@@ -1,108 +1,52 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  7 Apr 2019 11:06:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/numactl: remove patches
-Message-ID: <20190407090614.19628-1-fontaine.fabrice@gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Sun, 7 Apr 2019 12:27:44 +0300
+Subject: [Buildroot] [RFC 1/1] support/kconfig: Allow to override
+ 'default' config property
+In-Reply-To: <871s2emiei.fsf@dell.be.48ers.dk>
+References: <20190407001006.12925-1-vadim4j@gmail.com>
+ <20190407062440.GG2659@scaer> <871s2emiei.fsf@dell.be.48ers.dk>
+Message-ID: <20190407092744.giawzrzdjea53ne2@vkochan-ThinkPad-T470p>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Both patches are already included in version 2.0.12
+Hi Yann, Peter, All
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...LIBC_PREREQ-for-non-glibc-toolchains.patch | 35 -----------------
- ...LIBC_PREREQ-for-non-glibc-toolchains.patch | 39 -------------------
- 2 files changed, 74 deletions(-)
- delete mode 100644 package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
- delete mode 100644 package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
+On Sun, Apr 07, 2019 at 08:36:05AM +0200, Peter Korsgaard wrote:
+> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+> Hi,
+> 
+>  > Really, the defconfig *is* the place where defaults are overriden.
+> 
+>  > For example, at work, I handle a single br2-external for two "projects"
+>  > that each have four "boards", and each have three configurations. There
+>  > is no way your proposal can cover this.
+> 
+>  > Alternatively, what you propose is just pushing the feature of a
+>  > defconfig into the language itself. I don't think this is a good idea.
+>  > Even more so, as your proposal does not address all the cases either:
+>  > it only catters for strings, but what about choices, tri-states?
+> 
+>  > So, I'll be harsh, but NAK.
+> 
+> FWIW, I completely agree with Yanns points. Having two ways of
+> configuring this (defconfigs and br2-external trees) makes things more
+> complicated for little added value.
+> 
 
-diff --git a/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch b/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
-deleted file mode 100644
-index ebb934f60f..0000000000
---- a/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 3770bdc4fa7b9059db5cd2aa8bb09b50fa15e456 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Fri, 12 Feb 2016 19:25:02 +0100
--Subject: [PATCH] Fix usage of __GLIBC_PREREQ for non-glibc toolchains
--
--The way __GLIBC_PREREQ() is currently used means that it's evaluated
--even if __GLIBC__ is not defined. But obviously, __GLIBC_PREREQ will
--not exist if __GLIBC__ is not defined, causing build failures on C
--libraries not defining __GLIBC__ such as the musl C library.
--
--Patch originally taken from:
--https://github.com/voidlinux/void-packages/blob/master/srcpkgs/numactl/patches/musl.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Bernd: Reworked to fix uClibc]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[Thomas: improve patch description.]
--[Upstream commit: https://github.com/numactl/numactl/commit/3770bdc4fa7b9059db5cd2aa8bb09b50fa15e456.]
-----
-- syscall.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/syscall.c b/syscall.c
--index 4589b85..37782d9 100644
----- a/syscall.c
--+++ b/syscall.c
--@@ -115,7 +115,7 @@
-- 
-- #endif
-- 
---#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
--+#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
-- 
-- /* glibc 2.11 seems to have working 6 argument sycall. Use the
--    glibc supplied syscall in this case.
-diff --git a/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch b/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
-deleted file mode 100644
-index a98fd7247c..0000000000
---- a/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 31dc2951c758698bff060aeae8ffd8854616183b Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Fri, 12 Feb 2016 19:25:02 +0100
--Subject: [PATCH] Fix usage of __GLIBC_PREREQ for non-glibc toolchains
--
--The way __GLIBC_PREREQ() is currently used means that it's evaluated
--even if __GLIBC__ is not defined. But obviously, __GLIBC_PREREQ will
--not exist if __GLIBC__ is not defined, causing build failures on C
--libraries not defining __GLIBC__ such as the musl C library.
--
--Patch originally taken from:
--https://github.com/voidlinux/void-packages/blob/master/srcpkgs/numactl/patches/musl.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Bernd: Reworked to fix uClibc]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[Thomas: improve patch description.]
--[Upstream commit: https://github.com/numactl/numactl/commit/31dc2951c758698bff060aeae8ffd8854616183b]
-----
-- syscall.c | 6 +++++-
-- 1 file changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/syscall.c b/syscall.c
--index 37782d9..255853d 100644
----- a/syscall.c
--+++ b/syscall.c
--@@ -115,7 +115,11 @@
-- 
-- #endif
-- 
---#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
--+#ifndef __GLIBC_PREREQ
--+# define __GLIBC_PREREQ(x,y) 0
--+#endif
--+
--+#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
-- 
-- /* glibc 2.11 seems to have working 6 argument sycall. Use the
--    glibc supplied syscall in this case.
--- 
-2.20.1
+Yes, I understand the priority is for simplicity. I just thought that
+"extrernal" board tree may have defaults which really belongs to this
+particular board, and it makes flexible solution to already apply
+defaults by board, if to introduce separate keyword for this like
+"override" then maybe it would be clearer which configs are overriden.
+
+Sending this to the kernel's kconfig mailing-list is really no chance to be applied
+because there should be no such case (but maybe in case of external modules).
+
+OK, sorry to bother with this question!
+
+Regards,
+Vadim Kochan
