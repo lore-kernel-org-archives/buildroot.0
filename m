@@ -1,37 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 7 Apr 2019 16:03:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sunxi-mali: allow EGL type = X11
-In-Reply-To: <1531834236-23072-1-git-send-email-inigohuguet@fanamoel.com>
-References: <1531834236-23072-1-git-send-email-inigohuguet@fanamoel.com>
-Message-ID: <20190407160352.7e094d6c@windsurf>
+Date: Sun, 7 Apr 2019 16:06:22 +0200
+Subject: [Buildroot] [PATCH v4] busybox: Update udhcpc.script for
+ stateful DHCPv6
+In-Reply-To: <20180726013919.31268-1-sam@mendozajonas.com>
+References: <20180726013919.31268-1-sam@mendozajonas.com>
+Message-ID: <20190407160622.626d95b1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello I?igo,
+Hello Samuel,
 
-On Tue, 17 Jul 2018 15:30:36 +0200
-I?igo Huguet <inigohuguet@fanamoel.com> wrote:
+On Thu, 26 Jul 2018 11:39:19 +1000
+Samuel Mendoza-Jonas <sam@mendozajonas.com> wrote:
 
-> This patch allow to use sunxi-mali for OpenGLES acceleration for
-> apps running on top of X11 with EGL interface.
+> udhcpc6 will call the default script with the address set in the "ipv6"
+> variable. Set "ip" to this address if present.
 > 
-> For example, QT Quick 2 apps have to use GLX or EGL to run in an
-> X server, but GLX is not always available, specially in OpenGLES
-> only capable systems, like the ones with GPU Mali.
+> udhcpc6 implements "stateful" DHCPv6 for explicitly requesting an address
+> and other configuration information. A major difference between DHCPv4
+> and DHCPv6 is that DHCPv6 does *not* advertise a default route; this is
+> determined by normal IPv6 autoconfiguration.
+> Included is a change from Rob, which if handling a DHCPv6 address waits
+> a moment for the IPv6 route to be configured; as above this doesn't come
+> from DHCPv6 but rather the IPv6 Router Advertisement (RA) which happens
+> independently from udhcpc6. The intent here is to try and ensure that
+> the interface is route-able upon the script's completion as it would be
+> if called from udhcpc.
 > 
-> Signed-off-by: I?igo Huguet <inigohuguet@fanamoel.com>
+> (wait for IPv6 route)
+> From: Robert Lippert <rlippert@google.com>
+> Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
 > ---
->  package/sunxi-mali/Config.in     | 30 ++++++++++++++++++++++++++++++
->  package/sunxi-mali/sunxi-mali.mk | 32 +++++++++++++++++++++++++++-----
->  2 files changed, 57 insertions(+), 5 deletions(-)
+> v4: Expand description of stateful DHCPv6 in commit message
+> v3: Point out 'stateful' DHCPv6 in commit, send to the correct list...
+> v2: Avoid bashisms
 
-Thanks for the patch, but in the mean time, the sunxi-mali package was
-removed, in favor of sunxi-mali-mainline.
+On February 26, 2019, you received some comments on this patch (yes it
+took a lot of time for someone to review the patch, but it finally
+happened). Could you take into account those comments and post an
+updated version ?
 
-Best regards,
+Thanks a lot!
 
 Thomas
 -- 
