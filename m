@@ -1,65 +1,108 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Sun, 7 Apr 2019 12:13:42 +0300
-Subject: [Buildroot] [PATCH] Revert "package/gettext-tiny: bump version
- to add --template option"
-In-Reply-To: <20190407084926.GJ2659@scaer>
-References: <20190407073708.11205-1-yann.morin.1998@free.fr>
- <CADvTj4ofweg9YnvMz6bzd_QMsgOVv14EKL1ARCP6LKPCYdVXDA@mail.gmail.com>
- <20190407083026.GI2659@scaer>
- <CADvTj4pD-CgazLkKT_jdzRcKEoBCoMru6drevdi5JZ-qwchLdQ@mail.gmail.com>
- <20190407084926.GJ2659@scaer>
-Message-ID: <20190407091342.urpr5hri5rqly5xn@vkochan-ThinkPad-T470p>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  7 Apr 2019 11:06:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/numactl: remove patches
+Message-ID: <20190407090614.19628-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, James, All
+Both patches are already included in version 2.0.12
 
-On Sun, Apr 07, 2019 at 10:49:26AM +0200, Yann E. MORIN wrote:
-> James, All,
-> 
-> On 2019-04-07 10:45 +0200, James Hilliard spake thusly:
-> > On Sun, Apr 7, 2019 at 10:30 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > On 2019-04-07 10:23 +0200, James Hilliard spake thusly:
-> > > > On Sun, Apr 7, 2019 at 9:37 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > > > >
-> > > > > This reverts commit 758ea0e518492c703482a323653c3d20520b599b.
-> > > > >
-> > > > > 758ea0e bumped gettext-tiny to the latest (at the time) head of the
-> > > > > upstream git tree. In so doing, it included an upstream change of
-> > > > > behaviour that eventually broke the build of packages that use
-> > > > > -Werror=format-string.
-> > > > I'm assuming the glib2 build error was caused by this change.
-> > >
-> > > Yes, see the build failure I pointed to below...
-> > Ah, I was a little confused exactly how -Werror=format-nonliteral was related to
-> > -Werror=format-string.
-> 
-> That's me again confused with the other patch from Vadim that was
-> applied to gettext-tiny...
-> 
-> > > > I have a potential fix for that here:
-> > > > https://gitlab.gnome.org/GNOME/glib/merge_requests/770/diffs
-> > >
-> > > I've ahd a quick look, but since I don;t know the glib2 code, I have no
-> > > idea if that is the correct solution.
-> > >
-> > > However, you're probably going to have to provide more explanations
-> > > about your change to upstream, because libglib2 does build with the
-> > > non-tiny  implementations (either from glibc or from GNU gettext).
-> > Oh, I wasn't aware this was limited to a specific getttext implementation.
-> > I'll mention that in the pull request.
-> 
-> Be sure to check and test locally before hand! ;-)
-> 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...LIBC_PREREQ-for-non-glibc-toolchains.patch | 35 -----------------
+ ...LIBC_PREREQ-for-non-glibc-toolchains.patch | 39 -------------------
+ 2 files changed, 74 deletions(-)
+ delete mode 100644 package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
+ delete mode 100644 package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
 
-I sent yet-another-patch in:
-
-	https://patchwork.ozlabs.org/patch/1079937/
-
-but do you think it is better to fix issue per-package ?
-
-Regards,
-Vadim Kochan
+diff --git a/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch b/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
+deleted file mode 100644
+index ebb934f60f..0000000000
+--- a/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 3770bdc4fa7b9059db5cd2aa8bb09b50fa15e456 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Fri, 12 Feb 2016 19:25:02 +0100
+-Subject: [PATCH] Fix usage of __GLIBC_PREREQ for non-glibc toolchains
+-
+-The way __GLIBC_PREREQ() is currently used means that it's evaluated
+-even if __GLIBC__ is not defined. But obviously, __GLIBC_PREREQ will
+-not exist if __GLIBC__ is not defined, causing build failures on C
+-libraries not defining __GLIBC__ such as the musl C library.
+-
+-Patch originally taken from:
+-https://github.com/voidlinux/void-packages/blob/master/srcpkgs/numactl/patches/musl.patch
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Bernd: Reworked to fix uClibc]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-[Thomas: improve patch description.]
+-[Upstream commit: https://github.com/numactl/numactl/commit/3770bdc4fa7b9059db5cd2aa8bb09b50fa15e456.]
+----
+- syscall.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/syscall.c b/syscall.c
+-index 4589b85..37782d9 100644
+---- a/syscall.c
+-+++ b/syscall.c
+-@@ -115,7 +115,7 @@
+- 
+- #endif
+- 
+--#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
+-+#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
+- 
+- /* glibc 2.11 seems to have working 6 argument sycall. Use the
+-    glibc supplied syscall in this case.
+diff --git a/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch b/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
+deleted file mode 100644
+index a98fd7247c..0000000000
+--- a/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 31dc2951c758698bff060aeae8ffd8854616183b Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Fri, 12 Feb 2016 19:25:02 +0100
+-Subject: [PATCH] Fix usage of __GLIBC_PREREQ for non-glibc toolchains
+-
+-The way __GLIBC_PREREQ() is currently used means that it's evaluated
+-even if __GLIBC__ is not defined. But obviously, __GLIBC_PREREQ will
+-not exist if __GLIBC__ is not defined, causing build failures on C
+-libraries not defining __GLIBC__ such as the musl C library.
+-
+-Patch originally taken from:
+-https://github.com/voidlinux/void-packages/blob/master/srcpkgs/numactl/patches/musl.patch
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Bernd: Reworked to fix uClibc]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-[Thomas: improve patch description.]
+-[Upstream commit: https://github.com/numactl/numactl/commit/31dc2951c758698bff060aeae8ffd8854616183b]
+----
+- syscall.c | 6 +++++-
+- 1 file changed, 5 insertions(+), 1 deletion(-)
+-
+-diff --git a/syscall.c b/syscall.c
+-index 37782d9..255853d 100644
+---- a/syscall.c
+-+++ b/syscall.c
+-@@ -115,7 +115,11 @@
+- 
+- #endif
+- 
+--#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
+-+#ifndef __GLIBC_PREREQ
+-+# define __GLIBC_PREREQ(x,y) 0
+-+#endif
+-+
+-+#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
+- 
+- /* glibc 2.11 seems to have working 6 argument sycall. Use the
+-    glibc supplied syscall in this case.
+-- 
+2.20.1
