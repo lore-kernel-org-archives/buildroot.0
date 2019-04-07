@@ -1,36 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 7 Apr 2019 22:21:24 +0200
-Subject: [Buildroot] [RFC v3 3/4] libdrm: change to meson build system
-In-Reply-To: <20180719204355.10465-3-ps.report@gmx.net>
-References: <20180719204355.10465-1-ps.report@gmx.net>
- <20180719204355.10465-3-ps.report@gmx.net>
-Message-ID: <20190407222124.65030c6d@windsurf>
+Date: Sun, 7 Apr 2019 22:25:19 +0200
+Subject: [Buildroot] [PATCH 1/1] boost: correctly disable icu in locale
+ if needed
+In-Reply-To: <20180713174247.4005-1-fontaine.fabrice@gmail.com>
+References: <20180713174247.4005-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190407222519.01e928a6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Fabrice,
 
-On Thu, 19 Jul 2018 22:43:54 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Fri, 13 Jul 2018 19:42:47 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> - remove legacy patch
->   0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
+> boost doesn't take into account --without-icu flag and links
+> libboost_locale with icu if it founds it in staging directory
 > 
-> - add patch to fix meson atomic ops detection
->   0003-meson.build-fix-intel-atomics-detection.patch
+> So use boost.locale.icu to fix this issue
 > 
-> - add patch to enable static build
->   0004-meson.build-enable-static-build.patch
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/boost/boost.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 
-It's been a while: could you refresh this patch on the latest master
-and send a new version ?
+This patch is still pending in patchwork. Is it still needed ? You send
+a number of Boost fixes since then, and the last Boost build errors I
+can see at http://autobuild.buildroot.net/?reason=boost% are:
 
-Thanks,
+ - Download failure due to DNS resolution problem (late March)
+
+ - Internal compiler error on Xtensa, mips64, ARC (dating back from
+   January/February)
+
+Could you check whether your patch would still be needed or not ?
+
+Thanks!
 
 Thomas
 -- 
