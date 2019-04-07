@@ -1,87 +1,118 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Apr 2019 08:10:11 +0200
-Subject: [Buildroot] [git commit] package/mrouted: bump to version 3.9.8
-Message-ID: <20190407060627.A16EB82B3E@busybox.osuosl.org>
+Date: Sun, 7 Apr 2019 08:09:29 +0200
+Subject: [Buildroot] [git commit] package/mxml: bump to version 3.0
+Message-ID: <20190407060627.96D5C8DEF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f3384d84397b3daad2a8d197780642c9337e1a46
+commit: https://git.buildroot.net/buildroot/commit/?id=da6ce6472aab697d913da4ea95bba1cfb060d2f0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 - Remove patch (already in version)
-- Add hash for license file
+- Add hash for license files
+- Change license to "Apache-2.0 with exceptions", see:
+  https://github.com/michaelrsweet/mxml/commit/f166ad1977f2f13295689772a5d9e442f73d46f1
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../mrouted/0001-DVMRP-report-missing-subnet.patch | 35 ----------------------
- package/mrouted/mrouted.hash                       |  3 +-
- package/mrouted/mrouted.mk                         |  2 +-
- 3 files changed, 3 insertions(+), 37 deletions(-)
+ .../mxml/0001-fix-cross-target-installation.patch  | 55 ----------------------
+ package/mxml/mxml.hash                             |  6 +--
+ package/mxml/mxml.mk                               |  8 ++--
+ 3 files changed, 7 insertions(+), 62 deletions(-)
 
-diff --git a/package/mrouted/0001-DVMRP-report-missing-subnet.patch b/package/mrouted/0001-DVMRP-report-missing-subnet.patch
+diff --git a/package/mxml/0001-fix-cross-target-installation.patch b/package/mxml/0001-fix-cross-target-installation.patch
 deleted file mode 100644
-index 023c8cfd8d..0000000000
---- a/package/mrouted/0001-DVMRP-report-missing-subnet.patch
+index 3a9fa0c0cf..0000000000
+--- a/package/mxml/0001-fix-cross-target-installation.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From 687f41680d51585e9a5a135e39efee330588bea7 Mon Sep 17 00:00:00 2001
--From: Matt Weber <matthew.weber@rockwellcollins.com>
--Date: Fri, 11 Sep 2015 12:49:30 -0500
--Subject: [PATCH 1/1] DVMRP report missing subnet
+@@ -1,55 +0,0 @@
+-From: Baruch Siach <baruch@tkos.co.il>
+-Subject: [PATCH] mxml: workaround for cross build
 -
--Accepted upstream and will be included in 3.9.8.
--https://github.com/troglobit/mrouted/commit/512af5ffe0f48ffa2ba3b45898c66c2a561a5c2d
+-The added patch is a workaround for cross build as follows:
 -
--A subnet is missing in the DVMRP report sent to it's neighbor after
--the initial probe occurs.  The issue was with the traversal of a double
--linked list from end to start. Once the traversing pointer reaches
--the start of routing table for loop (condition) it would break and
--always drop the first subnet.
+-	* disable run of a test binary at build time
+-	* disable generation of documentation using the mxmldoc binary
+-	* remove now non-existent entries from the install target
+-	* disable strip when running install
 -
--Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ----
-- route.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/route.c b/route.c
--index f74e601..9fe779d 100644
----- a/route.c
--+++ b/route.c
--@@ -1193,7 +1193,7 @@ static int report_chunk(int which_routes, struct rtentry *start_rt, vifi_t vifi,
+-diff -Nuar mxml-2.7-orig/Makefile.in mxml-2.7/Makefile.in
+---- mxml-2.7-orig/Makefile.in	2011-04-13 18:43:32.000000000 +0300
+-+++ mxml-2.7/Makefile.in	2012-05-16 07:21:42.677220980 +0300
+-@@ -57,7 +57,7 @@
+- # Install commands...
+- #
 - 
--     p = send_buf + MIN_IP_HEADER_LEN + IGMP_MINLEN;
+--INSTALL_BIN	=	$(LIBTOOL) $(INSTALL) -m 755 -s
+-+INSTALL_BIN	=	$(LIBTOOL) $(INSTALL) -m 755
+- INSTALL_DATA	=	$(INSTALL) -m 644
+- INSTALL_DIR	=	$(INSTALL) -d
+- INSTALL_LIB	=	$(LIBTOOL) $(INSTALL) -m 755
+-@@ -88,7 +88,7 @@
+- 			mxml-index.o mxml-node.o mxml-search.o mxml-set.o
+- LIBOBJS		=	$(PUBLIBOBJS) mxml-private.o mxml-string.o
+- OBJS		=	mxmldoc.o testmxml.o $(LIBOBJS)
+--TARGETS		=	$(LIBMXML) mxmldoc testmxml mxml.xml doc/mxml.man
+-+TARGETS		=	$(LIBMXML) libmxml.a
 - 
---    for (r = start_rt; r != routing_table; r = r->rt_prev) {
--+    for (r = start_rt; r != NULL; r = r->rt_prev) {
-- 	if (which_routes == CHANGED_ROUTES && !(r->rt_flags & RTF_CHANGED)) {
-- 	    nrt++;
-- 	    continue;
---- 
--1.9.1
--
-diff --git a/package/mrouted/mrouted.hash b/package/mrouted/mrouted.hash
-index d5069e5fd9..8f10e014e3 100644
---- a/package/mrouted/mrouted.hash
-+++ b/package/mrouted/mrouted.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 181908f7025c5a2dee2e50d86888780469eaa9e1bd42d3eca9dfed8274aecd3d  mrouted-3.9.7.tar.gz
-+sha256 179636d211a82d0140a3488c6b65e634b4838da23e50d8cdee15ef03fe9b46af  mrouted-3.9.8.tar.gz
-+sha256 2e6c7d9e92afc391f584290c3817f2cdec1501621cf820abbd4bc4adc2e5b2ef  LICENSE
-diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
-index 731e79eb86..b9a4eaba45 100644
---- a/package/mrouted/mrouted.mk
-+++ b/package/mrouted/mrouted.mk
-@@ -4,7 +4,7 @@
+- 
+- #
+-@@ -140,9 +140,6 @@
+- #
+- 
+- install:	$(TARGETS) install-$(LIBMXML) install-libmxml.a
+--	echo Installing mxmldoc in $(BUILDROOT)$(bindir)...
+--	$(INSTALL_DIR) $(BUILDROOT)$(bindir)
+--	$(INSTALL_BIN) mxmldoc $(BUILDROOT)$(bindir)
+- 	echo Installing documentation in $(BUILDROOT)$(docdir)...
+- 	$(INSTALL_DIR) $(BUILDROOT)$(docdir)
+- 	for file in $(DOCFILES); do \
+-@@ -154,11 +151,6 @@
+- 	echo Installing pkgconfig files in $(BUILDROOT)$(libdir)/pkgconfig...
+- 	$(INSTALL_DIR) $(BUILDROOT)$(libdir)/pkgconfig
+- 	$(INSTALL_DATA) mxml.pc $(BUILDROOT)$(libdir)/pkgconfig
+--	echo Installing man pages in $(BUILDROOT)$(mandir)...
+--	$(INSTALL_DIR) $(BUILDROOT)$(mandir)/man1
+--	$(INSTALL_MAN) doc/mxmldoc.man $(BUILDROOT)$(mandir)/man1/mxmldoc.1
+--	$(INSTALL_DIR) $(BUILDROOT)$(mandir)/man3
+--	$(INSTALL_MAN) doc/mxml.man $(BUILDROOT)$(mandir)/man3/mxml.3
+- 
+- install-libmxml.a:
+- 	echo Installing libmxml.a to $(BUILDROOT)$(libdir)...
+diff --git a/package/mxml/mxml.hash b/package/mxml/mxml.hash
+index 90392755ba..3895dcfb24 100644
+--- a/package/mxml/mxml.hash
++++ b/package/mxml/mxml.hash
+@@ -1,4 +1,4 @@
+-# From http://www.msweet.org/downloads.php?L+Z3
+-md5 8804c961a24500a95690ef287d150abe mxml-2.10.tar.gz
+ # Locally computed
+-sha256 267ff58b64ddc767170d71dab0c729c06f45e1df9a9b6f75180b564f09767891 mxml-2.10.tar.gz
++sha256 88f05b3318f29ef6164d99c34b7dced76440c4a99106866b76b7fb729dc8310e mxml-3.0.tar.gz
++sha256 c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4 LICENSE
++sha256 63cc06ba05adecb1fdf2c94460a98291fd71614865456e52a19a1e7cc674250f NOTICE
+diff --git a/package/mxml/mxml.mk b/package/mxml/mxml.mk
+index ac270bd1bb..157c644a69 100644
+--- a/package/mxml/mxml.mk
++++ b/package/mxml/mxml.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--MROUTED_VERSION = 3.9.7
-+MROUTED_VERSION = 3.9.8
- MROUTED_SITE = $(call github,troglobit,mrouted,$(MROUTED_VERSION))
- MROUTED_DEPENDENCIES = host-bison
- MROUTED_LICENSE = BSD-3-Clause
+-MXML_VERSION = 2.10
+-MXML_SITE = https://github.com/michaelrsweet/mxml/releases/download/release-$(MXML_VERSION)
+-MXML_LICENSE = LGPL-2.0+ with exceptions
+-MXML_LICENSE_FILES = COPYING
++MXML_VERSION = 3.0
++MXML_SITE = https://github.com/michaelrsweet/mxml/releases/download/v$(MXML_VERSION)
++MXML_LICENSE = Apache-2.0 with exceptions
++MXML_LICENSE_FILES = LICENSE NOTICE
+ MXML_INSTALL_STAGING = YES
+ 
+ MXML_INSTALL_STAGING_OPTS = DSTROOT=$(STAGING_DIR) install
