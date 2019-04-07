@@ -1,51 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Apr 2019 09:13:36 +0200
-Subject: [Buildroot] [PATCH 3/3] package/linux-headers: add support for
- Linux 5.1 kernel headers
-In-Reply-To: <436454902.159974.1554361384065.JavaMail.zimbra@kalray.eu>
- (=?utf-8?Q?=22Cl=C3=A9ment?= Leger"'s message of "Thu, 4 Apr 2019 09:03:04
- +0200 (CEST)")
-References: <1905283465.159802.1554361271608.JavaMail.zimbra@kalray.eu>
- <2016794590.159827.1554361302233.JavaMail.zimbra@kalray.eu>
- <436454902.159974.1554361384065.JavaMail.zimbra@kalray.eu>
-Message-ID: <87ef6el23j.fsf@dell.be.48ers.dk>
+Date: Sun, 7 Apr 2019 09:10:10 +0200
+Subject: [Buildroot] [git commit] toolchain: add
+ BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+Message-ID: <20190407071019.D95678A54F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Cl?ment" == Cl?ment Leger <cleger@kalray.eu> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d2500dc581039766b0a767391317aeea13a1474c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Clement Leger <clement.leger@kalray.eu>
- > ---
- >  .../toolchain-external/toolchain-external-custom/Config.in.options    | 4 ++++
- >  1 file changed, 4 insertions(+)
+Signed-off-by: Clement Leger <clement.leger@kalray.eu>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Ehh, this looks to be a copy of patch 2/3 - Did you send the wrong
-patch?
-
- > diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
- > index 607490260f..cb7095632f 100644
- > --- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
- > +++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
- > @@ -123,6 +123,10 @@ choice
- >  	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
- >  	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 552220123f..8c5a4fb88e 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -404,10 +404,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+ 	bool
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
  
- > +config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1
- > +	bool "5.1.x"
- > +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
- > +
- >  config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_0
- >  	bool "5.0.x"
- >  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
- > -- 
- > 2.15.0.276.g89ea799
- > _______________________________________________
- > buildroot mailing list
- > buildroot at busybox.net
- > http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-Bye, Peter Korsgaard
++config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
++	bool
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
++
+ # This order guarantees that the highest version is set, as kconfig
+ # stops affecting a value on the first matching default.
+ config BR2_TOOLCHAIN_HEADERS_AT_LEAST
+ 	string
++	default "5.1"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+ 	default "5.0"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+ 	default "4.20" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+ 	default "4.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
