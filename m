@@ -1,45 +1,62 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Apr 2019 10:45:24 +0200
-Subject: [Buildroot] [git commit] package/vdr-plugin-vnsiserver: bump to
- version 1.8.0
-Message-ID: <20190407084214.6BED28B6D9@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 7 Apr 2019 10:49:26 +0200
+Subject: [Buildroot] [PATCH] Revert "package/gettext-tiny: bump version
+ to add --template option"
+In-Reply-To: <CADvTj4pD-CgazLkKT_jdzRcKEoBCoMru6drevdi5JZ-qwchLdQ@mail.gmail.com>
+References: <20190407073708.11205-1-yann.morin.1998@free.fr>
+ <CADvTj4ofweg9YnvMz6bzd_QMsgOVv14EKL1ARCP6LKPCYdVXDA@mail.gmail.com>
+ <20190407083026.GI2659@scaer>
+ <CADvTj4pD-CgazLkKT_jdzRcKEoBCoMru6drevdi5JZ-qwchLdQ@mail.gmail.com>
+Message-ID: <20190407084926.GJ2659@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7df6b2f06d8efbcee7c8416379f575246cff955a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+James, All,
 
-Add hash for license file
+On 2019-04-07 10:45 +0200, James Hilliard spake thusly:
+> On Sun, Apr 7, 2019 at 10:30 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2019-04-07 10:23 +0200, James Hilliard spake thusly:
+> > > On Sun, Apr 7, 2019 at 9:37 AM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > > >
+> > > > This reverts commit 758ea0e518492c703482a323653c3d20520b599b.
+> > > >
+> > > > 758ea0e bumped gettext-tiny to the latest (at the time) head of the
+> > > > upstream git tree. In so doing, it included an upstream change of
+> > > > behaviour that eventually broke the build of packages that use
+> > > > -Werror=format-string.
+> > > I'm assuming the glib2 build error was caused by this change.
+> >
+> > Yes, see the build failure I pointed to below...
+> Ah, I was a little confused exactly how -Werror=format-nonliteral was related to
+> -Werror=format-string.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash | 3 ++-
- package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+That's me again confused with the other patch from Vadim that was
+applied to gettext-tiny...
 
-diff --git a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash
-index 97cb4b42aa..595b1dc8cb 100644
---- a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash
-+++ b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 f8170b4d6f983e7b5b5110e0432ff46355998e170f66459588170cc320717f7f  vdr-plugin-vnsiserver-v1.5.2.tar.gz
-+sha256 d5989461541a91fe4de4ca9c396d4e7b2f4a8663fc9d6155d0830d2b143fce4d  vdr-plugin-vnsiserver-v1.8.0.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
-index f41ad701d3..20644d3f6b 100644
---- a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
-+++ b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--VDR_PLUGIN_VNSISERVER_VERSION = v1.5.2
-+VDR_PLUGIN_VNSISERVER_VERSION = v1.8.0
- VDR_PLUGIN_VNSISERVER_SITE = $(call github,FernetMenta,vdr-plugin-vnsiserver,$(VDR_PLUGIN_VNSISERVER_VERSION))
- VDR_PLUGIN_VNSISERVER_LICENSE = GPL-2.0+
- VDR_PLUGIN_VNSISERVER_LICENSE_FILES = COPYING
+> > > I have a potential fix for that here:
+> > > https://gitlab.gnome.org/GNOME/glib/merge_requests/770/diffs
+> >
+> > I've ahd a quick look, but since I don;t know the glib2 code, I have no
+> > idea if that is the correct solution.
+> >
+> > However, you're probably going to have to provide more explanations
+> > about your change to upstream, because libglib2 does build with the
+> > non-tiny  implementations (either from glibc or from GNU gettext).
+> Oh, I wasn't aware this was limited to a specific getttext implementation.
+> I'll mention that in the pull request.
+
+Be sure to check and test locally before hand! ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
