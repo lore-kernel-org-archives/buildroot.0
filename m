@@ -1,42 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 7 Apr 2019 22:20:38 +0200
-Subject: [Buildroot] [RFC v3 4/4] libinput: bump version to 1.11.0 and
- convert to meson build
-In-Reply-To: <20180719204355.10465-4-ps.report@gmx.net>
+Date: Sun, 7 Apr 2019 22:21:24 +0200
+Subject: [Buildroot] [RFC v3 3/4] libdrm: change to meson build system
+In-Reply-To: <20180719204355.10465-3-ps.report@gmx.net>
 References: <20180719204355.10465-1-ps.report@gmx.net>
- <20180719204355.10465-4-ps.report@gmx.net>
-Message-ID: <20190407222038.2db5708d@windsurf>
+ <20180719204355.10465-3-ps.report@gmx.net>
+Message-ID: <20190407222124.65030c6d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hello,
 
-On Thu, 19 Jul 2018 22:43:55 +0200
+On Thu, 19 Jul 2018 22:43:54 +0200
 Peter Seiderer <ps.report@gmx.net> wrote:
 
-> For details since 1.8.x see [1], [2] and [3].
+> - remove legacy patch
+>   0003-configure-Makefile.am-use-pkg-config-to-discover-lib.patch
 > 
-> Build system changed from autotools to meson exclusively
-> since 1.9.0 (see [1]).
+> - add patch to fix meson atomic ops detection
+>   0003-meson.build-fix-intel-atomics-detection.patch
 > 
-> Add hash for license file.
-> 
-> [1] https://lists.freedesktop.org/archives/wayland-devel/2017-October/035469.html
-> [2] https://lists.freedesktop.org/archives/wayland-devel/2018-February/036957.html
-> [3] https://lists.freedesktop.org/archives/wayland-devel/2018-June/038349.html
+> - add patch to enable static build
+>   0004-meson.build-enable-static-build.patch
 > 
 > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Sorry for the slow answer. Turns out that in the mean time, another
-libinput bump was merged which converted the package to use the meson
-build system.
+It's been a while: could you refresh this patch on the latest master
+and send a new version ?
 
-So I marked your patch as Superseded in patchwork.
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
