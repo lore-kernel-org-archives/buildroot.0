@@ -1,25 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Apr 2019 15:13:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpc: bump to version 1.1.0
-In-Reply-To: <20190407100655.21077-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 7 Apr 2019 12:06:55 +0200")
-References: <20190407100655.21077-1-fontaine.fabrice@gmail.com>
-Message-ID: <87y34mhsbe.fsf@dell.be.48ers.dk>
+Date: Sun, 07 Apr 2019 15:13:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: security bump to version
+ 7.3.4
+In-Reply-To: <20190407112749.9020-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 7 Apr 2019 13:27:49 +0200")
+References: <20190407112749.9020-1-bernd.kuhls@t-online.de>
+Message-ID: <87tvfahsao.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > - Add hash for license file
- > - Fix build with mpfr 4.0.2
+ > Changelog: https://www.php.net/ChangeLog-7.php#7.3.4
+ > Fixes these bugs, CVE-ID were not assigned yet:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/56c0e9e7e42320cdb7f8825889ff560b80ac10d4
+ >     Fixed bug #77753 (Heap-buffer-overflow in php_ifd_get32s).
+ >     Fixed bug #77831 (Heap-buffer-overflow in exif_iif_add_value).
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
 
