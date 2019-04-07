@@ -1,52 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 7 Apr 2019 23:05:39 +0200
-Subject: [Buildroot] [PATCH] glibc: Install iconvconfig on target with
- gconv libs
-In-Reply-To: <20180802063830.19364-1-abrodkin@synopsys.com>
-References: <20180802063830.19364-1-abrodkin@synopsys.com>
-Message-ID: <20190407230539.5cb8db42@windsurf>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Sun, 7 Apr 2019 14:09:18 -0700
+Subject: [Buildroot] [PATCH 1/1] boost: correctly disable icu in locale
+ if needed
+In-Reply-To: <CAMo8Bf+3Q310wGTJWWeSGP8G2-71m0yEVhWZ6wQJfe6CpfC8gQ@mail.gmail.com>
+References: <20180713174247.4005-1-fontaine.fabrice@gmail.com>
+ <20190407222519.01e928a6@windsurf>
+ <CAMo8Bf+3Q310wGTJWWeSGP8G2-71m0yEVhWZ6wQJfe6CpfC8gQ@mail.gmail.com>
+Message-ID: <CAMo8Bf+a5JZcfG4JGibU6icFbMN0SdDiTfRidD9wRYk2dxf2gg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alexey,
+On Sun, Apr 7, 2019 at 1:45 PM Max Filippov <jcmvbkbc@gmail.com> wrote:
+> On Sun, Apr 7, 2019 at 1:25 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> > the last Boost build errors I
+> > can see at http://autobuild.buildroot.net/?reason=boost% are:
+> >
+> >  - Download failure due to DNS resolution problem (late March)
+> >
+> >  - Internal compiler error on Xtensa, mips64, ARC (dating back from
+> >    January/February)
+>
+> I didn't see that. Will take a look at the ICE on xtensa.
 
-On Thu,  2 Aug 2018 09:38:30 +0300
-Alexey Brodkin <Alexey.Brodkin@synopsys.com> wrote:
+Hmmm... Does not reproduce here, the build is successful. Puzzled.
 
-> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-> index 6d21ae7ac07d..9366b3ec4199 100644
-> --- a/package/glibc/glibc.mk
-> +++ b/package/glibc/glibc.mk
-> @@ -119,6 +119,10 @@ ifeq ($(BR2_PACKAGE_GDB),y)
->  GLIBC_LIBS_LIB += libthread_db.so.*
->  endif
->  
-> +ifeq ($(BR2_TOOLCHAIN_GLIBC_GCONV_LIBS_COPY),y)
-> +GLIBC_LIBS_LIB += iconvconfig
-> +endif
-
-This solution only solves the problem for the internal toolchain
-backend, and leaves external toolchain unsupported.
-
-Instead, this should be done in toolchain/toolchain.mk, as part of the
-TOOLCHAIN_GLIBC_COPY_GCONV_LIBS macro.
-
-A possible (but separate!) improvement would be to move this macro from
-being called as a TOOLCHAIN_TARGET_FINALIZE_HOOKS to a
-TOOLCHAIN_POST_INSTALL_TARGET_HOOKS.
-
-However, overall it would be a lot nicer to not install iconvconfig to
-the target at all, and be able to generate the gconv-modules.cache at
-build time. This would make the thing work nicely for read-only
-filesystem configurations, for example.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks.
+-- Max
