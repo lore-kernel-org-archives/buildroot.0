@@ -1,29 +1,105 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  7 Apr 2019 00:16:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gerbera: fix hash
-Message-ID: <20190406221653.21833-1-fontaine.fabrice@gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Sun,  7 Apr 2019 03:10:06 +0300
+Subject: [Buildroot] [RFC 1/1] support/kconfig: Allow to override 'default'
+ config property
+Message-ID: <20190407001006.12925-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/d4af0a277dc293ab0f9d7b4e1dd801fd6d00f2d7
+Add kconfig patch which allows to apply last visible config's "default" property.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This allows to override default value for the same config symbol from
+other Config.in file, e.g.:
+
+	system/Config.in:
+		config BR2_TARGET_GENERIC_GETTY_PORT
+			string "TTY port"
+			default "console"
+			help
+			  Specify a port to run a getty on.
+
+now the same symbol value might be overriden by Config.in from external's one:
+
+	${external_vendor_tree}/Config.in:
+		config BR2_TARGET_GENERIC_GETTY_PORT
+			string
+			default "tty1"
+
+But why is the purpose of this if the value might be specified by the
+user in defconfig ? So, it allows for external projects to be more easy
+used w/o looking into their default defconfigs and specifying these
+default values in local defconfig, but external tree project might do
+this automatically by specifying default values like in the above
+example. And because it is the "default" property the user still can
+choose the own value.
+
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 ---
- package/gerbera/gerbera.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../22-apply-last-visible-default-property.patch     | 20 ++++++++++++++++++++
+ support/kconfig/patches/series                       |  1 +
+ support/kconfig/symbol.c                             |  6 +++---
+ 3 files changed, 24 insertions(+), 3 deletions(-)
+ create mode 100644 support/kconfig/patches/22-apply-last-visible-default-property.patch
 
-diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
-index 5bbd8826b1..aa6a29f81e 100644
---- a/package/gerbera/gerbera.hash
-+++ b/package/gerbera/gerbera.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	89bbcebcf6beebb50b9453329b13e6a20e3e505dee5655486e90e1f085591f4a	gerbera-v1.3.1.tar.gz
-+sha256	9c4509189eab6bff0fe183e1dd54ea8cb17d7fb0bc6e21bb5b1a8ccaaf6c60d9	gerbera-v1.3.1.tar.gz
- sha256	cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6	LICENSE.md
+diff --git a/support/kconfig/patches/22-apply-last-visible-default-property.patch b/support/kconfig/patches/22-apply-last-visible-default-property.patch
+new file mode 100644
+index 0000000000..c57490fe6d
+--- /dev/null
++++ b/support/kconfig/patches/22-apply-last-visible-default-property.patch
+@@ -0,0 +1,20 @@
++--- kconfig.orig/symbol.c	2019-04-07 03:02:49.263944705 +0300
+++++ kconfig/symbol.c	2019-04-07 03:03:15.367944606 +0300
++@@ -114,14 +114,14 @@
++ 
++ static struct property *sym_get_default_prop(struct symbol *sym)
++ {
++-	struct property *prop;
+++	struct property *prop, *found = NULL;
++ 
++ 	for_all_defaults(sym, prop) {
++ 		prop->visible.tri = expr_calc_value(prop->visible.expr);
++ 		if (prop->visible.tri != no)
++-			return prop;
+++			found = prop;
++ 	}
++-	return NULL;
+++	return found;
++ }
++ 
++ static struct property *sym_get_range_prop(struct symbol *sym)
+diff --git a/support/kconfig/patches/series b/support/kconfig/patches/series
+index e5a6f69d8f..9b3a37c4e6 100644
+--- a/support/kconfig/patches/series
++++ b/support/kconfig/patches/series
+@@ -10,3 +10,4 @@
+ 19-merge_config.sh-add-br2-external-support.patch
+ 20-merge_config.sh-Allow-to-define-config-prefix.patch
+ 21-Avoid-false-positive-matches-from-comment-lines.patch
++22-apply-last-visible-default-property.patch
+diff --git a/support/kconfig/symbol.c b/support/kconfig/symbol.c
+index f0b2e3b310..337dc55b5a 100644
+--- a/support/kconfig/symbol.c
++++ b/support/kconfig/symbol.c
+@@ -114,14 +114,14 @@ struct property *sym_get_env_prop(struct symbol *sym)
+ 
+ static struct property *sym_get_default_prop(struct symbol *sym)
+ {
+-	struct property *prop;
++	struct property *prop, *found = NULL;
+ 
+ 	for_all_defaults(sym, prop) {
+ 		prop->visible.tri = expr_calc_value(prop->visible.expr);
+ 		if (prop->visible.tri != no)
+-			return prop;
++			found = prop;
+ 	}
+-	return NULL;
++	return found;
+ }
+ 
+ static struct property *sym_get_range_prop(struct symbol *sym)
 -- 
-2.20.1
+2.14.1
