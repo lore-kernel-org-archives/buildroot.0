@@ -1,52 +1,31 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Sun, 7 Apr 2019 12:27:44 +0300
-Subject: [Buildroot] [RFC 1/1] support/kconfig: Allow to override
- 'default' config property
-In-Reply-To: <871s2emiei.fsf@dell.be.48ers.dk>
-References: <20190407001006.12925-1-vadim4j@gmail.com>
- <20190407062440.GG2659@scaer> <871s2emiei.fsf@dell.be.48ers.dk>
-Message-ID: <20190407092744.giawzrzdjea53ne2@vkochan-ThinkPad-T470p>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 07 Apr 2019 11:28:57 +0200
+Subject: [Buildroot] [PATCH 0/7] Bump docker packages to v18.09.4
+In-Reply-To: <CA+h8R2oXCr-e0rhD0wfWnz13a06_sDvSMxy63eTebEKf6xmSRA@mail.gmail.com>
+ (Christian Stewart's message of "Sun, 7 Apr 2019 01:56:48 -0700")
+References: <20190401182352.26342-1-peter@korsgaard.com>
+ <87mul8vgj8.fsf@paral.in> <875zrql1rk.fsf@dell.be.48ers.dk>
+ <CA+h8R2oXCr-e0rhD0wfWnz13a06_sDvSMxy63eTebEKf6xmSRA@mail.gmail.com>
+Message-ID: <87k1g6jh9i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, Peter, All
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
-On Sun, Apr 07, 2019 at 08:36:05AM +0200, Peter Korsgaard wrote:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
-> Hi,
-> 
->  > Really, the defconfig *is* the place where defaults are overriden.
-> 
->  > For example, at work, I handle a single br2-external for two "projects"
->  > that each have four "boards", and each have three configurations. There
->  > is no way your proposal can cover this.
-> 
->  > Alternatively, what you propose is just pushing the feature of a
->  > defconfig into the language itself. I don't think this is a good idea.
->  > Even more so, as your proposal does not address all the cases either:
->  > it only catters for strings, but what about choices, tri-states?
-> 
->  > So, I'll be harsh, but NAK.
-> 
-> FWIW, I completely agree with Yanns points. Having two ways of
-> configuring this (defconfigs and br2-external trees) makes things more
-> complicated for little added value.
-> 
+ > Hi Peter,
+ > On Sun, Apr 7, 2019, 12:20 AM Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Yes, I understand the priority is for simplicity. I just thought that
-"extrernal" board tree may have defaults which really belongs to this
-particular board, and it makes flexible solution to already apply
-defaults by board, if to introduce separate keyword for this like
-"override" then maybe it would be clearer which configs are overriden.
+ >> Any update on this? Thanks.
+ >> 
 
-Sending this to the kernel's kconfig mailing-list is really no chance to be applied
-because there should be no such case (but maybe in case of external modules).
+ > I ran into some unrelated issues and was delayed a bit on this. I'm
+ > compiling the images now and will try to get the testing done within 24
+ > hours.
 
-OK, sorry to bother with this question!
+Ok, thanks.
 
-Regards,
-Vadim Kochan
+-- 
+Bye, Peter Korsgaard
