@@ -1,44 +1,48 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 7 Apr 2019 23:43:50 +0200
-Subject: [Buildroot] [git commit] package/gettext: turn into virtual
- package
-In-Reply-To: <20190331121707.C1C2D86602@busybox.osuosl.org>
-References: <20190331121707.C1C2D86602@busybox.osuosl.org>
-Message-ID: <88c125ee-6c2b-9f99-87cb-b4b1ba075ec3@gmail.com>
+From: Anisse Astier <anisse@astier.eu>
+Date: Sun, 7 Apr 2019 23:49:41 +0200
+Subject: [Buildroot] [PATCH 1/1] pkg-golang: Allow per package/target
+ CGO_ENABLED setting
+In-Reply-To: <20180727024720.13370-1-camh@xdna.net>
+References: <20180727024720.13370-1-camh@xdna.net>
+Message-ID: <20190407214941.GA3117@jaya>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi, All
+Hi Cam,
 
-Le 31/03/2019 ? 14:04, Thomas Petazzoni a ?crit?:
-> commit: https://git.buildroot.net/buildroot/commit/?id=ea1e7ee6068265d3f8ade97a387d77c77335b38e
-> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Sorry for the delay,
+
+(+Angelo in cc)
+
+On Fri, Jul 27, 2018 at 12:47:20PM +1000, Cam Hutchison wrote:
+> Allow the CGO_ENABLED variable to be controlled per package and per
+> build target, instead of having the value determined by whether or not
+> the toolchain has threads.
 > 
-> Re-work gettext to be a virtual package which may allow to use
-> different gettext's providers, and rename the original one into
-> gettext-gnu package.
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
+> Some build targets may not build with CGO_ENABLED=1, so allowing a per
+> package and build target override will allow those targets to be built
+> with Buildroot.
 
-> +ifeq ($(BR2_PACKAGE_GETTEXT_GNU),y)
->  GETTEXTIZE = $(HOST_CONFIGURE_OPTS) AUTOM4TE=$(HOST_DIR)/bin/autom4te $(HOST_DIR)/bin/gettextize -f
-> +endif
+Just like Thomas, I'm wondering what specific use-case you have in mind;
+in particular, I'm interested why you needed build-target granularity in
+addition to package-level configuration.
 
-Why adding a if BR2_PACKAGE_GETTEXT_GNU here ?
-We need to define GETTEXTIZE for gettextized packages (like host-flex).
+To provide context: 
 
-Currently the build is broken with:
+Disabling CGO isn't an issue, until you try doing DNS requests, which
+are usually handled by your libc. If you have anything configured out of
+the ordinary /etc/resolv.conf, a cgo-disabled binary won't be able to do
+a DNS request. Same goes for user/group and user home dir resolution:
+anything outside of /etc/{passwd,group} (pam, NSS, etc.), won't work.
 
->>> host-flex 2.6.4 Gettextizing
-cd [...]/build/host-flex-2.6.4/ &&
-/bin/sh: -c: ligne 1: erreur de syntaxe : fin de fichier pr?matur?e
-make[1]: *** [package/pkg-generic.mk:230:
-[...]/build/host-flex-2.6.4/.stamp_configured] Error 1
+Disabling CGO allows you to have static binaries; if you don't use any
+native libraries.
 
-Best regards,
-Romain
+I don't know in which context it might be useful in buildroot.
+
+Regards,
+
+Anisse
