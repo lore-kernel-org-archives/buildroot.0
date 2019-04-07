@@ -1,40 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Apr 2019 09:10:10 +0200
-Subject: [Buildroot] [git commit] toolchain: add
- BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
-Message-ID: <20190407071019.D95678A54F@busybox.osuosl.org>
+Date: Sun, 7 Apr 2019 09:10:52 +0200
+Subject: [Buildroot] [git commit] toolchain/toolchain-external-custom:
+ support Linux 5.1
+Message-ID: <20190407071019.DF9388DF55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2500dc581039766b0a767391317aeea13a1474c
+commit: https://git.buildroot.net/buildroot/commit/?id=77d79bf586d467bdca96d28a745a443d0c961bb2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Clement Leger <clement.leger@kalray.eu>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../toolchain-external/toolchain-external-custom/Config.in.options    | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 552220123f..8c5a4fb88e 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -404,10 +404,15 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 607490260f..cb7095632f 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -123,6 +123,10 @@ choice
+ 	    m = ( LINUX_VERSION_CODE >> 8  ) & 0xFF
+ 	    p = ( LINUX_VERSION_CODE >> 0  ) & 0xFF
  
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
++config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1
++	bool "5.1.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
 +
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "5.1"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
- 	default "5.0"  if BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
- 	default "4.20" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_20
- 	default "4.19" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+ config BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_0
+ 	bool "5.0.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
