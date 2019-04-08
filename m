@@ -1,37 +1,34 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  8 Apr 2019 21:22:57 +0200
-Subject: [Buildroot] [PATCH] package/tpm2-tools: license is 3c BSD, not 2c
-Message-ID: <20190408192258.12121-1-peter@korsgaard.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 08 Apr 2019 19:24:33 +0000
+Subject: [Buildroot] [Bug 11761] Building custom kernel 5.1-rc3 or later
+ breaks on tools/objtool
+In-Reply-To: <bug-11761-163@https.bugs.busybox.net/>
+References: <bug-11761-163@https.bugs.busybox.net/>
+Message-ID: <bug-11761-163-WFK7SXifU4@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The license contains the "no endorsement" clause, so it should be listed as
-BSD-3-Clause:
+https://bugs.busybox.net/show_bug.cgi?id=11761
 
-  * Neither the name of Intel Corporation nor the names of its contributors
-    may be used to endorse or promote products derived from this software
-    without specific prior written permission.
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tpm2-tools/tpm2-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+           Assignee|unassigned at buildroot.uclibc |yann.morin.1998 at free.fr
+                   |.org                        |
+             Status|NEW                         |ASSIGNED
 
-diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
-index 9e50170297..e7423db67a 100644
---- a/package/tpm2-tools/tpm2-tools.mk
-+++ b/package/tpm2-tools/tpm2-tools.mk
-@@ -6,7 +6,7 @@
- 
- TPM2_TOOLS_VERSION = 3.1.4
- TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
--TPM2_TOOLS_LICENSE = BSD-2-Clause
-+TPM2_TOOLS_LICENSE = BSD-3-Clause
- TPM2_TOOLS_LICENSE_FILES = LICENSE
- TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf
- 
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+(In reply to Janusz Krzysztofik from comment #0)
+There's already a thread on the list about this issue:
+    http://lists.busybox.net/pipermail/buildroot/2019-April/246871.html
+
+Please keep an eye on it and report there if it fixes the issue for you.
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
