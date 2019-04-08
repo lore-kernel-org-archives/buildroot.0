@@ -1,108 +1,48 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Mon, 8 Apr 2019 03:33:33 +0300
-Subject: [Buildroot] [git commit] package/gettext: turn into virtual
- package
-In-Reply-To: <CAMw6YJLmW_FvHER3pjgH=4pD+rJB9zs9Lx394-G7XA1e+KLK+g@mail.gmail.com>
-References: <20190331121707.C1C2D86602@busybox.osuosl.org>
- <e1d4694d-420f-c479-7595-a1ccebed4f2e@gmail.com>
- <CAMw6YJLmW_FvHER3pjgH=4pD+rJB9zs9Lx394-G7XA1e+KLK+g@mail.gmail.com>
-Message-ID: <CAMw6YJ+Npy6M8z+WHF3tQETZSjrjzchV8WGWU5ojY9+sznsMhQ@mail.gmail.com>
+From: Christian Stewart <christian@paral.in>
+Date: Sun, 07 Apr 2019 19:00:20 -0700
+Subject: [Buildroot] [PATCH 1/1] pkg-golang: Allow per package/target
+ CGO_ENABLED setting
+In-Reply-To: <20190407214941.GA3117@jaya>
+References: <20180727024720.13370-1-camh@xdna.net> <20190407214941.GA3117@jaya>
+Message-ID: <87pnpxfe8b.fsf@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 8, 2019 at 2:04 AM Vadim Kochan <vadim4j@gmail.com> wrote:
->
-> Hi Romain, All
->
-> On Mon, Apr 8, 2019 at 12:33 AM Romain Naour <romain.naour@gmail.com> wrote:
-> >
-> > Hi All,
-> >
-> > Le 31/03/2019 ? 14:04, Thomas Petazzoni a ?crit :
-> > > commit: https://git.buildroot.net/buildroot/commit/?id=ea1e7ee6068265d3f8ade97a387d77c77335b38e
-> > > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Anisse, Cam, all,
 
-[..]
+Overriding CGO_ENABLED when we know that the toolchain doesn't work
+properly with cgo doesn't seem correct.
 
-> >
-> > [...]
-> >
-> > >
-> > > -config BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL
-> > > -     bool
-> > > -     default y if BR2_SYSTEM_ENABLE_NLS
-> > > -     depends on !BR2_TOOLCHAIN_HAS_FULL_GETTEXT
-> > > +config BR2_PACKAGE_PROVIDES_GETTEXT
-> > > +     default "gettext-gnu"
-> > >
-> > >  endif
-> > >
-> >
-> > [...]
-> >
-> > > diff --git a/package/gettext/gettext.mk b/package/gettext-gnu/gettext-gnu.mk
-> > > similarity index 57%
-> > > copy from package/gettext/gettext.mk
-> > > copy to package/gettext-gnu/gettext-gnu.mk
-> > > index ec9588f8ad..61adf72738 100644
-> > > --- a/package/gettext/gettext.mk
-> > > +++ b/package/gettext-gnu/gettext-gnu.mk
-> > > @@ -1,23 +1,24 @@
-> > >  ################################################################################
-> > >  #
-> > > -# gettext
-> > > +# gettext-gnu
-> > >  #
-> > >  ################################################################################
-> > >
-> > > -GETTEXT_VERSION = 0.19.8.1
-> > > -GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
-> > > -GETTEXT_SOURCE = gettext-$(GETTEXT_VERSION).tar.xz
-> > > -GETTEXT_INSTALL_STAGING = YES
-> > > -GETTEXT_LICENSE = LGPL-2.1+ (libintl), GPL-3.0+ (the rest)
-> > > -GETTEXT_LICENSE_FILES = COPYING gettext-runtime/intl/COPYING.LIB
-> > > +GETTEXT_GNU_VERSION = 0.19.8.1
-> > > +GETTEXT_GNU_SITE = $(BR2_GNU_MIRROR)/gettext
-> > > +GETTEXT_GNU_SOURCE = gettext-$(GETTEXT_GNU_VERSION).tar.xz
-> > > +GETTEXT_GNU_INSTALL_STAGING = YES
-> > > +GETTEXT_GNU_LICENSE = LGPL-2.1+ (libintl), GPL-3.0+ (the rest)
-> > > +GETTEXT_GNU_LICENSE_FILES = COPYING gettext-runtime/intl/COPYING.LIB
-> > >  # 0002-Update-after-gnulib-changed.patch
-> > > -GETTEXT_AUTORECONF = YES
-> > > -GETTEXT_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-> > > +GETTEXT_GNU_AUTORECONF = YES
-> > > +GETTEXT_GNU_PROVIDES = gettext
-> > > +GETTEXT_GNU_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-> > >
-> >
-> > [...]
-> >
-> > >
-> > >  # Force the build of libintl, even if the C library provides a stub
-> > >  # gettext implementation
-> > > -ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
-> > > -GETTEXT_CONF_OPTS += --with-included-gettext
-> > > +ifeq ($(BR2_PACKAGE_GETTEXT_GNU_PROVIDES_LIBINTL),y)
-> >
-> > It seems this patch introduced a typo here, There is no
-> > BR2_PACKAGE_GETTEXT_GNU_PROVIDES_LIBINTL option but
-> > BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL.
-> >
-> > Even with this patch my host-flex build is broken.
-> >
->
-> Yeah, this is a really typo  but anyway gettext/Config.in (which is a
-> virtual package now) uses
-> the right config option.
->
+Anisse Astier <anisse@astier.eu> writes:
+>> Some build targets may not build with CGO_ENABLED=1, so allowing a per
+>> package and build target override will allow those targets to be built
+>> with Buildroot.
 
-Sorry, I just realized that issue exists in gettext-gnu.mk not in Config.in,
-I sent patch for this.
+Why not just add the override in the existing build flag overrides?
 
-Sorry about all these issues with gettext-tiny :(
+> Just like Thomas, I'm wondering what specific use-case you have in mind;
+> in particular, I'm interested why you needed build-target granularity in
+> addition to package-level configuration.
 
-Regards,
-Vadim Kochan
+If you really need to do something this custom, I recommend just
+overriding the build stage entirely.
+
+> Disabling CGO isn't an issue, until you try doing DNS requests, which
+> are usually handled by your libc. If you have anything configured out of
+> the ordinary /etc/resolv.conf, a cgo-disabled binary won't be able to do
+> a DNS request. Same goes for user/group and user home dir resolution:
+> anything outside of /etc/{passwd,group} (pam, NSS, etc.), won't work.
+
+Are you referring to the case where a Go-implemented DNS is used? This
+should be the case with cgo disabled, and I don't know if the behavior
+differs from the regular libc dns.
+
+> I don't know in which context it might be useful in buildroot.
+
+I don't see a reason for it either.
+
+Best,
+Christian
