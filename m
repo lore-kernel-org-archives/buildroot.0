@@ -1,40 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Apr 2019 09:04:58 +0200
-Subject: [Buildroot] [PATCH 1/1] pkg-golang: Allow per package/target
- CGO_ENABLED setting
-In-Reply-To: <87pnpxfe8b.fsf@paral.in>
-References: <20180727024720.13370-1-camh@xdna.net> <20190407214941.GA3117@jaya>
- <87pnpxfe8b.fsf@paral.in>
-Message-ID: <20190408090458.49e1e5cc@windsurf>
+From: Christian Stewart <christian@paral.in>
+Date: Mon, 08 Apr 2019 00:06:47 -0700
+Subject: [Buildroot] [RFC PATCH v1 1/6] package/go: implement go modules
+ integration
+In-Reply-To: <20190408090251.7a63fd0d@windsurf>
+References: <20190317012142.10545-1-christian@paral.in>
+ <20190407221726.130ca0fe@windsurf> <87mul1fe27.fsf@paral.in>
+ <20190408090251.7a63fd0d@windsurf>
+Message-ID: <87bm1hf01k.fsf@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Thomas,
 
-On Sun, 07 Apr 2019 19:00:20 -0700
-Christian Stewart <christian@paral.in> wrote:
 
-> > I don't know in which context it might be useful in buildroot.  
-> 
-> I don't see a reason for it either.
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+> OK, thanks! What is the specific situation of the three Go packages
+> that Fabio wanted to integrate, namely bitcoin, btcd and neutrino ?
+> Will they be readily usable with the Go module integration ?
 
-Thanks for the feedback, I'll mark the patch as Rejected for now. We
-can of course revisit if there's some further details about why this
-would be needed.
+Both of these projects already seem to be using go.mod:
 
-Anisse, Christian: nobody is listed in the DEVELOPERS file for the
-package/pkg-golang.mk file. Would you be willing to be listed as
-DEVELOPERS for this file ? It would be useful as you would be Cc'ed on
-patches touching this file, which would help in situations like this
-one. If you're fine with this, send a patch to add yourself :)
+ - https://github.com/btcsuite/btcd
+ - https://github.com/lightninglabs/neutrino
 
-Thanks!
+... I can submit PoC patches implementing them trivially with the go
+module PoC patch in place.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best regards,
+Christian
