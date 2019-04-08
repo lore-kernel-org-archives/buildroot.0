@@ -1,8 +1,10 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon, 08 Apr 2019 00:22:11 -0300
-Subject: [Buildroot] [PATCH v3 2/5] .gitlab-ci.yml: use "include" keyword
-References: <1a09bb90-2a61-4db6-d4cd-e1972c955675@mind.be>
-Message-ID: <5caabe634b731_25943ff6aa17fcc43877a@ultri5.mail>
+Date: Mon,  8 Apr 2019 00:22:52 -0300
+Subject: [Buildroot] [PATCH v4 0/3] .gitlab-ci.yml: rework and add trigger
+ per job
+In-Reply-To: <20190121011115.19255-1-ricardo.martincoski@gmail.com>
+References: <20190121011115.19255-1-ricardo.martincoski@gmail.com>
+Message-ID: <20190408032255.12841-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,50 +13,41 @@ To: buildroot@busybox.net
 
 Hello,
 
-Sorry for the long delay in answering.
+Besides the current subsets of jobs that can be triggered by pushing temporary
+branches with special names:
+ - all defconfigs: /.*-defconfigs$/
+ - all runtime tests: /.*-runtime-tests$/
+This series allows the user of GitLab pipeline to trigger some interesting
+subsets of jobs by pushing temporary branches with names that match regexps:
+ - one defconfig: /.*-defconfig_name$/
+ - one test case: /.*-test_case_name$/
+Pushing a tag still triggers all jobs.
 
-On Wed, Feb 06, 2019 at 08:59 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
+Patch 1 reorders the template so similar keys stay together, making the
+maintenance easier.
+Patch 2 could be merged to patch 3, but for the sake of easier review/testing I
+had split them.
+Patches 1 and 2 do not change any functionality.
 
-> On 21/01/2019 02:11, Ricardo Martincoski wrote:
->> Do not copy the contents of .gitlab-ci.yml.in to .gitlab-ci.yml when
->> 'make .gitlab-ci.yml' runs, use the new "include" keyword instead.
->> 
->> The docs state "include requires the external YAML file to have the
->> extensions .yml or .yaml" so rename .gitlab-ci.yml.in. Use the example
->> name from the docs: .gitlab-ci-template.yml.
->> This file is not anymore a template for our own script that generates
->> .gitlab-ci.yml. It becomes a job template to the Gitlab CI infra
->> to use when populating the list of jobs to run.
-> 
->  Meh, this is not what I meant...
+Finally patch 3 actually adds the per defconfig and per runtime test triggers.
 
-Oh, really sorry. I was thinking only about the duplicated code.
-
-> 
->  What I meant was to rename .gitlab-ci.yml.in to .gitlab-ci.yml and to add the
-> include to the end of it, and to make generate-gitlab-ci.yml generate only the
-> included file.
-
-OK
-
-> 
->  This has the advantage that it allows to generate different versions of the
-> included file by modifying the generator script. For example, we could think of
-> generating only a subset of the defconfigs and tests in master, and use a
-> special branch for full testing, and add another CI job with a time trigger that
-> updates that special branch.
-
-OK, now (hopefully) I see what you want to achieve.
-
->  I thought of fixing that up while committing, but it's a little bit complicated
-> so instead I've marked the rest of the series as Changes Requested.
-> 
->  If you don't have time to do it, could you instead repost v2 but rebased on the
-> "extends" patch?
-
-I will repost without this patch so we can move forward with this series.
-But we can revisit the use of 'include' later, after the series got merged.
-
+Changes v3 -> v4:
+ - remove patch 2 that switch to using the new "include" keyword. That patch
+   started from a suggestion from Arnout that I misunderstood. That patch does
+   not really need to be in this series, so let's switch to using "include" in
+   a separate patch or series.
 
 Regards,
 Ricardo
+
+Ricardo Martincoski (3):
+  .gitlab-ci.yml: reorder jobs
+  .gitlab-ci.yml: prepare to reuse scripts
+  .gitlab-ci.yml: add trigger per job
+
+ .gitlab-ci.yml    | 90 ++++++++++++++++++++++++++++++++---------------
+ .gitlab-ci.yml.in | 90 ++++++++++++++++++++++++++++++++---------------
+ 2 files changed, 122 insertions(+), 58 deletions(-)
+
+-- 
+2.17.1
