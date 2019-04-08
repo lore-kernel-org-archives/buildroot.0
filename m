@@ -1,104 +1,66 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Mon,  8 Apr 2019 23:31:32 +0300
-Subject: [Buildroot] [PATCH v3 1/1] package/gettext: Fix GETTEXTIZE is not
- defined in case of full gettext
-Message-ID: <20190408203132.7740-1-vadim4j@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon,  8 Apr 2019 22:21:35 +0200
+Subject: [Buildroot] [PATCH] linux: simplify LINUX_BUILD_CMDS
+Message-ID: <20190408202136.22944-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-After introducing gettext-tiny in:
+We currently do the Linux build as follows:
 
-	5367a1b253 package/gettext-tiny: new package
+   make <imagename>
+   if modules enabled; make modules; fi
 
-GETTEXTIZE variable is conditionally defined separately by gettext-gnu
-or gettext-tiny package depending on which of them is enabled. But it
-causes the issue when BR2_TOOLCHAIN_HAS_FULL_GETTEXT=y, because in that
-case BR2_PACKAGE_GETTEXT is not selected by BR2_SYSTEM_ENABLE_NLS config
-and GETTEXTIZE is not defined, which causes build fail for packages
-which uses gettextizing (e.g. host-flex).
+However, Clement L?ger recently reported that due to us not using the
+"all" target, the GDB scripts that the kernel can build when
+CONFIG_GDB_SCRIPTS is enabled are not built, since upstream kernel
+commit 67274c083438340ad16c1437caebc84e1253b224 (merged in v5.1) moved
+that logic to a separate scripts_gdb target, which is a dependency of
+the "all" target.
 
-Fix issue by defining GETTEXTIZE unconditionally in
-package/gettext/gettext.mk. It is not needed to define it in each
-gettext-*.mk because the difference is only in passing 'data_dir'
-parameter which points to ${PREFIX}/share/gettext-tiny (in case of
-gettext-tiny provider), but simple linking:
+While we could add some more logic to explicit generate the
+"scripts_gdb" target, this logic would fail on Linux < 5.1 for which
+this make target doesn't exist.
 
-	${PREFIX}/share/gettext -> ${PREFIX}/share/gettext-tiny
+So instead, let's simplify the build logic, and use:
 
-solves this issue.
+  make all <imagename>
 
-Reported-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+The "all" target automatically depends on "modules", so we no longer
+need to explicit generate the "modules" target separately.
+
+As a result of this change, we may generate additional kernel images
+compared to what was done previously, but such images would anyway not
+be installed, and the additional built time is minimal.
+
+We did some research as to why the kernel build was done like this in
+Buildroot, and it's been like that since linux/linux.mk was added back
+in 2010 by commit 487e21cff69b30b404146b2ffb46959a728a4002 ("New,
+simpler, infrastructure for building the Linux kernel").
+
+Reported-by: Cl?ment Leger <cleger@kalray.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-v3:
-    Make commit message more descriptive and cleaner, also fix 'data_dir'
-    explanation which was not updated in v2.
+ linux/linux.mk | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-v2:
-    Do not use ${PREFIX}/share/gettext-tiny as 'data_dir' param for
-    gettextize, but instead create link ${PREFIX}/share/gettext -> ${PREFIX}/share/gettext-tiny.
-    It allows to have common invovation of gettextize in package/gettext.mk
-
- package/gettext-gnu/gettext-gnu.mk   |  4 ----
- package/gettext-tiny/gettext-tiny.mk | 10 +++-------
- package/gettext/gettext.mk           |  2 ++
- 3 files changed, 5 insertions(+), 11 deletions(-)
-
-diff --git a/package/gettext-gnu/gettext-gnu.mk b/package/gettext-gnu/gettext-gnu.mk
-index 61adf72738..33a1cbed38 100644
---- a/package/gettext-gnu/gettext-gnu.mk
-+++ b/package/gettext-gnu/gettext-gnu.mk
-@@ -95,9 +95,5 @@ endef
- 
- HOST_GETTEXT_GNU_POST_INSTALL_HOOKS += HOST_GETTEXT_GNU_ADD_ABOUT_NLS
- 
--ifeq ($(BR2_PACKAGE_GETTEXT_GNU),y)
--GETTEXTIZE = $(HOST_CONFIGURE_OPTS) AUTOM4TE=$(HOST_DIR)/bin/autom4te $(HOST_DIR)/bin/gettextize -f
--endif
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
-diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
-index 4fa014e8dd..b596cefce8 100644
---- a/package/gettext-tiny/gettext-tiny.mk
-+++ b/package/gettext-tiny/gettext-tiny.mk
-@@ -98,6 +98,9 @@ define HOST_GETTEXT_TINY_INSTALL_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/extra/Makevars.template $(HOST_DIR)/share/gettext-tiny/po/Makevars.template
- 
- 	$(Q)touch $(HOST_DIR)/share/gettext-tiny/ABOUT-NLS
-+
-+	# for gettextize
-+	ln -sf $(HOST_DIR)/usr/share/gettext-tiny $(HOST_DIR)/usr/share/gettext
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c7081db88f..46645f4780 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -438,10 +438,7 @@ define LINUX_BUILD_CMDS
+ 	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
+ 		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
+ 	)
+-	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+-	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then \
+-		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ; \
+-	fi
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all $(LINUX_TARGET_NAME)
+ 	$(LINUX_BUILD_DTB)
+ 	$(LINUX_APPEND_DTB)
  endef
- 
- # Install simple echo wrapper for gettext tool
-@@ -105,12 +108,5 @@ define GETTEXT_TINY_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 0755 -D $(GETTEXT_TINY_PKGDIR)/gettext-wrapper $(TARGET_DIR)/usr/bin/gettext
- endef
- 
--ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
--GETTEXTIZE = $(HOST_CONFIGURE_OPTS) \
--	     AUTOM4TE=$(HOST_DIR)/bin/autom4te \
--	     gettext_datadir=$(HOST_DIR)/usr/share/gettext-tiny \
--	     $(HOST_DIR)/bin/gettextize -f
--endif
--
- $(eval $(generic-package))
- $(eval $(host-generic-package))
-diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-index a86e26f69e..146d40e13b 100644
---- a/package/gettext/gettext.mk
-+++ b/package/gettext/gettext.mk
-@@ -4,5 +4,7 @@
- #
- ################################################################################
- 
-+GETTEXTIZE = $(HOST_CONFIGURE_OPTS) AUTOM4TE=$(HOST_DIR)/bin/autom4te $(HOST_DIR)/bin/gettextize -f
-+
- $(eval $(virtual-package))
- $(eval $(host-virtual-package))
 -- 
-2.14.1
+2.20.1
