@@ -1,44 +1,65 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 08 Apr 2019 21:48:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/fstrcmp: new package
-References: <20190407170941.19461-1-bernd.kuhls@t-online.de>
- <CANQCQpaSfczRHwznRVUJ=w_FNBVZRePKbd20Rw3XgX+LnBPMrg@mail.gmail.com>
-Message-ID: <n5lsnfxd9i.ln2@ID-313208.user.individual.net>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 8 Apr 2019 22:01:00 +0200
+Subject: [Buildroot] [PATCH 1/1] linux: use host pkg-config when host
+ libelf is set
+In-Reply-To: <899a55d6cfd3f183da8053082c645342242c9bdd.camel@intel.com>
+References: <20190405184712.5582-1-stuart.summers@intel.com>
+ <20190408184233.10697-1-stuart.summers@intel.com>
+ <20190408192840.GB23890@scaer>
+ <899a55d6cfd3f183da8053082c645342242c9bdd.camel@intel.com>
+Message-ID: <20190408200100.GC23890@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
+Stuart, All,
 
-Am Mon, 08 Apr 2019 08:09:16 -0500 schrieb Matthew Weber:
+On 2019-04-08 19:41 +0000, Summers, Stuart spake thusly:
+> On Mon, 2019-04-08 at 21:28 +0200, Yann E. MORIN wrote:
+[--SNIP--]
+> > >  $(2)_CONFIGURATOR_MAKE_ENV = \
+> > > -	$$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=%
+> > > PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
+> > > +	$$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% \
+> > > +	   PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=%
+> > > PKG_CONFIG_ALLOW_SYSTEM_LIBS=% \
+> > > +	   PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
+> > 
+> > I'm not too happy abfor the poout the look the above has, but I have
+> > no better
+> > formatting suggestion to provide...
+> Yeah, I agree it looks ugly.. If you have suggestions, I'm happy to
+> take a look.
 
-> Did checkpackage find anything on package/fstrcmp/*?
+No, I ahve no better suggestion, really, hence I gave my:
 
-$ ./utils/check-package package/fstrcmp/*
-78 lines processed
-0 warnings generated
+> > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> 
+> Thanks for the review and the time here!
+> 
+> Given this is my first patch, I'm not sure I have push rights. Can you
+> help with merging? Also, would you like a re-post with the commit
+> message recommendations above?
 
-> Any upstream bug worth mentioning?
+When one of the three maintainer have time, they'll pick up that patch
+and apply; it's not going to be forgotten: all patches are tracked on
+patchwork:
+    https://patchwork.ozlabs.org/project/buildroot/list/
 
-I did not find any active support mechanism, the trackers mentioned on 
-http://fstrcmp.sourceforge.net/ are all down and https://sourceforge.net/
-projects/fstrcmp/support is also not helpful...
+The committer can probably apply the tweaks I suggested when they apply,
+so no need to respin unless requested, now.
 
-> Is the fstrcmp binary really needed in staging or is it a cut paste err
-> from FSTRCMP_INSTALL_TARGET_CMDS?
+Thanks!
 
-No, fstrcmp can be dropped from staging, Kodi only needs libfstrcmp.a:
-https://github.com/xbmc/xbmc/blob/master/cmake/modules/
-Findfstrcmp.cmake#L31
+Regards,
+Yann E. MORIN.
 
-> Probably can drop the static lib and .pc installs from your
-> FSTRCMP_INSTALL_TARGET_CMDS?
-
-Yes, you are right, .a and .pc can be dropped from target.
-
-Because this package is not specific for Kodi I installed all binary 
-files in staging and target but this was too much ;)
-
-Regards, Bernd
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
