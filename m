@@ -1,30 +1,43 @@
-From: Christian Stewart <christian@paral.in>
-Date: Mon,  8 Apr 2019 00:13:36 -0700
-Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add Christian Stewart for
- package/pkg-golang
-Message-ID: <20190408071336.23009-1-christian@paral.in>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 8 Apr 2019 09:18:20 +0200
+Subject: [Buildroot] [PATCH] package/android-tools: fix static build
+ failure due to missing -latomic
+In-Reply-To: <e6f8db91-43e0-fc56-d071-1804616b2d61@micronovasrl.com>
+References: <20190404153904.69693-1-giulio.benetti@micronovasrl.com>
+ <20190404224539.2d79cf30@windsurf>
+ <699842f1-d9e3-dd02-4770-e8a10499194b@micronovasrl.com>
+ <e6f8db91-43e0-fc56-d071-1804616b2d61@micronovasrl.com>
+Message-ID: <20190408091820.2a7274a1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Christian Stewart <christian@paral.in>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+Hello Giulio,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 01cb34057b..aaca45a866 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -495,6 +495,7 @@ F:	package/docker-engine/
- F:	package/docker-proxy/
- F:	package/go/
- F:	package/mosh/
-+F:	package/pkg-golang.mk
- F:	package/rtl8821au/
- F:	package/runc/
- F:	package/tini/
+On Sun, 7 Apr 2019 23:55:38 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+
+> >> -LIBS+= -lc -lpthread -lz -lcrypto -lcrypt `pkg-config --libs glib-2.0 gio-2.0`  
+> 
+> In current version there is not glib-2.0 or gio-2.0, do I add them 
+> anyway as follows?
+
+Wow, I got confused about this. pkg-config is used for glib-2.0 and
+gio-2.0 in the upstream android-tools code, but we remove that in our
+0002-Fix-adbd-for-non-Ubuntu-systems.patch patch.
+
+So of course, don't re-add those pkg-config calls for glib-2.0 and gio-2.0.
+
+However, use pkg-config for OpenSSL. This will also allow you to drop
+patch 0005-fix-static-link-zlib.patch, which was needed for the same
+reason: pkg-config is not used to find OpenSSL.
+
+Thanks!
+
+Thomas
 -- 
-2.21.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
