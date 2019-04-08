@@ -1,46 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Apr 2019 09:21:12 +0200
-Subject: [Buildroot] [PATCH 1/1] boost: correctly disable icu in locale
- if needed
-In-Reply-To: <CAMo8Bf+a5JZcfG4JGibU6icFbMN0SdDiTfRidD9wRYk2dxf2gg@mail.gmail.com>
-References: <20180713174247.4005-1-fontaine.fabrice@gmail.com>
- <20190407222519.01e928a6@windsurf>
- <CAMo8Bf+3Q310wGTJWWeSGP8G2-71m0yEVhWZ6wQJfe6CpfC8gQ@mail.gmail.com>
- <CAMo8Bf+a5JZcfG4JGibU6icFbMN0SdDiTfRidD9wRYk2dxf2gg@mail.gmail.com>
-Message-ID: <20190408092112.043f6885@windsurf>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 8 Apr 2019 09:43:53 +0200
+Subject: [Buildroot] [PATCH] package/android-tools: fix static build
+ failure due to missing -latomic
+In-Reply-To: <20190408091820.2a7274a1@windsurf>
+References: <20190404153904.69693-1-giulio.benetti@micronovasrl.com>
+ <20190404224539.2d79cf30@windsurf>
+ <699842f1-d9e3-dd02-4770-e8a10499194b@micronovasrl.com>
+ <e6f8db91-43e0-fc56-d071-1804616b2d61@micronovasrl.com>
+ <20190408091820.2a7274a1@windsurf>
+Message-ID: <ae6a0d68-1cca-e9f5-9de1-7e2a56be2e7e@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Max,
-
-On Sun, 7 Apr 2019 14:09:18 -0700
-Max Filippov <jcmvbkbc@gmail.com> wrote:
-
-> > I didn't see that. Will take a look at the ICE on xtensa.  
+Il 08/04/2019 09:18, Thomas Petazzoni ha scritto:
+> Hello Giulio,
 > 
-> Hmmm... Does not reproduce here, the build is successful. Puzzled.
+> On Sun, 7 Apr 2019 23:55:38 +0200
+> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+> 
+>>>> -LIBS+= -lc -lpthread -lz -lcrypto -lcrypt `pkg-config --libs glib-2.0 gio-2.0`
+>>
+>> In current version there is not glib-2.0 or gio-2.0, do I add them
+>> anyway as follows?
+> 
+> Wow, I got confused about this. pkg-config is used for glib-2.0 and
+> gio-2.0 in the upstream android-tools code, but we remove that in our
+> 0002-Fix-adbd-for-non-Ubuntu-systems.patch patch.
+> 
+> So of course, don't re-add those pkg-config calls for glib-2.0 and gio-2.0.
 
-Of all the failures in:
+Ok
 
-  http://autobuild.buildroot.net/?reason=boost%&arch=xtensa
+> However, use pkg-config for OpenSSL. This will also allow you to drop
+> patch 0005-fix-static-link-zlib.patch, which was needed for the same
+> reason: pkg-config is not used to find OpenSSL.
 
-the internal compiler error happened only once. Did you try rebuilding
-with that exact configuration and Git commit ?
+Oh yes.
+In this case, can I substitute "0005-fix-static-link-zlib.patch" with 
+the new one I'm going to create? I mean "0005-...patch" ?
 
-If you indeed reproduced with the same config and Git commit, then it
-can be:
+Thanks
 
- 1. Influence from the environment (i.e the build machine is different)
- 2. The build machine is flaky and causes random failures
-
-If needed, we can always ask Richard Braun to try to reproduce the same
-build on his machine, in order to discriminate between (1) and (2).
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
