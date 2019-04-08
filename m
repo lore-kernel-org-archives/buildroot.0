@@ -1,33 +1,46 @@
 From: Shyam Saini <shyam.saini@amarulasolutions.com>
-Date: Mon,  8 Apr 2019 20:40:55 +0530
-Subject: [Buildroot] [PATCH 11/13] configs: nanopi_m1: Bump to u-boot
- version 2019.01
+Date: Mon,  8 Apr 2019 20:40:56 +0530
+Subject: [Buildroot] [PATCH 12/13] configs: nanopi_m1_plus: Bump to the
+ linux kernel 5.0
 In-Reply-To: <20190408151057.14455-1-shyam.saini@amarulasolutions.com>
 References: <20190408151057.14455-1-shyam.saini@amarulasolutions.com>
-Message-ID: <20190408151057.14455-11-shyam.saini@amarulasolutions.com>
+Message-ID: <20190408151057.14455-12-shyam.saini@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This bumps to linux/linux-headers 5.0
+
 Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
 ---
- configs/nanopi_m1_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/nanopi_m1_plus_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/configs/nanopi_m1_defconfig b/configs/nanopi_m1_defconfig
-index 0e782dab64..cf9521a3ad 100644
---- a/configs/nanopi_m1_defconfig
-+++ b/configs/nanopi_m1_defconfig
-@@ -14,7 +14,7 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi M1"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_m1"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/configs/nanopi_m1_plus_defconfig b/configs/nanopi_m1_plus_defconfig
+index da707fd5fa..5025148198 100644
+--- a/configs/nanopi_m1_plus_defconfig
++++ b/configs/nanopi_m1_plus_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_VFPV4=y
+ 
+-# Linux headers same as kernel, a 4.11 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_11=y
++# Linux headers same as kernel, a 5.0 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+ 
+ # System configuration
+ BR2_TARGET_GENERIC_HOSTNAME="nanopi-m1-plus"
+@@ -24,7 +24,7 @@ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.11.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+ BR2_GLOBAL_PATCH_DIR="board/friendlyarm/nanopi-m1-plus/patches/"
+ BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 -- 
 2.11.0
