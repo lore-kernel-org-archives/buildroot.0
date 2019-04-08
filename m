@@ -1,46 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 8 Apr 2019 22:31:52 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/openjdk: fix alsa-lib
- dependencies
-In-Reply-To: <20190408181035.38877-1-aduskett@gmail.com>
-References: <20190408181035.38877-1-aduskett@gmail.com>
-Message-ID: <20190408223152.3f1639c8@windsurf.home>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 8 Apr 2019 22:33:56 +0200
+Subject: [Buildroot] [PATCH v2] python-numpy: add sublibraries licenses
+In-Reply-To: <20190408221711.71a96f63@windsurf.home>
+References: <20180911124632.72416-1-giulio.benetti@micronovasrl.com>
+ <4419822d-fcff-54bf-5a2e-92876e301f7d@micronovasrl.com>
+ <e2fb25a2-c910-70b7-48fd-6ed096a3d91e@micronovasrl.com>
+ <b58c2ea4-0575-8360-10e1-2a6bbc753fa7@micronovasrl.com>
+ <20190408221711.71a96f63@windsurf.home>
+Message-ID: <96798671-6b15-d48c-496a-1dcb8ad6a145@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+Hello Thomas,
 
-On Mon,  8 Apr 2019 14:10:35 -0400
-aduskett at gmail.com wrote:
-
-> From: Adam Duskett <Aduskett@gmail.com>
+Il 08/04/2019 22:17, Thomas Petazzoni ha scritto:
+> Hello Giulio,
 > 
-> OpenJDK requires the following alsa-lib modules to be build:
->   - mixer
->   - pcm
->   - rawmidi
->   - seq
+> On Sun, 7 Apr 2019 22:58:39 +0200
+> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/c35/c35d64e659960663c935a31f4cb8ed4180728eb1
-> http://autobuild.buildroot.net/results/845/845fe32967c9879b6c1adbf0630f358be215e174
+>> Python-numpy has been bumped to 1.16.2 so this patch doesn't make sense
+>> anymore.
+> 
+> Why do you say that the patch doesn't make sense anymore ? The
+> python-numpy license information still isn't complete:
+> 
+> PYTHON_NUMPY_LICENSE = BSD-3-Clause
+> PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt
+> 
+> Yes, your patch needs to be updated/refreshed, but it certainly makes
+> sense to have such a patch.
 
-Hint: the autobuild URLs can be shorted by dropping the /c35/ and /845/ part of the URLs.
+Oops you're right, one patch more to send.
 
-Also, there must be an empty new line to separate the core of the
-commit log from the Signed-off-by line.
-
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-
-I've applied after adjusting this.
-
-Thanks!
-
-Thomas
+Thank you
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
