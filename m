@@ -1,115 +1,168 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Mon, 8 Apr 2019 11:48:16 +0300
-Subject: [Buildroot] [PATCH 1/1] package/gettext-gnu: Fix GETTEXTIZE is
- not defined in case of full gettext
-In-Reply-To: <20190408084241.dbue3nngwqqjziq7@vkochan-ThinkPad-T470p>
-References: <20190408001021.12249-1-vadim4j@gmail.com>
- <807fcd35-330e-cbeb-03f6-4fa59b95e5ad@smile.fr>
- <20190408084241.dbue3nngwqqjziq7@vkochan-ThinkPad-T470p>
-Message-ID: <20190408084816.hasekuy47uoae4tk@vkochan-ThinkPad-T470p>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Mon, 8 Apr 2019 10:49:50 +0200
+Subject: [Buildroot] [PATCH v2] support/testing: add xserver + Mesa
+ OpenGL (GLX) + glxinfo
+In-Reply-To: <5caa7e71e1bda_4f363faf901420b04172e@ultri5.mail>
+References: <20190320124508.5344-1-romain.naour@smile.fr>
+ <5caa7e71e1bda_4f363faf901420b04172e@ultri5.mail>
+Message-ID: <d419cda6-d51a-9c66-e0ef-10ceb1b2fbea@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Apr 08, 2019 at 11:42:41AM +0300, Vadim Kochan wrote:
-> Hi Romain, All,
+Hi Ricardo,
+
+Le 08/04/2019 ? 00:49, Ricardo Martincoski a ?crit?:
+> Hello,
 > 
-> On Mon, Apr 08, 2019 at 10:24:10AM +0200, Romain Naour wrote:
-> > Hi Vadim, All
-> > 
-> > Le 08/04/2019 ? 02:10, Vadim Kochan a ?crit?:
-> > > After introducing gettext-tiny in:
-> > > 
-> > > 	5367a1b253 package/gettext-tiny: new package
-> > > 
-> > > GETTEXTIZE variable is defined separately by gettext-gnu or gettext-tiny
-> > > package depending on which of them is enabled. But it causes the issue when
-> > > BR2_TOOLCHAIN_HAS_FULL_GETTEXT=y, because in that case
-> > > BR2_PACKAGE_GETTEXT is not selected by BR2_SYSTEM_ENABLE_NLS config
-> > > and GETTEXTIZE is not defined, which causes build fail for packages
-> > > which uses gettextizing (e.g. host-flex).
-> > > 
-> > > Fix issue by defining GETTEXTIZE in package/gettext/gettext.mk, the
-> > > definition is almost same for gettext-gnu and gettext-tiny with only
-> > > difference in additional 'data_dir' variable for gettext-tiny case.
-> > > 
-> > > Reported-by: Romain Naour <romain.naour@gmail.com>
-> > > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> > > ---
-> > >  package/gettext-gnu/gettext-gnu.mk   |  4 ----
-> > >  package/gettext-tiny/gettext-tiny.mk |  7 -------
-> > >  package/gettext/gettext.mk           | 10 ++++++++++
-> > >  3 files changed, 10 insertions(+), 11 deletions(-)
-> > > 
-> > > diff --git a/package/gettext-gnu/gettext-gnu.mk b/package/gettext-gnu/gettext-gnu.mk
-> > > index 61adf72738..33a1cbed38 100644
-> > > --- a/package/gettext-gnu/gettext-gnu.mk
-> > > +++ b/package/gettext-gnu/gettext-gnu.mk
-> > > @@ -95,9 +95,5 @@ endef
-> > >  
-> > >  HOST_GETTEXT_GNU_POST_INSTALL_HOOKS += HOST_GETTEXT_GNU_ADD_ABOUT_NLS
-> > >  
-> > > -ifeq ($(BR2_PACKAGE_GETTEXT_GNU),y)
-> > > -GETTEXTIZE = $(HOST_CONFIGURE_OPTS) AUTOM4TE=$(HOST_DIR)/bin/autom4te $(HOST_DIR)/bin/gettextize -f
-> > > -endif
-> > > -
-> > >  $(eval $(autotools-package))
-> > >  $(eval $(host-autotools-package))
-> > > diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
-> > > index 4fa014e8dd..4d002aba4b 100644
-> > > --- a/package/gettext-tiny/gettext-tiny.mk
-> > > +++ b/package/gettext-tiny/gettext-tiny.mk
-> > > @@ -105,12 +105,5 @@ define GETTEXT_TINY_INSTALL_TARGET_CMDS
-> > >  	$(INSTALL) -m 0755 -D $(GETTEXT_TINY_PKGDIR)/gettext-wrapper $(TARGET_DIR)/usr/bin/gettext
-> > >  endef
-> > >  
-> > > -ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
-> > > -GETTEXTIZE = $(HOST_CONFIGURE_OPTS) \
-> > > -	     AUTOM4TE=$(HOST_DIR)/bin/autom4te \
-> > > -	     gettext_datadir=$(HOST_DIR)/usr/share/gettext-tiny \
-> > > -	     $(HOST_DIR)/bin/gettextize -f
-> > > -endif
-> > > -
-> > >  $(eval $(generic-package))
-> > >  $(eval $(host-generic-package))
-> > > diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
-> > > index a86e26f69e..b836ebac57 100644
-> > > --- a/package/gettext/gettext.mk
-> > > +++ b/package/gettext/gettext.mk
-> > > @@ -4,5 +4,15 @@
-> > >  #
-> > >  ################################################################################
-> > >  
-> > > +GETTEXTIZE_ENV = $(HOST_CONFIGURE_OPTS) \
-> > > +	AUTOM4TE=$(HOST_DIR)/bin/autom4te
-> > > +
-> > > +ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
-> > > +GETTEXTIZE_ENV += gettext_datadir=$(HOST_DIR)/usr/share/gettext-tiny
-> > > +endif
-> > 
-> > The fix is ok but having something related to gettext-tiny in the virtual
-> > package is not great.
-> > I'm not sure if GETTEXTIZE_ENV can/should be used from gettext-tiny package.
-> > 
+> Looks good, but I have a proposal at the end to make the test stronger.
+> Also few nits.
 > 
-> Emmm, you are right, conceptually this is not good. OK,
-> let see if this 'data_dir' can be replaced by sed in gettext-tiny.mk .
+> On Wed, Mar 20, 2019 at 09:45 AM, Romain Naour wrote:
 > 
-> > 
-> > > +
-> > > +GETTEXTIZE = $(GETTEXTIZE_ENV) \
-> > > +	$(HOST_DIR)/bin/gettextize -f
-> > > +
-> > >  $(eval $(virtual-package))
-> > >  $(eval $(host-virtual-package))
-> > > 
-> > 
+> [snip]
+>> ---
+>>  support/testing/tests/package/test_glxinfo.py | 65 +++++++++++++++++++
+>>  1 file changed, 65 insertions(+)
+>>  create mode 100644 support/testing/tests/package/test_glxinfo.py
+> 
+> Please run flake8 and fix the warning it generates.
+> test_glxinfo.py:7:1: E302 expected 2 blank lines, found 1
+> 
+> Please run 'make .gitlab-ci.yml' and commit the changes.
+
+Ok
+
+> 
+> [snip]
+>> +class TestGlxinfo(infra.basetest.BRTest):
+>> +    config = \
+>> +        """
+>> +        BR2_x86_core2=y
+>> +        BR2_TOOLCHAIN_EXTERNAL=y
+>> +        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>> +        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+>> +        BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-core2/tarballs/x86-core2--glibc--bleeding-edge-2018.11-1.tar.bz2"
+>> +        BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+>> +        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
+>> +        # BR2_TOOLCHAIN_EXTERNAL_LOCALE is not set
+>> +        BR2_TOOLCHAIN_EXTERNAL_CXX=y
+>> +        BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
+>> +        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG=y
+>> +        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS=y
+>> +        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL=y
+>> +        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+>> +        BR2_LINUX_KERNEL=y
+>> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+>> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
+>> +        BR2_PACKAGE_MESA3D_DEMOS=y
+>> +        BR2_PACKAGE_MESA3D=y
+>> +        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
+>> +        BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
+>> +        BR2_PACKAGE_XORG7=y
+>> +        BR2_PACKAGE_XSERVER_XORG_SERVER=y
+>> +        BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+>> +        BR2_TARGET_ROOTFS_EXT2=y
+>> +        # BR2_TARGET_ROOTFS_TAR is not set
+>> +        """
+> 
+> nit, I am really unsure whether we should care about or not:
+> This is not the exact the order if we generate a defconfig.
+
+I wrote the defconfig by "hand", I'm not sure if it's really important.
+
+> I started the test with -k, then I pressed ctrl+C, then I chdir to it and ran
+> 'make defconfig', and finally I copied the result without BR2_DL_DIR to the
+> test case code and generated a diff:
+> +++ support/testing/tests/package/test_glxinfo.py
+> @@ -11,3 +11,2 @@ class TestGlxinfo(infra.basetest.BRTest):
+>          BR2_TOOLCHAIN_EXTERNAL=y
+> -        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+>          BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> @@ -16,9 +15,5 @@ class TestGlxinfo(infra.basetest.BRTest):
+>          BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
+> -        # BR2_TOOLCHAIN_EXTERNAL_LOCALE is not set
+> -        BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> -        BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
+> -        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG=y
+> -        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS=y
+> -        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL=y
+>          BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+> +        BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> +        BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+>          BR2_LINUX_KERNEL=y
+> @@ -34,3 +29,2 @@ class TestGlxinfo(infra.basetest.BRTest):
+>          BR2_PACKAGE_XSERVER_XORG_SERVER=y
+> -        BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+>          BR2_TARGET_ROOTFS_EXT2=y
 > 
 
-OK, I will just try to make link ${PREFIX}/share/gettext -> ${PREFIX}/share/gettext-tiny,
-there will be no need for 'data_dir' passing.
+Ok, I'll fix it.
 
-Regards,
-Vadim Kochan
+>> +
+>> +    def wait_for_xserver(self):
+>> +        # xserver takes some time to start up
+>> +        _, _ = self.emulator.run('while [ ! -e /var/run/xorg.pid ]; do sleep 1; done', 120)
+> 
+> The test passes without this, as you replied to v1.
+> But I think it is good to keep this here because if for some reason xserver is
+> not properly installed, the test case fails here. Checking the assumptions
+> needed by the real test (calling glxinfo assumes the xserver is running) is
+> always good because in the case of a test failure it eases the debug.
+
+Maybe I can update the comment for the case case where xserver crashed.
+
+> 
+> [snip]
+>> +    def test_run(self):
+>> +        self.login()
+>> +        self.wait_for_xserver()
+>> +
+>> +        # The test case verifies that the xserver with GLX is working
+>> +        cmd = "glxinfo -display :0 2>&1 >/dev/null | grep Error"
+>> +        # Error case: "Error: couldn't find RGB GLX visual or fbconfig"
+>> +        _, exit_code = self.emulator.run(cmd, GLXINFO_TIMEOUT)
+>> +        # Test the return code of grep command:
+>> +        # 0: glxinfo test is KO, there is an error returned by glxinfo.
+>> +        # 1: glxinfo test is OK, there is no error returned by glxinfo.
+>> +        self.assertEqual(exit_code, 1)
+> 
+> I removed glxinfo from the target and the test case passes (a false PASS), so
+> the test case could become stronger.
+> I first thought we could do something like this:
+>         cmd = "glxinfo -B -display :0"
+>         _, exit_code = self.emulator.run(cmd, GLXINFO_TIMEOUT)
+>         self.assertEqual(exit_code, 0)
+> 
+> But then I reverted bd0bb8b8f6c975de3c926359990da9308d08a9e0 and glxinfo
+> returns 0 in that case.
+
+Indeed, the glxinfo return code can't be used as is in our test.
+
+> So, what about this?
+>          cmd = "glxinfo -B -display :0"
+>          output, exit_code = self.emulator.run(cmd, GLXINFO_TIMEOUT)
+>          self.assertEqual(exit_code, 0)
+>          # Error case: "Error: couldn't find RGB GLX visual or fbconfig"
+>          for line in output:
+>              self.assertNotIn("Error", line)                                                                                                                       
+> It requires Python 2.7 but this is already the requirement to run buildroot.
+
+That's what I tried to do using a "| grep".
+Let's use the python way :)
+
+Maybe we should start writing testcase in python 3 ?
+On the long term, Python 2 will be deprecated.
+
+Best regards,
+Romain
+
+> 
+> 
+> Regards,
+> Ricardo
+> 
