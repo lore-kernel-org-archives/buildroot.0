@@ -1,65 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 8 Apr 2019 22:01:00 +0200
-Subject: [Buildroot] [PATCH 1/1] linux: use host pkg-config when host
- libelf is set
-In-Reply-To: <899a55d6cfd3f183da8053082c645342242c9bdd.camel@intel.com>
-References: <20190405184712.5582-1-stuart.summers@intel.com>
- <20190408184233.10697-1-stuart.summers@intel.com>
- <20190408192840.GB23890@scaer>
- <899a55d6cfd3f183da8053082c645342242c9bdd.camel@intel.com>
-Message-ID: <20190408200100.GC23890@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 8 Apr 2019 22:17:11 +0200
+Subject: [Buildroot] [PATCH v2] python-numpy: add sublibraries licenses
+In-Reply-To: <b58c2ea4-0575-8360-10e1-2a6bbc753fa7@micronovasrl.com>
+References: <20180911124632.72416-1-giulio.benetti@micronovasrl.com>
+ <4419822d-fcff-54bf-5a2e-92876e301f7d@micronovasrl.com>
+ <e2fb25a2-c910-70b7-48fd-6ed096a3d91e@micronovasrl.com>
+ <b58c2ea4-0575-8360-10e1-2a6bbc753fa7@micronovasrl.com>
+Message-ID: <20190408221711.71a96f63@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Stuart, All,
+Hello Giulio,
 
-On 2019-04-08 19:41 +0000, Summers, Stuart spake thusly:
-> On Mon, 2019-04-08 at 21:28 +0200, Yann E. MORIN wrote:
-[--SNIP--]
-> > >  $(2)_CONFIGURATOR_MAKE_ENV = \
-> > > -	$$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=%
-> > > PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
-> > > +	$$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% \
-> > > +	   PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=%
-> > > PKG_CONFIG_ALLOW_SYSTEM_LIBS=% \
-> > > +	   PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
-> > 
-> > I'm not too happy abfor the poout the look the above has, but I have
-> > no better
-> > formatting suggestion to provide...
-> Yeah, I agree it looks ugly.. If you have suggestions, I'm happy to
-> take a look.
+On Sun, 7 Apr 2019 22:58:39 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-No, I ahve no better suggestion, really, hence I gave my:
+> Python-numpy has been bumped to 1.16.2 so this patch doesn't make sense 
+> anymore.
 
-> > Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> Thanks for the review and the time here!
-> 
-> Given this is my first patch, I'm not sure I have push rights. Can you
-> help with merging? Also, would you like a re-post with the commit
-> message recommendations above?
+Why do you say that the patch doesn't make sense anymore ? The
+python-numpy license information still isn't complete:
 
-When one of the three maintainer have time, they'll pick up that patch
-and apply; it's not going to be forgotten: all patches are tracked on
-patchwork:
-    https://patchwork.ozlabs.org/project/buildroot/list/
+PYTHON_NUMPY_LICENSE = BSD-3-Clause
+PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt
 
-The committer can probably apply the tweaks I suggested when they apply,
-so no need to respin unless requested, now.
+Yes, your patch needs to be updated/refreshed, but it certainly makes
+sense to have such a patch.
 
-Thanks!
+Best regards,
 
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
