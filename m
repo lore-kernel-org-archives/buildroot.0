@@ -1,54 +1,54 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Tue, 9 Apr 2019 00:54:10 +0300
-Subject: [Buildroot] [PATCH] gettext-tiny: Make libiconv only target
- dependency
-In-Reply-To: <20190408230530.0a8a67be@windsurf.home>
-References: <20190408140442.29566-1-abrodkin@synopsys.com>
- <20190408230530.0a8a67be@windsurf.home>
-Message-ID: <20190408215410.e3mxykdxrm23y3ml@vkochan-ThinkPad-T470p>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 08 Apr 2019 20:02:07 -0300
+Subject: [Buildroot] [PATCH v2] support/testing: add xserver + Mesa
+ OpenGL (GLX) + glxinfo
+References: <d419cda6-d51a-9c66-e0ef-10ceb1b2fbea@smile.fr>
+Message-ID: <5cabd2ef8c663_2012acfc5fd214447397@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas, Alexey, All
+Hello,
 
-On Mon, Apr 08, 2019 at 11:05:30PM +0200, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Mon,  8 Apr 2019 17:04:42 +0300
-> Alexey Brodkin <alexey.brodkin@synopsys.com> wrote:
-> 
-> > diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
-> > index 4fa014e8dd..f07903d203 100644
-> > --- a/package/gettext-tiny/gettext-tiny.mk
-> > +++ b/package/gettext-tiny/gettext-tiny.mk
-> > @@ -50,7 +50,7 @@ endef
-> >  HOST_GETTEXT_TINY_POST_PATCH_HOOKS += HOST_GETTEXT_TINY_COPY_EXTRA_FILES
-> >  
-> >  ifeq ($(BR2_ENABLE_LOCALE),)
-> > -HOST_GETTEXT_TINY_DEPENDENCIES = libiconv
-> > +GETTEXT_TINY_DEPENDENCIES = libiconv
-> >  endif
-> 
-> Hm, the issue I see is that gettext-tiny/Config.in does not select
-> BR2_PACKAGE_LIBICONV, so we would run into the error that libiconv is
-> used as a dependency but not selected.
-> 
-> While looking at this, I realize that gettext-gnu does have the
-> conditional dependency on libiconv, but does not select it. libiconv
-> seems to no longer be needed since commit
-> 187b4d68e0ad9e92492345c5863da40e32863eda, but we forgot to remove the
-> libiconv conditional dependency in gettext-gnu.mk.
-> 
-> Vadim, do you confirm ?
-> 
+On Mon, Apr 08, 2019 at 05:49 AM, Romain Naour wrote:
 
-libiconv is needed by msgfmt and msgmerge during "translation" on the
-host so I think host-gettext-tiny should depend on host-libiconv.
+[snip]
+>> nit, I am really unsure whether we should care about or not:
+>> This is not the exact the order if we generate a defconfig.
+> 
+> I wrote the defconfig by "hand", I'm not sure if it's really important.
 
-Sorry for this issue!
+OK, let's keep it as-is.
+
+[snip]
+>> So, what about this?
+>>          cmd = "glxinfo -B -display :0"
+>>          output, exit_code = self.emulator.run(cmd, GLXINFO_TIMEOUT)
+>>          self.assertEqual(exit_code, 0)
+>>          # Error case: "Error: couldn't find RGB GLX visual or fbconfig"
+>>          for line in output:
+>>              self.assertNotIn("Error", line)
+>> It requires Python 2.7 but this is already the requirement to run buildroot.
+
+Sorry, in order to be precise I should had write:
+It requires Python 2 >= 2.7 or Python 3 >= 3.1
+So we can use now and we won't need to change later.
+
+> 
+> That's what I tried to do using a "| grep".
+> Let's use the python way :)
+
+Great :)
+
+> 
+> Maybe we should start writing testcase in python 3 ?
+> On the long term, Python 2 will be deprecated.
+
+Sure. It is in my TODO list (for quite some time now) to move the test infra
+and test cases to Python 3.
+
 
 Regards,
-Vadim Kochan
+Ricardo
