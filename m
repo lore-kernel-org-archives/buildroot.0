@@ -1,106 +1,87 @@
 From: Vadim Kochan <vadim4j@gmail.com>
-Date: Mon, 8 Apr 2019 02:04:46 +0300
-Subject: [Buildroot] [git commit] package/gettext: turn into virtual
- package
-In-Reply-To: <e1d4694d-420f-c479-7595-a1ccebed4f2e@gmail.com>
-References: <20190331121707.C1C2D86602@busybox.osuosl.org>
- <e1d4694d-420f-c479-7595-a1ccebed4f2e@gmail.com>
-Message-ID: <CAMw6YJLmW_FvHER3pjgH=4pD+rJB9zs9Lx394-G7XA1e+KLK+g@mail.gmail.com>
+Date: Mon,  8 Apr 2019 03:10:21 +0300
+Subject: [Buildroot] [PATCH 1/1] package/gettext-gnu: Fix GETTEXTIZE is not
+ defined in case of full gettext
+Message-ID: <20190408001021.12249-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain, All
+After introducing gettext-tiny in:
 
-On Mon, Apr 8, 2019 at 12:33 AM Romain Naour <romain.naour@gmail.com> wrote:
->
-> Hi All,
->
-> Le 31/03/2019 ? 14:04, Thomas Petazzoni a ?crit :
-> > commit: https://git.buildroot.net/buildroot/commit/?id=ea1e7ee6068265d3f8ade97a387d77c77335b38e
-> > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> >
-> > Re-work gettext to be a virtual package which may allow to use
-> > different gettext's providers, and rename the original one into
-> > gettext-gnu package.
-> >
-> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > ---
->
-> [...]
->
-> >
-> > -config BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL
-> > -     bool
-> > -     default y if BR2_SYSTEM_ENABLE_NLS
-> > -     depends on !BR2_TOOLCHAIN_HAS_FULL_GETTEXT
-> > +config BR2_PACKAGE_PROVIDES_GETTEXT
-> > +     default "gettext-gnu"
-> >
-> >  endif
-> >
->
-> [...]
->
-> > diff --git a/package/gettext/gettext.mk b/package/gettext-gnu/gettext-gnu.mk
-> > similarity index 57%
-> > copy from package/gettext/gettext.mk
-> > copy to package/gettext-gnu/gettext-gnu.mk
-> > index ec9588f8ad..61adf72738 100644
-> > --- a/package/gettext/gettext.mk
-> > +++ b/package/gettext-gnu/gettext-gnu.mk
-> > @@ -1,23 +1,24 @@
-> >  ################################################################################
-> >  #
-> > -# gettext
-> > +# gettext-gnu
-> >  #
-> >  ################################################################################
-> >
-> > -GETTEXT_VERSION = 0.19.8.1
-> > -GETTEXT_SITE = $(BR2_GNU_MIRROR)/gettext
-> > -GETTEXT_SOURCE = gettext-$(GETTEXT_VERSION).tar.xz
-> > -GETTEXT_INSTALL_STAGING = YES
-> > -GETTEXT_LICENSE = LGPL-2.1+ (libintl), GPL-3.0+ (the rest)
-> > -GETTEXT_LICENSE_FILES = COPYING gettext-runtime/intl/COPYING.LIB
-> > +GETTEXT_GNU_VERSION = 0.19.8.1
-> > +GETTEXT_GNU_SITE = $(BR2_GNU_MIRROR)/gettext
-> > +GETTEXT_GNU_SOURCE = gettext-$(GETTEXT_GNU_VERSION).tar.xz
-> > +GETTEXT_GNU_INSTALL_STAGING = YES
-> > +GETTEXT_GNU_LICENSE = LGPL-2.1+ (libintl), GPL-3.0+ (the rest)
-> > +GETTEXT_GNU_LICENSE_FILES = COPYING gettext-runtime/intl/COPYING.LIB
-> >  # 0002-Update-after-gnulib-changed.patch
-> > -GETTEXT_AUTORECONF = YES
-> > -GETTEXT_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-> > +GETTEXT_GNU_AUTORECONF = YES
-> > +GETTEXT_GNU_PROVIDES = gettext
-> > +GETTEXT_GNU_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
-> >
->
-> [...]
->
-> >
-> >  # Force the build of libintl, even if the C library provides a stub
-> >  # gettext implementation
-> > -ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
-> > -GETTEXT_CONF_OPTS += --with-included-gettext
-> > +ifeq ($(BR2_PACKAGE_GETTEXT_GNU_PROVIDES_LIBINTL),y)
->
-> It seems this patch introduced a typo here, There is no
-> BR2_PACKAGE_GETTEXT_GNU_PROVIDES_LIBINTL option but
-> BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL.
->
-> Even with this patch my host-flex build is broken.
->
+	5367a1b253 package/gettext-tiny: new package
 
-Yeah, this is a really typo  but anyway gettext/Config.in (which is a
-virtual package now) uses
-the right config option.
+GETTEXTIZE variable is defined separately by gettext-gnu or gettext-tiny
+package depending on which of them is enabled. But it causes the issue when
+BR2_TOOLCHAIN_HAS_FULL_GETTEXT=y, because in that case
+BR2_PACKAGE_GETTEXT is not selected by BR2_SYSTEM_ENABLE_NLS config
+and GETTEXTIZE is not defined, which causes build fail for packages
+which uses gettextizing (e.g. host-flex).
 
-Thanks Romain!
+Fix issue by defining GETTEXTIZE in package/gettext/gettext.mk, the
+definition is almost same for gettext-gnu and gettext-tiny with only
+difference in additional 'data_dir' variable for gettext-tiny case.
 
-Regards,
-Vadim Kochan
+Reported-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+---
+ package/gettext-gnu/gettext-gnu.mk   |  4 ----
+ package/gettext-tiny/gettext-tiny.mk |  7 -------
+ package/gettext/gettext.mk           | 10 ++++++++++
+ 3 files changed, 10 insertions(+), 11 deletions(-)
+
+diff --git a/package/gettext-gnu/gettext-gnu.mk b/package/gettext-gnu/gettext-gnu.mk
+index 61adf72738..33a1cbed38 100644
+--- a/package/gettext-gnu/gettext-gnu.mk
++++ b/package/gettext-gnu/gettext-gnu.mk
+@@ -95,9 +95,5 @@ endef
+ 
+ HOST_GETTEXT_GNU_POST_INSTALL_HOOKS += HOST_GETTEXT_GNU_ADD_ABOUT_NLS
+ 
+-ifeq ($(BR2_PACKAGE_GETTEXT_GNU),y)
+-GETTEXTIZE = $(HOST_CONFIGURE_OPTS) AUTOM4TE=$(HOST_DIR)/bin/autom4te $(HOST_DIR)/bin/gettextize -f
+-endif
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
+index 4fa014e8dd..4d002aba4b 100644
+--- a/package/gettext-tiny/gettext-tiny.mk
++++ b/package/gettext-tiny/gettext-tiny.mk
+@@ -105,12 +105,5 @@ define GETTEXT_TINY_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 0755 -D $(GETTEXT_TINY_PKGDIR)/gettext-wrapper $(TARGET_DIR)/usr/bin/gettext
+ endef
+ 
+-ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+-GETTEXTIZE = $(HOST_CONFIGURE_OPTS) \
+-	     AUTOM4TE=$(HOST_DIR)/bin/autom4te \
+-	     gettext_datadir=$(HOST_DIR)/usr/share/gettext-tiny \
+-	     $(HOST_DIR)/bin/gettextize -f
+-endif
+-
+ $(eval $(generic-package))
+ $(eval $(host-generic-package))
+diff --git a/package/gettext/gettext.mk b/package/gettext/gettext.mk
+index a86e26f69e..b836ebac57 100644
+--- a/package/gettext/gettext.mk
++++ b/package/gettext/gettext.mk
+@@ -4,5 +4,15 @@
+ #
+ ################################################################################
+ 
++GETTEXTIZE_ENV = $(HOST_CONFIGURE_OPTS) \
++	AUTOM4TE=$(HOST_DIR)/bin/autom4te
++
++ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
++GETTEXTIZE_ENV += gettext_datadir=$(HOST_DIR)/usr/share/gettext-tiny
++endif
++
++GETTEXTIZE = $(GETTEXTIZE_ENV) \
++	$(HOST_DIR)/bin/gettextize -f
++
+ $(eval $(virtual-package))
+ $(eval $(host-virtual-package))
+-- 
+2.14.1
