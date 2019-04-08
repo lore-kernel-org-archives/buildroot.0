@@ -1,52 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 08 Apr 2019 22:58:48 +0200
-Subject: [Buildroot] [PATCH] linux: simplify LINUX_BUILD_CMDS
-In-Reply-To: <20190408204832.GD23890@scaer> (Yann E. MORIN's message of "Mon, 
- 8 Apr 2019 22:48:32 +0200")
-References: <20190408202136.22944-1-thomas.petazzoni@bootlin.com>
- <20190408204832.GD23890@scaer>
-Message-ID: <87k1g4gqnr.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 8 Apr 2019 23:05:30 +0200
+Subject: [Buildroot] [PATCH] gettext-tiny: Make libiconv only target
+ dependency
+In-Reply-To: <20190408140442.29566-1-abrodkin@synopsys.com>
+References: <20190408140442.29566-1-abrodkin@synopsys.com>
+Message-ID: <20190408230530.0a8a67be@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello,
 
- > On 2019-04-08 22:21 +0200, Thomas Petazzoni spake thusly:
- >> We currently do the Linux build as follows:
- >> 
- >> make <imagename>
- >> if modules enabled; make modules; fi
- >> 
- >> However, Clement L?ger recently reported that due to us not using the
- >> "all" target, the GDB scripts that the kernel can build when
- >> CONFIG_GDB_SCRIPTS is enabled are not built, since upstream kernel
- >> commit 67274c083438340ad16c1437caebc84e1253b224 (merged in v5.1) moved
- >> that logic to a separate scripts_gdb target, which is a dependency of
- >> the "all" target.
- >> 
- >> While we could add some more logic to explicit generate the
- >> "scripts_gdb" target, this logic would fail on Linux < 5.1 for which
- >> this make target doesn't exist.
- >> 
- >> So instead, let's simplify the build logic, and use:
- >> 
- >> make all <imagename>
+On Mon,  8 Apr 2019 17:04:42 +0300
+Alexey Brodkin <alexey.brodkin@synopsys.com> wrote:
 
- > While we are at simplifying: do we still need to specify imagename?
+> diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
+> index 4fa014e8dd..f07903d203 100644
+> --- a/package/gettext-tiny/gettext-tiny.mk
+> +++ b/package/gettext-tiny/gettext-tiny.mk
+> @@ -50,7 +50,7 @@ endef
+>  HOST_GETTEXT_TINY_POST_PATCH_HOOKS += HOST_GETTEXT_TINY_COPY_EXTRA_FILES
+>  
+>  ifeq ($(BR2_ENABLE_LOCALE),)
+> -HOST_GETTEXT_TINY_DEPENDENCIES = libiconv
+> +GETTEXT_TINY_DEPENDENCIES = libiconv
+>  endif
 
- > Isn't the image name either:
- >   - implicit for the architecture, or
- >   - specified as a config option in the linux configuration?
+Hm, the issue I see is that gettext-tiny/Config.in does not select
+BR2_PACKAGE_LIBICONV, so we would run into the error that libiconv is
+used as a dependency but not selected.
 
-I'm not sure that is always the case, E.G. the uImage target is afaik
-not built by "make all".
+While looking at this, I realize that gettext-gnu does have the
+conditional dependency on libiconv, but does not select it. libiconv
+seems to no longer be needed since commit
+187b4d68e0ad9e92492345c5863da40e32863eda, but we forgot to remove the
+libiconv conditional dependency in gettext-gnu.mk.
 
-The patch itself looks good:
+Vadim, do you confirm ?
 
-Reviewed-by: Peter Korsgaard <peter@korsgaard.com>
+Thanks!
 
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
