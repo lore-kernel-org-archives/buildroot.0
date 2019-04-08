@@ -1,58 +1,60 @@
-From: Christian Stewart <christian@paral.in>
-Date: Sun, 07 Apr 2019 19:04:00 -0700
-Subject: [Buildroot] [RFC PATCH v1 1/6] package/go: implement go modules
- integration
-In-Reply-To: <20190407221726.130ca0fe@windsurf>
-References: <20190317012142.10545-1-christian@paral.in>
- <20190407221726.130ca0fe@windsurf>
-Message-ID: <87mul1fe27.fsf@paral.in>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Mon, 08 Apr 2019 00:22:11 -0300
+Subject: [Buildroot] [PATCH v3 2/5] .gitlab-ci.yml: use "include" keyword
+References: <1a09bb90-2a61-4db6-d4cd-e1972c955675@mind.be>
+Message-ID: <5caabe634b731_25943ff6aa17fcc43877a@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hello,
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
-> While browsing through the list of pending patches, I found the
-> following patch series related to Go and package management:
->
->   http://patchwork.ozlabs.org/project/buildroot/list/?series=68102
->
-> The first patch in the series,
-> http://patchwork.ozlabs.org/patch/976322/, introduces:
->
-> +	  Glide is a tool for managing the _vendor_ directory within a Go
-> +	  package. This feature, first introduced in Go 1.5, allows each
-> +	  package to have a _vendor_ directory containing dependent
-> +	  packages for the project. These vendor packages can be
-> +	  installed by a tool (e.g. glide), similar to go get or they
-> +	  can be vendored and distributed with the package.
->
-> and it does a fair amount of changes in pkg-golang.mk.
->
-> How does this fit (or not) with the changes you're proposing ?
+Sorry for the long delay in answering.
 
-Glide and other tools were built before Go modules were built. I do not
-recommend integrating them into Buildroot. They are on the way out.
+On Wed, Feb 06, 2019 at 08:59 AM, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Please see the Go module wiki:
+> On 21/01/2019 02:11, Ricardo Martincoski wrote:
+>> Do not copy the contents of .gitlab-ci.yml.in to .gitlab-ci.yml when
+>> 'make .gitlab-ci.yml' runs, use the new "include" keyword instead.
+>> 
+>> The docs state "include requires the external YAML file to have the
+>> extensions .yml or .yaml" so rename .gitlab-ci.yml.in. Use the example
+>> name from the docs: .gitlab-ci-template.yml.
+>> This file is not anymore a template for our own script that generates
+>> .gitlab-ci.yml. It becomes a job template to the Gitlab CI infra
+>> to use when populating the list of jobs to run.
+> 
+>  Meh, this is not what I meant...
 
-Specifically:
+Oh, really sorry. I was thinking only about the duplicated code.
 
-  go mod init automatically translates the required information from
-  dep, glide, govendor, godep and 5 other pre-existing dependency
-  managers into a go.mod file that produces the equivalent build.
+> 
+>  What I meant was to rename .gitlab-ci.yml.in to .gitlab-ci.yml and to add the
+> include to the end of it, and to make generate-gitlab-ci.yml generate only the
+> included file.
 
-The Go developers left it up to the community to develop a source
-package manager, which is why Glide, Dep (gopkg.toml), vendor.conf, and
-other formats exist. These formats are intended to be completely
-replaced by go.mod.
+OK
 
-My suggestion is to instead solve the Go module stuff, and then bring in
-Glide-based packages with the glide.lock file converted into the Go
-module format via the above automatic process.
+> 
+>  This has the advantage that it allows to generate different versions of the
+> included file by modifying the generator script. For example, we could think of
+> generating only a subset of the defconfigs and tests in master, and use a
+> special branch for full testing, and add another CI job with a time trigger that
+> updates that special branch.
 
-Best regards,
-Christian
+OK, now (hopefully) I see what you want to achieve.
+
+>  I thought of fixing that up while committing, but it's a little bit complicated
+> so instead I've marked the rest of the series as Changes Requested.
+> 
+>  If you don't have time to do it, could you instead repost v2 but rebased on the
+> "extends" patch?
+
+I will repost without this patch so we can move forward with this series.
+But we can revisit the use of 'include' later, after the series got merged.
+
+
+Regards,
+Ricardo
