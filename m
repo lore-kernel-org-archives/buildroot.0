@@ -1,91 +1,43 @@
-From: Stuart Summers <stuart.summers@intel.com>
-Date: Mon,  8 Apr 2019 11:42:33 -0700
-Subject: [Buildroot] [PATCH 1/1] linux: use host pkg-config when host libelf
- is set
-In-Reply-To: <20190405184712.5582-1-stuart.summers@intel.com>
-References: <20190405184712.5582-1-stuart.summers@intel.com>
-Message-ID: <20190408184233.10697-1-stuart.summers@intel.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon,  8 Apr 2019 14:50:04 -0400
+Subject: [Buildroot] [PATCH] package/audit: bump version to 2.8.5
+Message-ID: <20190408185013.71465-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A patch was added to the Linux kernel in 5.1.0-rc3 which
-adds a requirement that the host build environment include
-pkg-config. Add the correct host-pkgconf dependency and
-environment variables to ensure Linux picks up the correct
-libraries.
+From: Adam Duskett <Aduskett@gmail.com>
 
-v2: Use LINUX_MAKE_ENV to pass PKG_CONFIG_* options (Thomas)
-v3: Add PKG_CONFIG_ALLOW_SYSTEM_{CFLAGS,LIBS} to kconfig
-    blacklist and move LINUX_MAKE_ENV initial assign in
-    linux.mk before DEP* assignments (Yann)
-
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Stuart Summers <stuart.summers@intel.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- linux/linux.mk         | 16 +++++++++++-----
- package/pkg-kconfig.mk |  4 +++-
- 2 files changed, 14 insertions(+), 6 deletions(-)
+ package/audit/audit.hash | 2 +-
+ package/audit/audit.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 6bf2b88038..d209a5cf59 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -61,6 +61,10 @@ LINUX_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
- # be directories in the patch list (unlike for other packages).
- LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
+diff --git a/package/audit/audit.hash b/package/audit/audit.hash
+index d8c11a3d19..71e7df7dbc 100644
+--- a/package/audit/audit.hash
++++ b/package/audit/audit.hash
+@@ -1,4 +1,4 @@
+ #Locally computed
+-sha256 a410694d09fc5708d980a61a5abcb9633a591364f1ecc7e97ad5daef9c898c38 audit-2.8.4.tar.gz
++sha256 0e5d4103646e00f8d1981e1cd2faea7a2ae28e854c31a803e907a383c5e2ecb7 audit-2.8.5.tar.gz
+ sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
+ sha256 f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa COPYING.LIB
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 0988f88d8d..31053fed99 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+LINUX_MAKE_ENV = \
-+	$(TARGET_MAKE_ENV) \
-+	BR_BINARIES_DIR=$(BINARIES_DIR)
-+
- LINUX_INSTALL_IMAGES = YES
- LINUX_DEPENDENCIES = host-kmod
- 
-@@ -97,7 +101,13 @@ LINUX_DEPENDENCIES += host-openssl
- endif
- 
- ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF),y)
--LINUX_DEPENDENCIES += host-elfutils
-+LINUX_DEPENDENCIES += host-elfutils host-pkgconf
-+LINUX_MAKE_ENV += \
-+	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+	PKG_CONFIG_SYSROOT_DIR="/" \
-+	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-+	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-+	PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
- endif
- 
- # If host-uboot-tools is selected by the user, assume it is needed to
-@@ -121,10 +131,6 @@ LINUX_MAKE_FLAGS = \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	DEPMOD=$(HOST_DIR)/sbin/depmod
- 
--LINUX_MAKE_ENV = \
--	$(TARGET_MAKE_ENV) \
--	BR_BINARIES_DIR=$(BINARIES_DIR)
--
- ifeq ($(BR2_REPRODUCIBLE),y)
- LINUX_MAKE_ENV += \
- 	KBUILD_BUILD_VERSION=1 \
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index d6c95b897e..e53cc9002e 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -175,7 +175,9 @@ endif
- # nconfig, gconfig, xconfig).
- # So we simply remove our PATH and PKG_CONFIG_* variables.
- $(2)_CONFIGURATOR_MAKE_ENV = \
--	$$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
-+	$$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% \
-+	   PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=% PKG_CONFIG_ALLOW_SYSTEM_LIBS=% \
-+	   PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
- 	PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
- 
- # Configuration editors (menuconfig, ...)
+-AUDIT_VERSION = 2.8.4
++AUDIT_VERSION = 2.8.5
+ AUDIT_SITE = http://people.redhat.com/sgrubb/audit
+ AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ AUDIT_LICENSE_FILES = COPYING COPYING.LIB
 -- 
 2.20.1
