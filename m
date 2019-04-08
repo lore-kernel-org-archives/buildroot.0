@@ -1,57 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  8 Apr 2019 12:49:52 +0200
-Subject: [Buildroot] [PATCH] package/samba4: security bump to version 4.9.6
-Message-ID: <20190408104952.19872-1-peter@korsgaard.com>
+From: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Date: Mon,  8 Apr 2019 14:00:10 +0300
+Subject: [Buildroot] [PATCH] busybox: Enable domain search list support in
+ udhcpc
+Message-ID: <20190408110010.2596-1-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security vulnerabilities:
+This is useful in networks with internal resources as it allows
+to use much shorter names.
 
- - CVE-2019-3870:
-   During the provision of a new Active Directory DC, some files in the private/
-   directory are created world-writable.
-   https://www.samba.org/samba/security/CVE-2019-3870.html
+E.g. instead of "server.internal.company.com" it's possible
+to use just "server" if DHCP server is configured with:
+---------------------------->8-----------------------
+option domain-search "internal.company.com";
+---------------------------->8-----------------------
 
- - CVE-2019-3880:
-   Authenticated users with write permission can trigger a symlink traversal to
-   write or detect files outside the Samba share.
-   https://www.samba.org/samba/security/CVE-2019-3880.html
+This improvement consists of 2 parts:
 
-For more details, see the release notes:
-https://www.samba.org/samba/history/samba-4.9.6.html
+1. Enable handling of RFC3397 so DHCP client is ready for processing
+   corresponding data from DHCP server.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+2. Some DHCP servers always send out search list if it is set in server's
+   configuration and some servers only provide search list if client
+   asks for that (sending list of options it expectes to get).
+
+   And exactly for those stubborn DHCP servers we need to add "-O search"
+   to udhcp's command line via CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS.
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Ignacy Gawedzki <ignacy.gawedzki@green-communications.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/busybox/busybox.config | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 70cea4809b..7762456cfd 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.5.tar.asc
--sha256 078956d2d98e22011265afd4b7221efe4861067dcba4a031583b01f34d423700  samba-4.9.5.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.6.tar.asc
-+sha256 c9205a651a83d69e200fec9dd65e9fa360f0c75ab3275b3dcb74e5cbaec60807  samba-4.9.6.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 9b226a0e05..3f16b5be4a 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/busybox/busybox.config b/package/busybox/busybox.config
+index 1d9560d655..ab04854c83 100644
+--- a/package/busybox/busybox.config
++++ b/package/busybox/busybox.config
+@@ -967,9 +967,9 @@ CONFIG_UDHCPC_DEFAULT_SCRIPT="/usr/share/udhcpc/default.script"
+ # CONFIG_FEATURE_UDHCP_PORT is not set
+ CONFIG_UDHCP_DEBUG=0
+ CONFIG_UDHCPC_SLACK_FOR_BUGGY_SERVERS=80
+-# CONFIG_FEATURE_UDHCP_RFC3397 is not set
++CONFIG_FEATURE_UDHCP_RFC3397=y
+ CONFIG_FEATURE_UDHCP_8021Q=y
+-CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n"
++CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS="-R -n -O search"
  
--SAMBA4_VERSION = 4.9.5
-+SAMBA4_VERSION = 4.9.6
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+ #
+ # Print Utilities
 -- 
-2.11.0
+2.16.2
