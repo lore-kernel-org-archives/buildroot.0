@@ -1,33 +1,38 @@
-From: Shyam Saini <shyam.saini@amarulasolutions.com>
-Date: Mon,  8 Apr 2019 20:40:57 +0530
-Subject: [Buildroot] [PATCH 13/13] configs: nanopi_m1_plus: Bump to u-boot
- version 2019.01
-In-Reply-To: <20190408151057.14455-1-shyam.saini@amarulasolutions.com>
-References: <20190408151057.14455-1-shyam.saini@amarulasolutions.com>
-Message-ID: <20190408151057.14455-13-shyam.saini@amarulasolutions.com>
+From: Julien Floret <julien.floret@6wind.com>
+Date: Mon, 8 Apr 2019 17:33:45 +0200
+Subject: [Buildroot] [PATCH 1/6] package/lldpd: update license file
+In-Reply-To: <20190407195833.9275-1-fontaine.fabrice@gmail.com>
+References: <20190407195833.9275-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAHfJR7jrOw6FeYWXTEMtDHQqmDCZjTTxqOby-ZaCXDZdd6pYtw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
----
- configs/nanopi_m1_plus_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Fabrice, all,
 
-diff --git a/configs/nanopi_m1_plus_defconfig b/configs/nanopi_m1_plus_defconfig
-index 5025148198..0176fc1c5b 100644
---- a/configs/nanopi_m1_plus_defconfig
-+++ b/configs/nanopi_m1_plus_defconfig
-@@ -14,7 +14,7 @@ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi M1 Plus"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_m1_plus"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--- 
-2.11.0
+Le dim. 7 avr. 2019 ? 21:58, Fabrice Fontaine <fontaine.fabrice@gmail.com>
+a ?crit :
+
+> - Instead of README.md, use LICENSE file that has been added in version
+>   0.9.5 with
+>
+> https://github.com/vincentbernat/lldpd/commit/4d534a60ee33aa2431acb6bfe6d499d2e72d66d5
+> - Add hash of license file
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/lldpd/lldpd.hash | 1 +
+>  package/lldpd/lldpd.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>
+
+For this entire series,
+Acked-by: Julien Floret <julien.floret at 6wind.com
+<fontaine.fabrice@gmail.com>>
+
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190408/f4d4c80b/attachment.html>
