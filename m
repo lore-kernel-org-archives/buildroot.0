@@ -1,66 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon,  8 Apr 2019 22:21:35 +0200
-Subject: [Buildroot] [PATCH] linux: simplify LINUX_BUILD_CMDS
-Message-ID: <20190408202136.22944-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 8 Apr 2019 22:28:25 +0200
+Subject: [Buildroot] [PATCH 01/13] configs: pine64_sopine: Bump to the
+ linux kernel 5.0
+In-Reply-To: <20190408151057.14455-1-shyam.saini@amarulasolutions.com>
+References: <20190408151057.14455-1-shyam.saini@amarulasolutions.com>
+Message-ID: <20190408222825.406895dc@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We currently do the Linux build as follows:
+Hello,
 
-   make <imagename>
-   if modules enabled; make modules; fi
+On Mon,  8 Apr 2019 20:40:45 +0530
+Shyam Saini <shyam.saini@amarulasolutions.com> wrote:
 
-However, Clement L?ger recently reported that due to us not using the
-"all" target, the GDB scripts that the kernel can build when
-CONFIG_GDB_SCRIPTS is enabled are not built, since upstream kernel
-commit 67274c083438340ad16c1437caebc84e1253b224 (merged in v5.1) moved
-that logic to a separate scripts_gdb target, which is a dependency of
-the "all" target.
+> This bumps to linux/linux-headers 5.0
+> 
+> Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
 
-While we could add some more logic to explicit generate the
-"scripts_gdb" target, this logic would fail on Linux < 5.1 for which
-this make target doesn't exist.
+Please send one patch per defconfig. Splitting the Linux and U-Boot
+update in separate patches is really excessive.
 
-So instead, let's simplify the build logic, and use:
+Thanks!
 
-  make all <imagename>
-
-The "all" target automatically depends on "modules", so we no longer
-need to explicit generate the "modules" target separately.
-
-As a result of this change, we may generate additional kernel images
-compared to what was done previously, but such images would anyway not
-be installed, and the additional built time is minimal.
-
-We did some research as to why the kernel build was done like this in
-Buildroot, and it's been like that since linux/linux.mk was added back
-in 2010 by commit 487e21cff69b30b404146b2ffb46959a728a4002 ("New,
-simpler, infrastructure for building the Linux kernel").
-
-Reported-by: Cl?ment Leger <cleger@kalray.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/linux.mk | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/linux/linux.mk b/linux/linux.mk
-index c7081db88f..46645f4780 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -438,10 +438,7 @@ define LINUX_BUILD_CMDS
- 	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
- 		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
- 	)
--	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
--	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then \
--		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ; \
--	fi
-+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all $(LINUX_TARGET_NAME)
- 	$(LINUX_BUILD_DTB)
- 	$(LINUX_APPEND_DTB)
- endef
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
