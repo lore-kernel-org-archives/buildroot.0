@@ -1,87 +1,33 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon,  8 Apr 2019 11:58:38 +0200
-Subject: [Buildroot] [PATCH] package/mesa3d: add KMSRO support for vc4
-Message-ID: <20190408095838.22227-1-romain.naour@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 08 Apr 2019 12:47:22 +0200
+Subject: [Buildroot] [PATCH 3/3] package/linux-headers: add support for
+ Linux 5.1 kernel headers
+In-Reply-To: <1406533656.445702.1554710793435.JavaMail.zimbra@kalray.eu>
+ (=?utf-8?Q?=22Cl=C3=A9ment?= Leger"'s message of "Mon, 8 Apr 2019 10:06:33
+ +0200 (CEST)")
+References: <1905283465.159802.1554361271608.JavaMail.zimbra@kalray.eu>
+ <2016794590.159827.1554361302233.JavaMail.zimbra@kalray.eu>
+ <436454902.159974.1554361384065.JavaMail.zimbra@kalray.eu>
+ <87ef6el23j.fsf@dell.be.48ers.dk>
+ <1715855918.438291.1554707937551.JavaMail.zimbra@kalray.eu>
+ <87y34lgcqa.fsf@dell.be.48ers.dk>
+ <1406533656.445702.1554710793435.JavaMail.zimbra@kalray.eu>
+Message-ID: <87sgushiyt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-kmsro allow to support KMS displays with the renderonly layer used to attach a GPU [1].
+>>>>> "Cl?ment" == Cl?ment Leger <cleger@kalray.eu> writes:
 
-Quote from mesa3d meson.build:
-"kmsro driver requires one or more renderonly drivers (vc4, etnaviv, freedreno)"
-But only vc4 support is available by using the (deprecated) autotools build system [2].
+ > Yes, that was the intended modification.
+ > But it can probably wait for the 5.1 release if needed.
 
-This will also be used by mesa to support KMSRO with the upcomming Panfrost and Lima Gallium drivers.
+Up to you. Either send a patch now just for _CUSTOM_5_1 and then another
+once 5.1 is released or wait.
 
-[1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=ed65aeec7810a7d98a19461ba933bd77268cb0f6
-[2] https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=mesa-19.0.1#n2864
+When we add 5.1 I think it makes sense to remove 4.20 as it is now EOL.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
----
-Bernd, are you working on a patch to switch mesa3d to a meson package ?
-Thanks!
----
- package/mesa3d/Config.in | 17 +++++++++++++++++
- package/mesa3d/mesa3d.mk |  1 +
- 2 files changed, 18 insertions(+)
-
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index fdd64b0337..b240855a6f 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -83,6 +83,12 @@ config BR2_PACKAGE_MESA3D_DRIVER
- config BR2_PACKAGE_MESA3D_NEEDS_XA
- 	bool
- 
-+# Quote from mesa3d meson.build:
-+# "kmsro driver requires one or more renderonly drivers (vc4, etnaviv, freedreno)"
-+# But only vc4 support is available by using the (deprecated) autotools build system.
-+config BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-+	bool
-+
- comment "Gallium drivers"
- 
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
-@@ -93,6 +99,16 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
- 	help
- 	  Mesa driver for Vivante GPUs.
- 
-+config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
-+	bool "Gallium KMSRO driver"
-+	depends on BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-+	help
-+	  Support various sorts of KMS displays with the
-+	  renderonly layer used to attach a GPU.
-+
-+comment "Gallium KMSRO needs one or more renderonly drivers"
-+	depends on !BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- 	bool "Gallium nouveau driver"
- 	depends on BR2_i386 || BR2_x86_64
-@@ -166,6 +182,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	bool "Gallium vc4 driver"
- 	depends on BR2_ARM_CPU_HAS_NEON || BR2_aarch64
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	select BR2_PACKAGE_LIBDRM_VC4
- 	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 9779de788c..d9558ac1fc 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -99,6 +99,7 @@ endif
- 
- #Gallium Drivers
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv
-+MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
- MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
 -- 
-2.20.1
+Bye, Peter Korsgaard
