@@ -1,40 +1,42 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Mon,  8 Apr 2019 18:43:33 +0200
-Subject: [Buildroot] [PATCH 3/3] package/linux-tools: some selftests needs
- kmod's modprobe
-In-Reply-To: <20190408164333.26942-1-romain.naour@smile.fr>
-References: <20190408164333.26942-1-romain.naour@smile.fr>
-Message-ID: <20190408164333.26942-4-romain.naour@smile.fr>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon,  8 Apr 2019 13:10:00 -0400
+Subject: [Buildroot] [PATCH 1/1] package/openjdk: fix alsa-lib dependencies
+Message-ID: <20190408171000.86882-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some kernel-selftests are using modprobe options (-n) that are not available
-from busybox's modprobe, so make sure that BR2_PACKAGE_KMOD_TOOLS is selected.
+From: Adam Duskett <Aduskett@gmail.com>
 
-[linux-4.19 selftests]$ git grep tput
-drivers/gpu/drm_mm.sh:if ! /sbin/modprobe -n -q test-drm_mm; then
-drivers/usb/usbip/usbip_test.sh:if ! /sbin/modprobe -q -n usbip_host; then
+OpenJDK requires the following alsa-lib modules to be build:
+  - mixer
+  - pcm
+  - rawmidi
+  - seq
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Fixes:
+http://autobuild.buildroot.net/results/c35/c35d64e659960663c935a31f4cb8ed4180728eb1
+http://autobuild.buildroot.net/results/845/845fe32967c9879b6c1adbf0630f358be215e174
 ---
- package/linux-tools/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/openjdk/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index 22204ed090..4916faa349 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -85,6 +85,8 @@ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
- 	select BR2_PACKAGE_BASH # runtime
- 	select BR2_PACKAGE_NCURSES
- 	select BR2_PACKAGE_NCURSES_TARGET_PROGS # runtime (tput)
-+	select BR2_PACKAGE_KMOD
-+	select BR2_PACKAGE_KMOD_TOOLS # runtime (modprobe -n)
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_LIBCAP_NG
- 	select BR2_PACKAGE_UTIL_LINUX
+diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
+index 9cd7bffea3..1363587ed5 100644
+--- a/package/openjdk/Config.in
++++ b/package/openjdk/Config.in
+@@ -26,6 +26,10 @@ config BR2_PACKAGE_OPENJDK
+ 	depends on BR2_USE_MMU # cups
+ 	depends on BR2_PACKAGE_XORG7
+ 	select BR2_PACKAGE_ALSA_LIB
++	select BR2_PACKAGE_ALSA_LIB_MIXER
++	select BR2_PACKAGE_ALSA_LIB_PCM
++	select BR2_PACKAGE_ALSA_LIB_RAWMIDI
++	select BR2_PACKAGE_ALSA_LIB_SEQ
+ 	select BR2_PACKAGE_CUPS
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_GIFLIB
 -- 
 2.20.1
