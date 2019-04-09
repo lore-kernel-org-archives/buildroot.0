@@ -1,55 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  9 Apr 2019 23:06:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: fix static build with openssl
- and atomic
-Message-ID: <20190409210652.26052-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue,  9 Apr 2019 23:10:32 +0200
+Subject: [Buildroot] [PATCH] package/civetweb: fix link failure due to
+ missing OpenSSL dependency
+Message-ID: <20190409211032.66320-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update patch so -latomic (provided in LIBS) is added after openssl libs
-(provided in $3)
+During linking one OpenSSL dependecy is missing(-latomic) on linking
+library list.
+
+- Substitute explicit library list with `pkg-config libssl` when
+BR2_PACKAGE_OPENSSL is enabled. In such way all needed libraries will be
+included in linking list.
+- Add also `host-pkgconf` to CIVETWEB_DEPENDENCIES if
+BR2_PACKAGE_OPENSSL is enabled to make it available for previous point.
 
 Fixes:
- - http://autobuild.buildroot.org/results/4b90b7d02e354ebf3d8f95023547bf4a18e0165e
+http://autobuild.buildroot.net/results/b2e/b2e210bdefe84f4ec9cfda79a33d81788fb7e66c/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- .../0001-Fix-static-linking-with-OpenSSL.patch   | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ package/civetweb/civetweb.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tor/0001-Fix-static-linking-with-OpenSSL.patch b/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-index 50ea00af7a..e4cd24e138 100644
---- a/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-+++ b/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
-@@ -15,11 +15,25 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-+ acinclude.m4         | 2 +-
-  configure.ac         | 4 ++--
-  src/test/include.am  | 8 ++++----
-  src/tools/include.am | 4 ++--
-- 3 files changed, 8 insertions(+), 8 deletions(-)
-+ 4 files changed, 9 insertions(+), 9 deletions(-)
+diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
+index fe1cdd5675..c999ec89be 100644
+--- a/package/civetweb/civetweb.mk
++++ b/package/civetweb/civetweb.mk
+@@ -32,8 +32,8 @@ endif
  
-+diff --git a/acinclude.m4 b/acinclude.m4
-+index 5ecdf1d5c..be5633f4f 100644
-+--- a/acinclude.m4
-++++ b/acinclude.m4
-+@@ -166,7 +166,7 @@ AC_CACHE_CHECK([for $1 directory], tor_cv_library_$1_dir, [
-+
-+   for tor_trydir in "$try$1dir" "(system)" "$prefix" /usr/local /usr/pkg $8; do
-+     LDFLAGS="$tor_saved_LDFLAGS"
-+-    LIBS="$tor_saved_LIBS $3"
-++    LIBS="$3 $tor_saved_LIBS"
-+     CPPFLAGS="$tor_saved_CPPFLAGS"
-+
-+     if test -z "$tor_trydir" ; then
- diff --git a/configure.ac b/configure.ac
- index 05e1392cf..580befa6b 100644
- --- a/configure.ac
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ CIVETWEB_COPT += -DNO_SSL_DL
+-CIVETWEB_LIBS += -lssl -lcrypto -lz
+-CIVETWEB_DEPENDENCIES += openssl
++CIVETWEB_LIBS += `$(HOST_DIR)/usr/bin/pkg-config --libs libssl`
++CIVETWEB_DEPENDENCIES += openssl host-pkgconf
+ else
+ CIVETWEB_COPT += -DNO_SSL
+ endif
 -- 
-2.20.1
+2.17.1
