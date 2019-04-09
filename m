@@ -1,66 +1,40 @@
-From: Valentin Korenblit <valentinkorenblit@gmail.com>
-Date: Tue,  9 Apr 2019 08:07:23 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/clang: bump to 8.0.0
-In-Reply-To: <20190409060723.1654-1-valentinkorenblit@gmail.com>
-References: <20190409060723.1654-1-valentinkorenblit@gmail.com>
-Message-ID: <20190409060723.1654-2-valentinkorenblit@gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue, 9 Apr 2019 09:39:43 +0300
+Subject: [Buildroot] [PATCH] gettext-tiny: Make libiconv only target
+ dependency
+In-Reply-To: <20190409080207.0bc7649b@windsurf.home>
+References: <20190408140442.29566-1-abrodkin@synopsys.com>
+ <20190408230530.0a8a67be@windsurf.home>
+ <20190408215410.e3mxykdxrm23y3ml@vkochan-ThinkPad-T470p>
+ <20190409080207.0bc7649b@windsurf.home>
+Message-ID: <20190409063943.2uac4za2nt445j5a@vkochan-ThinkPad-T470p>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Clang no longer needs llvm-config. It now looks for LLVMConfig.cmake,
-which is specified by LLVM_DIR option.
+Hi Thomas, Alexey, All
 
-The license file hash changed due to a copyright year update:
+On Tue, Apr 09, 2019 at 08:02:07AM +0200, Thomas Petazzoni wrote:
+> On Tue, 9 Apr 2019 00:54:10 +0300
+> Vadim Kochan <vadim4j@gmail.com> wrote:
+> 
+> > libiconv is needed by msgfmt and msgmerge during "translation" on the
+> > host so I think host-gettext-tiny should depend on host-libiconv.
+> 
+> There is no such thing as "host-libiconv". We do not need it, because
+> we assume the host system is iconv-capable.
+> 
+> The only thing gettext-tiny does for the target is install the wrapper
+> gettext program, so it certainly does not need libiconv.
+> 
+> The right fix is to remove this conditional libiconv dependency
+> entirely, and probably we should do the same for the gettext-gnu
+> package.
+> 
 
--Copyright (c) 2007-2018 University of Illinois at Urbana-Champaign.
-+Copyright (c) 2007-2019 University of Illinois at Urbana-Champaign.
+Thanks for the explanation!
 
-Changes v1 -> v2:
-            - Add comment about changes in license file
-
-Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
----
- package/clang/clang.hash | 4 ++--
- package/clang/clang.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/package/clang/clang.hash b/package/clang/clang.hash
-index fe868f5874..405e22ce22 100644
---- a/package/clang/clang.hash
-+++ b/package/clang/clang.hash
-@@ -1,3 +1,3 @@
- # locally calculated
--sha256 a45b62dde5d7d5fdcdfa876b0af92f164d434b06e9e89b5d0b1cbc65dfe3f418 cfe-7.0.1.src.tar.xz
--sha256 3f3f2e96e3b7319d2b4b49227d6da624a717340107ce2ca5342a25e0e57dfd35 LICENSE.TXT
-+sha256 084c115aab0084e63b23eee8c233abb6739c399e29966eaeccfc6e088e0b736b cfe-8.0.0.src.tar.xz
-+sha256 bdc41b826a9a50c7a31c1b613ca5d46415be68d5cc6da06f91f5bc1db8ad87aa LICENSE.TXT
-diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-index c15f2b0d2a..6dda8ac2c3 100644
---- a/package/clang/clang.mk
-+++ b/package/clang/clang.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLANG_VERSION = 7.0.1
-+CLANG_VERSION = 8.0.0
- CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
- CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
- CLANG_LICENSE = NCSA
-@@ -49,9 +49,9 @@ CLANG_CONF_OPTS += \
- 	-DCLANG_INCLUDE_DOCS=OFF \
- 	-DCLANG_INCLUDE_TESTS=OFF
- 
--HOST_CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(HOST_DIR)/bin/llvm-config \
-+HOST_CLANG_CONF_OPTS += -DLLVM_DIR=$(HOST_DIR)/lib/cmake/llvm \
- 	-DCLANG_DEFAULT_LINKER=$(TARGET_LD)
--CLANG_CONF_OPTS += -DLLVM_CONFIG:FILEPATH=$(STAGING_DIR)/usr/bin/llvm-config \
-+CLANG_CONF_OPTS += -DLLVM_DIR=$(STAGING_DIR)/usr/lib/cmake/llvm \
- 	-DCLANG_TABLEGEN:FILEPATH=$(HOST_DIR)/bin/clang-tblgen \
- 	-DLLVM_TABLEGEN_EXE:FILEPATH=$(HOST_DIR)/bin/llvm-tblgen
- 
--- 
-2.11.0
+Regards,
+Vadim Kochan
