@@ -1,39 +1,40 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Tue,  9 Apr 2019 16:55:04 +0300
-Subject: [Buildroot] [PATCH 1/2] package/gettext-tiny: Fix cyclic dependency
- with iconv
-Message-ID: <1554818104-7594-1-git-send-email-email@gmail.com>
+From: Shyam Saini <shyam.saini@amarulasolutions.com>
+Date: Tue,  9 Apr 2019 21:14:56 +0530
+Subject: [Buildroot] [V2 0/7] linux and uboot version bumps and cleanup
+Message-ID: <20190409154503.7598-1-shyam.saini@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Vadim Kochan <vadim4j@gmail.com>
+Changelog:
 
-target's libiconv is added into host dependency which makes cyclic
-dependency, anyway this dependency is not needed because of assumption
-that iconv should be provided by the host.
+V2:
+- consildate uboot and linux version bump patches into one single
+  patch per board config file
+- Logically reorder all nanopi m1 plus patches  
+- Remove BR2_GLOBAL_PATCH_DIR option from nanopi_m1_plus_defconfig
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
----
- package/gettext-tiny/gettext-tiny.mk | 4 ----
- 1 file changed, 4 deletions(-)
+Shyam Saini (7):
+  configs: pine64_sopine: Bump to the linux 5.0 and u-boot 2019.01
+  configs: orangepi_prime: Bump to the linux 5.0 and u-boot 2019.01
+  configs: olimex_a64_olinuxino: Bump to the linux 5.0 and u-boot
+    2019.01
+  configs: orangepi_plus: Bump to the linux 5.0 and u-boot 2019.01
+  configs: nanopi_m1: Bump to the linux 5.0 and u-boot 2019.01
+  configs: nanopi_m1_plus: Bump to the linux 5.0 and u-boot 2019.01
+  board: friendlyarm: nanopi-m1-plus: patches: Remove linux patch
 
-diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
-index 4fa014e..87e90bc 100644
---- a/package/gettext-tiny/gettext-tiny.mk
-+++ b/package/gettext-tiny/gettext-tiny.mk
-@@ -49,10 +49,6 @@ define HOST_GETTEXT_TINY_COPY_EXTRA_FILES
- endef
- HOST_GETTEXT_TINY_POST_PATCH_HOOKS += HOST_GETTEXT_TINY_COPY_EXTRA_FILES
- 
--ifeq ($(BR2_ENABLE_LOCALE),)
--HOST_GETTEXT_TINY_DEPENDENCIES = libiconv
--endif
--
- define HOST_GETTEXT_TINY_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
- 		$(HOST_CONFIGURE_OPTS) \
+ ...ts-nanopi-m1-plus-add-dts-to-linux-4.11.5.patch | 103 ---------------------
+ configs/nanopi_m1_defconfig                        |   8 +-
+ configs/nanopi_m1_plus_defconfig                   |   9 +-
+ configs/olimex_a64_olinuxino_defconfig             |   8 +-
+ configs/orangepi_plus_defconfig                    |   8 +-
+ configs/orangepi_prime_defconfig                   |   8 +-
+ configs/pine64_sopine_defconfig                    |   8 +-
+ 7 files changed, 24 insertions(+), 128 deletions(-)
+ delete mode 100644 board/friendlyarm/nanopi-m1-plus/patches/linux/0001-ARM-dts-nanopi-m1-plus-add-dts-to-linux-4.11.5.patch
+
 -- 
-2.7.4
+2.11.0
