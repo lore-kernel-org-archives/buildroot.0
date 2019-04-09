@@ -1,34 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Apr 2019 23:24:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tor: fix static build with
- openssl and atomic
-In-Reply-To: <20190409210652.26052-1-fontaine.fabrice@gmail.com>
-References: <20190409210652.26052-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190409232457.64fa4f2f@windsurf.home>
+Date: Tue, 9 Apr 2019 23:26:21 +0200
+Subject: [Buildroot] [git commit] package/civetweb: fix link failure due to
+ missing OpenSSL dependency
+Message-ID: <20190409212308.A62A5836D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  9 Apr 2019 23:06:52 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=027a8b29f1e62d5ff5bbb15b79376614f902a680
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Update patch so -latomic (provided in LIBS) is added after openssl libs
-> (provided in $3)
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/4b90b7d02e354ebf3d8f95023547bf4a18e0165e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-Fix-static-linking-with-OpenSSL.patch   | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
+During linking one OpenSSL dependecy is missing(-latomic) on linking
+library list.
 
-Applied to master, thanks. Ah, pkg-config would be nicer :-)
+- Substitute explicit library list with `pkg-config libssl` when
+  BR2_PACKAGE_OPENSSL is enabled. In such way all needed libraries
+  will be included in linking list.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+- Add also `host-pkgconf` to CIVETWEB_DEPENDENCIES if
+  BR2_PACKAGE_OPENSSL is enabled to make it available for previous
+  point.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/b2e210bdefe84f4ec9cfda79a33d81788fb7e66c/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/civetweb/civetweb.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
+index fe1cdd5675..80272738e4 100644
+--- a/package/civetweb/civetweb.mk
++++ b/package/civetweb/civetweb.mk
+@@ -32,8 +32,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ CIVETWEB_COPT += -DNO_SSL_DL
+-CIVETWEB_LIBS += -lssl -lcrypto -lz
+-CIVETWEB_DEPENDENCIES += openssl
++CIVETWEB_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libssl`
++CIVETWEB_DEPENDENCIES += openssl host-pkgconf
+ else
+ CIVETWEB_COPT += -DNO_SSL
+ endif
