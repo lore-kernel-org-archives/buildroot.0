@@ -1,45 +1,40 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue,  9 Apr 2019 23:10:32 +0200
-Subject: [Buildroot] [PATCH] package/civetweb: fix link failure due to
- missing OpenSSL dependency
-Message-ID: <20190409211032.66320-1-giulio.benetti@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 9 Apr 2019 23:21:42 +0200
+Subject: [Buildroot] [PATCH] package/vdr-plugin-vnsiserver: package
+ needs host-gettext to build correctly
+In-Reply-To: <20190409174535.31768-1-giulio.benetti@micronovasrl.com>
+References: <20190409174535.31768-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190409232142.5c751a17@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-During linking one OpenSSL dependecy is missing(-latomic) on linking
-library list.
+Hello Giulio,
 
-- Substitute explicit library list with `pkg-config libssl` when
-BR2_PACKAGE_OPENSSL is enabled. In such way all needed libraries will be
-included in linking list.
-- Add also `host-pkgconf` to CIVETWEB_DEPENDENCIES if
-BR2_PACKAGE_OPENSSL is enabled to make it available for previous point.
+On Tue,  9 Apr 2019 19:45:35 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/b2e/b2e210bdefe84f4ec9cfda79a33d81788fb7e66c/
+> During building msgmerge is used, so at the moment if build environment
+> doesn't provide it, build will fail.
+> 
+> Add host-gettext to VDR_PLUGIN_VNSISERVER_DEPENDENCIES.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
- package/civetweb/civetweb.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+In retrospect, I think http://patchwork.ozlabs.org/patch/1074926/ is better.
 
-diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-index fe1cdd5675..c999ec89be 100644
---- a/package/civetweb/civetweb.mk
-+++ b/package/civetweb/civetweb.mk
-@@ -32,8 +32,8 @@ endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- CIVETWEB_COPT += -DNO_SSL_DL
--CIVETWEB_LIBS += -lssl -lcrypto -lz
--CIVETWEB_DEPENDENCIES += openssl
-+CIVETWEB_LIBS += `$(HOST_DIR)/usr/bin/pkg-config --libs libssl`
-+CIVETWEB_DEPENDENCIES += openssl host-pkgconf
- else
- CIVETWEB_COPT += -DNO_SSL
- endif
+In fact, my analysis of Fabrice's patch was wrong. Even if the
+gettext-tiny issue gets resolved, vdr-plugin-vnsiserver (apparently)
+still needs msgfmt/msgmerge unconditionally, so we would indeed need a
+host-gettext dependency.
+
+But Fabrice's patch makes that not necessary, by only installing the
+i18n files when BR2_SYSTEM_ENABLE_NLS=y.
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
