@@ -1,101 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 9 Apr 2019 21:03:56 +0200
-Subject: [Buildroot] [PATCH 1/1] .flake8: fix check for 80/132 columns
-In-Reply-To: <20190409001729.3422-1-ricardo.martincoski@gmail.com>
-References: <20190409001729.3422-1-ricardo.martincoski@gmail.com>
-Message-ID: <20190409190356.GE23890@scaer>
+From: Karsten Merker <merker@debian.org>
+Date: Tue,  9 Apr 2019 21:38:26 +0200
+Subject: [Buildroot] [PATCH] boot/opensbi: add hash file
+Message-ID: <20190409193826.8647-1-merker@debian.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
+All downloads performed by buildroot should be integrity-checked if
+possible. Enable integrity-checking for the RISC-V OpenSBI sources
+by adding a corresponding hash file.
 
-On 2019-04-08 21:17 -0300, Ricardo Martincoski spake thusly:
-> We recommend wrapping at 80 columns but we accept 132 columns when it
-> makes more readable.
-> 
-> When running flake8 locally, use maximum line length 80.
-> But when running in GitLab CI, keep the check-flake8 job failing only
-> for lines longer than 132.
+Signed-off-by: Karsten Merker <merker@debian.org>
+---
+ boot/opensbi/opensbi.hash | 3 +++
+ 1 file changed, 3 insertions(+)
+ create mode 100644 boot/opensbi/opensbi.hash
 
-So it means that when I run it locally, I'll get failures that we
-would not get on the pipelines, right? So, commits that introduced
-such incorrectly formatted code will not be caught on the pipelines,
-so that we can catch it and inform the author of the offending
-commits, but instead, individual developpers whi try to play by the
-rules and check their own code before submission, would get hit by
-the limitation?
-
-I am not too fond of this, TBH.. :-/
-
-Besides, 80 chars does make for a narrow limit, I think.
-
-Let's fully assume this 132-char limit. ;-)
-
-Regards,
-Yann E. MORIN.
-
-> Reported-by: Arnout Vandecappelle <arnout@mind.be>
-> Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
-> The result of check-flake8 does not change:
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/192997289
-> ---
->  .flake8           | 2 +-
->  .gitlab-ci.yml    | 2 +-
->  .gitlab-ci.yml.in | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/.flake8 b/.flake8
-> index 7dd7b541cc..ee3d5035a0 100644
-> --- a/.flake8
-> +++ b/.flake8
-> @@ -2,4 +2,4 @@
->  exclude=
->      # copied from the kernel sources
->      utils/diffconfig
-> -max-line-length=132
-> +max-line-length=80
-> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> index 572868a557..e62e1c3e38 100644
-> --- a/.gitlab-ci.yml
-> +++ b/.gitlab-ci.yml
-> @@ -38,7 +38,7 @@ check-flake8:
->          - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
->          - sort -u files.txt | tee files.processed
->      script:
-> -        - python -m flake8 --statistics --count $(cat files.processed)
-> +        - python -m flake8 --statistics --count --max-line-length=132 $(cat files.processed)
->      after_script:
->          - wc -l files.processed
->  
-> diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-> index a506840892..b1ec671867 100644
-> --- a/.gitlab-ci.yml.in
-> +++ b/.gitlab-ci.yml.in
-> @@ -38,7 +38,7 @@ check-flake8:
->          - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
->          - sort -u files.txt | tee files.processed
->      script:
-> -        - python -m flake8 --statistics --count $(cat files.processed)
-> +        - python -m flake8 --statistics --count --max-line-length=132 $(cat files.processed)
->      after_script:
->          - wc -l files.processed
->  
-> -- 
-> 2.17.1
-> 
-
+diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
+new file mode 100644
+index 0000000000..4c6827ac3b
+--- /dev/null
++++ b/boot/opensbi/opensbi.hash
+@@ -0,0 +1,3 @@
++# sha256 and sha512 locally computed
++sha256 07f18b73abf3b85aabe5bead19a923716c100d30eb58033459f39c3a224be300 opensbi-v0.3.tar.gz
++sha512 44608a504110ea1a992ebfc05e66fb895295b18defe53f9939bc33c45b04653fc8812c865e19e6a33d48ed8040c6ec2436883815ca615fff85b5ca656a3a0ca4 opensbi-v0.3.tar.gz
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
