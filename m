@@ -1,50 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Apr 2019 23:26:21 +0200
-Subject: [Buildroot] [git commit] package/civetweb: fix link failure due to
+Date: Tue, 9 Apr 2019 23:28:25 +0200
+Subject: [Buildroot] [PATCH] package/civetweb: fix link failure due to
  missing OpenSSL dependency
-Message-ID: <20190409212308.A62A5836D9@busybox.osuosl.org>
+In-Reply-To: <20190409211032.66320-1-giulio.benetti@micronovasrl.com>
+References: <20190409211032.66320-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190409232825.2cdb0766@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=027a8b29f1e62d5ff5bbb15b79376614f902a680
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  9 Apr 2019 23:10:32 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-During linking one OpenSSL dependecy is missing(-latomic) on linking
-library list.
+> During linking one OpenSSL dependecy is missing(-latomic) on linking
+> library list.
+> 
+> - Substitute explicit library list with `pkg-config libssl` when
+> BR2_PACKAGE_OPENSSL is enabled. In such way all needed libraries will be
+> included in linking list.
+> - Add also `host-pkgconf` to CIVETWEB_DEPENDENCIES if
+> BR2_PACKAGE_OPENSSL is enabled to make it available for previous point.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/b2e/b2e210bdefe84f4ec9cfda79a33d81788fb7e66c/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 
-- Substitute explicit library list with `pkg-config libssl` when
-  BR2_PACKAGE_OPENSSL is enabled. In such way all needed libraries
-  will be included in linking list.
+Applied to master, with one small change, see below.
 
-- Add also `host-pkgconf` to CIVETWEB_DEPENDENCIES if
-  BR2_PACKAGE_OPENSSL is enabled to make it available for previous
-  point.
+> +CIVETWEB_LIBS += `$(HOST_DIR)/usr/bin/pkg-config --libs libssl`
 
-Fixes:
+$(HOST_DIR)/usr no longer really exists, it's a symlink to $(HOST_DIR),
+so this path should have been just $(HOST_DIR)/bin/pkg-config.
 
-  http://autobuild.buildroot.net/results/b2e210bdefe84f4ec9cfda79a33d81788fb7e66c/
+However, pkgconf.mk precisely provides the PKG_CONFIG_HOST_BINARY
+variable, which contains exactly the path to pkg-config. So I've used
+that instead.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/civetweb/civetweb.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks!
 
-diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-index fe1cdd5675..80272738e4 100644
---- a/package/civetweb/civetweb.mk
-+++ b/package/civetweb/civetweb.mk
-@@ -32,8 +32,8 @@ endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- CIVETWEB_COPT += -DNO_SSL_DL
--CIVETWEB_LIBS += -lssl -lcrypto -lz
--CIVETWEB_DEPENDENCIES += openssl
-+CIVETWEB_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libssl`
-+CIVETWEB_DEPENDENCIES += openssl host-pkgconf
- else
- CIVETWEB_COPT += -DNO_SSL
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
