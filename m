@@ -1,39 +1,39 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue,  9 Apr 2019 15:17:54 +0200
-Subject: [Buildroot] [PATCH] package/android-tools: host-android-tools need
- pkg-conf
-Message-ID: <20190409131754.24516-1-giulio.benetti@micronovasrl.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue,  9 Apr 2019 16:55:04 +0300
+Subject: [Buildroot] [PATCH 1/2] package/gettext-tiny: Fix cyclic dependency
+ with iconv
+Message-ID: <1554818104-7594-1-git-send-email-email@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Host version of this package needs pkg-conf the same way as target
-package: for Makefiles library dependencies retrieving.
+From: Vadim Kochan <vadim4j@gmail.com>
 
-Set HOST_ANDROID_TOOLS_DEPENDENCIES = $(ANDROID_TOOLS_DEPENDENCIES) to
-provide host-pkg-conf.
+target's libiconv is added into host dependency which makes cyclic
+dependency, anyway this dependency is not needed because of assumption
+that iconv should be provided by the host.
 
-Fixes:
-http://autobuild.buildroot.net/results/854/8543eb3815a67747349a2e60654d19b9804a3a89/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 ---
- package/android-tools/android-tools.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/gettext-tiny/gettext-tiny.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/android-tools/android-tools.mk b/package/android-tools/android-tools.mk
-index 3a63139014..b8808057a2 100644
---- a/package/android-tools/android-tools.mk
-+++ b/package/android-tools/android-tools.mk
-@@ -12,6 +12,7 @@ HOST_ANDROID_TOOLS_EXTRA_DOWNLOADS = $(ANDROID_TOOLS_EXTRA_DOWNLOADS)
- ANDROID_TOOLS_LICENSE = Apache-2.0
- ANDROID_TOOLS_LICENSE_FILES = debian/copyright
- ANDROID_TOOLS_DEPENDENCIES = host-pkgconf
-+HOST_ANDROID_TOOLS_DEPENDENCIES = $(ANDROID_TOOLS_DEPENDENCIES)
+diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
+index 4fa014e..87e90bc 100644
+--- a/package/gettext-tiny/gettext-tiny.mk
++++ b/package/gettext-tiny/gettext-tiny.mk
+@@ -49,10 +49,6 @@ define HOST_GETTEXT_TINY_COPY_EXTRA_FILES
+ endef
+ HOST_GETTEXT_TINY_POST_PATCH_HOOKS += HOST_GETTEXT_TINY_COPY_EXTRA_FILES
  
- # Extract the Debian tarball inside the sources
- define ANDROID_TOOLS_DEBIAN_EXTRACT
+-ifeq ($(BR2_ENABLE_LOCALE),)
+-HOST_GETTEXT_TINY_DEPENDENCIES = libiconv
+-endif
+-
+ define HOST_GETTEXT_TINY_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
+ 		$(HOST_CONFIGURE_OPTS) \
 -- 
-2.17.1
+2.7.4
