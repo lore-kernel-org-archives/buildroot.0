@@ -1,60 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 9 Apr 2019 08:05:11 +0200
-Subject: [Buildroot] [PATCH 1/1] pkg-golang: Allow per package/target
- CGO_ENABLED setting
-In-Reply-To: <CABa6e=oAUccKG8mQh4NCZx6Oq6swgQZMCE7atN4Xeb0s3EcqXg@mail.gmail.com>
-References: <20180727024720.13370-1-camh@xdna.net> <20190407214941.GA3117@jaya>
- <87pnpxfe8b.fsf@paral.in> <20190408090458.49e1e5cc@windsurf>
- <CABa6e=oAUccKG8mQh4NCZx6Oq6swgQZMCE7atN4Xeb0s3EcqXg@mail.gmail.com>
-Message-ID: <20190409080511.2bd20105@windsurf.home>
+From: Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Tue,  9 Apr 2019 08:07:22 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/llvm: bump to 8.0.0
+Message-ID: <20190409060723.1654-1-valentinkorenblit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Cam,
+The license file hash changed due to a copyright year update:
 
-On Tue, 9 Apr 2019 10:22:19 +1000
-Cam Hutchison <camh@xdna.net> wrote:
+-Copyright (c) 2003-2018 University of Illinois at Urbana-Champaign.
++Copyright (c) 2003-2019 University of Illinois at Urbana-Champaign.
 
-> > Thanks for the feedback, I'll mark the patch as Rejected for now.  
-> 
-> Well that's rather demoralising - waiting 9 months for some feedback
-> and given only 10 hours to respond before the patch is rejected.
+Changes v1 -> v2:
+	- Add comment about changes in license file
 
-Sorry for this. Taking a step back, I can understand how my very direct
-decision can be disappointing.
+Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
+---
+ package/llvm/llvm.hash | 4 ++--
+ package/llvm/llvm.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-However, as Christian explained, it's definitely not a "reject
-forever", not at all. The status of patches in patchwork can always be
-flipped back to whatever state we want.
-
-As you have seen, we have a huge backlog of patches, so when the
-feedback on a patch is fairly negative, I tend to immediately update
-the patch state to not leave it pending forever. Otherwise, I forget
-about it among the 200+ patches that are pending.
-
-But clearly, if some additional explanation is given, either a new
-iteration of the patch is sent, or alternatively we could apply the
-original version after amending the commit log and/or adjusting the
-implementation.
-
-> My use case for this was for building Kubernetes, which builds some
-> components with CGO_ENABLED=0 and others without it. If I tried to
-> build some components with without it, I got linker errors. Since I
-> didn't feel like trying to debug/understand the whole Kubernetes build
-> process, I just went with building it the same way in buildroot as it
-> builds outside it. But for that I needed to be able to selectively
-> control CGO_ENABLED on a per-target basis.
-
-So Christian said he would try to integrate Kubernetes, and see where
-it goes. Would that work for you ?
-
-Best regards,
-
-Thomas
+diff --git a/package/llvm/llvm.hash b/package/llvm/llvm.hash
+index 531361ae10..4c5cea17ff 100644
+--- a/package/llvm/llvm.hash
++++ b/package/llvm/llvm.hash
+@@ -1,3 +1,3 @@
+ # locally calculated
+-sha256 a38dfc4db47102ec79dcc2aa61e93722c5f6f06f0a961073bd84b78fb949419b llvm-7.0.1.src.tar.xz
+-sha256 0303dfeaac87b80d2d1e543aa38d5be77b0eac93c3d04fe7e3c8eaa71a778667 LICENSE.TXT
++sha256 8872be1b12c61450cacc82b3d153eab02be2546ef34fa3580ed14137bb26224c llvm-8.0.0.src.tar.xz
++sha256 24b67da19b1422a819395738cb83ea34eee3fdce52870b0d1758524ba1615069 LICENSE.TXT
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 952f678eee..cd374d74b4 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LLVM_VERSION = 7.0.1
++LLVM_VERSION = 8.0.0
+ LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
+ LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+ LLVM_LICENSE = NCSA
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
