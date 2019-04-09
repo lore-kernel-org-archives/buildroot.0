@@ -1,40 +1,55 @@
 From: Shyam Saini <shyam.saini@amarulasolutions.com>
-Date: Tue,  9 Apr 2019 21:14:56 +0530
-Subject: [Buildroot] [V2 0/7] linux and uboot version bumps and cleanup
-Message-ID: <20190409154503.7598-1-shyam.saini@amarulasolutions.com>
+Date: Tue,  9 Apr 2019 21:14:57 +0530
+Subject: [Buildroot] [V2 1/7] configs: pine64_sopine: Bump to the linux 5.0
+ and u-boot 2019.01
+In-Reply-To: <20190409154503.7598-1-shyam.saini@amarulasolutions.com>
+References: <20190409154503.7598-1-shyam.saini@amarulasolutions.com>
+Message-ID: <20190409154503.7598-2-shyam.saini@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changelog:
+This bumps to linux/linux-headers 5.0 and u-boot version 2019.01
 
-V2:
-- consildate uboot and linux version bump patches into one single
-  patch per board config file
-- Logically reorder all nanopi m1 plus patches  
-- Remove BR2_GLOBAL_PATCH_DIR option from nanopi_m1_plus_defconfig
+Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
+---
+ configs/pine64_sopine_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Shyam Saini (7):
-  configs: pine64_sopine: Bump to the linux 5.0 and u-boot 2019.01
-  configs: orangepi_prime: Bump to the linux 5.0 and u-boot 2019.01
-  configs: olimex_a64_olinuxino: Bump to the linux 5.0 and u-boot
-    2019.01
-  configs: orangepi_plus: Bump to the linux 5.0 and u-boot 2019.01
-  configs: nanopi_m1: Bump to the linux 5.0 and u-boot 2019.01
-  configs: nanopi_m1_plus: Bump to the linux 5.0 and u-boot 2019.01
-  board: friendlyarm: nanopi-m1-plus: patches: Remove linux patch
-
- ...ts-nanopi-m1-plus-add-dts-to-linux-4.11.5.patch | 103 ---------------------
- configs/nanopi_m1_defconfig                        |   8 +-
- configs/nanopi_m1_plus_defconfig                   |   9 +-
- configs/olimex_a64_olinuxino_defconfig             |   8 +-
- configs/orangepi_plus_defconfig                    |   8 +-
- configs/orangepi_prime_defconfig                   |   8 +-
- configs/pine64_sopine_defconfig                    |   8 +-
- 7 files changed, 24 insertions(+), 128 deletions(-)
- delete mode 100644 board/friendlyarm/nanopi-m1-plus/patches/linux/0001-ARM-dts-nanopi-m1-plus-add-dts-to-linux-4.11.5.patch
-
+diff --git a/configs/pine64_sopine_defconfig b/configs/pine64_sopine_defconfig
+index b076681a98..3dcd907a7e 100644
+--- a/configs/pine64_sopine_defconfig
++++ b/configs/pine64_sopine_defconfig
+@@ -2,8 +2,8 @@ BR2_aarch64=y
+ BR2_cortex_a53=y
+ BR2_ARM_FPU_VFPV4=y
+ 
+-# Linux headers same as kernel, a 4.14 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
++# Linux headers same as kernel, a 5.0 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+ 
+ # Firmware
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+@@ -17,7 +17,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2017.11"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sopine_baseboard"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+@@ -31,7 +31,7 @@ BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/pine64/sopine/boot.cmd"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-sopine-baseboard"
 -- 
 2.11.0
