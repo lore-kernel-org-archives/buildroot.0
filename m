@@ -1,41 +1,57 @@
-From: Cam Hutchison <camh@xdna.net>
-Date: Tue, 9 Apr 2019 10:22:19 +1000
-Subject: [Buildroot] [PATCH 1/1] pkg-golang: Allow per package/target
- CGO_ENABLED setting
-In-Reply-To: <20190408090458.49e1e5cc@windsurf>
-References: <20180727024720.13370-1-camh@xdna.net> <20190407214941.GA3117@jaya>
- <87pnpxfe8b.fsf@paral.in> <20190408090458.49e1e5cc@windsurf>
-Message-ID: <CABa6e=oAUccKG8mQh4NCZx6Oq6swgQZMCE7atN4Xeb0s3EcqXg@mail.gmail.com>
+From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Date: Tue, 09 Apr 2019 10:51:09 +1000
+Subject: [Buildroot] [PATCH v4] busybox: Update udhcpc.script for
+ stateful DHCPv6
+In-Reply-To: <20190407160622.626d95b1@windsurf>
+References: <20180726013919.31268-1-sam@mendozajonas.com>
+ <20190407160622.626d95b1@windsurf>
+Message-ID: <c0940024be14acaaae57009820499034de63c07c.camel@mendozajonas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 8 Apr 2019 at 17:05, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Sun, 07 Apr 2019 19:00:20 -0700
-> Christian Stewart <christian@paral.in> wrote:
->
-> > > I don't know in which context it might be useful in buildroot.
-> >
-> > I don't see a reason for it either.
->
-> Thanks for the feedback, I'll mark the patch as Rejected for now.
+On Sun, 2019-04-07 at 16:06 +0200, Thomas Petazzoni wrote:
+> Hello Samuel,
+> 
+> On Thu, 26 Jul 2018 11:39:19 +1000
+> Samuel Mendoza-Jonas <sam@mendozajonas.com> wrote:
+> 
+> > udhcpc6 will call the default script with the address set in the "ipv6"
+> > variable. Set "ip" to this address if present.
+> > 
+> > udhcpc6 implements "stateful" DHCPv6 for explicitly requesting an address
+> > and other configuration information. A major difference between DHCPv4
+> > and DHCPv6 is that DHCPv6 does *not* advertise a default route; this is
+> > determined by normal IPv6 autoconfiguration.
+> > Included is a change from Rob, which if handling a DHCPv6 address waits
+> > a moment for the IPv6 route to be configured; as above this doesn't come
+> > from DHCPv6 but rather the IPv6 Router Advertisement (RA) which happens
+> > independently from udhcpc6. The intent here is to try and ensure that
+> > the interface is route-able upon the script's completion as it would be
+> > if called from udhcpc.
+> > 
+> > (wait for IPv6 route)
+> > From: Robert Lippert <rlippert@google.com>
+> > Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+> > ---
+> > v4: Expand description of stateful DHCPv6 in commit message
+> > v3: Point out 'stateful' DHCPv6 in commit, send to the correct list...
+> > v2: Avoid bashisms
+> 
+> On February 26, 2019, you received some comments on this patch (yes it
+> took a lot of time for someone to review the patch, but it finally
+> happened). Could you take into account those comments and post an
+> updated version ?
+> 
+> Thanks a lot!
+> 
+> Thomas
 
-Well that's rather demoralising - waiting 9 months for some feedback
-and given only 10 hours to respond before the patch is rejected.
+Hi Thomas,
 
-My use case for this was for building Kubernetes, which builds some
-components with CGO_ENABLED=0 and others without it. If I tried to
-build some components with without it, I got linker errors. Since I
-didn't feel like trying to debug/understand the whole Kubernetes build
-process, I just went with building it the same way in buildroot as it
-builds outside it. But for that I needed to be able to selectively
-control CGO_ENABLED on a per-target basis.
+So I did! This got lost in my inbox as well, I'll follow this up shortly.
 
-But never mind. I can maintain this patch in my local buildroot patch
-queue. I just thought it might be useful for others.
+Thanks,
+Sam
