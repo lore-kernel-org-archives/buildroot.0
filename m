@@ -1,34 +1,33 @@
-From: Alexey Brodkin <alexey.brodkin@synopsys.com>
-Date: Tue, 9 Apr 2019 19:40:05 +0000
-Subject: [Buildroot] [PATCH 1/2] package/gettext-tiny: Fix cyclic
- dependency with iconv
-In-Reply-To: <1554818104-7594-1-git-send-email-email@gmail.com>
-References: <1554818104-7594-1-git-send-email-email@gmail.com>
-Message-ID: <CY4PR1201MB01206B53B679013118403585A12D0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  9 Apr 2019 22:04:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xserver_xorg-server: disable unit
+ tests
+Message-ID: <20190409200448.25660-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vadim,
+Fixes:
+ - http://autobuild.buildroot.org/results/95a5004c9245f1f90758631b02e17d3df12812ec
 
-> -----Original Message-----
-> From: Vadim Kochan <vadim4j@gmail.com>
-> Sent: Tuesday, April 9, 2019 4:55 PM
-> To: buildroot at buildroot.org
-> Cc: Vadim Kochan <vadim4j@gmail.com>; Alexey Brodkin <alexey.brodkin@synopsys.com>
-> Subject: [PATCH 1/2] package/gettext-tiny: Fix cyclic dependency with iconv
-> 
-> From: Vadim Kochan <vadim4j@gmail.com>
-> 
-> target's libiconv is added into host dependency which makes cyclic
-> dependency, anyway this dependency is not needed because of assumption
-> that iconv should be provided by the host.
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> ---
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks for fixing this one!
-
-Reviewed-by: Alexey Brodkin <abrokdin@synopsys.com>
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 14f8104767..a33cb25076 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -47,6 +47,7 @@ XSERVER_XORG_SERVER_CONF_OPTS = \
+ 	--disable-xnest \
+ 	--disable-xephyr \
+ 	--disable-dmx \
++	--disable-unit-tests \
+ 	--with-builder-addr=buildroot at buildroot.org \
+ 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1 -O2" \
+ 	--with-fontrootdir=/usr/share/fonts/X11/ \
+-- 
+2.20.1
