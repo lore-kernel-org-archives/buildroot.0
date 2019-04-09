@@ -1,50 +1,39 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 09 Apr 2019 13:01:26 +0000
-Subject: [Buildroot] [Bug 11766] New: Console (getty) issues with systemd
-Message-ID: <bug-11766-163@https.bugs.busybox.net/>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue,  9 Apr 2019 15:17:54 +0200
+Subject: [Buildroot] [PATCH] package/android-tools: host-android-tools need
+ pkg-conf
+Message-ID: <20190409131754.24516-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11766
+Host version of this package needs pkg-conf the same way as target
+package: for Makefiles library dependencies retrieving.
 
-            Bug ID: 11766
-           Summary: Console (getty) issues with systemd
-           Product: buildroot
-           Version: 2019.02.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: isak.tjernberg at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Set HOST_ANDROID_TOOLS_DEPENDENCIES = $(ANDROID_TOOLS_DEPENDENCIES) to
+provide host-pkg-conf.
 
-Created attachment 7976
-  --> https://bugs.busybox.net/attachment.cgi?id=7976&action=edit
-Comparison between console-getty.service contents between 2018.11 and 2019.02.1
+Fixes:
+http://autobuild.buildroot.net/results/854/8543eb3815a67747349a2e60654d19b9804a3a89/
 
-When using an image built with Buildroot for the Raspberry Pi 3 (64 bit) using
-systemd as init system, the serial console reached through 3 of the GPIO pins
-reports various errors and is generally unstable (misses characters
-sporadically). One common error I get printed is: "Inappropriate ioctl for
-device" from Getty.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/android-tools/android-tools.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-This is on version 2019.02.1. The same config works fine with Buildroot
-2018.11.
-
-The error/issues goes away if I replace the contents in the file
-/etc/systemd/system/getty.target.wants/console-getty.service with the content
-in the same file from the image built with version 2018.11.
-
-I can attach one file only, so the file contains the contents both from version
-2018.11 (working) and 2019.02.1 (not working).
-
+diff --git a/package/android-tools/android-tools.mk b/package/android-tools/android-tools.mk
+index 3a63139014..b8808057a2 100644
+--- a/package/android-tools/android-tools.mk
++++ b/package/android-tools/android-tools.mk
+@@ -12,6 +12,7 @@ HOST_ANDROID_TOOLS_EXTRA_DOWNLOADS = $(ANDROID_TOOLS_EXTRA_DOWNLOADS)
+ ANDROID_TOOLS_LICENSE = Apache-2.0
+ ANDROID_TOOLS_LICENSE_FILES = debian/copyright
+ ANDROID_TOOLS_DEPENDENCIES = host-pkgconf
++HOST_ANDROID_TOOLS_DEPENDENCIES = $(ANDROID_TOOLS_DEPENDENCIES)
+ 
+ # Extract the Debian tarball inside the sources
+ define ANDROID_TOOLS_DEBIAN_EXTRACT
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
