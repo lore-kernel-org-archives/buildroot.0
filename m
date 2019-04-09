@@ -1,70 +1,41 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Mon,  8 Apr 2019 21:17:29 -0300
-Subject: [Buildroot] [PATCH 1/1] .flake8: fix check for 80/132 columns
-Message-ID: <20190409001729.3422-1-ricardo.martincoski@gmail.com>
+From: Cam Hutchison <camh@xdna.net>
+Date: Tue, 9 Apr 2019 10:22:19 +1000
+Subject: [Buildroot] [PATCH 1/1] pkg-golang: Allow per package/target
+ CGO_ENABLED setting
+In-Reply-To: <20190408090458.49e1e5cc@windsurf>
+References: <20180727024720.13370-1-camh@xdna.net> <20190407214941.GA3117@jaya>
+ <87pnpxfe8b.fsf@paral.in> <20190408090458.49e1e5cc@windsurf>
+Message-ID: <CABa6e=oAUccKG8mQh4NCZx6Oq6swgQZMCE7atN4Xeb0s3EcqXg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We recommend wrapping at 80 columns but we accept 132 columns when it
-makes more readable.
+On Mon, 8 Apr 2019 at 17:05, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Sun, 07 Apr 2019 19:00:20 -0700
+> Christian Stewart <christian@paral.in> wrote:
+>
+> > > I don't know in which context it might be useful in buildroot.
+> >
+> > I don't see a reason for it either.
+>
+> Thanks for the feedback, I'll mark the patch as Rejected for now.
 
-When running flake8 locally, use maximum line length 80.
-But when running in GitLab CI, keep the check-flake8 job failing only
-for lines longer than 132.
+Well that's rather demoralising - waiting 9 months for some feedback
+and given only 10 hours to respond before the patch is rejected.
 
-Reported-by: Arnout Vandecappelle <arnout@mind.be>
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
----
-The result of check-flake8 does not change:
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/192997289
----
- .flake8           | 2 +-
- .gitlab-ci.yml    | 2 +-
- .gitlab-ci.yml.in | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+My use case for this was for building Kubernetes, which builds some
+components with CGO_ENABLED=0 and others without it. If I tried to
+build some components with without it, I got linker errors. Since I
+didn't feel like trying to debug/understand the whole Kubernetes build
+process, I just went with building it the same way in buildroot as it
+builds outside it. But for that I needed to be able to selectively
+control CGO_ENABLED on a per-target basis.
 
-diff --git a/.flake8 b/.flake8
-index 7dd7b541cc..ee3d5035a0 100644
---- a/.flake8
-+++ b/.flake8
-@@ -2,4 +2,4 @@
- exclude=
-     # copied from the kernel sources
-     utils/diffconfig
--max-line-length=132
-+max-line-length=80
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 572868a557..e62e1c3e38 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -38,7 +38,7 @@ check-flake8:
-         - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
-         - sort -u files.txt | tee files.processed
-     script:
--        - python -m flake8 --statistics --count $(cat files.processed)
-+        - python -m flake8 --statistics --count --max-line-length=132 $(cat files.processed)
-     after_script:
-         - wc -l files.processed
- 
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index a506840892..b1ec671867 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -38,7 +38,7 @@ check-flake8:
-         - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
-         - sort -u files.txt | tee files.processed
-     script:
--        - python -m flake8 --statistics --count $(cat files.processed)
-+        - python -m flake8 --statistics --count --max-line-length=132 $(cat files.processed)
-     after_script:
-         - wc -l files.processed
- 
--- 
-2.17.1
+But never mind. I can maintain this patch in my local buildroot patch
+queue. I just thought it might be useful for others.
