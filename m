@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 10 Apr 2019 11:20:10 +0200
-Subject: [Buildroot] [PATCH 07/10] infra/pkg-generic: introduce
- foo-show-recursive-info
-In-Reply-To: <4286698c2433dc01def82a0768739c22e08275b0.1554637858.git.yann.morin.1998@free.fr>
+Date: Wed, 10 Apr 2019 11:28:07 +0200
+Subject: [Buildroot] [PATCH 10/10] infra: introduce top-level,
+ global show-info
+In-Reply-To: <9e4d027c3a353fadde428fbba702dcc9dac15d75.1554637858.git.yann.morin.1998@free.fr>
 References: <cover.1554637858.git.yann.morin.1998@free.fr>
- <4286698c2433dc01def82a0768739c22e08275b0.1554637858.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LWxesKnGRbRHPsS1c+EUFHRBoEov0F79rrXuzthtuZgng@mail.gmail.com>
+ <9e4d027c3a353fadde428fbba702dcc9dac15d75.1554637858.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LXUiuH_wUmQ23N3rOdeDoCc2-_EdmDjX5sPs1SRrZ-Q-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,48 +15,67 @@ To: buildroot@busybox.net
 El dom., 7 abr. 2019 a las 13:51, Yann E. MORIN
 (<yann.morin.1998@free.fr>) escribi?:
 >
-> Recusrively display the information for a package and its complete
+> Now that packages and filesystems can report their recursive info, use
+> that to dump the whole info as a valid JSOn array.
 
-Recursively
+JSON
 
-> dependency tree.
 >
-> Note that this does not generate a valid JSON blurb, as records are not
-> comma-separated. It is not trivial to do, so we leave this for later (or
-> as an exrecise to the user).
+> As it is rather complex to ensure soemthing is run before every rules
 
-exercise
+something
 
+> (to display the eldin opening '[' so as to have a valid JSON array),
+
+I don't know what you wanted to say for 'eldin'.
+
+> re-enter the Makefile and mangle the output with a sed expression, that:
+>
+>   - 0,/^/s//[\n/;   inserts a '[' before the first line,
+>   - $!s/$/,/;       appends a ',' at the end of every lines but the last,
+>   - $s/$/\n]/       appends a ']' after the last line.
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
 > ---
->  package/pkg-generic.mk | 3 +++
->  1 file changed, 3 insertions(+)
+>  Makefile | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 72b1a87f5f..f230292603 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -882,6 +882,8 @@ define $(2)_SHOW_INFO
->         ]
->  endef
+> diff --git a/Makefile b/Makefile
+> index 60bf7d7d08..13c4390ae4 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -876,6 +876,12 @@ graph-depends-requirements:
+>         @dot -? >/dev/null 2>&1 || \
+>                 { echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1; }
 >
-> +$(1)-show-recursive-info: $(1)-show-info
-> +$(1)-show-recursive-info: $$(patsubst %,%-show-recursive-info,$$($(2)_FINAL_ALL_DEPENDENCIES))
->  $(1)-show-info:
+> +.PHONY: show-info _show-info-private
+> +show-info:
+> +       @$(MAKE) -C $(CONFIG_DIR) _show-info-private |sed -r -e '0,/^/s//[\n/; $$!s/$$/,/; $$s/$$/\n]/'
+
+This should have an explicit '-s' argument, otherwise the output is:
+
+[
+make[1]: Entering directory '/home/tdescham/repo/contrib/buildroot',
+...
+(JSON)
+...
+make[1]: Leaving directory '/home/tdescham/repo/contrib/buildroot'
+]
+
+which is not valid json.
+
+With -s, I validated that the output is valid by piping 'make
+show-info' to 'jq .'
+
+> +_show-info-private: $(patsubst %,%-show-recursive-info,$(PACKAGES) $(TARGETS_ROOTFS))
+> +       @:
+> +
+>  .PHONY: show-dependency-tree
+>  show-dependency-tree: $(patsubst %,%-show-dependency-tree,$(PACKAGES) $(TARGETS_ROOTFS))
 >         @:
->         $$(info { $$(strip $$($(2)_SHOW_INFO)) })
-> @@ -1143,6 +1145,7 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
->         $(1)-show-dependency-tree \
->         $(1)-show-depends \
->         $(1)-show-info \
-> +       $(1)-show-recursive-info \
->         $(1)-show-version \
->         $(1)-source
->
 > --
 > 2.14.1
 >
