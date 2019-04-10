@@ -1,47 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 13:41:46 +0200
-Subject: [Buildroot] [V2 0/7] linux and uboot version bumps and cleanup
-In-Reply-To: <20190409154503.7598-1-shyam.saini@amarulasolutions.com>
-References: <20190409154503.7598-1-shyam.saini@amarulasolutions.com>
-Message-ID: <20190410134146.51426682@windsurf.home>
+Date: Wed, 10 Apr 2019 13:42:33 +0200
+Subject: [Buildroot] [git commit] package/civetweb: fix linking failure
+ caused by wrong argument passed to pkg-config
+Message-ID: <20190410113849.D1FCC8B767@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Shyam,
+commit: https://git.buildroot.net/buildroot/commit/?id=e38641851a1bc334e6fb0a019ccf3af91098182f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  9 Apr 2019 21:14:56 +0530
-Shyam Saini <shyam.saini@amarulasolutions.com> wrote:
+On commit 027a8b29f1e62d5ff5bbb15b79376614f902a680 pkg-config has been
+added to retrieve OpenSSL dependencies, but it's been passed `libssl`
+instead of `openssl`, this makes fail some linking. Indeed we need
+OpenSSL dependency, so let's use `openssl` with pkg-config.
 
-> - Logically reorder all nanopi m1 plus patches  
-> - Remove BR2_GLOBAL_PATCH_DIR option from nanopi_m1_plus_defconfig
-> 
-> Shyam Saini (7):
->   configs: pine64_sopine: Bump to the linux 5.0 and u-boot 2019.01
->   configs: orangepi_prime: Bump to the linux 5.0 and u-boot 2019.01
->   configs: olimex_a64_olinuxino: Bump to the linux 5.0 and u-boot
->     2019.01
->   configs: orangepi_plus: Bump to the linux 5.0 and u-boot 2019.01
->   configs: nanopi_m1: Bump to the linux 5.0 and u-boot 2019.01
->   configs: nanopi_m1_plus: Bump to the linux 5.0 and u-boot 2019.01
->   board: friendlyarm: nanopi-m1-plus: patches: Remove linux patch
+Substitute `libssl` with `openssl`.
 
-This was still wrong: if I apply the first 6 patches but not the last
-one, the nanopi_m1_plus defconfig is broken: you try to build Linux 5.0
-but apply a patch that was made for Linux 4.13. The last two patches
-should have been squashed together to form a single patch.
+Fixes:
 
-Also, the commit title prefix should follow the format
-"configs/<configname>".
+  http://autobuild.buildroot.net/results/b225425ee237852bd9fee4ca0b8d24f3e37d64f9/
 
-I have fixed those issues and applied. Thanks!
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/civetweb/civetweb.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
+index 80272738e4..1652239ebb 100644
+--- a/package/civetweb/civetweb.mk
++++ b/package/civetweb/civetweb.mk
+@@ -32,7 +32,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ CIVETWEB_COPT += -DNO_SSL_DL
+-CIVETWEB_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libssl`
++CIVETWEB_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ CIVETWEB_DEPENDENCIES += openssl host-pkgconf
+ else
+ CIVETWEB_COPT += -DNO_SSL
