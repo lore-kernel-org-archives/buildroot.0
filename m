@@ -1,47 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 12:01:27 +0200
-Subject: [Buildroot] [git commit] package/gettext-tiny: drop dependency of
- host-variant on libiconv
-Message-ID: <20190410095737.1FAEC8E1D2@busybox.osuosl.org>
+Date: Wed, 10 Apr 2019 12:02:49 +0200
+Subject: [Buildroot] [git commit] package/gettext-gnu: fix typo
+ BR2_PACKAGE_GETTEXT_GNU_PROVIDES_LIBINTL
+Message-ID: <20190410095859.486188E1D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=63af60fae344f5784929af229caf9a4d46baa23a
+commit: https://git.buildroot.net/buildroot/commit/?id=4c2aa19a292ec8b0e4edf439483a27e1ae12bfb3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The host variant of gettext-tiny incorrectly has a dependency on the
-target libiconv. Not only this is wrong (a host package cannot use a
-target library), but it also causes a circular dependencies:
-host-gettext-tiny is needed as part of the toolchain build in some
-configurations, and all target packages depend on the toolchain being
-available.
+After commit:
 
-For host packages, we assume that iconv functionnality is provided by
-the host system, so there is no host-libiconv package.
+	ea1e7ee606 package/gettext: turn into virtual package
 
+package/gettext was renamed to package/gettext-gnu and introduced typo
+BR2_PACKAGE_GETTEXT_GNU_PROVIDES_LIBINTL which should be
+BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL (w/o "_GNU" part).
+
+Reported-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-Reviewed-by: Alexey Brodkin <abrokdin@synopsys.com>
-[Thomas: rework commit log]
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gettext-tiny/gettext-tiny.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/gettext-gnu/gettext-gnu.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
-index 4fa014e8dd..87e90bcc70 100644
---- a/package/gettext-tiny/gettext-tiny.mk
-+++ b/package/gettext-tiny/gettext-tiny.mk
-@@ -49,10 +49,6 @@ define HOST_GETTEXT_TINY_COPY_EXTRA_FILES
- endef
- HOST_GETTEXT_TINY_POST_PATCH_HOOKS += HOST_GETTEXT_TINY_COPY_EXTRA_FILES
+diff --git a/package/gettext-gnu/gettext-gnu.mk b/package/gettext-gnu/gettext-gnu.mk
+index 61adf72738..c63ad8cb36 100644
+--- a/package/gettext-gnu/gettext-gnu.mk
++++ b/package/gettext-gnu/gettext-gnu.mk
+@@ -42,7 +42,7 @@ HOST_GETTEXT_GNU_CONF_OPTS = \
  
--ifeq ($(BR2_ENABLE_LOCALE),)
--HOST_GETTEXT_TINY_DEPENDENCIES = libiconv
--endif
--
- define HOST_GETTEXT_TINY_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
- 		$(HOST_CONFIGURE_OPTS) \
+ # Force the build of libintl, even if the C library provides a stub
+ # gettext implementation
+-ifeq ($(BR2_PACKAGE_GETTEXT_GNU_PROVIDES_LIBINTL),y)
++ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
+ GETTEXT_GNU_CONF_OPTS += --with-included-gettext
+ else
+ GETTEXT_GNU_CONF_OPTS += --without-included-gettext
