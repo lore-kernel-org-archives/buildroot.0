@@ -1,65 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Apr 2019 07:42:12 +0200
-Subject: [Buildroot] [git commit] configs/olimex_a20_olinuxino_lime*: bump
- Linux and U-Boot versions
-Message-ID: <20190410054249.16C2D8E212@busybox.osuosl.org>
+Date: Wed, 10 Apr 2019 07:45:30 +0200
+Subject: [Buildroot] [git commit] support/dependencies/dependencies.sh:
+ simplify an error message
+Message-ID: <20190410054249.2D4448E212@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c49d26798b954fe1ee0aa338e48a0b710abbef7a
+commit: https://git.buildroot.net/buildroot/commit/?id=09cb4ea933c7adec1e5074637befb8d1ce87015a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+There is no need to break the "\n" sequence using "%sn". We can just
+escape it. Note: the escaping backslash needs to be escaped too,
+because the shell will process the string before printf gets to see it.
+
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++--
- configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ support/dependencies/dependencies.sh | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index b61d56f42d..8ef745743b 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.15"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.34"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 5677b0312b..12ad8472ce 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.15"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.34"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 826874baa2..1d5c164aa6 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -37,8 +37,7 @@ case ":${PATH:-unset}:" in
+ 	;;
+ (*"
+ "*)	printf "\n"
+-	# Break the '\n' sequence, or a \n is printed (which is not what we want).
+-	printf "Your PATH contains a newline (%sn) character.\n" "\\"
++	printf "Your PATH contains a newline (\\\n) character.\n"
+ 	printf "This doesn't work. Fix you PATH.\n"
+ 	exit 1
+ 	;;
