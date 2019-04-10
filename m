@@ -1,32 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 19:41:55 +0200
-Subject: [Buildroot] [PATCH 1/4] package/squeezelite: bump to version
- 71c012ad9ba102feb95823b7b9dc17e5305689c7
-In-Reply-To: <20190406165800.4493-1-fontaine.fabrice@gmail.com>
-References: <20190406165800.4493-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190410194155.514d767d@windsurf.home>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 10 Apr 2019 19:43:22 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libva: remove optional mesa3d
+ support
+References: <20190407171318.19852-1-bernd.kuhls@t-online.de>
+ <20190410191307.1681df76@windsurf.home>
+Message-ID: <qim1ofxi21.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Wed, 10 Apr 2019 19:13:07 +0200 schrieb Thomas Petazzoni:
 
-On Sat,  6 Apr 2019 18:57:57 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> I understand the circular dependency issue, but what makes it reasonable
+> to drop mesa3d support in libva ? Until now, the choice was rather the
+> opposite: have mesa3d support in libva, and no libva support in mesa3d.
+> Is there a fundamental reason why one is more useful than the other ?
 
-> - Switch site to https://github.com/ralph-irving/squeezelite
+Hi Thomas,
 
-What makes this upstream better / more official than the current one
-we're using ? Admittedly, the current one doesn't look very official
-either, but I'm curious about how you decided to choose this "other"
-upstream.
+first I like to mention that I do not have any AMD hardware in use with 
+buildroot, I am just following the development of Libreelec:
 
-Thanks!
+https://github.com/xbmc/xbmc/pull/13333
+https://github.com/LibreELEC/LibreELEC.tv/pull/2403
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+The motivation for the Kodi patch was: "Hardware decoding with AMD GPUs 
+is only supported with this new method"
+
+Because I think this will improve user experience with AMD hardware I 
+sent these patches.
+
+Regards, Bernd
