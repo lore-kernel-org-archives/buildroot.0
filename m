@@ -1,31 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 12:03:28 +0200
-Subject: [Buildroot] [PATCH 1/2] package/gettext-tiny: Fix cyclic
- dependency with iconv
-In-Reply-To: <1554818104-7594-1-git-send-email-email@gmail.com>
-References: <1554818104-7594-1-git-send-email-email@gmail.com>
-Message-ID: <20190410120328.712969a7@windsurf.home>
+Date: Wed, 10 Apr 2019 12:03:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gettext-gnu: Fix typo
+ BR2_PACKAGE_GETTEXT_GNU_PROVIDES_LIBINTL
+In-Reply-To: <20190408002821.12763-1-vadim4j@gmail.com>
+References: <20190408002821.12763-1-vadim4j@gmail.com>
+Message-ID: <20190410120337.1c61aead@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  9 Apr 2019 16:55:04 +0300
+On Mon,  8 Apr 2019 03:28:21 +0300
 Vadim Kochan <vadim4j@gmail.com> wrote:
 
-> From: Vadim Kochan <vadim4j@gmail.com>
+> After commit:
 > 
-> target's libiconv is added into host dependency which makes cyclic
-> dependency, anyway this dependency is not needed because of assumption
-> that iconv should be provided by the host.
+> 	ea1e7ee606 package/gettext: turn into virtual package
 > 
+> package/gettext was renamed to package/gettext-gnu and introduced typo
+> BR2_PACKAGE_GETTEXT_GNU_PROVIDES_LIBINTL which should be
+> BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL (w/o "_GNU" part).
+> 
+> Reported-by: Romain Naour <romain.naour@gmail.com>
 > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 > ---
->  package/gettext-tiny/gettext-tiny.mk | 4 ----
->  1 file changed, 4 deletions(-)
+>  package/gettext-gnu/gettext-gnu.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master after significantly reworking the commit log. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
