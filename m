@@ -1,24 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 18:47:14 +0200
+Date: Wed, 10 Apr 2019 18:47:23 +0200
 Subject: [Buildroot] [git commit] package/linux-tools: some selftests needs
- tput
-Message-ID: <20190410164324.9E7128E161@busybox.osuosl.org>
+ kmod's modprobe
+Message-ID: <20190410164324.A699C8D518@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=633e5121f851b3a89121138ec8aafdb7338ce9de
+commit: https://git.buildroot.net/buildroot/commit/?id=c301405c3483fabda21911006986d235296fd12d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some kernel-selftests are using tput program, so make sure that
-BR2_PACKAGE_NCURSES_TARGET_PROGS is selected.
+Some kernel-selftests are using modprobe options (-n) that are not available
+from busybox's modprobe, so make sure that BR2_PACKAGE_KMOD_TOOLS is selected.
 
 [linux-4.19 selftests]$ git grep tput
-[...]
-futex/run.sh:tput setf 7 || tput setaf 7
-futex/run.sh:    tput sgr0
+drivers/gpu/drm_mm.sh:if ! /sbin/modprobe -n -q test-drm_mm; then
+drivers/usb/usbip/usbip_test.sh:if ! /sbin/modprobe -q -n usbip_host; then
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -27,15 +26,15 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index 6aa09d14a3..22204ed090 100644
+index 22204ed090..4916faa349 100644
 --- a/package/linux-tools/Config.in
 +++ b/package/linux-tools/Config.in
-@@ -83,6 +83,8 @@ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
- 	depends on BR2_USE_MMU  # bash
- 	select BR2_PACKAGE_LINUX_TOOLS
+@@ -85,6 +85,8 @@ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
  	select BR2_PACKAGE_BASH # runtime
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_TARGET_PROGS # runtime (tput)
+ 	select BR2_PACKAGE_NCURSES
+ 	select BR2_PACKAGE_NCURSES_TARGET_PROGS # runtime (tput)
++	select BR2_PACKAGE_KMOD
++	select BR2_PACKAGE_KMOD_TOOLS # runtime (modprobe -n)
  	select BR2_PACKAGE_POPT
  	select BR2_PACKAGE_LIBCAP_NG
  	select BR2_PACKAGE_UTIL_LINUX
