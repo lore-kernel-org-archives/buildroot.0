@@ -1,50 +1,69 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Apr 2019 12:23:39 +0200
-Subject: [Buildroot] Wrong license information in package
- qt5quickcontrols2?
-In-Reply-To: <017c92fcfda14fe3b07c0dcc70bbaf5e@erbe-med.com>
-References: <017c92fcfda14fe3b07c0dcc70bbaf5e@erbe-med.com>
-Message-ID: <d6920a5b-217c-8dd6-3d0e-f4b163ad2e17@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 10 Apr 2019 12:31:33 +0200
+Subject: [Buildroot] [git commit] .flake8: fix check for 80/132 columns
+Message-ID: <20190410102732.C703981509@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=7d17ae2acf63810495cc480da38127c4612e4da9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+We recommend wrapping at 80 columns but we accept 132 columns when it
+makes more readable.
 
-On 08/04/2019 16:43, Steinhilber, Markus wrote:
-> Hi,
-> 
-> I think the license information in the package qt5quickcontrols2 is wrong. But since I'm not an expert on licensing I didn't want to post a patch.
-> 
-> The .mk file includes this line: "QT5QUICKCONTROLS2_LICENSE = GPL-3.0 or LGPL-3.0, GFDL-1.3 (docs)", but on the Qt Website(https://doc.qt.io/qt-5/qtquickcontrols-index.html) it states: "Qt Quick Controls 2 is available under commercial licenses from The Qt Company. In addition, it is available under the GNU Lesser General Public License, version 3, or the GNU General Public License, version 2." So from this info I would say the .mk file should contain "QT5QUICKCONTROLS2_LICENSE = GPL-2.0 or LGPL-3.0, GFDL-1.3 (docs)".
-> 
-> But one thing that is even more confusing to me, is that the source folder of the package contains license files for GPL2, GPL3 and LGPL3, so from my understanding I should be able to choose any one of those licenses. So it should really be "QT5QUICKCONTROLS2_LICENSE = GPL-2.0, GPL-3.0 or LGPL-3.0, GFDL-1.3 (docs)". Am I correct?
-> 
-> Can someone with more knowledge on licensing confirm or disapprove on this?
+When running flake8 locally, use maximum line length 80.
+But when running in GitLab CI, keep the check-flake8 job failing only
+for lines longer than 132.
 
- The only somewhat reliable source of information for licensing is each
-individual source file. So the correct way to go about it is to check each
-individual source file and check it's license.
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .flake8           | 2 +-
+ .gitlab-ci.yml    | 2 +-
+ .gitlab-ci.yml.in | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
- The three individual license files are included because depending on the
-situation, either of them could apply.
-
- In this case we're lucky because all source files contain the same license
-header. This header specifies: commercial OR LGPL-3.0 OR GPL-2.0+. So you are
-correct, the license information in Buildroot is wrong. It should be:
-
-QT5QUICKCONTROLS2_LICENSE = GPL-2.0+ or LGPL-3.0, GFDL-1.3 (docs)
-
- Note that the docs should only be mentioned if they are in fact installed on
-the target. I'm not sure if that is the case here. Anyway, that's a separate
-issue and in general we're not very consistent in that.
-
- Oh and I also checked that both 5.6 and 5.12 have the same license - that's not
-always the case either.
-
- So, feel free to send a patch to fix this!
-
- Regards,
- Arnout
+diff --git a/.flake8 b/.flake8
+index 7dd7b541cc..ee3d5035a0 100644
+--- a/.flake8
++++ b/.flake8
+@@ -2,4 +2,4 @@
+ exclude=
+     # copied from the kernel sources
+     utils/diffconfig
+-max-line-length=132
++max-line-length=80
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 572868a557..e62e1c3e38 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -38,7 +38,7 @@ check-flake8:
+         - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
+         - sort -u files.txt | tee files.processed
+     script:
+-        - python -m flake8 --statistics --count $(cat files.processed)
++        - python -m flake8 --statistics --count --max-line-length=132 $(cat files.processed)
+     after_script:
+         - wc -l files.processed
+ 
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index a506840892..b1ec671867 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -38,7 +38,7 @@ check-flake8:
+         - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
+         - sort -u files.txt | tee files.processed
+     script:
+-        - python -m flake8 --statistics --count $(cat files.processed)
++        - python -m flake8 --statistics --count --max-line-length=132 $(cat files.processed)
+     after_script:
+         - wc -l files.processed
+ 
