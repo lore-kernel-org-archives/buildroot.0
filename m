@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 10 Apr 2019 11:19:07 +0200
-Subject: [Buildroot] [PATCH 08/10] infra/fs: introduce
- rootfs-foo-show-info
-In-Reply-To: <c84f4afccf1a83002880ca9977861e6b060d06aa.1554637858.git.yann.morin.1998@free.fr>
+Date: Wed, 10 Apr 2019 11:20:10 +0200
+Subject: [Buildroot] [PATCH 07/10] infra/pkg-generic: introduce
+ foo-show-recursive-info
+In-Reply-To: <4286698c2433dc01def82a0768739c22e08275b0.1554637858.git.yann.morin.1998@free.fr>
 References: <cover.1554637858.git.yann.morin.1998@free.fr>
- <c84f4afccf1a83002880ca9977861e6b060d06aa.1554637858.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LVr5OGtDY+HAG3oUpA_qMc7TQQ9ctVqQaF1xMuggy9zNA@mail.gmail.com>
+ <4286698c2433dc01def82a0768739c22e08275b0.1554637858.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LWxesKnGRbRHPsS1c+EUFHRBoEov0F79rrXuzthtuZgng@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,68 +15,48 @@ To: buildroot@busybox.net
 El dom., 7 abr. 2019 a las 13:51, Yann E. MORIN
 (<yann.morin.1998@free.fr>) escribi?:
 >
-> Similarly to what we introduced for packages, do the same for
-> filesystems.
+> Recusrively display the information for a package and its complete
+
+Recursively
+
+> dependency tree.
 >
-> This will be usefull later, when we are able to dump the complete
+> Note that this does not generate a valid JSON blurb, as records are not
+> comma-separated. It is not trivial to do, so we leave this for later (or
+> as an exrecise to the user).
 
-useful
+exercise
 
-> information for a configuration, by also reporting information
-> about packages that are dependencies for filesystems.
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
 > ---
->  fs/common.mk | 26 ++++++++++++++++++++++++++
->  1 file changed, 26 insertions(+)
+>  package/pkg-generic.mk | 3 +++
+>  1 file changed, 3 insertions(+)
 >
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 4ad51fdd0a..2ec27e8e63 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -47,6 +47,19 @@ ROOTFS_COMMON_DEPENDENCIES = \
->         $(BR2_TAR_HOST_DEPENDENCY) \
->         $(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 72b1a87f5f..f230292603 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -882,6 +882,8 @@ define $(2)_SHOW_INFO
+>         ]
+>  endef
 >
-> +define ROOTFS_COMMON_SHOW_INFO
-> +       "name": "rootfs-common", \
-> +       "type": "rootfs", \
-> +       "depends on": [ \
-> +               $(call make-comma-list,$(ROOTFS_COMMON_DEPENDENCIES)) \
-> +       ]
-> +endef
-> +
-> +.PHONY: rootfs-common-show-info
-> +rootfs-common-show-info:
-> +       @:
-> +       $(info { $(strip $(ROOTFS_COMMON_SHOW_INFO)) })
-> +
->  rootfs-common-show-dependency-tree: $(patsubst %,%-show-dependency-tree,$(ROOTFS_COMMON_DEPENDENCIES))
->         $(info rootfs-common: host)
->         $(info rootfs-common -> $(foreach d,$(ROOTFS_COMMON_DEPENDENCIES),$(d)))
-> @@ -84,6 +97,19 @@ ROOTFS_$(2)_TARGET_DIR = $$(ROOTFS_$(2)_DIR)/target
+> +$(1)-show-recursive-info: $(1)-show-info
+> +$(1)-show-recursive-info: $$(patsubst %,%-show-recursive-info,$$($(2)_FINAL_ALL_DEPENDENCIES))
+>  $(1)-show-info:
+>         @:
+>         $$(info { $$(strip $$($(2)_SHOW_INFO)) })
+> @@ -1143,6 +1145,7 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
+>         $(1)-show-dependency-tree \
+>         $(1)-show-depends \
+>         $(1)-show-info \
+> +       $(1)-show-recursive-info \
+>         $(1)-show-version \
+>         $(1)-source
 >
->  ROOTFS_$(2)_DEPENDENCIES += rootfs-common
->
-> +define ROOTFS_$(2)_SHOW_INFO
-> +       "name": "rootfs-$(1)", \
-> +       "type": "rootfs", \
-> +       "depends on": [ \
-> +               $$(call make-comma-list,$$(ROOTFS_$(2)_DEPENDENCIES)) \
-> +       ]
-> +endef
-> +
-> +.PHONY: rootfs-$(1)-show-info
-> +rootfs-$(1)-show-info:
-> +       @:
-> +       $$(info { $$(strip $$(ROOTFS_$(2)_SHOW_INFO)) })
-> +
->  rootfs-$(1)-show-dependency-tree: $$(patsubst %,%-show-dependency-tree,$$(ROOTFS_$(2)_DEPENDENCIES))
->         $$(info rootfs-$(1): host)
->         $$(info rootfs-$(1) -> $$(foreach d,$$(ROOTFS_$(2)_DEPENDENCIES),$$(d)))
 > --
 > 2.14.1
 >
