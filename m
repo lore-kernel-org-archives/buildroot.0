@@ -1,55 +1,48 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 10 Apr 2019 19:31:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/civetweb: fix static build with
- openssl
-In-Reply-To: <a053693b-ca55-e2a3-8fb2-5c6adba9fe31@micronovasrl.com>
-References: <20190407163231.20134-1-fontaine.fabrice@gmail.com>
- <20190410191158.3b5ad608@windsurf.home>
- <a053693b-ca55-e2a3-8fb2-5c6adba9fe31@micronovasrl.com>
-Message-ID: <CAPi7W80_RvJ5aaWBQUgQw3wq+9rdHQoYq7ExiJxWCV7kABKwng@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 10 Apr 2019 19:30:48 +0200
+Subject: [Buildroot] [git commit] package/lldpd: update license file
+Message-ID: <20190410172749.6BC588D295@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Giulio and Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=d86eb0c8b4be9f68cbd9ac17edc39b909a6427ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le mer. 10 avr. 2019 ? 19:21, Giulio Benetti
-<giulio.benetti@micronovasrl.com> a ?crit :
->
-> Il 10/04/2019 19:11, Thomas Petazzoni ha scritto:
-> > On Sun,  7 Apr 2019 18:32:31 +0200
-> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> >
-> >> Use pkg-config to retrieve openssl dependencies such as atomic
-> >>
-> >> Fixes:
-> >>   - http://autobuild.buildroot.org/results/b2e210bdefe84f4ec9cfda79a33d81788fb7e66c
-> >>
-> >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >> ---
-> >>   package/civetweb/civetweb.mk | 4 ++--
-> >>   1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > Gaah, sorry, I'm only seeing this patch now, and in the mean time, I
-> > have merged a similar patch from Giulio. Sorry about that :-/
->
-> I was sure to have checked patchwork before submitting.
-> I'm sorry too Fabrice.
-It's ok :-)
->
-> --
-> Giulio Benetti
-> CTO
->
-> MICRONOVA SRL
-> Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-> Tel. 049/8931563 - Fax 049/8931346
-> Cod.Fiscale - P.IVA 02663420285
-> Capitale Sociale ? 26.000 i.v.
-> Iscritta al Reg. Imprese di Padova N. 02663420285
-> Numero R.E.A. 258642
-Best Regards,
+- Instead of README.md, use LICENSE file that has been added in version
+  0.9.5 with
+  https://github.com/vincentbernat/lldpd/commit/4d534a60ee33aa2431acb6bfe6d499d2e72d66d5
+- Add hash of license file
 
-Fabrice
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Julien Floret <julien.floret at 6wind.com
+Signed-off-by: Fabrice Fontaine &lt;<a href="mailto:fontaine.fabrice@gmail.com" target="_blank" rel="noreferrer">fontaine.fabrice at gmail.com</a>&gt;<br>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/lldpd/lldpd.hash | 1 +
+ package/lldpd/lldpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/lldpd/lldpd.hash b/package/lldpd/lldpd.hash
+index 1785197737..1c0e380996 100644
+--- a/package/lldpd/lldpd.hash
++++ b/package/lldpd/lldpd.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+ sha256 450b622aac7ae1758f1ef82f3b7b94ec47f2ff33abfb0e6ac82555b9ee55f151  lldpd-1.0.1.tar.gz
++sha256 0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
+diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
+index 6a520448da..8d554ae5e2 100644
+--- a/package/lldpd/lldpd.mk
++++ b/package/lldpd/lldpd.mk
+@@ -8,7 +8,7 @@ LLDPD_VERSION = 1.0.1
+ LLDPD_SITE = http://media.luffy.cx/files/lldpd
+ LLDPD_DEPENDENCIES = host-pkgconf libevent
+ LLDPD_LICENSE = ISC
+-LLDPD_LICENSE_FILES = README.md
++LLDPD_LICENSE_FILES = LICENSE
+ # 0002-configure-do-not-check-for-libbsd.patch / 0003-configure-remove-check-on-CXX-compiler.patch
+ LLDPD_AUTORECONF = YES
+ 
