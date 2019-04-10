@@ -1,11 +1,11 @@
 From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 10 Apr 2019 11:03:07 +0200
-Subject: [Buildroot] [PATCH 05/10] infra/utils: add helper to generate
- comma-separated lists
-In-Reply-To: <429526964a369072244a0f2f5f4e99eff58220b7.1554637858.git.yann.morin.1998@free.fr>
+Date: Wed, 10 Apr 2019 11:16:48 +0200
+Subject: [Buildroot] [PATCH 06/10] infra/pkg-generic: introduce
+ foo-show-info
+In-Reply-To: <6e3c4eccb009f45ccb25b549c88e6a6603091ddb.1554637858.git.yann.morin.1998@free.fr>
 References: <cover.1554637858.git.yann.morin.1998@free.fr>
- <429526964a369072244a0f2f5f4e99eff58220b7.1554637858.git.yann.morin.1998@free.fr>
-Message-ID: <CAAXf6LVF1hstXKtV5vvuoDm8YeG2r6yoDqFeJFeJZtSF8WO9TA@mail.gmail.com>
+ <6e3c4eccb009f45ccb25b549c88e6a6603091ddb.1554637858.git.yann.morin.1998@free.fr>
+Message-ID: <CAAXf6LU-j7zMLUc93J1rchu5BytrZL22L=vkTOwDgwMdCA-rqA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,45 +15,170 @@ To: buildroot@busybox.net
 El dom., 7 abr. 2019 a las 13:51, Yann E. MORIN
 (<yann.morin.1998@free.fr>) escribi?:
 >
-> Add a helper macro that, from a space-separated list of items, returns a
-> comma-separated list of the quoted items.
+> Users are increasingly trying to extract information about packages.
+> For example, they might need to get the list of URIs, or the
+> dependencies of a package.
 >
-> This will be usefull when we need to generate lists in JSON, later...
+> Although we do have a bunch of rules to generate some of that, this is
+> done in ad-hic way, with most of the output formats just as-hoc, raw,
+> unformatted blurbs, mostly internal data dumped as-is.
 
-useful
+ad-hic -> ad-hoc
+as-hoc -> ad-hoc
+
 
 >
-> Code suggested by Thomas P.
+> Introduce a new rule, foo-show-info, that provides a properly formatted
+> output of all the meta-information about a package: name, type, version,
+> licenses, dependencies...
+>
+> We choose to use JSON as the output format, because it is pretty
+> veratile, has parsers in virtually all languages, has tols to parse from
+
+versatile
+tools
+
+> the shell (jq). It also closely matches Python data structure, which
+> makes it easy to use with our own internal tools as well. Finally, JSON
+> being a key-value store, allows for easy expanding the output without
+> requiring existing consumers to be updated; new, unknown keys are simply
+> ignored by those (as long as they are true JSON parsers).
+>
+> The complex part of this change was the conditional output of parts of
+> the data: virtual packages have no source, version, license or
+> downloads, unlike non-virtual packages. The basic idea was to
+> intersperse those conditions directly inside the $(info ...) block.
+> However, becasue key-value pairs in JSON are separated with commas, and
+
+because
+
+> that the comma is also the parameters separator in Makefile, we'd have
+> had to use $(comma) to output an actual comma when inside an $(if ...)
+> statement, like so:
+>
+>     $(if $$($(2)_IS_VIRTUAL), \
+>         "virtual": true$(comma), \
+>         "virtual": false$(comma) \
+>         "version": "$$($(2)_DL_VERSION)"$(comma) \
+>         [...]
+>     )
+>
+> This was, with the trailing '\'i and the indentation, a bit cumbersome
+> to handle, and would be difficult to maintain.
+>
+> Instead, an intermediate variable is used, which is set conditionally.
+> And to make the rest of the information look similar, it is also stored
+> in an intermediate variable. This makes it easier to read, and thus to
+> maintain (hopefully so).
+>
+> Note that we can't set part of the variable conditionally, like so:
+>
+>     SOMETHING = YES
+>     define FOO
+>     ifeq ($(SOMETHING),YES)
+>         Meh $(SOMETHING)
+>     else
+>         Meh --$(SOMETHING)--
+>     endif
+>     endef
+>     $(info $(FOO))
+>
+> as that would yield:
+>
+>     ifeq (YES,YES)
+>         Meh YES
+>     else
+>         Meh --YES--
+>     endif
+>
+> So, we use intermediate variables.
+>
+> Finally, the variable is $(strip...)ed before being displayed, so as to
+> make it fit on a single line, one per package info. This is just JSON,
+> so it does not matter, but at least it should be parallel-safe in the
+> future.
 >
 > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > Cc: Arnout Vandecappelle <arnout@mind.be>
 > ---
->  support/misc/utils.mk | 4 ++++
->  1 file changed, 4 insertions(+)
+>  package/pkg-generic.mk | 44 ++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 44 insertions(+)
 >
-> diff --git a/support/misc/utils.mk b/support/misc/utils.mk
-> index c44319338e..0903679e62 100644
-> --- a/support/misc/utils.mk
-> +++ b/support/misc/utils.mk
-> @@ -70,6 +70,10 @@ finddirclauses = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
->  # notfirstword(wordlist): returns all but the first word in wordlist
->  notfirstword = $(wordlist 2,$(words $(1)),$(1))
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index f78ff2e665..72b1a87f5f 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -843,6 +843,49 @@ $(1)-external-deps:
+>         @echo "file://$$($(2)_OVERRIDE_SRCDIR)"
+>  endif
 >
-> +# build a comma-separated list of quoted items, from a space-separated
-> +# list of unquoted items:   a b c d  -->  "a", "b", "c", "d"
-> +make-comma-list = $(subst $(space),$(comma) ,$(patsubst %,"%",$(strip $(1))))
+> +ifeq ($$($(2)_IS_VIRTUAL),YES)
+> +define $(2)_SHOW_INFO_VIRTUAL
+> +       "virtual": true,
+> +endef
+> +else
+> +define $(2)_SHOW_INFO_VIRTUAL
+> +       "virtual": false,
+> +       "version": "$$($(2)_DL_VERSION)",
+> +       "licenses": "$$($(2)_LICENSE)",
+> +       "downloads": [
+> +       $$(foreach dl,$$($(2)_ALL_DOWNLOADS),
+> +               {
+> +                       "source": "$$(notdir $$(dl))",
+> +                       "URIs": [
+> +                       $$(call make-comma-list,
+> +                               $$(subst \|,|,
+> +                                       $$(call DOWNLOAD_URIS,$$(dl),$(2))
+> +                               )
+> +                       )
+> +                       ]
+> +               },
+> +       )
+> +       null
+> +       ],
 
-I think it would be more obvious here to replace with $(subst
-$(space),$(comma)$(space),...)
-rather than relying on the space added after '$(comma)'.
+So the 'null' serves as last element in the array and is only needed
+because JSON cannot handle the trailing comma, right?
 
-
+> +endef
+> +endif
 > +
->  # Needed for the foreach loops to loop over the list of hooks, so that
->  # each hook call is properly separated by a newline.
->  define sep
+> +define $(2)_SHOW_INFO
+> +       "name": "$(1)",
+> +       "type": "$(4)",
+> +       $$($(2)_SHOW_INFO_VIRTUAL)
+> +       "depends on": [
+> +               $$(call make-comma-list,$$($(2)_FINAL_ALL_DEPENDENCIES))
+> +       ],
+> +       "dependency of": [
+> +               $$(call make-comma-list,$$($(2)_RDEPENDENCIES))
+> +       ]
+
+It feels odd to me to not use single-word keys here. Why not use
+'depends/rdepends', 'dependencies'/'rdependencies' or if you want
+dependencies/reverse_dependencies ? The naming 'rdepends' is already
+exposed to users 'make show-rdepends' so it makes sense to me to use
+the same naming.
+
+> +endef
+> +
+> +$(1)-show-info:
+> +       @:
+> +       $$(info { $$(strip $$($(2)_SHOW_INFO)) })
+> +
+>  $(1)-show-version:
+>                         @echo $$($(2)_VERSION)
+>
+> @@ -1099,6 +1142,7 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
+>         $(1)-rsync \
+>         $(1)-show-dependency-tree \
+>         $(1)-show-depends \
+> +       $(1)-show-info \
+>         $(1)-show-version \
+>         $(1)-source
+>
 > --
 > 2.14.1
 >
