@@ -1,27 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 18:48:41 +0200
-Subject: [Buildroot] [PATCH 0/3] linux-tools-selftests
-In-Reply-To: <20190408164333.26942-1-romain.naour@smile.fr>
-References: <20190408164333.26942-1-romain.naour@smile.fr>
-Message-ID: <20190410184841.1b80668f@windsurf.home>
+Date: Wed, 10 Apr 2019 19:02:51 +0200
+Subject: [Buildroot] [git commit] package/xz: update license
+Message-ID: <20190410165854.7E8F6836D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  8 Apr 2019 18:43:30 +0200
-Romain Naour <romain.naour@smile.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=dc9b97ab6cf0a3ee57b25fa6cb88dcbc70393ac9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Romain Naour (3):
->   package/linux-tools: some selftests needs util-linux schedutils
->   package/linux-tools: some selftests needs tput
->   package/linux-tools: some selftests needs modprobe
+- Add COPYING to license files as it gives useful info on license
+- Add "Public Domain" to XZ_LICENSE (see COPYING)
+- Add hash for license files
 
-All applied. Thanks!
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/xz/xz.hash | 6 ++++++
+ package/xz/xz.mk   | 4 ++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/xz/xz.hash b/package/xz/xz.hash
+index 20a4a47432..28018c76c3 100644
+--- a/package/xz/xz.hash
++++ b/package/xz/xz.hash
+@@ -1,2 +1,8 @@
+ # Locally calculated after checking pgp signature
+ sha256 fd9ca16de1052aac899ad3495ad20dfa906c27b4a5070102a2ec35ca3a4740c1  xz-5.2.3.tar.bz2
++
++#??Hash for license files
++sha256 c4f8e14fafe458d84808a4cd8b69f94673ebe2bf8fc992291629a69ac12218f8  COPYING
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.GPLv3
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPLv2.1
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index bcdac13ee3..6a0dc25816 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -9,8 +9,8 @@ XZ_SOURCE = xz-$(XZ_VERSION).tar.bz2
+ XZ_SITE = http://tukaani.org/xz
+ XZ_INSTALL_STAGING = YES
+ XZ_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
+-XZ_LICENSE = GPL-2.0+, GPL-3.0+, LGPL-2.1+
+-XZ_LICENSE_FILES = COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1
++XZ_LICENSE = Public Domain, GPL-2.0+, GPL-3.0+, LGPL-2.1+
++XZ_LICENSE_FILES = COPYING COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ XZ_CONF_OPTS = --enable-threads
