@@ -1,44 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 18:47:06 +0200
-Subject: [Buildroot] [git commit] package/linux-tools: some selftests needs
- util-linux schedutils
-Message-ID: <20190410164324.986268D518@busybox.osuosl.org>
+Date: Wed, 10 Apr 2019 18:47:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python3: bump version to 3.7.3
+In-Reply-To: <20190410154243.112933-1-aduskett@gmail.com>
+References: <20190410154243.112933-1-aduskett@gmail.com>
+Message-ID: <20190410184756.606d4c55@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6af93482d782ff8ecb75fd249b645a12fd76beff
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 10 Apr 2019 11:42:43 -0400
+aduskett at gmail.com wrote:
 
-Some kernel-selftests are using taskset program, so make sure that
-BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS is selected.
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Aslo remove upstream patch 0033.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  ...e-the-build-of-pyc-files-conditional.patch |   4 +-
+>  ...taddrinfo-configure-test-when-cross-.patch |   2 +-
+>  ...re-to-disable-the-build-of-certain-e.patch |  10 +-
+>  ...y-header-paths-for-cross-compilation.patch |   2 +-
+>  ...ook-in-usr-lib-termcap-for-libraries.patch |   2 +-
+>  .../0006-Don-t-add-multiarch-paths.patch      |   2 +-
+>  .../0007-Abort-on-failed-module-build.patch   |   2 +-
+>  ...locale-and-set-to-default-when-addin.patch |   2 +-
+>  ...-disable-installation-of-test-module.patch |   6 +-
+>  .../0014-Add-an-option-to-disable-pydoc.patch |  12 +-
+>  ...015-Add-an-option-to-disable-lib2to3.patch |  14 +-
+>  ...option-to-disable-the-sqlite3-module.patch |   8 +-
+>  ...d-an-option-to-disable-the-tk-module.patch |   8 +-
+>  ...-option-to-disable-the-curses-module.patch |   6 +-
+>  .../0019-Add-an-option-to-disable-expat.patch |   8 +-
+>  ...-Add-an-option-to-disable-CJK-codecs.patch |   2 +-
+>  .../0021-Add-an-option-to-disable-NIS.patch   |   2 +-
+>  ...Add-an-option-to-disable-unicodedata.patch |   2 +-
+>  .../0023-Add-an-option-to-disable-IDLE.patch  |  10 +-
+>  ...024-Add-an-option-to-disable-decimal.patch |   4 +-
+>  ...on-to-disable-the-ossaudiodev-module.patch |   2 +-
+>  ...an-option-to-disable-openssl-support.patch |   2 +-
+>  ...ption-to-disable-the-readline-module.patch |   2 +-
+>  ...to-disable-zlib-bzip2-and-xz-modules.patch |   2 +-
+>  ...-Fix-cross-compiling-the-uuid-module.patch |   2 +-
+>  ...Add-an-option-to-disable-uuid-module.patch |   2 +-
+>  ...gfault-in-ssl-s-cert-parser-GH-11569.patch | 121 ------------------
+>  package/python3/python3.hash                  |   6 +-
+>  package/python3/python3.mk                    |   2 +-
+>  29 files changed, 64 insertions(+), 185 deletions(-)
+>  delete mode 100644 package/python3/0033-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch
 
-[linux-4.19 selftests]$ git grep taskset
-bpf/test_progs.c:       assert(system("taskset 0x1 ./urandom_read 100000") == 0);
-cpu-hotplug/cpu-on-off-test.sh: taskset -p 01 $$
-cpufreq/main.sh:        taskset -p 01 $$
-netfilter/nft_trans_stress.sh:        ip netns exec "$testns" taskset $mask ping -4 127.0.0.1 -fq > /dev/null &
-netfilter/nft_trans_stress.sh:        ip netns exec "$testns" taskset $mask ping -6 ::1 -fq > /dev/null &
-rcutorture/bin/jitter.sh:       if ! taskset -p $cpumask $$ > /dev/null 2>&1
+Applied to master, thanks.
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/linux-tools/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index f4199fd618..6aa09d14a3 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -85,6 +85,8 @@ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
- 	select BR2_PACKAGE_BASH # runtime
- 	select BR2_PACKAGE_POPT
- 	select BR2_PACKAGE_LIBCAP_NG
-+	select BR2_PACKAGE_UTIL_LINUX
-+	select BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS # runtime (taskset)
- 	help
- 	  Build and install (to /usr/lib/kselftests) kernel selftests.
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
