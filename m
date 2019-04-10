@@ -1,47 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 18:48:05 +0200
-Subject: [Buildroot] [PATCH] package/syslog-ng: fix segfault on startup
- due to pthread_atfork
-In-Reply-To: <20190410082600.29086-1-patrickdepinguin@gmail.com>
-References: <20190410082600.29086-1-patrickdepinguin@gmail.com>
-Message-ID: <20190410184805.11418209@windsurf.home>
+Date: Wed, 10 Apr 2019 18:48:41 +0200
+Subject: [Buildroot] [PATCH 0/3] linux-tools-selftests
+In-Reply-To: <20190408164333.26942-1-romain.naour@smile.fr>
+References: <20190408164333.26942-1-romain.naour@smile.fr>
+Message-ID: <20190410184841.1b80668f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 10 Apr 2019 10:26:00 +0200
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+On Mon,  8 Apr 2019 18:43:30 +0200
+Romain Naour <romain.naour@smile.fr> wrote:
 
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> syslog-ng may segfault at startup (during library initialization, before
-> reaching main) in newer toolchains. I have witnessed it on aarch64 (but with
-> 32-bit arm userland) with glibc 2.28.
-> 
-> Problem is described in syslog-ng issue #2263 [1], which in turn leads to a
-> problem in 'ivykis' which is shipped with syslog-ng, see ivykis issue #15
-> [2].
-> 
-> Root cause is that 'pthread_atfork' is used by ivykis but searched by its
-> configure script in libpthread_nonshared only. In newer toolchains, it seems
-> this symbol is in libc_nonshared.
-> 
-> Apply a patch someone proposed via pullrequest [3] to the ivykis project,
-> but which is at this moment not yet merged upstream.
-> 
-> [1] https://github.com/balabit/syslog-ng/issues/2263
-> [2] https://github.com/buytenh/ivykis/issues/15
-> [3] https://github.com/buytenh/ivykis/pull/16
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> ---
->  ...thread-atfork-also-in-libc-nonshared.patch | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 package/syslog-ng/0003-look-for-pthread-atfork-also-in-libc-nonshared.patch
+> Romain Naour (3):
+>   package/linux-tools: some selftests needs util-linux schedutils
+>   package/linux-tools: some selftests needs tput
+>   package/linux-tools: some selftests needs modprobe
 
-Applied to master, thanks.
+All applied. Thanks!
 
 Thomas
 -- 
