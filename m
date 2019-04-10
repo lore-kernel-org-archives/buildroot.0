@@ -1,38 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 13:43:09 +0200
-Subject: [Buildroot] [PATCH] package/civetweb: fix linking failure due
- to wrong OpenSSL passed to pkg-config
-In-Reply-To: <20190410103746.18403-1-giulio.benetti@micronovasrl.com>
-References: <20190410103746.18403-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190410134309.2b1fbaa6@windsurf.home>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 10 Apr 2019 14:38:23 +0200
+Subject: [Buildroot] [PATCH] package/gettext-tiny: bump version for
+ having msgmerge working
+In-Reply-To: <20190410133739.54867aa5@windsurf.home>
+References: <20190409174606.31828-1-giulio.benetti@micronovasrl.com>
+ <20190410133739.54867aa5@windsurf.home>
+Message-ID: <24a6255a-9727-cea2-f07a-f03a02a8a058@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 10 Apr 2019 12:37:46 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+Hello Thomas,
 
-> On commit 027a8b29f1e62d5ff5bbb15b79376614f902a680 pkg-config has been
-> added to retrieve OpenSSL dependencies, but it's been passed `libssl`
-> instead of `openssl`, this makes fail some linking. Indeed we need
-> OpenSSL dependency, so let's use `openssl` with pkg-config.
+Il 10/04/2019 13:37, Thomas Petazzoni ha scritto:
+> Hello,
 > 
-> Substitute `libssl` with `openssl`.
+> On Tue,  9 Apr 2019 19:46:06 +0200
+> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/b22/b225425ee237852bd9fee4ca0b8d24f3e37d64f9/
+>> On current version msgmerge doesn't work properly. It exits giving:
+>> fopen: No such file or directory
+>> The problem has been signalled and fixed by upstream.
+>>
+>> Bump version to latest commit.
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  package/civetweb/civetweb.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Is this fixing a build issue with some particular package ?
 
-Applied to master, thanks.
+This was for package vdr-plugin-vnsiserver that uses msgmerge.
+But as you've pointed me here:
+https://patchwork.ozlabs.org/patch/1082580/
 
-Thomas
+i18n files are provided when BR2_SYSTEM_ENABLE_NLS=y
+So I think it's useless.
+
+Right?
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
