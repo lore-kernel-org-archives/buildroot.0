@@ -1,55 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 18:47:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python3: bump version to 3.7.3
-In-Reply-To: <20190410154243.112933-1-aduskett@gmail.com>
-References: <20190410154243.112933-1-aduskett@gmail.com>
-Message-ID: <20190410184756.606d4c55@windsurf.home>
+Date: Wed, 10 Apr 2019 18:48:05 +0200
+Subject: [Buildroot] [PATCH] package/syslog-ng: fix segfault on startup
+ due to pthread_atfork
+In-Reply-To: <20190410082600.29086-1-patrickdepinguin@gmail.com>
+References: <20190410082600.29086-1-patrickdepinguin@gmail.com>
+Message-ID: <20190410184805.11418209@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 10 Apr 2019 11:42:43 -0400
-aduskett at gmail.com wrote:
+On Wed, 10 Apr 2019 10:26:00 +0200
+Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
 
-> From: Adam Duskett <Aduskett@gmail.com>
+> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > 
-> Aslo remove upstream patch 0033.
+> syslog-ng may segfault at startup (during library initialization, before
+> reaching main) in newer toolchains. I have witnessed it on aarch64 (but with
+> 32-bit arm userland) with glibc 2.28.
 > 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> Problem is described in syslog-ng issue #2263 [1], which in turn leads to a
+> problem in 'ivykis' which is shipped with syslog-ng, see ivykis issue #15
+> [2].
+> 
+> Root cause is that 'pthread_atfork' is used by ivykis but searched by its
+> configure script in libpthread_nonshared only. In newer toolchains, it seems
+> this symbol is in libc_nonshared.
+> 
+> Apply a patch someone proposed via pullrequest [3] to the ivykis project,
+> but which is at this moment not yet merged upstream.
+> 
+> [1] https://github.com/balabit/syslog-ng/issues/2263
+> [2] https://github.com/buytenh/ivykis/issues/15
+> [3] https://github.com/buytenh/ivykis/pull/16
+> 
+> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
 > ---
->  ...e-the-build-of-pyc-files-conditional.patch |   4 +-
->  ...taddrinfo-configure-test-when-cross-.patch |   2 +-
->  ...re-to-disable-the-build-of-certain-e.patch |  10 +-
->  ...y-header-paths-for-cross-compilation.patch |   2 +-
->  ...ook-in-usr-lib-termcap-for-libraries.patch |   2 +-
->  .../0006-Don-t-add-multiarch-paths.patch      |   2 +-
->  .../0007-Abort-on-failed-module-build.patch   |   2 +-
->  ...locale-and-set-to-default-when-addin.patch |   2 +-
->  ...-disable-installation-of-test-module.patch |   6 +-
->  .../0014-Add-an-option-to-disable-pydoc.patch |  12 +-
->  ...015-Add-an-option-to-disable-lib2to3.patch |  14 +-
->  ...option-to-disable-the-sqlite3-module.patch |   8 +-
->  ...d-an-option-to-disable-the-tk-module.patch |   8 +-
->  ...-option-to-disable-the-curses-module.patch |   6 +-
->  .../0019-Add-an-option-to-disable-expat.patch |   8 +-
->  ...-Add-an-option-to-disable-CJK-codecs.patch |   2 +-
->  .../0021-Add-an-option-to-disable-NIS.patch   |   2 +-
->  ...Add-an-option-to-disable-unicodedata.patch |   2 +-
->  .../0023-Add-an-option-to-disable-IDLE.patch  |  10 +-
->  ...024-Add-an-option-to-disable-decimal.patch |   4 +-
->  ...on-to-disable-the-ossaudiodev-module.patch |   2 +-
->  ...an-option-to-disable-openssl-support.patch |   2 +-
->  ...ption-to-disable-the-readline-module.patch |   2 +-
->  ...to-disable-zlib-bzip2-and-xz-modules.patch |   2 +-
->  ...-Fix-cross-compiling-the-uuid-module.patch |   2 +-
->  ...Add-an-option-to-disable-uuid-module.patch |   2 +-
->  ...gfault-in-ssl-s-cert-parser-GH-11569.patch | 121 ------------------
->  package/python3/python3.hash                  |   6 +-
->  package/python3/python3.mk                    |   2 +-
->  29 files changed, 64 insertions(+), 185 deletions(-)
->  delete mode 100644 package/python3/0033-bpo-35746-Fix-segfault-in-ssl-s-cert-parser-GH-11569.patch
+>  ...thread-atfork-also-in-libc-nonshared.patch | 49 +++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+>  create mode 100644 package/syslog-ng/0003-look-for-pthread-atfork-also-in-libc-nonshared.patch
 
 Applied to master, thanks.
 
