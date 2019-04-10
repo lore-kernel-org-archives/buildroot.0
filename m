@@ -1,42 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 19:13:07 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libva: remove optional mesa3d
- support
-In-Reply-To: <20190407171318.19852-1-bernd.kuhls@t-online.de>
-References: <20190407171318.19852-1-bernd.kuhls@t-online.de>
-Message-ID: <20190410191307.1681df76@windsurf.home>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 10 Apr 2019 19:21:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/civetweb: fix static build with
+ openssl
+In-Reply-To: <20190410191158.3b5ad608@windsurf.home>
+References: <20190407163231.20134-1-fontaine.fabrice@gmail.com>
+ <20190410191158.3b5ad608@windsurf.home>
+Message-ID: <a053693b-ca55-e2a3-8fb2-5c6adba9fe31@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bernd,
-
-On Sun,  7 Apr 2019 19:13:17 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
-
-> Kodi 18.0-Leia will support vaapi on r600 and radeonsi.
-> We need libva support in mesa3d for this. To avoid the circular
-> dependency we switch from using mesa3d in libva to use libva in mesa3d.
+Il 10/04/2019 19:11, Thomas Petazzoni ha scritto:
+> On Sun,  7 Apr 2019 18:32:31 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 > 
-> This patch is the first step: disable mesa3d support in libva.
+>> Use pkg-config to retrieve openssl dependencies such as atomic
+>>
+>> Fixes:
+>>   - http://autobuild.buildroot.org/results/b2e210bdefe84f4ec9cfda79a33d81788fb7e66c
+>>
+>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>> ---
+>>   package/civetweb/civetweb.mk | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/libva/libva.mk | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+> Gaah, sorry, I'm only seeing this patch now, and in the mean time, I
+> have merged a similar patch from Giulio. Sorry about that :-/
 
-I understand the circular dependency issue, but what makes it
-reasonable to drop mesa3d support in libva ? Until now, the choice was
-rather the opposite: have mesa3d support in libva, and no libva support
-in mesa3d. Is there a fundamental reason why one is more useful than
-the other ?
+I was sure to have checked patchwork before submitting.
+I'm sorry too Fabrice.
 
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
