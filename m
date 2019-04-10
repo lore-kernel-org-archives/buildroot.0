@@ -1,55 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 19:31:55 +0200
-Subject: [Buildroot] [git commit] package/lldpd: add libcap optional
- dependency
-Message-ID: <20190410172749.8F60F8D295@busybox.osuosl.org>
+Date: Wed, 10 Apr 2019 19:31:09 +0200
+Subject: [Buildroot] [git commit] package/lldpd: remove --without-json
+Message-ID: <20190410172749.738C08D295@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=67ab484206c991174a59601fa978a620d35a9d9a
+commit: https://git.buildroot.net/buildroot/commit/?id=2bbe9c41c69176d09863c356e307de2d9ed5cb94
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libcap optional dependency has been added in version 1.0.2 with
-https://github.com/vincentbernat/lldpd/commit/f6933edaf2edea12ef72ef7c70958c2a617f6a1f
-
-Also refactor check and valgrind optional dependencies to put them on a
-single line
+json option has been removed in version 0.9.7 with
+https://github.com/vincentbernat/lldpd/commit/06987a24ce053cbb57f8853bbf544bc7c067c8aa
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lldpd/lldpd.mk | 15 ++++++---------
- 1 file changed, 6 insertions(+), 9 deletions(-)
+ package/lldpd/lldpd.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
-index 99de40d498..86c825c4e1 100644
+index 8d554ae5e2..506b6f136d 100644
 --- a/package/lldpd/lldpd.mk
 +++ b/package/lldpd/lldpd.mk
-@@ -6,18 +6,15 @@
- 
- LLDPD_VERSION = 1.0.3
- LLDPD_SITE = http://media.luffy.cx/files/lldpd
--LLDPD_DEPENDENCIES = host-pkgconf libevent
-+LLDPD_DEPENDENCIES = \
-+	$(if $(BR2_PACKAGE_CHECK),check) \
-+	host-pkgconf \
-+	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
-+	libevent \
-+	$(if $(BR2_PACKAGE_VALGRIND),valgrind)
- LLDPD_LICENSE = ISC
- LLDPD_LICENSE_FILES = LICENSE
- 
--ifeq ($(BR2_PACKAGE_CHECK),y)
--LLDPD_DEPENDENCIES += check
--endif
--
--ifeq ($(BR2_PACKAGE_VALGRIND),y)
--LLDPD_DEPENDENCIES += valgrind
--endif
--
- # Detection of c99 support in configure fails without WCHAR. To enable
- # automatic detection of c99 support by configure, we need to enable
- # WCHAR in toolchain. But actually we do not need WCHAR at lldpd
+@@ -31,7 +31,6 @@ LLDPD_CONF_OPTS = \
+ 	--without-embedded-libevent \
+ 	--without-snmp \
+ 	--without-xml \
+-	--without-json \
+ 	--without-seccomp \
+ 	--without-libbsd \
+ 	--disable-hardening \
