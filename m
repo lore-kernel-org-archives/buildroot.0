@@ -1,25 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 19:09:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/glm: bump version to 0.9.9.5
-In-Reply-To: <20190407195455.13793-1-bernd.kuhls@t-online.de>
-References: <20190407195455.13793-1-bernd.kuhls@t-online.de>
-Message-ID: <20190410190936.4fdc6565@windsurf.home>
+Date: Wed, 10 Apr 2019 19:11:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/civetweb: fix static build with
+ openssl
+In-Reply-To: <20190407163231.20134-1-fontaine.fabrice@gmail.com>
+References: <20190407163231.20134-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190410191158.3b5ad608@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  7 Apr 2019 21:54:55 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Sun,  7 Apr 2019 18:32:31 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Use pkg-config to retrieve openssl dependencies such as atomic
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/b2e210bdefe84f4ec9cfda79a33d81788fb7e66c
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/glm/glm.hash | 2 +-
->  package/glm/glm.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/civetweb/civetweb.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Gaah, sorry, I'm only seeing this patch now, and in the mean time, I
+have merged a similar patch from Giulio. Sorry about that :-/
 
 Thomas
 -- 
