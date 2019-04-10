@@ -1,48 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 19:30:48 +0200
-Subject: [Buildroot] [git commit] package/lldpd: update license file
-Message-ID: <20190410172749.6BC588D295@busybox.osuosl.org>
+Date: Wed, 10 Apr 2019 19:31:55 +0200
+Subject: [Buildroot] [git commit] package/lldpd: add libcap optional
+ dependency
+Message-ID: <20190410172749.8F60F8D295@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d86eb0c8b4be9f68cbd9ac17edc39b909a6427ab
+commit: https://git.buildroot.net/buildroot/commit/?id=67ab484206c991174a59601fa978a620d35a9d9a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Instead of README.md, use LICENSE file that has been added in version
-  0.9.5 with
-  https://github.com/vincentbernat/lldpd/commit/4d534a60ee33aa2431acb6bfe6d499d2e72d66d5
-- Add hash of license file
+libcap optional dependency has been added in version 1.0.2 with
+https://github.com/vincentbernat/lldpd/commit/f6933edaf2edea12ef72ef7c70958c2a617f6a1f
+
+Also refactor check and valgrind optional dependencies to put them on a
+single line
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: Julien Floret <julien.floret at 6wind.com
-Signed-off-by: Fabrice Fontaine &lt;<a href="mailto:fontaine.fabrice@gmail.com" target="_blank" rel="noreferrer">fontaine.fabrice at gmail.com</a>&gt;<br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lldpd/lldpd.hash | 1 +
- package/lldpd/lldpd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ package/lldpd/lldpd.mk | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/package/lldpd/lldpd.hash b/package/lldpd/lldpd.hash
-index 1785197737..1c0e380996 100644
---- a/package/lldpd/lldpd.hash
-+++ b/package/lldpd/lldpd.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256 450b622aac7ae1758f1ef82f3b7b94ec47f2ff33abfb0e6ac82555b9ee55f151  lldpd-1.0.1.tar.gz
-+sha256 0e96a5aea65f16e2239231ce4ab90497f8bc3bb8fe6abe9299aade4726ff7c8d  LICENSE
 diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
-index 6a520448da..8d554ae5e2 100644
+index 99de40d498..86c825c4e1 100644
 --- a/package/lldpd/lldpd.mk
 +++ b/package/lldpd/lldpd.mk
-@@ -8,7 +8,7 @@ LLDPD_VERSION = 1.0.1
- LLDPD_SITE = http://media.luffy.cx/files/lldpd
- LLDPD_DEPENDENCIES = host-pkgconf libevent
- LLDPD_LICENSE = ISC
--LLDPD_LICENSE_FILES = README.md
-+LLDPD_LICENSE_FILES = LICENSE
- # 0002-configure-do-not-check-for-libbsd.patch / 0003-configure-remove-check-on-CXX-compiler.patch
- LLDPD_AUTORECONF = YES
+@@ -6,18 +6,15 @@
  
+ LLDPD_VERSION = 1.0.3
+ LLDPD_SITE = http://media.luffy.cx/files/lldpd
+-LLDPD_DEPENDENCIES = host-pkgconf libevent
++LLDPD_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_CHECK),check) \
++	host-pkgconf \
++	$(if $(BR2_PACKAGE_LIBCAP),libcap) \
++	libevent \
++	$(if $(BR2_PACKAGE_VALGRIND),valgrind)
+ LLDPD_LICENSE = ISC
+ LLDPD_LICENSE_FILES = LICENSE
+ 
+-ifeq ($(BR2_PACKAGE_CHECK),y)
+-LLDPD_DEPENDENCIES += check
+-endif
+-
+-ifeq ($(BR2_PACKAGE_VALGRIND),y)
+-LLDPD_DEPENDENCIES += valgrind
+-endif
+-
+ # Detection of c99 support in configure fails without WCHAR. To enable
+ # automatic detection of c99 support by configure, we need to enable
+ # WCHAR in toolchain. But actually we do not need WCHAR at lldpd
