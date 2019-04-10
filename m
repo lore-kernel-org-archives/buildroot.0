@@ -1,56 +1,31 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 10 Apr 2019 20:22:28 +0200
-Subject: [Buildroot] [PATCH 1/4] package/squeezelite: bump to version
- 71c012ad9ba102feb95823b7b9dc17e5305689c7
-In-Reply-To: <20190410194155.514d767d@windsurf.home>
-References: <20190406165800.4493-1-fontaine.fabrice@gmail.com>
- <20190410194155.514d767d@windsurf.home>
-Message-ID: <CAPi7W81nDK5D+cEEgxj7xydQdUCK2N8YLhPMFhoa9Vkg-DX1YQ@mail.gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Wed, 10 Apr 2019 14:32:12 -0400
+Subject: [Buildroot] [PATCH 1/1] package/python3: fix hash for license file
+Message-ID: <20190410183212.12034-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Adam Duskett <Aduskett@gmail.com>
 
-Le mer. 10 avr. 2019 ? 19:41, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello,
->
-> On Sat,  6 Apr 2019 18:57:57 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > - Switch site to https://github.com/ralph-irving/squeezelite
->
-> What makes this upstream better / more official than the current one
-> we're using ? Admittedly, the current one doesn't look very official
-> either, but I'm curious about how you decided to choose this "other"
-> upstream.
-The current upstream has been automatically exported from
-code.google.com/p/squeezelite and has seen no updates since 4 years.
+The year was updated.
 
-The new upstream:
- - is active (updated nineteen days ago)
- - included our four patches
- - is declared as the official repository on wikipedia
-(https://en.wikipedia.org/wiki/Squeezelite)
- - has drawn interest from debian maintainer
-(https://github.com/ralph-irving/squeezelite/issues/29) even if debian
-did not switch to this fork (probably because of the lack of official
-releases).
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/python3/python3.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-That's why I decided to choose it as the "new" upstream.
-I'll open a new issue on github to ask for a new release.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
-
-Fabrice
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 9a7904c1d5..d5209c23cc 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -2,4 +2,4 @@
+ md5		93df27aec0cd18d6d42173e601ffbbfd Python-3.7.3.tar.xz
+ # Locally computed
+ sha256 da60b54064d4cfcd9c26576f6df2690e62085123826cff2e667e72a91952d318 Python-3.7.3.tar.xz
+-sha256 b9a6d9320b8f2693e8d41e496ce56caadacaddcca9be2a64a61749278f425cf2 LICENSE
++sha256 a77d71d6be6f9032e6b6e5d2cf6da68f9eeab9036edfbc043633c8979cd5e82c LICENSE
+-- 
+2.20.1
