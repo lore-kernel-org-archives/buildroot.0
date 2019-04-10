@@ -1,73 +1,32 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Wed, 10 Apr 2019 13:17:46 -0700
-Subject: [Buildroot] [PATCH v2] package/coreutils: allow building individual
- binaries
-Message-ID: <20190410201746.14678-1-mmayer@broadcom.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 10 Apr 2019 22:51:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xz: fix whitespace
+Message-ID: <20190410205105.9580-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We add configuration option BR2_PACKAGE_COREUTILS_INDIVIDUAL_BINARIES
-so that coreutils can be built and installed as individual binaries.
-It can be used if the target file system doesn't support symlinks or
-symlinks are undesirable.
+A strange unicode character was used instead of a standard white space
 
-The approach is modelled after Busybox's similarly named configuration
-option.
-
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/coreutils/Config.in    | 18 ++++++++++++++++++
- package/coreutils/coreutils.mk |  8 +++++++-
- 2 files changed, 25 insertions(+), 1 deletion(-)
+ package/xz/xz.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/coreutils/Config.in b/package/coreutils/Config.in
-index 11a6019e820f..a0a84c220a48 100644
---- a/package/coreutils/Config.in
-+++ b/package/coreutils/Config.in
-@@ -19,3 +19,21 @@ comment "coreutils needs a toolchain w/ wchar"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+
-+if BR2_PACKAGE_COREUTILS
-+
-+config BR2_PACKAGE_COREUTILS_INDIVIDUAL_BINARIES
-+	bool "Individual binaries"
-+	depends on !BR2_STATIC_LIBS
-+	help
-+	  By default (i.e. with this option disabled), coreutils is
-+	  installed as a single binary (Busybox style) called
-+	  /usr/bin/coreutils, and all core utilities are symbolic
-+	  links to this binary.
-+
-+	  With this option enabled, each utility is a separate binary.
-+
-+comment "coreutils individual binaries need a toolchain w/ dynamic library"
-+	depends on BR2_STATIC_LIBS
-+
-+endif
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 3e8efbf04706..287b84873a05 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -14,8 +14,14 @@ COREUTILS_LICENSE_FILES = COPYING
- COREUTILS_AUTORECONF = YES
- COREUTILS_GETTEXTIZE = YES
+diff --git a/package/xz/xz.hash b/package/xz/xz.hash
+index 6d4e2a69d9..69d1db2f4d 100644
+--- a/package/xz/xz.hash
++++ b/package/xz/xz.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature
+ sha256 3313fd2a95f43d88e44264e6b015e7d03053e681860b0d5d3f9baca79c57b7bf  xz-5.2.4.tar.bz2
  
--COREUTILS_CONF_OPTS = --disable-rpath --enable-single-binary=symlinks \
-+COREUTILS_CONF_OPTS = \
-+	--disable-rpath \
- 	$(if $(BR2_TOOLCHAIN_USES_MUSL),--with-included-regex)
-+
-+ifeq ($(BR2_PACKAGE_COREUTILS_INDIVIDUAL_BINARIES),)
-+COREUTILS_CONF_OPTS += --enable-single-binary=symlinks
-+endif
-+
- COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 	ac_cv_func_chown_works=yes \
- 	ac_cv_func_euidaccess=no \
+-#?Hash for license files
++# Hash for license files
+ sha256 bcb02973ef6e87ea73d331b3a80df7748407f17efdb784b61b47e0e610d3bb5c  COPYING
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.GPLv3
 -- 
-2.17.1
+2.20.1
