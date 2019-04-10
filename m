@@ -1,32 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Apr 2019 23:05:25 +0200
-Subject: [Buildroot] [PATCH v2] package/coreutils: allow building
- individual binaries
-In-Reply-To: <20190410201746.14678-1-mmayer@broadcom.com> (Markus Mayer's
- message of "Wed, 10 Apr 2019 13:17:46 -0700")
-References: <20190410201746.14678-1-mmayer@broadcom.com>
-Message-ID: <87r2a9r2p6.fsf@dell.be.48ers.dk>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Wed, 10 Apr 2019 19:35:04 +0000
+Subject: [Buildroot] [PATCH] package/libp11: fix help text
+In-Reply-To: <20190407063944.22260-1-yann.morin.1998@free.fr>
+References: <20190407063944.22260-1-yann.morin.1998@free.fr>
+Message-ID: <1554924903.2142.45.camel@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Markus" == Markus Mayer <mmayer@broadcom.com> writes:
+On Sun, 2019-04-07 at 08:39 +0200, Yann E. MORIN wrote:
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Trent Piepho <tpiepho@impinj.com>
 
- > We add configuration option BR2_PACKAGE_COREUTILS_INDIVIDUAL_BINARIES
- > so that coreutils can be built and installed as individual binaries.
- > It can be used if the target file system doesn't support symlinks or
- > symlinks are undesirable.
+Thanks for fixing this.
 
-Out of interest, what file system is that?
+Acked-by: Trent Piepho <tpiepho@impinj.com>
 
- > The approach is modelled after Busybox's similarly named configuration
- > option.
-
-The use case for individual binaries for busybox is afaik mainly for
-stuff like selinux, where you may want to have different policies for
-the different applets.
-
--- 
-Bye, Peter Korsgaard
+> ---
+>  package/libp11/Config.in.host | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/libp11/Config.in.host
+> b/package/libp11/Config.in.host
+> index ccc171025a..8da081f868 100644
+> --- a/package/libp11/Config.in.host
+> +++ b/package/libp11/Config.in.host
+> @@ -1,6 +1,7 @@
+>  config BR2_PACKAGE_HOST_LIBP11
+>  	bool "host libp11"
+>  	help
+> -	  OpenSSL engine for PKCS#11 modules.  Part of the OpenSC
+> project.
+> +	  OpenSSL engine for PKCS#11 modules. Part of the OpenSC
+> +	  project.
+>  
+> 
