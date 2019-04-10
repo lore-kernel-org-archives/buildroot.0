@@ -1,42 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 19:09:12 +0200
-Subject: [Buildroot] [git commit] package/glm: bump version to 0.9.9.5
-Message-ID: <20190410172059.E03A28476B@busybox.osuosl.org>
+Date: Wed, 10 Apr 2019 19:25:08 +0200
+Subject: [Buildroot] [git commit] package/libnfs: bump version to 4.0.0
+Message-ID: <20190410172059.EE4C780DEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e9f6f359046031e9fea6e5fe6760e8f285296ab
+commit: https://git.buildroot.net/buildroot/commit/?id=883ad169e05aca8ab772fff4b648f6c6b67dfa93
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Removed patch 0002, applied upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/glm/glm.hash | 2 +-
- package/glm/glm.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../0002-libnfs.c-include-time.h-in-libnfs.c.patch | 35 ----------------------
+ package/libnfs/libnfs.hash                         |  2 +-
+ package/libnfs/libnfs.mk                           |  2 +-
+ 3 files changed, 2 insertions(+), 37 deletions(-)
 
-diff --git a/package/glm/glm.hash b/package/glm/glm.hash
-index 9d5c94301d..2073d6bf04 100644
---- a/package/glm/glm.hash
-+++ b/package/glm/glm.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch b/package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch
+deleted file mode 100644
+index 34e584017e..0000000000
+--- a/package/libnfs/0002-libnfs.c-include-time.h-in-libnfs.c.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From b56bd3d99f67a3273fec3c0c5d9560413465a1db Mon Sep 17 00:00:00 2001
+-From: Anna Lyons <Anna.Lyons@data61.csiro.au>
+-Date: Thu, 12 Jul 2018 17:45:23 +1000
+-Subject: [PATCH] libnfs.c: include <time.h> in libnfs.c
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-time() is used in this file, which is from time.h. Fixes a warning.
+-
+-Note, that building with musl breaks otherwise, as it is more strict regarding
+-missing header inclusions.
+-
+-Backported from: 794a29f01f8e5961adc5c79d5ba5ac1062877e6c
+-
+-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+----
+- lib/libnfs.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/lib/libnfs.c b/lib/libnfs.c
+-index d89d84d..43c17b9 100755
+---- a/lib/libnfs.c
+-+++ b/lib/libnfs.c
+-@@ -70,6 +70,7 @@
+- #include <stdarg.h>
+- #include <stdlib.h>
+- #include <string.h>
+-+#include <time.h>
+- #include "slist.h"
+- #include "libnfs.h"
+- #include "libnfs-raw.h"
+--- 
+-2.19.1
+-
+diff --git a/package/libnfs/libnfs.hash b/package/libnfs/libnfs.hash
+index 0e4dc6fbc9..9cd2fd71c5 100644
+--- a/package/libnfs/libnfs.hash
++++ b/package/libnfs/libnfs.hash
+@@ -1,5 +1,5 @@
  # Locally calculated
--sha256 3a073eb8f3be07cee74481db0e1f78eda553b554941e405c863ab64de6a2e954  glm-0.9.9.4.tar.gz
-+sha256 5e33b6131cea6a904339734b015110d4342b7dc02d995164fdb86332d28a5aa4  glm-0.9.9.5.tar.gz
- sha256 337130631a714eeae017556cad101d5324c2961214120b6214741d3d43667086  manual.md
-diff --git a/package/glm/glm.mk b/package/glm/glm.mk
-index e15d4fea49..3ef106a943 100644
---- a/package/glm/glm.mk
-+++ b/package/glm/glm.mk
+-sha256 445d92c5fc55e4a5b115e358e60486cf8f87ee50e0103d46a02e7fb4618566a5  libnfs-libnfs-3.0.0.tar.gz
++sha256 6ee77e9fe220e2d3e3b1f53cfea04fb319828cc7dbb97dd9df09e46e901d797d  libnfs-libnfs-4.0.0.tar.gz
+ sha256 edd960c0142b8ada98b43b6396b78f4e557b0bc70ac601a51e397ad04070e2c5  COPYING
+ sha256 d9406ced95457941032aa11d04623b8ab71f2827a3395ebef137aec475be35b1  LICENCE-BSD.txt
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
+diff --git a/package/libnfs/libnfs.mk b/package/libnfs/libnfs.mk
+index 3a84e0aafa..5c8f66b011 100644
+--- a/package/libnfs/libnfs.mk
++++ b/package/libnfs/libnfs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GLM_VERSION = 0.9.9.4
-+GLM_VERSION = 0.9.9.5
- GLM_SITE = $(call github,g-truc,glm,$(GLM_VERSION))
- GLM_LICENSE = MIT
- GLM_LICENSE_FILES = manual.md
+-LIBNFS_VERSION = libnfs-3.0.0
++LIBNFS_VERSION = libnfs-4.0.0
+ LIBNFS_SITE = $(call github,sahlberg,libnfs,$(LIBNFS_VERSION))
+ LIBNFS_INSTALL_STAGING = YES
+ LIBNFS_AUTORECONF = YES
