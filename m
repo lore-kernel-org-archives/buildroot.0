@@ -1,40 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 10 Apr 2019 19:05:32 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/llvm: bump to 8.0.0
-In-Reply-To: <20190409060723.1654-1-valentinkorenblit@gmail.com>
-References: <20190409060723.1654-1-valentinkorenblit@gmail.com>
-Message-ID: <20190410190532.5d8f890f@windsurf.home>
+Date: Wed, 10 Apr 2019 19:08:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rapidxml: fix install path
+In-Reply-To: <20190407194246.29625-1-bernd.kuhls@t-online.de>
+References: <20190407194246.29625-1-bernd.kuhls@t-online.de>
+Message-ID: <20190410190801.4da3a286@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Sun,  7 Apr 2019 21:42:46 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Thanks for this new iteration!
-
-On Tue,  9 Apr 2019 08:07:22 +0200
-Valentin Korenblit <valentinkorenblit@gmail.com> wrote:
-
-> The license file hash changed due to a copyright year update:
+> kodi-pvr-iptvsimple as of
+> https://github.com/kodi-pvr/pvr.iptvsimple/commit/d27b3ed1d379d2f865e95f08bdf2dbf086f8c0ad
 > 
-> -Copyright (c) 2003-2018 University of Illinois at Urbana-Champaign.
-> +Copyright (c) 2003-2019 University of Illinois at Urbana-Champaign.
+> depends on rapidxml but expects the headers in usr/include/rapidxml
+> instead of usr/include.
 > 
-> Changes v1 -> v2:
-> 	- Add comment about changes in license file
-
-The changelog should not be part of the commit log itself. It should go...
-
+> This changes the install path to be consistent with Debian and Gentoo:
 > 
-> Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
+> https://packages.debian.org/stretch/all/librapidxml-dev/filelist
+> https://gitweb.gentoo.org/repo/gentoo.git/tree/dev-libs/rapidxml/rapidxml-1.13-r1.ebuild#n22
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
+>  package/rapidxml/rapidxml.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-... here, so that it gets dropped when the patch is applied.
-
-I've dropped the changelog from the commit log of both patches and
-applied them to master. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
