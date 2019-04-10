@@ -1,45 +1,42 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 10 Apr 2019 19:21:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/civetweb: fix static build with
- openssl
-In-Reply-To: <20190410191158.3b5ad608@windsurf.home>
-References: <20190407163231.20134-1-fontaine.fabrice@gmail.com>
- <20190410191158.3b5ad608@windsurf.home>
-Message-ID: <a053693b-ca55-e2a3-8fb2-5c6adba9fe31@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 10 Apr 2019 19:09:12 +0200
+Subject: [Buildroot] [git commit] package/glm: bump version to 0.9.9.5
+Message-ID: <20190410172059.E03A28476B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 10/04/2019 19:11, Thomas Petazzoni ha scritto:
-> On Sun,  7 Apr 2019 18:32:31 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> 
->> Use pkg-config to retrieve openssl dependencies such as atomic
->>
->> Fixes:
->>   - http://autobuild.buildroot.org/results/b2e210bdefe84f4ec9cfda79a33d81788fb7e66c
->>
->> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->> ---
->>   package/civetweb/civetweb.mk | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> Gaah, sorry, I'm only seeing this patch now, and in the mean time, I
-> have merged a similar patch from Giulio. Sorry about that :-/
+commit: https://git.buildroot.net/buildroot/commit/?id=3e9f6f359046031e9fea6e5fe6760e8f285296ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I was sure to have checked patchwork before submitting.
-I'm sorry too Fabrice.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/glm/glm.hash | 2 +-
+ package/glm/glm.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+diff --git a/package/glm/glm.hash b/package/glm/glm.hash
+index 9d5c94301d..2073d6bf04 100644
+--- a/package/glm/glm.hash
++++ b/package/glm/glm.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 3a073eb8f3be07cee74481db0e1f78eda553b554941e405c863ab64de6a2e954  glm-0.9.9.4.tar.gz
++sha256 5e33b6131cea6a904339734b015110d4342b7dc02d995164fdb86332d28a5aa4  glm-0.9.9.5.tar.gz
+ sha256 337130631a714eeae017556cad101d5324c2961214120b6214741d3d43667086  manual.md
+diff --git a/package/glm/glm.mk b/package/glm/glm.mk
+index e15d4fea49..3ef106a943 100644
+--- a/package/glm/glm.mk
++++ b/package/glm/glm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GLM_VERSION = 0.9.9.4
++GLM_VERSION = 0.9.9.5
+ GLM_SITE = $(call github,g-truc,glm,$(GLM_VERSION))
+ GLM_LICENSE = MIT
+ GLM_LICENSE_FILES = manual.md
