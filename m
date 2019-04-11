@@ -1,55 +1,65 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Thu, 11 Apr 2019 18:44:44 +0200
-Subject: [Buildroot] [PATCH v3 1/2] support/testing: add xserver + Mesa
- OpenGL (GLX) + glxinfo
-In-Reply-To: <20190411182447.4c1f8570@windsurf.home>
-References: <20190411155805.4111-1-yohar@P-ASN-FIRESTORM.daviel.idf.intranet>
- <20190411182447.4c1f8570@windsurf.home>
-Message-ID: <fb78f35d-583b-ddea-b4a0-bfad2bd03aa2@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 11 Apr 2019 18:56:58 +0200
+Subject: [Buildroot] [PATCH v2] package/coreutils: allow building
+ individual binaries
+In-Reply-To: <20190410201746.14678-1-mmayer@broadcom.com>
+References: <20190410201746.14678-1-mmayer@broadcom.com>
+Message-ID: <20190411185658.57ea2a38@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello Markus,
 
-Le 11/04/2019 ? 18:24, Thomas Petazzoni a ?crit?:
-> Hello,
-> 
-> On Thu, 11 Apr 2019 17:58:04 +0200
-> Youssef at smile.fr, Harmouch at smile.fr, youssef.harmouch at smile.fr wrote:
-> 
->> From: Romain Naour <romain.naour@gmail.com>
->>
->> This test allow to check if the xserver with GLX is working properly.
->> This is a basic test but it allow to trigger the current bug reported
->> by [1].
->>
->> To test if the glxinfo test is working, you can change "-display :0" by
->> "-display :1" in the glxinfo command line.
->>
->> [1] https://bugs.buildroot.org/show_bug.cgi?id=11591
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
->> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->> Signed-off-by: Romain Naour <romain.naour@smile.fr>
->> Signed-off-by: youssef <youssef.harmouch@smile.fr>
->> index 0000000000..5a28411f49
-> 
-> The patch was somehow damaged here, so I fixed it up, squashed PATCH
-> 2/2 into this one, and applied.
+On Wed, 10 Apr 2019 13:17:46 -0700
+Markus Mayer <mmayer@broadcom.com> wrote:
 
-Thanks for fixing the patch.
-
-I'll check what's going on with git format-patch on Youssef's computer.
-
-Best regards,
-Romain
-
+> We add configuration option BR2_PACKAGE_COREUTILS_INDIVIDUAL_BINARIES
+> so that coreutils can be built and installed as individual binaries.
+> It can be used if the target file system doesn't support symlinks or
+> symlinks are undesirable.
 > 
-> Thanks,
+> The approach is modelled after Busybox's similarly named configuration
+> option.
 > 
-> Thomas
-> 
+> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+
+I tested this, with BR2_ROOTFS_MERGED_USR and got some broken symlinks
+in /bin. I believe your patch is not sufficient. Indeed, it doesn't
+take care of the following parts of coreutils.mk:
+
+ifeq ($(BR2_ROOTFS_MERGED_USR),)
+define COREUTILS_CLEANUP_BIN
+        # some things go in /bin rather than /usr/bin
+        $(foreach f,$(COREUTILS_BIN_PROGS), \
+                rm -f $(TARGET_DIR)/usr/bin/$(f) && \
+                ln -sf ../usr/bin/coreutils $(TARGET_DIR)/bin/$(f)
+        )
+endef
+COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CLEANUP_BIN
+endif
+
+This probably needs to be changed to move applets from /usr/bin to /bin
+rather than changing the symlinks.
+
+define COREUTILS_CLEANUP
+        # link for archaic shells
+        ln -fs coreutils $(TARGET_DIR)/usr/bin/[
+        # gnu thinks chroot is in bin, debian thinks it's in sbin
+        rm -f $(TARGET_DIR)/usr/bin/chroot
+        ln -sf ../bin/coreutils $(TARGET_DIR)/usr/sbin/chroot
+endef
+
+The symlink logic here also needs to be adjusted I guess.
+
+Could you fix this and retest ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
