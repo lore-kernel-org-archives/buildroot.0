@@ -1,41 +1,88 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Apr 2019 19:14:44 +0200
-Subject: [Buildroot] [PATCH] package/python-numpy: add missing
- sublibrary license
-In-Reply-To: <20190409204630.52594-1-giulio.benetti@micronovasrl.com>
-References: <20190409204630.52594-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190411191444.6d3372a6@windsurf.home>
+Date: Thu, 11 Apr 2019 19:19:07 +0200
+Subject: [Buildroot] [git commit] package/mesa3d: add KMSRO support for vc4
+Message-ID: <20190411171514.C227B8E4BF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  9 Apr 2019 22:46:30 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c19e2f44cccf65f34c416ecda9a9ebd96608891f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Release 1.16.2 tarball doesn't contain all sublibraries license files
-> listed in the base LICENSE.txt file.
-> This makes python-numpy-legal-info incomplete.
-> 
-> - Add patch to add missing sublibrary license file:
->   numpy/linalg/lapack_lite/LICENSE.txt
-> - its sha256 into hash file.
-> - update PYTHON_NUMPY_LICENSE adding:
->   BSD-2-Clause, PSF, Apache-2.0, MIT, Zlib
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  ...03-Add-sublibraries-missing-licenses.patch | 61 +++++++++++++++++++
->  package/python-numpy/python-numpy.hash        |  5 ++
->  package/python-numpy/python-numpy.mk          |  8 ++-
->  3 files changed, 72 insertions(+), 2 deletions(-)
->  create mode 100644 package/python-numpy/0003-Add-sublibraries-missing-licenses.patch
+kmsro allow to support KMS displays with the renderonly layer used to
+attach a GPU [1].
 
-Applied to master, thanks.
+Quote from mesa3d meson.build: "kmsro driver requires one or more
+renderonly drivers (vc4, etnaviv, freedreno)". But only vc4 support is
+available by using the (deprecated) autotools build system [2].
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This will also be used by mesa to support KMSRO with the upcomming
+Panfrost and Lima Gallium drivers.
+
+[1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=ed65aeec7810a7d98a19461ba933bd77268cb0f6
+[2] https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=mesa-19.0.1#n2864
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d/Config.in | 17 +++++++++++++++++
+ package/mesa3d/mesa3d.mk |  1 +
+ 2 files changed, 18 insertions(+)
+
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index fdd64b0337..3f44e94229 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -83,6 +83,12 @@ config BR2_PACKAGE_MESA3D_DRIVER
+ config BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	bool
+ 
++# Quote from mesa3d meson.build: "kmsro driver requires one or more
++# renderonly drivers (vc4, etnaviv, freedreno)". But only vc4 support
++# is available by using the (deprecated) autotools build system.
++config BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
++	bool
++
+ comment "Gallium drivers"
+ 
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+@@ -93,6 +99,16 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+ 	help
+ 	  Mesa driver for Vivante GPUs.
+ 
++config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO
++	bool "Gallium KMSRO driver"
++	depends on BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
++	help
++	  Support various sorts of KMS displays with the
++	  renderonly layer used to attach a GPU.
++
++comment "Gallium KMSRO needs one or more renderonly drivers"
++	depends on !BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
++
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ 	bool "Gallium nouveau driver"
+ 	depends on BR2_i386 || BR2_x86_64
+@@ -166,6 +182,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+ 	bool "Gallium vc4 driver"
+ 	depends on BR2_ARM_CPU_HAS_NEON || BR2_aarch64
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
++	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+ 	select BR2_PACKAGE_LIBDRM_VC4
+ 	select BR2_PACKAGE_MESA3D_NEEDS_XA
+ 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 76affe5704..02c8a8a57a 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -99,6 +99,7 @@ endif
+ 
+ #Gallium Drivers
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV)  += etnaviv
++MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_KMSRO)    += kmsro
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU)  += nouveau
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600)     += r600
+ MESA3D_GALLIUM_DRIVERS-$(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI) += radeonsi
