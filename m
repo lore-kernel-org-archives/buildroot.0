@@ -1,48 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Apr 2019 18:27:16 +0200
-Subject: [Buildroot] [PATCH] package/tpm2-totp: blacklist Codesourcery
- ARM toolchain
-In-Reply-To: <20190411105906.12289-1-peter@korsgaard.com>
-References: <20190411105906.12289-1-peter@korsgaard.com>
-Message-ID: <20190411182716.7865e234@windsurf.home>
+Date: Thu, 11 Apr 2019 18:27:57 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/hostapd: add upstream 2019-1, 2, 3,
+ 4 security patches
+In-Reply-To: <20190411111103.19705-1-peter@korsgaard.com>
+References: <20190411111103.19705-1-peter@korsgaard.com>
+Message-ID: <20190411182757.5ec63ac5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 11 Apr 2019 12:59:06 +0200
+On Thu, 11 Apr 2019 13:11:02 +0200
 Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> Fixes:
-> http://autobuild.buildroot.net/results/6c9bb17920749409e5a0c3388ccda411c6c7cfb4/
+> Fixes the following security vulnerabilities:
 > 
-> tpm2-totp uses _DEFAULT_SOURCE to make the htobe64() macro available,
-> support for which was only added in glibc 2.20:
+> - CVE-2019-9494 (cache attack against SAE)
 > 
-> https://www.gnu.org/software/libc/manual/html_node/Feature-Test-Macros.html#index-_005fDEFAULT_005fSOURCE
+> For details, see the advisory:
+> https://w1.fi/security/2019-1/sae-side-channel-attacks.txt
 > 
-> From glibc 2.20 NEWS:
+> - CVE-2019-9495 (cache attack against EAP-pwd)
 > 
-> * The _BSD_SOURCE and _SVID_SOURCE feature test macros are no longer
->   supported; they now act the same as _DEFAULT_SOURCE (but generate a
->   warning).  Except for cases where _BSD_SOURCE enabled BSD interfaces that
->   conflicted with POSIX (support for which was removed in 2.19), the
->   interfaces those macros enabled remain available when compiling with
->   _GNU_SOURCE defined, with _DEFAULT_SOURCE defined, or without any feature
->   test macros defined.
+> For details, see the advisory:
+> https://w1.fi/security/2019-2/eap-pwd-side-channel-attack.txt
 > 
-> This could be worked around by defining _BSD_SOURCE for this old toolchain
-> (cannot be done unconditionally as it generated warnings for modern glibc
-> versions), but given that platforms using this old toolchain are unlikely to
-> have a TPM 2.0 and use it for TOTP, simply blacklist it instead.
+> - CVE-2019-9496 (SAE confirm missing state validation in hostapd/AP)
+> 
+> For details, see the advisory:
+> https://w1.fi/security/2019-3/sae-confirm-missing-state-validation.txt
+> 
+> - CVE-2019-9497 (EAP-pwd server not checking for reflection attack)
+> - CVE-2019-9498 (EAP-pwd server missing commit validation for scalar/element)
+> - CVE-2019-9499 (EAP-pwd peer missing commit validation for scalar/element)
+> 
+> For details, see the advisory:
+> https://w1.fi/security/2019-4/eap-pwd-missing-commit-validation.txt
+> 
+> Notice that SAE is not currently enabled in Buildroot, but the patches are
+> included here anyway for completeness.
 > 
 > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/tpm2-totp/Config.in | 2 ++
->  1 file changed, 2 insertions(+)
+>  package/hostapd/hostapd.hash | 14 ++++++++++++++
+>  package/hostapd/hostapd.mk   | 15 +++++++++++++++
+>  2 files changed, 29 insertions(+)
 
-Applied to master, thanks.
+Both applied, thanks! It's an interesting practice to delivery those
+security fixes only in the form of patches, and not do some proper
+point releases. But oh well, if that's how upstream works.
 
 Thomas
 -- 
