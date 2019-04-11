@@ -1,91 +1,42 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 11 Apr 2019 23:06:48 +0200
-Subject: [Buildroot] [PATCH 10/10] infra: introduce top-level,
- global show-info
-In-Reply-To: <CAAXf6LXUiuH_wUmQ23N3rOdeDoCc2-_EdmDjX5sPs1SRrZ-Q-g@mail.gmail.com>
-References: <cover.1554637858.git.yann.morin.1998@free.fr>
- <9e4d027c3a353fadde428fbba702dcc9dac15d75.1554637858.git.yann.morin.1998@free.fr>
- <CAAXf6LXUiuH_wUmQ23N3rOdeDoCc2-_EdmDjX5sPs1SRrZ-Q-g@mail.gmail.com>
-Message-ID: <20190411210648.GF2539@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 11 Apr 2019 23:12:49 +0200
+Subject: [Buildroot] [PATCH 1/2] package/stunnel: fix static build with
+ openssl and atomic
+Message-ID: <20190411211250.9402-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Use pkg-config to find openssl dependencies such as lz or latomic
 
-On 2019-04-10 11:28 +0200, Thomas De Schampheleire spake thusly:
-> El dom., 7 abr. 2019 a las 13:51, Yann E. MORIN
-> (<yann.morin.1998@free.fr>) escribi?:
-> > (to display the eldin opening '[' so as to have a valid JSON array),
-> I don't know what you wanted to say for 'eldin'.
+Fixes:
+ - http://autobuild.buildroot.org/results/28a466b98f813edb6402686cc4706766e73e1ff3
 
-'leading' that was.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/stunnel/stunnel.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> > re-enter the Makefile and mangle the output with a sed expression, that:
-> >
-> >   - 0,/^/s//[\n/;   inserts a '[' before the first line,
-> >   - $!s/$/,/;       appends a ',' at the end of every lines but the last,
-> >   - $s/$/\n]/       appends a ']' after the last line.
-> >
-> > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > ---
-> >  Makefile | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index 60bf7d7d08..13c4390ae4 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -876,6 +876,12 @@ graph-depends-requirements:
-> >         @dot -? >/dev/null 2>&1 || \
-> >                 { echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1; }
-> >
-> > +.PHONY: show-info _show-info-private
-> > +show-info:
-> > +       @$(MAKE) -C $(CONFIG_DIR) _show-info-private |sed -r -e '0,/^/s//[\n/; $$!s/$$/,/; $$s/$$/\n]/'
-> 
-> This should have an explicit '-s' argument, otherwise the output is:
-> 
-> [
-> make[1]: Entering directory '/home/tdescham/repo/contrib/buildroot',
-> ...
-> (JSON)
-> ...
-> make[1]: Leaving directory '/home/tdescham/repo/contrib/buildroot'
-> ]
-> 
-> which is not valid json.
-
-Ah yes, I always forget about in-tree builds, as I almost exclusively
-only ever use out-of-tree builds...
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> With -s, I validated that the output is valid by piping 'make
-> show-info' to 'jq .'
-> 
-> > +_show-info-private: $(patsubst %,%-show-recursive-info,$(PACKAGES) $(TARGETS_ROOTFS))
-> > +       @:
-> > +
-> >  .PHONY: show-dependency-tree
-> >  show-dependency-tree: $(patsubst %,%-show-dependency-tree,$(PACKAGES) $(TARGETS_ROOTFS))
-> >         @:
-> > --
-> > 2.14.1
-> >
-
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index 4a5d2a0335..9a81373a54 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -7,12 +7,12 @@
+ STUNNEL_VERSION_MAJOR = 5
+ STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).44
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+-STUNNEL_DEPENDENCIES = openssl
++STUNNEL_DEPENDENCIES = host-pkgconf openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+ 	--disable-libwrap
+ STUNNEL_CONF_ENV = \
+ 	ax_cv_check_cflags___fstack_protector=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no) \
+-	LIBS=$(if $(BR2_STATIC_LIBS),-lz)
++	LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ STUNNEL_LICENSE = GPL-2.0+
+ STUNNEL_LICENSE_FILES = COPYING COPYRIGHT.GPL
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
