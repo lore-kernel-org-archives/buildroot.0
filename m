@@ -1,63 +1,60 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 11 Apr 2019 08:36:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
- mesa3d-headers}: bump version to 19.0.2
-Message-ID: <20190411063650.21117-1-bernd.kuhls@t-online.de>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 11 Apr 2019 08:46:52 +0200
+Subject: [Buildroot] [PATCH] package/android-tools: host-android-tools
+ need pkg-conf
+In-Reply-To: <20190411082528.3152fca9@windsurf.home>
+References: <20190409131754.24516-1-giulio.benetti@micronovasrl.com>
+ <20190411082218.2503be2d@windsurf.home>
+ <20190411082528.3152fca9@windsurf.home>
+Message-ID: <2b9c43a0-e095-dae0-1d3a-3b80d02d0773@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+Hello Thomas,
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index e40a8556e4..7696b3a861 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 19.0.1
-+MESA3D_HEADERS_VERSION = 19.0.2
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 6495191b0f..8971e28a3b 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,7 +1,7 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2019-March/000505.html
--md5 19636bb3da35c21f43040d31e575d5ce  mesa-19.0.1.tar.xz
--sha1 41e825653b29c847912d51a37ff4cff4bab3d878  mesa-19.0.1.tar.xz
--sha256 6884163c0ea9e4c98378ab8fecd72fe7b5f437713a14471beda378df247999d4  mesa-19.0.1.tar.xz
--sha512 13afade840dfc44198b08298c9ebeb24c626c98bfff3ec6d08daaaea690ea9d47af466c877146f9afa3b45035e02c1e21fdc4b53a79c99e38dfc6126efe8ece5  mesa-19.0.1.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2019-April/000508.html
-+md5 7f84af1c3fe2078c35a7a991d1469921  mesa-19.0.2.tar.xz
-+sha1 554dad1da57f9de09ac5732ba9a27ef26f9c3005  mesa-19.0.2.tar.xz
-+sha256 1a2edc3ce56906a676c91e6851298db45903df1f5cb9827395a922c1452db802  mesa-19.0.2.tar.xz
-+sha512 6b317205efa7d62150fae23489fbad5f062ecde99fb5b210fa7ccbed2e0ef60aee1f1e66e2c606ea5d59193c3218f732556706ab3b645b175044342d88984d51  mesa-19.0.2.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 7e7f913180..bc327d5b3b 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 19.0.1
-+MESA3D_VERSION = 19.0.2
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+Il 11/04/2019 08:25, Thomas Petazzoni ha scritto:
+> On Thu, 11 Apr 2019 08:22:18 +0200
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> 
+>> We don't typically re-use the target dependencies variable for the host
+>> dependencies. So I changed this to = host-pkgconf and applied.
+> 
+> An illustration of why re-using $(ANDROID_TOOLS_DEPENDENCIES) doesn't
+> do what you think it does:
+> 
+> $ cat foo.mk
+> FOO_DEPENDENCIES = host-pkgconf
+> HOST_FOO_DEPENDENCIES = $(FOO_DEPENDENCIES)
+> 
+> FOO_DEPENDENCIES += zlib
+> HOST_FOO_DEPENDENCIES += host-zlib
+> 
+> all:
+> 	@echo $(FOO_DEPENDENCIES)
+> 	@echo $(HOST_FOO_DEPENDENCIES)
+> $ make -f foo.mk
+> host-pkgconf zlib
+> host-pkgconf zlib host-zlib
+> 
+> See how HOST_FOO_DEPENDENCIES contains "zlib" ?
+> 
+> = assignments are evaluated at the time of use, not at the time of
+> assignment (contrary to := assignments).
+
+Aah, this is why, '=' vs ':='.
+Thank you for the explanation.
+
 -- 
-2.20.1
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
