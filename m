@@ -1,52 +1,65 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 11 Apr 2019 10:13:28 +0200
-Subject: [Buildroot] [PATCH] package/python3: fix host and target
- legal-info failure
-In-Reply-To: <20190411101001.56782f85@windsurf.home>
-References: <20190411080210.6791-1-giulio.benetti@micronovasrl.com>
- <20190411101001.56782f85@windsurf.home>
-Message-ID: <5940ca60-17d7-ec04-0c39-4d936059b791@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 11 Apr 2019 10:53:43 +0200
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.0.2
+Message-ID: <20190411084936.351538E161@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=4b0acc4e99c2fc6b3bcc05ef9235059cb88ec7f5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Il 11/04/2019 10:10, Thomas Petazzoni ha scritto:
-> Hello Giulio,
-> 
-> On Thu, 11 Apr 2019 10:02:10 +0200
-> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
-> 
->> After version bump LICENSE sha256 was not recalculated and generates
->> python3-legal-info and host-python3-legal-info failure.
->>
->> Update package hash file with new locally calculated sha256.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/741/741c1d7ea94ff875420af0bd417dbfe737487750/
->> http://autobuild.buildroot.net/results/615/615286c1b71a74279e156b05c6e34694bf9ea5de/
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> 
-> Please rebase on the latest master before sending patches :-) This
-> issue was already fixed ~2h ago.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-Oh, didn't notice.
-Before submitting need to check against patchwork and master trying to 
-apply patch.
-
-Thank you
--- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index e40a8556e4..7696b3a861 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 19.0.1
++MESA3D_HEADERS_VERSION = 19.0.2
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 6495191b0f..8971e28a3b 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2019-March/000505.html
+-md5 19636bb3da35c21f43040d31e575d5ce  mesa-19.0.1.tar.xz
+-sha1 41e825653b29c847912d51a37ff4cff4bab3d878  mesa-19.0.1.tar.xz
+-sha256 6884163c0ea9e4c98378ab8fecd72fe7b5f437713a14471beda378df247999d4  mesa-19.0.1.tar.xz
+-sha512 13afade840dfc44198b08298c9ebeb24c626c98bfff3ec6d08daaaea690ea9d47af466c877146f9afa3b45035e02c1e21fdc4b53a79c99e38dfc6126efe8ece5  mesa-19.0.1.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2019-April/000508.html
++md5 7f84af1c3fe2078c35a7a991d1469921  mesa-19.0.2.tar.xz
++sha1 554dad1da57f9de09ac5732ba9a27ef26f9c3005  mesa-19.0.2.tar.xz
++sha256 1a2edc3ce56906a676c91e6851298db45903df1f5cb9827395a922c1452db802  mesa-19.0.2.tar.xz
++sha512 6b317205efa7d62150fae23489fbad5f062ecde99fb5b210fa7ccbed2e0ef60aee1f1e66e2c606ea5d59193c3218f732556706ab3b645b175044342d88984d51  mesa-19.0.2.tar.xz
+ # License
+ sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 9779de788c..76affe5704 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 19.0.1
++MESA3D_VERSION = 19.0.2
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
