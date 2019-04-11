@@ -1,96 +1,147 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Apr 2019 13:11:03 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/wpa_supplicant: add upstream
- 2019-1, 2, 3, 4 security patches
-In-Reply-To: <20190411111103.19705-1-peter@korsgaard.com>
-References: <20190411111103.19705-1-peter@korsgaard.com>
-Message-ID: <20190411111103.19705-2-peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 11 Apr 2019 11:37:08 +0200
+Subject: [Buildroot] [git commit] package/libselinux: bump version to 2.9
+Message-ID: <20190411114250.D43138E27B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security vulnerabilities:
+commit: https://git.buildroot.net/buildroot/commit/?id=91289e8adc98ad65ab5572b7bc3eac7045725499
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- CVE-2019-9494 (cache attack against SAE)
+Other changes:
+ - Remove upstream patch
+ - Add PYTHON=$(LIBSELINUX_PYLIBVER) to LIBSELINUX_MAKE_OPTS
+ - Add PYTHON=$(HOST_LIBSELINUX_PYLIBVER) to HOST_LIBSELINUX_MAKE_OPTS
 
-For details, see the advisory:
-https://w1.fi/security/2019-1/sae-side-channel-attacks.txt
+The python changes are necessary because libselinux python tools now defaults
+to python3.
 
-- CVE-2019-9495 (cache attack against EAP-pwd)
-
-For details, see the advisory:
-https://w1.fi/security/2019-2/eap-pwd-side-channel-attack.txt
-
-- CVE-2019-9496 (SAE confirm missing state validation in hostapd/AP)
-
-For details, see the advisory:
-https://w1.fi/security/2019-3/sae-confirm-missing-state-validation.txt
-
-- CVE-2019-9497 (EAP-pwd server not checking for reflection attack)
-- CVE-2019-9498 (EAP-pwd server missing commit validation for scalar/element)
-- CVE-2019-9499 (EAP-pwd peer missing commit validation for scalar/element)
-
-For details, see the advisory:
-https://w1.fi/security/2019-4/eap-pwd-missing-commit-validation.txt
-
-Notice that SAE is not currently enabled in Buildroot, but the patches are
-included here anyway for completeness.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wpa_supplicant/wpa_supplicant.hash | 14 ++++++++++++++
- package/wpa_supplicant/wpa_supplicant.mk   | 15 +++++++++++++++
- 2 files changed, 29 insertions(+)
+ ...build-break-around-__atomic_-with-GCC-4.7.patch | 70 ----------------------
+ package/libselinux/libselinux.hash                 |  2 +-
+ package/libselinux/libselinux.mk                   |  6 +-
+ 3 files changed, 5 insertions(+), 73 deletions(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.hash b/package/wpa_supplicant/wpa_supplicant.hash
-index 5b5d5fcab2..2e6cd6f226 100644
---- a/package/wpa_supplicant/wpa_supplicant.hash
-+++ b/package/wpa_supplicant/wpa_supplicant.hash
-@@ -1,3 +1,17 @@
- # Locally calculated
- sha256  76ea6b06b7a2ea8e6d9eb1a9166166f1656e6d48c7508914f592100c95c73074  wpa_supplicant-2.7.tar.gz
-+sha256  86979655f1c5a9578acbf83e8acdf69a36dcc0966a8819f3b6918530ad3e0c67  0001-OpenSSL-Use-constant-time-operations-for-private-big.patch
-+sha256  5663da175ecc344c90bea8c95ab831ad47a8002ccbb834f6c091705b92e90e71  0002-Add-helper-functions-for-constant-time-operations.patch
-+sha256  e5a6bc9f587351d4495740239ceb0a64958a59b3e875722dcaeb4c93fa517f64  0003-OpenSSL-Use-constant-time-selection-for-crypto_bignu.patch
-+sha256  aa5b722bebbaf175ff89a3653c3d048afe0d0f866989fca6b4c8e882a864392a  0004-EAP-pwd-Use-constant-time-and-memory-access-for-find.patch
-+sha256  bad9eeaeb118f88303a7a718820b3ba03d705e99b6183b3c44556bedf99db423  0005-SAE-Minimize-timing-differences-in-PWE-derivation.patch
-+sha256  ae7be450f652f6f77ad868856ab61ba6cb6d7e768585cf5f9f9f674a66e05b40  0006-SAE-Avoid-branches-in-is_quadratic_residue_blind.patch
-+sha256  86b731c787ca58ac001d20fb769b136e2ca76bf81a8465a8e72c50573cfc4b09  0007-SAE-Mask-timing-of-MODP-groups-22-23-24.patch
-+sha256  ff7305005217a34818dae247886b9fb1b1db781ab31fb5eac9ebdd9cb0d1edfe  0008-SAE-Use-const_time-selection-for-PWE-in-FFC.patch
-+sha256  707057cc0e60fe763350f82135dbe407bc289a4958879c8ff1e9413243a1caa4  0009-SAE-Use-constant-time-operations-in-sae_test_pwd_see.patch
-+sha256  82d8ae4fabfe3674bcb5412befe3a74e40d6485906589c219be72e4fd1e70baa  0010-SAE-Fix-confirm-message-validation-in-error-cases.patch
-+sha256  ff8d6d92ad4b01987be63cdaf67a24d2eba5b3cd654f37664a8a198e501c0e3b  0011-EAP-pwd-server-Verify-received-scalar-and-element.patch
-+sha256  d5ebf4e5a810e9a0c035f9268195c542273998ea70fd58697ee25965094062cc  0012-EAP-pwd-server-Detect-reflection-attacks.patch
-+sha256  7156656498f03b24a0b69a26a59d17a9fcc8e76761f1dabe6d13b4176ffd2ef8  0013-EAP-pwd-client-Verify-received-scalar-and-element.patch
-+sha256  69926854ec2a79dada290f79f04202764c5d6400d232e3a567ebe633a02c1c66  0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
- sha256  76eeecd8fc291a71f29189ea20e6a34387b8048a959cbc6a65c41b98194643a2  README
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index f56637f42e..a60f097801 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -6,6 +6,21 @@
+diff --git a/package/libselinux/0003-Fix-build-break-around-__atomic_-with-GCC-4.7.patch b/package/libselinux/0003-Fix-build-break-around-__atomic_-with-GCC-4.7.patch
+deleted file mode 100644
+index 88e3a79332..0000000000
+--- a/package/libselinux/0003-Fix-build-break-around-__atomic_-with-GCC-4.7.patch
++++ /dev/null
+@@ -1,70 +0,0 @@
+-From abe76789f8e7ce61b357f693eaed5b28feab5ce2 Mon Sep 17 00:00:00 2001
+-From: Hollis Blanchard <hollis_blanchard@mentor.com>
+-Date: Mon, 13 Aug 2018 12:11:33 -0700
+-Subject: [PATCH] Fix build break around __atomic_*() with GCC<4.7
+-
+-The __atomic_* GCC primitives were introduced in GCC 4.7, but Red Hat
+-Enterprise Linux 6.x (for example) provides GCC 4.4. Tweak the current code to
+-use the (most conservative) __sync_synchronize() primitive provided by those
+-older GCC versions.
+-
+-(Really, no __atomic or __sync operations are needed here at all, since POSIX
+-4.12 "Memory Synchronization" says pthread_mutex_lock() and
+-pthread_mutex_unlock() "synchronize memory with respect to other threads"...)
+-
+-Signed-off-by: Hollis Blanchard <hollis_blanchard@mentor.com>
+----
+- src/label_file.h | 18 ++++++++++++++++++
+- 1 file changed, 18 insertions(+)
+-
+-diff --git a/src/label_file.h b/src/label_file.h
+-index 2fa85474..47859baf 100644
+---- a/src/label_file.h
+-+++ b/src/label_file.h
+-@@ -351,8 +351,14 @@ static inline int compile_regex(struct saved_data *data, struct spec *spec,
+- 	 * init_routine does not take a parameter, it's not possible
+- 	 * to use, so we generate the same effect with atomics and a
+- 	 * mutex */
+-+#ifdef __ATOMIC_RELAXED
+- 	regex_compiled =
+- 		__atomic_load_n(&spec->regex_compiled, __ATOMIC_ACQUIRE);
+-+#else
+-+	/* GCC <4.7 */
+-+	__sync_synchronize();
+-+	regex_compiled = spec->regex_compiled;
+-+#endif
+- 	if (regex_compiled) {
+- 		return 0; /* already done */
+- 	}
+-@@ -360,8 +366,14 @@ static inline int compile_regex(struct saved_data *data, struct spec *spec,
+- 	__pthread_mutex_lock(&spec->regex_lock);
+- 	/* Check if another thread compiled the regex while we waited
+- 	 * on the mutex */
+-+#ifdef __ATOMIC_RELAXED
+- 	regex_compiled =
+- 		__atomic_load_n(&spec->regex_compiled, __ATOMIC_ACQUIRE);
+-+#else
+-+	/* GCC <4.7 */
+-+	__sync_synchronize();
+-+	regex_compiled = spec->regex_compiled;
+-+#endif
+- 	if (regex_compiled) {
+- 		__pthread_mutex_unlock(&spec->regex_lock);
+- 		return 0;
+-@@ -404,7 +416,13 @@ static inline int compile_regex(struct saved_data *data, struct spec *spec,
+- 	}
+- 
+- 	/* Done. */
+-+#ifdef __ATOMIC_RELAXED
+- 	__atomic_store_n(&spec->regex_compiled, true, __ATOMIC_RELEASE);
+-+#else
+-+	/* GCC <4.7 */
+-+	spec->regex_compiled = true;
+-+	__sync_synchronize();
+-+#endif
+- 	__pthread_mutex_unlock(&spec->regex_lock);
+- 	return 0;
+- }
+--- 
+-2.13.0
+-
+diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
+index fb8e350434..ed61ea8bd2 100644
+--- a/package/libselinux/libselinux.hash
++++ b/package/libselinux/libselinux.hash
+@@ -1,5 +1,5 @@
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 31db96ec7643ce10912b3c3f98506a08a9116dcfe151855fd349c3fda96187e1 libselinux-2.8.tar.gz
++sha256 1bccc8873e449587d9a2b2cf253de9b89a8291b9fbc7c59393ca9e5f5f4d2693 libselinux-2.9.tar.gz
  
- WPA_SUPPLICANT_VERSION = 2.7
- WPA_SUPPLICANT_SITE = http://w1.fi/releases
-+WPA_SUPPLICANT_PATCH = \
-+	https://w1.fi/security/2019-1/0001-OpenSSL-Use-constant-time-operations-for-private-big.patch \
-+	https://w1.fi/security/2019-1/0002-Add-helper-functions-for-constant-time-operations.patch \
-+	https://w1.fi/security/2019-1/0003-OpenSSL-Use-constant-time-selection-for-crypto_bignu.patch \
-+	https://w1.fi/security/2019-2/0004-EAP-pwd-Use-constant-time-and-memory-access-for-find.patch \
-+	https://w1.fi/security/2019-1/0005-SAE-Minimize-timing-differences-in-PWE-derivation.patch \
-+	https://w1.fi/security/2019-1/0006-SAE-Avoid-branches-in-is_quadratic_residue_blind.patch \
-+	https://w1.fi/security/2019-1/0007-SAE-Mask-timing-of-MODP-groups-22-23-24.patch \
-+	https://w1.fi/security/2019-1/0008-SAE-Use-const_time-selection-for-PWE-in-FFC.patch \
-+	https://w1.fi/security/2019-1/0009-SAE-Use-constant-time-operations-in-sae_test_pwd_see.patch \
-+	https://w1.fi/security/2019-3/0010-SAE-Fix-confirm-message-validation-in-error-cases.patch \
-+	https://w1.fi/security/2019-4/0011-EAP-pwd-server-Verify-received-scalar-and-element.patch \
-+	https://w1.fi/security/2019-4/0012-EAP-pwd-server-Detect-reflection-attacks.patch \
-+	https://w1.fi/security/2019-4/0013-EAP-pwd-client-Verify-received-scalar-and-element.patch \
-+	https://w1.fi/security/2019-4/0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
- WPA_SUPPLICANT_LICENSE = BSD-3-Clause
- WPA_SUPPLICANT_LICENSE_FILES = README
- WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
--- 
-2.11.0
+ # Hash for license file
+ sha256 86657b4c0fe868d7cbd977cb04c63b6c667e08fa51595a7bc846ad4bed8fc364 LICENSE
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index b09634740a..977f9e2e8b 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSELINUX_VERSION = 2.8
+-LIBSELINUX_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
++LIBSELINUX_VERSION = 2.9
++LIBSELINUX_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
+ LIBSELINUX_LICENSE = Public Domain
+ LIBSELINUX_LICENSE_FILES = LICENSE
+ 
+@@ -37,6 +37,7 @@ LIBSELINUX_PYLIBVER = python$(PYTHON_VERSION_MAJOR)
+ endif
+ 
+ LIBSELINUX_MAKE_OPTS += \
++	PYTHON=$(LIBSELINUX_PYLIBVER) \
+ 	PYINC="$(LIBSELINUX_PYINC)" \
+ 	PYSITEDIR=$(TARGET_DIR)/usr/lib/$(LIBSELINUX_PYLIBVER)/site-packages \
+ 	SWIG_LIB="$(HOST_DIR)/share/swig/$(SWIG_VERSION)/"
+@@ -88,6 +89,7 @@ endif
+ 
+ HOST_LIBSELINUX_MAKE_OPTS = \
+ 	$(HOST_CONFIGURE_OPTS) \
++	PYTHON=$(HOST_LIBSELINUX_PYLIBVER) \
+ 	PREFIX=$(HOST_DIR) \
+ 	SHLIBDIR=$(HOST_DIR)/lib \
+ 	LDFLAGS="$(HOST_LDFLAGS) -lpcre -lpthread" \
