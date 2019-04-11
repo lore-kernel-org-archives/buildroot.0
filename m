@@ -1,41 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Apr 2019 14:22:57 +0200
-Subject: [Buildroot] [PATCH] package/libselinux: bump version to 2.9
-In-Reply-To: <20190408185013.71465-3-aduskett@gmail.com>
-References: <20190408185013.71465-1-aduskett@gmail.com>
- <20190408185013.71465-3-aduskett@gmail.com>
-Message-ID: <20190411142257.34f4dcd7@windsurf.home>
+Date: Thu, 11 Apr 2019 14:23:16 +0200
+Subject: [Buildroot] [git commit] package/libsemanage: bump to version 2.9
+Message-ID: <20190411121929.B69AB8E15A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  8 Apr 2019 14:50:06 -0400
-aduskett at gmail.com wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2eb0529ee1f50417e3dd154a571006c48acd40ff
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Other changes:
->  - Remove upstream patch
->  - Add PYTHON=$(LIBSELINUX_PYLIBVER) to LIBSELINUX_MAKE_OPTS
->  - Add PYTHON=$(HOST_LIBSELINUX_PYLIBVER) to HOST_LIBSELINUX_MAKE_OPTS
-> 
-> The python changes are necessary because libselinux python tools now defaults
-> to python3.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  ...-break-around-__atomic_-with-GCC-4.7.patch | 70 -------------------
->  package/libselinux/libselinux.hash            |  2 +-
->  package/libselinux/libselinux.mk              |  6 +-
->  3 files changed, 5 insertions(+), 73 deletions(-)
->  delete mode 100644 package/libselinux/0003-Fix-build-break-around-__atomic_-with-GCC-4.7.patch
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libsemanage/libsemanage.hash | 2 +-
+ package/libsemanage/libsemanage.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libsemanage/libsemanage.hash b/package/libsemanage/libsemanage.hash
+index 5315514003..871ed192c4 100644
+--- a/package/libsemanage/libsemanage.hash
++++ b/package/libsemanage/libsemanage.hash
+@@ -1,5 +1,5 @@
+ # From: https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 1c0de8d2c51e5460926c21e371105c84a39087dfd8f8e9f0cc1d017e4cbea8e2 libsemanage-2.8.tar.gz
++sha256 2576349d344492e73b468059767268dec1dabd8c35f3c7222c3ec2448737bc1c libsemanage-2.9.tar.gz
+ 
+ # Hash for license file
+ sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
+diff --git a/package/libsemanage/libsemanage.mk b/package/libsemanage/libsemanage.mk
+index bbde50f49f..a139ad0a68 100644
+--- a/package/libsemanage/libsemanage.mk
++++ b/package/libsemanage/libsemanage.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBSEMANAGE_VERSION = 2.8
+-LIBSEMANAGE_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
++LIBSEMANAGE_VERSION = 2.9
++LIBSEMANAGE_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
+ LIBSEMANAGE_LICENSE = LGPL-2.1+
+ LIBSEMANAGE_LICENSE_FILES = COPYING
+ LIBSEMANAGE_DEPENDENCIES = host-bison host-flex audit libselinux ustr bzip2
