@@ -1,31 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Apr 2019 14:32:42 +0200
-Subject: [Buildroot] [PATCH] package/checkpolicy: bump to version 2.9
-In-Reply-To: <20190408185013.71465-5-aduskett@gmail.com>
-References: <20190408185013.71465-1-aduskett@gmail.com>
- <20190408185013.71465-5-aduskett@gmail.com>
-Message-ID: <20190411143242.6e519a96@windsurf.home>
+Date: Thu, 11 Apr 2019 14:32:56 +0200
+Subject: [Buildroot] [git commit] package/policycoreutils: bump to version
+ 2.9
+Message-ID: <20190411122920.718348E204@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  8 Apr 2019 14:50:08 -0400
-aduskett at gmail.com wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=163ecb788bc5ffeef1dbb54a8e5dfecd09c0e117
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/checkpolicy/checkpolicy.hash | 2 +-
->  package/checkpolicy/checkpolicy.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/policycoreutils/policycoreutils.hash | 2 +-
+ package/policycoreutils/policycoreutils.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/policycoreutils/policycoreutils.hash b/package/policycoreutils/policycoreutils.hash
+index b6367b4bf4..c601c7818b 100644
+--- a/package/policycoreutils/policycoreutils.hash
++++ b/package/policycoreutils/policycoreutils.hash
+@@ -1,3 +1,3 @@
+ # https://github.com/SELinuxProject/selinux/wiki/Releases
+-sha256 986553a235f27bee7ad7c2b7c35ea51eb2ee68e2cf03b661b1585de101bc1099 policycoreutils-2.8.tar.gz
++sha256 c53c344f28007b3c0742bd958751e9b5d2385898adeb8aec6281ae57342f0f7b policycoreutils-2.9.tar.gz
+ sha256 204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994 COPYING
+diff --git a/package/policycoreutils/policycoreutils.mk b/package/policycoreutils/policycoreutils.mk
+index abd70e16c8..3b13e2716c 100644
+--- a/package/policycoreutils/policycoreutils.mk
++++ b/package/policycoreutils/policycoreutils.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-POLICYCOREUTILS_VERSION = 2.8
+-POLICYCOREUTILS_SITE = https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/20180524
++POLICYCOREUTILS_VERSION = 2.9
++POLICYCOREUTILS_SITE = https://github.com/SELinuxProject/selinux/releases/download/20190315
+ POLICYCOREUTILS_LICENSE = GPL-2.0
+ POLICYCOREUTILS_LICENSE_FILES = COPYING
+ 
