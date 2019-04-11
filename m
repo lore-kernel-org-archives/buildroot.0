@@ -1,58 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 11 Apr 2019 12:59:06 +0200
-Subject: [Buildroot] [PATCH] package/tpm2-totp: blacklist Codesourcery ARM
- toolchain
-Message-ID: <20190411105906.12289-1-peter@korsgaard.com>
+Date: Thu, 11 Apr 2019 13:02:31 +0200
+Subject: [Buildroot] [PATCH 1/2] package/hostapd: add upstream 2019-1, 2,
+ 3 security patches
+In-Reply-To: <20190411104753.v363hzqtxdo6cgxn@sapphire.tkos.co.il> (Baruch
+ Siach's message of "Thu, 11 Apr 2019 13:47:53 +0300")
+References: <20190411104215.8317-1-peter@korsgaard.com>
+ <20190411104753.v363hzqtxdo6cgxn@sapphire.tkos.co.il>
+Message-ID: <87imvkreig.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/6c9bb17920749409e5a0c3388ccda411c6c7cfb4/
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-tpm2-totp uses _DEFAULT_SOURCE to make the htobe64() macro available,
-support for which was only added in glibc 2.20:
+ > Hi Peter,
+ > On Thu, Apr 11, 2019 at 12:42:13PM +0200, Peter Korsgaard wrote:
+ >> Fixes the following security vulnerabilities:
+ >> 
+ >> - CVE-2019-9494 (cache attack against SAE)
+ >> 
+ >> For details, see the advisory:
+ >> https://w1.fi/security/2019-1/sae-side-channel-attacks.txt
+ >> 
+ >> - CVE-2019-9495 (cache attack against EAP-pwd)
+ >> 
+ >> For details, see the advisory:
+ >> https://w1.fi/security/2019-2/eap-pwd-side-channel-attack.txt
+ >> 
+ >> - CVE-2019-9496 (SAE confirm missing state validation in hostapd/AP)
+ >> 
+ >> For details, see the advisory:
+ >> https://w1.fi/security/2019-3/sae-confirm-missing-state-validation.txt
+ >> 
+ >> Notice that SAE is not currently enabled in Buildroot, but the patches are
+ >> included here anyway for completeness.
 
-https://www.gnu.org/software/libc/manual/html_node/Feature-Test-Macros.html#index-_005fDEFAULT_005fSOURCE
+ > What about CVE-2019-949{7,8,9}?
 
-From glibc 2.20 NEWS:
+ > https://w1.fi/security/2019-4/eap-pwd-missing-commit-validation.txt
 
-* The _BSD_SOURCE and _SVID_SOURCE feature test macros are no longer
-  supported; they now act the same as _DEFAULT_SOURCE (but generate a
-  warning).  Except for cases where _BSD_SOURCE enabled BSD interfaces that
-  conflicted with POSIX (support for which was removed in 2.19), the
-  interfaces those macros enabled remain available when compiling with
-  _GNU_SOURCE defined, with _DEFAULT_SOURCE defined, or without any feature
-  test macros defined.
+Ups, I missed the advisory for those. I'l update and send a v2.
 
-This could be worked around by defining _BSD_SOURCE for this old toolchain
-(cannot be done unconditionally as it generated warnings for modern glibc
-versions), but given that platforms using this old toolchain are unlikely to
-have a TPM 2.0 and use it for TOTP, simply blacklist it instead.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/tpm2-totp/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/tpm2-totp/Config.in b/package/tpm2-totp/Config.in
-index ca630e4584..0dbbdea228 100644
---- a/package/tpm2-totp/Config.in
-+++ b/package/tpm2-totp/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_TPM2_TOTP
- 	bool "tpm2-tools"
- 	depends on !BR2_STATIC_LIBS # tpm2-tss
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # glibc < 2.20
- 	select BR2_PACKAGE_LIBQRENCODE
- 	select BR2_PACKAGE_TPM2_TSS
- 	help
-@@ -19,3 +20,4 @@ config BR2_PACKAGE_TPM2_TOTP
- 
- comment "tpm2-totp needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
 -- 
-2.11.0
+Bye, Peter Korsgaard
