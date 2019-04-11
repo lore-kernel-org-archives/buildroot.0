@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Apr 2019 18:20:46 +0200
-Subject: [Buildroot] [PATCH v2] package/qt5/qt5virtualkeyboard: fix
- legal-info failure
-In-Reply-To: <20190411161652.58705-1-giulio.benetti@micronovasrl.com>
-References: <7895922c-6017-4eb0-66b5-e41f166e5418@micronovasrl.com>
- <20190411161652.58705-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190411182046.13219384@windsurf.home>
+Date: Thu, 11 Apr 2019 18:22:25 +0200
+Subject: [Buildroot] [PATCH v3 2/2] Generating the .gitlab-ci.yml file
+In-Reply-To: <20190411155805.4111-2-yohar@P-ASN-FIRESTORM.daviel.idf.intranet>
+References: <20190411155805.4111-1-yohar@P-ASN-FIRESTORM.daviel.idf.intranet>
+ <20190411155805.4111-2-yohar@P-ASN-FIRESTORM.daviel.idf.intranet>
+Message-ID: <20190411182225.485fb7a5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,49 +13,24 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Thu, 11 Apr 2019 18:16:52 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+On Thu, 11 Apr 2019 17:58:05 +0200
+Youssef at smile.fr, Harmouch at smile.fr, youssef.harmouch at smile.fr wrote:
 
->  ifneq ($(filter ja_JP all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
->  QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 (openwnn)
-> -QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/openwnn/NOTICE
-> +QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/openwnn/3rdparty/openwnn/NOTICE
->  endif
+> From: youssef <youssef.harmouch@smile.fr>
+> 
+>   Signed-off-by: youssef <youssef.harmouch@smile.fr>
 
-This is fixing the issue for the 5.12 version of qt5virtualkeyboard,
-but breaking the situation for the 2.0 version of qt5virtualkeyboard
-(which is used with Qt 5.6).
+Thanks for your patch, but there are several problems with it:
 
->  
->  ifneq ($(filter zh_CN all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
->  QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
->  QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 (pinyin)
-> -QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/pinyin/NOTICE
-> +QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/pinyin/3rdparty/pinyin/NOTICE
->  endif
+ (1) It should be squashed into the patch introducing the test
 
-Ditto.
+ (2) The Signed-off-by line has some spurious spaces at the beginning
 
->  ifneq ($(filter zh_TW all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
->  QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
->  QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 (tcime), BSD-3-Clause (tcime)
-> -QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/tcime/COPYING
-> +QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/tcime/3rdparty/tcime/COPYING
->  endif
->  endif
+ (3) The From: and Signed-off-by should use your complete real name
+     (i.e first name + last name)
 
-Ditto.
-
->  
-> @@ -49,7 +49,7 @@ QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), MIT (lipi-toolkit)
->  ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
->  QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/lipi-toolkit/license.txt
->  else
-> -QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt
-> +QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/lipi-toolkit/3rdparty/lipi-toolkit/MIT_LICENSE.txt
->  endif
-
-This one is OK thanks to the condition.
+I will fix this up myself when applying, so these are only
+recommendations for future patches.
 
 Best regards,
 
