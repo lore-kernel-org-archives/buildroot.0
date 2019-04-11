@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Apr 2019 19:20:26 +0200
-Subject: [Buildroot] [PATCH] package/mesa3d: add KMSRO support for vc4
-In-Reply-To: <20190408095838.22227-1-romain.naour@smile.fr>
-References: <20190408095838.22227-1-romain.naour@smile.fr>
-Message-ID: <20190411192026.1a5e0503@windsurf.home>
+Date: Thu, 11 Apr 2019 19:26:51 +0200
+Subject: [Buildroot] [PATCH 00/10] infra: add solution to dump metadata
+ from packages (branch yem/misc)
+In-Reply-To: <cover.1554637858.git.yann.morin.1998@free.fr>
+References: <cover.1554637858.git.yann.morin.1998@free.fr>
+Message-ID: <20190411192651.5196cd1c@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,35 +13,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Mon,  8 Apr 2019 11:58:38 +0200
-Romain Naour <romain.naour@smile.fr> wrote:
+On Sun,  7 Apr 2019 13:51:06 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> kmsro allow to support KMS displays with the renderonly layer used to attach a GPU [1].
-> 
-> Quote from mesa3d meson.build:
-> "kmsro driver requires one or more renderonly drivers (vc4, etnaviv, freedreno)"
-> But only vc4 support is available by using the (deprecated) autotools build system [2].
-> 
-> This will also be used by mesa to support KMSRO with the upcomming Panfrost and Lima Gallium drivers.
-> 
-> [1] https://cgit.freedesktop.org/mesa/mesa/commit/?id=ed65aeec7810a7d98a19461ba933bd77268cb0f6
-> [2] https://cgit.freedesktop.org/mesa/mesa/tree/configure.ac?h=mesa-19.0.1#n2864
-> 
-> Signed-off-by: Romain Naour <romain.naour@smile.fr>
-> Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> Bernd, are you working on a patch to switch mesa3d to a meson package ?
-> Thanks!
-> ---
->  package/mesa3d/Config.in | 17 +++++++++++++++++
->  package/mesa3d/mesa3d.mk |  1 +
->  2 files changed, 18 insertions(+)
+> This series is a proposal to allow extracting metadata about packages,
+> in a way that makes it reusable for tooling outside of Buildroot, that
+> is both reliable and extendable, without causing too much burden on
+> Buildroot own infrastructure.
 
-Applied to master, thanks. However, I had to rewrap the commit log
-message and the comments in the Config.in file. Please make sure to
-wrap at a reasonable length ! :-)
+Overall, I am quite happy with the general idea (as we have already
+discussed). It allows to extract a lot of information about the
+packages, in a format that is easily parseable.
 
-Thanks,
+My small annoyance is that we start to have some overlap between the
+following mechanisms:
+
+ - The "make printvars" mechanism, which essentially already allows to
+   dump the metadata of all packages. Admittedly, in a format that is a
+   lot less nice. I think this overlap is OK, since "make printvars" is
+   mainly intended as a debugging mechanism, not so much as a real tool
+   whose output can be parsed. The new JSON stuff could presumably be
+   used as a replacement to "printvars" for people who need to
+   currently parse the "printvars" output.
+
+ - The "make legal-info" mechanism, which also outputs some metadata
+   about the packages.
+
+I'm not at all saying that we shouldn't merge this JSON output, I just
+wanted to point out the different ways that already exist to extract
+some package metadata out of Buildroot.
 
 Thomas
 -- 
