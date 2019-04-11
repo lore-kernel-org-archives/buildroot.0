@@ -1,42 +1,52 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 11 Apr 2019 23:12:49 +0200
-Subject: [Buildroot] [PATCH 1/2] package/stunnel: fix static build with
- openssl and atomic
-Message-ID: <20190411211250.9402-1-fontaine.fabrice@gmail.com>
+Date: Thu, 11 Apr 2019 23:12:50 +0200
+Subject: [Buildroot] [PATCH 2/2] package/stunnel: security bump to version
+ 5.53
+In-Reply-To: <20190411211250.9402-1-fontaine.fabrice@gmail.com>
+References: <20190411211250.9402-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190411211250.9402-2-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use pkg-config to find openssl dependencies such as lz or latomic
-
-Fixes:
- - http://autobuild.buildroot.org/results/28a466b98f813edb6402686cc4706766e73e1ff3
+- Update hash of COPYING (update in year:
+  https://github.com/mtrojnar/stunnel/commit/bb693862a3497bde442ffa37e7c20f1e2f5534ea)
+- Include a Security bugfix released in version 5.48: Fixed requesting
+  client certificate when specified as a global option.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/stunnel/stunnel.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/stunnel/stunnel.hash | 6 +++---
+ package/stunnel/stunnel.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index d3b9451ce9..999a4500ed 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
+@@ -1,5 +1,5 @@
+-# From https://www.stunnel.org/downloads/stunnel-5.44.tar.gz.sha256
+-sha256	990a325dbb47d77d88772dd02fbbd27d91b1fea3ece76c9ff4461eca93f12299	stunnel-5.44.tar.gz
++# From https://www.stunnel.org/downloads/stunnel-5.53.tar.gz.sha256
++sha256	80439896ee14269eb70bc8bc669433c7d619018a62c9f9c5c760a24515302585	stunnel-5.53.tar.gz
+ # Locally calculated
+-sha256	c43821865591e4d893906e2801b5ec4de58e51978f5563a61475cd0adc0bec4d	COPYING
++sha256	81d0b7244f44ef81dd0b299cf681037c5a42d468b8533e53aff6d1ac84c97dc8	COPYING
+ sha256	1ee2b290e92c211b08df10e9fcaf32596cdb22b8eae731b18c2c074a4a83eebe	COPYRIGHT.GPL
 diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index 4a5d2a0335..9a81373a54 100644
+index 9a81373a54..adfa0748ae 100644
 --- a/package/stunnel/stunnel.mk
 +++ b/package/stunnel/stunnel.mk
-@@ -7,12 +7,12 @@
- STUNNEL_VERSION_MAJOR = 5
- STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).44
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
--STUNNEL_DEPENDENCIES = openssl
-+STUNNEL_DEPENDENCIES = host-pkgconf openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
- 	--disable-libwrap
- STUNNEL_CONF_ENV = \
- 	ax_cv_check_cflags___fstack_protector=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no) \
--	LIBS=$(if $(BR2_STATIC_LIBS),-lz)
-+	LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- STUNNEL_LICENSE = GPL-2.0+
- STUNNEL_LICENSE_FILES = COPYING COPYRIGHT.GPL
+@@ -5,7 +5,7 @@
+ ################################################################################
  
+ STUNNEL_VERSION_MAJOR = 5
+-STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).44
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).53
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = host-pkgconf openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
 -- 
 2.20.1
