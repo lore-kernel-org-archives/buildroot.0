@@ -1,91 +1,235 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 11 Apr 2019 22:49:50 +0200
-Subject: [Buildroot] [PATCH 06/10] infra/pkg-generic: introduce
- foo-show-info
-In-Reply-To: <CAAXf6LU-j7zMLUc93J1rchu5BytrZL22L=vkTOwDgwMdCA-rqA@mail.gmail.com>
-References: <cover.1554637858.git.yann.morin.1998@free.fr>
- <6e3c4eccb009f45ccb25b549c88e6a6603091ddb.1554637858.git.yann.morin.1998@free.fr>
- <CAAXf6LU-j7zMLUc93J1rchu5BytrZL22L=vkTOwDgwMdCA-rqA@mail.gmail.com>
-Message-ID: <20190411204949.GE2539@scaer>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Thu, 11 Apr 2019 13:55:49 -0700
+Subject: [Buildroot] [PATCH] package/binutils: fix loops relaxation in bare
+ sections
+Message-ID: <20190411205549.7259-1-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thpmas DS. All,
+The commit 197b5f9d1c23 ("package/binutils: fix loops relaxation in
+xtensa gas") changed the way loop opcodes are relaxed resulting in build
+failures in hand-made assembly code that has loops in sections without
+.literal_position pseudo op or equivalent construct. This e.g. breaks
+xtensa linux kernel build.
 
-On 2019-04-10 11:16 +0200, Thomas De Schampheleire spake thusly:
-> El dom., 7 abr. 2019 a las 13:51, Yann E. MORIN
-> (<yann.morin.1998@free.fr>) escribi?:
-[--SNIP--]
-> > Introduce a new rule, foo-show-info, that provides a properly formatted
-> > output of all the meta-information about a package: name, type, version,
-> > licenses, dependencies...
-[--SNIP--]
-> > +define $(2)_SHOW_INFO_VIRTUAL
-> > +       "virtual": false,
-> > +       "version": "$$($(2)_DL_VERSION)",
-> > +       "licenses": "$$($(2)_LICENSE)",
-> > +       "downloads": [
-> > +       $$(foreach dl,$$($(2)_ALL_DOWNLOADS),
-> > +               {
-> > +                       "source": "$$(notdir $$(dl))",
-> > +                       "URIs": [
-> > +                       $$(call make-comma-list,
-> > +                               $$(subst \|,|,
-> > +                                       $$(call DOWNLOAD_URIS,$$(dl),$(2))
-> > +                               )
-> > +                       )
-> > +                       ]
-> > +               },
-> > +       )
-> > +       null
-> > +       ],
-> 
-> So the 'null' serves as last element in the array and is only needed
-> because JSON cannot handle the trailing comma, right?
+Fix that by adding literal position to the beginning of every section.
 
-Ah, right, I forgot to explain that part in the commit log, because it
-does deserve some explanations, indeed. And yes, that's because JSON
-does not allow for a trailing comma.
+Fixes: 197b5f9d1c23 ("package/binutils: fix loops relaxation in xtensa
+gas")
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ ...as-put-.literal_position-at-section-start.patch | 96 ++++++++++++++++++++++
+ ...as-put-.literal_position-at-section-start.patch | 96 ++++++++++++++++++++++
+ 2 files changed, 192 insertions(+)
+ create mode 100644 package/binutils/2.31.1/0017-xtensa-gas-put-.literal_position-at-section-start.patch
+ create mode 100644 package/binutils/2.32/0005-xtensa-gas-put-.literal_position-at-section-start.patch
 
-Comming up with a Makefile-based construct that did not require this
-trick is not obvious, so I did resort on this null trick to generate a
-valifd JSON output. If we require that jq is present, then we could
-pipe that to jq to filter it out. But I'm not to keen on that...
-
-> > +endef
-> > +endif
-> > +
-> > +define $(2)_SHOW_INFO
-> > +       "name": "$(1)",
-> > +       "type": "$(4)",
-> > +       $$($(2)_SHOW_INFO_VIRTUAL)
-> > +       "depends on": [
-> > +               $$(call make-comma-list,$$($(2)_FINAL_ALL_DEPENDENCIES))
-> > +       ],
-> > +       "dependency of": [
-> > +               $$(call make-comma-list,$$($(2)_RDEPENDENCIES))
-> > +       ]
-> 
-> It feels odd to me to not use single-word keys here. Why not use
-> 'depends/rdepends', 'dependencies'/'rdependencies' or if you want
-> dependencies/reverse_dependencies ? The naming 'rdepends' is already
-> exposed to users 'make show-rdepends' so it makes sense to me to use
-> the same naming.
-
-OK for "dependendencies" vs. "reverse_dependencies".
-
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/binutils/2.31.1/0017-xtensa-gas-put-.literal_position-at-section-start.patch b/package/binutils/2.31.1/0017-xtensa-gas-put-.literal_position-at-section-start.patch
+new file mode 100644
+index 000000000000..b4bbc27b3742
+--- /dev/null
++++ b/package/binutils/2.31.1/0017-xtensa-gas-put-.literal_position-at-section-start.patch
+@@ -0,0 +1,96 @@
++From 471702ac4a57878a06e8167f063274cf413e548d Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Mon, 8 Apr 2019 13:47:18 -0700
++Subject: [PATCH] xtensa: gas: put .literal_position at section start
++
++Provide literal position at the beginning of each section for literal
++space reserved by relaxations when text-section-literals or
++auto-litpools options are used. Remove code that adds fill frag to the
++literal section for every .literal_position directive to avoid creation
++of empty literal sections.
++
++Fix auto-litpools tests that got literal pool address changes.
++
++gas/
++2019-04-11  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* config/tc-xtensa.c (xtensa_is_init_fini): Add declaration.
++	(xtensa_mark_literal_pool_location): Don't add fill frag to literal
++	section that records literal pool location.
++	(md_begin): Call xtensa_mark_literal_pool_location when text
++	section literals or auto litpools are used.
++	(xtensa_elf_section_change_hook): Call
++	xtensa_mark_literal_pool_location when text section literals or
++	auto litpools are used, there's no literal pool location defined
++	for the current section and it's not .init or .fini.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ gas/config/tc-xtensa.c                          | 22 +++++++++-------------
++ 1 file changed, 9 insertions(+), 13 deletions(-)
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index 0cc06361cf6f..6a80e76fed8c 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -497,6 +497,7 @@ static fixS *xg_append_jump (fragS *fragP, symbolS *sym, offsetT offset);
++ static void xtensa_maybe_create_literal_pool_frag (bfd_boolean, bfd_boolean);
++ static bfd_boolean auto_litpools = FALSE;
++ static int auto_litpool_limit = 0;
+++static bfd_boolean xtensa_is_init_fini (segT seg);
++ 
++ /* Alignment Functions.  */
++ 
++@@ -4797,7 +4798,6 @@ xtensa_mark_literal_pool_location (void)
++ {
++   /* Any labels pointing to the current location need
++      to be adjusted to after the literal pool.  */
++-  emit_state s;
++   fragS *pool_location;
++ 
++   if (use_literal_section)
++@@ -4818,19 +4818,7 @@ xtensa_mark_literal_pool_location (void)
++ 		RELAX_LITERAL_POOL_END, NULL, 0, NULL);
++   xtensa_set_frag_assembly_state (frag_now);
++ 
++-  /* Now put a frag into the literal pool that points to this location.  */
++   set_literal_pool_location (now_seg, pool_location);
++-  xtensa_switch_to_non_abs_literal_fragment (&s);
++-  frag_align (2, 0, 0);
++-  record_alignment (now_seg, 2);
++-
++-  /* Close whatever frag is there.  */
++-  frag_variant (rs_fill, 0, 0, 0, NULL, 0, NULL);
++-  xtensa_set_frag_assembly_state (frag_now);
++-  frag_now->tc_frag_data.literal_frag = pool_location;
++-  frag_variant (rs_fill, 0, 0, 0, NULL, 0, NULL);
++-  xtensa_restore_emit_state (&s);
++-  xtensa_set_frag_assembly_state (frag_now);
++ }
++ 
++ 
++@@ -5334,6 +5322,9 @@ md_begin (void)
++   /* Set up the assembly state.  */
++   if (!frag_now->tc_frag_data.is_assembly_state_set)
++     xtensa_set_frag_assembly_state (frag_now);
+++
+++  if (!use_literal_section)
+++    xtensa_mark_literal_pool_location ();
++ }
++ 
++ 
++@@ -5933,6 +5924,11 @@ xtensa_elf_section_change_hook (void)
++   /* Set up the assembly state.  */
++   if (!frag_now->tc_frag_data.is_assembly_state_set)
++     xtensa_set_frag_assembly_state (frag_now);
+++
+++  if (!use_literal_section
+++      && seg_info (now_seg)->tc_segment_info_data.literal_pool_loc == NULL
+++      && !xtensa_is_init_fini (now_seg))
+++    xtensa_mark_literal_pool_location ();
++ }
++ 
++ 
++-- 
++2.11.0
++
+diff --git a/package/binutils/2.32/0005-xtensa-gas-put-.literal_position-at-section-start.patch b/package/binutils/2.32/0005-xtensa-gas-put-.literal_position-at-section-start.patch
+new file mode 100644
+index 000000000000..b4bbc27b3742
+--- /dev/null
++++ b/package/binutils/2.32/0005-xtensa-gas-put-.literal_position-at-section-start.patch
+@@ -0,0 +1,96 @@
++From 471702ac4a57878a06e8167f063274cf413e548d Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Mon, 8 Apr 2019 13:47:18 -0700
++Subject: [PATCH] xtensa: gas: put .literal_position at section start
++
++Provide literal position at the beginning of each section for literal
++space reserved by relaxations when text-section-literals or
++auto-litpools options are used. Remove code that adds fill frag to the
++literal section for every .literal_position directive to avoid creation
++of empty literal sections.
++
++Fix auto-litpools tests that got literal pool address changes.
++
++gas/
++2019-04-11  Max Filippov  <jcmvbkbc@gmail.com>
++
++	* config/tc-xtensa.c (xtensa_is_init_fini): Add declaration.
++	(xtensa_mark_literal_pool_location): Don't add fill frag to literal
++	section that records literal pool location.
++	(md_begin): Call xtensa_mark_literal_pool_location when text
++	section literals or auto litpools are used.
++	(xtensa_elf_section_change_hook): Call
++	xtensa_mark_literal_pool_location when text section literals or
++	auto litpools are used, there's no literal pool location defined
++	for the current section and it's not .init or .fini.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ gas/config/tc-xtensa.c                          | 22 +++++++++-------------
++ 1 file changed, 9 insertions(+), 13 deletions(-)
++
++diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
++index 0cc06361cf6f..6a80e76fed8c 100644
++--- a/gas/config/tc-xtensa.c
+++++ b/gas/config/tc-xtensa.c
++@@ -497,6 +497,7 @@ static fixS *xg_append_jump (fragS *fragP, symbolS *sym, offsetT offset);
++ static void xtensa_maybe_create_literal_pool_frag (bfd_boolean, bfd_boolean);
++ static bfd_boolean auto_litpools = FALSE;
++ static int auto_litpool_limit = 0;
+++static bfd_boolean xtensa_is_init_fini (segT seg);
++ 
++ /* Alignment Functions.  */
++ 
++@@ -4797,7 +4798,6 @@ xtensa_mark_literal_pool_location (void)
++ {
++   /* Any labels pointing to the current location need
++      to be adjusted to after the literal pool.  */
++-  emit_state s;
++   fragS *pool_location;
++ 
++   if (use_literal_section)
++@@ -4818,19 +4818,7 @@ xtensa_mark_literal_pool_location (void)
++ 		RELAX_LITERAL_POOL_END, NULL, 0, NULL);
++   xtensa_set_frag_assembly_state (frag_now);
++ 
++-  /* Now put a frag into the literal pool that points to this location.  */
++   set_literal_pool_location (now_seg, pool_location);
++-  xtensa_switch_to_non_abs_literal_fragment (&s);
++-  frag_align (2, 0, 0);
++-  record_alignment (now_seg, 2);
++-
++-  /* Close whatever frag is there.  */
++-  frag_variant (rs_fill, 0, 0, 0, NULL, 0, NULL);
++-  xtensa_set_frag_assembly_state (frag_now);
++-  frag_now->tc_frag_data.literal_frag = pool_location;
++-  frag_variant (rs_fill, 0, 0, 0, NULL, 0, NULL);
++-  xtensa_restore_emit_state (&s);
++-  xtensa_set_frag_assembly_state (frag_now);
++ }
++ 
++ 
++@@ -5334,6 +5322,9 @@ md_begin (void)
++   /* Set up the assembly state.  */
++   if (!frag_now->tc_frag_data.is_assembly_state_set)
++     xtensa_set_frag_assembly_state (frag_now);
+++
+++  if (!use_literal_section)
+++    xtensa_mark_literal_pool_location ();
++ }
++ 
++ 
++@@ -5933,6 +5924,11 @@ xtensa_elf_section_change_hook (void)
++   /* Set up the assembly state.  */
++   if (!frag_now->tc_frag_data.is_assembly_state_set)
++     xtensa_set_frag_assembly_state (frag_now);
+++
+++  if (!use_literal_section
+++      && seg_info (now_seg)->tc_segment_info_data.literal_pool_loc == NULL
+++      && !xtensa_is_init_fini (now_seg))
+++    xtensa_mark_literal_pool_location ();
++ }
++ 
++ 
++-- 
++2.11.0
++
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
