@@ -1,85 +1,56 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 11 Apr 2019 16:42:32 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5virtualkeyboard: fix
- legal-info failure
-In-Reply-To: <20190411144042.57324-1-giulio.benetti@micronovasrl.com>
-References: <20190411144042.57324-1-giulio.benetti@micronovasrl.com>
-Message-ID: <7895922c-6017-4eb0-66b5-e41f166e5418@micronovasrl.com>
+Date: Thu, 11 Apr 2019 16:50:06 +0200
+Subject: [Buildroot] [PATCH] package/vdr-plugin-vnsiserver: package
+ needs host-gettext to build correctly
+In-Reply-To: <811c4e06-7fc1-b6f5-0fef-16aa6e5604b1@micronovasrl.com>
+References: <20190409174535.31768-1-giulio.benetti@micronovasrl.com>
+ <20190409232142.5c751a17@windsurf.home>
+ <811c4e06-7fc1-b6f5-0fef-16aa6e5604b1@micronovasrl.com>
+Message-ID: <464f165b-f63b-8438-9df3-0e04b5f7c2e1@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 11/04/2019 16:40, Giulio Benetti ha scritto:
-> After version bump, all sha256 were updated, but not the changed license
-> files paths.
-> 
-> Update license files paths.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->   .../qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash | 8 ++++----
->   package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk      | 8 ++++----
->   2 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash b/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash
-> index 69c947359a..245f2b4a70 100644
-> --- a/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash
-> +++ b/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash
-> @@ -3,7 +3,7 @@ sha256 7111de5c78f8a0d29394409727647b90ae5906fd5105c843af98c3ae3804248d qtvirtua
->   
->   # Hashes for license files:
->   sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
-> -sha256 7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10 src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt
-> -sha256 05cc719deafd0ab083b03296bb2911de10d116953b626a7629b9ca59938038b1 src/virtualkeyboard/3rdparty/openwnn/NOTICE
-> -sha256 b5830d96fb5a7e7e7ebcc295f352846b4b998e78fdc8f9aa68e134d2e4b39986 src/virtualkeyboard/3rdparty/pinyin/NOTICE
-> -sha256 9400a6128693d2f25653698e695f554660c71efccc8c21af28bf143e35199db6 src/virtualkeyboard/3rdparty/tcime/COPYING
-> +sha256 7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10 src/plugins/lipi-toolkit/3rdparty/lipi-toolkit/MIT_LICENSE.txt
-> +sha256 05cc719deafd0ab083b03296bb2911de10d116953b626a7629b9ca59938038b1 src/plugins/openwnn/3rdparty/openwnn/NOTICE
-> +sha256 b5830d96fb5a7e7e7ebcc295f352846b4b998e78fdc8f9aa68e134d2e4b39986 src/plugins/pinyin/3rdparty/pinyin/NOTICE
-> +sha256 9400a6128693d2f25653698e695f554660c71efccc8c21af28bf143e35199db6 src/plugins/tcime/3rdparty/tcime/COPYING
-> diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> index 3f1ebdbaa4..b5c611f6d0 100644
-> --- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> +++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
-> @@ -26,19 +26,19 @@ QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+="$(foreach lang,$(QT5VIRTUALKEYBOARD_LA
->   
->   ifneq ($(filter ja_JP all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
->   QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 (openwnn)
-> -QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/openwnn/NOTICE
-> +QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/openwnn/3rdparty/openwnn/NOTICE
->   endif
->   
->   ifneq ($(filter zh_CN all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
->   QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
->   QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 (pinyin)
-> -QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/pinyin/NOTICE
-> +QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/pinyin/3rdparty/pinyin/NOTICE
->   endif
->   
->   ifneq ($(filter zh_TW all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
->   QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
->   QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 (tcime), BSD-3-Clause (tcime)
-> -QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/tcime/COPYING
-> +QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/tcime/3rdparty/tcime/COPYING
->   endif
->   endif
->   
-> @@ -49,7 +49,7 @@ QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), MIT (lipi-toolkit)
->   ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
->   QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/lipi-toolkit/license.txt
->   else
-> -QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt
-> +QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/lipi-toolkit/3rdparty/lipi-toolkit/MIT_LICENSE.txt
->   endif
->   endif
->   
-> 
+Hello Thomas,
 
-Ouch, I've sent without
-Fixes:
-http://autobuild.buildroot.net/results/3812f4a6313fab57766c7b98defa723c58a8fa76/
+Il 10/04/2019 12:05, Giulio Benetti ha scritto:
+> Il 09/04/2019 23:21, Thomas Petazzoni ha scritto:
+>> Hello Giulio,
+>>
+>> On Tue,  9 Apr 2019 19:45:35 +0200
+>> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+>>
+>>> During building msgmerge is used, so at the moment if build environment
+>>> doesn't provide it, build will fail.
+>>>
+>>> Add host-gettext to VDR_PLUGIN_VNSISERVER_DEPENDENCIES.
+>>>
+>>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>>
+>> In retrospect, I think http://patchwork.ozlabs.org/patch/1074926/ is better.
+>>
+>> In fact, my analysis of Fabrice's patch was wrong. Even if the
+>> gettext-tiny issue gets resolved, vdr-plugin-vnsiserver (apparently)
+>> still needs msgfmt/msgmerge unconditionally, so we would indeed need a
+>> host-gettext dependency.
+>>
+>> But Fabrice's patch makes that not necessary, by only installing the
+>> i18n files when BR2_SYSTEM_ENABLE_NLS=y.
+
+So you mean we need to avoid build step using msgfmt/msgmerge and need 
+to copy i18n files with something like "cp i18n-files target/i18n-files" ?
+
+> 
+> Ah ok, this is clever, since gettext-tiny maintainers pointed they only
+> provide stubs and not complete gettext support(this is why it's called
+> tiny):
+> https://github.com/sabotage-linux/gettext-tiny/issues/42#issuecomment-480127106
+> 
+> Thanks for the explanation.
+> Best regards
+> 
 
 -- 
 Giulio Benetti
