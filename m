@@ -1,99 +1,84 @@
-From: Youssef at smile.fr <Youssef@smile.fr>
-Date: Thu, 11 Apr 2019 17:58:04 +0200
-Subject: [Buildroot] [PATCH v3 1/2] support/testing: add xserver + Mesa
- OpenGL (GLX) + glxinfo
-Message-ID: <20190411155805.4111-1-yohar@P-ASN-FIRESTORM.daviel.idf.intranet>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 11 Apr 2019 18:16:52 +0200
+Subject: [Buildroot] [PATCH v2] package/qt5/qt5virtualkeyboard: fix
+ legal-info failure
+In-Reply-To: <7895922c-6017-4eb0-66b5-e41f166e5418@micronovasrl.com>
+References: <7895922c-6017-4eb0-66b5-e41f166e5418@micronovasrl.com>
+Message-ID: <20190411161652.58705-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Romain Naour <romain.naour@gmail.com>
+After version bump, all sha256 were updated, but not the changed license
+files paths.
 
-This test allow to check if the xserver with GLX is working properly.
-This is a basic test but it allow to trigger the current bug reported
-by [1].
+Update license files paths.
 
-To test if the glxinfo test is working, you can change "-display :0" by
-"-display :1" in the glxinfo command line.
+Fixes:
+http://autobuild.buildroot.net/results/3812f4a6313fab57766c7b98defa723c58a8fa76/
 
-[1] https://bugs.buildroot.org/show_bug.cgi?id=11591
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+Changes:
+V1->V2: Added "Fixes:" to commit log
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: youssef <youssef.harmouch@smile.fr>
-index 0000000000..5a28411f49
---- /dev/null
-+++ b/support/testing/tests/package/test_glxinfo.py
-@@ -0,0 +1,66 @@
-+import os
-+
-+import infra.basetest
-+
-+GLXINFO_TIMEOUT = 120
-+
-+
-+class TestGlxinfo(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_x86_core2=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-+        BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-+        BR2_TOOLCHAIN_EXTERNAL_URL="http://toolchains.bootlin.com/downloads/releases/toolchains/x86-core2/tarballs/x86-core2--glibc--bleeding-edge-2018.11-1.tar.bz2"
-+        BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
-+        BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
-+        # BR2_TOOLCHAIN_EXTERNAL_LOCALE is not set
-+        BR2_TOOLCHAIN_EXTERNAL_CXX=y
-+        BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y
-+        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG=y
-+        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS=y
-+        BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL=y
-+        BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86/linux.config"
-+        BR2_PACKAGE_MESA3D_DEMOS=y
-+        BR2_PACKAGE_MESA3D=y
-+        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST=y
-+        BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST=y
-+        BR2_PACKAGE_XORG7=y
-+        BR2_PACKAGE_XSERVER_XORG_SERVER=y
-+        BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def wait_for_xserver(self):
-+        # xserver takes some time to start up
-+        # The test case fail here if for some reason xserver is not properly installed
-+        _, _ = self.emulator.run('while [ ! -e /var/run/xorg.pid ]; do sleep 1; done', 120)
-+
-+    def login(self):
-+        img = os.path.join(self.builddir, "images", "rootfs.ext2")
-+        kern = os.path.join(self.builddir, "images", "bzImage")
-+        # glxinfo overallocate memory and the minimum that seemed to work was 512MB
-+        self.emulator.boot(arch="i386",
-+                           kernel=kern,
-+                           kernel_cmdline=["root=/dev/vda console=ttyS0"],
-+                           options=["-M", "pc", "-m", "512", "-drive", "file={},if=virtio,format=raw".format(img)])
-+        self.emulator.login()
-+
-+    def test_run(self):
-+        self.login()
-+        self.wait_for_xserver()
-+
-+        # The test case verifies that the xserver with GLX is working
-+        cmd = "glxinfo -B -display :0"
-+        output, exit_code = self.emulator.run(cmd, GLXINFO_TIMEOUT)
-+        self.assertEqual(exit_code, 0)
-+        for line in output:
-+            self.assertNotIn("Error", line)
-+        # Error case: "Error: couldn't find RGB GLX visual or fbconfig"
+ .../qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash | 8 ++++----
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk      | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash b/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash
+index 69c947359a..245f2b4a70 100644
+--- a/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash
++++ b/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash
+@@ -3,7 +3,7 @@ sha256 7111de5c78f8a0d29394409727647b90ae5906fd5105c843af98c3ae3804248d qtvirtua
+ 
+ # Hashes for license files:
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
+-sha256 7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10 src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt
+-sha256 05cc719deafd0ab083b03296bb2911de10d116953b626a7629b9ca59938038b1 src/virtualkeyboard/3rdparty/openwnn/NOTICE
+-sha256 b5830d96fb5a7e7e7ebcc295f352846b4b998e78fdc8f9aa68e134d2e4b39986 src/virtualkeyboard/3rdparty/pinyin/NOTICE
+-sha256 9400a6128693d2f25653698e695f554660c71efccc8c21af28bf143e35199db6 src/virtualkeyboard/3rdparty/tcime/COPYING
++sha256 7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10 src/plugins/lipi-toolkit/3rdparty/lipi-toolkit/MIT_LICENSE.txt
++sha256 05cc719deafd0ab083b03296bb2911de10d116953b626a7629b9ca59938038b1 src/plugins/openwnn/3rdparty/openwnn/NOTICE
++sha256 b5830d96fb5a7e7e7ebcc295f352846b4b998e78fdc8f9aa68e134d2e4b39986 src/plugins/pinyin/3rdparty/pinyin/NOTICE
++sha256 9400a6128693d2f25653698e695f554660c71efccc8c21af28bf143e35199db6 src/plugins/tcime/3rdparty/tcime/COPYING
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+index 3f1ebdbaa4..b5c611f6d0 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+@@ -26,19 +26,19 @@ QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+="$(foreach lang,$(QT5VIRTUALKEYBOARD_LA
+ 
+ ifneq ($(filter ja_JP all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+ QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 (openwnn)
+-QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/openwnn/NOTICE
++QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/openwnn/3rdparty/openwnn/NOTICE
+ endif
+ 
+ ifneq ($(filter zh_CN all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+ QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
+ QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 (pinyin)
+-QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/pinyin/NOTICE
++QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/pinyin/3rdparty/pinyin/NOTICE
+ endif
+ 
+ ifneq ($(filter zh_TW all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
+ QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
+ QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 (tcime), BSD-3-Clause (tcime)
+-QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/tcime/COPYING
++QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/tcime/3rdparty/tcime/COPYING
+ endif
+ endif
+ 
+@@ -49,7 +49,7 @@ QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), MIT (lipi-toolkit)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
+ QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/lipi-toolkit/license.txt
+ else
+-QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt
++QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/lipi-toolkit/3rdparty/lipi-toolkit/MIT_LICENSE.txt
+ endif
+ endif
+ 
 -- 
 2.17.1
