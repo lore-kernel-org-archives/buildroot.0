@@ -1,48 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 11 Apr 2019 08:26:58 +0200
-Subject: [Buildroot] [git commit] package/wireguard: bump version to
- 0.0.20190406
-Message-ID: <20190411062512.F09A08E421@busybox.osuosl.org>
+Date: Thu, 11 Apr 2019 08:30:46 +0200
+Subject: [Buildroot] [git commit] package/cargo-bin: bump version to 0.33.0
+Message-ID: <20190411062647.4964A8E429@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b3af12c8bb3eb4fd42d740f50b81fc05dc8ad31
+commit: https://git.buildroot.net/buildroot/commit/?id=9d8fb16e1788a579491453586201fd1096e56ffd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For details of the changes, see the announcement:
-https://lists.zx2c4.com/pipermail/wireguard/2019-April/004062.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wireguard/wireguard.hash | 4 ++--
- package/wireguard/wireguard.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/cargo-bin/cargo-bin.hash | 18 +++++++++---------
+ package/cargo-bin/cargo-bin.mk   |  2 +-
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/wireguard/wireguard.hash b/package/wireguard/wireguard.hash
-index 5f092a3f8c..d23fe500a2 100644
---- a/package/wireguard/wireguard.hash
-+++ b/package/wireguard/wireguard.hash
-@@ -1,4 +1,4 @@
--# https://lists.zx2c4.com/pipermail/wireguard/2019-February/003923.html
--sha256 fcdb26fd2692d9e1dee54d14418603c38fbb973a06ce89d08fbe45292ff37f79  WireGuard-0.0.20190227.tar.xz
-+# https://lists.zx2c4.com/pipermail/wireguard/2019-April/004062.html
-+sha256 2f06f3adf70b95e74a7736a22dcf6e9ef623b311a15b7d55b5474e57c3d0415b  WireGuard-0.0.20190406.tar.xz
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wireguard/wireguard.mk b/package/wireguard/wireguard.mk
-index 246b104d6f..8686bed4f9 100644
---- a/package/wireguard/wireguard.mk
-+++ b/package/wireguard/wireguard.mk
+diff --git a/package/cargo-bin/cargo-bin.hash b/package/cargo-bin/cargo-bin.hash
+index 2673e157af..0e9e9c5c61 100644
+--- a/package/cargo-bin/cargo-bin.hash
++++ b/package/cargo-bin/cargo-bin.hash
+@@ -1,12 +1,12 @@
+-# From https://static.rust-lang.org/dist/cargo-0.30.0-i686-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/cargo-0.30.0-i686-unknown-linux-gnu.tar.xz.asc
+-sha256 43a5754d13fa0436b33c48b1f562b4198d6930efad3dc36284b88289ff20d74d  cargo-0.30.0-i686-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/cargo-0.30.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/cargo-0.30.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
+-sha256 f8d7c27a40bba6343ee7dd39a324fe772b77824921adf3e9514a44d4e49059c8  cargo-0.30.0-powerpc64le-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/cargo-0.30.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/cargo-0.30.0-x86_64-unknown-linux-gnu.tar.xz.asc
+-sha256 cb7c63c166baa42ab0be08429e29fa59fc7108efd17ca512462b2645b1655a7f  cargo-0.30.0-x86_64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/cargo-0.33.0-i686-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/cargo-0.33.0-i686-unknown-linux-gnu.tar.xz.asc
++sha256 13acdb3c9f2505805ceed8a696f5f62ab8cd73e443cd43d6edd588aad88e1c32  cargo-0.33.0-i686-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/cargo-0.33.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/cargo-0.33.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
++sha256 6628db22370f397676195555d768f0449a60f0a694bcac24611f4cd1cfc97cdc  cargo-0.33.0-powerpc64le-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/cargo-0.33.0-x86_64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/cargo-0.33.0-x86_64-unknown-linux-gnu.tar.xz.asc
++sha256 c2c31db68c4dcb50ad856a19e6f11489a0d4df1212f31bd068dfbb73c5425761  cargo-0.33.0-x86_64-unknown-linux-gnu.tar.xz
+ # Locally generated
+ sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
+ sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
+diff --git a/package/cargo-bin/cargo-bin.mk b/package/cargo-bin/cargo-bin.mk
+index 7fb4508a52..3614f7a53d 100644
+--- a/package/cargo-bin/cargo-bin.mk
++++ b/package/cargo-bin/cargo-bin.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WIREGUARD_VERSION = 0.0.20190227
-+WIREGUARD_VERSION = 0.0.20190406
- WIREGUARD_SITE = https://git.zx2c4.com/WireGuard/snapshot
- WIREGUARD_SOURCE = WireGuard-$(WIREGUARD_VERSION).tar.xz
- WIREGUARD_LICENSE = GPL-2.0
+-CARGO_BIN_VERSION = 0.30.0
++CARGO_BIN_VERSION = 0.33.0
+ CARGO_BIN_SITE = https://static.rust-lang.org/dist
+ CARGO_BIN_SOURCE = cargo-$(CARGO_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
+ CARGO_BIN_LICENSE = Apache-2.0 or MIT
