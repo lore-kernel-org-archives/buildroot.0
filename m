@@ -1,100 +1,113 @@
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Date: Fri, 12 Apr 2019 10:06:46 +0100
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2019-04-11 (libcamera-uClibc support)
-In-Reply-To: <5cb02eac.1c69fb81.6a317.08faSMTPIN_ADDED_MISSING@mx.google.com>
-References: <5cb02eac.1c69fb81.6a317.08faSMTPIN_ADDED_MISSING@mx.google.com>
-Message-ID: <96eb1348-eeef-8fee-9b82-053fc10b2097@ideasonboard.com>
+From: Anisse Astier <anisse@astier.eu>
+Date: Fri, 12 Apr 2019 14:26:49 +0200
+Subject: [Buildroot] [PATCH] package/go: fix building host go toolchain
+ when target isn't supported
+In-Reply-To: <20190406132059.2601-1-anisse@astier.eu>
+References: <20190406132059.2601-1-anisse@astier.eu>
+Message-ID: <20190412122649.n5lus7v54n4u3jif@bifrost>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Hi everyone,
 
-On 12/04/2019 07:00, Thomas Petazzoni wrote:
-> Hello,
+I'd like to provide additionnal context on this patch. The main
+motivation is the continous series of host-go build failures since
+2019-03-18:
+http://autobuild.buildroot.net/?reason=host-go-1.12.1
+
+Which coincides with the merging of this patch series:
+https://git.buildroot.net/buildroot/commit/?id=aba08cd218315c8ce5ec97c5e2dd5edbcfa47fdd
+
+Before submitting I also evaluated the following :
+ - completely disabling build host packages if the target isn't
+   supported
+ - building a second separated go toolchain, specifically for the host.
+   But it would be more work and duplication.
+ - I don't think it would be a good idea to revert the host support
+   patch series, since they provide a very useful feature, which might
+   only grow as host go tools become more common (I even have such a
+   tool with dmencrypt)
+
+Regards,
+
+Anisse
+
+On Sat, Apr 06, 2019 at 03:20:59PM +0200, Anisse Astier wrote:
+> The go toolchain can cross-compile by default. So most of the time,
+> building a toolchain that supports a target, allows us to also build go
+> binaries for the host. This is how support for host go packages was
+> added: we use the same toolchain that was initially built only for
+> target.
 > 
-> This is the list of Buildroot build failures that occured on
-> 2019-04-11, and for which you are a registered architecture developer
-> or package developer. Please help us improving the quality of
-> Buildroot by investigating those build failures and sending patches to
-> fix them. Thanks!
+> But we might want to build a go binary for the host, when compiling a
+> target for which go isn't supported. Then, building host-go will fail:
+> by default, we build go for a specific target, and give the toolchain
+> bootstrap scripts the cross compiler we'll use.
 > 
-> Results for the 'master' branch
-> ===============================
+> This change modifies this behaviour: we only assume the go toolchain is
+> cross-capable if we know the current target is supported. Otherwise this
+> is a simple host go tool. For the host, only x86_64, i386 and arm are
+> supported, to mimic the limitation of the go-bootstrap package.
 > 
-> Build failures related to your packages:
+> Fixes:
+> http://autobuild.buildroot.net/results/98b9c7aaff2af4d19adfedac00b768d92530ce94
+> http://autobuild.buildroot.net/results/bed228995ce3778720f991df9b41345a7c724a46
+> http://autobuild.buildroot.net/results/3b3ea148165b96513ea511ee0d4adb334a6afac8
 > 
->          arc | libcamera-d5ca33f6c7b0cd1ca... | http://autobuild.buildroot.net/results/8517fe8fc197769285babf4c0915423d98c64d9c
-
-
-I've had a quick look into this failure - and the log reports the following:
-
-
-> [16/33] Compiling C++ object 'src/libcamera/4ab8042@@camera at sha/utils.cpp.o'.
-> FAILED: src/libcamera/4ab8042@@camera at sha/utils.cpp.o 
-> /home/buildroot/autobuild/instance-3/output/host/bin/arc-linux-g++ -Isrc/libcamera/4ab8042@@camera at sha -Isrc/libcamera -I../src/libcamera -Iinclude -I../include -I../src/libcamera/include -I/home/buildroot/autobuild/instance-3/output/host/usr/bin/../arc-buildroot-linux-uclibc/sysroot/usr/include -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -Werror -std=c++11 -O3 -Wno-unused-parameter -fPIC -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -matomic -Os -MD -MQ 'src/libcamera/4ab8042@@camera at sha/utils.cpp.o' -MF 'src/libcamera/4ab8042@@camera at sha/utils.cpp.o.d' -o 'src/libcamera/4ab8042@@camera at sha/utils.cpp.o' -c ../src/libcamera/utils.cpp
-> ../src/libcamera/utils.cpp:9:10: fatal error: sys/auxv.h: No such file or directory
->  #include <sys/auxv.h>
->           ^~~~~~~~~~~~
-> compilation terminated.
-
-
-This stems from the use of getauxval(AT_SECURE) in our replicated
-implementation of secure_getenv(), which itself was provided to support
-non-gnu-c-libraries (well, MUSL):
-
-char *secure_getenv(const char *name)
-{
-	if (getauxval(AT_SECURE))
-		return NULL;
-
-	return getenv(name);
-}
-
-
-I believe this implementation lets us function with MUSL, but now this
-error shows that uClibc does not provide <sys/auxv.h>.
-
-In that event we could either:
-
- - Make secure_getenv():
-	- always return NULL
-	- always return getenv(name)
- - Disable support for libcamera against uClibc.
-
-Alternatively, we could extend our secure_getenv() such that on uClibc
-we use 'issetugid()' which was added at [0]:
-
-> [0] https://git.busybox.net/uClibc/commit/?id=94246e65e20b5390d53858447526b231ef1afd67
-
-
-In fact, that commit references a commit [1] at MUSL with a very well
-written commit message describing the issue:
-
-> [1] http://git.musl-libc.org/cgit/musl/commit/?id=ddddec106fd17c3aca3287005d21e92f742aa9d4
-
-Then there is also a very good write up of this topic at [2] showing why
-this complexity has come to exist...
-
-> [2] issetugid() sadness 
->     https://gist.github.com/nicowilliams/4daf74a3a0c86848d3cbd9d0cdb5e26e
-
-And that one makes me just want to disable libcamera for uClibc or any
-other unsupported system instead.
-
-
-Thomas, I assume other projects have to deal with this same issue, how
-do they do it? Is there a generic way to solve this for all platforms?
-
-I'm leaning towards just disabling builds on uClibc for now as we are
-unlikely to get many users of libcamera with uClibc ... ? And we could
-always revisit the topic later if someone decided they did want to use
-it there.
-
--- 
-Regards
---
-Kieran
+> Signed-off-by: Anisse Astier <anisse@astier.eu>
+> ---
+>  package/go/go.mk | 24 ++++++++++++++++++------
+>  1 file changed, 18 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/go/go.mk b/package/go/go.mk
+> index c27f161f48..86f60b8514 100644
+> --- a/package/go/go.mk
+> +++ b/package/go/go.mk
+> @@ -62,6 +62,22 @@ else
+>  HOST_GO_CGO_ENABLED = 0
+>  endif
+>  
+> +HOST_GO_CROSS_ENV = \
+> +	CC_FOR_TARGET="$(TARGET_CC)" \
+> +	CXX_FOR_TARGET="$(TARGET_CXX)" \
+> +	GO_ASSUME_CROSSCOMPILING=1
+> +
+> +ifneq ($(BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS),y)
+> +HOST_GO_CROSS_ENV =
+> +GO_GOARM =
+> +ifeq ($(HOSTARCH),x86_64)
+> +GO_GOARCH = amd64
+> +else ifeq ($(HOSTARCH),i386)
+> +GO_GOARCH = 386
+> +else ifeq ($(HOSTARCH),arm)
+> +GO_GOARCH = arm
+> +endif
+> +endif
+>  # The go build system is not compatible with ccache, so use
+>  # HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
+>  HOST_GO_MAKE_ENV = \
+> @@ -75,16 +91,12 @@ HOST_GO_MAKE_ENV = \
+>  	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
+>  	GOOS=linux \
+>  	CC=$(HOSTCC_NOCCACHE) \
+> -	CXX=$(HOSTCXX_NOCCACHE) \
+> -	GO_ASSUME_CROSSCOMPILING=1
+> +	CXX=$(HOSTCXX_NOCCACHE)
+>  
+> -HOST_GO_TARGET_CC = \
+> -	CC_FOR_TARGET="$(TARGET_CC)" \
+> -	CXX_FOR_TARGET="$(TARGET_CXX)"
+>  
+>  define HOST_GO_BUILD_CMDS
+>  	cd $(@D)/src && \
+> -		$(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
+> +		$(HOST_GO_MAKE_ENV) $(HOST_GO_CROSS_ENV) CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
+>  		./make.bash $(if $(VERBOSE),-v)
+>  endef
+>  
+> -- 
+> 2.20.1
+> 
