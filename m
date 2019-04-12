@@ -1,122 +1,50 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 12 Apr 2019 23:51:03 +0200
-Subject: [Buildroot] [PATCH v2] package/qt5/qt5virtualkeyboard: fix
- legal-info failure
-In-Reply-To: <4f3d6cf0-7cdd-ce66-eda7-d1e038c8e1df@mind.be>
-References: <4549a443-50cb-3a96-a390-4b68b6328f76@micronovasrl.com>
- <20190412082455.65397-1-giulio.benetti@micronovasrl.com>
- <4f3d6cf0-7cdd-ce66-eda7-d1e038c8e1df@mind.be>
-Message-ID: <5d8bbfe9-6954-ce89-6b54-d81939fd3fd7@micronovasrl.com>
+From: Cam Hutchison <camh@xdna.net>
+Date: Sat, 13 Apr 2019 07:45:21 +1000
+Subject: [Buildroot] [PATCH 1/1] pkg-golang: Allow per package/target
+ CGO_ENABLED setting
+In-Reply-To: <20190407222812.570c91f7@windsurf>
+References: <20180727024720.13370-1-camh@xdna.net>
+ <20190407222812.570c91f7@windsurf>
+Message-ID: <CABa6e=rhu4hB2w4XK1uC8eZ=jcdVysYHqQ_h3vV76kz9toAY5w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+On Mon, 8 Apr 2019 at 06:28, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+wrote:
 
-Il 12/04/2019 23:26, Arnout Vandecappelle ha scritto:
-> 
-> 
-> On 12/04/2019 10:24, Giulio Benetti wrote:
->> After version bump, all sha256 were updated, but not the changed license
->> files paths for version 5.12.2.
->>
->> Update license files paths for 5.12.2.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/3812f4a6313fab57766c7b98defa723c58a8fa76/
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->> ---
->>   .../5.12.2/qt5virtualkeyboard.hash                 |  8 ++++----
->>   .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk   | 14 +++++++++++++-
->>   2 files changed, 17 insertions(+), 5 deletions(-)
->>
->> diff --git a/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash b/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash
->> index 69c947359a..245f2b4a70 100644
->> --- a/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash
->> +++ b/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash
->> @@ -3,7 +3,7 @@ sha256 7111de5c78f8a0d29394409727647b90ae5906fd5105c843af98c3ae3804248d qtvirtua
->>   
->>   # Hashes for license files:
->>   sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 LICENSE.GPL3
->> -sha256 7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10 src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt
->> -sha256 05cc719deafd0ab083b03296bb2911de10d116953b626a7629b9ca59938038b1 src/virtualkeyboard/3rdparty/openwnn/NOTICE
->> -sha256 b5830d96fb5a7e7e7ebcc295f352846b4b998e78fdc8f9aa68e134d2e4b39986 src/virtualkeyboard/3rdparty/pinyin/NOTICE
->> -sha256 9400a6128693d2f25653698e695f554660c71efccc8c21af28bf143e35199db6 src/virtualkeyboard/3rdparty/tcime/COPYING
-> 
->   Shouldn't these still be kept for the 5.6 version? Maybe with a comment above.
+> Hello Cam,
+>
+> +Christian and Anisse in Cc.
+>
+> Sorry for the very slow feedback.
+>
+> On Fri, 27 Jul 2018 12:47:20 +1000
+> Cam Hutchison <camh@xdna.net> wrote:
+>
+> > Allow the CGO_ENABLED variable to be controlled per package and per
+> > build target, instead of having the value determined by whether or not
+> > the toolchain has threads.
+> >
+> > Some build targets may not build with CGO_ENABLED=1, so allowing a per
+> > package and build target override will allow those targets to be built
+> > with Buildroot.
+>
+> Could you give some specific examples instead of the fuzzy "Some build
+> targets" wording ?
+>
 
-Version 5.6 uses qt5virtualkeyboard 2.0 that has differently located 
-license files, so they have their sha256 in 
-package/qt5/qt5virtualkeyboard/2.0/qt5virtualkeyboard.hash
+Sorry for my lack of detail. Here are my notes that I made at the time:
 
-I've succesfully built qt5virtualkeyboard-legal-info for both 5.6 and 
-latest(5.12.2)
-
-Kind regards
-
--- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
-
-> 
->> +sha256 7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10 src/plugins/lipi-toolkit/3rdparty/lipi-toolkit/MIT_LICENSE.txt
->> +sha256 05cc719deafd0ab083b03296bb2911de10d116953b626a7629b9ca59938038b1 src/plugins/openwnn/3rdparty/openwnn/NOTICE
->> +sha256 b5830d96fb5a7e7e7ebcc295f352846b4b998e78fdc8f9aa68e134d2e4b39986 src/plugins/pinyin/3rdparty/pinyin/NOTICE
->> +sha256 9400a6128693d2f25653698e695f554660c71efccc8c21af28bf143e35199db6 src/plugins/tcime/3rdparty/tcime/COPYING
->> diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
->> index 3f1ebdbaa4..814b454010 100644
->> --- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
->> +++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
->> @@ -26,19 +26,31 @@ QT5VIRTUALKEYBOARD_QMAKEFLAGS += CONFIG+="$(foreach lang,$(QT5VIRTUALKEYBOARD_LA
->>   
->>   ifneq ($(filter ja_JP all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
->>   QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 (openwnn)
->> +ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
->>   QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/openwnn/NOTICE
->> +else
->> +QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/openwnn/3rdparty/openwnn/NOTICE
->> +endif
->>   endif
->>   
->>   ifneq ($(filter zh_CN all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
->>   QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
->>   QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 (pinyin)
->> +ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
->>   QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/pinyin/NOTICE
->> +else
->> +QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/pinyin/3rdparty/pinyin/NOTICE
->> +endif
->>   endif
->>   
->>   ifneq ($(filter zh_TW all,$(QT5VIRTUALKEYBOARD_LANGUAGE_LAYOUTS)),)
->>   QT5VIRTUALKEYBOARD_3RDPARTY_PARTS = YES
->>   QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), Apache-2.0 (tcime), BSD-3-Clause (tcime)
->> +ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
->>   QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/tcime/COPYING
->> +else
->> +QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/tcime/3rdparty/tcime/COPYING
->> +endif
->>   endif
->>   endif
->>   
->> @@ -49,7 +61,7 @@ QT5VIRTUALKEYBOARD_LICENSE := $(QT5VIRTUALKEYBOARD_LICENSE), MIT (lipi-toolkit)
->>   ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
->>   QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/lipi-toolkit/license.txt
->>   else
->> -QT5VIRTUALKEYBOARD_LICENSE_FILES += src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt
->> +QT5VIRTUALKEYBOARD_LICENSE_FILES += src/plugins/lipi-toolkit/3rdparty/lipi-toolkit/MIT_LICENSE.txt
->>   endif
->>   endif
->>   
->>
+* kube-apiserver is not linking, emitting the error `direct call too far`.
+If I
+  override the go.mk to force CGO_ENABLED=0, it works. The kube build script
+  builds a bunch of components with CGO_ENABLED=0, but the buildroot golang
+  infra does not support setting CGO_ENABLED - it is hard-coded based on
+  whether the toolchain has threads (BR2_TOOLCHAIN_HAS_THREADS). I will need
+  to somehow override that.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190413/dffbe778/attachment.html>
