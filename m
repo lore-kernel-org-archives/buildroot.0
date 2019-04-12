@@ -1,90 +1,100 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 12 Apr 2019 10:32:47 +0200
-Subject: [Buildroot] [PATCH] package/gettext-tiny: bump version for
- having msgmerge working
-In-Reply-To: <20190411221915.xqqyv47qgq2lgvv2@vkochan-ThinkPad-T470p>
-References: <20190409174606.31828-1-giulio.benetti@micronovasrl.com>
- <20190410133739.54867aa5@windsurf.home>
- <24a6255a-9727-cea2-f07a-f03a02a8a058@micronovasrl.com>
- <20190411221915.xqqyv47qgq2lgvv2@vkochan-ThinkPad-T470p>
-Message-ID: <dc436ca2-f08b-2d6f-582f-3229bf2cfd3d@micronovasrl.com>
+From: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Date: Fri, 12 Apr 2019 10:06:46 +0100
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2019-04-11 (libcamera-uClibc support)
+In-Reply-To: <5cb02eac.1c69fb81.6a317.08faSMTPIN_ADDED_MISSING@mx.google.com>
+References: <5cb02eac.1c69fb81.6a317.08faSMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <96eb1348-eeef-8fee-9b82-053fc10b2097@ideasonboard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Vadim, Thomas, All,
+Hi Thomas,
 
-Il 12/04/2019 00:19, Vadim Kochan ha scritto:
+On 12/04/2019 07:00, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Hi Giulio, Thomas, All
+> This is the list of Buildroot build failures that occured on
+> 2019-04-11, and for which you are a registered architecture developer
+> or package developer. Please help us improving the quality of
+> Buildroot by investigating those build failures and sending patches to
+> fix them. Thanks!
 > 
-> On Wed, Apr 10, 2019 at 02:38:23PM +0200, Giulio Benetti wrote:
->> Hello Thomas,
->>
->> Il 10/04/2019 13:37, Thomas Petazzoni ha scritto:
->>> Hello,
->>>
->>> On Tue,  9 Apr 2019 19:46:06 +0200
->>> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
->>>
->>>> On current version msgmerge doesn't work properly. It exits giving:
->>>> fopen: No such file or directory
->>>> The problem has been signalled and fixed by upstream.
->>>>
->>>> Bump version to latest commit.
->>>>
->>>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->>>
->>> Is this fixing a build issue with some particular package ?
+> Results for the 'master' branch
+> ===============================
+> 
+> Build failures related to your packages:
+> 
+>          arc | libcamera-d5ca33f6c7b0cd1ca... | http://autobuild.buildroot.net/results/8517fe8fc197769285babf4c0915423d98c64d9c
 
-Yes, this fixes:
-http://autobuild.buildroot.net/results/ed0/ed0b14744106dc9b346fba3361d858ce36723816/
 
-as Vadim pointed below.
+I've had a quick look into this failure - and the log reports the following:
 
-So if you're ok I can send v2 reworded.
 
->> This was for package vdr-plugin-vnsiserver that uses msgmerge.
->> But as you've pointed me here:
->> https://patchwork.ozlabs.org/patch/1082580/
->>
->> i18n files are provided when BR2_SYSTEM_ENABLE_NLS=y
->> So I think it's useless.
->>
->> Right?
->>
-> 
-> I just finally finished built on latest master:
-> 
-> 	http://autobuild.buildroot.org/results/0c230e49b6e9bf27163f751e6912ee85c6eb62e3/
-> 
-> and got build error (as expected), but after I manually bumped to
-> version which Giulio proposed and it fixed the issue. But I did not
-> test the package in runtime.
-> 
-> Giulio opened the issue with msgmerge error:
-> 
-> 	https://github.com/sabotage-linux/gettext-tiny/issues/42
-> 
-> and the sabotage guys provided the fix:
-> 
-> 	https://github.com/sabotage-linux/gettext-tiny/commit/a597aaebd15ef73a65d67f0d6f746ca7ca812d51
-> 
-> Regards,
-> Vadim kochan
-> 
+> [16/33] Compiling C++ object 'src/libcamera/4ab8042@@camera at sha/utils.cpp.o'.
+> FAILED: src/libcamera/4ab8042@@camera at sha/utils.cpp.o 
+> /home/buildroot/autobuild/instance-3/output/host/bin/arc-linux-g++ -Isrc/libcamera/4ab8042@@camera at sha -Isrc/libcamera -I../src/libcamera -Iinclude -I../include -I../src/libcamera/include -I/home/buildroot/autobuild/instance-3/output/host/usr/bin/../arc-buildroot-linux-uclibc/sysroot/usr/include -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -Wextra -Werror -std=c++11 -O3 -Wno-unused-parameter -fPIC -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -matomic -Os -MD -MQ 'src/libcamera/4ab8042@@camera at sha/utils.cpp.o' -MF 'src/libcamera/4ab8042@@camera at sha/utils.cpp.o.d' -o 'src/libcamera/4ab8042@@camera at sha/utils.cpp.o' -c ../src/libcamera/utils.cpp
+> ../src/libcamera/utils.cpp:9:10: fatal error: sys/auxv.h: No such file or directory
+>  #include <sys/auxv.h>
+>           ^~~~~~~~~~~~
+> compilation terminated.
 
-Best regards
+
+This stems from the use of getauxval(AT_SECURE) in our replicated
+implementation of secure_getenv(), which itself was provided to support
+non-gnu-c-libraries (well, MUSL):
+
+char *secure_getenv(const char *name)
+{
+	if (getauxval(AT_SECURE))
+		return NULL;
+
+	return getenv(name);
+}
+
+
+I believe this implementation lets us function with MUSL, but now this
+error shows that uClibc does not provide <sys/auxv.h>.
+
+In that event we could either:
+
+ - Make secure_getenv():
+	- always return NULL
+	- always return getenv(name)
+ - Disable support for libcamera against uClibc.
+
+Alternatively, we could extend our secure_getenv() such that on uClibc
+we use 'issetugid()' which was added at [0]:
+
+> [0] https://git.busybox.net/uClibc/commit/?id=94246e65e20b5390d53858447526b231ef1afd67
+
+
+In fact, that commit references a commit [1] at MUSL with a very well
+written commit message describing the issue:
+
+> [1] http://git.musl-libc.org/cgit/musl/commit/?id=ddddec106fd17c3aca3287005d21e92f742aa9d4
+
+Then there is also a very good write up of this topic at [2] showing why
+this complexity has come to exist...
+
+> [2] issetugid() sadness 
+>     https://gist.github.com/nicowilliams/4daf74a3a0c86848d3cbd9d0cdb5e26e
+
+And that one makes me just want to disable libcamera for uClibc or any
+other unsupported system instead.
+
+
+Thomas, I assume other projects have to deal with this same issue, how
+do they do it? Is there a generic way to solve this for all platforms?
+
+I'm leaning towards just disabling builds on uClibc for now as we are
+unlikely to get many users of libcamera with uClibc ... ? And we could
+always revisit the topic later if someone decided they did want to use
+it there.
+
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Regards
+--
+Kieran
