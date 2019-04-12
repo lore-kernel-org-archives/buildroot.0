@@ -1,35 +1,43 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Fri, 12 Apr 2019 18:48:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/valgrind: do not install header
- files on the target
-Message-ID: <20190412164856.28641-1-titouan.christophe@railnova.eu>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 12 Apr 2019 19:10:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libfreefare: fix static build with
+ latomic
+Message-ID: <20190412171045.18584-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- package/valgrind/valgrind.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+Use pkg-config to retrieve openssl dependencies such as lz or latomic
 
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index cae14f79b9..8ee8c4585c 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -64,6 +64,12 @@ endef
+Fixes:
+ - http://autobuild.buildroot.org/results/9bf69f238a63ea28690f7c0dbb8c30feb0afc5ad
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libfreefare/libfreefare.mk | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
+index 13e6f2ad5e..16f15b34e4 100644
+--- a/package/libfreefare/libfreefare.mk
++++ b/package/libfreefare/libfreefare.mk
+@@ -9,13 +9,9 @@ LIBFREEFARE_SOURCE = libfreefare-$(LIBFREEFARE_VERSION).tar.bz2
+ # Do not use the github helper here, the generated tarball is *NOT*
+ # the same as the one uploaded by upstream for the release.
+ LIBFREEFARE_SITE = https://github.com/nfc-tools/libfreefare/releases/download/libfreefare-$(LIBFREEFARE_VERSION)
+-LIBFREEFARE_DEPENDENCIES = libnfc openssl
++LIBFREEFARE_DEPENDENCIES = host-pkgconf libnfc openssl
+ LIBFREEFARE_LICENSE = LGPL-3.0+ with exception
+ LIBFREEFARE_LICENSE_FILES = COPYING
+-
+-ifeq ($(BR2_STATIC_LIBS),y)
+-# openssl needs zlib even if the libfreefare example itself doesn't
+-LIBFREEFARE_CONF_ENV += LIBS='-lz'
+-endif
++LIBFREEFARE_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
  
- VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_INSTALL_UCLIBC_SUPP
- 
-+define VALGRIND_REMOVE_TARGET_HEADERS
-+	rm -rf $(TARGET_DIR)/usr/include/valgrind
-+endef
-+
-+VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_TARGET_HEADERS
-+
- ifeq ($(BR2_PACKAGE_VALGRIND_MEMCHECK),)
- define VALGRIND_REMOVE_MEMCHECK
- 	rm -f $(TARGET_DIR)/usr/lib/valgrind/*memcheck*
+ $(eval $(autotools-package))
 -- 
-2.19.2
+2.20.1
