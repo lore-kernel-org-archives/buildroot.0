@@ -1,11 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 12 Apr 2019 23:10:52 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2019-04-11
-In-Reply-To: <e49bfd0c-270c-77fb-0b18-04722b971c41@gmail.com>
-References: <5cb02982.1c69fb81.f3887.2c53SMTPIN_ADDED_MISSING@mx.google.com>
- <e49bfd0c-270c-77fb-0b18-04722b971c41@gmail.com>
-Message-ID: <3c3e02ff-b257-0225-7360-8d8ed4b3e10c@mind.be>
+Date: Fri, 12 Apr 2019 23:12:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/valgrind: do not install header
+ files on the target
+In-Reply-To: <20190412164856.28641-1-titouan.christophe@railnova.eu>
+References: <20190412164856.28641-1-titouan.christophe@railnova.eu>
+Message-ID: <a04030ec-04bd-631d-48dd-7a0fb02fb215@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,50 +13,37 @@ To: buildroot@busybox.net
 
 
 
-On 12/04/2019 22:15, Valentin Korenblit wrote:
-> Hi Thomas,
+On 12/04/2019 18:48, Titouan Christophe wrote:
+> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+> ---
+>  package/valgrind/valgrind.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
->> Results for the 'master' branch
->> ===============================
->>
->> Build failures related to your packages:
->>
->> ???????? i586 |??????????????? host-llvm-8.0.0 |
->> http://autobuild.buildroot.net/results/0c046a1b57a4f0b992333003d41062e1b256eb0d
-> 
-> Should we require gcc 5.1 or do we add LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN
-> and wait until next version ?
-> 
-> -- Detecting CXX compile features - done
-> CMake Error at cmake/modules/CheckCompilerVersion.cmake:40 (message):
-> ? Host GCC version should be at least 5.1 because LLVM will soon use new C++
-> ? features which your toolchain version doesn't support.? Your version is
-> ? 4.8.2.? You can temporarily opt out using
-> ? LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN, but very soon your toolchain won't be
-> ? supported.
+> diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
+> index cae14f79b9..8ee8c4585c 100644
+> --- a/package/valgrind/valgrind.mk
+> +++ b/package/valgrind/valgrind.mk
+> @@ -64,6 +64,12 @@ endef
+>  
+>  VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_INSTALL_UCLIBC_SUPP
+>  
+> +define VALGRIND_REMOVE_TARGET_HEADERS
+> +	rm -rf $(TARGET_DIR)/usr/include/valgrind
 
- That is an extremely stupid error...
+ Why? target-finalize already does rm -rf $(TARGET_DIR)/usr/include.
 
- So, now we should set LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN, and as soon as it
-really requires GCC 5.1, we'll have to make llvm depend on BR2_HOST_GCC_AT_LEAST_5.
+ Assuming this was a mistake, I've marked this patch as Rejected in patchwork.
+If there is a good reason to do this, please explain in the commit message and
+resend.
 
  Regards,
  Arnout
 
-
-> Call Stack (most recent call first):
-> ? cmake/modules/CheckCompilerVersion.cmake:45 (check_compiler_version)
-> ? cmake/config-ix.cmake:13 (include)
-> ? CMakeLists.txt:590 (include)
-> 
-> Best regards,
-> 
-> Valentin
-> 
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +endef
+> +
+> +VALGRIND_POST_INSTALL_TARGET_HOOKS += VALGRIND_REMOVE_TARGET_HEADERS
+> +
+>  ifeq ($(BR2_PACKAGE_VALGRIND_MEMCHECK),)
+>  define VALGRIND_REMOVE_MEMCHECK
+>  	rm -f $(TARGET_DIR)/usr/lib/valgrind/*memcheck*
 > 
