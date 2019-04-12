@@ -1,43 +1,38 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 12 Apr 2019 19:10:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libfreefare: fix static build with
- latomic
-Message-ID: <20190412171045.18584-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 12 Apr 2019 21:35:00 +0200
+Subject: [Buildroot] [PATCH] support/brpkutil: fix flake8 error
+Message-ID: <20190412193500.13393-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use pkg-config to retrieve openssl dependencies such as lz or latomic
+When locally checking with flake8, we now detect errors that are not
+reported in gitlab-ci pipelines.
 
-Fixes:
- - http://autobuild.buildroot.org/results/9bf69f238a63ea28690f7c0dbb8c30feb0afc5ad
+Fix one such an error now.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/libfreefare/libfreefare.mk | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ support/scripts/brpkgutil.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
-index 13e6f2ad5e..16f15b34e4 100644
---- a/package/libfreefare/libfreefare.mk
-+++ b/package/libfreefare/libfreefare.mk
-@@ -9,13 +9,9 @@ LIBFREEFARE_SOURCE = libfreefare-$(LIBFREEFARE_VERSION).tar.bz2
- # Do not use the github helper here, the generated tarball is *NOT*
- # the same as the one uploaded by upstream for the release.
- LIBFREEFARE_SITE = https://github.com/nfc-tools/libfreefare/releases/download/libfreefare-$(LIBFREEFARE_VERSION)
--LIBFREEFARE_DEPENDENCIES = libnfc openssl
-+LIBFREEFARE_DEPENDENCIES = host-pkgconf libnfc openssl
- LIBFREEFARE_LICENSE = LGPL-3.0+ with exception
- LIBFREEFARE_LICENSE_FILES = COPYING
--
--ifeq ($(BR2_STATIC_LIBS),y)
--# openssl needs zlib even if the libfreefare example itself doesn't
--LIBFREEFARE_CONF_ENV += LIBS='-lz'
--endif
-+LIBFREEFARE_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+diff --git a/support/scripts/brpkgutil.py b/support/scripts/brpkgutil.py
+index 9ceda71b7f..f65068d348 100644
+--- a/support/scripts/brpkgutil.py
++++ b/support/scripts/brpkgutil.py
+@@ -31,7 +31,8 @@ def get_dependency_tree():
  
- $(eval $(autotools-package))
+     cmd = ["make", "-s", "--no-print-directory", "show-dependency-tree"]
+     with open(os.devnull, 'wb') as devnull:
+-        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=devnull, universal_newlines=True)
++        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=devnull,
++                             universal_newlines=True)
+         output = p.communicate()[0]
+ 
+     for l in output.splitlines():
 -- 
-2.20.1
+2.14.1
