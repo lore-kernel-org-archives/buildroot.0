@@ -1,94 +1,62 @@
-From: Sven Oliver Moll <buildroot@svol.li>
-Date: Fri, 12 Apr 2019 18:07:06 +0200 (CEST)
-Subject: [Buildroot] [PATCH] package/most: added version 5.1.0
-Message-ID: <alpine.DEB.2.20.1904121806020.19094@defender.svolli.xa>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 12 Apr 2019 18:56:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lldpd: fix build without cdp
+Message-ID: <20190412165602.29302-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+ - http://autobuild.buildroot.org/results/e46055b86bcb03614f3fba076af2278e46a39714
 
-Signed-off-by: Sven Oliver Moll <svolli@svolli.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...lation-with--enable-fdp--disable-cdp.patch | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/lldpd/0001-build-fix-compilation-with--enable-fdp--disable-cdp.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 01cb34057b..677757556c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2108,6 +2108,9 @@ F:	package/libmms/
-  F:	package/orc/
-  F:	package/wampcc/
-
-+N:	Sven Oliver Moll <svolli@svolli.de>
-+F:	package/most/
-+
-  N:	Theo Debrouwere <t.debrouwere@televic.com>
-  F:	package/pugixml/
-
-diff --git a/package/Config.in b/package/Config.in
-index 32f80cb2d0..065933ade1 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2228,6 +2228,7 @@ menu "Text editors and viewers"
-  	source "package/joe/Config.in"
-  	source "package/less/Config.in"
-  	source "package/mc/Config.in"
-+	source "package/most/Config.in"
-  	source "package/nano/Config.in"
-  	source "package/uemacs/Config.in"
-  	source "package/vim/Config.in"
-diff --git a/package/most/Config.in b/package/most/Config.in
+diff --git a/package/lldpd/0001-build-fix-compilation-with--enable-fdp--disable-cdp.patch b/package/lldpd/0001-build-fix-compilation-with--enable-fdp--disable-cdp.patch
 new file mode 100644
-index 0000000000..c8909a024e
+index 0000000000..575d97d96d
 --- /dev/null
-+++ b/package/most/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_MOST
-+	bool "most"
-+	depends on BR2_PACKAGE_SLANG
-+	help
-+	  most is a powerful pager
++++ b/package/lldpd/0001-build-fix-compilation-with--enable-fdp--disable-cdp.patch
+@@ -0,0 +1,35 @@
++From 4e7ec8233cd185941eaa9e41785cfc53f92799b4 Mon Sep 17 00:00:00 2001
++From: Vincent Bernat <vincent@bernat.ch>
++Date: Tue, 8 Jan 2019 17:19:15 -0500
++Subject: [PATCH] build: fix compilation with `--enable-fdp --disable-cdp`
 +
-+	  https://www.jedsoft.org/most/
++Fix #315
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/vincentbernat/lldpd/commit/4e7ec8233cd185941eaa9e41785cfc53f92799b4]
++---
++ src/lldpd-structs.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+comment "most depends on slang library"
-+	depends on !BR2_PACKAGE_SLANG
-diff --git a/package/most/most.hash b/package/most/most.hash
-new file mode 100644
-index 0000000000..76cbec0cda
---- /dev/null
-+++ b/package/most/most.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256 db805d1ffad3e85890802061ac8c90e3c89e25afb184a794e03715a3ed190501  most-5.1.0.tar.gz
-diff --git a/package/most/most.mk b/package/most/most.mk
-new file mode 100644
-index 0000000000..7ff8d2ea95
---- /dev/null
-+++ b/package/most/most.mk
-@@ -0,0 +1,25 @@
-+################################################################################
-+#
-+# most
-+#
-+################################################################################
-+
-+MOST_SITE = http://www.jedsoft.org/releases/most
-+MOST_VERSION = 5.1.0
-+MOST_SOURCE = most-$(MOST_VERSION).tar.gz
-+MOST_LICENSE = GPL-2.0
-+MOST_LICENSE_FILES = COPYING
-+
-+define MOST_BUILD_CMDS
-+	# remove version check of slang library
-+	# - check assumes self-hosting compile
-+	# - slang version is sufficiant due to building from buildroot
-+	$(SED) 's/ slangversion / /g' $(@D)/src/Makefile
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
-+endef
-+
-+define MOST_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/src/objs/most $(TARGET_DIR)/usr/bin/most
-+endef
-+
-+$(eval $(autotools-package))
++diff --git a/src/lldpd-structs.h b/src/lldpd-structs.h
++index c3ffa108..f6b03d7d 100644
++--- a/src/lldpd-structs.h
+++++ b/src/lldpd-structs.h
++@@ -129,7 +129,7 @@ struct lldpd_dot3_power {
++ MARSHAL(lldpd_dot3_power);
++ #endif
++ 
++-#ifdef ENABLE_CDP
+++#if defined (ENABLE_CDP) || defined (ENABLE_FDP)
++ struct cdpv2_power {
++ 	u_int16_t request_id;
++ 	u_int16_t management_id;
++@@ -273,7 +273,7 @@ struct lldpd_port {
++ 	struct lldpd_med_power	 p_med_power;
++ #endif
++ 
++-#ifdef ENABLE_CDP
+++#if defined (ENABLE_CDP) || defined (ENABLE_FDP)
++ 	struct cdpv2_power p_cdp_power;
++ #endif
++ 
+-- 
+2.20.1
