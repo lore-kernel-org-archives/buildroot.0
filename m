@@ -1,54 +1,42 @@
-From: Arndt Kritzner <kritzner@logicway.de>
-Date: Fri, 12 Apr 2019 09:53:40 +0200
-Subject: [Buildroot] [PATCH] package/azure-iot-sdk-c: should also install
- libparson (otherwise linking errors in userspace applications)
-Message-ID: <d9eb67a8-b8fd-f890-1d02-c454c2313369@logicway.de>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Fri, 12 Apr 2019 10:15:17 +0200
+Subject: [Buildroot] [PATCH] package/musl: bump to version 1.1.22
+Message-ID: <20190412081517.3028-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
---- buildroot-2019.02.1.original/package/azure-iot-sdk-c/azure-iot-sdk-c.mk	2019-03-29 23:52:57.000000000 +0100
-+++ buildroot-2019.02.1.2/package/azure-iot-sdk-c/azure-iot-sdk-c.mk	2019-04-09 16:02:14.412271020 +0200
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/musl/musl.hash | 4 ++--
+ package/musl/musl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/musl/musl.hash b/package/musl/musl.hash
+index 9121424657..5644401770 100644
+--- a/package/musl/musl.hash
++++ b/package/musl/musl.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature from
+-# http://www.musl-libc.org/releases/musl-1.1.21.tar.gz.asc
+-sha256  c742b66f6f49c9e5f52f64d8b79fecb5a0f6e0203fca176c70ca20f6be285f44  musl-1.1.21.tar.gz
++# http://www.musl-libc.org/releases/musl-1.1.22.tar.gz.asc
++sha256  8b0941a48d2f980fd7036cfbd24aa1d414f03d9a0652ecbd5ec5c7ff1bee29e3  musl-1.1.22.tar.gz
+ sha256  a3ae1b9fc5d4938f5734734383b9813d27a5652df23010c6f9d4c5419b239a41  COPYRIGHT
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index ff807c0cba..5db5bbd265 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
-
--AZURE_IOT_SDK_C_VERSION = 2018-12-13
-+AZURE_IOT_SDK_C_VERSION = 2019-03-18
- AZURE_IOT_SDK_C_SITE = https://github.com/Azure/azure-iot-sdk-c
- AZURE_IOT_SDK_C_SITE_METHOD = git
- AZURE_IOT_SDK_C_GIT_SUBMODULES = YES
-@@ -23,7 +23,7 @@
- 	iothub_client/libiothub_client_http_transport.a \
- 	iothub_client/libiothub_client_amqp_transport.a \
- 	iothub_client/libiothub_client_mqtt_transport.a \
--	iothub_service_client/libiothub_service_client.a serializer/libserializer.a umqtt/libumqtt.a
-+	iothub_service_client/libiothub_service_client.a serializer/libserializer.a umqtt/libumqtt.a libparson.a
- else
- AZURE_IOT_SDK_C_LIBS += uamqp/libuamqp.so c-utility/libaziotsharedutil.so \
- 	iothub_client/libiothub_client.so iothub_client/libiothub_client_mqtt_ws_transport.so \
-@@ -31,7 +31,7 @@
- 	iothub_client/libiothub_client_http_transport.so \
- 	iothub_client/libiothub_client_amqp_transport.so \
- 	iothub_client/libiothub_client_mqtt_transport.so \
--	iothub_service_client/libiothub_service_client.so serializer/libserializer.so umqtt/libumqtt.so
-+	iothub_service_client/libiothub_service_client.so serializer/libserializer.so umqtt/libumqtt.so libparson.so
- endif
-
- define AZURE_IOT_SDK_C_INSTALL_STAGING_CMDS
-
-
-===============================================================================
-Kind regards
-Arndt
-
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190412/990f278a/attachment.asc>
+ 
+-MUSL_VERSION = 1.1.21
++MUSL_VERSION = 1.1.22
+ MUSL_SITE = http://www.musl-libc.org/releases
+ MUSL_LICENSE = MIT
+ MUSL_LICENSE_FILES = COPYRIGHT
+-- 
+2.21.0
