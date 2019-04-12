@@ -1,38 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 12 Apr 2019 21:35:00 +0200
-Subject: [Buildroot] [PATCH] support/brpkutil: fix flake8 error
-Message-ID: <20190412193500.13393-1-yann.morin.1998@free.fr>
+From: Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Fri, 12 Apr 2019 22:15:17 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2019-04-11
+In-Reply-To: <5cb02982.1c69fb81.f3887.2c53SMTPIN_ADDED_MISSING@mx.google.com>
+References: <5cb02982.1c69fb81.f3887.2c53SMTPIN_ADDED_MISSING@mx.google.com>
+Message-ID: <e49bfd0c-270c-77fb-0b18-04722b971c41@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When locally checking with flake8, we now detect errors that are not
-reported in gitlab-ci pipelines.
+Hi Thomas,
 
-Fix one such an error now.
+> Results for the 'master' branch
+> ===============================
+>
+> Build failures related to your packages:
+>
+>          i586 |                host-llvm-8.0.0 | http://autobuild.buildroot.net/results/0c046a1b57a4f0b992333003d41062e1b256eb0d
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- support/scripts/brpkgutil.py | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Should we require gcc 5.1 or do we add LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN
+and wait until next version ?
 
-diff --git a/support/scripts/brpkgutil.py b/support/scripts/brpkgutil.py
-index 9ceda71b7f..f65068d348 100644
---- a/support/scripts/brpkgutil.py
-+++ b/support/scripts/brpkgutil.py
-@@ -31,7 +31,8 @@ def get_dependency_tree():
- 
-     cmd = ["make", "-s", "--no-print-directory", "show-dependency-tree"]
-     with open(os.devnull, 'wb') as devnull:
--        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=devnull, universal_newlines=True)
-+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=devnull,
-+                             universal_newlines=True)
-         output = p.communicate()[0]
- 
-     for l in output.splitlines():
--- 
-2.14.1
+-- Detecting CXX compile features - done
+CMake Error at cmake/modules/CheckCompilerVersion.cmake:40 (message):
+   Host GCC version should be at least 5.1 because LLVM will soon use new C++
+   features which your toolchain version doesn't support.  Your version is
+   4.8.2.  You can temporarily opt out using
+   LLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN, but very soon your toolchain won't be
+   supported.
+Call Stack (most recent call first):
+   cmake/modules/CheckCompilerVersion.cmake:45 (check_compiler_version)
+   cmake/config-ix.cmake:13 (include)
+   CMakeLists.txt:590 (include)
+
+Best regards,
+
+Valentin
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190412/67246fc1/attachment.html>
