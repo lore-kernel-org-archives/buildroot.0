@@ -1,48 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 13 Apr 2019 22:02:50 +0200
-Subject: [Buildroot] [PATCH 1/2] support/testing: add test to verify
- 'scp' download via BR2_PRIMARY_SITE
-In-Reply-To: <20190215213549.8476-1-patrickdepinguin@gmail.com>
-References: <20190215213549.8476-1-patrickdepinguin@gmail.com>
-Message-ID: <20190413220250.21437d01@windsurf>
+Date: Sat, 13 Apr 2019 22:21:37 +0200
+Subject: [Buildroot] [PATCH 1/1] Add libvirt (KVM) support
+In-Reply-To: <20190215173607.13773-1-christopher@lecroq.be>
+References: <20190215173607.13773-1-christopher@lecroq.be>
+Message-ID: <20190413222137.6c0cba37@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello Christopher,
 
-On Fri, 15 Feb 2019 22:35:48 +0100
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+Sorry for the very long delay in replying. I am not an expert with the
+Vagrant stuff, so I'm adding Angelo in Cc who hopefully will be able to
+comment further. Still, I have a few comments.
 
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> Recently it was found that the scp download infrastructure was broken.
-> To avoid future failures, create a test that verifies that the scp command
-> receives the expected arguments.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+First, the commit title should be:
+
+	support/misc/Vagrantfile: add libvirt/kvm support
+
+On Fri, 15 Feb 2019 18:36:07 +0100
+Christopher Peeters <christopher@lecroq.be> wrote:
+
+> Signed-off-by: Christopher Peeters <christopher@lecroq.be>
 > ---
->  .../tests/download/br2-external/scp/Config.in |  0
->  .../download/br2-external/scp/external.desc   |  1 +
->  .../download/br2-external/scp/external.mk     |  1 +
->  .../br2-external/scp/package/nohash/nohash.mk | 10 +++
->  support/testing/tests/download/scp-wrapper    | 62 +++++++++++++++++++
->  support/testing/tests/download/test_scp.py    | 45 ++++++++++++++
->  6 files changed, 119 insertions(+)
->  create mode 100644 support/testing/tests/download/br2-external/scp/Config.in
->  create mode 100644 support/testing/tests/download/br2-external/scp/external.desc
->  create mode 100644 support/testing/tests/download/br2-external/scp/external.mk
->  create mode 100644 support/testing/tests/download/br2-external/scp/package/nohash/nohash.mk
->  create mode 100755 support/testing/tests/download/scp-wrapper
->  create mode 100644 support/testing/tests/download/test_scp.py
+>  support/misc/Vagrantfile | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+> index 1ca5edc647..48f01a5807 100644
+> --- a/support/misc/Vagrantfile
+> +++ b/support/misc/Vagrantfile
+> @@ -29,6 +29,12 @@ Vagrant.configure('2') do |config|
+>  		end
+>  	end
+>  
+> +  config.vm.provider :libvirt do |v, override|
+> +    override.vm.box = 'generic/ubuntu1804'
 
-You got some review/comments from Ricardo, which I believe are not too
-difficult to address. Do you think you will have the chance to address
-them and send an updated version ?
+Why are you overriding the distribution being used? It seems odd that
+depending on the virtualization technology, a different distribution
+gets installed inside the VM.
 
-Thanks!
+> +    v.memory = VM_MEMORY
+> +    v.cpus = VM_CORES
+> +  end 
+
+The indentation is also bogus: the file uses tabs, and you used two
+spaces. Could you fix that up ?
+
+Thanks,
 
 Thomas
 -- 
