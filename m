@@ -1,31 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 13 Apr 2019 21:13:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/squid: bump to version 4.6
-In-Reply-To: <20190413150541.30291-1-fontaine.fabrice@gmail.com>
-References: <20190413150541.30291-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190413211341.3d9f1ca9@windsurf>
+Date: Sat, 13 Apr 2019 21:13:49 +0200
+Subject: [Buildroot] [PATCH 1/2] package/efl: bump to version 1.22.0
+In-Reply-To: <20190413131418.31097-1-romain.naour@gmail.com>
+References: <20190413131418.31097-1-romain.naour@gmail.com>
+Message-ID: <20190413211349.14c51bca@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 13 Apr 2019 17:05:41 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 13 Apr 2019 15:14:17 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-> - Remove patch (already in version):
->   https://github.com/squid-cache/squid/commit/c34582b9e8c40529db7eb9c490b081a37972f6d4
-> - Drop autoreconf
+> Remove upstream commit.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> https://www.enlightenment.org/news/efl-1.22.0
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
 > ---
->  ...re.ac-use-pkg-config-to-find-libxml2.patch | 79 -------------------
->  package/squid/squid.hash                      |  8 +-
->  package/squid/squid.mk                        |  4 +-
->  3 files changed, 5 insertions(+), 86 deletions(-)
->  delete mode 100644 package/squid/0001-configure.ac-use-pkg-config-to-find-libxml2.patch
+>  ...e-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch | 34 ----------------------
+>  package/efl/efl.hash                               |  4 +--
+>  package/efl/efl.mk                                 |  2 +-
+>  3 files changed, 3 insertions(+), 37 deletions(-)
+>  delete mode 100644 package/efl/0001-evas-gl-make-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch
 
-Applied to master, thanks.
+Both applied to master, thanks.
 
 Thomas
 -- 
