@@ -1,143 +1,92 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 13 Apr 2019 17:05:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/squid: bump to version 4.6
-Message-ID: <20190413150541.30291-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 13 Apr 2019 17:07:10 +0200
+Subject: [Buildroot] [git commit] linux: use host pkg-config when host
+ libelf is set
+Message-ID: <20190413150427.859258A58E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove patch (already in version):
-  https://github.com/squid-cache/squid/commit/c34582b9e8c40529db7eb9c490b081a37972f6d4
-- Drop autoreconf
+commit: https://git.buildroot.net/buildroot/commit/?id=615e2edc2ae8351519448d1965f0c4eec4e793b1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+A patch was added to the Linux kernel in 5.1.0-rc3 which adds a
+requirement that the host build environment include pkg-config. Add the
+correct host-pkgconf dependency and environment variables to ensure
+Linux picks up the correct libraries.
+
+Move the existing LINUX_MAKE_ENV assignment earlier, to simplify the
+append-assignment in the libelf conditional block.
+
+Fixes: #11761
+
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Stuart Summers <stuart.summers@intel.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Arnout: extend commit message as suggested by Yann]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...re.ac-use-pkg-config-to-find-libxml2.patch | 79 -------------------
- package/squid/squid.hash                      |  8 +-
- package/squid/squid.mk                        |  4 +-
- 3 files changed, 5 insertions(+), 86 deletions(-)
- delete mode 100644 package/squid/0001-configure.ac-use-pkg-config-to-find-libxml2.patch
+ linux/linux.mk         | 16 +++++++++++-----
+ package/pkg-kconfig.mk |  4 +++-
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/package/squid/0001-configure.ac-use-pkg-config-to-find-libxml2.patch b/package/squid/0001-configure.ac-use-pkg-config-to-find-libxml2.patch
-deleted file mode 100644
-index cc1a9f0585..0000000000
---- a/package/squid/0001-configure.ac-use-pkg-config-to-find-libxml2.patch
-+++ /dev/null
-@@ -1,79 +0,0 @@
--From 39edb8ef08f51ea6a454d286091d78a4514c89e0 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 1 Dec 2018 18:21:55 +0100
--Subject: [PATCH] configure.ac: use pkg-config to find libxml2
--
--Fix static build of squid with libxml2 by using pkg-config to find
--libxml2 dependencies like -lz or -liconv
--
--Fixes:
-- - http://autobuild.buildroot.org/results/7f23eb98c311b294c7f0e165279fa26909a5ff93
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/squid-cache/squid/pull/338]
-----
-- configure.ac | 43 +++++++++++++++++++++++++------------------
-- 1 file changed, 25 insertions(+), 18 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index f30d824aa..47553db46 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -900,29 +900,36 @@ fi
-- 
-- AC_ARG_WITH(libxml2, AS_HELP_STRING([--without-libxml2],[Do not use libxml2 for ESI. Default: auto-detect]))
-- if test "x$squid_opt_use_esi" != "xno" -a "x$with_libxml2" != "xno" ; then
---  AC_CHECK_LIB([xml2], [main], [XMLLIB="-lxml2"; HAVE_LIBXML2=1])
---  dnl Find the main header and include path...
---  AC_CACHE_CHECK([location of libxml2 include files], [ac_cv_libxml2_include], [
---    AC_CHECK_HEADERS([libxml/parser.h], [], [
---      AC_MSG_NOTICE([Testing in /usr/include/libxml2])
---      SAVED_CPPFLAGS="$CPPFLAGS"
---      CPPFLAGS="-I/usr/include/libxml2 $CPPFLAGS"
---      unset ac_cv_header_libxml_parser_h
---      AC_CHECK_HEADERS([libxml/parser.h], [ac_cv_libxml2_include="-I/usr/include/libxml2"], [
---        AC_MSG_NOTICE([Testing in /usr/local/include/libxml2])
---        CPPFLAGS="-I/usr/local/include/libxml2 $SAVED_CPPFLAGS"
--+   PKG_CHECK_MODULES([LIBXML2],[libxml-2.0],[
--+    CPPFLAGS="$CPPFLAGS $LIBXML2_CFLAGS";
--+    SQUID_CXXFLAGS="$SQUID_CXXFLAGS $LIBXML2_CFLAGS";
--+    XMLLIB="$LIBXML2_LIBS";
--+    HAVE_LIBXML2=1
--+    ],[
--+    AC_CHECK_LIB([xml2], [main], [XMLLIB="-lxml2"; HAVE_LIBXML2=1])
--+    dnl Find the main header and include path...
--+    AC_CACHE_CHECK([location of libxml2 include files], [ac_cv_libxml2_include], [
--+      AC_CHECK_HEADERS([libxml/parser.h], [], [
--+        AC_MSG_NOTICE([Testing in /usr/include/libxml2])
--+        SAVED_CPPFLAGS="$CPPFLAGS"
--+        CPPFLAGS="-I/usr/include/libxml2 $CPPFLAGS"
--         unset ac_cv_header_libxml_parser_h
---        AC_CHECK_HEADERS([libxml/parser.h], [ac_cv_libxml2_include="-I/usr/local/include/libxml2"], [
---          AC_MSG_NOTICE([Failed to find libxml2 header file libxml/parser.h])
--+        AC_CHECK_HEADERS([libxml/parser.h], [ac_cv_libxml2_include="-I/usr/include/libxml2"], [
--+          AC_MSG_NOTICE([Testing in /usr/local/include/libxml2])
--+          CPPFLAGS="-I/usr/local/include/libxml2 $SAVED_CPPFLAGS"
--+          unset ac_cv_header_libxml_parser_h
--+          AC_CHECK_HEADERS([libxml/parser.h], [ac_cv_libxml2_include="-I/usr/local/include/libxml2"], [
--+            AC_MSG_NOTICE([Failed to find libxml2 header file libxml/parser.h])
--+          ])
--         ])
--+        CPPFLAGS="$SAVED_CPPFLAGS"
--       ])
---      CPPFLAGS="$SAVED_CPPFLAGS"
--     ])
--+    if test "x$ac_cv_libxml2_include" != "x"; then
--+        SQUID_CXXFLAGS="$ac_cv_libxml2_include $SQUID_CXXFLAGS"
--+        CPPFLAGS="$ac_cv_libxml2_include $CPPFLAGS"
--+    fi
--   ])
---  if test "x$ac_cv_libxml2_include" != "x"; then
---      SQUID_CXXFLAGS="$ac_cv_libxml2_include $SQUID_CXXFLAGS"
---      CPPFLAGS="$ac_cv_libxml2_include $CPPFLAGS"
---  fi
--   dnl Now that we know where to look find the headers...
--   AC_CHECK_HEADERS(libxml/parser.h libxml/HTMLparser.h libxml/HTMLtree.h)
--   AC_DEFINE_UNQUOTED(HAVE_LIBXML2, $HAVE_LIBXML2, [Define to 1 if you have the libxml2 library])
---- 
--2.17.1
--
-diff --git a/package/squid/squid.hash b/package/squid/squid.hash
-index 5e872707ce..d69e9b2ab0 100644
---- a/package/squid/squid.hash
-+++ b/package/squid/squid.hash
-@@ -1,6 +1,6 @@
--# From http://www.squid-cache.org/Versions/v4/squid-4.4.tar.xz.asc
--md5 892504ca9700e1f139a53f84098613bd squid-4.4.tar.xz
--sha1 0ab6b133f65866d825bf72cbbe8cef209768b2fa squid-4.4.tar.xz
-+# From http://www.squid-cache.org/Versions/v4/squid-4.6.tar.xz.asc
-+md5 e25e7cc37754ad14d8aa368c0c210e54 squid-4.6.tar.xz
-+sha1 0396fe8077049000407d13aca8efdd9228e69d98 squid-4.6.tar.xz
- # Locally calculated
--sha256 4905e6da7f5574d2583ba36f398bb062a12d51e70d67035078b6e85b09e9ee82 squid-4.4.tar.xz
-+sha256 015bade5d3a4905142c4c605df5c4216471e3d8338079955e0e44b0ae0303d41 squid-4.6.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/squid/squid.mk b/package/squid/squid.mk
-index 5d5ec0c38d..0331b83888 100644
---- a/package/squid/squid.mk
-+++ b/package/squid/squid.mk
-@@ -4,13 +4,11 @@
- #
- ################################################################################
+diff --git a/linux/linux.mk b/linux/linux.mk
+index c7081db88f..304fce21d0 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -59,6 +59,10 @@ BR_NO_CHECK_HASH_FOR += $(notdir $(LINUX_PATCHES))
+ # be directories in the patch list (unlike for other packages).
+ LINUX_PATCH = $(filter ftp://% http://% https://%,$(LINUX_PATCHES))
  
--SQUID_VERSION = 4.4
-+SQUID_VERSION = 4.6
- SQUID_SOURCE = squid-$(SQUID_VERSION).tar.xz
- SQUID_SITE = http://www.squid-cache.org/Versions/v4
- SQUID_LICENSE = GPL-2.0+
- SQUID_LICENSE_FILES = COPYING
--# We're patching configure.ac
--SQUID_AUTORECONF = YES
- SQUID_DEPENDENCIES = libcap host-libcap libxml2 host-pkgconf \
- 	$(if $(BR2_PACKAGE_LIBNETFILTER_CONNTRACK),libnetfilter_conntrack)
- SQUID_CONF_ENV = \
--- 
-2.20.1
++LINUX_MAKE_ENV = \
++	$(TARGET_MAKE_ENV) \
++	BR_BINARIES_DIR=$(BINARIES_DIR)
++
+ LINUX_INSTALL_IMAGES = YES
+ LINUX_DEPENDENCIES = host-kmod
+ 
+@@ -95,7 +99,13 @@ LINUX_DEPENDENCIES += host-openssl
+ endif
+ 
+ ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF),y)
+-LINUX_DEPENDENCIES += host-elfutils
++LINUX_DEPENDENCIES += host-elfutils host-pkgconf
++LINUX_MAKE_ENV += \
++	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
++	PKG_CONFIG_SYSROOT_DIR="/" \
++	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
++	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
++	PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig"
+ endif
+ 
+ # If host-uboot-tools is selected by the user, assume it is needed to
+@@ -119,10 +129,6 @@ LINUX_MAKE_FLAGS = \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	DEPMOD=$(HOST_DIR)/sbin/depmod
+ 
+-LINUX_MAKE_ENV = \
+-	$(TARGET_MAKE_ENV) \
+-	BR_BINARIES_DIR=$(BINARIES_DIR)
+-
+ ifeq ($(BR2_REPRODUCIBLE),y)
+ LINUX_MAKE_ENV += \
+ 	KBUILD_BUILD_VERSION=1 \
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index ce11e14824..60aae387ca 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -179,7 +179,9 @@ endif
+ # nconfig, gconfig, xconfig).
+ # So we simply remove our PATH and PKG_CONFIG_* variables.
+ $(2)_CONFIGURATOR_MAKE_ENV = \
+-	$$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
++	$$(filter-out PATH=% PKG_CONFIG=% PKG_CONFIG_SYSROOT_DIR=% \
++	   PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=% PKG_CONFIG_ALLOW_SYSTEM_LIBS=% \
++	   PKG_CONFIG_LIBDIR=%,$$($(2)_MAKE_ENV)) \
+ 	PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)"
+ 
+ # Configuration editors (menuconfig, ...)
