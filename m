@@ -1,34 +1,35 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 13 Apr 2019 10:38:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/thrift: drop unneeded static
- openssl workaround
-Message-ID: <20190413083858.12941-1-fontaine.fabrice@gmail.com>
+From: Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Sat, 13 Apr 2019 10:45:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/llvm: fix build with gcc < 5.1
+Message-ID: <20190413084555.2367-1-valentinkorenblit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-thrift uses pkg-config to find openssl dependencies such as lz or
-latomic so drop unneeded workaround
+Fixes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+http://autobuild.buildroot.net/results/0c046a1b57a4f0b992333003d41062e1b256eb0d
+
+Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
 ---
- package/thrift/thrift.mk | 2 --
- 1 file changed, 2 deletions(-)
+ package/llvm/llvm.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-index 8a284229a1..6014bbfcdd 100644
---- a/package/thrift/thrift.mk
-+++ b/package/thrift/thrift.mk
-@@ -31,8 +31,6 @@ endif
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index cd374d74b4..28c5e89706 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -17,6 +17,9 @@ LLVM_INSTALL_STAGING = YES
+ HOST_LLVM_DEPENDENCIES = host-python
+ LLVM_DEPENDENCIES = host-llvm
  
- # thrift doesn't use the regular flags BUILD_{STATIC,SHARED}_LIBS
- ifeq ($(BR2_STATIC_LIBS),y)
--# openssl uses zlib, so we need to explicitly link with it when static
--THRIFT_CONF_ENV += LIBS=-lz
- THRIFT_CONF_OPTS += -DWITH_STATIC_LIB=ON -DWITH_BOOST_STATIC=ON -DWITH_SHARED_LIB=OFF
- else ifeq ($(BR2_SHARED_LIBS),y)
- THRIFT_CONF_OPTS += -DWITH_STATIC_LIB=OFF -DWITH_BOOST_STATIC=OFF -DWITH_SHARED_LIB=ON
++HOST_LLVM_CONF_OPTS += -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON
++LLVM_CONF_OPTS += -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON
++
+ # Don't build clang libcxx libcxxabi lldb compiler-rt lld polly as llvm subprojects
+ # This flag assumes that projects are checked out side-by-side and not nested
+ HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_PROJECTS=""
 -- 
-2.20.1
+2.11.0
