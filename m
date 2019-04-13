@@ -1,88 +1,77 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sat, 13 Apr 2019 11:02:04 +0200
-Subject: [Buildroot] [PATCH v2] package/qt5/qt5virtualkeyboard: fix
- legal-info failure
-In-Reply-To: <10b83cfa-857e-0337-027f-393da6fd34bd@mind.be>
-References: <4549a443-50cb-3a96-a390-4b68b6328f76@micronovasrl.com>
- <20190412082455.65397-1-giulio.benetti@micronovasrl.com>
- <4f3d6cf0-7cdd-ce66-eda7-d1e038c8e1df@mind.be>
- <5d8bbfe9-6954-ce89-6b54-d81939fd3fd7@micronovasrl.com>
- <10b83cfa-857e-0337-027f-393da6fd34bd@mind.be>
-Message-ID: <9811e8ac-fae0-859b-bc85-fba814e36d11@micronovasrl.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 13 Apr 2019 11:08:21 +0200
+Subject: [Buildroot] [PATCH 10/10] infra: introduce top-level,
+ global show-info
+In-Reply-To: <9e4d027c3a353fadde428fbba702dcc9dac15d75.1554637858.git.yann.morin.1998@free.fr>
+References: <cover.1554637858.git.yann.morin.1998@free.fr>
+ <9e4d027c3a353fadde428fbba702dcc9dac15d75.1554637858.git.yann.morin.1998@free.fr>
+Message-ID: <bbb6678f-0be7-c11a-b6d0-872936a339bf@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 13/04/2019 09:39, Arnout Vandecappelle ha scritto:
-> 
-> 
-> On 12/04/2019 23:51, Giulio Benetti wrote:
->> Hello Arnout,
->>
->> Il 12/04/2019 23:26, Arnout Vandecappelle ha scritto:
->>>
->>>
->>> On 12/04/2019 10:24, Giulio Benetti wrote:
->>>> After version bump, all sha256 were updated, but not the changed license
->>>> files paths for version 5.12.2.
->>>>
->>>> Update license files paths for 5.12.2.
->>>>
->>>> Fixes:
->>>> http://autobuild.buildroot.net/results/3812f4a6313fab57766c7b98defa723c58a8fa76/
->>>>
->>>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->>>> ---
->>>>  ? .../5.12.2/qt5virtualkeyboard.hash???????????????? |? 8 ++++----
->>>>  ? .../qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk?? | 14 +++++++++++++-
->>>>  ? 2 files changed, 17 insertions(+), 5 deletions(-)
->>>>
->>>> diff --git a/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash
->>>> b/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash
->>>> index 69c947359a..245f2b4a70 100644
->>>> --- a/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash
->>>> +++ b/package/qt5/qt5virtualkeyboard/5.12.2/qt5virtualkeyboard.hash
->>>> @@ -3,7 +3,7 @@ sha256
->>>> 7111de5c78f8a0d29394409727647b90ae5906fd5105c843af98c3ae3804248d qtvirtua
->>>>  ? ? # Hashes for license files:
->>>>  ? sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903
->>>> LICENSE.GPL3
->>>> -sha256 7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10
->>>> src/virtualkeyboard/3rdparty/lipi-toolkit/MIT_LICENSE.txt
->>>> -sha256 05cc719deafd0ab083b03296bb2911de10d116953b626a7629b9ca59938038b1
->>>> src/virtualkeyboard/3rdparty/openwnn/NOTICE
->>>> -sha256 b5830d96fb5a7e7e7ebcc295f352846b4b998e78fdc8f9aa68e134d2e4b39986
->>>> src/virtualkeyboard/3rdparty/pinyin/NOTICE
->>>> -sha256 9400a6128693d2f25653698e695f554660c71efccc8c21af28bf143e35199db6
->>>> src/virtualkeyboard/3rdparty/tcime/COPYING
->>>
->>>  ? Shouldn't these still be kept for the 5.6 version? Maybe with a comment above.
->>
->> Version 5.6 uses qt5virtualkeyboard 2.0 that has differently located license
->> files, so they have their sha256 in
->> package/qt5/qt5virtualkeyboard/2.0/qt5virtualkeyboard.hash
-> 
->   Oops, of course, you're right. Sorry for the noise.
 
-No problem!
 
-Best regards.
--- 
-Giulio Benetti
-CTO
+On 07/04/2019 13:51, Yann E. MORIN wrote:
+> Now that packages and filesystems can report their recursive info, use
+> that to dump the whole info as a valid JSOn array.
+> 
+> As it is rather complex to ensure soemthing is run before every rules
+> (to display the eldin opening '[' so as to have a valid JSON array),
+> re-enter the Makefile and mangle the output with a sed expression, that:
+> 
+>   - 0,/^/s//[\n/;   inserts a '[' before the first line,
+>   - $!s/$/,/;       appends a ',' at the end of every lines but the last,
+>   - $s/$/\n]/       appends a ']' after the last line.
+> 
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> ---
+>  Makefile | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Makefile b/Makefile
+> index 60bf7d7d08..13c4390ae4 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -876,6 +876,12 @@ graph-depends-requirements:
+>  	@dot -? >/dev/null 2>&1 || \
+>  		{ echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1; }
+>  
+> +.PHONY: show-info _show-info-private
+> +show-info:
+> +	@$(MAKE) -C $(CONFIG_DIR) _show-info-private |sed -r -e '0,/^/s//[\n/; $$!s/$$/,/; $$s/$$/\n]/'
 
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
->>
->> I've succesfully built qt5virtualkeyboard-legal-info for both 5.6 and
->> latest(5.12.2)
->>
->> Kind regards
->>
+ This would be so much simpler as $(subst }$(sep){,}$(comma)$(sep){,...) but
+then of course you need to recurse through $(shell) instead of calling MAKE
+directly, which makes it very ugly again...
+
+ But of course, I would prefer this to be one big call:
+
+ALL_PACKAGES = $(sort $(foreach pkg,$(PACKAGES) $(TARGETS_ROOTFS),\
+	$($(call UPPERCASE,$(pkg))_FINAL_RECURSIVE_DEPENDENCIES)))
+
+show-info:
+	@:
+	@$(info $(subst }$(sep){,}$(comma)$(sep){,\
+		$(foreach pkg,$(ALL_PACKAGES),\
+			$(call show-info,$(pkg),$(call UPPERCASE $(pkg))))))
+
+> +_show-info-private: $(patsubst %,%-show-recursive-info,$(PACKAGES) $(TARGETS_ROOTFS))
+> +	@:
+
+ Why do you need an actual command for this rule? A dependency-only rule would
+be OK, no?
+
+ Regards,
+ Arnout
+
+> +
+>  .PHONY: show-dependency-tree
+>  show-dependency-tree: $(patsubst %,%-show-dependency-tree,$(PACKAGES) $(TARGETS_ROOTFS))
+>  	@:
+> 
