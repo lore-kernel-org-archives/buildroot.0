@@ -1,63 +1,89 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Apr 2019 15:08:58 +0200
-Subject: [Buildroot] [PATCH v4 6/6] qt5: Remove *.la/*.prl fixup script
-In-Reply-To: <502c3f48-3eb7-7d0b-dff6-c00bcbdf9658@andin.de>
-References: <20190322183904.22401-1-anaumann@ultratronik.de>
- <20190322183904.22401-7-anaumann@ultratronik.de>
- <502c3f48-3eb7-7d0b-dff6-c00bcbdf9658@andin.de>
-Message-ID: <0735f59d-5c83-152d-0895-23f0213309d6@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sat, 13 Apr 2019 15:14:17 +0200
+Subject: [Buildroot] [PATCH 1/2] package/efl: bump to version 1.22.0
+Message-ID: <20190413131418.31097-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Remove upstream commit.
 
+https://www.enlightenment.org/news/efl-1.22.0
 
-On 27/03/2019 23:13, Andreas Naumann wrote:
-> Hi,
-> 
-> I'd really be interested if somebody remembers why this was needed. *.la
-> files are fixed in another generic step anyway, so why do it twice?
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ ...e-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch | 34 ----------------------
+ package/efl/efl.hash                               |  4 +--
+ package/efl/efl.mk                                 |  2 +-
+ 3 files changed, 3 insertions(+), 37 deletions(-)
+ delete mode 100644 package/efl/0001-evas-gl-make-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch
 
- That's easy: at the time this was added (commit
-1737b5648c9f778149eb7da5897b66a9577d22c4 from 2013) the fixup was only done for
-autotools packages, not for all packages. That changed only with commit
-67f8138a46388f28d00dc8711b64d04ac7ebb464 in 2015.
-
-> Also, I have not found absolute /usr/lib pathes in any of the prl files
-> without this.
-
- This I can't explain. I've added Thomas in Cc but I doubt that he remembers.
-
- But isn't this exactly what gets fixed by the previous patch?
-
- BTW, this patch should also remove the definition of the macro.
-
- Regards,
- Arnout
-
-
-> 
-> regards,
-> Andreas
-> 
-> 
-> Am 22.03.19 um 19:39 schrieb Andreas Naumann:
->> After fixing Prefix in our custom qt.conf, Qt computes and embeds the
->> correct sysroot prefixed pathes in all *.la and *.prl files.
->>
->> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de> ---
->> package/pkg-qmake.mk | 1 - 1 file changed, 1 deletion(-)
->>
->> diff --git a/package/pkg-qmake.mk b/package/pkg-qmake.mk index
->> 11cfb809fc..9293253fae 100644 --- a/package/pkg-qmake.mk +++
->> b/package/pkg-qmake.mk @@ -77,7 +77,6 @@ define $(2)_INSTALL_STAGING_CMDS
->> $$(TARGET_MAKE_ENV) \ $$($(2)_MAKE_ENV) \ $$(MAKE) -C $$($$(PKG)_SRCDIR)
->> $$($(2)_INSTALL_STAGING_OPTS) - $$(QT5_LA_PRL_FILES_FIXUP) endef endif
->>
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/efl/0001-evas-gl-make-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch b/package/efl/0001-evas-gl-make-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch
+deleted file mode 100644
+index b64a200ffb..0000000000
+--- a/package/efl/0001-evas-gl-make-GLintptr-etc.-also-ndefed-for-GL_VERSIO.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From d045dd99acdd47be238642d4f9384dccacde2b42 Mon Sep 17 00:00:00 2001
+-From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
+-Date: Sat, 15 Dec 2018 16:19:01 +0000
+-Subject: [PATCH] evas gl - make GLintptr etc. also ndefed for GL_VERSION_1_5
+- fix typedef
+-
+-It seems that GL_VERSION_1_5 define == these provided by gl already. At
+-least reading the mesa headers I do, so this should fix T7502
+-
+-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+----
+- src/lib/evas/Evas_GL.h | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/lib/evas/Evas_GL.h b/src/lib/evas/Evas_GL.h
+-index fa3e6f4..5524d82 100644
+---- a/src/lib/evas/Evas_GL.h
+-+++ b/src/lib/evas/Evas_GL.h
+-@@ -4272,9 +4272,11 @@ typedef signed int       GLfixed;      // Changed khronos_int32_t
+- 
+- #ifndef GL_ES_VERSION_2_0
+- /* GL types for handling large vertex buffer objects */
+--#include <stddef.h>
+-+# ifndef GL_VERSION_1_5
+-+#  include <stddef.h>
+- typedef ptrdiff_t GLintptr;     // Changed khronos_intptr_t
+- typedef ptrdiff_t GLsizeiptr;   // Changed khronos_ssize_t
+-+# endif
+- #endif
+- 
+- /* Some definitions from GLES 3.0.
+--- 
+-2.14.1
+-
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index bbefdeec66..18d867bfe4 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,5 +1,5 @@
+-# From https://download.enlightenment.org/rel/libs/efl/efl-1.21.1.tar.xz.sha256
+-sha256 44774b42b3dbbbe4d124c8fddcd169c6ffab9d602d1a757abcfb9a84e001a928 efl-1.21.1.tar.xz
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.22.0.tar.xz.sha256
++sha256 6ac87450cb55a5948c550dbeb05464f5fc1b0616c52dcb1cb2efbda73999c8ef efl-1.22.0.tar.xz
+ 
+ sha256 d949e42ca8fd48d275c397c5fc2ac34c9b63ada715dcaf1a670e17bb62964341  COMPLIANCE
+ sha256 1f0597d326e2fdb54aa2f0caec6d8bb0afb9941ef32475f017ed02ca214fcf37  COPYING
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index c4fd676be1..ecc31f84c4 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EFL_VERSION = 1.21.1
++EFL_VERSION = 1.22.0
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+, FTL, MIT
+-- 
+2.14.5
