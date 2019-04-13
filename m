@@ -1,33 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 13 Apr 2019 21:16:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sconeserver: drop unneeded
- static openssl workaround
-In-Reply-To: <20190413091246.27331-1-fontaine.fabrice@gmail.com>
-References: <20190413091246.27331-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190413211645.3c8a517b@windsurf>
+Date: Sat, 13 Apr 2019 21:27:48 +0200
+Subject: [Buildroot] [git commit] package/luadbi-sqlite3: bump to version
+ 0.7.2
+Message-ID: <20190413192337.E29858E75C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 13 Apr 2019 11:12:46 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=16de141ddbfbf41b4336565449f5719ca5956a5e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> sconeserver can't be built statically since commit
-> a845798aa8af0535b85ea0e46cc9e8af9d1ffed1
-> 
-> So drop unneeded workaround for statically linking with openssl
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/sconeserver/sconeserver.mk | 3 ---
->  1 file changed, 3 deletions(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/luadbi-sqlite3/luadbi-sqlite3.hash | 2 +-
+ package/luadbi-sqlite3/luadbi-sqlite3.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/luadbi-sqlite3/luadbi-sqlite3.hash b/package/luadbi-sqlite3/luadbi-sqlite3.hash
+index 093a9067fd..3e865df300 100644
+--- a/package/luadbi-sqlite3/luadbi-sqlite3.hash
++++ b/package/luadbi-sqlite3/luadbi-sqlite3.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 2868dad4d189368fcf5cddd191965c8cb2efaa3a3ba83d50e6a88c30353f74ce  luadbi-sqlite3-0.6-2.src.rock
++sha256 c5b043db43941a3c6e43d3e3699236846ed6d03a6c4cb12fa1a497f965138d9f  luadbi-sqlite3-0.7.2-1.src.rock
+ sha256 988d73cc2e56f972e8177091e084855fc2904d0fafcfe5c4e02864f25ce2b928  luadbi/COPYING
+diff --git a/package/luadbi-sqlite3/luadbi-sqlite3.mk b/package/luadbi-sqlite3/luadbi-sqlite3.mk
+index 44cf4d1072..4ae2b5cf38 100644
+--- a/package/luadbi-sqlite3/luadbi-sqlite3.mk
++++ b/package/luadbi-sqlite3/luadbi-sqlite3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUADBI_SQLITE3_VERSION = 0.6-2
++LUADBI_SQLITE3_VERSION = 0.7.2-1
+ LUADBI_SQLITE3_SUBDIR = luadbi
+ LUADBI_SQLITE3_LICENSE = MIT
+ LUADBI_SQLITE3_LICENSE_FILES = $(LUADBI_SQLITE3_SUBDIR)/COPYING
