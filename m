@@ -1,43 +1,38 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 13 Apr 2019 16:23:30 +0200
-Subject: [Buildroot] [git commit] package/msmtp: drop unneeded static
- openssl workaround
-Message-ID: <20190413143605.8D3588D413@busybox.osuosl.org>
+Date: Sat, 13 Apr 2019 16:07:22 +0200
+Subject: [Buildroot] [git commit] package/pure-ftpd: add optional mysql
+ dependency
+Message-ID: <20190413143605.7ECF88E168@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=117108d59c32b29d332454f63d491ed63321e754
+commit: https://git.buildroot.net/buildroot/commit/?id=f5c906c5985879a5c5a3a8f99c243205ec853f41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-msmtp uses pkg-config to find openssl dependencies such as lz or latomic
-so drop unneeded openssl workaround that was added by
-https://git.buildroot.net/buildroot/commit/package/msmtp?id=468bbc1538aaea87beaf455a2ad6ea5a255d5f58
-
-I don't know why it was added seven years ago as msmtp already used
-pkg-config at this time:
-https://github.com/marlam/msmtp-mirror/blob/rel-1-4-27/configure.ac
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/msmtp/msmtp.mk | 4 ----
- 1 file changed, 4 deletions(-)
+ package/pure-ftpd/pure-ftpd.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
-index 079c7c2319..db3d42cd94 100644
---- a/package/msmtp/msmtp.mk
-+++ b/package/msmtp/msmtp.mk
-@@ -46,10 +46,6 @@ MSMTP_DEPENDENCIES += gnutls
- else ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MSMTP_CONF_OPTS += --with-tls=openssl
- MSMTP_DEPENDENCIES += openssl
--ifeq ($(BR2_STATIC_LIBS),y)
--# openssl uses zlib, so we need to explicitly link with it when static
--MSMTP_CONF_ENV += LIBS=-lz
--endif
- else
- MSMTP_CONF_OPTS += --with-tls=no
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index a9268b4446..93ad57c3f3 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -30,6 +30,13 @@ ifeq ($(BR2_PACKAGE_LIBSODIUM),y)
+ PURE_FTPD_DEPENDENCIES += libsodium
  endif
+ 
++ifeq ($(BR2_PACKAGE_MYSQL),y)
++PURE_FTPD_CONF_OPTS += --with-mysql=$(STAGING_DIR)/usr
++PURE_FTPD_DEPENDENCIES += mysql
++else
++PURE_FTPD_CONF_OPTS += --without-mysql
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENLDAP),y)
+ PURE_FTPD_CONF_OPTS += --with-ldap
+ PURE_FTPD_DEPENDENCIES += openldap
