@@ -1,56 +1,109 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 13 Apr 2019 22:21:37 +0200
-Subject: [Buildroot] [PATCH 1/1] Add libvirt (KVM) support
-In-Reply-To: <20190215173607.13773-1-christopher@lecroq.be>
-References: <20190215173607.13773-1-christopher@lecroq.be>
-Message-ID: <20190413222137.6c0cba37@windsurf>
+Date: Sat, 13 Apr 2019 22:35:09 +0200
+Subject: [Buildroot] [PATCH v2] package/xmlsec1: new package
+In-Reply-To: <20190210151207.18441-1-bastian.breit.buildroot@gmail.com>
+References: <20190210151207.18441-1-bastian.breit.buildroot@gmail.com>
+Message-ID: <20190413223509.20366104@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Christopher,
+Hello Bastian,
 
-Sorry for the very long delay in replying. I am not an expert with the
-Vagrant stuff, so I'm adding Angelo in Cc who hopefully will be able to
-comment further. Still, I have a few comments.
+Sorry for the very slow feedback. I wanted to apply this patch (after
+some rework), but some fundamental thing is missing, which requires
+another iteration: the commit log lacks your Signed-off-by line. So
+I'll do a full review below.
 
-First, the commit title should be:
+First, the commit title should match the package name:
 
-	support/misc/Vagrantfile: add libvirt/kvm support
+	package/libxmlsec1: new package
 
-On Fri, 15 Feb 2019 18:36:07 +0100
-Christopher Peeters <christopher@lecroq.be> wrote:
+On Sun, 10 Feb 2019 16:12:07 +0100
+Bastian Breit <bastian.breit.buildroot@gmail.com> wrote:
 
-> Signed-off-by: Christopher Peeters <christopher@lecroq.be>
+> This fixes spaces and tab formatting in the package folder.
+> Therefore an enty in DEVELOPERS is created.
+> Change from md5 to sha256 for checksums.
+> Remove unneeded libxslt dependency.
+
+The changelog should be after the "---" sign below, so that it doesn't
+end up in the commit log when the patch is applied.
+
+And more critically, we need your Signed-off-by at the end of the
+commit log.
+
 > ---
->  support/misc/Vagrantfile | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  DEVELOPERS                         |  3 +++
+>  package/Config.in                  |  1 +
+>  package/libxmlsec1/Config.in       | 11 +++++++++++
+>  package/libxmlsec1/libxmlsec1.hash |  4 ++++
+>  package/libxmlsec1/libxmlsec1.mk   | 20 ++++++++++++++++++++
+>  5 files changed, 39 insertions(+)
+>  create mode 100644 package/libxmlsec1/Config.in
+>  create mode 100644 package/libxmlsec1/libxmlsec1.hash
+>  create mode 100644 package/libxmlsec1/libxmlsec1.mk
 > 
-> diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
-> index 1ca5edc647..48f01a5807 100644
-> --- a/support/misc/Vagrantfile
-> +++ b/support/misc/Vagrantfile
-> @@ -29,6 +29,12 @@ Vagrant.configure('2') do |config|
->  		end
->  	end
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index f2e69cc041..2bcd561805 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -250,6 +250,9 @@ F:	package/tcpdump/
+>  F:	package/ti-uim/
+>  F:	package/uhubctl/
 >  
-> +  config.vm.provider :libvirt do |v, override|
-> +    override.vm.box = 'generic/ubuntu1804'
+> +N: Bastian Breit <bastian.breit.buildroot@gmail.com>
+> +F: package/libxmlsec1/
 
-Why are you overriding the distribution being used? It seems odd that
-depending on the virtualization technology, a different distribution
-gets installed inside the VM.
+Please fix the indentation here to comply with the rest of the file.
 
-> +    v.memory = VM_MEMORY
-> +    v.cpus = VM_CORES
-> +  end 
+> diff --git a/package/libxmlsec1/libxmlsec1.hash b/package/libxmlsec1/libxmlsec1.hash
+> new file mode 100644
+> index 0000000000..9ff3b35454
+> --- /dev/null
+> +++ b/package/libxmlsec1/libxmlsec1.hash
+> @@ -0,0 +1,4 @@
+> +# Locally calculated
+> +sha256 97d756bad8e92588e6997d2227797eaa900d05e34a426829b149f65d87118eb6  xmlsec1-1.2.27.tar.gz
+> +# Locally calculated
+> +sha256 526285395dd39627199ba20fd7f70a2608c8c8c70e4fea04aceddd71baa53d07  Copyright
+> diff --git a/package/libxmlsec1/libxmlsec1.mk b/package/libxmlsec1/libxmlsec1.mk
+> new file mode 100644
+> index 0000000000..e6a0a375e9
+> --- /dev/null
+> +++ b/package/libxmlsec1/libxmlsec1.mk
+> @@ -0,0 +1,20 @@
+> +################################################################################
+> +#
+> +# libxmlsec1
+> +#
+> +################################################################################
+> +
+> +LIBXMLSEC1_VERSION = 1.2.27
+> +LIBXMLSEC1_SOURCE = xmlsec1-$(LIBXMLSEC1_VERSION).tar.gz
+> +LIBXMLSEC1_SITE = http://www.aleksey.com/xmlsec/download
+> +LIBXMLSEC1_LICENSE = MIT
+> +LIBXMLSEC1_LICENSE_FILES = Copyright
+> +
+> +LIBXMLSEC1_CONF_OPTS += --enable-crypto-dl=no
+> +LIBXMLSEC1_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
+> +LIBXMLSEC1_CONF_OPTS += --with-libxslt=no
+> +LIBXMLSEC1_CONF_OPTS += --with-gnutls=no
+> +LIBXMLSEC1_CONF_OPTS += --with-gcrypt=no
 
-The indentation is also bogus: the file uses tabs, and you used two
-spaces. Could you fix that up ?
+One assignment is enough, and use --enable/--disable and
+--with/--without. I.e:
 
-Thanks,
+LIBXMLSEC1_CONF_OPTS = \
+	--disable-crypto-dl=no \
+	--with-openssl=$(STAGING_DIR)/usr \
+	--without-libxslt \
+	--without-gnutls \
+	--without-gcrypt
+
+Thanks!
 
 Thomas
 -- 
