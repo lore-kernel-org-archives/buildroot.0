@@ -1,118 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 13 Apr 2019 22:53:18 +0200
-Subject: [Buildroot] [PATCH 2/2] package/suricata: new package
-In-Reply-To: <20190314212600.20918-2-fontaine.fabrice@gmail.com>
-References: <20190314212600.20918-1-fontaine.fabrice@gmail.com>
- <20190314212600.20918-2-fontaine.fabrice@gmail.com>
-Message-ID: <20190413225318.5ce5559b@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 13 Apr 2019 22:59:21 +0200
+Subject: [Buildroot] [PATCH RFC/next 0/4] Unify configuration/makefiles
+ for the GTK and WPE WebKit packages
+In-Reply-To: <20190218171719.18721-1-aperez@igalia.com>
+References: <20190218171719.18721-1-aperez@igalia.com>
+Message-ID: <a6c36acc-91c7-e3c9-0f2b-e693f76468e3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+ Hi Adrian,
 
-On Thu, 14 Mar 2019 22:26:00 +0100
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+ It took us a bit of time, but finally a few of us got together and discussed
+this series.
 
-> Suricata is a free and open source, mature, fast and robust
-> network threat detection engine.
+On 18/02/2019 18:17, Adrian Perez de Castro wrote:
+> Hello!
 > 
-> The Suricata engine is capable of real time intrusion
-> detection (IDS), inline intrusion prevention (IPS), network
-> security monitoring (NSM) and offline pcap processing.
+> Both the GTK and WPE WebKit ports share many dependencies (usage of GLib,
+> libsoup, GStreamer, Cairo, etc.), their supported platforms, and both
+> receive releases from the same stable branch following the same schedule:
+> major releases twice a year, around the release dates for GNOME.
 > 
-> https://suricata-ids.org
+> Because of the above, it is possible to factor out commonalities from
+> the packaging for both the GTK and WPE WebKit ports. This patch set tries
+> to explore a possible way of doing it by moving both packages (plus libwpe
+> and wpebackend-fdo, which are specific to the WPE port) into a new
+> package/webkit/ subdirectory, where common parts live in a webkit.mk
+> and a Config.in file.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> I would really like to make it easier to maintain both the webkitgtk
+> and wpewebkit packages by factoring out the commonalities, so I am looking
+> forward to read you feedback on this patch set :-)
 
-Overall looks good. I was about to commit, but I have some doubts about
-the systemd unit, and therefore will take advantage of those doubts to
-also make a few comments about other aspects.
+ We doubt that this really makes it easier to maintain these packages.
 
-> diff --git a/package/suricata/S99suricata b/package/suricata/S99suricata
-> new file mode 100644
-> index 0000000000..35a034b179
-> --- /dev/null
-> +++ b/package/suricata/S99suricata
+ One of the design guidelines of Buildroot is "Explicit rather than implicit".
+Although software developers are tempted to "refactor" common bits into
+variables, this is often not making it easier to understand the code, and also
+not making it easier to change it. The refactoring of this series smells a bit
+like that: it factors out the options that happen to be the same.
 
-In terms of init scripts, package/busybox/S02klogd is now the
-"reference". I recommend following this example.
+ Also, it makes these packages different from how we normally do things in
+Buildroot. Normally, we don't use subdirectories. Also normally, the .mk file is
+self-contained, so within one file (and assuming you know how the infra works),
+you have everything needed to understand how the build system will behave. After
+this series, it will become more difficult to find out e.g. why the package has
+this particular dependency or config option. When you want to change something
+in wpewebkit, you need to also open, look at and potentially modify webkit.mk.
 
-> @@ -0,0 +1,39 @@
-> +#!/bin/sh
-> +
-> +NAME=suricata
-> +PIDFILE=/var/run/$NAME.pid
-> +DAEMON=/usr/bin/$NAME
-> +DAEMON_ARGS="-c /etc/suricata/suricata.yaml -i eth0"
+ Admittedly, the latter can be an advantage too: when you're editing wpewebkit,
+you're forced to consider if and how it impacts webkitgtk as well. But the same
+could be achieved by simply adding a comment in the .mk file that you should
+also look at the other package and do similar updates there.
 
-You clearly want to include a /etc/default/${DAEMON} file. DAEMON
-should be just the name of the program, see S02klogd.
+ To compare: we have for example mesa3d and mesa3d-headers, which are two
+separate independent packages even though they're tightly related. For those, we
+consciously chose to keep them separate to keep things explicit. In the end, not
+so much would be shared between the two packages. I think we have a similar case
+here: the common Config.in and webkit.mk files are less than 30 lines, and the
+non-shared Config.in and .mk files are much larger than that.
 
-> +case "$1" in
-> +  start)
-> +	start
-> +	;;
-> +  stop)
-> +	stop
-> +	;;
-> +  restart|reload)
-> +	restart
-> +	;;
-> +  *)
-> +	echo "Usage: $0 {start|stop|restart}"
-> +	exit 1
+ Therefore, I've marked the series as Rejected in patchwork.
 
-Please follow the indentation style of S02klogd.
+ However, it's a thin line. If you really believe that unifying these packages
+would make maintaining them significantly easier, feel free to resubmit the
+series, with a short explanation why it makes life easier. This probably means:
+how does this refactoring make it less likely that you make a mistake when
+you're updating the webkit stuff.
 
+ In case you would do that, I have one more suggestion: you should probably also
+factor out WEBKIT_MAJOR = 2.22. Otherwise, a common _ARCH_DEPENDS risks to
+become incorrect when one of them is bumped and the other is not.
 
-> +ifeq ($(BR2_PACKAGE_PYTHON),y)
-> +SURICATA_CONF_OPTS += --enable-python
-> +SURICATA_DEPENDENCIES += python
-> +else
-> +SURICATA_CONF_OPTS += --disable-python
-> +endif
-
-So only Python 2.x is supported ?
-
-> +ifeq ($(BR2_TOOLCHAIN_HAS_SSP),y)
-> +SURICATA_CONF_OPTS += --enable-gccprotect
-> +else
-> +SURICATA_CONF_OPTS += --disable-gccprotect
-> +endif
-
-We should unconditionally use --disable-gccprotect and let our
-gcc/wrapper pass the appropriate SSP/hardening options.
-
-> diff --git a/package/suricata/suricata.service b/package/suricata/suricata.service
-> new file mode 100644
-> index 0000000000..ca0be02dae
-> --- /dev/null
-> +++ b/package/suricata/suricata.service
-> @@ -0,0 +1,13 @@
-> +[Unit]
-> +Description=Suricata Intrusion Detection Service
-> +After=network.target
-> +
-> +[Service]
-> +ExecStartPre=/bin/rm -f /var/run/suricata.pid
-> +ExecStartPre=/usr/bin/mkdir -p /var/log/suricata
-> +ExecStart=/usr/bin/suricata -c /etc/suricata/suricata.yaml -i eth0 --pidfile /var/run/suricata.pid
-> +ExecReload=/bin/kill -USR2 $MAINPID
-
-I am a bit skeptical about the PID file handling. How is systemd going
-to know that the PID file is /var/run/suricata.pid ? Is this useful in
-the context of systemd ?
-
-I'm by no means not a systemd expert, but this seems weird to me. If a
-systemd-person could give more details about this, it would be nice.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ Regards,
+ Arnout
