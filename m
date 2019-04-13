@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Apr 2019 16:43:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pure-ftpd: fix static build
- with openssl and latomic
-In-Reply-To: <20190412212529.23242-1-fontaine.fabrice@gmail.com>
-References: <20190412212529.23242-1-fontaine.fabrice@gmail.com>
-Message-ID: <20e3d3a5-10ad-4b56-1f89-387b7f1db07c@mind.be>
+Date: Sat, 13 Apr 2019 16:43:23 +0200
+Subject: [Buildroot] [PATCH 1/2] package/msmtp: drop unneeded static
+ openssl workaround
+In-Reply-To: <20190413083218.6355-1-fontaine.fabrice@gmail.com>
+References: <20190413083218.6355-1-fontaine.fabrice@gmail.com>
+Message-ID: <00382d5e-ffdf-bc9f-be70-13f02e89504f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,38 +13,39 @@ To: buildroot@busybox.net
 
 
 
-On 12/04/2019 23:25, Fabrice Fontaine wrote:
-> Use pkg-config to find openssl dependencies such as lz or latomic
+On 13/04/2019 10:32, Fabrice Fontaine wrote:
+> msmtp uses pkg-config to find openssl dependencies such as lz or latomic
+> so drop unneeded openssl workaround that was added by
+> https://git.buildroot.net/buildroot/commit/package/msmtp?id=468bbc1538aaea87beaf455a2ad6ea5a255d5f58
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/eba8d344446b0db6327c0588c456c14594984f76
+> I don't know why it was added seven years ago as msmtp already used
+> pkg-config at this time:
+> https://github.com/marlam/msmtp-mirror/blob/rel-1-4-27/configure.ac
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- Applied to master, thanks.
+ Applied both to master, thanks.
 
  Regards,
  Arnout
 
 > ---
->  package/pure-ftpd/pure-ftpd.mk | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+>  package/msmtp/msmtp.mk | 4 ----
+>  1 file changed, 4 deletions(-)
 > 
-> diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-> index 7012268874..6b85b0c651 100644
-> --- a/package/pure-ftpd/pure-ftpd.mk
-> +++ b/package/pure-ftpd/pure-ftpd.mk
-> @@ -40,10 +40,8 @@ endif
->  
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
->  PURE_FTPD_CONF_OPTS += --with-tls
-> -PURE_FTPD_DEPENDENCIES += openssl
+> diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+> index 079c7c2319..db3d42cd94 100644
+> --- a/package/msmtp/msmtp.mk
+> +++ b/package/msmtp/msmtp.mk
+> @@ -46,10 +46,6 @@ MSMTP_DEPENDENCIES += gnutls
+>  else ifeq ($(BR2_PACKAGE_OPENSSL),y)
+>  MSMTP_CONF_OPTS += --with-tls=openssl
+>  MSMTP_DEPENDENCIES += openssl
 > -ifeq ($(BR2_STATIC_LIBS),y)
-> -PURE_FTPD_CONF_ENV += LIBS='-lssl -lcrypto -lz'
+> -# openssl uses zlib, so we need to explicitly link with it when static
+> -MSMTP_CONF_ENV += LIBS=-lz
 > -endif
-> +PURE_FTPD_DEPENDENCIES += host-pkgconf openssl
-> +PURE_FTPD_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
 >  else
->  PURE_FTPD_CONF_OPTS += --without-tls
+>  MSMTP_CONF_OPTS += --with-tls=no
 >  endif
 > 
