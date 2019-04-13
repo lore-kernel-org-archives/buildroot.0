@@ -1,79 +1,102 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Apr 2019 22:59:21 +0200
-Subject: [Buildroot] [PATCH RFC/next 0/4] Unify configuration/makefiles
- for the GTK and WPE WebKit packages
-In-Reply-To: <20190218171719.18721-1-aperez@igalia.com>
-References: <20190218171719.18721-1-aperez@igalia.com>
-Message-ID: <a6c36acc-91c7-e3c9-0f2b-e693f76468e3@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 13 Apr 2019 23:06:20 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix rasberry Pi 64bit firmware overlay
+ inclusion
+In-Reply-To: <20190103110036.14604-1-flatmax@flatmax.org>
+References: <20190103110036.14604-1-flatmax@flatmax.org>
+Message-ID: <20190413210620.GP2539@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Adrian,
+Matt, All,
 
- It took us a bit of time, but finally a few of us got together and discussed
-this series.
-
-On 18/02/2019 18:17, Adrian Perez de Castro wrote:
-> Hello!
+On 2019-01-03 22:00 +1100, Matt Flax spake thusly:
+> This patch enables the inclusion of the Pi's overlays. Previously
+> the overlays were not included in the genimage configuration.
+> This patch ensures overlays are included in the sdcard (when
+> enabled) by defaulting to the inclusion of an empty
+> output/images/rpi-firmware/overlays directory in genimage cfg.
 > 
-> Both the GTK and WPE WebKit ports share many dependencies (usage of GLib,
-> libsoup, GStreamer, Cairo, etc.), their supported platforms, and both
-> receive releases from the same stable branch following the same schedule:
-> major releases twice a year, around the release dates for GNOME.
+> The Pi's overlays are built with the following config
+> variables:
+> BR2_PACKAGE_RPI_FIRMWARE=y
+> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
+> BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+> BR2_LINUX_KERNEL_IMAGE_NAME="Image"
+> BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image modules dtbs"
 > 
-> Because of the above, it is possible to factor out commonalities from
-> the packaging for both the GTK and WPE WebKit ports. This patch set tries
-> to explore a possible way of doing it by moving both packages (plus libwpe
-> and wpebackend-fdo, which are specific to the WPE port) into a new
-> package/webkit/ subdirectory, where common parts live in a webkit.mk
-> and a Config.in file.
+> After building, the dtbo files are present in the
+> output/images/rpi-firmware/overlays directory but not added
+> to the sdcard because they are missing from the genimage cfg
+> file.
 > 
-> I would really like to make it easier to maintain both the webkitgtk
-> and wpewebkit packages by factoring out the commonalities, so I am looking
-> forward to read you feedback on this patch set :-)
+> Signed-off-by: Matt Flax <flatmax@flatmax.org>
 
- We doubt that this really makes it easier to maintain these packages.
+After a quick discussion on IRC woth Thomas, we find that this patch is
+indeed acceptable.
 
- One of the design guidelines of Buildroot is "Explicit rather than implicit".
-Although software developers are tempted to "refactor" common bits into
-variables, this is often not making it easier to understand the code, and also
-not making it easier to change it. The refactoring of this series smells a bit
-like that: it factors out the options that happen to be the same.
+However, I have a minor comment about it, see below...
 
- Also, it makes these packages different from how we normally do things in
-Buildroot. Normally, we don't use subdirectories. Also normally, the .mk file is
-self-contained, so within one file (and assuming you know how the infra works),
-you have everything needed to understand how the build system will behave. After
-this series, it will become more difficult to find out e.g. why the package has
-this particular dependency or config option. When you want to change something
-in wpewebkit, you need to also open, look at and potentially modify webkit.mk.
+> ---
+>  board/raspberrypi/genimage-raspberrypi3-64.cfg | 1 +
+>  package/rpi-firmware/rpi-firmware.mk           | 4 ++++
+>  2 files changed, 5 insertions(+)
+> 
+> diff --git a/board/raspberrypi/genimage-raspberrypi3-64.cfg b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+> index 0d0ca750a7..af1d17cde7 100644
+> --- a/board/raspberrypi/genimage-raspberrypi3-64.cfg
+> +++ b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+> @@ -9,6 +9,7 @@ image boot.vfat {
+>        "rpi-firmware/config.txt",
+>        "rpi-firmware/fixup.dat",
+>        "rpi-firmware/start.elf",
+> +      "rpi-firmware/overlays",
+>        "Image"
+>      }
+>    }
+> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+> index bb54904ae6..0df7b17cbd 100644
+> --- a/package/rpi-firmware/rpi-firmware.mk
+> +++ b/package/rpi-firmware/rpi-firmware.mk
+> @@ -24,6 +24,10 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+>  		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
+>  	done
+>  endef
+> +else
+> +define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+> +		$(INSTALL) -d $(BINARIES_DIR)/rpi-firmware/overlays || exit 1;
 
- Admittedly, the latter can be an advantage too: when you're editing wpewebkit,
-you're forced to consider if and how it impacts webkitgtk as well. But the same
-could be achieved by simply adding a comment in the .mk file that you should
-also look at the other package and do similar updates there.
+No need for the '|| exit 1' part in this case.
 
- To compare: we have for example mesa3d and mesa3d-headers, which are two
-separate independent packages even though they're tightly related. For those, we
-consciously chose to keep them separate to keep things explicit. In the end, not
-so much would be shared between the two packages. I think we have a similar case
-here: the common Config.in and webkit.mk files are less than 30 lines, and the
-non-shared Config.in and .mk files are much larger than that.
+It is important to use it ion the loop, above, because it is a shell
+loop, so an error in the commands would not be noticed. Here however,
+this is a single command, so it will return in error if it fils and make
+will notice.
 
- Therefore, I've marked the series as Rejected in patchwork.
+Barring that, which can be fixed when applying:
 
- However, it's a thin line. If you really believe that unifying these packages
-would make maintaining them significantly easier, feel free to resubmit the
-series, with a short explanation why it makes life easier. This probably means:
-how does this refactoring make it less likely that you make a mistake when
-you're updating the webkit stuff.
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
- In case you would do that, I have one more suggestion: you should probably also
-factor out WEBKIT_MAJOR = 2.22. Otherwise, a common _ARCH_DEPENDS risks to
-become incorrect when one of them is bumped and the other is not.
+> +endef
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
+> -- 
+> 2.19.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
- Regards,
- Arnout
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
