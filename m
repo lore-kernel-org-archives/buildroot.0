@@ -1,76 +1,39 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Apr 2019 17:18:14 +0200
-Subject: [Buildroot] [PATCH] linux: simplify LINUX_BUILD_CMDS
-In-Reply-To: <20190408202136.22944-1-thomas.petazzoni@bootlin.com>
-References: <20190408202136.22944-1-thomas.petazzoni@bootlin.com>
-Message-ID: <e6b0b91c-ad85-6cee-ff61-cea100a89da3@mind.be>
+Date: Sat, 13 Apr 2019 17:24:07 +0200
+Subject: [Buildroot] [PATCHv5 1/9] support/download: reintroduce
+ 'source-check' target
+In-Reply-To: <0a9e8f22-a95f-47d3-612e-23bcca6c20a6@mind.be>
+References: <20190219103839.25409-1-patrickdepinguin@gmail.com>
+ <20190317143215.GD14237@scaer> <20190317155719.14839925@windsurf>
+ <69fd8276-ea53-75a5-240a-a0e146cd8b62@mind.be>
+ <20190327173548.7db271b5@windsurf>
+ <0a9e8f22-a95f-47d3-612e-23bcca6c20a6@mind.be>
+Message-ID: <c2ae9ea6-d77f-be81-a991-6efa933a258d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Thomas DS,
 
+On 27/03/2019 18:25, Arnout Vandecappelle wrote:
+> 
+> 
+> On 27/03/2019 17:35, Thomas Petazzoni wrote:
+[snip]
+>> We already have "make external-deps" but it only prints the file names,
+>> not the full URL.
+> 
+>  True! So, we could extend external-deps with printing the URL (similar to how
+> printvars uses RAW_VARS maybe, to not break existing scripts using
+> external-deps). We could have variables to ask for primary, upstream or secondary.
 
-On 08/04/2019 22:21, Thomas Petazzoni wrote:
-> We currently do the Linux build as follows:
-> 
->    make <imagename>
->    if modules enabled; make modules; fi
-> 
-> However, Clement L?ger recently reported that due to us not using the
-> "all" target, the GDB scripts that the kernel can build when
-> CONFIG_GDB_SCRIPTS is enabled are not built, since upstream kernel
-> commit 67274c083438340ad16c1437caebc84e1253b224 (merged in v5.1) moved
-> that logic to a separate scripts_gdb target, which is a dependency of
-> the "all" target.
-> 
-> While we could add some more logic to explicit generate the
-> "scripts_gdb" target, this logic would fail on Linux < 5.1 for which
-> this make target doesn't exist.
-> 
-> So instead, let's simplify the build logic, and use:
-> 
->   make all <imagename>
-> 
-> The "all" target automatically depends on "modules", so we no longer
-> need to explicit generate the "modules" target separately.
-> 
-> As a result of this change, we may generate additional kernel images
-> compared to what was done previously, but such images would anyway not
-> be installed, and the additional built time is minimal.
-> 
-> We did some research as to why the kernel build was done like this in
-> Buildroot, and it's been like that since linux/linux.mk was added back
-> in 2010 by commit 487e21cff69b30b404146b2ffb46959a728a4002 ("New,
-> simpler, infrastructure for building the Linux kernel").
-> 
-> Reported-by: Cl?ment Leger <cleger@kalray.eu>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ With Yann's show-info series on its way in, can we consider this series as
+Rejected?
 
- Applied to master, thanks.
+ Thanks for the patches anyway, it was the push needed to get Yann to implement
+the Right Thing (tm) :-)
 
  Regards,
  Arnout
-
-> ---
->  linux/linux.mk | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index c7081db88f..46645f4780 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -438,10 +438,7 @@ define LINUX_BUILD_CMDS
->  	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
->  		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
->  	)
-> -	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
-> -	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then \
-> -		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ; \
-> -	fi
-> +	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all $(LINUX_TARGET_NAME)
->  	$(LINUX_BUILD_DTB)
->  	$(LINUX_APPEND_DTB)
->  endef
-> 
