@@ -1,90 +1,165 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 13 Apr 2019 16:05:37 +0200
-Subject: [Buildroot] [git commit] package/pure-ftpd: bump to version 1.0.49
-Message-ID: <20190413140221.230E48A4CA@busybox.osuosl.org>
+From: jonsmirl at gmail.com <jonsmirl@gmail.com>
+Date: Sat, 13 Apr 2019 10:11:30 -0400
+Subject: [Buildroot] Help making package file for libp11
+In-Reply-To: <993ea935-d7bf-e7bb-3641-ec20922f7d08@mind.be>
+References: <CAKON4OzT+DFQ2n4ic7CF+YD66UojXOjxyo2+ZVCZ7XyQdhng3w@mail.gmail.com>
+ <CAKON4OykMpXY7h3dPWF6vXqQL9WxuwuzH1cHYj0M7MJB63kLvA@mail.gmail.com>
+ <993ea935-d7bf-e7bb-3641-ec20922f7d08@mind.be>
+Message-ID: <CAKON4Oz8zQPoGkivckLuuehA34ZU8zxFiHZ-iQGqSTz0_8TiGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26d5d1c0a20719876220b429a43f8b1bcc29138b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, Apr 13, 2019 at 8:59 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 01/04/2019 22:03, jonsmirl at gmail.com wrote:
+> > The error is coming from pkg-generic.mk, step_check_build_dir()
+> >
+> > libp11 is trying to install a crypto engine for openssl. It uses pkg_config
+> > to get the path
+> > enginesexecdir="`$PKG_CONFIG --variable=enginesdir --silence-errors
+> > libcrypto`"
+> >
+> > The path returned from pkg_config is /usr/lib/engines-1.1
+> >
+> > But then the buildroot build system is mangling the enginesexecdir path
+> > into...
+> > /home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot//home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/engines-1.1
+> >
+> > So where does this path mangling happen? Why is it using a host path?
+>
+>  It's not using a host path; it's using the staging path (everything up to
+> sysroot), but the path is printed twice.
+>
+>  However, I don't have that issue:
 
-- Update hash of license file (update in year)
-- Remove patch (already in version)
-- Remove --with-rfc2640 (option removed with
-  https://github.com/jedisct1/pure-ftpd/commit/33eda763bfca8dfcf736275272b84602dcd18549)
+A complete rebuild of my system fixed the error. libp11 is checked in
+on git master now,
+but it needs a version bump to support ECC.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/pure-ftpd/0001-cross.patch | 25 -------------------------
- package/pure-ftpd/pure-ftpd.hash   |  4 ++--
- package/pure-ftpd/pure-ftpd.mk     |  5 ++---
- 3 files changed, 4 insertions(+), 30 deletions(-)
 
-diff --git a/package/pure-ftpd/0001-cross.patch b/package/pure-ftpd/0001-cross.patch
-deleted file mode 100644
-index f8b1d81da8..0000000000
---- a/package/pure-ftpd/0001-cross.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--Do not include host paths when cross-compiling.
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr pure-ftpd-1.0.36.org/configure pure-ftpd-1.0.36/configure
----- pure-ftpd-1.0.36.org/configure	2012-03-16 06:29:23.000000000 +0100
--+++ pure-ftpd-1.0.36/configure	2014-09-28 19:55:56.650529713 +0200
--@@ -6319,17 +6319,6 @@
-- 
-- 
-- 
---if test -d /usr/local/include; then
---  CPPFLAGS="$CPPFLAGS -I/usr/local/include"
---fi
---
---if test -d /usr/kerberos/include; then
---  CPPFLAGS="$CPPFLAGS -I/usr/kerberos/include"
---fi
---
---if test -d /usr/local/lib; then
---  LDFLAGS="$LDFLAGS -L/usr/local/lib"
---fi
-- 
-- if uname | fgrep SunOS > /dev/null 2> /dev/null ; then
--   CPPFLAGS="$CPPFLAGS -D_XPG4_2=1"
-diff --git a/package/pure-ftpd/pure-ftpd.hash b/package/pure-ftpd/pure-ftpd.hash
-index f01da51a37..8fe73e4fb0 100644
---- a/package/pure-ftpd/pure-ftpd.hash
-+++ b/package/pure-ftpd/pure-ftpd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 cb1b695e779a06e42d62d7a1a428d2f605d621dfd5afe4e192b5f9fc4e343692  pure-ftpd-1.0.47.tar.bz2
--sha256 e724ba991d8efa4c963e84ec31314c532dab00ac455ef77020fe60e78177bf23  COPYING
-+sha256 8a727dfef810f275fba3eb6099760d4f8a0bdeae2c1197d0d5bfeb8c1b2f61b6  pure-ftpd-1.0.49.tar.bz2
-+sha256 3a9e94382a69d04aa434d69b20ff2c01dbbfcb7191f05f69a7109c0ee1559c19  COPYING
-diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
-index 7012268874..aed528b981 100644
---- a/package/pure-ftpd/pure-ftpd.mk
-+++ b/package/pure-ftpd/pure-ftpd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PURE_FTPD_VERSION = 1.0.47
-+PURE_FTPD_VERSION = 1.0.49
- PURE_FTPD_SITE = https://download.pureftpd.org/pub/pure-ftpd/releases
- PURE_FTPD_SOURCE = pure-ftpd-$(PURE_FTPD_VERSION).tar.bz2
- PURE_FTPD_LICENSE = ISC
-@@ -13,8 +13,7 @@ PURE_FTPD_DEPENDENCIES = $(if $(BR2_PACKAGE_LIBICONV),libiconv)
- 
- PURE_FTPD_CONF_OPTS = \
- 	--with-altlog \
--	--with-puredb \
--	--with-rfc2640
-+	--with-puredb
- 
- ifeq ($(BR2_PACKAGE_ELFUTILS),y)
- PURE_FTPD_DEPENDENCIES += elfutils
+>
+> $ output/host/bin/pkg-config --variable=enginesdir --silence-errors libcrypto
+> output/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib/engines-1.1
+>
+>  Is it possible that you're using some outdated Buildroot version that doesn't
+> have 7125fc5c1a8a96ff8eee057789358702e1b55835 applied yet?
+>
+>
+>  Regards,
+>  Arnout
+>
+>
+> > On Sun, Mar 31, 2019 at 10:57 PM jonsmirl at gmail.com <jonsmirl@gmail.com>
+> > wrote:
+> >
+> >> I made up a package file for libp11 based off from other posts to the
+> >> list...
+> >>
+> >> LIBP11_VERSION = e1210903291b1de9eabcad26e740a4b2fbcca692
+> >> LIBP11_SITE = $(call github,OpenSC,libp11,$(LIBP11_VERSION))
+> >> LIBP11_DEPENDENCIES = openssl
+> >> LIBP11_INSTALL_STAGING = YES
+> >> LIBP11_LICENSE = LGPLv2.1
+> >> LIBP11_LICENSE_FILES = COPYING
+> >> LIBP11_AUTORECONF = YES
+> >>
+> >> LIBP11_CONF_OPTS += --with-enginesdir=/usr/lib
+> >> ifeq ($(BR2_PACKAGE_P11_KIT),y)
+> >> LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
+> >> endif
+> >>
+> >> $(eval $(autotools-package))
+> >>
+> >> -----------------------------
+> >>
+> >> I'm getting an error with the path at the install stage...
+> >> Can anyone give me a clue as to what is wrong?
+> >>
+> >> make[2]: Entering directory
+> >>
+> >> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+> >> make[3]: Entering directory
+> >>
+> >> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+> >> make[3]: Nothing to be done for `install-exec-am'.
+> >>  /bin/mkdir -p
+> >> '/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/share/doc/libp11'
+> >>  /usr/bin/install -c -m 644 NEWS
+> >>
+> >> '/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/share/doc/libp11'
+> >> make[3]: Leaving directory
+> >>
+> >> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+> >> make[2]: Leaving directory
+> >>
+> >> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+> >> make[1]: Leaving directory
+> >>
+> >> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+> >>>>> libp11 e1210903291b1de9eabcad26e740a4b2fbcca692 Fixing libtool files
+> >> for la in $(find
+> >>
+> >> /home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib*
+> >> -name "*.la"); do \
+> >> cp -a "${la}" "${la}.fixed" && \
+> >> /bin/sed -i -e
+> >> "s:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot:@BASE_DIR
+> >> @:g"
+> >> \
+> >> -e
+> >> "s:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot:@STAGING_DIR
+> >> @:g"
+> >> \
+> >> -e
+> >> "s:/home/jonsmirl/aosp/lindenis/out/external-toolchain/gcc-linaro-5.3.1-arm:@TOOLCHAIN_EXTERNAL_INSTALL_DIR
+> >> @:g"
+> >> \
+> >> -e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
+> >> -e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR
+> >> @:/home/jonsmirl/aosp/lindenis/out/external-toolchain/gcc-linaro-5.3.1-arm:g"
+> >> \
+> >> -e "s:@STAGING_DIR
+> >> @:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot:g"
+> >> \
+> >> -e "s:@BASE_DIR
+> >> @:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot:g"
+> >> \
+> >> "${la}.fixed" && \
+> >> if cmp -s "${la}" "${la}.fixed"; then \
+> >> rm -f "${la}.fixed"; \
+> >> else \
+> >> mv "${la}.fixed" "${la}"; \
+> >> fi || exit 1; \
+> >> done
+> >> libp11: installs files in
+> >>
+> >> /home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot//home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot
+> >> make: ***
+> >> [/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692/.stamp_staging_installed]
+> >> Error 1
+> >> make: Leaving directory `/home/jonsmirl/aosp/lindenis/buildroot'
+> >>
+> >>
+> >> --
+> >> Jon Smirl
+> >> jonsmirl at gmail.com
+> >>
+> >
+> >
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> >
+
+
+
+-- 
+Jon Smirl
+jonsmirl at gmail.com
