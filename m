@@ -1,58 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 13 Apr 2019 22:38:39 +0200
-Subject: [Buildroot] [PATCH v2] package/xmlsec1: new package
-In-Reply-To: <CACHoAdpicM=WcFLCgcPoose_qx8Kcig-_sD6fN8uMTJmWuLCtg@mail.gmail.com>
-References: <20190210151207.18441-1-bastian.breit.buildroot@gmail.com>
- <CACHoAdpicM=WcFLCgcPoose_qx8Kcig-_sD6fN8uMTJmWuLCtg@mail.gmail.com>
-Message-ID: <20190413223839.65cd4e0e@windsurf>
+Date: Sat, 13 Apr 2019 22:40:14 +0200
+Subject: [Buildroot] [RFC 1/1] package/[wpe]webkit[gtk]: common config
+ BR2_PACKAGE_WEBKIT_ARCH_SUPPORT[_JIT]
+In-Reply-To: <20190330101940.25868-2-francois.perrad@gadz.org>
+References: <20190330101940.25868-1-francois.perrad@gadz.org>
+ <20190330101940.25868-2-francois.perrad@gadz.org>
+Message-ID: <20190413224014.7966e180@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Bastian,
+Hello Fran?ois,
 
-On Tue, 12 Feb 2019 17:13:08 +0100
-Bastian Breit <bastian.breit.buildroot@gmail.com> wrote:
+On Sat, 30 Mar 2019 11:19:40 +0100
+Francois Perrad <fperrad@gmail.com> wrote:
 
-> I would summit options with later commits for the dependencies like
-> gnutls which is currently deactivated for this package. Should that be
-> mentioned in the help text? It should be clear by reading the current
-> dependencies.
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/midori/Config.in       |  4 ++--
+>  package/webkitgtk/Config.in    |  8 ++++----
+>  package/webkitgtk/webkitgtk.mk |  2 +-
+>  package/wpewebkit/Config.in    | 36 +++-------------------------------
+>  package/wpewebkit/wpewebkit.mk |  2 +-
+>  5 files changed, 11 insertions(+), 41 deletions(-)
 
-We don't typically document all possible dependencies of packages in
-the help text, it would be annoying to maintain. Handling them in
-the .mk file is enough.
+Thanks for this alternate proposal, but after discussing with Yann and
+Arnout on IRC, the three of us agreed that we didn't like seeing one
+package defining options that don't match this package name, and then
+have those options re-used by another package.
 
-> Does anyone prefer gnutls over openssl for non licencing
-> reasons? I am not sure how to handle licence changing by selecting
-> different dependencies (gnutls vs openssl)
-
-Why would the license change ? The license of libxmlsec1 itself remains
-MIT.
-
-I guess that openssl/gnutls/libgcrypt is actually a choice, i.e one
-would use one of the three, correct ?
-
-If so, then you can do:
-
-	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS && !BR2_PACKAGE_LIBGCRYPT
-
-in the Config.in file, and:
-
-ifeq ($(BR2_PACKAGE_OPENSSL),y)
-LIBXMLSEC1_DEPENDENCIES += openssl
-LIBXMLSEC1_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
-else ifeq ($(BR2_PACKAGE_GNUTLS),y)
-...
-else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-...
-endif
-
-You could also do the same to support libxslt as an optional
-dependency. All of this can be done as part of the initial libxmlsec1
-submission, or as follow-up patches.
+We are also not entirely convinced by Adrian's proposal either. Arnout
+is going to reply separately about this.
 
 Best regards,
 
