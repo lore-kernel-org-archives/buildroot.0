@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Apr 2019 16:44:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/thrift: drop unneeded static
- openssl workaround
-In-Reply-To: <20190413083858.12941-1-fontaine.fabrice@gmail.com>
-References: <20190413083858.12941-1-fontaine.fabrice@gmail.com>
-Message-ID: <06a15c77-f0e9-68b5-febf-f0588ebbdb8b@mind.be>
+Date: Sat, 13 Apr 2019 16:52:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/llvm: fix build with gcc < 5.1
+In-Reply-To: <7955ee96-ad39-0554-f6cf-6c50ea8130ad@smile.fr>
+References: <20190413084555.2367-1-valentinkorenblit@gmail.com>
+ <7955ee96-ad39-0554-f6cf-6c50ea8130ad@smile.fr>
+Message-ID: <e51f32f9-be73-0f81-d819-0a97a82a6a41@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,33 +13,53 @@ To: buildroot@busybox.net
 
 
 
-On 13/04/2019 10:38, Fabrice Fontaine wrote:
-> thrift uses pkg-config to find openssl dependencies such as lz or
-> latomic so drop unneeded workaround
+On 13/04/2019 16:36, Romain Naour wrote:
+> Hi Valentin,
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Le 13/04/2019 ? 10:45, Valentin Korenblit a ?crit?:
+>> Fixes:
+>>
+>> http://autobuild.buildroot.net/results/0c046a1b57a4f0b992333003d41062e1b256eb0d
+>>
+>> Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
+>> ---
+>>  package/llvm/llvm.mk | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+>> index cd374d74b4..28c5e89706 100644
+>> --- a/package/llvm/llvm.mk
+>> +++ b/package/llvm/llvm.mk
+>> @@ -17,6 +17,9 @@ LLVM_INSTALL_STAGING = YES
+>>  HOST_LLVM_DEPENDENCIES = host-python
+>>  LLVM_DEPENDENCIES = host-llvm
+>>  
+> 
+> Maybe a comment about these options is welcome :)
+> 
+> # LLVM >= 9.0 will soon require C++14 support, building llvm 8.x using a
+> toolchain using gcc < 5.1 is deprecated but still build with gcc >= 4.8.
+> # https://reviews.llvm.org/D57264
 
- Applied to master, thanks. I've checked, this was already added in the first
-commit adding thrift.
+ I did exactly that and applied to master, thanks.
 
  Regards,
  Arnout
 
-> ---
->  package/thrift/thrift.mk | 2 --
->  1 file changed, 2 deletions(-)
+>> +HOST_LLVM_CONF_OPTS += -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON
+>> +LLVM_CONF_OPTS += -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON
 > 
-> diff --git a/package/thrift/thrift.mk b/package/thrift/thrift.mk
-> index 8a284229a1..6014bbfcdd 100644
-> --- a/package/thrift/thrift.mk
-> +++ b/package/thrift/thrift.mk
-> @@ -31,8 +31,6 @@ endif
->  
->  # thrift doesn't use the regular flags BUILD_{STATIC,SHARED}_LIBS
->  ifeq ($(BR2_STATIC_LIBS),y)
-> -# openssl uses zlib, so we need to explicitly link with it when static
-> -THRIFT_CONF_ENV += LIBS=-lz
->  THRIFT_CONF_OPTS += -DWITH_STATIC_LIB=ON -DWITH_BOOST_STATIC=ON -DWITH_SHARED_LIB=OFF
->  else ifeq ($(BR2_SHARED_LIBS),y)
->  THRIFT_CONF_OPTS += -DWITH_STATIC_LIB=OFF -DWITH_BOOST_STATIC=OFF -DWITH_SHARED_LIB=ON
+> Best regards,
+> Romain
+> 
+>> +
+>>  # Don't build clang libcxx libcxxabi lldb compiler-rt lld polly as llvm subprojects
+>>  # This flag assumes that projects are checked out side-by-side and not nested
+>>  HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_PROJECTS=""
+>>
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
