@@ -1,109 +1,171 @@
-From: Sven Oliver Moll <buildroot@svol.li>
-Date: Sat, 13 Apr 2019 22:40:57 +0200 (CEST)
-Subject: [Buildroot] [PATCH] package/most: new package
-Message-ID: <alpine.DEB.2.20.1904132238530.19094@defender.svolli.xa>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 13 Apr 2019 22:41:28 +0200
+Subject: [Buildroot] [git commit] package/libhtp: new package
+Message-ID: <20190413204000.5727A8E160@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Sven Oliver Moll <svolli@svolli.de>
+commit: https://git.buildroot.net/buildroot/commit/?id=380375d380f68738b6032818422ca85237828699
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+LibHTP is a security-aware parser for the HTTP protocol and the related
+bits and pieces.
+
+https://github.com/OISF/libhtp
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+[Thomas: always disable SSP, let our gcc/wrapper handle that]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-  DEVELOPERS             |  3 +++
-  package/Config.in      |  1 +
-  package/most/Config.in | 12 ++++++++++++
-  package/most/most.hash |  7 +++++++
-  package/most/most.mk   | 22 ++++++++++++++++++++++
-  5 files changed, 45 insertions(+)
-  create mode 100644 package/most/Config.in
-  create mode 100644 package/most/most.hash
-  create mode 100644 package/most/most.mk
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ .../0001-fix-build-without-GNU-libiconv.patch      | 60 ++++++++++++++++++++++
+ package/libhtp/Config.in                           |  9 ++++
+ package/libhtp/libhtp.hash                         |  3 ++
+ package/libhtp/libhtp.mk                           | 21 ++++++++
+ 6 files changed, 95 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index e2ee7cbf69..121acedf99 100644
+index e2ee7cbf69..40d0642c2e 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2112,6 +2112,9 @@ F:	package/libmms/
-  F:	package/orc/
-  F:	package/wampcc/
-
-+N:	Sven Oliver Moll <svolli@svolli.de>
-+F:	package/most/
-+
-  N:	Theo Debrouwere <t.debrouwere@televic.com>
-  F:	package/pugixml/
-
+@@ -798,6 +798,7 @@ F:	package/libgee/
+ F:	package/libglib2/
+ F:	package/libgtk2/
+ F:	package/libgtk3/
++F:	package/libhtp/
+ F:	package/libidn/
+ F:	package/libidn2/
+ F:	package/libjpeg/
 diff --git a/package/Config.in b/package/Config.in
-index eed842c67a..ac7c0595ae 100644
+index eed842c67a..ceb78fac0b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2230,6 +2230,7 @@ menu "Text editors and viewers"
-  	source "package/joe/Config.in"
-  	source "package/less/Config.in"
-  	source "package/mc/Config.in"
-+	source "package/most/Config.in"
-  	source "package/nano/Config.in"
-  	source "package/uemacs/Config.in"
-  	source "package/vim/Config.in"
-diff --git a/package/most/Config.in b/package/most/Config.in
+@@ -1548,6 +1548,7 @@ menu "Networking"
+ 	source "package/libeXosip2/Config.in"
+ 	source "package/libfcgi/Config.in"
+ 	source "package/libgsasl/Config.in"
++	source "package/libhtp/Config.in"
+ 	source "package/libhttpparser/Config.in"
+ 	source "package/libidn/Config.in"
+ 	source "package/libidn2/Config.in"
+diff --git a/package/libhtp/0001-fix-build-without-GNU-libiconv.patch b/package/libhtp/0001-fix-build-without-GNU-libiconv.patch
 new file mode 100644
-index 0000000000..943042c3fd
+index 0000000000..8f6cddf2da
 --- /dev/null
-+++ b/package/most/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_MOST
-+	bool "most"
-+	depends on BR2_USE_MMU # slang
-+	select BR2_PACKAGE_SLANG
++++ b/package/libhtp/0001-fix-build-without-GNU-libiconv.patch
+@@ -0,0 +1,60 @@
++From 1531a8e9b91b567979a2a0d7fd6a4c2e9126b01c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 6 Mar 2019 23:06:54 +0100
++Subject: [PATCH] fix build without GNU libiconv
++
++iconvctl is only defined in GNU libiconv so check for the availability
++of this function before using it
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/OISF/libhtp/pull/193]
++---
++ configure.ac         | 18 ++++++++++++++++++
++ htp/htp_transcoder.c |  2 +-
++ 2 files changed, 19 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 7f0a58d..388ec7b 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -155,6 +155,24 @@ sinclude(m4/lib-link.m4)
++ sinclude(m4/lib-prefix.m4)
++ AM_ICONV
++ 
+++# iconvctl is not standard, it is defined only in GNU libiconv
+++AC_MSG_CHECKING(for iconvctl)
+++TMPLIBS="${LIBS}"
+++LIBS="${LIBS} ${LIBICONV}"
+++
+++AC_TRY_LINK([#include <stdlib.h>
+++             #include <iconv.h>],
+++            [int iconv_param = 0;
+++             iconv_t cd = iconv_open("","");
+++             iconvctl(cd, ICONV_SET_DISCARD_ILSEQ, &iconv_param);
+++             iconv_close(cd);],
+++            [ac_cv_func_iconvctl=yes])
+++AC_MSG_RESULT($ac_cv_func_iconvctl)
+++if test "$ac_cv_func_iconvctl" == yes; then
+++    AC_DEFINE(HAVE_ICONVCTL,1,"Define to 1 if you have the `iconvctl' function.")
+++fi
+++LIBS="${TMPLIBS}"
+++
++ dnl -----------------------------------------------
++ dnl Check and enable the GCC opts we want to use.
++ dnl We may need to add more checks
++diff --git a/htp/htp_transcoder.c b/htp/htp_transcoder.c
++index 57ff74c..d8e8280 100644
++--- a/htp/htp_transcoder.c
+++++ b/htp/htp_transcoder.c
++@@ -64,7 +64,7 @@ int htp_transcode_params(htp_connp_t *connp, htp_table_t **params, int destroy_o
++         return HTP_ERROR;
++     }
++ 
++-    #if (_LIBICONV_VERSION >= 0x0108)
+++    #if (_LIBICONV_VERSION >= 0x0108 && HAVE_ICONVCTL)
++     int iconv_param = 0;
++     iconvctl(cd, ICONV_SET_TRANSLITERATE, &iconv_param);
++     iconv_param = 1;
++-- 
++2.14.1
++
+diff --git a/package/libhtp/Config.in b/package/libhtp/Config.in
+new file mode 100644
+index 0000000000..98b9e2adea
+--- /dev/null
++++ b/package/libhtp/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_LIBHTP
++	bool "libhtp"
++	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  most is a powerful pager, including features like multi
-+	  document support, hex view and unpack on-the-fly.
++	  LibHTP is a security-aware parser for the HTTP protocol and
++	  the related bits and pieces.
 +
-+	  https://www.jedsoft.com/most/
-+
-+	  Note: this program depends on the slang library which is
-+	  rather large to be used just for this pager.
-diff --git a/package/most/most.hash b/package/most/most.hash
++	  https://github.com/OISF/libhtp
+diff --git a/package/libhtp/libhtp.hash b/package/libhtp/libhtp.hash
 new file mode 100644
-index 0000000000..647b3ed4e8
+index 0000000000..be68547be2
 --- /dev/null
-+++ b/package/most/most.hash
-@@ -0,0 +1,7 @@
-+# From https://www.jedsoft.org/releases/most/
-+sha1 db811669a6b22c15478c957b439b5e4483ce1c95 most-5.1.0.tar.gz
-+# Locally computed
-+sha256 db805d1ffad3e85890802061ac8c90e3c89e25afb184a794e03715a3ed190501  most-5.1.0.tar.gz
-+sha256 1b2a567f289f66a143c56353e7b3d4fa5862514a5e3c5cfdf8b02ee5e5aaa953  COPYING
-+sha256 47ad1c3f9b94d6ec42d9bee6c5df980c5c2daa5b9d22113545ae6a3f21ca2f52  COPYRIGHT
-+
-diff --git a/package/most/most.mk b/package/most/most.mk
++++ b/package/libhtp/libhtp.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256	7384f8461ad0431e9247c49b37a73929b284f39408d1f11b80949b188069b638	libhtp-0.5.30.tar.gz
++sha256	87c93904e5434c81622ea690c2b90097b9f162aaa92a96542649a157dbf98d15	LICENSE
+diff --git a/package/libhtp/libhtp.mk b/package/libhtp/libhtp.mk
 new file mode 100644
-index 0000000000..3e6618b621
+index 0000000000..3f7cecb277
 --- /dev/null
-+++ b/package/most/most.mk
-@@ -0,0 +1,22 @@
++++ b/package/libhtp/libhtp.mk
+@@ -0,0 +1,21 @@
 +################################################################################
 +#
-+# most
++# libhtp
 +#
 +################################################################################
 +
-+MOST_SITE = http://www.jedsoft.org/releases/most
-+MOST_VERSION = 5.1.0
-+MOST_LICENSE = GPL-2.0+
-+MOST_LICENSE_FILES = COPYING COPYRIGHT
-+MOST_DEPENDENCIES = slang
++LIBHTP_VERSION = 0.5.30
++LIBHTP_SITE = $(call github,OISF,libhtp,$(LIBHTP_VERSION))
++LIBHTP_LICENSE = BSD-3-Clause
++LIBHTP_LICENSE_FILES = LICENSE
++LIBHTP_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
++	zlib
++LIBHTP_INSTALL_STAGING = YES
++# From git
++LIBHTP_AUTORECONF = YES
 +
-+define MOST_REMOVE_LOCAL_SLANG_CHECK
-+	$(SED) 's/ slangversion / /g' $(@D)/src/Makefile.in
-+endef
-+MOST_POST_PATCH_HOOKS += MOST_REMOVE_LOCAL_SLANG_CHECK
-+
-+define MOST_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/src/objs/most $(TARGET_DIR)/usr/bin/most
-+endef
++# Let our gcc/wrapper handle SSP
++LIBHTP_CONF_ENV = NO_STACK_PROTECTOR=true
 +
 +$(eval $(autotools-package))
--- 
-2.11.0
