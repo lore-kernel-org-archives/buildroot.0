@@ -1,58 +1,47 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Apr 2019 17:04:18 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/netsnmp: fix static build with openssl
-In-Reply-To: <20190413085741.11342-1-fontaine.fabrice@gmail.com>
-References: <20190413085741.11342-1-fontaine.fabrice@gmail.com>
-Message-ID: <734a3261-b9d5-5850-8db4-a63a77a6627c@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 13 Apr 2019 17:04:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bind: drop unneeded static openssl
+ workarounds
+Message-ID: <20190413150453.30125-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+bind can't be built statically since commit
+6045904752b06a8b8e52ba8fc2e49a8548964e8d
 
+So drop uneeded LIBS="-lz" which was added by commit
+80ebf12906afc3a1e5f4e5682d4c5dc0779a556a to fix static build with
+openssl
 
-On 13/04/2019 10:57, Fabrice Fontaine wrote:
-> Use pkg-config to find openssl dependencies such as lz or latomic
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/8f6fdbf8a21967363b737bc771252bcded4278a9
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Also, drop ac_cv_func_EVP_{sha256,sha384,sha512} that was also added to
+fix tests in static build by commit
+26aefa672c96caefc17adf59a9ab3d327114ad36
 
- Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/bind/bind.mk | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
- Regards,
- Arnout
-
-> ---
-> Changes v1 -> v2 (after review of Arnout Vandecappelle):
->  - Drop patch and use pkg-config
-> 
->  package/netsnmp/netsnmp.mk | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
-> index 4bd65ef17a..ed573c51e3 100644
-> --- a/package/netsnmp/netsnmp.mk
-> +++ b/package/netsnmp/netsnmp.mk
-> @@ -53,15 +53,12 @@ endif
->  
->  # OpenSSL
->  ifeq ($(BR2_PACKAGE_OPENSSL),y)
-> -NETSNMP_DEPENDENCIES += openssl
-> +NETSNMP_DEPENDENCIES += host-pkgconf openssl
->  NETSNMP_CONF_OPTS += \
->  	--with-openssl=$(STAGING_DIR)/usr/include/openssl \
->  	--with-security-modules="tsm,usm" \
->  	--with-transports="DTLSUDP,TLSTCP"
-> -ifeq ($(BR2_STATIC_LIBS),y)
-> -# openssl uses zlib, so we need to explicitly link with it when static
-> -NETSNMP_CONF_ENV += LIBS=-lz
-> -endif
-> +NETSNMP_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
->  else ifeq ($(BR2_PACKAGE_NETSNMP_OPENSSL_INTERNAL),y)
->  NETSNMP_CONF_OPTS += --with-openssl=internal
->  else
-> 
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 572eacd11a..b2bbafab20 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -55,12 +55,8 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ BIND_DEPENDENCIES += openssl
+-BIND_CONF_ENV += \
+-	ac_cv_func_EVP_sha256=yes \
+-	ac_cv_func_EVP_sha384=yes \
+-	ac_cv_func_EVP_sha512=yes
+ BIND_CONF_OPTS += \
+-	--with-openssl=$(STAGING_DIR)/usr LIBS="-lz" \
++	--with-openssl=$(STAGING_DIR)/usr \
+ 	--with-ecdsa=yes \
+ 	--with-eddsa=no \
+ 	--with-aes=yes
+-- 
+2.20.1
