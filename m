@@ -1,42 +1,146 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 13 Apr 2019 15:33:41 +0200
-Subject: [Buildroot] [PATCH 2/3] luadbi-sqlite3: bump to version 0.7.2
-In-Reply-To: <20190413133342.25091-1-francois.perrad@gadz.org>
-References: <20190413133342.25091-1-francois.perrad@gadz.org>
-Message-ID: <20190413133342.25091-2-francois.perrad@gadz.org>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 13 Apr 2019 15:28:55 +0200
+Subject: [Buildroot] [git commit] .gitlab-ci.yml: reorder jobs
+Message-ID: <20190413133831.3C6BF83688@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luadbi-sqlite3/luadbi-sqlite3.hash | 2 +-
- package/luadbi-sqlite3/luadbi-sqlite3.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=7405d793e1436a1e2887f0c89f09cad146f239a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/luadbi-sqlite3/luadbi-sqlite3.hash b/package/luadbi-sqlite3/luadbi-sqlite3.hash
-index 093a9067f..3e865df30 100644
---- a/package/luadbi-sqlite3/luadbi-sqlite3.hash
-+++ b/package/luadbi-sqlite3/luadbi-sqlite3.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 2868dad4d189368fcf5cddd191965c8cb2efaa3a3ba83d50e6a88c30353f74ce  luadbi-sqlite3-0.6-2.src.rock
-+sha256 c5b043db43941a3c6e43d3e3699236846ed6d03a6c4cb12fa1a497f965138d9f  luadbi-sqlite3-0.7.2-1.src.rock
- sha256 988d73cc2e56f972e8177091e084855fc2904d0fafcfe5c4e02864f25ce2b928  luadbi/COPYING
-diff --git a/package/luadbi-sqlite3/luadbi-sqlite3.mk b/package/luadbi-sqlite3/luadbi-sqlite3.mk
-index 44cf4d107..4ae2b5cf3 100644
---- a/package/luadbi-sqlite3/luadbi-sqlite3.mk
-+++ b/package/luadbi-sqlite3/luadbi-sqlite3.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+In order to make the file easier to maintain, reorder the keys in a more
+logical way:
+Keep the docker image at the top.
+Then all check-* jobs in the case-insensitive alphabetical order they
+appear on Gitlab-CI pipeline results.
+Then all keys related to defconfigs.
+Finally all keys related to runtime tests.
+
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .gitlab-ci.yml    | 36 ++++++++++++++++++------------------
+ .gitlab-ci.yml.in | 36 ++++++++++++++++++------------------
+ 2 files changed, 36 insertions(+), 36 deletions(-)
+
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 87e4e13057..7d2dd50afa 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -6,24 +6,6 @@
  
--LUADBI_SQLITE3_VERSION = 0.6-2
-+LUADBI_SQLITE3_VERSION = 0.7.2-1
- LUADBI_SQLITE3_SUBDIR = luadbi
- LUADBI_SQLITE3_LICENSE = MIT
- LUADBI_SQLITE3_LICENSE_FILES = $(LUADBI_SQLITE3_SUBDIR)/COPYING
--- 
-2.17.1
+ image: buildroot/base:20180318.1724
+ 
+-.defconfig_script:
+-    script:
+-        - echo 'Configure Buildroot'
+-        - make ${CI_JOB_NAME}
+-        - echo 'Build buildroot'
+-        - |
+-            make > >(tee build.log |grep '>>>') 2>&1 || {
+-                echo 'Failed build last output'
+-                tail -200 build.log
+-                exit 1
+-            }
+-
+-check-gitlab-ci.yml:
+-    script:
+-        - mv .gitlab-ci.yml .gitlab-ci.yml.orig
+-        - make .gitlab-ci.yml
+-        - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
+-
+ check-DEVELOPERS:
+     # get-developers should print just "No action specified"; if it prints
+     # anything else, it's a parse error.
+@@ -42,10 +24,28 @@ check-flake8:
+     after_script:
+         - wc -l files.processed
+ 
++check-gitlab-ci.yml:
++    script:
++        - mv .gitlab-ci.yml .gitlab-ci.yml.orig
++        - make .gitlab-ci.yml
++        - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
++
+ check-package:
+     script:
+         - make check-package
+ 
++.defconfig_script:
++    script:
++        - echo 'Configure Buildroot'
++        - make ${CI_JOB_NAME}
++        - echo 'Build buildroot'
++        - |
++            make > >(tee build.log |grep '>>>') 2>&1 || {
++                echo 'Failed build last output'
++                tail -200 build.log
++                exit 1
++            }
++
+ .defconfig:
+     extends: .defconfig_script
+     # Running the defconfigs for every push is too much, so limit to
+diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+index b1ec671867..ad616437f3 100644
+--- a/.gitlab-ci.yml.in
++++ b/.gitlab-ci.yml.in
+@@ -6,24 +6,6 @@
+ 
+ image: buildroot/base:20180318.1724
+ 
+-.defconfig_script:
+-    script:
+-        - echo 'Configure Buildroot'
+-        - make ${CI_JOB_NAME}
+-        - echo 'Build buildroot'
+-        - |
+-            make > >(tee build.log |grep '>>>') 2>&1 || {
+-                echo 'Failed build last output'
+-                tail -200 build.log
+-                exit 1
+-            }
+-
+-check-gitlab-ci.yml:
+-    script:
+-        - mv .gitlab-ci.yml .gitlab-ci.yml.orig
+-        - make .gitlab-ci.yml
+-        - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
+-
+ check-DEVELOPERS:
+     # get-developers should print just "No action specified"; if it prints
+     # anything else, it's a parse error.
+@@ -42,10 +24,28 @@ check-flake8:
+     after_script:
+         - wc -l files.processed
+ 
++check-gitlab-ci.yml:
++    script:
++        - mv .gitlab-ci.yml .gitlab-ci.yml.orig
++        - make .gitlab-ci.yml
++        - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
++
+ check-package:
+     script:
+         - make check-package
+ 
++.defconfig_script:
++    script:
++        - echo 'Configure Buildroot'
++        - make ${CI_JOB_NAME}
++        - echo 'Build buildroot'
++        - |
++            make > >(tee build.log |grep '>>>') 2>&1 || {
++                echo 'Failed build last output'
++                tail -200 build.log
++                exit 1
++            }
++
+ .defconfig:
+     extends: .defconfig_script
+     # Running the defconfigs for every push is too much, so limit to
