@@ -1,217 +1,165 @@
-From: Alexey Lukyanchuk <skif@skif-web.ru>
-Date: Sat, 13 Apr 2019 22:01:02 +0300
-Subject: [Buildroot] [PATCH 1/1] package/zabbix: new package
-Message-ID: <20190413190102.27538-1-skif@skif-web.ru>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 13 Apr 2019 21:07:37 +0200
+Subject: [Buildroot] [PATCH 06/10] infra/pkg-generic: introduce
+ foo-show-info
+In-Reply-To: <20190413171720.GM2539@scaer>
+References: <cover.1554637858.git.yann.morin.1998@free.fr>
+ <6e3c4eccb009f45ccb25b549c88e6a6603091ddb.1554637858.git.yann.morin.1998@free.fr>
+ <2e6876e6-3098-44ee-11b5-f8b900d3b2ee@mind.be> <20190413171720.GM2539@scaer>
+Message-ID: <c34bda77-cc2b-652f-f5f6-371e1b61d586@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
----
- package/Config.in                    |  4 +-
- package/zabbix/Config.in             | 54 +++++++++++++++++++++
- package/zabbix/zabbix-agent.service  | 14 ++++++
- package/zabbix/zabbix-server.service | 15 ++++++
- package/zabbix/zabbix.mk             | 70 ++++++++++++++++++++++++++++
- 5 files changed, 155 insertions(+), 2 deletions(-)
- create mode 100644 package/zabbix/Config.in
- create mode 100644 package/zabbix/zabbix-agent.service
- create mode 100644 package/zabbix/zabbix-server.service
- create mode 100644 package/zabbix/zabbix.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index eed842c67a..19a89d5e0c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2070,8 +2070,8 @@ endif
- 	source "package/xinetd/Config.in"
- 	source "package/xl2tp/Config.in"
- 	source "package/xtables-addons/Config.in"
--	source "package/znc/Config.in"
--
-+        source "package/zabbix/Config.in"
-+        source "package/znc/Config.in"
- endmenu
- 
- menu "Package managers"
-diff --git a/package/zabbix/Config.in b/package/zabbix/Config.in
-new file mode 100644
-index 0000000000..1105c8d2e0
---- /dev/null
-+++ b/package/zabbix/Config.in
-@@ -0,0 +1,54 @@
-+config BR2_PACKAGE_ZABBIX
-+	bool "zabbix"
-+	default n
-+	select BR2_PACKAGE_LIBCURL
-+	select BR2_PACKAGE_LIBEVENT
-+	select BR2_PACKAGE_PCRE
-+	help
-+	  zabbix monitoring system
-+
-+if BR2_PACKAGE_ZABBIX
-+
-+if (!BR2_PACKAGE_APACHE && !BR2_PACKAGE_NGINX && !BR2_PACKAGE_LIGHTTPD) || !BR2_PACKAGE_ORACLE_MYSQL_SERVER
-+comment "zabbix server need http server with php and sql server"
-+endif
-+
-+if (BR2_PACKAGE_APACHE || BR2_PACKAGE_NGINX || BR2_PACKAGE_LIGHTTPD) && BR2_PACKAGE_ORACLE_MYSQL_SERVER
-+config BR2_PACKAGE_ZABBIX_SERVER
-+	bool "zabbix server"
-+	default n
-+	select BR2_PACKAGE_PHP
-+	select BR2_PACKAGE_PHP_EXT_CTYPE
-+	select BR2_PACKAGE_PHP_EXT_GETTEXT
-+	select BR2_PACKAGE_PHP_EXT_BCMATH
-+	select BR2_PACKAGE_PHP_EXT_MBSTRING
-+	select BR2_PACKAGE_PHP_EXT_SOCKETS
-+	select BR2_PACKAGE_PHP_EXT_MYSQLI
-+	select BR2_PACKAGE_PHP_EXT_PDO_MYSQL
-+	select BR2_PACKAGE_PHP_EXT_GD
-+	select BR2_PACKAGE_PHP_EXT_LIBXML2
-+	select BR2_PACKAGE_PHP_EXT_XMLREADER
-+	select BR2_PACKAGE_PHP_EXT_XMLWRITER
-+	select BR2_PACKAGE_PHP_EXT_SESSION
-+	help
-+	  Zabbix monitoring server
-+endif
-+if BR2_PACKAGE_ZABBIX_SERVER
-+choice
-+	prompt "zabbix server database backend"
-+	default BR2_PACKAGE_ZABBIX_SERVER_MYSQL
-+config BR2_PACKAGE_ZABBIX_SERVER_MYSQL
-+	bool "mysql"
-+config BR2_PACKAGE_ZABBIX_SERVER_POSTGRESQL
-+	bool "posgresql"
-+endchoice
-+
-+config BR2_PACKAGE_ZABBIX_SERVER_HTML_ROOT
-+	string "Location of frontend files"
-+	default "/usr/htdocs"
-+endif
-+
-+config BR2_PACKAGE_ZABBIX_CLIENT
-+	bool "zabbix client"
-+	default n
-+endif
-diff --git a/package/zabbix/zabbix-agent.service b/package/zabbix/zabbix-agent.service
-new file mode 100644
-index 0000000000..b46c91e30b
---- /dev/null
-+++ b/package/zabbix/zabbix-agent.service
-@@ -0,0 +1,14 @@
-+Description=Zabbix Agent Daemon
-+After=syslog.target network.target mysql.service
-+ 
-+[Service]
-+Type=forking
-+ExecStart=/usr/sbin/zabbix_agentd
-+ExecReload=/usr/sbin/zabbix_agentd -R config_cache_reload
-+PIDFile=/tmp/zabbix_agentd.pid
-+ 
-+User=zabbix
-+Group=zabbix
-+ 
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/package/zabbix/zabbix-server.service b/package/zabbix/zabbix-server.service
-new file mode 100644
-index 0000000000..f4a8d599ad
---- /dev/null
-+++ b/package/zabbix/zabbix-server.service
-@@ -0,0 +1,15 @@
-+Description=Zabbix Server Daemon
-+Requires=mysql.service
-+After=syslog.target network.target mysql.service
-+ 
-+[Service]
-+Type=forking
-+ExecStart=/usr/sbin/zabbix_server
-+ExecReload=/usr/sbin/zabbix_server -R config_cache_reload
-+PIDFile=/tmp/zabbix_server.pid
-+ 
-+User=zabbix
-+Group=zabbix
-+ 
-+[Install]
-+WantedBy=multi-user.target
-diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
-new file mode 100644
-index 0000000000..f4024751a9
---- /dev/null
-+++ b/package/zabbix/zabbix.mk
-@@ -0,0 +1,70 @@
-+################################################################################
-+#
-+#zabbix
-+#
-+################################################################################
-+
-+ZABBIX_VERSION = 4.2.0
-+ZABBIX_SITE = https://sourceforge.net/projects/zabbix/files
-+
-+ZABBIX_INSTALL_STAGING = YES
-+ZABBIX_DEPENDENCIES += pcre libcurl libevent
-+ZABBIX_CONF_OPTS = --with-libcurl --with-libevent
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER),y)
-+ZABBIX_CONF_OPTS += --enable-server
-+ZABBIX_DEPENDENCIES += php mysql
-+ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_COPY_FRONTEND
-+ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_COPY_SQL_SCHEMA_FILES
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_CLIENT),y)
-+ZABBIX_CONF_OPTS += --enable-agent
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_MYSQL),y)
-+ZABBIX_CONF_OPTS += --with-mysql=$(STAGING_DIR)/usr/bin/mysql_config
-+ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_COPY_MYSQL_SQL_SCHEMA_FILES
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_POSTGRESQL),y)
-+ZABBIX_CONF_OPTS += --with-postgresql
-+ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_COPY_POSTGRESQL_SQL_SCHEMA_FILES
-+endif
-+
-+define ZABBIX_COPY_FRONTEND
-+	mkdir -p $(TARGET_DIR)/$(BR2_PACKAGE_ZABBIX_SERVER_HTML_ROOT)
-+	cp -r $(@D)/frontends/php/* $(TARGET_DIR)/$(BR2_PACKAGE_ZABBIX_SERVER_HTML_ROOT)
-+endef
-+
-+define ZABBIX_COPY_POSTGRESQL_SQL_SCHEMA_FILES
-+	mkdir -p $(TARGET_DIR)/usr/zabbix/
-+	cp -r $(@D)/database/postgresql $(TARGET_DIR)/usr/zabbix/
-+endef
-+
-+define ZABBIX_COPY_MYSQL_SQL_SCHEMA_FILES
-+	mkdir -p $(TARGET_DIR)/usr/zabbix/
-+	cp -r $(@D)/database/mysql $(TARGET_DIR)/usr/zabbix/
-+endef
-+
-+define ZABBIX_SERVER_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/zabbix/zabbix-server.service $(TARGET_DIR)/usr/lib/systemd/system/zabbix-server.service
-+endef
-+
-+define ZABBIX_AGENT_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/zabbix/zabbix-agent.service $(TARGET_DIR)/usr/lib/systemd/system/zabbix-agent.service
-+endef
-+
-+ifeq ($(BR2_INIT_SYSTEMD),y)
-+ifeq ($(BR2_PACKAGE_ZABBIX_CLIENT),y)
-+ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_AGENT_INSTALL_INIT_SYSTEMD
-+endif
-+ifeq ($(BR2_PACKAGE_ZABBIX_SERVER),y)
-+ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_SERVER_INSTALL_INIT_SYSTEMD
-+endif
-+endif
-+
-+define ZABBIX_USERS
-+	zabbix -1 zabbix -1 !- /var/lib/zabbix - zabbix zabbix user
-+endef
-+
-+$(eval $(autotools-package))
--- 
-2.20.1
+
+On 13/04/2019 19:17, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2019-04-13 10:58 +0200, Arnout Vandecappelle spake thusly:
+[snip]
+>> * The null in the downloads list is really silly, and makes life difficult for
+>> the user because it has to be filtered out again (cfr. Thomas's PoC jq script).
+>> So it really has to go.
+> 
+> I'll try to see how it can be done with your sugestion below. Not that I
+> find the code nice, though...
+
+ True. But here, I think niceness of the user-visible output trumps niceness of
+the implementation.
+
+
+>> * I think the structure should always be completely the same. So a virtual
+>> package should still have version: "", licenses: "", downloads: []. This again
+>> makes it easier to process things.
+> 
+> I really wondered about that one. But to me, it does not make sense that
+> a virtual package has a license or a version: it is virtual... Yet, there
+> might be a point in having that information however, because, apart from
+> being virtual, they actually *can* install things in the target (or host
+> or staging).
+> 
+> But then, what about filesystems? Semantically, it does not make sense
+> at all to have a license or a version for them...
+
+ So, the reason I like to have the same structure everywhere is Python, which
+gives you KeyError rather than None when a key isn't present in the dict. Thus,
+a simple filter like this will give an exception:
+
+[p for p in pkginfo if "GPL" in p["licenses"]]
+
+ But maybe I'm making too big a deal of this, since it can just be written as:
+
+[p for p in pkginfo if "GPL" in p.get("licenses","")]
+
+
+[snip]
+>> * I absolutely hate these per-package rules. I also don't think it would behave
+>> correctly: I would expect 'make {foo,bar}-show-info' to output JSON, but it
+>> doesn't (as you note for the show-recursive-info). So I think we should just
+>> have a top-level show-info, which uses _FINAL_RECURSIVE_DEPENDENCIES to iterate
+>> over all packages (note that that variable would have to be added for rootfs as
+>> well). If we want to support selecting a subset of packages, we could add
+>> something like the VARS of printvars.
+> 
+> It would certainly simplify things a little bit... But I do like to keep
+> the per-package rules consistent each with the others:
+>     foo-build
+>     foo-install
+>     foo-reconfigure
+>     foo-legal-info
+>     foo-show-info
+> 
+> So, I'll at least keep foo-show-info, but will ditch the recursive one.
+
+ As I wrote, I don't like foo-show-info since it gives different output than
+show-info (a single dict rather than a list of dicts) and it doesn't output
+valid JSON when multiple packages are requested simultaneously (which would be a
+pretty typical use case I expect). Still, no big deal.
+
+
+>> * I have a vague feeling that the _SHOW_INFO variable looks ugly, but I can't
+>> put my finger on it what makes it ugly (or how it could be better).
+> 
+> I honestly ca'tn see uglyness in that one.
+
+ My first reaction was "this doesn't look like Buildroot code". But I think
+maybe it's just because it's JSON, and it doesn't look at all anymore like our
+normal formatting.
+
+> _SHOW_INFO_DETAILS, which is
+> conditional, is indeed not nice because of the conditional block...
+> 
+> But really, I don't see a better solution.
+[snip]
+>>> +					$$(call DOWNLOAD_URIS,$$(dl),$(2))
+>>> +				)
+>>> +			)
+>>> +			]
+>>> +		},
+>>> +	)
+>>
+>>  I think you might be able to get rid of the null like this:
+>>
+>> 	$$(subst }{,}$$(comma){,
+>> 		$$(foreach dl,$$($(2)_ALL_DOWNLOADS),{
+>> 			...
+>> 		})
+>>
+>>  Ugly, I know :-)
+> 
+> And then you fond that the _SHOW_INFO variable is ugly, and you want me
+> to add more uglyness to it? Meh! ;-)
+> 
+> But yes, your subst trick is interesting.
+
+ Might warrant making a function for it, like make-comma-list.
+
+> 
+>>> +	null
+>>> +	],
+>>> +endef
+>>> +endif
+>>> +
+>>> +define $(2)_SHOW_INFO
+>>> +	"name": "$(1)",
+>>> +	"type": "$(4)",
+>>> +	$$($(2)_SHOW_INFO_VIRTUAL)
+>>> +	"depends on": [
+>>> +		$$(call make-comma-list,$$($(2)_FINAL_ALL_DEPENDENCIES))
+>>> +	],
+>>> +	"dependency of": [
+>>> +		$$(call make-comma-list,$$($(2)_RDEPENDENCIES))
+>>> +	]
+>>> +endef
+>>
+>>  Maybe it would be better to make this a function (defined outside of
+>> inner-generic-package) rather than a per-package variable.
+> 
+> Good idea, indeed.
+
+ That's not going to fly with the condition on virtual, though. That one you
+can't easily put in a function. And if you anyway have _SHOW_INFO_VIRTUAL, you
+can just as well have _SHOW_INFO as well. Remove the special casing of virtual,
+I say! :-)
+
+
+ Regards,
+ Arnout
+
+
+>>> +$(1)-show-info:
+>>> +	@:
+>>> +	$$(info { $$(strip $$($(2)_SHOW_INFO)) })$$($(2)_ALL_DOWNLOADS),
+>>
+>>  So here you'd use
+>>
+>> 	$$(info { $$(strip $$(call show-info,$(1),$(2))) })
+> 
+> Right.
+> 
+> Regards,
+> Yann E. MORIN.
+> 
