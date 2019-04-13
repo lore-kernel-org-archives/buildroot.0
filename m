@@ -1,55 +1,47 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 13 Apr 2019 10:46:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/softether: fix static build with
+Date: Sat, 13 Apr 2019 10:49:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ipsec-tools: fix static build with
  openssl and atomic
-Message-ID: <20190413084640.32444-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190413084912.8000-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Don't pass --with-openssl option to force softether to use pkg-config
-(see autotools/ax_check_openssl.m4).
-
-pkg-config will find openssl dependencies such as lz or latomic
+Use pkg-config to find openssl dependencies such as lz or latomic
 
 Fix static build on sparc v8 (even if there is no autobuilder failures
 yet)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/softether/softether.mk | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ package/ipsec-tools/ipsec-tools.mk | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/softether/softether.mk b/package/softether/softether.mk
-index 31378e8b70..1a31abd4bd 100644
---- a/package/softether/softether.mk
-+++ b/package/softether/softether.mk
-@@ -8,7 +8,7 @@ SOFTETHER_VERSION = v4.28-9669-beta
- SOFTETHER_SITE = $(call github,SoftEtherVPN,SoftEtherVPN_stable,$(SOFTETHER_VERSION))
- SOFTETHER_LICENSE = GPL-2.0
- SOFTETHER_LICENSE_FILES = LICENSE
--SOFTETHER_DEPENDENCIES = host-softether libopenssl readline
-+SOFTETHER_DEPENDENCIES = host-pkgconf host-softether libopenssl readline
- SOFTETHER_AUTORECONF = YES
+diff --git a/package/ipsec-tools/ipsec-tools.mk b/package/ipsec-tools/ipsec-tools.mk
+index 8672272538..7ac6b5cb22 100644
+--- a/package/ipsec-tools/ipsec-tools.mk
++++ b/package/ipsec-tools/ipsec-tools.mk
+@@ -9,17 +9,14 @@ IPSEC_TOOLS_SOURCE = ipsec-tools-$(IPSEC_TOOLS_VERSION).tar.bz2
+ IPSEC_TOOLS_SITE = http://sourceforge.net/projects/ipsec-tools/files/ipsec-tools/$(IPSEC_TOOLS_VERSION)
+ IPSEC_TOOLS_INSTALL_STAGING = YES
+ IPSEC_TOOLS_MAKE = $(MAKE1)
+-IPSEC_TOOLS_DEPENDENCIES = openssl flex host-flex host-bison
++IPSEC_TOOLS_DEPENDENCIES = openssl flex host-pkgconf host-flex host-bison
+ # we patch configure.ac
+ IPSEC_TOOLS_AUTORECONF = YES
  
- ifeq ($(BR2_ENABLE_LOCALE),)
-@@ -16,14 +16,7 @@ SOFTETHER_DEPENDENCIES += libiconv
- SOFTETHER_CONF_ENV = LIBS+=" -liconv"
- endif
+ # configure hardcodes -Werror, so override CFLAGS on make invocation
+ IPSEC_TOOLS_MAKE_OPTS = CFLAGS='$(TARGET_CFLAGS)'
  
+-# openssl uses zlib, so we need to explicitly link with it when static
 -ifeq ($(BR2_STATIC_LIBS),y)
--# openssl needs zlib
--SOFTETHER_CONF_ENV += LIBS+=" -lz"
+-IPSEC_TOOLS_CONF_ENV += LIBS=-lz
 -endif
--
--SOFTETHER_CONF_OPTS = \
--	--with-openssl="$(STAGING_DIR)/usr" \
--	--with-zlib="$(STAGING_DIR)/usr"
-+SOFTETHER_CONF_OPTS = --with-zlib="$(STAGING_DIR)/usr"
++IPSEC_TOOLS_CONF_ENV = LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
  
- # host-libiconv does not exist, therefore we need this extra line
- HOST_SOFTETHER_DEPENDENCIES = host-pkgconf host-libopenssl host-readline
+ IPSEC_TOOLS_CONF_OPTS = \
+ 	  --without-libpam \
 -- 
 2.20.1
