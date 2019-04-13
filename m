@@ -1,29 +1,71 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 13 Apr 2019 15:13:32 +0000
-Subject: [Buildroot] [Bug 11761] Building custom kernel 5.1-rc3 or later
- breaks on tools/objtool
-In-Reply-To: <bug-11761-163@https.bugs.busybox.net/>
-References: <bug-11761-163@https.bugs.busybox.net/>
-Message-ID: <bug-11761-163-0HV7ABQKFN@https.bugs.busybox.net/>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 13 Apr 2019 17:15:19 +0200
+Subject: [Buildroot] [git commit] linux: simplify LINUX_BUILD_CMDS
+Message-ID: <20190413151318.97D3588163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11761
+commit: https://git.buildroot.net/buildroot/commit/?id=ffbe46a5295ce4e0442728f2ad3e19afa7eaa8ed
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Arnout Vandecappelle <arnout@mind.be> changed:
+We currently do the Linux build as follows:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|ASSIGNED                    |RESOLVED
+   make <imagename>
+   if modules enabled; make modules; fi
 
---- Comment #2 from Arnout Vandecappelle <arnout@mind.be> ---
-Fixed by commit 615e2edc2ae8351519448d1965f0c4eec4e793b1. Please reopen if that
-doesn't fix it for you.
+However, Clement L??ger recently reported that due to us not using the
+"all" target, the GDB scripts that the kernel can build when
+CONFIG_GDB_SCRIPTS is enabled are not built, since upstream kernel
+commit 67274c083438340ad16c1437caebc84e1253b224 (merged in v5.1) moved
+that logic to a separate scripts_gdb target, which is a dependency of
+the "all" target.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+While we could add some more logic to explicit generate the
+"scripts_gdb" target, this logic would fail on Linux < 5.1 for which
+this make target doesn't exist.
+
+So instead, let's simplify the build logic, and use:
+
+  make all <imagename>
+
+The "all" target automatically depends on "modules" if CONFIG_MODULES
+is set, so we no longer need to explicit generate the "modules" target
+separately.
+
+As a result of this change, we may generate additional kernel images
+compared to what was done previously, but such images would anyway not
+be installed, and the additional build time is minimal.
+
+We did some research as to why the kernel build was done like this in
+Buildroot, and it's been like that since linux/linux.mk was added back
+in 2010 by commit 487e21cff69b30b404146b2ffb46959a728a4002 ("New,
+simpler, infrastructure for building the Linux kernel").
+
+Reported-by: Cl??ment Leger <cleger@kalray.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Reviewed-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ linux/linux.mk | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 304fce21d0..1eac3287ab 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -444,10 +444,7 @@ define LINUX_BUILD_CMDS
+ 	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
+ 		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
+ 	)
+-	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+-	@if grep -q "CONFIG_MODULES=y" $(@D)/.config; then \
+-		$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) modules ; \
+-	fi
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all $(LINUX_TARGET_NAME)
+ 	$(LINUX_BUILD_DTB)
+ 	$(LINUX_APPEND_DTB)
+ endef
