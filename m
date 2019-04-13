@@ -1,12 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Apr 2019 14:52:42 +0200
-Subject: [Buildroot] Wrong license information in package
- qt5quickcontrols2?
-In-Reply-To: <64d306ea9d0a4e84ac0a1ef387fde33c@erbe-med.com>
-References: <017c92fcfda14fe3b07c0dcc70bbaf5e@erbe-med.com>
- <d6920a5b-217c-8dd6-3d0e-f4b163ad2e17@mind.be>
- <64d306ea9d0a4e84ac0a1ef387fde33c@erbe-med.com>
-Message-ID: <52117a7e-8fbb-9a7e-bf8e-acfc96985ad9@mind.be>
+Date: Sat, 13 Apr 2019 14:59:36 +0200
+Subject: [Buildroot] Help making package file for libp11
+In-Reply-To: <CAKON4OykMpXY7h3dPWF6vXqQL9WxuwuzH1cHYj0M7MJB63kLvA@mail.gmail.com>
+References: <CAKON4OzT+DFQ2n4ic7CF+YD66UojXOjxyo2+ZVCZ7XyQdhng3w@mail.gmail.com>
+ <CAKON4OykMpXY7h3dPWF6vXqQL9WxuwuzH1cHYj0M7MJB63kLvA@mail.gmail.com>
+Message-ID: <993ea935-d7bf-e7bb-3641-ec20922f7d08@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,47 +13,138 @@ To: buildroot@busybox.net
 
 
 
-On 11/04/2019 12:01, Steinhilber, Markus wrote:
->> -----Original Message-----
->> From: Arnout Vandecappelle [mailto:arnout at mind.be]
->>
->>  Note that the docs should only be mentioned if they are in fact installed on
->> the target. I'm not sure if that is the case here. Anyway, that's a separate
->> issue and in general we're not very consistent in that.
+On 01/04/2019 22:03, jonsmirl at gmail.com wrote:
+> The error is coming from pkg-generic.mk, step_check_build_dir()
 > 
-> I looked into that. I can't find any documentation that is copied to the target - normally. However I think
-> you could use a build parameter to build and install the examples and these are licensed under FDL. I don't
-> know what's the 'buildroot' way to do in such case. I think it might be better to list an unnecessary license than
-> to miss one.
-
- OK, so we *could* conditionally add the FDL license based on whether or not the
-examples are selected, but I don't really think that is necessary. So just keep
-FDL unconditinoally.
-
+> libp11 is trying to install a crypto engine for openssl. It uses pkg_config
+> to get the path
+> enginesexecdir="`$PKG_CONFIG --variable=enginesdir --silence-errors
+> libcrypto`"
 > 
->>
->>  Oh and I also checked that both 5.6 and 5.12 have the same license - that's not
->> always the case either.
->>
->>  So, feel free to send a patch to fix this!
+> The path returned from pkg_config is /usr/lib/engines-1.1
 > 
-> I wanted to. But then I found out that 5.6.3 does not include a GPLv2 license file, although in the source files they
-> have GPLv2 in the headers. Is it Ok, to mention that it's GPLv2 without supplying an actual license file for it?
-> It's not very good, but I think it's better than to show the wrong license.
+> But then the buildroot build system is mangling the enginesexecdir path
+> into...
+> /home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot//home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/engines-1.1
+> 
+> So where does this path mangling happen? Why is it using a host path?
 
- Yes it's OK. Add a comment above it in the .mk file to make it explicity that
-it is missing.
+ It's not using a host path; it's using the staging path (everything up to
+sysroot), but the path is printed twice.
+
+ However, I don't have that issue:
+
+$ output/host/bin/pkg-config --variable=enginesdir --silence-errors libcrypto
+output/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib/engines-1.1
+
+ Is it possible that you're using some outdated Buildroot version that doesn't
+have 7125fc5c1a8a96ff8eee057789358702e1b55835 applied yet?
+
 
  Regards,
  Arnout
 
+
+> On Sun, Mar 31, 2019 at 10:57 PM jonsmirl at gmail.com <jonsmirl@gmail.com>
+> wrote:
 > 
-> I think the reason this is the way it is, is because qtquickcontrols2 was officially only introduced in Qt 5.7.
-> In the 5.6 docs there is no info on them. Also the current docs say "The module was introduced in Qt 5.7."
+>> I made up a package file for libp11 based off from other posts to the
+>> list...
+>>
+>> LIBP11_VERSION = e1210903291b1de9eabcad26e740a4b2fbcca692
+>> LIBP11_SITE = $(call github,OpenSC,libp11,$(LIBP11_VERSION))
+>> LIBP11_DEPENDENCIES = openssl
+>> LIBP11_INSTALL_STAGING = YES
+>> LIBP11_LICENSE = LGPLv2.1
+>> LIBP11_LICENSE_FILES = COPYING
+>> LIBP11_AUTORECONF = YES
+>>
+>> LIBP11_CONF_OPTS += --with-enginesdir=/usr/lib
+>> ifeq ($(BR2_PACKAGE_P11_KIT),y)
+>> LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
+>> endif
+>>
+>> $(eval $(autotools-package))
+>>
+>> -----------------------------
+>>
+>> I'm getting an error with the path at the install stage...
+>> Can anyone give me a clue as to what is wrong?
+>>
+>> make[2]: Entering directory
+>>
+>> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+>> make[3]: Entering directory
+>>
+>> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+>> make[3]: Nothing to be done for `install-exec-am'.
+>>  /bin/mkdir -p
+>> '/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/share/doc/libp11'
+>>  /usr/bin/install -c -m 644 NEWS
+>>
+>> '/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/share/doc/libp11'
+>> make[3]: Leaving directory
+>>
+>> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+>> make[2]: Leaving directory
+>>
+>> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+>> make[1]: Leaving directory
+>>
+>> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
+>>>>> libp11 e1210903291b1de9eabcad26e740a4b2fbcca692 Fixing libtool files
+>> for la in $(find
+>>
+>> /home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib*
+>> -name "*.la"); do \
+>> cp -a "${la}" "${la}.fixed" && \
+>> /bin/sed -i -e
+>> "s:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot:@BASE_DIR
+>> @:g"
+>> \
+>> -e
+>> "s:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot:@STAGING_DIR
+>> @:g"
+>> \
+>> -e
+>> "s:/home/jonsmirl/aosp/lindenis/out/external-toolchain/gcc-linaro-5.3.1-arm:@TOOLCHAIN_EXTERNAL_INSTALL_DIR
+>> @:g"
+>> \
+>> -e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
+>> -e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR
+>> @:/home/jonsmirl/aosp/lindenis/out/external-toolchain/gcc-linaro-5.3.1-arm:g"
+>> \
+>> -e "s:@STAGING_DIR
+>> @:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot:g"
+>> \
+>> -e "s:@BASE_DIR
+>> @:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot:g"
+>> \
+>> "${la}.fixed" && \
+>> if cmp -s "${la}" "${la}.fixed"; then \
+>> rm -f "${la}.fixed"; \
+>> else \
+>> mv "${la}.fixed" "${la}"; \
+>> fi || exit 1; \
+>> done
+>> libp11: installs files in
+>>
+>> /home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot//home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot
+>> make: ***
+>> [/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692/.stamp_staging_installed]
+>> Error 1
+>> make: Leaving directory `/home/jonsmirl/aosp/lindenis/buildroot'
+>>
+>>
+>> --
+>> Jon Smirl
+>> jonsmirl at gmail.com
+>>
 > 
-> Regards,
-> Markus Steinhilber
-> ________________________________
 > 
-> Erbe Elektromedizin GmbH Firmensitz: 72072 Tuebingen Geschaeftsfuehrer: Christian O. Erbe, Reiner Thede Registergericht: Stuttgart HRB 380137
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
