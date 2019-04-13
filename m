@@ -1,48 +1,35 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 13 Apr 2019 15:14:18 +0200
-Subject: [Buildroot] [PATCH 2/2] package/terminology: bump to version 1.4.0
-In-Reply-To: <20190413131418.31097-1-romain.naour@gmail.com>
-References: <20190413131418.31097-1-romain.naour@gmail.com>
-Message-ID: <20190413131418.31097-2-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 13 Apr 2019 15:30:47 +0200
+Subject: [Buildroot] [PATCH v4 6/6] qt5: Remove *.la/*.prl fixup script
+In-Reply-To: <0735f59d-5c83-152d-0895-23f0213309d6@mind.be>
+References: <20190322183904.22401-1-anaumann@ultratronik.de>
+ <20190322183904.22401-7-anaumann@ultratronik.de>
+ <502c3f48-3eb7-7d0b-dff6-c00bcbdf9658@andin.de>
+ <0735f59d-5c83-152d-0895-23f0213309d6@mind.be>
+Message-ID: <20190413153047.1dd4dae9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update COPYING file hash due to year update.
+Hello,
 
-https://sourceforge.net/p/enlightenment/mailman/message/36626985/
+On Sat, 13 Apr 2019 15:08:58 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/terminology/terminology.hash | 6 +++---
- package/terminology/terminology.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> > Also, I have not found absolute /usr/lib pathes in any of the prl files
+> > without this.  
+> 
+>  This I can't explain. I've added Thomas in Cc but I doubt that he remembers.
 
-diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
-index 1e0a85cd23..6b96ed72ad 100644
---- a/package/terminology/terminology.hash
-+++ b/package/terminology/terminology.hash
-@@ -1,3 +1,3 @@
--# From https://sourceforge.net/p/enlightenment/mailman/message/36497308/
--sha256  b5171181da42cc5f384238f71e43302c2c760938f6a8ab931647ccdad4ef94cd  terminology-1.3.2.tar.xz
--sha256  605988548c7a52562d6f64d936a579b53f690e62ca92261b6a440bf9023ff521  COPYING
-+# From https://sourceforge.net/p/enlightenment/mailman/message/36626985/
-+sha256  ed5904ba5eb11c67790964306ec260b4134e2a443ef5abd5105610d9943b3e60  terminology-1.4.0.tar.xz
-+sha256  a907d434f4691990ed8f2826ff7546672e9934a26c798351da12ed544dadc628  COPYING
-diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
-index c53f6829de..09b4e536a9 100644
---- a/package/terminology/terminology.mk
-+++ b/package/terminology/terminology.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TERMINOLOGY_VERSION = 1.3.2
-+TERMINOLOGY_VERSION = 1.4.0
- TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
- TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
- TERMINOLOGY_LICENSE = BSD-2-Clause
+I obviously won't remember more than what the commit history has.
+However, this .prl fixup has been added a *long* time ago, I believe
+right when qt5 support was introduced. It is very well possible that
+things changed since then, making the fixup possibly no longer needed.
+
+Thomas
 -- 
-2.14.5
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
