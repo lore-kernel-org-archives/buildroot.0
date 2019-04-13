@@ -1,35 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 13 Apr 2019 15:30:47 +0200
-Subject: [Buildroot] [PATCH v4 6/6] qt5: Remove *.la/*.prl fixup script
-In-Reply-To: <0735f59d-5c83-152d-0895-23f0213309d6@mind.be>
-References: <20190322183904.22401-1-anaumann@ultratronik.de>
- <20190322183904.22401-7-anaumann@ultratronik.de>
- <502c3f48-3eb7-7d0b-dff6-c00bcbdf9658@andin.de>
- <0735f59d-5c83-152d-0895-23f0213309d6@mind.be>
-Message-ID: <20190413153047.1dd4dae9@windsurf>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Sat, 13 Apr 2019 15:33:40 +0200
+Subject: [Buildroot] [PATCH 1/3] luadbi: bump to version 0.7.2
+Message-ID: <20190413133342.25091-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/luadbi/luadbi.hash | 2 +-
+ package/luadbi/luadbi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Sat, 13 Apr 2019 15:08:58 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
-
-> > Also, I have not found absolute /usr/lib pathes in any of the prl files
-> > without this.  
-> 
->  This I can't explain. I've added Thomas in Cc but I doubt that he remembers.
-
-I obviously won't remember more than what the commit history has.
-However, this .prl fixup has been added a *long* time ago, I believe
-right when qt5 support was introduced. It is very well possible that
-things changed since then, making the fixup possibly no longer needed.
-
-Thomas
+diff --git a/package/luadbi/luadbi.hash b/package/luadbi/luadbi.hash
+index d72690d9a..07a9cc218 100644
+--- a/package/luadbi/luadbi.hash
++++ b/package/luadbi/luadbi.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 723f63b744b7367ddfd6bbf7a7e6f6867aa1eaabbbc2bab5dc8a90e80b0c34c2  luadbi-0.6-2.src.rock
++sha256 9ebbbaf4ea1f48628341e9ff3c1de10a57200c02453734f41b8016b0fc7b4956  luadbi-0.7.2-1.src.rock
+ sha256 988d73cc2e56f972e8177091e084855fc2904d0fafcfe5c4e02864f25ce2b928  luadbi/COPYING
+diff --git a/package/luadbi/luadbi.mk b/package/luadbi/luadbi.mk
+index 969c01ee2..fbae6b319 100644
+--- a/package/luadbi/luadbi.mk
++++ b/package/luadbi/luadbi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUADBI_VERSION = 0.6-2
++LUADBI_VERSION = 0.7.2-1
+ LUADBI_SUBDIR = luadbi
+ LUADBI_LICENSE = MIT
+ LUADBI_LICENSE_FILES = $(LUADBI_SUBDIR)/COPYING
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
