@@ -1,45 +1,47 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 13 Apr 2019 17:00:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sqlcipher: fix static build with
- openssl and atomic
-Message-ID: <20190413150005.29486-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 13 Apr 2019 16:57:56 +0200
+Subject: [Buildroot] [git commit] package/netsnmp: fix static build with
+ openssl
+Message-ID: <20190413145951.D80EF8B806@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=db430c67a263e5986d08bca520ba210a9a71c4c5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Use pkg-config to find openssl dependencies such as lz or latomic
 
-Fixes: static build on sparc v8 (even if there are no autobuilder
-failures yet)
+Fixes:
+ - http://autobuild.buildroot.org/results/8f6fdbf8a21967363b737bc771252bcded4278a9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/sqlcipher/sqlcipher.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/netsnmp/netsnmp.mk | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/package/sqlcipher/sqlcipher.mk b/package/sqlcipher/sqlcipher.mk
-index 4427344120..a16d94d1dc 100644
---- a/package/sqlcipher/sqlcipher.mk
-+++ b/package/sqlcipher/sqlcipher.mk
-@@ -8,7 +8,7 @@ SQLCIPHER_VERSION = v4.0.1
- SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,$(SQLCIPHER_VERSION))
- SQLCIPHER_LICENSE = BSD-3-Clause
- SQLCIPHER_LICENSE_FILES = LICENSE
--SQLCIPHER_DEPENDENCIES = openssl host-tcl
-+SQLCIPHER_DEPENDENCIES = host-pkgconf openssl host-tcl
- SQLCIPHER_INSTALL_STAGING = YES
+diff --git a/package/netsnmp/netsnmp.mk b/package/netsnmp/netsnmp.mk
+index 4bd65ef17a..ed573c51e3 100644
+--- a/package/netsnmp/netsnmp.mk
++++ b/package/netsnmp/netsnmp.mk
+@@ -53,15 +53,12 @@ endif
  
- SQLCIPHER_CONF_ENV = \
-@@ -20,7 +20,7 @@ SQLCIPHER_CONF_OPTS = \
- 	--disable-tcl
- 
- SQLCIPHER_CFLAGS += -DSQLITE_HAS_CODEC # Required according to the README
--SQLCIPHER_CONF_ENV += LIBS="-lcrypto -lz"
-+SQLCIPHER_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- 
- ifeq ($(BR2_PACKAGE_SQLCIPHER_STAT3),y)
- SQLCIPHER_CFLAGS += -DSQLITE_ENABLE_STAT3
--- 
-2.20.1
+ # OpenSSL
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-NETSNMP_DEPENDENCIES += openssl
++NETSNMP_DEPENDENCIES += host-pkgconf openssl
+ NETSNMP_CONF_OPTS += \
+ 	--with-openssl=$(STAGING_DIR)/usr/include/openssl \
+ 	--with-security-modules="tsm,usm" \
+ 	--with-transports="DTLSUDP,TLSTCP"
+-ifeq ($(BR2_STATIC_LIBS),y)
+-# openssl uses zlib, so we need to explicitly link with it when static
+-NETSNMP_CONF_ENV += LIBS=-lz
+-endif
++NETSNMP_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ else ifeq ($(BR2_PACKAGE_NETSNMP_OPENSSL_INTERNAL),y)
+ NETSNMP_CONF_OPTS += --with-openssl=internal
+ else
