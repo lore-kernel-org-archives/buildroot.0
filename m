@@ -1,54 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 13 Apr 2019 18:49:17 +0200
-Subject: [Buildroot] [PATCH v5 1/2] meson: add per package optional
- compiler/linker flags
-In-Reply-To: <20190408204321.18620-1-ps.report@gmx.net>
-References: <20190408204321.18620-1-ps.report@gmx.net>
-Message-ID: <20190413184917.3b3a44eb@windsurf>
+Date: Sat, 13 Apr 2019 18:54:07 +0200
+Subject: [Buildroot] [RFC] package/python-mako: build host-python-mako
+ as python3 module for mesa3d build.
+In-Reply-To: <20190413164606.25700-1-romain.naour@smile.fr>
+References: <20190413164606.25700-1-romain.naour@smile.fr>
+Message-ID: <20190413185407.7b474503@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hello Romain,
 
-On Mon,  8 Apr 2019 22:43:20 +0200
-Peter Seiderer <ps.report@gmx.net> wrote:
+On Sat, 13 Apr 2019 18:46:06 +0200
+Romain Naour <romain.naour@smile.fr> wrote:
 
-> Add LIBFOO_MESON_CFLAGS, LIBFOO_MESON_LDFLAGS and LIBFOO_MESON_CXXFLAGS
-> variables to allow per package additional compiler/linker flags.
+> But adding python3 on the target in order to have a python3 module
+> on the host is not nice.
 > 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> To build host-python-mako as python3 module we can add this line
+> in pyhon-mako package:
+> HOST_PYTHON_MAKO_NEEDS_HOST_PYTHON = python3
+> 
+> But python mako is not available anymore for python2 interpreter.
+> 
+> The problem is more global, how can we build the same python
+> module for python2 and/or python3 on the host ?
 
-I did a bit of research. Meson does accept -Dc_args and a bunch of
-other options on the command line, but they are ignored when a
-cross-file is used. http://mesonbuild.com/Builtin-options.html says it
-clearly: "c_args, cpp_args, c_link_args, and cpp_link_args only affect
-native builds, when cross compiling they will not be applied to
-binaries or libraries targeting the host system, only those being run
-on the build system."
+We can't :-)
 
-There is some on-going discussion upstream about this. See
-https://github.com/mesonbuild/meson/issues/4767.
+> Mako module is also used by gnuradio build system and building
+> this module for python3 for mesa3d can eventually break the build of
+> gnuradio when the python interpreter on the host is python2
+> (to be tested).
 
-A cross_pkg_config_path option was merged:
+Indeed, your patch would break situations where mesa3d is enabled, but
+another package needs host-python-mako for python2 (and not python3).
 
-  https://github.com/mesonbuild/meson/commit/91b2475e30d7659dad24eb35b47e4d098c716792
+We solved this problem for python-setuptools by having
+host-python-setuptools and host-python3-setuptools as separate
+packages. It's not great, but we don't have any other good solution for
+this at the moment I believe.
 
-Aparently, they are talking about possibly adding cross_c_args.
-
-What do we do ? Wait until upstream solves the problem ? Use an
-intermediate solution like yours, and later one move to another one if
-upstream provides one ?
-
-Could you at least raise the fact that the Buildroot project would also
-be interested in being able to pass addition cflags/cxxflags/ldflags on
-the command line, as well as passing the path of tools like
-libgcrypt-config ? (See my reply to J?rg Krause's patch on this topic,
-on which you are Cc'ed).
-
-Best regards,
+Alternatively, perhaps for host Python modules we should always install
+them for both host-python and host-python3 (if both are enabled, of
+course). The gotcha is that since we don't have any Config.in options
+for host packages, how can we know if host-python and/or host-python3
+are enabled ?
 
 Thomas
 -- 
