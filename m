@@ -1,33 +1,41 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Apr 2019 10:00:17 +0200
-Subject: [Buildroot] [PATCH 00/10] infra: add solution to dump metadata
- from packages (branch yem/misc)
-In-Reply-To: <20190411212002.GG2539@scaer>
-References: <cover.1554637858.git.yann.morin.1998@free.fr>
- <20190411192651.5196cd1c@windsurf.home> <20190411212002.GG2539@scaer>
-Message-ID: <27920e20-8b65-1a38-d82a-edad8b289bce@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 13 Apr 2019 10:32:17 +0200
+Subject: [Buildroot] [PATCH 1/2] package/msmtp: drop unneeded static openssl
+ workaround
+Message-ID: <20190413083218.6355-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+msmtp uses pkg-config to find openssl dependencies such as lz or latomic
+so drop unneeded openssl workaround that was added by
+https://git.buildroot.net/buildroot/commit/package/msmtp?id=468bbc1538aaea87beaf455a2ad6ea5a255d5f58
 
+I don't know why it was added seven years ago as msmtp already used
+pkg-config at this time:
+https://github.com/marlam/msmtp-mirror/blob/rel-1-4-27/configure.ac
 
-On 11/04/2019 23:20, Yann E. MORIN wrote:
->> I'm not at all saying that we shouldn't merge this JSON output, I just
->> wanted to point out the different ways that already exist to extract
->> some package metadata out of Buildroot.
-> Well, my idea wuld maybe to actually phase-out those rules, or at least
-> base them on this new JSON output.
-> 
-> Heck, even graph-depends could use that instead of the recently
-> introduced show-dependency-tree, and this is what I was going to do
-> before the release, so that show-dependency-tree never ever gets into
-> a release.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/msmtp/msmtp.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
- Indeed, I think show-info can replace a lot of our special targets:
-show-version, show-*depends, external-deps.
-
- Regards,
- Arnout
+diff --git a/package/msmtp/msmtp.mk b/package/msmtp/msmtp.mk
+index 079c7c2319..db3d42cd94 100644
+--- a/package/msmtp/msmtp.mk
++++ b/package/msmtp/msmtp.mk
+@@ -46,10 +46,6 @@ MSMTP_DEPENDENCIES += gnutls
+ else ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MSMTP_CONF_OPTS += --with-tls=openssl
+ MSMTP_DEPENDENCIES += openssl
+-ifeq ($(BR2_STATIC_LIBS),y)
+-# openssl uses zlib, so we need to explicitly link with it when static
+-MSMTP_CONF_ENV += LIBS=-lz
+-endif
+ else
+ MSMTP_CONF_OPTS += --with-tls=no
+ endif
+-- 
+2.20.1
