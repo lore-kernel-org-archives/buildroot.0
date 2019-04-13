@@ -1,113 +1,73 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 13 Apr 2019 23:54:42 +0200
-Subject: [Buildroot] [git commit] package/most: new package
-Message-ID: <20190413220301.11EE58E16E@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 00:09:56 +0200
+Subject: [Buildroot] [git commit] Fix rasberry Pi 64bit firmware overlay
+ inclusion
+Message-ID: <20190413220645.9CEC88D77F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f40ceb857e7f4e5b01bf0867e729240df3c977da
+commit: https://git.buildroot.net/buildroot/commit/?id=51d6d6c580432435f2b2f95ed35e22a5ecbe9dcb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---with-slang has to be given explicitly, otherwise the configure script
-looks for slang.h in host directories.
+This patch enables the inclusion of the Pi's overlays. Previously
+the overlays were not included in the genimage configuration.
+This patch ensures overlays are included in the sdcard (when
+enabled) by defaulting to the inclusion of an empty
+output/images/rpi-firmware/overlays directory in genimage cfg.
 
-Signed-off-by: Sven Oliver Moll <svolli@svolli.de>
-[Arnout: add --with-slang config option]
+The Pi's overlays are built with the following config
+variables:
+BR2_PACKAGE_RPI_FIRMWARE=y
+BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
+BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+BR2_LINUX_KERNEL_IMAGE_NAME="Image"
+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image modules dtbs"
+
+After building, the dtbo files are present in the
+output/images/rpi-firmware/overlays directory but not added
+to the sdcard because they are missing from the genimage cfg
+file.
+
+Signed-off-by: Matt Flax <flatmax@flatmax.org>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Arnout: fix indentation, and add comment explaining why an empty
+         directory is created.]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- DEVELOPERS             |  3 +++
- package/Config.in      |  1 +
- package/most/Config.in | 12 ++++++++++++
- package/most/most.hash |  6 ++++++
- package/most/most.mk   | 24 ++++++++++++++++++++++++
- 5 files changed, 46 insertions(+)
+ board/raspberrypi/genimage-raspberrypi3-64.cfg | 1 +
+ package/rpi-firmware/rpi-firmware.mk           | 6 ++++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 40d0642c2e..a77a730603 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2113,6 +2113,9 @@ F:	package/libmms/
- F:	package/orc/
- F:	package/wampcc/
- 
-+N:	Sven Oliver Moll <svolli@svolli.de>
-+F:	package/most/
-+
- N:	Theo Debrouwere <t.debrouwere@televic.com>
- F:	package/pugixml/
- 
-diff --git a/package/Config.in b/package/Config.in
-index ceb78fac0b..158a030e53 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2231,6 +2231,7 @@ menu "Text editors and viewers"
- 	source "package/joe/Config.in"
- 	source "package/less/Config.in"
- 	source "package/mc/Config.in"
-+	source "package/most/Config.in"
- 	source "package/nano/Config.in"
- 	source "package/uemacs/Config.in"
- 	source "package/vim/Config.in"
-diff --git a/package/most/Config.in b/package/most/Config.in
-new file mode 100644
-index 0000000000..943042c3fd
---- /dev/null
-+++ b/package/most/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_MOST
-+	bool "most"
-+	depends on BR2_USE_MMU # slang
-+	select BR2_PACKAGE_SLANG
-+	help
-+	  most is a powerful pager, including features like multi
-+	  document support, hex view and unpack on-the-fly.
-+
-+	  https://www.jedsoft.com/most/
-+
-+	  Note: this program depends on the slang library which is
-+	  rather large to be used just for this pager.
-diff --git a/package/most/most.hash b/package/most/most.hash
-new file mode 100644
-index 0000000000..151caadc3a
---- /dev/null
-+++ b/package/most/most.hash
-@@ -0,0 +1,6 @@
-+# From https://www.jedsoft.org/releases/most/
-+sha1 db811669a6b22c15478c957b439b5e4483ce1c95 most-5.1.0.tar.gz
-+# Locally computed
-+sha256 db805d1ffad3e85890802061ac8c90e3c89e25afb184a794e03715a3ed190501  most-5.1.0.tar.gz
-+sha256 1b2a567f289f66a143c56353e7b3d4fa5862514a5e3c5cfdf8b02ee5e5aaa953  COPYING
-+sha256 47ad1c3f9b94d6ec42d9bee6c5df980c5c2daa5b9d22113545ae6a3f21ca2f52  COPYRIGHT
-diff --git a/package/most/most.mk b/package/most/most.mk
-new file mode 100644
-index 0000000000..d24e67f936
---- /dev/null
-+++ b/package/most/most.mk
-@@ -0,0 +1,24 @@
-+################################################################################
-+#
-+# most
-+#
-+################################################################################
-+
-+MOST_SITE = http://www.jedsoft.org/releases/most
-+MOST_VERSION = 5.1.0
-+MOST_LICENSE = GPL-2.0+
-+MOST_LICENSE_FILES = COPYING COPYRIGHT
-+MOST_DEPENDENCIES = slang
-+
-+MOST_CONF_OPTS = --with-slang=$(STAGING_DIR)/usr
-+
-+define MOST_REMOVE_LOCAL_SLANG_CHECK
-+	$(SED) 's/ slangversion / /g' $(@D)/src/Makefile.in
+diff --git a/board/raspberrypi/genimage-raspberrypi3-64.cfg b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+index 0d0ca750a7..af1d17cde7 100644
+--- a/board/raspberrypi/genimage-raspberrypi3-64.cfg
++++ b/board/raspberrypi/genimage-raspberrypi3-64.cfg
+@@ -9,6 +9,7 @@ image boot.vfat {
+       "rpi-firmware/config.txt",
+       "rpi-firmware/fixup.dat",
+       "rpi-firmware/start.elf",
++      "rpi-firmware/overlays",
+       "Image"
+     }
+   }
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index e41b3442e6..630bc670ca 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -24,6 +24,12 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
+ 		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
+ 	done
+ endef
++else
++# Still create the directory, so a genimage.cfg can include it independently of
++# whether _INSTALL_DTB_OVERLAYS is selected or not.
++define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
++	$(INSTALL) -d $(BINARIES_DIR)/rpi-firmware/overlays
 +endef
-+MOST_POST_PATCH_HOOKS += MOST_REMOVE_LOCAL_SLANG_CHECK
-+
-+define MOST_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/src/objs/most $(TARGET_DIR)/usr/bin/most
-+endef
-+
-+$(eval $(autotools-package))
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
