@@ -1,165 +1,49 @@
-From: jonsmirl at gmail.com <jonsmirl@gmail.com>
-Date: Sat, 13 Apr 2019 10:11:30 -0400
-Subject: [Buildroot] Help making package file for libp11
-In-Reply-To: <993ea935-d7bf-e7bb-3641-ec20922f7d08@mind.be>
-References: <CAKON4OzT+DFQ2n4ic7CF+YD66UojXOjxyo2+ZVCZ7XyQdhng3w@mail.gmail.com>
- <CAKON4OykMpXY7h3dPWF6vXqQL9WxuwuzH1cHYj0M7MJB63kLvA@mail.gmail.com>
- <993ea935-d7bf-e7bb-3641-ec20922f7d08@mind.be>
-Message-ID: <CAKON4Oz8zQPoGkivckLuuehA34ZU8zxFiHZ-iQGqSTz0_8TiGw@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat, 13 Apr 2019 16:36:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/llvm: fix build with gcc < 5.1
+In-Reply-To: <20190413084555.2367-1-valentinkorenblit@gmail.com>
+References: <20190413084555.2367-1-valentinkorenblit@gmail.com>
+Message-ID: <7955ee96-ad39-0554-f6cf-6c50ea8130ad@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Apr 13, 2019 at 8:59 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 01/04/2019 22:03, jonsmirl at gmail.com wrote:
-> > The error is coming from pkg-generic.mk, step_check_build_dir()
-> >
-> > libp11 is trying to install a crypto engine for openssl. It uses pkg_config
-> > to get the path
-> > enginesexecdir="`$PKG_CONFIG --variable=enginesdir --silence-errors
-> > libcrypto`"
-> >
-> > The path returned from pkg_config is /usr/lib/engines-1.1
-> >
-> > But then the buildroot build system is mangling the enginesexecdir path
-> > into...
-> > /home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot//home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib/engines-1.1
-> >
-> > So where does this path mangling happen? Why is it using a host path?
->
->  It's not using a host path; it's using the staging path (everything up to
-> sysroot), but the path is printed twice.
->
->  However, I don't have that issue:
+Hi Valentin,
 
-A complete rebuild of my system fixed the error. libp11 is checked in
-on git master now,
-but it needs a version bump to support ECC.
+Le 13/04/2019 ? 10:45, Valentin Korenblit a ?crit?:
+> Fixes:
+> 
+> http://autobuild.buildroot.net/results/0c046a1b57a4f0b992333003d41062e1b256eb0d
+> 
+> Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
+> ---
+>  package/llvm/llvm.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+> index cd374d74b4..28c5e89706 100644
+> --- a/package/llvm/llvm.mk
+> +++ b/package/llvm/llvm.mk
+> @@ -17,6 +17,9 @@ LLVM_INSTALL_STAGING = YES
+>  HOST_LLVM_DEPENDENCIES = host-python
+>  LLVM_DEPENDENCIES = host-llvm
+>  
 
+Maybe a comment about these options is welcome :)
 
->
-> $ output/host/bin/pkg-config --variable=enginesdir --silence-errors libcrypto
-> output/host/bin/../arm-buildroot-linux-gnueabihf/sysroot/usr/lib/engines-1.1
->
->  Is it possible that you're using some outdated Buildroot version that doesn't
-> have 7125fc5c1a8a96ff8eee057789358702e1b55835 applied yet?
->
->
->  Regards,
->  Arnout
->
->
-> > On Sun, Mar 31, 2019 at 10:57 PM jonsmirl at gmail.com <jonsmirl@gmail.com>
-> > wrote:
-> >
-> >> I made up a package file for libp11 based off from other posts to the
-> >> list...
-> >>
-> >> LIBP11_VERSION = e1210903291b1de9eabcad26e740a4b2fbcca692
-> >> LIBP11_SITE = $(call github,OpenSC,libp11,$(LIBP11_VERSION))
-> >> LIBP11_DEPENDENCIES = openssl
-> >> LIBP11_INSTALL_STAGING = YES
-> >> LIBP11_LICENSE = LGPLv2.1
-> >> LIBP11_LICENSE_FILES = COPYING
-> >> LIBP11_AUTORECONF = YES
-> >>
-> >> LIBP11_CONF_OPTS += --with-enginesdir=/usr/lib
-> >> ifeq ($(BR2_PACKAGE_P11_KIT),y)
-> >> LIBP11_CONF_OPTS += --with-pkcs11-module=/usr/lib/p11-kit-proxy.so
-> >> endif
-> >>
-> >> $(eval $(autotools-package))
-> >>
-> >> -----------------------------
-> >>
-> >> I'm getting an error with the path at the install stage...
-> >> Can anyone give me a clue as to what is wrong?
-> >>
-> >> make[2]: Entering directory
-> >>
-> >> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
-> >> make[3]: Entering directory
-> >>
-> >> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
-> >> make[3]: Nothing to be done for `install-exec-am'.
-> >>  /bin/mkdir -p
-> >> '/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/share/doc/libp11'
-> >>  /usr/bin/install -c -m 644 NEWS
-> >>
-> >> '/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/share/doc/libp11'
-> >> make[3]: Leaving directory
-> >>
-> >> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
-> >> make[2]: Leaving directory
-> >>
-> >> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
-> >> make[1]: Leaving directory
-> >>
-> >> `/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692'
-> >>>>> libp11 e1210903291b1de9eabcad26e740a4b2fbcca692 Fixing libtool files
-> >> for la in $(find
-> >>
-> >> /home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot/usr/lib*
-> >> -name "*.la"); do \
-> >> cp -a "${la}" "${la}.fixed" && \
-> >> /bin/sed -i -e
-> >> "s:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot:@BASE_DIR
-> >> @:g"
-> >> \
-> >> -e
-> >> "s:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot:@STAGING_DIR
-> >> @:g"
-> >> \
-> >> -e
-> >> "s:/home/jonsmirl/aosp/lindenis/out/external-toolchain/gcc-linaro-5.3.1-arm:@TOOLCHAIN_EXTERNAL_INSTALL_DIR
-> >> @:g"
-> >> \
-> >> -e "s:\(['= ]\)/usr:\\1 at STAGING_DIR@/usr:g" \
-> >> -e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR
-> >> @:/home/jonsmirl/aosp/lindenis/out/external-toolchain/gcc-linaro-5.3.1-arm:g"
-> >> \
-> >> -e "s:@STAGING_DIR
-> >> @:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot:g"
-> >> \
-> >> -e "s:@BASE_DIR
-> >> @:/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot:g"
-> >> \
-> >> "${la}.fixed" && \
-> >> if cmp -s "${la}" "${la}.fixed"; then \
-> >> rm -f "${la}.fixed"; \
-> >> else \
-> >> mv "${la}.fixed" "${la}"; \
-> >> fi || exit 1; \
-> >> done
-> >> libp11: installs files in
-> >>
-> >> /home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/host/arm-buildroot-linux-gnueabi/sysroot//home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot
-> >> make: ***
-> >> [/home/jonsmirl/aosp/lindenis/out/eagle/lindeni-v5/buildroot/build/libp11-e1210903291b1de9eabcad26e740a4b2fbcca692/.stamp_staging_installed]
-> >> Error 1
-> >> make: Leaving directory `/home/jonsmirl/aosp/lindenis/buildroot'
-> >>
-> >>
-> >> --
-> >> Jon Smirl
-> >> jonsmirl at gmail.com
-> >>
-> >
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
+# LLVM >= 9.0 will soon require C++14 support, building llvm 8.x using a
+toolchain using gcc < 5.1 is deprecated but still build with gcc >= 4.8.
+# https://reviews.llvm.org/D57264
+> +HOST_LLVM_CONF_OPTS += -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON
+> +LLVM_CONF_OPTS += -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON
 
+Best regards,
+Romain
 
-
--- 
-Jon Smirl
-jonsmirl at gmail.com
+> +
+>  # Don't build clang libcxx libcxxabi lldb compiler-rt lld polly as llvm subprojects
+>  # This flag assumes that projects are checked out side-by-side and not nested
+>  HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_PROJECTS=""
+> 
