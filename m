@@ -1,55 +1,47 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 13 Apr 2019 17:51:13 +0200
-Subject: [Buildroot] [PATCHv5 1/9] support/download: reintroduce
- 'source-check' target
-In-Reply-To: <c2ae9ea6-d77f-be81-a991-6efa933a258d@mind.be>
-References: <20190219103839.25409-1-patrickdepinguin@gmail.com>
- <20190317143215.GD14237@scaer> <20190317155719.14839925@windsurf>
- <69fd8276-ea53-75a5-240a-a0e146cd8b62@mind.be>
- <20190327173548.7db271b5@windsurf>
- <0a9e8f22-a95f-47d3-612e-23bcca6c20a6@mind.be>
- <c2ae9ea6-d77f-be81-a991-6efa933a258d@mind.be>
-Message-ID: <CAAXf6LW5YQMVQEgQFUyyLvrFrprtfCWFpfNm1hqzxBBmgfzVDQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 13 Apr 2019 18:24:22 +0200
+Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
+ in cross file
+In-Reply-To: <20190403183202.19682-1-joerg.krause@embedded.rocks>
+References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
+Message-ID: <20190413182422.7e8f5f22@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hello J?rg,
 
-On Sat, Apr 13, 2019, 17:24 Arnout Vandecappelle <arnout@mind.be> wrote:
++Peter Seiderer in Cc.
 
->  Hi Thomas DS,
->
-> On 27/03/2019 18:25, Arnout Vandecappelle wrote:
-> >
-> >
-> > On 27/03/2019 17:35, Thomas Petazzoni wrote:
-> [snip]
-> >> We already have "make external-deps" but it only prints the file names,
-> >> not the full URL.
-> >
-> >  True! So, we could extend external-deps with printing the URL (similar
-> to how
-> > printvars uses RAW_VARS maybe, to not break existing scripts using
-> > external-deps). We could have variables to ask for primary, upstream or
-> secondary.
->
->  With Yann's show-info series on its way in, can we consider this series as
-> Rejected?
->
->  Thanks for the patches anyway, it was the push needed to get Yann to
-> implement
-> the Right Thing (tm) :-)
->
+On Wed,  3 Apr 2019 20:32:01 +0200
+J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
-Yes, I agree to drop these patches and use show-info instead.
+> Since version 0.49.0 the Meson build system has native support for
+> looking for `libgcrypt-config` if no pkg-config file is found. As the
+> latest version 1.8.4 of libgcrypt does not provide a .pc file, using
+> `libgcrypt-config` is the only way for detecting the required libraries
+> when linking agains libgrypt.
+> 
+> The `libgcrypt-config` entry is necessary for updating package mpd,
+> which switched from the Autotools to the Meson build system when bumping
+> from version 0.20 to 0.21.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-Thanks all for the discussion and alternative solution.
+As I said in my previous reply, I'm not too happy with this
+libgcrypt-config variable creeping into the global cross-compilation
+file. Can we instead look at extending what Peter Seiderer is doing in
+http://patchwork.ozlabs.org/patch/1081486/ and allow some per-package
+additions to the per-package cross-compilation file ? Peter's patch
+does it for CFLAGS/CXXFLAGS/LDFLAGS, we could perhaps do the same with
+arbitrary program paths ?
 
-Best regards
+Thanks!
+
 Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190413/c5fd7242/attachment.html>
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
