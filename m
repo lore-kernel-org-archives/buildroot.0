@@ -1,26 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 22:25:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sane-backends: security bump to
- version 1.0.27
-In-Reply-To: <20190406135904.12623-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 6 Apr 2019 15:59:04 +0200")
-References: <20190406135904.12623-1-fontaine.fabrice@gmail.com>
-Message-ID: <877ebwpc5r.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Apr 2019 22:27:52 +0200
+Subject: [Buildroot] [PATCH] package/wsapi: update coxpcall dependency
+In-Reply-To: <20190405160321.10629-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Fri, 5 Apr 2019 18:03:21 +0200")
+References: <20190405160321.10629-1-francois.perrad@gadz.org>
+Message-ID: <8736mkpc1j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
- > - Switch site to gitlab
- > - Remove second patch (already in version)
- > - Use new --{with,without}-usb option
- > - Add hash for license file
- > - Fix CVE-2017-6318
+ > since version 1.7, coxpcall is only required with Lua 5.1
+ > see, https://github.com/keplerproject/wsapi/pull/41
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
 Committed to 2019.02.x, thanks.
 
