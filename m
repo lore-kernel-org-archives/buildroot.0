@@ -1,42 +1,174 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Apr 2019 22:17:19 +0200
-Subject: [Buildroot] [PATCH 08/12 v2] fs: add all recursive dependencies to
- packages list
+Date: Sun, 14 Apr 2019 22:17:20 +0200
+Subject: [Buildroot] [PATCH 09/12 v2] core: introduce new global show-info
 In-Reply-To: <cover.1555273025.git.yann.morin.1998@free.fr>
 References: <cover.1555273025.git.yann.morin.1998@free.fr>
-Message-ID: <6dc29af3082c2b20bb4b385f63f1a35b4221fea1.1555273025.git.yann.morin.1998@free.fr>
+Message-ID: <e0509e7ca0439176b7f483afb7436bb85c4fbed3.1555273025.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, only first-level dependencies of a filesystem are added to
-the global list of packages, thus missing all recursive dependencies.
+Users are increasingly trying to extract information about packages. For
+example, they might need to get the list of URIs, or the dependencies of
+a package.
 
-Use the newly introduced recursive variable instead, which already
-contains the rootfs-common dependencies too.
+Although we do have a bunch of rules to generate some of that, this is
+done in ad-hoc way, with most of the output formats just ad-hoc, raw,
+unformatted blurbs, mostly internal data dumped as-is.
 
+Introduce a new rule, show-info, that provides a properly formatted
+output of all the meta-information about packages: name, type, version,
+licenses, dependencies...
+
+We choose to use JSON as the output format, because it is pretty
+versatile, has parsers in virtually all languages, has tools to parse
+from the shell (jq). It also closely matches Python data structure,
+which makes it easy to use with our own internal tools as well. Finally,
+JSON being a key-value store, allows for easy expanding the output
+without requiring existing consumers to be updated; new, unknown keys
+are simply ignored by those (as long as they are true JSON parsers).
+
+The complex part of this change was the conditional output of parts of
+the data: virtual packages have no source, version, license or
+downloads, unlike non-virtual packages. Same goes for filesystems. We
+use a wrapper macro, show-info, that de-multiplexes unto either the
+package-related- or filesystem-related macros, and for packages, we also
+use a detailed macro for non-virtual packages.
+
+It is non-trivial to properly output correct JSON blurbs, especially
+when trying to output an array of objects, like so, where the last item
+shall not be followed by a comma:  [ { ... }, { ... } ]
+
+So, we use a trick (as sugegsted by Arnout), to $(subst) any pair of
+",}" or ", }" or ",]" or ", ]" with only the respective closing symbol,
+"}" or "]".
+
+The whole stuff is $(strip)ed to make it a somewhat-minified JSON blurb
+that fits on a single line with all spaces squashed (but still with
+spaces, as it is not possible to differentiate spaces between JSON
+elements from spaces inside JSON strings).
+
+Reported-by: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
----
- fs/common.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 5ec28ca183..f7989eac57 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -190,7 +190,7 @@ rootfs-$(1): $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME)
+---
+Changes v1 -> v2:
+  - make it a macro to be called  (Arnout)
+  - make it a top-level rule  (Arnout)
+---
+ Makefile             | 15 ++++++++++++
+ package/pkg-utils.mk | 68 ++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 83 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index 60bf7d7d08..33215f91e5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -903,6 +903,21 @@ check-dependencies:
+ 	@cd "$(CONFIG_DIR)"; \
+ 	$(TOPDIR)/support/scripts/graph-depends -C
  
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
- TARGETS_ROOTFS += rootfs-$(1)
--PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES) $$(ROOTFS_COMMON_DEPENDENCIES))
-+PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES))
++.PHONY: show-info
++show-info:
++	@:
++	$(info $(call clean-json, \
++			$(foreach p, \
++				$(sort $(foreach i,$(PACKAGES) $(TARGETS_ROOTFS), \
++						$(i) \
++						$($(call UPPERCASE,$(i))_FINAL_RECURSIVE_DEPENDENCIES) \
++					) \
++				), \
++				$(call show-info,$(call UPPERCASE,$(p)))$(comma) \
++			) \
++		) \
++	)
++
+ else # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ 
+ # Some subdirectories are also package names. To avoid that "make linux"
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index bffd79dfb0..00d1d6bcac 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -62,6 +62,74 @@ $$(error Package error: use $(2) instead of $(1). Please fix your .mk file)
  endif
+ endef
  
- # Check for legacy POST_TARGETS rules
++# show-info -- return package or filesystem metadata formatted as an entry
++#              of a JSON dictionnary
++# $(1): upper-case package or filesystem name
++define show-info
++	"$($(1)_NAME)": {
++		"type": "$($(1)_TYPE)",
++		$(if $(filter rootfs,$($(1)_TYPE)), \
++			$(call _show-info-fs,$(1)), \
++			$(call _show-info-pkg,$(1)), \
++		)
++	}
++endef
++
++# _show-info-pkg, _show-info-pkg-details, _show-info-fs: private helpers
++# for show-info, above
++define _show-info-pkg
++	$(if $($(1)_IS_VIRTUAL), \
++		"virtual": true$(comma),
++		$(call _show-info-pkg-details,$(1)) \
++	)
++	"dependencies": [
++		$(call make-comma-list,$(sort $($(1)_FINAL_ALL_DEPENDENCIES)))
++	],
++	"reverse_dependencies": [
++		$(call make-comma-list,$(sort $($(1)_RDEPENDENCIES)))
++	]
++endef
++define _show-info-pkg-details
++	"virtual": false,
++	"version": "$($(1)_DL_VERSION)",
++	"licenses": "$($(1)_LICENSE)",
++	"downloads": [
++	$(foreach dl,$(sort $($(1)_ALL_DOWNLOADS)),
++		{
++			"source": "$(notdir $(dl))",
++			"URIs": [
++				$(call make-comma-list,
++					$(subst \|,|,
++						$(call DOWNLOAD_URIS,$(dl),$(1))
++					)
++				)
++			]
++		},
++	)
++	],
++endef
++define _show-info-fs
++	"dependencies": [
++		$(call make-comma-list,$(sort $($(1)_DEPENDENCIES)))
++	]
++endef
++
++# clean-json -- cleanup pseudo-json into clean json:
++#  - adds opening { and closing }
++#  - remove commas before closing ] and }
++#  - minify with $(strip)
++clean-json = $(strip \
++	$(subst $(comma)},, \
++		$(subst $(comma)$(space)},$(space)}, \
++			$(subst $(comma)],, \
++				$(subst $(comma)$(space)],$(space)], \
++					{ $(strip $(1)) } \
++				) \
++			) \
++		) \
++	) \
++)
++
+ #
+ # legal-info helper functions
+ #
 -- 
 2.14.1
