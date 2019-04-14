@@ -1,74 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 23:20:34 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/tpm2-tss: add
- upstream patch to drop hardcoded -lgcrypt from tss2-esys.pc
-Message-ID: <20190414212510.02B9B8A509@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 23:21:35 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/tor: fix static
+ build with openssl and atomic
+Message-ID: <20190414212510.0AFF28A509@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0341ab3a75022fac79f689830861efe8dc535bea
+commit: https://git.buildroot.net/buildroot/commit/?id=bc70d3b66dc70e74378773a33e7a8840bb28087e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-tss2-esys.pc contains a hardcoded -lgcrypt even though the openssl crypto
-backend (as in Buildroot) may be used, leading to linker errors when using
-esys.
+Update patch so -latomic (provided in LIBS) is added after openssl libs
+(provided in $3)
 
-Given that tpm2-tss doesn't allow static linking, there is no need to
-explicitly list the crypto library dependency.
+Fixes:
+ - http://autobuild.buildroot.org/results/4b90b7d02e354ebf3d8f95023547bf4a18e0165e
 
-Cherry pick an upstream patch to fix this.  Notice that the upstream patch
-also changes the default crypto backend to openssl.  As this isn't stricly
-needed (we explicitly configure for openssl) and requires autoreconv, drop
-the configure.ac hunk from the patch.
-
-https://github.com/tpm2-software/tpm2-tss/pull/1173
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 55c4f7ca4b3616cbc48f464d9f803eb10f7a908d)
+(cherry picked from commit 73c04d9448f9172eb2174ed3c891ac2953eff6d5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...c-switch-default-ESAPI-crypto-backend-to-.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ package/tor/0001-Fix-static-linking-with-OpenSSL.patch | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/package/tpm2-tss/0002-configure.ac-switch-default-ESAPI-crypto-backend-to-.patch b/package/tpm2-tss/0002-configure.ac-switch-default-ESAPI-crypto-backend-to-.patch
-new file mode 100644
-index 0000000000..a864293d58
---- /dev/null
-+++ b/package/tpm2-tss/0002-configure.ac-switch-default-ESAPI-crypto-backend-to-.patch
-@@ -0,0 +1,32 @@
-+From aa8d9b2bb2faeb0c6cc03548cc363d90d3414f15 Mon Sep 17 00:00:00 2001
-+From: Tadeusz Struk <tadeusz.struk@intel.com>
-+Date: Tue, 23 Oct 2018 16:04:25 -0700
-+Subject: [PATCH] configure.ac: switch default ESAPI crypto backend to openSSL
+diff --git a/package/tor/0001-Fix-static-linking-with-OpenSSL.patch b/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
+index 50ea00af7a..e4cd24e138 100644
+--- a/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
++++ b/package/tor/0001-Fix-static-linking-with-OpenSSL.patch
+@@ -15,11 +15,25 @@ Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+ Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
++ acinclude.m4         | 2 +-
+  configure.ac         | 4 ++--
+  src/test/include.am  | 8 ++++----
+  src/tools/include.am | 4 ++--
+- 3 files changed, 8 insertions(+), 8 deletions(-)
++ 4 files changed, 9 insertions(+), 9 deletions(-)
+ 
++diff --git a/acinclude.m4 b/acinclude.m4
++index 5ecdf1d5c..be5633f4f 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -166,7 +166,7 @@ AC_CACHE_CHECK([for $1 directory], tor_cv_library_$1_dir, [
 +
-+Switch the default ESAPI crypto backend to openSSL.
-+This should also fix the problem with forcing applications to
-+link against libgcrypt.
++   for tor_trydir in "$try$1dir" "(system)" "$prefix" /usr/local /usr/pkg $8; do
++     LDFLAGS="$tor_saved_LDFLAGS"
++-    LIBS="$tor_saved_LIBS $3"
+++    LIBS="$3 $tor_saved_LIBS"
++     CPPFLAGS="$tor_saved_CPPFLAGS"
 +
-+Fixes: #1169
-+
-+Signed-off-by: Tadeusz Struk <tadeusz.struk@intel.com>
-+[Peter: drop configure.ac hunk, only drop hard coded -lcrypt from .pc]
-+(cherry picked from commit a5ff71abeda9a5aea269812de32afb79ef3fcb4d)
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ lib/tss2-esys.pc.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/lib/tss2-esys.pc.in b/lib/tss2-esys.pc.in
-+index 792f0191..ecb01bc1 100644
-+--- a/lib/tss2-esys.pc.in
-++++ b/lib/tss2-esys.pc.in
-+@@ -4,4 +4,4 @@ URL: https://github.com/tpm2-software/tpm2-tss
-+ Version: @VERSION@
-+ Requires: tss2-mu tss2-sys
-+ Cflags: -I at includedir@
-+-Libs: -ltss2-esys -lgcrypt -L at libdir@
-++Libs: -ltss2-esys -L at libdir@
-+-- 
-+2.11.0
-+
++     if test -z "$tor_trydir" ; then
+ diff --git a/configure.ac b/configure.ac
+ index 05e1392cf..580befa6b 100644
+ --- a/configure.ac
