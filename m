@@ -1,143 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 23:18:35 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/android-tools:
- fix static linking failure due to OpenSSL dependencies
-Message-ID: <20190414212509.E46878A509@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 23:16:27 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/gnutls: security
+ bump to 3.6.7.1
+Message-ID: <20190414212509.CE9048E9A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0260950e8f9c9723d07f63a247f1566fbb78930
+commit: https://git.buildroot.net/buildroot/commit/?id=5eee309aeb8a055bf9da222c34c219d9e632fbd4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-When static linking some dependency library can be missing
-(i.e. -latomic for -lcrypto) on linking libraries list. This is
-because when static linking libraries dependencies are not
-transparently linked into binary.
+Fixes the following security issues:
 
-To avoid moving libraries before/after one another or add new ones
-that are not needed at all in the dynamic linking case, we use `pkg-config --libs
-LIBRARY` where LIBRARY is the library we "probe" for its existence and
-dependency.
+ * CVE-2019-3836: It was discovered in gnutls before version 3.6.7 upstream
+   that there is an uninitialized pointer access in gnutls versions 3.6.3 or
+   later which can be triggered by certain post-handshake messages
 
-In this commit, we:
+ * CVE-2019-3829: A vulnerability was found in gnutls versions from 3.5.8
+   before 3.6.7. A memory corruption (double free) vulnerability in the
+   certificate verification API. Any client or server application that
+   verifies X.509 certificates with GnuTLS 3.5.8 or later is affected.
 
-- Remove 0005-fix-static-link-zlib.patch where -lcrypto and -lz were
-  swapped, as it is no longer needed thanks to the following point.
+3.6.7.1 is identical to 3.6.7, but fixes a packaging issue in the release
+tarball:
 
-- Replace it with 0005-Use-pkgconf-to-get-libs-deps.patch where
-  -lcrypto has been substituted with `pkg-config --libs libcrypto`
+https://lists.gnutls.org/pipermail/gnutls-devel/2019-April/013086.html
 
-- Add host-pkgconf to ANDROID_TOOLS_DEPENDENCIES
+HTTP URLs changed to HTTPS in COPYING, so update license hash.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/d3d6679cfc8afe4467368bd3d31483172c1032de/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1e4f77a2e4ae42fa999be17eb48574363e0e51e0)
+Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 1dd5576ccb8eadeb8672c8b22df86f4f41dce1d5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0005-Use-pkgconf-to-get-libs-deps.patch        | 35 +++++++++++++++++++++
- .../android-tools/0005-fix-static-link-zlib.patch  | 36 ----------------------
- package/android-tools/android-tools.mk             |  1 +
- 3 files changed, 36 insertions(+), 36 deletions(-)
+ package/gnutls/gnutls.hash | 6 +++---
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/android-tools/0005-Use-pkgconf-to-get-libs-deps.patch b/package/android-tools/0005-Use-pkgconf-to-get-libs-deps.patch
-new file mode 100644
-index 0000000000..63ea1fb6a4
---- /dev/null
-+++ b/package/android-tools/0005-Use-pkgconf-to-get-libs-deps.patch
-@@ -0,0 +1,35 @@
-+makefiles: use pkgconf to get libs deps
-+
-+LIBS lists library dependencies without taking into account static linking
-+that need ordered listing and more libraries listed since differently from
-+shared linking dependency is not transparent(i.e. -lcrypto could need
-+-latomic etc.).
-+
-+Replace -lcrypto with `pkg-config --libs libcrypto` command to be sure all
-+needed libraries are listed during linking.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+---
-+diff -urpN android-tools-4.2.2+git20130218.orig/debian/makefiles/adbd.mk android-tools-4.2.2+git20130218/debian/makefiles/adbd.mk
-+--- android-tools-4.2.2+git20130218.orig/debian/makefiles/adbd.mk	2019-04-08 16:05:02.967710428 +0200
-++++ android-tools-4.2.2+git20130218/debian/makefiles/adbd.mk	2019-04-08 16:30:42.463084426 +0200
-+@@ -44,7 +44,7 @@ CPPFLAGS+= -DADBD_NON_ANDROID
-+ CPPFLAGS+= -I$(SRCDIR)/core/adbd
-+ CPPFLAGS+= -I$(SRCDIR)/core/include
-+
-+-LIBS+= -lc -lpthread -lz -lcrypto -lcrypt
-++LIBS+= -lc -lpthread -lz `pkg-config --libs libcrypto` -lcrypt
-+
-+ OBJS= $(patsubst %, %.o, $(basename $(SRCS)))
-+
-+diff -urpN android-tools-4.2.2+git20130218.orig/debian/makefiles/adb.mk android-tools-4.2.2+git20130218/debian/makefiles/adb.mk
-+--- android-tools-4.2.2+git20130218.orig/debian/makefiles/adb.mk	2019-04-08 16:05:02.959701400 +0200
-++++ android-tools-4.2.2+git20130218/debian/makefiles/adb.mk	2019-04-08 16:31:06.529426250 +0200
-+@@ -41,7 +41,7 @@ CPPFLAGS+= -DHAVE_TERMIO_H
-+ CPPFLAGS+= -I$(SRCDIR)/core/adb
-+ CPPFLAGS+= -I$(SRCDIR)/core/include
-+
-+-LIBS+= -lc -lpthread -lz -lcrypto
-++LIBS+= -lc -lpthread -lz `pkg-config --libs libcrypto`
-+
-+ OBJS= $(SRCS:.c=.o)
-diff --git a/package/android-tools/0005-fix-static-link-zlib.patch b/package/android-tools/0005-fix-static-link-zlib.patch
-deleted file mode 100644
-index dff4df6e79..0000000000
---- a/package/android-tools/0005-fix-static-link-zlib.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--Fix static linking of adb/adbd
--
--Both adb and adbd use OpenSSL, which indirectly uses zlib. Since
--adb/adbd also use zlib directly -lz is included in the linker flags,
--but not at the right position to ensure that static linking works: to
--make it possible for OpenSSL symbols to see zlib symbols, -lz must
--appear after -lcrypto.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/debian/makefiles/adb.mk
--===================================================================
----- a/debian/makefiles/adb.mk
--+++ b/debian/makefiles/adb.mk
--@@ -41,7 +41,7 @@
-- CPPFLAGS+= -I$(SRCDIR)/core/adb
-- CPPFLAGS+= -I$(SRCDIR)/core/include
-- 
---LIBS+= -lc -lpthread -lz -lcrypto
--+LIBS+= -lc -lpthread -lcrypto -lz
-- 
-- OBJS= $(SRCS:.c=.o)
-- 
--Index: b/debian/makefiles/adbd.mk
--===================================================================
----- a/debian/makefiles/adbd.mk
--+++ b/debian/makefiles/adbd.mk
--@@ -44,7 +44,7 @@
-- CPPFLAGS+= -I$(SRCDIR)/core/adbd
-- CPPFLAGS+= -I$(SRCDIR)/core/include
-- 
---LIBS+= -lc -lpthread -lz -lcrypto -lcrypt
--+LIBS+= -lc -lpthread -lcrypto -lz -lcrypt
-- 
-- OBJS= $(patsubst %, %.o, $(basename $(SRCS)))
-- 
-diff --git a/package/android-tools/android-tools.mk b/package/android-tools/android-tools.mk
-index 6f6ca7729b..3a63139014 100644
---- a/package/android-tools/android-tools.mk
-+++ b/package/android-tools/android-tools.mk
-@@ -11,6 +11,7 @@ ANDROID_TOOLS_EXTRA_DOWNLOADS = android-tools_$(ANDROID_TOOLS_VERSION)-3ubuntu41
- HOST_ANDROID_TOOLS_EXTRA_DOWNLOADS = $(ANDROID_TOOLS_EXTRA_DOWNLOADS)
- ANDROID_TOOLS_LICENSE = Apache-2.0
- ANDROID_TOOLS_LICENSE_FILES = debian/copyright
-+ANDROID_TOOLS_DEPENDENCIES = host-pkgconf
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 1af0e2d45d..8c0e0d69d5 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.6.tar.xz.sig
+-sha256	bb9acab8af2ac430edf45faaaa4ed2c51f86e57cb57689be6701aceef4732ca7	gnutls-3.6.6.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.7.1.tar.xz.sig
++sha256	881b26409ecd8ea4c514fd3fbdb6fae5fab422ca7b71116260e263940a4bbbad	gnutls-3.6.7.1.tar.xz
+ # Locally calculated
+-sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
++sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	doc/COPYING
+ sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index c6d2d72771..e7c5968204 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- # Extract the Debian tarball inside the sources
- define ANDROID_TOOLS_DEBIAN_EXTRACT
+ GNUTLS_VERSION_MAJOR = 3.6
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).6
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7.1
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
