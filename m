@@ -1,53 +1,102 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Apr 2019 16:52:27 +0200
-Subject: [Buildroot] [PATCH] package/dacapo: fix indentation
-Message-ID: <20190414145227.17968-1-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 14 Apr 2019 16:53:49 +0200
+Subject: [Buildroot] [PATCH v8 2/9] cpe-info: id prefix/suffix
+In-Reply-To: <1552082667-46877-3-git-send-email-matthew.weber@rockwellcollins.com>
+References: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
+ <1552082667-46877-3-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <f9effe28-4139-c5c2-e45c-29dc7dd31ac4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes errors reported by running 'make check-package':
-    package/dacapo/Config.in:2: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-    package/dacapo/Config.in:3: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-    package/dacapo/Config.in:4: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
-    package/dacapo/Config.in:5: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-    package/dacapo/Config.in:6: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-    package/dacapo/Config.in:7: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-    package/dacapo/Config.in:12: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Daniel J. Leach <dleach@belcan.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/dacapo/Config.in | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/dacapo/Config.in b/package/dacapo/Config.in
-index 802d7620e8..02dcab9e72 100644
---- a/package/dacapo/Config.in
-+++ b/package/dacapo/Config.in
-@@ -1,12 +1,12 @@
- config BR2_PACKAGE_DACAPO
--       bool "dacapo"
--       depends on BR2_PACKAGE_OPENJDK
--       help
--         The DaCapo benchmark suite is intended as a tool for Java
--         benchmarking by the programming language, memory
--         management and computer architecture communities.
-+	bool "dacapo"
-+	depends on BR2_PACKAGE_OPENJDK
-+	help
-+	  The DaCapo benchmark suite is intended as a tool for Java
-+	  benchmarking by the programming language, memory
-+	  management and computer architecture communities.
- 
--         http://dacapobench.org/
-+	  http://dacapobench.org/
- 
- comment "dacapo needs OpenJDK"
--       depends on !BR2_PACKAGE_OPENJDK
-+	depends on !BR2_PACKAGE_OPENJDK
--- 
-2.14.1
+On 08/03/2019 23:04, Matt Weber wrote:
+> There are two types of software CPE prefixes applicable for software,
+> one for applications and one for operating systems.
+> Note: The third type is for hardware.
+> 
+> This patchset determines which should be used and stores that
+> information with the package for later use when assembling the CPE
+> report.
+> 
+> Refs:
+>    https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir7695.pdf
+>    https://cpe.mitre.org/specification/
+> 
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+> Changes
+> 
+> v8
+>  - Rebase
+> 
+> v4 -> v7
+>  - None
+> 
+> v3
+> [Arnout
+>  - Moved CPE prefix and suffix defines to package/Makefile.in
+> 
+> v1 -> v2
+> [Thomas P
+>  - Change to using a filter on pkg name value vs ifelse
+> ---
+>  package/Makefile.in    | 4 ++++
+>  package/pkg-generic.mk | 8 +++++++-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/Makefile.in b/package/Makefile.in
+> index dc818a2..644282f 100644
+> --- a/package/Makefile.in
+> +++ b/package/Makefile.in
+> @@ -389,6 +389,10 @@ TARGET_CONFIGURE_ARGS = \
+>  
+>  ################################################################################
+>  
+> +CPE_PREFIX_OS = cpe:2.3:o
+> +CPE_PREFIX_APP = cpe:2.3:a
+> +CPE_SUFFIX = *:*:*:*:*:*:*
+
+ This is not correct. For Python packages, for instance, the language field is
+set to python.
+
+> +
+>  ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+>  NLS_OPTS = --enable-nls
+>  TARGET_NLS_DEPENDENCIES = host-gettext
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 644128d..a547c65 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -916,11 +916,17 @@ $(2)_CPE_ID_NAME ?= $$($(2)_NAME)
+>  $(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
+>  $(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
+>  
+> +ifneq ($(filter linux linux-headers,$(1)),)
+> +$(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
+
+ The linux and linux-headers packages are so special that I don't think it makes
+sense to have a separate rule here. For example, the value of LINUX_VERSION is
+probably NOT what you want to use in CPE_ID.
+
+ Regards,
+ Arnout
+
+
+> +else
+> +$(2)_CPE_PREFIX = $(CPE_PREFIX_APP)
+> +endif
+> +
+>  $(1)-cpe-info: PKG=$(2)
+>  $(1)-cpe-info:
+>  ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+>  	@$$(call MESSAGE,"Collecting cpe info")
+> -	$(Q)$$(call cpe-manifest,$$($(2)_CPE_ID),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
+> +	$(Q)$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$($(2)_CPE_ID):$(CPE_SUFFIX),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
+>  endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
+>  
+>  # legal-info: declare dependencies and set values used later for the manifest
+> 
