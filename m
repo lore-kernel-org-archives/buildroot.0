@@ -1,35 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 16:56:19 +0200
-Subject: [Buildroot] [PATCH 1/2] package/msmtp: drop unneeded static
- openssl workaround
-In-Reply-To: <20190413083218.6355-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 13 Apr 2019 10:32:17 +0200")
-References: <20190413083218.6355-1-fontaine.fabrice@gmail.com>
-Message-ID: <87tvf0pre4.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Apr 2019 17:20:38 +0200
+Subject: [Buildroot] [PATCH] package/dacapo: fix indentation
+In-Reply-To: <20190414145227.17968-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 14 Apr 2019 16:52:27 +0200")
+References: <20190414145227.17968-1-yann.morin.1998@free.fr>
+Message-ID: <87o958pq9l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > msmtp uses pkg-config to find openssl dependencies such as lz or latomic
- > so drop unneeded openssl workaround that was added by
- > https://git.buildroot.net/buildroot/commit/package/msmtp?id=468bbc1538aaea87beaf455a2ad6ea5a255d5f58
+ > Fixes errors reported by running 'make check-package':
+ >     package/dacapo/Config.in:2: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
+ >     package/dacapo/Config.in:3: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
+ >     package/dacapo/Config.in:4: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
+ >     package/dacapo/Config.in:5: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+ >     package/dacapo/Config.in:6: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+ >     package/dacapo/Config.in:7: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+ >     package/dacapo/Config.in:12: should be indented with one tab (http://nightly.buildroot.org/#_config_files)
 
- > I don't know why it was added seven years ago as msmtp already used
- > pkg-config at this time:
- > https://github.com/marlam/msmtp-mirror/blob/rel-1-4-27/configure.ac
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Daniel J. Leach <dleach@belcan.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-I believe it was because we didn't used to pass --static to pkg-config
-before
-
-commit 958c9438ccb5e8c8864edf242b6b4ce3b1f058a4
-Author: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
-Date:   Wed Mar 5 12:19:37 2014 +0000
-
-    host-pkgconf: use --static option for static builds
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
