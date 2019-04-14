@@ -1,113 +1,101 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Apr 2019 00:13:12 +0200
-Subject: [Buildroot] [PATCH 1/1] Fix rasberry Pi 64bit firmware overlay
- inclusion
-In-Reply-To: <20190413210620.GP2539@scaer>
-References: <20190103110036.14604-1-flatmax@flatmax.org>
- <20190413210620.GP2539@scaer>
-Message-ID: <6de3ad34-84b1-842f-07e3-6c34734bd1b3@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 14 Apr 2019 06:00:27 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-04-13
+Message-ID: <20190414060032.76421878CE@hemlock.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
+
+Build statistics for 2019-04-13
+===============================
+
+      branch |  OK | NOK | TIM | TOT |
+   2019.02.x |  26 |   1 |   1 |  28 |
+      master | 197 |  29 |   3 | 229 |
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+               host-llvm-8.0.0 | 11
+                host-go-1.12.1 | 2 
+                       netsurf | 2 
+  vdr-plugin-vnsiserver-v1.8.0 | 2 
+                   dvblast-3.4 | 1 
+                        glibmm | 1 
+                  grpc-v1.18.0 | 1 
+                      gzip-1.9 | 1 
+          host-mono-5.14.0.177 | 1 
+                   lldpd-1.0.3 | 1 
+                   mimic-1.1.0 | 1 
+                   mpd-0.20.23 | 1 
+                   netsnmp-5.8 | 1 
+              qt5enginio-1.6.3 | 1 
+          qt5multimedia-5.12.2 | 1 
+           qt5serialbus-5.12.2 | 1 
+      qt5webkit-examples-5.9.1 | 1 
+              spandsp-20180108 | 1 
+         systemd-bootchart-233 | 1 
 
 
-On 13/04/2019 23:06, Yann E. MORIN wrote:
-> Matt, All,
-> 
-> On 2019-01-03 22:00 +1100, Matt Flax spake thusly:
->> This patch enables the inclusion of the Pi's overlays. Previously
->> the overlays were not included in the genimage configuration.
->> This patch ensures overlays are included in the sdcard (when
->> enabled) by defaulting to the inclusion of an empty
->> output/images/rpi-firmware/overlays directory in genimage cfg.
->>
->> The Pi's overlays are built with the following config
->> variables:
->> BR2_PACKAGE_RPI_FIRMWARE=y
->> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
->> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
->> BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
->> BR2_LINUX_KERNEL_IMAGE_NAME="Image"
->> BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image modules dtbs"
->>
->> After building, the dtbo files are present in the
->> output/images/rpi-firmware/overlays directory but not added
->> to the sdcard because they are missing from the genimage cfg
->> file.
->>
->> Signed-off-by: Matt Flax <flatmax@flatmax.org>
-> 
-> After a quick discussion on IRC woth Thomas, we find that this patch is
-> indeed acceptable.
-> 
-> However, I have a minor comment about it, see below...
-> 
->> ---
->>  board/raspberrypi/genimage-raspberrypi3-64.cfg | 1 +
->>  package/rpi-firmware/rpi-firmware.mk           | 4 ++++
->>  2 files changed, 5 insertions(+)
->>
->> diff --git a/board/raspberrypi/genimage-raspberrypi3-64.cfg b/board/raspberrypi/genimage-raspberrypi3-64.cfg
->> index 0d0ca750a7..af1d17cde7 100644
->> --- a/board/raspberrypi/genimage-raspberrypi3-64.cfg
->> +++ b/board/raspberrypi/genimage-raspberrypi3-64.cfg
->> @@ -9,6 +9,7 @@ image boot.vfat {
->>        "rpi-firmware/config.txt",
->>        "rpi-firmware/fixup.dat",
->>        "rpi-firmware/start.elf",
->> +      "rpi-firmware/overlays",
->>        "Image"
->>      }
->>    }
->> diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
->> index bb54904ae6..0df7b17cbd 100644
->> --- a/package/rpi-firmware/rpi-firmware.mk
->> +++ b/package/rpi-firmware/rpi-firmware.mk
->> @@ -24,6 +24,10 @@ define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
->>  		$(INSTALL) -D -m 0644 $${ovldtb} $(BINARIES_DIR)/rpi-firmware/overlays/$${ovldtb##*/} || exit 1; \
->>  	done
->>  endef
->> +else
->> +define RPI_FIRMWARE_INSTALL_DTB_OVERLAYS
->> +		$(INSTALL) -d $(BINARIES_DIR)/rpi-firmware/overlays || exit 1;
-> 
-> No need for the '|| exit 1' part in this case.
+Detail of failures
+------------------
 
- Also it was indented too much, and the trailing semicolon was not needed.
+         arm |                    dvblast-3.4 | NOK | http://autobuild.buildroot.net/results/0062ef1956b89eb6094e256770e007eef1ee74df |     
+microblazeel |                         glibmm | TIM | http://autobuild.buildroot.net/results/78bc48387848b50e04e300b53e237b439f02b798 |     
+      x86_64 |                   grpc-v1.18.0 | NOK | http://autobuild.buildroot.net/results/5dc33fdd0b3cc913629c07feb5dd78df3c100488 |     
+         arm |                       gzip-1.9 | NOK | http://autobuild.buildroot.net/results/3e5739438fbb38691fe7bc230cbd4201f87064e8 | ORPH
+    mips64el |                 host-go-1.12.1 | NOK | http://autobuild.buildroot.net/results/7e891ff19e237354fc82a943f9fa9ee8cfd09526 |     
+         arm |                 host-go-1.12.1 | NOK | http://autobuild.buildroot.net/results/38036a179cd48ff78aafbdff9a9a5c5e742f0741 |     
+      x86_64 |                host-llvm-8.0.0 | NOK | http://autobuild.buildroot.net/results/94fabd0e928d8a8065c1bad1a6171da8b85994f0 |     
+        i586 |                host-llvm-8.0.0 | NOK | http://autobuild.buildroot.net/results/5bed06f27dc5eb964b55d714f0a0f9c917064597 |     
+         arm |                host-llvm-8.0.0 | NOK | http://autobuild.buildroot.net/results/569f56154c0a1b2fcd9f6e311e0950dcc3378641 |     
+         arm |                host-llvm-8.0.0 | NOK | http://autobuild.buildroot.net/results/db8f73164bc96f66750efda3ebdd08e67779ced8 |     
+      x86_64 |                host-llvm-8.0.0 | NOK | http://autobuild.buildroot.net/results/04ec26ae26d50bb96ac6005d251e63d13770d62b |     
+     aarch64 |                host-llvm-8.0.0 | NOK | http://autobuild.buildroot.net/results/5b75c955f16bcdbced1454532c422bd8652eb89d |     
+     aarch64 |                host-llvm-8.0.0 | NOK | http://autobuild.buildroot.net/results/336e8512de5811c008ce60dd7bbf1d368e484ae2 |     
+         arm |                host-llvm-8.0.0 | NOK | http://autobuild.buildroot.net/results/6259b65ad229970cc0e4c7675c9b712a344c32b3 |     
+         arm |                host-llvm-8.0.0 | NOK | http://autobuild.buildroot.net/results/0f681481188d48657b5604c98aaac4e712dc7334 |     
+         arm |                host-llvm-8.0.0 | NOK | http://autobuild.buildroot.net/results/90003db9c25fa830ff3935179b10de255118ada4 |     
+         arm |                host-llvm-8.0.0 | NOK | http://autobuild.buildroot.net/results/fa016bebdac8c0dfcb7059b0e10118cc18751434 |     
+         arm |           host-mono-5.14.0.177 | NOK | http://autobuild.buildroot.net/results/a0ed7dff2f8bf5963ddccd992323c3ac5dc84472 |     
+     aarch64 |                    lldpd-1.0.3 | NOK | http://autobuild.buildroot.net/results/64201ce8804b9041c52ca6692b6c2f0556882c7a |     
+     powerpc |                    mimic-1.1.0 | NOK | http://autobuild.buildroot.net/results/38b0dad720ec74d73ea89bf541ed619454c40144 |     
+         arm |                    mpd-0.20.23 | NOK | http://autobuild.buildroot.net/results/4e97c88554bb4d757938db9ee273ae5592762275 |     
+         arm |                    netsnmp-5.8 | NOK | http://autobuild.buildroot.net/results/104145f60f44e461093a11b414ed989620d62f48 | ORPH
+         arc |                        netsurf | TIM | http://autobuild.buildroot.net/results/5552aba2869447d18d0b3dea2dd9b3ddc21296e3 |     
+       sparc |                        netsurf | TIM | http://autobuild.buildroot.net/results/2a65d170ffc7a4c5ab07be7f35248fbd027f9c48 |     
+         arc |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/0c3a8c13ea0580645bf93e61f8c6069d2618a00f |     
+         arm |           qt5multimedia-5.12.2 | NOK | http://autobuild.buildroot.net/results/70f4a3059d75b9fb9a99fb66035d2d1ee7205601 |     
+microblazeel |            qt5serialbus-5.12.2 | NOK | http://autobuild.buildroot.net/results/3789f576d83f596824657489c77593627405caba |     
+         arm |       qt5webkit-examples-5.9.1 | NOK | http://autobuild.buildroot.net/results/d582b18c4a2e6a8bd9efd3b539d63708bade5ed3 |     
+        i686 |               spandsp-20180108 | NOK | http://autobuild.buildroot.net/results/b34c3a2d29f27023aaa000522f97de7d31c10f73 |     
+         arc |          systemd-bootchart-233 | NOK | http://autobuild.buildroot.net/results/84fb51212abf99faa2b7a46b8c44c42a3ca1201c |     
+         arc |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/69066d2d6c5cb8b3bf15a5aa0e1ab81e04bf750d |     
+    mips64el |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/0c75147747fd5c72a26d634d7656705f82b2a13b |     
 
- Also, I've added a brief comment explaining why we create this empty directory.
+Results for branch '2019.02.x'
+==============================
 
- Peter, we discussed this on IRC and we feel that one empty directory doesn't
-violate the minimalistic principle too much, because it does make life a lot
-easier when you start from the existing defconfig.
+Classification of failures by reason
+------------------------------------
 
- So, I've applied to master with the changes mentioned above.
+                      gzip-1.9 | 1 
+                          opus | 1 
 
- Regards,
- Arnout
 
-> 
-> It is important to use it ion the loop, above, because it is a shell
-> loop, so an error in the commands would not be noticed. Here however,
-> this is a single command, so it will return in error if it fils and make
-> will notice.
-> 
-> Barring that, which can be fixed when applying:
-> 
-> Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
->> +endef
->>  endif
->>  
->>  ifeq ($(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_VCDBG),y)
->> -- 
->> 2.19.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Detail of failures
+------------------
+
+         arm |                       gzip-1.9 | NOK | http://autobuild.buildroot.net/results/6b3a063cf3a6e5590d7aba09b6108365a4f624ab | ORPH
+microblazeel |                           opus | TIM | http://autobuild.buildroot.net/results/01e06d811ed611dac08b725caa3468ae148e7cb0 |     
+
+
+-- 
+http://autobuild.buildroot.net
