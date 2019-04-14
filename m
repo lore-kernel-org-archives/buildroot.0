@@ -1,30 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Apr 2019 14:58:44 +0200
-Subject: [Buildroot] [PATCH] package/cgilua: bump to version 5.2.1
-In-Reply-To: <20190414101451.29181-1-francois.perrad@gadz.org>
-References: <20190414101451.29181-1-francois.perrad@gadz.org>
-Message-ID: <20190414145844.40fe2dae@windsurf>
+Date: Sun, 14 Apr 2019 15:01:17 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mutt: fix static build with
+ idn2 and unistring
+In-Reply-To: <20190414084600.29278-1-fontaine.fabrice@gmail.com>
+References: <20190414084600.29278-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190414150117.3e01d134@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 14 Apr 2019 12:14:51 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+Hello,
 
-> The hash of the license file changes only due to a style sheet changes:
+On Sun, 14 Apr 2019 10:45:59 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> Fixes:
+>  - http://autobuild.buildroot.org/results/c9544b4f1a0252e260a2ed19218fa950f4dc2d2d
 > 
-> -    <link rel="stylesheet" href="http://www.keplerproject.org/doc.css" type="text/css"/>
-> +    <link rel="stylesheet" href="doc.css" type="text/css"/>
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/cgilua/cgilua.hash | 4 ++--
->  package/cgilua/cgilua.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  ...-static-build-with-idn2-and-unistrin.patch | 37 +++++++++++++++++++
+>  package/mutt/mutt.mk                          |  2 +
+>  2 files changed, 39 insertions(+)
+>  create mode 100644 package/mutt/0001-configure.ac-fix-static-build-with-idn2-and-unistrin.patch
 
-Applied to master, thanks.
+Both applied, thanks! As usual, using pkg-config would have been better :-)
 
 Thomas
 -- 
