@@ -1,42 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 23:19:37 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/tpm2-tools:
- license is 3c BSD, not 2c
-Message-ID: <20190414212509.F10468A509@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 23:22:26 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/civetweb: fix
+ link failure due to missing OpenSSL dependency
+Message-ID: <20190414212510.10F528A509@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=650c2a5dcf40868660920e2b4728b13c36c60569
+commit: https://git.buildroot.net/buildroot/commit/?id=18f8a9d00c340c5c1ffe23ce8cafedebd5e42562
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-The license contains the "no endorsement" clause, so it should be listed as
-BSD-3-Clause:
+During linking one OpenSSL dependecy is missing(-latomic) on linking
+library list.
 
-  * Neither the name of Intel Corporation nor the names of its contributors
-    may be used to endorse or promote products derived from this software
-    without specific prior written permission.
+- Substitute explicit library list with `pkg-config libssl` when
+  BR2_PACKAGE_OPENSSL is enabled. In such way all needed libraries
+  will be included in linking list.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+- Add also `host-pkgconf` to CIVETWEB_DEPENDENCIES if
+  BR2_PACKAGE_OPENSSL is enabled to make it available for previous
+  point.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/b2e210bdefe84f4ec9cfda79a33d81788fb7e66c/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 92c7310d5be2956d2f609013289cc85073deac24)
+(cherry picked from commit 027a8b29f1e62d5ff5bbb15b79376614f902a680)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tpm2-tools/tpm2-tools.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/civetweb/civetweb.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
-index 9e50170297..e7423db67a 100644
---- a/package/tpm2-tools/tpm2-tools.mk
-+++ b/package/tpm2-tools/tpm2-tools.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
+index fe1cdd5675..80272738e4 100644
+--- a/package/civetweb/civetweb.mk
++++ b/package/civetweb/civetweb.mk
+@@ -32,8 +32,8 @@ endif
  
- TPM2_TOOLS_VERSION = 3.1.4
- TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
--TPM2_TOOLS_LICENSE = BSD-2-Clause
-+TPM2_TOOLS_LICENSE = BSD-3-Clause
- TPM2_TOOLS_LICENSE_FILES = LICENSE
- TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf
- 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ CIVETWEB_COPT += -DNO_SSL_DL
+-CIVETWEB_LIBS += -lssl -lcrypto -lz
+-CIVETWEB_DEPENDENCIES += openssl
++CIVETWEB_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libssl`
++CIVETWEB_DEPENDENCIES += openssl host-pkgconf
+ else
+ CIVETWEB_COPT += -DNO_SSL
+ endif
