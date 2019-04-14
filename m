@@ -1,49 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 22:23:37 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] fs/common.mk: disable
- real chown calls in fakeroot
-Message-ID: <20190414202935.4D87C8E8BA@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 22:27:34 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/wsapi: update
+ coxpcall dependency
+Message-ID: <20190414202935.645B881597@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55a098dc774e0cfe518efd218d96cd895695c847
+commit: https://git.buildroot.net/buildroot/commit/?id=f64a25a099b74aadd9674db1b942dc8fba1cce2a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-fakeroot by default forwards {f,l,}chown calls to libc and ignores
-permission issues, which may cause issues when building in restricted
-environments like user namespaces as set up with bubblewrap where a chown
-call with a uid/gid not mapped in the user namespace instead returns EINVAL.
-This error is not masked by fakeroot and returned to the caller, causing
-failures.
+since version 1.7, coxpcall is only required with Lua 5.1
 
-There is no real reason to really perform the *chown calls in the context of
-Buildroot (as the calls will likely just fail and files are not accessed
-outside the fakeroot environment any way).
+see, https://github.com/keplerproject/wsapi/pull/41
 
-This forwarding can be disabled by setting the FAKEROOTDONTTRYCHOWN
-environment variable, so set it when fakeroot is executed.
-
-Reported-by: Esben Nielsen <nielsen.esben@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 655acd1df02e5e9ce318aadc33bd6fa8042fc455)
+(cherry picked from commit b7b8a7f3ac2c32d6fde841795ac09b7b9f296219)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- fs/common.mk | 2 +-
+ package/wsapi/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index a560417c6c..b361ecce25 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -138,7 +138,7 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
- 	$$(call PRINTF,$$(ROOTFS_REPRODUCIBLE)) >> $$(FAKEROOT_SCRIPT)
- 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
- 	chmod a+x $$(FAKEROOT_SCRIPT)
--	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
-+	PATH=$$(BR_PATH) FAKEROOTDONTTRYCHOWN=1 $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
- 	$(Q)rm -rf $$(TARGET_DIR)
- ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
- 	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
+diff --git a/package/wsapi/Config.in b/package/wsapi/Config.in
+index 60c029ddf6..72e2dcd8e0 100644
+--- a/package/wsapi/Config.in
++++ b/package/wsapi/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_WSAPI
+ 	bool "wsapi"
+-	select BR2_PACKAGE_COXPCALL # runtime
++	select BR2_PACKAGE_COXPCALL if BR2_PACKAGE_LUA_5_1 # runtime
+ 	select BR2_PACKAGE_LUAFILESYSTEM # runtime
+ 	select BR2_PACKAGE_RINGS # runtime
+ 	help
