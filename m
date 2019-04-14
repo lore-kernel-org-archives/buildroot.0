@@ -1,56 +1,158 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sun, 14 Apr 2019 22:12:25 +0200
-Subject: [Buildroot] [PATCH v2] package/wpebackend-fdo: package needs
- wayland libegl
-In-Reply-To: <0ab8f13f-225e-29cd-c1e5-7ca2c3897ed6@mind.be>
-References: <0ab8f13f-225e-29cd-c1e5-7ca2c3897ed6@mind.be>
-Message-ID: <20190414201225.21081-1-giulio.benetti@micronovasrl.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Apr 2019 22:17:17 +0200
+Subject: [Buildroot] [PATCH 00/12 v2] infra: add solution to dump metadata
+ from packages (branch yem/show-info-2)
+Message-ID: <cover.1555273025.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now wpebackend-fdo depends only on HAS_LIBEGL but if libegl is not of
-wayland type, build breaks due to different EGLNativeWindowType types
-depending on backends(fb,x11,wl).
+Hello All!
 
-Modify:
-'depend on BR2_PACKAGE_HAS_LIBEGL'
-to:
-'depend on BR2_PACKAGE_HAS_LIBEGL_WAYLAND'
-in Config.in to avoid building if there is not a wayland egl backend.
-Modify also comment in Config.in when package is not selectable
-mentioning the need to have an OpenEGL-capable Wayland backend.
+This series is a proposal to allow extracting metadata about packages,
+in a way that makes it reusable for tooling outside of Buildroot, that
+is both reliable and extendable, without causing too much burden on
+Buildroot own infrastructure.
 
-Fixes:
-http://autobuild.buildroot.net/results/4f02b91f6ffffd194e09ed18c917b4f678b1a52d/
+This series introduces a global 'show-info' rule, and a per package and
+per filesystem 'show-info' rule, that dump the package metadata as a
+JSON blob. JSON is a key-value based serialisation format. As such, it
+is easy to parse (there are implementations in virtually all languages,
+and there are even tools like jq, that can be used from shell scripts).
+But most importantly, it is easy to extend without breakign existing
+tools (as long as they use proper JSON parsers, that is).
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
- package/wpebackend-fdo/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This series first introduces 4 cleanup preparatory patches in the
+download infra, so that it gets easy to get the list of URIs to report
+them. Strictly speaking, only patches 1 and 2 are required for this
+series, but the cleanup was extended to the infra with patches 3 and 4,
+for consistency.
 
-diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
-index 2f5f965403..631f99fcb2 100644
---- a/package/wpebackend-fdo/Config.in
-+++ b/package/wpebackend-fdo/Config.in
-@@ -1,5 +1,5 @@
--comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable backend"
--	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
-+comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable Wayland backend"
-+	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_WPEBACKEND_FDO
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_WPEBACKEND_FDO
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, libglib2
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_USE_MMU # libglib2
--	depends on BR2_PACKAGE_HAS_LIBEGL
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBWPE
- 	select BR2_PACKAGE_WAYLAND
+Then, the series introduces a per package and per filesystem show-info
+rule. The per filesystem rule is needed to be able to get the info about
+packages that are a dependency of filesystems.
+
+Finally, a global show-info rule is introduced that generates a JSON
+array with all the information about a build.
+
+In the end, the output for a packages would look like:
+
+    $ make cracklib-show-info |jq . -
+    {
+      "cracklib": {
+        "type": "target",
+        "virtual": false,
+        "version": "2.9.7",
+        "licenses": "LGPL-2.1",
+        "downloads": [
+          {
+            "source": "cracklib-2.9.7.tar.gz",
+            "URIs": [
+              "https+https://github.com/cracklib/cracklib/releases/download/v2.9.7",
+              "http|urlencode+http://sources.buildroot.net/cracklib",
+              "http|urlencode+http://sources.buildroot.net"
+            ]
+          },
+          {
+            "source": "cracklib-words-2.9.7.gz",
+            "URIs": [
+              "https://github.com/cracklib/cracklib/releases/download/v2.9.7",
+              "http|urlencode+http://sources.buildroot.net/cracklib",
+              "http|urlencode+http://sources.buildroot.net"
+            ]
+          }
+        ],
+        "dependencies": [
+          "host-cracklib",
+          "host-skeleton",
+          "skeleton",
+          "toolchain"
+        ],
+        "reverse_dependencies": [
+          "libpwquality",
+          "linux-pam"
+        ]
+      }
+    }
+
+While the whole show-info would look like (elipsed and manually indented
+for readbility):
+
+    $ make show-info
+    {
+      "host-gcc-final": { "type": "host", "virtual": false, ... },
+      "host-binutils": { "type": "host", "virtual": false, ... },
+      "toolchain-buildroot": { "type": "target", "virtual": true, ... },
+      "gettext-tiny": { "type": "target", "virtual": false, ... },
+      "gettext": { "type": "target", "virtual": true, ... },
+      "ifupdown-scripts": { "type": "target", "virtual": false, ... },
+      ...
+      "rootfs-common": { "type": "rootfs", ... },
+      "rootfs-tar": { "type": "rootfs", ... }
+    }
+
+Changes v1 -> v2:
+  - DOWNLOAD_URIS uses foreach instead of patsubst  (Thomas P.)
+  - rename dependencies keys  (Thomas DS)
+  - split DOWNLOAD/DOWNLOAD_URIS comments  (Thomas DS)
+  - make-comma-list uses an explicit $(space)  (Thomas DS)
+  - top-level show-info is a dictionary, not an array  (Arnout)
+  - use a macro to generate a JSON element for an item  (Arnout)
+  - drop the 'null' object in download list  (Arnout, Thomas DS)
+  - change graph-depends to use that instead of show-dependency-graph
+  - drop show-dependency-graph
+  - fix double list of URIs
+  - fix typoes
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 46cd7061228720ddb93f540bc733359304d8118f
+
+  package/dacapo: fix indentation (2019-04-14 17:20:26 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 3f4a75c33a5f817dcd7a3576086ffca4c18e522b
+
+  core: remove show-depednency-tree (2019-04-14 17:56:08 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (12):
+      infra/pkg-download: return just a list of URIs
+      infra/pkg-download: make the URI list a callable macro
+      infra/pkg-download: get rid of the FLOCK variable
+      infra/pkg-download: make the DOWNLOAD macro fully parameterised
+      infra/utils: add helper to generate comma-separated lists
+      fs: introduce variables with name and type
+      fs: introduce variable with all recursive dependencies
+      fs: add all recursive dependencies to packages list
+      core: introduce new global show-info
+      core: add per-package and per-filesystem show-info
+      support/scripts: use show-info to extract dependency graph
+      core: remove show-depednency-tree
+
+ Makefile                     | 19 ++++++++++---
+ fs/common.mk                 | 45 +++++++++++++++++++++++------
+ package/pkg-download.mk      | 46 +++++++++++++++++-------------
+ package/pkg-generic.mk       |  9 +++---
+ package/pkg-utils.mk         | 68 ++++++++++++++++++++++++++++++++++++++++++++
+ support/misc/utils.mk        |  4 +++
+ support/scripts/brpkgutil.py | 31 +++++++++-----------
+ 7 files changed, 169 insertions(+), 53 deletions(-)
+
 -- 
-2.17.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
