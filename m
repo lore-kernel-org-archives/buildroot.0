@@ -1,80 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 23:09:14 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] Revert "package/runc:
- blacklist Codesourcery ARM toolchain"
-Message-ID: <20190414212509.A47A58A509@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 23:16:51 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: monitor
+ pkg-golang.mk
+Message-ID: <20190414212509.DCD078A509@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0ab62a737695062e0aa0a32ebc1fd266d830bb0
+commit: https://git.buildroot.net/buildroot/commit/?id=34cb21a209cb72403699281a616c794899e17e3d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-This reverts commit ce76a989022baa6395b874ed44b9246bba053f8a.
-
-With the bump to 1.0.0-rc7, runc no longer needs O_TMPFILE.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Anisse Astier <anisse@astier.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 18fb2167f7f41bd5702860d35459a0f498d941a9)
+(cherry picked from commit 89e5632c8d6509830b81fce37aa2bf1ecc45e79d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-containerd/Config.in | 2 --
- package/docker-engine/Config.in     | 2 --
- package/runc/Config.in              | 2 --
- 3 files changed, 6 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
-index 4a4db1cde1..3de3dc6da2 100644
---- a/package/docker-containerd/Config.in
-+++ b/package/docker-containerd/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # runc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # runc
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # runc
- 	depends on BR2_USE_MMU # util-linux
- 	select BR2_PACKAGE_RUNC # runtime dependency
- 	select BR2_PACKAGE_UTIL_LINUX # runtime dependency
-@@ -36,4 +35,3 @@ comment "docker-containerd needs a glibc or musl toolchain w/ threads"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 08f30e434a..cd878880ae 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_DOCKER_ENGINE
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # docker-containerd -> runc
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # docker-containerd -> runc
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # docker-containerd -> runc
- 	depends on BR2_USE_MMU # docker-containerd
- 	select BR2_PACKAGE_DOCKER_CONTAINERD # runtime dependency
- 	select BR2_PACKAGE_DOCKER_PROXY # runtime dependency
-@@ -57,5 +56,4 @@ comment "docker-engine needs a glibc or musl toolchain w/ threads, headers >= 3.
- 	depends on BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAIN_USES_UCLIBC
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
- 	depends on BR2_USE_MMU
-diff --git a/package/runc/Config.in b/package/runc/Config.in
-index cfd26e9813..5b08b91032 100644
---- a/package/runc/Config.in
-+++ b/package/runc/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_RUNC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 # O_TMPFILE
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no fexecve
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # glibc < 2.19
- 	help
- 	  runC is a CLI tool for spawning and running containers
- 	  according to the OCP specification.
-@@ -17,4 +16,3 @@ comment "runc needs a glibc or musl toolchain w/ threads, headers >= 3.11"
- 		BR2_PACKAGE_HOST_GO_CGO_LINKING_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_11 || BR2_TOOLCHAN_USES_UCLIBC
--	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e60555a3a2..8a0d1260bb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -168,6 +168,7 @@ F:	package/sysdig/
+ N:	Anisse Astier <anisse@astier.eu>
+ F:	package/go/
+ F:	package/nghttp2/
++F:	package/pkg-golang.mk
+ 
+ N:	Anthony Viallard <viallard@syscom-instruments.com>
+ F:	package/gnuplot/
