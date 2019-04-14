@@ -1,46 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 21:16:53 +0200
-Subject: [Buildroot] [PATCH] package/opus: bump version to 1.3.1
-Message-ID: <20190414191654.5635-1-peter@korsgaard.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 14 Apr 2019 21:55:35 +0200
+Subject: [Buildroot] New Package: Entware
+In-Reply-To: <CALtfCQY6aaSU-hq3P_z1avXs7g6LUx7VanA12bp84rDovuGGVw@mail.gmail.com>
+References: <CALtfCQZa9OH-LFC12DtAV=3Ff9wMphcLhBmNyeRqmym7BsFAJw@mail.gmail.com>
+ <50885bb4-64a7-e6bc-36e2-ac468050df3a@mind.be>
+ <bf8f0cba-e376-d800-df1f-8b44581a2f4c@mind.be>
+ <CALtfCQY6aaSU-hq3P_z1avXs7g6LUx7VanA12bp84rDovuGGVw@mail.gmail.com>
+Message-ID: <26bced5d-984a-ae0e-5e91-d42df957afa5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a number of post-1.3 fixes.  For details, see the announcement:
 
-http://lists.xiph.org/pipermail/opus/2019-April/004318.html
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/opus/opus.hash | 2 +-
- package/opus/opus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 14/04/2019 20:51, Oscar Gomez Fuente wrote:
+> On Sun, 14 Apr 2019 at 20:23, Arnout Vandecappelle <arnout@mind.be> wrote:
+> 
+>>  Let me clarify that: if you want to use OpenWrt packages on a Buildroot-built
+>> system, why do you use Buildroot to build your system anyway? Just use OpenWrt...
+> 
+> Yes, I agree with you but in some cases, it could be useful. For
+> example, I have a customer that he doesn't know how to use buildroot,
+> and I cannot build for him a new release for only a new package and
+> sometimes he needs to install some extra package, for example: mysql,
+> php and so on. The method of using ipkg/opkg was very useful for him,
+> but it seems to be that opkg is old fashioned and Entware is cool.
 
-diff --git a/package/opus/opus.hash b/package/opus/opus.hash
-index c916647916..2a94d3723d 100644
---- a/package/opus/opus.hash
-+++ b/package/opus/opus.hash
-@@ -1,5 +1,5 @@
- # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
--sha256 4f3d69aefdf2dbaf9825408e452a8a414ffc60494c70633560700398820dc550  opus-1.3.tar.gz
-+sha256 65b58e1e25b2a114157014736a3d9dfeaad8d41be1c8179866f144a2fb44ff9d  opus-1.3.1.tar.gz
- 
- # Hash for license file
- sha256 8338ce8d922bb4416ce3dd1e5680173332435e3f0755007ac7801ccd674fe682  COPYING
-diff --git a/package/opus/opus.mk b/package/opus/opus.mk
-index b3cfa21fde..f23461a3af 100644
---- a/package/opus/opus.mk
-+++ b/package/opus/opus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPUS_VERSION = 1.3
-+OPUS_VERSION = 1.3.1
- OPUS_SITE = https://downloads.xiph.org/releases/opus
- OPUS_LICENSE = BSD-3-Clause
- OPUS_LICENSE_FILES = COPYING
--- 
-2.11.0
+ I don't get it. Entware is a (kind of) distro that uses opkg. It's like saying
+apt is old-fashioned and Ubuntu is cool... Entware is essentially an opkg.conf file.
+
+ Regards,
+ Arnout
+
+> 
+> I'm going to try to create a new package with your piece of advice.
+> 
+> Best regards,
+> Oscar Gomez Fuente
+> 
