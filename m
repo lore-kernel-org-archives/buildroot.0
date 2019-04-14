@@ -1,28 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Apr 2019 15:01:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/babeld: bump to version 1.8.4
-In-Reply-To: <20190413194547.16098-1-fontaine.fabrice@gmail.com>
-References: <20190413194547.16098-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190414150125.04a912fd@windsurf>
+Date: Sun, 14 Apr 2019 15:01:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cmocka: bump to version 1.1.5
+In-Reply-To: <20190413193949.2227-1-fontaine.fabrice@gmail.com>
+References: <20190413193949.2227-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190414150122.3beb9c49@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 13 Apr 2019 21:45:47 +0200
+On Sat, 13 Apr 2019 21:39:49 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
 > - Remove patch (already in version)
-> - Add hash for license file
+> - Use WITH_EXAMPLES=OFF (option added with
+>   https://git.cryptomilk.org/projects/cmocka.git/commit?id=ee264da1aa222b354cee36184ab48c2072f62243)
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...nk.c-don-t-include-linux-if_bridge.h.patch | 78 -------------------
->  package/babeld/babeld.hash                    |  3 +-
->  package/babeld/babeld.mk                      |  2 +-
->  3 files changed, 3 insertions(+), 80 deletions(-)
->  delete mode 100644 package/babeld/0001-kernel_netlink.c-don-t-include-linux-if_bridge.h.patch
+>  ...ime-include-stdint.h-before-cmocka.h.patch | 35 -------------------
+>  package/cmocka/cmocka.hash                    |  2 +-
+>  package/cmocka/cmocka.mk                      |  3 +-
+>  3 files changed, 3 insertions(+), 37 deletions(-)
+>  delete mode 100644 package/cmocka/0001-examples-uptime-include-stdint.h-before-cmocka.h.patch
 
 Applied to master, thanks.
 
