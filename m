@@ -1,34 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 23:16:51 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: monitor
- pkg-golang.mk
-Message-ID: <20190414212509.DCD078A509@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 23:13:59 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ package/docker-containerd: refer to official website
+Message-ID: <20190414212509.B94548A509@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34cb21a209cb72403699281a616c794899e17e3d
+commit: https://git.buildroot.net/buildroot/commit/?id=b642a660c5354647c68c59f917ca88e6d3b718fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Anisse Astier <anisse@astier.eu>
+Containerd is no longer maintained under the docker github project and now
+has an official website, so refer to that in the help text.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 89e5632c8d6509830b81fce37aa2bf1ecc45e79d)
+(cherry picked from commit 638504bcdf98d44b09d7964ebaccb81137af1455)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/docker-containerd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e60555a3a2..8a0d1260bb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -168,6 +168,7 @@ F:	package/sysdig/
- N:	Anisse Astier <anisse@astier.eu>
- F:	package/go/
- F:	package/nghttp2/
-+F:	package/pkg-golang.mk
+diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
+index 5e0cc1e877..72ca9313b8 100644
+--- a/package/docker-containerd/Config.in
++++ b/package/docker-containerd/Config.in
+@@ -14,7 +14,7 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
+ 	help
+ 	  containerd is a daemon to control runC.
  
- N:	Anthony Viallard <viallard@syscom-instruments.com>
- F:	package/gnuplot/
+-	  https://github.com/docker/containerd
++	  https://containerd.io/
+ 
+ if BR2_PACKAGE_DOCKER_CONTAINERD
+ 
