@@ -1,37 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 22:23:22 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: stop
- monitoring aer-inject
-Message-ID: <20190414202935.487AA81597@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 22:23:37 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] fs/common.mk: disable
+ real chown calls in fakeroot
+Message-ID: <20190414202935.4D87C8E8BA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=461465b4ecd54b374b5ac3cd64cc4e723d5a307a
+commit: https://git.buildroot.net/buildroot/commit/?id=55a098dc774e0cfe518efd218d96cd895695c847
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-I left DATACOM and will unlikely have access to the hardware required to
-test the package.
+fakeroot by default forwards {f,l,}chown calls to libc and ignores
+permission issues, which may cause issues when building in restricted
+environments like user namespaces as set up with bubblewrap where a chown
+call with a uid/gid not mapped in the user namespace instead returns EINVAL.
+This error is not masked by fakeroot and returned to the caller, causing
+failures.
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+There is no real reason to really perform the *chown calls in the context of
+Buildroot (as the calls will likely just fail and files are not accessed
+outside the fakeroot environment any way).
+
+This forwarding can be disabled by setting the FAKEROOTDONTTRYCHOWN
+environment variable, so set it when fakeroot is executed.
+
+Reported-by: Esben Nielsen <nielsen.esben@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c45394c1b03dd79f39a017a14922a5d1f82de50b)
+(cherry picked from commit 655acd1df02e5e9ce318aadc33bd6fa8042fc455)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 -
- 1 file changed, 1 deletion(-)
+ fs/common.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4082007a4c..1a54fa5875 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -421,7 +421,6 @@ N:	Carlo Caione <carlo.caione@gmail.com>
- F:	package/sunxi-boards/
- 
- N:	Carlos Santos <unixmania@gmail.com>
--F:	package/aer-inject/
- F:	package/busybox/
- F:	package/gtest/
- F:	package/initscripts/
+diff --git a/fs/common.mk b/fs/common.mk
+index a560417c6c..b361ecce25 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -138,7 +138,7 @@ $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME): $$(ROOTFS_$(2)_DEPENDENCIES)
+ 	$$(call PRINTF,$$(ROOTFS_REPRODUCIBLE)) >> $$(FAKEROOT_SCRIPT)
+ 	$$(call PRINTF,$$(ROOTFS_$(2)_CMD)) >> $$(FAKEROOT_SCRIPT)
+ 	chmod a+x $$(FAKEROOT_SCRIPT)
+-	PATH=$$(BR_PATH) $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
++	PATH=$$(BR_PATH) FAKEROOTDONTTRYCHOWN=1 $$(HOST_DIR)/bin/fakeroot -- $$(FAKEROOT_SCRIPT)
+ 	$(Q)rm -rf $$(TARGET_DIR)
+ ifneq ($$(ROOTFS_$(2)_COMPRESS_CMD),)
+ 	PATH=$$(BR_PATH) $$(ROOTFS_$(2)_COMPRESS_CMD) $$@ > $$@$$(ROOTFS_$(2)_COMPRESS_EXT)
