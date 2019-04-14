@@ -1,68 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 23:16:27 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/gnutls: security
- bump to 3.6.7.1
-Message-ID: <20190414212509.CE9048E9A2@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 23:13:38 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ package/docker-containerd: bump version to v1.2.5
+Message-ID: <20190414212509.B25118A509@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5eee309aeb8a055bf9da222c34c219d9e632fbd4
+commit: https://git.buildroot.net/buildroot/commit/?id=e562f33a9dca72bf288d535cc0acf31fc43e8275
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security issues:
+Contains a number of bugfixes. For more details, see the announcement:
 
- * CVE-2019-3836: It was discovered in gnutls before version 3.6.7 upstream
-   that there is an uninitialized pointer access in gnutls versions 3.6.3 or
-   later which can be triggered by certain post-handshake messages
+https://github.com/containerd/containerd/releases/tag/v1.2.5
 
- * CVE-2019-3829: A vulnerability was found in gnutls versions from 3.5.8
-   before 3.6.7. A memory corruption (double free) vulnerability in the
-   certificate verification API. Any client or server application that
-   verifies X.509 certificates with GnuTLS 3.5.8 or later is affected.
-
-3.6.7.1 is identical to 3.6.7, but fixes a packaging issue in the release
-tarball:
-
-https://lists.gnutls.org/pipermail/gnutls-devel/2019-April/013086.html
-
-HTTP URLs changed to HTTPS in COPYING, so update license hash.
-
-Signed-off-by: Stefan S??rensen <stefan.sorensen@spectralink.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 1dd5576ccb8eadeb8672c8b22df86f4f41dce1d5)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 20af865354ed4e816ddcfd617cc18f8dedb9159e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gnutls/gnutls.hash | 6 +++---
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/docker-containerd/docker-containerd.hash | 2 +-
+ package/docker-containerd/docker-containerd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 1af0e2d45d..8c0e0d69d5 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.6.tar.xz.sig
--sha256	bb9acab8af2ac430edf45faaaa4ed2c51f86e57cb57689be6701aceef4732ca7	gnutls-3.6.6.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.7.1.tar.xz.sig
-+sha256	881b26409ecd8ea4c514fd3fbdb6fae5fab422ca7b71116260e263940a4bbbad	gnutls-3.6.7.1.tar.xz
- # Locally calculated
--sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	doc/COPYING
-+sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	doc/COPYING
- sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index c6d2d72771..e7c5968204 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
+index cae88f40e2..fc7b6fcb49 100644
+--- a/package/docker-containerd/docker-containerd.hash
++++ b/package/docker-containerd/docker-containerd.hash
+@@ -1,3 +1,3 @@
+ # Computed locally
+-sha256	ff4c2ad680c9e2484e335868a54b0c1ea49d9165dd5b38b64ef7d9dacf2b96b4  docker-containerd-v1.2.3.tar.gz
++sha256	b92819bde71de947329814a3c649b8adb106cc03be16aae217b94297f4b843a1  docker-containerd-v1.2.5.tar.gz
+ sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4	LICENSE
+diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
+index 9088c17660..586fd1fa08 100644
+--- a/package/docker-containerd/docker-containerd.mk
++++ b/package/docker-containerd/docker-containerd.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GNUTLS_VERSION_MAJOR = 3.6
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).6
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7.1
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+-DOCKER_CONTAINERD_VERSION = v1.2.3
++DOCKER_CONTAINERD_VERSION = v1.2.5
+ DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
+ DOCKER_CONTAINERD_LICENSE = Apache-2.0
+ DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
