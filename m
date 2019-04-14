@@ -1,38 +1,32 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Mon, 15 Apr 2019 00:26:54 +0300
-Subject: [Buildroot] [RFC 1/1] toolchain-external/Config.in: Allow to select
- custom external-toolchain package
-Message-ID: <20190414212654.14910-1-vadim4j@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 14 Apr 2019 23:17:35 +0200
+Subject: [Buildroot] [PATCH] gnutls: security bump to 3.6.7.1
+In-Reply-To: <20190403061405.27273-1-stefan.sorensen@spectralink.com>
+ (=?utf-8?Q?=22S=C3=B8rensen=2C?= Stefan"'s message of "Wed, 3 Apr 2019
+ 06:14:32 +0000")
+References: <20190403061405.27273-1-stefan.sorensen@spectralink.com>
+Message-ID: <87lg0cguc0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add dummy 'Other' external toolchain option which allows to select
-custom external-toolchain project, e.g. from external project tree.
+>>>>> "S?rensen," == S?rensen, Stefan <Stefan.Sorensen@spectralink.com> writes:
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
----
- toolchain/toolchain-external/Config.in | 6 ++++++
- 1 file changed, 6 insertions(+)
+ > Fixes the following security issues:
+ >  * CVE-2019-3836: It was discovered in gnutls before version 3.6.7 upstream
+ >    that there is an uninitialized pointer access in gnutls versions 3.6.3 or
+ >    later which can be triggered by certain post-handshake messages
 
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 1f14f0350a..fd61c70766 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -47,6 +47,12 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Confi
- # architecture.
- source "toolchain/toolchain-external/toolchain-external-custom/Config.in"
- 
-+config BR2_TOOLCHAIN_EXTERNAL_OTHER
-+	bool "Other"
-+	help
-+	  Use this option to use a external toolchain from custom package
-+	  (e.g. in external project).
-+
- endchoice
- 
- choice
+ >  * CVE-2019-3829: A vulnerability was found in gnutls versions from 3.5.8
+ >    before 3.6.7. A memory corruption (double free) vulnerability in the
+ >    certificate verification API. Any client or server application that
+ >    verifies X.509 certificates with GnuTLS 3.5.8 or later is affected.
+
+ > Signed-off-by: Stefan S?rensen <stefan.sorensen@spectralink.com>
+
+Committed to 2019.02.x, thanks.
+
 -- 
-2.14.1
+Bye, Peter Korsgaard
