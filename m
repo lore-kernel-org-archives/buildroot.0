@@ -1,109 +1,41 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 14 Apr 2019 17:51:53 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/ngircd: fix static build with openssl and atomic
-Message-ID: <20190414155153.4317-1-fontaine.fabrice@gmail.com>
+Date: Sun, 14 Apr 2019 18:08:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/check: bump to version 0.12
+Message-ID: <20190414160856.23052-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/72345ebd144bed824329618e66721a98eba3be22
-
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Do not call autogen.sh, use AUTORECONF and apply the same tweaks
-   than autogen.sh to remove de-ANSI-fication
+ package/check/check.hash | 2 +-
+ package/check/check.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- ...-pkg-config-to-find-openssl-dependen.patch | 35 +++++++++++++++++++
- package/ngircd/ngircd.mk                      | 23 ++++++++++--
- 2 files changed, 56 insertions(+), 2 deletions(-)
- create mode 100644 package/ngircd/0001-configure.ng-use-pkg-config-to-find-openssl-dependen.patch
-
-diff --git a/package/ngircd/0001-configure.ng-use-pkg-config-to-find-openssl-dependen.patch b/package/ngircd/0001-configure.ng-use-pkg-config-to-find-openssl-dependen.patch
-new file mode 100644
-index 0000000000..bf05f99dc4
---- /dev/null
-+++ b/package/ngircd/0001-configure.ng-use-pkg-config-to-find-openssl-dependen.patch
-@@ -0,0 +1,35 @@
-+From 75f669b9a00a76f0abf35cce8b9f80711aff7600 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 11 Apr 2019 23:24:36 +0200
-+Subject: [PATCH] configure.ng: use pkg-config to find openssl dependencies
-+
-+openssl can depends on lz or latomic so use pkg-config to find those
-+dependencies and fallback to existing mechanism
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/ngircd/ngircd/pull/256]
-+---
-+ configure.ng | 7 +++++--
-+ 1 file changed, 5 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ng b/configure.ng
-+index 57ae8bb8..899d00f7 100644
-+--- a/configure.ng
-++++ b/configure.ng
-+@@ -464,8 +464,11 @@ AC_ARG_WITH(openssl,
-+ 				CPPFLAGS="-I$withval/include $CPPFLAGS"
-+ 				LDFLAGS="-L$withval/lib $LDFLAGS"
-+ 			fi
-+-			AC_CHECK_LIB(crypto, BIO_s_mem)
-+-			AC_CHECK_LIB(ssl, SSL_new)
-++			PKG_CHECK_MODULES([OPENSSL], [libssl libcrypto],
-++				[LIBS="$LIBS $OPENSSL_LIBS" CFLAGS="$CFLAGS $OPENSSL_CFLAGS"],
-++				[AC_CHECK_LIB(crypto, BIO_s_mem)
-++				AC_CHECK_LIB(ssl, SSL_new)]
-++			)
-+ 			AC_CHECK_FUNCS(SSL_new, x_ssl_openssl=yes,
-+ 				AC_MSG_ERROR([Can't enable openssl])
-+ 			)
-+-- 
-+2.20.1
-+
-diff --git a/package/ngircd/ngircd.mk b/package/ngircd/ngircd.mk
-index 5fa86afdd5..582da563ac 100644
---- a/package/ngircd/ngircd.mk
-+++ b/package/ngircd/ngircd.mk
-@@ -9,6 +9,25 @@ NGIRCD_SOURCE = ngircd-$(NGIRCD_VERSION).tar.xz
- NGIRCD_SITE = https://arthur.barton.de/pub/ngircd
- NGIRCD_LICENSE = GPL-2.0+
- NGIRCD_LICENSE_FILES = COPYING
-+# We're patching configure.ac
-+NGIRCD_AUTORECONF = YES
-+
-+# We're patching configure.ng, but package cannot autoreconf with
-+# automake >= 1.12 because de-ANSI-fication has been removed so apply the same
-+# tweaks that are done by upstream in autogen.sh
-+define NGIRCD_REMOVE_DE_ANSI_FICATION
-+	sed -e "s|^__ng_PROTOTYPES__|AC_C_PROTOTYPES|g" \
-+		$(@D)/configure.ng > $(@D)/configure.ac
-+
-+	sed -e "s|^__ng_Makefile_am_template__|AUTOMAKE_OPTIONS = ${SERIAL_TESTS} #ansi2knr|g" \
-+		$(@D)/src/portab/Makefile.ng > $(@D)/src/portab/Makefile.am
-+	for i in ipaddr/Makefile ngircd/Makefile testsuite/Makefile tool/Makefile; do \
-+		sed -e "s|^__ng_Makefile_am_template__|AUTOMAKE_OPTIONS = ${SERIAL_TESTS} #../portab/ansi2knr|g" \
-+			$(@D)/src/$$i.ng > $(@D)/src/$$i.am ; \
-+	done
-+endef
-+
-+NGIRCD_PRE_CONFIGURE_HOOKS += NGIRCD_REMOVE_DE_ANSI_FICATION
+diff --git a/package/check/check.hash b/package/check/check.hash
+index 3c41a96144..ac7fddd462 100644
+--- a/package/check/check.hash
++++ b/package/check/check.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256	24f7a48aae6b74755bcbe964ce8bc7240f6ced2141f8d9cf480bc3b3de0d5616	check-0.11.0.tar.gz
++sha256	464201098bee00e90f5c4bdfa94a5d3ead8d641f9025b560a27755a83b824234	check-0.12.0.tar.gz
+ # License files, locally calculated
+ sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861	COPYING.LESSER
+diff --git a/package/check/check.mk b/package/check/check.mk
+index 047beba635..84b8c5333e 100644
+--- a/package/check/check.mk
++++ b/package/check/check.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
- NGIRCD_CONF_OPTS += --with-pam=$(STAGING_DIR)/usr
-@@ -18,8 +37,8 @@ NGIRCD_CONF_OPTS += --without-pam
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--NGIRCD_CONF_OPTS += --with-openssl=$(STAGING_DIR)/usr
--NGIRCD_DEPENDENCIES += openssl
-+NGIRCD_CONF_OPTS += --with-openssl
-+NGIRCD_DEPENDENCIES += host-pkgconf openssl
- else
- NGIRCD_CONF_OPTS += --without-openssl
- ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-CHECK_VERSION = 0.11.0
++CHECK_VERSION = 0.12.0
+ CHECK_SITE = https://github.com/libcheck/check/releases/download/$(CHECK_VERSION)
+ CHECK_INSTALL_STAGING = YES
+ CHECK_DEPENDENCIES = host-pkgconf
 -- 
 2.20.1
