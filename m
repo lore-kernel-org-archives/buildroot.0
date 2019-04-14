@@ -1,63 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Apr 2019 12:18:01 +0200
-Subject: [Buildroot] [PATCH] package/wpebackend-fdo: package needs
- wayland libegl
-In-Reply-To: <20190401092612.4614-1-giulio.benetti@micronovasrl.com>
-References: <20190401092612.4614-1-giulio.benetti@micronovasrl.com>
-Message-ID: <0ab8f13f-225e-29cd-c1e5-7ca2c3897ed6@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 14 Apr 2019 12:58:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/util-linux: fix build with glibc
+ 2.29
+Message-ID: <20190414105833.4132-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Giulio,
+Fixes:
+ - No autobuilders failures yet (found with
+ qemu_mips64el_malta_defconfig)
 
-On 01/04/2019 11:26, Giulio Benetti wrote:
-> Now wpebackend-fdo depends only on HAS_LIBEGL but if libegl is not of
-> wayland type, build breaks due to different EGLNativeWindowType types
-> depending on backends(fb,x11,wl).
-> 
-> Add 'depend on BR2_PACKAGE_HAS_LIBEGL_WAYLAND' to Config.in to avoid
-> building if there is not a wayland egl backend.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/4f02b91f6ffffd194e09ed18c917b4f678b1a52d/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  package/wpebackend-fdo/Config.in | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
-> index 2f5f965403..7d5ffb1fe0 100644
-> --- a/package/wpebackend-fdo/Config.in
-> +++ b/package/wpebackend-fdo/Config.in
-> @@ -1,6 +1,6 @@
->  comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable backend"
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...alue-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+ create mode 100644 package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch
 
- Wayland should be mentioned here as well.
-
->  	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
-                   ^^^^^^^^^^^^^^^^^^^^^^^ This can be removed I guess
-
-> -		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> +		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_LIBEGL_WAYLAND
->  
->  config BR2_PACKAGE_WPEBACKEND_FDO
->  	bool "wpebackend-fdo"
-> @@ -10,6 +10,7 @@ config BR2_PACKAGE_WPEBACKEND_FDO
->  	depends on BR2_USE_WCHAR # libglib2
->  	depends on BR2_USE_MMU # libglib2
->  	depends on BR2_PACKAGE_HAS_LIBEGL
-
- This as well.
-
- Regards,
- Arnout
-
-> +	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
->  	select BR2_PACKAGE_LIBGLIB2
->  	select BR2_PACKAGE_LIBWPE
->  	select BR2_PACKAGE_WAYLAND
-> 
+diff --git a/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch b/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch
+new file mode 100644
+index 0000000000..381c25382a
+--- /dev/null
++++ b/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch
+@@ -0,0 +1,32 @@
++From 963413a1adf6767ab17712097e288e1a346f63a7 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Fri, 4 Jan 2019 22:38:25 -0800
++Subject: [PATCH] ldattach: Check for value of _HAVE_STRUCT_TERMIOS_C_ISPEED
++
++in glibc 2.29+ checking for just existence of _HAVE_STRUCT_TERMIOS_C_ISPEED
++won't be enough, the value has to be checked
++
++see
++https://sourceware.org/git/?p=glibc.git;a=commit;h=e5a50db36eaa6e8c6427b3a971563240b633ca85
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/karelzak/util-linux/commit/963413a1adf6767ab17712097e288e1a346f63a7]
++---
++ sys-utils/ldattach.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/sys-utils/ldattach.c b/sys-utils/ldattach.c
++index d33d68535..fb50711eb 100644
++--- a/sys-utils/ldattach.c
+++++ b/sys-utils/ldattach.c
++@@ -242,7 +242,7 @@ static int my_cfsetspeed(struct termios *ts, int speed)
++ 	 * -- we have to bypass glibc and set the speed manually (because glibc
++ 	 *    checks for speed and supports Bxxx bit rates only)...
++ 	 */
++-#ifdef _HAVE_STRUCT_TERMIOS_C_ISPEED
+++#if _HAVE_STRUCT_TERMIOS_C_ISPEED
++ # define BOTHER 0010000		/* non standard rate */
++ 	dbg("using non-standard speeds");
++ 	ts->c_ospeed = ts->c_ispeed = speed;
+-- 
+2.20.1
