@@ -1,102 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Apr 2019 16:53:49 +0200
-Subject: [Buildroot] [PATCH v8 2/9] cpe-info: id prefix/suffix
-In-Reply-To: <1552082667-46877-3-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1552082667-46877-3-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <f9effe28-4139-c5c2-e45c-29dc7dd31ac4@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 14 Apr 2019 16:56:19 +0200
+Subject: [Buildroot] [PATCH 1/2] package/msmtp: drop unneeded static
+ openssl workaround
+In-Reply-To: <20190413083218.6355-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 13 Apr 2019 10:32:17 +0200")
+References: <20190413083218.6355-1-fontaine.fabrice@gmail.com>
+Message-ID: <87tvf0pre4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
+ > msmtp uses pkg-config to find openssl dependencies such as lz or latomic
+ > so drop unneeded openssl workaround that was added by
+ > https://git.buildroot.net/buildroot/commit/package/msmtp?id=468bbc1538aaea87beaf455a2ad6ea5a255d5f58
 
-On 08/03/2019 23:04, Matt Weber wrote:
-> There are two types of software CPE prefixes applicable for software,
-> one for applications and one for operating systems.
-> Note: The third type is for hardware.
-> 
-> This patchset determines which should be used and stores that
-> information with the package for later use when assembling the CPE
-> report.
-> 
-> Refs:
->    https://nvlpubs.nist.gov/nistpubs/Legacy/IR/nistir7695.pdf
->    https://cpe.mitre.org/specification/
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
-> Changes
-> 
-> v8
->  - Rebase
-> 
-> v4 -> v7
->  - None
-> 
-> v3
-> [Arnout
->  - Moved CPE prefix and suffix defines to package/Makefile.in
-> 
-> v1 -> v2
-> [Thomas P
->  - Change to using a filter on pkg name value vs ifelse
-> ---
->  package/Makefile.in    | 4 ++++
->  package/pkg-generic.mk | 8 +++++++-
->  2 files changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/Makefile.in b/package/Makefile.in
-> index dc818a2..644282f 100644
-> --- a/package/Makefile.in
-> +++ b/package/Makefile.in
-> @@ -389,6 +389,10 @@ TARGET_CONFIGURE_ARGS = \
->  
->  ################################################################################
->  
-> +CPE_PREFIX_OS = cpe:2.3:o
-> +CPE_PREFIX_APP = cpe:2.3:a
-> +CPE_SUFFIX = *:*:*:*:*:*:*
+ > I don't know why it was added seven years ago as msmtp already used
+ > pkg-config at this time:
+ > https://github.com/marlam/msmtp-mirror/blob/rel-1-4-27/configure.ac
 
- This is not correct. For Python packages, for instance, the language field is
-set to python.
+I believe it was because we didn't used to pass --static to pkg-config
+before
 
-> +
->  ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
->  NLS_OPTS = --enable-nls
->  TARGET_NLS_DEPENDENCIES = host-gettext
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 644128d..a547c65 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -916,11 +916,17 @@ $(2)_CPE_ID_NAME ?= $$($(2)_NAME)
->  $(2)_CPE_ID_VERSION ?= $$($(2)_VERSION)
->  $(2)_CPE_ID ?= $$($(2)_CPE_ID_VENDOR):$$($(2)_CPE_ID_NAME):$$($(2)_CPE_ID_VERSION)
->  
-> +ifneq ($(filter linux linux-headers,$(1)),)
-> +$(2)_CPE_PREFIX = $(CPE_PREFIX_OS)
+commit 958c9438ccb5e8c8864edf242b6b4ce3b1f058a4
+Author: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+Date:   Wed Mar 5 12:19:37 2014 +0000
 
- The linux and linux-headers packages are so special that I don't think it makes
-sense to have a separate rule here. For example, the value of LINUX_VERSION is
-probably NOT what you want to use in CPE_ID.
+    host-pkgconf: use --static option for static builds
 
- Regards,
- Arnout
-
-
-> +else
-> +$(2)_CPE_PREFIX = $(CPE_PREFIX_APP)
-> +endif
-> +
->  $(1)-cpe-info: PKG=$(2)
->  $(1)-cpe-info:
->  ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
->  	@$$(call MESSAGE,"Collecting cpe info")
-> -	$(Q)$$(call cpe-manifest,$$($(2)_CPE_ID),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
-> +	$(Q)$$(call cpe-manifest,$$($(2)_CPE_PREFIX):$$($(2)_CPE_ID):$(CPE_SUFFIX),$$($(2)_RAWNAME),$$($(2)_VERSION),$$($(2)_ACTUAL_SOURCE_SITE))
->  endif # ifneq ($$(call qstrip,$$($(2)_SOURCE)),)
->  
->  # legal-info: declare dependencies and set values used later for the manifest
-> 
+-- 
+Bye, Peter Korsgaard
