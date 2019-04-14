@@ -1,28 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 22:33:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/php: security bump to version
- 7.3.4
-In-Reply-To: <20190407112749.9020-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 7 Apr 2019 13:27:49 +0200")
-References: <20190407112749.9020-1-bernd.kuhls@t-online.de>
-Message-ID: <87lg0cnx7n.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Apr 2019 22:23:22 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] DEVELOPERS: stop
+ monitoring aer-inject
+Message-ID: <20190414202935.487AA81597@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=461465b4ecd54b374b5ac3cd64cc4e723d5a307a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Changelog: https://www.php.net/ChangeLog-7.php#7.3.4
- > Fixes these bugs, CVE-ID were not assigned yet:
+I left DATACOM and will unlikely have access to the hardware required to
+test the package.
 
- >     Fixed bug #77753 (Heap-buffer-overflow in php_ifd_get32s).
- >     Fixed bug #77831 (Heap-buffer-overflow in exif_iif_add_value).
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit c45394c1b03dd79f39a017a14922a5d1f82de50b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 1 -
+ 1 file changed, 1 deletion(-)
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-
-Committed to 2019.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4082007a4c..1a54fa5875 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -421,7 +421,6 @@ N:	Carlo Caione <carlo.caione@gmail.com>
+ F:	package/sunxi-boards/
+ 
+ N:	Carlos Santos <unixmania@gmail.com>
+-F:	package/aer-inject/
+ F:	package/busybox/
+ F:	package/gtest/
+ F:	package/initscripts/
