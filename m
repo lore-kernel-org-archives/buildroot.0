@@ -1,48 +1,78 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Apr 2019 22:06:20 +0200
-Subject: [Buildroot] [PATCH] package/luajit: bump to version 2.1.x
- developpment version
-In-Reply-To: <CAHpTZwkvHogtHue284vA0qUnUT7ygzA3O2Qx=Hdjor3tfKt2Bw@mail.gmail.com>
-References: <1554216575-24134-1-git-send-email-jugurtha.belkalem@smile.fr>
- <20190403091856.274fdc7e@windsurf>
- <CAHpTZwkvHogtHue284vA0qUnUT7ygzA3O2Qx=Hdjor3tfKt2Bw@mail.gmail.com>
-Message-ID: <54ef5dd8-6497-dfe6-2e5a-d6eebfac3890@mind.be>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sun, 14 Apr 2019 22:12:08 +0200
+Subject: [Buildroot] [PATCH] package/wpebackend-fdo: package needs
+ wayland libegl
+In-Reply-To: <0ab8f13f-225e-29cd-c1e5-7ca2c3897ed6@mind.be>
+References: <20190401092612.4614-1-giulio.benetti@micronovasrl.com>
+ <0ab8f13f-225e-29cd-c1e5-7ca2c3897ed6@mind.be>
+Message-ID: <78a23226-2ec4-a2f5-26bb-5c84a68b5a07@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- [Please don't remove the quoted text entirely, but quote inline like below.]
+Hi Arnout,
 
-On 03/04/2019 11:15, Jugurtha BELKALEM wrote:
-> Hi,
+Il 14/04/2019 12:18, Arnout Vandecappelle ha scritto:
+>   Hi Giulio,
 > 
-> To answer the question of Fran?ois : The luajit2.1.0-beta3 version in
-> http://luajit.org/download.html has not been changed since 2 years (last
-> change in May 2017), so I guess it is better to take a version which is up
-> to date.
+> On 01/04/2019 11:26, Giulio Benetti wrote:
+>> Now wpebackend-fdo depends only on HAS_LIBEGL but if libegl is not of
+>> wayland type, build breaks due to different EGLNativeWindowType types
+>> depending on backends(fb,x11,wl).
+>>
+>> Add 'depend on BR2_PACKAGE_HAS_LIBEGL_WAYLAND' to Config.in to avoid
+>> building if there is not a wayland egl backend.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/4f02b91f6ffffd194e09ed18c917b4f678b1a52d/
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> ---
+>>   package/wpebackend-fdo/Config.in | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
+>> index 2f5f965403..7d5ffb1fe0 100644
+>> --- a/package/wpebackend-fdo/Config.in
+>> +++ b/package/wpebackend-fdo/Config.in
+>> @@ -1,6 +1,6 @@
+>>   comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable backend"
+> 
+>   Wayland should be mentioned here as well.
 
- I feel a bit uncomfortable to bump a package to an unreleased version of a
-project that is apparently not going anywhere (only a handful of commits in the
-last year).
+Oh yes.
 
- Note that any issues are likely to be runtime issues. So it really depends on
-the users of luajit (if such users even exist...) to decide if they're willing
-to take that risk.
+>>   	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+>                     ^^^^^^^^^^^^^^^^^^^^^^^ This can be removed I guess
 
+Right.
 
-> To answer the question of Thamas : We have successfully tested bcc on a
-> raspberry PI 3, however; the purpose of this patch is to check that it does
-> not break the build process in buildroot (for example luajit2.1.0 is adding
-> support for aarch64; we need to ensure that it is safe).
+>> -		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+>> +		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || !BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+>>   
+>>   config BR2_PACKAGE_WPEBACKEND_FDO
+>>   	bool "wpebackend-fdo"
+>> @@ -10,6 +10,7 @@ config BR2_PACKAGE_WPEBACKEND_FDO
+>>   	depends on BR2_USE_WCHAR # libglib2
+>>   	depends on BR2_USE_MMU # libglib2
+>>   	depends on BR2_PACKAGE_HAS_LIBEGL
+> 
+>   This as well.
+Right.
 
- So, IIUC, bcc depends on luajit (not plain Lua)? But it is fine with the
-existing luajit version, only then you don't have aarch64 support?
+Thanks for rievewing.
+I'm going to send v2 patch.
+Best regards
+-- 
+Giulio Benetti
+CTO
 
- In that case, maybe it's better to make the version dependent on the
-architecture, like we sometimes do for other packages. See for instance the arc
-versions of binutils, gcc, gdb, glibc.
-
- Regards,
- Arnout
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
