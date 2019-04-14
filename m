@@ -1,38 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 23:13:59 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x]
- package/docker-containerd: refer to official website
-Message-ID: <20190414212509.B94548A509@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 23:19:37 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/tpm2-tools:
+ license is 3c BSD, not 2c
+Message-ID: <20190414212509.F10468A509@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b642a660c5354647c68c59f917ca88e6d3b718fa
+commit: https://git.buildroot.net/buildroot/commit/?id=650c2a5dcf40868660920e2b4728b13c36c60569
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Containerd is no longer maintained under the docker github project and now
-has an official website, so refer to that in the help text.
+The license contains the "no endorsement" clause, so it should be listed as
+BSD-3-Clause:
+
+  * Neither the name of Intel Corporation nor the names of its contributors
+    may be used to endorse or promote products derived from this software
+    without specific prior written permission.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 638504bcdf98d44b09d7964ebaccb81137af1455)
+(cherry picked from commit 92c7310d5be2956d2f609013289cc85073deac24)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-containerd/Config.in | 2 +-
+ package/tpm2-tools/tpm2-tools.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/docker-containerd/Config.in b/package/docker-containerd/Config.in
-index 5e0cc1e877..72ca9313b8 100644
---- a/package/docker-containerd/Config.in
-+++ b/package/docker-containerd/Config.in
-@@ -14,7 +14,7 @@ config BR2_PACKAGE_DOCKER_CONTAINERD
- 	help
- 	  containerd is a daemon to control runC.
+diff --git a/package/tpm2-tools/tpm2-tools.mk b/package/tpm2-tools/tpm2-tools.mk
+index 9e50170297..e7423db67a 100644
+--- a/package/tpm2-tools/tpm2-tools.mk
++++ b/package/tpm2-tools/tpm2-tools.mk
+@@ -6,7 +6,7 @@
  
--	  https://github.com/docker/containerd
-+	  https://containerd.io/
- 
- if BR2_PACKAGE_DOCKER_CONTAINERD
+ TPM2_TOOLS_VERSION = 3.1.4
+ TPM2_TOOLS_SITE = https://github.com/tpm2-software/tpm2-tools/releases/download/$(TPM2_TOOLS_VERSION)
+-TPM2_TOOLS_LICENSE = BSD-2-Clause
++TPM2_TOOLS_LICENSE = BSD-3-Clause
+ TPM2_TOOLS_LICENSE_FILES = LICENSE
+ TPM2_TOOLS_DEPENDENCIES = libcurl openssl tpm2-tss host-pkgconf
  
