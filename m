@@ -1,62 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 23:29:00 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/samba4: security
- bump to version 4.9.6
-Message-ID: <20190414212510.3A2C7804EF@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 23:20:34 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/tpm2-tss: add
+ upstream patch to drop hardcoded -lgcrypt from tss2-esys.pc
+Message-ID: <20190414212510.02B9B8A509@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c5dd5d9341fd17c137aa292bd6433427f6e7e79
+commit: https://git.buildroot.net/buildroot/commit/?id=0341ab3a75022fac79f689830861efe8dc535bea
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security vulnerabilities:
+tss2-esys.pc contains a hardcoded -lgcrypt even though the openssl crypto
+backend (as in Buildroot) may be used, leading to linker errors when using
+esys.
 
- - CVE-2019-3870:
-   During the provision of a new Active Directory DC, some files in the private/
-   directory are created world-writable.
-   https://www.samba.org/samba/security/CVE-2019-3870.html
+Given that tpm2-tss doesn't allow static linking, there is no need to
+explicitly list the crypto library dependency.
 
- - CVE-2019-3880:
-   Authenticated users with write permission can trigger a symlink traversal to
-   write or detect files outside the Samba share.
-   https://www.samba.org/samba/security/CVE-2019-3880.html
+Cherry pick an upstream patch to fix this.  Notice that the upstream patch
+also changes the default crypto backend to openssl.  As this isn't stricly
+needed (we explicitly configure for openssl) and requires autoreconv, drop
+the configure.ac hunk from the patch.
 
-For more details, see the release notes:
-https://www.samba.org/samba/history/samba-4.9.6.html
+https://github.com/tpm2-software/tpm2-tss/pull/1173
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8a662ae308586e60ae65114750a014b52b5969e0)
+(cherry picked from commit 55c4f7ca4b3616cbc48f464d9f803eb10f7a908d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...c-switch-default-ESAPI-crypto-backend-to-.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 70cea4809b..7762456cfd 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.5.tar.asc
--sha256 078956d2d98e22011265afd4b7221efe4861067dcba4a031583b01f34d423700  samba-4.9.5.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.6.tar.asc
-+sha256 c9205a651a83d69e200fec9dd65e9fa360f0c75ab3275b3dcb74e5cbaec60807  samba-4.9.6.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 9b226a0e05..3f16b5be4a 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.9.5
-+SAMBA4_VERSION = 4.9.6
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+diff --git a/package/tpm2-tss/0002-configure.ac-switch-default-ESAPI-crypto-backend-to-.patch b/package/tpm2-tss/0002-configure.ac-switch-default-ESAPI-crypto-backend-to-.patch
+new file mode 100644
+index 0000000000..a864293d58
+--- /dev/null
++++ b/package/tpm2-tss/0002-configure.ac-switch-default-ESAPI-crypto-backend-to-.patch
+@@ -0,0 +1,32 @@
++From aa8d9b2bb2faeb0c6cc03548cc363d90d3414f15 Mon Sep 17 00:00:00 2001
++From: Tadeusz Struk <tadeusz.struk@intel.com>
++Date: Tue, 23 Oct 2018 16:04:25 -0700
++Subject: [PATCH] configure.ac: switch default ESAPI crypto backend to openSSL
++
++Switch the default ESAPI crypto backend to openSSL.
++This should also fix the problem with forcing applications to
++link against libgcrypt.
++
++Fixes: #1169
++
++Signed-off-by: Tadeusz Struk <tadeusz.struk@intel.com>
++[Peter: drop configure.ac hunk, only drop hard coded -lcrypt from .pc]
++(cherry picked from commit a5ff71abeda9a5aea269812de32afb79ef3fcb4d)
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ lib/tss2-esys.pc.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/lib/tss2-esys.pc.in b/lib/tss2-esys.pc.in
++index 792f0191..ecb01bc1 100644
++--- a/lib/tss2-esys.pc.in
+++++ b/lib/tss2-esys.pc.in
++@@ -4,4 +4,4 @@ URL: https://github.com/tpm2-software/tpm2-tss
++ Version: @VERSION@
++ Requires: tss2-mu tss2-sys
++ Cflags: -I at includedir@
++-Libs: -ltss2-esys -lgcrypt -L at libdir@
+++Libs: -ltss2-esys -L at libdir@
++-- 
++2.11.0
++
