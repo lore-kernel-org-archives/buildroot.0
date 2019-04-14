@@ -1,34 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Apr 2019 15:01:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cmocka: bump to version 1.1.5
-In-Reply-To: <20190413193949.2227-1-fontaine.fabrice@gmail.com>
-References: <20190413193949.2227-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190414150122.3beb9c49@windsurf>
+Date: Sun, 14 Apr 2019 15:00:36 +0200
+Subject: [Buildroot] [git commit] package/mutt: bump to version 1.11.4
+Message-ID: <20190414125836.14C33815B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 13 Apr 2019 21:39:49 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6237ce0991091bbf04ca9e8076a5af53e0efba72
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Remove patch (already in version)
-> - Use WITH_EXAMPLES=OFF (option added with
->   https://git.cryptomilk.org/projects/cmocka.git/commit?id=ee264da1aa222b354cee36184ab48c2072f62243)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ime-include-stdint.h-before-cmocka.h.patch | 35 -------------------
->  package/cmocka/cmocka.hash                    |  2 +-
->  package/cmocka/cmocka.mk                      |  3 +-
->  3 files changed, 3 insertions(+), 37 deletions(-)
->  delete mode 100644 package/cmocka/0001-examples-uptime-include-stdint.h-before-cmocka.h.patch
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mutt/mutt.hash | 2 +-
+ package/mutt/mutt.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mutt/mutt.hash b/package/mutt/mutt.hash
+index 476773c294..d0e2d2dd83 100644
+--- a/package/mutt/mutt.hash
++++ b/package/mutt/mutt.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 da5cd4c39f228914d3933d8cf3a017c8271fdd9b9d81c6e4fc42ad22e1a28723  mutt-1.11.2.tar.gz
++sha256 b651357ea6c8762178080493991c77ecb111d916d171d422500257ab48be2801  mutt-1.11.4.tar.gz
+ sha256 732f24b69a6c71cd8e01e4672bb8e12cc1cbb88a50a4665e6ca4fd95000a57ee  GPL
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index 5860e8430e..613358abdd 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MUTT_VERSION = 1.11.2
++MUTT_VERSION = 1.11.4
+ MUTT_SITE = https://bitbucket.org/mutt/mutt/downloads
+ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
