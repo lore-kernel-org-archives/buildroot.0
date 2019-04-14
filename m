@@ -1,237 +1,367 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sun, 14 Apr 2019 19:24:13 +0200
-Subject: [Buildroot] [PATCH v8 6/9] cpe-info: update manual for new pkg
- vars
-In-Reply-To: <1552082667-46877-7-git-send-email-matthew.weber@rockwellcollins.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 14 Apr 2019 20:05:34 +0200
+Subject: [Buildroot] [PATCH v8 7/9] support/scripts/cpedb.py: new CPE
+ XML helper
+In-Reply-To: <1552082667-46877-8-git-send-email-matthew.weber@rockwellcollins.com>
 References: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
- <1552082667-46877-7-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <CAAXf6LW4QQ2WsCHQtpf=nm9wf__xieoZL3ZqWnF-6V97cmQwMA@mail.gmail.com>
+ <1552082667-46877-8-git-send-email-matthew.weber@rockwellcollins.com>
+Message-ID: <c76da478-276a-55f0-eea9-da4c70b65e99@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Mar 8, 2019, 23:06 Matt Weber <matthew.weber@rockwellcollins.com>
-wrote:
 
-> Provide guidance on setting up the *_CPE_* and *_CVE_* variables.
->
+
+On 08/03/2019 23:04, Matt Weber wrote:
+> Python class which consumes a NIST CPE XML and provides helper
+> functions to access and search the db's data.
+> 
+>  - Defines the CPE as a object with operations / formats
+>  - Processing of CPE dictionary
+> 
 > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 > ---
-> Changes
->
+> 
 > v8
->  - Added note about minor version
->  - Removed CVE patch listing as the backend has not be implemented
->     (LIBFOO_CVE_PATCHED)
->
-> v4 -> v7
->  - None
->
-> v3
->  - Updated to make *_CPE_VENDOR optional
->  - Changed wording around _CPE_ID as there is only one defined now
->
-> v2
-> [Thomas P
->  - Reworded LIBFOO_CVE_PATCHED description
->
-> [Matt W
->  - Added definition for new preset variables to auto-gen the CPE ID
->  - Added example LIBFOO_CPE_ID_VENDOR to LIBFOO
+>  - Added support for generation of update xml to maintain the
+>    NIST dictionary for any Buildroot package version bumps
+>  - Dropped searching of the Config.in files for URLs, instead
+>    assuming the first time a package is added to NIST, the xml is
+>    manually filled out with reference urls.  Any updates to versions
+>    after that will use the proposed autogen xml that mines the URLS
+>    from the NIST dict file.
+>  - Caching support for a processed dictionary to speed up subsequent
+>    runs when testing, as a db doesn't update more then once a day
+
+ Can we split this into three patches:
+
+1. basic CPEDB and cpe-report.
+2. Add caching
+3. Add XML generation.
+
+ For the cache, it's worth mentioning how much you save be storing the pickled
+object rather than the XML.
+
+> 
+> v5 -> v7
+>  - No change
+> 
+> v5
+> [Ricardo
+>  - Fixed typo in join/split of cpe str without version
+>  - Removed extra prints as they aren't needed when we have the
+>    output reports/stdout
+>  - Updated v4 comments about general flake formatting cleanup
+>  - Incorporated parts of patch 1/2 suggestions for optimizations
+> 
+> [Arnout
+>  - added pre-processing of cpe values into two sets, one with
+>    and one without version
+>  - Collectly with Ricardo, decided to move cpe class to this
+>    seperate script
+> 
+> v1 -> v4
+>  - No version
 > ---
->  docs/manual/adding-packages-generic.txt | 111
-> +++++++++++++++++++-------------
->  1 file changed, 68 insertions(+), 43 deletions(-)
->
-> diff --git a/docs/manual/adding-packages-generic.txt
-> b/docs/manual/adding-packages-generic.txt
-> index 7be1754..ddf1b2e 100644
-> --- a/docs/manual/adding-packages-generic.txt
-> +++ b/docs/manual/adding-packages-generic.txt
-> @@ -24,57 +24,59 @@ system is based on hand-written Makefiles or shell
-> scripts.
->  09: LIBFOO_SITE = http://www.foosoftware.org/download
->  10: LIBFOO_LICENSE = GPL-3.0+
->  11: LIBFOO_LICENSE_FILES = COPYING
-> -12: LIBFOO_INSTALL_STAGING = YES
-> -13: LIBFOO_CONFIG_SCRIPTS = libfoo-config
-> -14: LIBFOO_DEPENDENCIES = host-libaaa libbbb
-> -15:
-> -16: define LIBFOO_BUILD_CMDS
-> -17:    $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
-> -18: endef
-> -19:
-> -20: define LIBFOO_INSTALL_STAGING_CMDS
-> -21:    $(INSTALL) -D -m 0755 $(@D)/libfoo.a
-> $(STAGING_DIR)/usr/lib/libfoo.a
-> -22:    $(INSTALL) -D -m 0644 $(@D)/foo.h $(STAGING_DIR)/usr/include/foo.h
-> -23:    $(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(STAGING_DIR)/usr/lib
-> -24: endef
-> -25:
-> -26: define LIBFOO_INSTALL_TARGET_CMDS
-> -27:    $(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(TARGET_DIR)/usr/lib
-> -28:    $(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
-> -29: endef
-> -30:
-> -31: define LIBFOO_USERS
-> -32:    foo -1 libfoo -1 * - - - LibFoo daemon
-> -33: endef
-> -34:
-> -35: define LIBFOO_DEVICES
-> -36:    /dev/foo  c  666  0  0  42  0  -  -  -
-> -37: endef
-> -38:
-> -39: define LIBFOO_PERMISSIONS
-> -40:    /bin/foo  f  4755  foo  libfoo   -  -  -  -  -
-> -41: endef
-> -42:
-> -43: $(eval $(generic-package))
-> +12: LIBFOO_CPE_ID_VENDOR = foosoftware
-> +13: LIBFOO_INSTALL_STAGING = YES
-> +14: LIBFOO_CONFIG_SCRIPTS = libfoo-config
-> +15: LIBFOO_DEPENDENCIES = host-libaaa libbbb
-> +16:
-> +17: define LIBFOO_BUILD_CMDS
-> +18:    $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
-> +19: endef
-> +20:
-> +21: define LIBFOO_INSTALL_STAGING_CMDS
-> +22:    $(INSTALL) -D -m 0755 $(@D)/libfoo.a
-> $(STAGING_DIR)/usr/lib/libfoo.a
-> +23:    $(INSTALL) -D -m 0644 $(@D)/foo.h $(STAGING_DIR)/usr/include/foo.h
-> +24:    $(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(STAGING_DIR)/usr/lib
-> +25: endef
-> +26:
-> +27: define LIBFOO_INSTALL_TARGET_CMDS
-> +28:    $(INSTALL) -D -m 0755 $(@D)/libfoo.so* $(TARGET_DIR)/usr/lib
-> +29:    $(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/foo.d
-> +30: endef
-> +31:
-> +32: define LIBFOO_USERS
-> +33:    foo -1 libfoo -1 * - - - LibFoo daemon
-> +34: endef
-> +35:
-> +36: define LIBFOO_DEVICES
-> +37:    /dev/foo  c  666  0  0  42  0  -  -  -
-> +38: endef
-> +39:
-> +40: define LIBFOO_PERMISSIONS
-> +41:    /bin/foo  f  4755  foo  libfoo   -  -  -  -  -
-> +42: endef
-> +43:
-> +44: $(eval $(generic-package))
->  --------------------------------
->
-> -The Makefile begins on line 7 to 11 with metadata information: the
-> +The Makefile begins on line 7 to 12 with metadata information: the
->  version of the package (+LIBFOO_VERSION+), the name of the
->  tarball containing the package (+LIBFOO_SOURCE+) (xz-ed tarball
-> recommended)
->  the Internet location at which the tarball can be downloaded from
-> -(+LIBFOO_SITE+), the license (+LIBFOO_LICENSE+) and file with the
-> -license text (+LIBFOO_LICENSE_FILES+). All variables must start with
-> +(+LIBFOO_SITE+), the license (+LIBFOO_LICENSE+), the file with the
-> +license text (+LIBFOO_LICENSE_FILES+) and the vendor for vunerability
-> +analysis (+LIBFOO_CPE_ID_VENDOR+). All variables must start with
->  the same prefix, +LIBFOO_+ in this case. This prefix is always the
->  uppercased version of the package name (see below to understand where
->  the package name is defined).
->
-> -On line 12, we specify that this package wants to install something to
-> +On line 13, we specify that this package wants to install something to
->  the staging space. This is often needed for libraries, since they must
->  install header files and other development files in the staging space.
->  This will ensure that the commands listed in the
->  +LIBFOO_INSTALL_STAGING_CMDS+ variable will be executed.
->
-> -On line 13, we specify that there is some fixing to be done to some
-> +On line 14, we specify that there is some fixing to be done to some
->  of the 'libfoo-config' files that were installed during
->  +LIBFOO_INSTALL_STAGING_CMDS+ phase.
->  These *-config files are executable shell script files that are
-> @@ -122,14 +124,14 @@ IMAGEMAGICK_CONFIG_SCRIPTS = \
->  --------------------------------
->  ================================
->
-> -On line 14, we specify the list of dependencies this package relies
-> +On line 15, we specify the list of dependencies this package relies
->  on. These dependencies are listed in terms of lower-case package names,
->  which can be packages for the target (without the +host-+
->  prefix) or packages for the host (with the +host-+) prefix).
->  Buildroot will ensure that all these packages are built and installed
->  'before' the current package starts its configuration.
->
-> -The rest of the Makefile, lines 16..29, defines what should be done
-> +The rest of the Makefile, lines 17..29, defines what should be done
->  at the different steps of the package configuration, compilation and
->  installation.
->  +LIBFOO_BUILD_CMDS+ tells what steps should be performed to
-> @@ -142,16 +144,16 @@ All these steps rely on the +$(@D)+ variable, which
->  contains the directory where the source code of the package has been
->  extracted.
->
-> -On lines 31..43, we define a user that is used by this package (e.g.
-> +On lines 32..44, we define a user that is used by this package (e.g.
->  to run a daemon as non-root) (+LIBFOO_USERS+).
->
-> -On line 35..37, we define a device-node file used by this package
-> +On line 36..38, we define a device-node file used by this package
->  (+LIBFOO_DEVICES+).
->
-> -On line 39..41, we define the permissions to set to specific files
-> +On line 40..42, we define the permissions to set to specific files
->  installed by this package (+LIBFOO_PERMISSIONS+).
->
-> -Finally, on line 43, we call the +generic-package+ function, which
-> +Finally, on line 44, we call the +generic-package+ function, which
->  generates, according to the variables defined previously, all the
->  Makefile code necessary to make your package working.
->
-> @@ -482,6 +484,29 @@ not and can not work as people would expect it should:
->    locations, `/lib/firmware`, `/usr/lib/firmware`, `/lib/modules`,
->    `/usr/lib/modules`, and `/usr/share`, which are automatically excluded.
->
-> +* +LIBFOO_CPE_ID_VENDOR+
-> +  This variable is optional. It only must be defined if the package name
-> +  does not match what the CPE ID uses for the vendor. By default it's set
-> +  to <pkg-name>_project.
-> +
-> +* +LIBFOO_CPE_ID_NAME+
-> +  This variable is optional. It only must be defined if the package name
-> +  does not match what the CPE ID uses for the name. By default it's set
-> +  to <pkg-name>.
-> +
-> +* +LIBFOO_CPE_ID_VERSION+
-> +  This variable is optional. By default it's set to <pkg-version>.
-> +
-> +* +LIBFOO_CPE_ID_VERSION_MINOR+
-> +  This variable is optional. By default it's set to *.
-> +
-> +* +LIBFOO_CPE_ID+ is optional, as the package infrastructure hangles the
-> +  default case of a single package's Common Product Enumeration (CPE)
-> +  identification string. +make cpe-info+ copies all of these into a
-> +  +cpe-manifest.csv+ file. To identify a package's possible CPE,
-> +  the National Vunerability Database can be searched at
->
+>  support/scripts/cpedb.py | 185 +++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 185 insertions(+)
+>  create mode 100644 support/scripts/cpedb.py
+> 
+> diff --git a/support/scripts/cpedb.py b/support/scripts/cpedb.py
+> new file mode 100644
+> index 0000000..0369536
+> --- /dev/null
+> +++ b/support/scripts/cpedb.py
+> @@ -0,0 +1,185 @@
+> +import sys
+> +import urllib2
 
-Also here: Vulnerability with l
+ For python3, this should be urllib.request. So:
+
+try:
+	import urllib.request as urllib
+except ImportError:
+	import urllib2 as urllib
 
 
-+  https://nvd.nist.gov/products/cpe/search.
+> +from collections import OrderedDict
+> +import xmltodict
+
+ This is not a standard module, so maybe we should add an exception handler (in
+cpe-report) that says which non-standard packages must be installed.
+
+> +import gzip
+> +from StringIO import StringIO
+> +import os
+> +import pickle
 > +
->  The recommended way to define these variables is to use the following
->  syntax:
->
-> --
-> 1.9.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190414/a74e7d61/attachment.html>
+> +VALID_REFS = ['VENDOR', 'VERSION', 'CHANGE_LOG', 'PRODUCT', 'PROJECT', 'ADVISORY']
+> +
+> +
+> +class CPE:
+
+ CPE is a bit too generic. CPEEntry would be better.
+
+> +    cpe_str = None
+> +    cpe_str_short = None
+> +    cpe_desc = None
+> +    cpe_cur_ver = None
+> +    titles = {}
+> +    references = {}
+> +
+> +    def __init__(self, cpe_str, titles=None, refs=None):
+> +        self.cpe_str = cpe_str
+> +        self.cpe_str_short = ":".join(self.cpe_str.split(":")[:6])
+
+ Generating the cpe-2.2 name is actually a little bit more complicated than
+that, so I would pass it explicitly in the constructor as cpe_2_2_str (instead
+of str_short). Or, to keep it consistent with the database, cpe_name for the 2.2
+string, and cpe_23_name for the 2.3 string.
+
+> +        self.titles = titles
+> +        self.references = refs
+> +        self.cpe_cur_ver = "".join(self.cpe_str.split(":")[5:6])
+
+ This is just
+
+        self.cpe_cur_ver = self.cpe_str.split(":")[5]
+
+> +
+> +    def to_dict(self, cpe_str):
+
+ Why pass a cpe_str here? I would expect to convert self to a dict. That way,
+most of the below can be removed (after setting cpe_cur_ver to a new version in
+the object, of course).
+
+> +        cpe_short_name = ":".join(cpe_str.split(":")[2:6])
+> +        cpe_new_ver = "".join(cpe_str.split(":")[5:6])
+> +        self.titles[0]['#text'] = self.titles[0]['#text'].replace(self.cpe_cur_ver, cpe_new_ver)
+> +        cpe_dict = OrderedDict([
+> +            ('cpe-item', OrderedDict([
+> +                ('@name', 'cpe:/' + cpe_short_name),
+> +                ('title', self.titles),
+> +                ('references', OrderedDict([('reference', self.references)])),
+> +                ('cpe-23:cpe23-item', OrderedDict([
+> +                        ('@name', cpe_str)
+> +                ]))
+> +            ]))
+> +        ])
+> +        return cpe_dict
+> +
+> +
+> +class CPEDB:
+
+ They call it the dictionary, so maybe CPEDictionary is better.
+
+> +    all_cpes = dict()
+> +    all_cpes_no_version = dict()
+> +
+> +    def get_xml_dict(self, url):
+> +        print("CPE: Setting up NIST dictionary")
+> +        # Setup location to save dict and xmls, if it exists, assume we're
+> +        # reusing the previous dict
+> +        if not os.path.exists("cpe"):
+
+ The cache path should be settable with a command line option. You'll probably
+want to share the cache between different buildroot trees.
+
+> +            os.makedirs("cpe")
+> +            self.get_new_xml_dict(url)
+> +        else:
+> +            print("CPE: Loading CACHED dictionary")
+> +            cpe_file = open('cpe/.all_cpes.pkl', 'rb')
+> +            self.all_cpes = pickle.load(cpe_file)
+> +            cpe_file.close()
+> +            cpe_file = open('cpe/.all_cpes_no_version.pkl', 'rb')
+> +            self.all_cpes_no_version = pickle.load(cpe_file)
+> +            cpe_file.close()
+> +
+> +    def get_new_xml_dict(self, url):
+> +        print("CPE: Fetching xml manifest from [" + url + "]")
+> +        try:
+> +            compressed_cpe_file = urllib2.urlopen(url)
+> +            print("CPE: Unzipping xml manifest...")
+
+ I believe this is not correct, the unzipping will only start when you read from
+it in the xmltodict.parse() call.
+
+> +            nist_cpe_file = gzip.GzipFile(fileobj=StringIO(compressed_cpe_file.read())).read()
+
+ Is all this StringIO stuff needed? Why not just
+
+            nist_cpe_file = gzip.GzipFile(fileobj=compressed_cpe_file)
+
+?
+
+> +            print("CPE: Converting xml manifest to dict...")
+> +            all_cpedb = xmltodict.parse(nist_cpe_file)
+
+ FYI, this bit takes about 7 seconds on my laptop.
+
+> +
+> +            # Cycle through the dict and build two dict to be used for custom
+> +            # lookups of partial and complete CPE objects
+> +            # The objects are then used to create new proposed XML updates if
+> +            # if is determined one is required
+> +            for cpe in all_cpedb['cpe-list']['cpe-item']:
+> +                cpe_titles = cpe['title']
+> +                # There maybe multiple titles or one.  Make sure this is
+> +                # always a list
+> +                if not isinstance(cpe_titles, (list,)):
+> +                    cpe_titles = [cpe_titles]
+> +                # Out of the different language titles, select English
+> +                for title in cpe_titles:
+> +                    if title['@xml:lang'] is 'en-US':
+> +                        cpe_titles = [title]
+
+ You'll probably want to break here.
+
+> +                # Some older CPE don't include references, if they do, make
+> +                # sure we handle the case of one ref needing to be packed
+> +                # in a list
+> +                if 'references' in cpe:
+> +                    cpe_ref = cpe['references']['reference']
+> +                    if not isinstance(cpe_ref, (list,)):
+> +                        cpe_ref = [cpe_ref]
+> +                    # The reference text has not been consistantly upper case
+
+ To be completely exact: it is NEVER uppercase. A lot of the existing references
+are some free text. And AFAICS, the official labels are all title-cased
+(Advisory, Version, ...). Where do you get this information that it should be
+uppercase?
+
+> +                    # in the NIST dict but they now require it.  So force upper
+> +                    # and then check for compliance to a specific tagging
+> +                    for ref_href in cpe_ref:
+> +                        ref_href['#text'] = ref_href['#text'].upper()
+> +                        if ref_href['#text'] not in VALID_REFS:
+> +                            ref_href['#text'] = ref_href['#text'] + "-- UPDATE this entry, here are some exmaples and just one word should be used -- " + ' '.join(VALID_REFS)
+
+ I think if a current entry contains some invalid ref, we should just drop it.
+
+ However, IMO any updates like this (dropping invalid refs, uppercasing them,
+...) should be done only when the version is updated, not when the CPEDB is created.
+
+ In other words, I think the CPEEntry should get a method create_new_version
+that creates a new CPEEntry (or maybe a duck-typed similar class) with the new
+version.
+
+> +                cpe_str = cpe['cpe-23:cpe23-item']['@name']
+> +                item = CPE(cpe_str, cpe_titles, cpe_ref)
+> +                cpe_str_no_version = self.get_cpe_no_version(cpe_str)
+> +                # This dict must have a unique key for every CPE version
+> +                # which allows matching to the specific obj data of that
+> +                # NIST dict entry
+> +                self.all_cpes.update({cpe_str: item})
+> +                # This dict has one entry for every CPE (w/o version) to allow
+> +                # partial match (no valid version) check (the obj is saved and
+> +                # used as seed for suggested xml updates. By updating the same
+> +                # non-version'd entry, it assumes the last update here is the
+> +                # latest version in the NIST dict)
+> +                self.all_cpes_no_version.update({cpe_str_no_version: item})
+> +
+> +        except urllib2.HTTPError:
+> +            print("CPE: HTTP Error: %s" % url)
+> +            sys.exit(1)
+> +        except urllib2.URLError:
+> +            print("CPE: URL Error: %s" % url)
+> +            sys.exit(1)
+> +
+> +        print("CPE: Caching dictionary")
+> +        cpes_file = open('cpe/.all_cpes.pkl', 'wb')
+
+ I'm a bit afraid of this pickling, because it risks getting inconsistent if you
+update this file. Could we put some versioning mechanism in it? Maybe just in
+the file name?
+
+> +        pickle.dump(self.all_cpes, cpes_file)
+> +        cpes_file.close()
+> +        cpes_file = open('cpe/.all_cpes_no_version.pkl', 'wb')
+> +        pickle.dump(self.all_cpes_no_version, cpes_file)
+> +        cpes_file.close()
+> +
+> +    def find_partial(self, cpe_str):
+> +        cpe_str_no_version = self.get_cpe_no_version(cpe_str)
+> +        if cpe_str_no_version in self.all_cpes_no_version:
+> +            return cpe_str_no_version
+
+ This will not fly with my idea of defaulting vendor to *...
+
+ Actually, I realize now: if we require setting a full CPE_ID rather than the
+vendor, product, version fields, and if it would be part of show-info rather
+than cpe-info, then it may be better to leave the CPE_ID empty by default, and
+let cpe-report do the lookup. The cpe-report script would then be responsible
+for constructing a guessed CPE_ID, and it has more flexibility to do that based
+on package name and version. For example, it can try with the package name and
+it can try to strip the perl-/python-/... prefix.
+
+ To make that easy, it would be better to make the all_cpes_no_version keyed on
+product only instead of keyed on generated CPE string.
+
+> +
+> +    def find_partial_obj(self, cpe_str):
+> +        cpe_str_no_version = self.get_cpe_no_version(cpe_str)
+> +        if cpe_str_no_version in self.all_cpes_no_version:
+> +            return self.all_cpes_no_version[cpe_str_no_version]
+> +
+> +    def find_partial_latest_version(self, cpe_str_partial):
+> +        cpe_obj = self.find_partial_obj(cpe_str_partial)
+> +        return cpe_obj.cpe_cur_ver
+> +
+> +    def find(self, cpe_str):
+> +        if self.find_partial(cpe_str):
+> +            if cpe_str in self.all_cpes:
+> +                return cpe_str
+> +
+> +    def update(self, cpe_str):
+> +        to_update = self.find_partial_obj(cpe_str)
+> +        xml = self.__gen_xml__(to_update.to_dict(cpe_str))
+> +        fp = open(os.path.join('cpe', self.get_cpe_name(cpe_str) + '-' + self.get_cpe_version(cpe_str) + '.xml'), 'w+')
+> +        fp.write(xmltodict.unparse(xml, pretty=True))
+> +        fp.close()
+> +
+> +    def get_nvd_url(self, cpe_str):
+
+ This function is not used AFAICS, and probably a few others as well. Please
+remove them.
+
+> +        return "https://nvd.nist.gov/products/cpe/search/results?keyword=" + \
+> +                urllib2.quote(cpe_str) + \
+> +                "&status=FINAL&orderBy=CPEURI&namingFormat=2.3"
+> +
+> +    def get_cpe_no_version(self, cpe):
+> +        return ":".join(cpe.split(":")[:5])
+> +
+> +    def get_cpe_name(self, cpe_str):
+> +        return "".join(cpe_str.split(":")[4])
+> +
+> +    def get_cpe_version(self, cpe_str):
+> +        return "".join(cpe_str.split(":")[5])
+> +
+> +    def __gen_xml__(self, cpe_list):
+
+ This function is only used internally, right? Then don't give it a dunder name.
+dunder names should be reserved for official Python semantics. You can indicate
+that it is private by starting it with underscore, so _gen_xml().
+
+
+ Regards,
+ Arnout
+
+> +        list_header = {
+> +            "cpe-list": {
+> +                "@xmlns:config": "http://scap.nist.gov/schema/configuration/0.1",
+> +                "@xmlns": "http://cpe.mitre.org/dictionary/2.0",
+> +                "@xmlns:xsi": "http://www.w3.org/2001/XMLSchema-instance",
+> +                "@xmlnsscap-core": "http://scap.nist.gov/schema/scap-core/0.3",
+> +                "@xmlns:cpe-23": "http://scap.nist.gov/schema/cpe-extension/2.3",
+> +                "@xmlns:ns6": "http://scap.nist.gov/schema/scap-core/0.1",
+> +                "@xmlns:meta": "http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2",
+> +                "@xsi:schemaLocation": "http://scap.nist.gov/schema/cpe-extension/2.3 https://scap.nist.gov/schema/cpe/2.3/cpe-dictionary-extension_2.3.xsd http://cpe.mitre.org/dictionary/2.0 https://scap.nist.gov/schema/cpe/2.3/cpe-dictionary_2.3.xsd http://scap.nist.gov/schema/cpe-dictionary-metadata/0.2 https://scap.nist.gov/schema/cpe/2.1/cpe-dictionary-metadata_0.2.xsd http://scap.nist.gov/schema/scap-core/0.3 https://scap.nist.gov/schema/nvd/scap-core_0.3.xsd http://scap.nist.gov/schema/configuration/0.1 https://scap.nist.gov/schema/nvd/configuration_0.1.xsd http://scap.nist.gov/schema/scap-core/0.1 https://scap.nist.gov/schema/nvd/scap-core_0.1.xsd"
+> +             }
+> +        }
+> +        list_header['cpe-list'].update(cpe_list)
+> +        return list_header
+> 
