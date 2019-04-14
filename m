@@ -1,112 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 22:32:35 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/numactl: remove
- unneeded patches
-Message-ID: <20190414202935.7FF9281597@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 22:33:22 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/php: security
+ bump to version 7.3.4
+Message-ID: <20190414202935.875A981597@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d1cdb23f3a832f43394aa79fdb80fa8998b5990
+commit: https://git.buildroot.net/buildroot/commit/?id=e2825e92a9cef97a1e8ffaa214d309bc9f84c110
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Both patches are already included (a bit earlier in the file) in version
-2.0.12, so drop the patches.
+Changelog: https://www.php.net/ChangeLog-7.php#7.3.4
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes these bugs, CVE-ID were not assigned yet:
+
+    Fixed bug #77753 (Heap-buffer-overflow in php_ifd_get32s).
+    Fixed bug #77831 (Heap-buffer-overflow in exif_iif_add_value).
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0fda716432fb43c0d275c7194a33a20d106acdf9)
+(cherry picked from commit 614c1e2edde9378f87572412d0f86c24308d6547)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch | 35 -------------------
- ...-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch | 39 ----------------------
- 2 files changed, 74 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch b/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
-deleted file mode 100644
-index ebb934f60f..0000000000
---- a/package/numactl/0001-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 3770bdc4fa7b9059db5cd2aa8bb09b50fa15e456 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Fri, 12 Feb 2016 19:25:02 +0100
--Subject: [PATCH] Fix usage of __GLIBC_PREREQ for non-glibc toolchains
--
--The way __GLIBC_PREREQ() is currently used means that it's evaluated
--even if __GLIBC__ is not defined. But obviously, __GLIBC_PREREQ will
--not exist if __GLIBC__ is not defined, causing build failures on C
--libraries not defining __GLIBC__ such as the musl C library.
--
--Patch originally taken from:
--https://github.com/voidlinux/void-packages/blob/master/srcpkgs/numactl/patches/musl.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Bernd: Reworked to fix uClibc]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[Thomas: improve patch description.]
--[Upstream commit: https://github.com/numactl/numactl/commit/3770bdc4fa7b9059db5cd2aa8bb09b50fa15e456.]
-----
-- syscall.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/syscall.c b/syscall.c
--index 4589b85..37782d9 100644
----- a/syscall.c
--+++ b/syscall.c
--@@ -115,7 +115,7 @@
-- 
-- #endif
-- 
---#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
--+#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
-- 
-- /* glibc 2.11 seems to have working 6 argument sycall. Use the
--    glibc supplied syscall in this case.
-diff --git a/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch b/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
-deleted file mode 100644
-index a98fd7247c..0000000000
---- a/package/numactl/0002-Fix-usage-of-GLIBC_PREREQ-for-non-glibc-toolchains.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From 31dc2951c758698bff060aeae8ffd8854616183b Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Fri, 12 Feb 2016 19:25:02 +0100
--Subject: [PATCH] Fix usage of __GLIBC_PREREQ for non-glibc toolchains
--
--The way __GLIBC_PREREQ() is currently used means that it's evaluated
--even if __GLIBC__ is not defined. But obviously, __GLIBC_PREREQ will
--not exist if __GLIBC__ is not defined, causing build failures on C
--libraries not defining __GLIBC__ such as the musl C library.
--
--Patch originally taken from:
--https://github.com/voidlinux/void-packages/blob/master/srcpkgs/numactl/patches/musl.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Bernd: Reworked to fix uClibc]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--[Thomas: improve patch description.]
--[Upstream commit: https://github.com/numactl/numactl/commit/31dc2951c758698bff060aeae8ffd8854616183b]
-----
-- syscall.c | 6 +++++-
-- 1 file changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/syscall.c b/syscall.c
--index 37782d9..255853d 100644
----- a/syscall.c
--+++ b/syscall.c
--@@ -115,7 +115,11 @@
-- 
-- #endif
-- 
---#if defined(__GLIBC_PREREQ) && __GLIBC_PREREQ(2, 11)
--+#ifndef __GLIBC_PREREQ
--+# define __GLIBC_PREREQ(x,y) 0
--+#endif
--+
--+#if defined(__GLIBC__) && __GLIBC_PREREQ(2, 11)
-- 
-- /* glibc 2.11 seems to have working 6 argument sycall. Use the
--    glibc supplied syscall in this case.
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 8a9814d10e..fb25521955 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 6bb03e79a183d0cb059a6d117bbb2e0679cab667fb713a13c6a16f56bebab9b3  php-7.3.3.tar.xz
++sha256 6fe79fa1f8655f98ef6708cde8751299796d6c1e225081011f4104625b923b83  php-7.3.4.tar.xz
+ 
+ # License file
+ sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index ea6deca7c1..541c76755f 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.3.3
++PHP_VERSION = 7.3.4
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
