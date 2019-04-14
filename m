@@ -1,80 +1,94 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Apr 2019 15:00:34 +0200
-Subject: [Buildroot] [git commit] package/mutt: fix static build with idn2
- and unistring
-Message-ID: <20190414125836.0DCBA811B3@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 14:59:27 +0200
+Subject: [Buildroot] [git commit] package/cmocka: bump to version 1.1.5
+Message-ID: <20190414125836.003AD811B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a78ed3f3756273628143d7330ead3e7ae04ffc00
+commit: https://git.buildroot.net/buildroot/commit/?id=6235e4507523ea537d1a5e6ca7fa0d3ef3f5dfe1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/c9544b4f1a0252e260a2ed19218fa950f4dc2d2d
+- Remove patch (already in version)
+- Use WITH_EXAMPLES=OFF (option added with
+  https://git.cryptomilk.org/projects/cmocka.git/commit?id=ee264da1aa222b354cee36184ab48c2072f62243)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...c-fix-static-build-with-idn2-and-unistrin.patch | 37 ++++++++++++++++++++++
- package/mutt/mutt.mk                               |  2 ++
- 2 files changed, 39 insertions(+)
+ ...s-uptime-include-stdint.h-before-cmocka.h.patch | 35 ----------------------
+ package/cmocka/cmocka.hash                         |  2 +-
+ package/cmocka/cmocka.mk                           |  3 +-
+ 3 files changed, 3 insertions(+), 37 deletions(-)
 
-diff --git a/package/mutt/0001-configure.ac-fix-static-build-with-idn2-and-unistrin.patch b/package/mutt/0001-configure.ac-fix-static-build-with-idn2-and-unistrin.patch
-new file mode 100644
-index 0000000000..c802cbb365
---- /dev/null
-+++ b/package/mutt/0001-configure.ac-fix-static-build-with-idn2-and-unistrin.patch
-@@ -0,0 +1,37 @@
-+From c53b36698fe4721fb562908ac6119aa9280383af Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 14 Apr 2019 10:22:12 +0200
-+Subject: [PATCH] configure.ac: fix static build with idn2 and unistring
-+
-+Commit 78db40f25c6479b14da5a73adf7207bfbec5ccc5 did not fix static build
-+failure
-+
-+AC_SEARCH_LIBS prepends the library to LIBS as a result -lunistring is
-+added before -lidn2. To fix static build, we must set -lunistring after
-+-lidn2
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/c9544b4f1a0252e260a2ed19218fa950f4dc2d2d
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://gitlab.com/muttmua/mutt/merge_requests/42]
-+---
-+ configure.ac | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index bd8beb91..75943eee 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -1402,7 +1402,7 @@ if test "x$with_idn2" != "xno"; then
-+     AC_SEARCH_LIBS([idn2_check_version], [idn2], [
-+       AC_DEFINE([HAVE_LIBIDN2], 1, [Define to 1 if you have the GNU idn2 library])
-+       dnl -lunistring is needed for static linking
-+-      AC_SEARCH_LIBS([u8_strconv_from_locale], [unistring])
-++      AC_SEARCH_LIBS([u8_strconv_from_locale], [unistring], [LIBS="$LIBS -lunistring"])
-+       MUTTLIBS="$MUTTLIBS $LIBS"
-+ 
-+       dnl libidn2 >= 2.0.0 declares compatibility macros in idn2.h
-+-- 
-+2.20.1
-+
-diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
-index a336839cb7..5860e8430e 100644
---- a/package/mutt/mutt.mk
-+++ b/package/mutt/mutt.mk
-@@ -10,6 +10,8 @@ MUTT_LICENSE = GPL-2.0+
- MUTT_LICENSE_FILES = GPL
- MUTT_DEPENDENCIES = ncurses
- MUTT_CONF_OPTS = --disable-doc --disable-smtp
-+# We're patching configure.ac
-+MUTT_AUTORECONF = YES
+diff --git a/package/cmocka/0001-examples-uptime-include-stdint.h-before-cmocka.h.patch b/package/cmocka/0001-examples-uptime-include-stdint.h-before-cmocka.h.patch
+deleted file mode 100644
+index 68dbc11da8..0000000000
+--- a/package/cmocka/0001-examples-uptime-include-stdint.h-before-cmocka.h.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From dd8449ae3ba7fd05ac172f0227cd93af7f37005e Mon Sep 17 00:00:00 2001
+-From: Joel Carlson <joelsoncarl@gmail.com>
+-Date: Mon, 1 Oct 2018 15:01:56 -0600
+-Subject: [PATCH] examples: uptime: include stdint.h before cmocka.h
+-
+-Fixes a build error encountered on one MIPS64 toolchain about uintptr_t
+-being declared twice, first by cmocka.h and then later by the toolchains
+-stdint.h.
+-
+-Fixes #7
+-
+-Signed-off-by: Joel Carlson <JoelsonCarl@gmail.com>
+-Reviewed-by: Andreas Schneider <asn@cryptomilk.org>
+----
+-Fixes build error with br-mips64-n64-full
+-Upstream commit: dd8449ae3ba7fd05ac172f0227cd93af7f37005e
+----
+- example/mock/uptime/test_uptime.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/example/mock/uptime/test_uptime.c b/example/mock/uptime/test_uptime.c
+-index badfac9..183c276 100644
+---- a/example/mock/uptime/test_uptime.c
+-+++ b/example/mock/uptime/test_uptime.c
+-@@ -16,6 +16,7 @@
+- 
+- #include <stdarg.h>
+- #include <stddef.h>
+-+#include <stdint.h>
+- #include <setjmp.h>
+- #include <cmocka.h>
+- 
+--- 
+-2.17.1
+-
+diff --git a/package/cmocka/cmocka.hash b/package/cmocka/cmocka.hash
+index 1cbda22428..007dd7a7fc 100644
+--- a/package/cmocka/cmocka.hash
++++ b/package/cmocka/cmocka.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 43eabcf72a9c80e3d03f7c8a1c04e408c18d2db5121eb058a3ef732a9dfabfaf cmocka-1.1.3.tar.xz
++sha256 f0ccd8242d55e2fd74b16ba518359151f6f8383ff8aef4976e48393f77bba8b6 cmocka-1.1.5.tar.xz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/cmocka/cmocka.mk b/package/cmocka/cmocka.mk
+index 281410abb3..eafb4898e1 100644
+--- a/package/cmocka/cmocka.mk
++++ b/package/cmocka/cmocka.mk
+@@ -4,12 +4,13 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBICONV),y)
- MUTT_DEPENDENCIES += libiconv
+-CMOCKA_VERSION = 1.1.3
++CMOCKA_VERSION = 1.1.5
+ CMOCKA_SOURCE = cmocka-$(CMOCKA_VERSION).tar.xz
+ CMOCKA_SITE = https://cmocka.org/files/1.1
+ CMOCKA_LICENSE = Apache-2.0
+ CMOCKA_LICENSE_FILES = COPYING
+ CMOCKA_INSTALL_STAGING = YES
++CMOCKA_CONF_OPTS = -DWITH_EXAMPLES=OFF
+ 
+ # cmocka only supports out of source builds
+ CMOCKA_SUPPORTS_IN_SOURCE_BUILD = NO
