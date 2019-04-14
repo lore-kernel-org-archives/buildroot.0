@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Apr 2019 20:08:10 +0200
-Subject: [Buildroot] [PATCH v8 0/9] Package CPE Reporting
-In-Reply-To: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
-References: <1552082667-46877-1-git-send-email-matthew.weber@rockwellcollins.com>
-Message-ID: <5759a010-4340-647b-677c-fa6e0827a5bd@mind.be>
+Date: Sun, 14 Apr 2019 20:22:25 +0200
+Subject: [Buildroot] New Package: Entware
+In-Reply-To: <CALtfCQZa9OH-LFC12DtAV=3Ff9wMphcLhBmNyeRqmym7BsFAJw@mail.gmail.com>
+References: <CALtfCQZa9OH-LFC12DtAV=3Ff9wMphcLhBmNyeRqmym7BsFAJw@mail.gmail.com>
+Message-ID: <50885bb4-64a7-e6bc-36e2-ac468050df3a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,15 +12,35 @@ To: buildroot@busybox.net
 
 
 
-On 08/03/2019 23:04, Matt Weber wrote:
-> Some existing
-> fix-ups forthe CPE strings can be found in the following commit that
-> eventually needs to be split up and applied.
+On 14/04/2019 15:19, Oscar Gomez Fuente wrote:
+> Hi everyone,
 > 
-> https://github.com/rc-matthew-l-weber/buildroot/commit/8ce8d4740b95672d8390799b611a35ea18a543e0
+> 
+> I was thinking about if it would be a good idea to develop a new
+> package to include the option to include Entware:
+> https://github.com/Entware/Entware/wiki.
 
- I don't really think it needs to be split up. Only if it would touch more than
-100 packages it might be better to split it up in chunks of 50-ish packages.
+ That's a collection of binary packages built for openwrt and using opkg to
+install... And to make sure it doesn't run into libc problems, it downloads and
+installs its own libc and puts that in /opt/lib, and all executables use that
+one as INTERP.
+
+ So yes, I guess you could make a package that downloads those binaries and
+installs them in /opt, and makes sure that /opt/etc/init.d/rc.unslung is called
+at boot time. I kind of fail to see the point though.
 
  Regards,
  Arnout
+
+> 
+> It seems to be it is a good alternative to ipkg/opkg which is very old fashion
+> 
+> What do you think?
+> 
+> 
+> Oscar Gomez Fuente
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
