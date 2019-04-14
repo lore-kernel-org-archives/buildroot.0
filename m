@@ -1,70 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Apr 2019 23:39:38 +0200
-Subject: [Buildroot] [RFC 1/1] toolchain-external/Config.in: Allow to
- select custom external-toolchain package
-In-Reply-To: <20190414212654.14910-1-vadim4j@gmail.com>
-References: <20190414212654.14910-1-vadim4j@gmail.com>
-Message-ID: <f0ea00e5-8b75-807d-a1cd-245cd3bd080d@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 15 Apr 2019 00:35:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cjson: security bump to version
+ 1.7.11
+Message-ID: <20190414223529.3694-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Vadim,
+Fix a bug where cJSON_Minify could overflow it's buffer, both reading
+and writing: https://github.com/DaveGamble/cJSON/issues/338.
 
-On 14/04/2019 23:26, Vadim Kochan wrote:
-> Add dummy 'Other' external toolchain option which allows to select
-> custom external-toolchain project, e.g. from external project tree.
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> ---
->  toolchain/toolchain-external/Config.in | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index 1f14f0350a..fd61c70766 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -47,6 +47,12 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Confi
->  # architecture.
->  source "toolchain/toolchain-external/toolchain-external-custom/Config.in"
->  
-> +config BR2_TOOLCHAIN_EXTERNAL_OTHER
-> +	bool "Other"
-> +	help
-> +	  Use this option to use a external toolchain from custom package
-> +	  (e.g. in external project).
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- So, the idea is to extend the choice with toolchains that come from
-BR2_EXTERNAL and that you can't select here, right? And you need something like
-that because it's a choice, and there's no way to extend the choice in a
-different Kconfig file.
-
- I think this is a worthwhile idea, so I'd like to work it out a little more...
-Adding Yann in Cc since he like that kind of external craziness :-)
-
- If kept like this, then I think you should make it depend on a new (blind)
-BR2_TOOLCHAIN_EXTERNAL_OTHER_AVAILABLE option, and that an external toolchain
-package should select that option. This way, the option is only available if
-your external tree actually makes one available.
-
- Also, it should be documented in docs/manual/customize-outside-br.txt.
-
-
- However, it's still pretty inconvenient for the user. So perhaps we could
-explicitly extend the external infra to generate a .br2-external.toolchain.in
-that is included from here. This file would be populated based on the file
-toolchain/Config.in in the external.
-
- Thomas, is that idea over-engineered?
-
- Regards,
- Arnout
-
-
-> +
->  endchoice
->  
->  choice
-> 
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 9c39bb321f..32a05b3c05 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 cc544fdd065f3dd19113f1d5ba5f61d696e0f810f291f4b585d1dec361b0188e  cjson-v1.7.10.tar.gz
++sha256 17ace0e31ebd639906983b05fe1d51576b948ca5411c2162f55dd34c122162ca  cjson-v1.7.11.tar.gz
+ sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index b2ef1c8582..e6ab71b92a 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CJSON_VERSION = v1.7.10
++CJSON_VERSION = v1.7.11
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
+-- 
+2.20.1
