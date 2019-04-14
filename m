@@ -1,52 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 23:22:26 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/civetweb: fix
- link failure due to missing OpenSSL dependency
-Message-ID: <20190414212510.10F528A509@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 23:14:08 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/docker-engine:
+ bump to version v18.09.4
+Message-ID: <20190414212509.C07788A509@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18f8a9d00c340c5c1ffe23ce8cafedebd5e42562
+commit: https://git.buildroot.net/buildroot/commit/?id=55688518cbc84e5f6bf1c11490fcf57dd5df78f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-During linking one OpenSSL dependecy is missing(-latomic) on linking
-library list.
-
-- Substitute explicit library list with `pkg-config libssl` when
-  BR2_PACKAGE_OPENSSL is enabled. In such way all needed libraries
-  will be included in linking list.
-
-- Add also `host-pkgconf` to CIVETWEB_DEPENDENCIES if
-  BR2_PACKAGE_OPENSSL is enabled to make it available for previous
-  point.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/b2e210bdefe84f4ec9cfda79a33d81788fb7e66c/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 027a8b29f1e62d5ff5bbb15b79376614f902a680)
+(cherry picked from commit 37371ff4f6718409ca9f23be297b8ba3974bcf2a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/civetweb/civetweb.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/civetweb/civetweb.mk b/package/civetweb/civetweb.mk
-index fe1cdd5675..80272738e4 100644
---- a/package/civetweb/civetweb.mk
-+++ b/package/civetweb/civetweb.mk
-@@ -32,8 +32,8 @@ endif
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index fe7b0d3b94..b268b7f330 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	4babbcbc3e1d7750c61a1e5bee29bd206256948961feaac5b44cabb0c70a50a6  docker-engine-v18.09.2.tar.gz
++sha256	1f4bd15d799420b587024fe3c6d7bd4eb584e509d30c8193db31411579780f2a  docker-engine-v18.09.4.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index e2f59666df..92e364e60d 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- CIVETWEB_COPT += -DNO_SSL_DL
--CIVETWEB_LIBS += -lssl -lcrypto -lz
--CIVETWEB_DEPENDENCIES += openssl
-+CIVETWEB_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs libssl`
-+CIVETWEB_DEPENDENCIES += openssl host-pkgconf
- else
- CIVETWEB_COPT += -DNO_SSL
- endif
+-DOCKER_ENGINE_VERSION = v18.09.2
++DOCKER_ENGINE_VERSION = v18.09.4
+ DOCKER_ENGINE_SITE = $(call github,docker,engine,$(DOCKER_ENGINE_VERSION))
+ 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
