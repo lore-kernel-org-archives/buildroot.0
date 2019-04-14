@@ -1,49 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 23:13:38 +0200
+Date: Sun, 14 Apr 2019 23:26:19 +0200
 Subject: [Buildroot] [git commit branch/2019.02.x]
- package/docker-containerd: bump version to v1.2.5
-Message-ID: <20190414212509.B25118A509@busybox.osuosl.org>
+ package/xserver_xorg-server: disable unit tests
+Message-ID: <20190414212510.1E8788A509@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e562f33a9dca72bf288d535cc0acf31fc43e8275
+commit: https://git.buildroot.net/buildroot/commit/?id=2004e75d35aa84b158989f0fb18fb7b6c14e561e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Contains a number of bugfixes. For more details, see the announcement:
+Fixes:
+ - http://autobuild.buildroot.org/results/95a5004c9245f1f90758631b02e17d3df12812ec
 
-https://github.com/containerd/containerd/releases/tag/v1.2.5
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 20af865354ed4e816ddcfd617cc18f8dedb9159e)
+(cherry picked from commit c41d8ba066125d4ae20f865e01c8143a5ff58a16)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-containerd/docker-containerd.hash | 2 +-
- package/docker-containerd/docker-containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xserver_xorg-server/xserver_xorg-server.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-index cae88f40e2..fc7b6fcb49 100644
---- a/package/docker-containerd/docker-containerd.hash
-+++ b/package/docker-containerd/docker-containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256	ff4c2ad680c9e2484e335868a54b0c1ea49d9165dd5b38b64ef7d9dacf2b96b4  docker-containerd-v1.2.3.tar.gz
-+sha256	b92819bde71de947329814a3c649b8adb106cc03be16aae217b94297f4b843a1  docker-containerd-v1.2.5.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4	LICENSE
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 9088c17660..586fd1fa08 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_CONTAINERD_VERSION = v1.2.3
-+DOCKER_CONTAINERD_VERSION = v1.2.5
- DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
+diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+index 14f8104767..a33cb25076 100644
+--- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
++++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
+@@ -47,6 +47,7 @@ XSERVER_XORG_SERVER_CONF_OPTS = \
+ 	--disable-xnest \
+ 	--disable-xephyr \
+ 	--disable-dmx \
++	--disable-unit-tests \
+ 	--with-builder-addr=buildroot at buildroot.org \
+ 	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include/pixman-1 -O2" \
+ 	--with-fontrootdir=/usr/share/fonts/X11/ \
