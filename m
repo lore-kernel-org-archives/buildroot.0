@@ -1,130 +1,80 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Apr 2019 14:59:42 +0200
-Subject: [Buildroot] [git commit] package/babeld: bump to version 1.8.4
-Message-ID: <20190414125836.07385811B3@busybox.osuosl.org>
+Date: Sun, 14 Apr 2019 15:00:34 +0200
+Subject: [Buildroot] [git commit] package/mutt: fix static build with idn2
+ and unistring
+Message-ID: <20190414125836.0DCBA811B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da585ab44d435f8de1d547b0d5bdf093b4869e4a
+commit: https://git.buildroot.net/buildroot/commit/?id=a78ed3f3756273628143d7330ead3e7ae04ffc00
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove patch (already in version)
-- Add hash for license file
+Fixes:
+ - http://autobuild.buildroot.org/results/c9544b4f1a0252e260a2ed19218fa950f4dc2d2d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...netlink.c-don-t-include-linux-if_bridge.h.patch | 78 ----------------------
- package/babeld/babeld.hash                         |  3 +-
- package/babeld/babeld.mk                           |  2 +-
- 3 files changed, 3 insertions(+), 80 deletions(-)
+ ...c-fix-static-build-with-idn2-and-unistrin.patch | 37 ++++++++++++++++++++++
+ package/mutt/mutt.mk                               |  2 ++
+ 2 files changed, 39 insertions(+)
 
-diff --git a/package/babeld/0001-kernel_netlink.c-don-t-include-linux-if_bridge.h.patch b/package/babeld/0001-kernel_netlink.c-don-t-include-linux-if_bridge.h.patch
-deleted file mode 100644
-index efadd2038a..0000000000
---- a/package/babeld/0001-kernel_netlink.c-don-t-include-linux-if_bridge.h.patch
-+++ /dev/null
-@@ -1,78 +0,0 @@
--From 723bbfd8bdb76012a3da937c7499cf3c0b111dd5 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--Date: Sat, 20 Aug 2016 11:13:56 +0200
--Subject: [PATCH] kernel_netlink.c: don't include <linux/if_bridge.h>
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Including <linux/if_bridge.h> causes the inclusion of <linux/in6.h>,
--which defines 'struct in6_addr', also defined in <netinet/in.h>, causing
--a build failure with the musl C library:
--
--In file included from /home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/linux/if_bridge.h:18:0,
--                 from kernel_netlink.c:42,
--                 from kernel.c:31:
--/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/linux/in6.h:32:8: error: redefinition of ???struct in6_addr???
-- struct in6_addr {
--        ^
--In file included from kernel_netlink.c:33:0,
--                 from kernel.c:31:
--/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:23:8: note: originally defined here
-- struct in6_addr {
--        ^
--In file included from /home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/linux/if_bridge.h:18:0,
--                 from kernel_netlink.c:42,
--                 from kernel.c:31:
--/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/linux/in6.h:49:8: error: redefinition of ???struct sockaddr_in6???
-- struct sockaddr_in6 {
--        ^
--In file included from kernel_netlink.c:33:0,
--                 from kernel.c:31:
--/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:34:8: note: originally defined here
-- struct sockaddr_in6 {
--        ^
--In file included from /home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/linux/if_bridge.h:18:0,
--                 from kernel_netlink.c:42,
--                 from kernel.c:31:
--/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/linux/in6.h:59:8: error: redefinition of ???struct ipv6_mreq???
-- struct ipv6_mreq {
--        ^
--In file included from kernel_netlink.c:33:0,
--                 from kernel.c:31:
--/home/thomas/projets/buildroot/output/host/usr/x86_64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:42:8: note: originally defined here
-- struct ipv6_mreq {
--        ^
--
--In order to address this, this patch removes the <linux/if_bridge.h>
--inclusion, and instead defines BRCTL_GET_BRIDGES to the appropriate
--value if it's not provided by the C library.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-----
-- kernel_netlink.c | 6 +++++-
-- 1 file changed, 5 insertions(+), 1 deletion(-)
--
--diff --git a/kernel_netlink.c b/kernel_netlink.c
--index 4eadc39..1a5b3dd 100644
----- a/kernel_netlink.c
--+++ b/kernel_netlink.c
--@@ -39,10 +39,14 @@ THE SOFTWARE.
-- #include <sys/socket.h>
-- #include <linux/netlink.h>
-- #include <linux/rtnetlink.h>
---#include <linux/if_bridge.h>
-- #include <linux/fib_rules.h>
-- #include <net/if_arp.h>
-- 
--+/* From <linux/if_bridge.h> */
--+#ifndef BRCTL_GET_BRIDGES
--+#define BRCTL_GET_BRIDGES 1
--+#endif
--+
-- #if(__GLIBC__ < 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ <= 5)
-- #define RTA_TABLE 15
-- #endif
---- 
--2.7.4
--
-diff --git a/package/babeld/babeld.hash b/package/babeld/babeld.hash
-index 0ee64c4f9c..510fe2bc95 100644
---- a/package/babeld/babeld.hash
-+++ b/package/babeld/babeld.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 2c955e7d4ad971da1e860e5cedbaf1dd79903468ff6488b3f67102b2a8d087b6  babeld-1.7.1.tar.gz
-+sha256 98070dc418c190f047b8d69eb47987df30ded8f0fca353c49427d3137ad08b87  babeld-1.8.4.tar.gz
-+sha256 b415c41292cedef6c97b243609e50552887c29343566c639f23282d31efd2afd  LICENCE
-diff --git a/package/babeld/babeld.mk b/package/babeld/babeld.mk
-index d718237d98..5fbfa65485 100644
---- a/package/babeld/babeld.mk
-+++ b/package/babeld/babeld.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/mutt/0001-configure.ac-fix-static-build-with-idn2-and-unistrin.patch b/package/mutt/0001-configure.ac-fix-static-build-with-idn2-and-unistrin.patch
+new file mode 100644
+index 0000000000..c802cbb365
+--- /dev/null
++++ b/package/mutt/0001-configure.ac-fix-static-build-with-idn2-and-unistrin.patch
+@@ -0,0 +1,37 @@
++From c53b36698fe4721fb562908ac6119aa9280383af Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 14 Apr 2019 10:22:12 +0200
++Subject: [PATCH] configure.ac: fix static build with idn2 and unistring
++
++Commit 78db40f25c6479b14da5a73adf7207bfbec5ccc5 did not fix static build
++failure
++
++AC_SEARCH_LIBS prepends the library to LIBS as a result -lunistring is
++added before -lidn2. To fix static build, we must set -lunistring after
++-lidn2
++
++Fixes:
++ - http://autobuild.buildroot.org/results/c9544b4f1a0252e260a2ed19218fa950f4dc2d2d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://gitlab.com/muttmua/mutt/merge_requests/42]
++---
++ configure.ac | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index bd8beb91..75943eee 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1402,7 +1402,7 @@ if test "x$with_idn2" != "xno"; then
++     AC_SEARCH_LIBS([idn2_check_version], [idn2], [
++       AC_DEFINE([HAVE_LIBIDN2], 1, [Define to 1 if you have the GNU idn2 library])
++       dnl -lunistring is needed for static linking
++-      AC_SEARCH_LIBS([u8_strconv_from_locale], [unistring])
+++      AC_SEARCH_LIBS([u8_strconv_from_locale], [unistring], [LIBS="$LIBS -lunistring"])
++       MUTTLIBS="$MUTTLIBS $LIBS"
++ 
++       dnl libidn2 >= 2.0.0 declares compatibility macros in idn2.h
++-- 
++2.20.1
++
+diff --git a/package/mutt/mutt.mk b/package/mutt/mutt.mk
+index a336839cb7..5860e8430e 100644
+--- a/package/mutt/mutt.mk
++++ b/package/mutt/mutt.mk
+@@ -10,6 +10,8 @@ MUTT_LICENSE = GPL-2.0+
+ MUTT_LICENSE_FILES = GPL
+ MUTT_DEPENDENCIES = ncurses
+ MUTT_CONF_OPTS = --disable-doc --disable-smtp
++# We're patching configure.ac
++MUTT_AUTORECONF = YES
  
--BABELD_VERSION = 1.7.1
-+BABELD_VERSION = 1.8.4
- BABELD_SITE = http://www.pps.univ-paris-diderot.fr/~jch/software/files
- BABELD_LICENSE = MIT
- BABELD_LICENSE_FILES = LICENCE
+ ifeq ($(BR2_PACKAGE_LIBICONV),y)
+ MUTT_DEPENDENCIES += libiconv
