@@ -1,30 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Apr 2019 23:28:08 +0200
-Subject: [Buildroot] [PATCH] package/civetweb: fix linking failure due
- to wrong OpenSSL passed to pkg-config
-In-Reply-To: <20190410103746.18403-1-giulio.benetti@micronovasrl.com> (Giulio
- Benetti's message of "Wed, 10 Apr 2019 12:37:46 +0200")
-References: <20190410103746.18403-1-giulio.benetti@micronovasrl.com>
-Message-ID: <87a7gsff9z.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Apr 2019 23:29:19 +0200
+Subject: [Buildroot] [PATCH] package/samba4: security bump to version
+ 4.9.6
+In-Reply-To: <20190408104952.19872-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 8 Apr 2019 12:49:52 +0200")
+References: <20190408104952.19872-1-peter@korsgaard.com>
+Message-ID: <875zrgff80.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > On commit 027a8b29f1e62d5ff5bbb15b79376614f902a680 pkg-config has been
- > added to retrieve OpenSSL dependencies, but it's been passed `libssl`
- > instead of `openssl`, this makes fail some linking. Indeed we need
- > OpenSSL dependency, so let's use `openssl` with pkg-config.
+ > Fixes the following security vulnerabilities:
+ >  - CVE-2019-3870:
+ >    During the provision of a new Active Directory DC, some files in the private/
+ >    directory are created world-writable.
+ >    https://www.samba.org/samba/security/CVE-2019-3870.html
 
- > Substitute `libssl` with `openssl`.
+ >  - CVE-2019-3880:
+ >    Authenticated users with write permission can trigger a symlink traversal to
+ >    write or detect files outside the Samba share.
+ >    https://www.samba.org/samba/security/CVE-2019-3880.html
 
- > Fixes:
- > http://autobuild.buildroot.net/results/b22/b225425ee237852bd9fee4ca0b8d24f3e37d64f9/
+ > For more details, see the release notes:
+ > https://www.samba.org/samba/history/samba-4.9.6.html
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2019.02.x, thanks.
 
