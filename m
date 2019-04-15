@@ -1,62 +1,38 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Apr 2019 20:51:50 +0200
-Subject: [Buildroot] [PATCH 09/12 v2] core: introduce new global
- show-info
-In-Reply-To: <c45d8e34-997b-0bfd-30be-4c7d9eb675cf@mind.be>
-References: <cover.1555273025.git.yann.morin.1998@free.fr>
- <e0509e7ca0439176b7f483afb7436bb85c4fbed3.1555273025.git.yann.morin.1998@free.fr>
- <357abbd3-e69f-1756-2112-587e9e8c850e@mind.be>
- <20190415173457.GT2539@scaer>
- <c45d8e34-997b-0bfd-30be-4c7d9eb675cf@mind.be>
-Message-ID: <20190415185150.GA14607@scaer>
+From: Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Mon, 15 Apr 2019 21:14:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/clang: fix build with gcc < 5.1
+Message-ID: <20190415191401.12383-1-valentinkorenblit@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Fixes:
+http://autobuild.buildroot.net/results/dc2302844a1d274e63da72023b6fd7be993f97b7
 
-On 2019-04-15 19:51 +0200, Arnout Vandecappelle spake thusly:
-> On 15/04/2019 19:34, Yann E. MORIN wrote:
-> [snip]
-> >>> +	"$($(1)_NAME)": {
-> >>> +		"type": "$($(1)_TYPE)",
-> >>
-> >>  I may be exaggerating here, but I am getting a bit confused between commas that
-> >> are intrepreted by make and the JSON commas. Maybe we should consistently use
-> >> $(comma) for the commas that go into the output, even if it is not needed like here?
-> > 
-> > This is a macro definition, not a macro call, so commas are not
-> > interpreted.
-> 
->  I know, of course. My point is that it is not immediately apparent. My mind is
-> jumbling the JSON separators and the macro call separators together. My thought
-> was: if we use $(comma) everywhere to mark the JSON separators, things might
-> become more readable.
-> 
->  In fact, in the part you snipped, one line lower there is a macro-separator:
-> 
-> 		"type": "$($(1)_TYPE)",
-> 		$(if $(filter rootfs,$($(1)_TYPE)),
-> 
->  You see where I'm coming from?
+Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
+---
+ package/clang/clang.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Yeah, I see now.
-
->  Now, I can imagine that sprinkling this code with $(comma)s is not going to
-> help readability one bit. But I thought I'd just float the idea.
-
-To be honest, I tried to use $(comma) in place of actual commas. But
-seriously, that is totally unreadable... :-(
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+index 6dda8ac2c3..0cab1c7f89 100644
+--- a/package/clang/clang.mk
++++ b/package/clang/clang.mk
+@@ -15,6 +15,13 @@ CLANG_INSTALL_STAGING = YES
+ HOST_CLANG_DEPENDENCIES = host-llvm host-libxml2
+ CLANG_DEPENDENCIES = llvm host-clang
+ 
++# LLVM >= 9.0 will soon require C++14 support, building llvm 8.x using a
++# toolchain using gcc < 5.1 gives an error but actually still works. Setting
++# this option makes it still build with gcc >= 4.8.
++# https://reviews.llvm.org/D57264
++HOST_CLANG_CONF_OPTS += -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON
++CLANG_CONF_OPTS += -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON
++
+ # This option is needed, otherwise multiple shared libs
+ # (libclangAST.so, libclangBasic.so, libclangFrontend.so, etc.) will
+ # be generated. As a final shared lib containing all these components
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.11.0
