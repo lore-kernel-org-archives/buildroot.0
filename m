@@ -1,53 +1,64 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 15 Apr 2019 21:38:29 +0200
-Subject: [Buildroot] [git commit] configs/asus_tinker_rk3288: bump to Linux
- kernel 5.0 and u-boot 2019.01
-Message-ID: <20190415193427.7F2848A642@busybox.osuosl.org>
+Date: Mon, 15 Apr 2019 21:35:39 +0200
+Subject: [Buildroot] [git commit] package/wayland: bump to version 1.17.0
+Message-ID: <20190415193427.720298A642@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=791d2ea8f816cde5041978b3e60cf2a5f87d3026
+commit: https://git.buildroot.net/buildroot/commit/?id=4d6c047bb00decb485129e67cc7f875e477d0ee3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This bumps to linux/linux-headers 5.0 and u-boot version 2019.01.
+Fix conflict in disable tests patch.
 
-Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/asus_tinker_rk3288_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ .../wayland/0001-configure-add-option-to-disable-tests.patch   |  2 +-
+ package/wayland/wayland.hash                                   | 10 +++++-----
+ package/wayland/wayland.mk                                     |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/configs/asus_tinker_rk3288_defconfig b/configs/asus_tinker_rk3288_defconfig
-index b14cb0a2c2..e95a19a757 100644
---- a/configs/asus_tinker_rk3288_defconfig
-+++ b/configs/asus_tinker_rk3288_defconfig
-@@ -3,14 +3,14 @@ BR2_arm=y
- BR2_cortex_a17=y
- BR2_ARM_FPU_NEON_VFPV4=y
+diff --git a/package/wayland/0001-configure-add-option-to-disable-tests.patch b/package/wayland/0001-configure-add-option-to-disable-tests.patch
+index c6e4a49681..fdfbeb4bd1 100644
+--- a/package/wayland/0001-configure-add-option-to-disable-tests.patch
++++ b/package/wayland/0001-configure-add-option-to-disable-tests.patch
+@@ -40,7 +40,7 @@ index 741db5ebf9d9..4862d42959f0 100644
+ @@ -287,6 +288,7 @@ os_wrappers_test_LDADD = libtest-runner.la
+  
+  exec_fd_leak_checker_SOURCES = tests/exec-fd-leak-checker.c
+- exec_fd_leak_checker_LDADD = libtest-runner.la
++ exec_fd_leak_checker_LDADD = libtest-helpers.la
+ +endif
+  
+  EXTRA_DIST += tests/scanner-test.sh			\
+diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
+index 3f2846091a..f66a20efe5 100644
+--- a/package/wayland/wayland.hash
++++ b/package/wayland/wayland.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2018-August/039358.html
+-md5  0c215e53de71d6fb26f7102cdc6432d3  wayland-1.16.0.tar.xz
+-sha1 24c63a5045c653dcfa24efd10fa7c7de89aca9ef  wayland-1.16.0.tar.xz
+-sha256 4e72c2b56109ccfb6610d776e465f4ca0af2280c9c2f7d5cc23f0ed2548752f5  wayland-1.16.0.tar.xz
+-sha512 64eca2b1c0bc7913508a5499dae87e2723c712d8024acbb4c77c3c4a6c20de78c10704ae9827fd034116ca540a547aeec28c5a1e3bd382b23f85231424b0f49c  wayland-1.16.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2019-March/040335.html
++md5  d91f970aea11fd549eae023d06f91af3  wayland-1.17.0.tar.xz
++sha1 4d9e08a7a4a07fa37a25d7aa3ef83f08edec0600  wayland-1.17.0.tar.xz
++sha256 72aa11b8ac6e22f4777302c9251e8fec7655dc22f9d94ee676c6b276f95f91a4  wayland-1.17.0.tar.xz
++sha512 c5051aab5ff078b368c196ecfedb33ccd961265bb914845d7ed81de361bb86ae18299575baa6c4eceb0d82cf8b495e8293f31b51d1cbc05d84af0a199ab3f946  wayland-1.17.0.tar.xz
+diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
+index 6c2997be8e..e325c6d752 100644
+--- a/package/wayland/wayland.mk
++++ b/package/wayland/wayland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 4.12 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
-+# Linux headers same as kernel, a 5.0 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
- 
- # Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="tinker-rk3288"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -22,7 +22,7 @@ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
+-WAYLAND_VERSION = 1.16.0
++WAYLAND_VERSION = 1.17.0
+ WAYLAND_SITE = http://wayland.freedesktop.org/releases
+ WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
+ WAYLAND_LICENSE = MIT
