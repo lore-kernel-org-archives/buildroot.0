@@ -1,26 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 15 Apr 2019 21:40:46 +0200
-Subject: [Buildroot] [PATCH] package/opus: bump version to 1.3.1
-In-Reply-To: <20190414191654.5635-1-peter@korsgaard.com>
-References: <20190414191654.5635-1-peter@korsgaard.com>
-Message-ID: <20190415214046.41c7f78c@windsurf>
+Date: Mon, 15 Apr 2019 21:40:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cjson: security bump to version
+ 1.7.11
+In-Reply-To: <20190414223529.3694-1-fontaine.fabrice@gmail.com>
+References: <20190414223529.3694-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190415214056.4dafcf4d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 14 Apr 2019 21:16:53 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Mon, 15 Apr 2019 00:35:29 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fixes a number of post-1.3 fixes.  For details, see the announcement:
+> Fix a bug where cJSON_Minify could overflow it's buffer, both reading
+> and writing: https://github.com/DaveGamble/cJSON/issues/338.
 > 
-> http://lists.xiph.org/pipermail/opus/2019-April/004318.html
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/opus/opus.hash | 2 +-
->  package/opus/opus.mk   | 2 +-
+>  package/cjson/cjson.hash | 2 +-
+>  package/cjson/cjson.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
