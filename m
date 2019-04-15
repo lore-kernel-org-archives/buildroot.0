@@ -1,73 +1,91 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon, 15 Apr 2019 11:07:57 +0200
-Subject: [Buildroot] [PATCH v2] package/wpebackend-fdo: package needs
- wayland libegl
-In-Reply-To: <20190414201225.21081-1-giulio.benetti@micronovasrl.com>
-References: <0ab8f13f-225e-29cd-c1e5-7ca2c3897ed6@mind.be>
- <20190414201225.21081-1-giulio.benetti@micronovasrl.com>
-Message-ID: <011a4092-54fb-d2dc-9170-8ce7579dc14e@micronovasrl.com>
+From: Vadym Kochan <vadim4j@gmail.com>
+Date: Mon, 15 Apr 2019 12:08:23 +0300
+Subject: [Buildroot] [RFC 1/1] infra/pkg-generic: Add rootfs post gen
+ hook
+In-Reply-To: <4693_1555318434_5CB446A2_4693_25_6_20190415085342.GH3490@r-lnx-nyma7486-2>
+References: <20190415002635.3656-1-vadim4j@gmail.com>
+ <20190415085819.1d5c4152@windsurf>
+ <20190415073354.sld7grmlyjo6i24a@vkochan-ThinkPad-T470p>
+ <7346_1555315114_5CB439AA_7346_454_2_20190415075822.GG3490@r-lnx-nyma7486-2>
+ <20190415084238.GA13866@lwo1-lhp-f71841>
+ <4693_1555318434_5CB446A2_4693_25_6_20190415085342.GH3490@r-lnx-nyma7486-2>
+Message-ID: <20190415090823.GA17773@lwo1-lhp-f71841>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hi Yann,
 
-Il 14/04/2019 22:12, Giulio Benetti ha scritto:
-> Now wpebackend-fdo depends only on HAS_LIBEGL but if libegl is not of
-> wayland type, build breaks due to different EGLNativeWindowType types
-> depending on backends(fb,x11,wl).
+On Mon, Apr 15, 2019 at 10:53:42AM +0200, yann.morin at orange.com wrote:
+> Vadym, All,
 > 
-> Modify:
-> 'depend on BR2_PACKAGE_HAS_LIBEGL'
-> to:
-> 'depend on BR2_PACKAGE_HAS_LIBEGL_WAYLAND'
-> in Config.in to avoid building if there is not a wayland egl backend.
-> Modify also comment in Config.in when package is not selectable
-> mentioning the need to have an OpenEGL-capable Wayland backend.
+> On 2019-04-15 11:42 +0300, Vadym Kochan spake thusly:
+> > On Mon, Apr 15, 2019 at 09:58:22AM +0200, yann.morin at orange.com wrote:
+> > > Vadim, All,
+> > > 
+> > > On 2019-04-15 10:33 +0300, Vadim Kochan spake thusly:
+> > > > On Mon, Apr 15, 2019 at 08:58:19AM +0200, Thomas Petazzoni wrote:
+> > > > > Hello Vadim,
+> > > > > 
+> > > > > On Mon, 15 Apr 2019 03:26:35 +0300
+> > > > > Vadim Kochan <vadim4j@gmail.com> wrote:
+> > > > > 
+> > > > > > Add ability to generate image by custom package, and one of the
+> > > > > > way to do it - is to add new $(PKG)_ROOTFS_POST_GEN_HOOK which will be
+> > > > > > called after rootfs image is ready. This allows to have easier
+> > > > > > alternative to post-image script in form of package, which might be
+> > > > > > just selected by the user (or this package might be automatically
+> > > > > > selected already already).
+> > > > > 
+> > > > > Hum, this description is a bit vague/fuzzy to me. Do you have a
+> > > > > specific example that requires this rootfs post gen hook ?
+> > > > > 
+> > > > 
+> > > > The use case is simple - allow to generate firmware image by custom
+> > > > package instead of post-image script. I did not find some dependencies
+> > > > or other hook to make it installed after rootfs image is ready, so only
+> > > > option I found is to add yet-another-hook which will be called after
+> > > > rootfs image is generated.
+> > > 
+> > > If you have a custom tool to generate a custom image, why don't you also
+> > > provide a custom filesystem implementation of your own in fs/your-fs/
+> > > like any other filesystem ?
+> > > 
+> > > Note that a filesystem can also be defined in a br2-external tree.
+> > > 
+> > 
+> > Yes, I understand but this is not for fs image generation but for the
+> > final firmware image (for flashing, e.g. sdcard image), for example:
+> > 
+> > 	https://github.com/vkochan/buildroot-external-rpi/blob/master/package/rpi-image/rpi-image.mk
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/4f02b91f6ffffd194e09ed18c917b4f678b1a52d/
+> I perfectly understand what this is about. But now, say that there are
+> two (or more) packages that must provide a set of tools to run in
+> sequence on the generated filesystem?
 > 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->   package/wpebackend-fdo/Config.in | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+> For example, the first is an incantation of genimage or some such, and
+> the second one does a signature, and so on?
 > 
-> diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
-> index 2f5f965403..631f99fcb2 100644
-> --- a/package/wpebackend-fdo/Config.in
-> +++ b/package/wpebackend-fdo/Config.in
-> @@ -1,5 +1,5 @@
-> -comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable backend"
-> -	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
-> +comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable Wayland backend"
-> +	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
->   		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
->   
->   config BR2_PACKAGE_WPEBACKEND_FDO
-> @@ -9,7 +9,7 @@ config BR2_PACKAGE_WPEBACKEND_FDO
->   	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, libglib2
->   	depends on BR2_USE_WCHAR # libglib2
->   	depends on BR2_USE_MMU # libglib2
-> -	depends on BR2_PACKAGE_HAS_LIBEGL
-> +	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
->   	select BR2_PACKAGE_LIBGLIB2
->   	select BR2_PACKAGE_LIBWPE
->   	select BR2_PACKAGE_WAYLAND
-> 
+> How would your proposal cover this?
+Good point! Actually the package will cover genimage invocation, the
+rest is still possible to handle in user's post-image (which will be called
+after $(TARGETS_ROOTFS).
 
-This is broken, sorry, need to resend.
+> 
+> This is exactly what post-image is for: to be able to provide whatever
+> project-specific, board-specific (etc..) tooling to run after filesystems
+> have been generated.
+> 
+> Besides, your rpi-image stuff does not even solve your (non-)problem,
+> because your project-specific defconfig still has to enable that package
+> anyway, so it is not different than having a post-image script listed
+> in the defconfig.
+> 
+Well the package is automatically selected by default if RPI's top
+option is enabled (in ${EXTERNAL}/Config.in, actually it is 'implied',
+so it can be easy disabled via menuconfig).
 
--- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Thanks,
+Vadim Kochan
