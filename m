@@ -1,23 +1,23 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 15 Apr 2019 23:19:48 +0200
-Subject: [Buildroot] [git commit] infra/pkg-download: make the URI list a
- callable macro
-Message-ID: <20190415214606.580658B8A0@busybox.osuosl.org>
+Date: Mon, 15 Apr 2019 23:24:13 +0200
+Subject: [Buildroot] [git commit] infra/utils: add helper to generate
+ comma-separated lists
+Message-ID: <20190415214606.997758B8A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06426e16c8be31c75d551afce52d6f11704b720f
+commit: https://git.buildroot.net/buildroot/commit/?id=9bde598ced805f1f4c437ca53dcb3313e9ea57f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, that variable is context-dependent, as it expects the PKG
-variable to exist and be defined to the current package.
+Add a helper macro that, from a space-separated list of items, returns a
+comma-separated list of the quoted items.
 
-This is not so clean, so change the variable to a callable macro.
+This will be useful when we need to generate lists in JSON, later...
 
-Adapt the caller accordingly.
+Code suggested by Thomas P.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
@@ -25,63 +25,21 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pkg-download.mk | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+ support/misc/utils.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 4163333998..623caf9325 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -63,19 +63,19 @@ github = https://github.com/$(1)/$(2)/archive/$(3)
- export BR_NO_CHECK_HASH_FOR =
+diff --git a/support/misc/utils.mk b/support/misc/utils.mk
+index c44319338e..b422c67d76 100644
+--- a/support/misc/utils.mk
++++ b/support/misc/utils.mk
+@@ -70,6 +70,10 @@ finddirclauses = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
+ # notfirstword(wordlist): returns all but the first word in wordlist
+ notfirstword = $(wordlist 2,$(words $(1)),$(1))
  
- ################################################################################
--# DOWNLOAD -- Download helper. Will call DL_WRAPPER which will try to download
--# source from:
-+# DOWNLOAD_URIS - List the candidates URIs where to get the package from:
- # 1) BR2_PRIMARY_SITE if enabled
- # 2) Download site, unless BR2_PRIMARY_SITE_ONLY is set
- # 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
- #
- # Argument 1 is the source location
-+# Argument 2 is the upper-case package name
- #
- ################################################################################
- 
- ifneq ($(call qstrip,$(BR2_PRIMARY_SITE)),)
- DOWNLOAD_URIS += \
--	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
-+	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)/$($(2)_DL_SUBDIR)),urlencode) \
- 	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)),urlencode)
- endif
- 
-@@ -84,11 +84,19 @@ DOWNLOAD_URIS += \
- 	$(patsubst %/,%,$(dir $(call qstrip,$(1))))
- ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
- DOWNLOAD_URIS += \
--	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
-+	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(2)_DL_SUBDIR)),urlencode) \
- 	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)),urlencode)
- endif
- endif
- 
-+################################################################################
-+# DOWNLOAD -- Download helper. Will call DL_WRAPPER which will try to download
-+# source from the list returned by DOWNLOAD_URIS.
-+#
-+# Argument 1 is the source location
-+#
-+################################################################################
++# build a comma-separated list of quoted items, from a space-separated
++# list of unquoted items:   a b c d  -->  "a", "b", "c", "d"
++make-comma-list = $(subst $(space),$(comma)$(space),$(patsubst %,"%",$(strip $(1))))
 +
- define DOWNLOAD
- 	$(Q)mkdir -p $($(PKG)_DL_DIR)
- 	$(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
-@@ -101,7 +109,7 @@ define DOWNLOAD
- 		-N '$($(PKG)_RAWNAME)' \
- 		-o '$($(PKG)_DL_DIR)/$(notdir $(1))' \
- 		$(if $($(PKG)_GIT_SUBMODULES),-r) \
--		$(foreach uri,$(DOWNLOAD_URIS),-u $(uri)) \
-+		$(foreach uri,$(call DOWNLOAD_URIS,$(1),$(PKG)),-u $(uri)) \
- 		$(QUIET) \
- 		-- \
- 		$($(PKG)_DL_OPTS)
+ # Needed for the foreach loops to loop over the list of hooks, so that
+ # each hook call is properly separated by a newline.
+ define sep
