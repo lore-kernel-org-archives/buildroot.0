@@ -1,103 +1,62 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Mon, 15 Apr 2019 08:34:43 +0200
-Subject: [Buildroot] [PATCH v4 5/6] qt5base: Fix inconsistencies when
- overriding qmake properties
-In-Reply-To: <bec329fc-39c7-9c8b-a2b1-0254947899a9@mind.be>
-References: <20190322183904.22401-1-anaumann@ultratronik.de>
- <20190322183904.22401-6-anaumann@ultratronik.de>
- <bec329fc-39c7-9c8b-a2b1-0254947899a9@mind.be>
-Message-ID: <e475f67f-4e66-2ce7-1f44-f753851b59e0@andin.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 15 Apr 2019 08:57:24 +0200
+Subject: [Buildroot] [RFC 1/1] toolchain-external/Config.in: Allow to
+ select custom external-toolchain package
+In-Reply-To: <f0ea00e5-8b75-807d-a1cd-245cd3bd080d@mind.be>
+References: <20190414212654.14910-1-vadim4j@gmail.com>
+ <f0ea00e5-8b75-807d-a1cd-245cd3bd080d@mind.be>
+Message-ID: <20190415085724.0528c3f7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hello,
 
-Am 14.04.19 um 12:12 schrieb Arnout Vandecappelle:
-> 
-> 
-> On 22/03/2019 19:39, Andreas Naumann wrote:
->> When querying the qmake properties with our custom qt.conf present, I noticed
->> that they were different from the built-in ones (without qt.conf).
->> Most notably QT_INSTALL_PREFIX was a concatenated string of two absolute pathes
->> (hostdir + sysroot).
->>
->> This is due to Prefix being set to our HOST_DIR and HostPrefix not being set at
->> all. I guess this was also the root cause of the initial problem with
->> qt.conf.in, because once Prefix and HostPrefix were set to their correct values,
->> re-setting all the other default pathes became obsolete. (However, since our
->> pathes for Headers, Plugins and Examples are non-default, they still have to be
->> explicitely set.)
->>
->> There is one additional exception to this: Omitting 'Settings' leads to the
->> CONFIGURATION path being plain /usr, whereas the default without qt.conf is
->> /usr/etc/xdg. Thus 'Settings' is now also explicitely set, in order to keep
->> behaviour with/without qt.conf as similar as possible.
-> 
->   Since you said this patch is indeed independent of the rest, I was about to
-> apply, but then I noticed this...
-> 
->   In the original qt.conf.in, Settings was explicitly set to /usr. Now, you
-> change it back to /usr/etc/xdg, which is indeed the Qt default. However, would
-> this not lead to runtime problems for people who actually use the settings
-> directory, because it will have changed location after Buildroot upgrade? If we
-> had the Qt default overridden before, I think we should keep that override (even
-> if it is maybe not such a great idea to override it).
-> 
+On Sun, 14 Apr 2019 23:39:38 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-I agree and actually was a bit unsure if changing the value would create 
-issues for anybody. However within buildroot I have not found a package 
-that actually deploys anything to /usr/etc/xdg, which could also mean I 
-didnt look hard enough.
+> > +config BR2_TOOLCHAIN_EXTERNAL_OTHER
+> > +	bool "Other"
+> > +	help
+> > +	  Use this option to use a external toolchain from custom package
+> > +	  (e.g. in external project).  
+> 
+>  So, the idea is to extend the choice with toolchains that come from
+> BR2_EXTERNAL and that you can't select here, right? And you need something like
+> that because it's a choice, and there's no way to extend the choice in a
+> different Kconfig file.
+> 
+>  I think this is a worthwhile idea, so I'd like to work it out a little more...
+> Adding Yann in Cc since he like that kind of external craziness :-)
+> 
+>  If kept like this, then I think you should make it depend on a new (blind)
+> BR2_TOOLCHAIN_EXTERNAL_OTHER_AVAILABLE option, and that an external toolchain
+> package should select that option. This way, the option is only available if
+> your external tree actually makes one available.
+> 
+>  Also, it should be documented in docs/manual/customize-outside-br.txt.
+> 
+>  However, it's still pretty inconvenient for the user. So perhaps we could
+> explicitly extend the external infra to generate a .br2-external.toolchain.in
+> that is included from here. This file would be populated based on the file
+> toolchain/Config.in in the external.
+> 
+>  Thomas, is that idea over-engineered?
 
-I will try to finally prepare v5 of the set tonight. If I dont hear 
-anything else, I'll set the value back to /usr.
+It is over-engineered, but there is not much choice if we want to allow
+implementing external toolchains in BR2_EXTERNAL, which would
+definitely be useful.
 
+The downside of Vadim's approach is that it limits the BR2_EXTERNAL to
+implementing only one external toolchain, since it's only adding one
+entry to the choice. Your approach would be more flexible.
 
-regards,
-Andreas
+Best regards,
 
-> 
->>
->> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
->> ---
->>   package/qt5/qt5base/qt.conf.in | 17 +++--------------
->>   1 file changed, 3 insertions(+), 14 deletions(-)
->>
->> diff --git a/package/qt5/qt5base/qt.conf.in b/package/qt5/qt5base/qt.conf.in
->> index 9a0b9cd53b..46ebe61614 100644
->> --- a/package/qt5/qt5base/qt.conf.in
->> +++ b/package/qt5/qt5base/qt.conf.in
->> @@ -1,19 +1,8 @@
->>   [Paths]
->> -Prefix=@@HOST_DIR@@
->> +Prefix=/usr
->> +HostPrefix=@@HOST_DIR@@
->>   Sysroot=@@STAGING_DIR@@
->>   Headers=/usr/include/qt5
->> -Libraries=/usr/lib
->> -LibraryExecutables=/usr/libexec
->> -Binaries=/usr/bin
->>   Plugins=/usr/lib/qt/plugins
->>   Examples=/usr/lib/qt/examples
->> -Qml2Imports=/usr/qml
->> -Imports=/usr/imports
->> -Translations=/usr/translations
->> -Examples=/usr/lib/qt/examples
->> -Demos=/usr/lib/qt/examples
->> -Tests=/usr/tests
->> -Settings=/usr
-> 
->   This is the original setting of Settings.
-> 
->   Regards,
->   Arnout
-> 
->> -Documentation=/usr/doc
->> -ArchData=/usr
->> -Data=/usr
->> +Settings=/usr/etc/xdg
->>
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
