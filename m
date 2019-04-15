@@ -1,74 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 15 Apr 2019 16:27:44 +0200
-Subject: [Buildroot] [PATCH 2/2] board/sifive: add support for the
- HiFive Unleashed board
-In-Reply-To: <32b6cdc6-3536-91de-206e-6059eed78b9c@embecosm.com>
-References: <20190414134307.24754-1-mark.corbin@embecosm.com>
- <20190414134307.24754-2-mark.corbin@embecosm.com>
- <7261729c-385b-8dd1-e969-72f95c9ac0be@mind.be>
- <32b6cdc6-3536-91de-206e-6059eed78b9c@embecosm.com>
-Message-ID: <c7f0cf15-5ed5-6ab0-2c36-dad0bcc9572e@mind.be>
+From: Summers, Stuart <stuart.summers@intel.com>
+Date: Mon, 15 Apr 2019 14:29:59 +0000
+Subject: [Buildroot] [PATCH 1/1] linux: use host pkg-config when host
+ libelf is set
+In-Reply-To: <986122e4-8826-b9f5-bd3a-06ed36948770@mind.be>
+References: <20190405184712.5582-1-stuart.summers@intel.com>
+ <20190408184233.10697-1-stuart.summers@intel.com>
+ <986122e4-8826-b9f5-bd3a-06ed36948770@mind.be>
+Message-ID: <28a6504ffb2809e7d9913ebe9296a4c96045bbe3.camel@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sat, 2019-04-13 at 17:09 +0200, Arnout Vandecappelle wrote:
+> 
+> On 08/04/2019 20:42, Stuart Summers wrote:
+> > A patch was added to the Linux kernel in 5.1.0-rc3 which
+> > adds a requirement that the host build environment include
+> > pkg-config. Add the correct host-pkgconf dependency and
+> > environment variables to ensure Linux picks up the correct
+> > libraries.
+> > 
+> > v2: Use LINUX_MAKE_ENV to pass PKG_CONFIG_* options (Thomas)
+> > v3: Add PKG_CONFIG_ALLOW_SYSTEM_{CFLAGS,LIBS} to kconfig
+> >     blacklist and move LINUX_MAKE_ENV initial assign in
+> >     linux.mk before DEP* assignments (Yann)
+> > 
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> > Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> > Signed-off-by: Stuart Summers <stuart.summers@intel.com>
+> 
+>  Applied to master with Yann's suggested changes to the commit
+> message, thank.
 
+Thanks!
 
-On 15/04/2019 15:04, Mark Corbin wrote:
->>> +Connect the USB cable and open minicom (/dev/ttyUSB1, 115200, 8N1).
->>  How do you know it is ttyUSB1? It is usually USB0...
-> There are two USB serial devices on the board - the console always seems
-> to be on USB1 on my board. I can be more cautious and say '/dev/ttyUSBx'
-> instead.
+-Stuart
 
- Ah, now I see... So the single USB cable provides two serial ports, and USB1 is
-the one you need? Then it's indeed better to specify USB1 in the README. But
-maybe also explain that there are two ports.
-
->>> +
->>> +See the 'SiFive HiFive Unleashed Getting Started Guide' for
->>> +more details (https://www.sifive.com/documentation).
->>> +
->>> +--
->>> +
->>> +Mark Corbin <mark.corbin@embecosm.com> April 2019
->>> diff --git a/configs/sifive_u540_unleashed_defconfig b/configs/sifive_u540_unleashed_defconfig
->>> new file mode 100644
->>> index 0000000000..b56ae1b164
->>> --- /dev/null
->>> +++ b/configs/sifive_u540_unleashed_defconfig
->>> @@ -0,0 +1,29 @@
->>> +# Architecture
->>> +BR2_riscv=y
->>> +BR2_RISCV_64=y
->>> +
->>> +# Patches
->>> +BR2_GLOBAL_PATCH_DIR="board/sifive/patches"
->>> +
->>> +# Linux headers same as kernel, a 4.20 series
->>> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
->>> +
->>> +# System
->>> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/sifive/u540-unleashed/post-image.sh"
->>> +
->>> +# Kernel
->>> +BR2_LINUX_KERNEL=y
->>> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->>> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.20.17"
->>  Oh, now I see, you're porting the changes done by sifive from 4.19 to 4.20...
->> Is that also what the freedom-u-sdk does? I don't think so...
-> I'm not sure that the freedom-u-sdk has moved to 4.19 yet (the v1_0
-> release uses 4.15), but there is a patched 4.19 kernel tree available in
-> the master branch. I've generated a patch for 4.20.17 based on this
-> patched 4.19 tree. I wanted to move to the most recent version of the
-> 4.20 kernel that Buildroot supported, but I guess that I could also just
-> look at using the patched 4.19 branch that already exists.
-
- If a board is far away from being supported by upstream, we usually stick to an
-"offical" fork from the board vendor.
-
-
- Regards,
- Arnout
+> 
+>  Regards,
+>  Arnout
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: smime.p7s
+Type: application/x-pkcs7-signature
+Size: 3270 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190415/03e5ce56/attachment.bin>
