@@ -1,148 +1,293 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 15 Apr 2019 14:45:50 +0200
-Subject: [Buildroot] [PATCH v2] package/php: fix how external PCRE2 JIT
- is enabled
-In-Reply-To: <20190415094921.1050-1-panfilov.artyom@gmail.com>
-References: <20190415094921.1050-1-panfilov.artyom@gmail.com>
-Message-ID: <df60ec38-7222-6728-fac5-9332ab91ef82@mind.be>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Mon, 15 Apr 2019 14:04:43 +0100
+Subject: [Buildroot] [PATCH 2/2] board/sifive: add support for the
+ HiFive Unleashed board
+In-Reply-To: <7261729c-385b-8dd1-e969-72f95c9ac0be@mind.be>
+References: <20190414134307.24754-1-mark.corbin@embecosm.com>
+ <20190414134307.24754-2-mark.corbin@embecosm.com>
+ <7261729c-385b-8dd1-e969-72f95c9ac0be@mind.be>
+Message-ID: <32b6cdc6-3536-91de-206e-6059eed78b9c@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Artem,
+Hello Arnout
 
-On 15/04/2019 11:49, Artem Panfilov wrote:
-> This patch adds ac_cv_have_pcre2_jit cache variable to avoid
-> the tests running on the host system during cross-compiling.
-> 
-> Changes v1 -> v2:
->  - add autoconf cache variable (suggested by Thomas Petazzoni)
+On 14/04/2019 19:55, Arnout Vandecappelle wrote:
+>
+> On 14/04/2019 15:43, Mark Corbin wrote:
+>> This patch adds support for the SiFive HiFive Unleashed board and
+>> generates a system that attempts to closely match the output
+>> produced by the Freedom Unleashed Software Development Kit
+>> (sifive/freedom-u-sdk repository) release v1_0.
+>>
+>> The kernel patch has been generated from the Linux 4.19 tree of
+>> the sifive/riscv-linux repository (commit id
+>> 20eeb6522e3302c5f6e435c0bdba40ff57ffa41a).
+>>
+>> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+>> ---
+>>  ...es-for-SiFive-HiFive-Unleashed-board.patch | 3704 +++++++++++++++++
+>  Yikes. Why not just download the tarball from github, like we do for so many
+> other boards? E.g. imx8mpico does that as well.
 
- The changelog should be after your Sob, separated by a --- line. This way, it
-is removed in the final commit message in git.
+I can either set up a github repository for my patched 4.20 kernel or I
+can use an existing 4.19 repository (see comments later in this email).
+Either way I will remove the patch.
 
-> 
-> Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
+>
+>> diff --git a/board/sifive/u540-unleashed/linux.config.fragment b/board/sifive/u540-unleashed/linux.config.fragment
+>> new file mode 100644
+>> index 0000000000..c73a3d3cc3
+>> --- /dev/null
+>> +++ b/board/sifive/u540-unleashed/linux.config.fragment
+>> @@ -0,0 +1,652 @@
+>> +CONFIG_AFS_FS=m
+>> +CONFIG_AF_RXRPC=m
+>> +CONFIG_AUTOFS4_FS=m
+>> +CONFIG_AUTOFS_FS=m
+>  If you're going to give a config fragment, make it a minimal fragment. There is
+> something to be said for turning off drivers that you don't need, maybe, but
+> definitely don't go and enable random filesystems etc.
+>
+> [snip]
+>> +CONFIG_EXTRA_FIRMWARE="radeon/BTC_rlc.bin radeon/CAICOS_mc.bin radeon/CAICOS_me.bin radeon/CAICOS_pfp.bin radeon/CAICOS_smc.bin radeon/SUMO_uvd.bin"
+>  This might be a relevant one, but do we really need all of them?
 
- So here:
+I used the config from the existing freedom-u-sdk as a template, so I
+ended up with all the features that were enabled in that version. I will
+generate a minimal config fragment.
 
----
-Changes v1 -> v2:
- - add autoconf cache variable (suggested by Thomas Petazzoni)
+>
+>
+>> +CONFIG_HZ=100
+>  Huh? This is a blind option, how does it even end up in a config fragment?
 
-> ---
->  ....m4-add-ac_cv_have_pcre2_jit-variabl.patch | 58 +++++++++++++++++++
->  package/php/php.mk                            |  7 +++
->  2 files changed, 65 insertions(+)
->  create mode 100644 package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch
-> 
-> diff --git a/package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch b/package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch
-> new file mode 100644
-> index 0000000000..5a2b80ac96
-> --- /dev/null
-> +++ b/package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch
-> @@ -0,0 +1,58 @@
-> +From 4c23e174123c67363d51326b88c1160b389ed4c1 Mon Sep 17 00:00:00 2001
-> +From: Artem Panfilov <panfilov.artyom@gmail.com>
-> +Date: Mon, 15 Apr 2019 12:10:41 +0300
-> +Subject: [PATCH] ext/pcre/config0.m4: add ac_cv_have_pcre2_jit variable
-> +
-> +This patch adds ac_cv_have_pcre2_jit cache variable to avoid
-> +the tests running on the host system during cross-compiling.
+I'll take a look at that.
 
- Not entirely accurate. Better:
+>
+>> +CONFIG_SERIAL_SIFIVE=y
+>  This might be one you want to keep, and maybe a few others as well...
+>
+>> diff --git a/board/sifive/u540-unleashed/post-image.sh b/board/sifive/u540-unleashed/post-image.sh
+>> new file mode 100755
+>> index 0000000000..c8e5682626
+>> --- /dev/null
+>> +++ b/board/sifive/u540-unleashed/post-image.sh
+>> @@ -0,0 +1,9 @@
+>> +#!/bin/sh
+>> +
+>> +# When using a CPIO initramfs image as part of the kernel we
+>> +# need to rebuild the riscv-pk (bbl) bootloader again after the
+>> +# kernel has been rebuilt with the rootfs image.
+>  Yes that's annoying. But why do we use a linked-in cpio, and not the usual ext4
+> on SD card?
 
-The HAVE_PCRE_JIT_SUPPORT check uses AC_RUN_IFELSE, which is not available when
-cross-compiling. As a fallback, a guess is made based on the host_cpu. However,
-this may be wrong, e.g. when the JIT feature was not enabled in the pcre build.
+I was trying to keep things close to the existing freedom-u-sdk as I
+thought that it would be friendlier for existing developers/board users.
+I don't have a problem with using a separate ext4 partition on the SD
+card for the rootfs.
 
-Add a cache variable for the PCRE JIT feature, so it is possible to override the
-check.
+>
+>> +
+>> +make riscv-pk-rebuild
+>> +
+>> +exit $?
+>> diff --git a/board/sifive/u540-unleashed/readme.txt b/board/sifive/u540-unleashed/readme.txt
+>> new file mode 100644
+>> index 0000000000..3b2f42ca91
+>> --- /dev/null
+>> +++ b/board/sifive/u540-unleashed/readme.txt
+>> @@ -0,0 +1,91 @@
+>> +SiFive HiFive Unleashed
+>> +=======================
+>> +
+>> +This file describes how to use the pre-defined Buildroot
+>> +configuration for the SiFive HiFive Unleashed board.
+>> +
+>> +Further information about the HiFive Unleashed board can be found
+>> +at https://www.sifive.com/boards/hifive-unleashed
+>> +
+>> +Introduction
+>> +============
+>> +
+>> +The default board configuration (and these instructions) have
+>> +been created to match the system produced by the Freedom Unleashed
+>> +Software Development Kit as closely as possible. This is based on
+>> +the freedom-u-sdk v1_0 release that can be found at
+>> +https://github.com/sifive/freedom-u-sdk/tree/v1_0
+>> +
+>> +Building
+>> +========
+>> +
+>> +Configure Buildroot using the default board configuration:
+>> +
+>> +  $ make sifive_u540_unleashed_defconfig
+>  Why is it u540 instead of hifive?
 
-> +
-> +Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
+I was trying to relate it to a more specific hardware architecture (in
+this case the Freedom U540 processor) rather than just the 'HiFive'
+product name.? I guess that this will only really be necessary when/if
+there are other boards in the 'HiFive Unleashed' series. I can change it
+to 'sifive_hifive_unleashed_defconfig' for now and update it as
+necessary in the future.
 
- Did you send this patch upstream? If yes, please add a reference here to the
-upstream pull request or list archive entry or bug report. If no, please do so :-)
+>
+>> +
+>> +Customise the build as necessary:
+>> +
+>> +  $ make menuconfig
+>> +
+>> +Start the build:
+>> +
+>> +  $ make
+>> +
+>> +Result of the build
+>> +===================
+>> +
+>> +Once the build has finished you will have the following files:
+>> +
+>> +    output/images/
+>> +    +-- bbl
+>> +    +-- bbl.bin
+>> +    +-- rootfs.cpio
+>> +    +-- rootfs.cpio.gz
+>> +    +-- rootfs.tar
+>> +    +-- vmlinux
+>> +    
+>> +
+>> +Creating a bootable SD card
+>> +===========================
+>> +
+>> +At the current time the genimage utility (v10) used by Buildroot
+>> +does not support GPT partitions which are required by the HiFive
+>> +Unleashed FSBL. This means that a bootable SD card must be created
+>> +manually using the instructions below.
+>  You can still do that from a post-image script. Cfr. pc_x86_64_efi_defconfig
+> and board/pc/post-image-efi-gpt.sh.
 
-> +---
-> + ext/pcre/config0.m4 | 11 +++++++----
-> + 1 file changed, 7 insertions(+), 4 deletions(-)
-> +
-> +diff --git a/ext/pcre/config0.m4 b/ext/pcre/config0.m4
-> +index b9542f0113..a0bf14cb4a 100644
-> +--- a/ext/pcre/config0.m4
-> ++++ b/ext/pcre/config0.m4
-> +@@ -52,8 +52,8 @@ PHP_ARG_WITH(pcre-jit,,[  --with-pcre-jit         Enable PCRE JIT functionality
-> +     AC_DEFINE(PCRE2_CODE_UNIT_WIDTH, 8, [ ])
-> +     AC_DEFINE(HAVE_PCRE, 1, [ ])
-> + 
-> +-    if test "$PHP_PCRE_JIT" != "no"; then
+That looks like a better idea. I'll update the scripts to produce an
+sdcard.img file.
 
- I think this condition should not be removed.
+>
+>> +
+>> +Create the partitions on the SD card:
+>> +
+>> +  $ sudo sgdisk --clear \
+>> +        --new=1:2048:67583  \
+>> +        --change-name=1:bootloader \
+>> +        --typecode=1:2E54B353-1271-4842-806F-E436D6AF6985 \
+>> +        --new=2:264192: \
+>> +        --change-name=2:root \
+>> +        --typecode=2:0FC63DAF-8483-4772-8E79-3D69D8477DE4 \
+>> +        /dev/mmcblk0
+>> +
+>> +The first partition will contain the kernel and the combined rootfs
+>> +ram disk image (bbl.bin). The second partition is just an empty
+>> +Linux filesystem that can be used to expand or replace the initramfs
+>> +image in the kernel.
+>> +
+>> +Copy the kernel and combined rootfs image to the SD card:
+>> +
+>> +  $ sudo dd if=output/images/bbl.bin of=/dev/mmcblk0p1 bs=4096
+>> +
+>> +Create an empty ext3 filesystem on the second partition:
+>> +
+>> +  $ sudo mkfs.ext3 /dev/mmcblk0p2
+>> +
+>> +Make sure that the all DIP switches are set to the off position for
+>> +default boot mode (MSEL mode = 1111), insert the SD card and power
+>> +up the board.
+>> +
+>> +Connect the USB cable and open minicom (/dev/ttyUSB1, 115200, 8N1).
+>  How do you know it is ttyUSB1? It is usually USB0...
 
-> +-      AC_MSG_CHECKING([for JIT support in PCRE2])
-> ++    AC_CACHE_CHECK([for JIT support in PCRE2], ac_cv_have_pcre2_jit,
-> ++      [AC_MSG_CHECKING([for JIT support in PCRE2])
+There are two USB serial devices on the board - the console always seems
+to be on USB1 on my board. I can be more cautious and say '/dev/ttyUSBx'
+instead.
+>
+>> +
+>> +See the 'SiFive HiFive Unleashed Getting Started Guide' for
+>> +more details (https://www.sifive.com/documentation).
+>> +
+>> +--
+>> +
+>> +Mark Corbin <mark.corbin@embecosm.com> April 2019
+>> diff --git a/configs/sifive_u540_unleashed_defconfig b/configs/sifive_u540_unleashed_defconfig
+>> new file mode 100644
+>> index 0000000000..b56ae1b164
+>> --- /dev/null
+>> +++ b/configs/sifive_u540_unleashed_defconfig
+>> @@ -0,0 +1,29 @@
+>> +# Architecture
+>> +BR2_riscv=y
+>> +BR2_RISCV_64=y
+>> +
+>> +# Patches
+>> +BR2_GLOBAL_PATCH_DIR="board/sifive/patches"
+>> +
+>> +# Linux headers same as kernel, a 4.20 series
+>> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
+>> +
+>> +# System
+>> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/sifive/u540-unleashed/post-image.sh"
+>> +
+>> +# Kernel
+>> +BR2_LINUX_KERNEL=y
+>> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.20.17"
+>  Oh, now I see, you're porting the changes done by sifive from 4.19 to 4.20...
+> Is that also what the freedom-u-sdk does? I don't think so...
 
- The AC_MSG_CHECKING is implied by AC_CACHE_CHECK.
+I'm not sure that the freedom-u-sdk has moved to 4.19 yet (the v1_0
+release uses 4.15), but there is a patched 4.19 kernel tree available in
+the master branch. I've generated a patch for 4.20.17 based on this
+patched 4.19 tree. I wanted to move to the most recent version of the
+4.20 kernel that Buildroot supported, but I guess that I could also just
+look at using the patched 4.19 branch that already exists.
 
- Also, ac_cv_have_prce2_jit=no should be added explicitly here AFAIU.
+>
+>> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+>> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sifive/u540-unleashed/linux.config.fragment"
+>> +BR2_LINUX_KERNEL_VMLINUX=y
+>> +#BR2_LINUX_KERNEL_IMAGE=y
+>  Don't leave commented-out things in there.
 
- Regards,
- Arnout
+Ok.
 
-> +       AC_RUN_IFELSE([
-> +         AC_LANG_SOURCE([[
-> +             #include <pcre2.h>
-> +@@ -65,7 +65,7 @@ PHP_ARG_WITH(pcre-jit,,[  --with-pcre-jit         Enable PCRE JIT functionality
-> +             }
-> +         ]])], [
-> +         AC_MSG_RESULT([yes])
-> +-        AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
-> ++        ac_cv_have_pcre2_jit=yes
-> +       ],
-> +       [
-> +         AC_MSG_RESULT([no])
-> +@@ -75,13 +75,16 @@ PHP_ARG_WITH(pcre-jit,,[  --with-pcre-jit         Enable PCRE JIT functionality
-> +         case $host_cpu in
-> +         arm*|i[34567]86|x86_64|mips*|powerpc*|sparc)
-> +           AC_MSG_RESULT([yes])
-> +-          AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
-> ++          ac_cv_have_pcre2_jit=yes
-> +           ;;
-> +         *)
-> +           AC_MSG_RESULT([no])
-> +           ;;
-> +         esac
-> +       ])
-> ++    ])
-> ++    if test $ac_cv_have_pcre2_jit = yes; then
-> ++      AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
-> +     fi
-> + 
-> +     PHP_NEW_EXTENSION(pcre, php_pcre.c, no,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
-> +-- 
-> +2.17.1
-> +
-> diff --git a/package/php/php.mk b/package/php/php.mk
-> index 541c76755f..e570ed6f7e 100644
-> --- a/package/php/php.mk
-> +++ b/package/php/php.mk
-> @@ -246,6 +246,13 @@ PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_VALGRIND
->  ifeq ($(BR2_PACKAGE_PCRE2),y)
->  PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
->  PHP_DEPENDENCIES += pcre2
-> +
-> +ifeq ($(BR2_PACKAGE_PCRE2_JIT),y)
-> +PHP_CONF_ENV += ac_cv_have_pcre2_jit=yes
-> +else
-> +PHP_CONF_ENV += ac_cv_have_pcre2_jit=no
-> +endif
-> +
->  else
->  # The bundled pcre library is not configurable through ./configure options,
->  # and by default is configured to be thread-safe, so it wants pthreads. So
-> 
+>
+>> +
+>> +# Bootloader
+>> +BR2_TARGET_RISCV_PK=y
+>> +
+>> +# Filesystem
+>> +BR2_TARGET_ROOTFS_CPIO=y
+>> +BR2_TARGET_ROOTFS_CPIO_GZIP=y
+>  It doesn't make sense to compress the cpio, because it's the uncompressed one
+> that gets linked into the kernel.
+>
+>  And setting ROOTFS_CPIO explicitly is not needed, it's selected by INITRAMFS.
+
+I think that it probably makes sense to move to a separate rootfs.
+
+Thanks for the feedback.
+
+Mark
+-- 
+
+*Mark Corbin*
+Embedded Operating Systems Lead
+
+Embecosm Ltd.
+Palamos House #208, 66/67 High Street, Lymington, SO41 9AL, UK
+Phone: +44 1590 610184?????Mobile: +44 7765 703479
+Email: mark.corbin at embecosm.com
+<mailto:mark.corbin@embecosm.com>?????Web: https://www.embecosm.com
+
+Company No. 6577021 (England & Wales).
+--
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190415/0cc62992/attachment.html>
