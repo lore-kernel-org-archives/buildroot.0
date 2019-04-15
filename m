@@ -1,62 +1,28 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 15 Apr 2019 13:30:13 -0600
-Subject: [Buildroot] [PATCH 1/1] package/wayland: bump to version 1.17.0
-Message-ID: <20190415193013.92379-1-james.hilliard1@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 15 Apr 2019 21:30:52 +0200
+Subject: [Buildroot] [git commit] package/tar: add hash for license files
+Message-ID: <20190415193031.4B85E8160A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix conflict in disable tests patch.
+commit: https://git.buildroot.net/buildroot/commit/?id=5eabc084fb2a7dbe08d22b93c01ccdf8b5a86999
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-configure-add-option-to-disable-tests.patch   |  2 +-
- package/wayland/wayland.hash                           | 10 +++++-----
- package/wayland/wayland.mk                             |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/tar/tar.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/wayland/0001-configure-add-option-to-disable-tests.patch b/package/wayland/0001-configure-add-option-to-disable-tests.patch
-index c6e4a49681..fdfbeb4bd1 100644
---- a/package/wayland/0001-configure-add-option-to-disable-tests.patch
-+++ b/package/wayland/0001-configure-add-option-to-disable-tests.patch
-@@ -40,7 +40,7 @@ index 741db5ebf9d9..4862d42959f0 100644
- @@ -287,6 +288,7 @@ os_wrappers_test_LDADD = libtest-runner.la
-  
-  exec_fd_leak_checker_SOURCES = tests/exec-fd-leak-checker.c
-- exec_fd_leak_checker_LDADD = libtest-runner.la
-+ exec_fd_leak_checker_LDADD = libtest-helpers.la
- +endif
-  
-  EXTRA_DIST += tests/scanner-test.sh			\
-diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
-index 3f2846091a..f66a20efe5 100644
---- a/package/wayland/wayland.hash
-+++ b/package/wayland/wayland.hash
-@@ -1,5 +1,5 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2018-August/039358.html
--md5  0c215e53de71d6fb26f7102cdc6432d3  wayland-1.16.0.tar.xz
--sha1 24c63a5045c653dcfa24efd10fa7c7de89aca9ef  wayland-1.16.0.tar.xz
--sha256 4e72c2b56109ccfb6610d776e465f4ca0af2280c9c2f7d5cc23f0ed2548752f5  wayland-1.16.0.tar.xz
--sha512 64eca2b1c0bc7913508a5499dae87e2723c712d8024acbb4c77c3c4a6c20de78c10704ae9827fd034116ca540a547aeec28c5a1e3bd382b23f85231424b0f49c  wayland-1.16.0.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2019-March/040335.html
-+md5  d91f970aea11fd549eae023d06f91af3  wayland-1.17.0.tar.xz
-+sha1 4d9e08a7a4a07fa37a25d7aa3ef83f08edec0600  wayland-1.17.0.tar.xz
-+sha256 72aa11b8ac6e22f4777302c9251e8fec7655dc22f9d94ee676c6b276f95f91a4  wayland-1.17.0.tar.xz
-+sha512 c5051aab5ff078b368c196ecfedb33ccd961265bb914845d7ed81de361bb86ae18299575baa6c4eceb0d82cf8b495e8293f31b51d1cbc05d84af0a199ab3f946  wayland-1.17.0.tar.xz
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index 6c2997be8e..e325c6d752 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WAYLAND_VERSION = 1.16.0
-+WAYLAND_VERSION = 1.17.0
- WAYLAND_SITE = http://wayland.freedesktop.org/releases
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
--- 
-2.19.1
+diff --git a/package/tar/tar.hash b/package/tar/tar.hash
+index e5634566e0..60309bab8f 100644
+--- a/package/tar/tar.hash
++++ b/package/tar/tar.hash
+@@ -1,3 +1,4 @@
+ # Locally calculated after checking signature
+ sha256	402dcfd0022fd7a1f2c5611f5c61af1cd84910a760a44a688e18ddbff4e9f024	tar-1.29.tar.xz
+ sha256	9173f222464dd3676118408840da5990527062b5c7daf6487bed7c396c45bfb1	tar-1.29.cpio.gz
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
