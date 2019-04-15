@@ -1,45 +1,53 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 15 Apr 2019 23:24:13 +0200
-Subject: [Buildroot] [git commit] infra/utils: add helper to generate
- comma-separated lists
-Message-ID: <20190415214606.997758B8A0@busybox.osuosl.org>
+Date: Mon, 15 Apr 2019 23:21:39 +0200
+Subject: [Buildroot] [git commit] infra/pkg-download: get rid of the FLOCK
+ variable
+Message-ID: <20190415214606.72A088B806@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bde598ced805f1f4c437ca53dcb3313e9ea57f2
+commit: https://git.buildroot.net/buildroot/commit/?id=9b33a74450341f8bffcdb98df3f5b33d028ec9f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a helper macro that, from a space-separated list of items, returns a
-comma-separated list of the quoted items.
+The FLOCK variable is context-dependent, and expects the PKG
+variable to be set to the current package.
 
-This will be useful when we need to generate lists in JSON, later...
+This is not so nice. Besides, it is used in a single location.
 
-Code suggested by Thomas P.
+Get rid of this intermediate variable, and directly use flock
+where we need it.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- support/misc/utils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/pkg-download.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/support/misc/utils.mk b/support/misc/utils.mk
-index c44319338e..b422c67d76 100644
---- a/support/misc/utils.mk
-+++ b/support/misc/utils.mk
-@@ -70,6 +70,10 @@ finddirclauses = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
- # notfirstword(wordlist): returns all but the first word in wordlist
- notfirstword = $(wordlist 2,$(words $(1)),$(1))
+diff --git a/package/pkg-download.mk b/package/pkg-download.mk
+index 623caf9325..96a12b1f2e 100644
+--- a/package/pkg-download.mk
++++ b/package/pkg-download.mk
+@@ -18,7 +18,6 @@ export SCP := $(call qstrip,$(BR2_SCP))
+ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
  
-+# build a comma-separated list of quoted items, from a space-separated
-+# list of unquoted items:   a b c d  -->  "a", "b", "c", "d"
-+make-comma-list = $(subst $(space),$(comma)$(space),$(patsubst %,"%",$(strip $(1))))
-+
- # Needed for the foreach loops to loop over the list of hooks, so that
- # each hook call is properly separated by a newline.
- define sep
+ DL_WRAPPER = support/download/dl-wrapper
+-FLOCK = flock $($(PKG)_DL_DIR)/
+ 
+ # DL_DIR may have been set already from the environment
+ ifeq ($(origin DL_DIR),undefined)
+@@ -99,7 +98,7 @@ endif
+ 
+ define DOWNLOAD
+ 	$(Q)mkdir -p $($(PKG)_DL_DIR)
+-	$(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
++	$(Q)$(EXTRA_ENV) flock $($(PKG)_DL_DIR)/ $(DL_WRAPPER) \
+ 		-c '$($(PKG)_DL_VERSION)' \
+ 		-d '$($(PKG)_DL_DIR)' \
+ 		-D '$(DL_DIR)' \
