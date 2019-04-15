@@ -1,17 +1,21 @@
-From: Valentin Korenblit <valentinkorenblit@gmail.com>
-Date: Mon, 15 Apr 2019 21:14:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/clang: fix build with gcc < 5.1
-Message-ID: <20190415191401.12383-1-valentinkorenblit@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 15 Apr 2019 21:25:37 +0200
+Subject: [Buildroot] [git commit] package/clang: fix build with gcc < 5.1
+Message-ID: <20190415192120.C11B48E7D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=45d9a2b5bfe4feb144990ab4aa68eb03091e9a64
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
 Fixes:
 http://autobuild.buildroot.net/results/dc2302844a1d274e63da72023b6fd7be993f97b7
 
 Signed-off-by: Valentin Korenblit <valentinkorenblit@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  package/clang/clang.mk | 7 +++++++
  1 file changed, 7 insertions(+)
@@ -34,5 +38,3 @@ index 6dda8ac2c3..0cab1c7f89 100644
  # This option is needed, otherwise multiple shared libs
  # (libclangAST.so, libclangBasic.so, libclangFrontend.so, etc.) will
  # be generated. As a final shared lib containing all these components
--- 
-2.11.0
