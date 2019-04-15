@@ -1,24 +1,20 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Apr 2019 21:47:23 +0200
-Subject: [Buildroot] [PATCH 01/12 v3] infra/pkg-download: return just a list
- of URIs
+Date: Mon, 15 Apr 2019 21:47:24 +0200
+Subject: [Buildroot] [PATCH 02/12 v3] infra/pkg-download: make the URI list
+ a callable macro
 In-Reply-To: <cover.1555357644.git.yann.morin.1998@free.fr>
 References: <cover.1555357644.git.yann.morin.1998@free.fr>
-Message-ID: <2198092456f378175cf10e42002887e3c121abb3.1555357644.git.yann.morin.1998@free.fr>
+Message-ID: <493aca4729625cdaa2db75df867863f79cf9833b.1555357644.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the internal DOWNLOAD_URIS variable is set to be a list of
-options to pass to the download wrapper, with each URI passed as
-'-u URI'.
+Currently, that variable is context-dependent, as it expects the PKG
+variable to exist and be defined to the current package.
 
-This precludes using that variable to get just the list of URIs, in
-case we need to do something else with it.
-
-Fix the variable to really only contain the list of URIs.
+This is not so clean, so change the variable to a callable macro.
 
 Adapt the caller accordingly.
 
@@ -29,44 +25,65 @@ Cc: Arnout Vandecappelle <arnout@mind.be>
 
 ---
 Changes v1 -> v2:
-  - use foreach instead of patsubst  (Thomas)
+  - split DOWNLOAD/DOWNLOAD_URIS comment  (Thomas DS)
 ---
- package/pkg-download.mk | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ package/pkg-download.mk | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 7cd87c38ff..4163333998 100644
+index 4163333998..623caf9325 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -75,17 +75,17 @@ export BR_NO_CHECK_HASH_FOR =
+@@ -63,19 +63,19 @@ github = https://github.com/$(1)/$(2)/archive/$(3)
+ export BR_NO_CHECK_HASH_FOR =
+ 
+ ################################################################################
+-# DOWNLOAD -- Download helper. Will call DL_WRAPPER which will try to download
+-# source from:
++# DOWNLOAD_URIS - List the candidates URIs where to get the package from:
+ # 1) BR2_PRIMARY_SITE if enabled
+ # 2) Download site, unless BR2_PRIMARY_SITE_ONLY is set
+ # 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
+ #
+ # Argument 1 is the source location
++# Argument 2 is the upper-case package name
+ #
+ ################################################################################
  
  ifneq ($(call qstrip,$(BR2_PRIMARY_SITE)),)
  DOWNLOAD_URIS += \
--	-u $(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
--	-u $(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)),urlencode)
-+	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
-+	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)),urlencode)
+-	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
++	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)/$($(2)_DL_SUBDIR)),urlencode) \
+ 	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)),urlencode)
  endif
  
- ifeq ($(BR2_PRIMARY_SITE_ONLY),)
- DOWNLOAD_URIS += \
--	-u $(patsubst %/,%,$(dir $(call qstrip,$(1))))
-+	$(patsubst %/,%,$(dir $(call qstrip,$(1))))
+@@ -84,11 +84,19 @@ DOWNLOAD_URIS += \
+ 	$(patsubst %/,%,$(dir $(call qstrip,$(1))))
  ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
  DOWNLOAD_URIS += \
--	-u $(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
--	-u $(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)),urlencode)
-+	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
-+	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)),urlencode)
+-	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
++	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(2)_DL_SUBDIR)),urlencode) \
+ 	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)),urlencode)
  endif
  endif
  
-@@ -101,7 +101,7 @@ define DOWNLOAD
++################################################################################
++# DOWNLOAD -- Download helper. Will call DL_WRAPPER which will try to download
++# source from the list returned by DOWNLOAD_URIS.
++#
++# Argument 1 is the source location
++#
++################################################################################
++
+ define DOWNLOAD
+ 	$(Q)mkdir -p $($(PKG)_DL_DIR)
+ 	$(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
+@@ -101,7 +109,7 @@ define DOWNLOAD
  		-N '$($(PKG)_RAWNAME)' \
  		-o '$($(PKG)_DL_DIR)/$(notdir $(1))' \
  		$(if $($(PKG)_GIT_SUBMODULES),-r) \
--		$(DOWNLOAD_URIS) \
-+		$(foreach uri,$(DOWNLOAD_URIS),-u $(uri)) \
+-		$(foreach uri,$(DOWNLOAD_URIS),-u $(uri)) \
++		$(foreach uri,$(call DOWNLOAD_URIS,$(1),$(PKG)),-u $(uri)) \
  		$(QUIET) \
  		-- \
  		$($(PKG)_DL_OPTS)
