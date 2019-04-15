@@ -1,9 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 15 Apr 2019 14:15:15 -0400
-Subject: [Buildroot] [PATCH 2/4] package/libtool: Add hash for license files
+Date: Mon, 15 Apr 2019 14:15:16 -0400
+Subject: [Buildroot] [PATCH 3/4] package/ninja: Add hash for license files
 In-Reply-To: <20190415181517.83400-1-aduskett@gmail.com>
 References: <20190415181517.83400-1-aduskett@gmail.com>
-Message-ID: <20190415181517.83400-2-aduskett@gmail.com>
+Message-ID: <20190415181517.83400-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +14,17 @@ From: Adam Duskett <Aduskett@gmail.com>
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/libtool/libtool.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/ninja/ninja.hash | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libtool/libtool.hash b/package/libtool/libtool.hash
-index dd34c0d74f..e2adfa1897 100644
---- a/package/libtool/libtool.hash
-+++ b/package/libtool/libtool.hash
-@@ -2,3 +2,4 @@
- sha256	7c87a8c2c8c0fc9cd5019e402bed4292462d00a718a7cd5f11218153bf28b26f	libtool-2.4.6.tar.xz
- # License files, locally calculated
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-+sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	libltdl/COPYING.LIB
+diff --git a/package/ninja/ninja.hash b/package/ninja/ninja.hash
+index 3f5bd3a279..cf545b5b70 100644
+--- a/package/ninja/ninja.hash
++++ b/package/ninja/ninja.hash
+@@ -1,2 +1,3 @@
+ # Locally generated
+-sha256 5d7ec75828f8d3fd1a0c2f31b5b0cea780cdfe1031359228c428c1a48bfcd5b9 ninja-v1.9.0.tar.gz
++sha256	5d7ec75828f8d3fd1a0c2f31b5b0cea780cdfe1031359228c428c1a48bfcd5b9	ninja-v1.9.0.tar.gz
++sha256	eb7e9ab9690124c5c9f42bdc81383d886a3dede26345b6ed15bbad7caf81f7ea	COPYING
 -- 
 2.20.1
