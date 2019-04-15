@@ -1,91 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Apr 2019 21:47:24 +0200
-Subject: [Buildroot] [PATCH 02/12 v3] infra/pkg-download: make the URI list
- a callable macro
+Date: Mon, 15 Apr 2019 21:47:25 +0200
+Subject: [Buildroot] [PATCH 03/12 v3] infra/pkg-download: get rid of the
+ FLOCK variable
 In-Reply-To: <cover.1555357644.git.yann.morin.1998@free.fr>
 References: <cover.1555357644.git.yann.morin.1998@free.fr>
-Message-ID: <493aca4729625cdaa2db75df867863f79cf9833b.1555357644.git.yann.morin.1998@free.fr>
+Message-ID: <b96a4239687a19aed99c84c7b98a8d907ab313f5.1555357644.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, that variable is context-dependent, as it expects the PKG
-variable to exist and be defined to the current package.
+The FLOCK variable is context-dependent, and expects the PKG
+variable to be set to the current package.
 
-This is not so clean, so change the variable to a callable macro.
+This is not so nice. Besides, it is used in a single location.
 
-Adapt the caller accordingly.
+Get rid of this intermediate variable, and directly use flock
+where we need it.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-
+Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 ---
-Changes v1 -> v2:
-  - split DOWNLOAD/DOWNLOAD_URIS comment  (Thomas DS)
----
- package/pkg-download.mk | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+ package/pkg-download.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 4163333998..623caf9325 100644
+index 623caf9325..96a12b1f2e 100644
 --- a/package/pkg-download.mk
 +++ b/package/pkg-download.mk
-@@ -63,19 +63,19 @@ github = https://github.com/$(1)/$(2)/archive/$(3)
- export BR_NO_CHECK_HASH_FOR =
+@@ -18,7 +18,6 @@ export SCP := $(call qstrip,$(BR2_SCP))
+ export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
  
- ################################################################################
--# DOWNLOAD -- Download helper. Will call DL_WRAPPER which will try to download
--# source from:
-+# DOWNLOAD_URIS - List the candidates URIs where to get the package from:
- # 1) BR2_PRIMARY_SITE if enabled
- # 2) Download site, unless BR2_PRIMARY_SITE_ONLY is set
- # 3) BR2_BACKUP_SITE if enabled, unless BR2_PRIMARY_SITE_ONLY is set
- #
- # Argument 1 is the source location
-+# Argument 2 is the upper-case package name
- #
- ################################################################################
+ DL_WRAPPER = support/download/dl-wrapper
+-FLOCK = flock $($(PKG)_DL_DIR)/
  
- ifneq ($(call qstrip,$(BR2_PRIMARY_SITE)),)
- DOWNLOAD_URIS += \
--	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
-+	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)/$($(2)_DL_SUBDIR)),urlencode) \
- 	$(call getschemeplusuri,$(call qstrip,$(BR2_PRIMARY_SITE)),urlencode)
- endif
+ # DL_DIR may have been set already from the environment
+ ifeq ($(origin DL_DIR),undefined)
+@@ -99,7 +98,7 @@ endif
  
-@@ -84,11 +84,19 @@ DOWNLOAD_URIS += \
- 	$(patsubst %/,%,$(dir $(call qstrip,$(1))))
- ifneq ($(call qstrip,$(BR2_BACKUP_SITE)),)
- DOWNLOAD_URIS += \
--	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(PKG)_DL_SUBDIR)),urlencode) \
-+	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)/$($(2)_DL_SUBDIR)),urlencode) \
- 	$(call getschemeplusuri,$(call qstrip,$(BR2_BACKUP_SITE)),urlencode)
- endif
- endif
- 
-+################################################################################
-+# DOWNLOAD -- Download helper. Will call DL_WRAPPER which will try to download
-+# source from the list returned by DOWNLOAD_URIS.
-+#
-+# Argument 1 is the source location
-+#
-+################################################################################
-+
  define DOWNLOAD
  	$(Q)mkdir -p $($(PKG)_DL_DIR)
- 	$(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
-@@ -101,7 +109,7 @@ define DOWNLOAD
- 		-N '$($(PKG)_RAWNAME)' \
- 		-o '$($(PKG)_DL_DIR)/$(notdir $(1))' \
- 		$(if $($(PKG)_GIT_SUBMODULES),-r) \
--		$(foreach uri,$(DOWNLOAD_URIS),-u $(uri)) \
-+		$(foreach uri,$(call DOWNLOAD_URIS,$(1),$(PKG)),-u $(uri)) \
- 		$(QUIET) \
- 		-- \
- 		$($(PKG)_DL_OPTS)
+-	$(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
++	$(Q)$(EXTRA_ENV) flock $($(PKG)_DL_DIR)/ $(DL_WRAPPER) \
+ 		-c '$($(PKG)_DL_VERSION)' \
+ 		-d '$($(PKG)_DL_DIR)' \
+ 		-D '$(DL_DIR)' \
 -- 
 2.14.1
