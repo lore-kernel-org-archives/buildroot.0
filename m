@@ -1,68 +1,123 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 15 Apr 2019 21:40:05 +0200
-Subject: [Buildroot] [git commit] package/wpewebkit: security bump to
- version 2.22.5
-Message-ID: <20190415193637.A8E1B8E64C@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Mon, 15 Apr 2019 14:40:56 -0500
+Subject: [Buildroot] [PATCH 1/1] dacapo: new package
+In-Reply-To: <20190414154225.48347784@windsurf>
+References: <7B9EA298F6C566489E909E1B85615FB80186965B3A@AWHMBX02.belcan.com>
+ <20190414154225.48347784@windsurf>
+Message-ID: <CANQCQpbz8EETZUXUKsCTJBJc8YTMJ=bGzJzmXUKSDde-9ZJAJA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7adf8da2fef4ebe8e81c01fdc96697eb70ed64c8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas,
 
-Fixes the following security issues:
 
-- CVE-2019-8518: Processing maliciously crafted web content may lead to
-  arbitrary code execution.  Multiple memory corruption issues were
-  addressed with improved memory handling.
+On Sun, Apr 14, 2019 at 8:42 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Daniel,
+>
+> On Mon, 18 Feb 2019 21:55:03 +0000
+> "Leach, Daniel J." <dleach@belcan.com> wrote:
+>
+> > The DaCapo benchmark suite is intended as a tool for Java benchmarking
+> > by the programming language, memory management and computer architecture
+> > communities.
+> >
+> > Depends on the OpenJDK package for Java runtime environment.
+> >
+> > Signed-off-by: Daniel J. Leach <dleach@belcan.com>
+>
+> Thanks for your contribution, I have applied after doing a few changes.
+> First of all, your patch didn't apply as-is, it was probably mangled by
+> your e-mail client. Please try to use "git send-email" to send patches
+> in the future.
+>
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index baa325eead..a64a671b56 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -1405,6 +1405,7 @@ F:        package/checksec/
+> >  F:      package/cgroupfs-mount/
+> >  F:      package/crda/
+> >  F:      package/cunit/
+> > +F:     package/dacapo
+>
+> Why was this added in the middle of Matt Weber entries ? It should have
+> been associated to your name, since you are the one contributing
+> dacapo. I fixed that up.
 
-- CVE-2019-8523: Processing maliciously crafted web content may lead to
-  arbitrary code execution.  Multiple memory corruption issues were
-  addressed with improved memory handling.
+Sorry I should have responded and mentioned Dan was adding this
+package on behalf of me. I'll send a patch to fix-up.
 
-In addition, 2.22.5 contains a number of bugfixes.  From the announcement:
+>
+> > diff --git a/package/dacapo/dacapo.mk b/package/dacapo/dacapo.mk
+> > new file mode 100644
+> > index 0000000000..32d0cc0701
+> > --- /dev/null
+> > +++ b/package/dacapo/dacapo.mk
+> > @@ -0,0 +1,21 @@
+> > +################################################################################
+> > +#
+> > +# dacapo
+> > +#
+> > +################################################################################
+> > +
+> > +DACAPO_VERSION = 9.12-MR1-bach
+> > +DACAPO_SOURCE = dacapo-$(DACAPO_VERSION).jar
+> > +DACAPO_SITE = http://sourceforge.net/projects/dacapobench/files/9.12-bach-MR1
+> > +DACAPO_LICENSE = Apache-2.0
+> > +DACAPO_LICENSE_FILES = LICENSE
+> > +
+> > +define DACAPO_EXTRACT_CMDS
+> > +       unzip $(DACAPO_DL_DIR)/$(DACAPO_SOURCE) LICENSE -d $(@D)
+> > +endef
+> > +
+> > +define DACAPO_INSTALL_TARGET_CMDS
+> > +       $(INSTALL) -D -m 755 $(DACAPO_DL_DIR)/$(DACAPO_SOURCE) $(TARGET_DIR)/usr/bin/
+>
+> The destination path should include the filename, so I also fixed that.
+>
+> Applied with those two issues fixed. Thanks!
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-  - Fix rendering of glyphs in Hebrew (and possibly other languages) when
-    Unicode NFC normalization is used.
-  - Fix several crashes and race conditions.
 
-Change SITE to https as the webserver uses HSTS.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/wpewebkit/wpewebkit.hash | 8 ++++----
- package/wpewebkit/wpewebkit.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+-- 
 
-diff --git a/package/wpewebkit/wpewebkit.hash b/package/wpewebkit/wpewebkit.hash
-index 27c6cdf33e..cbf253d29c 100644
---- a/package/wpewebkit/wpewebkit.hash
-+++ b/package/wpewebkit/wpewebkit.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpewebkit-2.22.4.tar.xz.sums
--md5 6e5c668473c57906bdec1c641bac4579 wpewebkit-2.22.4.tar.xz
--sha1 002b8b25f4fc26bfef68767b3ff1eba1aac53fa5 wpewebkit-2.22.4.tar.xz
--sha256 871e86b7e989de0c1224ac7ab8ed6d8b52756cf793a8c253b56ab8ba8d288c96 wpewebkit-2.22.4.tar.xz
-+# From https://wpewebkit.org/releases/wpewebkit-2.22.5.tar.xz.sums
-+md5 7b768bfae1295ebbc9a9038bf8fb6e6c wpewebkit-2.22.5.tar.xz
-+sha1 c85f927e0f17f1e7045a5d33c683d310c7af24de wpewebkit-2.22.5.tar.xz
-+sha256 d5e7b23e4f9e9f1b9d369faa4d527cdb59aef56b3e6a50a16dad243df5f699f3 wpewebkit-2.22.5.tar.xz
- 
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index 89df9b725c..73ad534acd 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPEWEBKIT_VERSION = 2.22.4
-+WPEWEBKIT_VERSION = 2.22.5
- WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
- WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
- WPEWEBKIT_INSTALL_STAGING = YES
+Matthew Weber | Pr. Software Engineer | Commercial Avionics
+
+COLLINS AEROSPACE
+
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+
+matthew.weber at collins.com | collinsaerospace.com
+
+
+
+CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+privileged information of Collins Aerospace and its affiliated
+companies. If you are not the intended recipient, please 1) Do not
+disclose, copy, distribute or use this message or its contents. 2)
+Advise the sender by return email. 3) Delete all copies (including all
+attachments) from your computer. Your cooperation is greatly
+appreciated.
+
+
+Any export restricted material should be shared using my
+matthew.weber at corp.rockwellcollins.com address.
