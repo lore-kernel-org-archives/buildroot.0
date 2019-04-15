@@ -1,102 +1,80 @@
-From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Mon, 15 Apr 2019 10:53:42 +0200
-Subject: [Buildroot] [RFC 1/1] infra/pkg-generic: Add rootfs post gen
- hook
-In-Reply-To: <20190415084238.GA13866@lwo1-lhp-f71841>
-References: <20190415002635.3656-1-vadim4j@gmail.com>
- <20190415085819.1d5c4152@windsurf>
- <20190415073354.sld7grmlyjo6i24a@vkochan-ThinkPad-T470p>
- <7346_1555315114_5CB439AA_7346_454_2_20190415075822.GG3490@r-lnx-nyma7486-2>
- <20190415084238.GA13866@lwo1-lhp-f71841>
-Message-ID: <4693_1555318434_5CB446A2_4693_25_6_20190415085342.GH3490@r-lnx-nyma7486-2>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 15 Apr 2019 10:54:03 +0200
+Subject: [Buildroot] [RFC 1/1] toolchain-external/Config.in: Allow to
+ select custom external-toolchain package
+In-Reply-To: <20190415085724.0528c3f7@windsurf>
+References: <20190414212654.14910-1-vadim4j@gmail.com>
+ <f0ea00e5-8b75-807d-a1cd-245cd3bd080d@mind.be>
+ <20190415085724.0528c3f7@windsurf>
+Message-ID: <ba3c32a6-d28a-bbb1-6ea5-b12136599f5a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Vadym, All,
 
-On 2019-04-15 11:42 +0300, Vadym Kochan spake thusly:
-> On Mon, Apr 15, 2019 at 09:58:22AM +0200, yann.morin at orange.com wrote:
-> > Vadim, All,
-> > 
-> > On 2019-04-15 10:33 +0300, Vadim Kochan spake thusly:
-> > > On Mon, Apr 15, 2019 at 08:58:19AM +0200, Thomas Petazzoni wrote:
-> > > > Hello Vadim,
-> > > > 
-> > > > On Mon, 15 Apr 2019 03:26:35 +0300
-> > > > Vadim Kochan <vadim4j@gmail.com> wrote:
-> > > > 
-> > > > > Add ability to generate image by custom package, and one of the
-> > > > > way to do it - is to add new $(PKG)_ROOTFS_POST_GEN_HOOK which will be
-> > > > > called after rootfs image is ready. This allows to have easier
-> > > > > alternative to post-image script in form of package, which might be
-> > > > > just selected by the user (or this package might be automatically
-> > > > > selected already already).
-> > > > 
-> > > > Hum, this description is a bit vague/fuzzy to me. Do you have a
-> > > > specific example that requires this rootfs post gen hook ?
-> > > > 
-> > > 
-> > > The use case is simple - allow to generate firmware image by custom
-> > > package instead of post-image script. I did not find some dependencies
-> > > or other hook to make it installed after rootfs image is ready, so only
-> > > option I found is to add yet-another-hook which will be called after
-> > > rootfs image is generated.
-> > 
-> > If you have a custom tool to generate a custom image, why don't you also
-> > provide a custom filesystem implementation of your own in fs/your-fs/
-> > like any other filesystem ?
-> > 
-> > Note that a filesystem can also be defined in a br2-external tree.
-> > 
+
+On 15/04/2019 08:57, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Yes, I understand but this is not for fs image generation but for the
-> final firmware image (for flashing, e.g. sdcard image), for example:
+> On Sun, 14 Apr 2019 23:39:38 +0200
+> Arnout Vandecappelle <arnout@mind.be> wrote:
 > 
-> 	https://github.com/vkochan/buildroot-external-rpi/blob/master/package/rpi-image/rpi-image.mk
+>>> +config BR2_TOOLCHAIN_EXTERNAL_OTHER
+>>> +	bool "Other"
+>>> +	help
+>>> +	  Use this option to use a external toolchain from custom package
+>>> +	  (e.g. in external project).  
+>>
+>>  So, the idea is to extend the choice with toolchains that come from
+>> BR2_EXTERNAL and that you can't select here, right? And you need something like
+>> that because it's a choice, and there's no way to extend the choice in a
+>> different Kconfig file.
+>>
+>>  I think this is a worthwhile idea, so I'd like to work it out a little more...
+>> Adding Yann in Cc since he like that kind of external craziness :-)
+>>
+>>  If kept like this, then I think you should make it depend on a new (blind)
+>> BR2_TOOLCHAIN_EXTERNAL_OTHER_AVAILABLE option, and that an external toolchain
+>> package should select that option. This way, the option is only available if
+>> your external tree actually makes one available.
 
-I perfectly understand what this is about. But now, say that there are
-two (or more) packages that must provide a set of tools to run in
-sequence on the generated filesystem?
+ I forgot to mention how this option should be constructed... In the
+toolchain-external's Config.in, you would have
 
-For example, the first is an incantation of genimage or some such, and
-the second one does a signature, and so on?
+config BR2_TOOLCHAIN_EXTERNAL_OTHER_AVAILABLE
+	bool
 
-How would your proposal cover this?
+ And in the br2-external Config.in:
 
-This is exactly what post-image is for: to be able to provide whatever
-project-specific, board-specific (etc..) tooling to run after filesystems
-have been generated.
+config BR2_TOOLCHAIN_EXTERNAL_OTHER_AVAILABLE
+	bool
+	default y
 
-Besides, your rpi-image stuff does not even solve your (non-)problem,
-because your project-specific defconfig still has to enable that package
-anyway, so it is not different than having a post-image script listed
-in the defconfig.
-
-Regards,
-Yann E. MORIN.
-
--- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+(Kconfig language allows the same symbol to be declared in different places, as
+long as the definitions are consistent.)
 
 
-_________________________________________________________________________________________________________________________
+>>  Also, it should be documented in docs/manual/customize-outside-br.txt.
+>>
+>>  However, it's still pretty inconvenient for the user. So perhaps we could
+>> explicitly extend the external infra to generate a .br2-external.toolchain.in
+>> that is included from here. This file would be populated based on the file
+>> toolchain/Config.in in the external.
+>>
+>>  Thomas, is that idea over-engineered?
+> 
+> It is over-engineered, but there is not much choice if we want to allow
+> implementing external toolchains in BR2_EXTERNAL, which would
+> definitely be useful.
+> 
+> The downside of Vadim's approach is that it limits the BR2_EXTERNAL to
+> implementing only one external toolchain, since it's only adding one
+> entry to the choice. Your approach would be more flexible.
 
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+ Well, you *can* still add a second choice in the br2-external. But then having
+multiple options from multiple br2-externals becomes difficult...
 
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+ Regards,
+ Arnout
