@@ -1,48 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 15 Apr 2019 21:40:10 +0200
-Subject: [Buildroot] [git commit] package/opus: bump version to 1.3.1
-Message-ID: <20190415193637.B0888805AA@busybox.osuosl.org>
+Date: Mon, 15 Apr 2019 21:40:14 +0200
+Subject: [Buildroot] [git commit] package/cjson: security bump to version
+ 1.7.11
+Message-ID: <20190415193637.B7EC3805AA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b594e6a1b7af7a5e46d599579523953a3af75726
+commit: https://git.buildroot.net/buildroot/commit/?id=a45a3997d8ee0aa592c6a64ce300ee727ad7dc54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes a number of post-1.3 fixes.  For details, see the announcement:
+Fix a bug where cJSON_Minify could overflow it's buffer, both reading
+and writing: https://github.com/DaveGamble/cJSON/issues/338.
 
-http://lists.xiph.org/pipermail/opus/2019-April/004318.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/opus/opus.hash | 2 +-
- package/opus/opus.mk   | 2 +-
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/opus/opus.hash b/package/opus/opus.hash
-index c916647916..2a94d3723d 100644
---- a/package/opus/opus.hash
-+++ b/package/opus/opus.hash
-@@ -1,5 +1,5 @@
- # From http://downloads.xiph.org/releases/opus/SHA256SUMS.txt
--sha256 4f3d69aefdf2dbaf9825408e452a8a414ffc60494c70633560700398820dc550  opus-1.3.tar.gz
-+sha256 65b58e1e25b2a114157014736a3d9dfeaad8d41be1c8179866f144a2fb44ff9d  opus-1.3.1.tar.gz
- 
- # Hash for license file
- sha256 8338ce8d922bb4416ce3dd1e5680173332435e3f0755007ac7801ccd674fe682  COPYING
-diff --git a/package/opus/opus.mk b/package/opus/opus.mk
-index b3cfa21fde..f23461a3af 100644
---- a/package/opus/opus.mk
-+++ b/package/opus/opus.mk
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 9c39bb321f..32a05b3c05 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 cc544fdd065f3dd19113f1d5ba5f61d696e0f810f291f4b585d1dec361b0188e  cjson-v1.7.10.tar.gz
++sha256 17ace0e31ebd639906983b05fe1d51576b948ca5411c2162f55dd34c122162ca  cjson-v1.7.11.tar.gz
+ sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index b2ef1c8582..e6ab71b92a 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPUS_VERSION = 1.3
-+OPUS_VERSION = 1.3.1
- OPUS_SITE = https://downloads.xiph.org/releases/opus
- OPUS_LICENSE = BSD-3-Clause
- OPUS_LICENSE_FILES = COPYING
+-CJSON_VERSION = v1.7.10
++CJSON_VERSION = v1.7.11
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
