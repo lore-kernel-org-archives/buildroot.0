@@ -1,101 +1,49 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Apr 2019 21:47:26 +0200
-Subject: [Buildroot] [PATCH 04/12 v3] infra/pkg-download: make the DOWNLOAD
- macro fully parameterised
+Date: Mon, 15 Apr 2019 21:47:28 +0200
+Subject: [Buildroot] [PATCH 06/12 v3] fs: introduce variables with name and
+ type
 In-Reply-To: <cover.1555357644.git.yann.morin.1998@free.fr>
 References: <cover.1555357644.git.yann.morin.1998@free.fr>
-Message-ID: <2fe2e7fa9509df01908569ac95627f8fa7494e58.1555357644.git.yann.morin.1998@free.fr>
+Message-ID: <cbcbb18a1d108d782367c6b8371fffb26b8319a2.1555357644.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, the DOWNLOAD macro is context-dependent and expects
-the PKG variable to be set to the current package.
-
-This is not so nice.
-
-Change the macro to expect the upper-case package name as a
-parameter, rather than expect it from a variable.
-
-Adapt the caller accordingly.
+This makes the filesystems resemble packages yet a bit more, and will
+allow sorting "items" on their type and names, when indexed from the
+upper-case names.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
-changes v1 -> v2:
-  - DOWNLOAD_URIS was called twice in v1, once with $(PKG) and once with
-    $(1) (due to an incorrect rebase)
----
- package/pkg-download.mk | 23 ++++++++++++-----------
- package/pkg-generic.mk  |  4 ++--
- 2 files changed, 14 insertions(+), 13 deletions(-)
+ fs/common.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 96a12b1f2e..de619ba90a 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -93,23 +93,24 @@ endif
- # source from the list returned by DOWNLOAD_URIS.
- #
- # Argument 1 is the source location
-+# Argument 2 is the upper-case package name
- #
- ################################################################################
- 
- define DOWNLOAD
--	$(Q)mkdir -p $($(PKG)_DL_DIR)
--	$(Q)$(EXTRA_ENV) flock $($(PKG)_DL_DIR)/ $(DL_WRAPPER) \
--		-c '$($(PKG)_DL_VERSION)' \
--		-d '$($(PKG)_DL_DIR)' \
-+	$(Q)mkdir -p $($(2)_DL_DIR)
-+	$(Q)$(EXTRA_ENV) flock $($(2)_DL_DIR)/ $(DL_WRAPPER) \
-+		-c '$($(2)_DL_VERSION)' \
-+		-d '$($(2)_DL_DIR)' \
- 		-D '$(DL_DIR)' \
- 		-f '$(notdir $(1))' \
--		-H '$($(PKG)_HASH_FILE)' \
--		-n '$($(PKG)_BASENAME_RAW)' \
--		-N '$($(PKG)_RAWNAME)' \
--		-o '$($(PKG)_DL_DIR)/$(notdir $(1))' \
--		$(if $($(PKG)_GIT_SUBMODULES),-r) \
--		$(foreach uri,$(call DOWNLOAD_URIS,$(1),$(PKG)),-u $(uri)) \
-+		-H '$($(2)_HASH_FILE)' \
-+		-n '$($(2)_BASENAME_RAW)' \
-+		-N '$($(2)_RAWNAME)' \
-+		-o '$($(2)_DL_DIR)/$(notdir $(1))' \
-+		$(if $($(2)_GIT_SUBMODULES),-r) \
-+		$(foreach uri,$(call DOWNLOAD_URIS,$(1),$(2)),-u $(uri)) \
- 		$(QUIET) \
- 		-- \
--		$($(PKG)_DL_OPTS)
-+		$($(2)_DL_OPTS)
+diff --git a/fs/common.mk b/fs/common.mk
+index 4ad51fdd0a..286d671d06 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -42,6 +42,8 @@ define ROOTFS_REPRODUCIBLE
  endef
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index a83813e28d..8ff8cff12d 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -149,7 +149,7 @@ $(BUILD_DIR)/%/.stamp_downloaded:
- 			break ; \
- 		fi ; \
- 	done
--	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p))$(sep))
-+	$(foreach p,$($(PKG)_ALL_DOWNLOADS),$(call DOWNLOAD,$(p),$(PKG))$(sep))
- 	$(foreach hook,$($(PKG)_POST_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
- 	$(Q)mkdir -p $(@D)
- 	@$(call step_end,download)
-@@ -158,7 +158,7 @@ $(BUILD_DIR)/%/.stamp_downloaded:
- # Retrieve actual source archive, e.g. for prebuilt external toolchains
- $(BUILD_DIR)/%/.stamp_actual_downloaded:
- 	@$(call step_start,actual-download)
--	$(call DOWNLOAD,$($(PKG)_ACTUAL_SOURCE_SITE)/$($(PKG)_ACTUAL_SOURCE_TARBALL))
-+	$(call DOWNLOAD,$($(PKG)_ACTUAL_SOURCE_SITE)/$($(PKG)_ACTUAL_SOURCE_TARBALL),$(PKG))
- 	$(Q)mkdir -p $(@D)
- 	@$(call step_end,actual-download)
- 	$(Q)touch $@
+ endif
+ 
++ROOTFS_COMMON_NAME = rootfs-common
++ROOTFS_COMMON_TYPE = rootfs
+ ROOTFS_COMMON_DEPENDENCIES = \
+ 	host-fakeroot host-makedevs \
+ 	$(BR2_TAR_HOST_DEPENDENCY) \
+@@ -77,6 +79,8 @@ rootfs-common-show-depends:
+ # all variable references except the arguments must be $$-quoted.
+ define inner-rootfs
+ 
++ROOTFS_$(2)_NAME = rootfs-$(1)
++ROOTFS_$(2)_TYPE = rootfs
+ ROOTFS_$(2)_IMAGE_NAME ?= rootfs.$(1)
+ ROOTFS_$(2)_FINAL_IMAGE_NAME = $$(strip $$(ROOTFS_$(2)_IMAGE_NAME))
+ ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
 -- 
 2.14.1
