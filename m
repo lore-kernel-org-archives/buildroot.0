@@ -1,49 +1,50 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Apr 2019 21:47:28 +0200
-Subject: [Buildroot] [PATCH 06/12 v3] fs: introduce variables with name and
- type
+Date: Mon, 15 Apr 2019 21:47:27 +0200
+Subject: [Buildroot] [PATCH 05/12 v3] infra/utils: add helper to generate
+ comma-separated lists
 In-Reply-To: <cover.1555357644.git.yann.morin.1998@free.fr>
 References: <cover.1555357644.git.yann.morin.1998@free.fr>
-Message-ID: <cbcbb18a1d108d782367c6b8371fffb26b8319a2.1555357644.git.yann.morin.1998@free.fr>
+Message-ID: <05f3f1451ae2f32b291ffb5829f371af87f783c5.1555357644.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This makes the filesystems resemble packages yet a bit more, and will
-allow sorting "items" on their type and names, when indexed from the
-upper-case names.
+Add a helper macro that, from a space-separated list of items, returns a
+comma-separated list of the quoted items.
+
+This will be useful when we need to generate lists in JSON, later...
+
+Code suggested by Thomas P.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+
 ---
- fs/common.mk | 4 ++++
+Changes v1 -> v2:
+  - don't rely on implicit space in replacement text, instead use
+    explicit $(space)  (Thmas DS)
+---
+ support/misc/utils.mk | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index 4ad51fdd0a..286d671d06 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -42,6 +42,8 @@ define ROOTFS_REPRODUCIBLE
- endef
- endif
+diff --git a/support/misc/utils.mk b/support/misc/utils.mk
+index c44319338e..b422c67d76 100644
+--- a/support/misc/utils.mk
++++ b/support/misc/utils.mk
+@@ -70,6 +70,10 @@ finddirclauses = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
+ # notfirstword(wordlist): returns all but the first word in wordlist
+ notfirstword = $(wordlist 2,$(words $(1)),$(1))
  
-+ROOTFS_COMMON_NAME = rootfs-common
-+ROOTFS_COMMON_TYPE = rootfs
- ROOTFS_COMMON_DEPENDENCIES = \
- 	host-fakeroot host-makedevs \
- 	$(BR2_TAR_HOST_DEPENDENCY) \
-@@ -77,6 +79,8 @@ rootfs-common-show-depends:
- # all variable references except the arguments must be $$-quoted.
- define inner-rootfs
- 
-+ROOTFS_$(2)_NAME = rootfs-$(1)
-+ROOTFS_$(2)_TYPE = rootfs
- ROOTFS_$(2)_IMAGE_NAME ?= rootfs.$(1)
- ROOTFS_$(2)_FINAL_IMAGE_NAME = $$(strip $$(ROOTFS_$(2)_IMAGE_NAME))
- ROOTFS_$(2)_DIR = $$(FS_DIR)/$(1)
++# build a comma-separated list of quoted items, from a space-separated
++# list of unquoted items:   a b c d  -->  "a", "b", "c", "d"
++make-comma-list = $(subst $(space),$(comma)$(space),$(patsubst %,"%",$(strip $(1))))
++
+ # Needed for the foreach loops to loop over the list of hooks, so that
+ # each hook call is properly separated by a newline.
+ define sep
 -- 
 2.14.1
