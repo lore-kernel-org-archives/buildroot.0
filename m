@@ -1,53 +1,174 @@
-From: Shyam Saini <shyam.saini@amarulasolutions.com>
-Date: Mon, 15 Apr 2019 20:04:09 +0530
-Subject: [Buildroot] [PATCH 2/2] configs: asus_tinker_rk3288: Bump to the
- linux kernel 5.0 and u-boot 2019.01
-In-Reply-To: <20190415143409.24726-1-shyam.saini@amarulasolutions.com>
-References: <20190415143409.24726-1-shyam.saini@amarulasolutions.com>
-Message-ID: <20190415143409.24726-2-shyam.saini@amarulasolutions.com>
+From: Christopher Peeters <christopher@lecroq.be>
+Date: Mon, 15 Apr 2019 16:54:00 +0200
+Subject: [Buildroot] [PATCH 1/1] Add libvirt (KVM) support
+In-Reply-To: <CA+_SqVYm9vpx+Uuktb+s_TYu+Hzpu258AfNhUUkBTRK7K_SuOQ@mail.gmail.com>
+References: <20190215173607.13773-1-christopher@lecroq.be>
+ <20190413222137.6c0cba37@windsurf>
+ <da50400b-6cf2-d87a-3a51-c54a46b7cea6@lecroq.be>
+ <a4a04e64-bf89-f21b-89fe-7b3e5b1e5d69@mind.be>
+ <CA+_SqVYm9vpx+Uuktb+s_TYu+Hzpu258AfNhUUkBTRK7K_SuOQ@mail.gmail.com>
+Message-ID: <76055cea-ec05-aad3-1f27-39e07b48b12b@lecroq.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This bumps to linux/linux-headers 5.0 and u-boot version 2019.01
 
-Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
----
- configs/asus_tinker_rk3288_defconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+On 15/04/2019 16:06, Angelo Compagnucci wrote:
+> On Mon, Apr 15, 2019 at 2:23 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>>  Hi Christopher,
+>>
+>>  Plese don't top-post, but reply inline like I do below.
+>>
+>> On 15/04/2019 09:46, Christopher Peeters wrote:
+>>> Hi Thomas,
+>>>
+>>> Thank you for your email. I wasn't aware about the commit title
+>>> conventions so I will fix this.
+>>>
+>>> The reason why I selected a different distribution is the lack of
+>>> support for Libvirt by the original distribution.
+>>  I would prefer in that case that we always use this other distribution (which
+>> is actually the same distribution, right? bionic == ubuntu1804...).
+> I wouldn't like to use this distribution if possible, is not the
+> official one and not maintained by canonical. The official one is:
+>
+> https://app.vagrantup.com/ubuntu/boxes/bionic64
 
-diff --git a/configs/asus_tinker_rk3288_defconfig b/configs/asus_tinker_rk3288_defconfig
-index b14cb0a2c2..e95a19a757 100644
---- a/configs/asus_tinker_rk3288_defconfig
-+++ b/configs/asus_tinker_rk3288_defconfig
-@@ -3,14 +3,14 @@ BR2_arm=y
- BR2_cortex_a17=y
- BR2_ARM_FPU_NEON_VFPV4=y
- 
--# Linux headers same as kernel, a 4.12 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_12=y
-+# Linux headers same as kernel, a 5.0 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
- 
- # Bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="tinker-rk3288"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-@@ -22,7 +22,7 @@ BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
- BR2_LINUX_KERNEL_DEFCONFIG="multi_v7"
- BR2_LINUX_KERNEL_UIMAGE=y
- BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x02000000"
--- 
-2.11.0
+As I said before there's no support from Canonical for libvirt images.
+This can only be solved by Canonical. And if I look at Launchpad, it
+won't happen very soon. There's another question for LXC support open
+for more then a year now.
+
+An other option when preferring official images is to switch over to one
+of the following boxes since they do understand that source projects
+should support each other and therefore have support for libvirt in
+their Vagrant boxes. I haven't tested them though.
+
+- https://app.vagrantup.com/debian/boxes/stretch64
+
+- https://app.vagrantup.com/centos/boxes/7
+
+- https://app.vagrantup.com/fedora/boxes/29-atomic-host
+
+- https://app.vagrantup.com/opensuse/boxes/openSUSE-15.0-x86_64
+
+- https://app.vagrantup.com/archlinux/boxes/archlinux
+
+>
+> So I think the best approach is to install the required software in
+> conditional provisioning section that runs only if the vm is running
+> on top of libvirt.
+I'm not quite sure whether you understand the implications of "doesn't
+support libvirt". Unless I interpret your email incorrectly, I get the
+impression that you believe that the vm will run until a certain point.
+This is not the case. The vm won't even start because vagrant says that
+libvirt isn't supported. Please check the snippet in my email from 09h46.
+>>> When you do `vagrant
+>>> up` with the original Vagrantfile and KVM/Libvirt as default vagrant
+>>> provider, vagrant will quit with the error that the current box can't be
+>>> found / isn't supported. Please check the snippet below for more
+>>> information. The "generic/ubuntu1804" is also a Ubuntu Bionic machine
+>>> which is well-supported so I selected this one to be able to use
+>>> Buildroot on Vagrant on Libvirt.
+>>>
+>>> ```
+>>>
+>>> $ vagrant up
+>>> ==> vagrant: A new version of Vagrant is available: 2.2.4!
+>>> ==> vagrant: To upgrade visit: https://www.vagrantup.com/downloads.html
+>>>
+>>> Bringing machine 'default' up with 'libvirt' provider...
+>>> ==> default: Box 'ubuntu/bionic64' could not be found. Attempting to
+>>> find and install...
+>>>     default: Box Provider: libvirt
+>>>     default: Box Version: >= 0
+>>> ==> default: Loading metadata for box 'ubuntu/bionic64'
+>>>     default: URL: https://vagrantcloud.com/ubuntu/bionic64
+>>> The box you're attempting to add doesn't support the provider
+>>> you requested. Please find an alternate box or use an alternate
+>>> provider. Double-check your requested provider to verify you didn't
+>>> simply misspell it.
+>>>
+>>> If you're adding a box from HashiCorp's Vagrant Cloud, make sure the box is
+>>> released.
+>>>
+>>> Name: ubuntu/bionic64
+>>> Address: https://vagrantcloud.com/ubuntu/bionic64
+>>> Requested provider: [:libvirt]
+>>>
+>>> ```
+>>>
+>>> You can also search for boxes on the Vagrant website. They also show
+>>> which providers are supported:
+>>>
+>>> https://app.vagrantup.com/ubuntu/boxes/bionic64
+>>>
+>>> https://app.vagrantup.com/generic/boxes/ubuntu1804
+>>>
+>>> I will also contact Ubuntu to ask them if they're willing to support
+>>> Libvirt, but in the mean time I suggest to choose a different box for
+>>> Buildroot on Vagrant using the Libvirt provider.
+>>>
+>>> I will also fix the indentation as requested. This is probably due to my
+>>> vim settings.
+>>>
+>>> Best regards,
+>>>
+>>> Christopher
+>>>
+>>> On 13/04/2019 22:21, Thomas Petazzoni wrote:
+>>>> Hello Christopher,
+>>>>
+>>>> Sorry for the very long delay in replying. I am not an expert with the
+>>>> Vagrant stuff, so I'm adding Angelo in Cc who hopefully will be able to
+>>>> comment further. Still, I have a few comments.
+>>>>
+>>>> First, the commit title should be:
+>>>>
+>>>>      support/misc/Vagrantfile: add libvirt/kvm support
+>>>>
+>>>> On Fri, 15 Feb 2019 18:36:07 +0100
+>>>> Christopher Peeters <christopher@lecroq.be> wrote:
+>>>>
+>>>>> Signed-off-by: Christopher Peeters <christopher@lecroq.be>
+>>>>> ---
+>>>>>  support/misc/Vagrantfile | 6 ++++++
+>>>>>  1 file changed, 6 insertions(+)
+>>>>>
+>>>>> diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
+>>>>> index 1ca5edc647..48f01a5807 100644
+>>>>> --- a/support/misc/Vagrantfile
+>>>>> +++ b/support/misc/Vagrantfile
+>>>>> @@ -29,6 +29,12 @@ Vagrant.configure('2') do |config|
+>>>>>             end
+>>>>>     end
+>>>>>
+>>>>> +  config.vm.provider :libvirt do |v, override|
+>>>>> +    override.vm.box = 'generic/ubuntu1804'
+>>>> Why are you overriding the distribution being used? It seems odd that
+>>>> depending on the virtualization technology, a different distribution
+>>>> gets installed inside the VM.
+>>>>
+>>>>> +    v.memory = VM_MEMORY
+>>>>> +    v.cpus = VM_CORES
+>>>>> +  end
+>>>> The indentation is also bogus: the file uses tabs, and you used two
+>>>> spaces. Could you fix that up ?
+>>>>
+>>>> Thanks,
+>>>>
+>>>> Thomas
+>>>>
+>>>> _______________________________________________
+>>>> buildroot mailing list
+>>>> buildroot at busybox.net
+>>>> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: pEpkey.asc
+Type: application/pgp-keys
+Size: 1774 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190415/676d7d96/attachment.key>
