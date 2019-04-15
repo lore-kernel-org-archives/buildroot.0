@@ -1,329 +1,139 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 15 Apr 2019 22:44:10 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/suricata: new package
-Message-ID: <20190415204410.27463-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 15 Apr 2019 22:49:51 +0200
+Subject: [Buildroot] [PATCH v2] package/go: fix building host go toolchain
+ when target isn't supported
+Message-ID: <20190415204951.18744-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Suricata is a free and open source, mature, fast and robust
-network threat detection engine.
+From: Anisse Astier <anisse@astier.eu>
 
-The Suricata engine is capable of real time intrusion
-detection (IDS), inline intrusion prevention (IPS), network
-security monitoring (NSM) and offline pcap processing.
+The go toolchain can cross-compile by default. So most of the time,
+building a toolchain that supports a target, allows us to also build go
+binaries for the host. This is how support for host go packages was
+added: we use the same toolchain that was initially built only for
+target.
 
-https://suricata-ids.org
+But we might want to build a go binary for the host, when compiling a
+target for which go isn't supported. Then, building host-go will fail:
+by default, we build go for a specific target, and give the toolchain
+bootstrap scripts the cross compiler we'll use.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This change modifies this behaviour: we only assume the go toolchain is
+cross-capable if we know the current target is supported. Otherwise this
+is a simple host go tool. We don't need to set any of the options needed
+for cross-compilation in that case.
+
+Thus, only set all the target-specific go options under a condition that
+the target arch is supported. The only option we still set is
+HOST_GO_CGO_ENABLED, and we always set it to enabled.
+
+It was also considered to create a separate package to build the
+go-for-host compiler which would be used for host-go-packages, but that
+would lead to a lot of duplication and is completely unnecessary.
+
+Fixes:
+http://autobuild.buildroot.net/results/98b9c7aaff2af4d19adfedac00b768d92530ce94
+http://autobuild.buildroot.net/results/bed228995ce3778720f991df9b41345a7c724a46
+http://autobuild.buildroot.net/results/3b3ea148165b96513ea511ee0d4adb334a6afac8
+
+Signed-off-by: Anisse Astier <anisse@astier.eu>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Update S99suricata to follow the same template than S02klogd
- - Always disable gccprotect
- - Enable python3
- - Add EnvironmentFile to suricata.service
+v2 [Arnout]:
+- revert the condition (ifeq instead of ifneq)
+- move GOARCH and GOARM to HOST_GO_CROSS_ENV
+- don't set empty variables
+- don't set GOARCH at all in the host-only case
+- *do* set HOST_GO_CGO_ENABLED in the host-only case (it should not
+  depend on threads on the target)
+- add a small comment to the host-only case
+- use HOST_GO_CROSS_ENV in HOST_GO_MAKE_ENV instead of in the command
+- while we're at it, move CGO_ENABLED to HOST_GO_CROSS_ENV as well
 
- DEVELOPERS                        |   1 +
- package/Config.in                 |   1 +
- package/suricata/Config.in        |  22 ++++++
- package/suricata/S99suricata      |  64 +++++++++++++++
- package/suricata/suricata.hash    |   6 ++
- package/suricata/suricata.mk      | 126 ++++++++++++++++++++++++++++++
- package/suricata/suricata.service |  14 ++++
- 7 files changed, 234 insertions(+)
- create mode 100644 package/suricata/Config.in
- create mode 100644 package/suricata/S99suricata
- create mode 100644 package/suricata/suricata.hash
- create mode 100644 package/suricata/suricata.mk
- create mode 100644 package/suricata/suricata.service
+I was about to apply with some small changes, but the changes were
+getting bigger and bigger so I felt I had to resubmit for review.
+---
+ package/go/go.mk | 37 +++++++++++++++++++++++--------------
+ 1 file changed, 23 insertions(+), 14 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f0df75b844..4772fddc70 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -835,6 +835,7 @@ F:	package/oprofile/
- F:	package/pcmanfm/
- F:	package/rygel/
- F:	package/safeclib/
-+F:	package/suricata/
- F:	package/tinycbor/
- F:	package/tinydtls/
- F:	package/tinymembench/
-diff --git a/package/Config.in b/package/Config.in
-index 260114fe72..1440dcdcab 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2035,6 +2035,7 @@ endif
- 	source "package/sslh/Config.in"
- 	source "package/strongswan/Config.in"
- 	source "package/stunnel/Config.in"
-+	source "package/suricata/Config.in"
- 	source "package/tcpdump/Config.in"
- 	source "package/tcping/Config.in"
- 	source "package/tcpreplay/Config.in"
-diff --git a/package/suricata/Config.in b/package/suricata/Config.in
-new file mode 100644
-index 0000000000..2add34956e
---- /dev/null
-+++ b/package/suricata/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_SURICATA
-+	bool "suricata"
-+	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBHTP
-+	select BR2_PACKAGE_LIBPCAP
-+	select BR2_PACKAGE_LIBYAML
-+	select BR2_PACKAGE_PCRE
-+	help
-+	  Suricata is a free and open source, mature, fast and robust
-+	  network threat detection engine.
+diff --git a/package/go/go.mk b/package/go/go.mk
+index c27f161f48..8df02cc68d 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -11,6 +11,13 @@ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ GO_LICENSE = BSD-3-Clause
+ GO_LICENSE_FILES = LICENSE
+ 
++HOST_GO_DEPENDENCIES = host-go-bootstrap
++HOST_GO_HOST_CACHE = $(HOST_DIR)/usr/share/host-go-cache
++HOST_GO_ROOT = $(HOST_DIR)/lib/go
++HOST_GO_TARGET_CACHE = $(HOST_DIR)/usr/share/go-cache
 +
-+	  The Suricata engine is capable of real time intrusion
-+	  detection (IDS), inline intrusion prevention (IPS), network
-+	  security monitoring (NSM) and offline pcap processing.
++ifeq ($(BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS),y)
 +
-+	  https://suricata-ids.org
+ ifeq ($(BR2_arm),y)
+ GO_GOARCH = arm
+ ifeq ($(BR2_ARM_CPU_ARMV5),y)
+@@ -36,11 +43,6 @@ else ifeq ($(BR2_mips64el),y)
+ GO_GOARCH = mips64le
+ endif
+ 
+-HOST_GO_DEPENDENCIES = host-go-bootstrap
+-HOST_GO_HOST_CACHE = $(HOST_DIR)/usr/share/host-go-cache
+-HOST_GO_ROOT = $(HOST_DIR)/lib/go
+-HOST_GO_TARGET_CACHE = $(HOST_DIR)/usr/share/go-cache
+-
+ # For the convienience of target packages.
+ HOST_GO_TOOLDIR = $(HOST_GO_ROOT)/pkg/tool/linux_$(GO_GOARCH)
+ HOST_GO_TARGET_ENV = \
+@@ -62,6 +64,19 @@ else
+ HOST_GO_CGO_ENABLED = 0
+ endif
+ 
++HOST_GO_CROSS_ENV = \
++	CC_FOR_TARGET="$(TARGET_CC)" \
++	CXX_FOR_TARGET="$(TARGET_CXX)" \
++	GOARCH=$(GO_GOARCH) \
++	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
++	GO_ASSUME_CROSSCOMPILING=1
 +
-+comment "suricata needs a toolchain w/ wchar, threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/suricata/S99suricata b/package/suricata/S99suricata
-new file mode 100644
-index 0000000000..7c2b966521
---- /dev/null
-+++ b/package/suricata/S99suricata
-@@ -0,0 +1,64 @@
-+#!/bin/sh
++else # !BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++# host-go can still be used to build packages for the host. No need to set all
++# the arch stuff since we will not be cross-compiling.
++HOST_GO_CGO_ENABLED = 1
++endif # BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
 +
-+DAEMON=suricata
-+PIDFILE=/var/run/$DAEMON.pid
-+
-+SURICATA_ARGS="-c /etc/suricata/suricata.yaml -i eth0"
-+
-+SURICATA_RELOAD=0
-+
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+	mkdir -p /var/log/suricata
-+	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/bin/$DAEMON" \
-+		-- $SURICATA_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p "$PIDFILE"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		rm -f "$PIDFILE"
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	sleep 1
-+	start
-+}
-+
-+# SIGUSR2 makes suricata reload rules
-+reload() {
-+	printf 'Reloading %s: ' "$DAEMON"
-+	start-stop-daemon -K -s "$SURICATA_RELOAD" -q -p "$PIDFILE"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+case "$1" in
-+	start|stop|restart|reload)
-+		"$1";;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
-diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
-new file mode 100644
-index 0000000000..44ada0115a
---- /dev/null
-+++ b/package/suricata/suricata.hash
-@@ -0,0 +1,6 @@
-+# Locally computed:
-+sha256 6cda6c80b753ce36483c6be535358b971f3890b9aa27a58c2d2f7e89dd6c6aa0  suricata-4.1.3.tar.gz
-+
-+# Hash for license files:
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-new file mode 100644
-index 0000000000..e5884cdfe4
---- /dev/null
-+++ b/package/suricata/suricata.mk
-@@ -0,0 +1,126 @@
-+################################################################################
-+#
-+# suricata
-+#
-+################################################################################
-+
-+SURICATA_VERSION = 4.1.3
-+SURICATA_SITE = https://www.openinfosecfoundation.org/download
-+SURICATA_LICENSE = GPL-2.0
-+SURICATA_LICENSE_FILES = COPYING LICENSE
-+
-+SURICATA_DEPENDENCIES = \
-+	host-pkgconf \
-+	$(if $(BR2_PACKAGE_JANSSON),jansson) \
-+	$(if $(BR2_PACKAGE_LIBCAP_NG),libcap-ng) \
-+	$(if $(BR2_PACKAGE_LIBEVENT),libevent) \
-+	libhtp \
-+	$(if $(BR2_PACKAGE_LIBNFNETLINK),libnfnetlink) \
-+	libpcap \
-+	libyaml \
-+	$(if $(BR2_PACKAGE_LZ4),lz4) \
-+	$(if $(BR2_PACKAGE_LZMA),lzma) \
-+	pcre
-+
-+SURICATA_CONF_OPTS = \
-+	--disable-gccprotect \
-+	--disable-pie \
-+	--disable-rust \
-+	--disable-suricata-update \
-+	--enable-non-bundled-htp
-+
-+# install: install binaries
-+# install-conf: install initial configuration files
-+# install-full: install binaries, configuration and rules (rules will be
-+#               download through wget/curl)
-+SURICATA_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install install-conf
-+
-+ifeq ($(BR2_PACKAGE_FILE),y)
-+SURICATA_DEPENDENCIES += file
-+SURICATA_CONF_OPTS += --enable-libmagic
-+else
-+SURICATA_CONF_OPTS += --disable-libmagic
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GEOIP),y)
-+SURICATA_DEPENDENCIES += geoip
-+SURICATA_CONF_OPTS += --enable-geoip
-+else
-+SURICATA_CONF_OPTS += --disable-geoip
-+endif
-+
-+ifeq ($(BR2_PACKAGE_HIREDIS),y)
-+SURICATA_DEPENDENCIES += hiredis
-+SURICATA_CONF_OPTS += --enable-hiredis
-+else
-+SURICATA_CONF_OPTS += --disable-hiredis
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNET),y)
-+SURICATA_DEPENDENCIES += libnet
-+SURICATA_CONF_OPTS += --with-libnet-includes=$(STAGING_DIR)/usr/include
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNETFILTER_LOG),y)
-+SURICATA_DEPENDENCIES += libnetfilter_log
-+SURICATA_CONF_OPTS += --enable-nflog
-+else
-+SURICATA_CONF_OPTS += --disable-nflog
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNETFILTER_QUEUE),y)
-+SURICATA_DEPENDENCIES += libnetfilter_queue
-+SURICATA_CONF_OPTS += --enable-nfqueue
-+else
-+SURICATA_CONF_OPTS += --disable-nfqueue
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNSPR),y)
-+SURICATA_DEPENDENCIES += libnspr
-+SURICATA_CONF_OPTS += --enable-nspr
-+else
-+SURICATA_CONF_OPTS += --disable-nspr
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBNSS),y)
-+SURICATA_DEPENDENCIES += libnss
-+SURICATA_CONF_OPTS += --enable-nss
-+else
-+SURICATA_CONF_OPTS += --disable-nss
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LUA),y)
-+SURICATA_CONF_OPTS += --enable-lua
-+SURICATA_DEPENDENCIES += lua
-+else
-+SURICATA_CONF_OPTS += --disable-lua
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LUAJIT),y)
-+SURICATA_CONF_OPTS += --enable-luajit
-+SURICATA_DEPENDENCIES += luajit
-+else
-+SURICATA_CONF_OPTS += --disable-luajit
-+endif
-+
-+ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
-+SURICATA_CONF_OPTS += --enable-python
-+SURICATA_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
-+else
-+SURICATA_CONF_OPTS += --disable-python
-+endif
-+
-+define SURICATA_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 0755 package/suricata/S99suricata \
-+		$(TARGET_DIR)/etc/init.d/S99suricata
-+endef
-+
-+define SURICATA_INSTALL_INIT_SYSTEMD
-+	$(INSTALL) -D -m 644 package/suricata/suricata.service \
-+		$(TARGET_DIR)/usr/lib/systemd/system/suricata.service
-+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
-+	ln -sf ../../../../usr/lib/systemd/system/suricata.service \
-+		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/suricata.service
-+endef
-+
-+$(eval $(autotools-package))
-diff --git a/package/suricata/suricata.service b/package/suricata/suricata.service
-new file mode 100644
-index 0000000000..f5cd46ac48
---- /dev/null
-+++ b/package/suricata/suricata.service
-@@ -0,0 +1,14 @@
-+[Unit]
-+Description=Suricata Intrusion Detection Service
-+After=network.target
-+
-+[Service]
-+EnvironmentFile=-/etc/default/suricata
-+ExecStartPre=/bin/rm -f /var/run/suricata.pid
-+ExecStartPre=/usr/bin/mkdir -p /var/log/suricata
-+ExecStart=/usr/bin/suricata -c /etc/suricata/suricata.yaml -i eth0 --pidfile /var/run/suricata.pid
-+ExecReload=/bin/kill -USR2 $MAINPID
-+Restart=always
-+
-+[Install]
-+WantedBy=multi-user.target
+ # The go build system is not compatible with ccache, so use
+ # HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
+ HOST_GO_MAKE_ENV = \
+@@ -71,21 +86,15 @@ HOST_GO_MAKE_ENV = \
+ 	GOROOT_FINAL=$(HOST_GO_ROOT) \
+ 	GOROOT="$(@D)" \
+ 	GOBIN="$(@D)/bin" \
+-	GOARCH=$(GO_GOARCH) \
+-	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
+ 	GOOS=linux \
+ 	CC=$(HOSTCC_NOCCACHE) \
+ 	CXX=$(HOSTCXX_NOCCACHE) \
+-	GO_ASSUME_CROSSCOMPILING=1
+-
+-HOST_GO_TARGET_CC = \
+-	CC_FOR_TARGET="$(TARGET_CC)" \
+-	CXX_FOR_TARGET="$(TARGET_CXX)"
++	CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
++	$(HOST_GO_CROSS_ENV)
+ 
+ define HOST_GO_BUILD_CMDS
+ 	cd $(@D)/src && \
+-		$(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
+-		./make.bash $(if $(VERBOSE),-v)
++		$(HOST_GO_MAKE_ENV) ./make.bash $(if $(VERBOSE),-v)
+ endef
+ 
+ define HOST_GO_INSTALL_CMDS
 -- 
 2.20.1
