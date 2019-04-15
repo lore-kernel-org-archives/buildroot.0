@@ -1,50 +1,70 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Apr 2019 21:47:27 +0200
-Subject: [Buildroot] [PATCH 05/12 v3] infra/utils: add helper to generate
- comma-separated lists
+Date: Mon, 15 Apr 2019 21:47:29 +0200
+Subject: [Buildroot] [PATCH 07/12 v3] fs: introduce variable with all
+ recursive dependencies
 In-Reply-To: <cover.1555357644.git.yann.morin.1998@free.fr>
 References: <cover.1555357644.git.yann.morin.1998@free.fr>
-Message-ID: <05f3f1451ae2f32b291ffb5829f371af87f783c5.1555357644.git.yann.morin.1998@free.fr>
+Message-ID: <4a975afb747616fde0c2cd41ffd0c4ce3b200113.1555357644.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a helper macro that, from a space-separated list of items, returns a
-comma-separated list of the quoted items.
+This allows getting all the recursive dependencies of filesystems,
+ike we have for packages, and allows us to treat both in a similar
+fashion.
 
-This will be useful when we need to generate lists in JSON, later...
-
-Code suggested by Thomas P.
-
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 ---
-Changes v1 -> v2:
-  - don't rely on implicit space in replacement text, instead use
-    explicit $(space)  (Thmas DS)
----
- support/misc/utils.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ fs/common.mk | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/support/misc/utils.mk b/support/misc/utils.mk
-index c44319338e..b422c67d76 100644
---- a/support/misc/utils.mk
-+++ b/support/misc/utils.mk
-@@ -70,6 +70,10 @@ finddirclauses = $(call notfirstword,$(patsubst %,-o -path '$(1)/%',$(2)))
- # notfirstword(wordlist): returns all but the first word in wordlist
- notfirstword = $(wordlist 2,$(words $(1)),$(1))
+diff --git a/fs/common.mk b/fs/common.mk
+index 286d671d06..5ec28ca183 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -49,6 +49,18 @@ ROOTFS_COMMON_DEPENDENCIES = \
+ 	$(BR2_TAR_HOST_DEPENDENCY) \
+ 	$(if $(PACKAGES_USERS)$(ROOTFS_USERS_TABLES),host-mkpasswd)
  
-+# build a comma-separated list of quoted items, from a space-separated
-+# list of unquoted items:   a b c d  -->  "a", "b", "c", "d"
-+make-comma-list = $(subst $(space),$(comma)$(space),$(patsubst %,"%",$(strip $(1))))
++ROOTFS_COMMON_FINAL_RECURSIVE_DEPENDENCIES = $(sort \
++	$(if $(filter undefined,$(origin ROOTFS_COMMON_FINAL_RECURSIVE_DEPENDENCIES__X)), \
++		$(eval ROOTFS_COMMON_FINAL_RECURSIVE_DEPENDENCIES__X := \
++			$(foreach p, \
++				$(ROOTFS_COMMON_DEPENDENCIES), \
++				$(p) \
++				$($(call UPPERCASE,$(p))_FINAL_RECURSIVE_DEPENDENCIES) \
++			) \
++		) \
++	) \
++	$(ROOTFS_COMMON_FINAL_RECURSIVE_DEPENDENCIES__X))
 +
- # Needed for the foreach loops to loop over the list of hooks, so that
- # each hook call is properly separated by a newline.
- define sep
+ rootfs-common-show-dependency-tree: $(patsubst %,%-show-dependency-tree,$(ROOTFS_COMMON_DEPENDENCIES))
+ 	$(info rootfs-common: host)
+ 	$(info rootfs-common -> $(foreach d,$(ROOTFS_COMMON_DEPENDENCIES),$(d)))
+@@ -88,6 +100,18 @@ ROOTFS_$(2)_TARGET_DIR = $$(ROOTFS_$(2)_DIR)/target
+ 
+ ROOTFS_$(2)_DEPENDENCIES += rootfs-common
+ 
++ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES = $$(sort \
++	$$(if $$(filter undefined,$$(origin ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES__X)), \
++		$$(eval ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES__X := \
++			$$(foreach p, \
++				$$(ROOTFS_$(2)_DEPENDENCIES), \
++				$$(p) \
++				$$($$(call UPPERCASE,$$(p))_FINAL_RECURSIVE_DEPENDENCIES) \
++			) \
++		) \
++	) \
++	$$(ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES__X))
++
+ rootfs-$(1)-show-dependency-tree: $$(patsubst %,%-show-dependency-tree,$$(ROOTFS_$(2)_DEPENDENCIES))
+ 	$$(info rootfs-$(1): host)
+ 	$$(info rootfs-$(1) -> $$(foreach d,$$(ROOTFS_$(2)_DEPENDENCIES),$$(d)))
 -- 
 2.14.1
