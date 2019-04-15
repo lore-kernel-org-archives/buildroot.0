@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Apr 2019 00:08:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/systemd-bootchart: add
- BR2_PACKAGE_SYSTEMD_BOOTCHART_ARCH_SUPPORTS
-In-Reply-To: <20190414132437.31071-1-fontaine.fabrice@gmail.com>
-References: <20190414132437.31071-1-fontaine.fabrice@gmail.com>
-Message-ID: <866660b5-914e-de71-8413-76edcc3e5355@mind.be>
+Date: Tue, 16 Apr 2019 00:10:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/busybox: fix S0{1sys,
+ 2k}logd indentation
+In-Reply-To: <20190415083605.32138-1-fontaine.fabrice@gmail.com>
+References: <20190415083605.32138-1-fontaine.fabrice@gmail.com>
+Message-ID: <b5939eda-6334-6a9c-142f-c6d83665d283@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +13,67 @@ To: buildroot@busybox.net
 
 
 
-On 14/04/2019 15:24, Fabrice Fontaine wrote:
-> Since commit f93596d8ba82354efb545fe91449627e6c896ce1, systemd is
-> enabled on arc however systemd-bootchart is not available on this
-> architecture so add a BR2_PACKAGE_SYSTEMD_BOOTCHART_ARCH_SUPPORTS from
-> the information retrieved in src/architecture.h
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/84fb51212abf99faa2b7a46b8c44c42a3ca1201c
-> 
+On 15/04/2019 10:36, Fabrice Fontaine wrote:
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Both applied to master, thanks.
+ Applied to master, thanks.
+
+ Note that the other init scripts that were updated by Carlos have the same
+issue (copy&paste, I guess):
+
+package/rsyslog/S01rsyslogd
+package/sysklogd/S01syslogd
+package/sysklogd/S02klogd
+package/syslog-ng/S01syslog-ng
 
  Regards,
  Arnout
+
+> ---
+>  package/busybox/S01syslogd | 8 ++++----
+>  package/busybox/S02klogd   | 8 ++++----
+>  2 files changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/busybox/S01syslogd b/package/busybox/S01syslogd
+> index 6e642a678a..15006bc06f 100644
+> --- a/package/busybox/S01syslogd
+> +++ b/package/busybox/S01syslogd
+> @@ -44,12 +44,12 @@ restart() {
+>  }
+>  
+>  case "$1" in
+> -        start|stop|restart)
+> +	start|stop|restart)
+>  		"$1";;
+>  	reload)
+>  		# Restart, since there is no true "reload" feature.
+>  		restart;;
+> -        *)
+> -                echo "Usage: $0 {start|stop|restart|reload}"
+> -                exit 1
+> +	*)
+> +		echo "Usage: $0 {start|stop|restart|reload}"
+> +		exit 1
+>  esac
+> diff --git a/package/busybox/S02klogd b/package/busybox/S02klogd
+> index a4200cfb34..0677e1e5ca 100644
+> --- a/package/busybox/S02klogd
+> +++ b/package/busybox/S02klogd
+> @@ -44,12 +44,12 @@ restart() {
+>  }
+>  
+>  case "$1" in
+> -        start|stop|restart)
+> +	start|stop|restart)
+>  		"$1";;
+>  	reload)
+>  		# Restart, since there is no true "reload" feature.
+>  		restart;;
+> -        *)
+> -                echo "Usage: $0 {start|stop|restart|reload}"
+> -                exit 1
+> +	*)
+> +		echo "Usage: $0 {start|stop|restart|reload}"
+> +		exit 1
+>  esac
+> 
