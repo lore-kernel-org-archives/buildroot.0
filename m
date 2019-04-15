@@ -1,45 +1,108 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Mon, 15 Apr 2019 15:19:15 +0530
-Subject: [Buildroot] [PATCH v2 1/1] board: rename pine64 to pine64_a64
-In-Reply-To: <be5ea5a8-7393-7293-200d-cc5f1fc7e365@mind.be>
-References: <lNEO_Exlu8W8Rjcd0oJ5vQ2ptr6KvnyYieAxGJuwAPSSa4Go3VPYfrZObxeECm6eCv1iWrGk1aaI8GXfqh1qEMvKZ5Nm_H0Ul49slqofIKA=@philipmolloy.com>
- <be5ea5a8-7393-7293-200d-cc5f1fc7e365@mind.be>
-Message-ID: <CAMty3ZCcVctFZnJfn8A1B1yjR=jgEyniq7nk04P9OpuitByq=w@mail.gmail.com>
+From: Artem Panfilov <panfilov.artyom@gmail.com>
+Date: Mon, 15 Apr 2019 12:49:21 +0300
+Subject: [Buildroot] [PATCH v2] package/php: fix how external PCRE2 JIT is
+ enabled
+Message-ID: <20190415094921.1050-1-panfilov.artyom@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Apr 14, 2019 at 3:19 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->  Hi Philip, Jagan,
->
->  Let's sort out this confusion...
->
-> On 30/03/2019 22:27, Philip Molloy wrote:
-> > The link to https://www.pine64.org/?page_id=1194 in
-> > board/pine64/pine64/readme.txt loads a page for the "PINE A64" board.
-> > Follow the convention of using the model name to identify the board.
->
->  One thing is clear: the vendor is pine64. The names of the boards, however,
-> don't seem so clear...
->
->  If I look at the pine64.org website, I see on the front page (at the moment)
-> three boards advertised, and they are named PINE A64-LTS, ROCK64, and SOPINE A64.
->
->  So I think we have two options. Either we keep the A64 bit, and the three
-> current boards should be named:
->
-> pine64_pine_a64_defconfig and board/pine64/pine_a64
-> pine64_rock64_defconfig and board/pine64/rock64
-> pine64_sopine_a64_defconfig and board/pine64/sopine_a64
->
->  Or we say that the a64 is a bit redundant, and we call them
->
-> pine64_pine_defconfig and board/pine64/pine
-> pine64_rock64_defconfig and board/pine64/rock64
-> pine64_sopine_defconfig and board/pine64/sopine
+This patch adds ac_cv_have_pcre2_jit cache variable to avoid
+the tests running on the host system during cross-compiling.
 
-This is what I'm recommended in another mail. The board name is PINE
-and it is A64 based same like SOPINE with A64 based.
+Changes v1 -> v2:
+ - add autoconf cache variable (suggested by Thomas Petazzoni)
+
+Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
+---
+ ....m4-add-ac_cv_have_pcre2_jit-variabl.patch | 58 +++++++++++++++++++
+ package/php/php.mk                            |  7 +++
+ 2 files changed, 65 insertions(+)
+ create mode 100644 package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch
+
+diff --git a/package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch b/package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch
+new file mode 100644
+index 0000000000..5a2b80ac96
+--- /dev/null
++++ b/package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch
+@@ -0,0 +1,58 @@
++From 4c23e174123c67363d51326b88c1160b389ed4c1 Mon Sep 17 00:00:00 2001
++From: Artem Panfilov <panfilov.artyom@gmail.com>
++Date: Mon, 15 Apr 2019 12:10:41 +0300
++Subject: [PATCH] ext/pcre/config0.m4: add ac_cv_have_pcre2_jit variable
++
++This patch adds ac_cv_have_pcre2_jit cache variable to avoid
++the tests running on the host system during cross-compiling.
++
++Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
++---
++ ext/pcre/config0.m4 | 11 +++++++----
++ 1 file changed, 7 insertions(+), 4 deletions(-)
++
++diff --git a/ext/pcre/config0.m4 b/ext/pcre/config0.m4
++index b9542f0113..a0bf14cb4a 100644
++--- a/ext/pcre/config0.m4
+++++ b/ext/pcre/config0.m4
++@@ -52,8 +52,8 @@ PHP_ARG_WITH(pcre-jit,,[  --with-pcre-jit         Enable PCRE JIT functionality
++     AC_DEFINE(PCRE2_CODE_UNIT_WIDTH, 8, [ ])
++     AC_DEFINE(HAVE_PCRE, 1, [ ])
++ 
++-    if test "$PHP_PCRE_JIT" != "no"; then
++-      AC_MSG_CHECKING([for JIT support in PCRE2])
+++    AC_CACHE_CHECK([for JIT support in PCRE2], ac_cv_have_pcre2_jit,
+++      [AC_MSG_CHECKING([for JIT support in PCRE2])
++       AC_RUN_IFELSE([
++         AC_LANG_SOURCE([[
++             #include <pcre2.h>
++@@ -65,7 +65,7 @@ PHP_ARG_WITH(pcre-jit,,[  --with-pcre-jit         Enable PCRE JIT functionality
++             }
++         ]])], [
++         AC_MSG_RESULT([yes])
++-        AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
+++        ac_cv_have_pcre2_jit=yes
++       ],
++       [
++         AC_MSG_RESULT([no])
++@@ -75,13 +75,16 @@ PHP_ARG_WITH(pcre-jit,,[  --with-pcre-jit         Enable PCRE JIT functionality
++         case $host_cpu in
++         arm*|i[34567]86|x86_64|mips*|powerpc*|sparc)
++           AC_MSG_RESULT([yes])
++-          AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
+++          ac_cv_have_pcre2_jit=yes
++           ;;
++         *)
++           AC_MSG_RESULT([no])
++           ;;
++         esac
++       ])
+++    ])
+++    if test $ac_cv_have_pcre2_jit = yes; then
+++      AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
++     fi
++ 
++     PHP_NEW_EXTENSION(pcre, php_pcre.c, no,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
++-- 
++2.17.1
++
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 541c76755f..e570ed6f7e 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -246,6 +246,13 @@ PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_VALGRIND
+ ifeq ($(BR2_PACKAGE_PCRE2),y)
+ PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
+ PHP_DEPENDENCIES += pcre2
++
++ifeq ($(BR2_PACKAGE_PCRE2_JIT),y)
++PHP_CONF_ENV += ac_cv_have_pcre2_jit=yes
++else
++PHP_CONF_ENV += ac_cv_have_pcre2_jit=no
++endif
++
+ else
+ # The bundled pcre library is not configurable through ./configure options,
+ # and by default is configured to be thread-safe, so it wants pthreads. So
+-- 
+2.17.1
