@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Apr 2019 00:38:30 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/pkgconf: bump to version
- 1.6.1
-In-Reply-To: <20190415180351.67142-1-aduskett@gmail.com>
+Date: Tue, 16 Apr 2019 00:44:28 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/libglib2: bump to version
+ 2.60.0
+In-Reply-To: <20190415180351.67142-2-aduskett@gmail.com>
 References: <20190415180351.67142-1-aduskett@gmail.com>
-Message-ID: <c61b7ac2-e248-d198-e23e-5e770f6b59b6@mind.be>
+ <20190415180351.67142-2-aduskett@gmail.com>
+Message-ID: <c7359d05-81ec-e3a2-f812-cef521f23f6d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,56 +15,41 @@ To: buildroot@busybox.net
 
 
 On 15/04/2019 20:03, aduskett at gmail.com wrote:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Other changes:
->   - Add a hash for the license file.
-> 
-> Tested against:
->   - libsoup
->   - X11r7
->   - dbus-glib
->   - atk
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> diff --git a/package/libglib2/0004-Add-Wno-format-nonliteral-to-compiler-arguments.patch b/package/libglib2/0004-Add-Wno-format-nonliteral-to-compiler-arguments.patch
+> new file mode 100644
+> index 0000000000..1138ef1640
+> --- /dev/null
+> +++ b/package/libglib2/0004-Add-Wno-format-nonliteral-to-compiler-arguments.patch
+> @@ -0,0 +1,28 @@
+> +From 9e0f11a4981737f98bac93a22b6f2ff1a3887b63 Mon Sep 17 00:00:00 2001
+> +From: Adam Duskett <Aduskett@gmail.com>
+> +Date: Tue, 9 Apr 2019 13:03:51 -0400
+> +Subject: [PATCH] Add '-Wno-format-nonliteral' to compiler arguments.
+> +
+> +This warning is a false positive on older versions of gcc.
+> +See https://gitlab.gnome.org/GNOME/glib/issues/1744 for more details.
+> +
+> +Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> +---
+> + meson.build | 1 +
+> + 1 file changed, 1 insertion(+)
+> +
+> +diff --git a/meson.build b/meson.build
+> +index 3c615b7..7cae4e8 100644
+> +--- a/meson.build
+> ++++ b/meson.build
+> +@@ -357,6 +357,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
+> +     '-Wno-cast-function-type',
+> +     # Due to function casts through (void*) we cannot support -Wpedantic:
+> +     # https://wiki.gnome.org/Projects/GLib/CompilerRequirements#Function_pointer_conversions.
+> ++    '-Wno-format-nonliteral',
 
- Applied to master, thanks.
-
- Could you monitor the autobuilders for fallout from this bump?
+ Didn't I say in a previous iteration that this should go before the comment?
+The comment is about the no-pedantic so you shouldn't put something in-between.
 
  Regards,
  Arnout
 
-> ---
-> v1 -> v2:
->   - Clean up commit message (Thomas)
->   - Use the original URL as the https certificate is now fixed.
->   - Remove AUTORECONF = YES because the https certificate is now fixed.
-> 
->  package/pkgconf/pkgconf.hash | 3 ++-
->  package/pkgconf/pkgconf.mk   | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/pkgconf/pkgconf.hash b/package/pkgconf/pkgconf.hash
-> index 7ea7ff57a8..45848af943 100644
-> --- a/package/pkgconf/pkgconf.hash
-> +++ b/package/pkgconf/pkgconf.hash
-> @@ -1,2 +1,3 @@
->  # Locally calculated
-> -sha256	d3468308553c94389dadfd10c4d1067269052b5364276a9d24a643c88485f715	pkgconf-1.5.3.tar.xz
-> +sha256	22b9ee38438901f9d60f180e5182821180854fa738fd071f593ea26a81da208c	pkgconf-1.6.1.tar.xz
-> +sha256	07ee94b50a41ee3fc4e13a9b9c60b26fc28488494c465639f7e5f07a3952ec04	COPYING
-> diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
-> index e3c73fd405..1851ecfca4 100644
-> --- a/package/pkgconf/pkgconf.mk
-> +++ b/package/pkgconf/pkgconf.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -PKGCONF_VERSION = 1.5.3
-> +PKGCONF_VERSION = 1.6.1
->  PKGCONF_SITE = https://distfiles.dereferenced.org/pkgconf
->  PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.xz
->  PKGCONF_LICENSE = pkgconf license
-> 
+> +     '-Wno-pedantic',
+> +     '-Werror=declaration-after-statement',
+> +     '-Werror=format=2',
