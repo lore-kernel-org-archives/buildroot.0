@@ -1,53 +1,114 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 15 Apr 2019 23:21:39 +0200
-Subject: [Buildroot] [git commit] infra/pkg-download: get rid of the FLOCK
- variable
-Message-ID: <20190415214606.72A088B806@busybox.osuosl.org>
+Date: Mon, 15 Apr 2019 23:47:22 +0200
+Subject: [Buildroot] [git commit] core: add per-package and per-filesystem
+ show-info
+Message-ID: <20190415214606.C00288B8A0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b33a74450341f8bffcdb98df3f5b33d028ec9f6
+commit: https://git.buildroot.net/buildroot/commit/?id=5abb88218ecbb517b6a9f64a1f8b0a36fb9814aa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The FLOCK variable is context-dependent, and expects the PKG
-variable to be set to the current package.
+Sometimes, it is need to quickly get the metadata of a subset of
+packages, without resorting to a full-blown JSON query.
 
-This is not so nice. Besides, it is used in a single location.
+Introduce a new per-package (and per-filesystem) foo-show-info rule,
+that otputs a per-entity valid JSON blob.
 
-Get rid of this intermediate variable, and directly use flock
-where we need it.
+Note that calling it for multiple packages and.or filesystems at once
+will not generate a valid JSON blob, as there would be no separator
+between the JSON elements:
+
+    $ make {foo,bar}-show-info
+    { "foo": { foo stuff } }
+    { "bar": { bar stuff } }
+
+However, jq is able to absorb this, with its slurping ability, which
+generates an array (ellipsed and manualy reformated for readability):
+
+    $ make {foo,bar}-show-info |jq -s . -
+    [
+      { "foo": { foo stuff } },
+      { "bar": { bar stuff } }
+    ]
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pkg-download.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ Makefile               |  1 +
+ fs/common.mk           | 11 ++++++++++-
+ package/pkg-generic.mk |  5 +++++
+ 3 files changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/package/pkg-download.mk b/package/pkg-download.mk
-index 623caf9325..96a12b1f2e 100644
---- a/package/pkg-download.mk
-+++ b/package/pkg-download.mk
-@@ -18,7 +18,6 @@ export SCP := $(call qstrip,$(BR2_SCP))
- export LOCALFILES := $(call qstrip,$(BR2_LOCALFILES))
+diff --git a/Makefile b/Makefile
+index 0f5331ec7e..522c0b0606 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1111,6 +1111,7 @@ help:
+ 	@echo '  <pkg>-depends          - Build <pkg>'\''s dependencies'
+ 	@echo '  <pkg>-configure        - Build <pkg> up to the configure step'
+ 	@echo '  <pkg>-build            - Build <pkg> up to the build step'
++	@echo '  <pkg>-show-info        - generate info about <pkg>, as a JSON blurb'
+ 	@echo '  <pkg>-show-depends     - List packages on which <pkg> depends'
+ 	@echo '  <pkg>-show-rdepends    - List packages which have <pkg> as a dependency'
+ 	@echo '  <pkg>-show-recursive-depends'
+diff --git a/fs/common.mk b/fs/common.mk
+index f7989eac57..6dd1774726 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -87,6 +87,11 @@ endif
+ rootfs-common-show-depends:
+ 	@echo $(ROOTFS_COMMON_DEPENDENCIES)
  
- DL_WRAPPER = support/download/dl-wrapper
--FLOCK = flock $($(PKG)_DL_DIR)/
++.PHONY: rootfs-common-show-info
++rootfs-common-show-info:
++	@:
++	$(info $(call clean-json,{ $(call json-info,ROOTFS_COMMON) }))
++
+ # Since this function will be called from within an $(eval ...)
+ # all variable references except the arguments must be $$-quoted.
+ define inner-rootfs
+@@ -184,9 +189,13 @@ endif
+ rootfs-$(1)-show-depends:
+ 	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
  
- # DL_DIR may have been set already from the environment
- ifeq ($(origin DL_DIR),undefined)
-@@ -99,7 +98,7 @@ endif
++rootfs-$(1)-show-info:
++	@:
++	$$(info $$(call clean-json,{ $$(call json-info,ROOTFS_$(2)) }))
++
+ rootfs-$(1): $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME)
  
- define DOWNLOAD
- 	$(Q)mkdir -p $($(PKG)_DL_DIR)
--	$(Q)$(EXTRA_ENV) $(FLOCK) $(DL_WRAPPER) \
-+	$(Q)$(EXTRA_ENV) flock $($(PKG)_DL_DIR)/ $(DL_WRAPPER) \
- 		-c '$($(PKG)_DL_VERSION)' \
- 		-d '$($(PKG)_DL_DIR)' \
- 		-D '$(DL_DIR)' \
+-.PHONY: rootfs-$(1) rootfs-$(1)-show-depends
++.PHONY: rootfs-$(1) rootfs-$(1)-show-depends rootfs-$(1)-show-info
+ 
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
+ TARGETS_ROOTFS += rootfs-$(1)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 8ff8cff12d..67782138b4 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -867,6 +867,10 @@ $(1)-show-dependency-tree: $$(patsubst %,%-show-dependency-tree,$$($(2)_FINAL_AL
+ 	$$(info $(1): $(4) $$(if $$($(2)_IS_VIRTUAL),virtual,$$($(2)_DL_VERSION)))
+ 	$$(info $(1) -> $$($(2)_FINAL_ALL_DEPENDENCIES))
+ 
++$(1)-show-info:
++	@:
++	$$(info $$(call clean-json,{ $$(call json-info,$(2)) }))
++
+ $(1)-graph-depends: graph-depends-requirements
+ 	$(call pkg-graph-depends,$(1),--direct)
+ 
+@@ -1099,6 +1103,7 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
+ 	$(1)-rsync \
+ 	$(1)-show-dependency-tree \
+ 	$(1)-show-depends \
++	$(1)-show-info \
+ 	$(1)-show-version \
+ 	$(1)-source
+ 
