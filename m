@@ -1,29 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 15 Apr 2019 21:26:38 +0200
-Subject: [Buildroot] [git commit] package/autoconf: add hash for license
- files
-Message-ID: <20190415193031.32A9D815D1@busybox.osuosl.org>
+Date: Mon, 15 Apr 2019 21:30:40 +0200
+Subject: [Buildroot] [git commit] package/ninja: add hash for license files
+Message-ID: <20190415193031.438B88160A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5898b87abe628d61e05ed5cbb824362b5f2c3d25
+commit: https://git.buildroot.net/buildroot/commit/?id=e0d3d1ea4e6443c99cbf2b89c63db2cc6b3adfd4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/autoconf/autoconf.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ package/ninja/ninja.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/autoconf/autoconf.hash b/package/autoconf/autoconf.hash
-index f35f6f8d0a..f53e8979c0 100644
---- a/package/autoconf/autoconf.hash
-+++ b/package/autoconf/autoconf.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
- sha256	64ebcec9f8ac5b2487125a86a7760d2591ac9e1d3dbd59489633f9de62a57684  autoconf-2.69.tar.xz
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYINGv3
-+sha256	23ed0b84fa023bfa33433b498192cd08a3bfb1f4864a8ed791a84f3eb48b2dd2  COPYING.EXCEPTION
+diff --git a/package/ninja/ninja.hash b/package/ninja/ninja.hash
+index 3f5bd3a279..cc49907e3b 100644
+--- a/package/ninja/ninja.hash
++++ b/package/ninja/ninja.hash
+@@ -1,2 +1,3 @@
+ # Locally generated
+ sha256 5d7ec75828f8d3fd1a0c2f31b5b0cea780cdfe1031359228c428c1a48bfcd5b9 ninja-v1.9.0.tar.gz
++sha256 eb7e9ab9690124c5c9f42bdc81383d886a3dede26345b6ed15bbad7caf81f7ea COPYING
