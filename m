@@ -1,121 +1,106 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Apr 2019 21:47:32 +0200
-Subject: [Buildroot] [PATCH 10/12 v3] core: add per-package and
- per-filesystem show-info
+Date: Mon, 15 Apr 2019 21:47:33 +0200
+Subject: [Buildroot] [PATCH 11/12 v3] support/scripts: use show-info to
+ extract dependency graph
 In-Reply-To: <cover.1555357644.git.yann.morin.1998@free.fr>
 References: <cover.1555357644.git.yann.morin.1998@free.fr>
-Message-ID: <d6d7de0ae57232047dd474c8491bb4ddf9d18a43.1555357644.git.yann.morin.1998@free.fr>
+Message-ID: <cd1c2cccd0a2d39ba4ab7277d09ae0364ffa17f8.1555357645.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sometimes, it is need to quickly get the metadata of a subset of
-packages, without resorting to a full-blown JSON query.
+Currently, we extract the dependency graph from the aptly named but
+ad-hoc show-dependency-graph rule.
 
-Introduce a new per-package (and per-filesystem) foo-show-info rule,
-that otputs a per-entity valid JSON blob.
+We now have a better solution to report package information, with
+show-info.
 
-Note that calling it for multiple packages and.or filesystems at once
-will not generate a valid JSON blob, as there would be no separator
-between the JSON elements:
+Since show-dependency-graph never went into a release so far, and
+show-info does provide the same (and more), swith to using show-info.
 
-    $ make {foo,bar}-show-info
-    { "foo": { foo stuff } }
-    { "bar": { bar stuff } }
+Thanks to Adam for suggesting the coding style to have a readable code
+that is not ugly but still pleases flake8. Thanks to Arnout for
+suggesting the use of dict.get() to further simplify the code.
 
-However, jq is able to absorb this, with its slurping ability, which
-generates an array (ellipsed and manualy reformated for readability):
+Note: we do not use th reverse_dependencies field because it only
+contains those packages that have a kconfig option, so we'd miss most
+host packages.
 
-    $ make {foo,bar}-show-info |jq -s . -
-    [
-      { "foo": { foo stuff } },
-      { "bar": { bar stuff } }
-    ]
-
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Adam Duskett <aduskett@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
-Changes v2 -> v3:
-  - add to 'make help'
+ support/scripts/brpkgutil.py | 30 ++++++++++++++----------------
+ 1 file changed, 14 insertions(+), 16 deletions(-)
 
-Changes v1 -> v2:
-  - make it based on the new show-info macro  (Arnout)
----
- Makefile               |  1 +
- fs/common.mk           | 11 ++++++++++-
- package/pkg-generic.mk |  5 +++++
- 3 files changed, 16 insertions(+), 1 deletion(-)
-
-diff --git a/Makefile b/Makefile
-index 0f5331ec7e..522c0b0606 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1111,6 +1111,7 @@ help:
- 	@echo '  <pkg>-depends          - Build <pkg>'\''s dependencies'
- 	@echo '  <pkg>-configure        - Build <pkg> up to the configure step'
- 	@echo '  <pkg>-build            - Build <pkg> up to the build step'
-+	@echo '  <pkg>-show-info        - generate info about <pkg>, as a JSON blurb'
- 	@echo '  <pkg>-show-depends     - List packages on which <pkg> depends'
- 	@echo '  <pkg>-show-rdepends    - List packages which have <pkg> as a dependency'
- 	@echo '  <pkg>-show-recursive-depends'
-diff --git a/fs/common.mk b/fs/common.mk
-index f7989eac57..6dd1774726 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -87,6 +87,11 @@ endif
- rootfs-common-show-depends:
- 	@echo $(ROOTFS_COMMON_DEPENDENCIES)
+diff --git a/support/scripts/brpkgutil.py b/support/scripts/brpkgutil.py
+index f65068d348..780cdef49c 100644
+--- a/support/scripts/brpkgutil.py
++++ b/support/scripts/brpkgutil.py
+@@ -1,12 +1,12 @@
+ # Copyright (C) 2010-2013 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ # Copyright (C) 2019 Yann E. MORIN <yann.morin.1998@free.fr>
  
-+.PHONY: rootfs-common-show-info
-+rootfs-common-show-info:
-+	@:
-+	$(info $(call clean-json,{ $(call json-info,ROOTFS_COMMON) }))
-+
- # Since this function will be called from within an $(eval ...)
- # all variable references except the arguments must be $$-quoted.
- define inner-rootfs
-@@ -184,9 +189,13 @@ endif
- rootfs-$(1)-show-depends:
- 	@echo $$(ROOTFS_$(2)_DEPENDENCIES)
++import json
+ import logging
+ import os
+ import subprocess
+ from collections import defaultdict
  
-+rootfs-$(1)-show-info:
-+	@:
-+	$$(info $$(call clean-json,{ $$(call json-info,ROOTFS_$(2)) }))
-+
- rootfs-$(1): $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME)
+-
+ # This function returns a tuple of four dictionaries, all using package
+ # names as keys:
+ # - a dictionary which values are the lists of packages that are the
+@@ -19,7 +19,7 @@ from collections import defaultdict
+ def get_dependency_tree():
+     logging.info("Getting dependency tree...")
  
--.PHONY: rootfs-$(1) rootfs-$(1)-show-depends
-+.PHONY: rootfs-$(1) rootfs-$(1)-show-depends rootfs-$(1)-show-info
+-    deps = defaultdict(list)
++    deps = {}
+     rdeps = defaultdict(list)
+     types = {}
+     versions = {}
+@@ -29,23 +29,21 @@ def get_dependency_tree():
+     types['all'] = 'target'
+     versions['all'] = ''
  
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
- TARGETS_ROOTFS += rootfs-$(1)
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 8ff8cff12d..67782138b4 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -867,6 +867,10 @@ $(1)-show-dependency-tree: $$(patsubst %,%-show-dependency-tree,$$($(2)_FINAL_AL
- 	$$(info $(1): $(4) $$(if $$($(2)_IS_VIRTUAL),virtual,$$($(2)_DL_VERSION)))
- 	$$(info $(1) -> $$($(2)_FINAL_ALL_DEPENDENCIES))
+-    cmd = ["make", "-s", "--no-print-directory", "show-dependency-tree"]
++    cmd = ["make", "-s", "--no-print-directory", "show-info"]
+     with open(os.devnull, 'wb') as devnull:
+         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=devnull,
+                              universal_newlines=True)
+-        output = p.communicate()[0]
++        pkg_list = json.loads(p.communicate()[0])
  
-+$(1)-show-info:
-+	@:
-+	$$(info $$(call clean-json,{ $$(call json-info,$(2)) }))
-+
- $(1)-graph-depends: graph-depends-requirements
- 	$(call pkg-graph-depends,$(1),--direct)
+-    for l in output.splitlines():
+-        if " -> " in l:
+-            pkg = l.split(" -> ")[0]
+-            deps[pkg] += l.split(" -> ")[1].split()
+-            for p in l.split(" -> ")[1].split():
+-                rdeps[p].append(pkg)
+-        else:
+-            pkg, type_version = l.split(": ", 1)
+-            t, v = "{} -".format(type_version).split(None, 2)[:2]
+-            deps['all'].append(pkg)
+-            types[pkg] = t
+-            versions[pkg] = v
++    for pkg in pkg_list:
++        deps['all'].append(pkg)
++        types[pkg] = pkg_list[pkg]["type"]
++        deps[pkg] = pkg_list[pkg].get("dependencies", [])
++        for p in deps[pkg]:
++            rdeps[p].append(pkg)
++        versions[pkg] = \
++            None if pkg_list[pkg]["type"] == "rootfs" \
++            else "virtual" if pkg_list[pkg]["virtual"] \
++            else pkg_list[pkg]["version"]
  
-@@ -1099,6 +1103,7 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
- 	$(1)-rsync \
- 	$(1)-show-dependency-tree \
- 	$(1)-show-depends \
-+	$(1)-show-info \
- 	$(1)-show-version \
- 	$(1)-source
- 
+     return (deps, rdeps, types, versions)
 -- 
 2.14.1
