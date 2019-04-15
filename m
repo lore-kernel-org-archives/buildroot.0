@@ -1,119 +1,73 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 15 Apr 2019 10:55:57 +0200
-Subject: [Buildroot] [PATCH v4 5/6] qt5base: Fix inconsistencies when
- overriding qmake properties
-In-Reply-To: <e475f67f-4e66-2ce7-1f44-f753851b59e0@andin.de>
-References: <20190322183904.22401-1-anaumann@ultratronik.de>
- <20190322183904.22401-6-anaumann@ultratronik.de>
- <bec329fc-39c7-9c8b-a2b1-0254947899a9@mind.be>
- <e475f67f-4e66-2ce7-1f44-f753851b59e0@andin.de>
-Message-ID: <17eb2833-9b74-6559-8940-30574984d9ee@mind.be>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 15 Apr 2019 11:07:57 +0200
+Subject: [Buildroot] [PATCH v2] package/wpebackend-fdo: package needs
+ wayland libegl
+In-Reply-To: <20190414201225.21081-1-giulio.benetti@micronovasrl.com>
+References: <0ab8f13f-225e-29cd-c1e5-7ca2c3897ed6@mind.be>
+ <20190414201225.21081-1-giulio.benetti@micronovasrl.com>
+Message-ID: <011a4092-54fb-d2dc-9170-8ce7579dc14e@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi all,
 
-
-On 15/04/2019 08:34, Andreas Naumann wrote:
-> Hi Arnout,
+Il 14/04/2019 22:12, Giulio Benetti ha scritto:
+> Now wpebackend-fdo depends only on HAS_LIBEGL but if libegl is not of
+> wayland type, build breaks due to different EGLNativeWindowType types
+> depending on backends(fb,x11,wl).
 > 
-> Am 14.04.19 um 12:12 schrieb Arnout Vandecappelle:
->>
->>
->> On 22/03/2019 19:39, Andreas Naumann wrote:
->>> When querying the qmake properties with our custom qt.conf present, I noticed
->>> that they were different from the built-in ones (without qt.conf).
->>> Most notably QT_INSTALL_PREFIX was a concatenated string of two absolute pathes
->>> (hostdir + sysroot).
->>>
->>> This is due to Prefix being set to our HOST_DIR and HostPrefix not being set at
->>> all. I guess this was also the root cause of the initial problem with
->>> qt.conf.in, because once Prefix and HostPrefix were set to their correct values,
->>> re-setting all the other default pathes became obsolete. (However, since our
->>> pathes for Headers, Plugins and Examples are non-default, they still have to be
->>> explicitely set.)
->>>
->>> There is one additional exception to this: Omitting 'Settings' leads to the
->>> CONFIGURATION path being plain /usr, whereas the default without qt.conf is
->>> /usr/etc/xdg. Thus 'Settings' is now also explicitely set, in order to keep
->>> behaviour with/without qt.conf as similar as possible.
->>
->> ? Since you said this patch is indeed independent of the rest, I was about to
->> apply, but then I noticed this...
->>
->> ? In the original qt.conf.in, Settings was explicitly set to /usr. Now, you
->> change it back to /usr/etc/xdg, which is indeed the Qt default. However, would
->> this not lead to runtime problems for people who actually use the settings
->> directory, because it will have changed location after Buildroot upgrade? If we
->> had the Qt default overridden before, I think we should keep that override (even
->> if it is maybe not such a great idea to override it).
->>
+> Modify:
+> 'depend on BR2_PACKAGE_HAS_LIBEGL'
+> to:
+> 'depend on BR2_PACKAGE_HAS_LIBEGL_WAYLAND'
+> in Config.in to avoid building if there is not a wayland egl backend.
+> Modify also comment in Config.in when package is not selectable
+> mentioning the need to have an OpenEGL-capable Wayland backend.
 > 
-> I agree and actually was a bit unsure if changing the value would create issues
-> for anybody. However within buildroot I have not found a package that actually
-> deploys anything to /usr/etc/xdg, which could also mean I didnt look hard enough.
-
- I can't say I *really* know what this Settings configuration is doing, but I
-*think* it is used by applications (and we don't ship many qt5-based
-applications, mainly libraries). Also I think it will typically not be populated
-during installation, but it will be used at runtime to read and save global
-settings.
-
-
-> I will try to finally prepare v5 of the set tonight. If I dont hear anything
-> else, I'll set the value back to /usr.
-
- Okay, thanks.
-
- Regards,
- Arnout
-
+> Fixes:
+> http://autobuild.buildroot.net/results/4f02b91f6ffffd194e09ed18c917b4f678b1a52d/
 > 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>   package/wpebackend-fdo/Config.in | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> regards,
-> Andreas
+> diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
+> index 2f5f965403..631f99fcb2 100644
+> --- a/package/wpebackend-fdo/Config.in
+> +++ b/package/wpebackend-fdo/Config.in
+> @@ -1,5 +1,5 @@
+> -comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable backend"
+> -	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+> +comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable Wayland backend"
+> +	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+>   		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+>   
+>   config BR2_PACKAGE_WPEBACKEND_FDO
+> @@ -9,7 +9,7 @@ config BR2_PACKAGE_WPEBACKEND_FDO
+>   	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, libglib2
+>   	depends on BR2_USE_WCHAR # libglib2
+>   	depends on BR2_USE_MMU # libglib2
+> -	depends on BR2_PACKAGE_HAS_LIBEGL
+> +	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+>   	select BR2_PACKAGE_LIBGLIB2
+>   	select BR2_PACKAGE_LIBWPE
+>   	select BR2_PACKAGE_WAYLAND
 > 
->>
->>>
->>> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
->>> ---
->>> ? package/qt5/qt5base/qt.conf.in | 17 +++--------------
->>> ? 1 file changed, 3 insertions(+), 14 deletions(-)
->>>
->>> diff --git a/package/qt5/qt5base/qt.conf.in b/package/qt5/qt5base/qt.conf.in
->>> index 9a0b9cd53b..46ebe61614 100644
->>> --- a/package/qt5/qt5base/qt.conf.in
->>> +++ b/package/qt5/qt5base/qt.conf.in
->>> @@ -1,19 +1,8 @@
->>> ? [Paths]
->>> -Prefix=@@HOST_DIR@@
->>> +Prefix=/usr
->>> +HostPrefix=@@HOST_DIR@@
->>> ? Sysroot=@@STAGING_DIR@@
->>> ? Headers=/usr/include/qt5
->>> -Libraries=/usr/lib
->>> -LibraryExecutables=/usr/libexec
->>> -Binaries=/usr/bin
->>> ? Plugins=/usr/lib/qt/plugins
->>> ? Examples=/usr/lib/qt/examples
->>> -Qml2Imports=/usr/qml
->>> -Imports=/usr/imports
->>> -Translations=/usr/translations
->>> -Examples=/usr/lib/qt/examples
->>> -Demos=/usr/lib/qt/examples
->>> -Tests=/usr/tests
->>> -Settings=/usr
->>
->> ? This is the original setting of Settings.
->>
->> ? Regards,
->> ? Arnout
->>
->>> -Documentation=/usr/doc
->>> -ArchData=/usr
->>> -Data=/usr
->>> +Settings=/usr/etc/xdg
->>>
->>
+
+This is broken, sorry, need to resend.
+
+-- 
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
