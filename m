@@ -1,70 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 15 Apr 2019 11:48:06 +0200
-Subject: [Buildroot] [PATCH 08/12 v2] fs: add all recursive dependencies
- to packages list
-In-Reply-To: <6dc29af3082c2b20bb4b385f63f1a35b4221fea1.1555273025.git.yann.morin.1998@free.fr>
-References: <cover.1555273025.git.yann.morin.1998@free.fr>
- <6dc29af3082c2b20bb4b385f63f1a35b4221fea1.1555273025.git.yann.morin.1998@free.fr>
-Message-ID: <73def981-39ad-1051-2132-29ae0d19cb32@mind.be>
+From: Jagan Teki <jagan@amarulasolutions.com>
+Date: Mon, 15 Apr 2019 15:19:15 +0530
+Subject: [Buildroot] [PATCH v2 1/1] board: rename pine64 to pine64_a64
+In-Reply-To: <be5ea5a8-7393-7293-200d-cc5f1fc7e365@mind.be>
+References: <lNEO_Exlu8W8Rjcd0oJ5vQ2ptr6KvnyYieAxGJuwAPSSa4Go3VPYfrZObxeECm6eCv1iWrGk1aaI8GXfqh1qEMvKZ5Nm_H0Ul49slqofIKA=@philipmolloy.com>
+ <be5ea5a8-7393-7293-200d-cc5f1fc7e365@mind.be>
+Message-ID: <CAMty3ZCcVctFZnJfn8A1B1yjR=jgEyniq7nk04P9OpuitByq=w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Sun, Apr 14, 2019 at 3:19 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>  Hi Philip, Jagan,
+>
+>  Let's sort out this confusion...
+>
+> On 30/03/2019 22:27, Philip Molloy wrote:
+> > The link to https://www.pine64.org/?page_id=1194 in
+> > board/pine64/pine64/readme.txt loads a page for the "PINE A64" board.
+> > Follow the convention of using the model name to identify the board.
+>
+>  One thing is clear: the vendor is pine64. The names of the boards, however,
+> don't seem so clear...
+>
+>  If I look at the pine64.org website, I see on the front page (at the moment)
+> three boards advertised, and they are named PINE A64-LTS, ROCK64, and SOPINE A64.
+>
+>  So I think we have two options. Either we keep the A64 bit, and the three
+> current boards should be named:
+>
+> pine64_pine_a64_defconfig and board/pine64/pine_a64
+> pine64_rock64_defconfig and board/pine64/rock64
+> pine64_sopine_a64_defconfig and board/pine64/sopine_a64
+>
+>  Or we say that the a64 is a bit redundant, and we call them
+>
+> pine64_pine_defconfig and board/pine64/pine
+> pine64_rock64_defconfig and board/pine64/rock64
+> pine64_sopine_defconfig and board/pine64/sopine
 
-
-On 14/04/2019 22:17, Yann E. MORIN wrote:
-> Currently, only first-level dependencies of a filesystem are added to
-> the global list of packages, thus missing all recursive dependencies.
-> 
-> Use the newly introduced recursive variable instead, which already
-> contains the rootfs-common dependencies too.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-> ---
->  fs/common.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/common.mk b/fs/common.mk
-> index 5ec28ca183..f7989eac57 100644
-> --- a/fs/common.mk
-> +++ b/fs/common.mk
-> @@ -190,7 +190,7 @@ rootfs-$(1): $$(BINARIES_DIR)/$$(ROOTFS_$(2)_FINAL_IMAGE_NAME)
->  
->  ifeq ($$(BR2_TARGET_ROOTFS_$(2)),y)
->  TARGETS_ROOTFS += rootfs-$(1)
-> -PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_DEPENDENCIES) $$(ROOTFS_COMMON_DEPENDENCIES))
-> +PACKAGES += $$(filter-out rootfs-%,$$(ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES))
-
- I don't like that we do this for rootfs but not for packages...
-
- So maybe we should indeed change that in the package infra itself:
-
--PACKAGES += $(1)
-+PACKAGES += $$($(2)_FINAL_RECURSIVE_DEPENDENCIES)
-
- (The $$ is as usual not really needed since it will anyway be expanded
-immediately because PACKAGES is defined as immediately-expanded (i.e. := instead
-of =)).
-
- And then of course also change the top-level Makefile to remove the use of
-_FINAL_ALL_DEPENDENCIES there.
-
- And as a bonus, you can remove -all-source, -all-external-deps and
--all-legal-info because PACKAGES is already complete.
-
- But this is diverging a little bit from the show-info integration :-)
-
- In other words, this patch is fine as is.
-
- Regards,
- Arnout
-
->  endif
->  
->  # Check for legacy POST_TARGETS rules
-> 
+This is what I'm recommended in another mail. The board name is PINE
+and it is A64 based same like SOPINE with A64 based.
