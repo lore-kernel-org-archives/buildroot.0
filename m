@@ -1,146 +1,95 @@
-From: Artem Panfilov <panfilov.artyom@gmail.com>
-Date: Tue, 16 Apr 2019 19:03:23 +0300
-Subject: [Buildroot] [PATCH v3] package/php: fix how external PCRE2 JIT is
- enabled
-Message-ID: <20190416160323.18514-1-panfilov.artyom@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 16 Apr 2019 19:22:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sane-backends: remove unneeded
+ first patch
+Message-ID: <20190416172245.18739-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch adds ac_cv_have_pcre2_jit cache variable to avoid
-the tests running on the host system during cross-compiling.
+This patch is not needed since version 1.0.25 and
+https://gitlab.com/sane-project/backends/commit/8434ea91623f313eeb68ac301f7c7abf65976fc8
 
-Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - add autoconf cache variable (suggested by Thomas Petazzoni)
-Changes v2 -> v3:
- - backport upstream patch (suggested by Arnout Vandecappelle)
----
- ....m4-add-ac_cv_have_pcre2_jit-variabl.patch | 91 +++++++++++++++++++
- package/php/php.mk                            |  9 ++
- 2 files changed, 100 insertions(+)
- create mode 100644 package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch
+ package/sane-backends/0001-qcam-x86.patch     | 61 -------------------
+ ...1-sane_backend-add-missing-config.h.patch} |  0
+ 2 files changed, 61 deletions(-)
+ delete mode 100644 package/sane-backends/0001-qcam-x86.patch
+ rename package/sane-backends/{0002-sane_backend-add-missing-config.h.patch => 0001-sane_backend-add-missing-config.h.patch} (100%)
 
-diff --git a/package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch b/package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch
-new file mode 100644
-index 0000000000..4fa24fda63
---- /dev/null
-+++ b/package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch
-@@ -0,0 +1,91 @@
-+From a9151b1a6abde8306c7b46ca52036b2dc9c1b76d Mon Sep 17 00:00:00 2001
-+From: Artem Panfilov <panfilov.artyom@gmail.com>
-+Date: Tue, 16 Apr 2019 12:02:05 +0300
-+Subject: [PATCH] ext/pcre/config0.m4: add ac_cv_have_pcre2_jit variable
-+
-+The HAVE_PCRE_JIT_SUPPORT check uses AC_RUN_IFELSE, which is not
-+available when cross-compiling. As a fallback, JIT support is enabled
-+based on CPU architecture. However, this may be wrong,
-+e.g. when the JIT the feature was not enabled in the pcre2 build.
-+
-+Add a cache variable for the PCRE JIT feature to make it possible to
-+override the check.
-+
-+Backported from: 12ee246ae45889004fc2c099c04cfff1ce6e8848
-+Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
-+---
-+ ext/pcre/config0.m4 | 56 +++++++++++++++++++++++----------------------
-+ 1 file changed, 29 insertions(+), 27 deletions(-)
-+
-+diff --git a/ext/pcre/config0.m4 b/ext/pcre/config0.m4
-+index b9542f0113..f964429431 100644
-+--- a/ext/pcre/config0.m4
-++++ b/ext/pcre/config0.m4
-+@@ -53,35 +53,37 @@ PHP_ARG_WITH(pcre-jit,,[  --with-pcre-jit         Enable PCRE JIT functionality
-+     AC_DEFINE(HAVE_PCRE, 1, [ ])
-+ 
-+     if test "$PHP_PCRE_JIT" != "no"; then
-+-      AC_MSG_CHECKING([for JIT support in PCRE2])
-++      AC_CACHE_CHECK([for JIT support in PCRE2], ac_cv_have_pcre2_jit, [
-+       AC_RUN_IFELSE([
-+-        AC_LANG_SOURCE([[
-+-            #include <pcre2.h>
-+-            #include <stdlib.h>
-+-            int main(void) {
-+-              uint32_t have_jit;
-+-              pcre2_config_8(PCRE2_CONFIG_JIT, &have_jit);
-+-              return !have_jit;
-+-            }
-+-        ]])], [
-+-        AC_MSG_RESULT([yes])
-+-        AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
-+-      ],
-+-      [
-+-        AC_MSG_RESULT([no])
-+-      ],
-+-      [
-+-        AC_CANONICAL_HOST
-+-        case $host_cpu in
-+-        arm*|i[34567]86|x86_64|mips*|powerpc*|sparc)
-+-          AC_MSG_RESULT([yes])
-+-          AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
-+-          ;;
-+-        *)
-+-          AC_MSG_RESULT([no])
-+-          ;;
-+-        esac
-++          AC_LANG_SOURCE([[
-++              #include <pcre2.h>
-++              #include <stdlib.h>
-++              int main(void) {
-++                uint32_t have_jit;
-++                pcre2_config_8(PCRE2_CONFIG_JIT, &have_jit);
-++                return !have_jit;
-++              }
-++          ]])], [
-++          ac_cv_have_pcre2_jit=yes
-++        ],
-++        [
-++          ac_cv_have_pcre2_jit=no
-++        ],
-++        [
-++          AC_CANONICAL_HOST
-++          case $host_cpu in
-++          arm*|i[34567]86|x86_64|mips*|powerpc*|sparc)
-++            ac_cv_have_pcre2_jit=yes
-++            ;;
-++          *)
-++            ac_cv_have_pcre2_jit=no
-++            ;;
-++          esac
-++        ])
-+       ])
-++      if test $ac_cv_have_pcre2_jit = yes; then
-++        AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
-++      fi
-+     fi
-+ 
-+     PHP_NEW_EXTENSION(pcre, php_pcre.c, no,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
-+-- 
-+2.17.1
-+
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 541c76755f..d3a4d3984d 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -246,6 +246,15 @@ PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_VALGRIND
- ifeq ($(BR2_PACKAGE_PCRE2),y)
- PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
- PHP_DEPENDENCIES += pcre2
-+
-+ifeq ($(BR2_PACKAGE_PCRE2_JIT),y)
-+PHP_CONF_OPTS += --with-pcre-jit=yes
-+PHP_CONF_ENV += ac_cv_have_pcre2_jit=yes
-+else
-+PHP_CONF_OPTS += --with-pcre-jit=no
-+PHP_CONF_ENV += ac_cv_have_pcre2_jit=no
-+endif
-+
- else
- # The bundled pcre library is not configurable through ./configure options,
- # and by default is configured to be thread-safe, so it wants pthreads. So
+diff --git a/package/sane-backends/0001-qcam-x86.patch b/package/sane-backends/0001-qcam-x86.patch
+deleted file mode 100644
+index f14dd0e980..0000000000
+--- a/package/sane-backends/0001-qcam-x86.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-[PATCH] backend/qcam.c: fix build on !x86
+-
+-inb/outb/ioperm are x86 specific interfaces, so replace with noops on
+-!x86.
+-
+-Inspired by similar patch in openwrt:
+-https://dev.openwrt.org/ticket/5689
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+----
+- backend/qcam.c |   14 +++++++++++++-
+- 1 file changed, 13 insertions(+), 1 deletion(-)
+-
+-Index: sane-backends-1.0.22/backend/qcam.c
+-===================================================================
+---- sane-backends-1.0.22.orig/backend/qcam.c
+-+++ sane-backends-1.0.22/backend/qcam.c
+-@@ -205,12 +205,20 @@
+- 
+- #endif /* <sys/io.h> || <asm/io.h> || <sys/hw.h> */
+- 
+-+/* inb / outb only exist on x86 */
+-+#if defined(__i386__) || defined(__x86_64__)
+- #define read_lpdata(d)		inb ((d)->port)
+- #define read_lpstatus(d)	inb ((d)->port + 1)
+- #define read_lpcontrol(d)	inb ((d)->port + 2)
+- #define write_lpdata(d,v)	outb ((v), (d)->port)
+- #define write_lpcontrol(d,v)	outb ((v), (d)->port + 2)
+--
+-+#else
+-+#define read_lpdata(d)		0
+-+#define read_lpstatus(d)	0
+-+#define read_lpcontrol(d)	0
+-+#define write_lpdata(d,v)
+-+#define write_lpcontrol(d,v)
+-+#endif
+- 
+- static SANE_Status
+- enable_ports (QC_Device * q)
+-@@ -219,8 +227,10 @@
+-   if (q->port < 0x278 || q->port > 0x3bc)
+-     return SANE_STATUS_INVAL;
+- 
+-+#if defined(__i386__) || defined(__x86_64__)
+-   if (ioperm (q->port, 3, 1) < 0)
+-     return SANE_STATUS_INVAL;
+-+#endif
+- 
+-   return SANE_STATUS_GOOD;
+- }
+-@@ -228,8 +238,10 @@
+- static SANE_Status
+- disable_ports (QC_Device * q)
+- {
+-+#if defined(__i386__) || defined(__x86_64__)
+-   if (ioperm (q->port, 3, 0) < 0)
+-     return SANE_STATUS_INVAL;
+-+#endif
+- 
+-   return SANE_STATUS_GOOD;
+- }
+diff --git a/package/sane-backends/0002-sane_backend-add-missing-config.h.patch b/package/sane-backends/0001-sane_backend-add-missing-config.h.patch
+similarity index 100%
+rename from package/sane-backends/0002-sane_backend-add-missing-config.h.patch
+rename to package/sane-backends/0001-sane_backend-add-missing-config.h.patch
 -- 
-2.17.1
+2.20.1
