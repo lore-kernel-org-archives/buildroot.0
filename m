@@ -1,34 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Apr 2019 22:10:38 +0200
-Subject: [Buildroot] [PATCH 09/12 v2] core: introduce new global
- show-info
-In-Reply-To: <2f487d6e-97d6-497d-561d-d6c526e36fe8@mind.be> (Arnout
- Vandecappelle's message of "Tue, 16 Apr 2019 21:49:03 +0200")
-References: <cover.1555273025.git.yann.morin.1998@free.fr>
- <e0509e7ca0439176b7f483afb7436bb85c4fbed3.1555273025.git.yann.morin.1998@free.fr>
- <357abbd3-e69f-1756-2112-587e9e8c850e@mind.be>
- <87tveye0yq.fsf@dell.be.48ers.dk>
- <2f487d6e-97d6-497d-561d-d6c526e36fe8@mind.be>
-Message-ID: <87pnplemo1.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 16 Apr 2019 22:11:10 +0200
+Subject: [Buildroot] [RFC 1/1] toolchain-external/Config.in: Allow to
+ select custom external-toolchain package
+In-Reply-To: <20190416060110.d55fk33dloukl5tx@vkochan-ThinkPad-T470p>
+References: <20190414212654.14910-1-vadim4j@gmail.com>
+ <f0ea00e5-8b75-807d-a1cd-245cd3bd080d@mind.be>
+ <20190415085724.0528c3f7@windsurf>
+ <ba3c32a6-d28a-bbb1-6ea5-b12136599f5a@mind.be> <20190415171509.GR2539@scaer>
+ <20190416060110.d55fk33dloukl5tx@vkochan-ThinkPad-T470p>
+Message-ID: <aa4b15a1-61b5-f01f-77a6-7a4e1fa1d78d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Hi,
 
- >> That should be pretty trivial to do with jq, E.G. something like:
- >> 
- >> https://stackoverflow.com/questions/25378013/how-to-convert-a-json-object-to-key-value-format-in-jq
+On 16/04/2019 08:01, Vadim Kochan wrote:
+> So, the solution with aggregation external tree toolchains into
+> .br2-external.in.toolchain and then include it into
+> toolchain/toolchain-external/Config.in looks good, and it is worth to try to
+> implement ?
 
- >  Yes, but then jq needs to be installed. The point is to be able to use the
- > show-info output in our own shell scripts without requiring an additional
- > package to be installed.
+ We all seem to agree that that is the only way to do it, indeed.
 
-Ok, but we do have a host-jq package and jq has no extra dependencies.
+ In my earlier mail I said it would be $BR2_EXTERNAL_FOO/toolchain/Config.in
+that would get included in there, but it should actually be
+$BR2_EXTERNAL_FOO/toolchain-external/Config.in
 
--- 
-Bye, Peter Korsgaard
+ Make sure that you post an RFC pretty early so we can check if we all really
+agree on the direction.
+
+ Regards,
+ Arnout
