@@ -1,36 +1,43 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Apr 2019 22:11:10 +0200
-Subject: [Buildroot] [RFC 1/1] toolchain-external/Config.in: Allow to
- select custom external-toolchain package
-In-Reply-To: <20190416060110.d55fk33dloukl5tx@vkochan-ThinkPad-T470p>
-References: <20190414212654.14910-1-vadim4j@gmail.com>
- <f0ea00e5-8b75-807d-a1cd-245cd3bd080d@mind.be>
- <20190415085724.0528c3f7@windsurf>
- <ba3c32a6-d28a-bbb1-6ea5-b12136599f5a@mind.be> <20190415171509.GR2539@scaer>
- <20190416060110.d55fk33dloukl5tx@vkochan-ThinkPad-T470p>
-Message-ID: <aa4b15a1-61b5-f01f-77a6-7a4e1fa1d78d@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 16 Apr 2019 22:13:15 +0200
+Subject: [Buildroot] [PATCH] package/madplay: fix build failure due to
+ old autotools macro
+In-Reply-To: <20190416102125.124084-1-giulio.benetti@micronovasrl.com>
+References: <20190416102125.124084-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190416221315.74b4c9c9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Tue, 16 Apr 2019 12:21:25 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
+> MKINSTALLDIRS is not automatically called by autotools when
+> autoreconfigured.
+> This leads to have install stage error:
+> `/bin/sh @MKINSTALLDIRS@
+> /home/dawncrow/buildroot-test/scripts/instance-0/output/target/usr/share
+> /bin/sh: 0: Can't open @MKINSTALLDIRS@`
+> because @MKINSTALLDIRS@ doesn't get substituted during autoreconf.
+> 
+> Add patch that explicitly calls AM_MKINSTALLDIRS macro to substitute
+> every @MKINSTALLDIRS@ occurence in *.in Makefile.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/744/7447c03426556f787f20f7ab2d36f0cacc4af1bd/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 
-On 16/04/2019 08:01, Vadim Kochan wrote:
-> So, the solution with aggregation external tree toolchains into
-> .br2-external.in.toolchain and then include it into
-> toolchain/toolchain-external/Config.in looks good, and it is worth to try to
-> implement ?
+Why is this package suddenly failing to build ? madplay hasn't been
+updated recently, so why do we have build failures and not before ?
 
- We all seem to agree that that is the only way to do it, indeed.
+Isn't the build failure related to the switch from gettext-gnu to
+gettext-tiny ?
 
- In my earlier mail I said it would be $BR2_EXTERNAL_FOO/toolchain/Config.in
-that would get included in there, but it should actually be
-$BR2_EXTERNAL_FOO/toolchain-external/Config.in
-
- Make sure that you post an RFC pretty early so we can check if we all really
-agree on the direction.
-
- Regards,
- Arnout
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
