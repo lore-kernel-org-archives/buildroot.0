@@ -1,52 +1,66 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 16 Apr 2019 23:33:40 +0200
-Subject: [Buildroot] [PATCH] package/ruby: security bump to version 2.4.6
-Message-ID: <20190416213340.14880-1-peter@korsgaard.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 16 Apr 2019 23:47:48 +0200
+Subject: [Buildroot] [PATCH] package/madplay: fix build failure due to
+ old autotools macro
+In-Reply-To: <20190416221315.74b4c9c9@windsurf>
+References: <20190416102125.124084-1-giulio.benetti@micronovasrl.com>
+ <20190416221315.74b4c9c9@windsurf>
+Message-ID: <75d9fba9-15ff-695a-6347-550bf26488c6@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Hello Thomas,
 
-- CVE-2019-8320: Delete directory using symlink when decompressing tar
-- CVE-2019-8321: Escape sequence injection vulnerability in verbose
-- CVE-2019-8322: Escape sequence injection vulnerability in gem owner
-- CVE-2019-8323: Escape sequence injection vulnerability in API response handling
-- CVE-2019-8324: Installing a malicious gem may lead to arbitrary code execution
-- CVE-2019-8325: Escape sequence injection vulnerability in errors
+Il 16/04/2019 22:13, Thomas Petazzoni ha scritto:
+> On Tue, 16 Apr 2019 12:21:25 +0200
+> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+> 
+>> MKINSTALLDIRS is not automatically called by autotools when
+>> autoreconfigured.
+>> This leads to have install stage error:
+>> `/bin/sh @MKINSTALLDIRS@
+>> /home/dawncrow/buildroot-test/scripts/instance-0/output/target/usr/share
+>> /bin/sh: 0: Can't open @MKINSTALLDIRS@`
+>> because @MKINSTALLDIRS@ doesn't get substituted during autoreconf.
+>>
+>> Add patch that explicitly calls AM_MKINSTALLDIRS macro to substitute
+>> every @MKINSTALLDIRS@ occurence in *.in Makefile.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/744/7447c03426556f787f20f7ab2d36f0cacc4af1bd/
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> 
+> Why is this package suddenly failing to build ? madplay hasn't been
+> updated recently, so why do we have build failures and not before ?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+MKINSTALLDIRS is very obsolete, but Autoconf and Automake are the same 
+version since 2017 and 2018, so they're not the problem even if I 
+thought they were.
+First failure is dated 14-04-2019.
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index b36d49461c..fa9eddc279 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2018/10/17/ruby-2-4-5-released/
--sha256 2f0cdcce9989f63ef7c2939bdb17b1ef244c4f384d85b8531d60e73d8cc31eeb  ruby-2.4.5.tar.xz
-+# https://www.ruby-lang.org/en/news/2019/04/01/ruby-2-4-6-released/
-+sha256 25da31b9815bfa9bba9f9b793c055a40a35c43c6adfb1fdbd81a09099f9b529c  ruby-2.4.6.tar.xz
- # License files, Locally calculated
- sha256 609292a6d848ab223073944fc2d844449391a5ba2055a8b5baf1726bc13b39cb  LEGAL
- sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 3e71596bb4..10424020a9 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- RUBY_VERSION_MAJOR = 2.4
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).5
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).6
- RUBY_VERSION_EXT = 2.4.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+> Isn't the build failure related to the switch from gettext-gnu to
+> gettext-tiny ?
+
+.config has "gettext-gnu" not "gettext-tiny", so that doesn't seem the 
+problem.
+I try to dig deeper.
+
+Best regards
 -- 
-2.11.0
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
+
+> Thomas
+> 
