@@ -1,46 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Apr 2019 22:31:15 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-04-15
-In-Reply-To: <f6c8d29f-eb44-6b16-a94b-a09186c47c2b@micronovasrl.com>
-References: <20190416060047.6838786EF6@hemlock.osuosl.org>
- <e6975dfa-1a60-c394-de64-2e11243181d2@micronovasrl.com>
- <20190416134438.246c63cf@windsurf>
- <f6c8d29f-eb44-6b16-a94b-a09186c47c2b@micronovasrl.com>
-Message-ID: <20190416223115.1c314a13@windsurf>
+Date: Tue, 16 Apr 2019 22:36:47 +0200
+Subject: [Buildroot] [git commit] package/linux-firmware: move
+ BR2_PACKAGE_LINUX_FIRMWARE_TI_CC2560 to Bluetooth
+Message-ID: <20190416203225.AC1848EC79@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=0edbbe548f56367ead0feb354c27c0a0d42778e0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 16 Apr 2019 17:18:54 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+This moves the BR2_PACKAGE_LINUX_FIRMWARE_TI_CC2560 option to the
+Bluetooth section of the config file. This chip is Bluetooth-only, so
+it belongs there instead of with the Wi-Fi/Bluetooth combo chips.
 
-> So, if I don't understand wrong, when BR2_SYSTEM_ENABLE_NLS is disabled 
-> we want all packages not to produce translation files.
+Signed-off-by: David Lechner <david@lechnology.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linux-firmware/Config.in | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-Ideally yes.
-
-> Then if a package tries anyway to produce translation files we need to 
-> fix it by checking BR2_SYSTEM_ENABLE_NLS(depends on 
-> !BR2_SYSTEM_ENABLE_NLS etc.) in its Config.in file.
-
-I guess you wanted to say "if a package tries anyway to produce
-translation files, we need to fix it by adding a depends on
-BR2_SYSTEM_ENABLE_NLS". If that's what you meant, then I believe the
-answer is no.
-
-gettext-tiny provides some dummy implementation of the gettext tools,
-so we can use these if a package really wants to generate translation
-files despite BR2_SYSTEM_ENABLE_NLS being disabled. However, if there's
-a reasonable way to tell the package to not generate translation files,
-I'd say we should prefer that.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index eaf68de8a5..6b182dc64f 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -59,6 +59,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_6174A_BT
+ 	help
+ 	  Firmware files for QCA Rome 6174A bluetooth support.
+ 
++config BR2_PACKAGE_LINUX_FIRMWARE_TI_CC2560
++	bool "TI CC2560"
++	help
++	  Firmware files for Bluetooth modules CC2560 and CC2560A
++
+ endmenu # Bluetooth
+ 
+ menu "WiFi firmware"
+@@ -282,11 +287,6 @@ config BR2_PACKAGE_LINUX_FIRMWARE_REDPINE_RS9113
+ 	help
+ 	  Firmware files for WLAN and Bluetooth modules rs9113
+ 
+-config BR2_PACKAGE_LINUX_FIRMWARE_TI_CC2560
+-	bool "TI CC2560"
+-	help
+-	  Firmware files for Bluetooth modules CC2560 and CC2560A
+-
+ config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL127X
+ 	bool "TI wl127x"
+ 	help
