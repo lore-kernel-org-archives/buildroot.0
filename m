@@ -1,67 +1,77 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 16 Apr 2019 13:40:31 -0400
-Subject: [Buildroot] [PATCH 1/1] package/nginx: bump version to 1.15.12
-Message-ID: <20190416174031.22170-1-aduskett@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 16 Apr 2019 21:45:45 +0200
+Subject: [Buildroot] [PATCH] package/madplay: fix build failure due to
+ old autotools macro
+In-Reply-To: <20190416102125.124084-1-giulio.benetti@micronovasrl.com>
+References: <20190416102125.124084-1-giulio.benetti@micronovasrl.com>
+Message-ID: <c905ca2b-dab2-525d-c1bf-27de0bc8c02d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- ...0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch | 4 ++--
- package/nginx/nginx.hash                                      | 4 ++--
- package/nginx/nginx.mk                                        | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch b/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
-index b4d8215b34..747a034aee 100644
---- a/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
-+++ b/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
-@@ -109,7 +109,7 @@ diff --git a/auto/unix b/auto/unix
- index 7dbf9d1..00a7370 100755
- --- a/auto/unix
- +++ b/auto/unix
--@@ -708,6 +708,10 @@ ngx_feature_incs='#include <errno.h>
-+@@ -736,6 +736,10 @@ ngx_feature_incs='#include <errno.h>
-                    #include <stdio.h>'
-  ngx_feature_path=
-  ngx_feature_libs=
-@@ -120,7 +120,7 @@ index 7dbf9d1..00a7370 100755
-  ngx_feature_test='printf("%d", sys_nerr);'
-  . auto/feature
-  
--@@ -756,6 +760,12 @@ if [ $ngx_found = no ]; then
-+@@ -784,6 +788,12 @@ if [ $ngx_found = no ]; then
-      . auto/feature
-  fi
-  
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 40dba402e2..114bf292ce 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	8f22ea2f6c0e0a221b6ddc02b6428a3ff708e2ad55f9361102b1c9f4142bdf93	nginx-1.15.7.tar.gz
-+sha256	3d5b90aa17de1700709ae4ec6c4d73d87c888b06c510391bf7104b006fdb2abe	nginx-1.15.12.tar.gz
- # License files, locally calculated
--sha256	e18f05bcaad47528f8b21861d4a0fb9815ca1bbb4be946c51a51d36623758bcc	LICENSE
-+sha256	28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509	LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 3bdd92b3f5..b8e41b8089 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NGINX_VERSION = 1.15.7
-+NGINX_VERSION = 1.15.12
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
--- 
-2.20.1
+On 16/04/2019 12:21, Giulio Benetti wrote:
+> MKINSTALLDIRS is not automatically called by autotools when
+> autoreconfigured.
+> This leads to have install stage error:
+> `/bin/sh @MKINSTALLDIRS@
+> /home/dawncrow/buildroot-test/scripts/instance-0/output/target/usr/share
+> /bin/sh: 0: Can't open @MKINSTALLDIRS@`
+> because @MKINSTALLDIRS@ doesn't get substituted during autoreconf.
+> 
+> Add patch that explicitly calls AM_MKINSTALLDIRS macro to substitute
+> every @MKINSTALLDIRS@ occurence in *.in Makefile.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/744/7447c03426556f787f20f7ab2d36f0cacc4af1bd/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>  ...4-configure-ac-call-AM_MKINSTALLDIRS.patch | 23 +++++++++++++++++++
+>  1 file changed, 23 insertions(+)
+>  create mode 100644 package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch
+> 
+> diff --git a/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch b/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch
+> new file mode 100644
+> index 0000000000..bc6c97efae
+> --- /dev/null
+> +++ b/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch
+> @@ -0,0 +1,23 @@
+> +configure.ac: call AM_MKINSTALLDIRS to substitute @MKINSTALLDIRS@
+> +
+> +MKINSTALLDIRS is obsolete and doesn't get automatically called.
+> +
+> +Force call AM_MKINSTALLDIRS() macro to substitute every @MKINSTALLDIRS@
+> +occurence in *.in files.
+> +
+> +Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+
+ What is the upstream status of this patch?
+
+> +
+> +diff -urpN madplay-0.15.2b.orig/configure.ac madplay-0.15.2b/configure.ac
+> +--- madplay-0.15.2b.orig/configure.ac	2019-04-16 12:06:03.781018755 +0200
+> ++++ madplay-0.15.2b/configure.ac	2019-04-16 12:07:48.399162610 +0200
+> +@@ -146,6 +146,10 @@ ALL_LINGUAS="en es fr hr no"
+> + AM_GNU_GETTEXT([use-libtool])
+> + AM_GNU_GETTEXT_VERSION(0.14.1)
+> + 
+> ++dnl Make sure AM_MKINSTALLDIRS gets called
+
+ That comment just repeats the function call. Better:
+
+dnl Substitute MKINSTALLDIRS
+
+ Regards,
+ Arnout
+
+> ++
+> ++AM_MKINSTALLDIRS()
+> ++
+> + dnl Checks for header files.
+> + 
+> + AC_HEADER_STDC
+> 
