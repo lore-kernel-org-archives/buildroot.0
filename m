@@ -1,60 +1,62 @@
-From: Vadym Kochan <vadim4j@gmail.com>
-Date: Tue, 16 Apr 2019 12:53:03 +0300
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-04-15
-In-Reply-To: <20190416094732.GA27198@lwo1-lhp-f71841>
-References: <20190416060047.6838786EF6@hemlock.osuosl.org>
- <20190416094732.GA27198@lwo1-lhp-f71841>
-Message-ID: <20190416095303.GA29377@lwo1-lhp-f71841>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 16 Apr 2019 12:21:25 +0200
+Subject: [Buildroot] [PATCH] package/madplay: fix build failure due to old
+ autotools macro
+Message-ID: <20190416102125.124084-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 16, 2019 at 12:47:32PM +0300, Vadym Kochan wrote:
-> Hi Thomas, All
-> 
-> On Tue, Apr 16, 2019 at 06:00:42AM -0000, Thomas Petazzoni wrote:
-> > Hello,
-> > 
-> > Build statistics for 2019-04-15
-> > ===============================
-> > 
-> >       branch |  OK | NOK | TIM | TOT |
-> >    2019.02.x |  25 |   0 |   0 |  25 |
-> >       master | 167 |  50 |   0 | 217 |
-> > 
-> > Results for branch 'master'
-> > ===========================
-> > 
-> > Classification of failures by reason
-> > ------------------------------------
-> > 
-> [SNIP]
-> >                     git-2.16.5 | 5 
-> 
-> By the way this old patch still fixes the issue with git + nls enabled:
-> https://patchwork.ozlabs.org/patch/962166/
-> 
-> [SNIP]
-> 
-> >          arm |                     git-2.16.5 | NOK | http://autobuild.buildroot.net/results/091b790ca6f5b46d5d29211dc1cb3ff05b62a965 |     
-> >       mipsel |                     git-2.16.5 | NOK | http://autobuild.buildroot.net/results/a69b58b35b270fdd2df9b076e7030bb594520197 |     
-> >         m68k |                     git-2.16.5 | NOK | http://autobuild.buildroot.net/results/f104c4e6ff41b1dd175f2d27f3b4ea7c9b61f7c5 |     
-> >          arm |                     git-2.16.5 | NOK | http://autobuild.buildroot.net/results/ee12bdba398a139995de5f6f6718be6a493541d9 |     
-> >         i686 |                     git-2.16.5 | NOK | http://autobuild.buildroot.net/results/74fa6b2bfbb1301e35c9dd1bbc04856c1cbf25f2 |     
-> 
-> [SNIP]
-> 
-> May be I need to re-think and provide better fix approach, but current one is simple and does
-> not require patch.
-> 
-> Regards,
-> Vadim Kochan
+MKINSTALLDIRS is not automatically called by autotools when
+autoreconfigured.
+This leads to have install stage error:
+`/bin/sh @MKINSTALLDIRS@
+/home/dawncrow/buildroot-test/scripts/instance-0/output/target/usr/share
+/bin/sh: 0: Can't open @MKINSTALLDIRS@`
+because @MKINSTALLDIRS@ doesn't get substituted during autoreconf.
 
-Sorry for the noise, even if you OK with the fix, I will anyway re-send it
-to fixup the author's email, which is invalid in this patch.
+Add patch that explicitly calls AM_MKINSTALLDIRS macro to substitute
+every @MKINSTALLDIRS@ occurence in *.in Makefile.
 
-Regards,
-Vadim Kochan
+Fixes:
+http://autobuild.buildroot.net/results/744/7447c03426556f787f20f7ab2d36f0cacc4af1bd/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ ...4-configure-ac-call-AM_MKINSTALLDIRS.patch | 23 +++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+ create mode 100644 package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch
+
+diff --git a/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch b/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch
+new file mode 100644
+index 0000000000..bc6c97efae
+--- /dev/null
++++ b/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch
+@@ -0,0 +1,23 @@
++configure.ac: call AM_MKINSTALLDIRS to substitute @MKINSTALLDIRS@
++
++MKINSTALLDIRS is obsolete and doesn't get automatically called.
++
++Force call AM_MKINSTALLDIRS() macro to substitute every @MKINSTALLDIRS@
++occurence in *.in files.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++
++diff -urpN madplay-0.15.2b.orig/configure.ac madplay-0.15.2b/configure.ac
++--- madplay-0.15.2b.orig/configure.ac	2019-04-16 12:06:03.781018755 +0200
+++++ madplay-0.15.2b/configure.ac	2019-04-16 12:07:48.399162610 +0200
++@@ -146,6 +146,10 @@ ALL_LINGUAS="en es fr hr no"
++ AM_GNU_GETTEXT([use-libtool])
++ AM_GNU_GETTEXT_VERSION(0.14.1)
++ 
+++dnl Make sure AM_MKINSTALLDIRS gets called
+++
+++AM_MKINSTALLDIRS()
+++
++ dnl Checks for header files.
++ 
++ AC_HEADER_STDC
+-- 
+2.17.1
