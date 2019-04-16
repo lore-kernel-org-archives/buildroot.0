@@ -1,60 +1,83 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Date: Tue, 16 Apr 2019 17:18:54 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-04-15
-In-Reply-To: <20190416134438.246c63cf@windsurf>
-References: <20190416060047.6838786EF6@hemlock.osuosl.org>
- <e6975dfa-1a60-c394-de64-2e11243181d2@micronovasrl.com>
- <20190416134438.246c63cf@windsurf>
-Message-ID: <f6c8d29f-eb44-6b16-a94b-a09186c47c2b@micronovasrl.com>
+Subject: [Buildroot] [PATCH 1/1] package/easydbus: bump to version
+ b86721147b265dfefc9a857669408cb6eb3d6560
+Message-ID: <20190416151854.14650-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Remove patch (already in version)
 
-Il 16/04/2019 13:44, Thomas Petazzoni ha scritto:
-> Hello,
-> 
-> On Tue, 16 Apr 2019 12:24:41 +0200
-> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
-> 
->>>     vdr-plugin-vnsiserver-v1.8.0 | 1
->>
->> This ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ is fixed by:
->> https://patchwork.ozlabs.org/patch/1085284/
-> 
-> Yes, but I think https://patchwork.ozlabs.org/patch/1074926/ is a
-> better fix. This still makes your patch relevant in general, to bump
-> gettext-tiny and take advantage of the fixes.
-> 
-> In fact in theory, gettext-tiny msg* tools should not even be needed:
-> gettext-tiny is only used when BR2_SYSTEM_ENABLE_NLS is disabled, and
-> therefore when we don't want translation files at all. Of course, there
-> are probably some packages that will still try to call msg* tools when
-> they don't have an option to disable NLS support. But when they do, we
-> should preferably use that.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-easydbus-is-a-C-project-file.patch   | 33 -------------------
+ package/easydbus/easydbus.hash                |  2 +-
+ package/easydbus/easydbus.mk                  |  2 +-
+ 3 files changed, 2 insertions(+), 35 deletions(-)
+ delete mode 100644 package/easydbus/0001-easydbus-is-a-C-project-file.patch
 
-So, if I don't understand wrong, when BR2_SYSTEM_ENABLE_NLS is disabled 
-we want all packages not to produce translation files.
-Then if a package tries anyway to produce translation files we need to 
-fix it by checking BR2_SYSTEM_ENABLE_NLS(depends on 
-!BR2_SYSTEM_ENABLE_NLS etc.) in its Config.in file.
-
-Am I right?
-
-Thanks
-Best regards
+diff --git a/package/easydbus/0001-easydbus-is-a-C-project-file.patch b/package/easydbus/0001-easydbus-is-a-C-project-file.patch
+deleted file mode 100644
+index 1c149c582c..0000000000
+--- a/package/easydbus/0001-easydbus-is-a-C-project-file.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From a4bd47f593fbe55bd3ab17532e64be74aff5b29d Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sat, 17 Nov 2018 11:38:05 +0100
+-Subject: [PATCH] easydbus is a C project file
+-
+-Specify that easydbus is a C project file otherwise build will fail if
+-no C++ compiler is found by cmake
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/486c3cd98124e7415dee2fd1463bd5e0fcc9ba91
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/mniestroj/easydbus/pull/2]
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 58ccb2d..575eb24 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -5,7 +5,7 @@
+- #
+- 
+- cmake_minimum_required(VERSION 2.6)
+--project(easydbus)
+-+project(easydbus C)
+- 
+- add_definitions("-Wall -Wextra -Wno-unused-parameter")
+- set(CMAKE_C_FLAGS_RELEASE "-O2")
+--- 
+-2.17.1
+-
+diff --git a/package/easydbus/easydbus.hash b/package/easydbus/easydbus.hash
+index 0ef73f23f9..5e0484e9a6 100644
+--- a/package/easydbus/easydbus.hash
++++ b/package/easydbus/easydbus.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256 3e5907664f5dfebbc0e652faf87564fd58dbd639742f442c100ef2db8be46e52 easydbus-59c340f2cd2c92ded82f9d4436866847f295faab.tar.gz
++sha256 4626d6af3d9000d7e6ee9723abba7cd5f01d1c52420a80d8259dfa2d884faa11 easydbus-b86721147b265dfefc9a857669408cb6eb3d6560.tar.gz
+diff --git a/package/easydbus/easydbus.mk b/package/easydbus/easydbus.mk
+index 376b09bfca..5e6de73c31 100644
+--- a/package/easydbus/easydbus.mk
++++ b/package/easydbus/easydbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EASYDBUS_VERSION = 59c340f2cd2c92ded82f9d4436866847f295faab
++EASYDBUS_VERSION = b86721147b265dfefc9a857669408cb6eb3d6560
+ EASYDBUS_SITE = $(call github,mniestroj,easydbus,$(EASYDBUS_VERSION))
+ EASYDBUS_DEPENDENCIES = luainterpreter libglib2
+ EASYDBUS_LICENSE = MIT
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.20.1
