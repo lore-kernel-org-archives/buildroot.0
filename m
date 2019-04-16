@@ -1,166 +1,146 @@
-From: Anisse Astier <anisse@astier.eu>
-Date: Tue, 16 Apr 2019 17:48:42 +0200
-Subject: [Buildroot] [PATCH v2] package/go: fix building host go
- toolchain when target isn't supported
-In-Reply-To: <20190415204951.18744-1-arnout@mind.be>
-References: <20190415204951.18744-1-arnout@mind.be>
-Message-ID: <20190416154842.7om7ktsvcaws7jlo@bifrost>
+From: Artem Panfilov <panfilov.artyom@gmail.com>
+Date: Tue, 16 Apr 2019 19:03:23 +0300
+Subject: [Buildroot] [PATCH v3] package/php: fix how external PCRE2 JIT is
+ enabled
+Message-ID: <20190416160323.18514-1-panfilov.artyom@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+This patch adds ac_cv_have_pcre2_jit cache variable to avoid
+the tests running on the host system during cross-compiling.
 
-Thanks for taking the time to test and improve this,
+Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
 
-On Mon, Apr 15, 2019 at 10:49:51PM +0200, Arnout Vandecappelle (Essensium/Mind) wrote:
-> From: Anisse Astier <anisse@astier.eu>
+---
+Changes v1 -> v2:
+ - add autoconf cache variable (suggested by Thomas Petazzoni)
+Changes v2 -> v3:
+ - backport upstream patch (suggested by Arnout Vandecappelle)
+---
+ ....m4-add-ac_cv_have_pcre2_jit-variabl.patch | 91 +++++++++++++++++++
+ package/php/php.mk                            |  9 ++
+ 2 files changed, 100 insertions(+)
+ create mode 100644 package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch
 
-This version is much better than my initial attempt, you should not
-preserve original authorship here.
-
-> 
-> The go toolchain can cross-compile by default. So most of the time,
-> building a toolchain that supports a target, allows us to also build go
-> binaries for the host. This is how support for host go packages was
-> added: we use the same toolchain that was initially built only for
-> target.
-> 
-> But we might want to build a go binary for the host, when compiling a
-> target for which go isn't supported. Then, building host-go will fail:
-> by default, we build go for a specific target, and give the toolchain
-> bootstrap scripts the cross compiler we'll use.
-> 
-> This change modifies this behaviour: we only assume the go toolchain is
-> cross-capable if we know the current target is supported. Otherwise this
-> is a simple host go tool. We don't need to set any of the options needed
-> for cross-compilation in that case.
-> 
-> Thus, only set all the target-specific go options under a condition that
-> the target arch is supported. The only option we still set is
-> HOST_GO_CGO_ENABLED, and we always set it to enabled.
-> 
-> It was also considered to create a separate package to build the
-> go-for-host compiler which would be used for host-go-packages, but that
-> would lead to a lot of duplication and is completely unnecessary.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/98b9c7aaff2af4d19adfedac00b768d92530ce94
-> http://autobuild.buildroot.net/results/bed228995ce3778720f991df9b41345a7c724a46
-> http://autobuild.buildroot.net/results/3b3ea148165b96513ea511ee0d4adb334a6afac8
-> 
-> Signed-off-by: Anisse Astier <anisse@astier.eu>
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Reviewed-by: Anisse Astier <anisse@astier.eu>
-
-I didn't get a chance to test it yet, I'll report back if I get the
-chance.
-
-> ---
-> v2 [Arnout]:
-> - revert the condition (ifeq instead of ifneq)
-> - move GOARCH and GOARM to HOST_GO_CROSS_ENV
-> - don't set empty variables
-> - don't set GOARCH at all in the host-only case
-> - *do* set HOST_GO_CGO_ENABLED in the host-only case (it should not
->   depend on threads on the target)
-> - add a small comment to the host-only case
-> - use HOST_GO_CROSS_ENV in HOST_GO_MAKE_ENV instead of in the command
-> - while we're at it, move CGO_ENABLED to HOST_GO_CROSS_ENV as well
-
-I think you mean move CGO_ENABLED to HOST_GO_MAKE_ENV. The change is
-correct though.
-
-Regards,
-
-Anisse
-
-
-> 
-> I was about to apply with some small changes, but the changes were
-> getting bigger and bigger so I felt I had to resubmit for review.
-> ---
->  package/go/go.mk | 37 +++++++++++++++++++++++--------------
->  1 file changed, 23 insertions(+), 14 deletions(-)
-> 
-> diff --git a/package/go/go.mk b/package/go/go.mk
-> index c27f161f48..8df02cc68d 100644
-> --- a/package/go/go.mk
-> +++ b/package/go/go.mk
-> @@ -11,6 +11,13 @@ GO_SOURCE = go$(GO_VERSION).src.tar.gz
->  GO_LICENSE = BSD-3-Clause
->  GO_LICENSE_FILES = LICENSE
->  
-> +HOST_GO_DEPENDENCIES = host-go-bootstrap
-> +HOST_GO_HOST_CACHE = $(HOST_DIR)/usr/share/host-go-cache
-> +HOST_GO_ROOT = $(HOST_DIR)/lib/go
-> +HOST_GO_TARGET_CACHE = $(HOST_DIR)/usr/share/go-cache
-> +
-> +ifeq ($(BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS),y)
-> +
->  ifeq ($(BR2_arm),y)
->  GO_GOARCH = arm
->  ifeq ($(BR2_ARM_CPU_ARMV5),y)
-> @@ -36,11 +43,6 @@ else ifeq ($(BR2_mips64el),y)
->  GO_GOARCH = mips64le
->  endif
->  
-> -HOST_GO_DEPENDENCIES = host-go-bootstrap
-> -HOST_GO_HOST_CACHE = $(HOST_DIR)/usr/share/host-go-cache
-> -HOST_GO_ROOT = $(HOST_DIR)/lib/go
-> -HOST_GO_TARGET_CACHE = $(HOST_DIR)/usr/share/go-cache
-> -
->  # For the convienience of target packages.
->  HOST_GO_TOOLDIR = $(HOST_GO_ROOT)/pkg/tool/linux_$(GO_GOARCH)
->  HOST_GO_TARGET_ENV = \
-> @@ -62,6 +64,19 @@ else
->  HOST_GO_CGO_ENABLED = 0
->  endif
->  
-> +HOST_GO_CROSS_ENV = \
-> +	CC_FOR_TARGET="$(TARGET_CC)" \
-> +	CXX_FOR_TARGET="$(TARGET_CXX)" \
-> +	GOARCH=$(GO_GOARCH) \
-> +	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
-> +	GO_ASSUME_CROSSCOMPILING=1
-> +
-> +else # !BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-> +# host-go can still be used to build packages for the host. No need to set all
-> +# the arch stuff since we will not be cross-compiling.
-> +HOST_GO_CGO_ENABLED = 1
-> +endif # BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-> +
->  # The go build system is not compatible with ccache, so use
->  # HOSTCC_NOCCACHE.  See https://github.com/golang/go/issues/11685.
->  HOST_GO_MAKE_ENV = \
-> @@ -71,21 +86,15 @@ HOST_GO_MAKE_ENV = \
->  	GOROOT_FINAL=$(HOST_GO_ROOT) \
->  	GOROOT="$(@D)" \
->  	GOBIN="$(@D)/bin" \
-> -	GOARCH=$(GO_GOARCH) \
-> -	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
->  	GOOS=linux \
->  	CC=$(HOSTCC_NOCCACHE) \
->  	CXX=$(HOSTCXX_NOCCACHE) \
-> -	GO_ASSUME_CROSSCOMPILING=1
-> -
-> -HOST_GO_TARGET_CC = \
-> -	CC_FOR_TARGET="$(TARGET_CC)" \
-> -	CXX_FOR_TARGET="$(TARGET_CXX)"
-> +	CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
-> +	$(HOST_GO_CROSS_ENV)
->  
->  define HOST_GO_BUILD_CMDS
->  	cd $(@D)/src && \
-> -		$(HOST_GO_MAKE_ENV) $(HOST_GO_TARGET_CC) CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
-> -		./make.bash $(if $(VERBOSE),-v)
-> +		$(HOST_GO_MAKE_ENV) ./make.bash $(if $(VERBOSE),-v)
->  endef
->  
->  define HOST_GO_INSTALL_CMDS
-> -- 
-> 2.20.1
-> 
+diff --git a/package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch b/package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch
+new file mode 100644
+index 0000000000..4fa24fda63
+--- /dev/null
++++ b/package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch
+@@ -0,0 +1,91 @@
++From a9151b1a6abde8306c7b46ca52036b2dc9c1b76d Mon Sep 17 00:00:00 2001
++From: Artem Panfilov <panfilov.artyom@gmail.com>
++Date: Tue, 16 Apr 2019 12:02:05 +0300
++Subject: [PATCH] ext/pcre/config0.m4: add ac_cv_have_pcre2_jit variable
++
++The HAVE_PCRE_JIT_SUPPORT check uses AC_RUN_IFELSE, which is not
++available when cross-compiling. As a fallback, JIT support is enabled
++based on CPU architecture. However, this may be wrong,
++e.g. when the JIT the feature was not enabled in the pcre2 build.
++
++Add a cache variable for the PCRE JIT feature to make it possible to
++override the check.
++
++Backported from: 12ee246ae45889004fc2c099c04cfff1ce6e8848
++Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
++---
++ ext/pcre/config0.m4 | 56 +++++++++++++++++++++++----------------------
++ 1 file changed, 29 insertions(+), 27 deletions(-)
++
++diff --git a/ext/pcre/config0.m4 b/ext/pcre/config0.m4
++index b9542f0113..f964429431 100644
++--- a/ext/pcre/config0.m4
+++++ b/ext/pcre/config0.m4
++@@ -53,35 +53,37 @@ PHP_ARG_WITH(pcre-jit,,[  --with-pcre-jit         Enable PCRE JIT functionality
++     AC_DEFINE(HAVE_PCRE, 1, [ ])
++ 
++     if test "$PHP_PCRE_JIT" != "no"; then
++-      AC_MSG_CHECKING([for JIT support in PCRE2])
+++      AC_CACHE_CHECK([for JIT support in PCRE2], ac_cv_have_pcre2_jit, [
++       AC_RUN_IFELSE([
++-        AC_LANG_SOURCE([[
++-            #include <pcre2.h>
++-            #include <stdlib.h>
++-            int main(void) {
++-              uint32_t have_jit;
++-              pcre2_config_8(PCRE2_CONFIG_JIT, &have_jit);
++-              return !have_jit;
++-            }
++-        ]])], [
++-        AC_MSG_RESULT([yes])
++-        AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
++-      ],
++-      [
++-        AC_MSG_RESULT([no])
++-      ],
++-      [
++-        AC_CANONICAL_HOST
++-        case $host_cpu in
++-        arm*|i[34567]86|x86_64|mips*|powerpc*|sparc)
++-          AC_MSG_RESULT([yes])
++-          AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
++-          ;;
++-        *)
++-          AC_MSG_RESULT([no])
++-          ;;
++-        esac
+++          AC_LANG_SOURCE([[
+++              #include <pcre2.h>
+++              #include <stdlib.h>
+++              int main(void) {
+++                uint32_t have_jit;
+++                pcre2_config_8(PCRE2_CONFIG_JIT, &have_jit);
+++                return !have_jit;
+++              }
+++          ]])], [
+++          ac_cv_have_pcre2_jit=yes
+++        ],
+++        [
+++          ac_cv_have_pcre2_jit=no
+++        ],
+++        [
+++          AC_CANONICAL_HOST
+++          case $host_cpu in
+++          arm*|i[34567]86|x86_64|mips*|powerpc*|sparc)
+++            ac_cv_have_pcre2_jit=yes
+++            ;;
+++          *)
+++            ac_cv_have_pcre2_jit=no
+++            ;;
+++          esac
+++        ])
++       ])
+++      if test $ac_cv_have_pcre2_jit = yes; then
+++        AC_DEFINE(HAVE_PCRE_JIT_SUPPORT, 1, [])
+++      fi
++     fi
++ 
++     PHP_NEW_EXTENSION(pcre, php_pcre.c, no,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
++-- 
++2.17.1
++
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 541c76755f..d3a4d3984d 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -246,6 +246,15 @@ PHP_POST_CONFIGURE_HOOKS += PHP_DISABLE_VALGRIND
+ ifeq ($(BR2_PACKAGE_PCRE2),y)
+ PHP_CONF_OPTS += --with-pcre-regex=$(STAGING_DIR)/usr
+ PHP_DEPENDENCIES += pcre2
++
++ifeq ($(BR2_PACKAGE_PCRE2_JIT),y)
++PHP_CONF_OPTS += --with-pcre-jit=yes
++PHP_CONF_ENV += ac_cv_have_pcre2_jit=yes
++else
++PHP_CONF_OPTS += --with-pcre-jit=no
++PHP_CONF_ENV += ac_cv_have_pcre2_jit=no
++endif
++
+ else
+ # The bundled pcre library is not configurable through ./configure options,
+ # and by default is configured to be thread-safe, so it wants pthreads. So
+-- 
+2.17.1
