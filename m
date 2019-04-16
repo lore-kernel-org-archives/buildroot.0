@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 16 Apr 2019 21:45:45 +0200
-Subject: [Buildroot] [PATCH] package/madplay: fix build failure due to
- old autotools macro
-In-Reply-To: <20190416102125.124084-1-giulio.benetti@micronovasrl.com>
-References: <20190416102125.124084-1-giulio.benetti@micronovasrl.com>
-Message-ID: <c905ca2b-dab2-525d-c1bf-27de0bc8c02d@mind.be>
+Date: Tue, 16 Apr 2019 21:46:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: enable back static
+ build
+In-Reply-To: <20190416094106.30125-1-fontaine.fabrice@gmail.com>
+References: <20190416094106.30125-1-fontaine.fabrice@gmail.com>
+Message-ID: <2c6d4d36-9621-e141-fc31-436d8fd3921e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,65 +13,21 @@ To: buildroot@busybox.net
 
 
 
-On 16/04/2019 12:21, Giulio Benetti wrote:
-> MKINSTALLDIRS is not automatically called by autotools when
-> autoreconfigured.
-> This leads to have install stage error:
-> `/bin/sh @MKINSTALLDIRS@
-> /home/dawncrow/buildroot-test/scripts/instance-0/output/target/usr/share
-> /bin/sh: 0: Can't open @MKINSTALLDIRS@`
-> because @MKINSTALLDIRS@ doesn't get substituted during autoreconf.
-> 
-> Add patch that explicitly calls AM_MKINSTALLDIRS macro to substitute
-> every @MKINSTALLDIRS@ occurence in *.in Makefile.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/744/7447c03426556f787f20f7ab2d36f0cacc4af1bd/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  ...4-configure-ac-call-AM_MKINSTALLDIRS.patch | 23 +++++++++++++++++++
->  1 file changed, 23 insertions(+)
->  create mode 100644 package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch
-> 
-> diff --git a/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch b/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch
-> new file mode 100644
-> index 0000000000..bc6c97efae
-> --- /dev/null
-> +++ b/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch
-> @@ -0,0 +1,23 @@
-> +configure.ac: call AM_MKINSTALLDIRS to substitute @MKINSTALLDIRS@
-> +
-> +MKINSTALLDIRS is obsolete and doesn't get automatically called.
-> +
-> +Force call AM_MKINSTALLDIRS() macro to substitute every @MKINSTALLDIRS@
-> +occurence in *.in files.
-> +
-> +Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+On 16/04/2019 11:41, Fabrice Fontaine wrote:
+> +# Disable plugins as some of them (like l16mono) can't be built statically
+> +ifeq ($(BR2_STATIC_LIBS),y)
+> +WIRESHARK_CONF_OPTS += \
+> +	-DENABLE_PLUGINS=OFF \
+> +	-DENABLE_STATIC=ON
+> +else
+> +WIRESHARK_CONF_OPTS += \
+> +	-DENABLE_PLUGINS=ON \
+> +	-DENABLE_STATIC=OFF
 
- What is the upstream status of this patch?
-
-> +
-> +diff -urpN madplay-0.15.2b.orig/configure.ac madplay-0.15.2b/configure.ac
-> +--- madplay-0.15.2b.orig/configure.ac	2019-04-16 12:06:03.781018755 +0200
-> ++++ madplay-0.15.2b/configure.ac	2019-04-16 12:07:48.399162610 +0200
-> +@@ -146,6 +146,10 @@ ALL_LINGUAS="en es fr hr no"
-> + AM_GNU_GETTEXT([use-libtool])
-> + AM_GNU_GETTEXT_VERSION(0.14.1)
-> + 
-> ++dnl Make sure AM_MKINSTALLDIRS gets called
-
- That comment just repeats the function call. Better:
-
-dnl Substitute MKINSTALLDIRS
+ I don't know what this option does, but is it the appropriate thing to do in
+the STATIC_SHARED case?
 
  Regards,
  Arnout
 
-> ++
-> ++AM_MKINSTALLDIRS()
-> ++
-> + dnl Checks for header files.
-> + 
-> + AC_HEADER_STDC
-> 
+> +endif
