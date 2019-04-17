@@ -1,80 +1,110 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 17 Apr 2019 14:45:21 +0200
-Subject: [Buildroot] [PATCH] package/madplay: fix build failure due to
- old autotools macro
-In-Reply-To: <75d9fba9-15ff-695a-6347-550bf26488c6@micronovasrl.com>
-References: <20190416102125.124084-1-giulio.benetti@micronovasrl.com>
- <20190416221315.74b4c9c9@windsurf>
- <75d9fba9-15ff-695a-6347-550bf26488c6@micronovasrl.com>
-Message-ID: <dad71699-7fd9-c7a0-03a7-80352426dcc0@micronovasrl.com>
+From: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+Date: Wed, 17 Apr 2019 16:54:58 +0300
+Subject: [Buildroot] [PATCH] ltp-testsuite: Fix uClibc build with disabled
+ fts.h support
+Message-ID: <20190417135458.15505-1-Nikita.Sobolev@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Add patch, that fixes build on uClibc with disabled fts.h support
+and MUSL, which does not have fts.h at all.
 
-Il 16/04/2019 23:47, Giulio Benetti ha scritto:
-> Hello Thomas,
-> 
-> Il 16/04/2019 22:13, Thomas Petazzoni ha scritto:
->> On Tue, 16 Apr 2019 12:21:25 +0200
->> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
->>
->>> MKINSTALLDIRS is not automatically called by autotools when
->>> autoreconfigured.
->>> This leads to have install stage error:
->>> `/bin/sh @MKINSTALLDIRS@
->>> /home/dawncrow/buildroot-test/scripts/instance-0/output/target/usr/share
->>> /bin/sh: 0: Can't open @MKINSTALLDIRS@`
->>> because @MKINSTALLDIRS@ doesn't get substituted during autoreconf.
->>>
->>> Add patch that explicitly calls AM_MKINSTALLDIRS macro to substitute
->>> every @MKINSTALLDIRS@ occurence in *.in Makefile.
->>>
->>> Fixes:
->>> http://autobuild.buildroot.net/results/744/7447c03426556f787f20f7ab2d36f0cacc4af1bd/
->>>
->>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->>
->> Why is this package suddenly failing to build ? madplay hasn't been
->> updated recently, so why do we have build failures and not before ?
-> 
-> MKINSTALLDIRS is very obsolete, but Autoconf and Automake are the same
-> version since 2017 and 2018, so they're not the problem even if I
-> thought they were.
-> First failure is dated 14-04-2019.
+Original patch [1] will be a part of the next LTP release and
+current patch should be removed from Buildroot when LTP version
+is bumped.
 
-Found, it is due to this patch:
-https://git.buildroot.net/buildroot/commit/?id=c05cc5de868cc5af27afdb1451e30fcd1ecb2856
+[1] https://github.com/linux-test-project/ltp/commit/b24f3d32c54006af5499da5a7ac418eafcf6e459
 
-It sets MADPLAY_AUTORECONF = YES in madplay.mk
+Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
+---
+ .../0002-cpuset-Detect-missing-fts.h.patch         | 76 ++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
+ create mode 100644 package/ltp-testsuite/0002-cpuset-Detect-missing-fts.h.patch
 
-Then "autoreconf" is called and this is why @MKINSTALLDIRS@ is not 
-substituted correctly, due to obsolescence of MKINSTALLDIRS macro.
-
-I hope I've explained it decently.
-
->> Isn't the build failure related to the switch from gettext-gnu to
->> gettext-tiny ?
-> 
-> .config has "gettext-gnu" not "gettext-tiny", so that doesn't seem the
-> problem.
-> I try to dig deeper.
-> 
-> Best regards
-> 
-
-Best regards
+diff --git a/package/ltp-testsuite/0002-cpuset-Detect-missing-fts.h.patch b/package/ltp-testsuite/0002-cpuset-Detect-missing-fts.h.patch
+new file mode 100644
+index 0000000000..22d954ba51
+--- /dev/null
++++ b/package/ltp-testsuite/0002-cpuset-Detect-missing-fts.h.patch
+@@ -0,0 +1,76 @@
++From b24f3d32c54006af5499da5a7ac418eafcf6e459 Mon Sep 17 00:00:00 2001
++From: Petr Vorel <petr.vorel@gmail.com>
++Date: Thu, 21 Mar 2019 22:08:31 +0100
++Subject: [PATCH] cpuset: Detect missing fts.h
++
++This fixes build on uClibc with disabled fts.h support and MUSL, which
++does not have fts.h at all.
++
++Reported-by: Vineet Gupta <vgupta@synopsys.com>
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++[Nikita:
++ - back-ported to ltp-full-20190115 release]
++Signed-off-by: Nikita Sobolev <Nikita.Sobolev@synopsys.com>
++---
++ configure.ac                          | 1 +
++ include/mk/config.mk.in               | 1 +
++ m4/ltp-fts.m4                         | 7 +++++++
++ testcases/kernel/controllers/Makefile | 4 ++++
++ 4 files changed, 13 insertions(+)
++ create mode 100644 m4/ltp-fts.m4
++
++diff --git a/configure.ac b/configure.ac
++index e002c248e..f05db9d2e 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -231,6 +231,7 @@ LTP_CHECK_TPACKET_V3
++ LTP_CHECK_RLIMIT64
++ LTP_DETECT_HOST_CPU
++ LTP_CHECK_PERF_EVENT
+++LTP_CHECK_FTS_H
++ 
++ if test "x$with_numa" = xyes; then
++ 	LTP_CHECK_SYSCALL_NUMA
++diff --git a/include/mk/config.mk.in b/include/mk/config.mk.in
++index 01f178bff..d55fe9602 100644
++--- a/include/mk/config.mk.in
+++++ b/include/mk/config.mk.in
++@@ -46,6 +46,7 @@ SELINUX_LIBS		:= @SELINUX_LIBS@
++ TIRPC_CPPFLAGS		:= @TIRPC_CPPFLAGS@
++ TIRPC_LIBS		:= @TIRPC_LIBS@
++ KEYUTILS_LIBS		:= @KEYUTILS_LIBS@
+++HAVE_FTS_H		:= @HAVE_FTS_H@
++ 
++ prefix			:= @prefix@
++ 
++diff --git a/m4/ltp-fts.m4 b/m4/ltp-fts.m4
++new file mode 100644
++index 000000000..0da692f23
++--- /dev/null
+++++ b/m4/ltp-fts.m4
++@@ -0,0 +1,7 @@
+++dnl SPDX-License-Identifier: GPL-2.0-or-later
+++dnl Copyright (c) 2019 Petr Vorel <petr.vorel@gmail.com>
+++
+++AC_DEFUN([LTP_CHECK_FTS_H],[
+++	AC_CHECK_HEADERS(fts.h, [have_fts=1])
+++	AC_SUBST(HAVE_FTS_H, $have_fts)
+++])
++diff --git a/testcases/kernel/controllers/Makefile b/testcases/kernel/controllers/Makefile
++index 404073947..548692cb8 100644
++--- a/testcases/kernel/controllers/Makefile
+++++ b/testcases/kernel/controllers/Makefile
++@@ -29,6 +29,10 @@ LIBDIR			:= libcontrollers
++ LIB			:= $(LIBDIR)/libcontrollers.a
++ FILTER_OUT_DIRS		:= $(LIBDIR)
++ 
+++ifneq ($(HAVE_FTS_H),1)
+++	FILTER_OUT_DIRS += cpuset
+++endif
+++
++ $(LIBDIR):
++ 	mkdir -p "$@"
++ 
++-- 
++2.17.1
++
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.16.2
