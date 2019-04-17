@@ -1,63 +1,74 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 17 Apr 2019 08:16:33 +0200
-Subject: [Buildroot] [PATCH] package/luasec: bump to version 0.8
-Message-ID: <20190417061633.10558-1-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 17 Apr 2019 08:40:13 +0200
+Subject: [Buildroot] [git commit] package/nginx: bump version to 1.15.12
+Message-ID: <20190417063608.E49B98ED1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-the license file hash changed due to a copyright year update
+commit: https://git.buildroot.net/buildroot/commit/?id=05ca4c1343d4d2e2a18ad6b9e399414cd14dcb4f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
--LuaSec 0.7 license
--Copyright (C) 2006-2018 Bruno Silvestre, UFG
-+LuaSec 0.8 license
-+Copyright (C) 2006-2019 Bruno Silvestre, UFG
+The license file hash has been modified due to copyright year updates:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+- * Copyright (C) 2002-2018 Igor Sysoev
+- * Copyright (C) 2011-2018 Nginx, Inc.
++ * Copyright (C) 2002-2019 Igor Sysoev
++ * Copyright (C) 2011-2019 Nginx, Inc.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luasec/Config.in   | 4 ++--
- package/luasec/luasec.hash | 4 ++--
- package/luasec/luasec.mk   | 2 +-
+ .../nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch  | 4 ++--
+ package/nginx/nginx.hash                                              | 4 ++--
+ package/nginx/nginx.mk                                                | 2 +-
  3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/luasec/Config.in b/package/luasec/Config.in
-index 43527ab09..d22fd57a6 100644
---- a/package/luasec/Config.in
-+++ b/package/luasec/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LUASEC
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_LUASOCKET # runtime
- 	help
--	  LuaSec is a binding for OpenSSL library to provide TLS/SSL
--	  communication.
-+	  A binding for OpenSSL library to provide TLS/SSL communication
-+	  over LuaSocket.
- 
- 	  https://github.com/brunoos/luasec/wiki
-diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
-index 37fc08d45..30ef80101 100644
---- a/package/luasec/luasec.hash
-+++ b/package/luasec/luasec.hash
-@@ -1,3 +1,3 @@
- # computed by luarocks/buildroot
--sha256 383e183ba712f00b2fcbf60187177432ccde724a23ac6186075ceae620cf0b0a  luasec-0.7-1.src.rock
--sha256 b310a4c5a9927a43123e3ffcfaa5f5921b545b64d38ea55c7faf2a837547a200  luasec-luasec-0.7/LICENSE
-+sha256 3c993af8a392511380bf75f68525b5d1f2c6ecdddd17e72d0b51b39c710fa127  luasec-0.8-1.src.rock
-+sha256 93b708a114eb0b1028b0549116361da1d24131b042a2bd434c683c7a504877b8  luasec-luasec-0.8/LICENSE
-diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
-index 7ae729093..9ce358753 100644
---- a/package/luasec/luasec.mk
-+++ b/package/luasec/luasec.mk
+diff --git a/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch b/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
+index b4d8215b34..747a034aee 100644
+--- a/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
++++ b/package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch
+@@ -109,7 +109,7 @@ diff --git a/auto/unix b/auto/unix
+ index 7dbf9d1..00a7370 100755
+ --- a/auto/unix
+ +++ b/auto/unix
+-@@ -708,6 +708,10 @@ ngx_feature_incs='#include <errno.h>
++@@ -736,6 +736,10 @@ ngx_feature_incs='#include <errno.h>
+                    #include <stdio.h>'
+  ngx_feature_path=
+  ngx_feature_libs=
+@@ -120,7 +120,7 @@ index 7dbf9d1..00a7370 100755
+  ngx_feature_test='printf("%d", sys_nerr);'
+  . auto/feature
+  
+-@@ -756,6 +760,12 @@ if [ $ngx_found = no ]; then
++@@ -784,6 +788,12 @@ if [ $ngx_found = no ]; then
+      . auto/feature
+  fi
+  
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index 40dba402e2..114bf292ce 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	8f22ea2f6c0e0a221b6ddc02b6428a3ff708e2ad55f9361102b1c9f4142bdf93	nginx-1.15.7.tar.gz
++sha256	3d5b90aa17de1700709ae4ec6c4d73d87c888b06c510391bf7104b006fdb2abe	nginx-1.15.12.tar.gz
+ # License files, locally calculated
+-sha256	e18f05bcaad47528f8b21861d4a0fb9815ca1bbb4be946c51a51d36623758bcc	LICENSE
++sha256	28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509	LICENSE
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index 3bdd92b3f5..b8e41b8089 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUASEC_VERSION_UPSTREAM = 0.7
-+LUASEC_VERSION_UPSTREAM = 0.8
- LUASEC_VERSION = $(LUASEC_VERSION_UPSTREAM)-1
- LUASEC_SUBDIR = luasec-luasec-$(LUASEC_VERSION_UPSTREAM)
- LUASEC_LICENSE = MIT
--- 
-2.17.1
+-NGINX_VERSION = 1.15.7
++NGINX_VERSION = 1.15.12
+ NGINX_SITE = http://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
