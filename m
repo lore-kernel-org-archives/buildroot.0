@@ -1,24 +1,76 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 18 Apr 2019 00:16:41 +0200
-Subject: [Buildroot] Qt5 parallel build of qmake
-Message-ID: <5affd9e5-511b-394c-e2a0-51617489f1c1@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 18 Apr 2019 00:36:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: fix static build with
+ pcap
+Message-ID: <20190417223634.6878-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi all,
+Use pkg-config to find pcap dependencies
 
- I've put a few people in Cc that seem to be active users of Qt5.
+Fixes:
+ - http://autobuild.buildroot.org/results/277a24ad543a8f54cc8afde4f359f5d77b42eb7f
 
- I noticed during a test build that during the configure step, qmake is built
-but not in parallel. I think it should be possible to enable parallel build for
-qmake by passing MAKE="$(MAKE)" in the environment during configuration. Would
-someone be interested in checking that out?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...0003-FindPCAP.cmake-fix-static-build.patch | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/wireshark/0003-FindPCAP.cmake-fix-static-build.patch
 
- Ideally, you should also test with different make versions because they
-sometimes throw other stuff in the MAKE variable which may screw things up.
-
- Regards,
- Arnout
+diff --git a/package/wireshark/0003-FindPCAP.cmake-fix-static-build.patch b/package/wireshark/0003-FindPCAP.cmake-fix-static-build.patch
+new file mode 100644
+index 0000000000..425fa35ffc
+--- /dev/null
++++ b/package/wireshark/0003-FindPCAP.cmake-fix-static-build.patch
+@@ -0,0 +1,46 @@
++From 1ffe04d0f2ef3c7737f1f9667cfcdd6c4239bbbe Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 17 Apr 2019 23:58:55 +0200
++Subject: [PATCH] FindPCAP.cmake: fix static build
++
++When statically built, pcap can depends on other libraries such as
++-lnl-3. Add a call to pkg-config to find them and don't overwrite
++PCAP_LIBRARIES with PCAP_LIBRARY (use APPEND instead)
++
++Fixes:
++ - http://autobuild.buildroot.org/results/277a24ad543a8f54cc8afde4f359f5d77b42eb7f
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent yet (waiting feedback on first patch)]
++---
++ cmake/modules/FindPCAP.cmake | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/cmake/modules/FindPCAP.cmake b/cmake/modules/FindPCAP.cmake
++index dfd80415f6..826ccfbdcc 100644
++--- a/cmake/modules/FindPCAP.cmake
+++++ b/cmake/modules/FindPCAP.cmake
++@@ -9,6 +9,11 @@
++ include( FindWSWinLibs )
++ FindWSWinLibs( "WpdPack" "PCAP_HINTS" )
++ 
+++if (NOT WIN32)
+++  find_package(PkgConfig)
+++  pkg_search_module( PCAP libpcap )
+++endif()
+++
++ # The 64-bit wpcap.lib is under /x64
++ set ( _PLATFORM_SUBDIR "" )
++ if( WIN32 AND "${WIRESHARK_TARGET_PLATFORM}" STREQUAL "win64" )
++@@ -37,7 +42,7 @@ find_package_handle_standard_args( PCAP DEFAULT_MSG PCAP_LIBRARY PCAP_INCLUDE_DI
++ 
++ if( PCAP_FOUND )
++   set( PCAP_INCLUDE_DIRS ${PCAP_INCLUDE_DIR} )
++-  set( PCAP_LIBRARIES ${PCAP_LIBRARY} )
+++  list( APPEND PCAP_LIBRARIES ${PCAP_LIBRARY} )
++ else()
++   set( PCAP_INCLUDE_DIRS )
++   set( PCAP_LIBRARIES )
++-- 
++2.20.1
++
+-- 
+2.20.1
