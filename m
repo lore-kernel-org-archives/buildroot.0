@@ -1,41 +1,44 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Wed, 17 Apr 2019 10:17:12 +0300
-Subject: [Buildroot] [RFC 1/1] docs/adding-packages-generic.txt: Add note if
- package does not use source
-Message-ID: <20190417071712.7238-1-vadim4j@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 17 Apr 2019 09:27:21 +0200
+Subject: [Buildroot] [git commit] support/config-fragments/autobuild: test
+ the Andes nds32 architecture
+Message-ID: <20190417074345.1365D7F9A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add some description how to allow to add package which does not need
-any source code.
+commit: https://git.buildroot.net/buildroot/commit/?id=31161bfe9c4cdc2b799a7a7874fc9a062258f2c6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Che-Wei Chuang <cnoize@andestech.com>
+Signed-off-by: Greentime Hu <greentime@andestech.com>
+Signed-off-by: Nylon Chen <nylon7@andestech.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/manual/adding-packages-generic.txt | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ support/config-fragments/autobuild/andes-nds32.config    | 3 +++
+ support/config-fragments/autobuild/toolchain-configs.csv | 1 +
+ 2 files changed, 4 insertions(+)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 7be1754f54..96a57a519a 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -223,8 +223,13 @@ not and can not work as people would expect it should:
-   which Buildroot will use to download the tarball from
-   +LIBFOO_SITE+. If +HOST_LIBFOO_SOURCE+ is not specified, it defaults
-   to +LIBFOO_SOURCE+. If none are specified, then the value is assumed
--  to be +libfoo-$(LIBFOO_VERSION).tar.gz+. +
--  Example: +LIBFOO_SOURCE = foobar-$(LIBFOO_VERSION).tar.bz2+
-+  to be +libfoo-$(LIBFOO_VERSION).tar.gz+.
-+  In case when the package does not use any source code (e.g. only performs
-+  some target/host altering), then +LIBFOO_SOURCE+ should be specified
-+  with empty value. +
-+  Examples:
-+    +LIBFOO_SOURCE = foobar-$(LIBFOO_VERSION).tar.bz2+
-+    +LIBFOO_SOURCE =
+diff --git a/support/config-fragments/autobuild/andes-nds32.config b/support/config-fragments/autobuild/andes-nds32.config
+new file mode 100644
+index 0000000000..541677e002
+--- /dev/null
++++ b/support/config-fragments/autobuild/andes-nds32.config
+@@ -0,0 +1,3 @@
++BR2_nds32=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32=y
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index 60ce1a9786..15a69d60ee 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -22,6 +22,7 @@ support/config-fragments/autobuild/br-arm-full-static.config,x86_64
+ support/config-fragments/autobuild/sourcery-arm.config,x86
  
- * +LIBFOO_PATCH+ may contain a space-separated list of patch file
-   names, that Buildroot will download and apply to the package source
--- 
-2.14.1
+ # Toolchains used by test-pkg only when the '-a' option is passed:
++support/config-fragments/autobuild/andes-nds32.config,x86
+ support/config-fragments/autobuild/arm-aarch64.config,x86_64
+ support/config-fragments/autobuild/br-aarch64-glibc.config,x86_64
+ support/config-fragments/autobuild/br-arc-full-internal.config,any
