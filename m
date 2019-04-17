@@ -1,58 +1,42 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 17 Apr 2019 23:43:43 +0200
-Subject: [Buildroot] [RFC v2 2/7] package/mesa3d: add OSMesa classic needs
- dri swrast
+Date: Wed, 17 Apr 2019 23:43:44 +0200
+Subject: [Buildroot] [RFC v2 3/7] package/mesa3d: Only one swrast provider
+ can be built
 In-Reply-To: <20190417214348.15685-1-romain.naour@smile.fr>
 References: <20190417214348.15685-1-romain.naour@smile.fr>
-Message-ID: <20190417214348.15685-2-romain.naour@smile.fr>
+Message-ID: <20190417214348.15685-3-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The meson build system now check if dri swrast is enabled
-when OSMesa classic is enabled.
-
-See:
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=cbbd5bb889a2c271a504c379f36a7cb717a85af4
+https://cgit.freedesktop.org/mesa/mesa/commit/?id=de24d61765011ed4bfc169b8ad8cf67e86b1f3bd
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- Config.in.legacy         | 1 +
  package/mesa3d/Config.in | 4 ++++
- 2 files changed, 5 insertions(+)
+ 1 file changed, 4 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 98c0a43387..d10540b95e 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -148,6 +148,7 @@ comment "Legacy options removed in 2019.05"
- 
- config BR2_PACKAGE_MESA3D_OSMESA
- 	bool "mesa OSMesa option renamed"
-+	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
- 	select BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
- 	help
- 	  The option was renamed in order to match the naming used
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index bd05116aca..9bb95c3fd6 100644
+index 9bb95c3fd6..6ec395723a 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -267,10 +267,14 @@ comment "Off-screen Rendering"
+@@ -173,11 +173,15 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SVGA
  
- config BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
- 	bool "OSMesa (classic) library"
-+	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
- 	help
- 	  The OSMesa classic API provides functions for
- 	  making off-screen renderings.
- 
-+comment "OSMesa classic requires dri (classic) swrast"
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SWRAST
+ 	bool "Gallium swrast driver"
 +	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
-+
- if BR2_PACKAGE_MESA3D_DRIVER
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	help
+ 	  This is a software opengl implementation using the Gallium3D
+ 	  infrastructure.
  
- comment "Additional API Support"
++comment "Gallium swrast: Only one swrast provider can be built"
++	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
++
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
+ 	bool "Gallium vc4 driver"
+ 	depends on BR2_ARM_CPU_HAS_NEON || BR2_aarch64
 -- 
 2.20.1
