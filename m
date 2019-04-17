@@ -1,23 +1,24 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Apr 2019 08:55:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/check: bump to version 0.12
-In-Reply-To: <20190414160856.23052-1-fontaine.fabrice@gmail.com>
-References: <20190414160856.23052-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190417085528.53bd0fc4@windsurf>
+Date: Wed, 17 Apr 2019 08:55:35 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-schedule: bump to
+ version 0.6.0
+In-Reply-To: <20190415230436.20023-1-joseph.kogut@gmail.com>
+References: <20190415230436.20023-1-joseph.kogut@gmail.com>
+Message-ID: <20190417085535.635e0303@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 14 Apr 2019 18:08:56 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 15 Apr 2019 16:04:36 -0700
+Joseph Kogut <joseph.kogut@gmail.com> wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
 > ---
->  package/check/check.hash | 2 +-
->  package/check/check.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/python-schedule/python-schedule.hash | 8 ++++----
+>  package/python-schedule/python-schedule.mk   | 4 ++--
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 
 Applied to master, thanks.
 
