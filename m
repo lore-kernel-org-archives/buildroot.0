@@ -1,30 +1,50 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 17 Apr 2019 23:32:48 +0200
-Subject: [Buildroot] [git commit] package/syslog-ng: fix S01syslog-ng
- indentation
-Message-ID: <20190417212918.6700A8F005@busybox.osuosl.org>
+Date: Wed, 17 Apr 2019 23:32:42 +0200
+Subject: [Buildroot] [git commit] package/sysklogd: fix S0{1sys,
+ 2k}logd indentation
+Message-ID: <20190417212918.6039E8A50E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26c7e2a1a2ee71eb8f2871e642857e5cd1c02ce7
+commit: https://git.buildroot.net/buildroot/commit/?id=9064821d0f4ea9ebdb9466d2cb4c791de98a946b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Don't mix spaces and tabs, use only tabs
+Don't mix spaces and tabs, only use tabs
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/syslog-ng/S01syslog-ng | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/sysklogd/S01syslogd | 10 +++++-----
+ package/sysklogd/S02klogd   | 10 +++++-----
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/syslog-ng/S01syslog-ng b/package/syslog-ng/S01syslog-ng
-index 1d74bf8839..2ced6f8b00 100644
---- a/package/syslog-ng/S01syslog-ng
-+++ b/package/syslog-ng/S01syslog-ng
+diff --git a/package/sysklogd/S01syslogd b/package/sysklogd/S01syslogd
+index d0951f0235..2603632893 100644
+--- a/package/sysklogd/S01syslogd
++++ b/package/sysklogd/S01syslogd
 @@ -54,9 +54,9 @@ reload() {
+ }
+ 
+ case "$1" in
+-        start|stop|restart|reload)
+-                "$1";;
+-        *)
+-                echo "Usage: $0 {start|stop|restart|reload}"
+-                exit 1
++	start|stop|restart|reload)
++		"$1";;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
+diff --git a/package/sysklogd/S02klogd b/package/sysklogd/S02klogd
+index 93f39e1f0e..ba728aa99a 100644
+--- a/package/sysklogd/S02klogd
++++ b/package/sysklogd/S02klogd
+@@ -57,9 +57,9 @@ reload() {
  }
  
  case "$1" in
