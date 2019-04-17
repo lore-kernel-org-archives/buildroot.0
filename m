@@ -1,182 +1,133 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 17 Apr 2019 23:26:18 +0200
-Subject: [Buildroot] [RFC 1/1] br2-external: Alow to include toolchain
- from external tree
-In-Reply-To: <20190417204630.18746-1-vadim4j@gmail.com>
-References: <20190417204630.18746-1-vadim4j@gmail.com>
-Message-ID: <a37f9f50-381a-cdfb-4d78-bd78bbdd9f4c@mind.be>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 17 Apr 2019 23:29:23 +0200
+Subject: [Buildroot] [PATCH] package/madplay: fix build failure due to
+ old autotools macro
+In-Reply-To: <60d7cc47-7ec7-22df-d10c-07f073db5cc5@mind.be>
+References: <20190416102125.124084-1-giulio.benetti@micronovasrl.com>
+ <20190416221315.74b4c9c9@windsurf>
+ <75d9fba9-15ff-695a-6347-550bf26488c6@micronovasrl.com>
+ <dad71699-7fd9-c7a0-03a7-80352426dcc0@micronovasrl.com>
+ <60d7cc47-7ec7-22df-d10c-07f073db5cc5@mind.be>
+Message-ID: <334a62df-11d0-adc9-49dd-3420f67a759e@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Arnout,
 
-
-On 17/04/2019 22:46, Vadim Kochan wrote:
-> Add possibility to select toolchain from br2-external tree which
-> allows to easy use custom external toolchains by selecting them via
-> menuconfig as if they were integrated into buildroot.
+Il 17/04/2019 22:04, Arnout Vandecappelle ha scritto:
 > 
-> The br2-external tree should contain:
 > 
-> 	${br2-external}/external-toolchain/Config.in
+> On 17/04/2019 14:45, Giulio Benetti wrote:
+>> Hello Thomas,
+>>
+>> Il 16/04/2019 23:47, Giulio Benetti ha scritto:
+>>> Hello Thomas,
+>>>
+>>> Il 16/04/2019 22:13, Thomas Petazzoni ha scritto:
+>>>> On Tue, 16 Apr 2019 12:21:25 +0200
+>>>> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+>>>>
+>>>>> MKINSTALLDIRS is not automatically called by autotools when
+>>>>> autoreconfigured.
+>>>>> This leads to have install stage error:
+>>>>> `/bin/sh @MKINSTALLDIRS@
+>>>>> /home/dawncrow/buildroot-test/scripts/instance-0/output/target/usr/share
+>>>>> /bin/sh: 0: Can't open @MKINSTALLDIRS@`
+>>>>> because @MKINSTALLDIRS@ doesn't get substituted during autoreconf.
+>>>>>
+>>>>> Add patch that explicitly calls AM_MKINSTALLDIRS macro to substitute
+>>>>> every @MKINSTALLDIRS@ occurence in *.in Makefile.
+>>>>>
+>>>>> Fixes:
+>>>>> http://autobuild.buildroot.net/results/744/7447c03426556f787f20f7ab2d36f0cacc4af1bd/
+>>>>>
+>>>>>
+>>>>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>>>>
+>>>> Why is this package suddenly failing to build ? madplay hasn't been
+>>>> updated recently, so why do we have build failures and not before ?
+>>>
+>>> MKINSTALLDIRS is very obsolete, but Autoconf and Automake are the same
+>>> version since 2017 and 2018, so they're not the problem even if I
+>>> thought they were.
+>>> First failure is dated 14-04-2019.
+>>
+>> Found, it is due to this patch:
+>> https://git.buildroot.net/buildroot/commit/?id=c05cc5de868cc5af27afdb1451e30fcd1ecb2856
 > 
-> file to be included into external toolchains list.
+>   That commit was applied to master on Feb 15. However, the autobuilder errors
+> started on April 14. (There were also a number of autobuild errors in February,
+> but they were different errors and they were fixed.)
 > 
-> All such picked toolchains are sourced in:
+>   So no, that doesn't explain it.
 > 
-> 	toolchain/toolchain-external/Config.in
+>   What does explain it, however, is that NLS was only enabled in the autobuilders
+> since commit 472e8808d928af9787abd3303fb0b2b4d5916946 which I applied on April 14.
 > 
-> from auto-generated file ${O}/build/.br2-external.in.toolchain.
-
- Bikeshedding time: I would call the file .br2-external-toolchain.in.
-
+>   The thing is, all the @MKINSTALLDIRS@ things are under a condition like
 > 
-> Added new '-t' option in support/scripts/br2-external to generate
-> kconfig for the found toolchains from the all specified external trees.
+> if test "$(PACKAGE)" = "gettext-tools"; then
 > 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> ---
+> except for one, which is unconditional but is part of the rule
 > 
-> This is just PoC to rise the discussion about this concept.
+> install-data-yes: all
+>          $(mkinstalldirs) $(DESTDIR)$(datadir)
 > 
->  Makefile                               |  6 +++++-
->  support/scripts/br2-external           | 36 ++++++++++++++++++++++++++++++++--
->  toolchain/toolchain-external/Config.in |  2 ++
->  3 files changed, 41 insertions(+), 3 deletions(-)
+> and this rule only gets triggered by
 > 
-> diff --git a/Makefile b/Makefile
-> index 522c0b0606..4eceb88813 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -938,7 +938,7 @@ HOSTCFLAGS = $(CFLAGS_FOR_BUILD)
->  export HOSTCFLAGS
->  
->  .PHONY: prepare-kconfig
-> -prepare-kconfig: outputmakefile $(BUILD_DIR)/.br2-external.in
-> +prepare-kconfig: outputmakefile $(BUILD_DIR)/.br2-external.in $(BUILD_DIR)/.br2-external.in.toolchain
->  
->  $(BUILD_DIR)/buildroot-config/%onf:
->  	mkdir -p $(@D)/lxdialog
-> @@ -1042,6 +1042,10 @@ endif
->  $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
->  	$(Q)support/scripts/br2-external -k -o "$(@)" $(BR2_EXTERNAL)
->  
-> +.PHONY: $(BUILD_DIR)/.br2-external.in.toolchain
-> +$(BUILD_DIR)/.br2-external.in.toolchain: $(BUILD_DIR)
-> +	$(Q)support/scripts/br2-external -t -o "$(@)" $(BR2_EXTERNAL)
-
- I don't like much that it's a separate target. However, it's consistent with
-how .br2-external.in is called, so it's OK as it is.
-
-
->  # printvars prints all the variables currently defined in our
->  # Makefiles. Alternatively, if a non-empty VARS variable is passed,
->  # only the variables matching the make pattern passed in VARS are
-> diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-> index 00cb57d1ed..3ec332d93e 100755
-> --- a/support/scripts/br2-external
-> +++ b/support/scripts/br2-external
-> @@ -16,10 +16,11 @@ main() {
->      local OPT OPTARG
->      local br2_ext ofile ofmt
->  
-> -    while getopts :hkmo: OPT; do
-> +    while getopts :htkmo: OPT; do
->          case "${OPT}" in
->          h)  help; exit 0;;
->          o)  ofile="${OPTARG}";;
-> +        t)  ofmt="toolchain";;
->          k)  ofmt="kconfig";;
->          m)  ofmt="mk";;
->          :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
-> @@ -30,7 +31,7 @@ main() {
->      shift $((OPTIND-1))
->  
->      case "${ofmt}" in
-> -    mk|kconfig)
-> +    mk|kconfig|toolchain)
->          ;;
->      *)  error "no output format specified (-m/-k)\n";;
->      esac
-> @@ -188,6 +189,37 @@ do_kconfig() {
->      printf "endmenu # User-provided options\n"
->  }
->  
-> +# Generate the toolchain kconfig snippet for the br2-external tree.
-> +do_toolchain() {
-> +    local br2_name br2_ext
-> +
-> +    printf '#\n# Automatically generated file; DO NOT EDIT.\n#\n'
-> +    printf '\n'
-> +
-> +    if [ ${#BR2_EXT_NAMES[@]} -eq 0 ]; then
-> +        printf '# No br2-external tree defined.\n'
-> +        return
-> +    fi
-> +
-> +    for br2_name in "${BR2_EXT_NAMES[@]}"; do
-> +        eval br2_desc="\"\${BR2_EXT_DESCS_${br2_name}}\""
-> +        eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
-> +
-> +        if [ ! -f "${br2_ext}/toolchain-external/Config.in" ]; then
-> +            continue
-> +	fi
-
- There's some whitespace confusion here; this file uses spaces only.
-
-> +
-> +        # we have to duplicate it here too because otherwise BR2_EXTERNAL_*
-> +	# is not evaluated in Config.in
-
- Argh, that's mightily annoying... But I don't really see a better solution. The
-reason is that .br2-external.in only gets included after all the other files
-have already been included. Normally Kconfig is indepdent of the order in which
-you declare things, but not when you use a variable in a source directive...
-
- I don't see a good way around it. We could have yet another
-.br2-external-variables.in that gets included *before* all the rest, but that's
-also pretty ugly...
-
- Yann, any ideas?
-
-
- Assuming there is no better solution than this one, the patch looks pretty much
-OK except for the whitespace. I believe it covers all cases. It would be nice if
-the file would also contain *something* if there are some externals but none of
-them have a toolchain-external/Config.in, but I don't think it's worth spending
-time on that.
-
- For the final patch there should also be documentation of course.
-
- Regards,
- Arnout
-
-
-> +        printf 'config BR2_EXTERNAL_%s_PATH\n' "${br2_name}"
-> +        printf '\tstring\n'
-> +        printf '\tdefault "%s"\n' "${br2_ext}"
-> +
-> +        printf 'source "%s/toolchain-external/Config.in"\n' "${br2_ext}"
-> +        printf '\n'
-> +    done
-> +}
-> +
->  help() {
->      cat <<-_EOF_
->  	Usage:
-> diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-> index d234c1c552..70e8a89e5e 100644
-> --- a/toolchain/toolchain-external/Config.in
-> +++ b/toolchain/toolchain-external/Config.in
-> @@ -50,6 +50,8 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Confi
->  # architecture.
->  source "toolchain/toolchain-external/toolchain-external-custom/Config.in"
->  
-> +source "$BR2_BUILD_DIR/.br2-external.in.toolchain"
-> +
->  endchoice
->  
->  choice
+> install-data: install-data- at USE_NLS@
 > 
+> and obviously USE_NLS = yes only if NLS is enabled.
+> 
+>   So, that explains why this issue appears only now. Therefore, I've applied to
+> master (after modifying the comment). I've also reworked the commit log a little.
+
+So as we've discussed in IRC, to summarize:
+- AUTORECONF = yes exposed potential build error(install specifically), 
+but autobuilders still didn't call Makefile install-data recipe(where 
+error was)
+then:
+- you've applied a patch to autobuilders that enabled NLS support, this 
+way Makefile install-data recipe started to get called and then build failed
+
+Thank you for the deep explanation.
+
+Kind regards
+-- 
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
+
+>   Regards,
+>   Arnout
+> 
+> 
+> 
+>> It sets MADPLAY_AUTORECONF = YES in madplay.mk
+>>
+>> Then "autoreconf" is called and this is why @MKINSTALLDIRS@ is not substituted
+>> correctly, due to obsolescence of MKINSTALLDIRS macro.
+>>
+>> I hope I've explained it decently.
+>>
+>>>> Isn't the build failure related to the switch from gettext-gnu to
+>>>> gettext-tiny ?
+>>>
+>>> .config has "gettext-gnu" not "gettext-tiny", so that doesn't seem the
+>>> problem.
+>>> I try to dig deeper.
+>>>
+>>> Best regards
+>>>
+>>
+>> Best regards
