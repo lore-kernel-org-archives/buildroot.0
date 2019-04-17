@@ -1,33 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Apr 2019 21:07:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/easydbus: bump to version
- b86721147b265dfefc9a857669408cb6eb3d6560
-In-Reply-To: <20190416151854.14650-1-fontaine.fabrice@gmail.com>
-References: <20190416151854.14650-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190417210752.06a66638@windsurf>
+Date: Wed, 17 Apr 2019 21:16:21 +0200
+Subject: [Buildroot] [git commit] package/binutils: disable on nds32
+Message-ID: <20190417191238.7548A8ED32@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 16 Apr 2019 17:18:54 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b45a703078e6f3be096f24ac63848490d32d0d29
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Remove patch (already in version)
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .../0001-easydbus-is-a-C-project-file.patch   | 33 -------------------
->  package/easydbus/easydbus.hash                |  2 +-
->  package/easydbus/easydbus.mk                  |  2 +-
->  3 files changed, 2 insertions(+), 35 deletions(-)
->  delete mode 100644 package/easydbus/0001-easydbus-is-a-C-project-file.patch
+Upstream binutils does not yet have support for the nds32
+architecture, so let's disable binutils for the target on this
+architecture for the moment.
 
-Applied to master, thanks.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  http://autobuild.buildroot.net/results/1b18acb11db4d6c4198deb7385aff3d4d524c37e/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/binutils/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+index e17a8ec65a..2bf7929ac8 100644
+--- a/package/binutils/Config.in
++++ b/package/binutils/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_BINUTILS
+ 	bool "binutils"
+-	depends on !BR2_nios2
++	depends on !BR2_nios2 && !BR2_nds32
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  Install binutils on the target
+@@ -21,5 +21,5 @@ config BR2_PACKAGE_BINUTILS_TARGET
+ endif
+ 
+ comment "binutils needs a toolchain w/ wchar"
+-	depends on !BR2_nios2
++	depends on !BR2_nios2 && !BR2_nds32
+ 	depends on !BR2_USE_WCHAR
