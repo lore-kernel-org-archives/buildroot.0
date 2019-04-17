@@ -1,15 +1,15 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 17 Apr 2019 23:32:42 +0200
-Subject: [Buildroot] [git commit] package/sysklogd: fix S0{1sys,
- 2k}logd indentation
-Message-ID: <20190417212918.6039E8A50E@busybox.osuosl.org>
+Date: Wed, 17 Apr 2019 23:32:34 +0200
+Subject: [Buildroot] [git commit] package/rsyslog: fix S01rsyslogd
+ indentation
+Message-ID: <20190417212918.58B658A50E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9064821d0f4ea9ebdb9466d2cb4c791de98a946b
+commit: https://git.buildroot.net/buildroot/commit/?id=95a8655fe21c99806861a049e982bbec4a9cf6d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Don't mix spaces and tabs, only use tabs
@@ -17,44 +17,27 @@ Don't mix spaces and tabs, only use tabs
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/sysklogd/S01syslogd | 10 +++++-----
- package/sysklogd/S02klogd   | 10 +++++-----
- 2 files changed, 10 insertions(+), 10 deletions(-)
+ package/rsyslog/S01rsyslogd | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sysklogd/S01syslogd b/package/sysklogd/S01syslogd
-index d0951f0235..2603632893 100644
---- a/package/sysklogd/S01syslogd
-+++ b/package/sysklogd/S01syslogd
-@@ -54,9 +54,9 @@ reload() {
+diff --git a/package/rsyslog/S01rsyslogd b/package/rsyslog/S01rsyslogd
+index e9922d932d..78421876de 100644
+--- a/package/rsyslog/S01rsyslogd
++++ b/package/rsyslog/S01rsyslogd
+@@ -41,13 +41,13 @@ restart() {
  }
  
  case "$1" in
--        start|stop|restart|reload)
--                "$1";;
+-        start|stop|restart)
++	start|stop|restart)
+ 		"$1";;
+ 	reload)
+ 		# Restart, since there is no true "reload" feature (does not
+ 		# reconfigure/restart on SIGHUP, just closes all open files).
+ 		restart;;
 -        *)
 -                echo "Usage: $0 {start|stop|restart|reload}"
 -                exit 1
-+	start|stop|restart|reload)
-+		"$1";;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
- esac
-diff --git a/package/sysklogd/S02klogd b/package/sysklogd/S02klogd
-index 93f39e1f0e..ba728aa99a 100644
---- a/package/sysklogd/S02klogd
-+++ b/package/sysklogd/S02klogd
-@@ -57,9 +57,9 @@ reload() {
- }
- 
- case "$1" in
--        start|stop|restart|reload)
--                "$1";;
--        *)
--                echo "Usage: $0 {start|stop|restart|reload}"
--                exit 1
-+	start|stop|restart|reload)
-+		"$1";;
 +	*)
 +		echo "Usage: $0 {start|stop|restart|reload}"
 +		exit 1
