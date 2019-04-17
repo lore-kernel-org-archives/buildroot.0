@@ -1,74 +1,73 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 17 Apr 2019 22:46:39 +0200
-Subject: [Buildroot] [git commit] configs/freescale_t2080_qds_rdb_defconfig:
- new board
-Message-ID: <20190417204710.A7E988A58E@busybox.osuosl.org>
+Date: Wed, 17 Apr 2019 22:46:57 +0200
+Subject: [Buildroot] [git commit] board/freescale: single T1xxx/2xxx
+ readme.txt
+Message-ID: <20190417204710.AF1FA8F015@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfb5a7a3c1b9fc68ce77fa67fefbda17444598c7
+commit: https://git.buildroot.net/buildroot/commit/?id=4a12ea24aeddffe85ef898810f3025bf4dbee4f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The board is setup to track upstream Linux as the official
-vendor support was complete(depricated) at 4.1 via NXP SDKs.
-
-The target does not build uboot and assumes the user still uses the NXP
-suggested prebuilts in the SDK2.0 (last release for PowerPC). If a
-uboot is required, the source for SDK2.0 can be found in the following
-repo.
-http://git.freescale.com/git/cgit.cgi/ppc/sdk/u-boot.git/tag/?id=fsl-sdk-v2.0-1703
+The readme.txt would contain similar content for either processor
+family, so this patch consolidates the usage and adds the new
+T2080 notes.
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-[Arnout: update .gitlab-ci.yml]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .gitlab-ci.yml                            |  1 +
- configs/freescale_t2080_qds_rdb_defconfig | 25 +++++++++++++++++++++++++
- 2 files changed, 26 insertions(+)
+ .../{t1040d4rdb => t1040_t2080}/readme.txt         | 31 ++++++++++++++++++++--
+ 1 file changed, 29 insertions(+), 2 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 424e7e43af..e9869be784 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -148,6 +148,7 @@ freescale_imx8mqevk_defconfig: { extends: .defconfig }
- freescale_imx8qxpmek_defconfig: { extends: .defconfig }
- freescale_p1025twr_defconfig: { extends: .defconfig }
- freescale_t1040d4rdb_defconfig: { extends: .defconfig }
-+freescale_t2080_qds_rdb_defconfig: { extends: .defconfig }
- friendlyarm_nanopi_a64_defconfig: { extends: .defconfig }
- friendlyarm_nanopi_neo2_defconfig: { extends: .defconfig }
- galileo_defconfig: { extends: .defconfig }
-diff --git a/configs/freescale_t2080_qds_rdb_defconfig b/configs/freescale_t2080_qds_rdb_defconfig
-new file mode 100644
-index 0000000000..3d03c32f7e
---- /dev/null
-+++ b/configs/freescale_t2080_qds_rdb_defconfig
-@@ -0,0 +1,25 @@
-+# Architecture
-+BR2_powerpc64=y
-+BR2_powerpc_e6500=y
+diff --git a/board/freescale/t1040d4rdb/readme.txt b/board/freescale/t1040_t2080/readme.txt
+similarity index 55%
+rename from board/freescale/t1040d4rdb/readme.txt
+rename to board/freescale/t1040_t2080/readme.txt
+index 04d6b01531..65695295f6 100644
+--- a/board/freescale/t1040d4rdb/readme.txt
++++ b/board/freescale/t1040_t2080/readme.txt
+@@ -4,8 +4,12 @@ release notes for reflashing.
+ 
+ To program the kernel and rootfs created by buildroot into the flash. The
+ fast way is to tftp transfer the files via one of the network interfaces.
+-Make sure your devkit has ipaddr and serverip defined to reach your tftp
+-server.
++Make sure your devkit has ipaddr, netmask, and serverip defined to reach your
++tftp server. Verify bootargs are reasonable (console=ttyS0,115200).
 +
-+# Linux headers same as kernel
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
++------------------------------------------------------------------------------
 +
-+# Serial port config
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++Devkit: T1040RDB
+ 
+ (Assuming the default u-boot env from NXP)
+ 1. Program the DTB to NOR flash
+@@ -22,3 +26,26 @@ server.
+     => boot
+ 
+     You can login with user "root".
++------------------------------------------------------------------------------
 +
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.14"
-+BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="fsl/t2080qds fsl/t2080rdb"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++Devkit: T2080 QDS or RDB
 +
-+# Filesystem
-+BR2_TARGET_ROOTFS_CPIO=y
-+BR2_TARGET_ROOTFS_CPIO_GZIP=y
-+BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
-+# BR2_TARGET_ROOTFS_TAR is not set
++(Assuming the default u-boot env from NXP)
++1. Netboot the kernel/rootfs/dtb
 +
++    => tftp 0x1000000 uImage && tftp 0x2000000 rootfs.cpio.uboot
++
++    RDB => tftp 0x3000000 t2080rdb.dtb
++     or
++    QDS => tftp 0x3000000 t2080qds.dtb
++
++2. Booting your new system
++
++    => bootm 0x1000000 0x2000000 0x3000000
++
++    You can login with user "root".
++
++3. If flashing is desired, a similar approach to the T1040 can be followed
++   with updated addresses for the flash layout.  Example is in the NXP default
++   env.
++------------------------------------------------------------------------------
