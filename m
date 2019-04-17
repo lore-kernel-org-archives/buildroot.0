@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 17 Apr 2019 22:42:34 +0200
-Subject: [Buildroot] [PATCH 1/2] Makefile: add chmod before rm when
- cleaning.
-In-Reply-To: <20190417000931.5356-1-louis.deslandes@fleet.space>
-References: <20190417000931.5356-1-louis.deslandes@fleet.space>
-Message-ID: <339b8a2c-0557-e5ba-d153-5012b2773c4b@mind.be>
+Date: Wed, 17 Apr 2019 22:51:08 +0200
+Subject: [Buildroot] [PATCH 1/2]
+ configs/freescale_t2080_qds_rdb_defconfig: new board
+In-Reply-To: <20180816180105.32318-1-matthew.weber@rockwellcollins.com>
+References: <20180816180105.32318-1-matthew.weber@rockwellcollins.com>
+Message-ID: <faf8c4b2-297f-4798-347d-f4def5fb6657@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,50 +13,64 @@ To: buildroot@busybox.net
 
 
 
-On 17/04/2019 02:09, Louis des Landes wrote:
-> Some build systems (looking at you golang) create read only directories
-> as caches.
-> As such rm -rf will actually fail, causing clean and <pkg>-dirclean to fail.
+On 16/08/2018 20:01, Matt Weber wrote:
+> The board is setup to track upstream Linux as the official
+> vendor support was complete(depricated) at 4.1 via NXP SDKs.
 > 
-> This patch will cause `make clean` to run chmod -R +w on the relevant
-> directory first, which will allow rm -rf to work.
+> The target does not build uboot and assumes the user still uses the NXP
+> suggested prebuilts in the SDK2.0 (last release for PowerPC). If a
+> uboot is required, the source for SDK2.0 can be found in the following
+> repo.
+> http://git.freescale.com/git/cgit.cgi/ppc/sdk/u-boot.git/tag/?id=fsl-sdk-v2.0-1703
 > 
-> This may be resolved if https://github.com/golang/go/issues/31481 is
-> resolved satisfactorily.
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
- I don't like this very much - adding a go-specific workaround to the generic
-infrastructure.
+ Both (finally) applied to master, thanks.
 
- Would it be acceptable to instead do the chmod as a POST_BUILD_HOOK that is
-added by golang-package?
-
- I also don't understand that I haven't encountered this issue myself... Maybe I
-don't build Go packages...
+ It would be nice if you could bump the kernel (and also t1040's) to something
+more recent.
 
  Regards,
  Arnout
 
-> 
-> Signed-off-by: Louis des Landes <louis.deslandes@fleet.space>
 > ---
->  Makefile | 6 ++++++
->  1 file changed, 6 insertions(+)
 > 
-> diff --git a/Makefile b/Makefile
-> index 522c0b0606..fc2a82e074 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1060,6 +1060,12 @@ printvars:
->  
->  .PHONY: clean
->  clean:
-> +	# Some build systems (looking at you golang) create read only directories
-> +	# As such rm -rf will actually fail, so brute force them all to writeable
-> +	# before removing them.
-> +	chmod -R u+w $(BASE_TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) $(HOST_DIR_SYMLINK) \
-> +		$(BUILD_DIR) $(BASE_DIR)/staging \
-> +		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
->  	rm -rf $(BASE_TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) $(HOST_DIR_SYMLINK) \
->  		$(BUILD_DIR) $(BASE_DIR)/staging \
->  		$(LEGAL_INFO_DIR) $(GRAPHS_DIR)
+> DEVELOPERS already covers my entry with a wildcard catching this one
+> configs/freescale_t*
+> ---
+>  configs/freescale_t2080_qds_rdb_defconfig | 25 +++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>  create mode 100644 configs/freescale_t2080_qds_rdb_defconfig
+> 
+> diff --git a/configs/freescale_t2080_qds_rdb_defconfig b/configs/freescale_t2080_qds_rdb_defconfig
+> new file mode 100644
+> index 0000000000..3d03c32f7e
+> --- /dev/null
+> +++ b/configs/freescale_t2080_qds_rdb_defconfig
+> @@ -0,0 +1,25 @@
+> +# Architecture
+> +BR2_powerpc64=y
+> +BR2_powerpc_e6500=y
+> +
+> +# Linux headers same as kernel
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
+> +
+> +# Serial port config
+> +BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+> +
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.14"
+> +BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="fsl/t2080qds fsl/t2080rdb"
+> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +
+> +# Filesystem
+> +BR2_TARGET_ROOTFS_CPIO=y
+> +BR2_TARGET_ROOTFS_CPIO_GZIP=y
+> +BR2_TARGET_ROOTFS_CPIO_UIMAGE=y
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +
 > 
