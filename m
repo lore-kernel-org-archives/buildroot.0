@@ -1,94 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 18 Apr 2019 00:50:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/botan: fix build with boost 1.70.0
-Message-ID: <20190417225031.6190-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 18 Apr 2019 00:53:27 +0200
+Subject: [Buildroot] Qt5 parallel build of qmake
+In-Reply-To: <5affd9e5-511b-394c-e2a0-51617489f1c1@mind.be>
+References: <5affd9e5-511b-394c-e2a0-51617489f1c1@mind.be>
+Message-ID: <823bb0b7-aa62-d682-9cb7-f17471ff4926@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/ca9dfcfd34365aa1476b718d4897a2e75f6983ac
+Hi Arnout, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ompat-issue-with-upcoming-Boost-1-70.patch | 67 +++++++++++++++++++
- 1 file changed, 67 insertions(+)
- create mode 100644 package/botan/0002-Fix-compat-issue-with-upcoming-Boost-1-70.patch
+Il 18/04/2019 00:16, Arnout Vandecappelle ha scritto:
+>   Hi all,
+> 
+>   I've put a few people in Cc that seem to be active users of Qt5.
+> 
+>   I noticed during a test build that during the configure step, qmake is built
+> but not in parallel. I think it should be possible to enable parallel build for
+> qmake by passing MAKE="$(MAKE)" in the environment during configuration. Would
+> someone be interested in checking that out?
 
-diff --git a/package/botan/0002-Fix-compat-issue-with-upcoming-Boost-1-70.patch b/package/botan/0002-Fix-compat-issue-with-upcoming-Boost-1-70.patch
-new file mode 100644
-index 0000000000..bf89e6cfea
---- /dev/null
-+++ b/package/botan/0002-Fix-compat-issue-with-upcoming-Boost-1-70.patch
-@@ -0,0 +1,67 @@
-+From 86df247e4f090f984e050962ed5a4a536ec63b33 Mon Sep 17 00:00:00 2001
-+From: Ralf van der Enden <Ralf.vanderEnden@deltares.nl>
-+Date: Fri, 5 Apr 2019 14:58:14 +0200
-+Subject: [PATCH] boost 1.70 compatibility
-+
-+Fixes issue #82
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/randombit/botan/commit/f7148998ace97f2ad3a583685e6ed3c1f3b74c09]
-+---
-+ src/cli/tls_http_server.cpp | 8 +++++++-
-+ src/cli/tls_proxy.cpp       | 8 +++++++-
-+ 2 files changed, 14 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/cli/tls_http_server.cpp b/src/cli/tls_http_server.cpp
-+index cc59a71c33..0a6428cd65 100644
-+--- a/src/cli/tls_http_server.cpp
-++++ b/src/cli/tls_http_server.cpp
-+@@ -41,6 +41,12 @@
-+ 
-+ #include "credentials.h"
-+ 
-++#if BOOST_VERSION >= 107000
-++#define GET_IO_SERVICE(s) ((boost::asio::io_context&)(s).get_executor().context())
-++#else
-++#define GET_IO_SERVICE(s) ((s).get_io_service())
-++#endif
-++
-+ namespace Botan_CLI {
-+ 
-+ namespace {
-+@@ -435,7 +441,7 @@ class TLS_Asio_HTTP_Server final
-+       session::pointer make_session()
-+          {
-+          return session::create(
-+-                   m_acceptor.get_io_service(),
-++                   GET_IO_SERVICE(m_acceptor),
-+                    m_session_manager,
-+                    m_creds,
-+                    m_policy);
-+diff --git a/src/cli/tls_proxy.cpp b/src/cli/tls_proxy.cpp
-+index 49ffbe3766..42ce156b12 100644
-+--- a/src/cli/tls_proxy.cpp
-++++ b/src/cli/tls_proxy.cpp
-+@@ -33,6 +33,12 @@
-+ 
-+ #include "credentials.h"
-+ 
-++#if BOOST_VERSION >= 107000
-++#define GET_IO_SERVICE(s) ((boost::asio::io_context&)(s).get_executor().context())
-++#else
-++#define GET_IO_SERVICE(s) ((s).get_io_service())
-++#endif
-++
-+ namespace Botan_CLI {
-+ 
-+ namespace {
-+@@ -370,7 +376,7 @@ class tls_proxy_server final
-+       session::pointer make_session()
-+          {
-+          return session::create(
-+-                   m_acceptor.get_io_service(),
-++                   GET_IO_SERVICE(m_acceptor),
-+                    m_session_manager,
-+                    m_creds,
-+                    m_policy,
+I am interested. I'll try to have it working, let's see if I'm able.
+
+>   Ideally, you should also test with different make versions because they
+> sometimes throw other stuff in the MAKE variable which may screw things up.
+
+How much back should I go with make versions?
+I mean, now I have 4.1, maybe back to 3.82?
+Or more?
+
+Best regards
 -- 
-2.20.1
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
+
+>   Regards,
+>   Arnout
+> 
