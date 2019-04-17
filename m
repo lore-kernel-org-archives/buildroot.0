@@ -1,102 +1,80 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Wed, 17 Apr 2019 13:03:13 +0100
-Subject: [Buildroot] [PATCH 2/2] board/sifive: add support for the
- HiFive Unleashed board
-In-Reply-To: <CAKmqyKPbCKJe_TE4Y0uxhfcoP5FDzVCBXAPkXRWc9qyaX43F3A@mail.gmail.com>
-References: <20190414134307.24754-1-mark.corbin@embecosm.com>
- <20190414134307.24754-2-mark.corbin@embecosm.com>
- <7261729c-385b-8dd1-e969-72f95c9ac0be@mind.be>
- <32b6cdc6-3536-91de-206e-6059eed78b9c@embecosm.com>
- <c7f0cf15-5ed5-6ab0-2c36-dad0bcc9572e@mind.be>
- <CAKmqyKPbCKJe_TE4Y0uxhfcoP5FDzVCBXAPkXRWc9qyaX43F3A@mail.gmail.com>
-Message-ID: <cd832ff7-e333-684c-2064-f97172743c2c@embecosm.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 17 Apr 2019 14:45:21 +0200
+Subject: [Buildroot] [PATCH] package/madplay: fix build failure due to
+ old autotools macro
+In-Reply-To: <75d9fba9-15ff-695a-6347-550bf26488c6@micronovasrl.com>
+References: <20190416102125.124084-1-giulio.benetti@micronovasrl.com>
+ <20190416221315.74b4c9c9@windsurf>
+ <75d9fba9-15ff-695a-6347-550bf26488c6@micronovasrl.com>
+Message-ID: <dad71699-7fd9-c7a0-03a7-80352426dcc0@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alistair
+Hello Thomas,
 
-On 16/04/2019 00:29, Alistair Francis wrote:
-> On Mon, Apr 15, 2019 at 7:28 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+Il 16/04/2019 23:47, Giulio Benetti ha scritto:
+> Hello Thomas,
+> 
+> Il 16/04/2019 22:13, Thomas Petazzoni ha scritto:
+>> On Tue, 16 Apr 2019 12:21:25 +0200
+>> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 >>
+>>> MKINSTALLDIRS is not automatically called by autotools when
+>>> autoreconfigured.
+>>> This leads to have install stage error:
+>>> `/bin/sh @MKINSTALLDIRS@
+>>> /home/dawncrow/buildroot-test/scripts/instance-0/output/target/usr/share
+>>> /bin/sh: 0: Can't open @MKINSTALLDIRS@`
+>>> because @MKINSTALLDIRS@ doesn't get substituted during autoreconf.
+>>>
+>>> Add patch that explicitly calls AM_MKINSTALLDIRS macro to substitute
+>>> every @MKINSTALLDIRS@ occurence in *.in Makefile.
+>>>
+>>> Fixes:
+>>> http://autobuild.buildroot.net/results/744/7447c03426556f787f20f7ab2d36f0cacc4af1bd/
+>>>
+>>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 >>
->> On 15/04/2019 15:04, Mark Corbin wrote:
->>>>> +Connect the USB cable and open minicom (/dev/ttyUSB1, 115200, 8N1).
->>>>  How do you know it is ttyUSB1? It is usually USB0...
->>> There are two USB serial devices on the board - the console always seems
->>> to be on USB1 on my board. I can be more cautious and say '/dev/ttyUSBx'
->>> instead.
->>  Ah, now I see... So the single USB cable provides two serial ports, and USB1 is
->> the one you need? Then it's indeed better to specify USB1 in the README. But
->> maybe also explain that there are two ports.
-> It should always be USB1.
+>> Why is this package suddenly failing to build ? madplay hasn't been
+>> updated recently, so why do we have build failures and not before ?
+> 
+> MKINSTALLDIRS is very obsolete, but Autoconf and Automake are the same
+> version since 2017 and 2018, so they're not the problem even if I
+> thought they were.
+> First failure is dated 14-04-2019.
 
-Ok, that's agreed then :-)
+Found, it is due to this patch:
+https://git.buildroot.net/buildroot/commit/?id=c05cc5de868cc5af27afdb1451e30fcd1ecb2856
 
->
->>>>> +
->>>>> +See the 'SiFive HiFive Unleashed Getting Started Guide' for
->>>>> +more details (https://www.sifive.com/documentation).
->>>>> +
->>>>> +--
->>>>> +
->>>>> +Mark Corbin <mark.corbin@embecosm.com> April 2019
->>>>> diff --git a/configs/sifive_u540_unleashed_defconfig b/configs/sifive_u540_unleashed_defconfig
->>>>> new file mode 100644
->>>>> index 0000000000..b56ae1b164
->>>>> --- /dev/null
->>>>> +++ b/configs/sifive_u540_unleashed_defconfig
->>>>> @@ -0,0 +1,29 @@
->>>>> +# Architecture
->>>>> +BR2_riscv=y
->>>>> +BR2_RISCV_64=y
->>>>> +
->>>>> +# Patches
->>>>> +BR2_GLOBAL_PATCH_DIR="board/sifive/patches"
->>>>> +
->>>>> +# Linux headers same as kernel, a 4.20 series
->>>>> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
->>>>> +
->>>>> +# System
->>>>> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/sifive/u540-unleashed/post-image.sh"
->>>>> +
->>>>> +# Kernel
->>>>> +BR2_LINUX_KERNEL=y
->>>>> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->>>>> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.20.17"
->>>>  Oh, now I see, you're porting the changes done by sifive from 4.19 to 4.20...
->>>> Is that also what the freedom-u-sdk does? I don't think so...
->>> I'm not sure that the freedom-u-sdk has moved to 4.19 yet (the v1_0
->>> release uses 4.15), but there is a patched 4.19 kernel tree available in
->>> the master branch. I've generated a patch for 4.20.17 based on this
->>> patched 4.19 tree. I wanted to move to the most recent version of the
->>> 4.20 kernel that Buildroot supported, but I guess that I could also just
->>> look at using the patched 4.19 branch that already exists.
->>  If a board is far away from being supported by upstream, we usually stick to an
->> "offical" fork from the board vendor.
-> Unfortunately there is no "official" upstream fork. If using the 5.1
-> kernel there are only 8 patches required
-> (https://github.com/alistair23/linux/tree/hifive-unleashed-5.1). In OE
-> we just apply those patches on top of mainline for 5.1
-> (https://github.com/riscv/meta-riscv/tree/master/recipes-kernel/linux/files/freedom-u540)
-> as that way we can still get updates from the kernel community.
->
-> I think the best bet is to use the latest kernel (maybe it's worth
-> waiting until 5.1) and applying the patches on top. The diff is slowly
-> shrinking so the newer the kernel the better. Those older kernels are
-> not in a great shape and no one is maintaining them.
+It sets MADPLAY_AUTORECONF = YES in madplay.mk
 
-Rather that waiting for the 5.1 kernel I will look at using upstream
-5.0.7 (Buildroot latest) with patches applied from the appropriate repo
-via the BR2_LINUX_KERNEL_PATCH variable.
+Then "autoreconf" is called and this is why @MKINSTALLDIRS@ is not 
+substituted correctly, due to obsolescence of MKINSTALLDIRS macro.
 
-Regards
+I hope I've explained it decently.
 
-Mark
+>> Isn't the build failure related to the switch from gettext-gnu to
+>> gettext-tiny ?
+> 
+> .config has "gettext-gnu" not "gettext-tiny", so that doesn't seem the
+> problem.
+> I try to dig deeper.
+> 
+> Best regards
+> 
 
+Best regards
 -- 
-Mark Corbin
-Embecosm Ltd.
-https://www.embecosm.com
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
