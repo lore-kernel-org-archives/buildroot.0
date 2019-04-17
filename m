@@ -1,122 +1,141 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 17 Apr 2019 10:33:25 -0400
-Subject: [Buildroot] [PATCH v2 1/1] package/openjdk: only support a single
- variant at a time
-Message-ID: <20190417143325.5322-1-aduskett@gmail.com>
+From: Leach, Daniel J. <dleach@belcan.com>
+Date: Wed, 17 Apr 2019 15:09:51 +0000
+Subject: [Buildroot] [PATCH 1/1] dacapo: new package
+In-Reply-To: <CANQCQpbz8EETZUXUKsCTJBJc8YTMJ=bGzJzmXUKSDde-9ZJAJA@mail.gmail.com>
+References: <7B9EA298F6C566489E909E1B85615FB80186965B3A@AWHMBX02.belcan.com>
+ <20190414154225.48347784@windsurf>,
+ <CANQCQpbz8EETZUXUKsCTJBJc8YTMJ=bGzJzmXUKSDde-9ZJAJA@mail.gmail.com>
+Message-ID: <7B9EA298F6C566489E909E1B85615FB80186971E12@AWHMBX02.belcan.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Thomas,
 
-The Zero variant won't build with the server or client also selected at the same
-time, and expressing this in the Config.in would be too complicated to do.
-Even so, selecting multiple variants doesn't seem to be that important in the
-context of Buildroot.
+Sorry about the patch formatting; I have limited email client options but will take
+greater care in the future. Thanks for applying the patch and incorporating those fixes!
+As Matt said, I contributed the package on his behalf.
 
-This patch removes the ability to select multiple variants in favor
-of just selecting one. The default is server as that is what all of the major
-distributions currently use as the default as well.
 
-Fixes:
-http://autobuild.buildroot.net/results/a45cfa9b3602fd05f6adbf070a1bad6510975c36
+Matt,
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
-V1 -> V2:
- - More explination about the Config.in logic and combining Zero with server
-   and client. (Thomas)
+Thanks for providing clarification!
 
- package/openjdk/Config.in  | 16 +++++++++-------
- package/openjdk/openjdk.mk |  9 ++++-----
- 2 files changed, 13 insertions(+), 12 deletions(-)
+Dan
 
-diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
-index de0efcc86b..61294ec49f 100644
---- a/package/openjdk/Config.in
-+++ b/package/openjdk/Config.in
-@@ -41,10 +41,6 @@ config BR2_PACKAGE_OPENJDK
- 	select BR2_PACKAGE_XLIB_LIBXT
- 	select BR2_PACKAGE_XLIB_LIBXTST
- 	select BR2_PACKAGE_ZLIB
--	# make sure at least one variant is enabled
--	select BR2_PACKAGE_OPENJDK_JVM_VARIANT_SERVER \
--	       if !BR2_PACKAGE_OPENJDK_JVM_VARIANT_CLIENT && !BR2_PACKAGE_OPENJDK_JVM_VARIANT_ZERO && !BR2_powerpc
--	select BR2_PACKAGE_OPENJDK_JVM_VARIANT_ZERO if BR2_powerpc
- 	help
- 	  OpenJDK is a free and open-source implementation of the
- 	  Java Platform.
-@@ -53,20 +49,25 @@ config BR2_PACKAGE_OPENJDK
- 
- if BR2_PACKAGE_OPENJDK
- 
-+choice
-+	prompt "openjdk variant"
-+	default BR2_PACKAGE_OPENJDK_JVM_VARIANT_SERVER if !BR2_powerpc
-+	default BR2_PACKAGE_OPENJDK_JVM_VARIANT_ZERO if BR2_powerpc
-+
- config BR2_PACKAGE_OPENJDK_JVM_VARIANT_CLIENT
--	bool "build client variant"
-+	bool "client"
- 	depends on !BR2_powerpc
- 	help
- 	  Quick loading, but slower run-time performance.
- 
- config BR2_PACKAGE_OPENJDK_JVM_VARIANT_SERVER
--	bool "build server variant"
-+	bool "server"
- 	depends on !BR2_powerpc
- 	help
- 	  Slower loading, but faster run-time performance.
- 
- config BR2_PACKAGE_OPENJDK_JVM_VARIANT_ZERO
--	bool "build zero variant"
-+	bool "zero"
- 	select BR2_PACKAGE_LIBFFI
- 	help
- 	  A non-assembler variant with wide arch support, however
-@@ -74,6 +75,7 @@ config BR2_PACKAGE_OPENJDK_JVM_VARIANT_ZERO
- 
- 	  http://openjdk.java.net/projects/zero
- 
-+endchoice
- endif
- 
- comment "openjdk needs X.Org"
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 3f7b87ca96..b59e26778f 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -34,16 +34,15 @@ OPENJDK_DEPENDENCIES = \
- 
- # JVM variants
- ifeq ($(BR2_PACKAGE_OPENJDK_JVM_VARIANT_CLIENT),y)
--OPENJDK_JVM_VARIANTS += client
-+OPENJDK_JVM_VARIANT = client
- endif
- ifeq ($(BR2_PACKAGE_OPENJDK_JVM_VARIANT_SERVER),y)
--OPENJDK_JVM_VARIANTS += server
-+OPENJDK_JVM_VARIANT = server
- endif
- ifeq ($(BR2_PACKAGE_OPENJDK_JVM_VARIANT_ZERO),y)
--OPENJDK_JVM_VARIANTS += zero
-+OPENJDK_JVM_VARIANT = zero
- OPENJDK_DEPENDENCIES += libffi
- endif
--OPENJDK_JVM_VARIANT_LIST = $(subst $(space),$(comma),$(OPENJDK_JVM_VARIANTS))
- 
- # OpenJDK ignores some variables unless passed via the environment.
- # These variables are PATH, LD, CC, CXX, and CPP.
-@@ -75,7 +74,7 @@ OPENJDK_CONF_OPTS = \
- 	--with-extra-cxxflags="$(TARGET_CXXFLAGS)" \
- 	--with-giflib=system \
- 	--with-jobs=$(PARALLEL_JOBS) \
--	--with-jvm-variants=$(OPENJDK_JVM_VARIANT_LIST) \
-+	--with-jvm-variants=$(OPENJDK_JVM_VARIANT) \
- 	--with-lcms=system \
- 	--with-libjpeg=system \
- 	--with-libpng=system \
--- 
-2.20.1
+
+On Mon, Apr 15, 2019 at 2:40 PM Matthew Weber
+<matthew.weber@collins.com> wrote:
+> 
+> Thomas,
+> 
+> 
+> On Sun, Apr 14, 2019 at 8:42 AM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > Hello Daniel,
+> >
+> > On Mon, 18 Feb 2019 21:55:03 +0000
+> > "Leach, Daniel J." <dleach@belcan.com> wrote:
+> >
+> > > The DaCapo benchmark suite is intended as a tool for Java benchmarking
+> > > by the programming language, memory management and computer architecture
+> > > communities.
+> > >
+> > > Depends on the OpenJDK package for Java runtime environment.
+> > >
+> > > Signed-off-by: Daniel J. Leach <dleach@belcan.com>
+> >
+> > Thanks for your contribution, I have applied after doing a few changes.
+> > First of all, your patch didn't apply as-is, it was probably mangled by
+> > your e-mail client. Please try to use "git send-email" to send patches
+> > in the future.
+> >
+> > > diff --git a/DEVELOPERS b/DEVELOPERS
+> > > index baa325eead..a64a671b56 100644
+> > > --- a/DEVELOPERS
+> > > +++ b/DEVELOPERS
+> > > @@ -1405,6 +1405,7 @@ F:        package/checksec/
+> > >  F:      package/cgroupfs-mount/
+> > >  F:      package/crda/
+> > >  F:      package/cunit/
+> > > +F:     package/dacapo
+> >
+> > Why was this added in the middle of Matt Weber entries ? It should have
+> > been associated to your name, since you are the one contributing
+> > dacapo. I fixed that up.
+> 
+> Sorry I should have responded and mentioned Dan was adding this
+> package on behalf of me. I'll send a patch to fix-up.
+> 
+> >
+> > > diff --git a/package/dacapo/dacapo.mk b/package/dacapo/dacapo.mk
+> > > new file mode 100644
+> > > index 0000000000..32d0cc0701
+> > > --- /dev/null
+> > > +++ b/package/dacapo/dacapo.mk
+> > > @@ -0,0 +1,21 @@
+> > > +################################################################################
+> > > +#
+> > > +# dacapo
+> > > +#
+> > > +################################################################################
+> > > +
+> > > +DACAPO_VERSION = 9.12-MR1-bach
+> > > +DACAPO_SOURCE = dacapo-$(DACAPO_VERSION).jar
+> > > +DACAPO_SITE = http://sourceforge.net/projects/dacapobench/files/9.12-bach-MR1
+> > > +DACAPO_LICENSE = Apache-2.0
+> > > +DACAPO_LICENSE_FILES = LICENSE
+> > > +
+> > > +define DACAPO_EXTRACT_CMDS
+> > > +       unzip $(DACAPO_DL_DIR)/$(DACAPO_SOURCE) LICENSE -d $(@D)
+> > > +endef
+> > > +
+> > > +define DACAPO_INSTALL_TARGET_CMDS
+> > > +       $(INSTALL) -D -m 755 $(DACAPO_DL_DIR)/$(DACAPO_SOURCE) $(TARGET_DIR)/usr/bin/
+> >
+> > The destination path should include the filename, so I also fixed that.
+> >
+> > Applied with those two issues fixed. Thanks!
+> >
+> > Best regards,
+> >
+> > Thomas
+> > --
+> > Thomas Petazzoni, CTO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+> 
+> --
+> 
+> Matthew Weber | Pr. Software Engineer | Commercial Avionics
+> 
+> COLLINS AEROSPACE
+> 
+> 400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+> 
+> Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+> 
+> matthew.weber at collins.com | collinsaerospace.com
+> 
+> 
+> 
+> CONFIDENTIALITY WARNING: This message may contain proprietary and/or
+> privileged information of Collins Aerospace and its affiliated
+> companies. If you are not the intended recipient, please 1) Do not
+> disclose, copy, distribute or use this message or its contents. 2)
+> Advise the sender by return email. 3) Delete all copies (including all
+> attachments) from your computer. Your cooperation is greatly
+> appreciated.
+> 
+> 
+> Any export restricted material should be shared using my
+> matthew.weber at corp.rockwellcollins.com address.
