@@ -1,87 +1,134 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Apr 2019 09:03:37 +0200
-Subject: [Buildroot] [git commit] arch: add support for Andes 32-bit (nds32)
-Message-ID: <20190417074344.F22237F9A9@busybox.osuosl.org>
+Date: Wed, 17 Apr 2019 09:18:27 +0200
+Subject: [Buildroot] [git commit] toolchain/toolchain-external-andes-nds32:
+ new package
+Message-ID: <20190417074345.051DC8EF21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ad1d3d5cff33d4d28775450a5368148ccfedaa2
+commit: https://git.buildroot.net/buildroot/commit/?id=ef058dcdb78185d132ae84de079c82cb2ce5d64f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit provides basic support for the Andes 32-bit (nds32)
-architecture.
+This commit adds a new package for the Andes external toolchain for
+the nds32 Little Endian architecture.
+
+https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases/download/20180521/nds32le-linux-glibc-v3-upstream.tar.gz
 
 Signed-off-by: Che-Wei Chuang <cnoize@andestech.com>
 Signed-off-by: Greentime Hu <greentime@andestech.com>
 Signed-off-by: Nylon Chen <nylon7@andestech.com>
+[Thomas:
+ - rename .mk and .hash files to carry the proper package name
+ - fix <pkg>_SITE variable, which was incorrect
+ - add prompt in Config.in
+ - add missing include of Config.in in toolchain/toolchain-external/Config.in
+ - add missing selects for RPC and SSP, since the toolchain supports
+   both
+ - drop BR2_TOOLCHAIN_EXTERNAL_URL option, the toolchain URL is
+   provided by the .mk file]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS           |  3 +++
- arch/Config.in       | 12 ++++++++++++
- arch/Config.in.nds32 | 11 +++++++++++
- 3 files changed, 26 insertions(+)
+ DEVELOPERS                                                   |  1 +
+ toolchain/toolchain-external/Config.in                       |  6 ++++++
+ .../toolchain-external-andes-nds32/Config.in                 | 12 ++++++++++++
+ .../toolchain-external-andes-nds32/Config.in.options         |  9 +++++++++
+ .../toolchain-external-andes-nds32.hash                      |  2 ++
+ .../toolchain-external-andes-nds32.mk                        | 10 ++++++++++
+ 6 files changed, 40 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 45986c9dc7..db2c27c423 100644
+index db2c27c423..1dae65ed0a 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1667,6 +1667,9 @@ F:	package/trousers/
- N:	Norbert Lange <nolange79@gmail.com>
- F:	package/tcf-agent/
+@@ -1669,6 +1669,7 @@ F:	package/tcf-agent/
  
-+N:	Nylon Chen <nylon7@andestech.com>
-+F:	arch/Config.in.nds32
-+
+ N:	Nylon Chen <nylon7@andestech.com>
+ F:	arch/Config.in.nds32
++F:	toolchain/toolchain-external/toolchain-external-andes-nds32/
+ 
  N:	Olaf Rempel <razzor@kopf-tisch.de>
  F:	package/ctorrent/
+diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
+index 1f14f0350a..d234c1c552 100644
+--- a/toolchain/toolchain-external/Config.in
++++ b/toolchain/toolchain-external/Config.in
+@@ -23,6 +23,9 @@ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config
+ # ARC
+ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in"
  
-diff --git a/arch/Config.in b/arch/Config.in
-index f50760a0cf..d82803c828 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -154,6 +154,14 @@ config BR2_mips64el
- 	  http://www.mips.com/
- 	  http://en.wikipedia.org/wiki/MIPS_Technologies
- 
-+config BR2_nds32
-+	bool "nds32"
-+	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
-+	select BR2_ARCH_HAS_MMU_MANDATORY
-+	help
-+	  nds32 is a 32-bit architecture developed by Andes Technology.
-+	  https://en.wikipedia.org/wiki/Andes_Technology
++# Andes
++source "toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in"
 +
- config BR2_nios2
- 	bool "Nios II"
- 	select BR2_ARCH_HAS_MMU_MANDATORY
-@@ -419,6 +427,10 @@ if BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el
- source "arch/Config.in.mips"
- endif
+ # ARM (use ARM toolchain by default)
+ source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in"
+ source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in"
+@@ -124,6 +127,9 @@ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config
+ # ARC
+ source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options"
  
-+if BR2_nds32
-+source "arch/Config.in.nds32"
-+endif
++# Andes
++source "toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options"
 +
- if BR2_nios2
- source "arch/Config.in.nios2"
- endif
-diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
+ # ARM
+ source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in.options"
+ source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options"
+diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
 new file mode 100644
-index 0000000000..9c5db20e6f
+index 0000000000..e2fe63677d
 --- /dev/null
-+++ b/arch/Config.in.nds32
-@@ -0,0 +1,11 @@
-+config BR2_ARCH
-+	default "nds32"
++++ b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
+@@ -0,0 +1,12 @@
++config BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32
++	bool "Andes nds32"
++	depends on BR2_nds32
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
++	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
++	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
++	select BR2_TOOLCHAIN_HAS_SSP
++	help
++	  nds32 toolchain for the nds32 architecture. It uses GCC
++	  8.2.1, GDB 8.1.1, glibc 2.28, Binutils 2.30. It generates
++	  code that runs on ae3xx platform
+diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options
+new file mode 100644
+index 0000000000..7d11ae2098
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options
+@@ -0,0 +1,9 @@
++if BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32
 +
-+config BR2_GCC_TARGET_ARCH
-+	default "v3"
++config BR2_TOOLCHAIN_EXTERNAL_PREFIX
++	default "nds32le-linux"
 +
-+config BR2_ENDIAN
-+	default "LITTLE"
++config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
++	default "toolchain-external-andes-nds32"
 +
-+config BR2_READELF_ARCH_NAME
-+	default "Andes Technology compact code size embedded RISC processor family"
++endif
+diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash b/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash
+new file mode 100644
+index 0000000000..4314bb1f55
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash
+@@ -0,0 +1,2 @@
++# From https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases/download/20180521/nds32le-linux-glibc-v3-upstream.tar.gz
++sha256 6050601df85ad93a4c211c1d57ed3773edb62aa505f7e07d7d555652e83af2cc  nds32le-linux-glibc-v3-upstream.tar.gz
+diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk b/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk
+new file mode 100644
+index 0000000000..fa29490b4f
+--- /dev/null
++++ b/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk
+@@ -0,0 +1,10 @@
++################################################################################
++#
++# toolchain-external-andes-nds32
++#
++################################################################################
++
++TOOLCHAIN_EXTERNAL_ANDES_NDS32_SITE = https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases/download/20180521
++TOOLCHAIN_EXTERNAL_ANDES_NDS32_SOURCE = nds32le-linux-glibc-v3-upstream.tar.gz
++
++$(eval $(toolchain-external-package))
