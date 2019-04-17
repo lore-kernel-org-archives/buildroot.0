@@ -1,55 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Apr 2019 08:42:12 +0200
-Subject: [Buildroot] [git commit] package/ruby: security bump to version
- 2.4.6
-Message-ID: <20190417063745.ABC7A8EC73@busybox.osuosl.org>
+Date: Wed, 17 Apr 2019 08:42:36 +0200
+Subject: [Buildroot] [git commit] package/luasec: bump to version 0.8
+Message-ID: <20190417063809.4DCF481DB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=900982313786d3537417f18251732ab7dca95553
+commit: https://git.buildroot.net/buildroot/commit/?id=ff2ad87ad10e79a08ab8b41bc0c2f1630210f90a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security issues:
+the license file hash changed due to a copyright year update
 
-- CVE-2019-8320: Delete directory using symlink when decompressing tar
-- CVE-2019-8321: Escape sequence injection vulnerability in verbose
-- CVE-2019-8322: Escape sequence injection vulnerability in gem owner
-- CVE-2019-8323: Escape sequence injection vulnerability in API response handling
-- CVE-2019-8324: Installing a malicious gem may lead to arbitrary code execution
-- CVE-2019-8325: Escape sequence injection vulnerability in errors
+-LuaSec 0.7 license
+-Copyright (C) 2006-2018 Bruno Silvestre, UFG
++LuaSec 0.8 license
++Copyright (C) 2006-2019 Bruno Silvestre, UFG
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/luasec/Config.in   | 4 ++--
+ package/luasec/luasec.hash | 4 ++--
+ package/luasec/luasec.mk   | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index b36d49461c..fa9eddc279 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2018/10/17/ruby-2-4-5-released/
--sha256 2f0cdcce9989f63ef7c2939bdb17b1ef244c4f384d85b8531d60e73d8cc31eeb  ruby-2.4.5.tar.xz
-+# https://www.ruby-lang.org/en/news/2019/04/01/ruby-2-4-6-released/
-+sha256 25da31b9815bfa9bba9f9b793c055a40a35c43c6adfb1fdbd81a09099f9b529c  ruby-2.4.6.tar.xz
- # License files, Locally calculated
- sha256 609292a6d848ab223073944fc2d844449391a5ba2055a8b5baf1726bc13b39cb  LEGAL
- sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 3e71596bb4..10424020a9 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/luasec/Config.in b/package/luasec/Config.in
+index 43527ab09d..d22fd57a6e 100644
+--- a/package/luasec/Config.in
++++ b/package/luasec/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_LUASEC
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_LUASOCKET # runtime
+ 	help
+-	  LuaSec is a binding for OpenSSL library to provide TLS/SSL
+-	  communication.
++	  A binding for OpenSSL library to provide TLS/SSL communication
++	  over LuaSocket.
+ 
+ 	  https://github.com/brunoos/luasec/wiki
+diff --git a/package/luasec/luasec.hash b/package/luasec/luasec.hash
+index 37fc08d455..30ef801018 100644
+--- a/package/luasec/luasec.hash
++++ b/package/luasec/luasec.hash
+@@ -1,3 +1,3 @@
+ # computed by luarocks/buildroot
+-sha256 383e183ba712f00b2fcbf60187177432ccde724a23ac6186075ceae620cf0b0a  luasec-0.7-1.src.rock
+-sha256 b310a4c5a9927a43123e3ffcfaa5f5921b545b64d38ea55c7faf2a837547a200  luasec-luasec-0.7/LICENSE
++sha256 3c993af8a392511380bf75f68525b5d1f2c6ecdddd17e72d0b51b39c710fa127  luasec-0.8-1.src.rock
++sha256 93b708a114eb0b1028b0549116361da1d24131b042a2bd434c683c7a504877b8  luasec-luasec-0.8/LICENSE
+diff --git a/package/luasec/luasec.mk b/package/luasec/luasec.mk
+index 7ae7290937..9ce358753e 100644
+--- a/package/luasec/luasec.mk
++++ b/package/luasec/luasec.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 2.4
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).5
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).6
- RUBY_VERSION_EXT = 2.4.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-LUASEC_VERSION_UPSTREAM = 0.7
++LUASEC_VERSION_UPSTREAM = 0.8
+ LUASEC_VERSION = $(LUASEC_VERSION_UPSTREAM)-1
+ LUASEC_SUBDIR = luasec-luasec-$(LUASEC_VERSION_UPSTREAM)
+ LUASEC_LICENSE = MIT
