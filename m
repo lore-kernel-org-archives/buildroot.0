@@ -1,50 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Apr 2019 08:53:23 +0200
-Subject: [Buildroot] [git commit] package/python-sentry-sdk: bump to version
- 0.7.10
-Message-ID: <20190417064925.1DD4A8196D@busybox.osuosl.org>
+Date: Wed, 17 Apr 2019 08:55:19 +0200
+Subject: [Buildroot] [git commit] package/check: bump to version 0.12
+Message-ID: <20190417065054.6E23F8121D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62db9930542d9731618052903d58a696bf896242
+commit: https://git.buildroot.net/buildroot/commit/?id=a9e559ad72bb272d624c622b8137eff7e4751637
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-sentry-sdk/python-sentry-sdk.hash | 6 +++---
- package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/check/check.hash | 2 +-
+ package/check/check.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
-index 44af302ae4..9f57e0e70e 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.hash
-+++ b/package/python-sentry-sdk/python-sentry-sdk.hash
-@@ -1,5 +1,5 @@
--# md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
--md5	3a5bd3a5d9bd1305d26a702b38134140  sentry-sdk-0.7.3.tar.gz
--sha256	6f4e264d0ad6267c40e20431a6a50f815515805ffe8eb9815340adf931279523  sentry-sdk-0.7.3.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/sentry_sdk/json
-+md5	3380bb835596517261c4f0f6d6851e36  sentry-sdk-0.7.10.tar.gz
-+sha256	ca2723556c102a1fabdf461b9a038d1d8631608c4d10085a7c06a0b590e79ad4  sentry-sdk-0.7.10.tar.gz
- # Locally computed sha256 checksums
- sha256	59404d4c854e579097d41bfccd5006afde9d6d70e646cf55074cdbfead5ecf1c  LICENSE
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
-index c84b999e5c..7e4c9b169e 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.mk
-+++ b/package/python-sentry-sdk/python-sentry-sdk.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/check/check.hash b/package/check/check.hash
+index 3c41a96144..ac7fddd462 100644
+--- a/package/check/check.hash
++++ b/package/check/check.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256	24f7a48aae6b74755bcbe964ce8bc7240f6ced2141f8d9cf480bc3b3de0d5616	check-0.11.0.tar.gz
++sha256	464201098bee00e90f5c4bdfa94a5d3ead8d641f9025b560a27755a83b824234	check-0.12.0.tar.gz
+ # License files, locally calculated
+ sha256	a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861	COPYING.LESSER
+diff --git a/package/check/check.mk b/package/check/check.mk
+index 047beba635..84b8c5333e 100644
+--- a/package/check/check.mk
++++ b/package/check/check.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_SENTRY_SDK_VERSION = 0.7.3
-+PYTHON_SENTRY_SDK_VERSION = 0.7.10
- PYTHON_SENTRY_SDK_SOURCE = sentry-sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
--PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/9a/8d/e2af648ebb60cff433cdc80760bb45fe9cb7f32ccdff19c43c0d2e743968
-+PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/22/82/81445c38c82511d7bc4187669f04de74fde05c1dff0705f362cf1af3c4f0
- PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
- PYTHON_SENTRY_SDK_LICENSE = BSD-2-Clause
- PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
+-CHECK_VERSION = 0.11.0
++CHECK_VERSION = 0.12.0
+ CHECK_SITE = https://github.com/libcheck/check/releases/download/$(CHECK_VERSION)
+ CHECK_INSTALL_STAGING = YES
+ CHECK_DEPENDENCIES = host-pkgconf
