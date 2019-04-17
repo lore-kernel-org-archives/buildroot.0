@@ -1,75 +1,62 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 17 Apr 2019 23:43:46 +0200
-Subject: [Buildroot] [RFC v2 5/7] package/mesa3d: Gallium xa state tracker
- is only available for nouveau and svga Gallium drivers
+Date: Wed, 17 Apr 2019 23:43:45 +0200
+Subject: [Buildroot] [RFC v2 4/7] package/mesa3d: add xvmc option
 In-Reply-To: <20190417214348.15685-1-romain.naour@smile.fr>
 References: <20190417214348.15685-1-romain.naour@smile.fr>
-Message-ID: <20190417214348.15685-5-romain.naour@smile.fr>
+Message-ID: <20190417214348.15685-4-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-i915 and freedreno Gallium drivers are not currently supported by mesa3d package.
+"XVMC state tracker requires at least one of the following gallium drivers: r600, nouveau."
 
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=0ba909f0f111824223bc38563d1a6bc73e69c2cc
+https://cgit.freedesktop.org/mesa/mesa/commit/?id=22a817af8a89eb3c762fc3e07b443a3ce37d7416
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/mesa3d/Config.in | 6 +++---
- package/mesa3d/mesa3d.mk | 1 -
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/mesa3d/Config.in | 14 ++++++++++++++
+ package/mesa3d/mesa3d.mk |  2 +-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 72548adf57..eba218efb2 100644
+index 6ec395723a..72548adf57 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -80,6 +80,9 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- config BR2_PACKAGE_MESA3D_DRIVER
- 	bool
+@@ -312,6 +312,20 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
+ config BR2_PACKAGE_PROVIDES_LIBOPENCL
+ 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENCL
  
-+# Gallium xa state tracker.
-+# Quote from mesa3d meson.build: "XA state tracker requires at least
-+# one of the following gallium drivers: nouveau, freedreno, i915, svga.
- config BR2_PACKAGE_MESA3D_NEEDS_XA
- 	bool
++config BR2_PACKAGE_MESA3D_XVMC
++	bool "XvMC state tracker"
++	depends on BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
++		|| BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
++	select BR2_PACKAGE_XLIB_LIBXVMC
++	help
++	  XVMC state tracker (needs r600 or nouveau gallium drivers).
++
++comment "XvMC depends on X.org and needs gallium drivers: r600, nouveau"
++	depends on !BR2_PACKAGE_XORG7
++	depends on !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU \
++		|| !BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
++
+ endif # BR2_PACKAGE_MESA3D
  
-@@ -129,7 +132,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
- 	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	help
- 	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
- 
-@@ -151,7 +153,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
- 	select BR2_PACKAGE_LLVM_AMDGPU
- 	select BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	help
- 	  Driver for ATI/AMD Radeon HD7000/HD8000/Rx200 GPUs.
- 
-@@ -188,7 +189,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	select BR2_PACKAGE_LIBDRM_VC4
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	help
- 	  Driver for Broadcom VC4 (rpi2/3) GPUs.
+ comment "mesa3d needs a toolchain w/ C++, NPTL, dynamic library"
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index b97a56dc26..c8ca9a0d0f 100644
+index 3c5f488514..b97a56dc26 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -83,7 +83,6 @@ MESA3D_DEPENDENCIES += \
- 	xorgproto \
- 	libxcb
- MESA3D_CONF_OPTS += --enable-glx --disable-mangling
--# quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
- ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_XA),y)
- MESA3D_CONF_OPTS += --enable-xa
+@@ -220,7 +220,7 @@ else
+ MESA3D_CONF_OPTS += --disable-gles1 --disable-gles2
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XLIB_LIBXVMC),y)
++ifeq ($(BR2_PACKAGE_MESA3D_XVMC),y)
+ MESA3D_DEPENDENCIES += xlib_libXvMC
+ MESA3D_CONF_OPTS += --enable-xvmc
  else
 -- 
 2.20.1
