@@ -1,28 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Apr 2019 08:47:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pcre2: jit needs threads
-In-Reply-To: <20190416152915.16095-1-fontaine.fabrice@gmail.com>
-References: <20190416152915.16095-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190417084718.068dcb4c@windsurf>
+Date: Wed, 17 Apr 2019 08:47:24 +0200
+Subject: [Buildroot] [PATCH v3] package/php: fix how external PCRE2 JIT
+ is enabled
+In-Reply-To: <20190416160323.18514-1-panfilov.artyom@gmail.com>
+References: <20190416160323.18514-1-panfilov.artyom@gmail.com>
+Message-ID: <20190417084724.4b416085@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 16 Apr 2019 17:29:15 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Tue, 16 Apr 2019 19:03:23 +0300
+Artem Panfilov <panfilov.artyom@gmail.com> wrote:
 
-> Add a BR2_PACKAGE_PCRE2_JIT_ARCH_SUPPORTS to be able to use it in the
-> comment
+> This patch adds ac_cv_have_pcre2_jit cache variable to avoid
+> the tests running on the host system during cross-compiling.
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/547be5264effaf27c7f85ece88c5f5f792abd910
+> Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/pcre2/Config.in | 18 +++++++++++++++---
->  1 file changed, 15 insertions(+), 3 deletions(-)
+> Changes v1 -> v2:
+>  - add autoconf cache variable (suggested by Thomas Petazzoni)
+> Changes v2 -> v3:
+>  - backport upstream patch (suggested by Arnout Vandecappelle)
+> ---
+>  ....m4-add-ac_cv_have_pcre2_jit-variabl.patch | 91 +++++++++++++++++++
+>  package/php/php.mk                            |  9 ++
+>  2 files changed, 100 insertions(+)
+>  create mode 100644 package/php/0006-ext-pcre-config0.m4-add-ac_cv_have_pcre2_jit-variabl.patch
 
 Applied to master, thanks.
 
