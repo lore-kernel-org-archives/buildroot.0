@@ -1,48 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Apr 2019 08:47:09 +0200
-Subject: [Buildroot] [git commit] package/sudo: bump to version 1.8.27
-Message-ID: <20190417064243.3583A8EDDE@busybox.osuosl.org>
+Date: Wed, 17 Apr 2019 08:47:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pcre2: jit needs threads
+In-Reply-To: <20190416152915.16095-1-fontaine.fabrice@gmail.com>
+References: <20190416152915.16095-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190417084718.068dcb4c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=276072dbd46973589ff6c368ee47265269029300
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 16 Apr 2019 17:29:15 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Update hash of license file:
- - update in year
- - add arc4random.c, arc4random_uniform.c and getentropy.c license (ISC)
+> Add a BR2_PACKAGE_PCRE2_JIT_ARCH_SUPPORTS to be able to use it in the
+> comment
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/547be5264effaf27c7f85ece88c5f5f792abd910
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/pcre2/Config.in | 18 +++++++++++++++---
+>  1 file changed, 15 insertions(+), 3 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/sudo/sudo.hash | 4 ++--
- package/sudo/sudo.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/sudo/sudo.hash b/package/sudo/sudo.hash
-index 3f20ccb15e..8a3511df82 100644
---- a/package/sudo/sudo.hash
-+++ b/package/sudo/sudo.hash
-@@ -1,4 +1,4 @@
- # From: http://www.sudo.ws/download.html
--sha256 d863d29b6fc87bc784a3223350e2b28a2ff2c4738f0fb8f1c92bb38c3017e679  sudo-1.8.23.tar.gz
-+sha256 7beb68b94471ef56d8a1036dbcdc09a7b58a949a68ffce48b83f837dd33e2ec0  sudo-1.8.27.tar.gz
- # Locally calculated
--sha256 b6625a7b58e9469a7adfd1732960579a19fe84b3508030f9a31641283e2250b8  doc/LICENSE
-+sha256 e0e7990185834e9f08f3e922905d7bfaf998d13be668c6026d2586b1718210ba  doc/LICENSE
-diff --git a/package/sudo/sudo.mk b/package/sudo/sudo.mk
-index 136b6c6915..48c8921043 100644
---- a/package/sudo/sudo.mk
-+++ b/package/sudo/sudo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUDO_VERSION = 1.8.23
-+SUDO_VERSION = 1.8.27
- SUDO_SITE = https://www.sudo.ws/sudo/dist
- SUDO_LICENSE = ISC, BSD-3-Clause
- SUDO_LICENSE_FILES = doc/LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
