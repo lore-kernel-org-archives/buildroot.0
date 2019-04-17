@@ -1,66 +1,54 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 17 Apr 2019 11:28:26 +0200
+From: Vadym Kochan <vadim4j@gmail.com>
+Date: Wed, 17 Apr 2019 13:28:28 +0300
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-04-15
-In-Reply-To: <20190416223115.1c314a13@windsurf>
-References: <20190416060047.6838786EF6@hemlock.osuosl.org>
- <e6975dfa-1a60-c394-de64-2e11243181d2@micronovasrl.com>
- <20190416134438.246c63cf@windsurf>
- <f6c8d29f-eb44-6b16-a94b-a09186c47c2b@micronovasrl.com>
- <20190416223115.1c314a13@windsurf>
-Message-ID: <7a114046-e2b0-3a59-16f4-cc7e51fbe805@micronovasrl.com>
+ 2019-04-16
+In-Reply-To: <20190417060039.CCB8586D39@whitealder.osuosl.org>
+References: <20190417060039.CCB8586D39@whitealder.osuosl.org>
+Message-ID: <20190417102828.GA700@lwo1-lhp-f71841>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
 
-Il 16/04/2019 22:31, Thomas Petazzoni ha scritto:
+Hi Thomas, All
+
+On Wed, Apr 17, 2019 at 06:00:33AM -0000, Thomas Petazzoni wrote:
 > Hello,
 > 
-> On Tue, 16 Apr 2019 17:18:54 +0200
-> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+> Build statistics for 2019-04-16
+> ===============================
 > 
->> So, if I don't understand wrong, when BR2_SYSTEM_ENABLE_NLS is disabled
->> we want all packages not to produce translation files.
+>       branch |  OK | NOK | TIM | TOT |
+>    2019.02.x |  16 |   1 |   0 |  17 |
+>       master | 195 |  42 |   2 | 239 |
 > 
-> Ideally yes.
+> Results for branch 'master'
+> ===========================
 > 
->> Then if a package tries anyway to produce translation files we need to
->> fix it by checking BR2_SYSTEM_ENABLE_NLS(depends on
->> !BR2_SYSTEM_ENABLE_NLS etc.) in its Config.in file.
+> Classification of failures by reason
+> ------------------------------------
 > 
-> I guess you wanted to say "if a package tries anyway to produce
-> translation files, we need to fix it by adding a depends on
-> BR2_SYSTEM_ENABLE_NLS". If that's what you meant, then I believe the
-> answer is no.
-> 
-> gettext-tiny provides some dummy implementation of the gettext tools,
-> so we can use these if a package really wants to generate translation
-> files despite BR2_SYSTEM_ENABLE_NLS being disabled. However, if there's
-> a reasonable way to tell the package to not generate translation files,
-> I'd say we should prefer that.
+>                 cracklib-2.9.7 | 6 
+>                madplay-0.15.2b | 5 
+>                postgresql-11.2 | 5 
+>                    netsurf-3.8 | 4 
+>                   davfs2-1.5.4 | 2 
+>                     efl-1.22.0 | 2 
+>                 host-libsodium | 2 
+> minicom-19ab49422f3431102c3... | 2 
+>                    dvblast-3.4 | 1 
+>                     git-2.16.5 | 1 
 
-Thank you for the explanation.
-I've rechecked the patch:
-https://patchwork.ozlabs.org/patch/1074926/
+Again regarding the git fail issue, I posted better (I think) patch for
+NLS support for git, and I think it more clearer now and might be posted to
+git community:
+https://patchwork.ozlabs.org/patch/1086723/
 
-and now it's all clear.
+Sorry to make such noise with that.
 
-Thanks again
--- 
-Giulio Benetti
-CTO
+[SNIP]
 
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
-
-> Thomas
-> 
+Regards,
+Vadim Kochan
