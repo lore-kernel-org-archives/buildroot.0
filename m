@@ -1,76 +1,94 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 18 Apr 2019 00:36:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: fix static build with
- pcap
-Message-ID: <20190417223634.6878-1-fontaine.fabrice@gmail.com>
+Date: Thu, 18 Apr 2019 00:50:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/botan: fix build with boost 1.70.0
+Message-ID: <20190417225031.6190-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use pkg-config to find pcap dependencies
-
 Fixes:
- - http://autobuild.buildroot.org/results/277a24ad543a8f54cc8afde4f359f5d77b42eb7f
+ - http://autobuild.buildroot.org/results/ca9dfcfd34365aa1476b718d4897a2e75f6983ac
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...0003-FindPCAP.cmake-fix-static-build.patch | 46 +++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/wireshark/0003-FindPCAP.cmake-fix-static-build.patch
+ ...ompat-issue-with-upcoming-Boost-1-70.patch | 67 +++++++++++++++++++
+ 1 file changed, 67 insertions(+)
+ create mode 100644 package/botan/0002-Fix-compat-issue-with-upcoming-Boost-1-70.patch
 
-diff --git a/package/wireshark/0003-FindPCAP.cmake-fix-static-build.patch b/package/wireshark/0003-FindPCAP.cmake-fix-static-build.patch
+diff --git a/package/botan/0002-Fix-compat-issue-with-upcoming-Boost-1-70.patch b/package/botan/0002-Fix-compat-issue-with-upcoming-Boost-1-70.patch
 new file mode 100644
-index 0000000000..425fa35ffc
+index 0000000000..bf89e6cfea
 --- /dev/null
-+++ b/package/wireshark/0003-FindPCAP.cmake-fix-static-build.patch
-@@ -0,0 +1,46 @@
-+From 1ffe04d0f2ef3c7737f1f9667cfcdd6c4239bbbe Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 17 Apr 2019 23:58:55 +0200
-+Subject: [PATCH] FindPCAP.cmake: fix static build
++++ b/package/botan/0002-Fix-compat-issue-with-upcoming-Boost-1-70.patch
+@@ -0,0 +1,67 @@
++From 86df247e4f090f984e050962ed5a4a536ec63b33 Mon Sep 17 00:00:00 2001
++From: Ralf van der Enden <Ralf.vanderEnden@deltares.nl>
++Date: Fri, 5 Apr 2019 14:58:14 +0200
++Subject: [PATCH] boost 1.70 compatibility
 +
-+When statically built, pcap can depends on other libraries such as
-+-lnl-3. Add a call to pkg-config to find them and don't overwrite
-+PCAP_LIBRARIES with PCAP_LIBRARY (use APPEND instead)
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/277a24ad543a8f54cc8afde4f359f5d77b42eb7f
++Fixes issue #82
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not sent yet (waiting feedback on first patch)]
++[Retrieved from:
++https://github.com/randombit/botan/commit/f7148998ace97f2ad3a583685e6ed3c1f3b74c09]
 +---
-+ cmake/modules/FindPCAP.cmake | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
++ src/cli/tls_http_server.cpp | 8 +++++++-
++ src/cli/tls_proxy.cpp       | 8 +++++++-
++ 2 files changed, 14 insertions(+), 2 deletions(-)
 +
-+diff --git a/cmake/modules/FindPCAP.cmake b/cmake/modules/FindPCAP.cmake
-+index dfd80415f6..826ccfbdcc 100644
-+--- a/cmake/modules/FindPCAP.cmake
-++++ b/cmake/modules/FindPCAP.cmake
-+@@ -9,6 +9,11 @@
-+ include( FindWSWinLibs )
-+ FindWSWinLibs( "WpdPack" "PCAP_HINTS" )
++diff --git a/src/cli/tls_http_server.cpp b/src/cli/tls_http_server.cpp
++index cc59a71c33..0a6428cd65 100644
++--- a/src/cli/tls_http_server.cpp
+++++ b/src/cli/tls_http_server.cpp
++@@ -41,6 +41,12 @@
 + 
-++if (NOT WIN32)
-++  find_package(PkgConfig)
-++  pkg_search_module( PCAP libpcap )
-++endif()
++ #include "credentials.h"
++ 
+++#if BOOST_VERSION >= 107000
+++#define GET_IO_SERVICE(s) ((boost::asio::io_context&)(s).get_executor().context())
+++#else
+++#define GET_IO_SERVICE(s) ((s).get_io_service())
+++#endif
 ++
-+ # The 64-bit wpcap.lib is under /x64
-+ set ( _PLATFORM_SUBDIR "" )
-+ if( WIN32 AND "${WIRESHARK_TARGET_PLATFORM}" STREQUAL "win64" )
-+@@ -37,7 +42,7 @@ find_package_handle_standard_args( PCAP DEFAULT_MSG PCAP_LIBRARY PCAP_INCLUDE_DI
++ namespace Botan_CLI {
 + 
-+ if( PCAP_FOUND )
-+   set( PCAP_INCLUDE_DIRS ${PCAP_INCLUDE_DIR} )
-+-  set( PCAP_LIBRARIES ${PCAP_LIBRARY} )
-++  list( APPEND PCAP_LIBRARIES ${PCAP_LIBRARY} )
-+ else()
-+   set( PCAP_INCLUDE_DIRS )
-+   set( PCAP_LIBRARIES )
-+-- 
-+2.20.1
-+
++ namespace {
++@@ -435,7 +441,7 @@ class TLS_Asio_HTTP_Server final
++       session::pointer make_session()
++          {
++          return session::create(
++-                   m_acceptor.get_io_service(),
+++                   GET_IO_SERVICE(m_acceptor),
++                    m_session_manager,
++                    m_creds,
++                    m_policy);
++diff --git a/src/cli/tls_proxy.cpp b/src/cli/tls_proxy.cpp
++index 49ffbe3766..42ce156b12 100644
++--- a/src/cli/tls_proxy.cpp
+++++ b/src/cli/tls_proxy.cpp
++@@ -33,6 +33,12 @@
++ 
++ #include "credentials.h"
++ 
+++#if BOOST_VERSION >= 107000
+++#define GET_IO_SERVICE(s) ((boost::asio::io_context&)(s).get_executor().context())
+++#else
+++#define GET_IO_SERVICE(s) ((s).get_io_service())
+++#endif
+++
++ namespace Botan_CLI {
++ 
++ namespace {
++@@ -370,7 +376,7 @@ class tls_proxy_server final
++       session::pointer make_session()
++          {
++          return session::create(
++-                   m_acceptor.get_io_service(),
+++                   GET_IO_SERVICE(m_acceptor),
++                    m_session_manager,
++                    m_creds,
++                    m_policy,
 -- 
 2.20.1
