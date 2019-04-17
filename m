@@ -1,134 +1,155 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Apr 2019 09:18:27 +0200
-Subject: [Buildroot] [git commit] toolchain/toolchain-external-andes-nds32:
- new package
-Message-ID: <20190417074345.051DC8EF21@busybox.osuosl.org>
+Date: Wed, 17 Apr 2019 09:20:55 +0200
+Subject: [Buildroot] [git commit] configs/andes_ae3xx: new defconfig
+Message-ID: <20190417074345.0D65B7F9A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef058dcdb78185d132ae84de079c82cb2ce5d64f
+commit: https://git.buildroot.net/buildroot/commit/?id=5bf75e18646babf5cd0f3294a7cea7f3d3a474c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit adds a new package for the Andes external toolchain for
-the nds32 Little Endian architecture.
-
-https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases/download/20180521/nds32le-linux-glibc-v3-upstream.tar.gz
+Add Andes 32-bit defconfig for AE3XX platform.
 
 Signed-off-by: Che-Wei Chuang <cnoize@andestech.com>
 Signed-off-by: Greentime Hu <greentime@andestech.com>
 Signed-off-by: Nylon Chen <nylon7@andestech.com>
 [Thomas:
- - rename .mk and .hash files to carry the proper package name
- - fix <pkg>_SITE variable, which was incorrect
- - add prompt in Config.in
- - add missing include of Config.in in toolchain/toolchain-external/Config.in
- - add missing selects for RPC and SSP, since the toolchain supports
-   both
- - drop BR2_TOOLCHAIN_EXTERNAL_URL option, the toolchain URL is
-   provided by the .mk file]
+ - fix commit title to match the defconfig name
+ - use the external toolchain package]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                                   |  1 +
- toolchain/toolchain-external/Config.in                       |  6 ++++++
- .../toolchain-external-andes-nds32/Config.in                 | 12 ++++++++++++
- .../toolchain-external-andes-nds32/Config.in.options         |  9 +++++++++
- .../toolchain-external-andes-nds32.hash                      |  2 ++
- .../toolchain-external-andes-nds32.mk                        | 10 ++++++++++
- 6 files changed, 40 insertions(+)
+ DEVELOPERS                                         |  2 +
+ board/andes/ae3xx/ae3xx.fragment                   |  1 +
+ .../0001-nds32-Fix-boot-messages-garbled.patch     | 28 +++++++++++++
+ board/andes/readme.txt                             | 49 ++++++++++++++++++++++
+ configs/andes_ae3xx_defconfig                      | 10 +++++
+ 5 files changed, 90 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index db2c27c423..1dae65ed0a 100644
+index 1dae65ed0a..dae860969c 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1669,6 +1669,7 @@ F:	package/tcf-agent/
+@@ -1669,6 +1669,8 @@ F:	package/tcf-agent/
  
  N:	Nylon Chen <nylon7@andestech.com>
  F:	arch/Config.in.nds32
-+F:	toolchain/toolchain-external/toolchain-external-andes-nds32/
++F:	board/andes
++F:	configs/andes_ae3xx_defconfig
+ F:	toolchain/toolchain-external/toolchain-external-andes-nds32/
  
  N:	Olaf Rempel <razzor@kopf-tisch.de>
- F:	package/ctorrent/
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index 1f14f0350a..d234c1c552 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -23,6 +23,9 @@ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config
- # ARC
- source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in"
- 
-+# Andes
-+source "toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in"
-+
- # ARM (use ARM toolchain by default)
- source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in"
- source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in"
-@@ -124,6 +127,9 @@ source "toolchain/toolchain-external/toolchain-external-linaro-aarch64-be/Config
- # ARC
- source "toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options"
- 
-+# Andes
-+source "toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options"
-+
- # ARM
- source "toolchain/toolchain-external/toolchain-external-arm-arm/Config.in.options"
- source "toolchain/toolchain-external/toolchain-external-linaro-arm/Config.in.options"
-diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
+diff --git a/board/andes/ae3xx/ae3xx.fragment b/board/andes/ae3xx/ae3xx.fragment
 new file mode 100644
-index 0000000000..e2fe63677d
+index 0000000000..3b13d10740
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32
-+	bool "Andes nds32"
-+	depends on BR2_nds32
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
-+	select BR2_TOOLCHAIN_HAS_NATIVE_RPC
-+	select BR2_TOOLCHAIN_HAS_SSP
-+	help
-+	  nds32 toolchain for the nds32 architecture. It uses GCC
-+	  8.2.1, GDB 8.1.1, glibc 2.28, Binutils 2.30. It generates
-+	  code that runs on ae3xx platform
-diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options
++++ b/board/andes/ae3xx/ae3xx.fragment
+@@ -0,0 +1 @@
++CONFIG_NDS32_BUILTIN_DTB="ae3xx"
+diff --git a/board/andes/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch b/board/andes/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch
 new file mode 100644
-index 0000000000..7d11ae2098
+index 0000000000..adb60937bd
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in.options
-@@ -0,0 +1,9 @@
-+if BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32
++++ b/board/andes/patches/linux/0001-nds32-Fix-boot-messages-garbled.patch
+@@ -0,0 +1,28 @@
++From 90d52d180dcc5d1300dc352ca709eb6453894143 Mon Sep 17 00:00:00 2001
++From: Nylon Chen <nylon7@andestech.com>
++Date: Wed, 28 Nov 2018 16:26:46 +0800
++Subject: [PATCH] nds32: Fix boot messages garbled
 +
-+config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-+	default "nds32le-linux"
++In order to display uart correctly we have to pass the correct setting of uart to kernel by bootarg.
++This patch will provide such settings to set the correct uart baud rate.
 +
-+config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+	default "toolchain-external-andes-nds32"
++Signed-off-by: Nylon Chen <nylon7@andestech.com>
++---
++ arch/nds32/boot/dts/ae3xx.dts | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+endif
-diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash b/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash
++diff --git a/arch/nds32/boot/dts/ae3xx.dts b/arch/nds32/boot/dts/ae3xx.dts
++index bb39749a6673..aefe2090926a 100644
++--- a/arch/nds32/boot/dts/ae3xx.dts
+++++ b/arch/nds32/boot/dts/ae3xx.dts
++@@ -6,6 +6,7 @@
++ 	interrupt-parent = <&intc>;
++ 
++ 	chosen {
+++		bootargs = "memblock=debug earlycon console=ttyS0,38400n8 debug loglevel=7";
++ 		stdout-path = &serial0;
++ 	};
++ 
++-- 
++2.18.0
++
+diff --git a/board/andes/readme.txt b/board/andes/readme.txt
 new file mode 100644
-index 0000000000..4314bb1f55
+index 0000000000..0f95c65549
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.hash
-@@ -0,0 +1,2 @@
-+# From https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases/download/20180521/nds32le-linux-glibc-v3-upstream.tar.gz
-+sha256 6050601df85ad93a4c211c1d57ed3773edb62aa505f7e07d7d555652e83af2cc  nds32le-linux-glibc-v3-upstream.tar.gz
-diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk b/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk
++++ b/board/andes/readme.txt
+@@ -0,0 +1,49 @@
++Intro
++=====
++
++Andestech(nds32) AE3XX Platform
++
++The AE3XX prototype demonstrates the AE3XX example platform on the FPGA. 
++It is composed of one Andestech(nds32) processor and AE3XX.
++
++How to build it
++===============
++
++Configure Buildroot
++-------------------
++
++The andes_ae3xx_defconfig configuration is a sample configuration with
++all that is required to bring the FPGA Development Board:
++
++  $ make andes_ae3xx_defconfig
++
++Build everything
++----------------
++Note: you will need to have access to the network, since Buildroot will
++download the packages' sources.
++
++  $ make
++
++Result of the build
++-------------------
++
++After building, you should obtain this tree:
++
++output/images/
++    +-- vmlinux
++    +-- rootfs.cpio
++    +-- rootfs.tar
++
++How to run it
++=============
++
++Run
++---
++
++  Setup the Console with the rate 38400/8-N-1.
++
++  $ cd output/images
++  $ ../host/bin/nds32le-linux-gdb vmlinux
++  $ target remote [your host]
++  $ lo
++  $ c 
+diff --git a/configs/andes_ae3xx_defconfig b/configs/andes_ae3xx_defconfig
 new file mode 100644
-index 0000000000..fa29490b4f
+index 0000000000..52634caa50
 --- /dev/null
-+++ b/toolchain/toolchain-external/toolchain-external-andes-nds32/toolchain-external-andes-nds32.mk
++++ b/configs/andes_ae3xx_defconfig
 @@ -0,0 +1,10 @@
-+################################################################################
-+#
-+# toolchain-external-andes-nds32
-+#
-+################################################################################
-+
-+TOOLCHAIN_EXTERNAL_ANDES_NDS32_SITE = https://github.com/vincentzwc/prebuilt-nds32-toolchain/releases/download/20180521
-+TOOLCHAIN_EXTERNAL_ANDES_NDS32_SOURCE = nds32le-linux-glibc-v3-upstream.tar.gz
-+
-+$(eval $(toolchain-external-package))
++BR2_nds32=y
++BR2_GLOBAL_PATCH_DIR="board/andes/patches/"
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32=y
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/andes/ae3xx/ae3xx.fragment"
++BR2_TARGET_ROOTFS_INITRAMFS=y
