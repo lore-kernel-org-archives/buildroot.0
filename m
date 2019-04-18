@@ -1,177 +1,282 @@
-From: Jagan Teki <jagan@amarulasolutions.com>
-Date: Thu, 18 Apr 2019 21:24:18 +0530
-Subject: [Buildroot] [PATCH] configs/oceanic_5205_5inmfd: Add Oceanic
- 5205 5inMFD board support
-In-Reply-To: <20190418153811.27299-1-shyam.saini@amarulasolutions.com>
-References: <20190418153811.27299-1-shyam.saini@amarulasolutions.com>
-Message-ID: <CAMty3ZApPo6132ae+_Asv-obv=EDq_WKTtgKTE04yy+fO1P13A@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 18 Apr 2019 18:53:01 +0200
+Subject: [Buildroot] [PATCH v2, 1/1] package/ghostscript: fix parallel build
+Message-ID: <20190418165301.28018-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Apr 18, 2019 at 9:08 PM Shyam Saini
-<shyam.saini@amarulasolutions.com> wrote:
->
-> From: Jagan Teki <jagan@amarulasolutions.com>
->
-> This board is from sunx50i A64 SOC family.
-> This initial support has following features:
->     - Mainline U-Boot
->     - Linux 5.0
->     - Default packages from buildroot
->
+Fixes:
+ - http://autobuild.buildroot.org/results/eb33b41d1b267d0207a6e3a9f5ca7f79b2f51887
 
-Please fix the commit head
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2:
+ - Fix parallel build issue with upstream patch
 
-board: Add Oceanic 5205 5inMFD support
+ ...-the-crazy-md5-file-copying-nonsense.patch | 252 ++++++++++++++++++
+ 1 file changed, 252 insertions(+)
+ create mode 100644 package/ghostscript/0002-Bug-700986-Remove-the-crazy-md5-file-copying-nonsense.patch
 
-> Tested-by: Tamas Papp <tamas@osukl.com>
-> Signed-off-by: Jagan Teki <jagan@amarulasolutions.com>
-> Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
-> ---
->  .gitlab-ci.yml                         |  1 +
->  DEVELOPERS                             |  2 ++
->  board/oceanic/5205-5inmfd/boot.cmd     |  6 ++++
->  board/oceanic/5205-5inmfd/genimage.cfg | 39 ++++++++++++++++++++++++++
->  board/oceanic/5205-5inmfd/readme.txt   | 35 ++++++++++++++++++++++++
->  configs/oceanic_5205_5inmfd_defconfig  | 50 ++++++++++++++++++++++++++++++++++
->  6 files changed, 133 insertions(+)
->  create mode 100644 board/oceanic/5205-5inmfd/boot.cmd
->  create mode 100644 board/oceanic/5205-5inmfd/genimage.cfg
->  create mode 100644 board/oceanic/5205-5inmfd/readme.txt
->  create mode 100644 configs/oceanic_5205_5inmfd_defconfig
->
-> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> index ef16b73bfb..02d6f6c0cc 100644
-> --- a/.gitlab-ci.yml
-> +++ b/.gitlab-ci.yml
-> @@ -181,6 +181,7 @@ nitrogen6sx_defconfig: { extends: .defconfig }
->  nitrogen6x_defconfig: { extends: .defconfig }
->  nitrogen7_defconfig: { extends: .defconfig }
->  nitrogen8m_defconfig: { extends: .defconfig }
-> +oceanic_5205_5inmfd_defconfig: { extends: .defconfig }
->  odroidc2_defconfig: { extends: .defconfig }
->  odroidxu4_defconfig: { extends: .defconfig }
->  olimex_a10_olinuxino_lime_defconfig: { extends: .defconfig }
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 3e0ac08e11..f23479703b 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1000,6 +1000,7 @@ F:        board/bananapi/
->  F:     board/engicam/
->  F:     board/friendlyarm/nanopi-a64/
->  F:     board/friendlyarm/nanopi-neo2/
-> +F:     board/oceanic/
->  F:     board/olimex/a64-olinuxino/
->  F:     board/orangepi/orangepi-lite2/
->  F:     board/orangepi/orangepi-one-plus
-> @@ -1020,6 +1021,7 @@ F:        configs/engicam_imx6ul_geam_defconfig
->  F:     configs/engicam_imx6ul_isiot_defconfig
->  F:     configs/friendlyarm_nanopi_a64_defconfig
->  F:     configs/friendlyarm_nanopi_neo2_defconfig
-> +F:     configs/oceanic_5205_5inmfd_defconfig
->  F:     configs/olimex_a64_olinuxino_defconfig
->  F:     configs/orangepi_lite2_defconfig
->  F:     configs/orangepi_one_plus_defconfig
-> diff --git a/board/oceanic/5205-5inmfd/boot.cmd b/board/oceanic/5205-5inmfd/boot.cmd
-> new file mode 100644
-> index 0000000000..b9c5f0e829
-> --- /dev/null
-> +++ b/board/oceanic/5205-5inmfd/boot.cmd
-> @@ -0,0 +1,6 @@
-> +setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait
-> +
-> +fatload mmc 0 $kernel_addr_r Image
-> +fatload mmc 0 $fdt_addr_r sun50i-a64-oceanic-5205-5inmfd.dtb
-> +
-> +booti $kernel_addr_r - $fdt_addr_r
-> diff --git a/board/oceanic/5205-5inmfd/genimage.cfg b/board/oceanic/5205-5inmfd/genimage.cfg
-> new file mode 100644
-> index 0000000000..047fa488a3
-> --- /dev/null
-> +++ b/board/oceanic/5205-5inmfd/genimage.cfg
-> @@ -0,0 +1,39 @@
-> +image boot.vfat {
-> +       vfat {
-> +               files = {
-> +                       "Image",
-> +                       "sun50i-a64-oceanic-5205-5inmfd.dtb",
-> +                       "boot.scr"
-> +               }
-> +       }
-> +       size = 64M
-> +}
-> +
-> +image sdcard.img {
-> +       hdimage {
-> +       }
-> +
-> +       partition spl {
-> +               in-partition-table = "no"
-> +               image = "sunxi-spl.bin"
-> +               offset = 8192
-> +       }
-> +
-> +       partition u-boot {
-> +               in-partition-table = "no"
-> +               image = "u-boot.itb"
-> +               offset = 40K
-> +               size = 1M # 1MB - 40K
-> +       }
-> +
-> +       partition boot {
-> +               partition-type = 0xC
-> +               bootable = "true"
-> +               image = "boot.vfat"
-> +       }
-> +
-> +       partition rootfs {
-> +               partition-type = 0x83
-> +               image = "rootfs.ext4"
-> +       }
-> +}
-> diff --git a/board/oceanic/5205-5inmfd/readme.txt b/board/oceanic/5205-5inmfd/readme.txt
-> new file mode 100644
-> index 0000000000..d9cd08c9d8
-> --- /dev/null
-> +++ b/board/oceanic/5205-5inmfd/readme.txt
-> @@ -0,0 +1,35 @@
-> +Intro
-> +=====
-> +
-> +This default configuration will allow you to start experimenting with the
-> +buildroot environment for the SoPine. With the current configuration
-> +it will bring-up the board, and allow access through the serial console.
-> +
-> +Wiki link:
-> +https://openedev.amarulasolutions.com/display/ODWIKI/SoPine
-> +
-> +This configuration uses U-Boot mainline and kernel mainline.
-> +
-> +How to build
-> +============
-> +
-> +    $ make pine64_sopine_defconfig
-> +
-> +    $ make
-> +
-> +Note: you will need access to the internet to download the required
-> +sources.
-> +
-> +How to write the SD card
-> +========================
-> +
-> +Once the build process is finished you will have an image called "sdcard.img"
-> +in the output/images/ directory.
-> +
-> +Copy the bootable "sdcard.img" onto an SD card with "dd":
-> +
-> +  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-> +  $ sudo sync
-> +
-> +Insert the micro SDcard in your SoPine and power it up. The console
-> +is on the serial line, 115200 8N1.
-
-Look like you forgot to replace SoPine with Oceanic.
+diff --git a/package/ghostscript/0002-Bug-700986-Remove-the-crazy-md5-file-copying-nonsense.patch b/package/ghostscript/0002-Bug-700986-Remove-the-crazy-md5-file-copying-nonsense.patch
+new file mode 100644
+index 0000000000..49bcfcdd3b
+--- /dev/null
++++ b/package/ghostscript/0002-Bug-700986-Remove-the-crazy-md5-file-copying-nonsense.patch
+@@ -0,0 +1,252 @@
++From d86210973df93ccca0befd56afba2132da925ebc Mon Sep 17 00:00:00 2001
++From: Chris Liddell <chris.liddell@artifex.com>
++Date: Thu, 18 Apr 2019 16:58:41 +0100
++Subject: [PATCH] Bug 700986: Remove the crazy md5 file copying nonsense
++
++To preserve building as a standalone test exe, we avoided using Ghostscript
++includes in the md5 source and header files, but dynamically add them to
++copies of the files during the build. Since we no longer need/care for the
++stand alone exe, remove the build complication, and just include the header
++file normally.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++http://git.ghostscript.com/?p=user/chrisl/ghostpdl.git;a=commitdiff;h=d86210973df9]
++---
++ base/gsmd5.h                   |   2 +
++ base/lib.mak                   |  10 +--
++ base/md5main.c                 | 141 -----------------------------------------
++ doc/Develop.htm                |   1 -
++ windows/ghostscript.vcproj     |   4 --
++ windows/ghostscript_rt.vcxproj |   1 -
++ 6 files changed, 5 insertions(+), 154 deletions(-)
++ delete mode 100644 base/md5main.c
++
++diff --git a/base/gsmd5.h b/base/gsmd5.h
++index 206ea6b..b159afb 100644
++--- a/base/gsmd5.h
+++++ b/base/gsmd5.h
++@@ -50,6 +50,8 @@
++ #ifndef md5_INCLUDED
++ #  define md5_INCLUDED
++ 
+++#include "memory_.h"
+++
++ /*
++  * This package supports both compile-time and run-time determination of CPU
++  * byte order.  If ARCH_IS_BIG_ENDIAN is defined as 0, the code will be
++diff --git a/base/lib.mak b/base/lib.mak
++index 3ed088a..21e2cb7 100644
++--- a/base/lib.mak
+++++ b/base/lib.mak
++@@ -387,13 +387,8 @@ gsmd5_h=$(GLSRC)gsmd5.h
++ # We have to use a slightly different compilation approach in order to
++ # get std.h included when compiling md5.c.
++ md5_=$(GLOBJ)gsmd5.$(OBJ)
++-$(GLOBJ)gsmd5.$(OBJ) : $(GLSRC)gsmd5.c $(AK) $(gsmd5_h)\
++- $(EXP)$(ECHOGS_XE) $(LIB_MAK) $(MAKEDIRS)
++-	$(EXP)$(ECHOGS_XE) -w $(GLGEN)gsmd5.h -x 23 include -x 2022 memory_.h -x 22
++-	$(EXP)$(ECHOGS_XE) -a $(GLGEN)gsmd5.h -+R $(GLSRC)gsmd5.h
++-	$(CP_) $(GLSRC)gsmd5.c $(GLGEN)gsmd5.c
++-	$(GLCC) $(GLO_)gsmd5.$(OBJ) $(C_) $(GLGEN)gsmd5.c
++-	$(RM_) $(GLGEN)gsmd5.c $(GLGEN)gsmd5.h
+++$(GLOBJ)gsmd5.$(OBJ) : $(GLSRC)gsmd5.c $(AK) $(gsmd5_h) $(LIB_MAK) $(MAKEDIRS)
+++	$(GLCC) $(GLO_)gsmd5.$(OBJ) $(C_) $(GLSRC)gsmd5.c
++ 
++ # SHA-256 digest
++ sha2_h=$(GLSRC)sha2.h
++@@ -12346,3 +12341,4 @@ $(GLSRC)gxshade4.h:$(GLSRC)gstypes.h
++ $(GLSRC)gxshade4.h:$(GLSRC)stdpre.h
++ $(GLSRC)gxshade4.h:$(GLGEN)arch.h
++ $(GLSRC)gxshade4.h:$(GLSRC)gs_dll_call.h
+++$(GLSRC)gsmd5.h:$(GLSRC)memory_.h
++diff --git a/base/md5main.c b/base/md5main.c
++deleted file mode 100644
++index 75c523b..0000000
++--- a/base/md5main.c
+++++ /dev/null
++@@ -1,141 +0,0 @@
++-/*
++-  Copyright (C) 2002-2018 Artifex Software, Inc.
++-  All rights reserved.
++-
++-  This software is provided 'as-is', without any express or implied
++-  warranty.  In no event will the authors be held liable for any damages
++-  arising from the use of this software.
++-
++-  Permission is granted to anyone to use this software for any purpose,
++-  including commercial applications, and to alter it and redistribute it
++-  freely, subject to the following restrictions:
++-
++-  1. The origin of this software must not be misrepresented; you must not
++-     claim that you wrote the original software. If you use this software
++-     in a product, an acknowledgment in the product documentation would be
++-     appreciated but is not required.
++-  2. Altered source versions must be plainly marked as such, and must not be
++-     misrepresented as being the original software.
++-  3. This notice may not be removed or altered from any source distribution.
++-
++-  L. Peter Deutsch
++-  ghost at aladdin.com
++-
++- */
++-/*
++-  Independent implementation of MD5 (RFC 1321).
++-
++-  This code implements the MD5 Algorithm defined in RFC 1321, whose
++-  text is available at
++-        http://www.ietf.org/rfc/rfc1321.txt
++-  The code is derived from the text of the RFC, including the test suite
++-  (section A.5) but excluding the rest of Appendix A.  It does not include
++-  any code or documentation that is identified in the RFC as being
++-  copyrighted.
++-
++-  The original and principal author of md5.c is L. Peter Deutsch
++-  <ghost@aladdin.com>.  Other authors are noted in the change history
++-  that follows (in reverse chronological order):
++-
++-  2007-06-08 RG  Namespaced the api calls to avoid conflict with other
++-        implementations when linking gs as a library.
++-  2002-04-13 lpd Splits off main program into a separate file, md5main.c.
++- */
++-
++-#include "gsmd5.h"
++-#include <math.h>
++-#include <stdio.h>
++-#include <string.h>
++-
++-/*
++- * This file builds an executable that performs various functions related
++- * to the MD5 library.  Typical compilation:
++- *	gcc -o md5main -lm md5main.c md5.c
++- */
++-static const char *const usage = "\
++-Usage:\n\
++-    md5main --test		# run the self-test (A.5 of RFC 1321)\n\
++-    md5main --t-values		# print the T values for the library\n\
++-    md5main --version		# print the version of the package\n\
++-";
++-static const char *const version = "2002-04-13";
++-
++-/* Run the self-test. */
++-static int
++-do_test(void)
++-{
++-    static const char *const test[7*2] = {
++-        "", "d41d8cd98f00b204e9800998ecf8427e",
++-        "a", "0cc175b9c0f1b6a831c399e269772661",
++-        "abc", "900150983cd24fb0d6963f7d28e17f72",
++-        "message digest", "f96b697d7cb7938d525a2f31aaf161d0",
++-        "abcdefghijklmnopqrstuvwxyz", "c3fcd3d76192e4007dfb496cca67e13b",
++-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
++-                                "d174ab98d277d9f5a5611c2c9f419d9f",
++-        "12345678901234567890123456789012345678901234567890123456789012345678901234567890", "57edf4a22be3c955ac49da2e2107b67a"
++-    };
++-    int i;
++-    int status = 0;
++-
++-    for (i = 0; i < 7*2; i += 2) {
++-        gs_md5_state_t state;
++-        gs_md5_byte_t digest[16];
++-        char hex_output[16*2 + 1];
++-        int di;
++-
++-        gs_md5_init(&state);
++-        gs_md5_append(&state, (const gs_md5_byte_t *)test[i], strlen(test[i]));
++-        gs_md5_finish(&state, digest);
++-        for (di = 0; di < 16; ++di)
++-            gs_sprintf(hex_output + di * 2, "%02x", digest[di]);
++-        if (strcmp(hex_output, test[i + 1])) {
++-            printf("MD5 (\"%s\") = ", test[i]);
++-            puts(hex_output);
++-            printf("**** ERROR, should be: %s\n", test[i + 1]);
++-            status = 1;
++-        }
++-    }
++-    if (status == 0)
++-        puts("md5 self-test completed successfully.");
++-    return status;
++-}
++-
++-/* Print the T values. */
++-static int
++-do_t_values(void)
++-{
++-    int i;
++-    for (i = 1; i <= 64; ++i) {
++-        unsigned long v = (unsigned long)(4294967296.0 * fabs(sin((double)i)));
++-
++-        /*
++-         * The following nonsense is only to avoid compiler warnings about
++-         * "integer constant is unsigned in ANSI C, signed with -traditional".
++-         */
++-        if (v >> 31) {
++-            printf("#define T%d /* 0x%08lx */ (T_MASK ^ 0x%08lx)\n", i,
++-                   v, (unsigned long)(unsigned int)(~v));
++-        } else {
++-            printf("#define T%d    0x%08lx\n", i, v);
++-        }
++-    }
++-    return 0;
++-}
++-
++-/* Main program */
++-int
++-main(int argc, char *argv[])
++-{
++-    if (argc == 2) {
++-        if (!strcmp(argv[1], "--test"))
++-            return do_test();
++-        if (!strcmp(argv[1], "--t-values"))
++-            return do_t_values();
++-        if (!strcmp(argv[1], "--version")) {
++-            puts(version);
++-            return 0;
++-        }
++-    }
++-    puts(usage);
++-    return 0;
++-}
++diff --git a/doc/Develop.htm b/doc/Develop.htm
++index c1ffceb..1ed3030 100644
++--- a/doc/Develop.htm
+++++ b/doc/Develop.htm
++@@ -684,7 +684,6 @@ Other:
++ <a href="../base/gx.h">base/gx.h</a>,
++ <a href="../base/gsmd5.c">base/gsmd5.c</a>,
++ <a href="../base/gsmd5.h">base/gsmd5.h</a>,
++-<a href="../base/md5main.c">base/md5main.c</a>,
++ <a href="../base/aes.c">base/aes.c</a>,
++ <a href="../base/aes.h">base/aes.h</a>.
++ 
++diff --git a/windows/ghostscript.vcproj b/windows/ghostscript.vcproj
++index d607949..fdbeaa1 100644
++--- a/windows/ghostscript.vcproj
+++++ b/windows/ghostscript.vcproj
++@@ -2510,10 +2510,6 @@
++ 				>
++ 			</File>
++ 			<File
++-				RelativePath="..\base\md5main.c"
++-				>
++-			</File>
++-			<File
++ 				RelativePath="..\base\memento.c"
++ 				>
++ 			</File>
++diff --git a/windows/ghostscript_rt.vcxproj b/windows/ghostscript_rt.vcxproj
++index 589b2d1..fca736b 100644
++--- a/windows/ghostscript_rt.vcxproj
+++++ b/windows/ghostscript_rt.vcxproj
++@@ -597,7 +597,6 @@
++     <ClCompile Include="..\base\gxtype1.c" />
++     <ClCompile Include="..\base\gzspotan.c" />
++     <ClCompile Include="..\base\gsmd5.c" />
++-    <ClCompile Include="..\base\md5main.c" />
++     <ClCompile Include="..\base\memento.c" />
++     <ClCompile Include="..\base\minftrsz.c" />
++     <ClCompile Include="..\base\mkromfs.c" />
++-- 
++2.9.1
++
++
+-- 
+2.20.1
