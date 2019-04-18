@@ -1,115 +1,97 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Thu, 18 Apr 2019 07:42:15 -0700
-Subject: [Buildroot] [PATCH 2/2] board/sifive: add support for the
- HiFive Unleashed board
-In-Reply-To: <cd832ff7-e333-684c-2064-f97172743c2c@embecosm.com>
-References: <20190414134307.24754-1-mark.corbin@embecosm.com>
- <20190414134307.24754-2-mark.corbin@embecosm.com>
- <7261729c-385b-8dd1-e969-72f95c9ac0be@mind.be>
- <32b6cdc6-3536-91de-206e-6059eed78b9c@embecosm.com>
- <c7f0cf15-5ed5-6ab0-2c36-dad0bcc9572e@mind.be>
- <CAKmqyKPbCKJe_TE4Y0uxhfcoP5FDzVCBXAPkXRWc9qyaX43F3A@mail.gmail.com>
- <cd832ff7-e333-684c-2064-f97172743c2c@embecosm.com>
-Message-ID: <CAKmqyKMid_J_8Bv5FqEyDYx+4_uWmhF67t7hMw+uHaLP6hY=MQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 18 Apr 2019 16:45:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/neardal: bump to version
+ 4143d130ed39299bfc59d08d2c7c77dbc7f809e9
+Message-ID: <20190418144542.24410-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 17, 2019 at 5:03 AM Mark Corbin <mark.corbin@embecosm.com> wrote:
->
-> Hello Alistair
->
-> On 16/04/2019 00:29, Alistair Francis wrote:
-> > On Mon, Apr 15, 2019 at 7:28 AM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >>
-> >>
-> >> On 15/04/2019 15:04, Mark Corbin wrote:
-> >>>>> +Connect the USB cable and open minicom (/dev/ttyUSB1, 115200, 8N1).
-> >>>>  How do you know it is ttyUSB1? It is usually USB0...
-> >>> There are two USB serial devices on the board - the console always seems
-> >>> to be on USB1 on my board. I can be more cautious and say '/dev/ttyUSBx'
-> >>> instead.
-> >>  Ah, now I see... So the single USB cable provides two serial ports, and USB1 is
-> >> the one you need? Then it's indeed better to specify USB1 in the README. But
-> >> maybe also explain that there are two ports.
-> > It should always be USB1.
->
-> Ok, that's agreed then :-)
->
-> >
-> >>>>> +
-> >>>>> +See the 'SiFive HiFive Unleashed Getting Started Guide' for
-> >>>>> +more details (https://www.sifive.com/documentation).
-> >>>>> +
-> >>>>> +--
-> >>>>> +
-> >>>>> +Mark Corbin <mark.corbin@embecosm.com> April 2019
-> >>>>> diff --git a/configs/sifive_u540_unleashed_defconfig b/configs/sifive_u540_unleashed_defconfig
-> >>>>> new file mode 100644
-> >>>>> index 0000000000..b56ae1b164
-> >>>>> --- /dev/null
-> >>>>> +++ b/configs/sifive_u540_unleashed_defconfig
-> >>>>> @@ -0,0 +1,29 @@
-> >>>>> +# Architecture
-> >>>>> +BR2_riscv=y
-> >>>>> +BR2_RISCV_64=y
-> >>>>> +
-> >>>>> +# Patches
-> >>>>> +BR2_GLOBAL_PATCH_DIR="board/sifive/patches"
-> >>>>> +
-> >>>>> +# Linux headers same as kernel, a 4.20 series
-> >>>>> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
-> >>>>> +
-> >>>>> +# System
-> >>>>> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/sifive/u540-unleashed/post-image.sh"
-> >>>>> +
-> >>>>> +# Kernel
-> >>>>> +BR2_LINUX_KERNEL=y
-> >>>>> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> >>>>> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.20.17"
-> >>>>  Oh, now I see, you're porting the changes done by sifive from 4.19 to 4.20...
-> >>>> Is that also what the freedom-u-sdk does? I don't think so...
-> >>> I'm not sure that the freedom-u-sdk has moved to 4.19 yet (the v1_0
-> >>> release uses 4.15), but there is a patched 4.19 kernel tree available in
-> >>> the master branch. I've generated a patch for 4.20.17 based on this
-> >>> patched 4.19 tree. I wanted to move to the most recent version of the
-> >>> 4.20 kernel that Buildroot supported, but I guess that I could also just
-> >>> look at using the patched 4.19 branch that already exists.
-> >>  If a board is far away from being supported by upstream, we usually stick to an
-> >> "offical" fork from the board vendor.
-> > Unfortunately there is no "official" upstream fork. If using the 5.1
-> > kernel there are only 8 patches required
-> > (https://github.com/alistair23/linux/tree/hifive-unleashed-5.1). In OE
-> > we just apply those patches on top of mainline for 5.1
-> > (https://github.com/riscv/meta-riscv/tree/master/recipes-kernel/linux/files/freedom-u540)
-> > as that way we can still get updates from the kernel community.
-> >
-> > I think the best bet is to use the latest kernel (maybe it's worth
-> > waiting until 5.1) and applying the patches on top. The diff is slowly
-> > shrinking so the newer the kernel the better. Those older kernels are
-> > not in a great shape and no one is maintaining them.
->
-> Rather that waiting for the 5.1 kernel I will look at using upstream
-> 5.0.7 (Buildroot latest) with patches applied from the appropriate repo
-> via the BR2_LINUX_KERNEL_PATCH variable.
+- Remove patch (already in version)
+- Add hash for license file
 
-Ok, if you want I have a branch that we use in OE and is well tested.
-It's available here:
-https://github.com/alistair23/linux/commits/hifive-unleashed-5.0
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...tic-linking-with-libedit-or-readline.patch | 45 -------------------
+ package/neardal/neardal.hash                  |  3 +-
+ package/neardal/neardal.mk                    |  2 +-
+ 3 files changed, 3 insertions(+), 47 deletions(-)
+ delete mode 100644 package/neardal/0001-fix-static-linking-with-libedit-or-readline.patch
 
-You probably want to drop the top three patches if you are just
-targeting the Unleased (not the Microsemi expansion board or 32-bit).
-
-Alistair
-
->
-> Regards
->
-> Mark
->
-> --
-> Mark Corbin
-> Embecosm Ltd.
-> https://www.embecosm.com
+diff --git a/package/neardal/0001-fix-static-linking-with-libedit-or-readline.patch b/package/neardal/0001-fix-static-linking-with-libedit-or-readline.patch
+deleted file mode 100644
+index bae0edae96..0000000000
+--- a/package/neardal/0001-fix-static-linking-with-libedit-or-readline.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 62ae1bf0206960d0ba5ff8f90238030e67f1a5cd Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 28 Oct 2018 20:58:55 +0100
+-Subject: [PATCH] fix static linking with libedit or readline
+-
+-Use PKG_CHECK_MODULES to find libedit or readline and continue to use
+-AC_SEARCH_LIBS as a fallback
+-
+-By using PKG_CHECK_MODULES, static link will work as -lncurses or -lbsd
+-will be automatically added
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/connectivity/neardal/pull/7]
+----
+- configure.ac | 14 ++++++++++----
+- 1 file changed, 10 insertions(+), 4 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index f0cebed..211b896 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -68,10 +68,16 @@ PKG_CHECK_MODULES(gio, gio-unix-2.0 >= 2.30,
+- 	AC_SUBST([gio_LIBS]),
+- 	AC_MSG_ERROR(gio-unix-2.0 >= 2.30 is required))
+- 
+--AC_SEARCH_LIBS([rl_initialize], [edit readline],
+--	[AS_IF([echo $LIBS | grep -q "-ledit"],
+--		[CPPFLAGS="-DHAVE_LIBEDIT $CPPFLAGS"])],
+--	[AC_MSG_ERROR(editline or readline is required)])
+-+PKG_CHECK_MODULES(libedit, libedit,
+-+	[CPPFLAGS="-DHAVE_LIBEDIT $libedit_CFLAGS $CPPFLAGS"
+-+	 LIBS="$libedit_LIBS $LIBS"],
+-+	[PKG_CHECK_MODULES(readline, readline,
+-+		[CPPFLAGS="$readline_CFLAGS $CPPFLAGS"
+-+		 LIBS="$readline_LIBS $LIBS"],
+-+		AC_SEARCH_LIBS([rl_initialize], [edit readline],
+-+			[AS_IF([echo $LIBS | grep -q "-ledit"],
+-+				[CPPFLAGS="-DHAVE_LIBEDIT $CPPFLAGS"])],
+-+			[AC_MSG_ERROR(editline or readline is required)]))])
+- 
+- AC_PATH_TOOL([DOXYGEN], [doxygen])
+- AM_CONDITIONAL([HAVE_DOXYGEN], [test ! -z "$DOXYGEN"])
+--- 
+-2.17.1
+-
+diff --git a/package/neardal/neardal.hash b/package/neardal/neardal.hash
+index c767a74569..b8b8b96a44 100644
+--- a/package/neardal/neardal.hash
++++ b/package/neardal/neardal.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 9955753759a2604fa47562a4bbccd3b787d625e70311bb6662936d89d26715b7  neardal-33b54a55032b047fd885a5eb3592c169c0056c49.tar.gz
++sha256 dae3c432e619a0d3102c5222d0b8fde74413ae519a64ccaae0fc81d31504aecb  neardal-4143d130ed39299bfc59d08d2c7c77dbc7f809e9.tar.gz
++sha256 296a87e9098d3f2ce1ef80c73c53399dc2c7412f35d4175c45810ea15ed86406  COPYING
+diff --git a/package/neardal/neardal.mk b/package/neardal/neardal.mk
+index 3883011932..ea9643244e 100644
+--- a/package/neardal/neardal.mk
++++ b/package/neardal/neardal.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NEARDAL_VERSION = 33b54a55032b047fd885a5eb3592c169c0056c49
++NEARDAL_VERSION = 4143d130ed39299bfc59d08d2c7c77dbc7f809e9
+ NEARDAL_SITE = $(call github,connectivity,neardal,$(NEARDAL_VERSION))
+ NEARDAL_INSTALL_STAGING = YES
+ NEARDAL_LICENSE = GPL-2.0
+-- 
+2.20.1
