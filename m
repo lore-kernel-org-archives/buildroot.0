@@ -1,76 +1,91 @@
-From: Louis des Landes <louis@psykar.com>
-Date: Thu, 18 Apr 2019 09:44:19 +0930
-Subject: [Buildroot] [PATCH 1/2] Makefile: add chmod before rm when
- cleaning.
-In-Reply-To: <339b8a2c-0557-e5ba-d153-5012b2773c4b@mind.be>
-References: <20190417000931.5356-1-louis.deslandes@fleet.space>
- <339b8a2c-0557-e5ba-d153-5012b2773c4b@mind.be>
-Message-ID: <CALvytycy9-K6q-vRLaJ3a6OGBoAQU3hYiTkOeV-KCmpAKkawjQ@mail.gmail.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Thu, 18 Apr 2019 06:23:54 +0200
+Subject: [Buildroot] [PATCH v5 1/2] qt5base: Fix inconsistencies when
+ overriding qmake properties
+In-Reply-To: <2933136d-62be-ba98-cc68-4d301238620a@mind.be>
+References: <20190415205622.25268-1-anaumann@ultratronik.de>
+ <2933136d-62be-ba98-cc68-4d301238620a@mind.be>
+Message-ID: <4dedbe75-f180-6df3-3583-bf3a9c008684@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 18 Apr 2019 at 06:12, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 17/04/2019 02:09, Louis des Landes wrote:
-> > Some build systems (looking at you golang) create read only directories
-> > as caches.
-> > As such rm -rf will actually fail, causing clean and <pkg>-dirclean to fail.
-> >
-> > This patch will cause `make clean` to run chmod -R +w on the relevant
-> > directory first, which will allow rm -rf to work.
-> >
-> > This may be resolved if https://github.com/golang/go/issues/31481 is
-> > resolved satisfactorily.
->
->  I don't like this very much - adding a go-specific workaround to the generic
-> infrastructure.
->
->  Would it be acceptable to instead do the chmod as a POST_BUILD_HOOK that is
-> added by golang-package?
-I kind of agree, and this is somewhat of a hack. POST_BUILD_HOOK
-doesn't get triggered if the build fails (AFAIK) so
-a failed build would still leave this directory lying around without
-being chmod'd. Might still be a good addition though.
 
->
->  I also don't understand that I haven't encountered this issue myself... Maybe I
-> don't build Go packages...
-This 'feature' was introduced with 'module' support (
-https://github.com/golang/go/wiki/Modules )
-Previously there was no official dependency management, so unless
-you're building recent go packages you won't encounter this issue.
-In most other ways this module support is great. In this particular
-respect it's annoying for build systems.
 
->  Regards,
->  Arnout
->
-> >
-> > Signed-off-by: Louis des Landes <louis.deslandes@fleet.space>
-> > ---
-> >  Makefile | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/Makefile b/Makefile
-> > index 522c0b0606..fc2a82e074 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1060,6 +1060,12 @@ printvars:
-> >
-> >  .PHONY: clean
-> >  clean:
-> > +     # Some build systems (looking at you golang) create read only directories
-> > +     # As such rm -rf will actually fail, so brute force them all to writeable
-> > +     # before removing them.
-> > +     chmod -R u+w $(BASE_TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) $(HOST_DIR_SYMLINK) \
-> > +             $(BUILD_DIR) $(BASE_DIR)/staging \
-> > +             $(LEGAL_INFO_DIR) $(GRAPHS_DIR)
-> >       rm -rf $(BASE_TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) $(HOST_DIR_SYMLINK) \
-> >               $(BUILD_DIR) $(BASE_DIR)/staging \
-> >               $(LEGAL_INFO_DIR) $(GRAPHS_DIR)
-> >
+Am 18.04.19 um 00:09 schrieb Arnout Vandecappelle:
+> 
+> 
+> On 15/04/2019 22:56, Andreas Naumann wrote:
+>> When querying the qmake properties with our custom qt.conf present, I noticed
+>> that they were different from the built-in ones (without qt.conf).
+>> Most notably QT_INSTALL_PREFIX was a concatenated string of two absolute pathes
+> 
+>   It is paths, not pathes.
+> 
+>   Also, please wrap the commit log at 72 characters.
+
+Ok, wasnt aware of that, always thought 80.
+> 
+>   With that, I applied to master, thanks.
+
+Thanks,
+Andreas
+
+> 
+>   Regards,
+>   Arnout
+> 
+>> (hostdir + sysroot).
+>>
+>> This is due to Prefix being set to our HOST_DIR and HostPrefix not being set at
+>> all. I guess this was also the root cause of the initial problem with
+>> qt.conf.in, because once Prefix and HostPrefix were set to their correct values,
+>> re-setting all the other default pathes became obsolete. (However, since our
+>> pathes for Headers, Plugins and Examples are non-default, they still have to be
+>> explicitely set.)
+>>
+>> There is one exception to this: Omitting 'Settings' leads to the CONFIGURATION
+>> path being plain /usr, whereas the default without qt.conf is /usr/etc/xdg. But
+>> even if storing configs directly under /usr seems a bit strange we keep it that
+>> way, so the behaviour of "our" qmake doesnt change.
+>>
+>> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+>> ---
+>>   package/qt5/qt5base/qt.conf.in | 16 ++--------------
+>>   1 file changed, 2 insertions(+), 14 deletions(-)
+>>
+>> v4->v5
+>> - Split from qmake infra patches (because of limited time for full rework)
+>> - Keep custom settings path /usr instead of resetting to default /usr/etc/xdg
+>>
+>>
+>> diff --git a/package/qt5/qt5base/qt.conf.in b/package/qt5/qt5base/qt.conf.in
+>> index 9a0b9cd53b..2215cbd4e1 100644
+>> --- a/package/qt5/qt5base/qt.conf.in
+>> +++ b/package/qt5/qt5base/qt.conf.in
+>> @@ -1,19 +1,7 @@
+>>   [Paths]
+>> -Prefix=@@HOST_DIR@@
+>> +Prefix=/usr
+>> +HostPrefix=@@HOST_DIR@@
+>>   Sysroot=@@STAGING_DIR@@
+>>   Headers=/usr/include/qt5
+>> -Libraries=/usr/lib
+>> -LibraryExecutables=/usr/libexec
+>> -Binaries=/usr/bin
+>>   Plugins=/usr/lib/qt/plugins
+>>   Examples=/usr/lib/qt/examples
+>> -Qml2Imports=/usr/qml
+>> -Imports=/usr/imports
+>> -Translations=/usr/translations
+>> -Examples=/usr/lib/qt/examples
+>> -Demos=/usr/lib/qt/examples
+>> -Tests=/usr/tests
+>> -Settings=/usr
+>> -Documentation=/usr/doc
+>> -ArchData=/usr
+>> -Data=/usr
+>>
+> 
