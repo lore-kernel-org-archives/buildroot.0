@@ -1,54 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Apr 2019 11:43:36 +0200
-Subject: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
-In-Reply-To: <20190418093902.41835-1-abrodkin@synopsys.com>
-References: <20190418093902.41835-1-abrodkin@synopsys.com>
-Message-ID: <20190418114336.61f3f404@windsurf>
+From: Nylon Chen <nylon7@andestech.com>
+Date: Thu, 18 Apr 2019 17:46:55 +0800
+Subject: [Buildroot] [PATCH 1/1] package/binutils: fix build error due to
+ architecture name is incomplete
+Message-ID: <20190418094655.6526-1-nylon7@andestech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes
+  http://autobuild.buildroot.net/results/128/12803a705586e82fdfb49013da2eb3b9879ccd45/
 
-On Thu, 18 Apr 2019 12:39:02 +0300
-Alexey Brodkin <Alexey.Brodkin@synopsys.com> wrote:
+Signed-off-by: Che-Wei Chuang <cnoize@andestech.com>
+Signed-off-by: Greentime Hu <greentime@andestech.com>
+Signed-off-by: Nylon Chen <nylon7@andestech.com>
+---
+ Makefile                   | 1 +
+ arch/Config.in.nds32       | 2 +-
+ package/binutils/Config.in | 4 ++--
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-> perf uses its own build-system and doesn't respect externally set flags.
-> Let's force it to use target flags as perf utility is nothing but
-> an ordinary user-space application.
-> 
-> This among other things is required to build perf for ARC700 for which
-> we pass "-matomic" via TARGET_ABI, see [1] for more details.
-> 
-> [1] https://patchwork.ozlabs.org/patch/1087471/
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> ---
->  package/linux-tools/linux-tool-perf.mk.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
-> index 80e00c3c56..e7565773c4 100644
-> --- a/package/linux-tools/linux-tool-perf.mk.in
-> +++ b/package/linux-tools/linux-tool-perf.mk.in
-> @@ -19,6 +19,7 @@ PERF_MAKE_FLAGS = \
->  	JOBS=$(PARALLEL_JOBS) \
->  	ARCH=$(PERF_ARCH) \
->  	DESTDIR=$(TARGET_DIR) \
-> +	EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
-
-The change is OK, but I believe that if -matomic is really a
-core/important CFLAGS on ARC, then we should ideally pass it through
-the toolchain wrapper, so that we are sure it is always passed.
-
-Arnout, what do you think?
-
-Best regards,
-
-Thomas
+diff --git a/Makefile b/Makefile
+index 522c0b0606..86e444da98 100644
+--- a/Makefile
++++ b/Makefile
+@@ -439,6 +439,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+ 	-e s/arceb/arc/ \
+ 	-e s/arm.*/arm/ -e s/sa110/arm/ \
+ 	-e s/aarch64.*/arm64/ \
++	-e s/nds32.*/nds32/ \
+ 	-e s/or1k/openrisc/ \
+ 	-e s/parisc64/parisc/ \
+ 	-e s/powerpc64.*/powerpc/ \
+diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
+index 9c5db20e6f..f268883662 100644
+--- a/arch/Config.in.nds32
++++ b/arch/Config.in.nds32
+@@ -1,5 +1,5 @@
+ config BR2_ARCH
+-	default "nds32"
++	default "nds32le"
+ 
+ config BR2_GCC_TARGET_ARCH
+ 	default "v3"
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+index 2bf7929ac8..e17a8ec65a 100644
+--- a/package/binutils/Config.in
++++ b/package/binutils/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_BINUTILS
+ 	bool "binutils"
+-	depends on !BR2_nios2 && !BR2_nds32
++	depends on !BR2_nios2
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  Install binutils on the target
+@@ -21,5 +21,5 @@ config BR2_PACKAGE_BINUTILS_TARGET
+ endif
+ 
+ comment "binutils needs a toolchain w/ wchar"
+-	depends on !BR2_nios2 && !BR2_nds32
++	depends on !BR2_nios2
+ 	depends on !BR2_USE_WCHAR
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.18.0
