@@ -1,50 +1,53 @@
 From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Thu, 18 Apr 2019 17:06:16 +0000
-Subject: [Buildroot] [arc-buildroot] [PATCH] linux-tools/perf: Add
- dependency on atomic ops for ARC
-In-Reply-To: <20190418114115.2e186f18@windsurf>
-References: <20190418093025.36642-1-abrodkin@synopsys.com>
- <20190418114115.2e186f18@windsurf>
-Message-ID: <CY4PR1201MB0120AD583684DE9E67EA7C47A1260@CY4PR1201MB0120.namprd12.prod.outlook.com>
+Date: Thu, 18 Apr 2019 20:38:45 +0300
+Subject: [Buildroot] [PATCH v2] linux-tools/perf: Add dependency on 32-bit
+ atomics
+Message-ID: <20190418173845.14495-1-abrodkin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Atomic ops are strictly required by perf utility as it uses
+atomic_xxx() functions.
 
-> -----Original Message-----
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Sent: Thursday, April 18, 2019 12:41 PM
-> To: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: buildroot at busybox.net; ARC Buildroot mailing list <arc-buildroot@synopsys.com>
-> Subject: Re: [arc-buildroot] [Buildroot] [PATCH] linux-tools/perf: Add dependency on atomic ops for
-> ARC
-> 
-> Hello,
-> 
-> On Thu, 18 Apr 2019 12:30:25 +0300
-> Alexey Brodkin <Alexey.Brodkin@synopsys.com> wrote:
-> 
-> > Atomic ops are strictly required by perf utility as it uses
-> > atomic_xxx() functions.
+Otherwise building fails like that:
+|.../output/host/opt/ext-toolchain/bin/../lib/gcc/arc-snps-linux-uclibc/8.2.1/../../../../arc-snps-linux-uclibc/bin/ld:
+|.../output/build/linux-5.0.7/tools/perf/libperf.a(libperf-in.o): in function `atomic_cmpxchg':
+|.../output/build/linux-5.0.7/tools/include/asm-generic/atomic-gcc.h:69: undefined reference to `__sync_val_compare_and_swap_4'
 
-[snip]
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+
+Changes v1 -> v2:
+ * Depend on generic BR2_TOOLCHAIN_HAS_SYNC_4
+
+ package/linux-tools/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 4916faa349..104065b22d 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -46,6 +46,7 @@ config BR2_PACKAGE_LINUX_TOOLS_PCI
+ config BR2_PACKAGE_LINUX_TOOLS_PERF
+ 	bool "perf"
+ 	select BR2_PACKAGE_LINUX_TOOLS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	help
+ 	  perf (sometimes "Perf Events" or perf tools, originally
+ 	  "Performance Counters for Linux") - is a performance
+@@ -64,6 +65,9 @@ config BR2_PACKAGE_LINUX_TOOLS_PERF
  
-> Since the actual dependency is on sync builtins, can we use
-> BR2_TOOLCHAIN_HAS_SYNC_4 instead ?
-> 
-> BR2_TOOLCHAIN_HAS_SYNC_4 is already defined like this:
-> 
-> config BR2_TOOLCHAIN_HAS_SYNC_4
->         bool
->         default y
->         depends on !BR2_m68k_cf
->         depends on !BR2_sparc
->         depends on !(BR2_arc && !BR2_ARC_ATOMIC_EXT)
-
-That looks much better in fact, so re-spin is coming.
-Thanks for the hint!
-
--Alexey
+ 	  https://perf.wiki.kernel.org/
+ 
++comment "perf needs 32-bit atomic ops"
++	depends on !BR2_TOOLCHAIN_HAS_SYNC_4
++
+ if BR2_PACKAGE_LINUX_TOOLS_PERF
+ 
+ config BR2_PACKAGE_LINUX_TOOLS_PERF_TUI
+-- 
+2.16.2
