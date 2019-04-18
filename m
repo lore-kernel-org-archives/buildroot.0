@@ -1,70 +1,115 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 18 Apr 2019 15:38:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gnuradio: fix build with boost
- 1.70.0
-Message-ID: <20190418133848.15020-1-fontaine.fabrice@gmail.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Thu, 18 Apr 2019 07:42:15 -0700
+Subject: [Buildroot] [PATCH 2/2] board/sifive: add support for the
+ HiFive Unleashed board
+In-Reply-To: <cd832ff7-e333-684c-2064-f97172743c2c@embecosm.com>
+References: <20190414134307.24754-1-mark.corbin@embecosm.com>
+ <20190414134307.24754-2-mark.corbin@embecosm.com>
+ <7261729c-385b-8dd1-e969-72f95c9ac0be@mind.be>
+ <32b6cdc6-3536-91de-206e-6059eed78b9c@embecosm.com>
+ <c7f0cf15-5ed5-6ab0-2c36-dad0bcc9572e@mind.be>
+ <CAKmqyKPbCKJe_TE4Y0uxhfcoP5FDzVCBXAPkXRWc9qyaX43F3A@mail.gmail.com>
+ <cd832ff7-e333-684c-2064-f97172743c2c@embecosm.com>
+Message-ID: <CAKmqyKMid_J_8Bv5FqEyDYx+4_uWmhF67t7hMw+uHaLP6hY=MQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/4109881eab99fd720e97f1070c374e67dd881b85
+On Wed, Apr 17, 2019 at 5:03 AM Mark Corbin <mark.corbin@embecosm.com> wrote:
+>
+> Hello Alistair
+>
+> On 16/04/2019 00:29, Alistair Francis wrote:
+> > On Mon, Apr 15, 2019 at 7:28 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+> >>
+> >>
+> >> On 15/04/2019 15:04, Mark Corbin wrote:
+> >>>>> +Connect the USB cable and open minicom (/dev/ttyUSB1, 115200, 8N1).
+> >>>>  How do you know it is ttyUSB1? It is usually USB0...
+> >>> There are two USB serial devices on the board - the console always seems
+> >>> to be on USB1 on my board. I can be more cautious and say '/dev/ttyUSBx'
+> >>> instead.
+> >>  Ah, now I see... So the single USB cable provides two serial ports, and USB1 is
+> >> the one you need? Then it's indeed better to specify USB1 in the README. But
+> >> maybe also explain that there are two ports.
+> > It should always be USB1.
+>
+> Ok, that's agreed then :-)
+>
+> >
+> >>>>> +
+> >>>>> +See the 'SiFive HiFive Unleashed Getting Started Guide' for
+> >>>>> +more details (https://www.sifive.com/documentation).
+> >>>>> +
+> >>>>> +--
+> >>>>> +
+> >>>>> +Mark Corbin <mark.corbin@embecosm.com> April 2019
+> >>>>> diff --git a/configs/sifive_u540_unleashed_defconfig b/configs/sifive_u540_unleashed_defconfig
+> >>>>> new file mode 100644
+> >>>>> index 0000000000..b56ae1b164
+> >>>>> --- /dev/null
+> >>>>> +++ b/configs/sifive_u540_unleashed_defconfig
+> >>>>> @@ -0,0 +1,29 @@
+> >>>>> +# Architecture
+> >>>>> +BR2_riscv=y
+> >>>>> +BR2_RISCV_64=y
+> >>>>> +
+> >>>>> +# Patches
+> >>>>> +BR2_GLOBAL_PATCH_DIR="board/sifive/patches"
+> >>>>> +
+> >>>>> +# Linux headers same as kernel, a 4.20 series
+> >>>>> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
+> >>>>> +
+> >>>>> +# System
+> >>>>> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/sifive/u540-unleashed/post-image.sh"
+> >>>>> +
+> >>>>> +# Kernel
+> >>>>> +BR2_LINUX_KERNEL=y
+> >>>>> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> >>>>> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.20.17"
+> >>>>  Oh, now I see, you're porting the changes done by sifive from 4.19 to 4.20...
+> >>>> Is that also what the freedom-u-sdk does? I don't think so...
+> >>> I'm not sure that the freedom-u-sdk has moved to 4.19 yet (the v1_0
+> >>> release uses 4.15), but there is a patched 4.19 kernel tree available in
+> >>> the master branch. I've generated a patch for 4.20.17 based on this
+> >>> patched 4.19 tree. I wanted to move to the most recent version of the
+> >>> 4.20 kernel that Buildroot supported, but I guess that I could also just
+> >>> look at using the patched 4.19 branch that already exists.
+> >>  If a board is far away from being supported by upstream, we usually stick to an
+> >> "offical" fork from the board vendor.
+> > Unfortunately there is no "official" upstream fork. If using the 5.1
+> > kernel there are only 8 patches required
+> > (https://github.com/alistair23/linux/tree/hifive-unleashed-5.1). In OE
+> > we just apply those patches on top of mainline for 5.1
+> > (https://github.com/riscv/meta-riscv/tree/master/recipes-kernel/linux/files/freedom-u540)
+> > as that way we can still get updates from the kernel community.
+> >
+> > I think the best bet is to use the latest kernel (maybe it's worth
+> > waiting until 5.1) and applying the patches on top. The diff is slowly
+> > shrinking so the newer the kernel the better. Those older kernels are
+> > not in a great shape and no one is maintaining them.
+>
+> Rather that waiting for the 5.1 kernel I will look at using upstream
+> 5.0.7 (Buildroot latest) with patches applied from the appropriate repo
+> via the BR2_LINUX_KERNEL_PATCH variable.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ..._impl.cc-fix-build-with-boost-1.70.0.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/gnuradio/0001-socket_pdu_impl.cc-fix-build-with-boost-1.70.0.patch
+Ok, if you want I have a branch that we use in OE and is well tested.
+It's available here:
+https://github.com/alistair23/linux/commits/hifive-unleashed-5.0
 
-diff --git a/package/gnuradio/0001-socket_pdu_impl.cc-fix-build-with-boost-1.70.0.patch b/package/gnuradio/0001-socket_pdu_impl.cc-fix-build-with-boost-1.70.0.patch
-new file mode 100644
-index 0000000000..2047cdd036
---- /dev/null
-+++ b/package/gnuradio/0001-socket_pdu_impl.cc-fix-build-with-boost-1.70.0.patch
-@@ -0,0 +1,42 @@
-+From 6b450f36c14dd16d476f10f3e4eb1c5c26a78daa Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 18 Apr 2019 09:40:15 +0200
-+Subject: [PATCH] socket_pdu_impl.cc: fix build with boost 1.70.0
-+
-+Fix #2446
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/gnuradio/gnuradio/pull/2451]
-+---
-+ gr-blocks/lib/socket_pdu_impl.cc | 8 +++++++-
-+ 1 file changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/gr-blocks/lib/socket_pdu_impl.cc b/gr-blocks/lib/socket_pdu_impl.cc
-+index e20f1478f..d9dd1edd6 100644
-+--- a/gr-blocks/lib/socket_pdu_impl.cc
-++++ b/gr-blocks/lib/socket_pdu_impl.cc
-+@@ -29,6 +29,12 @@
-+ #include <gnuradio/io_signature.h>
-+ #include <gnuradio/blocks/pdu.h>
-+ 
-++#if BOOST_VERSION >= 107000
-++#define GET_IO_SERVICE(s) ((boost::asio::io_context&)(s)->get_executor().context())
-++#else
-++#define GET_IO_SERVICE(s) ((s)->get_io_service())
-++#endif
-++
-+ namespace gr {
-+   namespace blocks {
-+ 
-+@@ -165,7 +171,7 @@ namespace gr {
-+     void
-+     socket_pdu_impl::start_tcp_accept()
-+     {
-+-      tcp_connection::sptr new_connection = tcp_connection::make(d_acceptor_tcp->get_io_service(), d_rxbuf.size(), d_tcp_no_delay);
-++      tcp_connection::sptr new_connection = tcp_connection::make(GET_IO_SERVICE(d_acceptor_tcp), d_rxbuf.size(), d_tcp_no_delay);
-+ 
-+       d_acceptor_tcp->async_accept(new_connection->socket(),
-+         boost::bind(&socket_pdu_impl::handle_tcp_accept, this,
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+You probably want to drop the top three patches if you are just
+targeting the Unleased (not the Microsemi expansion board or 32-bit).
+
+Alistair
+
+>
+> Regards
+>
+> Mark
+>
+> --
+> Mark Corbin
+> Embecosm Ltd.
+> https://www.embecosm.com
