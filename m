@@ -1,99 +1,29 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 18 Apr 2019 15:19:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/domoticz: rewrite init script
-Message-ID: <20190418131956.3199-1-fontaine.fabrice@gmail.com>
+From: Shyam Saini <shyam.saini@amarulasolutions.com>
+Date: Thu, 18 Apr 2019 18:53:30 +0530
+Subject: [Buildroot] [PATCH 1/2] package/python-pyelftools: Add host variant
+Message-ID: <20190418132331.14213-1-shyam.saini@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Follow new S02klogd template
+This would be used by uboot for rockchip rk3399
+socs boards.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
 ---
- package/domoticz/S99domoticz | 61 ++++++++++++++++++++++--------------
- 1 file changed, 37 insertions(+), 24 deletions(-)
+ package/python-pyelftools/python-pyelftools.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/domoticz/S99domoticz b/package/domoticz/S99domoticz
-index a16cacadde..e773aceeec 100644
---- a/package/domoticz/S99domoticz
-+++ b/package/domoticz/S99domoticz
-@@ -1,38 +1,51 @@
- #!/bin/sh
+diff --git a/package/python-pyelftools/python-pyelftools.mk b/package/python-pyelftools/python-pyelftools.mk
+index 5b5b488cf0..92dafbe27f 100644
+--- a/package/python-pyelftools/python-pyelftools.mk
++++ b/package/python-pyelftools/python-pyelftools.mk
+@@ -12,3 +12,4 @@ PYTHON_PYELFTOOLS_LICENSE_FILES = LICENSE
+ PYTHON_PYELFTOOLS_SETUP_TYPE = distutils
  
--NAME=domoticz
--PIDFILE=/var/run/$NAME.pid
--DAEMON=/opt/domoticz/$NAME
--DAEMON_ARGS="-daemon -www 8080 -sslwww 443"
-+DAEMON="domoticz"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+DOMOTICZ_ARGS="-daemon -www 8080 -sslwww 443"
-+
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
- 
- start() {
--	printf "Starting $NAME: "
--	start-stop-daemon -S -q -m -b -p $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
--	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+	printf 'Starting %s: ' "$DAEMON"
-+	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/opt/domoticz/$DAEMON" \
-+		-- $DOMOTICZ_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
-+
- stop() {
--	printf "Stopping $NAME: "
--	start-stop-daemon -K -q -p $PIDFILE
--	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p "$PIDFILE"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		rm -f "$PIDFILE"
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
-+
- restart() {
- 	stop
-+	sleep 1
- 	start
- }
- 
- case "$1" in
--  start)
--	start
--	;;
--  stop)
--	stop
--	;;
--  restart|reload)
--	restart
--	;;
--  *)
--	echo "Usage: $0 {start|stop|restart}"
--	exit 1
-+	start|stop|restart)
-+		"$1";;
-+	reload)
-+		# Restart, since there is no true "reload" feature.
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
- esac
--
--exit $?
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
-2.20.1
+2.11.0
