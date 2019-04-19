@@ -1,103 +1,69 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 19 Apr 2019 11:19:30 +0200
-Subject: [Buildroot] [PATCH 3/5] package/python-jedi: new package
+Date: Fri, 19 Apr 2019 11:19:31 +0200
+Subject: [Buildroot] [PATCH 4/5] package/prompt-toolkit: bump to version
+ 2.0.9
 In-Reply-To: <20190419091932.4922-1-fontaine.fabrice@gmail.com>
 References: <20190419091932.4922-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190419091932.4922-3-fontaine.fabrice@gmail.com>
+Message-ID: <20190419091932.4922-4-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An autocompletion tool for Python that can be used for text
-editors.
+- Add hash for license file
+- Add xml depedency
 
-https://github.com/davidhalter/jedi
-
-python-jedi is a runtime dependency of ipython 7.3.0
+prompt-toolkit in version 2.x is a dependency of ipython 7.x
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS                           |  1 +
- package/Config.in                    |  1 +
- package/python-jedi/Config.in        |  8 ++++++++
- package/python-jedi/python-jedi.hash |  6 ++++++
- package/python-jedi/python-jedi.mk   | 14 ++++++++++++++
- 5 files changed, 30 insertions(+)
- create mode 100644 package/python-jedi/Config.in
- create mode 100644 package/python-jedi/python-jedi.hash
- create mode 100644 package/python-jedi/python-jedi.mk
+ package/python-prompt-toolkit/Config.in                  | 2 ++
+ package/python-prompt-toolkit/python-prompt-toolkit.hash | 8 +++++---
+ package/python-prompt-toolkit/python-prompt-toolkit.mk   | 4 ++--
+ 3 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index abdc4a40f0..e5b69c3ade 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -834,6 +834,7 @@ F:	package/oniguruma/
- F:	package/oprofile/
- F:	package/pcmanfm/
- F:	package/python-backcall/
-+F:	package/python-jedi/
- F:	package/python-parso/
- F:	package/rygel/
- F:	package/safeclib/
-diff --git a/package/Config.in b/package/Config.in
-index fb6ce3ce5a..091b16d02d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -914,6 +914,7 @@ menu "External python modules"
- 	source "package/python-iso8601/Config.in"
- 	source "package/python-itsdangerous/Config.in"
- 	source "package/python-jaraco-classes/Config.in"
-+	source "package/python-jedi/Config.in"
- 	source "package/python-jinja2/Config.in"
- 	source "package/python-jsonmodels/Config.in"
- 	source "package/python-jsonschema/Config.in"
-diff --git a/package/python-jedi/Config.in b/package/python-jedi/Config.in
-new file mode 100644
-index 0000000000..8ceaa1530c
---- /dev/null
-+++ b/package/python-jedi/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_JEDI
-+	bool "python-jedi"
-+	select BR2_PACKAGE_PYTHON_PARSO # runtime
-+	help
-+	  An autocompletion tool for Python that can be used for text
-+	  editors.
-+
-+	  https://github.com/davidhalter/jedi
-diff --git a/package/python-jedi/python-jedi.hash b/package/python-jedi/python-jedi.hash
-new file mode 100644
-index 0000000000..83ff196f40
---- /dev/null
-+++ b/package/python-jedi/python-jedi.hash
-@@ -0,0 +1,6 @@
-+# md5, sha256 from https://pypi.org/pypi/jedi/json
-+md5	46c12589de9df839ff6be79c5009766d  jedi-0.13.3.tar.gz
-+sha256	2bb0603e3506f708e792c7f4ad8fc2a7a9d9c2d292a358fbbd58da531695595b  jedi-0.13.3.tar.gz
+diff --git a/package/python-prompt-toolkit/Config.in b/package/python-prompt-toolkit/Config.in
+index ccc9ebb0f5..baafaeb8c1 100644
+--- a/package/python-prompt-toolkit/Config.in
++++ b/package/python-prompt-toolkit/Config.in
+@@ -2,6 +2,8 @@ config BR2_PACKAGE_PYTHON_PROMPT_TOOLKIT
+ 	bool "python-prompt-toolkit"
+ 	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	select BR2_PACKAGE_PYTHON_WCWIDTH # runtime
++	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON #?runtime
++	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 #?runtime
+ 	help
+ 	  Library for building powerful interactive command lines in
+ 	  Python.
+diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.hash b/package/python-prompt-toolkit/python-prompt-toolkit.hash
+index f60fc08679..be671b8953 100644
+--- a/package/python-prompt-toolkit/python-prompt-toolkit.hash
++++ b/package/python-prompt-toolkit/python-prompt-toolkit.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/prompt_toolkit/json, sha256 locally computed
+-md5 427b496d2c147bd3819bc3a7f6e0d493 prompt_toolkit-1.0.13.tar.gz
+-sha256 33d68ca09f76cd73287fde7df5748ffacf26a8238dd61ee81ac50860ea7c6776 prompt_toolkit-1.0.13.tar.gz
++# md5, sha256 from https://pypi.org/pypi/prompt-toolkit/json
++md5	091daddeec62015e0be36e8682d36562  prompt_toolkit-2.0.9.tar.gz
++sha256	2519ad1d8038fd5fc8e770362237ad0364d16a7650fb5724af6997ed5515e3c1  prompt_toolkit-2.0.9.tar.gz
 +# Locally computed sha256 checksums
-+sha256	78e60cd0b8f28694f30195482c33d76908d846b0d15278deb7332aa22ba8e412  LICENSE.txt
-+sha256	9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
-diff --git a/package/python-jedi/python-jedi.mk b/package/python-jedi/python-jedi.mk
-new file mode 100644
-index 0000000000..f182609273
---- /dev/null
-+++ b/package/python-jedi/python-jedi.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-jedi
-+#
-+################################################################################
-+
-+PYTHON_JEDI_VERSION = 0.13.3
-+PYTHON_JEDI_SOURCE = jedi-$(PYTHON_JEDI_VERSION).tar.gz
-+PYTHON_JEDI_SITE = https://files.pythonhosted.org/packages/96/fb/e99fc0442f8a0fa4bf5d34162c2d98131489017f661bf8a331857844b145
-+PYTHON_JEDI_SETUP_TYPE = setuptools
-+PYTHON_JEDI_LICENSE = MIT
-+PYTHON_JEDI_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE
-+
-+$(eval $(python-package))
++sha256	303574d9bdd85c757d6025017942bf17baeedf2778f62bd7f425d07d880f4c4a  LICENSE
+diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.mk b/package/python-prompt-toolkit/python-prompt-toolkit.mk
+index 19b7b34e0a..8f62922633 100644
+--- a/package/python-prompt-toolkit/python-prompt-toolkit.mk
++++ b/package/python-prompt-toolkit/python-prompt-toolkit.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PROMPT_TOOLKIT_VERSION = 1.0.13
++PYTHON_PROMPT_TOOLKIT_VERSION = 2.0.9
+ PYTHON_PROMPT_TOOLKIT_SOURCE = prompt_toolkit-$(PYTHON_PROMPT_TOOLKIT_VERSION).tar.gz
+-PYTHON_PROMPT_TOOLKIT_SITE = https://pypi.python.org/packages/23/be/4876b52d5cc159cbd4b0ff6e7aa419a26470849a43a8f647857a4a24467b
++PYTHON_PROMPT_TOOLKIT_SITE = https://files.pythonhosted.org/packages/94/a0/57dc47115621d9b3fcc589848cdbcbb6c4c130186e8fc4c4704766a7a699
+ PYTHON_PROMPT_TOOLKIT_SETUP_TYPE = setuptools
+ PYTHON_PROMPT_TOOLKIT_LICENSE = BSD-3-Clause
+ PYTHON_PROMPT_TOOLKIT_LICENSE_FILES = LICENSE
 -- 
 2.20.1
