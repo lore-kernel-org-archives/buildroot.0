@@ -1,267 +1,138 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Fri, 19 Apr 2019 06:01:01 +0300
-Subject: [Buildroot] [RFC 1/1] br2-external: Alow to include toolchain
- from external tree
-In-Reply-To: <20190418145344.GA21166@scaer>
-References: <20190417204630.18746-1-vadim4j@gmail.com>
- <a37f9f50-381a-cdfb-4d78-bd78bbdd9f4c@mind.be>
- <20190418145344.GA21166@scaer>
-Message-ID: <20190419030101.cktcloq4rfqyw3mt@vkochan-ThinkPad-T470p>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 19 Apr 2019 06:00:38 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-04-18
+Message-ID: <20190419060119.DA983228BD@silver.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, Arnout, Thomas, All
+Hello,
 
-On Thu, Apr 18, 2019 at 04:53:44PM +0200, Yann E. MORIN wrote:
-> Arnout, Vadim, All,
-> 
-> On 2019-04-17 23:26 +0200, Arnout Vandecappelle spake thusly:
-> > On 17/04/2019 22:46, Vadim Kochan wrote:
-> > > Add possibility to select toolchain from br2-external tree which
-> > > allows to easy use custom external toolchains by selecting them via
-> > > menuconfig as if they were integrated into buildroot.
-> > > 
-> > > The br2-external tree should contain:
-> > > 
-> > > 	${br2-external}/external-toolchain/Config.in
-> > > 
-> > > file to be included into external toolchains list.
-> > > 
-> > > All such picked toolchains are sourced in:
-> > > 
-> > > 	toolchain/toolchain-external/Config.in
-> > > 
-> > > from auto-generated file ${O}/build/.br2-external.in.toolchain.
-> > 
-> >  Bikeshedding time: I would call the file .br2-external-toolchain.in.
-> 
-> Ditto.
-> 
-> > > Added new '-t' option in support/scripts/br2-external to generate
-> > > kconfig for the found toolchains from the all specified external trees.
-> > > 
-> > > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> > > ---
-> > > 
-> > > This is just PoC to rise the discussion about this concept.
-> > > 
-> > >  Makefile                               |  6 +++++-
-> > >  support/scripts/br2-external           | 36 ++++++++++++++++++++++++++++++++--
-> > >  toolchain/toolchain-external/Config.in |  2 ++
-> > >  3 files changed, 41 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/Makefile b/Makefile
-> > > index 522c0b0606..4eceb88813 100644
-> > > --- a/Makefile
-> > > +++ b/Makefile
-> > > @@ -938,7 +938,7 @@ HOSTCFLAGS = $(CFLAGS_FOR_BUILD)
-> > >  export HOSTCFLAGS
-> > >  
-> > >  .PHONY: prepare-kconfig
-> > > -prepare-kconfig: outputmakefile $(BUILD_DIR)/.br2-external.in
-> > > +prepare-kconfig: outputmakefile $(BUILD_DIR)/.br2-external.in $(BUILD_DIR)/.br2-external.in.toolchain
-> > >  
-> > >  $(BUILD_DIR)/buildroot-config/%onf:
-> > >  	mkdir -p $(@D)/lxdialog
-> > > @@ -1042,6 +1042,10 @@ endif
-> > >  $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
-> > >  	$(Q)support/scripts/br2-external -k -o "$(@)" $(BR2_EXTERNAL)
-> > >  
-> > > +.PHONY: $(BUILD_DIR)/.br2-external.in.toolchain
-> > > +$(BUILD_DIR)/.br2-external.in.toolchain: $(BUILD_DIR)
-> > > +	$(Q)support/scripts/br2-external -t -o "$(@)" $(BR2_EXTERNAL)
-> > 
-> >  I don't like much that it's a separate target. However, it's consistent with
-> > how .br2-external.in is called, so it's OK as it is.
-> 
-> If at all, I would have tried to make it a single target as well.
-> 
-> However, it would require a bit of reachitecting the file, and so maybe
-> it is not worht the effort...
-> 
-> But now, the 'kconfig' -k option is misleading, because it does no
-> longer generate the whole kconfig stuff; it only generates parts of it.
-> But I don't havea better idea either... :-(
-> 
-> Oh, what about removing the '-o' opiton, and requiring each type to
-> expect the output file as arg :
-> 
->   - $(BUILD_DIR)/.br2-external.mk is generated with a call like:
-> 
->         support/scripts/br2-external -m /path/to/.br2-external.mk $(BR2_EXTERNAL)
-> 
->   - $(BUILD_DIR)/.br2-external.in and $(BUILD_DIR)/.br2-external-toolchain.in
->     are generated with a single call like so:
-> 
->         support/scripts/br2-external -k /path/to/.br2-external.in -t /path/to/.br2-external-toolchain.in $(BR2_EXTERNAL)
-> 
-> > >  # printvars prints all the variables currently defined in our
-> > >  # Makefiles. Alternatively, if a non-empty VARS variable is passed,
-> > >  # only the variables matching the make pattern passed in VARS are
-> > > diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-> > > index 00cb57d1ed..3ec332d93e 100755
-> > > --- a/support/scripts/br2-external
-> > > +++ b/support/scripts/br2-external
-> > > @@ -16,10 +16,11 @@ main() {
-> > >      local OPT OPTARG
-> > >      local br2_ext ofile ofmt
-> > >  
-> > > -    while getopts :hkmo: OPT; do
-> > > +    while getopts :htkmo: OPT; do
-> > >          case "${OPT}" in
-> > >          h)  help; exit 0;;
-> > >          o)  ofile="${OPTARG}";;
-> > > +        t)  ofmt="toolchain";;
-> 
-> Keep options in alphabetical order, except help which goes first.
-> 
-> > >          k)  ofmt="kconfig";;
-> 
-> And thus you'd have to be smart here, like so:
-> 
->     do_kconfig=false
->     do_mk=faile
->     do_toolchain=false
->     while getopts :ht:k:m: OPT; do
->         case "${1}" in
->         (m)     do_kconfig=true; kconfig_file="${OPTARG}";;
->         (k)     do_mk=true; mk_file="${OPTARG}";;
->         (t)     do_toolchain=true; toolchain_file="${OPTARG}";;
->         esac
->     done
+Build statistics for 2019-04-18
+===============================
 
-What about to use '-o' (or better '-O' ?) arg for output folder and use
-default names for output files, but also add possibility to specify a
-custom file names per each output file (if it is needed actually) ? then
-the invocation might look like:
+      branch |  OK | NOK | TIM | TOT |
+   2019.02.x |  13 |   1 |   0 |  14 |
+      master |  84 |  67 |   1 | 152 |
 
-for kconfig:
+Results for branch 'master'
+===========================
 
-    $(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
-    $(Q)support/scripts/br2-external -k -o "$(BUILD_DIR)" $(BR2_EXTERNAL)
+Classification of failures by reason
+------------------------------------
+
+   libtorrent-rasterbar-1.1.11 | 16
+                   i2pd-2.22.0 | 13
+             gnuradio-3.7.13.3 | 9 
+                   botan-2.8.0 | 3 
+            host-thrift-0.12.0 | 3 
+                 lrzsz-0.12.20 | 3 
+                    ncmpc-0.33 | 3 
+                  davfs2-1.5.4 | 2 
+              ghostscript-9.27 | 2 
+                    git-2.16.5 | 2 
+                  brotli-1.0.7 | 1 
+                cracklib-2.9.7 | 1 
+             freerdp-2.0.0-rc4 | 1 
+                      gzip-1.9 | 1 
+        libcpprestsdk-v2.10.10 | 1 
+                libkrb5-1.16.2 | 1 
+                  libnspr-4.20 | 1 
+                       netsurf | 1 
+                   netsurf-3.8 | 1 
+               pulseview-0.4.1 | 1 
+              spandsp-20180108 | 1 
+  vdr-plugin-vnsiserver-v1.8.0 | 1 
 
 
-for mk:
+Detail of failures
+------------------
 
-    $(shell support/scripts/br2-external \
-	-m -o '$(BASE_DIR)' $(BR2_EXTERNAL))
+     powerpc |                    botan-2.8.0 | NOK | http://autobuild.buildroot.net/results/30393c07e5bcaedaaed89c6774aeaf3d4e759f10 |     
+      x86_64 |                    botan-2.8.0 | NOK | http://autobuild.buildroot.net/results/82bfec2a7a4ed41c56330b2cf8ee60bff9b2040b |     
+    mips64el |                    botan-2.8.0 | NOK | http://autobuild.buildroot.net/results/33eee27cdc148d4706e76c39ddbb4ce41afdd54d |     
+microblazeel |                   brotli-1.0.7 | NOK | http://autobuild.buildroot.net/results/8ebca9af798f6813b296e1f272712210810a1287 |     
+       sparc |                 cracklib-2.9.7 | NOK | http://autobuild.buildroot.net/results/dda029effe2ce1dbcd1b9bf4648b899b5b4978fd |     
+      x86_64 |                   davfs2-1.5.4 | NOK | http://autobuild.buildroot.net/results/5e3c406ceefc3f8fda54528302868c610b850387 |     
+       sparc |                   davfs2-1.5.4 | NOK | http://autobuild.buildroot.net/results/deddd347ec45a88be9255d2f3af1aca1192f4bc4 |     
+         arm |              freerdp-2.0.0-rc4 | NOK | http://autobuild.buildroot.net/results/69245e574787bada718c52c805ec137041dc233d |     
+         arc |               ghostscript-9.27 | NOK | http://autobuild.buildroot.net/results/c7112212b522674f6097e0446d2d7378a67cd51b |     
+         sh4 |               ghostscript-9.27 | NOK | http://autobuild.buildroot.net/results/eb33b41d1b267d0207a6e3a9f5ca7f79b2f51887 |     
+        or1k |                     git-2.16.5 | NOK | http://autobuild.buildroot.net/results/aa4aa7ede12094b9aff9bbc8a0364a0e8639b5a6 |     
+         arm |                     git-2.16.5 | NOK | http://autobuild.buildroot.net/results/bf80805da7b1cf6ec9f44970039e7ce1f3b77f4a |     
+      x86_64 |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/458d22e4a7a2d4b4eb4db388e6e1b7e750c4993c |     
+         arc |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/3f90c9fba219bee7e1f852f52cb3380eab7fb93c |     
+    mips64el |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/403a6ff58745cd62f8629d00daeb394dd1063d6e |     
+         arm |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/4109881eab99fd720e97f1070c374e67dd881b85 |     
+         arm |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/0af39a7d0f3fe19390bc8855769c458e1053b2da |     
+ powerpc64le |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/25136bdf865be3154fd0d1460fddfb5ace382b0a |     
+         arm |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/83eed70ec579953b1e80975c4c62cee6fbe9ed41 |     
+     riscv64 |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/6880c9484bd59b7dc70a3f2e6240d0986d2ba082 |     
+         sh4 |              gnuradio-3.7.13.3 | NOK | http://autobuild.buildroot.net/results/78ef9c83c43207c1286b94f577d97191a44d4964 |     
+         arm |                       gzip-1.9 | NOK | http://autobuild.buildroot.net/results/cdc23fdbd9935bcd9598f26a0a02e3f463ef3a0b | ORPH
+         arm |             host-thrift-0.12.0 | NOK | http://autobuild.buildroot.net/results/62ecb0c84580deeac0bfc6bd206fdceead1dcd16 | ORPH
+  aarch64_be |             host-thrift-0.12.0 | NOK | http://autobuild.buildroot.net/results/4ada26bab5c1e6504c7d8c92672326ced1d336df | ORPH
+     sparc64 |             host-thrift-0.12.0 | NOK | http://autobuild.buildroot.net/results/7ffbc0de63018b034e39bb5f1d7b1a46107742e6 | ORPH
+       nios2 |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/621699759596dcd5d6e961aba5bc813ebead109c |     
+         arm |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/d5ad3f70077a71985204d11996a88e9ff3393b60 |     
+     powerpc |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/da575258eb24991893f004e5855f2cda6928032a |     
+microblazeel |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/ef4d1107edece43fcb34826a5d3d7cc3bcbf8264 |     
+      x86_64 |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/cf58251df22ff7b383f24c419057d69ffe80a983 |     
+ powerpc64le |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/9cadf2e83abe52b9bdaf73a2cd573801593bb190 |     
+     aarch64 |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/4a4dea4eca1d10dd68a1012d335a603a4d20f744 |     
+     powerpc |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/2c7897fca74f05b1045bc7131dcc3c0790e4ac26 |     
+     riscv32 |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/b35466da7308e60024cec743728aef045dc24405 |     
+         sh4 |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/8ee49747164f8ab925408f50fd21e490796783be |     
+     riscv32 |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/6a24784badc1a3e8937298bfc100e083e022a230 |     
+         arc |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/609dfbed073d997c8e365639ef2aa1be8f90c906 |     
+         arm |                    i2pd-2.22.0 | NOK | http://autobuild.buildroot.net/results/196c06bd820154960b237fc7c5080d5f754eb0d4 |     
+     powerpc |         libcpprestsdk-v2.10.10 | NOK | http://autobuild.buildroot.net/results/65abc39e159828a26bbeed3d90af3b05c7b753b6 |     
+        m68k |                 libkrb5-1.16.2 | NOK | http://autobuild.buildroot.net/results/daf80b07501e3e381a7b2fb86916bb8be8a8d376 |     
+       nds32 |                   libnspr-4.20 | NOK | http://autobuild.buildroot.net/results/9380435440c977eeaf98a1ffa80f411f07f62482 | ORPH
+   powerpc64 |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/99fe91547c6518c69d28c8f2e1e6998cd68f7cad |     
+        i586 |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/84f0023ac50e3b3f166d5832b98b34653da48390 |     
+      x86_64 |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/c89004ea9deb149b408c33a516705cf10475aa8c |     
+        i586 |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/4b38016cddbddc53855f77e13d04ac42b935a042 |     
+      mipsel |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/e924cbd6c3bbe7ca82ceb096c27819493851f328 |     
+     aarch64 |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/5d38722f7d7b030d9608210a7499693ec9fd7407 |     
+         arm |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/223f9a85ba242a2b1aa588ddbc8d1e92ace34444 |     
+         arm |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/62bc38044f5934b9fc6d9497774c41f3e71b9d01 |     
+     aarch64 |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/8c2378951c1909b1a2ef9fcd9537ebe4fa795a8c |     
+         arm |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/6e28339727b611e67ea620f233929c1b3241e9ef |     
+    mips64el |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/578a8a152e17647241f6ba9e02613aca8fd64f21 |     
+        mips |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/9db4e9f1223f37ad7531cfd258baa9c4bc2de232 |     
+      mipsel |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/dc21322e101cbd242a22018f4d506b9f2c26dd33 |     
+        m68k |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/55395ec41a4b88ae02217320f86bcca284868f54 |     
+         arm |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/d31d16edd7c97b242dc4636f563b4ca109e27449 |     
+         arm |    libtorrent-rasterbar-1.1.11 | NOK | http://autobuild.buildroot.net/results/f60bfe347b17f49e0ccb5e86fd0f765a78ee4ad5 |     
+         sh4 |                  lrzsz-0.12.20 | NOK | http://autobuild.buildroot.net/results/39b24ddd576eece899b41dd27c3e39ff20f008fd | ORPH
+         arc |                  lrzsz-0.12.20 | NOK | http://autobuild.buildroot.net/results/27e477006b00e266de0a93221855fdc86f229f0f | ORPH
+         arm |                  lrzsz-0.12.20 | NOK | http://autobuild.buildroot.net/results/77e3ea00ca2c20d9fe284d31bbdf2b72956eae9f | ORPH
+     riscv64 |                     ncmpc-0.33 | NOK | http://autobuild.buildroot.net/results/eb2a8fc46ca24352ca5e513ed1d05344d884c85b |     
+     powerpc |                     ncmpc-0.33 | NOK | http://autobuild.buildroot.net/results/648fdbec941ac443a24e5f3bdf0b9f661c045d94 |     
+         arm |                     ncmpc-0.33 | NOK | http://autobuild.buildroot.net/results/4b8de2b26a77d4011466dede49293052fe2e15a0 |     
+    mips64el |                        netsurf | TIM | http://autobuild.buildroot.net/results/95e1e44c9de88718ca5a5e7cdb7f883a24798ee4 |     
+        m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/d1c95725055d165ef8484dc75e82cd58a17f32b7 |     
+ powerpc64le |                pulseview-0.4.1 | NOK | http://autobuild.buildroot.net/results/0619070fabbe3316fa4f758d4b1daeeb44c9704c |     
+        i686 |               spandsp-20180108 | NOK | http://autobuild.buildroot.net/results/18c21738452fda78cc00defd3ead5f292effaf96 |     
+         arc |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/c7cf8b199262b5aebb84e4b2519b0e54ae2a318a |     
 
-in this case '-k' still makes sense and it will generate both toolchain
-and external kconfig files.
+Results for branch '2019.02.x'
+==============================
 
-The following options might be used for specifying output file names:
+Classification of failures by reason
+------------------------------------
 
-    -M - *.mk file
+                qt5base-5.11.3 | 1 
 
-    -E - main external kconfig
 
-    -T - toolchain file name
+Detail of failures
+------------------
 
-    -C - common kconfig file name
+  aarch64_be |                 qt5base-5.11.3 | NOK | http://autobuild.buildroot.net/results/c1da0b8c6f21982462101c76f0b9305820e4a4f2 |     
 
-(I really think this is not needed)
 
-I think that it is ok that script aware about default output file names.
-
-> 
-> This is missing the error case and help, but you get the idea. You could
-> also check that do_toolchain and do_kconfig must be identical (both
-> false or both true) and that it do_mk is incompatible with do_kconfig.
-> 
-> It would then be used as:
-> 
->     if ${do_kconfig}; then gen_kconfig >"${kconfig_file}"; fi
->     if ${do_mk}; then gen_mk >"${mk_file}"; fi
->     if ${do_toolchain}; then gen_toolchain >"${toolchain_file}"; fi
-> 
-> > >          m)  ofmt="mk";;
-> > >          :)  error "option '%s' expects a mandatory argument\n" "${OPTARG}";;
-> > > @@ -30,7 +31,7 @@ main() {
-> > >      shift $((OPTIND-1))
-> > >  
-> > >      case "${ofmt}" in
-> > > -    mk|kconfig)
-> > > +    mk|kconfig|toolchain)
-> > >          ;;
-> > >      *)  error "no output format specified (-m/-k)\n";;
-> > >      esac
-> > > @@ -188,6 +189,37 @@ do_kconfig() {
-> > >      printf "endmenu # User-provided options\n"
-> > >  }
-> > >  
-> > > +# Generate the toolchain kconfig snippet for the br2-external tree.
-> > > +do_toolchain() {
-> > > +    local br2_name br2_ext
-> > > +
-> > > +    printf '#\n# Automatically generated file; DO NOT EDIT.\n#\n'
-> > > +    printf '\n'
-> > > +
-> > > +    if [ ${#BR2_EXT_NAMES[@]} -eq 0 ]; then
-> > > +        printf '# No br2-external tree defined.\n'
-> > > +        return
-> > > +    fi
-> > > +
-> > > +    for br2_name in "${BR2_EXT_NAMES[@]}"; do
-> > > +        eval br2_desc="\"\${BR2_EXT_DESCS_${br2_name}}\""
-> > > +        eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
-> > > +
-> > > +        if [ ! -f "${br2_ext}/toolchain-external/Config.in" ]; then
-> > > +            continue
-> > > +	fi
-> > 
-> >  There's some whitespace confusion here; this file uses spaces only.
-> > 
-> > > +
-> > > +        # we have to duplicate it here too because otherwise BR2_EXTERNAL_*
-> > > +	# is not evaluated in Config.in
-> > 
-> >  Argh, that's mightily annoying... But I don't really see a better solution. The
-> > reason is that .br2-external.in only gets included after all the other files
-> > have already been included. Normally Kconfig is indepdent of the order in which
-> > you declare things, but not when you use a variable in a source directive...
-> > 
-> >  I don't see a good way around it. We could have yet another
-> > .br2-external-variables.in that gets included *before* all the rest, but that's
-> > also pretty ugly...
-> > 
-> >  Yann, any ideas?
-> 
-> Gaaahhh... I don't have a very impressive solution either... :-(
-> 
-> Building on my proposal above, what about expanding to:
-> 
->     -m -> .mk file
-> 
->     -k -> kconfig variables _only_, included very early, probably in
->           Config.in, before line 105 (source "arch/Config.in")
-> 
->     -t -> toolchains
-> 
->     -M -> kconfig menu only  (but uppercase 'M' is not nice, since we
->           already have lowercase 'm'... maybe switch them?)
-> 
-> If you have a better idea, be my guest and shout it out loud. ;-)
-> 
-> >  Assuming there is no better solution than this one, the patch looks pretty much
-> > OK except for the whitespace. I believe it covers all cases. It would be nice if
-> > the file would also contain *something* if there are some externals but none of
-> > them have a toolchain-external/Config.in, but I don't think it's worth spending
-> > time on that.
-> > 
-> >  For the final patch there should also be documentation of course.
-> 
-> Documentation, what's that? ;-)
-> 
-> Yes, the manual should explain that, when this file exist in a
-> br2-external tree, it will be included in the toolchain choice, so it
-> should only contain the boolean options that define the external
-> toolchains.
-> 
-> Regards,
-> Yann E. MORIN.
-
-Regards,
-Vadim Kochan
+-- 
+http://autobuild.buildroot.net
