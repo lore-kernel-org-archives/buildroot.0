@@ -1,35 +1,36 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 20 Apr 2019 16:55:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/refpolicy: set python path
-Message-ID: <20190420145533.15497-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 20 Apr 2019 16:56:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/binutils: fix build error due
+ to architecture name is incomplete
+In-Reply-To: <CAGKtFauRjyM83yyhyB5GC8_W_8PfhxaWgUhK9OLvecxfOH0R+g@mail.gmail.com>
+References: <20190418094655.6526-1-nylon7@andestech.com>
+ <20190420161653.79150ab3@windsurf>
+ <CAGKtFauRjyM83yyhyB5GC8_W_8PfhxaWgUhK9OLvecxfOH0R+g@mail.gmail.com>
+Message-ID: <20190420165628.5a5e3ef9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Set python path to $(HOST_DIR)/usr/bin/python to avoid build failures if
-python3 found on host is broken
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.org/results/1f878405593dd05bb00fe0b06ca1c64ffbe6c572
+On Sat, 20 Apr 2019 22:33:26 +0800
+??? <nylon7717@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/refpolicy/refpolicy.mk | 1 +
- 1 file changed, 1 insertion(+)
+> Sorry I make a mistake, this patch has an error, our architecture name is
+> nds32 not nds32le.
 
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index 78c17bad01..1c3b1bc541 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -26,6 +26,7 @@ endif
- 
- # Cannot use multiple threads to build the reference policy
- REFPOLICY_MAKE = \
-+	PYTHON=$(HOST_DIR)/usr/bin/python \
- 	TEST_TOOLCHAIN=$(HOST_DIR) \
- 	$(TARGET_MAKE_ENV) \
- 	$(MAKE1)
+Well, the architecture can be named nds32, but its tuple can be nds32le.
+
+At least, gnuconfig supports nds32le and nds32be:
+
+$ grep nds32 support/gnuconfig/*
+support/gnuconfig/config.sub:	| nds32 | nds32le | nds32be \
+support/gnuconfig/config.sub:	| nds32-* | nds32le-* | nds32be-* \
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
