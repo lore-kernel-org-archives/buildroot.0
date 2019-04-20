@@ -1,46 +1,36 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 20 Apr 2019 22:42:52 +0200
-Subject: [Buildroot] [PATCH 3/3] package/linknx: add optional log4cpp
- dependency
-In-Reply-To: <20190420204252.26815-1-fontaine.fabrice@gmail.com>
-References: <20190420204252.26815-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190420204252.26815-3-fontaine.fabrice@gmail.com>
+Date: Sat, 20 Apr 2019 22:44:34 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xlib_libXpm: fix build with NLS
+Message-ID: <20190420204434.27015-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+ - http://autobuild.buildroot.org/results/cc47a39d134fbc80426bab6fa3662150374bae35
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/linknx/linknx.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/x11r7/xlib_libXpm/xlib_libXpm.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
-index e593feda36..15d4b5a109 100644
---- a/package/linknx/linknx.mk
-+++ b/package/linknx/linknx.mk
-@@ -13,7 +13,6 @@ LINKNX_INSTALL_STAGING = YES
- LINKNX_AUTORECONF = YES
- LINKNX_CONF_OPTS = \
- 	--without-cppunit \
--	--without-log4cpp \
- 	--without-pth-test \
- 	--with-pth=$(STAGING_DIR)/usr \
- 	--disable-smtp
-@@ -29,6 +28,13 @@ else
- LINKNX_CONF_OPTS += --without-libcurl
+diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+index 7e11c4b5aa..391493a4ba 100644
+--- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
++++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
+@@ -15,9 +15,10 @@ XLIB_LIBXPM_AUTORECONF = YES
+ XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xorgproto \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+ 	$(TARGET_NLS_DEPENDENCIES)
++XLIB_LIBXPM_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+-XLIB_LIBXPM_CONF_ENV = ac_cv_search_gettext=no
++XLIB_LIBXPM_CONF_ENV += ac_cv_search_gettext=no
  endif
  
-+ifeq ($(BR2_PACKAGE_LOG4CPP),y)
-+LINKNX_CONF_OPTS += --with-log4cpp
-+LINKNX_DEPENDENCIES += host-pkgconf log4cpp
-+else
-+LINKNX_CONF_OPTS += --without-log4cpp
-+endif
-+
- ifeq ($(BR2_PACKAGE_LUA),y)
- LINKNX_CONF_OPTS += --with-lua
- LINKNX_DEPENDENCIES += lua
+ $(eval $(autotools-package))
 -- 
 2.20.1
