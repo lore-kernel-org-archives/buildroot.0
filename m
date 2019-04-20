@@ -1,10 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 20 Apr 2019 12:25:28 +0200
-Subject: [Buildroot] [PATCH 2/2] package/davfs2: add optional dependency on
- iconv and NLS
-In-Reply-To: <20190420102528.8559-1-fontaine.fabrice@gmail.com>
-References: <20190420102528.8559-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190420102528.8559-2-fontaine.fabrice@gmail.com>
+Date: Sat, 20 Apr 2019 13:44:49 +0200
+Subject: [Buildroot] [PATCH 1/1] package/minicom: fix build with lintl
+Message-ID: <20190420114449.24878-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,88 +9,63 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/ac2c39a7300fbdd069ac5504148ccb2b065fbf8e
+ - http://autobuild.buildroot.org/results/e64cdcf648764be53a3e951304bb89dc9410db23
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/davfs2/0002-fix-iconv.patch | 48 +++++++++++++++++++++++++++++
- package/davfs2/davfs2.mk            |  8 +++--
- 2 files changed, 54 insertions(+), 2 deletions(-)
- create mode 100644 package/davfs2/0002-fix-iconv.patch
+ ...ile.am-fix-ascii-xfr-link-with-lintl.patch | 44 +++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+ create mode 100644 package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch
 
-diff --git a/package/davfs2/0002-fix-iconv.patch b/package/davfs2/0002-fix-iconv.patch
+diff --git a/package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch b/package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch
 new file mode 100644
-index 0000000000..f2bae8f8e9
+index 0000000000..efc880d2e7
 --- /dev/null
-+++ b/package/davfs2/0002-fix-iconv.patch
-@@ -0,0 +1,48 @@
-+webdav.c: fix iconv calls
++++ b/package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch
+@@ -0,0 +1,44 @@
++From 6fe734c5a1d51e2d4a3c1cd4d7a61cc246faa3f2 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 20 Apr 2019 13:34:23 +0200
++Subject: [PATCH] src/Makefile.am: fix ascii-xfr link with lintl
 +
-+Replace HAVE_ICONV_H by HAVE_ICONV to fix build with iconv indeed
-+HAVE_ICONV_H is never set as AC_CHECK_HEADERS is not called to check for
-+iconv.h
++ascii-xfr needs to link with lintl if needed:
++
++/home/dawncrow/buildroot-test/scripts/instance-0/output/host/bin/m68k-linux-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -W -Wall -Wextra -std=gnu99 -Wno-format-truncation   -o ascii-xfr ascii-xfr.o ../lib/libport.a -lncurses
++ascii-xfr.o: In function `stats':
++ascii-xfr.c:(.text+0x4c): undefined reference to `libintl_gettext'
++ascii-xfr.c:(.text+0xb2): undefined reference to `libintl_gettext'
++ascii-xfr.o: In function `usage':
++ascii-xfr.c:(.text+0x10e): undefined reference to `libintl_gettext'
++ascii-xfr.o: In function `asend':
++ascii-xfr.c:(.text+0x534): undefined reference to `libintl_gettext'
++ascii-xfr.o: In function `main':
++ascii-xfr.c:(.text.startup+0xc8): undefined reference to `libintl_gettext'
++ascii-xfr.o:ascii-xfr.c:(.text.startup+0x1a8): more undefined references to `libintl_gettext' follow
++
++Fixes:
++ - http://autobuild.buildroot.org/results/e64cdcf648764be53a3e951304bb89dc9410db23
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://savannah.nongnu.org/bugs/index.php?56178]
++[Upstream status:
++https://salsa.debian.org/minicom-team/minicom/merge_requests/7]
++---
++ src/Makefile.am | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff -Naurp davfs2-1.5.4-orig/src/webdav.c davfs2-1.5.4/src/webdav.c
-+--- davfs2-1.5.4-orig/src/webdav.c	2019-04-20 12:12:38.252599230 +0200
-++++ davfs2-1.5.4/src/webdav.c	2019-04-20 12:13:33.012925300 +0200
-+@@ -25,7 +25,7 @@
-+ #ifdef HAVE_FCNTL_H
-+ #include <fcntl.h>
-+ #endif
-+-#ifdef HAVE_ICONV_H
-++#ifdef HAVE_ICONV
-+ #include <iconv.h>
-+ #endif
-+ #ifdef HAVE_LANGINFO_H
-+@@ -231,7 +231,7 @@ static int initialized;
-+    Needed by  ssl_verify() which may be called at any time. */
-+ static int have_terminal;
++diff --git a/src/Makefile.am b/src/Makefile.am
++index 19b1888..ba92f71 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -29,6 +29,7 @@ confdir = @MINICOM_CONFDIR@
++ AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/lib -DCONFDIR=\"$(confdir)\" \
++               -DLOCALEDIR=\"$(datadir)/locale\"
 + 
-+-#ifdef HAVE_ICONV_H
-++#ifdef HAVE_ICONV
-+ /* Handle to convert character encoding from utf-8 to LC_CTYPE.
-+    If NULL no conversion is done. */
-+ static iconv_t from_utf_8;
-+@@ -264,7 +264,7 @@ static char **cookie_list;
-+ /* Private function prototypes and inline functions */
-+ /*==================================================*/
-+ 
-+-#ifdef HAVE_ICONV_H
-++#ifdef HAVE_ICONV
-+ static void
-+ convert(char **s, iconv_t conv);
-+ #endif
-+@@ -337,7 +337,7 @@ dav_init_webdav(const dav_args *args)
-+     if (args->neon_debug & ~NE_DBG_HTTPPLAIN)
-+         syslog(LOG_MAKEPRI(LOG_DAEMON, LOG_DEBUG), "Initializing webdav");
-+ 
-+-#ifdef HAVE_ICONV_H
-++#ifdef HAVE_ICONV
-+     char *lc_charset = nl_langinfo(CODESET);
-+     if (lc_charset && strcasecmp(lc_charset, "UTF-8") != 0) {
-+         from_utf_8 = iconv_open(lc_charset, "UTF-8");
-diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
-index c1f8477f8b..f2b2fdbe41 100644
---- a/package/davfs2/davfs2.mk
-+++ b/package/davfs2/davfs2.mk
-@@ -9,9 +9,13 @@ DAVFS2_SITE = http://download.savannah.nongnu.org/releases/davfs2
- DAVFS2_LICENSE = GPL-3.0+
- DAVFS2_LICENSE_FILES = COPYING
- 
--DAVFS2_DEPENDENCIES = neon
-+DAVFS2_DEPENDENCIES = \
-+	neon \
-+	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
-+	$(TARGET_NLS_DEPENDENCIES)
- 
- DAVFS2_CONF_ENV += \
--	ac_cv_path_NEON_CONFIG=$(STAGING_DIR)/usr/bin/neon-config
-+	ac_cv_path_NEON_CONFIG=$(STAGING_DIR)/usr/bin/neon-config \
-+	LIBS=$(TARGET_NLS_LIBS)
- 
- $(eval $(autotools-package))
+++ascii_xfr_LDADD = @LIBINTL@
++ minicom_LDADD = @LIBINTL@ $(LIBICONV) $(MINICOM_LIBPORT) $(LOCKDEV_LIBS)
++ minicom_keyserv_LDADD = @LIBINTL@ $(MINICOM_LIBPORT)
++ runscript_LDADD = @LIBINTL@ $(MINICOM_LIBPORT)
++-- 
++2.20.1
++
 -- 
 2.20.1
