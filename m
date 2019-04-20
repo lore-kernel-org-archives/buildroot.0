@@ -1,72 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Apr 2019 16:09:54 +0200
-Subject: [Buildroot] [git commit] package/minicom: fix build with lintl
-Message-ID: <20190420140643.5EE8E8E81A@busybox.osuosl.org>
+Date: Sat, 20 Apr 2019 16:11:26 +0200
+Subject: [Buildroot] [git commit] package/postgresql: fix build with NLS
+Message-ID: <20190420140655.EA2718E81A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7d348c671b7c99176aa16553f7462c73e9fed527
+commit: https://git.buildroot.net/buildroot/commit/?id=45384e84669f1c1d634ee3f7d34b2f75b25775c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes:
- - http://autobuild.buildroot.org/results/e64cdcf648764be53a3e951304bb89dc9410db23
+ - http://autobuild.buildroot.org/results/0d35378b8bdcfffb0cefd264c95ca3617034559b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...Makefile.am-fix-ascii-xfr-link-with-lintl.patch | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ package/postgresql/postgresql.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch b/package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch
-new file mode 100644
-index 0000000000..efc880d2e7
---- /dev/null
-+++ b/package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch
-@@ -0,0 +1,44 @@
-+From 6fe734c5a1d51e2d4a3c1cd4d7a61cc246faa3f2 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 20 Apr 2019 13:34:23 +0200
-+Subject: [PATCH] src/Makefile.am: fix ascii-xfr link with lintl
-+
-+ascii-xfr needs to link with lintl if needed:
-+
-+/home/dawncrow/buildroot-test/scripts/instance-0/output/host/bin/m68k-linux-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -W -Wall -Wextra -std=gnu99 -Wno-format-truncation   -o ascii-xfr ascii-xfr.o ../lib/libport.a -lncurses
-+ascii-xfr.o: In function `stats':
-+ascii-xfr.c:(.text+0x4c): undefined reference to `libintl_gettext'
-+ascii-xfr.c:(.text+0xb2): undefined reference to `libintl_gettext'
-+ascii-xfr.o: In function `usage':
-+ascii-xfr.c:(.text+0x10e): undefined reference to `libintl_gettext'
-+ascii-xfr.o: In function `asend':
-+ascii-xfr.c:(.text+0x534): undefined reference to `libintl_gettext'
-+ascii-xfr.o: In function `main':
-+ascii-xfr.c:(.text.startup+0xc8): undefined reference to `libintl_gettext'
-+ascii-xfr.o:ascii-xfr.c:(.text.startup+0x1a8): more undefined references to `libintl_gettext' follow
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e64cdcf648764be53a3e951304bb89dc9410db23
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://salsa.debian.org/minicom-team/minicom/merge_requests/7]
-+---
-+ src/Makefile.am | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 19b1888..ba92f71 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -29,6 +29,7 @@ confdir = @MINICOM_CONFDIR@
-+ AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/lib -DCONFDIR=\"$(confdir)\" \
-+               -DLOCALEDIR=\"$(datadir)/locale\"
-+ 
-++ascii_xfr_LDADD = @LIBINTL@
-+ minicom_LDADD = @LIBINTL@ $(LIBICONV) $(MINICOM_LIBPORT) $(LOCKDEV_LIBS)
-+ minicom_keyserv_LDADD = @LIBINTL@ $(MINICOM_LIBPORT)
-+ runscript_LDADD = @LIBINTL@ $(MINICOM_LIBPORT)
-+-- 
-+2.20.1
-+
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index c7e9f526fc..8f01460109 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -14,8 +14,10 @@ POSTGRESQL_CONFIG_SCRIPTS = pg_config
+ POSTGRESQL_CONF_ENV = \
+ 	ac_cv_type_struct_sockaddr_in6=yes \
+ 	pgac_cv_snprintf_long_long_int_modifier="ll" \
+-	pgac_cv_snprintf_size_t_support=yes
++	pgac_cv_snprintf_size_t_support=yes \
++	LIBS=$(TARGET_NLS_LIBS)
+ POSTGRESQL_CONF_OPTS = --disable-rpath
++POSTGRESQL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ 
+ # https://www.postgresql.org/docs/11/static/install-procedure.html:
+ # "If you want to invoke the build from another makefile rather than
