@@ -1,71 +1,36 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 20 Apr 2019 13:44:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minicom: fix build with lintl
-Message-ID: <20190420114449.24878-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 20 Apr 2019 15:30:53 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-ugly: fix
+ typo in mk file
+Message-ID: <20190420132623.18FF883ACE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/e64cdcf648764be53a3e951304bb89dc9410db23
+commit: https://git.buildroot.net/buildroot/commit/?id=d2ada4d7045ba8b23824e10c59bb662c1cfd901c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+BR2_PACKAGE_GST_PLUGINS_UGL1_PLUGIN_XINGMUX needs to be
+BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ile.am-fix-ascii-xfr-link-with-lintl.patch | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
- create mode 100644 package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch b/package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch
-new file mode 100644
-index 0000000000..efc880d2e7
---- /dev/null
-+++ b/package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch
-@@ -0,0 +1,44 @@
-+From 6fe734c5a1d51e2d4a3c1cd4d7a61cc246faa3f2 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 20 Apr 2019 13:34:23 +0200
-+Subject: [PATCH] src/Makefile.am: fix ascii-xfr link with lintl
-+
-+ascii-xfr needs to link with lintl if needed:
-+
-+/home/dawncrow/buildroot-test/scripts/instance-0/output/host/bin/m68k-linux-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -W -Wall -Wextra -std=gnu99 -Wno-format-truncation   -o ascii-xfr ascii-xfr.o ../lib/libport.a -lncurses
-+ascii-xfr.o: In function `stats':
-+ascii-xfr.c:(.text+0x4c): undefined reference to `libintl_gettext'
-+ascii-xfr.c:(.text+0xb2): undefined reference to `libintl_gettext'
-+ascii-xfr.o: In function `usage':
-+ascii-xfr.c:(.text+0x10e): undefined reference to `libintl_gettext'
-+ascii-xfr.o: In function `asend':
-+ascii-xfr.c:(.text+0x534): undefined reference to `libintl_gettext'
-+ascii-xfr.o: In function `main':
-+ascii-xfr.c:(.text.startup+0xc8): undefined reference to `libintl_gettext'
-+ascii-xfr.o:ascii-xfr.c:(.text.startup+0x1a8): more undefined references to `libintl_gettext' follow
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e64cdcf648764be53a3e951304bb89dc9410db23
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://salsa.debian.org/minicom-team/minicom/merge_requests/7]
-+---
-+ src/Makefile.am | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 19b1888..ba92f71 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -29,6 +29,7 @@ confdir = @MINICOM_CONFDIR@
-+ AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/lib -DCONFDIR=\"$(confdir)\" \
-+               -DLOCALEDIR=\"$(datadir)/locale\"
-+ 
-++ascii_xfr_LDADD = @LIBINTL@
-+ minicom_LDADD = @LIBINTL@ $(LIBICONV) $(MINICOM_LIBPORT) $(LOCKDEV_LIBS)
-+ minicom_keyserv_LDADD = @LIBINTL@ $(MINICOM_LIBPORT)
-+ runscript_LDADD = @LIBINTL@ $(MINICOM_LIBPORT)
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index 2f9b204e9b..25546258cd 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+@@ -46,7 +46,7 @@ else
+ GST1_PLUGINS_UGLY_CONF_OPTS += --disable-dvdsub
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GST_PLUGINS_UGL1_PLUGIN_XINGMUX),y)
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX),y)
+ GST1_PLUGINS_UGLY_CONF_OPTS += --enable-xingmux
+ else
+ GST1_PLUGINS_UGLY_CONF_OPTS += --disable-xingmux
