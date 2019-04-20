@@ -1,46 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Apr 2019 15:50:05 +0200
-Subject: [Buildroot] [PATCH v2] linux-tools/perf: Add dependency on
- 32-bit atomics
-In-Reply-To: <20190418173845.14495-1-abrodkin@synopsys.com>
-References: <20190418173845.14495-1-abrodkin@synopsys.com>
-Message-ID: <20190420155005.3763b1ab@windsurf>
+Date: Sat, 20 Apr 2019 15:50:29 +0200
+Subject: [Buildroot] [git commit] package/gnuradio: fix build with boost
+ 1.70.0
+Message-ID: <20190420134624.1865A8E810@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=aacd43ad18c11c582177931b5656251c2eda3cce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu, 18 Apr 2019 20:38:45 +0300
-Alexey Brodkin <Alexey.Brodkin@synopsys.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/4109881eab99fd720e97f1070c374e67dd881b85
 
-> Atomic ops are strictly required by perf utility as it uses
-> atomic_xxx() functions.
-> 
-> Otherwise building fails like that:
-> |.../output/host/opt/ext-toolchain/bin/../lib/gcc/arc-snps-linux-uclibc/8.2.1/../../../../arc-snps-linux-uclibc/bin/ld:
-> |.../output/build/linux-5.0.7/tools/perf/libperf.a(libperf-in.o): in function `atomic_cmpxchg':
-> |.../output/build/linux-5.0.7/tools/include/asm-generic/atomic-gcc.h:69: undefined reference to `__sync_val_compare_and_swap_4'
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...t_pdu_impl.cc-fix-build-with-boost-1.70.0.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-I have applied to master, after doing one change, see below.
-
-> +comment "perf needs 32-bit atomic ops"
-> +	depends on !BR2_TOOLCHAIN_HAS_SYNC_4
-> +
-
-We typically don't add such comments, because it's an architecture
-dependency. There is nothing the user can do about it, so there's no
-point in having a comment.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gnuradio/0001-socket_pdu_impl.cc-fix-build-with-boost-1.70.0.patch b/package/gnuradio/0001-socket_pdu_impl.cc-fix-build-with-boost-1.70.0.patch
+new file mode 100644
+index 0000000000..2047cdd036
+--- /dev/null
++++ b/package/gnuradio/0001-socket_pdu_impl.cc-fix-build-with-boost-1.70.0.patch
+@@ -0,0 +1,42 @@
++From 6b450f36c14dd16d476f10f3e4eb1c5c26a78daa Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 18 Apr 2019 09:40:15 +0200
++Subject: [PATCH] socket_pdu_impl.cc: fix build with boost 1.70.0
++
++Fix #2446
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/gnuradio/gnuradio/pull/2451]
++---
++ gr-blocks/lib/socket_pdu_impl.cc | 8 +++++++-
++ 1 file changed, 7 insertions(+), 1 deletion(-)
++
++diff --git a/gr-blocks/lib/socket_pdu_impl.cc b/gr-blocks/lib/socket_pdu_impl.cc
++index e20f1478f..d9dd1edd6 100644
++--- a/gr-blocks/lib/socket_pdu_impl.cc
+++++ b/gr-blocks/lib/socket_pdu_impl.cc
++@@ -29,6 +29,12 @@
++ #include <gnuradio/io_signature.h>
++ #include <gnuradio/blocks/pdu.h>
++ 
+++#if BOOST_VERSION >= 107000
+++#define GET_IO_SERVICE(s) ((boost::asio::io_context&)(s)->get_executor().context())
+++#else
+++#define GET_IO_SERVICE(s) ((s)->get_io_service())
+++#endif
+++
++ namespace gr {
++   namespace blocks {
++ 
++@@ -165,7 +171,7 @@ namespace gr {
++     void
++     socket_pdu_impl::start_tcp_accept()
++     {
++-      tcp_connection::sptr new_connection = tcp_connection::make(d_acceptor_tcp->get_io_service(), d_rxbuf.size(), d_tcp_no_delay);
+++      tcp_connection::sptr new_connection = tcp_connection::make(GET_IO_SERVICE(d_acceptor_tcp), d_rxbuf.size(), d_tcp_no_delay);
++ 
++       d_acceptor_tcp->async_accept(new_connection->socket(),
++         boost::bind(&socket_pdu_impl::handle_tcp_accept, this,
++-- 
++2.20.1
++
