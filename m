@@ -1,101 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Apr 2019 16:31:25 +0200
-Subject: [Buildroot] [git commit] package/domoticz: rewrite init script
-Message-ID: <20190420142924.8444A8E810@busybox.osuosl.org>
+Date: Sat, 20 Apr 2019 16:34:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dhcp: bump to version 4.4.1
+In-Reply-To: <20190418131733.2027-1-fontaine.fabrice@gmail.com>
+References: <20190418131733.2027-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190420163418.158abec8@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03046fa0e82f900fab5e3ecf8152b61646602580
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 18 Apr 2019 15:17:33 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Follow new S02klogd template
+> - Use --with-bind-extra-config option to:
+>   - add --without-zlib otherwise static build will fail if zlib is found
+>     on host
+>   - Add --without-dlopen otherwise static build will fail
+> - Drop all patches (already in version)
+> - Drop autoreconf (not needed anymore)
+> - Update license to MPL-2.0:
+>   https://www.isc.org/blogs/isc-dhcp-moves-to-mpl-2-0-license
+> - Update hash of license file
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/dhcp/0001-bind-cross-compile.patch    | 24 --------
+>  ...gs-a-socket-descriptor-leak-in-OMAPI.patch | 51 ----------------
+>  ...uffer-overrun-in-pretty_print_option.patch | 59 -------------------
+>  ...rected-refcnt-loss-in-option-parsing.patch | 40 -------------
+>  package/dhcp/dhcp.hash                        |  6 +-
+>  package/dhcp/dhcp.mk                          | 26 ++++----
+>  6 files changed, 16 insertions(+), 190 deletions(-)
+>  delete mode 100644 package/dhcp/0001-bind-cross-compile.patch
+>  delete mode 100644 package/dhcp/0002-v4_3-Plugs-a-socket-descriptor-leak-in-OMAPI.patch
+>  delete mode 100644 package/dhcp/0003-Correct-buffer-overrun-in-pretty_print_option.patch
+>  delete mode 100644 package/dhcp/0004-Corrected-refcnt-loss-in-option-parsing.patch
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/domoticz/S99domoticz | 61 +++++++++++++++++++++++++++-----------------
- 1 file changed, 37 insertions(+), 24 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/domoticz/S99domoticz b/package/domoticz/S99domoticz
-index a16cacadde..e773aceeec 100644
---- a/package/domoticz/S99domoticz
-+++ b/package/domoticz/S99domoticz
-@@ -1,38 +1,51 @@
- #!/bin/sh
- 
--NAME=domoticz
--PIDFILE=/var/run/$NAME.pid
--DAEMON=/opt/domoticz/$NAME
--DAEMON_ARGS="-daemon -www 8080 -sslwww 443"
-+DAEMON="domoticz"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+DOMOTICZ_ARGS="-daemon -www 8080 -sslwww 443"
-+
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
- 
- start() {
--	printf "Starting $NAME: "
--	start-stop-daemon -S -q -m -b -p $PIDFILE --exec $DAEMON -- $DAEMON_ARGS
--	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+	printf 'Starting %s: ' "$DAEMON"
-+	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/opt/domoticz/$DAEMON" \
-+		-- $DOMOTICZ_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
-+
- stop() {
--	printf "Stopping $NAME: "
--	start-stop-daemon -K -q -p $PIDFILE
--	[ $? = 0 ] && echo "OK" || echo "FAIL"
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p "$PIDFILE"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		rm -f "$PIDFILE"
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
-+
- restart() {
- 	stop
-+	sleep 1
- 	start
- }
- 
- case "$1" in
--  start)
--	start
--	;;
--  stop)
--	stop
--	;;
--  restart|reload)
--	restart
--	;;
--  *)
--	echo "Usage: $0 {start|stop|restart}"
--	exit 1
-+	start|stop|restart)
-+		"$1";;
-+	reload)
-+		# Restart, since there is no true "reload" feature.
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
- esac
--
--exit $?
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
