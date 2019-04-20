@@ -1,31 +1,69 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Apr 2019 16:15:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/minicom: fix build with lintl
-In-Reply-To: <20190420114449.24878-1-fontaine.fabrice@gmail.com>
-References: <20190420114449.24878-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190420161528.6161352e@windsurf>
+Date: Sat, 20 Apr 2019 16:16:39 +0200
+Subject: [Buildroot] [git commit] package/binutils: fix build error due to
+ architecture name is incomplete
+Message-ID: <20190420141210.C5F428EE99@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 20 Apr 2019 13:44:49 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b58a6bf774baf56c3a73a838acb8a5472594ce82
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e64cdcf648764be53a3e951304bb89dc9410db23
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ile.am-fix-ascii-xfr-link-with-lintl.patch | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch
+Fixes
+  http://autobuild.buildroot.net/results/128/12803a705586e82fdfb49013da2eb3b9879ccd45/
 
-Applied to master, thanks.
+Signed-off-by: Che-Wei Chuang <cnoize@andestech.com>
+Signed-off-by: Greentime Hu <greentime@andestech.com>
+Signed-off-by: Nylon Chen <nylon7@andestech.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Makefile                   | 1 +
+ arch/Config.in.nds32       | 2 +-
+ package/binutils/Config.in | 4 ++--
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/Makefile b/Makefile
+index 522c0b0606..86e444da98 100644
+--- a/Makefile
++++ b/Makefile
+@@ -439,6 +439,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+ 	-e s/arceb/arc/ \
+ 	-e s/arm.*/arm/ -e s/sa110/arm/ \
+ 	-e s/aarch64.*/arm64/ \
++	-e s/nds32.*/nds32/ \
+ 	-e s/or1k/openrisc/ \
+ 	-e s/parisc64/parisc/ \
+ 	-e s/powerpc64.*/powerpc/ \
+diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
+index 9c5db20e6f..f268883662 100644
+--- a/arch/Config.in.nds32
++++ b/arch/Config.in.nds32
+@@ -1,5 +1,5 @@
+ config BR2_ARCH
+-	default "nds32"
++	default "nds32le"
+ 
+ config BR2_GCC_TARGET_ARCH
+ 	default "v3"
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+index 2bf7929ac8..e17a8ec65a 100644
+--- a/package/binutils/Config.in
++++ b/package/binutils/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_BINUTILS
+ 	bool "binutils"
+-	depends on !BR2_nios2 && !BR2_nds32
++	depends on !BR2_nios2
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  Install binutils on the target
+@@ -21,5 +21,5 @@ config BR2_PACKAGE_BINUTILS_TARGET
+ endif
+ 
+ comment "binutils needs a toolchain w/ wchar"
+-	depends on !BR2_nios2 && !BR2_nds32
++	depends on !BR2_nios2
+ 	depends on !BR2_USE_WCHAR
