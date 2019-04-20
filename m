@@ -1,36 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 20 Apr 2019 15:35:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/postgresql: fix build with NLS
-Message-ID: <20190420133551.31988-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 20 Apr 2019 15:35:38 +0200
+Subject: [Buildroot] [git commit] package/linux-tools/perf: add dependency
+ on 32-bit sync builtins
+Message-ID: <20190420133637.12C068A53D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/0d35378b8bdcfffb0cefd264c95ca3617034559b
+commit: https://git.buildroot.net/buildroot/commit/?id=d5edfa6eef6a0e0b124b894be4ce5da4f14c4af7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Sync builtins ops are strictly required by perf utility as it uses
+atomic_xxx() functions.
+
+Otherwise building fails like that:
+|.../output/host/opt/ext-toolchain/bin/../lib/gcc/arc-snps-linux-uclibc/8.2.1/../../../../arc-snps-linux-uclibc/bin/ld:
+|.../output/build/linux-5.0.7/tools/perf/libperf.a(libperf-in.o): in function `atomic_cmpxchg':
+|.../output/build/linux-5.0.7/tools/include/asm-generic/atomic-gcc.h:69: undefined reference to `__sync_val_compare_and_swap_4'
+
+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Thomas: drop Config.in comment]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/postgresql/postgresql.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/linux-tools/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index c7e9f526fc..8f01460109 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -14,8 +14,10 @@ POSTGRESQL_CONFIG_SCRIPTS = pg_config
- POSTGRESQL_CONF_ENV = \
- 	ac_cv_type_struct_sockaddr_in6=yes \
- 	pgac_cv_snprintf_long_long_int_modifier="ll" \
--	pgac_cv_snprintf_size_t_support=yes
-+	pgac_cv_snprintf_size_t_support=yes \
-+	LIBS=$(TARGET_NLS_LIBS)
- POSTGRESQL_CONF_OPTS = --disable-rpath
-+POSTGRESQL_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- 
- # https://www.postgresql.org/docs/11/static/install-procedure.html:
- # "If you want to invoke the build from another makefile rather than
--- 
-2.20.1
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 4916faa349..90b4825fee 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -46,6 +46,7 @@ config BR2_PACKAGE_LINUX_TOOLS_PCI
+ config BR2_PACKAGE_LINUX_TOOLS_PERF
+ 	bool "perf"
+ 	select BR2_PACKAGE_LINUX_TOOLS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	help
+ 	  perf (sometimes "Perf Events" or perf tools, originally
+ 	  "Performance Counters for Linux") - is a performance
