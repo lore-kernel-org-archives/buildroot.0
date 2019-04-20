@@ -1,69 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Apr 2019 21:59:33 +0200
-Subject: [Buildroot] [git commit] package/prompt-toolkit: bump to version
- 2.0.9
-Message-ID: <20190420195618.A4BBF88274@busybox.osuosl.org>
+Date: Sat, 20 Apr 2019 16:37:10 +0200
+Subject: [Buildroot] [git commit] package/python-backcall: new package
+Message-ID: <20190420195618.89B9288274@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa6125f6f80c3c68317f92685279140e11723091
+commit: https://git.buildroot.net/buildroot/commit/?id=62e8ce286cc8f46ce49c152bf3d1307d0e8873ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Add hash for license file
-- Add xml depedency
+Specifications for callback functions passed in to an API.
 
-prompt-toolkit in version 2.x is a dependency of ipython 7.x
+https://github.com/takluyver/backcall
+
+No license source files are provided from current version, however
+upstream added one:
+https://github.com/takluyver/backcall/blob/master/LICENSE
+
+python-backcall is a runtime dependency of python-inotify 7.3.0
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-prompt-toolkit/Config.in                  | 2 ++
- package/python-prompt-toolkit/python-prompt-toolkit.hash | 8 +++++---
- package/python-prompt-toolkit/python-prompt-toolkit.mk   | 4 ++--
- 3 files changed, 9 insertions(+), 5 deletions(-)
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-backcall/Config.in            |  6 ++++++
+ package/python-backcall/python-backcall.hash |  3 +++
+ package/python-backcall/python-backcall.mk   | 14 ++++++++++++++
+ 5 files changed, 25 insertions(+)
 
-diff --git a/package/python-prompt-toolkit/Config.in b/package/python-prompt-toolkit/Config.in
-index ccc9ebb0f5..baafaeb8c1 100644
---- a/package/python-prompt-toolkit/Config.in
-+++ b/package/python-prompt-toolkit/Config.in
-@@ -2,6 +2,8 @@ config BR2_PACKAGE_PYTHON_PROMPT_TOOLKIT
- 	bool "python-prompt-toolkit"
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON_WCWIDTH # runtime
-+	select BR2_PACKAGE_PYTHON_PYEXPAT if BR2_PACKAGE_PYTHON #??runtime
-+	select BR2_PACKAGE_PYTHON3_PYEXPAT if BR2_PACKAGE_PYTHON3 #??runtime
- 	help
- 	  Library for building powerful interactive command lines in
- 	  Python.
-diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.hash b/package/python-prompt-toolkit/python-prompt-toolkit.hash
-index f60fc08679..be671b8953 100644
---- a/package/python-prompt-toolkit/python-prompt-toolkit.hash
-+++ b/package/python-prompt-toolkit/python-prompt-toolkit.hash
-@@ -1,3 +1,5 @@
--# md5 from https://pypi.python.org/pypi/prompt_toolkit/json, sha256 locally computed
--md5 427b496d2c147bd3819bc3a7f6e0d493 prompt_toolkit-1.0.13.tar.gz
--sha256 33d68ca09f76cd73287fde7df5748ffacf26a8238dd61ee81ac50860ea7c6776 prompt_toolkit-1.0.13.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/prompt-toolkit/json
-+md5	091daddeec62015e0be36e8682d36562  prompt_toolkit-2.0.9.tar.gz
-+sha256	2519ad1d8038fd5fc8e770362237ad0364d16a7650fb5724af6997ed5515e3c1  prompt_toolkit-2.0.9.tar.gz
-+# Locally computed sha256 checksums
-+sha256	303574d9bdd85c757d6025017942bf17baeedf2778f62bd7f425d07d880f4c4a  LICENSE
-diff --git a/package/python-prompt-toolkit/python-prompt-toolkit.mk b/package/python-prompt-toolkit/python-prompt-toolkit.mk
-index 19b7b34e0a..8f62922633 100644
---- a/package/python-prompt-toolkit/python-prompt-toolkit.mk
-+++ b/package/python-prompt-toolkit/python-prompt-toolkit.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PROMPT_TOOLKIT_VERSION = 1.0.13
-+PYTHON_PROMPT_TOOLKIT_VERSION = 2.0.9
- PYTHON_PROMPT_TOOLKIT_SOURCE = prompt_toolkit-$(PYTHON_PROMPT_TOOLKIT_VERSION).tar.gz
--PYTHON_PROMPT_TOOLKIT_SITE = https://pypi.python.org/packages/23/be/4876b52d5cc159cbd4b0ff6e7aa419a26470849a43a8f647857a4a24467b
-+PYTHON_PROMPT_TOOLKIT_SITE = https://files.pythonhosted.org/packages/94/a0/57dc47115621d9b3fcc589848cdbcbb6c4c130186e8fc4c4704766a7a699
- PYTHON_PROMPT_TOOLKIT_SETUP_TYPE = setuptools
- PYTHON_PROMPT_TOOLKIT_LICENSE = BSD-3-Clause
- PYTHON_PROMPT_TOOLKIT_LICENSE_FILES = LICENSE
+diff --git a/DEVELOPERS b/DEVELOPERS
+index dae860969c..89c5f529ed 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -833,6 +833,7 @@ F:	package/ncmpc/
+ F:	package/oniguruma/
+ F:	package/oprofile/
+ F:	package/pcmanfm/
++F:	package/python-backcall/
+ F:	package/rygel/
+ F:	package/safeclib/
+ F:	package/tinycbor/
+diff --git a/package/Config.in b/package/Config.in
+index a3ef2748c9..7eb2376d57 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -828,6 +828,7 @@ menu "External python modules"
+ 	source "package/python-autobahn/Config.in"
+ 	source "package/python-automat/Config.in"
+ 	source "package/python-babel/Config.in"
++	source "package/python-backcall/Config.in"
+ 	source "package/python-backports-abc/Config.in"
+ 	source "package/python-backports-shutil-get-terminal-size/Config.in"
+ 	source "package/python-backports-ssl-match-hostname/Config.in"
+diff --git a/package/python-backcall/Config.in b/package/python-backcall/Config.in
+new file mode 100644
+index 0000000000..7b4345cab7
+--- /dev/null
++++ b/package/python-backcall/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_BACKCALL
++	bool "python-backcall"
++	help
++	  Specifications for callback functions passed in to an API.
++
++	  https://github.com/takluyver/backcall
+diff --git a/package/python-backcall/python-backcall.hash b/package/python-backcall/python-backcall.hash
+new file mode 100644
+index 0000000000..2eccbdef5d
+--- /dev/null
++++ b/package/python-backcall/python-backcall.hash
+@@ -0,0 +1,3 @@
++# md5, sha256 from https://pypi.org/pypi/backcall/json
++md5	87ce0c7839808e6a3427d57df6a792e7  backcall-0.1.0.tar.gz
++sha256	38ecd85be2c1e78f77fd91700c76e14667dc21e2713b63876c0eb901196e01e4  backcall-0.1.0.tar.gz
+diff --git a/package/python-backcall/python-backcall.mk b/package/python-backcall/python-backcall.mk
+new file mode 100644
+index 0000000000..3f95ea3d24
+--- /dev/null
++++ b/package/python-backcall/python-backcall.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-backcall
++#
++################################################################################
++
++PYTHON_BACKCALL_VERSION = 0.1.0
++PYTHON_BACKCALL_SOURCE = backcall-$(PYTHON_BACKCALL_VERSION).tar.gz
++PYTHON_BACKCALL_SITE = https://files.pythonhosted.org/packages/84/71/c8ca4f5bb1e08401b916c68003acf0a0655df935d74d93bf3f3364b310e0
++PYTHON_BACKCALL_SETUP_TYPE = distutils
++# From https://github.com/takluyver/backcall/blob/master/LICENSE
++PYTHON_BACKCALL_LICENSE = BSD-3-Clause
++
++$(eval $(python-package))
