@@ -1,8 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 21 Apr 2019 19:10:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dhcp: always disable zlib in bind
- library
-Message-ID: <20190421171039.26556-1-fontaine.fabrice@gmail.com>
+Date: Sun, 21 Apr 2019 19:27:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ncmpc: fix build with NLS
+Message-ID: <20190421172716.31468-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,37 +9,76 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/62df959193b7737d436162f93af6b89ea542f8f2
+ - http://autobuild.buildroot.org/results/d53978fb30d77cb4d10921bf721eff3d066567ce
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/dhcp/dhcp.mk | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ ...eson.build-link-with-lintl-if-needed.patch | 38 +++++++++++++++++++
+ package/ncmpc/ncmpc.mk                        |  7 +++-
+ 2 files changed, 44 insertions(+), 1 deletion(-)
+ create mode 100644 package/ncmpc/0002-meson.build-link-with-lintl-if-needed.patch
 
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 812e4870b9..aa8f66345e 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -40,16 +40,14 @@ DHCP_MAKE_ENV = \
- 	BUILD_CPPFLAGS="$(HOST_CPPFLAGS)" \
- 	BUILD_LDFLAGS="$(HOST_LDFLAGS)"
- 
-+#?Always disable zlib in bind library (like all other dependencies, see
-+#?bind/Makefile.in)
-+DHCP_BIND_CONF_OPTS = --without-zlib
+diff --git a/package/ncmpc/0002-meson.build-link-with-lintl-if-needed.patch b/package/ncmpc/0002-meson.build-link-with-lintl-if-needed.patch
+new file mode 100644
+index 0000000000..248086fb65
+--- /dev/null
++++ b/package/ncmpc/0002-meson.build-link-with-lintl-if-needed.patch
+@@ -0,0 +1,38 @@
++From 21ad6bf2bcb0745c25a28637449a72eee883a8e2 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 21 Apr 2019 19:19:10 +0200
++Subject: [PATCH] meson.build: link with lintl if needed
 +
- ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
- DHCP_CONF_OPTS += --enable-delayed-ack
- endif
++Fixes:
++ - http://autobuild.buildroot.org/results/d53978fb30d77cb4d10921bf721eff3d066567ce
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent as upstream already rejected the first patch
++on atomic: https://github.com/MusicPlayerDaemon/ncmpc/pull/45]
++---
++ meson.build | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/meson.build b/meson.build
++index 2e6defc..28e9d29 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -42,6 +42,7 @@ else
++ endif
++ conf.set('ENABLE_NLS', enable_nls)
++ if enable_nls
+++  intl_dep = cc.find_library('intl', required: false)
++   conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
++   subdir('po')
++ endif
++@@ -356,6 +357,7 @@ ncmpc = executable('ncmpc',
++     boost_dep,
++     pcre_dep,
++     curses_dep,
+++    intl_dep,
++     lirc_dep,
++     libmpdclient_dep,
++   ],
++-- 
++2.20.1
++
+diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
+index 88cf313249..f0fe3fe374 100644
+--- a/package/ncmpc/ncmpc.mk
++++ b/package/ncmpc/ncmpc.mk
+@@ -8,7 +8,12 @@ NCMPC_VERSION_MAJOR = 0
+ NCMPC_VERSION = $(NCMPC_VERSION_MAJOR).34
+ NCMPC_SOURCE = ncmpc-$(NCMPC_VERSION).tar.xz
+ NCMPC_SITE = http://www.musicpd.org/download/ncmpc/$(NCMPC_VERSION_MAJOR)
+-NCMPC_DEPENDENCIES = boost host-pkgconf libmpdclient ncurses
++NCMPC_DEPENDENCIES = \
++	boost \
++	host-pkgconf \
++	libmpdclient \
++	ncurses \
++	$(TARGET_NLS_DEPENDENCIES)
+ NCMPC_LICENSE = GPL-2.0+
+ NCMPC_LICENSE_FILES = COPYING
  
--ifeq ($(BR2_PACKAGE_ZLIB),y)
--DHCP_BIND_CONF_OPTS += --with-zlib
--else
--DHCP_BIND_CONF_OPTS += --without-zlib
--endif
--
- ifeq ($(BR2_STATIC_LIBS),y)
- DHCP_BIND_CONF_OPTS += --without-dlopen
- endif
 -- 
 2.20.1
