@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 21 Apr 2019 19:08:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/jemalloc: fix build on or1k with
- gcc < 6
-Message-ID: <20190421170851.26397-1-fontaine.fabrice@gmail.com>
+Date: Sun, 21 Apr 2019 19:10:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dhcp: always disable zlib in bind
+ library
+Message-ID: <20190421171039.26556-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,28 +10,37 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/8cb80bef5c60ac1e5f6507fbc68c21c32f4af84a
+ - http://autobuild.buildroot.org/results/62df959193b7737d436162f93af6b89ea542f8f2
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/jemalloc/jemalloc.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/dhcp/dhcp.mk | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
-index 1273f8a72a..f4d64851bf 100644
---- a/package/jemalloc/jemalloc.mk
-+++ b/package/jemalloc/jemalloc.mk
-@@ -11,5 +11,11 @@ JEMALLOC_LICENSE = BSD-2-Clause
- JEMALLOC_LICENSE_FILES = COPYING
- JEMALLOC_INSTALL_STAGING = YES
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 812e4870b9..aa8f66345e 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -40,16 +40,14 @@ DHCP_MAKE_ENV = \
+ 	BUILD_CPPFLAGS="$(HOST_CPPFLAGS)" \
+ 	BUILD_LDFLAGS="$(HOST_LDFLAGS)"
  
-+# gcc bug internal compiler error: in merge_overlapping_regs, at
-+# regrename.c:304. This bug is fixed since gcc 6.
-+ifeq ($(BR2_or1k):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:)
-+JEMALLOC_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O0"
-+endif
++#?Always disable zlib in bind library (like all other dependencies, see
++#?bind/Makefile.in)
++DHCP_BIND_CONF_OPTS = --without-zlib
 +
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
+ DHCP_CONF_OPTS += --enable-delayed-ack
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_ZLIB),y)
+-DHCP_BIND_CONF_OPTS += --with-zlib
+-else
+-DHCP_BIND_CONF_OPTS += --without-zlib
+-endif
+-
+ ifeq ($(BR2_STATIC_LIBS),y)
+ DHCP_BIND_CONF_OPTS += --without-dlopen
+ endif
 -- 
 2.20.1
