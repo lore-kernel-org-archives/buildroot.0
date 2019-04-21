@@ -1,30 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 21 Apr 2019 11:48:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libkrb5: fix build with NLS
-In-Reply-To: <20190420145654.15603-1-fontaine.fabrice@gmail.com>
-References: <20190420145654.15603-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190421114806.04c05f1c@windsurf>
+Date: Sun, 21 Apr 2019 12:06:56 +0200
+Subject: [Buildroot] [git commit] package/linknx: add license file
+Message-ID: <20190421101111.8D2AF8148C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 20 Apr 2019 16:56:54 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8481ba9c190aa3d508ed0a71dc0be42a91279b7a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/b35dd775015772b0f322f77470debe09d24173ff
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libkrb5/libkrb5.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+LICENSE has been added in version 0.0.1.32 with
+https://github.com/linknx/linknx/commit/74671aa27931be40662c0266441c7470dc11d595
 
-Applied to master, thanks.
+So add it to LINKNX_LICENSE_FILES as well as its hash
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/linknx/linknx.hash | 1 +
+ package/linknx/linknx.mk   | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/package/linknx/linknx.hash b/package/linknx/linknx.hash
+index 40e26766e2..312e43bfd3 100644
+--- a/package/linknx/linknx.hash
++++ b/package/linknx/linknx.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256 635b8fbd3477fd7d85a95955b93f327cd5a389db80dc18cdae04de19a3a8a972  linknx-0.0.1.33.tar.gz
++sha256 c03cea027b4b40e4402fabd08557736727ec3d5bc54ad64ab6472de432198cad  LICENSE
+diff --git a/package/linknx/linknx.mk b/package/linknx/linknx.mk
+index dfabef550e..5801eb5f87 100644
+--- a/package/linknx/linknx.mk
++++ b/package/linknx/linknx.mk
+@@ -7,6 +7,7 @@
+ LINKNX_VERSION = 0.0.1.33
+ LINKNX_SITE = $(call github,linknx,linknx,$(LINKNX_VERSION))
+ LINKNX_LICENSE = GPL-2.0+
++LINKNX_LICENSE_FILES = LICENSE
+ LINKNX_INSTALL_STAGING = YES
+ LINKNX_CONF_OPTS = \
+ 	--without-log4cpp \
