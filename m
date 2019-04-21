@@ -1,30 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 21 Apr 2019 12:16:29 +0200
-Subject: [Buildroot] [PATCH 1/3] package/linknx: add license file
-In-Reply-To: <20190420204252.26815-1-fontaine.fabrice@gmail.com>
-References: <20190420204252.26815-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190421121629.2ba9be2c@windsurf>
+Date: Sun, 21 Apr 2019 12:16:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xlib_libXpm: fix build with NLS
+In-Reply-To: <20190420204434.27015-1-fontaine.fabrice@gmail.com>
+References: <20190420204434.27015-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190421121632.10d53269@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 20 Apr 2019 22:42:50 +0200
+On Sat, 20 Apr 2019 22:44:34 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> LICENSE has been added in version 0.0.1.32 with
-> https://github.com/linknx/linknx/commit/74671aa27931be40662c0266441c7470dc11d595
-> 
-> So add it to LINKNX_LICENSE_FILES as well as its hash
+> Fixes:
+>  - http://autobuild.buildroot.org/results/cc47a39d134fbc80426bab6fa3662150374bae35
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/linknx/linknx.hash | 1 +
->  package/linknx/linknx.mk   | 1 +
->  2 files changed, 2 insertions(+)
+>  package/x11r7/xlib_libXpm/xlib_libXpm.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 
-Series applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
