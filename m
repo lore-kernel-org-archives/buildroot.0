@@ -1,39 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 21 Apr 2019 22:05:42 +0200
-Subject: [Buildroot] [git commit] configs/orangepi_prime: U-Boot needs
- pylibfdt
-Message-ID: <20190421201515.6EC5281429@busybox.osuosl.org>
+Date: Sun, 21 Apr 2019 22:32:21 +0200
+Subject: [Buildroot] [git commit] package/jemalloc: fix build on or1k with
+ gcc < 6
+Message-ID: <20190421202746.AFCBD81831@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=716b1e3a9f2dc245d22464a47c927eb5b233e0c0
+commit: https://git.buildroot.net/buildroot/commit/?id=f243f57abcdb415b57b8b887e9cc35bf69163224
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the bump of U-Boot to 2019.01, pylibfdt is needed to be able to
-build the U-Boot image, so we need to enable
-BR2_TARGET_UBOOT_NEEDS_PYLIBFDT.
-
 Fixes:
+ - http://autobuild.buildroot.org/results/8cb80bef5c60ac1e5f6507fbc68c21c32f4af84a
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339510
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/orangepi_prime_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/jemalloc/jemalloc.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/configs/orangepi_prime_defconfig b/configs/orangepi_prime_defconfig
-index 8117b40477..8703dccad5 100644
---- a/configs/orangepi_prime_defconfig
-+++ b/configs/orangepi_prime_defconfig
-@@ -20,6 +20,7 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="orangepi_prime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+diff --git a/package/jemalloc/jemalloc.mk b/package/jemalloc/jemalloc.mk
+index 1273f8a72a..f4d64851bf 100644
+--- a/package/jemalloc/jemalloc.mk
++++ b/package/jemalloc/jemalloc.mk
+@@ -11,5 +11,11 @@ JEMALLOC_LICENSE = BSD-2-Clause
+ JEMALLOC_LICENSE_FILES = COPYING
+ JEMALLOC_INSTALL_STAGING = YES
+ 
++# gcc bug internal compiler error: in merge_overlapping_regs, at
++# regrename.c:304. This bug is fixed since gcc 6.
++ifeq ($(BR2_or1k):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:)
++JEMALLOC_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O0"
++endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
