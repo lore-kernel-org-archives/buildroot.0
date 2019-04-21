@@ -1,41 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 21 Apr 2019 15:25:21 +0200
-Subject: [Buildroot] [git commit] configs/raspberrypi0: increase ext4 image
- size
-Message-ID: <20190421142159.BB62181475@busybox.osuosl.org>
+Date: Sun, 21 Apr 2019 15:28:45 +0200
+Subject: [Buildroot] [git commit] configs/atmel_sama5d2_xplained_mmc_dev:
+ increase ext4 image size
+Message-ID: <20190421142159.D6C2C81475@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4aab77b7004db049a35a65897e985e458ae786f9
+commit: https://git.buildroot.net/buildroot/commit/?id=df9f18907203d2910eb8acdc262fcb583446a8ad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Since the bump to Linux 4.19 in commit
-ed02414e9cd271c0b0db26b8d5db1bf40ff416d3, the number of kernel modules
-built has increased significantly, to the point where the default of
-60 MB for the ext4 image is no longer sufficient, so let's increase to
-120 MB.
+The default of 60 MB is no longer sufficient to contain all the tools
+enabled in this "development" defconfig, so let's increase the ext4
+image size to 120 MB.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339555
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339417
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/raspberrypi0_defconfig | 1 +
+ configs/atmel_sama5d2_xplained_mmc_dev_defconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/raspberrypi0_defconfig b/configs/raspberrypi0_defconfig
-index f6fcdf58f8..e85e549fa2 100644
---- a/configs/raspberrypi0_defconfig
-+++ b/configs/raspberrypi0_defconfig
-@@ -30,6 +30,7 @@ BR2_PACKAGE_HOST_MTOOLS=y
- # Filesystem / image
+diff --git a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+index bc5414c4f4..e140a44e45 100644
+--- a/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d2_xplained_mmc_dev_defconfig
+@@ -83,6 +83,7 @@ BR2_PACKAGE_VIM=y
+ # Filesystem
  BR2_TARGET_ROOTFS_EXT2=y
  BR2_TARGET_ROOTFS_EXT2_4=y
 +BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi0/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi0/post-image.sh"
+ 
+ # Bootloaders
+ BR2_TARGET_AT91BOOTSTRAP3=y
