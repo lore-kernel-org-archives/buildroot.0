@@ -1,46 +1,58 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 21 Apr 2019 09:30:46 +0200
-Subject: [Buildroot] [RFC 1/1] br2-external: Alow to include toolchain
- from external tree
-In-Reply-To: <20190420205404.GC21166@scaer>
-References: <20190417204630.18746-1-vadim4j@gmail.com>
- <a37f9f50-381a-cdfb-4d78-bd78bbdd9f4c@mind.be> <20190418145344.GA21166@scaer>
- <20190419030101.cktcloq4rfqyw3mt@vkochan-ThinkPad-T470p>
- <bc9c8aa1-9c56-7c86-9b3f-2cd66a91f796@mind.be> <20190420205404.GC21166@scaer>
-Message-ID: <cacfd25b-8a0e-dfe0-185b-2cff5b0d473c@mind.be>
+Date: Sun, 21 Apr 2019 09:36:18 +0200
+Subject: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
+In-Reply-To: <20190418114336.61f3f404@windsurf>
+References: <20190418093902.41835-1-abrodkin@synopsys.com>
+ <20190418114336.61f3f404@windsurf>
+Message-ID: <ea5f11a1-a7cb-4cee-dfda-64d55d550d83@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Yann,
 
-On 20/04/2019 22:54, Yann E. MORIN wrote:
-> Vadim, Arnout, All,
+
+On 18/04/2019 11:43, Thomas Petazzoni wrote:
+> Hello,
 > 
-> Here's my take on the topic (still WIP, but mostly there, needs commit
-> log):
+> On Thu, 18 Apr 2019 12:39:02 +0300
+> Alexey Brodkin <Alexey.Brodkin@synopsys.com> wrote:
 > 
->     https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/br2-ext-toolchain
+>> perf uses its own build-system and doesn't respect externally set flags.
+>> Let's force it to use target flags as perf utility is nothing but
+>> an ordinary user-space application.
+>>
+>> This among other things is required to build perf for ARC700 for which
+>> we pass "-matomic" via TARGET_ABI, see [1] for more details.
+>>
+>> [1] https://patchwork.ozlabs.org/patch/1087471/
+>>
+>> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+>> ---
+>>  package/linux-tools/linux-tool-perf.mk.in | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+>> index 80e00c3c56..e7565773c4 100644
+>> --- a/package/linux-tools/linux-tool-perf.mk.in
+>> +++ b/package/linux-tools/linux-tool-perf.mk.in
+>> @@ -19,6 +19,7 @@ PERF_MAKE_FLAGS = \
+>>  	JOBS=$(PARALLEL_JOBS) \
+>>  	ARCH=$(PERF_ARCH) \
+>>  	DESTDIR=$(TARGET_DIR) \
+>> +	EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
 > 
-> I'll be off until Monday, when I'll write proper commit log before
-> submitting it.
+> The change is OK, but I believe that if -matomic is really a
+> core/important CFLAGS on ARC, then we should ideally pass it through
+> the toolchain wrapper, so that we are sure it is always passed.
+> 
+> Arnout, what do you think?
 
- A few comments:
+ +1.
 
-- The rule for internal variables being prefixed by BR_ instead of BR2_ is
-written down, in some BR developer days report.
-
-- Bikeshed: call the "dir" variable "outputdir" or something that makes it clear
-it's the output.
-
-- For the removal of prepare-kconfig, maybe mention that it reverts
-9429e7b698638399ecfd73aa37545594f253a074
-
-- I think it's worth adding a flag that checks if there is any external
-toolchain at all, and to put a comment in br2-external.toolchains.in why it is
-empty.
+ Thomas, last year we made a beginning of deciding what should go through the
+wrapper and what through CFLAGS, but I'm not sure if we ever got to a conclusion?
 
  Regards,
  Arnout
