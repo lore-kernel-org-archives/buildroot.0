@@ -1,27 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Apr 2019 22:25:52 +0200
-Subject: [Buildroot] [PATCH] package/linux-tools: fix kconfig coding
- style
-In-Reply-To: <20190422073424.1116-1-yann.morin.1998@free.fr>
-References: <20190422073424.1116-1-yann.morin.1998@free.fr>
-Message-ID: <20190422222552.3746b5fd@windsurf>
+Date: Mon, 22 Apr 2019 22:26:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/keepalived: bump to version
+ 2.0.15
+In-Reply-To: <20190421174345.15284-1-fontaine.fabrice@gmail.com>
+References: <20190421174345.15284-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190422222616.7a7248b0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Apr 2019 09:34:24 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Sun, 21 Apr 2019 19:43:45 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fix coding style introduced in d5edfa6eef (package/linux-tools/perf: add
-> dependency on 32-bit sync builtins).
+> Remove patch (already in version)
 > 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/linux-tools/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  ...l_parser.c-fix-build-with-kernel-4.1.patch | 37 -------------------
+>  package/keepalived/keepalived.hash            |  2 +-
+>  package/keepalived/keepalived.mk              |  2 +-
+>  3 files changed, 2 insertions(+), 39 deletions(-)
+>  delete mode 100644 package/keepalived/0001-global_parser.c-fix-build-with-kernel-4.1.patch
 
 Applied to master, thanks.
 
