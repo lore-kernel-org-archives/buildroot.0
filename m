@@ -1,39 +1,36 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Apr 2019 21:24:00 +0200
-Subject: [Buildroot] [PATCH 04/12] core: simplify removal of generated
- br2-external files
+Date: Mon, 22 Apr 2019 21:24:01 +0200
+Subject: [Buildroot] [PATCH 05/12] supports/scripts: declare missing local
+ variable
 In-Reply-To: <cover.1555960978.git.yann.morin.1998@free.fr>
 References: <cover.1555960978.git.yann.morin.1998@free.fr>
-Message-ID: <a4aa1b30c09dafe64b788a2cbd19313edc53a1e0.1555960978.git.yann.morin.1998@free.fr>
+Message-ID: <597e25ae25df488634b42ea4294fdfb1632f7146.1555960978.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that all the br2-external generated files are named after the same
-pattern, it gets easier to remove them all using a glob.
-
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Vadim Kochan <vadim4j@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Makefile | 2 +-
+ support/scripts/br2-external | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 8b8f5b2690..196bb3c958 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1071,7 +1071,7 @@ ifeq ($(O),$(CURDIR)/output)
- 	rm -rf $(O)
- endif
- 	rm -rf $(TOPDIR)/dl $(BR2_CONFIG) $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/..config.tmp \
--		$(CONFIG_DIR)/.auto.deps $(BR2_EXTERNAL_FILE) $(BASE_DIR)/.br2-external.in
-+		$(CONFIG_DIR)/.auto.deps $(BASE_DIR)/.br2-external.*
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index dfb3cc8bcc..a70e0159af 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -154,7 +154,7 @@ do_mk() {
  
- .PHONY: help
- help:
+ # Generate the kconfig snippet for the br2-external tree.
+ do_kconfig() {
+-    local br2_name br2_ext
++    local br2_name br2_desc br2_ext
+ 
+     printf '#\n# Automatically generated file; DO NOT EDIT.\n#\n'
+     printf '\n'
 -- 
 2.14.1
