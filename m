@@ -1,85 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Apr 2019 21:24:05 +0200
-Subject: [Buildroot] [PATCH 09/12] core: allow br2-external trees to provide
- pre-configured toolchains
-In-Reply-To: <cover.1555960978.git.yann.morin.1998@free.fr>
-References: <cover.1555960978.git.yann.morin.1998@free.fr>
-Message-ID: <12a55c71a864eba5523aeee7f8a7398f720d258a.1555960978.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 22 Apr 2019 22:08:24 +0200
+Subject: [Buildroot] [PATCH 0/5] Fix fallouts from LINUX_BUILD_CMDS
+ simplification
+Message-ID: <20190422200830.2831-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we have a choice for the pre-configured pre-built toolchains,
-there is no p[ossbility for a br2-external to provide its own. The
-only solution so far for defconfigs in br2-external trees is to use
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM and define all the bits by itself...
+Hello,
 
-This is not so convemient, so offer a way for br2-external trees to
-provide such pre-configure toolchains.
+In commit ffbe46a5295ce4e0442728f2ad3e19afa7eaa8ed, a patch of mine
+changed LINUX_BUILD_CMDS to do "make all $(LINUX_TARGET_NAME)" instead
+of "make $(LINUX_TARGET_NAME)" and "make modules".
 
-To allow for this, we now scan each br2-external tree and look for a
-specific file, provides.toiolchains.in. We generate a kconfig file that
-sources each such file, and that generated file is sourced from within
-the toolchain choice, thus making the toolchains from a br2-external
-tree possible and available in the same location as the ones known to
-Buildroot.
+This has caused a number of build issues in our defconfigs:
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Vadim Kochan <vadim4j@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/scripts/br2-external           | 10 +++++++++-
- toolchain/toolchain-external/Config.in |  5 ++++-
- 2 files changed, 13 insertions(+), 2 deletions(-)
+ - A number of kernel configurations apparently don't build well when
+   the "all" target is built concurrently with $(LINUX_TARGET_NAME),
+   with weird file not found errors.
 
-diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-index 60ae67c967..9f4f261c3d 100755
---- a/support/scripts/br2-external
-+++ b/support/scripts/br2-external
-@@ -153,7 +153,7 @@ do_kconfig() {
-     local outputdir="${1}"
-     local br2_name br2_ext br2
- 
--    for br2 in paths menus; do
-+    for br2 in paths menus toolchains; do
-         {
-             printf '#\n# Automatically generated file; DO NOT EDIT.\n#\n'
-             printf '\n'
-@@ -190,6 +190,14 @@ do_kconfig() {
-             fi
-             printf '\n'
-         } >>"${outputdir}/.br2-external.menus.in"
-+
-+        if [ -f "${br2_ext}/provides/toolchains.in" ]; then
-+            printf 'comment "Toolchains from: %s"\n' "${br2_desc}"
-+            printf 'source "%s/provides/toolchains.in"\n' "${br2_ext}"
-+            printf '\n'
-+        else
-+            printf '# No toolchain from %s\n\n' "${br2_desc}"
-+        fi >>"${outputdir}/.br2-external.toolchains.in"
-     done
- 
-     printf 'endmenu\n' >>"${outputdir}/.br2-external.menus.in"
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index d234c1c552..1cf4fc850d 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -47,9 +47,12 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Confi
- 
- # Kept last, so it remains the non-default choice, unless there isn't
- # any available toolchain profile for the currently selected
--# architecture.
-+# architecture, but before toolchains from br2-external trees.
- source "toolchain/toolchain-external/toolchain-external-custom/Config.in"
- 
-+# Toolchains from br2-external trees, if any
-+source "$BR2_BASE_DIR/.br2-external.toolchains.in"
-+
- endchoice
- 
- choice
+   We fix this by doing "make all" and "make $(LINUX_TARGET_NAME)"
+   separately (first patch)
+
+ - Due to calling "make all", a little bit more might get built, and
+   sometimes this "little bit more" needs mkimage, so we add
+   host-uboot-tools to the defconfig. This is enough as linux/linux.mk
+   automatically adds host-uboot-tools to its dependency if it's
+   enabled. I hesitated with adding an explicit
+   BR2_LINUX_KERNEL_NEEDS_HOST_UBOOT_TOOLS option, let me know if this
+   sounds better or if the proposed solution in this patch series is
+   good enough.
+
+Thanks,
+
+Thomas
+
+Thomas Petazzoni (5):
+  linux: split calling "all" and "$(LINUX_TARGET_NAME)" targets
+  configs/beaglebone: kernel build needs mkimage
+  configs/qemu_nios2_10m50: kernel build needs mkimage
+  configs/qemu_ppc_mpc8544ds: kernel build needs mkimage
+  configs/qemu_ppc_virtex_ml507: kernel build needs mkimage
+
+ configs/beaglebone_defconfig            | 2 ++
+ configs/qemu_nios2_10m50_defconfig      | 3 +++
+ configs/qemu_ppc_mpc8544ds_defconfig    | 3 +++
+ configs/qemu_ppc_virtex_ml507_defconfig | 3 +++
+ linux/linux.mk                          | 3 ++-
+ 5 files changed, 13 insertions(+), 1 deletion(-)
+
 -- 
-2.14.1
+2.20.1
