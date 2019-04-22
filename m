@@ -1,39 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Apr 2019 22:37:48 +0200
-Subject: [Buildroot] [git commit] package/dhcp: add missing dependency on
- zlib
-Message-ID: <20190422203405.60EF88139F@busybox.osuosl.org>
+Date: Mon, 22 Apr 2019 22:39:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dhcp: always disable zlib in
+ bind library
+In-Reply-To: <20190421171039.26556-1-fontaine.fabrice@gmail.com>
+References: <20190421171039.26556-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190422223952.53412a78@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03785e13e44d2699abd9cdfe175a42d8983b0cad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Fabrice,
 
-When BR2_PACKAGE_ZLIB=y, we enable zlib support in the bind included
-in dhcp, but we forget to add zlib to DHCP_DEPENDENCIES, so it doesn't
-get built before dhcp, causing build failures.
+On Sun, 21 Apr 2019 19:10:39 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
+> +#?Always disable zlib in bind library (like all other dependencies, see
+> +#?bind/Makefile.in)
 
-  http://autobuild.buildroot.net/results/5a33057ceaf3f53e6ba9deab3f214a4c8a644352/
+This reason looked suspicious to me, so I investigated, and indeed, I
+think it's not the right fix.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/dhcp/dhcp.mk | 1 +
- 1 file changed, 1 insertion(+)
+> +DHCP_BIND_CONF_OPTS = --without-zlib
+> +
+>  ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
+>  DHCP_CONF_OPTS += --enable-delayed-ack
+>  endif
+>  
+> -ifeq ($(BR2_PACKAGE_ZLIB),y)
 
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 812e4870b9..9e7444eea6 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -45,6 +45,7 @@ DHCP_CONF_OPTS += --enable-delayed-ack
- endif
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
-+DHCP_DEPENDENCIES += zlib
- DHCP_BIND_CONF_OPTS += --with-zlib
- else
- DHCP_BIND_CONF_OPTS += --without-zlib
+The right fix is:
+
+DHCP_DEPENDENCIES += zlib
+
+> -DHCP_BIND_CONF_OPTS += --with-zlib
+> -else
+> -DHCP_BIND_CONF_OPTS += --without-zlib
+> -endif
+
+Thanks to this, zlib is properly built before dhcp, and everything
+works fine.
+
+I committed a fix that does this.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
