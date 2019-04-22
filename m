@@ -1,56 +1,46 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sun, 21 Apr 2019 22:27:24 -0300
-Subject: [Buildroot] [PATCH v4 3/3] .gitlab-ci.yml: add trigger per job
-References: <7fdd9d95-c147-d5bf-ca56-c0fef507f737@mind.be>
-Message-ID: <5cbd187c3c9b_707a3f9fd611a0e8645dd@ultri5.mail>
+From: Thomas Huth <huth@tuxfamily.org>
+Date: Mon, 22 Apr 2019 07:55:48 +0200
+Subject: [Buildroot] [PATCH 1/3] package/xorcurses: new package
+In-Reply-To: <CAKcgs2wiC6CcCwqb04G-VqwxdRULhSeQbEXUW+aMwdfwNFz8pw@mail.gmail.com>
+References: <20190223205657.18394-1-huth@tuxfamily.org>
+ <20190223205657.18394-2-huth@tuxfamily.org>
+ <CAKcgs2wiC6CcCwqb04G-VqwxdRULhSeQbEXUW+aMwdfwNFz8pw@mail.gmail.com>
+Message-ID: <20190422075548.435d4eca@thl530.multi.box>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Am Sat, 16 Mar 2019 17:57:28 +0100
+schrieb Gilles Talis <gilles.talis@gmail.com>:
 
-On Sat, Apr 13, 2019 at 10:46 AM, Arnout Vandecappelle wrote:
-
-> On 08/04/2019 05:22, Ricardo Martincoski wrote:
->> The check-* jobs are fast, so there is no need to add a per job trigger
->> for them.
+> Hello Thomas,
 > 
->  This bit is no longer true, right?
+> Thanks for your contribution. Please find some comments below.
 
-I still think:
- - The check-* jobs are fast
- - there is no *need* to add a per job trigger for them.
-But with v4 of this series indeed it should be easy to add a per job trigger
-for them too, for consistence or some other reason.
+ Hi Gilles,
 
-> 
->  I can fix that up while applying, no need to resend.
+thanks a lot for your review! I finally found some spare time to look
+into this again, but I have some questions below...
 
-So feel free to add them *if* you keep current behavior. For example, now when
-one pushes a branch to GitLab the 4 check-* jobs run.
-I guess you would need to do this for each of the 4 jobs:
+> Le sam. 23 f?vr. 2019 ? 21:57, Thomas Huth <huth@tuxfamily.org> a
+> ?crit :
+[...]
+> > diff --git a/package/xorcurses/xorcurses.hash
+> > b/package/xorcurses/xorcurses.hash new file mode 100644
+> > index 0000000000..49d3a0c3b9
+> > --- /dev/null
+> > +++ b/package/xorcurses/xorcurses.hash
+> > @@ -0,0 +1,2 @@
+> > +# Locally calculated
+> > +sha512
+> > 1782ebf6ae8798b32e0a8e5e20e6d0b44eb619f6e7f015735c6e86205bd545da108c36bff1c9cfc9e9b44dee8f90bacb9df70436991f57f51c2c87e94b3a4725
+> > XorCurses-0.2.2.tar.bz2  
+> You also need to provide the hash for the license file.
 
- check-DEVELOPERS:
-     extends: .check_base
-+    only:
-+        - triggers
-+        - tags
-+        - branches
-+        - /-check-DEVELOPERS$/
+There does not seem to be a license file in the tarball here, they just
+mention in the README that the game is licensed under the GPL. I guess
+I can skip the hash for the license file in this case?
 
-If you intend to change the current behavior, please do this in a follow up
-patch so we can discuss a little more during its review.
-
-> 
->  Also, I'll squash patches 2 and 3. Patch 2 is really not worth much on its own
-> IMO. It would make more sense to introduce the _base keys in a separate patch
-> (i.e. moving the artifacts to _base) and include the variable name in that
-> patch. But I don't think it's worth the effort to try to split like that.
-
-OK. Please feel free to squash them.
-
-
-Regards,
-Ricardo
+ Thomas
