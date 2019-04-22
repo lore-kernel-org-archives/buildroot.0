@@ -1,87 +1,70 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 22 Apr 2019 23:19:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dhcp: always disable zlib in
- bind library
-In-Reply-To: <20190422223952.53412a78@windsurf>
-References: <20190421171039.26556-1-fontaine.fabrice@gmail.com>
- <20190422223952.53412a78@windsurf>
-Message-ID: <CAPi7W80Lee0aq4oVwg5Ssy0NZTwQzCZqSwYBZ+q+VFA3hEfAJQ@mail.gmail.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 22 Apr 2019 23:37:19 +0200
+Subject: [Buildroot] [PATCH] package/minetest: bump to version 5.0.1
+Message-ID: <20190422213719.5775-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+See:
+https://forum.minetest.net/viewtopic.php?t=22463
 
-Le lun. 22 avr. 2019 ? 22:39, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello Fabrice,
->
-> On Sun, 21 Apr 2019 19:10:39 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > +# Always disable zlib in bind library (like all other dependencies, see
-> > +# bind/Makefile.in)
->
-> This reason looked suspicious to me, so I investigated, and indeed, I
-> think it's not the right fix.
->
-> > +DHCP_BIND_CONF_OPTS = --without-zlib
-> > +
-> >  ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
-> >  DHCP_CONF_OPTS += --enable-delayed-ack
-> >  endif
-> >
-> > -ifeq ($(BR2_PACKAGE_ZLIB),y)
->
-> The right fix is:
->
-> DHCP_DEPENDENCIES += zlib
->
-> > -DHCP_BIND_CONF_OPTS += --with-zlib
-> > -else
-> > -DHCP_BIND_CONF_OPTS += --without-zlib
-> > -endif
->
-> Thanks to this, zlib is properly built before dhcp, and everything
-> works fine.
-This is strange because I think I also tried this fix and the build
-failure was not fixed because if no value is provided to zlib, the
-configure script will try to find zlib header on host (see
-dhcp/bind/bind-9.11.2-P1/configure.in):
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/minetest-game/minetest-game.hash | 2 +-
+ package/minetest-game/minetest-game.mk   | 2 +-
+ package/minetest/minetest.hash           | 2 +-
+ package/minetest/minetest.mk             | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-    auto|yes)
-        for d in /usr /usr/local /opt/local
-        do
-            if test -f "${d}/include/zlib.h"
-            then
-                if test ${d} != /usr
-                then
-                    zlib_cflags="-I ${d}/include"
-                    LIBS="$LIBS -L${d}/lib"
-                fi
-                have_zlib="yes"
-            fi
-        done
-        ;;
-
-And obviously, build will fail if those headers are found on host.
-So I think, we should also set --with-zlib=$(STAGING_DIR)/usr but it
-was also failing.
-I'll investigate a little more to find why if you think that disabling
-zlib is not a good solution.
->
-> I committed a fix that does this.
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
-
-Fabrice
+diff --git a/package/minetest-game/minetest-game.hash b/package/minetest-game/minetest-game.hash
+index 4299df26c2..e766b6b6c4 100644
+--- a/package/minetest-game/minetest-game.hash
++++ b/package/minetest-game/minetest-game.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 83688d802f9d8308acf6f95e6845cdbe1ee1bc088a963a30f94cf72ec7265cf8 minetest-game-5.0.0.tar.gz
++sha256 965d2cf3ac8c822bc9e60fb8f508182fb2f24dde46f46b000caf225ebe2ec519 minetest-game-5.0.1.tar.gz
+ 
+ sha256 f8a254e8d5f6b3ca3873f990986e86c864f943aa5dc9bf56808c5f4bfa509db0 LICENSE.txt
+ sha256 ed2afed388c470e08edc1104e4ff6d12b68a32a76b8c52d760a99d4d2d7716f3 mods/beds/license.txt
+diff --git a/package/minetest-game/minetest-game.mk b/package/minetest-game/minetest-game.mk
+index 05471e6738..736d361458 100644
+--- a/package/minetest-game/minetest-game.mk
++++ b/package/minetest-game/minetest-game.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MINETEST_GAME_VERSION = 5.0.0
++MINETEST_GAME_VERSION = 5.0.1
+ MINETEST_GAME_SITE = $(call github,minetest,minetest_game,$(MINETEST_GAME_VERSION))
+ MINETEST_GAME_LICENSE = LGPL-2.1+ (code), CC-BY-SA-2.0, CC-BY-SA-3.0, \
+ 	CC-BY-SA-4.0, MIT, CC0 1.0, CC-BY-2.0 (mods)
+diff --git a/package/minetest/minetest.hash b/package/minetest/minetest.hash
+index f9f92fbb6c..12507957bf 100644
+--- a/package/minetest/minetest.hash
++++ b/package/minetest/minetest.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 1ba816f77dc9dbd5a4995f0c1d482f8f22b9aa75b6d6999dbfd1f3d698363d0a  minetest-5.0.0.tar.gz
++sha256 aa771cf178ad1b436d5723e5d6dd24e42b5d56f1cfe9c930f6426b7f24bb1635  minetest-5.0.1.tar.gz
+ 
+ sha256 03ec12b2ba71d5e31c37bcf2700af2f278141df62e5a2ac0ce056c53bf266e44  LICENSE.txt
+diff --git a/package/minetest/minetest.mk b/package/minetest/minetest.mk
+index 69bca691e2..96a66a3f19 100644
+--- a/package/minetest/minetest.mk
++++ b/package/minetest/minetest.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MINETEST_VERSION = 5.0.0
++MINETEST_VERSION = 5.0.1
+ MINETEST_SITE = $(call github,minetest,minetest,$(MINETEST_VERSION))
+ MINETEST_LICENSE = LGPL-2.1+ (code), CC-BY-SA-3.0 (textures and sounds)
+ MINETEST_LICENSE_FILES = LICENSE.txt
+-- 
+2.14.5
