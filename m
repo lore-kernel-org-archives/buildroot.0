@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 22 Apr 2019 13:19:15 -0400
-Subject: [Buildroot] [PATCH v2 08/10] package/gstreamer1/gst1-libav: bump to
- version 1.16.0
+Date: Mon, 22 Apr 2019 13:19:16 -0400
+Subject: [Buildroot] [PATCH v2 09/10] package/gstreamer1/gst1-validate: bump
+ to version 1.16.0
 In-Reply-To: <20190422171917.54898-1-aduskett@gmail.com>
 References: <20190422171917.54898-1-aduskett@gmail.com>
-Message-ID: <20190422171917.54898-8-aduskett@gmail.com>
+Message-ID: <20190422171917.54898-9-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,32 +19,32 @@ Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Changes v1 -> v2:
   - None
 
- package/gstreamer1/gst1-libav/gst1-libav.hash | 4 ++--
- package/gstreamer1/gst1-libav/gst1-libav.mk   | 2 +-
+ package/gstreamer1/gst1-validate/gst1-validate.hash | 4 ++--
+ package/gstreamer1/gst1-validate/gst1-validate.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.hash b/package/gstreamer1/gst1-libav/gst1-libav.hash
-index 741c582319..bcd4e251d2 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.hash
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.hash
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.hash b/package/gstreamer1/gst1-validate/gst1-validate.hash
+index 87bb294629..d3d1078d5f 100644
+--- a/package/gstreamer1/gst1-validate/gst1-validate.hash
++++ b/package/gstreamer1/gst1-validate/gst1-validate.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.14.4.tar.xz.sha256sum
--sha256 dfd78591901df7853eab7e56a86c34a1b03635da0d3d56b89aa577f1897865da gst-libav-1.14.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-1.16.0.tar.xz.sha256sum
-+sha256 dfac119043a9cfdcacd7acde77f674ab172cf2537b5812be52f49e9cddc53d9a gst-libav-1.16.0.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/gstreamer1/gst1-libav/gst1-libav.mk b/package/gstreamer1/gst1-libav/gst1-libav.mk
-index 73e47a0639..fed411bcc9 100644
---- a/package/gstreamer1/gst1-libav/gst1-libav.mk
-+++ b/package/gstreamer1/gst1-libav/gst1-libav.mk
+-# From https://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.14.4.tar.xz.sha256sum
+-sha256 18dccca94bdc0bab3cddb07817bd280df7ab4abbec9a83b92620367a22d955c7 gst-validate-1.14.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.16.0.tar.xz.sha256sum
++sha256 9331ae48a173a048243539730cc7a88607777762dea4aebbc3ab55981e68d6c9 gst-validate-1.16.0.tar.xz
+ sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
+diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
+index 0f3d251782..121190ede9 100644
+--- a/package/gstreamer1/gst1-validate/gst1-validate.mk
++++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_LIBAV_VERSION = 1.14.4
-+GST1_LIBAV_VERSION = 1.16.0
- GST1_LIBAV_SOURCE = gst-libav-$(GST1_LIBAV_VERSION).tar.xz
- GST1_LIBAV_SITE = https://gstreamer.freedesktop.org/src/gst-libav
- GST1_LIBAV_DEPENDENCIES = \
+-GST1_VALIDATE_VERSION = 1.14.4
++GST1_VALIDATE_VERSION = 1.16.0
+ GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
+ GST1_VALIDATE_SITE = https://gstreamer.freedesktop.org/src/gst-validate
+ GST1_VALIDATE_LICENSE = LGPL-2.1+
 -- 
 2.20.1
