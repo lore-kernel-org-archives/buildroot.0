@@ -1,96 +1,320 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 22 Apr 2019 22:46:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libyuv: bump to version
- 413a8d8041f1cc5a350a47c0d81cc721e64f9fd0
-Message-ID: <20190422204620.5645-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 22 Apr 2019 22:48:39 +0200
+Subject: [Buildroot] [git commit] package/suricata: new package
+Message-ID: <20190422204402.4DB5F810CA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Switch to https://chromium.googlesource.com/libyuv/libyuv which is
-  the official repository and still active (updated this month).
-  Current site has not been updated since 2015.
-- Drop second patch (already in version)
-- Add hash for license file
+commit: https://git.buildroot.net/buildroot/commit/?id=fc750d9a9d512aa9064d8b20a85f0a2fa95316b1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Suricata is a free and open source, mature, fast and robust
+network threat detection engine.
+
+The Suricata engine is capable of real time intrusion
+detection (IDS), inline intrusion prevention (IPS), network
+security monitoring (NSM) and offline pcap processing.
+
+https://suricata-ids.org
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libyuv/0002-aarch64.patch | 36 -------------------------------
- package/libyuv/libyuv.hash        |  3 ++-
- package/libyuv/libyuv.mk          |  7 ++----
- 3 files changed, 4 insertions(+), 42 deletions(-)
- delete mode 100644 package/libyuv/0002-aarch64.patch
+ DEVELOPERS                        |   1 +
+ package/Config.in                 |   1 +
+ package/suricata/Config.in        |  22 +++++++
+ package/suricata/S99suricata      |  64 +++++++++++++++++++
+ package/suricata/suricata.hash    |   6 ++
+ package/suricata/suricata.mk      | 126 ++++++++++++++++++++++++++++++++++++++
+ package/suricata/suricata.service |  14 +++++
+ 7 files changed, 234 insertions(+)
 
-diff --git a/package/libyuv/0002-aarch64.patch b/package/libyuv/0002-aarch64.patch
-deleted file mode 100644
-index c783cffe88..0000000000
---- a/package/libyuv/0002-aarch64.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--Add missing source files for aarch64.
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr libyuv-1ebf86795cb213a37f06eb1ef3713cff080568ea.org/CMakeLists.txt libyuv-1ebf86795cb213a37f06eb1ef3713cff080568ea/CMakeLists.txt
----- libyuv-1ebf86795cb213a37f06eb1ef3713cff080568ea.org/CMakeLists.txt	2015-06-20 00:04:06.000000000 +0200
--+++ libyuv-1ebf86795cb213a37f06eb1ef3713cff080568ea/CMakeLists.txt	2015-09-07 19:29:42.898034988 +0200
--@@ -14,6 +14,7 @@
--   ${ly_src_dir}/compare.cc
--   ${ly_src_dir}/compare_common.cc
--   ${ly_src_dir}/compare_neon.cc
--+  ${ly_src_dir}/compare_neon64.cc
--   ${ly_src_dir}/compare_gcc.cc
--   ${ly_src_dir}/compare_win.cc
--   ${ly_src_dir}/convert.cc
--@@ -31,10 +32,12 @@
--   ${ly_src_dir}/rotate_argb.cc
--   ${ly_src_dir}/rotate_mips.cc
--   ${ly_src_dir}/rotate_neon.cc
--+  ${ly_src_dir}/rotate_neon64.cc
--   ${ly_src_dir}/row_any.cc
--   ${ly_src_dir}/row_common.cc
--   ${ly_src_dir}/row_mips.cc
--   ${ly_src_dir}/row_neon.cc
--+  ${ly_src_dir}/row_neon64.cc
--   ${ly_src_dir}/row_gcc.cc
--   ${ly_src_dir}/row_win.cc
--   ${ly_src_dir}/scale.cc
--@@ -43,6 +46,7 @@
--   ${ly_src_dir}/scale_common.cc
--   ${ly_src_dir}/scale_mips.cc
--   ${ly_src_dir}/scale_neon.cc
--+  ${ly_src_dir}/scale_neon64.cc
--   ${ly_src_dir}/scale_gcc.cc
--   ${ly_src_dir}/scale_win.cc
--   ${ly_src_dir}/video_common.cc
-diff --git a/package/libyuv/libyuv.hash b/package/libyuv/libyuv.hash
-index 0361ce6eef..e0d4e57e1a 100644
---- a/package/libyuv/libyuv.hash
-+++ b/package/libyuv/libyuv.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 ec31df87fc42153723e9ca65a6d71b0993504c3de5f925e79464c93b7ef66094  libyuv-1ebf86795cb213a37f06eb1ef3713cff080568ea.tar.gz
-+sha256 395075bed7e048f5f7d4fe9cb9255ce0afcee3f8f093741a7af1a2b1c579d089  libyuv-413a8d8041f1cc5a350a47c0d81cc721e64f9fd0.tar.gz
-+sha256 2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f  LICENSE
-diff --git a/package/libyuv/libyuv.mk b/package/libyuv/libyuv.mk
-index 1abe126324..b3843cec8f 100644
---- a/package/libyuv/libyuv.mk
-+++ b/package/libyuv/libyuv.mk
-@@ -4,11 +4,8 @@
- #
- ################################################################################
- 
--LIBYUV_VERSION = 1ebf86795cb213a37f06eb1ef3713cff080568ea
--# we use the FreeSwitch fork because there is currently no alternative
--# for https://chromium.googlesource.com/libyuv/libyuv which will be
--# deactivated in 2015.
--LIBYUV_SITE = https://freeswitch.org/stash/scm/sd/libyuv.git
-+LIBYUV_VERSION = 413a8d8041f1cc5a350a47c0d81cc721e64f9fd0
-+LIBYUV_SITE = https://chromium.googlesource.com/libyuv/libyuv
- LIBYUV_SITE_METHOD = git
- LIBYUV_LICENSE = BSD-3-Clause
- LIBYUV_LICENSE_FILES = LICENSE
--- 
-2.20.1
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ea6b802de4..e5b69c3ade 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -838,6 +838,7 @@ F:	package/python-jedi/
+ F:	package/python-parso/
+ F:	package/rygel/
+ F:	package/safeclib/
++F:	package/suricata/
+ F:	package/tinycbor/
+ F:	package/tinydtls/
+ F:	package/tinymembench/
+diff --git a/package/Config.in b/package/Config.in
+index 4f3836ae10..091b16d02d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2040,6 +2040,7 @@ endif
+ 	source "package/sslh/Config.in"
+ 	source "package/strongswan/Config.in"
+ 	source "package/stunnel/Config.in"
++	source "package/suricata/Config.in"
+ 	source "package/tcpdump/Config.in"
+ 	source "package/tcping/Config.in"
+ 	source "package/tcpreplay/Config.in"
+diff --git a/package/suricata/Config.in b/package/suricata/Config.in
+new file mode 100644
+index 0000000000..2add34956e
+--- /dev/null
++++ b/package/suricata/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_SURICATA
++	bool "suricata"
++	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_WCHAR
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_LIBHTP
++	select BR2_PACKAGE_LIBPCAP
++	select BR2_PACKAGE_LIBYAML
++	select BR2_PACKAGE_PCRE
++	help
++	  Suricata is a free and open source, mature, fast and robust
++	  network threat detection engine.
++
++	  The Suricata engine is capable of real time intrusion
++	  detection (IDS), inline intrusion prevention (IPS), network
++	  security monitoring (NSM) and offline pcap processing.
++
++	  https://suricata-ids.org
++
++comment "suricata needs a toolchain w/ wchar, threads"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/suricata/S99suricata b/package/suricata/S99suricata
+new file mode 100644
+index 0000000000..7c2b966521
+--- /dev/null
++++ b/package/suricata/S99suricata
+@@ -0,0 +1,64 @@
++#!/bin/sh
++
++DAEMON=suricata
++PIDFILE=/var/run/$DAEMON.pid
++
++SURICATA_ARGS="-c /etc/suricata/suricata.yaml -i eth0"
++
++SURICATA_RELOAD=0
++
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	mkdir -p /var/log/suricata
++	start-stop-daemon -b -m -S -q -p "$PIDFILE" -x "/usr/bin/$DAEMON" \
++		-- $SURICATA_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++# SIGUSR2 makes suricata reload rules
++reload() {
++	printf 'Reloading %s: ' "$DAEMON"
++	start-stop-daemon -K -s "$SURICATA_RELOAD" -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++case "$1" in
++	start|stop|restart|reload)
++		"$1";;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
+new file mode 100644
+index 0000000000..44ada0115a
+--- /dev/null
++++ b/package/suricata/suricata.hash
+@@ -0,0 +1,6 @@
++# Locally computed:
++sha256 6cda6c80b753ce36483c6be535358b971f3890b9aa27a58c2d2f7e89dd6c6aa0  suricata-4.1.3.tar.gz
++
++# Hash for license files:
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
+diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
+new file mode 100644
+index 0000000000..e5884cdfe4
+--- /dev/null
++++ b/package/suricata/suricata.mk
+@@ -0,0 +1,126 @@
++################################################################################
++#
++# suricata
++#
++################################################################################
++
++SURICATA_VERSION = 4.1.3
++SURICATA_SITE = https://www.openinfosecfoundation.org/download
++SURICATA_LICENSE = GPL-2.0
++SURICATA_LICENSE_FILES = COPYING LICENSE
++
++SURICATA_DEPENDENCIES = \
++	host-pkgconf \
++	$(if $(BR2_PACKAGE_JANSSON),jansson) \
++	$(if $(BR2_PACKAGE_LIBCAP_NG),libcap-ng) \
++	$(if $(BR2_PACKAGE_LIBEVENT),libevent) \
++	libhtp \
++	$(if $(BR2_PACKAGE_LIBNFNETLINK),libnfnetlink) \
++	libpcap \
++	libyaml \
++	$(if $(BR2_PACKAGE_LZ4),lz4) \
++	$(if $(BR2_PACKAGE_LZMA),lzma) \
++	pcre
++
++SURICATA_CONF_OPTS = \
++	--disable-gccprotect \
++	--disable-pie \
++	--disable-rust \
++	--disable-suricata-update \
++	--enable-non-bundled-htp
++
++# install: install binaries
++# install-conf: install initial configuration files
++# install-full: install binaries, configuration and rules (rules will be
++#               download through wget/curl)
++SURICATA_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install install-conf
++
++ifeq ($(BR2_PACKAGE_FILE),y)
++SURICATA_DEPENDENCIES += file
++SURICATA_CONF_OPTS += --enable-libmagic
++else
++SURICATA_CONF_OPTS += --disable-libmagic
++endif
++
++ifeq ($(BR2_PACKAGE_GEOIP),y)
++SURICATA_DEPENDENCIES += geoip
++SURICATA_CONF_OPTS += --enable-geoip
++else
++SURICATA_CONF_OPTS += --disable-geoip
++endif
++
++ifeq ($(BR2_PACKAGE_HIREDIS),y)
++SURICATA_DEPENDENCIES += hiredis
++SURICATA_CONF_OPTS += --enable-hiredis
++else
++SURICATA_CONF_OPTS += --disable-hiredis
++endif
++
++ifeq ($(BR2_PACKAGE_LIBNET),y)
++SURICATA_DEPENDENCIES += libnet
++SURICATA_CONF_OPTS += --with-libnet-includes=$(STAGING_DIR)/usr/include
++endif
++
++ifeq ($(BR2_PACKAGE_LIBNETFILTER_LOG),y)
++SURICATA_DEPENDENCIES += libnetfilter_log
++SURICATA_CONF_OPTS += --enable-nflog
++else
++SURICATA_CONF_OPTS += --disable-nflog
++endif
++
++ifeq ($(BR2_PACKAGE_LIBNETFILTER_QUEUE),y)
++SURICATA_DEPENDENCIES += libnetfilter_queue
++SURICATA_CONF_OPTS += --enable-nfqueue
++else
++SURICATA_CONF_OPTS += --disable-nfqueue
++endif
++
++ifeq ($(BR2_PACKAGE_LIBNSPR),y)
++SURICATA_DEPENDENCIES += libnspr
++SURICATA_CONF_OPTS += --enable-nspr
++else
++SURICATA_CONF_OPTS += --disable-nspr
++endif
++
++ifeq ($(BR2_PACKAGE_LIBNSS),y)
++SURICATA_DEPENDENCIES += libnss
++SURICATA_CONF_OPTS += --enable-nss
++else
++SURICATA_CONF_OPTS += --disable-nss
++endif
++
++ifeq ($(BR2_PACKAGE_LUA),y)
++SURICATA_CONF_OPTS += --enable-lua
++SURICATA_DEPENDENCIES += lua
++else
++SURICATA_CONF_OPTS += --disable-lua
++endif
++
++ifeq ($(BR2_PACKAGE_LUAJIT),y)
++SURICATA_CONF_OPTS += --enable-luajit
++SURICATA_DEPENDENCIES += luajit
++else
++SURICATA_CONF_OPTS += --disable-luajit
++endif
++
++ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),y)
++SURICATA_CONF_OPTS += --enable-python
++SURICATA_DEPENDENCIES += $(if $(BR2_PACKAGE_PYTHON),python,python3)
++else
++SURICATA_CONF_OPTS += --disable-python
++endif
++
++define SURICATA_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/suricata/S99suricata \
++		$(TARGET_DIR)/etc/init.d/S99suricata
++endef
++
++define SURICATA_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 644 package/suricata/suricata.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/suricata.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -sf ../../../../usr/lib/systemd/system/suricata.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/suricata.service
++endef
++
++$(eval $(autotools-package))
+diff --git a/package/suricata/suricata.service b/package/suricata/suricata.service
+new file mode 100644
+index 0000000000..f5cd46ac48
+--- /dev/null
++++ b/package/suricata/suricata.service
+@@ -0,0 +1,14 @@
++[Unit]
++Description=Suricata Intrusion Detection Service
++After=network.target
++
++[Service]
++EnvironmentFile=-/etc/default/suricata
++ExecStartPre=/bin/rm -f /var/run/suricata.pid
++ExecStartPre=/usr/bin/mkdir -p /var/log/suricata
++ExecStart=/usr/bin/suricata -c /etc/suricata/suricata.yaml -i eth0 --pidfile /var/run/suricata.pid
++ExecReload=/bin/kill -USR2 $MAINPID
++Restart=always
++
++[Install]
++WantedBy=multi-user.target
