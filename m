@@ -1,137 +1,119 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 22 Apr 2019 09:56:45 +0200
-Subject: [Buildroot] Qt5 parallel build of qmake
-In-Reply-To: <36d88896-c2f0-8522-09f8-37d2fec19acd@micronovasrl.com>
-References: <5affd9e5-511b-394c-e2a0-51617489f1c1@mind.be>
- <823bb0b7-aa62-d682-9cb7-f17471ff4926@micronovasrl.com>
- <ab39fba8-d6b5-4dfc-3390-510bc7cf2bab@mind.be>
- <36d88896-c2f0-8522-09f8-37d2fec19acd@micronovasrl.com>
-Message-ID: <3d42506c-0a69-f3e9-cbc3-c36e21b47cd0@mind.be>
+From: Thomas Huth <huth@tuxfamily.org>
+Date: Mon, 22 Apr 2019 10:11:25 +0200
+Subject: [Buildroot] [PATCH v2] package/ascii-invaders: Add the game
+ ascii-invaders
+Message-ID: <20190422081125.6659-1-huth@tuxfamily.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+An ASCII-art game like Space Invaders using ncurses.
 
+Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+---
+ v2:
+ - I'm submitting the patch individually now, to ease the review
+ - Addressed Gilles' review feedback from v1
+ - Cleaned warnings from utils/check-package
+ - Checked with utils/test-pkg, added POST_EXTRACT_HOOK to fix a problem
+   when linking the program statically
+ - Use $(call github, ...) helper to create the SITE variable
 
-On 22/04/2019 00:43, Giulio Benetti wrote:
-> Hello Arnout, All,
-> 
-> Il 21/04/2019 09:08, Arnout Vandecappelle ha scritto:
->>
->>
->> On 18/04/2019 00:53, Giulio Benetti wrote:
->>> Hi Arnout, All,
->>>
->>> Il 18/04/2019 00:16, Arnout Vandecappelle ha scritto:
->>>> ?? Hi all,
->>>>
->>>> ?? I've put a few people in Cc that seem to be active users of Qt5.
->>>>
->>>> ?? I noticed during a test build that during the configure step, qmake is built
->>>> but not in parallel. I think it should be possible to enable parallel build for
->>>> qmake by passing MAKE="$(MAKE)" in the environment during configuration. Would
->>>> someone be interested in checking that out?
-> 
-> I've found out which is the problem and where is its origin.
-> 
-> On qt5base(and every other package using MAKEFLAGS) this:
-> MAKEFLAGS="$(MAKEFLAGS) -j$(PARALLEL_JOBS)"
-> expands in this:
-> MAKEFLAGS=" --no-print-directory -- -j5"
-> so -j5 is ignored, then is not built in parallel.
-> 
-> In:
-> https://git.buildroot.net/buildroot/tree/support/scripts/mkmakefile#n33
+ DEVELOPERS                                 |  3 +++
+ package/Config.in                          |  1 +
+ package/ascii-invaders/Config.in           |  7 ++++++
+ package/ascii-invaders/ascii-invaders.hash |  5 ++++
+ package/ascii-invaders/ascii-invaders.mk   | 28 ++++++++++++++++++++++
+ 5 files changed, 44 insertions(+)
+ create mode 100644 package/ascii-invaders/Config.in
+ create mode 100644 package/ascii-invaders/ascii-invaders.hash
+ create mode 100644 package/ascii-invaders/ascii-invaders.mk
 
- Note that I observed the same issue without out-of-tree build, and anyway if I
-do out-of-tree build I always use explicit O= rather than the generated
-makefile. So the problem is not (only) due to mkmakefile.
-
-> 
-> basic Makefile is created with a dashed argument(-C to pass Buildroot Root
-> Makefile as argument), but then also O=... option is passed.
-> 
-> Here is a snippet of my Makefile file created by mkmakefile script:
-> ...
-> MAKEARGS := -C /home/giuliobenetti/git/buildroot
-> MAKEARGS += O=$(if $(patsubst /%,,$(makedir)),$(CURDIR)/)$(patsubst
-> %/,%,$(makedir))
-
- Note that MAKEARGS is not a special variable for make...
-
-> 
-> MAKEFLAGS += --no-print-directory
-
- But MAKEFLAGS is. However, the MAKEFLAGS variable is always rebuilt by the new
-make process by combining the environment variable MAKEFLAGS with the command
-line options that are passed to it.
-
-
-> .PHONY: _all $(MAKECMDGOALS)
-> 
-> all??? := $(filter-out Makefile,$(MAKECMDGOALS))
-> 
-> _all:
-> ????echo Root MAKEARGS=$(MAKEARGS)
-> ????echo Root MAKEFLAGS=$(MAKEFLAGS)
-> ????$(Q)umask 0022 && $(MAKE) $(MAKEARGS) $(all)
-> ...
-> 
-> Doing lot of tries I've found out(I didn't know) that "make", when
-> evaluates $(MAKEARGS) it works as expected and gives:
-> Root MAKEARGS=-C /home/giuliobenetti/git/buildroot
-> O=/home/giuliobenetti/git/build-br/.
-> 
-> BUT, when printing MAKEFLAGS with echo, it gives:
-> Root MAKEFLAGS= --no-print-directory --
-> 
-> qt5base and every other package using $(MAKEFLAGS) under a *recipe* only will
-> always evaluate $(MAKEFLAGS) as "--".
-> Indeed if you try to use $(info $(MAKEFLAGS)) it will be different, without
-> showing the 2 dashes.
-
- The difference between echo and $(info) is that echo is in a subshell and info
-is not. So apparently, make doesn't just manipulate $(MAKEFLAGS) when it starts,
-but also when it forks a subprocess.
-
-
-> Going deeper I've found that those 2 dashes are appended only if you pass to
-> MAKEARGS some variable like "O=/home/..."
-> I mean, if you remove "O=/home/..." then MAKEFLAGS is "--no-print-directory" only.
-
- That is ...weird... because you do the echo in the outer make, which doesn't
-know that MAKEARGS has any relation with MAKEFLAGS...
-
-
-> The point is that MAKEARGS expects Makefile arguments only and not Variable as I
-> understand. When you add variables, a "--" is appended between Make flags and
-> Variables.
-
- Yes, when make starts, it reworks things so that the variables go into
-MAKEOVERRIDES.
-
-
-> One possible solution I thought is cleaning MAKEFLAGS from those isolated 2 dashes.
-
- I don't think that that's possible, because they're not really there.
-
-> Before I thought to pass directly O=/home/.. when calling $(MAKE),
-> but the problems comes out again, since in sub-makefile, that will be a MAKEARGS
-> again.
-> I don't see any different way to deny Make to emit "--".
-> 
-> This impacts MAKEFLAGS variable everywhere when evaluated under recipe like
-> "echo $(MAKEFLAGS)" and it works in this way for both make-4.1 and make-3.82 too.
-> 
-> What do you think?
-
- What about swapping the -j and the MAKEFLAGS in qt5base? I.e.
-
-	MAKEFLAGS="-j$(PARALLEL_JOBS) $(MAKEFLAGS)"
-
- Regards,
- Arnout
-> 
-> Happy easter and kind regards!
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ea6b802de4..1e69c72e41 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2166,6 +2166,9 @@ F:	support/scripts/size-stats
+ F:	utils/size-stats-compare
+ F:	toolchain/
+ 
++N:	Thomas Huth <huth@tuxfamily.org>
++F:	package/ascii-invaders/
++
+ N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ F:	arch/Config.in.arm
+ F:	boot/boot-wrapper-aarch64/
+diff --git a/package/Config.in b/package/Config.in
+index 4f3836ae10..3642c5679b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -243,6 +243,7 @@ comment "Themes"
+ endmenu
+ 
+ menu "Games"
++	source "package/ascii-invaders/Config.in"
+ 	source "package/chocolate-doom/Config.in"
+ 	source "package/doom-wad/Config.in"
+ 	source "package/flare-engine/Config.in"
+diff --git a/package/ascii-invaders/Config.in b/package/ascii-invaders/Config.in
+new file mode 100644
+index 0000000000..f02ab74994
+--- /dev/null
++++ b/package/ascii-invaders/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_ASCII_INVADERS
++	bool "ascii_invaders"
++	select BR2_PACKAGE_NCURSES
++	help
++	  An ASCII-art game like Space Invaders using ncurses.
++
++	  https://github.com/macdice/ascii-invaders
+diff --git a/package/ascii-invaders/ascii-invaders.hash b/package/ascii-invaders/ascii-invaders.hash
+new file mode 100644
+index 0000000000..b4805e7b1d
+--- /dev/null
++++ b/package/ascii-invaders/ascii-invaders.hash
+@@ -0,0 +1,5 @@
++# Locally calculated
++sha512	326708ffc2c277e04575920c58f6a267e0bf46f8d2a3dbca9b5c317fb01006d4f673ab35f92f292549cc52dbee4400a84c85478eb81b9bd7703689a705547bc7	v1.0.1.tar.gz
++
++# Hash for license file
++sha512	1e455684996d7733b2f1ccd4606d034694d16ceff6ede6125d7f1537d20dabe05976cca4cef5cbf6c31352cbd62a515fd8e34a2ffb54dae1181c1116b24c6cf7	LICENSE
+diff --git a/package/ascii-invaders/ascii-invaders.mk b/package/ascii-invaders/ascii-invaders.mk
+new file mode 100644
+index 0000000000..c91e0eeaa8
+--- /dev/null
++++ b/package/ascii-invaders/ascii-invaders.mk
+@@ -0,0 +1,28 @@
++################################################################################
++#
++# ASCII-Invaders
++#
++################################################################################
++
++ASCII_INVADERS_VERSION = v1.0.1
++ASCII_INVADERS_SOURCE = $(ASCII_INVADERS_VERSION).tar.gz
++ASCII_INVADERS_SITE = $(call github,macdice,ascii-invaders,$(ASCII_INVADERS_VERSION))
++ASCII_INVADERS_DEPENDENCIES = ncurses
++ASCII_INVADERS_LICENSE = GPL-2.0+
++ASCII_INVADERS_LICENSE_FILES = LICENSE
++
++# For compiling statically, libraries must be specified after the object file
++define ASCII_INVADERS_POST_EXTRACT_FIXUP
++	sed -i 's/\$$(LIBS) invaders.o/invaders.o \$$(LIBS)/' $(@D)/Makefile
++endef
++ASCII_INVADERS_POST_EXTRACT_HOOKS += ASCII_INVADERS_POST_EXTRACT_FIXUP
++
++define ASCII_INVADERS_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++endef
++
++define ASCII_INVADERS_INSTALL_TARGET_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/ascii_invaders $(TARGET_DIR)/usr/bin/ascii_invaders
++endef
++
++$(eval $(generic-package))
+-- 
+2.17.2
