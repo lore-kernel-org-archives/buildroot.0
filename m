@@ -1,51 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Apr 2019 22:24:21 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lynx: fix build with latomic
-In-Reply-To: <20190422104821.16807-1-fontaine.fabrice@gmail.com>
-References: <20190422104821.16807-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190422222421.50c771ea@windsurf>
+Date: Mon, 22 Apr 2019 22:24:42 +0200
+Subject: [Buildroot] [git commit] package/neon: add NLS dependencies
+Message-ID: <20190422202007.99CD6814A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=9b667fd14475c4e2023d93fc0b033a13f9632319
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Mon, 22 Apr 2019 12:48:21 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+neon checks for bind_textdomain_codeset
+Helps neon to find lintl so it will correctly add -lintl to neon-config
+en neon.pc. This will fix build of packages using neon such as nu
 
-> Help lynx finding openssl dependencies by giving it a path in --with-ssl
-> and using pkg-config to directly pass the correct libraries in LIBS.
-> 
-> This will disable the call to pkg-config and CF_ADD_LIBS which has the
-> sad behavior of removing duplicates ...
+Fixes:
+ - http://autobuild.buildroot.org/results/f7e6afce4b3335573f3cc62d282368b288e9a65a
 
-Could this issue be reported upstream ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/neon/neon.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> As a result, build fails because, the following correct dependencies:
-> 
-> configure:14170: testing adding -L/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-0/output/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib -lssl -L/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-0/output/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib -lz -pthread -latomic -lcrypto -lz -pthread -latomic  to LIBS ...
-> 
-> is replaced by:
-> 
-> -L/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-0/output/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib -lssl -lz -pthread -latomic -lcrypto
-> 
-> As a result, static linking fails on crypto because the second -latomic
-> has been removed ...
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/2c28426253014d93e86e3ba6ed578e84317a9f19
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/lynx/lynx.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/neon/neon.mk b/package/neon/neon.mk
+index 1b8eb368c2..2c00e6a8b4 100644
+--- a/package/neon/neon.mk
++++ b/package/neon/neon.mk
+@@ -11,7 +11,8 @@ NEON_LICENSE_FILES = src/COPYING.LIB test/COPYING README
+ NEON_INSTALL_STAGING = YES
+ NEON_CONF_OPTS = --without-gssapi --disable-rpath
+ NEON_CONFIG_SCRIPTS = neon-config
+-NEON_DEPENDENCIES = host-pkgconf
++NEON_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
++NEON_CONF_ENV = ne_cv_libsfor_bindtextdomain=$(TARGET_NLS_LIBS)
+ 
+ ifeq ($(BR2_PACKAGE_NEON_ZLIB),y)
+ NEON_CONF_OPTS += --with-zlib=$(STAGING_DIR)
