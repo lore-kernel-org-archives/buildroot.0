@@ -1,128 +1,64 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 22 Apr 2019 13:19:17 -0400
-Subject: [Buildroot] [PATCH v2 10/10]
- package/gstreamer1/gstreamer1-editing-services: bump to version 1.16.0
-In-Reply-To: <20190422171917.54898-1-aduskett@gmail.com>
-References: <20190422171917.54898-1-aduskett@gmail.com>
-Message-ID: <20190422171917.54898-10-aduskett@gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 22 Apr 2019 19:20:51 +0200
+Subject: [Buildroot] [PATCH] ltp-testsuite: Fix uClibc build with
+ disabled fts.h support
+In-Reply-To: <20190421123611.4016cc04@windsurf>
+References: <20190417135458.15505-1-Nikita.Sobolev@synopsys.com>
+ <20190421123611.4016cc04@windsurf>
+Message-ID: <20190422172050.GA18445@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Hi Thomas,
 
+> I am confused, because the current ltp-testsuite package seems to build
+> properly with uClibc that doesn't have FTS support enabled. I just
+> built the following configuration:
 
-Also removed upstreamed patch 0001-examples-ges-ui-fix-some-gtk2-ism.patch.
+> BR2_arm=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2019.02-rc1.tar.bz2"
+> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
+> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+> BR2_TOOLCHAIN_EXTERNAL_CXX=y
+> BR2_INIT_NONE=y
+> BR2_SYSTEM_BIN_SH_NONE=y
+> # BR2_PACKAGE_BUSYBOX is not set
+> BR2_PACKAGE_LTP_TESTSUITE=y
+> # BR2_TARGET_ROOTFS_TAR is not set
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
-Changes v1 -> v2:
-  - None
+> It has FTS disabled:
 
- ...01-examples-ges-ui-fix-some-gtk2-ism.patch | 66 -------------------
- .../gstreamer1-editing-services.hash          |  4 +-
- .../gstreamer1-editing-services.mk            |  2 +-
- 3 files changed, 3 insertions(+), 69 deletions(-)
- delete mode 100644 package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch
+> $ grep FTS output/staging/usr/include/bits/uClibc_config.h
+> #undef __UCLIBC_HAS_FTS__
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch b/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch
-deleted file mode 100644
-index 5a074941fd..0000000000
---- a/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch
-+++ /dev/null
-@@ -1,66 +0,0 @@
--From 76f3dcb8f11a240fc7147ab556c57f10abc9e957 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Tim-Philipp=20M=C3=BCller?= <tim@centricular.com>
--Date: Sun, 20 May 2018 23:46:42 +0100
--Subject: [PATCH] examples: ges-ui: fix some gtk2-ism
--
--Still lots of deprecated API to update.
--
--https://bugzilla.gnome.org/show_bug.cgi?id=796243
--
--Upstream: https://cgit.freedesktop.org/gstreamer/gst-editing-services/commit/?id=76f3dcb8f11a240fc7147ab556c57f10abc9e957
--Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-----
-- examples/c/ges-ui.c | 10 +++++-----
-- 1 file changed, 5 insertions(+), 5 deletions(-)
--
--diff --git a/examples/c/ges-ui.c b/examples/c/ges-ui.c
--index 4acd1ee9..45694a6b 100644
----- a/examples/c/ges-ui.c
--+++ b/examples/c/ges-ui.c
--@@ -106,7 +106,7 @@ static int n_instances = 0;
--  * These are declared non-static for signal auto-connection
--  */
-- 
---gboolean window_delete_event_cb (GtkObject * window, GdkEvent * event,
--+gboolean window_delete_event_cb (GtkWidget * window, GdkEvent * event,
--     App * app);
-- void new_activate_cb (GtkMenuItem * item, App * app);
-- void open_activate_cb (GtkMenuItem * item, App * app);
--@@ -1076,14 +1076,14 @@ gboolean
-- add_effect_dlg_delete_event_cb (GtkWidget * widget, GdkEvent * event,
--     gpointer * app)
-- {
---  gtk_widget_hide_all (((App *) app)->add_effect_dlg);
--+  gtk_widget_hide (((App *) app)->add_effect_dlg);
--   return TRUE;
-- }
-- 
-- void
-- on_cancel_add_effect_cb (GtkButton * button, App * app)
-- {
---  gtk_widget_hide_all (app->add_effect_dlg);
--+  gtk_widget_hide (app->add_effect_dlg);
-- }
-- 
-- void
--@@ -1103,7 +1103,7 @@ on_apply_effect_cb (GtkButton * button, App * app)
-- 
--   gtk_entry_set_text (GTK_ENTRY (app->audio_effect_entry), "");
-- 
---  gtk_widget_hide_all (app->add_effect_dlg);
--+  gtk_widget_hide (app->add_effect_dlg);
-- }
-- 
-- static void
--@@ -1347,7 +1347,7 @@ app_new_from_uri (gchar * uri)
-- /* UI callbacks  ************************************************************/
-- 
-- gboolean
---window_delete_event_cb (GtkObject * window, GdkEvent * event, App * app)
--+window_delete_event_cb (GtkWidget * window, GdkEvent * event, App * app)
-- {
--   app_dispose (app);
--   return FALSE;
---- 
--2.19.0
--
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index a388a097dd..7d6ab30829 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gstreamer-editing-services-1.14.4.tar.xz.sha256sum
--sha256 53d1d25b356009505ae0d22c218d6c6b1215399d9f6e3fe5d7b88e156531b35f gstreamer-editing-services-1.14.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gstreamer-editing-services-1.16.0.tar.xz.sha256sum
-+sha256 82a3faefb2b0d91e134fd02cddeee718b7846a07cbf0127fed7aa03e25495ad1 gstreamer-editing-services-1.16.0.tar.xz
- 
- # Hashes for license files:
- sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index 74a36824ed..9412e277e6 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.14.4
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.16.0
- GSTREAMER1_EDITING_SERVICES_SOURCE = gstreamer-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = http://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
--- 
-2.20.1
+> And it builds perfectly fine.
+Thanks for a research (I'll do more testing next time, not just reviewing)!
+Actually testing it, it's really ok, due these lines in
+package/ltp-testsuite/ltp-testsuite.mk:
+
+# Requires uClibc fts and bessel support, normally not enabled
+ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+define LTP_TESTSUITE_REMOVE_UNSUPPORTED
+	rm -rf $(@D)/testcases/kernel/controllers/cpuset/
+	rm -rf $(@D)/testcases/misc/math/float/bessel/
+	rm -f $(@D)/testcases/misc/math/float/float_bessel.c
+endef
+LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED
+endif
+
+We can either remove deleting testcases/kernel/controllers/cpuset/ as part of
+this patchset, or simply wait for next update (planning for the start of the
+second week in the May [1]), I'd remove it during the update.
+
+Kind regards,
+Petr
+
+[1] http://lists.linux.it/pipermail/ltp/2019-April/011729.html
