@@ -1,83 +1,31 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Apr 2019 08:53:44 +0200
-Subject: [Buildroot] [PATCH 11/12 v3] support/scripts: use show-info to
- extract dependency graph
-In-Reply-To: <5cbd07729d823_6f5c2ad964f8616052718@ultri5.mail>
-References: <cd1c2cccd0a2d39ba4ab7277d09ae0364ffa17f8.1555357645.git.yann.morin.1998@free.fr>
- <5cbd07729d823_6f5c2ad964f8616052718@ultri5.mail>
-Message-ID: <20190422065344.GA6200@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 22 Apr 2019 09:09:24 +0200
+Subject: [Buildroot] [RFC 1/1] br2-external: Alow to include toolchain
+ from external tree
+In-Reply-To: <20190421175343.GD21166@scaer>
+References: <20190417204630.18746-1-vadim4j@gmail.com>
+ <a37f9f50-381a-cdfb-4d78-bd78bbdd9f4c@mind.be> <20190418145344.GA21166@scaer>
+ <20190419030101.cktcloq4rfqyw3mt@vkochan-ThinkPad-T470p>
+ <bc9c8aa1-9c56-7c86-9b3f-2cd66a91f796@mind.be> <20190420205404.GC21166@scaer>
+ <cacfd25b-8a0e-dfe0-185b-2cff5b0d473c@mind.be> <20190421175343.GD21166@scaer>
+Message-ID: <9f648675-a652-b571-173f-37f306b6b677@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ricardo, All,
 
-[Typoes fixed, thanks.]
 
-On 2019-04-21 21:14 -0300, Ricardo Martincoski spake thusly:
-> On Mon, Apr 15, 2019 at 04:47 PM, Yann E. MORIN wrote:
-> > Since show-dependency-graph never went into a release so far, and
-> > show-info does provide the same (and more), swith to using show-info.
-[--SNIP--]
-> When I do this before and after this patch:
-> $ make qemu_arm_versatile_defconfig
-> $ make graph-depends
-> The color for "rootfs-common" and "rootfs-ext2" changes.
-> Can you reproduce it?
+On 21/04/2019 19:53, Yann E. MORIN wrote:
+>> - For the removal of prepare-kconfig, maybe mention that it reverts
+>> 9429e7b698638399ecfd73aa37545594f253a074
+> I see reverts as a way to state "this was incorrect, so we undo it", and
+> this is definitely not the case here; this is technically not a revert.
 
-Yes.
+ Refering to the original commit makes it easy to see that the only reason why
+this was introduced in the first place was for this particular creation of the
+.br2-external.in file.
 
-> Is this intended?
-
-More or less, yes.
-
-> If not intended, do we care enough?
-
-IMHO, not really.
-
-However, I still have further improvements to do about the graphs, and
-one of them was to add a new 'colour' to rootfs items.
-
-> 
-> [snip]
-> > +        versions[pkg] = \
-> > +            None if pkg_list[pkg]["type"] == "rootfs" \
-> > +            else "virtual" if pkg_list[pkg]["virtual"] \
-> > +            else pkg_list[pkg]["version"]
-> 
-> Why not the straightforward version?
->         if pkg_list[pkg]["type"] == "rootfs":
->             versions[pkg] = None
->         elif pkg_list[pkg]["virtual"]:
->             versions[pkg] = "virtual"
->         else:
->             versions[pkg] = pkg_list[pkg]["version"]
-
-Because this is not pythonic!
-
-Seriously, yes, the main reason is to write python scripts in the most
-pythonic way I can, for two reasons:
-
- 1- I try to use the idioms and best practices of the language I write
-    in, so that those that come later and are pofficient in the language
-    can maintain it without having to cleanup before;
-
- 2- I learn python along the way...
-
-So yes, this looks very more pythonic than the if-else-blocs which look
-much more like C or shell...
-
-And it takes 6 lines instead of 4! ;-)
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ Regards,
+ Arnout
