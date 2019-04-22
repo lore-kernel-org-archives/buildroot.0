@@ -1,11 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Apr 2019 22:35:40 +0200
-Subject: [Buildroot] [PATCH 2/5] configs/beaglebone: kernel build needs
- mkimage
-In-Reply-To: <20190422200830.2831-3-thomas.petazzoni@bootlin.com>
+Date: Mon, 22 Apr 2019 22:36:34 +0200
+Subject: [Buildroot] [PATCH 3/5] configs/qemu_nios2_10m50: kernel build
+ needs mkimage
+In-Reply-To: <20190422200830.2831-4-thomas.petazzoni@bootlin.com>
 References: <20190422200830.2831-1-thomas.petazzoni@bootlin.com>
- <20190422200830.2831-3-thomas.petazzoni@bootlin.com>
-Message-ID: <20190422203540.GD6200@scaer>
+ <20190422200830.2831-4-thomas.petazzoni@bootlin.com>
+Message-ID: <20190422203634.GE6200@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,13 +16,12 @@ Thomas, All,
 
 On 2019-04-22 22:08 +0200, Thomas Petazzoni spake thusly:
 > Following ffbe46a5295ce4e0442728f2ad3e19afa7eaa8ed ("linux: simplify
-> LINUX_BUILD_CMDS"), the Linux kernel build for beaglebone_defconfig
-> builds more things, including some .itb files, which require mkimage
-> with FIT support.
+> LINUX_BUILD_CMDS"), the Linux kernel build for
+> qemu_nios2_10m50_defconfig builds an image format that needs mkimage.
 > 
 > Fixes:
 > 
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/199339433
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/199339537
 > 
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
@@ -32,19 +31,20 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  configs/beaglebone_defconfig | 2 ++
->  1 file changed, 2 insertions(+)
+>  configs/qemu_nios2_10m50_defconfig | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-> index 2d9fba57dd..b4f152fd69 100644
-> --- a/configs/beaglebone_defconfig
-> +++ b/configs/beaglebone_defconfig
-> @@ -26,3 +26,5 @@ BR2_TARGET_UBOOT_SPL_NAME="MLO"
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
->  BR2_PACKAGE_HOST_GENIMAGE=y
->  BR2_PACKAGE_HOST_MTOOLS=y
+> diff --git a/configs/qemu_nios2_10m50_defconfig b/configs/qemu_nios2_10m50_defconfig
+> index d7e7c335a3..c07abc3715 100644
+> --- a/configs/qemu_nios2_10m50_defconfig
+> +++ b/configs/qemu_nios2_10m50_defconfig
+> @@ -8,3 +8,6 @@ BR2_TARGET_ROOTFS_INITRAMFS=y
+>  
+>  # Linux headers same as kernel, a 4.19 series
+>  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+> +
+> +# Kernel needs mkimage
 > +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
 > -- 
 > 2.20.1
 > 
