@@ -1,59 +1,39 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 22 Apr 2019 22:37:42 +0200
-Subject: [Buildroot] [PATCH 5/5] configs/qemu_ppc_virtex_ml507: kernel
- build needs mkimage
-In-Reply-To: <20190422200830.2831-6-thomas.petazzoni@bootlin.com>
-References: <20190422200830.2831-1-thomas.petazzoni@bootlin.com>
- <20190422200830.2831-6-thomas.petazzoni@bootlin.com>
-Message-ID: <20190422203742.GG6200@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 22 Apr 2019 22:37:48 +0200
+Subject: [Buildroot] [git commit] package/dhcp: add missing dependency on
+ zlib
+Message-ID: <20190422203405.60EF88139F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=03785e13e44d2699abd9cdfe175a42d8983b0cad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-04-22 22:08 +0200, Thomas Petazzoni spake thusly:
-> Following ffbe46a5295ce4e0442728f2ad3e19afa7eaa8ed ("linux: simplify
-> LINUX_BUILD_CMDS"), the Linux kernel build for
-> qemu_ppc_virtex_ml507_defconfig builds an image format that needs
-> mkimage.
-> 
-> Fixes:
-> 
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/199339544
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+When BR2_PACKAGE_ZLIB=y, we enable zlib support in the bind included
+in dhcp, but we forget to add zlib to DHCP_DEPENDENCIES, so it doesn't
+get built before dhcp, causing build failures.
 
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Fixes:
 
-Regards,
-Yann E. MORIN.
+  http://autobuild.buildroot.net/results/5a33057ceaf3f53e6ba9deab3f214a4c8a644352/
 
-> ---
->  configs/qemu_ppc_virtex_ml507_defconfig | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
-> index c71465dd56..eddaf3558a 100644
-> --- a/configs/qemu_ppc_virtex_ml507_defconfig
-> +++ b/configs/qemu_ppc_virtex_ml507_defconfig
-> @@ -21,3 +21,6 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-virtex-ml507/linux.config"
->  BR2_LINUX_KERNEL_VMLINUX=y
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="virtex440-ml507"
-> +
-> +# Kernel needs mkimage
-> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> -- 
-> 2.20.1
-> 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dhcp/dhcp.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 812e4870b9..9e7444eea6 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -45,6 +45,7 @@ DHCP_CONF_OPTS += --enable-delayed-ack
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
++DHCP_DEPENDENCIES += zlib
+ DHCP_BIND_CONF_OPTS += --with-zlib
+ else
+ DHCP_BIND_CONF_OPTS += --without-zlib
