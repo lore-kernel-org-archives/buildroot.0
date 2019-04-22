@@ -1,55 +1,73 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 22 Apr 2019 22:08:24 +0200
-Subject: [Buildroot] [PATCH 0/5] Fix fallouts from LINUX_BUILD_CMDS
- simplification
-Message-ID: <20190422200830.2831-1-thomas.petazzoni@bootlin.com>
+Date: Mon, 22 Apr 2019 22:08:25 +0200
+Subject: [Buildroot] [PATCH 1/5] linux: split calling "all" and
+ "$(LINUX_TARGET_NAME)" targets
+In-Reply-To: <20190422200830.2831-1-thomas.petazzoni@bootlin.com>
+References: <20190422200830.2831-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20190422200830.2831-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+In commit ffbe46a5295ce4e0442728f2ad3e19afa7eaa8ed ("linux: simplify
+LINUX_BUILD_CMDS"), we changed LINUX_BUILD_CMDS to essentially do:
 
-In commit ffbe46a5295ce4e0442728f2ad3e19afa7eaa8ed, a patch of mine
-changed LINUX_BUILD_CMDS to do "make all $(LINUX_TARGET_NAME)" instead
-of "make $(LINUX_TARGET_NAME)" and "make modules".
+  make all $(LINUX_TARGET_NAME)
 
-This has caused a number of build issues in our defconfigs:
+Unfortunately, it turns out that it breaks the build of a number of
+defconfigs, with errors such as:
 
- - A number of kernel configurations apparently don't build well when
-   the "all" target is built concurrently with $(LINUX_TARGET_NAME),
-   with weird file not found errors.
+  fixdep: error opening file: arch/xtensa/boot/lib/.inftrees.o.d: No such file or directory
 
-   We fix this by doing "make all" and "make $(LINUX_TARGET_NAME)"
-   separately (first patch)
+Calling "all" and "$(LINUX_TARGET_NAME)" as separate make invocations
+avoids this problem, and fixes the build of several defconfigs.
 
- - Due to calling "make all", a little bit more might get built, and
-   sometimes this "little bit more" needs mkimage, so we add
-   host-uboot-tools to the defconfig. This is enough as linux/linux.mk
-   automatically adds host-uboot-tools to its dependency if it's
-   enabled. I hesitated with adding an explicit
-   BR2_LINUX_KERNEL_NEEDS_HOST_UBOOT_TOOLS option, let me know if this
-   sounds better or if the proposed solution in this patch series is
-   good enough.
+Fixes:
 
-Thanks,
+  ts7680_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339583
 
-Thomas
+  qemu_xtensa_lx60_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339553
 
-Thomas Petazzoni (5):
-  linux: split calling "all" and "$(LINUX_TARGET_NAME)" targets
-  configs/beaglebone: kernel build needs mkimage
-  configs/qemu_nios2_10m50: kernel build needs mkimage
-  configs/qemu_ppc_mpc8544ds: kernel build needs mkimage
-  configs/qemu_ppc_virtex_ml507: kernel build needs mkimage
+  roseapplepi_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339564
 
- configs/beaglebone_defconfig            | 2 ++
- configs/qemu_nios2_10m50_defconfig      | 3 +++
- configs/qemu_ppc_mpc8544ds_defconfig    | 3 +++
- configs/qemu_ppc_virtex_ml507_defconfig | 3 +++
- linux/linux.mk                          | 3 ++-
- 5 files changed, 13 insertions(+), 1 deletion(-)
+  qemu_xtensa_lx60_nommu_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339554
 
+  qemu_ppc64_e5500_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339539
+
+  freescale_t2080_qds_rdb_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339455
+
+  arcturus_ucp1020_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339399
+
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/linux.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 1eac3287ab..dca3d63cd9 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -444,7 +444,8 @@ define LINUX_BUILD_CMDS
+ 	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
+ 		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
+ 	)
+-	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all $(LINUX_TARGET_NAME)
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	$(LINUX_BUILD_DTB)
+ 	$(LINUX_APPEND_DTB)
+ endef
 -- 
 2.20.1
