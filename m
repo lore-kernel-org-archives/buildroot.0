@@ -1,50 +1,69 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 22 Apr 2019 13:19:16 -0400
-Subject: [Buildroot] [PATCH v2 09/10] package/gstreamer1/gst1-validate: bump
- to version 1.16.0
-In-Reply-To: <20190422171917.54898-1-aduskett@gmail.com>
-References: <20190422171917.54898-1-aduskett@gmail.com>
-Message-ID: <20190422171917.54898-9-aduskett@gmail.com>
+From: Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
+Date: Mon, 22 Apr 2019 19:14:08 +0200
+Subject: [Buildroot] [PATCH] package/qt5base: fix qmake parallel build
+In-Reply-To: <20190422095842.61772-1-giulio.benetti@micronovasrl.com>
+References: <c060cbb3-21e2-5dcd-18ec-835106f2e682@micronovasrl.com>
+ <20190422095842.61772-1-giulio.benetti@micronovasrl.com>
+Message-ID: <CAOf5uwmv=+tLL2g=L+VNa24BG1esHmANm0OgTGDzn2MwBeJKZA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Hi
+
+On Mon, Apr 22, 2019 at 11:59 AM Giulio Benetti
+<giulio.benetti@micronovasrl.com> wrote:
+>
+> When configuring qt5base, qmake is built, but it's not built in parallel
+> mode. This is due to MAKEFLAGS having 2 dashes on its tail, so this:
+> MAKEFLAGS="$(MAKEFLAGS) -j$(PARALLEL_JOBS)"
+> expands in this(i.e. 5 njobs):
+> MAKEFLAGS="--no-print-directory -- -j5"
+> and -j5 gets ignored due to "--" preceeding -j5.
+> Double dashes are part of $(MAKEFLAGS) only when evaluated by shell.
+>
+> Swap $(MAKEFLAGS) and -j$(PARALLEL_JOBS) to avoid having "--" before
+> -j$(PARALLEL_JOBS), this way -j$(PARALLEL_JOBS) won't be ignored by
+> ./configure.
+>
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+
+Tested-by: Michael Trimarchi <michael@amarulasolutions.com>
+
+Thank you
+
+Michael
+>  package/qt5/qt5base/qt5base.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index 0b45c50a66..e73b8931aa 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -324,7 +324,7 @@ define QT5BASE_CONFIGURE_CMDS
+>         (cd $(@D); \
+>                 $(TARGET_MAKE_ENV) \
+>                 PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+> -               MAKEFLAGS="$(MAKEFLAGS) -j$(PARALLEL_JOBS)" \
+> +               MAKEFLAGS="-j$(PARALLEL_JOBS) $(MAKEFLAGS)" \
+>                 ./configure \
+>                 -v \
+>                 -prefix /usr \
+> --
+> 2.17.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
-Changes v1 -> v2:
-  - None
 
- package/gstreamer1/gst1-validate/gst1-validate.hash | 4 ++--
- package/gstreamer1/gst1-validate/gst1-validate.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.hash b/package/gstreamer1/gst1-validate/gst1-validate.hash
-index 87bb294629..d3d1078d5f 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.hash
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.14.4.tar.xz.sha256sum
--sha256 18dccca94bdc0bab3cddb07817bd280df7ab4abbec9a83b92620367a22d955c7 gst-validate-1.14.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-validate/gst-validate-1.16.0.tar.xz.sha256sum
-+sha256 9331ae48a173a048243539730cc7a88607777762dea4aebbc3ab55981e68d6c9 gst-validate-1.16.0.tar.xz
- sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-diff --git a/package/gstreamer1/gst1-validate/gst1-validate.mk b/package/gstreamer1/gst1-validate/gst1-validate.mk
-index 0f3d251782..121190ede9 100644
---- a/package/gstreamer1/gst1-validate/gst1-validate.mk
-+++ b/package/gstreamer1/gst1-validate/gst1-validate.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_VALIDATE_VERSION = 1.14.4
-+GST1_VALIDATE_VERSION = 1.16.0
- GST1_VALIDATE_SOURCE = gst-validate-$(GST1_VALIDATE_VERSION).tar.xz
- GST1_VALIDATE_SITE = https://gstreamer.freedesktop.org/src/gst-validate
- GST1_VALIDATE_LICENSE = LGPL-2.1+
 -- 
-2.20.1
+| Michael Nazzareno Trimarchi                     Amarula Solutions BV |
+| COO  -  Founder                                      Cruquiuskade 47 |
+| +31(0)851119172                                 Amsterdam 1018 AM NL |
+|                  [`as] http://www.amarulasolutions.com               |
