@@ -1,64 +1,79 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 22 Apr 2019 19:20:51 +0200
-Subject: [Buildroot] [PATCH] ltp-testsuite: Fix uClibc build with
- disabled fts.h support
-In-Reply-To: <20190421123611.4016cc04@windsurf>
-References: <20190417135458.15505-1-Nikita.Sobolev@synopsys.com>
- <20190421123611.4016cc04@windsurf>
-Message-ID: <20190422172050.GA18445@dell5510>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Mon, 22 Apr 2019 19:36:12 +0200
+Subject: [Buildroot] [PATCH 1/2] package/efl: fix build with gcc < 5.0
+Message-ID: <20190422173613.5920-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+__has_attribute has been introduced with gcc 5 [1].
 
-> I am confused, because the current ltp-testsuite package seems to build
-> properly with uClibc that doesn't have FTS support enabled. I just
-> built the following configuration:
+[1] https://www.gnu.org/software/gcc/gcc-5/changes.html
 
-> BR2_arm=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2019.02-rc1.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_INIT_NONE=y
-> BR2_SYSTEM_BIN_SH_NONE=y
-> # BR2_PACKAGE_BUSYBOX is not set
-> BR2_PACKAGE_LTP_TESTSUITE=y
-> # BR2_TARGET_ROOTFS_TAR is not set
+Fixes:
+http://autobuild.buildroot.net/results/64ab825048fac1654b0d0698740ddf857fcc0afa/
 
-> It has FTS disabled:
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ ...-add-missing-__has_attribute-definitions-.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/efl/0001-libunibreak-add-missing-__has_attribute-definitions-.patch
 
-> $ grep FTS output/staging/usr/include/bits/uClibc_config.h
-> #undef __UCLIBC_HAS_FTS__
-
-> And it builds perfectly fine.
-Thanks for a research (I'll do more testing next time, not just reviewing)!
-Actually testing it, it's really ok, due these lines in
-package/ltp-testsuite/ltp-testsuite.mk:
-
-# Requires uClibc fts and bessel support, normally not enabled
-ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
-define LTP_TESTSUITE_REMOVE_UNSUPPORTED
-	rm -rf $(@D)/testcases/kernel/controllers/cpuset/
-	rm -rf $(@D)/testcases/misc/math/float/bessel/
-	rm -f $(@D)/testcases/misc/math/float/float_bessel.c
-endef
-LTP_TESTSUITE_POST_PATCH_HOOKS += LTP_TESTSUITE_REMOVE_UNSUPPORTED
-endif
-
-We can either remove deleting testcases/kernel/controllers/cpuset/ as part of
-this patchset, or simply wait for next update (planning for the start of the
-second week in the May [1]), I'd remove it during the update.
-
-Kind regards,
-Petr
-
-[1] http://lists.linux.it/pipermail/ltp/2019-April/011729.html
+diff --git a/package/efl/0001-libunibreak-add-missing-__has_attribute-definitions-.patch b/package/efl/0001-libunibreak-add-missing-__has_attribute-definitions-.patch
+new file mode 100644
+index 0000000000..3b70d15293
+--- /dev/null
++++ b/package/efl/0001-libunibreak-add-missing-__has_attribute-definitions-.patch
+@@ -0,0 +1,48 @@
++From c394fba4c4c820ea2b7200306ff033e4bbc12ead Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Mon, 22 Apr 2019 19:26:09 +0200
++Subject: [PATCH] libunibreak: add missing __has_attribute definitions for old
++ compilers
++
++__has_attribute has been introduced with gcc 5 [1].
++
++[1] https://www.gnu.org/software/gcc/gcc-5/changes.html
++
++Fixes:
++http://autobuild.buildroot.net/results/64ab825048fac1654b0d0698740ddf857fcc0afa/build-end.log
++
++Upstream status:
++https://phab.enlightenment.org/T7818
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ src/static_libs/libunibreak/wordbreak.c | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/src/static_libs/libunibreak/wordbreak.c b/src/static_libs/libunibreak/wordbreak.c
++index 017e0fd091..50c830c7cc 100644
++--- a/src/static_libs/libunibreak/wordbreak.c
+++++ b/src/static_libs/libunibreak/wordbreak.c
++@@ -209,6 +209,9 @@ static void set_wordbreaks(
++                 posLast = posCur;
++                 break;
++             }
+++#ifndef __has_attribute
+++# define __has_attribute(x) 0
+++#endif
++ #if __has_attribute(fallthrough)
++            __attribute__((fallthrough));
++ #endif
++@@ -325,6 +328,9 @@ static void set_wordbreaks(
++                 wbcSeqStart = wbcCur;
++                 posLast = posCur;
++             }
+++#ifndef __has_attribute
+++# define __has_attribute(x) 0
+++#endif
++ #if __has_attribute(fallthrough)
++            __attribute__((fallthrough));
++ #endif
++-- 
++2.14.5
++
+-- 
+2.14.5
