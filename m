@@ -1,65 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 23 Apr 2019 09:28:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dhcp: always disable zlib in
- bind library
-In-Reply-To: <CAPi7W80Lee0aq4oVwg5Ssy0NZTwQzCZqSwYBZ+q+VFA3hEfAJQ@mail.gmail.com>
-References: <20190421171039.26556-1-fontaine.fabrice@gmail.com>
- <20190422223952.53412a78@windsurf>
- <CAPi7W80Lee0aq4oVwg5Ssy0NZTwQzCZqSwYBZ+q+VFA3hEfAJQ@mail.gmail.com>
-Message-ID: <20190423092825.0da99fd2@windsurf>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Tue, 23 Apr 2019 09:44:33 +0200
+Subject: [Buildroot] TestPerlDBDmysql continues to fail
+In-Reply-To: <20190422221208.3b4349c8@windsurf>
+References: <20190422221208.3b4349c8@windsurf>
+Message-ID: <CAB0FRsvE=G_FOFMsj8awHrCBK3fDJLqD1AZdCLaafsMJ90cQeg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Le lun. 22 avr. 2019 ? 22:12, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+a ?crit :
 
-On Mon, 22 Apr 2019 23:19:04 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> Hello Fran?ois,
+>
+> The test TestPerlDBDmysql continues to fail in Gitlab CI:
+>
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/199339668
+>
+> Could you have a look and propose a fix for this issue ? I think it has
+> been failing like this for quite some time, if I remember correctly.
+>
+>
+I could reproduce the issue.
+It is weird:
+- the build step seems good, the image  rootfs.cpio is created
+- but the system does not boot, there is a kernel panic, see
+https://gitlab.com/buildroot.org/buildroot/-/jobs/199339668/artifacts/file/test-output/TestPerlDBDmysql-run.log
 
-> > Thanks to this, zlib is properly built before dhcp, and everything
-> > works fine.  
-> This is strange because I think I also tried this fix and the build
-> failure was not fixed because if no value is provided to zlib, the
-> configure script will try to find zlib header on host (see
-> dhcp/bind/bind-9.11.2-P1/configure.in):
-> 
->     auto|yes)
->         for d in /usr /usr/local /opt/local
->         do
->             if test -f "${d}/include/zlib.h"
->             then
->                 if test ${d} != /usr
->                 then
->                     zlib_cflags="-I ${d}/include"
->                     LIBS="$LIBS -L${d}/lib"
->                 fi
->                 have_zlib="yes"
->             fi
->         done
->         ;;
-> 
-> And obviously, build will fail if those headers are found on host.
-> So I think, we should also set --with-zlib=$(STAGING_DIR)/usr but it
-> was also failing.
+Outside the testing infrastructure, I could build an image with the module
+perl-dbd-mysql and run successfully:
+$ perl -v
+$ perl -MDBI -e 1
+$ perl -MDBD::mysql -e 1
 
-Hum, OK, I see. I do have the Zlib development files installed on my
-system though, and /usr/include/zlib.h exists.
+Fran?ois
 
-> I'll investigate a little more to find why if you think that disabling
-> zlib is not a good solution.
 
-OK. Actually, it was not really well explained in your commit log /
-comment what the problem was. It felt like "it doesn't work, so let's
-take the easy route". If indeed the zlib detection is too broken, I'm
-perfectly fine with disabling it. But the reason is not "let's disable
-it like other dependencies".
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190423/dc1adb46/attachment.html>
