@@ -1,96 +1,50 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 23 Apr 2019 23:29:44 +0200
-Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
- in cross file
-In-Reply-To: <20190413182422.7e8f5f22@windsurf>
-References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
- <20190413182422.7e8f5f22@windsurf>
-Message-ID: <20190423232944.70aeddba@gmx.net>
+Date: Tue, 23 Apr 2019 23:34:55 +0200
+Subject: [Buildroot] [PATCH v1] package/libdrm: bump version to 2.4.98
+Message-ID: <20190423213455.18124-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello J?rg, Thomas,
+For detail see [1].
 
-On Sat, 13 Apr 2019 18:24:22 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+[1] https://lists.freedesktop.org/archives/dri-devel/2019-April/215254.html
 
-> Hello J?rg,
-> 
-> +Peter Seiderer in Cc.
-> 
-> On Wed,  3 Apr 2019 20:32:01 +0200
-> J?rg Krause <joerg.krause@embedded.rocks> wrote:
-> 
-> > Since version 0.49.0 the Meson build system has native support for
-> > looking for `libgcrypt-config` if no pkg-config file is found. As the
-> > latest version 1.8.4 of libgcrypt does not provide a .pc file, using
-> > `libgcrypt-config` is the only way for detecting the required libraries
-> > when linking agains libgrypt.
-> > 
-> > The `libgcrypt-config` entry is necessary for updating package mpd,
-> > which switched from the Autotools to the Meson build system when bumping
-> > from version 0.20 to 0.21.
-> > 
-> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>  
-> 
-> As I said in my previous reply, I'm not too happy with this
-> libgcrypt-config variable creeping into the global cross-compilation
-> file. Can we instead look at extending what Peter Seiderer is doing in
-> http://patchwork.ozlabs.org/patch/1081486/ and allow some per-package
-> additions to the per-package cross-compilation file ? Peter's patch
-> does it for CFLAGS/CXXFLAGS/LDFLAGS, we could perhaps do the same with
-> arbitrary program paths ?
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Something like the following (draft) should work:
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index 301866c8b0..cd08a9505a 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2019-January/204447.html
+-md5 acef22d0c62c89692348c2dd5591393e  libdrm-2.4.97.tar.bz2
+-sha1 7635bec769a17edd140282fa2c46838c4a44bc91  libdrm-2.4.97.tar.bz2
+-sha256 77d0ccda3e10d6593398edb70b1566bfe1a23a39bd3da98ace2147692eadd123  libdrm-2.4.97.tar.bz2
+-sha512 3e08ee9d6c9ce265d783a59b51e22449905ea73aa27f25a082a1e9e1532f7c99e1c9f7cb966eb0970be2a08e2e5993dc9aa55093b1bff548689fdb465e7145ed  libdrm-2.4.97.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2019-April/215254.html
++md5 1320b43c4bdb8846c308ec2610b62b64 libdrm-2.4.98.tar.bz2
++sha1 4c8a11870a89f59c294bef0109939a7ffaa1fb26 libdrm-2.4.98.tar.bz2
++sha256 8be0edccaca3abde8b6bb1431b46354c7fab46e9b91cc6946ba65b51f56f1894 libdrm-2.4.98.tar.bz2
++sha512 3d333d060ceb14fa8e204ef468ca2c95d6f07205185ca90a044b685832b9b2d7256faa5e81d5871ce8b70aa1fdf9fb1ade18b4e582ff0c7ef5551da8506eb27b libdrm-2.4.98.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index cc7350c10e..91d109c678 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
 
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-index 4056c2b2f4..7cd372128e 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -9,6 +9,7 @@ cpp = '@TARGET_CROSS at g++'
- ar = '@TARGET_CROSS at ar'
- strip = '@TARGET_CROSS at strip'
- pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
-+ at PKG_TARGET_BINARIES@
- 
- [properties]
- needs_exe_wrapper = true
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 70128f6bad..e550c80c9d 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -60,6 +60,7 @@ define HOST_MESON_INSTALL_CROSS_CONF
-            -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
-            -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
-            -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
-+           -e "s%@PKG_TARGET_BINARIES@%%g" \
-            -e "s%@PKG_TARGET_CFLAGS@%%g" \
-            -e "s%@PKG_TARGET_LDFLAGS@%%g" \
-            -e "s%@PKG_TARGET_CXXFLAGS@%%g" \
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 9974b1e513..93df43fe3e 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -74,6 +74,7 @@ define $(2)_CONFIGURE_CMDS
-            -e "s%@TARGET_CFLAGS@%$$(HOST_MESON_SED_CFLAGS)%g" \
-            -e "s%@TARGET_LDFLAGS@%$$(HOST_MESON_SED_LDFLAGS)%g" \
-            -e "s%@TARGET_CXXFLAGS@%$$(HOST_MESON_SED_CXXFLAGS)%g" \
-+           -e "s%@PKG_TARGET_BINARIES@%$$($$(PKG)_MESON_BINARIES)%g" \
-            -e "s%@PKG_TARGET_CFLAGS@%$$($$(PKG)_MESON_SED_CFLAGS)%g" \
-            -e "s%@PKG_TARGET_LDFLAGS@%$$($$(PKG)_MESON_SED_LDFLAGS)%g" \
-            -e "s%@PKG_TARGET_CXXFLAGS@%$$($$(PKG)_MESON_SED_CXXFLAGS)%g" \
-
-
-and with: 
-
-MPD_MESON_BINARIES = libgcrypt-config = '$(STAGING_DIR)/usr/bin/libgcrypt-config'
-
-Regards,
-Peter
-
-> 
-> Thanks!
-> 
-> Thomas
+-LIBDRM_VERSION = 2.4.97
++LIBDRM_VERSION = 2.4.98
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
+--
+2.21.0
