@@ -1,40 +1,110 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 23 Apr 2019 09:58:13 +0200
-Subject: [Buildroot] TestPerlDBDmysql continues to fail
-In-Reply-To: <CAB0FRsvE=G_FOFMsj8awHrCBK3fDJLqD1AZdCLaafsMJ90cQeg@mail.gmail.com>
-References: <20190422221208.3b4349c8@windsurf>
- <CAB0FRsvE=G_FOFMsj8awHrCBK3fDJLqD1AZdCLaafsMJ90cQeg@mail.gmail.com>
-Message-ID: <20190423095813.767fe22c@windsurf>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 23 Apr 2019 12:59:42 +0200
+Subject: [Buildroot] [PATCH] package/libcamera: fix build failure due to
+ lack of sys/auxv.h and getauxval()
+Message-ID: <20190423105942.113130-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 23 Apr 2019 09:44:33 +0200
-Fran?ois Perrad <francois.perrad@gadz.org> wrote:
+On some libc sys/auxv.h and getauxval() could not be present.
 
-> I could reproduce the issue.
-> It is weird:
-> - the build step seems good, the image  rootfs.cpio is created
-> - but the system does not boot, there is a kernel panic, see
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/199339668/artifacts/file/test-output/TestPerlDBDmysql-run.log
+Add patch to check if they are present or not.
 
-I can reproduce the issue locally. If I take the same rootfs.cpio, and
-boot it with -M versatilepb and the kernel-versatile kernel image, it
-boots fine.
+Fixes:
+http://autobuild.buildroot.net/results/80484849540786b913e353077cc4ff7c6443a4ca/
 
-However that is strange because:
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ ...when-sys-auxv.h-and-getauxval-are-no.patch | 78 +++++++++++++++++++
+ 1 file changed, 78 insertions(+)
+ create mode 100644 package/libcamera/0001-meson-fix-build-when-sys-auxv.h-and-getauxval-are-no.patch
 
- - The ARMv5 user-space that is being built should work fine under an
-   ARMv7 machine
-
- - All other Perl test cases are using the same base configuration
-   (ARMv5) and booting under an ARMv7 Qemu machine + kernel, and they
-   work fine.
-
-Thomas
+diff --git a/package/libcamera/0001-meson-fix-build-when-sys-auxv.h-and-getauxval-are-no.patch b/package/libcamera/0001-meson-fix-build-when-sys-auxv.h-and-getauxval-are-no.patch
+new file mode 100644
+index 0000000000..1cda49dddf
+--- /dev/null
++++ b/package/libcamera/0001-meson-fix-build-when-sys-auxv.h-and-getauxval-are-no.patch
+@@ -0,0 +1,78 @@
++From 0a0541a82b7f1b2dd906ad6bab18cf99c5a6f72d Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Tue, 23 Apr 2019 12:50:15 +0200
++Subject: [PATCH] meson: fix build when sys/auxv.h and getauxval() are not
++ present
++
++On some libc sys/auxv.h could not be present and getauxval() too.
++This way build will fail.
++
++Check in meson if they are present and add HAVE_SYS_AUXV_H and
++HAVE_GETAUXVAL defines to cxx arguments.
++Add #ifdef HAVE_ statements around #include <sys/auxv.h> and getauxval()
++in utils.cpp.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ meson.build             | 14 ++++++++++++++
++ src/libcamera/utils.cpp |  4 ++++
++ 2 files changed, 18 insertions(+)
++
++diff --git a/meson.build b/meson.build
++index 6e68c3e..3165235 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -20,11 +20,25 @@ common_arguments = [
++ c_arguments = common_arguments
++ cpp_arguments = common_arguments
++ 
+++cxx = meson.get_compiler('cpp')
+++
+++# check for header sys/auxv.h
+++if cxx.has_header('sys/auxv.h')
+++  cpp_arguments += ['-DHAVE_SYS_AUXV_H']
+++endif
+++
+++# check for function getauxval()
+++if cxx.has_function('getauxval')
+++  cpp_arguments += ['-DHAVE_GETAUXVAL']
+++endif
+++
++ add_project_arguments(c_arguments, language: 'c')
++ add_project_arguments(cpp_arguments, language: 'cpp')
++ 
++ libcamera_includes = include_directories('include')
++ 
+++
+++
++ subdir('include')
++ subdir('src')
++ subdir('utils')
++diff --git a/src/libcamera/utils.cpp b/src/libcamera/utils.cpp
++index cd0fd76..0fa915b 100644
++--- a/src/libcamera/utils.cpp
+++++ b/src/libcamera/utils.cpp
++@@ -6,7 +6,9 @@
++  */
++ 
++ #include <string.h>
+++#ifdef HAVE_SYS_AUXV_H
++ #include <sys/auxv.h>
+++#endif
++ 
++ #include "utils.h"
++ 
++@@ -57,8 +59,10 @@ const char *basename(const char *path)
++  */
++ char *secure_getenv(const char *name)
++ {
+++#ifdef HAVE_GETAUXVAL
++ 	if (getauxval(AT_SECURE))
++ 		return NULL;
+++#endif
++ 
++ 	return getenv(name);
++ }
++-- 
++2.17.1
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
