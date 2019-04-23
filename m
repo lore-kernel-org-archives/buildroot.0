@@ -1,67 +1,35 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 23 Apr 2019 13:35:15 +0200
-Subject: [Buildroot] [PATCH] package/owfs: delay sysvinit start until after
- network and avahi
-Message-ID: <20190423113515.6482-1-arnout@mind.be>
+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Date: Tue, 23 Apr 2019 15:01:05 +0200
+Subject: [Buildroot] [PATCH] package/libglib2: disable compiler warnings
+Message-ID: <1556024465-7928-1-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In its default configuration, owserver opens a TCP socket on the 'lo'
-interface. However, in some situations, the 'lo' interface may not yet
-be up until S40network is started. This causes owserver not to start its
-TCP socket, which makes it impossible for the owfs client to connect to
-it.
+This flag is not set by default which yields in a
+compilation error when host-qemu package is enabled.
+The build fails at libglib2 package because -Werror
+is activated which stops the compilation process.
+Adding this flag corrects the issue.
 
-In addition, owserver may have avahi integration.
-
-Therefore, delay the start of owserver and owfs until after S40network
-and S50avahi-daemon.
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 ---
- package/owfs/{S25owserver => S55owserver} | 0
- package/owfs/{S30owfs => S60owfs}         | 0
- package/owfs/owfs.mk                      | 8 ++++----
- 3 files changed, 4 insertions(+), 4 deletions(-)
- rename package/owfs/{S25owserver => S55owserver} (100%)
- rename package/owfs/{S30owfs => S60owfs} (100%)
+ package/libglib2/libglib2.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/owfs/S25owserver b/package/owfs/S55owserver
-similarity index 100%
-rename from package/owfs/S25owserver
-rename to package/owfs/S55owserver
-diff --git a/package/owfs/S30owfs b/package/owfs/S60owfs
-similarity index 100%
-rename from package/owfs/S30owfs
-rename to package/owfs/S60owfs
-diff --git a/package/owfs/owfs.mk b/package/owfs/owfs.mk
-index cd1c2dba6d..fccc2efa58 100644
---- a/package/owfs/owfs.mk
-+++ b/package/owfs/owfs.mk
-@@ -31,8 +31,8 @@ OWFS_CONF_OPTS += \
- 	--with-fuseinclude=$(STAGING_DIR)/usr/include \
- 	--with-fuselib=$(STAGING_DIR)/usr/lib
- define OWFS_INSTALL_FUSE_INIT_SYSV
--	$(INSTALL) -D -m 0755 $(OWFS_PKGDIR)S30owfs \
--		$(TARGET_DIR)/etc/init.d/S30owfs
-+	$(INSTALL) -D -m 0755 $(OWFS_PKGDIR)S60owfs \
-+		$(TARGET_DIR)/etc/init.d/S60owfs
- endef
- define OWFS_CREATE_MOUNTPOINT
- 	mkdir -p $(TARGET_DIR)/dev/1wire
-@@ -102,8 +102,8 @@ endif
- OWFS_MAKE = $(MAKE) $(OWFS_EXTRA_MAKE_OPTS)
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 63bfec3..5fd0544 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -91,6 +91,7 @@ LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
+ endif
  
- define OWFS_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 0755 $(OWFS_PKGDIR)S25owserver \
--		$(TARGET_DIR)/etc/init.d/S25owserver
-+	$(INSTALL) -D -m 0755 $(OWFS_PKGDIR)S55owserver \
-+		$(TARGET_DIR)/etc/init.d/S55owserver
- 	$(OWFS_INSTALL_FUSE_INIT_SYSV)
- endef
- 
+ HOST_LIBGLIB2_CONF_OPTS = \
++	--disable-compile-warnings \
+ 	--disable-coverage \
+ 	--disable-dtrace \
+ 	--disable-fam \
 -- 
-2.20.1
+2.7.4
