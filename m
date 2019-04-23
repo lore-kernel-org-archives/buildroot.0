@@ -1,173 +1,96 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 23 Apr 2019 23:24:06 +0200
-Subject: [Buildroot] [PATCH 4/4] package/dhcp: use system bind
-In-Reply-To: <20190423212406.13909-1-fontaine.fabrice@gmail.com>
-References: <20190423212406.13909-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190423212406.13909-4-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 23 Apr 2019 23:29:44 +0200
+Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
+ in cross file
+In-Reply-To: <20190413182422.7e8f5f22@windsurf>
+References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
+ <20190413182422.7e8f5f22@windsurf>
+Message-ID: <20190423232944.70aeddba@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Select bind instead of using the embedded bind libraries. This will help
-managing correctly all the bind dependencies such as zlib
+Hello J?rg, Thomas,
 
-Fixes:
- - http://autobuild.buildroot.org/results/a61f24e9f117c81893c58befb20d21179e61b85b
+On Sat, 13 Apr 2019 18:24:22 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ibility-headers-updated-util-bind-sh.patch | 87 +++++++++++++++++++
- package/dhcp/Config.in                        |  1 +
- package/dhcp/dhcp.mk                          | 17 +---
- 3 files changed, 92 insertions(+), 13 deletions(-)
- create mode 100644 package/dhcp/0001-master-Added-includes-of-new-BIND9-compatibility-headers-updated-util-bind-sh.patch
+> Hello J?rg,
+> 
+> +Peter Seiderer in Cc.
+> 
+> On Wed,  3 Apr 2019 20:32:01 +0200
+> J?rg Krause <joerg.krause@embedded.rocks> wrote:
+> 
+> > Since version 0.49.0 the Meson build system has native support for
+> > looking for `libgcrypt-config` if no pkg-config file is found. As the
+> > latest version 1.8.4 of libgcrypt does not provide a .pc file, using
+> > `libgcrypt-config` is the only way for detecting the required libraries
+> > when linking agains libgrypt.
+> > 
+> > The `libgcrypt-config` entry is necessary for updating package mpd,
+> > which switched from the Autotools to the Meson build system when bumping
+> > from version 0.20 to 0.21.
+> > 
+> > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>  
+> 
+> As I said in my previous reply, I'm not too happy with this
+> libgcrypt-config variable creeping into the global cross-compilation
+> file. Can we instead look at extending what Peter Seiderer is doing in
+> http://patchwork.ozlabs.org/patch/1081486/ and allow some per-package
+> additions to the per-package cross-compilation file ? Peter's patch
+> does it for CFLAGS/CXXFLAGS/LDFLAGS, we could perhaps do the same with
+> arbitrary program paths ?
 
-diff --git a/package/dhcp/0001-master-Added-includes-of-new-BIND9-compatibility-headers-updated-util-bind-sh.patch b/package/dhcp/0001-master-Added-includes-of-new-BIND9-compatibility-headers-updated-util-bind-sh.patch
-new file mode 100644
-index 0000000000..b8b187f17b
---- /dev/null
-+++ b/package/dhcp/0001-master-Added-includes-of-new-BIND9-compatibility-headers-updated-util-bind-sh.patch
-@@ -0,0 +1,87 @@
-+From 8194daabfd590f17825f0c61e9534bee5c99cc86 Mon Sep 17 00:00:00 2001
-+From: Thomas Markwalder <tmark@isc.org>
-+Date: Fri, 14 Sep 2018 13:41:41 -0400
-+Subject: [PATCH] [master] Added includes of new BIND9 compatibility headers,
-+ updated util/bind.sh
-+
-+    Merges in rt48072.
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved (and updated to remvove bind.sh update) from:
-+https://gitlab.isc.org/isc-projects/dhcp/commit/8194daabfd590f17825f0c61e9534bee5c99cc86]
-+---
-+ includes/omapip/isclib.h |  3 +++
-+ includes/omapip/result.h |  1 +
-+ server/dhcpv6.c          | 13 +++++++++----
-+ 3 files changed, 39 insertions(+), 12 deletions(-)
-+
-+diff --git a/includes/omapip/isclib.h b/includes/omapip/isclib.h
-+index 75a87ff6..538b927f 100644
-+--- a/includes/omapip/isclib.h
-++++ b/includes/omapip/isclib.h
-+@@ -48,6 +48,9 @@
-+ #include <string.h>
-+ #include <netdb.h>
-+ 
-++#include <isc/boolean.h>
-++#include <isc/int.h>
-++
-+ #include <isc/buffer.h>
-+ #include <isc/lex.h>
-+ #include <isc/lib.h>
-+diff --git a/includes/omapip/result.h b/includes/omapip/result.h
-+index 91243e1b..860298f6 100644
-+--- a/includes/omapip/result.h
-++++ b/includes/omapip/result.h
-+@@ -26,6 +26,7 @@
-+ #ifndef DHCP_RESULT_H
-+ #define DHCP_RESULT_H 1
-+ 
-++#include <isc/boolean.h>
-+ #include <isc/lang.h>
-+ #include <isc/resultclass.h>
-+ #include <isc/types.h>
-+diff --git a/server/dhcpv6.c b/server/dhcpv6.c
-+index a7110f98..cde4f617 100644
-+--- a/server/dhcpv6.c
-++++ b/server/dhcpv6.c
-+@@ -1034,7 +1034,8 @@ void check_pool6_threshold(struct reply_state *reply,
-+ 				  shared_name,
-+ 				  inet_ntop(AF_INET6, &lease->addr,
-+ 					    tmp_addr, sizeof(tmp_addr)),
-+-				  used, count);
-++				  (long long unsigned)(used),
-++				  (long long unsigned)(count));
-+ 		}
-+ 		return;
-+ 	}
-+@@ -1066,7 +1067,8 @@ void check_pool6_threshold(struct reply_state *reply,
-+ 		  "address: %s; high threshold %d%% %llu/%llu.",
-+ 		  shared_name,
-+ 		  inet_ntop(AF_INET6, &lease->addr, tmp_addr, sizeof(tmp_addr)),
-+-		  poolhigh, used, count);
-++		  poolhigh, (long long unsigned)(used),
-++		  (long long unsigned)(count));
-+ 
-+ 	/* handle the low threshold now, if we don't
-+ 	 * have one we default to 0. */
-+@@ -1436,12 +1438,15 @@ pick_v6_address(struct reply_state *reply)
-+ 		log_debug("Unable to pick client address: "
-+ 			  "no addresses available  - shared network %s: "
-+ 			  " 2^64-1 < total, %llu active,  %llu abandoned",
-+-			  shared_name, active - abandoned, abandoned);
-++			  shared_name, (long long unsigned)(active - abandoned),
-++			  (long long unsigned)(abandoned));
-+ 	} else {
-+ 		log_debug("Unable to pick client address: "
-+ 			  "no addresses available  - shared network %s: "
-+ 			  "%llu total, %llu active,  %llu abandoned",
-+-			  shared_name, total, active - abandoned, abandoned);
-++			  shared_name, (long long unsigned)(total),
-++			  (long long unsigned)(active - abandoned),
-++		          (long long unsigned)(abandoned));
-+ 	}
-+ 
-+ 	return ISC_R_NORESOURCES;
-+-- 
-+2.18.1
-+
-diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
-index 5340830902..a4930e53ba 100644
---- a/package/dhcp/Config.in
-+++ b/package/dhcp/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_DHCP
- 	# fork()
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-+	select BR2_PACKAGE_BIND
- 	help
- 	  DHCP relay agent from the ISC DHCP distribution.
+Something like the following (draft) should work:
+
+diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+index 4056c2b2f4..7cd372128e 100644
+--- a/package/meson/cross-compilation.conf.in
++++ b/package/meson/cross-compilation.conf.in
+@@ -9,6 +9,7 @@ cpp = '@TARGET_CROSS at g++'
+ ar = '@TARGET_CROSS at ar'
+ strip = '@TARGET_CROSS at strip'
+ pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
++ at PKG_TARGET_BINARIES@
  
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 9e7444eea6..45511421be 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -9,13 +9,15 @@ DHCP_SITE = http://ftp.isc.org/isc/dhcp/$(DHCP_VERSION)
- DHCP_INSTALL_STAGING = YES
- DHCP_LICENSE = MPL-2.0
- DHCP_LICENSE_FILES = LICENSE
-+DHCP_DEPENDENCIES = bind
- DHCP_CONF_ENV = \
- 	CPPFLAGS='-D_PATH_DHCPD_CONF=\"/etc/dhcp/dhcpd.conf\" \
- 		-D_PATH_DHCLIENT_CONF=\"/etc/dhcp/dhclient.conf\"' \
--	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1'
-+	CFLAGS='$(TARGET_CFLAGS) -DISC_CHECK_NONE=1' \
-+	LIBS="`$(STAGING_DIR)/usr/bin/bind9-config --libs bind9`"
- 
- DHCP_CONF_OPTS = \
--	--with-bind-extra-config="$(DHCP_BIND_CONF_OPTS)" \
-+	--with-libbind=$(STAGING_DIR)/usr \
- 	--with-randomdev=/dev/random \
- 	--with-srv-lease-file=/var/lib/dhcp/dhcpd.leases \
- 	--with-srv6-lease-file=/var/lib/dhcp/dhcpd6.leases \
-@@ -44,17 +46,6 @@ ifeq ($(BR2_PACKAGE_DHCP_SERVER_DELAYED_ACK),y)
- DHCP_CONF_OPTS += --enable-delayed-ack
- endif
- 
--ifeq ($(BR2_PACKAGE_ZLIB),y)
--DHCP_DEPENDENCIES += zlib
--DHCP_BIND_CONF_OPTS += --with-zlib
--else
--DHCP_BIND_CONF_OPTS += --without-zlib
--endif
--
--ifeq ($(BR2_STATIC_LIBS),y)
--DHCP_BIND_CONF_OPTS += --without-dlopen
--endif
--
- ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
- define DHCP_INSTALL_SERVER
- 	mkdir -p $(TARGET_DIR)/var/lib
--- 
-2.20.1
+ [properties]
+ needs_exe_wrapper = true
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 70128f6bad..e550c80c9d 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -60,6 +60,7 @@ define HOST_MESON_INSTALL_CROSS_CONF
+            -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
+            -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
+            -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
++           -e "s%@PKG_TARGET_BINARIES@%%g" \
+            -e "s%@PKG_TARGET_CFLAGS@%%g" \
+            -e "s%@PKG_TARGET_LDFLAGS@%%g" \
+            -e "s%@PKG_TARGET_CXXFLAGS@%%g" \
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 9974b1e513..93df43fe3e 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -74,6 +74,7 @@ define $(2)_CONFIGURE_CMDS
+            -e "s%@TARGET_CFLAGS@%$$(HOST_MESON_SED_CFLAGS)%g" \
+            -e "s%@TARGET_LDFLAGS@%$$(HOST_MESON_SED_LDFLAGS)%g" \
+            -e "s%@TARGET_CXXFLAGS@%$$(HOST_MESON_SED_CXXFLAGS)%g" \
++           -e "s%@PKG_TARGET_BINARIES@%$$($$(PKG)_MESON_BINARIES)%g" \
+            -e "s%@PKG_TARGET_CFLAGS@%$$($$(PKG)_MESON_SED_CFLAGS)%g" \
+            -e "s%@PKG_TARGET_LDFLAGS@%$$($$(PKG)_MESON_SED_LDFLAGS)%g" \
+            -e "s%@PKG_TARGET_CXXFLAGS@%$$($$(PKG)_MESON_SED_CXXFLAGS)%g" \
+
+
+and with: 
+
+MPD_MESON_BINARIES = libgcrypt-config = '$(STAGING_DIR)/usr/bin/libgcrypt-config'
+
+Regards,
+Peter
+
+> 
+> Thanks!
+> 
+> Thomas
