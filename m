@@ -1,10 +1,10 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 23 Apr 2019 13:01:03 +0200
+Date: Tue, 23 Apr 2019 13:06:25 +0200
 Subject: [Buildroot] [PATCH] package/libcamera: fix build failure due to
  lack of sys/auxv.h and getauxval()
 In-Reply-To: <20190423105942.113130-1-giulio.benetti@micronovasrl.com>
 References: <20190423105942.113130-1-giulio.benetti@micronovasrl.com>
-Message-ID: <c1e9aa37-9bea-e627-37d4-246fe739c5f9@micronovasrl.com>
+Message-ID: <e5183324-b11e-19f0-4254-9a4bec412308@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -80,6 +80,10 @@ Il 23/04/2019 12:59, Giulio Benetti ha scritto:
 > +
 > ++
 > ++
+
+Oops, these CRs are useless. Need to send v2, I wait for your comments 
+before.
+
 > + subdir('include')
 > + subdir('src')
 > + subdir('utils')
@@ -112,9 +116,6 @@ Il 23/04/2019 12:59, Giulio Benetti ha scritto:
 > +2.17.1
 > +
 > 
-
-I'm going to upstream it and patch will be slightly different because of 
-utils.cpp file changed a little bit.
 
 -- 
 Giulio Benetti
