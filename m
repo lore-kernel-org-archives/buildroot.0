@@ -1,41 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Apr 2019 22:47:03 +0200
-Subject: [Buildroot] [git commit] configs/qemu_ppc_virtex_ml507: kernel
- build needs mkimage
-Message-ID: <20190424204230.0483F81DBC@busybox.osuosl.org>
+Date: Wed, 24 Apr 2019 22:46:11 +0200
+Subject: [Buildroot] [git commit] linux: split calling "all" and
+ "$(LINUX_TARGET_NAME)" targets
+Message-ID: <20190424204229.DF8EC8122E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7cbf9c63e5abb498ab1863422cb3abc4c7ec7bc4
+commit: https://git.buildroot.net/buildroot/commit/?id=2a7cf511f4cd4b708eb68d3fe98e291ee6a588b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Following ffbe46a5295ce4e0442728f2ad3e19afa7eaa8ed ("linux: simplify
-LINUX_BUILD_CMDS"), the Linux kernel build for
-qemu_ppc_virtex_ml507_defconfig builds an image format that needs
-mkimage.
+In commit ffbe46a5295ce4e0442728f2ad3e19afa7eaa8ed ("linux: simplify
+LINUX_BUILD_CMDS"), we changed LINUX_BUILD_CMDS to essentially do:
+
+  make all $(LINUX_TARGET_NAME)
+
+Unfortunately, it turns out that it breaks the build of a number of
+defconfigs, with errors such as:
+
+  fixdep: error opening file: arch/xtensa/boot/lib/.inftrees.o.d: No such file or directory
+
+Calling "all" and "$(LINUX_TARGET_NAME)" as separate make invocations
+avoids this problem, and fixes the build of several defconfigs.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339544
+  ts7680_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339583
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+  qemu_xtensa_lx60_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339553
+
+  roseapplepi_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339564
+
+  qemu_xtensa_lx60_nommu_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339554
+
+  qemu_ppc64_e5500_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339539
+
+  freescale_t2080_qds_rdb_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339455
+
+  arcturus_ucp1020_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339399
+
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas: add comment in the code to explain why we call the two make
+targets separately, as suggested by Yann E. Morin]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/qemu_ppc_virtex_ml507_defconfig | 3 +++
- 1 file changed, 3 insertions(+)
+ linux/linux.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
-index c71465dd56..eddaf3558a 100644
---- a/configs/qemu_ppc_virtex_ml507_defconfig
-+++ b/configs/qemu_ppc_virtex_ml507_defconfig
-@@ -21,3 +21,6 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-virtex-ml507/linux.config"
- BR2_LINUX_KERNEL_VMLINUX=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="virtex440-ml507"
-+
-+# Kernel needs mkimage
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 1eac3287ab..51fd41fa15 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -439,12 +439,16 @@ endif
+ endif
+ 
+ # Compilation. We make sure the kernel gets rebuilt when the
+-# configuration has changed.
++# configuration has changed. We call the 'all' and
++# '$(LINUX_TARGET_NAME)' targets separately because calling them in
++# the same $(MAKE) invocation has shown to cause parallel build
++# issues.
+ define LINUX_BUILD_CMDS
+ 	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
+ 		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
+ 	)
+-	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all $(LINUX_TARGET_NAME)
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	$(LINUX_BUILD_DTB)
+ 	$(LINUX_APPEND_DTB)
+ endef
