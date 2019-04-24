@@ -1,43 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 17:23:19 +0200
+Date: Wed, 24 Apr 2019 17:23:11 +0200
 Subject: [Buildroot] [git commit branch/2019.02.x] package/linux-tools: some
- selftests needs tput
-Message-ID: <20190424152605.5ECE681000@busybox.osuosl.org>
+ selftests needs util-linux schedutils
+Message-ID: <20190424152605.4F42581270@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6f30d355cc9dfab4d8794d05ce9a87dc9ce8d6d
+commit: https://git.buildroot.net/buildroot/commit/?id=058c89f1e6dca25638c0d91444630b6db5e5ea54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Some kernel-selftests are using tput program, so make sure that
-BR2_PACKAGE_NCURSES_TARGET_PROGS is selected.
+Some kernel-selftests are using taskset program, so make sure that
+BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS is selected.
 
-[linux-4.19 selftests]$ git grep tput
-[...]
-futex/run.sh:tput setf 7 || tput setaf 7
-futex/run.sh:    tput sgr0
+[linux-4.19 selftests]$ git grep taskset
+bpf/test_progs.c:       assert(system("taskset 0x1 ./urandom_read 100000") == 0);
+cpu-hotplug/cpu-on-off-test.sh: taskset -p 01 $$
+cpufreq/main.sh:        taskset -p 01 $$
+netfilter/nft_trans_stress.sh:        ip netns exec "$testns" taskset $mask ping -4 127.0.0.1 -fq > /dev/null &
+netfilter/nft_trans_stress.sh:        ip netns exec "$testns" taskset $mask ping -6 ::1 -fq > /dev/null &
+rcutorture/bin/jitter.sh:       if ! taskset -p $cpumask $$ > /dev/null 2>&1
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 633e5121f851b3a89121138ec8aafdb7338ce9de)
+(cherry picked from commit 6af93482d782ff8ecb75fd249b645a12fd76beff)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/linux-tools/Config.in | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index 6aa09d14a3..22204ed090 100644
+index f4199fd618..6aa09d14a3 100644
 --- a/package/linux-tools/Config.in
 +++ b/package/linux-tools/Config.in
-@@ -83,6 +83,8 @@ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
- 	depends on BR2_USE_MMU  # bash
- 	select BR2_PACKAGE_LINUX_TOOLS
+@@ -85,6 +85,8 @@ config BR2_PACKAGE_LINUX_TOOLS_SELFTESTS
  	select BR2_PACKAGE_BASH # runtime
-+	select BR2_PACKAGE_NCURSES
-+	select BR2_PACKAGE_NCURSES_TARGET_PROGS # runtime (tput)
  	select BR2_PACKAGE_POPT
  	select BR2_PACKAGE_LIBCAP_NG
- 	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_SCHEDUTILS # runtime (taskset)
+ 	help
+ 	  Build and install (to /usr/lib/kselftests) kernel selftests.
+ 
