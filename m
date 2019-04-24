@@ -1,45 +1,26 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Wed, 24 Apr 2019 22:17:02 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/warp7: bump to Linux 5.0 and
- U-Boot 2019.01
-In-Reply-To: <CAOMZO5B7fCZ9CHQ-3A77f6kO3WDYCzxYE_Wpyd3ZHJzgBnLEPA@mail.gmail.com>
-References: <1556135702-9627-1-git-send-email-pjtexier@koncepto.io>
- <CAOMZO5B7fCZ9CHQ-3A77f6kO3WDYCzxYE_Wpyd3ZHJzgBnLEPA@mail.gmail.com>
-Message-ID: <b96b45b9-ec28-6c34-f63d-825972284439@koncepto.io>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Apr 2019 22:18:09 +0200
+Subject: [Buildroot] [PATCH 1/2] package/stunnel: fix static build with
+ openssl and atomic
+In-Reply-To: <20190411211250.9402-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 11 Apr 2019 23:12:49 +0200")
+References: <20190411211250.9402-1-fontaine.fabrice@gmail.com>
+Message-ID: <87lfzz88e6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabio,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Le 24/04/2019 ? 22:01, Fabio Estevam a ?crit?:
-> We are at 5.0.9 and 2019.04 now.
->
-> Could you please try these versions?
->
-> Thanks
+ > Use pkg-config to find openssl dependencies such as lz or latomic
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/28a466b98f813edb6402686cc4706766e73e1ff3
 
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Sure, I will do.
-
-
-Thanks
+Committed to 2019.02.x, thanks.
 
 -- 
-Signature
-<https://koncepto.io> 	
-
-*Pierre-Jean Texier*
-Co-founder and Embedded Linux engineer 
-<https://www.linkedin.com/in/pjtexier-embeedlinux/>
-
-pjtexier at koncepto.io <mailto:pjtexier@koncepto.io>
-+33 6 27 47 58 58
-
-*Koncepto* <https://koncepto.io> *- We develop your embedded ideas*
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190424/bdebb7d7/attachment.html>
+Bye, Peter Korsgaard
