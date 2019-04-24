@@ -1,157 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 15:37:18 +0200
-Subject: [Buildroot] [PATCH] package/libxslt: add upstream security fix for
- CVE-2019-11068
-Message-ID: <20190424133718.19751-1-peter@korsgaard.com>
+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Date: Wed, 24 Apr 2019 15:37:59 +0200
+Subject: [Buildroot] [PATCH] package/python-setuptools-scm: bump to version
+ 3.2.0
+Message-ID: <1556113079-20541-1-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
-
-- CVE-2019-11068: libxslt through 1.1.33 allows bypass of a protection
-  mechanism because callers of xsltCheckRead and xsltCheckWrite permit
-  access even upon receiving a -1 error code.  xsltCheckRead can return -1
-  for a crafted URL that is not actually invalid and is subsequently loaded.
-
-Upstream bugtracker issue not yet public:
-https://gitlab.gnome.org/GNOME/libxslt/issues/12
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 ---
- .../0001-Fix-security-framework-bypass.patch       | 122 +++++++++++++++++++++
- 1 file changed, 122 insertions(+)
- create mode 100644 package/libxslt/0001-Fix-security-framework-bypass.patch
+ package/python-setuptools-scm/python-setuptools-scm.hash | 8 +++++---
+ package/python-setuptools-scm/python-setuptools-scm.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/libxslt/0001-Fix-security-framework-bypass.patch b/package/libxslt/0001-Fix-security-framework-bypass.patch
-new file mode 100644
-index 0000000000..16700362b3
---- /dev/null
-+++ b/package/libxslt/0001-Fix-security-framework-bypass.patch
-@@ -0,0 +1,122 @@
-+From e03553605b45c88f0b4b2980adfbbb8f6fca2fd6 Mon Sep 17 00:00:00 2001
-+From: Nick Wellnhofer <wellnhofer@aevum.de>
-+Date: Sun, 24 Mar 2019 09:51:39 +0100
-+Subject: [PATCH] Fix security framework bypass
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
+index e34e8e2..774874b 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.hash
++++ b/package/python-setuptools-scm/python-setuptools-scm.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/setuptools_scm/json, sha256 locally computed
+-md5 f17493d53f0d842bb0152f214775640b setuptools_scm-1.15.6.tar.gz
+-sha256 49ab4685589986a42da85706b3311a2f74f1af567d39fee6cb1e088d7a75fb5f setuptools_scm-1.15.6.tar.gz
++# sha256 from https://pypi.python.org/pypi/setuptools_scm/json
++sha256 52ab47715fa0fc7d8e6cd15168d1a69ba995feb1505131c3e814eb7087b57358 setuptools_scm-3.2.0.tar.gz
 +
-+xsltCheckRead and xsltCheckWrite return -1 in case of error but callers
-+don't check for this condition and allow access. With a specially
-+crafted URL, xsltCheckRead could be tricked into returning an error
-+because of a supposedly invalid URL that would still be loaded
-+succesfully later on.
-+
-+Fixes #12.
-+
-+Thanks to Felix Wilhelm for the report.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ libxslt/documents.c | 18 ++++++++++--------
-+ libxslt/imports.c   |  9 +++++----
-+ libxslt/transform.c |  9 +++++----
-+ libxslt/xslt.c      |  9 +++++----
-+ 4 files changed, 25 insertions(+), 20 deletions(-)
-+
-+diff --git a/libxslt/documents.c b/libxslt/documents.c
-+index 3f3a7312..4aad11bb 100644
-+--- a/libxslt/documents.c
-++++ b/libxslt/documents.c
-+@@ -296,10 +296,11 @@ xsltLoadDocument(xsltTransformContextPtr ctxt, const xmlChar *URI) {
-+ 	int res;
-+ 
-+ 	res = xsltCheckRead(ctxt->sec, ctxt, URI);
-+-	if (res == 0) {
-+-	    xsltTransformError(ctxt, NULL, NULL,
-+-		 "xsltLoadDocument: read rights for %s denied\n",
-+-			     URI);
-++	if (res <= 0) {
-++            if (res == 0)
-++                xsltTransformError(ctxt, NULL, NULL,
-++                     "xsltLoadDocument: read rights for %s denied\n",
-++                                 URI);
-+ 	    return(NULL);
-+ 	}
-+     }
-+@@ -372,10 +373,11 @@ xsltLoadStyleDocument(xsltStylesheetPtr style, const xmlChar *URI) {
-+ 	int res;
-+ 
-+ 	res = xsltCheckRead(sec, NULL, URI);
-+-	if (res == 0) {
-+-	    xsltTransformError(NULL, NULL, NULL,
-+-		 "xsltLoadStyleDocument: read rights for %s denied\n",
-+-			     URI);
-++	if (res <= 0) {
-++            if (res == 0)
-++                xsltTransformError(NULL, NULL, NULL,
-++                     "xsltLoadStyleDocument: read rights for %s denied\n",
-++                                 URI);
-+ 	    return(NULL);
-+ 	}
-+     }
-+diff --git a/libxslt/imports.c b/libxslt/imports.c
-+index 874870cc..3783b247 100644
-+--- a/libxslt/imports.c
-++++ b/libxslt/imports.c
-+@@ -130,10 +130,11 @@ xsltParseStylesheetImport(xsltStylesheetPtr style, xmlNodePtr cur) {
-+ 	int secres;
-+ 
-+ 	secres = xsltCheckRead(sec, NULL, URI);
-+-	if (secres == 0) {
-+-	    xsltTransformError(NULL, NULL, NULL,
-+-		 "xsl:import: read rights for %s denied\n",
-+-			     URI);
-++	if (secres <= 0) {
-++            if (secres == 0)
-++                xsltTransformError(NULL, NULL, NULL,
-++                     "xsl:import: read rights for %s denied\n",
-++                                 URI);
-+ 	    goto error;
-+ 	}
-+     }
-+diff --git a/libxslt/transform.c b/libxslt/transform.c
-+index 13793914..0636dbd0 100644
-+--- a/libxslt/transform.c
-++++ b/libxslt/transform.c
-+@@ -3493,10 +3493,11 @@ xsltDocumentElem(xsltTransformContextPtr ctxt, xmlNodePtr node,
-+      */
-+     if (ctxt->sec != NULL) {
-+ 	ret = xsltCheckWrite(ctxt->sec, ctxt, filename);
-+-	if (ret == 0) {
-+-	    xsltTransformError(ctxt, NULL, inst,
-+-		 "xsltDocumentElem: write rights for %s denied\n",
-+-			     filename);
-++	if (ret <= 0) {
-++            if (ret == 0)
-++                xsltTransformError(ctxt, NULL, inst,
-++                     "xsltDocumentElem: write rights for %s denied\n",
-++                                 filename);
-+ 	    xmlFree(URL);
-+ 	    xmlFree(filename);
-+ 	    return;
-+diff --git a/libxslt/xslt.c b/libxslt/xslt.c
-+index 780a5ad7..a234eb79 100644
-+--- a/libxslt/xslt.c
-++++ b/libxslt/xslt.c
-+@@ -6763,10 +6763,11 @@ xsltParseStylesheetFile(const xmlChar* filename) {
-+ 	int res;
-+ 
-+ 	res = xsltCheckRead(sec, NULL, filename);
-+-	if (res == 0) {
-+-	    xsltTransformError(NULL, NULL, NULL,
-+-		 "xsltParseStylesheetFile: read rights for %s denied\n",
-+-			     filename);
-++	if (res <= 0) {
-++            if (res == 0)
-++                xsltTransformError(NULL, NULL, NULL,
-++                     "xsltParseStylesheetFile: read rights for %s denied\n",
-++                                 filename);
-+ 	    return(NULL);
-+ 	}
-+     }
-+-- 
-+2.11.0
-+
++# sha256 locally computed
++sha256 89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e LICENSE
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
+index acde261..e296dc6 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.mk
++++ b/package/python-setuptools-scm/python-setuptools-scm.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SETUPTOOLS_SCM_VERSION = 1.15.6
++PYTHON_SETUPTOOLS_SCM_VERSION = 3.2.0
+ PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SCM_SITE = https://pypi.python.org/packages/03/6d/aafdd01edd227ee879b691455bf19895091872af7e48192bea1758c82032
++PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/54/85/514ba3ca2a022bddd68819f187ae826986051d130ec5b972076e4f58a9f3
+ PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
+ PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
 -- 
-2.11.0
+2.7.4
