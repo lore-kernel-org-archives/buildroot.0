@@ -1,45 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 17:23:38 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/linux-tools/perf:
- add dependency on 32-bit sync builtins
-Message-ID: <20190424152605.65AA782879@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 24 Apr 2019 12:38:19 -0500
+Subject: [Buildroot] Linux arch default cfgs and fragments
+Message-ID: <CANQCQpZ3fyxSBbvkPURYj9LSYUKe7H9av+qvEwA3jvRFRrphaQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9e934bfbf168aa26c68172bd3e2446feae937bb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+Wanted to open the debate on the topic of using arch defconfigs and
+the negatives of where fragments may over time or between target
+kernel minor revisions have different end results because of the arch
+defconfig default state.
 
-Sync builtins ops are strictly required by perf utility as it uses
-atomic_xxx() functions.
+I'm wondering if when a arch defconfig is used the fragments against
+it should be validated as actually being in the final expanded
+config....  I see the merge config script has support to validate this
+but by default it isn't part of the process.
 
-Otherwise building fails like that:
-|.../output/host/opt/ext-toolchain/bin/../lib/gcc/arc-snps-linux-uclibc/8.2.1/../../../../arc-snps-linux-uclibc/bin/ld:
-|.../output/build/linux-5.0.7/tools/perf/libperf.a(libperf-in.o): in function `atomic_cmpxchg':
-|.../output/build/linux-5.0.7/tools/include/asm-generic/atomic-gcc.h:69: undefined reference to `__sync_val_compare_and_swap_4'
+Thoughts?
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Thomas: drop Config.in comment]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-(cherry picked from commit d5edfa6eef6a0e0b124b894be4ce5da4f14c4af7)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/linux-tools/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
-index 4916faa349..90b4825fee 100644
---- a/package/linux-tools/Config.in
-+++ b/package/linux-tools/Config.in
-@@ -46,6 +46,7 @@ config BR2_PACKAGE_LINUX_TOOLS_PCI
- config BR2_PACKAGE_LINUX_TOOLS_PERF
- 	bool "perf"
- 	select BR2_PACKAGE_LINUX_TOOLS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	help
- 	  perf (sometimes "Perf Events" or perf tools, originally
- 	  "Performance Counters for Linux") - is a performance
+-- 
+Matthew Weber | Pr. Software Engineer | Commercial Avionics
+COLLINS AEROSPACE
+400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
+Tel: +1 319 295 7349 | FAX: +1 319 263 6099
+matthew.weber at collins.com | collinsaerospace.com
