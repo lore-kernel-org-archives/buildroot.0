@@ -1,29 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 17:30:06 +0200
-Subject: [Buildroot] [PATCH 2/3] package/linux-tools: some selftests
- needs tput
-In-Reply-To: <20190408164333.26942-3-romain.naour@smile.fr> (Romain Naour's
- message of "Mon, 8 Apr 2019 18:43:32 +0200")
-References: <20190408164333.26942-1-romain.naour@smile.fr>
- <20190408164333.26942-3-romain.naour@smile.fr>
-Message-ID: <87h8anctfl.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Apr 2019 17:30:34 +0200
+Subject: [Buildroot] [PATCH v2] linux-tools/perf: Add dependency on
+ 32-bit atomics
+In-Reply-To: <20190418173845.14495-1-abrodkin@synopsys.com> (Alexey Brodkin's
+ message of "Thu, 18 Apr 2019 20:38:45 +0300")
+References: <20190418173845.14495-1-abrodkin@synopsys.com>
+Message-ID: <87d0lbctet.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+>>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
 
- > Some kernel-selftests are using tput program, so make sure that
- > BR2_PACKAGE_NCURSES_TARGET_PROGS is selected.
+ > Atomic ops are strictly required by perf utility as it uses
+ > atomic_xxx() functions.
 
- > [linux-4.19 selftests]$ git grep tput
- > [...]
- > futex/run.sh:tput setf 7 || tput setaf 7
- > futex/run.sh:    tput sgr0
+ > Otherwise building fails like that:
+ > |.../output/host/opt/ext-toolchain/bin/../lib/gcc/arc-snps-linux-uclibc/8.2.1/../../../../arc-snps-linux-uclibc/bin/ld:
+ > |.../output/build/linux-5.0.7/tools/perf/libperf.a(libperf-in.o): in function `atomic_cmpxchg':
+ > |.../output/build/linux-5.0.7/tools/include/asm-generic/atomic-gcc.h:69: undefined reference to `__sync_val_compare_and_swap_4'
 
- > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ > Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > ---
+
+ > Changes v1 -> v2:
+ >  * Depend on generic BR2_TOOLCHAIN_HAS_SYNC_4
 
 Committed to 2019.02.x, thanks.
 
