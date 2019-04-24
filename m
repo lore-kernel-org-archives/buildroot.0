@@ -1,56 +1,85 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Wed, 24 Apr 2019 22:32:07 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/warp7: bump to Linux 5.0 and
- U-Boot 2019.01
-In-Reply-To: <CAOMZO5B7fCZ9CHQ-3A77f6kO3WDYCzxYE_Wpyd3ZHJzgBnLEPA@mail.gmail.com>
-References: <1556135702-9627-1-git-send-email-pjtexier@koncepto.io>
- <CAOMZO5B7fCZ9CHQ-3A77f6kO3WDYCzxYE_Wpyd3ZHJzgBnLEPA@mail.gmail.com>
-Message-ID: <91fb88e9-0961-1f73-908d-3b18ed36103b@koncepto.io>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 24 Apr 2019 22:34:53 +0200
+Subject: [Buildroot] [PATCH 1/4] package/bind: enable static build
+In-Reply-To: <20190423212406.13909-1-fontaine.fabrice@gmail.com>
+References: <20190423212406.13909-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190424223453.0819e407@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabio,
+Hello Fabrice,
 
-Le 24/04/2019 ? 22:01, Fabio Estevam a ?crit?:
-> We are at 5.0.9 and 2019.04 now.
->
-> Could you please try these versions?
->
-> Thanks
+On Tue, 23 Apr 2019 23:24:03 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
+> Static build has been disabled in 2014 with commit
+> 6045904752b06a8b8e52ba8fc2e49a8548964e8d however bind can be built
+> statically thanks to --without-dlopen so enable it back
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...n_driver.c-fix-build-without-dlfcn.h.patch | 28 +++++++++++++++++++
+>  package/bind/Config.in                        |  5 ++--
+>  package/bind/bind.mk                          |  4 ++-
+>  3 files changed, 33 insertions(+), 4 deletions(-)
+>  create mode 100644 package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch
 
-I think we can not bump to 2019.04 due to [1], maybe we can prefer the 
-2019.01 for now ?
+The series looks good in principle, but sadly the following defconfig:
 
-Otherwise, the WaRP7 boot nicely with 5.0.9 :
+BR2_arm=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2019.02-rc1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+BR2_PACKAGE_DHCP=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-Starting kernel ...
+fails to build with:
 
-[??? 0.000000] Booting Linux on physical CPU 0x0
-[??? 0.000000] Linux version 5.0.9
+configure: error: Cannot find static libraries at /home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib
+make[1]: *** [package/pkg-generic.mk:231: /home/thomas/projets/buildroot/output/build/dhcp-4.4.1/.stamp_configured] Error 1
 
-...
+Looking at configure.ac sheds some light:
 
+AC_ARG_ENABLE(libtool,
+        AS_HELP_STRING([--enable-libtool],
+[use GNU libtool for dynamic shared libraries (default is no).]),
+        want_libtool="$enableval")
 
-[1] http://patchwork.ozlabs.org/patch/1084912/
+if test "$use_libbind" != "no"; then
+        if test "$want_libtool" = "yes" -a \
+                ! -f "$use_libbind/lib/libisc.la"
+        then
+                AC_MSG_ERROR([Cannot find dynamic libraries at $use_libbind/lib])
+        fi
+        if test "$want_libtool" = "no" -a \
+                ! -f "$use_libbind/lib/libisc.a"
+        then
+                AC_MSG_ERROR([Cannot find static libraries at $use_libbind/lib])
+        fi
+fi
 
+We are not passing --enable-libtool, so the code checks is libisc.a
+exists, and it doesn't because a default build is BR2_SHARED_LIBS=y,
+and therefore bind doesn't build/install any static library.
+
+I suppose passing --enable-libtool would work, but I haven't tested.
+
+Best regards,
+
+Thomas
 -- 
-
-Signature
-<https://koncepto.io> 	
-
-*Pierre-Jean Texier*
-Co-founder and Embedded Linux expert 
-<https://www.linkedin.com/in/pjtexier-embeedlinux/>
-
-pjtexier at koncepto.io <mailto:pjtexier@koncepto.io>
-+33 6 27 47 58 58
-
-*Koncepto* <https://koncepto.io> *- We develop your embedded ideas*
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190424/7869179b/attachment.html>
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
