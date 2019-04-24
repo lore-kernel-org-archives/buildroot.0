@@ -1,28 +1,32 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 24 Apr 2019 12:38:19 -0500
-Subject: [Buildroot] Linux arch default cfgs and fragments
-Message-ID: <CANQCQpZ3fyxSBbvkPURYj9LSYUKe7H9av+qvEwA3jvRFRrphaQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 24 Apr 2019 19:38:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/binutils: fix build error due
+ to architecture name is incomplete
+In-Reply-To: <20190424104402.15468-1-nylon7@andestech.com>
+References: <20190424104402.15468-1-nylon7@andestech.com>
+Message-ID: <20190424193839.11e7320b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Wanted to open the debate on the topic of using arch defconfigs and
-the negatives of where fragments may over time or between target
-kernel minor revisions have different end results because of the arch
-defconfig default state.
+On Wed, 24 Apr 2019 18:44:01 +0800
+Nylon Chen <nylon7@andestech.com> wrote:
 
-I'm wondering if when a arch defconfig is used the fragments against
-it should be validated as actually being in the final expanded
-config....  I see the merge config script has support to validate this
-but by default it isn't part of the process.
+> Fixes
+>   http://autobuild.buildroot.net/results/128/12803a705586e82fdfb49013da2eb3b9879ccd45/
+> 
+> Signed-off-by: Che-Wei Chuang <cnoize@andestech.com>
+> Signed-off-by: Greentime Hu <greentime@andestech.com>
+> Signed-off-by: Nylon Chen <nylon7@andestech.com>
 
-Thoughts?
+Thanks, but the exact same patch was already merged:
 
+  https://git.buildroot.org/buildroot/commit/arch?id=b58a6bf774baf56c3a73a838acb8a5472594ce82
+
+Thomas
 -- 
-Matthew Weber | Pr. Software Engineer | Commercial Avionics
-COLLINS AEROSPACE
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-matthew.weber at collins.com | collinsaerospace.com
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
