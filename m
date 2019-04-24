@@ -1,57 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 22:30:18 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/ruby: security
- bump to version 2.4.6
-Message-ID: <20190424202619.BF447807D7@busybox.osuosl.org>
+Date: Wed, 24 Apr 2019 22:30:07 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/tpm2-tss: bump
+ version to 2.1.3
+Message-ID: <20190424202619.B4970812F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0ce796f576bf824f34c2d39da8fed949c75f5e6
+commit: https://git.buildroot.net/buildroot/commit/?id=dc036559ac40fff817feb4b1166c3780a7e9eedf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security issues:
+Fixes a number of issues discovered post-2.1.2. For details, see:
+https://github.com/tpm2-software/tpm2-tss/releases/tag/2.1.3
 
-- CVE-2019-8320: Delete directory using symlink when decompressing tar
-- CVE-2019-8321: Escape sequence injection vulnerability in verbose
-- CVE-2019-8322: Escape sequence injection vulnerability in gem owner
-- CVE-2019-8323: Escape sequence injection vulnerability in API response handling
-- CVE-2019-8324: Installing a malicious gem may lead to arbitrary code execution
-- CVE-2019-8325: Escape sequence injection vulnerability in errors
+Drop 002-configure.ac-switch-default-ESAPI-crypto-backend-to-.patch as this
+issue is now fixed upstream.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 900982313786d3537417f18251732ab7dca95553)
+(cherry picked from commit 097ce6b3a83ac4c4e89d61ef439caee1a1368f32)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ruby/ruby.hash | 4 ++--
- package/ruby/ruby.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...c-switch-default-ESAPI-crypto-backend-to-.patch | 32 ----------------------
+ package/tpm2-tss/tpm2-tss.hash                     |  2 +-
+ package/tpm2-tss/tpm2-tss.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 34 deletions(-)
 
-diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
-index b36d49461c..fa9eddc279 100644
---- a/package/ruby/ruby.hash
-+++ b/package/ruby/ruby.hash
-@@ -1,5 +1,5 @@
--# https://www.ruby-lang.org/en/news/2018/10/17/ruby-2-4-5-released/
--sha256 2f0cdcce9989f63ef7c2939bdb17b1ef244c4f384d85b8531d60e73d8cc31eeb  ruby-2.4.5.tar.xz
-+# https://www.ruby-lang.org/en/news/2019/04/01/ruby-2-4-6-released/
-+sha256 25da31b9815bfa9bba9f9b793c055a40a35c43c6adfb1fdbd81a09099f9b529c  ruby-2.4.6.tar.xz
- # License files, Locally calculated
- sha256 609292a6d848ab223073944fc2d844449391a5ba2055a8b5baf1726bc13b39cb  LEGAL
- sha256 f5eb1b2956d5f7a67b2e5722a3749bc2fe86f9c580f2e3f5a08519cf073b5864  COPYING
-diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
-index 3e71596bb4..10424020a9 100644
---- a/package/ruby/ruby.mk
-+++ b/package/ruby/ruby.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/tpm2-tss/0002-configure.ac-switch-default-ESAPI-crypto-backend-to-.patch b/package/tpm2-tss/0002-configure.ac-switch-default-ESAPI-crypto-backend-to-.patch
+deleted file mode 100644
+index a864293d58..0000000000
+--- a/package/tpm2-tss/0002-configure.ac-switch-default-ESAPI-crypto-backend-to-.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From aa8d9b2bb2faeb0c6cc03548cc363d90d3414f15 Mon Sep 17 00:00:00 2001
+-From: Tadeusz Struk <tadeusz.struk@intel.com>
+-Date: Tue, 23 Oct 2018 16:04:25 -0700
+-Subject: [PATCH] configure.ac: switch default ESAPI crypto backend to openSSL
+-
+-Switch the default ESAPI crypto backend to openSSL.
+-This should also fix the problem with forcing applications to
+-link against libgcrypt.
+-
+-Fixes: #1169
+-
+-Signed-off-by: Tadeusz Struk <tadeusz.struk@intel.com>
+-[Peter: drop configure.ac hunk, only drop hard coded -lcrypt from .pc]
+-(cherry picked from commit a5ff71abeda9a5aea269812de32afb79ef3fcb4d)
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+----
+- lib/tss2-esys.pc.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/lib/tss2-esys.pc.in b/lib/tss2-esys.pc.in
+-index 792f0191..ecb01bc1 100644
+---- a/lib/tss2-esys.pc.in
+-+++ b/lib/tss2-esys.pc.in
+-@@ -4,4 +4,4 @@ URL: https://github.com/tpm2-software/tpm2-tss
+- Version: @VERSION@
+- Requires: tss2-mu tss2-sys
+- Cflags: -I at includedir@
+--Libs: -ltss2-esys -lgcrypt -L at libdir@
+-+Libs: -ltss2-esys -L at libdir@
+--- 
+-2.11.0
+-
+diff --git a/package/tpm2-tss/tpm2-tss.hash b/package/tpm2-tss/tpm2-tss.hash
+index a9a9f3c963..9368357c77 100644
+--- a/package/tpm2-tss/tpm2-tss.hash
++++ b/package/tpm2-tss/tpm2-tss.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 aba502ba70c7697a4ef1ff01a81802d4c6570509dd94acee74bb06d6d1e9f68c  tpm2-tss-2.1.2.tar.gz
++sha256 bddfa4ab2ceb6394bcacf7db5d6419cbfabdb22702b6df75c59e60dd5f3fafb5  tpm2-tss-2.1.3.tar.gz
+ sha256 f7da3c2da12cec3348bb7ee9e2a9e651a241450b2efb67da29d5a75ef2da058a  LICENSE
+diff --git a/package/tpm2-tss/tpm2-tss.mk b/package/tpm2-tss/tpm2-tss.mk
+index 3b730acdeb..e02abb446c 100644
+--- a/package/tpm2-tss/tpm2-tss.mk
++++ b/package/tpm2-tss/tpm2-tss.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- RUBY_VERSION_MAJOR = 2.4
--RUBY_VERSION = $(RUBY_VERSION_MAJOR).5
-+RUBY_VERSION = $(RUBY_VERSION_MAJOR).6
- RUBY_VERSION_EXT = 2.4.0
- RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
- RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
+-TPM2_TSS_VERSION = 2.1.2
++TPM2_TSS_VERSION = 2.1.3
+ TPM2_TSS_SITE = https://github.com/tpm2-software/tpm2-tss/releases/download/$(TPM2_TSS_VERSION)
+ TPM2_TSS_LICENSE = BSD-2-Clause
+ TPM2_TSS_LICENSE_FILES = LICENSE
