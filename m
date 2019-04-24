@@ -1,99 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 21:49:55 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/hostapd: add
- upstream 2019-1, 2, 3, 4 security patches
-Message-ID: <20190424194900.E56128107C@busybox.osuosl.org>
+Date: Wed, 24 Apr 2019 21:44:09 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/lldpd: remove
+ --without-json
+Message-ID: <20190424194900.D9A598133E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=084f230842dad92f085fe3ef655b75841c173936
+commit: https://git.buildroot.net/buildroot/commit/?id=3f62d96cd65df1d429a03f6af9dc32e365ebd79b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security vulnerabilities:
+json option has been removed in version 0.9.7 with
+https://github.com/vincentbernat/lldpd/commit/06987a24ce053cbb57f8853bbf544bc7c067c8aa
 
-- CVE-2019-9494 (cache attack against SAE)
-
-For details, see the advisory:
-https://w1.fi/security/2019-1/sae-side-channel-attacks.txt
-
-- CVE-2019-9495 (cache attack against EAP-pwd)
-
-For details, see the advisory:
-https://w1.fi/security/2019-2/eap-pwd-side-channel-attack.txt
-
-- CVE-2019-9496 (SAE confirm missing state validation in hostapd/AP)
-
-For details, see the advisory:
-https://w1.fi/security/2019-3/sae-confirm-missing-state-validation.txt
-
-- CVE-2019-9497 (EAP-pwd server not checking for reflection attack)
-- CVE-2019-9498 (EAP-pwd server missing commit validation for scalar/element)
-- CVE-2019-9499 (EAP-pwd peer missing commit validation for scalar/element)
-
-For details, see the advisory:
-https://w1.fi/security/2019-4/eap-pwd-missing-commit-validation.txt
-
-Notice that SAE is not currently enabled in Buildroot, but the patches are
-included here anyway for completeness.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 736f344755b67cf2a116cfda3abd0b04e1a9b7f9)
+(cherry picked from commit 2bbe9c41c69176d09863c356e307de2d9ed5cb94)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/hostapd/hostapd.hash | 14 ++++++++++++++
- package/hostapd/hostapd.mk   | 15 +++++++++++++++
- 2 files changed, 29 insertions(+)
+ package/lldpd/lldpd.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
-index 833c7aca02..3e6b086b00 100644
---- a/package/hostapd/hostapd.hash
-+++ b/package/hostapd/hostapd.hash
-@@ -1,4 +1,18 @@
- # Locally calculated
- sha256  21b0dda3cc3abe75849437f6b9746da461f88f0ea49dd621216936f87440a141  hostapd-2.7.tar.gz
-+sha256  86979655f1c5a9578acbf83e8acdf69a36dcc0966a8819f3b6918530ad3e0c67  0001-OpenSSL-Use-constant-time-operations-for-private-big.patch
-+sha256  5663da175ecc344c90bea8c95ab831ad47a8002ccbb834f6c091705b92e90e71  0002-Add-helper-functions-for-constant-time-operations.patch
-+sha256  e5a6bc9f587351d4495740239ceb0a64958a59b3e875722dcaeb4c93fa517f64  0003-OpenSSL-Use-constant-time-selection-for-crypto_bignu.patch
-+sha256  aa5b722bebbaf175ff89a3653c3d048afe0d0f866989fca6b4c8e882a864392a  0004-EAP-pwd-Use-constant-time-and-memory-access-for-find.patch
-+sha256  bad9eeaeb118f88303a7a718820b3ba03d705e99b6183b3c44556bedf99db423  0005-SAE-Minimize-timing-differences-in-PWE-derivation.patch
-+sha256  ae7be450f652f6f77ad868856ab61ba6cb6d7e768585cf5f9f9f674a66e05b40  0006-SAE-Avoid-branches-in-is_quadratic_residue_blind.patch
-+sha256  86b731c787ca58ac001d20fb769b136e2ca76bf81a8465a8e72c50573cfc4b09  0007-SAE-Mask-timing-of-MODP-groups-22-23-24.patch
-+sha256  ff7305005217a34818dae247886b9fb1b1db781ab31fb5eac9ebdd9cb0d1edfe  0008-SAE-Use-const_time-selection-for-PWE-in-FFC.patch
-+sha256  707057cc0e60fe763350f82135dbe407bc289a4958879c8ff1e9413243a1caa4  0009-SAE-Use-constant-time-operations-in-sae_test_pwd_see.patch
-+sha256  82d8ae4fabfe3674bcb5412befe3a74e40d6485906589c219be72e4fd1e70baa  0010-SAE-Fix-confirm-message-validation-in-error-cases.patch
-+sha256  ff8d6d92ad4b01987be63cdaf67a24d2eba5b3cd654f37664a8a198e501c0e3b  0011-EAP-pwd-server-Verify-received-scalar-and-element.patch
-+sha256  d5ebf4e5a810e9a0c035f9268195c542273998ea70fd58697ee25965094062cc  0012-EAP-pwd-server-Detect-reflection-attacks.patch
-+sha256  7156656498f03b24a0b69a26a59d17a9fcc8e76761f1dabe6d13b4176ffd2ef8  0013-EAP-pwd-client-Verify-received-scalar-and-element.patch
-+sha256  69926854ec2a79dada290f79f04202764c5d6400d232e3a567ebe633a02c1c66  0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
- sha256  e204da659d0583c71af23cb9b55536fe99598ee26a44104344f456e4d17350c6  rtlxdrv.patch
- sha256  76eeecd8fc291a71f29189ea20e6a34387b8048a959cbc6a65c41b98194643a2  README
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 0b3fa0646f..b7ebe26a28 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -6,6 +6,21 @@
- 
- HOSTAPD_VERSION = 2.7
- HOSTAPD_SITE = http://w1.fi/releases
-+HOSTAPD_PATCH = \
-+	https://w1.fi/security/2019-1/0001-OpenSSL-Use-constant-time-operations-for-private-big.patch \
-+	https://w1.fi/security/2019-1/0002-Add-helper-functions-for-constant-time-operations.patch \
-+	https://w1.fi/security/2019-1/0003-OpenSSL-Use-constant-time-selection-for-crypto_bignu.patch \
-+	https://w1.fi/security/2019-2/0004-EAP-pwd-Use-constant-time-and-memory-access-for-find.patch \
-+	https://w1.fi/security/2019-1/0005-SAE-Minimize-timing-differences-in-PWE-derivation.patch \
-+	https://w1.fi/security/2019-1/0006-SAE-Avoid-branches-in-is_quadratic_residue_blind.patch \
-+	https://w1.fi/security/2019-1/0007-SAE-Mask-timing-of-MODP-groups-22-23-24.patch \
-+	https://w1.fi/security/2019-1/0008-SAE-Use-const_time-selection-for-PWE-in-FFC.patch \
-+	https://w1.fi/security/2019-1/0009-SAE-Use-constant-time-operations-in-sae_test_pwd_see.patch \
-+	https://w1.fi/security/2019-3/0010-SAE-Fix-confirm-message-validation-in-error-cases.patch \
-+	https://w1.fi/security/2019-4/0011-EAP-pwd-server-Verify-received-scalar-and-element.patch \
-+	https://w1.fi/security/2019-4/0012-EAP-pwd-server-Detect-reflection-attacks.patch \
-+	https://w1.fi/security/2019-4/0013-EAP-pwd-client-Verify-received-scalar-and-element.patch \
-+	https://w1.fi/security/2019-4/0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
- HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
- HOSTAPD_DEPENDENCIES = host-pkgconf
+diff --git a/package/lldpd/lldpd.mk b/package/lldpd/lldpd.mk
+index 8d554ae5e2..506b6f136d 100644
+--- a/package/lldpd/lldpd.mk
++++ b/package/lldpd/lldpd.mk
+@@ -31,7 +31,6 @@ LLDPD_CONF_OPTS = \
+ 	--without-embedded-libevent \
+ 	--without-snmp \
+ 	--without-xml \
+-	--without-json \
+ 	--without-seccomp \
+ 	--without-libbsd \
+ 	--disable-hardening \
