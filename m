@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 21:56:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: fix static
- build with openssl and atomic
-In-Reply-To: <20190413083452.6694-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 13 Apr 2019 10:34:52 +0200")
-References: <20190413083452.6694-1-fontaine.fabrice@gmail.com>
-Message-ID: <87sgu79ny2.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Apr 2019 21:56:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/hostapd: fix static build with
+ openssl and atomic
+In-Reply-To: <20190413083724.10701-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 13 Apr 2019 10:37:24 +0200")
+References: <20190413083724.10701-1-fontaine.fabrice@gmail.com>
+Message-ID: <87o94v9nxw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
