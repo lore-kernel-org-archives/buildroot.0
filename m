@@ -1,31 +1,25 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 25 Apr 2019 00:04:42 +0200
-Subject: [Buildroot] [PATCH v3 04/10]
- package/gstreamer1/gst1-plugins-{base, good, bad, ugly}: bump to 1.16.0
-In-Reply-To: <20190424210333.62571-4-aduskett@gmail.com>
-References: <20190424210333.62571-1-aduskett@gmail.com>
- <20190424210333.62571-4-aduskett@gmail.com>
-Message-ID: <20190425000442.09f6044e@gmx.net>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 24 Apr 2019 19:24:23 -0300
+Subject: [Buildroot] [PATCH v2] configs/warp7: bump to Linux 5.0.9 and
+ U-Boot 2019.01
+In-Reply-To: <1556138817-8402-1-git-send-email-pjtexier@koncepto.io>
+References: <1556138817-8402-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <CAOMZO5BFf5E9WRkAECDoMA1cjo1Rbd8TKLiWT8Kgu-ZJAbqtmw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
-
-On Wed, 24 Apr 2019 17:03:27 -0400, aduskett at gmail.com wrote:
-
-[...]
-
+On Wed, Apr 24, 2019 at 5:47 PM Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 >
->   - Add BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV to Config.in.legacy as the
->     plugin now requires opencv3 with the bgsegm opencv_contrib module, which is
->     not in Buildroot.
+> This commit bumps Linux & Linux-headers to 5.0 and U-Boot to version 2019.01
+>
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> ---
+> Changes v1 -> v2:
+>   - Bump Kernel from 5.0.0 to 5.0.9  (suggested by Fabio Estevam)
 
-Out of interest, whats is wrong/missing from package/opencv3 (providing
-opencv-3.4.3) or what is the error message if you try to compile with this
-package enabled?
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
 
-Regards,
-Peter
+Thanks
