@@ -1,30 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Apr 2019 21:19:59 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{9, 14,
- 19}.x / 5.0.x series
-In-Reply-To: <20190424125117.26697-1-peter@korsgaard.com>
-References: <20190424125117.26697-1-peter@korsgaard.com>
-Message-ID: <20190424211959.5d7870fb@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Apr 2019 21:20:24 +0200
+Subject: [Buildroot] [PATCH 1/1] [v2] package/freerdp: bump version to
+ 2.0.0-rc4
+In-Reply-To: <20190407190629.5380-1-skif@skif-web.ru> (Alexey Lukyanchuk's
+ message of "Sun, 7 Apr 2019 22:06:29 +0300")
+References: <20190407190629.5380-1-skif@skif-web.ru>
+Message-ID: <87r29rb47b.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 24 Apr 2019 14:51:17 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>> "Alexey" == Alexey Lukyanchuk <skif@skif-web.ru> writes:
 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  linux/Config.in                      | 2 +-
->  linux/linux.hash                     | 8 ++++----
->  package/linux-headers/Config.in.host | 8 ++++----
->  3 files changed, 9 insertions(+), 9 deletions(-)
+ > Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+ > Add support to set tls security level (for openssl >= 1.1.0), for RDP
+ > protocol version 10(needed for windows 10 and windows server 2016). Also have some fix and features, see
+ > https://github.com/FreeRDP/FreeRDP/commit/e21b72c95f857817b4b32b5ef5406355c005a9e8
 
-Applied to master, thanks.
+ > Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
 
-Thomas
+Committed to 2019.02.x after extending the commit message to mention the
+security fixes this includes, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
