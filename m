@@ -1,49 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 21:50:46 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/wpa_supplicant: add upstream
- 2019-1, 2, 3, 4 security patches
-In-Reply-To: <20190411111103.19705-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 11 Apr 2019 13:11:03 +0200")
-References: <20190411111103.19705-1-peter@korsgaard.com>
- <20190411111103.19705-2-peter@korsgaard.com>
-Message-ID: <87a7gfb2sp.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 24 Apr 2019 21:20:02 +0200
+Subject: [Buildroot] [PATCH] package/libxslt: add upstream security fix
+ for CVE-2019-11068
+In-Reply-To: <20190424133718.19751-1-peter@korsgaard.com>
+References: <20190424133718.19751-1-peter@korsgaard.com>
+Message-ID: <20190424212002.6affd5f3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+On Wed, 24 Apr 2019 15:37:18 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
- > Fixes the following security vulnerabilities:
- > - CVE-2019-9494 (cache attack against SAE)
+> Fixes the following security issue:
+> 
+> - CVE-2019-11068: libxslt through 1.1.33 allows bypass of a protection
+>   mechanism because callers of xsltCheckRead and xsltCheckWrite permit
+>   access even upon receiving a -1 error code.  xsltCheckRead can return -1
+>   for a crafted URL that is not actually invalid and is subsequently loaded.
+> 
+> Upstream bugtracker issue not yet public:
+> https://gitlab.gnome.org/GNOME/libxslt/issues/12
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  .../0001-Fix-security-framework-bypass.patch       | 122 +++++++++++++++++++++
+>  1 file changed, 122 insertions(+)
+>  create mode 100644 package/libxslt/0001-Fix-security-framework-bypass.patch
 
- > For details, see the advisory:
- > https://w1.fi/security/2019-1/sae-side-channel-attacks.txt
+Applied to master, thanks.
 
- > - CVE-2019-9495 (cache attack against EAP-pwd)
-
- > For details, see the advisory:
- > https://w1.fi/security/2019-2/eap-pwd-side-channel-attack.txt
-
- > - CVE-2019-9496 (SAE confirm missing state validation in hostapd/AP)
-
- > For details, see the advisory:
- > https://w1.fi/security/2019-3/sae-confirm-missing-state-validation.txt
-
- > - CVE-2019-9497 (EAP-pwd server not checking for reflection attack)
- > - CVE-2019-9498 (EAP-pwd server missing commit validation for scalar/element)
- > - CVE-2019-9499 (EAP-pwd peer missing commit validation for scalar/element)
-
- > For details, see the advisory:
- > https://w1.fi/security/2019-4/eap-pwd-missing-commit-validation.txt
-
- > Notice that SAE is not currently enabled in Buildroot, but the patches are
- > included here anyway for completeness.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2019.02.x, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
