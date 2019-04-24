@@ -1,24 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Apr 2019 22:57:42 +0200
-Subject: [Buildroot] [PATCH v2] configs/warp7: bump to Linux 5.0.9 and
- U-Boot 2019.01
-In-Reply-To: <1556138817-8402-1-git-send-email-pjtexier@koncepto.io>
-References: <1556138817-8402-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190424225742.599417f5@windsurf>
+Date: Wed, 24 Apr 2019 22:58:48 +0200
+Subject: [Buildroot] [PATCH 1/3] package/enet: new package
+In-Reply-To: <20190422171049.22034-1-romain.naour@gmail.com>
+References: <20190422171049.22034-1-romain.naour@gmail.com>
+Message-ID: <20190424225848.41540d2f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 24 Apr 2019 22:46:57 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+On Mon, 22 Apr 2019 19:10:47 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-> This commit bumps Linux & Linux-headers to 5.0 and U-Boot to version 2019.01
+> enet will be used by supertuxkart 1.0.
 > 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> Build tested with test-pkg -a
+> ---
+>  DEVELOPERS             |  1 +
+>  package/Config.in      |  1 +
+>  package/enet/Config.in | 16 ++++++++++++++++
+>  package/enet/enet.hash |  3 +++
+>  package/enet/enet.mk   | 14 ++++++++++++++
+>  5 files changed, 35 insertions(+)
+>  create mode 100644 package/enet/Config.in
+>  create mode 100644 package/enet/enet.hash
+>  create mode 100644 package/enet/enet.mk
 
-I think Fabio also suggested to use U-Boot 2019.04 ?
+Series applied. Thanks!
 
 Thomas
 -- 
