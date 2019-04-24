@@ -1,78 +1,59 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 24 Apr 2019 22:10:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: fix static build
- with libxml2 and lzma
-In-Reply-To: <20190424215313.2f234920@windsurf>
-References: <20190424194741.12464-1-fontaine.fabrice@gmail.com>
- <20190424215313.2f234920@windsurf>
-Message-ID: <CAPi7W80tQb_EqiAgiNzOxrMqLDtVdj3JvwQCsff2-pOX4XU_yQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Apr 2019 22:15:08 +0200
+Subject: [Buildroot] [PATCH 1/1] Fix rasberry Pi 64bit firmware overlay
+ inclusion
+In-Reply-To: <6de3ad34-84b1-842f-07e3-6c34734bd1b3@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 14 Apr 2019 00:13:12 +0200")
+References: <20190103110036.14604-1-flatmax@flatmax.org>
+ <20190413210620.GP2539@scaer>
+ <6de3ad34-84b1-842f-07e3-6c34734bd1b3@mind.be>
+Message-ID: <87pnpb88j7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Le mer. 24 avr. 2019 ? 21:53, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello Fabrice,
->
-> On Wed, 24 Apr 2019 21:47:41 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > diff --git a/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch b/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
-> > new file mode 100644
-> > index 0000000000..ab549021e4
-> > --- /dev/null
-> > +++ b/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
-> > @@ -0,0 +1,33 @@
-> > +From e6a2e71831f0699e9759e0579a00eea5fcb93696 Mon Sep 17 00:00:00 2001
-> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +Date: Wed, 24 Apr 2019 20:23:00 +0200
-> > +Subject: [PATCH] FindXml2: use pkg-config to find libxml2 dependencies
-> > +
-> > +On UNIX, when statically built, libxml2 can depends on other libraries such
-> > +as lzma. These dependencies are already retrieved through pkg-config so
-> > +append them to LIBXML2_LIBRARIES otherwise static build will fail
-> > +
-> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +[Upstream status: not sent yet]
-> > +---
-> > + cmake/modules/FindLibXml2.cmake | 4 ++++
-> > + 1 file changed, 4 insertions(+)
-> > +
-> > +diff --git a/cmake/modules/FindLibXml2.cmake b/cmake/modules/FindLibXml2.cmake
-> > +index 99d70af57d..2a4b1f470f 100644
-> > +--- a/cmake/modules/FindLibXml2.cmake
-> > ++++ b/cmake/modules/FindLibXml2.cmake
-> > +@@ -98,6 +98,10 @@ endif()
-> > +
-> > + set(LIBXML2_INCLUDE_DIRS ${LIBXML2_INCLUDE_DIR} ${PC_LIBXML_INCLUDE_DIRS})
-> > + set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY})
-> > ++# Include transitive dependencies for static linking.
-> > ++if(UNIX)
-> > ++    list(APPEND LIBXML2_LIBRARIES ${PC_LIBXML_LIBRARIES})
-> > ++endif()
->
-> Why does this needs to be conditional on "UNIX" ? Why isn't it possible
-> to always use PC_LIBXML_LIBRARIES ?
-Because, I'm currently in the very long process of pushing my three
-first patches to upstream and they asked me to put all pkg-config
-calls under UNIX and even under "CMAKE_FIND_LIBRARY_SUFFIXES STREQUAL
-".a"" condition:
-https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=15713. Their
-rational is that pkg-config is not available under windows.
+Hi,
 
-So for my fourth patch, I dropped the latest condition as USE_STATIC
-option is not yet available in buildroot but I decided to keep UNIX.
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Fabrice
+ > On 13/04/2019 23:06, Yann E. MORIN wrote:
+ >> Matt, All,
+ >> 
+ >> On 2019-01-03 22:00 +1100, Matt Flax spake thusly:
+ >>> This patch enables the inclusion of the Pi's overlays. Previously
+ >>> the overlays were not included in the genimage configuration.
+ >>> This patch ensures overlays are included in the sdcard (when
+ >>> enabled) by defaulting to the inclusion of an empty
+ >>> output/images/rpi-firmware/overlays directory in genimage cfg.
+ >>> 
+ >>> The Pi's overlays are built with the following config
+ >>> variables:
+ >>> BR2_PACKAGE_RPI_FIRMWARE=y
+ >>> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y
+ >>> BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTB_OVERLAYS=y
+ >>> BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+ >>> BR2_LINUX_KERNEL_IMAGE_NAME="Image"
+ >>> BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image modules dtbs"
+ >>> 
+ >>> After building, the dtbo files are present in the
+ >>> output/images/rpi-firmware/overlays directory but not added
+ >>> to the sdcard because they are missing from the genimage cfg
+ >>> file.
+ >>> 
+ >>> Signed-off-by: Matt Flax <flatmax@flatmax.org>
+ >> 
+
+ >  Also, I've added a brief comment explaining why we create this empty directory.
+
+ >  Peter, we discussed this on IRC and we feel that one empty directory doesn't
+ > violate the minimalistic principle too much, because it does make life a lot
+ > easier when you start from the existing defconfig.
+
+ >  So, I've applied to master with the changes mentioned above.
+
+Committed to 2019.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
