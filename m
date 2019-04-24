@@ -1,38 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Apr 2019 22:17:45 +0200
-Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 6.0.0
-In-Reply-To: <1556098636-18860-1-git-send-email-angelo@amarulasolutions.com>
-References: <1556098636-18860-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20190424221745.181ecbb0@windsurf>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Wed, 24 Apr 2019 22:17:02 +0200
+Subject: [Buildroot] [PATCH 1/1] configs/warp7: bump to Linux 5.0 and
+ U-Boot 2019.01
+In-Reply-To: <CAOMZO5B7fCZ9CHQ-3A77f6kO3WDYCzxYE_Wpyd3ZHJzgBnLEPA@mail.gmail.com>
+References: <1556135702-9627-1-git-send-email-pjtexier@koncepto.io>
+ <CAOMZO5B7fCZ9CHQ-3A77f6kO3WDYCzxYE_Wpyd3ZHJzgBnLEPA@mail.gmail.com>
+Message-ID: <b96b45b9-ec28-6c34-f63d-825972284439@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Angelo,
+Hi Fabio,
 
-On Wed, 24 Apr 2019 11:37:16 +0200
-Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+Le 24/04/2019 ? 22:01, Fabio Estevam a ?crit?:
+> We are at 5.0.9 and 2019.04 now.
+>
+> Could you please try these versions?
+>
+> Thanks
 
-> This patch bumps python-pillow to version 6.0.0.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  package/python-pillow/python-pillow.hash | 4 ++--
->  package/python-pillow/python-pillow.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
 
-This patch breaks legal-info for this package:
+Sure, I will do.
 
-ERROR: LICENSE has wrong sha256 hash:
-ERROR: expected: 4960fc18becc286be839c8ff17bd70cd5222533f761129142153443718a25199
-ERROR: got     : 64ea4328ed56392b423ef968519a9ad427e3de9b985862c95ed2ed4d793d22ee
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-make[1]: *** [package/python-pillow/python-pillow.mk:75: python-pillow-legal-info] Error 1
 
-Thomas
+Thanks
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signature
+<https://koncepto.io> 	
+
+*Pierre-Jean Texier*
+Co-founder and Embedded Linux engineer 
+<https://www.linkedin.com/in/pjtexier-embeedlinux/>
+
+pjtexier at koncepto.io <mailto:pjtexier@koncepto.io>
++33 6 27 47 58 58
+
+*Koncepto* <https://koncepto.io> *- We develop your embedded ideas*
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190424/bdebb7d7/attachment.html>
