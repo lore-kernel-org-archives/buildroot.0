@@ -1,38 +1,55 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Apr 2019 22:58:48 +0200
-Subject: [Buildroot] [PATCH 1/3] package/enet: new package
-In-Reply-To: <20190422171049.22034-1-romain.naour@gmail.com>
-References: <20190422171049.22034-1-romain.naour@gmail.com>
-Message-ID: <20190424225848.41540d2f@windsurf>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Wed, 24 Apr 2019 23:02:41 +0200
+Subject: [Buildroot] [PATCH v2] configs/warp7: bump to Linux 5.0.9 and
+ U-Boot 2019.01
+In-Reply-To: <20190424225742.599417f5@windsurf>
+References: <1556138817-8402-1-git-send-email-pjtexier@koncepto.io>
+ <20190424225742.599417f5@windsurf>
+Message-ID: <f3b22d37-145c-3dbf-3114-46540cef349b@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Apr 2019 19:10:47 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+Thomas,
 
-> enet will be used by supertuxkart 1.0.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
-> Build tested with test-pkg -a
-> ---
->  DEVELOPERS             |  1 +
->  package/Config.in      |  1 +
->  package/enet/Config.in | 16 ++++++++++++++++
->  package/enet/enet.hash |  3 +++
->  package/enet/enet.mk   | 14 ++++++++++++++
->  5 files changed, 35 insertions(+)
->  create mode 100644 package/enet/Config.in
->  create mode 100644 package/enet/enet.hash
->  create mode 100644 package/enet/enet.mk
+Le 24/04/2019 ? 22:57, Thomas Petazzoni a ?crit?:
+> On Wed, 24 Apr 2019 22:46:57 +0200
+> Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+>
+>> This commit bumps Linux & Linux-headers to 5.0 and U-Boot to version 2019.01
+>>
+>> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> I think Fabio also suggested to use U-Boot 2019.04 ?
+>
+> Thomas
 
-Series applied. Thanks!
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Yes indeed, but there is a known issue with 2019.04 (see [1]).
+
+Fabio also told me to keep 2019.01 for now and bump only the Linux version.
+
+
+Thanks
+
+
+[1] http://patchwork.ozlabs.org/patch/1084912/
+
+--
+
+Signature
+<https://koncepto.io> 	
+
+*Pierre-Jean Texier*
+Co-founder and Embedded Linux expert 
+<https://www.linkedin.com/in/pjtexier-embeedlinux/>
+
+pjtexier at koncepto.io <mailto:pjtexier@koncepto.io>
++33 6 27 47 58 58
+
+*Koncepto* <https://koncepto.io> *- We develop your embedded ideas*
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190424/c4906949/attachment.html>
