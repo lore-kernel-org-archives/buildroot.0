@@ -1,42 +1,47 @@
 From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Wed, 24 Apr 2019 11:37:06 +0200
-Subject: [Buildroot] [PATCH] package/sysdig: bump to version 0.25
-Message-ID: <1556098626-18620-1-git-send-email-angelo@amarulasolutions.com>
+Date: Wed, 24 Apr 2019 11:37:16 +0200
+Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 6.0.0
+Message-ID: <1556098636-18860-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps sysdig to version 0.25
+This patch bumps python-pillow to version 6.0.0.
 
 Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/sysdig/sysdig.hash | 2 +-
- package/sysdig/sysdig.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-pillow/python-pillow.hash | 4 ++--
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
-index 565b1e9..c2589f3 100644
---- a/package/sysdig/sysdig.hash
-+++ b/package/sysdig/sysdig.hash
-@@ -1,3 +1,3 @@
- # sha256 locally computed
--sha256  57d5b713b875eba35546a1408bf3f20c2703904a17d956be115ee55272db4cfa  sysdig-0.23.1.tar.gz
-+sha256  57d5b713b875eba35546a1408bf3f20c2703904a17d956be115ee55272db4cfa  sysdig-0.25.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
-index 9ac990e..ddf1bf4 100644
---- a/package/sysdig/sysdig.mk
-+++ b/package/sysdig/sysdig.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index 0f90a0b..2269914 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,4 +1,4 @@
+-# sha256 for python-pillow from https://pypi.org/project/Pillow/5.2.0/#files
++# sha256 for python-pillow from https://pypi.org/project/Pillow/
+ # sha256 for LICENSE locally computed
+-sha256 f8b3d413c5a8f84b12cd4c5df1d8e211777c9852c6be3ee9c094b626644d3eab  Pillow-5.2.0.tar.gz
++sha256 809c0a2ce9032cbcd7b5313f71af4bdc5c8c771cb86eb7559afd954cab82ebb5  Pillow-6.0.0.tar.gz
+ sha256 4960fc18becc286be839c8ff17bd70cd5222533f761129142153443718a25199  LICENSE
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index c3a3d13..6efa9f3 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--SYSDIG_VERSION = 0.23.1
-+SYSDIG_VERSION = 0.25
- SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
- SYSDIG_LICENSE = GPL-2.0
- SYSDIG_LICENSE_FILES = COPYING
+-PYTHON_PILLOW_VERSION = 5.2.0
++PYTHON_PILLOW_VERSION = 6.0.0
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/d3/c4/b45b9c0d549f482dd072055e2d3ced88f3b977f7b87c7a990228b20e7da1
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/81/1a/6b2971adc1bca55b9a53ed1efa372acff7e8b9913982a396f3fa046efaf8
+ PYTHON_PILLOW_LICENSE = PIL Software License
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
+ PYTHON_PILLOW_SETUP_TYPE = setuptools
 -- 
 2.7.4
