@@ -1,50 +1,67 @@
-From: Julien Grossholtz <julien.grossholtz@openest.io>
-Date: Wed, 24 Apr 2019 11:40:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wolfssl: bump to version 4.0.0
-Message-ID: <20190424094006.18440-1-julien.grossholtz@openest.io>
+From: Nylon Chen <nylon7@andestech.com>
+Date: Wed, 24 Apr 2019 18:44:01 +0800
+Subject: [Buildroot] [PATCH 1/1] package/binutils: fix build error due to
+ architecture name is incomplete
+Message-ID: <20190424104402.15468-1-nylon7@andestech.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WolfSSL 4.0.0 has been released, it includes new features and fixes. The
-full changelog is available here [1].
+Fixes
+  http://autobuild.buildroot.net/results/128/12803a705586e82fdfb49013da2eb3b9879ccd45/
 
-Update the wolfssl package to stable version 4.0.0, and the
-corresponding hash file.
-
-[1] https://www.wolfssl.com/docs/wolfssl-changelog/
-
-Signed-off-by: Julien Grossholtz <julien.grossholtz@openest.io>
+Signed-off-by: Che-Wei Chuang <cnoize@andestech.com>
+Signed-off-by: Greentime Hu <greentime@andestech.com>
+Signed-off-by: Nylon Chen <nylon7@andestech.com>
 ---
- package/wolfssl/wolfssl.hash | 2 +-
- package/wolfssl/wolfssl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ Makefile                   | 1 +
+ arch/Config.in.nds32       | 2 +-
+ package/binutils/Config.in | 4 ++--
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
-index 1ff9fc61d8..6559486a18 100644
---- a/package/wolfssl/wolfssl.hash
-+++ b/package/wolfssl/wolfssl.hash
+diff --git a/Makefile b/Makefile
+index 522c0b0606..86e444da98 100644
+--- a/Makefile
++++ b/Makefile
+@@ -439,6 +439,7 @@ KERNEL_ARCH := $(shell echo "$(ARCH)" | sed -e "s/-.*//" \
+ 	-e s/arceb/arc/ \
+ 	-e s/arm.*/arm/ -e s/sa110/arm/ \
+ 	-e s/aarch64.*/arm64/ \
++	-e s/nds32.*/nds32/ \
+ 	-e s/or1k/openrisc/ \
+ 	-e s/parisc64/parisc/ \
+ 	-e s/powerpc64.*/powerpc/ \
+diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
+index 9c5db20e6f..f268883662 100644
+--- a/arch/Config.in.nds32
++++ b/arch/Config.in.nds32
 @@ -1,5 +1,5 @@
- # Locally computed:
--sha256 70e4fbeb91284a269b25a84fc526755c670475aee4034a6f237b1f754d108af3  v3.15.7-stable.tar.gz
-+sha256 6cf678c72b485d1904047c40c20f85104c96b5f39778822783a2c407ccb23657  v4.0.0-stable.tar.gz
+ config BR2_ARCH
+-	default "nds32"
++	default "nds32le"
  
- # Hash for license files:
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
-index 42198cb817..5ef182806a 100644
---- a/package/wolfssl/wolfssl.mk
-+++ b/package/wolfssl/wolfssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ config BR2_GCC_TARGET_ARCH
+ 	default "v3"
+diff --git a/package/binutils/Config.in b/package/binutils/Config.in
+index 2bf7929ac8..e17a8ec65a 100644
+--- a/package/binutils/Config.in
++++ b/package/binutils/Config.in
+@@ -1,6 +1,6 @@
+ config BR2_PACKAGE_BINUTILS
+ 	bool "binutils"
+-	depends on !BR2_nios2 && !BR2_nds32
++	depends on !BR2_nios2
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  Install binutils on the target
+@@ -21,5 +21,5 @@ config BR2_PACKAGE_BINUTILS_TARGET
+ endif
  
--WOLFSSL_VERSION = 3.15.7
-+WOLFSSL_VERSION = 4.0.0
- WOLFSSL_SITE = https://github.com/wolfSSL/wolfssl/archive
- WOLFSSL_SOURCE = v$(WOLFSSL_VERSION)-stable.tar.gz
- WOLFSSL_INSTALL_STAGING = YES
+ comment "binutils needs a toolchain w/ wchar"
+-	depends on !BR2_nios2 && !BR2_nds32
++	depends on !BR2_nios2
+ 	depends on !BR2_USE_WCHAR
 -- 
-2.20.1
+2.18.0
