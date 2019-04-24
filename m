@@ -1,25 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Apr 2019 22:20:10 +0200
-Subject: [Buildroot] [PATCH] package/corkscrew: bump to version v2.0
-In-Reply-To: <1556098668-19479-1-git-send-email-angelo@amarulasolutions.com>
-References: <1556098668-19479-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20190424222010.09c2f7ba@windsurf>
+Date: Wed, 24 Apr 2019 22:20:44 +0200
+Subject: [Buildroot] [PATCH v1] package/libdrm: bump version to 2.4.98
+In-Reply-To: <20190423213455.18124-1-ps.report@gmx.net>
+References: <20190423213455.18124-1-ps.report@gmx.net>
+Message-ID: <20190424222044.34bc8430@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 24 Apr 2019 11:37:48 +0200
-Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+On Tue, 23 Apr 2019 23:34:55 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-> This patch bumps corkscrew package to version v2.0.
+> For detail see [1].
 > 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+> [1] https://lists.freedesktop.org/archives/dri-devel/2019-April/215254.html
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/corkscrew/corkscrew.hash | 2 +-
->  package/corkscrew/corkscrew.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/libdrm/libdrm.hash | 10 +++++-----
+>  package/libdrm/libdrm.mk   |  2 +-
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 
 Applied to master, thanks.
 
