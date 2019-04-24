@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 21:50:40 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/hostapd: add upstream 2019-1, 2, 3,
- 4 security patches
-In-Reply-To: <20190411111103.19705-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 11 Apr 2019 13:11:02 +0200")
+Date: Wed, 24 Apr 2019 21:50:46 +0200
+Subject: [Buildroot] [PATCH v2 2/2] package/wpa_supplicant: add upstream
+ 2019-1, 2, 3, 4 security patches
+In-Reply-To: <20190411111103.19705-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 11 Apr 2019 13:11:03 +0200")
 References: <20190411111103.19705-1-peter@korsgaard.com>
-Message-ID: <87ef5rb2sv.fsf@dell.be.48ers.dk>
+ <20190411111103.19705-2-peter@korsgaard.com>
+Message-ID: <87a7gfb2sp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
