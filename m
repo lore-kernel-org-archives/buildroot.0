@@ -1,22 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 22:25:43 +0200
-Subject: [Buildroot] [PATCH] package/opus: bump version to 1.3.1
-In-Reply-To: <20190414191654.5635-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 14 Apr 2019 21:16:53 +0200")
-References: <20190414191654.5635-1-peter@korsgaard.com>
-Message-ID: <874l6n881k.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Apr 2019 22:25:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cjson: security bump to version
+ 1.7.11
+In-Reply-To: <20190414223529.3694-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 15 Apr 2019 00:35:29 +0200")
+References: <20190414223529.3694-1-fontaine.fabrice@gmail.com>
+Message-ID: <87zhof6tgw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes a number of post-1.3 fixes.  For details, see the announcement:
- > http://lists.xiph.org/pipermail/opus/2019-April/004318.html
+ > Fix a bug where cJSON_Minify could overflow it's buffer, both reading
+ > and writing: https://github.com/DaveGamble/cJSON/issues/338.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2019.02.x, thanks.
 
