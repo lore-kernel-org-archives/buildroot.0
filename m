@@ -1,72 +1,158 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Apr 2019 21:16:00 +0200
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{9, 14,
- 19}.x / 5.0.x series
-Message-ID: <20190424191119.0D54F826D6@busybox.osuosl.org>
+Date: Wed, 24 Apr 2019 21:16:25 +0200
+Subject: [Buildroot] [git commit] package/libxslt: add upstream security fix
+ for CVE-2019-11068
+Message-ID: <20190424191209.837CE814B9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=707529b7f7d7a80018cae5fec795dd36cc06fa8f
+commit: https://git.buildroot.net/buildroot/commit/?id=73edd3c21c8cd8610ade16f449e7af8fd60b8aa9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes the following security issue:
+
+- CVE-2019-11068: libxslt through 1.1.33 allows bypass of a protection
+  mechanism because callers of xsltCheckRead and xsltCheckWrite permit
+  access even upon receiving a -1 error code.  xsltCheckRead can return -1
+  for a crafted URL that is not actually invalid and is subsequently loaded.
+
+Upstream bugtracker issue not yet public:
+https://gitlab.gnome.org/GNOME/libxslt/issues/12
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ .../0001-Fix-security-framework-bypass.patch       | 122 +++++++++++++++++++++
+ 1 file changed, 122 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 8013f2b42a..65d4838075 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -121,7 +121,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.0.7" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.0.9" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.176-cip31" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 993cccdcfb..4232ba1054 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 16e177662b9fc7255bfc51018513979f6effcbe52e459c543aa83a5b15ef54ec  linux-5.0.7.tar.xz
-+sha256 0748b1375bf884db1bddc9ebdc8dcf1c45d828d8ba6839f9f7d8a033b905ba58  linux-5.0.9.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
--sha256 dd795e2a1fddbee5b03c3bb55a1926829cc08df4fdcabce62dda717ba087b8cc  linux-4.19.34.tar.xz
--sha256 f8197d56553f864d1d2e97abbe4fca50f8ab5e72089c292d22f0e4395340a6e8  linux-4.14.111.tar.xz
--sha256 4d451c21effad77de323edc9bfeae095aa1faed1a801ef427d66f5763bef091e  linux-4.9.168.tar.xz
-+sha256 b808b508177f9d288d94a3b9df7b01d5eac9fcc1804a794c913b2144de63f2bc  linux-4.19.36.tar.xz
-+sha256 b24df2e37faaf2290999c507f9e29de98494f52429bcd35513c5b3e52eaddac2  linux-4.14.113.tar.xz
-+sha256 33887b40fc8e0b71f423bb7afe112a4ae190378145f4a3f3892c563b7e43131d  linux-4.9.170.tar.xz
- sha256 c3598c22b7994b3bebc3059e8ab85bc212c53550eb401baab3f29f8d007a043d  linux-4.4.178.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 91b8411b32..530289c291 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -294,11 +294,11 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.178"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.168"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.111"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.34"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.9.170"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.113"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.36"	if BR2_KERNEL_HEADERS_4_19
- 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
--	default "5.0.7"		if BR2_KERNEL_HEADERS_5_0
-+	default "5.0.9"		if BR2_KERNEL_HEADERS_5_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+diff --git a/package/libxslt/0001-Fix-security-framework-bypass.patch b/package/libxslt/0001-Fix-security-framework-bypass.patch
+new file mode 100644
+index 0000000000..16700362b3
+--- /dev/null
++++ b/package/libxslt/0001-Fix-security-framework-bypass.patch
+@@ -0,0 +1,122 @@
++From e03553605b45c88f0b4b2980adfbbb8f6fca2fd6 Mon Sep 17 00:00:00 2001
++From: Nick Wellnhofer <wellnhofer@aevum.de>
++Date: Sun, 24 Mar 2019 09:51:39 +0100
++Subject: [PATCH] Fix security framework bypass
++
++xsltCheckRead and xsltCheckWrite return -1 in case of error but callers
++don't check for this condition and allow access. With a specially
++crafted URL, xsltCheckRead could be tricked into returning an error
++because of a supposedly invalid URL that would still be loaded
++succesfully later on.
++
++Fixes #12.
++
++Thanks to Felix Wilhelm for the report.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ libxslt/documents.c | 18 ++++++++++--------
++ libxslt/imports.c   |  9 +++++----
++ libxslt/transform.c |  9 +++++----
++ libxslt/xslt.c      |  9 +++++----
++ 4 files changed, 25 insertions(+), 20 deletions(-)
++
++diff --git a/libxslt/documents.c b/libxslt/documents.c
++index 3f3a7312..4aad11bb 100644
++--- a/libxslt/documents.c
+++++ b/libxslt/documents.c
++@@ -296,10 +296,11 @@ xsltLoadDocument(xsltTransformContextPtr ctxt, const xmlChar *URI) {
++ 	int res;
++ 
++ 	res = xsltCheckRead(ctxt->sec, ctxt, URI);
++-	if (res == 0) {
++-	    xsltTransformError(ctxt, NULL, NULL,
++-		 "xsltLoadDocument: read rights for %s denied\n",
++-			     URI);
+++	if (res <= 0) {
+++            if (res == 0)
+++                xsltTransformError(ctxt, NULL, NULL,
+++                     "xsltLoadDocument: read rights for %s denied\n",
+++                                 URI);
++ 	    return(NULL);
++ 	}
++     }
++@@ -372,10 +373,11 @@ xsltLoadStyleDocument(xsltStylesheetPtr style, const xmlChar *URI) {
++ 	int res;
++ 
++ 	res = xsltCheckRead(sec, NULL, URI);
++-	if (res == 0) {
++-	    xsltTransformError(NULL, NULL, NULL,
++-		 "xsltLoadStyleDocument: read rights for %s denied\n",
++-			     URI);
+++	if (res <= 0) {
+++            if (res == 0)
+++                xsltTransformError(NULL, NULL, NULL,
+++                     "xsltLoadStyleDocument: read rights for %s denied\n",
+++                                 URI);
++ 	    return(NULL);
++ 	}
++     }
++diff --git a/libxslt/imports.c b/libxslt/imports.c
++index 874870cc..3783b247 100644
++--- a/libxslt/imports.c
+++++ b/libxslt/imports.c
++@@ -130,10 +130,11 @@ xsltParseStylesheetImport(xsltStylesheetPtr style, xmlNodePtr cur) {
++ 	int secres;
++ 
++ 	secres = xsltCheckRead(sec, NULL, URI);
++-	if (secres == 0) {
++-	    xsltTransformError(NULL, NULL, NULL,
++-		 "xsl:import: read rights for %s denied\n",
++-			     URI);
+++	if (secres <= 0) {
+++            if (secres == 0)
+++                xsltTransformError(NULL, NULL, NULL,
+++                     "xsl:import: read rights for %s denied\n",
+++                                 URI);
++ 	    goto error;
++ 	}
++     }
++diff --git a/libxslt/transform.c b/libxslt/transform.c
++index 13793914..0636dbd0 100644
++--- a/libxslt/transform.c
+++++ b/libxslt/transform.c
++@@ -3493,10 +3493,11 @@ xsltDocumentElem(xsltTransformContextPtr ctxt, xmlNodePtr node,
++      */
++     if (ctxt->sec != NULL) {
++ 	ret = xsltCheckWrite(ctxt->sec, ctxt, filename);
++-	if (ret == 0) {
++-	    xsltTransformError(ctxt, NULL, inst,
++-		 "xsltDocumentElem: write rights for %s denied\n",
++-			     filename);
+++	if (ret <= 0) {
+++            if (ret == 0)
+++                xsltTransformError(ctxt, NULL, inst,
+++                     "xsltDocumentElem: write rights for %s denied\n",
+++                                 filename);
++ 	    xmlFree(URL);
++ 	    xmlFree(filename);
++ 	    return;
++diff --git a/libxslt/xslt.c b/libxslt/xslt.c
++index 780a5ad7..a234eb79 100644
++--- a/libxslt/xslt.c
+++++ b/libxslt/xslt.c
++@@ -6763,10 +6763,11 @@ xsltParseStylesheetFile(const xmlChar* filename) {
++ 	int res;
++ 
++ 	res = xsltCheckRead(sec, NULL, filename);
++-	if (res == 0) {
++-	    xsltTransformError(NULL, NULL, NULL,
++-		 "xsltParseStylesheetFile: read rights for %s denied\n",
++-			     filename);
+++	if (res <= 0) {
+++            if (res == 0)
+++                xsltTransformError(NULL, NULL, NULL,
+++                     "xsltParseStylesheetFile: read rights for %s denied\n",
+++                                 filename);
++ 	    return(NULL);
++ 	}
++     }
++-- 
++2.11.0
++
