@@ -1,135 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 22:46:47 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/binutils: fix
- loops relaxation in bare sections
-Message-ID: <20190424204209.CF3608147F@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 24 Apr 2019 22:46:49 +0200
+Subject: [Buildroot] [git commit] configs/beaglebone: kernel build needs
+ mkimage
+Message-ID: <20190424204229.E5A4B8122E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88eff22a9e651eca8e6f7d735412fb36165c2f54
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=80029da692300c5b62dd86114ff20122e89342e5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The commit 197b5f9d1c23 ("package/binutils: fix loops relaxation in
-xtensa gas") changed the way loop opcodes are relaxed resulting in build
-failures in hand-made assembly code that has loops in sections without
-.literal_position pseudo op or equivalent construct. This e.g. breaks
-xtensa linux kernel build.
+Following ffbe46a5295ce4e0442728f2ad3e19afa7eaa8ed ("linux: simplify
+LINUX_BUILD_CMDS"), the Linux kernel build for beaglebone_defconfig
+builds more things, including some .itb files, which require mkimage
+with FIT support.
 
-Fix that by adding literal position to the beginning of every section.
+Fixes:
 
-Fixes: 197b5f9d1c23 ("package/binutils: fix loops relaxation in xtensa
-gas")
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339433
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit de1d1577d727d41bf26eca46e6f4c659062aa105)
-[Peter: drop 2.32 patch]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...as-put-.literal_position-at-section-start.patch | 96 ++++++++++++++++++++++
- 1 file changed, 96 insertions(+)
+ configs/beaglebone_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/binutils/2.31.1/0017-xtensa-gas-put-.literal_position-at-section-start.patch b/package/binutils/2.31.1/0017-xtensa-gas-put-.literal_position-at-section-start.patch
-new file mode 100644
-index 0000000000..b4bbc27b37
---- /dev/null
-+++ b/package/binutils/2.31.1/0017-xtensa-gas-put-.literal_position-at-section-start.patch
-@@ -0,0 +1,96 @@
-+From 471702ac4a57878a06e8167f063274cf413e548d Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Mon, 8 Apr 2019 13:47:18 -0700
-+Subject: [PATCH] xtensa: gas: put .literal_position at section start
-+
-+Provide literal position at the beginning of each section for literal
-+space reserved by relaxations when text-section-literals or
-+auto-litpools options are used. Remove code that adds fill frag to the
-+literal section for every .literal_position directive to avoid creation
-+of empty literal sections.
-+
-+Fix auto-litpools tests that got literal pool address changes.
-+
-+gas/
-+2019-04-11  Max Filippov  <jcmvbkbc@gmail.com>
-+
-+	* config/tc-xtensa.c (xtensa_is_init_fini): Add declaration.
-+	(xtensa_mark_literal_pool_location): Don't add fill frag to literal
-+	section that records literal pool location.
-+	(md_begin): Call xtensa_mark_literal_pool_location when text
-+	section literals or auto litpools are used.
-+	(xtensa_elf_section_change_hook): Call
-+	xtensa_mark_literal_pool_location when text section literals or
-+	auto litpools are used, there's no literal pool location defined
-+	for the current section and it's not .init or .fini.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ gas/config/tc-xtensa.c                          | 22 +++++++++-------------
-+ 1 file changed, 9 insertions(+), 13 deletions(-)
-+
-+diff --git a/gas/config/tc-xtensa.c b/gas/config/tc-xtensa.c
-+index 0cc06361cf6f..6a80e76fed8c 100644
-+--- a/gas/config/tc-xtensa.c
-++++ b/gas/config/tc-xtensa.c
-+@@ -497,6 +497,7 @@ static fixS *xg_append_jump (fragS *fragP, symbolS *sym, offsetT offset);
-+ static void xtensa_maybe_create_literal_pool_frag (bfd_boolean, bfd_boolean);
-+ static bfd_boolean auto_litpools = FALSE;
-+ static int auto_litpool_limit = 0;
-++static bfd_boolean xtensa_is_init_fini (segT seg);
-+ 
-+ /* Alignment Functions.  */
-+ 
-+@@ -4797,7 +4798,6 @@ xtensa_mark_literal_pool_location (void)
-+ {
-+   /* Any labels pointing to the current location need
-+      to be adjusted to after the literal pool.  */
-+-  emit_state s;
-+   fragS *pool_location;
-+ 
-+   if (use_literal_section)
-+@@ -4818,19 +4818,7 @@ xtensa_mark_literal_pool_location (void)
-+ 		RELAX_LITERAL_POOL_END, NULL, 0, NULL);
-+   xtensa_set_frag_assembly_state (frag_now);
-+ 
-+-  /* Now put a frag into the literal pool that points to this location.  */
-+   set_literal_pool_location (now_seg, pool_location);
-+-  xtensa_switch_to_non_abs_literal_fragment (&s);
-+-  frag_align (2, 0, 0);
-+-  record_alignment (now_seg, 2);
-+-
-+-  /* Close whatever frag is there.  */
-+-  frag_variant (rs_fill, 0, 0, 0, NULL, 0, NULL);
-+-  xtensa_set_frag_assembly_state (frag_now);
-+-  frag_now->tc_frag_data.literal_frag = pool_location;
-+-  frag_variant (rs_fill, 0, 0, 0, NULL, 0, NULL);
-+-  xtensa_restore_emit_state (&s);
-+-  xtensa_set_frag_assembly_state (frag_now);
-+ }
-+ 
-+ 
-+@@ -5334,6 +5322,9 @@ md_begin (void)
-+   /* Set up the assembly state.  */
-+   if (!frag_now->tc_frag_data.is_assembly_state_set)
-+     xtensa_set_frag_assembly_state (frag_now);
-++
-++  if (!use_literal_section)
-++    xtensa_mark_literal_pool_location ();
-+ }
-+ 
-+ 
-+@@ -5933,6 +5924,11 @@ xtensa_elf_section_change_hook (void)
-+   /* Set up the assembly state.  */
-+   if (!frag_now->tc_frag_data.is_assembly_state_set)
-+     xtensa_set_frag_assembly_state (frag_now);
-++
-++  if (!use_literal_section
-++      && seg_info (now_seg)->tc_segment_info_data.literal_pool_loc == NULL
-++      && !xtensa_is_init_fini (now_seg))
-++    xtensa_mark_literal_pool_location ();
-+ }
-+ 
-+ 
-+-- 
-+2.11.0
-+
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 2d9fba57dd..b4f152fd69 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -26,3 +26,5 @@ BR2_TARGET_UBOOT_SPL_NAME="MLO"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
