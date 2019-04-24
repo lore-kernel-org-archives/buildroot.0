@@ -1,65 +1,85 @@
-From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Wed, 24 Apr 2019 10:59:39 +0200
-Subject: [Buildroot] [PATCH] package/python-pytest: new package
-Message-ID: <1556096379-32178-1-git-send-email-jugurtha.belkalem@smile.fr>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Wed, 24 Apr 2019 11:33:34 +0200
+Subject: [Buildroot] [PATCH v3] package/nfs-utils: making nfs server optional
+Message-ID: <1556098414-13394-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/python-pytest/Config.in          |  9 +++++++++
- package/python-pytest/python-pytest.hash |  2 ++
- package/python-pytest/python-pytest.mk   | 15 +++++++++++++++
- 3 files changed, 26 insertions(+)
- create mode 100644 package/python-pytest/Config.in
- create mode 100644 package/python-pytest/python-pytest.hash
- create mode 100644 package/python-pytest/python-pytest.mk
+This patch makes nfs server component optional. This is useful when
+only client tools are used and the full nfs server is not needed.
 
-diff --git a/package/python-pytest/Config.in b/package/python-pytest/Config.in
-new file mode 100644
-index 0000000..db69027
---- /dev/null
-+++ b/package/python-pytest/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_PYTEST
-+	bool "python-pytest"
-+    help
-+	  The pytest framework makes it easy to write small tests, 
-+	  yet scales to support complex functional testing for 
-+	  applications and libraries.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+v1->v2: Fixing minor formatting nitpick.
+v2->v3: fixing systemd stuff as suggested by Thomas
+
+ package/nfs-utils/Config.in    |  6 ++++++
+ package/nfs-utils/nfs-utils.mk | 10 ++++++++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
+index 055b711..04ea4db 100644
+--- a/package/nfs-utils/Config.in
++++ b/package/nfs-utils/Config.in
+@@ -25,6 +25,12 @@ config BR2_PACKAGE_NFS_UTILS_RPC_LOCKD
+ 	help
+ 	  NFS lock manager for Linux kernels older than 2.4
+ 
++config BR2_PACKAGE_NFS_UTILS_RPC_NFSD
++	bool "rpc.nfsd"
++	default y
++	help
++	  NFS server
 +
-+	  https://pypi.org/project/pytest/
+ config BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD
+ 	bool "rpc.rquotad"
+ 	help
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index 9fa7ae2..188d7f4 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -41,6 +41,8 @@ HOST_NFS_UTILS_DEPENDENCIES = host-pkgconf host-libtirpc
+ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPCDEBUG) += usr/sbin/rpcdebug
+ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_LOCKD) += usr/sbin/rpc.lockd
+ NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_RQUOTAD) += usr/sbin/rpc.rquotad
++NFS_UTILS_TARGETS_$(BR2_PACKAGE_NFS_UTILS_RPC_NFSD) += usr/sbin/exportfs \
++	usr/sbin/rpc.mountd usr/sbin/rpc.nfsd usr/lib/systemd/system/nfs-server.service
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ NFS_UTILS_CONF_OPTS += --enable-caps
+@@ -57,7 +59,7 @@ NFS_UTILS_CONF_OPTS += --disable-tirpc
+ endif
+ 
+ define NFS_UTILS_INSTALL_FIXUP
+-	rm -f $(NFS_UTILS_TARGETS_)
++	cd $(TARGET_DIR) && rm -f $(NFS_UTILS_TARGETS_)
+ 	touch $(TARGET_DIR)/etc/exports
+ 	$(INSTALL) -D -m 644 \
+ 		$(@D)/utils/mount/nfsmount.conf $(TARGET_DIR)/etc/nfsmount.conf
+@@ -71,16 +73,20 @@ else
+ NFS_UTILS_CONF_OPTS += --without-systemd
+ endif
+ 
++ifeq ($(BR2_PACKAGE_NFS_UTILS_RPC_NFSD),y)
+ define NFS_UTILS_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/nfs-utils/S60nfs \
+ 		$(TARGET_DIR)/etc/init.d/S60nfs
+ endef
++endif
+ 
+ define NFS_UTILS_INSTALL_INIT_SYSTEMD
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 
++	$(if $(BR2_PACKAGE_NFS_UTILS_RPC_NFSD), \
+ 	ln -fs ../../../../usr/lib/systemd/system/nfs-server.service \
+-		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nfs-server.service
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nfs-server.service,)
 +
-diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
-new file mode 100644
-index 0000000..5e072d7
---- /dev/null
-+++ b/package/python-pytest/python-pytest.hash
-@@ -0,0 +1,2 @@
-+# sha256 from https://pypi.org/project/pytest/#files
-+sha256 b7802283b70ca24d7119b32915efa7c409982f59913c1a6c0640aacf118b95f5 pytest-4.4.1.tar.gz
-diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
-new file mode 100644
-index 0000000..b6cafda
---- /dev/null
-+++ b/package/python-pytest/python-pytest.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-pytest
-+#
-+################################################################################
-+
-+PYTHON_PYTEST_VERSION = 4.4.1
-+PYTHON_PYTEST_SOURCE = pytest-$(PYTHON3_PYTEST_VERSION).tar.gz
-+PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/2b/b1/c9a84f79fc3bad226a9085289da11ecdd9bd2779a2c654195962b37d4110/
-+PYTHON_PYTEST_LICENSE = MIT
-+PYTHON_PYTEST_LICENSE_FILES = LICENSE
-+PYTHON_PYTEST_SETUP_TYPE = setuptools
-+PYTHON_DEPENDENCIES = python3-setuptools-scm
-+
-+$(eval $(python-package))
+ 	ln -fs ../../../../usr/lib/systemd/system/nfs-client.target \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/nfs-client.target
+ 
 -- 
 2.7.4
