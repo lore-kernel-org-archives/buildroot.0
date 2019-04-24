@@ -1,28 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 21:20:24 +0200
-Subject: [Buildroot] [PATCH 1/1] [v2] package/freerdp: bump version to
- 2.0.0-rc4
-In-Reply-To: <20190407190629.5380-1-skif@skif-web.ru> (Alexey Lukyanchuk's
- message of "Sun, 7 Apr 2019 22:06:29 +0300")
-References: <20190407190629.5380-1-skif@skif-web.ru>
-Message-ID: <87r29rb47b.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Apr 2019 21:19:40 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/freerdp: fix
+ build without xfixes
+Message-ID: <20190424191540.5BFBC81052@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Lukyanchuk <skif@skif-web.ru> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6de205f8bee64919393b43f770769f685bcdae69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
- > Add support to set tls security level (for openssl >= 1.1.0), for RDP
- > protocol version 10(needed for windows 10 and windows server 2016). Also have some fix and features, see
- > https://github.com/FreeRDP/FreeRDP/commit/e21b72c95f857817b4b32b5ef5406355c005a9e8
+Fixes:
+ - http://autobuild.buildroot.org/results/69245e574787bada718c52c805ec137041dc233d
 
- > Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 41da6f02ac45cb7b7105be0b33b702d95376335a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...01-xf_floatbar.c-fix-build-without-Xfixes.patch | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-Committed to 2019.02.x after extending the commit message to mention the
-security fixes this includes, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/freerdp/0001-xf_floatbar.c-fix-build-without-Xfixes.patch b/package/freerdp/0001-xf_floatbar.c-fix-build-without-Xfixes.patch
+new file mode 100644
+index 0000000000..c0b4195883
+--- /dev/null
++++ b/package/freerdp/0001-xf_floatbar.c-fix-build-without-Xfixes.patch
+@@ -0,0 +1,32 @@
++From 7dbb64cb62049159d9d71b9be39f469bbd116f41 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 18 Apr 2019 23:40:52 +0200
++Subject: [PATCH] xf_floatbar.c: fix build without Xfixes
++
++Remove unneeded include on Xfixes.h as it is not always available and
++not used in xf_floatbar.c
++
++Fixes:
++ - http://autobuild.buildroot.org/results/69245e574787bada718c52c805ec137041dc233d
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/FreeRDP/FreeRDP/pull/5354]
++---
++ client/X11/xf_floatbar.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/client/X11/xf_floatbar.c b/client/X11/xf_floatbar.c
++index 3643b6052..04912aa79 100644
++--- a/client/X11/xf_floatbar.c
+++++ b/client/X11/xf_floatbar.c
++@@ -19,7 +19,6 @@
++ #include <X11/Xutil.h>
++ #include <X11/Xatom.h>
++ #include <X11/extensions/shape.h>
++-#include <X11/extensions/Xfixes.h>
++ #include <X11/cursorfont.h>
++ 
++ #include "xf_floatbar.h"
++-- 
++2.20.1
++
