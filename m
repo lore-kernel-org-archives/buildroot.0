@@ -1,31 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Apr 2019 22:44:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mongodb: needs PCRE with UTF
- support
-In-Reply-To: <20190423170526.26577-1-fontaine.fabrice@gmail.com>
-References: <20190423170526.26577-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190424224456.6f1047f0@windsurf>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Wed, 24 Apr 2019 22:44:32 +0200
+Subject: [Buildroot] [PATCH 1/1] configs/warp7: bump to Linux 5.0 and
+ U-Boot 2019.01
+In-Reply-To: <CAOMZO5CFgnA14ctpKshBFKoeq+K5W9ZXqNnmWnE-CYVC4rPACg@mail.gmail.com>
+References: <1556135702-9627-1-git-send-email-pjtexier@koncepto.io>
+ <CAOMZO5B7fCZ9CHQ-3A77f6kO3WDYCzxYE_Wpyd3ZHJzgBnLEPA@mail.gmail.com>
+ <91fb88e9-0961-1f73-908d-3b18ed36103b@koncepto.io>
+ <CAOMZO5CFgnA14ctpKshBFKoeq+K5W9ZXqNnmWnE-CYVC4rPACg@mail.gmail.com>
+Message-ID: <5ad71448-0f8d-0efe-f249-451db8333a14@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 23 Apr 2019 19:05:26 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Fabio,
 
-> mongodb needs PCRE with UTF-8 support, see:
-> https://docs.mongodb.com/manual/reference/operator/query/regex/
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/mongodb/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+Le 24/04/2019 ? 22:37, Fabio Estevam a ?crit?:
+> Ok, that's fine. Let's use 2019.01 for now.
+>
+> Thanks
 
-Applied to master, thanks.
 
-Thomas
+Thanks, I will send a v2
+
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signature
+<https://koncepto.io> 	
+
+*Pierre-Jean Texier*
+Co-founder and Embedded Linux expert 
+<https://www.linkedin.com/in/pjtexier-embeedlinux/>
+
+pjtexier at koncepto.io <mailto:pjtexier@koncepto.io>
++33 6 27 47 58 58
+
+*Koncepto* <https://koncepto.io> *- We develop your embedded ideas*
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190424/8edc1895/attachment.html>
