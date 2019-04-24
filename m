@@ -1,25 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 22:25:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cjson: security bump to version
- 1.7.11
-In-Reply-To: <20190414223529.3694-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 15 Apr 2019 00:35:29 +0200")
-References: <20190414223529.3694-1-fontaine.fabrice@gmail.com>
-Message-ID: <87zhof6tgw.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Apr 2019 22:25:29 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/cjson: security
+ bump to version 1.7.11
+Message-ID: <20190424202106.26FA0807A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=01abefd7193c28d7ba461b8b581b374b09eba733
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Fix a bug where cJSON_Minify could overflow it's buffer, both reading
- > and writing: https://github.com/DaveGamble/cJSON/issues/338.
+Fix a bug where cJSON_Minify could overflow it's buffer, both reading
+and writing: https://github.com/DaveGamble/cJSON/issues/338.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a45a3997d8ee0aa592c6a64ce300ee727ad7dc54)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cjson/cjson.hash | 2 +-
+ package/cjson/cjson.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed to 2019.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cjson/cjson.hash b/package/cjson/cjson.hash
+index 9c39bb321f..32a05b3c05 100644
+--- a/package/cjson/cjson.hash
++++ b/package/cjson/cjson.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256 cc544fdd065f3dd19113f1d5ba5f61d696e0f810f291f4b585d1dec361b0188e  cjson-v1.7.10.tar.gz
++sha256 17ace0e31ebd639906983b05fe1d51576b948ca5411c2162f55dd34c122162ca  cjson-v1.7.11.tar.gz
+ sha256 a36dda207c36db5818729c54e7ad4e8b0c6fba847491ba64f372c1a2037b6d5c  LICENSE
+diff --git a/package/cjson/cjson.mk b/package/cjson/cjson.mk
+index b2ef1c8582..e6ab71b92a 100644
+--- a/package/cjson/cjson.mk
++++ b/package/cjson/cjson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CJSON_VERSION = v1.7.10
++CJSON_VERSION = v1.7.11
+ CJSON_SITE = $(call github,DaveGamble,cjson,$(CJSON_VERSION))
+ CJSON_INSTALL_STAGING = YES
+ CJSON_LICENSE = MIT
