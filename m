@@ -1,28 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 22:27:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/systemd-bootchart: add
- BR2_PACKAGE_SYSTEMD_BOOTCHART_ARCH_SUPPORTS
-In-Reply-To: <20190414132437.31071-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 14 Apr 2019 15:24:37 +0200")
-References: <20190414132437.31071-1-fontaine.fabrice@gmail.com>
-Message-ID: <87v9z36tdx.fsf@dell.be.48ers.dk>
+Date: Wed, 24 Apr 2019 22:29:15 +0200
+Subject: [Buildroot] [git commit] package/linux-firmware: move
+ BR2_PACKAGE_LINUX_FIRMWARE_TI_CC2560 to Bluetooth
+In-Reply-To: <20190416203225.AC1848EC79@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Tue, 16 Apr 2019 22:36:47 +0200")
+References: <20190416203225.AC1848EC79@busybox.osuosl.org>
+Message-ID: <87r29r6tb8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Since commit f93596d8ba82354efb545fe91449627e6c896ce1, systemd is
- > enabled on arc however systemd-bootchart is not available on this
- > architecture so add a BR2_PACKAGE_SYSTEMD_BOOTCHART_ARCH_SUPPORTS from
- > the information retrieved in src/architecture.h
+ > commit: https://git.buildroot.net/buildroot/commit/?id=0edbbe548f56367ead0feb354c27c0a0d42778e0
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/84fb51212abf99faa2b7a46b8c44c42a3ca1201c
+ > This moves the BR2_PACKAGE_LINUX_FIRMWARE_TI_CC2560 option to the
+ > Bluetooth section of the config file. This chip is Bluetooth-only, so
+ > it belongs there instead of with the Wi-Fi/Bluetooth combo chips.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: David Lechner <david@lechnology.com>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2019.02.x, thanks.
 
