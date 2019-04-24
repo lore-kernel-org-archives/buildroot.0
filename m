@@ -1,60 +1,25 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 24 Apr 2019 22:21:18 +0200
-Subject: [Buildroot] [PATCH 3/3] package/libhtp: add -lz to htp.pc
-In-Reply-To: <20190424202118.14795-1-fontaine.fabrice@gmail.com>
-References: <20190424202118.14795-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190424202118.14795-3-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Apr 2019 22:22:49 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mutt: fix static build with
+ idn2 and unistring
+In-Reply-To: <20190414084600.29278-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 14 Apr 2019 10:45:59 +0200")
+References: <20190414084600.29278-1-fontaine.fabrice@gmail.com>
+Message-ID: <87d0lb886e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This will fix static build of suricata
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
- - No autobuilder failures
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/c9544b4f1a0252e260a2ed19218fa950f4dc2d2d
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...002-htp.pc.in-add-lz-to-Libs.private.patch | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
- create mode 100644 package/libhtp/0002-htp.pc.in-add-lz-to-Libs.private.patch
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/libhtp/0002-htp.pc.in-add-lz-to-Libs.private.patch b/package/libhtp/0002-htp.pc.in-add-lz-to-Libs.private.patch
-new file mode 100644
-index 0000000000..b5b0c0e2b6
---- /dev/null
-+++ b/package/libhtp/0002-htp.pc.in-add-lz-to-Libs.private.patch
-@@ -0,0 +1,29 @@
-+From 39e534ab696157b244ec226d649c789dcf423e42 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 24 Apr 2019 20:48:57 +0200
-+Subject: [PATCH] htp.pc.in: add -lz to Libs.private
-+
-+zlib is a mandatory dependency so add it to Libs.private otherwise
-+static linking iof suricata will fail
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not sent yet]
-+---
-+ htp.pc.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/htp.pc.in b/htp.pc.in
-+index 2fec995..9b1a6cc 100644
-+--- a/htp.pc.in
-++++ b/htp.pc.in
-+@@ -7,6 +7,6 @@ Name: @PACKAGE_NAME@
-+ Description: A security-aware HTTP parser, designed for use in IDS/IPS and WAF products.
-+ Version: @PACKAGE_VERSION@
-+ Libs: -L${libdir} -lhtp
-+-Libs.private: @LIBICONV@
-++Libs.private: -lz @LIBICONV@
-+ Cflags: -I${includedir} -I${libdir}/htp/include
-+ 
-+-- 
-+2.20.1
-+
+Committed to 2019.02.x, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
