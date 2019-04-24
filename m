@@ -1,83 +1,56 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Apr 2019 22:46:11 +0200
-Subject: [Buildroot] [git commit] linux: split calling "all" and
- "$(LINUX_TARGET_NAME)" targets
-Message-ID: <20190424204229.DF8EC8122E@busybox.osuosl.org>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Wed, 24 Apr 2019 22:46:57 +0200
+Subject: [Buildroot] [PATCH v2] configs/warp7: bump to Linux 5.0.9 and
+ U-Boot 2019.01
+Message-ID: <1556138817-8402-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2a7cf511f4cd4b708eb68d3fe98e291ee6a588b1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This commit bumps Linux & Linux-headers to 5.0 and U-Boot to version 2019.01
 
-In commit ffbe46a5295ce4e0442728f2ad3e19afa7eaa8ed ("linux: simplify
-LINUX_BUILD_CMDS"), we changed LINUX_BUILD_CMDS to essentially do:
-
-  make all $(LINUX_TARGET_NAME)
-
-Unfortunately, it turns out that it breaks the build of a number of
-defconfigs, with errors such as:
-
-  fixdep: error opening file: arch/xtensa/boot/lib/.inftrees.o.d: No such file or directory
-
-Calling "all" and "$(LINUX_TARGET_NAME)" as separate make invocations
-avoids this problem, and fixes the build of several defconfigs.
-
-Fixes:
-
-  ts7680_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339583
-
-  qemu_xtensa_lx60_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339553
-
-  roseapplepi_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339564
-
-  qemu_xtensa_lx60_nommu_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339554
-
-  qemu_ppc64_e5500_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339539
-
-  freescale_t2080_qds_rdb_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339455
-
-  arcturus_ucp1020_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339399
-
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: add comment in the code to explain why we call the two make
-targets separately, as suggested by Yann E. Morin]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- linux/linux.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Changes v1 -> v2:
+  - Bump Kernel from 5.0.0 to 5.0.9  (suggested by Fabio Estevam)
+  
+ configs/warp7_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 1eac3287ab..51fd41fa15 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -439,12 +439,16 @@ endif
- endif
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index 95e538f..8acd730 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
- # Compilation. We make sure the kernel gets rebuilt when the
--# configuration has changed.
-+# configuration has changed. We call the 'all' and
-+# '$(LINUX_TARGET_NAME)' targets separately because calling them in
-+# the same $(MAKE) invocation has shown to cause parallel build
-+# issues.
- define LINUX_BUILD_CMDS
- 	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
- 		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
- 	)
--	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all $(LINUX_TARGET_NAME)
-+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all
-+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
- 	$(LINUX_BUILD_DTB)
- 	$(LINUX_APPEND_DTB)
- endef
+-# Linux headers same as kernel, a 4.16 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
++# Linux headers same as kernel, a 5.0 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.3"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.9"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+@@ -25,7 +25,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="warp7"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ 
+ # wifi firmware for brcm43430
+-- 
+2.7.4
