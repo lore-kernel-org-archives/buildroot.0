@@ -1,9 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 24 Apr 2019 17:03:26 -0400
-Subject: [Buildroot] [PATCH v3 03/10] package/libvpx: bump to version v1.8.0
+Date: Wed, 24 Apr 2019 17:03:28 -0400
+Subject: [Buildroot] [PATCH v3 05/10] package/gstreamer1/gst-omx: bump to
+ version 1.16.0
 In-Reply-To: <20190424210333.62571-1-aduskett@gmail.com>
 References: <20190424210333.62571-1-aduskett@gmail.com>
-Message-ID: <20190424210333.62571-3-aduskett@gmail.com>
+Message-ID: <20190424210333.62571-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,39 +13,37 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-The gst1-plugins-good 1.16.0 vpx plugin requires libvpx v1.8.0
-
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
-Changes v1 -> v2:
-  - Added this patch to the series.
+Changes v1 -> v3:
+  - None
 
- package/libvpx/libvpx.hash | 2 +-
- package/libvpx/libvpx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
+ package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libvpx/libvpx.hash b/package/libvpx/libvpx.hash
-index 1397b62f7b..bcf643b073 100644
---- a/package/libvpx/libvpx.hash
-+++ b/package/libvpx/libvpx.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 1fec931eb5c94279ad219a5b6e0202358e94a93a90cfb1603578c326abfc1238  libvpx-v1.7.0.tar.gz
-+sha256 86df18c694e1c06cc8f83d2d816e9270747a0ce6abe316e93a4f4095689373f6  libvpx-v1.8.0.tar.gz
- sha256 8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  LICENSE
- sha256 cc3273e0694ea5896145e0677699b53471b03ea43021ddc50e7923fbb9f5023c  PATENTS
-diff --git a/package/libvpx/libvpx.mk b/package/libvpx/libvpx.mk
-index 0f867eb2a9..265fcee1cf 100644
---- a/package/libvpx/libvpx.mk
-+++ b/package/libvpx/libvpx.mk
+diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
+index 3efd9f3226..fe3256bf73 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.hash
++++ b/package/gstreamer1/gst-omx/gst-omx.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.14.4.tar.xz.sha256sum
+-sha256 969870e75c1f75c96f8783530e2c2932fc3afbfd976eb0c466f51dae268ea3d4 gst-omx-1.14.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.16.0.tar.xz.sha256sum
++sha256 969870e75c1f75c96f8783530e2c2932fc3afbfd976eb0c466f51dae268ea3d4 gst-omx-1.16.0.tar.xz
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
+diff --git a/package/gstreamer1/gst-omx/gst-omx.mk b/package/gstreamer1/gst-omx/gst-omx.mk
+index bb325ad1d2..b9e1899201 100644
+--- a/package/gstreamer1/gst-omx/gst-omx.mk
++++ b/package/gstreamer1/gst-omx/gst-omx.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBVPX_VERSION = v1.7.0
-+LIBVPX_VERSION = v1.8.0
- LIBVPX_SITE = $(call github,webmproject,libvpx,$(LIBVPX_VERSION))
- LIBVPX_LICENSE = BSD-3-Clause
- LIBVPX_LICENSE_FILES = LICENSE PATENTS
+-GST_OMX_VERSION = 1.14.4
++GST_OMX_VERSION = 1.16.0
+ GST_OMX_SOURCE = gst-omx-$(GST_OMX_VERSION).tar.xz
+ GST_OMX_SITE = https://gstreamer.freedesktop.org/src/gst-omx
+ 
 -- 
 2.20.1
