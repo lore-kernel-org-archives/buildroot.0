@@ -1,105 +1,96 @@
-From: Nylon Chen <nylon7@andestech.com>
-Date: Wed, 24 Apr 2019 18:44:02 +0800
-Subject: [Buildroot] [PATCH 1/1] package/libnspr:add nds32 support patches
-In-Reply-To: <20190424104402.15468-1-nylon7@andestech.com>
-References: <20190424104402.15468-1-nylon7@andestech.com>
-Message-ID: <20190424104402.15468-2-nylon7@andestech.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Wed, 24 Apr 2019 13:09:57 +0200
+Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
+ in cross file
+In-Reply-To: <20190423232944.70aeddba@gmx.net>
+References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
+ <20190413182422.7e8f5f22@windsurf> <20190423232944.70aeddba@gmx.net>
+Message-ID: <dc67e3dce1b4f5fca495c836dc965daf171e348b.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libnspr 4.20 didn't support nds32 architecture lead to build error
+Hello Peter,
 
-Fixes:
-  http://autobuild.buildroot.net/results/9380435440c977eeaf98a1ffa80f411f07f62482/
-Signed-off-by: Nylon Chen <nylon7@andestech.com>
----
- package/libnspr/0003-nds32.patch | 75 ++++++++++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
- create mode 100644 package/libnspr/0003-nds32.patch
+On Tue, 2019-04-23 at 23:29 +0200, Peter Seiderer wrote:
+> Hello J?rg, Thomas,
+> 
+> On Sat, 13 Apr 2019 18:24:22 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> 
+> > Hello J?rg,
+> > 
+> > +Peter Seiderer in Cc.
+> > 
+> > On Wed,  3 Apr 2019 20:32:01 +0200
+> > J?rg Krause <joerg.krause@embedded.rocks> wrote:
+> > 
+> > > Since version 0.49.0 the Meson build system has native support for
+> > > looking for `libgcrypt-config` if no pkg-config file is found. As the
+> > > latest version 1.8.4 of libgcrypt does not provide a .pc file, using
+> > > `libgcrypt-config` is the only way for detecting the required libraries
+> > > when linking agains libgrypt.
+> > > 
+> > > The `libgcrypt-config` entry is necessary for updating package mpd,
+> > > which switched from the Autotools to the Meson build system when bumping
+> > > from version 0.20 to 0.21.
+> > > 
+> > > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>  
+> > 
+> > As I said in my previous reply, I'm not too happy with this
+> > libgcrypt-config variable creeping into the global cross-compilation
+> > file. Can we instead look at extending what Peter Seiderer is doing in
+> > http://patchwork.ozlabs.org/patch/1081486/ and allow some per-package
+> > additions to the per-package cross-compilation file ? Peter's patch
+> > does it for CFLAGS/CXXFLAGS/LDFLAGS, we could perhaps do the same with
+> > arbitrary program paths ?
+> 
+> Something like the following (draft) should work:
+> 
+> diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+> index 4056c2b2f4..7cd372128e 100644
+> --- a/package/meson/cross-compilation.conf.in
+> +++ b/package/meson/cross-compilation.conf.in
+> @@ -9,6 +9,7 @@ cpp = '@TARGET_CROSS at g++'
+>  ar = '@TARGET_CROSS at ar'
+>  strip = '@TARGET_CROSS at strip'
+>  pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
+> + at PKG_TARGET_BINARIES@
+>  
+>  [properties]
+>  needs_exe_wrapper = true
+> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> index 70128f6bad..e550c80c9d 100644
+> --- a/package/meson/meson.mk
+> +++ b/package/meson/meson.mk
+> @@ -60,6 +60,7 @@ define HOST_MESON_INSTALL_CROSS_CONF
+>             -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
+>             -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
+>             -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
+> +           -e "s%@PKG_TARGET_BINARIES@%%g" \
+>             -e "s%@PKG_TARGET_CFLAGS@%%g" \
+>             -e "s%@PKG_TARGET_LDFLAGS@%%g" \
+>             -e "s%@PKG_TARGET_CXXFLAGS@%%g" \
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index 9974b1e513..93df43fe3e 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -74,6 +74,7 @@ define $(2)_CONFIGURE_CMDS
+>             -e "s%@TARGET_CFLAGS@%$$(HOST_MESON_SED_CFLAGS)%g" \
+>             -e "s%@TARGET_LDFLAGS@%$$(HOST_MESON_SED_LDFLAGS)%g" \
+>             -e "s%@TARGET_CXXFLAGS@%$$(HOST_MESON_SED_CXXFLAGS)%g" \
+> +           -e "s%@PKG_TARGET_BINARIES@%$$($$(PKG)_MESON_BINARIES)%g" \
+>             -e "s%@PKG_TARGET_CFLAGS@%$$($$(PKG)_MESON_SED_CFLAGS)%g" \
+>             -e "s%@PKG_TARGET_LDFLAGS@%$$($$(PKG)_MESON_SED_LDFLAGS)%g" \
+>             -e "s%@PKG_TARGET_CXXFLAGS@%$$($$(PKG)_MESON_SED_CXXFLAGS)%g" \
+> 
+> 
+> and with: 
+> 
+> MPD_MESON_BINARIES = libgcrypt-config = '$(STAGING_DIR)/usr/bin/libgcrypt-config'
 
-diff --git a/package/libnspr/0003-nds32.patch b/package/libnspr/0003-nds32.patch
-new file mode 100644
-index 0000000000..dbcfa24e25
---- /dev/null
-+++ b/package/libnspr/0003-nds32.patch
-@@ -0,0 +1,75 @@
-+Add nds32 support
-+
-+[Nylon: update for nspr 4.20]
-+Signed-off-by:Nylon Chen <nylon7@andestech.com>
-+
-+Index: b/nspr/pr/include/md/_linux.cfg
-+===================================================================
-+--- a/nspr/pr/include/md/_linux.cfg
-++++ b/nspr/pr/include/md/_linux.cfg
-+@@ -1207,6 +1207,51 @@
-+ #define PR_BYTES_PER_WORD_LOG2   2
-+ #define PR_BYTES_PER_DWORD_LOG2  3
-+
-++#elif defined(__nds32__)
-++
-++#define IS_LITTLE_ENDIAN 1
-++#undef  IS_BIG_ENDIAN
-++
-++#define PR_BYTES_PER_BYTE   1
-++#define PR_BYTES_PER_SHORT  2
-++#define PR_BYTES_PER_INT    4
-++#define PR_BYTES_PER_INT64  8
-++#define PR_BYTES_PER_LONG   4
-++#define PR_BYTES_PER_FLOAT  4
-++#define PR_BYTES_PER_DOUBLE 8
-++#define PR_BYTES_PER_WORD   4
-++#define PR_BYTES_PER_DWORD  8
-++
-++#define PR_BITS_PER_BYTE    8
-++#define PR_BITS_PER_SHORT   16
-++#define PR_BITS_PER_INT     32
-++#define PR_BITS_PER_INT64   64
-++#define PR_BITS_PER_LONG    32
-++#define PR_BITS_PER_FLOAT   32
-++#define PR_BITS_PER_DOUBLE  64
-++#define PR_BITS_PER_WORD    32
-++
-++#define PR_BITS_PER_BYTE_LOG2   3
-++#define PR_BITS_PER_SHORT_LOG2  4
-++#define PR_BITS_PER_INT_LOG2    5
-++#define PR_BITS_PER_INT64_LOG2  6
-++#define PR_BITS_PER_LONG_LOG2   5
-++#define PR_BITS_PER_FLOAT_LOG2  5
-++#define PR_BITS_PER_DOUBLE_LOG2 6
-++#define PR_BITS_PER_WORD_LOG2   5
-++
-++#define PR_ALIGN_OF_SHORT   2
-++#define PR_ALIGN_OF_INT     4
-++#define PR_ALIGN_OF_LONG    4
-++#define PR_ALIGN_OF_INT64   4
-++#define PR_ALIGN_OF_FLOAT   4
-++#define PR_ALIGN_OF_DOUBLE  4
-++#define PR_ALIGN_OF_POINTER 4
-++#define PR_ALIGN_OF_WORD    4
-++
-++#define PR_BYTES_PER_WORD_LOG2   2
-++#define PR_BYTES_PER_DWORD_LOG2  3
-++
-+ #else
-+
-+ #error "Unknown CPU architecture"
-+
-+Index: b/nspr/pr/include/md/_linux.h
-+===================================================================
-+--- a/nspr/pr/include/md/_linux.h
-++++ b/nspr/pr/include/md/_linux.h
-+@@ -65,6 +65,8 @@
-+ #define _PR_SI_ARCHITECTURE "microblaze"
-+ #elif defined(__nios2__)
-+ #define _PR_SI_ARCHITECTURE "nios2"
-++#elif defined(__nds32__)
-++#define _PR_SI_ARCHITECTURE "nds32"
-+ #else
-+ #error "Unknown CPU architecture"
-+ #endif
--- 
-2.18.0
+Looks good to me. I will test and send an updated patch if Thomas
+agrees.
+
+J?rg
