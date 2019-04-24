@@ -1,44 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Apr 2019 22:19:12 +0200
-Subject: [Buildroot] [git commit] package/corkscrew: bump to version v2.0
-Message-ID: <20190424201444.D2A81814AE@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 24 Apr 2019 22:17:04 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/stunnel: fix
+ static build with openssl and atomic
+Message-ID: <20190424201454.50DAB82B77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b685b92642ba9435409a122073af4746c0bd4f6f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+commit: https://git.buildroot.net/buildroot/commit/?id=1f47bd3b3c7cf6f1e6316b25c085f8440de7fdb4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-This patch bumps corkscrew package to version v2.0.
+Use pkg-config to find openssl dependencies such as lz or latomic
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/28a466b98f813edb6402686cc4706766e73e1ff3
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a6e6dc1b322337cc35f5675dcab4bdba4c2beaa1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/corkscrew/corkscrew.hash | 2 +-
- package/corkscrew/corkscrew.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/stunnel/stunnel.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/corkscrew/corkscrew.hash b/package/corkscrew/corkscrew.hash
-index 5a580d1343..c6dee95d85 100644
---- a/package/corkscrew/corkscrew.hash
-+++ b/package/corkscrew/corkscrew.hash
-@@ -1,3 +1,3 @@
- # sha256 locally computed
--sha256  ba28a7d123fe607b87ff9d399b33e7549d9ef1a13ae3b61e8f61982e8ae5571d  corkscrew-a94f745b40077172b8fe7d77e2d583b9cf900281.tar.gz
-+sha256  09d70daaa3145070a1e463dbab6ae1cbc62449b1e09c94e158f6017e7c79c9f6  corkscrew-v2.0.tar.gz
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/corkscrew/corkscrew.mk b/package/corkscrew/corkscrew.mk
-index 13612d4448..ae90df80b7 100644
---- a/package/corkscrew/corkscrew.mk
-+++ b/package/corkscrew/corkscrew.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index 4a5d2a0335..9a81373a54 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -7,12 +7,12 @@
+ STUNNEL_VERSION_MAJOR = 5
+ STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).44
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+-STUNNEL_DEPENDENCIES = openssl
++STUNNEL_DEPENDENCIES = host-pkgconf openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+ 	--disable-libwrap
+ STUNNEL_CONF_ENV = \
+ 	ax_cv_check_cflags___fstack_protector=$(if $(BR2_TOOLCHAIN_HAS_SSP),yes,no) \
+-	LIBS=$(if $(BR2_STATIC_LIBS),-lz)
++	LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ STUNNEL_LICENSE = GPL-2.0+
+ STUNNEL_LICENSE_FILES = COPYING COPYRIGHT.GPL
  
--CORKSCREW_VERSION = a94f745b40077172b8fe7d77e2d583b9cf900281
-+CORKSCREW_VERSION = v2.0
- CORKSCREW_SITE = $(call github,bryanpkc,corkscrew,$(CORKSCREW_VERSION))
- CORKSCREW_LICENSE = GPL-2.0
- CORKSCREW_LICENSE_FILES = COPYING
