@@ -1,31 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Apr 2019 22:19:02 +0200
-Subject: [Buildroot] [PATCH] package/python-can: bump to version 3.1.1
-In-Reply-To: <1556098652-19128-1-git-send-email-angelo@amarulasolutions.com>
-References: <1556098652-19128-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20190424221902.33e13bd9@windsurf>
+Date: Wed, 24 Apr 2019 22:19:12 +0200
+Subject: [Buildroot] [git commit] package/corkscrew: bump to version v2.0
+Message-ID: <20190424201444.D2A81814AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 24 Apr 2019 11:37:32 +0200
-Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b685b92642ba9435409a122073af4746c0bd4f6f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This patch bumps python-can to version 3.1.1, it removes md5 sum from
-> hash file cause it's not present anymore on the pypi website.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  package/python-can/python-can.hash | 5 ++---
->  package/python-can/python-can.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 5 deletions(-)
+This patch bumps corkscrew package to version v2.0.
 
-Applied to master, thanks.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/corkscrew/corkscrew.hash | 2 +-
+ package/corkscrew/corkscrew.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/corkscrew/corkscrew.hash b/package/corkscrew/corkscrew.hash
+index 5a580d1343..c6dee95d85 100644
+--- a/package/corkscrew/corkscrew.hash
++++ b/package/corkscrew/corkscrew.hash
+@@ -1,3 +1,3 @@
+ # sha256 locally computed
+-sha256  ba28a7d123fe607b87ff9d399b33e7549d9ef1a13ae3b61e8f61982e8ae5571d  corkscrew-a94f745b40077172b8fe7d77e2d583b9cf900281.tar.gz
++sha256  09d70daaa3145070a1e463dbab6ae1cbc62449b1e09c94e158f6017e7c79c9f6  corkscrew-v2.0.tar.gz
+ sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
+diff --git a/package/corkscrew/corkscrew.mk b/package/corkscrew/corkscrew.mk
+index 13612d4448..ae90df80b7 100644
+--- a/package/corkscrew/corkscrew.mk
++++ b/package/corkscrew/corkscrew.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CORKSCREW_VERSION = a94f745b40077172b8fe7d77e2d583b9cf900281
++CORKSCREW_VERSION = v2.0
+ CORKSCREW_SITE = $(call github,bryanpkc,corkscrew,$(CORKSCREW_VERSION))
+ CORKSCREW_LICENSE = GPL-2.0
+ CORKSCREW_LICENSE_FILES = COPYING
