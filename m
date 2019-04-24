@@ -1,96 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 15:57:47 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/syslog-ng: fix
- segfault on startup due to pthread_atfork
-Message-ID: <20190424135338.CDBF9826DA@busybox.osuosl.org>
+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Date: Wed, 24 Apr 2019 16:27:17 +0200
+Subject: [Buildroot] [PATCH V2] package/python-setuptools-scm: bump to
+ version 3.2.0
+Message-ID: <1556116037-22857-1-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05f41b5a431671d4b9df31038055a69e3ee330d0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+python-setuptools-scm v1.15.6 is deprecated (last update
+was in 2017). Multiple versions were released to resolve
+various issues :
+https://github.com/pypa/setuptools_scm/blob/master/CHANGELOG.rst.
 
-syslog-ng may segfault at startup (during library initialization, before
-reaching main) in newer toolchains. I have witnessed it on aarch64 (but with
-32-bit arm userland) with glibc 2.28.
-
-Problem is described in syslog-ng issue #2263 [1], which in turn leads to a
-problem in 'ivykis' which is shipped with syslog-ng, see ivykis issue #15
-[2].
-
-Root cause is that 'pthread_atfork' is used by ivykis but searched by its
-configure script in libpthread_nonshared only. In newer toolchains, it seems
-this symbol is in libc_nonshared.
-
-Apply a patch someone proposed via pullrequest [3] to the ivykis project,
-but which is at this moment not yet merged upstream.
-
-[1] https://github.com/balabit/syslog-ng/issues/2263
-[2] https://github.com/buytenh/ivykis/issues/15
-[3] https://github.com/buytenh/ivykis/pull/16
-
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d1467eaa6bb951fafb0c1f3320a06635922f24ad)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 ---
- ...for-pthread-atfork-also-in-libc-nonshared.patch | 49 ++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ package/python-setuptools-scm/python-setuptools-scm.hash | 8 +++++---
+ package/python-setuptools-scm/python-setuptools-scm.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/syslog-ng/0003-look-for-pthread-atfork-also-in-libc-nonshared.patch b/package/syslog-ng/0003-look-for-pthread-atfork-also-in-libc-nonshared.patch
-new file mode 100644
-index 0000000000..0f8454af97
---- /dev/null
-+++ b/package/syslog-ng/0003-look-for-pthread-atfork-also-in-libc-nonshared.patch
-@@ -0,0 +1,49 @@
-+From a844abca43349739c36a4cdb7ea6f3bce560bd7f Mon Sep 17 00:00:00 2001
-+From: Rolf Eike Beer <eb@emlix.com>
-+Date: Thu, 8 Nov 2018 08:14:46 +0100
-+Subject: [PATCH] look for pthread_atfork() also in lib c_nonshared
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
+index e34e8e2..774874b 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.hash
++++ b/package/python-setuptools-scm/python-setuptools-scm.hash
+@@ -1,3 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/setuptools_scm/json, sha256 locally computed
+-md5 f17493d53f0d842bb0152f214775640b setuptools_scm-1.15.6.tar.gz
+-sha256 49ab4685589986a42da85706b3311a2f74f1af567d39fee6cb1e088d7a75fb5f setuptools_scm-1.15.6.tar.gz
++# sha256 from https://pypi.python.org/pypi/setuptools_scm/json
++sha256 52ab47715fa0fc7d8e6cd15168d1a69ba995feb1505131c3e814eb7087b57358 setuptools_scm-3.2.0.tar.gz
 +
-+Newer versions of glibc do not have pthread_nonshared anymore, instead the
-+symbol is in c_nonshared. This fixes a crash on start on those platforms
-+(namely with syslog-ng).
-+
-+Signed-off-by: Rolf Eike Beer <eb@emlix.com>
-+[ThomasDS: backport from https://github.com/buytenh/ivykis/pull/16, at this
-+moment not yet merged upstream.
-+See also:
-+- https://github.com/buytenh/ivykis/issues/15
-+- https://github.com/balabit/syslog-ng/issues/2263
-+]
-+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-+
-+---
-+ configure.ac | 2 ++
-+ src/pthr.h   | 2 +-
-+ 2 files changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/lib/ivykis/configure.ac b/lib/ivykis/configure.ac
-+index e9b10c0..56440d1 100644
-+--- a/lib/ivykis/configure.ac
-++++ b/lib/ivykis/configure.ac
-+@@ -88,6 +88,8 @@ esac
-+ # link in libpthread_nonshared.a if it is available.
-+ #
-+ AC_CHECK_LIB([pthread_nonshared], [pthread_atfork])
-++# the lib is gone in glibc 2.28, things are now in c_nonshared
-++AC_CHECK_LIB([c_nonshared], [pthread_atfork])
-+ 
-+ # Checks for header files.
-+ AC_CHECK_HEADERS([process.h])
-+diff --git a/lib/ivykis/src/pthr.h b/lib/ivykis/src/pthr.h
-+index a41eaf3..32c1af2 100644
-+--- a/lib/ivykis/src/pthr.h
-++++ b/lib/ivykis/src/pthr.h
-+@@ -42,7 +42,7 @@ static inline int pthreads_available(void)
-+  * symbol because that causes it to be undefined even if you link
-+  * libpthread_nonshared.a in explicitly.
-+  */
-+-#ifndef HAVE_LIBPTHREAD_NONSHARED
-++#if !defined(HAVE_LIBPTHREAD_NONSHARED) && !defined(HAVE_LIBC_NONSHARED)
-+ #pragma weak pthread_atfork
-+ #endif
-+ 
++# sha256 locally computed
++sha256 89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e LICENSE
+diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
+index acde261..e296dc6 100644
+--- a/package/python-setuptools-scm/python-setuptools-scm.mk
++++ b/package/python-setuptools-scm/python-setuptools-scm.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SETUPTOOLS_SCM_VERSION = 1.15.6
++PYTHON_SETUPTOOLS_SCM_VERSION = 3.2.0
+ PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
+-PYTHON_SETUPTOOLS_SCM_SITE = https://pypi.python.org/packages/03/6d/aafdd01edd227ee879b691455bf19895091872af7e48192bea1758c82032
++PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/54/85/514ba3ca2a022bddd68819f187ae826986051d130ec5b972076e4f58a9f3
+ PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
+ PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
+ PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = setuptools
+-- 
+2.7.4
