@@ -1,78 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 24 Apr 2019 21:15:44 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/freerdp: security
- bump to version 2.0.0-rc4
-Message-ID: <20190424191540.55FAA826C6@busybox.osuosl.org>
+Date: Wed, 24 Apr 2019 21:21:29 +0200
+Subject: [Buildroot] [PATCH 1/6] package/lldpd: update license file
+In-Reply-To: <20190407195833.9275-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 7 Apr 2019 21:58:28 +0200")
+References: <20190407195833.9275-1-fontaine.fabrice@gmail.com>
+Message-ID: <87mukfb45i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=942da943f391fae3ce283f7dd8f57f94c7408ad1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes the following security issues:
+ > - Instead of README.md, use LICENSE file that has been added in version
+ >   0.9.5 with
+ >   https://github.com/vincentbernat/lldpd/commit/4d534a60ee33aa2431acb6bfe6d499d2e72d66d5
+ > - Add hash of license file
 
-- CVE-2018-8785: FreeRDP prior to version 2.0.0-rc4 contains a Heap-Based
-  Buffer Overflow in function zgfx_decompress() that results in a memory
-  corruption and probably even a remote code execution.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-- CVE-2018-8786: FreeRDP prior to version 2.0.0-rc4 contains an Integer
-  Truncation that leads to a Heap-Based Buffer Overflow in function
-  update_read_bitmap_update() and results in a memory corruption and
-  probably even a remote code execution.
+Committed to 2019.02.x, thanks.
 
-- CVE-2018-8787: FreeRDP prior to version 2.0.0-rc4 contains an Integer
-  Overflow that leads to a Heap-Based Buffer Overflow in function
-  gdi_Bitmap_Decompress() and results in a memory corruption and probably
-  even a remote code execution.
-
-- CVE-2018-8788: FreeRDP prior to version 2.0.0-rc4 contains an
-  Out-Of-Bounds Write of up to 4 bytes in function nsc_rle_decode() that
-  results in a memory corruption and possibly even a remote code execution.
-
-- CVE-2018-8789: FreeRDP prior to version 2.0.0-rc4 contains several
-  Out-Of-Bounds Reads in the NTLM Authentication module that results in a
-  Denial of Service (segfault).
-
-For details, see the upstream PR:
-https://github.com/FreeRDP/FreeRDP/pull/5031
-
-Add support to set tls security level (for openssl >= 1.1.0), for RDP
-protocol version 10 (needed for windows 10 and windows server
-2016). Also have some fix and features, see
-https://github.com/FreeRDP/FreeRDP/commit/e21b72c95f857817b4b32b5ef5406355c005a9e8
-
-Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1e91d89bf1fd8d1a7b4ad18b61925dc5c2631f21)
-[Peter: mention security fixes]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/freerdp/freerdp.hash | 2 +-
- package/freerdp/freerdp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/freerdp/freerdp.hash b/package/freerdp/freerdp.hash
-index 44b7b876a9..7a6859551f 100644
---- a/package/freerdp/freerdp.hash
-+++ b/package/freerdp/freerdp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 a09e338b996fada44bf1277f423240d0fa82289799e2e5dea9d9c63201554de1 freerdp-2.0.0-rc2.tar.gz
-+sha256 3406f3bfab63f81c1533029a5bf73949ff60f22f6e155c5a08005b8b8afe6d49 freerdp-2.0.0-rc4.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 LICENSE
-diff --git a/package/freerdp/freerdp.mk b/package/freerdp/freerdp.mk
-index 91e4ae47ee..0f32ff4718 100644
---- a/package/freerdp/freerdp.mk
-+++ b/package/freerdp/freerdp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FREERDP_VERSION = 2.0.0-rc2
-+FREERDP_VERSION = 2.0.0-rc4
- FREERDP_SITE = $(call github,FreeRDP,FreeRDP,$(FREERDP_VERSION))
- FREERDP_DEPENDENCIES = libglib2 openssl zlib
- FREERDP_LICENSE = Apache-2.0
+-- 
+Bye, Peter Korsgaard
