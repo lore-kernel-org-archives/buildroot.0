@@ -1,25 +1,39 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 24 Apr 2019 19:24:23 -0300
-Subject: [Buildroot] [PATCH v2] configs/warp7: bump to Linux 5.0.9 and
- U-Boot 2019.01
-In-Reply-To: <1556138817-8402-1-git-send-email-pjtexier@koncepto.io>
-References: <1556138817-8402-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <CAOMZO5BFf5E9WRkAECDoMA1cjo1Rbd8TKLiWT8Kgu-ZJAbqtmw@mail.gmail.com>
+From: Trent Piepho <tpiepho@impinj.com>
+Date: Thu, 25 Apr 2019 00:10:46 +0000
+Subject: [Buildroot] [PATCH] network-manager: don't require an external DHCP
+ client
+Message-ID: <20190425001038.11403-1-tpiepho@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Apr 24, 2019 at 5:47 PM Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
->
-> This commit bumps Linux & Linux-headers to 5.0 and U-Boot to version 2019.01
->
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
-> Changes v1 -> v2:
->   - Bump Kernel from 5.0.0 to 5.0.9  (suggested by Fabio Estevam)
+NetworkManager now has an internal DHCP client.  Therefor, there is no
+need to select either the DHCPCD or DHCP_CLIENT package to get DHCP.
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+Remove the forced select of one of those packages.
 
-Thanks
+The internal DHCP client has become NetworkManager's preferred DHCP
+client, so it seems reasonable that it effectively becomes the default,
+unless DHCPCD or DHCP_CLIENT are intentionally enabled.
+
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+---
+ package/network-manager/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index ca508185f0..2d854fe003 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -7,7 +7,6 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	# Tested with 3.2, but may even work with earlier versions
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # CLOCK_BOOTTIME, IPTOS_CLASS_*
+-	select BR2_PACKAGE_DHCPCD if !BR2_PACKAGE_DHCP_CLIENT
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
+ 	select BR2_PACKAGE_GNUTLS
+-- 
+2.14.5
