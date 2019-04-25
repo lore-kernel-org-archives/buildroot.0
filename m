@@ -1,53 +1,20 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 25 Apr 2019 12:26:18 +0200
-Subject: [Buildroot] [PATCH] package/dovecot: security bump to version
- 2.3.5.2
-Message-ID: <20190425102618.32491-1-peter@korsgaard.com>
+From: Frank Hunleth <fhunleth@troodon-software.com>
+Date: Thu, 25 Apr 2019 08:35:16 -0400
+Subject: [Buildroot] Installing kernel headers after building Linux
+Message-ID: <EAEE4C8D-B3C1-4310-8D48-24B29A066A97@troodon-software.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
+Hello,
 
-* CVE-2019-10691: Trying to login with 8bit username containing
-  invalid UTF8 input causes auth process to crash if auth policy is
-  enabled. This could be used rather easily to cause a DoS. Similar
-  crash also happens during mail delivery when using invalid UTF8 in
-  From or Subject header when OX push notification driver is used.
+I have a setup where I?m using a non-Buildroot external toolchain, and I'm trying to add a package that requires the kernel headers from the same version of Linux that?s running. The kernel headers in the external toolchain don?t match the version of Linux that I?m using as you?d expect.
 
-https://dovecot.org/pipermail/dovecot-news/2019-April/000406.html
+I?m wondering why the Linux build step doesn?t run `make headers_install` at the end so that the header files could be available. Would doing this for external toolchains cause an issue? Before I head too far down that path, I wanted to check.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Or is there another way of making the kernel headers available (aside from switching to an internally generated toolchain)? In case it matters, the package I?m looking at adding is `ply` so that I can run a couple eBPF traces.
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index a1c2c8ff84..2b8492a3c8 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256 d78f9d479e3b2caa808160f86bfec1c9c7b46344d8b14b88f5fa9bbbf8c7c33f  dovecot-2.3.5.1.tar.gz
-+sha256 ba14e41aefd81a868a35b83bcb54194116106424d37690519b50ea83c0f31bf2  dovecot-2.3.5.2.tar.gz
- sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index e56517b0a2..d9b94eb83a 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).5.1
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).5.2
- DOVECOT_SITE = https://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
--- 
-2.11.0
+Thanks!
+Frank
