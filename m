@@ -1,494 +1,93 @@
-From: Daniel J. Leach <daniel.j.leach@gmail.com>
-Date: Thu, 25 Apr 2019 14:40:45 -0500
-Subject: [Buildroot] [PATCH 1/1] support/testing: openjdk JNI test cases
-Message-ID: <20190425194045.27849-1-dleach@belcan.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 25 Apr 2019 21:52:53 +0200
+Subject: [Buildroot] [git commit] package/rpm: fix build with NLS
+Message-ID: <20190425194810.DC6A3813E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This test case builds a native library and ensures a Java class can load
-and interact with the native library. The test also verifies Java code
-can make system calls via the native library.
+commit: https://git.buildroot.net/buildroot/commit/?id=1ba73d551ea9ea101288114e54cf7072a9e7e1ce
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Daniel J. Leach <dleach@belcan.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/26e20e19d878811d90fce52eb0951ee4d8b59068
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../package/br2-external/openjdk/Config.in    |  1 +
- .../package/openjdk-jni-test/Config.in        |  5 +
- .../package/openjdk-jni-test/JniHelper.java   |  9 ++
- .../package/openjdk-jni-test/JniTest.java     | 92 ++++++++++++++++++
- .../package/openjdk-jni-test/JniWrapper.c     | 50 ++++++++++
- .../package/openjdk-jni-test/JniWrapper.java  | 17 ++++
- .../package/openjdk-jni-test/jni_helper.c     | 94 +++++++++++++++++++
- .../package/openjdk-jni-test/jni_helper.h     | 13 +++
- .../openjdk/package/openjdk-jni-test/native.c | 39 ++++++++
- .../openjdk/package/openjdk-jni-test/native.h | 11 +++
- .../openjdk-jni-test/openjdk-jni-test.mk      | 34 +++++++
- support/testing/tests/package/test_openjdk.py |  6 ++
- 12 files changed, 371 insertions(+)
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/Config.in
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniHelper.java
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniTest.java
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniWrapper.c
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniWrapper.java
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/jni_helper.c
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/jni_helper.h
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.c
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.h
- create mode 100644 support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/openjdk-jni-test.mk
+ ...Makefile.am-rpm2-cpio-archive-needs-lintl.patch | 51 ++++++++++++++++++++++
+ package/rpm/rpm.mk                                 |  2 +
+ 2 files changed, 53 insertions(+)
 
-diff --git a/support/testing/tests/package/br2-external/openjdk/Config.in b/support/testing/tests/package/br2-external/openjdk/Config.in
-index 00c7fd4799..2588b34054 100644
---- a/support/testing/tests/package/br2-external/openjdk/Config.in
-+++ b/support/testing/tests/package/br2-external/openjdk/Config.in
-@@ -1 +1,2 @@
- source "$BR2_EXTERNAL_OPENJDK_PATH/package/openjdk-hello-world/Config.in"
-+source "$BR2_EXTERNAL_OPENJDK_PATH/package/openjdk-jni-test/Config.in"
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/Config.in b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/Config.in
+diff --git a/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch b/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
 new file mode 100644
-index 0000000000..22cd0c0aab
+index 0000000000..14d1d37d05
 --- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/Config.in
-@@ -0,0 +1,5 @@
-+config BR2_PACKAGE_OPENJDK_JNI_TEST
-+	bool "openjdk JNI test"
-+	depends on BR2_PACKAGE_OPENJDK
-+	help
-+	  Tests openjdk JNI support
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniHelper.java b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniHelper.java
-new file mode 100644
-index 0000000000..9e2a0387eb
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniHelper.java
-@@ -0,0 +1,9 @@
-+public class JniHelper
-+{
-+	public void HelloManagedWorld()
-+	{
-+		stringMember = "Hello, Managed World";
-+	}
++++ b/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
+@@ -0,0 +1,51 @@
++From 317bc5263fcb31ce788c76fe1947b2e0783e4542 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 25 Apr 2019 18:49:24 +0200
++Subject: [PATCH] Makefile.am: rpm2{cpio,archive} needs lintl
 +
-+	public String stringMember = "Set from Java";
-+}
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniTest.java b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniTest.java
-new file mode 100644
-index 0000000000..3d6c17b746
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniTest.java
-@@ -0,0 +1,92 @@
-+public class JniTest
-+{
-+	private static void Test(
-+		String name,
-+		Object actual,
-+		Object expected,
-+		String actualAsString,
-+		String expectedAsString)
-+	{
-+		if (!actual.equals(expected))
-+		{
-+			System.out.println(String.format(
-+				"Test: %s failed\nExpected: \"%s\", Actual: \"%s\"",
-+				name,
-+				expected,
-+				actual));
-+			JniTest.exitCode = -1;
-+		}
-+		else
-+		{
-+			System.out.println(String.format("Test: %s passed", name));
-+		}
-+	}
++Add LIBINTL to rpm2{cpio,archive}_LDADD otherwise build fails on:
 +
-+	private static void Test(
-+		String name,
-+		String actual,
-+		String expected)
-+	{
-+		JniTest.Test(name, actual, expected, actual, expected);
-+	}
++/home/buildroot/autobuild/instance-2/output/host/bin/xtensa-linux-gcc -std=gnu99 -DHAVE_CONFIG_H   -I. -I. -I./include/ -I./build -I./lib -I./rpmio -I./misc -DLOCALEDIR="\"/usr/share/locale\"" -DLIBRPMALIAS_FILENAME="\"rpmpopt-4.14.2.1\"" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include -fPIC -DPIC -D_REENTRANT -Wall -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes  -fno-strict-aliasing -Wempty-body -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os   -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/beecrypt -c -o tools/rpmdeps.o tools/rpmdeps.c
++/home/buildroot/autobuild/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: rpm2cpio.o: undefined reference to symbol 'libintl_dgettext'
++/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
++collect2: error: ld returned 1 exit status
++Makefile:962: recipe for target 'rpm2cpio' failed
++make[3]: *** [rpm2cpio] Error 1
++make[3]: *** Waiting for unfinished jobs....
++libtool: link: /home/buildroot/autobuild/instance-2/output/host/bin/xtensa-linux-gcc -std=gnu99 -fPIC -DPIC -D_REENTRANT -Wall -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes -fno-strict-aliasing -Wempty-body -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/beecrypt -o rpm2archive rpm2archive.o  lib/.libs/librpm.so /home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/rpmio/.libs/librpmio.so -lcap -ldb rpmio/.libs/librpmio.so -lbeecrypt -lbz2 -lz -llzma -lpopt -larchive -lpthread -Wl,-rpath -Wl,/home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/lib/.libs -Wl,-rpath -Wl,/home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/rpmio/.libs
++/home/buildroot/autobuild/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: rpm2archive.o: undefined reference to symbol 'libintl_dgettext'
++/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
++collect2: error: ld returned 1 exit status
++Makefile:958: recipe for target 'rpm2archive' failed
 +
-+	public static void main(String[] args)
-+	{
-+		var actualVersion = JniWrapper.get_jni_version();
-+		var expectedVersion = 0x000A0000;
-+		JniTest.Test(
-+			"Get JNI Version",
-+			actualVersion,
-+			expectedVersion,
-+			String.format("0x%08X", actualVersion),
-+			String.format("0x%08X", expectedVersion));
++Fixes:
++ - http://autobuild.buildroot.org/results/26e20e19d878811d90fce52eb0951ee4d8b59068
 +
-+		JniTest.Test(
-+			"Read Native String Constant",
-+			JniWrapper.read_constant_string(),
-+			"Hello from C");
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://github.com/rpm-software-management/rpm/pull/683]
++---
++ Makefile.am | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+		JniTest.Test(
-+			"Write Java String to Native Library",
-+			JniWrapper.write_string("Hello from Java"),
-+			"Hello from Java");
++diff --git a/Makefile.am b/Makefile.am
++index 057b7892c..e15240e60 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -145,11 +145,11 @@ rpmspec_LDADD +=	@WITH_POPT_LIB@
++ 
++ rpm2cpio_SOURCES =	rpm2cpio.c debug.h system.h
++ rpm2cpio_LDADD =	lib/librpm.la rpmio/librpmio.la
++-rpm2cpio_LDADD +=	@WITH_POPT_LIB@
+++rpm2cpio_LDADD +=	@WITH_POPT_LIB@ @LIBINTL@
++ 
++ rpm2archive_SOURCES =	rpm2archive.c debug.h system.h
++ rpm2archive_LDADD =	lib/librpm.la rpmio/librpmio.la
++-rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@
+++rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@ @LIBINTL@
++ 
++ 
++ if LIBELF
++-- 
++2.20.1
 +
-+		JniTest.Test(
-+			"Write Java Char Array to Native Library",
-+			JniWrapper.write_char_array("Hello from Java".toCharArray()),
-+			"Hello from Java");
-+
-+		var helper = new JniHelper();
-+		JniTest.Test(
-+			"Write String Member to Native Library",
-+			JniWrapper.write_string_member(helper),
-+			"Set from Java");
-+
-+		JniWrapper.set_string_member(helper);
-+		JniTest.Test(
-+			"Set String Member from Native Library",
-+			helper.stringMember,
-+			"Set from C");
-+
-+		JniWrapper.execute_java_function(helper);
-+		JniTest.Test(
-+			"Execeute Java Function from Native Library",
-+			helper.stringMember,
-+			"Hello, Managed World");
-+
-+		helper = JniWrapper.instantiate_java_class();
-+		JniTest.Test(
-+			"Instantiate Java Class",
-+			helper.stringMember,
-+			"Instantiated from C");
-+
-+		JniTest.Test(
-+			"Call Native Library to Set System Time",
-+			JniWrapper.set_and_write_time_in_seconds(1000),
-+			"1000");
-+
-+		System.exit(exitCode);
-+	}
-+
-+	public static int exitCode = 0;
-+}
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniWrapper.c b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniWrapper.c
-new file mode 100644
-index 0000000000..0dde4e0c28
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniWrapper.c
-@@ -0,0 +1,50 @@
-+#include "JniWrapper.h"
-+#include "jni_helper.h"
-+
-+// Proxies the generated function calls to the jni_helper
-+
-+JNIEXPORT jint JNICALL Java_JniWrapper_get_1jni_1version
-+	(JNIEnv* env, jclass class)
-+{
-+	return get_jni_version(env);
-+}
-+JNIEXPORT jstring JNICALL Java_JniWrapper_read_1constant_1string
-+	(JNIEnv* env, jclass class)
-+{
-+	return read_constant_jstring(env);
-+}
-+JNIEXPORT jstring JNICALL Java_JniWrapper_write_1string
-+	(JNIEnv* env, jclass class, jstring string)
-+{
-+	return write_jstring(env, string);
-+}
-+JNIEXPORT jstring JNICALL Java_JniWrapper_write_1char_1array
-+	(JNIEnv* env, jclass class, jcharArray chars)
-+{
-+	return write_jchar_array(env, chars);
-+}
-+JNIEXPORT jstring JNICALL Java_JniWrapper_write_1string_1member
-+	(JNIEnv* env, jclass class, jobject helper)
-+{
-+	return write_string_member(env, helper);
-+}
-+JNIEXPORT void JNICALL Java_JniWrapper_set_1string_1member
-+	(JNIEnv* env, jclass class, jobject helper)
-+{
-+	set_string_member(env, helper);
-+}
-+JNIEXPORT void JNICALL Java_JniWrapper_execute_1java_1function
-+	(JNIEnv* env, jclass class, jobject helper)
-+{
-+	execute_java_function(env, helper);
-+}
-+JNIEXPORT jobject JNICALL Java_JniWrapper_instantiate_1java_1class
-+	(JNIEnv* env, jclass class)
-+{
-+	return instantiate_java_class(env);
-+}
-+JNIEXPORT jstring JNICALL Java_JniWrapper_set_1and_1write_1time_1in_1seconds
-+	(JNIEnv* env, jclass class, jint seconds)
-+{
-+	return set_and_write_time_in_seconds(env, seconds);
-+}
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniWrapper.java b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniWrapper.java
-new file mode 100644
-index 0000000000..d11e99bf01
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/JniWrapper.java
-@@ -0,0 +1,17 @@
-+public class JniWrapper
-+{
-+	static
-+	{
-+		System.loadLibrary("jni_native");
-+	}
-+
-+	public static native int get_jni_version();
-+	public static native String read_constant_string();
-+	public static native String write_string(String string);
-+	public static native String write_char_array(char[] string);
-+	public static native String write_string_member(JniHelper helper);
-+	public static native void set_string_member(JniHelper helper);
-+	public static native void execute_java_function(JniHelper helper);
-+	public static native JniHelper instantiate_java_class();
-+	public static native String set_and_write_time_in_seconds(int seconds);
-+}
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/jni_helper.c b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/jni_helper.c
-new file mode 100644
-index 0000000000..e6e2eec8be
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/jni_helper.c
-@@ -0,0 +1,94 @@
-+#include "jni_helper.h"
-+#include "native.h"
-+
-+// Handles Java/C interop
-+
-+jint get_jni_version(JNIEnv* env)
-+{
-+	return (*env)->GetVersion(env);
-+}
-+jstring read_constant_jstring(JNIEnv* env)
-+{
-+	return (*env)->NewStringUTF(env, read_constant_string());
-+}
-+static jstring read_internal_string_as_jstring(JNIEnv* env)
-+{
-+	return (*env)->NewStringUTF(env, read_internal_string());
-+}
-+jstring write_jstring(JNIEnv* env, jstring string)
-+{
-+	const char* utf8_string = (*env)->GetStringUTFChars(env, string, NULL);
-+	write_internal_string(utf8_string);
-+
-+	(*env)->ReleaseStringUTFChars(env, string, utf8_string);
-+	return read_internal_string_as_jstring(env);
-+}
-+jstring write_jchar_array(JNIEnv* env, jcharArray chars)
-+{
-+	jsize length = (*env)->GetArrayLength(env, chars);
-+	jchar* body = (*env)->GetCharArrayElements(env, chars, NULL);
-+	jstring input = (*env)->NewString(env, body, length);
-+	jstring output = write_jstring(env, input);
-+
-+	(*env)->ReleaseCharArrayElements(env, chars, body, JNI_ABORT);
-+	return output;
-+}
-+static jfieldID get_string_member_field(JNIEnv* env, jobject helper)
-+{
-+	jclass class = (*env)->GetObjectClass(env, helper);
-+	return (*env)->GetFieldID(env, class, "stringMember", "Ljava/lang/String;");
-+}
-+jstring write_string_member(JNIEnv* env, jobject helper)
-+{
-+	jfieldID fieldID = get_string_member_field(env, helper);
-+	jstring string = (*env)->GetObjectField(env, helper, fieldID);
-+
-+	return write_jstring(env, string);
-+}
-+static void set_string_member_helper(JNIEnv* env, jobject helper, const char* utf8_string)
-+{
-+	jfieldID fieldID = get_string_member_field(env, helper);
-+	jstring string = (*env)->NewStringUTF(env, utf8_string);
-+	(*env)->SetObjectField(env, helper, fieldID, string);
-+}
-+void set_string_member(JNIEnv* env, jobject helper)
-+{
-+	char stringBuffer[256];
-+	write_external_string(stringBuffer, 256);
-+	set_string_member_helper(env, helper, stringBuffer);
-+}
-+
-+typedef struct
-+{
-+	JNIEnv* env;
-+	jobject object;
-+	jmethodID methodID;
-+} method_parameters;
-+static void call_void_java_method(void* context)
-+{
-+	method_parameters* parameters = (method_parameters*)context;
-+	(*parameters->env)->CallVoidMethod(parameters->env, parameters->object, parameters->methodID);
-+}
-+void execute_java_function(JNIEnv* env, jobject helper)
-+{
-+	jclass class = (*env)->GetObjectClass(env, helper);
-+	jmethodID methodID = (*env)->GetMethodID(env, class, "HelloManagedWorld", "()V");
-+
-+	method_parameters parameters = {env, helper, methodID};
-+	execute_function(call_void_java_method, (void*)&parameters);
-+}
-+jobject instantiate_java_class(JNIEnv* env)
-+{
-+	jclass class = (*env)->FindClass(env, "JniHelper");
-+	jmethodID methodID = (*env)->GetMethodID(env, class, "<init>", "()V");
-+
-+	jobject object =(*env)->NewObject(env, class, methodID);
-+	set_string_member_helper(env, object, "Instantiated from C");
-+	return object;
-+}
-+jstring set_and_write_time_in_seconds(JNIEnv* env, jint seconds)
-+{
-+	set_time_in_seconds((int)seconds);
-+	write_internal_time_in_seconds();
-+	return read_internal_string_as_jstring(env);
-+}
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/jni_helper.h b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/jni_helper.h
-new file mode 100644
-index 0000000000..4c9aab3b7f
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/jni_helper.h
-@@ -0,0 +1,13 @@
-+#pragma once
-+
-+#include <jni.h>
-+
-+jint get_jni_version(JNIEnv* env);
-+jstring read_constant_jstring(JNIEnv* env);
-+jstring write_jstring(JNIEnv* env, jstring string);
-+jstring write_jchar_array(JNIEnv* env, jcharArray chars);
-+jstring write_string_member(JNIEnv* env, jobject helper);
-+void set_string_member(JNIEnv* env, jobject helper);
-+void execute_java_function(JNIEnv* env, jobject helper);
-+jobject instantiate_java_class(JNIEnv* env);
-+jstring set_and_write_time_in_seconds(JNIEnv* env, jint seconds);
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.c b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.c
-new file mode 100644
-index 0000000000..ed87e345af
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.c
-@@ -0,0 +1,39 @@
-+#include "native.h"
-+#include <stdio.h>
-+#include <time.h>
-+
-+// Pure native functions
-+
-+#define CHAR_BUFFER_SIZE 256
-+static char buffer[CHAR_BUFFER_SIZE];
-+
-+const char* read_constant_string()
-+{
-+	return "Hello from C";
-+}
-+const char* read_internal_string()
-+{
-+	return buffer;
-+}
-+void write_internal_string(const char* string)
-+{
-+	snprintf(buffer, CHAR_BUFFER_SIZE, "%s", string);
-+}
-+void write_external_string(char* string, size_t maxLength)
-+{
-+	snprintf(string, maxLength, "Set from C");
-+}
-+void execute_function(void(*function)(void*), void* context)
-+{
-+	function(context);
-+}
-+void set_time_in_seconds(int seconds)
-+{
-+	time_t timeToSet = seconds;
-+	stime(&timeToSet);
-+}
-+void write_internal_time_in_seconds()
-+{
-+	time_t systemTime = time(NULL);
-+	snprintf(buffer, CHAR_BUFFER_SIZE, "%u", systemTime);
-+}
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.h b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.h
-new file mode 100644
-index 0000000000..a25f1779db
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/native.h
-@@ -0,0 +1,11 @@
-+#pragma once
-+
-+#include <stddef.h>
-+
-+const char* read_constant_string();
-+const char* read_internal_string();
-+void write_internal_string(const char* string);
-+void write_external_string(char* string, size_t maxLength);
-+void execute_function(void(*function)(void*), void* context);
-+void set_time_in_seconds(int seconds);
-+void write_internal_time_in_seconds();
-diff --git a/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/openjdk-jni-test.mk b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/openjdk-jni-test.mk
-new file mode 100644
-index 0000000000..f279e5cd70
---- /dev/null
-+++ b/support/testing/tests/package/br2-external/openjdk/package/openjdk-jni-test/openjdk-jni-test.mk
-@@ -0,0 +1,34 @@
-+################################################################################
-+#
-+# openjdk jni test
-+#
-+################################################################################
-+
-+OPENJDK_JNI_TEST_DEPENDENCIES = openjdk
-+
-+JNI_INCLUDE_PATH = $(BUILD_DIR)/openjdk-$(OPENJDK_VERSION)/build/linux-aarch64-server-release/jdk/include
-+
-+define OPENJDK_JNI_TEST_BUILD_CMDS
-+	# Compile Java classes and generate native headers
-+	$(HOST_DIR)/bin/javac -d $(@D) -h $(@D) \
-+		$(OPENJDK_JNI_TEST_PKGDIR)/JniTest.java \
-+		$(OPENJDK_JNI_TEST_PKGDIR)/JniWrapper.java \
-+		$(OPENJDK_JNI_TEST_PKGDIR)/JniHelper.java
-+
-+	# Compile shared library
-+	$(TARGET_MAKE_ENV) $(TARGET_CC) -shared -fPIC \
-+		-I$(JNI_INCLUDE_PATH) -I$(JNI_INCLUDE_PATH)/linux -I$(@D) \
-+		-o $(@D)/libjni_native.so \
-+		$(OPENJDK_JNI_TEST_PKGDIR)/JniWrapper.c \
-+		$(OPENJDK_JNI_TEST_PKGDIR)/jni_helper.c \
-+		$(OPENJDK_JNI_TEST_PKGDIR)/native.c
-+endef
-+
-+define OPENJDK_JNI_TEST_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 755 $(@D)/JniTest.class $(TARGET_DIR)/usr/bin/JniTest.class
-+	$(INSTALL) -D -m 755 $(@D)/JniWrapper.class $(TARGET_DIR)/usr/bin/JniWrapper.class
-+	$(INSTALL) -D -m 755 $(@D)/JniHelper.class $(TARGET_DIR)/usr/bin/JniHelper.class
-+	$(INSTALL) -D -m 755 $(@D)/libjni_native.so $(TARGET_DIR)/usr/lib/libjni_native.so
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/support/testing/tests/package/test_openjdk.py b/support/testing/tests/package/test_openjdk.py
-index 5fbb500fbd..3a1d1a9b09 100644
---- a/support/testing/tests/package/test_openjdk.py
-+++ b/support/testing/tests/package/test_openjdk.py
-@@ -21,6 +21,7 @@ class TestOpenJdk(infra.basetest.BRTest):
-         BR2_PACKAGE_XORG7=y
-         BR2_PACKAGE_OPENJDK=y
-         BR2_PACKAGE_OPENJDK_HELLO_WORLD=y
-+        BR2_PACKAGE_OPENJDK_JNI_TEST=y
-         """
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index 75a03abf4d..ddc6f1c6ad 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -20,6 +20,8 @@ RPM_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
+ RPM_LICENSE_FILES = COPYING
++# We're patching Makefile.am
++RPM_AUTORECONF = YES
  
-     def login(self):
-@@ -40,3 +41,8 @@ class TestOpenJdk(infra.basetest.BRTest):
-         print(output)
-         self.assertEqual(exit_code, 0)
-         self.assertEqual(output, ["Hello, World"])
-+
-+        cmd = "java -cp /usr/bin JniTest"
-+        output, exit_code = self.emulator.run(cmd, 120)
-+        print(output)
-+        self.assertEqual(exit_code, 0)
--- 
-2.17.1
+ RPM_CONF_OPTS = \
+ 	--disable-python \
