@@ -1,92 +1,126 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 25 Apr 2019 18:53:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rpm: fix build with NLS
-Message-ID: <20190425165319.24567-1-fontaine.fabrice@gmail.com>
+Date: Thu, 25 Apr 2019 19:49:13 +0200
+Subject: [Buildroot] [PATCH v2,1/4] package/bind: enable static build
+Message-ID: <20190425174916.31432-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/26e20e19d878811d90fce52eb0951ee4d8b59068
+Static build has been disabled in 2014 with commit
+6045904752b06a8b8e52ba8fc2e49a8548964e8d however bind can be built
+statically thanks to --without-dlopen so enable it back
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...ile.am-rpm2-cpio-archive-needs-lintl.patch | 51 +++++++++++++++++++
- package/rpm/rpm.mk                            |  2 +
- 2 files changed, 53 insertions(+)
- create mode 100644 package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Enable/disable libtool depending on BR2_STATIC_LIBS value
 
-diff --git a/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch b/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
+ ...n_driver.c-fix-build-without-dlfcn.h.patch | 28 +++++++++++++++++++
+ package/bind/Config.in                        |  5 ++--
+ package/bind/bind.mk                          | 14 ++++++++--
+ 3 files changed, 42 insertions(+), 5 deletions(-)
+ create mode 100644 package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch
+
+diff --git a/package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch b/package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch
 new file mode 100644
-index 0000000000..14d1d37d05
+index 0000000000..8b73e746e4
 --- /dev/null
-+++ b/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
-@@ -0,0 +1,51 @@
-+From 317bc5263fcb31ce788c76fe1947b2e0783e4542 Mon Sep 17 00:00:00 2001
++++ b/package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch
+@@ -0,0 +1,28 @@
++From 92b738a0fe8a7d65346de9e6dd7a8f135ee29765 Mon Sep 17 00:00:00 2001
 +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 25 Apr 2019 18:49:24 +0200
-+Subject: [PATCH] Makefile.am: rpm2{cpio,archive} needs lintl
-+
-+Add LIBINTL to rpm2{cpio,archive}_LDADD otherwise build fails on:
-+
-+/home/buildroot/autobuild/instance-2/output/host/bin/xtensa-linux-gcc -std=gnu99 -DHAVE_CONFIG_H   -I. -I. -I./include/ -I./build -I./lib -I./rpmio -I./misc -DLOCALEDIR="\"/usr/share/locale\"" -DLIBRPMALIAS_FILENAME="\"rpmpopt-4.14.2.1\"" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include -fPIC -DPIC -D_REENTRANT -Wall -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes  -fno-strict-aliasing -Wempty-body -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os   -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/beecrypt -c -o tools/rpmdeps.o tools/rpmdeps.c
-+/home/buildroot/autobuild/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: rpm2cpio.o: undefined reference to symbol 'libintl_dgettext'
-+/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
-+collect2: error: ld returned 1 exit status
-+Makefile:962: recipe for target 'rpm2cpio' failed
-+make[3]: *** [rpm2cpio] Error 1
-+make[3]: *** Waiting for unfinished jobs....
-+libtool: link: /home/buildroot/autobuild/instance-2/output/host/bin/xtensa-linux-gcc -std=gnu99 -fPIC -DPIC -D_REENTRANT -Wall -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes -fno-strict-aliasing -Wempty-body -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/beecrypt -o rpm2archive rpm2archive.o  lib/.libs/librpm.so /home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/rpmio/.libs/librpmio.so -lcap -ldb rpmio/.libs/librpmio.so -lbeecrypt -lbz2 -lz -llzma -lpopt -larchive -lpthread -Wl,-rpath -Wl,/home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/lib/.libs -Wl,-rpath -Wl,/home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/rpmio/.libs
-+/home/buildroot/autobuild/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: rpm2archive.o: undefined reference to symbol 'libintl_dgettext'
-+/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
-+collect2: error: ld returned 1 exit status
-+Makefile:958: recipe for target 'rpm2archive' failed
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/26e20e19d878811d90fce52eb0951ee4d8b59068
++Date: Tue, 23 Apr 2019 22:45:25 +0200
++Subject: [PATCH] dlz_open_driver.c: fix build without dlfcn.h
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://github.com/rpm-software-management/rpm/pull/683]
++[Upstream status: https://gitlab.isc.org/isc-projects/bind9/issues/995]
 +---
-+ Makefile.am | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ bin/named/unix/dlz_dlopen_driver.c | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index 057b7892c..e15240e60 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -145,11 +145,11 @@ rpmspec_LDADD +=	@WITH_POPT_LIB@
++diff --git a/bin/named/unix/dlz_dlopen_driver.c b/bin/named/unix/dlz_dlopen_driver.c
++index 74d29ffa09..ab8a5c9493 100644
++--- a/bin/named/unix/dlz_dlopen_driver.c
+++++ b/bin/named/unix/dlz_dlopen_driver.c
++@@ -14,7 +14,9 @@
++ #include <inttypes.h>
++ #include <stdlib.h>
++ #include <string.h>
+++#if HAVE_DLFCN_H
++ #include <dlfcn.h>
+++#endif
 + 
-+ rpm2cpio_SOURCES =	rpm2cpio.c debug.h system.h
-+ rpm2cpio_LDADD =	lib/librpm.la rpmio/librpmio.la
-+-rpm2cpio_LDADD +=	@WITH_POPT_LIB@
-++rpm2cpio_LDADD +=	@WITH_POPT_LIB@ @LIBINTL@
-+ 
-+ rpm2archive_SOURCES =	rpm2archive.c debug.h system.h
-+ rpm2archive_LDADD =	lib/librpm.la rpmio/librpmio.la
-+-rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@
-++rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@ @LIBINTL@
-+ 
-+ 
-+ if LIBELF
++ #include <dns/log.h>
++ #include <dns/result.h>
 +-- 
 +2.20.1
 +
-diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index 75a03abf4d..ddc6f1c6ad 100644
---- a/package/rpm/rpm.mk
-+++ b/package/rpm/rpm.mk
-@@ -20,6 +20,8 @@ RPM_DEPENDENCIES = \
- 	$(TARGET_NLS_DEPENDENCIES)
- RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
- RPM_LICENSE_FILES = COPYING
-+# We're patching Makefile.am
-+RPM_AUTORECONF = YES
+diff --git a/package/bind/Config.in b/package/bind/Config.in
+index 049a90cbaf..5b34b66f7a 100644
+--- a/package/bind/Config.in
++++ b/package/bind/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_BIND
+ 	bool "bind"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on !BR2_STATIC_LIBS
+ 	help
+ 	  BIND (Berkeley Internet Name Domain) is an
+ 	  implementation of the Domain Name System (DNS) protocols
+@@ -41,6 +40,6 @@ config BR2_PACKAGE_BIND_TOOLS
  
- RPM_CONF_OPTS = \
- 	--disable-python \
+ endif
+ 
+-comment "bind needs a toolchain w/ threads, dynamic library"
++comment "bind needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index b2bbafab20..87871bc60d 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -28,7 +28,6 @@ BIND_CONF_OPTS = \
+ 	--with-libjson=no \
+ 	--with-randomdev=/dev/urandom \
+ 	--enable-epoll \
+-	--with-libtool \
+ 	--with-gssapi=no \
+ 	--enable-filter-aaaa
+ 
+@@ -54,12 +53,13 @@ BIND_CONF_OPTS += --with-libxml2=no
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-BIND_DEPENDENCIES += openssl
++BIND_DEPENDENCIES += host-pkgconf openssl
+ BIND_CONF_OPTS += \
+ 	--with-openssl=$(STAGING_DIR)/usr \
+ 	--with-ecdsa=yes \
+ 	--with-eddsa=no \
+ 	--with-aes=yes
++BIND_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ # GOST cipher support requires openssl extra engines
+ ifeq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
+ BIND_CONF_OPTS += --with-gost=yes
+@@ -81,6 +81,16 @@ else
+ BIND_CONF_OPTS += --with-readline=no
+ endif
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++BIND_CONF_OPTS += \
++	--without-dlopen \
++	--without-libtool
++else
++BIND_CONF_OPTS += \
++	--with-dlopen \
++	--with-libtool
++endif
++
+ define BIND_TARGET_REMOVE_SERVER
+ 	rm -rf $(addprefix $(TARGET_DIR)/usr/sbin/, $(BIND_TARGET_SERVER_SBIN))
+ endef
 -- 
 2.20.1
