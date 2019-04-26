@@ -1,86 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 15:00:48 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] linux: split calling
- "all" and "$(LINUX_TARGET_NAME)" targets
-Message-ID: <20190426130223.BFBAB80163@busybox.osuosl.org>
+Date: Fri, 26 Apr 2019 14:51:32 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/perl: bump to
+ version 5.28.2
+Message-ID: <20190426130223.9B12C80163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3dc7deaba3751df40bc66b65054a0d5e7a754264
+commit: https://git.buildroot.net/buildroot/commit/?id=ca48851b8b4f289e85a8f34554a9725296bd6c54
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-In commit ffbe46a5295ce4e0442728f2ad3e19afa7eaa8ed ("linux: simplify
-LINUX_BUILD_CMDS"), we changed LINUX_BUILD_CMDS to essentially do:
+Contains a number of bugfixes since 5.28.1. For details, see:
+https://perldoc.pl/perl5282delta
 
-  make all $(LINUX_TARGET_NAME)
-
-Unfortunately, it turns out that it breaks the build of a number of
-defconfigs, with errors such as:
-
-  fixdep: error opening file: arch/xtensa/boot/lib/.inftrees.o.d: No such file or directory
-
-Calling "all" and "$(LINUX_TARGET_NAME)" as separate make invocations
-avoids this problem, and fixes the build of several defconfigs.
-
-Fixes:
-
-  ts7680_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339583
-
-  qemu_xtensa_lx60_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339553
-
-  roseapplepi_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339564
-
-  qemu_xtensa_lx60_nommu_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339554
-
-  qemu_ppc64_e5500_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339539
-
-  freescale_t2080_qds_rdb_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339455
-
-  arcturus_ucp1020_defconfig
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339399
-
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-[Thomas: add comment in the code to explain why we call the two make
-targets separately, as suggested by Yann E. Morin]
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-(cherry picked from commit 2a7cf511f4cd4b708eb68d3fe98e291ee6a588b1)
+(cherry picked from commit 3c68d2ddf923b8ad61c0a6fa147eaa8f76bdf7c1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/perl/perl.hash | 12 ++++++------
+ package/perl/perl.mk   |  4 ++--
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 1eac3287ab..51fd41fa15 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -439,12 +439,16 @@ endif
- endif
+diff --git a/package/perl/perl.hash b/package/perl/perl.hash
+index 5716900821..4604d2715d 100644
+--- a/package/perl/perl.hash
++++ b/package/perl/perl.hash
+@@ -1,7 +1,7 @@
+-# Hashes from: http://www.cpan.org/src/5.0/perl-5.28.1.tar.xz.{md5,sha1,sha256}.txt
+-md5    fbb590c305f2f88578f448581b8cf9c4                                 perl-5.28.1.tar.xz
+-sha1   5fc239bebb8c484c3f5c58e663274ce668981651                         perl-5.28.1.tar.xz
+-sha256 fea7162d4cca940a387f0587b93f6737d884bf74d8a9d7cfd978bc12cd0b202d perl-5.28.1.tar.xz
++# Hashes from: http://www.cpan.org/src/5.0/perl-5.28.2.tar.xz.{md5,sha1,sha256}.txt
++md5    6bb75770e9ba085b32bf13e4be71e4ac                                 perl-5.28.2.tar.xz
++sha1   e7be78eca9ac5596783e6abcf957408050a7b650                         perl-5.28.2.tar.xz
++sha256 0b0189bfa4b2da20e899b4bdd746ac402e8f746a58e4fcf5516484157f2aab07 perl-5.28.2.tar.xz
  
- # Compilation. We make sure the kernel gets rebuilt when the
--# configuration has changed.
-+# configuration has changed. We call the 'all' and
-+# '$(LINUX_TARGET_NAME)' targets separately because calling them in
-+# the same $(MAKE) invocation has shown to cause parallel build
-+# issues.
- define LINUX_BUILD_CMDS
- 	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
- 		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
- 	)
--	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all $(LINUX_TARGET_NAME)
-+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all
-+	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
- 	$(LINUX_BUILD_DTB)
- 	$(LINUX_APPEND_DTB)
- endef
+-# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.2.1/perl-cross-1.2.1.hash
+-sha256	8b706bc688ddf71b62d649bde72f648669f18b37fe0c54ec6201142ca3943498  perl-cross-1.2.1.tar.gz
++# Hashes from: https://github.com/arsv/perl-cross/releases/download/1.2.3/perl-cross-1.2.3.hash
++sha256 84583a1bb5f3a2c64d13d031386c114382e5c62955c6f84a27cec8318536627c perl-cross-1.2.3.tar.gz
+diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+index 9205ef64f9..ecb21c4b85 100644
+--- a/package/perl/perl.mk
++++ b/package/perl/perl.mk
+@@ -6,14 +6,14 @@
+ 
+ # When updating the version here, also update utils/scancpan
+ PERL_VERSION_MAJOR = 28
+-PERL_VERSION = 5.$(PERL_VERSION_MAJOR).1
++PERL_VERSION = 5.$(PERL_VERSION_MAJOR).2
+ PERL_SITE = http://www.cpan.org/src/5.0
+ PERL_SOURCE = perl-$(PERL_VERSION).tar.xz
+ PERL_LICENSE = Artistic or GPL-1.0+
+ PERL_LICENSE_FILES = Artistic Copying README
+ PERL_INSTALL_STAGING = YES
+ 
+-PERL_CROSS_VERSION = 1.2.1
++PERL_CROSS_VERSION = 1.2.3
+ # DO NOT refactor with the github helper (the result is not the same)
+ PERL_CROSS_SITE = https://github.com/arsv/perl-cross/releases/download/$(PERL_CROSS_VERSION)
+ PERL_CROSS_SOURCE = perl-cross-$(PERL_CROSS_VERSION).tar.gz
