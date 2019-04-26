@@ -1,33 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 26 Apr 2019 09:14:54 +0200
-Subject: [Buildroot] [PATCH v2] configs/warp7: bump to Linux 5.0.9 and
- U-Boot 2019.01
-In-Reply-To: <1556138817-8402-1-git-send-email-pjtexier@koncepto.io>
-References: <1556138817-8402-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190426091454.63e5f2ba@windsurf>
+Date: Fri, 26 Apr 2019 09:15:56 +0200
+Subject: [Buildroot] [git commit] package/network-manager: don't require an
+ external DHCP client
+Message-ID: <20190426071113.E744481151@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 24 Apr 2019 22:46:57 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1ab8b96fa8f77315adfbbe09659a8320d287bec2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This commit bumps Linux & Linux-headers to 5.0 and U-Boot to version 2019.01
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
-> Changes v1 -> v2:
->   - Bump Kernel from 5.0.0 to 5.0.9  (suggested by Fabio Estevam)
->   
->  configs/warp7_defconfig | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+NetworkManager now has an internal DHCP client.  Therefor, there is no
+need to select either the DHCPCD or DHCP_CLIENT package to get DHCP.
 
-Applied to master, thanks.
+Remove the forced select of one of those packages.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+The internal DHCP client has become NetworkManager's preferred DHCP
+client, so it seems reasonable that it effectively becomes the default,
+unless DHCPCD or DHCP_CLIENT are intentionally enabled.
+
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/network-manager/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/network-manager/Config.in b/package/network-manager/Config.in
+index ca508185f0..2d854fe003 100644
+--- a/package/network-manager/Config.in
++++ b/package/network-manager/Config.in
+@@ -7,7 +7,6 @@ config BR2_PACKAGE_NETWORK_MANAGER
+ 	# Tested with 3.2, but may even work with earlier versions
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # CLOCK_BOOTTIME, IPTOS_CLASS_*
+-	select BR2_PACKAGE_DHCPCD if !BR2_PACKAGE_DHCP_CLIENT
+ 	select BR2_PACKAGE_DBUS
+ 	select BR2_PACKAGE_DBUS_GLIB
+ 	select BR2_PACKAGE_GNUTLS
