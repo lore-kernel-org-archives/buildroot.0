@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 14:40:20 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/xlib_libXpm: fix
- build with NLS
-Message-ID: <20190426130223.28B58838A1@busybox.osuosl.org>
+Date: Fri, 26 Apr 2019 14:43:36 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ configs/atmel_sama5d4_xplained_mmc_dev: increase ext4 image size
+Message-ID: <20190426130223.4592680163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41bbdb72e59f40e50e239ee27b5b65b45b858a3c
+commit: https://git.buildroot.net/buildroot/commit/?id=ff101a6dabf0c2871922dc04fd40ea21b915fb9b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/cc47a39d134fbc80426bab6fa3662150374bae35
+The default of 60 MB is no longer sufficient to contain all the tools
+enabled in this "development" defconfig, so let's increase the ext4
+image size to 120 MB.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339426
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1067b7d9732b4389f0023f30572209691c26251b)
+(cherry picked from commit 18a4d559061ab3d00f7e39c963d86ee5ff794d4c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libXpm/xlib_libXpm.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/x11r7/xlib_libXpm/xlib_libXpm.mk b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-index 7e11c4b5aa..391493a4ba 100644
---- a/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-+++ b/package/x11r7/xlib_libXpm/xlib_libXpm.mk
-@@ -15,9 +15,10 @@ XLIB_LIBXPM_AUTORECONF = YES
- XLIB_LIBXPM_DEPENDENCIES = xlib_libX11 xlib_libXext xlib_libXt xorgproto \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
- 	$(TARGET_NLS_DEPENDENCIES)
-+XLIB_LIBXPM_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+index f20e114ff1..cfac503fa4 100644
+--- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
++++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
+@@ -83,6 +83,7 @@ BR2_PACKAGE_VIM=y
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
  
- ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
--XLIB_LIBXPM_CONF_ENV = ac_cv_search_gettext=no
-+XLIB_LIBXPM_CONF_ENV += ac_cv_search_gettext=no
- endif
- 
- $(eval $(autotools-package))
+ # Bootloaders
+ BR2_TARGET_AT91BOOTSTRAP3=y
