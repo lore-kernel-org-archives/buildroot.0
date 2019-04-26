@@ -1,41 +1,65 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 14:42:12 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/yaffs2utils:
- create $(HOST_DIR)/bin before installation
-Message-ID: <20190426130223.3659B80163@busybox.osuosl.org>
+Date: Fri, 26 Apr 2019 14:30:37 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/busybox: fix
+ S0{1sys, 2k}logd indentation
+Message-ID: <20190426130222.D3D6080163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=71149c2afa5e22e0a3e584ac1bc2acec8ad13d1e
+commit: https://git.buildroot.net/buildroot/commit/?id=4d8197c88fa5536f692691f6c750bea1e026d50c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-The yaffs2utils Makefile uses plain "cp", which fails when
-$(HOST_DIR)/bin doesn't exist. Fix that by creationg $(HOST_DIR)/bin
-beforehand.
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339624
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 01a0bd3f739ce1284a89641b7f41705c57b5bd04)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit dbdd94e103097b2b169495239f4b3a371c40f6e7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/yaffs2utils/yaffs2utils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/busybox/S01syslogd | 8 ++++----
+ package/busybox/S02klogd   | 8 ++++----
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/yaffs2utils/yaffs2utils.mk b/package/yaffs2utils/yaffs2utils.mk
-index c2a87eac7b..d3a8bdc9d2 100644
---- a/package/yaffs2utils/yaffs2utils.mk
-+++ b/package/yaffs2utils/yaffs2utils.mk
-@@ -15,6 +15,7 @@ define HOST_YAFFS2UTILS_BUILD_CMDS
- endef
+diff --git a/package/busybox/S01syslogd b/package/busybox/S01syslogd
+index 6e642a678a..15006bc06f 100644
+--- a/package/busybox/S01syslogd
++++ b/package/busybox/S01syslogd
+@@ -44,12 +44,12 @@ restart() {
+ }
  
- define HOST_YAFFS2UTILS_INSTALL_CMDS
-+	mkdir -p $(HOST_DIR)/bin
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) INSTALLDIR=$(HOST_DIR)/bin install
- endef
+ case "$1" in
+-        start|stop|restart)
++	start|stop|restart)
+ 		"$1";;
+ 	reload)
+ 		# Restart, since there is no true "reload" feature.
+ 		restart;;
+-        *)
+-                echo "Usage: $0 {start|stop|restart|reload}"
+-                exit 1
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
+diff --git a/package/busybox/S02klogd b/package/busybox/S02klogd
+index a4200cfb34..0677e1e5ca 100644
+--- a/package/busybox/S02klogd
++++ b/package/busybox/S02klogd
+@@ -44,12 +44,12 @@ restart() {
+ }
  
+ case "$1" in
+-        start|stop|restart)
++	start|stop|restart)
+ 		"$1";;
+ 	reload)
+ 		# Restart, since there is no true "reload" feature.
+ 		restart;;
+-        *)
+-                echo "Usage: $0 {start|stop|restart|reload}"
+-                exit 1
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
