@@ -1,34 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 26 Apr 2019 09:14:47 +0200
-Subject: [Buildroot] [PATCH] package/dovecot: security bump to version
- 2.3.5.2
-In-Reply-To: <20190425102618.32491-1-peter@korsgaard.com>
-References: <20190425102618.32491-1-peter@korsgaard.com>
-Message-ID: <20190426091447.5a0168f9@windsurf>
+Date: Fri, 26 Apr 2019 09:14:54 +0200
+Subject: [Buildroot] [PATCH v2] configs/warp7: bump to Linux 5.0.9 and
+ U-Boot 2019.01
+In-Reply-To: <1556138817-8402-1-git-send-email-pjtexier@koncepto.io>
+References: <1556138817-8402-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20190426091454.63e5f2ba@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 25 Apr 2019 12:26:18 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+On Wed, 24 Apr 2019 22:46:57 +0200
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-> Fixes the following security issue:
+> This commit bumps Linux & Linux-headers to 5.0 and U-Boot to version 2019.01
 > 
-> * CVE-2019-10691: Trying to login with 8bit username containing
->   invalid UTF8 input causes auth process to crash if auth policy is
->   enabled. This could be used rather easily to cause a DoS. Similar
->   crash also happens during mail delivery when using invalid UTF8 in
->   From or Subject header when OX push notification driver is used.
-> 
-> https://dovecot.org/pipermail/dovecot-news/2019-April/000406.html
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 > ---
->  package/dovecot/dovecot.hash | 2 +-
->  package/dovecot/dovecot.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Changes v1 -> v2:
+>   - Bump Kernel from 5.0.0 to 5.0.9  (suggested by Fabio Estevam)
+>   
+>  configs/warp7_defconfig | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
