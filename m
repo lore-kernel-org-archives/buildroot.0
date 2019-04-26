@@ -1,26 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 14:15:54 +0200
-Subject: [Buildroot] Any ETA for 2019.02.2?
-In-Reply-To: <CY4PR1201MB01208F1A243632E08018AD07A13D0@CY4PR1201MB0120.namprd12.prod.outlook.com>
- (Alexey Brodkin's message of "Thu, 25 Apr 2019 13:32:06 +0000")
-References: <CY4PR1201MB01208F1A243632E08018AD07A13D0@CY4PR1201MB0120.namprd12.prod.outlook.com>
-Message-ID: <87bm0t3qth.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Apr 2019 14:25:11 +0200
+Subject: [Buildroot] [git commit] package/madplay: fix build when NLS is
+ enabled
+In-Reply-To: <20190417195654.0FAC28DEF1@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Wed, 17 Apr 2019 22:00:44 +0200")
+References: <20190417195654.0FAC28DEF1@busybox.osuosl.org>
+Message-ID: <877ebh3qe0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Hi Peter,
- > I'm wondering if there's a plan for 2019.02.2 release sometime soon?
- > It's been about a month since 2019.02.1 and quite a few changes merged in
- > 2019.02.x branch so hopefully at some point new tag gets cut :)
+ > commit: https://git.buildroot.net/buildroot/commit/?id=00b733a39b0fe3902c96f6734c4f82c310cffc26
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Yes, the plan is to get a new releae out before the end of the
-month. 2019.02.1 is from End of March, and I normally do a point release
-approx once per month.
+ > MKINSTALLDIRS is not automatically called by autotools when
+ > autoreconfigured.
+ > This leads to the following error during install:
+
+ > `/bin/sh @MKINSTALLDIRS@ /home/dawncrow/buildroot-test/scripts/instance-0/output/target/usr/share
+ > /bin/sh: 0: Can't open @MKINSTALLDIRS@`
+
+ > because @MKINSTALLDIRS@ doesn't get substituted during autoreconf.
+
+ > This particular command only gets invoked when NLS is enabled.
+
+ > Add patch that explicitly calls AM_MKINSTALLDIRS macro to substitute
+ > every @MKINSTALLDIRS@ occurence in *.in Makefile.
+
+ > Patch is not sent upstream since upstream is dead.
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/744/7447c03426556f787f20f7ab2d36f0cacc4af1bd/
+
+ > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed to 2019.02.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
