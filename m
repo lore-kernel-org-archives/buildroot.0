@@ -1,41 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 14:43:51 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x]
- configs/atmel_sama5d3_xplained_mmc_dev: increase ext4 image size
-Message-ID: <20190426130223.538DE80163@busybox.osuosl.org>
+Date: Fri, 26 Apr 2019 14:45:44 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/lynx: fix build
+ with latomic
+Message-ID: <20190426130223.5EF2280163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=22104c11df204e21e3c25ee905dc1da5794f4d28
+commit: https://git.buildroot.net/buildroot/commit/?id=3779f6011d9c92d8044271d70a0e0ca2a994c3f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-The default of 60 MB is no longer sufficient to contain all the tools
-enabled in this "development" defconfig, so let's increase the ext4
-image size to 120 MB.
+Help lynx finding openssl dependencies by giving it a path in --with-ssl
+and using pkg-config to directly pass the correct libraries in LIBS.
+
+This will disable the call to pkg-config and CF_ADD_LIBS which has the
+sad behavior of removing duplicates ...
+As a result, build fails because, the following correct dependencies:
+
+configure:14170: testing adding -L/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-0/output/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib -lssl -L/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-0/output/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib -lz -pthread -latomic -lcrypto -lz -pthread -latomic  to LIBS ...
+
+is replaced by:
+
+-L/accts/mlweber1/rclinux/rc-buildroot-test/scripts/instance-0/output/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib -lssl -lz -pthread -latomic -lcrypto
+
+As a result, static linking fails on crypto because the second -latomic
+has been removed ...
 
 Fixes:
+ - http://autobuild.buildroot.org/results/2c28426253014d93e86e3ba6ed578e84317a9f19
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339421
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d9273b22e9c822d6302038a09b4b6767d51ab6ae)
+(cherry picked from commit fbe58db378dfc1b24fe3d50ca515bb7ae4493ee5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/atmel_sama5d3_xplained_mmc_dev_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ package/lynx/lynx.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-index a1e34ab810..da1c4eb73e 100644
---- a/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d3_xplained_mmc_dev_defconfig
-@@ -82,6 +82,7 @@ BR2_PACKAGE_VIM=y
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
+index 174d741dd9..3ac5b4cabf 100644
+--- a/package/lynx/lynx.mk
++++ b/package/lynx/lynx.mk
+@@ -21,8 +21,9 @@ LYNX_CONF_OPTS += --with-screen=slang
+ endif
  
- # Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+-LYNX_DEPENDENCIES += openssl
+-LYNX_CONF_OPTS += --with-ssl
++LYNX_DEPENDENCIES += host-pkgconf openssl
++LYNX_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr
++LYNX_CONF_ENV = LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ else ifeq ($(BR2_PACKAGE_GNUTLS),y)
+ LYNX_DEPENDENCIES += gnutls
+ LYNX_CONF_OPTS += --with-gnutls
