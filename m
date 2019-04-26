@@ -1,73 +1,50 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Fri, 26 Apr 2019 15:32:54 -0400
-Subject: [Buildroot] [PATCH 1/1] package/openjdk and package/openjdk-bin:
- bump to version 12.0.1+12
-Message-ID: <20190426193254.22036-1-aduskett@gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Fri, 26 Apr 2019 22:44:48 +0200
+Subject: [Buildroot] [PATCH v2] package/python-pillow: bump to version 6.0.0
+Message-ID: <1556311488-27139-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+This patch bumps python-pillow to version 6.0.0.
+Hash for LICENSE file is changed cause a copyright year update.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 ---
- package/openjdk-bin/openjdk-bin.hash | 2 +-
- package/openjdk-bin/openjdk-bin.mk   | 4 ++--
- package/openjdk/openjdk.hash         | 2 +-
- package/openjdk/openjdk.mk           | 4 ++--
- 4 files changed, 6 insertions(+), 6 deletions(-)
+v1 -> v2: fixing license hash
+ package/python-pillow/python-pillow.hash | 6 +++---
+ package/python-pillow/python-pillow.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-index 63ed5874c4..1fab6e07a8 100644
---- a/package/openjdk-bin/openjdk-bin.hash
-+++ b/package/openjdk-bin/openjdk-bin.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/AdoptOpenJDK/openjdk12-binaries/releases
--sha256	4739064dc439a05487744cce0ba951cb544ed5e796f6c699646e16c09da5dd6a	OpenJDK12U-jdk_x64_linux_hotspot_12_33.tar.gz
-+sha256	dd3fdf3771a05a010029c1cf1aef516928eab55d6f5eb019008875e9ccbc8337	OpenJDK12U-jdk_x64_linux_hotspot_12.0.1_12.tar.gz
- 
- # Locally calculated
- sha256	4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726	legal/java.prefs/LICENSE
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index d2e0c2fd3b..383842d280 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index 0f90a0b..fa9caae 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,4 +1,4 @@
+-# sha256 for python-pillow from https://pypi.org/project/Pillow/5.2.0/#files
++# sha256 for python-pillow from https://pypi.org/project/Pillow/
+ # sha256 for LICENSE locally computed
+-sha256 f8b3d413c5a8f84b12cd4c5df1d8e211777c9852c6be3ee9c094b626644d3eab  Pillow-5.2.0.tar.gz
+-sha256 4960fc18becc286be839c8ff17bd70cd5222533f761129142153443718a25199  LICENSE
++sha256 809c0a2ce9032cbcd7b5313f71af4bdc5c8c771cb86eb7559afd954cab82ebb5  Pillow-6.0.0.tar.gz
++sha256 64ea4328ed56392b423ef968519a9ad427e3de9b985862c95ed2ed4d793d22ee  LICENSE
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index c3a3d13..6efa9f3 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--HOST_OPENJDK_BIN_VERSION_MAJOR = 12
--HOST_OPENJDK_BIN_VERSION_MINOR = 33
-+HOST_OPENJDK_BIN_VERSION_MAJOR = 12.0.1
-+HOST_OPENJDK_BIN_VERSION_MINOR = 12
- HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
- HOST_OPENJDK_BIN_SOURCE = OpenJDK12U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
- HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk12-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index 91d0f1dbce..29a4de7645 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 de278328668bdaf35d50d0319d15d64d195ddd8a0de9c6fde3a6c9ca10135a92  openjdk-jdk-12+33.tar.gz
-+sha256 47cfd6d8430d862869c42c5841bbaaa303a811fea8229baa10ac03b58e259af2  openjdk-jdk-12.0.1+12.tar.gz
- sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index b59e26778f..33a23b4358 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--OPENJDK_VERSION_MAJOR = 12
--OPENJDK_VERSION_MINOR = 33
-+OPENJDK_VERSION_MAJOR = 12.0.1
-+OPENJDK_VERSION_MINOR = 12
- OPENJDK_VERSION = jdk-$(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
- OPENJDK_SITE = $(call github,AdoptOpenJDK,openjdk-jdk12u,$(OPENJDK_VERSION))
- OPENJDK_LICENSE = GPL-2.0+ with exception
+-PYTHON_PILLOW_VERSION = 5.2.0
++PYTHON_PILLOW_VERSION = 6.0.0
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/d3/c4/b45b9c0d549f482dd072055e2d3ced88f3b977f7b87c7a990228b20e7da1
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/81/1a/6b2971adc1bca55b9a53ed1efa372acff7e8b9913982a396f3fa046efaf8
+ PYTHON_PILLOW_LICENSE = PIL Software License
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
+ PYTHON_PILLOW_SETUP_TYPE = setuptools
 -- 
-2.20.1
+2.7.4
