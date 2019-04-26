@@ -1,116 +1,202 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 26 Apr 2019 13:04:59 +0300
-Subject: [Buildroot] [PATCH RFC/next 0/4] Unify configuration/makefiles
- for the GTK and WPE WebKit packages
-In-Reply-To: <a6c36acc-91c7-e3c9-0f2b-e693f76468e3@mind.be>
-References: <20190218171719.18721-1-aperez@igalia.com>
- <a6c36acc-91c7-e3c9-0f2b-e693f76468e3@mind.be>
-Message-ID: <20190426130459.GB1206@momiji>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 26 Apr 2019 13:32:56 +0200
+Subject: [Buildroot] [PATCH] package/bind: security bump to version 9.11.6-P1
+Message-ID: <20190426113256.1977-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout (and everybody else),
+Fixes the following security issues:
 
-On Sat, 13 Apr 2019 22:59:21 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+ - CVE-2018-5743: Limiting simultaneous TCP clients is ineffective
+   https://kb.isc.org/docs/cve-2018-5743
+
+ - CVE-2019-6467: An error in the nxdomain redirect feature can cause
+   BIND to exit with an INSIST assertion failure in query.c
+   https://kb.isc.org/docs/cve-2019-6467
+
+ - CVE-2019-6468: BIND Supported Preview Edition can exit with an
+   assertion failure if nxdomain-redirect is used
+   https://kb.isc.org/docs/cve-2019-6468
+
+Add an upstream patch to fix building on architectures where bind does not
+implement isc_atomic_*.
+
+Upstream moved to a 2019 signing key, so update comment in .hash file.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...mic-operations-in-bin-named-client.c-with.patch | 133 +++++++++++++++++++++
+ package/bind/bind.hash                             |   6 +-
+ package/bind/bind.mk                               |   2 +-
+ 3 files changed, 137 insertions(+), 4 deletions(-)
+ create mode 100644 package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch
+
+diff --git a/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch b/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch
+new file mode 100644
+index 0000000000..2701de766a
+--- /dev/null
++++ b/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch
+@@ -0,0 +1,133 @@
++From ef49780d30d3ddc5735cfc32561b678a634fa72f Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Ond=C5=99ej=20Sur=C3=BD?= <ondrej@sury.org>
++Date: Wed, 17 Apr 2019 15:22:27 +0200
++Subject: [PATCH] Replace atomic operations in bin/named/client.c with
++ isc_refcount reference counting
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ bin/named/client.c                     | 18 +++++++-----------
++ bin/named/include/named/interfacemgr.h |  5 +++--
++ bin/named/interfacemgr.c               |  7 +++++--
++ 3 files changed, 15 insertions(+), 15 deletions(-)
++
++diff --git a/bin/named/client.c b/bin/named/client.c
++index 845326abc0..29fecadca8 100644
++--- a/bin/named/client.c
+++++ b/bin/named/client.c
++@@ -402,12 +402,10 @@ tcpconn_detach(ns_client_t *client) {
++ static void
++ mark_tcp_active(ns_client_t *client, bool active) {
++ 	if (active && !client->tcpactive) {
++-		isc_atomic_xadd(&client->interface->ntcpactive, 1);
+++		isc_refcount_increment0(&client->interface->ntcpactive, NULL);
++ 		client->tcpactive = active;
++ 	} else if (!active && client->tcpactive) {
++-		uint32_t old =
++-			isc_atomic_xadd(&client->interface->ntcpactive, -1);
++-		INSIST(old > 0);
+++		isc_refcount_decrement(&client->interface->ntcpactive, NULL);
++ 		client->tcpactive = active;
++ 	}
++ }
++@@ -554,7 +552,7 @@ exit_check(ns_client_t *client) {
++ 		if (client->mortal && TCP_CLIENT(client) &&
++ 		    client->newstate != NS_CLIENTSTATE_FREED &&
++ 		    !ns_g_clienttest &&
++-		    isc_atomic_xadd(&client->interface->ntcpaccepting, 0) == 0)
+++		    isc_refcount_current(&client->interface->ntcpaccepting) == 0)
++ 		{
++ 			/* Nobody else is accepting */
++ 			client->mortal = false;
++@@ -3328,7 +3326,6 @@ client_newconn(isc_task_t *task, isc_event_t *event) {
++ 	isc_result_t result;
++ 	ns_client_t *client = event->ev_arg;
++ 	isc_socket_newconnev_t *nevent = (isc_socket_newconnev_t *)event;
++-	uint32_t old;
++ 
++ 	REQUIRE(event->ev_type == ISC_SOCKEVENT_NEWCONN);
++ 	REQUIRE(NS_CLIENT_VALID(client));
++@@ -3348,8 +3345,7 @@ client_newconn(isc_task_t *task, isc_event_t *event) {
++ 	INSIST(client->naccepts == 1);
++ 	client->naccepts--;
++ 
++-	old = isc_atomic_xadd(&client->interface->ntcpaccepting, -1);
++-	INSIST(old > 0);
+++	isc_refcount_decrement(&client->interface->ntcpaccepting, NULL);
++ 
++ 	/*
++ 	 * We must take ownership of the new socket before the exit
++@@ -3480,8 +3476,8 @@ client_accept(ns_client_t *client) {
++ 		 * quota is tcp-clients plus the number of listening
++ 		 * interfaces plus 1.)
++ 		 */
++-		exit = (isc_atomic_xadd(&client->interface->ntcpactive, 0) >
++-			(client->tcpactive ? 1 : 0));
+++		exit = (isc_refcount_current(&client->interface->ntcpactive) >
+++			(client->tcpactive ? 1U : 0U));
++ 		if (exit) {
++ 			client->newstate = NS_CLIENTSTATE_INACTIVE;
++ 			(void)exit_check(client);
++@@ -3539,7 +3535,7 @@ client_accept(ns_client_t *client) {
++ 	 * listening for connections itself to prevent the interface
++ 	 * going dead.
++ 	 */
++-	isc_atomic_xadd(&client->interface->ntcpaccepting, 1);
+++	isc_refcount_increment0(&client->interface->ntcpaccepting, NULL);
++ }
++ 
++ static void
++diff --git a/bin/named/include/named/interfacemgr.h b/bin/named/include/named/interfacemgr.h
++index 3535ef22a8..6e10f210fd 100644
++--- a/bin/named/include/named/interfacemgr.h
+++++ b/bin/named/include/named/interfacemgr.h
++@@ -45,6 +45,7 @@
++ #include <isc/magic.h>
++ #include <isc/mem.h>
++ #include <isc/socket.h>
+++#include <isc/refcount.h>
++ 
++ #include <dns/result.h>
++ 
++@@ -75,11 +76,11 @@ struct ns_interface {
++ 						/*%< UDP dispatchers. */
++ 	isc_socket_t *		tcpsocket;	/*%< TCP socket. */
++ 	isc_dscp_t		dscp;		/*%< "listen-on" DSCP value */
++-	int32_t			ntcpaccepting;	/*%< Number of clients
+++	isc_refcount_t		ntcpaccepting;	/*%< Number of clients
++ 						     ready to accept new
++ 						     TCP connections on this
++ 						     interface */
++-	int32_t			ntcpactive;	/*%< Number of clients
+++	isc_refcount_t		ntcpactive;	/*%< Number of clients
++ 						     servicing TCP queries
++ 						     (whether accepting or
++ 						     connected) */
++diff --git a/bin/named/interfacemgr.c b/bin/named/interfacemgr.c
++index d9f6df5802..135533be6b 100644
++--- a/bin/named/interfacemgr.c
+++++ b/bin/named/interfacemgr.c
++@@ -386,8 +386,8 @@ ns_interface_create(ns_interfacemgr_t *mgr, isc_sockaddr_t *addr,
++ 	 * connections will be handled in parallel even though there is
++ 	 * only one client initially.
++ 	 */
++-	ifp->ntcpaccepting = 0;
++-	ifp->ntcpactive = 0;
+++	isc_refcount_init(&ifp->ntcpaccepting, 0);
+++	isc_refcount_init(&ifp->ntcpactive, 0);
++ 
++ 	ifp->nudpdispatch = 0;
++ 
++@@ -618,6 +618,9 @@ ns_interface_destroy(ns_interface_t *ifp) {
++ 
++ 	ns_interfacemgr_detach(&ifp->mgr);
++ 
+++	isc_refcount_destroy(&ifp->ntcpactive);
+++	isc_refcount_destroy(&ifp->ntcpaccepting);
+++
++ 	ifp->magic = 0;
++ 	isc_mem_put(mctx, ifp, sizeof(*ifp));
++ }
++-- 
++2.11.0
++
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 3072d2d2a0..cdd4bdd312 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.11.5-P4/bind-9.11.5-P4.tar.gz.asc
+-# with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
+-sha256 7e8c08192bcbaeb6e9f2391a70e67583b027b90e8c4bc1605da6eb126edde434 bind-9.11.5-P4.tar.gz
++# Verified from https://ftp.isc.org/isc/bind9/9.11.6-P1/bind-9.11.6-P1.tar.gz.asc
++# with key 156890685EA0DF6A1371EF2017CC5DB1F0088407
++sha256 58ace2abb4d048b67abcdef0649ecd6cbd3b0652734a41a1d34f942d5500f8ef bind-9.11.6-P1.tar.gz
+ sha256 cd02c93b8dcda794f55dfd1231828d69633072a98eee4874f9cf732d22d9dcde COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index b2bbafab20..356bc259b2 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
->  It took us a bit of time, but finally a few of us got together and discussed
-> this series.
-
-No problem at all :)
-
-> On 18/02/2019 18:17, Adrian Perez de Castro wrote:
-> > Hello!
-> > 
-> > Both the GTK and WPE WebKit ports share many dependencies (usage of GLib,
-> > libsoup, GStreamer, Cairo, etc.), their supported platforms, and both
-> > receive releases from the same stable branch following the same schedule:
-> > major releases twice a year, around the release dates for GNOME.
-> > 
-> > Because of the above, it is possible to factor out commonalities from
-> > the packaging for both the GTK and WPE WebKit ports. This patch set tries
-> > to explore a possible way of doing it by moving both packages (plus libwpe
-> > and wpebackend-fdo, which are specific to the WPE port) into a new
-> > package/webkit/ subdirectory, where common parts live in a webkit.mk
-> > and a Config.in file.
-> > 
-> > I would really like to make it easier to maintain both the webkitgtk
-> > and wpewebkit packages by factoring out the commonalities, so I am looking
-> > forward to read you feedback on this patch set :-)
-> 
->  We doubt that this really makes it easier to maintain these packages.
-> 
->  One of the design guidelines of Buildroot is "Explicit rather than implicit".
-> Although software developers are tempted to "refactor" common bits into
-> variables, this is often not making it easier to understand the code, and also
-> not making it easier to change it. The refactoring of this series smells a bit
-> like that: it factors out the options that happen to be the same.
-> 
->  Also, it makes these packages different from how we normally do things in
-> Buildroot. Normally, we don't use subdirectories. Also normally, the .mk file is
-> self-contained, so within one file (and assuming you know how the infra works),
-> you have everything needed to understand how the build system will behave. After
-> this series, it will become more difficult to find out e.g. why the package has
-> this particular dependency or config option. When you want to change something
-> in wpewebkit, you need to also open, look at and potentially modify webkit.mk.
-> 
->  Admittedly, the latter can be an advantage too: when you're editing wpewebkit,
-> you're forced to consider if and how it impacts webkitgtk as well. But the same
-> could be achieved by simply adding a comment in the .mk file that you should
-> also look at the other package and do similar updates there.
-> 
->  To compare: we have for example mesa3d and mesa3d-headers, which are two
-> separate independent packages even though they're tightly related. For those, we
-> consciously chose to keep them separate to keep things explicit. In the end, not
-> so much would be shared between the two packages. I think we have a similar case
-> here: the common Config.in and webkit.mk files are less than 30 lines, and the
-> non-shared Config.in and .mk files are much larger than that.
-> 
->  Therefore, I've marked the series as Rejected in patchwork.
-> 
->  However, it's a thin line. If you really believe that unifying these packages
-> would make maintaining them significantly easier, feel free to resubmit the
-> series, with a short explanation why it makes life easier. This probably means:
-> how does this refactoring make it less likely that you make a mistake when
-> you're updating the webkit stuff.
-> 
->  In case you would do that, I have one more suggestion: you should probably also
-> factor out WEBKIT_MAJOR = 2.22. Otherwise, a common _ARCH_DEPENDS risks to
-> become incorrect when one of them is bumped and the other is not.
-
-I understand the rationale, and I am now convinced that it makes more sense 
-to maintain both packages separately.
-
-Also, trying to look at things with my ?Buildroot packager? hat, it can
-happen that we want to ship different versions of them at some point (e.g.
-WebKitGTK 2.24.x and WPE WebKit 2.22.x) in the same Buildroot release for
-$REASONS ? having the packages completely separate allows for that. Moreover,
-while right now I am maintaining both packages, it is not unthinkable that
-different people might want to take care of each package separately, and
-having two independent packages would allow for that with less friction, as
-it would not need different people to coordinate.
-
-While we (as WebKit maintainers) do not expect big differences between both
-the GTK and WPE ports appearing in the future, and we also do try hard to keep
-releases for both in sync, it might happen that both WebKit ports drift apart.
-Having two completely separate packages in Buildroot can be seen also as a
-?just in case? safeguard for the future.
-
-From now on I will keep maintenance of both packages separate.
-
-Thanks for the feedback!
-
-?Adri?n
-
-
-P.S: Now I am ready to look into updating to 2.24.x, which has been out
-for a while :)
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190426/dcad805c/attachment.asc>
+-BIND_VERSION = 9.11.5-P4
++BIND_VERSION = 9.11.6-P1
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+ BIND_MAKE = $(MAKE1)
+-- 
+2.11.0
