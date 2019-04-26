@@ -1,29 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 26 Apr 2019 09:13:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-psutil: bump to version
- 5.6.2
-In-Reply-To: <20190426054210.7525-1-asafka7@gmail.com>
-References: <20190426054210.7525-1-asafka7@gmail.com>
-Message-ID: <20190426091330.368bd0cc@windsurf>
+Date: Fri, 26 Apr 2019 09:13:57 +0200
+Subject: [Buildroot] [git commit] package/dovecot: security bump to version
+ 2.3.5.2
+Message-ID: <20190426070909.DEE0C81291@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 26 Apr 2019 08:42:10 +0300
-Asaf Kahlon <asafka7@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=89c7e417ede23c9f3583391a882c10d825527727
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  package/python-psutil/python-psutil.hash | 4 ++--
->  package/python-psutil/python-psutil.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Fixes the following security issue:
 
-Applied to master, thanks.
+* CVE-2019-10691: Trying to login with 8bit username containing
+  invalid UTF8 input causes auth process to crash if auth policy is
+  enabled. This could be used rather easily to cause a DoS. Similar
+  crash also happens during mail delivery when using invalid UTF8 in
+  From or Subject header when OX push notification driver is used.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+https://dovecot.org/pipermail/dovecot-news/2019-April/000406.html
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index a1c2c8ff84..2b8492a3c8 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256 d78f9d479e3b2caa808160f86bfec1c9c7b46344d8b14b88f5fa9bbbf8c7c33f  dovecot-2.3.5.1.tar.gz
++sha256 ba14e41aefd81a868a35b83bcb54194116106424d37690519b50ea83c0f31bf2  dovecot-2.3.5.2.tar.gz
+ sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index e56517b0a2..d9b94eb83a 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).5.1
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).5.2
+ DOVECOT_SITE = https://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
