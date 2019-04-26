@@ -1,63 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 14:26:00 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/sysklogd: fix
- S0{1sys, 2k}logd indentation
-Message-ID: <20190426130222.B65C081470@busybox.osuosl.org>
+Date: Fri, 26 Apr 2019 14:29:16 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ package/gstreamer1/gst1-plugins-ugly: fix typo in mk file
+Message-ID: <20190426130222.CD49E80163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e264eacdb82ea1ce95fd0188dfb05a81b00209f2
+commit: https://git.buildroot.net/buildroot/commit/?id=4c47bf893267d1ff171d6133e21c69898c20cf6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Don't mix spaces and tabs, only use tabs
+BR2_PACKAGE_GST_PLUGINS_UGL1_PLUGIN_XINGMUX needs to be
+BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 9064821d0f4ea9ebdb9466d2cb4c791de98a946b)
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit d2ada4d7045ba8b23824e10c59bb662c1cfd901c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sysklogd/S01syslogd | 10 +++++-----
- package/sysklogd/S02klogd   | 10 +++++-----
- 2 files changed, 10 insertions(+), 10 deletions(-)
+ package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sysklogd/S01syslogd b/package/sysklogd/S01syslogd
-index d0951f0235..2603632893 100644
---- a/package/sysklogd/S01syslogd
-+++ b/package/sysklogd/S01syslogd
-@@ -54,9 +54,9 @@ reload() {
- }
+diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+index 2f9b204e9b..25546258cd 100644
+--- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
++++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+@@ -46,7 +46,7 @@ else
+ GST1_PLUGINS_UGLY_CONF_OPTS += --disable-dvdsub
+ endif
  
- case "$1" in
--        start|stop|restart|reload)
--                "$1";;
--        *)
--                echo "Usage: $0 {start|stop|restart|reload}"
--                exit 1
-+	start|stop|restart|reload)
-+		"$1";;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
- esac
-diff --git a/package/sysklogd/S02klogd b/package/sysklogd/S02klogd
-index 93f39e1f0e..ba728aa99a 100644
---- a/package/sysklogd/S02klogd
-+++ b/package/sysklogd/S02klogd
-@@ -57,9 +57,9 @@ reload() {
- }
- 
- case "$1" in
--        start|stop|restart|reload)
--                "$1";;
--        *)
--                echo "Usage: $0 {start|stop|restart|reload}"
--                exit 1
-+	start|stop|restart|reload)
-+		"$1";;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
- esac
+-ifeq ($(BR2_PACKAGE_GST_PLUGINS_UGL1_PLUGIN_XINGMUX),y)
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX),y)
+ GST1_PLUGINS_UGLY_CONF_OPTS += --enable-xingmux
+ else
+ GST1_PLUGINS_UGLY_CONF_OPTS += --disable-xingmux
