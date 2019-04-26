@@ -1,60 +1,110 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 15:05:51 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/python-urllib3:
- security bump to version 1.24.2
-Message-ID: <20190426130224.00E4980163@busybox.osuosl.org>
+Date: Fri, 26 Apr 2019 14:28:57 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/git: fix build
+ with NLS enabled
+Message-ID: <20190426130222.C888980163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39dc2c601f713fad3e2c8d0d2d59c13f6a53fac4
+commit: https://git.buildroot.net/buildroot/commit/?id=5cb061e1a7f93da30f9d12c6f8cf40023e7e2c37
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security issue:
+git fails to build with NLS enabled because of weak check
+for gettext in configure.ac. The AC_CHECK_LIB(c, gettext ...)
+is used to set LIBC_CONTAINS_LIBINTL variable. If the variable
+is set then '-libs' is not passed to the linker, but this variable
+is set to 'Yes' even libc implementation does not provide libintl
+support, the AC_CHECK passes because gcc has gettext builtin.
 
-- CVE-2019-11324: The urllib3 library before 1.24.2 for Python mishandles
-  certain cases where the desired set of CA certificates is different from
-  the OS store of CA certificates, which results in SSL connections
-  succeeding in situations where a verification failure is the correct
-  outcome.  This is related to use of the ssl_context, ca_certs, or
-  ca_certs_dir argument.
+So use instead AC_LINK_IFELSE with included libintl.h because it
+makes gettext to unfold as libintl_gettext which causes AC_CHECK
+to fail for cases when gettext is not provided by libc.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Tested by ./utils/test-pkg with NLS disabled/enabled.
+
+Fixes:
+	http://autobuild.buildroot.net/results/091b790ca6f5b46d5d29211dc1cb3ff05b62a965
+	http://autobuild.buildroot.net/results/a69b58b35b270fdd2df9b076e7030bb594520197
+	http://autobuild.buildroot.net/results/f104c4e6ff41b1dd175f2d27f3b4ea7c9b61f7c5
+	http://autobuild.buildroot.net/results/ee12bdba398a139995de5f6f6718be6a493541d9
+	http://autobuild.buildroot.net/results/74fa6b2bfbb1301e35c9dd1bbc04856c1cbf25f2
+
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5bc45c5e77505cc07902e6fbd99a15c9d352ded7)
+(cherry picked from commit cb3a0177ef8ac64699d753b11daa0c37b3cf7b88)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-urllib3/python-urllib3.hash | 4 ++--
- package/python-urllib3/python-urllib3.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...1-configure.ac-Properly-check-for-libintl.patch | 49 ++++++++++++++++++++++
+ package/git/git.mk                                 |  1 +
+ 2 files changed, 50 insertions(+)
 
-diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
-index 098c7940a0..ec075cb4f6 100644
---- a/package/python-urllib3/python-urllib3.hash
-+++ b/package/python-urllib3/python-urllib3.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/urllib3/json
--md5	f3d8b1841539200c949a33e87e551d8e  urllib3-1.24.1.tar.gz
--sha256	de9529817c93f27c8ccbfead6985011db27bd0ddfcdb2d86f3f663385c6a9c22  urllib3-1.24.1.tar.gz
-+md5	20bb5a170a534bd0acd98bfc007fcc22  urllib3-1.24.2.tar.gz
-+sha256	9a247273df709c4fedb38c711e44292304f73f39ab01beda9f6b9fc375669ac3  urllib3-1.24.2.tar.gz
- # Locally computed sha256 checksums
- sha256	11db569430ca5ad793f1399297b8df5041a22137abaf90642ea71da21d59121c  LICENSE.txt
-diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
-index a2c3096a9c..893d32d976 100644
---- a/package/python-urllib3/python-urllib3.mk
-+++ b/package/python-urllib3/python-urllib3.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/package/git/0001-configure.ac-Properly-check-for-libintl.patch b/package/git/0001-configure.ac-Properly-check-for-libintl.patch
+new file mode 100644
+index 0000000000..2f367f547a
+--- /dev/null
++++ b/package/git/0001-configure.ac-Properly-check-for-libintl.patch
+@@ -0,0 +1,49 @@
++From 01da08fd60a0bdb2994f85f943dba148d9321d4d Mon Sep 17 00:00:00 2001
++From: Vadim Kochan <vadim4j@gmail.com>
++Date: Wed, 17 Apr 2019 01:25:40 +0300
++Subject: [PATCH 1/1] configure.ac: Properly check for libintl
++
++Some libc implementations like uclibc or musl provides
++gettext stubs via libintl library but this case is not checked
++by AC_CHECK_LIBRARY(c, gettext ...) because gcc has gettext as builtin
++which passess the check.
++
++So check it with included libintl.h where gettext may unfold into
++libintl_gettext which will cause check to fail if libintl_gettext are
++needed to be linked with -lintl.
++
++Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
++---
++ configure.ac | 16 +++++++++++++---
++ 1 file changed, 13 insertions(+), 3 deletions(-)
++
++diff --git a/configure.ac b/configure.ac
++index 7f84151..0b8e25f 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -762,9 +762,19 @@ AC_CHECK_LIB([c], [basename],
++ GIT_CONF_SUBST([NEEDS_LIBGEN])
++ test -n "$NEEDS_LIBGEN" && LIBS="$LIBS -lgen"
++ 
++-AC_CHECK_LIB([c], [gettext],
++-[LIBC_CONTAINS_LIBINTL=YesPlease],
++-[LIBC_CONTAINS_LIBINTL=])
+++AC_DEFUN([LIBINTL_SRC], [
+++AC_LANG_PROGRAM([[
+++#include <libintl.h>
+++]],[[
+++char *msg = gettext("test");
+++]])])
+++
+++AC_MSG_CHECKING([if libc contains libintl])
+++AC_LINK_IFELSE([LIBINTL_SRC],
+++	[AC_MSG_RESULT([yes])
+++	LIBC_CONTAINS_LIBINTL=YesPlease],
+++	[AC_MSG_RESULT([no])
+++	LIBC_CONTAINS_LIBINTL=])
++ GIT_CONF_SUBST([LIBC_CONTAINS_LIBINTL])
++ 
++ #
++-- 
++2.14.1
++
+diff --git a/package/git/git.mk b/package/git/git.mk
+index aec30e3eb3..804a6e2325 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -10,6 +10,7 @@ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
+ GIT_LICENSE = GPL-2.0, LGPL-2.1+
+ GIT_LICENSE_FILES = COPYING LGPL-2.1
+ GIT_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
++GIT_AUTORECONF = YES
  
--PYTHON_URLLIB3_VERSION = 1.24.1
-+PYTHON_URLLIB3_VERSION = 1.24.2
- PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
--PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/b1/53/37d82ab391393565f2f831b8eedbffd57db5a718216f82f1a8b4d381a1c1
-+PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/fd/fa/b21f4f03176463a6cccdb612a5ff71b927e5224e83483012747c12fc5d62
- PYTHON_URLLIB3_LICENSE = MIT
- PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
- PYTHON_URLLIB3_SETUP_TYPE = setuptools
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ GIT_DEPENDENCIES += host-pkgconf openssl
