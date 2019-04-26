@@ -1,11 +1,8 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 26 Apr 2019 17:14:43 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/libglib2: bump to version
- 2.60.0
-In-Reply-To: <20190426170751.18c6c159@windsurf>
-References: <20190415225541.3002-1-aduskett@gmail.com>
- <20190426170751.18c6c159@windsurf>
-Message-ID: <20190426171443.0a571d2d@windsurf>
+Date: Fri, 26 Apr 2019 17:19:43 +0200
+Subject: [Buildroot] [PATCH v2 0/4] Add defconfig for STM32MP157 Discovery
+ Kit
+Message-ID: <20190426151947.31836-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,22 +11,46 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Fri, 26 Apr 2019 17:07:51 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+This set of patches add a defconfig for the STM32MP157 Discovery Kit
+platform. The first three patches are preparation patches and the last
+one adds the defconfig itself and its related files.
 
-> So, apparently, it's using the --add-symbol option of objcopy, which
-> doesn't exist in this ancient objcopy version:
-> 
-> $ objcopy --version
-> GNU objcopy (GNU Binutils for Debian) 2.22
+Changes since v1:
 
---add-symbol was added in binutils upstream by commit
-2b35fb28f397a26c0da03f7579116d28af2af824, which first appeared in
-binutils 2.26. So it's expected that binutils 2.22 doesn't support this
-option.
+ - Add missing BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y option in
+   the defconfig
+
+Thanks!
 
 Thomas
+
+Thomas Petazzoni (4):
+  package/genimage: bump version
+  package/genimage: add patch to support bootable flag in GPT tables
+  boot/uboot: add option to pass custom variables to U-Boot build
+  configs/stm32mp157_dk: new defconfig
+
+ .gitlab-ci.yml                                |   1 +
+ DEVELOPERS                                    |   2 +
+ .../stm32mp157-dk/genimage.cfg                |  24 +++
+ .../stm32mp157-dk/linux.config                | 182 ++++++++++++++++++
+ .../overlay/boot/extlinux/extlinux.conf       |   4 +
+ .../stm32mp157-dk/readme.txt                  |  38 ++++
+ .../stm32mp157-dk/uboot-fragment.config       |   1 +
+ boot/uboot/Config.in                          |   6 +
+ boot/uboot/uboot.mk                           |   3 +-
+ configs/stm32mp157_dk_defconfig               |  31 +++
+ ...dd-support-for-bootable-flags-on-GPT.patch |  45 +++++
+ package/genimage/genimage.hash                |   2 +-
+ package/genimage/genimage.mk                  |   7 +-
+ 13 files changed, 341 insertions(+), 5 deletions(-)
+ create mode 100644 board/stmicroelectronics/stm32mp157-dk/genimage.cfg
+ create mode 100644 board/stmicroelectronics/stm32mp157-dk/linux.config
+ create mode 100644 board/stmicroelectronics/stm32mp157-dk/overlay/boot/extlinux/extlinux.conf
+ create mode 100644 board/stmicroelectronics/stm32mp157-dk/readme.txt
+ create mode 100644 board/stmicroelectronics/stm32mp157-dk/uboot-fragment.config
+ create mode 100644 configs/stm32mp157_dk_defconfig
+ create mode 100644 package/genimage/0001-image-hd-add-support-for-bootable-flags-on-GPT.patch
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
