@@ -1,41 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 14:43:36 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x]
- configs/atmel_sama5d4_xplained_mmc_dev: increase ext4 image size
-Message-ID: <20190426130223.4592680163@busybox.osuosl.org>
+Date: Fri, 26 Apr 2019 14:42:12 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/yaffs2utils:
+ create $(HOST_DIR)/bin before installation
+Message-ID: <20190426130223.3659B80163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff101a6dabf0c2871922dc04fd40ea21b915fb9b
+commit: https://git.buildroot.net/buildroot/commit/?id=71149c2afa5e22e0a3e584ac1bc2acec8ad13d1e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-The default of 60 MB is no longer sufficient to contain all the tools
-enabled in this "development" defconfig, so let's increase the ext4
-image size to 120 MB.
+The yaffs2utils Makefile uses plain "cp", which fails when
+$(HOST_DIR)/bin doesn't exist. Fix that by creationg $(HOST_DIR)/bin
+beforehand.
 
 Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339426
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339624
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 18a4d559061ab3d00f7e39c963d86ee5ff794d4c)
+(cherry picked from commit 01a0bd3f739ce1284a89641b7f41705c57b5bd04)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/atmel_sama5d4_xplained_mmc_dev_defconfig | 1 +
+ package/yaffs2utils/yaffs2utils.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-index f20e114ff1..cfac503fa4 100644
---- a/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-+++ b/configs/atmel_sama5d4_xplained_mmc_dev_defconfig
-@@ -83,6 +83,7 @@ BR2_PACKAGE_VIM=y
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+diff --git a/package/yaffs2utils/yaffs2utils.mk b/package/yaffs2utils/yaffs2utils.mk
+index c2a87eac7b..d3a8bdc9d2 100644
+--- a/package/yaffs2utils/yaffs2utils.mk
++++ b/package/yaffs2utils/yaffs2utils.mk
+@@ -15,6 +15,7 @@ define HOST_YAFFS2UTILS_BUILD_CMDS
+ endef
  
- # Bootloaders
- BR2_TARGET_AT91BOOTSTRAP3=y
+ define HOST_YAFFS2UTILS_INSTALL_CMDS
++	mkdir -p $(HOST_DIR)/bin
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) INSTALLDIR=$(HOST_DIR)/bin install
+ endef
+ 
