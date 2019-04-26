@@ -1,76 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 14:33:33 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x]
- package/xserver_xorg-server: fix build without glx
-Message-ID: <20190426130222.E25DA81470@busybox.osuosl.org>
+Date: Fri, 26 Apr 2019 14:26:06 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/syslog-ng: fix
+ S01syslog-ng indentation
+Message-ID: <20190426130222.C00AB81470@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=687476716ef4972e0e5bc26f4d40475676ef14c7
+commit: https://git.buildroot.net/buildroot/commit/?id=cb9972244ee7b7bd052b4c68e08aac94ab31772b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/397f8098c57fc6c88aa12dc8d35ebb1b933d52ef
+Don't mix spaces and tabs, use only tabs
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f1ade3ac96b30516e224bc18dad763e4d789b246)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 26c7e2a1a2ee71eb8f2871e642857e5cd1c02ce7)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...wayland-Makefile.am-fix-build-without-glx.patch | 45 ++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ package/syslog-ng/S01syslog-ng | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xserver_xorg-server/1.20.4/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/1.20.4/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch
-new file mode 100644
-index 0000000000..5f19a26d14
---- /dev/null
-+++ b/package/x11r7/xserver_xorg-server/1.20.4/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch
-@@ -0,0 +1,45 @@
-+From b1d2a82d644518c1a75775244ac63be738aaf062 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 19 Apr 2019 10:19:50 +0200
-+Subject: [PATCH] hw/xwayland/Makefile.am: fix build without glx
-+
-+Commit d8ec33fe0542141aed1d9016d2ecaf52da944b4b added libglxvnd.la to
-+Xwayland_LDFLAGS but GLX can be disabled through --disable-glx.
-+In this case, build fails on:
-+
-+make[3]: *** No rule to make target '../../glx/libglxvnd.la', needed by 'Xwayland'.  Stop.
-+make[3]: *** Waiting for unfinished jobs....
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/397f8098c57fc6c88aa12dc8d35ebb1b933d52ef
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.freedesktop.org/xorg/xserver/merge_requests/173]
-+---
-+ hw/xwayland/Makefile.am | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/hw/xwayland/Makefile.am b/hw/xwayland/Makefile.am
-+index bc1cb8506..502879e2a 100644
-+--- a/hw/xwayland/Makefile.am
-++++ b/hw/xwayland/Makefile.am
-+@@ -21,10 +21,14 @@ Xwayland_SOURCES =				\
-+ 	$(top_srcdir)/Xi/stubs.c		\
-+ 	$(top_srcdir)/mi/miinitext.c
-+ 
-++if GLX
-++GLXVND_LIB = $(top_builddir)/glx/libglxvnd.la
-++endif
-++
-+ Xwayland_LDADD =				\
-+ 	$(glamor_lib)				\
-+ 	$(XWAYLAND_LIBS)			\
-+-	$(top_builddir)/glx/libglxvnd.la	\
-++	$(GLXVND_LIB)				\
-+ 	$(XWAYLAND_SYS_LIBS)			\
-+ 	$(top_builddir)/Xext/libXvidmode.la	\
-+ 	$(XSERVER_SYS_LIBS)
-+-- 
-+2.20.1
-+
+diff --git a/package/syslog-ng/S01syslog-ng b/package/syslog-ng/S01syslog-ng
+index 1d74bf8839..2ced6f8b00 100644
+--- a/package/syslog-ng/S01syslog-ng
++++ b/package/syslog-ng/S01syslog-ng
+@@ -54,9 +54,9 @@ reload() {
+ }
+ 
+ case "$1" in
+-        start|stop|restart|reload)
+-                "$1";;
+-        *)
+-                echo "Usage: $0 {start|stop|restart|reload}"
+-                exit 1
++	start|stop|restart|reload)
++		"$1";;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
