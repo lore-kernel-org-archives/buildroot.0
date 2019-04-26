@@ -1,24 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 14:41:55 +0200
-Subject: [Buildroot] [PATCH 1/4] configs/amarula_vyasa_rk3288: adjust
- U-Boot config to boot larger kernel image
-In-Reply-To: <20190419095718.8444-1-shyam.saini@amarulasolutions.com> (Shyam
- Saini's message of "Fri, 19 Apr 2019 15:27:15 +0530")
-References: <20190419095718.8444-1-shyam.saini@amarulasolutions.com>
-Message-ID: <87ef5p0wh8.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Apr 2019 14:42:20 +0200
+Subject: [Buildroot] [git commit] package/yaffs2utils: create
+ $(HOST_DIR)/bin before installation
+In-Reply-To: <20190421102949.10D9B81441@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sun, 21 Apr 2019 12:32:23 +0200")
+References: <20190421102949.10D9B81441@busybox.osuosl.org>
+Message-ID: <87a7gd0wgj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Shyam" == Shyam Saini <shyam.saini@amarulasolutions.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Default value of CONFIG_SYS_BOOTM_LEN in u-boot causes board reset for
- > large uImage files, so add u-boot patch to increase the maximum kernel
- > image size.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=01a0bd3f739ce1284a89641b7f41705c57b5bd04
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
+ > The yaffs2utils Makefile uses plain "cp", which fails when
+ > $(HOST_DIR)/bin doesn't exist. Fix that by creationg $(HOST_DIR)/bin
+ > beforehand.
+
+ > Fixes:
+
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/199339624
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2019.02.x, thanks.
 
