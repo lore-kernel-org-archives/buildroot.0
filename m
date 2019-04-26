@@ -1,48 +1,76 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 14:39:05 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libkrb5: fix
- build with NLS
-Message-ID: <20190426130223.1042181470@busybox.osuosl.org>
+Date: Fri, 26 Apr 2019 14:33:33 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ package/xserver_xorg-server: fix build without glx
+Message-ID: <20190426130222.E25DA81470@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0e078567e680ad3ca85130a583bde3ccf8820e9
+commit: https://git.buildroot.net/buildroot/commit/?id=687476716ef4972e0e5bc26f4d40475676ef14c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes:
- - http://autobuild.buildroot.org/results/b35dd775015772b0f322f77470debe09d24173ff
+ - http://autobuild.buildroot.org/results/397f8098c57fc6c88aa12dc8d35ebb1b933d52ef
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 491b13def5a4dfce21e98becda1f2c6ea99e9fa0)
+(cherry picked from commit f1ade3ac96b30516e224bc18dad763e4d789b246)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libkrb5/libkrb5.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ ...wayland-Makefile.am-fix-build-without-glx.patch | 45 ++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
-diff --git a/package/libkrb5/libkrb5.mk b/package/libkrb5/libkrb5.mk
-index 5ba0ab1806..56345416aa 100644
---- a/package/libkrb5/libkrb5.mk
-+++ b/package/libkrb5/libkrb5.mk
-@@ -11,7 +11,7 @@ LIBKRB5_SOURCE = krb5-$(LIBKRB5_VERSION).tar.gz
- LIBKRB5_SUBDIR = src
- LIBKRB5_LICENSE = MIT
- LIBKRB5_LICENSE_FILES = NOTICE
--LIBKRB5_DEPENDENCIES = host-bison
-+LIBKRB5_DEPENDENCIES = host-bison $(TARGET_NLS_DEPENDENCIES)
- LIBKRB5_INSTALL_STAGING = YES
- 
- # The configure script uses AC_TRY_RUN tests to check for those values,
-@@ -20,7 +20,8 @@ LIBKRB5_INSTALL_STAGING = YES
- LIBKRB5_CONF_ENV = \
- 	ac_cv_printf_positional=yes \
- 	ac_cv_func_regcomp=yes \
--	krb5_cv_attr_constructor_destructor=yes,yes
-+	krb5_cv_attr_constructor_destructor=yes,yes \
-+	LIBS=$(TARGET_NLS_LIBS)
- 
- # Never use the host packages
- LIBKRB5_CONF_OPTS = \
+diff --git a/package/x11r7/xserver_xorg-server/1.20.4/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch b/package/x11r7/xserver_xorg-server/1.20.4/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch
+new file mode 100644
+index 0000000000..5f19a26d14
+--- /dev/null
++++ b/package/x11r7/xserver_xorg-server/1.20.4/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch
+@@ -0,0 +1,45 @@
++From b1d2a82d644518c1a75775244ac63be738aaf062 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 19 Apr 2019 10:19:50 +0200
++Subject: [PATCH] hw/xwayland/Makefile.am: fix build without glx
++
++Commit d8ec33fe0542141aed1d9016d2ecaf52da944b4b added libglxvnd.la to
++Xwayland_LDFLAGS but GLX can be disabled through --disable-glx.
++In this case, build fails on:
++
++make[3]: *** No rule to make target '../../glx/libglxvnd.la', needed by 'Xwayland'.  Stop.
++make[3]: *** Waiting for unfinished jobs....
++
++Fixes:
++ - http://autobuild.buildroot.org/results/397f8098c57fc6c88aa12dc8d35ebb1b933d52ef
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/xorg/xserver/merge_requests/173]
++---
++ hw/xwayland/Makefile.am | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/hw/xwayland/Makefile.am b/hw/xwayland/Makefile.am
++index bc1cb8506..502879e2a 100644
++--- a/hw/xwayland/Makefile.am
+++++ b/hw/xwayland/Makefile.am
++@@ -21,10 +21,14 @@ Xwayland_SOURCES =				\
++ 	$(top_srcdir)/Xi/stubs.c		\
++ 	$(top_srcdir)/mi/miinitext.c
++ 
+++if GLX
+++GLXVND_LIB = $(top_builddir)/glx/libglxvnd.la
+++endif
+++
++ Xwayland_LDADD =				\
++ 	$(glamor_lib)				\
++ 	$(XWAYLAND_LIBS)			\
++-	$(top_builddir)/glx/libglxvnd.la	\
+++	$(GLXVND_LIB)				\
++ 	$(XWAYLAND_SYS_LIBS)			\
++ 	$(top_builddir)/Xext/libXvidmode.la	\
++ 	$(XSERVER_SYS_LIBS)
++-- 
++2.20.1
++
