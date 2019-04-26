@@ -1,203 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 16:15:37 +0200
-Subject: [Buildroot] [git commit] package/bind: security bump to version
- 9.11.6-P1
-Message-ID: <20190426141121.6FE5A81922@busybox.osuosl.org>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Fri, 26 Apr 2019 14:48:35 +0000
+Subject: [Buildroot] Any ETA for 2019.02.2?
+In-Reply-To: <87bm0t3qth.fsf@dell.be.48ers.dk>
+References: <CY4PR1201MB01208F1A243632E08018AD07A13D0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+ <87bm0t3qth.fsf@dell.be.48ers.dk>
+Message-ID: <CY4PR1201MB01200C618215D77DFDAD8266A13E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc8ace0938a0bcf2e9fa628a88853252eabc991d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Peter,
 
-Fixes the following security issues:
+> -----Original Message-----
+> From: Peter Korsgaard <jacmet@gmail.com> On Behalf Of Peter Korsgaard
+> Sent: Friday, April 26, 2019 3:16 PM
+> To: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: buildroot at busybox.net; ARC Buildroot mailing list <arc-buildroot@synopsys.com>; Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com>
+> Subject: Re: Any ETA for 2019.02.2?
+> 
+> >>>>> "Alexey" == Alexey Brodkin <Alexey.Brodkin@synopsys.com> writes:
+> 
+>  > Hi Peter,
+>  > I'm wondering if there's a plan for 2019.02.2 release sometime soon?
+>  > It's been about a month since 2019.02.1 and quite a few changes merged in
+>  > 2019.02.x branch so hopefully at some point new tag gets cut :)
+> 
+> Yes, the plan is to get a new releae out before the end of the
+> month. 2019.02.1 is from End of March, and I normally do a point release
+> approx once per month.
 
- - CVE-2018-5743: Limiting simultaneous TCP clients is ineffective
-   https://kb.isc.org/docs/cve-2018-5743
+Right that's what I figured out myself judging by last few tags and so
+was just checking. We're going to prepare some delivery and the question was
+which release to use as a base, given that discussion I'll happily wait for
+v2019.02.2 as discussed timeframe perfectly matches our delivery schedule :)
 
- - CVE-2019-6467: An error in the nxdomain redirect feature can cause
-   BIND to exit with an INSIST assertion failure in query.c
-   https://kb.isc.org/docs/cve-2019-6467
+And thanks for taking care of that proven to be useful "stable" release process!
 
- - CVE-2019-6468: BIND Supported Preview Edition can exit with an
-   assertion failure if nxdomain-redirect is used
-   https://kb.isc.org/docs/cve-2019-6468
-
-Add an upstream patch to fix building on architectures where bind does not
-implement isc_atomic_*.
-
-Upstream moved to a 2019 signing key, so update comment in .hash file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...mic-operations-in-bin-named-client.c-with.patch | 133 +++++++++++++++++++++
- package/bind/bind.hash                             |   6 +-
- package/bind/bind.mk                               |   2 +-
- 3 files changed, 137 insertions(+), 4 deletions(-)
-
-diff --git a/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch b/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch
-new file mode 100644
-index 0000000000..2701de766a
---- /dev/null
-+++ b/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch
-@@ -0,0 +1,133 @@
-+From ef49780d30d3ddc5735cfc32561b678a634fa72f Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Ond=C5=99ej=20Sur=C3=BD?= <ondrej@sury.org>
-+Date: Wed, 17 Apr 2019 15:22:27 +0200
-+Subject: [PATCH] Replace atomic operations in bin/named/client.c with
-+ isc_refcount reference counting
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ bin/named/client.c                     | 18 +++++++-----------
-+ bin/named/include/named/interfacemgr.h |  5 +++--
-+ bin/named/interfacemgr.c               |  7 +++++--
-+ 3 files changed, 15 insertions(+), 15 deletions(-)
-+
-+diff --git a/bin/named/client.c b/bin/named/client.c
-+index 845326abc0..29fecadca8 100644
-+--- a/bin/named/client.c
-++++ b/bin/named/client.c
-+@@ -402,12 +402,10 @@ tcpconn_detach(ns_client_t *client) {
-+ static void
-+ mark_tcp_active(ns_client_t *client, bool active) {
-+ 	if (active && !client->tcpactive) {
-+-		isc_atomic_xadd(&client->interface->ntcpactive, 1);
-++		isc_refcount_increment0(&client->interface->ntcpactive, NULL);
-+ 		client->tcpactive = active;
-+ 	} else if (!active && client->tcpactive) {
-+-		uint32_t old =
-+-			isc_atomic_xadd(&client->interface->ntcpactive, -1);
-+-		INSIST(old > 0);
-++		isc_refcount_decrement(&client->interface->ntcpactive, NULL);
-+ 		client->tcpactive = active;
-+ 	}
-+ }
-+@@ -554,7 +552,7 @@ exit_check(ns_client_t *client) {
-+ 		if (client->mortal && TCP_CLIENT(client) &&
-+ 		    client->newstate != NS_CLIENTSTATE_FREED &&
-+ 		    !ns_g_clienttest &&
-+-		    isc_atomic_xadd(&client->interface->ntcpaccepting, 0) == 0)
-++		    isc_refcount_current(&client->interface->ntcpaccepting) == 0)
-+ 		{
-+ 			/* Nobody else is accepting */
-+ 			client->mortal = false;
-+@@ -3328,7 +3326,6 @@ client_newconn(isc_task_t *task, isc_event_t *event) {
-+ 	isc_result_t result;
-+ 	ns_client_t *client = event->ev_arg;
-+ 	isc_socket_newconnev_t *nevent = (isc_socket_newconnev_t *)event;
-+-	uint32_t old;
-+ 
-+ 	REQUIRE(event->ev_type == ISC_SOCKEVENT_NEWCONN);
-+ 	REQUIRE(NS_CLIENT_VALID(client));
-+@@ -3348,8 +3345,7 @@ client_newconn(isc_task_t *task, isc_event_t *event) {
-+ 	INSIST(client->naccepts == 1);
-+ 	client->naccepts--;
-+ 
-+-	old = isc_atomic_xadd(&client->interface->ntcpaccepting, -1);
-+-	INSIST(old > 0);
-++	isc_refcount_decrement(&client->interface->ntcpaccepting, NULL);
-+ 
-+ 	/*
-+ 	 * We must take ownership of the new socket before the exit
-+@@ -3480,8 +3476,8 @@ client_accept(ns_client_t *client) {
-+ 		 * quota is tcp-clients plus the number of listening
-+ 		 * interfaces plus 1.)
-+ 		 */
-+-		exit = (isc_atomic_xadd(&client->interface->ntcpactive, 0) >
-+-			(client->tcpactive ? 1 : 0));
-++		exit = (isc_refcount_current(&client->interface->ntcpactive) >
-++			(client->tcpactive ? 1U : 0U));
-+ 		if (exit) {
-+ 			client->newstate = NS_CLIENTSTATE_INACTIVE;
-+ 			(void)exit_check(client);
-+@@ -3539,7 +3535,7 @@ client_accept(ns_client_t *client) {
-+ 	 * listening for connections itself to prevent the interface
-+ 	 * going dead.
-+ 	 */
-+-	isc_atomic_xadd(&client->interface->ntcpaccepting, 1);
-++	isc_refcount_increment0(&client->interface->ntcpaccepting, NULL);
-+ }
-+ 
-+ static void
-+diff --git a/bin/named/include/named/interfacemgr.h b/bin/named/include/named/interfacemgr.h
-+index 3535ef22a8..6e10f210fd 100644
-+--- a/bin/named/include/named/interfacemgr.h
-++++ b/bin/named/include/named/interfacemgr.h
-+@@ -45,6 +45,7 @@
-+ #include <isc/magic.h>
-+ #include <isc/mem.h>
-+ #include <isc/socket.h>
-++#include <isc/refcount.h>
-+ 
-+ #include <dns/result.h>
-+ 
-+@@ -75,11 +76,11 @@ struct ns_interface {
-+ 						/*%< UDP dispatchers. */
-+ 	isc_socket_t *		tcpsocket;	/*%< TCP socket. */
-+ 	isc_dscp_t		dscp;		/*%< "listen-on" DSCP value */
-+-	int32_t			ntcpaccepting;	/*%< Number of clients
-++	isc_refcount_t		ntcpaccepting;	/*%< Number of clients
-+ 						     ready to accept new
-+ 						     TCP connections on this
-+ 						     interface */
-+-	int32_t			ntcpactive;	/*%< Number of clients
-++	isc_refcount_t		ntcpactive;	/*%< Number of clients
-+ 						     servicing TCP queries
-+ 						     (whether accepting or
-+ 						     connected) */
-+diff --git a/bin/named/interfacemgr.c b/bin/named/interfacemgr.c
-+index d9f6df5802..135533be6b 100644
-+--- a/bin/named/interfacemgr.c
-++++ b/bin/named/interfacemgr.c
-+@@ -386,8 +386,8 @@ ns_interface_create(ns_interfacemgr_t *mgr, isc_sockaddr_t *addr,
-+ 	 * connections will be handled in parallel even though there is
-+ 	 * only one client initially.
-+ 	 */
-+-	ifp->ntcpaccepting = 0;
-+-	ifp->ntcpactive = 0;
-++	isc_refcount_init(&ifp->ntcpaccepting, 0);
-++	isc_refcount_init(&ifp->ntcpactive, 0);
-+ 
-+ 	ifp->nudpdispatch = 0;
-+ 
-+@@ -618,6 +618,9 @@ ns_interface_destroy(ns_interface_t *ifp) {
-+ 
-+ 	ns_interfacemgr_detach(&ifp->mgr);
-+ 
-++	isc_refcount_destroy(&ifp->ntcpactive);
-++	isc_refcount_destroy(&ifp->ntcpaccepting);
-++
-+ 	ifp->magic = 0;
-+ 	isc_mem_put(mctx, ifp, sizeof(*ifp));
-+ }
-+-- 
-+2.11.0
-+
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 3072d2d2a0..cdd4bdd312 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.5-P4/bind-9.11.5-P4.tar.gz.asc
--# with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
--sha256 7e8c08192bcbaeb6e9f2391a70e67583b027b90e8c4bc1605da6eb126edde434 bind-9.11.5-P4.tar.gz
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.6-P1/bind-9.11.6-P1.tar.gz.asc
-+# with key 156890685EA0DF6A1371EF2017CC5DB1F0088407
-+sha256 58ace2abb4d048b67abcdef0649ecd6cbd3b0652734a41a1d34f942d5500f8ef bind-9.11.6-P1.tar.gz
- sha256 cd02c93b8dcda794f55dfd1231828d69633072a98eee4874f9cf732d22d9dcde COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index b2bbafab20..356bc259b2 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.11.5-P4
-+BIND_VERSION = 9.11.6-P1
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+-Alexey
