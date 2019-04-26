@@ -1,39 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 16:16:09 +0200
-Subject: [Buildroot] [PATCH] package/bind: security bump to version
- 9.11.6-P1
-In-Reply-To: <20190426113256.1977-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 26 Apr 2019 13:32:56 +0200")
-References: <20190426113256.1977-1-peter@korsgaard.com>
-Message-ID: <87a7gcx36e.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Apr 2019 16:15:15 +0200
+Subject: [Buildroot] [git commit] package/openssh: fix build with atomic
+Message-ID: <20190426141121.68CA080FAF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b7650ae940ff8f79c78366793b8286ed0e580b6e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes the following security issues:
- >  - CVE-2018-5743: Limiting simultaneous TCP clients is ineffective
- >    https://kb.isc.org/docs/cve-2018-5743
+Use pkg-config to retrieve openssl dependencies such as atomic
 
- >  - CVE-2019-6467: An error in the nxdomain redirect feature can cause
- >    BIND to exit with an INSIST assertion failure in query.c
- >    https://kb.isc.org/docs/cve-2019-6467
+Fixes:
+ - http://autobuild.buildroot.org/results/33d0e56368ab0e74d523be4837824654a4684746
 
- >  - CVE-2019-6468: BIND Supported Preview Edition can exit with an
- >    assertion failure if nxdomain-redirect is used
- >    https://kb.isc.org/docs/cve-2019-6468
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openssh/openssh.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
- > Add an upstream patch to fix building on architectures where bind does not
- > implement isc_atomic_*.
-
- > Upstream moved to a 2019 signing key, so update comment in .hash file.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 4fef5caedb..d21640e43e 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -8,7 +8,10 @@ OPENSSH_VERSION = 7.9p1
+ OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
+ OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
+ OPENSSH_LICENSE_FILES = LICENCE
+-OPENSSH_CONF_ENV = LD="$(TARGET_CC)" LDFLAGS="$(TARGET_CFLAGS)"
++OPENSSH_CONF_ENV = \
++	LD="$(TARGET_CC)" \
++	LDFLAGS="$(TARGET_CFLAGS)" \
++	LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ OPENSSH_CONF_OPTS = \
+ 	--sysconfdir=/etc/ssh \
+ 	--with-default-path=$(BR2_SYSTEM_DEFAULT_PATH) \
+@@ -27,7 +30,7 @@ ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
+ OPENSSH_CONF_OPTS += --without-pie
+ endif
+ 
+-OPENSSH_DEPENDENCIES = zlib openssl
++OPENSSH_DEPENDENCIES = host-pkgconf zlib openssl
+ 
+ ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
+ OPENSSH_DEPENDENCIES += cryptodev-linux
