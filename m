@@ -1,43 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 14:46:24 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/neon: add NLS
- dependencies
-Message-ID: <20190426130223.65A5580163@busybox.osuosl.org>
+Date: Fri, 26 Apr 2019 15:01:20 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] configs/beaglebone:
+ kernel build needs mkimage
+Message-ID: <20190426130223.C61CE838A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f826e395a734e74dd9b697d9154c3df8b73ddffc
+commit: https://git.buildroot.net/buildroot/commit/?id=982999598db6663c7f3ce8863051f07ac26a65d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-neon checks for bind_textdomain_codeset
-Helps neon to find lintl so it will correctly add -lintl to neon-config
-en neon.pc. This will fix build of packages using neon such as nu
+Following ffbe46a5295ce4e0442728f2ad3e19afa7eaa8ed ("linux: simplify
+LINUX_BUILD_CMDS"), the Linux kernel build for beaglebone_defconfig
+builds more things, including some .itb files, which require mkimage
+with FIT support.
 
 Fixes:
- - http://autobuild.buildroot.org/results/f7e6afce4b3335573f3cc62d282368b288e9a65a
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339433
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9b667fd14475c4e2023d93fc0b033a13f9632319)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 80029da692300c5b62dd86114ff20122e89342e5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/neon/neon.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ configs/beaglebone_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/neon/neon.mk b/package/neon/neon.mk
-index 1b8eb368c2..2c00e6a8b4 100644
---- a/package/neon/neon.mk
-+++ b/package/neon/neon.mk
-@@ -11,7 +11,8 @@ NEON_LICENSE_FILES = src/COPYING.LIB test/COPYING README
- NEON_INSTALL_STAGING = YES
- NEON_CONF_OPTS = --without-gssapi --disable-rpath
- NEON_CONFIG_SCRIPTS = neon-config
--NEON_DEPENDENCIES = host-pkgconf
-+NEON_DEPENDENCIES = host-pkgconf $(TARGET_NLS_DEPENDENCIES)
-+NEON_CONF_ENV = ne_cv_libsfor_bindtextdomain=$(TARGET_NLS_LIBS)
- 
- ifeq ($(BR2_PACKAGE_NEON_ZLIB),y)
- NEON_CONF_OPTS += --with-zlib=$(STAGING_DIR)
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index 2d9fba57dd..b4f152fd69 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -26,3 +26,5 @@ BR2_TARGET_UBOOT_SPL_NAME="MLO"
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
+ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_PACKAGE_HOST_MTOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
