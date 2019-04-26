@@ -1,55 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 25 Apr 2019 23:35:00 +0200
-Subject: [Buildroot] [PATCH v2,1/4] package/bind: enable static build
-In-Reply-To: <20190425174916.31432-1-fontaine.fabrice@gmail.com>
-References: <20190425174916.31432-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190425233450.6d84ca90@windsurf>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 26 Apr 2019 08:42:10 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-psutil: bump to version 5.6.2
+Message-ID: <20190426054210.7525-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-psutil/python-psutil.hash | 4 ++--
+ package/python-psutil/python-psutil.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On Thu, 25 Apr 2019 19:49:13 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-
-> Static build has been disabled in 2014 with commit
-> 6045904752b06a8b8e52ba8fc2e49a8548964e8d however bind can be built
-> statically thanks to --without-dlopen so enable it back
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Enable/disable libtool depending on BR2_STATIC_LIBS value
-
-Thanks for this new iteration, but unfortunately, it still doesn't
-build (with the same defconfig), but due to another error:
-
-libtool: install: (cd /home/thomas/projets/buildroot/output/build/dhcp-4.4.1/common; /bin/sh "/home/thomas/projets/buildroot/output/build/dhcp-4.4.1/libtool"  --tag CC --mode=relink /home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -DISC_CHECK_NONE=1 -I../includes -I/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/include -o libdhcp.la -rpath /usr/lib alloc.lo bpf.lo comapi.lo conflex.lo ctrace.lo dhcp4o6.lo discover.lo dispatch.lo dlpi.lo dns.lo 
-ethernet.lo execute.lo fddi.lo icmp.lo inet.lo lpf.lo memory.lo nit.lo ns_name.lo options.lo packet.lo parse.lo print.lo raw.lo resolv.lo socket.lo tables.lo tr.lo tree.lo upf.lo -L/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/bin/../../usr/lib -lbind9 -ldns -lisccfg -lisc -ldl -lpthread -inst-prefix-dir /home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot)
-libtool: relink: /home/thomas/projets/buildroot/output/host/bin/arm-linux-gcc -shared  -fPIC -DPIC  .libs/alloc.o .libs/bpf.o .libs/comapi.o .libs/conflex.o .libs/ctrace.o .libs/dhcp4o6.o .libs/discover.o .libs/dispatch.o .libs/dlpi.o .libs/dns.o .libs/ethernet.o .libs/execute.o .libs/fddi.o .libs/icmp.o .libs/inet.o .libs/lpf.o .libs/memory.o .libs/nit.o .libs/ns_name.o .libs/options.o .libs/packet.o .libs/parse.o .libs/print.o .libs/raw.o .libs/resolv.o .libs/socket.o .libs/tables.o .libs/tr.o .libs/tree.o .libs/upf.o 
-  -Wl,-rpath -Wl,/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -L/home/thomas/projets/buildroot/output/build/bind-9.11.5-P4/lib/isccfg/.libs -L/home/thomas/projets/buildroot/output/build/bind-9.11.5-P4/lib/dns/.libs -L/home/thomas/projets/buildroot/output/build/bind-9.11.5-P4/lib/isc/.libs -L/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/bin/../../usr/lib -L/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -L/home/thomas/projets/buildroot/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib -lbind9 -L/usr/lib -lisccfg -ldns -lisc -ldl -lpthread  -Os   -Wl,-soname -Wl,libdhcp.so.0 -o .libs/libdhcp.so.0.0.0
-arm-linux-gcc: ERROR: unsafe header/library path used in cross-compilation: '-L/usr/lib'
-libtool:   error: error: relink 'libdhcp.la' with the above command before installing it
-
-The -L/usr/lib doesn't exist on the libtool command line, so it gets
-invented by libtool. I think part of the problem is that this error
-happens during the staging installation case.
-
-There is also this warning at configure time:
-
-configure: WARNING: legacy configure is used but libtool is enabled. Trying to recover...
-
-I have uploaded the full build log of the DHCP package at:
-
-  http://code.bulix.org/7xi08h-677888?raw
-
-Best regards,
-
-Thomas
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index dea94d43fc..a7d49a9ab6 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/psutil/json
+-md5	765a4179f02c149794a6e99d890dfa4b  psutil-5.6.1.tar.gz
+-sha256	fa0a570e0a30b9dd618bffbece590ae15726b47f9f1eaf7518dfb35f4d7dcd21  psutil-5.6.1.tar.gz
++md5	571962acd249bcfbae317884af47c402  psutil-5.6.2.tar.gz
++sha256	828e1c3ca6756c54ac00f1427fdac8b12e21b8a068c3bb9b631a1734cada25ed  psutil-5.6.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256	bb073826b0dfb43b631c38ad5d9844cda74cc631d2a5569ad8798be4274a3e17  LICENSE
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index 3a6e7961bc..ed1a9051c8 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PSUTIL_VERSION = 5.6.1
++PYTHON_PSUTIL_VERSION = 5.6.2
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/2f/b8/11ec5006d2ec2998cb68349b8d1317c24c284cf918ecd6729739388e4c56
++PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/c6/c1/beed5e4eaa1345901b595048fab1c85aee647ea0fc02d9e8bf9aceb81078
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.19.1
