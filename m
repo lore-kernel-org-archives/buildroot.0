@@ -1,110 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 14:28:57 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/git: fix build
- with NLS enabled
-Message-ID: <20190426130222.C888980163@busybox.osuosl.org>
+Date: Fri, 26 Apr 2019 14:23:52 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/madplay: fix
+ build when NLS is enabled
+Message-ID: <20190426130222.A822981470@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cb061e1a7f93da30f9d12c6f8cf40023e7e2c37
+commit: https://git.buildroot.net/buildroot/commit/?id=ffb839ce3ea186f7593d832de86d3dbd56594bb9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-git fails to build with NLS enabled because of weak check
-for gettext in configure.ac. The AC_CHECK_LIB(c, gettext ...)
-is used to set LIBC_CONTAINS_LIBINTL variable. If the variable
-is set then '-libs' is not passed to the linker, but this variable
-is set to 'Yes' even libc implementation does not provide libintl
-support, the AC_CHECK passes because gcc has gettext builtin.
+MKINSTALLDIRS is not automatically called by autotools when
+autoreconfigured.
+This leads to the following error during install:
 
-So use instead AC_LINK_IFELSE with included libintl.h because it
-makes gettext to unfold as libintl_gettext which causes AC_CHECK
-to fail for cases when gettext is not provided by libc.
+`/bin/sh @MKINSTALLDIRS@ /home/dawncrow/buildroot-test/scripts/instance-0/output/target/usr/share
+/bin/sh: 0: Can't open @MKINSTALLDIRS@`
 
-Tested by ./utils/test-pkg with NLS disabled/enabled.
+because @MKINSTALLDIRS@ doesn't get substituted during autoreconf.
+
+This particular command only gets invoked when NLS is enabled.
+
+Add patch that explicitly calls AM_MKINSTALLDIRS macro to substitute
+every @MKINSTALLDIRS@ occurence in *.in Makefile.
+
+Patch is not sent upstream since upstream is dead.
 
 Fixes:
-	http://autobuild.buildroot.net/results/091b790ca6f5b46d5d29211dc1cb3ff05b62a965
-	http://autobuild.buildroot.net/results/a69b58b35b270fdd2df9b076e7030bb594520197
-	http://autobuild.buildroot.net/results/f104c4e6ff41b1dd175f2d27f3b4ea7c9b61f7c5
-	http://autobuild.buildroot.net/results/ee12bdba398a139995de5f6f6718be6a493541d9
-	http://autobuild.buildroot.net/results/74fa6b2bfbb1301e35c9dd1bbc04856c1cbf25f2
+http://autobuild.buildroot.net/results/744/7447c03426556f787f20f7ab2d36f0cacc4af1bd/
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cb3a0177ef8ac64699d753b11daa0c37b3cf7b88)
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit 00b733a39b0fe3902c96f6734c4f82c310cffc26)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...1-configure.ac-Properly-check-for-libintl.patch | 49 ++++++++++++++++++++++
- package/git/git.mk                                 |  1 +
- 2 files changed, 50 insertions(+)
+ .../0004-configure-ac-call-AM_MKINSTALLDIRS.patch  | 23 ++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/package/git/0001-configure.ac-Properly-check-for-libintl.patch b/package/git/0001-configure.ac-Properly-check-for-libintl.patch
+diff --git a/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch b/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch
 new file mode 100644
-index 0000000000..2f367f547a
+index 0000000000..7d3fb8ddc6
 --- /dev/null
-+++ b/package/git/0001-configure.ac-Properly-check-for-libintl.patch
-@@ -0,0 +1,49 @@
-+From 01da08fd60a0bdb2994f85f943dba148d9321d4d Mon Sep 17 00:00:00 2001
-+From: Vadim Kochan <vadim4j@gmail.com>
-+Date: Wed, 17 Apr 2019 01:25:40 +0300
-+Subject: [PATCH 1/1] configure.ac: Properly check for libintl
++++ b/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch
+@@ -0,0 +1,23 @@
++configure.ac: call AM_MKINSTALLDIRS to substitute @MKINSTALLDIRS@
 +
-+Some libc implementations like uclibc or musl provides
-+gettext stubs via libintl library but this case is not checked
-+by AC_CHECK_LIBRARY(c, gettext ...) because gcc has gettext as builtin
-+which passess the check.
++MKINSTALLDIRS is obsolete and doesn't get automatically called.
 +
-+So check it with included libintl.h where gettext may unfold into
-+libintl_gettext which will cause check to fail if libintl_gettext are
-+needed to be linked with -lintl.
++Force call AM_MKINSTALLDIRS() macro to substitute every @MKINSTALLDIRS@
++occurence in *.in files.
 +
-+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-+---
-+ configure.ac | 16 +++++++++++++---
-+ 1 file changed, 13 insertions(+), 3 deletions(-)
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 +
-+diff --git a/configure.ac b/configure.ac
-+index 7f84151..0b8e25f 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -762,9 +762,19 @@ AC_CHECK_LIB([c], [basename],
-+ GIT_CONF_SUBST([NEEDS_LIBGEN])
-+ test -n "$NEEDS_LIBGEN" && LIBS="$LIBS -lgen"
++diff -urpN madplay-0.15.2b.orig/configure.ac madplay-0.15.2b/configure.ac
++--- madplay-0.15.2b.orig/configure.ac	2019-04-16 12:06:03.781018755 +0200
+++++ madplay-0.15.2b/configure.ac	2019-04-16 12:07:48.399162610 +0200
++@@ -146,6 +146,10 @@ ALL_LINGUAS="en es fr hr no"
++ AM_GNU_GETTEXT([use-libtool])
++ AM_GNU_GETTEXT_VERSION(0.14.1)
 + 
-+-AC_CHECK_LIB([c], [gettext],
-+-[LIBC_CONTAINS_LIBINTL=YesPlease],
-+-[LIBC_CONTAINS_LIBINTL=])
-++AC_DEFUN([LIBINTL_SRC], [
-++AC_LANG_PROGRAM([[
-++#include <libintl.h>
-++]],[[
-++char *msg = gettext("test");
-++]])])
+++dnl Substitute MKINSTALLDIRS
 ++
-++AC_MSG_CHECKING([if libc contains libintl])
-++AC_LINK_IFELSE([LIBINTL_SRC],
-++	[AC_MSG_RESULT([yes])
-++	LIBC_CONTAINS_LIBINTL=YesPlease],
-++	[AC_MSG_RESULT([no])
-++	LIBC_CONTAINS_LIBINTL=])
-+ GIT_CONF_SUBST([LIBC_CONTAINS_LIBINTL])
+++AM_MKINSTALLDIRS()
+++
++ dnl Checks for header files.
 + 
-+ #
-+-- 
-+2.14.1
-+
-diff --git a/package/git/git.mk b/package/git/git.mk
-index aec30e3eb3..804a6e2325 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -10,6 +10,7 @@ GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
- GIT_LICENSE_FILES = COPYING LGPL-2.1
- GIT_DEPENDENCIES = zlib $(TARGET_NLS_DEPENDENCIES)
-+GIT_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- GIT_DEPENDENCIES += host-pkgconf openssl
++ AC_HEADER_STDC
