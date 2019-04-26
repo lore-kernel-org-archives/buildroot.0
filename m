@@ -1,283 +1,96 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 14:35:11 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/ghostscript: fix
- parallel build
-Message-ID: <20190426130222.E93BD81470@busybox.osuosl.org>
+Date: Fri, 26 Apr 2019 15:05:20 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/rpm: fix build
+ with NLS
+Message-ID: <20190426130223.ED007838A1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c748e47c99291e03283b4368c1e7b0c8afe4cac
+commit: https://git.buildroot.net/buildroot/commit/?id=5eab48cb8a3bafcdb07df856b655f73c318b9cb1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes:
- - http://autobuild.buildroot.org/results/eb33b41d1b267d0207a6e3a9f5ca7f79b2f51887
+ - http://autobuild.buildroot.org/results/26e20e19d878811d90fce52eb0951ee4d8b59068
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fa7804fec4e22dbe6a23cfc6ae1b4230b1f1d4fa)
+(cherry picked from commit 1ba73d551ea9ea101288114e54cf7072a9e7e1ce)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...emove-the-crazy-md5-file-copying-nonsense.patch | 252 +++++++++++++++++++++
- 1 file changed, 252 insertions(+)
+ ...Makefile.am-rpm2-cpio-archive-needs-lintl.patch | 51 ++++++++++++++++++++++
+ package/rpm/rpm.mk                                 |  2 +
+ 2 files changed, 53 insertions(+)
 
-diff --git a/package/ghostscript/0002-Bug-700986-Remove-the-crazy-md5-file-copying-nonsense.patch b/package/ghostscript/0002-Bug-700986-Remove-the-crazy-md5-file-copying-nonsense.patch
+diff --git a/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch b/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
 new file mode 100644
-index 0000000000..49bcfcdd3b
+index 0000000000..14d1d37d05
 --- /dev/null
-+++ b/package/ghostscript/0002-Bug-700986-Remove-the-crazy-md5-file-copying-nonsense.patch
-@@ -0,0 +1,252 @@
-+From d86210973df93ccca0befd56afba2132da925ebc Mon Sep 17 00:00:00 2001
-+From: Chris Liddell <chris.liddell@artifex.com>
-+Date: Thu, 18 Apr 2019 16:58:41 +0100
-+Subject: [PATCH] Bug 700986: Remove the crazy md5 file copying nonsense
++++ b/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
+@@ -0,0 +1,51 @@
++From 317bc5263fcb31ce788c76fe1947b2e0783e4542 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Thu, 25 Apr 2019 18:49:24 +0200
++Subject: [PATCH] Makefile.am: rpm2{cpio,archive} needs lintl
 +
-+To preserve building as a standalone test exe, we avoided using Ghostscript
-+includes in the md5 source and header files, but dynamically add them to
-+copies of the files during the build. Since we no longer need/care for the
-+stand alone exe, remove the build complication, and just include the header
-+file normally.
++Add LIBINTL to rpm2{cpio,archive}_LDADD otherwise build fails on:
++
++/home/buildroot/autobuild/instance-2/output/host/bin/xtensa-linux-gcc -std=gnu99 -DHAVE_CONFIG_H   -I. -I. -I./include/ -I./build -I./lib -I./rpmio -I./misc -DLOCALEDIR="\"/usr/share/locale\"" -DLIBRPMALIAS_FILENAME="\"rpmpopt-4.14.2.1\"" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include -fPIC -DPIC -D_REENTRANT -Wall -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes  -fno-strict-aliasing -Wempty-body -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os   -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/beecrypt -c -o tools/rpmdeps.o tools/rpmdeps.c
++/home/buildroot/autobuild/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: rpm2cpio.o: undefined reference to symbol 'libintl_dgettext'
++/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
++collect2: error: ld returned 1 exit status
++Makefile:962: recipe for target 'rpm2cpio' failed
++make[3]: *** [rpm2cpio] Error 1
++make[3]: *** Waiting for unfinished jobs....
++libtool: link: /home/buildroot/autobuild/instance-2/output/host/bin/xtensa-linux-gcc -std=gnu99 -fPIC -DPIC -D_REENTRANT -Wall -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes -fno-strict-aliasing -Wempty-body -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/beecrypt -o rpm2archive rpm2archive.o  lib/.libs/librpm.so /home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/rpmio/.libs/librpmio.so -lcap -ldb rpmio/.libs/librpmio.so -lbeecrypt -lbz2 -lz -llzma -lpopt -larchive -lpthread -Wl,-rpath -Wl,/home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/lib/.libs -Wl,-rpath -Wl,/home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/rpmio/.libs
++/home/buildroot/autobuild/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: rpm2archive.o: undefined reference to symbol 'libintl_dgettext'
++/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
++collect2: error: ld returned 1 exit status
++Makefile:958: recipe for target 'rpm2archive' failed
++
++Fixes:
++ - http://autobuild.buildroot.org/results/26e20e19d878811d90fce52eb0951ee4d8b59068
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+http://git.ghostscript.com/?p=user/chrisl/ghostpdl.git;a=commitdiff;h=d86210973df9]
++[Upstream status:
++https://github.com/rpm-software-management/rpm/pull/683]
 +---
-+ base/gsmd5.h                   |   2 +
-+ base/lib.mak                   |  10 +--
-+ base/md5main.c                 | 141 -----------------------------------------
-+ doc/Develop.htm                |   1 -
-+ windows/ghostscript.vcproj     |   4 --
-+ windows/ghostscript_rt.vcxproj |   1 -
-+ 6 files changed, 5 insertions(+), 154 deletions(-)
-+ delete mode 100644 base/md5main.c
++ Makefile.am | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
 +
-+diff --git a/base/gsmd5.h b/base/gsmd5.h
-+index 206ea6b..b159afb 100644
-+--- a/base/gsmd5.h
-++++ b/base/gsmd5.h
-+@@ -50,6 +50,8 @@
-+ #ifndef md5_INCLUDED
-+ #  define md5_INCLUDED
++diff --git a/Makefile.am b/Makefile.am
++index 057b7892c..e15240e60 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -145,11 +145,11 @@ rpmspec_LDADD +=	@WITH_POPT_LIB@
 + 
-++#include "memory_.h"
-++
-+ /*
-+  * This package supports both compile-time and run-time determination of CPU
-+  * byte order.  If ARCH_IS_BIG_ENDIAN is defined as 0, the code will be
-+diff --git a/base/lib.mak b/base/lib.mak
-+index 3ed088a..21e2cb7 100644
-+--- a/base/lib.mak
-++++ b/base/lib.mak
-+@@ -387,13 +387,8 @@ gsmd5_h=$(GLSRC)gsmd5.h
-+ # We have to use a slightly different compilation approach in order to
-+ # get std.h included when compiling md5.c.
-+ md5_=$(GLOBJ)gsmd5.$(OBJ)
-+-$(GLOBJ)gsmd5.$(OBJ) : $(GLSRC)gsmd5.c $(AK) $(gsmd5_h)\
-+- $(EXP)$(ECHOGS_XE) $(LIB_MAK) $(MAKEDIRS)
-+-	$(EXP)$(ECHOGS_XE) -w $(GLGEN)gsmd5.h -x 23 include -x 2022 memory_.h -x 22
-+-	$(EXP)$(ECHOGS_XE) -a $(GLGEN)gsmd5.h -+R $(GLSRC)gsmd5.h
-+-	$(CP_) $(GLSRC)gsmd5.c $(GLGEN)gsmd5.c
-+-	$(GLCC) $(GLO_)gsmd5.$(OBJ) $(C_) $(GLGEN)gsmd5.c
-+-	$(RM_) $(GLGEN)gsmd5.c $(GLGEN)gsmd5.h
-++$(GLOBJ)gsmd5.$(OBJ) : $(GLSRC)gsmd5.c $(AK) $(gsmd5_h) $(LIB_MAK) $(MAKEDIRS)
-++	$(GLCC) $(GLO_)gsmd5.$(OBJ) $(C_) $(GLSRC)gsmd5.c
++ rpm2cpio_SOURCES =	rpm2cpio.c debug.h system.h
++ rpm2cpio_LDADD =	lib/librpm.la rpmio/librpmio.la
++-rpm2cpio_LDADD +=	@WITH_POPT_LIB@
+++rpm2cpio_LDADD +=	@WITH_POPT_LIB@ @LIBINTL@
 + 
-+ # SHA-256 digest
-+ sha2_h=$(GLSRC)sha2.h
-+@@ -12346,3 +12341,4 @@ $(GLSRC)gxshade4.h:$(GLSRC)gstypes.h
-+ $(GLSRC)gxshade4.h:$(GLSRC)stdpre.h
-+ $(GLSRC)gxshade4.h:$(GLGEN)arch.h
-+ $(GLSRC)gxshade4.h:$(GLSRC)gs_dll_call.h
-++$(GLSRC)gsmd5.h:$(GLSRC)memory_.h
-+diff --git a/base/md5main.c b/base/md5main.c
-+deleted file mode 100644
-+index 75c523b..0000000
-+--- a/base/md5main.c
-++++ /dev/null
-+@@ -1,141 +0,0 @@
-+-/*
-+-  Copyright (C) 2002-2018 Artifex Software, Inc.
-+-  All rights reserved.
-+-
-+-  This software is provided 'as-is', without any express or implied
-+-  warranty.  In no event will the authors be held liable for any damages
-+-  arising from the use of this software.
-+-
-+-  Permission is granted to anyone to use this software for any purpose,
-+-  including commercial applications, and to alter it and redistribute it
-+-  freely, subject to the following restrictions:
-+-
-+-  1. The origin of this software must not be misrepresented; you must not
-+-     claim that you wrote the original software. If you use this software
-+-     in a product, an acknowledgment in the product documentation would be
-+-     appreciated but is not required.
-+-  2. Altered source versions must be plainly marked as such, and must not be
-+-     misrepresented as being the original software.
-+-  3. This notice may not be removed or altered from any source distribution.
-+-
-+-  L. Peter Deutsch
-+-  ghost at aladdin.com
-+-
-+- */
-+-/*
-+-  Independent implementation of MD5 (RFC 1321).
-+-
-+-  This code implements the MD5 Algorithm defined in RFC 1321, whose
-+-  text is available at
-+-        http://www.ietf.org/rfc/rfc1321.txt
-+-  The code is derived from the text of the RFC, including the test suite
-+-  (section A.5) but excluding the rest of Appendix A.  It does not include
-+-  any code or documentation that is identified in the RFC as being
-+-  copyrighted.
-+-
-+-  The original and principal author of md5.c is L. Peter Deutsch
-+-  <ghost@aladdin.com>.  Other authors are noted in the change history
-+-  that follows (in reverse chronological order):
-+-
-+-  2007-06-08 RG  Namespaced the api calls to avoid conflict with other
-+-        implementations when linking gs as a library.
-+-  2002-04-13 lpd Splits off main program into a separate file, md5main.c.
-+- */
-+-
-+-#include "gsmd5.h"
-+-#include <math.h>
-+-#include <stdio.h>
-+-#include <string.h>
-+-
-+-/*
-+- * This file builds an executable that performs various functions related
-+- * to the MD5 library.  Typical compilation:
-+- *	gcc -o md5main -lm md5main.c md5.c
-+- */
-+-static const char *const usage = "\
-+-Usage:\n\
-+-    md5main --test		# run the self-test (A.5 of RFC 1321)\n\
-+-    md5main --t-values		# print the T values for the library\n\
-+-    md5main --version		# print the version of the package\n\
-+-";
-+-static const char *const version = "2002-04-13";
-+-
-+-/* Run the self-test. */
-+-static int
-+-do_test(void)
-+-{
-+-    static const char *const test[7*2] = {
-+-        "", "d41d8cd98f00b204e9800998ecf8427e",
-+-        "a", "0cc175b9c0f1b6a831c399e269772661",
-+-        "abc", "900150983cd24fb0d6963f7d28e17f72",
-+-        "message digest", "f96b697d7cb7938d525a2f31aaf161d0",
-+-        "abcdefghijklmnopqrstuvwxyz", "c3fcd3d76192e4007dfb496cca67e13b",
-+-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
-+-                                "d174ab98d277d9f5a5611c2c9f419d9f",
-+-        "12345678901234567890123456789012345678901234567890123456789012345678901234567890", "57edf4a22be3c955ac49da2e2107b67a"
-+-    };
-+-    int i;
-+-    int status = 0;
-+-
-+-    for (i = 0; i < 7*2; i += 2) {
-+-        gs_md5_state_t state;
-+-        gs_md5_byte_t digest[16];
-+-        char hex_output[16*2 + 1];
-+-        int di;
-+-
-+-        gs_md5_init(&state);
-+-        gs_md5_append(&state, (const gs_md5_byte_t *)test[i], strlen(test[i]));
-+-        gs_md5_finish(&state, digest);
-+-        for (di = 0; di < 16; ++di)
-+-            gs_sprintf(hex_output + di * 2, "%02x", digest[di]);
-+-        if (strcmp(hex_output, test[i + 1])) {
-+-            printf("MD5 (\"%s\") = ", test[i]);
-+-            puts(hex_output);
-+-            printf("**** ERROR, should be: %s\n", test[i + 1]);
-+-            status = 1;
-+-        }
-+-    }
-+-    if (status == 0)
-+-        puts("md5 self-test completed successfully.");
-+-    return status;
-+-}
-+-
-+-/* Print the T values. */
-+-static int
-+-do_t_values(void)
-+-{
-+-    int i;
-+-    for (i = 1; i <= 64; ++i) {
-+-        unsigned long v = (unsigned long)(4294967296.0 * fabs(sin((double)i)));
-+-
-+-        /*
-+-         * The following nonsense is only to avoid compiler warnings about
-+-         * "integer constant is unsigned in ANSI C, signed with -traditional".
-+-         */
-+-        if (v >> 31) {
-+-            printf("#define T%d /* 0x%08lx */ (T_MASK ^ 0x%08lx)\n", i,
-+-                   v, (unsigned long)(unsigned int)(~v));
-+-        } else {
-+-            printf("#define T%d    0x%08lx\n", i, v);
-+-        }
-+-    }
-+-    return 0;
-+-}
-+-
-+-/* Main program */
-+-int
-+-main(int argc, char *argv[])
-+-{
-+-    if (argc == 2) {
-+-        if (!strcmp(argv[1], "--test"))
-+-            return do_test();
-+-        if (!strcmp(argv[1], "--t-values"))
-+-            return do_t_values();
-+-        if (!strcmp(argv[1], "--version")) {
-+-            puts(version);
-+-            return 0;
-+-        }
-+-    }
-+-    puts(usage);
-+-    return 0;
-+-}
-+diff --git a/doc/Develop.htm b/doc/Develop.htm
-+index c1ffceb..1ed3030 100644
-+--- a/doc/Develop.htm
-++++ b/doc/Develop.htm
-+@@ -684,7 +684,6 @@ Other:
-+ <a href="../base/gx.h">base/gx.h</a>,
-+ <a href="../base/gsmd5.c">base/gsmd5.c</a>,
-+ <a href="../base/gsmd5.h">base/gsmd5.h</a>,
-+-<a href="../base/md5main.c">base/md5main.c</a>,
-+ <a href="../base/aes.c">base/aes.c</a>,
-+ <a href="../base/aes.h">base/aes.h</a>.
++ rpm2archive_SOURCES =	rpm2archive.c debug.h system.h
++ rpm2archive_LDADD =	lib/librpm.la rpmio/librpmio.la
++-rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@
+++rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@ @LIBINTL@
 + 
-+diff --git a/windows/ghostscript.vcproj b/windows/ghostscript.vcproj
-+index d607949..fdbeaa1 100644
-+--- a/windows/ghostscript.vcproj
-++++ b/windows/ghostscript.vcproj
-+@@ -2510,10 +2510,6 @@
-+ 				>
-+ 			</File>
-+ 			<File
-+-				RelativePath="..\base\md5main.c"
-+-				>
-+-			</File>
-+-			<File
-+ 				RelativePath="..\base\memento.c"
-+ 				>
-+ 			</File>
-+diff --git a/windows/ghostscript_rt.vcxproj b/windows/ghostscript_rt.vcxproj
-+index 589b2d1..fca736b 100644
-+--- a/windows/ghostscript_rt.vcxproj
-++++ b/windows/ghostscript_rt.vcxproj
-+@@ -597,7 +597,6 @@
-+     <ClCompile Include="..\base\gxtype1.c" />
-+     <ClCompile Include="..\base\gzspotan.c" />
-+     <ClCompile Include="..\base\gsmd5.c" />
-+-    <ClCompile Include="..\base\md5main.c" />
-+     <ClCompile Include="..\base\memento.c" />
-+     <ClCompile Include="..\base\minftrsz.c" />
-+     <ClCompile Include="..\base\mkromfs.c" />
++ 
++ if LIBELF
 +-- 
-+2.9.1
++2.20.1
 +
-+
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index eb9a4a5a51..5efbad6dae 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -12,6 +12,8 @@ RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
+ RPM_LICENSE_FILES = COPYING
++# We're patching Makefile.am
++RPM_AUTORECONF = YES
+ 
+ RPM_CONF_OPTS = \
+ 	--disable-python \
