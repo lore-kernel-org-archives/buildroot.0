@@ -1,63 +1,86 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 15:05:11 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/rpm: fix nss
- build on musl
-Message-ID: <20190426130223.E2BDE7F9E7@busybox.osuosl.org>
+Date: Fri, 26 Apr 2019 15:00:48 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] linux: split calling
+ "all" and "$(LINUX_TARGET_NAME)" targets
+Message-ID: <20190426130223.BFBAB80163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ededfea4c8e8f2fda602ffb41bedc1f388270b88
+commit: https://git.buildroot.net/buildroot/commit/?id=3dc7deaba3751df40bc66b65054a0d5e7a754264
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/395fd44a930dfc2ad380bc735c26d9ce62344295
+In commit ffbe46a5295ce4e0442728f2ad3e19afa7eaa8ed ("linux: simplify
+LINUX_BUILD_CMDS"), we changed LINUX_BUILD_CMDS to essentially do:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  make all $(LINUX_TARGET_NAME)
+
+Unfortunately, it turns out that it breaks the build of a number of
+defconfigs, with errors such as:
+
+  fixdep: error opening file: arch/xtensa/boot/lib/.inftrees.o.d: No such file or directory
+
+Calling "all" and "$(LINUX_TARGET_NAME)" as separate make invocations
+avoids this problem, and fixes the build of several defconfigs.
+
+Fixes:
+
+  ts7680_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339583
+
+  qemu_xtensa_lx60_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339553
+
+  roseapplepi_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339564
+
+  qemu_xtensa_lx60_nommu_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339554
+
+  qemu_ppc64_e5500_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339539
+
+  freescale_t2080_qds_rdb_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339455
+
+  arcturus_ucp1020_defconfig
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339399
+
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+[Thomas: add comment in the code to explain why we call the two make
+targets separately, as suggested by Yann E. Morin]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4200087e965bcc00f854e3ab70e5e8fe8a697909)
+
+(cherry picked from commit 2a7cf511f4cd4b708eb68d3fe98e291ee6a588b1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...0002-rpmio-digest_nss.c-fix-build-on-musl.patch | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ linux/linux.mk | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpm/0002-rpmio-digest_nss.c-fix-build-on-musl.patch b/package/rpm/0002-rpmio-digest_nss.c-fix-build-on-musl.patch
-new file mode 100644
-index 0000000000..66aeb64786
---- /dev/null
-+++ b/package/rpm/0002-rpmio-digest_nss.c-fix-build-on-musl.patch
-@@ -0,0 +1,32 @@
-+From 817dbe77e3e5a6d89540000a48584358efb4b03a Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 1 Apr 2019 07:33:19 +0200
-+Subject: [PATCH] rpmio/digest_nss.c: fix build on musl
-+
-+signal.h must be included to be able to use sigaction
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/395fd44a930dfc2ad380bc735c26d9ce62344295
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://github.com/rpm-software-management/rpm/pull/650]
-+---
-+ rpmio/digest_nss.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/rpmio/digest_nss.c b/rpmio/digest_nss.c
-+index 50f8c8e90..1692a9221 100644
-+--- a/rpmio/digest_nss.c
-++++ b/rpmio/digest_nss.c
-+@@ -3,6 +3,7 @@
-+ #include <pthread.h>
-+ #include <nss.h>
-+ #include <sechash.h>
-++#include <signal.h>
-+ #include <keyhi.h>
-+ #include <cryptohi.h>
-+ #include <blapit.h>
-+-- 
-+2.14.1
-+
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 1eac3287ab..51fd41fa15 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -439,12 +439,16 @@ endif
+ endif
+ 
+ # Compilation. We make sure the kernel gets rebuilt when the
+-# configuration has changed.
++# configuration has changed. We call the 'all' and
++# '$(LINUX_TARGET_NAME)' targets separately because calling them in
++# the same $(MAKE) invocation has shown to cause parallel build
++# issues.
+ define LINUX_BUILD_CMDS
+ 	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
+ 		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
+ 	)
+-	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all $(LINUX_TARGET_NAME)
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all
++	$(LINUX_MAKE_ENV) $(MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+ 	$(LINUX_BUILD_DTB)
+ 	$(LINUX_APPEND_DTB)
+ endef
