@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 14:43:07 +0200
+Date: Fri, 26 Apr 2019 14:44:01 +0200
 Subject: [Buildroot] [git commit]
- configs/atmel_sama5d27_som1_ek_mmc_dev: increase rootfs image size
-In-Reply-To: <20190421123714.A6C9C81453@busybox.osuosl.org> (Thomas
- Petazzoni's message of "Sun, 21 Apr 2019 14:40:47 +0200")
-References: <20190421123714.A6C9C81453@busybox.osuosl.org>
-Message-ID: <875zr10wf8.fsf@dell.be.48ers.dk>
+ configs/atmel_sama5d3_xplained_mmc_dev: increase ext4 image size
+In-Reply-To: <20190421142159.DD338812DB@busybox.osuosl.org> (Thomas
+ Petazzoni's message of "Sun, 21 Apr 2019 15:29:26 +0200")
+References: <20190421142159.DD338812DB@busybox.osuosl.org>
+Message-ID: <871s1p0wdq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,21 +14,16 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=ce751fad37b78bb658ea6532bee3b49ea523aa73
+ > commit: https://git.buildroot.net/buildroot/commit/?id=d9273b22e9c822d6302038a09b4b6767d51ab6ae
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > The default rootfs image size is too small, causing the following
- > build failure:
-
- > Copying files into the device: __populate_fs: Could not allocate block in ext2 filesystem while writing file "udevd"
- > mkfs.ext4: Could not allocate block in ext2 filesystem while populating file system
- > *** Maybe you need to increase the filesystem size (BR2_TARGET_ROOTFS_EXT2_SIZE)
-
- > So we increase it to 120 MB.
+ > The default of 60 MB is no longer sufficient to contain all the tools
+ > enabled in this "development" defconfig, so let's increase the ext4
+ > image size to 120 MB.
 
  > Fixes:
 
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/199339415
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/199339421
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
