@@ -1,38 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 14:38:10 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/lrzsz: fix build
- with NLS
-Message-ID: <20190426130223.09CB881470@busybox.osuosl.org>
+Date: Fri, 26 Apr 2019 15:02:02 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ configs/qemu_ppc_virtex_ml507: kernel build needs mkimage
+Message-ID: <20190426130223.DB17280163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9faf155c3c7a149b16e6abca7571988de034932
+commit: https://git.buildroot.net/buildroot/commit/?id=dc38b98f606d98df64e45e219bda6eea80142a3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/77e3ea00ca2c20d9fe284d31bbdf2b72956eae9f
+Following ffbe46a5295ce4e0442728f2ad3e19afa7eaa8ed ("linux: simplify
+LINUX_BUILD_CMDS"), the Linux kernel build for
+qemu_ppc_virtex_ml507_defconfig builds an image format that needs
+mkimage.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/199339544
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3229cd16bdc4eaedd4e6d1087d804b8093b12d5b)
+Reviewed-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7cbf9c63e5abb498ab1863422cb3abc4c7ec7bc4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lrzsz/lrzsz.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ configs/qemu_ppc_virtex_ml507_defconfig | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/lrzsz/lrzsz.mk b/package/lrzsz/lrzsz.mk
-index 25ecf3dead..6c68232852 100644
---- a/package/lrzsz/lrzsz.mk
-+++ b/package/lrzsz/lrzsz.mk
-@@ -9,6 +9,8 @@ LRZSZ_SITE = http://www.ohse.de/uwe/releases
- LRZSZ_CONF_OPTS = --disable-timesync
- LRZSZ_LICENSE = GPL-2.0+
- LRZSZ_LICENSE_FILES = COPYING
-+LRZSZ_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
-+LRZSZ_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- 
- define LRZSZ_POST_CONFIGURE_HOOKS
- 	$(SED) "s/-lnsl//;" $(@D)/src/Makefile
+diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
+index c71465dd56..eddaf3558a 100644
+--- a/configs/qemu_ppc_virtex_ml507_defconfig
++++ b/configs/qemu_ppc_virtex_ml507_defconfig
+@@ -21,3 +21,6 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-virtex-ml507/linux.config"
+ BR2_LINUX_KERNEL_VMLINUX=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="virtex440-ml507"
++
++# Kernel needs mkimage
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
