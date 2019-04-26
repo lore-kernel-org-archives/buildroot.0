@@ -1,23 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 26 Apr 2019 16:16:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openssh: fix build with atomic
-In-Reply-To: <20190425181437.25687-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 25 Apr 2019 20:14:37 +0200")
-References: <20190425181437.25687-1-fontaine.fabrice@gmail.com>
-Message-ID: <87ef5ox36n.fsf@dell.be.48ers.dk>
+Date: Fri, 26 Apr 2019 16:16:09 +0200
+Subject: [Buildroot] [PATCH] package/bind: security bump to version
+ 9.11.6-P1
+In-Reply-To: <20190426113256.1977-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 26 Apr 2019 13:32:56 +0200")
+References: <20190426113256.1977-1-peter@korsgaard.com>
+Message-ID: <87a7gcx36e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Use pkg-config to retrieve openssl dependencies such as atomic
- > Fixes:
- >  - http://autobuild.buildroot.org/results/33d0e56368ab0e74d523be4837824654a4684746
+ > Fixes the following security issues:
+ >  - CVE-2018-5743: Limiting simultaneous TCP clients is ineffective
+ >    https://kb.isc.org/docs/cve-2018-5743
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >  - CVE-2019-6467: An error in the nxdomain redirect feature can cause
+ >    BIND to exit with an INSIST assertion failure in query.c
+ >    https://kb.isc.org/docs/cve-2019-6467
+
+ >  - CVE-2019-6468: BIND Supported Preview Edition can exit with an
+ >    assertion failure if nxdomain-redirect is used
+ >    https://kb.isc.org/docs/cve-2019-6468
+
+ > Add an upstream patch to fix building on architectures where bind does not
+ > implement isc_atomic_*.
+
+ > Upstream moved to a 2019 signing key, so update comment in .hash file.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
