@@ -1,121 +1,51 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 27 Apr 2019 14:27:51 +0200
-Subject: [Buildroot] [PATCH 1/1] spdlog: new package
-In-Reply-To: <20190427095851.25375-1-asafka7@gmail.com>
-References: <20190427095851.25375-1-asafka7@gmail.com>
-Message-ID: <aa9b6439-dcf4-9e4a-b399-31eb96c75122@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 27 Apr 2019 14:30:28 +0200
+Subject: [Buildroot] [git commit] package/libcamera: bump to version
+ ab0188fc8bbb6f397ac3aa11c9377662b7bd88b0
+Message-ID: <20190427122629.E1F3D81470@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=6cccfe64cd222328d19f4c1895ccdcea4947adad
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Build failures due to:
+`fatal error: sys/auxv.h: No such file or directory`
+have been fixed upstream.
 
-On 27/04/2019 11:58, Asaf Kahlon wrote:
-> Very fast, header only, C++ logging library.
-> 
-> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-> ---
->  DEVELOPERS                 |  1 +
->  package/Config.in          |  1 +
->  package/spdlog/Config.in   | 10 ++++++++++
->  package/spdlog/spdlog.hash |  3 +++
->  package/spdlog/spdlog.mk   | 17 +++++++++++++++++
->  5 files changed, 32 insertions(+)
->  create mode 100644 package/spdlog/Config.in
->  create mode 100644 package/spdlog/spdlog.hash
->  create mode 100644 package/spdlog/spdlog.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 56556413aa..8a4b90d276 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -222,6 +222,7 @@ F:	package/stress/
->  N:	Asaf Kahlon <asafka7@gmail.com>
->  F:	package/libuv/
->  F:	package/python*
-> +F:	package/spdlog/
->  F:	package/uftp/
->  F:	package/zeromq/
->  
-> diff --git a/package/Config.in b/package/Config.in
-> index f592e74a99..e822807a01 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1476,6 +1476,7 @@ menu "Logging"
->  	source "package/log4cpp/Config.in"
->  	source "package/log4cxx/Config.in"
->  	source "package/opentracing-cpp/Config.in"
-> +	source "package/spdlog/Config.in"
->  	source "package/zlog/Config.in"
->  endmenu
->  
-> diff --git a/package/spdlog/Config.in b/package/spdlog/Config.in
-> new file mode 100644
-> index 0000000000..30cccba785
-> --- /dev/null
-> +++ b/package/spdlog/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_SPDLOG
-> +	bool "spdlog"
-> +	depends on BR2_INSTALL_LIBSTDCPP
+Fixes:
+http://autobuild.buildroot.net/results/158/158950190141b4f1b0a3d7813322d3971bb8ba75/
 
- Why does it not select BR2_PACKAGE_FMT?
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Acked-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/libcamera/libcamera.hash | 2 +-
+ package/libcamera/libcamera.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- Note that fmt depends on WCHAR, so this one as well I guess...
-
-> +	help
-> +	  Very fast, header only, C++ logging library.
-> +
-> +	  https://github.com/gabime/spdlog
-> +
-> +comment "spdlog needs a toolchain w/ C++"
-> +	depends on !BR2_INSTALL_LIBSTDCPP
-> diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
-> new file mode 100644
-> index 0000000000..9cbf5b22a0
-> --- /dev/null
-> +++ b/package/spdlog/spdlog.hash
-> @@ -0,0 +1,3 @@
-> +# Locally calculated
-> +sha256 160845266e94db1d4922ef755637f6901266731c4cb3b30b45bf41efa0e6ab70  spdlog-1.3.1.tar.gz
-> +sha256 7d40b1967fca203d22b0eaf75f54566167ded823863abedf4de869fcea057038  LICENSE
-> diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
-> new file mode 100644
-> index 0000000000..e711c72961
-> --- /dev/null
-> +++ b/package/spdlog/spdlog.mk
-> @@ -0,0 +1,17 @@
-> +################################################################################
-> +#
-> +# spdlog
-> +#
-> +################################################################################
-> +
-> +SPDLOG_VERSION = 1.3.1
-> +SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
-> +SPDLOG_LICENSE = MIT
-> +SPDLOG_LICENSE_FILES = LICENSE
-> +SPDLOG_CONF_OPTS += -DSPDLOG_BUILD_TESTS=NO -DSPDLOG_BUILD_EXAMPLES=NO -DSPDLOG_BUILD_BENCH=NO
-
- ... and set SPDLOG_FMT_EXTERNAL=ON?
-
- Also, we normally use ON/OFF, not YES/NO.
-
-
-> +
-> +# Header-only library
-> +SPDLOG_INSTALL_STAGING = YES
-> +SPDLOG_INSTALL_TARGET = NO
-
- It would be nice to also have a package that uses spdlog, so it gets some
-testing in the autobuilders. Currently, nothing is compiled so e.g. the WCHAR
-dependency would not get discovered.
-
- Regards,
- Arnout
-
-> +
-> +$(eval $(cmake-package))
-> 
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index 5ad345f29f..0616bbdf81 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,3 +1,3 @@
+-sha256 2c01dc76d98ef257660f8ef3f4f17f042e112b5eca6b364ad615220c96fbd066  libcamera-d5ca33f6c7b0cd1ca20ec5dc7131aeedf1503080.tar.gz
++sha256 cc4630139575dc0ea47899b1ea368fdfc5faf150c20cab5bef150de9f84c558e  libcamera-ab0188fc8bbb6f397ac3aa11c9377662b7bd88b0.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  licenses/gnu-gpl-2.0.txt
+ sha256 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  licenses/gnu-lgpl-2.1.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 08cbb98020..5e17dd0b93 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = d5ca33f6c7b0cd1ca20ec5dc7131aeedf1503080
++LIBCAMERA_VERSION = ab0188fc8bbb6f397ac3aa11c9377662b7bd88b0
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = udev
+ LIBCAMERA_CONF_OPTS = -Dtests=false -Ddocumentation=false
