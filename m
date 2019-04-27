@@ -1,70 +1,92 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Apr 2019 19:18:33 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] CHANGES: update with
- recent changes
-Message-ID: <20190427171349.20897812A3@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 27 Apr 2019 19:39:58 +0200
+Subject: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
+In-Reply-To: <CY4PR1201MB01207D3F0C5E488EACEBA5DAA13E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+References: <20190418093902.41835-1-abrodkin@synopsys.com>
+ <20190418114336.61f3f404@windsurf>
+ <ea5f11a1-a7cb-4cee-dfda-64d55d550d83@mind.be>
+ <CY4PR1201MB01207D3F0C5E488EACEBA5DAA13E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+Message-ID: <ed9e89cc-3f7e-1a05-0d1e-6c6da6a3eb38@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f1be376dbf614d36714d4ca51e8d5432a9b4a79
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES | 43 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index 7b16afa5fb..622b31141a 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,46 @@
-+2019.02.2, Not yet released
-+
-+	Important / security related fixes.
-+
-+	Only build host-lzip / host-xz when really needed by packages,
-+	not just when not available on the build host.
-+
-+	fs: Set FAKEROOTDONTTRYCHOWN environment variable to not
-+	forward {f,l,}chown calls to libc when running under fakeroot
-+	to fix issues when building in restricted environments
-+	(E.G. user namespace with bubblewrap).
-+
-+	Linux: Also build default make target to ensure extra files
-+	like the gdb scripts enabled by CONFIG_GDB_SCRIPTS are also
-+	built. Notice: This may mean that extra host utilities like
-+	uboot-mkimage are needed.
-+
-+	Defconfigs: ASUS tinker and Amarula vyasa rk3822: Support
-+	larger kernel images, Atmel SAM5D27, SAM5D2,3,4 xplained:
-+	Increase rootfs size to fit utilities, Raspberry Pi 64bit:
-+	Include overlays in sdcard image
-+
-+	Updated/fixed packages: android-tools, apache, bind, binutils,
-+	busybox, civetweb, cjson, copas, davfs2, docker-cli,
-+	docker-containerd, docker-engine, dovecot, dovecot-pigeonhole,
-+	freerdp, gerbera, ghostscript, git, gnutls, go, gst-omx,
-+	gst1-plugins-ugly, haproxy, hostapd, ipsec-tools, libfreefare,
-+	libfuse, libkrb5, libpng, libxml2, libxslt, linknx, linux,
-+	linux-firmware, linux-tools, live555, lldp, lrzsz, lynx,
-+	madplay, make, minicom, mongodb, msmtp, musl, mutt, neon,
-+	netsnmp, numactl, opus, perl, php, postgresql, pure-ftpd,
-+	python-urllib3, python3, qt5base, rapidxml, rpm, rsyslog,
-+	ruby, runc, samba4, sane-backends, softether, stunnel,
-+	sysklogd, syslinux, syslog-ng, systemd-bootchart, thttpd,
-+	thrift, tiff, tor, tpm2-tools, tpm2-tss, webkitgtk,
-+	yaffs2utils, wget, wpa_supplicant, wsapi, xapp_xfd,
-+	xlib_libXpm, xserver_xorg-server, xz, znc
-+
-+	Issues resolved (http://bugs.uclibc.org):
-+
-+	#11756: package/syslinux: MBR's don't fit because of binutils..
-+	#11761: Building custom kernel 5.1-rc3 or later breaks on objtool
-+
- 2019.02.1, Released March 29th, 2019
- 
- 	Important / security related fixes.
+On 26/04/2019 08:30, Alexey Brodkin wrote:
+> Hi Arnout, Thomas,
+> 
+>> -----Original Message-----
+>> From: Arnout Vandecappelle <arnout@mind.be>
+>> Sent: Sunday, April 21, 2019 10:36 AM
+>> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>; Alexey Brodkin <abrodkin@synopsys.com>
+>> Cc: buildroot at busybox.net; ARC Buildroot mailing list <arc-buildroot@synopsys.com>
+>> Subject: Re: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
+>>
+>>
+>>
+>> On 18/04/2019 11:43, Thomas Petazzoni wrote:
+>>> Hello,
+>>>
+>>> On Thu, 18 Apr 2019 12:39:02 +0300
+>>> Alexey Brodkin <Alexey.Brodkin@synopsys.com> wrote:
+>>>
+>>>> perf uses its own build-system and doesn't respect externally set flags.
+>>>> Let's force it to use target flags as perf utility is nothing but
+>>>> an ordinary user-space application.
+>>>>
+>>>> This among other things is required to build perf for ARC700 for which
+>>>> we pass "-matomic" via TARGET_ABI, see [1] for more details.
+>>>>
+>>>> [1] https://urldefense.proofpoint.com/v2/url?u=https-
+>> 3A__patchwork.ozlabs.org_patch_1087471_&d=DwICaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7b
+>> reS55ytWkhpk5R81I&m=eB4KQfsAGH4782y3faOnCUr3nb3xgbJBuMv3P9P6cxY&s=g7hFDq2PCWQQNFtfEGkCnU8PyqSm-NS-
+>> FzrkT4QMA8c&e=
+>>>>
+>>>> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+>>>> ---
+>>>>  package/linux-tools/linux-tool-perf.mk.in | 1 +
+>>>>  1 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+>>>> index 80e00c3c56..e7565773c4 100644
+>>>> --- a/package/linux-tools/linux-tool-perf.mk.in
+>>>> +++ b/package/linux-tools/linux-tool-perf.mk.in
+>>>> @@ -19,6 +19,7 @@ PERF_MAKE_FLAGS = \
+>>>>  	JOBS=$(PARALLEL_JOBS) \
+>>>>  	ARCH=$(PERF_ARCH) \
+>>>>  	DESTDIR=$(TARGET_DIR) \
+>>>> +	EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
+>>>
+>>> The change is OK, but I believe that if -matomic is really a
+>>> core/important CFLAGS on ARC, then we should ideally pass it through
+>>> the toolchain wrapper, so that we are sure it is always passed.
+>>>
+>>> Arnout, what do you think?
+>>
+>>  +1.
+>>
+>>  Thomas, last year we made a beginning of deciding what should go through the
+>> wrapper and what through CFLAGS, but I'm not sure if we ever got to a conclusion?
+> 
+> So are we going to wait for some infrastructure changes or
+> shall we first fix the problem at hand with broken perf build to ARC700?
+
+ It's not really infrastructure changes. Rather, it is a better way to fix the
+issue.
+
+ You just need to move the -matomic from TARGET_ABI to TOOLCHAIN_WRAPPER_OPTS.
+
+ The only tricky part is where that should be done. I think arch/arch.mk.arc
+would be the right place. But that indeed requires an infrastructural change,
+because the TOOLCHAIN_WRAPPER_OPTS = ... in toolchain-wrapper.mk has to change
+into a +=.
+
+ Regards,
+ Arnout
+
+
+ Regards,
+ Arnout
