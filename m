@@ -1,47 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 27 Apr 2019 14:24:36 +0200
-Subject: [Buildroot] [git commit] package/perl-http-headers-fast: bump to
- version 0.22
-Message-ID: <20190427121956.F333E8156E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/xapp_xfd: fix build with NLS
+Message-ID: <20190427121956.EBE1A8156E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ff12ee6632f041d1f98b80e5bbbd1688a581f37
+commit: https://git.buildroot.net/buildroot/commit/?id=73661a7550f426b9c816c30fc122bd4ee775b547
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes:
+ - http://autobuild.buildroot.org/results/e6009f0232eb60ed10eb46b39edf125369eb12e1
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/perl-http-headers-fast/perl-http-headers-fast.hash | 4 ++--
- package/perl-http-headers-fast/perl-http-headers-fast.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xapp_xfd/xapp_xfd.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/perl-http-headers-fast/perl-http-headers-fast.hash b/package/perl-http-headers-fast/perl-http-headers-fast.hash
-index 0cba0f95a7..9282f2ef1a 100644
---- a/package/perl-http-headers-fast/perl-http-headers-fast.hash
-+++ b/package/perl-http-headers-fast/perl-http-headers-fast.hash
-@@ -1,6 +1,6 @@
- # retrieved by scancpan from http://cpan.metacpan.org/
--md5    024fde06808fc47db61a62655afacb41 HTTP-Headers-Fast-0.21.tar.gz
--sha256 5e68ed8e3e67531e1d43c6a2cdfd0ee2daddf2e5b94c1a2648f3a6500a6f12d5 HTTP-Headers-Fast-0.21.tar.gz
-+md5    a166a4d0ba47eca8ff9dffb760865f5f HTTP-Headers-Fast-0.22.tar.gz
-+sha256 cc431db68496dd884db4bc0c0b7112c1f4a4f1dc68c4f5a3caa757a1e7481b48 HTTP-Headers-Fast-0.22.tar.gz
+diff --git a/package/x11r7/xapp_xfd/xapp_xfd.mk b/package/x11r7/xapp_xfd/xapp_xfd.mk
+index 8bea7a2fa7..149e24b79a 100644
+--- a/package/x11r7/xapp_xfd/xapp_xfd.mk
++++ b/package/x11r7/xapp_xfd/xapp_xfd.mk
+@@ -9,8 +9,14 @@ XAPP_XFD_SOURCE = xfd-$(XAPP_XFD_VERSION).tar.bz2
+ XAPP_XFD_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XFD_LICENSE = MIT
+ XAPP_XFD_LICENSE_FILES = COPYING
+-XAPP_XFD_DEPENDENCIES = freetype fontconfig xlib_libXaw xlib_libXft
++XAPP_XFD_DEPENDENCIES = \
++	freetype \
++	fontconfig \
++	xlib_libXaw \
++	xlib_libXft \
++	$(TARGET_NLS_DEPENDENCIES)
+ XAPP_XFD_CONF_OPTS = --with-appdefaultdir=/usr/share/X11/app-defaults
++XAPP_XFD_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
  
- # computed by scancpan
- sha256 511724425acf76d736145cfbf7c775b024c70ae8674ebf9a24dfda2c8e4032a3 LICENSE
-diff --git a/package/perl-http-headers-fast/perl-http-headers-fast.mk b/package/perl-http-headers-fast/perl-http-headers-fast.mk
-index fadf06d5b0..d7bff6f99a 100644
---- a/package/perl-http-headers-fast/perl-http-headers-fast.mk
-+++ b/package/perl-http-headers-fast/perl-http-headers-fast.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PERL_HTTP_HEADERS_FAST_VERSION = 0.21
-+PERL_HTTP_HEADERS_FAST_VERSION = 0.22
- PERL_HTTP_HEADERS_FAST_SOURCE = HTTP-Headers-Fast-$(PERL_HTTP_HEADERS_FAST_VERSION).tar.gz
- PERL_HTTP_HEADERS_FAST_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOKUHIROM
- PERL_HTTP_HEADERS_FAST_DEPENDENCIES = host-perl-module-build-tiny
+ ifeq ($(BR2_PACKAGE_XLIB_LIBXKBFILE),y)
+ XAPP_XFD_CONF_OPTS += --with-xkb
