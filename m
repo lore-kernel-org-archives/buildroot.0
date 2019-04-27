@@ -1,76 +1,44 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 27 Apr 2019 19:56:03 +0200
-Subject: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
-In-Reply-To: <ed9e89cc-3f7e-1a05-0d1e-6c6da6a3eb38@mind.be>
-References: <20190418093902.41835-1-abrodkin@synopsys.com>
- <20190418114336.61f3f404@windsurf>
- <ea5f11a1-a7cb-4cee-dfda-64d55d550d83@mind.be>
- <CY4PR1201MB01207D3F0C5E488EACEBA5DAA13E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
- <ed9e89cc-3f7e-1a05-0d1e-6c6da6a3eb38@mind.be>
-Message-ID: <20190427175603.GA27252@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 27 Apr 2019 19:56:17 +0200
+Subject: [Buildroot] Possible conflict with systemd and e2fsprogs?
+In-Reply-To: <4dcaadcb-0ef8-887e-6681-1f326194315c@digineo.de>
+References: <4dcaadcb-0ef8-887e-6681-1f326194315c@digineo.de>
+Message-ID: <7bb7a201-cdd2-7e66-deee-6175a264366c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Alexey, All,
 
-On 2019-04-27 19:39 +0200, Arnout Vandecappelle spake thusly:
-> On 26/04/2019 08:30, Alexey Brodkin wrote:
-[--SNIP--]
-> >>> The change is OK, but I believe that if -matomic is really a
-> >>> core/important CFLAGS on ARC, then we should ideally pass it through
-> >>> the toolchain wrapper, so that we are sure it is always passed.
-> >>> Arnout, what do you think?
-> >>  +1.
-> >>  Thomas, last year we made a beginning of deciding what should go through the
-> >> wrapper and what through CFLAGS, but I'm not sure if we ever got to a conclusion?
-> > So are we going to wait for some infrastructure changes or
-> > shall we first fix the problem at hand with broken perf build to ARC700?
+
+On 25/04/2019 20:15, Dominik Menke wrote:
+> Greetings,
 > 
->  It's not really infrastructure changes. Rather, it is a better way to fix the
-> issue.
+> I've run into trouble with the following configuration on Buildroot
+> 2019.02.1-100-g88eff22a9e (current 2019.02.x branch):
 > 
->  You just need to move the -matomic from TARGET_ABI to TOOLCHAIN_WRAPPER_OPTS.
-> 
->  The only tricky part is where that should be done. I think arch/arch.mk.arc
-> would be the right place. But that indeed requires an infrastructural change,
-> because the TOOLCHAIN_WRAPPER_OPTS = ... in toolchain-wrapper.mk has to change
-> into a +=.
+> ??? (
+> ????? echo BR2_INIT_SYSTEMD=y
+> ????? echo BR2_PACKAGE_E2FSPROGS=y
+> ??? ) | cat configs/raspberrypi3_defconfig - > configs/myrpi_defconfig
+> ??? make myrpi_defconfig
+[snip]
+> Looking at /usr/lib/systemd/systemd-fsck (which is executed by
+> systemd-fsck-root.service), it calls to /sbin/fsck only if /sbin/fsck.$type
+> exists [3]. My guess is that it then fails to proceed because e2fsprog's fsck
+> behaves differently then fsck (of package util linux).
 
-I'm not too fond of this, but what about the following:
+ It would be good to find out what exactly is going wrong.
+package/systemd/Config.in does select BR2_PACKAGE_UTIL_LINUX_FSCK precisely for
+this reason...
+I'm adding Carlos (who added that) in Cc, maybe he has something to say about it.
 
-diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
-new file mode 100644
-index 0000000000..83503841b6
---- /dev/null
-+++ b/arch/arch.mk.arc
-@@ -0,0 +1,3 @@
-+ifeq ($(BR2_arcle),y)
-+ARCH_TOOLCHAIN_WRAPPER_OPTS = -matomic
-+endif
-diff --git a/toolchain/toolchain-wrapper.mk
-b/toolchain/toolchain-wrapper.mk
-index ca66fa7ba4..8f872506ec 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -17,6 +17,7 @@ TOOLCHAIN_WRAPPER_ARGS =
-$($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
- 
- TOOLCHAIN_WRAPPER_OPTS = \
-+   $(ARCH_TOOLCHAIN_WRAPPER_OPTS) \
-    $(call qstrip,$(BR2_SSP_OPTION)) \
-    $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
- 
-Regards,
-Yann E. MORIN.
+ If it now needs the fsck from e2fsprogs, then it is getting a little tricky to
+do the right thing. We'd have to revert the dependency between e2fsprogs fsck
+and util-linux fsck.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ However, I seem to recall that e2fsprogs fsck was considered deprecated.
+
+ Regards,
+ Arnout
