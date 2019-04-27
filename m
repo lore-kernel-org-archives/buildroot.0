@@ -1,26 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Apr 2019 18:28:37 +0200
-Subject: [Buildroot] [PATCH] package/libpng: security bump to version
- 1.6.37
-In-Reply-To: <20190427114242.3499-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sat, 27 Apr 2019 13:42:42 +0200")
-References: <20190427114242.3499-1-peter@korsgaard.com>
-Message-ID: <87lfzvtnt6.fsf@dell.be.48ers.dk>
+Date: Sat, 27 Apr 2019 18:28:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xapp_xfd: fix build with NLS
+In-Reply-To: <20190426182510.23661-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 26 Apr 2019 20:25:10 +0200")
+References: <20190426182510.23661-1-fontaine.fabrice@gmail.com>
+Message-ID: <87h8ajtnsk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fixes the following security issue:
- > CVE-2019-7317: png_image_free in png.c in libpng 1.6.36 has a use-after-free
- > because png_image_free_function is called under png_safe_execute.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/e6009f0232eb60ed10eb46b39edf125369eb12e1
 
- > Update license hash for a change in copyright year and typo fixes.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2019.02.x, thanks.
 
