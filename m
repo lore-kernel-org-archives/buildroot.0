@@ -1,42 +1,76 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 27 Apr 2019 19:46:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cryptopp: fix build with gcc < 4.9
-Message-ID: <20190427174604.14188-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 27 Apr 2019 19:56:03 +0200
+Subject: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
+In-Reply-To: <ed9e89cc-3f7e-1a05-0d1e-6c6da6a3eb38@mind.be>
+References: <20190418093902.41835-1-abrodkin@synopsys.com>
+ <20190418114336.61f3f404@windsurf>
+ <ea5f11a1-a7cb-4cee-dfda-64d55d550d83@mind.be>
+ <CY4PR1201MB01207D3F0C5E488EACEBA5DAA13E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+ <ed9e89cc-3f7e-1a05-0d1e-6c6da6a3eb38@mind.be>
+Message-ID: <20190427175603.GA27252@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/7e68f32e62c34497848f0f7fc1f12dba67bf44d0
+Arnout, Alexey, All,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/cryptopp/cryptopp.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+On 2019-04-27 19:39 +0200, Arnout Vandecappelle spake thusly:
+> On 26/04/2019 08:30, Alexey Brodkin wrote:
+[--SNIP--]
+> >>> The change is OK, but I believe that if -matomic is really a
+> >>> core/important CFLAGS on ARC, then we should ideally pass it through
+> >>> the toolchain wrapper, so that we are sure it is always passed.
+> >>> Arnout, what do you think?
+> >>  +1.
+> >>  Thomas, last year we made a beginning of deciding what should go through the
+> >> wrapper and what through CFLAGS, but I'm not sure if we ever got to a conclusion?
+> > So are we going to wait for some infrastructure changes or
+> > shall we first fix the problem at hand with broken perf build to ARC700?
+> 
+>  It's not really infrastructure changes. Rather, it is a better way to fix the
+> issue.
+> 
+>  You just need to move the -matomic from TARGET_ABI to TOOLCHAIN_WRAPPER_OPTS.
+> 
+>  The only tricky part is where that should be done. I think arch/arch.mk.arc
+> would be the right place. But that indeed requires an infrastructural change,
+> because the TOOLCHAIN_WRAPPER_OPTS = ... in toolchain-wrapper.mk has to change
+> into a +=.
 
-diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
-index 59ced7654c..bd209a6e7a 100644
---- a/package/cryptopp/cryptopp.mk
-+++ b/package/cryptopp/cryptopp.mk
-@@ -15,9 +15,16 @@ define HOST_CRYPTOPP_EXTRACT_CMDS
- 	$(UNZIP) $(HOST_CRYPTOPP_DL_DIR)/$(CRYPTOPP_SOURCE) -d $(@D)
- endef
- 
-+HOST_CRYPTOPP_CXXFLAGS = $(HOST_CFLAGS) -fPIC
-+
- HOST_CRYPTOPP_MAKE_OPTS = \
- 	$(HOST_CONFIGURE_OPTS) \
--	CXXFLAGS="$(HOST_CXXFLAGS) -fPIC"
-+	CXXFLAGS="$(HOST_CRYPTOPP_CXXFLAGS)"
-+
-+#?_mm256_broadcastsi128_si256 has been added only in gcc 4.9
-+ifneq ($(BR2_HOST_GCC_AT_LEAST_4_9),y)
-+HOST_CRYPTOPP_CXXFLAGS += -DCRYPTOPP_DISABLE_AVX2
+I'm not too fond of this, but what about the following:
+
+diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
+new file mode 100644
+index 0000000000..83503841b6
+--- /dev/null
++++ b/arch/arch.mk.arc
+@@ -0,0 +1,3 @@
++ifeq ($(BR2_arcle),y)
++ARCH_TOOLCHAIN_WRAPPER_OPTS = -matomic
 +endif
+diff --git a/toolchain/toolchain-wrapper.mk
+b/toolchain/toolchain-wrapper.mk
+index ca66fa7ba4..8f872506ec 100644
+--- a/toolchain/toolchain-wrapper.mk
++++ b/toolchain/toolchain-wrapper.mk
+@@ -17,6 +17,7 @@ TOOLCHAIN_WRAPPER_ARGS =
+$($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
+ TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
  
- define HOST_CRYPTOPP_BUILD_CMDS
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) shared
+ TOOLCHAIN_WRAPPER_OPTS = \
++   $(ARCH_TOOLCHAIN_WRAPPER_OPTS) \
+    $(call qstrip,$(BR2_SSP_OPTION)) \
+    $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+ 
+Regards,
+Yann E. MORIN.
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
