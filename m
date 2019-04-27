@@ -1,70 +1,69 @@
 From: Dominik Menke <dom@digineo.de>
-Date: Sat, 27 Apr 2019 23:02:44 +0200
+Date: Sat, 27 Apr 2019 23:20:22 +0200
 Subject: [Buildroot] Possible conflict with systemd and e2fsprogs?
-In-Reply-To: <20190427180814.GB27252@scaer>
+In-Reply-To: <7bb7a201-cdd2-7e66-deee-6175a264366c@mind.be>
 References: <4dcaadcb-0ef8-887e-6681-1f326194315c@digineo.de>
- <20190427180814.GB27252@scaer>
-Message-ID: <86bc386c-705f-ad70-eb03-85d094b7d540@digineo.de>
+ <7bb7a201-cdd2-7e66-deee-6175a264366c@mind.be>
+Message-ID: <1780e90c-9198-e9b6-5b38-9b27930337e2@digineo.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 4/27/19 8:08 PM, Yann E. MORIN wrote:
-> On 2019-04-25 20:15 +0200, Dominik Menke spake thusly:
+On 4/27/19 7:56 PM, Arnout Vandecappelle wrote:
+> On 25/04/2019 20:15, Dominik Menke wrote:
 >> I've run into trouble with the following configuration on Buildroot
 >> 2019.02.1-100-g88eff22a9e (current 2019.02.x branch):
 >>
->>      (
->>        echo BR2_INIT_SYSTEMD=y
->>        echo BR2_PACKAGE_E2FSPROGS=y
->>      ) | cat configs/raspberrypi3_defconfig - > configs/myrpi_defconfig
->>      make myrpi_defconfig
+>>  ??? (
+>>  ????? echo BR2_INIT_SYSTEMD=y
+>>  ????? echo BR2_PACKAGE_E2FSPROGS=y
+>>  ??? ) | cat configs/raspberrypi3_defconfig - > configs/myrpi_defconfig
+>>  ??? make myrpi_defconfig
+
+As pointed out in another response, BR2_TOOLCHAIN_BUILDROOT_GLIBC=y is 
+missing here.
+
+
+> [snip]
+>> Looking at /usr/lib/systemd/systemd-fsck (which is executed by
+>> systemd-fsck-root.service), it calls to /sbin/fsck only if /sbin/fsck.$type
+>> exists [3]. My guess is that it then fails to proceed because e2fsprog's fsck
+>> behaves differently then fsck (of package util linux).
 > 
-> How can that even work, when systemd depends on glibc?
+>   It would be good to find out what exactly is going wrong.
+
+Any advise on how I can to get more information? I'm struggeling with 
+the UART of the RPi 3B+ to be usable (this may be related to issue 11766 
+[0]). Currently, I only have the output on the Monitor connected on the 
+HDMI port, only a few pages of scrollback buffer, and no way to interact 
+with the system.
+
+[0]: https://bugs.busybox.net/show_bug.cgi?id=11766
+
+
+> package/systemd/Config.in does select BR2_PACKAGE_UTIL_LINUX_FSCK precisely for
+> this reason...
+> I'm adding Carlos (who added that) in Cc, maybe he has something to say about it.
 > 
-> And indeed, here, systemd is not selected when I do the above
-> commands...
+>   If it now needs the fsck from e2fsprogs, then it is getting a little tricky to
+> do the right thing. We'd have to revert the dependency between e2fsprogs fsck
+> and util-linux fsck.
 
-I may have forgotten to include BR2_TOOLCHAIN_BUILDROOT_GLIBC=y, yes. I 
-must have assumed selecting BR2_INIT_SYSTEMD would also change the libc 
-selection automatically, so I didn't verify that this is actually the 
-case (because, as you say, systemd depends on it).
+I don't think systemd needs e2fsprog's fsck. *I* need e2fsprogs, but 
+only for its resize2fs (nevertheless, it also installs /sbin/fsck.ext4). 
+However, systemd finds /sbin/fsck.ext4, and proceeds to execute /sbin/fsck.
 
-Please find my complete defconfig here:
+My current working theory is that /sbin/fsck then in turn calls out to 
+/sbin/fsck.ext4. As far as I can tell, /sbin/fsck originates from 
+util-linux, while /sbin/fsck.* come from e2fsprogs.
 
-BR2_arm=y
-BR2_cortex_a53=y
-BR2_ARM_FPU_NEON_VFPV4=y
-BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-BR2_BINUTILS_VERSION_2_31_X=y
-BR2_GCC_VERSION_8_X=y
-BR2_TOOLCHAIN_BUILDROOT_CXX=y
-BR2_INIT_SYSTEMD=y
-BR2_TARGET_LOCALTIME="Europe/Berlin"
-BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi3/post-build.sh"
-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi3/post-image.sh"
-BR2_ROOTFS_POST_SCRIPT_ARGS="--gpu_mem_1024=256"
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call 
-github,raspberrypi,linux,83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c)/linux-83b36f98e1a48d143f0b466fcf9f8c4e382c9a1c.tar.gz"
-BR2_LINUX_KERNEL_DEFCONFIG="bcm2709"
-BR2_LINUX_KERNEL_DTS_SUPPORT=y
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2710-rpi-3-b bcm2710-rpi-3-b-plus 
-bcm2710-rpi-cm3"
-BR2_PACKAGE_E2FSPROGS=y
-BR2_PACKAGE_OPENSSH=y
-BR2_TARGET_ROOTFS_EXT2=y
-BR2_TARGET_ROOTFS_EXT2_4=y
-BR2_TARGET_ROOTFS_EXT2_SIZE="150M"
-# BR2_TARGET_ROOTFS_TAR is not set
-BR2_PACKAGE_HOST_DOSFSTOOLS=y
-BR2_PACKAGE_HOST_GENIMAGE=y
-BR2_PACKAGE_HOST_MTOOLS=y
 
+>   However, I seem to recall that e2fsprogs fsck was considered deprecated.
+> 
+>   Regards,
+>   Arnout
 
 Kind Regards,
 Dominik
