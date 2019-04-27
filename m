@@ -1,57 +1,121 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Apr 2019 14:24:36 +0200
-Subject: [Buildroot] [git commit] package/hostapd: add upstream 2019-5
- security patches
-Message-ID: <20190427121956.D48018156E@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 27 Apr 2019 14:27:51 +0200
+Subject: [Buildroot] [PATCH 1/1] spdlog: new package
+In-Reply-To: <20190427095851.25375-1-asafka7@gmail.com>
+References: <20190427095851.25375-1-asafka7@gmail.com>
+Message-ID: <aa9b6439-dcf4-9e4a-b399-31eb96c75122@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b3adfacdb110fe5508284cf5159447492cffe944
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security vulnerabilities:
 
-EAP-pwd implementation in hostapd (EAP server) and wpa_supplicant (EAP
-peer) was discovered not to validate fragmentation reassembly state
-properly for a case where an unexpected fragment could be received. This
-could result in process termination due to NULL pointer dereference.
+On 27/04/2019 11:58, Asaf Kahlon wrote:
+> Very fast, header only, C++ logging library.
+> 
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+> ---
+>  DEVELOPERS                 |  1 +
+>  package/Config.in          |  1 +
+>  package/spdlog/Config.in   | 10 ++++++++++
+>  package/spdlog/spdlog.hash |  3 +++
+>  package/spdlog/spdlog.mk   | 17 +++++++++++++++++
+>  5 files changed, 32 insertions(+)
+>  create mode 100644 package/spdlog/Config.in
+>  create mode 100644 package/spdlog/spdlog.hash
+>  create mode 100644 package/spdlog/spdlog.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 56556413aa..8a4b90d276 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -222,6 +222,7 @@ F:	package/stress/
+>  N:	Asaf Kahlon <asafka7@gmail.com>
+>  F:	package/libuv/
+>  F:	package/python*
+> +F:	package/spdlog/
+>  F:	package/uftp/
+>  F:	package/zeromq/
+>  
+> diff --git a/package/Config.in b/package/Config.in
+> index f592e74a99..e822807a01 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1476,6 +1476,7 @@ menu "Logging"
+>  	source "package/log4cpp/Config.in"
+>  	source "package/log4cxx/Config.in"
+>  	source "package/opentracing-cpp/Config.in"
+> +	source "package/spdlog/Config.in"
+>  	source "package/zlog/Config.in"
+>  endmenu
+>  
+> diff --git a/package/spdlog/Config.in b/package/spdlog/Config.in
+> new file mode 100644
+> index 0000000000..30cccba785
+> --- /dev/null
+> +++ b/package/spdlog/Config.in
+> @@ -0,0 +1,10 @@
+> +config BR2_PACKAGE_SPDLOG
+> +	bool "spdlog"
+> +	depends on BR2_INSTALL_LIBSTDCPP
 
-For details, see the advisory:
-https://w1.fi/security/2019-5/eap-pwd-message-reassembly-issue-with-unexpected-fragment.txt
+ Why does it not select BR2_PACKAGE_FMT?
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/hostapd/hostapd.hash | 2 ++
- package/hostapd/hostapd.mk   | 4 +++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ Note that fmt depends on WCHAR, so this one as well I guess...
 
-diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
-index 3e6b086b00..8901aa43be 100644
---- a/package/hostapd/hostapd.hash
-+++ b/package/hostapd/hostapd.hash
-@@ -14,5 +14,7 @@ sha256  ff8d6d92ad4b01987be63cdaf67a24d2eba5b3cd654f37664a8a198e501c0e3b  0011-E
- sha256  d5ebf4e5a810e9a0c035f9268195c542273998ea70fd58697ee25965094062cc  0012-EAP-pwd-server-Detect-reflection-attacks.patch
- sha256  7156656498f03b24a0b69a26a59d17a9fcc8e76761f1dabe6d13b4176ffd2ef8  0013-EAP-pwd-client-Verify-received-scalar-and-element.patch
- sha256  69926854ec2a79dada290f79f04202764c5d6400d232e3a567ebe633a02c1c66  0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
-+sha256	cba82a051a39c48872250b2e85ca8ebc628cfe75a9ccec29f3e994abd4156152  0001-EAP-pwd-server-Fix-reassembly-buffer-handling.patch
-+sha256	dc0e015463e1fd1f230795e1a49ddd1b9d00e726cd9f38846d0f4892d7978162  0003-EAP-pwd-peer-Fix-reassembly-buffer-handling.patch
- sha256  e204da659d0583c71af23cb9b55536fe99598ee26a44104344f456e4d17350c6  rtlxdrv.patch
- sha256  76eeecd8fc291a71f29189ea20e6a34387b8048a959cbc6a65c41b98194643a2  README
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index e2b0feec9b..550f887206 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -20,7 +20,9 @@ HOSTAPD_PATCH = \
- 	https://w1.fi/security/2019-4/0011-EAP-pwd-server-Verify-received-scalar-and-element.patch \
- 	https://w1.fi/security/2019-4/0012-EAP-pwd-server-Detect-reflection-attacks.patch \
- 	https://w1.fi/security/2019-4/0013-EAP-pwd-client-Verify-received-scalar-and-element.patch \
--	https://w1.fi/security/2019-4/0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
-+	https://w1.fi/security/2019-4/0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch \
-+	https://w1.fi/security/2019-5/0001-EAP-pwd-server-Fix-reassembly-buffer-handling.patch \
-+	https://w1.fi/security/2019-5/0003-EAP-pwd-peer-Fix-reassembly-buffer-handling.patch
- HOSTAPD_SUBDIR = hostapd
- HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
- HOSTAPD_DEPENDENCIES = host-pkgconf
+> +	help
+> +	  Very fast, header only, C++ logging library.
+> +
+> +	  https://github.com/gabime/spdlog
+> +
+> +comment "spdlog needs a toolchain w/ C++"
+> +	depends on !BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
+> new file mode 100644
+> index 0000000000..9cbf5b22a0
+> --- /dev/null
+> +++ b/package/spdlog/spdlog.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256 160845266e94db1d4922ef755637f6901266731c4cb3b30b45bf41efa0e6ab70  spdlog-1.3.1.tar.gz
+> +sha256 7d40b1967fca203d22b0eaf75f54566167ded823863abedf4de869fcea057038  LICENSE
+> diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
+> new file mode 100644
+> index 0000000000..e711c72961
+> --- /dev/null
+> +++ b/package/spdlog/spdlog.mk
+> @@ -0,0 +1,17 @@
+> +################################################################################
+> +#
+> +# spdlog
+> +#
+> +################################################################################
+> +
+> +SPDLOG_VERSION = 1.3.1
+> +SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
+> +SPDLOG_LICENSE = MIT
+> +SPDLOG_LICENSE_FILES = LICENSE
+> +SPDLOG_CONF_OPTS += -DSPDLOG_BUILD_TESTS=NO -DSPDLOG_BUILD_EXAMPLES=NO -DSPDLOG_BUILD_BENCH=NO
+
+ ... and set SPDLOG_FMT_EXTERNAL=ON?
+
+ Also, we normally use ON/OFF, not YES/NO.
+
+
+> +
+> +# Header-only library
+> +SPDLOG_INSTALL_STAGING = YES
+> +SPDLOG_INSTALL_TARGET = NO
+
+ It would be nice to also have a package that uses spdlog, so it gets some
+testing in the autobuilders. Currently, nothing is compiled so e.g. the WCHAR
+dependency would not get discovered.
+
+ Regards,
+ Arnout
+
+> +
+> +$(eval $(cmake-package))
+> 
