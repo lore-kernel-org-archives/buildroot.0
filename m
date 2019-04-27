@@ -1,58 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Apr 2019 18:26:26 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/wpa_supplicant:
- add upstream 2019-5 security patches
-Message-ID: <20190427162407.7D71D8140A@busybox.osuosl.org>
+Date: Sat, 27 Apr 2019 18:27:15 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/xapp_xfd: fix
+ build with NLS
+Message-ID: <20190427162407.840828140A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc464da5cbf3175fbd0c55ab1dfca8bb5b6c8f89
+commit: https://git.buildroot.net/buildroot/commit/?id=1f0bf133516e0e746c5da6ff03f04fc4382e95c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security vulnerabilities:
+Fixes:
+ - http://autobuild.buildroot.org/results/e6009f0232eb60ed10eb46b39edf125369eb12e1
 
-EAP-pwd implementation in hostapd (EAP server) and wpa_supplicant (EAP
-peer) was discovered not to validate fragmentation reassembly state
-properly for a case where an unexpected fragment could be received. This
-could result in process termination due to NULL pointer dereference.
-
-For details, see the advisory:
-https://w1.fi/security/2019-5/eap-pwd-message-reassembly-issue-with-unexpected-fragment.txt
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c21edddec9043617f9a1d7fe8ad8ea1770846b82)
+(cherry picked from commit 73661a7550f426b9c816c30fc122bd4ee775b547)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wpa_supplicant/wpa_supplicant.hash | 2 ++
- package/wpa_supplicant/wpa_supplicant.mk   | 4 +++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
+ package/x11r7/xapp_xfd/xapp_xfd.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.hash b/package/wpa_supplicant/wpa_supplicant.hash
-index 2e6cd6f226..2da15f7f5d 100644
---- a/package/wpa_supplicant/wpa_supplicant.hash
-+++ b/package/wpa_supplicant/wpa_supplicant.hash
-@@ -14,4 +14,6 @@ sha256  ff8d6d92ad4b01987be63cdaf67a24d2eba5b3cd654f37664a8a198e501c0e3b  0011-E
- sha256  d5ebf4e5a810e9a0c035f9268195c542273998ea70fd58697ee25965094062cc  0012-EAP-pwd-server-Detect-reflection-attacks.patch
- sha256  7156656498f03b24a0b69a26a59d17a9fcc8e76761f1dabe6d13b4176ffd2ef8  0013-EAP-pwd-client-Verify-received-scalar-and-element.patch
- sha256  69926854ec2a79dada290f79f04202764c5d6400d232e3a567ebe633a02c1c66  0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
-+sha256	cba82a051a39c48872250b2e85ca8ebc628cfe75a9ccec29f3e994abd4156152  0001-EAP-pwd-server-Fix-reassembly-buffer-handling.patch
-+sha256	dc0e015463e1fd1f230795e1a49ddd1b9d00e726cd9f38846d0f4892d7978162  0003-EAP-pwd-peer-Fix-reassembly-buffer-handling.patch
- sha256  76eeecd8fc291a71f29189ea20e6a34387b8048a959cbc6a65c41b98194643a2  README
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 4c80cd2d03..a518ecc217 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -20,7 +20,9 @@ WPA_SUPPLICANT_PATCH = \
- 	https://w1.fi/security/2019-4/0011-EAP-pwd-server-Verify-received-scalar-and-element.patch \
- 	https://w1.fi/security/2019-4/0012-EAP-pwd-server-Detect-reflection-attacks.patch \
- 	https://w1.fi/security/2019-4/0013-EAP-pwd-client-Verify-received-scalar-and-element.patch \
--	https://w1.fi/security/2019-4/0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
-+	https://w1.fi/security/2019-4/0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch \
-+	https://w1.fi/security/2019-5/0001-EAP-pwd-server-Fix-reassembly-buffer-handling.patch \
-+	https://w1.fi/security/2019-5/0003-EAP-pwd-peer-Fix-reassembly-buffer-handling.patch
- WPA_SUPPLICANT_LICENSE = BSD-3-Clause
- WPA_SUPPLICANT_LICENSE_FILES = README
- WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
+diff --git a/package/x11r7/xapp_xfd/xapp_xfd.mk b/package/x11r7/xapp_xfd/xapp_xfd.mk
+index 06c9c83e4a..89b3f299f0 100644
+--- a/package/x11r7/xapp_xfd/xapp_xfd.mk
++++ b/package/x11r7/xapp_xfd/xapp_xfd.mk
+@@ -9,7 +9,13 @@ XAPP_XFD_SOURCE = xfd-$(XAPP_XFD_VERSION).tar.bz2
+ XAPP_XFD_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XFD_LICENSE = MIT
+ XAPP_XFD_LICENSE_FILES = COPYING
+-XAPP_XFD_DEPENDENCIES = freetype fontconfig xlib_libXaw xlib_libXft
++XAPP_XFD_DEPENDENCIES = \
++	freetype \
++	fontconfig \
++	xlib_libXaw \
++	xlib_libXft \
++	$(TARGET_NLS_DEPENDENCIES)
+ XAPP_XFD_CONF_OPTS = --with-appdefaultdir=/usr/share/X11/app-defaults
++XAPP_XFD_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ 
+ $(eval $(autotools-package))
