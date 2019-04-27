@@ -1,205 +1,58 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Apr 2019 18:25:04 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/bind: security
- bump to version 9.11.6-P1
-Message-ID: <20190427162407.697BA8140A@busybox.osuosl.org>
+Date: Sat, 27 Apr 2019 18:26:26 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/wpa_supplicant:
+ add upstream 2019-5 security patches
+Message-ID: <20190427162407.7D71D8140A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=757f764547f522bb7692976ed2c8678a7e5a2d3a
+commit: https://git.buildroot.net/buildroot/commit/?id=cc464da5cbf3175fbd0c55ab1dfca8bb5b6c8f89
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security issues:
+Fixes the following security vulnerabilities:
 
- - CVE-2018-5743: Limiting simultaneous TCP clients is ineffective
-   https://kb.isc.org/docs/cve-2018-5743
+EAP-pwd implementation in hostapd (EAP server) and wpa_supplicant (EAP
+peer) was discovered not to validate fragmentation reassembly state
+properly for a case where an unexpected fragment could be received. This
+could result in process termination due to NULL pointer dereference.
 
- - CVE-2019-6467: An error in the nxdomain redirect feature can cause
-   BIND to exit with an INSIST assertion failure in query.c
-   https://kb.isc.org/docs/cve-2019-6467
-
- - CVE-2019-6468: BIND Supported Preview Edition can exit with an
-   assertion failure if nxdomain-redirect is used
-   https://kb.isc.org/docs/cve-2019-6468
-
-Add an upstream patch to fix building on architectures where bind does not
-implement isc_atomic_*.
-
-Upstream moved to a 2019 signing key, so update comment in .hash file.
+For details, see the advisory:
+https://w1.fi/security/2019-5/eap-pwd-message-reassembly-issue-with-unexpected-fragment.txt
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit fc8ace0938a0bcf2e9fa628a88853252eabc991d)
+(cherry picked from commit c21edddec9043617f9a1d7fe8ad8ea1770846b82)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...mic-operations-in-bin-named-client.c-with.patch | 133 +++++++++++++++++++++
- package/bind/bind.hash                             |   6 +-
- package/bind/bind.mk                               |   2 +-
- 3 files changed, 137 insertions(+), 4 deletions(-)
+ package/wpa_supplicant/wpa_supplicant.hash | 2 ++
+ package/wpa_supplicant/wpa_supplicant.mk   | 4 +++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch b/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch
-new file mode 100644
-index 0000000000..2701de766a
---- /dev/null
-+++ b/package/bind/0002-Replace-atomic-operations-in-bin-named-client.c-with.patch
-@@ -0,0 +1,133 @@
-+From ef49780d30d3ddc5735cfc32561b678a634fa72f Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Ond=C5=99ej=20Sur=C3=BD?= <ondrej@sury.org>
-+Date: Wed, 17 Apr 2019 15:22:27 +0200
-+Subject: [PATCH] Replace atomic operations in bin/named/client.c with
-+ isc_refcount reference counting
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ bin/named/client.c                     | 18 +++++++-----------
-+ bin/named/include/named/interfacemgr.h |  5 +++--
-+ bin/named/interfacemgr.c               |  7 +++++--
-+ 3 files changed, 15 insertions(+), 15 deletions(-)
-+
-+diff --git a/bin/named/client.c b/bin/named/client.c
-+index 845326abc0..29fecadca8 100644
-+--- a/bin/named/client.c
-++++ b/bin/named/client.c
-+@@ -402,12 +402,10 @@ tcpconn_detach(ns_client_t *client) {
-+ static void
-+ mark_tcp_active(ns_client_t *client, bool active) {
-+ 	if (active && !client->tcpactive) {
-+-		isc_atomic_xadd(&client->interface->ntcpactive, 1);
-++		isc_refcount_increment0(&client->interface->ntcpactive, NULL);
-+ 		client->tcpactive = active;
-+ 	} else if (!active && client->tcpactive) {
-+-		uint32_t old =
-+-			isc_atomic_xadd(&client->interface->ntcpactive, -1);
-+-		INSIST(old > 0);
-++		isc_refcount_decrement(&client->interface->ntcpactive, NULL);
-+ 		client->tcpactive = active;
-+ 	}
-+ }
-+@@ -554,7 +552,7 @@ exit_check(ns_client_t *client) {
-+ 		if (client->mortal && TCP_CLIENT(client) &&
-+ 		    client->newstate != NS_CLIENTSTATE_FREED &&
-+ 		    !ns_g_clienttest &&
-+-		    isc_atomic_xadd(&client->interface->ntcpaccepting, 0) == 0)
-++		    isc_refcount_current(&client->interface->ntcpaccepting) == 0)
-+ 		{
-+ 			/* Nobody else is accepting */
-+ 			client->mortal = false;
-+@@ -3328,7 +3326,6 @@ client_newconn(isc_task_t *task, isc_event_t *event) {
-+ 	isc_result_t result;
-+ 	ns_client_t *client = event->ev_arg;
-+ 	isc_socket_newconnev_t *nevent = (isc_socket_newconnev_t *)event;
-+-	uint32_t old;
-+ 
-+ 	REQUIRE(event->ev_type == ISC_SOCKEVENT_NEWCONN);
-+ 	REQUIRE(NS_CLIENT_VALID(client));
-+@@ -3348,8 +3345,7 @@ client_newconn(isc_task_t *task, isc_event_t *event) {
-+ 	INSIST(client->naccepts == 1);
-+ 	client->naccepts--;
-+ 
-+-	old = isc_atomic_xadd(&client->interface->ntcpaccepting, -1);
-+-	INSIST(old > 0);
-++	isc_refcount_decrement(&client->interface->ntcpaccepting, NULL);
-+ 
-+ 	/*
-+ 	 * We must take ownership of the new socket before the exit
-+@@ -3480,8 +3476,8 @@ client_accept(ns_client_t *client) {
-+ 		 * quota is tcp-clients plus the number of listening
-+ 		 * interfaces plus 1.)
-+ 		 */
-+-		exit = (isc_atomic_xadd(&client->interface->ntcpactive, 0) >
-+-			(client->tcpactive ? 1 : 0));
-++		exit = (isc_refcount_current(&client->interface->ntcpactive) >
-++			(client->tcpactive ? 1U : 0U));
-+ 		if (exit) {
-+ 			client->newstate = NS_CLIENTSTATE_INACTIVE;
-+ 			(void)exit_check(client);
-+@@ -3539,7 +3535,7 @@ client_accept(ns_client_t *client) {
-+ 	 * listening for connections itself to prevent the interface
-+ 	 * going dead.
-+ 	 */
-+-	isc_atomic_xadd(&client->interface->ntcpaccepting, 1);
-++	isc_refcount_increment0(&client->interface->ntcpaccepting, NULL);
-+ }
-+ 
-+ static void
-+diff --git a/bin/named/include/named/interfacemgr.h b/bin/named/include/named/interfacemgr.h
-+index 3535ef22a8..6e10f210fd 100644
-+--- a/bin/named/include/named/interfacemgr.h
-++++ b/bin/named/include/named/interfacemgr.h
-+@@ -45,6 +45,7 @@
-+ #include <isc/magic.h>
-+ #include <isc/mem.h>
-+ #include <isc/socket.h>
-++#include <isc/refcount.h>
-+ 
-+ #include <dns/result.h>
-+ 
-+@@ -75,11 +76,11 @@ struct ns_interface {
-+ 						/*%< UDP dispatchers. */
-+ 	isc_socket_t *		tcpsocket;	/*%< TCP socket. */
-+ 	isc_dscp_t		dscp;		/*%< "listen-on" DSCP value */
-+-	int32_t			ntcpaccepting;	/*%< Number of clients
-++	isc_refcount_t		ntcpaccepting;	/*%< Number of clients
-+ 						     ready to accept new
-+ 						     TCP connections on this
-+ 						     interface */
-+-	int32_t			ntcpactive;	/*%< Number of clients
-++	isc_refcount_t		ntcpactive;	/*%< Number of clients
-+ 						     servicing TCP queries
-+ 						     (whether accepting or
-+ 						     connected) */
-+diff --git a/bin/named/interfacemgr.c b/bin/named/interfacemgr.c
-+index d9f6df5802..135533be6b 100644
-+--- a/bin/named/interfacemgr.c
-++++ b/bin/named/interfacemgr.c
-+@@ -386,8 +386,8 @@ ns_interface_create(ns_interfacemgr_t *mgr, isc_sockaddr_t *addr,
-+ 	 * connections will be handled in parallel even though there is
-+ 	 * only one client initially.
-+ 	 */
-+-	ifp->ntcpaccepting = 0;
-+-	ifp->ntcpactive = 0;
-++	isc_refcount_init(&ifp->ntcpaccepting, 0);
-++	isc_refcount_init(&ifp->ntcpactive, 0);
-+ 
-+ 	ifp->nudpdispatch = 0;
-+ 
-+@@ -618,6 +618,9 @@ ns_interface_destroy(ns_interface_t *ifp) {
-+ 
-+ 	ns_interfacemgr_detach(&ifp->mgr);
-+ 
-++	isc_refcount_destroy(&ifp->ntcpactive);
-++	isc_refcount_destroy(&ifp->ntcpaccepting);
-++
-+ 	ifp->magic = 0;
-+ 	isc_mem_put(mctx, ifp, sizeof(*ifp));
-+ }
-+-- 
-+2.11.0
-+
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 3072d2d2a0..cdd4bdd312 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.11.5-P4/bind-9.11.5-P4.tar.gz.asc
--# with key BE0E9748B718253A28BB89FFF1B11BF05CF02E57
--sha256 7e8c08192bcbaeb6e9f2391a70e67583b027b90e8c4bc1605da6eb126edde434 bind-9.11.5-P4.tar.gz
-+# Verified from https://ftp.isc.org/isc/bind9/9.11.6-P1/bind-9.11.6-P1.tar.gz.asc
-+# with key 156890685EA0DF6A1371EF2017CC5DB1F0088407
-+sha256 58ace2abb4d048b67abcdef0649ecd6cbd3b0652734a41a1d34f942d5500f8ef bind-9.11.6-P1.tar.gz
- sha256 cd02c93b8dcda794f55dfd1231828d69633072a98eee4874f9cf732d22d9dcde COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 572eacd11a..c3149394b0 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.11.5-P4
-+BIND_VERSION = 9.11.6-P1
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
- BIND_MAKE = $(MAKE1)
+diff --git a/package/wpa_supplicant/wpa_supplicant.hash b/package/wpa_supplicant/wpa_supplicant.hash
+index 2e6cd6f226..2da15f7f5d 100644
+--- a/package/wpa_supplicant/wpa_supplicant.hash
++++ b/package/wpa_supplicant/wpa_supplicant.hash
+@@ -14,4 +14,6 @@ sha256  ff8d6d92ad4b01987be63cdaf67a24d2eba5b3cd654f37664a8a198e501c0e3b  0011-E
+ sha256  d5ebf4e5a810e9a0c035f9268195c542273998ea70fd58697ee25965094062cc  0012-EAP-pwd-server-Detect-reflection-attacks.patch
+ sha256  7156656498f03b24a0b69a26a59d17a9fcc8e76761f1dabe6d13b4176ffd2ef8  0013-EAP-pwd-client-Verify-received-scalar-and-element.patch
+ sha256  69926854ec2a79dada290f79f04202764c5d6400d232e3a567ebe633a02c1c66  0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
++sha256	cba82a051a39c48872250b2e85ca8ebc628cfe75a9ccec29f3e994abd4156152  0001-EAP-pwd-server-Fix-reassembly-buffer-handling.patch
++sha256	dc0e015463e1fd1f230795e1a49ddd1b9d00e726cd9f38846d0f4892d7978162  0003-EAP-pwd-peer-Fix-reassembly-buffer-handling.patch
+ sha256  76eeecd8fc291a71f29189ea20e6a34387b8048a959cbc6a65c41b98194643a2  README
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 4c80cd2d03..a518ecc217 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -20,7 +20,9 @@ WPA_SUPPLICANT_PATCH = \
+ 	https://w1.fi/security/2019-4/0011-EAP-pwd-server-Verify-received-scalar-and-element.patch \
+ 	https://w1.fi/security/2019-4/0012-EAP-pwd-server-Detect-reflection-attacks.patch \
+ 	https://w1.fi/security/2019-4/0013-EAP-pwd-client-Verify-received-scalar-and-element.patch \
+-	https://w1.fi/security/2019-4/0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
++	https://w1.fi/security/2019-4/0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch \
++	https://w1.fi/security/2019-5/0001-EAP-pwd-server-Fix-reassembly-buffer-handling.patch \
++	https://w1.fi/security/2019-5/0003-EAP-pwd-peer-Fix-reassembly-buffer-handling.patch
+ WPA_SUPPLICANT_LICENSE = BSD-3-Clause
+ WPA_SUPPLICANT_LICENSE_FILES = README
+ WPA_SUPPLICANT_CONFIG = $(WPA_SUPPLICANT_DIR)/wpa_supplicant/.config
