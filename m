@@ -1,9 +1,8 @@
 From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 27 Apr 2019 09:05:19 +0200
-Subject: [Buildroot] [PATCH 2/4] package/perl-mail-dkim: bump to version 0.55
-In-Reply-To: <20190427070521.27791-1-francois.perrad@gadz.org>
-References: <20190427070521.27791-1-francois.perrad@gadz.org>
-Message-ID: <20190427070521.27791-2-francois.perrad@gadz.org>
+Date: Sat, 27 Apr 2019 09:05:18 +0200
+Subject: [Buildroot] [PATCH 1/4] package/perl-http-headers-fast: bump to
+ version 0.22
+Message-ID: <20190427070521.27791-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,32 +11,35 @@ To: buildroot@busybox.net
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-mail-dkim/perl-mail-dkim.hash | 4 ++--
- package/perl-mail-dkim/perl-mail-dkim.mk   | 2 +-
+ package/perl-http-headers-fast/perl-http-headers-fast.hash | 4 ++--
+ package/perl-http-headers-fast/perl-http-headers-fast.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.hash b/package/perl-mail-dkim/perl-mail-dkim.hash
-index 6d0b07970..e0e953212 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.hash
-+++ b/package/perl-mail-dkim/perl-mail-dkim.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/perl-http-headers-fast/perl-http-headers-fast.hash b/package/perl-http-headers-fast/perl-http-headers-fast.hash
+index 0cba0f95a..9282f2ef1 100644
+--- a/package/perl-http-headers-fast/perl-http-headers-fast.hash
++++ b/package/perl-http-headers-fast/perl-http-headers-fast.hash
+@@ -1,6 +1,6 @@
  # retrieved by scancpan from http://cpan.metacpan.org/
--md5    7f65cb291545aa10fa9d0d87d0e8d1d2 Mail-DKIM-0.54.tar.gz
--sha256 b72f78c80f7aa1bdb2a80986b45f9225a8fa0b7c91644590b102a78eb31c3dca Mail-DKIM-0.54.tar.gz
-+md5    76b9dd8a12e1f7ca2f0a5c097e7b8405 Mail-DKIM-0.55.tar.gz
-+sha256 df29ddf187025b6a8dfc1387209b7fef35557fed51f8313bd1763ae35c80daa2 Mail-DKIM-0.55.tar.gz
-diff --git a/package/perl-mail-dkim/perl-mail-dkim.mk b/package/perl-mail-dkim/perl-mail-dkim.mk
-index 986df27cb..b63634c87 100644
---- a/package/perl-mail-dkim/perl-mail-dkim.mk
-+++ b/package/perl-mail-dkim/perl-mail-dkim.mk
+-md5    024fde06808fc47db61a62655afacb41 HTTP-Headers-Fast-0.21.tar.gz
+-sha256 5e68ed8e3e67531e1d43c6a2cdfd0ee2daddf2e5b94c1a2648f3a6500a6f12d5 HTTP-Headers-Fast-0.21.tar.gz
++md5    a166a4d0ba47eca8ff9dffb760865f5f HTTP-Headers-Fast-0.22.tar.gz
++sha256 cc431db68496dd884db4bc0c0b7112c1f4a4f1dc68c4f5a3caa757a1e7481b48 HTTP-Headers-Fast-0.22.tar.gz
+ 
+ # computed by scancpan
+ sha256 511724425acf76d736145cfbf7c775b024c70ae8674ebf9a24dfda2c8e4032a3 LICENSE
+diff --git a/package/perl-http-headers-fast/perl-http-headers-fast.mk b/package/perl-http-headers-fast/perl-http-headers-fast.mk
+index fadf06d5b..d7bff6f99 100644
+--- a/package/perl-http-headers-fast/perl-http-headers-fast.mk
++++ b/package/perl-http-headers-fast/perl-http-headers-fast.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_MAIL_DKIM_VERSION = 0.54
-+PERL_MAIL_DKIM_VERSION = 0.55
- PERL_MAIL_DKIM_SOURCE = Mail-DKIM-$(PERL_MAIL_DKIM_VERSION).tar.gz
- PERL_MAIL_DKIM_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MB/MBRADSHAW
- PERL_MAIL_DKIM_DISTNAME = Mail-DKIM
+-PERL_HTTP_HEADERS_FAST_VERSION = 0.21
++PERL_HTTP_HEADERS_FAST_VERSION = 0.22
+ PERL_HTTP_HEADERS_FAST_SOURCE = HTTP-Headers-Fast-$(PERL_HTTP_HEADERS_FAST_VERSION).tar.gz
+ PERL_HTTP_HEADERS_FAST_SITE = $(BR2_CPAN_MIRROR)/authors/id/T/TO/TOKUHIROM
+ PERL_HTTP_HEADERS_FAST_DEPENDENCIES = host-perl-module-build-tiny
 -- 
 2.20.1
