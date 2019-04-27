@@ -1,159 +1,94 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sun, 28 Apr 2019 00:06:51 +0200
-Subject: [Buildroot] [PATCH] package/minicom: bump to version
- 6fe734c5a1d51e2d4a3c1cd4d7a61cc246faa3f2
-In-Reply-To: <20190427161625.99335-1-giulio.benetti@micronovasrl.com>
-References: <20190427161625.99335-1-giulio.benetti@micronovasrl.com>
-Message-ID: <eb06aafc-01f9-5c1d-aebf-f8eccb2ee8ad@micronovasrl.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 28 Apr 2019 00:09:59 +0200
+Subject: [Buildroot] [PATCH] package/python-pytest: new package
+In-Reply-To: <1556096379-32178-1-git-send-email-jugurtha.belkalem@smile.fr>
+References: <1556096379-32178-1-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <8b1274d9-2e63-823b-dfde-fba6b25b337e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ Hi Jugurtha,
 
-Il 27/04/2019 18:16, Giulio Benetti ha scritto:
-> Remove 0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch that has
-> been upstreamed.
-> 
-> Add host-pkgconf to MINICOM_DEPENDENCIES and remove:
-> `MINICOM_CONF_ENV = PKG_CONFIG=/bin/false` since now pkg-config is
-> needed to build.
-> 
-> Merge request for:
-> 0001-sysdep1-check-if-RS485-is-support-before-setting-its.patch
-> has been opened:
-> https://salsa.debian.org/minicom-team/minicom/merge_requests/8/commits
-
-This has just been merged so please discard this patch I will send a v2 
-soon.
-
-Best regards
-
-Giulio
-
-> Shortlog follows:
-> git shortlog 19ab49422f3431102c31fea01549121385113f80..
-> Adam Lackorzynski (9):
->        Update project URL
->        Updated translations
->        Updated translations: pl and sv
->        Translations: regen update
->        Update danish translation
->        Update of danish translation
->        Update README
->        Formatting fix
->        More friendly mbslength test
-> 
-> Fabrice Fontaine (1):
->        src/Makefile.am: fix ascii-xfr link with lintl
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+On 24/04/2019 10:59, Jugurtha BELKALEM wrote:
 > ---
->   ...ile.am-fix-ascii-xfr-link-with-lintl.patch | 44 -------------------
->   package/minicom/minicom.hash                  |  2 +-
->   package/minicom/minicom.mk                    | 10 +----
->   3 files changed, 3 insertions(+), 53 deletions(-)
->   delete mode 100644 package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch
-> 
-> diff --git a/package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch b/package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch
-> deleted file mode 100644
-> index efc880d2e7..0000000000
-> --- a/package/minicom/0002-src-Makefile.am-fix-ascii-xfr-link-with-lintl.patch
-> +++ /dev/null
-> @@ -1,44 +0,0 @@
-> -From 6fe734c5a1d51e2d4a3c1cd4d7a61cc246faa3f2 Mon Sep 17 00:00:00 2001
-> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Date: Sat, 20 Apr 2019 13:34:23 +0200
-> -Subject: [PATCH] src/Makefile.am: fix ascii-xfr link with lintl
-> -
-> -ascii-xfr needs to link with lintl if needed:
-> -
-> -/home/dawncrow/buildroot-test/scripts/instance-0/output/host/bin/m68k-linux-gcc  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2   -W -Wall -Wextra -std=gnu99 -Wno-format-truncation   -o ascii-xfr ascii-xfr.o ../lib/libport.a -lncurses
-> -ascii-xfr.o: In function `stats':
-> -ascii-xfr.c:(.text+0x4c): undefined reference to `libintl_gettext'
-> -ascii-xfr.c:(.text+0xb2): undefined reference to `libintl_gettext'
-> -ascii-xfr.o: In function `usage':
-> -ascii-xfr.c:(.text+0x10e): undefined reference to `libintl_gettext'
-> -ascii-xfr.o: In function `asend':
-> -ascii-xfr.c:(.text+0x534): undefined reference to `libintl_gettext'
-> -ascii-xfr.o: In function `main':
-> -ascii-xfr.c:(.text.startup+0xc8): undefined reference to `libintl_gettext'
-> -ascii-xfr.o:ascii-xfr.c:(.text.startup+0x1a8): more undefined references to `libintl_gettext' follow
-> -
-> -Fixes:
-> - - http://autobuild.buildroot.org/results/e64cdcf648764be53a3e951304bb89dc9410db23
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -[Upstream status:
-> -https://salsa.debian.org/minicom-team/minicom/merge_requests/7]
-> ----
-> - src/Makefile.am | 1 +
-> - 1 file changed, 1 insertion(+)
-> -
-> -diff --git a/src/Makefile.am b/src/Makefile.am
-> -index 19b1888..ba92f71 100644
-> ---- a/src/Makefile.am
-> -+++ b/src/Makefile.am
-> -@@ -29,6 +29,7 @@ confdir = @MINICOM_CONFDIR@
-> - AM_CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/lib -DCONFDIR=\"$(confdir)\" \
-> -               -DLOCALEDIR=\"$(datadir)/locale\"
-> -
-> -+ascii_xfr_LDADD = @LIBINTL@
-> - minicom_LDADD = @LIBINTL@ $(LIBICONV) $(MINICOM_LIBPORT) $(LOCKDEV_LIBS)
-> - minicom_keyserv_LDADD = @LIBINTL@ $(MINICOM_LIBPORT)
-> - runscript_LDADD = @LIBINTL@ $(MINICOM_LIBPORT)
-> ---
-> -2.20.1
-> -
-> diff --git a/package/minicom/minicom.hash b/package/minicom/minicom.hash
-> index c566f4be52..62982d37e6 100644
-> --- a/package/minicom/minicom.hash
-> +++ b/package/minicom/minicom.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256 3bd58b594ac66545649c13ab2b728a4df0f78612eb030680d4152f7627d1f177  minicom-19ab49422f3431102c31fea01549121385113f80.tar.gz
-> +sha256 14d238b7819844515a636ed799cd849285b580a3458f3a4e94ce328a55ab989d  minicom-6fe734c5a1d51e2d4a3c1cd4d7a61cc246faa3f2.tar.gz
->   sha256 cf80a758014eefbf068afffe3d462fc34ff4f528527524d8e100329c42094e15  COPYING
-> diff --git a/package/minicom/minicom.mk b/package/minicom/minicom.mk
-> index 000597f8a9..4ae852c2a8 100644
-> --- a/package/minicom/minicom.mk
-> +++ b/package/minicom/minicom.mk
-> @@ -4,21 +4,15 @@
->   #
->   ################################################################################
->   
-> -MINICOM_VERSION = 19ab49422f3431102c31fea01549121385113f80
-> +MINICOM_VERSION = 6fe734c5a1d51e2d4a3c1cd4d7a61cc246faa3f2
->   MINICOM_SITE = https://salsa.debian.org/minicom-team/minicom.git
->   MINICOM_SITE_METHOD = git
->   MINICOM_LICENSE = GPL-2.0+
->   MINICOM_LICENSE_FILES = COPYING
->   MINICOM_AUTORECONF = YES
->   
-> -# pkg-config is only used to check for liblockdev, which we don't have
-> -# in BR, so instead of adding host-pkgconf as a dependency, simply make
-> -# sure the host version isn't used so we don't end up with problems if
-> -# people have liblockdev1-dev installed
-> -MINICOM_CONF_ENV = PKG_CONFIG=/bin/false
-> -
->   MINICOM_DEPENDENCIES = ncurses $(if $(BR2_ENABLE_LOCALE),,libiconv) \
-> -	$(TARGET_NLS_DEPENDENCIES)
-> +	$(TARGET_NLS_DEPENDENCIES) host-pkgconf
->   # add host-gettext for AM_ICONV macro
->   MINICOM_DEPENDENCIES += host-gettext
->   
-> 
+>  package/python-pytest/Config.in          |  9 +++++++++
+>  package/python-pytest/python-pytest.hash |  2 ++
+>  package/python-pytest/python-pytest.mk   | 15 +++++++++++++++
 
--- 
-Giulio Benetti
-CTO
+ package/Config.in update is missing, so this package cannot be selected.
 
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+ Please also add yourself to DEVELOPERS.
+
+>  3 files changed, 26 insertions(+)
+>  create mode 100644 package/python-pytest/Config.in
+>  create mode 100644 package/python-pytest/python-pytest.hash
+>  create mode 100644 package/python-pytest/python-pytest.mk
+> 
+> diff --git a/package/python-pytest/Config.in b/package/python-pytest/Config.in
+> new file mode 100644
+> index 0000000..db69027
+> --- /dev/null
+> +++ b/package/python-pytest/Config.in
+> @@ -0,0 +1,9 @@
+> +config BR2_PACKAGE_PYTHON_PYTEST
+> +	bool "python-pytest"
+
+ Indentation is incorrect. Please use the check-package tool to verify before
+submitting.
+
+> +    help
+> +	  The pytest framework makes it easy to write small tests, 
+> +	  yet scales to support complex functional testing for 
+> +	  applications and libraries.
+> +
+> +	  https://pypi.org/project/pytest/
+> +
+> diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
+> new file mode 100644
+> index 0000000..5e072d7
+> --- /dev/null
+> +++ b/package/python-pytest/python-pytest.hash
+> @@ -0,0 +1,2 @@
+> +# sha256 from https://pypi.org/project/pytest/#files
+> +sha256 b7802283b70ca24d7119b32915efa7c409982f59913c1a6c0640aacf118b95f5 pytest-4.4.1.tar.gz
+
+ Please also add a hash for the license file.
+
+> diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
+> new file mode 100644
+> index 0000000..b6cafda
+> --- /dev/null
+> +++ b/package/python-pytest/python-pytest.mk
+> @@ -0,0 +1,15 @@
+> +################################################################################
+> +#
+> +# python-pytest
+> +#
+> +################################################################################
+> +
+> +PYTHON_PYTEST_VERSION = 4.4.1
+> +PYTHON_PYTEST_SOURCE = pytest-$(PYTHON3_PYTEST_VERSION).tar.gz
+> +PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/2b/b1/c9a84f79fc3bad226a9085289da11ecdd9bd2779a2c654195962b37d4110/
+> +PYTHON_PYTEST_LICENSE = MIT
+> +PYTHON_PYTEST_LICENSE_FILES = LICENSE
+> +PYTHON_PYTEST_SETUP_TYPE = setuptools
+> +PYTHON_DEPENDENCIES = python3-setuptools-scm
+
+ That package doesn't exist (yet).
+
+ Also, the 'python3' part is suspicious, since this package is supposed to work
+both on python2 and python3.
+
+ Also, it sounds like this should be a dependency on the host package rather
+than the target package.
+
+
+ Regards,
+ Arnout
+
+> +
+> +$(eval $(python-package))
+> 
