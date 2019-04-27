@@ -1,98 +1,54 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Sat, 27 Apr 2019 12:58:50 +0300
-Subject: [Buildroot] [PATCH 1/1] spdlog: new package
-Message-ID: <20190427095851.25375-1-asafka7@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 27 Apr 2019 13:42:42 +0200
+Subject: [Buildroot] [PATCH] package/libpng: security bump to version 1.6.37
+Message-ID: <20190427114242.3499-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Very fast, header only, C++ logging library.
+Fixes the following security issue:
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+CVE-2019-7317: png_image_free in png.c in libpng 1.6.36 has a use-after-free
+because png_image_free_function is called under png_safe_execute.
+
+Update license hash for a change in copyright year and typo fixes.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/spdlog/Config.in   | 10 ++++++++++
- package/spdlog/spdlog.hash |  3 +++
- package/spdlog/spdlog.mk   | 17 +++++++++++++++++
- 5 files changed, 32 insertions(+)
- create mode 100644 package/spdlog/Config.in
- create mode 100644 package/spdlog/spdlog.hash
- create mode 100644 package/spdlog/spdlog.mk
+ package/libpng/libpng.hash | 10 +++++-----
+ package/libpng/libpng.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 56556413aa..8a4b90d276 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -222,6 +222,7 @@ F:	package/stress/
- N:	Asaf Kahlon <asafka7@gmail.com>
- F:	package/libuv/
- F:	package/python*
-+F:	package/spdlog/
- F:	package/uftp/
- F:	package/zeromq/
+diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
+index 066d2c3bcd..e86b8c65ce 100644
+--- a/package/libpng/libpng.hash
++++ b/package/libpng/libpng.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.36/
+-md5 df2be2d29c40937fe1f5349b16bc2826  libpng-1.6.36.tar.xz
+-sha1 aec9548c8319104226cc4c31d1f5e524f1b55295  libpng-1.6.36.tar.xz
++# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/
++md5 015e8e15db1eecde5f2eb9eb5b6e59e9  libpng-1.6.37.tar.xz
++sha1 3ab93fabbf4c27e1c4724371df408d9a1bd3f656  libpng-1.6.37.tar.xz
+ # Locally computed:
+-sha256 eceb924c1fa6b79172fdfd008d335f0e59172a86a66481e09d4089df872aa319  libpng-1.6.36.tar.xz
+-sha256 142da07fb4b0cceb861b2e69fe7e5b602f25ec7adc85b0a426133d9ee0d2e116  LICENSE
++sha256 505e70834d35383537b6491e7ae8641f1a4bed1876dbfe361201fc80868d88ca  libpng-1.6.37.tar.xz
++sha256 bf5e22b9dce8464064ae17a48ea1133c3369ac9e1d80ef9e320e5219aa14ea9b  LICENSE
+diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
+index f956f9ce19..5c30a4f9ad 100644
+--- a/package/libpng/libpng.mk
++++ b/package/libpng/libpng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/Config.in b/package/Config.in
-index f592e74a99..e822807a01 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1476,6 +1476,7 @@ menu "Logging"
- 	source "package/log4cpp/Config.in"
- 	source "package/log4cxx/Config.in"
- 	source "package/opentracing-cpp/Config.in"
-+	source "package/spdlog/Config.in"
- 	source "package/zlog/Config.in"
- endmenu
- 
-diff --git a/package/spdlog/Config.in b/package/spdlog/Config.in
-new file mode 100644
-index 0000000000..30cccba785
---- /dev/null
-+++ b/package/spdlog/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_SPDLOG
-+	bool "spdlog"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	help
-+	  Very fast, header only, C++ logging library.
-+
-+	  https://github.com/gabime/spdlog
-+
-+comment "spdlog needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
-new file mode 100644
-index 0000000000..9cbf5b22a0
---- /dev/null
-+++ b/package/spdlog/spdlog.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 160845266e94db1d4922ef755637f6901266731c4cb3b30b45bf41efa0e6ab70  spdlog-1.3.1.tar.gz
-+sha256 7d40b1967fca203d22b0eaf75f54566167ded823863abedf4de869fcea057038  LICENSE
-diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
-new file mode 100644
-index 0000000000..e711c72961
---- /dev/null
-+++ b/package/spdlog/spdlog.mk
-@@ -0,0 +1,17 @@
-+################################################################################
-+#
-+# spdlog
-+#
-+################################################################################
-+
-+SPDLOG_VERSION = 1.3.1
-+SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
-+SPDLOG_LICENSE = MIT
-+SPDLOG_LICENSE_FILES = LICENSE
-+SPDLOG_CONF_OPTS += -DSPDLOG_BUILD_TESTS=NO -DSPDLOG_BUILD_EXAMPLES=NO -DSPDLOG_BUILD_BENCH=NO
-+
-+# Header-only library
-+SPDLOG_INSTALL_STAGING = YES
-+SPDLOG_INSTALL_TARGET = NO
-+
-+$(eval $(cmake-package))
+-LIBPNG_VERSION = 1.6.36
++LIBPNG_VERSION = 1.6.37
+ LIBPNG_SERIES = 16
+ LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
+ LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
 -- 
-2.20.1
+2.11.0
