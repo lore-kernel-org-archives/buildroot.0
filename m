@@ -1,92 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 27 Apr 2019 19:39:58 +0200
-Subject: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
-In-Reply-To: <CY4PR1201MB01207D3F0C5E488EACEBA5DAA13E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
-References: <20190418093902.41835-1-abrodkin@synopsys.com>
- <20190418114336.61f3f404@windsurf>
- <ea5f11a1-a7cb-4cee-dfda-64d55d550d83@mind.be>
- <CY4PR1201MB01207D3F0C5E488EACEBA5DAA13E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
-Message-ID: <ed9e89cc-3f7e-1a05-0d1e-6c6da6a3eb38@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 27 Apr 2019 19:46:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cryptopp: fix build with gcc < 4.9
+Message-ID: <20190427174604.14188-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+ - http://autobuild.buildroot.org/results/7e68f32e62c34497848f0f7fc1f12dba67bf44d0
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cryptopp/cryptopp.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-On 26/04/2019 08:30, Alexey Brodkin wrote:
-> Hi Arnout, Thomas,
-> 
->> -----Original Message-----
->> From: Arnout Vandecappelle <arnout@mind.be>
->> Sent: Sunday, April 21, 2019 10:36 AM
->> To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>; Alexey Brodkin <abrodkin@synopsys.com>
->> Cc: buildroot at busybox.net; ARC Buildroot mailing list <arc-buildroot@synopsys.com>
->> Subject: Re: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
->>
->>
->>
->> On 18/04/2019 11:43, Thomas Petazzoni wrote:
->>> Hello,
->>>
->>> On Thu, 18 Apr 2019 12:39:02 +0300
->>> Alexey Brodkin <Alexey.Brodkin@synopsys.com> wrote:
->>>
->>>> perf uses its own build-system and doesn't respect externally set flags.
->>>> Let's force it to use target flags as perf utility is nothing but
->>>> an ordinary user-space application.
->>>>
->>>> This among other things is required to build perf for ARC700 for which
->>>> we pass "-matomic" via TARGET_ABI, see [1] for more details.
->>>>
->>>> [1] https://urldefense.proofpoint.com/v2/url?u=https-
->> 3A__patchwork.ozlabs.org_patch_1087471_&d=DwICaQ&c=DPL6_X_6JkXFx7AXWqB0tg&r=lqdeeSSEes0GFDDl656eViXO7b
->> reS55ytWkhpk5R81I&m=eB4KQfsAGH4782y3faOnCUr3nb3xgbJBuMv3P9P6cxY&s=g7hFDq2PCWQQNFtfEGkCnU8PyqSm-NS-
->> FzrkT4QMA8c&e=
->>>>
->>>> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
->>>> ---
->>>>  package/linux-tools/linux-tool-perf.mk.in | 1 +
->>>>  1 file changed, 1 insertion(+)
->>>>
->>>> diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
->>>> index 80e00c3c56..e7565773c4 100644
->>>> --- a/package/linux-tools/linux-tool-perf.mk.in
->>>> +++ b/package/linux-tools/linux-tool-perf.mk.in
->>>> @@ -19,6 +19,7 @@ PERF_MAKE_FLAGS = \
->>>>  	JOBS=$(PARALLEL_JOBS) \
->>>>  	ARCH=$(PERF_ARCH) \
->>>>  	DESTDIR=$(TARGET_DIR) \
->>>> +	EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
->>>
->>> The change is OK, but I believe that if -matomic is really a
->>> core/important CFLAGS on ARC, then we should ideally pass it through
->>> the toolchain wrapper, so that we are sure it is always passed.
->>>
->>> Arnout, what do you think?
->>
->>  +1.
->>
->>  Thomas, last year we made a beginning of deciding what should go through the
->> wrapper and what through CFLAGS, but I'm not sure if we ever got to a conclusion?
-> 
-> So are we going to wait for some infrastructure changes or
-> shall we first fix the problem at hand with broken perf build to ARC700?
-
- It's not really infrastructure changes. Rather, it is a better way to fix the
-issue.
-
- You just need to move the -matomic from TARGET_ABI to TOOLCHAIN_WRAPPER_OPTS.
-
- The only tricky part is where that should be done. I think arch/arch.mk.arc
-would be the right place. But that indeed requires an infrastructural change,
-because the TOOLCHAIN_WRAPPER_OPTS = ... in toolchain-wrapper.mk has to change
-into a +=.
-
- Regards,
- Arnout
-
-
- Regards,
- Arnout
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index 59ced7654c..bd209a6e7a 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -15,9 +15,16 @@ define HOST_CRYPTOPP_EXTRACT_CMDS
+ 	$(UNZIP) $(HOST_CRYPTOPP_DL_DIR)/$(CRYPTOPP_SOURCE) -d $(@D)
+ endef
+ 
++HOST_CRYPTOPP_CXXFLAGS = $(HOST_CFLAGS) -fPIC
++
+ HOST_CRYPTOPP_MAKE_OPTS = \
+ 	$(HOST_CONFIGURE_OPTS) \
+-	CXXFLAGS="$(HOST_CXXFLAGS) -fPIC"
++	CXXFLAGS="$(HOST_CRYPTOPP_CXXFLAGS)"
++
++#?_mm256_broadcastsi128_si256 has been added only in gcc 4.9
++ifneq ($(BR2_HOST_GCC_AT_LEAST_4_9),y)
++HOST_CRYPTOPP_CXXFLAGS += -DCRYPTOPP_DISABLE_AVX2
++endif
+ 
+ define HOST_CRYPTOPP_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) shared
+-- 
+2.20.1
