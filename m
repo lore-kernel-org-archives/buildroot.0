@@ -1,42 +1,108 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 27 Apr 2019 15:49:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bind: fix python build
-Message-ID: <20190427134925.1730-1-fontaine.fabrice@gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 27 Apr 2019 17:03:35 +0300
+Subject: [Buildroot] [PATCH v2 1/1] spdlog: new package
+Message-ID: <20190427140335.10561-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-A check for python-ply has been added as this is a dependency of the
-dnssec-keymgr script so install host-python-ply to avoid a build failure
-if python-ply is not installed on host
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/96815b1300547c976443bf74b762febdfcc8d3ba
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/bind/bind.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+v1->v2: add dependency of fmt, use ON/OFF instead of YES/NO
 
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 356bc259b2..087ce941b0 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -70,8 +70,11 @@ else
- BIND_CONF_OPTS += --with-openssl=no
- endif
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/spdlog/Config.in   | 12 ++++++++++++
+ package/spdlog/spdlog.hash |  3 +++
+ package/spdlog/spdlog.mk   | 22 ++++++++++++++++++++++
+ 5 files changed, 39 insertions(+)
+ create mode 100644 package/spdlog/Config.in
+ create mode 100644 package/spdlog/spdlog.hash
+ create mode 100644 package/spdlog/spdlog.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 56556413aa..8a4b90d276 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -222,6 +222,7 @@ F:	package/stress/
+ N:	Asaf Kahlon <asafka7@gmail.com>
+ F:	package/libuv/
+ F:	package/python*
++F:	package/spdlog/
+ F:	package/uftp/
+ F:	package/zeromq/
  
--# Used by dnssec-checkds and dnssec-coverage
--ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),)
-+# Used by dnssec-keymgr
-+ifeq ($(BR2_PACKAGE_PYTHON_PLY),y)
-+BIND_DEPENDENCIES += host-python-ply
-+BIND_CONF_OPTS += --with-python=$(HOST_DIR)/usr/bin/python
-+else
- BIND_CONF_OPTS += --with-python=no
- endif
+diff --git a/package/Config.in b/package/Config.in
+index f592e74a99..e822807a01 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1476,6 +1476,7 @@ menu "Logging"
+ 	source "package/log4cpp/Config.in"
+ 	source "package/log4cxx/Config.in"
+ 	source "package/opentracing-cpp/Config.in"
++	source "package/spdlog/Config.in"
+ 	source "package/zlog/Config.in"
+ endmenu
  
+diff --git a/package/spdlog/Config.in b/package/spdlog/Config.in
+new file mode 100644
+index 0000000000..4b721774eb
+--- /dev/null
++++ b/package/spdlog/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_SPDLOG
++	bool "spdlog"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_USE_WCHAR # fmt
++	select BR2_PACKAGE_FMT
++	help
++	  Very fast, header only, C++ logging library.
++
++	  https://github.com/gabime/spdlog
++
++comment "spdlog needs a toolchain w/ C++, wchar"
++	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+diff --git a/package/spdlog/spdlog.hash b/package/spdlog/spdlog.hash
+new file mode 100644
+index 0000000000..9cbf5b22a0
+--- /dev/null
++++ b/package/spdlog/spdlog.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 160845266e94db1d4922ef755637f6901266731c4cb3b30b45bf41efa0e6ab70  spdlog-1.3.1.tar.gz
++sha256 7d40b1967fca203d22b0eaf75f54566167ded823863abedf4de869fcea057038  LICENSE
+diff --git a/package/spdlog/spdlog.mk b/package/spdlog/spdlog.mk
+new file mode 100644
+index 0000000000..7c70f5b663
+--- /dev/null
++++ b/package/spdlog/spdlog.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# spdlog
++#
++################################################################################
++
++SPDLOG_VERSION = 1.3.1
++SPDLOG_SITE = $(call github,gabime,spdlog,v$(SPDLOG_VERSION))
++SPDLOG_LICENSE = MIT
++SPDLOG_LICENSE_FILES = LICENSE
++SPDLOG_DEPENDENCIES = fmt
++SPDLOG_CONF_OPTS += \
++	-DSPDLOG_BUILD_TESTS=OFF \
++	-DSPDLOG_BUILD_EXAMPLES=OFF \
++	-DSPDLOG_BUILD_BENCH=OFF \
++	-DSPDLOG_FMT_EXTERNAL=ON
++
++# Header-only library
++SPDLOG_INSTALL_STAGING = YES
++SPDLOG_INSTALL_TARGET = NO
++
++$(eval $(cmake-package))
 -- 
 2.20.1
