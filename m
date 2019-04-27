@@ -1,13 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 28 Apr 2019 00:33:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5enginio: needs ssl
-In-Reply-To: <CAPi7W80=5U7ujs_M98HbQKgop0j-pyjeq7sp_6i9Ep_W2myuKg@mail.gmail.com>
-References: <20190309222953.7785-1-fontaine.fabrice@gmail.com>
- <20190312232910.5c88999a@windsurf>
- <CAPi7W80-SshJCY0yMoxFu71ZBXYUsi4s_6y+LU7RdvwJcRvg7Q@mail.gmail.com>
- <15021595-fc4a-db63-2868-2263f7af7fe1@mind.be>
- <CAPi7W80=5U7ujs_M98HbQKgop0j-pyjeq7sp_6i9Ep_W2myuKg@mail.gmail.com>
-Message-ID: <1072aca0-5cc2-53e1-ff57-7dcb8d55660c@mind.be>
+Date: Sun, 28 Apr 2019 00:47:37 +0200
+Subject: [Buildroot] Avoid rebuilding host build tools
+In-Reply-To: <CAD5jUk-8uJd7EOvFTdkrBdV3-xtu1CSOHVqn3-aGn7in1n+DBg@mail.gmail.com>
+References: <CAD5jUk-8uJd7EOvFTdkrBdV3-xtu1CSOHVqn3-aGn7in1n+DBg@mail.gmail.com>
+Message-ID: <a21e37f8-5822-e816-5b2f-d8f3e12e5918@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,116 +12,37 @@ To: buildroot@busybox.net
 
 
 
-On 27/03/2019 19:08, Fabrice Fontaine wrote:
-> Dear Arnout,
+On 22/04/2019 20:47, Radu Rendec wrote:
+> Hi Everyone,
 > 
-> Le mar. 26 mars 2019 ? 23:52, Arnout Vandecappelle <arnout@mind.be> a ?crit :
->>
->>
->>
->> On 13/03/2019 00:06, Fabrice Fontaine wrote:
->>> Hello Thomas,
->>> Le mar. 12 mars 2019 ? 23:29, Thomas Petazzoni
->>> <thomas.petazzoni@bootlin.com> a ?crit :
->>>>
->>>> Hello Fabrice,
->>>>
->>>> On Sat,  9 Mar 2019 23:29:53 +0100
->>>> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->>>>
->>>>> Remove select on BR2_PACKAGE_QT5BASE and BR2_PACKAGE_OPENSSL to avoid a
->>>>> circular dependency
->>>>
->>>> I don't really understand where the "circular dependency" is.
->>>>
->>>> To me it seems like the problem is rather:
->>>>
->>>> """
->>>> Qt 5.6 SSL support is no longer available with OpenSSL since the bump
->>>> of OpenSSL to 1.1.x. Therefore selecting Qt5 and OpenSSL does not
->>>> guarantee that qt5base will be built with SSL support. Due to this, the
->>>> build of qt5enginio currently fails on Qt 5.6.
->>>> """
->>>>
->>>>> diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
->>>>> index 102058e7c5..cce0f2a1cb 100644
->>>>> --- a/package/qt5/qt5enginio/Config.in
->>>>> +++ b/package/qt5/qt5enginio/Config.in
->>>>> @@ -1,7 +1,6 @@
->>>>>  config BR2_PACKAGE_QT5ENGINIO
->>>>>       bool "qt5enginio"
->>>>> -     select BR2_PACKAGE_OPENSSL
->>>>> -     select BR2_PACKAGE_QT5BASE
->>>>> +     depends on BR2_PACKAGE_QT5BASE_OPENSSL
->>>>
->>>> Either we do this, or:
->>>>
->>>>         select BR2_PACKAGE_OPENSSL if BR2_PACKAGE_QT5_VERSION_LATEST
->>>>         select BR2_PACKAGE_LIBRESSL if BR2_PACKAGE_QT5_VERSION_5_6
->>> I tried this, but I assume that I must add the dependencies of
->>> libressl if QT 5.6 is true, for example like this:
->>>
->>> depends on !BR2_PACKAGE_QT5_VERSION_5_6 || \
->>>                 (BR2_PACKAGE_QT5_VERSION_5_6 && \
->>>                 (!BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL && \
->>>                 !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)))
->>>
->>> But then, this creates the following circular dependency:
->>>
->>> package/sqlcipher/Config.in:1:error: recursive dependency detected!
->>> package/sqlcipher/Config.in:1: symbol BR2_PACKAGE_SQLCIPHER depends on
->>> BR2_PACKAGE_SQLITE
->>> package/sqlite/Config.in:1: symbol BR2_PACKAGE_SQLITE is selected by
->>> BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM
->>> package/qt5/qt5base/Config.in:104: symbol
->>> BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM is part of choice <choice>
->>> package/qt5/qt5base/Config.in:88: choice <choice> contains symbol <choice>
->>> package/qt5/qt5base/Config.in:88: choice <choice> contains symbol
->>> BR2_PACKAGE_QT5BASE
->>> package/qt5/qt5base/Config.in:1: symbol BR2_PACKAGE_QT5BASE is
->>> selected by BR2_PACKAGE_QT5ENGINIO
->>> package/qt5/qt5enginio/Config.in:1: symbol BR2_PACKAGE_QT5ENGINIO
->>> depends on BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
->>> package/openssl/Config.in:1: symbol
->>> BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL is selected by
->>> BR2_PACKAGE_SQLCIPHER
->>>
->>> Did I made a mistake? Shouldn't we add the libressl dependencies?
->>
->>  Whaa, kconfig...
->>
->>  How about just depending on QT5_LATEST || BR2_PACKAGE_QT5BASE_OPENSSL? Or does
->> that also give a circular dependency?
-> Yes, adding the select suggested by Thomas and the above dependencies
-> also give a circular dependency.
-> The issue is that we can't select BR2_PACKAGE_LIBRESSL without adding
-> a circular dependency because of the
-> BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL option that can be selected by
-> any package that can't work with libressl.
-> Currently, this option is selected by 4 packages: sqlcipher,
-> wpa_supplicant, tpm2-tss and softether.
-> So until this option is removed (if the above packages can work with
-> libressl), I think my current patch is the only solution.
+> Is there any easy way to avoid rebuilding most of the host build tools,
+> such as autoconf, automake, libtool, m4 and bison?
 
- I think I got it to work like this:
-
-# This is a hack to avoid circular dependencies when selecting OPENSSL
-config BR2_PACKAGE_QT5ENGINIO_SELECT_OPENSSL
-	bool
-	default y if BR2_PACKAGE_QT5ENGINIO
-	select BR2_PACKAGE_OPENSSL
-
-config BR2_PACKAGE_QT5ENGINIO
-	bool "qt5enginio"
-	depends on !BR2_PACKAGE_QT5_VERSION_5_6 || \
-                (BR2_PACKAGE_QT5_VERSION_5_6 && \
-                (!BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL && \
-                !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)))
-	select BR2_PACKAGE_QT5BASE_GUI
-	select BR2_PACKAGE_QT5BASE_NETWORK
+ I've been playing with that idea as well...
 
 
- Could you give that a go?
+> All these tools are already installed on the host system from distro
+> packages and are fairly new versions. Is there any good reason to
+> rebuild them anyway (e.g. strict version dependencies)?
+
+ Strict version dependencies are not a problem, because we can check the
+version. Cfr. support/dependencies/check-host-tar.sh where we check both a
+minimal and maximal version.
+
+ The problem is rather that we don't *know* if there is some version dependency...
+
+ That said, I think we can just go ahead and try it, and rely on the
+autobuilders to tell us if something doesn't work, and update the minimum
+version of that tool accordingly.
+
+ Since we the oldest autobuilder we have is a CentOS6, I would use the versions
+from that as the minimum as a start.
+
+ Radu, do you feel up to adding this?
+
+ Note that m4 etc. are used in many more places than e.g. cmake, so there are
+many places where you have to replace host-m4 with BR2_M4_HOST_DEPENDENCY. So
+this is not a small change.
 
  Regards,
  Arnout
