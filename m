@@ -1,59 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 27 Apr 2019 18:25:45 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libpng: security
- bump to version 1.6.37
-Message-ID: <20190427162407.6EDD681829@busybox.osuosl.org>
+Date: Sat, 27 Apr 2019 18:26:17 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/hostapd: add
+ upstream 2019-5 security patches
+Message-ID: <20190427162407.7647B8140A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a26fe0078249c5e91de657906061eabea05f9862
+commit: https://git.buildroot.net/buildroot/commit/?id=28e289fc715b3364c73d84dc3d10940b14edfdf9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security issue:
+Fixes the following security vulnerabilities:
 
-CVE-2019-7317: png_image_free in png.c in libpng 1.6.36 has a use-after-free
-because png_image_free_function is called under png_safe_execute.
+EAP-pwd implementation in hostapd (EAP server) and wpa_supplicant (EAP
+peer) was discovered not to validate fragmentation reassembly state
+properly for a case where an unexpected fragment could be received. This
+could result in process termination due to NULL pointer dereference.
 
-Update license hash for a change in copyright year and typo fixes.
+For details, see the advisory:
+https://w1.fi/security/2019-5/eap-pwd-message-reassembly-issue-with-unexpected-fragment.txt
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit bc4ac7da33ca6605de4128fb22ce2258be0f551a)
+(cherry picked from commit b3adfacdb110fe5508284cf5159447492cffe944)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpng/libpng.hash | 10 +++++-----
- package/libpng/libpng.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/hostapd/hostapd.hash | 2 ++
+ package/hostapd/hostapd.mk   | 4 +++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index 066d2c3bcd..e86b8c65ce 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.36/
--md5 df2be2d29c40937fe1f5349b16bc2826  libpng-1.6.36.tar.xz
--sha1 aec9548c8319104226cc4c31d1f5e524f1b55295  libpng-1.6.36.tar.xz
-+# From https://sourceforge.net/projects/libpng/files/libpng16/1.6.37/
-+md5 015e8e15db1eecde5f2eb9eb5b6e59e9  libpng-1.6.37.tar.xz
-+sha1 3ab93fabbf4c27e1c4724371df408d9a1bd3f656  libpng-1.6.37.tar.xz
- # Locally computed:
--sha256 eceb924c1fa6b79172fdfd008d335f0e59172a86a66481e09d4089df872aa319  libpng-1.6.36.tar.xz
--sha256 142da07fb4b0cceb861b2e69fe7e5b602f25ec7adc85b0a426133d9ee0d2e116  LICENSE
-+sha256 505e70834d35383537b6491e7ae8641f1a4bed1876dbfe361201fc80868d88ca  libpng-1.6.37.tar.xz
-+sha256 bf5e22b9dce8464064ae17a48ea1133c3369ac9e1d80ef9e320e5219aa14ea9b  LICENSE
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index f956f9ce19..5c30a4f9ad 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBPNG_VERSION = 1.6.36
-+LIBPNG_VERSION = 1.6.37
- LIBPNG_SERIES = 16
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
+diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
+index 3e6b086b00..8901aa43be 100644
+--- a/package/hostapd/hostapd.hash
++++ b/package/hostapd/hostapd.hash
+@@ -14,5 +14,7 @@ sha256  ff8d6d92ad4b01987be63cdaf67a24d2eba5b3cd654f37664a8a198e501c0e3b  0011-E
+ sha256  d5ebf4e5a810e9a0c035f9268195c542273998ea70fd58697ee25965094062cc  0012-EAP-pwd-server-Detect-reflection-attacks.patch
+ sha256  7156656498f03b24a0b69a26a59d17a9fcc8e76761f1dabe6d13b4176ffd2ef8  0013-EAP-pwd-client-Verify-received-scalar-and-element.patch
+ sha256  69926854ec2a79dada290f79f04202764c5d6400d232e3a567ebe633a02c1c66  0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
++sha256	cba82a051a39c48872250b2e85ca8ebc628cfe75a9ccec29f3e994abd4156152  0001-EAP-pwd-server-Fix-reassembly-buffer-handling.patch
++sha256	dc0e015463e1fd1f230795e1a49ddd1b9d00e726cd9f38846d0f4892d7978162  0003-EAP-pwd-peer-Fix-reassembly-buffer-handling.patch
+ sha256  e204da659d0583c71af23cb9b55536fe99598ee26a44104344f456e4d17350c6  rtlxdrv.patch
+ sha256  76eeecd8fc291a71f29189ea20e6a34387b8048a959cbc6a65c41b98194643a2  README
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index e2b0feec9b..550f887206 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -20,7 +20,9 @@ HOSTAPD_PATCH = \
+ 	https://w1.fi/security/2019-4/0011-EAP-pwd-server-Verify-received-scalar-and-element.patch \
+ 	https://w1.fi/security/2019-4/0012-EAP-pwd-server-Detect-reflection-attacks.patch \
+ 	https://w1.fi/security/2019-4/0013-EAP-pwd-client-Verify-received-scalar-and-element.patch \
+-	https://w1.fi/security/2019-4/0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch
++	https://w1.fi/security/2019-4/0014-EAP-pwd-Check-element-x-y-coordinates-explicitly.patch \
++	https://w1.fi/security/2019-5/0001-EAP-pwd-server-Fix-reassembly-buffer-handling.patch \
++	https://w1.fi/security/2019-5/0003-EAP-pwd-peer-Fix-reassembly-buffer-handling.patch
+ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+ HOSTAPD_DEPENDENCIES = host-pkgconf
