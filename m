@@ -1,22 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Apr 2019 22:05:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xapp_xload: fix build with NLS
-In-Reply-To: <20190428085104.2930-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 28 Apr 2019 10:51:04 +0200")
-References: <20190428085104.2930-1-fontaine.fabrice@gmail.com>
-Message-ID: <874l6huc8v.fsf@dell.be.48ers.dk>
+Date: Sun, 28 Apr 2019 22:08:54 +0200
+Subject: [Buildroot] [PATCH] package/gst1-plugins-base: drop legacy
+ remnant comment
+In-Reply-To: <20190428111034.5261-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sun, 28 Apr 2019 13:10:34 +0200")
+References: <20190428111034.5261-1-yann.morin.1998@free.fr>
+Message-ID: <87zho9sxih.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/a69b957d0f3251031b0c67e951ba8fb8d1043ce0
+ > In 76722342000d (gst1-plugins-base: bump version to 1.12.0), the unknown
+ > options were removed, but the comment associated to --disable-gio_unix_2_0
+ > was left out.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Drop it now.
+
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Adam Duskett <aduskett@gmail.com>
 
 Committed, thanks.
 
