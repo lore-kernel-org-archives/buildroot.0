@@ -1,39 +1,141 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Sun, 28 Apr 2019 11:02:54 +0200
-Subject: [Buildroot] [PATCH v4 1/2] package/nfs-utils: fix unnecessary files
- removal
-Message-ID: <1556442175-1494-1-git-send-email-angelo@amarulasolutions.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 28 Apr 2019 11:21:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qt5enginio: needs ssl
+In-Reply-To: <1072aca0-5cc2-53e1-ff57-7dcb8d55660c@mind.be>
+References: <20190309222953.7785-1-fontaine.fabrice@gmail.com>
+ <20190312232910.5c88999a@windsurf>
+ <CAPi7W80-SshJCY0yMoxFu71ZBXYUsi4s_6y+LU7RdvwJcRvg7Q@mail.gmail.com>
+ <15021595-fc4a-db63-2868-2263f7af7fe1@mind.be>
+ <CAPi7W80=5U7ujs_M98HbQKgop0j-pyjeq7sp_6i9Ep_W2myuKg@mail.gmail.com>
+ <1072aca0-5cc2-53e1-ff57-7dcb8d55660c@mind.be>
+Message-ID: <CAPi7W816v9hZjonteWXd7mNmjOxcuaKZ1xzEBYTuiwjyqbTKFQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removing of unnecessary files is actually broken by the fact that the rm
-command is executed inside build directory and not the target directory.
+Hello Arnout,
 
-This patch fixes the problem changing to target directory before
-removing files.
+Le dim. 28 avr. 2019 ? 00:33, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>
+>
+>
+> On 27/03/2019 19:08, Fabrice Fontaine wrote:
+> > Dear Arnout,
+> >
+> > Le mar. 26 mars 2019 ? 23:52, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+> >>
+> >>
+> >>
+> >> On 13/03/2019 00:06, Fabrice Fontaine wrote:
+> >>> Hello Thomas,
+> >>> Le mar. 12 mars 2019 ? 23:29, Thomas Petazzoni
+> >>> <thomas.petazzoni@bootlin.com> a ?crit :
+> >>>>
+> >>>> Hello Fabrice,
+> >>>>
+> >>>> On Sat,  9 Mar 2019 23:29:53 +0100
+> >>>> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> >>>>
+> >>>>> Remove select on BR2_PACKAGE_QT5BASE and BR2_PACKAGE_OPENSSL to avoid a
+> >>>>> circular dependency
+> >>>>
+> >>>> I don't really understand where the "circular dependency" is.
+> >>>>
+> >>>> To me it seems like the problem is rather:
+> >>>>
+> >>>> """
+> >>>> Qt 5.6 SSL support is no longer available with OpenSSL since the bump
+> >>>> of OpenSSL to 1.1.x. Therefore selecting Qt5 and OpenSSL does not
+> >>>> guarantee that qt5base will be built with SSL support. Due to this, the
+> >>>> build of qt5enginio currently fails on Qt 5.6.
+> >>>> """
+> >>>>
+> >>>>> diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+> >>>>> index 102058e7c5..cce0f2a1cb 100644
+> >>>>> --- a/package/qt5/qt5enginio/Config.in
+> >>>>> +++ b/package/qt5/qt5enginio/Config.in
+> >>>>> @@ -1,7 +1,6 @@
+> >>>>>  config BR2_PACKAGE_QT5ENGINIO
+> >>>>>       bool "qt5enginio"
+> >>>>> -     select BR2_PACKAGE_OPENSSL
+> >>>>> -     select BR2_PACKAGE_QT5BASE
+> >>>>> +     depends on BR2_PACKAGE_QT5BASE_OPENSSL
+> >>>>
+> >>>> Either we do this, or:
+> >>>>
+> >>>>         select BR2_PACKAGE_OPENSSL if BR2_PACKAGE_QT5_VERSION_LATEST
+> >>>>         select BR2_PACKAGE_LIBRESSL if BR2_PACKAGE_QT5_VERSION_5_6
+> >>> I tried this, but I assume that I must add the dependencies of
+> >>> libressl if QT 5.6 is true, for example like this:
+> >>>
+> >>> depends on !BR2_PACKAGE_QT5_VERSION_5_6 || \
+> >>>                 (BR2_PACKAGE_QT5_VERSION_5_6 && \
+> >>>                 (!BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL && \
+> >>>                 !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)))
+> >>>
+> >>> But then, this creates the following circular dependency:
+> >>>
+> >>> package/sqlcipher/Config.in:1:error: recursive dependency detected!
+> >>> package/sqlcipher/Config.in:1: symbol BR2_PACKAGE_SQLCIPHER depends on
+> >>> BR2_PACKAGE_SQLITE
+> >>> package/sqlite/Config.in:1: symbol BR2_PACKAGE_SQLITE is selected by
+> >>> BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM
+> >>> package/qt5/qt5base/Config.in:104: symbol
+> >>> BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM is part of choice <choice>
+> >>> package/qt5/qt5base/Config.in:88: choice <choice> contains symbol <choice>
+> >>> package/qt5/qt5base/Config.in:88: choice <choice> contains symbol
+> >>> BR2_PACKAGE_QT5BASE
+> >>> package/qt5/qt5base/Config.in:1: symbol BR2_PACKAGE_QT5BASE is
+> >>> selected by BR2_PACKAGE_QT5ENGINIO
+> >>> package/qt5/qt5enginio/Config.in:1: symbol BR2_PACKAGE_QT5ENGINIO
+> >>> depends on BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+> >>> package/openssl/Config.in:1: symbol
+> >>> BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL is selected by
+> >>> BR2_PACKAGE_SQLCIPHER
+> >>>
+> >>> Did I made a mistake? Shouldn't we add the libressl dependencies?
+> >>
+> >>  Whaa, kconfig...
+> >>
+> >>  How about just depending on QT5_LATEST || BR2_PACKAGE_QT5BASE_OPENSSL? Or does
+> >> that also give a circular dependency?
+> > Yes, adding the select suggested by Thomas and the above dependencies
+> > also give a circular dependency.
+> > The issue is that we can't select BR2_PACKAGE_LIBRESSL without adding
+> > a circular dependency because of the
+> > BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL option that can be selected by
+> > any package that can't work with libressl.
+> > Currently, this option is selected by 4 packages: sqlcipher,
+> > wpa_supplicant, tpm2-tss and softether.
+> > So until this option is removed (if the above packages can work with
+> > libressl), I think my current patch is the only solution.
+>
+>  I think I got it to work like this:
+>
+> # This is a hack to avoid circular dependencies when selecting OPENSSL
+> config BR2_PACKAGE_QT5ENGINIO_SELECT_OPENSSL
+>         bool
+>         default y if BR2_PACKAGE_QT5ENGINIO
+>         select BR2_PACKAGE_OPENSSL
+>
+> config BR2_PACKAGE_QT5ENGINIO
+>         bool "qt5enginio"
+>         depends on !BR2_PACKAGE_QT5_VERSION_5_6 || \
+>                 (BR2_PACKAGE_QT5_VERSION_5_6 && \
+>                 (!BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL && \
+>                 !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)))
+>         select BR2_PACKAGE_QT5BASE_GUI
+>         select BR2_PACKAGE_QT5BASE_NETWORK
+>
+>
+>  Could you give that a go?
+It works :-). Should I sent a new version of my patch or do you prefer
+to send it as this your solution?
+>
+>  Regards,
+>  Arnout
+Best Regards,
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
----
-v3->v4: separate fix patch as requested by Arnout
-
- package/nfs-utils/nfs-utils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index 9fa7ae2..4bb62de 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -57,7 +57,7 @@ NFS_UTILS_CONF_OPTS += --disable-tirpc
- endif
- 
- define NFS_UTILS_INSTALL_FIXUP
--	rm -f $(NFS_UTILS_TARGETS_)
-+	cd $(TARGET_DIR) && rm -f $(NFS_UTILS_TARGETS_)
- 	touch $(TARGET_DIR)/etc/exports
- 	$(INSTALL) -D -m 644 \
- 		$(@D)/utils/mount/nfsmount.conf $(TARGET_DIR)/etc/nfsmount.conf
--- 
-2.7.4
+Fabrice
