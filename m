@@ -1,45 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Apr 2019 22:08:24 +0200
-Subject: [Buildroot] [git commit] package/binutils: don't override the build
- command
-Message-ID: <20190428200611.BB95283ABB@busybox.osuosl.org>
+Date: Sun, 28 Apr 2019 22:05:07 +0200
+Subject: [Buildroot] [git commit] package/xapp_xload: fix build with NLS
+Message-ID: <20190428200611.AB75A83ABB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c4dd7bb5d96f4529a83ae7061c32062904b5b3c
+commit: https://git.buildroot.net/buildroot/commit/?id=3b017adcc63de4a6f685cebb9efe3e3367fd6185
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In 1d42d0acca (binutils: ensure TARGET_CONFIGURE_ARGS is taken into
-consideration for subdirs), the whole BUILD_CMDS was overriden in an
-attempt to ensure that the target configure args (in fact, environment
-variables) are indeed passed in the environment of the build command.
+Fixes:
+ - http://autobuild.buildroot.org/results/a69b957d0f3251031b0c67e951ba8fb8d1043ce0
 
-However, there is no reason to override the whole command, when we can
-simply specify additional environment variables, as supported by the
-autotools infra.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/binutils/binutils.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/x11r7/xapp_xload/xapp_xload.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 6798356ff2..c70ba13b04 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -91,9 +91,7 @@ HOST_BINUTILS_CONF_OPTS = \
+diff --git a/package/x11r7/xapp_xload/xapp_xload.mk b/package/x11r7/xapp_xload/xapp_xload.mk
+index 605359bab6..4bb21ecf0b 100644
+--- a/package/x11r7/xapp_xload/xapp_xload.mk
++++ b/package/x11r7/xapp_xload/xapp_xload.mk
+@@ -9,8 +9,9 @@ XAPP_XLOAD_SOURCE = xload-$(XAPP_XLOAD_VERSION).tar.bz2
+ XAPP_XLOAD_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XLOAD_LICENSE = MIT
+ XAPP_XLOAD_LICENSE_FILES = COPYING
+-XAPP_XLOAD_DEPENDENCIES = xlib_libXaw
++XAPP_XLOAD_DEPENDENCIES = xlib_libXaw $(TARGET_NLS_DEPENDENCIES)
+ XAPP_XLOAD_CONF_OPTS = --with-appdefaultdir=/usr/share/X11/app-defaults
++XAPP_XLOAD_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
  
- # binutils run configure script of subdirs at make time, so ensure
- # our TARGET_CONFIGURE_ARGS are taken into consideration for those
--define BINUTILS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_ARGS) $(MAKE) $(BINUTILS_MAKE_OPTS) -C $(@D)
--endef
-+BINUTILS_MAKE_ENV = $(TARGET_CONFIGURE_ARGS)
- 
- # We just want libbfd, libiberty and libopcodes,
- # not the full-blown binutils in staging
+ ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+ # musl doesn't have rwhod.h, but xload can replace it with stubs
