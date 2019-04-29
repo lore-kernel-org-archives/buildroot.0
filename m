@@ -1,81 +1,51 @@
 From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Mon, 29 Apr 2019 18:32:19 +0200
-Subject: [Buildroot] [PATCH 0/7] gitlab Qemu runtime testing
-Message-ID: <1556555546-9246-1-git-send-email-jugurtha.belkalem@smile.fr>
+Date: Mon, 29 Apr 2019 18:32:20 +0200
+Subject: [Buildroot] [PATCH 1/7] support/docker/Dockerfile: new package
+ expect
+In-Reply-To: <1556555546-9246-1-git-send-email-jugurtha.belkalem@smile.fr>
+References: <1556555546-9246-1-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <1556555546-9246-2-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The tests that have been performed resulted in:
-- 23 architectures passing the test.
-- 12 architectures that failed the test.
-More investigations need to be made for
-architectures that did not pass the test.
+expect package is required for various automation tests.
+One use case is to integrate the script from toolchain builder :
+https://github.com/bootlin/toolchains-builder/blob/master/build.sh
+to check Qemu build states.
+expect can be used to launch a qemu machine for a given
+architecture (x86, x86_64, mips, arm, sparc, nios2, ..., etc),
+send root password,  wait for login and then perform shutdown.
 
-special notes for :
-- m64k_q800 has been blacklisted (as there is
-no qemu support for it).
-- sparc64 does not find a qemu shell.
-- x86 and x86_64 do not boot properly (timeout).
-- qemu ork1 and xtensa do not even compile.
+Special note concerning python-pexpect package which can be
+used for the same task: After testing the package, We
+have noticed that it does not show the automation process
+correcly (you may not even see the message welcome to buildroot)
+and it is not verbose when errors are encountered.
 
-Jugurtha BELKALEM (7):
-  support/docker/Dockerfile: new package expect
-  package/qemu: enable nios2 support for host-qemu
-  package/qemu: enable sparc64 support for host-qemu
-  package/qemu: remove comment about sh64
-  configs/qemu-*: add host-qemu-system
-  support/scripts/qemu-boot: gitlab tests for Qemu
-  gitlab.yml.in: enable Qemu gitlab testing
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+---
+v2: reorder alphabetically
+    Remove m68k kernel issue, since we use kernel 4.19 with qemu
+    m68k defconfig. The patch fixing the issue was merged in
+    kernel 4.17.
+---
+ support/docker/Dockerfile | 1 +
+ 1 file changed, 1 insertion(+)
 
- .gitlab-ci.yml                                |  3 +++
- .gitlab-ci.yml.in                             |  3 +++
- configs/qemu_aarch64_virt_defconfig           |  4 +++
- configs/qemu_arm_versatile_defconfig          |  4 +++
- configs/qemu_arm_versatile_nommu_defconfig    |  4 +++
- configs/qemu_arm_vexpress_defconfig           |  4 +++
- configs/qemu_m68k_mcf5208_defconfig           |  4 +++
- configs/qemu_m68k_q800_defconfig              |  4 +++
- configs/qemu_microblazebe_mmu_defconfig       |  4 +++
- configs/qemu_microblazeel_mmu_defconfig       |  4 +++
- configs/qemu_mips32r2_malta_defconfig         |  4 +++
- configs/qemu_mips32r2el_malta_defconfig       |  4 +++
- configs/qemu_mips32r6_malta_defconfig         |  4 +++
- configs/qemu_mips32r6el_malta_defconfig       |  4 +++
- configs/qemu_mips64_malta_defconfig           |  4 +++
- configs/qemu_mips64el_malta_defconfig         |  4 +++
- configs/qemu_mips64r6_malta_defconfig         |  4 +++
- configs/qemu_mips64r6el_malta_defconfig       |  4 +++
- configs/qemu_nios2_10m50_defconfig            |  4 +++
- configs/qemu_or1k_defconfig                   |  4 +++
- configs/qemu_ppc64_e5500_defconfig            |  4 +++
- configs/qemu_ppc64_pseries_defconfig          |  4 +++
- configs/qemu_ppc64le_pseries_defconfig        |  4 +++
- configs/qemu_ppc_g3beige_defconfig            |  4 +++
- configs/qemu_ppc_mpc8544ds_defconfig          |  4 +++
- configs/qemu_ppc_virtex_ml507_defconfig       |  4 +++
- configs/qemu_riscv32_virt_defconfig           |  4 +++
- configs/qemu_riscv64_virt_defconfig           |  4 +++
- configs/qemu_sh4_r2d_defconfig                |  4 +++
- configs/qemu_sh4eb_r2d_defconfig              |  4 +++
- configs/qemu_sparc64_sun4u_defconfig          |  4 +++
- configs/qemu_sparc_ss10_defconfig             |  4 +++
- configs/qemu_x86_64_defconfig                 |  4 +++
- configs/qemu_x86_defconfig                    |  4 +++
- configs/qemu_xtensa_lx60_defconfig            |  4 +++
- configs/qemu_xtensa_lx60_nommu_defconfig      |  4 +++
- package/qemu/Config.in.host                   |  2 ++
- package/qemu/qemu.mk                          |  3 ++-
- support/docker/Dockerfile                     |  1 +
- support/scripts/expect.sh                     | 22 +++++++++++++++++
- support/scripts/qemu-boot-checker.sh          | 35 +++++++++++++++++++++++++++
- support/scripts/qemu-boot-defconfig_config.sh | 11 +++++++++
- 42 files changed, 215 insertions(+), 1 deletion(-)
- create mode 100755 support/scripts/expect.sh
- create mode 100755 support/scripts/qemu-boot-checker.sh
- create mode 100755 support/scripts/qemu-boot-defconfig_config.sh
-
+diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
+index 36cd3b2..8dcd3ef 100644
+--- a/support/docker/Dockerfile
++++ b/support/docker/Dockerfile
+@@ -29,6 +29,7 @@ RUN apt-get install -y --no-install-recommends \
+         cmake \
+         cpio \
+         cvs \
++        expect \
+         file \
+         g++-multilib \
+         git \
 -- 
 2.7.4
