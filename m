@@ -1,56 +1,86 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 29 Apr 2019 09:39:52 -0500
-Subject: [Buildroot] Linux arch default cfgs and fragments
-In-Reply-To: <4d2a6967-1451-7ed3-5465-05ca0d718019@mind.be>
-References: <CANQCQpZ3fyxSBbvkPURYj9LSYUKe7H9av+qvEwA3jvRFRrphaQ@mail.gmail.com>
- <4d2a6967-1451-7ed3-5465-05ca0d718019@mind.be>
-Message-ID: <CANQCQpaeXHvgzqScpPDbwHoOhU=f9_5kn-hMPra+aC8A5YVr-Q@mail.gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Mon, 29 Apr 2019 16:52:31 +0200
+Subject: [Buildroot] Using aarch64-linux-gnu_ilp32
+In-Reply-To: <MN2PR18MB27031E657093E72F41969828BD390@MN2PR18MB2703.namprd18.prod.outlook.com>
+References: <MN2PR18MB27031E657093E72F41969828BD390@MN2PR18MB2703.namprd18.prod.outlook.com>
+Message-ID: <0a627ddf-43bc-7375-f68b-522cffd5f9c9@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout,
+Hi Assaf, All,
 
-On Sat, Apr 27, 2019 at 4:58 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 24/04/2019 19:38, Matthew Weber wrote:
-> > Wanted to open the debate on the topic of using arch defconfigs and
-> > the negatives of where fragments may over time or between target
-> > kernel minor revisions have different end results because of the arch
-> > defconfig default state.
-> >
-> > I'm wondering if when a arch defconfig is used the fragments against
-> > it should be validated as actually being in the final expanded
-> > config....  I see the merge config script has support to validate this
-> > but by default it isn't part of the process.
->
->  I'm not sure in which context you're talking here. Is it for the in-tree
-> defconfigs? For those, it's fine for me if the exact configuration changes when
-> the kernel gets bumped, and it's up to the person doing the bump to make sure
-> that it stays reasonable/usable.
->
+Le 29/04/2019 ? 15:46, Assaf Hoffman a ?crit?:
+> Hi,
+> I'd like to use Buildroot in 32-bit ILP-32 mode while running in AARCH64.
+> I used gcc-linaro-7.3.1-2018.05-rc1-x86_64_aarch64-linux-gnu_ilp32 downloaded from Linaro as custom external toolchain
+> The build failed on misalignment between compiler mode ILP32 and source code mode (defined __LP64__) .
+> Is there a way to configure Buildroot to 32-bit build?
+> Thanks.
 
-Yes for the in-tree arch default configs.  I think we should be
-running a configuration check on those when used with fragments to
-help the developer know that the fragments are working.
+For now, Buildroot doesn't support building systems using ILP32 ABI for aarch64.
 
->  Or is your suggestion that for our defconfigs, we should switch to the arch
-> defconfig + fragments as the general rule? I don't really agree with that.
+Back in 2015, some patches adding initial support for ILP32 was posted on the
+mailing list but it required to use specific version (WIP) for each toolchain
+components and no prebuilt toolchain was available. See the wiki [1].
 
-Nope not suggesting that.
+Maybe you can resend the series using an external Linaro toolchain.
+(Note: Linaro toolchains are superseded by ARM toolchain but there is no ILP32
+anymore).
 
->  If it is for how users are maintaining their kernel configs, I don't think
-> there's anything we should prescribe.
+[1] https://www.elinux.org/Buildroot#Toolchain
 
-I was just curious if we can make the use of fragments a bit more
-foolproof as options get dropped and you have to watch the warnings to
-catch when they do.  (Hopefully my response above was clear.  Just
-this arch default case or even when initially setting up fragments, it
-would be nice to validate they are doing what's intended to the
-config)
+Best regards,
+Romain Naour
 
-Matt
+> 
+>>>> busybox 1.29.3 Building
+> PATH="/home/assaf/work/buildroot/buildroot-2019.02.1/output/host/bin:/home/assaf/work/buildroot/buildroot-2019.02.1/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  " CFLAGS_busybox="" /usr/bin/make  CC="/home/assaf/work/buildroot/buildroot-2019.02.1/output/host/bin/aarch64-linux-gnu_ilp32-gcc" ARCH=arm64 PREFIX="/home/assaf/work/buildroot/buildroot-2019.02.1/output/target" EXTRA_LDFLAGS="" CROSS_COMPILE="/home/assaf/work/buildroot/buildroot-2019.02.1/output/host/bin/aarch64-linux-gnu_ilp32-" CONFIG_PREFIX="/home/assaf/work/buildroot/buildroot-2019.02.1/output/target" SKIP_STRIP=y -C /home/assaf/work/buildroot/buildroot-2019.02.1/output/build/busybox-1.29.3
+> make[1]: Entering directory `/home/assaf/work/buildroot/buildroot-2019.02.1/output/build/busybox-1.29.3'
+>   CC      applets/applets.o
+> In file included from /home/assaf/work/buildroot/buildroot-2019.02.1/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/features.h:452:0,
+>                  from /home/assaf/work/buildroot/buildroot-2019.02.1/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/bits/libc-header-start.h:33,
+>                  from /home/assaf/work/buildroot/buildroot-2019.02.1/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/limits.h:26,
+>                  from /home/hoffman/work/toolchains/gcc-linaro-7.3.1-2018.05-rc1-x86_64_aarch64-linux-gnu_ilp32/lib/gcc/aarch64-linux-gnu_ilp32/7.3.1/include-fixed/limits.h:194,
+>                  from /home/hoffman/work/toolchains/gcc-linaro-7.3.1-2018.05-rc1-x86_64_aarch64-linux-gnu_ilp32/lib/gcc/aarch64-linux-gnu_ilp32/7.3.1/include-fixed/syslimits.h:7,
+>                  from /home/hoffman/work/toolchains/gcc-linaro-7.3.1-2018.05-rc1-x86_64_aarch64-linux-gnu_ilp32/lib/gcc/aarch64-linux-gnu_ilp32/7.3.1/include-fixed/limits.h:34,
+>                  from include/platform.h:153,
+>                  from include/libbb.h:13,
+>                  from include/busybox.h:8,
+>                  from applets/applets.c:9:
+> /home/assaf/work/buildroot/buildroot-2019.02.1/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/gnu/stubs.h:8:11: fatal error: gnu/stubs-lp64.h: No such file or directory
+> # include <gnu/stubs-lp64.h>
+>            ^~~~~~~~~~~~~~~~~~
+> compilation terminated.
+> make[2]: *** [applets/applets.o] Error 1
+> make[1]: *** [applets_dir] Error 2
+> make[1]: Leaving directory `/home/assaf/work/buildroot/buildroot-2019.02.1/output/build/busybox-1.29.3'
+> make: *** [/home/assaf/work/buildroot/buildroot-2019.02.1/output/build/busybox-1.29.3/.stamp_built] Error 2
+> assaf at hoffman-OptiPlex-780:~/work/buildroot/buildroot-2019.02.1$
+> 
+> 
+> ________________________________
+> ________________________________
+> Assaf Hoffman, Marvell Israel - Staff Field Application Engineer
+> 6 Hamada Street
+> Mordot HaCarmel Industrial Park
+> Yokneam, 2069203, Israel
+> Email: hoffman at marvell.com<mailto:hoffman@marvell.com>
+> Office:  +972.4.9091203 - OnNet: 704.1203
+> Fax:      +972.4.9091501
+> Mobile: +972.54.4990584
+> Web site: http://www.marvell.com
+> 
+> This message may contain confidential, proprietary or legally privileged information. The information is intended only for the use of the individual or entity named above. If the reader of this message is not the intended recipient, you are hereby notified that any dissemination, distribution or copying of this communication is strictly prohibited. If you have received this communication in error, please notify us immediately by telephone or by e-mail and delete the message from your computer.
+> ________________________________
+> ________________________________
+> 
+> 
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
