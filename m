@@ -1,88 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Apr 2019 09:02:14 +0200
-Subject: [Buildroot] [git commit] package/qemu: unset TARGET_DIR
-Message-ID: <20190429070024.8667783AB6@busybox.osuosl.org>
+Date: Mon, 29 Apr 2019 09:08:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xapp_xload: fix build with NLS
+In-Reply-To: <20190428085104.2930-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 28 Apr 2019 10:51:04 +0200")
+References: <20190428085104.2930-1-fontaine.fabrice@gmail.com>
+Message-ID: <87muk9s2yd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=138014bf233c1b946e7dab5a8cb56d4cae3093d7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-qemu uses TARGET_DIR internally, and it is at least used to display the
-shortened compiling commands, like (with a TARGET_DIR=/path/to/target):
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/a69b957d0f3251031b0c67e951ba8fb8d1043ce0
 
-    CC /path/to/targetblock/write-threshold.o
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-VS
+Committed to 2019.02.x, thanks.
 
-    CC block/write-threshold.o
-
-There does not seem to be any adverse effect to that, but this is very
-confusing to see, especially when building the host variant.
-
-Fix that by unsetting TARGET_DIR prior to building.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qemu/qemu.mk | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 30cd5972ef..19bcafa62f 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -95,7 +95,8 @@ endif
- # Override CPP, as it expects to be able to call it like it'd
- # call the compiler.
- define QEMU_CONFIGURE_CMDS
--	( cd $(@D); \
-+	unset TARGET_DIR; \
-+	cd $(@D); \
- 		LIBS='$(QEMU_LIBS)' \
- 		$(TARGET_CONFIGURE_OPTS) \
- 		$(TARGET_CONFIGURE_ARGS) \
-@@ -137,15 +138,16 @@ define QEMU_CONFIGURE_CMDS
- 			--disable-capstone \
- 			--disable-git-update \
- 			--disable-opengl \
--			$(QEMU_OPTS) \
--	)
-+			$(QEMU_OPTS)
- endef
- 
- define QEMU_BUILD_CMDS
-+	unset TARGET_DIR; \
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
- endef
- 
- define QEMU_INSTALL_TARGET_CMDS
-+	unset TARGET_DIR; \
- 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(QEMU_MAKE_ENV) DESTDIR=$(TARGET_DIR) install
- endef
- 
-@@ -264,6 +266,7 @@ endif
- # Override CPP, as it expects to be able to call it like it'd
- # call the compiler.
- define HOST_QEMU_CONFIGURE_CMDS
-+	unset TARGET_DIR; \
- 	cd $(@D); $(HOST_CONFIGURE_OPTS) CPP="$(HOSTCC) -E" \
- 		./configure \
- 		--target-list="$(HOST_QEMU_TARGETS)" \
-@@ -277,10 +280,12 @@ define HOST_QEMU_CONFIGURE_CMDS
- endef
- 
- define HOST_QEMU_BUILD_CMDS
-+	unset TARGET_DIR; \
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
- endef
- 
- define HOST_QEMU_INSTALL_CMDS
-+	unset TARGET_DIR; \
- 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) install
- endef
- 
+-- 
+Bye, Peter Korsgaard
