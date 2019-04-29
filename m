@@ -1,63 +1,61 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 29 Apr 2019 15:41:36 +0200
-Subject: [Buildroot] Add python module Connexion
-In-Reply-To: <CAOqJNTd1FdOS3tqzUrLdwGETBsjFRjK_bhZfR6bW+OniPmX6jA@mail.gmail.com>
-References: <CAOqJNTe=E=jd_4MEoWAMAAgQJh9vSLMB0gBzHbcdM9vTbRoQVg@mail.gmail.com>
- <CAOqJNTd1FdOS3tqzUrLdwGETBsjFRjK_bhZfR6bW+OniPmX6jA@mail.gmail.com>
-Message-ID: <CAGm1_kt_nPkomTjfSSt7ms1N69sKcLcv4MveeWcnG=8sJkhATQ@mail.gmail.com>
+From: Assaf Hoffman <hoffman@marvell.com>
+Date: Mon, 29 Apr 2019 13:46:19 +0000
+Subject: [Buildroot] Using aarch64-linux-gnu_ilp32
+Message-ID: <MN2PR18MB27031E657093E72F41969828BD390@MN2PR18MB2703.namprd18.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Serhii,
+Hi,
+I'd like to use Buildroot in 32-bit ILP-32 mode while running in AARCH64.
+I used gcc-linaro-7.3.1-2018.05-rc1-x86_64_aarch64-linux-gnu_ilp32 downloaded from Linaro as custom external toolchain
+The build failed on misalignment between compiler mode ILP32 and source code mode (defined __LP64__) .
+Is there a way to configure Buildroot to 32-bit build?
+Thanks.
+
+>>> busybox 1.29.3 Building
+PATH="/home/assaf/work/buildroot/buildroot-2019.02.1/output/host/bin:/home/assaf/work/buildroot/buildroot-2019.02.1/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" CFLAGS="-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  " CFLAGS_busybox="" /usr/bin/make  CC="/home/assaf/work/buildroot/buildroot-2019.02.1/output/host/bin/aarch64-linux-gnu_ilp32-gcc" ARCH=arm64 PREFIX="/home/assaf/work/buildroot/buildroot-2019.02.1/output/target" EXTRA_LDFLAGS="" CROSS_COMPILE="/home/assaf/work/buildroot/buildroot-2019.02.1/output/host/bin/aarch64-linux-gnu_ilp32-" CONFIG_PREFIX="/home/assaf/work/buildroot/buildroot-2019.02.1/output/target" SKIP_STRIP=y -C /home/assaf/work/buildroot/buildroot-2019.02.1/output/build/busybox-1.29.3
+make[1]: Entering directory `/home/assaf/work/buildroot/buildroot-2019.02.1/output/build/busybox-1.29.3'
+  CC      applets/applets.o
+In file included from /home/assaf/work/buildroot/buildroot-2019.02.1/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/features.h:452:0,
+                 from /home/assaf/work/buildroot/buildroot-2019.02.1/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/bits/libc-header-start.h:33,
+                 from /home/assaf/work/buildroot/buildroot-2019.02.1/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/limits.h:26,
+                 from /home/hoffman/work/toolchains/gcc-linaro-7.3.1-2018.05-rc1-x86_64_aarch64-linux-gnu_ilp32/lib/gcc/aarch64-linux-gnu_ilp32/7.3.1/include-fixed/limits.h:194,
+                 from /home/hoffman/work/toolchains/gcc-linaro-7.3.1-2018.05-rc1-x86_64_aarch64-linux-gnu_ilp32/lib/gcc/aarch64-linux-gnu_ilp32/7.3.1/include-fixed/syslimits.h:7,
+                 from /home/hoffman/work/toolchains/gcc-linaro-7.3.1-2018.05-rc1-x86_64_aarch64-linux-gnu_ilp32/lib/gcc/aarch64-linux-gnu_ilp32/7.3.1/include-fixed/limits.h:34,
+                 from include/platform.h:153,
+                 from include/libbb.h:13,
+                 from include/busybox.h:8,
+                 from applets/applets.c:9:
+/home/assaf/work/buildroot/buildroot-2019.02.1/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/include/gnu/stubs.h:8:11: fatal error: gnu/stubs-lp64.h: No such file or directory
+# include <gnu/stubs-lp64.h>
+           ^~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[2]: *** [applets/applets.o] Error 1
+make[1]: *** [applets_dir] Error 2
+make[1]: Leaving directory `/home/assaf/work/buildroot/buildroot-2019.02.1/output/build/busybox-1.29.3'
+make: *** [/home/assaf/work/buildroot/buildroot-2019.02.1/output/build/busybox-1.29.3/.stamp_built] Error 2
+assaf at hoffman-OptiPlex-780:~/work/buildroot/buildroot-2019.02.1$
 
 
+________________________________
+________________________________
+Assaf Hoffman, Marvell Israel - Staff Field Application Engineer
+6 Hamada Street
+Mordot HaCarmel Industrial Park
+Yokneam, 2069203, Israel
+Email: hoffman at marvell.com<mailto:hoffman@marvell.com>
+Office:  +972.4.9091203 - OnNet: 704.1203
+Fax:      +972.4.9091501
+Mobile: +972.54.4990584
+Web site: http://www.marvell.com
 
-On Mon, Apr 29, 2019 at 3:26 PM Serhii Sakhno <sergei.sakhno@gmail.com> wrote:
->
-> If i right understand, i need to patch setup.py of Connexion for skip check flake8 module (i added flake8 to image)
->
-> Regards,
-> Sakhno Serhii
->
->
-> ??, 29 ???. 2019 ?. ? 14:18, Serhii Sakhno <sergei.sakhno@gmail.com>:
->>
->> I would to add python module Connexion to buildroot. I haven`t problems with other python modules, but with Connexion (and with logging_tree, if i right remember) i have same problem.
->>
->>  >>> python-connexion 2.2.0 Building
->> buildroot_1  | (cd /ntc_image/standard/output/build/python-connexion-2.2.0//; _PYTHON_SYSCONFIGDATA_NAME="_sysconfigdata_m_linux_arm-linux-gnueabihf" PATH="/ntc_image/standard/output/host/bin:/ntc_image/standard/output/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" PYTHONPATH="/ntc_image/standard/output/target/usr/lib/python3.7/" PYTHONNOUSERSITE=1 _python_sysroot=/ntc_image/standard/output/host/arm-buildroot-linux-gnueabihf/sysroot _python_prefix=/usr _python_exec_prefix=/usr  /ntc_image/standard/output/host/bin/python setup.py build  )
->> buildroot_1  | Download error on https://pypi.org/simple/flake8/: unknown url type: https -- Some packages may not be found!
->> buildroot_1  | Couldn't find index page for 'flake8' (maybe misspelled?)
->> buildroot_1  | Download error on https://pypi.org/simple/: unknown url type: https -- Some packages may not be found!
->>
->> And now i didn't found problem with ssl.
+This message may contain confidential, proprietary or legally privileged information. The information is intended only for the use of the individual or entity named above. If the reader of this message is not the intended recipient, you are hereby notified that any dissemination, distribution or copying of this communication is strictly prohibited. If you have received this communication in error, please notify us immediately by telephone or by e-mail and delete the message from your computer.
+________________________________
+________________________________
 
-you need following Config.in file created with "./utils/scanpypi Connexion":
-
-config BR2_PACKAGE_PYTHON_CONNEXION
-        bool "python-connexion"
-        select BR2_PACKAGE_PYTHON_CLICKCLICK # runtime
-        select BR2_PACKAGE_PYTHON_JSONSCHEMA # runtime
-        select BR2_PACKAGE_PYTHON_PYYAML # runtime
-        select BR2_PACKAGE_PYTHON_REQUESTS # runtime
-        select BR2_PACKAGE_PYTHON_SIX # runtime
-        select BR2_PACKAGE_PYTHON_INFLECTION # runtime
-        select BR2_PACKAGE_PYTHON_PATHLIB # runtime
-        select BR2_PACKAGE_PYTHON_TYPING # runtime
-        select BR2_PACKAGE_PYTHON_OPENAPI_SPEC_VALIDATOR # runtime
-        select BR2_PACKAGE_PYTHON_FLASK # runtime
-        help
-          Connexion - API first applications with OpenAPI/Swagger and
-          Flask.
-
-          https://github.com/zalando/connexion
-
-The only problem is BR2_PACKAGE_PYTHON_OPENAPI_SPEC_VALIDATOR. At
-least scanpypi has problems with its description, so you'll have to
-add it manually.
-
-Regards,
-Yegor
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190429/0e46720a/attachment.html>
