@@ -1,75 +1,81 @@
-From: Dominik Menke <dom@digineo.de>
-Date: Mon, 29 Apr 2019 18:18:37 +0200
-Subject: [Buildroot] Possible conflict with systemd and e2fsprogs?
-In-Reply-To: <b3efb298-2353-ce88-552b-34fbe26df110@digineo.de>
-References: <4dcaadcb-0ef8-887e-6681-1f326194315c@digineo.de>
- <7bb7a201-cdd2-7e66-deee-6175a264366c@mind.be>
- <1780e90c-9198-e9b6-5b38-9b27930337e2@digineo.de>
- <4e0cc833-814c-3cc6-deb3-6539a0f92f4f@mind.be>
- <b3efb298-2353-ce88-552b-34fbe26df110@digineo.de>
-Message-ID: <df9e7287-f9b0-4381-6a04-3424ee752065@digineo.de>
+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Date: Mon, 29 Apr 2019 18:32:19 +0200
+Subject: [Buildroot] [PATCH 0/7] gitlab Qemu runtime testing
+Message-ID: <1556555546-9246-1-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 4/29/19 11:01 AM, Dominik Menke wrote:
-> On 4/27/19 11:47 PM, Arnout Vandecappelle wrote:
->>    [...] So I don't
->> really understand why it doesn't work for you.
->
-> I will investigate further.
+The tests that have been performed resulted in:
+- 23 architectures passing the test.
+- 12 architectures that failed the test.
+More investigations need to be made for
+architectures that did not pass the test.
 
-I now belive the fsck package mashup to be a red herring. I've switched 
-to buildroot master (89e70a7077 = systemd 241, e2fsprogs 1.44.5, 
-util-linux 2.33, kernel 4.19).
+special notes for :
+- m64k_q800 has been blacklisted (as there is
+no qemu support for it).
+- sparc64 does not find a qemu shell.
+- x86 and x86_64 do not boot properly (timeout).
+- qemu ork1 and xtensa do not even compile.
 
-By adding systemd.journald.forward_to_console=1 to /boot/cmdline.txt, 
-and sifting through the output I found this beauty:
+Jugurtha BELKALEM (7):
+  support/docker/Dockerfile: new package expect
+  package/qemu: enable nios2 support for host-qemu
+  package/qemu: enable sparc64 support for host-qemu
+  package/qemu: remove comment about sh64
+  configs/qemu-*: add host-qemu-system
+  support/scripts/qemu-boot: gitlab tests for Qemu
+  gitlab.yml.in: enable Qemu gitlab testing
 
+ .gitlab-ci.yml                                |  3 +++
+ .gitlab-ci.yml.in                             |  3 +++
+ configs/qemu_aarch64_virt_defconfig           |  4 +++
+ configs/qemu_arm_versatile_defconfig          |  4 +++
+ configs/qemu_arm_versatile_nommu_defconfig    |  4 +++
+ configs/qemu_arm_vexpress_defconfig           |  4 +++
+ configs/qemu_m68k_mcf5208_defconfig           |  4 +++
+ configs/qemu_m68k_q800_defconfig              |  4 +++
+ configs/qemu_microblazebe_mmu_defconfig       |  4 +++
+ configs/qemu_microblazeel_mmu_defconfig       |  4 +++
+ configs/qemu_mips32r2_malta_defconfig         |  4 +++
+ configs/qemu_mips32r2el_malta_defconfig       |  4 +++
+ configs/qemu_mips32r6_malta_defconfig         |  4 +++
+ configs/qemu_mips32r6el_malta_defconfig       |  4 +++
+ configs/qemu_mips64_malta_defconfig           |  4 +++
+ configs/qemu_mips64el_malta_defconfig         |  4 +++
+ configs/qemu_mips64r6_malta_defconfig         |  4 +++
+ configs/qemu_mips64r6el_malta_defconfig       |  4 +++
+ configs/qemu_nios2_10m50_defconfig            |  4 +++
+ configs/qemu_or1k_defconfig                   |  4 +++
+ configs/qemu_ppc64_e5500_defconfig            |  4 +++
+ configs/qemu_ppc64_pseries_defconfig          |  4 +++
+ configs/qemu_ppc64le_pseries_defconfig        |  4 +++
+ configs/qemu_ppc_g3beige_defconfig            |  4 +++
+ configs/qemu_ppc_mpc8544ds_defconfig          |  4 +++
+ configs/qemu_ppc_virtex_ml507_defconfig       |  4 +++
+ configs/qemu_riscv32_virt_defconfig           |  4 +++
+ configs/qemu_riscv64_virt_defconfig           |  4 +++
+ configs/qemu_sh4_r2d_defconfig                |  4 +++
+ configs/qemu_sh4eb_r2d_defconfig              |  4 +++
+ configs/qemu_sparc64_sun4u_defconfig          |  4 +++
+ configs/qemu_sparc_ss10_defconfig             |  4 +++
+ configs/qemu_x86_64_defconfig                 |  4 +++
+ configs/qemu_x86_defconfig                    |  4 +++
+ configs/qemu_xtensa_lx60_defconfig            |  4 +++
+ configs/qemu_xtensa_lx60_nommu_defconfig      |  4 +++
+ package/qemu/Config.in.host                   |  2 ++
+ package/qemu/qemu.mk                          |  3 ++-
+ support/docker/Dockerfile                     |  1 +
+ support/scripts/expect.sh                     | 22 +++++++++++++++++
+ support/scripts/qemu-boot-checker.sh          | 35 +++++++++++++++++++++++++++
+ support/scripts/qemu-boot-defconfig_config.sh | 11 +++++++++
+ 42 files changed, 215 insertions(+), 1 deletion(-)
+ create mode 100755 support/scripts/expect.sh
+ create mode 100755 support/scripts/qemu-boot-checker.sh
+ create mode 100755 support/scripts/qemu-boot-defconfig_config.sh
 
->          Starting File System Check on Root Device...
-> [    4.547439] systemd-fsck[94]: /dev/mmcblk0p2: Superblock last write time (Mon Apr 29 17:37:11 2019,
-> [    4.551637] systemd-fsck[94]: 	now = Thu Feb 14 11:11:59 2019) is in the future.
-> [    4.552072] systemd-fsck[94]: FIXED.
-> [    5.101772] systemd-fsck[94]: /dev/mmcblk0p2: ***** REBOOT SYSTEM *****
-> [    5.102214] systemd-fsck[94]: /dev/mmcblk0p2: 4658/65536 files (0.7% non-contiguous), 145524/262144 blocks
-> [    5.150450] systemd-fsck[94]: fsck failed with exit status 3.
-> [    5.180549] systemd-fsck[94]: Running request reboot.target/start/replace
-> [FAILED] Failed to start File System Check on Root Device.
-> See 'systemctl status systemd-fsck-root.service' for details.
-> [    5.210607] systemd-fsck[94]: Failed to start unit: Unit final.target not found.
-> [    5.279763] EXT4-fs (mmcblk0p2): re-mounted. Opts: (null)
->          Starting Remount Root and Kernel File Systems...
-> [    5.294799] systemd[1]: systemd-fsck-root.service: Main process exited, code=exited, status=1/FAILURE
-> [  OK  ] Started Remount Root and Kernel File Systems.
-> [    5.361063] systemd[1]: systemd-fsck-root.service: Failed with result 'exit-code'.
-> [  OK  ] Reached target Local File Systems (Pre).
-> [    5.430870] systemd[1]: Failed to start File System Check on Root Device.
-> [  OK  ] Reached target Local File Systems.
-> [    5.501359] systemd[1]: Starting Remount Root and Kernel File Systems...
->          Starting Rebuild Journal Catalog...
-> [    5.560605] systemd[1]: Started Remount Root and Kernel File Systems.
->          Starting Flush Journal to Persistent Storage...
-> [    5.620725] systemd[1]: Reached target Local File Systems (Pre).
->          Starting Rebuild Hardware Database...
-> [    5.681179] systemd[1]: Reached target Local File Systems.
-> [FAILED] Failed to start Rebuild Journal Catalog.
-> See 'systemctl status systemd-journal-catalog-update.service' for details.
-> [    5.741141] systemd[1]: Condition check resulted in Commit a transient machine-id on disk being skipped.
-> [FAILED] Failed to start Flush Journal to Persistent Storage.
-> [FAILED] Failed to start Rebuild Hardware Database.
-> [FAILED] Failed to start udev Kernel Device Manager.
-> [FAILED] Failed to start Create Volatile Files and Directories.
-> [FAILED] Failed to start Update is Completed.
-
-Correct me if I'm wrong, but this looks like correcting the (correct) 
-last write time to the (wrong) current time, fsck tries to trigger a 
-system reboot.
-
-Is this fixable without a real-time clock? ntp becomes available far too 
-late in the boot process.
-
-Kind Regards,
-Dominik
+-- 
+2.7.4
