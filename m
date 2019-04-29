@@ -1,51 +1,48 @@
 From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Mon, 29 Apr 2019 18:32:20 +0200
-Subject: [Buildroot] [PATCH 1/7] support/docker/Dockerfile: new package
- expect
+Date: Mon, 29 Apr 2019 18:32:21 +0200
+Subject: [Buildroot] [PATCH 2/7] package/qemu: enable nios2 support for
+ host-qemu
 In-Reply-To: <1556555546-9246-1-git-send-email-jugurtha.belkalem@smile.fr>
 References: <1556555546-9246-1-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <1556555546-9246-2-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <1556555546-9246-3-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-expect package is required for various automation tests.
-One use case is to integrate the script from toolchain builder :
-https://github.com/bootlin/toolchains-builder/blob/master/build.sh
-to check Qemu build states.
-expect can be used to launch a qemu machine for a given
-architecture (x86, x86_64, mips, arm, sparc, nios2, ..., etc),
-send root password,  wait for login and then perform shutdown.
-
-Special note concerning python-pexpect package which can be
-used for the same task: After testing the package, We
-have noticed that it does not show the automation process
-correcly (you may not even see the message welcome to buildroot)
-and it is not verbose when errors are encountered.
+This config enable host eqmu support for nios2 which
+allows to test this architecture in gitlab.
 
 Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 ---
-v2: reorder alphabetically
-    Remove m68k kernel issue, since we use kernel 4.19 with qemu
-    m68k defconfig. The patch fixing the issue was merged in
-    kernel 4.17.
----
- support/docker/Dockerfile | 1 +
- 1 file changed, 1 insertion(+)
+ package/qemu/Config.in.host | 1 +
+ package/qemu/qemu.mk        | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/support/docker/Dockerfile b/support/docker/Dockerfile
-index 36cd3b2..8dcd3ef 100644
---- a/support/docker/Dockerfile
-+++ b/support/docker/Dockerfile
-@@ -29,6 +29,7 @@ RUN apt-get install -y --no-install-recommends \
-         cmake \
-         cpio \
-         cvs \
-+        expect \
-         file \
-         g++-multilib \
-         git \
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index 8a0df38..160725d 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -9,6 +9,7 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
+ 	default y if BR2_microblazebe
+ 	default y if BR2_mips
+ 	default y if BR2_mipsel
++	default y if BR2_nios2
+ 	default y if BR2_powerpc
+ 	default y if BR2_powerpc64
+ 	default y if BR2_powerpc64le
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 19bcafa..e82d372 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -172,6 +172,7 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman
+ #       mipsel          mipsel
+ #       mips64          mips64
+ #       mips64el        mips64el
++#       nios2           nios2
+ #       powerpc         ppc
+ #       powerpc64       ppc64
+ #       powerpc64le     ppc64 (system) / ppc64le (usermode)
 -- 
 2.7.4
