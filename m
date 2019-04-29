@@ -1,66 +1,31 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 29 Apr 2019 22:28:48 +0200
-Subject: [Buildroot] [PATCH] core/pkg-infra: host variant inherits
- DL_SUBDIR
-In-Reply-To: <20190428174458.10458-1-yann.morin.1998@free.fr>
-References: <20190428174458.10458-1-yann.morin.1998@free.fr>
-Message-ID: <05ec02af-7527-6960-3ef0-ce70e13bc4b6@mind.be>
+Date: Mon, 29 Apr 2019 22:37:30 +0200
+Subject: [Buildroot] Possible conflict with systemd and e2fsprogs?
+In-Reply-To: <df9e7287-f9b0-4381-6a04-3424ee752065@digineo.de>
+References: <4dcaadcb-0ef8-887e-6681-1f326194315c@digineo.de>
+ <7bb7a201-cdd2-7e66-deee-6175a264366c@mind.be>
+ <1780e90c-9198-e9b6-5b38-9b27930337e2@digineo.de>
+ <4e0cc833-814c-3cc6-deb3-6539a0f92f4f@mind.be>
+ <b3efb298-2353-ce88-552b-34fbe26df110@digineo.de>
+ <df9e7287-f9b0-4381-6a04-3424ee752065@digineo.de>
+Message-ID: <6824ef05-10eb-d45a-4dd7-0fc75173473e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Yann,
 
-On 28/04/2019 19:44, Yann E. MORIN wrote:
-> We have no clear separation between variables that should be
-> automatically inherited by the host variant, from the target
-> variant, and those variables that should not be inherited.
-> 
-> However, it clearly makes sense that the host variant does inherit
-> all the download variables, of which the sub-directory.
 
- I'm not sure it's worth doing this if nothing uses it. But it does make things
-consistent. However...
+On 29/04/2019 18:18, Dominik Menke wrote:
+> [??? 4.547439] systemd-fsck[94]: /dev/mmcblk0p2: Superblock last write time (Mon
+> Apr 29 17:37:11 2019,
+> [??? 4.551637] systemd-fsck[94]:???? now = Thu Feb 14 11:11:59 2019) is in the
+> future.
 
-> 
-> Notes: currently, only three packages define HOST_FOO_DL_SUBDIR,
-> but they all are host-only packages anyway, so needs not be fixed:
->   - gcc-initial
->   - gcc-final
->   - python3-setuptools
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/pkg-generic.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 67782138b4..5c7c039390 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -466,6 +466,12 @@ ifdef $(3)_OVERRIDE_SRCDIR
->    $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
->  endif
->  
-> +ifndef $(2)_DL_SUBDIR
-> + ifdef $(3)_DL_SUBDIR
-> +  $(2)_DL_SUBDIR = $$($(3)_DL_SUBDIR)
-
- For most (all?) others, we define the default value in the same place. So move
-it from 4 lines below to the else branch here.
+ My systemd-fu is not great, but it looks weird that now = somewhere in 2019 if
+you have no RTC. I believe fsck has code to ignore the time-in-future check if
+now ~ 1970.
 
  Regards,
  Arnout
-
-> + endif
-> +endif
-> +
->  $(2)_BASENAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
->  $(2)_BASENAME_RAW = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
->  $(2)_DL_SUBDIR ?= $$($(2)_RAWNAME)
-> 
