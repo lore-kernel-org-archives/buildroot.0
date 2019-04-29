@@ -1,40 +1,67 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Mon, 29 Apr 2019 08:42:48 +0000
-Subject: [Buildroot] [PATCH 1/1] package/exiv2: bump to version 0.27.1
-Message-ID: <20190429084116.101188-1-nicolas.serafini@sensefly.com>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Mon, 29 Apr 2019 10:21:17 -0500
+Subject: [Buildroot] [External] Re: Linux arch default cfgs and fragments
+In-Reply-To: <8ac9f99f-a388-13da-413a-9b7b6c1f6094@mind.be>
+References: <CANQCQpZ3fyxSBbvkPURYj9LSYUKe7H9av+qvEwA3jvRFRrphaQ@mail.gmail.com>
+ <4d2a6967-1451-7ed3-5465-05ca0d718019@mind.be>
+ <CANQCQpaeXHvgzqScpPDbwHoOhU=f9_5kn-hMPra+aC8A5YVr-Q@mail.gmail.com>
+ <8ac9f99f-a388-13da-413a-9b7b6c1f6094@mind.be>
+Message-ID: <CANQCQpZtEpA9x=hyx4vWGfUGXXdUS=LWLX7wPVK+eHDXOUvT8A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
----
- package/exiv2/exiv2.hash | 3 ++-
- package/exiv2/exiv2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+On Mon, Apr 29, 2019 at 9:51 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 29/04/2019 16:39, Matthew Weber wrote:
+> [snip]
+> > I was just curious if we can make the use of fragments a bit more
+> > foolproof as options get dropped and you have to watch the warnings to
+> > catch when they do.
+>
+>  OK, so your suggestion is to add a check that after fragments have been
+> applied, the resulting .config indeed contains the contents of the fragments.
+> Similar to the check we have in e.g. test-pkg for SKIPPED.
+>
+>  The question is: do you want to make this an error or a warning? I think we
+> can't make it an error, because there are use cases where you expect the
+> fragment not to apply. I don't have a concrete example for the kernel config,
+> but for Buildroot configs I have some fragments that I sometimes use that set
+> defaults for some string options (e.g. for kernel defconfig to use), and that
+> only really apply to the defconfig in which the kernel is built, but that gets
+> applied everywhere (i.e. for all defconfigs for that particular board). So I'd
+> have four defconfigs for four different configurations which are independent of
+> the board, and then four config fragments for four different board types, with a
+> total of sixteen different .config files, but only four of those actually have a
+> kernel.
 
-diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
-index e30cbfaa51..f99cb8cb87 100644
---- a/package/exiv2/exiv2.hash
-+++ b/package/exiv2/exiv2.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 290cb6208f143b9bd5074d790fc8924409f28e5813356c143d739a3311d8ad76  exiv2-910f3507795e1930ae216c9febee0bf9a88e99c0.tar.gz
-+sha256 1b3766b2c203ce213a4195de14d61694017ec1a69d15d4575bccecef130990fe exiv2-0.27.1.tar.gz
-+sha256 a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66 COPYING
-diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-index 32029bab97..ba9d9b7303 100644
---- a/package/exiv2/exiv2.mk
-+++ b/package/exiv2/exiv2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXIV2_VERSION = 910f3507795e1930ae216c9febee0bf9a88e99c0
-+EXIV2_VERSION = 0.27.1
- EXIV2_SITE = $(call github,Exiv2,exiv2,$(EXIV2_VERSION))
- EXIV2_INSTALL_STAGING = YES
- 
--- 
-2.21.0
+Agree, the script already makes the check optional through how you
+provide arguments.  I think it would just be modifying how the kconfig
+infra uses the script to merge.
+
+>
+>  Anyway, my point is: we can't really predict what the use case for config
+> fragments is, so we can't make it an error.
+>
+>  And I do think it's already a warning. But of course, that warning gets
+> completely lost in the build log.
+
+Yep.....
+
+>
+>  In general, I think managing config fragments is far out of scope for
+> Buildroot. We might add some tools to make managing them easier (without
+> enforcing a particular workflow) but even that is a bit out of scope IMO. The
+> <pkg>-diff-config target from almost a year ago that is still floating around on
+> patchwork is already borderline IMO.
+>
+
+Agree.  Was just hoping to cleanup how we do merges as there are
+errors introduced occasionally that aren't noticed until you have a
+build in the lab.  If I can prevent that from occurring, I'll try :-)
+
+Matt
