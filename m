@@ -1,32 +1,72 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 29 Apr 2019 23:01:30 +0200
-Subject: [Buildroot] [DRAFT v1 1/7] package/gstreamer1: convert to meson
- build
-In-Reply-To: <d13454c7-6438-c4b6-8208-c3bfbc0692d9@mind.be>
+Date: Mon, 29 Apr 2019 23:02:49 +0200
+Subject: [Buildroot] [DRAFT v1 0/7] gstreamer1: convert to meson build
+In-Reply-To: <CAFSsvmpoZzfSVu4SP7356B0UWu8eDVFMNoQsiXe=tmQidbydng@mail.gmail.com>
 References: <20190429194534.25743-1-ps.report@gmx.net>
- <20190429194534.25743-2-ps.report@gmx.net>
- <d13454c7-6438-c4b6-8208-c3bfbc0692d9@mind.be>
-Message-ID: <20190429230130.6d5bd171@gmx.net>
+ <CAFSsvmpoZzfSVu4SP7356B0UWu8eDVFMNoQsiXe=tmQidbydng@mail.gmail.com>
+Message-ID: <20190429230249.1d054154@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Hello Adam,
 
-On Mon, 29 Apr 2019 22:52:59 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+On Mon, 29 Apr 2019 15:55:17 -0400, Adam Duskett <aduskett@gmail.com> wrote:
 
-> On 29/04/2019 21:45, Peter Seiderer wrote:
-> > +	-Dcheck=$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),enabled,disabled) \
+> Hey Peter;
 >
->  Is this intended? Or should it be _CHECK?
+> I happen to have a gstreamer-meson branch on my own personal fork, I
+> wasn't able to get a static-only-build working.
+>
+> Mind if you take a look?
+>
+> https://gitlab.com/aduskett/buildroot/tree/goi-meson/package/gstreamer1
 
-Ups, you are right, will fix it in the next patch iteration, thanks for review...
+Thanks for the hint, will take a look and test a static only configuration...
 
 Regards,
 Peter
 
 >
->  Regards,
->  Arnout
+> On Mon, Apr 29, 2019 at 3:45 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> >
+> > Early first draft version of gstreamer1 packages convert to meson
+> > build, depends on the bump to version 1.16.0 (see [1] and ff.).
+> >
+> > Notes:
+> >  - still some ToDo and or commented out code about
+> >    unkown/legacy options
+> >  - some commented out/not yet converted code about
+> >    extra compile flags setting
+> >  - still some patch description missing
+> >
+> > Not (yet) converted:
+> >  - gstreamer1-editing-services: GTK2/3 handling missing
+> >  - gst1-libav: libav options missing
+> >  - gst1-validate: meson build files missing from tar file
+> >
+> > [1] https://patchwork.ozlabs.org/patch/1090466/
+> >
+> > Peter Seiderer (7):
+> >   package/gstreamer1: convert to meson build
+> >   package/gst1-plugins-base: convert to meson build
+> >   package/gst1-plugins-good: convert to meson build
+> >   package/gst1-plugins-bad: convert to meson build
+> >   package/gst1-plugins-ugly: convert to meson build
+> >   package/gst1-vaapi: convert to meson build
+> >   package/gst1-rtsp-server: convert to meson build
+> >
+> >  .../gst1-plugins-bad/gst1-plugins-bad.mk      | 606 ++++++++++--------
+> >  .../gst1-plugins-base/gst1-plugins-base.mk    | 243 +++----
+> >  .../gst1-plugins-good/gst1-plugins-good.mk    | 399 ++++++------
+> >  .../gst1-plugins-ugly/gst1-plugins-ugly.mk    |  69 +-
+> >  .../gst1-rtsp-server/gst1-rtsp-server.mk      |  11 +-
+> >  package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   |  19 +-
+> >  package/gstreamer1/gstreamer1/gstreamer1.mk   |  28 +-
+> >  7 files changed, 725 insertions(+), 650 deletions(-)
+> >
+> > --
+> > 2.21.0
+> >
