@@ -1,24 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Apr 2019 14:40:27 +0200
-Subject: [Buildroot] [PATCH] package/tpm2-totp: fix menu prompt
-In-Reply-To: <20190430121955.20940-1-unixmania@gmail.com>
- (unixmania@gmail.com's message of "Tue, 30 Apr 2019 09:19:55 -0300")
-References: <20190430121955.20940-1-unixmania@gmail.com>
-Message-ID: <87sgtzmzt0.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Apr 2019 14:41:18 +0200
+Subject: [Buildroot] [PATCH] package/luajit: add hash for the license
+ file
+In-Reply-To: <20190430121939.16166-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Tue, 30 Apr 2019 14:19:39 +0200")
+References: <20190430121939.16166-1-joerg.krause@embedded.rocks>
+Message-ID: <87o94nmzrl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "unixmania" == unixmania  <unixmania@gmail.com> writes:
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
- > From: Carlos Santos <unixmania@gmail.com>
- > It must be "tpm2-totp", not "tpm2-tools" (probably a copy/paste issue).
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
- > Signed-off-by: Carlos Santos <unixmania@gmail.com>
-
-Heh, indeed - Committed, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
