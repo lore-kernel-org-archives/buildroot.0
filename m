@@ -1,39 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 30 Apr 2019 07:00:08 +0000
-Subject: [Buildroot] [Bug 11811] lsblk (util-linux) should depend on libudev
- if available
-In-Reply-To: <bug-11811-163@https.bugs.busybox.net/>
-References: <bug-11811-163@https.bugs.busybox.net/>
-Message-ID: <bug-11811-163-nQJTnR4kuF@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 30 Apr 2019 09:21:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bind: fix python build
+In-Reply-To: <20190427134925.1730-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 27 Apr 2019 15:49:25 +0200")
+References: <20190427134925.1730-1-fontaine.fabrice@gmail.com>
+Message-ID: <87ftq0ot5n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11811
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
---- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-I don't think the fix can be that simple: it causes a circular dependency.
+ > A check for python-ply has been added as this is a dependency of the
+ > dnssec-keymgr script so install host-python-ply to avoid a build failure
+ > if python-ply is not installed on host
 
-Indeed "udev" is provided either by the "eudev" or "systemd" packages. And both
-eudev and systemd depend on util-linux:
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/96815b1300547c976443bf74b762febdfcc8d3ba
 
-EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ >  package/bind/bind.mk | 7 +++++--
+ >  1 file changed, 5 insertions(+), 2 deletions(-)
 
-SYSTEMD_DEPENDENCIES = \
-        $(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
-        host-gperf \
-        host-intltool \
-        kmod \
-        libcap \
-        util-linux
+ > diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+ > index 356bc259b2..087ce941b0 100644
+ > --- a/package/bind/bind.mk
+ > +++ b/package/bind/bind.mk
+ > @@ -70,8 +70,11 @@ else
+ >  BIND_CONF_OPTS += --with-openssl=no
+ >  endif
+ 
+ > -# Used by dnssec-checkds and dnssec-coverage
+ > -ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),)
+ > +# Used by dnssec-keymgr
+ > +ifeq ($(BR2_PACKAGE_PYTHON_PLY),y)
+ > +BIND_DEPENDENCIES += host-python-ply
+ > +BIND_CONF_OPTS += --with-python=$(HOST_DIR)/usr/bin/python
 
-So, by adding a dependency on udev in util-linux, you create a circular
-dependency.
+Hmm, I somehow missed the host/target mixup. This is not good. You test
+if the target python-ply package is enabled, but then add
+host-python-ply (which doesn't exist) to _DEPENDENCIES:
 
-I'm not sure how we can break this circular dependency, unfortunately :-/
+http://autobuild.buildroot.net/results/2615ebfdcb068594d028af4823260e613d37e867/build-end.log
+
+If I understand it right, we need ply for the host to satisfy the
+configure check and ply for the target for runtime, so I guess the
+solution is to add a host version of the python-ply package.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
