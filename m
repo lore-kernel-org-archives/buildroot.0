@@ -1,43 +1,46 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 29 Apr 2019 22:50:03 -0400
-Subject: [Buildroot] [PATCH 1/2] package/nginx: bump to version 1.16.0
-Message-ID: <20190430025004.106145-1-aduskett@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 30 Apr 2019 03:02:40 +0000
+Subject: [Buildroot] [Bug 11811] New: lsblk (util-linux) should depend on
+ libudev if available
+Message-ID: <bug-11811-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=11811
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/nginx/nginx.hash | 2 +-
- package/nginx/nginx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+            Bug ID: 11811
+           Summary: lsblk (util-linux) should depend on libudev if
+                    available
+           Product: buildroot
+           Version: 2019.02.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: pmorici at dev295.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 114bf292ce..c322a64db2 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	3d5b90aa17de1700709ae4ec6c4d73d87c888b06c510391bf7104b006fdb2abe	nginx-1.15.12.tar.gz
-+sha256	4fd376bad78797e7f18094a00f0f1088259326436b537eb5af69b01be2ca1345	nginx-1.16.0.tar.gz
- # License files, locally calculated
- sha256	28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509	LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index b8e41b8089..eed7602570 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NGINX_VERSION = 1.15.12
-+NGINX_VERSION = 1.16.0
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
+Several of the output columns of lsblk such as SERIAL and WWN are incorrectly
+reported as empty strings. ie: 'lsblk -do SERIAL'  
+
+The cause is that lsblk uses libudev to obtain this information but the
+util-linux package doesn't list the udev package as a dependency if it is
+selected. If util-linux gets built before udev then many parts of lsblk return
+empty strings for various fields.
+
+Adding the following to packages/util-linux/util-linux.mk fixes the problem.
+
+ ifeq ($(BR2_PACKAGE_UDEV),y)
+ UTIL_LINUX_DEPENDENCIES += udev
+ endif
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
