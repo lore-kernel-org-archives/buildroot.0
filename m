@@ -1,36 +1,136 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 30 Apr 2019 13:53:24 +0300
-Subject: [Buildroot] [PATCH] package/strace: disable build for nds32
-Message-ID: <dbfab28381ec6dcae5fd92f7e6f2e0b56cf68d8e.1556621604.git.baruch@tkos.co.il>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Tue, 30 Apr 2019 13:04:04 +0200
+Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
+ in cross file
+In-Reply-To: <trinity-a5fd1873-52f7-4d2a-9195-2a9713d0b83a-1556612829462@3c-app-gmx-bs70>
+References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
+ <20190413182422.7e8f5f22@windsurf> <20190423232944.70aeddba@gmx.net>
+ <6f5eef5542a44d775baa396c7fa7c01a2e6e2c4d.camel@embedded.rocks>
+ <trinity-a5fd1873-52f7-4d2a-9195-2a9713d0b83a-1556612829462@3c-app-gmx-bs70>
+Message-ID: <2e75711ff4c34669fce6f86c50b34897d92ecb76.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Current version of strace does not support nds32.
+Hello Peter,
 
-Fixes:
-http://autobuild.buildroot.net/results/05ec776548c9bede4878d4c3c43040c5b0aac182
-http://autobuild.buildroot.net/results/24023f2fa3dbf7c281726abdbfd4322badaffbfb
+On Tue, 2019-04-30 at 10:27 +0200, Peter Seiderer wrote:
+> Hello J?rg,
+> 
+> > Gesendet: Dienstag, 30. April 2019 um 10:11 Uhr
+> > Von: "J?rg Krause" <joerg.krause@embedded.rocks>
+> > An: "Peter Seiderer" <ps.report@gmx.net>, "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+> > Cc: buildroot at buildroot.org
+> > Betreff: Re: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config in cross file
+> > 
+> > Hi Peter,
+> > 
+> > On Tue, 2019-04-23 at 23:29 +0200, Peter Seiderer wrote:
+> > > Hello J?rg, Thomas,
+> > > 
+> > > On Sat, 13 Apr 2019 18:24:22 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> > > 
+> > > > Hello J?rg,
+> > > > 
+> > > > +Peter Seiderer in Cc.
+> > > > 
+> > > > On Wed,  3 Apr 2019 20:32:01 +0200
+> > > > J?rg Krause <joerg.krause@embedded.rocks> wrote:
+> > > > 
+> > > > > Since version 0.49.0 the Meson build system has native support for
+> > > > > looking for `libgcrypt-config` if no pkg-config file is found. As the
+> > > > > latest version 1.8.4 of libgcrypt does not provide a .pc file, using
+> > > > > `libgcrypt-config` is the only way for detecting the required libraries
+> > > > > when linking agains libgrypt.
+> > > > > 
+> > > > > The `libgcrypt-config` entry is necessary for updating package mpd,
+> > > > > which switched from the Autotools to the Meson build system when bumping
+> > > > > from version 0.20 to 0.21.
+> > > > > 
+> > > > > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>  
+> > > > 
+> > > > As I said in my previous reply, I'm not too happy with this
+> > > > libgcrypt-config variable creeping into the global cross-compilation
+> > > > file. Can we instead look at extending what Peter Seiderer is doing in
+> > > > http://patchwork.ozlabs.org/patch/1081486/ and allow some per-package
+> > > > additions to the per-package cross-compilation file ? Peter's patch
+> > > > does it for CFLAGS/CXXFLAGS/LDFLAGS, we could perhaps do the same with
+> > > > arbitrary program paths ?
+> > > 
+> > > Something like the following (draft) should work:
+> > > 
+> > > diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
+> > > index 4056c2b2f4..7cd372128e 100644
+> > > --- a/package/meson/cross-compilation.conf.in
+> > > +++ b/package/meson/cross-compilation.conf.in
+> > > @@ -9,6 +9,7 @@ cpp = '@TARGET_CROSS at g++'
+> > >  ar = '@TARGET_CROSS at ar'
+> > >  strip = '@TARGET_CROSS at strip'
+> > >  pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
+> > > + at PKG_TARGET_BINARIES@
+> > >  
+> > >  [properties]
+> > >  needs_exe_wrapper = true
+> > > diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> > > index 70128f6bad..e550c80c9d 100644
+> > > --- a/package/meson/meson.mk
+> > > +++ b/package/meson/meson.mk
+> > > @@ -60,6 +60,7 @@ define HOST_MESON_INSTALL_CROSS_CONF
+> > >             -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
+> > >             -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
+> > >             -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
+> > > +           -e "s%@PKG_TARGET_BINARIES@%%g" \
+> > >             -e "s%@PKG_TARGET_CFLAGS@%%g" \
+> > >             -e "s%@PKG_TARGET_LDFLAGS@%%g" \
+> > >             -e "s%@PKG_TARGET_CXXFLAGS@%%g" \
+> > > diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> > > index 9974b1e513..93df43fe3e 100644
+> > > --- a/package/pkg-meson.mk
+> > > +++ b/package/pkg-meson.mk
+> > > @@ -74,6 +74,7 @@ define $(2)_CONFIGURE_CMDS
+> > >             -e "s%@TARGET_CFLAGS@%$$(HOST_MESON_SED_CFLAGS)%g" \
+> > >             -e "s%@TARGET_LDFLAGS@%$$(HOST_MESON_SED_LDFLAGS)%g" \
+> > >             -e "s%@TARGET_CXXFLAGS@%$$(HOST_MESON_SED_CXXFLAGS)%g" \
+> > > +           -e "s%@PKG_TARGET_BINARIES@%$$($$(PKG)_MESON_BINARIES)%g" \
+> > >             -e "s%@PKG_TARGET_CFLAGS@%$$($$(PKG)_MESON_SED_CFLAGS)%g" \
+> > >             -e "s%@PKG_TARGET_LDFLAGS@%$$($$(PKG)_MESON_SED_LDFLAGS)%g" \
+> > >             -e "s%@PKG_TARGET_CXXFLAGS@%$$($$(PKG)_MESON_SED_CXXFLAGS)%g" \
+> > > 
+> > > 
+> > > and with: 
+> > > 
+> > > MPD_MESON_BINARIES = libgcrypt-config = '$(STAGING_DIR)/usr/bin/libgcrypt-config'
+> > 
+> > I've just tested your draft. This still inserts libgcrypt-config in the
+> > global cross-compilation.conf.
+> 
+> Are you sure? The
+> 
+> +           -e "s%@PKG_TARGET_BINARIES@%%g"
+> 
+> in package/meson/meson.mk should not add anything to the global file...
 
-Cc: Nylon Chen <nylon7@andestech.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/strace/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+You're right! I missed that line, sorry.
 
-diff --git a/package/strace/Config.in b/package/strace/Config.in
-index c7649e57898d..38b4ebe32a4b 100644
---- a/package/strace/Config.in
-+++ b/package/strace/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_STRACE
- 	bool "strace"
- 	# needs at least kernel headers 4.0 on nios2
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 || !BR2_nios2
-+	depends on !BR2_nds32
- 	help
- 	  A useful diagnostic, instructional, and debugging tool.
- 	  Allows you to track what system calls a program makes
--- 
-2.20.1
+> Would have expected the trick/non-trivial thing to add more than one
+> binary entry (to get the newlines for the entries right)...
+
+That's indeed a difficult case to solve. I didn't managed to get
+multpile binary entries added to the [binaries] field, e.g.
+
+PKG_TARGET_BINARIES = \
+	libgcrypt-config = '...' \
+	llvm-config = '...'
+
+.. will not work.
+
+I spent some time to find a magic rule which splits the Makefile
+variable into a proper newline seperated string which can be used by
+sed, but I failed.
+
+Maybe you have an idea?
+
+Best regards
+J?rg Krause
