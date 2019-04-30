@@ -1,55 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Apr 2019 13:17:21 +0200
-Subject: [Buildroot] [git commit] package/go: bump version to 1.12.4
-Message-ID: <20190430111513.9AA3383D90@busybox.osuosl.org>
+Date: Tue, 30 Apr 2019 13:17:37 +0200
+Subject: [Buildroot] [git commit] package/gst1-plugins-base: add upstream
+ SA-2019-0001 security fix
+Message-ID: <20190430111513.A1A9A83D90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f5584af06dddb08acd7a0f290f304d1272805e3
+commit: https://git.buildroot.net/buildroot/commit/?id=99890750e0296ca29b61a315f78766261f6aee0e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes a number of issues discovered since 1.12.1.  From the release notes:
+Fixes the following security issue:
 
-go1.12.2 (released 2019/04/05) includes fixes to the compiler, the go
-command, the runtime, and the doc, net, net/http/httputil, and os packages.
-See the Go 1.12.2 milestone on our issue tracker for details.
+CVE-2019-9928: GStreamer before 1.16.0 has a heap-based buffer overflow in
+the RTSP connection parser via a crafted response from a server
 
-go1.12.3 (released 2019/04/08) was accidentally released without its
-intended fix.  It is identical to go1.12.2, except for its version number.
-The intended fix is in go1.12.4.
-
-go1.12.4 (released 2019/04/11) fixes an issue where using the prebuilt
-binary releases on older versions of GNU/Linux led to failures when linking
-programs that used cgo.  Only Linux users who hit this issue need to update.
+For more details, see the advisory:
+https://gstreamer.freedesktop.org/security/sa-2019-0001.html
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ection-Security-loophole-making-heap-over.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 60aa1e1f57..df3a9c4e43 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	0be127684df4b842a64e58093154f9d15422f1405f1fcff4b2c36ffc6a15818a  go1.12.1.src.tar.gz
-+sha256	4affc3e610cd8182c47abbc5b0c0e4e3c6a2b945b55aaa2ba952964ad9df1467  go1.12.4.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 8df02cc68d..f31b1941c4 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.12.1
-+GO_VERSION = 1.12.4
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+diff --git a/package/gstreamer1/gst1-plugins-base/0001-gstrtspconnection-Security-loophole-making-heap-over.patch b/package/gstreamer1/gst1-plugins-base/0001-gstrtspconnection-Security-loophole-making-heap-over.patch
+new file mode 100644
+index 0000000000..de88f67a39
+--- /dev/null
++++ b/package/gstreamer1/gst1-plugins-base/0001-gstrtspconnection-Security-loophole-making-heap-over.patch
+@@ -0,0 +1,31 @@
++From f672277509705c4034bc92a141eefee4524d15aa Mon Sep 17 00:00:00 2001
++From: Tobias Ronge <tobiasr@axis.com>
++Date: Thu, 14 Mar 2019 10:12:27 +0100
++Subject: [PATCH] gstrtspconnection: Security loophole making heap overflow
++
++The former code allowed an attacker to create a heap overflow by
++sending a longer than allowed session id in a response and including a
++semicolon to change the maximum length. With this change, the parser
++will never go beyond 512 bytes.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ gst-libs/gst/rtsp/gstrtspconnection.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gst-libs/gst/rtsp/gstrtspconnection.c b/gst-libs/gst/rtsp/gstrtspconnection.c
++index a6755bedd..c0429064a 100644
++--- a/gst-libs/gst/rtsp/gstrtspconnection.c
+++++ b/gst-libs/gst/rtsp/gstrtspconnection.c
++@@ -2461,7 +2461,7 @@ build_next (GstRTSPBuilder * builder, GstRTSPMessage * message,
++           maxlen = sizeof (conn->session_id) - 1;
++           /* the sessionid can have attributes marked with ;
++            * Make sure we strip them */
++-          for (i = 0; session_id[i] != '\0'; i++) {
+++          for (i = 0; i < maxlen && session_id[i] != '\0'; i++) {
++             if (session_id[i] == ';') {
++               maxlen = i;
++               /* parse timeout */
++-- 
++2.11.0
++
