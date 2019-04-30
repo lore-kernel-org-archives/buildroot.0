@@ -1,21 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Apr 2019 13:19:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python-reentry: bump to version
- 1.3.1
-In-Reply-To: <20190429171143.25845-1-asafka7@gmail.com> (Asaf Kahlon's message
- of "Mon, 29 Apr 2019 20:11:43 +0300")
-References: <20190429171143.25845-1-asafka7@gmail.com>
-Message-ID: <87muk7oi55.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Apr 2019 13:19:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/intel-mediasdk: fix license
+In-Reply-To: <20190429201549.30334-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 29 Apr 2019 22:15:49 +0200")
+References: <20190429201549.30334-1-fontaine.fabrice@gmail.com>
+Message-ID: <87imuvoi4y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Also update dependency list.
- > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/5730991fded5ab3474cd0325b399f6f27972ca81
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
