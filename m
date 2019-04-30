@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 30 Apr 2019 09:19:16 -0400
-Subject: [Buildroot] [PATCH 08/11] package/python-jinja2: bump to version
- 2.10.1
+Date: Tue, 30 Apr 2019 09:19:17 -0400
+Subject: [Buildroot] [PATCH 09/11] package/python-flask: bump to version
+ 1.0.2
 In-Reply-To: <20190430131919.130128-1-aduskett@gmail.com>
 References: <20190430131919.130128-1-aduskett@gmail.com>
-Message-ID: <20190430131919.130128-9-aduskett@gmail.com>
+Message-ID: <20190430131919.130128-10-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,43 +13,40 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
+Also add hash for the license file.
+
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/python-jinja2/python-jinja2.hash | 4 ++--
- package/python-jinja2/python-jinja2.mk   | 5 +++--
+ package/python-flask/python-flask.hash | 5 +++--
+ package/python-flask/python-flask.mk   | 4 ++--
  2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
-index fe34f73965..21a9c8394f 100644
---- a/package/python-jinja2/python-jinja2.hash
-+++ b/package/python-jinja2/python-jinja2.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jinja2/json
--md5 61ef1117f945486472850819b8d1eb3d Jinja2-2.10.tar.gz
--sha256 f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4 Jinja2-2.10.tar.gz
-+md5 0ae535be40fd215a8114a090c8b68e5a Jinja2-2.10.1.tar.gz
-+sha256 065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013 Jinja2-2.10.1.tar.gz
- # Locally computed sha256
- sha256 26fcd436fdc8a39d44896ac03e6f1dfd25e38499c48f20d8bc1dd3bf0aaa8a5b LICENSE
-diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-index 9ff36972d6..339ddd7e18 100644
---- a/package/python-jinja2/python-jinja2.mk
-+++ b/package/python-jinja2/python-jinja2.mk
-@@ -4,12 +4,13 @@
+diff --git a/package/python-flask/python-flask.hash b/package/python-flask/python-flask.hash
+index ca117218ea..4b34ea82a0 100644
+--- a/package/python-flask/python-flask.hash
++++ b/package/python-flask/python-flask.hash
+@@ -1,3 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/Flask/json, sha256 locally computed
+-md5	97278dfdafda98ba7902e890b0289177  Flask-0.12.2.tar.gz
+-sha256	49f44461237b69ecd901cc7ce66feea0319b9158743dd27a2899962ab214dac1  Flask-0.12.2.tar.gz
++md5	824f0f20aae1f44c9c7dc4054adb7969  Flask-1.0.2.tar.gz
++sha256	2271c0070dbcb5275fad4a82e29f23ab92682dc45f9dfbc22c02ba9b9322ce48  Flask-1.0.2.tar.gz
++sha256	ce2117037008b9a8949f5a9ee1c7755f10844964d8ae4e138cded06f4e89de5f  LICENSE
+diff --git a/package/python-flask/python-flask.mk b/package/python-flask/python-flask.mk
+index 06b1b4d9d1..344eba5edb 100644
+--- a/package/python-flask/python-flask.mk
++++ b/package/python-flask/python-flask.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_JINJA2_VERSION = 2.10
-+PYTHON_JINJA2_VERSION = 2.10.1
- PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
--PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/56/e6/332789f295cf22308386cf5bbd1f4e00ed11484299c5d7383378cf48ba47
-+PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/93/ea/d884a06f8c7f9b7afbc8138b762e80479fb17aedbbe2b06515a12de9378d
- PYTHON_JINJA2_SETUP_TYPE = setuptools
- PYTHON_JINJA2_LICENSE = BSD-3-Clause
- PYTHON_JINJA2_LICENSE_FILES = LICENSE
-+
- # In host build, setup.py tries to download markupsafe if it is not installed
- HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
- 
+-PYTHON_FLASK_VERSION = 0.12.2
++PYTHON_FLASK_VERSION = 1.0.2
+ PYTHON_FLASK_SOURCE = Flask-$(PYTHON_FLASK_VERSION).tar.gz
+-PYTHON_FLASK_SITE = https://pypi.python.org/packages/eb/12/1c7bd06fcbd08ba544f25bf2c6612e305a70ea51ca0eda8007344ec3f123
++PYTHON_FLASK_SITE = https://files.pythonhosted.org/packages/4b/12/c1fbf4971fda0e4de05565694c9f0c92646223cff53f15b6eb248a310a62
+ PYTHON_FLASK_SETUP_TYPE = setuptools
+ PYTHON_FLASK_LICENSE = BSD-3-Clause
+ PYTHON_FLASK_LICENSE_FILES = LICENSE
 -- 
 2.20.1
