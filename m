@@ -1,57 +1,100 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 30 Apr 2019 09:22:52 -0400
-Subject: [Buildroot] [PATCH v3 04/10]
- package/gstreamer1/gst1-plugins-{base, good, bad, ugly}: bump to 1.16.0
-In-Reply-To: <uvclpfxhjh.ln2@ID-313208.user.individual.net>
-References: <20190424210333.62571-1-aduskett@gmail.com>
- <20190424210333.62571-4-aduskett@gmail.com>
- <uvclpfxhjh.ln2@ID-313208.user.individual.net>
-Message-ID: <CAFSsvmpyo3u+sFGYDPj9rZEb9WLRbTZotyrM2mC-xKzxJKLOug@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 30 Apr 2019 15:41:24 +0200
+Subject: [Buildroot] [PATCH v3] package/wpebackend-fdo: package needs
+ wayland libegl
+In-Reply-To: <20190430152804.GB3486@momiji>
+References: <0ab8f13f-225e-29cd-c1e5-7ca2c3897ed6@mind.be>
+ <20190415091632.6437-1-giulio.benetti@micronovasrl.com>
+ <20190430152804.GB3486@momiji>
+Message-ID: <46ba6b1b-dfb3-7ca2-9976-2992c664197b@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sigh, ok, I will get to it and submit a v4....
+Il 30/04/2019 14:28, Adrian Perez de Castro ha scritto:
+> Hi,
+> 
+> I finally got round to look at this; the changes make sense. I also did try
+> a couple of builds with the patch applied (which went fine). Thanks!
 
-On Tue, Apr 30, 2019 at 4:19 AM Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
->
-> Am Wed, 24 Apr 2019 17:03:27 -0400 schrieb
-> aduskett-Re5JQEeQqe8AvxtiuMwx3w:
->
-> > diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> > index fb976f9a94..57d0cbd436 100644
-> > --- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> > +++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> > @@ -4,11 +4,11 @@
-> >  #
-> >
-> ################################################################################
-> >
-> > -GST1_PLUGINS_BASE_VERSION = 1.14.4
-> > +GST1_PLUGINS_BASE_VERSION = 1.16.0
-> >  GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$
-> (GST1_PLUGINS_BASE_VERSION).tar.xz
-> >  GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-
-> plugins-base
-> >  GST1_PLUGINS_BASE_INSTALL_STAGING = YES
-> > -GST1_PLUGINS_BASE_LICENSE_FILES = COPYING.LIB
-> > +GST1_PLUGINS_BASE_LICENSE_FILES = COPYING
-> >  GST1_PLUGINS_BASE_LICENSE = LGPL-2.0+, LGPL-2.1+
-> >
-> >  # gio_unix_2_0 is only used for tests
->
-> Hi Adam,
->
-> ftr: This patch needs a rebase after
-> https://git.buildroot.net/buildroot/commit/?
-> id=80a5217476c45e765db45acd8782f7f854783f93
->
-> Regards, Bernd
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Thank you.
+Best regards
+
+Giulio
+
+> On Mon, 15 Apr 2019 11:16:32 +0200, Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+> 
+>> Now wpebackend-fdo depends only on HAS_LIBEGL but if libegl is not of
+>> wayland type, build breaks due to different EGLNativeWindowType types
+>> depending on backends(fb,x11,wl).
+>>
+>> Modify:
+>> 'depend on BR2_PACKAGE_HAS_LIBEGL'
+>> to:
+>> 'depend on BR2_PACKAGE_HAS_LIBEGL_WAYLAND'
+>> in Config.in to avoid building if there is not a wayland egl backend.
+>> Modify also comment in Config.in when package is not selectable
+>> mentioning the need to have an OpenEGL-capable Wayland backend.
+>>
+>> Fixes:
+>> http://autobuild.buildroot.net/results/4f02b91f6ffffd194e09ed18c917b4f678b1a52d/
+>>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> 
+> Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+> 
+>> ---
+>> Changes:
+>> V1->V2:
+>> * use BR2_PACKAGE_HAS_LIBEGL_WAYLAND only instead of using
+>>    BR2_PACKAGE_HAS_LIBEGL too
+>> * add Wayland to comment
+>>
+>> V2->V3:
+>> * add `\` at the end of `depends on`
+>>
+>>   package/wpebackend-fdo/Config.in | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
+>> index 2f5f965403..161e4c9a7e 100644
+>> --- a/package/wpebackend-fdo/Config.in
+>> +++ b/package/wpebackend-fdo/Config.in
+>> @@ -1,5 +1,5 @@
+>> -comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable backend"
+>> -	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+>> +comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable Wayland backend"
+>> +	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+>>   		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+>>   
+>>   config BR2_PACKAGE_WPEBACKEND_FDO
+>> @@ -9,7 +9,7 @@ config BR2_PACKAGE_WPEBACKEND_FDO
+>>   	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, libglib2
+>>   	depends on BR2_USE_WCHAR # libglib2
+>>   	depends on BR2_USE_MMU # libglib2
+>> -	depends on BR2_PACKAGE_HAS_LIBEGL
+>> +	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+>>   	select BR2_PACKAGE_LIBGLIB2
+>>   	select BR2_PACKAGE_LIBWPE
+>>   	select BR2_PACKAGE_WAYLAND
+>> -- 
+>> 2.17.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
