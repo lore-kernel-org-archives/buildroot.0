@@ -1,23 +1,44 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Tue, 30 Apr 2019 12:23:40 +0200
-Subject: [Buildroot] Buildroot does not try to find/use the system-installed
- meson
-Message-ID: <CADYdroNf-GCbQVe5bZ1SU4D4aphJbnWPL_phiSLxLZb8DCv9wQ@mail.gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Tue, 30 Apr 2019 12:49:09 +0200
+Subject: [Buildroot] [PATCH] linux: bump Linux CIP to version v4.19.13-cip1
+Message-ID: <1556621349-18581-1-git-send-email-angelo@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This patch bumps CIP to the latest SLTS version v4.19.13-cip1.
+Kernel based on 4.4 is not deprecated, it will continue to be supported
+as planned by the CIP foundation.
+If the 4.4 version is needed, it should be selected manually.
 
-even though I have very recent meson installed, buildroot will go to
-great lengths to build everything from source (including host-python3,
-host-ninja and host-python which is a dependency of host-ninja for
-some reason).
-Is there a good reason for this, or is this just a lacking feature for now?
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+---
+ linux/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I am pretty sure the system meson would do the same thing, and would
-only need the crosscompile configuration (as its done with CMake).
-
-regards, Norbert
+diff --git a/linux/Config.in b/linux/Config.in
+index c6f80e9..a800a40 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -34,7 +34,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (5.0)"
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	bool "Latest CIP SLTS version (v4.4.176-cip31)"
++	bool "Latest CIP SLTS version (v4.19.13-cip1)"
+ 	help
+ 	  CIP launched in the spring of 2016 to address the needs of
+ 	  organizations in industries such as power generation and
+@@ -122,7 +122,7 @@ endif
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "5.0.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "v4.4.176-cip31" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
++	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+ 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+-- 
+2.7.4
