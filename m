@@ -1,102 +1,46 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 30 Apr 2019 10:11:47 +0200
-Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
- in cross file
-In-Reply-To: <20190423232944.70aeddba@gmx.net>
-References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
- <20190413182422.7e8f5f22@windsurf> <20190423232944.70aeddba@gmx.net>
-Message-ID: <6f5eef5542a44d775baa396c7fa7c01a2e6e2c4d.camel@embedded.rocks>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 30 Apr 2019 10:18:38 +0200
+Subject: [Buildroot] [PATCH v3 04/10]
+ package/gstreamer1/gst1-plugins-{base, good, bad, ugly}: bump to 1.16.0
+References: <20190424210333.62571-1-aduskett@gmail.com>
+ <20190424210333.62571-4-aduskett@gmail.com>
+Message-ID: <uvclpfxhjh.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Am Wed, 24 Apr 2019 17:03:27 -0400 schrieb
+aduskett-Re5JQEeQqe8AvxtiuMwx3w:
 
-On Tue, 2019-04-23 at 23:29 +0200, Peter Seiderer wrote:
-> Hello J?rg, Thomas,
-> 
-> On Sat, 13 Apr 2019 18:24:22 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> 
-> > Hello J?rg,
-> > 
-> > +Peter Seiderer in Cc.
-> > 
-> > On Wed,  3 Apr 2019 20:32:01 +0200
-> > J?rg Krause <joerg.krause@embedded.rocks> wrote:
-> > 
-> > > Since version 0.49.0 the Meson build system has native support for
-> > > looking for `libgcrypt-config` if no pkg-config file is found. As the
-> > > latest version 1.8.4 of libgcrypt does not provide a .pc file, using
-> > > `libgcrypt-config` is the only way for detecting the required libraries
-> > > when linking agains libgrypt.
-> > > 
-> > > The `libgcrypt-config` entry is necessary for updating package mpd,
-> > > which switched from the Autotools to the Meson build system when bumping
-> > > from version 0.20 to 0.21.
-> > > 
-> > > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>  
-> > 
-> > As I said in my previous reply, I'm not too happy with this
-> > libgcrypt-config variable creeping into the global cross-compilation
-> > file. Can we instead look at extending what Peter Seiderer is doing in
-> > http://patchwork.ozlabs.org/patch/1081486/ and allow some per-package
-> > additions to the per-package cross-compilation file ? Peter's patch
-> > does it for CFLAGS/CXXFLAGS/LDFLAGS, we could perhaps do the same with
-> > arbitrary program paths ?
-> 
-> Something like the following (draft) should work:
-> 
-> diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-> index 4056c2b2f4..7cd372128e 100644
-> --- a/package/meson/cross-compilation.conf.in
-> +++ b/package/meson/cross-compilation.conf.in
-> @@ -9,6 +9,7 @@ cpp = '@TARGET_CROSS at g++'
->  ar = '@TARGET_CROSS at ar'
->  strip = '@TARGET_CROSS at strip'
->  pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
-> + at PKG_TARGET_BINARIES@
+> diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk 
+b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> index fb976f9a94..57d0cbd436 100644
+> --- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> +++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+> @@ -4,11 +4,11 @@
+>  #
 >  
->  [properties]
->  needs_exe_wrapper = true
-> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> index 70128f6bad..e550c80c9d 100644
-> --- a/package/meson/meson.mk
-> +++ b/package/meson/meson.mk
-> @@ -60,6 +60,7 @@ define HOST_MESON_INSTALL_CROSS_CONF
->             -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
->             -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
->             -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
-> +           -e "s%@PKG_TARGET_BINARIES@%%g" \
->             -e "s%@PKG_TARGET_CFLAGS@%%g" \
->             -e "s%@PKG_TARGET_LDFLAGS@%%g" \
->             -e "s%@PKG_TARGET_CXXFLAGS@%%g" \
-> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> index 9974b1e513..93df43fe3e 100644
-> --- a/package/pkg-meson.mk
-> +++ b/package/pkg-meson.mk
-> @@ -74,6 +74,7 @@ define $(2)_CONFIGURE_CMDS
->             -e "s%@TARGET_CFLAGS@%$$(HOST_MESON_SED_CFLAGS)%g" \
->             -e "s%@TARGET_LDFLAGS@%$$(HOST_MESON_SED_LDFLAGS)%g" \
->             -e "s%@TARGET_CXXFLAGS@%$$(HOST_MESON_SED_CXXFLAGS)%g" \
-> +           -e "s%@PKG_TARGET_BINARIES@%$$($$(PKG)_MESON_BINARIES)%g" \
->             -e "s%@PKG_TARGET_CFLAGS@%$$($$(PKG)_MESON_SED_CFLAGS)%g" \
->             -e "s%@PKG_TARGET_LDFLAGS@%$$($$(PKG)_MESON_SED_LDFLAGS)%g" \
->             -e "s%@PKG_TARGET_CXXFLAGS@%$$($$(PKG)_MESON_SED_CXXFLAGS)%g" \
-> 
-> 
-> and with: 
-> 
-> MPD_MESON_BINARIES = libgcrypt-config = '$(STAGING_DIR)/usr/bin/libgcrypt-config'
+################################################################################
+>  
+> -GST1_PLUGINS_BASE_VERSION = 1.14.4
+> +GST1_PLUGINS_BASE_VERSION = 1.16.0
+>  GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$
+(GST1_PLUGINS_BASE_VERSION).tar.xz
+>  GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-
+plugins-base
+>  GST1_PLUGINS_BASE_INSTALL_STAGING = YES
+> -GST1_PLUGINS_BASE_LICENSE_FILES = COPYING.LIB
+> +GST1_PLUGINS_BASE_LICENSE_FILES = COPYING
+>  GST1_PLUGINS_BASE_LICENSE = LGPL-2.0+, LGPL-2.1+
+>  
+>  # gio_unix_2_0 is only used for tests
 
-I've just tested your draft. This still inserts libgcrypt-config in the
-global cross-compilation.conf.
+Hi Adam,
 
-I will send an updated version of the patch which does insert
-libgcrypt-config in the package cross file, but not in the global cross
-file.
+ftr: This patch needs a rebase after
+https://git.buildroot.net/buildroot/commit/?
+id=80a5217476c45e765db45acd8782f7f854783f93
 
-Many thanks!
-
-J?rg
+Regards, Bernd
