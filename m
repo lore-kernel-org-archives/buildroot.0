@@ -1,35 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Apr 2019 13:15:41 +0200
-Subject: [Buildroot] [git commit] package/intel-mediasdk: fix license
-Message-ID: <20190430111513.85EE983D90@busybox.osuosl.org>
+Date: Tue, 30 Apr 2019 13:17:59 +0200
+Subject: [Buildroot] [git commit] package/strace: disable build for nds32
+Message-ID: <20190430111513.B052483D90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94c6cab917c79334136cb74409eab9bc2f240677
+commit: https://git.buildroot.net/buildroot/commit/?id=14c9b9ed27660ca57c1b3759d566b743b0f10323
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/5730991fded5ab3474cd0325b399f6f27972ca81
+Current version of strace does not support nds32.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/05ec776548c9bede4878d4c3c43040c5b0aac182
+http://autobuild.buildroot.net/results/24023f2fa3dbf7c281726abdbfd4322badaffbfb
+
+Cc: Nylon Chen <nylon7@andestech.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-mediasdk/intel-mediasdk.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/strace/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
-index 611529390b..c47e99117f 100644
---- a/package/intel-mediasdk/intel-mediasdk.mk
-+++ b/package/intel-mediasdk/intel-mediasdk.mk
-@@ -7,7 +7,7 @@
- INTEL_MEDIASDK_VERSION = 18.4.0
- INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
- INTEL_MEDIASDK_LICENSE = MIT
--INTEL_MEDIASDK_LICENSE_FILES = COPYING
-+INTEL_MEDIASDK_LICENSE_FILES = LICENSE
- 
- INTEL_MEDIASDK_INSTALL_STAGING = YES
- INTEL_MEDIASDK_DEPENDENCIES = intel-mediadriver
+diff --git a/package/strace/Config.in b/package/strace/Config.in
+index c7649e5789..38b4ebe32a 100644
+--- a/package/strace/Config.in
++++ b/package/strace/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_STRACE
+ 	bool "strace"
+ 	# needs at least kernel headers 4.0 on nios2
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 || !BR2_nios2
++	depends on !BR2_nds32
+ 	help
+ 	  A useful diagnostic, instructional, and debugging tool.
+ 	  Allows you to track what system calls a program makes
