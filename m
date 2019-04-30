@@ -1,27 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Apr 2019 13:19:48 +0200
-Subject: [Buildroot] [PATCH] package/strace: disable build for nds32
-In-Reply-To: <dbfab28381ec6dcae5fd92f7e6f2e0b56cf68d8e.1556621604.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 30 Apr 2019 13:53:24 +0300")
-References: <dbfab28381ec6dcae5fd92f7e6f2e0b56cf68d8e.1556621604.git.baruch@tkos.co.il>
-Message-ID: <87wojbn3jf.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Apr 2019 13:14:54 +0200
+Subject: [Buildroot] [git commit] package/subversion: fix build with NLS
+Message-ID: <20190430111513.7592183D90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5cad1fe1ff240b97a47a4eda99252a171136977c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Current version of strace does not support nds32.
- > Fixes:
- > http://autobuild.buildroot.net/results/05ec776548c9bede4878d4c3c43040c5b0aac182
- > http://autobuild.buildroot.net/results/24023f2fa3dbf7c281726abdbfd4322badaffbfb
+Fixes:
+ - http://autobuild.buildroot.org/results/098a05b397ba1b05df561b6872b39e17a2bf27df
 
- > Cc: Nylon Chen <nylon7@andestech.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/subversion/subversion.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
+index db7e36a638..0e26cfd4be 100644
+--- a/package/subversion/subversion.mk
++++ b/package/subversion/subversion.mk
+@@ -9,7 +9,14 @@ SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
+ SUBVERSION_SITE = http://mirror.catn.com/pub/apache/subversion
+ SUBVERSION_LICENSE = Apache-2.0
+ SUBVERSION_LICENSE_FILES = LICENSE
+-SUBVERSION_DEPENDENCIES = host-pkgconf apr apr-util expat zlib sqlite
++SUBVERSION_DEPENDENCIES = \
++	host-pkgconf \
++	apr \
++	apr-util \
++	expat \
++	zlib \
++	sqlite \
++	$(TARGET_NLS_DEPENDENCIES)
+ SUBVERSION_AUTORECONF = YES
+ SUBVERSION_CONF_OPTS = \
+ 	--with-expat=$(STAGING_DIR)/usr/include:$(STAGING_DIR)/usr/lib: \
+@@ -22,5 +29,6 @@ SUBVERSION_CONF_OPTS = \
+ 	--without-sasl \
+ 	--without-gnome-keyring \
+ 	--without-libmagic
++SUBVERSION_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ 
+ $(eval $(autotools-package))
