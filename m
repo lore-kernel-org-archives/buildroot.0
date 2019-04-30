@@ -1,39 +1,36 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Tue, 30 Apr 2019 13:09:01 -0700
-Subject: [Buildroot] [PATCH 6/7] support/scripts/qemu-boot: gitlab tests
- for Qemu
-In-Reply-To: <20190430195623.GF27252@scaer>
-References: <1556555546-9246-1-git-send-email-jugurtha.belkalem@smile.fr>
- <1556555546-9246-7-git-send-email-jugurtha.belkalem@smile.fr>
- <df02769a-fa12-c908-1222-bf3817a83473@mind.be>
- <CAMo8BfK_oNzVTDawQvJakCozYsF6ThxCNzDx0ez75J9wN8cHxA@mail.gmail.com>
- <CAHpTZwnYegw7DTpoke0Yqf-DghTnAoL8+zN2bhQjVCasfHuoUA@mail.gmail.com>
- <4368e67d-3b86-9566-2fac-28c247dce4b6@mind.be> <20190430194033.GE27252@scaer>
- <20190430195623.GF27252@scaer>
-Message-ID: <CAMo8BfK0guBr15W2zAhQPSZo8uE8gBmjpRNfLZYfLGTYRqnVRw@mail.gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Tue, 30 Apr 2019 22:11:20 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libzip: add host variant
+Message-ID: <20190430201121.15634-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Apr 30, 2019 at 12:56 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> And it does not build because:
->
->       UIMAGE  arch/xtensa/boot/uImage
->     "mkimage" command not found - U-Boot images will not be built
->     arch/xtensa/boot/Makefile:51: recipe for target 'arch/xtensa/boot/uImage' failed
+The updated host mfgtool package needs the host variant of libzip.
 
-Ah, yes, I have mkimage somewhere in my PATH.
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/libzip/libzip.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> So, it needs to have host-uboot-tools.
-
-But I don't think this is the right thing. What I see is that despite
-BR2_LINUX_KERNEL_IMAGE_TARGET_NAME is set to Image,
-to only build self-contained ELF kernel, the initial kernel build is
-run as 'make ... all', and only the build with the cpio is run as
-'make ... Image'. Why?
-
+diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
+index b90ea76f5e..280ca6d8c7 100644
+--- a/package/libzip/libzip.mk
++++ b/package/libzip/libzip.mk
+@@ -11,6 +11,7 @@ LIBZIP_LICENSE = BSD-3-Clause
+ LIBZIP_LICENSE_FILES = LICENSE
+ LIBZIP_INSTALL_STAGING = YES
+ LIBZIP_DEPENDENCIES = zlib
++HOST_LIBZIP_DEPENDENCIES = host-zlib
+ 
+ ifeq ($(BR2_PACKAGE_BZIP2),y)
+ LIBZIP_DEPENDENCIES += bzip2
+@@ -33,3 +34,4 @@ LIBZIP_CONF_OPTS += -DENABLE_OPENSSL=OFF
+ endif
+ 
+ $(eval $(cmake-package))
++$(eval $(host-cmake-package))
 -- 
-Thanks.
--- Max
+2.21.0
