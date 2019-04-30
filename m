@@ -1,31 +1,31 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Tue, 30 Apr 2019 14:17:58 -0300
-Subject: [Buildroot] [PATCH] DEVELOPERS: Add Carlos Santos for liburiparser
-Message-ID: <20190430171758.481-1-unixmania@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 30 Apr 2019 19:45:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-ply: add host variant
+Message-ID: <20190430174557.2108-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+host-python-ply is needed to make bind configure script happy
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/a68251773f61c3463f4d18aa626c83df70126afc
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS | 1 +
+ package/python-ply/python-ply.mk | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f83198ba16..feda81df86 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -457,6 +457,7 @@ F:	package/tpm2-abrmd/
- F:	package/tpm2-tools/
- F:	package/tpm2-totp/
- F:	package/tpm2-tss/
-+F:	package/liburiparser/
+diff --git a/package/python-ply/python-ply.mk b/package/python-ply/python-ply.mk
+index 95a290a7c4..5dc7964d5f 100644
+--- a/package/python-ply/python-ply.mk
++++ b/package/python-ply/python-ply.mk
+@@ -12,3 +12,4 @@ PYTHON_PLY_LICENSE = BSD-3-Clause
+ PYTHON_PLY_LICENSE_FILES = README.md
  
- N:	Carsten Schoenert <c.schoenert@gmail.com>
- F:	package/dvbsnoop/
+ $(eval $(python-package))
++$(eval $(host-python-package))
 -- 
 2.20.1
