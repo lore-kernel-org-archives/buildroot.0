@@ -1,73 +1,71 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 30 Apr 2019 13:20:47 +0200
-Subject: [Buildroot] [PATCH 6/7] support/scripts/qemu-boot: gitlab tests
- for Qemu
-In-Reply-To: <CAHpTZwnYegw7DTpoke0Yqf-DghTnAoL8+zN2bhQjVCasfHuoUA@mail.gmail.com>
-References: <1556555546-9246-1-git-send-email-jugurtha.belkalem@smile.fr>
- <1556555546-9246-7-git-send-email-jugurtha.belkalem@smile.fr>
- <df02769a-fa12-c908-1222-bf3817a83473@mind.be>
- <CAMo8BfK_oNzVTDawQvJakCozYsF6ThxCNzDx0ez75J9wN8cHxA@mail.gmail.com>
- <CAHpTZwnYegw7DTpoke0Yqf-DghTnAoL8+zN2bhQjVCasfHuoUA@mail.gmail.com>
-Message-ID: <4368e67d-3b86-9566-2fac-28c247dce4b6@mind.be>
+From: ravi chandran <ravigct27@gmail.com>
+Date: Tue, 30 Apr 2019 17:04:02 +0530
+Subject: [Buildroot] Reg: Valgrind support for Aarch64 in buildroot
+ 2019.02.02
+In-Reply-To: <20190430085653.0bd4914e@windsurf>
+References: <CAAMHf5EaMVDS23JXv-4_yWByHnn=0xT+iOKdVOhan5Ah4EvbLw@mail.gmail.com>
+ <20190430085653.0bd4914e@windsurf>
+Message-ID: <CAAMHf5EEeW7j=tvj8hWanzdoKT0mae=85HF_D+OBFVHcF4oYjQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Jugurtha,
+Hi Thomas,
+               Thanks for your reply.
+I am running a aarch64 platform with userspace  in 32 bit mode, so probably
+the reason for valgrind not shown in that list is the BR2_arm was not
+exist  in config BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS .
 
- [Please don't top-post, but reply inline like I do below.]
+ After added the below line, i am able to choose valgrind support as part
+of my target package.  But i got below build error
 
-On 30/04/2019 10:54, Jugurtha BELKALEM wrote:
-> Thank you for you comments Arnout, I have corrected the indentation, timeout
-> and? function declaration issues.
-> 
-> However; I think that duplicating the content of readme.txt of each qemu
-> architecture would be difficult to maintain (even if it is more convenient to
-> use), this is why a project like toolchain builder :
-> https://github.com/bootlin/toolchains-builder/blob/master/build.sh is reading
-> directly from readme.txt.
+checking for a supported CPU... no (arm)
+configure: error: Unsupported host architecture. Sorry
 
- The idea would not be to duplicate it, but to move it. I.e., readme.txt just
-says "launch with board/qemu/x86_64/launch.sh", and the actual command is in
-that shell script.
+valgrind-3.14.0 is what the version configured to use in valgrind.mk. I am
+not sure if this particular version will support arm32.
 
- But maybe we should see what other Buildroot maintainers have to say about it.
-Thomas, Peter, Yann, Romain?
+config BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
+        bool
+        default y if BR2_aarch64
+       + default y if BR2_arm
+        default y if BR2_ARM_CPU_ARMV7A
+        # MIPS32 R6 is unsupported
+        default y if BR2_mips && !BR2_mips_32r6
+        default y if BR2_mipsel && !BR2_mips_32r6
 
-> Concerning the naming of x86_64 folder in board/qemu, it is the only one that
-> uses underscore instead of hyphen. Changing the directory name may cause issues
-> with other works as maybe other scripts as relying on this name (especially that
-> it exists since a long time ago).
+Thanks,
+Ravi
 
- OK, true. Let's keep that like you have it then.
+On Tue, Apr 30, 2019 at 12:26 PM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
 
-
-> I want to thank you also Max for your answer (We need to investigate more).
-
- If it doesn't work on gitlab-ci, I would just not enable the build of host-qemu
-for those (and put some intelligence in the script that it only runs if
-host-qemu has been built).
-
-
-> On Tue, Apr 30, 2019 at 1:38 AM Max Filippov <jcmvbkbc@gmail.com
-> <mailto:jcmvbkbc@gmail.com>> wrote:
-> 
->     On Mon, Apr 29, 2019 at 3:32 PM Arnout Vandecappelle <arnout@mind.be
->     <mailto:arnout@mind.be>> wrote:
->     > > +? elif [ $device_name == "xtensa-lx60" ] || [ $device_name ==
->     "xtensa-lx60-nommu" ]; then
->     > > +? ? echo "xtensa cannot be tested"
->     >
->     >? If that is the case, why do we even have these qemu defconfigs? Max?
-> 
->     Tested both configurations just now, with the current buildroot tip
->     (2019.02-959-gd54b0e22aef3) and QEMU-4.0. Both build and boot for me
->     with QEMU command line from the readme.
-
- Is this with the system-intalled qemu? I guess so, because Buildroot still has
-3.1.0... That might be the issue :-)
-
- Regards,
- Arnout
+> Hello,
+>
+> On Tue, 30 Apr 2019 11:45:17 +0530
+> ravi chandran <ravigct27@gmail.com> wrote:
+>
+> >    Is valgrind support for aarch64 platform is available in buildroot
+> > version 2019.02.02?
+>
+> config BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
+>         bool
+>         default y if BR2_aarch64
+>
+> So, yes, Valgrind can be enabled on AArch64 in Buildroot 2019.02.
+>
+> Why do you ask this question ? Did you try and encountered an issue ?
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190430/b18d013c/attachment.html>
