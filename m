@@ -1,40 +1,158 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 30 Apr 2019 14:08:59 +0200
-Subject: [Buildroot] [PATCH] package/luv: bump to version 1.28.0-0
-Message-ID: <20190430120859.2630-1-joerg.krause@embedded.rocks>
+Date: Tue, 30 Apr 2019 14:17:49 +0200
+Subject: [Buildroot] [PATCH] package/shairport-sync: bump to version 3.2.2
+Message-ID: <20190430121749.14877-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Drop patches 0001 and 0002 which are included in the new version.
+
+Add hash for the license file.
+
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/luv/luv.hash | 2 +-
- package/luv/luv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ibsoxr-is-built-to-rely-on-libavutil.patch | 63 -------------------
+ ...f-HAVE_LIBSOXR-with-using-pkg_config.patch | 35 -----------
+ package/shairport-sync/shairport-sync.hash    |  3 +-
+ package/shairport-sync/shairport-sync.mk      |  2 +-
+ 4 files changed, 3 insertions(+), 100 deletions(-)
+ delete mode 100644 package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch
+ delete mode 100644 package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
 
-diff --git a/package/luv/luv.hash b/package/luv/luv.hash
-index 50ad7d4d3b..7d872b279a 100644
---- a/package/luv/luv.hash
-+++ b/package/luv/luv.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch b/package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch
+deleted file mode 100644
+index 32c52add33..0000000000
+--- a/package/shairport-sync/0001-Sometimes-libsoxr-is-built-to-rely-on-libavutil.patch
++++ /dev/null
+@@ -1,63 +0,0 @@
+-From 5101ab2d13e2b89ea3c1276df5fb7413634eeccd Mon Sep 17 00:00:00 2001
+-From: Mike Brady <mikebrady@eircom.net>
+-Date: Sat, 25 Aug 2018 13:08:37 +0100
+-Subject: [PATCH] Sometimes libsoxr is built to rely on libavutil. If libavutil
+- is detected, link to it when building libsoxr. Add pgk_config support to soxr
+- selection.
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-The Buildroot autobuilder detected a build issue [0] when building
+-shairport-sync statically:
+-
+-```
+-arm-buildroot-linux-uclibcgnueabi/sysroot/usr//lib/libsoxr.a(soxr.c.o): In function `soxr_create':
+-soxr.c:(.text+0xd4c): undefined reference to `av_get_cpu_flags'
+-collect2: error: ld returned 1 exit status
+-```
+-
+-A quick look at the soxr source code shows that `soxr_create()` might use
+-`av_get_cpu_flags()` depending on the architecture.
+-
+-For the sake of simplicity link with `-lavutil` if it is found when using soxr.
+-
+-Even better, as soxr provides a pkg-config file, this should be prefered.
+-
+-[0] http://autobuild.buildroot.org/results/53d/53d21686780aa2485745b59e812b6280dd39f1c5
+-
+-Upstream status: 5101ab2d13e2b89ea3c1276df5fb7413634eeccd
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+----
+- configure.ac | 15 ++++++++++++++-
+- 1 file changed, 14 insertions(+), 1 deletion(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 0c917a4..2b6fddb 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -176,7 +176,20 @@ AC_ARG_WITH(ssl, [ choose --with-ssl=openssl, --with-ssl=mbedtls or --with-ssl=p
+- # Look for soxr flag
+- AC_ARG_WITH(soxr, [  --with-soxr = choose libsoxr for high-quality interpolation], [
+-   AC_MSG_RESULT(>>Including support for soxr-based interpolation)
+--  AC_CHECK_LIB([soxr],[soxr_create], , AC_MSG_ERROR(soxr support requested but libsoxr not found!))], )
+-+  if  test "x${with_pkg_config}" = xyes ; then
+-+    PKG_CHECK_MODULES(
+-+        [SOXR], [soxr],
+-+        [LIBS="${SOXR_LIBS} ${LIBS}"])
+-+  else
+-+    AC_CHECK_LIB([avutil],[av_get_cpu_flags])
+-+    if  test "x${ac_cv_lib_avutil_av_get_cpu_flags}" = xyes ; then
+-+      # soxr may link against libavutil, depending on the architecture, but for the sake of simplicity link with it if it is found
+-+      AC_CHECK_LIB([soxr],[soxr_create], , AC_MSG_ERROR(soxr support requested but libsoxr not found!), [-lavutil])
+-+    else
+-+      AC_CHECK_LIB([soxr],[soxr_create], , AC_MSG_ERROR(soxr support requested but libsoxr not found!))
+-+    fi
+-+  fi
+-+], )
+- 
+- # Look for metadata flag -- set flag for conditional compilation
+- AC_ARG_WITH(metadata, [  --with-metadata = include support for a metadata feed], [
+--- 
+-2.18.0
+diff --git a/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch b/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
+deleted file mode 100644
+index 66ce961ab1..0000000000
+--- a/package/shairport-sync/0002-Include-a-definition-of-HAVE_LIBSOXR-with-using-pkg_config.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9 Mon Sep 17 00:00:00 2001
+-From: Mike Brady <mikebrady@eircom.net>
+-Date: Sat, 8 Sep 2018 15:06:18 +0100
+-Subject: [PATCH] Include a definition of HAVE_LIBSOXR with using pkg_config
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-Commit e047dee241fe0660d92311a124757065c6c4c93d adds an upstream patch
+-to fix a build issue with soxr.  The patch also adds detecting soxr
+-using pkg-config. Upstream detected a config issue [1], where the
+-resulting binary lacks soxr support, although libsoxr was correctly
+-detected.
+-
+-Backported from: cd6a99a7cfde1c5e1c1cc74ee6a77041bb4012d9
+-
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+----
+- configure.ac | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/configure.ac b/configure.ac
+-index ceec4af..690a774 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -180,6 +180,7 @@ AC_ARG_WITH(soxr, [  --with-soxr = choose libsoxr for high-quality interpolation
+-     PKG_CHECK_MODULES(
+-         [SOXR], [soxr],
+-         [LIBS="${SOXR_LIBS} ${LIBS}"])
+-+    AC_DEFINE([HAVE_LIBSOXR],[1],[Define to 1 if you are including support for soxr interpolation])
+-   else
+-     AC_CHECK_LIB([avutil],[av_get_cpu_flags])
+-     if  test "x${ac_cv_lib_avutil_av_get_cpu_flags}" = xyes ; then
+--- 
+-2.18.0
+diff --git a/package/shairport-sync/shairport-sync.hash b/package/shairport-sync/shairport-sync.hash
+index 076f0a2132..6f73d109e4 100644
+--- a/package/shairport-sync/shairport-sync.hash
++++ b/package/shairport-sync/shairport-sync.hash
+@@ -1,2 +1,3 @@
  # Locally calculated
--sha256 0631648c04753066a23064fe0e9d6bf5b22cfb1bb3d5b0d393e0b448270b8446  luv-1.27.0-0.tar.gz
-+sha256 567737a5c0850a2584a201b8b51d9407f7ab2e94846dda737397053dcb8174b9  luv-1.28.0-0.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/luv/luv.mk b/package/luv/luv.mk
-index 0368758884..718cda342d 100644
---- a/package/luv/luv.mk
-+++ b/package/luv/luv.mk
+-sha256  1fe16856ec828704b086c571038a3b2eb907a3cf0a3847ed1b721b517554659d  shairport-sync-3.2.1.tar.gz
++sha256  4f1ee142b887842727ae0c310e21c83ea2386518e841a25c7ddb015d08b54eba  shairport-sync-3.2.2.tar.gz
++sha256  1daaa904985807b7f9f2fa91f6b19f3faadf8df4e813f7451a691f89a6965e3f  LICENSES
+diff --git a/package/shairport-sync/shairport-sync.mk b/package/shairport-sync/shairport-sync.mk
+index f1857b0dae..5f93f1b8ea 100644
+--- a/package/shairport-sync/shairport-sync.mk
++++ b/package/shairport-sync/shairport-sync.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUV_VERSION = 1.27.0-0
-+LUV_VERSION = 1.28.0-0
- LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
- LUV_LICENSE = Apache-2.0
- LUV_LICENSE_FILES = LICENSE.txt
+-SHAIRPORT_SYNC_VERSION = 3.2.1
++SHAIRPORT_SYNC_VERSION = 3.2.2
+ SHAIRPORT_SYNC_SITE = $(call github,mikebrady,shairport-sync,$(SHAIRPORT_SYNC_VERSION))
+ 
+ SHAIRPORT_SYNC_LICENSE = MIT, BSD-3-Clause
 -- 
 2.21.0
