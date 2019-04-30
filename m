@@ -1,100 +1,36 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 30 Apr 2019 15:41:24 +0200
-Subject: [Buildroot] [PATCH v3] package/wpebackend-fdo: package needs
- wayland libegl
-In-Reply-To: <20190430152804.GB3486@momiji>
-References: <0ab8f13f-225e-29cd-c1e5-7ca2c3897ed6@mind.be>
- <20190415091632.6437-1-giulio.benetti@micronovasrl.com>
- <20190430152804.GB3486@momiji>
-Message-ID: <46ba6b1b-dfb3-7ca2-9976-2992c664197b@micronovasrl.com>
+From: John Keeping <john@metanate.com>
+Date: Tue, 30 Apr 2019 14:28:26 +0100
+Subject: [Buildroot] [PATCH] package/netcat-openbsd: switch to new upstream
+ URL
+Message-ID: <20190430132826.19559-1-john@metanate.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 30/04/2019 14:28, Adrian Perez de Castro ha scritto:
-> Hi,
-> 
-> I finally got round to look at this; the changes make sense. I also did try
-> a couple of builds with the patch applied (which went fine). Thanks!
+anonscm.debian.org has been discontinued and now hosts a page pointing
+to salsa.debian.org.  Switch to the new upstream URL, explicitly setting
+the method to git now that we use an HTTPS URL.
 
-Thank you.
-Best regards
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ package/netcat-openbsd/netcat-openbsd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Giulio
-
-> On Mon, 15 Apr 2019 11:16:32 +0200, Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
-> 
->> Now wpebackend-fdo depends only on HAS_LIBEGL but if libegl is not of
->> wayland type, build breaks due to different EGLNativeWindowType types
->> depending on backends(fb,x11,wl).
->>
->> Modify:
->> 'depend on BR2_PACKAGE_HAS_LIBEGL'
->> to:
->> 'depend on BR2_PACKAGE_HAS_LIBEGL_WAYLAND'
->> in Config.in to avoid building if there is not a wayland egl backend.
->> Modify also comment in Config.in when package is not selectable
->> mentioning the need to have an OpenEGL-capable Wayland backend.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/4f02b91f6ffffd194e09ed18c917b4f678b1a52d/
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> 
-> Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-> 
->> ---
->> Changes:
->> V1->V2:
->> * use BR2_PACKAGE_HAS_LIBEGL_WAYLAND only instead of using
->>    BR2_PACKAGE_HAS_LIBEGL too
->> * add Wayland to comment
->>
->> V2->V3:
->> * add `\` at the end of `depends on`
->>
->>   package/wpebackend-fdo/Config.in | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
->> index 2f5f965403..161e4c9a7e 100644
->> --- a/package/wpebackend-fdo/Config.in
->> +++ b/package/wpebackend-fdo/Config.in
->> @@ -1,5 +1,5 @@
->> -comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable backend"
->> -	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
->> +comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable Wayland backend"
->> +	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
->>   		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
->>   
->>   config BR2_PACKAGE_WPEBACKEND_FDO
->> @@ -9,7 +9,7 @@ config BR2_PACKAGE_WPEBACKEND_FDO
->>   	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, libglib2
->>   	depends on BR2_USE_WCHAR # libglib2
->>   	depends on BR2_USE_MMU # libglib2
->> -	depends on BR2_PACKAGE_HAS_LIBEGL
->> +	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
->>   	select BR2_PACKAGE_LIBGLIB2
->>   	select BR2_PACKAGE_LIBWPE
->>   	select BR2_PACKAGE_WAYLAND
->> -- 
->> 2.17.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
+index e98b479c4f..b313116b3f 100644
+--- a/package/netcat-openbsd/netcat-openbsd.mk
++++ b/package/netcat-openbsd/netcat-openbsd.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ NETCAT_OPENBSD_VERSION = debian/1.190-1
+-NETCAT_OPENBSD_SITE = git://anonscm.debian.org/collab-maint/netcat-openbsd
++NETCAT_OPENBSD_SITE = https://salsa.debian.org/debian/netcat-openbsd.git
++NETCAT_OPENBSD_SITE_METHOD = git
+ NETCAT_OPENBSD_LICENSE = BSD-3-Clause
+ NETCAT_OPENBSD_LICENSE_FILES = debian/copyright
+ NETCAT_OPENBSD_DEPENDENCIES = host-pkgconf libbsd
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.21.0
