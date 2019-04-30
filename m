@@ -1,32 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Apr 2019 14:40:11 +0200
-Subject: [Buildroot] [git commit] package/tpm2-totp: fix menu prompt
-Message-ID: <20190430123739.797D083B69@busybox.osuosl.org>
+Date: Tue, 30 Apr 2019 14:41:51 +0200
+Subject: [Buildroot] [git commit] package/luv: bump to version 1.28.0-0
+Message-ID: <20190430123739.92A7683B69@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=06e46d9b0520fafbd5883519e91f6527d987c80b
+commit: https://git.buildroot.net/buildroot/commit/?id=2f2d437cd5931c5b5b29b905b7a0a1a0fb0e71b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-It must be "tpm2-totp", not "tpm2-tools" (probably a copy/paste issue).
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tpm2-totp/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/luv/luv.hash | 2 +-
+ package/luv/luv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/tpm2-totp/Config.in b/package/tpm2-totp/Config.in
-index 0dbbdea228..dcadf5a5f2 100644
---- a/package/tpm2-totp/Config.in
-+++ b/package/tpm2-totp/Config.in
-@@ -1,5 +1,5 @@
- config BR2_PACKAGE_TPM2_TOTP
--	bool "tpm2-tools"
-+	bool "tpm2-totp"
- 	depends on !BR2_STATIC_LIBS # tpm2-tss
- 	depends on !BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_ARM # glibc < 2.20
- 	select BR2_PACKAGE_LIBQRENCODE
+diff --git a/package/luv/luv.hash b/package/luv/luv.hash
+index 50ad7d4d3b..7d872b279a 100644
+--- a/package/luv/luv.hash
++++ b/package/luv/luv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 0631648c04753066a23064fe0e9d6bf5b22cfb1bb3d5b0d393e0b448270b8446  luv-1.27.0-0.tar.gz
++sha256 567737a5c0850a2584a201b8b51d9407f7ab2e94846dda737397053dcb8174b9  luv-1.28.0-0.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/luv/luv.mk b/package/luv/luv.mk
+index 0368758884..718cda342d 100644
+--- a/package/luv/luv.mk
++++ b/package/luv/luv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LUV_VERSION = 1.27.0-0
++LUV_VERSION = 1.28.0-0
+ LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
+ LUV_LICENSE = Apache-2.0
+ LUV_LICENSE_FILES = LICENSE.txt
