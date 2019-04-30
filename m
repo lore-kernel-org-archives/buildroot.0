@@ -1,64 +1,20 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Apr 2019 08:05:31 +0200
-Subject: [Buildroot] [PATCH] package/gst1-plugins-base: add upstream
- SA-2019-0001 security fix
-Message-ID: <20190430060532.16221-1-peter@korsgaard.com>
+From: ravi chandran <ravigct27@gmail.com>
+Date: Tue, 30 Apr 2019 11:45:17 +0530
+Subject: [Buildroot] Reg: Valgrind support for Aarch64 in buildroot
+ 2019.02.02
+Message-ID: <CAAMHf5EaMVDS23JXv-4_yWByHnn=0xT+iOKdVOhan5Ah4EvbLw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issue:
+Hi
+   Is valgrind support for aarch64 platform is available in buildroot
+version 2019.02.02?
 
-CVE-2019-9928: GStreamer before 1.16.0 has a heap-based buffer overflow in
-the RTSP connection parser via a crafted response from a server
-
-For more details, see the advisory:
-https://gstreamer.freedesktop.org/security/sa-2019-0001.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...ection-Security-loophole-making-heap-over.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 package/gstreamer1/gst1-plugins-base/0001-gstrtspconnection-Security-loophole-making-heap-over.patch
-
-diff --git a/package/gstreamer1/gst1-plugins-base/0001-gstrtspconnection-Security-loophole-making-heap-over.patch b/package/gstreamer1/gst1-plugins-base/0001-gstrtspconnection-Security-loophole-making-heap-over.patch
-new file mode 100644
-index 0000000000..de88f67a39
---- /dev/null
-+++ b/package/gstreamer1/gst1-plugins-base/0001-gstrtspconnection-Security-loophole-making-heap-over.patch
-@@ -0,0 +1,31 @@
-+From f672277509705c4034bc92a141eefee4524d15aa Mon Sep 17 00:00:00 2001
-+From: Tobias Ronge <tobiasr@axis.com>
-+Date: Thu, 14 Mar 2019 10:12:27 +0100
-+Subject: [PATCH] gstrtspconnection: Security loophole making heap overflow
-+
-+The former code allowed an attacker to create a heap overflow by
-+sending a longer than allowed session id in a response and including a
-+semicolon to change the maximum length. With this change, the parser
-+will never go beyond 512 bytes.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ gst-libs/gst/rtsp/gstrtspconnection.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gst-libs/gst/rtsp/gstrtspconnection.c b/gst-libs/gst/rtsp/gstrtspconnection.c
-+index a6755bedd..c0429064a 100644
-+--- a/gst-libs/gst/rtsp/gstrtspconnection.c
-++++ b/gst-libs/gst/rtsp/gstrtspconnection.c
-+@@ -2461,7 +2461,7 @@ build_next (GstRTSPBuilder * builder, GstRTSPMessage * message,
-+           maxlen = sizeof (conn->session_id) - 1;
-+           /* the sessionid can have attributes marked with ;
-+            * Make sure we strip them */
-+-          for (i = 0; session_id[i] != '\0'; i++) {
-++          for (i = 0; i < maxlen && session_id[i] != '\0'; i++) {
-+             if (session_id[i] == ';') {
-+               maxlen = i;
-+               /* parse timeout */
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+Thanks,
+Ravi
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190430/389bce5b/attachment.html>
