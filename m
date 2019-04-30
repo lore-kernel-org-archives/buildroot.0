@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Apr 2019 13:19:21 +0200
-Subject: [Buildroot] [PATCH] package/go: bump version to 1.12.4
-In-Reply-To: <20190429214417.29701-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 29 Apr 2019 23:44:17 +0200")
-References: <20190429214417.29701-1-peter@korsgaard.com>
-Message-ID: <87a7g7oi4m.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Apr 2019 13:19:31 +0200
+Subject: [Buildroot] [PATCH] package/gst1-plugins-base: add upstream
+ SA-2019-0001 security fix
+In-Reply-To: <20190430060532.16221-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 30 Apr 2019 08:05:31 +0200")
+References: <20190430060532.16221-1-peter@korsgaard.com>
+Message-ID: <875zqvoi4c.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,18 +14,12 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes a number of issues discovered since 1.12.1.  From the release notes:
- > go1.12.2 (released 2019/04/05) includes fixes to the compiler, the go
- > command, the runtime, and the doc, net, net/http/httputil, and os packages.
- > See the Go 1.12.2 milestone on our issue tracker for details.
+ > Fixes the following security issue:
+ > CVE-2019-9928: GStreamer before 1.16.0 has a heap-based buffer overflow in
+ > the RTSP connection parser via a crafted response from a server
 
- > go1.12.3 (released 2019/04/08) was accidentally released without its
- > intended fix.  It is identical to go1.12.2, except for its version number.
- > The intended fix is in go1.12.4.
-
- > go1.12.4 (released 2019/04/11) fixes an issue where using the prebuilt
- > binary releases on older versions of GNU/Linux led to failures when linking
- > programs that used cgo.  Only Linux users who hit this issue need to update.
+ > For more details, see the advisory:
+ > https://gstreamer.freedesktop.org/security/sa-2019-0001.html
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
