@@ -1,65 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Apr 2019 13:15:30 +0200
-Subject: [Buildroot] [git commit] package/python-reentry: bump to version
- 1.3.1
-Message-ID: <20190430111513.7E9D283D91@busybox.osuosl.org>
+Date: Tue, 30 Apr 2019 13:15:41 +0200
+Subject: [Buildroot] [git commit] package/intel-mediasdk: fix license
+Message-ID: <20190430111513.85EE983D90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a6235744ece959ff57d8ce765c038e2d988835a
+commit: https://git.buildroot.net/buildroot/commit/?id=94c6cab917c79334136cb74409eab9bc2f240677
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also update dependency list.
+Fixes:
+ - http://autobuild.buildroot.org/results/5730991fded5ab3474cd0325b399f6f27972ca81
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-reentry/Config.in           | 2 +-
- package/python-reentry/python-reentry.hash | 5 +++--
- package/python-reentry/python-reentry.mk   | 4 ++--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ package/intel-mediasdk/intel-mediasdk.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-reentry/Config.in b/package/python-reentry/Config.in
-index 18518f2c3f..8ebbe395c8 100644
---- a/package/python-reentry/Config.in
-+++ b/package/python-reentry/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_REENTRY
- 	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_CLICK # runtime
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
--	select BR2_PACKAGE_PYTHON_PY # runtime
-+	select BR2_PACKAGE_PYTHON_PATHLIB2 if BR2_PACKAGE_PYTHON # runtime
- 	help
- 	  A plugin manager based on setuptools entry points mechanism.
+diff --git a/package/intel-mediasdk/intel-mediasdk.mk b/package/intel-mediasdk/intel-mediasdk.mk
+index 611529390b..c47e99117f 100644
+--- a/package/intel-mediasdk/intel-mediasdk.mk
++++ b/package/intel-mediasdk/intel-mediasdk.mk
+@@ -7,7 +7,7 @@
+ INTEL_MEDIASDK_VERSION = 18.4.0
+ INTEL_MEDIASDK_SITE = http://github.com/Intel-Media-SDK/MediaSDK/archive
+ INTEL_MEDIASDK_LICENSE = MIT
+-INTEL_MEDIASDK_LICENSE_FILES = COPYING
++INTEL_MEDIASDK_LICENSE_FILES = LICENSE
  
-diff --git a/package/python-reentry/python-reentry.hash b/package/python-reentry/python-reentry.hash
-index 7a3bbf4d99..089d8594f5 100644
---- a/package/python-reentry/python-reentry.hash
-+++ b/package/python-reentry/python-reentry.hash
-@@ -1,4 +1,5 @@
--# sha256 from https://pypi.org/pypi/reentry/json
--sha256	00df980d8c61713f5002d4d893ba6ea38e9a721cd04aef5a520b974e700ab550  reentry-1.2.0.tar.gz
-+# md5, sha256 from https://pypi.org/pypi/reentry/json
-+md5	819931cd0a766a7c226879e57ccea9c7  reentry-1.3.1.tar.gz
-+sha256	2fe18c1a6946f3e2a51e1d5aa78228a11e879fbb0da14da5bf1e6252e83d26b1  reentry-1.3.1.tar.gz
- # Locally computed sha256 checksums
- sha256	4ae7f3216208a7e2327236e95bcd2397b2495f1c2298c708986c893bea608509  LICENSE
-diff --git a/package/python-reentry/python-reentry.mk b/package/python-reentry/python-reentry.mk
-index d3f0e03ef0..428dbf2b1b 100644
---- a/package/python-reentry/python-reentry.mk
-+++ b/package/python-reentry/python-reentry.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_REENTRY_VERSION = 1.2.0
-+PYTHON_REENTRY_VERSION = 1.3.1
- PYTHON_REENTRY_SOURCE = reentry-$(PYTHON_REENTRY_VERSION).tar.gz
--PYTHON_REENTRY_SITE = https://files.pythonhosted.org/packages/e2/b4/46dfac6613302fea51454a01aebedae9440aff9d813aedbbc5f687552e3b
-+PYTHON_REENTRY_SITE = https://files.pythonhosted.org/packages/ee/3f/a90789e01c4d2b67a57e9bd758e60ecb9338d428604f66130b57684ba8cc
- PYTHON_REENTRY_SETUP_TYPE = setuptools
- PYTHON_REENTRY_LICENSE = MIT
- PYTHON_REENTRY_LICENSE_FILES = LICENSE
+ INTEL_MEDIASDK_INSTALL_STAGING = YES
+ INTEL_MEDIASDK_DEPENDENCIES = intel-mediadriver
