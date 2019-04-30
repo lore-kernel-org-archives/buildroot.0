@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Apr 2019 13:19:40 +0200
-Subject: [Buildroot] [PATCH] linux: bump Linux CIP to version
- v4.19.13-cip1
-In-Reply-To: <1556621349-18581-1-git-send-email-angelo@amarulasolutions.com>
- (Angelo Compagnucci's message of "Tue, 30 Apr 2019 12:49:09 +0200")
-References: <1556621349-18581-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <871s1joi43.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Apr 2019 13:19:48 +0200
+Subject: [Buildroot] [PATCH] package/strace: disable build for nds32
+In-Reply-To: <dbfab28381ec6dcae5fd92f7e6f2e0b56cf68d8e.1556621604.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 30 Apr 2019 13:53:24 +0300")
+References: <dbfab28381ec6dcae5fd92f7e6f2e0b56cf68d8e.1556621604.git.baruch@tkos.co.il>
+Message-ID: <87wojbn3jf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > This patch bumps CIP to the latest SLTS version v4.19.13-cip1.
- > Kernel based on 4.4 is not deprecated, it will continue to be supported
- > as planned by the CIP foundation.
- > If the 4.4 version is needed, it should be selected manually.
+ > Current version of strace does not support nds32.
+ > Fixes:
+ > http://autobuild.buildroot.net/results/05ec776548c9bede4878d4c3c43040c5b0aac182
+ > http://autobuild.buildroot.net/results/24023f2fa3dbf7c281726abdbfd4322badaffbfb
 
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > Cc: Nylon Chen <nylon7@andestech.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
