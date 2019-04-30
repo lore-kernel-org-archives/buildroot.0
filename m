@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 30 Apr 2019 09:19:11 -0400
-Subject: [Buildroot] [PATCH 03/11] package/python-markupsafe: bump to
- version 1.1.1
+Date: Tue, 30 Apr 2019 09:19:12 -0400
+Subject: [Buildroot] [PATCH 04/11] package/python-werkzeug: bump to version
+ 0.15.2
 In-Reply-To: <20190430131919.130128-1-aduskett@gmail.com>
 References: <20190430131919.130128-1-aduskett@gmail.com>
-Message-ID: <20190430131919.130128-4-aduskett@gmail.com>
+Message-ID: <20190430131919.130128-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,45 +13,44 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Also add hash for the license file.
+Also add hash for the license file, and change the license file to LICENSE.rst
+as LICENSE no longer exists.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/python-markupsafe/python-markupsafe.hash | 6 ++++--
- package/python-markupsafe/python-markupsafe.mk   | 6 +++---
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/python-werkzeug/python-werkzeug.hash | 5 +++--
+ package/python-werkzeug/python-werkzeug.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-markupsafe/python-markupsafe.hash b/package/python-markupsafe/python-markupsafe.hash
-index 4226a1ddf6..044d6d83a5 100644
---- a/package/python-markupsafe/python-markupsafe.hash
-+++ b/package/python-markupsafe/python-markupsafe.hash
-@@ -1,3 +1,5 @@
- # md5 from https://pypi.python.org/pypi/markupsafe/json, sha256 locally computed
--md5	2fcedc9284d50e577b5192e8e3578355  MarkupSafe-1.0.tar.gz
--sha256	a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665  MarkupSafe-1.0.tar.gz
-+md5	43fd756864fe42063068e092e220c57b  MarkupSafe-1.1.1.tar.gz
-+sha256	29872e92839765e546828bb7754a68c418d927cd064fd4708fab9fe9c8bb116b  MarkupSafe-1.1.1.tar.gz
-+sha256	489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea  LICENSE.rst
-+
-diff --git a/package/python-markupsafe/python-markupsafe.mk b/package/python-markupsafe/python-markupsafe.mk
-index 625a9b5bbf..b527706091 100644
---- a/package/python-markupsafe/python-markupsafe.mk
-+++ b/package/python-markupsafe/python-markupsafe.mk
-@@ -4,12 +4,12 @@
+diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
+index 4b2075071e..84f1e2d624 100644
+--- a/package/python-werkzeug/python-werkzeug.hash
++++ b/package/python-werkzeug/python-werkzeug.hash
+@@ -1,3 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/Werkzeug/json, sha256 locally computed
+-md5	e385b2c5a7193cff24c689b31e1124dc  Werkzeug-0.12.2.tar.gz
+-sha256	903a7b87b74635244548b30d30db4c8947fe64c5198f58899ddcd3a13c23bb26  Werkzeug-0.12.2.tar.gz
++md5	7c02923f7d898844079f12e28e32e3f8  Werkzeug-0.15.2.tar.gz
++sha256	0a73e8bb2ff2feecfc5d56e6f458f5b99290ef34f565ffb2665801ff7de6af7a  Werkzeug-0.15.2.tar.gz
++sha256	3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
+diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
+index 6d478f7c11..a2e3bcfbcf 100644
+--- a/package/python-werkzeug/python-werkzeug.mk
++++ b/package/python-werkzeug/python-werkzeug.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PYTHON_MARKUPSAFE_VERSION = 1.0
-+PYTHON_MARKUPSAFE_VERSION = 1.1.1
- PYTHON_MARKUPSAFE_SOURCE = MarkupSafe-$(PYTHON_MARKUPSAFE_VERSION).tar.gz
--PYTHON_MARKUPSAFE_SITE = https://pypi.python.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b
-+PYTHON_MARKUPSAFE_SITE = https://files.pythonhosted.org/packages/b9/2e/64db92e53b86efccfaea71321f597fa2e1b2bd3853d8ce658568f7a13094
- PYTHON_MARKUPSAFE_SETUP_TYPE = setuptools
- PYTHON_MARKUPSAFE_LICENSE = BSD-3-Clause
--PYTHON_MARKUPSAFE_LICENSE_FILES = LICENSE
-+PYTHON_MARKUPSAFE_LICENSE_FILES = LICENSE.rst
+-PYTHON_WERKZEUG_VERSION = 0.12.2
++PYTHON_WERKZEUG_VERSION = 0.15.2
+ PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
+-PYTHON_WERKZEUG_SITE = https://pypi.python.org/packages/56/41/c095a77eb2dd69bf278dd664a97d3416af04e9ba1a00b8c138f772741d31
++PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/f3/c8/fa7e1a0283267bee8efa10c665d8dca27e591face7e333c789c85671b3ab
+ PYTHON_WERKZEUG_SETUP_TYPE = setuptools
+ PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
+-PYTHON_WERKZEUG_LICENSE_FILES = LICENSE
++PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
  
  $(eval $(python-package))
- $(eval $(host-python-package))
 -- 
 2.20.1
