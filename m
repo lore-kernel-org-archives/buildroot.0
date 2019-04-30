@@ -1,25 +1,88 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue, 30 Apr 2019 14:21:50 +0200
-Subject: [Buildroot] [PATCH] package/popt: add hash for the license file
-Message-ID: <20190430122150.19007-1-joerg.krause@embedded.rocks>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 30 Apr 2019 15:28:04 +0300
+Subject: [Buildroot] [PATCH v3] package/wpebackend-fdo: package needs
+ wayland libegl
+In-Reply-To: <20190415091632.6437-1-giulio.benetti@micronovasrl.com>
+References: <0ab8f13f-225e-29cd-c1e5-7ca2c3897ed6@mind.be>
+ <20190415091632.6437-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190430152804.GB3486@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/popt/popt.hash | 1 +
- 1 file changed, 1 insertion(+)
+Hi,
 
-diff --git a/package/popt/popt.hash b/package/popt/popt.hash
-index 875bbae7a3..1422f4b920 100644
---- a/package/popt/popt.hash
-+++ b/package/popt/popt.hash
-@@ -1,2 +1,3 @@
- # Locally calculated:
- sha256	e728ed296fe9f069a0e005003c3d6b2dde3d9cad453422a10d6558616d304cc8	popt-1.16.tar.gz
-+sha256	518d4f2a05064cb9a8ec0ea02e86408af4feed6916f78ef42171465db8b383c5	COPYING
--- 
-2.21.0
+I finally got round to look at this; the changes make sense. I also did try
+a couple of builds with the patch applied (which went fine). Thanks!
+
+On Mon, 15 Apr 2019 11:16:32 +0200, Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+
+> Now wpebackend-fdo depends only on HAS_LIBEGL but if libegl is not of
+> wayland type, build breaks due to different EGLNativeWindowType types
+> depending on backends(fb,x11,wl).
+> 
+> Modify:
+> 'depend on BR2_PACKAGE_HAS_LIBEGL'
+> to:
+> 'depend on BR2_PACKAGE_HAS_LIBEGL_WAYLAND'
+> in Config.in to avoid building if there is not a wayland egl backend.
+> Modify also comment in Config.in when package is not selectable
+> mentioning the need to have an OpenEGL-capable Wayland backend.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/4f02b91f6ffffd194e09ed18c917b4f678b1a52d/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+
+> ---
+> Changes:
+> V1->V2:
+> * use BR2_PACKAGE_HAS_LIBEGL_WAYLAND only instead of using 
+>   BR2_PACKAGE_HAS_LIBEGL too
+> * add Wayland to comment
+> 
+> V2->V3:
+> * add `\` at the end of `depends on`
+> 
+>  package/wpebackend-fdo/Config.in | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
+> index 2f5f965403..161e4c9a7e 100644
+> --- a/package/wpebackend-fdo/Config.in
+> +++ b/package/wpebackend-fdo/Config.in
+> @@ -1,5 +1,5 @@
+> -comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable backend"
+> -	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+> +comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic library and an OpenEGL-capable Wayland backend"
+> +	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND || !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
+>  		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+>  
+>  config BR2_PACKAGE_WPEBACKEND_FDO
+> @@ -9,7 +9,7 @@ config BR2_PACKAGE_WPEBACKEND_FDO
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, libglib2
+>  	depends on BR2_USE_WCHAR # libglib2
+>  	depends on BR2_USE_MMU # libglib2
+> -	depends on BR2_PACKAGE_HAS_LIBEGL
+> +	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+>  	select BR2_PACKAGE_LIBGLIB2
+>  	select BR2_PACKAGE_LIBWPE
+>  	select BR2_PACKAGE_WAYLAND
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190430/b2994a62/attachment.asc>
