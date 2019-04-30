@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 30 Apr 2019 09:19:15 -0400
-Subject: [Buildroot] [PATCH 07/11] package/python-mutagen: bump to version
- 1.42.0
+Date: Tue, 30 Apr 2019 09:19:16 -0400
+Subject: [Buildroot] [PATCH 08/11] package/python-jinja2: bump to version
+ 2.10.1
 In-Reply-To: <20190430131919.130128-1-aduskett@gmail.com>
 References: <20190430131919.130128-1-aduskett@gmail.com>
-Message-ID: <20190430131919.130128-8-aduskett@gmail.com>
+Message-ID: <20190430131919.130128-9-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,40 +13,43 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Also add hash for the license file.
-
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/python-mutagen/python-mutagen.hash | 5 +++--
- package/python-mutagen/python-mutagen.mk   | 4 ++--
+ package/python-jinja2/python-jinja2.hash | 4 ++--
+ package/python-jinja2/python-jinja2.mk   | 5 +++--
  2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-mutagen/python-mutagen.hash b/package/python-mutagen/python-mutagen.hash
-index 337100677c..5ee8ed17c7 100644
---- a/package/python-mutagen/python-mutagen.hash
-+++ b/package/python-mutagen/python-mutagen.hash
-@@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/mutagen/json, sha256 locally computed
--md5 af52956a1b8976accf402f3104b95a84 mutagen-1.36.2.tar.gz
--sha256 86fe98e941ca305be8ee6bdc6bb0e4e9c473bf9fb69a838fe5bf2fc6124fbcc7 mutagen-1.36.2.tar.gz
-+md5 3729218f974c3a79ee9972ffa5ca5d12 mutagen-1.42.0.tar.gz
-+sha256 bb61e2456f59a9a4a259fbc08def6d01ba45a42da8eeaa97d00633b0ec5de71c mutagen-1.42.0.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/python-mutagen/python-mutagen.mk b/package/python-mutagen/python-mutagen.mk
-index 3b516fe128..5477d6f4c8 100644
---- a/package/python-mutagen/python-mutagen.mk
-+++ b/package/python-mutagen/python-mutagen.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
+index fe34f73965..21a9c8394f 100644
+--- a/package/python-jinja2/python-jinja2.hash
++++ b/package/python-jinja2/python-jinja2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jinja2/json
+-md5 61ef1117f945486472850819b8d1eb3d Jinja2-2.10.tar.gz
+-sha256 f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4 Jinja2-2.10.tar.gz
++md5 0ae535be40fd215a8114a090c8b68e5a Jinja2-2.10.1.tar.gz
++sha256 065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013 Jinja2-2.10.1.tar.gz
+ # Locally computed sha256
+ sha256 26fcd436fdc8a39d44896ac03e6f1dfd25e38499c48f20d8bc1dd3bf0aaa8a5b LICENSE
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 9ff36972d6..339ddd7e18 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -4,12 +4,13 @@
  #
  ################################################################################
  
--PYTHON_MUTAGEN_VERSION = 1.36.2
-+PYTHON_MUTAGEN_VERSION = 1.42.0
- PYTHON_MUTAGEN_SOURCE = mutagen-$(PYTHON_MUTAGEN_VERSION).tar.gz
--PYTHON_MUTAGEN_SITE = https://pypi.python.org/packages/e7/8a/61496657e30c2cbeb9b3aa28848e0adbcba7cab0ff0bd8e6206647670088
-+PYTHON_MUTAGEN_SITE = https://files.pythonhosted.org/packages/30/4c/5ad1a6e1ccbcfaf6462db727989c302d9d721beedd9b09c11e6f0c7065b0
- PYTHON_MUTAGEN_LICENSE = GPL-2.0
- PYTHON_MUTAGEN_LICENSE_FILES = COPYING
- PYTHON_MUTAGEN_SETUP_TYPE = distutils
+-PYTHON_JINJA2_VERSION = 2.10
++PYTHON_JINJA2_VERSION = 2.10.1
+ PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
+-PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/56/e6/332789f295cf22308386cf5bbd1f4e00ed11484299c5d7383378cf48ba47
++PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/93/ea/d884a06f8c7f9b7afbc8138b762e80479fb17aedbbe2b06515a12de9378d
+ PYTHON_JINJA2_SETUP_TYPE = setuptools
+ PYTHON_JINJA2_LICENSE = BSD-3-Clause
+ PYTHON_JINJA2_LICENSE_FILES = LICENSE
++
+ # In host build, setup.py tries to download markupsafe if it is not installed
+ HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
+ 
 -- 
 2.20.1
