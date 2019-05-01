@@ -1,60 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  1 May 2019 11:32:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/liburiparser: fix build without C++
-Message-ID: <20190501093223.28311-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 1 May 2019 11:35:42 +0200
+Subject: [Buildroot] [PATCH 6/7] support/scripts/qemu-boot: gitlab tests
+ for Qemu
+In-Reply-To: <20190430194033.GE27252@scaer>
+References: <1556555546-9246-1-git-send-email-jugurtha.belkalem@smile.fr>
+ <1556555546-9246-7-git-send-email-jugurtha.belkalem@smile.fr>
+ <df02769a-fa12-c908-1222-bf3817a83473@mind.be>
+ <CAMo8BfK_oNzVTDawQvJakCozYsF6ThxCNzDx0ez75J9wN8cHxA@mail.gmail.com>
+ <CAHpTZwnYegw7DTpoke0Yqf-DghTnAoL8+zN2bhQjVCasfHuoUA@mail.gmail.com>
+ <4368e67d-3b86-9566-2fac-28c247dce4b6@mind.be> <20190430194033.GE27252@scaer>
+Message-ID: <7b923362-46ee-43b2-91c2-d881110e956d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/1e191676f28905a81de6282e07978aa5d4f02039
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...1-CMakeLists.txt-fix-build-without-C.patch | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
 
-diff --git a/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch b/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
-new file mode 100644
-index 0000000000..9f5e88989a
---- /dev/null
-+++ b/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
-@@ -0,0 +1,33 @@
-+From 0e385a6b747e967b6724ef3ded944c7da3b16f79 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 1 May 2019 11:18:29 +0200
-+Subject: [PATCH] CMakeLists.txt: fix build without C++
-+
-+Specify that uriparser is a C project (C++ is needed only for the test
-+runner) otherwise build will fail if no C++ compiler is found by cmake
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/1e191676f28905a81de6282e07978aa5d4f02039
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/uriparser/uriparser/pull/69]
-+---
-+ CMakeLists.txt | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index ceb79e0..40d3b20 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -39,6 +39,8 @@ cmake_minimum_required(VERSION 3.3)
-+ project(uriparser
-+     VERSION
-+         0.9.3
-++    LANGUAGES
-++        C
-+ )
-+ 
-+ # See https://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+On 30/04/2019 21:40, Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2019-04-30 13:20 +0200, Arnout Vandecappelle spake thusly:
+>> On 30/04/2019 10:54, Jugurtha BELKALEM wrote:
+>>> Thank you for you comments Arnout, I have corrected the indentation, timeout
+>>> and? function declaration issues.
+>>>
+>>> However; I think that duplicating the content of readme.txt of each qemu
+>>> architecture would be difficult to maintain (even if it is more convenient to
+>>> use), this is why a project like toolchain builder :
+>>> https://github.com/bootlin/toolchains-builder/blob/master/build.sh is reading
+>>> directly from readme.txt.
+>>  The idea would not be to duplicate it, but to move it. I.e., readme.txt just
+>> says "launch with board/qemu/x86_64/launch.sh", and the actual command is in
+>> that shell script.
+>>
+>>  But maybe we should see what other Buildroot maintainers have to say about it.
+>> Thomas, Peter, Yann, Romain?
+> Ideally, I'd go without the readme.txt altogether, or if we want to keep
+> "backward compatibility", we'd make it a symlink to launch.sh.
+
+ Sounds good to me. Most of those don't contain any information at all.
+
+ Regards,
+ Arnout
