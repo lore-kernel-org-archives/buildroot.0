@@ -1,66 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 May 2019 22:11:45 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x]
- package/gst1-plugins-base: add upstream SA-2019-0001 security fix
-Message-ID: <20190501201631.C2004839E5@busybox.osuosl.org>
+Date: Wed, 1 May 2019 22:10:31 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/go: bump version
+ to 1.11.9
+Message-ID: <20190501201631.BC0AB839E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c38c9138e29850e1d01e90e0dea489a6fdd4b98
+commit: https://git.buildroot.net/buildroot/commit/?id=acd3da78d53dedee902838b2f44757bf3ffaa3e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security issue:
+Fixes a number of issues discovered since 1.11.6.  From the release notes:
 
-CVE-2019-9928: GStreamer before 1.16.0 has a heap-based buffer overflow in
-the RTSP connection parser via a crafted response from a server
+go1.11.7 (released 2019/04/05) includes fixes to the runtime and the net
+packages.  See the Go 1.11.7 milestone on our issue tracker for details.
 
-For more details, see the advisory:
-https://gstreamer.freedesktop.org/security/sa-2019-0001.html
+go1.11.8 (released 2019/04/08) was accidentally released without its
+intended fix.  It is identical to go1.11.7, except for its version number.
+The intended fix is in go1.11.9.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 99890750e0296ca29b61a315f78766261f6aee0e)
+go1.11.9 (released 2019/04/11) fixes an issue where using the prebuilt
+binary releases on older versions of GNU/Linux led to failures when linking
+programs that used cgo.  Only Linux users who hit this issue need to update.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...ection-Security-loophole-making-heap-over.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-base/0001-gstrtspconnection-Security-loophole-making-heap-over.patch b/package/gstreamer1/gst1-plugins-base/0001-gstrtspconnection-Security-loophole-making-heap-over.patch
-new file mode 100644
-index 0000000000..de88f67a39
---- /dev/null
-+++ b/package/gstreamer1/gst1-plugins-base/0001-gstrtspconnection-Security-loophole-making-heap-over.patch
-@@ -0,0 +1,31 @@
-+From f672277509705c4034bc92a141eefee4524d15aa Mon Sep 17 00:00:00 2001
-+From: Tobias Ronge <tobiasr@axis.com>
-+Date: Thu, 14 Mar 2019 10:12:27 +0100
-+Subject: [PATCH] gstrtspconnection: Security loophole making heap overflow
-+
-+The former code allowed an attacker to create a heap overflow by
-+sending a longer than allowed session id in a response and including a
-+semicolon to change the maximum length. With this change, the parser
-+will never go beyond 512 bytes.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ gst-libs/gst/rtsp/gstrtspconnection.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gst-libs/gst/rtsp/gstrtspconnection.c b/gst-libs/gst/rtsp/gstrtspconnection.c
-+index a6755bedd..c0429064a 100644
-+--- a/gst-libs/gst/rtsp/gstrtspconnection.c
-++++ b/gst-libs/gst/rtsp/gstrtspconnection.c
-+@@ -2461,7 +2461,7 @@ build_next (GstRTSPBuilder * builder, GstRTSPMessage * message,
-+           maxlen = sizeof (conn->session_id) - 1;
-+           /* the sessionid can have attributes marked with ;
-+            * Make sure we strip them */
-+-          for (i = 0; session_id[i] != '\0'; i++) {
-++          for (i = 0; i < maxlen && session_id[i] != '\0'; i++) {
-+             if (session_id[i] == ';') {
-+               maxlen = i;
-+               /* parse timeout */
-+-- 
-+2.11.0
-+
+diff --git a/package/go/go.hash b/package/go/go.hash
+index fad5f29a71..77aa273aa9 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	a96da1425dcbec094736033a8a416316547f8100ab4b72c31d4824d761d3e133  go1.11.6.src.tar.gz
++sha256	ee80684b352f8d6b49d804d4e615f015ae92da41c4096cfee89ed4783b2498e3  go1.11.9.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index b91040a103..6b8b0de6b1 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.11.6
++GO_VERSION = 1.11.9
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
