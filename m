@@ -1,42 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 May 2019 21:34:29 +0200
-Subject: [Buildroot] [git commit] package/runc: bump to version 1.0.0-rc8
-Message-ID: <20190502144258.E85E08805D@busybox.osuosl.org>
+Date: Wed, 1 May 2019 21:35:00 +0200
+Subject: [Buildroot] [git commit] package/docker-cli: bump to version 18.09.5
+Message-ID: <20190502144259.0636F812B3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=045df6a4804087bf34d776839f42730e16d3f590
+commit: https://git.buildroot.net/buildroot/commit/?id=ee6973e48b607f1fd3760bc83ca2f4e57cb3bfbd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/runc/runc.hash | 2 +-
- package/runc/runc.mk   | 2 +-
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/runc/runc.hash b/package/runc/runc.hash
-index 24c30f5726..969bb0bfb3 100644
---- a/package/runc/runc.hash
-+++ b/package/runc/runc.hash
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 41686f0de8..987fbba3e9 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256	e8388b812d93a8a131a2a2fdd851847295c8e341721002940dadd2999fb81b51  runc-v1.0.0-rc7.tar.gz
-+sha256	efe4ff9bbe49b19074346d65c914d809c0a3e90d062ea9619fe240f931f0b700  runc-v1.0.0-rc8.tar.gz
- sha256  552a739c3b25792263f731542238b92f6f8d07e9a488eae27e6c4690038a8243  LICENSE
-diff --git a/package/runc/runc.mk b/package/runc/runc.mk
-index 56463b468e..55097e5a17 100644
---- a/package/runc/runc.mk
-+++ b/package/runc/runc.mk
+ # Locally calculated
+-sha256	f9be44f395617f3f75faac69ad90f93c94ee4050c193bfa05eddb520a27c5d44  docker-cli-v18.09.4.tar.gz
++sha256	dfed7e3b14643101e6d3746e722cbe8294dcf078c5405f3fb78bc38c7c17f0b1  docker-cli-v18.09.5.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 65701d1530..3ee9f5ca72 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RUNC_VERSION = v1.0.0-rc7
-+RUNC_VERSION = v1.0.0-rc8
- RUNC_SITE = $(call github,opencontainers,runc,$(RUNC_VERSION))
- RUNC_LICENSE = Apache-2.0
- RUNC_LICENSE_FILES = LICENSE
+-DOCKER_CLI_VERSION = v18.09.4
++DOCKER_CLI_VERSION = v18.09.5
+ DOCKER_CLI_SITE = $(call github,docker,cli,$(DOCKER_CLI_VERSION))
+ DOCKER_CLI_WORKSPACE = gopath
+ 
