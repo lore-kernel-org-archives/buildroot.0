@@ -1,50 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 May 2019 09:25:47 +0200
-Subject: [Buildroot] [git commit] package/python-mutagen: bump to version
- 1.42.0
-Message-ID: <20190501072308.096AE83D89@busybox.osuosl.org>
+Date: Wed, 1 May 2019 09:27:35 +0200
+Subject: [Buildroot] [git commit] package/python-flask-sqlalchemy: bump to
+ version 2.3.2
+Message-ID: <20190501072308.2618C83D89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=340c6b8006b3d613955db0bf6d202572d68acdde
+commit: https://git.buildroot.net/buildroot/commit/?id=7ae62516d32615072728b9be014722c203b5574d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash for the license file.
+Also update hash for license file due to additional information.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-mutagen/python-mutagen.hash | 5 +++--
- package/python-mutagen/python-mutagen.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash | 6 +++---
+ package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-mutagen/python-mutagen.hash b/package/python-mutagen/python-mutagen.hash
-index 337100677c..5ee8ed17c7 100644
---- a/package/python-mutagen/python-mutagen.hash
-+++ b/package/python-mutagen/python-mutagen.hash
-@@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/mutagen/json, sha256 locally computed
--md5 af52956a1b8976accf402f3104b95a84 mutagen-1.36.2.tar.gz
--sha256 86fe98e941ca305be8ee6bdc6bb0e4e9c473bf9fb69a838fe5bf2fc6124fbcc7 mutagen-1.36.2.tar.gz
-+md5 3729218f974c3a79ee9972ffa5ca5d12 mutagen-1.42.0.tar.gz
-+sha256 bb61e2456f59a9a4a259fbc08def6d01ba45a42da8eeaa97d00633b0ec5de71c mutagen-1.42.0.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/python-mutagen/python-mutagen.mk b/package/python-mutagen/python-mutagen.mk
-index 3b516fe128..5477d6f4c8 100644
---- a/package/python-mutagen/python-mutagen.mk
-+++ b/package/python-mutagen/python-mutagen.mk
+diff --git a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
+index 9e15b5d8f0..ad7f0e1a45 100644
+--- a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
++++ b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.hash
+@@ -1,4 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/Flask-SQLAlchemy/json, sha256 locally computed
+-md5    373ce61dfd03b593ad2eaba68c9fee35  Flask-SQLAlchemy-2.3.2.tar.gz
+-sha256 5971b9852b5888655f11db634e87725a9031e170f37c0ce7851cf83497f56e53  Flask-SQLAlchemy-2.3.2.tar.gz
+-sha256 de2011f25501c45f2b78bfa4f851ce021cfbab0f1e7ab763233688e0b969821f  PKG-INFO
++md5    01e943d6a8b492c2bc6031c024cd10be  Flask-SQLAlchemy-2.4.0.tar.gz
++sha256 0c9609b0d72871c540a7945ea559c8fdf5455192d2db67219509aed680a3d45a  Flask-SQLAlchemy-2.4.0.tar.gz
++sha256 5de187ec76e2d9dfc829fccad94ac0e5e810ddeccf8c8b50784918e4f12f14c4  PKG-INFO
+diff --git a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
+index 37fe603f1e..570fced04a 100644
+--- a/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
++++ b/package/python-flask-sqlalchemy/python-flask-sqlalchemy.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MUTAGEN_VERSION = 1.36.2
-+PYTHON_MUTAGEN_VERSION = 1.42.0
- PYTHON_MUTAGEN_SOURCE = mutagen-$(PYTHON_MUTAGEN_VERSION).tar.gz
--PYTHON_MUTAGEN_SITE = https://pypi.python.org/packages/e7/8a/61496657e30c2cbeb9b3aa28848e0adbcba7cab0ff0bd8e6206647670088
-+PYTHON_MUTAGEN_SITE = https://files.pythonhosted.org/packages/30/4c/5ad1a6e1ccbcfaf6462db727989c302d9d721beedd9b09c11e6f0c7065b0
- PYTHON_MUTAGEN_LICENSE = GPL-2.0
- PYTHON_MUTAGEN_LICENSE_FILES = COPYING
- PYTHON_MUTAGEN_SETUP_TYPE = distutils
+-PYTHON_FLASK_SQLALCHEMY_VERSION = 2.3.2
++PYTHON_FLASK_SQLALCHEMY_VERSION = 2.4.0
+ PYTHON_FLASK_SQLALCHEMY_SOURCE = Flask-SQLAlchemy-$(PYTHON_FLASK_SQLALCHEMY_VERSION).tar.gz
+-PYTHON_FLASK_SQLALCHEMY_SITE = https://pypi.python.org/packages/3a/66/f5ace276517c075f102457dd2f7d8645b033758f9c6effb4e0970a90fec1
++PYTHON_FLASK_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/9b/62/80a56f9d223f0b89cdcf7d592455375f8c9d73866f337fa85f39f45fe0c5
+ PYTHON_FLASK_SQLALCHEMY_SETUP_TYPE = setuptools
+ PYTHON_FLASK_SQLALCHEMY_LICENSE = BSD-3c
+ PYTHON_FLASK_SQLALCHEMY_LICENSE_FILES = PKG-INFO
