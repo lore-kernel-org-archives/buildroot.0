@@ -1,65 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 May 2019 09:20:25 +0200
-Subject: [Buildroot] [git commit] package/python{3}-setuptools: bump to
- version 41.0.1
-Message-ID: <20190501072307.D629283D89@busybox.osuosl.org>
+Date: Wed, 1 May 2019 09:24:26 +0200
+Subject: [Buildroot] [git commit] package/python-itsdangerous: bump to
+ version 1.1.0
+Message-ID: <20190501072307.F090D83D89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6559256f66e1b06c4b7c2ab07fb879aa1fe7b7e
+commit: https://git.buildroot.net/buildroot/commit/?id=1cb60a21f49c0e77e89a5b473c92a5192e9bc84d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also add a hash for the license file, and change the license file to LICENSE.rst
+as LICENSE no longer exists.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-setuptools/python-setuptools.hash | 4 ++--
- package/python-setuptools/python-setuptools.mk   | 4 ++--
- package/python3-setuptools/python3-setuptools.mk | 4 ++--
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-itsdangerous/python-itsdangerous.hash | 6 ++++--
+ package/python-itsdangerous/python-itsdangerous.mk   | 7 ++++---
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-index 53d77f57d2..1baccf309d 100644
---- a/package/python-setuptools/python-setuptools.hash
-+++ b/package/python-setuptools/python-setuptools.hash
-@@ -1,4 +1,4 @@
- # From https://pypi.org/pypi/setuptools/json
--md5  1fbcbe45c7fb1d21041e676ba68d2dec  setuptools-40.6.3.zip
--sha256  3b474dad69c49f0d2d86696b68105f3a6f195f7ab655af12ef9a9c326d2b08f8  setuptools-40.6.3.zip
-+md5  6404ca798bb9a9073aff3b91b2df35c8  setuptools-41.0.1.zip
-+sha256  a222d126f5471598053c9a77f4b5d4f26eaa1f150ad6e01dcf1a42e185d05613  setuptools-41.0.1.zip
- sha256  c32a3ac395af6321efd28be73d06a00f0db6ab887d1c21d4fec46128d2056d5a  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index 015347d49b..8a0717a61f 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
-@@ -6,9 +6,9 @@
+diff --git a/package/python-itsdangerous/python-itsdangerous.hash b/package/python-itsdangerous/python-itsdangerous.hash
+index a927b8b7ab..0904a91183 100644
+--- a/package/python-itsdangerous/python-itsdangerous.hash
++++ b/package/python-itsdangerous/python-itsdangerous.hash
+@@ -1,2 +1,4 @@
+-# Locally calculated
+-sha256 b035b2da1d493b00a5ee7a5b750f96929de87b610643939fbe382902774626fc  python-itsdangerous-0.24.tar.gz
++# md5, sha256 from https://pypi.org/pypi/itsdangerous/json
++md5	9b7f5afa7f1e3acfb7786eeca3d99307  itsdangerous-1.1.0.tar.gz
++sha256	321b033d07f2a4136d3ec762eac9f16a10ccd60f53c0c91af90217ace7ba1f19  itsdangerous-1.1.0.tar.gz
++sha256	feb28bfa348d816b0e7dbaeddf18499ee7e8007c67813db8d6ab37c65e046cd4  LICENSE.rst
+diff --git a/package/python-itsdangerous/python-itsdangerous.mk b/package/python-itsdangerous/python-itsdangerous.mk
+index 45adbb0655..9429233703 100644
+--- a/package/python-itsdangerous/python-itsdangerous.mk
++++ b/package/python-itsdangerous/python-itsdangerous.mk
+@@ -4,10 +4,11 @@
+ #
+ ################################################################################
  
- # Please keep in sync with
- # package/python3-setuptools/python3-setuptools.mk
--PYTHON_SETUPTOOLS_VERSION = 40.6.3
-+PYTHON_SETUPTOOLS_VERSION = 41.0.1
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).zip
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/1d/64/a18a487b4391a05b9c7f938b94a16d80305bf0369c6b0b9509e86165e1d3
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SETUP_TYPE = setuptools
-diff --git a/package/python3-setuptools/python3-setuptools.mk b/package/python3-setuptools/python3-setuptools.mk
-index b6de5d4b25..55be0a3141 100644
---- a/package/python3-setuptools/python3-setuptools.mk
-+++ b/package/python3-setuptools/python3-setuptools.mk
-@@ -6,9 +6,9 @@
+-PYTHON_ITSDANGEROUS_VERSION = 0.24
+-PYTHON_ITSDANGEROUS_SITE = $(call github,mitsuhiko,itsdangerous,$(PYTHON_ITSDANGEROUS_VERSION))
++PYTHON_ITSDANGEROUS_VERSION = 1.1.0
++PYTHON_ITSDANGEROUS_SOURCE = itsdangerous-$(PYTHON_ITSDANGEROUS_VERSION).tar.gz
++PYTHON_ITSDANGEROUS_SITE = https://files.pythonhosted.org/packages/68/1a/f27de07a8a304ad5fa817bbe383d1238ac4396da447fa11ed937039fa04b
+ PYTHON_ITSDANGEROUS_SETUP_TYPE = setuptools
+ PYTHON_ITSDANGEROUS_LICENSE = BSD-3-Clause
+-PYTHON_ITSDANGEROUS_LICENSE_FILES = LICENSE
++PYTHON_ITSDANGEROUS_LICENSE_FILES = LICENSE.rst
  
- # Please keep in sync with
- # package/python-setuptools/python-setuptools.mk
--PYTHON3_SETUPTOOLS_VERSION = 40.6.3
-+PYTHON3_SETUPTOOLS_VERSION = 41.0.1
- PYTHON3_SETUPTOOLS_SOURCE = setuptools-$(PYTHON3_SETUPTOOLS_VERSION).zip
--PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/37/1b/b25507861991beeade31473868463dad0e58b1978c209de27384ae541b0b
-+PYTHON3_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/1d/64/a18a487b4391a05b9c7f938b94a16d80305bf0369c6b0b9509e86165e1d3
- PYTHON3_SETUPTOOLS_LICENSE = MIT
- PYTHON3_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON3_SETUPTOOLS_SETUP_TYPE = setuptools
+ $(eval $(python-package))
