@@ -1,10 +1,10 @@
 From: Christian Stewart <christian@paral.in>
-Date: Wed,  1 May 2019 11:48:59 -0700
-Subject: [Buildroot] [PATCH v1 2/4] package/docker-containerd: bump to
- version 1.2.6
+Date: Wed,  1 May 2019 11:49:00 -0700
+Subject: [Buildroot] [PATCH v1 3/4] package/docker-cli: bump to version
+ 18.09.5
 In-Reply-To: <20190501184901.29441-1-christian@paral.in>
 References: <20190501184901.29441-1-christian@paral.in>
-Message-ID: <20190501184901.29441-2-christian@paral.in>
+Message-ID: <20190501184901.29441-3-christian@paral.in>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,31 +13,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Christian Stewart <christian@paral.in>
 ---
- package/docker-containerd/docker-containerd.hash | 2 +-
- package/docker-containerd/docker-containerd.mk   | 2 +-
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-index fc7b6fcb49..525191c651 100644
---- a/package/docker-containerd/docker-containerd.hash
-+++ b/package/docker-containerd/docker-containerd.hash
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 41686f0de8..987fbba3e9 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
 @@ -1,3 +1,3 @@
- # Computed locally
--sha256	b92819bde71de947329814a3c649b8adb106cc03be16aae217b94297f4b843a1  docker-containerd-v1.2.5.tar.gz
-+sha256	f2d578b743fb9faa5b3477b7cf4b33d00501087043a53b27754f14bbe741f891  docker-containerd-v1.2.6.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4	LICENSE
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 586fd1fa08..c67b36e7dc 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
+ # Locally calculated
+-sha256	f9be44f395617f3f75faac69ad90f93c94ee4050c193bfa05eddb520a27c5d44  docker-cli-v18.09.4.tar.gz
++sha256	dfed7e3b14643101e6d3746e722cbe8294dcf078c5405f3fb78bc38c7c17f0b1  docker-cli-v18.09.5.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 65701d1530..3ee9f5ca72 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_CONTAINERD_VERSION = v1.2.5
-+DOCKER_CONTAINERD_VERSION = v1.2.6
- DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
+-DOCKER_CLI_VERSION = v18.09.4
++DOCKER_CLI_VERSION = v18.09.5
+ DOCKER_CLI_SITE = $(call github,docker,cli,$(DOCKER_CLI_VERSION))
+ DOCKER_CLI_WORKSPACE = gopath
+ 
 -- 
 2.21.0
