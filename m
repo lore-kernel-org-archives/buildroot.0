@@ -1,61 +1,25 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 1 May 2019 14:46:30 +0200
-Subject: [Buildroot] [git commit] package/uboot-tools: fix build with
- host-openssl
-Message-ID: <20190501124244.1CA4D83C3C@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 01 May 2019 14:48:00 +0200
+Subject: [Buildroot] [PATCH] package/mono: bump to version 5.20.1.27
+In-Reply-To: <1556314527-21634-1-git-send-email-angelo@amarulasolutions.com>
+ (Angelo Compagnucci's message of "Fri, 26 Apr 2019 23:35:27 +0200")
+References: <1556314527-21634-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <87sgtygx33.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d76cf129f79122bd3f97fbbc0c8e2820e1e6def
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 
-As suggested by Arnout during review of previous iteration, add a patch
-to uboot-tools so it uses CFLAGS and not HOSTCFLAGS when building cross
-tools
+ > This patch bumps mono to version 5.20.1.27 and it's monolite dependency
+ > to version B886E13F-6276-4BE5-85F8-C6BF5EDBD200.
+ > It also adapt the monolite path to updated mono version.
 
-Fixes:
- - http://autobuild.buildroot.org/results/915b509e814bda16be54a24276b9c740c51e5770
+ > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...ile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+Committed, thanks.
 
-diff --git a/package/uboot-tools/0005-tools-Makefile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch b/package/uboot-tools/0005-tools-Makefile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch
-new file mode 100644
-index 0000000000..5c54f4cea6
---- /dev/null
-+++ b/package/uboot-tools/0005-tools-Makefile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch
-@@ -0,0 +1,28 @@
-+From 9f2dce5887bb52e8c7f9ef40a6733d70af72ff1c Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 30 Apr 2019 18:45:17 +0200
-+Subject: [PATCH] tools/Makefile: fix HOSTCFLAGS with CROSS_BUILD_TOOLS
-+
-+When CROSS_BUILD_TOOLS is set, set HOSTCFLAGS to CFLAGS otherwise CC
-+will be used with HOSTCFLAGS which seems wrong
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ tools/Makefile | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/tools/Makefile b/tools/Makefile
-+index 12a3027e23..eadeba417d 100644
-+--- a/tools/Makefile
-++++ b/tools/Makefile
-+@@ -272,6 +272,7 @@ subdir- += env
-+ 
-+ ifneq ($(CROSS_BUILD_TOOLS),)
-+ override HOSTCC = $(CC)
-++override HOSTCFLAGS = $(CFLAGS)
-+ 
-+ quiet_cmd_crosstools_strip = STRIP   $^
-+       cmd_crosstools_strip = $(STRIP) $^; touch $@
-+-- 
-+2.20.1
-+
+-- 
+Bye, Peter Korsgaard
