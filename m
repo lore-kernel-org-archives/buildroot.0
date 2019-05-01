@@ -1,23 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 01 May 2019 21:41:21 +0200
-Subject: [Buildroot] [PATCH v1 4/4] package/docker-engine: bump to
- version 18.09.5
-In-Reply-To: <20190501184901.29441-4-christian@paral.in> (Christian Stewart's
- message of "Wed, 1 May 2019 11:49:01 -0700")
-References: <20190501184901.29441-1-christian@paral.in>
- <20190501184901.29441-4-christian@paral.in>
-Message-ID: <87y33qezdq.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 1 May 2019 21:47:37 +0200
+Subject: [Buildroot] [PATCH] board/qemu/ppc*: disable Werror while
+ building ppc kernel with gcc >= 9.1
+In-Reply-To: <20190501213825.4cac162d@windsurf>
+References: <20190501125236.16786-1-romain.naour@gmail.com>
+ <27b861d5-8ead-229b-61ac-95806515d90a@mind.be>
+ <4a872624-ceb5-23cb-9005-3284ffbce131@gmail.com>
+ <20190501213825.4cac162d@windsurf>
+Message-ID: <ff6a6616-c0ee-d8f6-1d67-c5111bc13dc3@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
+Hi Thomas,
 
- > Signed-off-by: Christian Stewart <christian@paral.in>
+Le 01/05/2019 ? 21:38, Thomas Petazzoni a ?crit?:
+> Hello Romain,
+> 
+> On Wed, 1 May 2019 15:57:47 +0200
+> Romain Naour <romain.naour@gmail.com> wrote:
+> 
+>>>  Maybe it would be better to have a single fragment file
+>>> board/linux-ppc-disable-werror.fragment
+>>> and include that in all the relevant defconfigs, rather than updating each linux
+>>> config?  
+>>
+>> I'm not sure how to handle such fragments in Buildroot.
+>> Storing fragments in board directory seems not great.
+> 
+> Why ? We already have plenty of these:
+> 
+> $ find board/ | grep frag
+> board/beaglebone/linux-4.1-sgx.fragment
+> board/technologic/ts4800/linux.fragment
+> board/engicam/icorem6/linux_qt5.fragment
+> board/orangepi/orangepi-pc/linux.fragment
+> board/amarula/vyasa/linux_gmac.fragment
+> board/udoo/mx6qdl/linux.fragment
+> board/lego/ev3/linux.fragment
+> board/lego/ev3/busybox.fragment
+> board/stmicroelectronics/stm32mp157-dk/uboot-fragment.config
+> board/freescale/imx6-sabresd/linux_qt5.fragment
+> board/freescale/warpboard/linux.fragment
+> board/solidrun/macchiatobin/uboot-fragment.config
+> board/solidrun/clearfog/linux.fragment
+> board/synopsys/hsdk/linux.fragment
+> board/qemu/nios2-10m50/linux.fragment
+> board/qemu/ppc64-e5500/linux.fragment
+> board/lemaker/bananapro/linux-wifi.fragment
+> board/chromebook/snow/linux-4.15.fragment
+> board/olimex/imx233_olinuxino/linux-wifi.fragment
 
-Committed, thanks.
+I mean storing the fragment in board/linux-ppc-disable-werror.fragment that is
+shared between several boards.
 
--- 
-Bye, Peter Korsgaard
+Each existing linux.fragment are only used by one board.
+
+Best regards,
+Romain
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
