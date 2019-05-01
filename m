@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 1 May 2019 15:17:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: needs gcc
- >= 4.9
-In-Reply-To: <20190501094105.29016-1-fontaine.fabrice@gmail.com>
-References: <20190501094105.29016-1-fontaine.fabrice@gmail.com>
-Message-ID: <e451b24f-bdcd-2609-0401-162fab9c00ac@mind.be>
+Date: Wed, 1 May 2019 15:32:15 +0200
+Subject: [Buildroot] [PATCH] board/qemu/ppc*: disable Werror while
+ building ppc kernel with gcc >= 9.1
+In-Reply-To: <20190501125236.16786-1-romain.naour@gmail.com>
+References: <20190501125236.16786-1-romain.naour@gmail.com>
+Message-ID: <27b861d5-8ead-229b-61ac-95806515d90a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,47 +13,14 @@ To: buildroot@busybox.net
 
 
 
-On 01/05/2019 11:41, Fabrice Fontaine wrote:
-> Needs C++11 since bump to version 1.2.0
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/73481ae2e5736c8042ec7911f1378623bd3de74d
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+On 01/05/2019 14:52, Romain Naour wrote:
+> Add CONFIG_PPC_DISABLE_WERROR only for qemu ppc{64} defconfig
+> since they are used for CI with toolchain-builder's gitlab [3].
 
- Applied to master, thanks.
+ Maybe it would be better to have a single fragment file
+board/linux-ppc-disable-werror.fragment
+and include that in all the relevant defconfigs, rather than updating each linux
+config?
 
  Regards,
  Arnout
-
-> ---
->  package/libtorrent-rasterbar/Config.in | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/libtorrent-rasterbar/Config.in b/package/libtorrent-rasterbar/Config.in
-> index 8c259e113e..b2508b8b70 100644
-> --- a/package/libtorrent-rasterbar/Config.in
-> +++ b/package/libtorrent-rasterbar/Config.in
-> @@ -1,8 +1,8 @@
-> -comment "libtorrent-rasterbar needs a toolchain w/ C++, threads, wchar, gcc >= 4.8"
-> +comment "libtorrent-rasterbar needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
->  	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
-> -		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> +		!BR2_HOST_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
->  
->  comment "libtorrent-rasterbar needs exception_ptr"
->  	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
-> @@ -11,8 +11,8 @@ comment "libtorrent-rasterbar needs exception_ptr"
->  config BR2_PACKAGE_LIBTORRENT_RASTERBAR
->  	bool "libtorrent-rasterbar"
->  	depends on BR2_INSTALL_LIBSTDCPP # boost
-> -	depends on BR2_HOST_GCC_AT_LEAST_4_8
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-> +	depends on BR2_HOST_GCC_AT_LEAST_4_9 # C++11
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
->  	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
->  	depends on BR2_USE_WCHAR # boost
-> 
