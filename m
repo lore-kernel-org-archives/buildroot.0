@@ -1,51 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 May 2019 09:27:09 +0200
-Subject: [Buildroot] [git commit] package/python-sqlalchemy: bump to version
- .3.3
-Message-ID: <20190501072308.1F41983D89@busybox.osuosl.org>
+Date: Wed, 1 May 2019 09:26:09 +0200
+Subject: [Buildroot] [git commit] package/python-jinja2: bump to version
+ 2.10.1
+Message-ID: <20190501072308.0FF1183D89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8fe83f40b6c848705e1a345d884eef46c91d75c3
+commit: https://git.buildroot.net/buildroot/commit/?id=1f2cf458a2ebcc52b60c4008358c09b63124c5b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also update hash for license file due to copyright year bump.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-sqlalchemy/python-sqlalchemy.hash | 6 +++---
- package/python-sqlalchemy/python-sqlalchemy.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-jinja2/python-jinja2.hash | 4 ++--
+ package/python-jinja2/python-jinja2.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
-index 9e13a2f20f..7884016321 100644
---- a/package/python-sqlalchemy/python-sqlalchemy.hash
-+++ b/package/python-sqlalchemy/python-sqlalchemy.hash
-@@ -1,4 +1,4 @@
- # md5 from https://pypi.python.org/pypi/SQLAlchemy/json, sha256 locally computed
--md5    968e07dc0aa92f9205bb3877f33f498f  SQLAlchemy-1.2.2.tar.gz
--sha256 64b4720f0a8e033db0154d3824f5bf677cf2797e11d44743cf0aebd2a0499d9d  SQLAlchemy-1.2.2.tar.gz
--sha256 73bda3d7d6c568f494c1d12520a97d41a38b7ce91d88c21f1b469b747b17f7fd  LICENSE
-+md5    f1902c174981e363a7fbb9f6c8d932c6  SQLAlchemy-1.3.3.tar.gz
-+sha256 91c54ca8345008fceaec987e10924bf07dcab36c442925357e5a467b36a38319  SQLAlchemy-1.3.3.tar.gz
-+sha256 5536859eda1f40aa1e96d94d0c027ccd5eb6822f869fb76bca655f4b58742a6a  LICENSE
-diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
-index c0023712a2..d304db20d3 100644
---- a/package/python-sqlalchemy/python-sqlalchemy.mk
-+++ b/package/python-sqlalchemy/python-sqlalchemy.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
+index fe34f73965..21a9c8394f 100644
+--- a/package/python-jinja2/python-jinja2.hash
++++ b/package/python-jinja2/python-jinja2.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jinja2/json
+-md5 61ef1117f945486472850819b8d1eb3d Jinja2-2.10.tar.gz
+-sha256 f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4 Jinja2-2.10.tar.gz
++md5 0ae535be40fd215a8114a090c8b68e5a Jinja2-2.10.1.tar.gz
++sha256 065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013 Jinja2-2.10.1.tar.gz
+ # Locally computed sha256
+ sha256 26fcd436fdc8a39d44896ac03e6f1dfd25e38499c48f20d8bc1dd3bf0aaa8a5b LICENSE
+diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
+index 9ff36972d6..339ddd7e18 100644
+--- a/package/python-jinja2/python-jinja2.mk
++++ b/package/python-jinja2/python-jinja2.mk
+@@ -4,12 +4,13 @@
  #
  ################################################################################
  
--PYTHON_SQLALCHEMY_VERSION = 1.2.2
-+PYTHON_SQLALCHEMY_VERSION = 1.3.3
- PYTHON_SQLALCHEMY_SOURCE = SQLAlchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
--PYTHON_SQLALCHEMY_SITE = https://pypi.python.org/packages/b9/fb/a56d2fc0ce3571328fa872734ad124cae25a4cea422088987f865fb71787
-+PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/2b/b2/e6f5c5efc68942edefaa924e8fbea0b32375baa434a511cbf6bb17769cf6
- PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
- PYTHON_SQLALCHEMY_LICENSE = MIT
- PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
+-PYTHON_JINJA2_VERSION = 2.10
++PYTHON_JINJA2_VERSION = 2.10.1
+ PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
+-PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/56/e6/332789f295cf22308386cf5bbd1f4e00ed11484299c5d7383378cf48ba47
++PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/93/ea/d884a06f8c7f9b7afbc8138b762e80479fb17aedbbe2b06515a12de9378d
+ PYTHON_JINJA2_SETUP_TYPE = setuptools
+ PYTHON_JINJA2_LICENSE = BSD-3-Clause
+ PYTHON_JINJA2_LICENSE_FILES = LICENSE
++
+ # In host build, setup.py tries to download markupsafe if it is not installed
+ HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
+ 
