@@ -1,46 +1,69 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 1 May 2019 13:17:48 +0200
-Subject: [Buildroot] Reg: Valgrind support for Aarch64 in buildroot
- 2019.02.02
-In-Reply-To: <CAAMHf5EEeW7j=tvj8hWanzdoKT0mae=85HF_D+OBFVHcF4oYjQ@mail.gmail.com>
-References: <CAAMHf5EaMVDS23JXv-4_yWByHnn=0xT+iOKdVOhan5Ah4EvbLw@mail.gmail.com>
- <20190430085653.0bd4914e@windsurf>
- <CAAMHf5EEeW7j=tvj8hWanzdoKT0mae=85HF_D+OBFVHcF4oYjQ@mail.gmail.com>
-Message-ID: <94d81bb6-7fc8-85bb-cf4b-21f3101d0b13@mind.be>
+From: Carlos A. M. dos Santos <unixmania@gmail.com>
+Date: Wed, 1 May 2019 08:34:43 -0300
+Subject: [Buildroot] [PATCH 1/1] package/liburiparser: fix build without
+ C++
+In-Reply-To: <20190501093223.28311-1-fontaine.fabrice@gmail.com>
+References: <20190501093223.28311-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAJ4jsaepDNsAPSZN9paURn+8fbSz_5icS-13pdDOct_6JPEwbA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Wed, May 1, 2019 at 6:32 AM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/1e191676f28905a81de6282e07978aa5d4f02039
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...1-CMakeLists.txt-fix-build-without-C.patch | 33 +++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
+>
+> diff --git a/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch b/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
+> new file mode 100644
+> index 0000000000..9f5e88989a
+> --- /dev/null
+> +++ b/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
+> @@ -0,0 +1,33 @@
+> +From 0e385a6b747e967b6724ef3ded944c7da3b16f79 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Wed, 1 May 2019 11:18:29 +0200
+> +Subject: [PATCH] CMakeLists.txt: fix build without C++
+> +
+> +Specify that uriparser is a C project (C++ is needed only for the test
+> +runner) otherwise build will fail if no C++ compiler is found by cmake
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/1e191676f28905a81de6282e07978aa5d4f02039
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://github.com/uriparser/uriparser/pull/69]
+> +---
+> + CMakeLists.txt | 2 ++
+> + 1 file changed, 2 insertions(+)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index ceb79e0..40d3b20 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -39,6 +39,8 @@ cmake_minimum_required(VERSION 3.3)
+> + project(uriparser
+> +     VERSION
+> +         0.9.3
+> ++    LANGUAGES
+> ++        C
+> + )
+> +
+> + # See https://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
+> +--
+> +2.20.1
+> +
+> --
+> 2.20.1
+>
 
-
-On 30/04/2019 13:34, ravi chandran wrote:
-> checking for a supported CPU... no (arm)
-> configure: error: Unsupported host architecture. Sorry?
-> 
-> valgrind-3.14.0 is what the version configured to use in valgrind.mk
-> <http://valgrind.mk>. I am not sure if this particular version will support arm32.
-> 
-> config BR2_PACKAGE_VALGRIND_ARCH_SUPPORTS
-> ? ? ? ? bool
-> ? ? ? ? default y if BR2_aarch64
-> ? ? ? ?+ default y if BR2_arm
-> ? ? ? ? default y if BR2_ARM_CPU_ARMV7A
-                       ^^^^^^^^^^^^^^^^^^
- As you can see, valgrind does support arm32, but only ARMv7-A (i.e. Cortex-A
-class CPUs).
-
- It might also support ARMv8 in 32-bit mode, however. Note that you'll need to
-adapt the rewriting of GNU_TARGET_NAME in valgrind.mk if you want to try that.
-
- Regards,
- Arnout
-
-
-> ? ? ? ? # MIPS32 R6 is unsupported
-> ? ? ? ? default y if BR2_mips && !BR2_mips_32r6
-> ? ? ? ? default y if BR2_mipsel && !BR2_mips_32r6
-> 
-> Thanks,
-> Ravi
+Reviewed-by: Carlos Santos <unixmania@gmail.com>
