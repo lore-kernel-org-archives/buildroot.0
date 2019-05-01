@@ -1,44 +1,93 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 May 2019 21:28:47 +0200
-Subject: [Buildroot] [git commit] package/bird: BFD needs NPTL
-Message-ID: <20190501192536.8235D839E8@busybox.osuosl.org>
+Date: Wed, 1 May 2019 21:24:48 +0200
+Subject: [Buildroot] [git commit] package/rpm: drop unneeded third patch
+Message-ID: <20190501192536.7B5838124F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fcf71429ee6e75a1c0f1b9db1576db698eb2522
+commit: https://git.buildroot.net/buildroot/commit/?id=c6342736b0cd3bb6e236d861018c94538287ade2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/ab9ab2cca2c191ae9a8f0ecb2aa2536a3f020301
-
-uClibc linuxthreads does not provide pthread_spin_lock().
+After upstream review, I found that the third patch is not needed, just
+doing an autoreconf fix the linking issue with -lintl
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bird/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ ...Makefile.am-rpm2-cpio-archive-needs-lintl.patch | 51 ----------------------
+ package/rpm/rpm.mk                                 |  2 +-
+ 2 files changed, 1 insertion(+), 52 deletions(-)
 
-diff --git a/package/bird/Config.in b/package/bird/Config.in
-index fe34f96a45..22c39f8488 100644
---- a/package/bird/Config.in
-+++ b/package/bird/Config.in
-@@ -29,12 +29,12 @@ config BR2_PACKAGE_BIRD_BABEL
+diff --git a/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch b/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
+deleted file mode 100644
+index 14d1d37d05..0000000000
+--- a/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 317bc5263fcb31ce788c76fe1947b2e0783e4542 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 25 Apr 2019 18:49:24 +0200
+-Subject: [PATCH] Makefile.am: rpm2{cpio,archive} needs lintl
+-
+-Add LIBINTL to rpm2{cpio,archive}_LDADD otherwise build fails on:
+-
+-/home/buildroot/autobuild/instance-2/output/host/bin/xtensa-linux-gcc -std=gnu99 -DHAVE_CONFIG_H   -I. -I. -I./include/ -I./build -I./lib -I./rpmio -I./misc -DLOCALEDIR="\"/usr/share/locale\"" -DLIBRPMALIAS_FILENAME="\"rpmpopt-4.14.2.1\"" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include -fPIC -DPIC -D_REENTRANT -Wall -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes  -fno-strict-aliasing -Wempty-body -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os   -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/beecrypt -c -o tools/rpmdeps.o tools/rpmdeps.c
+-/home/buildroot/autobuild/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: rpm2cpio.o: undefined reference to symbol 'libintl_dgettext'
+-/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
+-collect2: error: ld returned 1 exit status
+-Makefile:962: recipe for target 'rpm2cpio' failed
+-make[3]: *** [rpm2cpio] Error 1
+-make[3]: *** Waiting for unfinished jobs....
+-libtool: link: /home/buildroot/autobuild/instance-2/output/host/bin/xtensa-linux-gcc -std=gnu99 -fPIC -DPIC -D_REENTRANT -Wall -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes -fno-strict-aliasing -Wempty-body -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/beecrypt -o rpm2archive rpm2archive.o  lib/.libs/librpm.so /home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/rpmio/.libs/librpmio.so -lcap -ldb rpmio/.libs/librpmio.so -lbeecrypt -lbz2 -lz -llzma -lpopt -larchive -lpthread -Wl,-rpath -Wl,/home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/lib/.libs -Wl,-rpath -Wl,/home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/rpmio/.libs
+-/home/buildroot/autobuild/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: rpm2archive.o: undefined reference to symbol 'libintl_dgettext'
+-/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
+-collect2: error: ld returned 1 exit status
+-Makefile:958: recipe for target 'rpm2archive' failed
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/26e20e19d878811d90fce52eb0951ee4d8b59068
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://github.com/rpm-software-management/rpm/pull/683]
+----
+- Makefile.am | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 057b7892c..e15240e60 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -145,11 +145,11 @@ rpmspec_LDADD +=	@WITH_POPT_LIB@
+- 
+- rpm2cpio_SOURCES =	rpm2cpio.c debug.h system.h
+- rpm2cpio_LDADD =	lib/librpm.la rpmio/librpmio.la
+--rpm2cpio_LDADD +=	@WITH_POPT_LIB@
+-+rpm2cpio_LDADD +=	@WITH_POPT_LIB@ @LIBINTL@
+- 
+- rpm2archive_SOURCES =	rpm2archive.c debug.h system.h
+- rpm2archive_LDADD =	lib/librpm.la rpmio/librpmio.la
+--rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@
+-+rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@ @LIBINTL@
+- 
+- 
+- if LIBELF
+--- 
+-2.20.1
+-
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index ddc6f1c6ad..6d1068194a 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -20,7 +20,7 @@ RPM_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
+ RPM_LICENSE_FILES = COPYING
+-# We're patching Makefile.am
++# Needed to fix an issue with -lintl linking
+ RPM_AUTORECONF = YES
  
- config BR2_PACKAGE_BIRD_BFD
- 	bool "bfd"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	help
- 	  Enable BFD protocol.
- 
--comment "BFD protocol needs a toolchain w/ threads"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "BFD protocol needs a toolchain w/ NPTL"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
- config BR2_PACKAGE_BIRD_BGP
- 	bool "bgp"
+ RPM_CONF_OPTS = \
