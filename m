@@ -1,49 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 1 May 2019 14:46:13 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libzip: add host variant
-In-Reply-To: <20190430201121.15634-1-joerg.krause@embedded.rocks>
-References: <20190430201121.15634-1-joerg.krause@embedded.rocks>
-Message-ID: <1610a93c-b451-4eea-a956-359e0752843f@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Wed, 1 May 2019 14:46:30 +0200
+Subject: [Buildroot] [git commit] package/uboot-tools: fix build with
+ host-openssl
+Message-ID: <20190501124244.1CA4D83C3C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=5d76cf129f79122bd3f97fbbc0c8e2820e1e6def
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+As suggested by Arnout during review of previous iteration, add a patch
+to uboot-tools so it uses CFLAGS and not HOSTCFLAGS when building cross
+tools
 
-On 30/04/2019 22:11, J?rg Krause wrote:
-> The updated host mfgtool package needs the host variant of libzip.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+Fixes:
+ - http://autobuild.buildroot.org/results/915b509e814bda16be54a24276b9c740c51e5770
 
- Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...ile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
- I marked them mfgtools bump itself as changes requested, so if you choose to
-ignore my comments (or it doesn't work), please resubmit that one.
-
- Regards,
- Arnout
-
-> ---
->  package/libzip/libzip.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/libzip/libzip.mk b/package/libzip/libzip.mk
-> index b90ea76f5e..280ca6d8c7 100644
-> --- a/package/libzip/libzip.mk
-> +++ b/package/libzip/libzip.mk
-> @@ -11,6 +11,7 @@ LIBZIP_LICENSE = BSD-3-Clause
->  LIBZIP_LICENSE_FILES = LICENSE
->  LIBZIP_INSTALL_STAGING = YES
->  LIBZIP_DEPENDENCIES = zlib
-> +HOST_LIBZIP_DEPENDENCIES = host-zlib
->  
->  ifeq ($(BR2_PACKAGE_BZIP2),y)
->  LIBZIP_DEPENDENCIES += bzip2
-> @@ -33,3 +34,4 @@ LIBZIP_CONF_OPTS += -DENABLE_OPENSSL=OFF
->  endif
->  
->  $(eval $(cmake-package))
-> +$(eval $(host-cmake-package))
-> 
+diff --git a/package/uboot-tools/0005-tools-Makefile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch b/package/uboot-tools/0005-tools-Makefile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch
+new file mode 100644
+index 0000000000..5c54f4cea6
+--- /dev/null
++++ b/package/uboot-tools/0005-tools-Makefile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch
+@@ -0,0 +1,28 @@
++From 9f2dce5887bb52e8c7f9ef40a6733d70af72ff1c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 30 Apr 2019 18:45:17 +0200
++Subject: [PATCH] tools/Makefile: fix HOSTCFLAGS with CROSS_BUILD_TOOLS
++
++When CROSS_BUILD_TOOLS is set, set HOSTCFLAGS to CFLAGS otherwise CC
++will be used with HOSTCFLAGS which seems wrong
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ tools/Makefile | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/tools/Makefile b/tools/Makefile
++index 12a3027e23..eadeba417d 100644
++--- a/tools/Makefile
+++++ b/tools/Makefile
++@@ -272,6 +272,7 @@ subdir- += env
++ 
++ ifneq ($(CROSS_BUILD_TOOLS),)
++ override HOSTCC = $(CC)
+++override HOSTCFLAGS = $(CFLAGS)
++ 
++ quiet_cmd_crosstools_strip = STRIP   $^
++       cmd_crosstools_strip = $(STRIP) $^; touch $@
++-- 
++2.20.1
++
