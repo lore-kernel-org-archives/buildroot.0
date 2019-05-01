@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 1 May 2019 15:04:43 +0200
-Subject: [Buildroot] [PATCH] package/gerbera: fix build with latest exiv2
-In-Reply-To: <20190501090704.44050-1-nicolas.serafini@sensefly.com>
-References: <20190501090704.44050-1-nicolas.serafini@sensefly.com>
-Message-ID: <4160d11d-c66d-39e5-a75d-5c50abd974d5@mind.be>
+Date: Wed, 1 May 2019 15:14:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/liburiparser: fix build without
+ C++
+In-Reply-To: <20190501093223.28311-1-fontaine.fabrice@gmail.com>
+References: <20190501093223.28311-1-fontaine.fabrice@gmail.com>
+Message-ID: <e69bcd45-0f7f-3868-c442-2b91d632e6e5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,69 +13,61 @@ To: buildroot@busybox.net
 
 
 
-On 01/05/2019 11:08, Nicolas Serafini wrote:
-> After the bump to exiv2 0.27.1 a build error due to missing header
-> inclusion apparead.
+On 01/05/2019 11:32, Fabrice Fontaine wrote:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/1e191676f28905a81de6282e07978aa5d4f02039
 > 
-> This patch fixes
-
- Small nit: write this as:
-
-Fixes:
-
-That way, patchwork recognizes it and marks it as a fix in the patch overview.
-
-> http://autobuild.buildroot.net/results/3831acf7f4c5a9f1a404e0ced3d6bec7a2249601/
-> http://autobuild.buildroot.net/results/de0545462c6017fe54acc284b914b9fa8b0172d8/
-> 
-> The patch is waiting merge into the mainline
-> https://github.com/gerbera/gerbera/pull/457
-> 
-> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/gerbera/gerbera.hash | 1 +
->  package/gerbera/gerbera.mk   | 3 +++
->  2 files changed, 4 insertions(+)
+>  ...1-CMakeLists.txt-fix-build-without-C.patch | 33 +++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>  create mode 100644 package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
 > 
-> diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
-> index aa6a29f81e..9f19e6ffc8 100644
-> --- a/package/gerbera/gerbera.hash
-> +++ b/package/gerbera/gerbera.hash
-> @@ -1,3 +1,4 @@
->  # Locally computed:
->  sha256	9c4509189eab6bff0fe183e1dd54ea8cb17d7fb0bc6e21bb5b1a8ccaaf6c60d9	gerbera-v1.3.1.tar.gz
->  sha256	cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6	LICENSE.md
-> +sha256	7fe27cab2145b1bde2a2a8fadf3a3f684e7a1a6ad6a31cf4bcdc7bc3e649faaa	457.patch
+> diff --git a/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch b/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
+> new file mode 100644
+> index 0000000000..9f5e88989a
+> --- /dev/null
+> +++ b/package/liburiparser/0001-CMakeLists.txt-fix-build-without-C.patch
+> @@ -0,0 +1,33 @@
+> +From 0e385a6b747e967b6724ef3ded944c7da3b16f79 Mon Sep 17 00:00:00 2001
+> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +Date: Wed, 1 May 2019 11:18:29 +0200
+> +Subject: [PATCH] CMakeLists.txt: fix build without C++
+> +
+> +Specify that uriparser is a C project (C++ is needed only for the test
+> +runner) otherwise build will fail if no C++ compiler is found by cmake
+> +
+> +Fixes:
+> + - http://autobuild.buildroot.org/results/1e191676f28905a81de6282e07978aa5d4f02039
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Upstream status: https://github.com/uriparser/uriparser/pull/69]
+> +---
+> + CMakeLists.txt | 2 ++
+> + 1 file changed, 2 insertions(+)
+> +
+> +diff --git a/CMakeLists.txt b/CMakeLists.txt
+> +index ceb79e0..40d3b20 100644
+> +--- a/CMakeLists.txt
+> ++++ b/CMakeLists.txt
+> +@@ -39,6 +39,8 @@ cmake_minimum_required(VERSION 3.3)
+> + project(uriparser
+> +     VERSION
+> +         0.9.3
+> ++    LANGUAGES
+> ++        C
 
- Unfortunately, the hashes of patches from git pull requests are not stable,
-because of the
-
-index f3a35d48..7f8c89bd 100644
-
-(additional hex digits are added to the abbreviated sha1 when more objects are
-added to the repo).
-
- So we have to include the patch inside Buildroot rather than downloading it.
-
- I've done this and committed to master, thanks. The content of the commit is
-completely different, of course, but the spirit is the same so I've retained
-your authorship on it.
+ As upstream remarked: this will break the build of the testrunner because C++
+is not enabled. So this is not OK for upstream, but good enough for us, so I
+applied to master, thanks.
 
  Regards,
  Arnout
 
-> diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
-> index 5b69faaf82..62edbbc900 100644
-> --- a/package/gerbera/gerbera.mk
-> +++ b/package/gerbera/gerbera.mk
-> @@ -19,6 +19,9 @@ GERBERA_CONF_OPTS = \
->  	-DWITH_DEBUG=OFF \
->  	-DWITH_JS=OFF
->  
-> +GERBERA_PATCH = \
-> +	https://patch-diff.githubusercontent.com/raw/gerbera/gerbera/pull/457.patch
+> + )
+> + 
+> + # See https://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
+> +-- 
+> +2.20.1
 > +
->  # Uses __atomic_fetch_add_4
->  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
->  GERBERA_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
 > 
