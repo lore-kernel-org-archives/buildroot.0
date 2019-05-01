@@ -1,42 +1,86 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 May 2019 09:06:43 +0200
-Subject: [Buildroot] [git commit] package/luv: bump to version 1.28.0-1
-Message-ID: <20190501071329.4FC0F7FD5F@busybox.osuosl.org>
+Date: Wed, 1 May 2019 09:04:20 +0200
+Subject: [Buildroot] [git commit] configs/atmel_sama5d27_som1: bump to
+ linux4sam_6.0
+Message-ID: <20190501071329.4162284658@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2d12399b71644b5d5b8067d895069fc8ec23b8a6
+commit: https://git.buildroot.net/buildroot/commit/?id=489a48fe632a2749d6de05041ab0bf585ab16994
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+This commit :
+	- bumps Linux & U-Boot to linux4sam_6.0.
+	- bumps at91bootstrap to v3.8.12.
+	- removes old in-tree dts (now in dt-overlay-at91 [1][2])
+	- adapts genimage accordingly.
+
+[1] https://github.com/linux4sam/dt-overlay-at91/tree/master/sama5d27_som1_ek
+[2] http://www.at91.com/linux4sam/bin/view/Linux4SAM/DT-Overlay
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luv/luv.hash | 2 +-
- package/luv/luv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/atmel/sama5d27_som1_ek_mmc/genimage.cfg    |  3 ---
+ configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig | 10 +++++-----
+ 2 files changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/package/luv/luv.hash b/package/luv/luv.hash
-index 7d872b279a..e6e47b0d5e 100644
---- a/package/luv/luv.hash
-+++ b/package/luv/luv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 567737a5c0850a2584a201b8b51d9407f7ab2e94846dda737397053dcb8174b9  luv-1.28.0-0.tar.gz
-+sha256 d7eca8a9d7f126ed478fa76ce6a4e5d6e9f79309ddbceaae01060f4edc6bf242  luv-1.28.0-1.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/luv/luv.mk b/package/luv/luv.mk
-index 718cda342d..084311a761 100644
---- a/package/luv/luv.mk
-+++ b/package/luv/luv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUV_VERSION = 1.28.0-0
-+LUV_VERSION = 1.28.0-1
- LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
- LUV_LICENSE = Apache-2.0
- LUV_LICENSE_FILES = LICENSE.txt
+diff --git a/board/atmel/sama5d27_som1_ek_mmc/genimage.cfg b/board/atmel/sama5d27_som1_ek_mmc/genimage.cfg
+index f5222ff893..eaa3896fcf 100644
+--- a/board/atmel/sama5d27_som1_ek_mmc/genimage.cfg
++++ b/board/atmel/sama5d27_som1_ek_mmc/genimage.cfg
+@@ -5,9 +5,6 @@ image boot.vfat {
+ 		files = {
+ 			"zImage",
+ 			"at91-sama5d27_som1_ek.dtb",
+-			"at91-sama5d27_som1_ek_pda4.dtb",
+-			"at91-sama5d27_som1_ek_pda7.dtb",
+-			"at91-sama5d27_som1_ek_pda7b.dtb",
+ 			"boot.bin",
+ 			"u-boot.bin"
+ 		}
+diff --git a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+index 1ae4b853da..fc9ce8c25a 100644
+--- a/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
++++ b/configs/atmel_sama5d27_som1_ek_mmc_dev_defconfig
+@@ -3,7 +3,7 @@ BR2_cortex_a5=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_INSTRUCTIONS_THUMB2=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_9=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
+ BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
+ BR2_PTHREAD_DEBUG=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+@@ -12,10 +12,10 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/atmel/sama5d27_som1_ek_mmc/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_5.8)/linux-linux4sam_5.8.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_6.0)/linux-linux4sam_6.0.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="sama5"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d27_som1_ek at91-sama5d27_som1_ek_pda4 at91-sama5d27_som1_ek_pda7 at91-sama5d27_som1_ek_pda7b"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="at91-sama5d27_som1_ek"
+ BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
+ BR2_PACKAGE_ALSA_UTILS=y
+ BR2_PACKAGE_ALSA_UTILS_ALSACONF=y
+@@ -71,13 +71,13 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_AT91BOOTSTRAP3=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+ BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+-BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.10"
++BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.8.12"
+ BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="sama5d27_som1_eksd_uboot"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/linux4sam/u-boot-at91.git"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_5.8"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="linux4sam_6.0"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="sama5d27_som1_ek_mmc"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
