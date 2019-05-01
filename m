@@ -1,7 +1,8 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Wed,  1 May 2019 19:55:27 -0300
-Subject: [Buildroot] [PATCH] eudev: generate hwdb.bin at system startup
-Message-ID: <20190501225527.2107-1-unixmania@gmail.com>
+Date: Wed,  1 May 2019 20:10:13 -0300
+Subject: [Buildroot] [PATCH v4] package/eudev: generate hwdb.bin at system
+ startup
+Message-ID: <20190501231013.5957-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
