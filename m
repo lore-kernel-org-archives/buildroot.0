@@ -1,24 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 01 May 2019 21:25:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rpm: drop unneeded third patch
-In-Reply-To: <20190427204122.25709-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 27 Apr 2019 22:41:22 +0200")
-References: <20190427204122.25709-1-fontaine.fabrice@gmail.com>
-Message-ID: <87k1fageos.fsf@dell.be.48ers.dk>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 1 May 2019 21:28:15 +0200
+Subject: [Buildroot] [gcc 9.1] build issue with uClibc-ng 1.0.31
+Message-ID: <5bca5ead-5b7d-a3f6-4b32-0b0d105557a4@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Hi Waldemar,
 
- > After upstream review, I found that the third patch is not needed, just
- > doing an autoreconf fix the linking issue with -lintl
+I'm testing the upcoming gcc 9.1 compiler and uClibc-ng 1.0.31 doesn't build for
+sparc architecture, see the build log [1]:
+"invalid hard register usage between earlyclobber operand and input operand"
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This error message come from a new commit introduced in gcc by the commit [2].
 
-Committed, thanks.
+I'm not sure if this is a gcc regression or a uClibc-ng issue ?
 
--- 
-Bye, Peter Korsgaard
+Thoughts ?
+
+Best regards,
+Romain
+
+[1] https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435757
+[2]
+https://github.com/gcc-mirror/gcc/commit/b782636f28f5c378897c238081d28d7a4a6ca578
