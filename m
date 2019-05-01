@@ -1,56 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 May 2019 21:53:37 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/imagemagick:
- security bump to version 7.0.8-42
-Message-ID: <20190501201631.B5345839E5@busybox.osuosl.org>
+Date: Wed, 1 May 2019 21:53:20 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/imagemagick: bump
+ to version 7.0.8-27
+Message-ID: <20190501201631.A83A8839E5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3079eee43ce0fcc6849b47c3664049540f38037a
+commit: https://git.buildroot.net/buildroot/commit/?id=e689a9d78f4103fbde3dfa85db4557924096ef6c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security issues:
+This patch bumps imagemagick to version 7.0.8-27
+Hash for license file is changed becasue the updated the copyright year
+for 2019:
 
-- CVE-2019-9956: In ImageMagick 7.0.8-35 Q16, there is a stack-based buffer
-  overflow in the function PopHexPixel of coders/ps.c, which allows an
-  attacker to cause a denial of service or code execution via a crafted
-  image file.
+https://github.com/ImageMagick/ImageMagick/commit/252dd2c52bcc591ccd673abdbb70113b42388150
 
-- CVE-2019-10650: In ImageMagick 7.0.8-36 Q16, there is a heap-based buffer
-  over-read in the function WriteTIFFImage of coders/tiff.c, which allows an
-  attacker to cause a denial of service or information disclosure via a
-  crafted image file.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 43ff6b974c6a5d07a705ebbdfdb7cd11ecff9c4c)
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 109e5c83dc9c05412cfc6139f2846268f73d76e5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.hash | 4 ++--
  package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index 09bfb2a2e9..e89aa557c1 100644
+index 9d5a39567e..09bfb2a2e9 100644
 --- a/package/imagemagick/imagemagick.hash
 +++ b/package/imagemagick/imagemagick.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256 94866968a447f8f92a969bf5342d612d05a64c71fc75e63bb2d8ecf887dc7fa2  7.0.8-27.tar.gz
-+sha256 2a1ca5f9c38e6596a5ee9fdbbaebba1d21b57618e892c72c8e4e63ced571af40  7.0.8-42.tar.gz
- sha256 5b47db932754743460eba7a226aea85b63e3408d3c7affb4d0117f70c9594ded  LICENSE
+-sha256 e7c1b19923bb97ed456c78b63b3259b809ebc8e3967c6d086450370c67eedf06  7.0.7-39.tar.gz
+-sha256 2318cc05bbd2c25c1b2d13af1aadccc45b9cf6f94757421ae59a3c8ea9064f1c  LICENSE
++sha256 94866968a447f8f92a969bf5342d612d05a64c71fc75e63bb2d8ecf887dc7fa2  7.0.8-27.tar.gz
++sha256 5b47db932754743460eba7a226aea85b63e3408d3c7affb4d0117f70c9594ded  LICENSE
 diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 81e49eb62c..5ea79bed49 100644
+index 7678980582..b5d0d56284 100644
 --- a/package/imagemagick/imagemagick.mk
 +++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IMAGEMAGICK_VERSION = 7.0.8-27
-+IMAGEMAGICK_VERSION = 7.0.8-42
+-IMAGEMAGICK_VERSION = 7.0.7-39
++IMAGEMAGICK_VERSION = 7.0.8-27
  IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
  IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
  IMAGEMAGICK_LICENSE = Apache-2.0
