@@ -1,317 +1,49 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 1 May 2019 15:42:45 +0200
-Subject: [Buildroot] [git commit] .gitlab-ci.yml: add trigger per job
-Message-ID: <20190501134617.756C583D7E@busybox.osuosl.org>
+Date: Wed, 1 May 2019 15:51:36 +0200
+Subject: [Buildroot] [git commit] package/network-manager: update to 1.18.0
+Message-ID: <20190501134640.C43D17FE0F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12904c03a7ccbf0c04c5b1f7e3302916c6f37f50
+commit: https://git.buildroot.net/buildroot/commit/?id=89e2995eac078c1903ab2f575a4289346f9e24b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Triggering a single defconfig or runtime test job can be handy:
- - when adding or changing a defconfig;
- - when adding or changing a runtime test case;
- - when fixing some bug on a use case tested by a runtime test case.
+A straightforward package update. Tested.
 
-Currently there are 3 subsets of jobs that can easily be triggered by
-pushing a temporary branch with specific suffix:
- - to trigger only the check-* jobs:
-   $ git push gitlab HEAD:<name>                   # currently   4 jobs
- - to trigger all defconfigs and all check-* jobs:
-   $ git push gitlab HEAD:<name>-defconfigs        # currently 197 jobs
- - to trigger all runtime tests and all check-* jobs:
-   $ git push gitlab HEAD:<name>-runtime-tests     # currently 118 jobs
-
-When the user wants to trigger a single defconfig or runtime test job,
-hand-editing the .gitlab-ci.yml and creating a temporary commit are
-currently needed.
-
-Add 2 more subsets that can be triggered based on the name of the
-branch pushed.
- - to trigger one defconfig job:
-   $ git push gitlab HEAD:<name>-<defconfig name>  # currently   1 jobs
- - to trigger one runtime job:
-   $ git push gitlab HEAD:<name>-<test case name>  # currently   1 jobs
-
-The check-* jobs are fast, so there is no need to add a per job trigger
-for them. Also, they are anyway triggered with every push already.
-
-While adding those new triggers, use the full name of the job as suffix.
-This leads to large branch names:
-$ git push gitlab HEAD:test1-tests.toolchain.test_external.TestExternalToolchainBuildrootuClibc
-$ git push gitlab HEAD:test2-olimex_a20_olinuxino_lime_legacy_defconfig
-But those branches are temporary, and this way the user doesn't need to
-think much, just copy and paste the job name as suffix.
-
-The hidden keys that now hold the commonalities between jobs does not
-hold only a script anymore, so rename then from *_script to *_base.
-
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Arnout: squash two patches]
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .gitlab-ci.yml    | 64 +++++++++++++++++++++++++++++++++++++++++--------------
- .gitlab-ci.yml.in | 64 +++++++++++++++++++++++++++++++++++++++++--------------
- 2 files changed, 96 insertions(+), 32 deletions(-)
+ package/network-manager/network-manager.hash | 4 ++--
+ package/network-manager/network-manager.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index e9869be784..558676709f 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -6,7 +6,13 @@
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 7c64e6505e..05ca63b041 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.14/NetworkManager-1.14.6.sha256sum
+-sha256 693bcdad15eec7f07a06cbc6e43ddb3b1c13b2d2d23ec165fbb5adf4c3323a5d  NetworkManager-1.14.6.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.18/NetworkManager-1.18.0.sha256sum
++sha256 c6e8df25e5a3c7309bc17664be8971689314884cdd08afdd6b0847d29d2a8ba6  NetworkManager-1.18.0.tar.xz
+ # Locally computed
+ sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
+ sha256 3a2968e3abb4fea464cd8dc1146d71996f9544af91a5f687bc4f3a2932df49b4  libnm-util/COPYING
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 96f842f120..c0a9ba0bdb 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- image: buildroot/base:20180318.1724
- 
-+.check_base:
-+    except:
-+        - /^.*-.*_defconfig$/
-+        - /^.*-tests\..*$/
-+
- check-DEVELOPERS:
-+    extends: .check_base
-     # get-developers should print just "No action specified"; if it prints
-     # anything else, it's a parse error.
-     # The initial ! is removed by YAML so we need to quote it.
-@@ -14,6 +20,7 @@ check-DEVELOPERS:
-         - "! utils/get-developers | grep -v 'No action specified'"
- 
- check-flake8:
-+    extends: .check_base
-     before_script:
-         # Help flake8 to find the Python files without .py extension.
-         - find * -type f -name '*.py' > files.txt
-@@ -25,19 +32,21 @@ check-flake8:
-         - wc -l files.processed
- 
- check-gitlab-ci.yml:
-+    extends: .check_base
-     script:
-         - mv .gitlab-ci.yml .gitlab-ci.yml.orig
-         - make .gitlab-ci.yml
-         - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
- 
- check-package:
-+    extends: .check_base
-     script:
-         - make check-package
- 
--.defconfig_script:
-+.defconfig_base:
-     script:
--        - echo 'Configure Buildroot'
--        - make ${CI_JOB_NAME}
-+        - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
-+        - make ${DEFCONFIG_NAME}
-         - echo 'Build buildroot'
-         - |
-             make > >(tee build.log |grep '>>>') 2>&1 || {
-@@ -45,15 +54,6 @@ check-package:
-                 tail -200 build.log
-                 exit 1
-             }
--
--.defconfig:
--    extends: .defconfig_script
--    # Running the defconfigs for every push is too much, so limit to
--    # explicit triggers through the API.
--    only:
--        - triggers
--        - tags
--        - /-defconfigs$/
-     artifacts:
-         when: always
-         expire_in: 2 weeks
-@@ -65,18 +65,32 @@ check-package:
-             - output/build/packages-file-list.txt
-             - output/build/*/.config
- 
--.runtime_test:
--    # Running the runtime tests for every push is too much, so limit to
-+.defconfig:
-+    extends: .defconfig_base
-+    # Running the defconfigs for every push is too much, so limit to
-     # explicit triggers through the API.
-     only:
-         - triggers
-         - tags
--        - /-runtime-tests$/
-+        - /-defconfigs$/
-+    before_script:
-+        - DEFCONFIG_NAME=${CI_JOB_NAME}
-+
-+one-defconfig:
-+    extends: .defconfig_base
-+    only:
-+        - /^.*-.*_defconfig$/
-+    before_script:
-+        - DEFCONFIG_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
-+
-+.runtime_test_base:
-     # Keep build directories so the rootfs can be an artifact of the job. The
-     # runner will clean up those files for us.
-     # Multiply every emulator timeout by 10 to avoid sporadic failures in
-     # elastic runners.
--    script: ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${CI_JOB_NAME}
-+    script:
-+        - echo "Starting runtime test ${TEST_CASE_NAME}"
-+        - ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${TEST_CASE_NAME}
-     artifacts:
-         when: always
-         expire_in: 2 weeks
-@@ -84,6 +98,24 @@ check-package:
-             - test-output/*.log
-             - test-output/*/.config
-             - test-output/*/images/*
-+
-+.runtime_test:
-+    extends: .runtime_test_base
-+    # Running the runtime tests for every push is too much, so limit to
-+    # explicit triggers through the API.
-+    only:
-+        - triggers
-+        - tags
-+        - /-runtime-tests$/
-+    before_script:
-+        - TEST_CASE_NAME=${CI_JOB_NAME}
-+
-+one-runtime_test:
-+    extends: .runtime_test_base
-+    only:
-+        - /^.*-tests\..*$/
-+    before_script:
-+        - TEST_CASE_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
- aarch64_efi_defconfig: { extends: .defconfig }
- acmesystems_aria_g25_128mb_defconfig: { extends: .defconfig }
- acmesystems_aria_g25_256mb_defconfig: { extends: .defconfig }
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index ad616437f3..33cb665d98 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -6,7 +6,13 @@
- 
- image: buildroot/base:20180318.1724
- 
-+.check_base:
-+    except:
-+        - /^.*-.*_defconfig$/
-+        - /^.*-tests\..*$/
-+
- check-DEVELOPERS:
-+    extends: .check_base
-     # get-developers should print just "No action specified"; if it prints
-     # anything else, it's a parse error.
-     # The initial ! is removed by YAML so we need to quote it.
-@@ -14,6 +20,7 @@ check-DEVELOPERS:
-         - "! utils/get-developers | grep -v 'No action specified'"
- 
- check-flake8:
-+    extends: .check_base
-     before_script:
-         # Help flake8 to find the Python files without .py extension.
-         - find * -type f -name '*.py' > files.txt
-@@ -25,19 +32,21 @@ check-flake8:
-         - wc -l files.processed
- 
- check-gitlab-ci.yml:
-+    extends: .check_base
-     script:
-         - mv .gitlab-ci.yml .gitlab-ci.yml.orig
-         - make .gitlab-ci.yml
-         - diff -u .gitlab-ci.yml.orig .gitlab-ci.yml
- 
- check-package:
-+    extends: .check_base
-     script:
-         - make check-package
- 
--.defconfig_script:
-+.defconfig_base:
-     script:
--        - echo 'Configure Buildroot'
--        - make ${CI_JOB_NAME}
-+        - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
-+        - make ${DEFCONFIG_NAME}
-         - echo 'Build buildroot'
-         - |
-             make > >(tee build.log |grep '>>>') 2>&1 || {
-@@ -45,15 +54,6 @@ check-package:
-                 tail -200 build.log
-                 exit 1
-             }
--
--.defconfig:
--    extends: .defconfig_script
--    # Running the defconfigs for every push is too much, so limit to
--    # explicit triggers through the API.
--    only:
--        - triggers
--        - tags
--        - /-defconfigs$/
-     artifacts:
-         when: always
-         expire_in: 2 weeks
-@@ -65,18 +65,32 @@ check-package:
-             - output/build/packages-file-list.txt
-             - output/build/*/.config
- 
--.runtime_test:
--    # Running the runtime tests for every push is too much, so limit to
-+.defconfig:
-+    extends: .defconfig_base
-+    # Running the defconfigs for every push is too much, so limit to
-     # explicit triggers through the API.
-     only:
-         - triggers
-         - tags
--        - /-runtime-tests$/
-+        - /-defconfigs$/
-+    before_script:
-+        - DEFCONFIG_NAME=${CI_JOB_NAME}
-+
-+one-defconfig:
-+    extends: .defconfig_base
-+    only:
-+        - /^.*-.*_defconfig$/
-+    before_script:
-+        - DEFCONFIG_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
-+
-+.runtime_test_base:
-     # Keep build directories so the rootfs can be an artifact of the job. The
-     # runner will clean up those files for us.
-     # Multiply every emulator timeout by 10 to avoid sporadic failures in
-     # elastic runners.
--    script: ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${CI_JOB_NAME}
-+    script:
-+        - echo "Starting runtime test ${TEST_CASE_NAME}"
-+        - ./support/testing/run-tests -o test-output/ -d test-dl/ -k --timeout-multiplier 10 ${TEST_CASE_NAME}
-     artifacts:
-         when: always
-         expire_in: 2 weeks
-@@ -84,3 +98,21 @@ check-package:
-             - test-output/*.log
-             - test-output/*/.config
-             - test-output/*/images/*
-+
-+.runtime_test:
-+    extends: .runtime_test_base
-+    # Running the runtime tests for every push is too much, so limit to
-+    # explicit triggers through the API.
-+    only:
-+        - triggers
-+        - tags
-+        - /-runtime-tests$/
-+    before_script:
-+        - TEST_CASE_NAME=${CI_JOB_NAME}
-+
-+one-runtime_test:
-+    extends: .runtime_test_base
-+    only:
-+        - /^.*-tests\..*$/
-+    before_script:
-+        - TEST_CASE_NAME=$(echo ${CI_COMMIT_REF_NAME} | sed -e 's,^.*-,,g')
+-NETWORK_MANAGER_VERSION_MAJOR = 1.14
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).6
++NETWORK_MANAGER_VERSION_MAJOR = 1.18
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
