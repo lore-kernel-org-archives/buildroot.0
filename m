@@ -1,33 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 May 2019 09:10:14 +0200
-Subject: [Buildroot] [git commit] package/mjpegtools: install to staging
-Message-ID: <20190501071329.6542681585@busybox.osuosl.org>
+Date: Wed, 1 May 2019 09:08:00 +0200
+Subject: [Buildroot] [git commit] package/netcat-openbsd: switch to new
+ upstream URL
+Message-ID: <20190501071329.563DF84658@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7002f1ac63302b55165ee8c0465cfb6f3fc80c5e
+commit: https://git.buildroot.net/buildroot/commit/?id=14839eca9a635c1ef2452f0c96614c8c273e9f72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The mpeg2enc plugin in gst1-plugins-bad now depends on mjpegtools.
+anonscm.debian.org has been discontinued and now hosts a page pointing
+to salsa.debian.org.  Switch to the new upstream URL, explicitly setting
+the method to git now that we use an HTTPS URL.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: John Keeping <john@metanate.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mjpegtools/mjpegtools.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/netcat-openbsd/netcat-openbsd.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/mjpegtools/mjpegtools.mk b/package/mjpegtools/mjpegtools.mk
-index 14713c868e..8cb383dd16 100644
---- a/package/mjpegtools/mjpegtools.mk
-+++ b/package/mjpegtools/mjpegtools.mk
-@@ -7,6 +7,7 @@
- MJPEGTOOLS_VERSION = 2.1.0
- MJPEGTOOLS_SITE = http://sourceforge.net/projects/mjpeg/files/mjpegtools/$(MJPEGTOOLS_VERSION)
- MJPEGTOOLS_DEPENDENCIES = host-pkgconf jpeg
-+MJPEGTOOLS_INSTALL_STAGING = YES
- MJPEGTOOLS_LICENSE = GPL-2.0+
- MJPEGTOOLS_LICENSE_FILES = COPYING
+diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
+index e98b479c4f..b313116b3f 100644
+--- a/package/netcat-openbsd/netcat-openbsd.mk
++++ b/package/netcat-openbsd/netcat-openbsd.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
  
+ NETCAT_OPENBSD_VERSION = debian/1.190-1
+-NETCAT_OPENBSD_SITE = git://anonscm.debian.org/collab-maint/netcat-openbsd
++NETCAT_OPENBSD_SITE = https://salsa.debian.org/debian/netcat-openbsd.git
++NETCAT_OPENBSD_SITE_METHOD = git
+ NETCAT_OPENBSD_LICENSE = BSD-3-Clause
+ NETCAT_OPENBSD_LICENSE_FILES = debian/copyright
+ NETCAT_OPENBSD_DEPENDENCIES = host-pkgconf libbsd
