@@ -1,53 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 May 2019 09:26:09 +0200
-Subject: [Buildroot] [git commit] package/python-jinja2: bump to version
- 2.10.1
-Message-ID: <20190501072308.0FF1183D89@busybox.osuosl.org>
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Wed, 01 May 2019 09:43:43 +0200
+Subject: [Buildroot] [PATCH] package/network-manager: update to 1.18.0
+Message-ID: <20190501072642.18350-1-lkundrak@v3.sk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1f2cf458a2ebcc52b60c4008358c09b63124c5b9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+A straightforward package update. Tested.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 ---
- package/python-jinja2/python-jinja2.hash | 4 ++--
- package/python-jinja2/python-jinja2.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/network-manager/network-manager.hash | 4 ++--
+ package/network-manager/network-manager.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-jinja2/python-jinja2.hash b/package/python-jinja2/python-jinja2.hash
-index fe34f73965..21a9c8394f 100644
---- a/package/python-jinja2/python-jinja2.hash
-+++ b/package/python-jinja2/python-jinja2.hash
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 7c64e6505e..05ca63b041 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jinja2/json
--md5 61ef1117f945486472850819b8d1eb3d Jinja2-2.10.tar.gz
--sha256 f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4 Jinja2-2.10.tar.gz
-+md5 0ae535be40fd215a8114a090c8b68e5a Jinja2-2.10.1.tar.gz
-+sha256 065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013 Jinja2-2.10.1.tar.gz
- # Locally computed sha256
- sha256 26fcd436fdc8a39d44896ac03e6f1dfd25e38499c48f20d8bc1dd3bf0aaa8a5b LICENSE
-diff --git a/package/python-jinja2/python-jinja2.mk b/package/python-jinja2/python-jinja2.mk
-index 9ff36972d6..339ddd7e18 100644
---- a/package/python-jinja2/python-jinja2.mk
-+++ b/package/python-jinja2/python-jinja2.mk
-@@ -4,12 +4,13 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.14/NetworkManager-1.14.6.sha256sum
+-sha256 693bcdad15eec7f07a06cbc6e43ddb3b1c13b2d2d23ec165fbb5adf4c3323a5d  NetworkManager-1.14.6.tar.xz
++# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.18/NetworkManager-1.18.0.sha256sum
++sha256 c6e8df25e5a3c7309bc17664be8971689314884cdd08afdd6b0847d29d2a8ba6  NetworkManager-1.18.0.tar.xz
+ # Locally computed
+ sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
+ sha256 3a2968e3abb4fea464cd8dc1146d71996f9544af91a5f687bc4f3a2932df49b4  libnm-util/COPYING
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 96f842f120..c0a9ba0bdb 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PYTHON_JINJA2_VERSION = 2.10
-+PYTHON_JINJA2_VERSION = 2.10.1
- PYTHON_JINJA2_SOURCE = Jinja2-$(PYTHON_JINJA2_VERSION).tar.gz
--PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/56/e6/332789f295cf22308386cf5bbd1f4e00ed11484299c5d7383378cf48ba47
-+PYTHON_JINJA2_SITE = https://files.pythonhosted.org/packages/93/ea/d884a06f8c7f9b7afbc8138b762e80479fb17aedbbe2b06515a12de9378d
- PYTHON_JINJA2_SETUP_TYPE = setuptools
- PYTHON_JINJA2_LICENSE = BSD-3-Clause
- PYTHON_JINJA2_LICENSE_FILES = LICENSE
-+
- # In host build, setup.py tries to download markupsafe if it is not installed
- HOST_PYTHON_JINJA2_DEPENDENCIES = host-python-markupsafe
- 
+-NETWORK_MANAGER_VERSION_MAJOR = 1.14
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).6
++NETWORK_MANAGER_VERSION_MAJOR = 1.18
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+-- 
+2.21.0
