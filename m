@@ -1,46 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 1 May 2019 11:35:42 +0200
-Subject: [Buildroot] [PATCH 6/7] support/scripts/qemu-boot: gitlab tests
- for Qemu
-In-Reply-To: <20190430194033.GE27252@scaer>
-References: <1556555546-9246-1-git-send-email-jugurtha.belkalem@smile.fr>
- <1556555546-9246-7-git-send-email-jugurtha.belkalem@smile.fr>
- <df02769a-fa12-c908-1222-bf3817a83473@mind.be>
- <CAMo8BfK_oNzVTDawQvJakCozYsF6ThxCNzDx0ez75J9wN8cHxA@mail.gmail.com>
- <CAHpTZwnYegw7DTpoke0Yqf-DghTnAoL8+zN2bhQjVCasfHuoUA@mail.gmail.com>
- <4368e67d-3b86-9566-2fac-28c247dce4b6@mind.be> <20190430194033.GE27252@scaer>
-Message-ID: <7b923362-46ee-43b2-91c2-d881110e956d@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  1 May 2019 11:41:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: needs gcc >=
+ 4.9
+Message-ID: <20190501094105.29016-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Needs C++11 since bump to version 1.2.0
 
+Fixes:
+ - http://autobuild.buildroot.org/results/73481ae2e5736c8042ec7911f1378623bd3de74d
 
-On 30/04/2019 21:40, Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2019-04-30 13:20 +0200, Arnout Vandecappelle spake thusly:
->> On 30/04/2019 10:54, Jugurtha BELKALEM wrote:
->>> Thank you for you comments Arnout, I have corrected the indentation, timeout
->>> and? function declaration issues.
->>>
->>> However; I think that duplicating the content of readme.txt of each qemu
->>> architecture would be difficult to maintain (even if it is more convenient to
->>> use), this is why a project like toolchain builder :
->>> https://github.com/bootlin/toolchains-builder/blob/master/build.sh is reading
->>> directly from readme.txt.
->>  The idea would not be to duplicate it, but to move it. I.e., readme.txt just
->> says "launch with board/qemu/x86_64/launch.sh", and the actual command is in
->> that shell script.
->>
->>  But maybe we should see what other Buildroot maintainers have to say about it.
->> Thomas, Peter, Yann, Romain?
-> Ideally, I'd go without the readme.txt altogether, or if we want to keep
-> "backward compatibility", we'd make it a symlink to launch.sh.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libtorrent-rasterbar/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- Sounds good to me. Most of those don't contain any information at all.
-
- Regards,
- Arnout
+diff --git a/package/libtorrent-rasterbar/Config.in b/package/libtorrent-rasterbar/Config.in
+index 8c259e113e..b2508b8b70 100644
+--- a/package/libtorrent-rasterbar/Config.in
++++ b/package/libtorrent-rasterbar/Config.in
+@@ -1,8 +1,8 @@
+-comment "libtorrent-rasterbar needs a toolchain w/ C++, threads, wchar, gcc >= 4.8"
++comment "libtorrent-rasterbar needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+-		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_HOST_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ comment "libtorrent-rasterbar needs exception_ptr"
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
+@@ -11,8 +11,8 @@ comment "libtorrent-rasterbar needs exception_ptr"
+ config BR2_PACKAGE_LIBTORRENT_RASTERBAR
+ 	bool "libtorrent-rasterbar"
+ 	depends on BR2_INSTALL_LIBSTDCPP # boost
+-	depends on BR2_HOST_GCC_AT_LEAST_4_8
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on BR2_HOST_GCC_AT_LEAST_4_9 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
+ 	depends on BR2_USE_WCHAR # boost
+-- 
+2.20.1
