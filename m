@@ -1,49 +1,51 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed,  1 May 2019 11:41:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: needs gcc >=
- 4.9
-Message-ID: <20190501094105.29016-1-fontaine.fabrice@gmail.com>
+From: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Date: Wed, 1 May 2019 09:08:33 +0000
+Subject: [Buildroot] [PATCH] package/gerbera: fix build with latest exiv2
+Message-ID: <20190501090704.44050-1-nicolas.serafini@sensefly.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Needs C++11 since bump to version 1.2.0
+After the bump to exiv2 0.27.1 a build error due to missing header
+inclusion apparead.
 
-Fixes:
- - http://autobuild.buildroot.org/results/73481ae2e5736c8042ec7911f1378623bd3de74d
+This patch fixes
+http://autobuild.buildroot.net/results/3831acf7f4c5a9f1a404e0ced3d6bec7a2249601/
+http://autobuild.buildroot.net/results/de0545462c6017fe54acc284b914b9fa8b0172d8/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The patch is waiting merge into the mainline
+https://github.com/gerbera/gerbera/pull/457
+
+Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
 ---
- package/libtorrent-rasterbar/Config.in | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/gerbera/gerbera.hash | 1 +
+ package/gerbera/gerbera.mk   | 3 +++
+ 2 files changed, 4 insertions(+)
 
-diff --git a/package/libtorrent-rasterbar/Config.in b/package/libtorrent-rasterbar/Config.in
-index 8c259e113e..b2508b8b70 100644
---- a/package/libtorrent-rasterbar/Config.in
-+++ b/package/libtorrent-rasterbar/Config.in
-@@ -1,8 +1,8 @@
--comment "libtorrent-rasterbar needs a toolchain w/ C++, threads, wchar, gcc >= 4.8"
-+comment "libtorrent-rasterbar needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
--		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+		!BR2_HOST_GCC_AT_LEAST_4_9 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
+index aa6a29f81e..9f19e6ffc8 100644
+--- a/package/gerbera/gerbera.hash
++++ b/package/gerbera/gerbera.hash
+@@ -1,3 +1,4 @@
+ # Locally computed:
+ sha256	9c4509189eab6bff0fe183e1dd54ea8cb17d7fb0bc6e21bb5b1a8ccaaf6c60d9	gerbera-v1.3.1.tar.gz
+ sha256	cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6	LICENSE.md
++sha256	7fe27cab2145b1bde2a2a8fadf3a3f684e7a1a6ad6a31cf4bcdc7bc3e649faaa	457.patch
+diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
+index 5b69faaf82..62edbbc900 100644
+--- a/package/gerbera/gerbera.mk
++++ b/package/gerbera/gerbera.mk
+@@ -19,6 +19,9 @@ GERBERA_CONF_OPTS = \
+ 	-DWITH_DEBUG=OFF \
+ 	-DWITH_JS=OFF
  
- comment "libtorrent-rasterbar needs exception_ptr"
- 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
-@@ -11,8 +11,8 @@ comment "libtorrent-rasterbar needs exception_ptr"
- config BR2_PACKAGE_LIBTORRENT_RASTERBAR
- 	bool "libtorrent-rasterbar"
- 	depends on BR2_INSTALL_LIBSTDCPP # boost
--	depends on BR2_HOST_GCC_AT_LEAST_4_8
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # C++11
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # boost
- 	depends on BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
- 	depends on BR2_USE_WCHAR # boost
++GERBERA_PATCH = \
++	https://patch-diff.githubusercontent.com/raw/gerbera/gerbera/pull/457.patch
++
+ # Uses __atomic_fetch_add_4
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ GERBERA_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
 -- 
-2.20.1
+2.21.0
