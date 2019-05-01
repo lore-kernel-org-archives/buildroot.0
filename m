@@ -1,8 +1,8 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Wed,  1 May 2019 20:10:13 -0300
-Subject: [Buildroot] [PATCH v4] package/eudev: generate hwdb.bin at system
- startup
-Message-ID: <20190501231013.5957-1-unixmania@gmail.com>
+Date: Wed,  1 May 2019 20:11:39 -0300
+Subject: [Buildroot] [PATCH v3 1/2] package/procps-ng: add init script for
+ sysctl
+Message-ID: <20190501231140.6365-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,121 +11,130 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <unixmania@gmail.com>
 
-Programs that use libudev (e.g. lsusb, from usbutils) need the hwdb.bin
-file to work properly.
+Add a simple init script that invokes sysctl early in the initialization
+process to configure kernel parameters. This is already performed by
+systemd (systemd-sysctl) but there is no sysvinit/busybox counterpart.
 
-If BR2_PACKAGE_EUDEV_ENABLE_HWDB is selected then the eudev installation
-populates /etc/udev/hwdb.d/ but does not genarete /etc/udev/hwdb.bin. It
-must be created running "udevadm hwdb --update" on the target device but
-this does not work with a read-only /etc, so we need these changes:
+Files are read from directories in the following list in the given order
+from top to bottom:
 
-- Add the BR2_PACKAGE_EUDEV_HWDB_BIN_PATH config, allowing the user to
-  set the location of hwdb.bin.
-- Patch the configuration script, allowing to set the hwdb.bin path by
-  means of an environment variable (udevhwdbbinpath).
-- Pass the value set in BR2_PACKAGE_EUDEV_HWDB_BIN_PATH to the configure
-  script by means of the udevhwdbbinpath variable.
-- Make the S10udev init script run "udevadm hwdb --update" to recreate
-  hwdb.bin or print an error message if the operation fails (e.g. no
-  write permission on the filesystem).
+    /run/sysctl.d/*.conf
+    /etc/sysctl.d/*.conf
+    /usr/local/lib/sysctl.d/*.conf
+    /usr/lib/sysctl.d/*.conf
+    /lib/sysctl.d/*.conf
+    /etc/sysctl.conf
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Tested-by: Matt Weber <matthew.weber@rockwellcollins.com>
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
-Changes v1->v2
-- Incorporate fixes and improvements provided by Matt Weber
-Changes v2->v3
-- Make HWDB_BIN_PATH depend on ENABLE_HWDB, as pointed by Matt Weber.
-Changes v3->v4
-- Changed SOB, since I don't work for DATACOM anymore.
-
-Note: there was a discussion via email and on IRC, with suggestions to
-prebuild hwdb.bin at build time and to add a /etc/defaults/udev cfg file
-instead of patching S10udev. I like both suggestions but I'd prefer to
-implement them in subsequent patches lather, since they would require
-additional changes (e.g. adding eudev as a host tool).
+Changes v2->v3:
+  - Update SOB, since I don't work for DATACOM anymore.
+Changes v1->v2:
+  - The "--system" option activates "--ignore", which is bad because
+    invalid variable settings in the configuration files will not be
+    reported on the system log. Use some scripting to mimic the --system
+    behavior but still reporting errors.
+  - Redirect sysctl's standard output to syslog with facility.level
+    "kern.info" and standard error to syslog with facility.level
+    "kern.err".
+  - Do not pass "--quiet" to sysctl, since we wanto to see the results.
+  - Use "Running" and "Rerunning" instead of "Starting", since we do not
+    really start anything, just run a program.
+  - Do nothing on "stop", since ther is no running daemon to stop.
 ---
- package/eudev/Config.in | 10 ++++++++++
- package/eudev/S10udev   |  8 +++++++-
- package/eudev/eudev.mk  | 11 ++++++++++-
- 3 files changed, 27 insertions(+), 2 deletions(-)
+ package/procps-ng/S02sysctl    | 64 ++++++++++++++++++++++++++++++++++
+ package/procps-ng/procps-ng.mk |  5 +++
+ 2 files changed, 69 insertions(+)
+ create mode 100644 package/procps-ng/S02sysctl
+---
+ package/procps-ng/S02sysctl    | 64 ++++++++++++++++++++++++++++++++++
+ package/procps-ng/procps-ng.mk |  5 +++
+ 2 files changed, 69 insertions(+)
+ create mode 100644 package/procps-ng/S02sysctl
 
-diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-index 2220265a55..0ee5390dfb 100644
---- a/package/eudev/Config.in
-+++ b/package/eudev/Config.in
-@@ -32,6 +32,16 @@ config BR2_PACKAGE_EUDEV_ENABLE_HWDB
- 	help
- 	  Enables hardware database installation to /etc/udev/hwdb.d
- 
-+config BR2_PACKAGE_EUDEV_HWDB_BIN_PATH
-+	string "hwdb.bin path"
-+	depends on BR2_PACKAGE_EUDEV_ENABLE_HWDB
-+	default "/etc/udev/hwdb.bin"
-+	help
-+	  Location of the hwdb.bin file, which is re-generated at system
-+	  startup. The default is /etc/udev/hwdb.bin but you may want to
-+	  move it elsewhere (e.g. /var/run/udev/hwdb.bin) if /etc is in
-+	  a read-only filesystem.
+diff --git a/package/procps-ng/S02sysctl b/package/procps-ng/S02sysctl
+new file mode 100644
+index 0000000000..3a58578de4
+--- /dev/null
++++ b/package/procps-ng/S02sysctl
+@@ -0,0 +1,64 @@
++#!/bin/sh
 +
++PROGRAM="sysctl"
++
++SYSCTL_ARGS=""
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$PROGRAM" ] && . "/etc/default/$PROGRAM"
++
++# Files are read from directories in the SYSCTL_SOURCES list, in the given
++# order. A file may be used more than once, since there can be multiple
++# symlinks to it. No attempt is made to prevent this.
++SYSCTL_SOURCES="/etc/sysctl.d/ /usr/local/lib/sysctl.d/ /usr/lib/sysctl.d/ /lib/sysctl.d/ /etc/sysctl.conf"
++
++# The "--system" option activates "--ignore", which is bad because invalid
++# variable settings in the configuration files will not be reported on the
++# system log. Use some scripting to mimic the --system behavior but still
++# reporting errors. Users not interested on error report can put "-e" in
++# SYSCTL_ARGS.
++#
++# The file redirections do the following:
++#
++# - stdout is redirected to syslog with facility.level "kern.info"
++# - stderr is redirected to syslog with facility.level "kern.err"
++# - file dscriptor 4 is used to pass the result to the "start" function.
++#
++run_program() {
++	# shellcheck disable=SC2086 # we need the word splitting
++	find $SYSCTL_SOURCES -maxdepth 1 -name '*.conf' -print0 2> /dev/null | \
++	xargs -0 -r -n 1 readlink -f | {
++		prog_status="OK"
++		while :; do
++			read -r file
++			if [ -z "$file" ]; then
++				echo "$prog_status" >&4
++				break
++			fi
++			echo "* Applying $file ..."
++			/sbin/sysctl -p "$file" $SYSCTL_ARGS || prog_status="FAIL"
++		done 2>&1 >&3 | /usr/bin/logger -t sysctl -p kern.err
++	} 3>&1 | /usr/bin/logger -t sysctl -p kern.info
++}
++
++start() {
++	printf '%s %s: ' "$1" "$PROGRAM"
++	status=$(run_program 4>&1)
++	echo "$status"
++	if [ "$status" = "OK" ]; then
++		return 0
++	fi
++	return 1
++}
++
++case "$1" in
++	start)
++		start "Running";;
++	restart|reload)
++		start "Rerunning";;
++	stop)
++		:;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 03b74784d2..6a41e9b322 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -44,4 +44,9 @@ ifeq ($(BR2_STATIC_LIBS),y)
+ PROCPS_NG_CONF_OPTS += --disable-numa
  endif
  
- comment "eudev needs eudev /dev management"
-diff --git a/package/eudev/S10udev b/package/eudev/S10udev
-index 4e799d6507..08aca82dd9 100644
---- a/package/eudev/S10udev
-+++ b/package/eudev/S10udev
-@@ -21,14 +21,20 @@ UDEV_CONFIG=/etc/udev/udev.conf
- test -r $UDEV_CONFIG || exit 6
- . $UDEV_CONFIG
- 
-+UDEV_HWDB_BIN=%%UDEV_HWDB_BIN%%
-+
- case "$1" in
-     start)
-         printf "Populating %s using udev: " "${udev_root:-/dev}"
-         [ -e /proc/sys/kernel/hotplug ] && printf '\000\000\000\000' > /proc/sys/kernel/hotplug
-         /sbin/udevd -d || { echo "FAIL"; exit 1; }
-+        echo "done"
-         udevadm trigger --type=subsystems --action=add
-         udevadm trigger --type=devices --action=add
--        udevadm settle --timeout=30 || echo "udevadm settle failed"
-+        udevadm settle --timeout=30 || { echo "udevadm settle failed" && exit 1; }
-+        echo "done"
-+        printf "Compiling hardware database information $UDEV_HWDB_BIN: "
-+        udevadm hwdb --update || { echo "FAIL" && exit 1; }
-         echo "done"
-         ;;
-     stop)
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index d88e010c28..f3b2d28b60 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -33,6 +33,12 @@ endif
- 
- ifeq ($(BR2_PACKAGE_EUDEV_ENABLE_HWDB),y)
- EUDEV_CONF_OPTS += --enable-hwdb
-+define EUDEV_POST_PATCH
-+	$(SED) 's,$${udevconfdir}/hwdb.bin,$${udevhwdbbinpath:-$${udevconfdir}/hwdb.bin},' \
-+		$(@D)/configure
++define PROCPS_NG_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/procps-ng/S02sysctl \
++		$(TARGET_DIR)/etc/init.d/S02sysctl
 +endef
-+EUDEV_POST_PATCH_HOOKS += EUDEV_POST_PATCH
-+EUDEV_CONF_ENV += udevhwdbbinpath=$(BR2_PACKAGE_EUDEV_HWDB_BIN_PATH)
- else
- EUDEV_CONF_OPTS += --disable-hwdb
- endif
-@@ -45,7 +51,10 @@ EUDEV_CONF_OPTS += --disable-selinux
- endif
- 
- define EUDEV_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 0755 package/eudev/S10udev $(TARGET_DIR)/etc/init.d/S10udev
-+	$(INSTALL) -D -m 0755 package/eudev/S10udev \
-+		$(TARGET_DIR)/etc/init.d/S10udev
-+	$(SED) 's,%%UDEV_HWDB_BIN%%,$(BR2_PACKAGE_EUDEV_HWDB_BIN_PATH),' \
-+		$(TARGET_DIR)/etc/init.d/S10udev
- endef
- 
- # Required by default rules for input devices
++
+ $(eval $(autotools-package))
 -- 
 2.20.1
