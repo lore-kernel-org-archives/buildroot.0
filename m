@@ -1,11 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 1 May 2019 15:54:12 +0200
-Subject: [Buildroot] [PATCH v4 3/3] .gitlab-ci.yml: add trigger per job
-In-Reply-To: <de070254-9408-b33b-83d6-25477c1f5703@mind.be>
-References: <7fdd9d95-c147-d5bf-ca56-c0fef507f737@mind.be>
- <5cbd187c3c9b_707a3f9fd611a0e8645dd@ultri5.mail>
- <de070254-9408-b33b-83d6-25477c1f5703@mind.be>
-Message-ID: <ca4f384d-ef32-1f1d-45de-53f5cad208a7@mind.be>
+Date: Wed, 1 May 2019 15:54:32 +0200
+Subject: [Buildroot] [PATCH] package/network-manager: update to 1.18.0
+In-Reply-To: <20190501072642.18350-1-lkundrak@v3.sk>
+References: <20190501072642.18350-1-lkundrak@v3.sk>
+Message-ID: <f90b3acc-8bdb-405a-cc19-6d2d78758fd6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,17 +12,46 @@ To: buildroot@busybox.net
 
 
 
-On 22/04/2019 09:19, Arnout Vandecappelle wrote:
->>>  Also, I'll squash patches 2 and 3. Patch 2 is really not worth much on its own
->>> IMO. It would make more sense to introduce the _base keys in a separate patch
->>> (i.e. moving the artifacts to _base) and include the variable name in that
->>> patch. But I don't think it's worth the effort to try to split like that.
->> OK. Please feel free to squash them.
->  I'll do that when I get around to applying them :-)
+On 01/05/2019 09:43, Lubomir Rintel wrote:
+> A straightforward package update. Tested.
+> 
+> Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 
- I finally did...
-
- Patches 2 and 3 squashed and applied to master, thanks.
+ Applied to master, thanks.
 
  Regards,
  Arnout
+
+> ---
+>  package/network-manager/network-manager.hash | 4 ++--
+>  package/network-manager/network-manager.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+> index 7c64e6505e..05ca63b041 100644
+> --- a/package/network-manager/network-manager.hash
+> +++ b/package/network-manager/network-manager.hash
+> @@ -1,5 +1,5 @@
+> -# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.14/NetworkManager-1.14.6.sha256sum
+> -sha256 693bcdad15eec7f07a06cbc6e43ddb3b1c13b2d2d23ec165fbb5adf4c3323a5d  NetworkManager-1.14.6.tar.xz
+> +# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.18/NetworkManager-1.18.0.sha256sum
+> +sha256 c6e8df25e5a3c7309bc17664be8971689314884cdd08afdd6b0847d29d2a8ba6  NetworkManager-1.18.0.tar.xz
+>  # Locally computed
+>  sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
+>  sha256 3a2968e3abb4fea464cd8dc1146d71996f9544af91a5f687bc4f3a2932df49b4  libnm-util/COPYING
+> diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+> index 96f842f120..c0a9ba0bdb 100644
+> --- a/package/network-manager/network-manager.mk
+> +++ b/package/network-manager/network-manager.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -NETWORK_MANAGER_VERSION_MAJOR = 1.14
+> -NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).6
+> +NETWORK_MANAGER_VERSION_MAJOR = 1.18
+> +NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
+>  NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+>  NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+>  NETWORK_MANAGER_INSTALL_STAGING = YES
+> 
