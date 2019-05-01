@@ -1,34 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 1 May 2019 14:23:17 +0200
-Subject: [Buildroot] Reg: Stripped binaries in output/build
-In-Reply-To: <CAAMHf5HyYJD=sxodMWfkQCkbg0ne5OEwfP9QG7cHFsrEK6M_jg@mail.gmail.com>
-References: <CAAMHf5HyYJD=sxodMWfkQCkbg0ne5OEwfP9QG7cHFsrEK6M_jg@mail.gmail.com>
-Message-ID: <fb97ce02-cdd3-f706-2533-c4174328f58c@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 01 May 2019 14:37:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bind: fix python build
+In-Reply-To: <027677af-1529-f480-7fe5-bf3788fac21e@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 1 May 2019 14:19:17 +0200")
+References: <20190427134925.1730-1-fontaine.fabrice@gmail.com>
+ <87ftq0ot5n.fsf@dell.be.48ers.dk>
+ <027677af-1529-f480-7fe5-bf3788fac21e@mind.be>
+Message-ID: <871s1iic56.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
+Hi,
 
-On 28/04/2019 15:15, ravi chandran wrote:
-> Hi,
-> ? I am using buildroot version 2019.02. By default i could see all the binaries
-> in output/target are stripped versions.? Similarly is there an option exist to
-> generate stripped binaries in output/build folder . The intention here is to
-> reduce the size of the output/build folder.
+ >> Hmm, I somehow missed the host/target mixup. This is not good. You test
+ >> if the target python-ply package is enabled, but then add
+ >> host-python-ply (which doesn't exist) to _DEPENDENCIES:
+ >> 
+ >> http://autobuild.buildroot.net/results/2615ebfdcb068594d028af4823260e613d37e867/build-end.log
+ >> 
+ >> If I understand it right, we need ply for the host to satisfy the
+ >> configure check and ply for the target for runtime, so I guess the
+ >> solution is to add a host version of the python-ply package.
 
- There is no such option. Stripping binaries in the build directory would take a
-long time and have very little impact on the overall size.
+ >  It's pretty ridiculous that we need host-python and host-python-ply *just* to
+ > satisfy the configure script... AFAICS, it's not actually used anywhere. Can't
+ > we turn PYTHON into a cache var and replace all that with a simple
+ > ac_cv_PYTHON=pyhon ?
 
- If the size of the build folder is really an issue for you, you can do
+I guess we could, but it also needs python for the target at runtime, so
+that implies host-python, and host-python-ply is a pure python package
+so trivial to build - So it doesn't really gain much.
 
-rm -rf output/build/*/*
-
- That way, you can *sometimes* still do a rebuild, though there is a significant
-risk that something will fail when you try to rebuild. So you could just as well
-save output/images and throw away the entire output directory.
-
- Regards,
- Arnout
+-- 
+Bye, Peter Korsgaard
