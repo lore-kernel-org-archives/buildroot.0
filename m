@@ -1,29 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 01 May 2019 09:07:06 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/atmel_sama5d27_som1: bump to
- linux4sam_6.0
-In-Reply-To: <1556659700-17918-1-git-send-email-pjtexier@koncepto.io>
- (Pierre-Jean Texier's message of "Tue, 30 Apr 2019 23:28:20 +0200")
-References: <1556659700-17918-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <87tveek605.fsf@dell.be.48ers.dk>
+Date: Wed, 01 May 2019 09:08:40 +0200
+Subject: [Buildroot] [PATCH] package/netcat-openbsd: switch to new
+ upstream URL
+In-Reply-To: <20190430132826.19559-1-john@metanate.com> (John Keeping's
+ message of "Tue, 30 Apr 2019 14:28:26 +0100")
+References: <20190430132826.19559-1-john@metanate.com>
+Message-ID: <87pnp2k5xj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
+>>>>> "John" == John Keeping <john@metanate.com> writes:
 
- > This commit :
- > 	- bumps Linux & U-Boot to linux4sam_6.0.
- > 	- bumps at91bootstrap to v3.8.12.
- > 	- removes old in-tree dts (now in dt-overlay-at91 [1][2])
- > 	- adapts genimage accordingly.
+ > anonscm.debian.org has been discontinued and now hosts a page pointing
+ > to salsa.debian.org.  Switch to the new upstream URL, explicitly setting
+ > the method to git now that we use an HTTPS URL.
 
- > [1] https://github.com/linux4sam/dt-overlay-at91/tree/master/sama5d27_som1_ek
- > [2] http://www.at91.com/linux4sam/bin/view/Linux4SAM/DT-Overlay
-
- > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+ > Signed-off-by: John Keeping <john@metanate.com>
 
 Committed, thanks.
 
