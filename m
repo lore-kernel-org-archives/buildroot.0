@@ -1,54 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 May 2019 09:23:58 +0200
-Subject: [Buildroot] [git commit] package/python-werkzeug: bump to version
- 0.15.2
-Message-ID: <20190501072307.EA4B183D89@busybox.osuosl.org>
+Date: Wed, 1 May 2019 09:27:09 +0200
+Subject: [Buildroot] [git commit] package/python-sqlalchemy: bump to version
+ .3.3
+Message-ID: <20190501072308.1F41983D89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=287819d361a3799dde390112d05e39d6f863ef0a
+commit: https://git.buildroot.net/buildroot/commit/?id=8fe83f40b6c848705e1a345d884eef46c91d75c3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also add hash for the license file, and change the license file to LICENSE.rst
-as LICENSE no longer exists.
+Also update hash for license file due to copyright year bump.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-werkzeug/python-werkzeug.hash | 5 +++--
- package/python-werkzeug/python-werkzeug.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-sqlalchemy/python-sqlalchemy.hash | 6 +++---
+ package/python-sqlalchemy/python-sqlalchemy.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-werkzeug/python-werkzeug.hash b/package/python-werkzeug/python-werkzeug.hash
-index 4b2075071e..84f1e2d624 100644
---- a/package/python-werkzeug/python-werkzeug.hash
-+++ b/package/python-werkzeug/python-werkzeug.hash
-@@ -1,3 +1,4 @@
- # md5 from https://pypi.python.org/pypi/Werkzeug/json, sha256 locally computed
--md5	e385b2c5a7193cff24c689b31e1124dc  Werkzeug-0.12.2.tar.gz
--sha256	903a7b87b74635244548b30d30db4c8947fe64c5198f58899ddcd3a13c23bb26  Werkzeug-0.12.2.tar.gz
-+md5	7c02923f7d898844079f12e28e32e3f8  Werkzeug-0.15.2.tar.gz
-+sha256	0a73e8bb2ff2feecfc5d56e6f458f5b99290ef34f565ffb2665801ff7de6af7a  Werkzeug-0.15.2.tar.gz
-+sha256	3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b  LICENSE.rst
-diff --git a/package/python-werkzeug/python-werkzeug.mk b/package/python-werkzeug/python-werkzeug.mk
-index 6d478f7c11..a2e3bcfbcf 100644
---- a/package/python-werkzeug/python-werkzeug.mk
-+++ b/package/python-werkzeug/python-werkzeug.mk
-@@ -4,11 +4,11 @@
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
+index 9e13a2f20f..7884016321 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.hash
++++ b/package/python-sqlalchemy/python-sqlalchemy.hash
+@@ -1,4 +1,4 @@
+ # md5 from https://pypi.python.org/pypi/SQLAlchemy/json, sha256 locally computed
+-md5    968e07dc0aa92f9205bb3877f33f498f  SQLAlchemy-1.2.2.tar.gz
+-sha256 64b4720f0a8e033db0154d3824f5bf677cf2797e11d44743cf0aebd2a0499d9d  SQLAlchemy-1.2.2.tar.gz
+-sha256 73bda3d7d6c568f494c1d12520a97d41a38b7ce91d88c21f1b469b747b17f7fd  LICENSE
++md5    f1902c174981e363a7fbb9f6c8d932c6  SQLAlchemy-1.3.3.tar.gz
++sha256 91c54ca8345008fceaec987e10924bf07dcab36c442925357e5a467b36a38319  SQLAlchemy-1.3.3.tar.gz
++sha256 5536859eda1f40aa1e96d94d0c027ccd5eb6822f869fb76bca655f4b58742a6a  LICENSE
+diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
+index c0023712a2..d304db20d3 100644
+--- a/package/python-sqlalchemy/python-sqlalchemy.mk
++++ b/package/python-sqlalchemy/python-sqlalchemy.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WERKZEUG_VERSION = 0.12.2
-+PYTHON_WERKZEUG_VERSION = 0.15.2
- PYTHON_WERKZEUG_SOURCE = Werkzeug-$(PYTHON_WERKZEUG_VERSION).tar.gz
--PYTHON_WERKZEUG_SITE = https://pypi.python.org/packages/56/41/c095a77eb2dd69bf278dd664a97d3416af04e9ba1a00b8c138f772741d31
-+PYTHON_WERKZEUG_SITE = https://files.pythonhosted.org/packages/f3/c8/fa7e1a0283267bee8efa10c665d8dca27e591face7e333c789c85671b3ab
- PYTHON_WERKZEUG_SETUP_TYPE = setuptools
- PYTHON_WERKZEUG_LICENSE = BSD-3-Clause
--PYTHON_WERKZEUG_LICENSE_FILES = LICENSE
-+PYTHON_WERKZEUG_LICENSE_FILES = LICENSE.rst
- 
- $(eval $(python-package))
+-PYTHON_SQLALCHEMY_VERSION = 1.2.2
++PYTHON_SQLALCHEMY_VERSION = 1.3.3
+ PYTHON_SQLALCHEMY_SOURCE = SQLAlchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
+-PYTHON_SQLALCHEMY_SITE = https://pypi.python.org/packages/b9/fb/a56d2fc0ce3571328fa872734ad124cae25a4cea422088987f865fb71787
++PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/2b/b2/e6f5c5efc68942edefaa924e8fbea0b32375baa434a511cbf6bb17769cf6
+ PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
+ PYTHON_SQLALCHEMY_LICENSE = MIT
+ PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
