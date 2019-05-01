@@ -1,23 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 01 May 2019 22:14:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/imagemagick: disable locale
- with uclibc
-In-Reply-To: <20190309145125.19822-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 9 Mar 2019 15:51:25 +0100")
-References: <20190309145125.19822-1-fontaine.fabrice@gmail.com>
-Message-ID: <87lfzqexvb.fsf@dell.be.48ers.dk>
+Date: Wed, 01 May 2019 22:14:27 +0200
+Subject: [Buildroot] [PATCH] package/gst1-plugins-base: add upstream
+ SA-2019-0001 security fix
+In-Reply-To: <20190430060532.16221-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 30 Apr 2019 08:05:31 +0200")
+References: <20190430060532.16221-1-peter@korsgaard.com>
+Message-ID: <87h8aeexuk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/f7be30ffa28b7f367fb5343a7d69dc8bc7c3a170
+ > Fixes the following security issue:
+ > CVE-2019-9928: GStreamer before 1.16.0 has a heap-based buffer overflow in
+ > the RTSP connection parser via a crafted response from a server
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > For more details, see the advisory:
+ > https://gstreamer.freedesktop.org/security/sa-2019-0001.html
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2019.02.x, thanks.
 
