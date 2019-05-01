@@ -1,93 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 1 May 2019 21:24:48 +0200
-Subject: [Buildroot] [git commit] package/rpm: drop unneeded third patch
-Message-ID: <20190501192536.7B5838124F@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 1 May 2019 21:36:02 +0200
+Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
+ in cross file
+In-Reply-To: <25be7377-dabe-41b6-68b3-f9d2a2537aad@mind.be>
+References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
+ <20190413182422.7e8f5f22@windsurf>
+ <20190423232944.70aeddba@gmx.net>
+ <6f5eef5542a44d775baa396c7fa7c01a2e6e2c4d.camel@embedded.rocks>
+ <trinity-a5fd1873-52f7-4d2a-9195-2a9713d0b83a-1556612829462@3c-app-gmx-bs70>
+ <2e75711ff4c34669fce6f86c50b34897d92ecb76.camel@embedded.rocks>
+ <25be7377-dabe-41b6-68b3-f9d2a2537aad@mind.be>
+Message-ID: <20190501213602.323f22eb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c6342736b0cd3bb6e236d861018c94538287ade2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-After upstream review, I found that the third patch is not needed, just
-doing an autoreconf fix the linking issue with -lintl
+On Wed, 1 May 2019 13:13:03 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...Makefile.am-rpm2-cpio-archive-needs-lintl.patch | 51 ----------------------
- package/rpm/rpm.mk                                 |  2 +-
- 2 files changed, 1 insertion(+), 52 deletions(-)
+> - I don't think it's appropriate to generate the cross-compilation.conf file in
+>  PKG_BUILDDIR. I think it should be at top level, i.e. $(@D).
 
-diff --git a/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch b/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
-deleted file mode 100644
-index 14d1d37d05..0000000000
---- a/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 317bc5263fcb31ce788c76fe1947b2e0783e4542 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 25 Apr 2019 18:49:24 +0200
--Subject: [PATCH] Makefile.am: rpm2{cpio,archive} needs lintl
--
--Add LIBINTL to rpm2{cpio,archive}_LDADD otherwise build fails on:
--
--/home/buildroot/autobuild/instance-2/output/host/bin/xtensa-linux-gcc -std=gnu99 -DHAVE_CONFIG_H   -I. -I. -I./include/ -I./build -I./lib -I./rpmio -I./misc -DLOCALEDIR="\"/usr/share/locale\"" -DLIBRPMALIAS_FILENAME="\"rpmpopt-4.14.2.1\"" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include -fPIC -DPIC -D_REENTRANT -Wall -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes  -fno-strict-aliasing -Wempty-body -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os   -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/beecrypt -c -o tools/rpmdeps.o tools/rpmdeps.c
--/home/buildroot/autobuild/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: rpm2cpio.o: undefined reference to symbol 'libintl_dgettext'
--/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
--collect2: error: ld returned 1 exit status
--Makefile:962: recipe for target 'rpm2cpio' failed
--make[3]: *** [rpm2cpio] Error 1
--make[3]: *** Waiting for unfinished jobs....
--libtool: link: /home/buildroot/autobuild/instance-2/output/host/bin/xtensa-linux-gcc -std=gnu99 -fPIC -DPIC -D_REENTRANT -Wall -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes -fno-strict-aliasing -Wempty-body -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/beecrypt -o rpm2archive rpm2archive.o  lib/.libs/librpm.so /home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/rpmio/.libs/librpmio.so -lcap -ldb rpmio/.libs/librpmio.so -lbeecrypt -lbz2 -lz -llzma -lpopt -larchive -lpthread -Wl,-rpath -Wl,/home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/lib/.libs -Wl,-rpath -Wl,/home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/rpmio/.libs
--/home/buildroot/autobuild/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: rpm2archive.o: undefined reference to symbol 'libintl_dgettext'
--/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
--collect2: error: ld returned 1 exit status
--Makefile:958: recipe for target 'rpm2archive' failed
--
--Fixes:
-- - http://autobuild.buildroot.org/results/26e20e19d878811d90fce52eb0951ee4d8b59068
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://github.com/rpm-software-management/rpm/pull/683]
-----
-- Makefile.am | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 057b7892c..e15240e60 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -145,11 +145,11 @@ rpmspec_LDADD +=	@WITH_POPT_LIB@
-- 
-- rpm2cpio_SOURCES =	rpm2cpio.c debug.h system.h
-- rpm2cpio_LDADD =	lib/librpm.la rpmio/librpmio.la
---rpm2cpio_LDADD +=	@WITH_POPT_LIB@
--+rpm2cpio_LDADD +=	@WITH_POPT_LIB@ @LIBINTL@
-- 
-- rpm2archive_SOURCES =	rpm2archive.c debug.h system.h
-- rpm2archive_LDADD =	lib/librpm.la rpmio/librpmio.la
---rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@
--+rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@ @LIBINTL@
-- 
-- 
-- if LIBELF
---- 
--2.20.1
--
-diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index ddc6f1c6ad..6d1068194a 100644
---- a/package/rpm/rpm.mk
-+++ b/package/rpm/rpm.mk
-@@ -20,7 +20,7 @@ RPM_DEPENDENCIES = \
- 	$(TARGET_NLS_DEPENDENCIES)
- RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
- RPM_LICENSE_FILES = COPYING
--# We're patching Makefile.am
-+# Needed to fix an issue with -lintl linking
- RPM_AUTORECONF = YES
- 
- RPM_CONF_OPTS = \
+I'd say it depends the $(@D) of which step. Indeed, in the (admittedly
+long term) perspective of per-package out-of-tree build, the source
+tree would be shared between the host and target builds of a given
+package, and this cross-compilation.conf file would only make sense for
+the target variant of the package, and therefore it should be in the
+build directory of the target variant.
+
+So, if this file is generated during the "configure" step, we are good,
+because $(@D) will point to the build directory. If it's generated in
+an earlier step, $(@D) points to the source directory (with per-package
+out-of-tree build implemented, of course).
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
