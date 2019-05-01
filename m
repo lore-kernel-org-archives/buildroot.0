@@ -1,85 +1,72 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Wed,  1 May 2019 14:40:27 -0500
-Subject: [Buildroot] [PATCH v7 0/5] Compiler-rt Security Fuzzing Support
-Message-ID: <20190501194032.765-1-matthew.weber@rockwellcollins.com>
+Date: Wed,  1 May 2019 14:40:29 -0500
+Subject: [Buildroot] [PATCH v7 2/5] package llvm/clang: note about version
+ bumping dep
+In-Reply-To: <20190501194032.765-1-matthew.weber@rockwellcollins.com>
+References: <20190501194032.765-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20190501194032.765-3-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This series adds the ability to perform security fuzzing on
-target for custom applications as well as against other open
-source projects which have existing libfuzzer frameworks.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Acked-by: Romain Naour <romain.naour@smile.fr>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+--
 
-What is Fuzzing?
+This patch can be applied independent of the compiler-rt series.
 
-"Fuzz testing or fuzzing is a software testing technique, often
-automated or semi-automated, that involves providing invalid,
-unexpected, or random data to the inputs of a computer program.
-The program is then monitored for exceptions such as crashes, or
-failing built-in code assertions or for finding potential memory
-Leaks.? - Wikipedia
+Changes
+v1 -> v2
+ - None
 
-Compiler-RT's Libfuzzer - https://llvm.org/docs/LibFuzzer.html
-Works at the software level like a unit or component test
-- Target is code rather than system interface
-- Specifically for C and C++
-Catch bugs sooner in the development cycle
-- Testing can begin before software is fully integrated
-Evolutionary fuzzer
-- No structural data modeling required
-- Uses code coverage of a test case to compute fitness score
-  in evolutionary algorithm
+v2 -> v3
+[Ricardo
+ - Added compiler-rt to list of items to bump. I originaly had kept this
+   patch independent of the compiler-rt series but since compiler-rt is
+   first in the series, this one may as well include it in the statements
 
-Sanitizers
-- Dynamic analysis tools designed to look for runtime errors
-- The sanitizers in this series are built with debug symbols
-  and will point to the exact line of code where the error
-  occurs. Sanitizers can be used with both GCC and CLANG.
-   Address Sanitizer
-    -fsanitize=address
-   Leak Sanitizer
-    -fsanitize=leak
-   Undefined behavior Sanitizer
-    -fsanitize=undefined
-   Thread Sanitizer
-    -fsanitize=thread
+v4
+ - None
 
+v5
+ - Rebased post 2018.11 on master
 
-Matt Weber (5):
-  package/llvm: install target binary/debug tools
-  package llvm/clang: note about version bumping dep
-  package/llvm: disable libxml2
-  package/compiler-rt: new package
-  testing/tests: CLANG compiler-rt runtime test
+v6
+ - Rebased after LLVM/Clang bump to 7.0.1
 
- .gitlab-ci.yml                                |  1 +
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- package/clang/clang.mk                        |  1 +
- package/compiler-rt/Config.in                 | 14 ++++++
- package/compiler-rt/compiler-rt.hash          |  3 ++
- package/compiler-rt/compiler-rt.mk            | 36 +++++++++++++++
- package/llvm/llvm.mk                          | 17 ++++++-
- .../br2-external/clang-compiler-rt/Config.in  |  1 +
- .../clang-compiler-rt/external.desc           |  1 +
- .../clang-compiler-rt/external.mk             |  1 +
- .../package/libfuzzer/Config.in               |  7 +++
- .../package/libfuzzer/libfuzzer.hash          |  2 +
- .../package/libfuzzer/libfuzzer.mk            | 24 ++++++++++
- support/testing/tests/package/test_clang.py   | 46 +++++++++++++++++++
- 15 files changed, 155 insertions(+), 1 deletion(-)
- create mode 100644 package/compiler-rt/Config.in
- create mode 100644 package/compiler-rt/compiler-rt.hash
- create mode 100644 package/compiler-rt/compiler-rt.mk
- create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/Config.in
- create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/external.desc
- create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/external.mk
- create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/Config.in
- create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.hash
- create mode 100644 support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
- create mode 100644 support/testing/tests/package/test_clang.py
+v7
+ - Updated patch so it could be applied independent of compiler-rt
+---
+ package/clang/clang.mk | 1 +
+ package/llvm/llvm.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
+diff --git a/package/clang/clang.mk b/package/clang/clang.mk
+index 0cab1c7f89..07e7fced2a 100644
+--- a/package/clang/clang.mk
++++ b/package/clang/clang.mk
+@@ -4,6 +4,7 @@
+ #
+ ################################################################################
+ 
++# LLVM and Clang should be version bumped together
+ CLANG_VERSION = 8.0.0
+ CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
+ CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
+diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
+index 7186c91cb7..a1c0167ff6 100644
+--- a/package/llvm/llvm.mk
++++ b/package/llvm/llvm.mk
+@@ -4,6 +4,7 @@
+ #
+ ################################################################################
+ 
++# LLVM and Clang should be version bumped together
+ LLVM_VERSION = 8.0.0
+ LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
+ LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
 -- 
 2.17.1
