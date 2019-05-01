@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 1 May 2019 14:19:17 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bind: fix python build
-In-Reply-To: <87ftq0ot5n.fsf@dell.be.48ers.dk>
-References: <20190427134925.1730-1-fontaine.fabrice@gmail.com>
- <87ftq0ot5n.fsf@dell.be.48ers.dk>
-Message-ID: <027677af-1529-f480-7fe5-bf3788fac21e@mind.be>
+Date: Wed, 1 May 2019 14:23:17 +0200
+Subject: [Buildroot] Reg: Stripped binaries in output/build
+In-Reply-To: <CAAMHf5HyYJD=sxodMWfkQCkbg0ne5OEwfP9QG7cHFsrEK6M_jg@mail.gmail.com>
+References: <CAAMHf5HyYJD=sxodMWfkQCkbg0ne5OEwfP9QG7cHFsrEK6M_jg@mail.gmail.com>
+Message-ID: <fb97ce02-cdd3-f706-2533-c4174328f58c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,50 +12,23 @@ To: buildroot@busybox.net
 
 
 
-On 30/04/2019 09:21, Peter Korsgaard wrote:
->>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
-> 
->  > A check for python-ply has been added as this is a dependency of the
->  > dnssec-keymgr script so install host-python-ply to avoid a build failure
->  > if python-ply is not installed on host
-> 
->  > Fixes:
->  >  - http://autobuild.buildroot.org/results/96815b1300547c976443bf74b762febdfcc8d3ba
-> 
->  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  > ---
->  >  package/bind/bind.mk | 7 +++++--
->  >  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
->  > diff --git a/package/bind/bind.mk b/package/bind/bind.mk
->  > index 356bc259b2..087ce941b0 100644
->  > --- a/package/bind/bind.mk
->  > +++ b/package/bind/bind.mk
->  > @@ -70,8 +70,11 @@ else
->  >  BIND_CONF_OPTS += --with-openssl=no
->  >  endif
->  
->  > -# Used by dnssec-checkds and dnssec-coverage
->  > -ifeq ($(BR2_PACKAGE_PYTHON)$(BR2_PACKAGE_PYTHON3),)
->  > +# Used by dnssec-keymgr
->  > +ifeq ($(BR2_PACKAGE_PYTHON_PLY),y)
->  > +BIND_DEPENDENCIES += host-python-ply
->  > +BIND_CONF_OPTS += --with-python=$(HOST_DIR)/usr/bin/python
-> 
-> Hmm, I somehow missed the host/target mixup. This is not good. You test
-> if the target python-ply package is enabled, but then add
-> host-python-ply (which doesn't exist) to _DEPENDENCIES:
-> 
-> http://autobuild.buildroot.net/results/2615ebfdcb068594d028af4823260e613d37e867/build-end.log
-> 
-> If I understand it right, we need ply for the host to satisfy the
-> configure check and ply for the target for runtime, so I guess the
-> solution is to add a host version of the python-ply package.
+On 28/04/2019 15:15, ravi chandran wrote:
+> Hi,
+> ? I am using buildroot version 2019.02. By default i could see all the binaries
+> in output/target are stripped versions.? Similarly is there an option exist to
+> generate stripped binaries in output/build folder . The intention here is to
+> reduce the size of the output/build folder.
 
- It's pretty ridiculous that we need host-python and host-python-ply *just* to
-satisfy the configure script... AFAICS, it's not actually used anywhere. Can't
-we turn PYTHON into a cache var and replace all that with a simple
-ac_cv_PYTHON=pyhon ?
+ There is no such option. Stripping binaries in the build directory would take a
+long time and have very little impact on the overall size.
+
+ If the size of the build folder is really an issue for you, you can do
+
+rm -rf output/build/*/*
+
+ That way, you can *sometimes* still do a rebuild, though there is a significant
+risk that something will fail when you try to rebuild. So you could just as well
+save output/images and throw away the entire output directory.
 
  Regards,
  Arnout
