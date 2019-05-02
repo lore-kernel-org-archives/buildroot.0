@@ -1,59 +1,79 @@
 From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Thu,  2 May 2019 20:51:24 +0200
-Subject: [Buildroot] [PATCH v2 5/7] package/llvm: add BPF backend
-In-Reply-To: <1556823086-29917-1-git-send-email-jugurtha.belkalem@smile.fr>
-References: <1556823086-29917-1-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <1556823086-29917-6-git-send-email-jugurtha.belkalem@smile.fr>
+Date: Thu,  2 May 2019 20:51:19 +0200
+Subject: [Buildroot] [PATCH v2 0/7] bcc front end tool for eBPF
+Message-ID: <1556823086-29917-1-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Romain Naour <romain.naour@smile.fr>
+eBPF is the lastest Linux tracer and considered to
+be a modern systemTap. However, eBPF programs are
+written in a flavour of C language (which is tedious).
+BCC allows to write eBPF scripts in Python and C which
+makes troubleshooting a system and identifying
+bottelenecks easier.
+More information is available at :
+https://github.com/iovisor/bcc/blob/master/README.md.
 
-The BPF backend is needed for bcc tool.
+Jugurtha BELKALEM (5):
+  package/luajit: bump to version 2.1.x developpment version for aarch64
+  package/python-pytest: new package
+  package/python-pytest-runner: new package
+  package/python-traittypes: new package
+  package/python-bcc: new package
 
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
----
- package/llvm/Config.in | 6 ++++++
- package/llvm/llvm.mk   | 5 +++++
- 2 files changed, 11 insertions(+)
+Romain Naour (2):
+  package/llvm: add BPF backend
+  package/bcc: new package
 
-diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-index 83e9466..72d920e 100644
---- a/package/llvm/Config.in
-+++ b/package/llvm/Config.in
-@@ -35,6 +35,12 @@ config BR2_PACKAGE_LLVM_AMDGPU
- 	  Build AMDGPU target. Select this option if you are going
- 	  to install mesa3d with llvm and use Gallium Radeon driver.
- 
-+config BR2_PACKAGE_LLVM_BPF
-+	bool "BPF backend"
-+	help
-+	  Build BPF target. Select this option if you are going
-+	  to install bcc on the target.
-+
- endif
- 
- comment "llvm needs a toolchain w/ wchar, threads, C++, gcc >= 4.8, host gcc >= 4.8, dynamic library"
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 3c62285..ad4f3c4 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -61,6 +61,11 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
- LLVM_TARGETS_TO_BUILD += AMDGPU
- endif
- 
-+# Build BPF backend
-+ifeq ($(BR2_PACKAGE_LLVM_BPF),y)
-+LLVM_TARGETS_TO_BUILD += BPF
-+endif
-+
- # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
- LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
- 
+ DEVELOPERS                                         |  6 +++
+ package/Config.in                                  |  5 +++
+ ...CMake-Allow-to-disable-building-man-pages.patch | 35 +++++++++++++++
+ package/bcc/0002-fix-aarch64-cross-compile.patch   | 38 ++++++++++++++++
+ package/bcc/Config.in                              | 51 ++++++++++++++++++++++
+ package/bcc/bcc.hash                               |  3 ++
+ package/bcc/bcc.mk                                 | 23 ++++++++++
+ package/llvm/Config.in                             |  6 +++
+ package/llvm/llvm.mk                               |  5 +++
+ package/luajit/Config.in                           |  2 +-
+ package/luajit/luajit.hash                         |  1 +
+ package/luajit/luajit.mk                           |  6 +++
+ ...e-pytest-runner-a-conditional-requirement.patch | 47 ++++++++++++++++++++
+ package/python-bcc/Config.in                       | 11 +++++
+ package/python-bcc/python-bcc.hash                 |  3 ++
+ package/python-bcc/python-bcc.mk                   | 15 +++++++
+ .../0001-Remove-setuptools_scm-dependency.patch    | 29 ++++++++++++
+ package/python-pytest-runner/Config.in             |  9 ++++
+ .../python-pytest-runner/python-pytest-runner.hash |  3 ++
+ .../python-pytest-runner/python-pytest-runner.mk   | 15 +++++++
+ package/python-pytest/Config.in                    |  8 ++++
+ package/python-pytest/python-pytest.hash           |  5 +++
+ package/python-pytest/python-pytest.mk             | 15 +++++++
+ package/python-traittypes/Config.in                |  7 +++
+ package/python-traittypes/python-traittypes.hash   |  5 +++
+ package/python-traittypes/python-traittypes.mk     | 14 ++++++
+ 26 files changed, 366 insertions(+), 1 deletion(-)
+ create mode 100644 package/bcc/0001-CMake-Allow-to-disable-building-man-pages.patch
+ create mode 100644 package/bcc/0002-fix-aarch64-cross-compile.patch
+ create mode 100644 package/bcc/Config.in
+ create mode 100644 package/bcc/bcc.hash
+ create mode 100644 package/bcc/bcc.mk
+ create mode 100644 package/python-bcc/0001-Make-pytest-runner-a-conditional-requirement.patch
+ create mode 100644 package/python-bcc/Config.in
+ create mode 100644 package/python-bcc/python-bcc.hash
+ create mode 100644 package/python-bcc/python-bcc.mk
+ create mode 100644 package/python-pytest-runner/0001-Remove-setuptools_scm-dependency.patch
+ create mode 100644 package/python-pytest-runner/Config.in
+ create mode 100644 package/python-pytest-runner/python-pytest-runner.hash
+ create mode 100644 package/python-pytest-runner/python-pytest-runner.mk
+ create mode 100644 package/python-pytest/Config.in
+ create mode 100644 package/python-pytest/python-pytest.hash
+ create mode 100644 package/python-pytest/python-pytest.mk
+ create mode 100644 package/python-traittypes/Config.in
+ create mode 100644 package/python-traittypes/python-traittypes.hash
+ create mode 100644 package/python-traittypes/python-traittypes.mk
+
 -- 
 2.7.4
