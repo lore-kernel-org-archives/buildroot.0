@@ -1,103 +1,101 @@
 From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Thu,  2 May 2019 20:51:21 +0200
-Subject: [Buildroot] [PATCH v2 2/7] package/python-pytest: new package
+Date: Thu,  2 May 2019 20:51:23 +0200
+Subject: [Buildroot] [PATCH v2 4/7] package/python-traittypes: new package
 In-Reply-To: <1556823086-29917-1-git-send-email-jugurtha.belkalem@smile.fr>
 References: <1556823086-29917-1-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <1556823086-29917-3-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <1556823086-29917-5-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-bcc requires python-bcc which itself
-requires python-pytest.
-The pytest framework makes it easy to write
-small tests, yet scales to support complex
-functional testing for applications and libraries.
+bcc requires this package which is used to add
+custom trait types for scientific computing.
 
 Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+
 ---
- DEVELOPERS                               |  3 +++
- package/Config.in                        |  1 +
- package/python-pytest/Config.in          |  8 ++++++++
- package/python-pytest/python-pytest.hash |  5 +++++
- package/python-pytest/python-pytest.mk   | 15 +++++++++++++++
- 5 files changed, 32 insertions(+)
- create mode 100644 package/python-pytest/Config.in
- create mode 100644 package/python-pytest/python-pytest.hash
- create mode 100644 package/python-pytest/python-pytest.mk
+Changes v1 => v2:
+Correcting typos, adding #runtime
+comment and fixing License name.
+---
+ DEVELOPERS                                       |  1 +
+ package/Config.in                                |  1 +
+ package/python-traittypes/Config.in              |  7 +++++++
+ package/python-traittypes/python-traittypes.hash |  5 +++++
+ package/python-traittypes/python-traittypes.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/python-traittypes/Config.in
+ create mode 100644 package/python-traittypes/python-traittypes.hash
+ create mode 100644 package/python-traittypes/python-traittypes.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 6ccb0af..f6d5d3e 100644
+index d4370db..dc83571 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1224,6 +1224,9 @@ F:	package/python-sentry-sdk/
- F:	package/python-websockets/
- F:	package/python-xlib/
+@@ -1227,6 +1227,7 @@ F:	package/python-xlib/
+ N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+ F:	package/python-pytest
+ F:	package/python-pytest-runner
++F:	package/python-traittypes
  
-+N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+F:	package/python-pytest
-+
  N:	Joshua Henderson <joshua.henderson@microchip.com>
  F:	package/qt5/qt5wayland/
- 
 diff --git a/package/Config.in b/package/Config.in
-index f592e74..2a0aca9 100644
+index 4fcf4f7..4918ec5 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1015,6 +1015,7 @@ menu "External python modules"
- 	source "package/python-pysocks/Config.in"
- 	source "package/python-pytablereader/Config.in"
- 	source "package/python-pytablewriter/Config.in"
-+	source "package/python-pytest/Config.in"
- 	source "package/python-pytrie/Config.in"
- 	source "package/python-pytz/Config.in"
- 	source "package/python-pyudev/Config.in"
-diff --git a/package/python-pytest/Config.in b/package/python-pytest/Config.in
+@@ -1073,6 +1073,7 @@ menu "External python modules"
+ 	source "package/python-toml/Config.in"
+ 	source "package/python-tornado/Config.in"
+ 	source "package/python-traitlets/Config.in"
++	source "package/python-traittypes/Config.in"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
+diff --git a/package/python-traittypes/Config.in b/package/python-traittypes/Config.in
 new file mode 100644
-index 0000000..7db5493
+index 0000000..0688f80
 --- /dev/null
-+++ b/package/python-pytest/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_PYTEST
-+	bool "python-pytest"
++++ b/package/python-traittypes/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_TRAITTYPES
++	bool "python-traittypes"
++	select BR2_PACKAGE_PYTHON_TRAITLETS # runtime
 +	help
-+	  The pytest framework makes it easy to write small tests,
-+	  yet scales to support complex functional testing for
-+	  applications and libraries.
++	  Custom trait types for scientific computing.
 +
-+	  https://pypi.org/project/pytest/
-diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
++	  https://pypi.org/project/traittypes/
+diff --git a/package/python-traittypes/python-traittypes.hash b/package/python-traittypes/python-traittypes.hash
 new file mode 100644
-index 0000000..43f9f98
+index 0000000..a94b256
 --- /dev/null
-+++ b/package/python-pytest/python-pytest.hash
++++ b/package/python-traittypes/python-traittypes.hash
 @@ -0,0 +1,5 @@
-+# sha256 from https://pypi.org/project/pytest/#files
-+sha256 b7802283b70ca24d7119b32915efa7c409982f59913c1a6c0640aacf118b95f5 pytest-4.4.1.tar.gz
++# sha256 from https://pypi.org/project/traittypes/#files
++sha256	be6fa26294733e7489822ded4ae25da5b4824a8a7a0e0c2dccfde596e3489bd6 traittypes-0.2.1.tar.gz
 +
 +# Locally calculated
-+sha256	4be38574daf05665b6194e4fd84c5ef6ce7c3a2810308a5222d5cdffc2d04d18 LICENSE
-diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
++sha256	221976dfad5db283a2669efe8607e24c9c9aecca8453d6beba045e665c2f88a1 LICENSE
+diff --git a/package/python-traittypes/python-traittypes.mk b/package/python-traittypes/python-traittypes.mk
 new file mode 100644
-index 0000000..665951f
+index 0000000..d360e2d
 --- /dev/null
-+++ b/package/python-pytest/python-pytest.mk
-@@ -0,0 +1,15 @@
++++ b/package/python-traittypes/python-traittypes.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-pytest
++# python-traittypes
 +#
 +################################################################################
 +
-+PYTHON_PYTEST_VERSION = 4.4.1
-+PYTHON_PYTEST_SOURCE = pytest-$(PYTHON3_PYTEST_VERSION).tar.gz
-+PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/2b/b1/c9a84f79fc3bad226a9085289da11ecdd9bd2779a2c654195962b37d4110/
-+PYTHON_PYTEST_LICENSE = MIT
-+PYTHON_PYTEST_LICENSE_FILES = LICENSE
-+PYTHON_PYTEST_SETUP_TYPE = setuptools
-+PYTHON_PYTEST_DEPENDENCIES = python-setuptools-scm
++PYTHON_TRAITTYPES_VERSION = 0.2.1
++PYTHON_TRAITTYPES_SOURCE = traittypes-$(PYTHON_TRAITTYPES_VERSION).tar.gz
++PYTHON_TRAITTYPES_SITE = https://files.pythonhosted.org/packages/8a/71/0578e44d2110f93c2136eb705f5b11e706e1e8ea3acaaaeac043bd40d8fd
++PYTHON_TRAITTYPES_LICENSE = BSD-3-Clause
++PYTHON_TRAITTYPES_LICENSE_FILES = LICENSE
++PYTHON_TRAITTYPES_SETUP_TYPE = distutils
 +
 +$(eval $(python-package))
 -- 
