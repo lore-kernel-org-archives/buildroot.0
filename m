@@ -1,32 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 2 May 2019 08:27:38 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/luajit: add hash
- for the license file
-Message-ID: <20190502063316.4A281802D6@busybox.osuosl.org>
+Date: Thu, 2 May 2019 08:35:42 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x]
+ configs/qemu_xtensa_lx60_*: kernel build needs mkimage
+Message-ID: <20190502063316.5F7F281213@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52baad93faad1984655dc6cb7c8c3e51e1309fc5
+commit: https://git.buildroot.net/buildroot/commit/?id=53ac60ced6ae9ff554610f1211af8a1e61a147f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Following ffbe46a5295 ("linux: simplify LINUX_BUILD_CMDS"), the Linux
+kernel build for these xtensa qemu builds an image format that needs
+mkimage.
+
+Reported-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Cc: Max Filippov <jcmvbkbc@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 86a7f00919d162cc7b57047a768b7693ff08552b)
+(cherry picked from commit 7cf13b9b0644295dc8a0aa33838b304eb6ebc444)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luajit/luajit.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ configs/qemu_xtensa_lx60_defconfig       | 3 +++
+ configs/qemu_xtensa_lx60_nommu_defconfig | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
-index 2081d12724..7e2d87ebb2 100644
---- a/package/luajit/luajit.hash
-+++ b/package/luajit/luajit.hash
-@@ -1,2 +1,5 @@
- # Hashes from: http://luajit.org/download.html
- md5 48353202cbcacab84ee41a5a70ea0a2c    LuaJIT-2.0.5.tar.gz
+diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
+index 6bf48a2ada..4287e6abeb 100644
+--- a/configs/qemu_xtensa_lx60_defconfig
++++ b/configs/qemu_xtensa_lx60_defconfig
+@@ -23,3 +23,6 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+ BR2_LINUX_KERNEL_IMAGE_NAME="Image.elf"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
 +
-+# Locally calculated
-+sha256 accb335aa3102f80d31caa2c2508fbcb795314106493519a367f13a87d0e87de  COPYRIGHT
++# Kernel needs mkimage
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
+index 5ff9646270..37b6743588 100644
+--- a/configs/qemu_xtensa_lx60_nommu_defconfig
++++ b/configs/qemu_xtensa_lx60_nommu_defconfig
+@@ -27,3 +27,6 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-nommu.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+ BR2_LINUX_KERNEL_IMAGE_NAME="Image.elf"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
++
++# Kernel needs mkimage
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
