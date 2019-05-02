@@ -1,16 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 2 May 2019 14:20:30 +0200
-Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
- in cross file
-In-Reply-To: <20190501213602.323f22eb@windsurf>
-References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
- <20190413182422.7e8f5f22@windsurf> <20190423232944.70aeddba@gmx.net>
- <6f5eef5542a44d775baa396c7fa7c01a2e6e2c4d.camel@embedded.rocks>
- <trinity-a5fd1873-52f7-4d2a-9195-2a9713d0b83a-1556612829462@3c-app-gmx-bs70>
- <2e75711ff4c34669fce6f86c50b34897d92ecb76.camel@embedded.rocks>
- <25be7377-dabe-41b6-68b3-f9d2a2537aad@mind.be>
- <20190501213602.323f22eb@windsurf>
-Message-ID: <c6fb8bd7-cf1a-e623-c849-b2fc468f50ca@mind.be>
+Date: Thu, 2 May 2019 14:27:25 +0200
+Subject: [Buildroot] [PATCH] board/qemu/ppc*: disable Werror while
+ building ppc kernel with gcc >= 9.1
+In-Reply-To: <4a872624-ceb5-23cb-9005-3284ffbce131@gmail.com>
+References: <20190501125236.16786-1-romain.naour@gmail.com>
+ <27b861d5-8ead-229b-61ac-95806515d90a@mind.be>
+ <4a872624-ceb5-23cb-9005-3284ffbce131@gmail.com>
+Message-ID: <b55d30e3-803f-11bb-0054-677eed9df333@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -19,30 +15,58 @@ To: buildroot@busybox.net
 
 
 
-On 01/05/2019 21:36, Thomas Petazzoni wrote:
-> Hello,
+On 01/05/2019 15:57, Romain Naour wrote:
+> Hi Arnout,
 > 
-> On Wed, 1 May 2019 13:13:03 +0200
-> Arnout Vandecappelle <arnout@mind.be> wrote:
+> Le 01/05/2019 ? 15:32, Arnout Vandecappelle a ?crit?:
+>>
+>>
+>> On 01/05/2019 14:52, Romain Naour wrote:
+>>> Add CONFIG_PPC_DISABLE_WERROR only for qemu ppc{64} defconfig
+>>> since they are used for CI with toolchain-builder's gitlab [3].
+>>
+>>  Maybe it would be better to have a single fragment file
+>> board/linux-ppc-disable-werror.fragment
+>> and include that in all the relevant defconfigs, rather than updating each linux
+>> config?
 > 
->> - I don't think it's appropriate to generate the cross-compilation.conf file in
->>  PKG_BUILDDIR. I think it should be at top level, i.e. $(@D).
-> 
-> I'd say it depends the $(@D) of which step. Indeed, in the (admittedly
-> long term) perspective of per-package out-of-tree build, the source
-> tree would be shared between the host and target builds of a given
-> package, and this cross-compilation.conf file would only make sense for
-> the target variant of the package, and therefore it should be in the
-> build directory of the target variant.
-> 
-> So, if this file is generated during the "configure" step, we are good,
-> because $(@D) will point to the build directory. If it's generated in
-> an earlier step, $(@D) points to the source directory (with per-package
-> out-of-tree build implemented, of course).
+> I'm not sure how to handle such fragments in Buildroot.
+> Storing fragments in board directory seems not great.
 
- Similarly like for $(2) vs. $(PKG), I think we should have a "default" for how
-to address "the directory where stuff happens". We currently use $(@D) in many
-places, but perhaps it's better to turn that into $(FOO_BUILDDIR).
+ Maybe in board/shared then?
+
+
+> Maybe add a new fragments directory in linux package directory:
+> linux/fragments/linux-ppc-disable-werror.fragment
+
+ I don't like that. that. IMO, the linux/ directory should only contain stuff
+that is used by the linux package infra itself. IMO the defconfigs should only
+refer to paths in board/ and utils/.
+
+ We currently have two exceptions to that "rule": genimage.sh which is in
+support/scripts instead of utils, and busybox-minimal.config which is in the
+busybox directory.
+
+
+> Or a new directory configs/fragments/linux/linux-ppc-disable-werror.fragment
+
+ I feel that configs/ is an artefact of the kconfig infra, it would in fact be a
+lot more logical to have the defconfigs in the board directory. But
+board/fragments/linux would work as well. Though I don't see many other shared
+fragments than linux config fragments...
 
  Regards,
  Arnout
+
+
+> 
+> Thought ?
+> 
+> Best regards,
+> Romain
+> 
+>>
+>>  Regards,
+>>  Arnout
+>>
+> 
