@@ -1,68 +1,74 @@
-From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Thu, 2 May 2019 10:01:19 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mfgtools: bump to version 1.2.91
-In-Reply-To: <4bf9c494-f6dc-e1a8-abad-3d87cbf1e051@mind.be>
-References: <20190430201121.15634-1-joerg.krause@embedded.rocks>
- <20190430201121.15634-2-joerg.krause@embedded.rocks>
- <880fdc14-d19f-020b-9735-9e0077e6be76@mind.be>
- <7552b9cbd58edcd667f52531ed75e3fe57cd705c.camel@embedded.rocks>
- <4bf9c494-f6dc-e1a8-abad-3d87cbf1e051@mind.be>
-Message-ID: <15946_1556784081_5CCAA3D1_15946_377_1_20190502080119.GA3431@r-lnx-nyma7486-2>
+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Date: Thu,  2 May 2019 10:20:03 +0200
+Subject: [Buildroot] [PATCH 0/7] bcc front end tool for eBPF
+Message-ID: <1556785210-18237-1-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+eBPF is the lastest Linux tracer and considered to
+be a modern systemTap. However, eBPF programs are
+written in a flavour of C language (which is tedious).
+BCC allows to write eBPF scripts in Python and C which
+makes troubleshooting a system and identifying
+bottelenecks easier.
+More information is available at : 
+https://github.com/iovisor/bcc/blob/master/README.md.
 
-On 2019-05-02 09:52 +0200, Arnout Vandecappelle spake thusly:
-> On 02/05/2019 08:51, J?rg Krause wrote:
-> >>> The
-> >>> problem is, that git provides the version information of Buildroot.
-> >>  Is it that much of a problem if the Buildroot version is used?
-> > mfgtools saves the version string in generated runtime scripts. So this
-> > is a problem.
-> 
->  Yes, I understand that. But the effect is that `uuu --version` will print
-> 2019.02 instead of 1.2.91, right? So my question is: is it that much of a
-> problem that this happens?
-> 
->  I'm asking because I'm sure there are other packages that have that behaviour.
-> Are we going to try to find and fix all of them? Or just live with the fact that
-> some packages report the wrong version?
+Jugurtha BELKALEM (6):
+  package/luajit: bump to version 2.1.x developpment version for aarch64
+  package/bcc: new package
+  package/python-pytest: new package
+  package/python-pytest-runner: new package
+  package/python-traittypes: new package
+  package/python-bcc: new package
 
-I think the real issue is that, for out-of-tree builds, there might be
-no git tree available, and thus those packages would FTBFS. This means
-we would eventually cactch such packages.
+Romain Naour (1):
+  package/llvm: add BPF backend
 
-Furthermore, it would be pretty surprising for unsuspecting users to end
-up with Buildroot's version instead of that package's version.
-
-As such, your proposal to replace the version script is good idea.
-
-Regards,
-Yann E. MORIN.
+ package/Config.in                                  |  5 +++
+ ...CMake-Allow-to-disable-building-man-pages.patch | 35 +++++++++++++++
+ .../bcc/0001-package-bcc-luajit-for-aarch64.patch  | 25 +++++++++++
+ package/bcc/Config.in                              | 51 ++++++++++++++++++++++
+ package/bcc/bcc.hash                               |  3 ++
+ package/bcc/bcc.mk                                 | 23 ++++++++++
+ package/llvm/Config.in                             |  6 +++
+ package/llvm/llvm.mk                               |  5 +++
+ package/luajit/Config.in                           |  2 +-
+ package/luajit/luajit.hash                         |  1 +
+ package/luajit/luajit.mk                           |  8 +++-
+ package/python-bcc/Config.in                       | 11 +++++
+ package/python-bcc/python-bcc.hash                 |  3 ++
+ package/python-bcc/python-bcc.mk                   | 15 +++++++
+ package/python-pytest-runner/Config.in             |  9 ++++
+ .../python-pytest-runner/python-pytest-runner.hash |  3 ++
+ .../python-pytest-runner/python-pytest-runner.mk   | 16 +++++++
+ package/python-pytest/Config.in                    |  8 ++++
+ package/python-pytest/python-pytest.hash           |  5 +++
+ package/python-pytest/python-pytest.mk             | 15 +++++++
+ package/python-traittypes/Config.in                |  7 +++
+ package/python-traittypes/python-traittypes.hash   |  5 +++
+ package/python-traittypes/python-traittypes.mk     | 14 ++++++
+ 23 files changed, 272 insertions(+), 3 deletions(-)
+ create mode 100644 package/bcc/0001-CMake-Allow-to-disable-building-man-pages.patch
+ create mode 100644 package/bcc/0001-package-bcc-luajit-for-aarch64.patch
+ create mode 100644 package/bcc/Config.in
+ create mode 100644 package/bcc/bcc.hash
+ create mode 100644 package/bcc/bcc.mk
+ create mode 100644 package/python-bcc/Config.in
+ create mode 100644 package/python-bcc/python-bcc.hash
+ create mode 100644 package/python-bcc/python-bcc.mk
+ create mode 100644 package/python-pytest-runner/Config.in
+ create mode 100644 package/python-pytest-runner/python-pytest-runner.hash
+ create mode 100644 package/python-pytest-runner/python-pytest-runner.mk
+ create mode 100644 package/python-pytest/Config.in
+ create mode 100644 package/python-pytest/python-pytest.hash
+ create mode 100644 package/python-pytest/python-pytest.mk
+ create mode 100644 package/python-traittypes/Config.in
+ create mode 100644 package/python-traittypes/python-traittypes.hash
+ create mode 100644 package/python-traittypes/python-traittypes.mk
 
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.7.4
