@@ -1,127 +1,164 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Wed,  1 May 2019 23:01:52 -0300
-Subject: [Buildroot] [PATCH v4] package/radvd: improve startup script
-Message-ID: <20190502020152.32632-1-unixmania@gmail.com>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Wed, 1 May 2019 21:07:11 -0500
+Subject: [Buildroot] [PATCH v3 2/2] package/busybox: add init script for
+ sysctl
+In-Reply-To: <20190501231140.6365-2-unixmania@gmail.com>
+References: <20190501231140.6365-1-unixmania@gmail.com>
+ <20190501231140.6365-2-unixmania@gmail.com>
+Message-ID: <CANQCQpa5ftm8xUxBTFoHK2969mOAUQf_tGMfMkBUiuZRpVaJOg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+Carlos,
 
-- Add start, stop and restart/reload options, following the logic used
-  in other init scripts (e.g. S01syslogd).
 
-- Do nothing if /etc/radvd.conf does not exist instead of printing an
-  error message. It is valid to install radvd without a configuration
-  file. The daemon may be started later by another service with a
-  configuration created at run-time.
+On Wed, May 1, 2019 at 6:11 PM <unixmania@gmail.com> wrote:
+>
+> From: Carlos Santos <unixmania@gmail.com>
+>
+> Add a simple init script that invokes sysctl early in the initialization
+> process to configure kernel parameters. This is already performed by
+> systemd (systemd-sysctl) but there is no sysvinit/busybox counterpart.
+>
+> Files are read from directories in the following list in the given order
+> from top to bottom:
+>
+>     /run/sysctl.d/*.conf
+>     /etc/sysctl.d/*.conf
+>     /usr/local/lib/sysctl.d/*.conf
+>     /usr/lib/sysctl.d/*.conf
+>     /lib/sysctl.d/*.conf
+>     /etc/sysctl.conf
+>
+> A file may be used more than once, since there can be multiple symlinks
+> to it. No attempt is made to prevent this.
+>
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
 
-- Print an error message if the kernel does not support IPv6 forwarding,
-  which is required by radvd.
+Reviewed-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
-Changes v3->v4
-- Changed SOB, since I don't work for DATACOM anymore.
-- Use the same template of other init scripts.
+> ---
+> Changes v2->v3:
+>   - Update SOB, since I don't work for DATACOM anymore.
+> Changes v1->v2:
+>   - Use a while loop to process all files.
+>   - Redirect sysctl's standard output to syslog with facility.level
+>     "kern.info" and standard error to syslog with facility.level
+>     "kern.err".
+>   - Do not pass "-q" to sysctl, since we wanto to see the results.
+>   - Use "Running" and "Rerunning" instead of "Starting", since we do not
+>     really start anything, just run a program.
+>   - Do nothing on "stop", since ther is no running daemon to stop.
+> ---
+>  package/busybox/S02sysctl  | 66 ++++++++++++++++++++++++++++++++++++++
+>  package/busybox/busybox.mk | 12 +++++++
+>  2 files changed, 78 insertions(+)
+>  create mode 100644 package/busybox/S02sysctl
+> ---
+>  package/busybox/S02sysctl  | 66 ++++++++++++++++++++++++++++++++++++++
+>  package/busybox/busybox.mk | 12 +++++++
+>  2 files changed, 78 insertions(+)
+>  create mode 100644 package/busybox/S02sysctl
+>
+> diff --git a/package/busybox/S02sysctl b/package/busybox/S02sysctl
+> new file mode 100644
+> index 0000000000..6bb2fa165e
+> --- /dev/null
+> +++ b/package/busybox/S02sysctl
+> @@ -0,0 +1,66 @@
+> +#!/bin/sh
+> +
+> +PROGRAM="sysctl"
+> +
+> +SYSCTL_ARGS=""
+> +
+> +# shellcheck source=/dev/null
+> +[ -r "/etc/default/$PROGRAM" ] && . "/etc/default/$PROGRAM"
+> +
+> +# Files are read from directories in the SYSCTL_SOURCES list, in the given
+> +# order. A file may be used more than once, since there can be multiple
+> +# symlinks to it. No attempt is made to prevent this.
+> +SYSCTL_SOURCES="/etc/sysctl.d/ /usr/local/lib/sysctl.d/ /usr/lib/sysctl.d/ /lib/sysctl.d/ /etc/sysctl.conf"
+> +
+> +# Use some scripting to mimic the --system option of the sysctl provided by
+> +# procps-ng but still reporting errors. Users not interested on error report
+> +# can put "-e" in SYSCTL_ARGS.
+> +#
+> +# The file redirections do the following:
+> +#
+> +# - stdout is redirected to syslog with facility.level "kern.info"
+> +# - stderr is redirected to syslog with facility.level "kern.err"
+> +# - file dscriptor 4 is used to pass the result to the "start" function.
+> +#
+> +# Testing the sysctl exit code is fruitless, as at the moment, since it ends
+> +# with status zero even if errors happen. Hopefully this will be fixed in a
+> +# future version of Busybox.
+> +#
+> +run_program() {
+> +       # shellcheck disable=SC2086 # we need the word splitting
+> +       find $SYSCTL_SOURCES -maxdepth 1 -name '*.conf' -print0 2> /dev/null | \
+> +       xargs -0 -r -n 1 readlink -f | {
+> +               prog_status="OK"
+> +               while :; do
+> +                       read -r file
+> +                       if [ -z "$file" ]; then
+> +                               echo "$prog_status" >&4
+> +                               break
+> +                       fi
+> +                       echo "* Applying $file ..."
+> +                       /sbin/sysctl -p "$file" $SYSCTL_ARGS || prog_status="FAIL"
+> +               done 2>&1 >&3 | /usr/bin/logger -t sysctl -p kern.err
+> +       } 3>&1 | /usr/bin/logger -t sysctl -p kern.info
 
-Changes v2->v3
-- Don't test if the binary is executable. It's unlikely to happen
-  because Buildroot installs both radvd and its init script as part of
-  the same package. But if it ever happens for some reason, the error
-  message from start-stop-daemon should be pretty clear (Thomas
-  Petazzoni).
-- Move start and stop to functions and rewrite the error handling code
-  to improve its readability.
-- Add a one second sleep between stop and start, in restart, as made in
-  several other scripts.
+Should the utilities used above be enabled automatically in the
+busybox config when this script is installed?  I.e. add .config fixups
+in the busybox.mk
 
-Changes v1->v2
-- Print error message is /usr/sbin/radvd is missing
-- Print error message if /proc/sys/net/ipv6/conf/all/forwarding is
-  missing (kernel does not support IPv6 forwarding)
-- Echo "1" to /proc/sys/net/ipv6/conf/all/forwarding upon start
----
- package/radvd/S50radvd | 65 ++++++++++++++++++++++++++++++++++--------
- 1 file changed, 53 insertions(+), 12 deletions(-)
+> +}
+> +
+> +start() {
+> +       printf '%s %s: ' "$1" "$PROGRAM"
+> +       status=$(run_program 4>&1)
+> +       echo "$status"
+> +       if [ "$status" = "OK" ]; then
+> +               return 0
+> +       fi
+> +       return 1
+> +}
+> +
+> +case "$1" in
+> +       start)
+> +               start "Running";;
+> +       restart|reload)
+> +               start "Rerunning";;
+> +       stop)
+> +               :;;
+> +       *)
+> +               echo "Usage: $0 {start|stop|restart|reload}"
+> +               exit 1
+> +esac
+> diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+> index 67b91500e9..416b6f9bae 100644
+> --- a/package/busybox/busybox.mk
+> +++ b/package/busybox/busybox.mk
+> @@ -259,6 +259,17 @@ define BUSYBOX_INSTALL_LOGGING_SCRIPT
+>  endef
+>  endif
+>
+> +# Only install our sysctl scripts if no other package does it.
+> +ifeq ($(BR2_PACKAGE_PROCPS_NG),)
+> +define BUSYBOX_INSTALL_SYSCTL_SCRIPT
+> +       if grep -q CONFIG_BB_SYSCTL=y $(@D)/.config; \
+> +       then \
+> +               $(INSTALL) -m 0755 -D package/busybox/S02sysctl \
+> +                       $(TARGET_DIR)/etc/init.d/S02sysctl ; \
+> +       fi
+> +endef
+> +endif
+> +
+ [snip]
 
-diff --git a/package/radvd/S50radvd b/package/radvd/S50radvd
-index 9f1407c95a..f73ce24ed5 100644
---- a/package/radvd/S50radvd
-+++ b/package/radvd/S50radvd
-@@ -1,18 +1,59 @@
- #!/bin/sh
- 
--RADVD=/usr/sbin/radvd
-+DAEMON="radvd"
-+PIDFILE="/var/run/$DAEMON.pid"
- 
--echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
-+RADVD_ARGS="-m syslog"
- 
--printf "Starting radvd: "
--if [ ! -x "${RADVD}" ]; then
--	echo "missing"
--	exit 1
--fi
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+[ -f /etc/radvd.conf ] || exit 0
- 
--if ${RADVD} ; then
--	echo "done"
--else
--	echo "failed"
-+[ -f /proc/sys/net/ipv6/conf/all/forwarding ] || {
-+	echo "Error: radvd requires IPv6 forwarding support."
- 	exit 1
--fi
-+}
-+
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+	echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
-+		-- $RADVD_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	sleep 1
-+	start
-+}
-+
-+case "$1" in
-+	start|stop)
-+		"$1";;
-+	restart|reload)
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
--- 
-2.20.1
+Matt
