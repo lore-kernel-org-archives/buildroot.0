@@ -1,89 +1,84 @@
 From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Thu,  2 May 2019 10:20:08 +0200
-Subject: [Buildroot] [PATCH 5/7] package/python-pytest-runner: new package
+Date: Thu,  2 May 2019 10:20:09 +0200
+Subject: [Buildroot] [PATCH 6/7] package/python-traittypes: new package
 In-Reply-To: <1556785210-18237-1-git-send-email-jugurtha.belkalem@smile.fr>
 References: <1556785210-18237-1-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <1556785210-18237-6-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <1556785210-18237-7-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-bcc needs this package because
-python-bcc and python-pytest require this package
-to work.
-Setup scripts can use pytest-runner
-to add setup.py test support for pytest runner.
+bcc requires this package which is used to add
+custom trait types for scientific computing.
 
 Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 ---
- package/Config.in                                      |  1 +
- package/python-pytest-runner/Config.in                 |  9 +++++++++
- package/python-pytest-runner/python-pytest-runner.hash |  3 +++
- package/python-pytest-runner/python-pytest-runner.mk   | 16 ++++++++++++++++
- 4 files changed, 29 insertions(+)
- create mode 100644 package/python-pytest-runner/Config.in
- create mode 100644 package/python-pytest-runner/python-pytest-runner.hash
- create mode 100644 package/python-pytest-runner/python-pytest-runner.mk
+ package/Config.in                                |  1 +
+ package/python-traittypes/Config.in              |  7 +++++++
+ package/python-traittypes/python-traittypes.hash |  5 +++++
+ package/python-traittypes/python-traittypes.mk   | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-traittypes/Config.in
+ create mode 100644 package/python-traittypes/python-traittypes.hash
+ create mode 100644 package/python-traittypes/python-traittypes.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index 6afbe0f..60986e6 100644
+index 60986e6..8d16a09 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1017,6 +1017,7 @@ menu "External python modules"
- 	source "package/python-pytablereader/Config.in"
- 	source "package/python-pytablewriter/Config.in"
- 	source "package/python-pytest/Config.in"
-+	source "package/python-pytest-runner/Config.in"
- 	source "package/python-pytrie/Config.in"
- 	source "package/python-pytz/Config.in"
- 	source "package/python-pyudev/Config.in"
-diff --git a/package/python-pytest-runner/Config.in b/package/python-pytest-runner/Config.in
+@@ -1074,6 +1074,7 @@ menu "External python modules"
+ 	source "package/python-toml/Config.in"
+ 	source "package/python-tornado/Config.in"
+ 	source "package/python-traitlets/Config.in"
++	source "package/python-traittypes/Config.in"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
+diff --git a/package/python-traittypes/Config.in b/package/python-traittypes/Config.in
 new file mode 100644
-index 0000000..01dea9d
+index 0000000..5eb6d07
 --- /dev/null
-+++ b/package/python-pytest-runner/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_PYTEST_RUNNER
-+	bool "python-pytest-runner"
-+	depends on BR2_PACKAGE_PYTHON3
-+	select BR2_PACKAGE_PYTHON_SETUPTOOLS_SCM
++++ b/package/python-traittypes/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_TRAITTYPES
++	bool "python-traittypes"
++	select BR2_PACKAGE_PYTHON_TRAITLETS
 +	help
-+	  Setup scripts can use pytest-runner to add setup.py
-+	  test support for pytest runner.
++	  Custom trait types for scientific computing.
 +
-+	  https://pypi.org/project/pytest-runner/
-diff --git a/package/python-pytest-runner/python-pytest-runner.hash b/package/python-pytest-runner/python-pytest-runner.hash
++	  https://pypi.org/project/traittypes/
+diff --git a/package/python-traittypes/python-traittypes.hash b/package/python-traittypes/python-traittypes.hash
 new file mode 100644
-index 0000000..da76c50
+index 0000000..a94b256
 --- /dev/null
-+++ b/package/python-pytest-runner/python-pytest-runner.hash
-@@ -0,0 +1,3 @@
++++ b/package/python-traittypes/python-traittypes.hash
+@@ -0,0 +1,5 @@
++# sha256 from https://pypi.org/project/traittypes/#files
++sha256	be6fa26294733e7489822ded4ae25da5b4824a8a7a0e0c2dccfde596e3489bd6 traittypes-0.2.1.tar.gz
++
 +# Locally calculated
-+sha256 00ad6cd754ce55b01b868a6d00b77161e4d2006b3918bde882376a0a884d0df4  pytest-runner-4.4.tar.gz
-+sha256 a55e2ffe9b44998e621d51d8c094bed09acc4b5236ee73d7df395a33ba3c18fd  LICENSE
-diff --git a/package/python-pytest-runner/python-pytest-runner.mk b/package/python-pytest-runner/python-pytest-runner.mk
++sha256	221976dfad5db283a2669efe8607e24c9c9aecca8453d6beba045e665c2f88a1 LICENSE
+diff --git a/package/python-traittypes/python-traittypes.mk b/package/python-traittypes/python-traittypes.mk
 new file mode 100644
-index 0000000..f3e1a24
+index 0000000..9e4eb47
 --- /dev/null
-+++ b/package/python-pytest-runner/python-pytest-runner.mk
-@@ -0,0 +1,16 @@
++++ b/package/python-traittypes/python-traittypes.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-pytest-runner
++# python-traittypes
 +#
 +################################################################################
 +
-+PYTHON_PYTEST_RUNNER_VERSION = 4.4
-+PYTHON_PYTEST_RUNNER_SOURCE = pytest-runner-$(PYTHON_PYTEST_RUNNER_VERSION).tar.gz
-+PYTHON_PYTEST_RUNNER_SITE = https://files.pythonhosted.org/packages/15/0a/1e73c3a3d3f4f5faf5eacac4e55675c1627b15d84265b80b8fef3f8a3fb5
-+PYTHON_PYTEST_RUNNER_LICENSE = MIT
-+PYTHON_PYTEST_RUNNER_LICENSE_FILES = LICENSE
-+PYTHON_PYTEST_RUNNER_SETUP_TYPE = setuptools
-+PYTHON_PYTEST_RUNNER_DEPENDENCIES = host-python-setuptools-scm
++PYTHON_TRAITTYPES_VERSION = 0.2.1
++PYTHON_TRAITTYPES_SOURCE = traittypes-$(PYTHON_TRAITTYPES_VERSION).tar.gz
++PYTHON_TRAITTYPES_SITE = https://files.pythonhosted.org/packages/8a/71/0578e44d2110f93c2136eb705f5b11e706e1e8ea3acaaaeac043bd40d8fd
++PYTHON_TRAITTYPES_LICENSE = BSD-like
++PYTHON_TRAITTYPES_LICENSE_FILES = LICENSE
++PYTHON_TRAITTYPES_SETUP_TYPE = distutils
 +
 +$(eval $(python-package))
-+$(eval $(host-python-package))
 -- 
 2.7.4
