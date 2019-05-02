@@ -1,100 +1,163 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 2 May 2019 21:57:13 +0200
-Subject: [Buildroot] [GSoC 2019] Introduction Email - Atharva Lele
-In-Reply-To: <CABM+sgo1dxV-SzpMn0VS-R0zJm5A2cj2ycH8fOSOLEOCd7FFtw@mail.gmail.com>
-References: <fd29cc91-8323-8f8e-addc-5d8a6a194acd@mind.be>
- <d528d059-b900-7b18-7772-dbb3350f1af6@mind.be>
- <CABM+sgpVOb0gxPeA3fTm4Luup6wDgyE56DPB1taVouCB4JmryA@mail.gmail.com>
- <CABM+sgoupr2UheZSXz97FDRZYaJceU_EPsc8jryZRtnXiuwh4g@mail.gmail.com>
- <ee6549a4-21e2-7586-b35d-7174657934b8@mind.be>
- <CABM+sgrntFNSi6=fi3SP_02qqBQPuf+X=LbeRwv+6Dd9sjX4WQ@mail.gmail.com>
- <20190402181929.GJ2587@scaer>
- <CABM+sgrL3SY4SfBhn2f6VGCguQM51xif3x1_cck57FB2eULrug@mail.gmail.com>
- <CABM+sgp1B+S7n=R1picPK5RN-CdxZ_BaRSKDTPdkXYiBkpVkcA@mail.gmail.com>
- <CABM+sgo1dxV-SzpMn0VS-R0zJm5A2cj2ycH8fOSOLEOCd7FFtw@mail.gmail.com>
-Message-ID: <20190502195713.GA17072@scaer>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu, 2 May 2019 22:02:26 +0200
+Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
+ in cross file
+In-Reply-To: <6b2cee96-285e-9c98-d010-53b4581e6e96@mind.be>
+References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
+ <20190413182422.7e8f5f22@windsurf>
+ <20190423232944.70aeddba@gmx.net>
+ <6f5eef5542a44d775baa396c7fa7c01a2e6e2c4d.camel@embedded.rocks>
+ <trinity-a5fd1873-52f7-4d2a-9195-2a9713d0b83a-1556612829462@3c-app-gmx-bs70>
+ <2e75711ff4c34669fce6f86c50b34897d92ecb76.camel@embedded.rocks>
+ <25be7377-dabe-41b6-68b3-f9d2a2537aad@mind.be>
+ <20190501210405.1448eeb1@gmx.net>
+ <6b2cee96-285e-9c98-d010-53b4581e6e96@mind.be>
+Message-ID: <20190502220226.0b6717ce@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Atharva, All,
+Hello Arnout,
 
-On 2019-05-03 00:57 +0530, Atharva Lele spake thusly:
-> Yann, Arnout, and everyone:
-> Just sending a follow-up email since I didn't hear back from you guys. Unfortunately due to
-> college assignments I was completely swamped and didn't get a chance to work on GSoC
-> as I'd mentioned in my timeline. I can devote a bit more time in this month, so I can catch up
-> on my research about Reproducible Builds that I was going to do.?
-> If there's anything you want me to know then I'm looking forward to hearing from you.
+On Thu, 2 May 2019 14:17:45 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-As described in the official GSoC timeline, the selection step is still
-an on-going process, and the final results will be announced on May the
-6th:
+> On 01/05/2019 21:04, Peter Seiderer wrote:
+> > Hello Arnout,
+> > 
+> > On Wed, 1 May 2019 13:13:03 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+> >   
+> >> On 30/04/2019 13:04, J?rg Krause wrote:  
+> >>> Hello Peter,
+> >>>
+> >>> On Tue, 2019-04-30 at 10:27 +0200, Peter Seiderer wrote:    
+> >> [snip]  
+> >>>> Would have expected the trick/non-trivial thing to add more than one
+> >>>> binary entry (to get the newlines for the entries right)...    
+> >>>
+> >>> That's indeed a difficult case to solve. I didn't managed to get
+> >>> multpile binary entries added to the [binaries] field, e.g.
+> >>>
+> >>> PKG_TARGET_BINARIES = \
+> >>> 	libgcrypt-config = '...' \
+> >>> 	llvm-config = '...'
+> >>>
+> >>> .. will not work.
+> >>>
+> >>> I spent some time to find a magic rule which splits the Makefile
+> >>> variable into a proper newline seperated string which can be used by
+> >>> sed, but I failed.
+> >>>
+> >>> Maybe you have an idea?    
+> >>
+> >>  Instead of sed, use the PRINTF macro and append to the file:
+> >>
+> >> 	$Q$$(if $$($$(PKG)_TARGET_BINARIES),\
+> >> 		$$(call PRINTF,$$($$(PKG)_TARGET_BINARIES)) \  
+> >> 		>> $$($$(PKG)_SRCDIR)/build/cross-compilation.conf    
+> > 
+> > Simple appending will not work, the extra binaries must be under the '[binaries]'
+> > section (maybe reordering the sections in the cross-compilation.conf.in template
+> > will work)  
+> 
+>  It should work if the [binaries] part is at the end, right? And if binaries is
+> empty, that's OK, no?
+> 
+>  Alternatively, the [binaries] part could be included in the _TARGET_BINARIES
+> (which would then have to be renamed to _CROSS_COMPILATION_CONF). So for a
+> package that needs libgcrypt-config, it would be
+> 
+> define FOO_CROSS_COMPILATION_CONF
+> [binaries]
+> libgcrypt-config = '$(STAGING_DIR)/usr/bin/libgcrypt-config'
+> endef
 
-    https://summerofcode.withgoogle.com/how-it-works/#timeline
+With this and the printf approach I get the following in the cross-compilation.conf
+file (mind the leading spaces in the binaries line):
+
+[host_machine]
+system = 'linux'
+cpu_family ='arm'
+cpu = 'cortex-a53'
+endian = 'little'
+
+   [binaries]
+libgcrypt-config = '.../host/arm-buildroot-linux-gnueabihf/sysroot/usr/bin/libgcrypt-config'
+
+And meson complains with:
+
+ERROR: Malformed value in cross file variable endian.
 
 Regards,
-Yann E. MORIN.
+Peter
 
-> Regards,
-> Atharva Lele
-> On Wed, Apr 10, 2019 at 12:08 AM Atharva Lele < [1]itsatharva@gmail.com> wrote:
 > 
->   Hello Arnout, Yann, and everyone:
->   I've submitted my final GSoC proposal PDF on the GSoC website.
->   If needed we can share the plan with the mailing list, let me know if that needs
->   to be done.
->   Regards,
->   Atharva Lele
->   On Thu, Apr 4, 2019 at 9:25 PM Atharva Lele < [2]itsatharva@gmail.com> wrote:
+> > , does the printf approach fix the newline problem for more than one
+> > entry?  
 > 
->     > I'll do my part of the review later tonight.
->     I have modified and added some parts (in blue color) and highlighted which parts
->     to remove (in red color). Also replied to your comments.
->     If you have any more suggestions please let me know. Meanwhile I will keep looking
->     for more information to improve the technicalities of my draft.
->     Regards,
->     Atharva Lele
->     On Tue, Apr 2, 2019 at 11:49 PM Yann E. MORIN < [3]yann.morin.1998@free.fr> wrote:
+>  It does, but you can't use _CROSS_COMPILATION_CONF = ..., you have to use
+> define, because the actual newlines have to be in the variable itself. Actually,
+> you can still use = assignment, but then you need to use $(sep), i.e.:
 > 
->       Atharva, Arnout, All,
+> FOO_CROSS_COMPILATION_CONF = [binaries]$(sep)libgcrypt-config =
+> '$(STAGING_DIR)/usr/bin/libgcrypt-config'$(sep)
 > 
->       On 2019-04-02 21:00 +0530, Atharva Lele spake thusly:
->       > > I've made comments on the document.
->       > I've replied to your comments on there. We can discuss a bit more and I think then I'll
->       > make necessary changes to the document.
->       > > I'm not sure if Yann is OK with using
->       > > Googly stuff though.
->       > Is there any other platform that he would be comfortable working on?
->       > I'll gladly move things over to there.
+> (which is ugly so don't do that :-)
 > 
->       Nope, that's fine. It's part of the GSoC ecosystem, so I'll play by the
->       GSoC rules. ;-) I'll do my part of the review later tonight.
 > 
->       Regards,
->       Yann E. MORIN.
+> >   
+> >>
+> >>
+> >>  Completely unrelated to this, but I notice now some things in that pkg-meson.mk
+> >> that make me wonder what our coding style is in pkg-infra.mk files... Adding
+> >> Yann and Eric in Cc for that.
+> >>
+> >> - We usually use $(2), but here it's $$(PKG). Recently there was a patch that
+> >> changed the $(PKG) back to $(2) in the download infra. So I think we really
+> >> should be using $(2).  
+> > 
+> > Any link to the relevant patch? Can test/rework my patch/pkg-meson.mk in case...  
 > 
->       --
->       .-----------------.--------------------.------------------.--------------------.
->       |? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
->       | +33 662 376 056 | Software? Designer | \ / CAMPAIGN? ? ?|? ___? ? ? ? ?
->       ? ? ?|
->       | +33 561 099 427 `------------.-------:? X? AGAINST? ? ? |? \e/? There is no? |
->       | [4]http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL? ? |? ?v? ?conspiracy.? |
->       '------------------------------^-------^------------------^--------------------'
+> 5a0d6813948fea2cdb88a2e35984520eec856dec
 > 
-> Links:
-> 1. mailto:itsatharva at gmail.com
-> 2. mailto:itsatharva at gmail.com
-> 3. mailto:yann.morin.1998 at free.fr
-> 4. http://ymorin.is-a-geek.org/
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+>  Note that the reasons for doing it in that patch don't apply here. However, I
+> feel it is better/easier to have a general rule to always do things the same
+> way, which is diverged from only in specific cases when there is a good reason
+> to diverge. Like we have the rule that in macros which get $(eval)'ed, we always
+> use $$ (even though it's really needed only in a small minority of the instances).
+> 
+>  It doesn't really matter which one we choose, $(PKG) or $(2), as long as it is
+> done consistently.
+> 
+>  The advantage of $(PKG) is that it can be used in contexts where you don't have
+> a $(2). The advantage of $(2) is that it is less surprising - by the time $(PKG)
+> gets expanded, it's hard to be sure which value it has (depends on the rule
+> within which it is expanded).
+> 
+> 
+> >> - meson infra builds in PKG_SRCDIR/build. That really should be PKG_BUILDDIR,
+> >> with a default of $(2)_BUILDDIR ?= $$($(2)_SRCDIR)/build.  
+> > 
+> > O.k.
+> >   
+> >>
+> >> - I don't think it's appropriate to generate the cross-compilation.conf file in
+> >>  PKG_BUILDDIR. I think it should be at top level, i.e. $(@D).  
+> > 
+> > Why (I think more a matter of taste?)? With cross-compilation.conf in PKG_BUILDDIR
+> > (or in other words build) it is automatically removed/refreshed by pkg-meson.mk
+> > (see the rm command in the configure step) and there is no danger of potentially
+> > collision with an already source package provided version?  
+> 
+>  It's a matter of taste unless there are additional reasons, and you gave
+> additional reasons, so it's no longer a matter of taste :-) Let's keep it in
+> BUILDDIR.
+> 
+>  Regards,
+>  Arnout
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
