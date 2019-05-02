@@ -1,110 +1,134 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 02 May 2019 11:28:13 +0000
-Subject: [Buildroot] [Bug 11821] New: agetty: unrecognized characters after
- login (systemd)
-Message-ID: <bug-11821-163@https.bugs.busybox.net/>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 2 May 2019 14:17:45 +0200
+Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
+ in cross file
+In-Reply-To: <20190501210405.1448eeb1@gmx.net>
+References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
+ <20190413182422.7e8f5f22@windsurf> <20190423232944.70aeddba@gmx.net>
+ <6f5eef5542a44d775baa396c7fa7c01a2e6e2c4d.camel@embedded.rocks>
+ <trinity-a5fd1873-52f7-4d2a-9195-2a9713d0b83a-1556612829462@3c-app-gmx-bs70>
+ <2e75711ff4c34669fce6f86c50b34897d92ecb76.camel@embedded.rocks>
+ <25be7377-dabe-41b6-68b3-f9d2a2537aad@mind.be>
+ <20190501210405.1448eeb1@gmx.net>
+Message-ID: <6b2cee96-285e-9c98-d010-53b4581e6e96@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11821
 
-            Bug ID: 11821
-           Summary: agetty: unrecognized characters after login (systemd)
-           Product: buildroot
-           Version: 2019.02.2
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: iot at iotasoft.ir
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
 
-I have a problem with agetty. when the login prompt gets the user name, then
-the password prompt or login shell shows unrecognized characters as below:
+On 01/05/2019 21:04, Peter Seiderer wrote:
+> Hello Arnout,
+> 
+> On Wed, 1 May 2019 13:13:03 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+> 
+>> On 30/04/2019 13:04, J?rg Krause wrote:
+>>> Hello Peter,
+>>>
+>>> On Tue, 2019-04-30 at 10:27 +0200, Peter Seiderer wrote:  
+>> [snip]
+>>>> Would have expected the trick/non-trivial thing to add more than one
+>>>> binary entry (to get the newlines for the entries right)...  
+>>>
+>>> That's indeed a difficult case to solve. I didn't managed to get
+>>> multpile binary entries added to the [binaries] field, e.g.
+>>>
+>>> PKG_TARGET_BINARIES = \
+>>> 	libgcrypt-config = '...' \
+>>> 	llvm-config = '...'
+>>>
+>>> .. will not work.
+>>>
+>>> I spent some time to find a magic rule which splits the Makefile
+>>> variable into a proper newline seperated string which can be used by
+>>> sed, but I failed.
+>>>
+>>> Maybe you have an idea?  
+>>
+>>  Instead of sed, use the PRINTF macro and append to the file:
+>>
+>> 	$Q$$(if $$($$(PKG)_TARGET_BINARIES),\
+>> 		$$(call PRINTF,$$($$(PKG)_TARGET_BINARIES)) \
+>> 		>> $$($$(PKG)_SRCDIR)/build/cross-compilation.conf  
+> 
+> Simple appending will not work, the extra binaries must be under the '[binaries]'
+> section (maybe reordering the sections in the cross-compilation.conf.in template
+> will work)
 
-=============================
-[  OK  ] Started Serial Getty on ttymxc4.
-[  OK  ] Reached target Login Prompts.
-[  OK  ] Stopped Network Name Resolution.
-[FAILED] Failed to start Network Name Resolution.
-See 'systemctl status systemd-resolved.service' for details.
-[  OK  ] Stopped Network Time Synchronization.
-[FAILED] Failed to start Network Time Synchronization.
-See 'systemctl status systemd-timesyncd.service' for details.
-[  OK  ] Stopped Network Name Resolution.
-[FAILED] Failed to start Network Name Resolution.
-See 'systemctl status systemd-resolved.service' for details.
-[  OK  ] Stopped Network Time Synchronization.
-[FAILED] Failed to start Network Time Synchronization.
-See 'systemctl status systemd-timesyncd.service' for details.
-[  OK  ] Stopped Network Name Resolution.
-[FAILED] Failed to start Network Name Resolution.
-See 'systemctl status systemd-resolved.service' for details.
-[  OK  ] Stopped Network Time Synchronization.
-[FAILED] Failed to start Network Time Synchronization.
-See 'systemctl status systemd-timesyncd.service' for details.
-[  OK  ] Started OpenSSH server daemon.
-[  OK  ] Reached target Multi-User System.
-         Starting Update UTMP about System Runlevel Changes...
-[  OK  ] Started Update UTMP about System Runlevel Changes.
+ It should work if the [binaries] part is at the end, right? And if binaries is
+empty, that's OK, no?
 
-Welcome to F+S i.MX6
-fsimx6 login: root
-?cs???
+ Alternatively, the [binaries] part could be included in the _TARGET_BINARIES
+(which would then have to be renamed to _CROSS_COMPILATION_CONF). So for a
+package that needs libgcrypt-config, it would be
 
-===============================
-After that any keys that I press will create other random unrecognized
-characters.
+define FOO_CROSS_COMPILATION_CONF
+[binaries]
+libgcrypt-config = '$(STAGING_DIR)/usr/bin/libgcrypt-config'
+endef
 
-My serial-getty at .service file's content is as below:
-===============================
-[Unit]
-Description=Serial Getty on %I
-Documentation=man:agetty(8) man:systemd-getty-generator(8)
-Documentation=http://0pointer.de/blog/projects/serial-console.html
-BindsTo=dev-%i.device
-After=dev-%i.device systemd-user-sessions.service plymouth-quit-wait.service
-getty-pre.target
-After=rc-local.service
+> , does the printf approach fix the newline problem for more than one
+> entry?
 
-# If additional gettys are spawned during boot then we should make
-# sure that this is synchronized before getty.target, even though
-# getty.target didn't actually pull it in.
-Before=getty.target
-IgnoreOnIsolate=yes
+ It does, but you can't use _CROSS_COMPILATION_CONF = ..., you have to use
+define, because the actual newlines have to be in the variable itself. Actually,
+you can still use = assignment, but then you need to use $(sep), i.e.:
 
-# IgnoreOnIsolate causes issues with sulogin, if someone isolates
-# rescue.target or starts rescue.service from multi-user.target or
-# graphical.target.
-Conflicts=rescue.service
-Before=rescue.service
+FOO_CROSS_COMPILATION_CONF = [binaries]$(sep)libgcrypt-config =
+'$(STAGING_DIR)/usr/bin/libgcrypt-config'$(sep)
 
-[Service]
-# The '-o' option value tells agetty to replace 'login' arguments with an
-# option to preserve environment (-p), followed by '--' for safety, and then
-# the entered username.
-ExecStart=-/sbin/getty -L %I 115200 vt100
-Type=idle
-Restart=always
-UtmpIdentifier=%I
-TTYPath=/dev/%I
-TTYReset=yes
-TTYVHangup=yes
-KillMode=process
-IgnoreSIGPIPE=no
-SendSIGHUP=yes
+(which is ugly so don't do that :-)
 
-[Install]
-WantedBy=getty.target
-==============================
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+> 
+>>
+>>
+>>  Completely unrelated to this, but I notice now some things in that pkg-meson.mk
+>> that make me wonder what our coding style is in pkg-infra.mk files... Adding
+>> Yann and Eric in Cc for that.
+>>
+>> - We usually use $(2), but here it's $$(PKG). Recently there was a patch that
+>> changed the $(PKG) back to $(2) in the download infra. So I think we really
+>> should be using $(2).
+> 
+> Any link to the relevant patch? Can test/rework my patch/pkg-meson.mk in case...
+
+5a0d6813948fea2cdb88a2e35984520eec856dec
+
+ Note that the reasons for doing it in that patch don't apply here. However, I
+feel it is better/easier to have a general rule to always do things the same
+way, which is diverged from only in specific cases when there is a good reason
+to diverge. Like we have the rule that in macros which get $(eval)'ed, we always
+use $$ (even though it's really needed only in a small minority of the instances).
+
+ It doesn't really matter which one we choose, $(PKG) or $(2), as long as it is
+done consistently.
+
+ The advantage of $(PKG) is that it can be used in contexts where you don't have
+a $(2). The advantage of $(2) is that it is less surprising - by the time $(PKG)
+gets expanded, it's hard to be sure which value it has (depends on the rule
+within which it is expanded).
+
+
+>> - meson infra builds in PKG_SRCDIR/build. That really should be PKG_BUILDDIR,
+>> with a default of $(2)_BUILDDIR ?= $$($(2)_SRCDIR)/build.
+> 
+> O.k.
+> 
+>>
+>> - I don't think it's appropriate to generate the cross-compilation.conf file in
+>>  PKG_BUILDDIR. I think it should be at top level, i.e. $(@D).
+> 
+> Why (I think more a matter of taste?)? With cross-compilation.conf in PKG_BUILDDIR
+> (or in other words build) it is automatically removed/refreshed by pkg-meson.mk
+> (see the rm command in the configure step) and there is no danger of potentially
+> collision with an already source package provided version?
+
+ It's a matter of taste unless there are additional reasons, and you gave
+additional reasons, so it's no longer a matter of taste :-) Let's keep it in
+BUILDDIR.
+
+ Regards,
+ Arnout
