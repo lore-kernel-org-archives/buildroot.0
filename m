@@ -1,53 +1,101 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Thu, 02 May 2019 11:37:27 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mfgtools: bump to version 1.2.91
-In-Reply-To: <15946_1556784081_5CCAA3D1_15946_377_1_20190502080119.GA3431@r-lnx-nyma7486-2>
-References: <20190430201121.15634-1-joerg.krause@embedded.rocks>
- <20190430201121.15634-2-joerg.krause@embedded.rocks>
- <880fdc14-d19f-020b-9735-9e0077e6be76@mind.be>
- <7552b9cbd58edcd667f52531ed75e3fe57cd705c.camel@embedded.rocks>
- <4bf9c494-f6dc-e1a8-abad-3d87cbf1e051@mind.be>
- <15946_1556784081_5CCAA3D1_15946_377_1_20190502080119.GA3431@r-lnx-nyma7486-2>
-Message-ID: <21d05d87384f2f839a4a053cf7701c803bdd7a38.camel@embedded.rocks>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Thu, 2 May 2019 11:45:55 +0200
+Subject: [Buildroot] [PATCH 6/7] package/python-traittypes: new package
+In-Reply-To: <1556785210-18237-7-git-send-email-jugurtha.belkalem@smile.fr>
+References: <1556785210-18237-1-git-send-email-jugurtha.belkalem@smile.fr>
+ <1556785210-18237-7-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <CAGm1_kvZqA5Y_QdJeJm084nFefyKZmCSdUhmvcAgRpsQqZZ7SA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 2019-05-02 at 10:01 +0200, yann.morin at orange.com wrote:
-> Arnout, All,
-> 
-> On 2019-05-02 09:52 +0200, Arnout Vandecappelle spake thusly:
-> > On 02/05/2019 08:51, J?rg Krause wrote:
-> > > > > The
-> > > > > problem is, that git provides the version information of Buildroot.
-> > > >  Is it that much of a problem if the Buildroot version is used?
-> > > mfgtools saves the version string in generated runtime scripts. So this
-> > > is a problem.
-> > 
-> >  Yes, I understand that. But the effect is that `uuu --version` will print
-> > 2019.02 instead of 1.2.91, right? So my question is: is it that much of a
-> > problem that this happens?
-> > 
-> >  I'm asking because I'm sure there are other packages that have that behaviour.
-> > Are we going to try to find and fix all of them? Or just live with the fact that
-> > some packages report the wrong version?
-> 
-> I think the real issue is that, for out-of-tree builds, there might be
-> no git tree available, and thus those packages would FTBFS. This means
-> we would eventually cactch such packages.
+On Thu, May 2, 2019 at 10:20 AM Jugurtha BELKALEM
+<jugurtha.belkalem@smile.fr> wrote:
+>
+> bcc requires this package which is used to add
+> custom trait types for scientific computing.
+>
+> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+> ---
+>  package/Config.in                                |  1 +
+>  package/python-traittypes/Config.in              |  7 +++++++
+>  package/python-traittypes/python-traittypes.hash |  5 +++++
+>  package/python-traittypes/python-traittypes.mk   | 14 ++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/python-traittypes/Config.in
+>  create mode 100644 package/python-traittypes/python-traittypes.hash
+>  create mode 100644 package/python-traittypes/python-traittypes.mk
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 60986e6..8d16a09 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1074,6 +1074,7 @@ menu "External python modules"
+>         source "package/python-toml/Config.in"
+>         source "package/python-tornado/Config.in"
+>         source "package/python-traitlets/Config.in"
+> +       source "package/python-traittypes/Config.in"
+>         source "package/python-treq/Config.in"
+>         source "package/python-twisted/Config.in"
+>         source "package/python-txaio/Config.in"
+> diff --git a/package/python-traittypes/Config.in b/package/python-traittypes/Config.in
+> new file mode 100644
+> index 0000000..5eb6d07
+> --- /dev/null
+> +++ b/package/python-traittypes/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_TRAITTYPES
+> +       bool "python-traittypes"
+> +       select BR2_PACKAGE_PYTHON_TRAITLETS
 
-That's correct for mfgtools for example. When building with Buildroot
-extracted from the tarball it will not compile as it misses
-gitversion.h. This issue has been reported upstream.
+add  "# runtime" tag. See package/python-tornado/Config.in for the reference.
 
-> Furthermore, it would be pretty surprising for unsuspecting users to end
-> up with Buildroot's version instead of that package's version.
-> 
-> As such, your proposal to replace the version script is good idea.
+> +       help
+> +         Custom trait types for scientific computing.
+> +
+> +         https://pypi.org/project/traittypes/
+> diff --git a/package/python-traittypes/python-traittypes.hash b/package/python-traittypes/python-traittypes.hash
+> new file mode 100644
+> index 0000000..a94b256
+> --- /dev/null
+> +++ b/package/python-traittypes/python-traittypes.hash
+> @@ -0,0 +1,5 @@
+> +# sha256 from https://pypi.org/project/traittypes/#files
+> +sha256 be6fa26294733e7489822ded4ae25da5b4824a8a7a0e0c2dccfde596e3489bd6 traittypes-0.2.1.tar.gz
+> +
+> +# Locally calculated
+> +sha256 221976dfad5db283a2669efe8607e24c9c9aecca8453d6beba045e665c2f88a1 LICENSE
+> diff --git a/package/python-traittypes/python-traittypes.mk b/package/python-traittypes/python-traittypes.mk
+> new file mode 100644
+> index 0000000..9e4eb47
+> --- /dev/null
+> +++ b/package/python-traittypes/python-traittypes.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-traittypes
+> +#
+> +################################################################################
+> +
+> +PYTHON_TRAITTYPES_VERSION = 0.2.1
+> +PYTHON_TRAITTYPES_SOURCE = traittypes-$(PYTHON_TRAITTYPES_VERSION).tar.gz
+> +PYTHON_TRAITTYPES_SITE = https://files.pythonhosted.org/packages/8a/71/0578e44d2110f93c2136eb705f5b11e706e1e8ea3acaaaeac043bd40d8fd
+> +PYTHON_TRAITTYPES_LICENSE = BSD-like
 
-I agree!
+BSD-3-Clause
 
-Best regards
-J?rg Krause
+Yegor
+
+> +PYTHON_TRAITTYPES_LICENSE_FILES = LICENSE
+> +PYTHON_TRAITTYPES_SETUP_TYPE = distutils
+> +
+> +$(eval $(python-package))
+> --
+> 2.7.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
