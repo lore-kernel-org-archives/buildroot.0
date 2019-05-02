@@ -1,189 +1,89 @@
 From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Thu,  2 May 2019 10:20:06 +0200
-Subject: [Buildroot] [PATCH 3/7] package/bcc: new package
+Date: Thu,  2 May 2019 10:20:07 +0200
+Subject: [Buildroot] [PATCH 4/7] package/python-pytest: new package
 In-Reply-To: <1556785210-18237-1-git-send-email-jugurtha.belkalem@smile.fr>
 References: <1556785210-18237-1-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <1556785210-18237-4-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <1556785210-18237-5-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-bcc is a front-end tool for eBPF :
-https://github.com/iovisor/bcc/blob/master/README.md.
-eBPF is the most powerful Linux tracer, and bcc
-allows to write eBPF scripts in C and PYTHON3.
-
-bcc can help to troubleshoot issues quickly on
-embedded systems (as long as Linux kernel
-version >= 4.1).
-
-bcc can also make it easy to create observabilty tools,
-SDN configuration, ddos mitigation, intrusion detection
-and secure containers. More information is available at:
-http://www.brendangregg.com/ebpf.html.
+bcc requires python-bcc which itself
+requires python-pytest.
+The pytest framework makes it easy to write
+small tests, yet scales to support complex
+functional testing for applications and libraries.
 
 Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 ---
- package/Config.in                                  |  1 +
- ...CMake-Allow-to-disable-building-man-pages.patch | 35 +++++++++++++++
- package/bcc/Config.in                              | 51 ++++++++++++++++++++++
- package/bcc/bcc.hash                               |  3 ++
- package/bcc/bcc.mk                                 | 23 ++++++++++
- 5 files changed, 113 insertions(+)
- create mode 100644 package/bcc/0001-CMake-Allow-to-disable-building-man-pages.patch
- create mode 100644 package/bcc/Config.in
- create mode 100644 package/bcc/bcc.hash
- create mode 100644 package/bcc/bcc.mk
+ package/Config.in                        |  1 +
+ package/python-pytest/Config.in          |  8 ++++++++
+ package/python-pytest/python-pytest.hash |  5 +++++
+ package/python-pytest/python-pytest.mk   | 15 +++++++++++++++
+ 4 files changed, 29 insertions(+)
+ create mode 100644 package/python-pytest/Config.in
+ create mode 100644 package/python-pytest/python-pytest.hash
+ create mode 100644 package/python-pytest/python-pytest.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f592e74..dc63589 100644
+index dc63589..6afbe0f 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -79,6 +79,7 @@ menu "Compressors and decompressors"
- endmenu
- 
- menu "Debugging, profiling and benchmark"
-+	source "package/bcc/Config.in"
- 	source "package/blktrace/Config.in"
- 	source "package/bonnie/Config.in"
- 	source "package/cache-calibrator/Config.in"
-diff --git a/package/bcc/0001-CMake-Allow-to-disable-building-man-pages.patch b/package/bcc/0001-CMake-Allow-to-disable-building-man-pages.patch
+@@ -1016,6 +1016,7 @@ menu "External python modules"
+ 	source "package/python-pysocks/Config.in"
+ 	source "package/python-pytablereader/Config.in"
+ 	source "package/python-pytablewriter/Config.in"
++	source "package/python-pytest/Config.in"
+ 	source "package/python-pytrie/Config.in"
+ 	source "package/python-pytz/Config.in"
+ 	source "package/python-pyudev/Config.in"
+diff --git a/package/python-pytest/Config.in b/package/python-pytest/Config.in
 new file mode 100644
-index 0000000..c5c87d5
+index 0000000..7db5493
 --- /dev/null
-+++ b/package/bcc/0001-CMake-Allow-to-disable-building-man-pages.patch
-@@ -0,0 +1,35 @@
-+From a99f097aedbf964356e62c0c4bba1257f108c3eb Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Fri, 7 Dec 2018 22:36:21 +0100
-+Subject: [PATCH] CMake: Allow to disable building man pages
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ CMakeLists.txt | 3 +++
-+ 1 file changed, 3 insertions(+)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index bb3f53b9..5e95d555 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -19,6 +19,7 @@ include(cmake/FindCompilerFlag.cmake)
-+ option(ENABLE_LLVM_SHARED "Enable linking LLVM as a shared library" OFF)
-+ option(ENABLE_CLANG_JIT "Enable Loading BPF through Clang Frontend" ON)
-+ option(ENABLE_USDT "Enable User-level Statically Defined Tracing" ON)
-++option(ENABLE_MAN "Build man pages" ON)
-+ CMAKE_DEPENDENT_OPTION(ENABLE_CPP_API "Enable C++ API" ON "ENABLE_USDT" OFF)
-+ 
-+ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-+@@ -88,7 +89,9 @@ add_subdirectory(src)
-+ add_subdirectory(introspection)
-+ if(ENABLE_CLANG_JIT)
-+ add_subdirectory(examples)
-++if(ENABLE_MAN)
-+ add_subdirectory(man)
-++endif(ENABLE_MAN)
-+ add_subdirectory(tests)
-+ add_subdirectory(tools)
-+ endif(ENABLE_CLANG_JIT)
-+-- 
-+2.14.5
-+
-diff --git a/package/bcc/Config.in b/package/bcc/Config.in
-new file mode 100644
-index 0000000..756a699
---- /dev/null
-+++ b/package/bcc/Config.in
-@@ -0,0 +1,51 @@
-+config BR2_PACKAGE_BCC
-+	bool "bcc"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_GLIBC # hardcode GNU tuple (x86_64-unknown-linux-gnu)
-+	depends on BR2_LINUX_KERNEL # needs kernel sources on the target
-+	depends on BR2_HOST_GCC_AT_LEAST_4_8 # clang
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # clang
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # clang
-+	depends on BR2_INSTALL_LIBSTDCPP # clang
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # clang
-+	depends on !BR2_STATIC_LIBS # clang, luajit
-+	depends on BR2_USE_WCHAR # clang
-+	select BR2_PACKAGE_CLANG
-+	select BR2_PACKAGE_ELFUTILS
-+	select BR2_PACKAGE_FLEX # needs FlexLexer.h
-+	select BR2_PACKAGE_LLVM_BPF
-+	select BR2_PACKAGE_LUAJIT
-+	select BR2_PACKAGE_PYTHON3_BCC # wrappers for BPF
++++ b/package/python-pytest/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_PYTEST
++	bool "python-pytest"
 +	help
-+	  BPF Compiler Collection (BCC)
++	  The pytest framework makes it easy to write small tests,
++	  yet scales to support complex functional testing for
++	  applications and libraries.
 +
-+	  BCC is a toolkit for creating efficient kernel tracing and
-+	  manipulation programs, and includes several useful tools and
-+	  examples. It makes use of extended BPF (Berkeley Packet
-+	  Filters), formally known as eBPF, a new feature that was
-+	  first added to Linux 3.15. Much of what BCC uses requires
-+	  Linux 4.1 and above.
-+
-+	  Note: Before using bcc, you need to copy the kernel source
-+	  code to the target. By default bcc use:
-+	  "/lib/module/<kernel version>/build". That's because the
-+	  clang frontend build eBPF code at runtime.
-+
-+	  https://github.com/iovisor/bcc
-+
-+comment "bcc needs a Linux kernel to be built"
-+	depends on !BR2_LINUX_KERNEL
-+
-+comment "bcc needs a glibc toolchain w/ wchar, threads, C++, gcc >= 4.8, host gcc >= 4.8, dynamic library"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_LINUX_KERNEL
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_INSTALL_LIBSTDCPP || !BR2_HOST_GCC_AT_LEAST_4_8 \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || BR2_STATIC_LIBS \
-+		|| !BR2_USE_WCHAR
-+
-+comment "bcc needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on BR2_LINUX_KERNEL
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/bcc/bcc.hash b/package/bcc/bcc.hash
++	  https://pypi.org/project/pytest/
+diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
 new file mode 100644
-index 0000000..19eccb3
+index 0000000..43f9f98
 --- /dev/null
-+++ b/package/bcc/bcc.hash
-@@ -0,0 +1,3 @@
-+# locally calculated
-+sha256 269949a47f9ed2ff01b5ebca20ec4a52341f7ff14b033b9dc1669b72a87af042  bcc-v0.8.0.tar.gz
-+sha256 b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  LICENSE.txt
-diff --git a/package/bcc/bcc.mk b/package/bcc/bcc.mk
++++ b/package/python-pytest/python-pytest.hash
+@@ -0,0 +1,5 @@
++# sha256 from https://pypi.org/project/pytest/#files
++sha256 b7802283b70ca24d7119b32915efa7c409982f59913c1a6c0640aacf118b95f5 pytest-4.4.1.tar.gz
++
++# Locally calculated
++sha256	4be38574daf05665b6194e4fd84c5ef6ce7c3a2810308a5222d5cdffc2d04d18 LICENSE
+diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
 new file mode 100644
-index 0000000..e8f53eb
+index 0000000..665951f
 --- /dev/null
-+++ b/package/bcc/bcc.mk
-@@ -0,0 +1,23 @@
++++ b/package/python-pytest/python-pytest.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# bcc
++# python-pytest
 +#
 +################################################################################
 +
-+BCC_VERSION = v0.8.0
-+BCC_SITE = $(call github,iovisor,bcc,$(BCC_VERSION))
-+BCC_LICENSE = Apache-2.0
-+BCC_LICENSE_FILES = LICENSE.txt
-+# libbcc.so and libbpf.so
-+BCC_INSTALL_STAGING = YES
++PYTHON_PYTEST_VERSION = 4.4.1
++PYTHON_PYTEST_SOURCE = pytest-$(PYTHON3_PYTEST_VERSION).tar.gz
++PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/2b/b1/c9a84f79fc3bad226a9085289da11ecdd9bd2779a2c654195962b37d4110/
++PYTHON_PYTEST_LICENSE = MIT
++PYTHON_PYTEST_LICENSE_FILES = LICENSE
++PYTHON_PYTEST_SETUP_TYPE = setuptools
++PYTHON_PYTEST_DEPENDENCIES = python-setuptools-scm
 +
-+BCC_DEPENDENCIES = host-bison host-flex host-luajit clang elfutils flex llvm luajit
-+
-+# ENABLE_LLVM_SHARED=ON to use llvm.so.
-+# Force REVISION otherwise bcc will use git describe to generate a version number.
-+BCC_CONF_OPTS = -DENABLE_LLVM_SHARED=ON \
-+	-DREVISION=$(BCC_VERSION) \
-+	-DENABLE_CLANG_JIT=ON \
-+	-DENABLE_MAN=OFF
-+
-+$(eval $(cmake-package))
++$(eval $(python-package))
 -- 
 2.7.4
