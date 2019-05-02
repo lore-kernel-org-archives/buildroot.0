@@ -1,70 +1,91 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  2 May 2019 16:52:25 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{9, 14,
- 19}.x / 5.0.x series
-Message-ID: <20190502145225.31637-1-peter@korsgaard.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Thu,  2 May 2019 11:16:15 -0400
+Subject: [Buildroot] [PATCH v5 1/8] package/gstreamer1/gstreamer1: bump to
+ version 1.16.0
+Message-ID: <20190502151622.80865-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+From: Adam Duskett <Aduskett@gmail.com>
 
-diff --git a/linux/Config.in b/linux/Config.in
-index a800a40af7..debba03ec1 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -121,7 +121,7 @@ endif
+Also remove upstreamed patch 0001-gstconfig.h.in-initial-RISC-V-support.patch.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+Changes v1 -> v5:
+  - None
+
+ ...stconfig.h.in-initial-RISC-V-support.patch | 34 -------------------
+ package/gstreamer1/gstreamer1/gstreamer1.hash |  4 +--
+ package/gstreamer1/gstreamer1/gstreamer1.mk   |  2 +-
+ 3 files changed, 3 insertions(+), 37 deletions(-)
+ delete mode 100644 package/gstreamer1/gstreamer1/0001-gstconfig.h.in-initial-RISC-V-support.patch
+
+diff --git a/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-initial-RISC-V-support.patch b/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-initial-RISC-V-support.patch
+deleted file mode 100644
+index 689346a3e8..0000000000
+--- a/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-initial-RISC-V-support.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 58982c0d28f1eb385319307ee47bd6522c812f22 Mon Sep 17 00:00:00 2001
+-From: Aurelien Jarno <aurelien@aurel32.net>
+-Date: Sun, 15 Apr 2018 00:49:55 +0200
+-Subject: [PATCH] gstconfig.h.in: initial RISC-V support
+-
+-RISC-V supports unaligned accesses, but these might run extremely slowly
+-depending on the implementation. Therefore set GST_HAVE_UNALIGNED_ACCESS
+-to 0 on this architecture.
+-
+-https://bugzilla.gnome.org/show_bug.cgi?id=795271
+-
+-Upstream: https://gitlab.freedesktop.org/gstreamer/gstreamer/commit/8a156d1725ecd03f2e8cdc8874e081dda2d3b43d
+-
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- gst/gstconfig.h.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/gst/gstconfig.h.in b/gst/gstconfig.h.in
+-index 6351c04da..33dfed1f6 100644
+---- a/gst/gstconfig.h.in
+-+++ b/gst/gstconfig.h.in
+-@@ -104,7 +104,7 @@
+-  * http://docs.oracle.com/cd/E19205-01/820-4155/c++_faq.html#Vers6
+-  * https://software.intel.com/en-us/node/583402
+-  */
+--#if defined(__alpha__) || defined(__arc__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__nios2__) || defined(__MICROBLAZE__) || defined(__mips__) || defined(__or1k__) || defined(__sh__) || defined(__SH4__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64) || defined(__xtensa__) || defined(__e2k__)
+-+#if defined(__alpha__) || defined(__arc__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__nios2__) || defined(__MICROBLAZE__) || defined(__mips__) || defined(__or1k__) || defined(__sh__) || defined(__SH4__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64) || defined(__xtensa__) || defined(__e2k__) || defined(__riscv)
+- #  define GST_HAVE_UNALIGNED_ACCESS 0
+- #elif defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || defined(__s390__) || defined(__s390x__) || defined(__zarch__)
+- #  define GST_HAVE_UNALIGNED_ACCESS 1
+--- 
+-2.19.1
+-
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
+index 204bb74fd3..588526c5c2 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.hash
++++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
+@@ -1,3 +1,3 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.14.4.tar.xz.sha256sum
+-sha256 f94f6696c5f05a3b3a9183e39c5f5c0b779f75a04c0efa497e7920afa985ffc7 gstreamer-1.14.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.16.0.tar.xz.sha256sum
++sha256 0e8e2f7118be437cba879353970cf83c2acced825ecb9275ba05d9186ef07c00 gstreamer-1.16.0.tar.xz
+ sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index 76a74a0806..3378232c10 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.0.10" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.0.11" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 1af2cb110f..e5a88d9899 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 ea1c1323c2c7e70bebf5463619b543f9bc353730b44ac62d9efadd4fe5625e76  linux-5.0.10.tar.xz
-+sha256 18db623665cad3802e79eef22830fc2aac8a76c41cd3c3ae6cc4bbe245957fa0  linux-5.0.11.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
--sha256 ecb0b30ec32c0c7d614c394158c7d37099a815507ed62235cca32052d7ff9c65  linux-4.19.37.tar.xz
--sha256 b75e1dcfabc8d18051a07cbf9b60eaee8ac470a2311fed20447fd0d022c19e15  linux-4.14.114.tar.xz
--sha256 431cd992bf74da9851dd5938dbe45ff7577219b84b237ae5e30067d483b57f01  linux-4.9.171.tar.xz
-+sha256 6a3fdfa02dbc61ee8120ff0947a6eb0d6595b9bbe27e30a1b6f53b905f0bcd7f  linux-4.19.38.tar.xz
-+sha256 b7ae61711a1323053d68fd47911b92977afd526d302755518e42744251516186  linux-4.14.115.tar.xz
-+sha256 49428e30989cc0b069a6f4b7bc08988deb02d10f910ca0c4d1e44b22155eb40e  linux-4.9.172.tar.xz
- sha256 2c6a9d2765ef182f2470afed5af74de6c435ba9aaf422af54db8c5dc2b4f27d1  linux-4.4.179.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 78a14071ff..61fcdc7a9f 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -294,11 +294,11 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.179"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.171"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.114"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.37"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.9.172"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.115"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.38"	if BR2_KERNEL_HEADERS_4_19
- 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
--	default "5.0.10"	if BR2_KERNEL_HEADERS_5_0
-+	default "5.0.11"	if BR2_KERNEL_HEADERS_5_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-GSTREAMER1_VERSION = 1.14.4
++GSTREAMER1_VERSION = 1.16.0
+ GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
+ GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
+ GSTREAMER1_INSTALL_STAGING = YES
 -- 
-2.11.0
+2.21.0
