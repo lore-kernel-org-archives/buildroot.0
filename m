@@ -1,55 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 2 May 2019 08:35:42 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x]
- configs/qemu_xtensa_lx60_*: kernel build needs mkimage
-Message-ID: <20190502063316.5F7F281213@busybox.osuosl.org>
+Date: Thu, 2 May 2019 08:27:16 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/popt: add hash
+ for the license file
+Message-ID: <20190502063316.41E1481255@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=53ac60ced6ae9ff554610f1211af8a1e61a147f1
+commit: https://git.buildroot.net/buildroot/commit/?id=16d94c3bb68847fd432b07706d90519dc239ca22
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Following ffbe46a5295 ("linux: simplify LINUX_BUILD_CMDS"), the Linux
-kernel build for these xtensa qemu builds an image format that needs
-mkimage.
-
-Reported-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Reviewed-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7cf13b9b0644295dc8a0aa33838b304eb6ebc444)
+(cherry picked from commit 6b8e3e74154dccc7c72a136f29e486afeff52f0e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/qemu_xtensa_lx60_defconfig       | 3 +++
- configs/qemu_xtensa_lx60_nommu_defconfig | 3 +++
- 2 files changed, 6 insertions(+)
+ package/popt/popt.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/qemu_xtensa_lx60_defconfig
-index 6bf48a2ada..4287e6abeb 100644
---- a/configs/qemu_xtensa_lx60_defconfig
-+++ b/configs/qemu_xtensa_lx60_defconfig
-@@ -23,3 +23,6 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
- BR2_LINUX_KERNEL_IMAGE_NAME="Image.elf"
- BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
-+
-+# Kernel needs mkimage
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/qemu_xtensa_lx60_nommu_defconfig
-index 5ff9646270..37b6743588 100644
---- a/configs/qemu_xtensa_lx60_nommu_defconfig
-+++ b/configs/qemu_xtensa_lx60_nommu_defconfig
-@@ -27,3 +27,6 @@ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/xtensa-lx60/linux-nommu.config"
- BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
- BR2_LINUX_KERNEL_IMAGE_NAME="Image.elf"
- BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
-+
-+# Kernel needs mkimage
-+BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+diff --git a/package/popt/popt.hash b/package/popt/popt.hash
+index 875bbae7a3..1422f4b920 100644
+--- a/package/popt/popt.hash
++++ b/package/popt/popt.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated:
+ sha256	e728ed296fe9f069a0e005003c3d6b2dde3d9cad453422a10d6558616d304cc8	popt-1.16.tar.gz
++sha256	518d4f2a05064cb9a8ec0ea02e86408af4feed6916f78ef42171465db8b383c5	COPYING
