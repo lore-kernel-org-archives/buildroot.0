@@ -1,178 +1,176 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 3 May 2019 18:57:21 +0200
-Subject: [Buildroot] [PATCH 1/2] allow build infrastructure to pick up
- installed meson tool
-In-Reply-To: <20190503131851.12315-1-norbert.lange@andritz.com>
-References: <20190503131851.12315-1-norbert.lange@andritz.com>
-Message-ID: <20190503185721.18b2c3a4@gmx.net>
+Date: Fri, 3 May 2019 20:10:11 +0200
+Subject: [Buildroot] [PATCH v1 1/2] package/pkg-meson: change to use
+ <PKG>_BUILDDIR
+In-Reply-To: <284679f5-39d0-f2b3-5443-9f78ee0bb112@mind.be>
+References: <20190502201436.6163-1-ps.report@gmx.net>
+ <284679f5-39d0-f2b3-5443-9f78ee0bb112@mind.be>
+Message-ID: <20190503201011.494df9ae@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Norbert,
+Hello Arnout,
 
-appreciating every patch which speeds up the buildroot build process ;-),
-but some nits, one minor comments and one major concern, see below...
+On Fri, 3 May 2019 10:34:47 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-On Fri,  3 May 2019 15:18:50 +0200, Norbert Lange <nolange79@gmail.com> wrote:
+> On 02/05/2019 22:14, Peter Seiderer wrote:
+> > Change to use <PKG>_BUILDDIR (and change from <PKG>_SRCDIR/build
+> > to <PKG>_SRCDIR/buildroot-build as in package/pkg-cmake.mk).
+>
+>  Could you do a build-test of BR2_PACKAGE_SYSTEMD_BOOT=y ? I believe it will fail...
 
-> From: Norbert Lange <nolange79@gmail.com>
->
-> Automatically check for an available meson tool,
-> and use it aslond the version is fitting.
-
-s/aslond/as long/
+Thanks for the hint (one more time libdrm only is not sufficient for meson changes
+test), it fails because of the build vs. buildroot-build change, will add an
+additional change on the next patch iteration...
 
 >
-> Some concerns are about being able to figure out the
-> correct version for all available packages in buildroot.
-> The min version could be set to version 1.0 to postpone the
+>  There may be others as well. You should check all meson packages if they refer
+> to the build directory.
 
-You mean 1.0 to disable host meson usage?
+Checked, systemd is the only package affected...
 
-> problem, but still have the infrastructure in place
-> to allow users to override the version.
 >
-> Currently host-ninja will still be always built.
 >
-> Signed-off-by: Norbert Lange <nolange79@gmail.com>
-> ---
->  package/meson/meson.mk                   |  1 -
->  package/pkg-meson.mk                     |  4 +--
->  support/dependencies/check-host-meson.mk | 16 +++++++++
->  support/dependencies/check-host-meson.sh | 45 ++++++++++++++++++++++++
->  4 files changed, 63 insertions(+), 3 deletions(-)
->  create mode 100644 support/dependencies/check-host-meson.mk
->  create mode 100755 support/dependencies/check-host-meson.sh
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> > Notes:
+> >   - suggested change by Arnout Vandecappelle
+> >   - <PKG>_SRCDIR seems to contain already an trailing '/', so
+> >     <PKG>_BUILDDIR gets an double '//' path seperator
 >
-> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> index cf62b0ddde..2ce7a26ab5 100644
-> --- a/package/meson/meson.mk
-> +++ b/package/meson/meson.mk
-> @@ -10,7 +10,6 @@ MESON_LICENSE = Apache-2.0
->  MESON_LICENSE_FILES = COPYING
->  MESON_SETUP_TYPE = setuptools
+> $(2)_SRCDIR                    = $$($(2)_DIR)/$$($(2)_SUBDIR)
 >
-> -HOST_MESON_DEPENDENCIES = host-ninja
->  HOST_MESON_NEEDS_HOST_PYTHON = python3
+>  _SUBDIR is usually empty.
 >
->  HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
-> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> index 7f1838c09a..25e9bb814e 100644
-> --- a/package/pkg-meson.mk
-> +++ b/package/pkg-meson.mk
-> @@ -25,7 +25,7 @@
->  # $(HOST_DIR)/bin/python3 will not look for Meson modules in
->  # $HOME/.local/lib/python3.x/site-packages
->  #
-> -MESON		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/meson
-> +MESON		= PYTHONNOUSERSITE=y $(BR2_MESON)
->  NINJA		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/ninja
->  NINJA_OPTS	= $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+>  You can't simply remove the / for the case where _SUBDIR is not empty.
 >
-> @@ -105,7 +105,7 @@ endef
->  endif
->  endif
+>  If we really want to avoid it, we could change that into
 >
-> -$(2)_DEPENDENCIES += host-meson
-> +$(2)_DEPENDENCIES += $(BR2_MESON_HOST_DEPENDENCY)
 >
->  #
->  # Build step. Only define it if not already defined by the package .mk
-> diff --git a/support/dependencies/check-host-meson.mk b/support/dependencies/check-host-meson.mk
-> new file mode 100644
-> index 0000000000..6c779b3e6d
-> --- /dev/null
-> +++ b/support/dependencies/check-host-meson.mk
-> @@ -0,0 +1,16 @@
-> +# Set this to either 0.49 or higher, depending on the highest minimum
-> +# version required by any of the packages bundled in Buildroot. If a
-> +# package is bumped or a new one added, and it requires a higher
-> +# version, our meson infra will catch it and build its own.
-> +#
-> +BR2_MESON_VERSION_MIN = 0.49
+> $(2)_SRCDIR                    = $$($(2)_DIR)$$(if $$($(2)_SUBDIR),/$$($(2)_SUBDIR))
+>
+> but I don't think it's worth it.
 
-Needs support for third version number, see latest meson bump to 0.50 and revert, but
-0.50.1 worked ([1], [2], [3])...
-
-The major concern is no distribution will ship meson with the still needed
-buildroot patch, see [4]...
+Will test it (and suggest an patch in case it works, it always catches my attention
+when a // traverses the console)...
 
 Regards,
 Peter
 
-[1] https://git.buildroot.net/buildroot/commit/?id=114e9dcd28e1001b74689215ec669b8940dc3ea9
-[2] https://git.buildroot.net/buildroot/commit/?id=c37b81af64dd8d6729325d8edbe633e6a186bb3d
-[3] https://git.buildroot.net/buildroot/commit/?id=70fb5e610761dd6468a058c580acc3d4f81fe547
-[4] https://git.buildroot.net/buildroot/tree/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
-
-> +
-> +BR2_MESON_CANDIDATES ?= meson
-> +BR2_MESON ?= $(call suitable-host-package,meson,\
-> +	$(BR2_MESON_VERSION_MIN) $(BR2_MESON_CANDIDATES))
-> +ifeq ($(BR2_MESON),)
-> +BR2_MESON = $(HOST_DIR)/bin/meson
-> +BR2_MESON_HOST_DEPENDENCY = host-meson host-ninja
-> +else
-> +BR2_MESON_HOST_DEPENDENCY = host-ninja
-> +endif
-> diff --git a/support/dependencies/check-host-meson.sh b/support/dependencies/check-host-meson.sh
-> new file mode 100755
-> index 0000000000..805fac9349
-> --- /dev/null
-> +++ b/support/dependencies/check-host-meson.sh
-> @@ -0,0 +1,45 @@
-> +#!/bin/sh
-> +
-> +# prevent shift error
-> +[ $# -lt 2 ] && exit 1
-> +
-> +split_version() {
-> +    local VARPREFIX
-> +    local NUMBERS
-> +    local major
-> +    local minor
-> +
-> +    VARPREFIX=$1
-> +    NUMBERS=$2
-> +
-> +    major=${NUMBERS%%\.*}
-> +    NUMBERS=${NUMBERS#$major}; NUMBERS=${NUMBERS#\.}
-> +    minor=${NUMBERS%%\.*}
-> +    NUMBERS=${NUMBERS#$minor}; NUMBERS=${NUMBERS#\.}
-> +
-> +    # ensure that missing values are 0
-> +    eval "${VARPREFIX}_major=\$major; ${VARPREFIX}_minor=\$((minor + 0)); ${VARPREFIX}_bugfix=\$((NUMBERS + 0));"
-> +}
-> +
-> +split_version req "$1"
-> +
-> +shift
-> +
-> +for candidate; do
-> +
-> +    # Try to locate the candidate. Discard it if not located.
-> +    meson=$(which "${candidate}" 2>/dev/null)
-> +    [ -n "${meson}" ] || continue
-> +
-> +    split_version cur "$("${meson}" --version)"
-> +
-> +    [ -n "${cur_major}" -a "${cur_major}" -ge "${req_major}" ] || continue
-> +    [ "${cur_major}" -gt "${req_major}" ] || [ "${cur_minor}" -ge "${req_minor}" ] || continue
-> +    [ "${cur_minor}" -gt "${req_minor}" ] || [ "${cur_bugfix}" -ge "${req_bugfix}" ] || continue
-> +
-> +    echo "${meson}"
-> +    exit
-> +done
-> +
-> +# echo nothing: no suitable meson found
-> +exit 1
-> --
-> 2.20.1
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  Regards,
+>  Arnout
+>
+> > ---
+> >  package/pkg-meson.mk | 28 +++++++++++++++-------------
+> >  1 file changed, 15 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> > index 886fcf7205..597c48b90a 100644
+> > --- a/package/pkg-meson.mk
+> > +++ b/package/pkg-meson.mk
+> > @@ -49,6 +49,8 @@ $(2)_CONF_ENV		?=
+> >  $(2)_CONF_OPTS		?=
+> >  $(2)_NINJA_ENV		?=
+> >
+> > +$(2)_BUILDDIR		?= $$($(2)_SRCDIR)/buildroot-build
+> > +
+> >  #
+> >  # Configure step. Only define it if not already defined by the package
+> >  # .mk file. And take care of the differences between host and target
+> > @@ -61,8 +63,8 @@ ifeq ($(4),target)
+> >  #
+> >  #
+> >  define $(2)_CONFIGURE_CMDS
+> > -	rm -rf $$($$(PKG)_SRCDIR)/build
+> > -	mkdir -p $$($$(PKG)_SRCDIR)/build
+> > +	rm -rf $$($$(PKG)_BUILDDIR)
+> > +	mkdir -p $$($$(PKG)_BUILDDIR)
+> >  	sed -e "s%@TARGET_CROSS@%$$(TARGET_CROSS)%g" \
+> >  	    -e "s%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
+> >  	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
+> > @@ -72,22 +74,22 @@ define $(2)_CONFIGURE_CMDS
+> >  	    -e "s%@TARGET_CXXFLAGS@%$$(HOST_MESON_SED_CXXFLAGS)%g" \
+> >  	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
+> >  	    package/meson/cross-compilation.conf.in \
+> > -	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+> > +	    > $$($$(PKG)_BUILDDIR)/cross-compilation.conf
+> >  	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
+> >  		--prefix=/usr \
+> >  		--libdir=lib \
+> >  		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
+> >  		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
+> > -		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+> > +		--cross-file=$$($$(PKG)_BUILDDIR)/cross-compilation.conf \
+> >  		$$($$(PKG)_CONF_OPTS) \
+> > -		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+> > +		$$($$(PKG)_SRCDIR) $$($$(PKG)_BUILDDIR)
+> >  endef
+> >  else
+> >
+> >  # Configure package for host
+> >  define $(2)_CONFIGURE_CMDS
+> > -	rm -rf $$($$(PKG)_SRCDIR)/build
+> > -	mkdir -p $$($$(PKG)_SRCDIR)/build
+> > +	rm -rf $$($$(PKG)_BUILDDIR)
+> > +	mkdir -p $$($$(PKG)_BUILDDIR)
+> >  	$$(HOST_CONFIGURE_OPTS) \
+> >  	$$($$(PKG)_CONF_ENV) $$(MESON) \
+> >  		--prefix=$$(HOST_DIR) \
+> > @@ -97,7 +99,7 @@ define $(2)_CONFIGURE_CMDS
+> >  		--default-library=shared \
+> >  		--buildtype=release \
+> >  		$$($$(PKG)_CONF_OPTS) \
+> > -		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
+> > +		$$($$(PKG)_SRCDIR) $$($$(PKG)_BUILDDIR)
+> >  endef
+> >  endif
+> >  endif
+> > @@ -112,12 +114,12 @@ ifndef $(2)_BUILD_CMDS
+> >  ifeq ($(4),target)
+> >  define $(2)_BUILD_CMDS
+> >  	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
+> > -		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
+> > +		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_BUILDDIR)
+> >  endef
+> >  else
+> >  define $(2)_BUILD_CMDS
+> >  	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
+> > -		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build
+> > +		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_BUILDDIR)
+> >  endef
+> >  endif
+> >  endif
+> > @@ -129,7 +131,7 @@ endif
+> >  ifndef $(2)_INSTALL_CMDS
+> >  define $(2)_INSTALL_CMDS
+> >  	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
+> > -		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
+> > +		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_BUILDDIR) install
+> >  endef
+> >  endif
+> >
+> > @@ -140,7 +142,7 @@ endif
+> >  ifndef $(2)_INSTALL_STAGING_CMDS
+> >  define $(2)_INSTALL_STAGING_CMDS
+> >  	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(STAGING_DIR) \
+> > -		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
+> > +		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_BUILDDIR) install
+> >  endef
+> >  endif
+> >
+> > @@ -151,7 +153,7 @@ endif
+> >  ifndef $(2)_INSTALL_TARGET_CMDS
+> >  define $(2)_INSTALL_TARGET_CMDS
+> >  	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(TARGET_DIR) \
+> > -		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/build install
+> > +		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_BUILDDIR) install
+> >  endef
+> >  endif
+> >
+> > --
+> > 2.21.0
+> >
