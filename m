@@ -1,71 +1,178 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 3 May 2019 17:25:47 +0200
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{9, 14,
- 19}.x / 5.0.x series
-Message-ID: <20190503152133.AA13684659@busybox.osuosl.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 3 May 2019 18:57:21 +0200
+Subject: [Buildroot] [PATCH 1/2] allow build infrastructure to pick up
+ installed meson tool
+In-Reply-To: <20190503131851.12315-1-norbert.lange@andritz.com>
+References: <20190503131851.12315-1-norbert.lange@andritz.com>
+Message-ID: <20190503185721.18b2c3a4@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a79bb4871a0f091b012421789b8bae56bf09707
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Norbert,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+appreciating every patch which speeds up the buildroot build process ;-),
+but some nits, one minor comments and one major concern, see below...
 
-diff --git a/linux/Config.in b/linux/Config.in
-index a800a40af7..debba03ec1 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -121,7 +121,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.0.10" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.0.11" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 1af2cb110f..e5a88d9899 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 ea1c1323c2c7e70bebf5463619b543f9bc353730b44ac62d9efadd4fe5625e76  linux-5.0.10.tar.xz
-+sha256 18db623665cad3802e79eef22830fc2aac8a76c41cd3c3ae6cc4bbe245957fa0  linux-5.0.11.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
--sha256 ecb0b30ec32c0c7d614c394158c7d37099a815507ed62235cca32052d7ff9c65  linux-4.19.37.tar.xz
--sha256 b75e1dcfabc8d18051a07cbf9b60eaee8ac470a2311fed20447fd0d022c19e15  linux-4.14.114.tar.xz
--sha256 431cd992bf74da9851dd5938dbe45ff7577219b84b237ae5e30067d483b57f01  linux-4.9.171.tar.xz
-+sha256 6a3fdfa02dbc61ee8120ff0947a6eb0d6595b9bbe27e30a1b6f53b905f0bcd7f  linux-4.19.38.tar.xz
-+sha256 b7ae61711a1323053d68fd47911b92977afd526d302755518e42744251516186  linux-4.14.115.tar.xz
-+sha256 49428e30989cc0b069a6f4b7bc08988deb02d10f910ca0c4d1e44b22155eb40e  linux-4.9.172.tar.xz
- sha256 2c6a9d2765ef182f2470afed5af74de6c435ba9aaf422af54db8c5dc2b4f27d1  linux-4.4.179.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 78a14071ff..61fcdc7a9f 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -294,11 +294,11 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.179"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.171"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.114"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.37"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.9.172"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.115"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.38"	if BR2_KERNEL_HEADERS_4_19
- 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
--	default "5.0.10"	if BR2_KERNEL_HEADERS_5_0
-+	default "5.0.11"	if BR2_KERNEL_HEADERS_5_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+On Fri,  3 May 2019 15:18:50 +0200, Norbert Lange <nolange79@gmail.com> wrote:
+
+> From: Norbert Lange <nolange79@gmail.com>
+>
+> Automatically check for an available meson tool,
+> and use it aslond the version is fitting.
+
+s/aslond/as long/
+
+>
+> Some concerns are about being able to figure out the
+> correct version for all available packages in buildroot.
+> The min version could be set to version 1.0 to postpone the
+
+You mean 1.0 to disable host meson usage?
+
+> problem, but still have the infrastructure in place
+> to allow users to override the version.
+>
+> Currently host-ninja will still be always built.
+>
+> Signed-off-by: Norbert Lange <nolange79@gmail.com>
+> ---
+>  package/meson/meson.mk                   |  1 -
+>  package/pkg-meson.mk                     |  4 +--
+>  support/dependencies/check-host-meson.mk | 16 +++++++++
+>  support/dependencies/check-host-meson.sh | 45 ++++++++++++++++++++++++
+>  4 files changed, 63 insertions(+), 3 deletions(-)
+>  create mode 100644 support/dependencies/check-host-meson.mk
+>  create mode 100755 support/dependencies/check-host-meson.sh
+>
+> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> index cf62b0ddde..2ce7a26ab5 100644
+> --- a/package/meson/meson.mk
+> +++ b/package/meson/meson.mk
+> @@ -10,7 +10,6 @@ MESON_LICENSE = Apache-2.0
+>  MESON_LICENSE_FILES = COPYING
+>  MESON_SETUP_TYPE = setuptools
+>
+> -HOST_MESON_DEPENDENCIES = host-ninja
+>  HOST_MESON_NEEDS_HOST_PYTHON = python3
+>
+>  HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index 7f1838c09a..25e9bb814e 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -25,7 +25,7 @@
+>  # $(HOST_DIR)/bin/python3 will not look for Meson modules in
+>  # $HOME/.local/lib/python3.x/site-packages
+>  #
+> -MESON		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/meson
+> +MESON		= PYTHONNOUSERSITE=y $(BR2_MESON)
+>  NINJA		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/ninja
+>  NINJA_OPTS	= $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+>
+> @@ -105,7 +105,7 @@ endef
+>  endif
+>  endif
+>
+> -$(2)_DEPENDENCIES += host-meson
+> +$(2)_DEPENDENCIES += $(BR2_MESON_HOST_DEPENDENCY)
+>
+>  #
+>  # Build step. Only define it if not already defined by the package .mk
+> diff --git a/support/dependencies/check-host-meson.mk b/support/dependencies/check-host-meson.mk
+> new file mode 100644
+> index 0000000000..6c779b3e6d
+> --- /dev/null
+> +++ b/support/dependencies/check-host-meson.mk
+> @@ -0,0 +1,16 @@
+> +# Set this to either 0.49 or higher, depending on the highest minimum
+> +# version required by any of the packages bundled in Buildroot. If a
+> +# package is bumped or a new one added, and it requires a higher
+> +# version, our meson infra will catch it and build its own.
+> +#
+> +BR2_MESON_VERSION_MIN = 0.49
+
+Needs support for third version number, see latest meson bump to 0.50 and revert, but
+0.50.1 worked ([1], [2], [3])...
+
+The major concern is no distribution will ship meson with the still needed
+buildroot patch, see [4]...
+
+Regards,
+Peter
+
+[1] https://git.buildroot.net/buildroot/commit/?id=114e9dcd28e1001b74689215ec669b8940dc3ea9
+[2] https://git.buildroot.net/buildroot/commit/?id=c37b81af64dd8d6729325d8edbe633e6a186bb3d
+[3] https://git.buildroot.net/buildroot/commit/?id=70fb5e610761dd6468a058c580acc3d4f81fe547
+[4] https://git.buildroot.net/buildroot/tree/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+
+> +
+> +BR2_MESON_CANDIDATES ?= meson
+> +BR2_MESON ?= $(call suitable-host-package,meson,\
+> +	$(BR2_MESON_VERSION_MIN) $(BR2_MESON_CANDIDATES))
+> +ifeq ($(BR2_MESON),)
+> +BR2_MESON = $(HOST_DIR)/bin/meson
+> +BR2_MESON_HOST_DEPENDENCY = host-meson host-ninja
+> +else
+> +BR2_MESON_HOST_DEPENDENCY = host-ninja
+> +endif
+> diff --git a/support/dependencies/check-host-meson.sh b/support/dependencies/check-host-meson.sh
+> new file mode 100755
+> index 0000000000..805fac9349
+> --- /dev/null
+> +++ b/support/dependencies/check-host-meson.sh
+> @@ -0,0 +1,45 @@
+> +#!/bin/sh
+> +
+> +# prevent shift error
+> +[ $# -lt 2 ] && exit 1
+> +
+> +split_version() {
+> +    local VARPREFIX
+> +    local NUMBERS
+> +    local major
+> +    local minor
+> +
+> +    VARPREFIX=$1
+> +    NUMBERS=$2
+> +
+> +    major=${NUMBERS%%\.*}
+> +    NUMBERS=${NUMBERS#$major}; NUMBERS=${NUMBERS#\.}
+> +    minor=${NUMBERS%%\.*}
+> +    NUMBERS=${NUMBERS#$minor}; NUMBERS=${NUMBERS#\.}
+> +
+> +    # ensure that missing values are 0
+> +    eval "${VARPREFIX}_major=\$major; ${VARPREFIX}_minor=\$((minor + 0)); ${VARPREFIX}_bugfix=\$((NUMBERS + 0));"
+> +}
+> +
+> +split_version req "$1"
+> +
+> +shift
+> +
+> +for candidate; do
+> +
+> +    # Try to locate the candidate. Discard it if not located.
+> +    meson=$(which "${candidate}" 2>/dev/null)
+> +    [ -n "${meson}" ] || continue
+> +
+> +    split_version cur "$("${meson}" --version)"
+> +
+> +    [ -n "${cur_major}" -a "${cur_major}" -ge "${req_major}" ] || continue
+> +    [ "${cur_major}" -gt "${req_major}" ] || [ "${cur_minor}" -ge "${req_minor}" ] || continue
+> +    [ "${cur_minor}" -gt "${req_minor}" ] || [ "${cur_bugfix}" -ge "${req_bugfix}" ] || continue
+> +
+> +    echo "${meson}"
+> +    exit
+> +done
+> +
+> +# echo nothing: no suitable meson found
+> +exit 1
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
