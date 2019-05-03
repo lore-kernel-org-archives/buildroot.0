@@ -1,17 +1,432 @@
-From: Gervais, Francois <FGervais@distech-controls.com>
-Date: Fri, 3 May 2019 20:21:41 +0000
-Subject: [Buildroot] Buildroot multi-arch build
-Message-ID: <BL0PR0102MB341237052A8B224C63E58B9FF3350@BL0PR0102MB3412.prod.exchangelabs.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  3 May 2019 23:02:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: bump to
+ version 1.2.1
+Message-ID: <20190503210251.18312-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Remove all patches (already in version)
 
-We use the same buildroot environment for x86_64, armhf and arm64.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-add-missing-cstdarg-include.patch    |  37 ---
+ .../0002-buffer.hpp-fix-build-on-uclibc.patch |  29 --
+ .../0003-fix-build-with-boost-1.70.0.patch    | 297 ------------------
+ .../libtorrent-rasterbar.hash                 |   2 +-
+ .../libtorrent-rasterbar.mk                   |   4 +-
+ 5 files changed, 3 insertions(+), 366 deletions(-)
+ delete mode 100644 package/libtorrent-rasterbar/0001-add-missing-cstdarg-include.patch
+ delete mode 100644 package/libtorrent-rasterbar/0002-buffer.hpp-fix-build-on-uclibc.patch
+ delete mode 100644 package/libtorrent-rasterbar/0003-fix-build-with-boost-1.70.0.patch
 
-For each architecture, everything is the same except for the architecture definition.
-
-Is there a way to achieve this without maintaining 3 config files?
+diff --git a/package/libtorrent-rasterbar/0001-add-missing-cstdarg-include.patch b/package/libtorrent-rasterbar/0001-add-missing-cstdarg-include.patch
+deleted file mode 100644
+index f5fc693ab4..0000000000
+--- a/package/libtorrent-rasterbar/0001-add-missing-cstdarg-include.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From bfc579e61f9c6dd69a024ef6e2f9287abb40603f Mon Sep 17 00:00:00 2001
+-From: arvidn <arvid@libtorrent.org>
+-Date: Sun, 20 Jan 2019 18:03:38 +0100
+-Subject: [PATCH] add missing cstdarg include
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/arvidn/libtorrent/commit/bfc579e61f9c6dd69a024ef6e2f9287abb40603f]
+----
+- include/libtorrent/alert_types.hpp     | 1 +
+- include/libtorrent/stack_allocator.hpp | 1 +
+- 2 files changed, 2 insertions(+)
+-
+-diff --git a/include/libtorrent/alert_types.hpp b/include/libtorrent/alert_types.hpp
+-index 12d4091e75..090c48c8cd 100644
+---- a/include/libtorrent/alert_types.hpp
+-+++ b/include/libtorrent/alert_types.hpp
+-@@ -60,6 +60,7 @@ POSSIBILITY OF SUCH DAMAGE.
+- #include "libtorrent/aux_/disable_warnings_pop.hpp"
+- 
+- #include <bitset>
+-+#include <cstdarg> // for va_list
+- 
+- #if TORRENT_ABI_VERSION == 1
+- #define PROGRESS_NOTIFICATION | alert::progress_notification
+-diff --git a/include/libtorrent/stack_allocator.hpp b/include/libtorrent/stack_allocator.hpp
+-index 9e83ac52e7..8fa7a98708 100644
+---- a/include/libtorrent/stack_allocator.hpp
+-+++ b/include/libtorrent/stack_allocator.hpp
+-@@ -39,6 +39,7 @@ POSSIBILITY OF SUCH DAMAGE.
+- #include "libtorrent/aux_/vector.hpp"
+- #include "libtorrent/aux_/numeric_cast.hpp"
+- 
+-+#include <cstdarg> // for va_list
+- #include <cstdio> // for vsnprintf
+- #include <cstring>
+- 
+diff --git a/package/libtorrent-rasterbar/0002-buffer.hpp-fix-build-on-uclibc.patch b/package/libtorrent-rasterbar/0002-buffer.hpp-fix-build-on-uclibc.patch
+deleted file mode 100644
+index 4957984825..0000000000
+--- a/package/libtorrent-rasterbar/0002-buffer.hpp-fix-build-on-uclibc.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From a2c7f19ad414879d5354ef6ca98acf80a5005ab3 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 18 Apr 2019 14:30:16 +0200
+-Subject: [PATCH] buffer.hpp: fix build on uclibc
+-
+-malloc_usable_size is not available on uclibc
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: not sent yet]
+----
+- include/libtorrent/buffer.hpp | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/include/libtorrent/buffer.hpp b/include/libtorrent/buffer.hpp
+-index 3af5ef24f..785e7cfd8 100644
+---- a/include/libtorrent/buffer.hpp
+-+++ b/include/libtorrent/buffer.hpp
+-@@ -85,7 +85,7 @@ public:
+- 
+- 		// the actual allocation may be larger than we requested. If so, let the
+- 		// user take advantage of every single byte
+--#if defined __GLIBC__ || defined __FreeBSD__
+-+#if (defined __GLIBC__ && !defined __UCLIBC__) || defined __FreeBSD__
+- 		m_size = static_cast<difference_type>(::malloc_usable_size(m_begin));
+- #elif defined _MSC_VER
+- 		m_size = static_cast<difference_type>(::_msize(m_begin));
+--- 
+-2.20.1
+-
+diff --git a/package/libtorrent-rasterbar/0003-fix-build-with-boost-1.70.0.patch b/package/libtorrent-rasterbar/0003-fix-build-with-boost-1.70.0.patch
+deleted file mode 100644
+index 17c29d530f..0000000000
+--- a/package/libtorrent-rasterbar/0003-fix-build-with-boost-1.70.0.patch
++++ /dev/null
+@@ -1,297 +0,0 @@
+-From 76c2794923c4c101ff715be11d794f7fefc6c524 Mon Sep 17 00:00:00 2001
+-From: Arvid Norberg <arvid.norberg@gmail.com>
+-Date: Fri, 19 Apr 2019 20:56:19 +0200
+-Subject: [PATCH] fix build with boost-1.70 (#3788)
+-
+-fix build with boost 1.70.0 Fix #3683
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/arvidn/libtorrent/commit/76c2794923c4c101ff715be11d794f7fefc6c524]
+----
+- include/libtorrent/io_service.hpp      |  3 +++
+- include/libtorrent/io_service_fwd.hpp  | 13 +++++++++++--
+- include/libtorrent/proxy_base.hpp      |  2 +-
+- include/libtorrent/tracker_manager.hpp |  2 +-
+- include/libtorrent/udp_socket.hpp      |  2 +-
+- src/disk_io_thread_pool.cpp            |  2 +-
+- src/http_connection.cpp                | 18 +++++++++---------
+- src/kademlia/dht_tracker.cpp           |  2 +-
+- src/lsd.cpp                            |  4 ++--
+- src/natpmp.cpp                         |  6 +++---
+- src/udp_socket.cpp                     |  2 +-
+- src/upnp.cpp                           |  2 +-
+- test/test_fast_extension.cpp           |  2 +-
+- 13 files changed, 36 insertions(+), 24 deletions(-)
+-
+-diff --git a/include/libtorrent/io_service.hpp b/include/libtorrent/io_service.hpp
+-index 123274019b..5f6be1a2ca 100644
+---- a/include/libtorrent/io_service.hpp
+-+++ b/include/libtorrent/io_service.hpp
+-@@ -38,9 +38,12 @@ POSSIBILITY OF SUCH DAMAGE.
+- #else
+- #include "libtorrent/aux_/disable_warnings_push.hpp"
+- #include <boost/asio/io_service.hpp>
+-+#include <boost/version.hpp>
+- #include "libtorrent/aux_/disable_warnings_pop.hpp"
+- #endif // SIMULATOR
+- 
+-+#include "libtorrent/io_service_fwd.hpp"
+-+
+- namespace libtorrent {
+- 
+- #if defined TORRENT_BUILD_SIMULATOR
+-diff --git a/include/libtorrent/io_service_fwd.hpp b/include/libtorrent/io_service_fwd.hpp
+-index 1b22c3e58f..71b845d3f3 100644
+---- a/include/libtorrent/io_service_fwd.hpp
+-+++ b/include/libtorrent/io_service_fwd.hpp
+-@@ -55,10 +55,19 @@ namespace boost { namespace asio {
+- namespace libtorrent {
+- 
+- #if defined TORRENT_BUILD_SIMULATOR
+--	typedef sim::asio::io_service io_service;
+-+	using io_service = sim::asio::io_service;
+- #else
+--	typedef boost::asio::io_service io_service;
+-+	using io_service = boost::asio::io_service;
+- #endif
+-+
+-+#if BOOST_VERSION >= 107000
+-+template <typename T>
+-+io_service& get_io_service(T& o) { return static_cast<io_service&>(o.get_executor().context()); }
+-+#else
+-+template <typename T>
+-+io_service& get_io_service(T& o) { return o.get_io_service(); }
+-+#endif
+-+
+- }
+- 
+- #endif
+-diff --git a/include/libtorrent/proxy_base.hpp b/include/libtorrent/proxy_base.hpp
+-index 344c230977..d7666545c6 100644
+---- a/include/libtorrent/proxy_base.hpp
+-+++ b/include/libtorrent/proxy_base.hpp
+-@@ -246,7 +246,7 @@ class proxy_base
+- 
+- 	io_service& get_io_service()
+- 	{
+--		return m_sock.get_io_service();
+-+		return lt::get_io_service(m_sock);
+- 	}
+- 
+- 	lowest_layer_type& lowest_layer()
+-diff --git a/include/libtorrent/tracker_manager.hpp b/include/libtorrent/tracker_manager.hpp
+-index 86331adbca..1fc28e89ff 100644
+---- a/include/libtorrent/tracker_manager.hpp
+-+++ b/include/libtorrent/tracker_manager.hpp
+-@@ -259,7 +259,7 @@ namespace libtorrent {
+- 		virtual void on_timeout(error_code const& ec) = 0;
+- 		virtual ~timeout_handler();
+- 
+--		io_service& get_io_service() { return m_timeout.get_io_service(); }
+-+		io_service& get_io_service() { return lt::get_io_service(m_timeout); }
+- 
+- 	private:
+- 
+-diff --git a/include/libtorrent/udp_socket.hpp b/include/libtorrent/udp_socket.hpp
+-index f4dcbeb248..c5c9aeba66 100644
+---- a/include/libtorrent/udp_socket.hpp
+-+++ b/include/libtorrent/udp_socket.hpp
+-@@ -61,7 +61,7 @@ namespace libtorrent {
+- 		static constexpr udp_send_flags_t dont_fragment = 3_bit;
+- 
+- 		bool is_open() const { return m_abort == false; }
+--		io_service& get_io_service() { return m_socket.get_io_service(); }
+-+		io_service& get_io_service() { return lt::get_io_service(m_socket); }
+- 
+- 		template <typename Handler>
+- 		void async_read(Handler&& h)
+-diff --git a/src/disk_io_thread_pool.cpp b/src/disk_io_thread_pool.cpp
+-index 4d4b5ee678..123159a45d 100644
+---- a/src/disk_io_thread_pool.cpp
+-+++ b/src/disk_io_thread_pool.cpp
+-@@ -173,7 +173,7 @@ namespace libtorrent {
+- 			// buffer pool won't exist anymore, and crash. This prevents that.
+- 			m_threads.emplace_back(&pool_thread_interface::thread_fun
+- 				, &m_thread_iface, std::ref(*this)
+--				, io_service::work(m_idle_timer.get_io_service()));
+-+				, io_service::work(get_io_service(m_idle_timer)));
+- 		}
+- 	}
+- 
+-diff --git a/src/http_connection.cpp b/src/http_connection.cpp
+-index e01e9ea1d5..81e5368a55 100644
+---- a/src/http_connection.cpp
+-+++ b/src/http_connection.cpp
+-@@ -148,7 +148,7 @@ void http_connection::get(std::string const& url, time_duration timeout, int pri
+- 
+- 	if (ec)
+- 	{
+--		m_timer.get_io_service().post(std::bind(&http_connection::callback
+-+		lt::get_io_service(m_timer).post(std::bind(&http_connection::callback
+- 			, me, ec, span<char>{}));
+- 		return;
+- 	}
+-@@ -160,7 +160,7 @@ void http_connection::get(std::string const& url, time_duration timeout, int pri
+- 		)
+- 	{
+- 		error_code err(errors::unsupported_url_protocol);
+--		m_timer.get_io_service().post(std::bind(&http_connection::callback
+-+		lt::get_io_service(m_timer).post(std::bind(&http_connection::callback
+- 			, me, err, span<char>{}));
+- 		return;
+- 	}
+-@@ -258,7 +258,7 @@ void http_connection::start(std::string const& hostname, int port
+- 
+- 	if (ec)
+- 	{
+--		m_timer.get_io_service().post(std::bind(&http_connection::callback
+-+		lt::get_io_service(m_timer).post(std::bind(&http_connection::callback
+- 			, me, ec, span<char>{}));
+- 		return;
+- 	}
+-@@ -297,7 +297,7 @@ void http_connection::start(std::string const& hostname, int port
+- #if TORRENT_USE_I2P
+- 			if (i2p_conn->proxy().type != settings_pack::i2p_proxy)
+- 			{
+--				m_timer.get_io_service().post(std::bind(&http_connection::callback
+-+				lt::get_io_service(m_timer).post(std::bind(&http_connection::callback
+- 					, me, error_code(errors::no_i2p_router), span<char>{}));
+- 				return;
+- 			}
+-@@ -332,8 +332,8 @@ void http_connection::start(std::string const& hostname, int port
+- 					m_ssl_ctx->set_verify_mode(ssl::context::verify_none, ec);
+- 					if (ec)
+- 					{
+--						m_timer.get_io_service().post(std::bind(&http_connection::callback
+--								, me, ec, span<char>{}));
+-+						lt::get_io_service(m_timer).post(std::bind(&http_connection::callback
+-+							, me, ec, span<char>{}));
+- 						return;
+- 					}
+- 				}
+-@@ -344,7 +344,7 @@ void http_connection::start(std::string const& hostname, int port
+- 		// assume this is not a tracker connection. Tracker connections that
+- 		// shouldn't be subject to the proxy should pass in nullptr as the proxy
+- 		// pointer.
+--		instantiate_connection(m_timer.get_io_service()
+-+		instantiate_connection(lt::get_io_service(m_timer)
+- 			, proxy ? *proxy : null_proxy, m_sock, userdata, nullptr, false, false);
+- 
+- 		if (m_bind_addr)
+-@@ -353,7 +353,7 @@ void http_connection::start(std::string const& hostname, int port
+- 			m_sock.bind(tcp::endpoint(*m_bind_addr, 0), ec);
+- 			if (ec)
+- 			{
+--				m_timer.get_io_service().post(std::bind(&http_connection::callback
+-+				lt::get_io_service(m_timer).post(std::bind(&http_connection::callback
+- 					, me, ec, span<char>{}));
+- 				return;
+- 			}
+-@@ -362,7 +362,7 @@ void http_connection::start(std::string const& hostname, int port
+- 		setup_ssl_hostname(m_sock, hostname, ec);
+- 		if (ec)
+- 		{
+--			m_timer.get_io_service().post(std::bind(&http_connection::callback
+-+			lt::get_io_service(m_timer).post(std::bind(&http_connection::callback
+- 				, me, ec, span<char>{}));
+- 			return;
+- 		}
+-diff --git a/src/kademlia/dht_tracker.cpp b/src/kademlia/dht_tracker.cpp
+-index a840bcf991..f2b2b9e2a1 100644
+---- a/src/kademlia/dht_tracker.cpp
+-+++ b/src/kademlia/dht_tracker.cpp
+-@@ -130,7 +130,7 @@ namespace libtorrent { namespace dht {
+- 		// must use piecewise construction because tracker_node::connection_timer
+- 		// is neither copyable nor movable
+- 		auto n = m_nodes.emplace(std::piecewise_construct_t(), std::forward_as_tuple(s)
+--			, std::forward_as_tuple(m_key_refresh_timer.get_io_service()
+-+			, std::forward_as_tuple(get_io_service(m_key_refresh_timer)
+- 			, s, this, m_settings, nid, m_log, m_counters
+- 			, std::bind(&dht_tracker::get_node, this, _1, _2)
+- 			, m_storage));
+-diff --git a/src/lsd.cpp b/src/lsd.cpp
+-index 99e21ead44..562f374c62 100644
+---- a/src/lsd.cpp
+-+++ b/src/lsd.cpp
+-@@ -100,11 +100,11 @@ void lsd::debug_log(char const* fmt, ...) const
+- void lsd::start(error_code& ec)
+- {
+- 	m_socket.open(std::bind(&lsd::on_announce, self(), _1, _2)
+--		, m_broadcast_timer.get_io_service(), ec);
+-+		, lt::get_io_service(m_broadcast_timer), ec);
+- 	if (ec) return;
+- 
+- 	m_socket6.open(std::bind(&lsd::on_announce, self(), _1, _2)
+--		, m_broadcast_timer.get_io_service(), ec);
+-+		, lt::get_io_service(m_broadcast_timer), ec);
+- }
+- 
+- lsd::~lsd() = default;
+-diff --git a/src/natpmp.cpp b/src/natpmp.cpp
+-index 1226bcebac..5876683ea9 100644
+---- a/src/natpmp.cpp
+-+++ b/src/natpmp.cpp
+-@@ -160,13 +160,13 @@ void natpmp::start(address local_address, std::string device)
+- 	// try to find one even if the listen socket isn't bound to a device
+- 	if (device.empty())
+- 	{
+--		device = device_for_address(local_address, m_socket.get_io_service(), ec);
+-+		device = device_for_address(local_address, get_io_service(m_socket), ec);
+- 		// if this fails fall back to using the first default gateway in the
+- 		// routing table
+- 		ec.clear();
+- 	}
+- 
+--	auto const route = get_default_route(m_socket.get_io_service()
+-+	auto const route = get_default_route(get_io_service(m_socket)
+- 		, device, local_address.is_v6(), ec);
+- 
+- 	if (!route)
+-@@ -194,7 +194,7 @@ void natpmp::start(address local_address, std::string device)
+- 	if (local_address.is_unspecified())
+- 	{
+- 		std::vector<ip_interface> const net = enum_net_interfaces(
+--			m_socket.get_io_service(), ec);
+-+			get_io_service(m_socket), ec);
+- 
+- 		auto const it = std::find_if(net.begin(), net.end(), [&](ip_interface const& i)
+- 		{
+-diff --git a/src/udp_socket.cpp b/src/udp_socket.cpp
+-index 9ca38e5486..2459e4f1ca 100644
+---- a/src/udp_socket.cpp
+-+++ b/src/udp_socket.cpp
+-@@ -492,7 +492,7 @@ void udp_socket::set_proxy_settings(aux::proxy_settings const& ps)
+- 	{
+- 		// connect to socks5 server and open up the UDP tunnel
+- 
+--		m_socks5_connection = std::make_shared<socks5>(m_socket.get_io_service());
+-+		m_socks5_connection = std::make_shared<socks5>(lt::get_io_service(m_socket));
+- 		m_socks5_connection->start(ps);
+- 	}
+- }
+-diff --git a/src/upnp.cpp b/src/upnp.cpp
+-index a300571e47..b1e8a5bb19 100644
+---- a/src/upnp.cpp
+-+++ b/src/upnp.cpp
+-@@ -121,7 +121,7 @@ void upnp::start()
+- 
+- 	error_code ec;
+- 	m_socket.open(std::bind(&upnp::on_reply, self(), _1, _2)
+--		, m_refresh_timer.get_io_service(), ec);
+-+		, lt::get_io_service(m_refresh_timer), ec);
+- 
+- 	m_mappings.reserve(10);
+- }
+-diff --git a/test/test_fast_extension.cpp b/test/test_fast_extension.cpp
+-index 91256fa0c9..cddc508825 100644
+---- a/test/test_fast_extension.cpp
+-+++ b/test/test_fast_extension.cpp
+-@@ -462,7 +462,7 @@ std::shared_ptr<torrent_info> setup_peer(tcp::socket& s, sha1_hash& ih
+- 	}
+- 	else
+- 	{
+--		tcp::acceptor l(s.get_io_service());
+-+		tcp::acceptor l(lt::get_io_service(s));
+- 		l.open(tcp::v4());
+- 		l.bind(tcp::endpoint(address_v4::from_string("127.0.0.1"), 0));
+- 		l.listen();
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+index f462a7b701..3e55d64a3e 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 428eefcf6a603abc0dc87e423dbd60caa00795ece07696b65f8ee8bceaa37c30 libtorrent-rasterbar-1.2.0.tar.gz
++sha256 cceba9842ec7d87549cee9e39d95fd5ce68b0eb9b314a2dd0d611cfa9798762d libtorrent-rasterbar-1.2.1.tar.gz
+ sha256 f3a5dd1558cce616b12edad521427ec8976ce2bb0af33f7f359cfa648bf55ad8 COPYING
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+index 9164c343c6..fdcc736b47 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-LIBTORRENT_RASTERBAR_VERSION = 1.2.0
+-LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent_$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
++LIBTORRENT_RASTERBAR_VERSION = 1.2.1
++LIBTORRENT_RASTERBAR_SITE = https://github.com/arvidn/libtorrent/releases/download/libtorrent-$(subst .,_,$(LIBTORRENT_RASTERBAR_VERSION))
+ LIBTORRENT_RASTERBAR_LICENSE = BSD-3-Clause
+ LIBTORRENT_RASTERBAR_LICENSE_FILES = COPYING
+ LIBTORRENT_RASTERBAR_DEPENDENCIES = host-pkgconf boost openssl
+-- 
+2.20.1
