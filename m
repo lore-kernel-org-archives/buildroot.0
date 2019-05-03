@@ -1,119 +1,115 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 03 May 2019 06:00:26 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-05-02
-Message-ID: <20190503060032.099C888289@hemlock.osuosl.org>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Fri, 3 May 2019 08:22:10 +0200
+Subject: [Buildroot] [PATCH v2 4/7] package/python-traittypes: new
+ package
+In-Reply-To: <1556823086-29917-5-git-send-email-jugurtha.belkalem@smile.fr>
+References: <1556823086-29917-1-git-send-email-jugurtha.belkalem@smile.fr>
+ <1556823086-29917-5-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <CAGm1_kty5PdxbNNPm59uDRN9T91LxiQP5kPvFw6aEXop2ntsCg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Thu, May 2, 2019 at 8:53 PM Jugurtha BELKALEM
+<jugurtha.belkalem@smile.fr> wrote:
+>
+> bcc requires this package which is used to add
+> custom trait types for scientific computing.
+>
+> Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 
-Build statistics for 2019-05-02
-===============================
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-      branch |  OK | NOK | TIM | TOT |
-   2019.02.x |  42 |   1 |   0 |  43 |
-      master | 241 |  46 |   2 | 289 |
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                    dhcp-4.4.1 | 10
-                   netsurf-3.8 | 5 
-      gst1-plugins-good-1.14.4 | 4 
-              qt5enginio-1.6.3 | 4 
-          wpebackend-fdo-1.0.1 | 3 
-                  libssh-0.8.7 | 2 
-                qt5base-5.12.2 | 2 
-          qt5multimedia-5.12.2 | 2 
-                     vlc-3.0.6 | 2 
-                chocolate-doom | 1 
-                cracklib-2.9.7 | 1 
-           host-cryptopp-8.1.0 | 1 
-                host-libsodium | 1 
-             keepalived-2.0.15 | 1 
-        kf5-kcoreaddons-5.47.0 | 1 
-                 mesa3d-19.0.3 | 1 
-                  monkey-1.6.9 | 1 
-                mono-5.20.1.27 | 1 
-rtc-tools-33ef4aa1c92b0c92a... | 1 
-              spandsp-20180108 | 1 
-                suricata-4.1.3 | 1 
-  vdr-plugin-vnsiserver-v1.8.0 | 1 
-               wireshark-3.0.1 | 1 
-
-
-Detail of failures
-------------------
-
-microblazeel |                 chocolate-doom | TIM | http://autobuild.buildroot.net/results/8e62614d018af1c4e5e15d1eec37e2821075055c |     
-         sh4 |                 cracklib-2.9.7 | NOK | http://autobuild.buildroot.net/results/87926aad8188db73ef6cecbf87c485e81f7e37f3 |     
-         arm |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/697f85dbb161afaf0c4590e27cf43472009a43f5 | ORPH
-         arm |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/aa1b58d349d6fb184dc631dc25d57c52f5ceec42 | ORPH
-         arc |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/6f8c74d8a2340672ee0768ad24db8cac66fbff76 | ORPH
- powerpc64le |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/fd4b1e2f60bad72c8248ffabc3b09f6f1f7164db | ORPH
-         arm |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/92d073ca0700e215e360b510ce4730d52792f180 | ORPH
-     aarch64 |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/7b17aeca5eed8682b770c4c4c075d2205f36fa50 | ORPH
-      xtensa |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/42d7f0683534bdb57e24e0360b62665f270684ef | ORPH
-         sh4 |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/dcc45583c809e44e62ddf938ee059cbbd9bcd35f | ORPH
-      xtensa |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/2cd4ff531614d7ad9d93170385fd66380d567033 | ORPH
-      x86_64 |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/e617ef59ca488ae139ecd421711f270eedd47093 | ORPH
-        or1k |       gst1-plugins-good-1.14.4 | NOK | http://autobuild.buildroot.net/results/166eefb3037b7a1999bc7444aacf33b8c44eba28 |     
-      mipsel |       gst1-plugins-good-1.14.4 | NOK | http://autobuild.buildroot.net/results/5839fe1f6717b70f33d3dcc2d248b09a9772d83e |     
-         arc |       gst1-plugins-good-1.14.4 | NOK | http://autobuild.buildroot.net/results/9fe4358e1cdf948932d2489ff0f4c7690b7af94c |     
-     powerpc |       gst1-plugins-good-1.14.4 | NOK | http://autobuild.buildroot.net/results/f4567c9aaa0d006c634fe0a5eb0206d53a3dc2f8 |     
-         arm |            host-cryptopp-8.1.0 | NOK | http://autobuild.buildroot.net/results/660b67bbfdb79374a537e51e6c75e7ac719df933 |     
-         arm |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/f19b8c9f177b680818423a2ba8cad2122f45ff17 |     
-         arc |              keepalived-2.0.15 | NOK | http://autobuild.buildroot.net/results/e1a350cef3b16a8bccbf92712f1a24f8df19783c |     
-       sparc |         kf5-kcoreaddons-5.47.0 | NOK | http://autobuild.buildroot.net/results/d17c2fb420e395b995b2c2eef387f0c66e89c96c |     
-      xtensa |                   libssh-0.8.7 | NOK | http://autobuild.buildroot.net/results/aa5b9c6a87c7cec0017e84c9e250ce08dd2265b3 |     
-      xtensa |                   libssh-0.8.7 | NOK | http://autobuild.buildroot.net/results/2ea083d59c161463dbcfc4e5e6ae2c33daed7fd3 |     
-         sh4 |                  mesa3d-19.0.3 | NOK | http://autobuild.buildroot.net/results/8f1c80070746b3b172d3386ec6e2645e25a2451b |     
-        m68k |                   monkey-1.6.9 | NOK | http://autobuild.buildroot.net/results/36246d69441891e8c61dcb2b86fa0bc0ca23c925 |     
-         arm |                 mono-5.20.1.27 | NOK | http://autobuild.buildroot.net/results/5002110aa796d1d29c4ca438fc43086374a7b233 |     
-     powerpc |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/dfd17d8bc5582cc7b136cbb1877b57a53e07f0a8 |     
-        i586 |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/a8d202891c2041fc9052b0f60b49d3f58d17c8dd |     
-         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/0337790700b7c1c377602b4d0e851a3be9883556 |     
-         sh4 |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/13fff50c6dd80892d946d9be30bdd976acef63bd |     
-         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/4c031f17cc9a582897bbda4280ad9b84e2ff030e |     
-  aarch64_be |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/22e8c34a99bf90dfd17c90448813e5dadad31499 |     
-      x86_64 |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/e0ac6f8ce944193c6eaa42e64786042c3229bba1 |     
-        mips |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/1d527dbe0f12613f1f301605cf79f1d0a1b2f3a0 |     
-      xtensa |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/9b9b7f60ae239dbd9cbd6809cc9728847900dfac |     
-         arc |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/3eeefee05a82c32033f9d3dfa741a81bce2f58e4 |     
-     riscv64 |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/a073249b0ed5319ea968576a6ef3858e4a3b2e27 |     
-     riscv32 |           qt5multimedia-5.12.2 | NOK | http://autobuild.buildroot.net/results/4b7a49a5f524b4a5621832800056c221e38bfb9a |     
-     riscv32 |           qt5multimedia-5.12.2 | NOK | http://autobuild.buildroot.net/results/21e174db0f99fd06f4b80516fcb4b6051c691901 |     
-     nds32le | rtc-tools-33ef4aa1c92b0c92a... | NOK | http://autobuild.buildroot.net/results/96c3be922a96c50fbd8e68059f9ced8a2a75f9ab |     
-        i686 |               spandsp-20180108 | NOK | http://autobuild.buildroot.net/results/26df9f2a2250926a1b0bd0340a50e69ede3ad8b0 |     
-         arm |                 suricata-4.1.3 | NOK | http://autobuild.buildroot.net/results/c3c43d5f220ed9e0587a0c8275252605f3a1afc3 |     
-      mipsel |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/f79a423cdd2527e21861c65bc8320152263cea9b |     
-    mips64el |                      vlc-3.0.6 | NOK | http://autobuild.buildroot.net/results/766b776a3244f505ab6bf1cab12d11dd16afa282 |     
-         arm |                      vlc-3.0.6 | NOK | http://autobuild.buildroot.net/results/68f2f11a3a74818b233f6d28833b25cee9c7f9ca |     
-     powerpc |                wireshark-3.0.1 | NOK | http://autobuild.buildroot.net/results/cfbb48b3804eadbd7e1c0ccced6e26875053c6d0 | ORPH
-     aarch64 |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/859102e20be07c21725f28b9dbd9a95c5e0e66fe |     
-         arm |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/d3795d287391a8d8d0e1f30f726833926091c8f4 |     
-         arm |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/b25309481ed34252dc8e4fe89ee6667ad29e1783 |     
-
-Results for branch '2019.02.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                  grpc-v1.16.1 | 1 
-
-
-Detail of failures
-------------------
-
-      x86_64 |                   grpc-v1.16.1 | NOK | http://autobuild.buildroot.net/results/30456a479ff80b1325d7e9e55a31a01f7295fa9d |     
-
-
--- 
-http://autobuild.buildroot.net
+>
+> ---
+> Changes v1 => v2:
+> Correcting typos, adding #runtime
+> comment and fixing License name.
+> ---
+>  DEVELOPERS                                       |  1 +
+>  package/Config.in                                |  1 +
+>  package/python-traittypes/Config.in              |  7 +++++++
+>  package/python-traittypes/python-traittypes.hash |  5 +++++
+>  package/python-traittypes/python-traittypes.mk   | 14 ++++++++++++++
+>  5 files changed, 28 insertions(+)
+>  create mode 100644 package/python-traittypes/Config.in
+>  create mode 100644 package/python-traittypes/python-traittypes.hash
+>  create mode 100644 package/python-traittypes/python-traittypes.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index d4370db..dc83571 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1227,6 +1227,7 @@ F:        package/python-xlib/
+>  N:     Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+>  F:     package/python-pytest
+>  F:     package/python-pytest-runner
+> +F:     package/python-traittypes
+>
+>  N:     Joshua Henderson <joshua.henderson@microchip.com>
+>  F:     package/qt5/qt5wayland/
+> diff --git a/package/Config.in b/package/Config.in
+> index 4fcf4f7..4918ec5 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1073,6 +1073,7 @@ menu "External python modules"
+>         source "package/python-toml/Config.in"
+>         source "package/python-tornado/Config.in"
+>         source "package/python-traitlets/Config.in"
+> +       source "package/python-traittypes/Config.in"
+>         source "package/python-treq/Config.in"
+>         source "package/python-twisted/Config.in"
+>         source "package/python-txaio/Config.in"
+> diff --git a/package/python-traittypes/Config.in b/package/python-traittypes/Config.in
+> new file mode 100644
+> index 0000000..0688f80
+> --- /dev/null
+> +++ b/package/python-traittypes/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_TRAITTYPES
+> +       bool "python-traittypes"
+> +       select BR2_PACKAGE_PYTHON_TRAITLETS # runtime
+> +       help
+> +         Custom trait types for scientific computing.
+> +
+> +         https://pypi.org/project/traittypes/
+> diff --git a/package/python-traittypes/python-traittypes.hash b/package/python-traittypes/python-traittypes.hash
+> new file mode 100644
+> index 0000000..a94b256
+> --- /dev/null
+> +++ b/package/python-traittypes/python-traittypes.hash
+> @@ -0,0 +1,5 @@
+> +# sha256 from https://pypi.org/project/traittypes/#files
+> +sha256 be6fa26294733e7489822ded4ae25da5b4824a8a7a0e0c2dccfde596e3489bd6 traittypes-0.2.1.tar.gz
+> +
+> +# Locally calculated
+> +sha256 221976dfad5db283a2669efe8607e24c9c9aecca8453d6beba045e665c2f88a1 LICENSE
+> diff --git a/package/python-traittypes/python-traittypes.mk b/package/python-traittypes/python-traittypes.mk
+> new file mode 100644
+> index 0000000..d360e2d
+> --- /dev/null
+> +++ b/package/python-traittypes/python-traittypes.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-traittypes
+> +#
+> +################################################################################
+> +
+> +PYTHON_TRAITTYPES_VERSION = 0.2.1
+> +PYTHON_TRAITTYPES_SOURCE = traittypes-$(PYTHON_TRAITTYPES_VERSION).tar.gz
+> +PYTHON_TRAITTYPES_SITE = https://files.pythonhosted.org/packages/8a/71/0578e44d2110f93c2136eb705f5b11e706e1e8ea3acaaaeac043bd40d8fd
+> +PYTHON_TRAITTYPES_LICENSE = BSD-3-Clause
+> +PYTHON_TRAITTYPES_LICENSE_FILES = LICENSE
+> +PYTHON_TRAITTYPES_SETUP_TYPE = distutils
+> +
+> +$(eval $(python-package))
+> --
+> 2.7.4
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
