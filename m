@@ -1,98 +1,49 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Fri,  3 May 2019 14:20:26 +0000
-Subject: [Buildroot] [PATCH] package/libglib2: avoid printing null strings
-Message-ID: <20190503142026.25724-1-grzegorz@blach.pl>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 03 May 2019 15:09:04 +0000
+Subject: [Buildroot] [Bug 11836] Embedded Shell Scripts in BusyBox
+In-Reply-To: <bug-11836-163@https.bugs.busybox.net/>
+References: <bug-11836-163@https.bugs.busybox.net/>
+Message-ID: <bug-11836-163-hhA10Latug@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GCC 9 is being stricter about passing null string pointers
-to printf-like functions.
+https://bugs.busybox.net/show_bug.cgi?id=11836
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
----
- .../0003-avoid-printing-null-strings.patch    | 71 +++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100644 package/libglib2/0003-avoid-printing-null-strings.patch
+Yann E. MORIN <yann.morin.1998@free.fr> changed:
 
-diff --git a/package/libglib2/0003-avoid-printing-null-strings.patch b/package/libglib2/0003-avoid-printing-null-strings.patch
-new file mode 100644
-index 0000000000..faf58caa9a
---- /dev/null
-+++ b/package/libglib2/0003-avoid-printing-null-strings.patch
-@@ -0,0 +1,71 @@
-+From 566e1d61a500267c7849ad0b2552feec9c9a29a6 Mon Sep 17 00:00:00 2001
-+From: Ernestas Kulik <ekulik@redhat.com>
-+Date: Tue, 29 Jan 2019 09:50:46 +0100
-+Subject: [PATCH] gdbus: Avoid printing null strings
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+This mostly affects the 2.56 branch, but, given that GCC 9 is being
-+stricter about passing null string pointers to printf-like functions, it
-+might make sense to proactively fix such calls.
-+
-+gdbusauth.c: In function '_g_dbus_auth_run_server':
-+gdbusauth.c:1302:11: error: '%s' directive argument is null
-+[-Werror=format-overflow=]
-+ 1302 |           debug_print ("SERVER: WaitingForBegin, read '%s'",
-+ line);
-+       |
-+
-+gdbusmessage.c: In function ?g_dbus_message_to_blob?:
-+gdbusmessage.c:2730:30: error: ?%s? directive argument is null [-Werror=format-overflow=]
-+ 2730 |       tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-+      |
-+---
-+ gio/gdbusauth.c    | 2 +-
-+ gio/gdbusmessage.c | 5 ++---
-+ 2 files changed, 3 insertions(+), 4 deletions(-)
-+
-+diff --git a/gio/gdbusauth.c b/gio/gdbusauth.c
-+index 1f8ea8057..752ec23fc 100644
-+--- a/gio/gdbusauth.c
-++++ b/gio/gdbusauth.c
-+@@ -1272,9 +1272,9 @@ _g_dbus_auth_run_server (GDBusAuth              *auth,
-+                                                     &line_length,
-+                                                     cancellable,
-+                                                     error);
-+-          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
-+           if (line == NULL)
-+             goto out;
-++          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
-+           if (g_strcmp0 (line, "BEGIN") == 0)
-+             {
-+               /* YAY, done! */
-+diff --git a/gio/gdbusmessage.c b/gio/gdbusmessage.c
-+index 3221b925d..3a1a1f9e9 100644
-+--- a/gio/gdbusmessage.c
-++++ b/gio/gdbusmessage.c
-+@@ -2731,7 +2731,6 @@ g_dbus_message_to_blob (GDBusMessage          *message,
-+   if (message->body != NULL)
-+     {
-+       gchar *tupled_signature_str;
-+-      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-+       if (signature == NULL)
-+         {
-+           g_set_error (error,
-+@@ -2739,10 +2738,10 @@ g_dbus_message_to_blob (GDBusMessage          *message,
-+                        G_IO_ERROR_INVALID_ARGUMENT,
-+                        _("Message body has signature ?%s? but there is no signature header"),
-+                        signature_str);
-+-          g_free (tupled_signature_str);
-+           goto out;
-+         }
-+-      else if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
-++      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-++      if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
-+         {
-+           g_set_error (error,
-+                        G_IO_ERROR,
-+-- 
-+2.18.1
-+
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |yann.morin.1998 at free.fr
+
+--- Comment #1 from Yann E. MORIN <yann.morin.1998@free.fr> ---
+Max, All,
+
+> It would be great to be able to use [embedded scripts]
+
+What is the advantage over having the scripts installed in /bin or /usr/bin
+instead? If you are concerned about space that much that you want to take
+advantage of busybox' compression of the scripts, you would anyway consider
+a compressed filesystem like squashfs anyway, so the space gain would
+probably be ridiculous.
+
+> there is no configuration option in buildroot [for that]
+
+Indeed no, but it should not be overly complex to add. Yet, I'd like to
+see a good explanations why that would be better than to have the scripts
+in the filesystem instead.
+
+Regards,
+Yann E. MORIN.
+
+PS. Yes, support for embedded scripts is enabled in a default build, but
+that's an accident: our busybox .config was created before embedded scripts
+were a thing, so they are not explicitly disabled in our .config, and since
+the default for them in busybox is 'y', we end up with a buysbox that has
+support for embedded script (but no such script).
+
 -- 
-2.21.0
+You are receiving this mail because:
+You are on the CC list for the bug.
