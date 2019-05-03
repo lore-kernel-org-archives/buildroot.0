@@ -1,131 +1,79 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Fri,  3 May 2019 15:18:51 +0200
-Subject: [Buildroot] [PATCH 2/2] allow build infrastructure to pick up
- installed ninja tool
-In-Reply-To: <20190503131851.12315-1-norbert.lange@andritz.com>
-References: <20190503131851.12315-1-norbert.lange@andritz.com>
-Message-ID: <20190503131851.12315-2-norbert.lange@andritz.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 03 May 2019 13:52:22 +0000
+Subject: [Buildroot] [Bug 11831] New: python-pyparsing: "No module named
+ 'pyparsing'" on target / while building cantools
+Message-ID: <bug-11831-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Norbert Lange <nolange79@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=11831
 
-If a fitting ninja tool is detected it will be used,
-otherwise the tool will be built from source.
+            Bug ID: 11831
+           Summary: python-pyparsing: "No module named 'pyparsing'" on
+                    target / while building cantools
+           Product: buildroot
+           Version: 2019.02.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: tistolz at outlook.de
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-Replace the fixed dependencies to host-ninja,
-notably from the meson infrastructure.
+Created attachment 7991
+  --> https://bugs.busybox.net/attachment.cgi?id=7991&action=edit
+python-cantools/Config.in
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- package/pkg-meson.mk                     |  2 +-
- support/dependencies/check-host-meson.mk |  4 +--
- support/dependencies/check-host-ninja.mk | 14 ++++++++
- support/dependencies/check-host-ninja.sh | 45 ++++++++++++++++++++++++
- 4 files changed, 62 insertions(+), 3 deletions(-)
- create mode 100644 support/dependencies/check-host-ninja.mk
- create mode 100755 support/dependencies/check-host-ninja.sh
+Hi all,
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 25e9bb814e..c4cf682ee8 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -26,7 +26,7 @@
- # $HOME/.local/lib/python3.x/site-packages
- #
- MESON		= PYTHONNOUSERSITE=y $(BR2_MESON)
--NINJA		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/ninja
-+NINJA		= PYTHONNOUSERSITE=y $(BR2_NINJA)
- NINJA_OPTS	= $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+I'm trying to include the Python module "cantools"
+<https://pypi.org/project/cantools/> into my Buildroot installation. The
+package files are given in the attachment. However, the build step for
+python-cantools fails with the message:
+    ModuleNotFoundError: No module named 'pyparsing'
+in a nested import while processing the first line (import cantools) of
+setup.py.
+I can confirm that the python-pyparsing package has been built before, so it
+should be available to python.
 
- ################################################################################
-diff --git a/support/dependencies/check-host-meson.mk b/support/dependencies/check-host-meson.mk
-index 6c779b3e6d..36fc9129d1 100644
---- a/support/dependencies/check-host-meson.mk
-+++ b/support/dependencies/check-host-meson.mk
-@@ -10,7 +10,7 @@ BR2_MESON ?= $(call suitable-host-package,meson,\
- 	$(BR2_MESON_VERSION_MIN) $(BR2_MESON_CANDIDATES))
- ifeq ($(BR2_MESON),)
- BR2_MESON = $(HOST_DIR)/bin/meson
--BR2_MESON_HOST_DEPENDENCY = host-meson host-ninja
-+BR2_MESON_HOST_DEPENDENCY = host-meson $(BR2_NINJA_HOST_DEPENDENCY)
- else
--BR2_MESON_HOST_DEPENDENCY = host-ninja
-+BR2_MESON_HOST_DEPENDENCY = $(BR2_NINJA_HOST_DEPENDENCY)
- endif
-diff --git a/support/dependencies/check-host-ninja.mk b/support/dependencies/check-host-ninja.mk
-new file mode 100644
-index 0000000000..6d89255ee5
---- /dev/null
-+++ b/support/dependencies/check-host-ninja.mk
-@@ -0,0 +1,14 @@
-+# Set this to either 1.8.2 or higher, depending on the highest minimum
-+# version required by any of the packages bundled in Buildroot. If a
-+# package is bumped or a new one added, and it requires a higher
-+# version, our ninja infra will catch it and build its own.
-+#
-+BR2_NINJA_VERSION_MIN = 1.8.0
-+
-+BR2_NINJA_CANDIDATES ?= ninja
-+BR2_NINJA ?= $(call suitable-host-package,ninja,\
-+	$(BR2_NINJA_VERSION_MIN) $(BR2_NINJA_CANDIDATES))
-+ifeq ($(BR2_NINJA),)
-+BR2_NINJA = $(HOST_DIR)/bin/ninja
-+BR2_NINJA_HOST_DEPENDENCY = host-ninja
-+endif
-diff --git a/support/dependencies/check-host-ninja.sh b/support/dependencies/check-host-ninja.sh
-new file mode 100755
-index 0000000000..7f531da98e
---- /dev/null
-+++ b/support/dependencies/check-host-ninja.sh
-@@ -0,0 +1,45 @@
-+#!/bin/sh
-+
-+# prevent shift error
-+[ $# -lt 2 ] && exit 1
-+
-+split_version() {
-+    local VARPREFIX
-+    local NUMBERS
-+    local major
-+    local minor
-+
-+    VARPREFIX=$1
-+    NUMBERS=$2
-+
-+    major=${NUMBERS%%\.*}
-+    NUMBERS=${NUMBERS#$major}; NUMBERS=${NUMBERS#\.}
-+    minor=${NUMBERS%%\.*}
-+    NUMBERS=${NUMBERS#$minor}; NUMBERS=${NUMBERS#\.}
-+
-+    # ensure that missing values are 0
-+    eval "${VARPREFIX}_major=\$major; ${VARPREFIX}_minor=\$((minor + 0)); ${VARPREFIX}_bugfix=\$((NUMBERS + 0));"
-+}
-+
-+split_version req "$1"
-+
-+shift
-+
-+for candidate; do
-+
-+    # Try to locate the candidate. Discard it if not located.
-+    ninja=$(which "${candidate}" 2>/dev/null)
-+    [ -n "${ninja}" ] || continue
-+
-+    split_version cur "$("${ninja}" --version)"
-+
-+    [ -n "${cur_major}" -a "${cur_major}" -ge "${req_major}" ] || continue
-+    [ "${cur_major}" -gt "${req_major}" ] || [ "${cur_minor}" -ge "${req_minor}" ] || continue
-+    [ "${cur_minor}" -gt "${req_minor}" ] || [ "${cur_bugfix}" -ge "${req_bugfix}" ] || continue
-+
-+    echo "${ninja}"
-+    exit
-+done
-+
-+# echo nothing: no suitable ninja found
-+exit 1
---
-2.20.1
+Trying to track this bug down, I first started output/host/bin/python3 and
+entered the command "import pyparsing", upon which I saw the same error
+message. However, another package I built was python-bitstruct (using
+utils/scanpypi), and this became available for "import bitstruct" in an
+output/host/bin/python3 session.
+
+Furthermore, I rebuilt Buildroot 2019.02.2 (from a freshly extracted tar
+archive) with only the following packages selected:
+    Interpreter languages and scripting --> python3 SELECTED
+        core python3 modules: DESELECTED unicodedata
+        External python modules: SELECTED python-can, python-spidev,
+python-pyparsing
+
+On the target, in a python3 session, I get:
+    >>> import can
+    >>> import pyparsing
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ModuleNotFoundError: No module named 'pyparsing'
+    >>> import spidev
+    Traceback (most recent call last):
+      File "<stdin>", line 1, in <module>
+    ModuleNotFoundError: No module named 'spidev'
+    >>>
+
+So, the "python-can" package seems to install correctly, while
+"python-pyparsing" and "python-spidev" appear to be not present on the target.
+
+Thanks for your attention,
+Tibor Stolz
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
