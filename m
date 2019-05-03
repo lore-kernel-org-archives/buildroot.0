@@ -1,10 +1,10 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 03 May 2019 13:55:59 +0000
+Date: Fri, 03 May 2019 13:58:42 +0000
 Subject: [Buildroot] [Bug 11831] python-pyparsing: "No module named
  'pyparsing'" on target / while building cantools
 In-Reply-To: <bug-11831-163@https.bugs.busybox.net/>
 References: <bug-11831-163@https.bugs.busybox.net/>
-Message-ID: <bug-11831-163-k8lTlQOY8j@https.bugs.busybox.net/>
+Message-ID: <bug-11831-163-QA2kwnLHcA@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,15 +17,15 @@ Tibor Stolz <tistolz@outlook.de> changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-   Attachment #7991|0                           |1
+   Attachment #7996|0                           |1
         is obsolete|                            |
 
---- Comment #3 from Tibor Stolz <tistolz@outlook.de> ---
-Created attachment 8006
-  --> https://bugs.busybox.net/attachment.cgi?id=8006&action=edit
-python-cantools/Config.in
+--- Comment #4 from Tibor Stolz <tistolz@outlook.de> ---
+Created attachment 8011
+  --> https://bugs.busybox.net/attachment.cgi?id=8011&action=edit
+python-cantools/python-cantools.hash
 
-same file, but set content type now correctly
+same file, but content type now set correctly
 
 -- 
 You are receiving this mail because:
