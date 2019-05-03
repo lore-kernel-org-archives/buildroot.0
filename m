@@ -1,23 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 03 May 2019 17:26:25 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/armadeus_apf28_defconfig: bump
+Date: Fri, 3 May 2019 17:26:07 +0200
+Subject: [Buildroot] [git commit] configs/armadeus_apf28_defconfig: bump
  Linux 4.9 version to latest one
-In-Reply-To: <1556892731-10163-1-git-send-email-julien.boibessot@free.fr>
- (julien boibessot's message of "Fri, 3 May 2019 16:12:11 +0200")
-References: <1556892731-10163-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <875zqreezi.fsf@dell.be.48ers.dk>
+Message-ID: <20190503152133.B0B2384659@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "julien" == julien boibessot <julien.boibessot@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=68448c5325ebbd00bdc01882ba941ecacfcf9474
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
- > Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/armadeus_apf28_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/armadeus_apf28_defconfig b/configs/armadeus_apf28_defconfig
+index 51e05f59f7..56351ebde5 100644
+--- a/configs/armadeus_apf28_defconfig
++++ b/configs/armadeus_apf28_defconfig
+@@ -13,7 +13,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.64"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.172"
+ BR2_LINUX_KERNEL_DEFCONFIG="mxs"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
