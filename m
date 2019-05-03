@@ -1,44 +1,98 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 03 May 2019 14:43:33 +0000
-Subject: [Buildroot] [Bug 11836] New: Embedded Shell Scripts in BusyBox
-Message-ID: <bug-11836-163@https.bugs.busybox.net/>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Fri,  3 May 2019 14:20:26 +0000
+Subject: [Buildroot] [PATCH] package/libglib2: avoid printing null strings
+Message-ID: <20190503142026.25724-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11836
+GCC 9 is being stricter about passing null string pointers
+to printf-like functions.
 
-            Bug ID: 11836
-           Summary: Embedded Shell Scripts in BusyBox
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: All
-            Status: NEW
-          Severity: enhancement
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: br-max at re-gister.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+---
+ .../0003-avoid-printing-null-strings.patch    | 71 +++++++++++++++++++
+ 1 file changed, 71 insertions(+)
+ create mode 100644 package/libglib2/0003-avoid-printing-null-strings.patch
 
-BusyBox has the feature to embed custom shell scripts into the main binary
-during the build process.
-Details are described at the following link:
-https://git.busybox.net/busybox/tree/docs/embedded-scripts.txt
-
-If the BusyBox config FEATURE_SH_EMBEDDED_SCRIPTS is set to yes (which is the
-default setting), all scripts from the 'embed' directory of the BusyBox build
-folder are compressed and embedded in the BusyBox binary.
-
-It would be great to be able to use this feature with buildroot, but (please
-correct me if I'm wrong) unfortunately there is no configuration option in
-buildroot to add custom scripts to the 'embed' directory of the BusyBox build
-folder.
-
+diff --git a/package/libglib2/0003-avoid-printing-null-strings.patch b/package/libglib2/0003-avoid-printing-null-strings.patch
+new file mode 100644
+index 0000000000..faf58caa9a
+--- /dev/null
++++ b/package/libglib2/0003-avoid-printing-null-strings.patch
+@@ -0,0 +1,71 @@
++From 566e1d61a500267c7849ad0b2552feec9c9a29a6 Mon Sep 17 00:00:00 2001
++From: Ernestas Kulik <ekulik@redhat.com>
++Date: Tue, 29 Jan 2019 09:50:46 +0100
++Subject: [PATCH] gdbus: Avoid printing null strings
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++This mostly affects the 2.56 branch, but, given that GCC 9 is being
++stricter about passing null string pointers to printf-like functions, it
++might make sense to proactively fix such calls.
++
++gdbusauth.c: In function '_g_dbus_auth_run_server':
++gdbusauth.c:1302:11: error: '%s' directive argument is null
++[-Werror=format-overflow=]
++ 1302 |           debug_print ("SERVER: WaitingForBegin, read '%s'",
++ line);
++       |
++
++gdbusmessage.c: In function ?g_dbus_message_to_blob?:
++gdbusmessage.c:2730:30: error: ?%s? directive argument is null [-Werror=format-overflow=]
++ 2730 |       tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
++      |
++---
++ gio/gdbusauth.c    | 2 +-
++ gio/gdbusmessage.c | 5 ++---
++ 2 files changed, 3 insertions(+), 4 deletions(-)
++
++diff --git a/gio/gdbusauth.c b/gio/gdbusauth.c
++index 1f8ea8057..752ec23fc 100644
++--- a/gio/gdbusauth.c
+++++ b/gio/gdbusauth.c
++@@ -1272,9 +1272,9 @@ _g_dbus_auth_run_server (GDBusAuth              *auth,
++                                                     &line_length,
++                                                     cancellable,
++                                                     error);
++-          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
++           if (line == NULL)
++             goto out;
+++          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
++           if (g_strcmp0 (line, "BEGIN") == 0)
++             {
++               /* YAY, done! */
++diff --git a/gio/gdbusmessage.c b/gio/gdbusmessage.c
++index 3221b925d..3a1a1f9e9 100644
++--- a/gio/gdbusmessage.c
+++++ b/gio/gdbusmessage.c
++@@ -2731,7 +2731,6 @@ g_dbus_message_to_blob (GDBusMessage          *message,
++   if (message->body != NULL)
++     {
++       gchar *tupled_signature_str;
++-      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
++       if (signature == NULL)
++         {
++           g_set_error (error,
++@@ -2739,10 +2738,10 @@ g_dbus_message_to_blob (GDBusMessage          *message,
++                        G_IO_ERROR_INVALID_ARGUMENT,
++                        _("Message body has signature ?%s? but there is no signature header"),
++                        signature_str);
++-          g_free (tupled_signature_str);
++           goto out;
++         }
++-      else if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
+++      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
+++      if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
++         {
++           g_set_error (error,
++                        G_IO_ERROR,
++-- 
++2.18.1
++
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.21.0
