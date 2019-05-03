@@ -1,72 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 03 May 2019 14:08:34 +0000
-Subject: [Buildroot] [Bug 11831] python-pyparsing: "No module named
- 'pyparsing'" on target / while building cantools
-In-Reply-To: <bug-11831-163@https.bugs.busybox.net/>
-References: <bug-11831-163@https.bugs.busybox.net/>
-Message-ID: <bug-11831-163-gD8H2tQeaj@https.bugs.busybox.net/>
+From: julien.boibessot at free.fr <julien.boibessot@free.fr>
+Date: Fri,  3 May 2019 16:12:11 +0200
+Subject: [Buildroot] [PATCH 1/1] configs/armadeus_apf28_defconfig: bump
+ Linux 4.9 version to latest one
+Message-ID: <1556892731-10163-1-git-send-email-julien.boibessot@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11831
+From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
---- Comment #6 from Tibor Stolz <tistolz@outlook.de> ---
-The build log for python-cantools in detail:
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+---
+ configs/armadeus_apf28_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->>> python-cantools 18.0.1 Downloading
-cantools-18.0.1.tar.gz: OK (sha256:
-dc5d265103b8b11d4c7cc21996ad1954325b1f1930837505cabb0b5b137d37ee)
->>> python-cantools 18.0.1 Extracting
-gzip -d -c
-/home/tibor/Buildroot/buildroot-2019.02.2/dl/python-cantools/cantools-18.0.1.tar.gz
-| tar --strip-components=1 -C
-/home/tibor/Buildroot/buildroot-2019.02.2/output/build/python-cantools-18.0.1  
--xf -
->>> python-cantools 18.0.1 Patching
->>> python-cantools 18.0.1 Configuring
->>> python-cantools 18.0.1 Building
-(cd
-/home/tibor/Buildroot/buildroot-2019.02.2/output/build/python-cantools-18.0.1//;
-_PYTHON_SYSCONFIGDATA_NAME="_sysconfigdata_m_linux_arm-linux-gnueabihf"
-PATH="/home/tibor/Buildroot/buildroot-2019.02.2/output/host/bin:/home/tibor/Buildroot/buildroot-2019.02.2/output/host/sbin:/home/tibor/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
-PYTHONPATH="/home/tibor/Buildroot/buildroot-2019.02.2/output/target/usr/lib/python3.7/"
-PYTHONNOUSERSITE=1
-_python_sysroot=/home/tibor/Buildroot/buildroot-2019.02.2/output/host/arm-buildroot-linux-uclibcgnueabihf/sysroot
-_python_prefix=/usr _python_exec_prefix=/usr 
-/home/tibor/Buildroot/buildroot-2019.02.2/output/host/bin/python setup.py build
- )
-Traceback (most recent call last):
-  File "setup.py", line 4, in <module>
-    import cantools
-  File
-"/home/tibor/Buildroot/buildroot-2019.02.2/output/build/python-cantools-18.0.1/cantools/__init__.py",
-line 6, in <module>
-    from . import db
-  File
-"/home/tibor/Buildroot/buildroot-2019.02.2/output/build/python-cantools-18.0.1/cantools/db/__init__.py",
-line 4, in <module>
-    from .database import Database
-  File
-"/home/tibor/Buildroot/buildroot-2019.02.2/output/build/python-cantools-18.0.1/cantools/db/database.py",
-line 3, in <module>
-    from .formats import dbc
-  File
-"/home/tibor/Buildroot/buildroot-2019.02.2/output/build/python-cantools-18.0.1/cantools/db/formats/dbc.py",
-line 4, in <module>
-    from pyparsing import Word
-ModuleNotFoundError: No module named 'pyparsing'
-package/pkg-generic.mk:238: recipe for target
-'/home/tibor/Buildroot/buildroot-2019.02.2/output/build/python-cantools-18.0.1/.stamp_built'
-failed
-make[1]: ***
-[/home/tibor/Buildroot/buildroot-2019.02.2/output/build/python-cantools-18.0.1/.stamp_built]
-Error 1
-Makefile:84: recipe for target '_all' failed
-make: *** [_all] Error 2
-
+diff --git a/configs/armadeus_apf28_defconfig b/configs/armadeus_apf28_defconfig
+index 51e05f5..56351eb 100644
+--- a/configs/armadeus_apf28_defconfig
++++ b/configs/armadeus_apf28_defconfig
+@@ -13,7 +13,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.64"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.9.172"
+ BR2_LINUX_KERNEL_DEFCONFIG="mxs"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x40008000"
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.1.4
