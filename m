@@ -1,39 +1,36 @@
-From: Christian Stewart <christian@paral.in>
-Date: Fri, 3 May 2019 16:36:42 -0700
-Subject: [Buildroot] Buildroot multi-arch build
-In-Reply-To: <BL0PR0102MB341237052A8B224C63E58B9FF3350@BL0PR0102MB3412.prod.exchangelabs.com>
-References: <BL0PR0102MB341237052A8B224C63E58B9FF3350@BL0PR0102MB3412.prod.exchangelabs.com>
-Message-ID: <CA+h8R2r8YCOuvkYXLzy7dp6FxNWkznCxWZicmpsCMzAabtqR7Q@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 04 May 2019 04:48:55 +0000
+Subject: [Buildroot] [Bug 11841] New: grub-efi.cfg not used when building
+ EFI disk image
+Message-ID: <bug-11841-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Francois,
+https://bugs.busybox.net/show_bug.cgi?id=11841
 
+            Bug ID: 11841
+           Summary: grub-efi.cfg not used when building EFI disk image
+           Product: buildroot
+           Version: 2019.02.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: minor
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: pmorici at dev295.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-On Fri, May 3, 2019, 1:49 PM Gervais, Francois <
-FGervais@distech-controls.com> wrote:
+In the board/pc directory there is a file grub-efi.cfg that the readme.txt file
+says is used when building an EFI based image but it doesn't appear that the
+grub configuration from that file is ever used any place.  Instead, the script
+post-image-efi-gpt.sh has a grub configuration embedded in it that gets used.
 
-> We use the same buildroot environment for x86_64, armhf and arm64.
->
-> For each architecture, everything is the same except for the architecture
-> definition.
->
-> Is there a way to achieve this without maintaining 3 config files?
->
-
-I'm not aware of a buildroot-only way to do this, but FWIW, my project
-SkiffOS is specifically designed to do this (layering packages of
-configuration fragments on top of each other).
-
-https://github.com/paralin/SkiffOS
-
-Maybe it will be of some use to you?
-
-Best,
-Christian
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190503/496165f2/attachment.html>
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
