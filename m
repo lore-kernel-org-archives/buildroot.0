@@ -1,52 +1,104 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  4 May 2019 19:32:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xdriver_xf86-video-sis: drop
- unneeded third patch
-Message-ID: <20190504173232.23401-1-fontaine.fabrice@gmail.com>
+From: Grzegorz Blach <grzegorz@blach.pl>
+Date: Sat,  4 May 2019 19:44:13 +0000
+Subject: [Buildroot] [PATCH] package/libglib2: avoid printing null strings
+Message-ID: <20190504194415.1121-1-grzegorz@blach.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch is not needed since version 0.10.8 and:
-https://gitlab.freedesktop.org/xorg/driver/xf86-video-sis/commit/0f50f8c3db2b9f1c9d4ecab8ad278e9db6418a92
+GCC 9 is being stricter about passing null string pointers
+to printf-like functions.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+
 ---
- .../xdriver_xf86-video-sis/0003-xi.patch      | 24 -------------------
- 1 file changed, 24 deletions(-)
- delete mode 100644 package/x11r7/xdriver_xf86-video-sis/0003-xi.patch
+Changes v1 -> v2:
+  - Patch taken from glib repository has been signed off by me.
+---
+ ...03-gdbus-Avoid-printing-null-strings.patch | 73 +++++++++++++++++++
+ 1 file changed, 73 insertions(+)
+ create mode 100644 package/libglib2/0003-gdbus-Avoid-printing-null-strings.patch
 
-diff --git a/package/x11r7/xdriver_xf86-video-sis/0003-xi.patch b/package/x11r7/xdriver_xf86-video-sis/0003-xi.patch
-deleted file mode 100644
-index 7905248163..0000000000
---- a/package/x11r7/xdriver_xf86-video-sis/0003-xi.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--Fetch from:
--https://projects.archlinux.org/svntogit/packages.git/commit/trunk?h=packages/xf86-video-sis&id=7aaa7a9786ce5654df877311909244e0a6c42fd1
--
--Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
--
----- xf86-video-sis-0.10.7/src/sis_driver.c	2013-03-10 13:57:50.000000000 +0100
--+++ xf86-video-sis-0.10.7/src/sis_driver.c.new	2013-03-10 13:54:48.645203559 +0100
--@@ -9378,7 +9378,15 @@
--      }
--      if(doit) {
-- 	sigstate = xf86BlockSIGIO();
---#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) >= 15
--+#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) >= 18
--+        {
--+            double dx = x, dy = y;
--+            miPointerSetPosition(inputInfo.pointer, Absolute, &dx, &dy,
--+                NULL, NULL);
--+            x = (int)dx;
--+            y = (int)dy;
--+        }
--+#elif GET_ABI_MAJOR(ABI_XINPUT_VERSION) >= 15
--         {
--             double dx = x, dy = y;
--             miPointerSetPosition(inputInfo.pointer, Absolute, &dx, &dy);
+diff --git a/package/libglib2/0003-gdbus-Avoid-printing-null-strings.patch b/package/libglib2/0003-gdbus-Avoid-printing-null-strings.patch
+new file mode 100644
+index 0000000000..2fbd3e2368
+--- /dev/null
++++ b/package/libglib2/0003-gdbus-Avoid-printing-null-strings.patch
+@@ -0,0 +1,73 @@
++From 79492bb914e419c54298ba6324e3d595e51c16c3 Mon Sep 17 00:00:00 2001
++From: Ernestas Kulik <ekulik@redhat.com>
++Date: Tue, 29 Jan 2019 09:50:46 +0100
++Subject: [PATCH 1/1] gdbus: Avoid printing null strings
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++This mostly affects the 2.56 branch, but, given that GCC 9 is being
++stricter about passing null string pointers to printf-like functions, it
++might make sense to proactively fix such calls.
++
++gdbusauth.c: In function '_g_dbus_auth_run_server':
++gdbusauth.c:1302:11: error: '%s' directive argument is null
++[-Werror=format-overflow=]
++ 1302 |           debug_print ("SERVER: WaitingForBegin, read '%s'",
++ line);
++       |
++
++gdbusmessage.c: In function ?g_dbus_message_to_blob?:
++gdbusmessage.c:2730:30: error: ?%s? directive argument is null [-Werror=format-overflow=]
++ 2730 |       tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
++      |
++
++Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
++---
++ gio/gdbusauth.c    | 2 +-
++ gio/gdbusmessage.c | 5 ++---
++ 2 files changed, 3 insertions(+), 4 deletions(-)
++
++diff --git a/gio/gdbusauth.c b/gio/gdbusauth.c
++index 1f8ea8057..752ec23fc 100644
++--- a/gio/gdbusauth.c
+++++ b/gio/gdbusauth.c
++@@ -1272,9 +1272,9 @@ _g_dbus_auth_run_server (GDBusAuth              *auth,
++                                                     &line_length,
++                                                     cancellable,
++                                                     error);
++-          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
++           if (line == NULL)
++             goto out;
+++          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
++           if (g_strcmp0 (line, "BEGIN") == 0)
++             {
++               /* YAY, done! */
++diff --git a/gio/gdbusmessage.c b/gio/gdbusmessage.c
++index 3221b925d..3a1a1f9e9 100644
++--- a/gio/gdbusmessage.c
+++++ b/gio/gdbusmessage.c
++@@ -2731,7 +2731,6 @@ g_dbus_message_to_blob (GDBusMessage          *message,
++   if (message->body != NULL)
++     {
++       gchar *tupled_signature_str;
++-      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
++       if (signature == NULL)
++         {
++           g_set_error (error,
++@@ -2739,10 +2738,10 @@ g_dbus_message_to_blob (GDBusMessage          *message,
++                        G_IO_ERROR_INVALID_ARGUMENT,
++                        _("Message body has signature ?%s? but there is no signature header"),
++                        signature_str);
++-          g_free (tupled_signature_str);
++           goto out;
++         }
++-      else if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
+++      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
+++      if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
++         {
++           g_set_error (error,
++                        G_IO_ERROR,
++--
++2.21.0
++
 -- 
-2.20.1
+2.21.0
