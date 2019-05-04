@@ -1,115 +1,123 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 4 May 2019 12:32:13 +0200
-Subject: [Buildroot] [PATCH] package/libglib2: avoid printing null
- strings
-In-Reply-To: <20190503142026.25724-1-grzegorz@blach.pl>
-References: <20190503142026.25724-1-grzegorz@blach.pl>
-Message-ID: <58a0a995-184f-35b0-52cf-766dba11e59c@mind.be>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Sat,  4 May 2019 15:55:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/swupdate: bump to version 2019.04
+Message-ID: <1556978156-1626-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Grzegorz,
+New features in this release:
 
-On 03/05/2019 16:20, Grzegorz Blach wrote:
-> GCC 9 is being stricter about passing null string pointers
-> to printf-like functions.
-> 
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-> ---
->  .../0003-avoid-printing-null-strings.patch    | 71 +++++++++++++++++++
->  1 file changed, 71 insertions(+)
->  create mode 100644 package/libglib2/0003-avoid-printing-null-strings.patch
-> 
-> diff --git a/package/libglib2/0003-avoid-printing-null-strings.patch b/package/libglib2/0003-avoid-printing-null-strings.patch
-> new file mode 100644
-> index 0000000000..faf58caa9a
-> --- /dev/null
-> +++ b/package/libglib2/0003-avoid-printing-null-strings.patch
-> @@ -0,0 +1,71 @@
-> +From 566e1d61a500267c7849ad0b2552feec9c9a29a6 Mon Sep 17 00:00:00 2001
-> +From: Ernestas Kulik <ekulik@redhat.com>
-> +Date: Tue, 29 Jan 2019 09:50:46 +0100
-> +Subject: [PATCH] gdbus: Avoid printing null strings
-> +MIME-Version: 1.0
-> +Content-Type: text/plain; charset=UTF-8
-> +Content-Transfer-Encoding: 8bit
-> +
-> +This mostly affects the 2.56 branch, but, given that GCC 9 is being
-> +stricter about passing null string pointers to printf-like functions, it
-> +might make sense to proactively fix such calls.
-> +
-> +gdbusauth.c: In function '_g_dbus_auth_run_server':
-> +gdbusauth.c:1302:11: error: '%s' directive argument is null
-> +[-Werror=format-overflow=]
-> + 1302 |           debug_print ("SERVER: WaitingForBegin, read '%s'",
-> + line);
-> +       |
-> +
-> +gdbusmessage.c: In function ?g_dbus_message_to_blob?:
-> +gdbusmessage.c:2730:30: error: ?%s? directive argument is null [-Werror=format-overflow=]
-> + 2730 |       tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-> +      |
+- Improved documentation
+- delta updates based on rdiff library
+- support for libubootenv
+- dry-run option
+- CA certificates for signed images
+- Fix security leak in parser
 
- You have to add our SoB to the patch as well, even if it is taken literally
-from upstream. This is a short way for you to  assert that you are entitled to
-contribute the patch under the package's license (which may be different from
-Buildroot's license, that's why the top SoB is not enough).
+This commit also drop upstreamed patch.
 
-See  http://elinux.org/Developer_Certificate_Of_Origin for more details.
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ .../swupdate/0001-Makefile-fix-static-build.patch  | 62 ----------------------
+ package/swupdate/swupdate.hash                     |  2 +-
+ package/swupdate/swupdate.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 64 deletions(-)
+ delete mode 100644 package/swupdate/0001-Makefile-fix-static-build.patch
 
-
- Regards,
- Arnout
-
-> +---
-> + gio/gdbusauth.c    | 2 +-
-> + gio/gdbusmessage.c | 5 ++---
-> + 2 files changed, 3 insertions(+), 4 deletions(-)
-> +
-> +diff --git a/gio/gdbusauth.c b/gio/gdbusauth.c
-> +index 1f8ea8057..752ec23fc 100644
-> +--- a/gio/gdbusauth.c
-> ++++ b/gio/gdbusauth.c
-> +@@ -1272,9 +1272,9 @@ _g_dbus_auth_run_server (GDBusAuth              *auth,
-> +                                                     &line_length,
-> +                                                     cancellable,
-> +                                                     error);
-> +-          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
-> +           if (line == NULL)
-> +             goto out;
-> ++          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
-> +           if (g_strcmp0 (line, "BEGIN") == 0)
-> +             {
-> +               /* YAY, done! */
-> +diff --git a/gio/gdbusmessage.c b/gio/gdbusmessage.c
-> +index 3221b925d..3a1a1f9e9 100644
-> +--- a/gio/gdbusmessage.c
-> ++++ b/gio/gdbusmessage.c
-> +@@ -2731,7 +2731,6 @@ g_dbus_message_to_blob (GDBusMessage          *message,
-> +   if (message->body != NULL)
-> +     {
-> +       gchar *tupled_signature_str;
-> +-      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-> +       if (signature == NULL)
-> +         {
-> +           g_set_error (error,
-> +@@ -2739,10 +2738,10 @@ g_dbus_message_to_blob (GDBusMessage          *message,
-> +                        G_IO_ERROR_INVALID_ARGUMENT,
-> +                        _("Message body has signature ?%s? but there is no signature header"),
-> +                        signature_str);
-> +-          g_free (tupled_signature_str);
-> +           goto out;
-> +         }
-> +-      else if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
-> ++      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-> ++      if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
-> +         {
-> +           g_set_error (error,
-> +                        G_IO_ERROR,
-> +-- 
-> +2.18.1
-> +
-> 
+diff --git a/package/swupdate/0001-Makefile-fix-static-build.patch b/package/swupdate/0001-Makefile-fix-static-build.patch
+deleted file mode 100644
+index 56901f9..0000000
+--- a/package/swupdate/0001-Makefile-fix-static-build.patch
++++ /dev/null
+@@ -1,62 +0,0 @@
+-From 15a324f8c67548f219256a5a75ba8123cc5bdac6 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 4 Mar 2019 21:51:36 +0100
+-Subject: [PATCH] Makefile: fix static build
+-
+-Don't build and install lua_swupdate.so if HAVE_LUA isn't set to y
+-otherwise build will fail if the toolchain only suports building static
+-libraries
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/c11c4d26983e0347d96f3dda62e6d72b031967bb
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/sbabic/swupdate/pull/49]
+----
+- Makefile | 12 +++++++++---
+- 1 file changed, 9 insertions(+), 3 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index cfeb9a6..cac99b5 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -369,11 +369,15 @@ tools-bins	:= $(patsubst $(tools-y)/%.c,$(tools-y)/%,$(wildcard $(tools-y)/*.c))
+- tools-bins-unstr:= $(patsubst %,%_unstripped,$(tools-bins))
+- tools-all	:= $(tools-objs)
+- 
+-+ifeq ($(HAVE_LUA),y)
+-+lua_swupdate	:= lua_swupdate.so
+-+endif
+-+
+- shared-dirs	:= $(shareds-y)
+- shared-libs	:= $(patsubst %,%/built-in.o, $(shareds-y))
+- shared-all	:= $(shared-libs)
+- 
+--all: swupdate ${tools-bins} lua_swupdate.so
+-+all: swupdate ${tools-bins} ${lua_swupdate}
+- 
+- # Do modpost on a prelinked vmlinux. The finally linked vmlinux has
+- # relevant sections renamed as per the linker script.
+-@@ -434,7 +438,6 @@ install: all
+- 	install -d ${DESTDIR}/usr/bin
+- 	install -d ${DESTDIR}/usr/include
+- 	install -d ${DESTDIR}/usr/lib
+--	install -d ${DESTDIR}/usr/lib/lua/$(LUAVER)
+- 	install -m 755 swupdate ${DESTDIR}/usr/bin
+- 	for i in ${tools-bins};do \
+- 		install -m 755 $$i ${DESTDIR}/usr/bin; \
+-@@ -443,7 +446,10 @@ install: all
+- 	install -m 0644 include/swupdate_status.h ${DESTDIR}/usr/include
+- 	install -m 0644 include/progress_ipc.h ${DESTDIR}/usr/include
+- 	install -m 0755 ipc/lib.a ${DESTDIR}/usr/lib/libswupdate.a
+--	install -m 0755 lua_swupdate.so $(DESTDIR)/usr/lib/lua/$(LUAVER)
+-+	if [ $(HAVE_LUA) = y ]; then \
+-+		install -d ${DESTDIR}/usr/lib/lua/$(LUAVER); \
+-+		install -m 0755 ${lua_swupdate} $(DESTDIR)/usr/lib/lua/$(LUAVER); \
+-+	fi
+- 
+- PHONY += run-tests
+- tests: \
+--- 
+-2.14.1
+-
+diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
+index 138bd6d..8194de6 100644
+--- a/package/swupdate/swupdate.hash
++++ b/package/swupdate/swupdate.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  a65884ca18523cde1b0744d952d6f91462dbd4ad07941305f5684c6d4ec833dc  swupdate-2018.11.tar.gz
++sha256  96b2c59558e847ddb7c23b666c1bbe61e03ab90a64c30d233bd5e9029df8519b  swupdate-2019.04.tar.gz
+ sha256  43492b377cf2fb67942d1dd231146bd4e6578646ad13ef289297c9dd75cbc478  Licenses/Exceptions
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 78f23ec..4626a16 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SWUPDATE_VERSION = 2018.11
++SWUPDATE_VERSION = 2019.04
+ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+ SWUPDATE_LICENSE = GPL-2.0+ with OpenSSL exception, LGPL-2.1+, MIT
+ SWUPDATE_LICENSE_FILES = Licenses/Exceptions Licenses/gpl-2.0.txt \
+-- 
+2.7.4
