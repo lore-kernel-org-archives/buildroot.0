@@ -1,53 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 6 May 2019 00:08:55 +0200
-Subject: [Buildroot] [PATCH] package/libglib2: disable compiler warnings
-In-Reply-To: <20190423145115.GA6590@lwo1-lhp-f71841>
-References: <1556024465-7928-1-git-send-email-jugurtha.belkalem@smile.fr>
- <20190423162303.2683abfb@windsurf>
- <CAHpTZwnAembvxag_fe-=XFshSNtpisE5Un+Y2fRfW3==QtqAOg@mail.gmail.com>
- <20190423145115.GA6590@lwo1-lhp-f71841>
-Message-ID: <d6134a3b-3f8b-f5e6-8f2f-3c44b8f091f1@mind.be>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon,  6 May 2019 01:29:23 +0200
+Subject: [Buildroot] [RFC PATCH 1/1] iputils: Bump to version s20190324
+Message-ID: <20190505232923.22744-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Jugurtha,
+Upstream changed build system to Meson.
+Removed patch included in this release.
 
-On 23/04/2019 16:51, Vadym Kochan wrote:
-> Hi Jugurtha, Thomas,
-> 
-> On Tue, Apr 23, 2019 at 04:45:34PM +0200, Jugurtha BELKALEM wrote:
->> Hi Thomas,
->>
->> I'm currently integrating the Qemu test from toolchain builder (
->> https://github.com/bootlin/toolchains-builder/blob/master/build.sh) into
->> buildroot to check the consistency of the build and get some ensurance that
->> Qemu build process went successful for the various Qemu architectures. This
->> why I have enabled host-qemu. When compiling without using
->> "--disable-compile-warnings"; I got this message :
->>
->>>>> host-libglib2 2.56.4 Patching libtool
->>>>> host-libglib2 2.56.4 Building
->> Failed build last output
->>   CC       libgio_2_0_la-glistmodel.lo
->>   CC       libgio_2_0_la-gliststore.lo
->>   CC       libgio_2_0_la-gapplication.lo
->> ....
->> ....
->> ....
->> cc1: some warnings being treated as errors
->> Makefile:3927: recipe for target 'libgio_2_0_la-gunixconnection.lo' failed
-> 
-> This is very similar error which was related to gettext-tiny libintl.h
-> header but issue was fixed already (may be about 1 month ago).
-> Could you please share the defconfig ?
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+Hi,
 
- Since you didn't come back to this issue, I assumed it was resolved in the end
-in some other way, so I've marked the patch as Rejected in patchwork.
+I'm trying to update iputils for Buildroot to newest version s20190324,
+which changed build system to Meson. I cannot figure out which compiler
+option is missing / wrong, or which dependency is missing or which
+buildroot config is missing wrong. Any tip / idea?
 
- If it still is relevant, please repost it with an updated explanation.
+Kind regards,
+Petr
 
- Regards,
- Arnout
+>>> iputils s20190324 Configuring
+rm -rf /opt/buildroot/output/build/iputils-s20190324//build
+mkdir -p /opt/buildroot/output/build/iputils-s20190324//build
+sed -e "s%@TARGET_CROSS@%/opt/buildroot/output/host/bin/arm-linux-%g" -e "s%@TARGET_ARCH@%arm%g" -e "s%@TARGET_CPU@%arm926ej-s%g" -e "s%@TARGET_ENDIAN@%"little"%g" -e "s%@TARGET_CFLAGS@%`printf '"%s", ' -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  `%g" -e "s%@TARGET_LDFLAGS@%%g" -e "s%@TARGET_CXXFLAGS@%`printf '"%s", ' -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os  `%g" -e "s%@HOST_DIR@%/opt/buildroot/output/host%g" package/meson/cross-compilation.conf.in > /opt/buildroot/output/build/iputils-s20190324//build/cross-compilation.conf
+The Meson build system
+Version: 0.50.1
+Source dir: /opt/buildroot/output/build/iputils-s20190324
+Build dir: /opt/buildroot/output/build/iputils-s20190324/build
+Build type: cross build
+Project name: iputils
+Project version: s20190324
+Native C compiler: ccache cc (gcc 8.3.1 "cc (SUSE Linux) 8.3.1 20190226 [gcc-8-branch revision 269204]")
