@@ -1,53 +1,43 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Sun, 5 May 2019 12:51:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/swupdate: bump to version
- 2019.04
-In-Reply-To: <87sgttcj3h.fsf@dell.be.48ers.dk>
-References: <1556978156-1626-1-git-send-email-pjtexier@koncepto.io>
- <87sgttcj3h.fsf@dell.be.48ers.dk>
-Message-ID: <06f88f57-95e8-2bac-b62f-b273167f5df4@koncepto.io>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  5 May 2019 14:04:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cryptopp: bump to version 8.2.0
+Message-ID: <20190505120431.16795-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/cryptopp/cryptopp.hash | 4 ++--
+ package/cryptopp/cryptopp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Le 05/05/2019 ? 12:05, Peter Korsgaard a ?crit?:
->>>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
->   > New features in this release:
->   > - Improved documentation
->   > - delta updates based on rdiff library
->
-> Looking at https://sbabic.github.io/swupdate/swupdate.html, this seems
-> to rely on librsync, but I don't see any change to _DEPENDENCIES?
-
-Indeed, I will do in v2.
-
->
->   > - support for libubootenv
->
-> Is that something that would be worthwhile to package?
-
-Sure, I am working on it [1] :).
-I'll try to send this package as soon as possible.
-And I'll send the v2 after.
-
->
->   > - dry-run option
->   > - CA certificates for signed images
->   > - Fix security leak in parser
->
-> What does this mean exactly? Does this mean that this should be applied
-> to 2019.02.x as well?
-Yes, I think so.
-
-
-[1] 
-https://github.com/texierp/buildroot/commit/6f1ea3cb62560996ba3669cf760dc527ed1a9ec9
-
-
-Thanks
-
-Pierre-Jean
+diff --git a/package/cryptopp/cryptopp.hash b/package/cryptopp/cryptopp.hash
+index 5d6d8520c2..c0d442a97b 100644
+--- a/package/cryptopp/cryptopp.hash
++++ b/package/cryptopp/cryptopp.hash
+@@ -1,5 +1,5 @@
+-# Hash from: https://www.cryptopp.com/release810.html:
+-sha256  f609b453e42abbab7163191dfe060964121f04da212e2e4f2f0ebe94b7e806ae  cryptopp810.zip
++# Hash from: https://www.cryptopp.com/release820.html:
++sha256  03f0e2242e11b9d19b28d0ec5a3fa8ed5cc7b27640e6bed365744f593e858058  cryptopp820.zip
+ 
+ # Hash for license file:
+ sha256  f29d65ae3f0c8e327284f193524643ffb4d682fcca3e1740a5c6cbab0e720583  License.txt
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index 59ced7654c..33c8423157 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CRYPTOPP_VERSION = 8.1.0
++CRYPTOPP_VERSION = 8.2.0
+ CRYPTOPP_SOURCE = cryptopp$(subst .,,$(CRYPTOPP_VERSION)).zip
+ CRYPTOPP_SITE = https://cryptopp.com
+ CRYPTOPP_LICENSE = BSL-1.0, BSD-3-Clause (CRYPTOGAMS), Public domain (ChaCha SSE2 and AVX)
+-- 
+2.20.1
