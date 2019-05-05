@@ -1,25 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 May 2019 12:05:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xdriver_xf86-video-sis: drop
- unneeded third patch
-In-Reply-To: <20190504173232.23401-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 4 May 2019 19:32:32 +0200")
-References: <20190504173232.23401-1-fontaine.fabrice@gmail.com>
-Message-ID: <87o94hcj2l.fsf@dell.be.48ers.dk>
+Date: Sun, 05 May 2019 12:12:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tor: bump version to 0.4.0.5
+In-Reply-To: <20190505092109.31394-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 5 May 2019 11:21:09 +0200")
+References: <20190505092109.31394-1-bernd.kuhls@t-online.de>
+Message-ID: <87k1f5cirg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > This patch is not needed since version 0.10.8 and:
- > https://gitlab.freedesktop.org/xorg/driver/xf86-video-sis/commit/0f50f8c3db2b9f1c9d4ecab8ad278e9db6418a92
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Release notes: https://blog.torproject.org/new-release-tor-0405
 
 Committed, thanks.
+
+The release notes mentions a CVE-2019-8955 security issue. Is 0.3.5.8
+also affected? If yes, is a fix available for 2019.02.x or should we
+bump to 0.4.0.5 there as well?
 
 -- 
 Bye, Peter Korsgaard
