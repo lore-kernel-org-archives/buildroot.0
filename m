@@ -1,600 +1,391 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 May 2019 23:31:51 +0200
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-{base, good,
- bad, ugly}: bump to 1.16.0
-Message-ID: <20190505212652.D8E1881121@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 5 May 2019 23:51:02 +0200
+Subject: [Buildroot] [PATCH v2] package/zabbix: new package
+In-Reply-To: <20190428111253.17263-1-skif@skif-web.ru>
+References: <20190428111253.17263-1-skif@skif-web.ru>
+Message-ID: <e295640e-c646-cdaf-c2d6-18313b2fdb14@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8efabd14d862c412889471cd94fe669f8db18e10
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Hi Alexey,
 
-Group these patches because of several changes to the plugin packages.
+On 28/04/2019 13:12, Alexey Lukyanchuk wrote:
+> Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
 
-Changes:
-  - Remove upstreamed patches:
-      - 0001-fdkaacenc-Remove-MODE_2_1.patch
-      - 0002-fdkaacdec-Use-WAV-channel-mapping-instead-of-interle.patch
+ When you send a second (or later) iteration of a patch, please add a patch
+changelog below your SoB, separated by ---, like this:
 
-  - Add BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_COMPOSITOR to Config.in.legacy as
-    this plugin is moved to gst1-plugins-base.
-
-  - Add BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IQA to Config.in.legacy as this the
-    plugin is now removed.
-
-  - Add BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV to Config.in.legacy as the
-    plugin now requires opencv3 with the bgsegm opencv_contrib module, which is
-    not in Buildroot.
-
-  - Add BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_STEREO to Config.in.legacy as this
-    plugin is merged with the audiofx plugin in gst1-plugins-good.
-
-  - Add BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD to Config.in.legacy as this
-    plugin is removed.
-
-  - Remove COPYING.LIB from gst-plugins-base mk file and hash file as it no
-    longer exists.
-
-  - Add BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_COMPOSITOR to gst1-plugins-base.mk
-
-  - Add BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OVERLAYCOMPOSITION to
-    gst1-plugins-base.
-
-  - Add mjpegtools to the dependencies of
-    BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEG2ENC
-
-  - Remove BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IQA because it now depends on
-    the package dssim which isn't available in Buildroot.
-
-  - Remove upstream patch
-    0001-gstrtspconnection-Security-loophole-making-heap-over.patch
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy                                   | 37 ++++++++++++++++
- .../0001-fdkaacenc-Remove-MODE_2_1.patch           | 32 --------------
- ...se-WAV-channel-mapping-instead-of-interle.patch | 49 ----------------------
- package/gstreamer1/gst1-plugins-bad/Config.in      | 46 ++++----------------
- .../gst1-plugins-bad/gst1-plugins-bad.hash         |  4 +-
- .../gst1-plugins-bad/gst1-plugins-bad.mk           | 41 +++---------------
- ...ection-Security-loophole-making-heap-over.patch | 31 --------------
- package/gstreamer1/gst1-plugins-base/Config.in     | 10 +++++
- .../gst1-plugins-base/gst1-plugins-base.hash       |  7 ++--
- .../gst1-plugins-base/gst1-plugins-base.mk         | 16 ++++++-
- .../gst1-plugins-good/gst1-plugins-good.hash       |  4 +-
- .../gst1-plugins-good/gst1-plugins-good.mk         |  2 +-
- .../gst1-plugins-ugly/gst1-plugins-ugly.hash       |  4 +-
- .../gst1-plugins-ugly/gst1-plugins-ugly.mk         |  2 +-
- 14 files changed, 86 insertions(+), 199 deletions(-)
+v2:
+- Added DEVELOPERS entry (Thomas)
+- ...
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index ec5079da65..f1866609c9 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,43 @@ endif
- 
- comment "Legacy options removed in 2019.05"
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_COMPOSITOR
-+	bool "compositor moved to gst1-plugins-base"
-+	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_COMPOSITOR
-+	select BR2_LEGACY
-+	help
-+	  The gst1-plugins-bad compositor plugin has moved
-+	  to gst1-plugins-base.
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IQA
-+	select BR2_LEGACY
-+	bool "gst-plugins-bad IQA option was removed"
-+	help
-+	  The gst1-plugins-bad IQA option was removed.
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
-+	bool "gst-plugins-bad opencv option was removed"
-+	select BR2_LEGACY
-+	help
-+	  The gst1-plugins-bad opencv option was removed because
-+	  buildroot does not have the opencv_contrib package which
-+	  is required for the bgsegm module which gst1-plugins-bad
-+	  now requires along with opencv3.
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_STEREO
-+	bool "stereo was merged into audiofx in gst1-plugins-good"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOFX
-+	help
-+	  The gst1-plugins-bad stereo plugin has merged with the
-+	  gst1-plugins-base audiofx plugin.
-+
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD
-+	bool "gst-plugins-bad vcd plugin was removed."
-+	select BR2_LEGACY
-+	help
-+	  The gst1-plugins-bad vcd plugin was removed.
-+
- config BR2_PACKAGE_LUNIT
- 	bool "lunit package removed"
- 	select BR2_LEGACY
-diff --git a/package/gstreamer1/gst1-plugins-bad/0001-fdkaacenc-Remove-MODE_2_1.patch b/package/gstreamer1/gst1-plugins-bad/0001-fdkaacenc-Remove-MODE_2_1.patch
-deleted file mode 100644
-index a9c5d44d92..0000000000
---- a/package/gstreamer1/gst1-plugins-bad/0001-fdkaacenc-Remove-MODE_2_1.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From f4fdb9770c76113f38515245fecc5f11b3ace20d Mon Sep 17 00:00:00 2001
--From: "Jan Alexander Steffens (heftig)" <jan.steffens@gmail.com>
--Date: Tue, 4 Dec 2018 17:54:42 +0100
--Subject: [PATCH] fdkaacenc: Remove MODE_2_1
--
--This is not a standard mode and no longer supported by fdk-aac 2.0.0.
--
--For https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/issues/825
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- ext/fdkaac/gstfdkaacenc.c | 4 ----
-- 1 file changed, 4 deletions(-)
--
--diff --git a/ext/fdkaac/gstfdkaacenc.c b/ext/fdkaac/gstfdkaacenc.c
--index ad2bcb492..8410e684c 100644
----- a/ext/fdkaac/gstfdkaacenc.c
--+++ b/ext/fdkaac/gstfdkaacenc.c
--@@ -71,10 +71,6 @@ static const struct
--   GST_AUDIO_CHANNEL_POSITION_FRONT_CENTER,
--           GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
--           GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT}}, {
---    3, MODE_2_1, {
---  GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
---          GST_AUDIO_CHANNEL_POSITION_FRONT_RIGHT,
---          GST_AUDIO_CHANNEL_POSITION_LFE1}}, {
--     4, MODE_1_2_1, {
--   GST_AUDIO_CHANNEL_POSITION_FRONT_CENTER,
--           GST_AUDIO_CHANNEL_POSITION_FRONT_LEFT,
---- 
--2.11.0
--
-diff --git a/package/gstreamer1/gst1-plugins-bad/0002-fdkaacdec-Use-WAV-channel-mapping-instead-of-interle.patch b/package/gstreamer1/gst1-plugins-bad/0002-fdkaacdec-Use-WAV-channel-mapping-instead-of-interle.patch
-deleted file mode 100644
-index 0049714266..0000000000
---- a/package/gstreamer1/gst1-plugins-bad/0002-fdkaacdec-Use-WAV-channel-mapping-instead-of-interle.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 19d34f6b5e1633d5ec4bb2832c58470f0c829cab Mon Sep 17 00:00:00 2001
--From: "Jan Alexander Steffens (heftig)" <jan.steffens@gmail.com>
--Date: Wed, 5 Dec 2018 10:10:39 +0100
--Subject: [PATCH] fdkaacdec: Use WAV channel mapping instead of interleave
-- setting
--
--The latter is going away in libfdk-aac 2.0.0. Instead, MPEG-style output
--is always non-interleaved and WAV-style output is always interleaved.
--Earlier libfdk-aac also defaults interleaving accordingly.
--
--Since our reordering looks at the associated PCE indices instead of the
--actual channel order, we're agnostic to the mapping.
--
--For https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/issues/825
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- ext/fdkaac/gstfdkaacdec.c | 12 ++++--------
-- 1 file changed, 4 insertions(+), 8 deletions(-)
--
--diff --git a/ext/fdkaac/gstfdkaacdec.c b/ext/fdkaac/gstfdkaacdec.c
--index c27183752..f5136b334 100644
----- a/ext/fdkaac/gstfdkaacdec.c
--+++ b/ext/fdkaac/gstfdkaacdec.c
--@@ -151,17 +151,13 @@ gst_fdkaacdec_set_format (GstAudioDecoder * dec, GstCaps * caps)
--     gst_buffer_unref (codec_data);
--   }
-- 
--+  /* Choose WAV channel mapping to get interleaving even with libfdk-aac 2.0.0
--+   * The pChannelIndices retain the indices from the standard MPEG mapping so
--+   * we're agnostic to the actual order. */
--   if ((err =
--           aacDecoder_SetParam (self->dec, AAC_PCM_OUTPUT_CHANNEL_MAPPING,
---              0)) != AAC_DEC_OK) {
---    GST_ERROR_OBJECT (self, "Failed to set output channel mapping: %d", err);
---    return FALSE;
---  }
---
---  if ((err =
---          aacDecoder_SetParam (self->dec, AAC_PCM_OUTPUT_INTERLEAVED,
--               1)) != AAC_DEC_OK) {
---    GST_ERROR_OBJECT (self, "Failed to set interleaved output: %d", err);
--+    GST_ERROR_OBJECT (self, "Failed to set output channel mapping: %d", err);
--     return FALSE;
--   }
-- 
---- 
--2.11.0
--
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 6830902f3a..e0757e96c9 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -51,11 +51,6 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOMIXMATRIX
- 	help
- 	  Audio N:M mixer plugin
- 
--config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_COMPOSITOR
--	bool "compositor"
--	help
--	  Video compositor plugin
--
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOVISUALIZERS
- 	bool "audiovisualizers"
- 	help
-@@ -263,9 +258,6 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SUBENC
- 	help
- 	  subtitle encoders
- 
--config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_STEREO
--	bool "stereo"
--
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TIMECODE
- 	bool "timecode"
- 
-@@ -279,11 +271,6 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOFRAME_AUDIOLEVEL
- 	help
- 	  videoframe_audiolevel
- 
--config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IQA
--	bool "iqa"
--	help
--	  Image Quality Assessment
--
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOPARSERS
- 	bool "videoparsers"
- 	help
-@@ -434,10 +421,19 @@ comment "ttml needs a toolchain w/ wchar, threads, C++"
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEG2ENC
- 	bool "mpeg2enc"
-+	depends on BR2_USE_MMU # fork
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_LIBMPEG2
-+	select BR2_PACKAGE_MJPEGTOOLS
- 	help
- 	  High-quality MPEG-1/2 video encoder
- 
-+comment "mpeg2enc needs a toolchain w/ threads, C++"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS \
-+		|| !BR2_INSTALL_LIBSTDCPP
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MUSEPACK
- 	bool "musepack"
- 	select BR2_PACKAGE_MUSEPACK
-@@ -460,27 +456,6 @@ comment "openal plugin needs a toolchain w/ NPTL, C++"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
- 		|| !BR2_INSTALL_LIBSTDCPP
- 
--config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV
--	bool "opencv"
--	depends on BR2_PACKAGE_OPENCV
--	# Remove the following opencv modules when gstreamer fixes the
--	# problem of including the old "cv.h" header
--	# bug: https://bugzilla.gnome.org/show_bug.cgi?id=725163
--	select BR2_PACKAGE_OPENCV_LIB_CALIB3D
--	select BR2_PACKAGE_OPENCV_LIB_CONTRIB
--	select BR2_PACKAGE_OPENCV_LIB_FEATURES2D
--	select BR2_PACKAGE_OPENCV_LIB_FLANN
--	select BR2_PACKAGE_OPENCV_LIB_IMGPROC
--	select BR2_PACKAGE_OPENCV_LIB_LEGACY
--	select BR2_PACKAGE_OPENCV_LIB_ML
--	select BR2_PACKAGE_OPENCV_LIB_OBJDETECT
--	select BR2_PACKAGE_OPENCV_LIB_VIDEO
--	help
--	  GStreamer OpenCV Plugins
--
--comment "opencv plugin needs OpenCV-2.4"
--	depends on !BR2_PACKAGE_OPENCV
--
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENH264
- 	bool "openh264"
- 	depends on BR2_PACKAGE_LIBOPENH264_ARCH_SUPPORTS
-@@ -537,9 +512,6 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_SRTP
- 	bool "srtp"
- 	select BR2_PACKAGE_LIBSRTP
- 
--config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD
--	bool "vcd"
--
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC
- 	bool "voaacenc"
- 	select BR2_PACKAGE_VO_AACENC
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-index cb4bf64677..0c1627de86 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.hash
-@@ -1,4 +1,4 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.14.4.tar.xz.sha256sum
--sha256 910b4e0e2e897e8b6d06767af1779d70057c309f67292f485ff988d087aa0de5 gst-plugins-bad-1.14.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.16.0.tar.xz.sha256sum
-+sha256 22139de35626ada6090bdfa3423b27b7fc15a0198331d25c95e6b12cb1072b05 gst-plugins-bad-1.16.0.tar.xz
- sha256 0b12e4d1cd5db5f8a0c04fc98a1d8c3acc533097b6198d6644420da78d460223 COPYING
- sha256 cf9b86bcf2d298e8cf5b9d8982f9dab296465b002fdfa0347357a0732f961e03 COPYING.LIB
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index e4e7661ac4..a66d3e32bf 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_BAD_VERSION = 1.14.4
-+GST1_PLUGINS_BAD_VERSION = 1.16.0
- GST1_PLUGINS_BAD_SOURCE = gst-plugins-bad-$(GST1_PLUGINS_BAD_VERSION).tar.xz
- GST1_PLUGINS_BAD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-bad
- GST1_PLUGINS_BAD_INSTALL_STAGING = YES
-@@ -21,7 +21,6 @@ GST1_PLUGINS_BAD_CONF_OPTS = \
- 	--disable-winks \
- 	--disable-android_media \
- 	--disable-apple_media \
--	--disable-acm \
- 	--disable-introspection
- 
- # Options which require currently unpackaged libraries
-@@ -53,12 +52,13 @@ GST1_PLUGINS_BAD_CONF_OPTS += \
- 	--disable-wildmidi \
- 	--disable-smoothstreaming \
- 	--disable-soundtouch \
--	--disable-spc \
- 	--disable-gme \
- 	--disable-vdpau \
- 	--disable-schro \
- 	--disable-spandsp \
--	--disable-gtk3
-+	--disable-gtk3 \
-+	--disable-iqa \
-+	--disable-opencv
- 
- GST1_PLUGINS_BAD_DEPENDENCIES = gst1-plugins-base gstreamer1
- 
-@@ -138,12 +138,6 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-audiomixmatrix
- endif
- 
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_COMPOSITOR),y)
--GST1_PLUGINS_BAD_CONF_OPTS += --enable-compositor
--else
--GST1_PLUGINS_BAD_CONF_OPTS += --disable-compositor
--endif
--
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOVISUALIZERS),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-audiovisualizers
- else
-@@ -405,12 +399,6 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-subenc
- endif
- 
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_STEREO),y)
--GST1_PLUGINS_BAD_CONF_OPTS += --enable-stereo
--else
--GST1_PLUGINS_BAD_CONF_OPTS += --disable-stereo
--endif
--
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TIMECODE),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-timecode
- else
-@@ -429,12 +417,6 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-videoframe_audiolevel
- endif
- 
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IQA),y)
--GST1_PLUGINS_BAD_CONF_OPTS += --enable-iqa
--else
--GST1_PLUGINS_BAD_CONF_OPTS += --disable-iqa
--endif
--
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VIDEOPARSERS),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-videoparsers
- else
-@@ -593,7 +575,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEG2ENC),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-mpeg2enc
--GST1_PLUGINS_BAD_DEPENDENCIES += libmpeg2
-+GST1_PLUGINS_BAD_DEPENDENCIES += libmpeg2 mjpegtools
- GST1_PLUGINS_BAD_HAS_GPL_LICENSE = y
- else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-mpeg2enc
-@@ -620,13 +602,6 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-openal
- endif
- 
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV),y)
--GST1_PLUGINS_BAD_CONF_OPTS += --enable-opencv
--GST1_PLUGINS_BAD_DEPENDENCIES += opencv
--else
--GST1_PLUGINS_BAD_CONF_OPTS += --disable-opencv
--endif
--
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENH264),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-openh264
- GST1_PLUGINS_BAD_DEPENDENCIES += libopenh264
-@@ -683,12 +658,6 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-srtp
- endif
- 
--ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD),y)
--GST1_PLUGINS_BAD_CONF_OPTS += --enable-vcd
--else
--GST1_PLUGINS_BAD_CONF_OPTS += --disable-vcd
--endif
--
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VOAACENC),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-voaacenc
- GST1_PLUGINS_BAD_DEPENDENCIES += vo-aacenc
-diff --git a/package/gstreamer1/gst1-plugins-base/0001-gstrtspconnection-Security-loophole-making-heap-over.patch b/package/gstreamer1/gst1-plugins-base/0001-gstrtspconnection-Security-loophole-making-heap-over.patch
-deleted file mode 100644
-index de88f67a39..0000000000
---- a/package/gstreamer1/gst1-plugins-base/0001-gstrtspconnection-Security-loophole-making-heap-over.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From f672277509705c4034bc92a141eefee4524d15aa Mon Sep 17 00:00:00 2001
--From: Tobias Ronge <tobiasr@axis.com>
--Date: Thu, 14 Mar 2019 10:12:27 +0100
--Subject: [PATCH] gstrtspconnection: Security loophole making heap overflow
--
--The former code allowed an attacker to create a heap overflow by
--sending a longer than allowed session id in a response and including a
--semicolon to change the maximum length. With this change, the parser
--will never go beyond 512 bytes.
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- gst-libs/gst/rtsp/gstrtspconnection.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/gst-libs/gst/rtsp/gstrtspconnection.c b/gst-libs/gst/rtsp/gstrtspconnection.c
--index a6755bedd..c0429064a 100644
----- a/gst-libs/gst/rtsp/gstrtspconnection.c
--+++ b/gst-libs/gst/rtsp/gstrtspconnection.c
--@@ -2461,7 +2461,7 @@ build_next (GstRTSPBuilder * builder, GstRTSPMessage * message,
--           maxlen = sizeof (conn->session_id) - 1;
--           /* the sessionid can have attributes marked with ;
--            * Make sure we strip them */
---          for (i = 0; session_id[i] != '\0'; i++) {
--+          for (i = 0; i < maxlen && session_id[i] != '\0'; i++) {
--             if (session_id[i] == ';') {
--               maxlen = i;
--               /* parse timeout */
---- 
--2.11.0
--
-diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
-index 340926ecb9..29f8001f3a 100644
---- a/package/gstreamer1/gst1-plugins-base/Config.in
-+++ b/package/gstreamer1/gst1-plugins-base/Config.in
-@@ -43,6 +43,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOTESTSRC
- 	help
- 	  Creates audio test signals of given frequency and volume
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_COMPOSITOR
-+	bool "compositor"
-+	help
-+	  Video compositor plugin
-+
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ENCODING
- 	bool "encoding"
- 	help
-@@ -58,6 +63,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_GIO
- 	help
- 	  GIO elements
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OVERLAYCOMPOSITION
-+	bool "overlaycomposition"
-+	help
-+	  Overlaycomposition plugin.
-+
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK
- 	bool "playback"
- 	default y
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-index c508bdc00d..b1fc68d93b 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-@@ -1,4 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.14.4.tar.xz.sha256sum
--sha256 ca6139490e48863e7706d870ff4e8ac9f417b56f3b9e4b3ce490c13b09a77461 gst-plugins-base-1.14.4.tar.xz
--sha256 78fb5977f177ab71cba77a4a127d29b93cb1ca5c25962204b31f183a20cf5c7a COPYING
--sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING.LIB
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.16.0.tar.xz.sha256sum
-+sha256 4093aa7b51e28fb24dfd603893fead8d1b7782f088b05ed0f22a21ef176fb5ae gst-plugins-base-1.16.0.tar.xz
-+sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index 5b7db0814f..60f2d4856b 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_BASE_VERSION = 1.14.4
-+GST1_PLUGINS_BASE_VERSION = 1.16.0
- GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
--GST1_PLUGINS_BASE_LICENSE_FILES = COPYING.LIB
-+GST1_PLUGINS_BASE_LICENSE_FILES = COPYING
- GST1_PLUGINS_BASE_LICENSE = LGPL-2.0+, LGPL-2.1+
- 
- GST1_PLUGINS_BASE_CONF_OPTS = \
-@@ -118,6 +118,12 @@ else
- GST1_PLUGINS_BASE_CONF_OPTS += --disable-audiotestsrc
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_COMPOSITOR),y)
-+GST1_PLUGINS_BASE_CONF_OPTS += --enable-compositor
-+else
-+GST1_PLUGINS_BASE_CONF_OPTS += --disable-compositor
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ENCODING),y)
- GST1_PLUGINS_BASE_CONF_OPTS += --enable-encoding
- else
-@@ -136,6 +142,12 @@ else
- GST1_PLUGINS_BASE_CONF_OPTS += --disable-gio
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OVERLAYCOMPOSITION),y)
-+GST1_PLUGINS_BASE_CONF_OPTS += --enable-overlaycomposition
-+else
-+GST1_PLUGINS_BASE_CONF_OPTS += --disable-overlaycomposition
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PLAYBACK),y)
- GST1_PLUGINS_BASE_CONF_OPTS += --enable-playback
- else
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-index 1d08938e09..be837ab569 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.14.4.tar.xz.sha256sum
--sha256 5f8b553260cb0aac56890053d8511db1528d53cae10f0287cfce2cb2acc70979 gst-plugins-good-1.14.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.16.0.tar.xz.sha256sum
-+sha256 654adef33380d604112f702c2927574cfc285e31307b79e584113858838bb0fd gst-plugins-good-1.16.0.tar.xz
- sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index f6a3037be0..4ef128229a 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_GOOD_VERSION = 1.14.4
-+GST1_PLUGINS_GOOD_VERSION = 1.16.0
- GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
- GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
- GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-index f93c7e2340..b80887a0cc 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.14.4.tar.xz.sha256sum
--sha256 ac02d837f166c35ff6ce0738e281680d0b90052cfb1f0255dcf6aaca5f0f6d23 gst-plugins-ugly-1.14.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.16.0.tar.xz.sha256sum
-+sha256 e30964c5f031c32289e0b25e176c3c95a5737f2052dfc81d0f7427ef0233a4c2 gst-plugins-ugly-1.16.0.tar.xz
- sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3 COPYING
-diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-index 25546258cd..f3ac2f79d3 100644
---- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-+++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GST1_PLUGINS_UGLY_VERSION = 1.14.4
-+GST1_PLUGINS_UGLY_VERSION = 1.16.0
- GST1_PLUGINS_UGLY_SOURCE = gst-plugins-ugly-$(GST1_PLUGINS_UGLY_VERSION).tar.xz
- GST1_PLUGINS_UGLY_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-ugly
- GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+ It is also useful to add the reviewers of the previous version in Cc
+explicitly, to gather their updated feedback (or Acks).
+
+[snip]
+> diff --git a/package/zabbix/0001-fix-netsnmp-path.patch b/package/zabbix/0001-fix-netsnmp-path.patch
+> new file mode 100644
+> index 0000000000..235bec3c18
+> --- /dev/null
+> +++ b/package/zabbix/0001-fix-netsnmp-path.patch
+> @@ -0,0 +1,16 @@
+> +Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+
+ A patch requires a proper commit message that explain why it is needed and what
+the chosen solution is. 'fix netsnmp' is not enough.
+
+ We usually prefer git-formatted patches (i.e. generated by git format-patch),
+but since upstream doesn't provide a git repo, it's not needed in this case. We
+also prefer patches to be upstreamable, but upstream doesn't give any indication
+that they accept patches...
+
+> +
+> +--- a/m4/netsnmp.m4	2019-04-28 12:13:09.978661351 +0300
+> ++++ b/m4/netsnmp.m4	2019-04-28 12:13:16.218598128 +0300
+> +@@ -88,7 +88,10 @@
+> + 				esac
+> + 			done
+> + 		fi
+> +-
+> ++	
+
+ You're introducing a whitespace error here.
+
+> ++  SNMP_CFLAGS="-I. -I$STAGING_DIR/usr/bin/../../usr/include"
+
+ Why is this needed? This is just the default search path...
+
+> ++  SNMP_LDFLAGS="-L$STAGING_DIR/usr/lib"
+
+ Same here...
+
+> ++  SNMP_LIBS="-lnetsnmp"
+> + 		_save_netsnmp_cflags="$CFLAGS"
+> + 		_save_netsnmp_ldflags="$LDFLAGS"
+> + 		_save_netsnmp_libs="$LIBS"
+> diff --git a/package/zabbix/Config.in b/package/zabbix/Config.in
+> new file mode 100644
+> index 0000000000..ca6ab56468
+> --- /dev/null
+> +++ b/package/zabbix/Config.in
+> @@ -0,0 +1,51 @@
+> +config BR2_PACKAGE_ZABBIX
+> +	bool "zabbix"
+> +	select BR2_PACKAGE_LIBCURL
+> +	select BR2_PACKAGE_LIBEVENT
+> +	select BR2_PACKAGE_PCRE
+
+ I don't think it makes sense to build zabbix without either server or client,
+right? In that case, we do:
+
+	select BR2_PACKAGE_ZABBIX_CLIENT if !BR2_PACKAGE_ZABBIX_SERVER
+
+> +	help
+> +	  zabbix monitoring system
+> +
+> +if BR2_PACKAGE_ZABBIX
+
+ Add an empty line here.
+
+> +comment "zabbix server need nls support"
+
+ This should only be shown if NLS is not available, but it is available in
+general on the architecture, i.e. you should add
+
+	depends on !BR2_BINFMT_FLAT
+	depends on BR2_USE_MMU
+	depends on !BR2_SYSTEM_ENABLE_NLS
+
+> +
+> +config BR2_PACKAGE_ZABBIX_SERVER
+> +	bool "zabbix server"
+> +	depends on !BR2_BINFMT_FLAT
+
+ You should add where this dependency comes from, i.e.
+
+	depends on !BR2_BINFMT_FLAT # php
+	depends on BR2_USE_MMU # netsnmp
+
+(note that you missed that dependency; I think test-pkg would have discovered
+that, did you run test-pkg?)
+
+> +	depends on BR2_SYSTEM_ENABLE_NLS
+> +	select BR2_PACKAGE_PHP
+
+ Is this an actual build time dependency?
+
+> +	select BR2_PACKAGE_PHP_EXT_CTYPE
+
+ These, for sure, are not. By convention, we add a comment in that case (to each
+of them):
+
+	select BR2_PACKAGE_PHP_EXT_CTYPE # runtime
+
+
+> +	select BR2_PACKAGE_PHP_EXT_GETTEXT
+> +	select BR2_PACKAGE_PHP_EXT_BCMATH
+> +	select BR2_PACKAGE_PHP_EXT_MBSTRING
+> +	select BR2_PACKAGE_PHP_EXT_SOCKETS
+> +	select BR2_PACKAGE_PHP_EXT_MYSQLI
+> +	select BR2_PACKAGE_PHP_EXT_PDO_MYSQL
+
+ Mysql is needed even if postgres is chosen as backend?
+
+> +	select BR2_PACKAGE_PHP_EXT_PDO
+> +	select BR2_PACKAGE_PHP_EXT_GD
+> +	select BR2_PACKAGE_PHP_EXT_LIBXML2
+> +	select BR2_PACKAGE_PHP_EXT_XMLREADER
+> +	select BR2_PACKAGE_PHP_EXT_XMLWRITER
+> +	select BR2_PACKAGE_PHP_EXT_SESSION
+> +	select BR2_PACKAGE_NETSNMP
+> +	select BR2_PACKAGE_LIBXML2
+
+ libxml2 is needed both for build and through PHP?
+
+ Finally, please keep all dependencies alphabetically ordered.
+
+
+> +	help
+> +	  Zabbix monitoring server
+> +
+> +if BR2_PACKAGE_ZABBIX_SERVER
+> +choice
+> +	prompt "zabbix server database backend"
+> +	default BR2_PACKAGE_ZABBIX_SERVER_MYSQL
+> +config BR2_PACKAGE_ZABBIX_SERVER_MYSQL
+> +	bool "mysql"
+> +	depends on BR2_PACKAGE_MYSQL
+
+ This should probably be select, not depends. Also, I wonder if it is really
+needed. The database is not necessarily running on the same machine, so
+typically you need just a database *connection*, and if you're using PHP, you'd
+typically use PDO for that, not mysql (client) itself.
+
+ If you really do need the mysql or postgresql client, then the corresponding
+dependencies have to be added to the BR2_PACKAGE_ZABBIX_SERVER.
+
+> +config BR2_PACKAGE_ZABBIX_SERVER_POSTGRESQL
+> +	bool "posgresql"
+> +	depends on BR2_PACKAGE_POSTGRESQL
+> +endchoice
+> +endif
+> +
+> +config BR2_PACKAGE_ZABBIX_CLIENT
+> +	bool "zabbix client"
+
+ Shouldn't this be called agent instead of client?
+
+> +	default n
+
+ Not needed.
+
+> +endif
+> diff --git a/package/zabbix/zabbix-agent.service b/package/zabbix/zabbix-agent.service
+> new file mode 100644
+> index 0000000000..31c8f81798
+> --- /dev/null
+> +++ b/package/zabbix/zabbix-agent.service
+> @@ -0,0 +1,13 @@
+> +Description=Zabbix Agent Daemon
+> +After=syslog.target network.target
+> + 
+> +[Service]
+> +Type=forking
+> +ExecStart=/usr/sbin/zabbix_agentd
+> +ExecReload=/usr/local/sbin/zabbix_agentd -R config_cache_reload
+> +PIDFile=/tmp/zabbix_agentd.pid
+
+ PIDFiles are normally put in /run... But I guess this is where the default
+zabbix config puts it?
+
+
+> +User=zabbix
+> +Group=zabbix
+> + 
+> +[Install]
+> +WantedBy=multi-user.target
+> \ No newline at end of file
+
+ Please add a newline.
+
+> diff --git a/package/zabbix/zabbix-server.service b/package/zabbix/zabbix-server.service
+> new file mode 100644
+> index 0000000000..30a906e551
+> --- /dev/null
+> +++ b/package/zabbix/zabbix-server.service
+> @@ -0,0 +1,14 @@
+> +Description=Zabbix Server Daemon
+> +Requires=
+> +After=syslog.target network.target
+> + 
+> +[Service]
+> +Type=forking
+> +ExecStart=/usr/sbin/zabbix_server
+> +ExecReload=/usr/sbin/zabbix_server -R config_cache_reload
+> +PIDFile=/tmp/zabbix_server.pid
+> +User=zabbix
+> +Group=zabbix
+> + 
+> +[Install]
+> +WantedBy=multi-user.target
+> \ No newline at end of file
+
+ Newline.
+
+> diff --git a/package/zabbix/zabbix.hash b/package/zabbix/zabbix.hash
+> new file mode 100644
+> index 0000000000..56b1bf88f0
+> --- /dev/null
+> +++ b/package/zabbix/zabbix.hash
+> @@ -0,0 +1 @@
+> +sha256	4915d52352163e40398ca9b56b8176ea369dfd475e291087c50a3d9ae2459076	zabbix-4.2.1.tar.gz
+> diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
+> new file mode 100644
+> index 0000000000..9da48514d9
+> --- /dev/null
+> +++ b/package/zabbix/zabbix.mk
+> @@ -0,0 +1,78 @@
+> +################################################################################
+> +#
+> +#zabbix
+> +#
+> +################################################################################
+> +
+> +ZABBIX_VERSION = 4.2.1
+> +ZABBIX_SITE = https://sourceforge.net/projects/zabbix/files
+> +
+> +ZABBIX_INSTALL_STAGING = YES
+
+ So, it installs a library as well?
+
+ In that case, maybe it *does* make sense to install without client or server?
+
+
+> +ZABBIX_DEPENDENCIES = pcre libcurl libevent netsnmp libxml2
+
+ netsnmp and libxml2 are (in Config.in) only selected for the server.
+
+
+> +ZABBIX_CONF_OPTS = --with-libcurl --with-libevent --with-libxml2 --with-net-snmp=$(STAGING_DIR)/usr/bin/
+
+ I haven't checked the configure script, but usually things just work when you
+do --with-net-snmp.
+
+> +
+> +ifeq ($(BR2_INIT_SYSTEMD),y)
+> +ifeq ($(BR2_PACKAGE_ZABBIX_CLIENT),y)
+> +ZABBIX_SYSTEMD_UNITS += zabbix-agent.service
+> +endif
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER),y)
+> +ZABBIX_SYSTEMD_UNITS += zabbix-server.service
+> +endif
+> +ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_INSTALL_INIT_SYSTEMD
+
+ This isn't needed: the ZABBIX_INSTALL_INIT_SYSTEMD commands will be called
+automatically when systemd is enabled. Because of this, also the outer systemd
+condition is not needed.
+
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER),y)
+> +ZABBIX_CONF_OPTS += --enable-server
+> +ZABBIX_DEPENDENCIES += php
+> +ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_SERVER_COPY_FRONTEND
+
+ We normally put the definitions of variables before their use, so move the
+COPY_FRONTEND definition higher up. Also, we usually keep it withint the same
+condition. So it would go after the update of CONF_OPTS and DEPENDENCIES, and
+before the update of POST_INSTALL_TARGET_HOOKS.
+
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_MYSQL),y)
+> +ZABBIX_DEPENDENCIES += mysql
+> +ZABBIX_CONF_OPTS += --with-mysql=$(STAGING_DIR)/usr/bin/mysql_config
+> +ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_SERVER_PREPARE_MYSQL
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_SERVER_POSTGRESQL),y)
+> +ZABBIX_DEPENDENCIES += postgresql
+> +ZABBIX_CONF_OPTS += --with-postgresql=$(STAGING_DIR)/usr/bin/pg_config
+> +ZABBIX_POST_INSTALL_TARGET_HOOKS += ZABBIX_SERVER_PREPARE_POSTGRESQL
+> +endif
+> +
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ZABBIX_CLIENT),y)
+> +ZABBIX_CONF_OPTS += --enable-agent
+> +endif
+> +
+> +define ZABBIX_SERVER_COPY_FRONTEND
+> +	mkdir -p $(TARGET_DIR)/usr/zabbix/php-frontend/
+> +	cp -r $(@D)/frontends/php/* $(TARGET_DIR)/usr/zabbix/php-frontend/
+
+ I suppose the PHP frontend is supposed to be exposed by a web server? Document
+that in the help text, including the path on target where it resides (i.e.
+/usr/zabbix/php-frontend, I suppose).
+
+> +endef
+> +
+> +define ZABBIX_SERVER_PREPARE_POSTGRESQL
+> +	mkdir -p $(TARGET_DIR)/usr/zabbix/postgresql_schema
+> +	cp -r $(@D)/database/postgresql/*\.sql $(TARGET_DIR)/usr/zabbix/postgresql_schema/
+
+ Does zabbix know automatically which server to connect to (and which schema to
+use)?
+
+ I guess the database must be initialised somehow as well?
+
+> +	sed -i '/^Requires=/ s/$$/postgresql.service/' $(TARGET_DIR)/usr/lib/systemd/system/zabbix-server.service
+> +	sed -i '/^After=/ s/$$/ postgresql.service/' $(TARGET_DIR)/usr/lib/systemd/system/zabbix-server.service
+
+ Hm, indeed, the most common case would be that you run the database on the same
+device, and in that case you'd need this dependency.
+
+> +endef
+> +
+> +define ZABBIX_SERVER_PREPARE_MYSQL
+> +	mkdir -p $(TARGET_DIR)/usr/zabbix/mysql_schema/
+> +	cp -r $(@D)/database/mysql/*\.sql $(TARGET_DIR)/usr/zabbix/mysql_schema/
+> +	sed -i '/^Requires=/ s/$$/ mysql.service/' $(TARGET_DIR)/usr/lib/systemd/system/zabbix-server.service
+> +	sed -i '/^After=/ s/$$/ mysql.service/' $(TARGET_DIR)/usr/lib/systemd/system/zabbix-server.service
+> +endef
+> +
+> +define ZABBIX_INSTALL_INIT_SYSTEMD
+> +	$(foreach unit,$(ZABBIX_SYSTEMD_UNITS),\
+
+ Very elegant solution, constructing SYSTEMD_UNITS and then using foreach.
+
+> +		echo UNIT=$(unit) && \
+
+	I don't think this echo is useful, since all commands are printed anyway.
+
+> +		$(INSTALL) -D -m 644 package/zabbix/$(unit) $(TARGET_DIR)/usr/lib/systemd/system/$(unit) && \
+
+ I think it's a little more elegant by doing it with two $(foreach) calls, i.e.
+
+	$(foreach unit,$(ZABBIX_SYSTEMD_UNITS),\
+		$(INSTALL) -D -m 644 package/zabbix/$(unit)
+$(TARGET_DIR)/usr/lib/systemd/system/$(unit)
+	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+	$(foreach unit,$(ZABBIX_SYSTEMD_UNITS),\
+		ln -fs ../../../../usr/lib/systemd/system/$(unit)
+$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/$(unit)
+
+
+ Regards,
+ Arnout
+
+> +		mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants && \
+> +		ln -fs ../../../../usr/lib/systemd/system/$(unit) $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/$(unit) ;)
+> +endef
+> +
+> +define ZABBIX_USERS
+> +	zabbix -1 zabbix -1 !- /var/lib/zabbix - zabbix zabbix user
+> +endef
+> +
+> +$(eval $(autotools-package))
+> 
