@@ -1,69 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 May 2019 19:59:34 +0200
-Subject: [Buildroot] [git commit] package/vlc: fix build with libvpx 1.8.0
-Message-ID: <20190505175546.13E69839E4@busybox.osuosl.org>
+Date: Sun, 05 May 2019 20:00:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openblas: bump to version 0.3.6
+In-Reply-To: <20190505164404.15655-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 5 May 2019 18:44:04 +0200")
+References: <20190505164404.15655-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y33kbx2l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6aa1b96ffdc324f798cfa55a5dca37497444b09
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes
-http://autobuild.buildroot.net/results/e44/e44d5ca85be9e0dafa4a3d8b0187c54cff6e2d55/
+ > - Remove second and third patches (already in version)
+ > - Add an upstream patch to fix build with glibc < 2.5
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../vlc/0010-codec-vpx-Detect-libvpx-1.8.0.patch   | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/vlc/0010-codec-vpx-Detect-libvpx-1.8.0.patch b/package/vlc/0010-codec-vpx-Detect-libvpx-1.8.0.patch
-new file mode 100644
-index 0000000000..2c352310bd
---- /dev/null
-+++ b/package/vlc/0010-codec-vpx-Detect-libvpx-1.8.0.patch
-@@ -0,0 +1,41 @@
-+From 2688feb2742a6021ca211ae5c106b12c3d822946 Mon Sep 17 00:00:00 2001
-+From: Danny Milosavljevic <dannym@scratchpost.org>
-+Date: Mon, 11 Feb 2019 16:07:12 +0100
-+Subject: [PATCH] codec: vpx: Detect libvpx 1.8.0 and, if detected, use fewer
-+ frame formats in the chroma_table
-+
-+Signed-off-by: Steve Lhomme <robux4@ycbcr.xyz>
-+(cherry picked from commit 5575fe3eb3fd46bada8662268b74d03493476a84)
-+
-+Downloaded from upstream commit
-+https://git.videolan.org/?p=vlc/vlc-3.0.git;a=commitdiff;h=2688feb2742a6021ca211ae5c106b12c3d822946
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ modules/codec/vpx.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/modules/codec/vpx.c b/modules/codec/vpx.c
-+index 2b1e37818d..aba180361f 100644
-+--- a/modules/codec/vpx.c
-++++ b/modules/codec/vpx.c
-+@@ -116,6 +116,7 @@ static const struct
-+     { VLC_CODEC_I440, VPX_IMG_FMT_I440, 8, 0 },
-+ 
-+     { VLC_CODEC_YV12, VPX_IMG_FMT_YV12, 8, 0 },
-++#if VPX_IMAGE_ABI_VERSION < 5
-+     { VLC_CODEC_YUVA, VPX_IMG_FMT_444A, 8, 0 },
-+     { VLC_CODEC_YUYV, VPX_IMG_FMT_YUY2, 8, 0 },
-+     { VLC_CODEC_UYVY, VPX_IMG_FMT_UYVY, 8, 0 },
-+@@ -128,7 +129,7 @@ static const struct
-+ 
-+     { VLC_CODEC_ARGB, VPX_IMG_FMT_ARGB, 8, 0 },
-+     { VLC_CODEC_BGRA, VPX_IMG_FMT_ARGB_LE, 8, 0 },
-+-
-++#endif
-+     { VLC_CODEC_GBR_PLANAR, VPX_IMG_FMT_I444, 8, 1 },
-+     { VLC_CODEC_GBR_PLANAR_10L, VPX_IMG_FMT_I44416, 10, 1 },
-+ 
-+-- 
-+2.11.0
-+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
