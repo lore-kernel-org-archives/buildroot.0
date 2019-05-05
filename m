@@ -1,33 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 May 2019 21:05:30 +0200
-Subject: [Buildroot] [PATCH] package/libglib2: avoid printing null
- strings
-In-Reply-To: <20190504194415.1121-1-grzegorz@blach.pl> (Grzegorz Blach's
- message of "Sat, 4 May 2019 19:44:13 +0000")
-References: <20190504194415.1121-1-grzegorz@blach.pl>
-Message-ID: <87k1f4bu2t.fsf@dell.be.48ers.dk>
+Date: Sun, 05 May 2019 21:07:02 +0200
+Subject: [Buildroot] Buildroot multi-arch build
+In-Reply-To: <20190505154209.c2zjo36l6wgam5ul@falbala.home.lespocky.de>
+ (Alexander Dahl's message of "Sun, 5 May 2019 17:42:10 +0200")
+References: <BL0PR0102MB341237052A8B224C63E58B9FF3350@BL0PR0102MB3412.prod.exchangelabs.com>
+ <20190505154209.c2zjo36l6wgam5ul@falbala.home.lespocky.de>
+Message-ID: <87ftpsbu09.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Grzegorz" == Grzegorz Blach <grzegorz@blach.pl> writes:
+>>>>> "Alexander" == Alexander Dahl <post@lespocky.de> writes:
 
- > GCC 9 is being stricter about passing null string pointers
- > to printf-like functions.
+ > Hei hei,
+ > On Fri, May 03, 2019 at 08:21:41PM +0000, Gervais, Francois wrote:
+ >> We use the same buildroot environment for x86_64, armhf and arm64.
+ >> 
+ >> For each architecture, everything is the same except for the architecture definition.
 
- > Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+ > What you won't be able to avoid is building everything three times.
+ > Those architectures all need different toolchains. You probably
+ > already know this? ;-)
 
- > ---
- > Changes v1 -> v2:
- >   - Patch taken from glib repository has been signed off by me.
+ >> Is there a way to achieve this without maintaining 3 config files?
 
-check-package still complains:
+ > Maybe you can somehow work with some kind of config template you
+ > maintain, and generate those three buildroot configs from it?
 
-package/libglib2/0003-gdbus-Avoid-printing-null-strings.patch:4: generate your patches with 'git format-patch -N'
-
-Committed with that fixed, thanks.
+This can simply be done with "cat", E.G. have a config snippet for each
+of the 3 architectures and one for the package selection, and then
+simply concatenate 1 arch + packages to a defconfig file.
 
 -- 
 Bye, Peter Korsgaard
