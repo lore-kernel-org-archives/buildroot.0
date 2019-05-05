@@ -1,106 +1,144 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 May 2019 21:14:48 +0200
-Subject: [Buildroot] [git commit] package/radvd: improve startup script
-Message-ID: <20190505191231.E906384266@busybox.osuosl.org>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Sun,  5 May 2019 21:52:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libubootenv: add new package
+Message-ID: <1557085947-25842-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=711ae58a536a106791c437ed15cb618d6af4eb23
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Libubootenv is a library that provides a hardware independent
+way to access to U-Boot environment.
 
-- Add start, stop and restart/reload options, following the logic used
-  in other init scripts (e.g. S01syslogd).
-
-- Do nothing if /etc/radvd.conf does not exist instead of printing an
-  error message. It is valid to install radvd without a configuration
-  file. The daemon may be started later by another service with a
-  configuration created at run-time.
-
-- Print an error message if the kernel does not support IPv6 forwarding,
-  which is required by radvd.
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/radvd/S50radvd | 65 ++++++++++++++++++++++++++++++++++++++++----------
- 1 file changed, 53 insertions(+), 12 deletions(-)
+ package/Config.in                                  |  1 +
+ ...w_printenv-remove-declaration-in-for-loop.patch | 53 ++++++++++++++++++++++
+ package/libubootenv/Config.in                      | 11 +++++
+ package/libubootenv/libubootenv.hash               |  2 +
+ package/libubootenv/libubootenv.mk                 | 14 ++++++
+ 5 files changed, 81 insertions(+)
+ create mode 100644 package/libubootenv/0001-fw_printenv-remove-declaration-in-for-loop.patch
+ create mode 100644 package/libubootenv/Config.in
+ create mode 100644 package/libubootenv/libubootenv.hash
+ create mode 100644 package/libubootenv/libubootenv.mk
 
-diff --git a/package/radvd/S50radvd b/package/radvd/S50radvd
-index 9f1407c95a..f73ce24ed5 100644
---- a/package/radvd/S50radvd
-+++ b/package/radvd/S50radvd
-@@ -1,18 +1,59 @@
- #!/bin/sh
- 
--RADVD=/usr/sbin/radvd
-+DAEMON="radvd"
-+PIDFILE="/var/run/$DAEMON.pid"
- 
--echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
-+RADVD_ARGS="-m syslog"
- 
--printf "Starting radvd: "
--if [ ! -x "${RADVD}" ]; then
--	echo "missing"
--	exit 1
--fi
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
+diff --git a/package/Config.in b/package/Config.in
+index f592e74..b920554 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -458,6 +458,7 @@ endmenu
+ 	source "package/iucode-tool/Config.in"
+ 	source "package/kbd/Config.in"
+ 	source "package/lcdproc/Config.in"
++	source "package/libubootenv/Config.in"
+ 	source "package/libuio/Config.in"
+ 	source "package/linuxconsoletools/Config.in"
+ 	source "package/linux-backports/Config.in"
+diff --git a/package/libubootenv/0001-fw_printenv-remove-declaration-in-for-loop.patch b/package/libubootenv/0001-fw_printenv-remove-declaration-in-for-loop.patch
+new file mode 100644
+index 0000000..1ec908a
+--- /dev/null
++++ b/package/libubootenv/0001-fw_printenv-remove-declaration-in-for-loop.patch
+@@ -0,0 +1,53 @@
++From ffca94e6f84956838a2d88824b37fcd3b0d0694b Mon Sep 17 00:00:00 2001
++From: Pierre-Jean Texier <pjtexier@koncepto.io>
++Date: Sun, 5 May 2019 21:42:48 +0200
++Subject: [PATCH] fw_printenv: remove declaration in for loop
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+[ -f /etc/radvd.conf ] || exit 0
- 
--if ${RADVD} ; then
--	echo "done"
--else
--	echo "failed"
-+[ -f /proc/sys/net/ipv6/conf/all/forwarding ] || {
-+	echo "Error: radvd requires IPv6 forwarding support."
- 	exit 1
--fi
-+}
++This commit fixes :
 +
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+	echo "1" > /proc/sys/net/ipv6/conf/all/forwarding
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	start-stop-daemon -S -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON" \
-+		-- $RADVD_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
++src/fw_printenv.c:142:4: error: ?for? loop initial declarations are only allowed in C99 or C11 mode
++    for (int i = 0; i < argc; i++) {
 +
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon -K -q -p "$PIDFILE" -x "/usr/sbin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
++Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
++[Upstream status: http://patchwork.ozlabs.org/patch/1092851/]
++---
++ src/fw_printenv.c | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
 +
-+restart() {
-+	stop
-+	sleep 1
-+	start
-+}
++diff --git a/src/fw_printenv.c b/src/fw_printenv.c
++index 361d150..4236eaa 100644
++--- a/src/fw_printenv.c
+++++ b/src/fw_printenv.c
++@@ -59,7 +59,7 @@ int main (int argc, char **argv) {
++ 	char *cfgfname = NULL;
++ 	char *defenvfile = NULL;
++ 	char *scriptfile = NULL;
++-	int c;
+++	int c, i;
++ 	int ret = 0;
++ 	void *tmp;
++ 	const char *name, *value;
++@@ -139,7 +139,7 @@ int main (int argc, char **argv) {
++ 				fprintf(stdout, "%s=%s\n", name, value);
++ 			}
++ 		} else {
++-			for (int i = 0; i < argc; i++) {
+++			for (i = 0; i < argc; i++) {
++ 				value = libuboot_get_env(ctx, argv[i]);
++ 				if (noheader)
++ 					fprintf(stdout, "%s\n", value ? value : "");
++@@ -151,7 +151,7 @@ int main (int argc, char **argv) {
++ 		if (scriptfile)
++ 			libuboot_load_file(ctx, scriptfile);
++ 		else {
++-			for (int i = 0; i < argc; i += 2) {
+++			for (i = 0; i < argc; i += 2) {
++ 				if (i + 1 == argc)
++ 					libuboot_set_env(ctx, argv[i], NULL);
++ 				else
++-- 
++2.7.4
 +
-+case "$1" in
-+	start|stop)
-+		"$1";;
-+	restart|reload)
-+		restart;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
+diff --git a/package/libubootenv/Config.in b/package/libubootenv/Config.in
+new file mode 100644
+index 0000000..9be52c4
+--- /dev/null
++++ b/package/libubootenv/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_LIBUBOOTENV
++	bool "libubootenv"
++	select BR2_PACKAGE_ZLIB
++	help
++	  libubootenv is a library that provides a hardware independent
++	  way to access to U-Boot environment.
++
++	  The package provides the fw_printenv / fw_setenv utilities,
++	  new tools build from the library and not from U-Boot.
++
++	  https://github.com/sbabic/libubootenv/
+diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
+new file mode 100644
+index 0000000..79aaac7
+--- /dev/null
++++ b/package/libubootenv/libubootenv.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256 82c6966af5feae8726bd78a2cde4c4c2f69e81f8fdc548098063f8a35eaad090 libubootenv-8a7d4030bcb106de11632e85b6a0e7b7d4cb47af.tar.gz
+diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
+new file mode 100644
+index 0000000..d74e823
+--- /dev/null
++++ b/package/libubootenv/libubootenv.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# libubootenv
++#
++################################################################################
++
++LIBUBOOTENV_VERSION = 8a7d4030bcb106de11632e85b6a0e7b7d4cb47af
++LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
++LIBUBOOTENV_LICENSE = LGPL-2.1
++LIBUBOOTENV_INSTALL_STAGING = YES
++
++LIBUBOOTENV_DEPENDENCIES += zlib
++
++$(eval $(cmake-package))
+-- 
+2.7.4
