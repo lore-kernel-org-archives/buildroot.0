@@ -1,58 +1,40 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 5 May 2019 22:36:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cryptopp: fix build with gcc <
- 4.9
-In-Reply-To: <20190427174604.14188-1-fontaine.fabrice@gmail.com>
-References: <20190427174604.14188-1-fontaine.fabrice@gmail.com>
-Message-ID: <33d8cde1-9453-c619-7d02-30676b5de331@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 5 May 2019 22:37:44 +0200
+Subject: [Buildroot] [git commit] package/nfs-utils: fix unnecessary files
+ removal
+Message-ID: <20190505203401.9B56C8036B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=a64c3a847da62e56ddc5c212f0910f207f3563c4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The removal of unnecessary files is currently broken by the fact that
+the rm command is executed from the buildroot directory and not the
+target directory.
 
-On 27/04/2019 19:46, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.org/results/7e68f32e62c34497848f0f7fc1f12dba67bf44d0
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This patch fixes the problem changing to target directory before
+removing files.
 
- Applied to master, thanks.
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/nfs-utils/nfs-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> ---
->  package/cryptopp/cryptopp.mk | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
-> index 59ced7654c..bd209a6e7a 100644
-> --- a/package/cryptopp/cryptopp.mk
-> +++ b/package/cryptopp/cryptopp.mk
-> @@ -15,9 +15,16 @@ define HOST_CRYPTOPP_EXTRACT_CMDS
->  	$(UNZIP) $(HOST_CRYPTOPP_DL_DIR)/$(CRYPTOPP_SOURCE) -d $(@D)
->  endef
->  
-> +HOST_CRYPTOPP_CXXFLAGS = $(HOST_CFLAGS) -fPIC
-> +
->  HOST_CRYPTOPP_MAKE_OPTS = \
->  	$(HOST_CONFIGURE_OPTS) \
-> -	CXXFLAGS="$(HOST_CXXFLAGS) -fPIC"
-> +	CXXFLAGS="$(HOST_CRYPTOPP_CXXFLAGS)"
-> +
-> +#?_mm256_broadcastsi128_si256 has been added only in gcc 4.9
-> +ifneq ($(BR2_HOST_GCC_AT_LEAST_4_9),y)
-> +HOST_CRYPTOPP_CXXFLAGS += -DCRYPTOPP_DISABLE_AVX2
-
- I see what you're doing here, but we usually keep the assignments in the
-imperative order, i.e. assignment before use. So I moved this up before
-HOST_CRYPTOPP_MAKE_OPTS.
-
- Regards,
- Arnout
-
-> +endif
->  
->  define HOST_CRYPTOPP_BUILD_CMDS
->  	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) $(HOST_CRYPTOPP_MAKE_OPTS) shared
-> 
+diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
+index 9fa7ae200b..4bb62de1ce 100644
+--- a/package/nfs-utils/nfs-utils.mk
++++ b/package/nfs-utils/nfs-utils.mk
+@@ -57,7 +57,7 @@ NFS_UTILS_CONF_OPTS += --disable-tirpc
+ endif
+ 
+ define NFS_UTILS_INSTALL_FIXUP
+-	rm -f $(NFS_UTILS_TARGETS_)
++	cd $(TARGET_DIR) && rm -f $(NFS_UTILS_TARGETS_)
+ 	touch $(TARGET_DIR)/etc/exports
+ 	$(INSTALL) -D -m 644 \
+ 		$(@D)/utils/mount/nfsmount.conf $(TARGET_DIR)/etc/nfsmount.conf
