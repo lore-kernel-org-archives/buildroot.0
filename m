@@ -1,46 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 May 2019 12:12:39 +0200
-Subject: [Buildroot] [git commit] package/samba4: bump version to 4.9.7
-Message-ID: <20190505100747.7ADBD84266@busybox.osuosl.org>
+Date: Sun, 5 May 2019 12:05:28 +0200
+Subject: [Buildroot] [git commit] package/xdriver_xf86-video-sis: drop
+ unneeded third patch
+Message-ID: <20190505100747.6F77F84266@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d365099fec760d3b25bd3d0640b6c8148689e9e
+commit: https://git.buildroot.net/buildroot/commit/?id=7980429e0a6c558f3409268650081a181025ed0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://www.samba.org/samba/history/samba-4.9.7.html
+This patch is not needed since version 0.10.8 and:
+https://gitlab.freedesktop.org/xorg/driver/xf86-video-sis/commit/0f50f8c3db2b9f1c9d4ecab8ad278e9db6418a92
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/x11r7/xdriver_xf86-video-sis/0003-xi.patch | 24 ----------------------
+ 1 file changed, 24 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 7762456cfd..9576690e4f 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.6.tar.asc
--sha256 c9205a651a83d69e200fec9dd65e9fa360f0c75ab3275b3dcb74e5cbaec60807  samba-4.9.6.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.7.tar.asc
-+sha256 44e5bc58dcae6d86ca8d5f269fa927f20ff91bce97cde86fe4e83addcb89c001  samba-4.9.7.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index f6dbda9dbb..941d4df1d6 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.9.6
-+SAMBA4_VERSION = 4.9.7
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+diff --git a/package/x11r7/xdriver_xf86-video-sis/0003-xi.patch b/package/x11r7/xdriver_xf86-video-sis/0003-xi.patch
+deleted file mode 100644
+index 7905248163..0000000000
+--- a/package/x11r7/xdriver_xf86-video-sis/0003-xi.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Fetch from:
+-https://projects.archlinux.org/svntogit/packages.git/commit/trunk?h=packages/xf86-video-sis&id=7aaa7a9786ce5654df877311909244e0a6c42fd1
+-
+-Signed-off-by: Bernd Kuhls <berndkuhls@hotmail.com>
+-
+---- xf86-video-sis-0.10.7/src/sis_driver.c	2013-03-10 13:57:50.000000000 +0100
+-+++ xf86-video-sis-0.10.7/src/sis_driver.c.new	2013-03-10 13:54:48.645203559 +0100
+-@@ -9378,7 +9378,15 @@
+-      }
+-      if(doit) {
+- 	sigstate = xf86BlockSIGIO();
+--#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) >= 15
+-+#if GET_ABI_MAJOR(ABI_XINPUT_VERSION) >= 18
+-+        {
+-+            double dx = x, dy = y;
+-+            miPointerSetPosition(inputInfo.pointer, Absolute, &dx, &dy,
+-+                NULL, NULL);
+-+            x = (int)dx;
+-+            y = (int)dy;
+-+        }
+-+#elif GET_ABI_MAJOR(ABI_XINPUT_VERSION) >= 15
+-         {
+-             double dx = x, dy = y;
+-             miPointerSetPosition(inputInfo.pointer, Absolute, &dx, &dy);
