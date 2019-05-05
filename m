@@ -1,43 +1,64 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  5 May 2019 14:04:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cryptopp: bump to version 8.2.0
-Message-ID: <20190505120431.16795-1-fontaine.fabrice@gmail.com>
+Date: Sun,  5 May 2019 14:47:31 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/qt5enginio: needs ssl
+Message-ID: <20190505124731.18275-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+qt5enginio needs Qt5 with ssl support, a dependency could be added on
+BR2_PACKAGE_QT5BASE_OPENSSL but this proposal was rejected in the first
+iteration of this patch
+
+Qt5 has ssl support through libressl on Qt 5.6 or openssl in latest Qt
+however we can't select libressl without adding a circular dependency as
+some packages (such as sqlcipher) force openssl through
+BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+
+So, as suggested by Arnout:
+ - add a hidden BR2_PACKAGE_QT5ENGINIO_SELECT_OPENSSL option that
+   selects BR2_PACKAGE_OPENSSL if qt5enginio is selected
+ - remove select on BR2_PACKAGE_QT5BASE to avoid a circular dependency
+   and because it's not needed as BR2_PACKAGE_QT5 already selects
+   BR2_PACKAGE_QT5BASE
+ - add dependencies of BR2_PACKAGE_LIBRESSL if Qt 5.6 is selected (but
+   don't select libressl to avoid a circular dependency)
+
+Fixes:
+ - http://autobuild.buildroot.org/results/60678cab68ec9aa17184b8417b64b3b79adf428a
+
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/cryptopp/cryptopp.hash | 4 ++--
- package/cryptopp/cryptopp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Changes v1 -> v2 (after review of Thomas Petazzoni and Arnout
+Vandecappelle):
+ - Remove dependency on BR2_PACKAGE_QT5BASE_OPENSSL
 
-diff --git a/package/cryptopp/cryptopp.hash b/package/cryptopp/cryptopp.hash
-index 5d6d8520c2..c0d442a97b 100644
---- a/package/cryptopp/cryptopp.hash
-+++ b/package/cryptopp/cryptopp.hash
-@@ -1,5 +1,5 @@
--# Hash from: https://www.cryptopp.com/release810.html:
--sha256  f609b453e42abbab7163191dfe060964121f04da212e2e4f2f0ebe94b7e806ae  cryptopp810.zip
-+# Hash from: https://www.cryptopp.com/release820.html:
-+sha256  03f0e2242e11b9d19b28d0ec5a3fa8ed5cc7b27640e6bed365744f593e858058  cryptopp820.zip
- 
- # Hash for license file:
- sha256  f29d65ae3f0c8e327284f193524643ffb4d682fcca3e1740a5c6cbab0e720583  License.txt
-diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
-index 59ced7654c..33c8423157 100644
---- a/package/cryptopp/cryptopp.mk
-+++ b/package/cryptopp/cryptopp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CRYPTOPP_VERSION = 8.1.0
-+CRYPTOPP_VERSION = 8.2.0
- CRYPTOPP_SOURCE = cryptopp$(subst .,,$(CRYPTOPP_VERSION)).zip
- CRYPTOPP_SITE = https://cryptopp.com
- CRYPTOPP_LICENSE = BSL-1.0, BSD-3-Clause (CRYPTOGAMS), Public domain (ChaCha SSE2 and AVX)
+ package/qt5/qt5enginio/Config.in | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+index 102058e7c5..94bf295396 100644
+--- a/package/qt5/qt5enginio/Config.in
++++ b/package/qt5/qt5enginio/Config.in
+@@ -1,7 +1,15 @@
++# This is a hack to avoid circular dependencies when selecting OPENSSL
++config BR2_PACKAGE_QT5ENGINIO_SELECT_OPENSSL
++	bool
++	default y if BR2_PACKAGE_QT5ENGINIO
++	select BR2_PACKAGE_OPENSSL
++
+ config BR2_PACKAGE_QT5ENGINIO
+ 	bool "qt5enginio"
+-	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_QT5BASE
++	depends on !BR2_PACKAGE_QT5_VERSION_5_6 || \
++		(BR2_PACKAGE_QT5_VERSION_5_6 && \
++		(!BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL && \
++		!(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)))
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_NETWORK
+ 	help
 -- 
 2.20.1
