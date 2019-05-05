@@ -1,87 +1,121 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 May 2019 23:31:51 +0200
-Subject: [Buildroot] [git commit] package/gstreamer1/gstreamer1: bump to
- version 1.16.0
-Message-ID: <20190505212652.CB24381801@busybox.osuosl.org>
+Date: Sun, 5 May 2019 23:31:52 +0200
+Subject: [Buildroot] [git commit]
+ package/gstreamer1/gstreamer1-editing-services: bump to version 1.16.0
+Message-ID: <20190505212653.12AB881121@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8bee110996614ca81450ca3376559f67d0abbbe4
+commit: https://git.buildroot.net/buildroot/commit/?id=c8efe29384e67db08d06952c96c4f3420815f619
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also remove upstreamed patch 0001-gstconfig.h.in-initial-RISC-V-support.patch.
+Also removed upstreamed patch 0001-examples-ges-ui-fix-some-gtk2-ism.patch.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...001-gstconfig.h.in-initial-RISC-V-support.patch | 34 ----------------------
- package/gstreamer1/gstreamer1/gstreamer1.hash      |  4 +--
- package/gstreamer1/gstreamer1/gstreamer1.mk        |  2 +-
- 3 files changed, 3 insertions(+), 37 deletions(-)
+ .../0001-examples-ges-ui-fix-some-gtk2-ism.patch   | 66 ----------------------
+ .../gstreamer1-editing-services.hash               |  4 +-
+ .../gstreamer1-editing-services.mk                 |  2 +-
+ 3 files changed, 3 insertions(+), 69 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-initial-RISC-V-support.patch b/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-initial-RISC-V-support.patch
+diff --git a/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch b/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch
 deleted file mode 100644
-index 689346a3e8..0000000000
---- a/package/gstreamer1/gstreamer1/0001-gstconfig.h.in-initial-RISC-V-support.patch
+index 5a074941fd..0000000000
+--- a/package/gstreamer1/gstreamer1-editing-services/0001-examples-ges-ui-fix-some-gtk2-ism.patch
 +++ /dev/null
-@@ -1,34 +0,0 @@
--From 58982c0d28f1eb385319307ee47bd6522c812f22 Mon Sep 17 00:00:00 2001
--From: Aurelien Jarno <aurelien@aurel32.net>
--Date: Sun, 15 Apr 2018 00:49:55 +0200
--Subject: [PATCH] gstconfig.h.in: initial RISC-V support
+@@ -1,66 +0,0 @@
+-From 76f3dcb8f11a240fc7147ab556c57f10abc9e957 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Tim-Philipp=20M=C3=BCller?= <tim@centricular.com>
+-Date: Sun, 20 May 2018 23:46:42 +0100
+-Subject: [PATCH] examples: ges-ui: fix some gtk2-ism
 -
--RISC-V supports unaligned accesses, but these might run extremely slowly
--depending on the implementation. Therefore set GST_HAVE_UNALIGNED_ACCESS
--to 0 on this architecture.
+-Still lots of deprecated API to update.
 -
--https://bugzilla.gnome.org/show_bug.cgi?id=795271
+-https://bugzilla.gnome.org/show_bug.cgi?id=796243
 -
--Upstream: https://gitlab.freedesktop.org/gstreamer/gstreamer/commit/8a156d1725ecd03f2e8cdc8874e081dda2d3b43d
--
+-Upstream: https://cgit.freedesktop.org/gstreamer/gst-editing-services/commit/?id=76f3dcb8f11a240fc7147ab556c57f10abc9e957
 -Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ----
-- gst/gstconfig.h.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- examples/c/ges-ui.c | 10 +++++-----
+- 1 file changed, 5 insertions(+), 5 deletions(-)
 -
--diff --git a/gst/gstconfig.h.in b/gst/gstconfig.h.in
--index 6351c04da..33dfed1f6 100644
----- a/gst/gstconfig.h.in
--+++ b/gst/gstconfig.h.in
--@@ -104,7 +104,7 @@
--  * http://docs.oracle.com/cd/E19205-01/820-4155/c++_faq.html#Vers6
--  * https://software.intel.com/en-us/node/583402
+-diff --git a/examples/c/ges-ui.c b/examples/c/ges-ui.c
+-index 4acd1ee9..45694a6b 100644
+---- a/examples/c/ges-ui.c
+-+++ b/examples/c/ges-ui.c
+-@@ -106,7 +106,7 @@ static int n_instances = 0;
+-  * These are declared non-static for signal auto-connection
 -  */
---#if defined(__alpha__) || defined(__arc__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__nios2__) || defined(__MICROBLAZE__) || defined(__mips__) || defined(__or1k__) || defined(__sh__) || defined(__SH4__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64) || defined(__xtensa__) || defined(__e2k__)
--+#if defined(__alpha__) || defined(__arc__) || defined(__arm__) || defined(__aarch64__) || defined(__bfin) || defined(__hppa__) || defined(__nios2__) || defined(__MICROBLAZE__) || defined(__mips__) || defined(__or1k__) || defined(__sh__) || defined(__SH4__) || defined(__sparc__) || defined(__sparc) || defined(__ia64__) || defined(_M_ALPHA) || defined(_M_ARM) || defined(_M_IA64) || defined(__xtensa__) || defined(__e2k__) || defined(__riscv)
-- #  define GST_HAVE_UNALIGNED_ACCESS 0
-- #elif defined(__i386__) || defined(__i386) || defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__ppc__) || defined(__ppc64__) || defined(__powerpc__) || defined(__powerpc64__) || defined(__m68k__) || defined(_M_IX86) || defined(_M_AMD64) || defined(_M_X64) || defined(__s390__) || defined(__s390x__) || defined(__zarch__)
-- #  define GST_HAVE_UNALIGNED_ACCESS 1
+- 
+--gboolean window_delete_event_cb (GtkObject * window, GdkEvent * event,
+-+gboolean window_delete_event_cb (GtkWidget * window, GdkEvent * event,
+-     App * app);
+- void new_activate_cb (GtkMenuItem * item, App * app);
+- void open_activate_cb (GtkMenuItem * item, App * app);
+-@@ -1076,14 +1076,14 @@ gboolean
+- add_effect_dlg_delete_event_cb (GtkWidget * widget, GdkEvent * event,
+-     gpointer * app)
+- {
+--  gtk_widget_hide_all (((App *) app)->add_effect_dlg);
+-+  gtk_widget_hide (((App *) app)->add_effect_dlg);
+-   return TRUE;
+- }
+- 
+- void
+- on_cancel_add_effect_cb (GtkButton * button, App * app)
+- {
+--  gtk_widget_hide_all (app->add_effect_dlg);
+-+  gtk_widget_hide (app->add_effect_dlg);
+- }
+- 
+- void
+-@@ -1103,7 +1103,7 @@ on_apply_effect_cb (GtkButton * button, App * app)
+- 
+-   gtk_entry_set_text (GTK_ENTRY (app->audio_effect_entry), "");
+- 
+--  gtk_widget_hide_all (app->add_effect_dlg);
+-+  gtk_widget_hide (app->add_effect_dlg);
+- }
+- 
+- static void
+-@@ -1347,7 +1347,7 @@ app_new_from_uri (gchar * uri)
+- /* UI callbacks  ************************************************************/
+- 
+- gboolean
+--window_delete_event_cb (GtkObject * window, GdkEvent * event, App * app)
+-+window_delete_event_cb (GtkWidget * window, GdkEvent * event, App * app)
+- {
+-   app_dispose (app);
+-   return FALSE;
 --- 
--2.19.1
+-2.19.0
 -
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.hash b/package/gstreamer1/gstreamer1/gstreamer1.hash
-index 204bb74fd3..588526c5c2 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.hash
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.hash
-@@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.14.4.tar.xz.sha256sum
--sha256 f94f6696c5f05a3b3a9183e39c5f5c0b779f75a04c0efa497e7920afa985ffc7 gstreamer-1.14.4.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.16.0.tar.xz.sha256sum
-+sha256 0e8e2f7118be437cba879353970cf83c2acced825ecb9275ba05d9186ef07c00 gstreamer-1.16.0.tar.xz
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
+index a388a097dd..7d6ab30829 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
+@@ -1,5 +1,5 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gstreamer-editing-services-1.14.4.tar.xz.sha256sum
+-sha256 53d1d25b356009505ae0d22c218d6c6b1215399d9f6e3fe5d7b88e156531b35f gstreamer-editing-services-1.14.4.tar.xz
++# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gstreamer-editing-services-1.16.0.tar.xz.sha256sum
++sha256 82a3faefb2b0d91e134fd02cddeee718b7846a07cbf0127fed7aa03e25495ad1 gstreamer-editing-services-1.16.0.tar.xz
+ 
+ # Hashes for license files:
  sha256 f445dc78b88496f7e20c7a2a461b95baba5865c8919b8289ac24ac0a80c6ce7a COPYING
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index 76a74a0806..3378232c10 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
+index 74a36824ed..9412e277e6 100644
+--- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
++++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GSTREAMER1_VERSION = 1.14.4
-+GSTREAMER1_VERSION = 1.16.0
- GSTREAMER1_SOURCE = gstreamer-$(GSTREAMER1_VERSION).tar.xz
- GSTREAMER1_SITE = https://gstreamer.freedesktop.org/src/gstreamer
- GSTREAMER1_INSTALL_STAGING = YES
+-GSTREAMER1_EDITING_SERVICES_VERSION = 1.14.4
++GSTREAMER1_EDITING_SERVICES_VERSION = 1.16.0
+ GSTREAMER1_EDITING_SERVICES_SOURCE = gstreamer-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
+ GSTREAMER1_EDITING_SERVICES_SITE = http://gstreamer.freedesktop.org/src/gstreamer-editing-services
+ GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
