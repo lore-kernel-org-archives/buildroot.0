@@ -1,44 +1,23 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun,  5 May 2019 11:42:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.9.7
-Message-ID: <20190505094219.9619-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 05 May 2019 12:01:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: bump to
+ version 1.2.1
+In-Reply-To: <20190503210251.18312-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 3 May 2019 23:02:51 +0200")
+References: <20190503210251.18312-1-fontaine.fabrice@gmail.com>
+Message-ID: <87woj5cj8z.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://www.samba.org/samba/history/samba-4.9.7.html
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Remove all patches (already in version)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 7762456cfd..9576690e4f 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.6.tar.asc
--sha256 c9205a651a83d69e200fec9dd65e9fa360f0c75ab3275b3dcb74e5cbaec60807  samba-4.9.6.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.7.tar.asc
-+sha256 44e5bc58dcae6d86ca8d5f269fa927f20ff91bce97cde86fe4e83addcb89c001  samba-4.9.7.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index f6dbda9dbb..941d4df1d6 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.9.6
-+SAMBA4_VERSION = 4.9.7
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+Committed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
