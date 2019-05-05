@@ -1,39 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 5 May 2019 21:09:32 +0200
-Subject: [Buildroot] [git commit] package/kf5-kcoreaddons: fix build with
- atomic
-Message-ID: <20190505190439.5AF148822E@busybox.osuosl.org>
+Date: Sun, 05 May 2019 21:12:23 +0200
+Subject: [Buildroot] [PATCH 1/2] configs/orangepi_zero: bump Linux to
+ 4.19.38, U-boot to 2019.04
+In-Reply-To: <20190503142522.26401-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 3 May 2019 16:25:20 +0200")
+References: <20190503142522.26401-1-peter@korsgaard.com>
+Message-ID: <877eb4btrc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b8a3cf5ad27cbcef56398eab6ab7241943b48a0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/d17c2fb420e395b995b2c2eef387f0c66e89c96c
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Committed, thanks.
 
-diff --git a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-index 6cf7a3d107..ea6aac4ec6 100644
---- a/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-+++ b/package/kf5/kf5-kcoreaddons/kf5-kcoreaddons.mk
-@@ -13,4 +13,11 @@ KF5_KCOREADDONS_LICENSE_FILES = COPYING.LIB
- KF5_KCOREADDONS_DEPENDENCIES = kf5-extra-cmake-modules qt5tools
- KF5_KCOREADDONS_INSTALL_STAGING = YES
- 
-+KF5_KCOREADDONS_CXXFLAGS = $(TARGET_CXXFLAGS)
-+KF5_KCOREADDONS_CONF_OPTS = -DCMAKE_CXX_FLAGS="$(KF5_KCOREADDONS_CXXFLAGS)"
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+KF5_KCOREADDONS_CXXFLAGS += -latomic
-+endif
-+
- $(eval $(cmake-package))
+-- 
+Bye, Peter Korsgaard
