@@ -1,69 +1,24 @@
-From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Sun,  5 May 2019 18:53:59 +0200
-Subject: [Buildroot] [PATCH v2 7/7] gitlab.yml.in*: enable Qemu gitlab
- testing
-In-Reply-To: <1557075239-30667-1-git-send-email-jugurtha.belkalem@smile.fr>
-References: <1557075239-30667-1-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <1557075239-30667-8-git-send-email-jugurtha.belkalem@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 05 May 2019 20:00:23 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: fix build with libvpx 1.8.0
+In-Reply-To: <20190505104116.30311-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 5 May 2019 12:41:16 +0200")
+References: <20190505104116.30311-1-bernd.kuhls@t-online.de>
+Message-ID: <877eb4dbns.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Used to launch qemu tests for various qemu
-architectures.
-Neverthless to say that this file skips any other job
-different from qemu (only qemu configurations are
-runtime tested).
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
----
- .gitlab-ci.yml    | 3 +++
- .gitlab-ci.yml.in | 3 +++
- 2 files changed, 6 insertions(+)
+ > Fixes
+ > http://autobuild.buildroot.net/results/e44/e44d5ca85be9e0dafa4a3d8b0187c54cff6e2d55/
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 5586767..b7902c1 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -46,6 +46,8 @@ check-package:
- .defconfig_base:
-     script:
-         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
-+        - main_dir=$(pwd)
-+        - ./support/scripts/qemu-boot-chg-defconfig.sh "${DEFCONFIG_NAME}" "${main_dir}"
-         - make ${DEFCONFIG_NAME}
-         - echo 'Build buildroot'
-         - |
-@@ -54,6 +56,7 @@ check-package:
-                 tail -200 build.log
-                 exit 1
-             }
-+        - ./support/scripts/qemu-boot-checker.sh "${DEFCONFIG_NAME}" "${main_dir}"
-     artifacts:
-         when: always
-         expire_in: 2 weeks
-diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-index 33cb665..8bd43a4 100644
---- a/.gitlab-ci.yml.in
-+++ b/.gitlab-ci.yml.in
-@@ -46,6 +46,8 @@ check-package:
- .defconfig_base:
-     script:
-         - echo "Configure Buildroot for ${DEFCONFIG_NAME}"
-+        - main_dir=$(pwd)
-+        - ./support/scripts/qemu-boot-chg-defconfig.sh "${DEFCONFIG_NAME}" "${main_dir}"
-         - make ${DEFCONFIG_NAME}
-         - echo 'Build buildroot'
-         - |
-@@ -54,6 +56,7 @@ check-package:
-                 tail -200 build.log
-                 exit 1
-             }
-+        - ./support/scripts/qemu-boot-checker.sh "${DEFCONFIG_NAME}" "${main_dir}"
-     artifacts:
-         when: always
-         expire_in: 2 weeks
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
