@@ -1,104 +1,32 @@
-From: Grzegorz Blach <grzegorz@blach.pl>
-Date: Sat,  4 May 2019 19:44:13 +0000
-Subject: [Buildroot] [PATCH] package/libglib2: avoid printing null strings
-Message-ID: <20190504194415.1121-1-grzegorz@blach.pl>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 05 May 2019 00:15:20 +0000
+Subject: [Buildroot] [Bug 11811] lsblk (util-linux) should depend on libudev
+ if available
+In-Reply-To: <bug-11811-163@https.bugs.busybox.net/>
+References: <bug-11811-163@https.bugs.busybox.net/>
+Message-ID: <bug-11811-163-MIE0kGEWKV@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GCC 9 is being stricter about passing null string pointers
-to printf-like functions.
+https://bugs.busybox.net/show_bug.cgi?id=11811
 
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+--- Comment #6 from Carlos Santos <unixmania@gmail.com> ---
+I investigated the problem and was unable to reproduce the problem on my test
+hardware: 
 
----
-Changes v1 -> v2:
-  - Patch taken from glib repository has been signed off by me.
----
- ...03-gdbus-Avoid-printing-null-strings.patch | 73 +++++++++++++++++++
- 1 file changed, 73 insertions(+)
- create mode 100644 package/libglib2/0003-gdbus-Avoid-printing-null-strings.patch
+# lsblk -do NAME,SERIAL
+NAME         SERIAL
+sda          
+mmcblk0      0x439da3eb
+mmcblk0boot0 
+mmcblk0boot1 
 
-diff --git a/package/libglib2/0003-gdbus-Avoid-printing-null-strings.patch b/package/libglib2/0003-gdbus-Avoid-printing-null-strings.patch
-new file mode 100644
-index 0000000000..2fbd3e2368
---- /dev/null
-+++ b/package/libglib2/0003-gdbus-Avoid-printing-null-strings.patch
-@@ -0,0 +1,73 @@
-+From 79492bb914e419c54298ba6324e3d595e51c16c3 Mon Sep 17 00:00:00 2001
-+From: Ernestas Kulik <ekulik@redhat.com>
-+Date: Tue, 29 Jan 2019 09:50:46 +0100
-+Subject: [PATCH 1/1] gdbus: Avoid printing null strings
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+This mostly affects the 2.56 branch, but, given that GCC 9 is being
-+stricter about passing null string pointers to printf-like functions, it
-+might make sense to proactively fix such calls.
-+
-+gdbusauth.c: In function '_g_dbus_auth_run_server':
-+gdbusauth.c:1302:11: error: '%s' directive argument is null
-+[-Werror=format-overflow=]
-+ 1302 |           debug_print ("SERVER: WaitingForBegin, read '%s'",
-+ line);
-+       |
-+
-+gdbusmessage.c: In function ?g_dbus_message_to_blob?:
-+gdbusmessage.c:2730:30: error: ?%s? directive argument is null [-Werror=format-overflow=]
-+ 2730 |       tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-+      |
-+
-+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
-+---
-+ gio/gdbusauth.c    | 2 +-
-+ gio/gdbusmessage.c | 5 ++---
-+ 2 files changed, 3 insertions(+), 4 deletions(-)
-+
-+diff --git a/gio/gdbusauth.c b/gio/gdbusauth.c
-+index 1f8ea8057..752ec23fc 100644
-+--- a/gio/gdbusauth.c
-++++ b/gio/gdbusauth.c
-+@@ -1272,9 +1272,9 @@ _g_dbus_auth_run_server (GDBusAuth              *auth,
-+                                                     &line_length,
-+                                                     cancellable,
-+                                                     error);
-+-          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
-+           if (line == NULL)
-+             goto out;
-++          debug_print ("SERVER: WaitingForBegin, read '%s'", line);
-+           if (g_strcmp0 (line, "BEGIN") == 0)
-+             {
-+               /* YAY, done! */
-+diff --git a/gio/gdbusmessage.c b/gio/gdbusmessage.c
-+index 3221b925d..3a1a1f9e9 100644
-+--- a/gio/gdbusmessage.c
-++++ b/gio/gdbusmessage.c
-+@@ -2731,7 +2731,6 @@ g_dbus_message_to_blob (GDBusMessage          *message,
-+   if (message->body != NULL)
-+     {
-+       gchar *tupled_signature_str;
-+-      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-+       if (signature == NULL)
-+         {
-+           g_set_error (error,
-+@@ -2739,10 +2738,10 @@ g_dbus_message_to_blob (GDBusMessage          *message,
-+                        G_IO_ERROR_INVALID_ARGUMENT,
-+                        _("Message body has signature ?%s? but there is no signature header"),
-+                        signature_str);
-+-          g_free (tupled_signature_str);
-+           goto out;
-+         }
-+-      else if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
-++      tupled_signature_str = g_strdup_printf ("(%s)", signature_str);
-++      if (g_strcmp0 (tupled_signature_str, g_variant_get_type_string (message->body)) != 0)
-+         {
-+           g_set_error (error,
-+                        G_IO_ERROR,
-+--
-+2.21.0
-+
+Could you please post a defconfig, preferably based on one of the already
+existing qemu defconfig's, with which the problem happens?
+
 -- 
-2.21.0
+You are receiving this mail because:
+You are on the CC list for the bug.
