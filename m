@@ -1,70 +1,136 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun,  5 May 2019 20:42:12 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{9, 14,
- 19}.x / 5.0.x series
-Message-ID: <20190505184212.16042-1-peter@korsgaard.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sun, 5 May 2019 20:49:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/python-numpty: bump to version
+ 1.16.3
+In-Reply-To: <20190505181147.20345-1-fontaine.fabrice@gmail.com>
+References: <20190505181147.20345-1-fontaine.fabrice@gmail.com>
+Message-ID: <a133f4f0-7fcf-f3fa-3bc0-1d2513d01f9a@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+Hello Fabrice,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index debba03ec1..4875454195 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -121,7 +121,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.0.11" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.0.13" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index e5a88d9899..035c324447 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 18db623665cad3802e79eef22830fc2aac8a76c41cd3c3ae6cc4bbe245957fa0  linux-5.0.11.tar.xz
-+sha256 bcfd52bf1faa24f5f712146a873959461e001656ad67717e80b947aa6ad53479  linux-5.0.13.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
--sha256 6a3fdfa02dbc61ee8120ff0947a6eb0d6595b9bbe27e30a1b6f53b905f0bcd7f  linux-4.19.38.tar.xz
--sha256 b7ae61711a1323053d68fd47911b92977afd526d302755518e42744251516186  linux-4.14.115.tar.xz
--sha256 49428e30989cc0b069a6f4b7bc08988deb02d10f910ca0c4d1e44b22155eb40e  linux-4.9.172.tar.xz
-+sha256 6fd8cd4d8a15d7bfb4a7968fbe104f97f8c5ff557c752aae43fe13a6ca073fb0  linux-4.19.40.tar.xz
-+sha256 a05afa95163eab4ec76dabb51f54aea8c40ef63d5ea2d112ac04e6b79a8e8dbd  linux-4.14.116.tar.xz
-+sha256 bc579d904f7d7d04adf03ed66dc8ac0a29d6cc74d989d3aa5c6ae2dedaf51168  linux-4.9.173.tar.xz
- sha256 2c6a9d2765ef182f2470afed5af74de6c435ba9aaf422af54db8c5dc2b4f27d1  linux-4.4.179.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 61fcdc7a9f..6c848aa2e2 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -294,11 +294,11 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.179"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.172"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.115"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.38"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.9.173"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.116"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.40"	if BR2_KERNEL_HEADERS_4_19
- 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
--	default "5.0.11"	if BR2_KERNEL_HEADERS_5_0
-+	default "5.0.13"	if BR2_KERNEL_HEADERS_5_0
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+there's a typo in subject: "package/python-numpty" instead of "numpy"
+                                            ^^^^^^
+Best regards
+Giulio
+
+Il 05/05/2019 20:11, Fabrice Fontaine ha scritto:
+> Remove third patch (already in version)
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>   ...03-Add-sublibraries-missing-licenses.patch | 61 -------------------
+>   package/python-numpy/python-numpy.hash        |  4 +-
+>   package/python-numpy/python-numpy.mk          |  2 +-
+>   3 files changed, 3 insertions(+), 64 deletions(-)
+>   delete mode 100644 package/python-numpy/0003-Add-sublibraries-missing-licenses.patch
+> 
+> diff --git a/package/python-numpy/0003-Add-sublibraries-missing-licenses.patch b/package/python-numpy/0003-Add-sublibraries-missing-licenses.patch
+> deleted file mode 100644
+> index 5b0bafe5b5..0000000000
+> --- a/package/python-numpy/0003-Add-sublibraries-missing-licenses.patch
+> +++ /dev/null
+> @@ -1,61 +0,0 @@
+> -Add sublibraries license files
+> -
+> -On Release 1.16.2 tarball one license files is missing:
+> -- numpy/linalg/lapack_lite/LICENSE.txt
+> -
+> -Add it to sources to keep licensing information complete.
+> -
+> -Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> -
+> -diff -urpN numpy-1.15.2.orig/numpy/linalg/lapack_lite/LICENSE.txt numpy-1.16.2/numpy/linalg/lapack_lite/LICENSE.txt
+> ---- numpy-1.16.2.orig/numpy/linalg/lapack_lite/LICENSE.txt	1970-01-01 01:00:00.000000000 +0100
+> -+++ numpy-1.16.2/numpy/linalg/lapack_lite/LICENSE.txt	2018-09-11 00:00:41.239919567 +0200
+> -@@ -0,0 +1,48 @@
+> -+Copyright (c) 1992-2013 The University of Tennessee and The University
+> -+                        of Tennessee Research Foundation.  All rights
+> -+                        reserved.
+> -+Copyright (c) 2000-2013 The University of California Berkeley. All
+> -+                        rights reserved.
+> -+Copyright (c) 2006-2013 The University of Colorado Denver.  All rights
+> -+                        reserved.
+> -+
+> -+$COPYRIGHT$
+> -+
+> -+Additional copyrights may follow
+> -+
+> -+$HEADER$
+> -+
+> -+Redistribution and use in source and binary forms, with or without
+> -+modification, are permitted provided that the following conditions are
+> -+met:
+> -+
+> -+- Redistributions of source code must retain the above copyright
+> -+  notice, this list of conditions and the following disclaimer.
+> -+
+> -+- Redistributions in binary form must reproduce the above copyright
+> -+  notice, this list of conditions and the following disclaimer listed
+> -+  in this license in the documentation and/or other materials
+> -+  provided with the distribution.
+> -+
+> -+- Neither the name of the copyright holders nor the names of its
+> -+  contributors may be used to endorse or promote products derived from
+> -+  this software without specific prior written permission.
+> -+
+> -+The copyright holders provide no reassurances that the source code
+> -+provided does not infringe any patent, copyright, or any other
+> -+intellectual property rights of third parties.  The copyright holders
+> -+disclaim any liability to any recipient for claims brought against
+> -+recipient by any third party for infringement of that parties
+> -+intellectual property rights.
+> -+
+> -+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+> -+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+> -+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+> -+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+> -+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+> -+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+> -+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+> -+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+> -+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+> -+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+> -+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+> diff --git a/package/python-numpy/python-numpy.hash b/package/python-numpy/python-numpy.hash
+> index c2b0cd9c79..c1cfacf734 100644
+> --- a/package/python-numpy/python-numpy.hash
+> +++ b/package/python-numpy/python-numpy.hash
+> @@ -1,5 +1,5 @@
+> -# Copied from https://github.com/numpy/numpy/releases/tag/v1.16.2
+> -sha256	8088221e6e27da8d5907729f0bfe798f526836f22cc59ae83a0f867e67416a3e	numpy-1.16.2.tar.gz
+> +# Copied from https://github.com/numpy/numpy/releases/tag/v1.16.3
+> +sha256	adf063a3f87ab89393f5eea0eb903293b112fa0a308e8c594a75ffa585d81d4f	numpy-1.16.3.tar.gz
+>   # License files, locally calculated
+>   sha256	6b5086f61fe0c71564a79304ecbaa60f11fa3f3debf82f73d16a611cab102adc	LICENSE.txt
+>   sha256	426a5a484480f57a295db48c2c04f47bb3274752dd82a7fd6541dfa2cb90f641	doc/sphinxext/LICENSE.txt
+> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+> index 0da803b9f5..28dccf8be5 100644
+> --- a/package/python-numpy/python-numpy.mk
+> +++ b/package/python-numpy/python-numpy.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -PYTHON_NUMPY_VERSION = 1.16.2
+> +PYTHON_NUMPY_VERSION = 1.16.3
+>   PYTHON_NUMPY_SOURCE = numpy-$(PYTHON_NUMPY_VERSION).tar.gz
+>   PYTHON_NUMPY_SITE = https://github.com/numpy/numpy/releases/download/v$(PYTHON_NUMPY_VERSION)
+>   PYTHON_NUMPY_LICENSE = BSD-3-Clause, BSD-2-Clause, PSF, Apache-2.0, MIT, Zlib
+> 
+
 -- 
-2.11.0
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
