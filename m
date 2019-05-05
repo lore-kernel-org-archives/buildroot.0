@@ -1,49 +1,28 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 5 May 2019 22:47:40 +0200
-Subject: [Buildroot] [PATCH] package/minicom: bump to version
- 1e84585e8e7710677b6ff9a70dce5f3ad3e23540
-In-Reply-To: <20190428100931.115748-1-giulio.benetti@micronovasrl.com>
-References: <eb06aafc-01f9-5c1d-aebf-f8eccb2ee8ad@micronovasrl.com>
- <20190428100931.115748-1-giulio.benetti@micronovasrl.com>
-Message-ID: <7bbf1289-491d-6eb0-4efe-199ba1fb6528@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 05 May 2019 23:30:22 +0200
+Subject: [Buildroot] [PATCH v5 1/8] package/gstreamer1/gstreamer1: bump
+ to version 1.16.0
+In-Reply-To: <20190502151622.80865-1-aduskett@gmail.com> (aduskett@gmail.com's
+ message of "Thu, 2 May 2019 11:16:15 -0400")
+References: <20190502151622.80865-1-aduskett@gmail.com>
+Message-ID: <87sgtsa8sx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
 
+ > From: Adam Duskett <Aduskett@gmail.com>
+ > Also remove upstreamed patch 0001-gstconfig.h.in-initial-RISC-V-support.patch.
 
-On 28/04/2019 12:09, Giulio Benetti wrote:
-> Remove both patches since they've been upstreamed.
-> 
-> Add host-pkgconf to MINICOM_DEPENDENCIES and remove:
-> `MINICOM_CONF_ENV = PKG_CONFIG=/bin/false` since now pkg-config is
-> needed to build.
-> 
-> Shortlog follows:
-> git shortlog --no-merges  19ab49422f3431102c31fea01549121385113f80..
-> Adam Lackorzynski (9):
->       Update project URL
->       Updated translations
->       Updated translations: pl and sv
->       Translations: regen update
->       Update danish translation
->       Update of danish translation
->       Update README
->       Formatting fix
->       More friendly mbslength test
-> 
-> Fabrice Fontaine (1):
->       src/Makefile.am: fix ascii-xfr link with lintl
-> 
-> Giulio Benetti (2):
->       TODO: remove Utf8 bug.
->       sysdep1: check if RS485 is support before setting its parameters
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+ > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+ > ---
+ > Changes v1 -> v5:
+ >   - None
 
- Applied to master, thanks.
+Committed, thanks.
 
- Regards,
- Arnout
+-- 
+Bye, Peter Korsgaard
