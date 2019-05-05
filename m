@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 05 May 2019 23:30:36 +0200
-Subject: [Buildroot] [PATCH v5 2/8]
- package/gstreamer1/gst1-plugins-{base, good, bad, ugly}: bump to 1.16.0
-In-Reply-To: <20190502151622.80865-2-aduskett@gmail.com> (aduskett@gmail.com's
- message of "Thu, 2 May 2019 11:16:16 -0400")
+Date: Sun, 05 May 2019 23:31:06 +0200
+Subject: [Buildroot] [PATCH v5 3/8] package/gstreamer1/gst-omx: bump to
+ version 1.16.0
+In-Reply-To: <20190502151622.80865-3-aduskett@gmail.com> (aduskett@gmail.com's
+ message of "Thu, 2 May 2019 11:16:17 -0400")
 References: <20190502151622.80865-1-aduskett@gmail.com>
- <20190502151622.80865-2-aduskett@gmail.com>
-Message-ID: <87o94ga8sj.fsf@dell.be.48ers.dk>
+ <20190502151622.80865-3-aduskett@gmail.com>
+Message-ID: <87k1f4a8rp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,77 +16,26 @@ To: buildroot@busybox.net
 >>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
 
  > From: Adam Duskett <Aduskett@gmail.com>
- > Group these patches because of several changes to the plugin packages.
-
- > Changes:
- >   - Remove upstreamed patches:
- >       - 0001-fdkaacenc-Remove-MODE_2_1.patch
- >       - 0002-fdkaacdec-Use-WAV-channel-mapping-instead-of-interle.patch
-
- >   - Add BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_COMPOSITOR to Config.in.legacy as
- >     this plugin is moved to gst1-plugins-base.
-
- >   - Add BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IQA to Config.in.legacy as this the
- >     plugin is now removed.
-
- >   - Add BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV to Config.in.legacy as the
- >     plugin now requires opencv3 with the bgsegm opencv_contrib module, which is
- >     not in Buildroot.
-
- >   - Add BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_STEREO to Config.in.legacy as this
- >     plugin is merged with the audiofx plugin in gst1-plugins-good.
-
- >   - Add BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD to Config.in.legacy as this
- >     plugin is removed.
-
- >   - Remove COPYING.LIB from gst-plugins-base mk file and hash file as it no
- >     longer exists.
-
- >   - Add BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_COMPOSITOR to gst1-plugins-base.mk
-
- >   - Add BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OVERLAYCOMPOSITION to
- >     gst1-plugins-base.
-
- >   - Add mjpegtools to the dependencies of
- >     BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEG2ENC
-
- >   - Remove BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IQA because it now depends on
- >     the package dssim which isn't available in Buildroot.
-
- >   - Remove upstream patch
- >     0001-gstrtspconnection-Security-loophole-making-heap-over.patch
-
  > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
  > ---
- > Changes v1 -> v2:
- >   - removed IQA plugin because of the dependency on the package dssim which does
- >     not exist in Buildroot.
- >   - Added mjpegtools to the dependencies of the mpeg2enc plugin.
- >   - Moved BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_COMPOSITOR to the correct location
- >     in Config.in.legacy.
- >   - Added BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_IQA to Config.in.legacy
+ > Changes v1 -> v5:
+ >   - None
 
- > Changes v2 -> v3:
- >   - Clean up commit message.
- >   - Remove BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_STEREO (Peter)
- >   - Remove BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VCD (Peter)
- >   - Remove BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_OPENCV (Peter)
- >   - Add BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OVERLAYCOMPOSITION to
- >     gst1-plugins-base. (Peter)
+ >  package/gstreamer1/gst-omx/gst-omx.hash | 4 ++--
+ >  package/gstreamer1/gst-omx/gst-omx.mk   | 2 +-
+ >  2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Changes v3 -> v4:
- >   - Rebase because of commit 80a5217476c45e765db45acd8782f7f854783f93 (Bernd)
- >   - Remove newly commited patch 0001-gstrtspconnection-Security-loophole-making-heap-over.patch 
+ > diff --git a/package/gstreamer1/gst-omx/gst-omx.hash b/package/gstreamer1/gst-omx/gst-omx.hash
+ > index 3efd9f3226..fe3256bf73 100644
+ > --- a/package/gstreamer1/gst-omx/gst-omx.hash
+ > +++ b/package/gstreamer1/gst-omx/gst-omx.hash
+ > @@ -1,3 +1,3 @@
+ > -# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.14.4.tar.xz.sha256sum
+ > -sha256 969870e75c1f75c96f8783530e2c2932fc3afbfd976eb0c466f51dae268ea3d4 gst-omx-1.14.4.tar.xz
+ > +# From https://gstreamer.freedesktop.org/src/gst-omx/gst-omx-1.16.0.tar.xz.sha256sum
+ > +sha256 969870e75c1f75c96f8783530e2c2932fc3afbfd976eb0c466f51dae268ea3d4 gst-omx-1.16.0.tar.xz
 
- > Changes v4 -> v5:
- >   - Fix changes (Peter)
- >   - Add missing "select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_COMPOSITOR" in
- >     Config.in.legacy (Peter)
- >   - Add missing "select BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_AUDIOFX" in
- >     Config.in.legacy (Peter)
- >   - Add missing unconditional --disable-opencv in gst1-plugins-bad.mk (Peter)
-
-Committed, thanks.
+That doesn't look right. Committed after fixing that, thanks.
 
 -- 
 Bye, Peter Korsgaard
