@@ -1,41 +1,67 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 May 2019 20:30:04 +0200
-Subject: [Buildroot] [PATCH 08/15] package/gcc: switch to gcc 8.x as the
- default
+Date: Mon,  6 May 2019 20:30:08 +0200
+Subject: [Buildroot] [PATCH 12/15] arch/arm: add two new 64-bit-only armv8a
+ cores
 In-Reply-To: <20190506183011.4856-1-romain.naour@gmail.com>
 References: <20190506183011.4856-1-romain.naour@gmail.com>
-Message-ID: <20190506183011.4856-9-romain.naour@gmail.com>
+Message-ID: <20190506183011.4856-13-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Even if gcc 8 is still maintained for some time (gcc 7.5 is pending),
-switch to gcc 8.x since it has been released since 2018-05-02 and
-gcc 9.x is available since 2019-05-03.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-We have been having toolchains in the autobuilders with gcc
-8.x for a while, so the vast majority of the problems should have
-already been solved.
-
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- package/gcc/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/Config.in.arm | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index a9f8492399..1d3af73e69 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -4,7 +4,7 @@ choice
- 	prompt "GCC compiler Version"
- 	default BR2_GCC_VERSION_ARC if BR2_arc
- 	default BR2_GCC_VERSION_OR1K if BR2_or1k
--	default BR2_GCC_VERSION_7_X
-+	default BR2_GCC_VERSION_8_X
- 	help
- 	  Select the version of gcc you wish to use.
- 
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index b46c1c5cd1..d29b6edbc4 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -367,6 +367,13 @@ config BR2_cortex_a73_a53
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
++config BR2_emag
++	bool "emag"
++	depends on BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+ config BR2_exynos_m1
+ 	bool "exynos-m1"
+ 	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
+@@ -383,6 +390,13 @@ config BR2_falkor
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
++config BR2_phecda
++	bool "phecda"
++	depends on BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+ config BR2_qdf24xx
+ 	bool "qdf24xx"
+ 	depends on BR2_ARCH_IS_64
+@@ -821,8 +835,10 @@ config BR2_GCC_TARGET_CPU
+ 	default "cortex-a73"	if BR2_cortex_a73
+ 	default "cortex-a73.cortex-a35"	if BR2_cortex_a73_a35
+ 	default "cortex-a73.cortex-a53"	if BR2_cortex_a73_a53
++	default "emag"		if BR2_emag
+ 	default "exynos-m1"	if BR2_exynos_m1
+ 	default "falkor"	if BR2_falkor
++	default "phecda"	if BR2_phecda
+ 	default "qdf24xx"	if BR2_qdf24xx
+ 	default "thunderx"	if BR2_thunderx && !BR2_TOOLCHAIN_GCC_AT_LEAST_9
+ 	default "octeontx"	if BR2_thunderx
 -- 
 2.14.5
