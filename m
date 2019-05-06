@@ -1,43 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 May 2019 14:10:16 +0200
-Subject: [Buildroot] [git commit] package/nginx: bump to version 1.16.0
-Message-ID: <20190506120851.394BE80641@busybox.osuosl.org>
+Date: Mon, 6 May 2019 14:13:12 +0200
+Subject: [Buildroot] [git commit] package/nginx-naxsi: bump to version 0.56
+Message-ID: <20190506120851.4136A7FB5D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0574e8166e039332be8890957cb16249a7230bad
+commit: https://git.buildroot.net/buildroot/commit/?id=0aee6839207242259f74149bf5838ab80a1b2426
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also add a hash for the license file.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/nginx/nginx.hash | 2 +-
- package/nginx/nginx.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/nginx-naxsi/nginx-naxsi.hash | 3 ++-
+ package/nginx-naxsi/nginx-naxsi.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 114bf292ce..c322a64db2 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	3d5b90aa17de1700709ae4ec6c4d73d87c888b06c510391bf7104b006fdb2abe	nginx-1.15.12.tar.gz
-+sha256	4fd376bad78797e7f18094a00f0f1088259326436b537eb5af69b01be2ca1345	nginx-1.16.0.tar.gz
- # License files, locally calculated
- sha256	28ad30e2f64bd89ac1287b4606906bb99ed04d9f4e13fb6564a0be9c8a23f509	LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index b8e41b8089..eed7602570 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
+diff --git a/package/nginx-naxsi/nginx-naxsi.hash b/package/nginx-naxsi/nginx-naxsi.hash
+index 55fc4f1460..1f289c56cd 100644
+--- a/package/nginx-naxsi/nginx-naxsi.hash
++++ b/package/nginx-naxsi/nginx-naxsi.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256	0b3c95d250772dc89ad8b49e47c1e024c5ae2c76c0cffa445e9fe05c4dd13495	nginx-naxsi-0.55.3.tar.gz
++sha256	0a66dcadd32432460fab180be9f2efe24e911e3798917b2787ee710e02901eb4	nginx-naxsi-0.56.tar.gz
++sha256	046812ddc8f250f85b5d6e04218c185849c618b309271ef9d8b01e92c6f7a6ac	naxsi_src/naxsi_json.c
+diff --git a/package/nginx-naxsi/nginx-naxsi.mk b/package/nginx-naxsi/nginx-naxsi.mk
+index 491d518363..7cfa94a5d4 100644
+--- a/package/nginx-naxsi/nginx-naxsi.mk
++++ b/package/nginx-naxsi/nginx-naxsi.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NGINX_VERSION = 1.15.12
-+NGINX_VERSION = 1.16.0
- NGINX_SITE = http://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
+-NGINX_NAXSI_VERSION = 0.55.3
++NGINX_NAXSI_VERSION = 0.56
+ NGINX_NAXSI_SITE = $(call github,nbs-system,naxsi,$(NGINX_NAXSI_VERSION))
+ NGINX_NAXSI_LICENSE = GPL-2.0+ with OpenSSL exception
+ NGINX_NAXSI_LICENSE_FILES = naxsi_src/naxsi_json.c
