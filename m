@@ -1,93 +1,41 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 May 2019 20:29:59 +0200
-Subject: [Buildroot] [PATCH 03/15] [RFC] package/uclibc: remove asm
- constraint
+Date: Mon,  6 May 2019 20:30:04 +0200
+Subject: [Buildroot] [PATCH 08/15] package/gcc: switch to gcc 8.x as the
+ default
 In-Reply-To: <20190506183011.4856-1-romain.naour@gmail.com>
 References: <20190506183011.4856-1-romain.naour@gmail.com>
-Message-ID: <20190506183011.4856-4-romain.naour@gmail.com>
+Message-ID: <20190506183011.4856-9-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-uClibc-ng don't build with gcc 9.1 [1] due to a new check that
-"catch illegal asm constraint usage" [2].
+Even if gcc 8 is still maintained for some time (gcc 7.5 is pending),
+switch to gcc 8.x since it has been released since 2018-05-02 and
+gcc 9.x is available since 2019-05-03.
 
-gcc 9.1 print this error:
-"invalid hard register usage between earlyclobber operand and input operand"
-
-The asm constraint is present in uClibc since it support sparc (back in 2002)[3].
-
-Note: There is no such constraint is Glibc counterpart code [4].
-
-[1] https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435757
-[2] https://github.com/gcc-mirror/gcc/commit/b782636f28f5c378897c238081d28d7a4a6ca578
-[3] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=3b6d086531102b6d09ce852feb1e370d5dca3ce9
-[4] https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/sparc/sysdep.h;h=981b2a26b7a91093f821c97876e55bc4be2d9f8a;hb=HEAD
+We have been having toolchains in the autobuilders with gcc
+8.x for a while, so the vast majority of the problems should have
+already been solved.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
 ---
-I did not fully analyze the asm code to understand why the constraint is present.
-I lightly tested using qemu_sparc_ss10_defconfig.
-Any help is welcome :)
----
- ...FC-sparc-syscalls.h-remove-asm-constraint.patch | 46 ++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
- create mode 100644 package/uclibc/0003-RFC-sparc-syscalls.h-remove-asm-constraint.patch
+ package/gcc/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/uclibc/0003-RFC-sparc-syscalls.h-remove-asm-constraint.patch b/package/uclibc/0003-RFC-sparc-syscalls.h-remove-asm-constraint.patch
-new file mode 100644
-index 0000000000..050dc573b0
---- /dev/null
-+++ b/package/uclibc/0003-RFC-sparc-syscalls.h-remove-asm-constraint.patch
-@@ -0,0 +1,46 @@
-+From 1854c332efa0ed5b9140d8df2a983625a1e2d9ef Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Sun, 5 May 2019 10:56:30 +0200
-+Subject: [PATCH] [RFC] sparc: syscalls.h: remove asm constraint
-+
-+uClibc-ng don't build with gcc 9.1 [1] due to a new check that
-+"catch illegal asm constraint usage" [2].
-+
-+gcc 9.1 print this error:
-+"invalid hard register usage between earlyclobber operand and input operand"
-+
-+The asm constraint is present in uClibc since it support sparc (back in 2002)[3].
-+
-+Note: There is no such constraint is Glibc counterpart code [4].
-+
-+[1] https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435757
-+[2] https://github.com/gcc-mirror/gcc/commit/b782636f28f5c378897c238081d28d7a4a6ca578
-+[3] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=3b6d086531102b6d09ce852feb1e370d5dca3ce9
-+[4] https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/sparc/sysdep.h;h=981b2a26b7a91093f821c97876e55bc4be2d9f8a;hb=HEAD
-+
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+Cc: Waldemar Brodkorb <wbx@openadk.org>
-+---
-+I did not fully analyze the asm code to understand why the constraint is present.
-+I lightly tested using qemu_sparc_ss10_defconfig.
-+Any help is welcome :)
-+---
-+ libc/sysdeps/linux/sparc/bits/syscalls.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libc/sysdeps/linux/sparc/bits/syscalls.h b/libc/sysdeps/linux/sparc/bits/syscalls.h
-+index 75af7a1573..e52ab98466 100644
-+--- a/libc/sysdeps/linux/sparc/bits/syscalls.h
-++++ b/libc/sysdeps/linux/sparc/bits/syscalls.h
-+@@ -33,7 +33,7 @@
-+             register long __g1 __asm__("g1") = sys_num;     \
-+             LOAD_ARGS_##nr(args)                            \
-+             __asm__ __volatile__( __SYSCALL_STRING          \
-+-                : "=r" (__res), "=&r" (__o0)                \
-++                : "=r" (__res), "=r" (__o0)                 \
-+                 : "1" (__o0) ASM_ARGS_##nr, "r" (__g1)     \
-+                 : __SYSCALL_CLOBBERS );                                   \
-+         }                                                   \
-+-- 
-+2.14.5
-+
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index a9f8492399..1d3af73e69 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -4,7 +4,7 @@ choice
+ 	prompt "GCC compiler Version"
+ 	default BR2_GCC_VERSION_ARC if BR2_arc
+ 	default BR2_GCC_VERSION_OR1K if BR2_or1k
+-	default BR2_GCC_VERSION_7_X
++	default BR2_GCC_VERSION_8_X
+ 	help
+ 	  Select the version of gcc you wish to use.
+ 
 -- 
 2.14.5
