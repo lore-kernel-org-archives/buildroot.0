@@ -1,55 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  6 May 2019 21:19:02 +0200
-Subject: [Buildroot] [PATCH 2/2] package/docker-cli: bump version to 18.09.6
-In-Reply-To: <20190506191903.6703-1-peter@korsgaard.com>
-References: <20190506191903.6703-1-peter@korsgaard.com>
-Message-ID: <20190506191903.6703-2-peter@korsgaard.com>
+Date: Mon, 06 May 2019 21:29:22 +0200
+Subject: [Buildroot] [PATCH] package/owfs: delay sysvinit start until
+ after network and avahi
+In-Reply-To: <20190423113515.6482-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Tue, 23 Apr 2019 13:35:15 +0200")
+References: <20190423113515.6482-1-arnout@mind.be>
+Message-ID: <874l678jql.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Additional post-18.09.5 fixes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Builder:
-- Fixed COPY and ADD with multiple <src> to not invalidate cache if
-  DOCKER_BUILDKIT=1.moby/moby#38964
+ > In its default configuration, owserver opens a TCP socket on the 'lo'
+ > interface. However, in some situations, the 'lo' interface may not yet
+ > be up until S40network is started. This causes owserver not to start its
+ > TCP socket, which makes it impossible for the owfs client to connect to
+ > it.
 
-Networking:
-- Cleaned up the cluster provider when the agent is closed. docker/libnetwork#2354
-- Windows: Now selects a random host port if the user does not specify a
-  host port.  docker/libnetwork#2369
-- --service-cluster-ip-range is now configurable for UCP install.
-  docker/orca#10263
+ > In addition, owserver may have avahi integration.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Therefore, delay the start of owserver and owfs until after S40network
+ > and S50avahi-daemon.
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index 987fbba3e9..e8af45ccea 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	dfed7e3b14643101e6d3746e722cbe8294dcf078c5405f3fb78bc38c7c17f0b1  docker-cli-v18.09.5.tar.gz
-+sha256	02bcb73dde1c9542fa65c8b87078aaa1b01b0dbdd62346637bcf0999a2a0909f  docker-cli-v18.09.6.tar.gz
- sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index 3ee9f5ca72..b71bd7097d 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_CLI_VERSION = v18.09.5
-+DOCKER_CLI_VERSION = v18.09.6
- DOCKER_CLI_SITE = $(call github,docker,cli,$(DOCKER_CLI_VERSION))
- DOCKER_CLI_WORKSPACE = gopath
- 
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+Committed, thanks.
+
 -- 
-2.11.0
+Bye, Peter Korsgaard
