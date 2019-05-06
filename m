@@ -1,69 +1,441 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 May 2019 20:29:56 +0200
-Subject: [Buildroot] [PATCH 00/15] Add gcc 9.1
-Message-ID: <20190506183011.4856-1-romain.naour@gmail.com>
+Date: Mon,  6 May 2019 20:29:57 +0200
+Subject: [Buildroot] [PATCH 01/15] package/glibc/arc: fix build issue with
+ gcc-9.1
+In-Reply-To: <20190506183011.4856-1-romain.naour@gmail.com>
+References: <20190506183011.4856-1-romain.naour@gmail.com>
+Message-ID: <20190506183011.4856-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Before adding gcc 9.1 [1] to Buildroot, add some fixes for issues discovered
-by toolchain-builder [2] that are trigged by this new compiler version.
-(disable powerpc Werror, uClibc-ng asm sparc and ARC glibc).
+Backport from upstream [1] to fix build issue with glibc arc-2018.09-release
+(based on glibc 2.28) and gcc 9.1 [2]]
 
-Then add gcc 9.1 for internal and extenal toolchain backend and switch gcc 8.x
-as default compiler.
+Using glibc arc-2.29-2019.02.08 or the upcoming arc-2019.03 release include
+this patch.
 
-Thanks to Yann E. MORIN for providing a patch series that add new ARM cores
-added by gcc 9.1.
+[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=1626a1cfcd6ba1cc64721be1036c2873211d499b
+[2] https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435682
 
-Finally, enbable the new ork1 (openrisc) that will replace in the following
-series the old gcc fork (gcc 5.x).
-
-[1] https://gcc.gnu.org/gcc-9/changes.html
-[2] https://gitlab.com/kubu93/toolchains-builder/pipelines/59794237
-
-Romain Naour (9):
-  package/glibc/arc: fix build issue with gcc-9.1
-  board/qemu/ppc*: disable Werror while building ppc kernel with gcc >=
-    9.1
-  [RFC] package/uclibc: remove asm constraint
-  arch: add BR2_ARCH_NEEDS_GCC_AT_LEAST_9
-  toolchain: add gcc 9 entry
-  package/gcc: add support for gcc 9.1
-  toolchain-external: add gcc 9 entry
-  package/gcc: switch to gcc 8.x as the default
-  package/gcc: enable gcc 9.1 for ork1 (openrisc)
-
-Yann E. MORIN (6):
-  arch/arm: move dependency on 64-bit down to individual cores
-  arch/arm: some cores have a different name with gcc-9
-  arch/arm: saphira is in fact an armv8.4a
-  arch/arm: add two new 64-bit-only armv8a cores
-  arch/arm: add two new cortex-based armv8.2a cores
-  arch/arm: add two new non-cortex-based armv8.2a cores
-
- arch/Config.in                                     |   4 +
- arch/Config.in.arm                                 |  95 ++++-
- .../linux/linux-ppc-disable-werror.fragment        |   1 +
- configs/qemu_ppc64_e5500_defconfig                 |   2 +-
- configs/qemu_ppc64_pseries_defconfig               |   1 +
- configs/qemu_ppc64le_pseries_defconfig             |   1 +
- configs/qemu_ppc_g3beige_defconfig                 |   1 +
- configs/qemu_ppc_mpc8544ds_defconfig               |   1 +
- configs/qemu_ppc_virtex_ml507_defconfig            |   1 +
- package/gcc/Config.in.host                         |   8 +-
- package/gcc/gcc.hash                               |   2 +
- package/gcc/gcc.mk                                 |   4 +-
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Cc: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Cc: Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
+---
  ...0001-Add-support-for-GCC-9-attribute-copy.patch | 402 +++++++++++++++++++++
- ...FC-sparc-syscalls.h-remove-asm-constraint.patch |  46 +++
- toolchain/Config.in                                |   5 +
- .../toolchain-external-custom/Config.in.options    |   6 +
- 16 files changed, 560 insertions(+), 20 deletions(-)
- create mode 100644 board/fragments/linux/linux-ppc-disable-werror.fragment
+ 1 file changed, 402 insertions(+)
  create mode 100644 package/glibc/arc-2018.09-release/0001-Add-support-for-GCC-9-attribute-copy.patch
- create mode 100644 package/uclibc/0003-RFC-sparc-syscalls.h-remove-asm-constraint.patch
 
+diff --git a/package/glibc/arc-2018.09-release/0001-Add-support-for-GCC-9-attribute-copy.patch b/package/glibc/arc-2018.09-release/0001-Add-support-for-GCC-9-attribute-copy.patch
+new file mode 100644
+index 0000000000..635ba97ec3
+--- /dev/null
++++ b/package/glibc/arc-2018.09-release/0001-Add-support-for-GCC-9-attribute-copy.patch
+@@ -0,0 +1,402 @@
++From 79937801dfe4d86f0cc813ab41dd541ad729a267 Mon Sep 17 00:00:00 2001
++From: Martin Sebor <msebor@redhat.com>
++Date: Fri, 9 Nov 2018 17:24:12 -0700
++Subject: [PATCH] Add support for GCC 9 attribute copy.
++
++GCC 9 has gained an enhancement to help detect attribute mismatches
++between alias declarations and their targets.  It consists of a new
++warning, -Wattribute-alias, an enhancement to an existing warning,
++-Wmissing-attributes, and a new attribute called copy.
++
++The purpose of the warnings is to help identify either possible bugs
++(an alias declared with more restrictive attributes than its target
++promises) or optimization or diagnostic opportunities (an alias target
++missing some attributes that it could be declared with that might
++benefit analysis and code generation).  The purpose of the new
++attribute is to easily apply (almost) the same set of attributes
++to one declaration as those already present on another.
++
++As expected (and intended) the enhancement triggers warnings for
++many alias declarations in Glibc code.  This change, tested on
++x86_64-linux, avoids all instances of the new warnings by making
++use of the attribute where appropriate.  To fully benefit from
++the enhancement Glibc will need to be compiled with
++ -Wattribute-alias=2 and remaining warnings reviewed and dealt with
++(there are a couple of thousand but most should be straightforward
++to deal with).
++
++ChangeLog:
++
++	* include/libc-symbols.h (__attribute_copy__): Define macro unless
++	it's already defined.
++	(_strong_alias): Use __attribute_copy__.
++	(_weak_alias,  __hidden_ver1,  __hidden_nolink2): Same.
++	* misc/sys/cdefs.h (__attribute_copy__): New macro.
++	* sysdeps/x86_64/multiarch/memchr.c (memchr): Use __attribute_copy__.
++	* sysdeps/x86_64/multiarch/memcmp.c (memcmp): Same.
++	* sysdeps/x86_64/multiarch/mempcpy.c (mempcpy): Same.
++	* sysdeps/x86_64/multiarch/memset.c (memset): Same.
++	* sysdeps/x86_64/multiarch/stpcpy.c (stpcpy): Same.
++	* sysdeps/x86_64/multiarch/strcat.c (strcat): Same.
++	* sysdeps/x86_64/multiarch/strchr.c (strchr): Same.
++	* sysdeps/x86_64/multiarch/strcmp.c (strcmp): Same.
++	* sysdeps/x86_64/multiarch/strcpy.c (strcpy): Same.
++	* sysdeps/x86_64/multiarch/strcspn.c (strcspn): Same.
++	* sysdeps/x86_64/multiarch/strlen.c (strlen): Same.
++	* sysdeps/x86_64/multiarch/strncmp.c (strncmp): Same.
++	* sysdeps/x86_64/multiarch/strncpy.c (strncpy): Same.
++	* sysdeps/x86_64/multiarch/strnlen.c (strnlen): Same.
++	* sysdeps/x86_64/multiarch/strpbrk.c (strpbrk): Same.
++	* sysdeps/x86_64/multiarch/strrchr.c (strrchr): Same.
++	* sysdeps/x86_64/multiarch/strspn.c (strspn): Same.
++
++[Romain:
++    Backport from upstream [1] to fix build issue with glibc arc-2018.09-release
++    (based on glibc 2.28) and gcc 9.1 [2]]
++
++Using glibc arc-2.29-2019.02.08 or the upcoming arc-2019.03 release include this patch.
++
++[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=1626a1cfcd6ba1cc64721be1036c2873211d499b
++[2] https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435682
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Cc: Alexey Brodkin <alexey.brodkin@synopsys.com>
++Cc: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
++Cc: Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
++---
++ include/libc-symbols.h             | 20 +++++++++++++++-----
++ misc/sys/cdefs.h                   | 10 ++++++++++
++ sysdeps/x86_64/multiarch/memchr.c  |  2 +-
++ sysdeps/x86_64/multiarch/memcmp.c  |  2 +-
++ sysdeps/x86_64/multiarch/mempcpy.c |  4 ++--
++ sysdeps/x86_64/multiarch/memset.c  |  2 +-
++ sysdeps/x86_64/multiarch/stpcpy.c  |  4 ++--
++ sysdeps/x86_64/multiarch/strcat.c  |  2 +-
++ sysdeps/x86_64/multiarch/strchr.c  |  2 +-
++ sysdeps/x86_64/multiarch/strcmp.c  |  2 +-
++ sysdeps/x86_64/multiarch/strcpy.c  |  2 +-
++ sysdeps/x86_64/multiarch/strcspn.c |  2 +-
++ sysdeps/x86_64/multiarch/strlen.c  |  2 +-
++ sysdeps/x86_64/multiarch/strncat.c |  2 +-
++ sysdeps/x86_64/multiarch/strncmp.c |  2 +-
++ sysdeps/x86_64/multiarch/strncpy.c |  2 +-
++ sysdeps/x86_64/multiarch/strnlen.c |  4 ++--
++ sysdeps/x86_64/multiarch/strpbrk.c |  2 +-
++ sysdeps/x86_64/multiarch/strrchr.c |  2 +-
++ sysdeps/x86_64/multiarch/strspn.c  |  2 +-
++ 20 files changed, 46 insertions(+), 26 deletions(-)
++
++diff --git a/include/libc-symbols.h b/include/libc-symbols.h
++index 8b9273c13a..e71a479e84 100644
++--- a/include/libc-symbols.h
+++++ b/include/libc-symbols.h
++@@ -125,6 +125,11 @@
++ # define ASM_LINE_SEP ;
++ #endif
++ 
+++#ifndef __attribute_copy__
+++/* Provide an empty definition when cdefs.h is not included.  */
+++# define __attribute_copy__(arg)
+++#endif
+++
++ #ifndef __ASSEMBLER__
++ /* GCC understands weak symbols and aliases; use its interface where
++    possible, instead of embedded assembly language.  */
++@@ -132,7 +137,8 @@
++ /* Define ALIASNAME as a strong alias for NAME.  */
++ # define strong_alias(name, aliasname) _strong_alias(name, aliasname)
++ # define _strong_alias(name, aliasname) \
++-  extern __typeof (name) aliasname __attribute__ ((alias (#name)));
+++  extern __typeof (name) aliasname __attribute__ ((alias (#name))) \
+++    __attribute_copy__ (name);
++ 
++ /* This comes between the return type and function name in
++    a function definition to make that definition weak.  */
++@@ -143,14 +149,16 @@
++    If weak aliases are not available, this defines a strong alias.  */
++ # define weak_alias(name, aliasname) _weak_alias (name, aliasname)
++ # define _weak_alias(name, aliasname) \
++-  extern __typeof (name) aliasname __attribute__ ((weak, alias (#name)));
+++  extern __typeof (name) aliasname __attribute__ ((weak, alias (#name))) \
+++    __attribute_copy__ (name);
++ 
++ /* Same as WEAK_ALIAS, but mark symbol as hidden.  */
++ # define weak_hidden_alias(name, aliasname) \
++   _weak_hidden_alias (name, aliasname)
++ # define _weak_hidden_alias(name, aliasname) \
++   extern __typeof (name) aliasname \
++-    __attribute__ ((weak, alias (#name), __visibility__ ("hidden")));
+++    __attribute__ ((weak, alias (#name), __visibility__ ("hidden"))) \
+++    __attribute_copy__ (name);
++ 
++ /* Declare SYMBOL as weak undefined symbol (resolved to 0 if not defined).  */
++ # define weak_extern(symbol) _weak_extern (weak symbol)
++@@ -532,7 +540,8 @@ for linking")
++ #  define __hidden_ver1(local, internal, name) \
++   extern __typeof (name) __EI_##name __asm__(__hidden_asmname (#internal)); \
++   extern __typeof (name) __EI_##name \
++-	__attribute__((alias (__hidden_asmname (#local))))
+++    __attribute__((alias (__hidden_asmname (#local))))	\
+++    __attribute_copy__ (name)
++ #  define hidden_ver(local, name)	__hidden_ver1(local, __GI_##name, name);
++ #  define hidden_data_ver(local, name)	hidden_ver(local, name)
++ #  define hidden_def(name)		__hidden_ver1(__GI_##name, name, name);
++@@ -545,7 +554,8 @@ for linking")
++ #  define __hidden_nolink1(local, internal, name, version) \
++   __hidden_nolink2 (local, internal, name, version)
++ #  define __hidden_nolink2(local, internal, name, version) \
++-  extern __typeof (name) internal __attribute__ ((alias (#local))); \
+++  extern __typeof (name) internal __attribute__ ((alias (#local)))	\
+++    __attribute_copy__ (name);						\
++   __hidden_nolink3 (local, internal, #name "@" #version)
++ #  define __hidden_nolink3(local, internal, vername) \
++   __asm__ (".symver " #internal ", " vername);
++diff --git a/misc/sys/cdefs.h b/misc/sys/cdefs.h
++index 3f6fe3cc85..8d585680a6 100644
++--- a/misc/sys/cdefs.h
+++++ b/misc/sys/cdefs.h
++@@ -431,6 +431,16 @@
++ # define __attribute_nonstring__
++ #endif
++ 
+++/* Undefine (also defined in libc-symbols.h).  */
+++#undef __attribute_copy__
+++#if __GNUC_PREREQ (9, 0)
+++/* Copies attributes from the declaration or type referenced by
+++   the argument.  */
+++# define __attribute_copy__(arg) __attribute__ ((__copy__ (arg)))
+++#else
+++# define __attribute_copy__(arg)
+++#endif
+++
++ #if (!defined _Static_assert && !defined __cplusplus \
++      && (defined __STDC_VERSION__ ? __STDC_VERSION__ : 0) < 201112 \
++      && (!__GNUC_PREREQ (4, 6) || defined __STRICT_ANSI__))
++diff --git a/sysdeps/x86_64/multiarch/memchr.c b/sysdeps/x86_64/multiarch/memchr.c
++index 016f57846a..372dd7784a 100644
++--- a/sysdeps/x86_64/multiarch/memchr.c
+++++ b/sysdeps/x86_64/multiarch/memchr.c
++@@ -30,6 +30,6 @@ libc_ifunc_redirected (__redirect_memchr, memchr, IFUNC_SELECTOR ());
++ strong_alias (memchr, __memchr)
++ # ifdef SHARED
++ __hidden_ver1 (memchr, __GI_memchr, __redirect_memchr)
++-  __attribute__((visibility ("hidden")));
+++  __attribute__((visibility ("hidden"))) __attribute_copy__ (memchr);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/memcmp.c b/sysdeps/x86_64/multiarch/memcmp.c
++index 6f3ca43128..bbd3b01ed8 100644
++--- a/sysdeps/x86_64/multiarch/memcmp.c
+++++ b/sysdeps/x86_64/multiarch/memcmp.c
++@@ -32,6 +32,6 @@ weak_alias (memcmp, bcmp)
++ 
++ # ifdef SHARED
++ __hidden_ver1 (memcmp, __GI_memcmp, __redirect_memcmp)
++-  __attribute__ ((visibility ("hidden")));
+++  __attribute__ ((visibility ("hidden"))) __attribute_copy__ (memcmp);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/mempcpy.c b/sysdeps/x86_64/multiarch/mempcpy.c
++index 9fe41dda82..d2f7928ae4 100644
++--- a/sysdeps/x86_64/multiarch/mempcpy.c
+++++ b/sysdeps/x86_64/multiarch/mempcpy.c
++@@ -35,8 +35,8 @@ libc_ifunc_redirected (__redirect_mempcpy, __mempcpy, IFUNC_SELECTOR ());
++ weak_alias (__mempcpy, mempcpy)
++ # ifdef SHARED
++ __hidden_ver1 (__mempcpy, __GI___mempcpy, __redirect___mempcpy)
++-  __attribute__ ((visibility ("hidden")));
+++  __attribute__ ((visibility ("hidden"))) __attribute_copy__ (mempcpy);
++ __hidden_ver1 (mempcpy, __GI_mempcpy, __redirect_mempcpy)
++-  __attribute__ ((visibility ("hidden")));
+++  __attribute__ ((visibility ("hidden"))) __attribute_copy__ (mempcpy);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/memset.c b/sysdeps/x86_64/multiarch/memset.c
++index 064841d5fc..4b8f57ffaa 100644
++--- a/sysdeps/x86_64/multiarch/memset.c
+++++ b/sysdeps/x86_64/multiarch/memset.c
++@@ -30,6 +30,6 @@ libc_ifunc_redirected (__redirect_memset, memset, IFUNC_SELECTOR ());
++ 
++ # ifdef SHARED
++ __hidden_ver1 (memset, __GI_memset, __redirect_memset)
++-  __attribute__ ((visibility ("hidden")));
+++  __attribute__ ((visibility ("hidden"))) __attribute_copy__ (memset);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/stpcpy.c b/sysdeps/x86_64/multiarch/stpcpy.c
++index 1e340fca99..f74a54b153 100644
++--- a/sysdeps/x86_64/multiarch/stpcpy.c
+++++ b/sysdeps/x86_64/multiarch/stpcpy.c
++@@ -35,8 +35,8 @@ libc_ifunc_redirected (__redirect_stpcpy, __stpcpy, IFUNC_SELECTOR ());
++ weak_alias (__stpcpy, stpcpy)
++ # ifdef SHARED
++ __hidden_ver1 (__stpcpy, __GI___stpcpy, __redirect___stpcpy)
++-  __attribute__ ((visibility ("hidden")));
+++  __attribute__ ((visibility ("hidden"))) __attribute_copy__ (stpcpy);
++ __hidden_ver1 (stpcpy, __GI_stpcpy, __redirect_stpcpy)
++-  __attribute__ ((visibility ("hidden")));
+++  __attribute__ ((visibility ("hidden"))) __attribute_copy__ (stpcpy);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/strcat.c b/sysdeps/x86_64/multiarch/strcat.c
++index 1f7f6263f3..1922c0a0da 100644
++--- a/sysdeps/x86_64/multiarch/strcat.c
+++++ b/sysdeps/x86_64/multiarch/strcat.c
++@@ -30,6 +30,6 @@ libc_ifunc_redirected (__redirect_strcat, strcat, IFUNC_SELECTOR ());
++ 
++ # ifdef SHARED
++ __hidden_ver1 (strcat, __GI_strcat, __redirect_strcat)
++-  __attribute__ ((visibility ("hidden")));
+++  __attribute__ ((visibility ("hidden"))) __attribute_copy__ (strcat);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/strchr.c b/sysdeps/x86_64/multiarch/strchr.c
++index 76d64fb378..87e99ba82a 100644
++--- a/sysdeps/x86_64/multiarch/strchr.c
+++++ b/sysdeps/x86_64/multiarch/strchr.c
++@@ -50,6 +50,6 @@ libc_ifunc_redirected (__redirect_strchr, strchr, IFUNC_SELECTOR ());
++ weak_alias (strchr, index)
++ # ifdef SHARED
++ __hidden_ver1 (strchr, __GI_strchr, __redirect_strchr)
++-  __attribute__((visibility ("hidden")));
+++  __attribute__((visibility ("hidden"))) __attribute_copy__ (strchr);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/strcmp.c b/sysdeps/x86_64/multiarch/strcmp.c
++index b903e418df..e3cf39d2c5 100644
++--- a/sysdeps/x86_64/multiarch/strcmp.c
+++++ b/sysdeps/x86_64/multiarch/strcmp.c
++@@ -54,6 +54,6 @@ libc_ifunc_redirected (__redirect_strcmp, strcmp, IFUNC_SELECTOR ());
++ 
++ # ifdef SHARED
++ __hidden_ver1 (strcmp, __GI_strcmp, __redirect_strcmp)
++-  __attribute__ ((visibility ("hidden")));
+++  __attribute__ ((visibility ("hidden"))) __attribute_copy__ (strcmp);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/strcpy.c b/sysdeps/x86_64/multiarch/strcpy.c
++index 12e0e3ffe2..ce819dd232 100644
++--- a/sysdeps/x86_64/multiarch/strcpy.c
+++++ b/sysdeps/x86_64/multiarch/strcpy.c
++@@ -30,6 +30,6 @@ libc_ifunc_redirected (__redirect_strcpy, strcpy, IFUNC_SELECTOR ());
++ 
++ # ifdef SHARED
++ __hidden_ver1 (strcpy, __GI_strcpy, __redirect_strcpy)
++-  __attribute__ ((visibility ("hidden")));
+++  __attribute__ ((visibility ("hidden"))) __attribute_copy__ (strcpy);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/strcspn.c b/sysdeps/x86_64/multiarch/strcspn.c
++index 9712e8410c..9d9652627c 100644
++--- a/sysdeps/x86_64/multiarch/strcspn.c
+++++ b/sysdeps/x86_64/multiarch/strcspn.c
++@@ -30,6 +30,6 @@ libc_ifunc_redirected (__redirect_strcspn, strcspn, IFUNC_SELECTOR ());
++ 
++ # ifdef SHARED
++ __hidden_ver1 (strcspn, __GI_strcspn, __redirect_strcspn)
++-  __attribute__ ((visibility ("hidden")));
+++  __attribute__ ((visibility ("hidden"))) __attribute_copy__ (strcspn);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/strlen.c b/sysdeps/x86_64/multiarch/strlen.c
++index 1758d22b8f..a2307409d9 100644
++--- a/sysdeps/x86_64/multiarch/strlen.c
+++++ b/sysdeps/x86_64/multiarch/strlen.c
++@@ -29,6 +29,6 @@
++ libc_ifunc_redirected (__redirect_strlen, strlen, IFUNC_SELECTOR ());
++ # ifdef SHARED
++ __hidden_ver1 (strlen, __GI_strlen, __redirect_strlen)
++-  __attribute__((visibility ("hidden")));
+++  __attribute__((visibility ("hidden"))) __attribute_copy__ (strlen);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/strncat.c b/sysdeps/x86_64/multiarch/strncat.c
++index 841c165565..2546277450 100644
++--- a/sysdeps/x86_64/multiarch/strncat.c
+++++ b/sysdeps/x86_64/multiarch/strncat.c
++@@ -30,6 +30,6 @@ libc_ifunc_redirected (__redirect_strncat, strncat, IFUNC_SELECTOR ());
++ strong_alias (strncat, __strncat);
++ # ifdef SHARED
++ __hidden_ver1 (strncat, __GI___strncat, __redirect_strncat)
++-  __attribute__((visibility ("hidden")));
+++  __attribute__((visibility ("hidden"))) __attribute_copy__ (strncat);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/strncmp.c b/sysdeps/x86_64/multiarch/strncmp.c
++index 02b6d0b6f5..32f5c6c6c7 100644
++--- a/sysdeps/x86_64/multiarch/strncmp.c
+++++ b/sysdeps/x86_64/multiarch/strncmp.c
++@@ -55,6 +55,6 @@ libc_ifunc_redirected (__redirect_strncmp, strncmp, IFUNC_SELECTOR ());
++ 
++ # ifdef SHARED
++ __hidden_ver1 (strncmp, __GI_strncmp, __redirect_strncmp)
++-  __attribute__ ((visibility ("hidden")));
+++  __attribute__ ((visibility ("hidden"))) __attribute_copy__ (strncmp);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/strncpy.c b/sysdeps/x86_64/multiarch/strncpy.c
++index 3c3de8b18e..37aae2c3ba 100644
++--- a/sysdeps/x86_64/multiarch/strncpy.c
+++++ b/sysdeps/x86_64/multiarch/strncpy.c
++@@ -30,6 +30,6 @@ libc_ifunc_redirected (__redirect_strncpy, strncpy, IFUNC_SELECTOR ());
++ 
++ # ifdef SHARED
++ __hidden_ver1 (strncpy, __GI_strncpy, __redirect_strncpy)
++-  __attribute__ ((visibility ("hidden")));
+++  __attribute__ ((visibility ("hidden"))) __attribute_copy__ (strncpy);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/strnlen.c b/sysdeps/x86_64/multiarch/strnlen.c
++index 3ab94ce230..9d64335fc2 100644
++--- a/sysdeps/x86_64/multiarch/strnlen.c
+++++ b/sysdeps/x86_64/multiarch/strnlen.c
++@@ -32,8 +32,8 @@ libc_ifunc_redirected (__redirect_strnlen, __strnlen, IFUNC_SELECTOR ());
++ weak_alias (__strnlen, strnlen);
++ # ifdef SHARED
++ __hidden_ver1 (__strnlen, __GI___strnlen, __redirect___strnlen)
++-  __attribute__((visibility ("hidden")));
+++  __attribute__((visibility ("hidden"))) __attribute_copy__ (strnlen);
++ __hidden_ver1 (strnlen, __GI_strnlen, __redirect_strnlen)
++-  __attribute__((weak, visibility ("hidden")));
+++  __attribute__((weak, visibility ("hidden"))) __attribute_copy__ (strnlen);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/strpbrk.c b/sysdeps/x86_64/multiarch/strpbrk.c
++index a0d435a504..f1103678b6 100644
++--- a/sysdeps/x86_64/multiarch/strpbrk.c
+++++ b/sysdeps/x86_64/multiarch/strpbrk.c
++@@ -30,6 +30,6 @@ libc_ifunc_redirected (__redirect_strpbrk, strpbrk, IFUNC_SELECTOR ());
++ 
++ # ifdef SHARED
++ __hidden_ver1 (strpbrk, __GI_strpbrk, __redirect_strpbrk)
++-  __attribute__ ((visibility ("hidden")));
+++  __attribute__ ((visibility ("hidden"))) __attribute_copy__ (strpbrk);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/strrchr.c b/sysdeps/x86_64/multiarch/strrchr.c
++index a719edde10..ba7458a7d6 100644
++--- a/sysdeps/x86_64/multiarch/strrchr.c
+++++ b/sysdeps/x86_64/multiarch/strrchr.c
++@@ -29,6 +29,6 @@ libc_ifunc_redirected (__redirect_strrchr, strrchr, IFUNC_SELECTOR ());
++ weak_alias (strrchr, rindex);
++ # ifdef SHARED
++ __hidden_ver1 (strrchr, __GI_strrchr, __redirect_strrchr)
++-  __attribute__((visibility ("hidden")));
+++  __attribute__((visibility ("hidden"))) __attribute_copy__ (strrchr);
++ # endif
++ #endif
++diff --git a/sysdeps/x86_64/multiarch/strspn.c b/sysdeps/x86_64/multiarch/strspn.c
++index 56ab4d9558..5b9654e16c 100644
++--- a/sysdeps/x86_64/multiarch/strspn.c
+++++ b/sysdeps/x86_64/multiarch/strspn.c
++@@ -30,6 +30,6 @@ libc_ifunc_redirected (__redirect_strspn, strspn, IFUNC_SELECTOR ());
++ 
++ # ifdef SHARED
++ __hidden_ver1 (strspn, __GI_strspn, __redirect_strspn)
++-  __attribute__ ((visibility ("hidden")));
+++  __attribute__ ((visibility ("hidden"))) __attribute_copy__ (strspn);
++ # endif
++ #endif
++-- 
++2.14.5
++
 -- 
 2.14.5
