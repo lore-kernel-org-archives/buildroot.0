@@ -1,49 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon,  6 May 2019 10:02:13 +0200
-Subject: [Buildroot] [PATCH] package/orc: bump version to 0.4.29
-Message-ID: <20190506080214.15131-1-peter@korsgaard.com>
+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Date: Mon,  6 May 2019 10:15:41 +0200
+Subject: [Buildroot] [PATCH v3 0/7] bcc front end tool for eBPF
+Message-ID: <1557130548-6267-1-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Contains a number of fixes. Release notes:
+eBPF is the lastest Linux tracer and considered to
+be a modern systemTap. However, eBPF programs are
+written in a flavour of C language (which is tedious).
+BCC allows to write eBPF scripts in Python and C which
+makes troubleshooting a system and identifying
+bottelenecks easier.
+More information is available at :
+https://github.com/iovisor/bcc/blob/master/README.md.
 
-0.4.28: https://lists.freedesktop.org/archives/gstreamer-announce/2017-November/000449.html
-0.4.29: https://lists.freedesktop.org/archives/gstreamer-announce/2019-April/000483.html
+Jugurtha BELKALEM (5):
+  package/luajit: bump to version 2.1.x developpment version for aarch64
+  package/python-pytest: new package
+  package/python-pytest-runner: new package
+  package/python-traittypes: new package
+  package/python-bcc: new package
 
-Also add a hash for the license file.
+Romain Naour (2):
+  package/llvm: add BPF backend
+  package/bcc: new package
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/orc/orc.hash | 5 ++++-
- package/orc/orc.mk   | 2 +-
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ DEVELOPERS                                         |  6 +++
+ package/Config.in                                  |  5 +++
+ ...CMake-Allow-to-disable-building-man-pages.patch | 35 +++++++++++++++
+ package/bcc/0002-fix-aarch64-cross-compile.patch   | 38 ++++++++++++++++
+ package/bcc/Config.in                              | 51 ++++++++++++++++++++++
+ package/bcc/bcc.hash                               |  3 ++
+ package/bcc/bcc.mk                                 | 23 ++++++++++
+ package/llvm/Config.in                             |  6 +++
+ package/llvm/llvm.mk                               |  5 +++
+ package/luajit/Config.in                           |  2 +-
+ package/luajit/luajit.hash                         |  1 +
+ package/luajit/luajit.mk                           |  6 +++
+ ...e-pytest-runner-a-conditional-requirement.patch | 49 +++++++++++++++++++++
+ package/python-bcc/Config.in                       | 10 +++++
+ package/python-bcc/python-bcc.hash                 |  3 ++
+ package/python-bcc/python-bcc.mk                   | 14 ++++++
+ .../0001-Remove-setuptools_scm-dependency.patch    | 29 ++++++++++++
+ package/python-pytest-runner/Config.in             |  9 ++++
+ .../python-pytest-runner/python-pytest-runner.hash |  3 ++
+ .../python-pytest-runner/python-pytest-runner.mk   | 15 +++++++
+ package/python-pytest/Config.in                    |  8 ++++
+ package/python-pytest/python-pytest.hash           |  5 +++
+ package/python-pytest/python-pytest.mk             | 15 +++++++
+ package/python-traittypes/Config.in                |  7 +++
+ package/python-traittypes/python-traittypes.hash   |  5 +++
+ package/python-traittypes/python-traittypes.mk     | 14 ++++++
+ 26 files changed, 366 insertions(+), 1 deletion(-)
+ create mode 100644 package/bcc/0001-CMake-Allow-to-disable-building-man-pages.patch
+ create mode 100644 package/bcc/0002-fix-aarch64-cross-compile.patch
+ create mode 100644 package/bcc/Config.in
+ create mode 100644 package/bcc/bcc.hash
+ create mode 100644 package/bcc/bcc.mk
+ create mode 100644 package/python-bcc/0001-Make-pytest-runner-a-conditional-requirement.patch
+ create mode 100644 package/python-bcc/Config.in
+ create mode 100644 package/python-bcc/python-bcc.hash
+ create mode 100644 package/python-bcc/python-bcc.mk
+ create mode 100644 package/python-pytest-runner/0001-Remove-setuptools_scm-dependency.patch
+ create mode 100644 package/python-pytest-runner/Config.in
+ create mode 100644 package/python-pytest-runner/python-pytest-runner.hash
+ create mode 100644 package/python-pytest-runner/python-pytest-runner.mk
+ create mode 100644 package/python-pytest/Config.in
+ create mode 100644 package/python-pytest/python-pytest.hash
+ create mode 100644 package/python-pytest/python-pytest.mk
+ create mode 100644 package/python-traittypes/Config.in
+ create mode 100644 package/python-traittypes/python-traittypes.hash
+ create mode 100644 package/python-traittypes/python-traittypes.mk
 
-diff --git a/package/orc/orc.hash b/package/orc/orc.hash
-index f47a9cfe5f..71dd3007ca 100644
---- a/package/orc/orc.hash
-+++ b/package/orc/orc.hash
-@@ -1,2 +1,5 @@
- # From https://gstreamer.freedesktop.org/src/orc/orc-0.4.27.tar.xz.sha256sum
--sha256 51e53e58fc8158e5986a1f1a49a6d970c5b16493841cf7b9de2c2bde7ce36b93 orc-0.4.27.tar.xz
-+sha256 4f8901f9144b5ec17dffdb33548b5f4c7f8049b0d1023be3462cdd64ec5a3ab2  orc-0.4.29.tar.xz
-+
-+# Locally calculated
-+sha256 4f5dabb1b44bb6fc5cd53820b1f103147ad61b395a57903991325bd1b85d97bf  COPYING
-diff --git a/package/orc/orc.mk b/package/orc/orc.mk
-index ab718296ac..d121266bce 100644
---- a/package/orc/orc.mk
-+++ b/package/orc/orc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ORC_VERSION = 0.4.27
-+ORC_VERSION = 0.4.29
- ORC_SOURCE = orc-$(ORC_VERSION).tar.xz
- ORC_SITE = http://gstreamer.freedesktop.org/data/src/orc
- ORC_LICENSE = BSD-2-Clause, BSD-3-Clause
 -- 
-2.11.0
+2.7.4
