@@ -1,10 +1,10 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 May 2019 20:30:10 +0200
-Subject: [Buildroot] [PATCH 14/15] arch/arm: add two new non-cortex-based
- armv8.2a cores
+Date: Mon,  6 May 2019 20:30:06 +0200
+Subject: [Buildroot] [PATCH 10/15] arch/arm: some cores have a different
+ name with gcc-9
 In-Reply-To: <20190506183011.4856-1-romain.naour@gmail.com>
 References: <20190506183011.4856-1-romain.naour@gmail.com>
-Message-ID: <20190506183011.4856-15-romain.naour@gmail.com>
+Message-ID: <20190506183011.4856-11-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,65 +13,74 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-The Neoverse N1 CPU was supported in GCC earlier through the codename Ares [1].
+In gcc-9, some cores from the ThunderX familly have been renamed to
+their marketting names, i.e. OcteonTX. Subsequently, new core names
+have been added to gcc, with the old names still being around.
 
-[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=37cf0ddecfd1eb5c6852a44135af5a92e5103931
+Update the prompts with the new names as alternative to the existing
+names. We still keep the kconfig options as-is, so that we do not need
+to add legacy handling.
+
+However, since there is no guarantee for how long gcc will retain
+compatibility for the older names, we readily switch over to using the
+new names when using a gcc 9-or-later, but keep using the older names
+with gcc older than 9.
+
+The ordering of the 'default' clauses in kconfig is important, with the
+first default which conditions is satisfied, to be used, so we just add
+the new core names under a more liberal condition than the older names.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Romain: rename BR2_ares to BR2_neoverse_n1]
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- arch/Config.in.arm | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ arch/Config.in.arm | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 100a28e997..3cc9358ea2 100644
+index 71a148ad98..ee6ab875a3 100644
 --- a/arch/Config.in.arm
 +++ b/arch/Config.in.arm
-@@ -473,6 +473,15 @@ config BR2_vulcan
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- 
- comment "armv8.2a cores"
-+config BR2_neoverse_n1
-+	bool "neoverse-N1 (alias ares)"
-+	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- config BR2_cortex_a55
- 	bool "cortex-A55"
+@@ -391,21 +391,21 @@ config BR2_qdf24xx
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ config BR2_thunderx
+-	bool "thunderx"
++	bool "thunderx (aka octeontx)"
  	depends on BR2_ARCH_IS_64
-@@ -512,6 +521,13 @@ config BR2_cortex_a76_a55
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
  	select BR2_ARM_CPU_ARMV8A
  	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
-+config BR2_tsv110
-+	bool "tsv110"
-+	depends on BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- 
- comment "armv8.4a cores"
- config BR2_saphira
-@@ -872,11 +888,13 @@ config BR2_GCC_TARGET_CPU
- 	default "thunderx2t99p1"	if BR2_thunderx2t99p1
- 	default "vulcan"	if BR2_vulcan
- 	# armv8.2a
-+	default "neoverse-n1"	if BR2_neoverse_n1
- 	default "cortex-a55"	if BR2_cortex_a55
- 	default "cortex-a75"	if BR2_cortex_a75
- 	default "cortex-a75.cortex-a55"	if BR2_cortex_a75_a55
- 	default "cortex-a76"	if BR2_cortex_a76
- 	default "cortex-a76.cortex-a55"	if BR2_cortex_a76_a55
-+	default "tsv110"	if BR2_tsv110
- 	# armv8.4a
- 	default "saphira"	if BR2_saphira
- 
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ config BR2_thunderxt81
+-	bool "thunderxt81"
++	bool "thunderxt81 (aka octeontx81)"
+ 	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ config BR2_thunderxt83
+-	bool "thunderxt83"
++	bool "thunderxt83 (aka octeontx83)"
+ 	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+@@ -824,9 +824,12 @@ config BR2_GCC_TARGET_CPU
+ 	default "exynos-m1"	if BR2_exynos_m1
+ 	default "falkor"	if BR2_falkor
+ 	default "qdf24xx"	if BR2_qdf24xx
+-	default "thunderx"	if BR2_thunderx
+-	default "thunderxt81"	if BR2_thunderxt81
+-	default "thunderxt83"	if BR2_thunderxt83
++	default "thunderx"	if BR2_thunderx && !BR2_TOOLCHAIN_GCC_AT_LEAST_9
++	default "octeontx"	if BR2_thunderx
++	default "thunderxt81"	if BR2_thunderxt81 && !BR2_TOOLCHAIN_GCC_AT_LEAST_9
++	default "octeontx81"	if BR2_thunderxt81
++	default "thunderxt83"	if BR2_thunderxt83 && !BR2_TOOLCHAIN_GCC_AT_LEAST_9
++	default "octeontx83"	if BR2_thunderxt83
+ 	default "thunderxt88"	if BR2_thunderxt88
+ 	default "thunderxt88p1"	if BR2_thunderxt88p1
+ 	default "xgene1"	if BR2_xgene1
 -- 
 2.14.5
