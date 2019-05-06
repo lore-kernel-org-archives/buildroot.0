@@ -1,49 +1,63 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 May 2019 20:30:07 +0200
-Subject: [Buildroot] [PATCH 11/15] arch/arm: saphira is in fact an armv8.4a
+Date: Mon,  6 May 2019 20:30:11 +0200
+Subject: [Buildroot] [PATCH 15/15] package/gcc: enable gcc 9.1 for ork1
+ (openrisc)
 In-Reply-To: <20190506183011.4856-1-romain.naour@gmail.com>
 References: <20190506183011.4856-1-romain.naour@gmail.com>
-Message-ID: <20190506183011.4856-12-romain.naour@gmail.com>
+Message-ID: <20190506183011.4856-16-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+openrisc support has been added with gcc 9.1.
+Keep for now the old gcc 5 fork for ork1.
 
-... and not an armv8.3a like previously supposed:
-    https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=886d991373e4dc5a746d0a33de64f1b36e61eed9
+https://gcc.gnu.org/gcc-9/changes.html
 
-So, change the correspoding labels and comments.
+Tested using qemu_or1k_defconfig.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- arch/Config.in.arm | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gcc/Config.in.host | 2 --
+ package/gcc/gcc.mk         | 4 ++--
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index ee6ab875a3..b46c1c5cd1 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -481,7 +481,7 @@ config BR2_cortex_a75_a55
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 1d3af73e69..beea1f6cdb 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -71,8 +71,6 @@ config BR2_GCC_VERSION_8_X
  
--comment "armv8.3a cores"
-+comment "armv8.4a cores"
- config BR2_saphira
- 	bool "saphira"
- 	depends on BR2_ARCH_IS_64
-@@ -841,7 +841,7 @@ config BR2_GCC_TARGET_CPU
- 	default "cortex-a55"	if BR2_cortex_a55
- 	default "cortex-a75"	if BR2_cortex_a75
- 	default "cortex-a75.cortex-a55"	if BR2_cortex_a75_a55
--	# armv8.3a
-+	# armv8.4a
- 	default "saphira"	if BR2_saphira
+ config BR2_GCC_VERSION_9_X
+ 	bool "gcc 9.x"
+-	# Broken or unsupported architectures
+-	depends on !BR2_or1k
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
  
- config BR2_GCC_TARGET_ABI
+ endchoice
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 5901624ea5..e07a453ecc 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -13,7 +13,7 @@ GCC_VERSION = $(call qstrip,$(BR2_GCC_VERSION))
+ ifeq ($(BR2_GCC_VERSION_ARC),y)
+ GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
+ GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+-else ifeq ($(BR2_or1k),y)
++else ifeq ($(BR2_GCC_VERSION_OR1K),y)
+ GCC_SITE = $(call github,openrisc,or1k-gcc,$(GCC_VERSION))
+ GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+ else
+@@ -177,7 +177,7 @@ else
+ HOST_GCC_COMMON_CONF_OPTS += --without-isl --without-cloog
+ endif
+ 
+-ifeq ($(BR2_arc)$(BR2_or1k),y)
++ifeq ($(BR2_arc)$(BR2_GCC_VERSION_OR1K),y)
+ HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
+ endif
+ 
 -- 
 2.14.5
