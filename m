@@ -1,34 +1,32 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 May 2019 11:57:54 +0200
-Subject: [Buildroot] [git commit] package/coreutils: install base64 under
- /bin iso /usr/bin to match busybox
-Message-ID: <20190506100539.69ECC814AA@busybox.osuosl.org>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 06 May 2019 10:11:03 +0000
+Subject: [Buildroot] [Bug 11816] Only selected coreutils binaries are
+ installed
+In-Reply-To: <bug-11816-163@https.bugs.busybox.net/>
+References: <bug-11816-163@https.bugs.busybox.net/>
+Message-ID: <bug-11816-163-o5T4u4KnOk@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=873fa4f01fa7cdd61450f46c4f51ddcec258b230
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+https://bugs.busybox.net/show_bug.cgi?id=11816
 
-Fixes #11816
+Peter Korsgaard <jacmet@uclibc.org> changed:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/coreutils/coreutils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|ASSIGNED                    |RESOLVED
+         Resolution|---                         |FIXED
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 3e8efbf047..8e5518f638 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -55,7 +55,7 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 	MAKEINFO=true \
- 	INSTALL_PROGRAM=$(INSTALL)
- 
--COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false \
-+COREUTILS_BIN_PROGS = base64 cat chgrp chmod chown cp date dd df dir echo false \
- 	kill link ln ls mkdir mknod mktemp mv nice printenv pwd rm rmdir \
- 	vdir sleep stty sync touch true uname join
- 
+--- Comment #3 from Peter Korsgaard <jacmet@uclibc.org> ---
+Ahh yes. In general, your best bet is to enable BR2_ROOTFS_MERGED_USR to get
+rid of this class of issues.
+
+With that said, I have pushed a commit adding base64 to _BIN_PROGS. I will also
+cherry pick it for the next 2019.02.x update.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
