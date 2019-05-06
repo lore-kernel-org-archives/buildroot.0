@@ -1,10 +1,10 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 May 2019 20:30:08 +0200
-Subject: [Buildroot] [PATCH 12/15] arch/arm: add two new 64-bit-only armv8a
- cores
+Date: Mon,  6 May 2019 20:30:09 +0200
+Subject: [Buildroot] [PATCH 13/15] arch/arm: add two new cortex-based
+ armv8.2a cores
 In-Reply-To: <20190506183011.4856-1-romain.naour@gmail.com>
 References: <20190506183011.4856-1-romain.naour@gmail.com>
-Message-ID: <20190506183011.4856-13-romain.naour@gmail.com>
+Message-ID: <20190506183011.4856-14-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,55 +13,61 @@ To: buildroot@busybox.net
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+The cortex-a76 implements the full amrv8.2a extensions, and some
+optional extensions from the armv8.3a, armv8.4a, and armv8.5a sets,
+but none of their mandatory extensions, which means that it does not
+qualify for better than an armv8.2a:
+    https://developer.arm.com/products/processors/cortex-a/cortex-a76
+    http://infocenter.arm.com/help/topic/com.arm.doc.100798_0301_00_en/giq1479805174793.html
+    http://infocenter.arm.com/help/topic/com.arm.doc.100798_0301_00_en/fjv1477559794375.html
+
+Also, gcc fits it in the armv8.2a category, too:
+    https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/aarch64/aarch64-cores.def;h=67ce42fb8aacd4c246295f32151a03b1f318ae44;hb=HEAD#l97
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- arch/Config.in.arm | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ arch/Config.in.arm | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
 diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index b46c1c5cd1..d29b6edbc4 100644
+index d29b6edbc4..100a28e997 100644
 --- a/arch/Config.in.arm
 +++ b/arch/Config.in.arm
-@@ -367,6 +367,13 @@ config BR2_cortex_a73_a53
+@@ -494,6 +494,24 @@ config BR2_cortex_a75_a55
  	select BR2_ARM_CPU_ARMV8A
  	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-+config BR2_emag
-+	bool "emag"
-+	depends on BR2_ARCH_IS_64
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
++config BR2_cortex_a76
++	bool "cortex-A76"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
 +	select BR2_ARM_CPU_HAS_FP_ARMV8
 +	select BR2_ARM_CPU_ARMV8A
 +	select BR2_ARCH_HAS_MMU_OPTIONAL
 +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- config BR2_exynos_m1
- 	bool "exynos-m1"
- 	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
-@@ -383,6 +390,13 @@ config BR2_falkor
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-+config BR2_phecda
-+	bool "phecda"
-+	depends on BR2_ARCH_IS_64
++config BR2_cortex_a76_a55
++	bool "cortex-A76/A55 big.LITTLE"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
 +	select BR2_ARM_CPU_HAS_FP_ARMV8
 +	select BR2_ARM_CPU_ARMV8A
 +	select BR2_ARCH_HAS_MMU_OPTIONAL
 +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- config BR2_qdf24xx
- 	bool "qdf24xx"
- 	depends on BR2_ARCH_IS_64
-@@ -821,8 +835,10 @@ config BR2_GCC_TARGET_CPU
- 	default "cortex-a73"	if BR2_cortex_a73
- 	default "cortex-a73.cortex-a35"	if BR2_cortex_a73_a35
- 	default "cortex-a73.cortex-a53"	if BR2_cortex_a73_a53
-+	default "emag"		if BR2_emag
- 	default "exynos-m1"	if BR2_exynos_m1
- 	default "falkor"	if BR2_falkor
-+	default "phecda"	if BR2_phecda
- 	default "qdf24xx"	if BR2_qdf24xx
- 	default "thunderx"	if BR2_thunderx && !BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 	default "octeontx"	if BR2_thunderx
+ 
+ comment "armv8.4a cores"
+ config BR2_saphira
+@@ -857,6 +875,8 @@ config BR2_GCC_TARGET_CPU
+ 	default "cortex-a55"	if BR2_cortex_a55
+ 	default "cortex-a75"	if BR2_cortex_a75
+ 	default "cortex-a75.cortex-a55"	if BR2_cortex_a75_a55
++	default "cortex-a76"	if BR2_cortex_a76
++	default "cortex-a76.cortex-a55"	if BR2_cortex_a76_a55
+ 	# armv8.4a
+ 	default "saphira"	if BR2_saphira
+ 
 -- 
 2.14.5
