@@ -1,36 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 May 2019 21:40:40 +0200
-Subject: [Buildroot] [git commit] package/libbsd: disable for nds32
-Message-ID: <20190506193621.578D783D90@busybox.osuosl.org>
+Date: Mon, 6 May 2019 21:39:52 +0200
+Subject: [Buildroot] [git commit] postgresql: disable spinlock support for
+ nds32
+Message-ID: <20190506193621.5153081368@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92afce5951921451ab03aa88f36eeeab739ded67
+commit: https://git.buildroot.net/buildroot/commit/?id=db64e5ecc3df5f4b464a8e1653382976b5006173
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There is no support for nds32 in libbsd.
-
 Fixes:
-  http://autobuild.buildroot.net/results/eb79fbd8283f62ca08b85d851e3c817e0354f85c/
-
+  - http://autobuild.buildroot.net/results/881318dad8217be0cd0eb18ce3c5ab3aff216272
 Signed-off-by: Nylon Chen <nylon7@andestech.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libbsd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/postgresql/postgresql.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
-index 0f320302b9..1a107d41f0 100644
---- a/package/libbsd/Config.in
-+++ b/package/libbsd/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
- 	depends on !BR2_microblaze
- 	depends on !BR2_arc
- 	depends on !BR2_xtensa
-+	depends on !BR2_nds32
- 	# uClibc on noMMU doesn't provide __register_atfork()
- 	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 8f01460109..2f2b49ca24 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -36,7 +36,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ POSTGRESQL_CONF_OPTS += --disable-thread-safety
+ endif
+ 
+-ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_or1k)$(BR2_nios2)$(BR2_riscv)$(BR2_xtensa),y)
++ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_or1k)$(BR2_nios2)$(BR2_riscv)$(BR2_xtensa)$(BR2_nds32),y)
+ POSTGRESQL_CONF_OPTS += --disable-spinlocks
+ endif
  
