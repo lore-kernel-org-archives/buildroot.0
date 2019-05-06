@@ -1,81 +1,104 @@
 From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Mon,  6 May 2019 10:15:42 +0200
-Subject: [Buildroot] [PATCH v3 1/7] package/luajit: bump to version 2.1.x
- developpment version for aarch64
+Date: Mon,  6 May 2019 10:15:43 +0200
+Subject: [Buildroot] [PATCH v3 2/7] package/python-pytest: new package
 In-Reply-To: <1557130548-6267-1-git-send-email-jugurtha.belkalem@smile.fr>
 References: <1557130548-6267-1-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <1557130548-6267-2-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <1557130548-6267-3-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-luajit 2.0.5 has not been updated since 2017, it
-lacks aarch64 support.
-An upgrade to version 2.1.0-beta3 is required to
-get aarch64 which allows to execute bcc (ebpf's front
-end tool) on arm64 architectures.
-
-Luajit 2.0.1-beta3 is not a release version:
-https://github.com/LuaJIT/LuaJIT which why we
-kept luajit 2.0.5 version and the upgrade is
-only made when aarch64 is encountered.
+bcc requires python-bcc which itself
+requires python-pytest.
+The pytest framework makes it easy to write
+small tests, yet scales to support complex
+functional testing for applications and libraries.
 
 Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-
 ---
-Changes V1 => V2 :
-Removing luajit patch for aarch64
-as this patch should be in
-bcc package.
----
- package/luajit/Config.in   | 2 +-
- package/luajit/luajit.hash | 1 +
- package/luajit/luajit.mk   | 6 ++++++
- 3 files changed, 8 insertions(+), 1 deletion(-)
+ DEVELOPERS                               |  3 +++
+ package/Config.in                        |  1 +
+ package/python-pytest/Config.in          |  8 ++++++++
+ package/python-pytest/python-pytest.hash |  5 +++++
+ package/python-pytest/python-pytest.mk   | 15 +++++++++++++++
+ 5 files changed, 32 insertions(+)
+ create mode 100644 package/python-pytest/Config.in
+ create mode 100644 package/python-pytest/python-pytest.hash
+ create mode 100644 package/python-pytest/python-pytest.mk
 
-diff --git a/package/luajit/Config.in b/package/luajit/Config.in
-index 88c5bcb..9ecf6b4 100644
---- a/package/luajit/Config.in
-+++ b/package/luajit/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
- 	bool
--	default y if BR2_i386 || \
-+	default y if BR2_i386 || BR2_aarch64 || \
- 		(BR2_x86_64 && BR2_HOSTARCH='x86_64') || \
- 		BR2_powerpc || BR2_arm || BR2_armeb || \
- 		((BR2_mips || BR2_mipsel) && !BR2_MIPS_SOFT_FLOAT && \
-diff --git a/package/luajit/luajit.hash b/package/luajit/luajit.hash
-index 7e2d87e..1737cca 100644
---- a/package/luajit/luajit.hash
-+++ b/package/luajit/luajit.hash
-@@ -2,4 +2,5 @@
- md5 48353202cbcacab84ee41a5a70ea0a2c    LuaJIT-2.0.5.tar.gz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 95ebfcb..abb6b4e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1224,6 +1224,9 @@ F:	package/python-sentry-sdk/
+ F:	package/python-websockets/
+ F:	package/python-xlib/
  
- # Locally calculated
-+sha256 ad5077bd861241bf5e50ae4bf543d291c5fcffab95ccc3218401131f503e45bd luajit-f0e865dd4861520258299d0f2a56491bd9d602e1.tar.gz
- sha256 accb335aa3102f80d31caa2c2508fbcb795314106493519a367f13a87d0e87de  COPYRIGHT
-diff --git a/package/luajit/luajit.mk b/package/luajit/luajit.mk
-index 5b08a42..181cf1c 100644
---- a/package/luajit/luajit.mk
-+++ b/package/luajit/luajit.mk
-@@ -4,9 +4,15 @@
- #
- ################################################################################
- 
-+ifeq ($(BR2_aarch64),y)
-+LUAJIT_VERSION = f0e865dd4861520258299d0f2a56491bd9d602e1
-+LUAJIT_SITE = $(call github,luajit,luajit,$(LUAJIT_VERSION))
-+else
- LUAJIT_VERSION = 2.0.5
- LUAJIT_SOURCE = LuaJIT-$(LUAJIT_VERSION).tar.gz
- LUAJIT_SITE = http://luajit.org/download
-+endif
++N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
++F:	package/python-pytest
 +
- LUAJIT_LICENSE = MIT
- LUAJIT_LICENSE_FILES = COPYRIGHT
+ N:	Joshua Henderson <joshua.henderson@microchip.com>
+ F:	package/qt5/qt5wayland/
  
+diff --git a/package/Config.in b/package/Config.in
+index f592e74..2a0aca9 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1015,6 +1015,7 @@ menu "External python modules"
+ 	source "package/python-pysocks/Config.in"
+ 	source "package/python-pytablereader/Config.in"
+ 	source "package/python-pytablewriter/Config.in"
++	source "package/python-pytest/Config.in"
+ 	source "package/python-pytrie/Config.in"
+ 	source "package/python-pytz/Config.in"
+ 	source "package/python-pyudev/Config.in"
+diff --git a/package/python-pytest/Config.in b/package/python-pytest/Config.in
+new file mode 100644
+index 0000000..7db5493
+--- /dev/null
++++ b/package/python-pytest/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_PYTEST
++	bool "python-pytest"
++	help
++	  The pytest framework makes it easy to write small tests,
++	  yet scales to support complex functional testing for
++	  applications and libraries.
++
++	  https://pypi.org/project/pytest/
+diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
+new file mode 100644
+index 0000000..43f9f98
+--- /dev/null
++++ b/package/python-pytest/python-pytest.hash
+@@ -0,0 +1,5 @@
++# sha256 from https://pypi.org/project/pytest/#files
++sha256 b7802283b70ca24d7119b32915efa7c409982f59913c1a6c0640aacf118b95f5 pytest-4.4.1.tar.gz
++
++# Locally calculated
++sha256	4be38574daf05665b6194e4fd84c5ef6ce7c3a2810308a5222d5cdffc2d04d18 LICENSE
+diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
+new file mode 100644
+index 0000000..665951f
+--- /dev/null
++++ b/package/python-pytest/python-pytest.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-pytest
++#
++################################################################################
++
++PYTHON_PYTEST_VERSION = 4.4.1
++PYTHON_PYTEST_SOURCE = pytest-$(PYTHON3_PYTEST_VERSION).tar.gz
++PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/2b/b1/c9a84f79fc3bad226a9085289da11ecdd9bd2779a2c654195962b37d4110/
++PYTHON_PYTEST_LICENSE = MIT
++PYTHON_PYTEST_LICENSE_FILES = LICENSE
++PYTHON_PYTEST_SETUP_TYPE = setuptools
++PYTHON_PYTEST_DEPENDENCIES = python-setuptools-scm
++
++$(eval $(python-package))
 -- 
 2.7.4
