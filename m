@@ -1,75 +1,70 @@
 From: Romain Naour <romain.naour@smile.fr>
-Date: Mon,  6 May 2019 11:54:48 +0200
-Subject: [Buildroot] [PATCH v3 6/9] package/mesa3d: Gallium xa state tracker
- is only available for nouveau and svga Gallium drivers
+Date: Mon,  6 May 2019 11:54:49 +0200
+Subject: [Buildroot] [PATCH v3 7/9] package/mesa3d: add a new option to
+ enable GLX support
 In-Reply-To: <20190506095451.26522-1-romain.naour@smile.fr>
 References: <20190506095451.26522-1-romain.naour@smile.fr>
-Message-ID: <20190506095451.26522-6-romain.naour@smile.fr>
+Message-ID: <20190506095451.26522-7-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-i915 and freedreno Gallium drivers are not currently supported by mesa3d package.
+When switching to meson build system, enabling GLX support
+require at least one DRI or Gallium dirver.
 
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=0ba909f0f111824223bc38563d1a6bc73e69c2cc
+So add a dependency on BR2_PACKAGE_MESA3D_DRIVER for
+BR2_PACKAGE_MESA3D_OPENGL_GLX option.
+
+quoting the meson build system:
+"dri based GLX requires at least one DRI driver." [1]
+"Even when building just gallium drivers the user probably wants dri." [2]
+
+[1] https://cgit.freedesktop.org/mesa/mesa/tree/meson.build?h=19.0#n340
+[2] https://cgit.freedesktop.org/mesa/mesa/tree/meson.build?h=19.0#n266
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
- package/mesa3d/Config.in | 6 +++---
- package/mesa3d/mesa3d.mk | 1 -
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ package/mesa3d/Config.in | 12 ++++++++++++
+ package/mesa3d/mesa3d.mk |  2 +-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index 72548adf57..eba218efb2 100644
+index eba218efb2..ceed097d71 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -80,6 +80,9 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- config BR2_PACKAGE_MESA3D_DRIVER
- 	bool
+@@ -281,6 +281,18 @@ comment "OSMesa classic requires dri (classic) swrast"
  
-+# Gallium xa state tracker.
-+# Quote from mesa3d meson.build: "XA state tracker requires at least
-+# one of the following gallium drivers: nouveau, freedreno, i915, svga.
- config BR2_PACKAGE_MESA3D_NEEDS_XA
- 	bool
+ if BR2_PACKAGE_MESA3D_DRIVER
  
-@@ -129,7 +132,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600
- 	select BR2_PACKAGE_LLVM_AMDGPU if BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS if BR2_PACKAGE_MESA3D_LLVM
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	help
- 	  Driver for ATI/AMD Radeon R600/R700/HD5000/HD6000 GPUs.
++comment "OpenGL API Support"
++
++config BR2_PACKAGE_MESA3D_OPENGL_GLX
++	bool "OpenGL GLX"
++	depends on BR2_PACKAGE_XORG7
++	help
++	  Enable GLX graphic acceleration (OpenGL + X11).
++	  GLX support needs X11 and at least one DRI or Gallium driver.
++
++comment "OpenGL GLX support needs X11"
++	depends on !BR2_PACKAGE_XORG7
++
+ comment "Additional API Support"
  
-@@ -151,7 +153,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
- 	select BR2_PACKAGE_LLVM_AMDGPU
- 	select BR2_PACKAGE_ELFUTILS
- 	select BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	help
- 	  Driver for ATI/AMD Radeon HD7000/HD8000/Rx200 GPUs.
- 
-@@ -188,7 +189,6 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VC4
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
- 	select BR2_PACKAGE_LIBDRM_VC4
--	select BR2_PACKAGE_MESA3D_NEEDS_XA
- 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
- 	help
- 	  Driver for Broadcom VC4 (rpi2/3) GPUs.
+ config BR2_PACKAGE_MESA3D_OPENGL_EGL
 diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 70aa2e4866..271353b72e 100644
+index 271353b72e..426676a520 100644
 --- a/package/mesa3d/mesa3d.mk
 +++ b/package/mesa3d/mesa3d.mk
-@@ -83,7 +83,6 @@ MESA3D_DEPENDENCIES += \
- 	xorgproto \
- 	libxcb
- MESA3D_CONF_OPTS += --enable-glx --disable-mangling
--# quote from mesa3d configure "Building xa requires at least one non swrast gallium driver."
- ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_XA),y)
- MESA3D_CONF_OPTS += --enable-xa
- else
+@@ -72,7 +72,7 @@ MESA3D_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -mno-compact-eh"
+ MESA3D_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -mno-compact-eh"
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_XORG7),y)
++ifeq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX),y)
+ MESA3D_DEPENDENCIES += \
+ 	xlib_libX11 \
+ 	xlib_libXext \
 -- 
 2.20.1
