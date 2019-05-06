@@ -1,156 +1,93 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 May 2019 20:30:05 +0200
-Subject: [Buildroot] [PATCH 09/15] arch/arm: move dependency on 64-bit down
- to individual cores
+Date: Mon,  6 May 2019 20:29:59 +0200
+Subject: [Buildroot] [PATCH 03/15] [RFC] package/uclibc: remove asm
+ constraint
 In-Reply-To: <20190506183011.4856-1-romain.naour@gmail.com>
 References: <20190506183011.4856-1-romain.naour@gmail.com>
-Message-ID: <20190506183011.4856-10-romain.naour@gmail.com>
+Message-ID: <20190506183011.4856-4-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+uClibc-ng don't build with gcc 9.1 [1] due to a new check that
+"catch illegal asm constraint usage" [2].
 
-It will make it easier to introduce new variants anywhere in the
-list, when those variants have different bitness requirements.
+gcc 9.1 print this error:
+"invalid hard register usage between earlyclobber operand and input operand"
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The asm constraint is present in uClibc since it support sparc (back in 2002)[3].
+
+Note: There is no such constraint is Glibc counterpart code [4].
+
+[1] https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435757
+[2] https://github.com/gcc-mirror/gcc/commit/b782636f28f5c378897c238081d28d7a4a6ca578
+[3] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=3b6d086531102b6d09ce852feb1e370d5dca3ce9
+[4] https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/sparc/sysdep.h;h=981b2a26b7a91093f821c97876e55bc4be2d9f8a;hb=HEAD
+
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
 ---
- arch/Config.in.arm | 22 ++++++++++++++--------
- 1 file changed, 14 insertions(+), 8 deletions(-)
+I did not fully analyze the asm code to understand why the constraint is present.
+I lightly tested using qemu_sparc_ss10_defconfig.
+Any help is welcome :)
+---
+ ...FC-sparc-syscalls.h-remove-asm-constraint.patch | 46 ++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/uclibc/0003-RFC-sparc-syscalls.h-remove-asm-constraint.patch
 
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index a9972978d4..71a148ad98 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -376,50 +376,55 @@ config BR2_exynos_m1
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
--if BR2_ARCH_IS_64
- config BR2_falkor
- 	bool "falkor"
-+	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_qdf24xx
- 	bool "qdf24xx"
-+	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- config BR2_thunderx
- 	bool "thunderx"
-+	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- config BR2_thunderxt81
- 	bool "thunderxt81"
-+	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_thunderxt83
- 	bool "thunderxt83"
-+	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_thunderxt88
- 	bool "thunderxt88"
-+	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_thunderxt88p1
- 	bool "thunderxt88p1"
-+	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
--endif # BR2_ARCH_IS_64
- config BR2_xgene1
- 	bool "xgene1"
- 	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
-@@ -430,59 +435,60 @@ config BR2_xgene1
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- 
--if BR2_ARCH_IS_64
- comment "armv8.1a cores"
- config BR2_thunderx2t99
- 	bool "thunderx2t99"
-+	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_thunderx2t99p1
- 	bool "thunderx2t99p1"
-+	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_vulcan
- 	bool "vulcan"
-+	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
--endif # BR2_ARCH_IS_64
- 
--if BR2_ARCH_IS_64
- comment "armv8.2a cores"
- config BR2_cortex_a55
- 	bool "cortex-A55"
-+	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- config BR2_cortex_a75
- 	bool "cortex-A75"
-+	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- config BR2_cortex_a75_a55
- 	bool "cortex-A75/A55 big.LITTLE"
-+	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
--endif # BR2_ARCH_IS_64
- 
--if BR2_ARCH_IS_64
- comment "armv8.3a cores"
- config BR2_saphira
- 	bool "saphira"
-+	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
--endif # BR2_ARCH_IS_64
- endchoice
- 
- config BR2_ARM_ENABLE_NEON
+diff --git a/package/uclibc/0003-RFC-sparc-syscalls.h-remove-asm-constraint.patch b/package/uclibc/0003-RFC-sparc-syscalls.h-remove-asm-constraint.patch
+new file mode 100644
+index 0000000000..050dc573b0
+--- /dev/null
++++ b/package/uclibc/0003-RFC-sparc-syscalls.h-remove-asm-constraint.patch
+@@ -0,0 +1,46 @@
++From 1854c332efa0ed5b9140d8df2a983625a1e2d9ef Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Sun, 5 May 2019 10:56:30 +0200
++Subject: [PATCH] [RFC] sparc: syscalls.h: remove asm constraint
++
++uClibc-ng don't build with gcc 9.1 [1] due to a new check that
++"catch illegal asm constraint usage" [2].
++
++gcc 9.1 print this error:
++"invalid hard register usage between earlyclobber operand and input operand"
++
++The asm constraint is present in uClibc since it support sparc (back in 2002)[3].
++
++Note: There is no such constraint is Glibc counterpart code [4].
++
++[1] https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435757
++[2] https://github.com/gcc-mirror/gcc/commit/b782636f28f5c378897c238081d28d7a4a6ca578
++[3] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=3b6d086531102b6d09ce852feb1e370d5dca3ce9
++[4] https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/sparc/sysdep.h;h=981b2a26b7a91093f821c97876e55bc4be2d9f8a;hb=HEAD
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++Cc: Waldemar Brodkorb <wbx@openadk.org>
++---
++I did not fully analyze the asm code to understand why the constraint is present.
++I lightly tested using qemu_sparc_ss10_defconfig.
++Any help is welcome :)
++---
++ libc/sysdeps/linux/sparc/bits/syscalls.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libc/sysdeps/linux/sparc/bits/syscalls.h b/libc/sysdeps/linux/sparc/bits/syscalls.h
++index 75af7a1573..e52ab98466 100644
++--- a/libc/sysdeps/linux/sparc/bits/syscalls.h
+++++ b/libc/sysdeps/linux/sparc/bits/syscalls.h
++@@ -33,7 +33,7 @@
++             register long __g1 __asm__("g1") = sys_num;     \
++             LOAD_ARGS_##nr(args)                            \
++             __asm__ __volatile__( __SYSCALL_STRING          \
++-                : "=r" (__res), "=&r" (__o0)                \
+++                : "=r" (__res), "=r" (__o0)                 \
++                 : "1" (__o0) ASM_ARGS_##nr, "r" (__g1)     \
++                 : __SYSCALL_CLOBBERS );                                   \
++         }                                                   \
++-- 
++2.14.5
++
 -- 
 2.14.5
