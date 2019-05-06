@@ -1,25 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 06 May 2019 21:41:21 +0200
-Subject: [Buildroot] [PATCH 2/3] package/libbsd: disable for nds32
-In-Reply-To: <20190506090411.9453-2-nylon7@andestech.com> (Nylon Chen's
- message of "Mon, 6 May 2019 17:04:10 +0800")
-References: <20190506090411.9453-1-nylon7@andestech.com>
- <20190506090411.9453-2-nylon7@andestech.com>
-Message-ID: <87mujz74m6.fsf@dell.be.48ers.dk>
+Date: Mon, 6 May 2019 21:40:40 +0200
+Subject: [Buildroot] [git commit] package/libbsd: disable for nds32
+Message-ID: <20190506193621.578D783D90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Nylon" == Nylon Chen <nylon7@andestech.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=92afce5951921451ab03aa88f36eeeab739ded67
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > nds32 no porting libbsd library
- > Fixes:
- >   http://autobuild.buildroot.net/results/eb79fbd8283f62ca08b85d851e3c817e0354f85c/
- > Signed-off-by: Nylon Chen <nylon7@andestech.com>
+There is no support for nds32 in libbsd.
 
-Committed after slightly rewording commit text, thanks.
+Fixes:
+  http://autobuild.buildroot.net/results/eb79fbd8283f62ca08b85d851e3c817e0354f85c/
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Nylon Chen <nylon7@andestech.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libbsd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/libbsd/Config.in b/package/libbsd/Config.in
+index 0f320302b9..1a107d41f0 100644
+--- a/package/libbsd/Config.in
++++ b/package/libbsd/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_LIBBSD_ARCH_SUPPORTS
+ 	depends on !BR2_microblaze
+ 	depends on !BR2_arc
+ 	depends on !BR2_xtensa
++	depends on !BR2_nds32
+ 	# uClibc on noMMU doesn't provide __register_atfork()
+ 	depends on !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)
+ 
