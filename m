@@ -1,63 +1,54 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 May 2019 20:30:11 +0200
-Subject: [Buildroot] [PATCH 15/15] package/gcc: enable gcc 9.1 for ork1
- (openrisc)
-In-Reply-To: <20190506183011.4856-1-romain.naour@gmail.com>
-References: <20190506183011.4856-1-romain.naour@gmail.com>
-Message-ID: <20190506183011.4856-16-romain.naour@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon,  6 May 2019 21:19:01 +0200
+Subject: [Buildroot] [PATCH 1/2] package/docker-engine: bump version to
+ 18.09.6
+Message-ID: <20190506191903.6703-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-openrisc support has been added with gcc 9.1.
-Keep for now the old gcc 5 fork for ork1.
+Additional post-18.09.5 fixes:
 
-https://gcc.gnu.org/gcc-9/changes.html
+Builder:
+- Fixed COPY and ADD with multiple <src> to not invalidate cache if
+  DOCKER_BUILDKIT=1.moby/moby#38964
 
-Tested using qemu_or1k_defconfig.
+Networking:
+- Cleaned up the cluster provider when the agent is closed. docker/libnetwork#2354
+- Windows: Now selects a random host port if the user does not specify a
+  host port.  docker/libnetwork#2369
+- --service-cluster-ip-range is now configurable for UCP install.
+  docker/orca#10263
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gcc/Config.in.host | 2 --
- package/gcc/gcc.mk         | 4 ++--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 1d3af73e69..beea1f6cdb 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -71,8 +71,6 @@ config BR2_GCC_VERSION_8_X
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 28f1d72136..4e673f2856 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	f6c1f2cff88c1f143fe9c16ea6555eace68ef17a5b7803dc5d5fa0a1f45a3a97  docker-engine-v18.09.5.tar.gz
++sha256	7cb45266fff79245c81ec86c455d4b0513ca5d4ec1b9be8c8330df30a9467481  docker-engine-v18.09.6.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 7b0f451ee9..50d4129256 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_GCC_VERSION_9_X
- 	bool "gcc 9.x"
--	# Broken or unsupported architectures
--	depends on !BR2_or1k
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
+-DOCKER_ENGINE_VERSION = v18.09.5
++DOCKER_ENGINE_VERSION = v18.09.6
+ DOCKER_ENGINE_SITE = $(call github,docker,engine,$(DOCKER_ENGINE_VERSION))
  
- endchoice
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 5901624ea5..e07a453ecc 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -13,7 +13,7 @@ GCC_VERSION = $(call qstrip,$(BR2_GCC_VERSION))
- ifeq ($(BR2_GCC_VERSION_ARC),y)
- GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
- GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
--else ifeq ($(BR2_or1k),y)
-+else ifeq ($(BR2_GCC_VERSION_OR1K),y)
- GCC_SITE = $(call github,openrisc,or1k-gcc,$(GCC_VERSION))
- GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
- else
-@@ -177,7 +177,7 @@ else
- HOST_GCC_COMMON_CONF_OPTS += --without-isl --without-cloog
- endif
- 
--ifeq ($(BR2_arc)$(BR2_or1k),y)
-+ifeq ($(BR2_arc)$(BR2_GCC_VERSION_OR1K),y)
- HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
- endif
- 
+ DOCKER_ENGINE_LICENSE = Apache-2.0
 -- 
-2.14.5
+2.11.0
