@@ -1,42 +1,156 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Mon,  6 May 2019 20:30:01 +0200
-Subject: [Buildroot] [PATCH 05/15] toolchain: add gcc 9 entry
+Date: Mon,  6 May 2019 20:30:05 +0200
+Subject: [Buildroot] [PATCH 09/15] arch/arm: move dependency on 64-bit down
+ to individual cores
 In-Reply-To: <20190506183011.4856-1-romain.naour@gmail.com>
 References: <20190506183011.4856-1-romain.naour@gmail.com>
-Message-ID: <20190506183011.4856-6-romain.naour@gmail.com>
+Message-ID: <20190506183011.4856-10-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to add gcc 9 support for internal and external toolchain in
-follow-up commits, introduce BR2_TOOLCHAIN_GCC_AT_LEAST_9 symbol.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
+It will make it easier to introduce new variants anywhere in the
+list, when those variants have different bitness requirements.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 ---
- toolchain/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/Config.in.arm | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 8c5a4fb88e..467d6bd84f 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -500,10 +500,15 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	bool
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index a9972978d4..71a148ad98 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -376,50 +376,55 @@ config BR2_exynos_m1
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+-if BR2_ARCH_IS_64
+ config BR2_falkor
+ 	bool "falkor"
++	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ config BR2_qdf24xx
+ 	bool "qdf24xx"
++	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ config BR2_thunderx
+ 	bool "thunderx"
++	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ config BR2_thunderxt81
+ 	bool "thunderxt81"
++	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ config BR2_thunderxt83
+ 	bool "thunderxt83"
++	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ config BR2_thunderxt88
+ 	bool "thunderxt88"
++	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ config BR2_thunderxt88p1
+ 	bool "thunderxt88p1"
++	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+-endif # BR2_ARCH_IS_64
+ config BR2_xgene1
+ 	bool "xgene1"
+ 	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
+@@ -430,59 +435,60 @@ config BR2_xgene1
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
  
-+config BR2_TOOLCHAIN_GCC_AT_LEAST_9
-+	bool
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_GCC_AT_LEAST
- 	string
-+	default "9"	if BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 	default "8"	if BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	default "7"	if BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	default "6"	if BR2_TOOLCHAIN_GCC_AT_LEAST_6
+-if BR2_ARCH_IS_64
+ comment "armv8.1a cores"
+ config BR2_thunderx2t99
+ 	bool "thunderx2t99"
++	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ config BR2_thunderx2t99p1
+ 	bool "thunderx2t99p1"
++	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ config BR2_vulcan
+ 	bool "vulcan"
++	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+-endif # BR2_ARCH_IS_64
+ 
+-if BR2_ARCH_IS_64
+ comment "armv8.2a cores"
+ config BR2_cortex_a55
+ 	bool "cortex-A55"
++	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ config BR2_cortex_a75
+ 	bool "cortex-A75"
++	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ config BR2_cortex_a75_a55
+ 	bool "cortex-A75/A55 big.LITTLE"
++	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+-endif # BR2_ARCH_IS_64
+ 
+-if BR2_ARCH_IS_64
+ comment "armv8.3a cores"
+ config BR2_saphira
+ 	bool "saphira"
++	depends on BR2_ARCH_IS_64
+ 	select BR2_ARM_CPU_HAS_FP_ARMV8
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+-endif # BR2_ARCH_IS_64
+ endchoice
+ 
+ config BR2_ARM_ENABLE_NEON
 -- 
 2.14.5
