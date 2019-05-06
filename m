@@ -1,59 +1,102 @@
 From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Mon,  6 May 2019 10:15:46 +0200
-Subject: [Buildroot] [PATCH v3 5/7] package/llvm: add BPF backend
+Date: Mon,  6 May 2019 10:15:45 +0200
+Subject: [Buildroot] [PATCH v3 4/7] package/python-traittypes: new package
 In-Reply-To: <1557130548-6267-1-git-send-email-jugurtha.belkalem@smile.fr>
 References: <1557130548-6267-1-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <1557130548-6267-6-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <1557130548-6267-5-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Romain Naour <romain.naour@smile.fr>
+bcc requires this package which is used to add
+custom trait types for scientific computing.
 
-The BPF backend is needed for bcc tool.
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
----
- package/llvm/Config.in | 6 ++++++
- package/llvm/llvm.mk   | 5 +++++
- 2 files changed, 11 insertions(+)
 
-diff --git a/package/llvm/Config.in b/package/llvm/Config.in
-index 83e9466..72d920e 100644
---- a/package/llvm/Config.in
-+++ b/package/llvm/Config.in
-@@ -35,6 +35,12 @@ config BR2_PACKAGE_LLVM_AMDGPU
- 	  Build AMDGPU target. Select this option if you are going
- 	  to install mesa3d with llvm and use Gallium Radeon driver.
+---
+Changes v1 => v2:
+Correcting typos, adding #runtime
+comment and fixing License name.
+---
+ DEVELOPERS                                       |  1 +
+ package/Config.in                                |  1 +
+ package/python-traittypes/Config.in              |  7 +++++++
+ package/python-traittypes/python-traittypes.hash |  5 +++++
+ package/python-traittypes/python-traittypes.mk   | 14 ++++++++++++++
+ 5 files changed, 28 insertions(+)
+ create mode 100644 package/python-traittypes/Config.in
+ create mode 100644 package/python-traittypes/python-traittypes.hash
+ create mode 100644 package/python-traittypes/python-traittypes.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b7480c0..c64589e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1227,6 +1227,7 @@ F:	package/python-xlib/
+ N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+ F:	package/python-pytest
+ F:	package/python-pytest-runner
++F:	package/python-traittypes
  
-+config BR2_PACKAGE_LLVM_BPF
-+	bool "BPF backend"
+ N:	Joshua Henderson <joshua.henderson@microchip.com>
+ F:	package/qt5/qt5wayland/
+diff --git a/package/Config.in b/package/Config.in
+index 4fcf4f7..4918ec5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1073,6 +1073,7 @@ menu "External python modules"
+ 	source "package/python-toml/Config.in"
+ 	source "package/python-tornado/Config.in"
+ 	source "package/python-traitlets/Config.in"
++	source "package/python-traittypes/Config.in"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
+diff --git a/package/python-traittypes/Config.in b/package/python-traittypes/Config.in
+new file mode 100644
+index 0000000..0688f80
+--- /dev/null
++++ b/package/python-traittypes/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_TRAITTYPES
++	bool "python-traittypes"
++	select BR2_PACKAGE_PYTHON_TRAITLETS # runtime
 +	help
-+	  Build BPF target. Select this option if you are going
-+	  to install bcc on the target.
++	  Custom trait types for scientific computing.
 +
- endif
- 
- comment "llvm needs a toolchain w/ wchar, threads, C++, gcc >= 4.8, host gcc >= 4.8, dynamic library"
-diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-index 3c62285..ad4f3c4 100644
---- a/package/llvm/llvm.mk
-+++ b/package/llvm/llvm.mk
-@@ -61,6 +61,11 @@ ifeq ($(BR2_PACKAGE_LLVM_AMDGPU),y)
- LLVM_TARGETS_TO_BUILD += AMDGPU
- endif
- 
-+# Build BPF backend
-+ifeq ($(BR2_PACKAGE_LLVM_BPF),y)
-+LLVM_TARGETS_TO_BUILD += BPF
-+endif
++	  https://pypi.org/project/traittypes/
+diff --git a/package/python-traittypes/python-traittypes.hash b/package/python-traittypes/python-traittypes.hash
+new file mode 100644
+index 0000000..a94b256
+--- /dev/null
++++ b/package/python-traittypes/python-traittypes.hash
+@@ -0,0 +1,5 @@
++# sha256 from https://pypi.org/project/traittypes/#files
++sha256	be6fa26294733e7489822ded4ae25da5b4824a8a7a0e0c2dccfde596e3489bd6 traittypes-0.2.1.tar.gz
 +
- # Use native llvm-tblgen from host-llvm (needed for cross-compilation)
- LLVM_CONF_OPTS += -DLLVM_TABLEGEN=$(HOST_DIR)/bin/llvm-tblgen
- 
++# Locally calculated
++sha256	221976dfad5db283a2669efe8607e24c9c9aecca8453d6beba045e665c2f88a1 LICENSE
+diff --git a/package/python-traittypes/python-traittypes.mk b/package/python-traittypes/python-traittypes.mk
+new file mode 100644
+index 0000000..d360e2d
+--- /dev/null
++++ b/package/python-traittypes/python-traittypes.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-traittypes
++#
++################################################################################
++
++PYTHON_TRAITTYPES_VERSION = 0.2.1
++PYTHON_TRAITTYPES_SOURCE = traittypes-$(PYTHON_TRAITTYPES_VERSION).tar.gz
++PYTHON_TRAITTYPES_SITE = https://files.pythonhosted.org/packages/8a/71/0578e44d2110f93c2136eb705f5b11e706e1e8ea3acaaaeac043bd40d8fd
++PYTHON_TRAITTYPES_LICENSE = BSD-3-Clause
++PYTHON_TRAITTYPES_LICENSE_FILES = LICENSE
++PYTHON_TRAITTYPES_SETUP_TYPE = distutils
++
++$(eval $(python-package))
 -- 
 2.7.4
