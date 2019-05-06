@@ -1,35 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 6 May 2019 21:39:52 +0200
-Subject: [Buildroot] [git commit] postgresql: disable spinlock support for
- nds32
-Message-ID: <20190506193621.5153081368@busybox.osuosl.org>
+Date: Mon, 6 May 2019 21:38:26 +0200
+Subject: [Buildroot] [git commit] package/orc: bump version to 0.4.29
+Message-ID: <20190506193621.49AF483D90@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db64e5ecc3df5f4b464a8e1653382976b5006173
+commit: https://git.buildroot.net/buildroot/commit/?id=116811c26458aea2041b60831ccc55ac3a1d1ac1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-  - http://autobuild.buildroot.net/results/881318dad8217be0cd0eb18ce3c5ab3aff216272
-Signed-off-by: Nylon Chen <nylon7@andestech.com>
+Contains a number of fixes. Release notes:
+
+0.4.28: https://lists.freedesktop.org/archives/gstreamer-announce/2017-November/000449.html
+0.4.29: https://lists.freedesktop.org/archives/gstreamer-announce/2019-April/000483.html
+
+Also add a hash for the license file.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/orc/orc.hash | 5 ++++-
+ package/orc/orc.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 8f01460109..2f2b49ca24 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -36,7 +36,7 @@ ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- POSTGRESQL_CONF_OPTS += --disable-thread-safety
- endif
+diff --git a/package/orc/orc.hash b/package/orc/orc.hash
+index f47a9cfe5f..71dd3007ca 100644
+--- a/package/orc/orc.hash
++++ b/package/orc/orc.hash
+@@ -1,2 +1,5 @@
+ # From https://gstreamer.freedesktop.org/src/orc/orc-0.4.27.tar.xz.sha256sum
+-sha256 51e53e58fc8158e5986a1f1a49a6d970c5b16493841cf7b9de2c2bde7ce36b93 orc-0.4.27.tar.xz
++sha256 4f8901f9144b5ec17dffdb33548b5f4c7f8049b0d1023be3462cdd64ec5a3ab2  orc-0.4.29.tar.xz
++
++# Locally calculated
++sha256 4f5dabb1b44bb6fc5cd53820b1f103147ad61b395a57903991325bd1b85d97bf  COPYING
+diff --git a/package/orc/orc.mk b/package/orc/orc.mk
+index ab718296ac..d121266bce 100644
+--- a/package/orc/orc.mk
++++ b/package/orc/orc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_or1k)$(BR2_nios2)$(BR2_riscv)$(BR2_xtensa),y)
-+ifeq ($(BR2_arcle)$(BR2_arceb)$(BR2_microblazeel)$(BR2_microblazebe)$(BR2_or1k)$(BR2_nios2)$(BR2_riscv)$(BR2_xtensa)$(BR2_nds32),y)
- POSTGRESQL_CONF_OPTS += --disable-spinlocks
- endif
- 
+-ORC_VERSION = 0.4.27
++ORC_VERSION = 0.4.29
+ ORC_SOURCE = orc-$(ORC_VERSION).tar.xz
+ ORC_SITE = http://gstreamer.freedesktop.org/data/src/orc
+ ORC_LICENSE = BSD-2-Clause, BSD-3-Clause
