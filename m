@@ -1,109 +1,187 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 07 May 2019 06:00:38 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-05-06
-Message-ID: <20190507060043.7F49287A3A@hemlock.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 7 May 2019 10:26:26 +0200
+Subject: [Buildroot] [PATCH 02/15] board/qemu/ppc*: disable Werror while
+ building ppc kernel with gcc >= 9.1
+In-Reply-To: <20190506200155.GC6887@scaer>
+References: <20190506183011.4856-1-romain.naour@gmail.com>
+ <20190506183011.4856-3-romain.naour@gmail.com> <20190506194908.GB6887@scaer>
+ <7a5d0c4c-abe5-b7e4-4ea1-160fc2be3a5f@gmail.com>
+ <20190506200155.GC6887@scaer>
+Message-ID: <ee0b92f0-1fae-c844-a84a-bda08e33e71c@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hi Yann,
 
-Build statistics for 2019-05-06
-===============================
+Le 06/05/2019 ? 22:01, Yann E. MORIN a ?crit?:
+> Romain, All,
+> 
+> On 2019-05-06 21:57 +0200, Romain Naour spake thusly:
+>> Le 06/05/2019 ? 21:49, Yann E. MORIN a ?crit?:
+>>> On 2019-05-06 20:29 +0200, Romain Naour spake thusly:
+>>>> From patch [1] included in kernel >= 5.0:
+>>>> "The upcoming GCC 9 release extends the -Wmissing-attributes warnings
+>>>> (enabled by -Wall) to C and aliases: it warns when particular function
+>>>> attributes are missing in the aliases but not in their target.
+> [--SNIP--]
+>>>> Add CONFIG_PPC_DISABLE_WERROR only for qemu ppc{64} defconfig
+>>>> since they are used for CI with toolchain-builder's gitlab [3].
+>>>
+>>> When you introduce gcc-9 later in the series, itis not the default
+>>> compiler, so it will not be selected for these defconfigs.
+>>>
+>>> So, I don't think we need this change (yet).
+>>>
+>>> If we decide to update these defconfigs to use the latest gcc-9, later,
+>>> then that would be the moment to include the fix.
+>>
+>> This fix is required for toolchain-builder that use a bleeding-edge toolchain.
+>> Since we test the new toolchain by building a small rootfs + a kernel Linux for
+>> Qemu, we really need this fix before introducing gcc 9.1.
+> 
+> Then it should be that toolchain-builder that is responsible to provide
+> the fragment, no?
 
-      branch |  OK | NOK | TIM | TOT |
-   2019.02.x |  26 |   1 |   0 |  27 |
-      master | 239 |  39 |   2 | 280 |
+Indeed, the fragment can be part of toolchain-builder but...
 
-Results for branch 'master'
-===========================
+> 
+> The defconfigs as they are in Buildroot do not need it, so I fail to
+> understand why we, in Buildroot, would need that.
 
-Classification of failures by reason
-------------------------------------
+I believe that's the same reason why we remove Werror in packages's compiler
+flags. Building with Werror is not bulletproof when we start using a newer
+compiler that introduce new warnings. This is the case here.
 
-                    dhcp-4.4.1 | 10
-                cracklib-2.9.7 | 6 
-                   netsurf-3.8 | 4 
-                   bullet-2.88 | 2 
-                suricata-4.1.3 | 2 
-               tpm2-totp-0.1.1 | 2 
-  vdr-plugin-vnsiserver-v1.8.0 | 2 
-android-tools-4.2.2+git2013... | 1 
-                   dvblast-3.4 | 1 
-                        glibmm | 1 
-                  libssh-0.8.7 | 1 
-                   mpd-0.20.23 | 1 
-                       netsurf | 1 
-              python-pyqt5-5.7 | 1 
-                 python3-3.7.3 | 1 
-             qt5wayland-5.12.2 | 1 
-      qt5webkit-examples-5.9.1 | 1 
-                  samba4-4.9.7 | 1 
-               wireshark-3.0.1 | 1 
-          wpebackend-fdo-1.0.1 | 1 
+Also this option is a bit strange since it's specific to ppc kernels:
+"The intention is to make it harder for people to inadvertantly introduce
+warnings in the arch/powerpc code." Other kernel developers on other arch may be
+interested by this option.
 
+So, It's clearly intended for kernel developers.
 
-Detail of failures
-------------------
+Best regards,
+Romain
 
-     nds32le | android-tools-4.2.2+git2013... | NOK | http://autobuild.buildroot.net/results/63994f51a2b224b66acfafe5b236249d867a507d |     
-        m68k |                    bullet-2.88 | NOK | http://autobuild.buildroot.net/results/0ef56a160500cbf05bc79463990f467b7012712e |     
-        m68k |                    bullet-2.88 | NOK | http://autobuild.buildroot.net/results/3c249acce9ce87af6f5bdf46923c0a2bf68523d2 |     
-        i686 |                 cracklib-2.9.7 | NOK | http://autobuild.buildroot.net/results/ca8abfa88fffcd5c9604a1f7e8435fe09504c7b1 |     
-        or1k |                 cracklib-2.9.7 | NOK | http://autobuild.buildroot.net/results/8e159dd6f29174b0d1b0183f035403f26abfa1de |     
-         arc |                 cracklib-2.9.7 | NOK | http://autobuild.buildroot.net/results/eac376aad5746dae3f84f27615c1c794e3925f1f |     
-      xtensa |                 cracklib-2.9.7 | NOK | http://autobuild.buildroot.net/results/ed300956990942b9b30b1f55675202e3df3be747 |     
-      x86_64 |                 cracklib-2.9.7 | NOK | http://autobuild.buildroot.net/results/4e8c5fc5da8f4229c60ef0f4f9f64228e8bd1d7f |     
-      mipsel |                 cracklib-2.9.7 | NOK | http://autobuild.buildroot.net/results/4717dd2ed073dcefbf13e10300e27cc90df3d4a9 |     
-        mips |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/da78fafdbbbbb4079ada0aee2f783181d11339cb | ORPH
- powerpc64le |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/16585190c83d9f03c82afa551a3b4a5e307cb36e | ORPH
-         arm |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/1602ef9bb1c53211709f3f3a48566f9044e734e2 | ORPH
-         arm |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/aa6e6f1d876beb653d232f9df5e0c7966454b156 | ORPH
-         sh4 |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/ccdd783e7c6e5f55e86ba22c65837267fdfc5866 | ORPH
-         arm |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/5fa228147ff6e1ed9dd655ef4b6927f0b56d6043 | ORPH
-      mipsel |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/8ece9c1c4248edf22ff9ee2baa9fa1e68005b9c5 | ORPH
-     aarch64 |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/4c68d39d4e1c3d8715194aa9b16fb3436fe99959 | ORPH
-        or1k |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/653579ae36822a7bb164a9c223c0298a8dc2d9b3 | ORPH
-    mips64el |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/b021457eb0dd51467de29cae6002538a56c0ca98 | ORPH
-         arm |                    dvblast-3.4 | NOK | http://autobuild.buildroot.net/results/ecffaa83e608020ac3642995a5b7ff056d350918 |     
-microblazeel |                         glibmm | TIM | http://autobuild.buildroot.net/results/32abc04f6a6751dceea184ea504110b4ff0191c9 |     
-      xtensa |                   libssh-0.8.7 | NOK | http://autobuild.buildroot.net/results/2e05ada8e7313efd2b2ea1ee456e50bce9ab7c20 |     
-         arm |                    mpd-0.20.23 | NOK | http://autobuild.buildroot.net/results/a0396e120be51350df3ef248ff35acae58a64ad9 |     
-        i586 |                        netsurf | TIM | http://autobuild.buildroot.net/results/afd3b449750dcdd95362bb6ed4a2c96873334b07 |     
-        m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/19e04486f8deb2ccc2a91982221a41a2338b8e36 |     
-         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/e5073938bbbd27b8e07a75f8e3d76489bb212ed2 |     
-         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/84ca9162e963e25293a8b363629b5a7bef79ab59 |     
-         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/b911c6d1011957ff7462c84a971a22f65becf04c |     
-        i586 |               python-pyqt5-5.7 | NOK | http://autobuild.buildroot.net/results/501e2971dc5b8a87deaebae4180bfa155efb13c6 |     
-      x86_64 |                  python3-3.7.3 | NOK | http://autobuild.buildroot.net/results/0f05f2a00d05cdc0fea9389f1594de1bda5a8761 |     
-     aarch64 |              qt5wayland-5.12.2 | NOK | http://autobuild.buildroot.net/results/5a793143b19437e5702e6d9624b026abfd530354 |     
-        i686 |       qt5webkit-examples-5.9.1 | NOK | http://autobuild.buildroot.net/results/68dd6f1ffed49f8e2570f7364e5e635573807d3e |     
-    mips64el |                   samba4-4.9.7 | NOK | http://autobuild.buildroot.net/results/af5d7887d546c51d737a2de2eb91c799913272a1 |     
-        i686 |                 suricata-4.1.3 | NOK | http://autobuild.buildroot.net/results/540274de01b18dd84e09e31eaf2609fd244baff8 |     
-        m68k |                 suricata-4.1.3 | NOK | http://autobuild.buildroot.net/results/4c4eee2cd63ee7a42ed4d66f182f4c62842820c1 |     
-      x86_64 |                tpm2-totp-0.1.1 | NOK | http://autobuild.buildroot.net/results/c3972f0eb6a01a8032e4a37a127e6dbc6d6f73a5 |     
-        mips |                tpm2-totp-0.1.1 | NOK | http://autobuild.buildroot.net/results/42683d2409fd6e26728f721780c70b62feb534a6 |     
-     sparc64 |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/c2b1637d81b90c51c3acbddd9e9a96ee0679b947 |     
-    mips64el |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/eb7404f05c447d402d9a90c087310c9ccbcfd964 |     
-      x86_64 |                wireshark-3.0.1 | NOK | http://autobuild.buildroot.net/results/2ccb7448f9a156a337394d28d02b51fee18c09dc | ORPH
-     aarch64 |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/6d83c0d8b3dab95c054bee257893dea96e82587b |     
-
-Results for branch '2019.02.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                 python3-3.7.3 | 1 
-
-
-Detail of failures
-------------------
-
-      x86_64 |                  python3-3.7.3 | NOK | http://autobuild.buildroot.net/results/bacba5173e5b01edb3da39e9c44d7789a64616d9 |     
-
-
--- 
-http://autobuild.buildroot.net
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+>> Best regards,
+>> Romain
+>>
+>>>
+>>> Regards,
+>>> Yann E. MORIN.
+>>>
+>>>> Fixes:
+>>>> https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435741
+>>>>
+>>>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=a6e60d84989fa0e91db7f236eda40453b0e44afa
+>>>> [2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=ba55bd74360ea4b8b95e73ed79474d37ff482b36
+>>>> [3] https://gitlab.com/bootlin/toolchains-builder
+>>>>
+>>>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>>>> ---
+>>>> Note: It can be usefull to select CONFIG_PPC_DISABLE_WERROR for
+>>>> other ppc board defconfig.
+>>>>
+>>>> v2: add a shared fragment in board/fragments/linux and update
+>>>> qemu ppc* defconfigs. (Arnout)
+>>>> ---
+>>>>  board/fragments/linux/linux-ppc-disable-werror.fragment | 1 +
+>>>>  configs/qemu_ppc64_e5500_defconfig                      | 2 +-
+>>>>  configs/qemu_ppc64_pseries_defconfig                    | 1 +
+>>>>  configs/qemu_ppc64le_pseries_defconfig                  | 1 +
+>>>>  configs/qemu_ppc_g3beige_defconfig                      | 1 +
+>>>>  configs/qemu_ppc_mpc8544ds_defconfig                    | 1 +
+>>>>  configs/qemu_ppc_virtex_ml507_defconfig                 | 1 +
+>>>>  7 files changed, 7 insertions(+), 1 deletion(-)
+>>>>  create mode 100644 board/fragments/linux/linux-ppc-disable-werror.fragment
+>>>>
+>>>> diff --git a/board/fragments/linux/linux-ppc-disable-werror.fragment b/board/fragments/linux/linux-ppc-disable-werror.fragment
+>>>> new file mode 100644
+>>>> index 0000000000..6ea12a1243
+>>>> --- /dev/null
+>>>> +++ b/board/fragments/linux/linux-ppc-disable-werror.fragment
+>>>> @@ -0,0 +1 @@
+>>>> +CONFIG_PPC_DISABLE_WERROR=y
+>>>> diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
+>>>> index 59b8636918..624155316c 100644
+>>>> --- a/configs/qemu_ppc64_e5500_defconfig
+>>>> +++ b/configs/qemu_ppc64_e5500_defconfig
+>>>> @@ -13,7 +13,7 @@ BR2_LINUX_KERNEL=y
+>>>>  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>>>>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
+>>>>  BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
+>>>> -BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment"
+>>>> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment board/fragments/linux/linux-ppc-disable-werror.fragment"
+>>>>  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>>>>  
+>>>>  # Filesystem
+>>>> diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
+>>>> index 5f55b246f7..277d08989a 100644
+>>>> --- a/configs/qemu_ppc64_pseries_defconfig
+>>>> +++ b/configs/qemu_ppc64_pseries_defconfig
+>>>> @@ -19,3 +19,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>>>>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
+>>>>  BR2_LINUX_KERNEL_DEFCONFIG="pseries"
+>>>>  BR2_LINUX_KERNEL_VMLINUX=y
+>>>> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/fragments/linux/linux-ppc-disable-werror.fragment"
+>>>> diff --git a/configs/qemu_ppc64le_pseries_defconfig b/configs/qemu_ppc64le_pseries_defconfig
+>>>> index 8356e4e250..1848667abf 100644
+>>>> --- a/configs/qemu_ppc64le_pseries_defconfig
+>>>> +++ b/configs/qemu_ppc64le_pseries_defconfig
+>>>> @@ -19,3 +19,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>>>>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
+>>>>  BR2_LINUX_KERNEL_DEFCONFIG="pseries_le"
+>>>>  BR2_LINUX_KERNEL_VMLINUX=y
+>>>> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/fragments/linux/linux-ppc-disable-werror.fragment"
+>>>> diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
+>>>> index 4b2f3ed2fe..c8bbd74ada 100644
+>>>> --- a/configs/qemu_ppc_g3beige_defconfig
+>>>> +++ b/configs/qemu_ppc_g3beige_defconfig
+>>>> @@ -18,6 +18,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>>>>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
+>>>>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>>>>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux.config"
+>>>> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/fragments/linux/linux-ppc-disable-werror.fragment"
+>>>>  BR2_LINUX_KERNEL_VMLINUX=y
+>>>>  
+>>>>  # Serial port config
+>>>> diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
+>>>> index 98985b7b76..68a9e80e93 100644
+>>>> --- a/configs/qemu_ppc_mpc8544ds_defconfig
+>>>> +++ b/configs/qemu_ppc_mpc8544ds_defconfig
+>>>> @@ -18,6 +18,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>>>>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
+>>>>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>>>>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-mpc8544ds/linux.config"
+>>>> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/fragments/linux/linux-ppc-disable-werror.fragment"
+>>>>  BR2_LINUX_KERNEL_VMLINUX=y
+>>>>  
+>>>>  # Serial port config
+>>>> diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
+>>>> index eddaf3558a..2a127ed70d 100644
+>>>> --- a/configs/qemu_ppc_virtex_ml507_defconfig
+>>>> +++ b/configs/qemu_ppc_virtex_ml507_defconfig
+>>>> @@ -18,6 +18,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+>>>>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
+>>>>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+>>>>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-virtex-ml507/linux.config"
+>>>> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/fragments/linux/linux-ppc-disable-werror.fragment"
+>>>>  BR2_LINUX_KERNEL_VMLINUX=y
+>>>>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>>>>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="virtex440-ml507"
+>>>> -- 
+>>>> 2.14.5
+>>>>
+>>>> _______________________________________________
+>>>> buildroot mailing list
+>>>> buildroot at busybox.net
+>>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+>>
+> 
