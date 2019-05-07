@@ -1,101 +1,60 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 May 2019 23:03:41 +0200
-Subject: [Buildroot] [git commit] support/scripts: use show-info to extract
- dependency graph
-Message-ID: <20190507210158.48021815D1@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 7 May 2019 23:07:35 +0200
+Subject: [Buildroot] [PATCH] package/ninja: enforce Python3 on the host
+In-Reply-To: <20190222203756.8795-1-joerg.krause@embedded.rocks>
+References: <20190222203756.8795-1-joerg.krause@embedded.rocks>
+Message-ID: <20190507230735.0a489f73@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d901aa32d5c75b16e3ba08b20b12dc9858a68512
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Currently, we extract the dependency graph from the aptly named but
-ad-hoc show-dependency-graph rule.
+On Fri, 22 Feb 2019 21:37:56 +0100
+J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
-We now have a better solution to report package information, with
-show-info.
+> The current logic selects Python3 for the host only if Python3 is
+> selected for the target, otherwise it selects Python2.
+> 
+> As Meson, the only package infrastructure using ninja, needs Python3, it is
+> desirable to also depend on Python3 on the host for the ninja host
+> package.
+> 
+> Otherwise, if no Python interpreter is selected for the target, both
+> Python2 and Python3 are build for the host, which is time consuming
+> without any benefit.
+> 
+> For example when building libmpdclient (and all its target and host
+> dependencies) the actual elapsed time for is reduced from around 286s to 207s
+> as reported by `time -p make clean all`.
+> 
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-Since show-dependency-graph never went into a release so far, and
-show-info does provide the same (and more), switch to using show-info.
+I think this is a good idea, but...
 
-Thanks to Adam for suggesting the coding style to have a readable code
-that is not ugly but still pleases flake8. Thanks to Arnout for
-suggesting the use of dict.get() to further simplify the code.
+> -HOST_NINJA_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
+> +# Enforce Python3 on the host, to prevent building Python2 and Python3 when
+> +# using packages using the Meson infrastructure and not having any Python
+> +# interperter selected for the target.
+> +HOST_NINJA_NEEDS_HOST_PYTHON = python3
 
-Note: we do not use the reverse_dependencies field because it only
-contains those packages that have a kconfig option, so we'd miss most
-host packages.
+This definitely cannot be the right change: <pkg>_NEEDS_HOST_PYTHON
+only makes sense for packages using the python-package infrastructure,
+but Ninja is using the generic-package infrastructure. So basically,
+the line you have added does not do anything at all, and it only works
+by chance because host-python3 was already built before host-ninja by
+some other package.
 
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/scripts/brpkgutil.py | 31 +++++++++++++++----------------
- 1 file changed, 15 insertions(+), 16 deletions(-)
+I think the right change is to just do:
 
-diff --git a/support/scripts/brpkgutil.py b/support/scripts/brpkgutil.py
-index f65068d348..73d8fbe931 100644
---- a/support/scripts/brpkgutil.py
-+++ b/support/scripts/brpkgutil.py
-@@ -1,6 +1,7 @@
- # Copyright (C) 2010-2013 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- # Copyright (C) 2019 Yann E. MORIN <yann.morin.1998@free.fr>
- 
-+import json
- import logging
- import os
- import subprocess
-@@ -19,7 +20,7 @@ from collections import defaultdict
- def get_dependency_tree():
-     logging.info("Getting dependency tree...")
- 
--    deps = defaultdict(list)
-+    deps = {}
-     rdeps = defaultdict(list)
-     types = {}
-     versions = {}
-@@ -29,23 +30,21 @@ def get_dependency_tree():
-     types['all'] = 'target'
-     versions['all'] = ''
- 
--    cmd = ["make", "-s", "--no-print-directory", "show-dependency-tree"]
-+    cmd = ["make", "-s", "--no-print-directory", "show-info"]
-     with open(os.devnull, 'wb') as devnull:
-         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=devnull,
-                              universal_newlines=True)
--        output = p.communicate()[0]
--
--    for l in output.splitlines():
--        if " -> " in l:
--            pkg = l.split(" -> ")[0]
--            deps[pkg] += l.split(" -> ")[1].split()
--            for p in l.split(" -> ")[1].split():
--                rdeps[p].append(pkg)
--        else:
--            pkg, type_version = l.split(": ", 1)
--            t, v = "{} -".format(type_version).split(None, 2)[:2]
--            deps['all'].append(pkg)
--            types[pkg] = t
--            versions[pkg] = v
-+        pkg_list = json.loads(p.communicate()[0])
-+
-+    for pkg in pkg_list:
-+        deps['all'].append(pkg)
-+        types[pkg] = pkg_list[pkg]["type"]
-+        deps[pkg] = pkg_list[pkg].get("dependencies", [])
-+        for p in deps[pkg]:
-+            rdeps[p].append(pkg)
-+        versions[pkg] = \
-+            None if pkg_list[pkg]["type"] == "rootfs" \
-+            else "virtual" if pkg_list[pkg]["virtual"] \
-+            else pkg_list[pkg]["version"]
- 
-     return (deps, rdeps, types, versions)
+HOST_NINJA_DEPENDENCIES = host-python3
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
