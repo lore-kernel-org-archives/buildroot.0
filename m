@@ -1,33 +1,36 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue,  7 May 2019 22:35:40 +0200
-Subject: [Buildroot] [PATCH v1 20/28] package/python-mutagen: replace utf-8
- apostrophe by ascii single quote
+Date: Tue,  7 May 2019 22:35:27 +0200
+Subject: [Buildroot] [PATCH v1 07/28] package/sysklogd: replace utf-8 space
+ by ascii character
 In-Reply-To: <20190507203548.10337-1-ps.report@gmx.net>
 References: <20190507203548.10337-1-ps.report@gmx.net>
-Message-ID: <20190507203548.10337-20-ps.report@gmx.net>
+Message-ID: <20190507203548.10337-7-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Replace utf-8 NO-BREAK-SPACE (c2 a0) in comment line by simple
+ascii space character.
+
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/python-mutagen/Config.in | 2 +-
+ package/sysklogd/sysklogd.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-mutagen/Config.in b/package/python-mutagen/Config.in
-index 470cd996a7..3c95e37447 100644
---- a/package/python-mutagen/Config.in
-+++ b/package/python-mutagen/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_PYTHON_MUTAGEN
- 	select BR2_PACKAGE_PYTHON3_ZLIB if BR2_PACKAGE_PYTHON3 # runtime
- 	help
- 	  Mutagen is a Python module to handle audio metadata.  It
--	  supports ASF, FLAC, MP4, Monkey?s Audio, MP3, Musepack, Ogg
-+	  supports ASF, FLAC, MP4, Monkey's Audio, MP3, Musepack, Ogg
- 	  Opus, Ogg FLAC, Ogg Speex, Ogg Theora, Ogg Vorbis, True
- 	  Audio, WavPack, OptimFROG, and AIFF audio files. All
- 	  versions of ID3v2 are supported, and all standard ID3v2.4
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index 8cd7f9573c..266c171170 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -8,7 +8,7 @@ SYSKLOGD_VERSION = 1.6
+ SYSKLOGD_SITE = $(call github,troglobit,sysklogd,v$(SYSKLOGD_VERSION))
+ SYSKLOGD_LICENSE = GPL-2.0+
+ SYSKLOGD_LICENSE_FILES = COPYING
+-#?From git
++# From git
+ SYSKLOGD_AUTORECONF = YES
+
+ define SYSKLOGD_INSTALL_SAMPLE_CONFIG
 --
 2.21.0
