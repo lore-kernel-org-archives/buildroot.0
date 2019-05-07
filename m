@@ -1,45 +1,98 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue,  7 May 2019 17:13:39 +0200
-Subject: [Buildroot] [PATCH] package/go: bump version to 1.12.5
-Message-ID: <20190507151339.350-1-peter@korsgaard.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 7 May 2019 17:41:17 +0200
+Subject: [Buildroot] [PATCH v2 0/3] murata-wireless firmware packages
+In-Reply-To: <20190507083218.24283-1-m.niestroj@grinn-global.com>
+References: <20190507083218.24283-1-m.niestroj@grinn-global.com>
+Message-ID: <20190507154117.GG6887@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes a number of issues discovered since 1.12.4.  From the release notes:
+Marcin, All,
 
-go1.12.5 (released 2019/05/06) includes fixes to the compiler, the linker,
-the go command, the runtime, and the os package.
+On 2019-05-07 10:32 +0200, Marcin Niestroj spake thusly:
+> This set adds 3 firmware packages for muRata wireless modules (WiFi + BLE).
+> I've put all three packages into single murata-wireless directory and Kconfig
+> submenu, as they relate to the same hardware and there are plenty of options
+> to choose from. Not sure whether this is the correct approach, so looking
+> forward to get feedback on this.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I wonder why we would actually need three packages.
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index df3a9c4e43..13cc9baef4 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://golang.org/dl/
--sha256	4affc3e610cd8182c47abbc5b0c0e4e3c6a2b945b55aaa2ba952964ad9df1467  go1.12.4.src.tar.gz
-+sha256	2aa5f088cbb332e73fc3def546800616b38d3bfe6b8713b8a6404060f22503e8  go1.12.5.src.tar.gz
- sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index f31b1941c4..a2453e001f 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.12.4
-+GO_VERSION = 1.12.5
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+As far as I can see from a cursory look, they are all very tightly
+coupled; they even have the same choice about the actual variant to use.
+
+So, I would like we look at making that a single package, which
+downloads multiple tarballs, something like:
+
+    MURATA_WIRELESS_CYW_FW_VERSION = 8d87950bfad28c65926695b7357bd8995b60016a
+    MURATA_WIRELESS_CYW_FW_VERSION_NVRAM = d27f1bf105fa1e5b828e355793b88d4b66188411
+    MURATA_WIRELESS_CYW_FW_VERSION_PATCH = 748462f0b02ec4aeb500bedd60780ac51c37be31
+
+    MURATA_WIRELESS_CYW_FW_SITE = $(call github,murata-wireless,cyw-fmac-fw,$(MURATA_WIRELESS_CYW_FW_VERSION)
+    MURATA_WIRELESS_CYW_FW_EXTRA_DOWNLOADS = \
+        $(call github,murata-wireless,cyw-fmac-nvram,$(MURATA_WIRELESS_CYW_FW_VERSION_NVRAM)/cyw-bt-nvram-$(MURATA_WIRELESS_CYW_FW_VERSION_NVRAM).tar.gz \
+        $(call github,murata-wireless,cyw-fmac-patch,$(MURATA_WIRELESS_CYW_FW_VERSION_PATCH)/cyw-bt-patch-$(MURATA_WIRELESS_CYW_FW_VERSION_PATCH).tar.gz
+
+    define MURATA_WIRELESS_CYW_FW_EXTRACT_NVRAM_PATCH
+        $(foreach tar, $(notdir $(MURATA_WIRELESS_CYW_FW_EXTRA_DOWNLOADS)), \
+            $(call suitable-extractor,$(tar)) $(MURATA_WIRELESS_CYW_FW_DL_DIR)/$(tar) | \
+            $(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -$(sep) \
+        )
+    endef
+    MURATA_WIRELESS_CYW_FW_POST_EXTRACT_HOOKS += MURATA_WIRELESS_CYW_FW_EXTRACT_NVRAM_PATCH
+
+And a similar hook for the installation step (which I leave up to you as
+an exercise ;-) ).
+
+Regards,
+Yann E. MORIN.
+
+> Marcin Niestroj (3):
+>   package/murata-wireless-cyw-fmac-fw: new package
+>   package/murata-wireless-cyw-fmac-nvram: new package
+>   package/murata-wireless-cyw-bt-patch: new package
+> 
+>  DEVELOPERS                                    |  1 +
+>  package/Config.in                             |  1 +
+>  package/murata-wireless/Config.in             |  7 ++
+>  .../murata-wireless-cyw-bt-patch/Config.in    | 47 ++++++++++
+>  .../murata-wireless-cyw-bt-patch.hash         |  3 +
+>  .../murata-wireless-cyw-bt-patch.mk           | 50 ++++++++++
+>  .../murata-wireless-cyw-fmac-fw/Config.in     | 91 +++++++++++++++++++
+>  .../murata-wireless-cyw-fmac-fw.hash          |  3 +
+>  .../murata-wireless-cyw-fmac-fw.mk            | 80 ++++++++++++++++
+>  .../murata-wireless-cyw-fmac-nvram/Config.in  | 91 +++++++++++++++++++
+>  .../murata-wireless-cyw-fmac-nvram.hash       |  3 +
+>  .../murata-wireless-cyw-fmac-nvram.mk         | 75 +++++++++++++++
+>  package/murata-wireless/murata-wireless.mk    |  9 ++
+>  13 files changed, 461 insertions(+)
+>  create mode 100644 package/murata-wireless/Config.in
+>  create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/Config.in
+>  create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/murata-wireless-cyw-bt-patch.hash
+>  create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/murata-wireless-cyw-bt-patch.mk
+>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/Config.in
+>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/murata-wireless-cyw-fmac-fw.hash
+>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/murata-wireless-cyw-fmac-fw.mk
+>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/Config.in
+>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/murata-wireless-cyw-fmac-nvram.hash
+>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/murata-wireless-cyw-fmac-nvram.mk
+>  create mode 100644 package/murata-wireless/murata-wireless.mk
+> 
+> -- 
+> 2.21.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.11.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
