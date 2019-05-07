@@ -1,144 +1,158 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 7 May 2019 23:12:10 +0200
-Subject: [Buildroot] [PATCH v7 5/5] testing/tests: CLANG compiler-rt
- runtime test
-In-Reply-To: <20190501194032.765-6-matthew.weber@rockwellcollins.com>
-References: <20190501194032.765-1-matthew.weber@rockwellcollins.com>
- <20190501194032.765-6-matthew.weber@rockwellcollins.com>
-Message-ID: <3f14fe0c-d2a1-4502-b94d-0045e4c06e5b@smile.fr>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 7 May 2019 23:17:40 +0200
+Subject: [Buildroot] [GSoC 2019] Introduction Email - Atharva Lele
+In-Reply-To: <CABM+sgoVC9SK4_x8K+Vd0B+G9i2HAQ7983OuD1psdieSVFzGFA@mail.gmail.com>
+References: <CABM+sgpVOb0gxPeA3fTm4Luup6wDgyE56DPB1taVouCB4JmryA@mail.gmail.com>
+ <CABM+sgoupr2UheZSXz97FDRZYaJceU_EPsc8jryZRtnXiuwh4g@mail.gmail.com>
+ <ee6549a4-21e2-7586-b35d-7174657934b8@mind.be>
+ <CABM+sgrntFNSi6=fi3SP_02qqBQPuf+X=LbeRwv+6Dd9sjX4WQ@mail.gmail.com>
+ <20190402181929.GJ2587@scaer>
+ <CABM+sgrL3SY4SfBhn2f6VGCguQM51xif3x1_cck57FB2eULrug@mail.gmail.com>
+ <CABM+sgp1B+S7n=R1picPK5RN-CdxZ_BaRSKDTPdkXYiBkpVkcA@mail.gmail.com>
+ <CABM+sgo1dxV-SzpMn0VS-R0zJm5A2cj2ycH8fOSOLEOCd7FFtw@mail.gmail.com>
+ <20190502195713.GA17072@scaer>
+ <CABM+sgoVC9SK4_x8K+Vd0B+G9i2HAQ7983OuD1psdieSVFzGFA@mail.gmail.com>
+Message-ID: <20190507211740.GI6887@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matt,
+Atharva, All,
 
-Le 01/05/2019 ? 21:40, Matt Weber a ?crit?:
-> This patch adds a test case that
->  1) Builds the complete LLVM and CLANG set of host tools
->  2) Cross-compiles the compiler-rt runtime using CLANG
->  3) Builds a cross-compiled application using CLANG and the libfuzzer
->     compiler-rt library.
->  4) Executes the fuzz application (part of the libfuzzer package) on
->     target and checks expected output
+On 2019-05-07 18:56 +0530, Atharva Lele spake thusly:
+> I'm really glad to be selected as a GSoC student for Reproducible Builds and look forward
+> to working with all of you.
 
-Can you provide an example of expected output of fuzz_me ?
-I tried on x86_64 bit but I get an error: AddressSanitizer: heap-buffer-overflow
+Congratulations on your selection!
 
-I'm testing with aarch64 at the moment.
+> I would like to hear your inputs on my plan and deliverables and to to go ahead with it.
 
+For me, the timeline you proposed is sensible. Maybe you can send a mail
+to the list that sumarrises your initial work. Maybe you could even post
+your timeline?
+
+Please keep Arnout and I in Cc of your mails.
+
+> If there's any specific time you'd want to?discuss about it do let me know, I'm usually?
+> available from 10am to 10pm (Indian Standard Time).
+
+10:00 to 22:00 IST is 06:30 to 18:30 GMT+2, the timezone for Arnout and
+I (and the other mentors), which means working hours. We'll be available
+on IRC during that time for quick help and short topics.
+
+We'll see to schedule a longer meeting, probably hang-out or something,
+on Sat or Sun, so we can debrief more in depth.
+
+Regards,
+Yann E. MORIN.
+
+> Regards,
+> Atharva Lele
+> On Fri, May 3, 2019 at 1:27 AM Yann E. MORIN < [1]yann.morin.1998@free.fr> wrote:
 > 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+>   Atharva, All,
 > 
-> Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> [with the entire series applied on next branch:
->  https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/121908178
->  NOTE: this test case takes longer than test_rust, ~2 hours in my host
->  machine with all tarballs previously downloaded]
-> Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> ---
-
-[snip]
-
-6814053e847c10f3eb003417bc523d30  LICENSE
-> diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
-> new file mode 100644
-> index 0000000000..7d6f83b4d3
-> --- /dev/null
-> +++ b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
-> @@ -0,0 +1,24 @@
-> +################################################################################
-> +#
-> +# libfuzzer
-> +#
-> +################################################################################
-> +
-> +LIBFUZZER_VERSION = 64e4d9aa19a8d33b61882154addbf8419d7416e1
-> +LIBFUZZER_SITE = $(call github,google,fuzzer-test-suite,$(LIBFUZZER_VERSION))
-> +LIBFUZZER_LICENSE = Apache-2.0
-> +LIBFUZZER_LICENSE_FILES = LICENSE
-> +LIBFUZZER_DEPENDENCIES = compiler-rt
-> +
-> +define LIBFUZZER_BUILD_CMDS
-> +	$(HOST_DIR)/bin/clang++ -mcpu=cortex-a53 --sysroot=$(STAGING_DIR) \
-
-There is no -mcpu option with clang++, I had to use -march=x86-64 instead.
-
-> +		-B $(HOST_DIR)/opt/ext-toolchain -fsanitize=address,fuzzer \
-
-Using $(HOST_DIR)/opt/ext-toolchain expect an external toolchain (this is the
-case during the test), but it doesn't work for internal toolchain or external
-pre-installed toolchain.
-
-Clang++ is using the path provided by -B to find crtbegin.o. This object file is
-not copied when using a pre-installed toolchain.
-
-https://pastebin.com/Wm59Z9nz
-
-Best regards,
-Romain
-
-> +		$(@D)/tutorial/fuzz_me.cc \
-> +		-o $(@D)/fuzz_me
-> +endef
-> +
-> +define LIBFUZZER_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -D -m 755 $(@D)/fuzz_me $(TARGET_DIR)/usr/bin/fuzz_me
-> +endef
-> +
-> +$(eval $(generic-package))
-> diff --git a/support/testing/tests/package/test_clang.py b/support/testing/tests/package/test_clang.py
-> new file mode 100644
-> index 0000000000..84a2528b00
-> --- /dev/null
-> +++ b/support/testing/tests/package/test_clang.py
-> @@ -0,0 +1,46 @@
-> +import os
-> +
-> +import infra.basetest
-> +
-> +FUZZ_TIMEOUT = 120
-> +
-> +
-> +class TestClangCompilerRT(infra.basetest.BRTest):
-> +    br2_external = [infra.filepath("tests/package/br2-external/clang-compiler-rt")]
-> +    config = \
-> +        """
-> +        BR2_aarch64=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-> +        BR2_LINUX_KERNEL=y
-> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-> +        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +        BR2_PACKAGE_COMPILER_RT=y
-> +        BR2_PACKAGE_LLVM=y
-> +        BR2_TARGET_ROOTFS_CPIO=y
-> +        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        BR2_PACKAGE_LIBFUZZER=y
-> +        """
-> +
-> +    def login(self):
-> +        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-> +        kern = os.path.join(self.builddir, "images", "Image")
-> +        # Sanitizers overallocate memory and the minimum that seemed to work was 512MB
-> +        self.emulator.boot(arch="aarch64",
-> +                           kernel=kern,
-> +                           kernel_cmdline=["console=ttyAMA0"],
-> +                           options=["-M", "virt", "-cpu", "cortex-a53", "-m", "512", "-initrd", img])
-> +        self.emulator.login()
-> +
-> +    def test_run(self):
-> +        self.login()
-> +
-> +        # The test case verifies both that the application executes and that
-> +        # the symbolizer is working to decode the stack trace
-> +        cmd = "fuzz_me 2>&1 | grep _M_replace"
-> +        _, exit_code = self.emulator.run(cmd, FUZZ_TIMEOUT)
-> +        self.assertEqual(exit_code, 0)
+>   On 2019-05-03 00:57 +0530, Atharva Lele spake thusly:
+>   > Yann, Arnout, and everyone:
+>   > Just sending a follow-up email since I didn't hear back from you guys. Unfortunately due to
+>   > college assignments I was completely swamped and didn't get a chance to work on GSoC
+>   > as I'd mentioned in my timeline. I can devote a bit more time in this month, so I can catch up
+>   > on my research about Reproducible Builds that I was going to do.?
+>   > If there's anything you want me to know then I'm looking forward to hearing from you.
 > 
+>   As described in the official GSoC timeline, the selection step is still
+>   an on-going process, and the final results will be announced on May the
+>   6th:
+> 
+>   ? ? [2]https://summerofcode.withgoogle.com/how-it-works/#timeline
+> 
+>   Regards,
+>   Yann E. MORIN.
+> 
+>   > Regards,
+>   > Atharva Lele
+>   > On Wed, Apr 10, 2019 at 12:08 AM Atharva Lele < [1] [3]itsatharva@gmail.com> wrote:
+>   >
+>   >? ?Hello Arnout, Yann, and everyone:
+>   >? ?I've submitted my final GSoC proposal PDF on the GSoC website.
+>   >? ?If needed we can share the plan with the mailing list, let me know if that needs
+>   >? ?to be done.
+>   >? ?Regards,
+>   >? ?Atharva Lele
+>   >? ?On Thu, Apr 4, 2019 at 9:25 PM Atharva Lele < [2] [4]itsatharva@gmail.com> wrote:
+>   >
+>   >? ? ?> I'll do my part of the review later tonight.
+>   >? ? ?I have modified and added some parts (in blue color) and highlighted which parts
+>   >? ? ?to remove (in red color). Also replied to your comments.
+>   >? ? ?If you have any more suggestions please let me know. Meanwhile I will keep looking
+>   >? ? ?for more information to improve the technicalities of my draft.
+>   >? ? ?Regards,
+>   >? ? ?Atharva Lele
+>   >? ? ?On Tue, Apr 2, 2019 at 11:49 PM Yann E. MORIN < [3] [5]yann.morin.1998@free.fr> wrote:
+>   >
+>   >? ? ? ?Atharva, Arnout, All,
+>   >
+>   >? ? ? ?On 2019-04-02 21:00 +0530, Atharva Lele spake thusly:
+>   >? ? ? ?> > I've made comments on the document.
+>   >? ? ? ?> I've replied to your comments on there. We can discuss a bit more and I think then I'll
+>   >? ? ? ?> make necessary changes to the document.
+>   >? ? ? ?> > I'm not sure if Yann is OK with using
+>   >? ? ? ?> > Googly stuff though.
+>   >? ? ? ?> Is there any other platform that he would be comfortable working on?
+>   >? ? ? ?> I'll gladly move things over to there.
+>   >
+>   >? ? ? ?Nope, that's fine. It's part of the GSoC ecosystem, so I'll play by the
+>   >? ? ? ?GSoC rules. ;-) I'll do my part of the review later tonight.
+>   >
+>   >? ? ? ?Regards,
+>   >? ? ? ?Yann E. MORIN.
+>   >
+>   >? ? ? ?--
+>   >? ? ? ?.-----------------.--------------------.------------------.--------------------.
+>   >? ? ? ?|? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>   >? ? ? ?| +33 662 376 056 | Software? Designer | \ / CAMPAIGN? ? ?|? ___? ?
+>   ? ? ?
+>   >? ? ? ?? ? ?|
+>   >? ? ? ?| +33 561 099 427 `------------.-------:? X? AGAINST? ? ? |? \e/?
+>   There is no? |
+>   >? ? ? ?| [4] [6]http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL? ? |? ?v?
+>   ?conspiracy.? |
+>   >? ? ? ?'------------------------------^-------^------------------^--------------------'
+>   >
+>   > Links:
+>   > 1. mailto: [7]itsatharva at gmail.com
+>   > 2. mailto: [8]itsatharva at gmail.com
+>   > 3. mailto: [9]yann.morin.1998 at free.fr
+>   > 4. [10]http://ymorin.is-a-geek.org/
+> 
+>   --
+>   .-----------------.--------------------.------------------.--------------------.
+>   |? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>   | +33 662 376 056 | Software? Designer | \ / CAMPAIGN? ? ?|? ___? ? ? ? ? ?
+>   ? ?|
+>   | +33 561 099 427 `------------.-------:? X? AGAINST? ? ? |? \e/? There is no? |
+>   | [11]http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL? ? |? ?v? ?conspiracy.? |
+>   '------------------------------^-------^------------------^--------------------'
+> 
+> Links:
+> 1. mailto:yann.morin.1998 at free.fr
+> 2. https://summerofcode.withgoogle.com/how-it-works/#timeline
+> 3. mailto:itsatharva at gmail.com
+> 4. mailto:itsatharva at gmail.com
+> 5. mailto:yann.morin.1998 at free.fr
+> 6. http://ymorin.is-a-geek.org/
+> 7. mailto:itsatharva at gmail.com
+> 8. mailto:itsatharva at gmail.com
+> 9. mailto:yann.morin.1998 at free.fr
+> 10. http://ymorin.is-a-geek.org/
+> 11. http://ymorin.is-a-geek.org/
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
