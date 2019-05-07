@@ -1,72 +1,83 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Tue,  7 May 2019 11:01:49 +0200
-Subject: [Buildroot] [PATCH] package/linux-headers: add support for Linux
- 5.1 kernel headers
-Message-ID: <20190507090149.3143-1-m.niestroj@grinn-global.com>
+From: guoren at kernel.org <guoren@kernel.org>
+Date: Tue,  7 May 2019 17:47:20 +0800
+Subject: [Buildroot] [PATCH 1/3] arch/csky: Add ck860 and vdsp compiler
+ options
+Message-ID: <1557222442-8484-1-git-send-email-guoren@kernel.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
----
- linux/linux.hash                     |  1 +
- package/linux-headers/Config.in.host | 11 ++++++++++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+From: Guo Ren <ren_guo@c-sky.com>
 
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 035c324447..3d49ea476a 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
-+sha256 d06a7be6e73f97d1350677ad3bae0ce7daecb79c2c2902aaabe806f7fa94f041  linux-5.1.tar.xz
- sha256 bcfd52bf1faa24f5f712146a873959461e001656ad67717e80b947aa6ad53479  linux-5.0.13.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 6c848aa2e2..66366628c5 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_5_0
-+	default BR2_KERNEL_HEADERS_5_1
- 	help
- 	  Select the kernel version to get headers from.
+The ck860 is C-SKY abiv2 cpu series and it could support SMP and vdsp
+instructions set. Add the compiler options for them.
+
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+---
+ arch/Config.in.csky | 33 ++++++++++++++++++++-------------
+ 1 file changed, 20 insertions(+), 13 deletions(-)
+
+diff --git a/arch/Config.in.csky b/arch/Config.in.csky
+index e88e4e2..bbff600 100644
+--- a/arch/Config.in.csky
++++ b/arch/Config.in.csky
+@@ -13,19 +13,26 @@ config BR2_ck807
+ config BR2_ck810
+ 	bool "ck810"
  
-@@ -53,6 +53,10 @@ config BR2_KERNEL_HEADERS_5_0
- 	bool "Linux 5.0.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
- 
-+config BR2_KERNEL_HEADERS_5_1
-+	bool "Linux 5.1.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
++config BR2_ck860
++	bool "ck860"
 +
- config BR2_KERNEL_HEADERS_VERSION
- 	bool "Manually specified Linux version"
- 	help
-@@ -118,6 +122,10 @@ choice
- 	  This is used to hide/show some packages that have strict
- 	  requirements on the version of kernel headers.
+ endchoice
  
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1
-+	bool "5.1.x"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
+ config BR2_CSKY_FPU
+ 	bool "Enable FPU coprocessor"
+-	depends on BR2_ck810 || BR2_ck807
++	depends on BR2_ck807 || BR2_ck810 || BR2_ck860
+ 	help
+ 	  You can say N here if your C-SKY CPU doesn't have a
+ 	  Floating-Point Coprocessor or if you don't need FPU support
+ 	  for your user-space programs.
+ 
+-config BR2_CSKY_DSP
+-	bool "Enable DSP enhanced instructions"
+-	depends on BR2_ck810 || BR2_ck807
++config BR2_CSKY_VDSP
++	bool "Enable VDSP 3.0 enhanced instructions Co-processor"
++	depends on BR2_ck860
 +
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0
- 	bool "5.0.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
-@@ -299,6 +307,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "4.19.40"	if BR2_KERNEL_HEADERS_4_19
- 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
- 	default "5.0.13"	if BR2_KERNEL_HEADERS_5_0
-+	default "5.1"		if BR2_KERNEL_HEADERS_5_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
++config BR2_GCC_TARGET_FLOAT_ABI
++	default "soft"		if !BR2_CSKY_FPU
++	default "hard"		if BR2_CSKY_FPU
+ 
+ config BR2_ARCH
+ 	default "csky"
+@@ -34,15 +41,15 @@ config BR2_ENDIAN
+ 	default "LITTLE"
+ 
+ config BR2_GCC_TARGET_CPU
+-	default "ck610"		if (BR2_ck610 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+-	default "ck807"		if (BR2_ck807 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+-	default "ck807e"	if (BR2_ck807 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+-	default "ck807f"	if (BR2_ck807 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
+-	default "ck807ef"	if (BR2_ck807 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+-	default "ck810"		if (BR2_ck810 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+-	default "ck810e"	if (BR2_ck810 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+-	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
+-	default "ck810ef"	if (BR2_ck810 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
++	default "ck610"		if (BR2_ck610 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
++	default "ck807"		if (BR2_ck807 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
++	default "ck807f"	if (BR2_ck807 &&  BR2_CSKY_FPU && !BR2_CSKY_VDSP)
++	default "ck810"		if (BR2_ck810 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
++	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_VDSP)
++	default "ck860"		if (BR2_ck860 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
++	default "ck860f"	if (BR2_ck860 &&  BR2_CSKY_FPU && !BR2_CSKY_VDSP)
++	default "ck860v"	if (BR2_ck860 && !BR2_CSKY_FPU &&  BR2_CSKY_VDSP)
++	default "ck860fv"	if (BR2_ck860 &&  BR2_CSKY_FPU &&  BR2_CSKY_VDSP)
+ 
+ config BR2_READELF_ARCH_NAME
+ 	default "CSKY"
 -- 
-2.21.0
+2.7.4
