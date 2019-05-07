@@ -1,27 +1,34 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 07 May 2019 15:00:16 +0000
-Subject: [Buildroot] [Bug 11831] python-pyparsing: "No module named
- 'pyparsing'" on target / while building cantools
-In-Reply-To: <bug-11831-163@https.bugs.busybox.net/>
-References: <bug-11831-163@https.bugs.busybox.net/>
-Message-ID: <bug-11831-163-2beBs0w4yC@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 07 May 2019 17:03:15 +0200
+Subject: [Buildroot] [PATCH 1/2] package/docker-engine: bump version to
+ 18.09.6
+In-Reply-To: <20190506191903.6703-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 6 May 2019 21:19:01 +0200")
+References: <20190506191903.6703-1-peter@korsgaard.com>
+Message-ID: <871s1aux1o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11831
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Tibor Stolz <tistolz@outlook.de> changed:
+ > Additional post-18.09.5 fixes:
+ > Builder:
+ > - Fixed COPY and ADD with multiple <src> to not invalidate cache if
+ >   DOCKER_BUILDKIT=1.moby/moby#38964
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |WORKSFORME
-           Assignee|unassigned at buildroot.uclibc |tistolz at outlook.de
-                   |.org                        |
-             Status|NEW                         |RESOLVED
+ > Networking:
+ > - Cleaned up the cluster provider when the agent is closed. docker/libnetwork#2354
+ > - Windows: Now selects a random host port if the user does not specify a
+ >   host port.  docker/libnetwork#2369
+ > - --service-cluster-ip-range is now configurable for UCP install.
+ >   docker/orca#10263
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
