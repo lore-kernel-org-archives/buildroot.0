@@ -1,32 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 May 2019 17:03:42 +0200
-Subject: [Buildroot] [PATCH] toolchain/toolchain-external-andes-nds32:
- disable static build
-In-Reply-To: <a33c8c3ccbb5888c7ff288748bb769d4fa402ce6.1557201262.git.baruch@tkos.co.il>
- (Baruch Siach's message of "Tue, 7 May 2019 06:54:22 +0300")
-References: <a33c8c3ccbb5888c7ff288748bb769d4fa402ce6.1557201262.git.baruch@tkos.co.il>
-Message-ID: <87o94etigh.fsf@dell.be.48ers.dk>
+Date: Tue, 7 May 2019 17:02:44 +0200
+Subject: [Buildroot] [git commit] package/cryptopp: replace utf-8 space by
+ ascii character
+Message-ID: <20190507145846.305E08830A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=695f20cd0c92bd68bf771dc07751335519b40875
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Buildroot does not support static build with glibc. Since this external
- > toolchain uses glibc, disable static build with this toolchain.
+Replace utf-8 NO-BREAK-SPACE (c2 a0) in comment line by simple
+ascii space character.
 
- > Fixes:
- > http://autobuild.buildroot.net/results/3c93cfac81f15f4c18eb7ad578ad86bb7bcf1c12/
- > http://autobuild.buildroot.net/results/63994f51a2b224b66acfafe5b236249d867a507d/
- > http://autobuild.buildroot.net/results/96c3be922a96c50fbd8e68059f9ced8a2a75f9ab/
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cryptopp/cryptopp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Cc: Nylon Chen <nylon7@andestech.com>
- > Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index 3a9f621c67..f1d19386ab 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -17,7 +17,7 @@ endef
+ 
+ HOST_CRYPTOPP_CXXFLAGS = $(HOST_CFLAGS) -fPIC
+ 
+-#??_mm256_broadcastsi128_si256 has been added only in gcc 4.9
++# _mm256_broadcastsi128_si256 has been added only in gcc 4.9
+ ifneq ($(BR2_HOST_GCC_AT_LEAST_4_9),y)
+ HOST_CRYPTOPP_CXXFLAGS += -DCRYPTOPP_DISABLE_AVX2
+ endif
