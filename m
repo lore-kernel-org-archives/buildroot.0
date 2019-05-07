@@ -1,36 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 May 2019 17:02:44 +0200
-Subject: [Buildroot] [git commit] package/cryptopp: replace utf-8 space by
- ascii character
-Message-ID: <20190507145846.305E08830A@busybox.osuosl.org>
+Date: Tue, 7 May 2019 17:02:17 +0200
+Subject: [Buildroot] [git commit] package/docker-cli: bump version to 18.09.6
+Message-ID: <20190507145846.296D1801F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=695f20cd0c92bd68bf771dc07751335519b40875
+commit: https://git.buildroot.net/buildroot/commit/?id=c7e5f9cfc64862835e1d0764c6454abd3ee7311c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Replace utf-8 NO-BREAK-SPACE (c2 a0) in comment line by simple
-ascii space character.
+Additional post-18.09.5 fixes:
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Builder:
+- Fixed COPY and ADD with multiple <src> to not invalidate cache if
+  DOCKER_BUILDKIT=1.moby/moby#38964
+
+Networking:
+- Cleaned up the cluster provider when the agent is closed. docker/libnetwork#2354
+- Windows: Now selects a random host port if the user does not specify a
+  host port.  docker/libnetwork#2369
+- --service-cluster-ip-range is now configurable for UCP install.
+  docker/orca#10263
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptopp/cryptopp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
-index 3a9f621c67..f1d19386ab 100644
---- a/package/cryptopp/cryptopp.mk
-+++ b/package/cryptopp/cryptopp.mk
-@@ -17,7 +17,7 @@ endef
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 987fbba3e9..e8af45ccea 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	dfed7e3b14643101e6d3746e722cbe8294dcf078c5405f3fb78bc38c7c17f0b1  docker-cli-v18.09.5.tar.gz
++sha256	02bcb73dde1c9542fa65c8b87078aaa1b01b0dbdd62346637bcf0999a2a0909f  docker-cli-v18.09.6.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index 3ee9f5ca72..b71bd7097d 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- HOST_CRYPTOPP_CXXFLAGS = $(HOST_CFLAGS) -fPIC
+-DOCKER_CLI_VERSION = v18.09.5
++DOCKER_CLI_VERSION = v18.09.6
+ DOCKER_CLI_SITE = $(call github,docker,cli,$(DOCKER_CLI_VERSION))
+ DOCKER_CLI_WORKSPACE = gopath
  
--#??_mm256_broadcastsi128_si256 has been added only in gcc 4.9
-+# _mm256_broadcastsi128_si256 has been added only in gcc 4.9
- ifneq ($(BR2_HOST_GCC_AT_LEAST_4_9),y)
- HOST_CRYPTOPP_CXXFLAGS += -DCRYPTOPP_DISABLE_AVX2
- endif
