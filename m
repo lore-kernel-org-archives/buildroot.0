@@ -1,34 +1,99 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 May 2019 22:59:28 +0200
-Subject: [Buildroot] [git commit] package/mpfr: replace utf-8 space by ascii
- character
-Message-ID: <20190507210158.28A6A8125A@busybox.osuosl.org>
+Date: Tue, 7 May 2019 23:06:05 +0200
+Subject: [Buildroot] [git commit] core: remove show-dependency-tree
+Message-ID: <20190507210158.4F6C3815D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8011fcb0d186a0934d82165cf737fe53744710b6
+commit: https://git.buildroot.net/buildroot/commit/?id=f5f17c4dd7a449941a395002b0b9dae37368a8f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Replace utf-8 NO-BREAK-SPACE (c2 a0) in comment line by simple
-ascii space character.
+show-dependency-tree was introduced in this release cycle, as a way to
+quickly and easily provide the dependency tree to graph-depends.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+show-dependency-tree is no longer used, now that graph-depends has been
+switched over to using the more versatile show-info.
+
+Beside, show-dependency-tree has never been part of a release.
+
+Drop it.
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpfr/mpfr.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Makefile               | 4 ----
+ fs/common.mk           | 8 --------
+ package/pkg-generic.mk | 6 ------
+ 3 files changed, 18 deletions(-)
 
-diff --git a/package/mpfr/mpfr.hash b/package/mpfr/mpfr.hash
-index 593c97d774..ea44b8c20a 100644
---- a/package/mpfr/mpfr.hash
-+++ b/package/mpfr/mpfr.hash
-@@ -1,5 +1,5 @@
- # From http://lists.gnu.org/archive/html/info-gnu/2019-01/msg00019.html
- sha256 1d3be708604eae0e42d578ba93b390c2a145f17743a744d8f3f8c2ad5855a38a  mpfr-4.0.2.tar.xz
+diff --git a/Makefile b/Makefile
+index 86e444da98..4da2453288 100644
+--- a/Makefile
++++ b/Makefile
+@@ -877,10 +877,6 @@ graph-depends-requirements:
+ 	@dot -? >/dev/null 2>&1 || \
+ 		{ echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1; }
  
--#??Hash for license file
-+# Hash for license file
- sha256 e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118  COPYING.LESSER
+-.PHONY: show-dependency-tree
+-show-dependency-tree: $(patsubst %,%-show-dependency-tree,$(PACKAGES) $(TARGETS_ROOTFS))
+-	@:
+-
+ .PHONY: graph-depends
+ graph-depends: graph-depends-requirements
+ 	@$(INSTALL) -d $(GRAPHS_DIR)
+diff --git a/fs/common.mk b/fs/common.mk
+index 6dd1774726..fceb38c5b9 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -61,10 +61,6 @@ ROOTFS_COMMON_FINAL_RECURSIVE_DEPENDENCIES = $(sort \
+ 	) \
+ 	$(ROOTFS_COMMON_FINAL_RECURSIVE_DEPENDENCIES__X))
+ 
+-rootfs-common-show-dependency-tree: $(patsubst %,%-show-dependency-tree,$(ROOTFS_COMMON_DEPENDENCIES))
+-	$(info rootfs-common: host)
+-	$(info rootfs-common -> $(foreach d,$(ROOTFS_COMMON_DEPENDENCIES),$(d)))
+-
+ .PHONY: rootfs-common
+ rootfs-common: $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
+ 	@$(call MESSAGE,"Generating root filesystems common tables")
+@@ -117,10 +113,6 @@ ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES = $$(sort \
+ 	) \
+ 	$$(ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES__X))
+ 
+-rootfs-$(1)-show-dependency-tree: $$(patsubst %,%-show-dependency-tree,$$(ROOTFS_$(2)_DEPENDENCIES))
+-	$$(info rootfs-$(1): host)
+-	$$(info rootfs-$(1) -> $$(foreach d,$$(ROOTFS_$(2)_DEPENDENCIES),$$(d)))
+-
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
+ ROOTFS_$(2)_COMPRESS_EXT = .gz
+ ROOTFS_$(2)_COMPRESS_CMD = gzip -9 -c
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 67782138b4..e44f5d913c 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -862,11 +862,6 @@ $(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPEND
+ 	@:
+ 	$$(info $(1))
+ 
+-$(1)-show-dependency-tree: $$(patsubst %,%-show-dependency-tree,$$($(2)_FINAL_ALL_DEPENDENCIES))
+-	@:
+-	$$(info $(1): $(4) $$(if $$($(2)_IS_VIRTUAL),virtual,$$($(2)_DL_VERSION)))
+-	$$(info $(1) -> $$($(2)_FINAL_ALL_DEPENDENCIES))
+-
+ $(1)-show-info:
+ 	@:
+ 	$$(info $$(call clean-json,{ $$(call json-info,$(2)) }))
+@@ -1101,7 +1096,6 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
+ 	$(1)-reconfigure \
+ 	$(1)-reinstall \
+ 	$(1)-rsync \
+-	$(1)-show-dependency-tree \
+ 	$(1)-show-depends \
+ 	$(1)-show-info \
+ 	$(1)-show-version \
