@@ -1,10 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue,  7 May 2019 23:30:26 +0200
-Subject: [Buildroot] [PATCH v1 24/28] package/rpm: replace utf-8 space by
+Date: Tue,  7 May 2019 23:30:29 +0200
+Subject: [Buildroot] [PATCH v1 27/28] package/vdr: replace utf-8 space by
  ascii character
 In-Reply-To: <20190507213030.1542-1-ps.report@gmx.net>
 References: <20190507213030.1542-1-ps.report@gmx.net>
-Message-ID: <20190507213030.1542-4-ps.report@gmx.net>
+Message-ID: <20190507213030.1542-7-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,19 +16,21 @@ ascii space character.
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- package/rpm/rpm.hash | 2 +-
+ package/vdr/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/rpm/rpm.hash b/package/rpm/rpm.hash
-index b550e12721..f7cbd0cbc3 100644
---- a/package/rpm/rpm.hash
-+++ b/package/rpm/rpm.hash
-@@ -1,5 +1,5 @@
- # From https://rpm.org/wiki/Releases/4.14.2.1.html
- sha256 1139c24b7372f89c0a697096bf9809be70ba55e006c23ff47305c1849d98acda  rpm-4.14.2.1.tar.bz2
-
--#?Hash for license file
-+# Hash for license file
- sha256 d56f4f1f290f6920cb053aef0dbcd0b853cda289e2568b364ddbfce220a6f3e0  COPYING
+diff --git a/package/vdr/Config.in b/package/vdr/Config.in
+index 712364a971..df602f26d6 100644
+--- a/package/vdr/Config.in
++++ b/package/vdr/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_VDR
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+-	depends on BR2_TOOLCHAIN_USES_GLIBC #?execinfo.h
++	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_FONTCONFIG
 --
 2.21.0
