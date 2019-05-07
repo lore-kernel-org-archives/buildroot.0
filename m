@@ -1,48 +1,21 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 7 May 2019 21:54:24 +0200
-Subject: [Buildroot] [RFC PATCH] package/util-linux: build libraries as
- a separate package
-In-Reply-To: <20190507165158.10427-1-unixmania@gmail.com>
-References: <20190507165158.10427-1-unixmania@gmail.com>
-Message-ID: <20190507215424.791e69d3@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 07 May 2019 22:23:40 +0200
+Subject: [Buildroot] [PATCH] package/luarocks: bump to version 3.1.1
+In-Reply-To: <20190506193213.22345-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Mon, 6 May 2019 21:32:13 +0200")
+References: <20190506193213.22345-1-francois.perrad@gadz.org>
+Message-ID: <87bm0et3n7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Carlos,
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-On Tue,  7 May 2019 13:51:58 -0300
-unixmania at gmail.com wrote:
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-> The findmount and lsblk utilities need udev to work correctly but cannot
-> be built with udev support because the packages providing libudev (eudev
-> and systemd) depend on util-linux, creating a chicken-egg problem. Solve
-> it by means of the following changes:
+Committed, thanks.
 
-Thanks a lot for working on this topic. It is obviously becoming a
-nightmare :-/
-
-> - Add the util-linux-libs package, which provides libblkid, libfdisk,
->   libmount, libsmartcols and libuuid. It needs a small patch to
->   install the uuidd.h header, used to build the uuidd utility.
-> - Make util-linux depend on util-linux-libs and build only the programs.
->   This requires a quite intrusive patch that modifies Makefile.am and
->   some Makemodule.am files, thus requiring AUTORECONF.
-
-Could you get in touch with upstream util-linux, expose the problem,
-and see if they would be willing to merge some changes that would help
-building only the programs ?
-
-The best would of course be for upstream to realize that there is now a
-circular dependency, and that it should be broken up by splitting
-util-linux upstream itself in two separate projects.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
