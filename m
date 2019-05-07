@@ -1,42 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 May 2019 17:02:53 +0200
-Subject: [Buildroot] [git commit] toolchain/toolchain-external-andes-nds32:
- disable static build
-Message-ID: <20190507145846.376D58869D@busybox.osuosl.org>
+Date: Tue,  7 May 2019 17:13:39 +0200
+Subject: [Buildroot] [PATCH] package/go: bump version to 1.12.5
+Message-ID: <20190507151339.350-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=982a61b6adabbcd68a0eb9ad1e348a732915e9e4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes a number of issues discovered since 1.12.4.  From the release notes:
 
-Buildroot does not support static build with glibc. Since this external
-toolchain uses glibc, disable static build with this toolchain.
+go1.12.5 (released 2019/05/06) includes fixes to the compiler, the linker,
+the go command, the runtime, and the os package.
 
-Fixes:
-http://autobuild.buildroot.net/results/3c93cfac81f15f4c18eb7ad578ad86bb7bcf1c12/
-http://autobuild.buildroot.net/results/63994f51a2b224b66acfafe5b236249d867a507d/
-http://autobuild.buildroot.net/results/96c3be922a96c50fbd8e68059f9ced8a2a75f9ab/
-
-Cc: Nylon Chen <nylon7@andestech.com>
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
-index e2fe63677d..2596fc3c8b 100644
---- a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
-@@ -1,6 +1,7 @@
- config BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32
- 	bool "Andes nds32"
- 	depends on BR2_nds32
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
+diff --git a/package/go/go.hash b/package/go/go.hash
+index df3a9c4e43..13cc9baef4 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
+@@ -1,3 +1,3 @@
+ # From https://golang.org/dl/
+-sha256	4affc3e610cd8182c47abbc5b0c0e4e3c6a2b945b55aaa2ba952964ad9df1467  go1.12.4.src.tar.gz
++sha256	2aa5f088cbb332e73fc3def546800616b38d3bfe6b8713b8a6404060f22503e8  go1.12.5.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index f31b1941c4..a2453e001f 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GO_VERSION = 1.12.4
++GO_VERSION = 1.12.5
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
+-- 
+2.11.0
