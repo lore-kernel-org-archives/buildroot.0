@@ -1,236 +1,149 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 7 May 2019 08:19:32 -0500
-Subject: [Buildroot] [PATCH v7 4/5] package/compiler-rt: new package
-In-Reply-To: <4b05a0e7-2996-d2d1-86d9-7459ab24ebbf@smile.fr>
-References: <20190501194032.765-1-matthew.weber@rockwellcollins.com>
- <20190501194032.765-5-matthew.weber@rockwellcollins.com>
- <4b05a0e7-2996-d2d1-86d9-7459ab24ebbf@smile.fr>
-Message-ID: <CANQCQpae_a6xE9CoDzT6e8Nxp4zua7OMgr9y=9x+R08Q+s5rHA@mail.gmail.com>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Tue, 7 May 2019 18:56:57 +0530
+Subject: [Buildroot] [GSoC 2019] Introduction Email - Atharva Lele
+In-Reply-To: <20190502195713.GA17072@scaer>
+References: <fd29cc91-8323-8f8e-addc-5d8a6a194acd@mind.be>
+ <d528d059-b900-7b18-7772-dbb3350f1af6@mind.be>
+ <CABM+sgpVOb0gxPeA3fTm4Luup6wDgyE56DPB1taVouCB4JmryA@mail.gmail.com>
+ <CABM+sgoupr2UheZSXz97FDRZYaJceU_EPsc8jryZRtnXiuwh4g@mail.gmail.com>
+ <ee6549a4-21e2-7586-b35d-7174657934b8@mind.be>
+ <CABM+sgrntFNSi6=fi3SP_02qqBQPuf+X=LbeRwv+6Dd9sjX4WQ@mail.gmail.com>
+ <20190402181929.GJ2587@scaer>
+ <CABM+sgrL3SY4SfBhn2f6VGCguQM51xif3x1_cck57FB2eULrug@mail.gmail.com>
+ <CABM+sgp1B+S7n=R1picPK5RN-CdxZ_BaRSKDTPdkXYiBkpVkcA@mail.gmail.com>
+ <CABM+sgo1dxV-SzpMn0VS-R0zJm5A2cj2ycH8fOSOLEOCd7FFtw@mail.gmail.com>
+ <20190502195713.GA17072@scaer>
+Message-ID: <CABM+sgoVC9SK4_x8K+Vd0B+G9i2HAQ7983OuD1psdieSVFzGFA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+Yann, Arnout, all,
 
-On Tue, May 7, 2019 at 6:54 AM Romain Naour <romain.naour@smile.fr> wrote:
+I'm really glad to be selected as a GSoC student for Reproducible Builds
+and look forward
+to working with all of you.
+
+I would like to hear your inputs on my plan and deliverables and to to go
+ahead with it.
+If there's any specific time you'd want to discuss about it do let me know,
+I'm usually
+available from 10am to 10pm (Indian Standard Time).
+
+Regards,
+Atharva Lele
+
+
+On Fri, May 3, 2019 at 1:27 AM Yann E. MORIN <yann.morin.1998@free.fr>
+wrote:
+
+> Atharva, All,
 >
-> Le 01/05/2019 ? 21:40, Matt Weber a ?crit :
-> > This patch adds support for the compiler-rt (CLANG runtime) library.
-> > It builds a set of static libraries and installs them into the
-> > CLANG/LLVM toolchain resource folder.
-> >
-> > Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> > Cc: Romain Naour <romain.naour@smile.fr>
-> > Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> > Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
-> > ---
-> > Changes
-> > v1 -> v2
-> > [Romain
-> >  - Removed unnecessary host-cmake dependency
-> >
-> > v2 -> v3
-> > [Romain
-> >  - Update to use COMPILER_RT_INSTALL_PATH for library install
-> > [Ricardo
-> >  - Fixed check-package extra line
-> >  - Spelling in commit message
-> >
-> > v3 -> v4
-> > [Valentin
-> >  - Pointed out that non-glibc libraries won't build. Further
-> >    investigation shows that the lib asan support in compiler-rt
-> >    doesn't have the libc checks yet to support multiple libraries.
-> >    (https://patchwork.ozlabs.org/patch/339938/ was the best example
-> >     I could find and it doesn't look like anything has changed in the
-> >     recent codebase)
-> >
-> > v4 -> v5
-> > [Thomas P
-> >  - Revisited staging install step and found a cleaner way to use the
-> >    default and then a hook to setup the runtime library path
-> >
-> > v6
-> >  - Bumped to 7.0.1 to match current LLVM/Clang version
-> >
-> > v7
-> >  - Rebased on master for 8.0 LLVM/Clang version
-> >  - Added comment about bumping verions of LLVM/Clang and Compiler-rt
-> >    together
-> > [Romain
-> >  - Disabled test cases (-DCOMPILER_RT_INCLUDE_TESTS=OFF)
-> > ---
-> >  DEVELOPERS                           |  1 +
-> >  package/Config.in                    |  1 +
-> >  package/clang/clang.mk               |  2 +-
-> >  package/compiler-rt/Config.in        | 14 +++++++++++
-> >  package/compiler-rt/compiler-rt.hash |  3 +++
-> >  package/compiler-rt/compiler-rt.mk   | 36 ++++++++++++++++++++++++++++
-> >  package/llvm/llvm.mk                 |  2 +-
-> >  7 files changed, 57 insertions(+), 2 deletions(-)
-> >  create mode 100644 package/compiler-rt/Config.in
-> >  create mode 100644 package/compiler-rt/compiler-rt.hash
-> >  create mode 100644 package/compiler-rt/compiler-rt.mk
-> >
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 6ccb0afaf6..72a635a81a 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -1467,6 +1467,7 @@ F:      package/bridge-utils/
-> >  F:   package/checkpolicy/
-> >  F:   package/checksec/
-> >  F:   package/cgroupfs-mount/
-> > +F:   package/compiler-rt/
-> >  F:   package/crda/
-> >  F:   package/cunit/
-> >  F:   package/dacapo/
-> > diff --git a/package/Config.in b/package/Config.in
-> > index f592e74a99..99fcf49a63 100644
-> > --- a/package/Config.in
-> > +++ b/package/Config.in
-> > @@ -1652,6 +1652,7 @@ menu "Other"
-> >       source "package/clapack/Config.in"
-> >       source "package/classpath/Config.in"
-> >       source "package/cmocka/Config.in"
-> > +     source "package/compiler-rt/Config.in"
-> >       source "package/cppcms/Config.in"
-> >       source "package/cracklib/Config.in"
-> >       source "package/dawgdic/Config.in"
-> > diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-> > index 07e7fced2a..87a80ab258 100644
-> > --- a/package/clang/clang.mk
-> > +++ b/package/clang/clang.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
-> >
-> > -# LLVM and Clang should be version bumped together
-> > +# LLVM, Compiler-rt and Clang should be version bumped together
-> >  CLANG_VERSION = 8.0.0
-> >  CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
-> >  CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
-> > diff --git a/package/compiler-rt/Config.in b/package/compiler-rt/Config.in
-> > new file mode 100644
-> > index 0000000000..9afc0d9d60
-> > --- /dev/null
-> > +++ b/package/compiler-rt/Config.in
-> > @@ -0,0 +1,14 @@
-> > +config BR2_PACKAGE_COMPILER_RT
-> > +     bool "compiler-rt"
-> > +     depends on BR2_PACKAGE_LLVM
-> > +     depends on BR2_TOOLCHAIN_USES_GLIBC # asan lib requires
-> > +     help
-> > +       A collection of runtime libraries primarily used by clang and
-> > +       llvm to provide builtins, sanitizer runtimes, and profiling
-> > +       at runtime.
-> > +
-> > +       https://compiler-rt.llvm.org/
-> > +
-> > +comment "compiler-rt requires llvm to be enabled and a glibc toolchain"
-> > +     depends on !BR2_PACKAGE_LLVM
-> > +     depends on !BR2_TOOLCHAIN_USES_GLIBC
-> > diff --git a/package/compiler-rt/compiler-rt.hash b/package/compiler-rt/compiler-rt.hash
-> > new file mode 100644
-> > index 0000000000..4b6bd1a75e
-> > --- /dev/null
-> > +++ b/package/compiler-rt/compiler-rt.hash
-> > @@ -0,0 +1,3 @@
-> > +# Locally computed:
-> > +sha256 782edfc119ee172f169c91dd79f2c964fb6b248bd9b73523149030ed505bbe18  compiler-rt-7.0.1.src.tar.xz
-> > +sha256 417541d990edb3f96327ac03cb67e52eac80fc5c3e7afc69213cd04d7c3b9b27  LICENSE.TXT
+> On 2019-05-03 00:57 +0530, Atharva Lele spake thusly:
+> > Yann, Arnout, and everyone:
+> > Just sending a follow-up email since I didn't hear back from you guys.
+> Unfortunately due to
+> > college assignments I was completely swamped and didn't get a chance to
+> work on GSoC
+> > as I'd mentioned in my timeline. I can devote a bit more time in this
+> month, so I can catch up
+> > on my research about Reproducible Builds that I was going to do.
+> > If there's anything you want me to know then I'm looking forward to
+> hearing from you.
 >
-> The hashes must be updated after the bump to llvm/clang 8.0.0 :)
-
-Good call, I've made that update but it must have slipped out of my
-rebase :-)  Will update pending other feedbac.
-
+> As described in the official GSoC timeline, the selection step is still
+> an on-going process, and the final results will be announced on May the
+> 6th:
 >
-> Best regards,
-> Romain
+>     https://summerofcode.withgoogle.com/how-it-works/#timeline
 >
-> > diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
-> > new file mode 100644
-> > index 0000000000..7eda3bc4fe
-> > --- /dev/null
-> > +++ b/package/compiler-rt/compiler-rt.mk
-> > @@ -0,0 +1,36 @@
-> > +################################################################################
-> > +#
-> > +# compiler-rt
-> > +#
-> > +################################################################################
-> > +
-> > +# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
-> > +# tied to the version of those tools
-> > +COMPILER_RT_VERSION = 8.0.0
-> > +COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
-> > +COMPILER_RT_SITE = http://llvm.org/releases/$(COMPILER_RT_VERSION)
-> > +COMPILER_RT_LICENSE = NCSA MIT
-> > +COMPILER_RT_LICENSE_FILES = LICENSE.TXT
-> > +COMPILER_RT_DEPENDENCIES = host-clang llvm
-> > +
-> > +COMPILER_RT_INSTALL_STAGING = YES
-> > +COMPILER_RT_INSTALL_TARGET = NO
-> > +
-> > +COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_STANDALONE_BUILD=OFF \
-> > +     -DCOMPILER_RT_STANDALONE_BUILD=ON \
-> > +     -DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME) \
-> > +     -DLLVM_CONFIG_PATH=$(HOST_DIR)/usr/bin/llvm-config
-> > +
-> > +# The installation of the target runtime libraries defaults to DESTDIR, however
-> > +# host-clang resources directory needs a link so Clang can find the runtime
-> > +# libraries in the same location they would be if built as part of the Clang
-> > +# build. The "resources" directory is loosely documented and seems to be
-> > +# assumed, as compiler-rt is usually build at the same time as Clang and not
-> > +# standalone.
-> > +define COMPILER_RT_SETUP_RUNTIME_LIBS
-> > +     mkdir -p $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib
-> > +     ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/lib/linux $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib/linux
-> > +endef
-> > +COMPILER_RT_POST_INSTALL_STAGING_HOOKS += COMPILER_RT_SETUP_RUNTIME_LIBS
-> > +
-> > +$(eval $(cmake-package))
-> > diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-> > index 9d276c5190..cd07860068 100644
-> > --- a/package/llvm/llvm.mk
-> > +++ b/package/llvm/llvm.mk
-> > @@ -4,7 +4,7 @@
-> >  #
-> >  ################################################################################
+> Regards,
+> Yann E. MORIN.
+>
+> > Regards,
+> > Atharva Lele
+> > On Wed, Apr 10, 2019 at 12:08 AM Atharva Lele < [1]itsatharva@gmail.com>
+> wrote:
 > >
-> > -# LLVM and Clang should be version bumped together
-> > +# LLVM, Compiler-rt and Clang should be version bumped together
-> >  LLVM_VERSION = 8.0.0
-> >  LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
-> >  LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
+> >   Hello Arnout, Yann, and everyone:
+> >   I've submitted my final GSoC proposal PDF on the GSoC website.
+> >   If needed we can share the plan with the mailing list, let me know if
+> that needs
+> >   to be done.
+> >   Regards,
+> >   Atharva Lele
+> >   On Thu, Apr 4, 2019 at 9:25 PM Atharva Lele < [2]itsatharva@gmail.com>
+> wrote:
 > >
+> >     > I'll do my part of the review later tonight.
+> >     I have modified and added some parts (in blue color) and highlighted
+> which parts
+> >     to remove (in red color). Also replied to your comments.
+> >     If you have any more suggestions please let me know. Meanwhile I
+> will keep looking
+> >     for more information to improve the technicalities of my draft.
+> >     Regards,
+> >     Atharva Lele
+> >     On Tue, Apr 2, 2019 at 11:49 PM Yann E. MORIN < [3]
+> yann.morin.1998 at free.fr> wrote:
+> >
+> >       Atharva, Arnout, All,
+> >
+> >       On 2019-04-02 21:00 +0530, Atharva Lele spake thusly:
+> >       > > I've made comments on the document.
+> >       > I've replied to your comments on there. We can discuss a bit
+> more and I think then I'll
+> >       > make necessary changes to the document.
+> >       > > I'm not sure if Yann is OK with using
+> >       > > Googly stuff though.
+> >       > Is there any other platform that he would be comfortable working
+> on?
+> >       > I'll gladly move things over to there.
+> >
+> >       Nope, that's fine. It's part of the GSoC ecosystem, so I'll play
+> by the
+> >       GSoC rules. ;-) I'll do my part of the review later tonight.
+> >
+> >       Regards,
+> >       Yann E. MORIN.
+> >
+> >       --
+> >
+>  .-----------------.--------------------.------------------.--------------------.
+> >       |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> >       | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
 >
-
-
--- 
-
-Matthew Weber | Pr. Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
+> >            |
+> >       | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/
+> There is no  |
+> >       | [4]http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |
+>  v   conspiracy.  |
+> >
+>  '------------------------------^-------^------------------^--------------------'
+> >
+> > Links:
+> > 1. mailto:itsatharva at gmail.com
+> > 2. mailto:itsatharva at gmail.com
+> > 3. mailto:yann.morin.1998 at free.fr
+> > 4. http://ymorin.is-a-geek.org/
+>
+> --
+>
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
+> conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
+>      |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
+> no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
+>  conspiracy.  |
+>
+> '------------------------------^-------^------------------^--------------------'
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190507/033bb5fb/attachment.html>
