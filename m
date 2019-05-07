@@ -1,199 +1,129 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 7 May 2019 13:54:27 +0200
-Subject: [Buildroot] [PATCH v7 4/5] package/compiler-rt: new package
-In-Reply-To: <20190501194032.765-5-matthew.weber@rockwellcollins.com>
-References: <20190501194032.765-1-matthew.weber@rockwellcollins.com>
- <20190501194032.765-5-matthew.weber@rockwellcollins.com>
-Message-ID: <4b05a0e7-2996-d2d1-86d9-7459ab24ebbf@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 7 May 2019 14:01:50 +0200
+Subject: [Buildroot] [PATCH 1/3] arch/csky: Add ck860 and vdsp compiler
+ options
+In-Reply-To: <1557222442-8484-1-git-send-email-guoren@kernel.org>
+References: <1557222442-8484-1-git-send-email-guoren@kernel.org>
+Message-ID: <20190507140150.7d970503@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le 01/05/2019 ? 21:40, Matt Weber a ?crit?:
-> This patch adds support for the compiler-rt (CLANG runtime) library.
-> It builds a set of static libraries and installs them into the
-> CLANG/LLVM toolchain resource folder.
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> Cc: Romain Naour <romain.naour@smile.fr>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Valentin Korenblit <valentinkorenblit@gmail.com>
-> ---
-> Changes
-> v1 -> v2
-> [Romain
->  - Removed unnecessary host-cmake dependency
-> 
-> v2 -> v3
-> [Romain
->  - Update to use COMPILER_RT_INSTALL_PATH for library install
-> [Ricardo
->  - Fixed check-package extra line
->  - Spelling in commit message
-> 
-> v3 -> v4
-> [Valentin
->  - Pointed out that non-glibc libraries won't build. Further
->    investigation shows that the lib asan support in compiler-rt
->    doesn't have the libc checks yet to support multiple libraries.
->    (https://patchwork.ozlabs.org/patch/339938/ was the best example
->     I could find and it doesn't look like anything has changed in the
->     recent codebase)
-> 
-> v4 -> v5
-> [Thomas P
->  - Revisited staging install step and found a cleaner way to use the
->    default and then a hook to setup the runtime library path
-> 
-> v6
->  - Bumped to 7.0.1 to match current LLVM/Clang version
-> 
-> v7
->  - Rebased on master for 8.0 LLVM/Clang version
->  - Added comment about bumping verions of LLVM/Clang and Compiler-rt
->    together
-> [Romain
->  - Disabled test cases (-DCOMPILER_RT_INCLUDE_TESTS=OFF)
-> ---
->  DEVELOPERS                           |  1 +
->  package/Config.in                    |  1 +
->  package/clang/clang.mk               |  2 +-
->  package/compiler-rt/Config.in        | 14 +++++++++++
->  package/compiler-rt/compiler-rt.hash |  3 +++
->  package/compiler-rt/compiler-rt.mk   | 36 ++++++++++++++++++++++++++++
->  package/llvm/llvm.mk                 |  2 +-
->  7 files changed, 57 insertions(+), 2 deletions(-)
->  create mode 100644 package/compiler-rt/Config.in
->  create mode 100644 package/compiler-rt/compiler-rt.hash
->  create mode 100644 package/compiler-rt/compiler-rt.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 6ccb0afaf6..72a635a81a 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1467,6 +1467,7 @@ F:	package/bridge-utils/
->  F:	package/checkpolicy/
->  F:	package/checksec/
->  F:	package/cgroupfs-mount/
-> +F:	package/compiler-rt/
->  F:	package/crda/
->  F:	package/cunit/
->  F:	package/dacapo/
-> diff --git a/package/Config.in b/package/Config.in
-> index f592e74a99..99fcf49a63 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1652,6 +1652,7 @@ menu "Other"
->  	source "package/clapack/Config.in"
->  	source "package/classpath/Config.in"
->  	source "package/cmocka/Config.in"
-> +	source "package/compiler-rt/Config.in"
->  	source "package/cppcms/Config.in"
->  	source "package/cracklib/Config.in"
->  	source "package/dawgdic/Config.in"
-> diff --git a/package/clang/clang.mk b/package/clang/clang.mk
-> index 07e7fced2a..87a80ab258 100644
-> --- a/package/clang/clang.mk
-> +++ b/package/clang/clang.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -# LLVM and Clang should be version bumped together
-> +# LLVM, Compiler-rt and Clang should be version bumped together
->  CLANG_VERSION = 8.0.0
->  CLANG_SITE = http://llvm.org/releases/$(CLANG_VERSION)
->  CLANG_SOURCE = cfe-$(CLANG_VERSION).src.tar.xz
-> diff --git a/package/compiler-rt/Config.in b/package/compiler-rt/Config.in
-> new file mode 100644
-> index 0000000000..9afc0d9d60
-> --- /dev/null
-> +++ b/package/compiler-rt/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_COMPILER_RT
-> +	bool "compiler-rt"
-> +	depends on BR2_PACKAGE_LLVM
-> +	depends on BR2_TOOLCHAIN_USES_GLIBC # asan lib requires
-> +	help
-> +	  A collection of runtime libraries primarily used by clang and
-> +	  llvm to provide builtins, sanitizer runtimes, and profiling
-> +	  at runtime.
-> +
-> +	  https://compiler-rt.llvm.org/
-> +
-> +comment "compiler-rt requires llvm to be enabled and a glibc toolchain"
-> +	depends on !BR2_PACKAGE_LLVM
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
-> diff --git a/package/compiler-rt/compiler-rt.hash b/package/compiler-rt/compiler-rt.hash
-> new file mode 100644
-> index 0000000000..4b6bd1a75e
-> --- /dev/null
-> +++ b/package/compiler-rt/compiler-rt.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed:
-> +sha256 782edfc119ee172f169c91dd79f2c964fb6b248bd9b73523149030ed505bbe18  compiler-rt-7.0.1.src.tar.xz
-> +sha256 417541d990edb3f96327ac03cb67e52eac80fc5c3e7afc69213cd04d7c3b9b27  LICENSE.TXT
+Hello Guo,
 
-The hashes must be updated after the bump to llvm/clang 8.0.0 :)
+Thanks for this new csky related contribution. See below some comments.
+
+On Tue,  7 May 2019 17:47:20 +0800
+guoren at kernel.org wrote:
+
+> From: Guo Ren <ren_guo@c-sky.com>
+> 
+> The ck860 is C-SKY abiv2 cpu series and it could support SMP and vdsp
+> instructions set. Add the compiler options for them.
+> 
+> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+> ---
+>  arch/Config.in.csky | 33 ++++++++++++++++++++-------------
+>  1 file changed, 20 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/Config.in.csky b/arch/Config.in.csky
+> index e88e4e2..bbff600 100644
+> --- a/arch/Config.in.csky
+> +++ b/arch/Config.in.csky
+> @@ -13,19 +13,26 @@ config BR2_ck807
+>  config BR2_ck810
+>  	bool "ck810"
+>  
+> +config BR2_ck860
+> +	bool "ck860"
+> +
+>  endchoice
+>  
+>  config BR2_CSKY_FPU
+>  	bool "Enable FPU coprocessor"
+> -	depends on BR2_ck810 || BR2_ck807
+> +	depends on BR2_ck807 || BR2_ck810 || BR2_ck860
+>  	help
+>  	  You can say N here if your C-SKY CPU doesn't have a
+>  	  Floating-Point Coprocessor or if you don't need FPU support
+>  	  for your user-space programs.
+>  
+> -config BR2_CSKY_DSP
+> -	bool "Enable DSP enhanced instructions"
+> -	depends on BR2_ck810 || BR2_ck807
+
+Why is this option being removed ? This is not explained in the commit
+log.
+
+> +config BR2_CSKY_VDSP
+> +	bool "Enable VDSP 3.0 enhanced instructions Co-processor"
+> +	depends on BR2_ck860
+> +
+> +config BR2_GCC_TARGET_FLOAT_ABI
+> +	default "soft"		if !BR2_CSKY_FPU
+> +	default "hard"		if BR2_CSKY_FPU
+
+This should be in a separate patch, it's not a change that is directly
+related.
+
+>  config BR2_ARCH
+>  	default "csky"
+> @@ -34,15 +41,15 @@ config BR2_ENDIAN
+>  	default "LITTLE"
+>  
+>  config BR2_GCC_TARGET_CPU
+> -	default "ck610"		if (BR2_ck610 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> -	default "ck807"		if (BR2_ck807 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> -	default "ck807e"	if (BR2_ck807 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+> -	default "ck807f"	if (BR2_ck807 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> -	default "ck807ef"	if (BR2_ck807 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+> -	default "ck810"		if (BR2_ck810 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> -	default "ck810e"	if (BR2_ck810 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+> -	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> -	default "ck810ef"	if (BR2_ck810 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+> +	default "ck610"		if (BR2_ck610 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
+> +	default "ck807"		if (BR2_ck807 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
+> +	default "ck807f"	if (BR2_ck807 &&  BR2_CSKY_FPU && !BR2_CSKY_VDSP)
+> +	default "ck810"		if (BR2_ck810 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
+> +	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_VDSP)
+> +	default "ck860"		if (BR2_ck860 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
+> +	default "ck860f"	if (BR2_ck860 &&  BR2_CSKY_FPU && !BR2_CSKY_VDSP)
+> +	default "ck860v"	if (BR2_ck860 && !BR2_CSKY_FPU &&  BR2_CSKY_VDSP)
+> +	default "ck860fv"	if (BR2_ck860 &&  BR2_CSKY_FPU &&  BR2_CSKY_VDSP)
+
+Perhaps this is becoming too much, and we should adopt a solution
+similar to the one in arch/arch.mk.riscv. I.e, drop the
+BR2_GCC_TARGET_CPU definition from arch/Config.in.csky, and add a file
+arch/arch.mk.csky that contains:
+
+ifeq ($(BR2_csky),y)
+
+ifeq ($(BR2_ck610),y)
+GCC_TARGET_CPU := ck610
+else ifeq ($(BR2_ck807),y)
+GCC_TARGET_CPU := ck807
+else ifeq ($(BR2_ck810),y)
+GCC_TARGET_CPU := ck810
+else ifeq ($(BR2_ck860),y)
+GCC_TARGET_CPU := ck860
+endif
+
+ifeq ($(BR2_CSKY_FPU),y)
+GCC_TARGET_CPU := $(GCC_TARGET_CPU)f
+endif
+
+ifeq ($(BR2_CSKY_VDSP),y)
+GCC_TARGET_CPU := $(GCC_TARGET_CPU)v
+endif
+
+endif
 
 Best regards,
-Romain
 
-> diff --git a/package/compiler-rt/compiler-rt.mk b/package/compiler-rt/compiler-rt.mk
-> new file mode 100644
-> index 0000000000..7eda3bc4fe
-> --- /dev/null
-> +++ b/package/compiler-rt/compiler-rt.mk
-> @@ -0,0 +1,36 @@
-> +################################################################################
-> +#
-> +# compiler-rt
-> +#
-> +################################################################################
-> +
-> +# Compiler-RT should be bumped together with LLVM and Clang as the run-time is
-> +# tied to the version of those tools
-> +COMPILER_RT_VERSION = 8.0.0
-> +COMPILER_RT_SOURCE = compiler-rt-$(COMPILER_RT_VERSION).src.tar.xz
-> +COMPILER_RT_SITE = http://llvm.org/releases/$(COMPILER_RT_VERSION)
-> +COMPILER_RT_LICENSE = NCSA MIT
-> +COMPILER_RT_LICENSE_FILES = LICENSE.TXT
-> +COMPILER_RT_DEPENDENCIES = host-clang llvm
-> +
-> +COMPILER_RT_INSTALL_STAGING = YES
-> +COMPILER_RT_INSTALL_TARGET = NO
-> +
-> +COMPILER_RT_CONF_OPTS=-DCOMPILER_RT_STANDALONE_BUILD=OFF \
-> +	-DCOMPILER_RT_STANDALONE_BUILD=ON \
-> +	-DCOMPILER_RT_DEFAULT_TARGET_TRIPLE=$(GNU_TARGET_NAME) \
-> +	-DLLVM_CONFIG_PATH=$(HOST_DIR)/usr/bin/llvm-config
-> +
-> +# The installation of the target runtime libraries defaults to DESTDIR, however
-> +# host-clang resources directory needs a link so Clang can find the runtime
-> +# libraries in the same location they would be if built as part of the Clang
-> +# build. The "resources" directory is loosely documented and seems to be
-> +# assumed, as compiler-rt is usually build at the same time as Clang and not
-> +# standalone.
-> +define COMPILER_RT_SETUP_RUNTIME_LIBS
-> +	mkdir -p $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib
-> +	ln -sf ../../../../$(GNU_TARGET_NAME)/sysroot/usr/lib/linux $(HOST_DIR)/lib/clang/$(HOST_CLANG_VERSION)/lib/linux
-> +endef
-> +COMPILER_RT_POST_INSTALL_STAGING_HOOKS += COMPILER_RT_SETUP_RUNTIME_LIBS
-> +
-> +$(eval $(cmake-package))
-> diff --git a/package/llvm/llvm.mk b/package/llvm/llvm.mk
-> index 9d276c5190..cd07860068 100644
-> --- a/package/llvm/llvm.mk
-> +++ b/package/llvm/llvm.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -# LLVM and Clang should be version bumped together
-> +# LLVM, Compiler-rt and Clang should be version bumped together
->  LLVM_VERSION = 8.0.0
->  LLVM_SITE = http://llvm.org/releases/$(LLVM_VERSION)
->  LLVM_SOURCE = llvm-$(LLVM_VERSION).src.tar.xz
-> 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
