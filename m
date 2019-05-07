@@ -1,98 +1,58 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 7 May 2019 17:41:17 +0200
-Subject: [Buildroot] [PATCH v2 0/3] murata-wireless firmware packages
-In-Reply-To: <20190507083218.24283-1-m.niestroj@grinn-global.com>
-References: <20190507083218.24283-1-m.niestroj@grinn-global.com>
-Message-ID: <20190507154117.GG6887@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 07 May 2019 17:42:03 +0200
+Subject: [Buildroot] [PATCH] package/linux-headers: add support for
+ Linux 5.1 kernel headers
+In-Reply-To: <20190507090149.3143-1-m.niestroj@grinn-global.com> (Marcin
+ Niestroj's message of "Tue, 7 May 2019 11:01:49 +0200")
+References: <20190507090149.3143-1-m.niestroj@grinn-global.com>
+Message-ID: <87k1f2tgok.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Marcin, All,
+>>>>> "Marcin" == Marcin Niestroj <m.niestroj@grinn-global.com> writes:
 
-On 2019-05-07 10:32 +0200, Marcin Niestroj spake thusly:
-> This set adds 3 firmware packages for muRata wireless modules (WiFi + BLE).
-> I've put all three packages into single murata-wireless directory and Kconfig
-> submenu, as they relate to the same hardware and there are plenty of options
-> to choose from. Not sure whether this is the correct approach, so looking
-> forward to get feedback on this.
+ > Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+ > ---
+ >  linux/linux.hash                     |  1 +
+ >  package/linux-headers/Config.in.host | 11 ++++++++++-
+ >  2 files changed, 11 insertions(+), 1 deletion(-)
 
-I wonder why we would actually need three packages.
+ > diff --git a/linux/linux.hash b/linux/linux.hash
+ > index 035c324447..3d49ea476a 100644
+ > --- a/linux/linux.hash
+ > +++ b/linux/linux.hash
+ > @@ -1,4 +1,5 @@
+ >  # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ > +sha256 d06a7be6e73f97d1350677ad3bae0ce7daecb79c2c2902aaabe806f7fa94f041  linux-5.1.tar.xz
+ >  sha256 bcfd52bf1faa24f5f712146a873959461e001656ad67717e80b947aa6ad53479  linux-5.0.13.tar.xz
+ >  # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ >  sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
+ > diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+ > index 6c848aa2e2..66366628c5 100644
+ > --- a/package/linux-headers/Config.in.host
+ > +++ b/package/linux-headers/Config.in.host
+ > @@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+ >  choice
+ >  	prompt "Kernel Headers"
+ >  	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+ > -	default BR2_KERNEL_HEADERS_5_0
+ > +	default BR2_KERNEL_HEADERS_5_1
+ >  	help
+ >  	  Select the kernel version to get headers from.
+ 
+ > @@ -53,6 +53,10 @@ config BR2_KERNEL_HEADERS_5_0
+ >  	bool "Linux 5.0.x kernel headers"
+ >  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+ 
+ > +config BR2_KERNEL_HEADERS_5_1
+ > +	bool "Linux 5.1.x kernel headers"
+ > +	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
 
-As far as I can see from a cursory look, they are all very tightly
-coupled; they even have the same choice about the actual variant to use.
-
-So, I would like we look at making that a single package, which
-downloads multiple tarballs, something like:
-
-    MURATA_WIRELESS_CYW_FW_VERSION = 8d87950bfad28c65926695b7357bd8995b60016a
-    MURATA_WIRELESS_CYW_FW_VERSION_NVRAM = d27f1bf105fa1e5b828e355793b88d4b66188411
-    MURATA_WIRELESS_CYW_FW_VERSION_PATCH = 748462f0b02ec4aeb500bedd60780ac51c37be31
-
-    MURATA_WIRELESS_CYW_FW_SITE = $(call github,murata-wireless,cyw-fmac-fw,$(MURATA_WIRELESS_CYW_FW_VERSION)
-    MURATA_WIRELESS_CYW_FW_EXTRA_DOWNLOADS = \
-        $(call github,murata-wireless,cyw-fmac-nvram,$(MURATA_WIRELESS_CYW_FW_VERSION_NVRAM)/cyw-bt-nvram-$(MURATA_WIRELESS_CYW_FW_VERSION_NVRAM).tar.gz \
-        $(call github,murata-wireless,cyw-fmac-patch,$(MURATA_WIRELESS_CYW_FW_VERSION_PATCH)/cyw-bt-patch-$(MURATA_WIRELESS_CYW_FW_VERSION_PATCH).tar.gz
-
-    define MURATA_WIRELESS_CYW_FW_EXTRACT_NVRAM_PATCH
-        $(foreach tar, $(notdir $(MURATA_WIRELESS_CYW_FW_EXTRA_DOWNLOADS)), \
-            $(call suitable-extractor,$(tar)) $(MURATA_WIRELESS_CYW_FW_DL_DIR)/$(tar) | \
-            $(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -$(sep) \
-        )
-    endef
-    MURATA_WIRELESS_CYW_FW_POST_EXTRACT_HOOKS += MURATA_WIRELESS_CYW_FW_EXTRACT_NVRAM_PATCH
-
-And a similar hook for the installation step (which I leave up to you as
-an exercise ;-) ).
-
-Regards,
-Yann E. MORIN.
-
-> Marcin Niestroj (3):
->   package/murata-wireless-cyw-fmac-fw: new package
->   package/murata-wireless-cyw-fmac-nvram: new package
->   package/murata-wireless-cyw-bt-patch: new package
-> 
->  DEVELOPERS                                    |  1 +
->  package/Config.in                             |  1 +
->  package/murata-wireless/Config.in             |  7 ++
->  .../murata-wireless-cyw-bt-patch/Config.in    | 47 ++++++++++
->  .../murata-wireless-cyw-bt-patch.hash         |  3 +
->  .../murata-wireless-cyw-bt-patch.mk           | 50 ++++++++++
->  .../murata-wireless-cyw-fmac-fw/Config.in     | 91 +++++++++++++++++++
->  .../murata-wireless-cyw-fmac-fw.hash          |  3 +
->  .../murata-wireless-cyw-fmac-fw.mk            | 80 ++++++++++++++++
->  .../murata-wireless-cyw-fmac-nvram/Config.in  | 91 +++++++++++++++++++
->  .../murata-wireless-cyw-fmac-nvram.hash       |  3 +
->  .../murata-wireless-cyw-fmac-nvram.mk         | 75 +++++++++++++++
->  package/murata-wireless/murata-wireless.mk    |  9 ++
->  13 files changed, 461 insertions(+)
->  create mode 100644 package/murata-wireless/Config.in
->  create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/Config.in
->  create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/murata-wireless-cyw-bt-patch.hash
->  create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/murata-wireless-cyw-bt-patch.mk
->  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/Config.in
->  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/murata-wireless-cyw-fmac-fw.hash
->  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/murata-wireless-cyw-fmac-fw.mk
->  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/Config.in
->  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/murata-wireless-cyw-fmac-nvram.hash
->  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/murata-wireless-cyw-fmac-nvram.mk
->  create mode 100644 package/murata-wireless/murata-wireless.mk
-> 
-> -- 
-> 2.21.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+You forgot to actually add BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1 (in
+toolchain/Config.in).
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
