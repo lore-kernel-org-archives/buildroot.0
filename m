@@ -1,127 +1,279 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 8 May 2019 00:31:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/exiv2: cleanup options and
- licenses
-In-Reply-To: <20190507103639.94701-1-nicolas.serafini@sensefly.com>
-References: <20190507103639.94701-1-nicolas.serafini@sensefly.com>
-Message-ID: <bdcad4a5-2ba7-ed8c-8fc3-3de53bd2aa0d@mind.be>
+Date: Wed, 8 May 2019 00:54:59 +0200
+Subject: [Buildroot] [PATCH 2/3] arch: Add support for C-SKY toolchain
+ build
+In-Reply-To: <1557222442-8484-2-git-send-email-guoren@kernel.org>
+References: <1557222442-8484-1-git-send-email-guoren@kernel.org>
+ <1557222442-8484-2-git-send-email-guoren@kernel.org>
+Message-ID: <f0826b4e-93ed-cec5-b862-9a61c12a7a3d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Guo,
 
+ [Very quick review only.]
 
-On 07/05/2019 12:37, Nicolas Serafini wrote:
-> The current version of exiv2 no longer requires a commercial option for
-> lens database integration.
-
- Since when is this (IOW, should it be backported to 2019.02.x or not)?
-
+On 07/05/2019 11:47, guoren at kernel.org wrote:
+> From: Guo Ren <ren_guo@c-sky.com>
 > 
-> Add the dedicated licence file for CMake script.
+> This enables csky to be built with generated toolchain:
+>  - gcc 6.3
+>  - binutils 2.27
+>  - gdb 7.12
+>  - glibc 2.28
 > 
-> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+> All of them has been tested with csky gitlab-ci based on buildroot:
+>  - https://gitlab.com/c-sky/buildroot/pipelines
+> 
+> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 > ---
->  package/exiv2/Config.in  | 19 ++-----------------
->  package/exiv2/exiv2.hash |  1 +
->  package/exiv2/exiv2.mk   | 16 +++++-----------
->  3 files changed, 8 insertions(+), 28 deletions(-)
+>  arch/Config.in                          | 1 -
+>  package/Makefile.in                     | 9 +++++++++
+>  package/binutils/binutils.hash          | 2 ++
+>  package/binutils/binutils.mk            | 8 ++++++++
+>  package/gcc/Config.in.host              | 7 +++++++
+>  package/gcc/gcc.hash                    | 2 ++
+>  package/gcc/gcc.mk                      | 4 ++++
+>  package/gdb/Config.in.host              | 1 +
+>  package/gdb/gdb.hash                    | 2 ++
+>  package/gdb/gdb.mk                      | 7 +++++++
+>  package/glibc/glibc.hash                | 2 ++
+>  package/glibc/glibc.mk                  | 3 +++
+>  support/gnuconfig/config.sub            | 2 ++
+>  toolchain/toolchain-buildroot/Config.in | 2 +-
+
+ This should be split into separate patches:
+
+- binutils
+- gcc
+- glibc
+- toolchain-buildroot
+- gdb
+
+
+>  14 files changed, 50 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
-> index acce81c593..ddfa34261f 100644
-> --- a/package/exiv2/Config.in
-> +++ b/package/exiv2/Config.in
-> @@ -23,17 +23,6 @@ config BR2_PACKAGE_EXIV2
->  
->  if BR2_PACKAGE_EXIV2
->  
-> -config BR2_PACKAGE_EXIV2_COMMERCIAL
-
- We normally add Config.in.legacy entries when an option is removed. In this
-case, however, the option is turned into always-enabled, so the legacy handling
-doesn't do much good. So your patch is OK here.
-
-> -	bool "Enable commercial"
-> -	help
-> -	  Build the commercial version for closed source project.
-> -
-> -	  The Nikon lens name database and the NLS support is disabled
-> -	  for copyright reasons.
-> -
-> -	  A commercial license request is needed.
-> -	  http://www.exiv2.org/download.html#license
-> -
->  config BR2_PACKAGE_EXIV2_PNG
->  	bool "PNG image support"
->  	select BR2_PACKAGE_ZLIB
-> @@ -47,12 +36,8 @@ config BR2_PACKAGE_EXIV2_XMP
->  	  Build with XMP support
->  
->  config BR2_PACKAGE_EXIV2_LENSDATA
-> -	bool "Nikon lens name database"
-> -	depends on !BR2_PACKAGE_EXIV2_COMMERCIAL
-> +	bool "Include lens data"
-
- How big is this lens data? Is it worth keeping an option for it?
-
->  	help
-> -	  Integrate Nikon lens name database.
-> -
-> -	  This database is integrated but comes from a thirdparty:
-> -	  http://www.rottmerhusen.com/objektives/lensid/thirdparty.html.
-> +	  Build with lens data
->  
+[snip]
+> --- a/package/binutils/binutils.mk
+> +++ b/package/binutils/binutils.mk
+> @@ -20,6 +20,14 @@ BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,
+>  BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
+>  BINUTILS_FROM_GIT = y
 >  endif
-> diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
-> index f99cb8cb87..b753c03854 100644
-> --- a/package/exiv2/exiv2.hash
-> +++ b/package/exiv2/exiv2.hash
-> @@ -1,3 +1,4 @@
->  # Locally calculated
->  sha256 1b3766b2c203ce213a4195de14d61694017ec1a69d15d4575bccecef130990fe exiv2-0.27.1.tar.gz
->  sha256 a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66 COPYING
-> +sha256 46cde7dc11e64c78d650b4851b88f6704b4665ff60f22a1caf68ceb15e217e5b COPYING-CMAKE-SCRIPTS
-> diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-> index ba9d9b7303..3aa2a9e088 100644
-> --- a/package/exiv2/exiv2.mk
-> +++ b/package/exiv2/exiv2.mk
-> @@ -7,6 +7,8 @@
->  EXIV2_VERSION = 0.27.1
->  EXIV2_SITE = $(call github,Exiv2,exiv2,$(EXIV2_VERSION))
->  EXIV2_INSTALL_STAGING = YES
-> +EXIV2_LICENSE = GPL-2.0+
-> +EXIV2_LICENSE_FILES = COPYING COPYING-CMAKE-SCRIPTS
+> +
+> +ifeq ($(BR2_csky),y)
 
- What is in this additional license file?
+ You also have to update Config.in.host to get rid of the version selection there.
+
+ However, I do agree that the pattern you use here is nicer. So I think in
+Config.in.host, you should have:
+
+if !BR2_arc && !BR2_csky
+choice
+        prompt "Binutils Version"
+	default BR2_BINUTILS_VERSION_2_31_X
+... (without arc option)
+endif
+
+config BR2_BINUTILS_ENABLE_LTO
+
+
+ And in the .mk file, put the condition on the arch outside:
+
+ifeq ($(BR2_arc),y)
+BINUTILS_VERSION = arc-2018.09-release
+BINUTILS_SITE = ...
+BINUTILS_SOURCE = ...
+else ifeq ($(BR2_csky),y)
+...
+else
+BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
+# Version is set when using buildroot toolchain.
+# If not, we do like other packages
+ifeq ($(BINUTILS_VERSION),)
+BINUTILS_VERSION = 2.31.1
+endif
+BINUTILS_SITE = ...
+BINUTILS_SOURCE = ...
+endif
+
+
+ Obviously, this should be done in two patches: one that refactors the situation
+for arc, and a second one that adds csky.
+
+
+> +BINUTILS_VERSION = c66d8bbcebfddf713b2b436e1b135e6b125a55a5
+> +BINUTILS_SITE = $(call github,c-sky,binutils-gdb,$(BINUTILS_VERSION))
+> +BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
+> +BINUTILS_FROM_GIT = y
+> +endif
+> +
+>  BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
+>  BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.xz
+>  BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
+> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+> index 8e22a4c..3f82696 100644
+> --- a/package/gcc/Config.in.host
+> +++ b/package/gcc/Config.in.host
+> @@ -3,6 +3,7 @@ comment "GCC Options"
+>  choice
+>  	prompt "GCC compiler Version"
+>  	default BR2_GCC_VERSION_ARC if BR2_arc
+> +	default BR2_GCC_VERSION_CSKY if BR2_csky
+>  	default BR2_GCC_VERSION_OR1K if BR2_or1k
+>  	default BR2_GCC_VERSION_7_X
+>  	help
+> @@ -14,6 +15,12 @@ config BR2_GCC_VERSION_ARC
+>  	depends on BR2_arc
+>  	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+>  
+> +config BR2_GCC_VERSION_CSKY
+> +	bool "gcc csky"
+> +	# Only supported architecture
+> +	depends on BR2_csky
+> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+
+ Note that you can't use the same trick for gcc as for binutils because you need
+this select.
+
+> +
+>  config BR2_GCC_VERSION_OR1K
+>  	bool "gcc or1k (5.x)"
+>  	# Only supported architecture
+> diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+> index 4f1e7f9..780484d 100644
+> --- a/package/gcc/gcc.hash
+> +++ b/package/gcc/gcc.hash
+> @@ -13,3 +13,5 @@ sha512  1811337ae3add9680cec64968a2509d085b6dc5b6783fc1e8c295e3e47416196fd1a3ad8
+>  sha512  4d12c3ac27b9de9c533be3b8964cf23d21bf6933b5073183e1affe714b0ff33f9d6169e3b55a5c505d7dae33c9bb4f8b0d110461e3a124182d8c8d51b66b8e45  gcc-arc-2018.09-release.tar.gz
+>  # Locally calculated (fetched from Github)
+>  sha512  2de7cf47333a4092b02d3bb98f4206f14966f1d139a724d09cf3b22f8a43ae0c704f33e6477d6367a03c29b265480dc900169e9d417006c5d46f0ae446b8c6f1  gcc-or1k-musl-5.4.0-20170218.tar.gz
+> +# Locally calculated (fetched from https://github.com/c-sky/gcc)
+> +sha512  1c3564fd6573dce13451a73015e7d88fecbb214dc1df96607976255b1d8b9e60318405333f4f218eea8d07e3675a802b66eff6df3921d505c4036481512792c2  gcc-48152afb96c59733d5bc79e3399bb7b3d4b44266.tar.gz
+> diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+> index 5901624..fd77adc 100644
+> --- a/package/gcc/gcc.mk
+> +++ b/package/gcc/gcc.mk
+> @@ -16,6 +16,10 @@ GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+>  else ifeq ($(BR2_or1k),y)
+>  GCC_SITE = $(call github,openrisc,or1k-gcc,$(GCC_VERSION))
+>  GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+> +else ifeq ($(BR2_csky),y)
+> +GCC_VERSION = 48152afb96c59733d5bc79e3399bb7b3d4b44266
+
+ Move the version definition to Config.in.host like for the others.
+
+> +GCC_SITE = $(call github,c-sky,gcc,$(GCC_VERSION))
+> +GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
+>  else
+>  GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-$(GCC_VERSION)
+>  # From version 5.5.0, 6.4.0, 7.2.0 and 8.1.0 a bz2 release tarball is not
+> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+> index 969168f..0aa7d0a 100644
+> --- a/package/gdb/Config.in.host
+> +++ b/package/gdb/Config.in.host
+> @@ -48,6 +48,7 @@ choice
+>  	prompt "GDB debugger Version"
+>  	default BR2_GDB_VERSION_8_1
+>  	depends on !BR2_arc
+> +	depends on !BR2_csky
+>  	help
+>  	  Select the version of gdb you wish to use.
+>  
+> diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+> index 1104da5..90a60b0 100644
+> --- a/package/gdb/gdb.hash
+> +++ b/package/gdb/gdb.hash
+> @@ -6,3 +6,5 @@ sha512  2aa81cfd389bb48c35d7d9f95cc10e88b4f7ad4597bdde0f8f1fd312f60f10d9fb2cc6e5
+>  
+>  # Locally calculated (fetched from Github)
+>  sha512  8303e399e396f5c15dc976e48503fc7d45a720dd1a470443f755c5f2458d092b4392e7ae582abc251bc4b43a778ad784f764286a2a05abfc1649cbeeeb6e7d15 	gdb-arc-2018.09-release-gdb.tar.gz
+> +# Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
+> +sha512  c421e1f3c0d6cfb3c04544573c0c4b0075c8d8e3d563c6c234fcc1e4c2167ab203d1e57aec3b58abd348dc46f8cf9b47b753d3a43dba3ea970c9c9a6bd78c07b	gdb-4ecb98fbc2f94dbe01b69384afbc515107de73df.tar.gz
+> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+> index a926961..460d21f 100644
+> --- a/package/gdb/gdb.mk
+> +++ b/package/gdb/gdb.mk
+> @@ -14,6 +14,13 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+>  GDB_FROM_GIT = y
+>  endif
+>  
+> +ifeq ($(BR2_csky),y)
+> +GDB_VERSION = 4ecb98fbc2f94dbe01b69384afbc515107de73df
+> +GDB_SITE = $(call github,c-sky,binutils-gdb,$(GDB_VERSION))
+> +GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+> +GDB_FROM_GIT = y
+> +endif
+> +
+>  GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
+>  GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
+>  
+> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
+> index 5316f03..6e47559 100644
+> --- a/package/glibc/glibc.hash
+> +++ b/package/glibc/glibc.hash
+> @@ -1,2 +1,4 @@
+>  # This hash file is not used; instead, update the
+>  # hash files in the per-version sub-directories.
+> +# Locally calculated (fetched from https://github.com/c-sky/glibc)
+> +sha512 9deb2deceefe347d72de13510a5baa3de00f94c684f3b25e136ca3660f61e65a69f2115abb488c2ab0fa93cda8535853ce1e13e186efcc8434ecc4049efd82b5  glibc-7630ed2fa60caea98f500e4a7a51b88f9bf1e176.tar.gz
+> diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+> index 0345f1f..c4ddf8b 100644
+> --- a/package/glibc/glibc.mk
+> +++ b/package/glibc/glibc.mk
+> @@ -10,6 +10,9 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
+>  else ifeq ($(BR2_RISCV_32),y)
+>  GLIBC_VERSION = 06983fe52cfe8e4779035c27e8cc5d2caab31531
+>  GLIBC_SITE = $(call github,riscv,riscv-glibc,$(GLIBC_VERSION))
+> +else ifeq ($(BR2_csky),y)
+> +GLIBC_VERSION = 7630ed2fa60caea98f500e4a7a51b88f9bf1e176
+> +GLIBC_SITE = $(call github,c-sky,glibc,$(GLIBC_VERSION))
+>  else
+>  # Generate version string using:
+>  #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+> diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
+> index 6d86a1e..45dd0a7 100755
+> --- a/support/gnuconfig/config.sub
+> +++ b/support/gnuconfig/config.sub
+
+ Err... wouldn't this change be needed to make autotools packages work at all,
+regardless of whether it's an external or internal toolchain? So this should
+*definitely* be a separate patch.
+
 
  Regards,
  Arnout
 
->  
->  EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
->  
-> @@ -14,18 +16,10 @@ EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
->  # test which is not allowed when cross-compiling.
->  EXIV2_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
->  
-> -ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),)
-> -EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=OFF
-> -endif
-> -
-> -ifeq ($(BR2_PACKAGE_EXIV2_COMMERCIAL),y)
-> -EXIV2_LICENSE = commercial
-> -# NLS support is disabled in commercial version due to the copyright
-> -# of the translated texts.
-> -EXIV2_CONF_OPTS += -DEXIV2_ENABLE_COMMERCIAL=ON -DEXIV2_ENABLE_NLS=OFF
-> +ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),y)
-> +EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=ON
->  else
-> -EXIV2_LICENSE = GPL-2.0+
-> -EXIV2_LICENSE_FILES = COPYING
-> +EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=OFF
->  endif
->  
->  ifeq ($(BR2_PACKAGE_EXIV2_PNG),y)
+> @@ -254,6 +254,7 @@ case $basic_machine in
+>  	| arc | arceb \
+>  	| arm | arm[bl]e | arme[lb] | armv[2-8] | armv[3-8][lb] | armv7[arm] \
+>  	| avr | avr32 \
+> +	| csky \
+>  	| ba \
+>  	| be32 | be64 \
+>  	| bfin \
+> @@ -376,6 +377,7 @@ case $basic_machine in
+>  	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* | arceb-* \
+>  	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
+>  	| avr-* | avr32-* \
+> +	| csky-* \
+>  	| ba-* \
+>  	| be32-* | be64-* \
+>  	| bfin-* | bs2000-* \
+> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+> index beb17a2..d9f16e2 100644
+> --- a/toolchain/toolchain-buildroot/Config.in
+> +++ b/toolchain/toolchain-buildroot/Config.in
+> @@ -48,7 +48,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+>  		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
+>  		   BR2_riscv       || BR2_sh         || BR2_sparc64     || \
+>  		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
+> -		   (BR2_arcle && BR2_ARC_ATOMIC_EXT)
+> +		   (BR2_arcle && BR2_ARC_ATOMIC_EXT) || BR2_csky
+>  	depends on BR2_USE_MMU
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
 > 
