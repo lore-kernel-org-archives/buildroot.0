@@ -1,77 +1,72 @@
-From: Mats Jansson <matsmanhav@tele2.se>
-Date: Tue, 7 May 2019 10:25:24 +0200
-Subject: [Buildroot] Location of external firmware
-In-Reply-To: <37f920d1-be43-800f-4422-7f1217cc4b82@mind.be>
-References: <509774653.20190506161444@tele2.se>
- <37f920d1-be43-800f-4422-7f1217cc4b82@mind.be>
-Message-ID: <19174340.20190507102524@tele2.se>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Tue,  7 May 2019 11:01:49 +0200
+Subject: [Buildroot] [PATCH] package/linux-headers: add support for Linux
+ 5.1 kernel headers
+Message-ID: <20190507090149.3143-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+---
+ linux/linux.hash                     |  1 +
+ package/linux-headers/Config.in.host | 11 ++++++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-AV> On 06/05/2019 16:14, Mats Jansson wrote:
->> Hi,
->> 
->> I have an external firmware to be loaed by a driver. The normal way is
->> to put the firmware in /lib/firmware. But since it needs to
->> be loaded during boot and udev is not intitialised at that point I
->> have found out that I need to build it into the kernel.
->> 
->> I want to put this file in my buildroot-external-tree just like I do
->> with patches. Any idea on how to do it?
->> I have tried two different approaches.
->> 1. Creating a patch, but then I get the error message that "git binary diffs are not
->> supported."
-
-AV>  That will indeed not be possible, unfortunately.
-
->> 2. setting CONFIG_EXTRA_FIRMWARE_DIR to $(BR2_EXTERNAL)/firmware but I
->> get the error message "BR2_EXTERNAL: command does not exist"
-
-AV>  Looks like you're trying to do this from the shell; $(...) in shell means
-AV> executing a subcommand, which is not what you want here.
-
-AV>  In addtion, $(BR2_EXTERNAL) should no longer be used (since 2016.11). Instead,
-AV> each external has a name, and you should use
-AV> $(BR2_EXTERNAL_<name>_PATH). This
-AV> variable is exported, so you can use it in your linux configuration file.
-
-I am just letting buildroot handle things, by running make in
-buildroot. So I suppose it is running in a shell.
-
-Setting
-CONFIG_EXTRA_FIRMWARE="htc9271.fw"
-CONFIG_EXTRA_FIRMWARE_DIR="$(BR2_EXTERNAL_e100_PATH)/firmware"
-also gets me the message "command does not exist".
-
-Setting it to
-CONFIG_EXTRA_FIRMWARE="htc9271.fw"
-CONFIG_EXTRA_FIRMWARE_DIR="$BR2_EXTERNAL_e100_PATH/firmware"
-gives me
-*** No rule to create the target "R2_EXTERNAL_e100_PATH/firmware/htc_9271.fw?, needed by ?firmware/htc_9271.fw.gen.o?.  Stopping.
-
-The use of $(BR2_EXTERNAL_e100_PATH) works in other parts of the configuration, eg
-for patches. But maybe it is not possible to use the BR2_EXTERNAL_e100_PATH variable
-when building the kernel.config?
-
-AV>  Regards,
-AV>  Arnout
-
->> 
->> Anyone have a good idea on how to solve this?
->> 
->> Best regards
->> Mats                          mailto:matsmanhav at tele2.se
->> 
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->> 
-AV> _______________________________________________
-AV> buildroot mailing list
-AV> buildroot at busybox.net
-AV> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 035c324447..3d49ea476a 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,4 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
++sha256 d06a7be6e73f97d1350677ad3bae0ce7daecb79c2c2902aaabe806f7fa94f041  linux-5.1.tar.xz
+ sha256 bcfd52bf1faa24f5f712146a873959461e001656ad67717e80b947aa6ad53479  linux-5.0.13.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+ sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 6c848aa2e2..66366628c5 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_HOST_LINUX_HEADERS
+ choice
+ 	prompt "Kernel Headers"
+ 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
+-	default BR2_KERNEL_HEADERS_5_0
++	default BR2_KERNEL_HEADERS_5_1
+ 	help
+ 	  Select the kernel version to get headers from.
+ 
+@@ -53,6 +53,10 @@ config BR2_KERNEL_HEADERS_5_0
+ 	bool "Linux 5.0.x kernel headers"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+ 
++config BR2_KERNEL_HEADERS_5_1
++	bool "Linux 5.1.x kernel headers"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
++
+ config BR2_KERNEL_HEADERS_VERSION
+ 	bool "Manually specified Linux version"
+ 	help
+@@ -118,6 +122,10 @@ choice
+ 	  This is used to hide/show some packages that have strict
+ 	  requirements on the version of kernel headers.
+ 
++config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1
++	bool "5.1.x"
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_1
++
+ config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0
+ 	bool "5.0.x"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_0
+@@ -299,6 +307,7 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "4.19.40"	if BR2_KERNEL_HEADERS_4_19
+ 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
+ 	default "5.0.13"	if BR2_KERNEL_HEADERS_5_0
++	default "5.1"		if BR2_KERNEL_HEADERS_5_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-- 
+2.21.0
