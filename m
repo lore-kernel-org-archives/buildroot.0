@@ -1,42 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 May 2019 22:23:35 +0200
-Subject: [Buildroot] [git commit] package/luarocks: bump to version 3.1.1
-Message-ID: <20190507201847.07BA3885E2@busybox.osuosl.org>
+Date: Tue, 7 May 2019 22:30:13 +0200
+Subject: [Buildroot] [git commit] package/go: bump version to 1.12.5
+Message-ID: <20190507202456.0806982B77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18bd9a440af8cd3a42a8db8beea67a9d0f433556
+commit: https://git.buildroot.net/buildroot/commit/?id=ce32fa6cc1decd07ced9f944e7ea6aa51dd0c49d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Fixes a number of issues discovered since 1.12.4.  From the release notes:
+
+go1.12.5 (released 2019/05/06) includes fixes to the compiler, the linker,
+the go command, the runtime, and the os package.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
+ package/go/go.hash | 2 +-
+ package/go/go.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index a0369516ee..aed0274b5a 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
+diff --git a/package/go/go.hash b/package/go/go.hash
+index df3a9c4e43..13cc9baef4 100644
+--- a/package/go/go.hash
++++ b/package/go/go.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256 865eae1e49b0f701c955c1c8f7b6fae99287c9cef32227d64177509224908921  luarocks-3.1.0.tar.gz
-+sha256 3c26c102f8e69f81e12ea39037c770a00b6244e115a4c832e7a92feffdfad1aa  luarocks-3.1.1.tar.gz
- sha256 542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index fc71ede074..6a8254fd43 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
+ # From https://golang.org/dl/
+-sha256	4affc3e610cd8182c47abbc5b0c0e4e3c6a2b945b55aaa2ba952964ad9df1467  go1.12.4.src.tar.gz
++sha256	2aa5f088cbb332e73fc3def546800616b38d3bfe6b8713b8a6404060f22503e8  go1.12.5.src.tar.gz
+ sha256	2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
+diff --git a/package/go/go.mk b/package/go/go.mk
+index f31b1941c4..a2453e001f 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUAROCKS_VERSION = 3.1.0
-+LUAROCKS_VERSION = 3.1.1
- LUAROCKS_SITE = http://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
+-GO_VERSION = 1.12.4
++GO_VERSION = 1.12.5
+ GO_SITE = https://storage.googleapis.com/golang
+ GO_SOURCE = go$(GO_VERSION).src.tar.gz
+ 
