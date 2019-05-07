@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 May 2019 22:58:01 +0200
-Subject: [Buildroot] [git commit] package/vde2: replace utf-8 space by ascii
- character
-Message-ID: <20190507210157.EF437815D1@busybox.osuosl.org>
+Date: Tue, 7 May 2019 22:58:48 +0200
+Subject: [Buildroot] [git commit] package/libunwind: replace utf-8 space by
+ ascii character
+Message-ID: <20190507210158.156DB815D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=91f03aefaa737f35943b0b7d537b4c57554a4f14
+commit: https://git.buildroot.net/buildroot/commit/?id=708987de411d0b719833f6799bdc541361570163
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Replace utf-8 NO-BREAK-SPACE (c2 a0) in comment line by simple
@@ -18,28 +18,17 @@ ascii space character.
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/vde2/vde2.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/libunwind/libunwind.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
-index e2ec12416e..29337601c4 100644
---- a/package/vde2/vde2.mk
-+++ b/package/vde2/vde2.mk
-@@ -15,7 +15,7 @@ VDE2_INSTALL_STAGING = YES
- VDE2_AUTORECONF = YES
+diff --git a/package/libunwind/libunwind.hash b/package/libunwind/libunwind.hash
+index 394bef1287..c8d44b44ac 100644
+--- a/package/libunwind/libunwind.hash
++++ b/package/libunwind/libunwind.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+ sha256 43997a3939b6ccdf2f669b50fdb8a4d3205374728c2923ddc2354c65260214f8  libunwind-1.3.1.tar.gz
  
- # Reasons for enabling/disabling stuff:
--#??- tuntap is enabled in the hope we're using a recent-enough toolchain
-+# - tuntap is enabled in the hope we're using a recent-enough toolchain
- #   that does have if_tun.h (virtually everything these days)
- # - kvde_switch is disabled because it requires a patched kernel
- # - cryptcab is disabled to not depend on openSSL
-@@ -34,7 +34,7 @@ VDE2_CONF_OPTS = \
- 	--disable-python \
- 	--enable-tuntap
- 
--#??Package does not build in parallel due to improper make rules
-+# Package does not build in parallel due to improper make rules
- VDE2_MAKE = $(MAKE1)
- 
- HOST_VDE2_CONF_OPTS = \
+-#??Hash for license file
++# Hash for license file
+ sha256 6a0dbbdaec2b3136b7bf045586f4212bdf74e7af688bf9dfe9154607cf5ec156  COPYING
