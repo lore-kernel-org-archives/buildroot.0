@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 May 2019 17:03:15 +0200
-Subject: [Buildroot] [PATCH 1/2] package/docker-engine: bump version to
+Date: Tue, 07 May 2019 17:03:21 +0200
+Subject: [Buildroot] [PATCH 2/2] package/docker-cli: bump version to
  18.09.6
-In-Reply-To: <20190506191903.6703-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 6 May 2019 21:19:01 +0200")
+In-Reply-To: <20190506191903.6703-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 6 May 2019 21:19:02 +0200")
 References: <20190506191903.6703-1-peter@korsgaard.com>
-Message-ID: <871s1aux1o.fsf@dell.be.48ers.dk>
+ <20190506191903.6703-2-peter@korsgaard.com>
+Message-ID: <87woj2tih2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
