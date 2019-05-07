@@ -1,33 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 May 2019 17:03:21 +0200
-Subject: [Buildroot] [PATCH 2/2] package/docker-cli: bump version to
- 18.09.6
-In-Reply-To: <20190506191903.6703-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Mon, 6 May 2019 21:19:02 +0200")
-References: <20190506191903.6703-1-peter@korsgaard.com>
- <20190506191903.6703-2-peter@korsgaard.com>
-Message-ID: <87woj2tih2.fsf@dell.be.48ers.dk>
+Date: Tue, 07 May 2019 17:03:32 +0200
+Subject: [Buildroot] [PATCH v1] package/cryptopp: replace utf-8 space by
+ ascii character
+In-Reply-To: <20190506202402.13832-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Mon, 6 May 2019 22:24:02 +0200")
+References: <20190506202402.13832-1-ps.report@gmx.net>
+Message-ID: <87sgtqtigr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
- > Additional post-18.09.5 fixes:
- > Builder:
- > - Fixed COPY and ADD with multiple <src> to not invalidate cache if
- >   DOCKER_BUILDKIT=1.moby/moby#38964
+ > Replace utf-8 NO-BREAK-SPACE (c2 a0) in comment line by simple
+ > ascii space character.
 
- > Networking:
- > - Cleaned up the cluster provider when the agent is closed. docker/libnetwork#2354
- > - Windows: Now selects a random host port if the user does not specify a
- >   host port.  docker/libnetwork#2369
- > - --service-cluster-ip-range is now configurable for UCP install.
- >   docker/orca#10263
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
 Committed, thanks.
 
