@@ -1,35 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 May 2019 23:06:33 +0200
-Subject: [Buildroot] [PATCH 2/2 v3] core: remove show-dependency-tree
-In-Reply-To: <fc3002077beb3f48401c4280e5347f27f548b4a3.1557262335.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Tue, 7 May 2019 22:52:29 +0200")
-References: <cover.1557262335.git.yann.morin.1998@free.fr>
- <fc3002077beb3f48401c4280e5347f27f548b4a3.1557262335.git.yann.morin.1998@free.fr>
-Message-ID: <87imumkm92.fsf@dell.be.48ers.dk>
+Date: Tue, 7 May 2019 22:55:52 +0200
+Subject: [Buildroot] [git commit] package/assimp: replace utf-8 quote by
+ ascii single quote
+Message-ID: <20190507210157.B98EE815D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ad4a2b5e1c596f4ae54ff1c8810e97877809cb76
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > show-dependency-tree was introduced in this release cycle, as a way to
- > quickly and easily provide the dependency tree to graph-depends.
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/assimp/assimp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > show-dependency-tree is no longer used, now that graph-depends has been
- > switched over to using the more versatile show-info.
-
- > Beside, show-dependency-tree has never been part of a release.
-
- > Drop it.
-
- > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
- > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index 4d447487ba..1316720423 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
+@@ -19,7 +19,7 @@ endif
+ # workaround SuperH compiler failure when static linking (i.e -fPIC is
+ # not passed) in gcc versions 5.x or older. The -Os optimization level
+ # causes a "unable to find a register to spill in class
+-# ???GENERAL_REGS???" error. -O2 works fine.
++# 'GENERAL_REGS'" error. -O2 works fine.
+ ifeq ($(BR2_sh):$(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:y:)
+ ASSIMP_CXXFLAGS += -O2
+ endif
