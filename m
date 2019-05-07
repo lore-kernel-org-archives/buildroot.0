@@ -1,51 +1,59 @@
-From: Carlos A. M. dos Santos <unixmania@gmail.com>
-Date: Tue, 7 May 2019 19:13:55 -0300
-Subject: [Buildroot] [RFC PATCH] package/util-linux: build libraries as
- a separate package
-In-Reply-To: <20190507215424.791e69d3@windsurf>
-References: <20190507165158.10427-1-unixmania@gmail.com>
- <20190507215424.791e69d3@windsurf>
-Message-ID: <CAJ4jsacxyOQyfKjaGH2ZD37PLW0V4ByQSg6CoMVxF+orM-pOcw@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 8 May 2019 00:24:02 +0200
+Subject: [Buildroot] [PATCH] support/check-kernel-headers: Fixup
+ couldn't compile linux rc version
+In-Reply-To: <1557222665-9498-1-git-send-email-guoren@kernel.org>
+References: <1557222665-9498-1-git-send-email-guoren@kernel.org>
+Message-ID: <cfa74b88-11af-ba38-3158-325d8fc2bc48@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 7, 2019 at 4:54 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Carlos,
->
-> On Tue,  7 May 2019 13:51:58 -0300
-> unixmania at gmail.com wrote:
->
-> > The findmount and lsblk utilities need udev to work correctly but cannot
-> > be built with udev support because the packages providing libudev (eudev
-> > and systemd) depend on util-linux, creating a chicken-egg problem. Solve
-> > it by means of the following changes:
->
-> Thanks a lot for working on this topic. It is obviously becoming a
-> nightmare :-/
->
-> > - Add the util-linux-libs package, which provides libblkid, libfdisk,
-> >   libmount, libsmartcols and libuuid. It needs a small patch to
-> >   install the uuidd.h header, used to build the uuidd utility.
-> > - Make util-linux depend on util-linux-libs and build only the programs.
-> >   This requires a quite intrusive patch that modifies Makefile.am and
-> >   some Makemodule.am files, thus requiring AUTORECONF.
->
-> Could you get in touch with upstream util-linux, expose the problem,
-> and see if they would be willing to merge some changes that would help
-> building only the programs ?
->
-> The best would of course be for upstream to realize that there is now a
-> circular dependency, and that it should be broken up by splitting
-> util-linux upstream itself in two separate projects.
+ Hi Guo,
 
-I'm in contact with Karel Zak, the util-linux maintainer and already
-asked for subgestions on how to avoid building the libraries or at
-least install them.
+On 07/05/2019 11:51, guoren at kernel.org wrote:
+> From: Guo Ren <ren_guo@c-sky.com>
+> 
+> Sometimes we want to try newest kernel rc version, but the
+> check-kernel-headers will prevent it.
 
--- 
-Carlos Santos <unixmania@gmail.com>
+ It would indeed be good if we would be able to use newer kernel headers without
+requiring an update of Buildroot.
+
+> In package/linux-headers we
+> use BR2_TOOLCHAIN_HEADERS_AT_LEAST for checking, I think AT_LEAST means
+> "<" not "!=".
+
+ However, I think we should not treat it as "at least" in general, but only for
+the "newer" case. In other words, I think we should add
+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_NEWER (and the equivalent in
+toolchain-external) which selects BR2_TOOLCHAIN_HEADERS_NEWER, and make the
+check > 5.0 (rather than == something) in that case.
+
+ It's a bigger change though.
+
+ Regards,
+ Arnout
+
+> 
+> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+> ---
+>  support/scripts/check-kernel-headers.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/support/scripts/check-kernel-headers.sh b/support/scripts/check-kernel-headers.sh
+> index a8cca78..4787678 100755
+> --- a/support/scripts/check-kernel-headers.sh
+> +++ b/support/scripts/check-kernel-headers.sh
+> @@ -23,7 +23,7 @@ int main(int argc __attribute__((unused)),
+>           char** argv __attribute__((unused)))
+>  {
+>      if((LINUX_VERSION_CODE & ~0xFF)
+> -        != KERNEL_VERSION(${HDR_M},${HDR_m},0))
+> +        < KERNEL_VERSION(${HDR_M},${HDR_m},0))
+>      {
+>          printf("Incorrect selection of kernel headers: ");
+>          printf("expected %d.%d.x, got %d.%d.x\n", ${HDR_M}, ${HDR_m},
+> 
