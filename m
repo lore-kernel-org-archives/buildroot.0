@@ -1,36 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 7 May 2019 22:57:46 +0200
-Subject: [Buildroot] [git commit] package/sysklogd: replace utf-8 space by
- ascii character
-Message-ID: <20190507210157.E1CEB815D1@busybox.osuosl.org>
+Date: Tue, 7 May 2019 22:58:12 +0200
+Subject: [Buildroot] [git commit] package/capnproto: replace utf-8
+ apostrophe by ascii single quote
+Message-ID: <20190507210158.01DCC815D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6865c94d73a95356dab96b4fe03bfc392af9b9fc
+commit: https://git.buildroot.net/buildroot/commit/?id=2a725944484e4783e21282c13902d74d7d2c48ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Replace utf-8 NO-BREAK-SPACE (c2 a0) in comment line by simple
-ascii space character.
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sysklogd/sysklogd.mk | 2 +-
+ package/capnproto/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
-index 8cd7f9573c..266c171170 100644
---- a/package/sysklogd/sysklogd.mk
-+++ b/package/sysklogd/sysklogd.mk
-@@ -8,7 +8,7 @@ SYSKLOGD_VERSION = 1.6
- SYSKLOGD_SITE = $(call github,troglobit,sysklogd,v$(SYSKLOGD_VERSION))
- SYSKLOGD_LICENSE = GPL-2.0+
- SYSKLOGD_LICENSE_FILES = COPYING
--#??From git
-+# From git
- SYSKLOGD_AUTORECONF = YES
+diff --git a/package/capnproto/Config.in b/package/capnproto/Config.in
+index 00328fa6ce..a979a334ff 100644
+--- a/package/capnproto/Config.in
++++ b/package/capnproto/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_CAPNPROTO
+ 	  Cap'n Proto is an insanely fast data interchange format
+ 	  and capability-based RPC system. Think JSON, except
+ 	  binary. Or think Protocol Buffers, except faster. In
+-	  fact, in benchmarks, Cap???n Proto is INFINITY TIMES
++	  fact, in benchmarks, Cap'n Proto is INFINITY TIMES
+ 	  faster than Protocol Buffers.
  
- define SYSKLOGD_INSTALL_SAMPLE_CONFIG
+ 	  https://capnproto.org/index.html
