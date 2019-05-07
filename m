@@ -1,173 +1,68 @@
-From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-Date: Tue,  7 May 2019 14:33:35 +0200
-Subject: [Buildroot] [PATCH] package/ettercap: new package
-Message-ID: <1557232415-11421-1-git-send-email-jugurtha.belkalem@smile.fr>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 7 May 2019 14:56:14 +0200
+Subject: [Buildroot] [PATCH] board/qemu/aarch64: add a aarch64 virt
+ machine using an ARM cortex-a72 core
+In-Reply-To: <20190507141142.27657a08@windsurf>
+References: <20190507112521.12165-1-romain.naour@smile.fr>
+ <20190507141142.27657a08@windsurf>
+Message-ID: <26432ffd-009c-22b1-c49d-5a58fd0f3e5c@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ettercap is a comprehensive suite for man
-in the middle attacks.
-It features sniffing of live connections, content
-filtering on the fly and many other interesting
-tricks.
+Hello Thomas,
 
-Ettercap can help identify misconfigured networks,
-testing intrusion detection and prevention
-applications and build robust embedded systems that
-are "security by design" compliant.
+Le 07/05/2019 ? 14:11, Thomas Petazzoni a ?crit?:
+> Hello Romain,
+> 
+> On Tue,  7 May 2019 13:25:21 +0200
+> Romain Naour <romain.naour@smile.fr> wrote:
+> 
+>> ARM cortex-a72 core has been added to Qemu since version 3.1.0 [1] [2].
+> 
+> Do we really want a different defconfig for each possible ARM core that
+> Qemu emulates ?
 
-This tool can be used for security testing or
-educational purposes.
+Indeed, it would increase the maintenance burden and duplicating some board
+files... just to change the target arch variant and one qemu option.
 
-Master branch from :
-https://github.com/Ettercap/ettercap
-was used as the source for this packet as it
-remains in active development (unlike release
-version which dates back to 2015).
+> 
+>> Qemu also support ARM cortex-a57 cpu core.
+>> Should we support and test all cpu emulation available in Qemu ?
+>> This can be useful for toolchain-builder project to provide a prebuilt ARM aarch64
+>> toolchain optimized for cortex-a57.
+> 
+> I'm not sure the toolchain builder project requires exactly a Qemu
+> emulating the specific optimization for which gcc was built. I.e, a
+> Cortex-A53 qemu defconfig can be used to boot test a Cortex-A57 or A72
+> optimized toolchain.
+> 
+> We're already doing that for example with ARMv5/v6/v7:
+> 
+>     armv5-* | armv6-* | armv7-*)
+>         test_defconfig="qemu_arm_vexpress_defconfig"
+>         test_board_dir="arm-vexpress"
+> 
+> Or for x86:
+> 
+>     x86-core2)
+>         test_defconfig="qemu_x86_defconfig"
+>     x86-i686)
+>         test_defconfig="qemu_x86_defconfig"
 
-More information is available at:
-https://www.ettercap-project.org/
+For these configuration we only provide the machine type (-M), not the cpu type
+(-cpu).
 
-Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
----
- DEVELOPERS                                         |  3 ++
- package/Config.in                                  |  1 +
- .../0001-Fix-invalid-utf-8-is-not-supported.patch  | 33 ++++++++++++++++++++++
- package/ettercap/Config.in                         | 22 +++++++++++++++
- package/ettercap/ettercap.hash                     |  3 ++
- package/ettercap/ettercap.mk                       | 16 +++++++++++
- 6 files changed, 78 insertions(+)
- create mode 100644 package/ettercap/0001-Fix-invalid-utf-8-is-not-supported.patch
- create mode 100644 package/ettercap/Config.in
- create mode 100644 package/ettercap/ettercap.hash
- create mode 100644 package/ettercap/ettercap.mk
+Maybe toolchain-builder should update/replace the -cpu option if provided by the
+readme.txt using test_qemu_args="-cpu <cpu core>"
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5bfc456..9246d96 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1227,6 +1227,9 @@ F:	package/python-xlib/
- N:	Joshua Henderson <joshua.henderson@microchip.com>
- F:	package/qt5/qt5wayland/
- 
-+N:	Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+F:	package/ettercap/
-+
- N:	Juha Rantanen <juha@codercoded.com>
- F:	package/acsccid/
- 
-diff --git a/package/Config.in b/package/Config.in
-index f592e74..52d08d3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1757,6 +1757,7 @@ endif
- endmenu
- 
- menu "Security"
-+	source "package/ettercap/Config.in"
- 	source "package/libselinux/Config.in"
- 	source "package/libsemanage/Config.in"
- 	source "package/libsepol/Config.in"
-diff --git a/package/ettercap/0001-Fix-invalid-utf-8-is-not-supported.patch b/package/ettercap/0001-Fix-invalid-utf-8-is-not-supported.patch
-new file mode 100644
-index 0000000..9627cc3
---- /dev/null
-+++ b/package/ettercap/0001-Fix-invalid-utf-8-is-not-supported.patch
-@@ -0,0 +1,33 @@
-+From b4f8a10100669806de6cb37b1c1f747539e93b31 Mon Sep 17 00:00:00 2001
-+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+Date: Tue, 7 May 2019 13:25:44 +0200
-+Subject: [PATCH] Fix invalid utf-8 is not supported
-+
-+Fixes fatal error message generated even when
-+utf-8 is available.
-+Ettercap requires gettext package and works fine.
-+ 
-+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
-+---
-+ ettercap-5fb604823c6063676ebdf7cac66b7807acb4f7ed/src/ec_format.c | 5 +----
-+ 1 file changed, 1 insertion(+), 4 deletions(-)
-+
-+diff --git a/src/ec_format.c b/ettercap-5fb604823c6063676ebdf7cac66b7807acb4f7ed/src/ec_format.c
-+index 5c9b850..dd9d972 100644
-+--- a/src/ec_format.c
-++++ b/src/ec_format.c
-+@@ -417,10 +417,7 @@ int set_utf8_encoding(u_char *fromcode)
-+ 
-+    /* make sure encoding type is supported */
-+    cd = iconv_open("UTF-8", (const char*)fromcode);
-+-   
-+-   if (cd == (iconv_t)(-1))
-+-      SEMIFATAL_ERROR("The conversion from %s to UTF-8 is not supported.", fromcode);
-+-   
-++      
-+    iconv_close(cd);
-+ 
-+    utf8_encoding = strdup((const char*)fromcode);
-+-- 
-+2.7.4
-+
-diff --git a/package/ettercap/Config.in b/package/ettercap/Config.in
-new file mode 100644
-index 0000000..fbab876
---- /dev/null
-+++ b/package/ettercap/Config.in
-@@ -0,0 +1,22 @@
-+config BR2_PACKAGE_ETTERCAP
-+	bool "ettercap"
-+	select BR2_PACKAGE_ETHTOOL # runtime
-+	select BR2_PACKAGE_GEOIP # runtime
-+	select BR2_PACKAGE_GETTEXT # runtime
-+	select BR2_PACKAGE_LIBCURL # runtime
-+	select BR2_PACKAGE_LIBNET # runtime
-+	select BR2_PACKAGE_LIBPCAP # runtime
-+	select BR2_PACKAGE_LIBPTHREAD_STUB # runtime
-+	select BR2_PACKAGE_NCURSES # runtime
-+	select BR2_PACKAGE_OPENSSL # runtime
-+	select BR2_PACKAGE_ZLIB # runtime
-+	help
-+	  Ettercap is a comprehensive suite for man
-+	  in the middle attacks. It features sniffing of
-+	  live connections, content filtering on the fly
-+	  and many other interesting tricks. It supports
-+	  active and passive dissection of many protocols
-+	  and includes many features for network and
-+	  host analysis.
-+
-+	  http://www.ettercap-project.org/
-diff --git a/package/ettercap/ettercap.hash b/package/ettercap/ettercap.hash
-new file mode 100644
-index 0000000..776c34c
---- /dev/null
-+++ b/package/ettercap/ettercap.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 a6ea1b70f9e1d8ba8815ca540ff1571556d6ba19cfd05c409f518d03e669befc  ettercap-5fb604823c6063676ebdf7cac66b7807acb4f7ed.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE
-diff --git a/package/ettercap/ettercap.mk b/package/ettercap/ettercap.mk
-new file mode 100644
-index 0000000..b913708
---- /dev/null
-+++ b/package/ettercap/ettercap.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# ettercap
-+#
-+################################################################################
-+
-+ETTERCAP_VERSION = 5fb604823c6063676ebdf7cac66b7807acb4f7ed
-+ETTERCAP_SITE = $(call github,Ettercap,ettercap,$(ETTERCAP_VERSION))
-+ETTERCAP_LICENSE = GPL-2.0
-+ETTERCAP_LICENSE_FILES = LICENSE
-+ETTERCAP_SUPPORTS_IN_SOURCE_BUILD = NO
-+ETTERCAP_DEPENDENCIES = geoip host-ncurses libzlib \
-+	libcurl libnet libopenssl libpcap ncurses
-+ETTERCAP_CONF_OPTS = -DENABLE_GTK=NO
-+
-+$(eval $(cmake-package))
--- 
-2.7.4
+Best regards,
+Romain
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
