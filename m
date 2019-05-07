@@ -1,58 +1,100 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  7 May 2019 22:52:26 +0200
-Subject: [Buildroot] [PATCH 0/2 v3] support/scripts: use the new show-info
- to generate dependency graphs (branch yem/show-info-2)
-Message-ID: <cover.1557262335.git.yann.morin.1998@free.fr>
+Date: Tue,  7 May 2019 22:52:28 +0200
+Subject: [Buildroot] [PATCH 1/2 v3] support/scripts: use show-info to
+ extract dependency graph
+In-Reply-To: <cover.1557262335.git.yann.morin.1998@free.fr>
+References: <cover.1557262335.git.yann.morin.1998@free.fr>
+Message-ID: <83e280d556b75984c34a3ce2de261e5c123b1a1a.1557262335.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+Currently, we extract the dependency graph from the aptly named but
+ad-hoc show-dependency-graph rule.
 
-The dependency graphs currently use the show-depednency-tree rule, which
-was introduced in this release cycle. But we now have a better and more
-versatile rule, show-info, to provide the same (and more) information.
+We now have a better solution to report package information, with
+show-info.
 
-So, this series switches brpkg-utils to use show-info to grab the
-dependency tree, and then removes the show-dependency-tree rule as it
-was never part of a release.
+Since show-dependency-graph never went into a release so far, and
+show-info does provide the same (and more), switch to using show-info.
 
+Thanks to Adam for suggesting the coding style to have a readable code
+that is not ugly but still pleases flake8. Thanks to Arnout for
+suggesting the use of dict.get() to further simplify the code.
 
-Regards,
-Yann E. MORIN.
+Note: we do not use the reverse_dependencies field because it only
+contains those packages that have a kconfig option, so we'd miss most
+host packages.
 
-
-The following changes since commit ce32fa6cc1decd07ced9f944e7ea6aa51dd0c49d
-
-  package/go: bump version to 1.12.5 (2019-05-07 22:30:13 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to fc3002077beb3f48401c4280e5347f27f548b4a3
-
-  core: remove show-dependency-tree (2019-05-07 22:51:00 +0200)
-
-
-----------------------------------------------------------------
-Yann E. MORIN (2):
-      support/scripts: use show-info to extract dependency graph
-      core: remove show-dependency-tree
-
- Makefile                     |  4 ----
- fs/common.mk                 |  8 --------
- package/pkg-generic.mk       |  6 ------
+Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+---
  support/scripts/brpkgutil.py | 29 ++++++++++++++---------------
- 4 files changed, 14 insertions(+), 33 deletions(-)
+ 1 file changed, 14 insertions(+), 15 deletions(-)
 
+diff --git a/support/scripts/brpkgutil.py b/support/scripts/brpkgutil.py
+index f65068d348..73d8fbe931 100644
+--- a/support/scripts/brpkgutil.py
++++ b/support/scripts/brpkgutil.py
+@@ -1,6 +1,7 @@
+ # Copyright (C) 2010-2013 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ # Copyright (C) 2019 Yann E. MORIN <yann.morin.1998@free.fr>
+ 
++import json
+ import logging
+ import os
+ import subprocess
+@@ -19,7 +20,7 @@ from collections import defaultdict
+ def get_dependency_tree():
+     logging.info("Getting dependency tree...")
+ 
+-    deps = defaultdict(list)
++    deps = {}
+     rdeps = defaultdict(list)
+     types = {}
+     versions = {}
+@@ -29,23 +30,21 @@ def get_dependency_tree():
+     types['all'] = 'target'
+     versions['all'] = ''
+ 
+-    cmd = ["make", "-s", "--no-print-directory", "show-dependency-tree"]
++    cmd = ["make", "-s", "--no-print-directory", "show-info"]
+     with open(os.devnull, 'wb') as devnull:
+         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=devnull,
+                              universal_newlines=True)
+-        output = p.communicate()[0]
++        pkg_list = json.loads(p.communicate()[0])
+ 
+-    for l in output.splitlines():
+-        if " -> " in l:
+-            pkg = l.split(" -> ")[0]
+-            deps[pkg] += l.split(" -> ")[1].split()
+-            for p in l.split(" -> ")[1].split():
+-                rdeps[p].append(pkg)
+-        else:
+-            pkg, type_version = l.split(": ", 1)
+-            t, v = "{} -".format(type_version).split(None, 2)[:2]
+-            deps['all'].append(pkg)
+-            types[pkg] = t
+-            versions[pkg] = v
++    for pkg in pkg_list:
++        deps['all'].append(pkg)
++        types[pkg] = pkg_list[pkg]["type"]
++        deps[pkg] = pkg_list[pkg].get("dependencies", [])
++        for p in deps[pkg]:
++            rdeps[p].append(pkg)
++        versions[pkg] = \
++            None if pkg_list[pkg]["type"] == "rootfs" \
++            else "virtual" if pkg_list[pkg]["virtual"] \
++            else pkg_list[pkg]["version"]
+ 
+     return (deps, rdeps, types, versions)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
