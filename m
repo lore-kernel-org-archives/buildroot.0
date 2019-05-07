@@ -1,10 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 8 May 2019 01:02:11 +0200
-Subject: [Buildroot] [PATCH v2 0/3] murata-wireless firmware packages
-In-Reply-To: <20190507154117.GG6887@scaer>
+Date: Wed, 8 May 2019 01:10:25 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/murata-wireless-cyw-fmac-fw:
+ new package
+In-Reply-To: <20190507083218.24283-2-m.niestroj@grinn-global.com>
 References: <20190507083218.24283-1-m.niestroj@grinn-global.com>
- <20190507154117.GG6887@scaer>
-Message-ID: <987dafac-b1f5-2cc3-eae3-4f1694c983cb@mind.be>
+ <20190507083218.24283-2-m.niestroj@grinn-global.com>
+Message-ID: <77f579fb-40a9-1063-59a8-f35405c29cf7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,89 +14,55 @@ To: buildroot@busybox.net
 
 
 
-On 07/05/2019 17:41, Yann E. MORIN wrote:
-> Marcin, All,
-> 
-> On 2019-05-07 10:32 +0200, Marcin Niestroj spake thusly:
->> This set adds 3 firmware packages for muRata wireless modules (WiFi + BLE).
->> I've put all three packages into single murata-wireless directory and Kconfig
->> submenu, as they relate to the same hardware and there are plenty of options
->> to choose from. Not sure whether this is the correct approach, so looking
->> forward to get feedback on this.
-> 
-> I wonder why we would actually need three packages.
-> 
-> As far as I can see from a cursory look, they are all very tightly
-> coupled; they even have the same choice about the actual variant to use.
+On 07/05/2019 10:32, Marcin Niestroj wrote:
+> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW4339
+> +	bool "CYW4339 (1CK/ZP)"
+> +	help
+> +	  Murata Wireless FMAC WiFi CYW4339 (1CK/ZP) module
+> +	  firmware.
+> +
+> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430
+> +	bool "CYW43430/CYW4343W/CYW43364 (1DX/1FX/1LN)"
+> +	help
+> +	  Murata Wireless FMAC WiFi CYW43430/CYW4343W/CYW43364
+> +	  (1DX/1FX/1LN) module firmware.
+> +
+> +choice
+> +	prompt "CYW43430/CYW4343W/CYW43364 module" if BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430
+> +
+> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430_1DX
+> +	bool "1DX"
+> +
+> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430_1FX
+> +	bool "1FX"
+> +
+> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430_1LN
+> +	bool "1LN"
+> +
+> +endchoice
 
- Indeed, I guess you always need all three of them, so this seems to make sense.
+ I don't understand this. Why is it possible to install firmware for CYW4339 and
+CYW43430 1DX at the same time, but not for CYW43430 IDX and CYW43430 1FX?
+
+ In other words, why a choice and not just separate options like for the rest?
+
+ So I think what you want is that the
+BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430 option becomes a blind option
+and moves out of the choice, and that it gets selected by
+BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430_1DX etc.
+
+
+> +ifeq ($(BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43340),y)
+> +MURATA_WIRELESS_CYW_FMAC_FW_FILES += brcmfmac43340-sdio.bin
+> +endif
+
+ In most of this type of many-simple-options situations, we use something like
+
+MURATA_WIRELESS_CYW_FMAC_FW_FILES_$(BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43340)
++= brcmfmac43340-sdio.bin
+
+ By the way, I think the package name is way too long. With Yann's idea to merge
+the three, I think we could name it e.g. murata-cyw-fw.
 
  Regards,
  Arnout
-
-> 
-> So, I would like we look at making that a single package, which
-> downloads multiple tarballs, something like:
-> 
->     MURATA_WIRELESS_CYW_FW_VERSION = 8d87950bfad28c65926695b7357bd8995b60016a
->     MURATA_WIRELESS_CYW_FW_VERSION_NVRAM = d27f1bf105fa1e5b828e355793b88d4b66188411
->     MURATA_WIRELESS_CYW_FW_VERSION_PATCH = 748462f0b02ec4aeb500bedd60780ac51c37be31
-> 
->     MURATA_WIRELESS_CYW_FW_SITE = $(call github,murata-wireless,cyw-fmac-fw,$(MURATA_WIRELESS_CYW_FW_VERSION)
->     MURATA_WIRELESS_CYW_FW_EXTRA_DOWNLOADS = \
->         $(call github,murata-wireless,cyw-fmac-nvram,$(MURATA_WIRELESS_CYW_FW_VERSION_NVRAM)/cyw-bt-nvram-$(MURATA_WIRELESS_CYW_FW_VERSION_NVRAM).tar.gz \
->         $(call github,murata-wireless,cyw-fmac-patch,$(MURATA_WIRELESS_CYW_FW_VERSION_PATCH)/cyw-bt-patch-$(MURATA_WIRELESS_CYW_FW_VERSION_PATCH).tar.gz
-> 
->     define MURATA_WIRELESS_CYW_FW_EXTRACT_NVRAM_PATCH
->         $(foreach tar, $(notdir $(MURATA_WIRELESS_CYW_FW_EXTRA_DOWNLOADS)), \
->             $(call suitable-extractor,$(tar)) $(MURATA_WIRELESS_CYW_FW_DL_DIR)/$(tar) | \
->             $(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -$(sep) \
->         )
->     endef
->     MURATA_WIRELESS_CYW_FW_POST_EXTRACT_HOOKS += MURATA_WIRELESS_CYW_FW_EXTRACT_NVRAM_PATCH
-> 
-> And a similar hook for the installation step (which I leave up to you as
-> an exercise ;-) ).
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> Marcin Niestroj (3):
->>   package/murata-wireless-cyw-fmac-fw: new package
->>   package/murata-wireless-cyw-fmac-nvram: new package
->>   package/murata-wireless-cyw-bt-patch: new package
->>
->>  DEVELOPERS                                    |  1 +
->>  package/Config.in                             |  1 +
->>  package/murata-wireless/Config.in             |  7 ++
->>  .../murata-wireless-cyw-bt-patch/Config.in    | 47 ++++++++++
->>  .../murata-wireless-cyw-bt-patch.hash         |  3 +
->>  .../murata-wireless-cyw-bt-patch.mk           | 50 ++++++++++
->>  .../murata-wireless-cyw-fmac-fw/Config.in     | 91 +++++++++++++++++++
->>  .../murata-wireless-cyw-fmac-fw.hash          |  3 +
->>  .../murata-wireless-cyw-fmac-fw.mk            | 80 ++++++++++++++++
->>  .../murata-wireless-cyw-fmac-nvram/Config.in  | 91 +++++++++++++++++++
->>  .../murata-wireless-cyw-fmac-nvram.hash       |  3 +
->>  .../murata-wireless-cyw-fmac-nvram.mk         | 75 +++++++++++++++
->>  package/murata-wireless/murata-wireless.mk    |  9 ++
->>  13 files changed, 461 insertions(+)
->>  create mode 100644 package/murata-wireless/Config.in
->>  create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/Config.in
->>  create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/murata-wireless-cyw-bt-patch.hash
->>  create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/murata-wireless-cyw-bt-patch.mk
->>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/Config.in
->>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/murata-wireless-cyw-fmac-fw.hash
->>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/murata-wireless-cyw-fmac-fw.mk
->>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/Config.in
->>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/murata-wireless-cyw-fmac-nvram.hash
->>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/murata-wireless-cyw-fmac-nvram.mk
->>  create mode 100644 package/murata-wireless/murata-wireless.mk
->>
->> -- 
->> 2.21.0
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
