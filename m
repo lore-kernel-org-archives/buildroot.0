@@ -1,100 +1,99 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  7 May 2019 22:52:28 +0200
-Subject: [Buildroot] [PATCH 1/2 v3] support/scripts: use show-info to
- extract dependency graph
+Date: Tue,  7 May 2019 22:52:29 +0200
+Subject: [Buildroot] [PATCH 2/2 v3] core: remove show-dependency-tree
 In-Reply-To: <cover.1557262335.git.yann.morin.1998@free.fr>
 References: <cover.1557262335.git.yann.morin.1998@free.fr>
-Message-ID: <83e280d556b75984c34a3ce2de261e5c123b1a1a.1557262335.git.yann.morin.1998@free.fr>
+Message-ID: <fc3002077beb3f48401c4280e5347f27f548b4a3.1557262335.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, we extract the dependency graph from the aptly named but
-ad-hoc show-dependency-graph rule.
+show-dependency-tree was introduced in this release cycle, as a way to
+quickly and easily provide the dependency tree to graph-depends.
 
-We now have a better solution to report package information, with
-show-info.
+show-dependency-tree is no longer used, now that graph-depends has been
+switched over to using the more versatile show-info.
 
-Since show-dependency-graph never went into a release so far, and
-show-info does provide the same (and more), switch to using show-info.
+Beside, show-dependency-tree has never been part of a release.
 
-Thanks to Adam for suggesting the coding style to have a readable code
-that is not ugly but still pleases flake8. Thanks to Arnout for
-suggesting the use of dict.get() to further simplify the code.
+Drop it.
 
-Note: we do not use the reverse_dependencies field because it only
-contains those packages that have a kconfig option, so we'd miss most
-host packages.
-
-Reported-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Adam Duskett <aduskett@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 ---
- support/scripts/brpkgutil.py | 29 ++++++++++++++---------------
- 1 file changed, 14 insertions(+), 15 deletions(-)
+ Makefile               | 4 ----
+ fs/common.mk           | 8 --------
+ package/pkg-generic.mk | 6 ------
+ 3 files changed, 18 deletions(-)
 
-diff --git a/support/scripts/brpkgutil.py b/support/scripts/brpkgutil.py
-index f65068d348..73d8fbe931 100644
---- a/support/scripts/brpkgutil.py
-+++ b/support/scripts/brpkgutil.py
-@@ -1,6 +1,7 @@
- # Copyright (C) 2010-2013 Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- # Copyright (C) 2019 Yann E. MORIN <yann.morin.1998@free.fr>
+diff --git a/Makefile b/Makefile
+index 86e444da98..4da2453288 100644
+--- a/Makefile
++++ b/Makefile
+@@ -877,10 +877,6 @@ graph-depends-requirements:
+ 	@dot -? >/dev/null 2>&1 || \
+ 		{ echo "ERROR: The 'dot' program from Graphviz is needed for graph-depends" >&2; exit 1; }
  
-+import json
- import logging
- import os
- import subprocess
-@@ -19,7 +20,7 @@ from collections import defaultdict
- def get_dependency_tree():
-     logging.info("Getting dependency tree...")
+-.PHONY: show-dependency-tree
+-show-dependency-tree: $(patsubst %,%-show-dependency-tree,$(PACKAGES) $(TARGETS_ROOTFS))
+-	@:
+-
+ .PHONY: graph-depends
+ graph-depends: graph-depends-requirements
+ 	@$(INSTALL) -d $(GRAPHS_DIR)
+diff --git a/fs/common.mk b/fs/common.mk
+index 6dd1774726..fceb38c5b9 100644
+--- a/fs/common.mk
++++ b/fs/common.mk
+@@ -61,10 +61,6 @@ ROOTFS_COMMON_FINAL_RECURSIVE_DEPENDENCIES = $(sort \
+ 	) \
+ 	$(ROOTFS_COMMON_FINAL_RECURSIVE_DEPENDENCIES__X))
  
--    deps = defaultdict(list)
-+    deps = {}
-     rdeps = defaultdict(list)
-     types = {}
-     versions = {}
-@@ -29,23 +30,21 @@ def get_dependency_tree():
-     types['all'] = 'target'
-     versions['all'] = ''
+-rootfs-common-show-dependency-tree: $(patsubst %,%-show-dependency-tree,$(ROOTFS_COMMON_DEPENDENCIES))
+-	$(info rootfs-common: host)
+-	$(info rootfs-common -> $(foreach d,$(ROOTFS_COMMON_DEPENDENCIES),$(d)))
+-
+ .PHONY: rootfs-common
+ rootfs-common: $(ROOTFS_COMMON_DEPENDENCIES) target-finalize
+ 	@$(call MESSAGE,"Generating root filesystems common tables")
+@@ -117,10 +113,6 @@ ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES = $$(sort \
+ 	) \
+ 	$$(ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES__X))
  
--    cmd = ["make", "-s", "--no-print-directory", "show-dependency-tree"]
-+    cmd = ["make", "-s", "--no-print-directory", "show-info"]
-     with open(os.devnull, 'wb') as devnull:
-         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=devnull,
-                              universal_newlines=True)
--        output = p.communicate()[0]
-+        pkg_list = json.loads(p.communicate()[0])
+-rootfs-$(1)-show-dependency-tree: $$(patsubst %,%-show-dependency-tree,$$(ROOTFS_$(2)_DEPENDENCIES))
+-	$$(info rootfs-$(1): host)
+-	$$(info rootfs-$(1) -> $$(foreach d,$$(ROOTFS_$(2)_DEPENDENCIES),$$(d)))
+-
+ ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
+ ROOTFS_$(2)_COMPRESS_EXT = .gz
+ ROOTFS_$(2)_COMPRESS_CMD = gzip -9 -c
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 67782138b4..e44f5d913c 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -862,11 +862,6 @@ $(1)-show-build-order: $$(patsubst %,%-show-build-order,$$($(2)_FINAL_ALL_DEPEND
+ 	@:
+ 	$$(info $(1))
  
--    for l in output.splitlines():
--        if " -> " in l:
--            pkg = l.split(" -> ")[0]
--            deps[pkg] += l.split(" -> ")[1].split()
--            for p in l.split(" -> ")[1].split():
--                rdeps[p].append(pkg)
--        else:
--            pkg, type_version = l.split(": ", 1)
--            t, v = "{} -".format(type_version).split(None, 2)[:2]
--            deps['all'].append(pkg)
--            types[pkg] = t
--            versions[pkg] = v
-+    for pkg in pkg_list:
-+        deps['all'].append(pkg)
-+        types[pkg] = pkg_list[pkg]["type"]
-+        deps[pkg] = pkg_list[pkg].get("dependencies", [])
-+        for p in deps[pkg]:
-+            rdeps[p].append(pkg)
-+        versions[pkg] = \
-+            None if pkg_list[pkg]["type"] == "rootfs" \
-+            else "virtual" if pkg_list[pkg]["virtual"] \
-+            else pkg_list[pkg]["version"]
- 
-     return (deps, rdeps, types, versions)
+-$(1)-show-dependency-tree: $$(patsubst %,%-show-dependency-tree,$$($(2)_FINAL_ALL_DEPENDENCIES))
+-	@:
+-	$$(info $(1): $(4) $$(if $$($(2)_IS_VIRTUAL),virtual,$$($(2)_DL_VERSION)))
+-	$$(info $(1) -> $$($(2)_FINAL_ALL_DEPENDENCIES))
+-
+ $(1)-show-info:
+ 	@:
+ 	$$(info $$(call clean-json,{ $$(call json-info,$(2)) }))
+@@ -1101,7 +1096,6 @@ DL_TOOLS_DEPENDENCIES += $$(call extractor-dependency,$$($(2)_SOURCE))
+ 	$(1)-reconfigure \
+ 	$(1)-reinstall \
+ 	$(1)-rsync \
+-	$(1)-show-dependency-tree \
+ 	$(1)-show-depends \
+ 	$(1)-show-info \
+ 	$(1)-show-version \
 -- 
 2.20.1
