@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 8 May 2019 01:10:25 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/murata-wireless-cyw-fmac-fw:
- new package
-In-Reply-To: <20190507083218.24283-2-m.niestroj@grinn-global.com>
-References: <20190507083218.24283-1-m.niestroj@grinn-global.com>
- <20190507083218.24283-2-m.niestroj@grinn-global.com>
-Message-ID: <77f579fb-40a9-1063-59a8-f35405c29cf7@mind.be>
+Date: Wed, 8 May 2019 01:17:17 +0200
+Subject: [Buildroot] [PATCH v1 01/28] package/assimp: replace utf-8
+ quote by ascii single quote
+In-Reply-To: <87v9ymkmgh.fsf@dell.be.48ers.dk>
+References: <20190507203548.10337-1-ps.report@gmx.net>
+ <20190507225224.6cde6018@windsurf> <87v9ymkmgh.fsf@dell.be.48ers.dk>
+Message-ID: <d3226f64-aa3e-ebd0-a5fb-082f901eda38@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,55 +14,29 @@ To: buildroot@busybox.net
 
 
 
-On 07/05/2019 10:32, Marcin Niestroj wrote:
-> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW4339
-> +	bool "CYW4339 (1CK/ZP)"
-> +	help
-> +	  Murata Wireless FMAC WiFi CYW4339 (1CK/ZP) module
-> +	  firmware.
-> +
-> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430
-> +	bool "CYW43430/CYW4343W/CYW43364 (1DX/1FX/1LN)"
-> +	help
-> +	  Murata Wireless FMAC WiFi CYW43430/CYW4343W/CYW43364
-> +	  (1DX/1FX/1LN) module firmware.
-> +
-> +choice
-> +	prompt "CYW43430/CYW4343W/CYW43364 module" if BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430
-> +
-> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430_1DX
-> +	bool "1DX"
-> +
-> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430_1FX
-> +	bool "1FX"
-> +
-> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430_1LN
-> +	bool "1LN"
-> +
-> +endchoice
+On 07/05/2019 23:02, Peter Korsgaard wrote:
+>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+> 
+>  > Hello Peter,
+>  > On Tue,  7 May 2019 22:35:21 +0200
+>  > Peter Seiderer <ps.report@gmx.net> wrote:
+> 
+>  >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>  >> ---
+>  >> package/assimp/assimp.mk | 2 +-
+>  >> 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+>  > Thanks for all those patches. I think it would be useful to extend the
+>  > check-package logic to check that such UTF-8 quotes/spaces don't get
+>  > re-added.
+> 
+> Agreed!
 
- I don't understand this. Why is it possible to install firmware for CYW4339 and
-CYW43430 1DX at the same time, but not for CYW43430 IDX and CYW43430 1FX?
+ I think in Config.in, *.mk and *.hash we should never need any non-ascii
+character, so that check would be easy.
 
- In other words, why a choice and not just separate options like for the rest?
-
- So I think what you want is that the
-BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430 option becomes a blind option
-and moves out of the choice, and that it gets selected by
-BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430_1DX etc.
-
-
-> +ifeq ($(BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43340),y)
-> +MURATA_WIRELESS_CYW_FMAC_FW_FILES += brcmfmac43340-sdio.bin
-> +endif
-
- In most of this type of many-simple-options situations, we use something like
-
-MURATA_WIRELESS_CYW_FMAC_FW_FILES_$(BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43340)
-+= brcmfmac43340-sdio.bin
-
- By the way, I think the package name is way too long. With Yann's idea to merge
-the three, I think we could name it e.g. murata-cyw-fw.
+ In patches, there may be non-ascii characters in the From, Sob and other tags,
+and in the patch contents itself. So that will be tricky to check.
 
  Regards,
  Arnout
