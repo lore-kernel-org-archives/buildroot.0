@@ -1,105 +1,153 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Tue, 7 May 2019 10:37:14 +0000
-Subject: [Buildroot] [PATCH 1/1] package/exiv2: cleanup options and licenses
-Message-ID: <20190507103639.94701-1-nicolas.serafini@sensefly.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue,  7 May 2019 13:25:21 +0200
+Subject: [Buildroot] [PATCH] board/qemu/aarch64: add a aarch64 virt machine
+ using an ARM cortex-a72 core
+Message-ID: <20190507112521.12165-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current version of exiv2 no longer requires a commercial option for
-lens database integration.
+ARM cortex-a72 core has been added to Qemu since version 3.1.0 [1] [2].
 
-Add the dedicated licence file for CMake script.
+Rebuild the .gitlab-ci.yml.
 
-Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Tested using Qemu 4.0.0.
+
+[1] https://git.qemu.org/?p=qemu.git;a=commit;h=f11b452b95df4a0fc6561c278721cad03b24098b
+[2] https://wiki.qemu.org/ChangeLog/3.1
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/exiv2/Config.in  | 19 ++-----------------
- package/exiv2/exiv2.hash |  1 +
- package/exiv2/exiv2.mk   | 16 +++++-----------
- 3 files changed, 8 insertions(+), 28 deletions(-)
+Qemu also support ARM cortex-a57 cpu core.
+Should we support and test all cpu emulation available in Qemu ?
+This can be useful for toolchain-builder project to provide a prebuilt ARM aarch64
+toolchain optimized for cortex-a57.
+---
+ .gitlab-ci.yml                                |  1 +
+ .../qemu/aarch64-virt-cortex-a72/linux.config | 54 +++++++++++++++++++
+ board/qemu/aarch64-virt-cortex-a72/readme.txt |  7 +++
+ .../qemu_aarch64_virt_cortex-a72_defconfig    | 23 ++++++++
+ 4 files changed, 85 insertions(+)
+ create mode 100644 board/qemu/aarch64-virt-cortex-a72/linux.config
+ create mode 100644 board/qemu/aarch64-virt-cortex-a72/readme.txt
+ create mode 100644 configs/qemu_aarch64_virt_cortex-a72_defconfig
 
-diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
-index acce81c593..ddfa34261f 100644
---- a/package/exiv2/Config.in
-+++ b/package/exiv2/Config.in
-@@ -23,17 +23,6 @@ config BR2_PACKAGE_EXIV2
- 
- if BR2_PACKAGE_EXIV2
- 
--config BR2_PACKAGE_EXIV2_COMMERCIAL
--	bool "Enable commercial"
--	help
--	  Build the commercial version for closed source project.
--
--	  The Nikon lens name database and the NLS support is disabled
--	  for copyright reasons.
--
--	  A commercial license request is needed.
--	  http://www.exiv2.org/download.html#license
--
- config BR2_PACKAGE_EXIV2_PNG
- 	bool "PNG image support"
- 	select BR2_PACKAGE_ZLIB
-@@ -47,12 +36,8 @@ config BR2_PACKAGE_EXIV2_XMP
- 	  Build with XMP support
- 
- config BR2_PACKAGE_EXIV2_LENSDATA
--	bool "Nikon lens name database"
--	depends on !BR2_PACKAGE_EXIV2_COMMERCIAL
-+	bool "Include lens data"
- 	help
--	  Integrate Nikon lens name database.
--
--	  This database is integrated but comes from a thirdparty:
--	  http://www.rottmerhusen.com/objektives/lensid/thirdparty.html.
-+	  Build with lens data
- 
- endif
-diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
-index f99cb8cb87..b753c03854 100644
---- a/package/exiv2/exiv2.hash
-+++ b/package/exiv2/exiv2.hash
-@@ -1,3 +1,4 @@
- # Locally calculated
- sha256 1b3766b2c203ce213a4195de14d61694017ec1a69d15d4575bccecef130990fe exiv2-0.27.1.tar.gz
- sha256 a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66 COPYING
-+sha256 46cde7dc11e64c78d650b4851b88f6704b4665ff60f22a1caf68ceb15e217e5b COPYING-CMAKE-SCRIPTS
-diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-index ba9d9b7303..3aa2a9e088 100644
---- a/package/exiv2/exiv2.mk
-+++ b/package/exiv2/exiv2.mk
-@@ -7,6 +7,8 @@
- EXIV2_VERSION = 0.27.1
- EXIV2_SITE = $(call github,Exiv2,exiv2,$(EXIV2_VERSION))
- EXIV2_INSTALL_STAGING = YES
-+EXIV2_LICENSE = GPL-2.0+
-+EXIV2_LICENSE_FILES = COPYING COPYING-CMAKE-SCRIPTS
- 
- EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
- 
-@@ -14,18 +16,10 @@ EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
- # test which is not allowed when cross-compiling.
- EXIV2_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
- 
--ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),)
--EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_EXIV2_COMMERCIAL),y)
--EXIV2_LICENSE = commercial
--# NLS support is disabled in commercial version due to the copyright
--# of the translated texts.
--EXIV2_CONF_OPTS += -DEXIV2_ENABLE_COMMERCIAL=ON -DEXIV2_ENABLE_NLS=OFF
-+ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),y)
-+EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=ON
- else
--EXIV2_LICENSE = GPL-2.0+
--EXIV2_LICENSE_FILES = COPYING
-+EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_EXIV2_PNG),y)
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 374dbfe837..6462ca3a32 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -244,6 +244,7 @@ pc_x86_64_bios_defconfig: { extends: .defconfig }
+ pc_x86_64_efi_defconfig: { extends: .defconfig }
+ pine64_defconfig: { extends: .defconfig }
+ pine64_sopine_defconfig: { extends: .defconfig }
++qemu_aarch64_virt_cortex-a72_defconfig: { extends: .defconfig }
+ qemu_aarch64_virt_defconfig: { extends: .defconfig }
+ qemu_arm_versatile_defconfig: { extends: .defconfig }
+ qemu_arm_versatile_nommu_defconfig: { extends: .defconfig }
+diff --git a/board/qemu/aarch64-virt-cortex-a72/linux.config b/board/qemu/aarch64-virt-cortex-a72/linux.config
+new file mode 100644
+index 0000000000..c9f2708ad5
+--- /dev/null
++++ b/board/qemu/aarch64-virt-cortex-a72/linux.config
+@@ -0,0 +1,54 @@
++CONFIG_SYSVIPC=y
++CONFIG_POSIX_MQUEUE=y
++CONFIG_NO_HZ_IDLE=y
++CONFIG_HIGH_RES_TIMERS=y
++CONFIG_TASKSTATS=y
++CONFIG_SCHED_AUTOGROUP=y
++CONFIG_PROFILING=y
++CONFIG_MODULES=y
++CONFIG_MODULE_UNLOAD=y
++CONFIG_BLK_DEV_BSGLIB=y
++CONFIG_ARCH_VEXPRESS=y
++CONFIG_TRANSPARENT_HUGEPAGE=y
++CONFIG_BINFMT_MISC=y
++CONFIG_COMPAT=y
++CONFIG_NET=y
++CONFIG_PACKET=y
++CONFIG_PACKET_DIAG=y
++CONFIG_UNIX=y
++CONFIG_NET_KEY=y
++CONFIG_INET=y
++CONFIG_IP_MULTICAST=y
++CONFIG_IP_ADVANCED_ROUTER=y
++CONFIG_BRIDGE=m
++CONFIG_NET_SCHED=y
++CONFIG_VSOCKETS=y
++CONFIG_DEVTMPFS=y
++CONFIG_DEVTMPFS_MOUNT=y
++CONFIG_VIRTIO_BLK=y
++CONFIG_BLK_DEV_SD=y
++CONFIG_CHR_DEV_SG=y
++CONFIG_SCSI_CONSTANTS=y
++CONFIG_SCSI_LOGGING=y
++CONFIG_SCSI_SCAN_ASYNC=y
++CONFIG_SCSI_VIRTIO=y
++CONFIG_ATA=y
++CONFIG_NETDEVICES=y
++CONFIG_DUMMY=y
++CONFIG_MACVLAN=y
++CONFIG_VIRTIO_NET=y
++CONFIG_NLMON=y
++CONFIG_VT_HW_CONSOLE_BINDING=y
++CONFIG_SERIAL_AMBA_PL011=y
++CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
++CONFIG_VIRTIO_CONSOLE=y
++CONFIG_HW_RANDOM=y
++CONFIG_HW_RANDOM_VIRTIO=y
++CONFIG_RTC_CLASS=y
++CONFIG_VIRTIO_MMIO=y
++CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
++CONFIG_MAILBOX=y
++CONFIG_PL320_MBOX=y
++CONFIG_EXT4_FS=y
++CONFIG_TMPFS=y
++CONFIG_TMPFS_POSIX_ACL=y
+diff --git a/board/qemu/aarch64-virt-cortex-a72/readme.txt b/board/qemu/aarch64-virt-cortex-a72/readme.txt
+new file mode 100644
+index 0000000000..c1395839f2
+--- /dev/null
++++ b/board/qemu/aarch64-virt-cortex-a72/readme.txt
+@@ -0,0 +1,7 @@
++Run the emulation with:
++
++  qemu-system-aarch64 -M virt -cpu cortex-a72 -nographic -smp 1 -kernel output/images/Image -append "root=/dev/vda console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=output/images/rootfs.ext4,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0
++
++The login prompt will appear in the terminal that started Qemu.
++
++Tested with QEMU 4.0.0
+diff --git a/configs/qemu_aarch64_virt_cortex-a72_defconfig b/configs/qemu_aarch64_virt_cortex-a72_defconfig
+new file mode 100644
+index 0000000000..703f5797fe
+--- /dev/null
++++ b/configs/qemu_aarch64_virt_cortex-a72_defconfig
+@@ -0,0 +1,23 @@
++# Architecture
++BR2_aarch64=y
++BR2_cortex_a72=y
++
++# System
++BR2_SYSTEM_DHCP="eth0"
++BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
++BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt-cortex-a72/linux.config"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 -- 
-2.21.0
+2.20.1
