@@ -1,25 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 07 May 2019 22:30:29 +0200
-Subject: [Buildroot] [PATCH] package/go: bump version to 1.12.5
-In-Reply-To: <20190507151339.350-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 7 May 2019 17:13:39 +0200")
-References: <20190507151339.350-1-peter@korsgaard.com>
-Message-ID: <877eb2t3bu.fsf@dell.be.48ers.dk>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue,  7 May 2019 22:35:31 +0200
+Subject: [Buildroot] [PATCH v1 11/28] package/collectd: replace utf-8 quote
+ by ascii single quote
+In-Reply-To: <20190507203548.10337-1-ps.report@gmx.net>
+References: <20190507203548.10337-1-ps.report@gmx.net>
+Message-ID: <20190507203548.10337-11-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/collectd/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Fixes a number of issues discovered since 1.12.4.  From the release notes:
- > go1.12.5 (released 2019/05/06) includes fixes to the compiler, the linker,
- > the go command, the runtime, and the os package.
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 3222547b68..0cf04b5180 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -389,7 +389,7 @@ config BR2_PACKAGE_COLLECTD_POSTGRESQL
+ 	  Connects to and executes SQL statements on a PostgreSQL
+ 	  database. It then reads back the results and, depending on the
+ 	  configuration, the returned values are then converted into
+-	  collectd ?value lists?.
++	  collectd 'value lists'.
 
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ comment "postgresql support needs a toolchain w/ wchar"
+ 	depends on !BR2_USE_WCHAR
+--
+2.21.0
