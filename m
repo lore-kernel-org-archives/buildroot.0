@@ -1,187 +1,51 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 7 May 2019 10:26:26 +0200
-Subject: [Buildroot] [PATCH 02/15] board/qemu/ppc*: disable Werror while
- building ppc kernel with gcc >= 9.1
-In-Reply-To: <20190506200155.GC6887@scaer>
-References: <20190506183011.4856-1-romain.naour@gmail.com>
- <20190506183011.4856-3-romain.naour@gmail.com> <20190506194908.GB6887@scaer>
- <7a5d0c4c-abe5-b7e4-4ea1-160fc2be3a5f@gmail.com>
- <20190506200155.GC6887@scaer>
-Message-ID: <ee0b92f0-1fae-c844-a84a-bda08e33e71c@smile.fr>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Tue,  7 May 2019 10:32:15 +0200
+Subject: [Buildroot] [PATCH v2 0/3] murata-wireless firmware packages
+Message-ID: <20190507083218.24283-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Hi,
 
-Le 06/05/2019 ? 22:01, Yann E. MORIN a ?crit?:
-> Romain, All,
-> 
-> On 2019-05-06 21:57 +0200, Romain Naour spake thusly:
->> Le 06/05/2019 ? 21:49, Yann E. MORIN a ?crit?:
->>> On 2019-05-06 20:29 +0200, Romain Naour spake thusly:
->>>> From patch [1] included in kernel >= 5.0:
->>>> "The upcoming GCC 9 release extends the -Wmissing-attributes warnings
->>>> (enabled by -Wall) to C and aliases: it warns when particular function
->>>> attributes are missing in the aliases but not in their target.
-> [--SNIP--]
->>>> Add CONFIG_PPC_DISABLE_WERROR only for qemu ppc{64} defconfig
->>>> since they are used for CI with toolchain-builder's gitlab [3].
->>>
->>> When you introduce gcc-9 later in the series, itis not the default
->>> compiler, so it will not be selected for these defconfigs.
->>>
->>> So, I don't think we need this change (yet).
->>>
->>> If we decide to update these defconfigs to use the latest gcc-9, later,
->>> then that would be the moment to include the fix.
->>
->> This fix is required for toolchain-builder that use a bleeding-edge toolchain.
->> Since we test the new toolchain by building a small rootfs + a kernel Linux for
->> Qemu, we really need this fix before introducing gcc 9.1.
-> 
-> Then it should be that toolchain-builder that is responsible to provide
-> the fragment, no?
+This set adds 3 firmware packages for muRata wireless modules (WiFi + BLE).
+I've put all three packages into single murata-wireless directory and Kconfig
+submenu, as they relate to the same hardware and there are plenty of options
+to choose from. Not sure whether this is the correct approach, so looking
+forward to get feedback on this.
 
-Indeed, the fragment can be part of toolchain-builder but...
+Marcin Niestroj (3):
+  package/murata-wireless-cyw-fmac-fw: new package
+  package/murata-wireless-cyw-fmac-nvram: new package
+  package/murata-wireless-cyw-bt-patch: new package
 
-> 
-> The defconfigs as they are in Buildroot do not need it, so I fail to
-> understand why we, in Buildroot, would need that.
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/murata-wireless/Config.in             |  7 ++
+ .../murata-wireless-cyw-bt-patch/Config.in    | 47 ++++++++++
+ .../murata-wireless-cyw-bt-patch.hash         |  3 +
+ .../murata-wireless-cyw-bt-patch.mk           | 50 ++++++++++
+ .../murata-wireless-cyw-fmac-fw/Config.in     | 91 +++++++++++++++++++
+ .../murata-wireless-cyw-fmac-fw.hash          |  3 +
+ .../murata-wireless-cyw-fmac-fw.mk            | 80 ++++++++++++++++
+ .../murata-wireless-cyw-fmac-nvram/Config.in  | 91 +++++++++++++++++++
+ .../murata-wireless-cyw-fmac-nvram.hash       |  3 +
+ .../murata-wireless-cyw-fmac-nvram.mk         | 75 +++++++++++++++
+ package/murata-wireless/murata-wireless.mk    |  9 ++
+ 13 files changed, 461 insertions(+)
+ create mode 100644 package/murata-wireless/Config.in
+ create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/Config.in
+ create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/murata-wireless-cyw-bt-patch.hash
+ create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/murata-wireless-cyw-bt-patch.mk
+ create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/Config.in
+ create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/murata-wireless-cyw-fmac-fw.hash
+ create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/murata-wireless-cyw-fmac-fw.mk
+ create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/Config.in
+ create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/murata-wireless-cyw-fmac-nvram.hash
+ create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/murata-wireless-cyw-fmac-nvram.mk
+ create mode 100644 package/murata-wireless/murata-wireless.mk
 
-I believe that's the same reason why we remove Werror in packages's compiler
-flags. Building with Werror is not bulletproof when we start using a newer
-compiler that introduce new warnings. This is the case here.
-
-Also this option is a bit strange since it's specific to ppc kernels:
-"The intention is to make it harder for people to inadvertantly introduce
-warnings in the arch/powerpc code." Other kernel developers on other arch may be
-interested by this option.
-
-So, It's clearly intended for kernel developers.
-
-Best regards,
-Romain
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
->> Best regards,
->> Romain
->>
->>>
->>> Regards,
->>> Yann E. MORIN.
->>>
->>>> Fixes:
->>>> https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435741
->>>>
->>>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=a6e60d84989fa0e91db7f236eda40453b0e44afa
->>>> [2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=ba55bd74360ea4b8b95e73ed79474d37ff482b36
->>>> [3] https://gitlab.com/bootlin/toolchains-builder
->>>>
->>>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->>>> ---
->>>> Note: It can be usefull to select CONFIG_PPC_DISABLE_WERROR for
->>>> other ppc board defconfig.
->>>>
->>>> v2: add a shared fragment in board/fragments/linux and update
->>>> qemu ppc* defconfigs. (Arnout)
->>>> ---
->>>>  board/fragments/linux/linux-ppc-disable-werror.fragment | 1 +
->>>>  configs/qemu_ppc64_e5500_defconfig                      | 2 +-
->>>>  configs/qemu_ppc64_pseries_defconfig                    | 1 +
->>>>  configs/qemu_ppc64le_pseries_defconfig                  | 1 +
->>>>  configs/qemu_ppc_g3beige_defconfig                      | 1 +
->>>>  configs/qemu_ppc_mpc8544ds_defconfig                    | 1 +
->>>>  configs/qemu_ppc_virtex_ml507_defconfig                 | 1 +
->>>>  7 files changed, 7 insertions(+), 1 deletion(-)
->>>>  create mode 100644 board/fragments/linux/linux-ppc-disable-werror.fragment
->>>>
->>>> diff --git a/board/fragments/linux/linux-ppc-disable-werror.fragment b/board/fragments/linux/linux-ppc-disable-werror.fragment
->>>> new file mode 100644
->>>> index 0000000000..6ea12a1243
->>>> --- /dev/null
->>>> +++ b/board/fragments/linux/linux-ppc-disable-werror.fragment
->>>> @@ -0,0 +1 @@
->>>> +CONFIG_PPC_DISABLE_WERROR=y
->>>> diff --git a/configs/qemu_ppc64_e5500_defconfig b/configs/qemu_ppc64_e5500_defconfig
->>>> index 59b8636918..624155316c 100644
->>>> --- a/configs/qemu_ppc64_e5500_defconfig
->>>> +++ b/configs/qemu_ppc64_e5500_defconfig
->>>> @@ -13,7 +13,7 @@ BR2_LINUX_KERNEL=y
->>>>  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->>>>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
->>>>  BR2_LINUX_KERNEL_DEFCONFIG="corenet64_smp"
->>>> -BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment"
->>>> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc64-e5500/linux.fragment board/fragments/linux/linux-ppc-disable-werror.fragment"
->>>>  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
->>>>  
->>>>  # Filesystem
->>>> diff --git a/configs/qemu_ppc64_pseries_defconfig b/configs/qemu_ppc64_pseries_defconfig
->>>> index 5f55b246f7..277d08989a 100644
->>>> --- a/configs/qemu_ppc64_pseries_defconfig
->>>> +++ b/configs/qemu_ppc64_pseries_defconfig
->>>> @@ -19,3 +19,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->>>>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
->>>>  BR2_LINUX_KERNEL_DEFCONFIG="pseries"
->>>>  BR2_LINUX_KERNEL_VMLINUX=y
->>>> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/fragments/linux/linux-ppc-disable-werror.fragment"
->>>> diff --git a/configs/qemu_ppc64le_pseries_defconfig b/configs/qemu_ppc64le_pseries_defconfig
->>>> index 8356e4e250..1848667abf 100644
->>>> --- a/configs/qemu_ppc64le_pseries_defconfig
->>>> +++ b/configs/qemu_ppc64le_pseries_defconfig
->>>> @@ -19,3 +19,4 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->>>>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
->>>>  BR2_LINUX_KERNEL_DEFCONFIG="pseries_le"
->>>>  BR2_LINUX_KERNEL_VMLINUX=y
->>>> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/fragments/linux/linux-ppc-disable-werror.fragment"
->>>> diff --git a/configs/qemu_ppc_g3beige_defconfig b/configs/qemu_ppc_g3beige_defconfig
->>>> index 4b2f3ed2fe..c8bbd74ada 100644
->>>> --- a/configs/qemu_ppc_g3beige_defconfig
->>>> +++ b/configs/qemu_ppc_g3beige_defconfig
->>>> @@ -18,6 +18,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->>>>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
->>>>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->>>>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-g3beige/linux.config"
->>>> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/fragments/linux/linux-ppc-disable-werror.fragment"
->>>>  BR2_LINUX_KERNEL_VMLINUX=y
->>>>  
->>>>  # Serial port config
->>>> diff --git a/configs/qemu_ppc_mpc8544ds_defconfig b/configs/qemu_ppc_mpc8544ds_defconfig
->>>> index 98985b7b76..68a9e80e93 100644
->>>> --- a/configs/qemu_ppc_mpc8544ds_defconfig
->>>> +++ b/configs/qemu_ppc_mpc8544ds_defconfig
->>>> @@ -18,6 +18,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->>>>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
->>>>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->>>>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-mpc8544ds/linux.config"
->>>> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/fragments/linux/linux-ppc-disable-werror.fragment"
->>>>  BR2_LINUX_KERNEL_VMLINUX=y
->>>>  
->>>>  # Serial port config
->>>> diff --git a/configs/qemu_ppc_virtex_ml507_defconfig b/configs/qemu_ppc_virtex_ml507_defconfig
->>>> index eddaf3558a..2a127ed70d 100644
->>>> --- a/configs/qemu_ppc_virtex_ml507_defconfig
->>>> +++ b/configs/qemu_ppc_virtex_ml507_defconfig
->>>> @@ -18,6 +18,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
->>>>  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
->>>>  BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
->>>>  BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/ppc-virtex-ml507/linux.config"
->>>> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/fragments/linux/linux-ppc-disable-werror.fragment"
->>>>  BR2_LINUX_KERNEL_VMLINUX=y
->>>>  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->>>>  BR2_LINUX_KERNEL_INTREE_DTS_NAME="virtex440-ml507"
->>>> -- 
->>>> 2.14.5
->>>>
->>>> _______________________________________________
->>>> buildroot mailing list
->>>> buildroot at busybox.net
->>>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>
->>
-> 
+-- 
+2.21.0
