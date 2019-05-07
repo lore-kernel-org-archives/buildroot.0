@@ -1,124 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 7 May 2019 14:01:50 +0200
-Subject: [Buildroot] [PATCH 1/3] arch/csky: Add ck860 and vdsp compiler
- options
-In-Reply-To: <1557222442-8484-1-git-send-email-guoren@kernel.org>
-References: <1557222442-8484-1-git-send-email-guoren@kernel.org>
-Message-ID: <20190507140150.7d970503@windsurf>
+Date: Tue, 7 May 2019 14:11:42 +0200
+Subject: [Buildroot] [PATCH] board/qemu/aarch64: add a aarch64 virt
+ machine using an ARM cortex-a72 core
+In-Reply-To: <20190507112521.12165-1-romain.naour@smile.fr>
+References: <20190507112521.12165-1-romain.naour@smile.fr>
+Message-ID: <20190507141142.27657a08@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Guo,
+Hello Romain,
 
-Thanks for this new csky related contribution. See below some comments.
+On Tue,  7 May 2019 13:25:21 +0200
+Romain Naour <romain.naour@smile.fr> wrote:
 
-On Tue,  7 May 2019 17:47:20 +0800
-guoren at kernel.org wrote:
+> ARM cortex-a72 core has been added to Qemu since version 3.1.0 [1] [2].
 
-> From: Guo Ren <ren_guo@c-sky.com>
-> 
-> The ck860 is C-SKY abiv2 cpu series and it could support SMP and vdsp
-> instructions set. Add the compiler options for them.
-> 
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> ---
->  arch/Config.in.csky | 33 ++++++++++++++++++++-------------
->  1 file changed, 20 insertions(+), 13 deletions(-)
-> 
-> diff --git a/arch/Config.in.csky b/arch/Config.in.csky
-> index e88e4e2..bbff600 100644
-> --- a/arch/Config.in.csky
-> +++ b/arch/Config.in.csky
-> @@ -13,19 +13,26 @@ config BR2_ck807
->  config BR2_ck810
->  	bool "ck810"
->  
-> +config BR2_ck860
-> +	bool "ck860"
-> +
->  endchoice
->  
->  config BR2_CSKY_FPU
->  	bool "Enable FPU coprocessor"
-> -	depends on BR2_ck810 || BR2_ck807
-> +	depends on BR2_ck807 || BR2_ck810 || BR2_ck860
->  	help
->  	  You can say N here if your C-SKY CPU doesn't have a
->  	  Floating-Point Coprocessor or if you don't need FPU support
->  	  for your user-space programs.
->  
-> -config BR2_CSKY_DSP
-> -	bool "Enable DSP enhanced instructions"
-> -	depends on BR2_ck810 || BR2_ck807
+Do we really want a different defconfig for each possible ARM core that
+Qemu emulates ?
 
-Why is this option being removed ? This is not explained in the commit
-log.
+> Qemu also support ARM cortex-a57 cpu core.
+> Should we support and test all cpu emulation available in Qemu ?
+> This can be useful for toolchain-builder project to provide a prebuilt ARM aarch64
+> toolchain optimized for cortex-a57.
 
-> +config BR2_CSKY_VDSP
-> +	bool "Enable VDSP 3.0 enhanced instructions Co-processor"
-> +	depends on BR2_ck860
-> +
-> +config BR2_GCC_TARGET_FLOAT_ABI
-> +	default "soft"		if !BR2_CSKY_FPU
-> +	default "hard"		if BR2_CSKY_FPU
+I'm not sure the toolchain builder project requires exactly a Qemu
+emulating the specific optimization for which gcc was built. I.e, a
+Cortex-A53 qemu defconfig can be used to boot test a Cortex-A57 or A72
+optimized toolchain.
 
-This should be in a separate patch, it's not a change that is directly
-related.
+We're already doing that for example with ARMv5/v6/v7:
 
->  config BR2_ARCH
->  	default "csky"
-> @@ -34,15 +41,15 @@ config BR2_ENDIAN
->  	default "LITTLE"
->  
->  config BR2_GCC_TARGET_CPU
-> -	default "ck610"		if (BR2_ck610 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
-> -	default "ck807"		if (BR2_ck807 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
-> -	default "ck807e"	if (BR2_ck807 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
-> -	default "ck807f"	if (BR2_ck807 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
-> -	default "ck807ef"	if (BR2_ck807 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
-> -	default "ck810"		if (BR2_ck810 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
-> -	default "ck810e"	if (BR2_ck810 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
-> -	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
-> -	default "ck810ef"	if (BR2_ck810 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
-> +	default "ck610"		if (BR2_ck610 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
-> +	default "ck807"		if (BR2_ck807 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
-> +	default "ck807f"	if (BR2_ck807 &&  BR2_CSKY_FPU && !BR2_CSKY_VDSP)
-> +	default "ck810"		if (BR2_ck810 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
-> +	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_VDSP)
-> +	default "ck860"		if (BR2_ck860 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
-> +	default "ck860f"	if (BR2_ck860 &&  BR2_CSKY_FPU && !BR2_CSKY_VDSP)
-> +	default "ck860v"	if (BR2_ck860 && !BR2_CSKY_FPU &&  BR2_CSKY_VDSP)
-> +	default "ck860fv"	if (BR2_ck860 &&  BR2_CSKY_FPU &&  BR2_CSKY_VDSP)
+    armv5-* | armv6-* | armv7-*)
+        test_defconfig="qemu_arm_vexpress_defconfig"
+        test_board_dir="arm-vexpress"
 
-Perhaps this is becoming too much, and we should adopt a solution
-similar to the one in arch/arch.mk.riscv. I.e, drop the
-BR2_GCC_TARGET_CPU definition from arch/Config.in.csky, and add a file
-arch/arch.mk.csky that contains:
+Or for x86:
 
-ifeq ($(BR2_csky),y)
-
-ifeq ($(BR2_ck610),y)
-GCC_TARGET_CPU := ck610
-else ifeq ($(BR2_ck807),y)
-GCC_TARGET_CPU := ck807
-else ifeq ($(BR2_ck810),y)
-GCC_TARGET_CPU := ck810
-else ifeq ($(BR2_ck860),y)
-GCC_TARGET_CPU := ck860
-endif
-
-ifeq ($(BR2_CSKY_FPU),y)
-GCC_TARGET_CPU := $(GCC_TARGET_CPU)f
-endif
-
-ifeq ($(BR2_CSKY_VDSP),y)
-GCC_TARGET_CPU := $(GCC_TARGET_CPU)v
-endif
-
-endif
+    x86-core2)
+        test_defconfig="qemu_x86_defconfig"
+    x86-i686)
+        test_defconfig="qemu_x86_defconfig"
 
 Best regards,
 
