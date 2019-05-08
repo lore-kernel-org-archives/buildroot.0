@@ -1,64 +1,210 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Wed,  8 May 2019 17:07:05 +0200
-Subject: [Buildroot] [PATCH v2 00/15]  Add gcc 9.1
-Message-ID: <20190508150720.27946-1-romain.naour@gmail.com>
+Date: Wed,  8 May 2019 17:07:06 +0200
+Subject: [Buildroot] [PATCH v2 01/15] package/glibc/arc: fix build issue
+ with gcc-9.1
+In-Reply-To: <20190508150720.27946-1-romain.naour@gmail.com>
+References: <20190508150720.27946-1-romain.naour@gmail.com>
+Message-ID: <20190508150720.27946-2-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Before adding gcc 9.1 [1] to Buildroot, add some fixes for issues discovered
-by toolchain-builder [2] that are trigged by this new compiler version.
-(disable powerpc Werror, uClibc-ng asm sparc and ARC glibc).
+Backport from upstream [1] to fix build issue with glibc arc-2018.09-release
+(based on glibc 2.28) and gcc 9.1 [2]]
 
-Then add gcc 9.1 for internal and extenal toolchain backend and switch gcc 8.x
-as default compiler.
+Using glibc arc-2.29-2019.02.08 or the upcoming arc-2019.03 release include
+this patch.
 
-Thanks to Yann E. MORIN for providing a patch series that add new ARM cores
-added by gcc 9.1.
+The upstream patch [1] modify mostly x86_64 files, but also two generic headers
+where the new __attribute_copy__() macro is defined *and* used to complement
+existing attribute-related macros.
 
-Each new ARM core has been build tested for aarch64:
-https://gitlab.com/kubu93/buildroot/pipelines/60318953
+So, it is not much the x86_64 part we're interested in, but the generic
+two headers, which changes percolate to the various functions via the
+various attribute macros...
 
-Finally, enable the new ork1 (openrisc) that will replace in the following
-series the old gcc fork (gcc 5.x).
+[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=1626a1cfcd6ba1cc64721be1036c2873211d499b
+[2] https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435682
 
-[1] https://gcc.gnu.org/gcc-9/changes.html
-[2] https://gitlab.com/kubu93/toolchains-builder/pipelines/59794237
-
-Romain Naour (9):
-  package/glibc/arc: fix build issue with gcc-9.1
-  linux: disable Werror for powerpc kernels
-  [RFC] package/uclibc: remove asm constraint
-  toolchain: add gcc 9 entry
-  package/gcc: add support for gcc 9.1
-  arch: add BR2_ARCH_NEEDS_GCC_AT_LEAST_9
-  toolchain-external: add gcc 9 entry
-  package/gcc: switch to gcc 8.x as the default
-  package/gcc: enable gcc 9.1 for ork1 (openrisc)
-
-Yann E. MORIN (6):
-  arch/arm: move dependency on 64-bit down to individual cores
-  arch/arm: some cores have a different name with gcc-9
-  arch/arm: saphira is in fact an armv8.4a
-  arch/arm: add two new 64-bit-only armv8a cores
-  arch/arm: add two new cortex-based armv8.2a cores
-  arch/arm: add two new non-cortex-based armv8.2a cores
-
- arch/Config.in                                     |   4 +
- arch/Config.in.arm                                 |  95 +++++++++---
- linux/linux.mk                                     |   2 +
- package/gcc/Config.in.host                         |   8 +-
- package/gcc/gcc.hash                               |   2 +
- package/gcc/gcc.mk                                 |   4 +-
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Alexey Brodkin <alexey.brodkin@synopsys.com>
+Cc: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Cc: Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
+---
+v2: remove x86_64 part of the backported patch (Yann).
+    commit log (Yann)
+---
  ...0001-Add-support-for-GCC-9-attribute-copy.patch | 160 +++++++++++++++++++++
- ...FC-sparc-syscalls.h-remove-asm-constraint.patch |  46 ++++++
- toolchain/Config.in                                |   5 +
- .../toolchain-external-custom/Config.in.options    |   6 +
- 10 files changed, 313 insertions(+), 19 deletions(-)
+ 1 file changed, 160 insertions(+)
  create mode 100644 package/glibc/arc-2018.09-release/0001-Add-support-for-GCC-9-attribute-copy.patch
- create mode 100644 package/uclibc/0003-RFC-sparc-syscalls.h-remove-asm-constraint.patch
 
+diff --git a/package/glibc/arc-2018.09-release/0001-Add-support-for-GCC-9-attribute-copy.patch b/package/glibc/arc-2018.09-release/0001-Add-support-for-GCC-9-attribute-copy.patch
+new file mode 100644
+index 0000000000..0c0a8a9337
+--- /dev/null
++++ b/package/glibc/arc-2018.09-release/0001-Add-support-for-GCC-9-attribute-copy.patch
+@@ -0,0 +1,160 @@
++From 3e0c7985c9535304d87af3ad728f5f6d34557f0d Mon Sep 17 00:00:00 2001
++From: Martin Sebor <msebor@redhat.com>
++Date: Fri, 9 Nov 2018 17:24:12 -0700
++Subject: [PATCH] Add support for GCC 9 attribute copy.
++
++GCC 9 has gained an enhancement to help detect attribute mismatches
++between alias declarations and their targets.  It consists of a new
++warning, -Wattribute-alias, an enhancement to an existing warning,
++-Wmissing-attributes, and a new attribute called copy.
++
++The purpose of the warnings is to help identify either possible bugs
++(an alias declared with more restrictive attributes than its target
++promises) or optimization or diagnostic opportunities (an alias target
++missing some attributes that it could be declared with that might
++benefit analysis and code generation).  The purpose of the new
++attribute is to easily apply (almost) the same set of attributes
++to one declaration as those already present on another.
++
++As expected (and intended) the enhancement triggers warnings for
++many alias declarations in Glibc code.  This change, tested on
++x86_64-linux, avoids all instances of the new warnings by making
++use of the attribute where appropriate.  To fully benefit from
++the enhancement Glibc will need to be compiled with
++ -Wattribute-alias=2 and remaining warnings reviewed and dealt with
++(there are a couple of thousand but most should be straightforward
++to deal with).
++
++ChangeLog:
++
++	* include/libc-symbols.h (__attribute_copy__): Define macro unless
++	it's already defined.
++	(_strong_alias): Use __attribute_copy__.
++	(_weak_alias,  __hidden_ver1,  __hidden_nolink2): Same.
++	* misc/sys/cdefs.h (__attribute_copy__): New macro.
++	* sysdeps/x86_64/multiarch/memchr.c (memchr): Use __attribute_copy__.
++	* sysdeps/x86_64/multiarch/memcmp.c (memcmp): Same.
++	* sysdeps/x86_64/multiarch/mempcpy.c (mempcpy): Same.
++	* sysdeps/x86_64/multiarch/memset.c (memset): Same.
++	* sysdeps/x86_64/multiarch/stpcpy.c (stpcpy): Same.
++	* sysdeps/x86_64/multiarch/strcat.c (strcat): Same.
++	* sysdeps/x86_64/multiarch/strchr.c (strchr): Same.
++	* sysdeps/x86_64/multiarch/strcmp.c (strcmp): Same.
++	* sysdeps/x86_64/multiarch/strcpy.c (strcpy): Same.
++	* sysdeps/x86_64/multiarch/strcspn.c (strcspn): Same.
++	* sysdeps/x86_64/multiarch/strlen.c (strlen): Same.
++	* sysdeps/x86_64/multiarch/strncmp.c (strncmp): Same.
++	* sysdeps/x86_64/multiarch/strncpy.c (strncpy): Same.
++	* sysdeps/x86_64/multiarch/strnlen.c (strnlen): Same.
++	* sysdeps/x86_64/multiarch/strpbrk.c (strpbrk): Same.
++	* sysdeps/x86_64/multiarch/strrchr.c (strrchr): Same.
++	* sysdeps/x86_64/multiarch/strspn.c (strspn): Same.
++
++Using glibc arc-2.29-2019.02.08 or the upcoming arc-2019.03 release include this patch.
++
++[1] https://sourceware.org/git/?p=glibc.git;a=commit;h=1626a1cfcd6ba1cc64721be1036c2873211d499b
++[2] https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435682
++
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++[Romain:
++    - Backport from upstream [1] to fix build issue with glibc arc-2018.09-release
++      (based on glibc 2.28) and gcc 9.1 [2]
++    - Also drop the x86-64 related hunks to avoid confusion.
++]
++Cc: Alexey Brodkin <alexey.brodkin@synopsys.com>
++Cc: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
++Cc: Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
++---
++ include/libc-symbols.h | 20 +++++++++++++++-----
++ misc/sys/cdefs.h       | 10 ++++++++++
++ 2 files changed, 25 insertions(+), 5 deletions(-)
++
++diff --git a/include/libc-symbols.h b/include/libc-symbols.h
++index 8b9273c13a..e71a479e84 100644
++--- a/include/libc-symbols.h
+++++ b/include/libc-symbols.h
++@@ -125,6 +125,11 @@
++ # define ASM_LINE_SEP ;
++ #endif
++ 
+++#ifndef __attribute_copy__
+++/* Provide an empty definition when cdefs.h is not included.  */
+++# define __attribute_copy__(arg)
+++#endif
+++
++ #ifndef __ASSEMBLER__
++ /* GCC understands weak symbols and aliases; use its interface where
++    possible, instead of embedded assembly language.  */
++@@ -132,7 +137,8 @@
++ /* Define ALIASNAME as a strong alias for NAME.  */
++ # define strong_alias(name, aliasname) _strong_alias(name, aliasname)
++ # define _strong_alias(name, aliasname) \
++-  extern __typeof (name) aliasname __attribute__ ((alias (#name)));
+++  extern __typeof (name) aliasname __attribute__ ((alias (#name))) \
+++    __attribute_copy__ (name);
++ 
++ /* This comes between the return type and function name in
++    a function definition to make that definition weak.  */
++@@ -143,14 +149,16 @@
++    If weak aliases are not available, this defines a strong alias.  */
++ # define weak_alias(name, aliasname) _weak_alias (name, aliasname)
++ # define _weak_alias(name, aliasname) \
++-  extern __typeof (name) aliasname __attribute__ ((weak, alias (#name)));
+++  extern __typeof (name) aliasname __attribute__ ((weak, alias (#name))) \
+++    __attribute_copy__ (name);
++ 
++ /* Same as WEAK_ALIAS, but mark symbol as hidden.  */
++ # define weak_hidden_alias(name, aliasname) \
++   _weak_hidden_alias (name, aliasname)
++ # define _weak_hidden_alias(name, aliasname) \
++   extern __typeof (name) aliasname \
++-    __attribute__ ((weak, alias (#name), __visibility__ ("hidden")));
+++    __attribute__ ((weak, alias (#name), __visibility__ ("hidden"))) \
+++    __attribute_copy__ (name);
++ 
++ /* Declare SYMBOL as weak undefined symbol (resolved to 0 if not defined).  */
++ # define weak_extern(symbol) _weak_extern (weak symbol)
++@@ -532,7 +540,8 @@ for linking")
++ #  define __hidden_ver1(local, internal, name) \
++   extern __typeof (name) __EI_##name __asm__(__hidden_asmname (#internal)); \
++   extern __typeof (name) __EI_##name \
++-	__attribute__((alias (__hidden_asmname (#local))))
+++    __attribute__((alias (__hidden_asmname (#local))))	\
+++    __attribute_copy__ (name)
++ #  define hidden_ver(local, name)	__hidden_ver1(local, __GI_##name, name);
++ #  define hidden_data_ver(local, name)	hidden_ver(local, name)
++ #  define hidden_def(name)		__hidden_ver1(__GI_##name, name, name);
++@@ -545,7 +554,8 @@ for linking")
++ #  define __hidden_nolink1(local, internal, name, version) \
++   __hidden_nolink2 (local, internal, name, version)
++ #  define __hidden_nolink2(local, internal, name, version) \
++-  extern __typeof (name) internal __attribute__ ((alias (#local))); \
+++  extern __typeof (name) internal __attribute__ ((alias (#local)))	\
+++    __attribute_copy__ (name);						\
++   __hidden_nolink3 (local, internal, #name "@" #version)
++ #  define __hidden_nolink3(local, internal, vername) \
++   __asm__ (".symver " #internal ", " vername);
++diff --git a/misc/sys/cdefs.h b/misc/sys/cdefs.h
++index 3f6fe3cc85..8d585680a6 100644
++--- a/misc/sys/cdefs.h
+++++ b/misc/sys/cdefs.h
++@@ -431,6 +431,16 @@
++ # define __attribute_nonstring__
++ #endif
++ 
+++/* Undefine (also defined in libc-symbols.h).  */
+++#undef __attribute_copy__
+++#if __GNUC_PREREQ (9, 0)
+++/* Copies attributes from the declaration or type referenced by
+++   the argument.  */
+++# define __attribute_copy__(arg) __attribute__ ((__copy__ (arg)))
+++#else
+++# define __attribute_copy__(arg)
+++#endif
+++
++ #if (!defined _Static_assert && !defined __cplusplus \
++      && (defined __STDC_VERSION__ ? __STDC_VERSION__ : 0) < 201112 \
++      && (!__GNUC_PREREQ (4, 6) || defined __STRICT_ANSI__))
++-- 
++2.14.5
++
 -- 
 2.14.5
