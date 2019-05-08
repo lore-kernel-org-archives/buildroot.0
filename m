@@ -1,56 +1,51 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 May 2019 14:01:36 +0200
-Subject: [Buildroot] [PATCH 02/15] board/qemu/ppc*: disable Werror while
- building ppc kernel with gcc >= 9.1
-In-Reply-To: <ee0b92f0-1fae-c844-a84a-bda08e33e71c@smile.fr>
-References: <20190506183011.4856-1-romain.naour@gmail.com>
- <20190506183011.4856-3-romain.naour@gmail.com>
- <20190506194908.GB6887@scaer>
- <7a5d0c4c-abe5-b7e4-4ea1-160fc2be3a5f@gmail.com>
- <20190506200155.GC6887@scaer>
- <ee0b92f0-1fae-c844-a84a-bda08e33e71c@smile.fr>
-Message-ID: <20190508120136.GB31209@scaer>
+Date: Wed, 8 May 2019 14:21:04 +0200
+Subject: [Buildroot] [GSoC 2019] Introduction Email - Atharva Lele
+In-Reply-To: <CABM+sgryAAcEjpJiBAGxQ3pyDLGiDjavoxN0X4o8pdfqz_da9g@mail.gmail.com>
+References: <CABM+sgrntFNSi6=fi3SP_02qqBQPuf+X=LbeRwv+6Dd9sjX4WQ@mail.gmail.com>
+ <20190402181929.GJ2587@scaer>
+ <CABM+sgrL3SY4SfBhn2f6VGCguQM51xif3x1_cck57FB2eULrug@mail.gmail.com>
+ <CABM+sgp1B+S7n=R1picPK5RN-CdxZ_BaRSKDTPdkXYiBkpVkcA@mail.gmail.com>
+ <CABM+sgo1dxV-SzpMn0VS-R0zJm5A2cj2ycH8fOSOLEOCd7FFtw@mail.gmail.com>
+ <20190502195713.GA17072@scaer>
+ <CABM+sgoVC9SK4_x8K+Vd0B+G9i2HAQ7983OuD1psdieSVFzGFA@mail.gmail.com>
+ <20190507211740.GI6887@scaer>
+ <e3cfef58-e6c4-4af0-60c6-88aa65231dd7@mind.be>
+ <CABM+sgryAAcEjpJiBAGxQ3pyDLGiDjavoxN0X4o8pdfqz_da9g@mail.gmail.com>
+Message-ID: <20190508122104.GC31209@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain, All,
+Atharva, All,
 
-On 2019-05-07 10:26 +0200, Romain Naour spake thusly:
-> Le 06/05/2019 ? 22:01, Yann E. MORIN a ?crit?:
-> > The defconfigs as they are in Buildroot do not need it, so I fail to
-> > understand why we, in Buildroot, would need that.
-> I believe that's the same reason why we remove Werror in packages's compiler
-> flags. Building with Werror is not bulletproof when we start using a newer
-> compiler that introduce new warnings. This is the case here.
+On 2019-05-08 17:04 +0530, Atharva Lele spake thusly:
+> I read both of your replies.
+> > We'll see to schedule a longer meeting, probably hang-out or something,
+> > on Sat or Sun, so we can debrief more in depth. ?
+> ?
+> Since Yann can't make it to a meeting/hangout on weekdays, we can schedule
+> it on weekends. I'll be available during the time slot I mentioned (10am to 10pm IST)
 
-What you say makes sense, but then it means we should *always* disable
-Werror for the kernel builds, not just in the defconfigs, as you did. We
-would need something like:
+Let's all speak UTC (or GMT) for the sake of synchronizing; always
+switching between timezones is error-prone. 10am IST is 04:30Z, 10pm IST
+is 16:30Z.
 
-    diff --git a/linux/linux.mk b/linux/linux.mk
-    index 51fd41fa15..85364451a8 100644
-    --- a/linux/linux.mk
-    +++ b/linux/linux.mk
-    @@ -315,6 +315,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
-     	$(LINUX_FIXUP_CONFIG_ENDIANNESS)
-     	$(if $(BR2_arm)$(BR2_armeb),
-     		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
-    +	$(if $(BR2_powerpc)$(BR2_powerpc64)$(B R2_powerpc64le),
-    +		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR,$(@D)/.config))
-     	$(if $(BR2_TARGET_ROOTFS_CPIO),
-     		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
-     	# As the kernel gets compiled before root filesystems are
+Actually, I can make it on Tuesdays and Thursdays without any problem,
+if we can schedule it between 14:30Z and 16:30Z; other days of the week,
+we'd have to schedule it between 15:30Z and 16:30Z.
 
-This is the way we disable Werror in packages. We don;t do that in the
-defconfigs, we do it in the pacakge's .mk file (or we patch/sed it out).
+> > Maybe it would be useful to create a calendar to easily track absences (exams,
+> > holidays, ...) of both Atharva and the mentors (Yann and me)?
+> Regarding the calendar to track absences (as Arnout suggested), do you
+> have any particular service in mind or do we just note it down somewhere?
 
-> So, It's clearly intended for kernel developers.
-
-All the more reasons to always disable it, and not limit it to the
-defconfigs.
+What about creating a page on the elinux.org wiki, which is where we
+already have the Buildroot wiki pages, to track all your GSoC-related
+activity? You'd report progress, pain-points, proposals, achievements,
+and so on in there, it can act as a journal, etc...
 
 Regards,
 Yann E. MORIN.
