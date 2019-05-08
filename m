@@ -1,50 +1,129 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Wed,  8 May 2019 13:02:24 +0200
-Subject: [Buildroot] [PATCH v2 0/4] allow build infrastructure to pick up
+Date: Wed,  8 May 2019 13:02:26 +0200
+Subject: [Buildroot] [PATCH v2 2/4] prepare build infrastructure to pick up
  installed meson tool
-Message-ID: <20190508110228.25921-1-nolange79@gmail.com>
+In-Reply-To: <20190508110228.25921-1-nolange79@gmail.com>
+References: <20190508110228.25921-1-nolange79@gmail.com>
+Message-ID: <20190508110228.25921-3-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is V2 of the patchset. The purpose is to allow meson/ninja dependencies to
-be optionally resolved to the system installed version.
+From: Norbert Lange <norbert.lange@andritz.com>
 
-This wont be fully accepted, thanks to meson missing patches upstream,
-the patches default to disable this functionality.
+Automatically check for an available meson tool,
+and use it as long as the version is fitting.
 
-V2 includes 2 more cleanup-patches, a rebase and default to never use the
-system installed tools.
+Using a system provided meson is not an official supported
+option, hence this is currently disabled.
+use of the system provided meson can be enforced with:
 
-users can force the use of the system installed tools, by overriding variables:
+   make ... BR2_MESON_VERSION_MIN=0
 
-    make graph-depends BR2_MESON_VERSION_MIN=0 BR2_NINJA_VERSION_MIN=0
-
-Norbert Lange (4):
-  package/pkg-meson: move crosscompilation support out of package
-  prepare build infrastructure to pick up installed meson tool
-  prepare build infrastructure to pick up installed ninja tool
-  support/dependencies: use a helper script for common checks
-
- package/meson/meson.mk                        | 55 ---------------
- package/pkg-meson.mk                          | 70 +++++++++++++++----
- support/dependencies/check-host-cmake.sh      | 47 ++-----------
- support/dependencies/check-host-make.sh       | 39 ++---------
- support/dependencies/check-host-meson.mk      | 15 ++++
- support/dependencies/check-host-meson.sh      |  5 ++
- support/dependencies/check-host-ninja.mk      | 13 ++++
- support/dependencies/check-host-ninja.sh      |  5 ++
- support/dependencies/versioncheck.sh          | 45 ++++++++++++
- .../misc}/cross-compilation.conf.in           |  0
- 10 files changed, 149 insertions(+), 145 deletions(-)
+Signed-off-by: Norbert Lange <nolange79@gmail.com>
+---
+ package/pkg-meson.mk                     |  4 +--
+ support/dependencies/check-host-meson.mk | 15 ++++++++
+ support/dependencies/check-host-meson.sh | 45 ++++++++++++++++++++++++
+ 3 files changed, 62 insertions(+), 2 deletions(-)
  create mode 100644 support/dependencies/check-host-meson.mk
  create mode 100755 support/dependencies/check-host-meson.sh
- create mode 100644 support/dependencies/check-host-ninja.mk
- create mode 100755 support/dependencies/check-host-ninja.sh
- create mode 100755 support/dependencies/versioncheck.sh
- rename {package/meson => support/misc}/cross-compilation.conf.in (100%)
 
---
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 5487ee2c11..157ccde446 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -25,7 +25,7 @@
+ # $(HOST_DIR)/bin/python3 will not look for Meson modules in
+ # $HOME/.local/lib/python3.x/site-packages
+ #
+-MESON		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/meson
++MESON		= PYTHONNOUSERSITE=y $(BR2_MESON)
+ NINJA		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/ninja
+ NINJA_OPTS	= $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
+ 
+@@ -92,7 +92,7 @@ endef
+ endif
+ endif
+ 
+-$(2)_DEPENDENCIES += host-meson
++$(2)_DEPENDENCIES += $(BR2_MESON_HOST_DEPENDENCY)
+ 
+ #
+ # Build step. Only define it if not already defined by the package .mk
+diff --git a/support/dependencies/check-host-meson.mk b/support/dependencies/check-host-meson.mk
+new file mode 100644
+index 0000000000..fbe0b7d7aa
+--- /dev/null
++++ b/support/dependencies/check-host-meson.mk
+@@ -0,0 +1,15 @@
++# Set this to a valid version like  0.49, depending on the highest minimum
++# version required by any of the packages bundled in Buildroot.
++# An empty version will never match a system executable
++#
++# BR2_MESON_VERSION_MIN = 0.49
++
++BR2_MESON_CANDIDATES ?= meson
++BR2_MESON ?= $(call suitable-host-package,meson,\
++	$(BR2_MESON_VERSION_MIN) $(BR2_MESON_CANDIDATES))
++ifeq ($(BR2_MESON),)
++BR2_MESON = $(HOST_DIR)/bin/meson
++BR2_MESON_HOST_DEPENDENCY = host-meson host-ninja
++else
++BR2_MESON_HOST_DEPENDENCY = host-ninja
++endif
+diff --git a/support/dependencies/check-host-meson.sh b/support/dependencies/check-host-meson.sh
+new file mode 100755
+index 0000000000..62746822cc
+--- /dev/null
++++ b/support/dependencies/check-host-meson.sh
+@@ -0,0 +1,45 @@
++#!/bin/sh
++
++# prevent shift error
++[ $# -ge 2 ] && [ -n "$1" ] || exit 1
++
++split_version() {
++    local VARPREFIX
++    local NUMBERS
++    local major
++    local minor
++
++    VARPREFIX=$1
++    NUMBERS=$2
++
++    major=${NUMBERS%%\.*}
++    NUMBERS=${NUMBERS#$major}; NUMBERS=${NUMBERS#\.}
++    minor=${NUMBERS%%\.*}
++    NUMBERS=${NUMBERS#$minor}; NUMBERS=${NUMBERS#\.}
++
++    # ensure that missing values are 0
++    eval "${VARPREFIX}_major=\$major; ${VARPREFIX}_minor=\$((minor + 0)); ${VARPREFIX}_bugfix=\$((NUMBERS + 0));"
++}
++
++split_version req "$1"
++
++shift
++
++for candidate; do
++
++    # Try to locate the candidate. Discard it if not located.
++    tool=$(which "${candidate}" 2>/dev/null)
++    [ -n "${tool}" ] || continue
++
++    split_version cur "$("${tool}" --version)"
++
++    [ -n "${cur_major}" -a "${cur_major}" -ge "${req_major}" ] || continue
++    [ "${cur_major}" -gt "${req_major}" ] || [ "${cur_minor}" -ge "${req_minor}" ] || continue
++    [ "${cur_minor}" -gt "${req_minor}" ] || [ "${cur_bugfix}" -ge "${req_bugfix}" ] || continue
++
++    echo "${tool}"
++    exit
++done
++
++# echo nothing: no suitable tool found
++exit 1
+-- 
 2.20.1
