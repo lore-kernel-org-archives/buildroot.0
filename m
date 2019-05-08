@@ -1,22 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 May 2019 23:44:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rpm: drop unneeded third patch
-In-Reply-To: <20190427204122.25709-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 27 Apr 2019 22:41:22 +0200")
-References: <20190427204122.25709-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r298ipta.fsf@dell.be.48ers.dk>
+Date: Wed, 08 May 2019 23:45:32 +0200
+Subject: [Buildroot] [PATCH v1 1/4] package/runc: bump to version
+ 1.0.0-rc8
+In-Reply-To: <20190501184901.29441-1-christian@paral.in> (Christian Stewart's
+ message of "Wed, 1 May 2019 11:48:58 -0700")
+References: <20190501184901.29441-1-christian@paral.in>
+Message-ID: <87mujwips3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Christian" == Christian Stewart <christian@paral.in> writes:
 
- > After upstream review, I found that the third patch is not needed, just
- > doing an autoreconf fix the linking issue with -lintl
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Christian Stewart <christian@paral.in>
 
 Committed to 2019.02.x, thanks.
 
