@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 08 May 2019 09:26:53 +0200
-Subject: [Buildroot] [PATCH v1 23/28] package/quota: replace utf-8 space
+Date: Wed, 08 May 2019 09:26:57 +0200
+Subject: [Buildroot] [PATCH v1 24/28] package/rpm: replace utf-8 space
  by ascii character
-In-Reply-To: <20190507213030.1542-3-ps.report@gmx.net> (Peter Seiderer's
- message of "Tue, 7 May 2019 23:30:25 +0200")
+In-Reply-To: <20190507213030.1542-4-ps.report@gmx.net> (Peter Seiderer's
+ message of "Tue, 7 May 2019 23:30:26 +0200")
 References: <20190507213030.1542-1-ps.report@gmx.net>
- <20190507213030.1542-3-ps.report@gmx.net>
-Message-ID: <87pnotjtj6.fsf@dell.be.48ers.dk>
+ <20190507213030.1542-4-ps.report@gmx.net>
+Message-ID: <87lfzhjtj2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
