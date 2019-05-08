@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 May 2019 09:16:07 +0200
-Subject: [Buildroot] [git commit] package/sane-backends: replace utf-8 space
- by ascii character
-Message-ID: <20190508073739.9680D888A8@busybox.osuosl.org>
+Date: Wed, 8 May 2019 09:16:02 +0200
+Subject: [Buildroot] [git commit] package/rpm: replace utf-8 space by ascii
+ character
+Message-ID: <20190508073739.8F5BD83B6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02614478cc916efb499d9374022bf3e7f02f959d
+commit: https://git.buildroot.net/buildroot/commit/?id=80ff8f5ee8651a065c9b7a436cd9ccad05c7b156
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Replace utf-8 NO-BREAK-SPACE (c2 a0) in comment line by simple
@@ -18,17 +18,17 @@ ascii space character.
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sane-backends/sane-backends.hash | 2 +-
+ package/rpm/rpm.hash | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/sane-backends/sane-backends.hash b/package/sane-backends/sane-backends.hash
-index ddf82500bb..09652c993f 100644
---- a/package/sane-backends/sane-backends.hash
-+++ b/package/sane-backends/sane-backends.hash
+diff --git a/package/rpm/rpm.hash b/package/rpm/rpm.hash
+index b550e12721..f7cbd0cbc3 100644
+--- a/package/rpm/rpm.hash
++++ b/package/rpm/rpm.hash
 @@ -1,5 +1,5 @@
- # From https://gitlab.com/sane-project/backends/tags/RELEASE_1_0_27
- sha256 293747bf37275c424ebb2c833f8588601a60b2f9653945d5a3194875355e36c9  sane-backends-1.0.27.tar.gz
+ # From https://rpm.org/wiki/Releases/4.14.2.1.html
+ sha256 1139c24b7372f89c0a697096bf9809be70ba55e006c23ff47305c1849d98acda  rpm-4.14.2.1.tar.bz2
  
 -#??Hash for license file
 +# Hash for license file
- sha256 dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
+ sha256 d56f4f1f290f6920cb053aef0dbcd0b853cda289e2568b364ddbfce220a6f3e0  COPYING
