@@ -1,140 +1,154 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed,  8 May 2019 11:49:24 -0400
-Subject: [Buildroot] [PATCH 1/1] package/mender: bump to version 2.0.0
-Message-ID: <20190508154924.67828-1-aduskett@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 8 May 2019 18:23:09 +0200
+Subject: [Buildroot] [PATCH 1/1] support/download/git: add branch support
+In-Reply-To: <CANj1ofkg42Ly-j2v2Gh8xt-2URP+xzL3W3wMW2-qVN+0PYvDbw@mail.gmail.com>
+References: <1557325351-17906-1-git-send-email-catherine@kubos.co>
+ <20190508144321.GE31209@scaer>
+ <CANj1ofkg42Ly-j2v2Gh8xt-2URP+xzL3W3wMW2-qVN+0PYvDbw@mail.gmail.com>
+Message-ID: <20190508162309.GF31209@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Catherine, All,
 
-In addition:
-  - Update hashes for license files.
-  - Add hash for vendor/golang.org/x/text/LICENSE
-  - Add hash for vendor/github.com/mendersoftware/go-liblzma/LICENSE
-  - Add new dependency xz, as mender now depends on LZMA.
+[please keep the buildroot ML in Cc on replies; if you're not subscribed,
+please do so, otherwise people can't follow the discussion and wonder
+what's going on...]
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/mender/Config.in   |  1 +
- package/mender/mender.hash | 45 ++++++++++++++++++++------------------
- package/mender/mender.mk   |  6 ++++-
- 3 files changed, 30 insertions(+), 22 deletions(-)
+On 2019-05-08 10:47 -0500, Catherine Garabedian spake thusly:
+> Understood. I'm upgrading from an older version of Buildroot, so missed that change.
+> I'll have to update our configurations to adjust to the new behavior.
 
-diff --git a/package/mender/Config.in b/package/mender/Config.in
-index 5ab2304e49..e8c29bb33e 100644
---- a/package/mender/Config.in
-+++ b/package/mender/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_MENDER
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_XZ # LZMA
- 	select BR2_PACKAGE_UBOOT_TOOLS # runtime
- 	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV # runtime
- 	help
-diff --git a/package/mender/mender.hash b/package/mender/mender.hash
-index 89aec239b1..70d3b858eb 100644
---- a/package/mender/mender.hash
-+++ b/package/mender/mender.hash
-@@ -1,41 +1,44 @@
- # Locally computed:
--sha256 caee18d1b8446df0cbb9a9c5a1c040d7eb1924332da94c3489494443a8077eb8 1.7.0.tar.gz
-+sha256 af37a11c4189097b485254c35450f289b078bc61f6a230d6540743f202d81b98 2.0.0.tar.gz
- 
- # Apache-2.0 license, locally computed
--sha256 98ed35b5a138f58164b5c0dbccd9d7f01ef4d84b9dba01e896f0a3241c50c0f7 LICENSE
-+sha256 beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2 LICENSE
- 
- # Vendor licenses
- # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
- 
- # Apache-2.0 license.
--sha256 98ed35b5a138f58164b5c0dbccd9d7f01ef4d84b9dba01e896f0a3241c50c0f7  vendor/github.com/mendersoftware/mendertesting/LICENSE
--sha256 3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/log/LICENSE
--sha256 bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/log/COPYING
--sha256 3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/scopestack/LICENSE
--sha256 bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/scopestack/COPYING
--sha256 b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  vendor/github.com/mendersoftware/mender-artifact/LICENSE
-+sha256  beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  LICENSE
-+sha256  beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  vendor/github.com/mendersoftware/mendertesting/LICENSE
-+sha256  3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/log/LICENSE
-+sha256  bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/log/COPYING
-+sha256  3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/scopestack/LICENSE
-+sha256  bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/scopestack/COPYING
-+sha256  beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  vendor/github.com/mendersoftware/mender-artifact/LICENSE
- 
- # BSD 2 Clause license.
--sha256 8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
-+sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
- 
- # BSD 3 Clause license.
--sha256 2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
--sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
--sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
--sha256 0634b008cee55ca01f0888d2f5aba2d34e66c3f52c31a4e16a5d5d33d0c2a03e  vendor/github.com/bmatsuo/lmdb-go/LICENSE.md
-+sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
-+sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
-+sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
-+sha256  0634b008cee55ca01f0888d2f5aba2d34e66c3f52c31a4e16a5d5d33d0c2a03e  vendor/github.com/bmatsuo/lmdb-go/LICENSE.md
-+sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/text/LICENSE
-+sha256  a284e538f3e5649ae6a8f32da2bbd18e9daabf2c1ebbfb99ed92e797b159be1a  vendor/github.com/mendersoftware/go-liblzma/LICENSE
- 
- # ISC license.
--sha256  3525392c6db3b804af76980b2c560ee9ec1abdadd907d76a26091df7c78f3a25  vendor/github.com/davecgh/go-spew/LICENSE
-+sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
- 
- # MIT license.
--sha256 51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/Sirupsen/logrus/LICENSE
--sha256 402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f  vendor/github.com/stretchr/testify/LICENSE
--sha256 402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f  vendor/github.com/stretchr/testify/LICENCE.txt
--sha256 fde7d610b9b95fc5a6304055c4dae951025b630aaa42a24e95ebf76675ae832c  vendor/github.com/stretchr/objx/LICENSE.md
--sha256 ffa15bdce332058a03a1d923910864fb6e58bf6df66a0e3914284725b327183e  vendor/github.com/ungerik/go-sysfs/LICENSE
-+sha256  51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/Sirupsen/logrus/LICENSE
-+sha256  dad2b0b2cc2dbdbf95ad5d800ef7588956e74dc2479014829d42be295125c25d  vendor/github.com/stretchr/testify/LICENSE
-+sha256  402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f  vendor/github.com/stretchr/testify/LICENCE.txt
-+sha256  fde7d610b9b95fc5a6304055c4dae951025b630aaa42a24e95ebf76675ae832c  vendor/github.com/stretchr/objx/LICENSE.md
-+sha256  ffa15bdce332058a03a1d923910864fb6e58bf6df66a0e3914284725b327183e  vendor/github.com/ungerik/go-sysfs/LICENSE
- 
- # OpenLDAP Public License
--sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
-+sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
- 
- # sha256 of all the vendor licenses combined
--sha256 b84b543cab0505452982422783c0e68b7bfa0a1de4a625753d325e0a8b2dacb1 LIC_FILES_CHKSUM.sha256
-+sha256 b4b6f1b6f923ae052ac1393ebcd302844db5e9306df37ce07d7c912f15746e3c LIC_FILES_CHKSUM.sha256
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index 07f6e5e5f9..70d84b22f8 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MENDER_VERSION = 1.7.0
-+MENDER_VERSION = 2.0.0
- MENDER_SITE = https://github.com/mendersoftware/mender/archive
- MENDER_SOURCE = $(MENDER_VERSION).tar.gz
- MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
-@@ -25,6 +25,8 @@ MENDER_LICENSE_FILES = \
- 	vendor/golang.org/x/sys/LICENSE \
- 	vendor/golang.org/x/net/LICENSE \
- 	vendor/github.com/bmatsuo/lmdb-go/LICENSE.md \
-+	vendor/golang.org/x/text/LICENSE \
-+	vendor/github.com/mendersoftware/go-liblzma/LICENSE \
- 	vendor/github.com/davecgh/go-spew/LICENSE \
- 	vendor/github.com/Sirupsen/logrus/LICENSE \
- 	vendor/github.com/stretchr/testify/LICENSE \
-@@ -33,6 +35,8 @@ MENDER_LICENSE_FILES = \
- 	vendor/github.com/ungerik/go-sysfs/LICENSE \
- 	vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
- 
-+MENDER_DEPENDENCIES = xz
-+
- MENDER_LDFLAGS = -X main.Version=$(MENDER_VERSION)
- 
- define MENDER_INSTALL_CONFIG_FILES
+Note that there was no change; that has always been the case. It's just
+that it's now documented.
+
+> I would like to update this code to add an explicit error message
+> instead ("Change sets may not be referred to by branch name"). Should
+> that be submitted as a revision to this patch, or as an entirely
+> separate patch?
+
+I already posted a series to that effect in the past, and it is not
+trivial to do.
+
+The problem is that for some time, we allowed (and still allow) for
+so-called special refs, like github PR, or gerrit reviews, and so on.
+Due to a bug in the git download backend, when the cset to use is a
+sha1, this does create local branches named after that sha1.
+
+So, if we add a check that a cset is a branch name or not, then even if
+the cset is a sha1, it can match a local branch (that was created by an
+older version of Buildroot).
+
+As such, we first have to clean up the git cache.
+
+I have two WIP branches to address this issue [0] and [1], but I haven't
+come to terms with previous reviews (which I can't seem to find again in
+the ML archives, and I don;t even remember why the '3' is shorter than
+the '2', which looks more complete, sigh...) You can get a better
+picture of the issue by reading the commit logs in those series.
+
+[0] https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/dl-git-no-branch-2
+[1] https://git.buildroot.org/~ymorin/git/buildroot/log/?h=yem/dl-git-no-branch-3
+
+I shall revive those and get them to their conclusion. Soon, I hope,
+soon (famous last words)...
+
+Regards,
+Yann E. MORIN.
+
+> Thanks,
+> Catherine Garabedian
+> On Wed, May 8, 2019 at 9:43 AM Yann E. MORIN < [1]yann.morin.1998@free.fr> wrote:
+> 
+>   CAtherine, All,
+> 
+>   On 2019-05-08 14:22 +0000, [2]catherine at kubos.co spake thusly:
+>   > From: Catherine Garabedian < [3]catherine@kubos.co>
+>   >
+>   > A prior patch added logic to verify that the given cset exists.
+>   >
+>   > The command format used fails when attempting to verify a branch name, thus
+>   > preventing Buildroot from downloading any packages whose source comes from a
+>   > branch.
+> 
+>   We explciitly do not want to support using a branch _by name_, because
+>   that does not work as people expect it to work, see our manual:
+> 
+>   ? ? [4]https://buildroot.org/downloads/manual/manual.html#generic-package-reference
+> 
+>   Excerpt:
+> 
+>   ?1. due to local caching, Buildroot will not re-fetch the repository,
+>   ? ? so people who expect to be able to follow the remote repository
+>   ? ? would be quite surprised and disappointed;
+>   ?2. because two builds can never be perfectly simultaneous, and because
+>   ? ? the remote repository may get new commits on the branch anytime, two
+>   ? ? users, using the same Buildroot tree and building the same
+>   ? ? configuration, may get different source, thus rendering the build
+>   ? ? non reproducible, and people would be quite surprised and
+>   ? ? disappointed.
+> 
+>   So, using a branch _by name_ can not owrk because of those two reasons,
+>   and as such we believe this should not be supported.
+> 
+>   Instead, there was some effort a few months ago, to actually enforce the
+>   check that a branch was not used, and fail if that was the case.
+> 
+>   Regards,
+>   Yann E. MORIN.
+> 
+>   > This patch adds a secondary check which can validate branches (but not tags).
+>   >
+>   > Signed-off-by: Catherine Garabedian < [5]catherine@kubos.co>
+>   > ---
+>   >? support/download/git | 6 ++++--
+>   >? 1 file changed, 4 insertions(+), 2 deletions(-)
+>   >
+>   > diff --git a/support/download/git b/support/download/git
+>   > index 17ca04e..a25552e 100755
+>   > --- a/support/download/git
+>   > +++ b/support/download/git
+>   > @@ -130,8 +130,10 @@ fi
+>   >? # scratch won't help, so we don't want to trash the repository for a
+>   >? # missing commit. We just exit without going through the ERR trap.
+>   >? if ! _git rev-parse --quiet --verify "'${cset}^{commit}'" >/dev/null 2>&1; then
+>   > -? ? printf "Commit '%s' does not exist in this repository\n." "${cset}"
+>   > -? ? exit 1
+>   > +? ? if ! _git rev-parse --quiet --verify "'origin/${cset}'" >/dev/null 2>&1; then
+>   > +? ? ? ? printf "'%s' does not exist in this repository\n." "${cset}"
+>   > +? ? ? ? exit 1
+>   > +? ? fi
+>   >? fi
+>   >?
+>   >? # The new cset we want to checkout might have different submodules, or
+>   > --
+>   > 2.7.4
+>   >
+> 
+>   --
+>   .-----------------.--------------------.------------------.--------------------.
+>   |? Yann E. MORIN? | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+>   | +33 662 376 056 | Software? Designer | \ / CAMPAIGN? ? ?|? ___? ? ? ? ? ?
+>   ? ?|
+>   | +33 561 099 427 `------------.-------:? X? AGAINST? ? ? |? \e/? There is no? |
+>   | [6]http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL? ? |? ?v? ?conspiracy.? |
+>   '------------------------------^-------^------------------^--------------------'
+> 
+> Links:
+> 1. mailto:yann.morin.1998 at free.fr
+> 2. mailto:catherine at kubos.co
+> 3. mailto:catherine at kubos.co
+> 4. https://buildroot.org/downloads/manual/manual.html#generic-package-reference
+> 5. mailto:catherine at kubos.co
+> 6. http://ymorin.is-a-geek.org/
+
 -- 
-2.21.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
