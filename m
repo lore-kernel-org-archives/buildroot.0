@@ -1,183 +1,282 @@
 From: Norbert Lange <nolange79@gmail.com>
-Date: Wed,  8 May 2019 13:02:25 +0200
-Subject: [Buildroot] [PATCH v2 1/4] package/pkg-meson: move crosscompilation
- support out of package
+Date: Wed,  8 May 2019 13:02:28 +0200
+Subject: [Buildroot] [PATCH v2 4/4] support/dependencies: use a helper
+ script for common checks
 In-Reply-To: <20190508110228.25921-1-nolange79@gmail.com>
 References: <20190508110228.25921-1-nolange79@gmail.com>
-Message-ID: <20190508110228.25921-2-nolange79@gmail.com>
+Message-ID: <20190508110228.25921-5-nolange79@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Norbert Lange <norbert.lange@andritz.com>
-
-install the cross-compilation.conf file when setting up the
-staging area, not as part of host-meson.
-This allows external usage of the buildroot toolchain through meson.
-
-Remove a few variables, as they were only used to communicate between
-meson package and pkg-meson.
-
 Signed-off-by: Norbert Lange <nolange79@gmail.com>
 ---
- package/meson/meson.mk                        | 54 ----------------
- package/pkg-meson.mk                          | 64 +++++++++++++++----
- .../misc}/cross-compilation.conf.in           |  0
- 3 files changed, 53 insertions(+), 65 deletions(-)
- rename {package/meson => support/misc}/cross-compilation.conf.in (100%)
+ support/dependencies/check-host-cmake.sh | 47 +++---------------------
+ support/dependencies/check-host-make.sh  | 39 +++-----------------
+ support/dependencies/check-host-meson.sh | 44 +---------------------
+ support/dependencies/check-host-ninja.sh | 44 +---------------------
+ support/dependencies/versioncheck.sh     | 45 +++++++++++++++++++++++
+ 5 files changed, 59 insertions(+), 160 deletions(-)
+ create mode 100755 support/dependencies/versioncheck.sh
 
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index cf62b0ddde..12cadb2856 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -13,58 +13,4 @@ MESON_SETUP_TYPE = setuptools
- HOST_MESON_DEPENDENCIES = host-ninja
- HOST_MESON_NEEDS_HOST_PYTHON = python3
+diff --git a/support/dependencies/check-host-cmake.sh b/support/dependencies/check-host-cmake.sh
+index fadeae9f6b..0699ddf571 100755
+--- a/support/dependencies/check-host-cmake.sh
++++ b/support/dependencies/check-host-cmake.sh
+@@ -1,45 +1,8 @@
+ #!/bin/sh
  
--HOST_MESON_TARGET_ENDIAN = $(call LOWERCASE,$(BR2_ENDIAN))
--HOST_MESON_TARGET_CPU = $(GCC_TARGET_CPU)
--
--# https://mesonbuild.com/Reference-tables.html#cpu-families
--ifeq ($(BR2_arcle)$(BR2_arceb),y)
--HOST_MESON_TARGET_CPU_FAMILY = arc
--else ifeq ($(BR2_arm)$(BR2_armeb),y)
--HOST_MESON_TARGET_CPU_FAMILY = arm
--else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
--HOST_MESON_TARGET_CPU_FAMILY = aarch64
--else ifeq ($(BR2_i386),y)
--HOST_MESON_TARGET_CPU_FAMILY = x86
--else ifeq ($(BR2_mips)$(BR2_mipsel),y)
--HOST_MESON_TARGET_CPU_FAMILY = mips
--else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
--HOST_MESON_TARGET_CPU_FAMILY = mips64
--else ifeq ($(BR2_powerpc),y)
--HOST_MESON_TARGET_CPU_FAMILY = ppc
--else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
--HOST_MESON_TARGET_CPU_FAMILY = ppc64
--else ifeq ($(BR2_riscv),y)
--HOST_MESON_TARGET_CPU_FAMILY = riscv64
--else ifeq ($(BR2_sparc),y)
--HOST_MESON_TARGET_CPU_FAMILY = sparc
--else ifeq ($(BR2_sparc64),y)
--HOST_MESON_TARGET_CPU_FAMILY = sparc64
--else ifeq ($(BR2_x86_64),y)
--HOST_MESON_TARGET_CPU_FAMILY = x86_64
--else
--HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
--endif
--
--HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
--HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
--HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
--
--# Generate a Meson cross-compilation.conf suitable for use with the
--# SDK
--define HOST_MESON_INSTALL_CROSS_CONF
--	mkdir -p $(HOST_DIR)/etc/meson
--	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
--	    -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
--	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
--	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
--	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
--	    -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
--	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
--	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
--	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
--	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
--endef
--
--TARGET_FINALIZE_HOOKS += HOST_MESON_INSTALL_CROSS_CONF
--
- $(eval $(host-python-package))
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 886fcf7205..5487ee2c11 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -63,22 +63,12 @@ ifeq ($(4),target)
- define $(2)_CONFIGURE_CMDS
- 	rm -rf $$($$(PKG)_SRCDIR)/build
- 	mkdir -p $$($$(PKG)_SRCDIR)/build
--	sed -e "s%@TARGET_CROSS@%$$(TARGET_CROSS)%g" \
--	    -e "s%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
--	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
--	    -e "s%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g" \
--	    -e "s%@TARGET_CFLAGS@%$$(HOST_MESON_SED_CFLAGS)%g" \
--	    -e "s%@TARGET_LDFLAGS@%$$(HOST_MESON_SED_LDFLAGS)%g" \
--	    -e "s%@TARGET_CXXFLAGS@%$$(HOST_MESON_SED_CXXFLAGS)%g" \
--	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
--	    package/meson/cross-compilation.conf.in \
--	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
- 	PATH=$$(BR_PATH) $$($$(PKG)_CONF_ENV) $$(MESON) \
- 		--prefix=/usr \
- 		--libdir=lib \
- 		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
- 		--buildtype=$(if $(BR2_ENABLE_DEBUG),debug,release) \
--		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
-+		--cross-file=$(HOST_DIR)/etc/meson/cross-compilation.conf \
- 		$$($$(PKG)_CONF_OPTS) \
- 		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/build
- endef
-@@ -167,3 +157,55 @@ endef
+-# prevent shift error
+-[ $# -lt 2 ] && exit 1
++readversion() {
++	"$1" --version |
++		sed -r -e '/.* ([[:digit:]]+\.[[:digit:]]+).*$/!d;' -e 's//\1/'
++}
  
- meson-package = $(call inner-meson-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
- host-meson-package = $(call inner-meson-package,host-$(pkgname),$(call UPPERCASE,host-$(pkgname)),$(call UPPERCASE,$(pkgname)),host)
+-major_min="${1%.*}"
+-minor_min="${1#*.}"
+-
+-shift
+-
+-for candidate; do
+-
+-    # Try to locate the candidate. Discard it if not located.
+-    cmake=`which "${candidate}" 2>/dev/null`
+-    [ -n "${cmake}" ] || continue
+-
+-    # Extract version X.Y from versions in the form X.Y or X.Y.Z
+-    # with X, Y and Z numbers with one or more digits each, e.g.
+-    #   3.2     -> 3.2
+-    #   3.2.3   -> 3.2
+-    #   3.2.42  -> 3.2
+-    #   3.10    -> 3.10
+-    #   3.10.4  -> 3.10
+-    #   3.10.42 -> 3.10
+-    # Discard the candidate if no version can be obtained
+-    version="$(${cmake} --version \
+-               |sed -r -e '/.* ([[:digit:]]+\.[[:digit:]]+).*$/!d;' \
+-                       -e 's//\1/'
+-              )"
+-    [ -n "${version}" ] || continue
+-
+-    major="${version%.*}"
+-    minor="${version#*.}"
+-
+-    if [ ${major} -gt ${major_min} ]; then
+-        echo "${cmake}"
+-        exit
+-    elif [ ${major} -eq ${major_min} -a ${minor} -ge ${minor_min} ]; then
+-        echo "${cmake}"
+-        exit
+-    fi
+-done
+-
+-# echo nothing: no suitable cmake found
+-exit 1
++. "$(dirname "$(readlink -e "$0")")"/versioncheck.sh
+diff --git a/support/dependencies/check-host-make.sh b/support/dependencies/check-host-make.sh
+index 0de7e9f6fa..77bfc5123d 100755
+--- a/support/dependencies/check-host-make.sh
++++ b/support/dependencies/check-host-make.sh
+@@ -1,37 +1,8 @@
+ #!/bin/sh
+ 
+-# prevent shift error
+-[ $# -lt 2 ] && exit 1
++readversion() {
++	"$1" --version 2>&1 |
++		sed -e 's/^.* \([0-9\.]\)/\1/g' -e 's/[-].*//g' -e '1q'
++}
+ 
+-major_min="${1%.*}"
+-minor_min="${1#*.}"
+-
+-shift
+-
+-# The host make program is already checked by dependencies.sh but we
+-# want to check the version number even if Buildroot is able to use
+-# GNU make >= 3.81 but some packages may require a more recent version.
+-make="$1"
+-
+-# Output of 'make --version' examples:
+-# GNU Make 4.2.1
+-# GNU Make 4.0
+-# GNU Make 3.81
+-version=`$make --version 2>&1 | sed -e 's/^.* \([0-9\.]\)/\1/g' -e 's/[-\
+-].*//g' -e '1q'`
+-
+-major=`echo "$version" | cut -d. -f1`
+-minor=`echo "$version" | cut -d. -f2`
+-
+-if [ $major -lt $major_min ]; then
+-	# echo nothing: no suitable make found
+-	exit 1
+-fi
+-
+-if [ $major -eq $major_min -a $minor -lt $minor_min ]; then
+-	# echo nothing: no suitable make found
+-	exit 1
+-fi
+-
+-# valid
+-echo $make
++. "$(dirname "$(readlink -e "$0")")"/versioncheck.sh
+diff --git a/support/dependencies/check-host-meson.sh b/support/dependencies/check-host-meson.sh
+index 62746822cc..69f58b1df5 100755
+--- a/support/dependencies/check-host-meson.sh
++++ b/support/dependencies/check-host-meson.sh
+@@ -1,45 +1,5 @@
+ #!/bin/sh
+ 
+-# prevent shift error
+-[ $# -ge 2 ] && [ -n "$1" ] || exit 1
+-
+-split_version() {
+-    local VARPREFIX
+-    local NUMBERS
+-    local major
+-    local minor
+-
+-    VARPREFIX=$1
+-    NUMBERS=$2
+-
+-    major=${NUMBERS%%\.*}
+-    NUMBERS=${NUMBERS#$major}; NUMBERS=${NUMBERS#\.}
+-    minor=${NUMBERS%%\.*}
+-    NUMBERS=${NUMBERS#$minor}; NUMBERS=${NUMBERS#\.}
+-
+-    # ensure that missing values are 0
+-    eval "${VARPREFIX}_major=\$major; ${VARPREFIX}_minor=\$((minor + 0)); ${VARPREFIX}_bugfix=\$((NUMBERS + 0));"
++readversion() {
++	"$1" --version
+ }
+-
+-split_version req "$1"
+-
+-shift
+-
+-for candidate; do
+-
+-    # Try to locate the candidate. Discard it if not located.
+-    tool=$(which "${candidate}" 2>/dev/null)
+-    [ -n "${tool}" ] || continue
+-
+-    split_version cur "$("${tool}" --version)"
+-
+-    [ -n "${cur_major}" -a "${cur_major}" -ge "${req_major}" ] || continue
+-    [ "${cur_major}" -gt "${req_major}" ] || [ "${cur_minor}" -ge "${req_minor}" ] || continue
+-    [ "${cur_minor}" -gt "${req_minor}" ] || [ "${cur_bugfix}" -ge "${req_bugfix}" ] || continue
+-
+-    echo "${tool}"
+-    exit
+-done
+-
+-# echo nothing: no suitable tool found
+-exit 1
+diff --git a/support/dependencies/check-host-ninja.sh b/support/dependencies/check-host-ninja.sh
+index 62746822cc..69f58b1df5 100755
+--- a/support/dependencies/check-host-ninja.sh
++++ b/support/dependencies/check-host-ninja.sh
+@@ -1,45 +1,5 @@
+ #!/bin/sh
+ 
+-# prevent shift error
+-[ $# -ge 2 ] && [ -n "$1" ] || exit 1
+-
+-split_version() {
+-    local VARPREFIX
+-    local NUMBERS
+-    local major
+-    local minor
+-
+-    VARPREFIX=$1
+-    NUMBERS=$2
+-
+-    major=${NUMBERS%%\.*}
+-    NUMBERS=${NUMBERS#$major}; NUMBERS=${NUMBERS#\.}
+-    minor=${NUMBERS%%\.*}
+-    NUMBERS=${NUMBERS#$minor}; NUMBERS=${NUMBERS#\.}
+-
+-    # ensure that missing values are 0
+-    eval "${VARPREFIX}_major=\$major; ${VARPREFIX}_minor=\$((minor + 0)); ${VARPREFIX}_bugfix=\$((NUMBERS + 0));"
++readversion() {
++	"$1" --version
+ }
+-
+-split_version req "$1"
+-
+-shift
+-
+-for candidate; do
+-
+-    # Try to locate the candidate. Discard it if not located.
+-    tool=$(which "${candidate}" 2>/dev/null)
+-    [ -n "${tool}" ] || continue
+-
+-    split_version cur "$("${tool}" --version)"
+-
+-    [ -n "${cur_major}" -a "${cur_major}" -ge "${req_major}" ] || continue
+-    [ "${cur_major}" -gt "${req_major}" ] || [ "${cur_minor}" -ge "${req_minor}" ] || continue
+-    [ "${cur_minor}" -gt "${req_minor}" ] || [ "${cur_bugfix}" -ge "${req_bugfix}" ] || continue
+-
+-    echo "${tool}"
+-    exit
+-done
+-
+-# echo nothing: no suitable tool found
+-exit 1
+diff --git a/support/dependencies/versioncheck.sh b/support/dependencies/versioncheck.sh
+new file mode 100755
+index 0000000000..e606da87e4
+--- /dev/null
++++ b/support/dependencies/versioncheck.sh
+@@ -0,0 +1,45 @@
++#!/bin/sh
 +
-+################################################################################
-+# Generation of the Messon compile flags and cross-compilation file
-+################################################################################
++# prevent shift error
++[ $# -ge 2 ] && [ -n "$1" ] || exit 1
 +
-+# https://mesonbuild.com/Reference-tables.html#cpu-families
-+ifeq ($(BR2_arcle)$(BR2_arceb),y)
-+HOST_MESON_TARGET_CPU_FAMILY = arc
-+else ifeq ($(BR2_arm)$(BR2_armeb),y)
-+HOST_MESON_TARGET_CPU_FAMILY = arm
-+else ifeq ($(BR2_aarch64)$(BR2_aarch64_be),y)
-+HOST_MESON_TARGET_CPU_FAMILY = aarch64
-+else ifeq ($(BR2_i386),y)
-+HOST_MESON_TARGET_CPU_FAMILY = x86
-+else ifeq ($(BR2_mips)$(BR2_mipsel),y)
-+HOST_MESON_TARGET_CPU_FAMILY = mips
-+else ifeq ($(BR2_mips64)$(BR2_mips64el),y)
-+HOST_MESON_TARGET_CPU_FAMILY = mips64
-+else ifeq ($(BR2_powerpc),y)
-+HOST_MESON_TARGET_CPU_FAMILY = ppc
-+else ifeq ($(BR2_powerpc64)$(BR2_powerpc64le),y)
-+HOST_MESON_TARGET_CPU_FAMILY = ppc64
-+else ifeq ($(BR2_riscv),y)
-+HOST_MESON_TARGET_CPU_FAMILY = riscv64
-+else ifeq ($(BR2_sparc),y)
-+HOST_MESON_TARGET_CPU_FAMILY = sparc
-+else ifeq ($(BR2_sparc64),y)
-+HOST_MESON_TARGET_CPU_FAMILY = sparc64
-+else ifeq ($(BR2_x86_64),y)
-+HOST_MESON_TARGET_CPU_FAMILY = x86_64
-+else
-+HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
-+endif
++split_version() {
++	local VARPREFIX
++	local NUMBERS
++	local major
++	local minor
 +
-+# Generate a Meson cross-compilation.conf suitable for use with the
-+# SDK
-+define TOOLCHAIN_MESON_INSTALL_FILES
-+	mkdir -p $(HOST_DIR)/etc/meson
-+	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
-+	    -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
-+	    -e "s%@TARGET_CPU@%$(GCC_TARGET_CPU)%g" \
-+	    -e "s%@TARGET_ENDIAN@%$(call LOWERCASE,$(BR2_ENDIAN))%g" \
-+	    -e "s%@TARGET_CFLAGS@%$(patsubst %,\"%\"$(comma),$(TARGET_CFLAGS))%g" \
-+	    -e "s%@TARGET_LDFLAGS@%$(patsubst %,\"%\"$(comma),$(TARGET_LDFLAGS))%g" \
-+	    -e "s%@TARGET_CXXFLAGS@%$(patsubst %,\"%\"$(comma),$(TARGET_CXXFLAGS))%g" \
-+	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
-+	    $(TOPDIR)/support/misc/cross-compilation.conf.in \
-+	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
-+endef
++	VARPREFIX=$1
++	NUMBERS=$2
 +
-+TOOLCHAIN_POST_INSTALL_STAGING_HOOKS += TOOLCHAIN_MESON_INSTALL_FILES
-+TOOLCHAIN_INSTALL_STAGING = YES
-diff --git a/package/meson/cross-compilation.conf.in b/support/misc/cross-compilation.conf.in
-similarity index 100%
-rename from package/meson/cross-compilation.conf.in
-rename to support/misc/cross-compilation.conf.in
++	major=${NUMBERS%%\.*}
++	NUMBERS=${NUMBERS#$major}; NUMBERS=${NUMBERS#\.}
++	minor=${NUMBERS%%\.*}
++	NUMBERS=${NUMBERS#$minor}; NUMBERS=${NUMBERS#\.}
++
++	# ensure that missing values are 0
++	eval "${VARPREFIX}_major=\$major; ${VARPREFIX}_minor=\$((minor + 0)); ${VARPREFIX}_bugfix=\$((NUMBERS + 0));"
++}
++
++split_version req "$1"
++
++shift
++
++for candidate; do
++
++	# Try to locate the candidate. Discard it if not located.
++	tool=$(which "${candidate}" 2>/dev/null)
++	[ -n "${tool}" ] || continue
++
++	split_version cur "$(readversion "${tool}")"
++
++	[ -n "${cur_major}" -a "${cur_major}" -ge "${req_major}" ] || continue
++	[ "${cur_major}" -gt "${req_major}" ] || [ "${cur_minor}" -ge "${req_minor}" ] || continue
++	[ "${cur_minor}" -gt "${req_minor}" ] || [ "${cur_bugfix}" -ge "${req_bugfix}" ] || continue
++
++	echo "${tool}"
++	exit
++done
++
++# echo nothing: no suitable tool found
++exit 1
 -- 
 2.20.1
