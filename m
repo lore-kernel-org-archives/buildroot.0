@@ -1,66 +1,50 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 8 May 2019 15:29:32 +0200
-Subject: [Buildroot] [PATCH 02/15] board/qemu/ppc*: disable Werror while
- building ppc kernel with gcc >= 9.1
-In-Reply-To: <20190508120136.GB31209@scaer>
-References: <20190506183011.4856-1-romain.naour@gmail.com>
- <20190506183011.4856-3-romain.naour@gmail.com> <20190506194908.GB6887@scaer>
- <7a5d0c4c-abe5-b7e4-4ea1-160fc2be3a5f@gmail.com>
- <20190506200155.GC6887@scaer> <ee0b92f0-1fae-c844-a84a-bda08e33e71c@smile.fr>
- <20190508120136.GB31209@scaer>
-Message-ID: <efdcab25-8db0-78f8-c918-b9c35186a19e@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 08 May 2019 15:40:14 +0200
+Subject: [Buildroot] [PATCH] package/atftp: security bump to version
+ 0.7.2
+In-Reply-To: <20190508063519.27686-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 8 May 2019 08:35:19 +0200")
+References: <20190508063519.27686-1-peter@korsgaard.com>
+Message-ID: <874l65jc8x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Le 08/05/2019 ? 14:01, Yann E. MORIN a ?crit?:
-> Romain, All,
-> 
-> On 2019-05-07 10:26 +0200, Romain Naour spake thusly:
->> Le 06/05/2019 ? 22:01, Yann E. MORIN a ?crit?:
->>> The defconfigs as they are in Buildroot do not need it, so I fail to
->>> understand why we, in Buildroot, would need that.
->> I believe that's the same reason why we remove Werror in packages's compiler
->> flags. Building with Werror is not bulletproof when we start using a newer
->> compiler that introduce new warnings. This is the case here.
-> 
-> What you say makes sense, but then it means we should *always* disable
-> Werror for the kernel builds, not just in the defconfigs, as you did. We
-> would need something like:
-> 
->     diff --git a/linux/linux.mk b/linux/linux.mk
->     index 51fd41fa15..85364451a8 100644
->     --- a/linux/linux.mk
->     +++ b/linux/linux.mk
->     @@ -315,6 +315,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
->      	$(LINUX_FIXUP_CONFIG_ENDIANNESS)
->      	$(if $(BR2_arm)$(BR2_armeb),
->      		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
->     +	$(if $(BR2_powerpc)$(BR2_powerpc64)$(B R2_powerpc64le),
->     +		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR,$(@D)/.config))
->      	$(if $(BR2_TARGET_ROOTFS_CPIO),
->      		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
->      	# As the kernel gets compiled before root filesystems are
-> 
-> This is the way we disable Werror in packages. We don;t do that in the
-> defconfigs, we do it in the pacakge's .mk file (or we patch/sed it out).
-> 
->> So, It's clearly intended for kernel developers.
-> 
-> All the more reasons to always disable it, and not limit it to the
-> defconfigs.
+ > Fixes the following security issues:
+ > CVE-2019-11365: An issue was discovered in atftpd in atftp 0.7.1.  A remote
+ > attacker may send a crafted packet triggering a stack-based buffer overflow
+ > due to an insecurely implemented strncpy call.  The vulnerability is
+ > triggered by sending an error packet of 3 bytes or fewer.  There are
+ > multiple instances of this vulnerable strncpy pattern within the code base,
+ > specifically within tftpd_file.c, tftp_file.c, tftpd_mtftp.c, and
+ > tftp_mtftp.c.
 
-Ok, I updated the patch with your suggestion.
-Thanks!
+ > CVE-2019-11366: An issue was discovered in atftpd in atftp 0.7.1.  It does
+ > not lock the thread_list_mutex mutex before assigning the current thread
+ > data structure.  As a result, the daemon is vulnerable to a denial of
+ > service attack due to a NULL pointer dereference.  If thread_data is NULL
+ > when assigned to current, and modified by another thread before a certain
+ > tftpd_list.c check, there is a crash when dereferencing current->next.
 
-Best regards,
-Romain
+ > For details, see
+ > https://pulsesecurity.co.nz/advisories/atftpd-multiple-vulnerabilities
 
-> 
-> Regards,
-> Yann E. MORIN.
-> 
+ > Patch 0001-Makefile.am-link-against-libpthread-for-atftp.patch patches
+ > Makefile.am, so add _AUTORECONF.
+
+ > CFLAGS is now correctly handled since commit f9dbb96844167f (configure.ac:
+ > fix hard setting of CFLAGS), so drop the workaround about passing
+ > -fgnu89-inline in CPPFLAGS.
+
+ > Add a hash for the license file.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
