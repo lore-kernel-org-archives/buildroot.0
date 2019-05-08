@@ -1,65 +1,62 @@
 From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-Date: Thu,  9 May 2019 00:09:34 +0200
-Subject: [Buildroot] [PATCH 10/13] package/openrc: change /run/lock from
- root:uucp to root:daemon
+Date: Thu,  9 May 2019 00:09:30 +0200
+Subject: [Buildroot] [PATCH 06/13] package/skeleton-init-openrc: add support
+ to remount rootfs as rw
 In-Reply-To: <20190508220937.23200-1-michal.lyszczek@bofc.pl>
 References: <20190508220937.23200-1-michal.lyszczek@bofc.pl>
-Message-ID: <20190508220937.23200-10-michal.lyszczek@bofc.pl>
+Message-ID: <20190508220937.23200-6-michal.lyszczek@bofc.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On gentoo /run/lock is owned by uucp group because of historical
-reasons. However uucp does not exist on buildroot by default, and
-it makes more sense that 'daemon' group should own this directory.
+Adds support to openrc skeleton to monitor
+BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW and remount rootfs as rw when
+options is set.
 
 Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 ---
- ....in-change-run-lock-from-root-uucp-t.patch | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
- create mode 100644 package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch
+ .../skeleton-init-openrc/skeleton-init-sysv.mk    | 15 +++++++++++++++
+ package/skeleton-init-openrc/skeleton/etc/fstab   |  1 +
+ 2 files changed, 16 insertions(+)
 
-diff --git a/package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch b/package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch
-new file mode 100644
-index 0000000000..66bbba42ba
---- /dev/null
-+++ b/package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch
-@@ -0,0 +1,34 @@
-+From 5ae8209afad9a4284723712b46d8685e7f7fd72c Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-+Date: Mon, 6 May 2019 00:06:39 +0200
-+Subject: [PATCH] sh/init.sh.Linux.in: change /run/lock from root:uucp to
-+ root:daemon
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
+diff --git a/package/skeleton-init-openrc/skeleton-init-sysv.mk b/package/skeleton-init-openrc/skeleton-init-sysv.mk
+index 5ee2192093..bbe80071ae 100644
+--- a/package/skeleton-init-openrc/skeleton-init-sysv.mk
++++ b/package/skeleton-init-openrc/skeleton-init-sysv.mk
+@@ -15,8 +15,23 @@ SKELETON_INIT_OPENRC_DEPENDENCIES = skeleton-init-common
+ 
+ SKELETON_INIT_OPENRC_PROVIDES = skeleton
+ 
++ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
++# Comment /dev/root entry in fstab. When openrc does not find fstab entry for
++# "/", it will try to remount "/" as "rw".
++define SKELETON_INIT_OPENRC_ROOT_RO_OR_RW
++	$(SED) '/^ *\/dev\/root.*$$/s~^~#~' $(TARGET_DIR)/etc/fstab
++endef
++else
++# Uncomment /dev/root entry in fstab which has "ro" option so openrc notices
++# it and doesn't remount root to rw.
++define SKELETON_INIT_OPENRC_ROOT_RO_OR_RW
++	$(SED) '/^# *\/dev\/root.*$$/s~^#\+~~' $(TARGET_DIR)/etc/fstab
++endef
++endif # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
 +
-+On gentoo /run/lock is owned by uucp group because of historical
-+reasons. However uucp does not exist on buildroot by default, and
-+it makes more sense that 'daemon' group should own this directory.
-+
-+Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
-+---
-+ sh/init.sh.Linux.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/sh/init.sh.Linux.in b/sh/init.sh.Linux.in
-+index 222bbd3b..7f1a88db 100644
-+--- a/sh/init.sh.Linux.in
-++++ b/sh/init.sh.Linux.in
-+@@ -85,7 +85,7 @@ fi
-+ 
-+ [ -x /sbin/restorecon ] && /sbin/restorecon -rF /run
-+ checkpath -d $RC_SVCDIR
-+-checkpath -d -m 0775 -o root:uucp /run/lock
-++checkpath -d -m 0775 -o root:daemon /run/lock
-+ 
-+ # Try to mount xenfs as early as possible, otherwise rc_sys() will always
-+ # return RC_SYS_XENU and will think that we are in a domU while it's not.
-+-- 
-+2.18.1
-+
+ define SKELETON_INIT_OPENRC_INSTALL_TARGET_CMDS
+ 	$(call SYSTEM_RSYNC,$(SKELETON_INIT_OPENRC_PKGDIR)/skeleton,$(TARGET_DIR))
++	$(SKELETON_INIT_OPENRC_ROOT_RO_OR_RW)
+ endef
+ 
+ $(eval $(generic-package))
+diff --git a/package/skeleton-init-openrc/skeleton/etc/fstab b/package/skeleton-init-openrc/skeleton/etc/fstab
+index 3ec96cf634..21cf49ba5a 100644
+--- a/package/skeleton-init-openrc/skeleton/etc/fstab
++++ b/package/skeleton-init-openrc/skeleton/etc/fstab
+@@ -1,3 +1,4 @@
+ # <file system>	<mount pt>	<type>	<options>	<dump>	<pass>
++/dev/root	/		ext2	ro,noauto	0	0
+ tmpfs		/tmp		tmpfs	mode=1777	0	0
+ tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0
 -- 
 2.18.1
