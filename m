@@ -1,47 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 8 May 2019 10:44:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/exiv2: cleanup options and
- licenses
-In-Reply-To: <20190508102742.0000138c@sensefly.com>
-References: <20190507103639.94701-1-nicolas.serafini@sensefly.com>
- <bdcad4a5-2ba7-ed8c-8fc3-3de53bd2aa0d@mind.be>
- <20190508102742.0000138c@sensefly.com>
-Message-ID: <8e7755d7-831f-4945-d04f-b63d9ebc67c2@mind.be>
+From: guoren at kernel.org <guoren@kernel.org>
+Date: Wed,  8 May 2019 16:58:27 +0800
+Subject: [Buildroot] [PATCH V2 1/9] arch/csky: Add VDSP and FLOAT_ABI
+ compiler options.
+Message-ID: <1557305915-11247-1-git-send-email-guoren@kernel.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Guo Ren <ren_guo@c-sky.com>
 
+We never use BR2_CSKY_DSP in buildroot and we use VDSP instead. For
+float compiling, we need -mfloat-abi=xxx.
 
-On 08/05/2019 10:27, Nicolas Serafini wrote:
->>>  config BR2_PACKAGE_EXIV2_LENSDATA
->>> -	bool "Nikon lens name database"
->>> -	depends on !BR2_PACKAGE_EXIV2_COMMERCIAL
->>> +	bool "Include lens data"
->> How big is this lens data? Is it worth keeping an option for it?
-> Yes you are right we can remove it. The binary is only 80KB less with
-> the lensdata option disabled.
-> 
-> Do I need to add a Config.in.legacy option if I remove it.
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+---
+ arch/Config.in.csky | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
- No, same as for the _COMMERCIAL option. The legacy handling is there to make
-sure that people who update Buildroot and had some option enabled will be able
-to do whatever is needed to keep the same behaviour.
-
- It is useful to mention explicitly in the commit message why legacy handling is
-skipped. Something like: "Legacy handling for the removed options _COMMERCIAL
-and _LENSDATA is not needed, since now they are always enabled."
-
-> The default
-> state in exiv2 CMakeList is enabled.
-
- It is a good idea to still add the -D...=ON explicitly, because:
-- it makes sure that the same behaviour is kept if the default changes; and
-- if the option changes name, is removed, ... there is a warning in the
-configure step, so there's a better chance that whoever is doing the bump will
-notice it.
-
- Regards,
- Arnout
+diff --git a/arch/Config.in.csky b/arch/Config.in.csky
+index e88e4e2..4622eb9 100644
+--- a/arch/Config.in.csky
++++ b/arch/Config.in.csky
+@@ -23,9 +23,13 @@ config BR2_CSKY_FPU
+ 	  Floating-Point Coprocessor or if you don't need FPU support
+ 	  for your user-space programs.
+ 
+-config BR2_CSKY_DSP
+-	bool "Enable DSP enhanced instructions"
+-	depends on BR2_ck810 || BR2_ck807
++config BR2_CSKY_VDSP
++	bool "Enable VDSP 3.0 enhanced instructions Co-processor"
++	depends on BR2_ck860
++
++config BR2_GCC_TARGET_FLOAT_ABI
++	default "soft"		if !BR2_CSKY_FPU
++	default "hard"		if BR2_CSKY_FPU
+ 
+ config BR2_ARCH
+ 	default "csky"
+-- 
+2.7.4
