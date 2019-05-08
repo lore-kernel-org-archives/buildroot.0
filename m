@@ -1,10 +1,10 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  8 May 2019 19:28:22 +0200
-Subject: [Buildroot] [PATCH v1 5/5] board/pandaboard: replace utf-8 graphic
- sympols by ascii characters
+Date: Wed,  8 May 2019 19:28:19 +0200
+Subject: [Buildroot] [PATCH v1 2/5] board/beagleboardx15: replace utf-8
+ graphic sympols by ascii characters
 In-Reply-To: <20190508172822.7929-1-ps.report@gmx.net>
 References: <20190508172822.7929-1-ps.report@gmx.net>
-Message-ID: <20190508172822.7929-5-ps.report@gmx.net>
+Message-ID: <20190508172822.7929-2-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,35 +13,41 @@ To: buildroot@busybox.net
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- board/pandaboard/readme.txt | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ board/beagleboardx15/readme.txt | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/board/pandaboard/readme.txt b/board/pandaboard/readme.txt
-index 1e4820b828..80a20c2743 100644
---- a/board/pandaboard/readme.txt
-+++ b/board/pandaboard/readme.txt
-@@ -23,14 +23,14 @@ When you are happy with the setup, run:
- The result of the build with the default settings should be these files:
+diff --git a/board/beagleboardx15/readme.txt b/board/beagleboardx15/readme.txt
+index 56ebca8c5f..5af2c914ba 100644
+--- a/board/beagleboardx15/readme.txt
++++ b/board/beagleboardx15/readme.txt
+@@ -26,17 +26,17 @@ Result of the build
+ After building, you should get a tree like this:
 
-   output/images
+   output/images/
+-  ??? am57xx-beagle-x15.dtb
+-  ??? am57xx-beagle-x15-revb1.dtb
+-  ??? boot.vfat
 -  ??? MLO
--  ??? omap4-panda-a4.dtb
--  ??? omap4-panda.dtb
--  ??? omap4-panda-es.dtb
+-  ??? rootfs.ext2
 -  ??? rootfs.ext4
+-  ??? rootfs.tar
 -  ??? sdcard.img
 -  ??? u-boot.img
+-  ??? u-boot-spl.bin
 -  ??? zImage
++  +-- am57xx-beagle-x15.dtb
++  +-- am57xx-beagle-x15-revb1.dtb
++  +-- boot.vfat
 +  +-- MLO
-+  +-- omap4-panda-a4.dtb
-+  +-- omap4-panda.dtb
-+  +-- omap4-panda-es.dtb
++  +--rootfs.ext2
 +  +-- rootfs.ext4
++  +-- rootfs.tar
 +  +-- sdcard.img
 +  +-- u-boot.img
++  +-- u-boot-spl.bin
 +  +-- zImage
 
- How to write the SD card
- ------------------------
+ How to write the microSD card
+ =============================
 --
 2.21.0
