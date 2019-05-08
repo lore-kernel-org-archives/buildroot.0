@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 May 2019 09:16:30 +0200
-Subject: [Buildroot] [git commit] package/wireshark: replace utf-8 space by
- ascii character
-Message-ID: <20190508073739.AB04283B6F@busybox.osuosl.org>
+Date: Wed, 8 May 2019 09:16:24 +0200
+Subject: [Buildroot] [git commit] package/vdr: replace utf-8 space by ascii
+ character
+Message-ID: <20190508073739.A3DD483B6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a271bbe003efdccbbb4da7c4de3ddfbcfb62c3c4
+commit: https://git.buildroot.net/buildroot/commit/?id=1698377f39547c0285b706c909285c99b9ca72d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Replace utf-8 NO-BREAK-SPACE (c2 a0) in comment line by simple
@@ -18,21 +18,19 @@ ascii space character.
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireshark/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/vdr/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
-index 0a94a00c09..416b334df6 100644
---- a/package/wireshark/Config.in
-+++ b/package/wireshark/Config.in
-@@ -23,8 +23,8 @@ config BR2_PACKAGE_WIRESHARK_GUI
- 	depends on BR2_PACKAGE_HAS_UDEV # qt5 input
- 	select BR2_PACKAGE_QT5
- 	select BR2_PACKAGE_QT5BASE
--	select BR2_PACKAGE_QT5BASE_FONTCONFIG #??runtime
--	select BR2_PACKAGE_QT5BASE_PNG #??runtime
-+	select BR2_PACKAGE_QT5BASE_FONTCONFIG # runtime
-+	select BR2_PACKAGE_QT5BASE_PNG # runtime
- 	select BR2_PACKAGE_QT5BASE_WIDGETS
- 	select BR2_PACKAGE_QT5MULTIMEDIA
- 	select BR2_PACKAGE_QT5SVG
+diff --git a/package/vdr/Config.in b/package/vdr/Config.in
+index 712364a971..df602f26d6 100644
+--- a/package/vdr/Config.in
++++ b/package/vdr/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_VDR
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
+-	depends on BR2_TOOLCHAIN_USES_GLIBC #??execinfo.h
++	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_FONTCONFIG
