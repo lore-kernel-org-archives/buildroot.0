@@ -1,89 +1,98 @@
 From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-Date: Thu,  9 May 2019 00:09:35 +0200
-Subject: [Buildroot] [PATCH 11/13] package/openrc: add support to set
- terminal encoding
+Date: Thu,  9 May 2019 00:09:33 +0200
+Subject: [Buildroot] [PATCH 09/13] package/openrc: add patch to support
+ busybox version of sysctl
 In-Reply-To: <20190508220937.23200-1-michal.lyszczek@bofc.pl>
 References: <20190508220937.23200-1-michal.lyszczek@bofc.pl>
-Message-ID: <20190508220937.23200-11-michal.lyszczek@bofc.pl>
+Message-ID: <20190508220937.23200-9-michal.lyszczek@bofc.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When openrc init is enabled, user can chose to set terminal
-encoding to ascii, utf-8 or to keep default settings.
-
-* system/Config.in
-  New kconfig choice BR2_TARGET_GENERIC_TERMENCODING_* to
-  choose terminal encoding. Depends on openrc init.
-
-* package/openrc/openrc.mk
-  monitors BR2_TARGET_GENERIC_TERMENCODING_* choice and
-  make proper changes on TARGET_DIR to enable/disable
-  terminal encoding set.
+Busybox version of sysctl does not support --system argument, and
+files need to be loaded one by one. This patch adds code to sysctl
+service in openrc to recognize busybox sysctl and execute proper
+function based on that.
 
 Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 ---
- package/openrc/openrc.mk | 19 +++++++++++++++++++
- system/Config.in         | 17 +++++++++++++++++
- 2 files changed, 36 insertions(+)
+ ...tl.in-add-support-for-busybox-sysctl.patch | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+ create mode 100644 package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch
 
-diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-index f0aa014256..23b33b65f4 100644
---- a/package/openrc/openrc.mk
-+++ b/package/openrc/openrc.mk
-@@ -56,4 +56,23 @@ endef
- OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_SET_GETTY
- endif # BR2_TARGET_GENERIC_GETTY
- 
-+ifeq ($(BR2_TARGET_GENERIC_TERMENCODING_KEEP),y)
-+# openrc by default installs service to set terminal encoding, if we want to
-+# keep default encoding we need to remove service from boot.
-+define OPENRC_TERMENCODING
-+	$(RM) $(TARGET_DIR)/etc/runlevels/boot/{termencoding,save-termencoding}
-+	$(RM) $(TARGET_DIR)/etc/conf.d/termencoding
-+endef
-+OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_TERMENCODING
-+else
-+ifeq ($(BR2_TARGET_GENERIC_TERMENCODING_UTF8),y)
-+# By default openrc will set terminal encoding to ASCII, if we want encoding
-+# to be utf8, we need to set it.
-+define OPENRC_TERMENCODING
-+	echo "unicode=\"yes\"" > $(TARGET_DIR)/etc/conf.d/termencoding
-+endef
-+OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_TERMENCODING
-+endif # BR2_TARGET_GENERIC_TERMENCODING_UTF8
-+endif # BR2_TARGET_GENERIC_TERMENCODING_KEEP
+diff --git a/package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch b/package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch
+new file mode 100644
+index 0000000000..da8cf042c6
+--- /dev/null
++++ b/package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch
+@@ -0,0 +1,66 @@
++From ec1a0c8fa2e7a7c6cf70f68bdabc07cbb1a567cf Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
++Date: Sun, 5 May 2019 23:43:40 +0200
++Subject: [PATCH] init.d/sysctl.in: add support for busybox sysctl
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
- $(eval $(generic-package))
-diff --git a/system/Config.in b/system/Config.in
-index 32c502e310..08bcb517e4 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -390,6 +390,23 @@ comment "automatic network configuration via DHCP needs ifupdown or busybox or n
- 		BR2_PACKAGE_SYSTEMD_NETWORKD) && !BR2_PACKAGE_OPENRC) || \
- 		BR2_PACKAGE_OPENRC_NETIFRC)
- 
-+choice
-+	prompt "Terminal encoding"
-+	default BR2_TARGET_GENERIC_TERMENCODING_KEEP
-+	depends on BR2_INIT_OPENRC
-+	help
-+	  Set terminal encoding. This makes sense only when you are going to
-+	  use virtual terminals with external monitor (or qemu) that uses
-+	  /dev/tty[1-12].
++Busybox version of sysctl does not support --system argument,
++and files need to be loaded one by one. This patch adds code
++to recognize busybox sysctl and execute proper function based
++on that.
 +
-+config BR2_TARGET_GENERIC_TERMENCODING_KEEP
-+	bool "keep default"
-+config BR2_TARGET_GENERIC_TERMENCODING_ASCII
-+	bool "ascii"
-+config BR2_TARGET_GENERIC_TERMENCODING_UTF8
-+	bool "utf-8"
-+endchoice
++Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
++---
++ init.d/sysctl.in | 27 ++++++++++++++++++++++++++-
++ 1 file changed, 26 insertions(+), 1 deletion(-)
 +
- endif # BR2_ROOTFS_SKELETON_DEFAULT
- 
- config BR2_SYSTEM_DEFAULT_PATH
++diff --git a/init.d/sysctl.in b/init.d/sysctl.in
++index e49f4db2..a705b3d4 100644
++--- a/init.d/sysctl.in
+++++ b/init.d/sysctl.in
++@@ -37,6 +37,23 @@ BSD_sysctl()
++ 	return $retval
++ }
++ 
+++Busybox_sysctl()
+++{
+++	local quiet
+++	yesno $rc_verbose || quiet=-q
+++
+++	eindent
+++	for conf in /etc/sysctl.conf /etc/sysctl.d/*.conf; do
+++		if [ -r "$conf" ]; then
+++			vebegin "applying $conf"
+++			sysctl $quiet -p "$conf" || retval=1
+++			veend $retval
+++		fi
+++	done
+++	eoutdent
+++	return $retval
+++}
+++
++ Linux_sysctl()
++ {
++ 	local quiet
++@@ -52,7 +69,15 @@ start()
++ 	ebegin "Configuring kernel parameters"
++ 	case "$RC_UNAME" in
++ 	*BSD|GNU) BSD_sysctl; rc=$? ;;
++-	Linux) Linux_sysctl; rc=$? ;;
+++	Linux)
+++		sysctl -h > /dev/null 2>&1
+++		if [ $? -ne 0 ]; then
+++			# busybox version of sysctl does not recognize -h option
+++			Busybox_sysctl
+++		else
+++			Linux_sysctl
+++		fi
+++		rc=$? ;;
++ 	esac
++ 	eend $rc "Unable to configure some kernel parameters"
++ }
++-- 
++2.18.1
++
 -- 
 2.18.1
