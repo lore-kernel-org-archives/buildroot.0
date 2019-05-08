@@ -1,131 +1,131 @@
 From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-Date: Thu,  9 May 2019 00:09:25 +0200
-Subject: [Buildroot] [PATCH 01/13] new package: openrc-0.41.2
-Message-ID: <20190508220937.23200-1-michal.lyszczek@bofc.pl>
+Date: Thu,  9 May 2019 00:09:28 +0200
+Subject: [Buildroot] [PATCH 04/13] package/openrc: add support for spawning
+ getty
+In-Reply-To: <20190508220937.23200-1-michal.lyszczek@bofc.pl>
+References: <20190508220937.23200-1-michal.lyszczek@bofc.pl>
+Message-ID: <20190508220937.23200-4-michal.lyszczek@bofc.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This adds openrc init system package. This performs default openrc
-installation with openrc-init that acts as pid1.
+* package/openrc/openrc.mk
+  add code that monitors BR2_TARGET_GENERIC_GETTY and if set,
+  creates configuration file (with SYSTEM_GETTY_*) for port in
+  /etc/conf.d/getty.$(SYSTEM_GETTY_PORT) and links so openrc
+  starts service.
+
+* package/skeleton-init-openrc/skeleton/etc/init.d/getty
+  openrc service that spawns getty on configured port.
+
+* system/Config.in
+  change dependency of BR2_TARGET_GENERIC_GETTY_TERM and
+  BR2_TARGET_GENERIC_GETTY_OPTIONS so openrc can make use
+  of these fields too.
 
 Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/openrc/Config.in   | 14 ++++++++++++
- package/openrc/openrc.hash |  2 ++
- package/openrc/openrc.mk   | 46 ++++++++++++++++++++++++++++++++++++++
- 5 files changed, 64 insertions(+)
- create mode 100644 package/openrc/Config.in
- create mode 100644 package/openrc/openrc.hash
- create mode 100644 package/openrc/openrc.mk
+ package/openrc/openrc.mk                      | 13 ++++++++
+ .../skeleton/etc/conf.d/.empty                |  0
+ .../skeleton/etc/init.d/getty                 | 31 +++++++++++++++++++
+ .../skeleton/etc/runlevels/default/.empty     |  0
+ system/Config.in                              |  8 ++---
+ 5 files changed, 48 insertions(+), 4 deletions(-)
+ create mode 100644 package/skeleton-init-openrc/skeleton/etc/conf.d/.empty
+ create mode 100755 package/skeleton-init-openrc/skeleton/etc/init.d/getty
+ create mode 100644 package/skeleton-init-openrc/skeleton/etc/runlevels/default/.empty
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 6ccb0afaf6..0f89e49b92 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1615,6 +1615,7 @@ F:	board/altera/socrates_cyclone5/
- F:	board/pine64/rock64
- F:	configs/rock64_defconfig
- F:	configs/socrates_cyclone5_defconfig
-+F:	package/openrc/
- 
- N:	Michel Stempin <michel.stempin@wanadoo.fr>
- F:	board/licheepi/
-diff --git a/package/Config.in b/package/Config.in
-index f592e74a99..d9cb755d68 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2194,6 +2194,7 @@ menu "System tools"
- 	source "package/ncdu/Config.in"
- 	source "package/numactl/Config.in"
- 	source "package/nut/Config.in"
-+	source "package/openrc/Config.in"
- 	source "package/openvmtools/Config.in"
- 	source "package/pamtester/Config.in"
- 	source "package/polkit/Config.in"
-diff --git a/package/openrc/Config.in b/package/openrc/Config.in
-new file mode 100644
-index 0000000000..e98ed624c9
---- /dev/null
-+++ b/package/openrc/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_OPENRC
-+	bool "OpenRC"
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  Init that works on top of pid 1 (for example openrc-init). By default
-+	  it does quite a lot on startup (like setting hwclock, mounting
-+	  directories, configuring interfaces and so on). So for this init to
-+	  properly work you need at least these tools on the root filesystem
-+	  (default busybox configuration provides them all):
-+
-+	  swapon, fsck, hwclock, getty, login, grep, mount, coreutils, procps,
-+	  modprobe (kmod), net-tools
-+
-+	  Number of tools may be decreased by removing services that use them.
-diff --git a/package/openrc/openrc.hash b/package/openrc/openrc.hash
-new file mode 100644
-index 0000000000..0d813b6a14
---- /dev/null
-+++ b/package/openrc/openrc.hash
-@@ -0,0 +1,2 @@
-+# Calculated manually
-+sha256	c99488ca54f2b795328d07bbd456ade49b571136bba7501f7eaaeb1ca9f9ecc4	openrc-0.41.2.tar.gz
 diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-new file mode 100644
-index 0000000000..faffb5beb0
---- /dev/null
+index faffb5beb0..f0aa014256 100644
+--- a/package/openrc/openrc.mk
 +++ b/package/openrc/openrc.mk
-@@ -0,0 +1,46 @@
-+################################################################################
-+#
-+# openrc
-+#
-+################################################################################
-+
-+OPENRC_VERSION = 0.41.2
-+OPENRC_SOURCE = openrc-$(OPENRC_VERSION).tar.gz
-+OPENRC_SITE = $(call github,OpenRC,openrc,$(OPENRC_VERSION))
-+OPENRC_LICENSE = BSD-2-Clause
-+OPENRC_LICENSE_FILES = LICENSE
-+
-+OPENRC_DEPENDENCIES += ncurses
-+
-+ifeq ($(BR2_SHARED_LIBS),y)
-+OPENRC_MAKE_OPTS += MKSTATICLIBS=no
-+else
-+OPENRC_MAKE_OPTS += MKSTATICLIBS=yes
-+endif
-+
-+# set LIBNAME so openrc puts files in proper directories and sets proper
-+# paths in installed files. Since in buildroot /lib64 and /lib32 always
-+# points to /lib, it's safe to hardcode it to "lib"
-+OPENRC_MAKE_OPTS += LIBNAME=lib
-+OPENRC_MAKE_OPTS += LIBEXECDIR=/usr/libexec/rc
-+OPENRC_MAKE_OPTS += TARGETDIR=$(TARGET_DIR)
-+OPENRC_MAKE_OPTS += MKPKGCONFIG=no
-+OPENRC_MAKE_OPTS += MKSELINUX=no
-+OPENRC_MAKE_OPTS += MKSYSVINIT=yes
-+OPENRC_MAKE_OPTS += BRANDING="Buildroot $(BR2_VERSION_FULL)"
-+OPENRC_MAKE_OPTS += CC=$(TARGET_CC)
-+
-+define OPENRC_BUILD_CMDS
-+	$(MAKE) $(OPENRC_MAKE_OPTS) -C $(@D)
+@@ -43,4 +43,17 @@ define OPENRC_REMOVE_UNNEEDED
+ endef
+ OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_REMOVE_UNNEEDED
+ 
++ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
++GETTY_SVCNAME = getty.$(SYSTEM_GETTY_PORT)
++GETTY_CONF_D = $(TARGET_DIR)/etc/conf.d/$(GETTY_SVCNAME)
++define OPENRC_SET_GETTY
++	echo "baud=\"$(SYSTEM_GETTY_BAUDRATE)\"" > $(GETTY_CONF_D)
++	echo "term_type=\"$(SYSTEM_GETTY_TERM)\"" >> $(GETTY_CONF_D)
++	echo "getty_options=\"-L $(SYSTEM_GETTY_OPTIONS)\"" >> $(GETTY_CONF_D)
++	ln -sf getty $(TARGET_DIR)/etc/init.d/$(GETTY_SVCNAME)
++	ln -sf /etc/init.d/$(GETTY_SVCNAME) $(TARGET_DIR)/etc/runlevels/default/$(GETTY_SVCNAME)
 +endef
++OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_SET_GETTY
++endif # BR2_TARGET_GENERIC_GETTY
 +
-+define OPENRC_INSTALL_TARGET_CMDS
-+	DESTDIR=$(TARGET_DIR) $(MAKE) $(OPENRC_MAKE_OPTS) -C $(@D) install
-+endef
+ $(eval $(generic-package))
+diff --git a/package/skeleton-init-openrc/skeleton/etc/conf.d/.empty b/package/skeleton-init-openrc/skeleton/etc/conf.d/.empty
+new file mode 100644
+index 0000000000..e69de29bb2
+diff --git a/package/skeleton-init-openrc/skeleton/etc/init.d/getty b/package/skeleton-init-openrc/skeleton/etc/init.d/getty
+new file mode 100755
+index 0000000000..acae1b218b
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/etc/init.d/getty
+@@ -0,0 +1,31 @@
++#!/sbin/openrc-run
++# based on agetty service from OpenRC package
 +
-+define OPENRC_REMOVE_UNNEEDED
-+	$(RM) -r $(TARGET_DIR)/usr/share/openrc
-+endef
-+OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_REMOVE_UNNEEDED
++description="start getty on terminal"
++supervisor=supervise-daemon
++port="${RC_SVCNAME#*.}"
++term_type="${term_type:-linux}"
++command=/sbin/getty
++command_args_foreground="${getty_options} ${baud} ${port} ${term_type}"
++pidfile="/run/${RC_SVCNAME}.pid"
 +
-+$(eval $(generic-package))
++depend() {
++	# start getty at the very end of init
++	after *
++	keyword -prefix
++}
++
++start_pre() {
++	if [ -z "$port" ]; then
++		eerror "${RC_SVCNAME} cannot be started directly. You must create"
++		eerror "symbolic links to it for the ports you want to start"
++		eerror "agetty on and add those to the appropriate runlevels."
++		return 1
++	else
++		export EINFO_QUIET="${quiet:-yes}"
++	fi
++}
++
++stop_pre() {
++	export EINFO_QUIET="${quiet:-yes}"
++}
+diff --git a/package/skeleton-init-openrc/skeleton/etc/runlevels/default/.empty b/package/skeleton-init-openrc/skeleton/etc/runlevels/default/.empty
+new file mode 100644
+index 0000000000..e69de29bb2
+diff --git a/system/Config.in b/system/Config.in
+index 808fc070f3..90aa0e52b9 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -343,16 +343,16 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
+ config BR2_TARGET_GENERIC_GETTY_TERM
+ 	string "TERM environment variable"
+ 	default "vt100"
+-	# currently observed only by busybox and sysvinit
+-	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV
++	# currently observed by all but systemd
++	depends on !BR2_INIT_SYSTEMD
+ 	help
+ 	  Specify a TERM type.
+ 
+ config BR2_TARGET_GENERIC_GETTY_OPTIONS
+ 	string "other options to pass to getty"
+ 	default ""
+-	# currently observed only by busybox and sysvinit
+-	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV
++	# currently observed by all but systemd
++	depends on !BR2_INIT_SYSTEMD
+ 	help
+ 	  Any other flags you want to pass to getty,
+ 	  Refer to getty --help for details.
 -- 
 2.18.1
