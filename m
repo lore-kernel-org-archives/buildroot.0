@@ -1,76 +1,64 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 8 May 2019 14:54:13 +0000
-Subject: [Buildroot] [arc-buildroot] [PATCH] linux-tools/perf: Respect
- TARGET_CFLAGS
-In-Reply-To: <20190508143127.GD31209@scaer>
-References: <20190418093902.41835-1-abrodkin@synopsys.com>
- <20190418114336.61f3f404@windsurf>
- <ea5f11a1-a7cb-4cee-dfda-64d55d550d83@mind.be>
- <CY4PR1201MB01207D3F0C5E488EACEBA5DAA13E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
- <ed9e89cc-3f7e-1a05-0d1e-6c6da6a3eb38@mind.be> <20190427175603.GA27252@scaer>
- <CY4PR1201MB012025B382EBDE4883CA80B8A1320@CY4PR1201MB0120.namprd12.prod.outlook.com>
- <20190508143127.GD31209@scaer>
-Message-ID: <CY4PR1201MB01208EC953B8DFBB678E8D44A1320@CY4PR1201MB0120.namprd12.prod.outlook.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed,  8 May 2019 17:07:05 +0200
+Subject: [Buildroot] [PATCH v2 00/15]  Add gcc 9.1
+Message-ID: <20190508150720.27946-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Before adding gcc 9.1 [1] to Buildroot, add some fixes for issues discovered
+by toolchain-builder [2] that are trigged by this new compiler version.
+(disable powerpc Werror, uClibc-ng asm sparc and ARC glibc).
 
-> -----Original Message-----
-> From: Yann E. MORIN <yann.morin.1998@free.fr>
-> Sent: Wednesday, May 8, 2019 5:31 PM
-> To: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>; buildroot at busybox.net; ARC Buildroot mailing list
-> <arc-buildroot@synopsys.com>; Arnout Vandecappelle <arnout@mind.be>
-> Subject: Re: [arc-buildroot] [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
-> 
-> Alexey, All,
-> 
-> On 2019-05-08 13:19 +0000, Alexey Brodkin spake thusly:
-> > From: Yann E. MORIN <yann.morin.1998@gmail.com> On Behalf Of Yann E. MORIN
-> [--SNIP--]
-> > > I'm not too fond of this, but what about the following:
-> > >
-> > > diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
-> > > new file mode 100644
-> > > index 0000000000..83503841b6
-> > > --- /dev/null
-> > > +++ b/arch/arch.mk.arc
-> > > @@ -0,0 +1,3 @@
-> > > +ifeq ($(BR2_arcle),y)
-> > > +ARCH_TOOLCHAIN_WRAPPER_OPTS = -matomic
-> > > +endif
-> > > diff --git a/toolchain/toolchain-wrapper.mk
-> > > b/toolchain/toolchain-wrapper.mk
-> > > index ca66fa7ba4..8f872506ec 100644
-> > > --- a/toolchain/toolchain-wrapper.mk
-> > > +++ b/toolchain/toolchain-wrapper.mk
-> > > @@ -17,6 +17,7 @@ TOOLCHAIN_WRAPPER_ARGS =
-> > > $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
-> > >  TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
-> > >
-> > >  TOOLCHAIN_WRAPPER_OPTS = \
-> > > +   $(ARCH_TOOLCHAIN_WRAPPER_OPTS) \
-> > >     $(call qstrip,$(BR2_SSP_OPTION)) \
-> > >     $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
-> >
-> > That looks good to me with only one change: prefer generic "BR2_arc"
-> > instead of little-endian only "BR2_arcle".
-> 
-> Yes, of course, it was just a quicky to demo what I was thinking...
-> 
-> > Care to send-out a patch?
-> 
-> Aw... But *you* are the arc guy! ;-)
-> 
-> OK, will do.
+Then add gcc 9.1 for internal and extenal toolchain backend and switch gcc 8.x
+as default compiler.
 
-I'm all for sending it myself but it will be like I'm stealing
-your nice idea - nothing more that that.
+Thanks to Yann E. MORIN for providing a patch series that add new ARM cores
+added by gcc 9.1.
 
-Want me to do that instead?
+Each new ARM core has been build tested for aarch64:
+https://gitlab.com/kubu93/buildroot/pipelines/60318953
 
--Alexey
+Finally, enable the new ork1 (openrisc) that will replace in the following
+series the old gcc fork (gcc 5.x).
+
+[1] https://gcc.gnu.org/gcc-9/changes.html
+[2] https://gitlab.com/kubu93/toolchains-builder/pipelines/59794237
+
+Romain Naour (9):
+  package/glibc/arc: fix build issue with gcc-9.1
+  linux: disable Werror for powerpc kernels
+  [RFC] package/uclibc: remove asm constraint
+  toolchain: add gcc 9 entry
+  package/gcc: add support for gcc 9.1
+  arch: add BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+  toolchain-external: add gcc 9 entry
+  package/gcc: switch to gcc 8.x as the default
+  package/gcc: enable gcc 9.1 for ork1 (openrisc)
+
+Yann E. MORIN (6):
+  arch/arm: move dependency on 64-bit down to individual cores
+  arch/arm: some cores have a different name with gcc-9
+  arch/arm: saphira is in fact an armv8.4a
+  arch/arm: add two new 64-bit-only armv8a cores
+  arch/arm: add two new cortex-based armv8.2a cores
+  arch/arm: add two new non-cortex-based armv8.2a cores
+
+ arch/Config.in                                     |   4 +
+ arch/Config.in.arm                                 |  95 +++++++++---
+ linux/linux.mk                                     |   2 +
+ package/gcc/Config.in.host                         |   8 +-
+ package/gcc/gcc.hash                               |   2 +
+ package/gcc/gcc.mk                                 |   4 +-
+ ...0001-Add-support-for-GCC-9-attribute-copy.patch | 160 +++++++++++++++++++++
+ ...FC-sparc-syscalls.h-remove-asm-constraint.patch |  46 ++++++
+ toolchain/Config.in                                |   5 +
+ .../toolchain-external-custom/Config.in.options    |   6 +
+ 10 files changed, 313 insertions(+), 19 deletions(-)
+ create mode 100644 package/glibc/arc-2018.09-release/0001-Add-support-for-GCC-9-attribute-copy.patch
+ create mode 100644 package/uclibc/0003-RFC-sparc-syscalls.h-remove-asm-constraint.patch
+
+-- 
+2.14.5
