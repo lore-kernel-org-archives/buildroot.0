@@ -1,64 +1,79 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 8 May 2019 16:31:27 +0200
-Subject: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
-In-Reply-To: <CY4PR1201MB012025B382EBDE4883CA80B8A1320@CY4PR1201MB0120.namprd12.prod.outlook.com>
-References: <20190418093902.41835-1-abrodkin@synopsys.com>
- <20190418114336.61f3f404@windsurf>
- <ea5f11a1-a7cb-4cee-dfda-64d55d550d83@mind.be>
- <CY4PR1201MB01207D3F0C5E488EACEBA5DAA13E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
- <ed9e89cc-3f7e-1a05-0d1e-6c6da6a3eb38@mind.be>
- <20190427175603.GA27252@scaer>
- <CY4PR1201MB012025B382EBDE4883CA80B8A1320@CY4PR1201MB0120.namprd12.prod.outlook.com>
-Message-ID: <20190508143127.GD31209@scaer>
+Date: Wed, 8 May 2019 16:43:21 +0200
+Subject: [Buildroot] [PATCH 1/1] support/download/git: add branch support
+In-Reply-To: <1557325351-17906-1-git-send-email-catherine@kubos.co>
+References: <1557325351-17906-1-git-send-email-catherine@kubos.co>
+Message-ID: <20190508144321.GE31209@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexey, All,
+CAtherine, All,
 
-On 2019-05-08 13:19 +0000, Alexey Brodkin spake thusly:
-> From: Yann E. MORIN <yann.morin.1998@gmail.com> On Behalf Of Yann E. MORIN
-[--SNIP--]
-> > I'm not too fond of this, but what about the following:
-> > 
-> > diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
-> > new file mode 100644
-> > index 0000000000..83503841b6
-> > --- /dev/null
-> > +++ b/arch/arch.mk.arc
-> > @@ -0,0 +1,3 @@
-> > +ifeq ($(BR2_arcle),y)
-> > +ARCH_TOOLCHAIN_WRAPPER_OPTS = -matomic
-> > +endif
-> > diff --git a/toolchain/toolchain-wrapper.mk
-> > b/toolchain/toolchain-wrapper.mk
-> > index ca66fa7ba4..8f872506ec 100644
-> > --- a/toolchain/toolchain-wrapper.mk
-> > +++ b/toolchain/toolchain-wrapper.mk
-> > @@ -17,6 +17,7 @@ TOOLCHAIN_WRAPPER_ARGS =
-> > $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
-> >  TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
-> > 
-> >  TOOLCHAIN_WRAPPER_OPTS = \
-> > +   $(ARCH_TOOLCHAIN_WRAPPER_OPTS) \
-> >     $(call qstrip,$(BR2_SSP_OPTION)) \
-> >     $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+On 2019-05-08 14:22 +0000, catherine at kubos.co spake thusly:
+> From: Catherine Garabedian <catherine@kubos.co>
 > 
-> That looks good to me with only one change: prefer generic "BR2_arc"
-> instead of little-endian only "BR2_arcle".
+> A prior patch added logic to verify that the given cset exists.
+> 
+> The command format used fails when attempting to verify a branch name, thus
+> preventing Buildroot from downloading any packages whose source comes from a
+> branch.
 
-Yes, of course, it was just a quicky to demo what I was thinking...
+We explciitly do not want to support using a branch _by name_, because
+that does not work as people expect it to work, see our manual:
 
-> Care to send-out a patch?
+    https://buildroot.org/downloads/manual/manual.html#generic-package-reference
 
-Aw... But *you* are the arc guy! ;-)
+Excerpt:
 
-OK, will do.
+ 1. due to local caching, Buildroot will not re-fetch the repository,
+    so people who expect to be able to follow the remote repository
+    would be quite surprised and disappointed;
+ 2. because two builds can never be perfectly simultaneous, and because
+    the remote repository may get new commits on the branch anytime, two
+    users, using the same Buildroot tree and building the same
+    configuration, may get different source, thus rendering the build
+    non reproducible, and people would be quite surprised and
+    disappointed.
+
+So, using a branch _by name_ can not owrk because of those two reasons,
+and as such we believe this should not be supported.
+
+Instead, there was some effort a few months ago, to actually enforce the
+check that a branch was not used, and fail if that was the case.
 
 Regards,
 Yann E. MORIN.
+
+> This patch adds a secondary check which can validate branches (but not tags).
+> 
+> Signed-off-by: Catherine Garabedian <catherine@kubos.co>
+> ---
+>  support/download/git | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/support/download/git b/support/download/git
+> index 17ca04e..a25552e 100755
+> --- a/support/download/git
+> +++ b/support/download/git
+> @@ -130,8 +130,10 @@ fi
+>  # scratch won't help, so we don't want to trash the repository for a
+>  # missing commit. We just exit without going through the ERR trap.
+>  if ! _git rev-parse --quiet --verify "'${cset}^{commit}'" >/dev/null 2>&1; then
+> -    printf "Commit '%s' does not exist in this repository\n." "${cset}"
+> -    exit 1
+> +    if ! _git rev-parse --quiet --verify "'origin/${cset}'" >/dev/null 2>&1; then
+> +        printf "'%s' does not exist in this repository\n." "${cset}"
+> +        exit 1
+> +    fi
+>  fi
+>  
+>  # The new cset we want to checkout might have different submodules, or
+> -- 
+> 2.7.4
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
