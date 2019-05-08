@@ -1,44 +1,69 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 8 May 2019 14:05:05 +0000
-Subject: [Buildroot] [PATCH 01/15] package/glibc/arc: fix build issue
- with gcc-9.1
-In-Reply-To: <1aaf011e-be23-89a8-35ca-ecd2429b6b77@gmail.com>
-References: <20190506183011.4856-1-romain.naour@gmail.com>
- <20190506183011.4856-2-romain.naour@gmail.com> <20190506194049.GA6887@scaer>
- <CY4PR1201MB0120841C0FE2B612DCA380BCA1320@CY4PR1201MB0120.namprd12.prod.outlook.com>
- <1aaf011e-be23-89a8-35ca-ecd2429b6b77@gmail.com>
-Message-ID: <CY4PR1201MB012056D967087A23A169C81BA1320@CY4PR1201MB0120.namprd12.prod.outlook.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 8 May 2019 16:31:27 +0200
+Subject: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
+In-Reply-To: <CY4PR1201MB012025B382EBDE4883CA80B8A1320@CY4PR1201MB0120.namprd12.prod.outlook.com>
+References: <20190418093902.41835-1-abrodkin@synopsys.com>
+ <20190418114336.61f3f404@windsurf>
+ <ea5f11a1-a7cb-4cee-dfda-64d55d550d83@mind.be>
+ <CY4PR1201MB01207D3F0C5E488EACEBA5DAA13E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+ <ed9e89cc-3f7e-1a05-0d1e-6c6da6a3eb38@mind.be>
+ <20190427175603.GA27252@scaer>
+ <CY4PR1201MB012025B382EBDE4883CA80B8A1320@CY4PR1201MB0120.namprd12.prod.outlook.com>
+Message-ID: <20190508143127.GD31209@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Romain,
+Alexey, All,
 
-> -----Original Message-----
-> From: Romain Naour <romain.naour@gmail.com>
-> Sent: Wednesday, May 8, 2019 4:28 PM
-> To: Alexey Brodkin <abrodkin@synopsys.com>; Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: buildroot at buildroot.org; Evgeniy Didin <didin@synopsys.com>; Eugeniy Paltsev
-> <Eugeniy.Paltsev@synopsys.com>
-> Subject: Re: [Buildroot] [PATCH 01/15] package/glibc/arc: fix build issue with gcc-9.1
-
-[snip]
- 
-> > Now given we're about to cut ARC 2019.03 release of our tools which
-> > among other things has Glibc rebased on upstream 2.29 version
-> > this particular fix won't be required at all.
-> >
-> > So let us post ARC toolchain bump to 2019.03-RC1 ASAP.
+On 2019-05-08 13:19 +0000, Alexey Brodkin spake thusly:
+> From: Yann E. MORIN <yann.morin.1998@gmail.com> On Behalf Of Yann E. MORIN
+[--SNIP--]
+> > I'm not too fond of this, but what about the following:
+> > 
+> > diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
+> > new file mode 100644
+> > index 0000000000..83503841b6
+> > --- /dev/null
+> > +++ b/arch/arch.mk.arc
+> > @@ -0,0 +1,3 @@
+> > +ifeq ($(BR2_arcle),y)
+> > +ARCH_TOOLCHAIN_WRAPPER_OPTS = -matomic
+> > +endif
+> > diff --git a/toolchain/toolchain-wrapper.mk
+> > b/toolchain/toolchain-wrapper.mk
+> > index ca66fa7ba4..8f872506ec 100644
+> > --- a/toolchain/toolchain-wrapper.mk
+> > +++ b/toolchain/toolchain-wrapper.mk
+> > @@ -17,6 +17,7 @@ TOOLCHAIN_WRAPPER_ARGS =
+> > $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
+> >  TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
+> > 
+> >  TOOLCHAIN_WRAPPER_OPTS = \
+> > +   $(ARCH_TOOLCHAIN_WRAPPER_OPTS) \
+> >     $(call qstrip,$(BR2_SSP_OPTION)) \
+> >     $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
 > 
-> We are close to -rc1, I don't think gcc 9.1 will be merged for this release so
-> we have some time to merge ARC 2019.03 release.
+> That looks good to me with only one change: prefer generic "BR2_arc"
+> instead of little-endian only "BR2_arcle".
 
-Cool. We'll be sending arc-2019.03-rc1 either by the end of this week
-or early next week so hopefully it gets in Buildroot's RC1.
+Yes, of course, it was just a quicky to demo what I was thinking...
 
-And looking forward to rocking vanilla GCC 9.1 in BR starting from the
-next release cycle.
+> Care to send-out a patch?
 
--Alexey
+Aw... But *you* are the arc guy! ;-)
+
+OK, will do.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
