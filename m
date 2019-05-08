@@ -1,98 +1,118 @@
 From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-Date: Thu,  9 May 2019 00:09:33 +0200
-Subject: [Buildroot] [PATCH 09/13] package/openrc: add patch to support
- busybox version of sysctl
+Date: Thu,  9 May 2019 00:09:37 +0200
+Subject: [Buildroot] [PATCH 13/13] package/skeleton-init-openrc: add support
+ for starting sysv scripts
 In-Reply-To: <20190508220937.23200-1-michal.lyszczek@bofc.pl>
 References: <20190508220937.23200-1-michal.lyszczek@bofc.pl>
-Message-ID: <20190508220937.23200-9-michal.lyszczek@bofc.pl>
+Message-ID: <20190508220937.23200-13-michal.lyszczek@bofc.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Busybox version of sysctl does not support --system argument, and
-files need to be loaded one by one. This patch adds code to sysctl
-service in openrc to recognize busybox sysctl and execute proper
-function based on that.
+* package/skeleton-init-openrc/skeleton/etc/init.d/sysv-rcs
+  This openrc script implements rcS and rcK equivalent which will
+  start or stop any script from /etc/init.d/S??*
+
+* package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
+  symlink to /etc/init.d/sysv-rcs to start service at startup
+
+* package/pkg-generic.mk
+  When openrc is enabled, evaluate $(PKG)_INSTALL_INIT_OPENRC, but
+  if install steps for openrc are not avilable, then evaluate
+  $(PKG)_INSTALL_INIT_SYSV))
 
 Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 ---
- ...tl.in-add-support-for-busybox-sysctl.patch | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
- create mode 100644 package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch
+ package/pkg-generic.mk                        |  4 +-
+ .../skeleton/etc/init.d/sysv-rcs              | 53 +++++++++++++++++++
+ .../skeleton/etc/runlevels/default/sysv-rcs   |  1 +
+ 3 files changed, 57 insertions(+), 1 deletion(-)
+ create mode 100755 package/skeleton-init-openrc/skeleton/etc/init.d/sysv-rcs
+ create mode 120000 package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
 
-diff --git a/package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch b/package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch
-new file mode 100644
-index 0000000000..da8cf042c6
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 6d63c46a5b..dc335973c7 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -338,7 +338,9 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+ 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
+ 		$($(PKG)_INSTALL_INIT_SYSV))
+ 	$(if $(BR2_INIT_OPENRC), \
+-		$($(PKG)_INSTALL_INIT_OPENRC))
++		$(if $($(PKG)_INSTALL_INIT_OPENRC), \
++			$($(PKG)_INSTALL_INIT_OPENRC), \
++			$($(PKG)_INSTALL_INIT_SYSV)))
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+ 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
+diff --git a/package/skeleton-init-openrc/skeleton/etc/init.d/sysv-rcs b/package/skeleton-init-openrc/skeleton/etc/init.d/sysv-rcs
+new file mode 100755
+index 0000000000..9cbfe354d1
 --- /dev/null
-+++ b/package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch
-@@ -0,0 +1,66 @@
-+From ec1a0c8fa2e7a7c6cf70f68bdabc07cbb1a567cf Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-+Date: Sun, 5 May 2019 23:43:40 +0200
-+Subject: [PATCH] init.d/sysctl.in: add support for busybox sysctl
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
++++ b/package/skeleton-init-openrc/skeleton/etc/init.d/sysv-rcs
+@@ -0,0 +1,53 @@
++#!/sbin/openrc-run
 +
-+Busybox version of sysctl does not support --system argument,
-+and files need to be loaded one by one. This patch adds code
-+to recognize busybox sysctl and execute proper function based
-+on that.
++description="start or stop sysv rc[S,K] scripts"
 +
-+Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
-+---
-+ init.d/sysctl.in | 27 ++++++++++++++++++++++++++-
-+ 1 file changed, 26 insertions(+), 1 deletion(-)
++depend() {
++	after local
++}
 +
-+diff --git a/init.d/sysctl.in b/init.d/sysctl.in
-+index e49f4db2..a705b3d4 100644
-+--- a/init.d/sysctl.in
-++++ b/init.d/sysctl.in
-+@@ -37,6 +37,23 @@ BSD_sysctl()
-+ 	return $retval
-+ }
-+ 
-++Busybox_sysctl()
-++{
-++	local quiet
-++	yesno $rc_verbose || quiet=-q
-++
-++	eindent
-++	for conf in /etc/sysctl.conf /etc/sysctl.d/*.conf; do
-++		if [ -r "$conf" ]; then
-++			vebegin "applying $conf"
-++			sysctl $quiet -p "$conf" || retval=1
-++			veend $retval
-++		fi
-++	done
-++	eoutdent
-++	return $retval
-++}
-++
-+ Linux_sysctl()
-+ {
-+ 	local quiet
-+@@ -52,7 +69,15 @@ start()
-+ 	ebegin "Configuring kernel parameters"
-+ 	case "$RC_UNAME" in
-+ 	*BSD|GNU) BSD_sysctl; rc=$? ;;
-+-	Linux) Linux_sysctl; rc=$? ;;
-++	Linux)
-++		sysctl -h > /dev/null 2>&1
-++		if [ $? -ne 0 ]; then
-++			# busybox version of sysctl does not recognize -h option
-++			Busybox_sysctl
-++		else
-++			Linux_sysctl
-++		fi
-++		rc=$? ;;
-+ 	esac
-+ 	eend $rc "Unable to configure some kernel parameters"
-+ }
-+-- 
-+2.18.1
++start() {
++	einfo "Starting sysv rc scripts"
++	for i in /etc/init.d/S??* ; do
++		# Ignore dangling symlinks (if any).
++		[ ! -f "$i" ] && continue
 +
++		case "$i" in
++		*.sh)
++			# Source shell script for speed.
++			(
++				trap - INT QUIT TSTP
++				set start
++				. $i
++			)
++			;;
++		*)
++			# No sh extension, so fork subprocess.
++			$i start
++			;;
++		esac
++	done
++}
++
++stop() {
++	einfo "Stopping sysv rc scripts"
++	for i in /etc/init.d/S??* ; do
++		# Ignore dangling symlinks (if any).
++		[ ! -f "$i" ] && continue
++
++		case "$i" in
++		*.sh)
++			# Source shell script for speed.
++			(
++				trap - INT QUIT TSTP
++				set stop
++				. $i
++			)
++			;;
++		*)
++			# No sh extension, so fork subprocess.
++			$i stop
++			;;
++		esac
++	done
++}
+diff --git a/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs b/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
+new file mode 120000
+index 0000000000..ef5e00823c
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
+@@ -0,0 +1 @@
++/etc/init.d/sysv-rcs
+\ No newline at end of file
 -- 
 2.18.1
