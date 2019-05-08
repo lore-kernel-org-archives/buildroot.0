@@ -1,63 +1,76 @@
 From: Romain Naour <romain.naour@gmail.com>
-Date: Wed,  8 May 2019 17:07:20 +0200
-Subject: [Buildroot] [PATCH v2 15/15] package/gcc: enable gcc 9.1 for ork1
- (openrisc)
+Date: Wed,  8 May 2019 17:07:19 +0200
+Subject: [Buildroot] [PATCH v2 14/15] arch/arm: add two new non-cortex-based
+ armv8.2a cores
 In-Reply-To: <20190508150720.27946-1-romain.naour@gmail.com>
 References: <20190508150720.27946-1-romain.naour@gmail.com>
-Message-ID: <20190508150720.27946-16-romain.naour@gmail.com>
+Message-ID: <20190508150720.27946-15-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-openrisc support has been added with gcc 9.1.
-Keep for now the old gcc 5 fork for ork1.
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-https://gcc.gnu.org/gcc-9/changes.html
+The Neoverse N1 CPU was supported in GCC earlier through the codename Ares [1].
 
-Tested using qemu_or1k_defconfig.
+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=37cf0ddecfd1eb5c6852a44135af5a92e5103931
 
+Build tested:
+https://gitlab.com/kubu93/buildroot/pipelines/60318953
+
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Romain: rename BR2_ares to BR2_neoverse_n1]
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gcc/Config.in.host | 2 --
- package/gcc/gcc.mk         | 4 ++--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+v2: add neoverse-e1 (Yann)
+    reorder alphabetically after renaming ares to neoverse-n1.
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 1d3af73e69..beea1f6cdb 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -71,8 +71,6 @@ config BR2_GCC_VERSION_8_X
+Note: The Neoverse E1 CPU needs at least binutils 2.32 to support Speculative Store
+Bypass Safe instruction (SSBS) which is part of ARMv8.5-A architecture extensions.
+Postpone the support for this new ARM core.
+See: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=104fefeebb544b7745bb353b63110afa46119647
+---
+ arch/Config.in.arm | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 100a28e997..b1d9173b84 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -512,6 +512,22 @@ config BR2_cortex_a76_a55
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
++config BR2_neoverse_n1
++	bool "neoverse-N1 (alias ares)"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
++config BR2_tsv110
++	bool "tsv110"
++	depends on BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
  
- config BR2_GCC_VERSION_9_X
- 	bool "gcc 9.x"
--	# Broken or unsupported architectures
--	depends on !BR2_or1k
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 
- endchoice
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index 5901624ea5..e07a453ecc 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -13,7 +13,7 @@ GCC_VERSION = $(call qstrip,$(BR2_GCC_VERSION))
- ifeq ($(BR2_GCC_VERSION_ARC),y)
- GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
- GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
--else ifeq ($(BR2_or1k),y)
-+else ifeq ($(BR2_GCC_VERSION_OR1K),y)
- GCC_SITE = $(call github,openrisc,or1k-gcc,$(GCC_VERSION))
- GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
- else
-@@ -177,7 +177,7 @@ else
- HOST_GCC_COMMON_CONF_OPTS += --without-isl --without-cloog
- endif
- 
--ifeq ($(BR2_arc)$(BR2_or1k),y)
-+ifeq ($(BR2_arc)$(BR2_GCC_VERSION_OR1K),y)
- HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
- endif
+ comment "armv8.4a cores"
+ config BR2_saphira
+@@ -877,6 +893,8 @@ config BR2_GCC_TARGET_CPU
+ 	default "cortex-a75.cortex-a55"	if BR2_cortex_a75_a55
+ 	default "cortex-a76"	if BR2_cortex_a76
+ 	default "cortex-a76.cortex-a55"	if BR2_cortex_a76_a55
++	default "neoverse-n1"	if BR2_neoverse_n1
++	default "tsv110"	if BR2_tsv110
+ 	# armv8.4a
+ 	default "saphira"	if BR2_saphira
  
 -- 
 2.14.5
