@@ -1,145 +1,70 @@
-From: Norbert Lange <nolange79@gmail.com>
-Date: Wed,  8 May 2019 13:02:27 +0200
-Subject: [Buildroot] [PATCH v2 3/4] prepare build infrastructure to pick up
- installed ninja tool
-In-Reply-To: <20190508110228.25921-1-nolange79@gmail.com>
-References: <20190508110228.25921-1-nolange79@gmail.com>
-Message-ID: <20190508110228.25921-4-nolange79@gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 8 May 2019 11:12:20 +0000
+Subject: [Buildroot] [PATCH 01/15] package/glibc/arc: fix build issue
+ with gcc-9.1
+In-Reply-To: <20190506194049.GA6887@scaer>
+References: <20190506183011.4856-1-romain.naour@gmail.com>
+ <20190506183011.4856-2-romain.naour@gmail.com> <20190506194049.GA6887@scaer>
+Message-ID: <CY4PR1201MB0120841C0FE2B612DCA380BCA1320@CY4PR1201MB0120.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Norbert Lange <norbert.lange@andritz.com>
+Hi Romain, Yann, all,
 
-The only notable use is as dependency from meson,
-since using the system installed meson is not officially
-supported, netiher is using a system installed ninja.
+> -----Original Message-----
+> From: Yann E. MORIN <yann.morin.1998@gmail.com> On Behalf Of Yann E. MORIN
+> Sent: Monday, May 6, 2019 10:41 PM
+> To: Romain Naour <romain.naour@gmail.com>
+> Cc: buildroot at buildroot.org; Evgeniy Didin <didin@synopsys.com>; Alexey Brodkin
+> <abrodkin@synopsys.com>; Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
+> Subject: Re: [Buildroot] [PATCH 01/15] package/glibc/arc: fix build issue with gcc-9.1
+> 
+> Romain, All,
+> 
+> On 2019-05-06 20:29 +0200, Romain Naour spake thusly:
+> > Backport from upstream [1] to fix build issue with glibc arc-2018.09-release
+> > (based on glibc 2.28) and gcc 9.1 [2]]
+> >
+> > Using glibc arc-2.29-2019.02.08 or the upcoming arc-2019.03 release include
+> > this patch.
+> 
+> So, here is a small summary of my discussion with Romain on IRC:
+> 
+>   - this patch touches mostly x86_64 files, so I was puzzled why it had
+>     to be applied to the arc fork;
+> 
+>   - however, that patch also touxphces teo generic headers; in there the
+>     new __attribute_copy__() macro is defined *and* used to complement
+>     existing attribute-related macros.
+> 
+> So, it is not much the x86_64 part we're interested in, but the generic
+> two headers, which changes percolate to the various functions via the
+> various attribute macros...
+> 
+> So, for other reviewers: just ignore the x86_64 part.
+> 
+> Romain: what do you think about this: remove those x86_64 files from the
+> patch, and update the soh-line as... (see below)
 
-a user can force the use of the system installed ninja with
+First of all thanks a lot for fixing stuff for ARC.
+Also pls pardon my late reply - there were long May holidays Russia
+and a lot of people including myself were enjoying anything but work :)
 
-   make graph-depends BR2_NINJA_VERSION_MIN=0
+Now given we're about to cut ARC 2019.03 release of our tools which
+among other things has Glibc rebased on upstream 2.29 version
+this particular fix won't be required at all.
 
-Signed-off-by: Norbert Lange <nolange79@gmail.com>
----
- package/meson/meson.mk                   |  1 -
- package/pkg-meson.mk                     |  2 +-
- support/dependencies/check-host-meson.mk |  4 +--
- support/dependencies/check-host-ninja.mk | 13 +++++++
- support/dependencies/check-host-ninja.sh | 45 ++++++++++++++++++++++++
- 5 files changed, 61 insertions(+), 4 deletions(-)
- create mode 100644 support/dependencies/check-host-ninja.mk
- create mode 100755 support/dependencies/check-host-ninja.sh
+So let us post ARC toolchain bump to 2019.03-RC1 ASAP.
 
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 12cadb2856..e0585d228c 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -10,7 +10,6 @@ MESON_LICENSE = Apache-2.0
- MESON_LICENSE_FILES = COPYING
- MESON_SETUP_TYPE = setuptools
- 
--HOST_MESON_DEPENDENCIES = host-ninja
- HOST_MESON_NEEDS_HOST_PYTHON = python3
- 
- $(eval $(host-python-package))
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 157ccde446..6adda743e4 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -26,7 +26,7 @@
- # $HOME/.local/lib/python3.x/site-packages
- #
- MESON		= PYTHONNOUSERSITE=y $(BR2_MESON)
--NINJA		= PYTHONNOUSERSITE=y $(HOST_DIR)/bin/ninja
-+NINJA		= PYTHONNOUSERSITE=y $(BR2_NINJA)
- NINJA_OPTS	= $(if $(VERBOSE),-v) -j$(PARALLEL_JOBS)
- 
- ################################################################################
-diff --git a/support/dependencies/check-host-meson.mk b/support/dependencies/check-host-meson.mk
-index fbe0b7d7aa..fb07bea792 100644
---- a/support/dependencies/check-host-meson.mk
-+++ b/support/dependencies/check-host-meson.mk
-@@ -9,7 +9,7 @@ BR2_MESON ?= $(call suitable-host-package,meson,\
- 	$(BR2_MESON_VERSION_MIN) $(BR2_MESON_CANDIDATES))
- ifeq ($(BR2_MESON),)
- BR2_MESON = $(HOST_DIR)/bin/meson
--BR2_MESON_HOST_DEPENDENCY = host-meson host-ninja
-+BR2_MESON_HOST_DEPENDENCY = host-meson $(BR2_NINJA_HOST_DEPENDENCY)
- else
--BR2_MESON_HOST_DEPENDENCY = host-ninja
-+BR2_MESON_HOST_DEPENDENCY = $(BR2_NINJA_HOST_DEPENDENCY)
- endif
-diff --git a/support/dependencies/check-host-ninja.mk b/support/dependencies/check-host-ninja.mk
-new file mode 100644
-index 0000000000..09ee45ef1e
---- /dev/null
-+++ b/support/dependencies/check-host-ninja.mk
-@@ -0,0 +1,13 @@
-+# Set this to a valid version like 1.8.2, depending on the highest
-+# minimum version required by any of the packages bundled in Buildroot.
-+# An empty version will never match a system executable
-+#
-+# BR2_NINJA_VERSION_MIN = 1.8.2
-+
-+BR2_NINJA_CANDIDATES ?= ninja
-+BR2_NINJA ?= $(call suitable-host-package,ninja,\
-+	$(BR2_NINJA_VERSION_MIN) $(BR2_NINJA_CANDIDATES))
-+ifeq ($(BR2_NINJA),)
-+BR2_NINJA = $(HOST_DIR)/bin/ninja
-+BR2_NINJA_HOST_DEPENDENCY = host-ninja
-+endif
-diff --git a/support/dependencies/check-host-ninja.sh b/support/dependencies/check-host-ninja.sh
-new file mode 100755
-index 0000000000..62746822cc
---- /dev/null
-+++ b/support/dependencies/check-host-ninja.sh
-@@ -0,0 +1,45 @@
-+#!/bin/sh
-+
-+# prevent shift error
-+[ $# -ge 2 ] && [ -n "$1" ] || exit 1
-+
-+split_version() {
-+    local VARPREFIX
-+    local NUMBERS
-+    local major
-+    local minor
-+
-+    VARPREFIX=$1
-+    NUMBERS=$2
-+
-+    major=${NUMBERS%%\.*}
-+    NUMBERS=${NUMBERS#$major}; NUMBERS=${NUMBERS#\.}
-+    minor=${NUMBERS%%\.*}
-+    NUMBERS=${NUMBERS#$minor}; NUMBERS=${NUMBERS#\.}
-+
-+    # ensure that missing values are 0
-+    eval "${VARPREFIX}_major=\$major; ${VARPREFIX}_minor=\$((minor + 0)); ${VARPREFIX}_bugfix=\$((NUMBERS + 0));"
-+}
-+
-+split_version req "$1"
-+
-+shift
-+
-+for candidate; do
-+
-+    # Try to locate the candidate. Discard it if not located.
-+    tool=$(which "${candidate}" 2>/dev/null)
-+    [ -n "${tool}" ] || continue
-+
-+    split_version cur "$("${tool}" --version)"
-+
-+    [ -n "${cur_major}" -a "${cur_major}" -ge "${req_major}" ] || continue
-+    [ "${cur_major}" -gt "${req_major}" ] || [ "${cur_minor}" -ge "${req_minor}" ] || continue
-+    [ "${cur_minor}" -gt "${req_minor}" ] || [ "${cur_bugfix}" -ge "${req_bugfix}" ] || continue
-+
-+    echo "${tool}"
-+    exit
-+done
-+
-+# echo nothing: no suitable tool found
-+exit 1
--- 
-2.20.1
+Also with GCC 9.1 out of the door we have pretty much all our changes
+right in upstream release tarball so hopefully even ARC fork won't
+be that important any longer and we'll try to use upstream
+GCC by default.
+
+-Alexey
+
+P.S. Romain I'm really sorry for letting you do that extra yet not very
+     useful work!
