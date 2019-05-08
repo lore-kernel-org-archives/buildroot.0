@@ -1,56 +1,66 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed,  8 May 2019 19:34:27 +0200
-Subject: [Buildroot] [PATCH v1] utils/check-package: warn about utf-8
- characters in .mk files
-Message-ID: <20190508173427.8612-1-ps.report@gmx.net>
+Date: Wed, 8 May 2019 19:43:10 +0200
+Subject: [Buildroot] [PATCH v1 01/28] package/assimp: replace utf-8
+ quote by ascii single quote
+In-Reply-To: <87ef59l84u.fsf@dell.be.48ers.dk>
+References: <20190507203548.10337-1-ps.report@gmx.net>
+ <20190507225224.6cde6018@windsurf>
+ <87v9ymkmgh.fsf@dell.be.48ers.dk>
+ <d3226f64-aa3e-ebd0-a5fb-082f901eda38@mind.be>
+ <87ef59l84u.fsf@dell.be.48ers.dk>
+Message-ID: <20190508194310.23789f8e@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
----
-Note: is_ascii taken from one of the stackoverflow suggestions ([1])
+Hello *,
 
-[1] https://stackoverflow.com/questions/196345/how-to-check-if-a-string-in-python-is-in-ascii
----
- utils/checkpackagelib/lib.py    | 13 +++++++++++++
- utils/checkpackagelib/lib_mk.py |  1 +
- 2 files changed, 14 insertions(+)
+On Wed, 08 May 2019 09:26:09 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
 
-diff --git a/utils/checkpackagelib/lib.py b/utils/checkpackagelib/lib.py
-index 6afe1aabce..c65a2ed939 100644
---- a/utils/checkpackagelib/lib.py
-+++ b/utils/checkpackagelib/lib.py
-@@ -52,3 +52,16 @@ class TrailingSpace(_CheckFunction):
-             return ["{}:{}: line contains trailing whitespace"
-                     .format(self.filename, lineno),
-                     text]
-+
-+class Utf8Characters(_CheckFunction):
-+    def is_ascii(self, s):
-+        try:
-+            return all(ord(c) < 128 for c in s)
-+        except TypeError:
-+            return False
-+
-+    def check_line(self, lineno, text):
-+        if not self.is_ascii(text):
-+            return ["{}:{}: line contains UTF-8 characters"
-+                    .format(self.filename, lineno),
-+                    text]
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 00efeb7fb2..9e9a045776 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -11,6 +11,7 @@ from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
- from checkpackagelib.lib import EmptyLastLine          # noqa: F401
- from checkpackagelib.lib import NewlineAtEof           # noqa: F401
- from checkpackagelib.lib import TrailingSpace          # noqa: F401
-+from checkpackagelib.lib import Utf8Characters         # noqa: F401
+> >>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+>
+>  > On 07/05/2019 23:02, Peter Korsgaard wrote:
+>  >>>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>  >>
+>  >> > Hello Peter,
+>  >> > On Tue,  7 May 2019 22:35:21 +0200
+>  >> > Peter Seiderer <ps.report@gmx.net> wrote:
+>  >>
+>  >> >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+>  >> >> ---
+>  >> >> package/assimp/assimp.mk | 2 +-
+>  >> >> 1 file changed, 1 insertion(+), 1 deletion(-)
+>  >>
+>  >> > Thanks for all those patches. I think it would be useful to extend the
+>  >> > check-package logic to check that such UTF-8 quotes/spaces don't get
+>  >> > re-added.
+>  >>
+>  >> Agreed!
+>
+>  >  I think in Config.in, *.mk and *.hash we should never need any non-ascii
+>  > character, so that check would be easy.
 
- # used in more than one check
- start_conditional = ["ifdef", "ifeq", "ifndef", "ifneq"]
---
-2.21.0
+First draft, checking only the .mk files, just sent out, see [1]...
+
+>
+> I am not so sure about Config.in. If you look at:
+>
+> package/intel-mediasdk/Config.in
+> package/imagemagick/Config.in
+> package/zeromq/Config.in
+> package/directfb/Config.in
+>
+> They have UTF-8 copyright characters, a funny e in bezier and the OE in
+> zeromq.
+>
+
+- do not check (and keep as is)
+- whitelist for some special characters (per file?)
+- convert to plain ascii, e.g: (R), bezier, zeromq (without the specail zero)...
+
+Regards,
+Peter
+
+[1] https://patchwork.ozlabs.org/patch/1097166/
