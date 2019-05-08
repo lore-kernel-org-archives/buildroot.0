@@ -1,57 +1,135 @@
 From: Guo Ren <guoren@kernel.org>
-Date: Wed, 8 May 2019 10:04:19 +0800
-Subject: [Buildroot] [PATCH] support/check-kernel-headers: Fixup
- couldn't compile linux rc version
-In-Reply-To: <cfa74b88-11af-ba38-3158-325d8fc2bc48@mind.be>
-References: <1557222665-9498-1-git-send-email-guoren@kernel.org>
- <cfa74b88-11af-ba38-3158-325d8fc2bc48@mind.be>
-Message-ID: <20190508020419.GA20613@guoren-Inspiron-7460>
+Date: Wed, 8 May 2019 10:31:04 +0800
+Subject: [Buildroot] [PATCH 1/3] arch/csky: Add ck860 and vdsp compiler
+ options
+In-Reply-To: <20190507140150.7d970503@windsurf>
+References: <1557222442-8484-1-git-send-email-guoren@kernel.org>
+ <20190507140150.7d970503@windsurf>
+Message-ID: <20190508023104.GA22555@guoren-Inspiron-7460>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thx Arnout,
+Thx Thomas,
 
-On Wed, May 08, 2019 at 12:24:02AM +0200, Arnout Vandecappelle wrote:
->  Hi Guo,
+On Tue, May 07, 2019 at 02:01:50PM +0200, Thomas Petazzoni wrote:
+> Hello Guo,
 > 
-> On 07/05/2019 11:51, guoren at kernel.org wrote:
+> Thanks for this new csky related contribution. See below some comments.
+> 
+> On Tue,  7 May 2019 17:47:20 +0800
+> guoren at kernel.org wrote:
+> 
 > > From: Guo Ren <ren_guo@c-sky.com>
 > > 
-> > Sometimes we want to try newest kernel rc version, but the
-> > check-kernel-headers will prevent it.
+> > The ck860 is C-SKY abiv2 cpu series and it could support SMP and vdsp
+> > instructions set. Add the compiler options for them.
+> > 
+> > Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+> > ---
+> >  arch/Config.in.csky | 33 ++++++++++++++++++++-------------
+> >  1 file changed, 20 insertions(+), 13 deletions(-)
+> > 
+> > diff --git a/arch/Config.in.csky b/arch/Config.in.csky
+> > index e88e4e2..bbff600 100644
+> > --- a/arch/Config.in.csky
+> > +++ b/arch/Config.in.csky
+> > @@ -13,19 +13,26 @@ config BR2_ck807
+> >  config BR2_ck810
+> >  	bool "ck810"
+> >  
+> > +config BR2_ck860
+> > +	bool "ck860"
+> > +
+> >  endchoice
+> >  
+> >  config BR2_CSKY_FPU
+> >  	bool "Enable FPU coprocessor"
+> > -	depends on BR2_ck810 || BR2_ck807
+> > +	depends on BR2_ck807 || BR2_ck810 || BR2_ck860
+> >  	help
+> >  	  You can say N here if your C-SKY CPU doesn't have a
+> >  	  Floating-Point Coprocessor or if you don't need FPU support
+> >  	  for your user-space programs.
+> >  
+> > -config BR2_CSKY_DSP
+> > -	bool "Enable DSP enhanced instructions"
+> > -	depends on BR2_ck810 || BR2_ck807
 > 
->  It would indeed be good if we would be able to use newer kernel headers without
-> requiring an update of Buildroot.
-> 
-> > In package/linux-headers we
-> > use BR2_TOOLCHAIN_HEADERS_AT_LEAST for checking, I think AT_LEAST means
-> > "<" not "!=".
-> 
->  However, I think we should not treat it as "at least" in general, but only for
-> the "newer" case. In other words, I think we should add
-> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_NEWER (and the equivalent in
-> toolchain-external) which selects BR2_TOOLCHAIN_HEADERS_NEWER, and make the
-> check > 5.0 (rather than == something) in that case.
-> 
->  It's a bigger change though.
+> Why is this option being removed ? This is not explained in the commit
+> log.
+In fact we haven't used BR2_CSKY_DSP in buildroot, and we change it to
+VDSP instead. I'll add commnet in commit log.
 
-In linux-headers.mk:
+> 
+> > +config BR2_CSKY_VDSP
+> > +	bool "Enable VDSP 3.0 enhanced instructions Co-processor"
+> > +	depends on BR2_ck860
+> > +
+> > +config BR2_GCC_TARGET_FLOAT_ABI
+> > +	default "soft"		if !BR2_CSKY_FPU
+> > +	default "hard"		if BR2_CSKY_FPU
+> 
+> This should be in a separate patch, it's not a change that is directly
+> related.
+Ok
 
-ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL)$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL)$(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
-define LINUX_HEADERS_CHECK_VERSION
-	$(call check_kernel_headers_version,\
-		$(STAGING_DIR),\
-		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)))
-endef
-LINUX_HEADERS_POST_INSTALL_STAGING_HOOKS += LINUX_HEADERS_CHECK_VERSION
-endif
-
-If we use BR2_KERNEL_HEADERS_AS_KERNEL, I think it's no necessary to
-check _AT_LEAST. Because user has specified the linux version and he want
-the version without more checking.
+> 
+> >  config BR2_ARCH
+> >  	default "csky"
+> > @@ -34,15 +41,15 @@ config BR2_ENDIAN
+> >  	default "LITTLE"
+> >  
+> >  config BR2_GCC_TARGET_CPU
+> > -	default "ck610"		if (BR2_ck610 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> > -	default "ck807"		if (BR2_ck807 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> > -	default "ck807e"	if (BR2_ck807 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+> > -	default "ck807f"	if (BR2_ck807 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> > -	default "ck807ef"	if (BR2_ck807 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+> > -	default "ck810"		if (BR2_ck810 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> > -	default "ck810e"	if (BR2_ck810 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+> > -	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
+> > -	default "ck810ef"	if (BR2_ck810 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+> > +	default "ck610"		if (BR2_ck610 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
+> > +	default "ck807"		if (BR2_ck807 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
+> > +	default "ck807f"	if (BR2_ck807 &&  BR2_CSKY_FPU && !BR2_CSKY_VDSP)
+> > +	default "ck810"		if (BR2_ck810 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
+> > +	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_VDSP)
+> > +	default "ck860"		if (BR2_ck860 && !BR2_CSKY_FPU && !BR2_CSKY_VDSP)
+> > +	default "ck860f"	if (BR2_ck860 &&  BR2_CSKY_FPU && !BR2_CSKY_VDSP)
+> > +	default "ck860v"	if (BR2_ck860 && !BR2_CSKY_FPU &&  BR2_CSKY_VDSP)
+> > +	default "ck860fv"	if (BR2_ck860 &&  BR2_CSKY_FPU &&  BR2_CSKY_VDSP)
+> 
+> Perhaps this is becoming too much, and we should adopt a solution
+> similar to the one in arch/arch.mk.riscv. I.e, drop the
+> BR2_GCC_TARGET_CPU definition from arch/Config.in.csky, and add a file
+> arch/arch.mk.csky that contains:
+> 
+> ifeq ($(BR2_csky),y)
+> 
+> ifeq ($(BR2_ck610),y)
+> GCC_TARGET_CPU := ck610
+> else ifeq ($(BR2_ck807),y)
+> GCC_TARGET_CPU := ck807
+> else ifeq ($(BR2_ck810),y)
+> GCC_TARGET_CPU := ck810
+> else ifeq ($(BR2_ck860),y)
+> GCC_TARGET_CPU := ck860
+> endif
+> 
+> ifeq ($(BR2_CSKY_FPU),y)
+> GCC_TARGET_CPU := $(GCC_TARGET_CPU)f
+> endif
+> 
+> ifeq ($(BR2_CSKY_VDSP),y)
+> GCC_TARGET_CPU := $(GCC_TARGET_CPU)v
+> endif
+> 
+> endif
+> 
+Ok.
 
 Best Regards
  Guo Ren
