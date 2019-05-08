@@ -1,92 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 8 May 2019 01:32:17 +0200
-Subject: [Buildroot] Location of external firmware
-In-Reply-To: <19174340.20190507102524@tele2.se>
-References: <509774653.20190506161444@tele2.se>
- <37f920d1-be43-800f-4422-7f1217cc4b82@mind.be>
- <19174340.20190507102524@tele2.se>
-Message-ID: <979d65fd-8b41-980a-ddd3-efedbbf27310@mind.be>
+From: Guo Ren <guoren@kernel.org>
+Date: Wed, 8 May 2019 10:04:19 +0800
+Subject: [Buildroot] [PATCH] support/check-kernel-headers: Fixup
+ couldn't compile linux rc version
+In-Reply-To: <cfa74b88-11af-ba38-3158-325d8fc2bc48@mind.be>
+References: <1557222665-9498-1-git-send-email-guoren@kernel.org>
+ <cfa74b88-11af-ba38-3158-325d8fc2bc48@mind.be>
+Message-ID: <20190508020419.GA20613@guoren-Inspiron-7460>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Thx Arnout,
 
+On Wed, May 08, 2019 at 12:24:02AM +0200, Arnout Vandecappelle wrote:
+>  Hi Guo,
+> 
+> On 07/05/2019 11:51, guoren at kernel.org wrote:
+> > From: Guo Ren <ren_guo@c-sky.com>
+> > 
+> > Sometimes we want to try newest kernel rc version, but the
+> > check-kernel-headers will prevent it.
+> 
+>  It would indeed be good if we would be able to use newer kernel headers without
+> requiring an update of Buildroot.
+> 
+> > In package/linux-headers we
+> > use BR2_TOOLCHAIN_HEADERS_AT_LEAST for checking, I think AT_LEAST means
+> > "<" not "!=".
+> 
+>  However, I think we should not treat it as "at least" in general, but only for
+> the "newer" case. In other words, I think we should add
+> BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_NEWER (and the equivalent in
+> toolchain-external) which selects BR2_TOOLCHAIN_HEADERS_NEWER, and make the
+> check > 5.0 (rather than == something) in that case.
+> 
+>  It's a bigger change though.
 
-On 07/05/2019 10:25, Mats Jansson wrote:
-> 
-> AV> On 06/05/2019 16:14, Mats Jansson wrote:
->>> Hi,
->>>
->>> I have an external firmware to be loaed by a driver. The normal way is
->>> to put the firmware in /lib/firmware. But since it needs to
->>> be loaded during boot and udev is not intitialised at that point I
->>> have found out that I need to build it into the kernel.
->>>
->>> I want to put this file in my buildroot-external-tree just like I do
->>> with patches. Any idea on how to do it?
->>> I have tried two different approaches.
->>> 1. Creating a patch, but then I get the error message that "git binary diffs are not
->>> supported."
-> 
-> AV>  That will indeed not be possible, unfortunately.
-> 
->>> 2. setting CONFIG_EXTRA_FIRMWARE_DIR to $(BR2_EXTERNAL)/firmware but I
->>> get the error message "BR2_EXTERNAL: command does not exist"
-> 
-> AV>  Looks like you're trying to do this from the shell; $(...) in shell means
-> AV> executing a subcommand, which is not what you want here.
-> 
-> AV>  In addtion, $(BR2_EXTERNAL) should no longer be used (since 2016.11). Instead,
-> AV> each external has a name, and you should use
-> AV> $(BR2_EXTERNAL_<name>_PATH). This
-> AV> variable is exported, so you can use it in your linux configuration file.
-> 
-> I am just letting buildroot handle things, by running make in
-> buildroot. So I suppose it is running in a shell.
-> 
-> Setting
-> CONFIG_EXTRA_FIRMWARE="htc9271.fw"
-> CONFIG_EXTRA_FIRMWARE_DIR="$(BR2_EXTERNAL_e100_PATH)/firmware"
-> also gets me the message "command does not exist".
+In linux-headers.mk:
 
- Yeah, auto.conf gives that message but I don't think it's very relevant, is it?
+ifeq ($(BR2_KERNEL_HEADERS_VERSION)$(BR2_KERNEL_HEADERS_AS_KERNEL)$(BR2_KERNEL_HEADERS_CUSTOM_TARBALL)$(BR2_KERNEL_HEADERS_CUSTOM_GIT),y)
+define LINUX_HEADERS_CHECK_VERSION
+	$(call check_kernel_headers_version,\
+		$(STAGING_DIR),\
+		$(call qstrip,$(BR2_TOOLCHAIN_HEADERS_AT_LEAST)))
+endef
+LINUX_HEADERS_POST_INSTALL_STAGING_HOOKS += LINUX_HEADERS_CHECK_VERSION
+endif
 
- If it really is a problem, you can use ${BR2_EXTERNAL_e100_PATH} instead (i.e.
-curly braces instead of round brackets). This is used both by shell and make as
-a variable name delimiter.
+If we use BR2_KERNEL_HEADERS_AS_KERNEL, I think it's no necessary to
+check _AT_LEAST. Because user has specified the linux version and he want
+the version without more checking.
 
- Regards,
- Arnout
-
-> 
-> Setting it to
-> CONFIG_EXTRA_FIRMWARE="htc9271.fw"
-> CONFIG_EXTRA_FIRMWARE_DIR="$BR2_EXTERNAL_e100_PATH/firmware"
-> gives me
-> *** No rule to create the target "R2_EXTERNAL_e100_PATH/firmware/htc_9271.fw?, needed by ?firmware/htc_9271.fw.gen.o?.  Stopping.
-> 
-> The use of $(BR2_EXTERNAL_e100_PATH) works in other parts of the configuration, eg
-> for patches. But maybe it is not possible to use the BR2_EXTERNAL_e100_PATH variable
-> when building the kernel.config?
-> 
-> AV>  Regards,
-> AV>  Arnout
-> 
->>>
->>> Anyone have a good idea on how to solve this?
->>>
->>> Best regards
->>> Mats                          mailto:matsmanhav at tele2.se
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>
-> AV> _______________________________________________
-> AV> buildroot mailing list
-> AV> buildroot at busybox.net
-> AV> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+Best Regards
+ Guo Ren
