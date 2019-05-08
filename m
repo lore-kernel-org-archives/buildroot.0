@@ -1,93 +1,82 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Wed, 8 May 2019 18:21:28 +0530
-Subject: [Buildroot] [GSoC 2019] Introduction Email - Atharva Lele
-In-Reply-To: <20190508122104.GC31209@scaer>
-References: <CABM+sgrntFNSi6=fi3SP_02qqBQPuf+X=LbeRwv+6Dd9sjX4WQ@mail.gmail.com>
- <20190402181929.GJ2587@scaer>
- <CABM+sgrL3SY4SfBhn2f6VGCguQM51xif3x1_cck57FB2eULrug@mail.gmail.com>
- <CABM+sgp1B+S7n=R1picPK5RN-CdxZ_BaRSKDTPdkXYiBkpVkcA@mail.gmail.com>
- <CABM+sgo1dxV-SzpMn0VS-R0zJm5A2cj2ycH8fOSOLEOCd7FFtw@mail.gmail.com>
- <20190502195713.GA17072@scaer>
- <CABM+sgoVC9SK4_x8K+Vd0B+G9i2HAQ7983OuD1psdieSVFzGFA@mail.gmail.com>
- <20190507211740.GI6887@scaer> <e3cfef58-e6c4-4af0-60c6-88aa65231dd7@mind.be>
- <CABM+sgryAAcEjpJiBAGxQ3pyDLGiDjavoxN0X4o8pdfqz_da9g@mail.gmail.com>
- <20190508122104.GC31209@scaer>
-Message-ID: <CABM+sgpvG2jH9mzqh7eVd4XB0gA7SNbD3KKpmedRUkzdb+8veQ@mail.gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 8 May 2019 13:19:00 +0000
+Subject: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
+In-Reply-To: <20190427175603.GA27252@scaer>
+References: <20190418093902.41835-1-abrodkin@synopsys.com>
+ <20190418114336.61f3f404@windsurf>
+ <ea5f11a1-a7cb-4cee-dfda-64d55d550d83@mind.be>
+ <CY4PR1201MB01207D3F0C5E488EACEBA5DAA13E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+ <ed9e89cc-3f7e-1a05-0d1e-6c6da6a3eb38@mind.be> <20190427175603.GA27252@scaer>
+Message-ID: <CY4PR1201MB012025B382EBDE4883CA80B8A1320@CY4PR1201MB0120.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->  Let's all speak UTC (or GMT) for the sake of synchronizing; always
-> switching between timezones is error-prone.
+Hi Yann, all,
 
-Agreed.
-
-> What about creating a page on the elinux.org wiki, which is where we
-> already have the Buildroot wiki pages, to track all your GSoC-related
-> activity?
-
-I like this idea. In the future it'll also help other projects which are
-trying
-to implement Reproducible Builds and might be running into issues or
-need some guidance.
-
-Regards,
-Atharva Lele
-
-
-On Wed, May 8, 2019 at 5:51 PM Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
-
-> Atharva, All,
->
-> On 2019-05-08 17:04 +0530, Atharva Lele spake thusly:
-> > I read both of your replies.
-> > > We'll see to schedule a longer meeting, probably hang-out or something,
-> > > on Sat or Sun, so we can debrief more in depth.
+> -----Original Message-----
+> From: Yann E. MORIN <yann.morin.1998@gmail.com> On Behalf Of Yann E. MORIN
+> Sent: Saturday, April 27, 2019 8:56 PM
+> To: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Alexey Brodkin <abrodkin@synopsys.com>; Thomas Petazzoni <thomas.petazzoni@bootlin.com>;
+> buildroot at busybox.net; ARC Buildroot mailing list <arc-buildroot@synopsys.com>
+> Subject: Re: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
+> 
+> Arnout, Alexey, All,
+> 
+> On 2019-04-27 19:39 +0200, Arnout Vandecappelle spake thusly:
+> > On 26/04/2019 08:30, Alexey Brodkin wrote:
+> [--SNIP--]
+> > >>> The change is OK, but I believe that if -matomic is really a
+> > >>> core/important CFLAGS on ARC, then we should ideally pass it through
+> > >>> the toolchain wrapper, so that we are sure it is always passed.
+> > >>> Arnout, what do you think?
+> > >>  +1.
+> > >>  Thomas, last year we made a beginning of deciding what should go through the
+> > >> wrapper and what through CFLAGS, but I'm not sure if we ever got to a conclusion?
+> > > So are we going to wait for some infrastructure changes or
+> > > shall we first fix the problem at hand with broken perf build to ARC700?
 > >
-> > Since Yann can't make it to a meeting/hangout on weekdays, we can
-> schedule
-> > it on weekends. I'll be available during the time slot I mentioned (10am
-> to 10pm IST)
->
-> Let's all speak UTC (or GMT) for the sake of synchronizing; always
-> switching between timezones is error-prone. 10am IST is 04:30Z, 10pm IST
-> is 16:30Z.
->
-> Actually, I can make it on Tuesdays and Thursdays without any problem,
-> if we can schedule it between 14:30Z and 16:30Z; other days of the week,
-> we'd have to schedule it between 15:30Z and 16:30Z.
->
-> > > Maybe it would be useful to create a calendar to easily track absences
-> (exams,
-> > > holidays, ...) of both Atharva and the mentors (Yann and me)?
-> > Regarding the calendar to track absences (as Arnout suggested), do you
-> > have any particular service in mind or do we just note it down somewhere?
->
-> What about creating a page on the elinux.org wiki, which is where we
-> already have the Buildroot wiki pages, to track all your GSoC-related
-> activity? You'd report progress, pain-points, proposals, achievements,
-> and so on in there, it can act as a journal, etc...
->
-> Regards,
-> Yann E. MORIN.
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190508/80aed2ae/attachment.html>
+> >  It's not really infrastructure changes. Rather, it is a better way to fix the
+> > issue.
+> >
+> >  You just need to move the -matomic from TARGET_ABI to TOOLCHAIN_WRAPPER_OPTS.
+> >
+> >  The only tricky part is where that should be done. I think arch/arch.mk.arc
+> > would be the right place. But that indeed requires an infrastructural change,
+> > because the TOOLCHAIN_WRAPPER_OPTS = ... in toolchain-wrapper.mk has to change
+> > into a +=.
+> 
+> I'm not too fond of this, but what about the following:
+> 
+> diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
+> new file mode 100644
+> index 0000000000..83503841b6
+> --- /dev/null
+> +++ b/arch/arch.mk.arc
+> @@ -0,0 +1,3 @@
+> +ifeq ($(BR2_arcle),y)
+> +ARCH_TOOLCHAIN_WRAPPER_OPTS = -matomic
+> +endif
+> diff --git a/toolchain/toolchain-wrapper.mk
+> b/toolchain/toolchain-wrapper.mk
+> index ca66fa7ba4..8f872506ec 100644
+> --- a/toolchain/toolchain-wrapper.mk
+> +++ b/toolchain/toolchain-wrapper.mk
+> @@ -17,6 +17,7 @@ TOOLCHAIN_WRAPPER_ARGS =
+> $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
+>  TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
+> 
+>  TOOLCHAIN_WRAPPER_OPTS = \
+> +   $(ARCH_TOOLCHAIN_WRAPPER_OPTS) \
+>     $(call qstrip,$(BR2_SSP_OPTION)) \
+>     $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+
+That looks good to me with only one change: prefer generic "BR2_arc"
+instead of little-endian only "BR2_arcle".
+
+Care to send-out a patch?
+
+-Alexey
