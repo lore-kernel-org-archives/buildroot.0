@@ -1,45 +1,96 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 May 2019 23:33:54 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x]
- package/docker-containerd: bump to version 1.2.6
-Message-ID: <20190508214035.68F55813E0@busybox.osuosl.org>
+Date: Wed, 8 May 2019 23:32:56 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/rpm: drop
+ unneeded third patch
+Message-ID: <20190508214035.5A827813E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=daa0e3a0841c9ce1ef685527f408a6130c3f14ac
+commit: https://git.buildroot.net/buildroot/commit/?id=8af8887c334da9a84128e59d2c683adaf90eb31d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Christian Stewart <christian@paral.in>
+After upstream review, I found that the third patch is not needed, just
+doing an autoreconf fix the linking issue with -lintl
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit bcf7f56f263bf0b5a6c4f3a84ab434f8f089e7da)
+(cherry picked from commit c6342736b0cd3bb6e236d861018c94538287ade2)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-containerd/docker-containerd.hash | 2 +-
- package/docker-containerd/docker-containerd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...Makefile.am-rpm2-cpio-archive-needs-lintl.patch | 51 ----------------------
+ package/rpm/rpm.mk                                 |  2 +-
+ 2 files changed, 1 insertion(+), 52 deletions(-)
 
-diff --git a/package/docker-containerd/docker-containerd.hash b/package/docker-containerd/docker-containerd.hash
-index fc7b6fcb49..525191c651 100644
---- a/package/docker-containerd/docker-containerd.hash
-+++ b/package/docker-containerd/docker-containerd.hash
-@@ -1,3 +1,3 @@
- # Computed locally
--sha256	b92819bde71de947329814a3c649b8adb106cc03be16aae217b94297f4b843a1  docker-containerd-v1.2.5.tar.gz
-+sha256	f2d578b743fb9faa5b3477b7cf4b33d00501087043a53b27754f14bbe741f891  docker-containerd-v1.2.6.tar.gz
- sha256  4bbe3b885e8cd1907ab4cf9a41e862e74e24b5422297a4f2fe524e6a30ada2b4	LICENSE
-diff --git a/package/docker-containerd/docker-containerd.mk b/package/docker-containerd/docker-containerd.mk
-index 586fd1fa08..c67b36e7dc 100644
---- a/package/docker-containerd/docker-containerd.mk
-+++ b/package/docker-containerd/docker-containerd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch b/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
+deleted file mode 100644
+index 14d1d37d05..0000000000
+--- a/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
++++ /dev/null
+@@ -1,51 +0,0 @@
+-From 317bc5263fcb31ce788c76fe1947b2e0783e4542 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 25 Apr 2019 18:49:24 +0200
+-Subject: [PATCH] Makefile.am: rpm2{cpio,archive} needs lintl
+-
+-Add LIBINTL to rpm2{cpio,archive}_LDADD otherwise build fails on:
+-
+-/home/buildroot/autobuild/instance-2/output/host/bin/xtensa-linux-gcc -std=gnu99 -DHAVE_CONFIG_H   -I. -I. -I./include/ -I./build -I./lib -I./rpmio -I./misc -DLOCALEDIR="\"/usr/share/locale\"" -DLIBRPMALIAS_FILENAME="\"rpmpopt-4.14.2.1\"" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include -fPIC -DPIC -D_REENTRANT -Wall -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes  -fno-strict-aliasing -Wempty-body -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os   -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/beecrypt -c -o tools/rpmdeps.o tools/rpmdeps.c
+-/home/buildroot/autobuild/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: rpm2cpio.o: undefined reference to symbol 'libintl_dgettext'
+-/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
+-collect2: error: ld returned 1 exit status
+-Makefile:962: recipe for target 'rpm2cpio' failed
+-make[3]: *** [rpm2cpio] Error 1
+-make[3]: *** Waiting for unfinished jobs....
+-libtool: link: /home/buildroot/autobuild/instance-2/output/host/bin/xtensa-linux-gcc -std=gnu99 -fPIC -DPIC -D_REENTRANT -Wall -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes -fno-strict-aliasing -Wempty-body -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/beecrypt -o rpm2archive rpm2archive.o  lib/.libs/librpm.so /home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/rpmio/.libs/librpmio.so -lcap -ldb rpmio/.libs/librpmio.so -lbeecrypt -lbz2 -lz -llzma -lpopt -larchive -lpthread -Wl,-rpath -Wl,/home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/lib/.libs -Wl,-rpath -Wl,/home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/rpmio/.libs
+-/home/buildroot/autobuild/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: rpm2archive.o: undefined reference to symbol 'libintl_dgettext'
+-/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
+-collect2: error: ld returned 1 exit status
+-Makefile:958: recipe for target 'rpm2archive' failed
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/26e20e19d878811d90fce52eb0951ee4d8b59068
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://github.com/rpm-software-management/rpm/pull/683]
+----
+- Makefile.am | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/Makefile.am b/Makefile.am
+-index 057b7892c..e15240e60 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -145,11 +145,11 @@ rpmspec_LDADD +=	@WITH_POPT_LIB@
+- 
+- rpm2cpio_SOURCES =	rpm2cpio.c debug.h system.h
+- rpm2cpio_LDADD =	lib/librpm.la rpmio/librpmio.la
+--rpm2cpio_LDADD +=	@WITH_POPT_LIB@
+-+rpm2cpio_LDADD +=	@WITH_POPT_LIB@ @LIBINTL@
+- 
+- rpm2archive_SOURCES =	rpm2archive.c debug.h system.h
+- rpm2archive_LDADD =	lib/librpm.la rpmio/librpmio.la
+--rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@
+-+rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@ @LIBINTL@
+- 
+- 
+- if LIBELF
+--- 
+-2.20.1
+-
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index 5efbad6dae..246c0d0695 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -12,7 +12,7 @@ RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
+ RPM_LICENSE_FILES = COPYING
+-# We're patching Makefile.am
++# Needed to fix an issue with -lintl linking
+ RPM_AUTORECONF = YES
  
--DOCKER_CONTAINERD_VERSION = v1.2.5
-+DOCKER_CONTAINERD_VERSION = v1.2.6
- DOCKER_CONTAINERD_SITE = $(call github,containerd,containerd,$(DOCKER_CONTAINERD_VERSION))
- DOCKER_CONTAINERD_LICENSE = Apache-2.0
- DOCKER_CONTAINERD_LICENSE_FILES = LICENSE
+ RPM_CONF_OPTS = \
