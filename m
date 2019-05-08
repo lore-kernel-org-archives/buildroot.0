@@ -1,19 +1,45 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 8 May 2019 19:01:45 +0200
-Subject: [Buildroot] [PATCH] package/bullet: needs NPTL to build extras
-In-Reply-To: <20190508165945.22057-1-giulio.benetti@micronovasrl.com>
-References: <20190508165945.22057-1-giulio.benetti@micronovasrl.com>
-Message-ID: <b0238f95-292f-2916-e6aa-a38fdbd42d51@micronovasrl.com>
+Date: Wed, 8 May 2019 19:03:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bullet: extras needs NPTL
+In-Reply-To: <20190429164844.21247-1-fontaine.fabrice@gmail.com>
+References: <20190429164844.21247-1-fontaine.fabrice@gmail.com>
+Message-ID: <47845397-197b-72d6-aacf-3ab090b5eb21@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Oops, Fabrice already provided a patch for this:
-https://patchwork.ozlabs.org/patch/1092686/
+Hello,
 
-Sorry for the noise
+Il 29/04/2019 18:48, Fabrice Fontaine ha scritto:
+> Fixes:
+>   - http://autobuild.buildroot.org/results/9c6325e6cc86116d1e8c940e0fcfe94243faa6de
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Tested-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+
+> ---
+>   package/bullet/bullet.mk | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/bullet/bullet.mk b/package/bullet/bullet.mk
+> index 7ff8195c85..36aaa157e1 100644
+> --- a/package/bullet/bullet.mk
+> +++ b/package/bullet/bullet.mk
+> @@ -16,8 +16,8 @@ BULLET_CONF_OPTS = -DBUILD_UNIT_TESTS=OFF \
+>   	-DBUILD_BULLET2_DEMOS=OFF \
+>   	-DBUILD_BULLET3=OFF
+>   
+> -# extras needs dlfcn.h and threads
+> -ifeq ($(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_HAS_THREADS),:y)
+> +# extras needs dlfcn.h and NPTL (pthread_barrier_init)
+> +ifeq ($(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_HAS_THREADS_NPTL),:y)
+>   BULLET_CONF_OPTS += -DBUILD_EXTRAS=ON
+>   else
+>   BULLET_CONF_OPTS += -DBUILD_EXTRAS=OFF
+> 
 
 -- 
 Giulio Benetti
@@ -26,33 +52,3 @@ Cod.Fiscale - P.IVA 02663420285
 Capitale Sociale ? 26.000 i.v.
 Iscritta al Reg. Imprese di Padova N. 02663420285
 Numero R.E.A. 258642
-
-Il 08/05/2019 18:59, Giulio Benetti ha scritto:
-> At the moment HAS_THREADS=y only is needed to build extras but this
-> results in build failure due to function calls to pthread_barrier_*.
-> 
-> Modify BR2_TOOLCHAIN_HAS_THREADS=y check to
-> BR2_TOOLCHAIN_HAS_THREADS_NPTL=y.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/e96/e96cacd185f14479433f91ccd47d76058cf5b345/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->   package/bullet/bullet.mk | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/bullet/bullet.mk b/package/bullet/bullet.mk
-> index 7ff8195c85..f234335890 100644
-> --- a/package/bullet/bullet.mk
-> +++ b/package/bullet/bullet.mk
-> @@ -17,7 +17,7 @@ BULLET_CONF_OPTS = -DBUILD_UNIT_TESTS=OFF \
->   	-DBUILD_BULLET3=OFF
->   
->   # extras needs dlfcn.h and threads
-> -ifeq ($(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_HAS_THREADS),:y)
-> +ifeq ($(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_HAS_THREADS_NPTL),:y)
->   BULLET_CONF_OPTS += -DBUILD_EXTRAS=ON
->   else
->   BULLET_CONF_OPTS += -DBUILD_EXTRAS=OFF
-> 
