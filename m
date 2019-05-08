@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 May 2019 09:16:02 +0200
-Subject: [Buildroot] [git commit] package/rpm: replace utf-8 space by ascii
- character
-Message-ID: <20190508073739.8F5BD83B6F@busybox.osuosl.org>
+Date: Wed, 8 May 2019 09:16:30 +0200
+Subject: [Buildroot] [git commit] package/wireshark: replace utf-8 space by
+ ascii character
+Message-ID: <20190508073739.AB04283B6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80ff8f5ee8651a065c9b7a436cd9ccad05c7b156
+commit: https://git.buildroot.net/buildroot/commit/?id=a271bbe003efdccbbb4da7c4de3ddfbcfb62c3c4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Replace utf-8 NO-BREAK-SPACE (c2 a0) in comment line by simple
@@ -18,17 +18,21 @@ ascii space character.
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rpm/rpm.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/wireshark/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rpm/rpm.hash b/package/rpm/rpm.hash
-index b550e12721..f7cbd0cbc3 100644
---- a/package/rpm/rpm.hash
-+++ b/package/rpm/rpm.hash
-@@ -1,5 +1,5 @@
- # From https://rpm.org/wiki/Releases/4.14.2.1.html
- sha256 1139c24b7372f89c0a697096bf9809be70ba55e006c23ff47305c1849d98acda  rpm-4.14.2.1.tar.bz2
- 
--#??Hash for license file
-+# Hash for license file
- sha256 d56f4f1f290f6920cb053aef0dbcd0b853cda289e2568b364ddbfce220a6f3e0  COPYING
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+index 0a94a00c09..416b334df6 100644
+--- a/package/wireshark/Config.in
++++ b/package/wireshark/Config.in
+@@ -23,8 +23,8 @@ config BR2_PACKAGE_WIRESHARK_GUI
+ 	depends on BR2_PACKAGE_HAS_UDEV # qt5 input
+ 	select BR2_PACKAGE_QT5
+ 	select BR2_PACKAGE_QT5BASE
+-	select BR2_PACKAGE_QT5BASE_FONTCONFIG #??runtime
+-	select BR2_PACKAGE_QT5BASE_PNG #??runtime
++	select BR2_PACKAGE_QT5BASE_FONTCONFIG # runtime
++	select BR2_PACKAGE_QT5BASE_PNG # runtime
+ 	select BR2_PACKAGE_QT5BASE_WIDGETS
+ 	select BR2_PACKAGE_QT5MULTIMEDIA
+ 	select BR2_PACKAGE_QT5SVG
