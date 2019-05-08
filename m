@@ -1,96 +1,192 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 8 May 2019 23:32:56 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/rpm: drop
- unneeded third patch
-Message-ID: <20190508214035.5A827813E0@busybox.osuosl.org>
+From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
+Date: Thu,  9 May 2019 00:09:26 +0200
+Subject: [Buildroot] [PATCH 02/13] package/skeleton-init-openrc: basic
+ skeleton for openrc
+In-Reply-To: <20190508220937.23200-1-michal.lyszczek@bofc.pl>
+References: <20190508220937.23200-1-michal.lyszczek@bofc.pl>
+Message-ID: <20190508220937.23200-2-michal.lyszczek@bofc.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8af8887c334da9a84128e59d2c683adaf90eb31d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+This basic skeleton is similar to skeleton-init-sysv.
+All links in /var are same as in skeleton-init-sysv to be compatible
+with current default filesystem scheme.
 
-After upstream review, I found that the third patch is not needed, just
-doing an autoreconf fix the linking issue with -lintl
+Exceptions:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit c6342736b0cd3bb6e236d861018c94538287ade2)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+* /dev/shm and /dev/pts dirs were removed, since they are created by
+  openrc devfs service
+* /etc/fstab does not need /dev/shm, /dev/pts and /sys entries
+  becuse they are mounted by devfs and sysfs services respectively
+
+Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 ---
- ...Makefile.am-rpm2-cpio-archive-needs-lintl.patch | 51 ----------------------
- package/rpm/rpm.mk                                 |  2 +-
- 2 files changed, 1 insertion(+), 52 deletions(-)
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/skeleton-init-openrc/Config.in        |  7 ++++++
+ .../skeleton-init-sysv.mk                     | 22 +++++++++++++++++++
+ package/skeleton-init-openrc/skeleton/dev/log |  1 +
+ .../skeleton-init-openrc/skeleton/etc/fstab   |  3 +++
+ .../skeleton-init-openrc/skeleton/var/cache   |  1 +
+ .../skeleton/var/lib/misc                     |  1 +
+ .../skeleton-init-openrc/skeleton/var/lock    |  1 +
+ package/skeleton-init-openrc/skeleton/var/log |  1 +
+ package/skeleton-init-openrc/skeleton/var/run |  1 +
+ .../skeleton-init-openrc/skeleton/var/spool   |  1 +
+ package/skeleton-init-openrc/skeleton/var/tmp |  1 +
+ 13 files changed, 42 insertions(+)
+ create mode 100644 package/skeleton-init-openrc/Config.in
+ create mode 100644 package/skeleton-init-openrc/skeleton-init-sysv.mk
+ create mode 120000 package/skeleton-init-openrc/skeleton/dev/log
+ create mode 100644 package/skeleton-init-openrc/skeleton/etc/fstab
+ create mode 120000 package/skeleton-init-openrc/skeleton/var/cache
+ create mode 120000 package/skeleton-init-openrc/skeleton/var/lib/misc
+ create mode 120000 package/skeleton-init-openrc/skeleton/var/lock
+ create mode 120000 package/skeleton-init-openrc/skeleton/var/log
+ create mode 120000 package/skeleton-init-openrc/skeleton/var/run
+ create mode 120000 package/skeleton-init-openrc/skeleton/var/spool
+ create mode 120000 package/skeleton-init-openrc/skeleton/var/tmp
 
-diff --git a/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch b/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
-deleted file mode 100644
-index 14d1d37d05..0000000000
---- a/package/rpm/0003-Makefile.am-rpm2-cpio-archive-needs-lintl.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 317bc5263fcb31ce788c76fe1947b2e0783e4542 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 25 Apr 2019 18:49:24 +0200
--Subject: [PATCH] Makefile.am: rpm2{cpio,archive} needs lintl
--
--Add LIBINTL to rpm2{cpio,archive}_LDADD otherwise build fails on:
--
--/home/buildroot/autobuild/instance-2/output/host/bin/xtensa-linux-gcc -std=gnu99 -DHAVE_CONFIG_H   -I. -I. -I./include/ -I./build -I./lib -I./rpmio -I./misc -DLOCALEDIR="\"/usr/share/locale\"" -DLIBRPMALIAS_FILENAME="\"rpmpopt-4.14.2.1\"" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include -fPIC -DPIC -D_REENTRANT -Wall -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes  -fno-strict-aliasing -Wempty-body -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os   -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/beecrypt -c -o tools/rpmdeps.o tools/rpmdeps.c
--/home/buildroot/autobuild/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: rpm2cpio.o: undefined reference to symbol 'libintl_dgettext'
--/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
--collect2: error: ld returned 1 exit status
--Makefile:962: recipe for target 'rpm2cpio' failed
--make[3]: *** [rpm2cpio] Error 1
--make[3]: *** Waiting for unfinished jobs....
--libtool: link: /home/buildroot/autobuild/instance-2/output/host/bin/xtensa-linux-gcc -std=gnu99 -fPIC -DPIC -D_REENTRANT -Wall -Wpointer-arith -Wmissing-prototypes -Wstrict-prototypes -fno-strict-aliasing -Wempty-body -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -mlongcalls -mauto-litpools -Os -I/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/include/beecrypt -o rpm2archive rpm2archive.o  lib/.libs/librpm.so /home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/rpmio/.libs/librpmio.so -lcap -ldb rpmio/.libs/librpmio.so -lbeecrypt -lbz2 -lz -llzma -lpopt -larchive -lpthread -Wl,-rpath -Wl,/home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/lib/.libs -Wl,-rpath -Wl,/home/buildroot/autobuild/instance-2/output/build/rpm-4.14.2.1/rpmio/.libs
--/home/buildroot/autobuild/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/xtensa-buildroot-linux-uclibc/7.4.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: rpm2archive.o: undefined reference to symbol 'libintl_dgettext'
--/home/buildroot/autobuild/instance-2/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libintl.so.8: error adding symbols: DSO missing from command line
--collect2: error: ld returned 1 exit status
--Makefile:958: recipe for target 'rpm2archive' failed
--
--Fixes:
-- - http://autobuild.buildroot.org/results/26e20e19d878811d90fce52eb0951ee4d8b59068
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://github.com/rpm-software-management/rpm/pull/683]
-----
-- Makefile.am | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index 057b7892c..e15240e60 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -145,11 +145,11 @@ rpmspec_LDADD +=	@WITH_POPT_LIB@
-- 
-- rpm2cpio_SOURCES =	rpm2cpio.c debug.h system.h
-- rpm2cpio_LDADD =	lib/librpm.la rpmio/librpmio.la
---rpm2cpio_LDADD +=	@WITH_POPT_LIB@
--+rpm2cpio_LDADD +=	@WITH_POPT_LIB@ @LIBINTL@
-- 
-- rpm2archive_SOURCES =	rpm2archive.c debug.h system.h
-- rpm2archive_LDADD =	lib/librpm.la rpmio/librpmio.la
---rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@
--+rpm2archive_LDADD +=	@WITH_POPT_LIB@ @WITH_ARCHIVE_LIB@ @LIBINTL@
-- 
-- 
-- if LIBELF
---- 
--2.20.1
--
-diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index 5efbad6dae..246c0d0695 100644
---- a/package/rpm/rpm.mk
-+++ b/package/rpm/rpm.mk
-@@ -12,7 +12,7 @@ RPM_DEPENDENCIES = host-pkgconf berkeleydb file popt zlib \
- 	$(TARGET_NLS_DEPENDENCIES)
- RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
- RPM_LICENSE_FILES = COPYING
--# We're patching Makefile.am
-+# Needed to fix an issue with -lintl linking
- RPM_AUTORECONF = YES
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0f89e49b92..92aa5381f8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1616,6 +1616,7 @@ F:	board/pine64/rock64
+ F:	configs/rock64_defconfig
+ F:	configs/socrates_cyclone5_defconfig
+ F:	package/openrc/
++F:	package/skeleton-init-openrc/
  
- RPM_CONF_OPTS = \
+ N:	Michel Stempin <michel.stempin@wanadoo.fr>
+ F:	board/licheepi/
+diff --git a/package/Config.in b/package/Config.in
+index d9cb755d68..584c7e4e5a 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -5,6 +5,7 @@ menu "Target packages"
+ 	source "package/skeleton-custom/Config.in"
+ 	source "package/skeleton-init-common/Config.in"
+ 	source "package/skeleton-init-none/Config.in"
++	source "package/skeleton-init-openrc/Config.in"
+ 	source "package/skeleton-init-systemd/Config.in"
+ 	source "package/skeleton-init-sysv/Config.in"
+ 
+diff --git a/package/skeleton-init-openrc/Config.in b/package/skeleton-init-openrc/Config.in
+new file mode 100644
+index 0000000000..8f4dd17ebd
+--- /dev/null
++++ b/package/skeleton-init-openrc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_SKELETON_INIT_OPENRC
++	bool
++	select BR2_PACKAGE_HAS_SKELETON
++	select BR2_PACKAGE_SKELETON_INIT_COMMON
++
++config BR2_PACKAGE_PROVIDES_SKELETON
++	default "skeleton-init-openrc" if BR2_PACKAGE_SKELETON_INIT_OPENRC
+diff --git a/package/skeleton-init-openrc/skeleton-init-sysv.mk b/package/skeleton-init-openrc/skeleton-init-sysv.mk
+new file mode 100644
+index 0000000000..5ee2192093
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton-init-sysv.mk
+@@ -0,0 +1,22 @@
++################################################################################
++#
++# skeleton-init-openrc
++#
++################################################################################
++
++# The skeleton can't depend on the toolchain, since all packages depends on the
++# skeleton and the toolchain is a target package, as is skeleton.
++# Hence, skeleton would depends on the toolchain and the toolchain would depend
++# on skeleton.
++SKELETON_INIT_OPENRC_ADD_TOOLCHAIN_DEPENDENCY = NO
++SKELETON_INIT_OPENRC_ADD_SKELETON_DEPENDENCY = NO
++
++SKELETON_INIT_OPENRC_DEPENDENCIES = skeleton-init-common
++
++SKELETON_INIT_OPENRC_PROVIDES = skeleton
++
++define SKELETON_INIT_OPENRC_INSTALL_TARGET_CMDS
++	$(call SYSTEM_RSYNC,$(SKELETON_INIT_OPENRC_PKGDIR)/skeleton,$(TARGET_DIR))
++endef
++
++$(eval $(generic-package))
+diff --git a/package/skeleton-init-openrc/skeleton/dev/log b/package/skeleton-init-openrc/skeleton/dev/log
+new file mode 120000
+index 0000000000..d96b3b1cb8
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/dev/log
+@@ -0,0 +1 @@
++../tmp/log
+\ No newline at end of file
+diff --git a/package/skeleton-init-openrc/skeleton/etc/fstab b/package/skeleton-init-openrc/skeleton/etc/fstab
+new file mode 100644
+index 0000000000..3ec96cf634
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/etc/fstab
+@@ -0,0 +1,3 @@
++# <file system>	<mount pt>	<type>	<options>	<dump>	<pass>
++tmpfs		/tmp		tmpfs	mode=1777	0	0
++tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0
+diff --git a/package/skeleton-init-openrc/skeleton/var/cache b/package/skeleton-init-openrc/skeleton/var/cache
+new file mode 120000
+index 0000000000..1431b0e432
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/var/cache
+@@ -0,0 +1 @@
++../tmp
+\ No newline at end of file
+diff --git a/package/skeleton-init-openrc/skeleton/var/lib/misc b/package/skeleton-init-openrc/skeleton/var/lib/misc
+new file mode 120000
+index 0000000000..f1fde8c107
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/var/lib/misc
+@@ -0,0 +1 @@
++../../tmp
+\ No newline at end of file
+diff --git a/package/skeleton-init-openrc/skeleton/var/lock b/package/skeleton-init-openrc/skeleton/var/lock
+new file mode 120000
+index 0000000000..1431b0e432
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/var/lock
+@@ -0,0 +1 @@
++../tmp
+\ No newline at end of file
+diff --git a/package/skeleton-init-openrc/skeleton/var/log b/package/skeleton-init-openrc/skeleton/var/log
+new file mode 120000
+index 0000000000..1431b0e432
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/var/log
+@@ -0,0 +1 @@
++../tmp
+\ No newline at end of file
+diff --git a/package/skeleton-init-openrc/skeleton/var/run b/package/skeleton-init-openrc/skeleton/var/run
+new file mode 120000
+index 0000000000..84ba55b912
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/var/run
+@@ -0,0 +1 @@
++../run
+\ No newline at end of file
+diff --git a/package/skeleton-init-openrc/skeleton/var/spool b/package/skeleton-init-openrc/skeleton/var/spool
+new file mode 120000
+index 0000000000..1431b0e432
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/var/spool
+@@ -0,0 +1 @@
++../tmp
+\ No newline at end of file
+diff --git a/package/skeleton-init-openrc/skeleton/var/tmp b/package/skeleton-init-openrc/skeleton/var/tmp
+new file mode 120000
+index 0000000000..1431b0e432
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/var/tmp
+@@ -0,0 +1 @@
++../tmp
+\ No newline at end of file
+-- 
+2.18.1
