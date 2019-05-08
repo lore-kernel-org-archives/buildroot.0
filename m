@@ -1,82 +1,91 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 8 May 2019 13:19:00 +0000
-Subject: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
-In-Reply-To: <20190427175603.GA27252@scaer>
-References: <20190418093902.41835-1-abrodkin@synopsys.com>
- <20190418114336.61f3f404@windsurf>
- <ea5f11a1-a7cb-4cee-dfda-64d55d550d83@mind.be>
- <CY4PR1201MB01207D3F0C5E488EACEBA5DAA13E0@CY4PR1201MB0120.namprd12.prod.outlook.com>
- <ed9e89cc-3f7e-1a05-0d1e-6c6da6a3eb38@mind.be> <20190427175603.GA27252@scaer>
-Message-ID: <CY4PR1201MB012025B382EBDE4883CA80B8A1320@CY4PR1201MB0120.namprd12.prod.outlook.com>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 8 May 2019 15:27:51 +0200
+Subject: [Buildroot] [PATCH 01/15] package/glibc/arc: fix build issue
+ with gcc-9.1
+In-Reply-To: <CY4PR1201MB0120841C0FE2B612DCA380BCA1320@CY4PR1201MB0120.namprd12.prod.outlook.com>
+References: <20190506183011.4856-1-romain.naour@gmail.com>
+ <20190506183011.4856-2-romain.naour@gmail.com> <20190506194049.GA6887@scaer>
+ <CY4PR1201MB0120841C0FE2B612DCA380BCA1320@CY4PR1201MB0120.namprd12.prod.outlook.com>
+Message-ID: <1aaf011e-be23-89a8-35ca-ecd2429b6b77@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+Hi Alexey, All,
 
-> -----Original Message-----
-> From: Yann E. MORIN <yann.morin.1998@gmail.com> On Behalf Of Yann E. MORIN
-> Sent: Saturday, April 27, 2019 8:56 PM
-> To: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>; Thomas Petazzoni <thomas.petazzoni@bootlin.com>;
-> buildroot at busybox.net; ARC Buildroot mailing list <arc-buildroot@synopsys.com>
-> Subject: Re: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
+Le 08/05/2019 ? 13:12, Alexey Brodkin a ?crit?:
+> Hi Romain, Yann, all,
 > 
-> Arnout, Alexey, All,
+>> -----Original Message-----
+>> From: Yann E. MORIN <yann.morin.1998@gmail.com> On Behalf Of Yann E. MORIN
+>> Sent: Monday, May 6, 2019 10:41 PM
+>> To: Romain Naour <romain.naour@gmail.com>
+>> Cc: buildroot at buildroot.org; Evgeniy Didin <didin@synopsys.com>; Alexey Brodkin
+>> <abrodkin@synopsys.com>; Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
+>> Subject: Re: [Buildroot] [PATCH 01/15] package/glibc/arc: fix build issue with gcc-9.1
+>>
+>> Romain, All,
+>>
+>> On 2019-05-06 20:29 +0200, Romain Naour spake thusly:
+>>> Backport from upstream [1] to fix build issue with glibc arc-2018.09-release
+>>> (based on glibc 2.28) and gcc 9.1 [2]]
+>>>
+>>> Using glibc arc-2.29-2019.02.08 or the upcoming arc-2019.03 release include
+>>> this patch.
+>>
+>> So, here is a small summary of my discussion with Romain on IRC:
+>>
+>>   - this patch touches mostly x86_64 files, so I was puzzled why it had
+>>     to be applied to the arc fork;
+>>
+>>   - however, that patch also touxphces teo generic headers; in there the
+>>     new __attribute_copy__() macro is defined *and* used to complement
+>>     existing attribute-related macros.
+>>
+>> So, it is not much the x86_64 part we're interested in, but the generic
+>> two headers, which changes percolate to the various functions via the
+>> various attribute macros...
+>>
+>> So, for other reviewers: just ignore the x86_64 part.
+>>
+>> Romain: what do you think about this: remove those x86_64 files from the
+>> patch, and update the soh-line as... (see below)
 > 
-> On 2019-04-27 19:39 +0200, Arnout Vandecappelle spake thusly:
-> > On 26/04/2019 08:30, Alexey Brodkin wrote:
-> [--SNIP--]
-> > >>> The change is OK, but I believe that if -matomic is really a
-> > >>> core/important CFLAGS on ARC, then we should ideally pass it through
-> > >>> the toolchain wrapper, so that we are sure it is always passed.
-> > >>> Arnout, what do you think?
-> > >>  +1.
-> > >>  Thomas, last year we made a beginning of deciding what should go through the
-> > >> wrapper and what through CFLAGS, but I'm not sure if we ever got to a conclusion?
-> > > So are we going to wait for some infrastructure changes or
-> > > shall we first fix the problem at hand with broken perf build to ARC700?
-> >
-> >  It's not really infrastructure changes. Rather, it is a better way to fix the
-> > issue.
-> >
-> >  You just need to move the -matomic from TARGET_ABI to TOOLCHAIN_WRAPPER_OPTS.
-> >
-> >  The only tricky part is where that should be done. I think arch/arch.mk.arc
-> > would be the right place. But that indeed requires an infrastructural change,
-> > because the TOOLCHAIN_WRAPPER_OPTS = ... in toolchain-wrapper.mk has to change
-> > into a +=.
-> 
-> I'm not too fond of this, but what about the following:
-> 
-> diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
-> new file mode 100644
-> index 0000000000..83503841b6
-> --- /dev/null
-> +++ b/arch/arch.mk.arc
-> @@ -0,0 +1,3 @@
-> +ifeq ($(BR2_arcle),y)
-> +ARCH_TOOLCHAIN_WRAPPER_OPTS = -matomic
-> +endif
-> diff --git a/toolchain/toolchain-wrapper.mk
-> b/toolchain/toolchain-wrapper.mk
-> index ca66fa7ba4..8f872506ec 100644
-> --- a/toolchain/toolchain-wrapper.mk
-> +++ b/toolchain/toolchain-wrapper.mk
-> @@ -17,6 +17,7 @@ TOOLCHAIN_WRAPPER_ARGS =
-> $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
->  TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
-> 
->  TOOLCHAIN_WRAPPER_OPTS = \
-> +   $(ARCH_TOOLCHAIN_WRAPPER_OPTS) \
->     $(call qstrip,$(BR2_SSP_OPTION)) \
->     $(call qstrip,$(BR2_TARGET_OPTIMIZATION))
+> First of all thanks a lot for fixing stuff for ARC.
+> Also pls pardon my late reply - there were long May holidays Russia
+> and a lot of people including myself were enjoying anything but work :)
 
-That looks good to me with only one change: prefer generic "BR2_arc"
-instead of little-endian only "BR2_arcle".
+No problem at all, It's perfectly normal to look for a fix when a toolchain
+component is updated :)
+I really appreciate your work (and Synopsys effort) on ARC support in Buildroot,
+I don't want to introduce regressions.
 
-Care to send-out a patch?
+> Now given we're about to cut ARC 2019.03 release of our tools which
+> among other things has Glibc rebased on upstream 2.29 version
+> this particular fix won't be required at all.
+> 
+> So let us post ARC toolchain bump to 2019.03-RC1 ASAP.
 
--Alexey
+We are close to -rc1, I don't think gcc 9.1 will be merged for this release so
+we have some time to merge ARC 2019.03 release.
+
+> 
+> Also with GCC 9.1 out of the door we have pretty much all our changes
+> right in upstream release tarball so hopefully even ARC fork won't
+> be that important any longer and we'll try to use upstream
+> GCC by default.
+
+Great, congratulations :)
+
+> 
+> -Alexey
+> 
+> P.S. Romain I'm really sorry for letting you do that extra yet not very
+>      useful work!
+
+No problem :)
+
+Best regards,
+Romain
