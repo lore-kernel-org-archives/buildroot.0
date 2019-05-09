@@ -1,37 +1,65 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  9 May 2019 15:45:41 +0300
-Subject: [Buildroot] [PATCH] package/strace: disable build for m68k
-Message-ID: <73b636ac421a851535f158350343bc82a25db097.1557405941.git.baruch@tkos.co.il>
+From: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+Date: Thu, 9 May 2019 08:55:43 -0500
+Subject: [Buildroot] Fwd: [autobuild.buildroot.net] Your build results for
+ 2019-05-08
+In-Reply-To: <20190509060040.D56B7604B6@crulimr01.rockwellcollins.com>
+References: <20190509060040.D56B7604B6@crulimr01.rockwellcollins.com>
+Message-ID: <CAMQcK5J5YUv4nYfdFpZhRnO6uy+5i6Rpnxa6nGXcZNQDTA3zGw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mismatch in struct bpf_prog_info fields offset between kernel headers
-and strace local definition causes build failure. Disable strace for
-m68k until upstream (either strace or the kernel) find a solution.
+Peter and Thomas,
 
-https://lists.strace.io/pipermail/strace-devel/2019-May/thread.html#8750
+Looks like the recent bump on aftp is causing issues with the
+autobuilders and downloading the new file. From both logs:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/strace/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+>>> atftp 0.7.2 Downloading [27m
+--2019-05-08 14:47:03--
+http://sourceforge.net/projects/atftp/files/atftp-0.7.2.tar.gz
+Resolving sourceforge.net (sourceforge.net)... 216.105.38.13
+Connecting to sourceforge.net (sourceforge.net)|216.105.38.13|:80... connected.
+HTTP request sent, awaiting response... 301 Moved Permanently
+Location: https://sourceforge.net/projects/atftp/files/atftp-0.7.2.tar.gz
+[following]
+--2019-05-08 14:47:04--
+https://sourceforge.net/projects/atftp/files/atftp-0.7.2.tar.gz
+Connecting to sourceforge.net (sourceforge.net)|216.105.38.13|:443... connected.
+GnuTLS: A TLS fatal alert has been received.
+Unable to establish SSL connection.
 
-diff --git a/package/strace/Config.in b/package/strace/Config.in
-index 38b4ebe32a4b..286a061a80ba 100644
---- a/package/strace/Config.in
-+++ b/package/strace/Config.in
-@@ -3,6 +3,9 @@ config BR2_PACKAGE_STRACE
- 	# needs at least kernel headers 4.0 on nios2
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 || !BR2_nios2
- 	depends on !BR2_nds32
-+	# struct bpf_prog_info fields offset mismatch
-+	# https://lists.strace.io/pipermail/strace-devel/2019-May/thread.html#8750
-+	depends on !BR2_m68k
- 	help
- 	  A useful diagnostic, instructional, and debugging tool.
- 	  Allows you to track what system calls a program makes
--- 
-2.20.1
+These were both run on the autobuilder from Thomas so it may be a
+build server configuration issue.
+
+Thanks,
+-Ryan
+
+---------- Forwarded message ---------
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, May 9, 2019 at 1:00 AM
+Subject: [autobuild.buildroot.net] Your build results for 2019-05-08
+To: Ryan Barnett <ryan.barnett@rockwellcollins.com>
+
+
+Hello,
+
+This is the list of Buildroot build failures that occured on
+2019-05-08, and for which you are a registered architecture developer
+or package developer. Please help us improving the quality of
+Buildroot by investigating those build failures and sending patches to
+fix them. Thanks!
+
+Results for the 'master' branch
+===============================
+
+Build failures related to your packages:
+
+         arm |                    atftp-0.7.2 |
+http://autobuild.buildroot.net/results/8606908b60fca430366d558a8e6db7a06ca08631
+         arc |                    atftp-0.7.2 |
+http://autobuild.buildroot.net/results/177a64fb419a6d4c2349970bce966819925e4de5
+
+--
+http://autobuild.buildroot.net
