@@ -1,7 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu,  9 May 2019 18:46:18 -0400
-Subject: [Buildroot] [PATCH 0/5] gstreamer1: Plugin work
-Message-ID: <20190509224624.80437-1-aduskett@gmail.com>
+Date: Thu,  9 May 2019 18:46:21 -0400
+Subject: [Buildroot] [PATCH 3/5] package/gstreamer1/gst1-plugins-bad: add
+ proxy plugin
+In-Reply-To: <20190509224624.80437-1-aduskett@gmail.com>
+References: <20190509224624.80437-1-aduskett@gmail.com>
+Message-ID: <20190509224624.80437-4-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +13,47 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-In this patch series, the following plugins are added:
- - gst1-plugins-good/twolame
- - gst1-plugins-bad/audiolatency
- - gst1-plugins-bad/proxy
+This plugin was introduced in 1.16.0. It is dependencyless and provides
+proxied inter-pipeline communication.
 
-There are also two plugins that are currently enabled just by selecting a
-package, but with no way to explicitly enable or disable them.
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 5 +++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-These plugins are:
- - gst1-plugins-good/jack
- - gst1-plugins-bad/bluez
-
-So I added options to enable/disable those as well.
-
-This is the first of a multi-step process to do the following:
-
-1) Clean up gstreamer1 and the plugin packages.
-2) Convert gstreamer1 to meson.
-3) Fix the order of plugins in the mk and config files to reflect what is in
-   meson_options.txt
-
-Adam Duskett (5):
-  package/gstreamer1/gst1-plugins-good: Add twolame plugin
-  package/gstreamer1/gst1-plugins-good: Add jack plugin
-  package/gstreamer1/gst1-plugins-bad: add proxy plugin
-  package/gstreamer1/gst1-plugins-bad: add audiolatency plugin
-  package/gstreamer1/gst1-plugins-bad: Add bluez plugin
-
- package/gstreamer1/gst1-plugins-bad/Config.in | 20 +++++++++++++++++++
- .../gst1-plugins-bad/gst1-plugins-bad.mk      | 14 ++++++++++++-
- .../gstreamer1/gst1-plugins-good/Config.in    | 19 ++++++++++++++++++
- .../gst1-plugins-good/gst1-plugins-good.mk    |  9 ++++++++-
- 4 files changed, 60 insertions(+), 2 deletions(-)
-
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index e0757e96c9..c53ff66272 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -212,6 +212,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PNM
+ 	help
+ 	  PNM plugin
+ 
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PROXY
++	bool "proxy"
++	help
++	  Proxy plugin
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE
+ 	bool "rawparse"
+ 	help
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index a66d3e32bf..d6414f9daa 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -344,6 +344,12 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-pnm
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PROXY),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-proxy
++else
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-proxy
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-rawparse
+ else
 -- 
 2.21.0
