@@ -1,47 +1,50 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu,  9 May 2019 23:50:02 +0300
-Subject: [Buildroot] [PATCH v2] package/strace: disable bpf support for m68k
-Message-ID: <d10e11cd2b915958286cf09efc470beb80c8ccb0.1557435002.git.baruch@tkos.co.il>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 9 May 2019 22:52:59 +0200
+Subject: [Buildroot] [PATCH 1/2] package/netsurf: change how
+ CFLAGS/LDFLAGS are passed
+In-Reply-To: <20190509202808.6741-2-thomas.petazzoni@bootlin.com>
+References: <20190509202808.6741-1-thomas.petazzoni@bootlin.com>
+ <20190509202808.6741-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20190509225259.2b62a2cb@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Mismatch in struct bpf_prog_info fields offset between kernel headers
-and strace local definition causes build failure. Disable bpf support
-for m68k until upstream (either strace or the kernel) find a solution.
+Hello,
 
-https://lists.strace.io/pipermail/strace-devel/2019-May/thread.html#8750
+On Thu,  9 May 2019 22:28:07 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Fixes:
-http://autobuild.buildroot.net/results/c036b11bf1f2fc39f42661634ef3e03360fb85de/
-http://autobuild.buildroot.net/results/f142e4c7f0d512bb872572f5e678230117ab0ad5/
-http://autobuild.buildroot.net/results/b74a17cfa7112c026938cacafdd18c6dca285005/
+> In commit 6da049f8ae61b956d135526722ce58fc2f67626a ("package/netsurf:
+> fix build"), the CC variable passed to netsurf's build system was
+> extended to pass some special -I and -L options needed for netsurf to
+> find its own headers/libraries.
+> 
+> Unfortunately, on some systems (including mine), it breaks the build,
+> due to:
+> 
+>   toolpath_ := $(shell /bin/which $(CC__))
+> 
+> when $(CC__) contains some -I/-L options, they are considered to be
+> options "to which", which causes the funny:
+> 
+> /usr/bin/make install --directory=libnslog HOST=arm-buildroot-linux-uclibcgnueabi PREFIX=/home/thomas/projets/outputs/shared-netsurf/build/netsurf-3.8/tmpusr Q=@ WARNFLAGS='-Wall -W -Wno-error' DESTDIR=
+> make[3]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
-v2: Only disable bpf support; add Fixes tag
----
- package/strace/strace.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+In fact, I discovered that the autobuilders have encountered this issue
+as well:
 
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 0f705a2fb8ae..f957144160af 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -19,6 +19,12 @@ STRACE_CONF_OPTS += st_cv_m32_mpers=no \
- 	st_cv_mx32_mpers=no
- endif
- 
-+# struct bpf_prog_info fields offset mismatch
-+# https://lists.strace.io/pipermail/strace-devel/2019-May/thread.html#8750
-+ifeq ($(BR2_m68k),y)
-+STRACE_CONF_OPTS += ac_cv_header_linux_bpf_h=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
- STRACE_DEPENDENCIES += libunwind
- STRACE_CONF_OPTS += --with-libunwind
+    powerpc64 |                        netsurf | TIM | http://autobuild.buildroot.net/results/eeb2863c6237aac8428e49a5ee514d43088b0fb8 |     
+       x86_64 |                        netsurf | TIM | http://autobuild.buildroot.net/results/f938fd1515f1d6e11b57aa6e314135789da52a44 |     
+
+Both of those timeouts would be fixed by this patch.
+
+Best regards,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
