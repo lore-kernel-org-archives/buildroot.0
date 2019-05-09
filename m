@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu,  9 May 2019 18:46:21 -0400
-Subject: [Buildroot] [PATCH 3/5] package/gstreamer1/gst1-plugins-bad: add
- proxy plugin
+Date: Thu,  9 May 2019 18:46:20 -0400
+Subject: [Buildroot] [PATCH 2/5] package/gstreamer1/gst1-plugins-good: Add
+ jack plugin
 In-Reply-To: <20190509224624.80437-1-aduskett@gmail.com>
 References: <20190509224624.80437-1-aduskett@gmail.com>
-Message-ID: <20190509224624.80437-4-aduskett@gmail.com>
+Message-ID: <20190509224624.80437-3-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,47 +13,51 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-This plugin was introduced in 1.16.0. It is dependencyless and provides
-proxied inter-pipeline communication.
+Currently there is no explicit way to turn the jack plugin on or off.
+Create a menu entry allowing users to disable or enable the plugin.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/gstreamer1/gst1-plugins-bad/Config.in           | 5 +++++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 6 ++++++
- 2 files changed, 11 insertions(+)
+ package/gstreamer1/gst1-plugins-good/Config.in      | 13 +++++++++++++
+ .../gst1-plugins-good/gst1-plugins-good.mk          |  2 +-
+ 2 files changed, 14 insertions(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index e0757e96c9..c53ff66272 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -212,6 +212,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PNM
- 	help
- 	  PNM plugin
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index 3af05ba6b4..433084fd6b 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -345,6 +345,19 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GDKPIXBUF
+ comment "gdkpixbuf needs a toolchain w/ wchar, threads"
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
  
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PROXY
-+	bool "proxy"
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_JACK
++	bool "jack"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	select BR2_PACKAGE_JACK2
 +	help
-+	  Proxy plugin
++	  JACK audio source/sink plugin
 +
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE
- 	bool "rawparse"
- 	help
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index a66d3e32bf..d6414f9daa 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -344,6 +344,12 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-pnm
- endif
++comment "jack needs a toolchain w/ C++, dynamic library"
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
++	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
++
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
+ 	bool "pulseaudio"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 462d5e1307..829d27a2da 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -30,7 +30,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS += \
  
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PROXY),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += --enable-proxy
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += --disable-proxy
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-rawparse
+ GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
+ 
+-ifeq ($(BR2_PACKAGE_JACK2),y)
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_JACK),y)
+ GST1_PLUGINS_GOOD_CONF_OPTS += --enable-jack
+ GST1_PLUGINS_GOOD_DEPENDENCIES += jack2
  else
 -- 
 2.21.0
