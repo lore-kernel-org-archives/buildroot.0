@@ -1,101 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu,  9 May 2019 22:28:07 +0200
-Subject: [Buildroot] [PATCH 1/2] package/netsurf: change how CFLAGS/LDFLAGS
- are passed
+Date: Thu,  9 May 2019 22:28:08 +0200
+Subject: [Buildroot] [PATCH 2/2] package/netsurf: do not allow on static
+ linking configurations
 In-Reply-To: <20190509202808.6741-1-thomas.petazzoni@bootlin.com>
 References: <20190509202808.6741-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190509202808.6741-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20190509202808.6741-3-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In commit 6da049f8ae61b956d135526722ce58fc2f67626a ("package/netsurf:
-fix build"), the CC variable passed to netsurf's build system was
-extended to pass some special -I and -L options needed for netsurf to
-find its own headers/libraries.
+Static linking does not work properly in netsurf, nobody fixed it, and
+the netsurf build system is completely broken. Let's disable the
+package for static linking configurations.
 
-Unfortunately, on some systems (including mine), it breaks the build,
-due to:
+Fixes:
 
-  toolpath_ := $(shell /bin/which $(CC__))
-
-when $(CC__) contains some -I/-L options, they are considered to be
-options "to which", which causes the funny:
-
-/usr/bin/make install --directory=libnslog HOST=arm-buildroot-linux-uclibcgnueabi PREFIX=/home/thomas/projets/outputs/shared-netsurf/build/netsurf-3.8/tmpusr Q=@ WARNFLAGS='-Wall -W -Wno-error' DESTDIR=
-make[3]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
-/bin/which: invalid option -- 'I'
-/bin/which: invalid option -- '/'
-/bin/which: invalid option -- 'h'
-/bin/which: invalid option -- 'o'
-/bin/which: invalid option -- 'm'
-/bin/which: invalid option -- 'e'
-/bin/which: invalid option -- '/'
-/bin/which: invalid option -- 't'
-/bin/which: invalid option -- 'h'
-/bin/which: invalid option -- 'o'
-/bin/which: invalid option -- 'm'
-/bin/which: invalid option -- 's'
-/bin/which: invalid option -- '/'
-[...]
-/bin/which: invalid option -- 'l'
-/bin/which: invalid option -- 'b'
-/bin/which: --read-alias, -i: Warning: stdin is a tty.
-
-and the build simply hangs.
-
-We cannot pass CFLAGS/LDFLAGS as make options, as they would override
-the CFLAGS definitions in netsurf Makefiles. However, those Makefiles
-use the construct:
-
-CFLAGS := $(CFLAGS) -more-flags
-
-so by passing CFLAGS and LDFLAGS through the make environment, which
-can achieve our goal.
-
-It is worth mentioning that it remains very fragile, because
-CFLAGS/LDFLAGS are used both for building target objects but also some
-host tools. The netsurf build system is really not good.
+  http://autobuild.buildroot.net/results/28b43c29e241080e23c87145797ea00dc4b3970d/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/netsurf/netsurf.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ package/netsurf/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
-index e617707ade..31cf9e62b8 100644
---- a/package/netsurf/netsurf.mk
-+++ b/package/netsurf/netsurf.mk
-@@ -70,13 +70,18 @@ define NETSURF_CONFIGURE_CMDS
- 	$(NETSURF_CURL_CONFIGURE_CMDS)
- endef
- 
-+NETSURF_MAKE_ENV = \
-+	$(TARGET_MAKE_ENV) \
-+	CFLAGS="$(TARGET_CFLAGS) -I$(@D)/tmpusr/include" \
-+	LDFLAGS="$(TARGET_LDFLAGS) -L$(@D)/tmpusr/lib"
+diff --git a/package/netsurf/Config.in b/package/netsurf/Config.in
+index 8a301e6218..30b2695309 100644
+--- a/package/netsurf/Config.in
++++ b/package/netsurf/Config.in
+@@ -1,5 +1,10 @@
++comment "netsurf needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
 +
- NETSURF_MAKE_OPTS = \
- 	TARGET=$(NETSURF_FRONTEND) \
- 	BISON="$(HOST_DIR)/bin/bison" \
- 	FLEX="$(HOST_DIR)/bin/flex" \
- 	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
- 	BUILD_CC="$(HOSTCC)" \
--	CC="$(TARGET_CC) -I$(@D)/tmpusr/include -L$(@D)/tmpusr/lib" \
-+	CC="$(TARGET_CC)" \
- 	AR="$(TARGET_AR)" \
- 	TMP_PREFIX=$(@D)/tmpusr \
- 	NETSURF_CONFIG="$(NETSURF_CONFIG)" \
-@@ -84,7 +89,7 @@ NETSURF_MAKE_OPTS = \
- 
- define NETSURF_BUILD_CMDS
- 	mkdir -p $(@D)/tmpusr
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(NETSURF_MAKE_OPTS) \
-+	$(NETSURF_MAKE_ENV) $(MAKE) -C $(@D) $(NETSURF_MAKE_OPTS) \
- 		build
- endef
- 
+ config BR2_PACKAGE_NETSURF
+ 	bool "netsurf"
++	# static linking support is broken beyond repair
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_JPEG
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
 -- 
 2.21.0
