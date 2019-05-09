@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu,  9 May 2019 18:46:20 -0400
-Subject: [Buildroot] [PATCH 2/5] package/gstreamer1/gst1-plugins-good: Add
- jack plugin
+Date: Thu,  9 May 2019 18:46:22 -0400
+Subject: [Buildroot] [PATCH 4/5] package/gstreamer1/gst1-plugins-bad: add
+ audiolatency plugin
 In-Reply-To: <20190509224624.80437-1-aduskett@gmail.com>
 References: <20190509224624.80437-1-aduskett@gmail.com>
-Message-ID: <20190509224624.80437-3-aduskett@gmail.com>
+Message-ID: <20190509224624.80437-5-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,51 +13,47 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-Currently there is no explicit way to turn the jack plugin on or off.
-Create a menu entry allowing users to disable or enable the plugin.
+This plugin was introduced in 1.16.0. It is dependencyless and provides
+a way to measure audio latency
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/gstreamer1/gst1-plugins-good/Config.in      | 13 +++++++++++++
- .../gst1-plugins-good/gst1-plugins-good.mk          |  2 +-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 5 +++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 3af05ba6b4..433084fd6b 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -345,6 +345,19 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GDKPIXBUF
- comment "gdkpixbuf needs a toolchain w/ wchar, threads"
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index c53ff66272..35d6bddd05 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -46,6 +46,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOFXBAD
+ 	help
+ 	  Audio filters plugin
  
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_JACK
-+	bool "jack"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	select BR2_PACKAGE_JACK2
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOLATENCY
++	bool "audiolatency"
 +	help
-+	  JACK audio source/sink plugin
++	  Audio latency plugin
 +
-+comment "jack needs a toolchain w/ C++, dynamic library"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOMIXMATRIX
+ 	bool "audiomixmatrix"
+ 	help
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index d6414f9daa..ad1adbc385 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -132,6 +132,12 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-audiofxbad
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOLATENCY),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-audiolatency
++else
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-audiolatency
++endif
 +
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
- 	bool "pulseaudio"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index 462d5e1307..829d27a2da 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -30,7 +30,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS += \
- 
- GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
- 
--ifeq ($(BR2_PACKAGE_JACK2),y)
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_JACK),y)
- GST1_PLUGINS_GOOD_CONF_OPTS += --enable-jack
- GST1_PLUGINS_GOOD_DEPENDENCIES += jack2
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOMIXMATRIX),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-audiomixmatrix
  else
 -- 
 2.21.0
