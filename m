@@ -1,20 +1,39 @@
-From: Carlos A. M. dos Santos <unixmania@gmail.com>
-Date: Thu, 9 May 2019 11:34:44 -0300
-Subject: [Buildroot] [RFC PATCH] package/util-linux: build libraries as
- a separate package
-In-Reply-To: <a430a07e-e29f-8878-27c5-4fc89d63af85@mind.be>
-References: <20190507165158.10427-1-unixmania@gmail.com>
- <20190507215424.791e69d3@windsurf> <20190507204018.GH6887@scaer>
- <CAJ4jsaeNW-W_K-tu1g1hFrtkO9wy6p=spe4ccwOjkbukmpvsJg@mail.gmail.com>
- <a430a07e-e29f-8878-27c5-4fc89d63af85@mind.be>
-Message-ID: <CAJ4jsaeJ9A8nTQ+_9Zbbst164RuUM1fWA=1BkcL8pTwpWZLMag@mail.gmail.com>
+From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Date: Thu,  9 May 2019 17:58:48 +0200
+Subject: [Buildroot] [PATCH 0/2] matplotlib for python 2d graphics
+Message-ID: <1557417530-25084-1-git-send-email-jugurtha.belkalem@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I submitted  a new patch using a slightly different approach:
-https://patchwork.ozlabs.org/patch/1097541/
+This library allows to have 2D data visualization
+in python.
+
+This library requires Python>=3.5.
+
+Jugurtha BELKALEM (2):
+  package/python-cycler: new package
+  package/python-matplotlib: new package
+
+ DEVELOPERS                                         |  4 +++
+ package/Config.in                                  |  2 ++
+ package/python-cycler/Config.in                    |  8 ++++++
+ package/python-cycler/python-cycler.hash           |  4 +++
+ package/python-cycler/python-cycler.mk             | 14 +++++++++++
+ .../0001-Fix-invalid-inclusion-headers.patch       | 29 ++++++++++++++++++++++
+ package/python-matplotlib/Config.in                | 22 ++++++++++++++++
+ package/python-matplotlib/python-matplotlib.hash   |  4 +++
+ package/python-matplotlib/python-matplotlib.mk     | 16 ++++++++++++
+ 9 files changed, 103 insertions(+)
+ create mode 100644 package/python-cycler/Config.in
+ create mode 100644 package/python-cycler/python-cycler.hash
+ create mode 100644 package/python-cycler/python-cycler.mk
+ create mode 100644 package/python-matplotlib/0001-Fix-invalid-inclusion-headers.patch
+ create mode 100644 package/python-matplotlib/Config.in
+ create mode 100644 package/python-matplotlib/python-matplotlib.hash
+ create mode 100644 package/python-matplotlib/python-matplotlib.mk
+
 -- 
-Carlos Santos <unixmania@gmail.com>
+2.7.4
