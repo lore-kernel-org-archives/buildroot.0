@@ -1,30 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 09 May 2019 10:50:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/redis: bump to 5.0.4
-In-Reply-To: <20190509074311.102736-1-titouan.christophe@railnova.eu> (Titouan
- Christophe's message of "Thu, 9 May 2019 09:43:11 +0200")
-References: <20190509074311.102736-1-titouan.christophe@railnova.eu>
-Message-ID: <871s18huzm.fsf@dell.be.48ers.dk>
+Date: Thu, 09 May 2019 11:01:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/collectd: explicitly disable lua
+In-Reply-To: <20190508210543.13740-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 8 May 2019 23:05:43 +0200")
+References: <20190508210543.13740-1-fontaine.fabrice@gmail.com>
+Message-ID: <87woj0gfwn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > * Redis 5 now supports reproducible builds via SOURCE_DATE_EPOCH
- > * Add myself to DEVELOPERS for Redis
+ > lua plugin has been added in version 5.6.0 with
+ > https://github.com/collectd/collectd/commit/023092323ca617c8ff95b1efd4a055c29b1aaa3b
 
- > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+ > Disabled it otherwise it'll be enabled if liblua is found
+
+Is there any specific reason why we don't instead enable it if lua is
+enabled?
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
  > ---
- >  DEVELOPERS                      | 3 +++
- >  package/redis/0001-uclibc.patch | 9 ++++++---
+ >  package/collectd/collectd.mk | 2 +-
+ >  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to next, thanks.
+ > diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+ > index 589324e612..027df8f111 100644
+ > --- a/package/collectd/collectd.mk
+ > +++ b/package/collectd/collectd.mk
+ > @@ -15,7 +15,7 @@ COLLECTD_LICENSE_FILES = COPYING libltdl/COPYING.LIB
+ >  # These require unmet dependencies, are fringe, pointless or deprecated
+ >  COLLECTD_PLUGINS_DISABLE = \
+ >  	amqp apple_sensors aquaero ascent barometer dbi dpdkstat email \
+ > -	gmond grpc hddtemp intel_rdt ipmi java libvirt lpar lvm \
+ > +	gmond grpc hddtemp intel_rdt ipmi java libvirt lpar lua lvm \
+ >  	madwifi mbmon mic multimeter netapp notify_desktop numa \
+ >  	nut onewire oracle perl pf pinba powerdns python redis routeros \
+ >  	rrdcached sigrok tape target_v5upgrade teamspeak2 ted \
+ > -- 
+ > 2.20.1
 
-It would be great if we could get our patches upstream. Care to take a
-look at that?
+ > _______________________________________________
+ > buildroot mailing list
+ > buildroot at busybox.net
+ > http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 Bye, Peter Korsgaard
