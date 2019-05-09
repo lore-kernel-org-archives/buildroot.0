@@ -1,34 +1,43 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Thu, 9 May 2019 11:34:30 -0700
-Subject: [Buildroot] uclibc-ng built with wrong _FILE_OFFSET_BITS
-Message-ID: <CAMo8BfKY5TyJeF=-toMXQZ1SWwM1ymn+3tTsi2nmoiHUUFeb5w@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 9 May 2019 21:43:48 +0200
+Subject: [Buildroot] Fwd: [autobuild.buildroot.net] Your build results
+ for 2019-05-08
+In-Reply-To: <CAMQcK5J5YUv4nYfdFpZhRnO6uy+5i6Rpnxa6nGXcZNQDTA3zGw@mail.gmail.com>
+References: <20190509060040.D56B7604B6@crulimr01.rockwellcollins.com>
+ <CAMQcK5J5YUv4nYfdFpZhRnO6uy+5i6Rpnxa6nGXcZNQDTA3zGw@mail.gmail.com>
+Message-ID: <20190509214348.1d45d19e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Ryan,
 
-I've tried to run uclibc-ng tests on xtensa in a buildroot-built rootfs
-and found misc/tst-preadvwritev failing with the following message:
+On Thu, 9 May 2019 08:55:43 -0500
+Ryan Barnett <ryan.barnett@rockwellcollins.com> wrote:
 
-  first buffer from first preadv different than expected
+> [following]
+> --2019-05-08 14:47:04--
+> https://sourceforge.net/projects/atftp/files/atftp-0.7.2.tar.gz
+> Connecting to sourceforge.net (sourceforge.net)|216.105.38.13|:443... connected.
+> GnuTLS: A TLS fatal alert has been received.
+> Unable to establish SSL connection.
+> 
+> These were both run on the autobuilder from Thomas so it may be a
+> build server configuration issue.
 
-Digging deeper into it I've found that the test is built with the following
-definition in the command line: -D_FILE_OFFSET_BITS=64,
-due to the following line in the uclibc-ng-test.mk:
+It is a bug in the old version of wget/gnutls that is used in my old
+Debian Wheezy chroot. It disappears once the tarball is cached in
+sources.buildroot.net.
 
-  UCLIBC_EXTRA_CFLAGS="$(TARGET_CFLAGS)"
+I should probably update my chroot to Debian Jessie, now that Debian
+Wheezy is completely EOLed.
 
-but uclibc-ng itself does not have -D_FILE_OFFSET_BITS=64,
-because of the following definition in the uclibc-ng.mk:
+Best regards,
 
-  UCLIBC_EXTRA_CFLAGS="$(TARGET_ABI)"
-
-uclibc-ng defaults to 32-bit off_t type then.
-I'm not sure what's broken here, buildroot or uclibc-ng. Ideas?
-
+Thomas
 -- 
-Thanks.
--- Max
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
