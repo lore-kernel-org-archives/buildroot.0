@@ -1,69 +1,86 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  9 May 2019 09:46:53 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{9, 14,
- 19}.x / 5.0.x series
-Message-ID: <20190509074654.3957-1-peter@korsgaard.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Thu,  9 May 2019 09:43:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/redis: bump to 5.0.4
+Message-ID: <20190509074311.102736-1-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+* Redis 5 now supports reproducible builds via SOURCE_DATE_EPOCH
+* Add myself to DEVELOPERS for Redis
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 4875454195..af3c9115f2 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -121,7 +121,7 @@ endif
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+---
+ DEVELOPERS                      | 3 +++
+ package/redis/0001-uclibc.patch | 9 ++++++---
+ package/redis/redis.hash        | 2 +-
+ package/redis/redis.mk          | 2 +-
+ 4 files changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5bfc4561c0..b1c82dc304 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2221,6 +2221,9 @@ F:	toolchain/
+ N:	Timo Ketola <timo.ketola@exertus.fi>
+ F:	package/fbgrab/
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.0.13" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.0.14" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 549b4d5351..fae7c04cd9 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256 d06a7be6e73f97d1350677ad3bae0ce7daecb79c2c2902aaabe806f7fa94f041  linux-5.1.tar.xz
--sha256 bcfd52bf1faa24f5f712146a873959461e001656ad67717e80b947aa6ad53479  linux-5.0.13.tar.xz
-+sha256 2e376076cf8a20c0f86fa30fc56a9ca35cadbe43908cd24b7d678f97f3676c61  linux-5.0.14.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 6fd8cd4d8a15d7bfb4a7968fbe104f97f8c5ff557c752aae43fe13a6ca073fb0  linux-4.19.40.tar.xz
--sha256 a05afa95163eab4ec76dabb51f54aea8c40ef63d5ea2d112ac04e6b79a8e8dbd  linux-4.14.116.tar.xz
--sha256 bc579d904f7d7d04adf03ed66dc8ac0a29d6cc74d989d3aa5c6ae2dedaf51168  linux-4.9.173.tar.xz
-+sha256 90de6296504c64cbc4147fe053a1e8f88a98b7aed7896777e33a0321d0714782  linux-4.19.41.tar.xz
-+sha256 a855a134e7a77dff92ad50f20501dbb39a1ee011ffa781ed885a3d17c6b9f23f  linux-4.14.117.tar.xz
-+sha256 fc84fd68077fff55bb1779fbf3ee916257a4362a8e6d982773856c78f7865858  linux-4.9.174.tar.xz
- sha256 2c6a9d2765ef182f2470afed5af74de6c435ba9aaf422af54db8c5dc2b4f27d1  linux-4.4.179.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2042702eb9..3fd8b000c5 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -298,10 +298,10 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.179"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.173"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.116"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.40"	if BR2_KERNEL_HEADERS_4_19
--	default "5.0.13"	if BR2_KERNEL_HEADERS_5_0
-+	default "4.9.174"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.117"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.41"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.0.14"	if BR2_KERNEL_HEADERS_5_0
- 	default "5.1"		if BR2_KERNEL_HEADERS_5_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
++N:	Titouan Christophe <titouan.christophe@railnova.eu>
++F:	package/redis/
++
+ N:	Trent Piepho <tpiepho@impinj.com>
+ F:	package/libp11/
+ 
+diff --git a/package/redis/0001-uclibc.patch b/package/redis/0001-uclibc.patch
+index a0534d5748..3329a60edc 100644
+--- a/package/redis/0001-uclibc.patch
++++ b/package/redis/0001-uclibc.patch
+@@ -8,6 +8,8 @@ against uclibc.  Patch originates from:
+ Signed-off-by: Daniel Price <daniel.price@gmail.com>
+ [Martin: adapt to 3.0.3]
+ Signed-off-by: Martin Bark <martin@barkynet.com>
++[Titouan: adapt to 5.0.4]
++Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+ 
+ =========================================================================
+ diff -ur old/src/config.h new/src/config.h
+@@ -17,7 +19,8 @@ diff -ur old/src/config.h new/src/config.h
+  #endif
+  
+  /* Test for backtrace() */
+--#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__))
+-+#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__) && !defined(__UCLIBC__))
++-#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__)) || \
+++#if defined(__APPLE__) || (defined(__linux__) && defined(__GLIBC__) && !defined(__UCLIBC__)) || \
++     defined(__FreeBSD__) || (defined(__OpenBSD__) && defined(USE_BACKTRACE))\
++  || defined(__DragonFly__)
+  #define HAVE_BACKTRACE 1
+- #endif
+diff --git a/package/redis/redis.hash b/package/redis/redis.hash
+index 0b4e25c61d..9ec243d7dd 100644
+--- a/package/redis/redis.hash
++++ b/package/redis/redis.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/antirez/redis-hashes/blob/master/README
+-sha256 fc53e73ae7586bcdacb4b63875d1ff04f68c5474c1ddeda78f00e5ae2eed1bbb  redis-4.0.11.tar.gz
++sha256 3ce9ceff5a23f60913e1573f6dfcd4aa53b42d4a2789e28fa53ec2bd28c987dd  redis-5.0.4.tar.gz
+ 
+ # Locally calculated
+ sha256 cbf420a3672475a6e2765e3c0984c1f81efe0212afb94a3c998ee63bfd661063  COPYING
+diff --git a/package/redis/redis.mk b/package/redis/redis.mk
+index da2307d693..372676438a 100644
+--- a/package/redis/redis.mk
++++ b/package/redis/redis.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-REDIS_VERSION = 4.0.11
++REDIS_VERSION = 5.0.4
+ REDIS_SITE = http://download.redis.io/releases
+ REDIS_LICENSE = BSD-3-Clause (core); MIT and BSD family licenses (Bundled components)
+ REDIS_LICENSE_FILES = COPYING
 -- 
-2.11.0
+2.21.0
