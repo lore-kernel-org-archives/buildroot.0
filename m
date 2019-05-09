@@ -1,124 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 9 May 2019 21:23:57 +0200
-Subject: [Buildroot] [git commit] package/bind: enable static build
-Message-ID: <20190509202328.9FC9188DC0@busybox.osuosl.org>
+Date: Thu, 9 May 2019 21:25:32 +0200
+Subject: [Buildroot] [git commit] package/bind: don't enable server by
+ default
+Message-ID: <20190509202328.AEB8E88EE3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05cbc9a184867fe57fe53abe29af046b1b17ee54
+commit: https://git.buildroot.net/buildroot/commit/?id=39cd8cc9beb119d77a54a9fa7309ead2b18d563e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Static build has been disabled in 2014 with commit
-6045904752b06a8b8e52ba8fc2e49a8548964e8d however bind can be built
-statically thanks to --without-dlopen so enable it back
+Don't enable server by default as dhcp will now select bind to use the
+bind libraries
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...z_open_driver.c-fix-build-without-dlfcn.h.patch | 28 ++++++++++++++++++++++
- package/bind/Config.in                             |  5 ++--
- package/bind/bind.mk                               | 14 +++++++++--
- 3 files changed, 42 insertions(+), 5 deletions(-)
+ package/bind/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch b/package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch
-new file mode 100644
-index 0000000000..8b73e746e4
---- /dev/null
-+++ b/package/bind/0002-dlz_open_driver.c-fix-build-without-dlfcn.h.patch
-@@ -0,0 +1,28 @@
-+From 92b738a0fe8a7d65346de9e6dd7a8f135ee29765 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 23 Apr 2019 22:45:25 +0200
-+Subject: [PATCH] dlz_open_driver.c: fix build without dlfcn.h
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://gitlab.isc.org/isc-projects/bind9/issues/995]
-+---
-+ bin/named/unix/dlz_dlopen_driver.c | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/bin/named/unix/dlz_dlopen_driver.c b/bin/named/unix/dlz_dlopen_driver.c
-+index 74d29ffa09..ab8a5c9493 100644
-+--- a/bin/named/unix/dlz_dlopen_driver.c
-++++ b/bin/named/unix/dlz_dlopen_driver.c
-+@@ -14,7 +14,9 @@
-+ #include <inttypes.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-++#if HAVE_DLFCN_H
-+ #include <dlfcn.h>
-++#endif
-+ 
-+ #include <dns/log.h>
-+ #include <dns/result.h>
-+-- 
-+2.20.1
-+
 diff --git a/package/bind/Config.in b/package/bind/Config.in
-index 049a90cbaf..5b34b66f7a 100644
+index 60546f691b..6d4ee2e6d7 100644
 --- a/package/bind/Config.in
 +++ b/package/bind/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_BIND
- 	bool "bind"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_STATIC_LIBS
+@@ -28,7 +28,6 @@ if BR2_PACKAGE_BIND
+ 
+ config BR2_PACKAGE_BIND_SERVER
+ 	bool "Install server components"
+-	default y
  	help
- 	  BIND (Berkeley Internet Name Domain) is an
- 	  implementation of the Domain Name System (DNS) protocols
-@@ -41,6 +40,6 @@ config BR2_PACKAGE_BIND_TOOLS
+ 	  Install server components (named, lwresd)
  
- endif
- 
--comment "bind needs a toolchain w/ threads, dynamic library"
-+comment "bind needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 087ce941b0..9d1f5a1ecb 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -28,7 +28,6 @@ BIND_CONF_OPTS = \
- 	--with-libjson=no \
- 	--with-randomdev=/dev/urandom \
- 	--enable-epoll \
--	--with-libtool \
- 	--with-gssapi=no \
- 	--enable-filter-aaaa
- 
-@@ -54,12 +53,13 @@ BIND_CONF_OPTS += --with-libxml2=no
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--BIND_DEPENDENCIES += openssl
-+BIND_DEPENDENCIES += host-pkgconf openssl
- BIND_CONF_OPTS += \
- 	--with-openssl=$(STAGING_DIR)/usr \
- 	--with-ecdsa=yes \
- 	--with-eddsa=no \
- 	--with-aes=yes
-+BIND_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- # GOST cipher support requires openssl extra engines
- ifeq ($(BR2_PACKAGE_OPENSSL_ENGINES),y)
- BIND_CONF_OPTS += --with-gost=yes
-@@ -84,6 +84,16 @@ else
- BIND_CONF_OPTS += --with-readline=no
- endif
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+BIND_CONF_OPTS += \
-+	--without-dlopen \
-+	--without-libtool
-+else
-+BIND_CONF_OPTS += \
-+	--with-dlopen \
-+	--with-libtool
-+endif
-+
- define BIND_TARGET_REMOVE_SERVER
- 	rm -rf $(addprefix $(TARGET_DIR)/usr/sbin/, $(BIND_TARGET_SERVER_SBIN))
- endef
