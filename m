@@ -1,42 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 09 May 2019 12:17:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/collectd: explicitly disable lua
-In-Reply-To: <CAPi7W81GSpCx6KXnt2SxuLYBiLhR8n9OC97nFvcfrqMMwdLiTQ@mail.gmail.com>
- (Fabrice Fontaine's message of "Thu, 9 May 2019 11:28:54 +0200")
-References: <20190508210543.13740-1-fontaine.fabrice@gmail.com>
- <87woj0gfwn.fsf@dell.be.48ers.dk>
- <CAPi7W81GSpCx6KXnt2SxuLYBiLhR8n9OC97nFvcfrqMMwdLiTQ@mail.gmail.com>
-Message-ID: <87sgtogcdv.fsf@dell.be.48ers.dk>
+Date: Thu, 9 May 2019 12:18:13 +0200
+Subject: [Buildroot] [git commit] package/collectd: explicitly disable lua
+Message-ID: <20190509101257.EA86588DC0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=753bfec583b6bb921b44d6735df67f9d681c31c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Dear Peter,
- > Le jeu. 9 mai 2019 ? 11:01, Peter Korsgaard <peter@korsgaard.com> a ?crit :
- >> 
- >> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
- >> 
- >> > lua plugin has been added in version 5.6.0 with
- >> > https://github.com/collectd/collectd/commit/023092323ca617c8ff95b1efd4a055c29b1aaa3b
- >> 
- >> > Disabled it otherwise it'll be enabled if liblua is found
- >> 
- >> Is there any specific reason why we don't instead enable it if lua is
- >> enabled?
- > Because I didn't have time to test it yet and I saw that 2019.05-rc1
- > was released.
- > So my reasonig was to disable it for 2019.05 and enable it for next.
+lua plugin has been added in version 5.6.0 with
+https://github.com/collectd/collectd/commit/023092323ca617c8ff95b1efd4a055c29b1aaa3b
 
-Ok, that is also fine by me.
+Disabled it otherwise it'll be enabled if liblua is found
 
-Such meta-information can go into the commit message but under the --
-line, so it doesn't end up in the git repo.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/collectd/collectd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index 589324e612..027df8f111 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -15,7 +15,7 @@ COLLECTD_LICENSE_FILES = COPYING libltdl/COPYING.LIB
+ # These require unmet dependencies, are fringe, pointless or deprecated
+ COLLECTD_PLUGINS_DISABLE = \
+ 	amqp apple_sensors aquaero ascent barometer dbi dpdkstat email \
+-	gmond grpc hddtemp intel_rdt ipmi java libvirt lpar lvm \
++	gmond grpc hddtemp intel_rdt ipmi java libvirt lpar lua lvm \
+ 	madwifi mbmon mic multimeter netapp notify_desktop numa \
+ 	nut onewire oracle perl pf pinba powerdns python redis routeros \
+ 	rrdcached sigrok tape target_v5upgrade teamspeak2 ted \
