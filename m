@@ -1,71 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu,  9 May 2019 22:45:28 +0200
-Subject: [Buildroot] [PATCH] package/postgresql: security bump to version
- 11.3
-Message-ID: <20190509204528.18008-1-peter@korsgaard.com>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  9 May 2019 23:50:02 +0300
+Subject: [Buildroot] [PATCH v2] package/strace: disable bpf support for m68k
+Message-ID: <d10e11cd2b915958286cf09efc470beb80c8ccb0.1557435002.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+Mismatch in struct bpf_prog_info fields offset between kernel headers
+and strace local definition causes build failure. Disable bpf support
+for m68k until upstream (either strace or the kernel) find a solution.
 
-CVE-2019-10129: Memory disclosure in partition routing
+https://lists.strace.io/pipermail/strace-devel/2019-May/thread.html#8750
 
-Prior to this release, a user running PostgreSQL 11 can read arbitrary bytes
-of server memory by executing a purpose-crafted INSERT statement to a
-partitioned table.
+Fixes:
+http://autobuild.buildroot.net/results/c036b11bf1f2fc39f42661634ef3e03360fb85de/
+http://autobuild.buildroot.net/results/f142e4c7f0d512bb872572f5e678230117ab0ad5/
+http://autobuild.buildroot.net/results/b74a17cfa7112c026938cacafdd18c6dca285005/
 
-CVE-2019-10130: Selectivity estimators bypass row security policies
-
-PostgreSQL maintains statistics for tables by sampling data available in
-columns; this data is consulted during the query planning process.  Prior to
-this release, a user able to execute SQL queries with permissions to read a
-given column could craft a leaky operator that could read whatever data had
-been sampled from that column.  If this happened to include values from rows
-that the user is forbidden to see by a row security policy, the user could
-effectively bypass the policy.  This is fixed by only allowing a
-non-leakproof operator to use this data if there are no relevant row
-security policies for the table.
-
-For more details, see the release notes:
-https://www.postgresql.org/about/news/1939/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/postgresql/postgresql.hash | 8 ++++----
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+v2: Only disable bpf support; add Fixes tag
+---
+ package/strace/strace.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index c4d7ab55bb..ba6e02d4d8 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,7 +1,7 @@
--# From https://ftp.postgresql.org/pub/source/v11.2/postgresql-11.2.tar.bz2.md5
--md5 19d43be679cb0d55363feb8926af3a0f  postgresql-11.2.tar.bz2
--# From https://ftp.postgresql.org/pub/source/v11.2/postgresql-11.2.tar.bz2.sha256
--sha256 2676b9ce09c21978032070b6794696e0aa5a476e3d21d60afc036dc0a9c09405  postgresql-11.2.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v11.3/postgresql-11.3.tar.bz2.md5
-+md5 c2a729b754b8de86a969c86ec25db076  postgresql-11.3.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v11.3/postgresql-11.3.tar.bz2.sha256
-+sha256 2a85e082fc225944821dfd23990e32dfcd2284c19060864b0ad4ca537d30522d  postgresql-11.3.tar.bz2
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 0f705a2fb8ae..f957144160af 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -19,6 +19,12 @@ STRACE_CONF_OPTS += st_cv_m32_mpers=no \
+ 	st_cv_mx32_mpers=no
+ endif
  
- # License file, Locally calculated
- sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 2f2b49ca24..067679bcbd 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 11.2
-+POSTGRESQL_VERSION = 11.3
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
++# struct bpf_prog_info fields offset mismatch
++# https://lists.strace.io/pipermail/strace-devel/2019-May/thread.html#8750
++ifeq ($(BR2_m68k),y)
++STRACE_CONF_OPTS += ac_cv_header_linux_bpf_h=no
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBUNWIND),y)
+ STRACE_DEPENDENCIES += libunwind
+ STRACE_CONF_OPTS += --with-libunwind
 -- 
-2.11.0
+2.20.1
