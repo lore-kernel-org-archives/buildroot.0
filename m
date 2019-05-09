@@ -1,264 +1,143 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 9 May 2019 20:03:15 +0200
-Subject: [Buildroot] [RFC PATCH v2] package/util-linux: build programs
- and libraries in separate packages
-In-Reply-To: <20190509143039.24045-1-unixmania@gmail.com>
-References: <20190509143039.24045-1-unixmania@gmail.com>
-Message-ID: <20190509180315.GA2787@scaer>
+Date: Thu, 9 May 2019 20:10:00 +0200
+Subject: [Buildroot] [PATCH v2 0/3] murata-wireless firmware packages
+In-Reply-To: <87pnosxdxd.fsf@grinn-global.com>
+References: <20190507083218.24283-1-m.niestroj@grinn-global.com>
+ <20190507154117.GG6887@scaer> <87pnosxdxd.fsf@grinn-global.com>
+Message-ID: <20190509181000.GB2787@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Carlos, All,
+Marcin, All,
 
-On 2019-05-09 11:30 -0300, unixmania at gmail.com spake thusly:
-> From: Carlos Santos <unixmania@gmail.com>
+On 2019-05-09 09:52 +0200, Marcin Niestr?j spake thusly:
+> Yann E. MORIN <yann.morin.1998@free.fr> writes:
+> > On 2019-05-07 10:32 +0200, Marcin Niestroj spake thusly:
+> >> This set adds 3 firmware packages for muRata wireless modules (WiFi + BLE).
+> >> I've put all three packages into single murata-wireless directory and Kconfig
+> >> submenu, as they relate to the same hardware and there are plenty of options
+> >> to choose from. Not sure whether this is the correct approach, so looking
+> >> forward to get feedback on this.
+> >
+> > I wonder why we would actually need three packages.
+> >
+> > As far as I can see from a cursory look, they are all very tightly
+> > coupled; they even have the same choice about the actual variant to use.
+> >
+> > So, I would like we look at making that a single package, which
+> > downloads multiple tarballs, something like:
+> >
+> >     MURATA_WIRELESS_CYW_FW_VERSION = 8d87950bfad28c65926695b7357bd8995b60016a
+> >     MURATA_WIRELESS_CYW_FW_VERSION_NVRAM = d27f1bf105fa1e5b828e355793b88d4b66188411
+> >     MURATA_WIRELESS_CYW_FW_VERSION_PATCH = 748462f0b02ec4aeb500bedd60780ac51c37be31
+> >
+> >     MURATA_WIRELESS_CYW_FW_SITE = $(call github,murata-wireless,cyw-fmac-fw,$(MURATA_WIRELESS_CYW_FW_VERSION)
+> >     MURATA_WIRELESS_CYW_FW_EXTRA_DOWNLOADS = \
+> >         $(call github,murata-wireless,cyw-fmac-nvram,$(MURATA_WIRELESS_CYW_FW_VERSION_NVRAM)/cyw-bt-nvram-$(MURATA_WIRELESS_CYW_FW_VERSION_NVRAM).tar.gz \
+> >         $(call github,murata-wireless,cyw-fmac-patch,$(MURATA_WIRELESS_CYW_FW_VERSION_PATCH)/cyw-bt-patch-$(MURATA_WIRELESS_CYW_FW_VERSION_PATCH).tar.gz
+> >
+> >     define MURATA_WIRELESS_CYW_FW_EXTRACT_NVRAM_PATCH
+> >         $(foreach tar, $(notdir $(MURATA_WIRELESS_CYW_FW_EXTRA_DOWNLOADS)), \
+> >             $(call suitable-extractor,$(tar)) $(MURATA_WIRELESS_CYW_FW_DL_DIR)/$(tar) | \
+> >             $(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -$(sep) \
+> >         )
+> >     endef
+> >     MURATA_WIRELESS_CYW_FW_POST_EXTRACT_HOOKS += MURATA_WIRELESS_CYW_FW_EXTRACT_NVRAM_PATCH
+> >
+> > And a similar hook for the installation step (which I leave up to you as
+> > an exercise ;-) ).
 > 
-> The findmount and lsblk utilities need udev to work correctly but cannot
-> be built with udev support because the packages providing libudev (eudev
-> and systemd) depend on util-linux, creating a chicken-egg problem. Solve
-> it by means of the following changes:
-> 
-> - Split util-linux into three packages:
->   - util-linux-libs, providing lib{blkid,fdisk,mount,smartcols,uuid}.
->   - util-linux-programs, providing both the aforementioned libs and the
->     programs.
->   - util-linux, a dummy package that drives configuration and building
->     of the other ones.
-> - Add blind selections for -libs and -programs, i.e. they are indirectly
->   selected according to the util-linux options.
-> - Make util-linux have build dependencies on util-linux-{libs,programs}
->   if they are selected.
-> - host-util-linux has a build depencency on either host-util-linux-libs
->   or host-util-linux-programs (not on both, since they are installed on
->   the same destination).
-> - Make eudev and systemd have build dependencies on util-linux-libs.
->   This can be extended to other packages in the future but is not needed
->   right now because the configuration options are backward-compatible.
-> - Make util-linux-programs have an optional build dependency on the
->   package that provides libudev (either eudev or systemd), if it is
->   selected.
+> Thanks for review and tips on how to use single package here. The only
+> downside that I see is that all three packages will be downloaded, even
+> if (in some cases) one or two are required only. However overall code
+> will be much simpler, so it is a good idea anyway.
 
-To be honest, I was at first very reluctant at lloking into that patch,
-and your explanations of it make it appear more nasty than it really is.
-It *is* a sneaky trick you're playing with the install-target/staging
-conditions, and I am not too happy with it, that's for sure.
+Well, you can always do the extra dowenload dance conditionally:
 
-But otherwise, it is interesting what you came up with.
+    ifeq ($(BR2_PACKAGE_MURATA_WIRELESS_CYW_FW_NEEDS_NVRAM),y)
+    MURATA_WIRELESS_CYW_FW_EXTRA_DOWNLOADS += \
+        (call github,murata-wireless,cyw-fmac-nvram,$(MURATA_WIRELESS_CYW_FW_VERSION_NVRAM)/cyw-bt-nvram-$(MURATA_WIRELESS_CYW_FW_VERSION_NVRAM).tar.gz \
+    endif
 
-I even think you could have gone a bit further, and completely hide the
-split, so packages would still only have to know about util-linux and
-never have to worry about the backing -libs and -programs. See below...
+    ifeq ($(BR2_PACKAGE_MURATA_WIRELESS_CYW_FW_NEEDS_PATCH),y)
+    MURATA_WIRELESS_CYW_FW_EXTRA_DOWNLOADS += \
+        $(call github,murata-wireless,cyw-fmac-patch,$(MURATA_WIRELESS_CYW_FW_VERSION_PATCH)/cyw-bt-patch-$(MURATA_WIRELESS_CYW_FW_VERSION_PATCH).tar.gz
+    endif
 
-> util-linux-libs is installed on STAGING_DIR by default and on TARGET_DIR
-> if util-linux-programs is not selected. Conversely, util-linux-programs
-> installs on TARGET_DIR by default and on STAGING_DIR if util-linux-libs
-> is not selected. This prevents installing the libraries twice on the
-> same destination, which would confuse check-uniq-files.
-> 
-> With this approach we don't need to patch configuration files neither
-> change other packages besides eudev and systemd. Other packages that
-> require util-linux libraries and whose libraries can be used by
-> util-linux programs can be updated later. We also don't need to change
-> any existing defcconfig, since all configuration options are kept in
-> the dummy util-linux package.
-> 
-> The main drawback of this approach is that util-linux-rebuild, as wel as
-> -reinstall, -reconfigure and even -dirclean targets do not have real
-> effect. It's necessary to use util-linux-libs-rebuild, for instance, but
-> this is a reasonable price to pay for the solution.
+And in Config.in:
 
-I agree that this drawback is not too big of a problem. It is
-unavoidable, whatever the solution we choose, this one or the previous.
+    config BR2_PACKAGE_MURATA_WIRELESS_CYW_FW_NEEDS_NVRAM
+        bool
 
-[--SNIP--]
-> diff --git a/package/eudev/Config.in b/package/eudev/Config.in
-> index 2220265a55..2df94fb68c 100644
-> --- a/package/eudev/Config.in
-> +++ b/package/eudev/Config.in
-> @@ -6,6 +6,7 @@ config BR2_PACKAGE_EUDEV
->  	depends on !BR2_STATIC_LIBS # kmod
->  	select BR2_PACKAGE_HAS_UDEV
->  	select BR2_PACKAGE_UTIL_LINUX
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBS
+    config BR2_PACKAGE_MURATA_WIRELESS_CYW_FW_NEEDS_PATCH
+        bool
 
-This select can go away altogether if ...
+    choice
+        bool "Variant to use"
 
->  	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+    config BR2_PACKAGE_MURATA_WIRELESS_CYW_FW_FOO
+        bool "foo"
+        select BR2_PACKAGE_MURATA_WIRELESS_CYW_FW_NEEDS_PATCH
 
-... the BR2_PACKAGE_UTIL_LINUX_LIBBLKID (and the others) do the select,
-like you did for programs.
+    config BR2_PACKAGE_MURATA_WIRELESS_CYW_FW_BAR
+        bool "bar"
+        select BR2_PACKAGE_MURATA_WIRELESS_CYW_FW_NEEDS_NVRAM
 
-I.e. a package that wants a library just has to do:
+    endchoice
 
-    config BR2_PACKAGE_EUDEV
-        select BR2_PACKAGE_UTIL_LINUX
-        select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-
-and then:
-
-    config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-        select BR2_PACKAGE_UTIL_LINUX_LIBS
-
-So, the complexity and duality of util-linux.
-
->  	select BR2_PACKAGE_KMOD
->  	help
-> diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-> index d88e010c28..5590049fcc 100644
-> --- a/package/eudev/eudev.mk
-> +++ b/package/eudev/eudev.mk
-> @@ -18,7 +18,8 @@ EUDEV_CONF_OPTS = \
->  	--enable-kmod \
->  	--enable-blkid
->  
-> -EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux kmod
-> +# eudev requires only the util-linux libraries at build time
-> +EUDEV_DEPENDENCIES = host-gperf host-pkgconf util-linux-libs kmod
->  EUDEV_PROVIDES = udev
->  
->  ifeq ($(BR2_ROOTFS_MERGED_USR),)
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index 92ffc7cc5a..3aa5ced46c 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -23,6 +23,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
->  	select BR2_PACKAGE_DBUS # runtime dependency only
->  	select BR2_PACKAGE_LIBCAP
->  	select BR2_PACKAGE_UTIL_LINUX
-> +	select BR2_PACKAGE_UTIL_LINUX_LIBS
-
-Ditto as eudev, of course.
-
->  	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
->  	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
->  	select BR2_PACKAGE_UTIL_LINUX_BINARIES
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index edc4a9ecc1..292a97fb40 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -9,13 +9,15 @@ SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
->  SYSTEMD_LICENSE = LGPL-2.1+, GPL-2.0+ (udev), Public Domain (few source files, see README)
->  SYSTEMD_LICENSE_FILES = LICENSE.GPL2 LICENSE.LGPL2.1 README
->  SYSTEMD_INSTALL_STAGING = YES
-> +
-> +# systemd requires only the util-linux libraries at build time
->  SYSTEMD_DEPENDENCIES = \
->  	$(if $(BR2_PACKAGE_BASH_COMPLETION),bash-completion) \
->  	host-gperf \
->  	host-intltool \
->  	kmod \
->  	libcap \
-> -	util-linux
-> +	util-linux-libs
->  
->  SYSTEMD_PROVIDES = udev
->  
-> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-> index a5a137bfe0..6fa873ac40 100644
-> --- a/package/util-linux/Config.in
-> +++ b/package/util-linux/Config.in
-> @@ -9,6 +9,9 @@ menuconfig BR2_PACKAGE_UTIL_LINUX
->  
->  if BR2_PACKAGE_UTIL_LINUX
->  
-> +config BR2_PACKAGE_UTIL_LINUX_LIBS
-> +	bool
-> +
->  config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
->  	bool "libblkid"
->  	depends on BR2_USE_MMU # fork()
-
-Here you would add the select BR2_PACKAGE_UTIL_LINUX_LIBS (and on the
-other libs symbols, too).
-
-[--SNIP--]
-> diff --git a/package/util-linux/util-linux-libs/util-linux-libs.hash b/package/util-linux/util-linux-libs/util-linux-libs.hash
-> new file mode 120000
-> index 0000000000..dc1b2f866a
-> --- /dev/null
-> +++ b/package/util-linux/util-linux-libs/util-linux-libs.hash
-> @@ -0,0 +1 @@
-> +../util-linux.hash
-> \ No newline at end of file
-> diff --git a/package/util-linux/util-linux-libs/util-linux-libs.mk b/package/util-linux/util-linux-libs/util-linux-libs.mk
-> new file mode 100644
-> index 0000000000..b6af22f2ce
-> --- /dev/null
-> +++ b/package/util-linux/util-linux-libs/util-linux-libs.mk
-> @@ -0,0 +1,91 @@
-> +################################################################################
-> +#
-> +# util-linux-libs
-> +#
-> +################################################################################
-> +
-> +UTIL_LINUX_LIBS_VERSION = $(UTIL_LINUX_VERSION)
-> +UTIL_LINUX_LIBS_SOURCE = $(UTIL_LINUX_SOURCE)
-> +UTIL_LINUX_LIBS_SITE = $(UTIL_LINUX_SITE)
-> +UTIL_LINUX_LIBS_DL_SUBDIR = $(UTIL_LINUX_DL_SUBDIR)
-> +
-> +# README.licensing claims that some files are GPL-2.0 only, but this is not true.
-> +# Some files are GPL-3.0+ but only in tests. rfkill uses an ISC-style license.
-> +UTIL_LINUX_LIBS_LICENSE = LGPL-2.1+ (libblkid, libfdisk, libmount, libsmartcols), BSD-3-Clause (libuuid)
-> +UTIL_LINUX_LIBS_LICENSE_FILES = README.licensing \
-> +	Documentation/licenses/COPYING.BSD-3-Clause \
-> +	Documentation/licenses/COPYING.LGPL-2.1-or-later
-> +UTIL_LINUX_LIBS_INSTALL_STAGING = YES
-> +# Prevent installing the libraries twice on TARGET_DIR
-> +UTIL_LINUX_LIBS_INSTALL_TARGET = if($(BR2_PACKAGE_UTIL_LINUX_PROGRAMS),NO,YES)
-
-How can that even work? It's gonna be either 'if(y,NO,YES)' or
-'if(,NO,YES)' , but never just 'YES' or just 'NO'.
-
-Note that you have the exact same issue in the -programs case...
-
-[--SNIP--]
-> diff --git a/package/util-linux/util-linux-programs/util-linux-programs.mk b/package/util-linux/util-linux-programs/util-linux-programs.mk
-> new file mode 100644
-> index 0000000000..e215fe7187
-> --- /dev/null
-> +++ b/package/util-linux/util-linux-programs/util-linux-programs.mk
-> @@ -0,0 +1,261 @@
-> +################################################################################
-> +#
-> +# util-linux-programs
-> +#
-> +################################################################################
-> +
-> +UTIL_LINUX_PROGRAMS_VERSION = $(UTIL_LINUX_VERSION)
-> +UTIL_LINUX_PROGRAMS_SOURCE = $(UTIL_LINUX_SOURCE)
-> +UTIL_LINUX_PROGRAMS_SITE = $(UTIL_LINUX_SITE)
-> +UTIL_LINUX_PROGRAMS_DL_SUBDIR = $(UTIL_LINUX_DL_SUBDIR)
-> +
-> +# README.licensing claims that some files are GPL-2.0 only, but this is not true.
-> +# Some files are GPL-3.0+ but only in tests. rfkill uses an ISC-style license.
-> +UTIL_LINUX_PROGRAMS_LICENSE = GPL-2.0+, BSD-4-Clause, LGPL-2.1+ (libblkid, libfdisk, libmount, libsmartcols), BSD-3-Clause (libuuid) ISC (rfkill)
-> +UTIL_LINUX_PROGRAMS_LICENSE_FILES = README.licensing \
-> +	Documentation/licenses/COPYING.BSD-3-Clause \
-> +	Documentation/licenses/COPYING.BSD-4-Clause-UC \
-> +	Documentation/licenses/COPYING.GPL-2.0-or-later \
-> +	Documentation/licenses/COPYING.ISC \
-> +	Documentation/licenses/COPYING.LGPL-2.1-or-later
-> +# Prevent installing the libraries twice on STAGING_DIR
-> +UTIL_LINUX_PROGRAMS_INSTALL_STAGING = if($(BR2_PACKAGE_UTIL_LINUX_LIBS),NO,YES)
-
-... here.
-
-So, this is otherwise a big patch, and I obviously did not review it in
-its entirety.
-
-But otherwise it looks OK-ish, even if I am still not entirely happy
-with this trick...
-
-Still, I'd like we get some feedback from upstream about a way to
-actually split the package. Did you get any? I tried looking at their
-github tracker, and could not see any relevant activity...
+You get the idea...
 
 Regards,
 Yann E. MORIN.
+
+> > Regards,
+> > Yann E. MORIN.
+> >
+> >> Marcin Niestroj (3):
+> >>   package/murata-wireless-cyw-fmac-fw: new package
+> >>   package/murata-wireless-cyw-fmac-nvram: new package
+> >>   package/murata-wireless-cyw-bt-patch: new package
+> >>
+> >>  DEVELOPERS                                    |  1 +
+> >>  package/Config.in                             |  1 +
+> >>  package/murata-wireless/Config.in             |  7 ++
+> >>  .../murata-wireless-cyw-bt-patch/Config.in    | 47 ++++++++++
+> >>  .../murata-wireless-cyw-bt-patch.hash         |  3 +
+> >>  .../murata-wireless-cyw-bt-patch.mk           | 50 ++++++++++
+> >>  .../murata-wireless-cyw-fmac-fw/Config.in     | 91 +++++++++++++++++++
+> >>  .../murata-wireless-cyw-fmac-fw.hash          |  3 +
+> >>  .../murata-wireless-cyw-fmac-fw.mk            | 80 ++++++++++++++++
+> >>  .../murata-wireless-cyw-fmac-nvram/Config.in  | 91 +++++++++++++++++++
+> >>  .../murata-wireless-cyw-fmac-nvram.hash       |  3 +
+> >>  .../murata-wireless-cyw-fmac-nvram.mk         | 75 +++++++++++++++
+> >>  package/murata-wireless/murata-wireless.mk    |  9 ++
+> >>  13 files changed, 461 insertions(+)
+> >>  create mode 100644 package/murata-wireless/Config.in
+> >>  create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/Config.in
+> >>  create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/murata-wireless-cyw-bt-patch.hash
+> >>  create mode 100644 package/murata-wireless/murata-wireless-cyw-bt-patch/murata-wireless-cyw-bt-patch.mk
+> >>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/Config.in
+> >>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/murata-wireless-cyw-fmac-fw.hash
+> >>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-fw/murata-wireless-cyw-fmac-fw.mk
+> >>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/Config.in
+> >>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/murata-wireless-cyw-fmac-nvram.hash
+> >>  create mode 100644 package/murata-wireless/murata-wireless-cyw-fmac-nvram/murata-wireless-cyw-fmac-nvram.mk
+> >>  create mode 100644 package/murata-wireless/murata-wireless.mk
+> >>
+> >> --
+> >> 2.21.0
+> >>
+> >> _______________________________________________
+> >> buildroot mailing list
+> >> buildroot at busybox.net
+> >> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> 
+> --
+> Marcin Niestr?j
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
