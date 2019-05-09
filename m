@@ -1,42 +1,92 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 09 May 2019 09:32:01 +0200
-Subject: [Buildroot] [PATCH] CHANGES: fix missing "binutils" in
- 2019.05-rc1 description
-In-Reply-To: <20190509065155.21279-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Thu, 9 May 2019 08:51:54 +0200")
-References: <20190509065155.21279-1-thomas.petazzoni@bootlin.com>
-Message-ID: <875zqkhymm.fsf@dell.be.48ers.dk>
+From: Marcin =?utf-8?Q?Niestr=C3=B3j?= <m.niestroj@grinn-global.com>
+Date: Thu, 09 May 2019 09:44:49 +0200
+Subject: [Buildroot] [PATCH v2 1/3] package/murata-wireless-cyw-fmac-fw:
+ new package
+In-Reply-To: <77f579fb-40a9-1063-59a8-f35405c29cf7@mind.be>
+References: <20190507083218.24283-1-m.niestroj@grinn-global.com>
+ <20190507083218.24283-2-m.niestroj@grinn-global.com>
+ <77f579fb-40a9-1063-59a8-f35405c29cf7@mind.be>
+Message-ID: <87r298xea6.fsf@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hi Arnout,
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > ---
- >  CHANGES | 4 ++--
- >  1 file changed, 2 insertions(+), 2 deletions(-)
+Arnout Vandecappelle <arnout@mind.be> writes:
 
- > diff --git a/CHANGES b/CHANGES
- > index 6fb63479ee..fb9e2e70c5 100644
- > --- a/CHANGES
- > +++ b/CHANGES
- > @@ -8,8 +8,8 @@
- >  	not just when not available on the build host.
- 
- >  	Toolchain: Glibc bumped to 2.29, musl bumped to 1.1.22,
- > -	binutils 2.32 added, 2.28/2.29 removed, default changed to
- > -	2.31.1.
- > +	binutils 2.32 added, binutils 2.28/2.29 removed, default
- > +	changed to 2.31.1.
+> On 07/05/2019 10:32, Marcin Niestroj wrote:
+>> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW4339
+>> +	bool "CYW4339 (1CK/ZP)"
+>> +	help
+>> +	  Murata Wireless FMAC WiFi CYW4339 (1CK/ZP) module
+>> +	  firmware.
+>> +
+>> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430
+>> +	bool "CYW43430/CYW4343W/CYW43364 (1DX/1FX/1LN)"
+>> +	help
+>> +	  Murata Wireless FMAC WiFi CYW43430/CYW4343W/CYW43364
+>> +	  (1DX/1FX/1LN) module firmware.
+>> +
+>> +choice
+>> +	prompt "CYW43430/CYW4343W/CYW43364 module" if BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430
+>> +
+>> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430_1DX
+>> +	bool "1DX"
+>> +
+>> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430_1FX
+>> +	bool "1FX"
+>> +
+>> +config BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430_1LN
+>> +	bool "1LN"
+>> +
+>> +endchoice
+>
+>  I don't understand this. Why is it possible to install firmware for CYW4339 and
+> CYW43430 1DX at the same time, but not for CYW43430 IDX and CYW43430 1FX?
 
-I actually did this on purpose as the entire line is about binutils, so
-it is implied for the removed / default part.
+This is because 'brcmfmac43430-sdio.1DX.clm_blob' is renamed during
+installation step into 'brcmfmac43430-sdio.clm_blob' (using
+murata-cyw-fw-strip-model helper). The latter is the firmware name
+expected by Linux kernel.
 
-But I don't really feel strongly about it. If you find this way clearer
-then feel free to apply.
+>
+>  In other words, why a choice and not just separate options like for the rest?
+>
+>  So I think what you want is that the
+> BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430 option becomes a blind option
+> and moves out of the choice, and that it gets selected by
+> BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43430_1DX etc.
 
--- 
-Bye, Peter Korsgaard
+It would be nice to do it that way. However different modules based on
+the same chip have conflicting names under /lib/firmware/brcm/
+directory.
+
+>
+>
+>> +ifeq ($(BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43340),y)
+>> +MURATA_WIRELESS_CYW_FMAC_FW_FILES += brcmfmac43340-sdio.bin
+>> +endif
+>
+>  In most of this type of many-simple-options situations, we use something like
+>
+> MURATA_WIRELESS_CYW_FMAC_FW_FILES_$(BR2_PACKAGE_MURATA_WIRELESS_CYW_FMAC_FW_CYW43340)
+> += brcmfmac43340-sdio.bin
+
+Thanks for hint!
+
+>
+>  By the way, I think the package name is way too long. With Yann's idea to merge
+> the three, I think we could name it e.g. murata-cyw-fw.
+
+Okay, will use proposed name.
+
+>
+>  Regards,
+>  Arnout
+
+
+--
+Marcin Niestr?j
