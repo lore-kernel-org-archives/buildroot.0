@@ -1,38 +1,37 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 9 May 2019 14:20:56 +0200
-Subject: [Buildroot] [PATCH 01/13] new package: openrc-0.41.2
-In-Reply-To: <20190509103024.xxzjilxbujcwi552@c-ml-p3510.redembedded.pl>
-References: <20190508220937.23200-1-michal.lyszczek@bofc.pl>
- <20190509090111.47aac2e7@windsurf.home>
- <20190509103024.xxzjilxbujcwi552@c-ml-p3510.redembedded.pl>
-Message-ID: <20190509142056.6a3e8065@windsurf.home>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu,  9 May 2019 15:45:41 +0300
+Subject: [Buildroot] [PATCH] package/strace: disable build for m68k
+Message-ID: <73b636ac421a851535f158350343bc82a25db097.1557405941.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Michal,
+Mismatch in struct bpf_prog_info fields offset between kernel headers
+and strace local definition causes build failure. Disable strace for
+m68k until upstream (either strace or the kernel) find a solution.
 
-On Thu, 09 May 2019 12:30:24 +0200
-michal.lyszczek at bofc.pl wrote:
+https://lists.strace.io/pipermail/strace-devel/2019-May/thread.html#8750
 
-> >  - What is the effect of MKPKGCONFIG=no ? What is openrc using
-> >    pkg-config for ?  
-> 
-> openrc does not use pkg-config per se, if MKPKGCONFIG is enabled, it will
-> just install *.pc files on rootfs for other programs to find librc and
-> libeinfo. These libs exposes C api to controll openrc (al rc-* functions
-> uses it). From the looks of it, these libs would be usefull if you wanted
-> to write your own programs to manager services, and vast majority of people
-> using openrc won't need it. Also, that's the reason why there is not
-> INSTALL_STAGING=yes.
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ package/strace/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-OK, thanks for the explanation, it makes perfect sense. Could perhaps
-be explained in the commit log or in a comment in the .mk file.
-
-Thomas
+diff --git a/package/strace/Config.in b/package/strace/Config.in
+index 38b4ebe32a4b..286a061a80ba 100644
+--- a/package/strace/Config.in
++++ b/package/strace/Config.in
+@@ -3,6 +3,9 @@ config BR2_PACKAGE_STRACE
+ 	# needs at least kernel headers 4.0 on nios2
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_0 || !BR2_nios2
+ 	depends on !BR2_nds32
++	# struct bpf_prog_info fields offset mismatch
++	# https://lists.strace.io/pipermail/strace-devel/2019-May/thread.html#8750
++	depends on !BR2_m68k
+ 	help
+ 	  A useful diagnostic, instructional, and debugging tool.
+ 	  Allows you to track what system calls a program makes
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
