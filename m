@@ -1,44 +1,101 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu,  9 May 2019 22:28:06 +0200
-Subject: [Buildroot] [PATCH 0/2] Some more netsurf fixes
-Message-ID: <20190509202808.6741-1-thomas.petazzoni@bootlin.com>
+Date: Thu,  9 May 2019 22:28:07 +0200
+Subject: [Buildroot] [PATCH 1/2] package/netsurf: change how CFLAGS/LDFLAGS
+ are passed
+In-Reply-To: <20190509202808.6741-1-thomas.petazzoni@bootlin.com>
+References: <20190509202808.6741-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20190509202808.6741-2-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+In commit 6da049f8ae61b956d135526722ce58fc2f67626a ("package/netsurf:
+fix build"), the CC variable passed to netsurf's build system was
+extended to pass some special -I and -L options needed for netsurf to
+find its own headers/libraries.
 
-On my machine, netsurf does not even build due to commit
-6da049f8ae61b956d135526722ce58fc2f67626a. My PATCH 1/2 fixes that, but
-it still remains fragile as CFLAGS/LDFLAGS are used for both building
-target objects and host tools. For example, with my PATCH 1/2 applied,
-if BR2_STATIC_LIBS is enabled, -static is passed in LDFLAGS, and
-netsurf fails to build on my machine with "-lc not found" because it
-passes -static when building host tools, and I don't have a static
-glibc installed on my machine.
+Unfortunately, on some systems (including mine), it breaks the build,
+due to:
 
-PATCH 2/2 disable static linking for netsurf, which was anyway failing
-to build for months in the autobuilders.
+  toolpath_ := $(shell /bin/which $(CC__))
 
-To be honest, the netsurf build system is broken beyond repair, and is
-a royal pain to work with. Since nobody has acted to fix those build
-issues for the past months, if my patches are not sufficient (and as I
-said, they *are* fragile), I will propose to simply remove the netsurf
-package.
+when $(CC__) contains some -I/-L options, they are considered to be
+options "to which", which causes the funny:
 
-Best regards,
+/usr/bin/make install --directory=libnslog HOST=arm-buildroot-linux-uclibcgnueabi PREFIX=/home/thomas/projets/outputs/shared-netsurf/build/netsurf-3.8/tmpusr Q=@ WARNFLAGS='-Wall -W -Wno-error' DESTDIR=
+make[3]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+/bin/which: invalid option -- 'I'
+/bin/which: invalid option -- '/'
+/bin/which: invalid option -- 'h'
+/bin/which: invalid option -- 'o'
+/bin/which: invalid option -- 'm'
+/bin/which: invalid option -- 'e'
+/bin/which: invalid option -- '/'
+/bin/which: invalid option -- 't'
+/bin/which: invalid option -- 'h'
+/bin/which: invalid option -- 'o'
+/bin/which: invalid option -- 'm'
+/bin/which: invalid option -- 's'
+/bin/which: invalid option -- '/'
+[...]
+/bin/which: invalid option -- 'l'
+/bin/which: invalid option -- 'b'
+/bin/which: --read-alias, -i: Warning: stdin is a tty.
 
-Thomas
+and the build simply hangs.
 
-Thomas Petazzoni (2):
-  package/netsurf: change how CFLAGS/LDFLAGS are passed
-  package/netsurf: do not allow on static linking configurations
+We cannot pass CFLAGS/LDFLAGS as make options, as they would override
+the CFLAGS definitions in netsurf Makefiles. However, those Makefiles
+use the construct:
 
- package/netsurf/Config.in  | 5 +++++
+CFLAGS := $(CFLAGS) -more-flags
+
+so by passing CFLAGS and LDFLAGS through the make environment, which
+can achieve our goal.
+
+It is worth mentioning that it remains very fragile, because
+CFLAGS/LDFLAGS are used both for building target objects but also some
+host tools. The netsurf build system is really not good.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
  package/netsurf/netsurf.mk | 9 +++++++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
+diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
+index e617707ade..31cf9e62b8 100644
+--- a/package/netsurf/netsurf.mk
++++ b/package/netsurf/netsurf.mk
+@@ -70,13 +70,18 @@ define NETSURF_CONFIGURE_CMDS
+ 	$(NETSURF_CURL_CONFIGURE_CMDS)
+ endef
+ 
++NETSURF_MAKE_ENV = \
++	$(TARGET_MAKE_ENV) \
++	CFLAGS="$(TARGET_CFLAGS) -I$(@D)/tmpusr/include" \
++	LDFLAGS="$(TARGET_LDFLAGS) -L$(@D)/tmpusr/lib"
++
+ NETSURF_MAKE_OPTS = \
+ 	TARGET=$(NETSURF_FRONTEND) \
+ 	BISON="$(HOST_DIR)/bin/bison" \
+ 	FLEX="$(HOST_DIR)/bin/flex" \
+ 	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 	BUILD_CC="$(HOSTCC)" \
+-	CC="$(TARGET_CC) -I$(@D)/tmpusr/include -L$(@D)/tmpusr/lib" \
++	CC="$(TARGET_CC)" \
+ 	AR="$(TARGET_AR)" \
+ 	TMP_PREFIX=$(@D)/tmpusr \
+ 	NETSURF_CONFIG="$(NETSURF_CONFIG)" \
+@@ -84,7 +89,7 @@ NETSURF_MAKE_OPTS = \
+ 
+ define NETSURF_BUILD_CMDS
+ 	mkdir -p $(@D)/tmpusr
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(NETSURF_MAKE_OPTS) \
++	$(NETSURF_MAKE_ENV) $(MAKE) -C $(@D) $(NETSURF_MAKE_OPTS) \
+ 		build
+ endef
+ 
 -- 
 2.21.0
