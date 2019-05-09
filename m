@@ -1,43 +1,40 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 9 May 2019 21:43:48 +0200
-Subject: [Buildroot] Fwd: [autobuild.buildroot.net] Your build results
- for 2019-05-08
-In-Reply-To: <CAMQcK5J5YUv4nYfdFpZhRnO6uy+5i6Rpnxa6nGXcZNQDTA3zGw@mail.gmail.com>
-References: <20190509060040.D56B7604B6@crulimr01.rockwellcollins.com>
- <CAMQcK5J5YUv4nYfdFpZhRnO6uy+5i6Rpnxa6nGXcZNQDTA3zGw@mail.gmail.com>
-Message-ID: <20190509214348.1d45d19e@windsurf.home>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Thu,  9 May 2019 22:12:51 +0200
+Subject: [Buildroot] [PATCH v1] package/libopenh264: bump version to v1.8.0
+Message-ID: <20190509201251.8266-1-ps.report@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ryan,
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+---
+ package/libopenh264/libopenh264.hash | 2 +-
+ package/libopenh264/libopenh264.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Thu, 9 May 2019 08:55:43 -0500
-Ryan Barnett <ryan.barnett@rockwellcollins.com> wrote:
+diff --git a/package/libopenh264/libopenh264.hash b/package/libopenh264/libopenh264.hash
+index b9cd9ed53e..f8a63f523e 100644
+--- a/package/libopenh264/libopenh264.hash
++++ b/package/libopenh264/libopenh264.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 9c07c38d7de00046c9c52b12c76a2af7648b70d05bd5460c8b67f6895738653f  libopenh264-v1.7.0.tar.gz
++sha256 08670017fd0bb36594f14197f60bebea27b895511251c7c64df6cd33fc667d34  libopenh264-v1.8.0.tar.gz
+ sha256 dd5c1c9668512530fa5a96e4c29ac4033d70a7eeb0eed7a42fddb6dd794ebdbb  LICENSE
+diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
+index 233e7971f4..96979a9d43 100644
+--- a/package/libopenh264/libopenh264.mk
++++ b/package/libopenh264/libopenh264.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
 
-> [following]
-> --2019-05-08 14:47:04--
-> https://sourceforge.net/projects/atftp/files/atftp-0.7.2.tar.gz
-> Connecting to sourceforge.net (sourceforge.net)|216.105.38.13|:443... connected.
-> GnuTLS: A TLS fatal alert has been received.
-> Unable to establish SSL connection.
-> 
-> These were both run on the autobuilder from Thomas so it may be a
-> build server configuration issue.
-
-It is a bug in the old version of wget/gnutls that is used in my old
-Debian Wheezy chroot. It disappears once the tarball is cached in
-sources.buildroot.net.
-
-I should probably update my chroot to Debian Jessie, now that Debian
-Wheezy is completely EOLed.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-LIBOPENH264_VERSION = v1.7.0
++LIBOPENH264_VERSION = v1.8.0
+ LIBOPENH264_SITE = $(call github,cisco,openh264,$(LIBOPENH264_VERSION))
+ LIBOPENH264_LICENSE = BSD-2-Clause
+ LIBOPENH264_LICENSE_FILES = LICENSE
+--
+2.21.0
