@@ -1,35 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 9 May 2019 21:25:32 +0200
-Subject: [Buildroot] [git commit] package/bind: don't enable server by
- default
-Message-ID: <20190509202328.AEB8E88EE3@busybox.osuosl.org>
+Date: Thu, 9 May 2019 22:30:06 +0200
+Subject: [Buildroot] [PATCH v3,1/4] package/bind: enable static build
+In-Reply-To: <20190426165613.31812-1-fontaine.fabrice@gmail.com>
+References: <20190426165613.31812-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190509223006.2b8fc6f2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=39cd8cc9beb119d77a54a9fa7309ead2b18d563e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Fabrice,
 
-Don't enable server by default as dhcp will now select bind to use the
-bind libraries
+On Fri, 26 Apr 2019 18:56:10 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/bind/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+> Static build has been disabled in 2014 with commit
+> 6045904752b06a8b8e52ba8fc2e49a8548964e8d however bind can be built
+> statically thanks to --without-dlopen so enable it back
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v2 -> v3 (after review of Thomas Petazzoni):
+>  - Move bind9-config under BR2_STATIC_LIBS condition
+>  - Drop DHCP_MAKE and DHCP_MAKE_ENV as these variables were set for the
+>    embedded bind
 
-diff --git a/package/bind/Config.in b/package/bind/Config.in
-index 60546f691b..6d4ee2e6d7 100644
---- a/package/bind/Config.in
-+++ b/package/bind/Config.in
-@@ -28,7 +28,6 @@ if BR2_PACKAGE_BIND
- 
- config BR2_PACKAGE_BIND_SERVER
- 	bool "Install server components"
--	default y
- 	help
- 	  Install server components (named, lwresd)
- 
+Thanks, series applied!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
