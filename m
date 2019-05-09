@@ -1,10 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu,  9 May 2019 18:46:23 -0400
-Subject: [Buildroot] [PATCH 4/4] package/gstreamer1/gst1-plugins-bad: Add
+Date: Thu,  9 May 2019 18:46:24 -0400
+Subject: [Buildroot] [PATCH 5/5] package/gstreamer1/gst1-plugins-bad: Add
  bluez plugin
 In-Reply-To: <20190509224624.80437-1-aduskett@gmail.com>
 References: <20190509224624.80437-1-aduskett@gmail.com>
-Message-ID: <20190509224624.80437-6-aduskett@gmail.com>
+Message-ID: <20190509224624.80437-7-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
