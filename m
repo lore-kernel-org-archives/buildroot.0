@@ -1,37 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 9 May 2019 12:18:13 +0200
-Subject: [Buildroot] [git commit] package/collectd: explicitly disable lua
-Message-ID: <20190509101257.EA86588DC0@busybox.osuosl.org>
+From: michal.lyszczek at bofc.pl <michal.lyszczek@bofc.pl>
+Date: Thu, 09 May 2019 12:30:24 +0200
+Subject: [Buildroot] [PATCH 01/13] new package: openrc-0.41.2
+In-Reply-To: <20190509090111.47aac2e7@windsurf.home>
+References: <20190508220937.23200-1-michal.lyszczek@bofc.pl>
+ <20190509090111.47aac2e7@windsurf.home>
+Message-ID: <20190509103024.xxzjilxbujcwi552@c-ml-p3510.redembedded.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=753bfec583b6bb921b44d6735df67f9d681c31c3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas,
 
-lua plugin has been added in version 5.6.0 with
-https://github.com/collectd/collectd/commit/023092323ca617c8ff95b1efd4a055c29b1aaa3b
+On 2019-05-09 09:01:11, Thomas Petazzoni wrote:
+> Also, a few questions:
+> 
+>  - How is the TARGETDIR variable used by the build system ? Why does it
+>    need to know the installation location at build time ?
 
-Disabled it otherwise it'll be enabled if liblua is found
+Good catch, it's not needed, it's a leftover from my integration I did in
+March, but found better solution so it is not needed anymore. Deleted.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/collectd/collectd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>  - What is the effect of MKPKGCONFIG=no ? What is openrc using
+>    pkg-config for ?
 
-diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
-index 589324e612..027df8f111 100644
---- a/package/collectd/collectd.mk
-+++ b/package/collectd/collectd.mk
-@@ -15,7 +15,7 @@ COLLECTD_LICENSE_FILES = COPYING libltdl/COPYING.LIB
- # These require unmet dependencies, are fringe, pointless or deprecated
- COLLECTD_PLUGINS_DISABLE = \
- 	amqp apple_sensors aquaero ascent barometer dbi dpdkstat email \
--	gmond grpc hddtemp intel_rdt ipmi java libvirt lpar lvm \
-+	gmond grpc hddtemp intel_rdt ipmi java libvirt lpar lua lvm \
- 	madwifi mbmon mic multimeter netapp notify_desktop numa \
- 	nut onewire oracle perl pf pinba powerdns python redis routeros \
- 	rrdcached sigrok tape target_v5upgrade teamspeak2 ted \
+openrc does not use pkg-config per se, if MKPKGCONFIG is enabled, it will
+just install *.pc files on rootfs for other programs to find librc and
+libeinfo. These libs exposes C api to controll openrc (al rc-* functions
+uses it). From the looks of it, these libs would be usefull if you wanted
+to write your own programs to manager services, and vast majority of people
+using openrc won't need it. Also, that's the reason why there is not
+INSTALL_STAGING=yes.
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 488 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190509/8907fb13/attachment.asc>
