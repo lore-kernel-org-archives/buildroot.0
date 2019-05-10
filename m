@@ -1,275 +1,125 @@
 From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Fri, 10 May 2019 10:35:04 +0200
-Subject: [Buildroot] [PATCH v3 1/2] package/murata-cyw-fw: new package
-In-Reply-To: <20190510083505.1341-1-m.niestroj@grinn-global.com>
-References: <20190510083505.1341-1-m.niestroj@grinn-global.com>
-Message-ID: <20190510083505.1341-2-m.niestroj@grinn-global.com>
+Date: Fri, 10 May 2019 10:37:42 +0200
+Subject: [Buildroot] [PATCH] package/dt-utils: bump to v2019.01.0
+Message-ID: <20190510083742.5182-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Also drop patch which is part of new release.
+
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
-Changes v2 -> v3:
- * merge 3 packages into single murata-cyw-fw (suggested by Yann)
- * use MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4354) trick to collect
-   files to install (suggested by Arnout)
+ ...ion-for-glibc-version-2.27.9000-36.f.patch | 75 -------------------
+ package/dt-utils/dt-utils.hash                |  2 +-
+ package/dt-utils/dt-utils.mk                  |  2 +-
+ 3 files changed, 2 insertions(+), 77 deletions(-)
+ delete mode 100644 package/dt-utils/0001-src-fix-compilation-for-glibc-version-2.27.9000-36.f.patch
 
- DEVELOPERS                               |   1 +
- package/Config.in                        |   1 +
- package/murata-cyw-fw/Config.in          |  97 ++++++++++++++++++++++
- package/murata-cyw-fw/murata-cyw-fw.hash |   5 ++
- package/murata-cyw-fw/murata-cyw-fw.mk   | 100 +++++++++++++++++++++++
- 5 files changed, 204 insertions(+)
- create mode 100644 package/murata-cyw-fw/Config.in
- create mode 100644 package/murata-cyw-fw/murata-cyw-fw.hash
- create mode 100644 package/murata-cyw-fw/murata-cyw-fw.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5bfc4561c0..849bf9c308 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1386,6 +1386,7 @@ F:	package/easydbus/
- F:	package/lua-flu/
- F:	package/lua-stdlib/
- F:	package/luaossl/
-+F:	package/murata-cyw-fw/
- F:	package/rs485conf/
- F:	package/turbolua/
+diff --git a/package/dt-utils/0001-src-fix-compilation-for-glibc-version-2.27.9000-36.f.patch b/package/dt-utils/0001-src-fix-compilation-for-glibc-version-2.27.9000-36.f.patch
+deleted file mode 100644
+index 8c2f585946..0000000000
+--- a/package/dt-utils/0001-src-fix-compilation-for-glibc-version-2.27.9000-36.f.patch
++++ /dev/null
+@@ -1,75 +0,0 @@
+-From 1c80e31872aec9f2ef7eca6a52aa89c0ea759d8f Mon Sep 17 00:00:00 2001
+-From: Enrico Joerns <ejo@pengutronix.de>
+-Date: Wed, 5 Sep 2018 12:28:28 +0200
+-Subject: [PATCH] src: fix compilation for glibc version 2.27.9000-36.fc29 and
+- newer
+-
+-As recent glibc versions (>= 2.27.9000-36.fc29) also define 'struct
+-statx' which is also defined in linux/stat.h, compilation fails with
+-error:
+-
+-| In file included from ../dt-utils-2018.05.0/src/crypto/digest.c:24:
+-| [..]/usr/include/linux/stat.h:56:8: error: redefinition of 'struct statx_timestamp'
+-|  struct statx_timestamp {
+-|         ^~~~~~~~~~~~~~~
+-| In file included from [..]/usr/include/sys/stat.h:446,
+-|                  from ../dt-utils-2018.05.0/src/dt/common.h:15,
+-|                  from ../dt-utils-2018.05.0/src/crypto/digest.c:19:
+-| [..]/usr/include/bits/statx.h:25:8: note: originally defined here
+-|  struct statx_timestamp
+-|         ^~~~~~~~~~~~~~~
+-| In file included from ../dt-utils-2018.05.0/src/crypto/digest.c:24:
+-| [..]/usr/include/linux/stat.h:99:8: error: redefinition of 'struct statx'
+-|  struct statx {
+-|         ^~~~~
+-| In file included from [..]/usr/include/sys/stat.h:446,
+-|                  from ../dt-utils-2018.05.0/src/dt/common.h:15,
+-|                  from ../dt-utils-2018.05.0/src/crypto/digest.c:19:
+-| [..]/usr/include/bits/statx.h:36:8: note: originally defined here
+-|  struct statx
+-|         ^~~~~
+-
+-The linux/stat.h originates from the code that was copied from barebox
+-but is not explicitly required to be linux/stat.h instead of sys/stat.h
+-and we do not actually use struct statx.
+-
+-Thus it is safe to simply replace occurrences of linux/stat.h by
+-sys/stat.h to fix compilation.
+-
+-Signed-off-by: Enrico Joerns <ejo@pengutronix.de>
+-[Thomas: backport from upstream.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- src/barebox-state/backend_storage.c | 2 +-
+- src/crypto/digest.c                 | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/barebox-state/backend_storage.c b/src/barebox-state/backend_storage.c
+-index 53fe829..1052656 100644
+---- a/src/barebox-state/backend_storage.c
+-+++ b/src/barebox-state/backend_storage.c
+-@@ -19,7 +19,7 @@
+- #include <linux/kernel.h>
+- #include <linux/list.h>
+- #include <linux/mtd/mtd-abi.h>
+--#include <linux/stat.h>
+-+#include <sys/stat.h>
+- #include <linux/fs.h>
+- #include <malloc.h>
+- #include <printk.h>
+-diff --git a/src/crypto/digest.c b/src/crypto/digest.c
+-index 7a8c3c0..8353412 100644
+---- a/src/crypto/digest.c
+-+++ b/src/crypto/digest.c
+-@@ -21,7 +21,7 @@
+- #include <malloc.h>
+- #include <fs.h>
+- #include <fcntl.h>
+--#include <linux/stat.h>
+-+#include <sys/stat.h>
+- #include <errno.h>
+- #include <module.h>
+- #include <linux/err.h>
+--- 
+-2.19.2
+-
+diff --git a/package/dt-utils/dt-utils.hash b/package/dt-utils/dt-utils.hash
+index 5805adf361..3610fe164f 100644
+--- a/package/dt-utils/dt-utils.hash
++++ b/package/dt-utils/dt-utils.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 d0f53c76bc9f821a6506c8db3b623922d82570a017a9a40ad118bd7c957672b6  dt-utils-v2018.05.0.tar.gz
++sha256 61440ab222543268923175eb5c7425076d2b8bce4c1dfc177f2eb3873449af7c  dt-utils-v2019.01.0.tar.gz
+ sha256 a45932c79317d15116eadbf1c9c6fc59117ec3c4621db3a876066defa723963b  COPYING
+diff --git a/package/dt-utils/dt-utils.mk b/package/dt-utils/dt-utils.mk
+index 3dbadc7b9e..25c287d434 100644
+--- a/package/dt-utils/dt-utils.mk
++++ b/package/dt-utils/dt-utils.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-diff --git a/package/Config.in b/package/Config.in
-index f592e74a99..d9ebfc677e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -382,6 +382,7 @@ menu "Firmware"
- 	source "package/armbian-firmware/Config.in"
- 	source "package/b43-firmware/Config.in"
- 	source "package/linux-firmware/Config.in"
-+	source "package/murata-cyw-fw/Config.in"
- 	source "package/rpi-bt-firmware/Config.in"
- 	source "package/rpi-firmware/Config.in"
- 	source "package/rpi-wifi-firmware/Config.in"
-diff --git a/package/murata-cyw-fw/Config.in b/package/murata-cyw-fw/Config.in
-new file mode 100644
-index 0000000000..7530477511
---- /dev/null
-+++ b/package/murata-cyw-fw/Config.in
-@@ -0,0 +1,97 @@
-+config BR2_PACKAGE_MURATA_CYW_FW
-+	bool "murata-cyw-fw"
-+	help
-+	  Murata Wireless firmware, NVRAM and Bluetooth HCD patch files.
-+
-+	  https://github.com/murata-wireless/cyw-fmac-fw
-+	  https://github.com/murata-wireless/cyw-fmac-nvram
-+	  https://github.com/murata-wireless/cyw-bt-patch
-+
-+if BR2_PACKAGE_MURATA_CYW_FW
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW43012
-+	bool "CYW43012 (1LV)"
-+	help
-+	  Murata Wireless CYW43012 (1LV) module firmware files.
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW43340
-+	bool "CYW43340/CYW43341 (1BW)"
-+	help
-+	  Murata Wireless CYW43340/CYW43341 (1BW) module firmware files.
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW43362
-+	bool "CYW43362 (SN8000)"
-+	help
-+	  Murata Wireless CYW43362 (SN8000) module firmware files.
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW4339
-+	bool "CYW4339 (1CK/ZP)"
-+	help
-+	  Murata Wireless CYW4339 (1CK/ZP) module firmware files.
-+
-+choice
-+	prompt "CYW4339 module" if BR2_PACKAGE_MURATA_CYW_FW_CYW4339
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW4339_1CK
-+	bool "1CK"
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW4339_ZP
-+	bool "ZP"
-+
-+endchoice
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW43430
-+	bool "CYW43430/CYW4343W/CYW43364 (1DX/1FX/1LN)"
-+	help
-+	  Murata Wireless CYW43430/CYW4343W/CYW43364 (1DX/1FX/1LN)
-+	  module firmware files.
-+
-+choice
-+	prompt "CYW43430/CYW4343W/CYW43364 module" if BR2_PACKAGE_MURATA_CYW_FW_CYW43430
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW43430_1DX
-+	bool "1DX"
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW43430_1FX
-+	bool "1FX"
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW43430_1LN
-+	bool "1LN"
-+
-+endchoice
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW43455
-+	bool "CYW43455 (1HK/1LC/1MW)"
-+	help
-+	  Murata Wireless CYW43455 (1HK/1LC/1MW) module firmware files.
-+
-+choice
-+	prompt "CYW43455 module" if BR2_PACKAGE_MURATA_CYW_FW_CYW43455
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW43455_1HK
-+	bool "1HK"
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW43455_1LC
-+	bool "1LC"
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW43455_1MW
-+	bool "1MW"
-+
-+endchoice
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW4354
-+	bool "CYW4354 (1BB)"
-+	help
-+	  Murata Wireless CYW4354 (1BB) module firmware files.
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW4356
-+	bool "CYW4356 (1CX)"
-+	help
-+	  Murata Wireless CYW4356 (1CX) module firmware files.
-+
-+config BR2_PACKAGE_MURATA_CYW_FW_CYW4359
-+	bool "CYW4359 (1FD)"
-+	help
-+	  Murata Wireless CYW4359 (1FD) module firmware files.
-+
-+endif
-diff --git a/package/murata-cyw-fw/murata-cyw-fw.hash b/package/murata-cyw-fw/murata-cyw-fw.hash
-new file mode 100644
-index 0000000000..c1afb229eb
---- /dev/null
-+++ b/package/murata-cyw-fw/murata-cyw-fw.hash
-@@ -0,0 +1,5 @@
-+# Locally calculated
-+sha256 c3ecf357786d6db6f3283c0ea36ec067b1728f801fd8871694aed1502a82e9bc murata-cyw-fw-8d87950bfad28c65926695b7357bd8995b60016a.tar.gz
-+sha256 03c140ae04f9c2036678262d6457b9c4b4a9ebb523c5e681af6d57b97c11da37 cyw-fmac-nvram-d27f1bf105fa1e5b828e355793b88d4b66188411.tar.gz
-+sha256 8f23ebb9a262112b62ace1e1bedcdeb00523d9a45e8d48a829d4ca35db4f0280 cyw-bt-patch-748462f0b02ec4aeb500bedd60780ac51c37be31.tar.gz
-+sha256 3a892759b73e8b459f1a750954b316118b0061fd9d1868d11fa258c104ee7e0c LICENCE.cypress
-diff --git a/package/murata-cyw-fw/murata-cyw-fw.mk b/package/murata-cyw-fw/murata-cyw-fw.mk
-new file mode 100644
-index 0000000000..0196b47821
---- /dev/null
-+++ b/package/murata-cyw-fw/murata-cyw-fw.mk
-@@ -0,0 +1,100 @@
-+################################################################################
-+#
-+# murata-cyw-fw
-+#
-+################################################################################
-+
-+MURATA_CYW_FW_VERSION = 8d87950bfad28c65926695b7357bd8995b60016a
-+MURATA_CYW_FW_VERSION_NVRAM = d27f1bf105fa1e5b828e355793b88d4b66188411
-+MURATA_CYW_FW_VERSION_BT_PATCH = 748462f0b02ec4aeb500bedd60780ac51c37be31
-+MURATA_CYW_FW_SITE = $(call github,murata-wireless,cyw-fmac-fw,$(MURATA_CYW_FW_VERSION))
-+MURATA_CYW_FW_EXTRA_DOWNLOADS = \
-+	$(call github,murata-wireless,cyw-fmac-nvram,$(MURATA_CYW_FW_VERSION_NVRAM))/cyw-fmac-nvram-$(MURATA_CYW_FW_VERSION_NVRAM).tar.gz \
-+	$(call github,murata-wireless,cyw-bt-patch,$(MURATA_CYW_FW_VERSION_BT_PATCH))/cyw-bt-patch-$(MURATA_CYW_FW_VERSION_BT_PATCH).tar.gz
-+MURATA_CYW_FW_LICENSE = PROPRIETARY
-+MURATA_CYW_FW_LICENSE_FILES = LICENCE.cypress
-+MURATA_CYW_FW_REDISTRIBUTE = NO
-+
-+define MURATA_CYW_FW_EXTRACT_NVRAM_PATCH
-+	$(foreach tar, $(notdir $(MURATA_CYW_FW_EXTRA_DOWNLOADS)), \
-+		$(call suitable-extractor,$(tar)) $(MURATA_CYW_FW_DL_DIR)/$(tar) | \
-+		$(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) -$(sep) \
-+	)
-+endef
-+MURATA_CYW_FW_POST_EXTRACT_HOOKS += MURATA_CYW_FW_EXTRACT_NVRAM_PATCH
-+
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43012) += \
-+	brcmfmac43012-sdio.bin \
-+	brcmfmac43012-sdio.1LV.clm_blob \
-+	brcmfmac43012-sdio.1LV.txt \
-+	CYW43012C0.1LV.hcd
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43340) += \
-+	brcmfmac43340-sdio.bin \
-+	brcmfmac43340-sdio.1BW.txt \
-+	CYW43341B0.1BW.hcd
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43362) += \
-+	brcmfmac43362-sdio.bin \
-+	brcmfmac43362-sdio.SN8000.txt
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4339) += \
-+	brcmfmac4339-sdio.bin
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4339_1CK) += \
-+	brcmfmac4339-sdio.1CK.txt
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4339_ZP) += \
-+	brcmfmac4339-sdio.ZP.txt \
-+	CYW4335C0.ZP.hcd
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43430) += \
-+	brcmfmac43430-sdio.bin
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43430_1DX) += \
-+	brcmfmac43430-sdio.1DX.clm_blob \
-+	brcmfmac43430-sdio.1DX.txt \
-+	CYW43430A1.1DX.hcd
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43430_1FX) += \
-+	brcmfmac43430-sdio.1FX.clm_blob \
-+	brcmfmac43430-sdio.1FX.txt
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43430_1LN) += \
-+	brcmfmac43430-sdio.1LN.clm_blob \
-+	brcmfmac43430-sdio.1LN.txt
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43455) += \
-+	brcmfmac43455-sdio.bin
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43455_1HK) += \
-+	brcmfmac43455-sdio.1HK.clm_blob \
-+	brcmfmac43455-sdio.1HK.txt
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43455_1LC) += \
-+	brcmfmac43455-sdio.1LC.clm_blob \
-+	brcmfmac43455-sdio.1LC.txt
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW43455_1MW) += \
-+	brcmfmac43455-sdio.1MW.clm_blob \
-+	brcmfmac43455-sdio.1MW.txt \
-+	CYW4345C0.1MW.hcd
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4354) += \
-+	brcmfmac4354-sdio.bin \
-+	brcmfmac4354-sdio.1BB.clm_blob \
-+	brcmfmac4354-sdio.1BB.txt \
-+	CYW4350C0.1BB.hcd
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4356) += \
-+	brcmfmac4356-pcie.bin \
-+	brcmfmac4356-pcie.1CX.clm_blob \
-+	brcmfmac4356-pcie.1CX.txt \
-+	CYW4354A2.1CX.hcd
-+MURATA_CYW_FW_FILES_$(BR2_PACKAGE_MURATA_CYW_FW_CYW4359) += \
-+	brcmfmac4359-pcie.bin \
-+	brcmfmac4359-pcie.1FD.clm_blob
-+
-+# Helper that assumes filename with model has two dots (CHIP.MODEL.EXT),
-+# but filename without model has only single dot (CHIP.EXT).
-+murata-cyw-fw-strip-model = $(shell echo -n $(1) | sed 's/\..*\./\./')
-+
-+# Helper that strips model name and renames Bluetooth patch files to the ones
-+# expected by Linux kernel.
-+murata-cyw-fw-file-rename = $(call murata-cyw-fw-strip-model,$(patsubst CYW%,BCM%,$(f)))
-+
-+ifneq ($(MURATA_CYW_FW_FILES_y),)
-+define MURATA_CYW_FW_INSTALL_TARGET_CMDS
-+	mkdir -p $(TARGET_DIR)/lib/firmware/brcm
-+	$(foreach f,$(MURATA_CYW_FW_FILES_y), \
-+		$(INSTALL) -m 0644 $(@D)/$(f) \
-+			$(TARGET_DIR)/lib/firmware/brcm/$(call murata-cyw-fw-file-rename,$(f))$(sep))
-+endef
-+endif
-+
-+$(eval $(generic-package))
+-DT_UTILS_VERSION = v2018.05.0
++DT_UTILS_VERSION = v2019.01.0
+ DT_UTILS_SITE = https://git.pengutronix.de/git/tools/dt-utils
+ DT_UTILS_SITE_METHOD = git
+ DT_UTILS_LICENSE = GPL-2.0
 -- 
 2.21.0
