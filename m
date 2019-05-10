@@ -1,25 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 May 2019 11:45:23 +0200
-Subject: [Buildroot] [PATCH] package/libglib2: avoid printing null
- strings
-In-Reply-To: <20190503142026.25724-1-grzegorz@blach.pl> (Grzegorz Blach's
- message of "Fri, 3 May 2019 14:20:26 +0000")
-References: <20190503142026.25724-1-grzegorz@blach.pl>
-Message-ID: <874l62skwc.fsf@dell.be.48ers.dk>
+Date: Fri, 10 May 2019 11:32:58 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/php: security
+ bump version to 7.3.5
+Message-ID: <20190510094009.768F883B7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Grzegorz" == Grzegorz Blach <grzegorz@blach.pl> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=815812e33eea64c305a6cfec5479391a9cc4291b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > GCC 9 is being stricter about passing null string pointers
- > to printf-like functions.
+Release notes: https://www.php.net/archive/2019.php#id2019-05-02-1
 
- > Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Fixes 2019-11036:
+* Heap-buffer-overflow in _estrndup via exif_process_IFD_TAG
 
-Committed to 2019.02.x, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 934239eafb4387d5a10cbf15852fac4f56d89839)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/php/php.hash b/package/php/php.hash
+index fb25521955..b764f8a507 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 6fe79fa1f8655f98ef6708cde8751299796d6c1e225081011f4104625b923b83  php-7.3.4.tar.xz
++sha256 e1011838a46fd4a195c8453b333916622d7ff5bce4aca2d9d99afac142db2472  php-7.3.5.tar.xz
+ 
+ # License file
+ sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 541c76755f..2d7d3b4aa0 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 7.3.4
++PHP_VERSION = 7.3.5
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
