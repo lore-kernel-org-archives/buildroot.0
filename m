@@ -1,69 +1,70 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 May 2019 10:30:15 +0200
-Subject: [Buildroot] [git commit] board/pc: drop unused grub-efi.cfg file
-Message-ID: <20190510084547.7BE6D88FA6@busybox.osuosl.org>
+Date: Fri, 10 May 2019 10:28:30 +0200
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{9, 14,
+ 19}.x / 5.0.x series
+Message-ID: <20190510084547.6E4F781474@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79b8540d624ac4846ba341b1b9691eccacf0bc05
+commit: https://git.buildroot.net/buildroot/commit/?id=6606f6c6a1e715e76e0022fdd46edcbcacff8f13
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Following commit fee29b05bb7db25e37c8a5175ce00dc712554edf
-("configs/pc_x86_64_efi: use a GPT partition table"),
-board/pc/grub-efi.cfg is no longer used anywhere: the
-post-image-efi-gpt.sh script generates the grub configuration.
-
-Also, since post-image-efi-gpt.sh generates a grub configuration file
-that uses the root filesystem partition UUID as the root= kernel
-argument, the instructions in the readme.txt file to tweak root= from
-/dev/sda2 to /dev/vda2 is no longer relevant. This was noted in the
-commit log of fee29b05bb7db25e37c8a5175ce00dc712554edf:
-
-    The root filesystem location is passed to the kernel by a partition
-    UUID, so it is possible to boot on QEMU, directly from the disk image,
-    or dump the image to a physical device.
-
-Fixes: #11841
-Cc: Pete Morici <pmorici@dev295.com>
-Cc: Carlos A. M. dos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/pc/grub-efi.cfg | 6 ------
- board/pc/readme.txt   | 8 +-------
- 2 files changed, 1 insertion(+), 13 deletions(-)
+ linux/Config.in                      | 2 +-
+ linux/linux.hash                     | 8 ++++----
+ package/linux-headers/Config.in.host | 8 ++++----
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/board/pc/grub-efi.cfg b/board/pc/grub-efi.cfg
-deleted file mode 100644
-index 222301a4e0..0000000000
---- a/board/pc/grub-efi.cfg
-+++ /dev/null
-@@ -1,6 +0,0 @@
--set default="0"
--set timeout="5"
--
--menuentry "Buildroot" {
--	linux /bzImage root=/dev/sda2 rootwait console=tty1
--}
-diff --git a/board/pc/readme.txt b/board/pc/readme.txt
-index 895331b0af..41aec50d36 100644
---- a/board/pc/readme.txt
-+++ b/board/pc/readme.txt
-@@ -57,13 +57,7 @@ qemu-system-x86_64 \
- Emulation in qemu (UEFI)
- ========================
+diff --git a/linux/Config.in b/linux/Config.in
+index 4875454195..af3c9115f2 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -121,7 +121,7 @@ endif
  
--1. Edit grub-efi.cfg
--
--  Since the driver will show up in the virtual machine as /dev/vda,
--  change board/pc/grub-efi.cfg to use root=/dev/vda2 instead of
--  root=/dev/sda2. Then rebuild grub2 and the image.
--
--2. Run the emulation with:
-+Run the emulation with:
- 
- qemu-system-x86_64 \
- 	-M pc \
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.0.13" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.0.14" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 549b4d5351..fae7c04cd9 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256 d06a7be6e73f97d1350677ad3bae0ce7daecb79c2c2902aaabe806f7fa94f041  linux-5.1.tar.xz
+-sha256 bcfd52bf1faa24f5f712146a873959461e001656ad67717e80b947aa6ad53479  linux-5.0.13.tar.xz
++sha256 2e376076cf8a20c0f86fa30fc56a9ca35cadbe43908cd24b7d678f97f3676c61  linux-5.0.14.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 6fd8cd4d8a15d7bfb4a7968fbe104f97f8c5ff557c752aae43fe13a6ca073fb0  linux-4.19.40.tar.xz
+-sha256 a05afa95163eab4ec76dabb51f54aea8c40ef63d5ea2d112ac04e6b79a8e8dbd  linux-4.14.116.tar.xz
+-sha256 bc579d904f7d7d04adf03ed66dc8ac0a29d6cc74d989d3aa5c6ae2dedaf51168  linux-4.9.173.tar.xz
++sha256 90de6296504c64cbc4147fe053a1e8f88a98b7aed7896777e33a0321d0714782  linux-4.19.41.tar.xz
++sha256 a855a134e7a77dff92ad50f20501dbb39a1ee011ffa781ed885a3d17c6b9f23f  linux-4.14.117.tar.xz
++sha256 fc84fd68077fff55bb1779fbf3ee916257a4362a8e6d982773856c78f7865858  linux-4.9.174.tar.xz
+ sha256 2c6a9d2765ef182f2470afed5af74de6c435ba9aaf422af54db8c5dc2b4f27d1  linux-4.4.179.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 2042702eb9..3fd8b000c5 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -298,10 +298,10 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "4.4.179"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.173"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.116"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.40"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.0.13"	if BR2_KERNEL_HEADERS_5_0
++	default "4.9.174"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.117"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.41"	if BR2_KERNEL_HEADERS_4_19
++	default "5.0.14"	if BR2_KERNEL_HEADERS_5_0
+ 	default "5.1"		if BR2_KERNEL_HEADERS_5_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
