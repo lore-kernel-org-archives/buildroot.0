@@ -1,57 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 May 2019 12:16:27 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/docker-engine:
- bump version to 18.09.6
-Message-ID: <20190510101149.2C00C83B7E@busybox.osuosl.org>
+Date: Fri, 10 May 2019 12:15:02 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/orc: bump version
+ to 0.4.29
+Message-ID: <20190510101149.2588983B7E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=590e35a590099c9cb5a75ad0dca3a92c3847a873
+commit: https://git.buildroot.net/buildroot/commit/?id=82b1e767166fc051ab52abb5b4353faf2f07dbfe
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Additional post-18.09.5 fixes:
+Contains a number of fixes. Release notes:
 
-Builder:
-- Fixed COPY and ADD with multiple <src> to not invalidate cache if
-  DOCKER_BUILDKIT=1.moby/moby#38964
+0.4.28: https://lists.freedesktop.org/archives/gstreamer-announce/2017-November/000449.html
+0.4.29: https://lists.freedesktop.org/archives/gstreamer-announce/2019-April/000483.html
 
-Networking:
-- Cleaned up the cluster provider when the agent is closed. docker/libnetwork#2354
-- Windows: Now selects a random host port if the user does not specify a
-  host port.  docker/libnetwork#2369
-- --service-cluster-ip-range is now configurable for UCP install.
-  docker/orca#10263
+Also add a hash for the license file.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d692ecb05489ee783090ddd95ba47ee296a50bc5)
+(cherry picked from commit 116811c26458aea2041b60831ccc55ac3a1d1ac1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/orc/orc.hash | 5 ++++-
+ package/orc/orc.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 28f1d72136..4e673f2856 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	f6c1f2cff88c1f143fe9c16ea6555eace68ef17a5b7803dc5d5fa0a1f45a3a97  docker-engine-v18.09.5.tar.gz
-+sha256	7cb45266fff79245c81ec86c455d4b0513ca5d4ec1b9be8c8330df30a9467481  docker-engine-v18.09.6.tar.gz
- sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 7b0f451ee9..50d4129256 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
+diff --git a/package/orc/orc.hash b/package/orc/orc.hash
+index f47a9cfe5f..71dd3007ca 100644
+--- a/package/orc/orc.hash
++++ b/package/orc/orc.hash
+@@ -1,2 +1,5 @@
+ # From https://gstreamer.freedesktop.org/src/orc/orc-0.4.27.tar.xz.sha256sum
+-sha256 51e53e58fc8158e5986a1f1a49a6d970c5b16493841cf7b9de2c2bde7ce36b93 orc-0.4.27.tar.xz
++sha256 4f8901f9144b5ec17dffdb33548b5f4c7f8049b0d1023be3462cdd64ec5a3ab2  orc-0.4.29.tar.xz
++
++# Locally calculated
++sha256 4f5dabb1b44bb6fc5cd53820b1f103147ad61b395a57903991325bd1b85d97bf  COPYING
+diff --git a/package/orc/orc.mk b/package/orc/orc.mk
+index ab718296ac..d121266bce 100644
+--- a/package/orc/orc.mk
++++ b/package/orc/orc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = v18.09.5
-+DOCKER_ENGINE_VERSION = v18.09.6
- DOCKER_ENGINE_SITE = $(call github,docker,engine,$(DOCKER_ENGINE_VERSION))
- 
- DOCKER_ENGINE_LICENSE = Apache-2.0
+-ORC_VERSION = 0.4.27
++ORC_VERSION = 0.4.29
+ ORC_SOURCE = orc-$(ORC_VERSION).tar.xz
+ ORC_SITE = http://gstreamer.freedesktop.org/data/src/orc
+ ORC_LICENSE = BSD-2-Clause, BSD-3-Clause
