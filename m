@@ -1,41 +1,34 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 10 May 2019 07:41:34 +0000
-Subject: [Buildroot] [Bug 11861] New: Syslinux EFI binaries are broken on
- 2019.05-rc1 (binutils >= 2.31)
-Message-ID: <bug-11861-163@https.bugs.busybox.net/>
+Date: Fri, 10 May 2019 07:43:06 +0000
+Subject: [Buildroot] [Bug 11851] Support for Google Coral devboard
+In-Reply-To: <bug-11851-163@https.bugs.busybox.net/>
+References: <bug-11851-163@https.bugs.busybox.net/>
+Message-ID: <bug-11851-163-yqfox3opDC@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11861
+https://bugs.busybox.net/show_bug.cgi?id=11851
 
-            Bug ID: 11861
-           Summary: Syslinux EFI binaries are broken on 2019.05-rc1
-                    (binutils >= 2.31)
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: sam at gpsm.co.uk
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
 
-Binutils >= 2.31 writes two PT_LOAD segements by default. This
-is not supported by the wrapper.c script used to convert the shared
-object into an elf binary.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |WONTFIX
 
-Refs:
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+Thanks for the suggestion. Howevr, this is not really a bug report or an
+enhancement on which there's much we can do: if somebody has access to this
+hardware platform, and is interested in adding a defconfig for it in Buildroot,
+it will be done. But without this, this bug would be sitting in our bug tracker
+for ages, without us being able to do anything about it.
 
-https://wiki.syslinux.org/wiki/index.php?title=Building
-https://www.syslinux.org/archives/2018-August/026167.html
-https://salsa.debian.org/images-team/syslinux/commit/012e1dd312eb8c1f9a52239966e0be0169d7af98
+Perhaps you could consider sponsoring this HW platform to one of the Buildroot
+developers, or alternatively adding a Buildroot configuration for this HW
+platform yourself ?
 
 -- 
 You are receiving this mail because:
