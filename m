@@ -1,33 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 May 2019 12:14:04 +0200
-Subject: [Buildroot] [PATCH] package/owfs: delay sysvinit start until
- after network and avahi
-In-Reply-To: <20190423113515.6482-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Tue, 23 Apr 2019 13:35:15 +0200")
-References: <20190423113515.6482-1-arnout@mind.be>
-Message-ID: <87mujur503.fsf@dell.be.48ers.dk>
+Date: Fri, 10 May 2019 12:12:10 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/coreutils:
+ install base64 under /bin iso /usr/bin to match busybox
+Message-ID: <20190510100841.98D1388510@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=948d9db61aae3ee1468071ca334ed72f0eb93a8e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > In its default configuration, owserver opens a TCP socket on the 'lo'
- > interface. However, in some situations, the 'lo' interface may not yet
- > be up until S40network is started. This causes owserver not to start its
- > TCP socket, which makes it impossible for the owfs client to connect to
- > it.
+Fixes #11816
 
- > In addition, owserver may have avahi integration.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 873fa4f01fa7cdd61450f46c4f51ddcec258b230)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/coreutils/coreutils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Therefore, delay the start of owserver and owfs until after S40network
- > and S50avahi-daemon.
-
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-Committed to 2019.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 3e8efbf047..8e5518f638 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -55,7 +55,7 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
+ 	MAKEINFO=true \
+ 	INSTALL_PROGRAM=$(INSTALL)
+ 
+-COREUTILS_BIN_PROGS = cat chgrp chmod chown cp date dd df dir echo false \
++COREUTILS_BIN_PROGS = base64 cat chgrp chmod chown cp date dd df dir echo false \
+ 	kill link ln ls mkdir mknod mktemp mv nice printenv pwd rm rmdir \
+ 	vdir sleep stty sync touch true uname join
+ 
