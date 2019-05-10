@@ -1,46 +1,38 @@
-From: Christian Stewart <christian@paral.in>
-Date: Thu, 9 May 2019 18:15:48 -0700
-Subject: [Buildroot] initial ram filesystem with pc_x86_64_efi_defconfig
-In-Reply-To: <CA+0GdoM2b3FMCHW2TTn7jxzwLtRZZJy3hDRM7pQLEwSfbakncA@mail.gmail.com>
-References: <CA+0GdoM2b3FMCHW2TTn7jxzwLtRZZJy3hDRM7pQLEwSfbakncA@mail.gmail.com>
-Message-ID: <CA+h8R2raXTKctY9gXGToXQue39_FkYvkwOp7vaGB9-EUkarjxA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 10 May 2019 03:59:54 +0000
+Subject: [Buildroot] [Bug 11856] New: Busybox static build fails due to
+ missing libtirpc
+Message-ID: <bug-11856-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter, all,
+https://bugs.busybox.net/show_bug.cgi?id=11856
 
-I am also working on an initramfs based system for x86_64 and have had
-some initial difficulty (although I haven't had much time to delve
-into it completely) getting a straightforward pipeline for Buildroot
-build -> install on a x86_64 machine -> boot.
+            Bug ID: 11856
+           Summary: Busybox static build fails due to missing libtirpc
+           Product: buildroot
+           Version: 2019.02.2
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: pmorici at dev295.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-I have managed to get qemu + even VirtualBox working somewhat with an
-initramfs based system:
+The busybox build fails if the CONFIG_STATIC option is selected in the busybox
+config.  The failure is caused by a missing static library libtirpc.
 
-https://github.com/paralin/SkiffOS/tree/master/configs/intel/x64
+The libtirpc package doesn't build a static version by default.  The
+--enable-static option needs to be added to LIBTIRPC_CONF_OPTS in
+package/libtirpc/libtirpc.mk
 
-Getting it to work on a machine should involve flashing grub and/or
-isolinux (does isolinux work reliably for a "production-grade" boot or
-is grub needed?) and copying in the initramfs + kernel + boot config
-(??).
-
-Unfortunately I have limited experience with grub, most of my
-bootloader experience is with either Refind on my laptop (an efi based
-bootup for macs) or u-boot.
-
-On Thu, May 9, 2019 at 6:00 PM Peter Morici <pmorici@dev295.com> wrote:
->
->
->     I'm trying to get a buildroot system that runs entirely from ram once booted so that the boot device (ie: a usb drive) can be removed without causing a problem.
->
->     I tried starting with the pc_x86_64_efi_defconfig and making changes to enable building initramfs and modifying the post image generation script but the resulting image caused the machine to crash on boot w/o any useful feedback.  Is there an existing def config that maybe better suited as a starting point or some other approach I can take to get the desired result?
-
-
-Can you detail how you installed the image on the machine and at what
-point in the boot you got the crash?
-
-Thanks,
-Christian Stewart
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
