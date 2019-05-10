@@ -1,43 +1,51 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 May 2019 16:02:41 +0200
-Subject: [Buildroot] [git commit branch/next] package/libopenh264: bump
- version to v1.8.0
-Message-ID: <20190510135727.B3C3088E94@busybox.osuosl.org>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri, 10 May 2019 07:08:10 -0700
+Subject: [Buildroot] [uclibc-ng-devel] uclibc-ng built with wrong
+ _FILE_OFFSET_BITS
+In-Reply-To: <8b7f9c38-15cf-affa-b750-f2b3a2ecf4c0@kalray.eu>
+References: <CAMo8BfKY5TyJeF=-toMXQZ1SWwM1ymn+3tTsi2nmoiHUUFeb5w@mail.gmail.com>
+ <CAMo8Bf+9WcBQnt2O9DampeSE2wWFYrKrOE1KQVED+ynOArrhMA@mail.gmail.com>
+ <8b7f9c38-15cf-affa-b750-f2b3a2ecf4c0@kalray.eu>
+Message-ID: <CAMo8BfJq8zM2DiO9J96ZtPshMfV3TYmsos2UXnCwPxsXNNSzfQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=037cf1d5a1e226a8314d14356003f575bb2bf435
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Fri, May 10, 2019 at 6:32 AM Yann Sionneau <ysionneau@kalray.eu> wrote:
+>
+> If that can be of any help, this test seems to PASS on armv7 arch:
+> https://uclibc-ng-ci.sionneau.net:8443/job/uclibc-ng-multiarch/arch=armv7/19/console
+>
+> However this bugs reproduces for mips32r6 :
+> https://uclibc-ng-ci.sionneau.net:8443/job/uclibc-ng-multiarch/19/arch=mips32r6/console
+>
+> Also, I can confirm I am able to reproduce the issue with
+> buildroot+uclibc-ng by building the qemu_xtensa_lx60_defconfig buildroot
+> config
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libopenh264/libopenh264.hash | 2 +-
- package/libopenh264/libopenh264.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks for the confirmation.
+I've spent some more time on this issue and I hope have got a better
+understanding of it. So:
+- uclibc-ng itself is not meant to be compiled differently with
+-D_FILE_OFFSET_BITS=64
+  and without it. It is meant to provide both LFS and non-LFS function versions,
+  like ftruncate and ftruncate64.
+- the library user on the other hand gets different set of
+declarations depending
+  on the presence of -D_FILE_OFFSET_BITS=64, that results in a call to different
+  functions.
+- however this is not the case for preadv/pwritev: there's only one
+definition for
+  each of these functions. When libc is built these functions assume 32-bit
+  off_t, but when the user code is built, off_t size is selected by the
+  _FILE_OFFSET_BITS resulting in declaration that does not match definition.
 
-diff --git a/package/libopenh264/libopenh264.hash b/package/libopenh264/libopenh264.hash
-index b9cd9ed53e..f8a63f523e 100644
---- a/package/libopenh264/libopenh264.hash
-+++ b/package/libopenh264/libopenh264.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 9c07c38d7de00046c9c52b12c76a2af7648b70d05bd5460c8b67f6895738653f  libopenh264-v1.7.0.tar.gz
-+sha256 08670017fd0bb36594f14197f60bebea27b895511251c7c64df6cd33fc667d34  libopenh264-v1.8.0.tar.gz
- sha256 dd5c1c9668512530fa5a96e4c29ac4033d70a7eeb0eed7a42fddb6dd794ebdbb  LICENSE
-diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
-index 233e7971f4..96979a9d43 100644
---- a/package/libopenh264/libopenh264.mk
-+++ b/package/libopenh264/libopenh264.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBOPENH264_VERSION = v1.7.0
-+LIBOPENH264_VERSION = v1.8.0
- LIBOPENH264_SITE = $(call github,cisco,openh264,$(LIBOPENH264_VERSION))
- LIBOPENH264_LICENSE = BSD-2-Clause
- LIBOPENH264_LICENSE_FILES = LICENSE
+I guess the right way to fix it is using __off64_t in declarations and
+definitions
+of both preadv/pwritev. With this change the test passes on xtensa.
+
+-- 
+Thanks.
+-- Max
