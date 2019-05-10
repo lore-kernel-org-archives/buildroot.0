@@ -1,50 +1,106 @@
-From: Michael Nebel <michael@nebel.de>
-Date: Fri, 10 May 2019 19:27:21 +0200
-Subject: [Buildroot] problems compiling nodejs 10.15.3 and suggested fix
-Message-ID: <a8114d08-6afa-95eb-0152-ce47cc923921@nebel.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 10 May 2019 22:57:04 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/qt5enginio: needs ssl
+In-Reply-To: <3c08a2ee-d0d1-8ca2-ccf6-e411f0802344@mind.be>
+References: <20190505124731.18275-1-fontaine.fabrice@gmail.com>
+ <3c08a2ee-d0d1-8ca2-ccf6-e411f0802344@mind.be>
+Message-ID: <CAPi7W81Me3cZ56cZiesW_sxEz4-i2CsTPCLWL=AQ5fyo6fZaAQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Arnout,
 
-I started to evaluate buildroot some days ago. The "make menuconfig" was
-very intriguing for me. It felt like coming home again :-) Cool and
-thanks for this project!
+Le ven. 10 mai 2019 ? 17:07, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>
+>  Hi Fabrice,
+>
+> On 05/05/2019 14:47, Fabrice Fontaine wrote:
+> > qt5enginio needs Qt5 with ssl support, a dependency could be added on
+> > BR2_PACKAGE_QT5BASE_OPENSSL but this proposal was rejected in the first
+> > iteration of this patch
+> >
+> > Qt5 has ssl support through libressl on Qt 5.6 or openssl in latest Qt
+> > however we can't select libressl without adding a circular dependency as
+> > some packages (such as sqlcipher) force openssl through
+> > BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+> >
+> > So, as suggested by Arnout:
+> >  - add a hidden BR2_PACKAGE_QT5ENGINIO_SELECT_OPENSSL option that
+> >    selects BR2_PACKAGE_OPENSSL if qt5enginio is selected
+> >  - remove select on BR2_PACKAGE_QT5BASE to avoid a circular dependency
+> >    and because it's not needed as BR2_PACKAGE_QT5 already selects
+> >    BR2_PACKAGE_QT5BASE
+> >  - add dependencies of BR2_PACKAGE_LIBRESSL if Qt 5.6 is selected (but
+> >    don't select libressl to avoid a circular dependency)
+> >
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/60678cab68ec9aa17184b8417b64b3b79adf428a
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> > Changes v1 -> v2 (after review of Thomas Petazzoni and Arnout
+> > Vandecappelle):
+> >  - Remove dependency on BR2_PACKAGE_QT5BASE_OPENSSL
+> >
+> >  package/qt5/qt5enginio/Config.in | 12 ++++++++++--
+> >  1 file changed, 10 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+> > index 102058e7c5..94bf295396 100644
+> > --- a/package/qt5/qt5enginio/Config.in
+> > +++ b/package/qt5/qt5enginio/Config.in
+> > @@ -1,7 +1,15 @@
+> > +# This is a hack to avoid circular dependencies when selecting OPENSSL
+> > +config BR2_PACKAGE_QT5ENGINIO_SELECT_OPENSSL
+> > +     bool
+> > +     default y if BR2_PACKAGE_QT5ENGINIO
+> > +     select BR2_PACKAGE_OPENSSL
+>
+>  Unfortunately, this still doesn't work for Qt5.6.
+>
+>  However, there is not much we can do there. Selecting libressl is not possible,
+> so we have to depend on it, so we can't select libopenssl or we'd get a circular
+> dependency.
+>
+>  So, I've gone back to your original patch but changed the depends into a
+> select, and I added a comment that for Qt5.6 you need to select libressl:
+>
+> comment "qt5enginio needs libressl for Qt5.6"
+>        depends on BR2_PACKAGE_QT5_VERSION_5_6
+>        depends on !BR2_PACKAGE_LIBRESSL
+>
+>
+>  This would still lead to autobuild failures for Qt5.6, of course, because it is
+> still possible to select libopenssl instead of libressl. But we don't test Qt5.6
+> in the autobuilders, so that's fine.
+Are you sure that we're not testing Qt5.6 in autobuilders?
+Here is the latest build failure on qt5enginio:
+http://autobuild.buildroot.org/results/969/969d38b9ff1db51959e68343cf6e932dc8645688/config.
+But I agree that perhaps we should remove Qt5.6 from autobuilders.
+>
+>  With that, I've applied to master. Many thanks for keeping on trying to fix
+> this properly.
+>
+>
+>  Regards,
+>  Arnout
+>
+> > +
+> >  config BR2_PACKAGE_QT5ENGINIO
+> >       bool "qt5enginio"
+> > -     select BR2_PACKAGE_OPENSSL
+> > -     select BR2_PACKAGE_QT5BASE
+> > +     depends on !BR2_PACKAGE_QT5_VERSION_5_6 || \
+> > +             (BR2_PACKAGE_QT5_VERSION_5_6 && \
+> > +             (!BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL && \
+> > +             !(BR2_TOOLCHAIN_USES_UCLIBC && !BR2_USE_MMU)))
+> >       select BR2_PACKAGE_QT5BASE_GUI
+> >       select BR2_PACKAGE_QT5BASE_NETWORK
+> >       help
+> >
+Best Regards,
 
-After first successful experiments with buildroot-2019.02.2, I switched
-to the git-version. Here I ran into some troubles to compile nodejs for
-x86_64. It failed with
-
-  output/build/host-nodejs-10.15.3/out/Release/torque:
-        error while loading shared libraries: libcrypto.so.1.1:
-
-After some poking around, I applied the following patch to nodejs.mk and
-built everything successfully:
-
-nebel at tyche ~/src/buildroot $ git diff
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 2577239e19..abf51a3f9c 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -72,6 +72,7 @@ define HOST_NODEJS_BUILD_CMDS
-        $(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
-                $(MAKE) -C $(@D) \
-                $(HOST_CONFIGURE_OPTS) \
-+               LD_LIBRARY_PATH="$(LD_LIBRARY_PATH):$(HOST_DIR)/lib/" \
-                NO_LOAD=cctest.target.mk \
-                PATH=$(@D)/bin:$(BR_PATH)
-
-
-I don't oversee the whole complexity of buildroot. So I don't know, if
-this patch is a valid solution. Is there a better way? Is it worth the
-effort to generate and submit a regular patch?
-
-Greetings from northern Germany
-
-	Michael
--- 
-Michael Nebel
-								
+Fabrice
