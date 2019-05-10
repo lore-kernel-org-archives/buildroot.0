@@ -1,44 +1,37 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 10 May 2019 10:30:38 +0200
-Subject: [Buildroot] [PATCH] package/postgresql: security bump to
- version 11.3
-In-Reply-To: <20190509204528.18008-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Thu, 9 May 2019 22:45:28 +0200")
-References: <20190509204528.18008-1-peter@korsgaard.com>
-Message-ID: <87v9yisocx.fsf@dell.be.48ers.dk>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Fri, 10 May 2019 10:35:03 +0200
+Subject: [Buildroot] [PATCH v3 0/2] package/murata-cyw-fw: new package
+Message-ID: <20190510083505.1341-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+Hi,
 
- > Fixes the following security issues:
- > CVE-2019-10129: Memory disclosure in partition routing
+This is a next version of package with firmware for murata wireless modules
+(WiFi + BLE). This version is based on feedback from v2 [1].
 
- > Prior to this release, a user running PostgreSQL 11 can read arbitrary bytes
- > of server memory by executing a purpose-crafted INSERT statement to a
- > partitioned table.
+I have splitted it into two patches, because I am not sure that second patch
+(reducing required files to download) is worth worse (in my opinion) user
+experience when rebuilding with new options selected.
 
- > CVE-2019-10130: Selectivity estimators bypass row security policies
+[1] http://lists.busybox.net/pipermail/buildroot/2019-May/249595.html
 
- > PostgreSQL maintains statistics for tables by sampling data available in
- > columns; this data is consulted during the query planning process.  Prior to
- > this release, a user able to execute SQL queries with permissions to read a
- > given column could craft a leaky operator that could read whatever data had
- > been sampled from that column.  If this happened to include values from rows
- > that the user is forbidden to see by a row security policy, the user could
- > effectively bypass the policy.  This is fixed by only allowing a
- > non-leakproof operator to use this data if there are no relevant row
- > security policies for the table.
+Marcin Niestroj (2):
+  package/murata-cyw-fw: new package
+  package/murata-cyw-fw: download NVRAM and BT_PATCH only when needed
 
- > For more details, see the release notes:
- > https://www.postgresql.org/about/news/1939/
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
+ DEVELOPERS                               |   1 +
+ package/Config.in                        |   1 +
+ package/murata-cyw-fw/Config.in          |  97 ++++++++++++++++++++
+ package/murata-cyw-fw/murata-cyw-fw.hash |   5 ++
+ package/murata-cyw-fw/murata-cyw-fw.mk   | 107 +++++++++++++++++++++++
+ 5 files changed, 211 insertions(+)
+ create mode 100644 package/murata-cyw-fw/Config.in
+ create mode 100644 package/murata-cyw-fw/murata-cyw-fw.hash
+ create mode 100644 package/murata-cyw-fw/murata-cyw-fw.mk
 
 -- 
-Bye, Peter Korsgaard
+2.21.0
