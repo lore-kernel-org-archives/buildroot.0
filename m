@@ -1,51 +1,63 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Fri, 10 May 2019 07:08:10 -0700
-Subject: [Buildroot] [uclibc-ng-devel] uclibc-ng built with wrong
- _FILE_OFFSET_BITS
-In-Reply-To: <8b7f9c38-15cf-affa-b750-f2b3a2ecf4c0@kalray.eu>
-References: <CAMo8BfKY5TyJeF=-toMXQZ1SWwM1ymn+3tTsi2nmoiHUUFeb5w@mail.gmail.com>
- <CAMo8Bf+9WcBQnt2O9DampeSE2wWFYrKrOE1KQVED+ynOArrhMA@mail.gmail.com>
- <8b7f9c38-15cf-affa-b750-f2b3a2ecf4c0@kalray.eu>
-Message-ID: <CAMo8BfJq8zM2DiO9J96ZtPshMfV3TYmsos2UXnCwPxsXNNSzfQ@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 10 May 2019 16:37:20 +0200
+Subject: [Buildroot] [git commit] package/qt5enginio: needs ssl
+Message-ID: <20190510145751.CE527814A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, May 10, 2019 at 6:32 AM Yann Sionneau <ysionneau@kalray.eu> wrote:
->
-> If that can be of any help, this test seems to PASS on armv7 arch:
-> https://uclibc-ng-ci.sionneau.net:8443/job/uclibc-ng-multiarch/arch=armv7/19/console
->
-> However this bugs reproduces for mips32r6 :
-> https://uclibc-ng-ci.sionneau.net:8443/job/uclibc-ng-multiarch/19/arch=mips32r6/console
->
-> Also, I can confirm I am able to reproduce the issue with
-> buildroot+uclibc-ng by building the qemu_xtensa_lx60_defconfig buildroot
-> config
+commit: https://git.buildroot.net/buildroot/commit/?id=ac38d6ce9c2d00623661806650807e14d4731e52
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for the confirmation.
-I've spent some more time on this issue and I hope have got a better
-understanding of it. So:
-- uclibc-ng itself is not meant to be compiled differently with
--D_FILE_OFFSET_BITS=64
-  and without it. It is meant to provide both LFS and non-LFS function versions,
-  like ftruncate and ftruncate64.
-- the library user on the other hand gets different set of
-declarations depending
-  on the presence of -D_FILE_OFFSET_BITS=64, that results in a call to different
-  functions.
-- however this is not the case for preadv/pwritev: there's only one
-definition for
-  each of these functions. When libc is built these functions assume 32-bit
-  off_t, but when the user code is built, off_t size is selected by the
-  _FILE_OFFSET_BITS resulting in declaration that does not match definition.
+qt5enginio needs Qt5 with ssl support, a dependency could be added on
+BR2_PACKAGE_QT5BASE_OPENSSL but this proposal was rejected in the first
+iteration of this patch.
 
-I guess the right way to fix it is using __off64_t in declarations and
-definitions
-of both preadv/pwritev. With this change the test passes on xtensa.
+Qt5 has ssl support through libressl on Qt 5.6 or openssl in latest Qt
+however we can't select libressl without adding a circular dependency as
+some packages (such as sqlcipher) force openssl through
+BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL.
 
--- 
-Thanks.
--- Max
+Any solution at the Kconfig level that tries to select libressl will
+lead to circular dependencies. Since Qt 5.6 is more or less deprecated
+anyway, and since it is not tested in the autobuilders, solve this with
+a comment. The comment is only shown for Qt 5.6, when libressl is not
+selected. Note that it is also shown when qt5enginio is not selected.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/60678cab68ec9aa17184b8417b64b3b79adf428a
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/qt5/qt5enginio/Config.in | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+index 102058e7c5..ac2d13b3ab 100644
+--- a/package/qt5/qt5enginio/Config.in
++++ b/package/qt5/qt5enginio/Config.in
+@@ -1,9 +1,8 @@
+ config BR2_PACKAGE_QT5ENGINIO
+ 	bool "qt5enginio"
+-	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_QT5BASE
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_NETWORK
++	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
+@@ -15,3 +14,10 @@ config BR2_PACKAGE_QT5ENGINIO
+ 	  5.6 and not recommended for new design.
+ 
+ 	  http://doc.qt.io/archives/qt-5.5/enginio-index.html
++
++# Forcibly selecting libressl is not possible because it is from a choice, and
++# depending on it is also not possible because we select openssl. So just a
++# a warning.
++comment "qt5enginio needs libressl for Qt5.6"
++	depends on BR2_PACKAGE_QT5_VERSION_5_6
++	depends on !BR2_PACKAGE_LIBRESSL
