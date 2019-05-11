@@ -1,81 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 11 May 2019 06:00:32 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-05-10
-Message-ID: <20190511060140.EED6A23724@silver.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 11 May 2019 12:10:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/log4cpp: add -lpthread to LIBS
+Message-ID: <20190511101048.20406-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+linknx fails to build with log4cpp because log4cpp does not add
+-lpthread to its log4cpp.pc file:
 
-Build statistics for 2019-05-10
-===============================
+/home/buildroot/autobuild/instance-0/output/host/bin/mipsel-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os     -o linknx linknx.o logger.o ruleserver.o objectcontroller.o eibclient.o threads.o timermanager.o persistentstorage.o xmlserver.o smsgateway.o emailgateway.o knxconnection.o services.o suncalc.o luacondition.o ioport.o ../ticpp/libticpp.a  -L/home/buildroot/autobuild/instance-0/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib -lpthsem  -L/home/buildroot/autobuild/instance-0/output/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/lib -llog4cpp     -lm
+/home/buildroot/autobuild/instance-0/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib/liblog4cpp.so: undefined reference to `pthread_key_create'
 
-      branch |  OK | NOK | TIM | TOT |
-   2019.02.x |  19 |   0 |   1 |  20 |
-      master | 176 |  16 |   2 | 194 |
+Help log4cpp to find this dependency by adding it to LIBS
 
-Results for branch 'master'
-===========================
+Fixes:
+ - http://autobuild.buildroot.org/results/1863f8f27041bc15ca68e786ba3b8e4764c40574
 
-Classification of failures by reason
-------------------------------------
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/log4cpp/log4cpp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-                cracklib-2.9.7 | 2 
-                   netsurf-3.8 | 2 
-                suricata-4.1.3 | 2 
-                     gdb-8.1.1 | 1 
-                gnuchess-6.2.5 | 1 
-                      gzip-1.9 | 1 
-                host-libsodium | 1 
-                   mimic-1.1.0 | 1 
-                          opus | 1 
-                 python3-3.7.3 | 1 
-              qt5enginio-1.6.3 | 1 
-      qt5webkit-examples-5.9.1 | 1 
-                  samba4-4.9.7 | 1 
-  vdr-plugin-vnsiserver-v1.8.0 | 1 
-               wireshark-3.0.1 | 1 
-
-
-Detail of failures
-------------------
-
-         arm |                 cracklib-2.9.7 | NOK | http://autobuild.buildroot.net/results/bd6efac187ce84306a6a5348e0591c4c7728ae39 |     
-         arm |                 cracklib-2.9.7 | NOK | http://autobuild.buildroot.net/results/d642e4343a0480d409a90d69934801e5b9df3433 |     
-         arm |                      gdb-8.1.1 | NOK | http://autobuild.buildroot.net/results/f350d2538e2c393a9f74fefc7c61ffdbd8c1ba6e | ORPH
-         arm |                 gnuchess-6.2.5 | NOK | http://autobuild.buildroot.net/results/ea90051f4c8d614b20011f499bc508604fe829c3 | ORPH
-         arm |                       gzip-1.9 | NOK | http://autobuild.buildroot.net/results/1bdf32e0d0dfa50c55c55c8c87b588b27758c169 | ORPH
-         arc |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/b827089f7fafc404e9d8e4079dbc5c1d19367d7d |     
-     powerpc |                    mimic-1.1.0 | NOK | http://autobuild.buildroot.net/results/7849014c963ab4f6125e9f813066c3996e1f780e |     
-         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/180e36e636e8797f55dcdc7c1e3192c993f5b79e |     
-         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/e2a2fbbf0e91dbd4a557f0db1c765fc72d9204eb |     
-microblazeel |                           opus | TIM | http://autobuild.buildroot.net/results/4f0665a3fb200d17120e398532cc98539550e88b |     
-      x86_64 |                  python3-3.7.3 | NOK | http://autobuild.buildroot.net/results/6434ab448f46b3886ccdfd4a39317975f8b21a43 |     
-         arc |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/969d38b9ff1db51959e68343cf6e932dc8645688 |     
-     aarch64 |       qt5webkit-examples-5.9.1 | NOK | http://autobuild.buildroot.net/results/387f5840fac9d0ee5217f5f963e598eb1c212a48 |     
-    mips64el |                   samba4-4.9.7 | NOK | http://autobuild.buildroot.net/results/bae0508e84c905dc23ad7cf1153cd1e9d8e4d734 |     
-      xtensa |                 suricata-4.1.3 | NOK | http://autobuild.buildroot.net/results/19d694b6672ff2ef1c95cf2d4f628ef65dccce29 |     
-        m68k |                 suricata-4.1.3 | NOK | http://autobuild.buildroot.net/results/fc1ea8a96281ea25298d310dd07654b46d214ad3 |     
-         arc |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/b58d2a0e322e54e8a280be07d5f1287c3a8de216 |     
-         arm |                wireshark-3.0.1 | NOK | http://autobuild.buildroot.net/results/d7e1a33d41f305e35012287e21cd68e42798866d | ORPH
-
-Results for branch '2019.02.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                       netsurf | 1 
-
-
-Detail of failures
-------------------
-
-        i686 |                        netsurf | TIM | http://autobuild.buildroot.net/results/d09e12c44e6d6081be947cee942da216f0a91182 |     
-
-
+diff --git a/package/log4cpp/log4cpp.mk b/package/log4cpp/log4cpp.mk
+index 8664a54385..527ad49e53 100644
+--- a/package/log4cpp/log4cpp.mk
++++ b/package/log4cpp/log4cpp.mk
+@@ -12,7 +12,7 @@ LOG4CPP_SUBDIR = log4cpp
+ LOG4CPP_LICENSE = LGPL-2.1+
+ LOG4CPP_LICENSE_FILES = log4cpp/COPYING
+ LOG4CPP_INSTALL_STAGING = YES
+-LOG4CPP_CONF_OPTS = --enable-doxygen=no --enable-dot=no
++LOG4CPP_CONF_OPTS = --enable-doxygen=no --enable-dot=no LIBS=-lpthread
+ # needed to fix broken configure script
+ LOG4CPP_AUTORECONF = YES
+ LOG4CPP_AUTORECONF_OPTS = -I m4
 -- 
-http://autobuild.buildroot.net
+2.20.1
