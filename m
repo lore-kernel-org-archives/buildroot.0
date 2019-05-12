@@ -1,87 +1,93 @@
 From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-Date: Sun, 12 May 2019 21:55:45 +0200
-Subject: [Buildroot] [PATCH v2 08/13]
- package/openrc-netifrc/openrc-netifrc.mk: add support for BR2_SYSTEM_DHCP
+Date: Sun, 12 May 2019 21:55:48 +0200
+Subject: [Buildroot] [PATCH v2 11/13] package/openrc: add support to set
+ terminal encoding
 In-Reply-To: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
 References: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
-Message-ID: <20190512195550.24457-8-michal.lyszczek@bofc.pl>
+Message-ID: <20190512195550.24457-11-michal.lyszczek@bofc.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch makes openrc-netifrc package aware of BR2_SYSTEM_DHCP
-config, and if set, will start dhcp daemon on configured interface.
+When openrc init is enabled, user can chose to set terminal
+encoding to ascii, utf-8 or to keep default settings.
 
 * system/Config.in
-  Changes dependency of BR2_SYSTEM_DHCP config.
+  New kconfig choice BR2_TARGET_GENERIC_TERMENCODING_* to
+  choose terminal encoding. Depends on openrc init.
 
-  When INIT_OPENRC is not set, DHCP is available to set if any of
-  BUSYBOX, IFUPDOWN or NETWORKD is enabled, OPENRC_NETIFRC is
-  ignored and will always be disabled since it depends on OPENRC.
-
-  When INIT_OPENRC is set, DHCP is available to set only when
-  OPENRC_NETIFRC is enabled. Rest of the options are ignored and
-  asserted to disable with "&& !BR2_PACKAGE_OPENRC"
+* package/openrc/openrc.mk
+  monitors BR2_TARGET_GENERIC_TERMENCODING_* choice and
+  make proper changes on TARGET_DIR to enable/disable
+  terminal encoding set.
 
 Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 
 ---
 Changes v1 -> v2
-  Own initiative:
-  - add short description about changes in system/Config.in
+  None
 ---
- package/openrc-netifrc/openrc-netifrc.mk | 10 ++++++++++
- system/Config.in                         | 10 +++++++---
- 2 files changed, 17 insertions(+), 3 deletions(-)
+ package/openrc/openrc.mk | 19 +++++++++++++++++++
+ system/Config.in         | 17 +++++++++++++++++
+ 2 files changed, 36 insertions(+)
 
-diff --git a/package/openrc-netifrc/openrc-netifrc.mk b/package/openrc-netifrc/openrc-netifrc.mk
-index 55421af72f..d9cf03eeb9 100644
---- a/package/openrc-netifrc/openrc-netifrc.mk
-+++ b/package/openrc-netifrc/openrc-netifrc.mk
-@@ -50,4 +50,14 @@ endef
- OPENRC_NETIFRC_TARGET_FINALIZE_HOOKS += OPENRC_NETIFRC_INSTALL
- endif # BR2_PACKAGE_OPENRC_NETIFRC
+diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
+index 0feea22818..8d5e6ec381 100644
+--- a/package/openrc/openrc.mk
++++ b/package/openrc/openrc.mk
+@@ -55,4 +55,23 @@ endef
+ OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_SET_GETTY
+ endif # BR2_TARGET_GENERIC_GETTY
  
-+OPENRC_NETIFRC_DHCP_IFACE = $(call qstrip,$(BR2_SYSTEM_DHCP))
-+ifneq ($(OPENRC_NETIFRC_DHCP_IFACE),)
-+define OPENRC_NETIFRC_SYSTEM_DHCP
-+	echo "config_$(OPENRC_NETIFRC_DHCP_IFACE)=\"dhcp\"" >> $(TARGET_DIR)/etc/conf.d/net
-+	ln -sf net.lo $(TARGET_DIR)/etc/init.d/net.$(OPENRC_NETIFRC_DHCP_IFACE)
-+	ln -sf /etc/init.d/net.$(OPENRC_NETIFRC_DHCP_IFACE) $(TARGET_DIR)/etc/runlevels/default/net.$(OPENRC_NETIFRC_DHCP_IFACE)
++ifeq ($(BR2_TARGET_GENERIC_TERMENCODING_KEEP),y)
++# openrc by default installs service to set terminal encoding, if we want to
++# keep default encoding we need to remove service from boot.
++define OPENRC_TERMENCODING
++	$(RM) $(TARGET_DIR)/etc/runlevels/boot/{termencoding,save-termencoding}
++	$(RM) $(TARGET_DIR)/etc/conf.d/termencoding
 +endef
-+OPENRC_NETIFRC_TARGET_FINALIZE_HOOKS += OPENRC_NETIFRC_SYSTEM_DHCP
-+endif # BR2_SYSTEM_DHCP
++OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_TERMENCODING
++else
++ifeq ($(BR2_TARGET_GENERIC_TERMENCODING_UTF8),y)
++# By default openrc will set terminal encoding to ASCII, if we want encoding
++# to be utf8, we need to set it.
++define OPENRC_TERMENCODING
++	echo "unicode=\"yes\"" > $(TARGET_DIR)/etc/conf.d/termencoding
++endef
++OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_TERMENCODING
++endif # BR2_TARGET_GENERIC_TERMENCODING_UTF8
++endif # BR2_TARGET_GENERIC_TERMENCODING_KEEP
 +
  $(eval $(generic-package))
 diff --git a/system/Config.in b/system/Config.in
-index 90aa0e52b9..32c502e310 100644
+index 32c502e310..08bcb517e4 100644
 --- a/system/Config.in
 +++ b/system/Config.in
-@@ -372,7 +372,9 @@ config BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
- config BR2_SYSTEM_DHCP
- 	string "Network interface to configure through DHCP"
- 	default ""
--	depends on BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN || BR2_PACKAGE_SYSTEMD_NETWORKD
-+	depends on ((BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN || \
-+		BR2_PACKAGE_SYSTEMD_NETWORKD) && !BR2_PACKAGE_OPENRC) || \
-+		BR2_PACKAGE_OPENRC_NETIFRC
- 	help
- 	  Enter here the name of the network interface (E.G. eth0) to
- 	  automatically configure through DHCP at bootup.
-@@ -383,8 +385,10 @@ config BR2_SYSTEM_DHCP
- 	  overwrite /etc/network/interfaces or add a networkd
- 	  configuration file.
+@@ -390,6 +390,23 @@ comment "automatic network configuration via DHCP needs ifupdown or busybox or n
+ 		BR2_PACKAGE_SYSTEMD_NETWORKD) && !BR2_PACKAGE_OPENRC) || \
+ 		BR2_PACKAGE_OPENRC_NETIFRC)
  
--comment "automatic network configuration via DHCP needs ifupdown or busybox or networkd"
--	depends on !(BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN || BR2_PACKAGE_SYSTEMD_NETWORKD)
-+comment "automatic network configuration via DHCP needs ifupdown or busybox or networkd or openrc-netifrc"
-+	depends on !(((BR2_PACKAGE_BUSYBOX || BR2_PACKAGE_IFUPDOWN || \
-+		BR2_PACKAGE_SYSTEMD_NETWORKD) && !BR2_PACKAGE_OPENRC) || \
-+		BR2_PACKAGE_OPENRC_NETIFRC)
- 
++choice
++	prompt "Terminal encoding"
++	default BR2_TARGET_GENERIC_TERMENCODING_KEEP
++	depends on BR2_INIT_OPENRC
++	help
++	  Set terminal encoding. This makes sense only when you are going to
++	  use virtual terminals with external monitor (or qemu) that uses
++	  /dev/tty[1-12].
++
++config BR2_TARGET_GENERIC_TERMENCODING_KEEP
++	bool "keep default"
++config BR2_TARGET_GENERIC_TERMENCODING_ASCII
++	bool "ascii"
++config BR2_TARGET_GENERIC_TERMENCODING_UTF8
++	bool "utf-8"
++endchoice
++
  endif # BR2_ROOTFS_SKELETON_DEFAULT
  
+ config BR2_SYSTEM_DEFAULT_PATH
 -- 
 2.18.1
