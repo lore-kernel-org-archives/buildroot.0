@@ -1,29 +1,20 @@
 From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-Date: Sun, 12 May 2019 21:55:41 +0200
-Subject: [Buildroot] [PATCH v2 04/13] package/openrc: add support for
- spawning getty
+Date: Sun, 12 May 2019 21:55:46 +0200
+Subject: [Buildroot] [PATCH v2 09/13] package/openrc: add patch to support
+ busybox version of sysctl
 In-Reply-To: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
 References: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
-Message-ID: <20190512195550.24457-4-michal.lyszczek@bofc.pl>
+Message-ID: <20190512195550.24457-9-michal.lyszczek@bofc.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* package/openrc/openrc.mk
-  add code that monitors BR2_TARGET_GENERIC_GETTY and if set,
-  creates configuration file (with SYSTEM_GETTY_*) for port in
-  /etc/conf.d/getty.$(SYSTEM_GETTY_PORT) and links so openrc
-  starts service.
-
-* package/skeleton-init-openrc/skeleton/etc/init.d/getty
-  openrc service that spawns getty on configured port.
-
-* system/Config.in
-  change dependency of BR2_TARGET_GENERIC_GETTY_TERM and
-  BR2_TARGET_GENERIC_GETTY_OPTIONS so openrc can make use
-  of these fields too.
+Busybox version of sysctl does not support --system argument, and
+files need to be loaded one by one. This patch adds code to sysctl
+service in openrc to recognize busybox sysctl and execute proper
+function based on that.
 
 Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 
@@ -31,105 +22,81 @@ Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 Changes v1 -> v2
   None
 ---
- package/openrc/openrc.mk                      | 13 ++++++++
- .../skeleton/etc/conf.d/.empty                |  0
- .../skeleton/etc/init.d/getty                 | 31 +++++++++++++++++++
- .../skeleton/etc/runlevels/default/.empty     |  0
- system/Config.in                              |  8 ++---
- 5 files changed, 48 insertions(+), 4 deletions(-)
- create mode 100644 package/skeleton-init-openrc/skeleton/etc/conf.d/.empty
- create mode 100755 package/skeleton-init-openrc/skeleton/etc/init.d/getty
- create mode 100644 package/skeleton-init-openrc/skeleton/etc/runlevels/default/.empty
+ ...tl.in-add-support-for-busybox-sysctl.patch | 66 +++++++++++++++++++
+ 1 file changed, 66 insertions(+)
+ create mode 100644 package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch
 
-diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-index 53f2947dcc..0feea22818 100644
---- a/package/openrc/openrc.mk
-+++ b/package/openrc/openrc.mk
-@@ -42,4 +42,17 @@ define OPENRC_REMOVE_UNNEEDED
- endef
- OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_REMOVE_UNNEEDED
- 
-+ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
-+GETTY_SVCNAME = getty.$(SYSTEM_GETTY_PORT)
-+GETTY_CONF_D = $(TARGET_DIR)/etc/conf.d/$(GETTY_SVCNAME)
-+define OPENRC_SET_GETTY
-+	echo "baud=\"$(SYSTEM_GETTY_BAUDRATE)\"" > $(GETTY_CONF_D)
-+	echo "term_type=\"$(SYSTEM_GETTY_TERM)\"" >> $(GETTY_CONF_D)
-+	echo "getty_options=\"-L $(SYSTEM_GETTY_OPTIONS)\"" >> $(GETTY_CONF_D)
-+	ln -sf getty $(TARGET_DIR)/etc/init.d/$(GETTY_SVCNAME)
-+	ln -sf /etc/init.d/$(GETTY_SVCNAME) $(TARGET_DIR)/etc/runlevels/default/$(GETTY_SVCNAME)
-+endef
-+OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_SET_GETTY
-+endif # BR2_TARGET_GENERIC_GETTY
-+
- $(eval $(generic-package))
-diff --git a/package/skeleton-init-openrc/skeleton/etc/conf.d/.empty b/package/skeleton-init-openrc/skeleton/etc/conf.d/.empty
+diff --git a/package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch b/package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch
 new file mode 100644
-index 0000000000..e69de29bb2
-diff --git a/package/skeleton-init-openrc/skeleton/etc/init.d/getty b/package/skeleton-init-openrc/skeleton/etc/init.d/getty
-new file mode 100755
-index 0000000000..acae1b218b
+index 0000000000..da8cf042c6
 --- /dev/null
-+++ b/package/skeleton-init-openrc/skeleton/etc/init.d/getty
-@@ -0,0 +1,31 @@
-+#!/sbin/openrc-run
-+# based on agetty service from OpenRC package
++++ b/package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch
+@@ -0,0 +1,66 @@
++From ec1a0c8fa2e7a7c6cf70f68bdabc07cbb1a567cf Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
++Date: Sun, 5 May 2019 23:43:40 +0200
++Subject: [PATCH] init.d/sysctl.in: add support for busybox sysctl
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+description="start getty on terminal"
-+supervisor=supervise-daemon
-+port="${RC_SVCNAME#*.}"
-+term_type="${term_type:-linux}"
-+command=/sbin/getty
-+command_args_foreground="${getty_options} ${baud} ${port} ${term_type}"
-+pidfile="/run/${RC_SVCNAME}.pid"
++Busybox version of sysctl does not support --system argument,
++and files need to be loaded one by one. This patch adds code
++to recognize busybox sysctl and execute proper function based
++on that.
 +
-+depend() {
-+	# start getty at the very end of init
-+	after *
-+	keyword -prefix
-+}
++Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
++---
++ init.d/sysctl.in | 27 ++++++++++++++++++++++++++-
++ 1 file changed, 26 insertions(+), 1 deletion(-)
 +
-+start_pre() {
-+	if [ -z "$port" ]; then
-+		eerror "${RC_SVCNAME} cannot be started directly. You must create"
-+		eerror "symbolic links to it for the ports you want to start"
-+		eerror "agetty on and add those to the appropriate runlevels."
-+		return 1
-+	else
-+		export EINFO_QUIET="${quiet:-yes}"
-+	fi
-+}
++diff --git a/init.d/sysctl.in b/init.d/sysctl.in
++index e49f4db2..a705b3d4 100644
++--- a/init.d/sysctl.in
+++++ b/init.d/sysctl.in
++@@ -37,6 +37,23 @@ BSD_sysctl()
++ 	return $retval
++ }
++ 
+++Busybox_sysctl()
+++{
+++	local quiet
+++	yesno $rc_verbose || quiet=-q
+++
+++	eindent
+++	for conf in /etc/sysctl.conf /etc/sysctl.d/*.conf; do
+++		if [ -r "$conf" ]; then
+++			vebegin "applying $conf"
+++			sysctl $quiet -p "$conf" || retval=1
+++			veend $retval
+++		fi
+++	done
+++	eoutdent
+++	return $retval
+++}
+++
++ Linux_sysctl()
++ {
++ 	local quiet
++@@ -52,7 +69,15 @@ start()
++ 	ebegin "Configuring kernel parameters"
++ 	case "$RC_UNAME" in
++ 	*BSD|GNU) BSD_sysctl; rc=$? ;;
++-	Linux) Linux_sysctl; rc=$? ;;
+++	Linux)
+++		sysctl -h > /dev/null 2>&1
+++		if [ $? -ne 0 ]; then
+++			# busybox version of sysctl does not recognize -h option
+++			Busybox_sysctl
+++		else
+++			Linux_sysctl
+++		fi
+++		rc=$? ;;
++ 	esac
++ 	eend $rc "Unable to configure some kernel parameters"
++ }
++-- 
++2.18.1
 +
-+stop_pre() {
-+	export EINFO_QUIET="${quiet:-yes}"
-+}
-diff --git a/package/skeleton-init-openrc/skeleton/etc/runlevels/default/.empty b/package/skeleton-init-openrc/skeleton/etc/runlevels/default/.empty
-new file mode 100644
-index 0000000000..e69de29bb2
-diff --git a/system/Config.in b/system/Config.in
-index 808fc070f3..90aa0e52b9 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -343,16 +343,16 @@ config BR2_TARGET_GENERIC_GETTY_BAUDRATE
- config BR2_TARGET_GENERIC_GETTY_TERM
- 	string "TERM environment variable"
- 	default "vt100"
--	# currently observed only by busybox and sysvinit
--	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV
-+	# currently observed by all but systemd
-+	depends on !BR2_INIT_SYSTEMD
- 	help
- 	  Specify a TERM type.
- 
- config BR2_TARGET_GENERIC_GETTY_OPTIONS
- 	string "other options to pass to getty"
- 	default ""
--	# currently observed only by busybox and sysvinit
--	depends on BR2_INIT_BUSYBOX || BR2_INIT_SYSV
-+	# currently observed by all but systemd
-+	depends on !BR2_INIT_SYSTEMD
- 	help
- 	  Any other flags you want to pass to getty,
- 	  Refer to getty --help for details.
 -- 
 2.18.1
