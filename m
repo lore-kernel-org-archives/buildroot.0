@@ -1,20 +1,19 @@
 From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-Date: Sun, 12 May 2019 21:55:46 +0200
-Subject: [Buildroot] [PATCH v2 09/13] package/openrc: add patch to support
- busybox version of sysctl
+Date: Sun, 12 May 2019 21:55:47 +0200
+Subject: [Buildroot] [PATCH v2 10/13] package/openrc: change /run/lock from
+ root:uucp to root:daemon
 In-Reply-To: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
 References: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
-Message-ID: <20190512195550.24457-9-michal.lyszczek@bofc.pl>
+Message-ID: <20190512195550.24457-10-michal.lyszczek@bofc.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Busybox version of sysctl does not support --system argument, and
-files need to be loaded one by one. This patch adds code to sysctl
-service in openrc to recognize busybox sysctl and execute proper
-function based on that.
+On gentoo /run/lock is owned by uucp group because of historical
+reasons. However uucp does not exist on buildroot by default, and
+it makes more sense that 'daemon' group should own this directory.
 
 Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 
@@ -22,79 +21,47 @@ Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 Changes v1 -> v2
   None
 ---
- ...tl.in-add-support-for-busybox-sysctl.patch | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
- create mode 100644 package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch
+ ....in-change-run-lock-from-root-uucp-t.patch | 34 +++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+ create mode 100644 package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch
 
-diff --git a/package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch b/package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch
+diff --git a/package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch b/package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch
 new file mode 100644
-index 0000000000..da8cf042c6
+index 0000000000..66bbba42ba
 --- /dev/null
-+++ b/package/openrc/0001-init.d-sysctl.in-add-support-for-busybox-sysctl.patch
-@@ -0,0 +1,66 @@
-+From ec1a0c8fa2e7a7c6cf70f68bdabc07cbb1a567cf Mon Sep 17 00:00:00 2001
++++ b/package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch
+@@ -0,0 +1,34 @@
++From 5ae8209afad9a4284723712b46d8685e7f7fd72c Mon Sep 17 00:00:00 2001
 +From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-+Date: Sun, 5 May 2019 23:43:40 +0200
-+Subject: [PATCH] init.d/sysctl.in: add support for busybox sysctl
++Date: Mon, 6 May 2019 00:06:39 +0200
++Subject: [PATCH] sh/init.sh.Linux.in: change /run/lock from root:uucp to
++ root:daemon
 +MIME-Version: 1.0
 +Content-Type: text/plain; charset=UTF-8
 +Content-Transfer-Encoding: 8bit
 +
-+Busybox version of sysctl does not support --system argument,
-+and files need to be loaded one by one. This patch adds code
-+to recognize busybox sysctl and execute proper function based
-+on that.
++On gentoo /run/lock is owned by uucp group because of historical
++reasons. However uucp does not exist on buildroot by default, and
++it makes more sense that 'daemon' group should own this directory.
 +
 +Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 +---
-+ init.d/sysctl.in | 27 ++++++++++++++++++++++++++-
-+ 1 file changed, 26 insertions(+), 1 deletion(-)
++ sh/init.sh.Linux.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/init.d/sysctl.in b/init.d/sysctl.in
-+index e49f4db2..a705b3d4 100644
-+--- a/init.d/sysctl.in
-++++ b/init.d/sysctl.in
-+@@ -37,6 +37,23 @@ BSD_sysctl()
-+ 	return $retval
-+ }
++diff --git a/sh/init.sh.Linux.in b/sh/init.sh.Linux.in
++index 222bbd3b..7f1a88db 100644
++--- a/sh/init.sh.Linux.in
+++++ b/sh/init.sh.Linux.in
++@@ -85,7 +85,7 @@ fi
 + 
-++Busybox_sysctl()
-++{
-++	local quiet
-++	yesno $rc_verbose || quiet=-q
-++
-++	eindent
-++	for conf in /etc/sysctl.conf /etc/sysctl.d/*.conf; do
-++		if [ -r "$conf" ]; then
-++			vebegin "applying $conf"
-++			sysctl $quiet -p "$conf" || retval=1
-++			veend $retval
-++		fi
-++	done
-++	eoutdent
-++	return $retval
-++}
-++
-+ Linux_sysctl()
-+ {
-+ 	local quiet
-+@@ -52,7 +69,15 @@ start()
-+ 	ebegin "Configuring kernel parameters"
-+ 	case "$RC_UNAME" in
-+ 	*BSD|GNU) BSD_sysctl; rc=$? ;;
-+-	Linux) Linux_sysctl; rc=$? ;;
-++	Linux)
-++		sysctl -h > /dev/null 2>&1
-++		if [ $? -ne 0 ]; then
-++			# busybox version of sysctl does not recognize -h option
-++			Busybox_sysctl
-++		else
-++			Linux_sysctl
-++		fi
-++		rc=$? ;;
-+ 	esac
-+ 	eend $rc "Unable to configure some kernel parameters"
-+ }
++ [ -x /sbin/restorecon ] && /sbin/restorecon -rF /run
++ checkpath -d $RC_SVCDIR
++-checkpath -d -m 0775 -o root:uucp /run/lock
+++checkpath -d -m 0775 -o root:daemon /run/lock
++ 
++ # Try to mount xenfs as early as possible, otherwise rc_sys() will always
++ # return RC_SYS_XENU and will think that we are in a domU while it's not.
 +-- 
 +2.18.1
 +
