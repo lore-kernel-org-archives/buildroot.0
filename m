@@ -1,46 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 12 May 2019 12:45:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mono: needs C++
-Message-ID: <20190512104542.12573-1-fontaine.fabrice@gmail.com>
+Date: Sun, 12 May 2019 14:12:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rpm: fix build with NLS
+Message-ID: <20190512121252.6049-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-mono needs a working C++ compiler to get the exact type of size_t since
-version 5.16.0.179 and
-https://github.com/mono/mono/commit/d8af77551de1f59803a46946786e0f9a5eb5cb9d
+Add TARGET_NLS_LIBS to LIBS to definitely fix linking with lintl instead
+of calling autoreconf
 
 Fixes:
- - http://autobuild.buildroot.org/results/ee6d037154127cc6572f06e9a78bae383ea381bc
+ - http://autobuild.buildroot.org/results/a1446b419f5f59f65fe80849182e38457de203b5
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/mono/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ package/rpm/rpm.mk | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/mono/Config.in b/package/mono/Config.in
-index a375a98448..0d555bfa82 100644
---- a/package/mono/Config.in
-+++ b/package/mono/Config.in
-@@ -12,6 +12,7 @@ config BR2_PACKAGE_MONO_ARCH_SUPPORTS
- config BR2_PACKAGE_MONO
- 	bool "mono"
- 	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
- 	help
-@@ -20,6 +21,7 @@ config BR2_PACKAGE_MONO
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index 6d1068194a..bcdc8c5fee 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -20,8 +20,6 @@ RPM_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES)
+ RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
+ RPM_LICENSE_FILES = COPYING
+-# Needed to fix an issue with -lintl linking
+-RPM_AUTORECONF = YES
  
- 	  http://download.mono-project.com/sources/mono/
+ RPM_CONF_OPTS = \
+ 	--disable-python \
+@@ -95,6 +93,7 @@ endif
+ # ac_cv_prog_cc_c99: RPM uses non-standard GCC extensions (ex. `asm`).
+ RPM_CONF_ENV = \
+ 	ac_cv_prog_cc_c99='-std=gnu99' \
+-	CFLAGS="$(TARGET_CFLAGS) $(RPM_CFLAGS)"
++	CFLAGS="$(TARGET_CFLAGS) $(RPM_CFLAGS)" \
++	LIBS=$(TARGET_NLS_LIBS)
  
--comment "mono needs a toolchain w/ threads, dynamic library"
-+comment "mono needs a toolchain w/ C++, threads, dynamic library"
- 	depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ $(eval $(autotools-package))
 -- 
 2.20.1
