@@ -1,143 +1,24 @@
-From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-Date: Sun, 12 May 2019 21:55:50 +0200
-Subject: [Buildroot] [PATCH v2 13/13] package/skeleton-init-openrc: add
- support for starting sysv scripts
-In-Reply-To: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
-References: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
-Message-ID: <20190512195550.24457-13-michal.lyszczek@bofc.pl>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 12 May 2019 22:17:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: fix build on mips64el
+In-Reply-To: <20190510222053.28783-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 11 May 2019 00:20:53 +0200")
+References: <20190510222053.28783-1-fontaine.fabrice@gmail.com>
+Message-ID: <87mujrpgvm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* package/skeleton-init-openrc/skeleton/etc/init.d/sysv-rcs
-  This openrc script implements rcS and rcK equivalent which will
-  start or stop any script from /etc/init.d/S??*
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-* package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
-  symlink to /etc/init.d/sysv-rcs to start service at startup
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/bae0508e84c905dc23ad7cf1153cd1e9d8e4d734
 
-* package/pkg-generic.mk
-  When openrc is enabled, evaluate $(PKG)_INSTALL_INIT_OPENRC, but
-  if install steps for openrc are not avilable, then evaluate
-  $(PKG)_INSTALL_INIT_SYSV))
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-* docs/manual/adding-packages-generic.txt
-  Add information about openrc exception to docs.
+Committed, thanks.
 
-Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
-
----
-Changes v1 -> v2
-  Suggested by Thomas Petazzoni
-  - update docs/manual/adding-packages-generic.txt about exception
----
- docs/manual/adding-packages-generic.txt       |  5 +-
- package/pkg-generic.mk                        |  4 +-
- .../skeleton/etc/init.d/sysv-rcs              | 53 +++++++++++++++++++
- .../skeleton/etc/runlevels/default/sysv-rcs   |  1 +
- 4 files changed, 61 insertions(+), 2 deletions(-)
- create mode 100755 package/skeleton-init-openrc/skeleton/etc/init.d/sysv-rcs
- create mode 120000 package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
-
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 5ac07a81b4..b402767b05 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -542,7 +542,10 @@ different steps of the build process.
-   sysvinit, etc.), openrc or for the systemd units. These commands
-   will be run only when the relevant init system is installed (i.e.
-   if systemd is selected as the init system in the configuration,
--  only +LIBFOO_INSTALL_INIT_SYSTEMD+ will be run).
-+  only +LIBFOO_INSTALL_INIT_SYSTEMD+ will be run). The only exception
-+  is when openrc is chosen as init system and +LIBFOO_INSTALL_INIT_OPENRC+
-+  has not been set, in such situation +LIBFOO_INSTALL_INIT_SYSV+ will
-+  be called, since openrc supports sysv init scripts.
- 
- * +LIBFOO_HELP_CMDS+ lists the actions to print the package help, which
-   is included to the main +make help+ output. These commands can print
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 6d63c46a5b..dc335973c7 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -338,7 +338,9 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
- 		$($(PKG)_INSTALL_INIT_SYSV))
- 	$(if $(BR2_INIT_OPENRC), \
--		$($(PKG)_INSTALL_INIT_OPENRC))
-+		$(if $($(PKG)_INSTALL_INIT_OPENRC), \
-+			$($(PKG)_INSTALL_INIT_OPENRC), \
-+			$($(PKG)_INSTALL_INIT_SYSV)))
- 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
-diff --git a/package/skeleton-init-openrc/skeleton/etc/init.d/sysv-rcs b/package/skeleton-init-openrc/skeleton/etc/init.d/sysv-rcs
-new file mode 100755
-index 0000000000..9cbfe354d1
---- /dev/null
-+++ b/package/skeleton-init-openrc/skeleton/etc/init.d/sysv-rcs
-@@ -0,0 +1,53 @@
-+#!/sbin/openrc-run
-+
-+description="start or stop sysv rc[S,K] scripts"
-+
-+depend() {
-+	after local
-+}
-+
-+start() {
-+	einfo "Starting sysv rc scripts"
-+	for i in /etc/init.d/S??* ; do
-+		# Ignore dangling symlinks (if any).
-+		[ ! -f "$i" ] && continue
-+
-+		case "$i" in
-+		*.sh)
-+			# Source shell script for speed.
-+			(
-+				trap - INT QUIT TSTP
-+				set start
-+				. $i
-+			)
-+			;;
-+		*)
-+			# No sh extension, so fork subprocess.
-+			$i start
-+			;;
-+		esac
-+	done
-+}
-+
-+stop() {
-+	einfo "Stopping sysv rc scripts"
-+	for i in /etc/init.d/S??* ; do
-+		# Ignore dangling symlinks (if any).
-+		[ ! -f "$i" ] && continue
-+
-+		case "$i" in
-+		*.sh)
-+			# Source shell script for speed.
-+			(
-+				trap - INT QUIT TSTP
-+				set stop
-+				. $i
-+			)
-+			;;
-+		*)
-+			# No sh extension, so fork subprocess.
-+			$i stop
-+			;;
-+		esac
-+	done
-+}
-diff --git a/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs b/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
-new file mode 120000
-index 0000000000..ef5e00823c
---- /dev/null
-+++ b/package/skeleton-init-openrc/skeleton/etc/runlevels/default/sysv-rcs
-@@ -0,0 +1 @@
-+/etc/init.d/sysv-rcs
-\ No newline at end of file
 -- 
-2.18.1
+Bye, Peter Korsgaard
