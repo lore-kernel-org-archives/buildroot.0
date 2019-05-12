@@ -1,10 +1,10 @@
 From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-Date: Sun, 12 May 2019 21:55:48 +0200
-Subject: [Buildroot] [PATCH v2 11/13] package/openrc: add support to set
- terminal encoding
+Date: Sun, 12 May 2019 21:55:49 +0200
+Subject: [Buildroot] [PATCH v2 12/13] package/openrc: add support for
+ setting terminal keymap
 In-Reply-To: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
 References: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
-Message-ID: <20190512195550.24457-11-michal.lyszczek@bofc.pl>
+Message-ID: <20190512195550.24457-12-michal.lyszczek@bofc.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,79 +12,85 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 When openrc init is enabled, user can chose to set terminal
-encoding to ascii, utf-8 or to keep default settings.
+keymap or keep default settings.
 
 * system/Config.in
-  New kconfig choice BR2_TARGET_GENERIC_TERMENCODING_* to
-  choose terminal encoding. Depends on openrc init.
+  New config BR2_TARGET_GENERIC_TERM_KEYMAP which is available
+  only when openrc is selected and kbd package is installed.
+  Used to set keymap from /usr/share/keymaps
 
 * package/openrc/openrc.mk
-  monitors BR2_TARGET_GENERIC_TERMENCODING_* choice and
-  make proper changes on TARGET_DIR to enable/disable
-  terminal encoding set.
+  monitors BR2_TARGET_GENERIC_TERM_KEYMAP and configures init
+  to use specified keymap. It will also check if keymap exists
+  in the system
 
 Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
 
 ---
 Changes v1 -> v2
-  None
+  Own initiative:
+  - fix "kdb" typo in system/Config.in (should be kbd)
 ---
- package/openrc/openrc.mk | 19 +++++++++++++++++++
- system/Config.in         | 17 +++++++++++++++++
- 2 files changed, 36 insertions(+)
+ package/openrc/openrc.mk | 28 ++++++++++++++++++++++++++++
+ system/Config.in         | 12 ++++++++++++
+ 2 files changed, 40 insertions(+)
 
 diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-index 0feea22818..8d5e6ec381 100644
+index 8d5e6ec381..0498c9c95f 100644
 --- a/package/openrc/openrc.mk
 +++ b/package/openrc/openrc.mk
-@@ -55,4 +55,23 @@ endef
- OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_SET_GETTY
- endif # BR2_TARGET_GENERIC_GETTY
+@@ -74,4 +74,32 @@ OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_TERMENCODING
+ endif # BR2_TARGET_GENERIC_TERMENCODING_UTF8
+ endif # BR2_TARGET_GENERIC_TERMENCODING_KEEP
  
-+ifeq ($(BR2_TARGET_GENERIC_TERMENCODING_KEEP),y)
-+# openrc by default installs service to set terminal encoding, if we want to
-+# keep default encoding we need to remove service from boot.
-+define OPENRC_TERMENCODING
-+	$(RM) $(TARGET_DIR)/etc/runlevels/boot/{termencoding,save-termencoding}
-+	$(RM) $(TARGET_DIR)/etc/conf.d/termencoding
++OPENRC_TERM_KEYMAP = $(call qstrip,$(BR2_TARGET_GENERIC_TERM_KEYMAP))
++ifneq ($(OPENRC_TERM_KEYMAP),)
++OPENRC_DEPENDENCIES += kbd
++# 1) check if passed kaymap exists in the installed system
++# 2) set keymap value in /etc/conf.d/keymaps
++# 3) set keyboard mode to same encoding as terminal encoding
++define OPENRC_SET_TERM_KEYMAP
++	if ! find $(TARGET_DIR)/usr/share/keymaps -name "*$(OPENRC_TERM_KEYMAP).map*" | grep -q ".*"; then \
++		echo "keymap $(OPENRC_TERM_KEYMAP) not found in $(TARGET_DIR)/usr/share/keymaps"; \
++		exit 1; \
++	fi
++	echo "keymap=\"$(OPENRC_TERM_KEYMAP)\"" > $(TARGET_DIR)/etc/conf.d/keymaps
++	if test -f $(TARGET_DIR)/etc/conf.d/termencoding; then \
++		grep "unicode=" $(TARGET_DIR)/etc/conf.d/termencoding >> $(TARGET_DIR)/etc/conf.d/keymaps; \
++	fi
 +endef
-+OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_TERMENCODING
 +else
-+ifeq ($(BR2_TARGET_GENERIC_TERMENCODING_UTF8),y)
-+# By default openrc will set terminal encoding to ASCII, if we want encoding
-+# to be utf8, we need to set it.
-+define OPENRC_TERMENCODING
-+	echo "unicode=\"yes\"" > $(TARGET_DIR)/etc/conf.d/termencoding
++# openrc installs keymaps service by default, so if keymap is not set (like
++# because kbd is not installed) we need to remove keymaps service from boot
++# so there are no errors about missing programs. If kbd is installed, but
++# keymap config is empty value, we also remove service to keep default values.
++define OPENRC_SET_TERM_KEYMAP
++	$(RM) $(TARGET_DIR)/etc/runlevels/boot/{keymaps,save-keymaps}
++	$(RM) $(TARGET_DIR)/etc/conf.d/keymaps
 +endef
-+OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_TERMENCODING
-+endif # BR2_TARGET_GENERIC_TERMENCODING_UTF8
-+endif # BR2_TARGET_GENERIC_TERMENCODING_KEEP
++endif # OPENRC_TERM_KEYMAP
++OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_SET_TERM_KEYMAP
 +
  $(eval $(generic-package))
 diff --git a/system/Config.in b/system/Config.in
-index 32c502e310..08bcb517e4 100644
+index 08bcb517e4..e0421d8dff 100644
 --- a/system/Config.in
 +++ b/system/Config.in
-@@ -390,6 +390,23 @@ comment "automatic network configuration via DHCP needs ifupdown or busybox or n
- 		BR2_PACKAGE_SYSTEMD_NETWORKD) && !BR2_PACKAGE_OPENRC) || \
- 		BR2_PACKAGE_OPENRC_NETIFRC)
+@@ -407,6 +407,18 @@ config BR2_TARGET_GENERIC_TERMENCODING_UTF8
+ 	bool "utf-8"
+ endchoice
  
-+choice
-+	prompt "Terminal encoding"
-+	default BR2_TARGET_GENERIC_TERMENCODING_KEEP
-+	depends on BR2_INIT_OPENRC
++config BR2_TARGET_GENERIC_TERM_KEYMAP
++	string "Set terminal keymap"
++	default "us"
++	depends on BR2_INIT_OPENRC && BR2_PACKAGE_KBD
 +	help
-+	  Set terminal encoding. This makes sense only when you are going to
-+	  use virtual terminals with external monitor (or qemu) that uses
-+	  /dev/tty[1-12].
++	  Configures all virtual terminals (on /dev/tty[1-12]) to use
++	  specified keymap. List of keymaps are installed in /usr/share/keymaps.
++	  Set to empty, to keep default keymap.
 +
-+config BR2_TARGET_GENERIC_TERMENCODING_KEEP
-+	bool "keep default"
-+config BR2_TARGET_GENERIC_TERMENCODING_ASCII
-+	bool "ascii"
-+config BR2_TARGET_GENERIC_TERMENCODING_UTF8
-+	bool "utf-8"
-+endchoice
++comment "Setting terminal keymap requires OpenRC and kbd package"
++	depends on !(BR2_INIT_OPENRC && BR2_PACKAGE_KBD)
 +
  endif # BR2_ROOTFS_SKELETON_DEFAULT
  
