@@ -1,45 +1,49 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 12 May 2019 14:12:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rpm: fix build with NLS
-Message-ID: <20190512121252.6049-1-fontaine.fabrice@gmail.com>
+Date: Sun, 12 May 2019 15:26:26 +0200
+Subject: [Buildroot] [PATCH 1/2] package/qt5multimedia: put back gstreamer
+ 0.10 optional dependency
+Message-ID: <20190512132627.18937-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add TARGET_NLS_LIBS to LIBS to definitely fix linking with lintl instead
-of calling autoreconf
+Commit b2e16ea64a6f89a82098625bb93db020ea5d4db4 tried to remove
+gstreamer 0.10 support by removing its dependency but this was just
+masking the issue as we have a build failure with gstreamer 0.10
 
-Fixes:
- - http://autobuild.buildroot.org/results/a1446b419f5f59f65fe80849182e38457de203b5
+So put back this dependency (build failure is fixed in the follow-up
+patch)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/rpm/rpm.mk | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ package/qt5/qt5multimedia/qt5multimedia.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
-index 6d1068194a..bcdc8c5fee 100644
---- a/package/rpm/rpm.mk
-+++ b/package/rpm/rpm.mk
-@@ -20,8 +20,6 @@ RPM_DEPENDENCIES = \
- 	$(TARGET_NLS_DEPENDENCIES)
- RPM_LICENSE = GPL-2.0 or LGPL-2.0 (library only)
- RPM_LICENSE_FILES = COPYING
--# Needed to fix an issue with -lintl linking
--RPM_AUTORECONF = YES
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index 7d332b0304..0a27c857e5 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -18,6 +18,10 @@ QT5MULTIMEDIA_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3
+ QT5MULTIMEDIA_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
  
- RPM_CONF_OPTS = \
- 	--disable-python \
-@@ -95,6 +93,7 @@ endif
- # ac_cv_prog_cc_c99: RPM uses non-standard GCC extensions (ex. `asm`).
- RPM_CONF_ENV = \
- 	ac_cv_prog_cc_c99='-std=gnu99' \
--	CFLAGS="$(TARGET_CFLAGS) $(RPM_CFLAGS)"
-+	CFLAGS="$(TARGET_CFLAGS) $(RPM_CFLAGS)" \
-+	LIBS=$(TARGET_NLS_LIBS)
- 
- $(eval $(autotools-package))
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
++QT5MULTIMEDIA_DEPENDENCIES += gst-plugins-base
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
+ QT5MULTIMEDIA_DEPENDENCIES += gst1-plugins-base
+ endif
+@@ -49,7 +53,7 @@ endef
+ ifeq ($(BR2_STATIC_LIBS),)
+ # since Qt5.10.1 libqgsttools was renamed to libQtMultimediaGstTools
+ # and is installed by the default target install step below
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)x$(BR2_PACKAGE_GST1_PLUGINS_BASE),xy)
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)x$(BR2_PACKAGE_GST_PLUGINS_BASE)$(BR2_PACKAGE_GST1_PLUGINS_BASE),xy)
+ define QT5MULTIMEDIA_INSTALL_TARGET_QGSTTOOLS_LIB
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libqgsttools*.so.* $(TARGET_DIR)/usr/lib
+ endef
 -- 
 2.20.1
