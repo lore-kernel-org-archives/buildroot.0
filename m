@@ -1,66 +1,79 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 13 May 2019 22:42:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linknx: fix build with log4cpp
-Message-ID: <20190513204206.3328-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 13 May 2019 22:59:57 +0200
+Subject: [Buildroot] [PATCH 1/6] boot/optee-os: install trusted shared
+ libraries
+In-Reply-To: <20190513201602.2549-1-etienne.carriere@linaro.org>
+References: <20190513201602.2549-1-etienne.carriere@linaro.org>
+Message-ID: <20190513225957.679620c0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/1863f8f27041bc15ca68e786ba3b8e4764c40574
+Hello Etienne,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...Makefile.am-fix-linking-with-log4cpp.patch | 39 +++++++++++++++++++
- 1 file changed, 39 insertions(+)
- create mode 100644 package/linknx/0003-src-Makefile.am-fix-linking-with-log4cpp.patch
+Thanks for your series of patches on OP-TEE. A couple of comments below.
 
-diff --git a/package/linknx/0003-src-Makefile.am-fix-linking-with-log4cpp.patch b/package/linknx/0003-src-Makefile.am-fix-linking-with-log4cpp.patch
-new file mode 100644
-index 0000000000..253c1f6f23
---- /dev/null
-+++ b/package/linknx/0003-src-Makefile.am-fix-linking-with-log4cpp.patch
-@@ -0,0 +1,39 @@
-+From b4595154e84e21abdc0c89f937c410cf8280991c Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 13 May 2019 22:14:43 +0200
-+Subject: [PATCH] src/Makefile.am: fix linking with log4cpp
-+
-+linknx fails to build with log4cpp because LOG4CPP_CFLAGS (which
-+contains -pthread) is added to AM_CPPFLAGS (which is not used at link
-+time) instead of AM_CXXFLAGS:
-+
-+/home/buildroot/autobuild/instance-0/output/host/bin/mipsel-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os     -o linknx linknx.o logger.o ruleserver.o objectcontroller.o eibclient.o threads.o timermanager.o persistentstorage.o xmlserver.o smsgateway.o emailgateway.o knxconnection.o services.o suncalc.o luacondition.o ioport.o ../ticpp/libticpp.a  -L/home/buildroot/autobuild/instance-0/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib -lpthsem  -L/home/buildroot/autobuild/instance-0/output/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/lib -llog4cpp     -lm
-+/home/buildroot/autobuild/instance-0/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib/liblog4cpp.so: undefined reference to `pthread_key_create'
-+
-+So move LOG4CPP_CFLAGS to AM_CXXFLAGS
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/1863f8f27041bc15ca68e786ba3b8e4764c40574
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not sent yet]
-+---
-+ src/Makefile.am | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 6a4f493..92d147c 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -6,6 +6,7 @@ else
-+ B64_CFLAGS=
-+ B64_LIBS=
-+ endif
-+-AM_CPPFLAGS=-I$(top_srcdir)/include -I$(top_srcdir)/ticpp $(B64_CFLAGS) $(PTH_CPPFLAGS) $(LIBCURL_CPPFLAGS) $(LOG4CPP_CFLAGS) $(LUA_CFLAGS) $(MYSQL_CFLAGS) $(ESMTP_CFLAGS)
-++AM_CPPFLAGS=-I$(top_srcdir)/include -I$(top_srcdir)/ticpp $(B64_CFLAGS) $(PTH_CPPFLAGS) $(LIBCURL_CPPFLAGS) $(LUA_CFLAGS) $(MYSQL_CFLAGS) $(ESMTP_CFLAGS)
-++AM_CXXFLAGS=$(LOG4CPP_CFLAGS)
-+ linknx_LDADD=$(top_srcdir)/ticpp/libticpp.a $(B64_LIBS) $(PTH_LDFLAGS) $(PTH_LIBS) $(LIBCURL) $(LOG4CPP_LIBS) $(LUA_LIBS) $(MYSQL_LIBS) $(ESMTP_LIBS) -lm
-+ linknx_SOURCES=linknx.cpp logger.cpp ruleserver.cpp objectcontroller.cpp eibclient.c threads.cpp timermanager.cpp  persistentstorage.cpp xmlserver.cpp smsgateway.cpp emailgateway.cpp knxconnection.cpp services.cpp suncalc.cpp  luacondition.cpp ioport.cpp ruleserver.h objectcontroller.h threads.h timermanager.h persistentstorage.h xmlserver.h smsgateway.h emailgateway.h knxconnection.h services.h suncalc.h luacondition.h ioport.h logger.h
-+-- 
-+2.20.1
-+
+On Mon, 13 May 2019 22:15:57 +0200
+Etienne Carriere <etienne.carriere@linaro.org> wrote:
+
+>  config BR2_TARGET_OPTEE_OS_SERVICES
+> -	bool "Build service TAs"
+> +	bool "Service trusted application and shared libraries"
+
+I am not too happy with the change of wording, because all other
+options are worded as "Build XYZ", and your change moves away from this
+consistency.
+
+Can we keep:
+
+	bool "Build service TAs and libs"
+
+for example ?
+
+> diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+> index 6da20a9f3e..811bbbc6ea 100644
+> --- a/boot/optee-os/optee-os.mk
+> +++ b/boot/optee-os/optee-os.mk
+> @@ -77,8 +77,12 @@ endif # BR2_TARGET_OPTEE_OS_CORE
+>  ifeq ($(BR2_TARGET_OPTEE_OS_SERVICES),y)
+>  define OPTEE_OS_INSTALL_IMAGES_SERVICES
+>  	mkdir -p $(TARGET_DIR)/lib/optee_armtz
+> -	$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
+> -		$(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta
+> +	[ -z "$(wildcard $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta)" ] || \
+> +		$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
+> +			$(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta
+> +	[ -z "$(wildcard $(OPTEE_OS_SDK)/lib/*.ta)" ] || \
+> +		$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
+> +			$(OPTEE_OS_SDK)/lib/*.ta
+
+I am not a big fan of the conditionals here.
+
+The first one should I guess not be needed, because it was already
+non-conditional, so I don't see why it should become conditional.
+
+The second one is less clear. In which cases do we have .ta files in
+OPTEE_OS_SDK/lib ? I did a build for the Qemu vexpress platform and
+didn't get any lib/*.ta file.
+
+If we really need a test, we could do it in make:
+
+	$(if $(wildcard $(OPTEE_OS_SDK)/lib/*.ta),
+		...)
+
+Also, and it should be fixed by a separate patch:
+OPTEE_OS_INSTALL_IMAGES_SERVICES contrary to what its name says
+installs stuff to $(TARGET_DIR), but is called from
+OPTEE_OS_INSTALL_IMAGES_CMDS. It should be called from
+OPTEE_OS_INSTALL_TARGET_CMDS instead, and probably renamed to
+OPTEE_OS_INSTALL_SERVICES or something like that.
+
+Best regards,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
