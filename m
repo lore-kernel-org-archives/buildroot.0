@@ -1,28 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 May 2019 20:53:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sqlite: security bump version
- to 3.28.0
-In-Reply-To: <20190513162236.18404-1-bernd.kuhls@t-online.de>
-References: <20190513162236.18404-1-bernd.kuhls@t-online.de>
-Message-ID: <20190513205311.7d083dab@windsurf.home>
+Date: Mon, 13 May 2019 20:53:18 +0200
+Subject: [Buildroot] [PATCH 1/1] docs/manual: Clarify location of
+ local.mk
+In-Reply-To: <20190513103742.24692-1-cturner@igalia.com>
+References: <20190513103742.24692-1-cturner@igalia.com>
+Message-ID: <20190513205318.58d72c82@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 13 May 2019 18:22:36 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Mon, 13 May 2019 11:37:42 +0100
+Charlie Turner <cturner@igalia.com> wrote:
 
-> Release notes: https://www.sqlite.org/releaselog/3_28_0.html
+> In particular, the manual was incorrect when the user had selected an
+> out-of-tree build.
 > 
-> Fixes https://nvd.nist.gov/vuln/detail/CVE-2019-5018
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Charlie Turner <cturner@igalia.com>
 > ---
->  package/sqlite/sqlite.hash | 4 ++--
->  package/sqlite/sqlite.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  docs/manual/using-buildroot-development.txt | 20 ++++++++++++++++----
+>  1 file changed, 16 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
