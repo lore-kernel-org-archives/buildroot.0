@@ -1,70 +1,101 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 May 2019 20:47:10 +0200
-Subject: [Buildroot] [PATCH] support/testing/tests: drop Python 2.x test in
- test_ipython
-Message-ID: <20190513184710.19747-1-thomas.petazzoni@bootlin.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Mon, 13 May 2019 11:48:11 -0700
+Subject: [Buildroot] [PATCH] package/uclibc: fix preadv/pwritev offset
+ argument type
+Message-ID: <20190513184811.20461-1-jcmvbkbc@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since commit 6ebaef3818d6e3dc821616a33391eb6d594a053e
-("package/python-ipython: bump to version 7.4.0"), ipython is no
-longer available for Python 2.x, as it requires Python 3.x.
+preadv/pwritev don't provide separate version for 64-bit wide off_t,
+and default to 32-bit wide off_t, which results in a mismatch between
+declaration and definition for user programs built with
+-D_FILE_OFFSET_BITS=64.
 
-However, the corresponding test case that was testing iPython under
-Python 2.x was not removed at the same time, causing a failure of
-TestIPythonPy2 test. Let's drop the test that is no longer relevant.
-
-Fixes:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/210208754
-
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: Andrey Smirnov <andrew.smirnov@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Backported from: 423e49023eeb ("preadv/pwritev: fix offset argument type")
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- .gitlab-ci.yml                                |  1 -
- support/testing/tests/package/test_ipython.py | 14 --------------
- 2 files changed, 15 deletions(-)
+ ...3-preadv-pwritev-fix-offset-argument-type.patch | 70 ++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+ create mode 100644 package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 374dbfe837..836944faf5 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -361,7 +361,6 @@ tests.package.test_atop.TestAtop: { extends: .runtime_test }
- tests.package.test_docker_compose.TestDockerCompose: { extends: .runtime_test }
- tests.package.test_dropbear.TestDropbear: { extends: .runtime_test }
- tests.package.test_glxinfo.TestGlxinfo: { extends: .runtime_test }
--tests.package.test_ipython.TestIPythonPy2: { extends: .runtime_test }
- tests.package.test_ipython.TestIPythonPy3: { extends: .runtime_test }
- tests.package.test_lpeg.TestLuaLPeg: { extends: .runtime_test }
- tests.package.test_lpeg.TestLuajitLPeg: { extends: .runtime_test }
-diff --git a/support/testing/tests/package/test_ipython.py b/support/testing/tests/package/test_ipython.py
-index 3b291d9583..50b00da7c2 100644
---- a/support/testing/tests/package/test_ipython.py
-+++ b/support/testing/tests/package/test_ipython.py
-@@ -8,20 +8,6 @@ from tests.package.test_python import TestPythonBase
- #              does, so this test ends up being a false-negative
- 
- 
--class TestIPythonPy2(TestPythonBase):
--    config = TestPythonBase.config + \
--        """
--        BR2_PACKAGE_PYTHON=y
--        BR2_PACKAGE_PYTHON_IPYTHON=y
--        """
--    interpreter = "ipython"
--
--    def test_run(self):
--        self.login()
--        self.math_floor_test(40)
--        self.libc_time_test(40)
--
--
- class TestIPythonPy3(TestPythonBase):
-     config = TestPythonBase.config + \
-         """
+diff --git a/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch b/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
+new file mode 100644
+index 000000000000..2a20aecc8d20
+--- /dev/null
++++ b/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
+@@ -0,0 +1,70 @@
++From 1077d5bebffacfd4b09896ed890fb45a5b3c6dc6 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Fri, 10 May 2019 07:13:19 -0700
++Subject: [PATCH] preadv/pwritev: fix offset argument type
++
++preadv/pwritev don't provide separate version for 64-bit wide off_t,
++and default to 32-bit wide off_t, which results in a mismatch between
++declaration and definition for user programs built with
++-D_FILE_OFFSET_BITS=64.
++Make offset argument of both functions __off64_t.
++This fixes test misc/tst-preadvwritev on xtensa.
++
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ include/sys/uio.h                   | 4 ++--
++ libc/sysdeps/linux/common/preadv.c  | 2 +-
++ libc/sysdeps/linux/common/pwritev.c | 2 +-
++ 3 files changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/include/sys/uio.h b/include/sys/uio.h
++index aa766f9b1187..330426fec492 100644
++--- a/include/sys/uio.h
+++++ b/include/sys/uio.h
++@@ -59,7 +59,7 @@ extern ssize_t writev (int __fd, const struct iovec *__iovec, int __count);
++    This function is a cancellation point and therefore not marked with
++    __THROW.  */
++ extern ssize_t preadv (int __fd, const struct iovec *__iovec, int __count,
++-		       off_t __offset) __wur;
+++		       __off64_t __offset) __wur;
++ 
++ /* Write data pointed by the buffers described by IOVEC, which is a
++    vector of COUNT 'struct iovec's, to file descriptor FD at the given
++@@ -71,7 +71,7 @@ extern ssize_t preadv (int __fd, const struct iovec *__iovec, int __count,
++    This function is a cancellation point and therefore not marked with
++    __THROW.  */
++ extern ssize_t pwritev (int __fd, const struct iovec *__iovec, int __count,
++-			off_t __offset) __wur;
+++			__off64_t __offset) __wur;
++ #endif	/* Use misc.  */
++ 
++ __END_DECLS
++diff --git a/libc/sysdeps/linux/common/preadv.c b/libc/sysdeps/linux/common/preadv.c
++index fd9dde4b999c..6a07d5df87e0 100644
++--- a/libc/sysdeps/linux/common/preadv.c
+++++ b/libc/sysdeps/linux/common/preadv.c
++@@ -21,7 +21,7 @@
++ 
++ #ifdef __NR_preadv
++ ssize_t
++-preadv (int fd, const struct iovec *vector, int count, off_t offset)
+++preadv (int fd, const struct iovec *vector, int count, __off64_t offset)
++ {
++   unsigned long pos_l, pos_h;
++ 
++diff --git a/libc/sysdeps/linux/common/pwritev.c b/libc/sysdeps/linux/common/pwritev.c
++index bef5bcf69b46..f07c40e6de3c 100644
++--- a/libc/sysdeps/linux/common/pwritev.c
+++++ b/libc/sysdeps/linux/common/pwritev.c
++@@ -21,7 +21,7 @@
++ 
++ #ifdef __NR_pwritev
++ ssize_t
++-pwritev (int fd, const struct iovec *vector, int count, off_t offset)
+++pwritev (int fd, const struct iovec *vector, int count, __off64_t offset)
++ {
++   unsigned long pos_l, pos_h;
++ 
++-- 
++2.11.0
++
 -- 
-2.21.0
+2.11.0
