@@ -1,58 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 May 2019 21:28:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5wayland: install compositor
- QML files
-In-Reply-To: <20190511150750.5985-1-nowrep@gmail.com>
-References: <20190511150750.5985-1-nowrep@gmail.com>
-Message-ID: <20190513212833.63cd7c1a@windsurf.home>
+From: stefan.nickl at gmail.com <stefan.nickl@gmail.com>
+Date: Mon, 13 May 2019 22:00:58 +0200
+Subject: [Buildroot] [PATCH] package/musl: Make scheduler functions
+ Linux-compatible
+Message-ID: <509e7dab95b95c040af26c842e94777b069d6ba5.camel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello David,
+Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
+---
+ package/musl/0002-sched-linux-compat.patch | 74 ++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
+ create mode 100644 package/musl/0002-sched-linux-compat.patch
 
-On Sat, 11 May 2019 17:07:49 +0200
-nowrep at gmail.com wrote:
-
-> From: David Rosca <nowrep@gmail.com>
-> 
-> Fixes using QtWayland.Compositor QML import.
-> 
-> Signed-off-by: David Rosca <nowrep@gmail.com>
-> ---
->  package/qt5/qt5wayland/qt5wayland.mk | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
-> index f96e4c2f8f..6ff8ba169f 100644
-> --- a/package/qt5/qt5wayland/qt5wayland.mk
-> +++ b/package/qt5/qt5wayland/qt5wayland.mk
-> @@ -46,6 +46,7 @@ ifeq ($(BR2_PACKAGE_QT5WAYLAND_COMPOSITOR),y)
->  ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
->  define QT5WAYLAND_INSTALL_COMPOSITOR
->  	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WaylandCompositor.so* $(TARGET_DIR)/usr/lib
-> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtWayland $(TARGET_DIR)/usr/qml/
-
-Thanks a lot for your patch. However, I see two problems with it:
-
- - First of all, QML files are only generated when
-   BR2_PACKAGE_QT5DECLARATIVE_QUICK=y, but BR2_PACKAGE_QT5WAYLAND does
-   not mandate having BR2_PACKAGE_QT5DECLARATIVE_QUICK as far as I can
-   see. So I believe we need a conditional on
-   BR2_PACKAGE_QT5DECLARATIVE_QUICK=y. See qt5location.mk for an
-   example.
-
- - Secondly, you only handle the BR2_PACKAGE_QT5_VERSION_LATEST case
-   (i.e Qt 5.11), but not the Qt LTS version (5.6) case. Does it mean
-   that Qt 5.6 did not have those QML files (if that's the case, the
-   commit log should at least say it) ? Or was it an oversight ?
-
-Thanks a lot,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/musl/0002-sched-linux-compat.patch
+b/package/musl/0002-sched-linux-compat.patch
+new file mode 100644
+index 0000000000..c1626ea7c3
+--- /dev/null
++++ b/package/musl/0002-sched-linux-compat.patch
+@@ -0,0 +1,74 @@
++The POSIX functions sched_getscheduler(), sched_setscheduler(),
++sched_getparam(), sched_setparam() are technically not correctly
++implemented by the Linux syscalls of the same name, because what the
++kernel calls a PID and what POSIX calls a PID isn't truly the same,
++resulting in somewhat different semantics as to what these functions
++exactly apply to.
++
++Since the musl developers put a high premium on POSIX compliance, they
++deliberately implement these functions to return -ENOSYS instead of
++relaying them to the respective Linux syscalls as glibc/uClibc do.
++
++This means that virtually all programs written for Linux using these
++functions are currently broken. For example running 'chrt -p 1' fails
++with "Function not implemented" on a musl-libc based system.
++
++While the musl developers are right strictly speaking, it seems
++unfeasible to fix all affected programs in a way that hardly any Linux
++developer will consider to be broken in the first place. So this patch
++simply changes musl to fall in line with the other libcs.
++
++Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
++---
++diff -ru a/src/sched/sched_getparam.c b/src/sched/sched_getparam.c
++--- a/src/sched/sched_getparam.c	2019-04-10 02:39:21.000000000
++0200
+++++ b/src/sched/sched_getparam.c	2019-05-07 08:51:00.980363141
++0200
++@@ -1,8 +1,7 @@
++ #include <sched.h>
++-#include <errno.h>
++ #include "syscall.h"
++ 
++ int sched_getparam(pid_t pid, struct sched_param *param)
++ {
++-	return __syscall_ret(-ENOSYS);
+++	return syscall(SYS_sched_getparam, pid, param);
++ }
++diff -ru a/src/sched/sched_getscheduler.c
+b/src/sched/sched_getscheduler.c
++--- a/src/sched/sched_getscheduler.c	2019-04-10 02:39:21.000000000
++0200
+++++ b/src/sched/sched_getscheduler.c	2019-05-07 08:50:48.246021455
++0200
++@@ -1,8 +1,7 @@
++ #include <sched.h>
++-#include <errno.h>
++ #include "syscall.h"
++ 
++ int sched_getscheduler(pid_t pid)
++ {
++-	return __syscall_ret(-ENOSYS);
+++	return syscall(SYS_sched_getscheduler, pid);
++ }
++diff -ru a/src/sched/sched_setparam.c b/src/sched/sched_setparam.c
++--- a/src/sched/sched_setparam.c	2019-04-10 02:39:21.000000000
++0200
+++++ b/src/sched/sched_setparam.c	2019-05-07 08:51:03.603227550
++0200
++@@ -1,8 +1,7 @@
++ #include <sched.h>
++-#include <errno.h>
++ #include "syscall.h"
++ 
++ int sched_setparam(pid_t pid, const struct sched_param *param)
++ {
++-	return __syscall_ret(-ENOSYS);
+++	return syscall(SYS_sched_setparam, pid, param);
++ }
++diff -ru a/src/sched/sched_setscheduler.c
+b/src/sched/sched_setscheduler.c
++--- a/src/sched/sched_setscheduler.c	2019-04-10 02:39:21.000000000
++0200
+++++ b/src/sched/sched_setscheduler.c	2019-05-07 08:50:53.379756063
++0200
++@@ -1,8 +1,7 @@
++ #include <sched.h>
++-#include <errno.h>
++ #include "syscall.h"
++ 
++ int sched_setscheduler(pid_t pid, int sched, const struct sched_param
+*param)
++ {
++-	return __syscall_ret(-ENOSYS);
+++	return syscall(SYS_sched_setscheduler, pid, sched, param);
++ }
