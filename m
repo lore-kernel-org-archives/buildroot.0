@@ -1,11 +1,12 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Mon, 13 May 2019 13:20:54 +0200
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 13 May 2019 13:31:46 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2019-05-08
-In-Reply-To: <20190509230324.0b03746e@windsurf.home>
+In-Reply-To: <8fd5700b-d81b-71da-7edb-c32248a32a4f@free.fr>
 References: <20190509060042.1026E872A2@whitealder.osuosl.org>
  <20190509230324.0b03746e@windsurf.home>
-Message-ID: <8fd5700b-d81b-71da-7edb-c32248a32a4f@free.fr>
+ <8fd5700b-d81b-71da-7edb-c32248a32a4f@free.fr>
+Message-ID: <20190513133146.7a011b13@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,30 +15,25 @@ To: buildroot@busybox.net
 
 Hello,
 
-Thomas,
+On Mon, 13 May 2019 13:20:54 +0200
+Julien Boibessot <julien.boibessot@free.fr> wrote:
 
-On 09/05/2019 23:03, Thomas Petazzoni wrote:
-> Hello,
->
-> -rc1 has been released, let's try to resume my traditional effort of
-> analyzing the build failures, and bring attention to some of them.
->
-> Julien, Louis-Paul, Nylon, Romain, Vadim, Adam, Peter, Bernd, please
-> see below: there are some questions for you! :-)
->
-... cut ...
->
->>       xtensa |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/4f460ff42739e3c8277baf50880139aefd169cfa |     
-> We still have this regular timeout, almost always on Julien Boibessot's
-> machine. Julien, do you have any idea what's going on ?
+> I have already brought this problem up a few times before but no one has
+> a clue.
+> My build system is consuming 100% CPU in conftest process when building
+> libsodium.
+> 
+> In this state I have to manually kill all conftest processes otherwise
+> the build is blocked for days... :-)
 
-I have already brought this problem up a few times before but no one has
-a clue.
-My build system is consuming 100% CPU in conftest process when building
-libsodium.
+Which configure test is it running when it's blocked ? What does
+"strace" says about this conftest process that is stuck ?
 
-In this state I have to manually kill all conftest processes otherwise
-the build is blocked for days... :-)
+Can  you reproduce manually ? Does it happen every time libsodium is
+built on your machine, or only once in a while ?
 
-Best regards,
-Julien
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
