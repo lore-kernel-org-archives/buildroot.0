@@ -1,58 +1,46 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 13 May 2019 09:42:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mono: needs C++
-In-Reply-To: <20190512104542.12573-1-fontaine.fabrice@gmail.com>
-References: <20190512104542.12573-1-fontaine.fabrice@gmail.com>
-Message-ID: <CA+_SqVbOgiTx4W_n4sBigC9p2Z_=M8LE_XmuaUSuFfESO+F8Pg@mail.gmail.com>
+From: Charlie Turner <cturner@igalia.com>
+Date: Mon, 13 May 2019 10:44:40 +0100
+Subject: [Buildroot] [PATCH 1/1] docs/manual: Clarify location of local.mk
+Message-ID: <20190513094440.20712-1-cturner@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, May 12, 2019 at 12:45 PM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> mono needs a working C++ compiler to get the exact type of size_t since
-> version 5.16.0.179 and
-> https://github.com/mono/mono/commit/d8af77551de1f59803a46946786e0f9a5eb5cb9d
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/ee6d037154127cc6572f06e9a78bae383ea381bc
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Reviewed-by Angelo Compagnucci <angelo@amarulasolutions.com>
-> ---
->  package/mono/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/package/mono/Config.in b/package/mono/Config.in
-> index a375a98448..0d555bfa82 100644
-> --- a/package/mono/Config.in
-> +++ b/package/mono/Config.in
-> @@ -12,6 +12,7 @@ config BR2_PACKAGE_MONO_ARCH_SUPPORTS
->  config BR2_PACKAGE_MONO
->         bool "mono"
->         depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
-> +       depends on BR2_INSTALL_LIBSTDCPP
->         depends on BR2_TOOLCHAIN_HAS_THREADS
->         depends on !BR2_STATIC_LIBS
->         help
-> @@ -20,6 +21,7 @@ config BR2_PACKAGE_MONO
->
->           http://download.mono-project.com/sources/mono/
->
-> -comment "mono needs a toolchain w/ threads, dynamic library"
-> +comment "mono needs a toolchain w/ C++, threads, dynamic library"
->         depends on BR2_PACKAGE_MONO_ARCH_SUPPORTS
-> -       depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> +       depends on !BR2_INSTALL_LIBSTDCPP || \
-> +               !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> --
-> 2.20.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+In particular, the manual was incorrect when the user had selected an
+out-of-tree build.
+
+Signed-off-by: Charlie Turner <cturner@igalia.com>
+---
+ docs/manual/using-buildroot-development.txt | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/docs/manual/using-buildroot-development.txt b/docs/manual/using-buildroot-development.txt
+index 3389a37b39..3e0f4be287 100644
+--- a/docs/manual/using-buildroot-development.txt
++++ b/docs/manual/using-buildroot-development.txt
+@@ -29,9 +29,18 @@ Therefore, Buildroot provides a specific mechanism for this use case:
+ the +<pkg>_OVERRIDE_SRCDIR+ mechanism. Buildroot reads an _override_
+ file, which allows the user to tell Buildroot the location of the
+ source for certain packages. By default this _override_ file is named
+-+local.mk+ and located in the top directory of the Buildroot source
+-tree, but a different location can be specified through the
+-+BR2_PACKAGE_OVERRIDE_FILE+ configuration option.
+++local.mk+ and is located where your Buildroot configuration file is.
++By default this location is in the top-level directory of the
++buildroot source tree.
++
++However, if the user has selected an out-of-tree build (using the
+++O=path/to/my_output_dir+ make option) then you should place +local.mk+ in
+++path/to/my_output_dir+, since that is where this out-of-tree build's
+++.config+ file is located.
++
++If a different location than these defaults is required, it can be
++specified through the +BR2_PACKAGE_OVERRIDE_FILE+ configuration
++option.
+ 
+ In this _override_ file, Buildroot expects to find lines of the form:
+ 
+-- 
+2.17.1
