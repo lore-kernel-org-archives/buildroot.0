@@ -1,29 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 May 2019 23:10:59 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5webkit-examples: fix build
- with qt5webkit
-In-Reply-To: <20190513202210.1706-1-fontaine.fabrice@gmail.com>
-References: <20190513202210.1706-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190513231059.524b1bf1@windsurf.home>
+Date: Mon, 13 May 2019 23:12:15 +0200
+Subject: [Buildroot] [PATCH 2/6] boot/optee-os: bump version to 3.5.0
+In-Reply-To: <20190513201602.2549-2-etienne.carriere@linaro.org>
+References: <20190513201602.2549-1-etienne.carriere@linaro.org>
+ <20190513201602.2549-2-etienne.carriere@linaro.org>
+Message-ID: <20190513231215.6b080031@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Etienne,
 
-On Mon, 13 May 2019 22:22:10 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 13 May 2019 22:15:58 +0200
+Etienne Carriere <etienne.carriere@linaro.org> wrote:
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/68dd6f1ffed49f8e2570f7364e5e635573807d3e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> diff --git a/boot/optee-os/3.5.0/optee-os.hash b/boot/optee-os/3.5.0/optee-os.hash
+> new file mode 100644
+> index 0000000000..167f96475d
+> --- /dev/null
+> +++ b/boot/optee-os/3.5.0/optee-os.hash
 
-Is this for both Qt latest and Qt LTS ?
+I think we should move the optee-os.hash file directly in
+boot/optee-os/. Indeed, in this commit, you forget to remove the
+3.4.0/optee-os.hash file.
 
-Thanks!
+In the case of the Git version being used, we have:
+
+BR_NO_CHECK_HASH_FOR += $(OPTEE_OS_SOURCE)
+
+in the .mk file, so there is anyway no hash check.
+
+Best regards,
 
 Thomas
 -- 
