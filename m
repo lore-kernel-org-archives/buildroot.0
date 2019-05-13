@@ -1,74 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 13 May 2019 21:24:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gdb: fix build of 8.1.1 on ARM
- cortex A8
-In-Reply-To: <20190512101147.7967-1-fontaine.fabrice@gmail.com>
-References: <20190512101147.7967-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190513212412.7de78aa5@windsurf.home>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon, 13 May 2019 15:26:22 -0400
+Subject: [Buildroot] [PATCH 1/1] package/ca-certificates: bump to version
+ 20190110
+Message-ID: <20190513192622.80031-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+From: Adam Duskett <Aduskett@gmail.com>
 
-On Sun, 12 May 2019 12:11:47 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Also add a hash for the license file.
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/a81eb395bd95306fcbb07c1443c9134fd63fa379
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/ca-certificates/ca-certificates.hash | 7 +++++--
+ package/ca-certificates/ca-certificates.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-This commit log was a bit terse, and the issue is not related to ARM
-Cortex-A8: it happens on all architectures. You only see it on ARM
-Cortex A8 in the autobuilders because it's the only architecture with
-an internal glibc configuration, which means it's the only testing
-glibc 2.29. Indeed the root source of the build failure is the bump
-from glibc 2.28 to 2.29.
-
-If you look at http://autobuild.buildroot.net/?reason=gdb% you can
-clearly see the pattern that the issue started appearing on March 17,
-2019. Guess what was merged on March 15, 2019 ? The bump to glibc 2.29.
-
-So, I improved the commit log to explain which glibc change broke this,
-and why an IA64-related build fix in gdb is in fact needed on other
-architectures. So the commit log now goes like this:
-
-    package/gdb: fix build of 8.1.1 since the bump to glibc 2.29
-    
-    Between glibc 2.28 and glibc 2.29, commit
-    89983cb37c9319806a551e8fe9f3a11ff8f973e1 ("Update siginfo constants
-    from Linux kernel (bug 21286)") was merged. This commit moved the
-    TRAP_HWBKPT definition from an IA64-specific header to an
-    architecture-agnostic header.
-    
-    This change exhibited a build issue that until then was only visible
-    on IA64 (which Buildroot does not support). This Buildroot commit
-    backports a patch from gdb upstream (which is in gdb since 8.2) which
-    mentions IA64 because it was originally meant to fix only the
-    IA64-related issue. But the glibc change, this change has become
-    visible on all architectures.
-    
-    Fixes:
-    
-     - http://autobuild.buildroot.org/results/a81eb395bd95306fcbb07c1443c9134fd63fa379
-    
-    Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-    [Thomas: extend commit log]
-    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-I have applied with this improved commit log.
-
-However, nothing indicates that this problem does not exist on older
-versions of gdb. Could you check the status of gdb 7.12 and 8.0 with
-glibc 2.29 ?
-
-Thanks!
-
-Thomas
+diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
+index 8100dde357..71a8da4784 100644
+--- a/package/ca-certificates/ca-certificates.hash
++++ b/package/ca-certificates/ca-certificates.hash
+@@ -1,3 +1,6 @@
+ # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
+-sha1   edf0ec04b02fcbc90cc65906ff83fb042894a3b7                         ca-certificates_20180409.tar.xz
+-sha256 7af6f5bfc619fd29cbf0258c1d95107c38ce840ad6274e343e1e0d971fc72b51 ca-certificates_20180409.tar.xz
++sha1   47d4584eae85fc905e4994766eb3930a8a84e2e1                         ca-certificates_20190110.tar.xz
++sha256 ee4bf0f4c6398005f5b5ca4e0b87b82837ac5c3b0280a1cb3a63c47555c3a675 ca-certificates_20190110.tar.xz
++
++# Locally computed
++sha256 80fd11117df5543d5cf17bfd951b0ead213f7867d0b09f09c6d5a5eca3ff7422 debian/copyright
+diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
+index 5c259aa3ab..79c81a41ea 100644
+--- a/package/ca-certificates/ca-certificates.mk
++++ b/package/ca-certificates/ca-certificates.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-CA_CERTIFICATES_VERSION = 20180409
++CA_CERTIFICATES_VERSION = 20190110
+ CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
+-CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20180411T111033Z/pool/main/c/ca-certificates
++CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20190513T145054Z/pool/main/c/ca-certificates
+ CA_CERTIFICATES_DEPENDENCIES = host-openssl
+ # ca-certificates can be built with either python 2 or python 3
+ # but it must be at least python 2.7
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
