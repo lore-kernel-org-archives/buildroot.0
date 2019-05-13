@@ -1,57 +1,49 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Mon, 13 May 2019 17:59:28 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-05-08
-In-Reply-To: <20190513133146.7a011b13@windsurf.home>
-References: <20190509060042.1026E872A2@whitealder.osuosl.org>
- <20190509230324.0b03746e@windsurf.home>
- <8fd5700b-d81b-71da-7edb-c32248a32a4f@free.fr>
- <20190513133146.7a011b13@windsurf.home>
-Message-ID: <a40a22a6-6b2b-0c03-95ed-78fd0461428d@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 13 May 2019 18:22:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sqlite: security bump version to
+ 3.28.0
+Message-ID: <20190513162236.18404-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas,
+Release notes: https://www.sqlite.org/releaselog/3_28_0.html
 
-On 13/05/2019 13:31, Thomas Petazzoni wrote:
-> Hello,
->
-> On Mon, 13 May 2019 13:20:54 +0200
-> Julien Boibessot <julien.boibessot@free.fr> wrote:
->
->> I have already brought this problem up a few times before but no one has
->> a clue.
->> My build system is consuming 100% CPU in conftest process when building
->> libsodium.
->>
->> In this state I have to manually kill all conftest processes otherwise
->> the build is blocked for days... :-)
-> Which configure test is it running when it's blocked ? 
+Fixes https://nvd.nist.gov/vuln/detail/CVE-2019-5018
 
-when host-libsodium fails I would say it is blocked on:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-    /checking whether segmentation violations can be caught when using
-the C compiler.../
-
-
-> What does
-> "strace" says about this conftest process that is stuck ?
->
-> Can  you reproduce manually ? Does it happen every time libsodium is
-> built on your machine, or only once in a while ?
-
-It sometimes can be reproduced manually but not as often as from BR
-build system.
-I would say when it fails from BR build, I can kill it and reproduce the
-problem once.
-
-Most of the time it works well when build manually.
-
-Best regards,
-Julien
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190513/d9ebed49/attachment.html>
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 5e2bc7030a..9b7efe71d6 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,6 +1,6 @@
+ # From https://www.sqlite.org/download.html
+-sha1 5f5750e3f39b7b60394a2fb6ddb2371f848670e6  sqlite-autoconf-3270200.tar.gz
++sha1 01b9d8fc77085e144dddc87456c9783e53d09a53  sqlite-autoconf-3280000.tar.gz
+ # Calculated based on the hash above
+-sha256 50c39e85ea28b5ecfdb3f9e860afe9ba606381e21836b2849efca6a0bfe6ef6e  sqlite-autoconf-3270200.tar.gz
++sha256 d61b5286f062adfce5125eaf544d495300656908e61fca143517afcc0a89b7c3  sqlite-autoconf-3280000.tar.gz
+ # Locally calculated
+ sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 95ededd8c4..7e97c966b7 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3270200
++SQLITE_VERSION = 3280000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2019
+ SQLITE_LICENSE = Public domain
+-- 
+2.11.0
