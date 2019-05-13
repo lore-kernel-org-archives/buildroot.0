@@ -1,38 +1,125 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 13 May 2019 13:11:35 +0000
-Subject: [Buildroot] [Bug 11866] iniramfs file system fails to boot using
- Grub on EFI x86_64
-In-Reply-To: <bug-11866-163@https.bugs.busybox.net/>
-References: <bug-11866-163@https.bugs.busybox.net/>
-Message-ID: <bug-11866-163-OM5LoclU0F@https.bugs.busybox.net/>
+From: Thomas Huth <huth@tuxfamily.org>
+Date: Mon, 13 May 2019 17:19:51 +0200
+Subject: [Buildroot] [PATCH v2] package/ascii-invaders: Add the game
+ ascii-invaders
+In-Reply-To: <20190422081125.6659-1-huth@tuxfamily.org>
+References: <20190422081125.6659-1-huth@tuxfamily.org>
+Message-ID: <dd26f023-0386-71e8-65ec-fe6a89b0e276@tuxfamily.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11866
+On 22/04/2019 10.11, Thomas Huth wrote:
+> An ASCII-art game like Space Invaders using ncurses.
+> 
+> Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+> ---
+>  v2:
+>  - I'm submitting the patch individually now, to ease the review
+>  - Addressed Gilles' review feedback from v1
+>  - Cleaned warnings from utils/check-package
+>  - Checked with utils/test-pkg, added POST_EXTRACT_HOOK to fix a problem
+>    when linking the program statically
+>  - Use $(call github, ...) helper to create the SITE variable
+> 
+>  DEVELOPERS                                 |  3 +++
+>  package/Config.in                          |  1 +
+>  package/ascii-invaders/Config.in           |  7 ++++++
+>  package/ascii-invaders/ascii-invaders.hash |  5 ++++
+>  package/ascii-invaders/ascii-invaders.mk   | 28 ++++++++++++++++++++++
+>  5 files changed, 44 insertions(+)
+>  create mode 100644 package/ascii-invaders/Config.in
+>  create mode 100644 package/ascii-invaders/ascii-invaders.hash
+>  create mode 100644 package/ascii-invaders/ascii-invaders.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index ea6b802de4..1e69c72e41 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2166,6 +2166,9 @@ F:	support/scripts/size-stats
+>  F:	utils/size-stats-compare
+>  F:	toolchain/
+>  
+> +N:	Thomas Huth <huth@tuxfamily.org>
+> +F:	package/ascii-invaders/
+> +
+>  N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+>  F:	arch/Config.in.arm
+>  F:	boot/boot-wrapper-aarch64/
+> diff --git a/package/Config.in b/package/Config.in
+> index 4f3836ae10..3642c5679b 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -243,6 +243,7 @@ comment "Themes"
+>  endmenu
+>  
+>  menu "Games"
+> +	source "package/ascii-invaders/Config.in"
+>  	source "package/chocolate-doom/Config.in"
+>  	source "package/doom-wad/Config.in"
+>  	source "package/flare-engine/Config.in"
+> diff --git a/package/ascii-invaders/Config.in b/package/ascii-invaders/Config.in
+> new file mode 100644
+> index 0000000000..f02ab74994
+> --- /dev/null
+> +++ b/package/ascii-invaders/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_ASCII_INVADERS
+> +	bool "ascii_invaders"
+> +	select BR2_PACKAGE_NCURSES
+> +	help
+> +	  An ASCII-art game like Space Invaders using ncurses.
+> +
+> +	  https://github.com/macdice/ascii-invaders
+> diff --git a/package/ascii-invaders/ascii-invaders.hash b/package/ascii-invaders/ascii-invaders.hash
+> new file mode 100644
+> index 0000000000..b4805e7b1d
+> --- /dev/null
+> +++ b/package/ascii-invaders/ascii-invaders.hash
+> @@ -0,0 +1,5 @@
+> +# Locally calculated
+> +sha512	326708ffc2c277e04575920c58f6a267e0bf46f8d2a3dbca9b5c317fb01006d4f673ab35f92f292549cc52dbee4400a84c85478eb81b9bd7703689a705547bc7	v1.0.1.tar.gz
+> +
+> +# Hash for license file
+> +sha512	1e455684996d7733b2f1ccd4606d034694d16ceff6ede6125d7f1537d20dabe05976cca4cef5cbf6c31352cbd62a515fd8e34a2ffb54dae1181c1116b24c6cf7	LICENSE
+> diff --git a/package/ascii-invaders/ascii-invaders.mk b/package/ascii-invaders/ascii-invaders.mk
+> new file mode 100644
+> index 0000000000..c91e0eeaa8
+> --- /dev/null
+> +++ b/package/ascii-invaders/ascii-invaders.mk
+> @@ -0,0 +1,28 @@
+> +################################################################################
+> +#
+> +# ASCII-Invaders
+> +#
+> +################################################################################
+> +
+> +ASCII_INVADERS_VERSION = v1.0.1
+> +ASCII_INVADERS_SOURCE = $(ASCII_INVADERS_VERSION).tar.gz
+> +ASCII_INVADERS_SITE = $(call github,macdice,ascii-invaders,$(ASCII_INVADERS_VERSION))
+> +ASCII_INVADERS_DEPENDENCIES = ncurses
+> +ASCII_INVADERS_LICENSE = GPL-2.0+
+> +ASCII_INVADERS_LICENSE_FILES = LICENSE
+> +
+> +# For compiling statically, libraries must be specified after the object file
+> +define ASCII_INVADERS_POST_EXTRACT_FIXUP
+> +	sed -i 's/\$$(LIBS) invaders.o/invaders.o \$$(LIBS)/' $(@D)/Makefile
+> +endef
+> +ASCII_INVADERS_POST_EXTRACT_HOOKS += ASCII_INVADERS_POST_EXTRACT_FIXUP
+> +
+> +define ASCII_INVADERS_BUILD_CMDS
+> +	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+> +endef
+> +
+> +define ASCII_INVADERS_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/ascii_invaders $(TARGET_DIR)/usr/bin/ascii_invaders
+> +endef
+> +
+> +$(eval $(generic-package))
+> 
 
---- Comment #3 from Pete Morici <pmorici@dev295.com> ---
-Looked into this more and the source of the issue is setting the console
-argument to certain values causes the boot process to lock up but only when the
-initramfs file system is used.  I have been setting the console value to null
-which causes the problem and when I changed it back to tty1 I made a typo and
-wrote /dev/tty1 which also causes the problem.  None of these values cause a
-boot hang when used with a file system other than initramfs.
+Friendly *ping*
 
-This might have something to do with the /init script installed as part of the
-cpio fs option that initramfs depends on but since there is no output I can't
-tell what the exact problem is.
-
- #!/bin/sh
- # devtmpfs does not get automounted for initramfs
- /bin/mount -t devtmpfs devtmpfs /dev
- exec 0</dev/console
- exec 1>/dev/console
- exec 2>/dev/console
- exec /sbin/init "$@"
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+ Thomas
