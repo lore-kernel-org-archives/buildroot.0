@@ -1,52 +1,58 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 13 May 2019 15:26:22 -0400
-Subject: [Buildroot] [PATCH 1/1] package/ca-certificates: bump to version
- 20190110
-Message-ID: <20190513192622.80031-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 13 May 2019 21:28:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qt5wayland: install compositor
+ QML files
+In-Reply-To: <20190511150750.5985-1-nowrep@gmail.com>
+References: <20190511150750.5985-1-nowrep@gmail.com>
+Message-ID: <20190513212833.63cd7c1a@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Hello David,
 
-Also add a hash for the license file.
+On Sat, 11 May 2019 17:07:49 +0200
+nowrep at gmail.com wrote:
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/ca-certificates/ca-certificates.hash | 7 +++++--
- package/ca-certificates/ca-certificates.mk   | 4 ++--
- 2 files changed, 7 insertions(+), 4 deletions(-)
+> From: David Rosca <nowrep@gmail.com>
+> 
+> Fixes using QtWayland.Compositor QML import.
+> 
+> Signed-off-by: David Rosca <nowrep@gmail.com>
+> ---
+>  package/qt5/qt5wayland/qt5wayland.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
+> index f96e4c2f8f..6ff8ba169f 100644
+> --- a/package/qt5/qt5wayland/qt5wayland.mk
+> +++ b/package/qt5/qt5wayland/qt5wayland.mk
+> @@ -46,6 +46,7 @@ ifeq ($(BR2_PACKAGE_QT5WAYLAND_COMPOSITOR),y)
+>  ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+>  define QT5WAYLAND_INSTALL_COMPOSITOR
+>  	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WaylandCompositor.so* $(TARGET_DIR)/usr/lib
+> +	cp -dpfr $(STAGING_DIR)/usr/qml/QtWayland $(TARGET_DIR)/usr/qml/
 
-diff --git a/package/ca-certificates/ca-certificates.hash b/package/ca-certificates/ca-certificates.hash
-index 8100dde357..71a8da4784 100644
---- a/package/ca-certificates/ca-certificates.hash
-+++ b/package/ca-certificates/ca-certificates.hash
-@@ -1,3 +1,6 @@
- # hashes from: $(CA_CERTIFICATES_SITE)/ca-certificates_$(CA_CERTIFICATES_VERSION).dsc :
--sha1   edf0ec04b02fcbc90cc65906ff83fb042894a3b7                         ca-certificates_20180409.tar.xz
--sha256 7af6f5bfc619fd29cbf0258c1d95107c38ce840ad6274e343e1e0d971fc72b51 ca-certificates_20180409.tar.xz
-+sha1   47d4584eae85fc905e4994766eb3930a8a84e2e1                         ca-certificates_20190110.tar.xz
-+sha256 ee4bf0f4c6398005f5b5ca4e0b87b82837ac5c3b0280a1cb3a63c47555c3a675 ca-certificates_20190110.tar.xz
-+
-+# Locally computed
-+sha256 80fd11117df5543d5cf17bfd951b0ead213f7867d0b09f09c6d5a5eca3ff7422 debian/copyright
-diff --git a/package/ca-certificates/ca-certificates.mk b/package/ca-certificates/ca-certificates.mk
-index 5c259aa3ab..79c81a41ea 100644
---- a/package/ca-certificates/ca-certificates.mk
-+++ b/package/ca-certificates/ca-certificates.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--CA_CERTIFICATES_VERSION = 20180409
-+CA_CERTIFICATES_VERSION = 20190110
- CA_CERTIFICATES_SOURCE = ca-certificates_$(CA_CERTIFICATES_VERSION).tar.xz
--CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20180411T111033Z/pool/main/c/ca-certificates
-+CA_CERTIFICATES_SITE = http://snapshot.debian.org/archive/debian/20190513T145054Z/pool/main/c/ca-certificates
- CA_CERTIFICATES_DEPENDENCIES = host-openssl
- # ca-certificates can be built with either python 2 or python 3
- # but it must be at least python 2.7
+Thanks a lot for your patch. However, I see two problems with it:
+
+ - First of all, QML files are only generated when
+   BR2_PACKAGE_QT5DECLARATIVE_QUICK=y, but BR2_PACKAGE_QT5WAYLAND does
+   not mandate having BR2_PACKAGE_QT5DECLARATIVE_QUICK as far as I can
+   see. So I believe we need a conditional on
+   BR2_PACKAGE_QT5DECLARATIVE_QUICK=y. See qt5location.mk for an
+   example.
+
+ - Secondly, you only handle the BR2_PACKAGE_QT5_VERSION_LATEST case
+   (i.e Qt 5.11), but not the Qt LTS version (5.6) case. Does it mean
+   that Qt 5.6 did not have those QML files (if that's the case, the
+   commit log should at least say it) ? Or was it an oversight ?
+
+Thanks a lot,
+
+Thomas
 -- 
-2.21.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
