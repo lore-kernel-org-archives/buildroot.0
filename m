@@ -1,101 +1,51 @@
-From: Max Filippov <jcmvbkbc@gmail.com>
-Date: Mon, 13 May 2019 11:48:11 -0700
-Subject: [Buildroot] [PATCH] package/uclibc: fix preadv/pwritev offset
- argument type
-Message-ID: <20190513184811.20461-1-jcmvbkbc@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 13 May 2019 20:47:41 +0200
+Subject: [Buildroot] [git commit] package/sqlite: security bump version to
+ 3.28.0
+Message-ID: <20190513184330.C442389173@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-preadv/pwritev don't provide separate version for 64-bit wide off_t,
-and default to 32-bit wide off_t, which results in a mismatch between
-declaration and definition for user programs built with
--D_FILE_OFFSET_BITS=64.
+commit: https://git.buildroot.net/buildroot/commit/?id=cde99db79a6801e1e6fe48cf75cab65d5860c351
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Backported from: 423e49023eeb ("preadv/pwritev: fix offset argument type")
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Release notes: https://www.sqlite.org/releaselog/3_28_0.html
+
+Fixes https://nvd.nist.gov/vuln/detail/CVE-2019-5018
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...3-preadv-pwritev-fix-offset-argument-type.patch | 70 ++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100644 package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch b/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
-new file mode 100644
-index 000000000000..2a20aecc8d20
---- /dev/null
-+++ b/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
-@@ -0,0 +1,70 @@
-+From 1077d5bebffacfd4b09896ed890fb45a5b3c6dc6 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Fri, 10 May 2019 07:13:19 -0700
-+Subject: [PATCH] preadv/pwritev: fix offset argument type
-+
-+preadv/pwritev don't provide separate version for 64-bit wide off_t,
-+and default to 32-bit wide off_t, which results in a mismatch between
-+declaration and definition for user programs built with
-+-D_FILE_OFFSET_BITS=64.
-+Make offset argument of both functions __off64_t.
-+This fixes test misc/tst-preadvwritev on xtensa.
-+
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ include/sys/uio.h                   | 4 ++--
-+ libc/sysdeps/linux/common/preadv.c  | 2 +-
-+ libc/sysdeps/linux/common/pwritev.c | 2 +-
-+ 3 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/include/sys/uio.h b/include/sys/uio.h
-+index aa766f9b1187..330426fec492 100644
-+--- a/include/sys/uio.h
-++++ b/include/sys/uio.h
-+@@ -59,7 +59,7 @@ extern ssize_t writev (int __fd, const struct iovec *__iovec, int __count);
-+    This function is a cancellation point and therefore not marked with
-+    __THROW.  */
-+ extern ssize_t preadv (int __fd, const struct iovec *__iovec, int __count,
-+-		       off_t __offset) __wur;
-++		       __off64_t __offset) __wur;
-+ 
-+ /* Write data pointed by the buffers described by IOVEC, which is a
-+    vector of COUNT 'struct iovec's, to file descriptor FD at the given
-+@@ -71,7 +71,7 @@ extern ssize_t preadv (int __fd, const struct iovec *__iovec, int __count,
-+    This function is a cancellation point and therefore not marked with
-+    __THROW.  */
-+ extern ssize_t pwritev (int __fd, const struct iovec *__iovec, int __count,
-+-			off_t __offset) __wur;
-++			__off64_t __offset) __wur;
-+ #endif	/* Use misc.  */
-+ 
-+ __END_DECLS
-+diff --git a/libc/sysdeps/linux/common/preadv.c b/libc/sysdeps/linux/common/preadv.c
-+index fd9dde4b999c..6a07d5df87e0 100644
-+--- a/libc/sysdeps/linux/common/preadv.c
-++++ b/libc/sysdeps/linux/common/preadv.c
-+@@ -21,7 +21,7 @@
-+ 
-+ #ifdef __NR_preadv
-+ ssize_t
-+-preadv (int fd, const struct iovec *vector, int count, off_t offset)
-++preadv (int fd, const struct iovec *vector, int count, __off64_t offset)
-+ {
-+   unsigned long pos_l, pos_h;
-+ 
-+diff --git a/libc/sysdeps/linux/common/pwritev.c b/libc/sysdeps/linux/common/pwritev.c
-+index bef5bcf69b46..f07c40e6de3c 100644
-+--- a/libc/sysdeps/linux/common/pwritev.c
-++++ b/libc/sysdeps/linux/common/pwritev.c
-+@@ -21,7 +21,7 @@
-+ 
-+ #ifdef __NR_pwritev
-+ ssize_t
-+-pwritev (int fd, const struct iovec *vector, int count, off_t offset)
-++pwritev (int fd, const struct iovec *vector, int count, __off64_t offset)
-+ {
-+   unsigned long pos_l, pos_h;
-+ 
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 5e2bc7030a..9b7efe71d6 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,6 +1,6 @@
+ # From https://www.sqlite.org/download.html
+-sha1 5f5750e3f39b7b60394a2fb6ddb2371f848670e6  sqlite-autoconf-3270200.tar.gz
++sha1 01b9d8fc77085e144dddc87456c9783e53d09a53  sqlite-autoconf-3280000.tar.gz
+ # Calculated based on the hash above
+-sha256 50c39e85ea28b5ecfdb3f9e860afe9ba606381e21836b2849efca6a0bfe6ef6e  sqlite-autoconf-3270200.tar.gz
++sha256 d61b5286f062adfce5125eaf544d495300656908e61fca143517afcc0a89b7c3  sqlite-autoconf-3280000.tar.gz
+ # Locally calculated
+ sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 95ededd8c4..7e97c966b7 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3270200
++SQLITE_VERSION = 3280000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2019
+ SQLITE_LICENSE = Public domain
