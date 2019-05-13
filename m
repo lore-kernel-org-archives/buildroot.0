@@ -1,182 +1,161 @@
-From: Christopher Peeters <christopher@lecroq.be>
-Date: Mon, 13 May 2019 13:34:53 +0200
-Subject: [Buildroot] [PATCH 1/1] Add libvirt (KVM) support
-In-Reply-To: <76055cea-ec05-aad3-1f27-39e07b48b12b@lecroq.be>
-References: <20190215173607.13773-1-christopher@lecroq.be>
- <20190413222137.6c0cba37@windsurf>
- <da50400b-6cf2-d87a-3a51-c54a46b7cea6@lecroq.be>
- <a4a04e64-bf89-f21b-89fe-7b3e5b1e5d69@mind.be>
- <CA+_SqVYm9vpx+Uuktb+s_TYu+Hzpu258AfNhUUkBTRK7K_SuOQ@mail.gmail.com>
- <76055cea-ec05-aad3-1f27-39e07b48b12b@lecroq.be>
-Message-ID: <2d514b29-7114-e9e9-913b-27b98c659c78@lecroq.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 13 May 2019 13:55:20 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-05-12
+In-Reply-To: <20190513060042.2B05F852CF@fraxinus.osuosl.org>
+References: <20190513060042.2B05F852CF@fraxinus.osuosl.org>
+Message-ID: <20190513135520.6ced2ff2@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Hello,
 
-Any updates on this?
+Giulio, Matt, Vadym, Gilles, Peter, Adrian, there are some
+questions/topics/issues for you below!
+
+On Mon, 13 May 2019 06:00:37 -0000
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+
+>       branch |  OK | NOK | TIM | TOT |
+>    2019.02.x |  30 |   1 |   0 |  31 |
+>       master | 177 |  11 |   5 | 193 |
+
+Results are not too bad, but we have a fairly high number of timeouts,
+which is not nice. Let's have a look at the details.
+
+> microblazeel |                           atop | TIM | http://autobuild.buildroot.net/results/94aa00f776b8a3491ac0b3212c95f5e666c5a29a |     
+
+This seems weird. Happened when linking a fairly simple application,
+never had another timeout on that package.
+
+Giulio, could you try to re-run the exact same defconfig (using
+br-reproduce-build) and see if it's reproducible ?
+
+>          arm |                      gdb-8.1.1 | NOK | http://autobuild.buildroot.net/results/a81eb395bd95306fcbb07c1443c9134fd63fa379 | ORPH
+
+This would be fixed by http://patchwork.ozlabs.org/patch/1098520/.
+
+> microblazeel |                         glibmm | TIM | http://autobuild.buildroot.net/results/e196d77626b877dc3454d21febe20a04877c02a9 |     
+
+Another weird timeout, this time on Matt's autobuilder. Matt, could you
+have a look ?
+
+But this seems to happen quite regularly, even on other autobuilder
+machines:
+
+  http://autobuild.buildroot.net/?reason=glibmm
+
+Always on microblazeel, like the timeout on "atop" discussed above. I
+guess that probably points at a compiler issue, which means it should
+be reproducible.
+
+>  powerpc64le |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/30bcf2ab8f95574b20ac2833ce237b3a885c01b8 |     
+
+The usual host-libsodium timeout on Julien's machine, there is a
+separate thread of discussion about it.
+
+>       mipsel |                       iwd-0.13 | NOK | http://autobuild.buildroot.net/results/176a40dd27ad92e5ad07eabbacdddf4e95edcba7 |     
+
+/data/buildroot/buildroot-test/instance-1/output/host/bin/autoconf: line 442: /usr/bin/sed: No such file or directory
+/data/buildroot/buildroot-test/instance-1/output/host/bin/autoconf: line 405: /usr/bin/expr: No such file or directory
+/data/buildroot/buildroot-test/instance-1/output/host/bin/autoconf: line 407: /usr/bin/expr: No such file or directory
+/data/buildroot/buildroot-test/instance-1/output/host/bin/autoconf: line 442: /usr/bin/sed: No such file or directory
+/data/buildroot/buildroot-test/instance-1/output/host/bin/autoconf: line 442: printf: write error: Broken pipe
+[...]
+expr: error while loading shared libraries: libc.so.6: cannot open shared object file: No such file or directory
+sed: error while loading shared libraries: libc.so.6: cannot open shared object file: No such file or directory
+/data/buildroot/buildroot-test/instance-1/output/host/bin/autoconf: line 442: printf: write error: Broken pipe
+expr: error while loading shared libraries: libc.so.6: cannot open shared object file: No such file or directory
+
+Wow, this looks like a system/distro issue.
+
+Xogium, did you do any system update around the time of this build
+failure ? Could you have a look ?
+
+>      aarch64 |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/3896b76ea6494222e062369e537a76da577f502e |   
+
+Would be fixed by http://patchwork.ozlabs.org/patch/1047538/.
+  
+>          arm |                 mono-5.20.1.27 | NOK | http://autobuild.buildroot.net/results/ee6d037154127cc6572f06e9a78bae383ea381bc |     
+>          arm |                 mono-5.20.1.27 | NOK | http://autobuild.buildroot.net/results/e505ec5aed040b34754d75e91f9de7ca334f2da9 |     
+
+Would be fixed by http://patchwork.ozlabs.org/patch/1098523/.
+
+>       mipsel |                        netsurf | TIM | http://autobuild.buildroot.net/results/b454b00198ddd6601b2238f9c1d0bb2154c1901e |     
+>      riscv64 |                        netsurf | TIM | http://autobuild.buildroot.net/results/fc1ffc5c3a006f66b11de0e0127e4224aec1aa2d |     
+
+Would be fixed by my netsurf patch series.
+
+>      powerpc |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/04ac3da1d9584095f57f3ea07de73e06449618d8 |     
+
+Ditto.
+
+>      powerpc |                   rpm-4.14.2.1 | NOK | http://autobuild.buildroot.net/results/a1446b419f5f59f65fe80849182e38457de203b5 |     
+
+Some libintl dance missing. Vadim ?
+
+>         i686 |               spandsp-20180108 | NOK | http://autobuild.buildroot.net/results/674ef1b8791c7f9dbdf4e7a0f84192abb59c21ae |     
+
+gsm0610_rpe.c:132:5: error: invalid 'asm': invalid constraints for operand
+
+Bernd ?
+
+>       mipsel |            tesseract-ocr-4.0.0 | NOK | http://autobuild.buildroot.net/results/dba4cf210815c66aac5474fbc05f418a2cc98bf6 |     
+
+ERROR: fra.traineddata has wrong sha256 hash:
+ERROR: expected: eac01c1d72540d6090facb7b2f42dd0a2ee8fc57c5be1b20548ae668e2761913
+ERROR: got     : 86afb23ad146467f263e8ade56fd3951b1cc28f8c4eebc34f993d3c02d88a7ab
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+
+Ah ah. Seems like sources.buildroot.net does not have the latest
+version of the files. But in fact the issue is that the file names do
+not contain the version... so obviously this is not going to work well.
+
+I think our approach of downloading the tessdata files from the
+tesseract-ocr package is not good. We probably need to have a separate
+tessdata package, that downloads the entire dataset, so that we can
+rely on proper version numbers.
+
+Gilles: could you cook a patch to implement this ?
+
+>      aarch64 |                    whois-5.4.0 | NOK | http://autobuild.buildroot.net/results/d272b906cc0a1dcced2b8d48aad77b272300005a |     
+
+2019-05-12 13:20:06 ERROR 500: Internal Server Error.
+
+on the Debian server + our mirror didn't had the tarball.
+
+Peter, any idea why our mirror doesn't have the tarball ? The bump
+dates back from January 2019, we should have mirrored the tarball since
+then.
+
+>          arm |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/07dded285364ca342c3270ba71bdc8ef72e1db26 |     
+
+Should be fixed by http://patchwork.ozlabs.org/patch/1085508/, but we
+still haven't received feedback from Adrian on this one.
+
+> Results for branch '2019.02.x'
+> ==============================
+> 
+> Classification of failures by reason
+> ------------------------------------
+> 
+>                    netsurf-3.8 | 1 
+> 
+> 
+> Detail of failures
+> ------------------
+> 
+>         m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/a2097f0bf03d8409164cc8ad6dba6775c49d3f91 |     
+
+Same static linking issue, would be fixed by my patch series on netsurf.
 
 Best regards,
 
-Christopher
-
-On 15/04/2019 16:54, Christopher Peeters wrote:
-> On 15/04/2019 16:06, Angelo Compagnucci wrote:
->> On Mon, Apr 15, 2019 at 2:23 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->>>  Hi Christopher,
->>>
->>>  Plese don't top-post, but reply inline like I do below.
->>>
->>> On 15/04/2019 09:46, Christopher Peeters wrote:
->>>> Hi Thomas,
->>>>
->>>> Thank you for your email. I wasn't aware about the commit title
->>>> conventions so I will fix this.
->>>>
->>>> The reason why I selected a different distribution is the lack of
->>>> support for Libvirt by the original distribution.
->>>  I would prefer in that case that we always use this other distribution (which
->>> is actually the same distribution, right? bionic == ubuntu1804...).
->> I wouldn't like to use this distribution if possible, is not the
->> official one and not maintained by canonical. The official one is:
->>
->> https://app.vagrantup.com/ubuntu/boxes/bionic64
-> As I said before there's no support from Canonical for libvirt images.
-> This can only be solved by Canonical. And if I look at Launchpad, it
-> won't happen very soon. There's another question for LXC support open
-> for more then a year now.
->
-> An other option when preferring official images is to switch over to one
-> of the following boxes since they do understand that source projects
-> should support each other and therefore have support for libvirt in
-> their Vagrant boxes. I haven't tested them though.
->
-> - https://app.vagrantup.com/debian/boxes/stretch64
->
-> - https://app.vagrantup.com/centos/boxes/7
->
-> - https://app.vagrantup.com/fedora/boxes/29-atomic-host
->
-> - https://app.vagrantup.com/opensuse/boxes/openSUSE-15.0-x86_64
->
-> - https://app.vagrantup.com/archlinux/boxes/archlinux
->
->> So I think the best approach is to install the required software in
->> conditional provisioning section that runs only if the vm is running
->> on top of libvirt.
-> I'm not quite sure whether you understand the implications of "doesn't
-> support libvirt". Unless I interpret your email incorrectly, I get the
-> impression that you believe that the vm will run until a certain point.
-> This is not the case. The vm won't even start because vagrant says that
-> libvirt isn't supported. Please check the snippet in my email from 09h46.
->>>> When you do `vagrant
->>>> up` with the original Vagrantfile and KVM/Libvirt as default vagrant
->>>> provider, vagrant will quit with the error that the current box can't be
->>>> found / isn't supported. Please check the snippet below for more
->>>> information. The "generic/ubuntu1804" is also a Ubuntu Bionic machine
->>>> which is well-supported so I selected this one to be able to use
->>>> Buildroot on Vagrant on Libvirt.
->>>>
->>>> ```
->>>>
->>>> $ vagrant up
->>>> ==> vagrant: A new version of Vagrant is available: 2.2.4!
->>>> ==> vagrant: To upgrade visit: https://www.vagrantup.com/downloads.html
->>>>
->>>> Bringing machine 'default' up with 'libvirt' provider...
->>>> ==> default: Box 'ubuntu/bionic64' could not be found. Attempting to
->>>> find and install...
->>>>     default: Box Provider: libvirt
->>>>     default: Box Version: >= 0
->>>> ==> default: Loading metadata for box 'ubuntu/bionic64'
->>>>     default: URL: https://vagrantcloud.com/ubuntu/bionic64
->>>> The box you're attempting to add doesn't support the provider
->>>> you requested. Please find an alternate box or use an alternate
->>>> provider. Double-check your requested provider to verify you didn't
->>>> simply misspell it.
->>>>
->>>> If you're adding a box from HashiCorp's Vagrant Cloud, make sure the box is
->>>> released.
->>>>
->>>> Name: ubuntu/bionic64
->>>> Address: https://vagrantcloud.com/ubuntu/bionic64
->>>> Requested provider: [:libvirt]
->>>>
->>>> ```
->>>>
->>>> You can also search for boxes on the Vagrant website. They also show
->>>> which providers are supported:
->>>>
->>>> https://app.vagrantup.com/ubuntu/boxes/bionic64
->>>>
->>>> https://app.vagrantup.com/generic/boxes/ubuntu1804
->>>>
->>>> I will also contact Ubuntu to ask them if they're willing to support
->>>> Libvirt, but in the mean time I suggest to choose a different box for
->>>> Buildroot on Vagrant using the Libvirt provider.
->>>>
->>>> I will also fix the indentation as requested. This is probably due to my
->>>> vim settings.
->>>>
->>>> Best regards,
->>>>
->>>> Christopher
->>>>
->>>> On 13/04/2019 22:21, Thomas Petazzoni wrote:
->>>>> Hello Christopher,
->>>>>
->>>>> Sorry for the very long delay in replying. I am not an expert with the
->>>>> Vagrant stuff, so I'm adding Angelo in Cc who hopefully will be able to
->>>>> comment further. Still, I have a few comments.
->>>>>
->>>>> First, the commit title should be:
->>>>>
->>>>>      support/misc/Vagrantfile: add libvirt/kvm support
->>>>>
->>>>> On Fri, 15 Feb 2019 18:36:07 +0100
->>>>> Christopher Peeters <christopher@lecroq.be> wrote:
->>>>>
->>>>>> Signed-off-by: Christopher Peeters <christopher@lecroq.be>
->>>>>> ---
->>>>>>  support/misc/Vagrantfile | 6 ++++++
->>>>>>  1 file changed, 6 insertions(+)
->>>>>>
->>>>>> diff --git a/support/misc/Vagrantfile b/support/misc/Vagrantfile
->>>>>> index 1ca5edc647..48f01a5807 100644
->>>>>> --- a/support/misc/Vagrantfile
->>>>>> +++ b/support/misc/Vagrantfile
->>>>>> @@ -29,6 +29,12 @@ Vagrant.configure('2') do |config|
->>>>>>             end
->>>>>>     end
->>>>>>
->>>>>> +  config.vm.provider :libvirt do |v, override|
->>>>>> +    override.vm.box = 'generic/ubuntu1804'
->>>>> Why are you overriding the distribution being used? It seems odd that
->>>>> depending on the virtualization technology, a different distribution
->>>>> gets installed inside the VM.
->>>>>
->>>>>> +    v.memory = VM_MEMORY
->>>>>> +    v.cpus = VM_CORES
->>>>>> +  end
->>>>> The indentation is also bogus: the file uses tabs, and you used two
->>>>> spaces. Could you fix that up ?
->>>>>
->>>>> Thanks,
->>>>>
->>>>> Thomas
->>>>>
->>>>> _______________________________________________
->>>>> buildroot mailing list
->>>>> buildroot at busybox.net
->>>>> http://lists.busybox.net/mailman/listinfo/buildroot
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 833 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190513/1847fdcb/attachment.asc>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
