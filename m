@@ -1,35 +1,51 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Tue, 14 May 2019 08:44:19 +0200
-Subject: [Buildroot] [PATCH 2/6] boot/optee-os: bump version to 3.5.0
-In-Reply-To: <CAN5uoS8WRz32mCpXAdMGK29exopKxwwQbtK4Q-N4Z4XU=kzVEg@mail.gmail.com>
-References: <20190513201602.2549-1-etienne.carriere@linaro.org>
- <20190513201602.2549-2-etienne.carriere@linaro.org>
- <20190513231215.6b080031@windsurf.home>
- <CAN5uoS8WRz32mCpXAdMGK29exopKxwwQbtK4Q-N4Z4XU=kzVEg@mail.gmail.com>
-Message-ID: <CAN5uoS-krME6naZwuPoR-UWcNVDpd8BmuOPrJS=Wi1r4o6Q+nQ@mail.gmail.com>
+From: David Rosca <nowrep@gmail.com>
+Date: Tue, 14 May 2019 09:18:29 +0200
+Subject: [Buildroot] [PATCH v2] package/qt5wayland: install compositor QML
+ files
+In-Reply-To: <20190511150750.5985-1-nowrep@gmail.com>
+References: <20190511150750.5985-1-nowrep@gmail.com>
+Message-ID: <20190514071830.30037-1-nowrep@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By the way, I had a question.
+Fixes using QtWayland.Compositor QML import.
 
-This series is build from few upgrade/cleanup changes:
-  [PATCH 1/6] "boot/optee-os: install trusted shared libraries"
-followed by optee-os version bump:
-  [PATCH 2/6]  "boot/optee-os: bump version to 3.5.0"
-followed by each remaining OP-TEE package version bump:
-  [PATCH 3/6]  "package/optee-client: bump version to 3.5.0"
-  ...
-  [PATCH 6/6]  "package/optee-benchmark: bump version to 3.5.0"
+Signed-off-by: David Rosca <nowrep@gmail.com>
 
-I think patches 2/6 up to 6/6 should be squashed into a single change
-"OP-TEE: bump boot and packages version to 3.5.0".
-Build optee-test from old 3.4.0 and optee-os from new 3.5.0 in the
-same build may fail or generate failed tests.
+---
+Changes v1 -> v2:
+  - move under BR2_PACKAGE_QT5DECLARATIVE_QUICK condition
+  - also handle stable Qt version (5.6)
+---
+ package/qt5/qt5wayland/qt5wayland.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Your thoughts on this squash proposal?
-
-Regards,
-etienne
+diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
+index f96e4c2f8f..449640c881 100644
+--- a/package/qt5/qt5wayland/qt5wayland.mk
++++ b/package/qt5/qt5wayland/qt5wayland.mk
+@@ -52,6 +52,11 @@ define QT5WAYLAND_INSTALL_COMPOSITOR
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Compositor.so* $(TARGET_DIR)/usr/lib
+ endef
+ endif
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
++define QT5WAYLAND_INSTALL_COMPOSITOR_QMLS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtWayland $(TARGET_DIR)/usr/qml/
++endef
++endif
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
+@@ -65,6 +70,7 @@ define QT5WAYLAND_INSTALL_TARGET_CMDS
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/wayland* $(TARGET_DIR)/usr/lib/qt/plugins
+ 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/platforms/libqwayland* $(TARGET_DIR)/usr/lib/qt/plugins/platforms
+ 	$(QT5WAYLAND_INSTALL_COMPOSITOR)
++	$(QT5WAYLAND_INSTALL_COMPOSITOR_QMLS)
+ 	$(QT5WAYLAND_INSTALL_TARGET_EXAMPLES)
+ endef
+ 
+-- 
+2.21.0
