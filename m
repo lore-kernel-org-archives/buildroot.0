@@ -1,46 +1,38 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 May 2019 19:02:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: fix build on
- m68k_cf
-Message-ID: <20190514170213.21811-1-fontaine.fabrice@gmail.com>
+Date: Tue, 14 May 2019 19:10:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qt5serialbus: disable on microblaze
+Message-ID: <20190514171058.22604-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-An internal compiler error is raised on m68k_cf at dwarf2cfi.c:2802 in
-connect_traces. Error can be fixed by adding -fno-defer-pop, see
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58864
-
 Fixes:
- - http://autobuild.buildroot.org/results/746f60fadb40288341c1e5642cfcf6373b70583a
+ - http://autobuild.buildroot.org/results/3482bd950c7ab5608666807a7ab7ea857c767333
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/libtorrent-rasterbar/libtorrent-rasterbar.mk | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ package/qt5/qt5serialbus/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-index fdcc736b47..012e972f1d 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-@@ -13,7 +13,15 @@ LIBTORRENT_RASTERBAR_INSTALL_STAGING = YES
- LIBTORRENT_RASTERBAR_CONF_OPTS = \
- 	--with-boost-libdir=$(STAGING_DIR)/usr/lib \
- 	--disable-invariant-checks
--LIBTORRENT_RASTERBAR_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
-+LIBTORRENT_RASTERBAR_CXXFLAGS = $(TARGET_CXXFLAGS) -std=c++11
-+
-+# Internal error, aborting at dwarf2cfi.c:2802 in connect_traces
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58864
-+ifeq ($(BR2_m68k_cf),y)
-+LIBTORRENT_RASTERBAR_CXXFLAGS += -fno-defer-pop
-+endif
-+
-+LIBTORRENT_RASTERBAR_CONF_OPTS += CXXFLAGS="$(LIBTORRENT_RASTERBAR_CXXFLAGS)"
+diff --git a/package/qt5/qt5serialbus/Config.in b/package/qt5/qt5serialbus/Config.in
+index 2882d50644..cdaed32475 100644
+--- a/package/qt5/qt5serialbus/Config.in
++++ b/package/qt5/qt5serialbus/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_QT5SERIALBUS
+ 	bool "qt5serialbus"
++	# internal compiler error: in do_output_reload, at reload1.c:7978
++	depends on !BR2_microblaze
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6 # CAN FD
+ 	select BR2_PACKAGE_QT5BASE
+ 	select BR2_PACKAGE_QT5SERIALPORT
+@@ -15,4 +17,5 @@ config BR2_PACKAGE_QT5SERIALBUS
+ 	  http://doc.qt.io/qt-5/qtserialbus-index.html
  
- ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
- LIBTORRENT_RASTERBAR_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ comment "qt5serialbus needs headers >= 3.6"
++	depends on !BR2_microblaze
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
 -- 
 2.20.1
