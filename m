@@ -1,73 +1,98 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 May 2019 18:09:24 +0200
-Subject: [Buildroot] [git commit branch/next] boot/optee-os: bump version to
- 3.5.0
-Message-ID: <20190514161225.136B58A35E@busybox.osuosl.org>
+Date: Tue, 14 May 2019 18:09:48 +0200
+Subject: [Buildroot] [git commit branch/next] package/optee-examples: bump
+ version to 3.5.0
+Message-ID: <20190514161225.287337FD1A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f274d52a590591f3c4d976466182cf11b6ddc28
+commit: https://git.buildroot.net/buildroot/commit/?id=e53299f67cf847b98890225abb9109b314297a38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump OP-TEE OS package version to OP-TEE release 3.5.0.
-
-The hash of the license file changed due to a fairly minor change in
-the file:
-
-  -Unless it has its own copyright/license embedded in its body, each source file
-  +Unless it has its own copyright/license embedded in its body, each file
+Bump OP-TEE Examples package version to release 3.5.0.
+This change discard now useless patches on OP-TEE Examples
+package.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-[Thomas: update the license file hash]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/optee-os/3.4.0/optee-os.hash | 4 ----
- boot/optee-os/Config.in           | 4 ++--
- boot/optee-os/optee-os.hash       | 4 ++++
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ .../0001-fix-deprecated-size_t-type-for-size.patch | 42 ----------------------
+ package/optee-examples/optee-examples.hash         |  4 +--
+ package/optee-examples/optee-examples.mk           |  2 +-
+ 3 files changed, 3 insertions(+), 45 deletions(-)
 
-diff --git a/boot/optee-os/3.4.0/optee-os.hash b/boot/optee-os/3.4.0/optee-os.hash
+diff --git a/package/optee-examples/0001-fix-deprecated-size_t-type-for-size.patch b/package/optee-examples/0001-fix-deprecated-size_t-type-for-size.patch
 deleted file mode 100644
-index 07afdfac8f..0000000000
---- a/boot/optee-os/3.4.0/optee-os.hash
+index 4f1fb38305..0000000000
+--- a/package/optee-examples/0001-fix-deprecated-size_t-type-for-size.patch
 +++ /dev/null
-@@ -1,4 +0,0 @@
--# From https://github.com/OP-TEE/optee_os/archive/3.4.0.tar.gz
--sha256 51d42ac7aa780ec8d8ee471eff689a29a7621aacace046722b1490b62ec2d481  optee-os-3.4.0.tar.gz
--# Locally computed
--sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index a1f1b910ac..c17c698a9a 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -18,7 +18,7 @@ choice
- 	  Select the version of OP-TEE OS you want to use
+@@ -1,42 +0,0 @@
+-From 1a2713ac698410fb1a889941d52df12a7bd75f3b Mon Sep 17 00:00:00 2001
+-From: Etienne Carriere <etienne.carriere@linaro.org>
+-Date: Sun, 17 Feb 2019 22:17:21 +0100
+-Subject: [PATCH] secure_storage: fix deprecated size_t type for size
+-
+-size_t types is an deprecated type used in GPD API v1.0.
+-Update
+-
+-Error reported by GCC 7.3-2018.05:
+-  secure_storage_ta.c:203:6: warning: passing argument 4 of 'TEE_ReadObjectData' from incompatible pointer type [-Wincompatible-pointer-types]
+-      &read_bytes);
+-
+-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+----
+- secure_storage/ta/secure_storage_ta.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/secure_storage/ta/secure_storage_ta.c b/secure_storage/ta/secure_storage_ta.c
+-index d120e47..3ccc12d 100644
+---- a/secure_storage/ta/secure_storage_ta.c
+-+++ b/secure_storage/ta/secure_storage_ta.c
+-@@ -146,7 +146,7 @@ static TEE_Result read_raw_object(uint32_t param_types, TEE_Param params[4])
+- 	TEE_ObjectHandle object;
+- 	TEE_ObjectInfo object_info;
+- 	TEE_Result res;
+--	size_t read_bytes;
+-+	uint32_t read_bytes;
+- 	char *obj_id;
+- 	size_t obj_id_sz;
+- 	char *data;
+-@@ -202,7 +202,7 @@ static TEE_Result read_raw_object(uint32_t param_types, TEE_Param params[4])
+- 	res = TEE_ReadObjectData(object, data, object_info.dataSize,
+- 				 &read_bytes);
+- 	if (res != TEE_SUCCESS || read_bytes != object_info.dataSize) {
+--		EMSG("TEE_ReadObjectData failed 0x%08x, read %u over %u",
+-+		EMSG("TEE_ReadObjectData failed 0x%08x, read %" PRIu32 " over %u",
+- 				res, read_bytes, object_info.dataSize);
+- 		goto exit;
+- 	}
+--- 
+-2.20.1
+-
+diff --git a/package/optee-examples/optee-examples.hash b/package/optee-examples/optee-examples.hash
+index 077fd9757c..980595eb69 100644
+--- a/package/optee-examples/optee-examples.hash
++++ b/package/optee-examples/optee-examples.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/linaro-swg/optee_examples/archive/3.4.0.tar.gz
+-sha256 d833753980ac438c1675787857bb8352997352212334274de9419770097ce039  optee-examples-3.4.0.tar.gz
++# From https://github.com/linaro-swg/optee_examples/archive/3.5.0.tar.gz
++sha256 5b7cf07f6d4b19a8557cfa9ab7a0d98b9e199832694c65c8a74e928926821862  optee-examples-3.5.0.tar.gz
+ # Locally computed
+ sha256 6f1ef8449cb82ae79d2155605f7985bdf0f08e7ab5007de9b4362e8bf28733b9  LICENSE
+diff --git a/package/optee-examples/optee-examples.mk b/package/optee-examples/optee-examples.mk
+index f2163b8643..7d08209ce8 100644
+--- a/package/optee-examples/optee-examples.mk
++++ b/package/optee-examples/optee-examples.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_OPTEE_OS_LATEST
--	bool "3.4.0"
-+	bool "3.5.0"
- 	help
- 	  Use the latest release tag from the OP-TEE OS official Git
- 	  repository.
-@@ -50,7 +50,7 @@ endif
- 
- config BR2_TARGET_OPTEE_OS_VERSION
- 	string
--	default "3.4.0"		if BR2_TARGET_OPTEE_OS_LATEST
-+	default "3.5.0"		if BR2_TARGET_OPTEE_OS_LATEST
- 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
- 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
- 
-diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
-new file mode 100644
-index 0000000000..1c8f5d6b31
---- /dev/null
-+++ b/boot/optee-os/optee-os.hash
-@@ -0,0 +1,4 @@
-+# From https://github.com/OP-TEE/optee_os/archive/3.5.0.tar.gz
-+sha256 a02fe8e7fdee9653e9207059071735a839b1255fdaf311a2a6cfd185a4cee6a2  optee-os-3.5.0.tar.gz
-+# Locally computed
-+sha256 1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
+-OPTEE_EXAMPLES_VERSION = 3.4.0
++OPTEE_EXAMPLES_VERSION = 3.5.0
+ OPTEE_EXAMPLES_SITE = $(call github,linaro-swg,optee_examples,$(OPTEE_EXAMPLES_VERSION))
+ OPTEE_EXAMPLES_LICENSE = BSD-2-Clause
+ OPTEE_EXAMPLES_LICENSE_FILES = LICENSE
