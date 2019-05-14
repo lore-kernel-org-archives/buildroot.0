@@ -1,63 +1,54 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Tue, 14 May 2019 09:57:00 -0500
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-05-12
-In-Reply-To: <20190513135520.6ced2ff2@windsurf.home>
-References: <20190513060042.2B05F852CF@fraxinus.osuosl.org>
- <20190513135520.6ced2ff2@windsurf.home>
-Message-ID: <CANQCQpZFOf=0zsDVqim7R9MopGDuN6bvPOC1PNV_DO=cPXhm=Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 14 May 2019 17:39:32 +0200
+Subject: [Buildroot] [git commit] package/samba4: security bump to version
+ 4.9.8
+Message-ID: <20190514153358.7FD3E88313@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 13, 2019 at 6:55 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> Giulio, Matt, Vadym, Gilles, Peter, Adrian, there are some
-> questions/topics/issues for you below!
->
+commit: https://git.buildroot.net/buildroot/commit/?id=7037a761eedced7ab9680ba7ad91a8bc29f1ec09
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-[snip]
+Fixes the following security issues:
 
+CVE-2018-16860: The checksum validation in the S4U2Self handler in the
+embedded Heimdal KDC did not first confirm that the checksum was keyed,
+allowing replacement of the requested target (client) principal.
 
-> > microblazeel |                         glibmm | TIM | http://autobuild.buildroot.net/results/e196d77626b877dc3454d21febe20a04877c02a9 |
->
-> Another weird timeout, this time on Matt's autobuilder. Matt, could you
-> have a look ?
->
-> But this seems to happen quite regularly, even on other autobuilder
-> machines:
->
->   http://autobuild.buildroot.net/?reason=glibmm
->
-> Always on microblazeel, like the timeout on "atop" discussed above. I
-> guess that probably points at a compiler issue, which means it should
-> be reproducible.
->
+For more details, see the advisory:
+https://www.samba.org/samba/security/CVE-2018-16860.html
 
-Build definitely hung (didn't even need to be on that build machine).
-I'll hopefully get some time to take a deeper look later.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-#74 0x00000000006ffd72 in find_base_term(rtx_def*) ()
-#75 0x00000000006ffe45 in find_base_term(rtx_def*) ()
-#76 0x00000000006ffd72 in find_base_term(rtx_def*) ()
-#77 0x00000000006ffe45 in find_base_term(rtx_def*) ()
-#78 0x00000000006ffdb0 in find_base_term(rtx_def*) ()
-#79 0x0000000000703615 in true_dependence_1(rtx_def const*,
-machine_mode, rtx_def*, rtx_def const*, rtx_def*, bool) ()
-#80 0x0000000000e2e771 in check_mem_read_use(rtx_def**, void*) ()
-#81 0x0000000000a4122d in note_uses(rtx_def**, void (*)(rtx_def**,
-void*), void*) ()
-#82 0x0000000000e2f80b in rest_of_handle_dse() ()
-#83 0x00000000009deb9a in execute_one_pass(opt_pass*) ()
-#84 0x00000000009df3e0 in execute_pass_list_1(opt_pass*) ()
-#85 0x00000000009df3f2 in execute_pass_list_1(opt_pass*) ()
-#86 0x00000000009df435 in execute_pass_list(function*, opt_pass*) ()
-#87 0x000000000076477d in cgraph_node::expand() ()
-#88 0x0000000000765f13 in symbol_table::compile() ()
-#89 0x0000000000767670 in symbol_table::finalize_compilation_unit() ()
-#90 0x0000000000a994b6 in compile_file() ()
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 9576690e4f..7e82261b4e 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.9.7.tar.asc
+-sha256 44e5bc58dcae6d86ca8d5f269fa927f20ff91bce97cde86fe4e83addcb89c001  samba-4.9.7.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.9.8.tar.asc
++sha256 82ebb7c3f1847c39341dd97ff8b73f40fa83f5f794daeceb80f3c349ace3cf56  samba-4.9.8.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 941d4df1d6..d2f89e2c82 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SAMBA4_VERSION = 4.9.7
++SAMBA4_VERSION = 4.9.8
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
