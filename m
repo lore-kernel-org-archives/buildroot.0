@@ -1,76 +1,73 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Tue, 14 May 2019 10:20:36 +0200
-Subject: [Buildroot] [PATCH v3 2/7] boot/optee-os: install trusted shared
- libraries
+Date: Tue, 14 May 2019 10:20:37 +0200
+Subject: [Buildroot] [PATCH v3 3/7] boot/optee-os: bump version to 3.5.0
 In-Reply-To: <20190514082041.3487-1-etienne.carriere@linaro.org>
 References: <20190514082041.3487-1-etienne.carriere@linaro.org>
-Message-ID: <20190514082041.3487-2-etienne.carriere@linaro.org>
+Message-ID: <20190514082041.3487-3-etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Install generated trusted shared libraries in the target file
-system next to the trusted applications.
+Bump OP-TEE OS package version to OP-TEE release 3.5.0.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
 Changes v2 -> v3:
-- Install shared trusted libs from OPTEE_OS_LOCAL_SDK (build
-  dir) instead of $(OPTEE_OS_SDK) (staging dir) that is
-  populated only upon BR2_TARGET_OPTEE_OS_SDK=y.
+- Fix commit message (s/dump/bump/g)
 Changes v1 -> v2:
-- Fixes on .ta file install commands move to a specific patch
-- Fix BR2_TARGET_OPTEE_OS_SERVICES 1-string description
-- Replace conditional commands in .ta files install commands
-  with Makefile script level conditionals
+- Move hash file to package root dir
+- Remove old 3.4.0/ subdir
 ---
- boot/optee-os/Config.in   | 14 +++++++-------
- boot/optee-os/optee-os.mk |  3 +++
- 2 files changed, 10 insertions(+), 7 deletions(-)
+ boot/optee-os/3.4.0/optee-os.hash | 4 ----
+ boot/optee-os/Config.in           | 4 ++--
+ boot/optee-os/optee-os.hash       | 4 ++++
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+ delete mode 100644 boot/optee-os/3.4.0/optee-os.hash
+ create mode 100644 boot/optee-os/optee-os.hash
 
+diff --git a/boot/optee-os/3.4.0/optee-os.hash b/boot/optee-os/3.4.0/optee-os.hash
+deleted file mode 100644
+index 07afdfac8f..0000000000
+--- a/boot/optee-os/3.4.0/optee-os.hash
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# From https://github.com/OP-TEE/optee_os/archive/3.4.0.tar.gz
+-sha256 51d42ac7aa780ec8d8ee471eff689a29a7621aacace046722b1490b62ec2d481  optee-os-3.4.0.tar.gz
+-# Locally computed
+-sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
 diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index a1f1b910ac..4cb05798e5 100644
+index 4cb05798e5..bd685b58bf 100644
 --- a/boot/optee-os/Config.in
 +++ b/boot/optee-os/Config.in
-@@ -70,16 +70,16 @@ config BR2_TARGET_OPTEE_OS_SDK
- 	  installed in the staging directory /lib/optee.
+@@ -18,7 +18,7 @@ choice
+ 	  Select the version of OP-TEE OS you want to use
  
- config BR2_TARGET_OPTEE_OS_SERVICES
--	bool "Build service TAs"
-+	bool "Build service TAs and libs"
- 	default y
- 	select BR2_TARGET_OPTEE_OS_CORE
+ config BR2_TARGET_OPTEE_OS_LATEST
+-	bool "3.4.0"
++	bool "3.5.0"
  	help
--	  This option installs the service trusted applications built
--	  from OP-TEE OS source tree. These are installed in the target
--	  /lib/optee_armtz directory as other trusted applications.
--	  At runtime OP-TEE OS can load trusted applications from this
--	  non-secure filesystem/directory into the secure world for
--	  execution.
-+	  This option installs the service trusted applications and
-+	  trusted shared libraries built from OP-TEE OS source tree.
-+	  These are installed in target /lib/optee_armtz directory
-+	  as other trusted applications. At runtime OP-TEE OS can
-+	  load these from this non-secure filesystem/directory into
-+	  the secure world for execution.
+ 	  Use the latest release tag from the OP-TEE OS official Git
+ 	  repository.
+@@ -50,7 +50,7 @@ endif
  
- config BR2_TARGET_OPTEE_OS_PLATFORM
- 	string "Target platform (mandatory)"
-diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
-index b22f560ba7..5962c3bab8 100644
---- a/boot/optee-os/optee-os.mk
-+++ b/boot/optee-os/optee-os.mk
-@@ -79,6 +79,9 @@ define OPTEE_OS_INSTALL_TARGET_CMDS
- 	$(if $(wildcard $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta),
- 		$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
- 			$(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta)
-+	$(if $(wildcard $(OPTEE_OS_LOCAL_SDK)/lib/*.ta),
-+		$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
-+			$(OPTEE_OS_LOCAL_SDK)/lib/*.ta)
- endef
- endif # BR2_TARGET_OPTEE_OS_SERVICES
+ config BR2_TARGET_OPTEE_OS_VERSION
+ 	string
+-	default "3.4.0"		if BR2_TARGET_OPTEE_OS_LATEST
++	default "3.5.0"		if BR2_TARGET_OPTEE_OS_LATEST
+ 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
+ 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
  
+diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
+new file mode 100644
+index 0000000000..167f96475d
+--- /dev/null
++++ b/boot/optee-os/optee-os.hash
+@@ -0,0 +1,4 @@
++# From https://github.com/OP-TEE/optee_os/archive/3.5.0.tar.gz
++sha256 a02fe8e7fdee9653e9207059071735a839b1255fdaf311a2a6cfd185a4cee6a2  optee-os-3.5.0.tar.gz
++# Locally computed
++sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
 -- 
 2.17.1
