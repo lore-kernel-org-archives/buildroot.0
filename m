@@ -1,51 +1,35 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 May 2019 21:38:07 +0200
-Subject: [Buildroot] [PATCH] package/musl: Make scheduler functions
- Linux-compatible
-In-Reply-To: <0b86f826cd3f48839e74dcb3dde3a4b69b80f701.camel@gmail.com>
-References: <509e7dab95b95c040af26c842e94777b069d6ba5.camel@gmail.com>
- <20190513221341.4150ab0c@windsurf.home>
- <071f102e7135306dfdba3203fbd35bdc07aa185f.camel@gmail.com>
- <20190514183356.50c06a52@windsurf>
- <c9b7162513ee169da4b9e7e73d66288c083e4a7a.camel@gmail.com>
- <00138043-5f6e-ef40-37e4-21368c24c82a@mind.be>
- <0b86f826cd3f48839e74dcb3dde3a4b69b80f701.camel@gmail.com>
-Message-ID: <14271c8c-d9e3-7be3-872b-ef5f1cb57eba@mind.be>
+Date: Tue, 14 May 2019 21:50:35 +0200
+Subject: [Buildroot] [PATCH 2/2] package/qt5multimedia: fix build with
+ gstreamer 0.10
+In-Reply-To: <20190512132627.18937-2-fontaine.fabrice@gmail.com>
+References: <20190512132627.18937-1-fontaine.fabrice@gmail.com>
+ <20190512132627.18937-2-fontaine.fabrice@gmail.com>
+Message-ID: <c035d344-0dff-f375-04d2-10ae4c82b8b6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Fabrice,
 
+On 12/05/2019 15:26, Fabrice Fontaine wrote:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/de26fd4f5ab130bd87ea9d7709d9568290362758
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...-compile-failure-with-gstreamer-0-10.patch | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>  create mode 100644 package/qt5/qt5multimedia/0001-Fix-compile-failure-with-gstreamer-0-10.patch
 
-On 14/05/2019 20:54, stefan.nickl at gmail.com wrote:
-> On Tue, 2019-05-14 at 20:04 +0200, Arnout Vandecappelle wrote:
->>  As Thomas wrote, the patch as it is is not upstreamable since musl
->> considers
->> this a feature.
->>
->>  However, it is possible that Rich can be convinced to actually read
->> the POSIX
->> spec and decide that linux behaviour is correct (except for the fact
->> that it
->> sched_setscheduler() should return the previous scheduling policy
->> rather than 0,
->> but that can be approximated (in a racy way) by calling
->> sched_getscheduler()
->> first). So it might be worth trying to push the patch upstream.
-> 
-> Hi Arnout,
-> 
-> I think upstreaming is out of the question since Rich has actually
-> *undone* it before 
-> https://git.musl-libc.org/cgit/musl/commit/?id=1e21e78bf7a5
-> 
-> Also asked on #musl a couple days ago whether they might be willing to
-> at least #ifdef it, and only got suggestions for application side
-> fixes. So, no dice it seems.
+ Does this patch apply both to 5.6 and 5.12?
 
- Yes, but has the argument "Linux does in fact implement POSIX" been used already?
+ Note that we don't need a patch for 5.6, since it's excluded in qt5base. And
+both Qt5.6 and gstreamer0.10 will be removed soonish, so there's no need to go
+and re-enable it for 5.6. But I just want to avoid a build failure for 5.6
+because the patch doesn't apply.
 
  Regards,
  Arnout
