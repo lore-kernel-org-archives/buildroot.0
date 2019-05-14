@@ -1,48 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 May 2019 18:55:48 +0200
-Subject: [Buildroot] [PATCH] package/musl: Make scheduler functions
- Linux-compatible
-In-Reply-To: <a03605e62a3879a0fffcbd14be04907cc3e54d3c.camel@gmail.com>
-References: <509e7dab95b95c040af26c842e94777b069d6ba5.camel@gmail.com>
- <20190513221341.4150ab0c@windsurf.home>
- <071f102e7135306dfdba3203fbd35bdc07aa185f.camel@gmail.com>
- <20190514183356.50c06a52@windsurf>
- <a03605e62a3879a0fffcbd14be04907cc3e54d3c.camel@gmail.com>
-Message-ID: <20190514185548.13b23569@windsurf>
+Date: Tue, 14 May 2019 18:46:41 +0200
+Subject: [Buildroot] [git commit] package/uclibc: fix preadv/pwritev offset
+ argument type
+Message-ID: <20190514165056.9A239888AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=7eb857f199e0510b3de6de80569c123ed22e23c6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Please keep the mailing list Cc'ed. Thanks!
+preadv/pwritev don't provide separate version for 64-bit wide off_t,
+and default to 32-bit wide off_t, which results in a mismatch between
+declaration and definition for user programs built with
+-D_FILE_OFFSET_BITS=64.
 
-On Tue, 14 May 2019 18:51:05 +0200
-stefan.nickl at gmail.com wrote:
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...3-preadv-pwritev-fix-offset-argument-type.patch | 71 ++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
 
-> Should I move the text all out from the patch to the commit log, or can
-> I just duplicate the text inside and outside the patch?
-> Or should one be more detailed and the other shorter?
-
-The text can be similar, but it has a different target.
-
-The commit log is meant to be useful to Buildroot, so it should explain
-why in Buildroot we would want this change.
-
-The description of the musl patch itself should theoretically be
-unrelated to Buildroot: it should ideally be an upstreamable patch, and
-musl doesn't care about Buildroot specifically.
-
-So the patch description should really describe the change in terms of
-the upstream project, while the commit log should describe the change
-in the context of Buildroot.
-
-Does this helps?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch b/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
+new file mode 100644
+index 0000000000..ccc262b9c5
+--- /dev/null
++++ b/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
+@@ -0,0 +1,71 @@
++From 1077d5bebffacfd4b09896ed890fb45a5b3c6dc6 Mon Sep 17 00:00:00 2001
++From: Max Filippov <jcmvbkbc@gmail.com>
++Date: Fri, 10 May 2019 07:13:19 -0700
++Subject: [PATCH] preadv/pwritev: fix offset argument type
++
++preadv/pwritev don't provide separate version for 64-bit wide off_t,
++and default to 32-bit wide off_t, which results in a mismatch between
++declaration and definition for user programs built with
++-D_FILE_OFFSET_BITS=64.
++Make offset argument of both functions __off64_t.
++This fixes test misc/tst-preadvwritev on xtensa.
++
++Backported from: 423e49023eeb ("preadv/pwritev: fix offset argument type")
++Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++---
++ include/sys/uio.h                   | 4 ++--
++ libc/sysdeps/linux/common/preadv.c  | 2 +-
++ libc/sysdeps/linux/common/pwritev.c | 2 +-
++ 3 files changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/include/sys/uio.h b/include/sys/uio.h
++index aa766f9b1187..330426fec492 100644
++--- a/include/sys/uio.h
+++++ b/include/sys/uio.h
++@@ -59,7 +59,7 @@ extern ssize_t writev (int __fd, const struct iovec *__iovec, int __count);
++    This function is a cancellation point and therefore not marked with
++    __THROW.  */
++ extern ssize_t preadv (int __fd, const struct iovec *__iovec, int __count,
++-		       off_t __offset) __wur;
+++		       __off64_t __offset) __wur;
++ 
++ /* Write data pointed by the buffers described by IOVEC, which is a
++    vector of COUNT 'struct iovec's, to file descriptor FD at the given
++@@ -71,7 +71,7 @@ extern ssize_t preadv (int __fd, const struct iovec *__iovec, int __count,
++    This function is a cancellation point and therefore not marked with
++    __THROW.  */
++ extern ssize_t pwritev (int __fd, const struct iovec *__iovec, int __count,
++-			off_t __offset) __wur;
+++			__off64_t __offset) __wur;
++ #endif	/* Use misc.  */
++ 
++ __END_DECLS
++diff --git a/libc/sysdeps/linux/common/preadv.c b/libc/sysdeps/linux/common/preadv.c
++index fd9dde4b999c..6a07d5df87e0 100644
++--- a/libc/sysdeps/linux/common/preadv.c
+++++ b/libc/sysdeps/linux/common/preadv.c
++@@ -21,7 +21,7 @@
++ 
++ #ifdef __NR_preadv
++ ssize_t
++-preadv (int fd, const struct iovec *vector, int count, off_t offset)
+++preadv (int fd, const struct iovec *vector, int count, __off64_t offset)
++ {
++   unsigned long pos_l, pos_h;
++ 
++diff --git a/libc/sysdeps/linux/common/pwritev.c b/libc/sysdeps/linux/common/pwritev.c
++index bef5bcf69b46..f07c40e6de3c 100644
++--- a/libc/sysdeps/linux/common/pwritev.c
+++++ b/libc/sysdeps/linux/common/pwritev.c
++@@ -21,7 +21,7 @@
++ 
++ #ifdef __NR_pwritev
++ ssize_t
++-pwritev (int fd, const struct iovec *vector, int count, off_t offset)
+++pwritev (int fd, const struct iovec *vector, int count, __off64_t offset)
++ {
++   unsigned long pos_l, pos_h;
++ 
++-- 
++2.11.0
++
