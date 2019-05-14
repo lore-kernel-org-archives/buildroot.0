@@ -1,13 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 May 2019 23:12:54 +0200
-Subject: [Buildroot] [PATCH 1/2] package/netsurf: change how
- CFLAGS/LDFLAGS are passed
-In-Reply-To: <20190509225259.2b62a2cb@windsurf.home> (Thomas Petazzoni's
- message of "Thu, 9 May 2019 22:52:59 +0200")
+Date: Tue, 14 May 2019 23:13:18 +0200
+Subject: [Buildroot] [PATCH 2/2] package/netsurf: do not allow on static
+ linking configurations
+In-Reply-To: <20190509202808.6741-3-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 9 May 2019 22:28:08 +0200")
 References: <20190509202808.6741-1-thomas.petazzoni@bootlin.com>
- <20190509202808.6741-2-thomas.petazzoni@bootlin.com>
- <20190509225259.2b62a2cb@windsurf.home>
-Message-ID: <87pnok4u5l.fsf@dell.be.48ers.dk>
+ <20190509202808.6741-3-thomas.petazzoni@bootlin.com>
+Message-ID: <87lfz84u4x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,38 +15,17 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Hello,
- > On Thu,  9 May 2019 22:28:07 +0200
- > Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+ > Static linking does not work properly in netsurf, nobody fixed it, and
+ > the netsurf build system is completely broken. Let's disable the
+ > package for static linking configurations.
 
- >> In commit 6da049f8ae61b956d135526722ce58fc2f67626a ("package/netsurf:
- >> fix build"), the CC variable passed to netsurf's build system was
- >> extended to pass some special -I and -L options needed for netsurf to
- >> find its own headers/libraries.
- >> 
- >> Unfortunately, on some systems (including mine), it breaks the build,
- >> due to:
- >> 
- >> toolpath_ := $(shell /bin/which $(CC__))
- >> 
- >> when $(CC__) contains some -I/-L options, they are considered to be
- >> options "to which", which causes the funny:
- >> 
- >> /usr/bin/make install --directory=libnslog
- >> HOST=arm-buildroot-linux-uclibcgnueabi
- >> PREFIX=/home/thomas/projets/outputs/shared-netsurf/build/netsurf-3.8/tmpusr
- >> Q=@ WARNFLAGS='-Wall -W -Wno-error' DESTDIR=
- >> make[3]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+ > Fixes:
 
- > In fact, I discovered that the autobuilders have encountered this issue
- > as well:
+ >   http://autobuild.buildroot.net/results/28b43c29e241080e23c87145797ea00dc4b3970d/
 
- >     powerpc64 |                        netsurf | TIM | http://autobuild.buildroot.net/results/eeb2863c6237aac8428e49a5ee514d43088b0fb8 |     
- >        x86_64 |                        netsurf | TIM | http://autobuild.buildroot.net/results/f938fd1515f1d6e11b57aa6e314135789da52a44 |     
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
- > Both of those timeouts would be fixed by this patch.
-
-Committed after adding these two autobuilder references, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
