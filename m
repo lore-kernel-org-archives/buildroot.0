@@ -1,53 +1,54 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 14 May 2019 14:41:07 +0300
-Subject: [Buildroot] [PATCH 1/5] package/libwpe: bump to version 1.2.0
+Date: Tue, 14 May 2019 14:41:08 +0300
+Subject: [Buildroot] [PATCH 2/5] package/wpebackend-fdo: bump to version
+ 1.2.0
 In-Reply-To: <20190514114111.20424-1-aperez@igalia.com>
 References: <20190514114111.20424-1-aperez@igalia.com>
-Message-ID: <20190514114111.20424-2-aperez@igalia.com>
+Message-ID: <20190514114111.20424-3-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WPE WebKit 2.24.x requires libwpe 1.2.x, as indicated at:
+WPE WebKit 2.24.x requires WPEBackend-fdo 1.2.x, as indicated at:
 
   https://wpewebkit.org/release/schedule/#compatible-components
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/libwpe/libwpe.hash | 8 ++++----
- package/libwpe/libwpe.mk   | 2 +-
+ package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+ package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
-index 58dba92e6f..bd36016603 100644
---- a/package/libwpe/libwpe.hash
-+++ b/package/libwpe/libwpe.hash
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
+index 6e6f9f0e3f..4d89d1e16f 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.hash
++++ b/package/wpebackend-fdo/wpebackend-fdo.hash
 @@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/libwpe-1.0.0.tar.xz.sums
--md5 b5ea32bd644811d5c6433cf1439763f7 libwpe-1.0.0.tar.xz
--sha1 6e51591c00a9a6128e19920807e6874794c723fd libwpe-1.0.0.tar.xz
--sha256 aff11612123f9ab85a8b9a4bcdfb3a7503eba0a0d2d96f2cdecd30e911091719 libwpe-1.0.0.tar.xz
-+# From https://wpewebkit.org/releases/libwpe-1.2.0.tar.xz.sums
-+md5 060876c6a32ef1ae519cb9542d0ede06 libwpe-1.2.0.tar.xz
-+sha1 5dd34eba8cc7625d2b1c679c509492941092d137 libwpe-1.2.0.tar.xz
-+sha256 f28035e7a8991fbb1a0e762f1b3d0e3cb57513a3164c75c7dc3eb0c11d9149fc libwpe-1.2.0.tar.xz
+-# From https://wpewebkit.org/releases/wpebackend-fdo-1.0.1.tar.xz.sums
+-md5 2ee81a4212c18110a06a0c51c12e0d2e wpebackend-fdo-1.0.1.tar.xz
+-sha1 cdc6ac95e302a2358204b766936a9bf8ef4f26f2 wpebackend-fdo-1.0.1.tar.xz
+-sha256 15b8b1febea5d9c271e95c35b3c1e13f870712a54bc5f689cfdbb96e2f070fc8 wpebackend-fdo-1.0.1.tar.xz
++# From https://wpewebkit.org/releases/wpebackend-fdo-1.2.0.tar.xz.sums
++md5 74e1b2fc2bc19933b17ff4f8435f67cd wpebackend-fdo-1.2.0.tar.xz
++sha1 60559697512fd483c1d918b708a3d1d130b74a0a wpebackend-fdo-1.2.0.tar.xz
++sha256 b1bb261273772af8f7d96d94989fc2ed0445ec06c7eb21f47a1b94e52422ddd5 wpebackend-fdo-1.2.0.tar.xz
  
  # Hashes for license files:
- sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22 COPYING
-diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
-index aad1214e1d..fca974aecd 100644
---- a/package/libwpe/libwpe.mk
-+++ b/package/libwpe/libwpe.mk
+ sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
+diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
+index 5842861bac..15530ec45f 100644
+--- a/package/wpebackend-fdo/wpebackend-fdo.mk
++++ b/package/wpebackend-fdo/wpebackend-fdo.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBWPE_VERSION = 1.0.0
-+LIBWPE_VERSION = 1.2.0
- LIBWPE_SITE = https://wpewebkit.org/releases
- LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
- LIBWPE_INSTALL_STAGING = YES
+-WPEBACKEND_FDO_VERSION = 1.0.1
++WPEBACKEND_FDO_VERSION = 1.2.0
+ WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
+ WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
+ WPEBACKEND_FDO_INSTALL_STAGING = YES
 -- 
 2.21.0
