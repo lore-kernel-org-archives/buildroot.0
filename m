@@ -1,69 +1,79 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 14 May 2019 23:33:10 +0300
-Subject: [Buildroot] [PATCH 5/5] package/cog: bump version to 0.3.0
-In-Reply-To: <20190514114111.20424-6-aperez@igalia.com>
-References: <20190514114111.20424-1-aperez@igalia.com>
- <20190514114111.20424-6-aperez@igalia.com>
-Message-ID: <20190514233310.GB20205@momiji>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 14 May 2019 22:36:08 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-05-08
+In-Reply-To: <52f30b47-7416-e4d1-cb63-29ee8f6c7b88@micronovasrl.com>
+References: <20190509060042.1026E872A2@whitealder.osuosl.org>
+ <20190509230324.0b03746e@windsurf.home>
+ <decc64fc-5968-9c8a-6f0f-ca42fdbf2edb@micronovasrl.com>
+ <52f30b47-7416-e4d1-cb63-29ee8f6c7b88@micronovasrl.com>
+Message-ID: <20190514203608.GG2787@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Giulio, All,
 
-One quick note below...
-
-On Tue, 14 May 2019 14:41:11 +0300, Adrian Perez de Castro <aperez@igalia.com> wrote:
-> Version 0.2.0 does not work with WPE WebKit 2.22.x, this is the
-> first version which can be used with 2.24.x
+On 2019-05-11 23:00 +0200, Giulio Benetti spake thusly:
+> Hello Yann, All,
 > 
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> ---
->  package/cog/cog.hash | 2 +-
->  package/cog/cog.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Il 09/05/2019 23:19, Giulio Benetti ha scritto:
+> >>>       aarch64 |            python-numpy-1.16.3 | NOK | http://autobuild.buildroot.net/results/50f7f09a9f830cd7b94f8fc83c09fc3d39297d3d |
+> >>
+> >>/home/buildroot/autobuild/run/instance-2/output/host/bin/aarch64-linux-gnu-gcc /tmp/tmph865w02v/tmp/tmph865w02v/source.o -L/home/buildroot/autobuild/run/instance-2/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib -lcblas -o /tmp/tmph865w02v/a.out
+> >>/home/buildroot/autobuild/run/instance-2/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcblas.so: undefined reference to `scnrm2_'
+> >>/home/buildroot/autobuild/run/instance-2/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcblas.so: undefined reference to `scasum_'
+> >>collect2: error: ld returned 1 exit status
+> >>/home/buildroot/autobuild/run/instance-2/output/host/bin/aarch64-linux-gnu-gcc /tmp/tmph865w02v/tmp/tmph865w02v/source.o -L/home/buildroot/autobuild/run/instance-2/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib -lblas -o /tmp/tmph865w02v/a.out
+> >>/tmp/tmph865w02v/tmp/tmph865w02v/source.o: In function `main':
+> >>/tmp/tmph865w02v/source.c:6: undefined reference to `cblas_ddot'
+> >>collect2: error: ld returned 1 exit status
+> >>
+> >>I'm not sure what's going on here. Sadly, Samuel who was maintaining
+> >>python-numpy, is no longer active in Buildroot. Is there anyone else
+> >>volunteering to have a look ?
+> >
+> >I can try to work this out.
+> >
 > 
-> diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-> index 97daf72744..39cf2afdbd 100644
-> --- a/package/cog/cog.hash
-> +++ b/package/cog/cog.hash
-> @@ -1,5 +1,5 @@
->  # Locally generated
-> -sha256 a6abadb78395226bac2e1dd5467feab2cc8c493eab6894a09a51a8e072e38c06  cog-v0.2.0.tar.gz
-> +sha256 755c68029bbd05a17784262e56021362740783d15868dab9402a125ef35eedaf  cog-v0.3.0.tar.gz
->  
->  # Hashes for license files:
->  sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-> index 43f13152c8..da59b6a097 100644
-> --- a/package/cog/cog.mk
-> +++ b/package/cog/cog.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -COG_VERSION = v0.2.0
-> +COG_VERSION = v0.3.0
->  COG_SITE = $(call github,Igalia,cog,$(COG_VERSION))
->  COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
->  COG_LICENSE = MIT
+> As spoken in IRC this builds correctly with every Docker in Adam Duskett:
+> https://github.com/aduskett/buildroot-docker-devel
+> 
+> included Ubuntu 14.04(Trusty), the same as Yann's Autobuilder.
+> 
+> I'm waiting for Yann to report if it works for him too or not.
 
-FWIW, I think this should have also:
+Here is a quick summary of Giulio's and my findings:
 
-  COG_INSTALL_STAGING = YES
+Usign the configuration from the failed autobuild job:
 
-to make it possible to debug Cog properly. I can either resubmit a second
-version of the patchset, or send this one change in a separate independent
-patch as a follow-up.
+  - make clean; make python-numpy    --> builds OK
 
-Cheers,
-?Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190514/29f704d3/attachment.asc>
+  - make clean; make   --> fails to build
+
+The root cause is a hidden dependency on lapack. When lapack is build
+before python-numpy (which is highly possible, because of alphabetical
+ordering), then python-numpy detects it and fails to build properly in
+this case.
+
+So, I can see two solutions:
+
+  - add an explicit, conditional dependency on lapack, and fix the
+    build,
+
+  - explicitly tell python-numpy to never use lapack.
+
+Obviously, the first would be preferred, but it's probably non-trivial.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
