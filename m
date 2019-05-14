@@ -1,33 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 May 2019 17:41:12 +0200
-Subject: [Buildroot] [git commit branch/next] configs/liteboard: bump U-Boot
- to 2019.04
-Message-ID: <20190514153539.082A8885E5@busybox.osuosl.org>
+Date: Tue, 14 May 2019 17:43:05 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-05-12
+In-Reply-To: <CANQCQpZFOf=0zsDVqim7R9MopGDuN6bvPOC1PNV_DO=cPXhm=Q@mail.gmail.com>
+References: <20190513060042.2B05F852CF@fraxinus.osuosl.org>
+ <20190513135520.6ced2ff2@windsurf.home>
+ <CANQCQpZFOf=0zsDVqim7R9MopGDuN6bvPOC1PNV_DO=cPXhm=Q@mail.gmail.com>
+Message-ID: <20190514174305.4ee8da2b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6e9bbd6b9a073f6d40c87908f598baae321d234
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/grinn_liteboard_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, 14 May 2019 09:57:00 -0500
+Matthew Weber <matthew.weber@collins.com> wrote:
+> > > microblazeel |                         glibmm | TIM | http://autobuild.buildroot.net/results/e196d77626b877dc3454d21febe20a04877c02a9 |  
+> >
+> > Another weird timeout, this time on Matt's autobuilder. Matt, could you
+> > have a look ?
+> >
+> > But this seems to happen quite regularly, even on other autobuilder
+> > machines:
+> >
+> >   http://autobuild.buildroot.net/?reason=glibmm
+> >
+> > Always on microblazeel, like the timeout on "atop" discussed above. I
+> > guess that probably points at a compiler issue, which means it should
+> > be reproducible.
+> >  
+> 
+> Build definitely hung (didn't even need to be on that build machine).
+> I'll hopefully get some time to take a deeper look later.
 
-diff --git a/configs/grinn_liteboard_defconfig b/configs/grinn_liteboard_defconfig
-index 09656331e5..f2c1da33e3 100644
---- a/configs/grinn_liteboard_defconfig
-+++ b/configs/grinn_liteboard_defconfig
-@@ -15,7 +15,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="liteboard"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
+I'd say most likely it's the same Microblaze issue than on atop, which
+Giulio has been looking into, and which is in fact related to
+BR2_TOOLCHAIN_HAS_GCC_BUG_85180.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
