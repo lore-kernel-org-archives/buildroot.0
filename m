@@ -1,33 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 May 2019 09:51:31 +0200
-Subject: [Buildroot] [PATCH v2 2/7] boot/optee-os: install trusted
- shared libraries
-In-Reply-To: <20190514073902.3775-2-etienne.carriere@linaro.org>
-References: <20190514073902.3775-1-etienne.carriere@linaro.org>
- <20190514073902.3775-2-etienne.carriere@linaro.org>
-Message-ID: <20190514095131.092f1b50@windsurf.home>
+From: David Rosca <nowrep@gmail.com>
+Date: Tue, 14 May 2019 09:49:36 +0200
+Subject: [Buildroot] [PATCH] package/qt5base: enable journald logging
+Message-ID: <20190514074937.3745-1-nowrep@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Etienne,
+Allows Qt applications to log into systemd journal with
+QT_LOGGING_TO_CONSOLE=0 environment variable.
 
-On Tue, 14 May 2019 09:38:57 +0200
-Etienne Carriere <etienne.carriere@linaro.org> wrote:
+Signed-off-by: David Rosca <nowrep@gmail.com>
+---
+ package/qt5/qt5base/qt5base.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> +	$(if $(wildcard $(OPTEE_OS_SDK)/lib/*.ta),
-
-OPTEE_OS_SDK is only populated if BR2_TARGET_OPTEE_OS_SDK=y, but
-services/libs are installed if BR2_TARGET_OPTEE_OS_SERVICES=y.
-
-So if BR2_TARGET_OPTEE_OS_SDK is disabled, but
-BR2_TARGET_OPTEE_OS_SERVICES=y, this will not copy anything. Is this
-the indented behavior ?
-
-Thomas
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index e73b8931aa..e4ae120631 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -253,6 +253,13 @@ QT5BASE_CONFIGURE_OPTS += -no-gtk
+ endif
+ endif
+ 
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++QT5BASE_CONFIGURE_OPTS += -journald
++QT5BASE_DEPENDENCIES += systemd
++else
++QT5BASE_CONFIGURE_OPTS += -no-journald
++endif
++
+ # Build the list of libraries to be installed on the target
+ QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
+ QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XCB)        += Qt5XcbQpa
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
