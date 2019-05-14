@@ -1,54 +1,77 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 14 May 2019 14:41:08 +0300
-Subject: [Buildroot] [PATCH 2/5] package/wpebackend-fdo: bump to version
- 1.2.0
+Date: Tue, 14 May 2019 14:41:09 +0300
+Subject: [Buildroot] [PATCH 3/5] package/libepoxy: update to version 1.5.3,
+ convert to Meson
 In-Reply-To: <20190514114111.20424-1-aperez@igalia.com>
 References: <20190514114111.20424-1-aperez@igalia.com>
-Message-ID: <20190514114111.20424-3-aperez@igalia.com>
+Message-ID: <20190514114111.20424-4-aperez@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WPE WebKit 2.24.x requires WPEBackend-fdo 1.2.x, as indicated at:
+This release fixes building with uClibc and symbol lookups for
+drivers which have GLES 3.x support.
 
-  https://wpewebkit.org/release/schedule/#compatible-components
+Tarballs do not include a generated "configure" script any more,
+so use Meson to configure the build instead.
 
 Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
- package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/libepoxy/libepoxy.hash |  4 ++--
+ package/libepoxy/libepoxy.mk   | 13 +++++++------
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash b/package/wpebackend-fdo/wpebackend-fdo.hash
-index 6e6f9f0e3f..4d89d1e16f 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.hash
-+++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-@@ -1,7 +1,7 @@
--# From https://wpewebkit.org/releases/wpebackend-fdo-1.0.1.tar.xz.sums
--md5 2ee81a4212c18110a06a0c51c12e0d2e wpebackend-fdo-1.0.1.tar.xz
--sha1 cdc6ac95e302a2358204b766936a9bf8ef4f26f2 wpebackend-fdo-1.0.1.tar.xz
--sha256 15b8b1febea5d9c271e95c35b3c1e13f870712a54bc5f689cfdbb96e2f070fc8 wpebackend-fdo-1.0.1.tar.xz
-+# From https://wpewebkit.org/releases/wpebackend-fdo-1.2.0.tar.xz.sums
-+md5 74e1b2fc2bc19933b17ff4f8435f67cd wpebackend-fdo-1.2.0.tar.xz
-+sha1 60559697512fd483c1d918b708a3d1d130b74a0a wpebackend-fdo-1.2.0.tar.xz
-+sha256 b1bb261273772af8f7d96d94989fc2ed0445ec06c7eb21f47a1b94e52422ddd5 wpebackend-fdo-1.2.0.tar.xz
+diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
+index dd1b13487b..d574a04455 100644
+--- a/package/libepoxy/libepoxy.hash
++++ b/package/libepoxy/libepoxy.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.2.sha256sum
+-sha256 a9562386519eb3fd7f03209f279f697a8cba520d3c155d6e253c3e138beca7d8  libepoxy-1.5.2.tar.xz
++# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.3.sha256sum
++sha256 002958c5528321edd53440235d3c44e71b5b1e09b9177e8daf677450b6c4433d  libepoxy-1.5.3.tar.xz
  
  # Hashes for license files:
- sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825 COPYING
-diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk b/package/wpebackend-fdo/wpebackend-fdo.mk
-index 5842861bac..15530ec45f 100644
---- a/package/wpebackend-fdo/wpebackend-fdo.mk
-+++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-@@ -4,7 +4,7 @@
- #
+ sha256 8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
+diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
+index b1731a22c5..deb3c1ecbb 100644
+--- a/package/libepoxy/libepoxy.mk
++++ b/package/libepoxy/libepoxy.mk
+@@ -5,26 +5,27 @@
  ################################################################################
  
--WPEBACKEND_FDO_VERSION = 1.0.1
-+WPEBACKEND_FDO_VERSION = 1.2.0
- WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
- WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
- WPEBACKEND_FDO_INSTALL_STAGING = YES
+ LIBEPOXY_VERSION_MAJOR = 1.5
+-LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).2
++LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).3
+ LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
+ LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
+ LIBEPOXY_INSTALL_STAGING = YES
+ LIBEPOXY_DEPENDENCIES = host-pkgconf xutil_util-macros
+ LIBEPOXY_LICENSE = MIT
+ LIBEPOXY_LICENSE_FILES = COPYING
++LIBEPOXY_CONF_OPTS += -Ddocs=false -Dtests=false
+ 
+ ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
+-LIBEPOXY_CONF_OPTS += --enable-egl
++LIBEPOXY_CONF_OPTS += -Degl=yes
+ LIBEPOXY_DEPENDENCIES += libegl
+ else
+-LIBEPOXY_CONF_OPTS += --disable-egl
++LIBEPOXY_CONF_OPTS += -Degl=no
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_XLIB_LIBX11),yy)
+-LIBEPOXY_CONF_OPTS += --enable-glx
++LIBEPOXY_CONF_OPTS += -Dglx=yes -Dx11=true
+ LIBEPOXY_DEPENDENCIES += libgl xlib_libX11
+ else
+-LIBEPOXY_CONF_OPTS += --disable-glx
++LIBEPOXY_CONF_OPTS += -Dglx=no -Dx11=false
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 -- 
 2.21.0
