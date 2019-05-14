@@ -1,104 +1,30 @@
-From: stefan.nickl at gmail.com <stefan.nickl@gmail.com>
-Date: Tue, 14 May 2019 22:40:51 +0200
-Subject: [Buildroot] [PATCH] package/musl: Make scheduler functions
- Linux-compatible
-In-Reply-To: <20190514202405.GF2787@scaer>
-References: <509e7dab95b95c040af26c842e94777b069d6ba5.camel@gmail.com>
- <20190513221341.4150ab0c@windsurf.home>
- <071f102e7135306dfdba3203fbd35bdc07aa185f.camel@gmail.com>
- <20190514183356.50c06a52@windsurf>
- <c9b7162513ee169da4b9e7e73d66288c083e4a7a.camel@gmail.com>
- <00138043-5f6e-ef40-37e4-21368c24c82a@mind.be>
- <0b86f826cd3f48839e74dcb3dde3a4b69b80f701.camel@gmail.com>
- <14271c8c-d9e3-7be3-872b-ef5f1cb57eba@mind.be>
- <db160fbf9100e03d489a9f067e836ad6de5a256e.camel@gmail.com>
- <20190514202405.GF2787@scaer>
-Message-ID: <0947386914d17d5155147608386b687952d92185.camel@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 14 May 2019 22:52:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/woff2: add a comment for C++
+Message-ID: <20190514205204.6859-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 2019-05-14 at 22:24 +0200, Yann E. MORIN wrote:
-> Stefan, All,
-> 
-> On 2019-05-14 22:03 +0200, stefan.nickl at gmail.com spake thusly:
-> > On Tue, 2019-05-14 at 21:38 +0200, Arnout Vandecappelle wrote:
-> > > On 14/05/2019 20:54, stefan.nickl at gmail.com wrote:
-> > > > On Tue, 2019-05-14 at 20:04 +0200, Arnout Vandecappelle wrote:
-> > > > >  As Thomas wrote, the patch as it is is not upstreamable
-> > > > > since
-> > > > > musl
-> > > > > considers
-> > > > > this a feature.
-> > > > > 
-> > > > >  However, it is possible that Rich can be convinced to
-> > > > > actually
-> > > > > read
-> > > > > the POSIX
-> > > > > spec and decide that linux behaviour is correct (except for
-> > > > > the
-> > > > > fact
-> > > > > that it
-> > > > > sched_setscheduler() should return the previous scheduling
-> > > > > policy
-> > > > > rather than 0,
-> > > > > but that can be approximated (in a racy way) by calling
-> > > > > sched_getscheduler()
-> > > > > first). So it might be worth trying to push the patch
-> > > > > upstream.
-> > > > 
-> > > > Hi Arnout,
-> > > > 
-> > > > I think upstreaming is out of the question since Rich has
-> > > > actually
-> > > > *undone* it before 
-> > > > https://git.musl-libc.org/cgit/musl/commit/?id=1e21e78bf7a5
-> > > > 
-> > > > Also asked on #musl a couple days ago whether they might be
-> > > > willing
-> > > > to
-> > > > at least #ifdef it, and only got suggestions for application
-> > > > side
-> > > > fixes. So, no dice it seems.
-> > > 
-> > >  Yes, but has the argument "Linux does in fact implement POSIX"
-> > > been
-> > > used already?
-> > 
-> > I haven't used that argument and I'm not aware of anyone that has.
-> > 
-> > This comes pretty close though: 
-> > https://github.com/MusicPlayerDaemon/MPD/issues/218
-> > 
-> > And just recently Rich managed to convince even the glibc
-> > developers of
-> > the opposite, so I certainly don't feel up to arguing that position
-> > ;-)
-> > https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=c70824b9a4645c0ecd049da8cfdb2c28ae7ada23
-> 
-> So, if glibc is going the musl way, because Linux does not allow to
-> properly implement the sched_* stuff, when why do we even attempt to
-> implement them in musl at all?
+woff2 depends on C++ so add a comment if C++ is not enabled
 
-Hi Yann,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/woff2/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-that's not what I'm seeing.
-
-The glibc folks are not going to change the library call <-> Linux
-syscall correspondence.
-They merely make note of the fact that they've screwed up in the past,
-and that now it is too late to change.
-All that happens is that the non-conformance gets documented.
-
-What makes this extra confusing is that there are source files in the
-glibc tree with -ENOSYS-returning implementations of these functions,
-but it seems the functions that really get used for Linux are generated
-from a syscalls.list file to use the syscall.
-Maybe someone more familiar with glibc can confirm this.
-In the uclibc-ng case, it seems rather straightforward, see e.g.
-libc/sysdeps/linux/common/sched_setscheduler.c
-
-Cheers,
-Stefan
+diff --git a/package/woff2/Config.in b/package/woff2/Config.in
+index 48672570dd..d280414d4c 100644
+--- a/package/woff2/Config.in
++++ b/package/woff2/Config.in
+@@ -7,3 +7,6 @@ config BR2_PACKAGE_WOFF2
+ 	  typically used for Web fonts
+ 
+ 	  https://github.com/google/woff2
++
++comment "woff2 needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
+-- 
+2.20.1
