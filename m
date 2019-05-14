@@ -1,51 +1,51 @@
-From: David Rosca <nowrep@gmail.com>
-Date: Tue, 14 May 2019 09:18:29 +0200
-Subject: [Buildroot] [PATCH v2] package/qt5wayland: install compositor QML
- files
-In-Reply-To: <20190511150750.5985-1-nowrep@gmail.com>
-References: <20190511150750.5985-1-nowrep@gmail.com>
-Message-ID: <20190514071830.30037-1-nowrep@gmail.com>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Tue, 14 May 2019 09:38:56 +0200
+Subject: [Buildroot] [PATCH v2 1/7] boot/optee-os: correct TA files install
+Message-ID: <20190514073902.3775-1-etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes using QtWayland.Compositor QML import.
+This change corrects TA binary files install sequence that
+were previously install in target filesystem though
+OPTEE_OS_INSTALL_IMAGES_CMDS instead of expected
+OPTEE_OS_INSTALL_TARGET_CMDS.
 
-Signed-off-by: David Rosca <nowrep@gmail.com>
+This change removes useless mkdir prior call to $(INSTALL)
+that already handles parent directory creation when needed.
 
+This change conditions .ta files install upon their
+generation as a custom package repository may not generate
+any .ta files.
+
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
 Changes v1 -> v2:
-  - move under BR2_PACKAGE_QT5DECLARATIVE_QUICK condition
-  - also handle stable Qt version (5.6)
+- Patch introduced in v2
 ---
- package/qt5/qt5wayland/qt5wayland.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ boot/optee-os/optee-os.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
-index f96e4c2f8f..449640c881 100644
---- a/package/qt5/qt5wayland/qt5wayland.mk
-+++ b/package/qt5/qt5wayland/qt5wayland.mk
-@@ -52,6 +52,11 @@ define QT5WAYLAND_INSTALL_COMPOSITOR
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5Compositor.so* $(TARGET_DIR)/usr/lib
- endef
- endif
-+ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
-+define QT5WAYLAND_INSTALL_COMPOSITOR_QMLS
-+	cp -dpfr $(STAGING_DIR)/usr/qml/QtWayland $(TARGET_DIR)/usr/qml/
-+endef
-+endif
- endif
+diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+index 6da20a9f3e..b22f560ba7 100644
+--- a/boot/optee-os/optee-os.mk
++++ b/boot/optee-os/optee-os.mk
+@@ -75,10 +75,10 @@ endef
+ endif # BR2_TARGET_OPTEE_OS_CORE
  
- ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-@@ -65,6 +70,7 @@ define QT5WAYLAND_INSTALL_TARGET_CMDS
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/wayland* $(TARGET_DIR)/usr/lib/qt/plugins
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/plugins/platforms/libqwayland* $(TARGET_DIR)/usr/lib/qt/plugins/platforms
- 	$(QT5WAYLAND_INSTALL_COMPOSITOR)
-+	$(QT5WAYLAND_INSTALL_COMPOSITOR_QMLS)
- 	$(QT5WAYLAND_INSTALL_TARGET_EXAMPLES)
+ ifeq ($(BR2_TARGET_OPTEE_OS_SERVICES),y)
+-define OPTEE_OS_INSTALL_IMAGES_SERVICES
+-	mkdir -p $(TARGET_DIR)/lib/optee_armtz
+-	$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
+-		$(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta
++define OPTEE_OS_INSTALL_TARGET_CMDS
++	$(if $(wildcard $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta),
++		$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
++			$(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta)
  endef
+ endif # BR2_TARGET_OPTEE_OS_SERVICES
  
 -- 
-2.21.0
+2.17.1
