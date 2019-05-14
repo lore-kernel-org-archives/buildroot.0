@@ -1,122 +1,33 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 May 2019 22:12:51 +0200
-Subject: [Buildroot] Keyboard and mouse not working in X server
-In-Reply-To: <CAPm8-H57Nh28bx-pB8hukv8FAPLKe4xQ2EgtGVCWvZntThP3Og@mail.gmail.com>
-References: <CAPm8-H57Nh28bx-pB8hukv8FAPLKe4xQ2EgtGVCWvZntThP3Og@mail.gmail.com>
-Message-ID: <2562bee5-bcb7-0ced-d16f-496701c8ac92@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 14 May 2019 22:13:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qt5location: disable on microblaze
+ with gcc < 8
+Message-ID: <20190514201352.24579-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi L-C,
+Fixes:
+ - http://autobuild.buildroot.org/results/a43820c328a5444fe35086d099df2676b03cba9e
 
-On 14/05/2019 15:51, Laurentiu-Cristian Duca wrote:
-> Hello Buildroot community,
-> 
->   I am an open source enthusisast and I am new to buildroot.
-> I have built in buildroot 2019.02.1
-> a raspberry pi 1 configuration
-> with Xorg server (1.20.3) and xdriver_xf86-input-mouse-1.9.3
-> xdriver_xf86-input-keyboard-1.9.0 and SystemV init.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/qt5/qt5location/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
- I am not an X expert by a long shot, but I believe you'll have better luck with
-xdriver_xf86-input-evdev or -libinput. -keyboard and -mouse are more for legacy
-bus keyboard/mouse devices I think.
-
-
->   I use simple USB keyboard and mouse.
-> 
->   Keyboard works in consle tty1 (HDMI display).
->   startx runs successfully but mouse and keyboard do not work with X started.
-> X just shows 3 open xterm windows and I can not write or move mouse cursor
-> (which is showed in the center of the screen).
-> 
->   I have tried xorg.conf with:
-> Section "Device"
->         Identifier      "Allwinner A10/A13 FBDEV"
->         Driver          "fbturbo"
->         Option          "fbdev" "/dev/fb0"
->         Option          "SwapbuffersWait" "true"
-> EndSection
-> 
->   I have also tried with no success combinations with:
-> 
-> Section "InputDevice"
-
- I don't think there's any need for input device configuration in xorg.conf.
-
->     Identifier  "Mouse"
->     Driver      "mouse"
->     Option      "Protocol"      "auto"
->     Option      "Device"        "/dev/bus/usb/001/005"
-> EndSection
-> 
-> Section "InputDevice"
->     Identifier     "Keyboard0"
->     Driver         "kbd"
->     Option         "XkbLayout" "us"
->     Option         "XkbModel" "pc105"
-> EndSection
-> 
->   When I have nothing connected to usb
-> find /dev/ | grep -i "usb"
-> it shows:
-> /dev/bus/usb
-> /dev/bus/usb/001
-> /dev/bus/usb/001/003
-> /dev/bus/usb/001/002
-> /dev/bus/usb/001/001
->   If I insert keyboard and mouse it also shows:
-> /dev/bus/usb/001/006
-> /dev/bus/usb/001/005
-> /dev/bus/usb/001/004
-
- Can you check that you also have /dev/input/eventN nodes? These are the ones
-that get used by evdev and libinput. But if you don't have them, I don't think
-the console keyboard would work either.
-
- Regards,
- Arnout
-
-> 
-> # ls /usr/lib/xorg/modules/input/
-> kbd_drv.so    mouse_drv.so
-> # xinput --list
-> ??? Virtual core pointer                        id=2    [master pointer  (3)]
-> ???   ??? Virtual core XTEST pointer                    id=4    [slave
->  pointer  (2)]
-> ??? Virtual core keyboard                       id=3    [master keyboard (2)]
->     ??? Virtual core XTEST keyboard                     id=5    [slave
->  keyboard (3)]
-> No success with:
-> # xinput enable 2
-> (and 3, 4, 5)
-> 
-> I do not use udev or mdev, instead I use devtmpfs. Is there any way to have
-> mouse and keyboard working?
-> # cat /var/log/Xorg.0.log
-> ...
-> [  2042.804] (II) The server relies on udev to provide the list of
-> input devices.
->         If no devices become available, reconfigure udev or disable
-> AutoAddDevices.
-> [  2042.804] (II) Loader magic: 0x1d8e58
-> [  2042.804] (II) Module ABI versions:
-> [  2042.804]    X.Org ANSI C Emulation: 0.4
-> [  2042.804]    X.Org Video Driver: 24.0
-> [  2042.804]    X.Org XInput driver : 24.1
-> [  2042.804]    X.Org Server Extension : 10.0
-> [  2042.816] (++) using VT number 1
-> ...
-> 
->   Any ideas?
-> 
-> Thank you and best regards,
-> L-C. Duca
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/qt5/qt5location/Config.in b/package/qt5/qt5location/Config.in
+index 7c39979eff..f50113d942 100644
+--- a/package/qt5/qt5location/Config.in
++++ b/package/qt5/qt5location/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_QT5LOCATION
+ 	bool "qt5location"
++	# internal compiler error: in do_output_reload, at reload1.c:7978
++	depends on !BR2_microblaze || BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	select BR2_PACKAGE_QT5BASE
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	help
+-- 
+2.20.1
