@@ -1,35 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 May 2019 18:19:27 +0200
-Subject: [Buildroot] [PATCH v4 3/7] boot/optee-os: bump version to 3.5.0
-In-Reply-To: <20190514085319.9031-3-etienne.carriere@linaro.org>
+Date: Tue, 14 May 2019 18:19:32 +0200
+Subject: [Buildroot] [PATCH v4 4/7] package/optee-client: bump version
+ to 3.5.0
+In-Reply-To: <20190514085319.9031-4-etienne.carriere@linaro.org>
 References: <20190514085319.9031-1-etienne.carriere@linaro.org>
- <20190514085319.9031-3-etienne.carriere@linaro.org>
-Message-ID: <20190514181927.68d53f22@windsurf>
+ <20190514085319.9031-4-etienne.carriere@linaro.org>
+Message-ID: <20190514181932.7269ab48@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-
-On Tue, 14 May 2019 10:53:15 +0200
+On Tue, 14 May 2019 10:53:16 +0200
 Etienne Carriere <etienne.carriere@linaro.org> wrote:
 
-> diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
-> new file mode 100644
-> index 0000000000..167f96475d
-> --- /dev/null
-> +++ b/boot/optee-os/optee-os.hash
-> @@ -0,0 +1,4 @@
-> +# From https://github.com/OP-TEE/optee_os/archive/3.5.0.tar.gz
-> +sha256 a02fe8e7fdee9653e9207059071735a839b1255fdaf311a2a6cfd185a4cee6a2  optee-os-3.5.0.tar.gz
-> +# Locally computed
-> +sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
+> Bump OP-TEE Client package version to release 3.5.0.
+> This change discard now useless patches on OP-TEE Client
+> package.
+> 
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> ---
+> Changes v3 -> v4:
+> - No change
+> Changes v2 -> v3:
+> - Fix on commit message: s/OP-TEE OS/OP-TEE Client/.
+> Changes v1 -> v2:
+> - No change
+> ---
+>  ...-BUILD_STATIC_LIBS-BUILD_SHARED_LIBS.patch |  52 -------
+>  .../0002-libteec-fix-build-warnings.patch     | 128 ------------------
+>  .../0003-libteec-fix-clang-build-errors.patch |  64 ---------
+>  package/optee-client/optee-client.hash        |   4 +-
+>  package/optee-client/optee-client.mk          |   2 +-
+>  5 files changed, 3 insertions(+), 247 deletions(-)
+>  delete mode 100644 package/optee-client/0001-cmake-support-BUILD_STATIC_LIBS-BUILD_SHARED_LIBS.patch
+>  delete mode 100644 package/optee-client/0002-libteec-fix-build-warnings.patch
+>  delete mode 100644 package/optee-client/0003-libteec-fix-clang-build-errors.patch
 
-This hash was wrong: you did not test it with "make legal-info".
-
-I fixed it and applied to next. Thanks.
+Applied to master, thanks.
 
 Thomas
 -- 
