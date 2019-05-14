@@ -1,75 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 May 2019 23:08:51 +0200
-Subject: [Buildroot] [PATCH 2/2] package/qt5multimedia: fix build with
- gstreamer 0.10
-In-Reply-To: <CAPi7W82CASM+P1+zKHBWRBUa8LDyFfbi9vLU3vizTUVm3GR=EA@mail.gmail.com>
-References: <20190512132627.18937-1-fontaine.fabrice@gmail.com>
- <20190512132627.18937-2-fontaine.fabrice@gmail.com>
- <c035d344-0dff-f375-04d2-10ae4c82b8b6@mind.be>
- <CAPi7W82CASM+P1+zKHBWRBUa8LDyFfbi9vLU3vizTUVm3GR=EA@mail.gmail.com>
-Message-ID: <bd9ceef1-19d5-836f-568f-df5bcf85cea9@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 14 May 2019 23:09:53 +0200
+Subject: [Buildroot] [git commit] package/qt5multimedia: put back gstreamer
+ 0.10 optional dependency
+Message-ID: <20190514210432.6E4E98A63C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=460ee0dbe0b46c55a6ae6729c3dec863e8db97ac
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Commit b2e16ea64a6f89a82098625bb93db020ea5d4db4 tried to remove
+gstreamer 0.10 support by removing its dependency but this was just
+masking the issue as we have a build failure with gstreamer 0.10
 
-On 14/05/2019 22:27, Fabrice Fontaine wrote:
-> Hi Arnout,
-> 
-> Le mar. 14 mai 2019 ? 21:50, Arnout Vandecappelle <arnout@mind.be> a ?crit :
->>
->>  Hi Fabrice,
->>
->> On 12/05/2019 15:26, Fabrice Fontaine wrote:
->>> Fixes:
->>>  - http://autobuild.buildroot.org/results/de26fd4f5ab130bd87ea9d7709d9568290362758
->>>
->>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->>> ---
->>>  ...-compile-failure-with-gstreamer-0-10.patch | 36 +++++++++++++++++++
->>>  1 file changed, 36 insertions(+)
->>>  create mode 100644 package/qt5/qt5multimedia/0001-Fix-compile-failure-with-gstreamer-0-10.patch
->>
->>  Does this patch apply both to 5.6 and 5.12?
-> Patch does not apply on QT 5.6. It fixes a build failure added in 5.12.2.
+So put back this dependency.
 
- Indeed, this patch breaks the build.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/qt5/qt5multimedia/qt5multimedia.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-$ make BR2_PACKAGE_QT5_VERSION_5_6=y BR2_PACKAGE_QT5_VERSION_LATEST=
-qt5multimedia-patch
-qtmultimedia-opensource-src-5.6.3.tar.xz: OK (sha256:
-ae36039ea8037742342f1615687e0ca2188f3ed0d700627a5e5be546c15e1b46)
->>> qt5multimedia 5.6.3 Extracting
-xzcat
-/home/arnout/src/buildroot-dl/qt5multimedia/qtmultimedia-opensource-src-5.6.3.tar.xz
-| tar --strip-components=1 -C
-/home/arnout/src/buildroot/output/build/qt5multimedia-5.6.3   -xf -
->>> qt5multimedia 5.6.3 Patching
-
-Applying 0001-Fix-compile-failure-with-gstreamer-0-10.patch using patch:
-can't find file to patch at input line 22
-Perhaps you used the wrong -p or --strip option?
-The text leading up to this was:
-...
-
- So I moved it to the 5.12.2 subdirectory and applied to master, thanks.
-
- Regards,
- Arnout
-
-
->>
->>  Note that we don't need a patch for 5.6, since it's excluded in qt5base. And
->> both Qt5.6 and gstreamer0.10 will be removed soonish, so there's no need to go
->> and re-enable it for 5.6. But I just want to avoid a build failure for 5.6
->> because the patch doesn't apply.
->>
->>  Regards,
->>  Arnout
-> Regards,
-> 
-> Fabrice
-> 
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index 7d332b0304..0a27c857e5 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -18,6 +18,10 @@ QT5MULTIMEDIA_LICENSE = GPL-3.0 or LGPL-2.1 with exception or LGPL-3.0, GFDL-1.3
+ QT5MULTIMEDIA_LICENSE_FILES = LICENSE.GPLv3 LICENSE.LGPLv21 LGPL_EXCEPTION.txt LICENSE.LGPLv3 LICENSE.FDL
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST_PLUGINS_BASE),y)
++QT5MULTIMEDIA_DEPENDENCIES += gst-plugins-base
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE),y)
+ QT5MULTIMEDIA_DEPENDENCIES += gst1-plugins-base
+ endif
+@@ -49,7 +53,7 @@ endef
+ ifeq ($(BR2_STATIC_LIBS),)
+ # since Qt5.10.1 libqgsttools was renamed to libQtMultimediaGstTools
+ # and is installed by the default target install step below
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)x$(BR2_PACKAGE_GST1_PLUGINS_BASE),xy)
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)x$(BR2_PACKAGE_GST_PLUGINS_BASE)$(BR2_PACKAGE_GST1_PLUGINS_BASE),xy)
+ define QT5MULTIMEDIA_INSTALL_TARGET_QGSTTOOLS_LIB
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libqgsttools*.so.* $(TARGET_DIR)/usr/lib
+ endef
