@@ -1,55 +1,93 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Mon, 13 May 2019 23:53:37 +0200
-Subject: [Buildroot] [PATCH v2] package/ninja: enforce Python3 on the host
-Message-ID: <20190513215337.10400-1-joerg.krause@embedded.rocks>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 14 May 2019 06:00:35 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-05-13
+Message-ID: <20190514060040.8F90986849@whitealder.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current logic selects Python3 for the host only if Python3 is
-selected for the target, otherwise it selects Python2.
+Hello,
 
-As Meson, the only package infrastructure using ninja, needs Python3, it is
-desirable to also depend on Python3 on the host for the ninja host
-package.
+Build statistics for 2019-05-13
+===============================
 
-Otherwise, if no Python interpreter is selected for the target, both
-Python2 and Python3 are build for the host, which is time consuming
-without any benefit.
+      branch |  OK | NOK | TIM | TOT |
+   2019.02.x |  21 |   2 |   0 |  23 |
+      master | 219 |  22 |   2 | 243 |
 
-For example when building libmpdclient (and all its target and host
-dependencies) the actual elapsed time for is reduced from around 286s to 207s
-as reported by `time -p make clean all`.
+Results for branch 'master'
+===========================
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
-v2:
- * fix setting the dependency, as <pkg>_NEEDS_HOST_PYTHON
-   only makes sense for packages using the python-package infrastructure,
-   but Ninja is using the generic-package infrastructure (Thomas
-   Petazzoni)
----
- package/ninja/ninja.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Classification of failures by reason
+------------------------------------
 
-diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
-index 9d6f30e9fe..6ae32d5ca3 100644
---- a/package/ninja/ninja.mk
-+++ b/package/ninja/ninja.mk
-@@ -9,7 +9,11 @@ NINJA_SITE = $(call github,ninja-build,ninja,$(NINJA_VERSION))
- NINJA_LICENSE = Apache-2.0
- NINJA_LICENSE_FILES = COPYING
- 
--HOST_NINJA_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
-+# Although Ninja supports both Python2 and Python3, we enforce Python3 on the
-+# host for the following reason: Meson is the only package using Ninja so far
-+# and Meson requires Python3. In this way, we prevent both Python2 and Python3
-+# from being created on the host, which is time consuming and without benefit.
-+HOST_NINJA_DEPENDENCIES = host-python3
- 
- define HOST_NINJA_BUILD_CMDS
- 	(cd $(@D); ./configure.py --bootstrap)
+  vdr-plugin-vnsiserver-v1.8.0 | 3 
+                      gzip-1.9 | 2 
+             openjdk-jdk-12+33 | 2 
+                qt5base-5.12.2 | 2 
+                     gdb-8.1.1 | 1 
+      intel-mediadriver-18.4.0 | 1 
+    libtorrent-rasterbar-1.2.1 | 1 
+                  linuxptp-2.0 | 1 
+                   mimic-1.1.0 | 1 
+                       netsurf | 1 
+                   netsurf-3.8 | 1 
+               opencv-2.4.13.7 | 1 
+                    postgresql | 1 
+              qt5enginio-1.6.3 | 1 
+          qt5multimedia-5.12.2 | 1 
+              spandsp-20180108 | 1 
+                   whois-5.4.0 | 1 
+               wireshark-3.0.1 | 1 
+          wpebackend-fdo-1.0.1 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                      gdb-8.1.1 | NOK | http://autobuild.buildroot.net/results/bb1ec0bac624504b022d8dd038c35610fe655662 | ORPH
+         arm |                       gzip-1.9 | NOK | http://autobuild.buildroot.net/results/79f9d92a40f44afa653bdf04026f5d40a1b1caac | ORPH
+         arm |                       gzip-1.9 | NOK | http://autobuild.buildroot.net/results/c4c0612ae2912892b0b19887c4b84d2cd15d605e | ORPH
+      x86_64 |       intel-mediadriver-18.4.0 | NOK | http://autobuild.buildroot.net/results/659c1dfe3d40e6a5e25ba2e05fe32974c2060e39 |     
+        m68k |     libtorrent-rasterbar-1.2.1 | NOK | http://autobuild.buildroot.net/results/746f60fadb40288341c1e5642cfcf6373b70583a |     
+     aarch64 |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/3cbc8c090fed00448ab2604cc4209329ea1f79ab |     
+     powerpc |                    mimic-1.1.0 | NOK | http://autobuild.buildroot.net/results/8a51dfc5028da62a48b4b3644c7207914f888347 |     
+         arm |                        netsurf | TIM | http://autobuild.buildroot.net/results/2cf8ef4935166fa874042d5214110fb8c18b2fd7 |     
+        m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/0129ed9c20ce5a44e612075bb4a01ef517aa5343 |     
+microblazeel |                opencv-2.4.13.7 | NOK | http://autobuild.buildroot.net/results/17fff0f312ebd520ba3341976ba56fd8c85ee376 |     
+     sparc64 |              openjdk-jdk-12+33 | NOK | http://autobuild.buildroot.net/results/53f1c27abe5daccab448dccab69f370865c4014d |     
+     aarch64 |              openjdk-jdk-12+33 | NOK | http://autobuild.buildroot.net/results/3c2455dbc285a418f332adb583e923bb90a0d8b6 |     
+microblazeel |                     postgresql | TIM | http://autobuild.buildroot.net/results/e3516e654610bbdd579bb31211c3f56e7d0c3953 |     
+  aarch64_be |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/a836e2949f40726a85b1f611cc8883d4ecce312b |     
+  aarch64_be |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/16dc54f5575fa4c8f3c69c57de8e4bf8f4f31925 |     
+         arc |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/894fcf9b9ca20fa4e5b54f99da6a56ff221cb11c |     
+     aarch64 |           qt5multimedia-5.12.2 | NOK | http://autobuild.buildroot.net/results/0db7c162683c328fcb6562c3a6aaf2cd172620ec |     
+        i686 |               spandsp-20180108 | NOK | http://autobuild.buildroot.net/results/38cc08b3e040a515f28200321d222a98fbcae190 |     
+      mipsel |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/d259ab1a79b809c5970c3cd5501c5d21a120b903 |     
+     riscv64 |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/abae02f4b8811b9cc4cc747216078d5fa8cdd219 |     
+     sparc64 |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/14ed5edee636ccdbda2b4b3a61cd3de76a62d998 |     
+         arm |                    whois-5.4.0 | NOK | http://autobuild.buildroot.net/results/b2972a346471b38eb1d8ddfdaf29f8f4f0bf3190 |     
+     powerpc |                wireshark-3.0.1 | NOK | http://autobuild.buildroot.net/results/6a2b90cd74dabacf11f69e7e994de4ee22bfe4b9 | ORPH
+     aarch64 |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/04bfad470b353aea08fa4d4068894ef8faf0d009 |     
+
+Results for branch '2019.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+               openldap-2.4.46 | 1 
+           qt5serialbus-5.11.3 | 1 
+
+
+Detail of failures
+------------------
+
+      x86_64 |                openldap-2.4.46 | NOK | http://autobuild.buildroot.net/results/81b6345f4524fe9f709b497e897226834224e053 |     
+microblazeel |            qt5serialbus-5.11.3 | NOK | http://autobuild.buildroot.net/results/3482bd950c7ab5608666807a7ab7ea857c767333 |     
+
+
 -- 
-2.21.0
+http://autobuild.buildroot.net
