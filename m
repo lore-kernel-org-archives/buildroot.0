@@ -1,79 +1,104 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 14 May 2019 22:36:08 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-05-08
-In-Reply-To: <52f30b47-7416-e4d1-cb63-29ee8f6c7b88@micronovasrl.com>
-References: <20190509060042.1026E872A2@whitealder.osuosl.org>
- <20190509230324.0b03746e@windsurf.home>
- <decc64fc-5968-9c8a-6f0f-ca42fdbf2edb@micronovasrl.com>
- <52f30b47-7416-e4d1-cb63-29ee8f6c7b88@micronovasrl.com>
-Message-ID: <20190514203608.GG2787@scaer>
+From: stefan.nickl at gmail.com <stefan.nickl@gmail.com>
+Date: Tue, 14 May 2019 22:40:51 +0200
+Subject: [Buildroot] [PATCH] package/musl: Make scheduler functions
+ Linux-compatible
+In-Reply-To: <20190514202405.GF2787@scaer>
+References: <509e7dab95b95c040af26c842e94777b069d6ba5.camel@gmail.com>
+ <20190513221341.4150ab0c@windsurf.home>
+ <071f102e7135306dfdba3203fbd35bdc07aa185f.camel@gmail.com>
+ <20190514183356.50c06a52@windsurf>
+ <c9b7162513ee169da4b9e7e73d66288c083e4a7a.camel@gmail.com>
+ <00138043-5f6e-ef40-37e4-21368c24c82a@mind.be>
+ <0b86f826cd3f48839e74dcb3dde3a4b69b80f701.camel@gmail.com>
+ <14271c8c-d9e3-7be3-872b-ef5f1cb57eba@mind.be>
+ <db160fbf9100e03d489a9f067e836ad6de5a256e.camel@gmail.com>
+ <20190514202405.GF2787@scaer>
+Message-ID: <0947386914d17d5155147608386b687952d92185.camel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Giulio, All,
-
-On 2019-05-11 23:00 +0200, Giulio Benetti spake thusly:
-> Hello Yann, All,
+On Tue, 2019-05-14 at 22:24 +0200, Yann E. MORIN wrote:
+> Stefan, All,
 > 
-> Il 09/05/2019 23:19, Giulio Benetti ha scritto:
-> >>>       aarch64 |            python-numpy-1.16.3 | NOK | http://autobuild.buildroot.net/results/50f7f09a9f830cd7b94f8fc83c09fc3d39297d3d |
-> >>
-> >>/home/buildroot/autobuild/run/instance-2/output/host/bin/aarch64-linux-gnu-gcc /tmp/tmph865w02v/tmp/tmph865w02v/source.o -L/home/buildroot/autobuild/run/instance-2/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib -lcblas -o /tmp/tmph865w02v/a.out
-> >>/home/buildroot/autobuild/run/instance-2/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcblas.so: undefined reference to `scnrm2_'
-> >>/home/buildroot/autobuild/run/instance-2/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcblas.so: undefined reference to `scasum_'
-> >>collect2: error: ld returned 1 exit status
-> >>/home/buildroot/autobuild/run/instance-2/output/host/bin/aarch64-linux-gnu-gcc /tmp/tmph865w02v/tmp/tmph865w02v/source.o -L/home/buildroot/autobuild/run/instance-2/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib -lblas -o /tmp/tmph865w02v/a.out
-> >>/tmp/tmph865w02v/tmp/tmph865w02v/source.o: In function `main':
-> >>/tmp/tmph865w02v/source.c:6: undefined reference to `cblas_ddot'
-> >>collect2: error: ld returned 1 exit status
-> >>
-> >>I'm not sure what's going on here. Sadly, Samuel who was maintaining
-> >>python-numpy, is no longer active in Buildroot. Is there anyone else
-> >>volunteering to have a look ?
-> >
-> >I can try to work this out.
-> >
+> On 2019-05-14 22:03 +0200, stefan.nickl at gmail.com spake thusly:
+> > On Tue, 2019-05-14 at 21:38 +0200, Arnout Vandecappelle wrote:
+> > > On 14/05/2019 20:54, stefan.nickl at gmail.com wrote:
+> > > > On Tue, 2019-05-14 at 20:04 +0200, Arnout Vandecappelle wrote:
+> > > > >  As Thomas wrote, the patch as it is is not upstreamable
+> > > > > since
+> > > > > musl
+> > > > > considers
+> > > > > this a feature.
+> > > > > 
+> > > > >  However, it is possible that Rich can be convinced to
+> > > > > actually
+> > > > > read
+> > > > > the POSIX
+> > > > > spec and decide that linux behaviour is correct (except for
+> > > > > the
+> > > > > fact
+> > > > > that it
+> > > > > sched_setscheduler() should return the previous scheduling
+> > > > > policy
+> > > > > rather than 0,
+> > > > > but that can be approximated (in a racy way) by calling
+> > > > > sched_getscheduler()
+> > > > > first). So it might be worth trying to push the patch
+> > > > > upstream.
+> > > > 
+> > > > Hi Arnout,
+> > > > 
+> > > > I think upstreaming is out of the question since Rich has
+> > > > actually
+> > > > *undone* it before 
+> > > > https://git.musl-libc.org/cgit/musl/commit/?id=1e21e78bf7a5
+> > > > 
+> > > > Also asked on #musl a couple days ago whether they might be
+> > > > willing
+> > > > to
+> > > > at least #ifdef it, and only got suggestions for application
+> > > > side
+> > > > fixes. So, no dice it seems.
+> > > 
+> > >  Yes, but has the argument "Linux does in fact implement POSIX"
+> > > been
+> > > used already?
+> > 
+> > I haven't used that argument and I'm not aware of anyone that has.
+> > 
+> > This comes pretty close though: 
+> > https://github.com/MusicPlayerDaemon/MPD/issues/218
+> > 
+> > And just recently Rich managed to convince even the glibc
+> > developers of
+> > the opposite, so I certainly don't feel up to arguing that position
+> > ;-)
+> > https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=c70824b9a4645c0ecd049da8cfdb2c28ae7ada23
 > 
-> As spoken in IRC this builds correctly with every Docker in Adam Duskett:
-> https://github.com/aduskett/buildroot-docker-devel
-> 
-> included Ubuntu 14.04(Trusty), the same as Yann's Autobuilder.
-> 
-> I'm waiting for Yann to report if it works for him too or not.
+> So, if glibc is going the musl way, because Linux does not allow to
+> properly implement the sched_* stuff, when why do we even attempt to
+> implement them in musl at all?
 
-Here is a quick summary of Giulio's and my findings:
+Hi Yann,
 
-Usign the configuration from the failed autobuild job:
+that's not what I'm seeing.
 
-  - make clean; make python-numpy    --> builds OK
+The glibc folks are not going to change the library call <-> Linux
+syscall correspondence.
+They merely make note of the fact that they've screwed up in the past,
+and that now it is too late to change.
+All that happens is that the non-conformance gets documented.
 
-  - make clean; make   --> fails to build
+What makes this extra confusing is that there are source files in the
+glibc tree with -ENOSYS-returning implementations of these functions,
+but it seems the functions that really get used for Linux are generated
+from a syscalls.list file to use the syscall.
+Maybe someone more familiar with glibc can confirm this.
+In the uclibc-ng case, it seems rather straightforward, see e.g.
+libc/sysdeps/linux/common/sched_setscheduler.c
 
-The root cause is a hidden dependency on lapack. When lapack is build
-before python-numpy (which is highly possible, because of alphabetical
-ordering), then python-numpy detects it and fails to build properly in
-this case.
-
-So, I can see two solutions:
-
-  - add an explicit, conditional dependency on lapack, and fix the
-    build,
-
-  - explicitly tell python-numpy to never use lapack.
-
-Obviously, the first would be preferred, but it's probably non-trivial.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Cheers,
+Stefan
