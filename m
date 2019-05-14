@@ -1,46 +1,53 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Tue, 14 May 2019 10:06:32 +0200
-Subject: [Buildroot] [PATCH v2 2/7] boot/optee-os: install trusted
- shared libraries
-In-Reply-To: <20190514095131.092f1b50@windsurf.home>
-References: <20190514073902.3775-1-etienne.carriere@linaro.org>
- <20190514073902.3775-2-etienne.carriere@linaro.org>
- <20190514095131.092f1b50@windsurf.home>
-Message-ID: <CAN5uoS8tS6BF7dxLm7Z2_q0WPpX2r1gFct8SQc6AftkXg1yK-w@mail.gmail.com>
+Date: Tue, 14 May 2019 10:20:35 +0200
+Subject: [Buildroot] [PATCH v3 1/7] boot/optee-os: correct TA files install
+Message-ID: <20190514082041.3487-1-etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 14 May 2019 at 09:51, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Etienne,
->
-> On Tue, 14 May 2019 09:38:57 +0200
-> Etienne Carriere <etienne.carriere@linaro.org> wrote:
->
-> > +     $(if $(wildcard $(OPTEE_OS_SDK)/lib/*.ta),
->
-> OPTEE_OS_SDK is only populated if BR2_TARGET_OPTEE_OS_SDK=y, but
-> services/libs are installed if BR2_TARGET_OPTEE_OS_SERVICES=y.
->
-> So if BR2_TARGET_OPTEE_OS_SDK is disabled, but
-> BR2_TARGET_OPTEE_OS_SERVICES=y, this will not copy anything. Is this
-> the indented behavior ?
+This change corrects TA binary files install sequence that
+were previously install in target filesystem though
+OPTEE_OS_INSTALL_IMAGES_CMDS instead of expected
+OPTEE_OS_INSTALL_TARGET_CMDS.
 
-No, this is not intended.
-I'll find a better way.
-Thanks,
+This change removes useless mkdir prior call to $(INSTALL)
+that already handles parent directory creation when needed.
 
-regards,
-etienne
+This change conditions .ta files install upon their
+generation as a custom package repository may not generate
+any .ta files.
 
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+---
+Changes v2 -> v3:
+- No change
+Changes v1 -> v2:
+- Patch introduced in v2
+---
+ boot/optee-os/optee-os.mk | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+index 6da20a9f3e..b22f560ba7 100644
+--- a/boot/optee-os/optee-os.mk
++++ b/boot/optee-os/optee-os.mk
+@@ -75,10 +75,10 @@ endef
+ endif # BR2_TARGET_OPTEE_OS_CORE
+ 
+ ifeq ($(BR2_TARGET_OPTEE_OS_SERVICES),y)
+-define OPTEE_OS_INSTALL_IMAGES_SERVICES
+-	mkdir -p $(TARGET_DIR)/lib/optee_armtz
+-	$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
+-		$(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta
++define OPTEE_OS_INSTALL_TARGET_CMDS
++	$(if $(wildcard $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta),
++		$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
++			$(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta)
+ endef
+ endif # BR2_TARGET_OPTEE_OS_SERVICES
+ 
+-- 
+2.17.1
