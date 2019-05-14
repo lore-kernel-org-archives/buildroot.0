@@ -1,55 +1,133 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Tue, 14 May 2019 10:53:19 +0200
-Subject: [Buildroot] [PATCH v4 7/7] package/optee-benchmark: bump version to
- 3.5.0
-In-Reply-To: <20190514085319.9031-1-etienne.carriere@linaro.org>
-References: <20190514085319.9031-1-etienne.carriere@linaro.org>
-Message-ID: <20190514085319.9031-7-etienne.carriere@linaro.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 14 May 2019 11:04:45 +0200
+Subject: [Buildroot] [PATCH] package/ifmetric: new package
+Message-ID: <20190514090445.20398-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump OP-TEE Benchmark package version to release 3.5.0
-which now provides an identified LICENSE file.
+Add an upstream post-0.3 patch to fix netlink issues with modern kernels.
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v3 -> v4:
-- No change
-Changes v2 -> v3:
-- Fix on commit message: s/OP-TEE OS/OP-TEE Benchmark/.
-Changes v1 -> v2:
-- No change
----
- package/optee-benchmark/optee-benchmark.hash | 6 ++++--
- package/optee-benchmark/optee-benchmark.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ ...ETLINK-Packet-too-small-or-truncated-92-1.patch | 29 ++++++++++++++++++++++
+ package/ifmetric/Config.in                         | 10 ++++++++
+ package/ifmetric/ifmetric.hash                     |  4 +++
+ package/ifmetric/ifmetric.mk                       | 14 +++++++++++
+ 6 files changed, 59 insertions(+)
+ create mode 100644 package/ifmetric/0001-Fix-issue-NETLINK-Packet-too-small-or-truncated-92-1.patch
+ create mode 100644 package/ifmetric/Config.in
+ create mode 100644 package/ifmetric/ifmetric.hash
+ create mode 100644 package/ifmetric/ifmetric.mk
 
-diff --git a/package/optee-benchmark/optee-benchmark.hash b/package/optee-benchmark/optee-benchmark.hash
-index c3c41b69da..a19427ea13 100644
---- a/package/optee-benchmark/optee-benchmark.hash
-+++ b/package/optee-benchmark/optee-benchmark.hash
-@@ -1,2 +1,4 @@
--# From https://github.com/linaro-swg/optee_benchmark/archive/3.4.0.tar.gz
--sha256 e5e868a06a9dcc8cc444b3e72c65f57670b0811091be62edbe0d03d13c75e716 optee-benchmark-3.4.0.tar.gz
-+# From https://github.com/linaro-swg/optee_benchmark/archive/3.5.0.tar.gz
-+sha256 678fd4d3f65d7e18952f4505a1caad6c7ebfef67458a2e92fb51f8c098e7f439 optee-benchmark-3.5.0.tar.gz
-+# Locally computed
-+sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
-diff --git a/package/optee-benchmark/optee-benchmark.mk b/package/optee-benchmark/optee-benchmark.mk
-index 4ebab4498e..54f1359444 100644
---- a/package/optee-benchmark/optee-benchmark.mk
-+++ b/package/optee-benchmark/optee-benchmark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPTEE_BENCHMARK_VERSION = 3.4.0
-+OPTEE_BENCHMARK_VERSION = 3.5.0
- OPTEE_BENCHMARK_SITE = $(call github,linaro-swg,optee_benchmark,$(OPTEE_BENCHMARK_VERSION))
- OPTEE_BENCHMARK_LICENSE = BSD-2-Clause
- 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b1c82dc304..f1bed77fe9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1746,6 +1746,7 @@ F:	package/docker-compose/
+ F:	package/dump1090/
+ F:	package/flickcurl/
+ F:	package/fscryptctl/
++F:	package/ifmetric/
+ F:	package/jo/
+ F:	package/jose/
+ F:	package/libfastjson/
+diff --git a/package/Config.in b/package/Config.in
+index f592e74a99..3df091b608 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1903,6 +1903,7 @@ menu "Networking applications"
+ 	source "package/ibrdtn-tools/Config.in"
+ 	source "package/ibrdtnd/Config.in"
+ 	source "package/ifenslave/Config.in"
++	source "package/ifmetric/Config.in"
+ 	source "package/ifplugd/Config.in"
+ 	source "package/iftop/Config.in"
+ 	source "package/ifupdown/Config.in"
+diff --git a/package/ifmetric/0001-Fix-issue-NETLINK-Packet-too-small-or-truncated-92-1.patch b/package/ifmetric/0001-Fix-issue-NETLINK-Packet-too-small-or-truncated-92-1.patch
+new file mode 100644
+index 0000000000..8986b4fc31
+--- /dev/null
++++ b/package/ifmetric/0001-Fix-issue-NETLINK-Packet-too-small-or-truncated-92-1.patch
+@@ -0,0 +1,29 @@
++From 0c80f9ead3eb1d938b3e8e68165c91e62db72de3 Mon Sep 17 00:00:00 2001
++From: Damjan Georgievski <gdamjan@gmail.com>
++Date: Wed, 15 Aug 2012 00:54:38 +0200
++Subject: [PATCH] Fix issue: NETLINK: Packet too small or truncated!
++ 92!=16!=244
++
++As reported in http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=514197#22
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ src/nlrequest.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/nlrequest.c b/src/nlrequest.c
++index 99fd3d0..3a1f794 100644
++--- a/src/nlrequest.c
+++++ b/src/nlrequest.c
++@@ -44,7 +44,7 @@ int netlink_request(int s, struct nlmsghdr *n, int (*callback) (struct nlmsghdr
++ 
++     for (;;) {
++         int bytes;
++-        char replybuf[2048];
+++        char replybuf[4096];
++         struct nlmsghdr *p = (struct nlmsghdr *) replybuf;
++         
++         if ((bytes = recv(s, &replybuf, sizeof(replybuf), 0)) < 0) {
++-- 
++2.11.0
++
+diff --git a/package/ifmetric/Config.in b/package/ifmetric/Config.in
+new file mode 100644
+index 0000000000..64c8ace84b
+--- /dev/null
++++ b/package/ifmetric/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_IFMETRIC
++	bool "ifmetric"
++	help
++	  Ifmetric is a Linux tool for setting the metrics of all IPv4
++	  routes attached to a given network interface@once. This
++	  may be used to change the priority of routing IPv4 traffic
++	  over the interface. Lower metrics correlate with higher
++	  priorities.
++
++	  http://0pointer.de/lennart/projects/ifmetric/
+diff --git a/package/ifmetric/ifmetric.hash b/package/ifmetric/ifmetric.hash
+new file mode 100644
+index 0000000000..186522efab
+--- /dev/null
++++ b/package/ifmetric/ifmetric.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256	0fa8510a4e34e555f136f9df81d26618313f2d69a4880c0fb5967f19502f1aec  ifmetric-0.3.tar.gz
++sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  LICENSE
++sha256	1e33d5a8750b4b3c2cb4fb89a916463f3c838f8eb361abbf72faf244c7dde771  README
+diff --git a/package/ifmetric/ifmetric.mk b/package/ifmetric/ifmetric.mk
+new file mode 100644
+index 0000000000..29a6cbcdd6
+--- /dev/null
++++ b/package/ifmetric/ifmetric.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# ifmetric
++#
++################################################################################
++
++IFMETRIC_VERSION = 0.3
++IFMETRIC_SITE = http://0pointer.de/lennart/projects/ifmetric
++IFMETRIC_LICENSE = GPL-2.0+
++IFMETRIC_LICENSE_FILES = LICENSE README
++# do not generate documentation
++IFMETRIC_CONF_OPTS = --disable-lynx --disable-xmltoman
++
++$(eval $(autotools-package))
 -- 
-2.17.1
+2.11.0
