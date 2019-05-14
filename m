@@ -1,29 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 May 2019 18:21:11 +0200
-Subject: [Buildroot] [PATCH v4 4/7] package/optee-client: bump version
- to 3.5.0
-In-Reply-To: <20190514181932.7269ab48@windsurf>
-References: <20190514085319.9031-1-etienne.carriere@linaro.org>
- <20190514085319.9031-4-etienne.carriere@linaro.org>
- <20190514181932.7269ab48@windsurf>
-Message-ID: <20190514182111.4fb69907@windsurf>
+Date: Tue, 14 May 2019 18:22:23 +0200
+Subject: [Buildroot] [git commit] package/linknx: fix build with log4cpp
+Message-ID: <20190514161649.D452B89176@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=1ba1ce8351dd42236c8ceb6e66d5e7f35c506be9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 14 May 2019 18:19:32 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Fixes:
+ - http://autobuild.buildroot.org/results/1863f8f27041bc15ca68e786ba3b8e4764c40574
 
-> Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-src-Makefile.am-fix-linking-with-log4cpp.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-Sorry: I've applied to next, not master.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/linknx/0003-src-Makefile.am-fix-linking-with-log4cpp.patch b/package/linknx/0003-src-Makefile.am-fix-linking-with-log4cpp.patch
+new file mode 100644
+index 0000000000..253c1f6f23
+--- /dev/null
++++ b/package/linknx/0003-src-Makefile.am-fix-linking-with-log4cpp.patch
+@@ -0,0 +1,39 @@
++From b4595154e84e21abdc0c89f937c410cf8280991c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 13 May 2019 22:14:43 +0200
++Subject: [PATCH] src/Makefile.am: fix linking with log4cpp
++
++linknx fails to build with log4cpp because LOG4CPP_CFLAGS (which
++contains -pthread) is added to AM_CPPFLAGS (which is not used at link
++time) instead of AM_CXXFLAGS:
++
++/home/buildroot/autobuild/instance-0/output/host/bin/mipsel-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os     -o linknx linknx.o logger.o ruleserver.o objectcontroller.o eibclient.o threads.o timermanager.o persistentstorage.o xmlserver.o smsgateway.o emailgateway.o knxconnection.o services.o suncalc.o luacondition.o ioport.o ../ticpp/libticpp.a  -L/home/buildroot/autobuild/instance-0/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib -lpthsem  -L/home/buildroot/autobuild/instance-0/output/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/lib -llog4cpp     -lm
++/home/buildroot/autobuild/instance-0/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib/liblog4cpp.so: undefined reference to `pthread_key_create'
++
++So move LOG4CPP_CFLAGS to AM_CXXFLAGS
++
++Fixes:
++ - http://autobuild.buildroot.org/results/1863f8f27041bc15ca68e786ba3b8e4764c40574
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent yet]
++---
++ src/Makefile.am | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/src/Makefile.am b/src/Makefile.am
++index 6a4f493..92d147c 100644
++--- a/src/Makefile.am
+++++ b/src/Makefile.am
++@@ -6,6 +6,7 @@ else
++ B64_CFLAGS=
++ B64_LIBS=
++ endif
++-AM_CPPFLAGS=-I$(top_srcdir)/include -I$(top_srcdir)/ticpp $(B64_CFLAGS) $(PTH_CPPFLAGS) $(LIBCURL_CPPFLAGS) $(LOG4CPP_CFLAGS) $(LUA_CFLAGS) $(MYSQL_CFLAGS) $(ESMTP_CFLAGS)
+++AM_CPPFLAGS=-I$(top_srcdir)/include -I$(top_srcdir)/ticpp $(B64_CFLAGS) $(PTH_CPPFLAGS) $(LIBCURL_CPPFLAGS) $(LUA_CFLAGS) $(MYSQL_CFLAGS) $(ESMTP_CFLAGS)
+++AM_CXXFLAGS=$(LOG4CPP_CFLAGS)
++ linknx_LDADD=$(top_srcdir)/ticpp/libticpp.a $(B64_LIBS) $(PTH_LDFLAGS) $(PTH_LIBS) $(LIBCURL) $(LOG4CPP_LIBS) $(LUA_LIBS) $(MYSQL_LIBS) $(ESMTP_LIBS) -lm
++ linknx_SOURCES=linknx.cpp logger.cpp ruleserver.cpp objectcontroller.cpp eibclient.c threads.cpp timermanager.cpp  persistentstorage.cpp xmlserver.cpp smsgateway.cpp emailgateway.cpp knxconnection.cpp services.cpp suncalc.cpp  luacondition.cpp ioport.cpp ruleserver.h objectcontroller.h threads.h timermanager.h persistentstorage.h xmlserver.h smsgateway.h emailgateway.h knxconnection.h services.h suncalc.h luacondition.h ioport.h logger.h
++-- 
++2.20.1
++
