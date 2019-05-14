@@ -1,41 +1,30 @@
 From: Mirza Krak <mirza.krak@northern.tech>
-Date: Tue, 14 May 2019 11:04:50 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mender: install additional
- inventory scripts
-In-Reply-To: <20190514090450.20142-1-mirza.krak@northern.tech>
-References: <20190514090450.20142-1-mirza.krak@northern.tech>
-Message-ID: <20190514090450.20142-3-mirza.krak@northern.tech>
+Date: Tue, 14 May 2019 11:04:48 +0200
+Subject: [Buildroot] [PATCH 0/2] misc package/mender updates
+Message-ID: <20190514090450.20142-1-mirza.krak@northern.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-There are two additional inventory scripts provided in
-the Mender client repository, lets install them.
+Small series:
 
-- mender-inventory-os
-    - will push content of /etc/os-release
-- mender-inventory-rootfs-type
-    - will push filesystem type of rootfs
+- fixing a configuration error in the default mender.conf
+- installing additional available inventory scripts
 
-Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
----
- package/mender/mender.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Note that there is a patch pending to bump this package to 2.0.0 [1],
+which might require a rebase of either this one or the bump to 2.0.0.
 
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index 07f6e5e5f9..d56b634713 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -46,7 +46,7 @@ define MENDER_INSTALL_CONFIG_FILES
- 
- 	$(INSTALL) -D -m 0755 $(@D)/support/mender-device-identity \
- 		$(TARGET_DIR)/usr/share/mender/identity/mender-device-identity
--	$(foreach f,hostinfo network, \
-+	$(foreach f,hostinfo network os rootfs-type, \
- 		$(INSTALL) -D -m 0755 $(@D)/support/mender-inventory-$(f) \
- 			$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-$(f)
- 	)
+[1]. http://lists.busybox.net/pipermail/buildroot/2019-May/249797.html
+
+Mirza Krak (2):
+  package/mender: update rootfs parts in mender.conf
+  package/mender: install additional inventory scripts
+
+ package/mender/mender.conf | 4 ++--
+ package/mender/mender.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
 -- 
 2.11.0
