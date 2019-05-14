@@ -1,69 +1,89 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 May 2019 23:36:52 +0200
-Subject: [Buildroot] [PATCH 5/5] package/cog: bump version to 0.3.0
-In-Reply-To: <20190514233310.GB20205@momiji>
-References: <20190514114111.20424-1-aperez@igalia.com>
- <20190514114111.20424-6-aperez@igalia.com> <20190514233310.GB20205@momiji>
-Message-ID: <6d6d945f-05be-61cd-0c60-6b9f75a23d97@mind.be>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 14 May 2019 23:45:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qt5sensors: disable on
+ microblaze with gcc < 8
+In-Reply-To: <e64ec143-a98a-0c59-d410-6542763e1272@mind.be>
+References: <20190514201443.24645-1-fontaine.fabrice@gmail.com>
+ <e64ec143-a98a-0c59-d410-6542763e1272@mind.be>
+Message-ID: <0722b25d-70ef-166d-3575-d1757a7a6e82@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Arnout,
 
-
-On 14/05/2019 22:33, Adrian Perez de Castro wrote:
-> Hi,
+Il 14/05/2019 23:34, Arnout Vandecappelle ha scritto:
 > 
-> One quick note below...
 > 
-> On Tue, 14 May 2019 14:41:11 +0300, Adrian Perez de Castro <aperez@igalia.com> wrote:
->> Version 0.2.0 does not work with WPE WebKit 2.22.x, this is the
->> first version which can be used with 2.24.x
+> On 14/05/2019 22:14, Fabrice Fontaine wrote:
+>> Fixes:
+>>   - http://autobuild.buildroot.org/results/3ba494a3341301cb71d1346aefc28f884479f912
 >>
->> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 >> ---
->>  package/cog/cog.hash | 2 +-
->>  package/cog/cog.mk   | 2 +-
->>  2 files changed, 2 insertions(+), 2 deletions(-)
+>>   package/qt5/qt5sensors/Config.in | 2 ++
+>>   1 file changed, 2 insertions(+)
 >>
->> diff --git a/package/cog/cog.hash b/package/cog/cog.hash
->> index 97daf72744..39cf2afdbd 100644
->> --- a/package/cog/cog.hash
->> +++ b/package/cog/cog.hash
->> @@ -1,5 +1,5 @@
->>  # Locally generated
->> -sha256 a6abadb78395226bac2e1dd5467feab2cc8c493eab6894a09a51a8e072e38c06  cog-v0.2.0.tar.gz
->> +sha256 755c68029bbd05a17784262e56021362740783d15868dab9402a125ef35eedaf  cog-v0.3.0.tar.gz
->>  
->>  # Hashes for license files:
->>  sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
->> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
->> index 43f13152c8..da59b6a097 100644
->> --- a/package/cog/cog.mk
->> +++ b/package/cog/cog.mk
->> @@ -4,7 +4,7 @@
->>  #
->>  ################################################################################
->>  
->> -COG_VERSION = v0.2.0
->> +COG_VERSION = v0.3.0
->>  COG_SITE = $(call github,Igalia,cog,$(COG_VERSION))
->>  COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
->>  COG_LICENSE = MIT
+>> diff --git a/package/qt5/qt5sensors/Config.in b/package/qt5/qt5sensors/Config.in
+>> index 4846a3f95f..488027875b 100644
+>> --- a/package/qt5/qt5sensors/Config.in
+>> +++ b/package/qt5/qt5sensors/Config.in
+>> @@ -1,5 +1,7 @@
+>>   config BR2_PACKAGE_QT5SENSORS
+>>   	bool "qt5sensors"
+>> +	# internal compiler error: in do_output_reload, at reload1.c:7978
+>> +	depends on !BR2_microblaze || BR2_TOOLCHAIN_GCC_AT_LEAST_8
 > 
-> FWIW, I think this should have also:
+>   So, apparently, there are tons of failures and timeouts (e.g. [1]) for
+> microblaze that are fixed with GCC 8.
 > 
->   COG_INSTALL_STAGING = YES
-> 
-> to make it possible to debug Cog properly. I can either resubmit a second
-> version of the patchset, or send this one change in a separate independent
-> patch as a follow-up.
+>   Since microblaze is kind of niche anyway, can't we just globally require GCC 8
+> for microblaze?
 
- It's definitely independent. And I don't think we would see "to make it
-possible to debug Cog properly" as a good reason... Because with that reasoning,
-*all* packages should be installed to staging. (Which, indeed, they should...)
+That could be an idea.
+Anyway tomorrow I would like to try to find if there is a common bug in 
+toolchain.
 
- Regards,
- Arnout
+What I've found at the moment(today I had very few time) is that:
+- atop compiles c files and works ok without -g2/3
+- flare-engine compiles c++ files and doesn't seem to work at all(but 
+need to repeat buildings)
+
+and these packages need to be tested:
+- boost
+- gst-ffmpeg
+- glibmm
+- qt5sensors(added now)
+
+The only chance is that C and CXX behave in the same way,
+so I can treat them with different patches.
+
+Otherwise your solution would be the best one IMHO.
+
+Best regards
+-- 
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
+
+>   Regards,
+>   Arnout
+> 
+> 
+> [1] http://autobuild.buildroot.net/results/94aa00f776b8a3491ac0b3212c95f5e666c5a29a
+> 
+> 
+> 
+>>   	select BR2_PACKAGE_QT5BASE
+>>   	help
+>>   	  Qt is a cross-platform application and UI framework for
+>>
