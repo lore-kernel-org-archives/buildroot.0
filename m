@@ -1,38 +1,46 @@
-From: David Rosca <nowrep@gmail.com>
-Date: Tue, 14 May 2019 09:49:36 +0200
-Subject: [Buildroot] [PATCH] package/qt5base: enable journald logging
-Message-ID: <20190514074937.3745-1-nowrep@gmail.com>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Tue, 14 May 2019 10:06:32 +0200
+Subject: [Buildroot] [PATCH v2 2/7] boot/optee-os: install trusted
+ shared libraries
+In-Reply-To: <20190514095131.092f1b50@windsurf.home>
+References: <20190514073902.3775-1-etienne.carriere@linaro.org>
+ <20190514073902.3775-2-etienne.carriere@linaro.org>
+ <20190514095131.092f1b50@windsurf.home>
+Message-ID: <CAN5uoS8tS6BF7dxLm7Z2_q0WPpX2r1gFct8SQc6AftkXg1yK-w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allows Qt applications to log into systemd journal with
-QT_LOGGING_TO_CONSOLE=0 environment variable.
+On Tue, 14 May 2019 at 09:51, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Etienne,
+>
+> On Tue, 14 May 2019 09:38:57 +0200
+> Etienne Carriere <etienne.carriere@linaro.org> wrote:
+>
+> > +     $(if $(wildcard $(OPTEE_OS_SDK)/lib/*.ta),
+>
+> OPTEE_OS_SDK is only populated if BR2_TARGET_OPTEE_OS_SDK=y, but
+> services/libs are installed if BR2_TARGET_OPTEE_OS_SERVICES=y.
+>
+> So if BR2_TARGET_OPTEE_OS_SDK is disabled, but
+> BR2_TARGET_OPTEE_OS_SERVICES=y, this will not copy anything. Is this
+> the indented behavior ?
 
-Signed-off-by: David Rosca <nowrep@gmail.com>
----
- package/qt5/qt5base/qt5base.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+No, this is not intended.
+I'll find a better way.
+Thanks,
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index e73b8931aa..e4ae120631 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -253,6 +253,13 @@ QT5BASE_CONFIGURE_OPTS += -no-gtk
- endif
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+QT5BASE_CONFIGURE_OPTS += -journald
-+QT5BASE_DEPENDENCIES += systemd
-+else
-+QT5BASE_CONFIGURE_OPTS += -no-journald
-+endif
-+
- # Build the list of libraries to be installed on the target
- QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XCB)        += Qt5XcbQpa
--- 
-2.21.0
+regards,
+etienne
+
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
