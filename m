@@ -1,51 +1,42 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Tue, 14 May 2019 09:39:02 +0200
-Subject: [Buildroot] [PATCH v2 7/7] package/optee-benchmark: bump version to
- 3.5.0
-In-Reply-To: <20190514073902.3775-1-etienne.carriere@linaro.org>
-References: <20190514073902.3775-1-etienne.carriere@linaro.org>
-Message-ID: <20190514073902.3775-7-etienne.carriere@linaro.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 14 May 2019 09:42:50 +0200
+Subject: [Buildroot] [PATCH 1/6] boot/optee-os: install trusted shared
+ libraries
+In-Reply-To: <CAN5uoS_D9K8Tuuemt--+oNNVgmRjRNmiWb0XHBS__wunXwk9Bg@mail.gmail.com>
+References: <20190513201602.2549-1-etienne.carriere@linaro.org>
+ <20190513225957.679620c0@windsurf.home>
+ <CAN5uoS_D9K8Tuuemt--+oNNVgmRjRNmiWb0XHBS__wunXwk9Bg@mail.gmail.com>
+Message-ID: <20190514094250.5566823e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to OP-TEE OS package version to release 3.5.0
-that now provides an identified LICENSE file.
+Hello Etienne,
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
----
-Changes v1 -> v2:
-- No change
----
- package/optee-benchmark/optee-benchmark.hash | 6 ++++--
- package/optee-benchmark/optee-benchmark.mk   | 2 +-
- 2 files changed, 5 insertions(+), 3 deletions(-)
+On Tue, 14 May 2019 08:14:41 +0200
+Etienne Carriere <etienne.carriere@linaro.org> wrote:
 
-diff --git a/package/optee-benchmark/optee-benchmark.hash b/package/optee-benchmark/optee-benchmark.hash
-index c3c41b69da..a19427ea13 100644
---- a/package/optee-benchmark/optee-benchmark.hash
-+++ b/package/optee-benchmark/optee-benchmark.hash
-@@ -1,2 +1,4 @@
--# From https://github.com/linaro-swg/optee_benchmark/archive/3.4.0.tar.gz
--sha256 e5e868a06a9dcc8cc444b3e72c65f57670b0811091be62edbe0d03d13c75e716 optee-benchmark-3.4.0.tar.gz
-+# From https://github.com/linaro-swg/optee_benchmark/archive/3.5.0.tar.gz
-+sha256 678fd4d3f65d7e18952f4505a1caad6c7ebfef67458a2e92fb51f8c098e7f439 optee-benchmark-3.5.0.tar.gz
-+# Locally computed
-+sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
-diff --git a/package/optee-benchmark/optee-benchmark.mk b/package/optee-benchmark/optee-benchmark.mk
-index 4ebab4498e..54f1359444 100644
---- a/package/optee-benchmark/optee-benchmark.mk
-+++ b/package/optee-benchmark/optee-benchmark.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPTEE_BENCHMARK_VERSION = 3.4.0
-+OPTEE_BENCHMARK_VERSION = 3.5.0
- OPTEE_BENCHMARK_SITE = $(call github,linaro-swg,optee_benchmark,$(OPTEE_BENCHMARK_VERSION))
- OPTEE_BENCHMARK_LICENSE = BSD-2-Clause
- 
+
+> > The first one should I guess not be needed, because it was already
+> > non-conditional, so I don't see why it should become conditional.  
+> 
+> OP-TEE OS content may change and possibly no TA being built.
+> For example, maybe one day the package will not build TAs unless some
+> per in-tree TA configuration.
+> This change aims at making this build script to be more flexible.
+
+Hm, OK. I generally don't like those conditionals, because then you
+don't get any error if those TAs should have been built, but have not.
+But if it's indeed dependent on the platform configuration, we don't
+really have much choice. So let's keep those conditionals, but please
+use make conditions with $(if ...) as I suggested in my previous e-mail.
+
+Thanks!
+
+Thomas
 -- 
-2.17.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
