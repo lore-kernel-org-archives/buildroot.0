@@ -1,67 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 May 2019 18:58:00 +0200
-Subject: [Buildroot] [PATCH] package/uclibc: fix preadv/pwritev offset
- argument type
-In-Reply-To: <20190513184811.20461-1-jcmvbkbc@gmail.com>
-References: <20190513184811.20461-1-jcmvbkbc@gmail.com>
-Message-ID: <20190514185800.3b4e9ea9@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 14 May 2019 19:02:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: fix build on
+ m68k_cf
+Message-ID: <20190514170213.21811-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Max,
+An internal compiler error is raised on m68k_cf at dwarf2cfi.c:2802 in
+connect_traces. Error can be fixed by adding -fno-defer-pop, see
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58864
 
-Thanks for the patch and all the investigation around this issue!
+Fixes:
+ - http://autobuild.buildroot.org/results/746f60fadb40288341c1e5642cfcf6373b70583a
 
-On Mon, 13 May 2019 11:48:11 -0700
-Max Filippov <jcmvbkbc@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libtorrent-rasterbar/libtorrent-rasterbar.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-> preadv/pwritev don't provide separate version for 64-bit wide off_t,
-> and default to 32-bit wide off_t, which results in a mismatch between
-> declaration and definition for user programs built with
-> -D_FILE_OFFSET_BITS=64.
-> 
-> Backported from: 423e49023eeb ("preadv/pwritev: fix offset argument type")
-
-This Backported tag is not really relevant inside the Buildroot commit
-log: indeed it refers to an upstream uClibc-ng commit. So I have moved
-this line...
-
-> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-> ---
->  ...3-preadv-pwritev-fix-offset-argument-type.patch | 70 ++++++++++++++++++++++
->  1 file changed, 70 insertions(+)
->  create mode 100644 package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
-> 
-> diff --git a/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch b/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
-> new file mode 100644
-> index 000000000000..2a20aecc8d20
-> --- /dev/null
-> +++ b/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
-> @@ -0,0 +1,70 @@
-> +From 1077d5bebffacfd4b09896ed890fb45a5b3c6dc6 Mon Sep 17 00:00:00 2001
-> +From: Max Filippov <jcmvbkbc@gmail.com>
-> +Date: Fri, 10 May 2019 07:13:19 -0700
-> +Subject: [PATCH] preadv/pwritev: fix offset argument type
-> +
-> +preadv/pwritev don't provide separate version for 64-bit wide off_t,
-> +and default to 32-bit wide off_t, which results in a mismatch between
-> +declaration and definition for user programs built with
-> +-D_FILE_OFFSET_BITS=64.
-> +Make offset argument of both functions __off64_t.
-> +This fixes test misc/tst-preadvwritev on xtensa.
-> +
-
-... here.
-
-> +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-
-And applied to master. Thanks!
-
-Thomas
+diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+index fdcc736b47..012e972f1d 100644
+--- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
++++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
+@@ -13,7 +13,15 @@ LIBTORRENT_RASTERBAR_INSTALL_STAGING = YES
+ LIBTORRENT_RASTERBAR_CONF_OPTS = \
+ 	--with-boost-libdir=$(STAGING_DIR)/usr/lib \
+ 	--disable-invariant-checks
+-LIBTORRENT_RASTERBAR_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11"
++LIBTORRENT_RASTERBAR_CXXFLAGS = $(TARGET_CXXFLAGS) -std=c++11
++
++# Internal error, aborting at dwarf2cfi.c:2802 in connect_traces
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58864
++ifeq ($(BR2_m68k_cf),y)
++LIBTORRENT_RASTERBAR_CXXFLAGS += -fno-defer-pop
++endif
++
++LIBTORRENT_RASTERBAR_CONF_OPTS += CXXFLAGS="$(LIBTORRENT_RASTERBAR_CXXFLAGS)"
+ 
+ ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
+ LIBTORRENT_RASTERBAR_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
