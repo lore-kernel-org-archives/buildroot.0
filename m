@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 May 2019 18:21:42 +0200
-Subject: [Buildroot] [git commit] package/gdb: fix build of 8.0.1 with glibc
- 2.29
-Message-ID: <20190514161649.C798089176@busybox.osuosl.org>
+Date: Tue, 14 May 2019 18:21:49 +0200
+Subject: [Buildroot] [git commit] package/gdb: fix build of 7.12.1 with
+ glibc 2.29
+Message-ID: <20190514161649.CDE7989176@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b8b23ac20829776c841db94434fc42817ddfca61
+commit: https://git.buildroot.net/buildroot/commit/?id=57ec3ec06e51de8b43486d58f79a48918a9183ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Between glibc 2.28 and glibc 2.29, commit
@@ -34,11 +34,11 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  ...g-TRAP_HWBKPT-before-including-gdb_wait-h.patch | 54 ++++++++++++++++++++++
  1 file changed, 54 insertions(+)
 
-diff --git a/package/gdb/8.0.1/0006-gdb-Fix-ia64-defining-TRAP_HWBKPT-before-including-gdb_wait-h.patch b/package/gdb/8.0.1/0006-gdb-Fix-ia64-defining-TRAP_HWBKPT-before-including-gdb_wait-h.patch
+diff --git a/package/gdb/7.12.1/0008-gdb-Fix-ia64-defining-TRAP_HWBKPT-before-including-gdb_wait-h.patch b/package/gdb/7.12.1/0008-gdb-Fix-ia64-defining-TRAP_HWBKPT-before-including-gdb_wait-h.patch
 new file mode 100644
-index 0000000000..1e85d9314c
+index 0000000000..3cfc0feb5e
 --- /dev/null
-+++ b/package/gdb/8.0.1/0006-gdb-Fix-ia64-defining-TRAP_HWBKPT-before-including-gdb_wait-h.patch
++++ b/package/gdb/7.12.1/0008-gdb-Fix-ia64-defining-TRAP_HWBKPT-before-including-gdb_wait-h.patch
 @@ -0,0 +1,54 @@
 +From 5a6c3296a7a90694ad4042f6256f3da6d4fa4ee8 Mon Sep 17 00:00:00 2001
 +From: James Clarke <jrtc27@jrtc27.com>
@@ -58,7 +58,7 @@ index 0000000000..1e85d9314c
 +	* nat/linux-ptrace.h: ... to here.
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved (and updated to remove ChangeLog update) from:
++[Retrieved (and backported/updated to remove ChangeLog update) from:
 +https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=5a6c3296a7a90694ad4042f6256f3da6d4fa4ee8]
 +---
 + gdb/ChangeLog          | 6 ++++++
@@ -76,9 +76,9 @@ index 0000000000..1e85d9314c
 + #include "buffer.h"
 +-#include "gdb_wait.h"
 +-#include "gdb_ptrace.h"
-+ #ifdef HAVE_SYS_PROCFS_H
 + #include <sys/procfs.h>
-+ #endif
++
++ /* Stores the ptrace options supported by the running kernel.
 +diff --git a/gdb/nat/linux-ptrace.h b/gdb/nat/linux-ptrace.h
 +index 60967a3..dc180fb 100644
 +--- a/gdb/nat/linux-ptrace.h
