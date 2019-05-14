@@ -1,86 +1,75 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 May 2019 23:17:50 +0200
-Subject: [Buildroot] [PATCH 2/2] package/qt5multimedia: fix build with
- gstreamer 0.10
-In-Reply-To: <bd9ceef1-19d5-836f-568f-df5bcf85cea9@mind.be>
-References: <20190512132627.18937-1-fontaine.fabrice@gmail.com>
- <20190512132627.18937-2-fontaine.fabrice@gmail.com>
- <c035d344-0dff-f375-04d2-10ae4c82b8b6@mind.be>
- <CAPi7W82CASM+P1+zKHBWRBUa8LDyFfbi9vLU3vizTUVm3GR=EA@mail.gmail.com>
- <bd9ceef1-19d5-836f-568f-df5bcf85cea9@mind.be>
-Message-ID: <CAPi7W83sCrx-LPJjANGaCJc8xW2u9LrCpMd4oXbDVd9yR_T4ew@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 14 May 2019 23:24:00 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{9, 14,
+ 19}.x / 5.{0, 1}.x series
+Message-ID: <20190514212401.26177-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Including mitigation for the "ZombieLoad" speculative execution
+vulnerability.
 
-Le mar. 14 mai 2019 ? 23:08, Arnout Vandecappelle <arnout@mind.be> a ?crit :
->
->
->
-> On 14/05/2019 22:27, Fabrice Fontaine wrote:
-> > Hi Arnout,
-> >
-> > Le mar. 14 mai 2019 ? 21:50, Arnout Vandecappelle <arnout@mind.be> a ?crit :
-> >>
-> >>  Hi Fabrice,
-> >>
-> >> On 12/05/2019 15:26, Fabrice Fontaine wrote:
-> >>> Fixes:
-> >>>  - http://autobuild.buildroot.org/results/de26fd4f5ab130bd87ea9d7709d9568290362758
-> >>>
-> >>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >>> ---
-> >>>  ...-compile-failure-with-gstreamer-0-10.patch | 36 +++++++++++++++++++
-> >>>  1 file changed, 36 insertions(+)
-> >>>  create mode 100644 package/qt5/qt5multimedia/0001-Fix-compile-failure-with-gstreamer-0-10.patch
-> >>
-> >>  Does this patch apply both to 5.6 and 5.12?
-> > Patch does not apply on QT 5.6. It fixes a build failure added in 5.12.2.
->
->  Indeed, this patch breaks the build.
->
-> $ make BR2_PACKAGE_QT5_VERSION_5_6=y BR2_PACKAGE_QT5_VERSION_LATEST=
-> qt5multimedia-patch
-> qtmultimedia-opensource-src-5.6.3.tar.xz: OK (sha256:
-> ae36039ea8037742342f1615687e0ca2188f3ed0d700627a5e5be546c15e1b46)
-> >>> qt5multimedia 5.6.3 Extracting
-> xzcat
-> /home/arnout/src/buildroot-dl/qt5multimedia/qtmultimedia-opensource-src-5.6.3.tar.xz
-> | tar --strip-components=1 -C
-> /home/arnout/src/buildroot/output/build/qt5multimedia-5.6.3   -xf -
-> >>> qt5multimedia 5.6.3 Patching
->
-> Applying 0001-Fix-compile-failure-with-gstreamer-0-10.patch using patch:
-> can't find file to patch at input line 22
-> Perhaps you used the wrong -p or --strip option?
-Nope, I forgot to test it on Qt 5.6 :-/. I completely forgot that we
-had two Qt versions ...
-> The text leading up to this was:
-> ...
->
->  So I moved it to the 5.12.2 subdirectory and applied to master, thanks.
-Thanks for taking care of that.
->
->  Regards,
->  Arnout
->
->
-> >>
-> >>  Note that we don't need a patch for 5.6, since it's excluded in qt5base. And
-> >> both Qt5.6 and gstreamer0.10 will be removed soonish, so there's no need to go
-> >> and re-enable it for 5.6. But I just want to avoid a build failure for 5.6
-> >> because the patch doesn't apply.
-> >>
-> >>  Regards,
-> >>  Arnout
-> > Regards,
-> >
-> > Fabrice
-> >
-Regards,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-Fabrice
+diff --git a/linux/Config.in b/linux/Config.in
+index 914f01f62c..c41dcc6c05 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -121,7 +121,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.0.15" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.0.16" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 1411cf05cc..240f095f26 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256 a04d991416e780c229d62a11e36aa936f132027ca8d4fa73006cc96caf058ddd  linux-5.1.1.tar.xz
+-sha256 5c3eb8454e13e1c5d11e31ec63053b207ee5bc02f5778fa4708e751a3e45eb07  linux-5.0.15.tar.xz
++sha256 ec7ad67a423698855200b46e1c7ee325d68a8fe4706c66fe456780a8c99bef5b  linux-5.1.2.tar.xz
++sha256 5ca7ce390f52d0ce10b3c07f77701e75f7370b5da856646f63c2b67a4ef9fcac  linux-5.0.16.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 f809d76010d575979362551fda3190569502973d5e2a972e78b9093a3526da26  linux-4.19.42.tar.xz
+-sha256 687d73abd4b9af66ec30bdccdf96193e04316f9f5a1c7b8d74732c10b4729a15  linux-4.14.118.tar.xz
+-sha256 d98434f91f9df2bf36c7896ca747b7cf98be2e3a491073fd26e3f53cda07500c  linux-4.9.175.tar.xz
++sha256 111619a1fab2368bf4da05c079e44bf25ee00ee250694c1b8e536f2ed5d2df57  linux-4.19.43.tar.xz
++sha256 5615b713389d74044eaa57032dab674228116b63ed358086c33bd929d7ad3b7c  linux-4.14.119.tar.xz
++sha256 2a94d008c0737f01d4b78f669a3c40e334cacebe4d62eb25252171cee205b178  linux-4.9.176.tar.xz
+ sha256 2c6a9d2765ef182f2470afed5af74de6c435ba9aaf422af54db8c5dc2b4f27d1  linux-4.4.179.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 38fdfce737..8284913860 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -298,11 +298,11 @@ endchoice
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+ 	default "4.4.179"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.175"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.118"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.42"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.0.15"	if BR2_KERNEL_HEADERS_5_0
+-	default "5.1.1"		if BR2_KERNEL_HEADERS_5_1
++	default "4.9.176"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.119"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.43"	if BR2_KERNEL_HEADERS_4_19
++	default "5.0.16"	if BR2_KERNEL_HEADERS_5_0
++	default "5.1.2"		if BR2_KERNEL_HEADERS_5_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-- 
+2.11.0
