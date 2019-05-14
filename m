@@ -1,156 +1,519 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 14 May 2019 20:04:20 +0200
-Subject: [Buildroot] [PATCH] package/musl: Make scheduler functions
- Linux-compatible
-In-Reply-To: <c9b7162513ee169da4b9e7e73d66288c083e4a7a.camel@gmail.com>
-References: <509e7dab95b95c040af26c842e94777b069d6ba5.camel@gmail.com>
- <20190513221341.4150ab0c@windsurf.home>
- <071f102e7135306dfdba3203fbd35bdc07aa185f.camel@gmail.com>
- <20190514183356.50c06a52@windsurf>
- <c9b7162513ee169da4b9e7e73d66288c083e4a7a.camel@gmail.com>
-Message-ID: <00138043-5f6e-ef40-37e4-21368c24c82a@mind.be>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Tue, 14 May 2019 14:42:45 -0400
+Subject: [Buildroot] [PATCH 1/1] package/meson: Fix linking of shared/static
+ libs with static libs
+Message-ID: <20190514184245.92222-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Adam Duskett <Aduskett@gmail.com>
 
+From https://github.com/mesonbuild/meson/pull/3939:
 
-On 14/05/2019 19:31, stefan.nickl at gmail.com wrote:
-> The POSIX functions sched_getscheduler(), sched_setscheduler(),
-> sched_getparam(), sched_setparam() are technically not correctly
-> implemented by the Linux syscalls of the same name, because what the
-> kernel calls a PID and what POSIX calls a PID isn't truly the same,
-> resulting in somewhat different semantics as to what these functions
-> exactly apply to.
-> Details: https://sourceware.org/bugzilla/show_bug.cgi?id=14829
-> 
-> Since the musl developers put a high premium on POSIX compliance, they
-> deliberately implement these functions to return -ENOSYS instead of
-> relaying them to the respective Linux syscalls as glibc/uClibc do.
-> 
-> Unfortunally this breaks virtually all Linux programs using these
-> functions under musl. For example running 'chrt -p 1' fails with
-> 'Function not implemented' on a musl-libc based system.
-> In particular, it affects embedded systems using these interfaces
-> for scheduling real-time processes.
-> 
-> As it seems unfeasible to fix all affected programs to manually use
-> syscall wrappers instead of the libc functions, make musl behave the
-> Linux way.
+This commit contains the following fixes:
 
- As Thomas wrote, the patch as it is is not upstreamable since musl considers
-this a feature.
+  1. When a shared library A does link_with: to static library B, the
+     parts of B used by A will be added to A, and so we don't need to
+     return B in A.get_dependencies() for targets that link to A. This
+     already is the behaviour when a shared library A does link_whole:
+     on B.
 
- However, it is possible that Rich can be convinced to actually read the POSIX
-spec and decide that linux behaviour is correct (except for the fact that it
-sched_setscheduler() should return the previous scheduling policy rather than 0,
-but that can be approximated (in a racy way) by calling sched_getscheduler()
-first). So it might be worth trying to push the patch upstream.
+  2. In situation (1), when generating a pkg-config file for A, we must
+     also not add B to Libs.private for A. This already is the behaviour
+     when a shared library A does link_whole: on B.
 
-> Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
-> ---
->  ...e-scheduler-functions-Linux-compatib.patch | 76 +++++++++++++++++++
->  1 file changed, 76 insertions(+)
->  create mode 100644 package/musl/0002-package-musl-Make-scheduler-functions-Linux-compatib.patch
-> 
-> diff --git a/package/musl/0002-package-musl-Make-scheduler-functions-Linux-compatib.patch b/package/musl/0002-package-musl-Make-scheduler-functions-Linux-compatib.patch
-> new file mode 100644
-> index 0000000000..7c3acf9f02
-> --- /dev/null
-> +++ b/package/musl/0002-package-musl-Make-scheduler-functions-Linux-compatib.patch
-> @@ -0,0 +1,76 @@
-> +From 407c96fc790d0d11ca9603a2a533216c745b5051 Mon Sep 17 00:00:00 2001
-> +From: Stefan Nickl <Stefan.Nickl@gmail.com>
-> +Date: Mon, 13 May 2019 22:33:21 +0200
-> +Subject: [PATCH] Make scheduler functions Linux-compatible
-> +
-> +Let sched_getscheduler(), sched_setscheduler(), sched_getparam(),
-> +sched_setparam() invoke the Linux syscalls of the same name instead
-> +of returning -ENOSYS.
+  3. When a static library A does link_whole: to static library B, we
+     must add the objects in B to A.
 
- ... but then you'd need to refer to
-https://pubs.opengroup.org/onlinepubs/7908799/xsh/sched_setparam.html
-and explain that in Linux, a pid_t can only refer to a process (because a
-thread's PID can only be obtained with gettid() or clone(), neither of which is
-available in musl), and that POSIX specifies that in a process with multiple
-threads, sched_setscheduler should affect only the main thread, which is exactly
-what Linux does.
+  4. When a static library A does link_with: to static library B, and
+     B is not installed (which makes it an internal static library), we
+     must add the objects in B to A, otherwise nothing can use A.
 
- Either way (whether you upstream it or not), this patch looks good to me.
+  5. In situation (4), when generating a pkg-config file for A, we must
+     also not add B to Libs.private for A.
 
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Without this patch, static builds of libglib2 and gstreamer using the
+meson build system will not compile and link properly.
 
- Regards,
- Arnout
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ ...-shared-static-libs-with-static-libs.patch | 465 ++++++++++++++++++
+ 1 file changed, 465 insertions(+)
+ create mode 100644 package/meson/0002-Fix-linking-of-shared-static-libs-with-static-libs.patch
 
-> +
-> +Signed-off-by: Stefan Nickl <Stefan.Nickl@gmail.com>
-> +---
-> + src/sched/sched_getparam.c     | 3 +--
-> + src/sched/sched_getscheduler.c | 3 +--
-> + src/sched/sched_setparam.c     | 3 +--
-> + src/sched/sched_setscheduler.c | 3 +--
-> + 4 files changed, 4 insertions(+), 8 deletions(-)
-> +
-> +diff --git a/src/sched/sched_getparam.c b/src/sched/sched_getparam.c
-> +index 76f10e4..65be107 100644
-> +--- a/src/sched/sched_getparam.c
-> ++++ b/src/sched/sched_getparam.c
-> +@@ -1,8 +1,7 @@
-> + #include <sched.h>
-> +-#include <errno.h>
-> + #include "syscall.h"
-> + 
-> + int sched_getparam(pid_t pid, struct sched_param *param)
-> + {
-> +-	return __syscall_ret(-ENOSYS);
-> ++	return syscall(SYS_sched_getparam, pid, param);
-> + }
-> +diff --git a/src/sched/sched_getscheduler.c b/src/sched/sched_getscheduler.c
-> +index 394e508..4c922f6 100644
-> +--- a/src/sched/sched_getscheduler.c
-> ++++ b/src/sched/sched_getscheduler.c
-> +@@ -1,8 +1,7 @@
-> + #include <sched.h>
-> +-#include <errno.h>
-> + #include "syscall.h"
-> + 
-> + int sched_getscheduler(pid_t pid)
-> + {
-> +-	return __syscall_ret(-ENOSYS);
-> ++	return syscall(SYS_sched_getscheduler, pid);
-> + }
-> +diff --git a/src/sched/sched_setparam.c b/src/sched/sched_setparam.c
-> +index 18623ee..f699faf 100644
-> +--- a/src/sched/sched_setparam.c
-> ++++ b/src/sched/sched_setparam.c
-> +@@ -1,8 +1,7 @@
-> + #include <sched.h>
-> +-#include <errno.h>
-> + #include "syscall.h"
-> + 
-> + int sched_setparam(pid_t pid, const struct sched_param *param)
-> + {
-> +-	return __syscall_ret(-ENOSYS);
-> ++	return syscall(SYS_sched_setparam, pid, param);
-> + }
-> +diff --git a/src/sched/sched_setscheduler.c b/src/sched/sched_setscheduler.c
-> +index 4435f21..e678221 100644
-> +--- a/src/sched/sched_setscheduler.c
-> ++++ b/src/sched/sched_setscheduler.c
-> +@@ -1,8 +1,7 @@
-> + #include <sched.h>
-> +-#include <errno.h>
-> + #include "syscall.h"
-> + 
-> + int sched_setscheduler(pid_t pid, int sched, const struct sched_param *param)
-> + {
-> +-	return __syscall_ret(-ENOSYS);
-> ++	return syscall(SYS_sched_setscheduler, pid, sched, param);
-> + }
-> +-- 
-> +2.21.0
-> +
-> 
+diff --git a/package/meson/0002-Fix-linking-of-shared-static-libs-with-static-libs.patch b/package/meson/0002-Fix-linking-of-shared-static-libs-with-static-libs.patch
+new file mode 100644
+index 0000000000..3060d28108
+--- /dev/null
++++ b/package/meson/0002-Fix-linking-of-shared-static-libs-with-static-libs.patch
+@@ -0,0 +1,465 @@
++From 2d370c24ec83de889c83511c4a32e52e75a38aca Mon Sep 17 00:00:00 2001
++From: Nirbheek Chauhan <nirbheek@centricular.com>
++Date: Wed, 25 Jul 2018 12:59:41 +0530
++Subject: [PATCH] Fix linking of shared/static libs with static libs
++
++This commit contains the following fixes:
++
++1. When a shared library A does `link_with:` to static library B, the
++   parts of B used by A will be added to A, and so we don't need to
++   return B in A.get_dependencies() for targets that link to A. This
++   already is the behaviour when a shared library A does `link_whole:`
++   on B.
++
++2. In situation (1), when generating a pkg-config file for A, we must
++   also not add B to Libs.private for A. This already is the behaviour
++   when a shared library A does `link_whole:` on B.
++
++3. When a static library A does `link_whole:` to static library B, we
++   must add the objects in B to A.
++
++4. When a static library A does `link_with:` to static library B, and
++   B is not installed (which makes it an internal static library), we
++   must add the objects in B to A, otherwise nothing can use A.
++
++5. In situation (4), when generating a pkg-config file for A, we must
++   also not add B to Libs.private for A.
++
++All these situations are tested by the unit test added in this commit.
++
++Closes https://github.com/mesonbuild/meson/issues/3934
++Closes https://github.com/mesonbuild/meson/issues/3937
++
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ mesonbuild/backend/ninjabackend.py            |  2 +-
++ mesonbuild/backend/vs2010backend.py           |  2 +-
++ mesonbuild/build.py                           | 61 ++++++++++---
++ run_unittests.py                              | 85 ++++++++++++++++++-
++ .../common/143 C and CPP link/meson.build     |  4 +-
++ .../consumer/meson.build                      | 11 +++
++ .../consumer/tester.c                         | 17 ++++
++ .../35 both library usability/provider/both.c | 20 +++++
++ .../provider/meson.build                      | 36 ++++++++
++ .../provider/otherlib/installed.c             |  7 ++
++ .../provider/otherlib/internal.c              |  7 ++
++ .../provider/otherlib/meson.build             |  3 +
++ .../provider/tester.c                         | 14 +++
++ 13 files changed, 253 insertions(+), 16 deletions(-)
++ create mode 100644 test cases/unit/35 both library usability/consumer/meson.build
++ create mode 100644 test cases/unit/35 both library usability/consumer/tester.c
++ create mode 100644 test cases/unit/35 both library usability/provider/both.c
++ create mode 100644 test cases/unit/35 both library usability/provider/meson.build
++ create mode 100644 test cases/unit/35 both library usability/provider/otherlib/installed.c
++ create mode 100644 test cases/unit/35 both library usability/provider/otherlib/internal.c
++ create mode 100644 test cases/unit/35 both library usability/provider/otherlib/meson.build
++ create mode 100644 test cases/unit/35 both library usability/provider/tester.c
++
++diff --git a/mesonbuild/backend/ninjabackend.py b/mesonbuild/backend/ninjabackend.py
++index 6b2a00a190..80edce5d06 100644
++--- a/mesonbuild/backend/ninjabackend.py
+++++ b/mesonbuild/backend/ninjabackend.py
++@@ -2412,7 +2412,7 @@ def generate_link(self, target, outfile, outname, obj_list, linker, extra_args=[
++             # line where the static library is used.
++             dependencies = []
++         else:
++-            dependencies = target.get_dependencies()
+++            dependencies = target.get_dependencies(link_whole=True)
++         internal = self.build_target_link_arguments(linker, dependencies)
++         commands += internal
++         # Only non-static built targets need link args and link dependencies
++diff --git a/mesonbuild/backend/vs2010backend.py b/mesonbuild/backend/vs2010backend.py
++index 2e86ca9aa2..09b074c60b 100644
++--- a/mesonbuild/backend/vs2010backend.py
+++++ b/mesonbuild/backend/vs2010backend.py
++@@ -1032,7 +1032,7 @@ def gen_vcxproj(self, target, ofname, guid):
++         (additional_libpaths, additional_links, extra_link_args) = self.split_link_args(extra_link_args.to_native())
++ 
++         # Add more libraries to be linked if needed
++-        for t in target.get_dependencies():
+++        for t in target.get_dependencies(link_whole=True):
++             lobj = self.build.targets[t.get_id()]
++             linkname = os.path.join(down, self.get_target_filename_for_linking(lobj))
++             if t in target.link_whole_targets:
++diff --git a/mesonbuild/build.py b/mesonbuild/build.py
++index ec6e1e656f..c26db764ab 100644
++--- a/mesonbuild/build.py
+++++ b/mesonbuild/build.py
++@@ -856,22 +856,43 @@ def get_outputs(self):
++     def get_extra_args(self, language):
++         return self.extra_args.get(language, [])
++ 
++-    def get_dependencies(self, exclude=None, internal=True):
+++    def is_internal(self):
+++        if isinstance(self, StaticLibrary) and not self.need_install:
+++            return True
+++        return False
+++
+++    def get_dependencies(self, exclude=None, internal=True, link_whole=False):
++         transitive_deps = []
++         if exclude is None:
++             exclude = []
++-        if internal:
++-            link_targets = itertools.chain(self.link_targets, self.link_whole_targets)
++-        else:
++-            # We don't want the 'internal' libraries when generating the
++-            # `Libs:` and `Libs.private:` lists in pkg-config files.
++-            link_targets = self.link_targets
++-        for t in link_targets:
+++        for t in self.link_targets:
++             if t in transitive_deps or t in exclude:
++                 continue
+++            # When we don't want internal libraries, f.ex. when we're
+++            # generating the list of private installed libraries for use in
+++            # a pkg-config file, don't include static libraries that aren't
+++            # installed because those get directly included in the static
+++            # or shared library already. See: self.link()
+++            if not internal and t.is_internal():
+++                continue
++             transitive_deps.append(t)
++             if isinstance(t, StaticLibrary):
++-                transitive_deps += t.get_dependencies(transitive_deps + exclude, internal)
+++                transitive_deps += t.get_dependencies(transitive_deps + exclude,
+++                                                      internal, link_whole)
+++        for t in self.link_whole_targets:
+++            if t in transitive_deps or t in exclude:
+++                continue
+++            if not internal and t.is_internal():
+++                continue
+++            # self.link_whole_targets are not included by default here because
+++            # the objects from those will already be in the library. They are
+++            # only needed while generating backend (ninja) target dependencies.
+++            if link_whole:
+++                transitive_deps.append(t)
+++            # However, the transitive dependencies are still needed
+++            if isinstance(t, StaticLibrary):
+++                transitive_deps += t.get_dependencies(transitive_deps + exclude,
+++                                                      internal, link_whole)
++         return transitive_deps
++ 
++     def get_source_subdir(self):
++@@ -958,7 +979,17 @@ def link(self, target):
++                 raise InvalidArguments(msg)
++             if self.is_cross != t.is_cross:
++                 raise InvalidArguments('Tried to mix cross built and native libraries in target {!r}'.format(self.name))
++-            self.link_targets.append(t)
+++            # When linking to a static library that's not installed, we
+++            # transparently add that target's objects to ourselves.
+++            # Static libraries that are installed will either be linked through
+++            # self.link_targets or using the pkg-config file.
+++            if isinstance(self, StaticLibrary) and isinstance(t, StaticLibrary) and not t.need_install:
+++                self.objects.append(t.extract_all_objects())
+++                # Add internal and external deps
+++                self.external_deps += t.external_deps
+++                self.link_targets += t.link_targets
+++            else:
+++                self.link_targets.append(t)
++ 
++     def link_whole(self, target):
++         for t in listify(target, unholder=True):
++@@ -970,7 +1001,15 @@ def link_whole(self, target):
++                 raise InvalidArguments(msg)
++             if self.is_cross != t.is_cross:
++                 raise InvalidArguments('Tried to mix cross built and native libraries in target {!r}'.format(self.name))
++-            self.link_whole_targets.append(t)
+++            # When we're a static library and we link_whole: to another static
+++            # library, we need to add that target's objects to ourselves.
+++            if isinstance(self, StaticLibrary):
+++                self.objects.append(t.extract_all_objects())
+++                # Add internal and external deps
+++                self.external_deps += t.external_deps
+++                self.link_targets += t.link_targets
+++            else:
+++                self.link_whole_targets.append(t)
++ 
++     def add_pch(self, language, pchlist):
++         if not pchlist:
++diff --git a/run_unittests.py b/run_unittests.py
++index 96802cc8cc..87518a8e90 100755
++--- a/run_unittests.py
+++++ b/run_unittests.py
++@@ -96,6 +96,14 @@ def _git_init(project_dir):
++     subprocess.check_call(['git', 'commit', '-a', '-m', 'I am a project'], cwd=project_dir,
++                           stdout=subprocess.DEVNULL)
++ 
+++def can_use_pkgconfig():
+++    # CI provides pkg-config, and we should fail the test if it isn't found
+++    if is_ci():
+++        return True
+++    if shutil.which('pkg-config'):
+++        return True
+++    return False
+++
++ def skipIfNoPkgconfig(f):
++     '''
++     Skip this test if no pkg-config is found, unless we're on Travis or
++@@ -106,7 +114,7 @@ def skipIfNoPkgconfig(f):
++     Note: Yes, we provide pkg-config even while running Windows CI
++     '''
++     def wrapped(*args, **kwargs):
++-        if not is_ci() and shutil.which('pkg-config') is None:
+++        if not can_use_pkgconfig():
++             raise unittest.SkipTest('pkg-config not found')
++         return f(*args, **kwargs)
++     return wrapped
++@@ -2744,6 +2752,81 @@ def test_buildtype_setting(self):
++         self.assertEqual(opts['debug'], True)
++         self.assertEqual(opts['optimization'], '0')
++ 
+++    def test_static_and_shared_library_usability(self):
+++        '''
+++        Test that static and shared libraries with various kinds of static
+++        library internal dependencies are usable after installation, and that
+++        the pkg-config files generated for such libraries have the correct
+++        Libs: and Libs.private: lines.
+++        '''
+++        env = get_fake_env('', self.builddir, self.prefix)
+++        cc = env.detect_c_compiler(False)
+++        if cc.get_id() == 'msvc':
+++            static_args = '-DPROVIDER_STATIC'
+++            # FIXME: Can't reliably test mixed shared/static because of
+++            # __declspec linkage issues and because it will greatly complicate
+++            # the build files. Waiting for static_c_args support.
+++            libtypes = ('static',)
+++        else:
+++            static_args = ''
+++            libtypes = ('static', 'shared', 'both')
+++        # Test
+++        for libtype in libtypes:
+++            oldprefix = self.prefix
+++            # Install external library so we can find it
+++            testdir = os.path.join(self.unit_test_dir, '35 both library usability', 'provider')
+++            # install into installdir without using DESTDIR
+++            installdir = self.installdir
+++            self.prefix = installdir
+++            if libtype == 'static':
+++                c_args = static_args
+++            else:
+++                c_args = ''
+++            self.init(testdir, extra_args=['--default-library=' + libtype, '-Dc_args=' + c_args])
+++            self.prefix = oldprefix
+++            for each in ('whole-installed', 'whole-internal', 'with-installed', 'with-internal'):
+++                pc = os.path.join(self.privatedir, '{}.pc'.format(each))
+++                with open(pc, 'r') as f:
+++                    for l in f:
+++                        l = l.strip()
+++                        if l.startswith('Libs:'):
+++                            if libtype == 'static' and each == 'with-installed':
+++                                self.assertEqual(l, 'Libs: -L${libdir} -linstalled-some -l' + each)
+++                            else:
+++                                self.assertEqual(l, 'Libs: -L${libdir} -l' + each)
+++                        if l.startswith('Libs.private:'):
+++                            if each == 'with-installed':
+++                                self.assertEqual(l, 'Libs.private: -L${libdir} -linstalled-some')
+++                            else:
+++                                self.assertNotIn('internal-some', l)
+++            self.build()
+++            self.run_tests()
+++            # Rest of the test requires pkg-config
+++            if not can_use_pkgconfig():
+++                ## New builddir for the next iteration
+++                self.new_builddir()
+++                continue
+++            self.install(use_destdir=False)
+++            if is_windows() or is_cygwin():
+++                os.environ['PATH'] += os.pathsep + os.path.join(installdir, 'bin')
+++            os.environ['PKG_CONFIG_PATH'] = os.path.join(installdir, self.libdir, 'pkgconfig')
+++            testdir = os.path.join(self.unit_test_dir, '35 both library usability', 'consumer')
+++            for _libtype in libtypes:
+++                if _libtype == 'static':
+++                    _c_args = static_args
+++                else:
+++                    _c_args = ''
+++                ## New builddir for the consumer
+++                self.new_builddir()
+++                self.init(testdir, extra_args=['--default-library=' + _libtype, '-Dc_args=' + _c_args])
+++                self.build()
+++                self.run_tests()
+++            ## New builddir for the next iteration
+++            self.new_builddir()
+++        # Deliver a skip status to signal incomplete test
+++        if not can_use_pkgconfig():
+++            raise unittest.SkipTest('pkg-config not found, test incomplete')
+++
++ 
++ class FailureTests(BasePlatformTests):
++     '''
++diff --git a/test cases/common/143 C and CPP link/meson.build b/test cases/common/143 C and CPP link/meson.build
++index 55c1b87a50..519fe22cd3 100644
++--- a/test cases/common/143 C and CPP link/meson.build	
+++++ b/test cases/common/143 C and CPP link/meson.build	
++@@ -15,8 +15,8 @@
++ project('C and C++ static link test', ['c', 'cpp'])
++ 
++ # Verify that adding link arguments works.
++-add_global_link_arguments('', language : 'c')
++-add_project_link_arguments('', language : 'c')
+++add_global_link_arguments('-DMESON_UNUSED', language : 'c')
+++add_project_link_arguments('-DMESON_UNUSED', language : 'c')
++ 
++ libc = static_library('cfoo', ['foo.c', 'foo.h'])
++ 
++diff --git a/test cases/unit/35 both library usability/consumer/meson.build b/test cases/unit/35 both library usability/consumer/meson.build
++new file mode 100644
++index 0000000000..2d8d2587cb
++--- /dev/null
+++++ b/test cases/unit/35 both library usability/consumer/meson.build	
++@@ -0,0 +1,11 @@
+++project('both libraries consumer', 'c')
+++
+++d1 = dependency('whole-installed')
+++d2 = dependency('whole-internal')
+++d3 = dependency('with-installed')
+++d4 = dependency('with-internal')
+++
+++test('both-whole-installed', executable('tester1', 'tester.c', dependencies : d1))
+++test('both-whole-internal', executable('tester2', 'tester.c', dependencies : d2))
+++test('both-with-installed', executable('tester3', 'tester.c', dependencies : d3))
+++test('both-with-internal', executable('tester4', 'tester.c', dependencies : d4))
++diff --git a/test cases/unit/35 both library usability/consumer/tester.c b/test cases/unit/35 both library usability/consumer/tester.c
++new file mode 100644
++index 0000000000..9a2538b311
++--- /dev/null
+++++ b/test cases/unit/35 both library usability/consumer/tester.c	
++@@ -0,0 +1,17 @@
+++#include <stdio.h>
+++
+++#if defined(_MSC_VER) && !defined(PROVIDER_STATIC)
+++__declspec(dllimport)
+++#endif
+++int both_get_dat_value (void);
+++
+++int main (int argc, char *argv[])
+++{
+++  int got = both_get_dat_value ();
+++
+++  if (got != 111) {
+++    printf ("Got %i instead of 111\n", got);
+++    return 2;
+++  }
+++  return 0;
+++}
++diff --git a/test cases/unit/35 both library usability/provider/both.c b/test cases/unit/35 both library usability/provider/both.c
++new file mode 100644
++index 0000000000..db60151401
++--- /dev/null
+++++ b/test cases/unit/35 both library usability/provider/both.c	
++@@ -0,0 +1,20 @@
+++#if defined(_MSC_VER) && !defined(PROVIDER_STATIC)
+++__declspec(dllimport)
+++#endif
+++int get_dat_value (void);
+++
+++#ifdef INSTALLED_LIBRARY
+++  #define EXPECTED_VALUE 69
+++#else
+++  #define EXPECTED_VALUE 42
+++#endif
+++
+++#if defined(_MSC_VER) && !defined(PROVIDER_STATIC)
+++__declspec(dllexport)
+++#endif
+++int both_get_dat_value (void)
+++{
+++  if (get_dat_value () != EXPECTED_VALUE)
+++    return 666;
+++  return 111;
+++}
++diff --git a/test cases/unit/35 both library usability/provider/meson.build b/test cases/unit/35 both library usability/provider/meson.build
++new file mode 100644
++index 0000000000..b7f87d7826
++--- /dev/null
+++++ b/test cases/unit/35 both library usability/provider/meson.build	
++@@ -0,0 +1,36 @@
+++project('both library provider', 'c')
+++
+++pkg = import('pkgconfig')
+++
+++subdir('otherlib')
+++
+++# Both libraries with a link_whole dependency on an installed static library
+++l1 = library('whole-installed', 'both.c',
+++            c_args : ['-DINSTALLED_LIBRARY'],
+++            link_whole : installed_lib,
+++            install: true)
+++pkg.generate(l1)
+++
+++# Both libraries with a link_whole dependency on a not-installed static library
+++l2 = library('whole-internal', 'both.c',
+++            link_whole : internal_lib,
+++            install: true)
+++pkg.generate(l2)
+++
+++# Both libraries with a link_with dependency on an installed static library
+++l3 = library('with-installed', 'both.c',
+++            c_args : ['-DINSTALLED_LIBRARY'],
+++            link_with : installed_lib,
+++            install: true)
+++pkg.generate(l3)
+++
+++# Both libraries with a link_with dependency on a not-installed static library
+++l4 = library('with-internal', 'both.c',
+++            link_with : internal_lib,
+++            install: true)
+++pkg.generate(l4)
+++
+++test('test-both-whole-installed', executable('tester1', 'tester.c', link_with : l1))
+++test('test-both-whole-internal', executable('tester2', 'tester.c', link_with : l2))
+++test('test-both-with-installed', executable('tester3', 'tester.c', link_with : l3))
+++test('test-both-with-internal', executable('tester4', 'tester.c', link_with : l4))
++diff --git a/test cases/unit/35 both library usability/provider/otherlib/installed.c b/test cases/unit/35 both library usability/provider/otherlib/installed.c
++new file mode 100644
++index 0000000000..08cfcb1254
++--- /dev/null
+++++ b/test cases/unit/35 both library usability/provider/otherlib/installed.c	
++@@ -0,0 +1,7 @@
+++#if defined(_MSC_VER) && !defined(PROVIDER_STATIC)
+++__declspec(dllexport)
+++#endif
+++int get_dat_value (void)
+++{
+++  return 69;
+++}
++diff --git a/test cases/unit/35 both library usability/provider/otherlib/internal.c b/test cases/unit/35 both library usability/provider/otherlib/internal.c
++new file mode 100644
++index 0000000000..c70fd98079
++--- /dev/null
+++++ b/test cases/unit/35 both library usability/provider/otherlib/internal.c	
++@@ -0,0 +1,7 @@
+++#if defined(_MSC_VER) && !defined(PROVIDER_STATIC)
+++__declspec(dllexport)
+++#endif
+++int get_dat_value (void)
+++{
+++  return 42;
+++}
++diff --git a/test cases/unit/35 both library usability/provider/otherlib/meson.build b/test cases/unit/35 both library usability/provider/otherlib/meson.build
++new file mode 100644
++index 0000000000..2f2cf678ce
++--- /dev/null
+++++ b/test cases/unit/35 both library usability/provider/otherlib/meson.build	
++@@ -0,0 +1,3 @@
+++internal_lib = static_library('internal-some', 'internal.c')
+++
+++installed_lib = static_library('installed-some', 'installed.c', install: true)
++diff --git a/test cases/unit/35 both library usability/provider/tester.c b/test cases/unit/35 both library usability/provider/tester.c
++new file mode 100644
++index 0000000000..5946099e2d
++--- /dev/null
+++++ b/test cases/unit/35 both library usability/provider/tester.c	
++@@ -0,0 +1,14 @@
+++#include <stdio.h>
+++
+++int both_get_dat_value (void);
+++
+++int main (int argc, char *argv[])
+++{
+++  int got = both_get_dat_value ();
+++
+++  if (got != 111) {
+++    printf ("Got %i instead of 111\n", got);
+++    return 2;
+++  }
+++  return 0;
+++}
++
+-- 
+2.21.0
