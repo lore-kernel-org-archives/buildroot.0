@@ -1,51 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 14 May 2019 13:42:05 +0200
-Subject: [Buildroot] [PATCH] package/samba4: security bump to version 4.9.8
-Message-ID: <20190514114205.10515-1-peter@korsgaard.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 14 May 2019 11:55:58 +0000
+Subject: [Buildroot] [Bug 11831] python-pyparsing: "No module named
+ 'pyparsing'" on target / while building cantools
+In-Reply-To: <bug-11831-163@https.bugs.busybox.net/>
+References: <bug-11831-163@https.bugs.busybox.net/>
+Message-ID: <bug-11831-163-s9PAIEh5tf@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+https://bugs.busybox.net/show_bug.cgi?id=11831
 
-CVE-2018-16860: The checksum validation in the S4U2Self handler in the
-embedded Heimdal KDC did not first confirm that the checksum was keyed,
-allowing replacement of the requested target (client) principal.
+--- Comment #8 from Tibor Stolz <tistolz@outlook.de> ---
+Created attachment 8046
+  --> https://bugs.busybox.net/attachment.cgi?id=8046&action=edit
+FIXED python-cantools/python-cantools.mk
 
-For more details, see the advisory:
-https://www.samba.org/samba/security/CVE-2018-16860.html
+Hi all,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+The build error for python-cantools persisted, but now I figured out why I ran
+into it: In order to build correctly, the build-time dependencies must be
+installed on the *host*! Therefore, the package makefile (python-cantools.mk)
+must be changed:
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 9576690e4f..7e82261b4e 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.7.tar.asc
--sha256 44e5bc58dcae6d86ca8d5f269fa927f20ff91bce97cde86fe4e83addcb89c001  samba-4.9.7.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.8.tar.asc
-+sha256 82ebb7c3f1847c39341dd97ff8b73f40fa83f5f794daeceb80f3c349ace3cf56  samba-4.9.8.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 941d4df1d6..d2f89e2c82 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SAMBA4_VERSION = 4.9.7
-+SAMBA4_VERSION = 4.9.8
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+- PYTHON_CANTOOLS_DEPENDENCIES = python-bitstruct python-pyparsing
++ PYTHON_CANTOOLS_DEPENDENCIES = host-python-bitstruct host-python-pyparsing
+
+Doing a 'grep -r DEPENDENCIES package/python-*' in the buildroot-2019.02.2
+directory revealed that most python library dependencies are in the
+host-python-* form. Maybe this should be mentioned in the Buildroot user
+manual?
+
+Best regards,
+Tibor Stolz
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
