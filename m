@@ -1,68 +1,81 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 14 May 2019 23:45:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5sensors: disable on
- microblaze with gcc < 8
-In-Reply-To: <e64ec143-a98a-0c59-d410-6542763e1272@mind.be>
-References: <20190514201443.24645-1-fontaine.fabrice@gmail.com>
- <e64ec143-a98a-0c59-d410-6542763e1272@mind.be>
-Message-ID: <0722b25d-70ef-166d-3575-d1757a7a6e82@micronovasrl.com>
+Date: Tue, 14 May 2019 23:47:29 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-05-08
+In-Reply-To: <20190514203608.GG2787@scaer>
+References: <20190509060042.1026E872A2@whitealder.osuosl.org>
+ <20190509230324.0b03746e@windsurf.home>
+ <decc64fc-5968-9c8a-6f0f-ca42fdbf2edb@micronovasrl.com>
+ <52f30b47-7416-e4d1-cb63-29ee8f6c7b88@micronovasrl.com>
+ <20190514203608.GG2787@scaer>
+Message-ID: <8f2b0a25-250a-dd35-ecae-21ccb52ebe31@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Hi Yann,
 
-Il 14/05/2019 23:34, Arnout Vandecappelle ha scritto:
+Il 14/05/2019 22:36, Yann E. MORIN ha scritto:
+> Giulio, All,
 > 
-> 
-> On 14/05/2019 22:14, Fabrice Fontaine wrote:
->> Fixes:
->>   - http://autobuild.buildroot.org/results/3ba494a3341301cb71d1346aefc28f884479f912
+> On 2019-05-11 23:00 +0200, Giulio Benetti spake thusly:
+>> Hello Yann, All,
 >>
->> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->> ---
->>   package/qt5/qt5sensors/Config.in | 2 ++
->>   1 file changed, 2 insertions(+)
+>> Il 09/05/2019 23:19, Giulio Benetti ha scritto:
+>>>>>        aarch64 |            python-numpy-1.16.3 | NOK | http://autobuild.buildroot.net/results/50f7f09a9f830cd7b94f8fc83c09fc3d39297d3d |
+>>>>
+>>>> /home/buildroot/autobuild/run/instance-2/output/host/bin/aarch64-linux-gnu-gcc /tmp/tmph865w02v/tmp/tmph865w02v/source.o -L/home/buildroot/autobuild/run/instance-2/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib -lcblas -o /tmp/tmph865w02v/a.out
+>>>> /home/buildroot/autobuild/run/instance-2/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcblas.so: undefined reference to `scnrm2_'
+>>>> /home/buildroot/autobuild/run/instance-2/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcblas.so: undefined reference to `scasum_'
+>>>> collect2: error: ld returned 1 exit status
+>>>> /home/buildroot/autobuild/run/instance-2/output/host/bin/aarch64-linux-gnu-gcc /tmp/tmph865w02v/tmp/tmph865w02v/source.o -L/home/buildroot/autobuild/run/instance-2/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib -lblas -o /tmp/tmph865w02v/a.out
+>>>> /tmp/tmph865w02v/tmp/tmph865w02v/source.o: In function `main':
+>>>> /tmp/tmph865w02v/source.c:6: undefined reference to `cblas_ddot'
+>>>> collect2: error: ld returned 1 exit status
+>>>>
+>>>> I'm not sure what's going on here. Sadly, Samuel who was maintaining
+>>>> python-numpy, is no longer active in Buildroot. Is there anyone else
+>>>> volunteering to have a look ?
+>>>
+>>> I can try to work this out.
+>>>
 >>
->> diff --git a/package/qt5/qt5sensors/Config.in b/package/qt5/qt5sensors/Config.in
->> index 4846a3f95f..488027875b 100644
->> --- a/package/qt5/qt5sensors/Config.in
->> +++ b/package/qt5/qt5sensors/Config.in
->> @@ -1,5 +1,7 @@
->>   config BR2_PACKAGE_QT5SENSORS
->>   	bool "qt5sensors"
->> +	# internal compiler error: in do_output_reload, at reload1.c:7978
->> +	depends on !BR2_microblaze || BR2_TOOLCHAIN_GCC_AT_LEAST_8
+>> As spoken in IRC this builds correctly with every Docker in Adam Duskett:
+>> https://github.com/aduskett/buildroot-docker-devel
+>>
+>> included Ubuntu 14.04(Trusty), the same as Yann's Autobuilder.
+>>
+>> I'm waiting for Yann to report if it works for him too or not.
 > 
->   So, apparently, there are tons of failures and timeouts (e.g. [1]) for
-> microblaze that are fixed with GCC 8.
+> Here is a quick summary of Giulio's and my findings:
 > 
->   Since microblaze is kind of niche anyway, can't we just globally require GCC 8
-> for microblaze?
+> Usign the configuration from the failed autobuild job:
+> 
+>    - make clean; make python-numpy    --> builds OK
+> 
+>    - make clean; make   --> fails to build
+> 
+> The root cause is a hidden dependency on lapack. When lapack is build
+> before python-numpy (which is highly possible, because of alphabetical
+> ordering), then python-numpy detects it and fails to build properly in
+> this case.
+> 
+> So, I can see two solutions:
+> 
+>    - add an explicit, conditional dependency on lapack, and fix the
+>      build,
+> 
+>    - explicitly tell python-numpy to never use lapack.
+> 
+> Obviously, the first would be preferred, but it's probably non-trivial.
 
-That could be an idea.
-Anyway tomorrow I would like to try to find if there is a common bug in 
-toolchain.
+I would go for the first one, but before I need to solve microblaze 
+toolchain bug 85180 impact.
+It depends on expected time.
+I'd hope to fix both for this week, but I can't assure.
 
-What I've found at the moment(today I had very few time) is that:
-- atop compiles c files and works ok without -g2/3
-- flare-engine compiles c++ files and doesn't seem to work at all(but 
-need to repeat buildings)
-
-and these packages need to be tested:
-- boost
-- gst-ffmpeg
-- glibmm
-- qt5sensors(added now)
-
-The only chance is that C and CXX behave in the same way,
-so I can treat them with different patches.
-
-Otherwise your solution would be the best one IMHO.
-
-Best regards
 -- 
 Giulio Benetti
 CTO
@@ -75,15 +88,6 @@ Capitale Sociale ? 26.000 i.v.
 Iscritta al Reg. Imprese di Padova N. 02663420285
 Numero R.E.A. 258642
 
->   Regards,
->   Arnout
+> Regards,
+> Yann E. MORIN.
 > 
-> 
-> [1] http://autobuild.buildroot.net/results/94aa00f776b8a3491ac0b3212c95f5e666c5a29a
-> 
-> 
-> 
->>   	select BR2_PACKAGE_QT5BASE
->>   	help
->>   	  Qt is a cross-platform application and UI framework for
->>
