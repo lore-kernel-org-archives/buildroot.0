@@ -1,67 +1,53 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 14 May 2019 23:08:35 +0200
-Subject: [Buildroot] [git commit] package/qt5multimedia: fix build with
- gstreamer 0.10
-Message-ID: <20190514210432.67BC9814B1@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 14 May 2019 23:12:54 +0200
+Subject: [Buildroot] [PATCH 1/2] package/netsurf: change how
+ CFLAGS/LDFLAGS are passed
+In-Reply-To: <20190509225259.2b62a2cb@windsurf.home> (Thomas Petazzoni's
+ message of "Thu, 9 May 2019 22:52:59 +0200")
+References: <20190509202808.6741-1-thomas.petazzoni@bootlin.com>
+ <20190509202808.6741-2-thomas.petazzoni@bootlin.com>
+ <20190509225259.2b62a2cb@windsurf.home>
+Message-ID: <87pnok4u5l.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5b2c53fa4ca9995b244714503666081acefbaa1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/de26fd4f5ab130bd87ea9d7709d9568290362758
+ > Hello,
+ > On Thu,  9 May 2019 22:28:07 +0200
+ > Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-[Arnout: patch applies to 5.12.2 version only]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...1-Fix-compile-failure-with-gstreamer-0-10.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ >> In commit 6da049f8ae61b956d135526722ce58fc2f67626a ("package/netsurf:
+ >> fix build"), the CC variable passed to netsurf's build system was
+ >> extended to pass some special -I and -L options needed for netsurf to
+ >> find its own headers/libraries.
+ >> 
+ >> Unfortunately, on some systems (including mine), it breaks the build,
+ >> due to:
+ >> 
+ >> toolpath_ := $(shell /bin/which $(CC__))
+ >> 
+ >> when $(CC__) contains some -I/-L options, they are considered to be
+ >> options "to which", which causes the funny:
+ >> 
+ >> /usr/bin/make install --directory=libnslog
+ >> HOST=arm-buildroot-linux-uclibcgnueabi
+ >> PREFIX=/home/thomas/projets/outputs/shared-netsurf/build/netsurf-3.8/tmpusr
+ >> Q=@ WARNFLAGS='-Wall -W -Wno-error' DESTDIR=
+ >> make[3]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
 
-diff --git a/package/qt5/qt5multimedia/5.12.2/0001-Fix-compile-failure-with-gstreamer-0-10.patch b/package/qt5/qt5multimedia/5.12.2/0001-Fix-compile-failure-with-gstreamer-0-10.patch
-new file mode 100644
-index 0000000000..8bb1f582c7
---- /dev/null
-+++ b/package/qt5/qt5multimedia/5.12.2/0001-Fix-compile-failure-with-gstreamer-0-10.patch
-@@ -0,0 +1,36 @@
-+From 935967a453b47ae7c8e9ad3d94eef3813eab58db Mon Sep 17 00:00:00 2001
-+From: Richard Oehlinger <richard.oehlinger@adbsafegate.com>
-+Date: Mon, 18 Mar 2019 10:15:13 +0100
-+Subject: [PATCH] Fix compile failure with gstreamer 0.10
-+
-+This fixes an compile failure introduced in commit 67c4ec55.
-+
-+Fixes: QTBUG-74475
-+Change-Id: I0dabb72f8b5cdd75336b15515381ff9d9442788f
-+Reviewed-by: VaL Doroshchuk <valentyn.doroshchuk@qt.io>
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://github.com/qt/qtmultimedia/commit/935967a453b47ae7c8e9ad3d94eef3813eab58db]
-+---
-+ src/gsttools/qgstreamerplayersession.cpp | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/src/gsttools/qgstreamerplayersession.cpp b/src/gsttools/qgstreamerplayersession.cpp
-+index f21c94c5c..9858f61c9 100644
-+--- a/src/gsttools/qgstreamerplayersession.cpp
-++++ b/src/gsttools/qgstreamerplayersession.cpp
-+@@ -402,9 +402,14 @@ void QGstreamerPlayerSession::setPipeline(GstElement *pipeline)
-+ 
-+     if (m_renderer) {
-+         auto it = gst_bin_iterate_sinks(GST_BIN(pipeline));
-++#if GST_CHECK_VERSION(1,0,0)
-+         GValue data = { 0, 0 };
-+         while (gst_iterator_next (it, &data) == GST_ITERATOR_OK) {
-+             auto child = static_cast<GstElement*>(g_value_get_object(&data));
-++#else
-++       GstElement *child = nullptr;
-++       while (gst_iterator_next(it, reinterpret_cast<gpointer *>(&child)) == GST_ITERATOR_OK) {
-++#endif
-+             if (QLatin1String(GST_OBJECT_NAME(child)) == QLatin1String("qtvideosink")) {
-+                 m_renderer->setVideoSink(child);
-+                 break;
+ > In fact, I discovered that the autobuilders have encountered this issue
+ > as well:
+
+ >     powerpc64 |                        netsurf | TIM | http://autobuild.buildroot.net/results/eeb2863c6237aac8428e49a5ee514d43088b0fb8 |     
+ >        x86_64 |                        netsurf | TIM | http://autobuild.buildroot.net/results/f938fd1515f1d6e11b57aa6e314135789da52a44 |     
+
+ > Both of those timeouts would be fixed by this patch.
+
+Committed after adding these two autobuilder references, thanks.
+
+-- 
+Bye, Peter Korsgaard
