@@ -1,67 +1,96 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 May 2019 18:22:23 +0200
-Subject: [Buildroot] [git commit] package/linknx: fix build with log4cpp
-Message-ID: <20190514161649.D452B89176@busybox.osuosl.org>
+Date: Tue, 14 May 2019 18:21:42 +0200
+Subject: [Buildroot] [git commit] package/gdb: fix build of 8.0.1 with glibc
+ 2.29
+Message-ID: <20190514161649.C798089176@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ba1ce8351dd42236c8ceb6e66d5e7f35c506be9
+commit: https://git.buildroot.net/buildroot/commit/?id=b8b23ac20829776c841db94434fc42817ddfca61
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Between glibc 2.28 and glibc 2.29, commit
+89983cb37c9319806a551e8fe9f3a11ff8f973e1 ("Update siginfo constants
+from Linux kernel (bug 21286)") was merged. This commit moved the
+TRAP_HWBKPT definition from an IA64-specific header to an
+architecture-agnostic header.
+
+This change exhibited a build issue that until then was only visible
+on IA64 (which Buildroot does not support). This Buildroot commit
+backports a patch from gdb upstream (which is in gdb since 8.2) which
+mentions IA64 because it was originally meant to fix only the
+IA64-related issue. But the glibc change, this change has become
+visible on all architectures.
+
 Fixes:
- - http://autobuild.buildroot.org/results/1863f8f27041bc15ca68e786ba3b8e4764c40574
+ - No autobuilder failures
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...-src-Makefile.am-fix-linking-with-log4cpp.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ ...g-TRAP_HWBKPT-before-including-gdb_wait-h.patch | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-diff --git a/package/linknx/0003-src-Makefile.am-fix-linking-with-log4cpp.patch b/package/linknx/0003-src-Makefile.am-fix-linking-with-log4cpp.patch
+diff --git a/package/gdb/8.0.1/0006-gdb-Fix-ia64-defining-TRAP_HWBKPT-before-including-gdb_wait-h.patch b/package/gdb/8.0.1/0006-gdb-Fix-ia64-defining-TRAP_HWBKPT-before-including-gdb_wait-h.patch
 new file mode 100644
-index 0000000000..253c1f6f23
+index 0000000000..1e85d9314c
 --- /dev/null
-+++ b/package/linknx/0003-src-Makefile.am-fix-linking-with-log4cpp.patch
-@@ -0,0 +1,39 @@
-+From b4595154e84e21abdc0c89f937c410cf8280991c Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 13 May 2019 22:14:43 +0200
-+Subject: [PATCH] src/Makefile.am: fix linking with log4cpp
++++ b/package/gdb/8.0.1/0006-gdb-Fix-ia64-defining-TRAP_HWBKPT-before-including-gdb_wait-h.patch
+@@ -0,0 +1,54 @@
++From 5a6c3296a7a90694ad4042f6256f3da6d4fa4ee8 Mon Sep 17 00:00:00 2001
++From: James Clarke <jrtc27@jrtc27.com>
++Date: Fri, 19 Jan 2018 17:22:49 +0000
++Subject: [PATCH] gdb: Fix ia64 defining TRAP_HWBKPT before including
++ gdb_wait.h
 +
-+linknx fails to build with log4cpp because LOG4CPP_CFLAGS (which
-+contains -pthread) is added to AM_CPPFLAGS (which is not used at link
-+time) instead of AM_CXXFLAGS:
++On ia64, gdb_wait.h eventually includes siginfo-consts-arch.h, which
++contains an enum with TRAP_HWBKPT, along with a #define. Thus we cannot
++define TRAP_HWBKPT to 4 beforehand, and so gdb_wait.h must be included
++earlier; include it from linux-ptrace.h so it can never come afterwards.
 +
-+/home/buildroot/autobuild/instance-0/output/host/bin/mipsel-linux-g++  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os     -o linknx linknx.o logger.o ruleserver.o objectcontroller.o eibclient.o threads.o timermanager.o persistentstorage.o xmlserver.o smsgateway.o emailgateway.o knxconnection.o services.o suncalc.o luacondition.o ioport.o ../ticpp/libticpp.a  -L/home/buildroot/autobuild/instance-0/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib -lpthsem  -L/home/buildroot/autobuild/instance-0/output/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/lib -llog4cpp     -lm
-+/home/buildroot/autobuild/instance-0/output/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib/liblog4cpp.so: undefined reference to `pthread_key_create'
++gdb/ChangeLog:
 +
-+So move LOG4CPP_CFLAGS to AM_CXXFLAGS
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/1863f8f27041bc15ca68e786ba3b8e4764c40574
++	* nat/linux-ptrace.c: Remove unnecessary reinclusion of
++	gdb_ptrace.h, and move including gdb_wait.h ...
++	* nat/linux-ptrace.h: ... to here.
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not sent yet]
++[Retrieved (and updated to remove ChangeLog update) from:
++https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=5a6c3296a7a90694ad4042f6256f3da6d4fa4ee8]
 +---
-+ src/Makefile.am | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++ gdb/ChangeLog          | 6 ++++++
++ gdb/nat/linux-ptrace.c | 2 --
++ gdb/nat/linux-ptrace.h | 1 +
++ 3 files changed, 7 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 6a4f493..92d147c 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -6,6 +6,7 @@ else
-+ B64_CFLAGS=
-+ B64_LIBS=
-+ endif
-+-AM_CPPFLAGS=-I$(top_srcdir)/include -I$(top_srcdir)/ticpp $(B64_CFLAGS) $(PTH_CPPFLAGS) $(LIBCURL_CPPFLAGS) $(LOG4CPP_CFLAGS) $(LUA_CFLAGS) $(MYSQL_CFLAGS) $(ESMTP_CFLAGS)
-++AM_CPPFLAGS=-I$(top_srcdir)/include -I$(top_srcdir)/ticpp $(B64_CFLAGS) $(PTH_CPPFLAGS) $(LIBCURL_CPPFLAGS) $(LUA_CFLAGS) $(MYSQL_CFLAGS) $(ESMTP_CFLAGS)
-++AM_CXXFLAGS=$(LOG4CPP_CFLAGS)
-+ linknx_LDADD=$(top_srcdir)/ticpp/libticpp.a $(B64_LIBS) $(PTH_LDFLAGS) $(PTH_LIBS) $(LIBCURL) $(LOG4CPP_LIBS) $(LUA_LIBS) $(MYSQL_LIBS) $(ESMTP_LIBS) -lm
-+ linknx_SOURCES=linknx.cpp logger.cpp ruleserver.cpp objectcontroller.cpp eibclient.c threads.cpp timermanager.cpp  persistentstorage.cpp xmlserver.cpp smsgateway.cpp emailgateway.cpp knxconnection.cpp services.cpp suncalc.cpp  luacondition.cpp ioport.cpp ruleserver.h objectcontroller.h threads.h timermanager.h persistentstorage.h xmlserver.h smsgateway.h emailgateway.h knxconnection.h services.h suncalc.h luacondition.h ioport.h logger.h
++diff --git a/gdb/nat/linux-ptrace.c b/gdb/nat/linux-ptrace.c
++index 5c4ddc9..1f21ef0 100644
++--- a/gdb/nat/linux-ptrace.c
+++++ b/gdb/nat/linux-ptrace.c
++@@ -21,8 +21,6 @@
++ #include "linux-procfs.h"
++ #include "linux-waitpid.h"
++ #include "buffer.h"
++-#include "gdb_wait.h"
++-#include "gdb_ptrace.h"
++ #ifdef HAVE_SYS_PROCFS_H
++ #include <sys/procfs.h>
++ #endif
++diff --git a/gdb/nat/linux-ptrace.h b/gdb/nat/linux-ptrace.h
++index 60967a3..dc180fb 100644
++--- a/gdb/nat/linux-ptrace.h
+++++ b/gdb/nat/linux-ptrace.h
++@@ -21,6 +21,7 @@
++ struct buffer;
++ 
++ #include "nat/gdb_ptrace.h"
+++#include "gdb_wait.h"
++ 
++ #ifdef __UCLIBC__
++ #if !(defined(__UCLIBC_HAS_MMU__) || defined(__ARCH_HAS_MMU__))
 +-- 
-+2.20.1
++2.9.3
 +
