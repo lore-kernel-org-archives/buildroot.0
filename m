@@ -1,41 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 May 2019 17:44:27 +0200
-Subject: [Buildroot] [git commit branch/next] package/qt5base: enable
- journald logging
-Message-ID: <20190514153907.D919988DB6@busybox.osuosl.org>
+Date: Tue, 14 May 2019 17:45:04 +0200
+Subject: [Buildroot] [PATCH 1/4] configs/liteboard: bump Linux to 5.1.1
+In-Reply-To: <20190514094248.4893-1-m.niestroj@grinn-global.com>
+References: <20190514094248.4893-1-m.niestroj@grinn-global.com>
+Message-ID: <20190514174504.2569a801@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d63ba6546bdcdd691220ca5276b8dacf0671acb9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue, 14 May 2019 11:42:45 +0200
+Marcin Niestroj <m.niestroj@grinn-global.com> wrote:
 
-Allows Qt applications to log into systemd journal with
-QT_LOGGING_TO_CONSOLE=0 environment variable.
+> Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+> ---
+>  configs/grinn_liteboard_defconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: David Rosca <nowrep@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/qt5/qt5base/qt5base.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+Series applied to next. Thanks!
 
-diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index e73b8931aa..e4ae120631 100644
---- a/package/qt5/qt5base/qt5base.mk
-+++ b/package/qt5/qt5base/qt5base.mk
-@@ -253,6 +253,13 @@ QT5BASE_CONFIGURE_OPTS += -no-gtk
- endif
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+QT5BASE_CONFIGURE_OPTS += -journald
-+QT5BASE_DEPENDENCIES += systemd
-+else
-+QT5BASE_CONFIGURE_OPTS += -no-journald
-+endif
-+
- # Build the list of libraries to be installed on the target
- QT5BASE_INSTALL_LIBS_y                                 += Qt5Core
- QT5BASE_INSTALL_LIBS_$(BR2_PACKAGE_QT5BASE_XCB)        += Qt5XcbQpa
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
