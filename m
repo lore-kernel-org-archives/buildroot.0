@@ -1,49 +1,70 @@
 From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Tue, 14 May 2019 09:38:56 +0200
-Subject: [Buildroot] [PATCH v2 1/7] boot/optee-os: correct TA files install
-Message-ID: <20190514073902.3775-1-etienne.carriere@linaro.org>
+Date: Tue, 14 May 2019 09:38:57 +0200
+Subject: [Buildroot] [PATCH v2 2/7] boot/optee-os: install trusted shared
+ libraries
+In-Reply-To: <20190514073902.3775-1-etienne.carriere@linaro.org>
+References: <20190514073902.3775-1-etienne.carriere@linaro.org>
+Message-ID: <20190514073902.3775-2-etienne.carriere@linaro.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This change corrects TA binary files install sequence that
-were previously install in target filesystem though
-OPTEE_OS_INSTALL_IMAGES_CMDS instead of expected
-OPTEE_OS_INSTALL_TARGET_CMDS.
-
-This change removes useless mkdir prior call to $(INSTALL)
-that already handles parent directory creation when needed.
-
-This change conditions .ta files install upon their
-generation as a custom package repository may not generate
-any .ta files.
+Install generated trusted shared libraries in the target file
+system next to the trusted applications.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
 Changes v1 -> v2:
-- Patch introduced in v2
+- Fixes on .ta file install commands move to a specific patch
+- Fix BR2_TARGET_OPTEE_OS_SERVICES 1-string description
+- Replace conditional commands in .ta files install commands
+  with Makefile script level conditionals
 ---
- boot/optee-os/optee-os.mk | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ boot/optee-os/Config.in   | 14 +++++++-------
+ boot/optee-os/optee-os.mk |  3 +++
+ 2 files changed, 10 insertions(+), 7 deletions(-)
 
+diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
+index a1f1b910ac..4cb05798e5 100644
+--- a/boot/optee-os/Config.in
++++ b/boot/optee-os/Config.in
+@@ -70,16 +70,16 @@ config BR2_TARGET_OPTEE_OS_SDK
+ 	  installed in the staging directory /lib/optee.
+ 
+ config BR2_TARGET_OPTEE_OS_SERVICES
+-	bool "Build service TAs"
++	bool "Build service TAs and libs"
+ 	default y
+ 	select BR2_TARGET_OPTEE_OS_CORE
+ 	help
+-	  This option installs the service trusted applications built
+-	  from OP-TEE OS source tree. These are installed in the target
+-	  /lib/optee_armtz directory as other trusted applications.
+-	  At runtime OP-TEE OS can load trusted applications from this
+-	  non-secure filesystem/directory into the secure world for
+-	  execution.
++	  This option installs the service trusted applications and
++	  trusted shared libraries built from OP-TEE OS source tree.
++	  These are installed in target /lib/optee_armtz directory
++	  as other trusted applications. At runtime OP-TEE OS can
++	  load these from this non-secure filesystem/directory into
++	  the secure world for execution.
+ 
+ config BR2_TARGET_OPTEE_OS_PLATFORM
+ 	string "Target platform (mandatory)"
 diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
-index 6da20a9f3e..b22f560ba7 100644
+index b22f560ba7..ce763d64e8 100644
 --- a/boot/optee-os/optee-os.mk
 +++ b/boot/optee-os/optee-os.mk
-@@ -75,10 +75,10 @@ endef
- endif # BR2_TARGET_OPTEE_OS_CORE
- 
- ifeq ($(BR2_TARGET_OPTEE_OS_SERVICES),y)
--define OPTEE_OS_INSTALL_IMAGES_SERVICES
--	mkdir -p $(TARGET_DIR)/lib/optee_armtz
--	$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
--		$(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta
-+define OPTEE_OS_INSTALL_TARGET_CMDS
-+	$(if $(wildcard $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta),
+@@ -79,6 +79,9 @@ define OPTEE_OS_INSTALL_TARGET_CMDS
+ 	$(if $(wildcard $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta),
+ 		$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
+ 			$(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta)
++	$(if $(wildcard $(OPTEE_OS_SDK)/lib/*.ta),
 +		$(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
-+			$(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta)
++			$(OPTEE_OS_SDK)/lib/*.ta)
  endef
  endif # BR2_TARGET_OPTEE_OS_SERVICES
  
