@@ -1,93 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 May 2019 06:00:35 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-05-13
-Message-ID: <20190514060040.8F90986849@whitealder.osuosl.org>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Tue, 14 May 2019 08:14:41 +0200
+Subject: [Buildroot] [PATCH 1/6] boot/optee-os: install trusted shared
+ libraries
+In-Reply-To: <20190513225957.679620c0@windsurf.home>
+References: <20190513201602.2549-1-etienne.carriere@linaro.org>
+ <20190513225957.679620c0@windsurf.home>
+Message-ID: <CAN5uoS_D9K8Tuuemt--+oNNVgmRjRNmiWb0XHBS__wunXwk9Bg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Thomas,
 
-Build statistics for 2019-05-13
-===============================
+On Mon, 13 May 2019 at 23:00, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Etienne,
+>
+> Thanks for your series of patches on OP-TEE. A couple of comments below.
+>
+> On Mon, 13 May 2019 22:15:57 +0200
+> Etienne Carriere <etienne.carriere@linaro.org> wrote:
+>
+> >  config BR2_TARGET_OPTEE_OS_SERVICES
+> > -     bool "Build service TAs"
+> > +     bool "Service trusted application and shared libraries"
+>
+> I am not too happy with the change of wording, because all other
+> options are worded as "Build XYZ", and your change moves away from this
+> consistency.
+>
+> Can we keep:
+>
+>         bool "Build service TAs and libs"
+>
+> for example ?
 
-      branch |  OK | NOK | TIM | TOT |
-   2019.02.x |  21 |   2 |   0 |  23 |
-      master | 219 |  22 |   2 | 243 |
+Ok, i'll fix.
 
-Results for branch 'master'
-===========================
+>
+> > diff --git a/boot/optee-os/optee-os.mk b/boot/optee-os/optee-os.mk
+> > index 6da20a9f3e..811bbbc6ea 100644
+> > --- a/boot/optee-os/optee-os.mk
+> > +++ b/boot/optee-os/optee-os.mk
+> > @@ -77,8 +77,12 @@ endif # BR2_TARGET_OPTEE_OS_CORE
+> >  ifeq ($(BR2_TARGET_OPTEE_OS_SERVICES),y)
+> >  define OPTEE_OS_INSTALL_IMAGES_SERVICES
+> >       mkdir -p $(TARGET_DIR)/lib/optee_armtz
+> > -     $(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
+> > -             $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta
+> > +     [ -z "$(wildcard $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta)" ] || \
+> > +             $(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
+> > +                     $(@D)/$(OPTEE_OS_BUILDDIR_OUT)/ta/*/*.ta
+> > +     [ -z "$(wildcard $(OPTEE_OS_SDK)/lib/*.ta)" ] || \
+> > +             $(INSTALL) -D -m 444 -t $(TARGET_DIR)/lib/optee_armtz \
+> > +                     $(OPTEE_OS_SDK)/lib/*.ta
+>
+> I am not a big fan of the conditionals here.
+>
+> The first one should I guess not be needed, because it was already
+> non-conditional, so I don't see why it should become conditional.
 
-Classification of failures by reason
-------------------------------------
+OP-TEE OS content may change and possibly no TA being built.
+For example, maybe one day the package will not build TAs unless some
+per in-tree TA configuration.
+This change aims at making this build script to be more flexible.
 
-  vdr-plugin-vnsiserver-v1.8.0 | 3 
-                      gzip-1.9 | 2 
-             openjdk-jdk-12+33 | 2 
-                qt5base-5.12.2 | 2 
-                     gdb-8.1.1 | 1 
-      intel-mediadriver-18.4.0 | 1 
-    libtorrent-rasterbar-1.2.1 | 1 
-                  linuxptp-2.0 | 1 
-                   mimic-1.1.0 | 1 
-                       netsurf | 1 
-                   netsurf-3.8 | 1 
-               opencv-2.4.13.7 | 1 
-                    postgresql | 1 
-              qt5enginio-1.6.3 | 1 
-          qt5multimedia-5.12.2 | 1 
-              spandsp-20180108 | 1 
-                   whois-5.4.0 | 1 
-               wireshark-3.0.1 | 1 
-          wpebackend-fdo-1.0.1 | 1 
+>
+> The second one is less clear. In which cases do we have .ta files in
+> OPTEE_OS_SDK/lib ? I did a build for the Qemu vexpress platform and
+> didn't get any lib/*.ta file.
 
+.ta file in lib/ build directory are generated when configuration
+enabled trusted shared libraries,
+which a platform may enable or not. The package default config current
+does not enable shared trusted libs.
 
-Detail of failures
-------------------
+>
+> If we really need a test, we could do it in make:
+>
+>         $(if $(wildcard $(OPTEE_OS_SDK)/lib/*.ta),
+>                 ...)
 
-         arm |                      gdb-8.1.1 | NOK | http://autobuild.buildroot.net/results/bb1ec0bac624504b022d8dd038c35610fe655662 | ORPH
-         arm |                       gzip-1.9 | NOK | http://autobuild.buildroot.net/results/79f9d92a40f44afa653bdf04026f5d40a1b1caac | ORPH
-         arm |                       gzip-1.9 | NOK | http://autobuild.buildroot.net/results/c4c0612ae2912892b0b19887c4b84d2cd15d605e | ORPH
-      x86_64 |       intel-mediadriver-18.4.0 | NOK | http://autobuild.buildroot.net/results/659c1dfe3d40e6a5e25ba2e05fe32974c2060e39 |     
-        m68k |     libtorrent-rasterbar-1.2.1 | NOK | http://autobuild.buildroot.net/results/746f60fadb40288341c1e5642cfcf6373b70583a |     
-     aarch64 |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/3cbc8c090fed00448ab2604cc4209329ea1f79ab |     
-     powerpc |                    mimic-1.1.0 | NOK | http://autobuild.buildroot.net/results/8a51dfc5028da62a48b4b3644c7207914f888347 |     
-         arm |                        netsurf | TIM | http://autobuild.buildroot.net/results/2cf8ef4935166fa874042d5214110fb8c18b2fd7 |     
-        m68k |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/0129ed9c20ce5a44e612075bb4a01ef517aa5343 |     
-microblazeel |                opencv-2.4.13.7 | NOK | http://autobuild.buildroot.net/results/17fff0f312ebd520ba3341976ba56fd8c85ee376 |     
-     sparc64 |              openjdk-jdk-12+33 | NOK | http://autobuild.buildroot.net/results/53f1c27abe5daccab448dccab69f370865c4014d |     
-     aarch64 |              openjdk-jdk-12+33 | NOK | http://autobuild.buildroot.net/results/3c2455dbc285a418f332adb583e923bb90a0d8b6 |     
-microblazeel |                     postgresql | TIM | http://autobuild.buildroot.net/results/e3516e654610bbdd579bb31211c3f56e7d0c3953 |     
-  aarch64_be |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/a836e2949f40726a85b1f611cc8883d4ecce312b |     
-  aarch64_be |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/16dc54f5575fa4c8f3c69c57de8e4bf8f4f31925 |     
-         arc |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/894fcf9b9ca20fa4e5b54f99da6a56ff221cb11c |     
-     aarch64 |           qt5multimedia-5.12.2 | NOK | http://autobuild.buildroot.net/results/0db7c162683c328fcb6562c3a6aaf2cd172620ec |     
-        i686 |               spandsp-20180108 | NOK | http://autobuild.buildroot.net/results/38cc08b3e040a515f28200321d222a98fbcae190 |     
-      mipsel |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/d259ab1a79b809c5970c3cd5501c5d21a120b903 |     
-     riscv64 |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/abae02f4b8811b9cc4cc747216078d5fa8cdd219 |     
-     sparc64 |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/14ed5edee636ccdbda2b4b3a61cd3de76a62d998 |     
-         arm |                    whois-5.4.0 | NOK | http://autobuild.buildroot.net/results/b2972a346471b38eb1d8ddfdaf29f8f4f0bf3190 |     
-     powerpc |                wireshark-3.0.1 | NOK | http://autobuild.buildroot.net/results/6a2b90cd74dabacf11f69e7e994de4ee22bfe4b9 | ORPH
-     aarch64 |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/04bfad470b353aea08fa4d4068894ef8faf0d009 |     
+ok.
 
-Results for branch '2019.02.x'
-==============================
+>
+> Also, and it should be fixed by a separate patch:
+> OPTEE_OS_INSTALL_IMAGES_SERVICES contrary to what its name says
+> installs stuff to $(TARGET_DIR), but is called from
+> OPTEE_OS_INSTALL_IMAGES_CMDS. It should be called from
+> OPTEE_OS_INSTALL_TARGET_CMDS instead, and probably renamed to
+> OPTEE_OS_INSTALL_SERVICES or something like that.
 
-Classification of failures by reason
-------------------------------------
+Fine. Thanks for the help.
 
-               openldap-2.4.46 | 1 
-           qt5serialbus-5.11.3 | 1 
+Best regards,
+etienne
 
-
-Detail of failures
-------------------
-
-      x86_64 |                openldap-2.4.46 | NOK | http://autobuild.buildroot.net/results/81b6345f4524fe9f709b497e897226834224e053 |     
-microblazeel |            qt5serialbus-5.11.3 | NOK | http://autobuild.buildroot.net/results/3482bd950c7ab5608666807a7ab7ea857c767333 |     
-
-
--- 
-http://autobuild.buildroot.net
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
