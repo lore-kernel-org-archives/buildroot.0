@@ -1,44 +1,69 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 May 2019 22:27:13 +0200
-Subject: [Buildroot] [PATCH 2/2] package/qt5multimedia: fix build with
- gstreamer 0.10
-In-Reply-To: <c035d344-0dff-f375-04d2-10ae4c82b8b6@mind.be>
-References: <20190512132627.18937-1-fontaine.fabrice@gmail.com>
- <20190512132627.18937-2-fontaine.fabrice@gmail.com>
- <c035d344-0dff-f375-04d2-10ae4c82b8b6@mind.be>
-Message-ID: <CAPi7W82CASM+P1+zKHBWRBUa8LDyFfbi9vLU3vizTUVm3GR=EA@mail.gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Tue, 14 May 2019 23:33:10 +0300
+Subject: [Buildroot] [PATCH 5/5] package/cog: bump version to 0.3.0
+In-Reply-To: <20190514114111.20424-6-aperez@igalia.com>
+References: <20190514114111.20424-1-aperez@igalia.com>
+ <20190514114111.20424-6-aperez@igalia.com>
+Message-ID: <20190514233310.GB20205@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi,
 
-Le mar. 14 mai 2019 ? 21:50, Arnout Vandecappelle <arnout@mind.be> a ?crit :
->
->  Hi Fabrice,
->
-> On 12/05/2019 15:26, Fabrice Fontaine wrote:
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/de26fd4f5ab130bd87ea9d7709d9568290362758
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  ...-compile-failure-with-gstreamer-0-10.patch | 36 +++++++++++++++++++
-> >  1 file changed, 36 insertions(+)
-> >  create mode 100644 package/qt5/qt5multimedia/0001-Fix-compile-failure-with-gstreamer-0-10.patch
->
->  Does this patch apply both to 5.6 and 5.12?
-Patch does not apply on QT 5.6. It fixes a build failure added in 5.12.2.
->
->  Note that we don't need a patch for 5.6, since it's excluded in qt5base. And
-> both Qt5.6 and gstreamer0.10 will be removed soonish, so there's no need to go
-> and re-enable it for 5.6. But I just want to avoid a build failure for 5.6
-> because the patch doesn't apply.
->
->  Regards,
->  Arnout
-Regards,
+One quick note below...
 
-Fabrice
+On Tue, 14 May 2019 14:41:11 +0300, Adrian Perez de Castro <aperez@igalia.com> wrote:
+> Version 0.2.0 does not work with WPE WebKit 2.22.x, this is the
+> first version which can be used with 2.24.x
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> ---
+>  package/cog/cog.hash | 2 +-
+>  package/cog/cog.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/cog/cog.hash b/package/cog/cog.hash
+> index 97daf72744..39cf2afdbd 100644
+> --- a/package/cog/cog.hash
+> +++ b/package/cog/cog.hash
+> @@ -1,5 +1,5 @@
+>  # Locally generated
+> -sha256 a6abadb78395226bac2e1dd5467feab2cc8c493eab6894a09a51a8e072e38c06  cog-v0.2.0.tar.gz
+> +sha256 755c68029bbd05a17784262e56021362740783d15868dab9402a125ef35eedaf  cog-v0.3.0.tar.gz
+>  
+>  # Hashes for license files:
+>  sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+> index 43f13152c8..da59b6a097 100644
+> --- a/package/cog/cog.mk
+> +++ b/package/cog/cog.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -COG_VERSION = v0.2.0
+> +COG_VERSION = v0.3.0
+>  COG_SITE = $(call github,Igalia,cog,$(COG_VERSION))
+>  COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
+>  COG_LICENSE = MIT
+
+FWIW, I think this should have also:
+
+  COG_INSTALL_STAGING = YES
+
+to make it possible to debug Cog properly. I can either resubmit a second
+version of the patchset, or send this one change in a separate independent
+patch as a follow-up.
+
+Cheers,
+?Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190514/29f704d3/attachment.asc>
