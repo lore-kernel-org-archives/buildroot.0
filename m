@@ -1,102 +1,67 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 14 May 2019 18:46:41 +0200
-Subject: [Buildroot] [git commit] package/uclibc: fix preadv/pwritev offset
+Date: Tue, 14 May 2019 18:58:00 +0200
+Subject: [Buildroot] [PATCH] package/uclibc: fix preadv/pwritev offset
  argument type
-Message-ID: <20190514165056.9A239888AF@busybox.osuosl.org>
+In-Reply-To: <20190513184811.20461-1-jcmvbkbc@gmail.com>
+References: <20190513184811.20461-1-jcmvbkbc@gmail.com>
+Message-ID: <20190514185800.3b4e9ea9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7eb857f199e0510b3de6de80569c123ed22e23c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Max,
 
-preadv/pwritev don't provide separate version for 64-bit wide off_t,
-and default to 32-bit wide off_t, which results in a mismatch between
-declaration and definition for user programs built with
--D_FILE_OFFSET_BITS=64.
+Thanks for the patch and all the investigation around this issue!
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...3-preadv-pwritev-fix-offset-argument-type.patch | 71 ++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+On Mon, 13 May 2019 11:48:11 -0700
+Max Filippov <jcmvbkbc@gmail.com> wrote:
 
-diff --git a/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch b/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
-new file mode 100644
-index 0000000000..ccc262b9c5
---- /dev/null
-+++ b/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
-@@ -0,0 +1,71 @@
-+From 1077d5bebffacfd4b09896ed890fb45a5b3c6dc6 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Fri, 10 May 2019 07:13:19 -0700
-+Subject: [PATCH] preadv/pwritev: fix offset argument type
-+
-+preadv/pwritev don't provide separate version for 64-bit wide off_t,
-+and default to 32-bit wide off_t, which results in a mismatch between
-+declaration and definition for user programs built with
-+-D_FILE_OFFSET_BITS=64.
-+Make offset argument of both functions __off64_t.
-+This fixes test misc/tst-preadvwritev on xtensa.
-+
-+Backported from: 423e49023eeb ("preadv/pwritev: fix offset argument type")
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-+---
-+ include/sys/uio.h                   | 4 ++--
-+ libc/sysdeps/linux/common/preadv.c  | 2 +-
-+ libc/sysdeps/linux/common/pwritev.c | 2 +-
-+ 3 files changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/include/sys/uio.h b/include/sys/uio.h
-+index aa766f9b1187..330426fec492 100644
-+--- a/include/sys/uio.h
-++++ b/include/sys/uio.h
-+@@ -59,7 +59,7 @@ extern ssize_t writev (int __fd, const struct iovec *__iovec, int __count);
-+    This function is a cancellation point and therefore not marked with
-+    __THROW.  */
-+ extern ssize_t preadv (int __fd, const struct iovec *__iovec, int __count,
-+-		       off_t __offset) __wur;
-++		       __off64_t __offset) __wur;
-+ 
-+ /* Write data pointed by the buffers described by IOVEC, which is a
-+    vector of COUNT 'struct iovec's, to file descriptor FD at the given
-+@@ -71,7 +71,7 @@ extern ssize_t preadv (int __fd, const struct iovec *__iovec, int __count,
-+    This function is a cancellation point and therefore not marked with
-+    __THROW.  */
-+ extern ssize_t pwritev (int __fd, const struct iovec *__iovec, int __count,
-+-			off_t __offset) __wur;
-++			__off64_t __offset) __wur;
-+ #endif	/* Use misc.  */
-+ 
-+ __END_DECLS
-+diff --git a/libc/sysdeps/linux/common/preadv.c b/libc/sysdeps/linux/common/preadv.c
-+index fd9dde4b999c..6a07d5df87e0 100644
-+--- a/libc/sysdeps/linux/common/preadv.c
-++++ b/libc/sysdeps/linux/common/preadv.c
-+@@ -21,7 +21,7 @@
-+ 
-+ #ifdef __NR_preadv
-+ ssize_t
-+-preadv (int fd, const struct iovec *vector, int count, off_t offset)
-++preadv (int fd, const struct iovec *vector, int count, __off64_t offset)
-+ {
-+   unsigned long pos_l, pos_h;
-+ 
-+diff --git a/libc/sysdeps/linux/common/pwritev.c b/libc/sysdeps/linux/common/pwritev.c
-+index bef5bcf69b46..f07c40e6de3c 100644
-+--- a/libc/sysdeps/linux/common/pwritev.c
-++++ b/libc/sysdeps/linux/common/pwritev.c
-+@@ -21,7 +21,7 @@
-+ 
-+ #ifdef __NR_pwritev
-+ ssize_t
-+-pwritev (int fd, const struct iovec *vector, int count, off_t offset)
-++pwritev (int fd, const struct iovec *vector, int count, __off64_t offset)
-+ {
-+   unsigned long pos_l, pos_h;
-+ 
-+-- 
-+2.11.0
-+
+> preadv/pwritev don't provide separate version for 64-bit wide off_t,
+> and default to 32-bit wide off_t, which results in a mismatch between
+> declaration and definition for user programs built with
+> -D_FILE_OFFSET_BITS=64.
+> 
+> Backported from: 423e49023eeb ("preadv/pwritev: fix offset argument type")
+
+This Backported tag is not really relevant inside the Buildroot commit
+log: indeed it refers to an upstream uClibc-ng commit. So I have moved
+this line...
+
+> Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+> ---
+>  ...3-preadv-pwritev-fix-offset-argument-type.patch | 70 ++++++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>  create mode 100644 package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
+> 
+> diff --git a/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch b/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
+> new file mode 100644
+> index 000000000000..2a20aecc8d20
+> --- /dev/null
+> +++ b/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
+> @@ -0,0 +1,70 @@
+> +From 1077d5bebffacfd4b09896ed890fb45a5b3c6dc6 Mon Sep 17 00:00:00 2001
+> +From: Max Filippov <jcmvbkbc@gmail.com>
+> +Date: Fri, 10 May 2019 07:13:19 -0700
+> +Subject: [PATCH] preadv/pwritev: fix offset argument type
+> +
+> +preadv/pwritev don't provide separate version for 64-bit wide off_t,
+> +and default to 32-bit wide off_t, which results in a mismatch between
+> +declaration and definition for user programs built with
+> +-D_FILE_OFFSET_BITS=64.
+> +Make offset argument of both functions __off64_t.
+> +This fixes test misc/tst-preadvwritev on xtensa.
+> +
+
+... here.
+
+> +Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+
+And applied to master. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
