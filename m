@@ -1,38 +1,63 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 14 May 2019 19:10:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5serialbus: disable on microblaze
-Message-ID: <20190514171058.22604-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 14 May 2019 19:12:47 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-05-12
+In-Reply-To: <20190514174305.4ee8da2b@windsurf>
+References: <20190513060042.2B05F852CF@fraxinus.osuosl.org>
+ <20190513135520.6ced2ff2@windsurf.home>
+ <CANQCQpZFOf=0zsDVqim7R9MopGDuN6bvPOC1PNV_DO=cPXhm=Q@mail.gmail.com>
+ <20190514174305.4ee8da2b@windsurf>
+Message-ID: <7a7c3d86-7d41-8f21-ffa3-9237f4cfe23f@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/3482bd950c7ab5608666807a7ab7ea857c767333
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/qt5/qt5serialbus/Config.in | 3 +++
- 1 file changed, 3 insertions(+)
+Il 14/05/2019 17:43, Thomas Petazzoni ha scritto:
+> Hello,
+> 
+> On Tue, 14 May 2019 09:57:00 -0500
+> Matthew Weber <matthew.weber@collins.com> wrote:
+>>>> microblazeel |                         glibmm | TIM | http://autobuild.buildroot.net/results/e196d77626b877dc3454d21febe20a04877c02a9 |
+>>>
+>>> Another weird timeout, this time on Matt's autobuilder. Matt, could you
+>>> have a look ?
+>>>
+>>> But this seems to happen quite regularly, even on other autobuilder
+>>> machines:
+>>>
+>>>    http://autobuild.buildroot.net/?reason=glibmm
+>>>
+>>> Always on microblazeel, like the timeout on "atop" discussed above. I
+>>> guess that probably points at a compiler issue, which means it should
+>>> be reproducible.
+>>>   
+>>
+>> Build definitely hung (didn't even need to be on that build machine).
+>> I'll hopefully get some time to take a deeper look later.
+> 
+> I'd say most likely it's the same Microblaze issue than on atop, which
+> Giulio has been looking into, and which is in fact related to
+> BR2_TOOLCHAIN_HAS_GCC_BUG_85180.
 
-diff --git a/package/qt5/qt5serialbus/Config.in b/package/qt5/qt5serialbus/Config.in
-index 2882d50644..cdaed32475 100644
---- a/package/qt5/qt5serialbus/Config.in
-+++ b/package/qt5/qt5serialbus/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_QT5SERIALBUS
- 	bool "qt5serialbus"
-+	# internal compiler error: in do_output_reload, at reload1.c:7978
-+	depends on !BR2_microblaze
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6 # CAN FD
- 	select BR2_PACKAGE_QT5BASE
- 	select BR2_PACKAGE_QT5SERIALPORT
-@@ -15,4 +17,5 @@ config BR2_PACKAGE_QT5SERIALBUS
- 	  http://doc.qt.io/qt-5/qtserialbus-index.html
- 
- comment "qt5serialbus needs headers >= 3.6"
-+	depends on !BR2_microblaze
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_6
+I'm going to test this too together with:
+- atop(now it compiles ok)
+- boost(todo)
+- engine-flare(g++ seems to behave differentely from gcc, it always fail)
+- glibmm(just added, todo)
+
+Best regards
 -- 
-2.20.1
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
