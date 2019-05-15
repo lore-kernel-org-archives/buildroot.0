@@ -1,10 +1,13 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 May 2019 16:00:29 +0200
-Subject: [Buildroot] [PATCH 1/1] linux: xenomai: use URL for the
- ADEOS/IPIPE patch
-In-Reply-To: <20190515090251.20668-1-sebastien.szymanski@armadeus.com>
-References: <20190515090251.20668-1-sebastien.szymanski@armadeus.com>
-Message-ID: <20190515160029.1e85d845@windsurf>
+Date: Wed, 15 May 2019 16:05:30 +0200
+Subject: [Buildroot] [PATCH 4/5] package/wpewebkit: bump to version
+ 2.24.1
+In-Reply-To: <20190515145239.GB9191@momiji>
+References: <20190514114111.20424-1-aperez@igalia.com>
+ <20190514114111.20424-5-aperez@igalia.com>
+ <CAB0FRstZPttVSDYzYGih2nfdTdZ7UKuipDGPKWSaBJf6h_LVSw@mail.gmail.com>
+ <20190515145239.GB9191@momiji>
+Message-ID: <20190515160530.234d9212@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,71 +16,44 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 15 May 2019 11:02:51 +0200
-S?bastien Szymanski <sebastien.szymanski@armadeus.com> wrote:
+Adding Peter in Cc. I know he'll like it :-)
 
-> diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-> index 32dacbdf06..4db694c2b8 100644
-> --- a/linux/Config.ext.in
-> +++ b/linux/Config.ext.in
-> @@ -22,18 +22,22 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI
->  
->  	  However, it is recommended to use the latest version of the
->  	  Adeos/Ipipe patch available at
-> -	  http://download.gna.org/adeos/patches
-> +	  https://xenomai.org/downloads/ipipe/
->  
->  	  Xenomai is know to support Blackfin, SH4, x86, ARM, NIOS2
->  	  and PowerPC architectures.
->  
-> -config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
-> -	string "Path for Adeos patch file"
-> +config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH_URL
+Adding Yann in Cc. I know he won't like it :-)
 
-I don't think it makes sense to rename the option just for this. The
-behavior is backward compatible, and adding the _URL prefix is not
-really necessary.
+On Wed, 15 May 2019 14:52:39 +0300
+Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-> +	string "Path/URL for Adeos patch file"
-> +	default BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH if BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH != "" # legacy
->  	depends on BR2_LINUX_KERNEL_EXT_XENOMAI
->  	help
-> -	  Optionally, explicitly specify the Adeos patch to use.
-> -	  Download it at http://download.gna.org/adeos/patches
-> -	  and verify that your kernel version in buildroot matches.
-> +	  Optionally, explicitly specify where to find the Adeos
-> +	  patch to use.
-> +	  Examples:
-> +	  https://xenomai.org/downloads/ipipe/v4.x/arm/ipipe-core-4.19.33-arm-2.patch
-> +	  or file:///home/foo/ipipe-core-4.19.33-arm-2.patch
-> +	  Please verify that your kernel version in Buildroot matches.
->  
->  comment "xenomai needs a uClibc or glibc toolchain w/ threads"
->  	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
-> diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
-> index d066bb32ac..e16f76ffb5 100644
-> --- a/linux/linux-ext-xenomai.mk
-> +++ b/linux/linux-ext-xenomai.mk
-> @@ -7,11 +7,17 @@
->  LINUX_EXTENSIONS += xenomai
->  
->  # Adeos patch version
-> -XENOMAI_ADEOS_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH))
-> -ifeq ($(XENOMAI_ADEOS_PATCH),)
-> +XENOMAI_ADEOS_PATCH_URL = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH_URL))
-> +ifneq ($(XENOMAI_ADEOS_PATCH_URL),)
-> +XENOMAI_ADEOS_PATCH = $(shell basename $(XENOMAI_ADEOS_PATCH_URL))
 
-You can use $(basename ...) instead of $(shell basename ...)
+> > openjpeg is an optional dependency
+> > 
+> > ifeq ($(BR2_PACKAGE_OPENJPEG),y)
+> > WPEWEBKIT_CONF_OPTS += -DUSE_OPENJPEG=ON
+> > WPEWEBKIT_DEPENDENCIES += openjpeg
+> > else
+> > WPEWEBKIT_CONF_OPTS += -DUSE_OPENJPEG=OFF
+> > endif  
+> 
+> While it is indeed possible to build without OpenJPEG, with my WebKit
+> developer hat I have to strongly recommend to make it required: many websites
+> will silently fail to show images without this enabled, and that's the reason
+> why I have selected the dependency unconditionally.
+> 
+> For the record: I did a quick check and in my work system (x86_64) the
+> ?libopenjp2.so? library is only 365 KiB, which is peanuts compared to the size
+> of ?libWPEWebKit.so?. Moreover, the openjpeg package can be built in every
+> platform where wpewebkit is supported, therefore I think it is worth it to
+> leave the dependency unconditionally enabled.
 
-> +LINUX_EXTRA_DOWNLOADS += $(XENOMAI_ADEOS_PATCH_URL)
-> +BR_NO_CHECK_HASH_FOR += $(XENOMAI_ADEOS_PATCH)
-> +endif
+Perhaps this is one situation where we could make good use of the
+"imply" kconfig keyword ?
 
-Is this really backward compatible with a value of
-XENOMAI_ADEOS_PATCH_URL = board/foo/ipipe-core-<version>.patch ?
+BR2_PACKAGE_WEBKIT would do an "imply BR2_PACKAGE_OPENJPEG". This way
+by default OpenJPEG is automatically enabled by WPE Webkit, but we
+still allow the user to disable OpenJPEG if he really wants it.
 
-Best regards,
+That allows to comply with the Buildroot principle of "make everything
+optional really optional" while offering a good out-of-the-box
+experience.
 
 Thomas
 -- 
