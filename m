@@ -1,11 +1,11 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Wed, 15 May 2019 08:53:39 +0200
-Subject: [Buildroot] [PATCH 2/5] package/wpebackend-fdo: bump to version
- 1.2.0
-In-Reply-To: <20190514114111.20424-3-aperez@igalia.com>
+Date: Wed, 15 May 2019 08:55:08 +0200
+Subject: [Buildroot] [PATCH 4/5] package/wpewebkit: bump to version
+ 2.24.1
+In-Reply-To: <20190514114111.20424-5-aperez@igalia.com>
 References: <20190514114111.20424-1-aperez@igalia.com>
- <20190514114111.20424-3-aperez@igalia.com>
-Message-ID: <CAB0FRsuK9U0+Gv=HCivDwtjwjD9MmBnicKfxGPsHBe-Q0BGxHg@mail.gmail.com>
+ <20190514114111.20424-5-aperez@igalia.com>
+Message-ID: <CAB0FRstZPttVSDYzYGih2nfdTdZ7UKuipDGPKWSaBJf6h_LVSw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,74 +15,152 @@ To: buildroot@busybox.net
 Le mar. 14 mai 2019 ? 14:24, Adrian Perez de Castro <aperez@igalia.com> a
 ?crit :
 
-> WPE WebKit 2.24.x requires WPEBackend-fdo 1.2.x, as indicated at:
+> This is a new major release which brings in many improvements and new
+> features. For a complete list, please refer to the release notes:
 >
->   https://wpewebkit.org/release/schedule/#compatible-components
+>   https://wpewebkit.org/release/wpewebkit-2.24.0.html
+>   https://wpewebkit.org/release/wpewebkit-2.24.1.html
+>
+> Updating to version 2.24.1 also includes fixes for CVE-2019-6201,
+> CVE-2019-6251, CVE-2019-7285, CVE-2019-7292, CVE-2019-8503,
+> CVE-2019-8506, CVE-2019-8515, CVE-2019-8518, CVE-2019-8523,
+> CVE-2019-8524, CVE-2019-8535, CVE-2019-8536, CVE-2019-8544,
+> CVE-2019-8551, CVE-2019-8558, CVE-2019-8559, CVE-2019-8563, and
+> CVE-2019-11070. The detailed security advisory can be found at:
+>
+>   https://wpewebkit.org/security/WSA-2019-0002.html
+>
+> The BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS_JIT configuration symbol is not
+> needed anymore, because the logic to decide whether the JavaScriptCore
+> JIT spport can be enabled has been improved upstream.
+>
+> One of the new features in 2.24.x is the support for JPEG2000 images,
+> which is implemented using the OpenJPEG library. Therefore a dependency
+> on BR2_PACKAGE_OPENJPEG is added.
 >
 > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 > ---
->  package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
->  package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/wpewebkit/Config.in      | 17 +----------------
+>  package/wpewebkit/wpewebkit.hash |  8 ++++----
+>  package/wpewebkit/wpewebkit.mk   | 10 ++--------
+>  3 files changed, 7 insertions(+), 28 deletions(-)
 >
-> diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash
-> b/package/wpebackend-fdo/wpebackend-fdo.hash
-> index 6e6f9f0e3f..4d89d1e16f 100644
-> --- a/package/wpebackend-fdo/wpebackend-fdo.hash
-> +++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+> diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+> index 04ebe5452b..ff5775c735 100644
+> --- a/package/wpewebkit/Config.in
+> +++ b/package/wpewebkit/Config.in
+> @@ -12,22 +12,6 @@ config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+>         depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>         depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+>
+> -config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS_JIT
+> -       bool
+> -       # ARM needs NEON for JIT.
+> -       default y if BR2_ARM_CPU_HAS_NEON
+> -       # AArch64 is supported upstream but not well tested on big-endian
+> mode.
+> -       default y if BR2_aarch64
+> -       # i386 & x86_64 don't have any special requirements.
+> -       default y if BR2_i386
+> -       default y if BR2_x86_64
+> -       # JIT is known not to work on MIPS64.
+> -       # Plain MIPS32 (pre R2) is not well tested and likely broken, and
+> R6
+> -       # is unsupported, see
+> https://bugs.webkit.org/show_bug.cgi?id=191258
+> -       # The MIPS support is completely untested in big-endian mode.
+> -       default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R2
+> -       default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R5
+> -
+>  comment "wpewebkit needs a toolchain w/ C++, wchar, threads, dynamic
+> library, gcc >= 4.8, host gcc >= 4.8"
+>         depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+>         depends on !BR2_BINFMT_FLAT
+> @@ -63,6 +47,7 @@ config BR2_PACKAGE_WPEWEBKIT
+>         select BR2_PACKAGE_LIBSOUP
+>         select BR2_PACKAGE_LIBTASN1
+>         select BR2_PACKAGE_LIBXSLT
+> +       select BR2_PACKAGE_OPENJPEG
+>         select BR2_PACKAGE_WAYLAND
+>         select BR2_PACKAGE_WAYLAND_PROTOCOLS
+>         select BR2_PACKAGE_WEBP
+> diff --git a/package/wpewebkit/wpewebkit.hash
+> b/package/wpewebkit/wpewebkit.hash
+> index cbf253d29c..27f7344be2 100644
+> --- a/package/wpewebkit/wpewebkit.hash
+> +++ b/package/wpewebkit/wpewebkit.hash
 > @@ -1,7 +1,7 @@
-> -# From https://wpewebkit.org/releases/wpebackend-fdo-1.0.1.tar.xz.sums
-> -md5 <https://wpewebkit.org/releases/wpebackend-fdo-1.0.1.tar.xz.sums-md5>
-> 2ee81a4212c18110a06a0c51c12e0d2e wpebackend-fdo-1.0.1.tar.xz
-> -sha1 cdc6ac95e302a2358204b766936a9bf8ef4f26f2 wpebackend-fdo-1.0.1.tar.xz
-> -sha256 15b8b1febea5d9c271e95c35b3c1e13f870712a54bc5f689cfdbb96e2f070fc8
-> wpebackend-fdo-1.0.1.tar.xz
-> +# From https://wpewebkit.org/releases/wpebackend-fdo-1.2.0.tar.xz.sums
-> +md5 <https://wpewebkit.org/releases/wpebackend-fdo-1.2.0.tar.xz.sums+md5>
-> 74e1b2fc2bc19933b17ff4f8435f67cd wpebackend-fdo-1.2.0.tar.xz
-> +sha1 60559697512fd483c1d918b708a3d1d130b74a0a wpebackend-fdo-1.2.0.tar.xz
-> +sha256 b1bb261273772af8f7d96d94989fc2ed0445ec06c7eb21f47a1b94e52422ddd5
-> wpebackend-fdo-1.2.0.tar.xz
+> -# From https://wpewebkit.org/releases/wpewebkit-2.22.5.tar.xz.sums
+> -md5 <https://wpewebkit.org/releases/wpewebkit-2.22.5.tar.xz.sums-md5>
+> 7b768bfae1295ebbc9a9038bf8fb6e6c wpewebkit-2.22.5.tar.xz
+> -sha1 c85f927e0f17f1e7045a5d33c683d310c7af24de wpewebkit-2.22.5.tar.xz
+> -sha256 d5e7b23e4f9e9f1b9d369faa4d527cdb59aef56b3e6a50a16dad243df5f699f3
+> wpewebkit-2.22.5.tar.xz
+> +# From https://wpewebkit.org/releases/wpewebkit-2.24.1.tar.xz.sums
+> +md5 <https://wpewebkit.org/releases/wpewebkit-2.24.1.tar.xz.sums+md5>
+> 0f7b792874853416d8005b020bd90685 wpewebkit-2.24.1.tar.xz
+> +sha1 d009c82afbc2c373a7f34ffda392e5c3b52dac7d wpewebkit-2.24.1.tar.xz
+> +sha256 95f2fb68429fbd901ea415d09fdd88d6d9ac5ec2d170bec9977093b12e5093a6
+> wpewebkit-2.24.1.tar.xz
 >
 >  # Hashes for license files:
->  sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825
-> COPYING
-> diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk
-> b/package/wpebackend-fdo/wpebackend-fdo.mk
-> index 5842861bac..15530ec45f 100644
-> --- a/package/wpebackend-fdo/wpebackend-fdo.mk
-> +++ b/package/wpebackend-fdo/wpebackend-fdo.mk
+>  sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4
+> Source/WebCore/LICENSE-APPLE
+> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/
+> wpewebkit.mk
+> index 73ad534acd..480ddb0b0c 100644
+> --- a/package/wpewebkit/wpewebkit.mk
+> +++ b/package/wpewebkit/wpewebkit.mk
 > @@ -4,7 +4,7 @@
 >  #
 >
 >  ################################################################################
 >
-> -WPEBACKEND_FDO_VERSION = 1.0.1
-> +WPEBACKEND_FDO_VERSION = 1.2.0
->  WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
->  WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
->  WPEBACKEND_FDO_INSTALL_STAGING = YES
+> -WPEWEBKIT_VERSION = 2.22.5
+> +WPEWEBKIT_VERSION = 2.24.1
+>  WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+>  WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+>  WPEWEBKIT_INSTALL_STAGING = YES
+> @@ -14,19 +14,13 @@ WPEWEBKIT_LICENSE_FILES = \
+>         Source/WebCore/LICENSE-LGPL-2.1
+>  WPEWEBKIT_DEPENDENCIES = host-gperf host-python host-ruby \
+>         harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup
+> libtasn1 \
+> -       libpng libxslt wayland-protocols webp wpebackend-fdo
+> +       libpng libxslt openjpeg wayland-protocols webp wpebackend-fdo
 >
+>  WPEWEBKIT_CONF_OPTS = \
+>         -DPORT=WPE \
+>         -DENABLE_API_TESTS=OFF \
+>         -DENABLE_MINIBROWSER=OFF
+>
+>
+openjpeg is an optional dependency
 
-Here, I need to add this hook:
-
-# CMake found the wayland-scanner in $(STAGING_DIR), we need the one in
-$(HOST_DIR)
-define WPEBACKEND_FDO_FIX_WAYLAND_SCANNER
-    $(SED) "s:/usr/bin/wayland-scanner:$(HOST_DIR)/bin/wayland-scanner:;" \
-        $(@D)/CMakeFiles/WPEBackend-fdo.dir/build.make
-endef
-
-WPEBACKEND_FDO_POST_CONFIGURE_HOOKS += WPEBACKEND_FDO_FIX_WAYLAND_SCANNER
+ifeq ($(BR2_PACKAGE_OPENJPEG),y)
+WPEWEBKIT_CONF_OPTS += -DUSE_OPENJPEG=ON
+WPEWEBKIT_DEPENDENCIES += openjpeg
+else
+WPEWEBKIT_CONF_OPTS += -DUSE_OPENJPEG=OFF
+endif
 
 
 Fran?ois
 
 
+> -ifeq ($(BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS_JIT),y)
+> -WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=ON
+> -else
+> -WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF
+> -endif
+> -
+>  ifeq ($(BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA),y)
+>  WPEWEBKIT_CONF_OPTS += \
+>         -DENABLE_VIDEO=ON \
 > --
 > 2.21.0
 >
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190515/8617ed89/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190515/31e7863e/attachment.html>
