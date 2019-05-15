@@ -1,50 +1,70 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Wed, 15 May 2019 08:48:45 +0200
-Subject: [Buildroot] [PATCH v4 3/7] boot/optee-os: bump version to 3.5.0
-In-Reply-To: <20190514181927.68d53f22@windsurf>
-References: <20190514085319.9031-1-etienne.carriere@linaro.org>
- <20190514085319.9031-3-etienne.carriere@linaro.org>
- <20190514181927.68d53f22@windsurf>
-Message-ID: <CAN5uoS9icO6qTa4j5+SAmqP4MbK11ENCBihvKtLoB66hdEswyA@mail.gmail.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
+Date: Wed, 15 May 2019 08:52:20 +0200
+Subject: [Buildroot] [PATCH 1/5] package/libwpe: bump to version 1.2.0
+In-Reply-To: <20190514114111.20424-2-aperez@igalia.com>
+References: <20190514114111.20424-1-aperez@igalia.com>
+ <20190514114111.20424-2-aperez@igalia.com>
+Message-ID: <CAB0FRstsuCgp9EQ0sGFBVEOuc+3dLAM_1cdEgeVhVfV-ZBRAog@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 14 May 2019 at 18:19, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
+Le mar. 14 mai 2019 ? 14:24, Adrian Perez de Castro <aperez@igalia.com> a
+?crit :
+
+> WPE WebKit 2.24.x requires libwpe 1.2.x, as indicated at:
 >
-> Hello,
+>   https://wpewebkit.org/release/schedule/#compatible-components
 >
-> On Tue, 14 May 2019 10:53:15 +0200
-> Etienne Carriere <etienne.carriere@linaro.org> wrote:
->
-> > diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
-> > new file mode 100644
-> > index 0000000000..167f96475d
-> > --- /dev/null
-> > +++ b/boot/optee-os/optee-os.hash
-> > @@ -0,0 +1,4 @@
-> > +# From https://github.com/OP-TEE/optee_os/archive/3.5.0.tar.gz
-> > +sha256 a02fe8e7fdee9653e9207059071735a839b1255fdaf311a2a6cfd185a4cee6a2  optee-os-3.5.0.tar.gz
-> > +# Locally computed
-> > +sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
->
-> This hash was wrong: you did not test it with "make legal-info".
->
-> I fixed it and applied to next. Thanks.
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 >
 
-Thanks, and sorry, no I've never run "make legal-info". I will, promise!
-And thanks for the whole series.
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
-regards,
-etienne
-
-
-> Thomas
+---
+>  package/libwpe/libwpe.hash | 8 ++++----
+>  package/libwpe/libwpe.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/package/libwpe/libwpe.hash b/package/libwpe/libwpe.hash
+> index 58dba92e6f..bd36016603 100644
+> --- a/package/libwpe/libwpe.hash
+> +++ b/package/libwpe/libwpe.hash
+> @@ -1,7 +1,7 @@
+> -# From https://wpewebkit.org/releases/libwpe-1.0.0.tar.xz.sums
+> -md5 b5ea32bd644811d5c6433cf1439763f7 libwpe-1.0.0.tar.xz
+> -sha1 6e51591c00a9a6128e19920807e6874794c723fd libwpe-1.0.0.tar.xz
+> -sha256 aff11612123f9ab85a8b9a4bcdfb3a7503eba0a0d2d96f2cdecd30e911091719
+> libwpe-1.0.0.tar.xz
+> +# From https://wpewebkit.org/releases/libwpe-1.2.0.tar.xz.sums
+> +md5 060876c6a32ef1ae519cb9542d0ede06 libwpe-1.2.0.tar.xz
+> +sha1 5dd34eba8cc7625d2b1c679c509492941092d137 libwpe-1.2.0.tar.xz
+> +sha256 f28035e7a8991fbb1a0e762f1b3d0e3cb57513a3164c75c7dc3eb0c11d9149fc
+> libwpe-1.2.0.tar.xz
+>
+>  # Hashes for license files:
+>  sha256 6efc9991641b47b1f4e727db7f090d0ade00117dcbbc74be622f2baceddb1f22
+> COPYING
+> diff --git a/package/libwpe/libwpe.mk b/package/libwpe/libwpe.mk
+> index aad1214e1d..fca974aecd 100644
+> --- a/package/libwpe/libwpe.mk
+> +++ b/package/libwpe/libwpe.mk
+> @@ -4,7 +4,7 @@
+>  #
+>
+>  ################################################################################
+>
+> -LIBWPE_VERSION = 1.0.0
+> +LIBWPE_VERSION = 1.2.0
+>  LIBWPE_SITE = https://wpewebkit.org/releases
+>  LIBWPE_SOURCE = libwpe-$(LIBWPE_VERSION).tar.xz
+>  LIBWPE_INSTALL_STAGING = YES
 > --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> 2.21.0
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190515/c269be94/attachment.html>
