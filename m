@@ -1,24 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 May 2019 14:01:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/lynx: remove duplicate
- dependency for host-pkg-conf
-In-Reply-To: <1557917096-20967-1-git-send-email-email@gmail.com> (Vadim
- Kochan's message of "Wed, 15 May 2019 13:44:56 +0300")
-References: <1557917096-20967-1-git-send-email-email@gmail.com>
-Message-ID: <874l5w3p0m.fsf@dell.be.48ers.dk>
+Date: Wed, 15 May 2019 14:20:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libtorrent-rasterbar: fix build
+ on m68k_cf
+In-Reply-To: <20190514170213.21811-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 14 May 2019 19:02:13 +0200")
+References: <20190514170213.21811-1-fontaine.fabrice@gmail.com>
+Message-ID: <87y3373o4o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vadim" == Vadim Kochan <vadim4j@gmail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > From: Vadim Kochan <vadim4j@gmail.com>
- > host-pkg-conf is already in default lynx's dependencies so remove it
- > from openssl condition block.
+ > An internal compiler error is raised on m68k_cf at dwarf2cfi.c:2802 in
+ > connect_traces. Error can be fixed by adding -fno-defer-pop, see
+ > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=58864
 
- > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/746f60fadb40288341c1e5642cfcf6373b70583a
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
