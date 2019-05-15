@@ -1,11 +1,10 @@
 From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed, 15 May 2019 21:50:09 +0300
-Subject: [Buildroot] [PATCH 5/5] package/cog: bump version to 0.3.0
-In-Reply-To: <6d6d945f-05be-61cd-0c60-6b9f75a23d97@mind.be>
-References: <20190514114111.20424-1-aperez@igalia.com>
- <20190514114111.20424-6-aperez@igalia.com> <20190514233310.GB20205@momiji>
- <6d6d945f-05be-61cd-0c60-6b9f75a23d97@mind.be>
-Message-ID: <20190515215009.GB29472@momiji>
+Date: Wed, 15 May 2019 22:17:03 +0300
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-05-14
+In-Reply-To: <20190515060039.F045C22920@silver.osuosl.org>
+References: <20190515060039.F045C22920@silver.osuosl.org>
+Message-ID: <20190515221703.GC32757@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,67 +13,28 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Tue, 14 May 2019 23:36:52 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
- 
-> On 14/05/2019 22:33, Adrian Perez de Castro wrote:
-> > Hi,
-> > 
-> > One quick note below...
-> > 
-> > On Tue, 14 May 2019 14:41:11 +0300, Adrian Perez de Castro <aperez@igalia.com> wrote:
-> >> Version 0.2.0 does not work with WPE WebKit 2.22.x, this is the
-> >> first version which can be used with 2.24.x
-> >>
-> >> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> >> ---
-> >>  package/cog/cog.hash | 2 +-
-> >>  package/cog/cog.mk   | 2 +-
-> >>  2 files changed, 2 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-> >> index 97daf72744..39cf2afdbd 100644
-> >> --- a/package/cog/cog.hash
-> >> +++ b/package/cog/cog.hash
-> >> @@ -1,5 +1,5 @@
-> >>  # Locally generated
-> >> -sha256 a6abadb78395226bac2e1dd5467feab2cc8c493eab6894a09a51a8e072e38c06  cog-v0.2.0.tar.gz
-> >> +sha256 755c68029bbd05a17784262e56021362740783d15868dab9402a125ef35eedaf  cog-v0.3.0.tar.gz
-> >>  
-> >>  # Hashes for license files:
-> >>  sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-> >> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-> >> index 43f13152c8..da59b6a097 100644
-> >> --- a/package/cog/cog.mk
-> >> +++ b/package/cog/cog.mk
-> >> @@ -4,7 +4,7 @@
-> >>  #
-> >>  ################################################################################
-> >>  
-> >> -COG_VERSION = v0.2.0
-> >> +COG_VERSION = v0.3.0
-> >>  COG_SITE = $(call github,Igalia,cog,$(COG_VERSION))
-> >>  COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
-> >>  COG_LICENSE = MIT
-> > 
-> > FWIW, I think this should have also:
-> > 
-> >   COG_INSTALL_STAGING = YES
-> > 
-> > to make it possible to debug Cog properly. I can either resubmit a second
-> > version of the patchset, or send this one change in a separate independent
-> > patch as a follow-up.
-> 
->  It's definitely independent. And I don't think we would see "to make it
-> possible to debug Cog properly" as a good reason... Because with that reasoning,
-> *all* packages should be installed to staging. (Which, indeed, they should...)
+On Wed, 15 May 2019 06:00:34 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-I have submitted a separate patch for this, and with a better reasoning for
-having it installed to the staging tree: the package includes libraries and
-headers which e.g. should end up being part of the SDK.
+>      aarch64 |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/39ccf985b3121342589167fe8bc0f88735318c28 |     
+>      aarch64 |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/fa8341c0b11c5ef30a4692927e90f64de5bf4e11 |     
+>      aarch64 |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/790c239fee8a59682927cb87ea9c1908a83d3c84 |     
 
-Patch here: https://patchwork.ozlabs.org/patch/1100157/
+The wpebackend-fdo build failure would go away by applying Giulio's patch:
 
-Cheers,
+  https://patchwork.ozlabs.org/patch/1085508/
+
+>          arm |               wpewebkit-2.22.5 | NOK | http://autobuild.buildroot.net/results/645be27edc31037a9b1bb7ce0dc85440949b0846 |     
+
+
+This build failure of of the wpewebkit package is kind of odd: it looks like
+with assertions enabled (as in: doing a debug build) uses some variables which
+do not exist, and I wonder why we haven't seen this before?when working on
+WebKit we routinely do debug builds ?\_(?)_/? 
+
+I think it is more worth it to push the update to WPE WebKit 2.24.x forward,
+and this build failure would just go away.
+
+Regards,
 ?Adri?n
 -------------- next part --------------
 A non-text attachment was scrubbed...
@@ -82,4 +42,4 @@ Name: not available
 Type: application/pgp-signature
 Size: 195 bytes
 Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190515/33870330/attachment.asc>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190515/22d82b26/attachment.asc>
