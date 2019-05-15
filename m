@@ -1,70 +1,123 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 15 May 2019 21:53:34 +0200
-Subject: [Buildroot] [PATCH 4/5] package/wpewebkit: bump to version
- 2.24.1
-In-Reply-To: <20190515211139.GB26229@momiji>
-References: <20190514114111.20424-1-aperez@igalia.com>
- <20190514114111.20424-5-aperez@igalia.com>
- <CAB0FRstZPttVSDYzYGih2nfdTdZ7UKuipDGPKWSaBJf6h_LVSw@mail.gmail.com>
- <20190515145239.GB9191@momiji> <20190515160530.234d9212@windsurf>
- <20190515211139.GB26229@momiji>
-Message-ID: <20190515195334.GA2441@scaer>
+From: Michael Nebel <michael@nebel.de>
+Date: Wed, 15 May 2019 21:56:05 +0200
+Subject: [Buildroot] problems compiling nodejs 10.15.3 and suggested fix
+In-Reply-To: <20190513222749.6289dbed@windsurf.home>
+References: <a8114d08-6afa-95eb-0152-ce47cc923921@nebel.de>
+ <20190513222749.6289dbed@windsurf.home>
+Message-ID: <bd442dda-c5ff-2d43-e764-db396b136e57@nebel.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adrian, Thomas, All,
+Hello Thomas, Daniel, Martin,
 
-On 2019-05-15 21:11 +0300, Adrian Perez de Castro spake thusly:
-> On Wed, 15 May 2019 16:05:30 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> > Adding Peter in Cc. I know he'll like it :-)
-> > Adding Yann in Cc. I know he won't like it :-)
+I agree, that mangling the LD_LIBRARY_PATH isn't the best solution, but
+as far as I debugged the problem, the alternative would be to patch a
+part of tools in the original nodejs package :-(
 
-I see the wink, but still, meh... ;-)
+The linking of the command "torque" is done by
 
-> Personally, I like the suggestion, but I will wait for feedback on this
-> before sending v2 of the patch set.
+/usr/bin/g++ -o .....host-nodejs-10.15.3/out/Release/torque  -pthread
+-rdynamic -m64 -m64  -Wl,--start-group ......  ...
+-L...buildroot/output/host/lib -lz -lcrypto -lssl -ldl -lrt -Wl,--end-group
 
-Well, as you said previously, what good is a browser without support for
-one of the most prominent image format on the web?
 
-If you were arguing for BMP or TGA, we'd use a conditional dependency.
+The LDFLAGS="-L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib" are missing.
 
-But please note that openjpeg is a JPEG 2000 codec, not a JPEG one.
-JPEG 2000 is much less used on the web:
+The makefile to compile torque is generated out of
+node-v10.15.3/tools/gyp/pylib/gyp/generator/make.py. The cmd_link does
+not include the LDFLAGS, but $(LDFLAGS.$(TOOLSET)).
 
-    https://en.wikipedia.org/wiki/Comparison_of_web_browsers#Image_format_support
+Adding a simple $(LDFLAGS) seems to fix the linking problem:
 
-Only Konqueror, Midori, Omniweb, and Safari are said to support it.
+--- tmp/node-v10.15.3/tools/gyp/pylib/gyp/generator/make.py
++++
+output/build/host-nodejs-10.15.3/tools/gyp/pylib/gyp/generator/make.py
+@@ -147,7 +147,7 @@
+ # special "figure out circular dependencies" flags around the entire
+ # input list during linking.
+ quiet_cmd_link = LINK($(TOOLSET)) $@
+-cmd_link = $(LINK.$(TOOLSET)) -o $@ $(GYP_LDFLAGS)
+$(LDFLAGS.$(TOOLSET)) -Wl,--start-group $(LD_INPUTS) $(LIBS) -Wl,--end-group
++cmd_link = $(LINK.$(TOOLSET)) -o $@ $(GYP_LDFLAGS)
+$(LDFLAGS.$(TOOLSET)) $(LDFLAGS) -Wl,--start-group $(LD_INPUTS) $(LIBS)
+-Wl,--end-group
 
-Also, Thomas, please note that NetSurf does not support it eitther. ;-]
 
-So, in this case, I would argue for a conditional dependency, as Adrian
-initially suggested below:
+But this brings me far out of my comfort zone.
 
-> > On Wed, 15 May 2019 14:52:39 +0300
-> > Adrian Perez de Castro <aperez@igalia.com> wrote:
-> > > > openjpeg is an optional dependency
-> > > > ifeq ($(BR2_PACKAGE_OPENJPEG),y)
-> > > > WPEWEBKIT_CONF_OPTS += -DUSE_OPENJPEG=ON
-> > > > WPEWEBKIT_DEPENDENCIES += openjpeg
-> > > > else
-> > > > WPEWEBKIT_CONF_OPTS += -DUSE_OPENJPEG=OFF
-> > > > endif  
 
-... here ^^^.
+Perhaps this debugging helps a little further,
 
-Sorry, but I still dislike "imply". :-p
+	Michael
 
-Regards,
-Yann E. MORIN.
+
+
+
+
+
+
+Am 13.05.2019 um 22:27 schrieb Thomas Petazzoni:
+> Hello Michael,
+> 
+> Thanks for your e-mail and bug report. I'm adding in Cc Daniel and
+> Martin, who take care of the nodejs package in Buildroot. Martin has
+> done the recent update of nodejs that probably introduced this
+> regression. See below for some comment.
+> 
+> On Fri, 10 May 2019 19:27:21 +0200
+> Michael Nebel <michael@nebel.de> wrote:
+> 
+>> Hello,
+>>
+>> I started to evaluate buildroot some days ago. The "make menuconfig" was
+>> very intriguing for me. It felt like coming home again :-) Cool and
+>> thanks for this project!
+>>
+>> After first successful experiments with buildroot-2019.02.2, I switched
+>> to the git-version. Here I ran into some troubles to compile nodejs for
+>> x86_64. It failed with
+>>
+>>   output/build/host-nodejs-10.15.3/out/Release/torque:
+>>         error while loading shared libraries: libcrypto.so.1.1:
+> 
+> This normally should not happen because our host binaries should be
+> built with a RPATH that points to $(HOST_DIR)/lib.
+> 
+> However, as explained in commit 2ebc2219d5716f81789f29dcbb6b05d0c9d886dd:
+> 
+>     The host tool "torque" is unfortunately not built by complying to our
+>     LDFLAGS, so it is not built with the proper RPATH. We fix that using
+>     patchelf, and install it to $(HOST_DIR) to make it available during
+>     the build of the target nodejs.
+> 
+> But unfortunately, it seems like this "torque" tool is being executed
+> *during* the host-nodejs build, i.e after it has been compiled, but
+> before its RPATH is fixed up by patchelf.
+> 
+>> nebel at tyche ~/src/buildroot $ git diff
+>> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+>> index 2577239e19..abf51a3f9c 100644
+>> --- a/package/nodejs/nodejs.mk
+>> +++ b/package/nodejs/nodejs.mk
+>> @@ -72,6 +72,7 @@ define HOST_NODEJS_BUILD_CMDS
+>>         $(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
+>>                 $(MAKE) -C $(@D) \
+>>                 $(HOST_CONFIGURE_OPTS) \
+>> +               LD_LIBRARY_PATH="$(LD_LIBRARY_PATH):$(HOST_DIR)/lib/" \
+> 
+> This is most likely not really how we want to fix it. I think we really
+> want to build the torque program with the proper RPATH from the start.
+> 
+> Martin, any idea about this ?
+> 
+> Thanks!
+> 
+> Thomas
+> 
+
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Michael Nebel                  	
