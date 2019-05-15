@@ -1,146 +1,86 @@
-From: Laurentiu-Cristian Duca <laurentiu.duca@gmail.com>
-Date: Wed, 15 May 2019 16:15:47 +0300
-Subject: [Buildroot] Keyboard and mouse not working in X server
-In-Reply-To: <2562bee5-bcb7-0ced-d16f-496701c8ac92@mind.be>
-References: <CAPm8-H57Nh28bx-pB8hukv8FAPLKe4xQ2EgtGVCWvZntThP3Og@mail.gmail.com>
- <2562bee5-bcb7-0ced-d16f-496701c8ac92@mind.be>
-Message-ID: <CAPm8-H5H5eACiAvU8B8tLGz=XFgOxgQZEULXJePabia1eFVNQg@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 15 May 2019 16:00:29 +0200
+Subject: [Buildroot] [PATCH 1/1] linux: xenomai: use URL for the
+ ADEOS/IPIPE patch
+In-Reply-To: <20190515090251.20668-1-sebastien.szymanski@armadeus.com>
+References: <20190515090251.20668-1-sebastien.szymanski@armadeus.com>
+Message-ID: <20190515160029.1e85d845@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Success in two situations:
-1. udev + xdriver_xf86-input-evdev and xdriver_xf86-libinput
-(thanks Arnout Vandecappelle)
-2. devtmpfs with the following lines to xorg.conf:
-Section "ServerFlags"
-  Option       "AutoAddDevices"   "false"
-EndSection
+Hello,
+
+On Wed, 15 May 2019 11:02:51 +0200
+S?bastien Szymanski <sebastien.szymanski@armadeus.com> wrote:
+
+> diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+> index 32dacbdf06..4db694c2b8 100644
+> --- a/linux/Config.ext.in
+> +++ b/linux/Config.ext.in
+> @@ -22,18 +22,22 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI
+>  
+>  	  However, it is recommended to use the latest version of the
+>  	  Adeos/Ipipe patch available at
+> -	  http://download.gna.org/adeos/patches
+> +	  https://xenomai.org/downloads/ipipe/
+>  
+>  	  Xenomai is know to support Blackfin, SH4, x86, ARM, NIOS2
+>  	  and PowerPC architectures.
+>  
+> -config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
+> -	string "Path for Adeos patch file"
+> +config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH_URL
+
+I don't think it makes sense to rename the option just for this. The
+behavior is backward compatible, and adding the _URL prefix is not
+really necessary.
+
+> +	string "Path/URL for Adeos patch file"
+> +	default BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH if BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH != "" # legacy
+>  	depends on BR2_LINUX_KERNEL_EXT_XENOMAI
+>  	help
+> -	  Optionally, explicitly specify the Adeos patch to use.
+> -	  Download it at http://download.gna.org/adeos/patches
+> -	  and verify that your kernel version in buildroot matches.
+> +	  Optionally, explicitly specify where to find the Adeos
+> +	  patch to use.
+> +	  Examples:
+> +	  https://xenomai.org/downloads/ipipe/v4.x/arm/ipipe-core-4.19.33-arm-2.patch
+> +	  or file:///home/foo/ipipe-core-4.19.33-arm-2.patch
+> +	  Please verify that your kernel version in Buildroot matches.
+>  
+>  comment "xenomai needs a uClibc or glibc toolchain w/ threads"
+>  	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
+> diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
+> index d066bb32ac..e16f76ffb5 100644
+> --- a/linux/linux-ext-xenomai.mk
+> +++ b/linux/linux-ext-xenomai.mk
+> @@ -7,11 +7,17 @@
+>  LINUX_EXTENSIONS += xenomai
+>  
+>  # Adeos patch version
+> -XENOMAI_ADEOS_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH))
+> -ifeq ($(XENOMAI_ADEOS_PATCH),)
+> +XENOMAI_ADEOS_PATCH_URL = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH_URL))
+> +ifneq ($(XENOMAI_ADEOS_PATCH_URL),)
+> +XENOMAI_ADEOS_PATCH = $(shell basename $(XENOMAI_ADEOS_PATCH_URL))
+
+You can use $(basename ...) instead of $(shell basename ...)
+
+> +LINUX_EXTRA_DOWNLOADS += $(XENOMAI_ADEOS_PATCH_URL)
+> +BR_NO_CHECK_HASH_FOR += $(XENOMAI_ADEOS_PATCH)
+> +endif
+
+Is this really backward compatible with a value of
+XENOMAI_ADEOS_PATCH_URL = board/foo/ipipe-core-<version>.patch ?
 
 Best regards,
-L-C.
 
-On 5/14/19, Arnout Vandecappelle <arnout@mind.be> wrote:
->  Hi L-C,
->
-> On 14/05/2019 15:51, Laurentiu-Cristian Duca wrote:
->> Hello Buildroot community,
->>
->>   I am an open source enthusisast and I am new to buildroot.
->> I have built in buildroot 2019.02.1
->> a raspberry pi 1 configuration
->> with Xorg server (1.20.3) and xdriver_xf86-input-mouse-1.9.3
->> xdriver_xf86-input-keyboard-1.9.0 and SystemV init.
->
->  I am not an X expert by a long shot, but I believe you'll have better luck
-> with
-> xdriver_xf86-input-evdev or -libinput. -keyboard and -mouse are more for
-> legacy
-> bus keyboard/mouse devices I think.
->
->
->>   I use simple USB keyboard and mouse.
->>
->>   Keyboard works in consle tty1 (HDMI display).
->>   startx runs successfully but mouse and keyboard do not work with X
->> started.
->> X just shows 3 open xterm windows and I can not write or move mouse
->> cursor
->> (which is showed in the center of the screen).
->>
->>   I have tried xorg.conf with:
->> Section "Device"
->>         Identifier      "Allwinner A10/A13 FBDEV"
->>         Driver          "fbturbo"
->>         Option          "fbdev" "/dev/fb0"
->>         Option          "SwapbuffersWait" "true"
->> EndSection
->>
->>   I have also tried with no success combinations with:
->>
->> Section "InputDevice"
->
->  I don't think there's any need for input device configuration in
-> xorg.conf.
->
->>     Identifier  "Mouse"
->>     Driver      "mouse"
->>     Option      "Protocol"      "auto"
->>     Option      "Device"        "/dev/bus/usb/001/005"
->> EndSection
->>
->> Section "InputDevice"
->>     Identifier     "Keyboard0"
->>     Driver         "kbd"
->>     Option         "XkbLayout" "us"
->>     Option         "XkbModel" "pc105"
->> EndSection
->>
->>   When I have nothing connected to usb
->> find /dev/ | grep -i "usb"
->> it shows:
->> /dev/bus/usb
->> /dev/bus/usb/001
->> /dev/bus/usb/001/003
->> /dev/bus/usb/001/002
->> /dev/bus/usb/001/001
->>   If I insert keyboard and mouse it also shows:
->> /dev/bus/usb/001/006
->> /dev/bus/usb/001/005
->> /dev/bus/usb/001/004
->
->  Can you check that you also have /dev/input/eventN nodes? These are the
-> ones
-> that get used by evdev and libinput. But if you don't have them, I don't
-> think
-> the console keyboard would work either.
->
->  Regards,
->  Arnout
->
->>
->> # ls /usr/lib/xorg/modules/input/
->> kbd_drv.so    mouse_drv.so
->> # xinput --list
->> ??? Virtual core pointer                        id=2    [master pointer
->> (3)]
->> ???   ??? Virtual core XTEST pointer                    id=4    [slave
->>  pointer  (2)]
->> ??? Virtual core keyboard                       id=3    [master keyboard
->> (2)]
->>     ??? Virtual core XTEST keyboard                     id=5    [slave
->>  keyboard (3)]
->> No success with:
->> # xinput enable 2
->> (and 3, 4, 5)
->>
->> I do not use udev or mdev, instead I use devtmpfs. Is there any way to
->> have
->> mouse and keyboard working?
->> # cat /var/log/Xorg.0.log
->> ...
->> [  2042.804] (II) The server relies on udev to provide the list of
->> input devices.
->>         If no devices become available, reconfigure udev or disable
->> AutoAddDevices.
->> [  2042.804] (II) Loader magic: 0x1d8e58
->> [  2042.804] (II) Module ABI versions:
->> [  2042.804]    X.Org ANSI C Emulation: 0.4
->> [  2042.804]    X.Org Video Driver: 24.0
->> [  2042.804]    X.Org XInput driver : 24.1
->> [  2042.804]    X.Org Server Extension : 10.0
->> [  2042.816] (++) using VT number 1
->> ...
->>
->>   Any ideas?
->>
->> Thank you and best regards,
->> L-C. Duca
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
->
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
