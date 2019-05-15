@@ -1,33 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 May 2019 16:17:05 +0200
-Subject: [Buildroot] [PATCH 1/1] linux: xenomai: use URL for the
- ADEOS/IPIPE patch
-In-Reply-To: <1091_1557929413_5CDC1DC5_1091_391_1_20190515141011.GA12386@r-lnx-nyma7486-2>
-References: <20190515090251.20668-1-sebastien.szymanski@armadeus.com>
- <20190515160029.1e85d845@windsurf>
- <1091_1557929413_5CDC1DC5_1091_391_1_20190515141011.GA12386@r-lnx-nyma7486-2>
-Message-ID: <20190515161705.53ce0ba0@windsurf>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 15 May 2019 16:41:21 +0200
+Subject: [Buildroot] [PATCH] package/python-numpy: fix occasional build
+ failure with lapack
+Message-ID: <20190515144121.81041-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 15 May 2019 16:10:11 +0200
-<yann.morin@orange.com> wrote:
+python-numpy build fails only if lapack is built before python-numpy
+itself, and this doesn't always happen because lapack dependency is
+missing in BR2_PYTHON_NUMPY_DEPENDENCIES.
+Then build failure is due to missing BR2_PACKAGE_LAPACK_COMPLEX that
+provides some functions in lapack libraries needed by python-numpy.
 
-> > > +ifneq ($(XENOMAI_ADEOS_PATCH_URL),)
-> > > +XENOMAI_ADEOS_PATCH = $(shell basename $(XENOMAI_ADEOS_PATCH_URL))  
-> > You can use $(basename ...) instead of $(shell basename ...)  
-> 
-> I think you meant $(notdir ...)
-> 
-> $(basename ...) does not seem to do what you seem to think it would do.
+So:
+- add lapack to BR2_PYTHON_NUMPY_DEPENDENCIES when
+  BR2_PACKAGE_LAPACK = y
+- substitute ifeq check "$(BR2_PACKAGE_LAPACK),y" with
+  "$(BR2_PACKAGE_LAPACK_COMPLEX),y" because python-numpy needs COMPLEX
+  functions and BR2_PACKAGE_LAPACK_COMPLEX inherits BR2_PACKAGE_LAPACK
 
-Gah, indeed. Thanks for fixing my too-quick answer on this point :-/
+Fixes:
+http://autobuild.buildroot.net/results/50f/50f7f09a9f830cd7b94f8fc83c09fc3d39297d3d/
 
-Thomas
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/python-numpy/python-numpy.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index 28dccf8be5..a61246615a 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -15,8 +15,8 @@ PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt doc/sphinxext/LICENSE.txt \
+ 			numpy/core/src/multiarray/dragon4.c
+ PYTHON_NUMPY_SETUP_TYPE = setuptools
+ 
+-ifeq ($(BR2_PACKAGE_CLAPACK),y)
+-PYTHON_NUMPY_DEPENDENCIES += clapack
++ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)
++PYTHON_NUMPY_DEPENDENCIES += clapack lapack
+ PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
+ else
+ PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
