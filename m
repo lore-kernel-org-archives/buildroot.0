@@ -1,123 +1,130 @@
-From: Michael Nebel <michael@nebel.de>
-Date: Wed, 15 May 2019 21:56:05 +0200
-Subject: [Buildroot] problems compiling nodejs 10.15.3 and suggested fix
-In-Reply-To: <20190513222749.6289dbed@windsurf.home>
-References: <a8114d08-6afa-95eb-0152-ce47cc923921@nebel.de>
- <20190513222749.6289dbed@windsurf.home>
-Message-ID: <bd442dda-c5ff-2d43-e764-db396b136e57@nebel.de>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 15 May 2019 21:58:11 +0200
+Subject: [Buildroot] [PATCH] package/python-numpy: fix occasional build
+ failure with lapack
+In-Reply-To: <20190515151244.GH2787@scaer>
+References: <20190515144121.81041-1-giulio.benetti@micronovasrl.com>
+ <20190515151244.GH2787@scaer>
+Message-ID: <756d5d20-8f60-9635-105e-42be72c74630@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas, Daniel, Martin,
+Hello Yann,
 
-I agree, that mangling the LD_LIBRARY_PATH isn't the best solution, but
-as far as I debugged the problem, the alternative would be to patch a
-part of tools in the original nodejs package :-(
-
-The linking of the command "torque" is done by
-
-/usr/bin/g++ -o .....host-nodejs-10.15.3/out/Release/torque  -pthread
--rdynamic -m64 -m64  -Wl,--start-group ......  ...
--L...buildroot/output/host/lib -lz -lcrypto -lssl -ldl -lrt -Wl,--end-group
-
-
-The LDFLAGS="-L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib" are missing.
-
-The makefile to compile torque is generated out of
-node-v10.15.3/tools/gyp/pylib/gyp/generator/make.py. The cmd_link does
-not include the LDFLAGS, but $(LDFLAGS.$(TOOLSET)).
-
-Adding a simple $(LDFLAGS) seems to fix the linking problem:
-
---- tmp/node-v10.15.3/tools/gyp/pylib/gyp/generator/make.py
-+++
-output/build/host-nodejs-10.15.3/tools/gyp/pylib/gyp/generator/make.py
-@@ -147,7 +147,7 @@
- # special "figure out circular dependencies" flags around the entire
- # input list during linking.
- quiet_cmd_link = LINK($(TOOLSET)) $@
--cmd_link = $(LINK.$(TOOLSET)) -o $@ $(GYP_LDFLAGS)
-$(LDFLAGS.$(TOOLSET)) -Wl,--start-group $(LD_INPUTS) $(LIBS) -Wl,--end-group
-+cmd_link = $(LINK.$(TOOLSET)) -o $@ $(GYP_LDFLAGS)
-$(LDFLAGS.$(TOOLSET)) $(LDFLAGS) -Wl,--start-group $(LD_INPUTS) $(LIBS)
--Wl,--end-group
-
-
-But this brings me far out of my comfort zone.
-
-
-Perhaps this debugging helps a little further,
-
-	Michael
-
-
-
-
-
-
-
-Am 13.05.2019 um 22:27 schrieb Thomas Petazzoni:
-> Hello Michael,
+Il 15/05/2019 17:12, Yann E. MORIN ha scritto:
+> Giulio, All,
 > 
-> Thanks for your e-mail and bug report. I'm adding in Cc Daniel and
-> Martin, who take care of the nodejs package in Buildroot. Martin has
-> done the recent update of nodejs that probably introduced this
-> regression. See below for some comment.
-> 
-> On Fri, 10 May 2019 19:27:21 +0200
-> Michael Nebel <michael@nebel.de> wrote:
-> 
->> Hello,
+> On 2019-05-15 16:41 +0200, Giulio Benetti spake thusly:
+>> python-numpy build fails only if lapack is built before python-numpy
+>> itself, and this doesn't always happen because lapack dependency is
+>> missing in BR2_PYTHON_NUMPY_DEPENDENCIES.
+>> Then build failure is due to missing BR2_PACKAGE_LAPACK_COMPLEX that
+>> provides some functions in lapack libraries needed by python-numpy.
 >>
->> I started to evaluate buildroot some days ago. The "make menuconfig" was
->> very intriguing for me. It felt like coming home again :-) Cool and
->> thanks for this project!
+>> So:
+>> - add lapack to BR2_PYTHON_NUMPY_DEPENDENCIES when
+>>    BR2_PACKAGE_LAPACK = y
+>> - substitute ifeq check "$(BR2_PACKAGE_LAPACK),y" with
+>>    "$(BR2_PACKAGE_LAPACK_COMPLEX),y" because python-numpy needs COMPLEX
+>>    functions and BR2_PACKAGE_LAPACK_COMPLEX inherits BR2_PACKAGE_LAPACK
 >>
->> After first successful experiments with buildroot-2019.02.2, I switched
->> to the git-version. Here I ran into some troubles to compile nodejs for
->> x86_64. It failed with
+>> Fixes:
+>> http://autobuild.buildroot.net/results/50f/50f7f09a9f830cd7b94f8fc83c09fc3d39297d3d/
 >>
->>   output/build/host-nodejs-10.15.3/out/Release/torque:
->>         error while loading shared libraries: libcrypto.so.1.1:
+>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> ---
+>>   package/python-numpy/python-numpy.mk | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+>> index 28dccf8be5..a61246615a 100644
+>> --- a/package/python-numpy/python-numpy.mk
+>> +++ b/package/python-numpy/python-numpy.mk
+>> @@ -15,8 +15,8 @@ PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt doc/sphinxext/LICENSE.txt \
+>>   			numpy/core/src/multiarray/dragon4.c
+>>   PYTHON_NUMPY_SETUP_TYPE = setuptools
+>>   
+>> -ifeq ($(BR2_PACKAGE_CLAPACK),y)
+>> -PYTHON_NUMPY_DEPENDENCIES += clapack
+>> +ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)
+>> +PYTHON_NUMPY_DEPENDENCIES += clapack lapack
 > 
-> This normally should not happen because our host binaries should be
-> built with a RPATH that points to $(HOST_DIR)/lib.
-> 
-> However, as explained in commit 2ebc2219d5716f81789f29dcbb6b05d0c9d886dd:
-> 
->     The host tool "torque" is unfortunately not built by complying to our
->     LDFLAGS, so it is not built with the proper RPATH. We fix that using
->     patchelf, and install it to $(HOST_DIR) to make it available during
->     the build of the target nodejs.
-> 
-> But unfortunately, it seems like this "torque" tool is being executed
-> *during* the host-nodejs build, i.e after it has been compiled, but
-> before its RPATH is fixed up by patchelf.
-> 
->> nebel at tyche ~/src/buildroot $ git diff
->> diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
->> index 2577239e19..abf51a3f9c 100644
->> --- a/package/nodejs/nodejs.mk
->> +++ b/package/nodejs/nodejs.mk
->> @@ -72,6 +72,7 @@ define HOST_NODEJS_BUILD_CMDS
->>         $(HOST_MAKE_ENV) PYTHON=$(HOST_DIR)/bin/python2 \
->>                 $(MAKE) -C $(@D) \
->>                 $(HOST_CONFIGURE_OPTS) \
->> +               LD_LIBRARY_PATH="$(LD_LIBRARY_PATH):$(HOST_DIR)/lib/" \
-> 
-> This is most likely not really how we want to fix it. I think we really
-> want to build the torque program with the proper RPATH from the start.
-> 
-> Martin, any idea about this ?
-> 
-> Thanks!
-> 
-> Thomas
-> 
+> This is not correct, because tehre is no relation between lapack and
+> clapack. So, we can have lapack enabled but not clapack. Your code will
+> cause a build failure when clapack is not enabled.
 
+Right, they should be exclusive.
 
+> So, you probably want something like:
+> 
+>      ifeq ($(BR2_PACKAGE_CLAPACK),y)
+>      PYTHON_NUMPY_DEPENDENCIES_LAPACK += clapack
+>      endif
+>      ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)
+>      PYTHON_NUMPY_DEPENDENCIES_LAPACK += lapack
+>      endif
+>      ifneq ($(PYTHON_NUMPY_DEPENDENCIES_LAPACK),)
+>      PYTHON_NUMPY_DEPENDENCIES += $(PYTHON_NUMPY_DEPENDENCIES_LAPACK)
+>      else
+>      PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
+>      endif
+> 
+> But beware of the above, it might not yet be correct: if clapack and
+> lapack (without complex) are both enabled, then you may still en up in
+> the current situation.
+
+Right.
+
+> So, you may need to refine it even further, with something like:
+> 
+>      ifeq ($(BR2_PACKAGE_CLAPACK),y)
+>      PYTHON_NUMPY_DEPENDENCIES += clapack
+>      PYTHON_NUMPY_ENV += BLAS=clapack LAPACK=clapack
+>      else ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)
+>      PYTHON_NUMPY_DEPENDENCIES += lapack
+>      PYTHON_NUMPY_ENV += BLAS=lapack LAPACK=lapack
+>      else
+>      PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
+>      endif
+> 
+> (check what BLAS= and LAPACK= expect as values.)
+> 
+> Also, is the depenency on clapack really needed? Can python-numpy really
+> use clapack?
+
+Judging from here:
+https://www.numpy.org/devdocs/user/building.html#blas
+clapack seems to not be supported.
+But AIK clapack should be the same as lapack but written entirely in C 
+instead of Fortran(later translated in C in lapack during build), so it 
+should work with clapack too.
+I try to build with that and check.
+
+Thanks for reviewing and proposing alternatives.
+
+Kind regards
 -- 
-Michael Nebel                  	
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
+
+> Regards,
+> Yann E. MORIN.
+> 
+>>   PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
+>>   else
+>>   PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
+>> -- 
+>> 2.17.1
+>>
+> 
