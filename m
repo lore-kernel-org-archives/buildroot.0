@@ -1,76 +1,40 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Wed, 15 May 2019 21:11:39 +0300
-Subject: [Buildroot] [PATCH 4/5] package/wpewebkit: bump to version
- 2.24.1
-In-Reply-To: <20190515160530.234d9212@windsurf>
-References: <20190514114111.20424-1-aperez@igalia.com>
- <20190514114111.20424-5-aperez@igalia.com>
- <CAB0FRstZPttVSDYzYGih2nfdTdZ7UKuipDGPKWSaBJf6h_LVSw@mail.gmail.com>
- <20190515145239.GB9191@momiji> <20190515160530.234d9212@windsurf>
-Message-ID: <20190515211139.GB26229@momiji>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Wed, 15 May 2019 21:18:31 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libuv: bump to version 1.29.0
+Message-ID: <20190515181831.26670-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed, 15 May 2019 16:05:30 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-
-> Hello,
-> 
-> Adding Peter in Cc. I know he'll like it :-)
-> 
-> Adding Yann in Cc. I know he won't like it :-)
-
-:-D
-
-Personally, I like the suggestion, but I will wait for feedback on this
-before sending v2 of the patch set.
-
-> On Wed, 15 May 2019 14:52:39 +0300
-> Adrian Perez de Castro <aperez@igalia.com> wrote:
-> 
-> > > openjpeg is an optional dependency
-> > > 
-> > > ifeq ($(BR2_PACKAGE_OPENJPEG),y)
-> > > WPEWEBKIT_CONF_OPTS += -DUSE_OPENJPEG=ON
-> > > WPEWEBKIT_DEPENDENCIES += openjpeg
-> > > else
-> > > WPEWEBKIT_CONF_OPTS += -DUSE_OPENJPEG=OFF
-> > > endif  
-> > 
-> > While it is indeed possible to build without OpenJPEG, with my WebKit
-> > developer hat I have to strongly recommend to make it required: many websites
-> > will silently fail to show images without this enabled, and that's the reason
-> > why I have selected the dependency unconditionally.
-> > 
-> > For the record: I did a quick check and in my work system (x86_64) the
-> > ?libopenjp2.so? library is only 365 KiB, which is peanuts compared to the size
-> > of ?libWPEWebKit.so?. Moreover, the openjpeg package can be built in every
-> > platform where wpewebkit is supported, therefore I think it is worth it to
-> > leave the dependency unconditionally enabled.
-> 
-> Perhaps this is one situation where we could make good use of the
-> "imply" kconfig keyword ?
-> 
-> BR2_PACKAGE_WEBKIT would do an "imply BR2_PACKAGE_OPENJPEG". This way
-> by default OpenJPEG is automatically enabled by WPE Webkit, but we
-> still allow the user to disable OpenJPEG if he really wants it.
-> 
-> That allows to comply with the Buildroot principle of "make everything
-> optional really optional" while offering a good out-of-the-box
-> experience.
-
-It seems like the situation in which ?imply? fits perfectly.
-
-Cheers,
-?Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190515/bbe720d0/attachment.asc>
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 7f51dfc923..b237bd81dd 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9ab338062e5b73bd4a05b7fcb77a0745c925c0be9118e0946434946a262cdad5  libuv-v1.28.0.tar.gz
++sha256  ca62158fd35dfc06e37400f5ae5d0f18dde1ffc4c140738fff6f95b036a8b6f1  libuv-v1.29.0.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 00b13f26bc..ef6fc1af12 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUV_VERSION = v1.28.0
++LIBUV_VERSION = v1.29.0
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
+-- 
+2.20.1
