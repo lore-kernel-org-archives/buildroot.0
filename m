@@ -1,51 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 May 2019 11:50:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/brotli: fix build on microblaze
- with -02
-In-Reply-To: <e214d7bb-e9b1-af4d-8143-0641a9e45758@micronovasrl.com>
-References: <20190514211526.26467-1-fontaine.fabrice@gmail.com>
- <20190515122718.GB6334@momiji>
- <e214d7bb-e9b1-af4d-8143-0641a9e45758@micronovasrl.com>
-Message-ID: <20190515115026.5a5b6632@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 15 May 2019 11:52:17 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{9, 14,
+ 19}.x / 5.{0, 1}.x series
+In-Reply-To: <20190514212401.26177-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Tue, 14 May 2019 23:24:00 +0200")
+References: <20190514212401.26177-1-peter@korsgaard.com>
+Message-ID: <87d0kk3uzy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Wed, 15 May 2019 11:42:12 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+ > Including mitigation for the "ZombieLoad" speculative execution
+ > vulnerability.
 
-> >> +# prevents from triggering GCC ICE
-> >> +# A bug was reported to the gcc bug tracker:
-> >> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485
-> >> +ifeq ($(BR2_microblaze),y)
-> >> +BROTLI_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -O0"
-> >> +endif  
-> > 
-> > This is not a great fix, but still better than not being able to build the
-> > package at all, so I think it's okay to merge it. ?\_(?)_/?  
-> 
-> This is another package added to the list of Microblaze GCC6/7 bug 85180.
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Be careful: we have two separate issues. Gcc bug 85180 and gcc bug 68485.
+Committed, thanks.
 
-gcc bug 85180, which you were working on, causes the compiler to got in
-an infinite loop
-
-gcc bug 68485, which this patch is about, causes the compiler to throw
-an ICE (Internal Compiler Error). I.e the compiler aborts, it does not
-enter in an infinite loop.
-
-It would be interesting to see if bug 68485 stills exists with gcc 8.x
-or 9.x.
-
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
