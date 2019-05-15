@@ -1,36 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 15 May 2019 13:42:55 +0200
-Subject: [Buildroot] [git commit] package/lynx: remove duplicate dependency
- for host-pkg-conf
-Message-ID: <20190515113746.1BE2781DB9@busybox.osuosl.org>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Wed, 15 May 2019 14:46:08 +0300
+Subject: [Buildroot] [PATCH 1/1] package/netsniff-ng: bump to version 0.6.6
+Message-ID: <1557920768-12145-1-git-send-email-email@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b80dbd4f56d911f0c0a5a004afc5d739d0bf8ad9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Vadim Kochan <vadim4j@gmail.com>
 
-host-pkg-conf is already in default lynx's dependencies so remove it
-from openssl condition block.
+Update to new released version:
+
+    https://github.com/netsniff-ng/netsniff-ng/releases/tag/v0.6.6
+
+Changelog:
+
+    implement rotating capture files in netsniff-ng
+    fixed '--in -' to work again with STDIN in trafgen
+    fixed -t 0 option to use sendto in trafgen
+    checksum calculation for ICMP and TCP in astraceroute
+    fix for reading mirrors from file in astraceroute
+    use GZIP_ENV instead of GZIP in build system
+    added error handling for mismatched address families in mausezahn
 
 Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lynx/lynx.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/netsniff-ng/netsniff-ng.hash | 2 +-
+ package/netsniff-ng/netsniff-ng.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
-index b6cc1b2b91..07a3ddfcf0 100644
---- a/package/lynx/lynx.mk
-+++ b/package/lynx/lynx.mk
-@@ -21,7 +21,7 @@ LYNX_CONF_OPTS += --with-screen=slang
- endif
+diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
+index 706c946..d44c762 100644
+--- a/package/netsniff-ng/netsniff-ng.hash
++++ b/package/netsniff-ng/netsniff-ng.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking signature
+-sha256 4966821510079bb13722b9fbb4b7567e44b1b4c3e1b1e7ad95f417a89be5d795 netsniff-ng-0.6.5.tar.xz
++sha256 7949d38eb5b507700ea0f3c87e9f804d87b43f86ea5de0e961451044c2d3dba2  netsniff-ng-0.6.6.tar.xz
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+index 415e86d..283ecaf 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--LYNX_DEPENDENCIES += host-pkgconf openssl
-+LYNX_DEPENDENCIES += openssl
- LYNX_CONF_OPTS += --with-ssl=$(STAGING_DIR)/usr
- LYNX_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- else ifeq ($(BR2_PACKAGE_GNUTLS),y)
+-NETSNIFF_NG_VERSION = 0.6.5
++NETSNIFF_NG_VERSION = 0.6.6
+ NETSNIFF_NG_SITE = http://pub.netsniff-ng.org/netsniff-ng
+ NETSNIFF_NG_SOURCE = netsniff-ng-$(NETSNIFF_NG_VERSION).tar.xz
+ NETSNIFF_NG_LICENSE = GPL-2.0
+-- 
+2.7.4
