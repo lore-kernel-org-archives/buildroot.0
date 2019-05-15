@@ -1,62 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 15 May 2019 16:05:30 +0200
-Subject: [Buildroot] [PATCH 4/5] package/wpewebkit: bump to version
- 2.24.1
-In-Reply-To: <20190515145239.GB9191@momiji>
-References: <20190514114111.20424-1-aperez@igalia.com>
- <20190514114111.20424-5-aperez@igalia.com>
- <CAB0FRstZPttVSDYzYGih2nfdTdZ7UKuipDGPKWSaBJf6h_LVSw@mail.gmail.com>
- <20190515145239.GB9191@momiji>
-Message-ID: <20190515160530.234d9212@windsurf>
+From: yann.morin at orange.com <yann.morin@orange.com>
+Date: Wed, 15 May 2019 16:10:11 +0200
+Subject: [Buildroot] [PATCH 1/1] linux: xenomai: use URL for the
+ ADEOS/IPIPE patch
+In-Reply-To: <20190515160029.1e85d845@windsurf>
+References: <20190515090251.20668-1-sebastien.szymanski@armadeus.com>
+ <20190515160029.1e85d845@windsurf>
+Message-ID: <1091_1557929413_5CDC1DC5_1091_391_1_20190515141011.GA12386@r-lnx-nyma7486-2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas, All,
 
-Adding Peter in Cc. I know he'll like it :-)
+On 2019-05-15 16:00 +0200, Thomas Petazzoni spake thusly:
+> On Wed, 15 May 2019 11:02:51 +0200
+> S?bastien Szymanski <sebastien.szymanski@armadeus.com> wrote:
+[--SNIP--]
+> > +ifneq ($(XENOMAI_ADEOS_PATCH_URL),)
+> > +XENOMAI_ADEOS_PATCH = $(shell basename $(XENOMAI_ADEOS_PATCH_URL))
+> You can use $(basename ...) instead of $(shell basename ...)
 
-Adding Yann in Cc. I know he won't like it :-)
+I think you meant $(notdir ...)
 
-On Wed, 15 May 2019 14:52:39 +0300
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+$(basename ...) does not seem to do what you seem to think it would do.
 
+Regards,
+Yann E. MORIN.
 
-> > openjpeg is an optional dependency
-> > 
-> > ifeq ($(BR2_PACKAGE_OPENJPEG),y)
-> > WPEWEBKIT_CONF_OPTS += -DUSE_OPENJPEG=ON
-> > WPEWEBKIT_DEPENDENCIES += openjpeg
-> > else
-> > WPEWEBKIT_CONF_OPTS += -DUSE_OPENJPEG=OFF
-> > endif  
-> 
-> While it is indeed possible to build without OpenJPEG, with my WebKit
-> developer hat I have to strongly recommend to make it required: many websites
-> will silently fail to show images without this enabled, and that's the reason
-> why I have selected the dependency unconditionally.
-> 
-> For the record: I did a quick check and in my work system (x86_64) the
-> ?libopenjp2.so? library is only 365 KiB, which is peanuts compared to the size
-> of ?libWPEWebKit.so?. Moreover, the openjpeg package can be built in every
-> platform where wpewebkit is supported, therefore I think it is worth it to
-> leave the dependency unconditionally enabled.
-
-Perhaps this is one situation where we could make good use of the
-"imply" kconfig keyword ?
-
-BR2_PACKAGE_WEBKIT would do an "imply BR2_PACKAGE_OPENJPEG". This way
-by default OpenJPEG is automatically enabled by WPE Webkit, but we
-still allow the user to disable OpenJPEG if he really wants it.
-
-That allows to comply with the Buildroot principle of "make everything
-optional really optional" while offering a good out-of-the-box
-experience.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
