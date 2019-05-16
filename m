@@ -1,30 +1,32 @@
-From: Charlie Turner <cturner@igalia.com>
-Date: Thu, 16 May 2019 10:58:58 +0100
-Subject: [Buildroot] [PATCH] package/cog: install to staging
-Message-ID: <20190516095858.33732-1-cturner@igalia.com>
+From: muhammet <mk61@hotmail.com>
+Date: Thu, 16 May 2019 06:13:10 -0500 (CDT)
+Subject: [Buildroot] Orange pi zero:  i2c is not under /dev
+In-Reply-To: <20190516085647.7a861d60@windsurf>
+References: <1557981319043-0.post@n4.nabble.com>
+ <20190516080159.6d844d12@windsurf> <1557988831153-0.post@n4.nabble.com>
+ <20190516085647.7a861d60@windsurf>
+Message-ID: <1558005190987-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This is useful when unstripped libraries are installed into staging. It
-allows the cog executable to be debugged.
----
- package/cog/cog.mk | 1 +
- 1 file changed, 1 insertion(+)
+Hello,
 
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index 43f13152c8..6bbffcfc8e 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -9,6 +9,7 @@ COG_SITE = $(call github,Igalia,cog,$(COG_VERSION))
- COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
- COG_LICENSE = MIT
- COG_LICENSE_FILES = COPYING
-+COG_INSTALL_STAGING = YES
- COG_CONF_OPTS = \
- 	-DCOG_BUILD_PROGRAMS=ON \
- 	-DCOG_PLATFORM_FDO=ON \
--- 
-2.17.1
+There are
+/sys/bus/platform/drivers/i2c-sunxi-pwi
+/sys/bus/platform/drivers/mv64xxx_i2c
+/sys/bus/i2c
+/sys/bus/i2c/drivers/axp20x-i2c
+
+but no
+/sys/bus/i2c/devices/
+
+what am i missing?
+
+
+
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
