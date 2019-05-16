@@ -1,114 +1,145 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 16 May 2019 14:32:17 +0300
-Subject: [Buildroot] [PATCH 2/5] package/wpebackend-fdo: bump to version
- 1.2.0
-In-Reply-To: <20190515210735.GD5634@momiji>
-References: <20190514114111.20424-1-aperez@igalia.com>
- <20190514114111.20424-3-aperez@igalia.com>
- <CAB0FRsuK9U0+Gv=HCivDwtjwjD9MmBnicKfxGPsHBe-Q0BGxHg@mail.gmail.com>
- <20190515210735.GD5634@momiji>
-Message-ID: <20190516143217.GC28332@momiji>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 16 May 2019 15:26:21 +0200
+Subject: [Buildroot] [PATCH] board: friendlyarm: Add initial support for
+ NanoPc T4
+In-Reply-To: <20190516075010.14219-1-shyam.saini@amarulasolutions.com>
+References: <20190516075010.14219-1-shyam.saini@amarulasolutions.com>
+Message-ID: <20190516152621.57ece57b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello!
+Hello,
 
-Quick update below...
+On Thu, 16 May 2019 13:20:10 +0530
+Shyam Saini <shyam.saini@amarulasolutions.com> wrote:
 
-On Wed, 15 May 2019 21:07:35 +0300, Adrian Perez de Castro <aperez@igalia.com> wrote:
-> Hello Fran?ois,
-> 
-> On Wed, 15 May 2019 08:53:39 +0200, Fran?ois Perrad <francois.perrad@gadz.org> wrote:
-> > Le mar. 14 mai 2019 ? 14:24, Adrian Perez de Castro <aperez@igalia.com> a
-> > ?crit :
-> > 
-> > > WPE WebKit 2.24.x requires WPEBackend-fdo 1.2.x, as indicated at:
-> > >
-> > >   https://wpewebkit.org/release/schedule/#compatible-components
-> > >
-> > > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> > > ---
-> > >  package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
-> > >  package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
-> > >  2 files changed, 5 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash
-> > > b/package/wpebackend-fdo/wpebackend-fdo.hash
-> > > index 6e6f9f0e3f..4d89d1e16f 100644
-> > > --- a/package/wpebackend-fdo/wpebackend-fdo.hash
-> > > +++ b/package/wpebackend-fdo/wpebackend-fdo.hash
-> > > @@ -1,7 +1,7 @@
-> > > -# From https://wpewebkit.org/releases/wpebackend-fdo-1.0.1.tar.xz.sums
-> > > -md5 <https://wpewebkit.org/releases/wpebackend-fdo-1.0.1.tar.xz.sums-md5>
-> > > 2ee81a4212c18110a06a0c51c12e0d2e wpebackend-fdo-1.0.1.tar.xz
-> > > -sha1 cdc6ac95e302a2358204b766936a9bf8ef4f26f2 wpebackend-fdo-1.0.1.tar.xz
-> > > -sha256 15b8b1febea5d9c271e95c35b3c1e13f870712a54bc5f689cfdbb96e2f070fc8
-> > > wpebackend-fdo-1.0.1.tar.xz
-> > > +# From https://wpewebkit.org/releases/wpebackend-fdo-1.2.0.tar.xz.sums
-> > > +md5 <https://wpewebkit.org/releases/wpebackend-fdo-1.2.0.tar.xz.sums+md5>
-> > > 74e1b2fc2bc19933b17ff4f8435f67cd wpebackend-fdo-1.2.0.tar.xz
-> > > +sha1 60559697512fd483c1d918b708a3d1d130b74a0a wpebackend-fdo-1.2.0.tar.xz
-> > > +sha256 b1bb261273772af8f7d96d94989fc2ed0445ec06c7eb21f47a1b94e52422ddd5
-> > > wpebackend-fdo-1.2.0.tar.xz
-> > >
-> > >  # Hashes for license files:
-> > >  sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825
-> > > COPYING
-> > > diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk
-> > > b/package/wpebackend-fdo/wpebackend-fdo.mk
-> > > index 5842861bac..15530ec45f 100644
-> > > --- a/package/wpebackend-fdo/wpebackend-fdo.mk
-> > > +++ b/package/wpebackend-fdo/wpebackend-fdo.mk
-> > > @@ -4,7 +4,7 @@
-> > >  #
-> > >
-> > >  ################################################################################
-> > >
-> > > -WPEBACKEND_FDO_VERSION = 1.0.1
-> > > +WPEBACKEND_FDO_VERSION = 1.2.0
-> > >  WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
-> > >  WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
-> > >  WPEBACKEND_FDO_INSTALL_STAGING = YES
-> > >
-> > 
-> > Here, I need to add this hook:
-> > 
-> > # CMake found the wayland-scanner in $(STAGING_DIR), we need the one in
-> > $(HOST_DIR)
-> > define WPEBACKEND_FDO_FIX_WAYLAND_SCANNER
-> >     $(SED) "s:/usr/bin/wayland-scanner:$(HOST_DIR)/bin/wayland-scanner:;" \
-> >         $(@D)/CMakeFiles/WPEBackend-fdo.dir/build.make
-> > endef
-> > 
-> > WPEBACKEND_FDO_POST_CONFIGURE_HOOKS += WPEBACKEND_FDO_FIX_WAYLAND_SCANNER
-> 
-> Ouch, this looks ugly, but thanks a lot to point out this issue. We can do
-> better, so I just made a pull request to the upstream project with a patch
-> that improves the CMake code to make it smarter so it searches in the $PATH
-> first, and also to allow passing the path to wayland-scanner manually in the
-> CMake command (which always takes precedence, of course), see:
-> 
->     https://github.com/Igalia/WPEBackend-fdo/pull/39
-> 
-> For v2 of the patch set I plan to include the above patch :-)
- 
-The patch has been merged upstream already, but it is not yet in a release.
-I have double checked that with the patch applied then ?wayland-scanner? is
-correctly picked from the host tools directory [1], so I'll go ahead with
-its inclusion in v2 of this patch set.
- 
-Cheers,
-?Adri?n
+> This initial support includes:
+> 	Linux 5.1-rc1
 
----
-[1] https://github.com/Igalia/WPEBackend-fdo/pull/39#issuecomment-493029077
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190516/54dd411f/attachment.asc>
+Why not use the final 5.1 release ?
+
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index e4a089e6f5..ec1dde20e7 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2048,6 +2048,8 @@ F:     board/orangepi/orangepi-rk3399/
+>  F:     configs/orangepi_rk3399_defconfig
+>  F:	board/olimex/a33_olinuxino/
+>  F:	configs/olimex_a33_olinuxino_defconfig
+> +F:	board/friendlyarm/nanopc-t4/
+> +F:	configs/nanopc_t4_defconfig
+
+Alphabetic ordering is preferred.
+
+
+> +Files created in output directory
+> +=================================
+> +output/images/
+
+One empty line to separate the section title from the section contents
+would be nice.
+
+> +??? bl31.bin
+> +??? bl31.elf
+> +??? Image
+> +??? rk3399-nanopc-t4.dtb
+> +??? rootfs.ext2
+> +??? rootfs.ext4 -> rootfs.ext2
+> +??? rootfs.tar
+> +??? sdcard.img
+> +??? u-boot.bin
+> +??? u-boot.itb
+> +??? u-boot-spl-dtb.bin
+> +??? u-boot-spl-dtb.img
+> +
+> +Creating bootable SD card:
+> +=========================
+> +
+> +Simply invoke (as root)
+> +
+> +  # dd if=output/images/sdcard.img of=/dev/sdX && sync
+> +
+> +Where X is your SD card device
+> +
+> +Serial console
+> +--------------
+
+Ditto.
+
+> diff --git a/configs/nanopc_t4_defconfig b/configs/nanopc_t4_defconfig
+> new file mode 100644
+> index 0000000000..a55b754d0f
+> --- /dev/null
+> +++ b/configs/nanopc_t4_defconfig
+> @@ -0,0 +1,55 @@
+> +# Architecture
+> +BR2_aarch64=y
+> +BR2_cortex_a72_a53=y
+> +
+> +# Linux headers same as kernel, a 5.0 series
+> +BR2_KERNEL_HEADERS_5_0=y
+
+So 5_1 preferably.
+
+> +#Firmware
+
+Space before firmware, for consistency.
+
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/ARM-software/arm-trusted-firmware"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="v2.0"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3399"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+> +
+> +# Bootloader
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="980ca75ae0438b4a1847d044605c492f3c844f88"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopc-t4-rk3399"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+> +BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+> +BR2_TARGET_UBOOT_SPL=y
+> +BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.bin"
+> +
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="v5.1-rc1"
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-nanopc-t4"
+> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
+> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +
+> +# Filesystem
+> +BR2_TARGET_GENERIC_HOSTNAME="NanoPc T4"
+> +BR2_TARGET_GENERIC_ISSUE="Welcome to NanoPc T4!"
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_MTOOLS=y
+> +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopc-t4/genimage.cfg"
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopc-t4/post-build.sh"
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
