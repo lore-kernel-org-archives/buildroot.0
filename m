@@ -1,46 +1,26 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 May 2019 08:33:53 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-05-14
-In-Reply-To: <20190515221703.GC32757@momiji>
-References: <20190515060039.F045C22920@silver.osuosl.org>
- <20190515221703.GC32757@momiji>
-Message-ID: <20190516083353.5cd7ae04@windsurf>
+From: muhammet <mk61@hotmail.com>
+Date: Thu, 16 May 2019 01:40:31 -0500 (CDT)
+Subject: [Buildroot] Orange pi zero:  i2c is not under /dev
+In-Reply-To: <20190516080159.6d844d12@windsurf>
+References: <1557981319043-0.post@n4.nabble.com>
+ <20190516080159.6d844d12@windsurf>
+Message-ID: <1557988831153-0.post@n4.nabble.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adrian,
+<http://buildroot-busybox.2317881.n4.nabble.com/file/t2724/IMG_20190516_093129.jpg> 
 
-On Wed, 15 May 2019 22:17:03 +0300
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+Hello 
 
-> >          arm |               wpewebkit-2.22.5 | NOK | http://autobuild.buildroot.net/results/645be27edc31037a9b1bb7ce0dc85440949b0846 |       
-> 
-> 
-> This build failure of of the wpewebkit package is kind of odd: it looks like
-> with assertions enabled (as in: doing a debug build) uses some variables which
-> do not exist, and I wonder why we haven't seen this before?when working on
-> WebKit we routinely do debug builds ?\_(?)_/? 
+I enabled it as a module and directly. But the result didn't change. I am
+new to buildroot and embedded systems. I don't know what and where to look.
 
-This build has BR2_ENABLE_DEBUG=y, and when BR2_ENABLE_DEBUG=y, the
-CMake package infrastructure passes -DCMAKE_BUILD_TYPE=Debug. I assume
-that's under this condition that assertions become enabled.
 
-> I think it is more worth it to push the update to WPE WebKit 2.24.x forward,
-> and this build failure would just go away.
 
-Except that the build issue you're seeing is in master, and we're past
--rc1 (even -rc2 now), and therefore we generally don't take version
-bumps in master, as we're too close to the release. Especially a
-version bump on a complex package like wpewebkit, and for which the
-version bump requires bumping the versions of a number of other
-packages as well.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+--
+Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
