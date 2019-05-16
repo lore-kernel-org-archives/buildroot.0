@@ -1,64 +1,51 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 16 May 2019 21:43:20 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mono: add libunwind optional
- dependency
-In-Reply-To: <20190516082910.5ed9ab2c@windsurf>
-References: <20190515204721.18722-1-fontaine.fabrice@gmail.com>
- <20190515204721.18722-2-fontaine.fabrice@gmail.com>
- <20190516082910.5ed9ab2c@windsurf>
-Message-ID: <CAPi7W82iu7AYsC0NzXHTiMFvR-4Q6+rfpzPHy_ZLHMn=hZZf0g@mail.gmail.com>
+Date: Thu, 16 May 2019 22:12:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: add
+ BR2_PACKAGE_HAS_LIBEGL_WAYLAND dependency
+Message-ID: <20190516201220.24893-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Commit 5b3c7a3e7828107eaa9dad49ba2650466277d891 added a
+BR2_PACKAGE_HAS_LIBEGL_WAYLAND dependency to wpebackend-fdo but forget
+to add it to wpewebkit
 
-Le jeu. 16 mai 2019 ? 08:29, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> a ?crit :
->
-> Hello Fabrice,
->
-> On Wed, 15 May 2019 22:47:21 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
->
-> > +_Unwind_GetIP is used in build_stack_trace however this function can be
-> > +provided by libunwind so check for it to avoid the following build
-> > +failure:
-> > +
-> > +/home/buildroot/autobuild/run/instance-1/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.4.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: ./.libs/libmini.a(libmini_la-mini-exceptions.o): in function `build_stack_trace':
-> > +/home/buildroot/autobuild/run/instance-1/output/build/mono-5.20.1.27/mono/mini/mini-exceptions.c:365: undefined reference to `_Unwind_GetIP'
-> > +collect2: error: ld returned 1 exit status
->
-> I am really not familiar with _Unwind_GetIP, and I haven't done much
-> research, but it seems like _Unwind_GetIP is also provided by libgcc.
->
-> Did you make some further research to understand what is
-> _Unwind_GetIP ? Or was your analysis just based on "mono needs
-> _Unwind_GetIP, it's provided by libunwind, let's link with it" ?
-My analysis was based on the fact that the build failures occured only
-when libunwind was built before mono.
-I traced back this error to the installation of unwind.h by libunwind
-which contains the following definition of _Unwind_GetIP:
-extern unsigned long _Unwind_GetIP (struct _Unwind_Context *);
+Fixes:
+ - http://autobuild.buildroot.net/results/49e04166de68358e69bce580b29ba3a25b313acf
 
-However, libunwind implements _Unwind_GetIP in src/unwind/GetIP.c only
-if --enable-cxx-exceptions is defined.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/wpewebkit/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-On his side, mono includes unwind.h if it's available:
-#ifdef HAVE_UNWIND_H
-#include <unwind.h>
-#endif
-
-unwind.h and _Unwind_GetIP can also be provided by glibc but that's
-not the cause of this build failure on musl.
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-Best Regards,
-
-Fabrice
+diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+index 04ebe5452b..15db924829 100644
+--- a/package/wpewebkit/Config.in
++++ b/package/wpewebkit/Config.in
+@@ -35,10 +35,11 @@ comment "wpewebkit needs a toolchain w/ C++, wchar, threads, dynamic library, gc
+ 		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_HOST_GCC_AT_LEAST_4_8
+ 
+-comment "wpewebkit needs an OpenGL ES w/ EGL backend"
++comment "wpewebkit needs an OpenGL ES w/ EGL-capable Wayland backend"
+ 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+ 	depends on !BR2_BINFMT_FLAT
+-	depends on !BR2_PACKAGE_HAS_LIBGLES || !BR2_PACKAGE_HAS_LIBEGL
++	depends on !BR2_PACKAGE_HAS_LIBGLES || !BR2_PACKAGE_HAS_LIBEGL \
++		|| !BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+ 
+ config BR2_PACKAGE_WPEWEBKIT
+ 	bool "wpewebkit"
+@@ -51,6 +52,7 @@ config BR2_PACKAGE_WPEWEBKIT
+ 	depends on BR2_USE_WCHAR # icu, libsoup
+ 	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
+ 	depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
++	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wpebackend-fdo
+ 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PNG
+-- 
+2.20.1
