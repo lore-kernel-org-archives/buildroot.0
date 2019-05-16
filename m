@@ -1,43 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 May 2019 09:08:57 +0200
-Subject: [Buildroot] [git commit branch/next] package/libuv: bump to version
- 1.29.0
-Message-ID: <20190516070954.BB8D78B580@busybox.osuosl.org>
+Date: Thu, 16 May 2019 09:08:50 +0200
+Subject: [Buildroot] [git commit branch/next] package/openjpeg: bump to
+ version 2.3.1
+Message-ID: <20190516070954.B48C382595@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea5238ff1fe935aec50cc20fcdb36daf3df46131
+commit: https://git.buildroot.net/buildroot/commit/?id=7a0f168c19b44c729247db1e055c049beccd11a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libuv/libuv.hash | 2 +-
- package/libuv/libuv.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/openjpeg/openjpeg.hash | 2 +-
+ package/openjpeg/openjpeg.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
-index 7f51dfc923..b237bd81dd 100644
---- a/package/libuv/libuv.hash
-+++ b/package/libuv/libuv.hash
+diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
+index 8a6fda48c4..31c5b50409 100644
+--- a/package/openjpeg/openjpeg.hash
++++ b/package/openjpeg/openjpeg.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9ab338062e5b73bd4a05b7fcb77a0745c925c0be9118e0946434946a262cdad5  libuv-v1.28.0.tar.gz
-+sha256  ca62158fd35dfc06e37400f5ae5d0f18dde1ffc4c140738fff6f95b036a8b6f1  libuv-v1.29.0.tar.gz
- sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
-diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
-index 00b13f26bc..ef6fc1af12 100644
---- a/package/libuv/libuv.mk
-+++ b/package/libuv/libuv.mk
-@@ -4,7 +4,7 @@
+ # Locally computed:
+-sha256 3389a1aa908c2b577863da213db3a170df3edbb1432e99ae5fd3f2ac721d69d3  openjpeg-51f097e6d5754ddae93e716276fe8176b44ec548.tar.gz
++sha256 63f5a4713ecafc86de51bfad89cc07bb788e9bba24ebbf0c4ca637621aadb6a9  openjpeg-2.3.1.tar.gz
+ sha256 a6af136f3e15038a666b61f376612a07d9a4e48cb7c01adbf3e33b3f14ab49b6  LICENSE
+diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
+index 6036ab95a3..1b119fa5fe 100644
+--- a/package/openjpeg/openjpeg.mk
++++ b/package/openjpeg/openjpeg.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBUV_VERSION = v1.28.0
-+LIBUV_VERSION = v1.29.0
- LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
- LIBUV_DEPENDENCIES = host-pkgconf
- LIBUV_INSTALL_STAGING = YES
+-OPENJPEG_VERSION = 51f097e6d5754ddae93e716276fe8176b44ec548
+-OPENJPEG_SITE = $(call github,uclouvain,openjpeg,$(OPENJPEG_VERSION))
++OPENJPEG_VERSION = 2.3.1
++OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
+ OPENJPEG_LICENSE = BSD-2-Clause
+ OPENJPEG_LICENSE_FILES = LICENSE
+ OPENJPEG_INSTALL_STAGING = YES
