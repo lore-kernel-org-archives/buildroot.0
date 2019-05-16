@@ -1,62 +1,91 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 16 May 2019 11:52:48 +0300
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 16 May 2019 11:06:16 +0200
 Subject: [Buildroot] [autobuild.buildroot.net] Build results for
  2019-05-14
-In-Reply-To: <20190516083353.5cd7ae04@windsurf>
+In-Reply-To: <20190516115248.GB25918@momiji>
 References: <20190515060039.F045C22920@silver.osuosl.org>
  <20190515221703.GC32757@momiji> <20190516083353.5cd7ae04@windsurf>
-Message-ID: <20190516115248.GB25918@momiji>
+ <20190516115248.GB25918@momiji>
+Message-ID: <20190516110616.329beae6@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 May 2019 08:33:53 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> Hello Adrian,
-> 
-> On Wed, 15 May 2019 22:17:03 +0300
-> Adrian Perez de Castro <aperez@igalia.com> wrote:
-> 
-> > >          arm |               wpewebkit-2.22.5 | NOK | http://autobuild.buildroot.net/results/645be27edc31037a9b1bb7ce0dc85440949b0846 |       
-> > 
-> > 
-> > This build failure of of the wpewebkit package is kind of odd: it looks like
-> > with assertions enabled (as in: doing a debug build) uses some variables which
-> > do not exist, and I wonder why we haven't seen this before?when working on
-> > WebKit we routinely do debug builds ?\_(?)_/? 
-> 
-> This build has BR2_ENABLE_DEBUG=y, and when BR2_ENABLE_DEBUG=y, the
-> CMake package infrastructure passes -DCMAKE_BUILD_TYPE=Debug. I assume
-> that's under this condition that assertions become enabled.
+Hello,
 
-On a related note: for debug builds done by packagers we usually recommend
-building with ?-DCMAKE_BUILD_TYPE=RelWithDebInfo? because using the ?Debug?
-produces excruciatingly slow WebKit binaries. To give you an idea: loading
-some simple static HTML page over the network can take a couple of minutes.
-Typically full ?Debug? builds are only ever used by WebKit developers.
++Samuel Martin in the discussion.
 
-> > I think it is more worth it to push the update to WPE WebKit 2.24.x forward,
-> > and this build failure would just go away.
+On Thu, 16 May 2019 11:52:48 +0300
+Adrian Perez de Castro <aperez@igalia.com> wrote:
+
+> > This build has BR2_ENABLE_DEBUG=y, and when BR2_ENABLE_DEBUG=y, the
+> > CMake package infrastructure passes -DCMAKE_BUILD_TYPE=Debug. I assume
+> > that's under this condition that assertions become enabled.  
 > 
-> Except that the build issue you're seeing is in master, and we're past
-> -rc1 (even -rc2 now), and therefore we generally don't take version
-> bumps in master, as we're too close to the release. Especially a
-> version bump on a complex package like wpewebkit, and for which the
-> version bump requires bumping the versions of a number of other
-> packages as well.
+> On a related note: for debug builds done by packagers we usually recommend
+> building with ?-DCMAKE_BUILD_TYPE=RelWithDebInfo? because using the ?Debug?
+> produces excruciatingly slow WebKit binaries. To give you an idea: loading
+> some simple static HTML page over the network can take a couple of minutes.
+> Typically full ?Debug? builds are only ever used by WebKit developers.
 
-Good point, I was forgetting about the upcoming release. Let's fix this.
-Do you think it would be enough to make Buildroot use ?RelWithDebInfo? for
-debug builds? I see that other packages (like flare-engine, for example) do
-that already.
+I know there was so back and forth between Debug and RelWithDebInfo,
+see the commit log of commit 104bb29e0490bfb487e2e665448dd3ca07fcc2b5:
 
-Cheers,
-?Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190516/054655ff/attachment.asc>
+commit 104bb29e0490bfb487e2e665448dd3ca07fcc2b5
+Author: Samuel Martin <s.martin49@gmail.com>
+Date:   Sun Oct 16 13:12:37 2016 +0200
+
+    Revert "package/cmake: with BR2_ENABLE_DEBUG use RelWithDebInfo"
+    
+    This reverts commit 4b0120183404913f7f7788ef4f0f6b51498ef363.
+    
+    Before reverting this patch, CMake packages are built with the following
+    options:
+      * if BR2_ENABLE_DEBUG is set:
+        The CMake build type is set to RelWithDebInfo, which means:
+        - Optimization level is forced to: -O2;
+        - no log nor assert due to -DNDEBUG;
+        - BR2_DEBUG_{1..3} effect is unchanged;
+      * otherwise:
+        The CMake build type is set to Release, which means:
+        - Optimization level is forced to: -O3;
+        - no log nor assert due to -DNDEBUG (as expected).
+      In any case, the optimization WRT the binary size is always ignored
+      and forced.
+    
+    Reverting to the previous situation, so Buildroot now chooses between
+    the 'Debug' and 'Release' config types, which are semantically closer
+    to what Buildroot does everywhere else:
+      * if BR2_ENABLE_DEBUG is set:
+        The CMake build type is set to Debug, which means:
+        - only -g option is passed by CMake;
+        - optimization is not forced, nor debug level, so they are kept
+          as-is;
+      * otherwise:
+        The CMake build type is set to Release, so no change in this case:
+        - Optimization level is forced to: -O3;
+        - no log nor assert due to -DNDEBUG (as expected);
+        - size optimization is ignored.
+    
+    Follow-up patches will fix the CMake flag variables that are appended by
+    CMake.
+    
+    Cc: Charles Hardin <ckhardin@exablox.com>
+    Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+    Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+    Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+    Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+
+So apparently, the issue with RelWithDebInfo is that it forces the
+optimization level.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
