@@ -1,36 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 16 May 2019 08:29:10 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mono: add libunwind optional
- dependency
-In-Reply-To: <20190515204721.18722-2-fontaine.fabrice@gmail.com>
-References: <20190515204721.18722-1-fontaine.fabrice@gmail.com>
- <20190515204721.18722-2-fontaine.fabrice@gmail.com>
-Message-ID: <20190516082910.5ed9ab2c@windsurf>
+Date: Thu, 16 May 2019 08:33:53 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-05-14
+In-Reply-To: <20190515221703.GC32757@momiji>
+References: <20190515060039.F045C22920@silver.osuosl.org>
+ <20190515221703.GC32757@momiji>
+Message-ID: <20190516083353.5cd7ae04@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+Hello Adrian,
 
-On Wed, 15 May 2019 22:47:21 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Wed, 15 May 2019 22:17:03 +0300
+Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-> +_Unwind_GetIP is used in build_stack_trace however this function can be
-> +provided by libunwind so check for it to avoid the following build
-> +failure:
-> +
-> +/home/buildroot/autobuild/run/instance-1/output/host/lib/gcc/arm-buildroot-linux-musleabihf/7.4.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: ./.libs/libmini.a(libmini_la-mini-exceptions.o): in function `build_stack_trace':
-> +/home/buildroot/autobuild/run/instance-1/output/build/mono-5.20.1.27/mono/mini/mini-exceptions.c:365: undefined reference to `_Unwind_GetIP'
-> +collect2: error: ld returned 1 exit status
+> >          arm |               wpewebkit-2.22.5 | NOK | http://autobuild.buildroot.net/results/645be27edc31037a9b1bb7ce0dc85440949b0846 |       
+> 
+> 
+> This build failure of of the wpewebkit package is kind of odd: it looks like
+> with assertions enabled (as in: doing a debug build) uses some variables which
+> do not exist, and I wonder why we haven't seen this before?when working on
+> WebKit we routinely do debug builds ?\_(?)_/? 
 
-I am really not familiar with _Unwind_GetIP, and I haven't done much
-research, but it seems like _Unwind_GetIP is also provided by libgcc.
+This build has BR2_ENABLE_DEBUG=y, and when BR2_ENABLE_DEBUG=y, the
+CMake package infrastructure passes -DCMAKE_BUILD_TYPE=Debug. I assume
+that's under this condition that assertions become enabled.
 
-Did you make some further research to understand what is
-_Unwind_GetIP ? Or was your analysis just based on "mono needs
-_Unwind_GetIP, it's provided by libunwind, let's link with it" ?
+> I think it is more worth it to push the update to WPE WebKit 2.24.x forward,
+> and this build failure would just go away.
+
+Except that the build issue you're seeing is in master, and we're past
+-rc1 (even -rc2 now), and therefore we generally don't take version
+bumps in master, as we're too close to the release. Especially a
+version bump on a complex package like wpewebkit, and for which the
+version bump requires bumping the versions of a number of other
+packages as well.
 
 Thomas
 -- 
