@@ -1,46 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 16 May 2019 09:08:50 +0200
-Subject: [Buildroot] [git commit branch/next] package/openjpeg: bump to
- version 2.3.1
-Message-ID: <20190516070954.B48C382595@busybox.osuosl.org>
+Date: Thu, 16 May 2019 09:16:55 +0200
+Subject: [Buildroot] [PATCH v3] package/wpebackend-fdo: package needs
+ wayland libegl
+In-Reply-To: <20190415091632.6437-1-giulio.benetti@micronovasrl.com> (Giulio
+ Benetti's message of "Mon, 15 Apr 2019 11:16:32 +0200")
+References: <0ab8f13f-225e-29cd-c1e5-7ca2c3897ed6@mind.be>
+ <20190415091632.6437-1-giulio.benetti@micronovasrl.com>
+Message-ID: <87mujm27iw.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a0f168c19b44c729247db1e055c049beccd11a5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/openjpeg/openjpeg.hash | 2 +-
- package/openjpeg/openjpeg.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > Now wpebackend-fdo depends only on HAS_LIBEGL but if libegl is not of
+ > wayland type, build breaks due to different EGLNativeWindowType types
+ > depending on backends(fb,x11,wl).
 
-diff --git a/package/openjpeg/openjpeg.hash b/package/openjpeg/openjpeg.hash
-index 8a6fda48c4..31c5b50409 100644
---- a/package/openjpeg/openjpeg.hash
-+++ b/package/openjpeg/openjpeg.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256 3389a1aa908c2b577863da213db3a170df3edbb1432e99ae5fd3f2ac721d69d3  openjpeg-51f097e6d5754ddae93e716276fe8176b44ec548.tar.gz
-+sha256 63f5a4713ecafc86de51bfad89cc07bb788e9bba24ebbf0c4ca637621aadb6a9  openjpeg-2.3.1.tar.gz
- sha256 a6af136f3e15038a666b61f376612a07d9a4e48cb7c01adbf3e33b3f14ab49b6  LICENSE
-diff --git a/package/openjpeg/openjpeg.mk b/package/openjpeg/openjpeg.mk
-index 6036ab95a3..1b119fa5fe 100644
---- a/package/openjpeg/openjpeg.mk
-+++ b/package/openjpeg/openjpeg.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--OPENJPEG_VERSION = 51f097e6d5754ddae93e716276fe8176b44ec548
--OPENJPEG_SITE = $(call github,uclouvain,openjpeg,$(OPENJPEG_VERSION))
-+OPENJPEG_VERSION = 2.3.1
-+OPENJPEG_SITE = $(call github,uclouvain,openjpeg,v$(OPENJPEG_VERSION))
- OPENJPEG_LICENSE = BSD-2-Clause
- OPENJPEG_LICENSE_FILES = LICENSE
- OPENJPEG_INSTALL_STAGING = YES
+ > Modify:
+ > 'depend on BR2_PACKAGE_HAS_LIBEGL'
+ > to:
+ > 'depend on BR2_PACKAGE_HAS_LIBEGL_WAYLAND'
+ > in Config.in to avoid building if there is not a wayland egl backend.
+ > Modify also comment in Config.in when package is not selectable
+ > mentioning the need to have an OpenEGL-capable Wayland backend.
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/4f02b91f6ffffd194e09ed18c917b4f678b1a52d/
+
+ > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+ > ---
+ > Changes:
+ > V1-> V2:
+ > * use BR2_PACKAGE_HAS_LIBEGL_WAYLAND only instead of using 
+ >   BR2_PACKAGE_HAS_LIBEGL too
+ > * add Wayland to comment
+
+ > V2-> V3:
+ > * add `\` at the end of `depends on`
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
