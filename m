@@ -1,198 +1,79 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 16 May 2019 07:39:21 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/iputils: bump to version
- s20190515
-Message-ID: <20190516053921.21907-1-petr.vorel@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 16 May 2019 06:00:29 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-05-15
+Message-ID: <20190516060037.1706688020@hemlock.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit also include changes from s20190324.
+Hello,
 
-Upstream changed build system to Meson, these extra changes
-were required:
-* remove custom commands of previous build system:
-(IPUTILS_INSTALL_TARGET_CMDS, IPUTILS_PERMISSIONS)
-* remove USE_SYSFS=no (support removed from upstream
-* transform options from USE_FOO={yes,no} to -DUSE_FOO={true,false}
+Build statistics for 2019-05-15
+===============================
 
-Removed patch included in this release
+      branch |  OK | NOK | TIM | TOT |
+   2019.02.x |  28 |   1 |   0 |  29 |
+      master | 244 |  18 |   1 | 263 |
 
-Build ninfod if possible (when use any crypto)
+Results for branch 'master'
+===========================
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
-Changes v2->v3:
-* update to s20190515, which included needed build fixes
-* setup -DUSE_IDN for build system
-* Note USE_IDN is gone
-* Fix commit message
+Classification of failures by reason
+------------------------------------
 
- ...ix-AI_CANONIDN-usage-on-some-systems.patch | 57 ------------------
- package/iputils/iputils.hash                  |  2 +-
- package/iputils/iputils.mk                    | 59 +++++++------------
- 3 files changed, 21 insertions(+), 97 deletions(-)
- delete mode 100644 package/iputils/0001-ping-Fix-AI_CANONIDN-usage-on-some-systems.patch
+                   netsurf-3.8 | 3 
+              qt5enginio-1.6.3 | 3 
+             openjdk-jdk-12+33 | 2 
+  vdr-plugin-vnsiserver-v1.8.0 | 2 
+          wpebackend-fdo-1.0.1 | 2 
+                  brotli-1.0.7 | 1 
+                       netsurf | 1 
+                 python3-3.7.3 | 1 
+                qt5base-5.12.2 | 1 
+                suricata-4.1.3 | 1 
+               tpm2-totp-0.1.1 | 1 
+               wireshark-3.0.1 | 1 
 
-diff --git a/package/iputils/0001-ping-Fix-AI_CANONIDN-usage-on-some-systems.patch b/package/iputils/0001-ping-Fix-AI_CANONIDN-usage-on-some-systems.patch
-deleted file mode 100644
-index 556d3786fb..0000000000
---- a/package/iputils/0001-ping-Fix-AI_CANONIDN-usage-on-some-systems.patch
-+++ /dev/null
-@@ -1,57 +0,0 @@
--From 25899e849aa3abc1ad29ebf0b830262a859eaed5 Mon Sep 17 00:00:00 2001
--From: Petr Vorel <petr.vorel@gmail.com>
--Date: Sat, 21 Jul 2018 17:46:14 +0200
--Subject: [PATCH] ping: Fix AI_CANONIDN usage on some systems
--
--Commit 99f67db used AI_CANONIDN in a way, which broke compilation on
--systems where AI_CANONIDN is not defined in netdb.h (e.g. glibc < 2.3.4,
--alternative libcs that don't support IDN: e.g. current musl 1.1.19 and
--uClibc-ng 1.0.30) when not using the system libidn2.
--
--Fixes: 99f67db ping: Fix ping name encoded using ACE on C locale
--
--Reported-by: Nicholas Fish
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-----
-- ping.c | 2 +-
-- ping.h | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/ping.c b/ping.c
--index 733477f..b241815 100644
----- a/ping.c
--+++ b/ping.c
--@@ -207,9 +207,9 @@ main(int argc, char **argv)
-- 
-- #ifdef USE_IDN
-- 	setlocale(LC_ALL, "");
---#endif
-- 	if (!strcmp(setlocale(LC_ALL, NULL), "C"))
-- 		hints.ai_flags &= ~ AI_CANONIDN;
--+#endif
-- 
-- 	/* Support being called using `ping4` or `ping6` symlinks */
-- 	if (argv[0][strlen(argv[0])-1] == '4')
--diff --git a/ping.h b/ping.h
--index 3e09685..8a0c4ef 100644
----- a/ping.h
--+++ b/ping.h
--@@ -28,7 +28,6 @@
-- #include <netinet/icmp6.h>
-- #include <linux/filter.h>
-- #include <resolv.h>
---#include <locale.h>
-- 
-- #ifdef CAPABILITIES
-- #include <sys/prctl.h>
--@@ -36,6 +35,7 @@
-- #endif
-- 
-- #ifdef USE_IDN
--+#include <locale.h>
-- #include <idn2.h>
-- #define getaddrinfo_flags (AI_CANONNAME | AI_IDN | AI_CANONIDN)
-- #define getnameinfo_flags NI_IDN
---- 
--2.19.0.rc2
--
-diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-index 14e2c67134..57b9ccf6a4 100644
---- a/package/iputils/iputils.hash
-+++ b/package/iputils/iputils.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 da14105291dd491f28ea91ade854ed10aee8ba019641c80eed233de3908be7c5  iputils-s20180629.tar.gz
-+sha256 9b5125eb5ef9f4e947ad8fdddcf77f538f53b8f47b53eb5bc5347cb16d01c8fd  iputils-s20190515.tar.gz
- sha256 966075293e45785230c19415bcda15bd07c75bead4fe73332d1a4b9c45bb321f  ninfod/COPYING
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 8371971231..eeb64dd381 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -11,61 +11,42 @@
- # and IPv6 updates.
- # http://www.spinics.net/lists/netdev/msg279881.html
- 
--IPUTILS_VERSION = s20180629
-+IPUTILS_VERSION = s20190515
- IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
- IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause, BSD-4-Clause
- # Only includes a license file for BSD
- IPUTILS_LICENSE_FILES = ninfod/COPYING
- 
--IPUTILS_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) USE_SYSFS=no USE_IDN=no\
--	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
--
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
--IPUTILS_MAKE_OPTS += USE_CAP=yes
-+IPUTILS_CONF_OPTS += -DUSE_CAP=true
- IPUTILS_DEPENDENCIES += libcap
- else
--IPUTILS_MAKE_OPTS += USE_CAP=no
-+IPUTILS_CONF_OPTS += -DUSE_CAP=false
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
--IPUTILS_MAKE_OPTS += USE_GCRYPT=yes
--IPUTILS_DEPENDENCIES += libgcrypt
-+ifeq ($(BR2_PACKAGE_LIBIDN),y)
-+IPUTILS_CONF_OPTS += -DUSE_IDN=true
-+IPUTILS_DEPENDENCIES += libidn
- else
--IPUTILS_MAKE_OPTS += USE_GCRYPT=no
-+IPUTILS_CONF_OPTS += -DUSE_IDN=false
- endif
- 
- ifeq ($(BR2_PACKAGE_NETTLE),y)
--IPUTILS_MAKE_OPTS += USE_NETTLE=yes
-+IPUTILS_CONF_OPTS += -DUSE_CRYPTO=nettle
- IPUTILS_DEPENDENCIES += nettle
--else
--IPUTILS_MAKE_OPTS += USE_NETTLE=no
--endif
--
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--IPUTILS_MAKE_OPTS += USE_CRYPTO=yes
-+else ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+IPUTILS_CONF_OPTS += -DUSE_CRYPTO=gcrypt
-+IPUTILS_DEPENDENCIES += libgcrypt
-+else ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+IPUTILS_CONF_OPTS += -DUSE_CRYPTO=openssl
- IPUTILS_DEPENDENCIES += openssl
-+else ifeq ($(BR2_PACKAGE_LINUX_HEADERS),y)
-+IPUTILS_CONF_OPTS += -DUSE_CRYPTO=kernel
-+IPUTILS_DEPENDENCIES += linux-headers
- else
--IPUTILS_MAKE_OPTS += USE_CRYPTO=no
-+IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
-+# BUILD_NINFOD=true and USE_CRYPTO=none cannot be combined
-+IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
- endif
- 
--define IPUTILS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(IPUTILS_MAKE_OPTS)
--endef
--
--define IPUTILS_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 755 $(@D)/arping      $(TARGET_DIR)/sbin/arping
--	$(INSTALL) -D -m 755 $(@D)/clockdiff   $(TARGET_DIR)/bin/clockdiff
--	$(INSTALL) -D -m 755 $(@D)/ping        $(TARGET_DIR)/bin/ping
--	$(INSTALL) -D -m 755 $(@D)/rarpd       $(TARGET_DIR)/sbin/rarpd
--	$(INSTALL) -D -m 755 $(@D)/rdisc       $(TARGET_DIR)/sbin/rdisc
--	$(INSTALL) -D -m 755 $(@D)/tftpd       $(TARGET_DIR)/usr/sbin/in.tftpd
--	$(INSTALL) -D -m 755 $(@D)/tracepath   $(TARGET_DIR)/bin/tracepath
--	$(INSTALL) -D -m 755 $(@D)/traceroute6 $(TARGET_DIR)/bin/traceroute6
--endef
--
--define IPUTILS_PERMISSIONS
--	/bin/ping        f 4755 0 0 - - - - -
--	/bin/traceroute6 f 4755 0 0 - - - - -
--endef
--
--$(eval $(generic-package))
-+$(eval $(meson-package))
+
+Detail of failures
+------------------
+
+microblazeel |                   brotli-1.0.7 | NOK | http://autobuild.buildroot.net/results/e73d01aacd25319dbd118a21029c8b0a3e204d02 |     
+         arc |                        netsurf | TIM | http://autobuild.buildroot.net/results/fa900584e775e3ff63b0a3cc47200abb6b116041 |     
+      xtensa |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/a6d885bdb40dc2efd4413299b847418f8c19c9c2 |     
+         arc |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/4273a9bf584a10d65bebbfa1cc1b37110efd1809 |     
+         arc |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/6c8bb5071e9d266a54afad317fec45fcbd2af496 |     
+     sparc64 |              openjdk-jdk-12+33 | NOK | http://autobuild.buildroot.net/results/bd17be79a40e97223759a69052ea2371c294bdf9 |     
+     sparc64 |              openjdk-jdk-12+33 | NOK | http://autobuild.buildroot.net/results/0ac1b391bb41cade0b38bcf49df51ad274336086 |     
+      x86_64 |                  python3-3.7.3 | NOK | http://autobuild.buildroot.net/results/8c4111e65648d8a25bbf6d36a962cfba2337f3cb |     
+     aarch64 |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/c2b6bd947c7e72b22df6c9ea57174e055f702f53 |     
+   powerpc64 |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/b25b836053c77a12b729a48e797f510baee1a7d3 |     
+       sparc |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/0ac2e83a6c6e41942312298600d8b05920ef8e8c |     
+      xtensa |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/56794a7b113ab9f387d550a8a17117023be30ee1 |     
+         arc |                 suricata-4.1.3 | NOK | http://autobuild.buildroot.net/results/f4ac030737c22a78cac17499ac96341e4119403a |     
+      x86_64 |                tpm2-totp-0.1.1 | NOK | http://autobuild.buildroot.net/results/da6f559e72c120202a2f8b81b0a5eddd99567161 |     
+         arm |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/3f4505726465fa3a1e9f748bd6b386572864617f |     
+     aarch64 |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/af508d067b3bf2a73e5051e1a293ffa7cdaa56a7 |     
+         arm |                wireshark-3.0.1 | NOK | http://autobuild.buildroot.net/results/431efab9a925cc229b6922c2e3cfae2dfe1e4afa | ORPH
+         arm |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/256739a88a79ce92e9e09cdae5e1f290f9cad0b0 |     
+         arm |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/6ffbf528ae8a32a130bf912007f80cd440ba119c |     
+
+Results for branch '2019.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+              qt5enginio-1.6.3 | 1 
+
+
+Detail of failures
+------------------
+
+       nios2 |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/d85014730dde32a4122a1b4078bbacc17a5e592b |     
+
+
 -- 
-2.21.0
+http://autobuild.buildroot.net
