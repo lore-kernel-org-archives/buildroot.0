@@ -1,47 +1,77 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 17 May 2019 13:56:21 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-requests: bump to version
- 2.22.0
-Message-ID: <20190517105621.26356-1-asafka7@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 17 May 2019 13:25:14 +0200
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.{0, 1}.x series
+Message-ID: <20190517111939.3A62888736@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-requests/python-requests.hash | 4 ++--
- package/python-requests/python-requests.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=24a9a7894d7f176e870b19a7f69d920760ffcf62
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
-index 46f62c75c5..42f45d3a44 100644
---- a/package/python-requests/python-requests.hash
-+++ b/package/python-requests/python-requests.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/requests/json
--md5	1bcd0e0977c3f8db1848ba0e2b7ab904  requests-2.21.0.tar.gz
--sha256	502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e  requests-2.21.0.tar.gz
-+md5	ee28bee2de76e9198fc41e48f3a7dd47  requests-2.22.0.tar.gz
-+sha256	11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4  requests-2.22.0.tar.gz
- # Locally computed sha256 checksums
- sha256	be41abac2c40f8530307e8d172c590b476f4a488bc6a68f8de57b7cf64786687  LICENSE
-diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-index 3d8542fcdf..e64db94523 100644
---- a/package/python-requests/python-requests.mk
-+++ b/package/python-requests/python-requests.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index c41dcc6c05..5f2c81a3a0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -121,7 +121,7 @@ endif
  
--PYTHON_REQUESTS_VERSION = 2.21.0
-+PYTHON_REQUESTS_VERSION = 2.22.0
- PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
--PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/52/2c/514e4ac25da2b08ca5a464c50463682126385c4272c18193876e91f4bc38
-+PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/01/62/ddcf76d1d19885e8579acb1b1df26a852b03472c0e46d2b959a714c90608
- PYTHON_REQUESTS_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_LICENSE = Apache-2.0
- PYTHON_REQUESTS_LICENSE_FILES = LICENSE
--- 
-2.20.1
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.0.16" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.0.17" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 240f095f26..19dfa19fec 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256 ec7ad67a423698855200b46e1c7ee325d68a8fe4706c66fe456780a8c99bef5b  linux-5.1.2.tar.xz
+-sha256 5ca7ce390f52d0ce10b3c07f77701e75f7370b5da856646f63c2b67a4ef9fcac  linux-5.0.16.tar.xz
++sha256 b0f53e12daf8e710992151333edeb7d7da3d935a6aa3db8360681f7d05a6aaa2  linux-5.1.3.tar.xz
++sha256 ab37029bdc9a4e3fc5dc2cc6f6e8f506a62fa42f68e50897c24fc9dbba789629  linux-5.0.17.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 111619a1fab2368bf4da05c079e44bf25ee00ee250694c1b8e536f2ed5d2df57  linux-4.19.43.tar.xz
+-sha256 5615b713389d74044eaa57032dab674228116b63ed358086c33bd929d7ad3b7c  linux-4.14.119.tar.xz
+-sha256 2a94d008c0737f01d4b78f669a3c40e334cacebe4d62eb25252171cee205b178  linux-4.9.176.tar.xz
+-sha256 2c6a9d2765ef182f2470afed5af74de6c435ba9aaf422af54db8c5dc2b4f27d1  linux-4.4.179.tar.xz
++sha256 707642e993775618a5afa039b1058fa49f1c0faada46e8cdcb976241bca6b288  linux-4.19.44.tar.xz
++sha256 ddb8e86cf65e6f53f782bc46f026823b6b3fc472aa1385b601f22dce2dbccb4c  linux-4.14.120.tar.xz
++sha256 c73b1e3ebcc35b653f7b673ca151fc67b814bdb27269799fa7cda251827887ee  linux-4.9.177.tar.xz
++sha256 1a450217d381bb7fd259d026d3b7a57c717e8d1f66754cd6fcc9df3c4a8a6a7a  linux-4.4.180.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8284913860..16096b65e1 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -297,12 +297,12 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.179"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.176"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.119"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.43"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.0.16"	if BR2_KERNEL_HEADERS_5_0
+-	default "5.1.2"		if BR2_KERNEL_HEADERS_5_1
++	default "4.4.180"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.177"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.120"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.44"	if BR2_KERNEL_HEADERS_4_19
++	default "5.0.17"	if BR2_KERNEL_HEADERS_5_0
++	default "5.1.3"		if BR2_KERNEL_HEADERS_5_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
