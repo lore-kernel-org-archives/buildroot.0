@@ -1,44 +1,60 @@
-From: Serhii Sakhno <sergei.sakhno@gmail.com>
-Date: Fri, 17 May 2019 20:53:42 +0300
-Subject: [Buildroot] [PATCH] package/python-socketio: bump version to 4.0.1
-Message-ID: <20190517175342.12371-1-sergei.sakhno@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Fri, 17 May 2019 20:09:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: add
+ BR2_PACKAGE_HAS_LIBEGL_WAYLAND dependency
+In-Reply-To: <20190517090800.1ce26f4f@windsurf>
+References: <20190516201220.24893-1-fontaine.fabrice@gmail.com>
+ <20190517002828.GB29253@momiji> <20190517090800.1ce26f4f@windsurf>
+Message-ID: <d8ba40cb-dbcf-0d3e-5a47-16dad7fff660@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- package/python-socketio/python-socketio.hash | 6 ++----
- package/python-socketio/python-socketio.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+Hello Adrian, All,
 
-diff --git a/package/python-socketio/python-socketio.hash b/package/python-socketio/python-socketio.hash
-index 659d4d540c..ea6f2359da 100644
---- a/package/python-socketio/python-socketio.hash
-+++ b/package/python-socketio/python-socketio.hash
-@@ -1,4 +1,2 @@
--# md5 from https://pypi.python.org/pypi/python-socketio/json
--md5	44fd24e839dc3102920765f345740646  python-socketio-1.4.1.tar.gz
--# sha256 calculated by scanpypi
--sha256	ebd0984d831d602c8ec6d586ecde4466972cc7ed37dbbfe613192864e8263779  python-socketio-1.4.1.tar.gz
-+md5	1c9e30c6a70eaa8176cc1a9fbb51453c  python-socketio-4.0.1.tar.gz
-+sha256	8035604105058195dfa1c8ca1aff0435f08bbbdc3f72bb1f4b81723d129a4ecf  python-socketio-4.0.1.tar.gz
-diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
-index 57dc1f8b48..6ab5ed46e2 100644
---- a/package/python-socketio/python-socketio.mk
-+++ b/package/python-socketio/python-socketio.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SOCKETIO_VERSION = 1.4.1
--PYTHON_SOCKETIO_SITE = https://pypi.python.org/packages/da/00/66103df6a116a2ce3ea662a9c8c80f337d43d7f138caf04e9af6dec24ba7
-+PYTHON_SOCKETIO_VERSION = 4.0.1
-+PYTHON_SOCKETIO_SOURCE = python-socketio-$(PYTHON_SOCKETIO_VERSION).tar.gz
-+PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/79/74/c280be1e037226ad2ca4ab9e02ec4ae0f127da2765800b1e3bc651d3d678
- PYTHON_SOCKETIO_SETUP_TYPE = setuptools
- PYTHON_SOCKETIO_LICENSE = MIT
- PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
+Il 17/05/2019 09:08, Thomas Petazzoni ha scritto:
+> Hello Adrian,
+> 
+> On Fri, 17 May 2019 00:28:28 +0300
+> Adrian Perez de Castro <aperez@igalia.com> wrote:
+> 
+>> This is not correct. The short version of the story is tat WPE WebKit
+>> itself does not require Wayland, only wpebackend-fdo uses Wayland.
+> 
+> That does not matter.
+> 
+> If A selects B, and B depends on C, then A *must* replicate the
+> "depends on C". That's due to how Kconfig work, and it's totally
+> unrelated to the fact that A doesn't use C directly in practice.
+> 
+> If you don't replicate this "depends on", then Kconfig allows you to
+> enable "A" even if the dependencies for "B" are not satisfied, causing
+> the build failure that Fabrice is fixing.
+> 
+> So, Fabrice patch is correct.
+
+Thomas and Fabrice are correct because wpewebkit in its Config.in:
+"select BR2_PACKAGE_WPEBACKEND_FDO"
+Probably that's the problem, wpewebkit should not select that specific 
+Backend, but should let to the user the choice about which Backend to 
+use or even none.
+This is why I've got confused too.
+
+So Fabrice's patch fixes build failure, but probably we need another 
+patch to add the Backend choice.
+
+What do you think?
+
 -- 
-2.21.0
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
