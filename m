@@ -1,52 +1,42 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 17 May 2019 20:09:55 +0200
+Date: Fri, 17 May 2019 20:12:41 +0200
 Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: add
  BR2_PACKAGE_HAS_LIBEGL_WAYLAND dependency
-In-Reply-To: <20190517090800.1ce26f4f@windsurf>
+In-Reply-To: <2bcdcce8-a6c0-c714-2f4f-8946afe68779@micronovasrl.com>
 References: <20190516201220.24893-1-fontaine.fabrice@gmail.com>
- <20190517002828.GB29253@momiji> <20190517090800.1ce26f4f@windsurf>
-Message-ID: <d8ba40cb-dbcf-0d3e-5a47-16dad7fff660@micronovasrl.com>
+ <7b7b2abd-69a6-33c0-a892-68cdcbc57b9a@micronovasrl.com>
+ <2bcdcce8-a6c0-c714-2f4f-8946afe68779@micronovasrl.com>
+Message-ID: <ade874ba-b8f8-a51a-6e64-3a1e140ec177@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adrian, All,
+Il 16/05/2019 23:38, Giulio Benetti ha scritto:
+> Il 16/05/2019 23:35, Giulio Benetti ha scritto:
+>> Hello Fabrice,
+>>
+>> Il 16/05/2019 22:12, Fabrice Fontaine ha scritto:
+>>> Commit 5b3c7a3e7828107eaa9dad49ba2650466277d891 added a
+>>> BR2_PACKAGE_HAS_LIBEGL_WAYLAND dependency to wpebackend-fdo but forget
+>>> to add it to wpewebkit
+>>>
+>>> Fixes:
+>>> ? - 
+>>> http://autobuild.buildroot.net/results/49e04166de68358e69bce580b29ba3a25b313acf 
+>>>
+>>>
+>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>
+>> Reviewed-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> 
+> Please discard this ^^^^^^^^^
 
-Il 17/05/2019 09:08, Thomas Petazzoni ha scritto:
-> Hello Adrian,
-> 
-> On Fri, 17 May 2019 00:28:28 +0300
-> Adrian Perez de Castro <aperez@igalia.com> wrote:
-> 
->> This is not correct. The short version of the story is tat WPE WebKit
->> itself does not require Wayland, only wpebackend-fdo uses Wayland.
-> 
-> That does not matter.
-> 
-> If A selects B, and B depends on C, then A *must* replicate the
-> "depends on C". That's due to how Kconfig work, and it's totally
-> unrelated to the fact that A doesn't use C directly in practice.
-> 
-> If you don't replicate this "depends on", then Kconfig allows you to
-> enable "A" even if the dependencies for "B" are not satisfied, causing
-> the build failure that Fabrice is fixing.
-> 
-> So, Fabrice patch is correct.
+Sorry, please keep my Reviewed-by.
+Thanks
 
-Thomas and Fabrice are correct because wpewebkit in its Config.in:
-"select BR2_PACKAGE_WPEBACKEND_FDO"
-Probably that's the problem, wpewebkit should not select that specific 
-Backend, but should let to the user the choice about which Backend to 
-use or even none.
-This is why I've got confused too.
-
-So Fabrice's patch fixes build failure, but probably we need another 
-patch to add the Backend choice.
-
-What do you think?
-
+Best regards
 -- 
 Giulio Benetti
 CTO
@@ -58,3 +48,43 @@ Cod.Fiscale - P.IVA 02663420285
 Capitale Sociale ? 26.000 i.v.
 Iscritta al Reg. Imprese di Padova N. 02663420285
 Numero R.E.A. 258642
+
+>>> ---
+>>> ? package/wpewebkit/Config.in | 6 ++++--
+>>> ? 1 file changed, 4 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+>>> index 04ebe5452b..15db924829 100644
+>>> --- a/package/wpewebkit/Config.in
+>>> +++ b/package/wpewebkit/Config.in
+>>> @@ -35,10 +35,11 @@ comment "wpewebkit needs a toolchain w/ C++, 
+>>> wchar, threads, dynamic library, gc
+>>> ????????? || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+>>> ????????? || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || 
+>>> !BR2_HOST_GCC_AT_LEAST_4_8
+>>> -comment "wpewebkit needs an OpenGL ES w/ EGL backend"
+>>> +comment "wpewebkit needs an OpenGL ES w/ EGL-capable Wayland backend"
+>>> ????? depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+>>> ????? depends on !BR2_BINFMT_FLAT
+>>> -??? depends on !BR2_PACKAGE_HAS_LIBGLES || !BR2_PACKAGE_HAS_LIBEGL
+>>> +??? depends on !BR2_PACKAGE_HAS_LIBGLES || !BR2_PACKAGE_HAS_LIBEGL \
+>>> +??????? || !BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+>>> ? config BR2_PACKAGE_WPEWEBKIT
+>>> ????? bool "wpewebkit"
+>>> @@ -51,6 +52,7 @@ config BR2_PACKAGE_WPEWEBKIT
+>>> ????? depends on BR2_USE_WCHAR # icu, libsoup
+>>> ????? depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
+>>> ????? depends on BR2_PACKAGE_HAS_LIBEGL # libepoxy
+>>> +??? depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wpebackend-fdo
+>>> ????? depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+>>> ????? select BR2_PACKAGE_CAIRO
+>>> ????? select BR2_PACKAGE_CAIRO_PNG
+>>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
