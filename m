@@ -1,90 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 17 May 2019 16:11:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pcsc-lite: disable documentation
-Message-ID: <20190517141107.18230-1-fontaine.fabrice@gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 17 May 2019 17:29:11 +0300
+Subject: [Buildroot] [PATCH] package/cog: install to staging
+In-Reply-To: <20190516152750.6badca4b@windsurf>
+References: <20190516095858.33732-1-cturner@igalia.com>
+ <20190516152750.6badca4b@windsurf>
+Message-ID: <20190517172911.GB3458@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/a6cd53b060c00e916b40d7bd6c99bd8232d0f978
+Hello Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...002-Add-disable-documentation-option.patch | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 package/pcsc-lite/0002-Add-disable-documentation-option.patch
+On Thu, 16 May 2019 15:27:50 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> Hello Charlie,
+> 
+> On Thu, 16 May 2019 10:58:58 +0100
+> Charlie Turner <cturner@igalia.com> wrote:
+> 
+> > This is useful when unstripped libraries are installed into staging. It
+> > allows the cog executable to be debugged.
+> 
+> Missing Signed-off-by line, but an identical patch was already proposed
+> by Adrian:
+> 
+>   http://patchwork.ozlabs.org/patch/1100157/
 
-diff --git a/package/pcsc-lite/0002-Add-disable-documentation-option.patch b/package/pcsc-lite/0002-Add-disable-documentation-option.patch
-new file mode 100644
-index 0000000000..6a083f5aa0
---- /dev/null
-+++ b/package/pcsc-lite/0002-Add-disable-documentation-option.patch
-@@ -0,0 +1,63 @@
-+From 77ac8fcb78e3085577cd4eb5c4ac7746a5444f13 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 17 May 2019 15:48:35 +0200
-+Subject: [PATCH] Add --disable-documentation option
-+
-+This option allows the user to disable man pages which can be useful if
-+podman is not available
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/LudovicRousseau/PCSC/pull/60]
-+---
-+ configure.ac        | 7 +++++++
-+ src/spy/Makefile.am | 2 ++
-+ 2 files changed, 9 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 0fa5168..7d20c6e 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -144,6 +144,12 @@ esac
-+ AC_DEFINE_UNQUOTED(PCSC_ARCH, "$PCSC_ARCH", [PC/SC target architecture])
-+ PCSCLITE_FEATURES="${PCSCLITE_FEATURES} $PCSC_ARCH $host"
-+ 
-++# --disable-documentation
-++AC_ARG_ENABLE(documentation,
-++	AS_HELP_STRING([--disable-documentation],[do not build documentation]),
-++	[ enable_doc="${enableval}" ], [ enable_doc="yes" ] )
-++AM_CONDITIONAL(ENABLE_DOC, test "$enable_doc" != "no")
-++
-+ # See if socket() is found from libsocket
-+ AC_CHECK_LIB(socket, socket, [LIBS="$LIBS -lsocket"])
-+ 
-+@@ -446,6 +452,7 @@ use libsystemd:         ${use_libsystemd}
-+ systemd unit directory: ${with_systemdsystemunitdir}
-+ serial config dir.:     ${confdir_exp}
-+ filter:                 ${use_filter}
-++documentation:          ${enable_doc}
-+ 
-+ PCSCLITE_FEATURES:      ${PCSCLITE_FEATURES}
-+ 
-+diff --git a/src/spy/Makefile.am b/src/spy/Makefile.am
-+index 3c3daee..0a83371 100644
-+--- a/src/spy/Makefile.am
-++++ b/src/spy/Makefile.am
-+@@ -6,6 +6,7 @@ dist_bin_SCRIPTS = pcsc-spy
-+ libpcscspy_la_SOURCES = \
-+ 	libpcscspy.c
-+ 
-++if ENABLE_DOC
-+ man_MANS = pcsc-spy.1
-+ 
-+ pcsc-spy.1: pcsc-spy.pod
-+@@ -13,6 +14,7 @@ pcsc-spy.1: pcsc-spy.pod
-+ 		--center="PC/SC lite" \
-+ 		--release="$(PACKAGE_NAME) $(PACKAGE_VERSION)" \
-+ 		$(srcdir)/pcsc-spy.pod > $@
-++endif
-+ 
-+ EXTRA_DIST = install_spy.sh uninstall_spy.sh pcsc-spy.pod
-+ CLEANFILES = pcsc-spy.1
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+Today I had a quick private chat with Charlie and we have agreed on
+withdrawing his patch and go ahead with mine :-)
+
+Cheers,
+?Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190517/4a79388b/attachment.asc>
