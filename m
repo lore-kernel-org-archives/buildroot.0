@@ -1,73 +1,90 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 17 May 2019 16:44:31 +0300
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: needs gcc >= 6
-In-Reply-To: <20190517132528.13269-1-fontaine.fabrice@gmail.com>
-References: <20190517132528.13269-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190517164431.GB29686@momiji>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 17 May 2019 16:11:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pcsc-lite: disable documentation
+Message-ID: <20190517141107.18230-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Fixes:
+ - http://autobuild.buildroot.org/results/a6cd53b060c00e916b40d7bd6c99bd8232d0f978
 
-On Fri, 17 May 2019 15:25:28 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...002-Add-disable-documentation-option.patch | 63 +++++++++++++++++++
+ 1 file changed, 63 insertions(+)
+ create mode 100644 package/pcsc-lite/0002-Add-disable-documentation-option.patch
 
-> gcc requirement has been bumped from gcc 5 to gcc 6 since
-> https://trac.webkit.org/browser/webkit/trunk/CMakeLists.txt?rev=231152
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/304956dda8e580cb39107e57a139cd1ae08ee655
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
-
-> ---
->  package/wpewebkit/Config.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-> index 15db924829..39f64c4e54 100644
-> --- a/package/wpewebkit/Config.in
-> +++ b/package/wpewebkit/Config.in
-> @@ -28,12 +28,12 @@ config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS_JIT
->  	default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R2
->  	default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R5
->  
-> -comment "wpewebkit needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 4.8, host gcc >= 4.8"
-> +comment "wpewebkit needs a toolchain w/ C++, wchar, threads, dynamic library, gcc >= 6, host gcc >= 4.8"
->  	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
->  	depends on !BR2_BINFMT_FLAT
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
->  		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
-> -		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || !BR2_HOST_GCC_AT_LEAST_4_8
-> +		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_6 || !BR2_HOST_GCC_AT_LEAST_4_8
-
-Good catch, somehow we missed this when the package was first added in
-upstream Buildroot ? probably because I used as basis for it the files
-we had in a BR2_EXTERNAL for 2.20.x. O:-)
-
-
->  comment "wpewebkit needs an OpenGL ES w/ EGL-capable Wayland backend"
->  	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
-> @@ -47,7 +47,7 @@ config BR2_PACKAGE_WPEWEBKIT
->  	depends on !BR2_BINFMT_FLAT # icu
->  	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz, icu
->  	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # icu
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6
->  	depends on BR2_HOST_GCC_AT_LEAST_4_8 # icu
->  	depends on BR2_USE_WCHAR # icu, libsoup
->  	depends on BR2_PACKAGE_HAS_LIBGLES # libepoxy
-> -- 
-> 2.20.1
-> 
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190517/c757c9e1/attachment.asc>
+diff --git a/package/pcsc-lite/0002-Add-disable-documentation-option.patch b/package/pcsc-lite/0002-Add-disable-documentation-option.patch
+new file mode 100644
+index 0000000000..6a083f5aa0
+--- /dev/null
++++ b/package/pcsc-lite/0002-Add-disable-documentation-option.patch
+@@ -0,0 +1,63 @@
++From 77ac8fcb78e3085577cd4eb5c4ac7746a5444f13 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 17 May 2019 15:48:35 +0200
++Subject: [PATCH] Add --disable-documentation option
++
++This option allows the user to disable man pages which can be useful if
++podman is not available
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/LudovicRousseau/PCSC/pull/60]
++---
++ configure.ac        | 7 +++++++
++ src/spy/Makefile.am | 2 ++
++ 2 files changed, 9 insertions(+)
++
++diff --git a/configure.ac b/configure.ac
++index 0fa5168..7d20c6e 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -144,6 +144,12 @@ esac
++ AC_DEFINE_UNQUOTED(PCSC_ARCH, "$PCSC_ARCH", [PC/SC target architecture])
++ PCSCLITE_FEATURES="${PCSCLITE_FEATURES} $PCSC_ARCH $host"
++ 
+++# --disable-documentation
+++AC_ARG_ENABLE(documentation,
+++	AS_HELP_STRING([--disable-documentation],[do not build documentation]),
+++	[ enable_doc="${enableval}" ], [ enable_doc="yes" ] )
+++AM_CONDITIONAL(ENABLE_DOC, test "$enable_doc" != "no")
+++
++ # See if socket() is found from libsocket
++ AC_CHECK_LIB(socket, socket, [LIBS="$LIBS -lsocket"])
++ 
++@@ -446,6 +452,7 @@ use libsystemd:         ${use_libsystemd}
++ systemd unit directory: ${with_systemdsystemunitdir}
++ serial config dir.:     ${confdir_exp}
++ filter:                 ${use_filter}
+++documentation:          ${enable_doc}
++ 
++ PCSCLITE_FEATURES:      ${PCSCLITE_FEATURES}
++ 
++diff --git a/src/spy/Makefile.am b/src/spy/Makefile.am
++index 3c3daee..0a83371 100644
++--- a/src/spy/Makefile.am
+++++ b/src/spy/Makefile.am
++@@ -6,6 +6,7 @@ dist_bin_SCRIPTS = pcsc-spy
++ libpcscspy_la_SOURCES = \
++ 	libpcscspy.c
++ 
+++if ENABLE_DOC
++ man_MANS = pcsc-spy.1
++ 
++ pcsc-spy.1: pcsc-spy.pod
++@@ -13,6 +14,7 @@ pcsc-spy.1: pcsc-spy.pod
++ 		--center="PC/SC lite" \
++ 		--release="$(PACKAGE_NAME) $(PACKAGE_VERSION)" \
++ 		$(srcdir)/pcsc-spy.pod > $@
+++endif
++ 
++ EXTRA_DIST = install_spy.sh uninstall_spy.sh pcsc-spy.pod
++ CLEANFILES = pcsc-spy.1
++-- 
++2.20.1
++
+-- 
+2.20.1
