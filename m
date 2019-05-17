@@ -1,26 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 17 May 2019 10:38:59 +0200
-Subject: [Buildroot] [PATCH] package/gerbera: fix pidfile name in
- start-stop-script
-In-Reply-To: <20190516082542.28530-1-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Thu, 16 May 2019 10:25:42 +0200")
-References: <20190516082542.28530-1-joerg.krause@embedded.rocks>
-Message-ID: <87pnohxyos.fsf@dell.be.48ers.dk>
+Date: Fri, 17 May 2019 10:36:40 +0200
+Subject: [Buildroot] [git commit] package/dhcp: fix upstream URL in Config.in
+Message-ID: <20190517083327.B188B7FEA5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=45d0f35ba2d9799cc1fe4d815904858a38132b63
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > `NAME` is not set resulting in a pidfile without a basename:
- > `/var/run/.pid`. Use the correct variable `DAEMON` instead.
+The current URL no longer exists, so update it to what looks like the
+main DHCP upstream site.
 
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+This issue was noticed by the upstream URL check added by Matt Weber
+in the pkg-stats script, whose results are visible at
+http://autobuild.buildroot.net/stats/.
 
-Committed, thanks.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/dhcp/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/dhcp/Config.in b/package/dhcp/Config.in
+index a4930e53ba..e626d78a4c 100644
+--- a/package/dhcp/Config.in
++++ b/package/dhcp/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_DHCP
+ 	help
+ 	  DHCP relay agent from the ISC DHCP distribution.
+ 
+-	  http://www.isc.org/products/DHCP
++	  https://www.isc.org/downloads/dhcp/
+ 
+ if BR2_PACKAGE_DHCP
+ 
