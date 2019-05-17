@@ -1,53 +1,47 @@
-From: Martin Kepplinger <martin.kepplinger@ginzinger.com>
-Date: Fri, 17 May 2019 12:46:20 +0200
-Subject: [Buildroot] [PATCH] tslib: update upstream source address
-Message-ID: <20190517104620.21939-1-martin.kepplinger@ginzinger.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri, 17 May 2019 13:56:21 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-requests: bump to version
+ 2.22.0
+Message-ID: <20190517105621.26356-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The project has been moved from the kergoth user account to the
-libts organisation on github. While github seems to maintain redirects,
-we should use the new location directly.
-
-Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/tslib/tslib.hash | 2 +-
- package/tslib/tslib.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python-requests/python-requests.hash | 4 ++--
+ package/python-requests/python-requests.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index cfe78765bc..269d8f95fe 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,4 +1,4 @@
--# https://github.com/kergoth/tslib/releases/download/1.19/tslib-1.19.tar.xz.sha256
-+# https://github.com/libts/tslib/releases/download/1.19/tslib-1.19.tar.xz.sha256
- sha256  efe1fef16a00dc818f1d8e402877184dadf331f1b0dd1fbfeeb2698ee8647f4d  tslib-1.19.tar.xz
- 
- # Locally computed
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index ccc2671c6a..9d21647033 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index 46f62c75c5..42f45d3a44 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/requests/json
+-md5	1bcd0e0977c3f8db1848ba0e2b7ab904  requests-2.21.0.tar.gz
+-sha256	502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e  requests-2.21.0.tar.gz
++md5	ee28bee2de76e9198fc41e48f3a7dd47  requests-2.22.0.tar.gz
++sha256	11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4  requests-2.22.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	be41abac2c40f8530307e8d172c590b476f4a488bc6a68f8de57b7cf64786687  LICENSE
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 3d8542fcdf..e64db94523 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- TSLIB_VERSION = 1.19
--TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
-+TSLIB_SITE = https://github.com/libts/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- TSLIB_LICENSE_FILES = COPYING
+-PYTHON_REQUESTS_VERSION = 2.21.0
++PYTHON_REQUESTS_VERSION = 2.22.0
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/52/2c/514e4ac25da2b08ca5a464c50463682126385c4272c18193876e91f4bc38
++PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/01/62/ddcf76d1d19885e8579acb1b1df26a852b03472c0e46d2b959a714c90608
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
 -- 
 2.20.1
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: smime.p7s
-Type: application/x-pkcs7-signature
-Size: 3616 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190517/ee85f5c1/attachment.bin>
