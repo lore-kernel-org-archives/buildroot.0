@@ -1,35 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 17 May 2019 09:03:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/busybox: select individual
- libraries when selecting SELinux support.
-In-Reply-To: <20190516155200.86689-1-aduskett@gmail.com>
-References: <20190516155200.86689-1-aduskett@gmail.com>
-Message-ID: <20190517090319.00ebb34e@windsurf>
+Date: Fri, 17 May 2019 09:08:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: add
+ BR2_PACKAGE_HAS_LIBEGL_WAYLAND dependency
+In-Reply-To: <20190517002828.GB29253@momiji>
+References: <20190516201220.24893-1-fontaine.fabrice@gmail.com>
+ <20190517002828.GB29253@momiji>
+Message-ID: <20190517090800.1ce26f4f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Adrian,
 
-On Thu, 16 May 2019 11:52:00 -0400
-aduskett at gmail.com wrote:
+On Fri, 17 May 2019 00:28:28 +0300
+Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> From the help test of individual binaries:
-> 
-> With this option enabled, each applet is a separate binary, which is needed for
-> proper operation with SELinux
-> 
-> As such, it only makes sense to select this option when SELinux support is
-> selected as well.
+> This is not correct. The short version of the story is tat WPE WebKit
+> itself does not require Wayland, only wpebackend-fdo uses Wayland.
 
-The wording here is a bit unfortunate, as one could read this as if you
-had added a "depends on BR2_PACKAGE_BUSYBOX_SELINUX" to
-"BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES", so that "individual
-binaries" can only be used with SELinux.
+That does not matter.
+
+If A selects B, and B depends on C, then A *must* replicate the
+"depends on C". That's due to how Kconfig work, and it's totally
+unrelated to the fact that A doesn't use C directly in practice.
+
+If you don't replicate this "depends on", then Kconfig allows you to
+enable "A" even if the dependencies for "B" are not satisfied, causing
+the build failure that Fabrice is fixing.
+
+So, Fabrice patch is correct.
 
 Best regards,
 
