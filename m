@@ -1,112 +1,84 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Fri, 17 May 2019 18:36:41 +0300
-Subject: [Buildroot] [PATCH 4/5] package/wpewebkit: bump to version
- 2.24.1
-In-Reply-To: <20190516190703.GC2441@scaer>
-References: <20190514114111.20424-1-aperez@igalia.com>
- <20190514114111.20424-5-aperez@igalia.com>
- <CAB0FRstZPttVSDYzYGih2nfdTdZ7UKuipDGPKWSaBJf6h_LVSw@mail.gmail.com>
- <20190515145239.GB9191@momiji> <20190515160530.234d9212@windsurf>
- <20190515211139.GB26229@momiji> <20190515195334.GA2441@scaer>
- <20190516001516.GB4444@momiji> <20190516190703.GC2441@scaer>
-Message-ID: <20190517183641.GB32359@momiji>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Fri, 17 May 2019 13:40:19 -0400
+Subject: [Buildroot] [PATCH 1/1] package/tzdata and package/zic: bump to
+ version 2019a
+Message-ID: <20190517174019.65050-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Adam Duskett <Aduskett@gmail.com>
 
-On Thu, 16 May 2019 21:07:03 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> Adrian, All,
-> 
-> On 2019-05-16 00:15 +0300, Adrian Perez de Castro spake thusly:
-> > On Wed, 15 May 2019 21:53:34 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > > On 2019-05-15 21:11 +0300, Adrian Perez de Castro spake thusly:
-> > > Well, as you said previously, what good is a browser without support for
-> > > one of the most prominent image format on the web?
-> > > But please note that openjpeg is a JPEG 2000 codec, not a JPEG one.
-> > > JPEG 2000 is much less used on the web:
-> > >     https://en.wikipedia.org/wiki/Comparison_of_web_browsers#Image_format_support
-> > > Only Konqueror, Midori, Omniweb, and Safari are said to support it.
-> > 
-> > ?and now WebKitGTK, and WPE WebKit :)
-> > 
-> > With my WebKit maintainer hat on, let me tell you a short story.
-> 
-> /me sits by the fire and listens carefully to stories from the
-> trenches... :-)
+Also add TZDATA_LICENSE_FILES and ZIC_LICENSE_FILES, and hashes for those
+files.
 
-:-D
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/tzdata/tzdata.hash | 5 +++--
+ package/tzdata/tzdata.mk   | 3 ++-
+ package/zic/zic.hash       | 5 +++--
+ package/zic/zic.mk         | 3 ++-
+ 4 files changed, 10 insertions(+), 6 deletions(-)
 
-> > We have been forced to add support for JPEG2000 [1] because our user-agent is
-> > similar to that of Safari (because? our WebKit ports *are* using the same Web
-> > engine as Safari?there is no point denying it!) and a few sites started over
-> > a year ago to send JPEG2000 images replies, then a few more, and then some.
-> > At some point Akamai's Image Manager [2] started serving JPEG2000 images
-> > transparently: the HTML references an URL ending in ?.png? (for example),
-> > and Akamai will return a JPEG2000 in the response (with an appropriate
-> > Content-Type HTTP header, of course). At this point, if we don't support
-> > JPEG2000, a good chunk of popular websites will just look broken because
-> > the images returned by popular CDNs or the websites themselves cannot be
-> > decoded.
-> > 
-> > This above is what I meant with ?many websites will silently fail to
-> > show images without [OpenJPEG support] enabled?.
-> 
-> So, from what you are saying, I understand that support for jpeg 2000
-> *is* de facto mandatory.
-
-That's 101% correct.
-
-> > I hope this helps understand why I am so insistent in having the OpenJPEG
-> > support enabled unconditionally: preventing that the Web is broken when
-> > browsing with a WebKit-based browser.
-> 
-> Yes, I understand that. Thanks for the explanations.
-
-No problem. If there's any other questions regarding WebKit, feel free to
-send them my way.
-
-> > The rationale why we have in the CMake build files in WebKit an ?USE_OPENJPEG?
-> > build-time option is to disable it when configuring for distributions which
-> > either a.) do not ship an OpenJPEG package, or b.) ship an old version that
-> > does not include some new API that WebKit needs (example: Ubuntu LTS).
-> > Buildroot does not fall into any of the categories above, and therefore I
-> > would argue that either we use ?select? to depend unconditionally on OpenJPEG,
-> > or ?imply? to choose it by default while still allowing to deselect it by
-> > hand.
-> 
-> I would not even give the option to disable it. Given the size of
-> openjpeg as compared to that of *webkit, there is not even the slightest
-> reason to make it configurable (IMHO).
-
-I also like this option, so I will do that for v2 of the patch set.
-
-> > > Also, Thomas, please note that NetSurf does not support it eitther. ;-]
-> > Then again, NetSurf does not have an user-agent close enough to a WebKit
-> > one as to be served JPEG2000 images }:-)
-> 
-> That was a partially-private joke with Thomas, as he is keen on removing
-> netsurf after having lost countless hair trying to fix it. ;-)
-
-Hehe, I figured :-]
-
-> > I hope that my little store above might help you change your mind, if
-> > only a little bit :-)
-> 
-> Yes, I changed my mind, from a conditional to mandatory dependency. ;-)
-> Sorry, still no imply for me! ;-)
-
-Well, imply or not imply... at least we have now an agreement on how to
-go ahead with this. Thanks for your feedback!
-
-?Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190517/6bd3828a/attachment.asc>
+diff --git a/package/tzdata/tzdata.hash b/package/tzdata/tzdata.hash
+index 6a0ea17ce9..5884a76a17 100644
+--- a/package/tzdata/tzdata.hash
++++ b/package/tzdata/tzdata.hash
+@@ -1,2 +1,3 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2018-May/000050.html
+-sha512 d059fcd381b2f6ecdafcd68fdd2a00451d1bf9b1affeb164ae7cabca2e022d499e77f0706ec3f3091b8e84c2211aa66da6c90937108771f1bf070cfebc105cae	tzdata2018e.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2019-March/000055.html
++sha512 d8eb5b2b68abee08bd2b0d2134bce85b5c0aee85168e9697a607604ed5be7d1539ac60fda9b37e0c9c793ef6251978bc250563a0af59497fde775499964bb5aa	tzdata2019a.tar.gz
++sha512 9fe102f8894714cd0bd7d72a92e5ca29e4f75ff3f802d6fc363d5349b83345251b1d572a35321bd487cc70485da337b90df0cd37f896b6343f6f4c29cba7a295 LICENSE
+diff --git a/package/tzdata/tzdata.mk b/package/tzdata/tzdata.mk
+index e20c946208..1d98393e62 100644
+--- a/package/tzdata/tzdata.mk
++++ b/package/tzdata/tzdata.mk
+@@ -4,13 +4,14 @@
+ #
+ ################################################################################
+ 
+-TZDATA_VERSION = 2018e
++TZDATA_VERSION = 2019a
+ TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
+ TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
+ TZDATA_STRIP_COMPONENTS = 0
+ TZDATA_DEPENDENCIES = host-tzdata
+ HOST_TZDATA_DEPENDENCIES = host-zic
+ TZDATA_LICENSE = Public domain
++TZDATA_LICENSE_FILES = LICENSE
+ 
+ # Take care when re-ordering this list since this might break zone
+ # dependencies
+diff --git a/package/zic/zic.hash b/package/zic/zic.hash
+index 6b7994731c..dca2a5fbec 100644
+--- a/package/zic/zic.hash
++++ b/package/zic/zic.hash
+@@ -1,2 +1,3 @@
+-# From https://mm.icann.org/pipermail/tz-announce/2018-May/000050.html
+-sha512 4a245cae2d0922b24539a94cf4a8ccc2bba1ee696e0aaefecb41c7c8d78724a7fcea6039909336177b8b26fec8fc47719e3e56ca9839dbaf52f9a4fec84d4717	tzcode2018e.tar.gz
++# From https://mm.icann.org/pipermail/tz-announce/2019-March/000055.html
++sha512 7cc76ce6be4a67c3e1b2222cb632d2de9dabb76899793a938f87a1d4bb20e462cabdae9e3b986aaabaa400795370510095d236dbad5aff4c192d0887f0ecedf5	tzcode2019a.tar.gz
++sha256 9fe102f8894714cd0bd7d72a92e5ca29e4f75ff3f802d6fc363d5349b83345251b1d572a35321bd487cc70485da337b90df0cd37f896b6343f6f4c29cba7a295 LICENSE
+diff --git a/package/zic/zic.mk b/package/zic/zic.mk
+index 224b7ab407..c1e088459f 100644
+--- a/package/zic/zic.mk
++++ b/package/zic/zic.mk
+@@ -4,11 +4,12 @@
+ #
+ ################################################################################
+ 
+-ZIC_VERSION = 2018e
++ZIC_VERSION = 2019a
+ ZIC_SOURCE = tzcode$(ZIC_VERSION).tar.gz
+ ZIC_SITE = http://www.iana.org/time-zones/repository/releases
+ ZIC_STRIP_COMPONENTS = 0
+ ZIC_LICENSE = Public domain
++ZIC_LICENSE_FILES = LICENSE
+ 
+ define HOST_ZIC_BUILD_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) zic
+-- 
+2.21.0
