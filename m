@@ -1,43 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 21:48:14 +0200
-Subject: [Buildroot] [git commit branch/next] package/stress-ng: bump to
- version 0.09.58
-Message-ID: <20190518194755.BF81D8A35E@busybox.osuosl.org>
+Date: Sat, 18 May 2019 21:49:48 +0200
+Subject: [Buildroot] [git commit branch/next] package/netsniff-ng: bump to
+ version 0.6.6
+Message-ID: <20190518194755.C4B818B458@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9098a044569b34c41eb4444bdc3ec932fd37b704
+commit: https://git.buildroot.net/buildroot/commit/?id=3ab75e370a8a18cab920f5080af7be512030edaf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+Update to new released version:
+
+    https://github.com/netsniff-ng/netsniff-ng/releases/tag/v0.6.6
+
+Changelog:
+
+    implement rotating capture files in netsniff-ng
+    fixed '--in -' to work again with STDIN in trafgen
+    fixed -t 0 option to use sendto in trafgen
+    checksum calculation for ICMP and TCP in astraceroute
+    fix for reading mirrors from file in astraceroute
+    use GZIP_ENV instead of GZIP in build system
+    added error handling for mismatched address families in mausezahn
+
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/stress-ng/stress-ng.hash | 2 +-
- package/stress-ng/stress-ng.mk   | 2 +-
+ package/netsniff-ng/netsniff-ng.hash | 2 +-
+ package/netsniff-ng/netsniff-ng.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
-index fd7ab42224..4356f55849 100644
---- a/package/stress-ng/stress-ng.hash
-+++ b/package/stress-ng/stress-ng.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 3430e007c4d27c5d79ff177a209d81acc7d3242dbf28effb05ecb92b32a8a03f stress-ng-0.09.55.tar.xz
-+sha256 ea1ba0e96637d7ecc0d2b08c981c4fcb3e7753ca7d64d76210154440b9a194e6 stress-ng-0.09.58.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643 COPYING
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index 767af79f25..c5adf99ae5 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
+diff --git a/package/netsniff-ng/netsniff-ng.hash b/package/netsniff-ng/netsniff-ng.hash
+index 706c9461cf..d44c762660 100644
+--- a/package/netsniff-ng/netsniff-ng.hash
++++ b/package/netsniff-ng/netsniff-ng.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated after checking signature
+-sha256 4966821510079bb13722b9fbb4b7567e44b1b4c3e1b1e7ad95f417a89be5d795 netsniff-ng-0.6.5.tar.xz
++sha256 7949d38eb5b507700ea0f3c87e9f804d87b43f86ea5de0e961451044c2d3dba2  netsniff-ng-0.6.6.tar.xz
+diff --git a/package/netsniff-ng/netsniff-ng.mk b/package/netsniff-ng/netsniff-ng.mk
+index 415e86def1..283ecaf245 100644
+--- a/package/netsniff-ng/netsniff-ng.mk
++++ b/package/netsniff-ng/netsniff-ng.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRESS_NG_VERSION = 0.09.55
-+STRESS_NG_VERSION = 0.09.58
- STRESS_NG_SOURCE = stress-ng-$(STRESS_NG_VERSION).tar.xz
- STRESS_NG_SITE = http://kernel.ubuntu.com/~cking/tarballs/stress-ng
- STRESS_NG_LICENSE = GPL-2.0+
+-NETSNIFF_NG_VERSION = 0.6.5
++NETSNIFF_NG_VERSION = 0.6.6
+ NETSNIFF_NG_SITE = http://pub.netsniff-ng.org/netsniff-ng
+ NETSNIFF_NG_SOURCE = netsniff-ng-$(NETSNIFF_NG_VERSION).tar.xz
+ NETSNIFF_NG_LICENSE = GPL-2.0
