@@ -1,76 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 23:31:55 +0200
-Subject: [Buildroot] [git commit] package/libupnp18: add upstream patch to
- fix runtime crash with musl
-Message-ID: <20190518212610.1C4498A63C@busybox.osuosl.org>
+Date: Sat, 18 May 2019 23:31:18 +0200
+Subject: [Buildroot] [git commit] package/libupnp18: needs host-pkgconf
+Message-ID: <20190518212610.110D48A63C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=165fcefc60f6f4054f01702ae74546f019fbbf9b
+commit: https://git.buildroot.net/buildroot/commit/?id=ffc51049ab83c2c1a35e0826405c2cad0316f14b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Applications build with a musl 1.1.20+ toolchain and linked with libupnpp will
-crash at runtime with `Illegal instruction` as musl is more strict with
-trying to detach an already detached thread resulting in undefined
-behaviour.
+Otherwise build fails with:
 
-Upstream status:
-https://github.com/mrjimenez/pupnp/issues/102
+```
+configure.ac:630: error: possibly undefined macro: AC_MSG_ERROR
+      If this token and others are legitimate, please use m4_pattern_allow.
+```
 
-Backported from:
-https://github.com/mrjimenez/pupnp/commit/04b454f693d0c71336252380d08f1d02967e133e
+Fixes:
+
+  http://autobuild.buildroot.net/results/6d734e45ec923dfa7549e0480b3d8913fc29fddd/
 
 Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...to-detach-detached-thread-the-result-is-u.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+ package/libupnp18/libupnp18.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/libupnp18/0002-Do-not-try-to-detach-detached-thread-the-result-is-u.patch b/package/libupnp18/0002-Do-not-try-to-detach-detached-thread-the-result-is-u.patch
-new file mode 100644
-index 0000000000..601ea89be7
---- /dev/null
-+++ b/package/libupnp18/0002-Do-not-try-to-detach-detached-thread-the-result-is-u.patch
-@@ -0,0 +1,39 @@
-+From 04b454f693d0c71336252380d08f1d02967e133e Mon Sep 17 00:00:00 2001
-+From: Jean-Francois Dockes <jf@dockes.org>
-+Date: Sun, 27 Jan 2019 10:44:17 +0100
-+Subject: [PATCH] Do not try to detach detached thread, the result is
-+ undefined. Fixes issue #102
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes runtime crash with musl 1.1.20+. The problem is that libupnp is
-+calling pthread_detach() on a thread which was created in the detached state.
-+
-+Backported from: 04b454f693d0c71336252380d08f1d02967e133e
-+
-+(cherry picked from commit 386b7ed79146ecf7a3bba49f48cb8f41a9b49170)
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+ upnp/src/threadutil/ThreadPool.c | 5 -----
-+ 1 file changed, 5 deletions(-)
-+
-+diff --git a/upnp/src/threadutil/ThreadPool.c b/upnp/src/threadutil/ThreadPool.c
-+index d272907..5e590ed 100644
-+--- a/upnp/src/threadutil/ThreadPool.c
-++++ b/upnp/src/threadutil/ThreadPool.c
-+@@ -651,11 +651,6 @@ static int CreateWorker(
-+ 	rc = ithread_create(&temp, &attr, WorkerThread, tp);
-+ 	ithread_attr_destroy(&attr);
-+ 	if (rc == 0) {
-+-		rc = ithread_detach(temp);
-+-		/* ithread_detach will return EINVAL if thread has been
-+-		 successfully detached by ithread_create */
-+-		if (rc == EINVAL)
-+-			rc = 0;
-+ 		tp->pendingWorkerThreadStart = 1;
-+ 		/* wait until the new worker thread starts */
-+ 		while (tp->pendingWorkerThreadStart) {
-+-- 
-+2.21.0
-+
+diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
+index 5154be5316..35e8dc4a47 100644
+--- a/package/libupnp18/libupnp18.mk
++++ b/package/libupnp18/libupnp18.mk
+@@ -11,12 +11,13 @@ LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
+ LIBUPNP18_INSTALL_STAGING = YES
+ LIBUPNP18_LICENSE = BSD-3-Clause
+ LIBUPNP18_LICENSE_FILES = COPYING
++LIBUPNP18_DEPENDENCIES = host-pkgconf
+ # We're patching configure.ac
+ LIBUPNP18_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBUPNP18_CONF_OPTS += --enable-open-ssl
+-LIBUPNP18_DEPENDENCIES += host-pkgconf openssl
++LIBUPNP18_DEPENDENCIES += openssl
+ else
+ LIBUPNP18_CONF_OPTS += --disable-open-ssl
+ endif
