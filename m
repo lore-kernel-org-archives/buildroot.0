@@ -1,40 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 22:06:54 +0200
-Subject: [Buildroot] [git commit branch/next] package/busybox: select
- individual libraries when SELinux is enabled
-Message-ID: <20190518200130.2E4CB8A4F4@busybox.osuosl.org>
+Date: Sat, 18 May 2019 22:07:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/busybox: select individual
+ libraries when selecting SELinux support.
+In-Reply-To: <20190516155200.86689-1-aduskett@gmail.com>
+References: <20190516155200.86689-1-aduskett@gmail.com>
+Message-ID: <20190518220747.2121412f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=769d4c6160a106a57271ff8ffc7c2011c39bfad2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello Adam,
 
-From the help test of individual binaries:
+On Thu, 16 May 2019 11:52:00 -0400
+aduskett at gmail.com wrote:
 
-  With this option enabled, each applet is a separate binary, which is
-  needed for proper operation with SELinux
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> From the help test of individual binaries:
+> 
+> With this option enabled, each applet is a separate binary, which is needed for
+> proper operation with SELinux
+> 
+> As such, it only makes sense to select this option when SELinux support is
+> selected as well.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/busybox/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
 
-As such, it makes sense to select this option when SELinux support is
-selected as well.
+Applied to next, after slightly tweaking the commit log to reduce the
+confusion it was causing IMO.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/busybox/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Thanks!
 
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index e5c5f89a4d..bab00bf835 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -42,6 +42,7 @@ config BR2_PACKAGE_BUSYBOX_SELINUX
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on !BR2_arc
-+	select BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
- 	select BR2_PACKAGE_LIBSELINUX
- 	help
- 	  Enable SELinux support in BusyBox. Please note that
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
