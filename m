@@ -1,244 +1,51 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 18 May 2019 17:47:09 +0200
-Subject: [Buildroot] [RFC PATCH/next 1/2] package/wlroots: new package
-In-Reply-To: <20190516220836.24543-2-aperez@igalia.com>
-References: <20190516220836.24543-1-aperez@igalia.com>
- <20190516220836.24543-2-aperez@igalia.com>
-Message-ID: <CAB0FRsvkMmTCis=ECoPHX8jNBDs+jBAP+vSJ5a0qqiWbMcRdKQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 18 May 2019 18:23:52 +0200
+Subject: [Buildroot] [PATCH] package/python-socketio: bump version to
+ 4.0.1
+In-Reply-To: <20190517175342.12371-1-sergei.sakhno@gmail.com>
+References: <20190517175342.12371-1-sergei.sakhno@gmail.com>
+Message-ID: <20190518182352.6a194727@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le ven. 17 mai 2019 ? 00:09, Adrian Perez de Castro <aperez@igalia.com> a
-?crit :
+Hello Serhii,
 
-> wlroots is a modular library which provides building blocks to
-> implement Wayland compositors. wlroots is a dependency of the
-> Cage Wayland compositor.
->
-> https://github.com/swaywm/wlroots/
->
-> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Thanks for your contribution! See a few comments below that need to be
+addressed before we can apply the patch.
+
+On Fri, 17 May 2019 20:53:42 +0300
+Serhii Sakhno <sergei.sakhno@gmail.com> wrote:
+
 > ---
->  package/Config.in            |  1 +
->  package/wlroots/Config.in    | 65 +++++++++++++++++++++++++++++
->  package/wlroots/wlroots.hash |  5 +++
->  package/wlroots/wlroots.mk   | 80 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 151 insertions(+)
->  create mode 100644 package/wlroots/Config.in
->  create mode 100644 package/wlroots/wlroots.hash
->  create mode 100644 package/wlroots/wlroots.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index f592e74a99..5b1f279b8e 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1341,6 +1341,7 @@ menu "Graphics"
->         source "package/waylandpp/Config.in"
->         source "package/webkitgtk/Config.in"
->         source "package/webp/Config.in"
-> +       source "package/wlroots/Config.in"
->         source "package/woff2/Config.in"
->         source "package/wpebackend-fdo/Config.in"
->         source "package/wpewebkit/Config.in"
-> diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
-> new file mode 100644
-> index 0000000000..45db63f62c
-> --- /dev/null
-> +++ b/package/wlroots/Config.in
-> @@ -0,0 +1,65 @@
-> +config BR2_PACKAGE_WLROOTS
-> +       bool "wlroots"
-> +       depends on !BR2_STATIC_LIBS # mesa3d, wayland
-> +       depends on BR2_INSTALL_LIBSTDCPP # freedrp, mesa3d
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm, wayland
-> +       depends on BR2_TOOLCHAIN_HAS_SYNC_1 # mesa3d
-> +       depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # mesa3d
-> +       depends on BR2_ENABLE_LOCALE # libinput
-> +       depends on BR2_PACKAGE_HAS_UDEV # libinput
-> +       depends on BR2_PACKAGE_HAS_LIBEGL
-> +       depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-> +       depends on BR2_PACKAGE_HAS_LIBGLES
-> +       select BR2_PACKAGE_LIBDRM
-> +       select BR2_PACKAGE_LIBINPUT
-> +       select BR2_PACKAGE_LIBXKBCOMMON
-> +       select BR2_PACKAGE_PIXMAN
-> +       select BR2_PACKAGE_WAYLAND
-> +       select BR2_PACKAGE_WAYLAND_PROTOCOLS
-> +       help
-> +         wlroots is a modular Wayland library for building compositors
-> +         which implements many of their common features.
-> +
-> +         https://github.com/swaywm/wlroots
-> +
-> +if BR2_PACKAGE_WLROOTS
-> +
-> +config BR2_PACKAGE_WLROOTS_RDP
-> +       bool "RDP backend support"
-> +       depends on BR2_PACKAGE_FREERDP
-> +       depends on BR2_USE_WCHAR # freerdp
-> +       depends on BR2_USE_MMU # libglib2
-> +       depends on BR2_TOOLCHAIN_HAS_SYNC_4 # freerdp
-> +       help
-> +         Support Wayland sessions served using the RDP protocol
-> +
-> +comment "RDP backend support needs FreeRDP"
-> +       depends on !BR2_PACKAGE_FREERDP
-> +
-> +config BR2_PACKAGE_WLROOTS_X11
-> +       bool "X11 backend support"
-> +       depends on BR2_PACKAGE_XORG7
-> +       select BR2_PACKAGE_LIBXCB
-> +       select BR2_PACKAGE_XLIB_LIBX11
-> +       help
-> +         Support Wayland sessions nested inside a X11 window
-> +
-> +comment "X11 backend support needs X.org enabled"
-> +       depends on !BR2_PACKAGE_XORG7
-> +
-> +config BR2_PACKAGE_WLROOTS_XWAYLAND
-> +       bool "XWayland support"
-> +       depends on BR2_PACKAGE_XORG7
-> +       select BR2_PACKAGE_LIBXCB
-> +       help
-> +         Enable support for XWayland
-> +
-> +comment "XWayland support needs X.org enabled"
-> +       depends on !BR2_PACKAGE_XORG7
-> +
-> +config BR2_PACKAGE_WLROOTS_ROOTSTON
-> +       bool "rootston"
-> +       help
-> +         Build and install the rootston example compositor
-> +
-> +endif
-> diff --git a/package/wlroots/wlroots.hash b/package/wlroots/wlroots.hash
-> new file mode 100644
-> index 0000000000..dbb387a865
-> --- /dev/null
-> +++ b/package/wlroots/wlroots.hash
-> @@ -0,0 +1,5 @@
-> +# Generated locally
-> +sha256 9cf3716f3683d800df8b150f256ff66dad65faf13a9d67c284f67a9444d28c70
-> 0.6.0.tar.gz
-> +
-> +# Hashes for license files:
-> +sha256 ffd3737a478b83a8b51b42757d3bf909ef36694508355879722e11fc1fa6736b
-> LICENSE
-> diff --git a/package/wlroots/wlroots.mk b/package/wlroots/wlroots.mk
-> new file mode 100644
-> index 0000000000..9d3581fd6f
-> --- /dev/null
-> +++ b/package/wlroots/wlroots.mk
-> @@ -0,0 +1,80 @@
->
-> +################################################################################
-> +#
-> +# wlroots
-> +#
->
-> +################################################################################
-> +
-> +WLROOTS_VERSION = 0.6.0
-> +WLROOTS_SITE = https://github.com/swaywm/wlroots/archive
-> +WLROOTS_SOURCE = $(WLROOTS_VERSION).tar.gz
-> +WLROOTS_LICENSE = MIT
-> +WLROOTS_INSTALL_STAGING = YES
-> +
-> +WLROOTS_DEPENDENCIES = host-pkgconf host-wayland libegl libinput \
-> +                                          libxkbcommon mesa3d pixman udev
-> \
-> +                                          wayland wayland-protocols
->
 
-wlroots has the same issue as WPEBackend-fdo:
->>> wlroots 0.6.0 Configuring
+We need you to sign-off on our patch, i.e to add a Signed-off-by line
+with your name/e-mail. See how other patches on the mailing list look
+like, and also
+https://buildroot.org/downloads/manual/manual.html#submitting-patches.
 
-Native dependency wayland-scanner found: YES 1.17.0
-Program /usr/bin/wayland-scanner found: NO
+> index 659d4d540c..ea6f2359da 100644
+> --- a/package/python-socketio/python-socketio.hash
+> +++ b/package/python-socketio/python-socketio.hash
+> @@ -1,4 +1,2 @@
+> -# md5 from https://pypi.python.org/pypi/python-socketio/json
+> -md5	44fd24e839dc3102920765f345740646  python-socketio-1.4.1.tar.gz
+> -# sha256 calculated by scanpypi
+> -sha256	ebd0984d831d602c8ec6d586ecde4466972cc7ed37dbbfe613192864e8263779  python-socketio-1.4.1.tar.gz
+> +md5	1c9e30c6a70eaa8176cc1a9fbb51453c  python-socketio-4.0.1.tar.gz
+> +sha256	8035604105058195dfa1c8ca1aff0435f08bbbdc3f72bb1f4b81723d129a4ecf  python-socketio-4.0.1.tar.gz
 
-protocol/meson.build:5:1: ERROR: Program(s) ['/usr/bin/wayland-scanner']
-not found or not executable
+We like to have in the .hash file the source for the hash. Was it
+locally generated ? Or most likely it's available on PyPi. By the way,
+did you use the ./utils/scanpypi script to update this package ? I
+believe this would have preserved the right comments in the .hash file.
 
-Fran?ois
+Thanks a lot!
 
-
-> +
-> +WLROOTS_CONF_OPTS = -Dexamples=false
-> +
-> +ifeq ($(BR2_PACKAGE_FFMPEG),y)
-> +WLROOTS_DEPENDENCIES += ffmpeg
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBCAP),y)
-> +WLROOTS_CONF_OPTS += -Dlibcap=enabled
-> +WLROOTS_DEPENDENCIES += libcap
-> +else
-> +WLROOTS_CONF_OPTS += -Dlibcap=disabled
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBPNG),y)
-> +WLROOTS_DEPENDENCIES += libpng
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_LOGIND),y)
-> +WLROOTS_CONF_OPTS += -Dlogind=enabled -Dlogind-provider=systemd
-> +WLROOTS_DEPENDENCIES += systemd
-> +else
-> +WLROOTS_CONF_OPTS += -Dlogind=disabled
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_WLROOTS_RDP),y)
-> +WLROOTS_CONF_OPTS += -Dfreerdp=enabled
-> +WLROOTS_DEPENDENCIES += freerdp
-> +else
-> +WLROOTS_CONF_OPTS += -Dfreerdp=disabled
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_WLROOTS_X11),y)
-> +WLROOTS_CONF_OPTS += -Dx11-backend=enabled
-> +WLROOTS_DEPENDENCIES += xlib_libX11
-> +else
-> +WLROOTS_CONF_OPTS += -Dx11-backend=disabled
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_WLROOTS_XWAYLAND),y)
-> +WLROOTS_CONF_OPTS += -Dxwayland=enabled
-> +WLROOTS_DEPENDENCIES += libxcb
-> +ifeq ($(BR2_PACKAGE_XCB_UTIL),y)
-> +WLROOTS_CONF_OPTS += -Dxcb-errors=enabled
-> +WLROOTS_DEPENDENCIES += xcb-util
-> +else
-> +WLROOTS_CONF_OPTS += -Dxcb-errors=disabled
-> +endif
-> +ifeq ($(BR2_PACKAGE_XCB_UTIL_WM),y)
-> +WLROOTS_CONF_OPTS += -Dxcb-icccm=enabled
-> +WLROOTS_DEPENDENCIES += xcb-util-wm
-> +else
-> +WLROOTS_CONF_OPTS += -Dxcb-icccm=disabled
-> +endif
-> +else
-> +WLROOTS_CONF_OPTS += -Dxwayland=disabled -Dxcb-errors=disabled
-> -Dxcb-icccm=disabled
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_WLROOTS_ROOTSTON),y)
-> +WLROOTS_CONF_OPTS += -Drootston=true
-> +else
-> +WLROOTS_CONF_OPTS += -Drootston=false
-> +endif
-> +
-> +$(eval $(meson-package))
-> --
-> 2.21.0
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190518/1f00d5f1/attachment.html>
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
