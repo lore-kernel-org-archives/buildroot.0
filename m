@@ -1,90 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 May 2019 11:10:16 +0200
-Subject: [Buildroot] [git commit] package/fatcat: new host package
-Message-ID: <20190602201235.82DED81354@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 18 May 2019 23:25:08 +0200
+Subject: [Buildroot] [git commit] package/openrc: change /run/lock from
+ root:uucp to root:daemon
+Message-ID: <20190602201234.A53B28EDA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08d6e63bdc545bb3e321ea0fdf377dd3a0d52609
+commit: https://git.buildroot.net/buildroot/commit/?id=6d61bf8cdbebe07c86a8bbdf6c3cab45f7b17534
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Utility to manipulate FAT file systems, E.G. to tweak the output of
-genimage.
+On gentoo /run/lock is owned by uucp group because of historical
+reasons. However uucp does not exist on buildroot by default, and
+it makes more sense that 'daemon' group should own this directory.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Micha?? ??yszczek <michal.lyszczek@bofc.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                    |  1 +
- package/Config.in.host        |  1 +
- package/fatcat/Config.in.host |  8 ++++++++
- package/fatcat/fatcat.hash    |  3 +++
- package/fatcat/fatcat.mk      | 12 ++++++++++++
- 5 files changed, 25 insertions(+)
+ ...Linux.in-change-run-lock-from-root-uucp-t.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d5a7b7d390..66dc2504ff 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1751,6 +1751,7 @@ F:	configs/sheevaplug_defconfig
- F:	package/bats-core/
- F:	package/docker-compose/
- F:	package/dump1090/
-+F:	package/fatcat/
- F:	package/flickcurl/
- F:	package/fscryptctl/
- F:	package/ifmetric/
-diff --git a/package/Config.in.host b/package/Config.in.host
-index bc7e71882b..d1c6d0d81f 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -18,6 +18,7 @@ menu "Host utilities"
- 	source "package/e2tools/Config.in.host"
- 	source "package/f2fs-tools/Config.in.host"
- 	source "package/faketime/Config.in.host"
-+	source "package/fatcat/Config.in.host"
- 	source "package/fwup/Config.in.host"
- 	source "package/genext2fs/Config.in.host"
- 	source "package/genimage/Config.in.host"
-diff --git a/package/fatcat/Config.in.host b/package/fatcat/Config.in.host
+diff --git a/package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch b/package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch
 new file mode 100644
-index 0000000000..2c5f66981b
+index 0000000000..66bbba42ba
 --- /dev/null
-+++ b/package/fatcat/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_FATCAT
-+	bool "host fatcat"
-+	help
-+	  Fatcat is designed to manipulate FAT filesystems, in order
-+	  to explore, extract, repair, recover and forensic them. It
-+	  currently supports FAT12, FAT16 and FAT32.
++++ b/package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch
+@@ -0,0 +1,34 @@
++From 5ae8209afad9a4284723712b46d8685e7f7fd72c Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
++Date: Mon, 6 May 2019 00:06:39 +0200
++Subject: [PATCH] sh/init.sh.Linux.in: change /run/lock from root:uucp to
++ root:daemon
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
 +
-+	  https://github.com/Gregwar/fatcat
-diff --git a/package/fatcat/fatcat.hash b/package/fatcat/fatcat.hash
-new file mode 100644
-index 0000000000..a5a6f670ad
---- /dev/null
-+++ b/package/fatcat/fatcat.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256 d44f6bb80d20ed50095ace9e71df8da98037db9f22cda76bdd9724d37df69130  fatcat-1.0.6.tar.gz
-+sha256 3ea03755e32cf7f5b12981de92a0fdad396448195fe0024990c9cbc388e9866c  LICENSE
-diff --git a/package/fatcat/fatcat.mk b/package/fatcat/fatcat.mk
-new file mode 100644
-index 0000000000..e4f8d757b6
---- /dev/null
-+++ b/package/fatcat/fatcat.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# fatcat
-+#
-+################################################################################
++On gentoo /run/lock is owned by uucp group because of historical
++reasons. However uucp does not exist on buildroot by default, and
++it makes more sense that 'daemon' group should own this directory.
 +
-+FATCAT_VERSION = 1.0.6
-+FATCAT_SITE = $(call github,Gregwar,fatcat,$(FATCAT_VERSION))
-+FATCAT_LICENSE = MIT
-+FATCAT_LICENSE_FILES = LICENSE
++Signed-off-by: Micha?? ??yszczek <michal.lyszczek@bofc.pl>
++---
++ sh/init.sh.Linux.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+$(eval $(host-cmake-package))
++diff --git a/sh/init.sh.Linux.in b/sh/init.sh.Linux.in
++index 222bbd3b..7f1a88db 100644
++--- a/sh/init.sh.Linux.in
+++++ b/sh/init.sh.Linux.in
++@@ -85,7 +85,7 @@ fi
++ 
++ [ -x /sbin/restorecon ] && /sbin/restorecon -rF /run
++ checkpath -d $RC_SVCDIR
++-checkpath -d -m 0775 -o root:uucp /run/lock
+++checkpath -d -m 0775 -o root:daemon /run/lock
++ 
++ # Try to mount xenfs as early as possible, otherwise rc_sys() will always
++ # return RC_SYS_XENU and will think that we are in a domU while it's not.
++-- 
++2.18.1
++
