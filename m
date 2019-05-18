@@ -1,79 +1,180 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 May 2019 22:59:57 +0200
-Subject: [Buildroot] [git commit] arch/csky: move GCC_TARGET_CPU calculation
- to arch.mk.csky
-Message-ID: <20190602201237.7FA448EDA8@busybox.osuosl.org>
+Date: Sat, 18 May 2019 22:56:16 +0200
+Subject: [Buildroot] [git commit] package/skeleton-init-openrc: new package
+Message-ID: <20190602201234.7C2FD81354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d26bd58502f024927755950c0ba3f880ca1b50a5
+commit: https://git.buildroot.net/buildroot/commit/?id=a840e485d174c74bf2e4cd81ad48e184992cd3db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Calculating GCC_TARGET_CPU requires combining multiple flags, which
-isn't very nicely expressed in Config.in, so let's move this into
-arch.mk.csky, similarly to what is done in arch.mk.riscv.
+This basic skeleton is similar to skeleton-init-sysv.
+All links in /var are same as in skeleton-init-sysv to be compatible
+with current default filesystem scheme.
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Thomas: rework commit log]
+Exceptions:
+
+* /dev/shm and /dev/pts dirs were removed, since they are created by
+  openrc devfs service
+* /etc/fstab does not need /dev/shm, /dev/pts and /sys entries
+  becuse they are mounted by devfs and sysfs services respectively
+
+Signed-off-by: Micha?? ??yszczek <michal.lyszczek@bofc.pl>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- arch/Config.in.csky | 11 -----------
- arch/arch.mk.csky   | 24 ++++++++++++++++++++++++
- 2 files changed, 24 insertions(+), 11 deletions(-)
+ DEVELOPERS                                         |  1 +
+ package/Config.in                                  |  1 +
+ package/skeleton-init-openrc/Config.in             |  7 +++++++
+ .../skeleton-init-openrc/skeleton-init-openrc.mk   | 22 ++++++++++++++++++++++
+ package/skeleton-init-openrc/skeleton/dev/log      |  1 +
+ package/skeleton-init-openrc/skeleton/etc/fstab    |  3 +++
+ package/skeleton-init-openrc/skeleton/var/cache    |  1 +
+ package/skeleton-init-openrc/skeleton/var/lib/misc |  1 +
+ package/skeleton-init-openrc/skeleton/var/lock     |  1 +
+ package/skeleton-init-openrc/skeleton/var/log      |  1 +
+ package/skeleton-init-openrc/skeleton/var/run      |  1 +
+ package/skeleton-init-openrc/skeleton/var/spool    |  1 +
+ package/skeleton-init-openrc/skeleton/var/tmp      |  1 +
+ 13 files changed, 42 insertions(+)
 
-diff --git a/arch/Config.in.csky b/arch/Config.in.csky
-index 420e831c21..a9d6548d8e 100644
---- a/arch/Config.in.csky
-+++ b/arch/Config.in.csky
-@@ -33,17 +33,6 @@ config BR2_ARCH
- config BR2_ENDIAN
- 	default "LITTLE"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 3b5d2faae2..59b47e38fe 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1616,6 +1616,7 @@ F:	board/pine64/rock64
+ F:	configs/rock64_defconfig
+ F:	configs/socrates_cyclone5_defconfig
+ F:	package/openrc/
++F:	package/skeleton-init-openrc/
  
--config BR2_GCC_TARGET_CPU
--	default "ck610"		if (BR2_ck610 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
--	default "ck807"		if (BR2_ck807 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
--	default "ck807e"	if (BR2_ck807 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
--	default "ck807f"	if (BR2_ck807 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
--	default "ck807ef"	if (BR2_ck807 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
--	default "ck810"		if (BR2_ck810 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
--	default "ck810e"	if (BR2_ck810 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
--	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
--	default "ck810ef"	if (BR2_ck810 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
--
- config BR2_READELF_ARCH_NAME
- 	default "CSKY"
+ N:	Michel Stempin <michel.stempin@wanadoo.fr>
+ F:	board/licheepi/
+diff --git a/package/Config.in b/package/Config.in
+index ff07dce000..e5b26dd33f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -5,6 +5,7 @@ menu "Target packages"
+ 	source "package/skeleton-custom/Config.in"
+ 	source "package/skeleton-init-common/Config.in"
+ 	source "package/skeleton-init-none/Config.in"
++	source "package/skeleton-init-openrc/Config.in"
+ 	source "package/skeleton-init-systemd/Config.in"
+ 	source "package/skeleton-init-sysv/Config.in"
  
-diff --git a/arch/arch.mk.csky b/arch/arch.mk.csky
+diff --git a/package/skeleton-init-openrc/Config.in b/package/skeleton-init-openrc/Config.in
 new file mode 100644
-index 0000000000..a39fbd43c2
+index 0000000000..8f4dd17ebd
 --- /dev/null
-+++ b/arch/arch.mk.csky
-@@ -0,0 +1,24 @@
++++ b/package/skeleton-init-openrc/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_SKELETON_INIT_OPENRC
++	bool
++	select BR2_PACKAGE_HAS_SKELETON
++	select BR2_PACKAGE_SKELETON_INIT_COMMON
++
++config BR2_PACKAGE_PROVIDES_SKELETON
++	default "skeleton-init-openrc" if BR2_PACKAGE_SKELETON_INIT_OPENRC
+diff --git a/package/skeleton-init-openrc/skeleton-init-openrc.mk b/package/skeleton-init-openrc/skeleton-init-openrc.mk
+new file mode 100644
+index 0000000000..5ee2192093
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton-init-openrc.mk
+@@ -0,0 +1,22 @@
++################################################################################
 +#
-+# Configure the GCC_TARGET_ARCH variable and append the
-+# appropriate C-SKY ISA extensions.
++# skeleton-init-openrc
 +#
++################################################################################
 +
-+ifeq ($(BR2_csky),y)
++# The skeleton can't depend on the toolchain, since all packages depends on the
++# skeleton and the toolchain is a target package, as is skeleton.
++# Hence, skeleton would depends on the toolchain and the toolchain would depend
++# on skeleton.
++SKELETON_INIT_OPENRC_ADD_TOOLCHAIN_DEPENDENCY = NO
++SKELETON_INIT_OPENRC_ADD_SKELETON_DEPENDENCY = NO
 +
-+ifeq ($(BR2_ck610),y)
-+GCC_TARGET_CPU := ck610
-+else ifeq ($(BR2_ck807),y)
-+GCC_TARGET_CPU := ck807
-+else ifeq ($(BR2_ck810),y)
-+GCC_TARGET_CPU := ck810
-+endif
++SKELETON_INIT_OPENRC_DEPENDENCIES = skeleton-init-common
 +
-+ifeq ($(BR2_CSKY_DSP),y)
-+GCC_TARGET_CPU := $(GCC_TARGET_CPU)e
-+endif
++SKELETON_INIT_OPENRC_PROVIDES = skeleton
 +
-+ifeq ($(BR2_CSKY_FPU),y)
-+GCC_TARGET_CPU := $(GCC_TARGET_CPU)f
-+endif
++define SKELETON_INIT_OPENRC_INSTALL_TARGET_CMDS
++	$(call SYSTEM_RSYNC,$(SKELETON_INIT_OPENRC_PKGDIR)/skeleton,$(TARGET_DIR))
++endef
 +
-+endif
++$(eval $(generic-package))
+diff --git a/package/skeleton-init-openrc/skeleton/dev/log b/package/skeleton-init-openrc/skeleton/dev/log
+new file mode 120000
+index 0000000000..d96b3b1cb8
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/dev/log
+@@ -0,0 +1 @@
++../tmp/log
+\ No newline at end of file
+diff --git a/package/skeleton-init-openrc/skeleton/etc/fstab b/package/skeleton-init-openrc/skeleton/etc/fstab
+new file mode 100644
+index 0000000000..3ec96cf634
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/etc/fstab
+@@ -0,0 +1,3 @@
++# <file system>	<mount pt>	<type>	<options>	<dump>	<pass>
++tmpfs		/tmp		tmpfs	mode=1777	0	0
++tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0
+diff --git a/package/skeleton-init-openrc/skeleton/var/cache b/package/skeleton-init-openrc/skeleton/var/cache
+new file mode 120000
+index 0000000000..1431b0e432
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/var/cache
+@@ -0,0 +1 @@
++../tmp
+\ No newline at end of file
+diff --git a/package/skeleton-init-openrc/skeleton/var/lib/misc b/package/skeleton-init-openrc/skeleton/var/lib/misc
+new file mode 120000
+index 0000000000..f1fde8c107
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/var/lib/misc
+@@ -0,0 +1 @@
++../../tmp
+\ No newline at end of file
+diff --git a/package/skeleton-init-openrc/skeleton/var/lock b/package/skeleton-init-openrc/skeleton/var/lock
+new file mode 120000
+index 0000000000..1431b0e432
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/var/lock
+@@ -0,0 +1 @@
++../tmp
+\ No newline at end of file
+diff --git a/package/skeleton-init-openrc/skeleton/var/log b/package/skeleton-init-openrc/skeleton/var/log
+new file mode 120000
+index 0000000000..1431b0e432
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/var/log
+@@ -0,0 +1 @@
++../tmp
+\ No newline at end of file
+diff --git a/package/skeleton-init-openrc/skeleton/var/run b/package/skeleton-init-openrc/skeleton/var/run
+new file mode 120000
+index 0000000000..84ba55b912
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/var/run
+@@ -0,0 +1 @@
++../run
+\ No newline at end of file
+diff --git a/package/skeleton-init-openrc/skeleton/var/spool b/package/skeleton-init-openrc/skeleton/var/spool
+new file mode 120000
+index 0000000000..1431b0e432
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/var/spool
+@@ -0,0 +1 @@
++../tmp
+\ No newline at end of file
+diff --git a/package/skeleton-init-openrc/skeleton/var/tmp b/package/skeleton-init-openrc/skeleton/var/tmp
+new file mode 120000
+index 0000000000..1431b0e432
+--- /dev/null
++++ b/package/skeleton-init-openrc/skeleton/var/tmp
+@@ -0,0 +1 @@
++../tmp
+\ No newline at end of file
