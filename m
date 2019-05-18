@@ -1,41 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 23:32:42 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libupnp18: add upstream patch
- to fix runtime crash with musl
-In-Reply-To: <20190509110438.31340-2-joerg.krause@embedded.rocks>
-References: <20190509110438.31340-1-joerg.krause@embedded.rocks>
- <20190509110438.31340-2-joerg.krause@embedded.rocks>
-Message-ID: <20190518233242.5d5880ff@windsurf>
+Date: Sat, 18 May 2019 23:33:20 +0200
+Subject: [Buildroot] [git commit]
+ board/lemaker/bananapro/linux-wifi.fragment: add rfkill driver into kernel
+ by default
+Message-ID: <20190518212752.B688581456@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  9 May 2019 13:04:38 +0200
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=15ff8e49799fd0daeb1c2b511d60977e8a16b870
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Applications build with a musl 1.1.20+ toolchain and linked with libupnpp will
-> crash at runtime with `Illegal instruction` as musl is more strict with
-> trying to detach an already detached thread resulting in undefined
-> behaviour.
-> 
-> Upstream status:
-> https://github.com/mrjimenez/pupnp/issues/102
-> 
-> Backported from:
-> https://github.com/mrjimenez/pupnp/commit/04b454f693d0c71336252380d08f1d02967e133e
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  ...tach-detached-thread-the-result-is-u.patch | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/libupnp18/0002-Do-not-try-to-detach-detached-thread-the-result-is-u.patch
+This fixes following error:
 
-Applied to master, thanks.
+	# wpa_supplicant -i wlan0 -c /etc/wpa_supplicant.conf -B
+	Successfully initialized wpa_supplicant
+	rfkill: Cannot open RFKILL control device
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/lemaker/bananapro/linux-wifi.fragment | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/board/lemaker/bananapro/linux-wifi.fragment b/board/lemaker/bananapro/linux-wifi.fragment
+index 8e4bd5cc7d..f4ede39faa 100644
+--- a/board/lemaker/bananapro/linux-wifi.fragment
++++ b/board/lemaker/bananapro/linux-wifi.fragment
+@@ -2,6 +2,7 @@
+ CONFIG_WIRELESS=y
+ CONFIG_CFG80211=y
+ CONFIG_CFG80211_WEXT=y
++CONFIG_RFKILL=y
+ 
+ # Network device support
+ CONFIG_WLAN=y
