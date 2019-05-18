@@ -1,63 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 21:56:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/meson: Fix linking of
- shared/static libs with static libs
-In-Reply-To: <20190514184245.92222-1-aduskett@gmail.com>
-References: <20190514184245.92222-1-aduskett@gmail.com>
-Message-ID: <20190518215637.2ea2ea51@windsurf>
+Date: Sat, 18 May 2019 21:57:05 +0200
+Subject: [Buildroot] [git commit branch/next] package/cog: mark for
+ installation to the staging tree
+Message-ID: <20190518195121.3F225810CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=085165153a9a8afe90e908002a04cf9caf81bbf1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-+Peter Seiderer in Cc. Peter, if you could review the below patch, it
-would be nice.
+The cog package includes libraries and headers, so installing it
+to the staging tree allows having those available for development.
 
-On Tue, 14 May 2019 14:42:45 -0400
-aduskett at gmail.com wrote:
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cog/cog.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> From https://github.com/mesonbuild/meson/pull/3939:
-> 
-> This commit contains the following fixes:
-> 
->   1. When a shared library A does link_with: to static library B, the
->      parts of B used by A will be added to A, and so we don't need to
->      return B in A.get_dependencies() for targets that link to A. This
->      already is the behaviour when a shared library A does link_whole:
->      on B.
-> 
->   2. In situation (1), when generating a pkg-config file for A, we must
->      also not add B to Libs.private for A. This already is the behaviour
->      when a shared library A does link_whole: on B.
-> 
->   3. When a static library A does link_whole: to static library B, we
->      must add the objects in B to A.
-> 
->   4. When a static library A does link_with: to static library B, and
->      B is not installed (which makes it an internal static library), we
->      must add the objects in B to A, otherwise nothing can use A.
-> 
->   5. In situation (4), when generating a pkg-config file for A, we must
->      also not add B to Libs.private for A.
-> 
-> Without this patch, static builds of libglib2 and gstreamer using the
-> meson build system will not compile and link properly.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-
-Adam: is this for next or master ? Since libglib2 and gstreamer in
-master are still using autotools, I would suppose this patch is for
-next. Could you confirm ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index 43f13152c8..44ea62185d 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
+@@ -6,6 +6,7 @@
+ 
+ COG_VERSION = v0.2.0
+ COG_SITE = $(call github,Igalia,cog,$(COG_VERSION))
++COG_INSTALL_STAGING = YES
+ COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
+ COG_LICENSE = MIT
+ COG_LICENSE_FILES = COPYING
