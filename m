@@ -1,55 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 23:34:59 +0200
-Subject: [Buildroot] [git commit] utils/check-package: warn about utf-8
- characters in .mk files
-Message-ID: <20190518213018.CFB2E88696@busybox.osuosl.org>
+Date: Sat, 18 May 2019 23:34:36 +0200
+Subject: [Buildroot] [git commit] board/csky: replace utf-8 graphic sympols
+ by ascii characters
+Message-ID: <20190518213018.C2D1788696@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e352c32b0beded97a8a5c1e9edc9d618514ee7b
+commit: https://git.buildroot.net/buildroot/commit/?id=12c0d4288b1cab79da73a3d6d1ee787341e1f768
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Tested-by: Titouan Christophe <titouan.christophe@railnova.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/checkpackagelib/lib.py    | 13 +++++++++++++
- utils/checkpackagelib/lib_mk.py |  1 +
- 2 files changed, 14 insertions(+)
+ board/csky/readme.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/utils/checkpackagelib/lib.py b/utils/checkpackagelib/lib.py
-index 6afe1aabce..c65a2ed939 100644
---- a/utils/checkpackagelib/lib.py
-+++ b/utils/checkpackagelib/lib.py
-@@ -52,3 +52,16 @@ class TrailingSpace(_CheckFunction):
-             return ["{}:{}: line contains trailing whitespace"
-                     .format(self.filename, lineno),
-                     text]
-+
-+class Utf8Characters(_CheckFunction):
-+    def is_ascii(self, s):
-+        try:
-+            return all(ord(c) < 128 for c in s)
-+        except TypeError:
-+            return False
-+
-+    def check_line(self, lineno, text):
-+        if not self.is_ascii(text):
-+            return ["{}:{}: line contains UTF-8 characters"
-+                    .format(self.filename, lineno),
-+                    text]
-diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-index 00efeb7fb2..9e9a045776 100644
---- a/utils/checkpackagelib/lib_mk.py
-+++ b/utils/checkpackagelib/lib_mk.py
-@@ -11,6 +11,7 @@ from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
- from checkpackagelib.lib import EmptyLastLine          # noqa: F401
- from checkpackagelib.lib import NewlineAtEof           # noqa: F401
- from checkpackagelib.lib import TrailingSpace          # noqa: F401
-+from checkpackagelib.lib import Utf8Characters         # noqa: F401
+diff --git a/board/csky/readme.txt b/board/csky/readme.txt
+index b4605c541e..dc82dcc1d7 100644
+--- a/board/csky/readme.txt
++++ b/board/csky/readme.txt
+@@ -41,9 +41,9 @@ Result of the build
+ After building, you should obtain this tree:
  
- # used in more than one check
- start_conditional = ["ifdef", "ifeq", "ifndef", "ifneq"]
+     output/images/
+-    ????????? vmlinux
+-    ????????? rootfs.ext2
+-    ????????? <board name>.dtb
++    +-- vmlinux
++    +-- rootfs.ext2
++    +-- <board name>.dtb
+ 
+ How to run it
+ =============
