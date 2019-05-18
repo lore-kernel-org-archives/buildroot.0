@@ -1,66 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 21:13:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tzdata and package/zic: bump to
- version 2019a
-In-Reply-To: <20190517174019.65050-1-aduskett@gmail.com>
-References: <20190517174019.65050-1-aduskett@gmail.com>
-Message-ID: <20190518211320.3c2b6bf3@windsurf>
+Date: Sat, 18 May 2019 21:16:23 +0200
+Subject: [Buildroot] [git commit] package/tslib: update upstream source
+ address
+Message-ID: <20190518191038.703B48A63C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+commit: https://git.buildroot.net/buildroot/commit/?id=4161f9f1c92d37c5cae336ab94480d9931f2ef7c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 17 May 2019 13:40:19 -0400
-aduskett at gmail.com wrote:
+The project has been moved from the kergoth user account to the
+libts organisation on github. While github seems to maintain redirects,
+we should use the new location directly.
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Also add TZDATA_LICENSE_FILES and ZIC_LICENSE_FILES, and hashes for those
-> files.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
+Signed-off-by: Martin Kepplinger <martin.kepplinger@ginzinger.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/tslib/tslib.hash | 2 +-
+ package/tslib/tslib.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Nit: the commit title would be better formatted as:
-
-	package/{tzdata,zic}: bump to version 2019a
-
-> -TZDATA_VERSION = 2018e
-> +TZDATA_VERSION = 2019a
->  TZDATA_SOURCE = tzdata$(TZDATA_VERSION).tar.gz
->  TZDATA_SITE = http://www.iana.org/time-zones/repository/releases
->  TZDATA_STRIP_COMPONENTS = 0
->  TZDATA_DEPENDENCIES = host-tzdata
->  HOST_TZDATA_DEPENDENCIES = host-zic
->  TZDATA_LICENSE = Public domain
-> +TZDATA_LICENSE_FILES = LICENSE
-
-Unfortunately, this breaks "make legal-info":
-
->>> tzdata 2019a Collecting legal info
-sha512sum: /home/thomas/projets/buildroot/output/build/tzdata-2019a/LICENSE: No such file or directory
-ERROR: LICENSE has wrong sha512 hash:
-ERROR: expected: 9fe102f8894714cd0bd7d72a92e5ca29e4f75ff3f802d6fc363d5349b83345251b1d572a35321bd487cc70485da337b90df0cd37f896b6343f6f4c29cba7a295
-ERROR: got     : 
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-make[1]: *** [package/tzdata/tzdata.mk:65: tzdata-legal-info] Error 1
-
-This is due to the fact that tzdata for the target is not extracted
-(TZDATA_EXTRACT_CMDS is empty).
-
-So either we need to extract at least the LICENSE file, or perhaps we
-could extract it normally, it's just 4.5 MB of data anyway.
-
-In any case, when you add license information to a package, it would be
-good to test with "make legal-info" before submitting the patch :/
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
+index cfe78765bc..269d8f95fe 100644
+--- a/package/tslib/tslib.hash
++++ b/package/tslib/tslib.hash
+@@ -1,4 +1,4 @@
+-# https://github.com/kergoth/tslib/releases/download/1.19/tslib-1.19.tar.xz.sha256
++# https://github.com/libts/tslib/releases/download/1.19/tslib-1.19.tar.xz.sha256
+ sha256  efe1fef16a00dc818f1d8e402877184dadf331f1b0dd1fbfeeb2698ee8647f4d  tslib-1.19.tar.xz
+ 
+ # Locally computed
+diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
+index ccc2671c6a..9d21647033 100644
+--- a/package/tslib/tslib.mk
++++ b/package/tslib/tslib.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ TSLIB_VERSION = 1.19
+-TSLIB_SITE = https://github.com/kergoth/tslib/releases/download/$(TSLIB_VERSION)
++TSLIB_SITE = https://github.com/libts/tslib/releases/download/$(TSLIB_VERSION)
+ TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
+ TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+ TSLIB_LICENSE_FILES = COPYING
