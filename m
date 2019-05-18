@@ -1,11 +1,11 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 23:18:43 +0200
-Subject: [Buildroot] [PATCH v2 03/13] system/Config.in: add new init -
- openrc
-In-Reply-To: <20190512195550.24457-3-michal.lyszczek@bofc.pl>
+Date: Sat, 18 May 2019 23:20:16 +0200
+Subject: [Buildroot] [PATCH v2 04/13] package/openrc: add support for
+ spawning getty
+In-Reply-To: <20190512195550.24457-4-michal.lyszczek@bofc.pl>
 References: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
- <20190512195550.24457-3-michal.lyszczek@bofc.pl>
-Message-ID: <20190518231843.021bf74b@windsurf>
+ <20190512195550.24457-4-michal.lyszczek@bofc.pl>
+Message-ID: <20190518232016.078e190e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,48 +14,46 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sun, 12 May 2019 21:55:40 +0200
+On Sun, 12 May 2019 21:55:41 +0200
 Micha? ?yszczek <michal.lyszczek@bofc.pl> wrote:
 
-> This is very basic settings for openrc init.
-> 
-> * system/Config.in
->   Allows to select openrc as init system (which auto selects
->   openrc-skeleton and openrc package).
-> 
-> * package/ifupdown-scripts/Config.in
->   openrc has its own service to bring up/down interfaces, so
->   ifupdown-scripts should not be enabled when openrc is enabled to
->   prevent service clash.
-> 
-> Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
+> diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
+> index 53f2947dcc..0feea22818 100644
+> --- a/package/openrc/openrc.mk
+> +++ b/package/openrc/openrc.mk
+> @@ -42,4 +42,17 @@ define OPENRC_REMOVE_UNNEEDED
+>  endef
+>  OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_REMOVE_UNNEEDED
+>  
+> +ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+> +GETTY_SVCNAME = getty.$(SYSTEM_GETTY_PORT)
+> +GETTY_CONF_D = $(TARGET_DIR)/etc/conf.d/$(GETTY_SVCNAME)
 
-I've applied, with some changes, see below.
+The namespace of variables is global, so all variables defined by a
+package must be prefixed by the package name, here OPENRC_.
 
-> diff --git a/package/openrc/Config.in b/package/openrc/Config.in
-> index 4baeed60ae..f79279533f 100644
-> --- a/package/openrc/Config.in
-> +++ b/package/openrc/Config.in
-> @@ -1,6 +1,7 @@
->  config BR2_PACKAGE_OPENRC
->  	bool "OpenRC"
->  	select BR2_PACKAGE_NCURSES
-> +	depends on BR2_INIT_OPENRC
+> +define OPENRC_SET_GETTY
+> +	echo "baud=\"$(SYSTEM_GETTY_BAUDRATE)\"" > $(GETTY_CONF_D)
+> +	echo "term_type=\"$(SYSTEM_GETTY_TERM)\"" >> $(GETTY_CONF_D)
+> +	echo "getty_options=\"-L $(SYSTEM_GETTY_OPTIONS)\"" >> $(GETTY_CONF_D)
+> +	ln -sf getty $(TARGET_DIR)/etc/init.d/$(GETTY_SVCNAME)
+> +	ln -sf /etc/init.d/$(GETTY_SVCNAME) $(TARGET_DIR)/etc/runlevels/default/$(GETTY_SVCNAME)
+> +endef
+> +OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_SET_GETTY
+> +endif # BR2_TARGET_GENERIC_GETTY
+> +
+>  $(eval $(generic-package))
+> diff --git a/package/skeleton-init-openrc/skeleton/etc/conf.d/.empty b/package/skeleton-init-openrc/skeleton/etc/conf.d/.empty
+> new file mode 100644
+> index 0000000000..e69de29bb2
+> diff --git a/package/skeleton-init-openrc/skeleton/etc/init.d/getty b/package/skeleton-init-openrc/skeleton/etc/init.d/getty
+> new file mode 100755
+> index 0000000000..acae1b218b
+> --- /dev/null
+> +++ b/package/skeleton-init-openrc/skeleton/etc/init.d/getty
 
-"depends on" must be before selects, otherwise "make check-package"
-complains.
-> +config BR2_INIT_OPENRC
-> +	bool "OpenRC"
-> +	depends on BR2_USE_MMU
-
-I have replicated this BR2_USE_MMU dependency on the openrc package.
-Also, a !BR2_STATIC_LIBS dependency was missing, which I have added to
-both BR2_PACKAGE_OPENRC and BR2_INIT_OPENRC.
-
-And due to this !BR2_STATIC_LIBS dependency, I've added a Config.in
-comment as well.
-
-Thanks,
+I am not sure: should this be part of the OpenRC skeleton package ? Or
+the OpenRC package itself ?
 
 Thomas
 -- 
