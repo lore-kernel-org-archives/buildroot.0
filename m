@@ -1,34 +1,77 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 21:30:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: add
- BR2_PACKAGE_HAS_LIBEGL_WAYLAND dependency
-In-Reply-To: <20190516201220.24893-1-fontaine.fabrice@gmail.com>
-References: <20190516201220.24893-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190518213005.707e045d@windsurf>
+Date: Sat, 18 May 2019 21:47:48 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/iputils: bump to version
+ s20190515
+In-Reply-To: <20190516053921.21907-1-petr.vorel@gmail.com>
+References: <20190516053921.21907-1-petr.vorel@gmail.com>
+Message-ID: <20190518214748.355c6489@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 16 May 2019 22:12:20 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Petr,
 
-> Commit 5b3c7a3e7828107eaa9dad49ba2650466277d891 added a
-> BR2_PACKAGE_HAS_LIBEGL_WAYLAND dependency to wpebackend-fdo but forget
-> to add it to wpewebkit
+On Thu, 16 May 2019 07:39:21 +0200
+Petr Vorel <petr.vorel@gmail.com> wrote:
+
+> This commit also include changes from s20190324.
 > 
-> Fixes:
->  - http://autobuild.buildroot.net/results/49e04166de68358e69bce580b29ba3a25b313acf
+> Upstream changed build system to Meson, these extra changes
+> were required:
+> * remove custom commands of previous build system:
+> (IPUTILS_INSTALL_TARGET_CMDS, IPUTILS_PERMISSIONS)
+> * remove USE_SYSFS=no (support removed from upstream
+> * transform options from USE_FOO={yes,no} to -DUSE_FOO={true,false}
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/wpewebkit/Config.in | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> Removed patch included in this release
+> 
+> Build ninfod if possible (when use any crypto)
+> 
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
-Applied to master, thanks.
+I'm sorry, but unfortunately, it still fails to build here:
 
-Thomas
+>>> iputils s20190515 Building
+PATH="/home/thomas/projets/buildroot/output/host/bin:/home/thomas/projets/buildroot/output/host/sbin:/home/thomas/sys/bin/:/usr/lib64/ccache:/usr/share/Modules/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/thomas/.rvm/bin:/home/thomas/sys/bin:/home/thomas/.gem/ruby/2.1.0/bin:/home/thomas/.rvm/bin:/home/thomas/.local/bin"  PYTHONNOUSERSITE=y /home/thomas/projets/buildroot/output/host/bin/ninja  -j5  -C /home/thomas/projets/buildroot/output/build/iputils-s20190515//build
+ninja: Entering directory `/home/thomas/projets/buildroot/output/build/iputils-s20190515//build'
+[1/24] Generating arping.8 with a custom command.
+FAILED: doc/arping.8 
+/home/thomas/sys/bin/xsltproc -o doc/arping.8 --nonet --stringparam man.output.quietly 1 --stringparam funcsynopsis.style ansi --stringparam man.th.extra1.suppress 1 --stringparam iputils.version s20190515 ../doc/custom-man.xsl ../doc/arping.xml
+I/O error : Attempt to load network entity http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl
+warning: failed to load external entity "http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl"
+compilation error: file ../doc/custom-man.xsl line 8 element import
+xsl:import : unable to load http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl
+[2/24] Generating ping.8 with a custom command.
+FAILED: doc/ping.8 
+/home/thomas/sys/bin/xsltproc -o doc/ping.8 --nonet --stringparam man.output.quietly 1 --stringparam funcsynopsis.style ansi --stringparam man.th.extra1.suppress 1 --stringparam iputils.version s20190515 ../doc/custom-man.xsl ../doc/ping.xml
+I/O error : Attempt to load network entity http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl
+warning: failed to load external entity "http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl"
+compilation error: file ../doc/custom-man.xsl line 8 element import
+xsl:import : unable to load http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl
+[3/24] Generating clockdiff.8 with a custom command.
+FAILED: doc/clockdiff.8 
+/home/thomas/sys/bin/xsltproc -o doc/clockdiff.8 --nonet --stringparam man.output.quietly 1 --stringparam funcsynopsis.style ansi --stringparam man.th.extra1.suppress 1 --stringparam iputils.version s20190515 ../doc/custom-man.xsl ../doc/clockdiff.xml
+I/O error : Attempt to load network entity http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl
+warning: failed to load external entity "http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl"
+compilation error: file ../doc/custom-man.xsl line 8 element import
+xsl:import : unable to load http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl
+[4/24] Generating rdisc.8 with a custom command.
+FAILED: doc/rdisc.8 
+/home/thomas/sys/bin/xsltproc -o doc/rdisc.8 --nonet --stringparam man.output.quietly 1 --stringparam funcsynopsis.style ansi --stringparam man.th.extra1.suppress 1 --stringparam iputils.version s20190515 ../doc/custom-man.xsl ../doc/rdisc.xml
+I/O error : Attempt to load network entity http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl
+warning: failed to load external entity "http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl"
+compilation error: file ../doc/custom-man.xsl line 8 element import
+xsl:import : unable to load http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl
+[5/24] Generating git-version.h with a custom command.
+ninja: build stopped: subcommand failed.
+make[1]: *** [package/pkg-generic.mk:241: /home/thomas/projets/buildroot/output/build/iputils-s20190515/.stamp_built] Error 1
+make: *** [Makefile:84: _all] Error 2
+
+Best regards,
+
+Thomas Petazzoni
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
