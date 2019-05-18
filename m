@@ -1,46 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 22:57:29 +0200
-Subject: [Buildroot] [PATCH v2 02/13] package/skeleton-init-openrc:
- basic skeleton for openrc
-In-Reply-To: <20190512195550.24457-2-michal.lyszczek@bofc.pl>
-References: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
- <20190512195550.24457-2-michal.lyszczek@bofc.pl>
-Message-ID: <20190518225729.0b7eed0b@windsurf>
+Date: Sat, 18 May 2019 23:07:09 +0200
+Subject: [Buildroot] [git commit branch/next] package/openrc: add missing
+ mmu and !static dependencies
+Message-ID: <20190518211117.F31D28B51E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=a7314d842e4ea0610d313bbefe07c85af525cd61
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 12 May 2019 21:55:39 +0200
-Micha? ?yszczek <michal.lyszczek@bofc.pl> wrote:
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/openrc/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> This basic skeleton is similar to skeleton-init-sysv.
-> All links in /var are same as in skeleton-init-sysv to be compatible
-> with current default filesystem scheme.
-> 
-> Exceptions:
-> 
-> * /dev/shm and /dev/pts dirs were removed, since they are created by
->   openrc devfs service
-> * /etc/fstab does not need /dev/shm, /dev/pts and /sys entries
->   becuse they are mounted by devfs and sysfs services respectively
-> 
-> Signed-off-by: Micha? ?yszczek <michal.lyszczek@bofc.pl>
-
-Applied to next, after doing one change, see below.
-
-> +++ b/package/skeleton-init-openrc/skeleton-init-sysv.mk
-
-Too much copy paste here: this file should have been named
-skeleton-init-openrc.mk. I fixed that when applying.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/openrc/Config.in b/package/openrc/Config.in
+index ec536c8692..84c58b20c3 100644
+--- a/package/openrc/Config.in
++++ b/package/openrc/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_OPENRC
+ 	bool "openrc"
++	depends on BR2_USE_MMU # fork()
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+ 	  Init that works on top of pid 1 (for example
+@@ -16,3 +18,7 @@ config BR2_PACKAGE_OPENRC
+ 	  use them.
+ 
+ 	  https://github.com/OpenRC/openrc
++
++comment "openrc needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on BR2_STATIC_LIBS
