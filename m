@@ -1,62 +1,44 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 18 May 2019 23:43:49 +0200
-Subject: [Buildroot] [PATCH 3/3] package/pcsc-lite: security bump to version
- 1.8.25
-In-Reply-To: <20190518214349.5979-1-fontaine.fabrice@gmail.com>
-References: <20190518214349.5979-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190518214349.5979-3-fontaine.fabrice@gmail.com>
+Date: Sun, 19 May 2019 00:02:36 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/powertop: bump to version 2.10
+Message-ID: <20190518220236.5858-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Contains the following security related fixes:
- - Race condition possibility; CWE-362: Concurrent Execution using
-   Shared Resource with Improper Synchronization ('Race Condition'):
-   https://github.com/LudovicRousseau/PCSC/commit/36c8eae890dc81f0e25ebf0be1c6a969ffd9543a
- - Fix realloc error handling:
-   https://github.com/LudovicRousseau/PCSC/commit/430043842e05a300f1dda1b93fcfa8fceadd81e5
-
-Update hash of COPYING and remove MIT from licenses because sd-daemon
-files were removed:
-https://github.com/LudovicRousseau/PCSC/commit/0984e0f4a03e5e29bb5725b6f149f56c9e9c73c2
+Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pcsc-lite/pcsc-lite.hash | 4 ++--
- package/pcsc-lite/pcsc-lite.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/powertop/powertop.hash | 3 ++-
+ package/powertop/powertop.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/pcsc-lite/pcsc-lite.hash b/package/pcsc-lite/pcsc-lite.hash
-index 3b8cde1617..7e209f8cd2 100644
---- a/package/pcsc-lite/pcsc-lite.hash
-+++ b/package/pcsc-lite/pcsc-lite.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 5a27262586eff39cfd5c19aadc8891dd71c0818d3d629539bd631b958be689c9  pcsc-lite-1.8.23.tar.bz2
--sha256 2ce8f52bc5afa74f223121955e4e6328c432b16044ea535acd550435dda2b5db  COPYING
-+sha256 d76d79edc31cf76e782b9f697420d3defbcc91778c3c650658086a1b748e8792  pcsc-lite-1.8.25.tar.bz2
-+sha256 40d4358bb8dc8d30f5365ae6d999b6f820bbc051b292912482f2e4d0ebd837e1  COPYING
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  GPL-3.0.txt
-diff --git a/package/pcsc-lite/pcsc-lite.mk b/package/pcsc-lite/pcsc-lite.mk
-index 5a18d46a71..e819a93910 100644
---- a/package/pcsc-lite/pcsc-lite.mk
-+++ b/package/pcsc-lite/pcsc-lite.mk
-@@ -4,12 +4,12 @@
+diff --git a/package/powertop/powertop.hash b/package/powertop/powertop.hash
+index 0f9acdc277..13e938d505 100644
+--- a/package/powertop/powertop.hash
++++ b/package/powertop/powertop.hash
+@@ -1,2 +1,3 @@
+ # Locally-generated hash
+-sha256	aa7fb7d8e9a00f05e7d8a7a2866d85929741e0d03a5bf40cab22d2021c959250	powertop-v2.9.tar.gz
++sha256	d3b7459eaba7d01c8841dd33a3b4d369416c01e9bd8951b0d88234cf18fe4a75	powertop-v2.10.tar.gz
++sha256	b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259	COPYING
+diff --git a/package/powertop/powertop.mk b/package/powertop/powertop.mk
+index cf5e8d4ffb..e4472080e8 100644
+--- a/package/powertop/powertop.mk
++++ b/package/powertop/powertop.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PCSC_LITE_VERSION = 1.8.23
-+PCSC_LITE_VERSION = 1.8.25
- PCSC_LITE_SOURCE = pcsc-lite-$(PCSC_LITE_VERSION).tar.bz2
- PCSC_LITE_SITE = https://pcsclite.apdu.fr/files
- PCSC_LITE_INSTALL_STAGING = YES
- PCSC_LITE_DEPENDENCIES = host-pkgconf
--PCSC_LITE_LICENSE = BSD-2-Clause (auth), BSD-3-Clause, GPL-3.0+ (demo, spy, tests), ISC (simclist), MIT (sd-daemon)
-+PCSC_LITE_LICENSE = BSD-2-Clause (auth), BSD-3-Clause, GPL-3.0+ (demo, spy, tests), ISC (simclist)
- PCSC_LITE_LICENSE_FILES = COPYING GPL-3.0.txt
- PCSC_LITE_AUTORECONF = YES
- 
+-POWERTOP_VERSION = 2.9
+-POWERTOP_SITE = https://01.org/sites/default/files/downloads/powertop
++POWERTOP_VERSION = 2.10
++POWERTOP_SITE = https://01.org/sites/default/files/downloads
+ POWERTOP_SOURCE = powertop-v$(POWERTOP_VERSION).tar.gz
+ POWERTOP_DEPENDENCIES = pciutils ncurses libnl host-pkgconf \
+ 	$(TARGET_NLS_DEPENDENCIES)
 -- 
 2.20.1
