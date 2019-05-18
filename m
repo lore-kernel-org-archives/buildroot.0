@@ -1,64 +1,76 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 23:25:08 +0200
-Subject: [Buildroot] [git commit branch/next] package/openrc: change
- /run/lock from root:uucp to root:daemon
-Message-ID: <20190518212029.DADB083898@busybox.osuosl.org>
+Date: Sat, 18 May 2019 23:31:55 +0200
+Subject: [Buildroot] [git commit] package/libupnp18: add upstream patch to
+ fix runtime crash with musl
+Message-ID: <20190518212610.1C4498A63C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d61bf8cdbebe07c86a8bbdf6c3cab45f7b17534
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: https://git.buildroot.net/buildroot/commit/?id=165fcefc60f6f4054f01702ae74546f019fbbf9b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On gentoo /run/lock is owned by uucp group because of historical
-reasons. However uucp does not exist on buildroot by default, and
-it makes more sense that 'daemon' group should own this directory.
+Applications build with a musl 1.1.20+ toolchain and linked with libupnpp will
+crash at runtime with `Illegal instruction` as musl is more strict with
+trying to detach an already detached thread resulting in undefined
+behaviour.
 
-Signed-off-by: Micha?? ??yszczek <michal.lyszczek@bofc.pl>
+Upstream status:
+https://github.com/mrjimenez/pupnp/issues/102
+
+Backported from:
+https://github.com/mrjimenez/pupnp/commit/04b454f693d0c71336252380d08f1d02967e133e
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...Linux.in-change-run-lock-from-root-uucp-t.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ ...to-detach-detached-thread-the-result-is-u.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch b/package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch
+diff --git a/package/libupnp18/0002-Do-not-try-to-detach-detached-thread-the-result-is-u.patch b/package/libupnp18/0002-Do-not-try-to-detach-detached-thread-the-result-is-u.patch
 new file mode 100644
-index 0000000000..66bbba42ba
+index 0000000000..601ea89be7
 --- /dev/null
-+++ b/package/openrc/0002-sh-init.sh.Linux.in-change-run-lock-from-root-uucp-t.patch
-@@ -0,0 +1,34 @@
-+From 5ae8209afad9a4284723712b46d8685e7f7fd72c Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Micha=C5=82=20=C5=81yszczek?= <michal.lyszczek@bofc.pl>
-+Date: Mon, 6 May 2019 00:06:39 +0200
-+Subject: [PATCH] sh/init.sh.Linux.in: change /run/lock from root:uucp to
-+ root:daemon
++++ b/package/libupnp18/0002-Do-not-try-to-detach-detached-thread-the-result-is-u.patch
+@@ -0,0 +1,39 @@
++From 04b454f693d0c71336252380d08f1d02967e133e Mon Sep 17 00:00:00 2001
++From: Jean-Francois Dockes <jf@dockes.org>
++Date: Sun, 27 Jan 2019 10:44:17 +0100
++Subject: [PATCH] Do not try to detach detached thread, the result is
++ undefined. Fixes issue #102
 +MIME-Version: 1.0
 +Content-Type: text/plain; charset=UTF-8
 +Content-Transfer-Encoding: 8bit
 +
-+On gentoo /run/lock is owned by uucp group because of historical
-+reasons. However uucp does not exist on buildroot by default, and
-+it makes more sense that 'daemon' group should own this directory.
++Fixes runtime crash with musl 1.1.20+. The problem is that libupnp is
++calling pthread_detach() on a thread which was created in the detached state.
 +
-+Signed-off-by: Micha?? ??yszczek <michal.lyszczek@bofc.pl>
++Backported from: 04b454f693d0c71336252380d08f1d02967e133e
++
++(cherry picked from commit 386b7ed79146ecf7a3bba49f48cb8f41a9b49170)
++Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 +---
-+ sh/init.sh.Linux.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ upnp/src/threadutil/ThreadPool.c | 5 -----
++ 1 file changed, 5 deletions(-)
 +
-+diff --git a/sh/init.sh.Linux.in b/sh/init.sh.Linux.in
-+index 222bbd3b..7f1a88db 100644
-+--- a/sh/init.sh.Linux.in
-++++ b/sh/init.sh.Linux.in
-+@@ -85,7 +85,7 @@ fi
-+ 
-+ [ -x /sbin/restorecon ] && /sbin/restorecon -rF /run
-+ checkpath -d $RC_SVCDIR
-+-checkpath -d -m 0775 -o root:uucp /run/lock
-++checkpath -d -m 0775 -o root:daemon /run/lock
-+ 
-+ # Try to mount xenfs as early as possible, otherwise rc_sys() will always
-+ # return RC_SYS_XENU and will think that we are in a domU while it's not.
++diff --git a/upnp/src/threadutil/ThreadPool.c b/upnp/src/threadutil/ThreadPool.c
++index d272907..5e590ed 100644
++--- a/upnp/src/threadutil/ThreadPool.c
+++++ b/upnp/src/threadutil/ThreadPool.c
++@@ -651,11 +651,6 @@ static int CreateWorker(
++ 	rc = ithread_create(&temp, &attr, WorkerThread, tp);
++ 	ithread_attr_destroy(&attr);
++ 	if (rc == 0) {
++-		rc = ithread_detach(temp);
++-		/* ithread_detach will return EINVAL if thread has been
++-		 successfully detached by ithread_create */
++-		if (rc == EINVAL)
++-			rc = 0;
++ 		tp->pendingWorkerThreadStart = 1;
++ 		/* wait until the new worker thread starts */
++ 		while (tp->pendingWorkerThreadStart) {
 +-- 
-+2.18.1
++2.21.0
 +
