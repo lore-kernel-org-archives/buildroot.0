@@ -1,37 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 23:34:36 +0200
-Subject: [Buildroot] [git commit] board/csky: replace utf-8 graphic sympols
- by ascii characters
-Message-ID: <20190518213018.C2D1788696@busybox.osuosl.org>
+Date: Sat, 18 May 2019 23:34:43 +0200
+Subject: [Buildroot] [git commit] board/pandaboard: replace utf-8 graphic
+ sympols by ascii characters
+Message-ID: <20190518213018.C99AE88696@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=12c0d4288b1cab79da73a3d6d1ee787341e1f768
+commit: https://git.buildroot.net/buildroot/commit/?id=dff08793eec131a4d3ba87771f1ed6a8e5a1e294
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/csky/readme.txt | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ board/pandaboard/readme.txt | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/board/csky/readme.txt b/board/csky/readme.txt
-index b4605c541e..dc82dcc1d7 100644
---- a/board/csky/readme.txt
-+++ b/board/csky/readme.txt
-@@ -41,9 +41,9 @@ Result of the build
- After building, you should obtain this tree:
+diff --git a/board/pandaboard/readme.txt b/board/pandaboard/readme.txt
+index 1e4820b828..80a20c2743 100644
+--- a/board/pandaboard/readme.txt
++++ b/board/pandaboard/readme.txt
+@@ -23,14 +23,14 @@ When you are happy with the setup, run:
+ The result of the build with the default settings should be these files:
  
-     output/images/
--    ????????? vmlinux
--    ????????? rootfs.ext2
--    ????????? <board name>.dtb
-+    +-- vmlinux
-+    +-- rootfs.ext2
-+    +-- <board name>.dtb
+   output/images
+-  ????????? MLO
+-  ????????? omap4-panda-a4.dtb
+-  ????????? omap4-panda.dtb
+-  ????????? omap4-panda-es.dtb
+-  ????????? rootfs.ext4
+-  ????????? sdcard.img
+-  ????????? u-boot.img
+-  ????????? zImage
++  +-- MLO
++  +-- omap4-panda-a4.dtb
++  +-- omap4-panda.dtb
++  +-- omap4-panda-es.dtb
++  +-- rootfs.ext4
++  +-- sdcard.img
++  +-- u-boot.img
++  +-- zImage
  
- How to run it
- =============
+ How to write the SD card
+ ------------------------
