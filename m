@@ -1,62 +1,65 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 23:20:16 +0200
-Subject: [Buildroot] [PATCH v2 04/13] package/openrc: add support for
- spawning getty
-In-Reply-To: <20190512195550.24457-4-michal.lyszczek@bofc.pl>
-References: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
- <20190512195550.24457-4-michal.lyszczek@bofc.pl>
-Message-ID: <20190518232016.078e190e@windsurf>
+Date: Sat, 18 May 2019 23:21:19 +0200
+Subject: [Buildroot] [git commit branch/next] package/pkg-generic.mk: add
+ <pkg>_INSTALL_INIT_OPENRC
+Message-ID: <20190518211536.866E98C5BD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=6d89420774da6216b492871df9007b316199303c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Sun, 12 May 2019 21:55:41 +0200
-Micha? ?yszczek <michal.lyszczek@bofc.pl> wrote:
+* package/pkg-generic.mk
+  Add <pkg>_INSTALL_INIT_OPENRC so packages can define their own steps
+  to install openrc service scripts.
 
-> diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
-> index 53f2947dcc..0feea22818 100644
-> --- a/package/openrc/openrc.mk
-> +++ b/package/openrc/openrc.mk
-> @@ -42,4 +42,17 @@ define OPENRC_REMOVE_UNNEEDED
->  endef
->  OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_REMOVE_UNNEEDED
->  
-> +ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
-> +GETTY_SVCNAME = getty.$(SYSTEM_GETTY_PORT)
-> +GETTY_CONF_D = $(TARGET_DIR)/etc/conf.d/$(GETTY_SVCNAME)
+* docs/manual/adding-packages-generic.txt
+  update documentation about new hook.
 
-The namespace of variables is global, so all variables defined by a
-package must be prefixed by the package name, here OPENRC_.
+Signed-off-by: Micha?? ??yszczek <michal.lyszczek@bofc.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/adding-packages-generic.txt | 13 +++++++------
+ package/pkg-generic.mk                  |  2 ++
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
-> +define OPENRC_SET_GETTY
-> +	echo "baud=\"$(SYSTEM_GETTY_BAUDRATE)\"" > $(GETTY_CONF_D)
-> +	echo "term_type=\"$(SYSTEM_GETTY_TERM)\"" >> $(GETTY_CONF_D)
-> +	echo "getty_options=\"-L $(SYSTEM_GETTY_OPTIONS)\"" >> $(GETTY_CONF_D)
-> +	ln -sf getty $(TARGET_DIR)/etc/init.d/$(GETTY_SVCNAME)
-> +	ln -sf /etc/init.d/$(GETTY_SVCNAME) $(TARGET_DIR)/etc/runlevels/default/$(GETTY_SVCNAME)
-> +endef
-> +OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_SET_GETTY
-> +endif # BR2_TARGET_GENERIC_GETTY
-> +
->  $(eval $(generic-package))
-> diff --git a/package/skeleton-init-openrc/skeleton/etc/conf.d/.empty b/package/skeleton-init-openrc/skeleton/etc/conf.d/.empty
-> new file mode 100644
-> index 0000000000..e69de29bb2
-> diff --git a/package/skeleton-init-openrc/skeleton/etc/init.d/getty b/package/skeleton-init-openrc/skeleton/etc/init.d/getty
-> new file mode 100755
-> index 0000000000..acae1b218b
-> --- /dev/null
-> +++ b/package/skeleton-init-openrc/skeleton/etc/init.d/getty
-
-I am not sure: should this be part of the OpenRC skeleton package ? Or
-the OpenRC package itself ?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
+index 7be1754f54..5ac07a81b4 100644
+--- a/docs/manual/adding-packages-generic.txt
++++ b/docs/manual/adding-packages-generic.txt
+@@ -536,12 +536,13 @@ different steps of the build process.
+   should utilize this step if it has binaries which would be similar
+   to the kernel image, bootloader or root filesystem images.
+ 
+-* +LIBFOO_INSTALL_INIT_SYSV+ and +LIBFOO_INSTALL_INIT_SYSTEMD+ list the
+-  actions to install init scripts either for the systemV-like init systems
+-  (busybox, sysvinit, etc.) or for the systemd units. These commands
+-  will be run only when the relevant init system is installed (i.e. if
+-  systemd is selected as the init system in the configuration, only
+-  +LIBFOO_INSTALL_INIT_SYSTEMD+ will be run).
++* +LIBFOO_INSTALL_INIT_SYSV+, +LIBFOO_INSTALL_INIT_OPENRC+ and
++  +LIBFOO_INSTALL_INIT_SYSTEMD+ list the actions to install init
++  scripts either for the systemV-like init systems (busybox,
++  sysvinit, etc.), openrc or for the systemd units. These commands
++  will be run only when the relevant init system is installed (i.e.
++  if systemd is selected as the init system in the configuration,
++  only +LIBFOO_INSTALL_INIT_SYSTEMD+ will be run).
+ 
+ * +LIBFOO_HELP_CMDS+ lists the actions to print the package help, which
+   is included to the main +make help+ output. These commands can print
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index e44f5d913c..3b5ee7b356 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -337,6 +337,8 @@ $(BUILD_DIR)/%/.stamp_target_installed:
+ 		$($(PKG)_INSTALL_INIT_SYSTEMD))
+ 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
+ 		$($(PKG)_INSTALL_INIT_SYSV))
++	$(if $(BR2_INIT_OPENRC), \
++		$($(PKG)_INSTALL_INIT_OPENRC))
+ 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
+ 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
+ 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
