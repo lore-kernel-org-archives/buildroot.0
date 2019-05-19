@@ -1,45 +1,72 @@
-From: Montag, Gil <gil.montag@intel.com>
-Date: Sun, 19 May 2019 06:57:36 +0000
-Subject: [Buildroot] =?windows-1252?q?suggestion_to_add_info_to_buildroot?=
- =?windows-1252?q?_manual_section_10=2E1=2E_=22The_boot_hangs_after_Starti?=
- =?windows-1252?q?ng_network=85=22?=
-In-Reply-To: <2C6957468785C14D8F47AB016E1D8F4B6E4B9E50@hasmsx107.ger.corp.intel.com>
-References: <2C6957468785C14D8F47AB016E1D8F4B6E4B9E50@hasmsx107.ger.corp.intel.com>
-Message-ID: <2C6957468785C14D8F47AB016E1D8F4B6E4BBE95@hasmsx107.ger.corp.intel.com>
+From: michal.lyszczek at bofc.pl <michal.lyszczek@bofc.pl>
+Date: Sun, 19 May 2019 10:32:16 +0200
+Subject: [Buildroot] [PATCH v2 04/13] package/openrc: add support for
+ spawning getty
+In-Reply-To: <20190518232016.078e190e@windsurf>
+References: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
+ <20190512195550.24457-4-michal.lyszczek@bofc.pl>
+ <20190518232016.078e190e@windsurf>
+Message-ID: <20190519083216.4kikzqwpyfyfct7l@c-ml-p3510.redembedded.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Thomas
+On 2019-05-18 23:20:16, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sun, 12 May 2019 21:55:41 +0200
+> Micha? ?yszczek <michal.lyszczek@bofc.pl> wrote:
+> 
+> > diff --git a/package/openrc/openrc.mk b/package/openrc/openrc.mk
+> > index 53f2947dcc..0feea22818 100644
+> > --- a/package/openrc/openrc.mk
+> > +++ b/package/openrc/openrc.mk
+> > @@ -42,4 +42,17 @@ define OPENRC_REMOVE_UNNEEDED
+> >  endef
+> >  OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_REMOVE_UNNEEDED
+> >  
+> > +ifeq ($(BR2_TARGET_GENERIC_GETTY),y)
+> > +GETTY_SVCNAME = getty.$(SYSTEM_GETTY_PORT)
+> > +GETTY_CONF_D = $(TARGET_DIR)/etc/conf.d/$(GETTY_SVCNAME)
+> 
+> The namespace of variables is global, so all variables defined by a
+> package must be prefixed by the package name, here OPENRC_.
 
-Hi,
-Lately I faced an issue with an OS I build using BR2019.2
-The issue was that when I enabled SSH on my OS, system hanged during boot and I did not get login prompt on the serial console.
-After analyzing it on buildroot irc channel forum, I figured out the hang is related to /usr/bin/ssh-keygen ?A hanging trying to get a random number (getrandom() syscall)
-Googling a bit explained this as kernel?s entropy pool is empty for some reason and hence random number generation hanged.
-Solution (for me) was to enable HAVEGED package on BR.
-I suggest to add a hint on this on BR manual (above section) or to add some hint to BR menuconfig tool
-The problem was not happening to me on older BR version (2018) as that version uses also an older SSH package which somehow could live without the HAVEGED or so.
-Thanks,
-Gil
+Right, didn't know that, thanks. Will fix.
 
+> > +define OPENRC_SET_GETTY
+> > +	echo "baud=\"$(SYSTEM_GETTY_BAUDRATE)\"" > $(GETTY_CONF_D)
+> > +	echo "term_type=\"$(SYSTEM_GETTY_TERM)\"" >> $(GETTY_CONF_D)
+> > +	echo "getty_options=\"-L $(SYSTEM_GETTY_OPTIONS)\"" >> $(GETTY_CONF_D)
+> > +	ln -sf getty $(TARGET_DIR)/etc/init.d/$(GETTY_SVCNAME)
+> > +	ln -sf /etc/init.d/$(GETTY_SVCNAME) $(TARGET_DIR)/etc/runlevels/default/$(GETTY_SVCNAME)
+> > +endef
+> > +OPENRC_TARGET_FINALIZE_HOOKS += OPENRC_SET_GETTY
+> > +endif # BR2_TARGET_GENERIC_GETTY
+> > +
+> >  $(eval $(generic-package))
+> > diff --git a/package/skeleton-init-openrc/skeleton/etc/conf.d/.empty b/package/skeleton-init-openrc/skeleton/etc/conf.d/.empty
+> > new file mode 100644
+> > index 0000000000..e69de29bb2
+> > diff --git a/package/skeleton-init-openrc/skeleton/etc/init.d/getty b/package/skeleton-init-openrc/skeleton/etc/init.d/getty
+> > new file mode 100755
+> > index 0000000000..acae1b218b
+> > --- /dev/null
+> > +++ b/package/skeleton-init-openrc/skeleton/etc/init.d/getty
+> 
+> I am not sure: should this be part of the OpenRC skeleton package ? Or
+> the OpenRC package itself ?
 
-
----------------------------------------------------------------------
-Intel Israel (74) Limited
-
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
----------------------------------------------------------------------
-Intel Israel (74) Limited
-
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
+All init sysvinit/sysvinit.mk, busybox/busybox.mk systemd/systemd.mk has
+BR2_TARGET_GENERIC_GETTY defined in their packages makefile and not
+skeleton. It seemed consistent for me.
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190519/64b0ad38/attachment.html>
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 488 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190519/c363eff9/attachment.asc>
