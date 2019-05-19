@@ -1,83 +1,47 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sun, 19 May 2019 16:47:53 +0200
-Subject: [Buildroot] [PATCH v2] package/python-numpy: fix occasional
- build failure with lapack
-In-Reply-To: <20190518221352.0630eaa6@windsurf>
-References: <eb24ad7d-6de2-085d-d3e0-9037c3d5cf81@micronovasrl.com>
- <20190515210342.126951-1-giulio.benetti@micronovasrl.com>
- <20190518221352.0630eaa6@windsurf>
-Message-ID: <e0c589d1-ce45-0132-43da-db2605b81616@micronovasrl.com>
+From: Serhii Sakhno <sergei.sakhno@gmail.com>
+Date: Sun, 19 May 2019 18:02:10 +0300
+Subject: [Buildroot] [PATCH] package/python-socketio: bump version to 4.0.2
+Message-ID: <20190519150210.4815-1-sergei.sakhno@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas, All,
+Signed-off-by: Serhii Sakhno <sergei.sakhno@gmail.com>
+---
+ package/python-socketio/python-socketio.hash | 9 +++++----
+ package/python-socketio/python-socketio.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-Il 18/05/2019 22:13, Thomas Petazzoni ha scritto:
-> Hello,
-> 
-> On Wed, 15 May 2019 23:03:42 +0200
-> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
-> 
->> python-numpy build fails only if lapack is built before python-numpy
->> itself, and this doesn't always happen because lapack dependency is
->> missing in BR2_PYTHON_NUMPY_DEPENDENCIES. clapack is present
->> instead, but it's wrong since we're checking $(BR2_PACKAGE_LAPACK) not
->> $(BR2_PACKAGE_CLAPACK).
-> 
-> I don't follow here: in the current code, we're checking
-> BR2_PACKAGE_CLAPACK and adding clapack to PYTHON_NUMPY_DEPENDENCIES,
-> which is consistent.
-
-You're right, I've done a mistake, I've substituted clapack with lapack.
-So need to send a v3 with this corrected.
-
-The problem was due to cohexistence of lapack and clapack, but they are 
-both(like openblas) accelerators that can exist once(I mean or lapack, 
-or clapack).
-Here I was asking about inserting a menu to choose which accelerator to use:
-http://lists.busybox.net/pipermail/buildroot/2019-May/250273.html
-
-Can you take a look and answer with your opinion?
-
-> In order to better understand the problem. Without this patch:
-> 
->   - Does python-numpy builds fine when neither clapack nor lapack are
->     enabled ?
-
-Yes it does(it works without accelerators).
-
->   - Does python-numpy builds fine when clapack is enabled, but not
->     lapack ?
-
-Yes
-
->   - What happens when both clapack and lapack are enabled ?
-
-Python-numpy will choose the accelerator according to this list:
-https://www.numpy.org/devdocs/user/building.html#accelerated-blas-lapack-libraries
-
-> Also, perhaps we need:
-> 
-> 	select BR2_PACKAGE_LAPACK_COMPLEX if BR2_PACKAGE_LAPACK
-> 
-> in the Config.in file, so that it's a bit easier for users: they don't
-> have to know they need that specific sub-option of lapack.
-
-If lapack selected yes, but that should come after adding a choice menu 
-IMHO.
-
-Kind regards
+diff --git a/package/python-socketio/python-socketio.hash b/package/python-socketio/python-socketio.hash
+index 659d4d540c..a6948659c7 100644
+--- a/package/python-socketio/python-socketio.hash
++++ b/package/python-socketio/python-socketio.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/python-socketio/json
+-md5	44fd24e839dc3102920765f345740646  python-socketio-1.4.1.tar.gz
+-# sha256 calculated by scanpypi
+-sha256	ebd0984d831d602c8ec6d586ecde4466972cc7ed37dbbfe613192864e8263779  python-socketio-1.4.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/python-socketio/json
++md5	51d3820673710afa5caa442c17b08635  python-socketio-4.0.2.tar.gz
++sha256	7bb11f79981eaad08f33b98ffcd501590e5a2c645fdd7bb3fb0a5d9078e08bbc  python-socketio-4.0.2.tar.gz
++# Locally computed sha256 checksums
++sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
+index 57dc1f8b48..d68e76a2e3 100644
+--- a/package/python-socketio/python-socketio.mk
++++ b/package/python-socketio/python-socketio.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SOCKETIO_VERSION = 1.4.1
+-PYTHON_SOCKETIO_SITE = https://pypi.python.org/packages/da/00/66103df6a116a2ce3ea662a9c8c80f337d43d7f138caf04e9af6dec24ba7
++PYTHON_SOCKETIO_VERSION = 4.0.2
++PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/41/94/f59c7c61e4544d27ad0cdca354a20b4fc12674fae18c4f6a00e34a88007e
+ PYTHON_SOCKETIO_SETUP_TYPE = setuptools
+ PYTHON_SOCKETIO_LICENSE = MIT
+ PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.21.0
