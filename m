@@ -1,64 +1,83 @@
-From: Alexey Lukyanchuk <skif@skif-web.ru>
-Date: Sun, 19 May 2019 14:36:48 +0300
-Subject: [Buildroot] [PATCH 2/2] fs/iso9660: add specified files to image
-Message-ID: <20190519113648.31566-1-skif@skif-web.ru>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sun, 19 May 2019 16:47:53 +0200
+Subject: [Buildroot] [PATCH v2] package/python-numpy: fix occasional
+ build failure with lapack
+In-Reply-To: <20190518221352.0630eaa6@windsurf>
+References: <eb24ad7d-6de2-085d-d3e0-9037c3d5cf81@micronovasrl.com>
+ <20190515210342.126951-1-giulio.benetti@micronovasrl.com>
+ <20190518221352.0630eaa6@windsurf>
+Message-ID: <e0c589d1-ce45-0132-43da-db2605b81616@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allows to add any specified files to iso-image
+Hello Thomas, All,
 
-Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
----
- fs/iso9660/Config.in  |  5 +++++
- fs/iso9660/iso9660.mk | 12 ++++++++++++
- 2 files changed, 17 insertions(+)
+Il 18/05/2019 22:13, Thomas Petazzoni ha scritto:
+> Hello,
+> 
+> On Wed, 15 May 2019 23:03:42 +0200
+> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+> 
+>> python-numpy build fails only if lapack is built before python-numpy
+>> itself, and this doesn't always happen because lapack dependency is
+>> missing in BR2_PYTHON_NUMPY_DEPENDENCIES. clapack is present
+>> instead, but it's wrong since we're checking $(BR2_PACKAGE_LAPACK) not
+>> $(BR2_PACKAGE_CLAPACK).
+> 
+> I don't follow here: in the current code, we're checking
+> BR2_PACKAGE_CLAPACK and adding clapack to PYTHON_NUMPY_DEPENDENCIES,
+> which is consistent.
 
-diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
-index 6f001c0640..588fc307a5 100644
---- a/fs/iso9660/Config.in
-+++ b/fs/iso9660/Config.in
-@@ -81,6 +81,11 @@ config BR2_TARGET_ROOTFS_ISO9660_HYBRID
- 	  which BIOS considers a hard disk or ZIP disk, e.g. a USB key
- 	  or similar.
- 
-+config BR2_ROOTFS_ISO9660_ADDITIONAL_FILES
-+	string "Add additional files to iso"
-+	help
-+	  Use this option to add any additional files to iso
-+
- endif
- 
- comment "iso image needs a Linux kernel and either grub2 i386-pc or isolinux to be built"
-diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
-index a129655ce3..809f883be7 100644
---- a/fs/iso9660/iso9660.mk
-+++ b/fs/iso9660/iso9660.mk
-@@ -23,6 +23,7 @@
- #     of BR2_TARGET_ROOTFS_ISO9660_INITRD).
- 
- ROOTFS_ISO9660_BOOT_MENU = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
-+ROOTFS_ISO9660_ADDITIONAL_FILES=$(call qstrip,$(BR2_ROOTFS_ISO9660_ADDITIONAL_FILES))
- 
- ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit linux
- 
-@@ -143,4 +144,15 @@ endef
- ROOTFS_ISO9660_POST_GEN_HOOKS += ROOTFS_ISO9660_GEN_HYBRID
- endif
- 
-+define ROOTFS_ISO9660_ADD_ADDITIONAL_FILES
-+	for i in $(ROOTFS_ISO9660_ADDITIONAL_FILES); do
-+		$(INSTALL) -D -m 0755 $${i} \
-+			$(ROOTFS_ISO9660_TMP_TARGET_DIR)/
-+	done
-+endef
-+
-+ifneq ($(ROOTFS_ISO9660_ADDITIONAL_FILES),)
-+ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_ADD_ADDITIONAL_FILES
-+endif
-+
- $(eval $(rootfs))
+You're right, I've done a mistake, I've substituted clapack with lapack.
+So need to send a v3 with this corrected.
+
+The problem was due to cohexistence of lapack and clapack, but they are 
+both(like openblas) accelerators that can exist once(I mean or lapack, 
+or clapack).
+Here I was asking about inserting a menu to choose which accelerator to use:
+http://lists.busybox.net/pipermail/buildroot/2019-May/250273.html
+
+Can you take a look and answer with your opinion?
+
+> In order to better understand the problem. Without this patch:
+> 
+>   - Does python-numpy builds fine when neither clapack nor lapack are
+>     enabled ?
+
+Yes it does(it works without accelerators).
+
+>   - Does python-numpy builds fine when clapack is enabled, but not
+>     lapack ?
+
+Yes
+
+>   - What happens when both clapack and lapack are enabled ?
+
+Python-numpy will choose the accelerator according to this list:
+https://www.numpy.org/devdocs/user/building.html#accelerated-blas-lapack-libraries
+
+> Also, perhaps we need:
+> 
+> 	select BR2_PACKAGE_LAPACK_COMPLEX if BR2_PACKAGE_LAPACK
+> 
+> in the Config.in file, so that it's a bit easier for users: they don't
+> have to know they need that specific sub-option of lapack.
+
+If lapack selected yes, but that should come after adding a choice menu 
+IMHO.
+
+Kind regards
 -- 
-2.20.1
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
