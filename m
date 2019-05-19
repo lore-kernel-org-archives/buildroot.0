@@ -1,99 +1,69 @@
-From: Michael Walle <michael@walle.cc>
-Date: Sun, 19 May 2019 21:16:35 +0200
-Subject: [Buildroot] [PATCH] boot/uboot: add initial environment support
-Message-ID: <20190519191635.23814-1-michael@walle.cc>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sun, 19 May 2019 22:08:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: bump to version
+ 20190517
+Message-ID: <20190519200852.26710-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since v2019.07 U-Boot supports extracting the compiled-in environment.
-As a first step, add support to the environment generation in buildroot.
-In the future, the text file may also be injected into the target
-filesystem.
+Also remove workaround deleting testcases/kernel/controllers/cpuset/.
+Upstream commit b24f3d32c ("cpuset: Detect missing fts.h") detect fts.h
+presence, thus it's working with '#undef __UCLIBC_HAS_FTS__'.
 
-Signed-off-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
+Tested locally (uClibc) and with test-pkg.
 
-Future u-boot versions will support this. Getting support into buildroot as
-soon as possible would be cool.
+./utils/test-pkg -p ltp-testsuite 
+                             br-arm-full [1/6]: OK
+                  br-arm-cortex-a9-glibc [2/6]: OK
+                   br-arm-cortex-m4-full [3/6]: SKIPPED
+                          br-x86-64-musl [4/6]: SKIPPED
+                      br-arm-full-static [5/6]: OK
+                            sourcery-arm [6/6]: OK
+6 builds, 2 skipped, 0 build failed, 0 legal-info failed
 
- boot/uboot/Config.in | 13 +++++++++++++
- boot/uboot/uboot.mk  | 17 ++++++++++++++++-
- 2 files changed, 29 insertions(+), 1 deletion(-)
+NOTE: MUSL build is work-in-progress, maybe next release.
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 33b7e67ff7..92f00bf752 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -488,7 +488,19 @@ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
- 	  The environment image will be called uboot-env.bin.
+Kind regards,
+Petr
+---
+ package/ltp-testsuite/ltp-testsuite.hash | 4 ++--
+ package/ltp-testsuite/ltp-testsuite.mk   | 3 +--
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/package/ltp-testsuite/ltp-testsuite.hash b/package/ltp-testsuite/ltp-testsuite.hash
+index ba0dcbe7e8..01111a8a30 100644
+--- a/package/ltp-testsuite/ltp-testsuite.hash
++++ b/package/ltp-testsuite/ltp-testsuite.hash
+@@ -1,2 +1,2 @@
+-# From: https://github.com/linux-test-project/ltp/releases/download/20190115/ltp-full-20190115.tar.xz.sha1
+-sha1 d87e2f96dc628f927e98ecba2e9dae581fc115b4  ltp-full-20190115.tar.xz
++# From: https://github.com/linux-test-project/ltp/releases/download/20190517/ltp-full-20190517.tar.xz.sha1
++sha1 464d09ee1d3b43eecd0d78a9818596e6e1f2234e  ltp-full-20190517.tar.xz
+diff --git a/package/ltp-testsuite/ltp-testsuite.mk b/package/ltp-testsuite/ltp-testsuite.mk
+index ebc386d0cf..173c3bfe8c 100644
+--- a/package/ltp-testsuite/ltp-testsuite.mk
++++ b/package/ltp-testsuite/ltp-testsuite.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- if BR2_TARGET_UBOOT_ENVIMAGE
-+choice
-+	prompt "Environment image source"
-+	default BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM
-+
-+config BR2_TARGET_UBOOT_ENVIMAGE_INITIAL
-+	bool "Using the initial environment file"
-+
-+config BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM
-+	bool "Using a custom environment file"
-+
-+endchoice
- 
-+if BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM
- config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
- 	string "Source files for environment"
- 	help
-@@ -497,6 +509,7 @@ config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
- 	  lines starting with a # are ignored.
- 
- 	  Multiple source files are concatenated in the order listed.
-+endif # BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM
- 
- config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
- 	string "Size of environment"
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index ae09c37d84..2ecf74036e 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -271,9 +271,22 @@ define UBOOT_BUILD_OMAP_IFT
+-LTP_TESTSUITE_VERSION = 20190115
++LTP_TESTSUITE_VERSION = 20190517
+ LTP_TESTSUITE_SOURCE = ltp-full-$(LTP_TESTSUITE_VERSION).tar.xz
+ LTP_TESTSUITE_SITE = https://github.com/linux-test-project/ltp/releases/download/$(LTP_TESTSUITE_VERSION)
+ LTP_TESTSUITE_LICENSE = GPL-2.0, GPL-2.0+
+@@ -60,7 +60,6 @@ LTP_TESTSUITE_CONF_ENV += \
+ # Requires uClibc fts and bessel support, normally not enabled
+ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ define LTP_TESTSUITE_REMOVE_UNSUPPORTED
+-	rm -rf $(@D)/testcases/kernel/controllers/cpuset/
+ 	rm -rf $(@D)/testcases/misc/math/float/bessel/
+ 	rm -f $(@D)/testcases/misc/math/float/float_bessel.c
  endef
- 
- ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
--define UBOOT_GENERATE_ENV_IMAGE
-+ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM),y)
-+define UBOOT_CREATE_ENV_SOURCE
- 	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
- 		>$(@D)/buildroot-env.txt
-+endef
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE_INITIAL),y)
-+UBOOT_MAKE_TARGET += u-boot-initial-env
-+define UBOOT_CREATE_ENV_SOURCE
-+	cp -dpf $(@D)/u-boot-initial-env $(@D)/buildroot-env.txt
-+endef
-+endif
-+
-+define UBOOT_GENERATE_ENV_IMAGE
-+	$(UBOOT_CREATE_ENV_SOURCE)
- 	$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
- 		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
- 		$(if $(filter "BIG",$(BR2_ENDIAN)),-b) \
-@@ -385,9 +398,11 @@ endef
- 
- ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
- ifeq ($(BR_BUILDING),y)
-+ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM),y)
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
- $(error Please define a source file for Uboot environment (BR2_TARGET_UBOOT_ENVIMAGE_SOURCE setting))
- endif
-+endif
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SIZE)),)
- $(error Please provide Uboot environment size (BR2_TARGET_UBOOT_ENVIMAGE_SIZE setting))
- endif
 -- 
-2.11.0
+2.21.0
