@@ -1,82 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 May 2019 11:41:25 +0200
-Subject: [Buildroot] [PATCH v1] utils/check-package: warn about utf-8
- characters in .mk files
-In-Reply-To: <20190508173427.8612-1-ps.report@gmx.net>
-References: <20190508173427.8612-1-ps.report@gmx.net>
-Message-ID: <20190519094125.GC4569@scaer>
+From: Alexey Lukyanchuk <skif@skif-web.ru>
+Date: Sun, 19 May 2019 14:35:26 +0300
+Subject: [Buildroot] [PATCH 1/1] boot/grub2: memdisk option
+Message-ID: <20190519113526.25633-1-skif@skif-web.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Allows to create grub2 memdisk from specified directory
 
-On 2019-05-08 19:34 +0200, Peter Seiderer spake thusly:
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> ---
-> Note: is_ascii taken from one of the stackoverflow suggestions ([1])
-> 
-> [1] https://stackoverflow.com/questions/196345/how-to-check-if-a-string-in-python-is-in-ascii
-> ---
->  utils/checkpackagelib/lib.py    | 13 +++++++++++++
->  utils/checkpackagelib/lib_mk.py |  1 +
->  2 files changed, 14 insertions(+)
-> 
-> diff --git a/utils/checkpackagelib/lib.py b/utils/checkpackagelib/lib.py
-> index 6afe1aabce..c65a2ed939 100644
-> --- a/utils/checkpackagelib/lib.py
-> +++ b/utils/checkpackagelib/lib.py
-> @@ -52,3 +52,16 @@ class TrailingSpace(_CheckFunction):
->              return ["{}:{}: line contains trailing whitespace"
->                      .format(self.filename, lineno),
->                      text]
-> +
-> +class Utf8Characters(_CheckFunction):
+Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
+---
+ boot/grub2/Config.in |  5 +++++
+ boot/grub2/grub2.mk  | 14 ++++++++++++++
+ 2 files changed, 19 insertions(+)
 
-This breaks flake8:
-
-    utils/checkpackagelib/lib.py:56:1: E302 expected 2 blank lines, found 1
-
-Regards,
-Yann E. MORIN.
-
-> +    def is_ascii(self, s):
-> +        try:
-> +            return all(ord(c) < 128 for c in s)
-> +        except TypeError:
-> +            return False
-> +
-> +    def check_line(self, lineno, text):
-> +        if not self.is_ascii(text):
-> +            return ["{}:{}: line contains UTF-8 characters"
-> +                    .format(self.filename, lineno),
-> +                    text]
-> diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-> index 00efeb7fb2..9e9a045776 100644
-> --- a/utils/checkpackagelib/lib_mk.py
-> +++ b/utils/checkpackagelib/lib_mk.py
-> @@ -11,6 +11,7 @@ from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
->  from checkpackagelib.lib import EmptyLastLine          # noqa: F401
->  from checkpackagelib.lib import NewlineAtEof           # noqa: F401
->  from checkpackagelib.lib import TrailingSpace          # noqa: F401
-> +from checkpackagelib.lib import Utf8Characters         # noqa: F401
-> 
->  # used in more than one check
->  start_conditional = ["ifdef", "ifeq", "ifndef", "ifneq"]
-> --
-> 2.21.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
+index e45133999e..15c2db1a06 100644
+--- a/boot/grub2/Config.in
++++ b/boot/grub2/Config.in
+@@ -116,6 +116,11 @@ config BR2_TARGET_GRUB2_INSTALL_TOOLS
+ 	  This will also install the Grub 2 loadable modules to the
+ 	  target.
+ 
++config BR2_ROOTFS_ISO9660_ADDITIONAL_FILES
++	string "Add additional files to iso"
++	help
++	  Use this option to add any additional files to iso
++
+ endif # BR2_TARGET_GRUB2
+ 
+ comment "grub2 needs a toolchain w/ wchar"
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 65371f0170..04166ddec9 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -114,6 +114,19 @@ define GRUB2_IMAGE_INSTALL_ELTORITO
+ endef
+ endif
+ 
++ifneq ($(BR2_TARGET_GRUB2_MEMDISK_DIR),)
++GRUB2_POST_BUILD_HOOKS += GRUB2_MAKE_MEMDISK
++define GRUB2_MAKE_MEMDISK
++	# clean artefacs from previos build
++	rm -rf $(HOST_DIR)/grub2_memdisk
++	# clean artefacs from previos build
++	rm -rf $(HOST_DIR)/memdisk.tar
++	mkdir -p $(HOST_DIR)/grub2_memdisk
++	cp -r $(BR2_TARGET_GRUB2_MEMDISK_DIR)/* $(HOST_DIR)/grub2_memdisk/
++	tar -cvf $(HOST_DIR)/memdisk.tar -C $(HOST_DIR)/grub2_memdisk/ .
++endef
++endif
++
+ define GRUB2_INSTALL_IMAGES_CMDS
+ 	mkdir -p $(dir $(GRUB2_IMAGE))
+ 	$(HOST_DIR)/usr/bin/grub-mkimage \
+@@ -121,6 +134,7 @@ define GRUB2_INSTALL_IMAGES_CMDS
+ 		-O $(GRUB2_TUPLE) \
+ 		-o $(GRUB2_IMAGE) \
+ 		-p "$(GRUB2_PREFIX)" \
++		$(if $(BR2_TARGET_GRUB2_MEMDISK_DIR),-m $(HOST_DIR)/memdisk.tar) \
+ 		$(if $(GRUB2_BUILTIN_CONFIG),-c $(GRUB2_BUILTIN_CONFIG)) \
+ 		$(GRUB2_BUILTIN_MODULES)
+ 	mkdir -p $(dir $(GRUB2_CFG))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
