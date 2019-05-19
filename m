@@ -1,65 +1,77 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 May 2019 11:17:07 +0200
-Subject: [Buildroot] [PATCH v2 1/1] linux: xenomai: allow URL for the
- ADEOS/IPIPE patch
-In-Reply-To: <20190518220632.312f98da@windsurf>
-References: <20190517125049.15774-1-sebastien.szymanski@armadeus.com>
- <20190518220632.312f98da@windsurf>
-Message-ID: <20190519091707.GB4569@scaer>
+Date: Sun, 19 May 2019 11:41:25 +0200
+Subject: [Buildroot] [PATCH v1] utils/check-package: warn about utf-8
+ characters in .mk files
+In-Reply-To: <20190508173427.8612-1-ps.report@gmx.net>
+References: <20190508173427.8612-1-ps.report@gmx.net>
+Message-ID: <20190519094125.GC4569@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, S?bastien, All,
+Peter, All,
 
-On 2019-05-18 22:06 +0200, Thomas Petazzoni spake thusly:
-> On Fri, 17 May 2019 14:50:49 +0200
-> S?bastien Szymanski <sebastien.szymanski@armadeus.com> wrote:
-> > diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
-> > index d066bb32ac..ed29943e6c 100644
-> > --- a/linux/linux-ext-xenomai.mk
-> > +++ b/linux/linux-ext-xenomai.mk
-> > @@ -8,10 +8,20 @@ LINUX_EXTENSIONS += xenomai
-> >  
-> >  # Adeos patch version
-> >  XENOMAI_ADEOS_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH))
-> > +
-> > +ifneq ($(filter ftp://% http://% https://%, $(XENOMAI_ADEOS_PATCH)),)
-> > +XENOMAI_ADEOS_PATCH_NAME = $(notdir $(XENOMAI_ADEOS_PATCH))
-> > +XENOMAI_ADEOS_PATCH_PATH = $(LINUX_DL_DIR)/$(XENOMAI_ADEOS_PATCH_NAME)
-> > +LINUX_EXTRA_DOWNLOADS += $(XENOMAI_ADEOS_PATCH)
-> > +BR_NO_CHECK_HASH_FOR += $(XENOMAI_ADEOS_PATCH_NAME)
-> > +else
-> > +XENOMAI_ADEOS_PATCH_PATH = $(subst file://,,$(XENOMAI_ADEOS_PATCH))
+On 2019-05-08 19:34 +0200, Peter Seiderer spake thusly:
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+> Note: is_ascii taken from one of the stackoverflow suggestions ([1])
 > 
-> I don't feel super strongly about this, but everywhere else in
-> Buildroot when paths are specified through configuration options, we do
-> not support having a file:// URI. For example the
-> BR2_LINUX_KERNEL_PATCH option will support file paths only without
-> file://.
+> [1] https://stackoverflow.com/questions/196345/how-to-check-if-a-string-in-python-is-in-ascii
+> ---
+>  utils/checkpackagelib/lib.py    | 13 +++++++++++++
+>  utils/checkpackagelib/lib_mk.py |  1 +
+>  2 files changed, 14 insertions(+)
 > 
-> So for consistency, I would do the same here, and therefore just do:
-> 
-> XENOMAI_ADEOS_PATCH_PATH = $(XENOMAI_ADEOS_PATCH)
-> 
-> Yann, what do you think ?
+> diff --git a/utils/checkpackagelib/lib.py b/utils/checkpackagelib/lib.py
+> index 6afe1aabce..c65a2ed939 100644
+> --- a/utils/checkpackagelib/lib.py
+> +++ b/utils/checkpackagelib/lib.py
+> @@ -52,3 +52,16 @@ class TrailingSpace(_CheckFunction):
+>              return ["{}:{}: line contains trailing whitespace"
+>                      .format(self.filename, lineno),
+>                      text]
+> +
+> +class Utf8Characters(_CheckFunction):
 
-Indeed, I don't see the point in the file:// scheme. I don't even see
-people really using it routinely.
+This breaks flake8:
 
-But as far as I can see, the above, although wrong, does not require
-that the file:// prefix be used. If it is there, it is scrubbed;
-otherwise the filename is used as-is.
-
-And it is wrong, because it should only remove it at the beginning.
-$(subst ...) would remove it anywhere. So if we were to use it (and I
-think we should not), we'd have to use $(patsubst ...) instead;
-    XENOMAI_ADEOS_PATCH_PATH = $(patsubst file://%,%,$(XENOMAI_ADEOS_PATCH))
+    utils/checkpackagelib/lib.py:56:1: E302 expected 2 blank lines, found 1
 
 Regards,
 Yann E. MORIN.
+
+> +    def is_ascii(self, s):
+> +        try:
+> +            return all(ord(c) < 128 for c in s)
+> +        except TypeError:
+> +            return False
+> +
+> +    def check_line(self, lineno, text):
+> +        if not self.is_ascii(text):
+> +            return ["{}:{}: line contains UTF-8 characters"
+> +                    .format(self.filename, lineno),
+> +                    text]
+> diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
+> index 00efeb7fb2..9e9a045776 100644
+> --- a/utils/checkpackagelib/lib_mk.py
+> +++ b/utils/checkpackagelib/lib_mk.py
+> @@ -11,6 +11,7 @@ from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
+>  from checkpackagelib.lib import EmptyLastLine          # noqa: F401
+>  from checkpackagelib.lib import NewlineAtEof           # noqa: F401
+>  from checkpackagelib.lib import TrailingSpace          # noqa: F401
+> +from checkpackagelib.lib import Utf8Characters         # noqa: F401
+> 
+>  # used in more than one check
+>  start_conditional = ["ifdef", "ifeq", "ifndef", "ifneq"]
+> --
+> 2.21.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
