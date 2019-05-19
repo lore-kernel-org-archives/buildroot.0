@@ -1,58 +1,69 @@
-From: michal.lyszczek at bofc.pl <michal.lyszczek@bofc.pl>
-Date: Sun, 19 May 2019 10:32:27 +0200
-Subject: [Buildroot] [PATCH v2 06/13] package/skeleton-init-openrc: add
- support to remount rootfs as rw
-In-Reply-To: <20190518232240.4f92819f@windsurf>
-References: <20190512195550.24457-1-michal.lyszczek@bofc.pl>
- <20190512195550.24457-6-michal.lyszczek@bofc.pl>
- <20190518232240.4f92819f@windsurf>
-Message-ID: <20190519083227.5ixpwxbnv7hhmp4w@c-ml-p3510.redembedded.pl>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 19 May 2019 11:08:53 +0200
+Subject: [Buildroot] [PATCH v1 1/5] board/armadeus: replace utf-8
+ graphic sympols by ascii characters
+In-Reply-To: <20190518233634.432e4b00@windsurf>
+References: <20190508172822.7929-1-ps.report@gmx.net>
+ <20190518233634.432e4b00@windsurf>
+Message-ID: <20190519090853.GA4569@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas
-On 2019-05-18 23:22:40, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Sun, 12 May 2019 21:55:43 +0200
-> Micha? ?yszczek <michal.lyszczek@bofc.pl> wrote:
-> 
-> > diff --git a/package/skeleton-init-openrc/skeleton-init-sysv.mk b/package/skeleton-init-openrc/skeleton-init-sysv.mk
-> > index 5ee2192093..bbe80071ae 100644
-> > --- a/package/skeleton-init-openrc/skeleton-init-sysv.mk
-> > +++ b/package/skeleton-init-openrc/skeleton-init-sysv.mk
-> > @@ -15,8 +15,23 @@ SKELETON_INIT_OPENRC_DEPENDENCIES = skeleton-init-common
-> >  
-> >  SKELETON_INIT_OPENRC_PROVIDES = skeleton
-> >  
-> > +ifeq ($(BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW),y)
-> > +# Comment /dev/root entry in fstab. When openrc does not find fstab entry for
-> > +# "/", it will try to remount "/" as "rw".
-> > +define SKELETON_INIT_OPENRC_ROOT_RO_OR_RW
-> > +	$(SED) '/^ *\/dev\/root.*$$/s~^~#~' $(TARGET_DIR)/etc/fstab
-> > +endef
-> > +else
-> > +# Uncomment /dev/root entry in fstab which has "ro" option so openrc notices
-> > +# it and doesn't remount root to rw.
-> > +define SKELETON_INIT_OPENRC_ROOT_RO_OR_RW
-> > +	$(SED) '/^# *\/dev\/root.*$$/s~^#\+~~' $(TARGET_DIR)/etc/fstab
-> > +endef
-> > +endif # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
-> 
-> Why are you handling the ro/rw rootfs topic from skeleton-init-sysv.mk,
-> but the getty topic is handled from openrc.mk (in PATCH 04/13). It
-> doesn't seem very consistent.
+Peter, Thomas, Peter, All,
 
-I just followed already established rules here (based on systemd package).
-BR2_TARGET_GENERIC_GETTY is in systemd.mk, and
-BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is in skeleton-init-systemd.mk
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 488 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190519/c8b8a8b6/attachment.asc>
+On 2019-05-18 23:36 +0200, Thomas Petazzoni spake thusly:
+> On Wed,  8 May 2019 19:28:18 +0200
+> Peter Seiderer <ps.report@gmx.net> wrote:
+> 
+> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > ---
+> >  board/armadeus/readme.txt | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> Series applied to master. Thanks!
+
+Sorry, but I still fail to see why we want to remove non-ascii chars,
+especially in docs and the likes. The commit logs for these patches fail
+to explain the problem they fix, if there is even a problem.
+
+This whole "no UTF-8 chars patches" are totally nonsense nowadays. If
+your system still can't display them properly, upgrade and get a decent
+font.
+
+Now, if I need to add a comment like:
+
+    # As explained by Fr?d?ric in [0], blurb da dee woops blabla...
+
+then, check-package whines. While "Fr?d?ric" can be easily asciified to
+Frederic, this is not nice and there are a lot of names that can't be
+easily asciified, like ??? or anyone whose language is not using a
+latin script.
+
+I agree that the unicode NO-BREAK-SPACE (U+00A0, UTF-8 C2A0) is nasty,
+and should be replaced, but otherwise it feels like we're going
+something like 30 years back in time...
+
+BTW, a good editor can be made to report such "trolling" chars. For
+example, there is a plugin for vim that can highlight such chars, like
+NO-BREAK-SPACE "?" (U+00A0) which is highlighted red for me here:
+    https://github.com/vim-utils/vim-troll-stopper
+And for emacs (untested, I don't use emacs):
+    https://www.emacswiki.org/emacs/highlight-chars.el
+
+Regards,
+Yann E. MORIN.
+
+PS. Yes, I was the first one to report and fix U+00A0 (C2 A0) in
+    5d436ac5a6 and 911ac036e0, but those were fixing real problems.
+YEM.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
