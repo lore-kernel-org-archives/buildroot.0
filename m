@@ -1,9 +1,9 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 May 2019 19:00:21 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/grub2: memdisk option
-In-Reply-To: <20190519113526.25633-1-skif@skif-web.ru>
-References: <20190519113526.25633-1-skif@skif-web.ru>
-Message-ID: <20190519170021.GA5097@scaer>
+Date: Sun, 19 May 2019 19:05:53 +0200
+Subject: [Buildroot] [PATCH 2/2] fs/iso9660: add specified files to image
+In-Reply-To: <20190519113648.31566-1-skif@skif-web.ru>
+References: <20190519113648.31566-1-skif@skif-web.ru>
+Message-ID: <20190519170553.GB5097@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,97 +12,82 @@ To: buildroot@busybox.net
 
 Alexey, All,
 
-On 2019-05-19 14:35 +0300, Alexey Lukyanchuk spake thusly:
-> Allows to create grub2 memdisk from specified directory
+On 2019-05-19 14:36 +0300, Alexey Lukyanchuk spake thusly:
+> Allows to add any specified files to iso-image
 
-Can you expand a bit on what you're trying to achieve with this?
+Same as for the grub2 patch: what are you trying to achieve with this
+patch?
 
 > Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
 > ---
->  boot/grub2/Config.in |  5 +++++
->  boot/grub2/grub2.mk  | 14 ++++++++++++++
->  2 files changed, 19 insertions(+)
+>  fs/iso9660/Config.in  |  5 +++++
+>  fs/iso9660/iso9660.mk | 12 ++++++++++++
+>  2 files changed, 17 insertions(+)
 > 
-> diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-> index e45133999e..15c2db1a06 100644
-> --- a/boot/grub2/Config.in
-> +++ b/boot/grub2/Config.in
-> @@ -116,6 +116,11 @@ config BR2_TARGET_GRUB2_INSTALL_TOOLS
->  	  This will also install the Grub 2 loadable modules to the
->  	  target.
+> diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+> index 6f001c0640..588fc307a5 100644
+> --- a/fs/iso9660/Config.in
+> +++ b/fs/iso9660/Config.in
+> @@ -81,6 +81,11 @@ config BR2_TARGET_ROOTFS_ISO9660_HYBRID
+>  	  which BIOS considers a hard disk or ZIP disk, e.g. a USB key
+>  	  or similar.
 >  
 > +config BR2_ROOTFS_ISO9660_ADDITIONAL_FILES
 > +	string "Add additional files to iso"
 > +	help
 > +	  Use this option to add any additional files to iso
-
-This patch is about grub2, so the option is incorrectly mnamed, its
-prompt is incorrect, and the help text is incorrect too, as they refer
-to iso, not grub2.
-
->  endif # BR2_TARGET_GRUB2
->  
->  comment "grub2 needs a toolchain w/ wchar"
-> diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-> index 65371f0170..04166ddec9 100644
-> --- a/boot/grub2/grub2.mk
-> +++ b/boot/grub2/grub2.mk
-> @@ -114,6 +114,19 @@ define GRUB2_IMAGE_INSTALL_ELTORITO
->  endef
+> +
 >  endif
 >  
-> +ifneq ($(BR2_TARGET_GRUB2_MEMDISK_DIR),)
-> +GRUB2_POST_BUILD_HOOKS += GRUB2_MAKE_MEMDISK
-> +define GRUB2_MAKE_MEMDISK
-> +	# clean artefacs from previos build
+>  comment "iso image needs a Linux kernel and either grub2 i386-pc or isolinux to be built"
+> diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+> index a129655ce3..809f883be7 100644
+> --- a/fs/iso9660/iso9660.mk
+> +++ b/fs/iso9660/iso9660.mk
+> @@ -23,6 +23,7 @@
+>  #     of BR2_TARGET_ROOTFS_ISO9660_INITRD).
+>  
+>  ROOTFS_ISO9660_BOOT_MENU = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
+> +ROOTFS_ISO9660_ADDITIONAL_FILES=$(call qstrip,$(BR2_ROOTFS_ISO9660_ADDITIONAL_FILES))
 
-s/previos/previous/
+Please keep the coding style consistent, and use spaces around the equal
+sign, like the line just above.
 
-> +	rm -rf $(HOST_DIR)/grub2_memdisk
+>  ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit linux
+>  
+> @@ -143,4 +144,15 @@ endef
+>  ROOTFS_ISO9660_POST_GEN_HOOKS += ROOTFS_ISO9660_GEN_HYBRID
+>  endif
+>  
+> +define ROOTFS_ISO9660_ADD_ADDITIONAL_FILES
+> +	for i in $(ROOTFS_ISO9660_ADDITIONAL_FILES); do
+> +		$(INSTALL) -D -m 0755 $${i} \
+> +			$(ROOTFS_ISO9660_TMP_TARGET_DIR)/
+> +	done
 
-Why did you put that in $(HOST_DIR) ? Why can't you put that in $(@D)
-instead?
+Does this even works? The lines are missing continuation '\', so make
+will try to run three commands:
 
-Note: you may even use $(GRUB2_BUILD_DIR) instead of $(@D), this is more
-future-proof.
+    1. for i in $(ROOTFS_ISO9660_ADDITIONAL_FILES); do
+    2. (INSTALL) -D -m 0755 $${i} $(ROOTFS_ISO9660_TMP_TARGET_DIR)/
+    3. done
 
-> +	# clean artefacs from previos build
+Of course, the first is incomplete, so make will barf on it.
 
-No need to repeat.
+> +endef
+> +
+> +ifneq ($(ROOTFS_ISO9660_ADDITIONAL_FILES),)
+> +ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_ADD_ADDITIONAL_FILES
 
-> +	rm -rf $(HOST_DIR)/memdisk.tar
-
-You can use a single command to remove both the dir and file. Although
-there should be no need to remove the file, as tar will overwrite it
-anyway.
-
-> +	mkdir -p $(HOST_DIR)/grub2_memdisk
-> +	cp -r $(BR2_TARGET_GRUB2_MEMDISK_DIR)/* $(HOST_DIR)/grub2_memdisk/
-
-cp -r does not preserve all attributes of files, so you should use cp -a
-instead.
-
-But before you fix and respin, please explain what you are trying to
-achieve eith this patch (and the next one too).
+Kepp the hook definition and assignment in the conditional block, like
+is done for ROOTFS_ISO9660_GEN_HYBRID, just above.
 
 Regards,
 Yann E. MORIN.
 
-> +	tar -cvf $(HOST_DIR)/memdisk.tar -C $(HOST_DIR)/grub2_memdisk/ .
-> +endef
 > +endif
 > +
->  define GRUB2_INSTALL_IMAGES_CMDS
->  	mkdir -p $(dir $(GRUB2_IMAGE))
->  	$(HOST_DIR)/usr/bin/grub-mkimage \
-> @@ -121,6 +134,7 @@ define GRUB2_INSTALL_IMAGES_CMDS
->  		-O $(GRUB2_TUPLE) \
->  		-o $(GRUB2_IMAGE) \
->  		-p "$(GRUB2_PREFIX)" \
-> +		$(if $(BR2_TARGET_GRUB2_MEMDISK_DIR),-m $(HOST_DIR)/memdisk.tar) \
->  		$(if $(GRUB2_BUILTIN_CONFIG),-c $(GRUB2_BUILTIN_CONFIG)) \
->  		$(GRUB2_BUILTIN_MODULES)
->  	mkdir -p $(dir $(GRUB2_CFG))
+>  $(eval $(rootfs))
 > -- 
 > 2.20.1
 > 
