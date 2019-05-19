@@ -1,35 +1,41 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Sun, 19 May 2019 23:08:54 +0300
-Subject: [Buildroot] [PATCH 1/1] package/suricata: fix static build with pcap
-Message-ID: <20190519200854.8933-1-vadim4j@gmail.com>
+From: Paulo Serra Filho <ptvsf@cesar.org.br>
+Date: Sun, 19 May 2019 17:05:05 -0300
+Subject: [Buildroot] [PATCH 1/1] package/genimage: bump to version 11
+Message-ID: <1558296305-18316-1-git-send-email-ptvsf@cesar.org.br>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Build of suricata fails with BR2_STATIC_LIBS=y because pcap
-requires libnl which can't be found, so use pkg-config to obtain
-libpcap dependencies.
+Add GPT support and new options for partitions and images creation.
 
-Fixes:
-	http://autobuild.buildroot.net/results/b5fdf31db6897a9612a0badc7c4bd3e54f031308/
-
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Paulo Serra Filho <ptvsf@cesar.org.br>
 ---
- package/suricata/suricata.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/genimage/genimage.hash | 2 +-
+ package/genimage/genimage.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-index e5884cdfe4..503d76e6a8 100644
---- a/package/suricata/suricata.mk
-+++ b/package/suricata/suricata.mk
-@@ -123,4 +123,6 @@ define SURICATA_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/suricata.service
- endef
+diff --git a/package/genimage/genimage.hash b/package/genimage/genimage.hash
+index 095eb14..dedb32b 100644
+--- a/package/genimage/genimage.hash
++++ b/package/genimage/genimage.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	5a36b2c1387007c2d6535a722ee257a387d0913bddcf8a94d460e6acd4d01859	genimage-10.tar.xz
++sha256	2ee024bfb2ec157651b86f3365d138ee013dcc48277d86e1eed6f3285a67b532	genimage-11.tar.xz
+diff --git a/package/genimage/genimage.mk b/package/genimage/genimage.mk
+index 393c3e9..5ef7d30 100644
+--- a/package/genimage/genimage.mk
++++ b/package/genimage/genimage.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+SURICATA_CONF_OPTS += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libpcap`"
-+
- $(eval $(autotools-package))
+-GENIMAGE_VERSION = 10
++GENIMAGE_VERSION = 11
+ GENIMAGE_SOURCE = genimage-$(GENIMAGE_VERSION).tar.xz
+ GENIMAGE_SITE = https://github.com/pengutronix/genimage/releases/download/v$(GENIMAGE_VERSION)
+ HOST_GENIMAGE_DEPENDENCIES = host-pkgconf host-libconfuse
 -- 
-2.21.0
+2.7.4
