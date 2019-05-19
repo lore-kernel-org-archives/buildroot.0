@@ -1,41 +1,73 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Sun, 19 May 2019 23:49:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/connman: bump to version 1.37
-Message-ID: <20190519214928.14338-1-petr.vorel@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 20 May 2019 00:17:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vdr-plugin-vnsiserver: fix
+ build with host-gettext-tiny
+In-Reply-To: <20190402203237.14733-1-fontaine.fabrice@gmail.com>
+References: <20190402203237.14733-1-fontaine.fabrice@gmail.com>
+Message-ID: <95fe55bc-019b-2ea2-1c07-365ffe2898d3@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/connman/connman.hash | 2 +-
- package/connman/connman.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index fad1c55d2d..ff5b4d48f0 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256 c789db41cc443fa41e661217ea321492ad59a004bebcd1aa013f3bc10a6e0074  connman-1.36.tar.xz
-+sha256 6ce29b3eb0bb16a7387bc609c39455fd13064bdcde5a4d185fab3a0c71946e16  connman-1.37.tar.xz
- # Locally computed
- sha256 b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index b67d1c4b86..839bc7a0e2 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONNMAN_VERSION = 1.36
-+CONNMAN_VERSION = 1.37
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+Il 02/04/2019 22:32, Fabrice Fontaine ha scritto:
+> Don't build and intall i18n if BR2_SYSTEM_ENABLE_NLS is not set
+> otherwise build will fail with host-gettext-tiny on:
+> 
+> msgmerge -U --no-wrap --no-location --backup=none -q -N po/lt_LT.po po/vnsiserver.pot
+> fopen: No such file or directory
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/0c230e49b6e9bf27163f751e6912ee85c6eb62e3
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Reviewed-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+
+> ---
+>   package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk | 9 +++++++--
+>   1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
+> index f41ad701d3..7475edead3 100644
+> --- a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
+> +++ b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
+> @@ -12,6 +12,11 @@ VDR_PLUGIN_VNSISERVER_DEPENDENCIES = vdr
+>   
+>   VDR_PLUGIN_VNSISERVER_CXXFLAGS = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11 -fPIC"
+>   
+> +VDR_PLUGIN_VNSISERVER_INSTALL_TARGETS = install-lib
+> +ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+> +VDR_PLUGIN_VNSISERVER_INSTALL_TARGETS += install-i18n
+> +endif
+> +
+>   define VDR_PLUGIN_VNSISERVER_BUILD_CMDS
+>   	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+>   		$(VDR_PLUGIN_VNSISERVER_CXXFLAGS)
+> @@ -19,8 +24,8 @@ endef
+>   
+>   define VDR_PLUGIN_VNSISERVER_INSTALL_TARGET_CMDS
+>   	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
+> -		install DESTDIR=$(TARGET_DIR) LIBDIR=/usr/lib/vdr \
+> -		LOCDIR=/usr/share/locale
+> +		$(VDR_PLUGIN_VNSISERVER_INSTALL_TARGETS) DESTDIR=$(TARGET_DIR) \
+> +		LIBDIR=/usr/lib/vdr LOCDIR=/usr/share/locale
+>   endef
+>   
+>   $(eval $(generic-package))
+> 
+
 -- 
-2.21.0
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
