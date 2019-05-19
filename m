@@ -1,68 +1,64 @@
 From: Alexey Lukyanchuk <skif@skif-web.ru>
-Date: Sun, 19 May 2019 14:35:26 +0300
-Subject: [Buildroot] [PATCH 1/1] boot/grub2: memdisk option
-Message-ID: <20190519113526.25633-1-skif@skif-web.ru>
+Date: Sun, 19 May 2019 14:36:48 +0300
+Subject: [Buildroot] [PATCH 2/2] fs/iso9660: add specified files to image
+Message-ID: <20190519113648.31566-1-skif@skif-web.ru>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allows to create grub2 memdisk from specified directory
+Allows to add any specified files to iso-image
 
 Signed-off-by: Alexey Lukyanchuk <skif@skif-web.ru>
 ---
- boot/grub2/Config.in |  5 +++++
- boot/grub2/grub2.mk  | 14 ++++++++++++++
- 2 files changed, 19 insertions(+)
+ fs/iso9660/Config.in  |  5 +++++
+ fs/iso9660/iso9660.mk | 12 ++++++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/boot/grub2/Config.in b/boot/grub2/Config.in
-index e45133999e..15c2db1a06 100644
---- a/boot/grub2/Config.in
-+++ b/boot/grub2/Config.in
-@@ -116,6 +116,11 @@ config BR2_TARGET_GRUB2_INSTALL_TOOLS
- 	  This will also install the Grub 2 loadable modules to the
- 	  target.
+diff --git a/fs/iso9660/Config.in b/fs/iso9660/Config.in
+index 6f001c0640..588fc307a5 100644
+--- a/fs/iso9660/Config.in
++++ b/fs/iso9660/Config.in
+@@ -81,6 +81,11 @@ config BR2_TARGET_ROOTFS_ISO9660_HYBRID
+ 	  which BIOS considers a hard disk or ZIP disk, e.g. a USB key
+ 	  or similar.
  
 +config BR2_ROOTFS_ISO9660_ADDITIONAL_FILES
 +	string "Add additional files to iso"
 +	help
 +	  Use this option to add any additional files to iso
 +
- endif # BR2_TARGET_GRUB2
- 
- comment "grub2 needs a toolchain w/ wchar"
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index 65371f0170..04166ddec9 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -114,6 +114,19 @@ define GRUB2_IMAGE_INSTALL_ELTORITO
- endef
  endif
  
-+ifneq ($(BR2_TARGET_GRUB2_MEMDISK_DIR),)
-+GRUB2_POST_BUILD_HOOKS += GRUB2_MAKE_MEMDISK
-+define GRUB2_MAKE_MEMDISK
-+	# clean artefacs from previos build
-+	rm -rf $(HOST_DIR)/grub2_memdisk
-+	# clean artefacs from previos build
-+	rm -rf $(HOST_DIR)/memdisk.tar
-+	mkdir -p $(HOST_DIR)/grub2_memdisk
-+	cp -r $(BR2_TARGET_GRUB2_MEMDISK_DIR)/* $(HOST_DIR)/grub2_memdisk/
-+	tar -cvf $(HOST_DIR)/memdisk.tar -C $(HOST_DIR)/grub2_memdisk/ .
+ comment "iso image needs a Linux kernel and either grub2 i386-pc or isolinux to be built"
+diff --git a/fs/iso9660/iso9660.mk b/fs/iso9660/iso9660.mk
+index a129655ce3..809f883be7 100644
+--- a/fs/iso9660/iso9660.mk
++++ b/fs/iso9660/iso9660.mk
+@@ -23,6 +23,7 @@
+ #     of BR2_TARGET_ROOTFS_ISO9660_INITRD).
+ 
+ ROOTFS_ISO9660_BOOT_MENU = $(call qstrip,$(BR2_TARGET_ROOTFS_ISO9660_BOOT_MENU))
++ROOTFS_ISO9660_ADDITIONAL_FILES=$(call qstrip,$(BR2_ROOTFS_ISO9660_ADDITIONAL_FILES))
+ 
+ ROOTFS_ISO9660_DEPENDENCIES = host-cdrkit linux
+ 
+@@ -143,4 +144,15 @@ endef
+ ROOTFS_ISO9660_POST_GEN_HOOKS += ROOTFS_ISO9660_GEN_HYBRID
+ endif
+ 
++define ROOTFS_ISO9660_ADD_ADDITIONAL_FILES
++	for i in $(ROOTFS_ISO9660_ADDITIONAL_FILES); do
++		$(INSTALL) -D -m 0755 $${i} \
++			$(ROOTFS_ISO9660_TMP_TARGET_DIR)/
++	done
 +endef
++
++ifneq ($(ROOTFS_ISO9660_ADDITIONAL_FILES),)
++ROOTFS_ISO9660_PRE_GEN_HOOKS += ROOTFS_ISO9660_ADD_ADDITIONAL_FILES
 +endif
 +
- define GRUB2_INSTALL_IMAGES_CMDS
- 	mkdir -p $(dir $(GRUB2_IMAGE))
- 	$(HOST_DIR)/usr/bin/grub-mkimage \
-@@ -121,6 +134,7 @@ define GRUB2_INSTALL_IMAGES_CMDS
- 		-O $(GRUB2_TUPLE) \
- 		-o $(GRUB2_IMAGE) \
- 		-p "$(GRUB2_PREFIX)" \
-+		$(if $(BR2_TARGET_GRUB2_MEMDISK_DIR),-m $(HOST_DIR)/memdisk.tar) \
- 		$(if $(GRUB2_BUILTIN_CONFIG),-c $(GRUB2_BUILTIN_CONFIG)) \
- 		$(GRUB2_BUILTIN_MODULES)
- 	mkdir -p $(dir $(GRUB2_CFG))
+ $(eval $(rootfs))
 -- 
 2.20.1
