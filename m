@@ -1,64 +1,65 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 19 May 2019 11:08:53 +0200
-Subject: [Buildroot] [PATCH v1 1/5] board/armadeus: replace utf-8
- graphic sympols by ascii characters
-In-Reply-To: <20190518233634.432e4b00@windsurf>
-References: <20190508172822.7929-1-ps.report@gmx.net>
- <20190518233634.432e4b00@windsurf>
-Message-ID: <20190519090853.GA4569@scaer>
+Date: Sun, 19 May 2019 11:17:07 +0200
+Subject: [Buildroot] [PATCH v2 1/1] linux: xenomai: allow URL for the
+ ADEOS/IPIPE patch
+In-Reply-To: <20190518220632.312f98da@windsurf>
+References: <20190517125049.15774-1-sebastien.szymanski@armadeus.com>
+ <20190518220632.312f98da@windsurf>
+Message-ID: <20190519091707.GB4569@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, Thomas, Peter, All,
+Thomas, S?bastien, All,
 
-On 2019-05-18 23:36 +0200, Thomas Petazzoni spake thusly:
-> On Wed,  8 May 2019 19:28:18 +0200
-> Peter Seiderer <ps.report@gmx.net> wrote:
+On 2019-05-18 22:06 +0200, Thomas Petazzoni spake thusly:
+> On Fri, 17 May 2019 14:50:49 +0200
+> S?bastien Szymanski <sebastien.szymanski@armadeus.com> wrote:
+> > diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
+> > index d066bb32ac..ed29943e6c 100644
+> > --- a/linux/linux-ext-xenomai.mk
+> > +++ b/linux/linux-ext-xenomai.mk
+> > @@ -8,10 +8,20 @@ LINUX_EXTENSIONS += xenomai
+> >  
+> >  # Adeos patch version
+> >  XENOMAI_ADEOS_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH))
+> > +
+> > +ifneq ($(filter ftp://% http://% https://%, $(XENOMAI_ADEOS_PATCH)),)
+> > +XENOMAI_ADEOS_PATCH_NAME = $(notdir $(XENOMAI_ADEOS_PATCH))
+> > +XENOMAI_ADEOS_PATCH_PATH = $(LINUX_DL_DIR)/$(XENOMAI_ADEOS_PATCH_NAME)
+> > +LINUX_EXTRA_DOWNLOADS += $(XENOMAI_ADEOS_PATCH)
+> > +BR_NO_CHECK_HASH_FOR += $(XENOMAI_ADEOS_PATCH_NAME)
+> > +else
+> > +XENOMAI_ADEOS_PATCH_PATH = $(subst file://,,$(XENOMAI_ADEOS_PATCH))
 > 
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> >  board/armadeus/readme.txt | 10 +++++-----
-> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> I don't feel super strongly about this, but everywhere else in
+> Buildroot when paths are specified through configuration options, we do
+> not support having a file:// URI. For example the
+> BR2_LINUX_KERNEL_PATCH option will support file paths only without
+> file://.
 > 
-> Series applied to master. Thanks!
+> So for consistency, I would do the same here, and therefore just do:
+> 
+> XENOMAI_ADEOS_PATCH_PATH = $(XENOMAI_ADEOS_PATCH)
+> 
+> Yann, what do you think ?
 
-Sorry, but I still fail to see why we want to remove non-ascii chars,
-especially in docs and the likes. The commit logs for these patches fail
-to explain the problem they fix, if there is even a problem.
+Indeed, I don't see the point in the file:// scheme. I don't even see
+people really using it routinely.
 
-This whole "no UTF-8 chars patches" are totally nonsense nowadays. If
-your system still can't display them properly, upgrade and get a decent
-font.
+But as far as I can see, the above, although wrong, does not require
+that the file:// prefix be used. If it is there, it is scrubbed;
+otherwise the filename is used as-is.
 
-Now, if I need to add a comment like:
-
-    # As explained by Fr?d?ric in [0], blurb da dee woops blabla...
-
-then, check-package whines. While "Fr?d?ric" can be easily asciified to
-Frederic, this is not nice and there are a lot of names that can't be
-easily asciified, like ??? or anyone whose language is not using a
-latin script.
-
-I agree that the unicode NO-BREAK-SPACE (U+00A0, UTF-8 C2A0) is nasty,
-and should be replaced, but otherwise it feels like we're going
-something like 30 years back in time...
-
-BTW, a good editor can be made to report such "trolling" chars. For
-example, there is a plugin for vim that can highlight such chars, like
-NO-BREAK-SPACE "?" (U+00A0) which is highlighted red for me here:
-    https://github.com/vim-utils/vim-troll-stopper
-And for emacs (untested, I don't use emacs):
-    https://www.emacswiki.org/emacs/highlight-chars.el
+And it is wrong, because it should only remove it at the beginning.
+$(subst ...) would remove it anywhere. So if we were to use it (and I
+think we should not), we'd have to use $(patsubst ...) instead;
+    XENOMAI_ADEOS_PATCH_PATH = $(patsubst file://%,%,$(XENOMAI_ADEOS_PATCH))
 
 Regards,
 Yann E. MORIN.
-
-PS. Yes, I was the first one to report and fix U+00A0 (C2 A0) in
-    5d436ac5a6 and 911ac036e0, but those were fixing real problems.
-YEM.
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
