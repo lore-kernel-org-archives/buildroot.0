@@ -1,50 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 19 May 2019 23:43:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/suricata: fix static build with
- pcap
-In-Reply-To: <20190519200854.8933-1-vadim4j@gmail.com>
-References: <20190519200854.8933-1-vadim4j@gmail.com>
-Message-ID: <CAPi7W8258vYdxOuRoS+gkmz987xdh2B5QDQ1cZgnusNtKGnTjA@mail.gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sun, 19 May 2019 23:49:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/connman: bump to version 1.37
+Message-ID: <20190519214928.14338-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Vadim,
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ package/connman/connman.hash | 2 +-
+ package/connman/connman.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Le dim. 19 mai 2019 ? 22:09, Vadim Kochan <vadim4j@gmail.com> a ?crit :
->
-> Build of suricata fails with BR2_STATIC_LIBS=y because pcap
-> requires libnl which can't be found, so use pkg-config to obtain
-> libpcap dependencies.
-Thanks for your patch however I already sent a patch's serie one month
-ago that also fixed this pcap issue:
-https://patchwork.ozlabs.org/project/buildroot/list/?series=104482.
-I think it's time to merge it.
->
-> Fixes:
->         http://autobuild.buildroot.net/results/b5fdf31db6897a9612a0badc7c4bd3e54f031308/
->
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> ---
->  package/suricata/suricata.mk | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-> index e5884cdfe4..503d76e6a8 100644
-> --- a/package/suricata/suricata.mk
-> +++ b/package/suricata/suricata.mk
-> @@ -123,4 +123,6 @@ define SURICATA_INSTALL_INIT_SYSTEMD
->                 $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/suricata.service
->  endef
->
-> +SURICATA_CONF_OPTS += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libpcap`"
-> +
->  $(eval $(autotools-package))
-> --
-> 2.21.0
->
-Best Regards,
-
-Fabrice
+diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+index fad1c55d2d..ff5b4d48f0 100644
+--- a/package/connman/connman.hash
++++ b/package/connman/connman.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+-sha256 c789db41cc443fa41e661217ea321492ad59a004bebcd1aa013f3bc10a6e0074  connman-1.36.tar.xz
++sha256 6ce29b3eb0bb16a7387bc609c39455fd13064bdcde5a4d185fab3a0c71946e16  connman-1.37.tar.xz
+ # Locally computed
+ sha256 b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index b67d1c4b86..839bc7a0e2 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CONNMAN_VERSION = 1.36
++CONNMAN_VERSION = 1.37
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+-- 
+2.21.0
