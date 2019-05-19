@@ -1,87 +1,89 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 19 May 2019 23:19:12 +0200
-Subject: [Buildroot] [PATCH v1] utils/check-package: warn about utf-8
- characters in .mk files
-In-Reply-To: <20190519094125.GC4569@scaer>
-References: <20190508173427.8612-1-ps.report@gmx.net>
- <20190519094125.GC4569@scaer>
-Message-ID: <20190519231912.03525ceb@gmx.net>
+Date: Sun, 19 May 2019 23:42:34 +0200
+Subject: [Buildroot] [PATCH v1 1/5] board/armadeus: replace utf-8
+ graphic sympols by ascii characters
+In-Reply-To: <20190519090853.GA4569@scaer>
+References: <20190508172822.7929-1-ps.report@gmx.net>
+ <20190518233634.432e4b00@windsurf> <20190519090853.GA4569@scaer>
+Message-ID: <20190519234234.38c84790@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Hello Yann, and *,
 
-On Sun, 19 May 2019 11:41:25 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Sun, 19 May 2019 11:08:53 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> Peter, All,
->
-> On 2019-05-08 19:34 +0200, Peter Seiderer spake thusly:
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> > ---
-> > Note: is_ascii taken from one of the stackoverflow suggestions ([1])
-> >
-> > [1] https://stackoverflow.com/questions/196345/how-to-check-if-a-string-in-python-is-in-ascii
-> > ---
-> >  utils/checkpackagelib/lib.py    | 13 +++++++++++++
-> >  utils/checkpackagelib/lib_mk.py |  1 +
-> >  2 files changed, 14 insertions(+)
-> >
-> > diff --git a/utils/checkpackagelib/lib.py b/utils/checkpackagelib/lib.py
-> > index 6afe1aabce..c65a2ed939 100644
-> > --- a/utils/checkpackagelib/lib.py
-> > +++ b/utils/checkpackagelib/lib.py
-> > @@ -52,3 +52,16 @@ class TrailingSpace(_CheckFunction):
-> >              return ["{}:{}: line contains trailing whitespace"
-> >                      .format(self.filename, lineno),
-> >                      text]
-> > +
-> > +class Utf8Characters(_CheckFunction):
->
-> This breaks flake8:
->
->     utils/checkpackagelib/lib.py:56:1: E302 expected 2 blank lines, found 1
+> Peter, Thomas, Peter, All,
+> 
+> On 2019-05-18 23:36 +0200, Thomas Petazzoni spake thusly:
+> > On Wed,  8 May 2019 19:28:18 +0200
+> > Peter Seiderer <ps.report@gmx.net> wrote:
+> >   
+> > > Signed-off-by: Peter Seiderer <ps.report@gmx.net>--cc "Ricardo Martincoski <ricardo.martincoski@gmail.com>"
+> > > ---
+> > >  board/armadeus/readme.txt | 10 +++++-----
+> > >  1 file changed, 5 insertions(+), 5 deletions(-)  
+> > 
+> > Series applied to master. Thanks!  
+> 
+> Sorry, but I still fail to see why we want to remove non-ascii chars,
+> especially in docs and the likes. The commit logs for these patches fail
+> to explain the problem they fix, if there is even a problem.
 
-Sorry, introduced due to my poor python formatting skills..., patch to fix
-it just send out...
+Valid point, maybe for the board patches a commit tile a la 'harmonize graphic
+symbol usage' would have been better...
+
+> 
+> This whole "no UTF-8 chars patches" are totally nonsense nowadays. If
+> your system still can't display them properly, upgrade and get a decent
+> font.
+> 
+> Now, if I need to add a comment like:
+> 
+>     # As explained by Fr?d?ric in [0], blurb da dee woops blabla...
+> 
+> then, check-package whines. While "Fr?d?ric" can be easily asciified to
+> Frederic, this is not nice and there are a lot of names that can't be
+> easily asciified, like ??? or anyone whose language is not using a
+> latin script.
+> 
+> I agree that the unicode NO-BREAK-SPACE (U+00A0, UTF-8 C2A0) is nasty,
+> and should be replaced, but otherwise it feels like we're going
+> something like 30 years back in time...
+
+Yes, Fr?d?ric will surly by honoured to be called by his real name ;-),
+but all package patches touched easily replaceable UTF-8 characters
+and did not change, by intent, the ones mentioned by Peter Korsgaard
+(see [1]) and Arnout Vandecappelle mentioned the From/Sob tags
+problem (see [2])...
+
+> 
+> BTW, a good editor can be made to report such "trolling" chars. For
+> example, there is a plugin for vim that can highlight such chars, like
+> NO-BREAK-SPACE "?" (U+00A0) which is highlighted red for me here:
+>     https://github.com/vim-utils/vim-troll-stopper
+> And for emacs (untested, I don't use emacs):
+>     https://www.emacswiki.org/emacs/highlight-chars.el
+
+It is simpler to check for not utf-8 instead of an blacklist of
+various characters (no-break-space, multiple quote/hyphen signs, etc.),
+maybe the warning can be downgraded to a minor one (plus a hint 'do
+not apply to names')...
 
 Regards,
 Peter
 
->
+[1] http://lists.busybox.net/pipermail/buildroot/2019-May/249725.html
+[2] http://lists.busybox.net/pipermail/buildroot/2019-May/249716.html
+
+> 
 > Regards,
 > Yann E. MORIN.
->
-> > +    def is_ascii(self, s):
-> > +        try:
-> > +            return all(ord(c) < 128 for c in s)
-> > +        except TypeError:
-> > +            return False
-> > +
-> > +    def check_line(self, lineno, text):
-> > +        if not self.is_ascii(text):
-> > +            return ["{}:{}: line contains UTF-8 characters"
-> > +                    .format(self.filename, lineno),
-> > +                    text]
-> > diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-> > index 00efeb7fb2..9e9a045776 100644
-> > --- a/utils/checkpackagelib/lib_mk.py
-> > +++ b/utils/checkpackagelib/lib_mk.py
-> > @@ -11,6 +11,7 @@ from checkpackagelib.lib import ConsecutiveEmptyLines  # noqa: F401
-> >  from checkpackagelib.lib import EmptyLastLine          # noqa: F401
-> >  from checkpackagelib.lib import NewlineAtEof           # noqa: F401
-> >  from checkpackagelib.lib import TrailingSpace          # noqa: F401
-> > +from checkpackagelib.lib import Utf8Characters         # noqa: F401
-> >
-> >  # used in more than one check
-> >  start_conditional = ["ifdef", "ifeq", "ifndef", "ifneq"]
-> > --
-> > 2.21.0
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
+> 
+> PS. Yes, I was the first one to report and fix U+00A0 (C2 A0) in
+>     5d436ac5a6 and 911ac036e0, but those were fixing real problems.
+> YEM.
+> 
