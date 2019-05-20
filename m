@@ -1,52 +1,51 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 21 May 2019 00:40:37 +0300
-Subject: [Buildroot] [PATCH/next v2 3/3] package/cog: bump version to 0.3.0
-In-Reply-To: <20190520214037.58011-1-aperez@igalia.com>
-References: <20190514114111.20424-1-aperez@igalia.com>
- <20190520214037.58011-1-aperez@igalia.com>
-Message-ID: <20190520214037.58011-4-aperez@igalia.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 May 2019 00:17:10 +0200
+Subject: [Buildroot] [PATCH 1/3] package/intel-microcode: install into
+ images for early loading support
+Message-ID: <20190520221712.22564-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 0.2.0 does not work with WPE WebKit 2.22.x, this is the
-first version which can be used with 2.24.x
+Microcode based security mitigation (E.G.  MDS) requires that the microcode
+gets loaded very early. This can be handled by one of:
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+- Concatenating (a subset of) the intel-microcode files and write to
+  kernel/x86/microcode/GenuineIntel.bin in the initrd.  Requires that the
+  (first) initrd is external from the kernel and NOT compressed.
+
+- Build (a subset of) the intel-microcode files into the kernel using the
+  CONFIG_EXTRA_FIRMWARE option.
+
+Install the microcode files into images to support these use cases (E.G.
+through a post-build script for the initrd, or by pointing
+CONFIG_EXTRA_FIRMWARE_DIR to ${BR_BINARIES_DIR}, similar to how we include
+the .cpio image inside the kernel).
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2:
-  - No changes.
+ package/intel-microcode/intel-microcode.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
----
- package/cog/cog.hash | 2 +-
- package/cog/cog.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/cog/cog.hash b/package/cog/cog.hash
-index 97daf72744..39cf2afdbd 100644
---- a/package/cog/cog.hash
-+++ b/package/cog/cog.hash
-@@ -1,5 +1,5 @@
- # Locally generated
--sha256 a6abadb78395226bac2e1dd5467feab2cc8c493eab6894a09a51a8e072e38c06  cog-v0.2.0.tar.gz
-+sha256 755c68029bbd05a17784262e56021362740783d15868dab9402a125ef35eedaf  cog-v0.3.0.tar.gz
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index aa3b1f4dbb..43cdc3d0b8 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -9,6 +9,13 @@ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
+ INTEL_MICROCODE_REDISTRIBUTE = NO
++INTEL_MICROCODE_INSTALL_IMAGES = YES
++
++define INTEL_MICROCODE_INSTALL_IMAGES_CMDS
++	mkdir -p $(BINARIES_DIR)/intel-ucode
++	$(INSTALL) -m 0644 -t $(BINARIES_DIR)/intel-ucode \
++		$(@D)/intel-ucode/*
++endef
  
- # Hashes for license files:
- sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
-diff --git a/package/cog/cog.mk b/package/cog/cog.mk
-index 44ea62185d..b56a772a25 100644
---- a/package/cog/cog.mk
-+++ b/package/cog/cog.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--COG_VERSION = v0.2.0
-+COG_VERSION = v0.3.0
- COG_SITE = $(call github,Igalia,cog,$(COG_VERSION))
- COG_INSTALL_STAGING = YES
- COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
+ define INTEL_MICROCODE_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/lib/firmware/intel-ucode
 -- 
-2.21.0
+2.11.0
