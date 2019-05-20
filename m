@@ -1,117 +1,123 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 20 May 2019 19:34:16 +0200
-Subject: [Buildroot] [PATCH] core: make it possible to check flake8 like
- we check package
-In-Reply-To: <20190519164417.20124-1-yann.morin.1998@free.fr>
-References: <20190519164417.20124-1-yann.morin.1998@free.fr>
-Message-ID: <20190520193416.0e9f8217@gmx.net>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 20 May 2019 19:48:40 +0200
+Subject: [Buildroot] [PATCH v2] package/python-numpy: fix occasional
+ build failure with lapack
+In-Reply-To: <e0c589d1-ce45-0132-43da-db2605b81616@micronovasrl.com>
+References: <eb24ad7d-6de2-085d-d3e0-9037c3d5cf81@micronovasrl.com>
+ <20190515210342.126951-1-giulio.benetti@micronovasrl.com>
+ <20190518221352.0630eaa6@windsurf>
+ <e0c589d1-ce45-0132-43da-db2605b81616@micronovasrl.com>
+Message-ID: <74098714-11ae-9897-a5fb-71db0f04c44a@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Yann,
+Hello Thomas,
 
-On Sun, 19 May 2019 18:44:17 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Il 19/05/2019 16:47, Giulio Benetti ha scritto:
+> Hello Thomas, All,
+> 
+> Il 18/05/2019 22:13, Thomas Petazzoni ha scritto:
+>> Hello,
+>>
+>> On Wed, 15 May 2019 23:03:42 +0200
+>> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+>>
+>>> python-numpy build fails only if lapack is built before python-numpy
+>>> itself, and this doesn't always happen because lapack dependency is
+>>> missing in BR2_PYTHON_NUMPY_DEPENDENCIES. clapack is present
+>>> instead, but it's wrong since we're checking $(BR2_PACKAGE_LAPACK) not
+>>> $(BR2_PACKAGE_CLAPACK).
+>>
+>> I don't follow here: in the current code, we're checking
+>> BR2_PACKAGE_CLAPACK and adding clapack to PYTHON_NUMPY_DEPENDENCIES,
+>> which is consistent.
+> 
+> You're right, I've done a mistake, I've substituted clapack with lapack.
+> So need to send a v3 with this corrected.
+> 
+> The problem was due to cohexistence of lapack and clapack, but they are 
+> both(like openblas) accelerators that can exist once(I mean or lapack, 
+> or clapack).
+> Here I was asking about inserting a menu to choose which accelerator to 
+> use:
+> http://lists.busybox.net/pipermail/buildroot/2019-May/250273.html
+> 
+> Can you take a look and answer with your opinion?
+> 
+>> In order to better understand the problem. Without this patch:
+>>
+>> ? - Does python-numpy builds fine when neither clapack nor lapack are
+>> ??? enabled ?
+> 
+> Yes it does(it works without accelerators).
+> 
+>> ? - Does python-numpy builds fine when clapack is enabled, but not
+>> ??? lapack ?
+> 
+> Yes
+> 
+>> ? - What happens when both clapack and lapack are enabled ?
+> 
+> Python-numpy will choose the accelerator according to this list:
+> https://www.numpy.org/devdocs/user/building.html#accelerated-blas-lapack-libraries 
 
-> Move the code to run check-flake8 into the Makefile, like we
-> have for check-package, so that it is easy to run locally (and
-> not wait for someone to report a failure from their Gitlab
-> pipelines).
->
-> Since there is no "post-rule" in Makefiles, we resort to using
-> a little trick to remove the temporary file. Also, there is a
-> slight change in behaviour: the list of files is not reported,
-> and the number of processed files is not reported either (there
-> is little value in that; all that is important are the errors,
-> if any).
->
-> Regenerate .gitlab-ci.yml.
->
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  .gitlab-ci.yml    | 9 +--------
->  .gitlab-ci.yml.in | 9 +--------
->  Makefile          | 9 ++++++++-
->  3 files changed, 10 insertions(+), 17 deletions(-)
->
-> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-> index 836944faf5..002ee07afb 100644
-> --- a/.gitlab-ci.yml
-> +++ b/.gitlab-ci.yml
-> @@ -21,15 +21,8 @@ check-DEVELOPERS:
->
->  check-flake8:
->      extends: .check_base
-> -    before_script:
-> -        # Help flake8 to find the Python files without .py extension.
-> -        - find * -type f -name '*.py' > files.txt
-> -        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
-> -        - sort -u files.txt | tee files.processed
->      script:
-> -        - python -m flake8 --statistics --count --max-line-length=132 $(cat files.processed)
-> -    after_script:
-> -        - wc -l files.processed
-> +        - make check-flake8
->
->  check-gitlab-ci.yml:
->      extends: .check_base
-> diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
-> index 33cb665d98..afa0d93500 100644
-> --- a/.gitlab-ci.yml.in
-> +++ b/.gitlab-ci.yml.in
-> @@ -21,15 +21,8 @@ check-DEVELOPERS:
->
->  check-flake8:
->      extends: .check_base
-> -    before_script:
-> -        # Help flake8 to find the Python files without .py extension.
-> -        - find * -type f -name '*.py' > files.txt
-> -        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
-> -        - sort -u files.txt | tee files.processed
->      script:
-> -        - python -m flake8 --statistics --count --max-line-length=132 $(cat files.processed)
-> -    after_script:
-> -        - wc -l files.processed
-> +        - make check-flake8
->
->  check-gitlab-ci.yml:
->      extends: .check_base
-> diff --git a/Makefile b/Makefile
-> index 7246376cf9..f78e5aad4d 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -119,7 +119,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
->  noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
->  	defconfig %_defconfig allyesconfig allnoconfig alldefconfig syncconfig release \
->  	randpackageconfig allyespackageconfig allnopackageconfig \
-> -	print-version olddefconfig distclean manual manual-% check-package
-> +	print-version olddefconfig distclean manual manual-% check-package check-flake8
->
->  # Some global targets do not trigger a build, but are used to collect
->  # metadata, or do various checks. When such targets are triggered,
-> @@ -1197,6 +1197,13 @@ release:
->  print-version:
->  	@echo $(BR2_VERSION_FULL)
->
-> +check-flake8:
-> +	{ find * -type f -name '*.py'; \
-> +	  find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1; \
-> +	} >files.txt
-> +	$(Q)python -m flake8 --statistics --count --max-line-length=132 \
-> +		$$(sort -u files.txt; rm -f files.txt)
-> +
->  check-package:
->  	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \) \
->  		-exec ./utils/check-package {} +
+This ^^^^^^^^^^^^^ is wrong.
+The problem is that both lapack and clapack library names are equal:
+liblapack.so
 
-Did a local run with 'make check-flake8', produced 7636 warnings ;-) , you can add my
+So what happens here is that python-numpy will use clapack headers,
+then it will link with liblapack.so causing linking error.
+Because liblapack.so is from lapack(not clapack) due to alphabetical
+order when building.
 
-Tested-by: Peter Seiderer <ps.report@gmx.net>
+Basically clapack is the c implementation of lapack, but in lapack it's
+been implemented lapacke(a c interface) that makes clapack useless at
+this point.
 
-Regards,
-Peter
+I see 2 options:
+- remove clapack completely because it's the same as lapacke(embedded in
+lapack)
+- make clapack and lapack exclusive selectable in their Config.in like:
+   (clapack Config.in)
+   depends on !BR2_PACKAGE_LAPACK
+   and:
+   (lapack Config.in)
+   depends on !BR2_PACKAGE_CLAPACK
+
+But IMHO we should proceed with dropping clapack.
+
+> 
+>> Also, perhaps we need:
+>>
+>> ????select BR2_PACKAGE_LAPACK_COMPLEX if BR2_PACKAGE_LAPACK
+
+This ^^^^^^^^^^ instead never built succesfully.
+It built successfully only because I was trying to build with:
+make python-numpy-dirclean python-numpy
+instead of:
+make clean all
+
+So I had a mess of LAPACK libraries in my environment(sorry).
+
+Best regards--
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
+
+>> in the Config.in file, so that it's a bit easier for users: they don't
+>> have to know they need that specific sub-option of lapack.
+> 
+> If lapack selected yes, but that should come after adding a choice menu 
+> IMHO.
+> 
+> Kind regards
