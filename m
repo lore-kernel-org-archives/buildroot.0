@@ -1,125 +1,50 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 20 May 2019 21:07:26 +0200
-Subject: [Buildroot] [PATCH] core: make it possible to check flake8 like
- we check package
-In-Reply-To: <20190520200346.453c08b1@gmx.net>
-References: <20190519164417.20124-1-yann.morin.1998@free.fr>
- <20190520193416.0e9f8217@gmx.net> <20190520200346.453c08b1@gmx.net>
-Message-ID: <20190520190726.GA2229@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 20 May 2019 21:11:56 +0200
+Subject: [Buildroot] [git commit branch/next] package/python-socketio: bump
+ version to 4.0.2
+Message-ID: <20190520190725.71B8581592@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=58c16f4af15003d9a9aebcaa2d78b9c7275c778e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2019-05-20 20:03 +0200, Peter Seiderer spake thusly:
-> On Mon, 20 May 2019 19:34:16 +0200, Peter Seiderer <ps.report@gmx.net> wrote:
-> > Did a local run with 'make check-flake8', produced 7636 warnings ;-) , you can add my
-> Most warnings where from the download/dl directory,
+Signed-off-by: Serhii Sakhno <sergei.sakhno@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-socketio/python-socketio.hash | 9 +++++----
+ package/python-socketio/python-socketio.mk   | 4 ++--
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-Aha! ;-)
-
-> without only 96
-> warnings in support and utils are left:
-> 
-> support/testing/infra/__init__.py:91:29: W605 invalid escape sequence '\['
-
-Yes, like me you are running a pretty recent distribution, that has
-pycodestyle 2.4.0 (or more recent), which introduced a new warning,
-W605.
-
-I started fixing it locally, but I am not totally sure:
-
- 1- if we really need to fix it: the warning is about python3, while
-    quite a few reported errors apply to python2 code.
-
- 2- how we should fix it. The obvious solution seems to prefix all such
-    strings with a leading 'r', like so:  r"the\.pattern\sstrings".
-    However, doing so will change the behaviour, for example, of
-    check-package, which starts reportign new issues with our mk files
-    (more on that in a later mail...)
-
-However, this very patch is indeed about _calling_ flake8 from the
-Makefile instead of only from a gitlab pipeline.
-
-Thanks for the testing! :-)
-
-Regards,
-Yann E. MORIN.
-
-> support/testing/infra/__init__.py:91:67: W605 invalid escape sequence '\]'
-> support/testing/tests/core/test_timezone.py:7:9: E117 over-indented
-> utils/check-package:48:40: W605 invalid escape sequence '\.'
-> utils/check-package:48:42: W605 invalid escape sequence '\S'
-> 
-> [...]
-> 
-> utils/checkpackagelib/lib_config.py:65:48: W605 invalid escape sequence '\S'
-> utils/checkpackagelib/lib_mk.py:22:28: W605 invalid escape sequence '\s'
-> 
-> [...]
-> 
-> utils/checkpackagelib/lib_mk.py:78:50: W605 invalid escape sequence '\+'
-> utils/checkpackagelib/lib_mk.py:78:57: W605 invalid escape sequence '\s'
-> utils/checkpackagelib/lib_mk.py:78:60: W605 invalid escape sequence '\$'
-> utils/checkpackagelib/lib_mk.py:78:62: W605 invalid escape sequence '\('
-> utils/checkpackagelib/lib_mk.py:78:67: W605 invalid escape sequence '\)'
-> 
-> [...]
-> 
-> utils/checkpackagelib/lib_patch.py:13:32: W605 invalid escape sequence '\d'
-> utils/checkpackagelib/lib_patch.py:23:42: W605 invalid escape sequence '\s'
-> utils/checkpackagelib/lib_patch.py:23:45: W605 invalid escape sequence '\['
-> utils/checkpackagelib/lib_patch.py:23:52: W605 invalid escape sequence '\s'
-> utils/checkpackagelib/lib_patch.py:23:55: W605 invalid escape sequence '\d'
-> utils/checkpackagelib/lib_patch.py:23:59: W605 invalid escape sequence '\d'
-> utils/checkpackagelib/lib_patch.py:23:62: W605 invalid escape sequence '\]'
-> utils/checkpackagelib/lib.py:56:1: E302 expected 2 blank lines, found 1
-> utils/getdeveloperlib.py:12:36: W605 invalid escape sequence '\+'
-> utils/getdeveloperlib.py:12:38: W605 invalid escape sequence '\$'
-> utils/getdeveloperlib.py:12:40: W605 invalid escape sequence '\('
-> utils/getdeveloperlib.py:12:47: W605 invalid escape sequence '\$'
-> utils/getdeveloperlib.py:12:49: W605 invalid escape sequence '\('
-> utils/getdeveloperlib.py:12:74: W605 invalid escape sequence '\)'
-> utils/getdeveloperlib.py:12:76: W605 invalid escape sequence '\)'
-> utils/getdeveloperlib.py:35:33: W605 invalid escape sequence '\$'
-> utils/getdeveloperlib.py:35:35: W605 invalid escape sequence '\('
-> utils/getdeveloperlib.py:35:42: W605 invalid escape sequence '\$'
-> utils/getdeveloperlib.py:35:44: W605 invalid escape sequence '\('
-> utils/getdeveloperlib.py:35:69: W605 invalid escape sequence '\)'
-> utils/getdeveloperlib.py:35:71: W605 invalid escape sequence '\)'
-> utils/getdeveloperlib.py:128:32: W605 invalid escape sequence '\s'
-> utils/getdeveloperlib.py:142:41: W605 invalid escape sequence '\.'
-> utils/getdeveloperlib.py:142:45: W605 invalid escape sequence '\.'
-> utils/scanpypi:99:22: W605 invalid escape sequence '\w'
-> utils/scanpypi:340:37: W605 invalid escape sequence '\w'
-> utils/scanpypi:454:60: W605 invalid escape sequence '\('
-> utils/scanpypi:454:64: W605 invalid escape sequence '\)'
-> 
-> Regards,
-> Peter
-> 
-> >
-> > Tested-by: Peter Seiderer <ps.report@gmx.net>
-> >
-> > Regards,
-> > Peter
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/python-socketio/python-socketio.hash b/package/python-socketio/python-socketio.hash
+index 659d4d540c..a6948659c7 100644
+--- a/package/python-socketio/python-socketio.hash
++++ b/package/python-socketio/python-socketio.hash
+@@ -1,4 +1,5 @@
+-# md5 from https://pypi.python.org/pypi/python-socketio/json
+-md5	44fd24e839dc3102920765f345740646  python-socketio-1.4.1.tar.gz
+-# sha256 calculated by scanpypi
+-sha256	ebd0984d831d602c8ec6d586ecde4466972cc7ed37dbbfe613192864e8263779  python-socketio-1.4.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/python-socketio/json
++md5	51d3820673710afa5caa442c17b08635  python-socketio-4.0.2.tar.gz
++sha256	7bb11f79981eaad08f33b98ffcd501590e5a2c645fdd7bb3fb0a5d9078e08bbc  python-socketio-4.0.2.tar.gz
++# Locally computed sha256 checksums
++sha256	c9e97d3dbc1fbbcdb4f7808b282cd646db887aff4f5313fe6bbe8d4c31405a9c  LICENSE
+diff --git a/package/python-socketio/python-socketio.mk b/package/python-socketio/python-socketio.mk
+index 57dc1f8b48..d68e76a2e3 100644
+--- a/package/python-socketio/python-socketio.mk
++++ b/package/python-socketio/python-socketio.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SOCKETIO_VERSION = 1.4.1
+-PYTHON_SOCKETIO_SITE = https://pypi.python.org/packages/da/00/66103df6a116a2ce3ea662a9c8c80f337d43d7f138caf04e9af6dec24ba7
++PYTHON_SOCKETIO_VERSION = 4.0.2
++PYTHON_SOCKETIO_SITE = https://files.pythonhosted.org/packages/41/94/f59c7c61e4544d27ad0cdca354a20b4fc12674fae18c4f6a00e34a88007e
+ PYTHON_SOCKETIO_SETUP_TYPE = setuptools
+ PYTHON_SOCKETIO_LICENSE = MIT
+ PYTHON_SOCKETIO_LICENSE_FILES = LICENSE
