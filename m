@@ -1,65 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 23:21:19 +0200
-Subject: [Buildroot] [git commit] package/pkg-generic.mk: add
- <pkg>_INSTALL_INIT_OPENRC
-Message-ID: <20190602201234.967E581354@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 20 May 2019 10:23:02 +0200
+Subject: [Buildroot] [git commit] package/connman: bump to version 1.37
+Message-ID: <20190602201234.AD37181354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d89420774da6216b492871df9007b316199303c
+commit: https://git.buildroot.net/buildroot/commit/?id=2529cdd7a3ff4efb805dc92cdea0cd367e786001
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-* package/pkg-generic.mk
-  Add <pkg>_INSTALL_INIT_OPENRC so packages can define their own steps
-  to install openrc service scripts.
-
-* docs/manual/adding-packages-generic.txt
-  update documentation about new hook.
-
-Signed-off-by: Micha?? ??yszczek <michal.lyszczek@bofc.pl>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-generic.txt | 13 +++++++------
- package/pkg-generic.mk                  |  2 ++
- 2 files changed, 9 insertions(+), 6 deletions(-)
+ package/connman/connman.hash | 2 +-
+ package/connman/connman.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/adding-packages-generic.txt b/docs/manual/adding-packages-generic.txt
-index 7be1754f54..5ac07a81b4 100644
---- a/docs/manual/adding-packages-generic.txt
-+++ b/docs/manual/adding-packages-generic.txt
-@@ -536,12 +536,13 @@ different steps of the build process.
-   should utilize this step if it has binaries which would be similar
-   to the kernel image, bootloader or root filesystem images.
+diff --git a/package/connman/connman.hash b/package/connman/connman.hash
+index fad1c55d2d..ff5b4d48f0 100644
+--- a/package/connman/connman.hash
++++ b/package/connman/connman.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
+-sha256 c789db41cc443fa41e661217ea321492ad59a004bebcd1aa013f3bc10a6e0074  connman-1.36.tar.xz
++sha256 6ce29b3eb0bb16a7387bc609c39455fd13064bdcde5a4d185fab3a0c71946e16  connman-1.37.tar.xz
+ # Locally computed
+ sha256 b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+diff --git a/package/connman/connman.mk b/package/connman/connman.mk
+index b67d1c4b86..839bc7a0e2 100644
+--- a/package/connman/connman.mk
++++ b/package/connman/connman.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--* +LIBFOO_INSTALL_INIT_SYSV+ and +LIBFOO_INSTALL_INIT_SYSTEMD+ list the
--  actions to install init scripts either for the systemV-like init systems
--  (busybox, sysvinit, etc.) or for the systemd units. These commands
--  will be run only when the relevant init system is installed (i.e. if
--  systemd is selected as the init system in the configuration, only
--  +LIBFOO_INSTALL_INIT_SYSTEMD+ will be run).
-+* +LIBFOO_INSTALL_INIT_SYSV+, +LIBFOO_INSTALL_INIT_OPENRC+ and
-+  +LIBFOO_INSTALL_INIT_SYSTEMD+ list the actions to install init
-+  scripts either for the systemV-like init systems (busybox,
-+  sysvinit, etc.), openrc or for the systemd units. These commands
-+  will be run only when the relevant init system is installed (i.e.
-+  if systemd is selected as the init system in the configuration,
-+  only +LIBFOO_INSTALL_INIT_SYSTEMD+ will be run).
- 
- * +LIBFOO_HELP_CMDS+ lists the actions to print the package help, which
-   is included to the main +make help+ output. These commands can print
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index e44f5d913c..3b5ee7b356 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -337,6 +337,8 @@ $(BUILD_DIR)/%/.stamp_target_installed:
- 		$($(PKG)_INSTALL_INIT_SYSTEMD))
- 	$(if $(BR2_INIT_SYSV)$(BR2_INIT_BUSYBOX),\
- 		$($(PKG)_INSTALL_INIT_SYSV))
-+	$(if $(BR2_INIT_OPENRC), \
-+		$($(PKG)_INSTALL_INIT_OPENRC))
- 	$(foreach hook,$($(PKG)_POST_INSTALL_TARGET_HOOKS),$(call $(hook))$(sep))
- 	$(Q)if test -n "$($(PKG)_CONFIG_SCRIPTS)" ; then \
- 		$(RM) -f $(addprefix $(TARGET_DIR)/usr/bin/,$($(PKG)_CONFIG_SCRIPTS)) ; \
+-CONNMAN_VERSION = 1.36
++CONNMAN_VERSION = 1.37
+ CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
+ CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
+ CONNMAN_DEPENDENCIES = libglib2 dbus iptables
