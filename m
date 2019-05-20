@@ -1,47 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 May 2019 23:01:19 +0200
-Subject: [Buildroot] [PATCH] core/pkg-infra: host variant inherits
- DL_SUBDIR
-In-Reply-To: <20190428174458.10458-1-yann.morin.1998@free.fr>
-References: <20190428174458.10458-1-yann.morin.1998@free.fr>
-Message-ID: <20190520230119.05902d36@windsurf.home>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 20 May 2019 23:07:23 +0200
+Subject: [Buildroot] [PATCH] toolchain: specify GCC_BUG_85180 is true
+ only if GCC version < 8.x
+In-Reply-To: <20190520203949.120720-1-giulio.benetti@micronovasrl.com>
+References: <20190520203949.120720-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190520210722.GA24931@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 28 Apr 2019 19:44:58 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Hi,
 
-> We have no clear separation between variables that should be
-> automatically inherited by the host variant, from the target
-> variant, and those variables that should not be inherited.
-> 
-> However, it clearly makes sense that the host variant does inherit
-> all the download variables, of which the sub-directory.
-> 
-> Notes: currently, only three packages define HOST_FOO_DL_SUBDIR,
-> but they all are host-only packages anyway, so needs not be fixed:
->   - gcc-initial
->   - gcc-final
->   - python3-setuptools
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Peter Korsgaard <peter@korsgaard.com>
-> Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-> ---
->  package/pkg-generic.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+> Bug 85180:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+> has been fixed on Gcc version >= 8.x
 
-Following the comments from Arnout, I marked this patch as Changes
-Requested in patchwork. Could you send an updated version ?
+> So:
+> - add 'depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8' to 'config
+>   BR2_TOOLCHAIN_HAS_GCC_BUG_85180'.
 
-Thanks!
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Kind regards,
+Petr
