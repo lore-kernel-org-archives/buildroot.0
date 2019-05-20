@@ -1,33 +1,37 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Mon, 20 May 2019 21:32:23 +0200
-Subject: [Buildroot] [RFC PATCH 4/4] board/lemaker/bananapro/rootfs_overlay:
- add symlink for brcmfmac43362-sdio file
-In-Reply-To: <20190520193223.14071-1-b.bilas@grinn-global.com>
-References: <20190520193223.14071-1-b.bilas@grinn-global.com>
-Message-ID: <20190520193223.14071-4-b.bilas@grinn-global.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 20 May 2019 21:33:18 +0200
+Subject: [Buildroot] [PATCH 2/5] package/wpebackend-fdo: bump to version
+ 1.2.0
+In-Reply-To: <20190514114111.20424-3-aperez@igalia.com>
+References: <20190514114111.20424-1-aperez@igalia.com>
+ <20190514114111.20424-3-aperez@igalia.com>
+Message-ID: <20190520213318.6deef9c6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes following error:
-     brcmfmac mmc1:0001:1: Direct firmware load for
-     brcm/brcmfmac43362-sdio.lemaker,bananapro.txt failed with error -2
+On Tue, 14 May 2019 14:41:08 +0300
+Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- .../lib/firmware/brcm/brcmfmac43362-sdio.lemaker,bananapro.txt   | 1 +
- 1 file changed, 1 insertion(+)
- create mode 120000 board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.lemaker,bananapro.txt
+> WPE WebKit 2.24.x requires WPEBackend-fdo 1.2.x, as indicated at:
+> 
+>   https://wpewebkit.org/release/schedule/#compatible-components
+> 
+> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> ---
+>  package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
+>  package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.lemaker,bananapro.txt b/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.lemaker,bananapro.txt
-new file mode 120000
-index 0000000000..93947975ee
---- /dev/null
-+++ b/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.lemaker,bananapro.txt
-@@ -0,0 +1 @@
-+brcmfmac43362-sdio.txt
-\ No newline at end of file
+I've marked this patch, as well as PATCH 4/5 and 5/5 as Changes
+Requested.
+
+Thanks!
+
+Thomas
 -- 
-2.21.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
