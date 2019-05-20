@@ -1,43 +1,71 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 May 2019 10:23:02 +0200
-Subject: [Buildroot] [git commit] package/connman: bump to version 1.37
-Message-ID: <20190602201234.AD37181354@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 20 May 2019 22:45:14 +0200
+Subject: [Buildroot] [git commit] package/python-falcon: bump to version
+ 2.0.0
+Message-ID: <20190602201235.40DCE8EDA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2529cdd7a3ff4efb805dc92cdea0cd367e786001
+commit: https://git.buildroot.net/buildroot/commit/?id=337d303790cbffd958fe23ca1be5abc18cac9dff
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/connman/connman.hash | 2 +-
- package/connman/connman.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+From https://falcon.readthedocs.io/en/stable/changes/2.0.0.html:
 
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index fad1c55d2d..ff5b4d48f0 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256 c789db41cc443fa41e661217ea321492ad59a004bebcd1aa013f3bc10a6e0074  connman-1.36.tar.xz
-+sha256 6ce29b3eb0bb16a7387bc609c39455fd13064bdcde5a4d185fab3a0c71946e16  connman-1.37.tar.xz
- # Locally computed
- sha256 b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index b67d1c4b86..839bc7a0e2 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
+""
+Removed the six and python-mimeparse dependencies.
+""
+
+Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-falcon/Config.in          | 4 +---
+ package/python-falcon/python-falcon.hash | 4 ++--
+ package/python-falcon/python-falcon.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/package/python-falcon/Config.in b/package/python-falcon/Config.in
+index ffd66eec1b..1bf93064bb 100644
+--- a/package/python-falcon/Config.in
++++ b/package/python-falcon/Config.in
+@@ -1,9 +1,7 @@
+ config BR2_PACKAGE_PYTHON_FALCON
+ 	bool "python-falcon"
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+-	select BR2_PACKAGE_PYTHON_MIMEPARSE # runtime
+ 	help
+ 	  An unladen web framework for building APIs and app
+ 	  backends.
+ 
+-	  http://falconframework.org
++	  https://falconframework.org
+diff --git a/package/python-falcon/python-falcon.hash b/package/python-falcon/python-falcon.hash
+index 7f6ee6ea3d..68b8d4cb2c 100644
+--- a/package/python-falcon/python-falcon.hash
++++ b/package/python-falcon/python-falcon.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/falcon/json
+-md5	3cb880665ee2cd52143cf8a7790a35e6  falcon-1.4.1.tar.gz
+-sha256	3981f609c0358a9fcdb25b0e7fab3d9e23019356fb429c635ce4133135ae1bc4  falcon-1.4.1.tar.gz
++md5	77c52c144dd284e6259d257c6f008072  falcon-2.0.0.tar.gz
++sha256	eea593cf466b9c126ce667f6d30503624ef24459f118c75594a69353b6c3d5fc  falcon-2.0.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	e9e7f1a7ba764f042e56afce6f3563c2be9c4fffbb1404b20f8050ae051f577c  LICENSE
+diff --git a/package/python-falcon/python-falcon.mk b/package/python-falcon/python-falcon.mk
+index b724ffadbe..1d7c869d6d 100644
+--- a/package/python-falcon/python-falcon.mk
++++ b/package/python-falcon/python-falcon.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--CONNMAN_VERSION = 1.36
-+CONNMAN_VERSION = 1.37
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+-PYTHON_FALCON_VERSION = 1.4.1
++PYTHON_FALCON_VERSION = 2.0.0
+ PYTHON_FALCON_SOURCE = falcon-$(PYTHON_FALCON_VERSION).tar.gz
+-PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/2f/e6/5045da9df509b9259037f065d15608930fd6c997ee930ad230f9fbfecf15
++PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/19/30/edff5a1fea7a8e9876c8391e170263e1bb207875b6a65cd619818487b27b
+ PYTHON_FALCON_SETUP_TYPE = setuptools
+ PYTHON_FALCON_LICENSE = Apache-2.0
+ PYTHON_FALCON_LICENSE_FILES = LICENSE
