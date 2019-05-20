@@ -1,27 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 May 2019 11:12:22 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/oniguruma: fix license hash
-In-Reply-To: <20190519180802.1738-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 19 May 2019 20:08:02 +0200")
-References: <20190519180802.1738-1-fontaine.fabrice@gmail.com>
-Message-ID: <87ef4twkuh.fsf@dell.be.48ers.dk>
+Date: Mon, 20 May 2019 11:12:14 +0200
+Subject: [Buildroot] [git commit branch/next] package/oniguruma: fix license
+ hash
+Message-ID: <20190520090636.1DE487FE1E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9372aea8f711221ccd79e75777a7e1ef1a181450
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
- > Year has been updated when bumping to 6.9.2:
- > https://github.com/kkos/oniguruma/commit/73ac6e6a236c12ff62f48e56da536b5c9a1c543b
+Year has been updated when bumping to 6.9.2:
+https://github.com/kkos/oniguruma/commit/73ac6e6a236c12ff62f48e56da536b5c9a1c543b
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/551b3f12867e27b1a9f784099cad1e439d50089f
+Fixes:
+ - http://autobuild.buildroot.org/results/551b3f12867e27b1a9f784099cad1e439d50089f
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/oniguruma/oniguruma.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to next, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/oniguruma/oniguruma.hash b/package/oniguruma/oniguruma.hash
+index 0adbba167c..b6f1cc549d 100644
+--- a/package/oniguruma/oniguruma.hash
++++ b/package/oniguruma/oniguruma.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  3b568a9050839e7828b2f2d5bc9cd3650979b6b54a080f54c515320dddda06b0  oniguruma-6.9.2.tar.gz
+-sha256  84e55812150474adf4170d4656744dfcc5f260ff7602e447a70bf13c56203e4b  COPYING
++sha256  ae266a1ad1c2ef50baf14a1a2993e926cd46d09c6cc8b0b3a8498e44da2746b8  COPYING
