@@ -1,38 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 21 May 2019 00:17:11 +0200
-Subject: [Buildroot] [PATCH 2/3] linux: build after intel-microcode if
- enabled for early loading support
-In-Reply-To: <20190520221712.22564-1-peter@korsgaard.com>
-References: <20190520221712.22564-1-peter@korsgaard.com>
-Message-ID: <20190520221712.22564-2-peter@korsgaard.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 21 May 2019 00:27:09 +0200
+Subject: [Buildroot] [PATCH] package/glibmm: fix BUG_85180 build timeout
+Message-ID: <20190520222709.20566-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To support building in (a subset of) the intel-microcode files into the
-kernel using the CONFIG_EXTRA_FIRMWARE option, we need to ensure that the
-microcode files are installed before the Linux kernel is built.
+With Microblaze Gcc version < 8.x build hangs on compiling first files.
+This is due to bug 85180:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+Bug shows up building glibmm with optimization but not when building
+with -O0.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+If BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 passing it to
+CXXFLAGS.
+
+Fixes:
+http://autobuild.buildroot.net/results/e19/e196d77626b877dc3454d21febe20a04877c02a9/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- linux/linux.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/glibmm/glibmm.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 51fd41fa15..dd182d06b2 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -64,7 +64,8 @@ LINUX_MAKE_ENV = \
- 	BR_BINARIES_DIR=$(BINARIES_DIR)
+diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
+index 71f1dfd36f..06dc9f92e2 100644
+--- a/package/glibmm/glibmm.mk
++++ b/package/glibmm/glibmm.mk
+@@ -13,4 +13,8 @@ GLIBMM_SITE = http://ftp.gnome.org/pub/gnome/sources/glibmm/$(GLIBMM_VERSION_MAJ
+ GLIBMM_INSTALL_STAGING = YES
+ GLIBMM_DEPENDENCIES = libglib2 libsigc host-pkgconf
  
- LINUX_INSTALL_IMAGES = YES
--LINUX_DEPENDENCIES = host-kmod
-+LINUX_DEPENDENCIES = host-kmod \
-+	$(if $(BR2_PACKAGE_INTEL_MICROCODE),intel-microcode)
- 
- # Starting with 4.16, the generated kconfig paser code is no longer
- # shipped with the kernel sources, so we need flex and bison, but
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++GLIBMM_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -O0"
++endif
++
+ $(eval $(autotools-package))
 -- 
-2.11.0
+2.17.1
