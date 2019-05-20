@@ -1,93 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 23:16:04 +0200
-Subject: [Buildroot] [git commit] system/Config.in: add new init - openrc
-Message-ID: <20190602201234.8DEF781354@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 20 May 2019 11:16:40 +0200
+Subject: [Buildroot] [git commit] package/x265: bump to version 3.0
+Message-ID: <20190602201234.D275E8EDA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb77734d11db4a50f5e8a6757b673173f029e4e3
+commit: https://git.buildroot.net/buildroot/commit/?id=1b4e58d8029bfaefa689f56c1ff156449269c84f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is very basic settings for openrc init.
+Remove second patch (already in version)
 
-* system/Config.in
-  Allows to select openrc as init system (which auto selects
-  openrc-skeleton and openrc package).
-
-* package/ifupdown-scripts/Config.in
-  openrc has its own service to bring up/down interfaces, so
-  ifupdown-scripts should not be enabled when openrc is enabled to
-  prevent service clash.
-
-Signed-off-by: Micha?? ??yszczek <michal.lyszczek@bofc.pl>
-[Thomas: take into account the !BR2_STATIC_LIBS dependency]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ifupdown-scripts/Config.in |  2 +-
- package/openrc/Config.in           |  2 ++
- system/Config.in                   | 11 +++++++++++
- 3 files changed, 14 insertions(+), 1 deletion(-)
+ ...mitives.patch => 0002-arm-asm-primitives.patch} |  0
+ package/x265/0002-fix-build-error-on-ppc64le.patch | 23 ----------------------
+ package/x265/x265.hash                             |  2 +-
+ package/x265/x265.mk                               |  2 +-
+ 4 files changed, 2 insertions(+), 25 deletions(-)
 
-diff --git a/package/ifupdown-scripts/Config.in b/package/ifupdown-scripts/Config.in
-index 2f4b0d5467..4b984bc30c 100644
---- a/package/ifupdown-scripts/Config.in
-+++ b/package/ifupdown-scripts/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_IFUPDOWN_SCRIPTS
- 	bool "ifupdown scripts"
- 	default y if BR2_ROOTFS_SKELETON_DEFAULT
--	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD
-+	depends on !BR2_PACKAGE_SYSTEMD_NETWORKD && !BR2_PACKAGE_OPENRC
- 	help
- 	  Set of scripts used by ifupdown (either the standalone one,
- 	  or the busybox one) to bring network up, or tear it down.
-diff --git a/package/openrc/Config.in b/package/openrc/Config.in
-index 84c58b20c3..796858f404 100644
---- a/package/openrc/Config.in
-+++ b/package/openrc/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPENRC
- 	bool "openrc"
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_INIT_OPENRC
- 	select BR2_PACKAGE_NCURSES
- 	help
- 	  Init that works on top of pid 1 (for example
-@@ -21,4 +22,5 @@ config BR2_PACKAGE_OPENRC
+diff --git a/package/x265/0003-arm-asm-primitives.patch b/package/x265/0002-arm-asm-primitives.patch
+similarity index 100%
+rename from package/x265/0003-arm-asm-primitives.patch
+rename to package/x265/0002-arm-asm-primitives.patch
+diff --git a/package/x265/0002-fix-build-error-on-ppc64le.patch b/package/x265/0002-fix-build-error-on-ppc64le.patch
+deleted file mode 100644
+index ca034477eb..0000000000
+--- a/package/x265/0002-fix-build-error-on-ppc64le.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-# HG changeset patch
+-# User Jayashree <jayashree.c@multicorewareinc.com>
+-# Date 1527224165 -19800
+-# Node ID 4504219210793536d921ee4e0b3058698c630bf4
+-# Parent  cc2c5e46f3c87d27e3602af30b06ba6a0fbe2704
+-Fix build error on on ppc64le
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-
+-Upstream status: commit 450421921
+-
+-diff --git a/source/common/param.cpp b/source/common/param.cpp
+---- a/source/common/param.cpp
+-+++ b/source/common/param.cpp
+-@@ -633,7 +633,7 @@
+-         if (bValueWasNull)
+-             p->cpuid = atobool(value);
+-         else
+--            p->cpuid = parseCpuName(value, bError);
+-+            p->cpuid = parseCpuName(value, bError, false);
+- #endif
+-     }
+-     OPT("fps")
+diff --git a/package/x265/x265.hash b/package/x265/x265.hash
+index 61e6181199..16ca5d3ce6 100644
+--- a/package/x265/x265.hash
++++ b/package/x265/x265.hash
+@@ -1,3 +1,3 @@
+ # Locally generated
+-sha256 6e59f9afc0c2b87a46f98e33b5159d56ffb3558a49d8e3d79cb7fdc6b7aaa863  x265_2.8.tar.gz
++sha256 c5b9fc260cabbc4a81561a448f4ce9cad7218272b4011feabc3a6b751b2f0662  x265_3.0.tar.gz
+ sha256 d8afb1bcc7a2cfc603683b168d6987ef0a48e59e0da3693bf55c5d33b67e2b49  COPYING
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index fe317d09d0..4e3b3bfa8e 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "openrc needs a toolchain w/ dynamic library"
- 	depends on BR2_USE_MMU
-+	depends on BR2_INIT_OPENRC
- 	depends on BR2_STATIC_LIBS
-diff --git a/system/Config.in b/system/Config.in
-index 498b56e222..af7d8566d3 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -11,6 +11,7 @@ config BR2_ROOTFS_SKELETON_DEFAULT
- 	bool "default target skeleton"
- 	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_INIT_SYSV
- 	select BR2_PACKAGE_SKELETON_INIT_SYSV if BR2_INIT_BUSYBOX
-+	select BR2_PACKAGE_SKELETON_INIT_OPENRC if BR2_INIT_OPENRC
- 	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_INIT_SYSTEMD
- 	select BR2_PACKAGE_SKELETON_INIT_NONE if BR2_INIT_NONE
- 	help
-@@ -98,6 +99,16 @@ config BR2_INIT_SYSV
- 	select BR2_PACKAGE_INITSCRIPTS
- 	select BR2_PACKAGE_SYSVINIT
- 
-+config BR2_INIT_OPENRC
-+	bool "OpenRC"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_STATIC_LIBS
-+	select BR2_PACKAGE_OPENRC
-+
-+comment "openrc needs a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on BR2_STATIC_LIBS
-+
- # In Buildroot, we decided not to support a split-usr when systemd is
- # used as an init system. This is a design decision, not a systemd
- # issue. Thus the select is with BR2_INIT_SYSTEMD (below) rather than
+-X265_VERSION = 2.8
++X265_VERSION = 3.0
+ X265_SOURCE = x265_$(X265_VERSION).tar.gz
+ X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
+ X265_LICENSE = GPL-2.0+
