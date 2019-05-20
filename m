@@ -1,34 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 May 2019 21:33:18 +0200
-Subject: [Buildroot] [PATCH 2/5] package/wpebackend-fdo: bump to version
- 1.2.0
-In-Reply-To: <20190514114111.20424-3-aperez@igalia.com>
+Date: Mon, 20 May 2019 21:33:26 +0200
+Subject: [Buildroot] [PATCH 3/5] package/libepoxy: update to version
+ 1.5.3, convert to Meson
+In-Reply-To: <20190514114111.20424-4-aperez@igalia.com>
 References: <20190514114111.20424-1-aperez@igalia.com>
- <20190514114111.20424-3-aperez@igalia.com>
-Message-ID: <20190520213318.6deef9c6@windsurf.home>
+ <20190514114111.20424-4-aperez@igalia.com>
+Message-ID: <20190520213326.74609f54@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 14 May 2019 14:41:08 +0300
+On Tue, 14 May 2019 14:41:09 +0300
 Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-> WPE WebKit 2.24.x requires WPEBackend-fdo 1.2.x, as indicated at:
+> This release fixes building with uClibc and symbol lookups for
+> drivers which have GLES 3.x support.
 > 
->   https://wpewebkit.org/release/schedule/#compatible-components
+> Tarballs do not include a generated "configure" script any more,
+> so use Meson to configure the build instead.
 > 
 > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 > ---
->  package/wpebackend-fdo/wpebackend-fdo.hash | 8 ++++----
->  package/wpebackend-fdo/wpebackend-fdo.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+>  package/libepoxy/libepoxy.hash |  4 ++--
+>  package/libepoxy/libepoxy.mk   | 13 +++++++------
+>  2 files changed, 9 insertions(+), 8 deletions(-)
 
-I've marked this patch, as well as PATCH 4/5 and 5/5 as Changes
-Requested.
-
-Thanks!
+Applied to next, thanks.
 
 Thomas
 -- 
