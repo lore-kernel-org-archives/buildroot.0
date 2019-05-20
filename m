@@ -1,71 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 May 2019 22:45:14 +0200
-Subject: [Buildroot] [git commit] package/python-falcon: bump to version
- 2.0.0
-Message-ID: <20190602201235.40DCE8EDA8@busybox.osuosl.org>
+Date: Mon, 20 May 2019 21:21:42 +0200
+Subject: [Buildroot] [git commit] linux/linux-ext-xenomai: allow URL for the
+ ADEOS/IPIPE patch
+Message-ID: <20190602201235.176058EDA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=337d303790cbffd958fe23ca1be5abc18cac9dff
+commit: https://git.buildroot.net/buildroot/commit/?id=7aaedc775bce9bcb2e7545072a28e2a8232c087a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From https://falcon.readthedocs.io/en/stable/changes/2.0.0.html:
+With an URL Buildroot will be able to download the patch
+automatically.
 
-""
-Removed the six and python-mimeparse dependencies.
-""
-
-Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+[Thomas: don't strip file:// in the non-download case]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-falcon/Config.in          | 4 +---
- package/python-falcon/python-falcon.hash | 4 ++--
- package/python-falcon/python-falcon.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 7 deletions(-)
+ linux/Config.ext.in        | 13 ++++++++-----
+ linux/linux-ext-xenomai.mk | 12 +++++++++++-
+ 2 files changed, 19 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-falcon/Config.in b/package/python-falcon/Config.in
-index ffd66eec1b..1bf93064bb 100644
---- a/package/python-falcon/Config.in
-+++ b/package/python-falcon/Config.in
-@@ -1,9 +1,7 @@
- config BR2_PACKAGE_PYTHON_FALCON
- 	bool "python-falcon"
--	select BR2_PACKAGE_PYTHON_SIX # runtime
--	select BR2_PACKAGE_PYTHON_MIMEPARSE # runtime
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 32dacbdf06..14140d352c 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -22,18 +22,21 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI
+ 
+ 	  However, it is recommended to use the latest version of the
+ 	  Adeos/Ipipe patch available at
+-	  http://download.gna.org/adeos/patches
++	  https://xenomai.org/downloads/ipipe/
+ 
+ 	  Xenomai is know to support Blackfin, SH4, x86, ARM, NIOS2
+ 	  and PowerPC architectures.
+ 
+ config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
+-	string "Path for Adeos patch file"
++	string "Path/URL for Adeos patch file"
+ 	depends on BR2_LINUX_KERNEL_EXT_XENOMAI
  	help
- 	  An unladen web framework for building APIs and app
- 	  backends.
+-	  Optionally, explicitly specify the Adeos patch to use.
+-	  Download it at http://download.gna.org/adeos/patches
+-	  and verify that your kernel version in buildroot matches.
++	  Optionally, explicitly specify where to find the Adeos
++	  patch to use.
++	  Examples:
++	  https://xenomai.org/downloads/ipipe/v4.x/arm/ipipe-core-4.19.33-arm-2.patch
++	  or /home/foo/ipipe-core-4.19.33-arm-2.patch
++	  Please verify that your kernel version in Buildroot matches.
  
--	  http://falconframework.org
-+	  https://falconframework.org
-diff --git a/package/python-falcon/python-falcon.hash b/package/python-falcon/python-falcon.hash
-index 7f6ee6ea3d..68b8d4cb2c 100644
---- a/package/python-falcon/python-falcon.hash
-+++ b/package/python-falcon/python-falcon.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/falcon/json
--md5	3cb880665ee2cd52143cf8a7790a35e6  falcon-1.4.1.tar.gz
--sha256	3981f609c0358a9fcdb25b0e7fab3d9e23019356fb429c635ce4133135ae1bc4  falcon-1.4.1.tar.gz
-+md5	77c52c144dd284e6259d257c6f008072  falcon-2.0.0.tar.gz
-+sha256	eea593cf466b9c126ce667f6d30503624ef24459f118c75594a69353b6c3d5fc  falcon-2.0.0.tar.gz
- # Locally computed sha256 checksums
- sha256	e9e7f1a7ba764f042e56afce6f3563c2be9c4fffbb1404b20f8050ae051f577c  LICENSE
-diff --git a/package/python-falcon/python-falcon.mk b/package/python-falcon/python-falcon.mk
-index b724ffadbe..1d7c869d6d 100644
---- a/package/python-falcon/python-falcon.mk
-+++ b/package/python-falcon/python-falcon.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+ comment "xenomai needs a uClibc or glibc toolchain w/ threads"
+ 	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
+diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
+index d066bb32ac..c7c112dac3 100644
+--- a/linux/linux-ext-xenomai.mk
++++ b/linux/linux-ext-xenomai.mk
+@@ -8,10 +8,20 @@ LINUX_EXTENSIONS += xenomai
  
--PYTHON_FALCON_VERSION = 1.4.1
-+PYTHON_FALCON_VERSION = 2.0.0
- PYTHON_FALCON_SOURCE = falcon-$(PYTHON_FALCON_VERSION).tar.gz
--PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/2f/e6/5045da9df509b9259037f065d15608930fd6c997ee930ad230f9fbfecf15
-+PYTHON_FALCON_SITE = https://files.pythonhosted.org/packages/19/30/edff5a1fea7a8e9876c8391e170263e1bb207875b6a65cd619818487b27b
- PYTHON_FALCON_SETUP_TYPE = setuptools
- PYTHON_FALCON_LICENSE = Apache-2.0
- PYTHON_FALCON_LICENSE_FILES = LICENSE
+ # Adeos patch version
+ XENOMAI_ADEOS_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH))
++
++ifneq ($(filter ftp://% http://% https://%,$(XENOMAI_ADEOS_PATCH)),)
++XENOMAI_ADEOS_PATCH_NAME = $(notdir $(XENOMAI_ADEOS_PATCH))
++XENOMAI_ADEOS_PATCH_PATH = $(LINUX_DL_DIR)/$(XENOMAI_ADEOS_PATCH_NAME)
++LINUX_EXTRA_DOWNLOADS += $(XENOMAI_ADEOS_PATCH)
++BR_NO_CHECK_HASH_FOR += $(XENOMAI_ADEOS_PATCH_NAME)
++else
++XENOMAI_ADEOS_PATCH_PATH = $(XENOMAI_ADEOS_PATCH)
++endif
++
+ ifeq ($(XENOMAI_ADEOS_PATCH),)
+ XENOMAI_ADEOS_OPTS = --default
+ else
+-XENOMAI_ADEOS_OPTS = --adeos=$(XENOMAI_ADEOS_PATCH)
++XENOMAI_ADEOS_OPTS = --adeos=$(XENOMAI_ADEOS_PATCH_PATH)
+ endif
+ 
+ # Prepare kernel patch
