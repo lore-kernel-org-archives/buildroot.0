@@ -1,43 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 May 2019 22:34:29 +0200
-Subject: [Buildroot] [PATCH] arch: force syntax colouring to kconfig in
- Config.in.*
-In-Reply-To: <20190503131017.30477-1-yann.morin.1998@free.fr>
-References: <20190503131017.30477-1-yann.morin.1998@free.fr>
-Message-ID: <20190520223429.363e9f89@windsurf.home>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 20 May 2019 22:39:49 +0200
+Subject: [Buildroot] [PATCH] toolchain: specify GCC_BUG_85180 is true only
+ if GCC version < 8.x
+Message-ID: <20190520203949.120720-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  3 May 2019 15:10:17 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+Bug 85180:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+has been fixed on Gcc version >= 8.x
 
-> It is too sad when an editor picks up the wrong syntax...
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> ---
->  arch/Config.in.arc        | 3 +++
->  arch/Config.in.arm        | 3 +++
->  arch/Config.in.csky       | 3 +++
->  arch/Config.in.m68k       | 3 +++
->  arch/Config.in.microblaze | 3 +++
->  arch/Config.in.mips       | 3 +++
->  arch/Config.in.nios2      | 3 +++
->  arch/Config.in.or1k       | 3 +++
->  arch/Config.in.powerpc    | 3 +++
->  arch/Config.in.riscv      | 3 +++
->  arch/Config.in.sh         | 3 +++
->  arch/Config.in.sparc      | 3 +++
->  arch/Config.in.x86        | 3 +++
->  arch/Config.in.xtensa     | 3 +++
->  14 files changed, 42 insertions(+)
+So:
+- add 'depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8' to 'config
+  BR2_TOOLCHAIN_HAS_GCC_BUG_85180'.
 
-Applied to next, thanks.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ toolchain/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 8c5a4fb88e..6421f6fcbb 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -129,6 +129,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_85180
+ 	bool
+ 	default y if BR2_microblaze
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85862
+ # An infinite loop exists in the find_base_term() logic of 6.x
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
