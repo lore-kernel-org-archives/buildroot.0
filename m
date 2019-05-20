@@ -1,83 +1,82 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 May 2019 21:17:08 +0200
-Subject: [Buildroot] [git commit branch/next] package/powertop: fix build
- failure due to PATH_MAX
-Message-ID: <20190520191129.C26B781487@busybox.osuosl.org>
+Date: Mon, 20 May 2019 21:21:42 +0200
+Subject: [Buildroot] [git commit branch/next] linux/linux-ext-xenomai: allow
+ URL for the ADEOS/IPIPE patch
+Message-ID: <20190520191752.10DA78C584@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11ad081737e76df848cedbf24c77ec35cfbf31e9
+commit: https://git.buildroot.net/buildroot/commit/?id=7aaedc775bce9bcb2e7545072a28e2a8232c087a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
- - http://autobuild.buildroot.org/results/a0b3337cf4a827e6566f8b15b6bb180f0dcef7a3
+With an URL Buildroot will be able to download the patch
+automatically.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: S??bastien Szymanski <sebastien.szymanski@armadeus.com>
+[Thomas: don't strip file:// in the non-download case]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-wakeup_xxx.h-include-limits.h.patch       | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+ linux/Config.ext.in        | 13 ++++++++-----
+ linux/linux-ext-xenomai.mk | 12 +++++++++++-
+ 2 files changed, 19 insertions(+), 6 deletions(-)
 
-diff --git a/package/powertop/0002-wakeup_xxx.h-include-limits.h.patch b/package/powertop/0002-wakeup_xxx.h-include-limits.h.patch
-new file mode 100644
-index 0000000000..821de8b948
---- /dev/null
-+++ b/package/powertop/0002-wakeup_xxx.h-include-limits.h.patch
-@@ -0,0 +1,54 @@
-+From 4c24fdd8e0a42359df7308155b2d43c28a5e02fd Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 20 May 2019 20:25:00 +0200
-+Subject: [PATCH] wakeup_xxx.h: include limits.h
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 32dacbdf06..14140d352c 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -22,18 +22,21 @@ config BR2_LINUX_KERNEL_EXT_XENOMAI
+ 
+ 	  However, it is recommended to use the latest version of the
+ 	  Adeos/Ipipe patch available at
+-	  http://download.gna.org/adeos/patches
++	  https://xenomai.org/downloads/ipipe/
+ 
+ 	  Xenomai is know to support Blackfin, SH4, x86, ARM, NIOS2
+ 	  and PowerPC architectures.
+ 
+ config BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH
+-	string "Path for Adeos patch file"
++	string "Path/URL for Adeos patch file"
+ 	depends on BR2_LINUX_KERNEL_EXT_XENOMAI
+ 	help
+-	  Optionally, explicitly specify the Adeos patch to use.
+-	  Download it at http://download.gna.org/adeos/patches
+-	  and verify that your kernel version in buildroot matches.
++	  Optionally, explicitly specify where to find the Adeos
++	  patch to use.
++	  Examples:
++	  https://xenomai.org/downloads/ipipe/v4.x/arm/ipipe-core-4.19.33-arm-2.patch
++	  or /home/foo/ipipe-core-4.19.33-arm-2.patch
++	  Please verify that your kernel version in Buildroot matches.
+ 
+ comment "xenomai needs a uClibc or glibc toolchain w/ threads"
+ 	depends on BR2_PACKAGE_XENOMAI_COBALT_ARCH_SUPPORTS
+diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
+index d066bb32ac..c7c112dac3 100644
+--- a/linux/linux-ext-xenomai.mk
++++ b/linux/linux-ext-xenomai.mk
+@@ -8,10 +8,20 @@ LINUX_EXTENSIONS += xenomai
+ 
+ # Adeos patch version
+ XENOMAI_ADEOS_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH))
 +
-+limits.h must be included to define PATH_MAX otherwise build will fail
-+on:
++ifneq ($(filter ftp://% http://% https://%,$(XENOMAI_ADEOS_PATCH)),)
++XENOMAI_ADEOS_PATCH_NAME = $(notdir $(XENOMAI_ADEOS_PATCH))
++XENOMAI_ADEOS_PATCH_PATH = $(LINUX_DL_DIR)/$(XENOMAI_ADEOS_PATCH_NAME)
++LINUX_EXTRA_DOWNLOADS += $(XENOMAI_ADEOS_PATCH)
++BR_NO_CHECK_HASH_FOR += $(XENOMAI_ADEOS_PATCH_NAME)
++else
++XENOMAI_ADEOS_PATCH_PATH = $(XENOMAI_ADEOS_PATCH)
++endif
 +
-+In file included from wakeup/wakeup_ethernet.cpp:45:0:
-+wakeup/wakeup_ethernet.h:35:16: error: 'PATH_MAX' was not declared in this scope
-+  char eth_path[PATH_MAX];
-+
-+In file included from wakeup/wakeup_usb.cpp:45:0:
-+wakeup/wakeup_usb.h:35:16: error: 'PATH_MAX' was not declared in this scope
-+  char usb_path[PATH_MAX];
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a0b3337cf4a827e6566f8b15b6bb180f0dcef7a3
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://lists.01.org/pipermail/powertop/2019-May/002052.html]
-+---
-+ src/wakeup/wakeup_ethernet.h | 1 +
-+ src/wakeup/wakeup_usb.h      | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/src/wakeup/wakeup_ethernet.h b/src/wakeup/wakeup_ethernet.h
-+index 682bf95..e0fa628 100644
-+--- a/src/wakeup/wakeup_ethernet.h
-++++ b/src/wakeup/wakeup_ethernet.h
-+@@ -25,6 +25,7 @@
-+ #ifndef _INCLUDE_GUARD_ETHERNET_WAKEUP_H
-+ #define _INCLUDE_GUARD_ETHERNET_WAKEUP_H
-+ 
-++#include <limits.h>
-+ #include <vector>
-+ 
-+ #include "wakeup.h"
-+diff --git a/src/wakeup/wakeup_usb.h b/src/wakeup/wakeup_usb.h
-+index f7a1f7e..15898e3 100644
-+--- a/src/wakeup/wakeup_usb.h
-++++ b/src/wakeup/wakeup_usb.h
-+@@ -25,6 +25,7 @@
-+ #ifndef _INCLUDE_GUARD_USB_WAKEUP_H
-+ #define _INCLUDE_GUARD_USB_WAKEUP_H
-+ 
-++#include <limits.h>
-+ #include <vector>
-+ 
-+ #include "wakeup.h"
-+-- 
-+2.20.1
-+
+ ifeq ($(XENOMAI_ADEOS_PATCH),)
+ XENOMAI_ADEOS_OPTS = --default
+ else
+-XENOMAI_ADEOS_OPTS = --adeos=$(XENOMAI_ADEOS_PATCH)
++XENOMAI_ADEOS_OPTS = --adeos=$(XENOMAI_ADEOS_PATCH_PATH)
+ endif
+ 
+ # Prepare kernel patch
