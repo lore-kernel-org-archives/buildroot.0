@@ -1,31 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:25:17 +0200
-Subject: [Buildroot] [git commit] package/gmp: add hashes for license files
-Message-ID: <20190602201236.B337081354@busybox.osuosl.org>
+Date: Mon, 20 May 2019 11:11:03 +0200
+Subject: [Buildroot] [git commit] package/powertop: bump to version 2.10
+Message-ID: <20190602201234.BC63981354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b5b082416de476679b47d21538bb1f7a6b9c844
+commit: https://git.buildroot.net/buildroot/commit/?id=f1fbbfd872b1aea64ec128db2363346b1df1318b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Reviewed-by: Thomas Huth <huth@tuxfamily.org>
+Add hash for license file
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gmp/gmp.hash | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/powertop/powertop.hash | 3 ++-
+ package/powertop/powertop.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/gmp/gmp.hash b/package/gmp/gmp.hash
-index f4793cd93c..417b9d17bf 100644
---- a/package/gmp/gmp.hash
-+++ b/package/gmp/gmp.hash
-@@ -1,2 +1,6 @@
- # Locally calculated after checking pgp signature
- sha256	87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912	gmp-6.1.2.tar.xz
-+
-+# Locally calculated
-+sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LESSERv3
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
+diff --git a/package/powertop/powertop.hash b/package/powertop/powertop.hash
+index 0f9acdc277..13e938d505 100644
+--- a/package/powertop/powertop.hash
++++ b/package/powertop/powertop.hash
+@@ -1,2 +1,3 @@
+ # Locally-generated hash
+-sha256	aa7fb7d8e9a00f05e7d8a7a2866d85929741e0d03a5bf40cab22d2021c959250	powertop-v2.9.tar.gz
++sha256	d3b7459eaba7d01c8841dd33a3b4d369416c01e9bd8951b0d88234cf18fe4a75	powertop-v2.10.tar.gz
++sha256	b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259	COPYING
+diff --git a/package/powertop/powertop.mk b/package/powertop/powertop.mk
+index cf5e8d4ffb..e4472080e8 100644
+--- a/package/powertop/powertop.mk
++++ b/package/powertop/powertop.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-POWERTOP_VERSION = 2.9
+-POWERTOP_SITE = https://01.org/sites/default/files/downloads/powertop
++POWERTOP_VERSION = 2.10
++POWERTOP_SITE = https://01.org/sites/default/files/downloads
+ POWERTOP_SOURCE = powertop-v$(POWERTOP_VERSION).tar.gz
+ POWERTOP_DEPENDENCIES = pciutils ncurses libnl host-pkgconf \
+ 	$(TARGET_NLS_DEPENDENCIES)
