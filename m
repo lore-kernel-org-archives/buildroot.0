@@ -1,68 +1,88 @@
-From: Robert Hancock <hancock@sedsystems.ca>
-Date: Fri, 31 May 2019 16:18:15 -0600
-Subject: [Buildroot] [PATCH] package/gpsd: Fix systemd service
- installation and paths
-In-Reply-To: <20190531231124.54d5a076@windsurf>
-References: <1559170961-14091-1-git-send-email-hancock@sedsystems.ca>
- <20190531231124.54d5a076@windsurf>
-Message-ID: <2fe4d417-ed59-cb97-35b8-73e5fa701c21@sedsystems.ca>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 20 May 2019 11:11:11 +0200
+Subject: [Buildroot] [git commit] package/pptp-linux: bump to version 1.10.0
+Message-ID: <20190602201234.C41DC81354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2019-05-31 3:11 p.m., Thomas Petazzoni wrote:
-> Hello Robert,
-> 
-> Thanks for this patch!
-> 
-> On Wed, 29 May 2019 17:02:41 -0600
-> Robert Hancock <hancock@sedsystems.ca> wrote:
-> 
->> Fix several issues with systemd service file installation for gpsd:
->>
->> -systemd support in the gpsd build was defaulting to enabled or not
->> based on whether the host system had systemd directories present. Set
->> this explicitly based on whether BR2_INIT_SYSTEMD is set.
->>
->> -The installed systemd service files referenced paths in /usr/local when
->> the actual binaries are installed in /usr. Replace /usr/local with /usr
->> in the installed service files.
-> 
-> I have not looked into the gpsd build system, but I was wondering if
-> there was a way to convince gpsd to produce those files with the right
-> prefix (i.e /usr instead or /usr/local).
+commit: https://git.buildroot.net/buildroot/commit/?id=305e8022471c4dd4b61117bdc8399602c42fb39b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As far as I can see, no - the service files are just part of the gpsd
-source tree and the build system installs them as-is, there's no
-mechanism provided to set the prefix etc.
+- Remove third patch (already in version)
+- Add hash for license file
 
-> 
->> -When BR2_PACKAGE_HAS_UDEV was enabled, all of the binaries were
->> re-installed again, along with the udev rules, as part of the
->> post-install hooks. Just choose between using install and udev-install
->> based on whether udev is enabled to avoid redundant re-installations.
-> 
-> This should be part of a separate patch, because it's not a fix, just
-> an unrelated optimization.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0003-pqueue.h-include-sys-types.h.patch        | 30 ----------------------
+ package/pptp-linux/pptp-linux.hash                 | 10 +++++---
+ package/pptp-linux/pptp-linux.mk                   |  2 +-
+ 3 files changed, 8 insertions(+), 34 deletions(-)
 
-I suppose it wasn't obvious from the description, but this issue
-actually caused problems with fixing the systemd service file paths,
-since we would fix the paths after the files were installed, but then
-udev-install was being run afterwards and reinstalled everything, which
-wiped out our fix.
-
-> 
-> But in fact, the systemd fixes could also be two separate patches.
-> 
-> Thanks,
-> 
-> Thomas
-> 
-
--- 
-Robert Hancock
-Senior Software Developer
-SED Systems, a division of Calian Ltd.
-Email: hancock at sedsystems.ca
+diff --git a/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch b/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch
+deleted file mode 100644
+index 1036b3c895..0000000000
+--- a/package/pptp-linux/0003-pqueue.h-include-sys-types.h.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From 060ad28b9ca5e99d7c6e8010132da58a3a8a0585 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Fri, 22 Jan 2016 10:19:18 -0300
+-Subject: [PATCH] pqueue.h: include sys/types.h
+-
+-We're using u_int32_t here, this breaks on musl libc builds otherwise.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+----
+-Patch status: applied upstream:
+-https://sourceforge.net/p/pptpclient/git/ci/ee8ef349d9543cb48045a27d1cdd801fc6e910e8/
+-
+- pqueue.h | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/pqueue.h b/pqueue.h
+-index a56590f..8c60c62 100644
+---- a/pqueue.h
+-+++ b/pqueue.h
+-@@ -3,6 +3,7 @@
+- 
+- #include <time.h>
+- #include <sys/time.h>
+-+#include <sys/types.h>
+- 
+- /* wait this many seconds for missing packets before forgetting about them */
+- #define DEFAULT_PACKET_TIMEOUT 0.3
+--- 
+-2.4.10
+-
+diff --git a/package/pptp-linux/pptp-linux.hash b/package/pptp-linux/pptp-linux.hash
+index 6200ef151f..668e01c30b 100644
+--- a/package/pptp-linux/pptp-linux.hash
++++ b/package/pptp-linux/pptp-linux.hash
+@@ -1,3 +1,7 @@
+-# From http://sourceforge.net/projects/pptpclient/files/pptp/pptp-1.9.0/
+-md5 b2117b377f65294a9786f80f0235d308  pptp-1.9.0.tar.gz
+-sha1 047bb9812be477b44c94ffb1dc95c34658eedc24  pptp-1.9.0.tar.gz
++# From http://sourceforge.net/projects/pptpclient/files/pptp/pptp-1.10.0/
++md5 8d25341352fdae5ad5b36b9f18254908  pptp-1.10.0.tar.gz
++sha1 173c9b7d204c89fd1538116f165bba1e9101b51c  pptp-1.10.0.tar.gz
++
++# Locally calculated
++sha256 82492db8e487ce73b182ee7f444251d20c44f5c26d6e96c553ec7093aefb5af4  pptp-1.10.0.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/pptp-linux/pptp-linux.mk b/package/pptp-linux/pptp-linux.mk
+index 25f3037f88..7fd0733977 100644
+--- a/package/pptp-linux/pptp-linux.mk
++++ b/package/pptp-linux/pptp-linux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PPTP_LINUX_VERSION = 1.9.0
++PPTP_LINUX_VERSION = 1.10.0
+ PPTP_LINUX_SITE = http://downloads.sourceforge.net/project/pptpclient/pptp/pptp-$(PPTP_LINUX_VERSION)
+ PPTP_LINUX_SOURCE = pptp-$(PPTP_LINUX_VERSION).tar.gz
+ PPTP_LINUX_MAKE = $(MAKE1)
