@@ -1,75 +1,117 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Mon, 20 May 2019 11:41:35 -0400
-Subject: [Buildroot] [PATCH 1/1] package/meson: Fix linking of
- shared/static libs with static libs
-In-Reply-To: <20190518215637.2ea2ea51@windsurf>
-References: <20190514184245.92222-1-aduskett@gmail.com>
- <20190518215637.2ea2ea51@windsurf>
-Message-ID: <CAFSsvmrR+CsitdAX4khEzYr+NmeNCVAvS6P6NDQzyrECaGBsfg@mail.gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 20 May 2019 19:34:16 +0200
+Subject: [Buildroot] [PATCH] core: make it possible to check flake8 like
+ we check package
+In-Reply-To: <20190519164417.20124-1-yann.morin.1998@free.fr>
+References: <20190519164417.20124-1-yann.morin.1998@free.fr>
+Message-ID: <20190520193416.0e9f8217@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Thomas;
+Hello Yann,
 
-Sorry, it's for next.
+On Sun, 19 May 2019 18:44:17 +0200, "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Thanks!
+> Move the code to run check-flake8 into the Makefile, like we
+> have for check-package, so that it is easy to run locally (and
+> not wait for someone to report a failure from their Gitlab
+> pipelines).
+>
+> Since there is no "post-rule" in Makefiles, we resort to using
+> a little trick to remove the temporary file. Also, there is a
+> slight change in behaviour: the list of files is not reported,
+> and the number of processed files is not reported either (there
+> is little value in that; all that is important are the errors,
+> if any).
+>
+> Regenerate .gitlab-ci.yml.
+>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  .gitlab-ci.yml    | 9 +--------
+>  .gitlab-ci.yml.in | 9 +--------
+>  Makefile          | 9 ++++++++-
+>  3 files changed, 10 insertions(+), 17 deletions(-)
+>
+> diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+> index 836944faf5..002ee07afb 100644
+> --- a/.gitlab-ci.yml
+> +++ b/.gitlab-ci.yml
+> @@ -21,15 +21,8 @@ check-DEVELOPERS:
+>
+>  check-flake8:
+>      extends: .check_base
+> -    before_script:
+> -        # Help flake8 to find the Python files without .py extension.
+> -        - find * -type f -name '*.py' > files.txt
+> -        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
+> -        - sort -u files.txt | tee files.processed
+>      script:
+> -        - python -m flake8 --statistics --count --max-line-length=132 $(cat files.processed)
+> -    after_script:
+> -        - wc -l files.processed
+> +        - make check-flake8
+>
+>  check-gitlab-ci.yml:
+>      extends: .check_base
+> diff --git a/.gitlab-ci.yml.in b/.gitlab-ci.yml.in
+> index 33cb665d98..afa0d93500 100644
+> --- a/.gitlab-ci.yml.in
+> +++ b/.gitlab-ci.yml.in
+> @@ -21,15 +21,8 @@ check-DEVELOPERS:
+>
+>  check-flake8:
+>      extends: .check_base
+> -    before_script:
+> -        # Help flake8 to find the Python files without .py extension.
+> -        - find * -type f -name '*.py' > files.txt
+> -        - find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1 >> files.txt
+> -        - sort -u files.txt | tee files.processed
+>      script:
+> -        - python -m flake8 --statistics --count --max-line-length=132 $(cat files.processed)
+> -    after_script:
+> -        - wc -l files.processed
+> +        - make check-flake8
+>
+>  check-gitlab-ci.yml:
+>      extends: .check_base
+> diff --git a/Makefile b/Makefile
+> index 7246376cf9..f78e5aad4d 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -119,7 +119,7 @@ export BR2_VERSION_FULL := $(BR2_VERSION)$(shell $(TOPDIR)/support/scripts/setlo
+>  noconfig_targets := menuconfig nconfig gconfig xconfig config oldconfig randconfig \
+>  	defconfig %_defconfig allyesconfig allnoconfig alldefconfig syncconfig release \
+>  	randpackageconfig allyespackageconfig allnopackageconfig \
+> -	print-version olddefconfig distclean manual manual-% check-package
+> +	print-version olddefconfig distclean manual manual-% check-package check-flake8
+>
+>  # Some global targets do not trigger a build, but are used to collect
+>  # metadata, or do various checks. When such targets are triggered,
+> @@ -1197,6 +1197,13 @@ release:
+>  print-version:
+>  	@echo $(BR2_VERSION_FULL)
+>
+> +check-flake8:
+> +	{ find * -type f -name '*.py'; \
+> +	  find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1; \
+> +	} >files.txt
+> +	$(Q)python -m flake8 --statistics --count --max-line-length=132 \
+> +		$$(sort -u files.txt; rm -f files.txt)
+> +
+>  check-package:
+>  	find $(TOPDIR) -type f \( -name '*.mk' -o -name '*.hash' -o -name 'Config.*' \) \
+>  		-exec ./utils/check-package {} +
 
-Adam
+Did a local run with 'make check-flake8', produced 7636 warnings ;-) , you can add my
 
-On Sat, May 18, 2019 at 3:56 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> +Peter Seiderer in Cc. Peter, if you could review the below patch, it
-> would be nice.
->
-> On Tue, 14 May 2019 14:42:45 -0400
-> aduskett at gmail.com wrote:
->
-> > From: Adam Duskett <Aduskett@gmail.com>
-> >
-> > From https://github.com/mesonbuild/meson/pull/3939:
-> >
-> > This commit contains the following fixes:
-> >
-> >   1. When a shared library A does link_with: to static library B, the
-> >      parts of B used by A will be added to A, and so we don't need to
-> >      return B in A.get_dependencies() for targets that link to A. This
-> >      already is the behaviour when a shared library A does link_whole:
-> >      on B.
-> >
-> >   2. In situation (1), when generating a pkg-config file for A, we must
-> >      also not add B to Libs.private for A. This already is the behaviour
-> >      when a shared library A does link_whole: on B.
-> >
-> >   3. When a static library A does link_whole: to static library B, we
-> >      must add the objects in B to A.
-> >
-> >   4. When a static library A does link_with: to static library B, and
-> >      B is not installed (which makes it an internal static library), we
-> >      must add the objects in B to A, otherwise nothing can use A.
-> >
-> >   5. In situation (4), when generating a pkg-config file for A, we must
-> >      also not add B to Libs.private for A.
-> >
-> > Without this patch, static builds of libglib2 and gstreamer using the
-> > meson build system will not compile and link properly.
-> >
-> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
->
-> Adam: is this for next or master ? Since libglib2 and gstreamer in
-> master are still using autotools, I would suppose this patch is for
-> next. Could you confirm ?
->
-> Thanks,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Tested-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
