@@ -1,85 +1,27 @@
-From: =?UTF-8?Q?S=c3=a9bastien_Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Mon, 20 May 2019 09:29:55 +0200
-Subject: [Buildroot] [PATCH v2 1/1] linux: xenomai: allow URL for the
- ADEOS/IPIPE patch
-In-Reply-To: <20190519091707.GB4569@scaer>
-References: <20190517125049.15774-1-sebastien.szymanski@armadeus.com>
- <20190518220632.312f98da@windsurf> <20190519091707.GB4569@scaer>
-Message-ID: <d4035039-6dfe-046b-48da-fa323489e5fa@armadeus.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 20 May 2019 10:20:54 +0200
+Subject: [Buildroot] [PATCH v1] utils/check-package: fix flake8 warning
+In-Reply-To: <20190519211528.9917-1-ps.report@gmx.net> (Peter Seiderer's
+ message of "Sun, 19 May 2019 23:15:28 +0200")
+References: <20190519211528.9917-1-ps.report@gmx.net>
+Message-ID: <87d0kdy1sp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
 
-On 5/19/19 11:17 AM, Yann E. MORIN wrote:
-> Thomas, S?bastien, All,
-> 
-> On 2019-05-18 22:06 +0200, Thomas Petazzoni spake thusly:
->> On Fri, 17 May 2019 14:50:49 +0200
->> S?bastien Szymanski <sebastien.szymanski@armadeus.com> wrote:
->>> diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
->>> index d066bb32ac..ed29943e6c 100644
->>> --- a/linux/linux-ext-xenomai.mk
->>> +++ b/linux/linux-ext-xenomai.mk
->>> @@ -8,10 +8,20 @@ LINUX_EXTENSIONS += xenomai
->>>  
->>>  # Adeos patch version
->>>  XENOMAI_ADEOS_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH))
->>> +
->>> +ifneq ($(filter ftp://% http://% https://%, $(XENOMAI_ADEOS_PATCH)),)
->>> +XENOMAI_ADEOS_PATCH_NAME = $(notdir $(XENOMAI_ADEOS_PATCH))
->>> +XENOMAI_ADEOS_PATCH_PATH = $(LINUX_DL_DIR)/$(XENOMAI_ADEOS_PATCH_NAME)
->>> +LINUX_EXTRA_DOWNLOADS += $(XENOMAI_ADEOS_PATCH)
->>> +BR_NO_CHECK_HASH_FOR += $(XENOMAI_ADEOS_PATCH_NAME)
->>> +else
->>> +XENOMAI_ADEOS_PATCH_PATH = $(subst file://,,$(XENOMAI_ADEOS_PATCH))
->>
->> I don't feel super strongly about this, but everywhere else in
->> Buildroot when paths are specified through configuration options, we do
->> not support having a file:// URI. For example the
->> BR2_LINUX_KERNEL_PATCH option will support file paths only without
->> file://.
->>
->> So for consistency, I would do the same here, and therefore just do:
->>
->> XENOMAI_ADEOS_PATCH_PATH = $(XENOMAI_ADEOS_PATCH)
->>
->> Yann, what do you think ?
-> 
-> Indeed, I don't see the point in the file:// scheme. I don't even see
-> people really using it routinely.
-> 
-> But as far as I can see, the above, although wrong, does not require
-> that the file:// prefix be used. If it is there, it is scrubbed;
-> otherwise the filename is used as-is.
+ > Fix flake 8 warning (introduced with commit [1]):
+ >   utils/checkpackagelib/lib.py:56:1: E302 expected 2 blank lines, found 1
 
-I don't understand what you mean with "it is scrubbed", sorry.
-With the file:// scheme, Buildroot will try to download the patch with
-wget and fail, that's why I filter the file:// scheme out.
+ > [1] https://git.buildroot.net/buildroot/commit/?id=8e352c32b0beded97a8a5c1e9edc9d618514ee7b
 
-But I agree that the file:// scheme is not really useful.
+ > Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-> 
-> And it is wrong, because it should only remove it at the beginning.
-> $(subst ...) would remove it anywhere. So if we were to use it (and I
-> think we should not), we'd have to use $(patsubst ...) instead;
->     XENOMAI_ADEOS_PATCH_PATH = $(patsubst file://%,%,$(XENOMAI_ADEOS_PATCH))
-
-Indeed... Thanks
-
-Regards,
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-
+Committed, thanks.
 
 -- 
-S?bastien Szymanski
-Software engineer, Armadeus Systems
-Tel: +33 (0)9 72 29 41 44
-Fax: +33 (0)9 72 28 79 26
+Bye, Peter Korsgaard
