@@ -1,44 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 May 2019 10:23:02 +0200
-Subject: [Buildroot] [git commit branch/next] package/connman: bump to
- version 1.37
-Message-ID: <20190520081749.83AE57FE30@busybox.osuosl.org>
+Date: Mon, 20 May 2019 11:05:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ltp-testsuite: bump to version
+ 20190517
+In-Reply-To: <20190519200852.26710-1-petr.vorel@gmail.com> (Petr Vorel's
+ message of "Sun, 19 May 2019 22:08:52 +0200")
+References: <20190519200852.26710-1-petr.vorel@gmail.com>
+Message-ID: <874l5pxzqd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2529cdd7a3ff4efb805dc92cdea0cd367e786001
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/connman/connman.hash | 2 +-
- package/connman/connman.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Also remove workaround deleting testcases/kernel/controllers/cpuset/.
+ > Upstream commit b24f3d32c ("cpuset: Detect missing fts.h") detect fts.h
+ > presence, thus it's working with '#undef __UCLIBC_HAS_FTS__'.
 
-diff --git a/package/connman/connman.hash b/package/connman/connman.hash
-index fad1c55d2d..ff5b4d48f0 100644
---- a/package/connman/connman.hash
-+++ b/package/connman/connman.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/connman/sha256sums.asc
--sha256 c789db41cc443fa41e661217ea321492ad59a004bebcd1aa013f3bc10a6e0074  connman-1.36.tar.xz
-+sha256 6ce29b3eb0bb16a7387bc609c39455fd13064bdcde5a4d185fab3a0c71946e16  connman-1.37.tar.xz
- # Locally computed
- sha256 b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
-diff --git a/package/connman/connman.mk b/package/connman/connman.mk
-index b67d1c4b86..839bc7a0e2 100644
---- a/package/connman/connman.mk
-+++ b/package/connman/connman.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CONNMAN_VERSION = 1.36
-+CONNMAN_VERSION = 1.37
- CONNMAN_SOURCE = connman-$(CONNMAN_VERSION).tar.xz
- CONNMAN_SITE = $(BR2_KERNEL_MIRROR)/linux/network/connman
- CONNMAN_DEPENDENCIES = libglib2 dbus iptables
+ > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+ > ---
+ > Tested locally (uClibc) and with test-pkg.
+
+ > ./utils/test-pkg -p ltp-testsuite 
+ >                              br-arm-full [1/6]: OK
+ >                   br-arm-cortex-a9-glibc [2/6]: OK
+ >                    br-arm-cortex-m4-full [3/6]: SKIPPED
+ >                           br-x86-64-musl [4/6]: SKIPPED
+ >                       br-arm-full-static [5/6]: OK
+ >                             sourcery-arm [6/6]: OK
+ > 6 builds, 2 skipped, 0 build failed, 0 legal-info failed
+
+ > NOTE: MUSL build is work-in-progress, maybe next release.
+
+Committed to next, thanks.
+
+-- 
+Bye, Peter Korsgaard
