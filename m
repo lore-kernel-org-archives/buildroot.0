@@ -1,31 +1,28 @@
-From: Martin Kepplinger <martink@posteo.de>
-Date: Tue, 21 May 2019 12:45:44 +0200
-Subject: [Buildroot] [PATCH] tslib: update to 1.20
-In-Reply-To: <87imu4urup.fsf@dell.be.48ers.dk>
-References: <20190521064101.31715-1-martink@posteo.de>
- <87imu4urup.fsf@dell.be.48ers.dk>
-Message-ID: <c6b4a107-4940-ea22-ac3e-c33c0308676b@posteo.de>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 21 May 2019 14:34:34 +0200
+Subject: [Buildroot] [PATCH] toolchain: specify GCC_BUG_85180 is true
+ only if GCC version < 8.x
+In-Reply-To: <20190520210722.GA24931@dell5510>
+References: <20190520203949.120720-1-giulio.benetti@micronovasrl.com>
+ <20190520210722.GA24931@dell5510>
+Message-ID: <1be6dbdc-6ff9-fc60-f56f-8ca3a5c6c4c3@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 21.05.19 10:36, Peter Korsgaard wrote:
->>>>>> "Martin" == Martin Kepplinger <martink@posteo.de> writes:
-> 
->  > The release page has a changelog overview:
->  > https://github.com/libts/tslib/releases
-> 
->  > Signed-off-by: Martin Kepplinger <martink@posteo.de>
->  > ---
-> 
->  > IMO this release qualifies for being included in a stable branch.
-> 
-> Because of the 'ts_setup: fix possible memory leak'? Ok - Committed to
-> master, thanks.
-> 
+Il 20/05/2019 23:07, Petr Vorel ha scritto:
+> Reviewed-by: Petr Vorel<petr.vorel@gmail.com>
+Thanks
+-- 
+Giulio Benetti
+CTO
 
-Because of this and the fact that it's overall little changes.
-
-                     martin
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
