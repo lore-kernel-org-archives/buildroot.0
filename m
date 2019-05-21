@@ -1,48 +1,45 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 21 May 2019 15:39:32 +0200
-Subject: [Buildroot] [PATCH v2 12/12] package/postgresql: fix BUG_85180
- build timeout
-In-Reply-To: <20190521133932.81841-1-giulio.benetti@micronovasrl.com>
-References: <20190521133932.81841-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190521133932.81841-13-giulio.benetti@micronovasrl.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Tue, 21 May 2019 18:18:32 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libubootenv: fix build with
+ musl and static lib
+Message-ID: <1558455512-31444-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Microblaze Gcc version < 8.x build hangs on compiling last files
-before linking.
-This is due to bug 85180:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
-Bug shows up building postgresql with optimization but not when building
-with -O0.
+Libubootenv is a shared library, so add missing dependency on !BR2_STATIC_LIBS.
 
-If BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 passing it to
-CFLAGS.
+Also add BR2_TOOLCHAIN_USES_MUSL dependency to avoid 'unknown type name 'loff_t''.
 
 Fixes:
-http://autobuild.buildroot.net/results/53c/53c270c696ee999d541da0b09bf6a215e5335e9a/
+ - http://autobuild.buildroot.net/results/206/206f1eba0dec39de1c02d760fa8f961d5a3879d0/
+ - http://autobuild.buildroot.net/results/8a6/8a6b3087a4c2cb53f4e9b80183c7f4b0ea6ffd3b/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/postgresql/postgresql.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libubootenv/Config.in | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 067679bcbd..da49ca755e 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -93,6 +93,10 @@ else
- POSTGRESQL_CONF_OPTS += --without-systemd
- endif
+diff --git a/package/libubootenv/Config.in b/package/libubootenv/Config.in
+index 9be52c4..bad5aee 100644
+--- a/package/libubootenv/Config.in
++++ b/package/libubootenv/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_LIBUBOOTENV
+ 	bool "libubootenv"
++	depends on !BR2_STATIC_LIBS
++	depends on !BR2_TOOLCHAIN_USES_MUSL # loff_t
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+ 	  libubootenv is a library that provides a hardware independent
+@@ -9,3 +11,6 @@ config BR2_PACKAGE_LIBUBOOTENV
+ 	  new tools build from the library and not from U-Boot.
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+POSTGRESQL_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O0"
-+endif
+ 	  https://github.com/sbabic/libubootenv/
 +
- define POSTGRESQL_USERS
- 	postgres -1 postgres -1 * /var/lib/pgsql /bin/sh - PostgreSQL Server
- endef
++comment "libubootenv application library needs a glibc or uClibc toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS || BR2_TOOLCHAIN_USES_MUSL
 -- 
-2.17.1
+2.7.4
