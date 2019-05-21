@@ -1,54 +1,43 @@
-From: Martin Kepplinger <martink@posteo.de>
-Date: Tue, 21 May 2019 08:41:01 +0200
-Subject: [Buildroot] [PATCH] tslib: update to 1.20
-Message-ID: <20190521064101.31715-1-martink@posteo.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 21 May 2019 09:15:51 +0200
+Subject: [Buildroot] [PATCH] package/atop: fix BUG_85180 build timeout
+In-Reply-To: <20190520212723.63754-1-giulio.benetti@micronovasrl.com>
+References: <20190520212723.63754-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190521091551.384da8a1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The release page has a changelog overview:
-https://github.com/libts/tslib/releases
+Hello,
 
-Signed-off-by: Martin Kepplinger <martink@posteo.de>
----
+On Mon, 20 May 2019 23:27:23 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-IMO this release qualifies for being included in a stable branch.
+> With Microblaze Gcc version < 8.x build hangs on compiling last files
+> before linking. This is due to bug 85180:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+> Bug shows up building atop with -g2 and -g3.
+> 
+> If BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y and BR2_ENABLE_DEBUG=y force using
+> -g1 passing it to CFLAGS.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/94a/94aa00f776b8a3491ac0b3212c95f5e666c5a29a/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 
-thanks
-                          martin
+I am a bit confused: the other instances of bug 85180 are worked around
+by passing -O0 (in glibmm, opus, chocolate-doom, jasper), but here you
+do the work around using -g1.
 
+Is it expected ? Can't we have the same work around in all situations ?
 
+Best regards,
 
- package/tslib/tslib.hash | 4 ++--
- package/tslib/tslib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index 269d8f95fe..b250783fda 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,5 +1,5 @@
--# https://github.com/libts/tslib/releases/download/1.19/tslib-1.19.tar.xz.sha256
--sha256  efe1fef16a00dc818f1d8e402877184dadf331f1b0dd1fbfeeb2698ee8647f4d  tslib-1.19.tar.xz
-+# https://github.com/libts/tslib/releases/download/1.20/tslib-1.20.tar.xz.sha256
-+sha256  fda8c088e348b40cc68269460d562778aa4ad8f8c2281f147b09f305ba714777  tslib-1.20.tar.xz
- 
- # Locally computed
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 9d21647033..6d6e85033b 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TSLIB_VERSION = 1.19
-+TSLIB_VERSION = 1.20
- TSLIB_SITE = https://github.com/libts/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
