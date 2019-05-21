@@ -1,138 +1,48 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Tue, 21 May 2019 18:20:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libubootenv: add new package
-In-Reply-To: <20190520225940.5caa9424@windsurf.home>
-References: <1557085947-25842-1-git-send-email-pjtexier@koncepto.io>
- <20190520225940.5caa9424@windsurf.home>
-Message-ID: <d323ca71-b22d-2dce-d7de-63cb3f68bb63@koncepto.io>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 21 May 2019 18:46:39 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/nbd: bump to version 3.19
+Message-ID: <20190521164639.21877-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Add hash for license file
 
-Thanks a lot for all your comments, really appreciated for a first 
-package submission.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/nbd/nbd.hash | 10 +++++++---
+ package/nbd/nbd.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-Le 20/05/2019 ? 22:59, Thomas Petazzoni a ?crit?:
-> Hello,
->
-> I have applied your new package to next, after doing a few minor
-> changes, see below.
->
-> First, the canonical title for patches adding a new package is:
->
-> 	package/libubootenv: new package
->
-> On Sun,  5 May 2019 21:52:27 +0200
-> Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
->
->> Libubootenv is a library that provides a hardware independent
->> way to access to U-Boot environment.
->>
->> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
->> ---
->>   package/Config.in                                  |  1 +
->>   ...w_printenv-remove-declaration-in-for-loop.patch | 53 ++++++++++++++++++++++
->>   package/libubootenv/Config.in                      | 11 +++++
->>   package/libubootenv/libubootenv.hash               |  2 +
->>   package/libubootenv/libubootenv.mk                 | 14 ++++++
->>   5 files changed, 81 insertions(+)
-> You forgot to update the DEVELOPERS file with this new package, so I've
-> done that.
-
-Oops, sorry for that, I thought I should send it once the patch was applied.
->
->> diff --git a/package/libubootenv/0001-fw_printenv-remove-declaration-in-for-loop.patch b/package/libubootenv/0001-fw_printenv-remove-declaration-in-for-loop.patch
->> new file mode 100644
->> index 0000000..1ec908a
->> --- /dev/null
->> +++ b/package/libubootenv/0001-fw_printenv-remove-declaration-in-for-loop.patch
->> @@ -0,0 +1,53 @@
->> +From ffca94e6f84956838a2d88824b37fcd3b0d0694b Mon Sep 17 00:00:00 2001
->> +From: Pierre-Jean Texier <pjtexier@koncepto.io>
->> +Date: Sun, 5 May 2019 21:42:48 +0200
->> +Subject: [PATCH] fw_printenv: remove declaration in for loop
->> +MIME-Version: 1.0
->> +Content-Type: text/plain; charset=UTF-8
->> +Content-Transfer-Encoding: 8bit
->> +
->> +This commit fixes :
->> +
->> +src/fw_printenv.c:142:4: error: ?for? loop initial declarations are only allowed in C99 or C11 mode
->> +    for (int i = 0; i < argc; i++) {
->> +
->> +Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
->> +[Upstream status: http://patchwork.ozlabs.org/patch/1092851/]
-> I've replaced this with the actual upstream commit, now that your patch
-> has been merged upstream.
-
-Thanks !
->
->> diff --git a/package/libubootenv/libubootenv.hash b/package/libubootenv/libubootenv.hash
->> new file mode 100644
->> index 0000000..79aaac7
->> --- /dev/null
->> +++ b/package/libubootenv/libubootenv.hash
->> @@ -0,0 +1,2 @@
->> +# Locally calculated
->> +sha256 82c6966af5feae8726bd78a2cde4c4c2f69e81f8fdc548098063f8a35eaad090 libubootenv-8a7d4030bcb106de11632e85b6a0e7b7d4cb47af.tar.gz
->> diff --git a/package/libubootenv/libubootenv.mk b/package/libubootenv/libubootenv.mk
->> new file mode 100644
->> index 0000000..d74e823
->> --- /dev/null
->> +++ b/package/libubootenv/libubootenv.mk
->> @@ -0,0 +1,14 @@
->> +################################################################################
->> +#
->> +# libubootenv
->> +#
->> +################################################################################
->> +
->> +LIBUBOOTENV_VERSION = 8a7d4030bcb106de11632e85b6a0e7b7d4cb47af
->> +LIBUBOOTENV_SITE = $(call github,sbabic,libubootenv,$(LIBUBOOTENV_VERSION))
->> +LIBUBOOTENV_LICENSE = LGPL-2.1
-> It would be nice to ask Stefano Babic if he could add a license file.
-
-Sure, I will do !
->
->> +LIBUBOOTENV_INSTALL_STAGING = YES
->> +
->> +LIBUBOOTENV_DEPENDENCIES += zlib
-> = was sufficient, no need for += here.
-
-Ok
-
-Another point, I don't know why but it seems, I have I forgot to add 
-some dependencies
-in the first patch.
-
-In local, my build is fine :
-
-$. ./utils/test-pkg -c libuboot.config -p libubootenv -d 
-libubootenv-integration
-
- ???????????????????????????? br-arm-full [1/6]: OK
- ????????????????? br-arm-cortex-a9-glibc [2/6]: OK
- ?????????????????? br-arm-cortex-m4-full [3/6]: SKIPPED
- ????????????????????????? br-x86-64-musl [4/6]: SKIPPED
- ????????????????????? br-arm-full-static [5/6]: SKIPPED
- ??????????????????????????? sourcery-arm [6/6]: OK
-6 builds, 3 skipped, 0 build failed, 0 legal-info failed
-
-I just sent a patch [1], let me know if it's ok for you.
-
-Sorry for that,
-
-Thanks again !
-
-Pierre-Jean
-
-[1] http://patchwork.ozlabs.org/patch/1102919/
-
->
-> Thanks!
->
-> Thomas
+diff --git a/package/nbd/nbd.hash b/package/nbd/nbd.hash
+index 03234fd876..fab14072c9 100644
+--- a/package/nbd/nbd.hash
++++ b/package/nbd/nbd.hash
+@@ -1,3 +1,7 @@
+-# From http://sourceforge.net/projects/nbd/files/nbd/3.13/
+-md5	f52a4ef8979d81e6c15a745236582fdf	nbd-3.15.2.tar.xz
+-sha1	c8248dd76641a31189735407cd4d55fe63969c08	nbd-3.15.2.tar.xz
++# From http://sourceforge.net/projects/nbd/files/nbd/3.19/
++md5	162da84302abb5b9be06143c7943a642	nbd-3.19.tar.xz
++sha1	97edd98f7323a2fcd0dcf441f307d348cdbbb807	nbd-3.19.tar.xz
++
++# Locally calculated
++sha256	b4466412f13e057659f25d35e1e8e181afd62c7179bff22a6add81445ecb8690	nbd-3.19.tar.xz
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index 82de1c487d..484f3e695b 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NBD_VERSION = 3.15.2
++NBD_VERSION = 3.19
+ NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
+ NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
+ NBD_CONF_OPTS = --enable-lfs
+-- 
+2.20.1
