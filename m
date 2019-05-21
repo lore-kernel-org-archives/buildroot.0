@@ -1,55 +1,28 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 21 May 2019 10:31:41 +0200
-Subject: [Buildroot] [PATCH] package/atop: fix BUG_85180 build timeout
-In-Reply-To: <20190521100237.18d46daa@windsurf.home>
-References: <20190520212723.63754-1-giulio.benetti@micronovasrl.com>
- <20190521091551.384da8a1@windsurf.home>
- <757973bf-7d43-f3d6-8364-b4353d42b317@mind.be>
- <20190521100237.18d46daa@windsurf.home>
-Message-ID: <201371a2-09c0-9919-72f5-ee7a8bc8b58e@micronovasrl.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 May 2019 10:36:14 +0200
+Subject: [Buildroot] [PATCH] tslib: update to 1.20
+In-Reply-To: <20190521064101.31715-1-martink@posteo.de> (Martin Kepplinger's
+ message of "Tue, 21 May 2019 08:41:01 +0200")
+References: <20190521064101.31715-1-martink@posteo.de>
+Message-ID: <87imu4urup.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout, Thomas,
+>>>>> "Martin" == Martin Kepplinger <martink@posteo.de> writes:
 
-Il 21/05/2019 10:02, Thomas Petazzoni ha scritto:
-> Hello,
-> 
-> On Tue, 21 May 2019 09:55:16 +0200
-> Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
->>   I think it's just that in *this* case, it is also solved by using -g1 instead
->> of -g2, which is less "aggressive" than passing -O0. However, I agree with
->> Thomas that it's better to use the same solution everywhere, even if it is
->> suboptimal.
-> 
-> I agree: using the same solution everywhere is better, even if slightly
-> suboptimal here or there.
+ > The release page has a changelog overview:
+ > https://github.com/libts/tslib/releases
 
-Ok.
+ > Signed-off-by: Martin Kepplinger <martink@posteo.de>
+ > ---
 
->>   Just to be sure: in some cases, -Os also works, but not in all cases, right?
->> Otherwise I'd actually prefer -Os instead of -O0.
+ > IMO this release qualifies for being included in a stable branch.
 
-I've just retried with -Os, unfortunately glibmm fails while all the 
-others work.
+Because of the 'ts_setup: fix possible memory leak'? Ok - Committed to
+master, thanks.
 
-So I'm going to keep -O0 for every package with BUG_85180.
-
-Thank you
-
-Best regards
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Bye, Peter Korsgaard
