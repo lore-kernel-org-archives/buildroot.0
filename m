@@ -1,77 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 May 2019 21:26:28 +0200
-Subject: [Buildroot] [git commit] package/libepoxy: update to version 1.5.3,
- convert to Meson
-Message-ID: <20190602201235.26E5C8EDA8@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 21 May 2019 21:49:43 +0200
+Subject: [Buildroot] [git commit] package/nbd: bump to version 3.19
+Message-ID: <20190602201235.5237B8EDEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9e1976e8760d7421cc10b506aeb19eedc202baf0
+commit: https://git.buildroot.net/buildroot/commit/?id=af9fcaea638d6e893f78eb1ecf991319187f7c5a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This release fixes building with uClibc and symbol lookups for
-drivers which have GLES 3.x support.
+Add hash for license file
 
-Tarballs do not include a generated "configure" script any more,
-so use Meson to configure the build instead.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libepoxy/libepoxy.hash |  4 ++--
- package/libepoxy/libepoxy.mk   | 13 +++++++------
- 2 files changed, 9 insertions(+), 8 deletions(-)
+ package/nbd/nbd.hash | 10 +++++++---
+ package/nbd/nbd.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/package/libepoxy/libepoxy.hash b/package/libepoxy/libepoxy.hash
-index dd1b13487b..d574a04455 100644
---- a/package/libepoxy/libepoxy.hash
-+++ b/package/libepoxy/libepoxy.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.2.sha256sum
--sha256 a9562386519eb3fd7f03209f279f697a8cba520d3c155d6e253c3e138beca7d8  libepoxy-1.5.2.tar.xz
-+# From http://ftp.gnome.org/pub/gnome/sources/libepoxy/1.5/libepoxy-1.5.3.sha256sum
-+sha256 002958c5528321edd53440235d3c44e71b5b1e09b9177e8daf677450b6c4433d  libepoxy-1.5.3.tar.xz
- 
- # Hashes for license files:
- sha256 8d5144666f9c4df9bbd69b8900086d5979259152a1060421cdcc0fb9061a1c12  COPYING
-diff --git a/package/libepoxy/libepoxy.mk b/package/libepoxy/libepoxy.mk
-index b1731a22c5..deb3c1ecbb 100644
---- a/package/libepoxy/libepoxy.mk
-+++ b/package/libepoxy/libepoxy.mk
-@@ -5,26 +5,27 @@
+diff --git a/package/nbd/nbd.hash b/package/nbd/nbd.hash
+index 03234fd876..fab14072c9 100644
+--- a/package/nbd/nbd.hash
++++ b/package/nbd/nbd.hash
+@@ -1,3 +1,7 @@
+-# From http://sourceforge.net/projects/nbd/files/nbd/3.13/
+-md5	f52a4ef8979d81e6c15a745236582fdf	nbd-3.15.2.tar.xz
+-sha1	c8248dd76641a31189735407cd4d55fe63969c08	nbd-3.15.2.tar.xz
++# From http://sourceforge.net/projects/nbd/files/nbd/3.19/
++md5	162da84302abb5b9be06143c7943a642	nbd-3.19.tar.xz
++sha1	97edd98f7323a2fcd0dcf441f307d348cdbbb807	nbd-3.19.tar.xz
++
++# Locally calculated
++sha256	b4466412f13e057659f25d35e1e8e181afd62c7179bff22a6add81445ecb8690	nbd-3.19.tar.xz
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
+diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
+index 82de1c487d..484f3e695b 100644
+--- a/package/nbd/nbd.mk
++++ b/package/nbd/nbd.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBEPOXY_VERSION_MAJOR = 1.5
--LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).2
-+LIBEPOXY_VERSION = $(LIBEPOXY_VERSION_MAJOR).3
- LIBEPOXY_SITE = http://ftp.gnome.org/pub/gnome/sources/libepoxy/$(LIBEPOXY_VERSION_MAJOR)
- LIBEPOXY_SOURCE = libepoxy-$(LIBEPOXY_VERSION).tar.xz
- LIBEPOXY_INSTALL_STAGING = YES
- LIBEPOXY_DEPENDENCIES = host-pkgconf xutil_util-macros
- LIBEPOXY_LICENSE = MIT
- LIBEPOXY_LICENSE_FILES = COPYING
-+LIBEPOXY_CONF_OPTS += -Ddocs=false -Dtests=false
- 
- ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
--LIBEPOXY_CONF_OPTS += --enable-egl
-+LIBEPOXY_CONF_OPTS += -Degl=yes
- LIBEPOXY_DEPENDENCIES += libegl
- else
--LIBEPOXY_CONF_OPTS += --disable-egl
-+LIBEPOXY_CONF_OPTS += -Degl=no
- endif
- 
- ifeq ($(BR2_PACKAGE_HAS_LIBGL)$(BR2_PACKAGE_XLIB_LIBX11),yy)
--LIBEPOXY_CONF_OPTS += --enable-glx
-+LIBEPOXY_CONF_OPTS += -Dglx=yes -Dx11=true
- LIBEPOXY_DEPENDENCIES += libgl xlib_libX11
- else
--LIBEPOXY_CONF_OPTS += --disable-glx
-+LIBEPOXY_CONF_OPTS += -Dglx=no -Dx11=false
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+-NBD_VERSION = 3.15.2
++NBD_VERSION = 3.19
+ NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
+ NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
+ NBD_CONF_OPTS = --enable-lfs
