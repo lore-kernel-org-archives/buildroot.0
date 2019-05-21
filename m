@@ -1,48 +1,67 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 21 May 2019 18:46:39 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/nbd: bump to version 3.19
-Message-ID: <20190521164639.21877-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 21 May 2019 18:54:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/meson: Fix linking of
+ shared/static libs with static libs
+In-Reply-To: <20190520204517.52564b80@windsurf.home>
+References: <20190514184245.92222-1-aduskett@gmail.com>
+ <20190518215637.2ea2ea51@windsurf>
+ <20190520202615.37fbd048@gmx.net>
+ <20190520204517.52564b80@windsurf.home>
+Message-ID: <20190521185447.2de12554@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+Hello Thomas,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/nbd/nbd.hash | 10 +++++++---
- package/nbd/nbd.mk   |  2 +-
- 2 files changed, 8 insertions(+), 4 deletions(-)
+On Mon, 20 May 2019 20:45:17 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-diff --git a/package/nbd/nbd.hash b/package/nbd/nbd.hash
-index 03234fd876..fab14072c9 100644
---- a/package/nbd/nbd.hash
-+++ b/package/nbd/nbd.hash
-@@ -1,3 +1,7 @@
--# From http://sourceforge.net/projects/nbd/files/nbd/3.13/
--md5	f52a4ef8979d81e6c15a745236582fdf	nbd-3.15.2.tar.xz
--sha1	c8248dd76641a31189735407cd4d55fe63969c08	nbd-3.15.2.tar.xz
-+# From http://sourceforge.net/projects/nbd/files/nbd/3.19/
-+md5	162da84302abb5b9be06143c7943a642	nbd-3.19.tar.xz
-+sha1	97edd98f7323a2fcd0dcf441f307d348cdbbb807	nbd-3.19.tar.xz
-+
-+# Locally calculated
-+sha256	b4466412f13e057659f25d35e1e8e181afd62c7179bff22a6add81445ecb8690	nbd-3.19.tar.xz
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/nbd/nbd.mk b/package/nbd/nbd.mk
-index 82de1c487d..484f3e695b 100644
---- a/package/nbd/nbd.mk
-+++ b/package/nbd/nbd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NBD_VERSION = 3.15.2
-+NBD_VERSION = 3.19
- NBD_SOURCE = nbd-$(NBD_VERSION).tar.xz
- NBD_SITE = http://downloads.sourceforge.net/project/nbd/nbd/$(NBD_VERSION)
- NBD_CONF_OPTS = --enable-lfs
--- 
-2.20.1
+> Hello Peter,
+>
+> Thanks for your feedback!
+>
+> On Mon, 20 May 2019 20:26:15 +0200
+> Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> > I can confirm the patch fixes the gstreamer static build/static libs
+> > problem (see [1])....
+> >
+> > But as it is a (not yet) upstream committed bugfix, maybe it is better to
+> > wait for a upstream committ and/or next meson version bump?
+>
+> That would of course be the best approach...
+>
+> > On the other side the gstreamer folks where bored with waiting for the
+> > meson fix to be accepted and committed an workaround for the problem
+> > already (see [2])...
+> >
+> > Conclusion: Take the patch in case there is already a buildroot
+> > in-tree package which needs the fix (or commit the patch with
+> > in series with a in-tree user), otherwise wait for meson
+> > upstream...
+>
+> ... however, if it starts holding off bumping too many packages, I
+> guess we'll have to take this patch. Having to add a !BR2_STATIC_LIBS
+> dependency to libglib2 would be really horrible, considering the number
+> of reverse dependencies that libglib2 has.
+
+As far as I know only gstreamer itself is affected (the only package
+linking a static library using an internal static helper library)?
+But the first other package affected by this bug justifies the
+patch applied ;-)
+
+>
+> At least, if the problem is acknowledged upstream, we know it will be
+> fixed at some point. Perhaps not with the exact patch we will have, but
+> at least it will be fixed, which means we won't have to carry this
+> patch forever.
+
+Yes...
+
+Regards,
+Peter
+
+>
+> Thomas
