@@ -1,12 +1,12 @@
 From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Tue, 21 May 2019 20:11:35 +0200
-Subject: [Buildroot] [PATCH/next v2 1/3] package/wpebackend-fdo: bump to
- version 1.2.0
-In-Reply-To: <20190520214037.58011-2-aperez@igalia.com>
+Date: Tue, 21 May 2019 20:12:27 +0200
+Subject: [Buildroot] [PATCH/next v2 2/3] package/wpewebkit: bump to
+ version 2.24.2
+In-Reply-To: <20190520214037.58011-3-aperez@igalia.com>
 References: <20190514114111.20424-1-aperez@igalia.com>
  <20190520214037.58011-1-aperez@igalia.com>
- <20190520214037.58011-2-aperez@igalia.com>
-Message-ID: <CAB0FRsvtTKYRk2dDWqJQ0Jhpt0VP6XghgWy_FYz_RCvE6j8nNA@mail.gmail.com>
+ <20190520214037.58011-3-aperez@igalia.com>
+Message-ID: <CAB0FRssg_tosV9WmYvEaxiHKQcmf=2XRJ5h-jhjBQmTL-R8BGQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,224 +16,215 @@ To: buildroot@busybox.net
 Le mar. 21 mai 2019 ? 00:24, Adrian Perez de Castro <aperez@igalia.com> a
 ?crit :
 
-> WPE WebKit 2.24.x requires WPEBackend-fdo 1.2.x, as indicated at:
+> This is a new major release which brings in many improvements and new
+> features. For a complete list, please refer to the release notes:
 >
->   https://wpewebkit.org/release/schedule/#compatible-components
+>   https://wpewebkit.org/release/wpewebkit-2.24.0.html
+>   https://wpewebkit.org/release/wpewebkit-2.24.1.html
+>   https://wpewebkit.org/release/wpewebkit-2.24.2.html
 >
-> The added patch makes the build system pick the version of
-> wayland-scanner from $(HOST_DIR), instead of the target version.
+> Updating to version 2.24.2 also includes fixes for CVE-2019-6201,
+> CVE-2019-6251, CVE-2019-7285, CVE-2019-7292, CVE-2019-8503,
+> CVE-2019-8506, CVE-2019-8515, CVE-2019-8518, CVE-2019-8523,
+> CVE-2019-8524, CVE-2019-8535, CVE-2019-8536, CVE-2019-8544,
+> CVE-2019-8551, CVE-2019-8558, CVE-2019-8559, CVE-2019-8563,
+> CVE-2019-11070, CVE-2019-6237, CVE-2019-8571, CVE-2019-8583,
+> CVE-2019-8584, CVE-2019-8586, CVE-2019-8587, CVE-2019-8594,
+> CVE-2019-8595, CVE-2019-8596, CVE-2019-8597, CVE-2019-8601,
+> CVE-2019-8607, CVE-2019-8608, CVE-2019-8609, CVE-2019-8610,
+> CVE-2019-8615, CVE-2019-8611, CVE-2019-8619, CVE-2019-8622, and
+> CVE-2019-8623.
+>
+> The detailed security advisories can be found at:
+>
+>   https://wpewebkit.org/security/WSA-2019-0002.html
+>   https://wpewebkit.org/security/WSA-2019-0003.html
+>
+> The BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS_JIT configuration symbol is not
+> needed anymore, because the logic to decide whether the JavaScriptCore
+> JIT spport can be enabled has been improved upstream.
+>
+> One of the new features in 2.24.x is the support for JPEG2000 images,
+> which is implemented using the OpenJPEG library. Therefore now
+> BR2_PACKAGE_OPENJPEG is selected.
+>
+> This adds one small patch which did not make it to the 2.24.2 release
+> which solves a build issue when the building the GStreamer GL elements
+> is disabled.
 >
 > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 >
 
 Acked-by: Francois Perrad <francois.perrad@gadz.org>
 
----
+
+> ---
 > Changes v1 -> v2:
->   - Included upstream patch which solves picking the correct (host)
->     version of wayland-scanner.
+>   - Use WPE WebKit 2.24.2 instead of 2.24.1
+>   - Include upstream patch to fix a build issue
 >
 > ---
->  ...-how-CMake-looks-for-wayland-scanner.patch | 137 ++++++++++++++++++
->  package/wpebackend-fdo/wpebackend-fdo.hash    |   8 +-
->  package/wpebackend-fdo/wpebackend-fdo.mk      |   2 +-
->  3 files changed, 142 insertions(+), 5 deletions(-)
+>  ...uild-failure-after-r243644-in-GTK-Li.patch | 36 +++++++++++++++++++
+>  package/wpewebkit/Config.in                   | 17 +--------
+>  package/wpewebkit/wpewebkit.hash              |  8 ++---
+>  package/wpewebkit/wpewebkit.mk                | 10 ++----
+>  4 files changed, 43 insertions(+), 28 deletions(-)
 >  create mode 100644
-> package/wpebackend-fdo/0001-Improve-how-CMake-looks-for-wayland-scanner.patch
+> package/wpewebkit/0001-Build-failure-after-r243644-in-GTK-Li.patch
 >
 > diff --git
-> a/package/wpebackend-fdo/0001-Improve-how-CMake-looks-for-wayland-scanner.patch
-> b/package/wpebackend-fdo/0001-Improve-how-CMake-looks-for-wayland-scanner.patch
+> a/package/wpewebkit/0001-Build-failure-after-r243644-in-GTK-Li.patch
+> b/package/wpewebkit/0001-Build-failure-after-r243644-in-GTK-Li.patch
 > new file mode 100644
-> index 0000000000..d83902c662
+> index 0000000000..748fc8e46e
 > --- /dev/null
-> +++
-> b/package/wpebackend-fdo/0001-Improve-how-CMake-looks-for-wayland-scanner.patch
-> @@ -0,0 +1,137 @@
-> +From a03431fb562176d25919e76e0baf52a0ba3752c4 Mon Sep 17 00:00:00 2001
-> +From: Adrian Perez de Castro <aperez@igalia.com>
-> +Date: Wed, 15 May 2019 20:54:10 +0300
-> +Subject: [PATCH] Improve how CMake looks for wayland-scanner
+> +++ b/package/wpewebkit/0001-Build-failure-after-r243644-in-GTK-Li.patch
+> @@ -0,0 +1,36 @@
+> +From a672bbd75f257dd65844ad53dd21fb37345999b5 Mon Sep 17 00:00:00 2001
+> +From: "aperez at igalia.com"
+> + <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
+> +Date: Mon, 20 May 2019 21:20:02 +0000
+> +Subject: [PATCH] Build failure after r243644 in GTK
+> + Linux 64-bit stable builds
+> https://bugs.webkit.org/show_bug.cgi?id=196440
 > +
-> +This improves FindWaylandScanner.cmake to allow it to find the
-> +wayland-scanner tool in any of the following ways (in order of
-> +preference):
+> +Patch by Pablo Saavedra <psaavedra@igalia.com> on 2019-04-01
+> +Reviewed by Philippe Normand.
 > +
-> +  1. By passing -DWAYLAND_SCANNER=path/to/wayland-scanner to CMake.
-> +  2. Looking for wayland-scanner in the current $PATH
-> +  3. Figuring out the location from pkg-config (as before).
-> +
-> +This will make the package friendlier to cross-compilation, and
-> +then build systems can either prepend their locations for host
-> +tools to $PATH (covered by 2. above), or they can specify the
-> +tool path in the command line (covered by 1. above) if they need
-> +to be more specific.
-> +
-> +The motivation for this patch is to avoid kludges like the following:
-> +
-> +  https://patchwork.ozlabs.org/comment/2172010/
+> +* platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp:
+> +(WebCore::MediaPlayerPrivateGStreamerBase::updateTextureMapperFlags):
 > +
 > +Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-> +[Upstream status: https://github.com/Igalia/WPEBackend-fdo/pull/39]
 > +
+> +diff --git
+> a/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp
+> b/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp
+> +index 608aee2e1b3..c614050972a 100644
 > +---
-> + cmake/FindWaylandScanner.cmake | 93 ++++++++++++++++++++++++++++++----
-> + 1 file changed, 84 insertions(+), 9 deletions(-)
+> a/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp
+> ++++
+> b/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp
+> +@@ -1000,11 +1000,13 @@ void
+> MediaPlayerPrivateGStreamerBase::updateTextureMapperFlags()
+> +         break;
+> +     }
 > +
-> +diff --git a/cmake/FindWaylandScanner.cmake
-> b/cmake/FindWaylandScanner.cmake
-> +index 09a92b2..7130c10 100644
-> +--- a/cmake/FindWaylandScanner.cmake
-> ++++ b/cmake/FindWaylandScanner.cmake
-> +@@ -28,15 +28,90 @@
-> + # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
-> + # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+> ++#if USE(GSTREAMER_GL)
+> +     // When the imxvpudecoder is used, the texture sampling of the
+> +     // directviv-uploaded texture returns an RGB value, so there's no
+> need to
+> +     // convert it.
+> +     if (m_videoDecoderPlatform != WebKitGstVideoDecoderPlatform::ImxVPU)
+> +         m_textureMapperFlags |= TEXTURE_MAPPER_COLOR_CONVERT_FLAG;
+> ++#endif
+> + }
+> + #endif
 > +
-> +-find_package(PkgConfig)
-> +-pkg_check_modules(WAYLAND_SCANNER wayland-scanner)
-> +-
-> +-pkg_get_variable(WAYLAND_SCANNER wayland-scanner wayland_scanner)
-> +-if (WAYLAND_SCANNER_VERSION VERSION_LESS "1.15")
-> +-    set(WAYLAND_SCANNER_CODE_ARG "code")
-> +-else ()
-> +-    set(WAYLAND_SCANNER_CODE_ARG "private-code")
-> ++set(WAYLAND_SCANNER "" CACHE FILEPATH "Path to the wayland-scanner tool")
-> ++
-> ++function(wayland_scanner_get_version _result _exepath)
-> ++    set(_version "")
-> ++    set(_status -1)
-> ++    if (EXISTS "${_exepath}")
-> ++        execute_process(
-> ++            COMMAND "${_exepath}" "--version"
-> ++            RESULT_VARIABLE _status
-> ++            ERROR_VARIABLE _version
-> ++            ERROR_STRIP_TRAILING_WHITESPACE
-> ++            OUTPUT_QUIET
-> ++        )
-> ++        if (_status EQUAL 0)
-> ++            string(REPLACE "wayland-scanner" "" _version "${_version}")
-> ++            string(STRIP "${_version}" _version)
-> ++        endif ()
-> ++    endif ()
-> ++    if (_version)
-> ++        set(${_result} "${_version}" PARENT_SCOPE)
-> ++    else ()
-> ++        unset(${_result} PARENT_SCOPE)
-> ++    endif ()
-> ++endfunction()
-> ++
-> ++#
-> ++# Method 1: If -DWAYLAND_SCANNER=... was passed on the command line,
-> ++#           check whether we can extract the version number from it.
-> ++#           Otherwise: unset the variable, to try other methods below.
-> ++#
-> ++if (WAYLAND_SCANNER)
-> ++    wayland_scanner_get_version(WAYLAND_SCANNER_VERSION
-> "${WAYLAND_SCANNER}")
-> ++    if (NOT WAYLAND_SCANNER_VERSION)
-> ++        set(WAYLAND_SCANNER "")
-> ++    endif ()
-> ++endif ()
-> ++
-> ++#
-> ++# Method 2: Try to find an executable program in the current $PATH.
-> ++#
-> ++if (NOT WAYLAND_SCANNER)
-> ++    find_program(WAYLAND_SCANNER_EXECUTABLE NAMES wayland-scanner)
-> ++    if (WAYLAND_SCANNER_EXECUTABLE)
-> ++        wayland_scanner_get_version(WAYLAND_SCANNER_VERSION
-> "${WAYLAND_SCANNER_EXECUTABLE}")
-> ++        if (WAYLAND_SCANNER_VERSION)
-> ++            set(WAYLAND_SCANNER "${WAYLAND_SCANNER_EXECUTABLE}")
-> ++        endif ()
-> ++    endif ()
-> ++    unset(WAYLAND_SCANNER_EXECUTABLE)
-> ++endif ()
-> ++
-> ++#
-> ++# Method 3: Try to find the executable using pkg-config, in case the
-> ++#           tool was installed in a non-standard location.
-> ++#
-> ++if (NOT DEFINED WAYLAND_SCANNER OR NOT WAYLAND_SCANNER)
-> ++    find_package(PkgConfig)
-> ++    pkg_check_modules(WAYLAND_SCANNER_PC wayland-scanner)
-> ++    if (WAYLAND_SCANNER_PC_FOUND)
-> ++        pkg_get_variable(WAYLAND_SCANNER_PC_EXECUTABLE wayland-scanner
-> wayland_scanner)
-> ++        if (WAYLAND_SCANNER_PC_EXECUTABLE)
-> ++            wayland_scanner_get_version(WAYLAND_SCANNER_VERSION
-> "${WAYLAND_SCANNER_PC_EXECUTABLE}")
-> ++            if (WAYLAND_SCANNER_VERSION)
-> ++                set(WAYLAND_SCANNER "${WAYLAND_SCANNER_PC_EXECUTABLE}")
-> ++            endif ()
-> ++        endif ()
-> ++    endif ()
-> ++    unset(WAYLAND_SCANNER_PC)
-> ++    unset(WAYLAND_SCANNER_PC_EXECUTABLE)
-> ++endif ()
-> ++
-> ++if (WAYLAND_SCANNER_VERSION)
-> ++    if (WAYLAND_SCANNER_VERSION VERSION_LESS "1.15")
-> ++        set(WAYLAND_SCANNER_CODE_ARG "code")
-> ++    else ()
-> ++        set(WAYLAND_SCANNER_CODE_ARG "private-code")
-> ++    endif ()
-> + endif ()
-> +
-> + include(FindPackageHandleStandardArgs)
-> +-FIND_PACKAGE_HANDLE_STANDARD_ARGS(WAYLAND_SCANNER DEFAULT_MSG
-> WAYLAND_SCANNER)
-> ++FIND_PACKAGE_HANDLE_STANDARD_ARGS(
-> ++    WAYLAND_SCANNER
-> ++    DEFAULT_MSG
-> ++    WAYLAND_SCANNER
-> ++    WAYLAND_SCANNER_VERSION
-> ++    WAYLAND_SCANNER_CODE_ARG
-> ++)
 > +--
 > +2.21.0
 > +
-> diff --git a/package/wpebackend-fdo/wpebackend-fdo.hash
-> b/package/wpebackend-fdo/wpebackend-fdo.hash
-> index 6e6f9f0e3f..4d89d1e16f 100644
-> --- a/package/wpebackend-fdo/wpebackend-fdo.hash
-> +++ b/package/wpebackend-fdo/wpebackend-fdo.hash
+> diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+> index 04ebe5452b..ff5775c735 100644
+> --- a/package/wpewebkit/Config.in
+> +++ b/package/wpewebkit/Config.in
+> @@ -12,22 +12,6 @@ config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+>         depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>         depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+>
+> -config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS_JIT
+> -       bool
+> -       # ARM needs NEON for JIT.
+> -       default y if BR2_ARM_CPU_HAS_NEON
+> -       # AArch64 is supported upstream but not well tested on big-endian
+> mode.
+> -       default y if BR2_aarch64
+> -       # i386 & x86_64 don't have any special requirements.
+> -       default y if BR2_i386
+> -       default y if BR2_x86_64
+> -       # JIT is known not to work on MIPS64.
+> -       # Plain MIPS32 (pre R2) is not well tested and likely broken, and
+> R6
+> -       # is unsupported, see
+> https://bugs.webkit.org/show_bug.cgi?id=191258
+> -       # The MIPS support is completely untested in big-endian mode.
+> -       default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R2
+> -       default y if BR2_mipsel && BR2_MIPS_CPU_MIPS32R5
+> -
+>  comment "wpewebkit needs a toolchain w/ C++, wchar, threads, dynamic
+> library, gcc >= 4.8, host gcc >= 4.8"
+>         depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
+>         depends on !BR2_BINFMT_FLAT
+> @@ -63,6 +47,7 @@ config BR2_PACKAGE_WPEWEBKIT
+>         select BR2_PACKAGE_LIBSOUP
+>         select BR2_PACKAGE_LIBTASN1
+>         select BR2_PACKAGE_LIBXSLT
+> +       select BR2_PACKAGE_OPENJPEG
+>         select BR2_PACKAGE_WAYLAND
+>         select BR2_PACKAGE_WAYLAND_PROTOCOLS
+>         select BR2_PACKAGE_WEBP
+> diff --git a/package/wpewebkit/wpewebkit.hash
+> b/package/wpewebkit/wpewebkit.hash
+> index cbf253d29c..ddab159d4f 100644
+> --- a/package/wpewebkit/wpewebkit.hash
+> +++ b/package/wpewebkit/wpewebkit.hash
 > @@ -1,7 +1,7 @@
-> -# From https://wpewebkit.org/releases/wpebackend-fdo-1.0.1.tar.xz.sums
-> -md5 <https://wpewebkit.org/releases/wpebackend-fdo-1.0.1.tar.xz.sums-md5>
-> 2ee81a4212c18110a06a0c51c12e0d2e wpebackend-fdo-1.0.1.tar.xz
-> -sha1 cdc6ac95e302a2358204b766936a9bf8ef4f26f2 wpebackend-fdo-1.0.1.tar.xz
-> -sha256 15b8b1febea5d9c271e95c35b3c1e13f870712a54bc5f689cfdbb96e2f070fc8
-> wpebackend-fdo-1.0.1.tar.xz
-> +# From https://wpewebkit.org/releases/wpebackend-fdo-1.2.0.tar.xz.sums
-> +md5 <https://wpewebkit.org/releases/wpebackend-fdo-1.2.0.tar.xz.sums+md5>
-> 74e1b2fc2bc19933b17ff4f8435f67cd wpebackend-fdo-1.2.0.tar.xz
-> +sha1 60559697512fd483c1d918b708a3d1d130b74a0a wpebackend-fdo-1.2.0.tar.xz
-> +sha256 b1bb261273772af8f7d96d94989fc2ed0445ec06c7eb21f47a1b94e52422ddd5
-> wpebackend-fdo-1.2.0.tar.xz
+> -# From https://wpewebkit.org/releases/wpewebkit-2.22.5.tar.xz.sums
+> -md5 <https://wpewebkit.org/releases/wpewebkit-2.22.5.tar.xz.sums-md5>
+> 7b768bfae1295ebbc9a9038bf8fb6e6c wpewebkit-2.22.5.tar.xz
+> -sha1 c85f927e0f17f1e7045a5d33c683d310c7af24de wpewebkit-2.22.5.tar.xz
+> -sha256 d5e7b23e4f9e9f1b9d369faa4d527cdb59aef56b3e6a50a16dad243df5f699f3
+> wpewebkit-2.22.5.tar.xz
+> +# From https://wpewebkit.org/releases/wpewebkit-2.24.2.tar.xz.sums
+> +md5 <https://wpewebkit.org/releases/wpewebkit-2.24.2.tar.xz.sums+md5>
+> 3604a2167827c8354f6dcbab98305d7b wpewebkit-2.24.2.tar.xz
+> +sha1 1248d7723d0e6aec52cafc27a92c5c335c1abdd4 wpewebkit-2.24.2.tar.xz
+> +sha256 cf251a467b3bcae50f97e22f4baccca49fcbbd54162dc5b71c0b1ebf655fd95f
+> wpewebkit-2.24.2.tar.xz
 >
 >  # Hashes for license files:
->  sha256 c9f6803371047fad3e72200ec6cd226329a5ee08ac61104c8211c2761fb46825
-> COPYING
-> diff --git a/package/wpebackend-fdo/wpebackend-fdo.mk
-> b/package/wpebackend-fdo/wpebackend-fdo.mk
-> index 5842861bac..15530ec45f 100644
-> --- a/package/wpebackend-fdo/wpebackend-fdo.mk
-> +++ b/package/wpebackend-fdo/wpebackend-fdo.mk
+>  sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4
+> Source/WebCore/LICENSE-APPLE
+> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/
+> wpewebkit.mk
+> index 73ad534acd..b59a1f793a 100644
+> --- a/package/wpewebkit/wpewebkit.mk
+> +++ b/package/wpewebkit/wpewebkit.mk
 > @@ -4,7 +4,7 @@
 >  #
 >
 >  ################################################################################
 >
-> -WPEBACKEND_FDO_VERSION = 1.0.1
-> +WPEBACKEND_FDO_VERSION = 1.2.0
->  WPEBACKEND_FDO_SITE = https://wpewebkit.org/releases
->  WPEBACKEND_FDO_SOURCE = wpebackend-fdo-$(WPEBACKEND_FDO_VERSION).tar.xz
->  WPEBACKEND_FDO_INSTALL_STAGING = YES
+> -WPEWEBKIT_VERSION = 2.22.5
+> +WPEWEBKIT_VERSION = 2.24.2
+>  WPEWEBKIT_SITE = http://www.wpewebkit.org/releases
+>  WPEWEBKIT_SOURCE = wpewebkit-$(WPEWEBKIT_VERSION).tar.xz
+>  WPEWEBKIT_INSTALL_STAGING = YES
+> @@ -14,19 +14,13 @@ WPEWEBKIT_LICENSE_FILES = \
+>         Source/WebCore/LICENSE-LGPL-2.1
+>  WPEWEBKIT_DEPENDENCIES = host-gperf host-python host-ruby \
+>         harfbuzz cairo icu jpeg libepoxy libgcrypt libgles libsoup
+> libtasn1 \
+> -       libpng libxslt wayland-protocols webp wpebackend-fdo
+> +       libpng libxslt openjpeg wayland-protocols webp wpebackend-fdo
+>
+>  WPEWEBKIT_CONF_OPTS = \
+>         -DPORT=WPE \
+>         -DENABLE_API_TESTS=OFF \
+>         -DENABLE_MINIBROWSER=OFF
+>
+> -ifeq ($(BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS_JIT),y)
+> -WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=ON
+> -else
+> -WPEWEBKIT_CONF_OPTS += -DENABLE_JIT=OFF
+> -endif
+> -
+>  ifeq ($(BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA),y)
+>  WPEWEBKIT_CONF_OPTS += \
+>         -DENABLE_VIDEO=ON \
 > --
 > 2.21.0
 >
 >
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190521/0c3ed350/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190521/ab340e76/attachment.html>
