@@ -1,47 +1,48 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 21 May 2019 15:39:29 +0200
-Subject: [Buildroot] [PATCH v2 09/12] package/kismet: fix BUG_85180 build
+Date: Tue, 21 May 2019 15:39:31 +0200
+Subject: [Buildroot] [PATCH v2 11/12] package/opus: fix BUG_85180 build
  timeout
 In-Reply-To: <20190521133932.81841-1-giulio.benetti@micronovasrl.com>
 References: <20190521133932.81841-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190521133932.81841-10-giulio.benetti@micronovasrl.com>
+Message-ID: <20190521133932.81841-12-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Microblaze Gcc version < 8.x build hangs on compiling first files.
+With Microblaze Gcc version < 8.x build hangs on compiling last files
+before linking.
 This is due to bug 85180:
 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
-Bug shows up building kismet with optimization but not when building
-with -O0.
+Bug shows up building opus with optimization but not when building with
+-O0.
 
 If BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 passing it to
-CXXFLAGS.
+CFLAGS.
 
 Fixes:
-http://autobuild.buildroot.net/results/02f/02f6e616631f05a4f15f31f2b2e67d65ba7afcb0/
+http://autobuild.buildroot.net/results/73d/73dc9610a13d6e14eec58d529617210d93d5dec4/
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/kismet/kismet.mk | 4 ++++
+ package/opus/opus.mk | 4 ++++
  1 file changed, 4 insertions(+)
 
-diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-index cee814b52b..b06106f58b 100644
---- a/package/kismet/kismet.mk
-+++ b/package/kismet/kismet.mk
-@@ -15,6 +15,10 @@ KISMET_LICENSE_FILES = debian/copyright
- # We touch configure.in:
- KISMET_AUTORECONF = YES
+diff --git a/package/opus/opus.mk b/package/opus/opus.mk
+index f23461a3af..4b127aa187 100644
+--- a/package/opus/opus.mk
++++ b/package/opus/opus.mk
+@@ -10,6 +10,10 @@ OPUS_LICENSE = BSD-3-Clause
+ OPUS_LICENSE_FILES = COPYING
+ OPUS_INSTALL_STAGING = YES
  
 +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+KISMET_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -O0"
++OPUS_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O0"
 +endif
 +
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- KISMET_DEPENDENCIES += libcap
+ ifeq ($(BR2_PACKAGE_OPUS_FIXED_POINT),y)
+ OPUS_CONF_OPTS += --enable-fixed-point
  endif
 -- 
 2.17.1
