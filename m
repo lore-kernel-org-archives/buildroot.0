@@ -1,99 +1,113 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 21 May 2019 07:56:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ofono: bump to version 1.29
-Message-ID: <20190521055644.11708-1-petr.vorel@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 21 May 2019 06:00:39 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-05-20
+Message-ID: <20190521060047.5727A8780D@hemlock.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Backport upstream patch which adds explicit_bzero() autoconf detection,
-which fixes br-arm-cortex-a9-glibc and br-arm-full-static build:
+Hello,
 
-In file included from ell/random.c:34:
-ell/missing.h:59:20: error: static declaration of ?explicit_bzero? follows non-static declaration
- static inline void explicit_bzero(void *s, size_t n)
-                    ^~~~~~~~~~~~~~
-In file included from ./ell/util.h:26,
-                 from ell/private.h:26,
-                 from ell/random.c:33:
-/home/pvorel/br-test-pkg/br-arm-cortex-a9-glibc/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/string.h:435:13: note: previous declaration of ?explicit_bzero? was here
- extern void explicit_bzero (void *__s, size_t __n) __THROW __nonnull ((1));
-             ^~~~~~~~~~~~~~
+Build statistics for 2019-05-20
+===============================
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- ...Add-check-for-explicit_bzero-support.patch | 28 +++++++++++++++++++
- package/ofono/ofono.hash                      |  2 +-
- package/ofono/ofono.mk                        |  5 +++-
- 3 files changed, 33 insertions(+), 2 deletions(-)
- create mode 100644 package/ofono/0003-build-Add-check-for-explicit_bzero-support.patch
+      branch |  OK | NOK | TIM | TOT |
+   2019.02.x |  20 |   2 |   0 |  22 |
+      master | 201 |  13 |   2 | 216 |
+        next |  39 |  12 |   0 |  51 |
 
-diff --git a/package/ofono/0003-build-Add-check-for-explicit_bzero-support.patch b/package/ofono/0003-build-Add-check-for-explicit_bzero-support.patch
-new file mode 100644
-index 0000000000..b2507df3ff
---- /dev/null
-+++ b/package/ofono/0003-build-Add-check-for-explicit_bzero-support.patch
-@@ -0,0 +1,28 @@
-+From dff595671bf5a46f7c9231966a6cd7d2a0183076 Mon Sep 17 00:00:00 2001
-+From: Marcel Holtmann <marcel@holtmann.org>
-+Date: Wed, 15 May 2019 09:39:44 +0200
-+Subject: [PATCH] build: Add check for explicit_bzero support
-+
-+Upstream: dff595671bf5a46f7c9231966a6cd7d2a0183076
-+
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+---
-+ configure.ac | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index bacb7ac5..cad35c5d 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -54,6 +54,8 @@ AC_ARG_ENABLE(pie, AC_HELP_STRING([--enable-pie],
-+ 	fi
-+ ])
-+ 
-++AC_CHECK_FUNCS(explicit_bzero)
-++
-+ AC_CHECK_FUNC(signalfd, dummy=yes,
-+ 			AC_MSG_ERROR(signalfd support is required))
-+ 
-+-- 
-+2.21.0
-+
-diff --git a/package/ofono/ofono.hash b/package/ofono/ofono.hash
-index 2dbb9986c7..5204bb4fca 100644
---- a/package/ofono/ofono.hash
-+++ b/package/ofono/ofono.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/ofono/sha256sums.asc
--sha256 93bb2cedef54f897dd5200e22b072a6e38b5d9b44be57eebbbe8d513f0beb0e4	ofono-1.28.tar.xz
-+sha256 67f0f8e5740dea5b46309e40667d1e560be39c90ef08dd01ff9e9ce8e61f0679  ofono-1.29.tar.xz
- # Locally computed
- sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 0552a181fd..176d23ae05 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OFONO_VERSION = 1.28
-+OFONO_VERSION = 1.29
- OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- OFONO_LICENSE = GPL-2.0
-@@ -49,4 +49,7 @@ else
- OFONO_CONF_OPTS += --disable-bluetooth
- endif
- 
-+# required by 0003-build-Add-check-for-explicit_bzero-support.patch
-+OFONO_AUTORECONF = YES
-+
- $(eval $(autotools-package))
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+                    dhcp-4.4.1 | 3 
+          oniguruma-legal-info | 2 
+                   netsurf-3.8 | 1 
+             openjdk-jdk-12+33 | 1 
+package/oniguruma/oniguruma... | 1 
+                 powertop-2.10 | 1 
+                    strace-5.0 | 1 
+                suricata-4.1.3 | 1 
+          wpebackend-fdo-1.0.1 | 1 
+
+
+Detail of failures
+------------------
+
+       nios2 |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/4b85304688d0d44fa1385d24511d74622c4a9f97 | ORPH
+microblazeel |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/7e9caaafdef915f845833d9e7961eae38ffeefb1 | ORPH
+        i586 |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/061eb0deaa5ca3cee12078d16fa25f1ac65be7ed | ORPH
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/e0dc522b6c25e6f9a52a72d7372d90514df677c0 |     
+         arm |           oniguruma-legal-info | NOK | http://autobuild.buildroot.net/results/321e46eddcf87c4a54420aefde6b8e0d2eb0f8ea |     
+         arc |           oniguruma-legal-info | NOK | http://autobuild.buildroot.net/results/87597859bea7c94440ecfc9eb897dcff45d2f5d6 |     
+     sparc64 |              openjdk-jdk-12+33 | NOK | http://autobuild.buildroot.net/results/9c8a066a7ef7866e76e70eba063aeb0dc2f6c511 |     
+         sh4 | package/oniguruma/oniguruma... | NOK | http://autobuild.buildroot.net/results/be5300c86abe9775c89805a1d03fb3cca882d6d6 |     
+     aarch64 |                  powertop-2.10 | NOK | http://autobuild.buildroot.net/results/a0b3337cf4a827e6566f8b15b6bb180f0dcef7a3 |     
+        m68k |                     strace-5.0 | NOK | http://autobuild.buildroot.net/results/5e3b011dd5482abf566967843bd04f69ffbe7813 |     
+        m68k |                 suricata-4.1.3 | NOK | http://autobuild.buildroot.net/results/e5966229755ea21356022cae94d73945c026fd26 |     
+         arm |           wpebackend-fdo-1.0.1 | NOK | http://autobuild.buildroot.net/results/05082220bd3bd7359c304c84198e6ad37852a4e5 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                   netsurf-3.8 | 2 
+                  brotli-1.0.7 | 1 
+                      ddrescue | 1 
+                        glibmm | 1 
+                      gzip-1.9 | 1 
+           host-mfgtools-v0.02 | 1 
+libcamera-ab0188fc8bbb6f397... | 1 
+                  linuxptp-2.0 | 1 
+                   mpd-0.20.23 | 1 
+                   mutt-1.11.4 | 1 
+                qt5base-5.12.2 | 1 
+            qt5location-5.12.2 | 1 
+           qt5multimedia-5.6.3 | 1 
+  vdr-plugin-vnsiserver-v1.8.0 | 1 
+
+
+Detail of failures
+------------------
+
+microblazeel |                   brotli-1.0.7 | NOK | http://autobuild.buildroot.net/results/c8c5edd2599a37085315abf4677bf71e210a98ca |     
+microblazeel |                       ddrescue | TIM | http://autobuild.buildroot.net/results/6138596e90fa8230cbbe012ba451012806c54363 |     
+microblazeel |                         glibmm | TIM | http://autobuild.buildroot.net/results/68ff78a9712054317a9b55140cf6e82a17888d01 |     
+         arm |                       gzip-1.9 | NOK | http://autobuild.buildroot.net/results/c8ae868a11affaf54df06a5624b75a86e1132c25 | ORPH
+         arm |            host-mfgtools-v0.02 | NOK | http://autobuild.buildroot.net/results/6fa5615c4f8c653549a4ac6dff965a4022aecef3 |     
+       sparc | libcamera-ab0188fc8bbb6f397... | NOK | http://autobuild.buildroot.net/results/f81d3e821d0ece82e2e4e060f35bfdf18f82c1a4 |     
+     aarch64 |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/921004f77f91a07dfc6c9493295811dbbfd0cb8f |     
+         arm |                    mpd-0.20.23 | NOK | http://autobuild.buildroot.net/results/814dfed89e5a67f0c9ff766d574269a8f04d3617 |     
+         arm |                    mutt-1.11.4 | NOK | http://autobuild.buildroot.net/results/7309a09e257abd389f1da7f60b4f2895030b37f0 |     
+      xtensa |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/c90b10b4ab864665b0a6ae9c3dd15c30e6e2a562 |     
+         arc |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/2f540b2003cc8e283f99c6598ddac3e7584ba597 |     
+      x86_64 |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/739f9d462bcd36b49b7bded43a3a0eb5b443c6f8 |     
+         arm |             qt5location-5.12.2 | NOK | http://autobuild.buildroot.net/results/1384d44673519df1b315aa6d3f05ebfe0c5051dd |     
+      x86_64 |            qt5multimedia-5.6.3 | NOK | http://autobuild.buildroot.net/results/78886d375b6b02f020154cbcf3698f614c35193b |     
+       nios2 |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/171d79220ca0e511141b45e12516405eb8574166 |     
+
+Results for branch '2019.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                   botan-2.8.0 | 1 
+                   netsurf-3.8 | 1 
+
+
+Detail of failures
+------------------
+
+       sparc |                    botan-2.8.0 | NOK | http://autobuild.buildroot.net/results/b4f84de5bca0d670096ea5610fc685bc6c903ca1 |     
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/2cb648e920343525a4540f06f0ac4cf86a3b8002 |     
+
+
 -- 
-2.21.0
+http://autobuild.buildroot.net
