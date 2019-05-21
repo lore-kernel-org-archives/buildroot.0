@@ -1,49 +1,56 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Tue, 21 May 2019 21:53:29 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libubootenv: fix build
- with musl and static lib
-In-Reply-To: <20190521205911.5dca7351@windsurf.home>
-References: <1558455512-31444-1-git-send-email-pjtexier@koncepto.io>
- <20190521205911.5dca7351@windsurf.home>
-Message-ID: <b1c26647-772e-8f7b-e9f5-ed6ff2f9e970@koncepto.io>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 21 May 2019 22:20:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mono-gtksharp3: fix build with
+ latest mono
+Message-ID: <20190521202056.17117-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Fixes:
+ - http://autobuild.buildroot.org/results/7cae5b32285fe0edf69eab3297be9c6a4e76b7b8
 
-Le 21/05/2019 ? 20:59, Thomas Petazzoni a ?crit?:
-> Hello Pierre-Jean,
->
-> On Tue, 21 May 2019 18:18:32 +0200
-> Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
->
->> Libubootenv is a shared library, so add missing dependency on !BR2_STATIC_LIBS.
-> I think instead src/CMakeLists.txt should be changed to not force
-> building a shared library.
-Ok, I will do.
->
->> Also add BR2_TOOLCHAIN_USES_MUSL dependency to avoid 'unknown type name 'loff_t''.
-> And here I'm pretty sure musl provides loff_t, it's probably just a
-> missing #include.
-In fact yes, we have to define _GNU_SOURCE.
-I'll prepare a patch to fix this issue.
->
->> +comment "libubootenv application library needs a glibc or uClibc toolchain w/ dynamic library"
-> The correct comment would be:
->
-> comment "libubootenv needs a glibc or uClibc toolchain w/ dynamic library"
->
-> but I think it's better to fix the actual problems.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...-MONO_PROFILE_ENTER_LEAVE-undeclared.patch | 28 +++++++++++++++++++
+ 1 file changed, 28 insertions(+)
+ create mode 100644 package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch
 
-No problem, I will send a v2 tomorrow.
-
-Thanks
-
-Pierre-Jean
->
-> Best regards,
->
-> Thomas
+diff --git a/package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch b/package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch
+new file mode 100644
+index 0000000000..6596849a89
+--- /dev/null
++++ b/package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch
+@@ -0,0 +1,28 @@
++From c1b9bd4214b78dc426bc6e6a07c23a8ab4ab50ea Mon Sep 17 00:00:00 2001
++From: Jordi Mas <jmas@softcatala.org>
++Date: Tue, 12 Mar 2019 12:24:19 +0100
++Subject: [PATCH] Fixes MONO_PROFILE_ENTER_LEAVE undeclared when compiling with
++ newer versions of Mono (#266)
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/mono/gtk-sharp/commit/c1b9bd4214b78dc426bc6e6a07c23a8ab4ab50ea]
++---
++ gtk/gui-thread-check/profiler/gui-thread-check.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/gtk/gui-thread-check/profiler/gui-thread-check.c b/gtk/gui-thread-check/profiler/gui-thread-check.c
++index 11838e3b0..9f45fe6b2 100644
++--- a/gtk/gui-thread-check/profiler/gui-thread-check.c
+++++ b/gtk/gui-thread-check/profiler/gui-thread-check.c
++@@ -86,6 +86,10 @@ simple_method_enter (MonoProfiler *prof, MonoMethod *method)
++ 	}
++ }
++ 
+++#ifndef MONO_PROFILE_ENTER_LEAVE
+++#define MONO_PROFILE_ENTER_LEAVE (1 << 12)
+++#endif
+++
++ void
++ mono_profiler_startup (const char *desc)
++ {
+-- 
+2.20.1
