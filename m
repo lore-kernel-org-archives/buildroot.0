@@ -1,28 +1,51 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 21 May 2019 14:34:34 +0200
-Subject: [Buildroot] [PATCH] toolchain: specify GCC_BUG_85180 is true
- only if GCC version < 8.x
-In-Reply-To: <20190520210722.GA24931@dell5510>
-References: <20190520203949.120720-1-giulio.benetti@micronovasrl.com>
- <20190520210722.GA24931@dell5510>
-Message-ID: <1be6dbdc-6ff9-fc60-f56f-8ca3a5c6c4c3@micronovasrl.com>
+Date: Tue, 21 May 2019 15:39:20 +0200
+Subject: [Buildroot] [PATCH v2 00/12] Fix GCC BUG 85180 per-package
+Message-ID: <20190521133932.81841-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Il 20/05/2019 23:07, Petr Vorel ha scritto:
-> Reviewed-by: Petr Vorel<petr.vorel@gmail.com>
-Thanks
--- 
-Giulio Benetti
-CTO
+This patchset aims to build packages when building with Gcc affected by
+Bug 85180 instead of not bulding them at all.
+Bug 85180:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+is present in Gcc version < 8.x
+The basic solution is to force compiling without optimization, so forcing
+-O0 appending it to CFLAGS or CXXFLAGS according to programming language
+used in package.
 
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Giulio Benetti (12):
+  toolchain: specify GCC_BUG_85180 is true only if GCC version < 8.x
+  package/atop: fix BUG_85180 build timeout
+  package/chocolate-doom: fix BUG_85180 build timeout
+  package/ddrescue: fix BUG_85180 build timeout
+  package/flare-engine: fix BUG_85180 build timeout
+  package/glibmm: fix BUG_85180 build timeout
+  package/gst-ffmpeg: re-enable package if BUG_85180 is present
+  package/jasper: fix BUG_85180 build timeout
+  package/kismet: fix BUG_85180 build timeout
+  package/libcpprestsdk: fix BUG_85180 build timeout
+  package/opus: fix BUG_85180 build timeout
+  package/postgresql: fix BUG_85180 build timeout
+
+ package/atop/atop.mk                       | 7 ++++++-
+ package/chocolate-doom/chocolate-doom.mk   | 4 ++++
+ package/ddrescue/ddrescue.mk               | 6 +++++-
+ package/flare-engine/Config.in             | 4 ----
+ package/flare-engine/flare-engine.mk       | 6 ++++++
+ package/glibmm/glibmm.mk                   | 4 ++++
+ package/gstreamer/gst-ffmpeg/Config.in     | 4 ----
+ package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk | 5 +++++
+ package/jasper/jasper.mk                   | 4 ++++
+ package/kismet/kismet.mk                   | 4 ++++
+ package/libcpprestsdk/libcpprestsdk.mk     | 4 ++++
+ package/opus/opus.mk                       | 4 ++++
+ package/postgresql/postgresql.mk           | 4 ++++
+ toolchain/Config.in                        | 1 +
+ 14 files changed, 51 insertions(+), 10 deletions(-)
+
+-- 
+2.17.1
