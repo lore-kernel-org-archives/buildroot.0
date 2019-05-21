@@ -1,19 +1,19 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 21 May 2019 09:55:16 +0200
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 21 May 2019 09:59:13 +0200
 Subject: [Buildroot] [PATCH] package/atop: fix BUG_85180 build timeout
 In-Reply-To: <20190521091551.384da8a1@windsurf.home>
 References: <20190520212723.63754-1-giulio.benetti@micronovasrl.com>
  <20190521091551.384da8a1@windsurf.home>
-Message-ID: <757973bf-7d43-f3d6-8364-b4353d42b317@mind.be>
+Message-ID: <1a457db6-afc2-e2c8-16d2-41248af114ec@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Thomas,
 
-
-On 21/05/2019 09:15, Thomas Petazzoni wrote:
+Il 21/05/2019 09:15, Thomas Petazzoni ha scritto:
 > Hello,
 > 
 > On Mon, 20 May 2019 23:27:23 +0200
@@ -38,13 +38,18 @@ On 21/05/2019 09:15, Thomas Petazzoni wrote:
 > 
 > Is it expected ? Can't we have the same work around in all situations ?
 
- I think it's just that in *this* case, it is also solved by using -g1 instead
-of -g2, which is less "aggressive" than passing -O0. However, I agree with
-Thomas that it's better to use the same solution everywhere, even if it is
-suboptimal.
+Yes it is expected, but we can have the same workaround(-O0) for all 
+situations.
 
- Just to be sure: in some cases, -Os also works, but not in all cases, right?
-Otherwise I'd actually prefer -Os instead of -O0.
+Best regards
+-- 
+Giulio Benetti
+CTO
 
- Regards,
- Arnout
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
