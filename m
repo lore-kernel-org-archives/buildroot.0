@@ -1,40 +1,28 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Wed, 22 May 2019 17:33:13 +0200
-Subject: [Buildroot] [PATCH] package/luarocks: bump to version 3.1.2
-Message-ID: <20190522153314.10699-1-francois.perrad@gadz.org>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Wed, 22 May 2019 10:34:23 -0500
+Subject: [Buildroot] [External] Re: [PATCH v4 1/1] package/iputils: bump
+ to version s20190515
+In-Reply-To: <20190522142130.GC22951@dell5510>
+References: <20190519211504.15141-1-petr.vorel@gmail.com>
+ <20190520205637.7018d95b@windsurf.home>
+ <CANQCQpZi6Oy+bt+Y4OpCnECCNfEtYEtJyK=-t6w90HepbgpBnQ@mail.gmail.com>
+ <20190522142130.GC22951@dell5510>
+Message-ID: <CANQCQpYJMUVJCph_yABzdVhC4_QWMFDZPHkBNcj6ayF5m=AJbQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Petr,
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index aed0274b5..6936bfbbb 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 3c26c102f8e69f81e12ea39037c770a00b6244e115a4c832e7a92feffdfad1aa  luarocks-3.1.1.tar.gz
-+sha256 72a3b74f05b7fd011eed894dc34193ee80b3235fe58016ac9ffdbfceecc88950  luarocks-3.1.2.tar.gz
- sha256 542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 6a8254fd4..0d05b448a 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAROCKS_VERSION = 3.1.1
-+LUAROCKS_VERSION = 3.1.2
- LUAROCKS_SITE = http://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
--- 
-2.20.1
+On Wed, May 22, 2019 at 9:22 AM Petr Vorel <petr.vorel@gmail.com> wrote:
+>
+> Hi Matthew,
+>
+> > Petr,
+>
+
+> I already acked proposed fix made by Fabrice
+
+Cool!
