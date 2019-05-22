@@ -1,28 +1,51 @@
-From: Matthew Weber <matthew.weber@collins.com>
-Date: Wed, 22 May 2019 10:34:23 -0500
-Subject: [Buildroot] [External] Re: [PATCH v4 1/1] package/iputils: bump
- to version s20190515
-In-Reply-To: <20190522142130.GC22951@dell5510>
-References: <20190519211504.15141-1-petr.vorel@gmail.com>
- <20190520205637.7018d95b@windsurf.home>
- <CANQCQpZi6Oy+bt+Y4OpCnECCNfEtYEtJyK=-t6w90HepbgpBnQ@mail.gmail.com>
- <20190522142130.GC22951@dell5510>
-Message-ID: <CANQCQpYJMUVJCph_yABzdVhC4_QWMFDZPHkBNcj6ayF5m=AJbQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 22 May 2019 17:50:04 +0200
+Subject: [Buildroot] [PATCH] package/libcurl: security bump to version 7.65.0
+Message-ID: <20190522155004.30024-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr,
+Fixes the following security vulnerabilities:
 
-On Wed, May 22, 2019 at 9:22 AM Petr Vorel <petr.vorel@gmail.com> wrote:
->
-> Hi Matthew,
->
-> > Petr,
->
+- CVE-2019-5435: Integer overflows in curl_url_set()
+  https://curl.haxx.se/docs/CVE-2019-5435.html
 
-> I already acked proposed fix made by Fabrice
+- CVE-2019-5436: TFTP receive buffer overflow
+  https://curl.haxx.se/docs/CVE-2019-5436.html
 
-Cool!
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index d321adcd62..bece16dc0d 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.64.1.tar.xz.asc
++# https://curl.haxx.se/download/curl-7.65.0.tar.xz.asc
+ # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256 9252332a7f871ce37bfa7f78bdd0a0e3924d8187cc27cb57c76c9474a7168fb3  curl-7.64.1.tar.xz
++sha256 7766d263929404f693905b5e5222aa0f2bdf8c66ab4b8758f0c0820a42b966cd  curl-7.65.0.tar.xz
+ sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 852054a4bd..80bf2dd245 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.64.1
++LIBCURL_VERSION = 7.65.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+-- 
+2.11.0
