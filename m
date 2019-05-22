@@ -1,55 +1,50 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 22 May 2019 14:25:40 +0200
-Subject: [Buildroot] [PATCH 6/8] package/ecryptfs-utils: allow building with
- GCC_BUG_85862 and on Microblaze
+Date: Wed, 22 May 2019 14:25:41 +0200
+Subject: [Buildroot] [PATCH 7/8] package/qt5webengine: re-enable building if
+ BUG_85682=y on latest Qt5
 In-Reply-To: <20190522122542.84146-1-giulio.benetti@micronovasrl.com>
 References: <20190522122542.84146-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190522122542.84146-7-giulio.benetti@micronovasrl.com>
+Message-ID: <20190522122542.84146-8-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libnss gcc bug 85862 has been worked around and that caused build
-failure on Microblaze.
+'depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862' is listed because libnss
+was affected by that bug in latest Qt5, but now that bug has been worked
+around.
 
-Remove 'depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862' and 'depends on
-!BR2_microblaze' from Config.in allowing this package to build.
+So remove 'depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862' and allow
+building latest Qt5 by removing also '|| BR2_PACKAGE_QT5_VERSION_5_6'.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/ecryptfs-utils/Config.in | 6 ------
+ package/qt5/qt5webengine/Config.in | 6 ------
  1 file changed, 6 deletions(-)
 
-diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-index 6652d33e0e..68a659d33d 100644
---- a/package/ecryptfs-utils/Config.in
-+++ b/package/ecryptfs-utils/Config.in
-@@ -2,12 +2,10 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	bool "ecryptfs-utils"
- 	depends on BR2_USE_WCHAR # gettext
- 	depends on BR2_USE_MMU # keyutils
--	depends on !BR2_microblaze # keyutils
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
- 	depends on !BR2_MIPS_NABI32 # libnss
- 	depends on !BR2_STATIC_LIBS # libnss, keyutils
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 # microblaze specific & GCC < 7.x
- 	select BR2_PACKAGE_KEYUTILS
- 	select BR2_PACKAGE_LIBNSS
- 	# runtime dependency only, some scripts are using the
-@@ -31,11 +29,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	  http://ecryptfs.org
+diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
+index 744d659567..969582712e 100644
+--- a/package/qt5/qt5webengine/Config.in
++++ b/package/qt5/qt5webengine/Config.in
+@@ -20,18 +20,12 @@ comment "qt5webengine needs an OpenGL and EGL-capable backend"
+ 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+ 	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE || !BR2_PACKAGE_HAS_LIBEGL
  
- comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynami library"
--	depends on !BR2_microblaze
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
- 		BR2_STATIC_LIBS
--
--comment "ecryptfs needs a toolchain not affected by GCC bug 85862"
+-comment "qt5webengine needs a toolchain not affected by GCC bug 85862"
+-	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+-	depends on !BR2_PACKAGE_QT5_VERSION_5_6
 -	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862 # libnss
+-
+ config BR2_PACKAGE_QT5WEBENGINE
+ 	bool "qt5webengine"
+ 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_8 # qt5base-icu
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # qt5base-icu
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || BR2_PACKAGE_QT5_VERSION_5_6 # libnss
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
 -- 
 2.17.1
