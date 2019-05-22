@@ -1,43 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 22 May 2019 22:50:01 +0200
-Subject: [Buildroot] [git commit branch/next] package/luarocks: bump to
- version 3.1.2
-Message-ID: <20190522204407.09AFA8D4AF@busybox.osuosl.org>
+Date: Wed, 22 May 2019 22:52:23 +0200
+Subject: [Buildroot] [git commit] toolchain: gcc bug 85180 is fixed in gcc
+ >= 8.x
+Message-ID: <20190522204624.3C17881674@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1bc70929249d072655834fa685205c1a2e6b5e19
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: https://git.buildroot.net/buildroot/commit/?id=a94dd1ce9c48a079bfa22c0af718a00a6b4ba237
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Gcc bug 85180 (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180) has
+been fixed on Gcc version >= 8.x, so this commit adjusts the
+BR2_TOOLCHAIN_HAS_GCC_BUG_85180 option to no longer be true when the
+gcc version is >= 8.x.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ toolchain/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index aed0274b5a..6936bfbbb6 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 3c26c102f8e69f81e12ea39037c770a00b6244e115a4c832e7a92feffdfad1aa  luarocks-3.1.1.tar.gz
-+sha256 72a3b74f05b7fd011eed894dc34193ee80b3235fe58016ac9ffdbfceecc88950  luarocks-3.1.2.tar.gz
- sha256 542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 6a8254fd43..0d05b448a5 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 8c5a4fb88e..6421f6fcbb 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -129,6 +129,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_85180
+ 	bool
+ 	default y if BR2_microblaze
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
  
--LUAROCKS_VERSION = 3.1.1
-+LUAROCKS_VERSION = 3.1.2
- LUAROCKS_SITE = http://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85862
+ # An infinite loop exists in the find_base_term() logic of 6.x
