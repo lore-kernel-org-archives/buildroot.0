@@ -1,38 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 22 May 2019 22:52:42 +0200
-Subject: [Buildroot] [PATCH v2 01/12] toolchain: specify GCC_BUG_85180
- is true only if GCC version < 8.x
-In-Reply-To: <20190521133932.81841-2-giulio.benetti@micronovasrl.com>
-References: <20190521133932.81841-1-giulio.benetti@micronovasrl.com>
- <20190521133932.81841-2-giulio.benetti@micronovasrl.com>
-Message-ID: <20190522225242.7efd830c@windsurf.home>
+Date: Wed, 22 May 2019 23:04:44 +0200
+Subject: [Buildroot] [git commit] package/atop: work around gcc bug 85180
+Message-ID: <20190522210002.CA7DD8D6EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 21 May 2019 15:39:21 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b0545135e71052daf90dba8c82e6e750c333dde1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Bug 85180:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
-> has been fixed on Gcc version >= 8.x
-> 
-> So:
-> - add 'depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8' to 'config
->   BR2_TOOLCHAIN_HAS_GCC_BUG_85180'.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  toolchain/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+shows up when building atop with optimization but not when building
+with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y
+we force using -O0.
 
-Applied to master with a tweaked commit log/title. Thanks!
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  http://autobuild.buildroot.net/results/94aa00f776b8a3491ac0b3212c95f5e666c5a29a/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/atop/atop.mk | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/package/atop/atop.mk b/package/atop/atop.mk
+index aaf02908c4..4ea1ccf26f 100644
+--- a/package/atop/atop.mk
++++ b/package/atop/atop.mk
+@@ -10,8 +10,15 @@ ATOP_LICENSE = GPL-2.0+
+ ATOP_LICENSE_FILES = COPYING
+ ATOP_DEPENDENCIES = ncurses zlib
+ 
++ATOP_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++ATOP_CFLAGS += -O0
++endif
++
+ define ATOP_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(MAKE) $(TARGET_CONFIGURE_OPTS) CFLAGS="$(ATOP_CFLAGS)" \
++		-C $(@D)
+ endef
+ 
+ define ATOP_INSTALL_TARGET_CMDS
