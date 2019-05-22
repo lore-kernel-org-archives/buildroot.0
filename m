@@ -1,136 +1,106 @@
-From: jeffrey.kinross at i3pd.com <jeffrey.kinross@i3pd.com>
-Date: Tue, 21 May 2019 15:45:34 -0500
-Subject: [Buildroot] [PATCH 1/1] configs/imx6ullevk: add imx6ullevk support
-Message-ID: <20190521204534.27569-1-jeffrey.kinross@i3pd.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 22 May 2019 06:00:41 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-05-21
+Message-ID: <20190522060049.2EAE186B90@whitealder.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jeffrey Kinross <jeffrey.kinross@i3pd.com>
+Hello,
 
-Signed-off-by: Jeffrey Kinross <jeffrey.kinross@i3pd.com>
----
- board/freescale/imx6ullevk/readme.txt | 64 +++++++++++++++++++++++++++
- configs/imx6ullevk_defconfig          | 38 ++++++++++++++++
- 2 files changed, 102 insertions(+)
- create mode 100644 board/freescale/imx6ullevk/readme.txt
- create mode 100644 configs/imx6ullevk_defconfig
+Build statistics for 2019-05-21
+===============================
 
-diff --git a/board/freescale/imx6ullevk/readme.txt b/board/freescale/imx6ullevk/readme.txt
-new file mode 100644
-index 0000000000..1b10f90621
---- /dev/null
-+++ b/board/freescale/imx6ullevk/readme.txt
-@@ -0,0 +1,64 @@
-+***************************
-+Freescale i.MX6ULL EVK board
-+***************************
-+
-+This file documents the Buildroot support for the Freescale i.MX6ULL EVK board.
-+
-+Please read the i.MX6ULL Evaluation Kit Quick Start Guide [1] for an
-+introduction to the board.
-+
-+Build
-+=====
-+
-+First, configure Buildroot for your i.MX6ULL EVK board:
-+
-+make imx6ullevk_defconfig
-+
-+Build all components:
-+
-+  make
-+
-+You will find in ./output/images/ the following files:
-+  - imx6ull-14x14-evk.dtb
-+  - rootfs.ext4
-+  - rootfs.tar
-+  - sdcard.img
-+  - u-boot.imx
-+  - zImage
-+
-+Create a bootable microSD card
-+==============================
-+
-+To determine the device associated to the microSD card have a look in the
-+/proc/partitions file:
-+
-+  cat /proc/partitions
-+
-+Buildroot prepares a bootable "sdcard.img" image in the output/images/
-+directory, ready to be dumped on a microSD card. Launch the following
-+command as root:
-+
-+  dd if=./output/images/sdcard.img of=/dev/<your-microsd-device>
-+
-+*** WARNING! This will destroy all the card content. Use with care! ***
-+
-+For details about the medium image layout, see the definition in
-+board/freescale/common/imx/genimage.cfg.template.
-+
-+Boot the i.MX6ULL EVK board
-+=========================
-+
-+To boot your newly created system (refer to the i.MX6ULL EVK Quick Start Guide
-+[1] for guidance):
-+- insert the microSD card in the microSD slot of the board;
-+- verify that your i.MX6ULL EVK board jumpers and switches are set as mentioned
-+  in the i.MX6ULL EVK Quick Start Guide [1];
-+- put a micro USB cable into the Debug USB Port and connect using a terminal
-+  emulator at 115200 bps, 8n1;
-+- power on the board.
-+
-+Enjoy!
-+
-+References
-+==========
-+[1] https://www.nxp.com/files-static/32bit/doc/brochure/IMX6ULLQSG.pdf
-diff --git a/configs/imx6ullevk_defconfig b/configs/imx6ullevk_defconfig
-new file mode 100644
-index 0000000000..85e0f4fe8b
---- /dev/null
-+++ b/configs/imx6ullevk_defconfig
-@@ -0,0 +1,38 @@
-+# architecture
-+BR2_arm=y
-+BR2_cortex_a7=y
-+BR2_ARM_FPU_NEON_VFPV4=y
-+
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-+
-+# system
-+BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-+
-+# kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.44"
-+BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ull-14x14-evk"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# bootloader
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BOARDNAME="mx6ullevk"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_USE_DEFCONFIG=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx6ull_14x14_evk"
-+BR2_TARGET_UBOOT_FORMAT_IMX=y
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+
-+# required tools to create the SD card image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+
-+# filesystem / image
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
+      branch |  OK | NOK | TIM | TOT |
+   2019.02.x |  25 |   2 |   0 |  27 |
+      master | 191 |   8 |   3 | 202 |
+        next |  48 |  14 |   1 |  63 |
+
+Results for branch 'next'
+=========================
+
+Classification of failures by reason
+------------------------------------
+
+libubootenv-8a7d4030bcb106d... | 4 
+             iputils-s20190515 | 3 
+                    dhcp-4.4.1 | 2 
+                mono-5.20.1.27 | 2 
+                chocolate-doom | 1 
+                cracklib-2.9.7 | 1 
+         mono-gtksharp3-2.99.3 | 1 
+                qt5base-5.12.2 | 1 
+
+
+Detail of failures
+------------------
+
+microblazeel |                 chocolate-doom | TIM | http://autobuild.buildroot.net/results/ddfcc2fa875e1761e2f745cc249afee2a9f18371 |     
+         arm |                 cracklib-2.9.7 | NOK | http://autobuild.buildroot.net/results/7ef699682ed5d7d3423e2c06ba88328f3ed4d71e |     
+         arm |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/38a499349611836f3acead5760ce51cddc63bb95 | ORPH
+         arc |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/a3d3d6b7c049fbe10d5ae0afb96a2cd4b092b94e | ORPH
+     riscv64 |              iputils-s20190515 | NOK | http://autobuild.buildroot.net/results/f78ac0d3c9a679a584bd54ac7f908390f5a4087b |     
+    mips64el |              iputils-s20190515 | NOK | http://autobuild.buildroot.net/results/e86555090e27b631ba35214ef100aa9331844684 |     
+      xtensa |              iputils-s20190515 | NOK | http://autobuild.buildroot.net/results/a15323897950f8166f2b14f235a36cd88387d5de |     
+         arm | libubootenv-8a7d4030bcb106d... | NOK | http://autobuild.buildroot.net/results/8a6b3087a4c2cb53f4e9b80183c7f4b0ea6ffd3b |     
+         arm | libubootenv-8a7d4030bcb106d... | NOK | http://autobuild.buildroot.net/results/206f1eba0dec39de1c02d760fa8f961d5a3879d0 |     
+      x86_64 | libubootenv-8a7d4030bcb106d... | NOK | http://autobuild.buildroot.net/results/90873370a73749a5afd506e4dda0df316cd4139b |     
+         arm | libubootenv-8a7d4030bcb106d... | NOK | http://autobuild.buildroot.net/results/e1837ccbe774071876642655b1fcffbd69dd7947 |     
+         arm |                 mono-5.20.1.27 | NOK | http://autobuild.buildroot.net/results/f13a6103ec68697271c3cb3986828b9deac7c3ea |     
+         arm |                 mono-5.20.1.27 | NOK | http://autobuild.buildroot.net/results/e6beaba992e0057535e1a8f97967bbbc465f5979 |     
+      x86_64 |          mono-gtksharp3-2.99.3 | NOK | http://autobuild.buildroot.net/results/7cae5b32285fe0edf69eab3297be9c6a4e76b7b8 |     
+      x86_64 |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/0ff8ba667fa4dcaf6e0230d648cee6d5aede3a09 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                qt5base-5.12.2 | 2 
+                suricata-4.1.3 | 2 
+                host-libsodium | 1 
+                  linuxptp-2.0 | 1 
+                   mpd-0.20.23 | 1 
+                   netsurf-3.8 | 1 
+                          opus | 1 
+                    postgresql | 1 
+               tpm2-totp-0.1.1 | 1 
+
+
+Detail of failures
+------------------
+
+     riscv64 |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/dace17550493e1a261d00a810b6d67257b5f1cb3 |     
+     aarch64 |                   linuxptp-2.0 | NOK | http://autobuild.buildroot.net/results/53a5f4289c4cb522f97acd39d9d1c25bcff1a15d |     
+         arm |                    mpd-0.20.23 | NOK | http://autobuild.buildroot.net/results/2001c9dfd0b4291b93eb4f6211cdcfb3376b5920 |     
+         arc |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/3819a3d77d6d0579443983bffb3b22babb38af26 |     
+microblazeel |                           opus | TIM | http://autobuild.buildroot.net/results/d8a16a22d037a2cc2fc2f0e2b709a76ff02a7777 |     
+microblazeel |                     postgresql | TIM | http://autobuild.buildroot.net/results/aeaa6371e06d4df7788cfab497f98ba0f9ac18a4 |     
+  aarch64_be |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/aa3c6c83829cae36017c1bc24e1e1d0ca35ea0cb |     
+  aarch64_be |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/8779fc1595c9d645d1c0847097f3e2db0d231af5 |     
+        m68k |                 suricata-4.1.3 | NOK | http://autobuild.buildroot.net/results/294aea8d286a3e1374d3cc523799c30c313179ee |     
+        m68k |                 suricata-4.1.3 | NOK | http://autobuild.buildroot.net/results/4f57c417157a4c3b6f8cccb2acabad291b274ff6 |     
+      x86_64 |                tpm2-totp-0.1.1 | NOK | http://autobuild.buildroot.net/results/5693a35e4d6bc76a1f46fe0e217abc49f7188aad |     
+
+Results for branch '2019.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                   glm-0.9.8.4 | 1 
+                   netsurf-3.8 | 1 
+
+
+Detail of failures
+------------------
+
+        i686 |                    glm-0.9.8.4 | NOK | http://autobuild.buildroot.net/results/a46e09bc599408ba9f0b178883c91ce26aaf02a9 | ORPH
+         arm |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/4b6987e8d470a4d5da3977b40c0081e289de864b |     
+
+
 -- 
-2.20.1
+http://autobuild.buildroot.net
