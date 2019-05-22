@@ -1,65 +1,73 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 22 May 2019 15:59:01 +0200
-Subject: [Buildroot] [PATCH v2 2/7] package/ffmpeg: re-enable package if
- BUG_85180 is present
+Date: Wed, 22 May 2019 15:59:02 +0200
+Subject: [Buildroot] [PATCH v2 3/7] package/assimp: re-enable package if
+ BR2_microblaze is enabled
 In-Reply-To: <20190522135906.30796-1-giulio.benetti@micronovasrl.com>
 References: <10430096-81de-792a-8b49-c59ed5e9de2e@micronovasrl.com>
  <20190522135906.30796-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190522135906.30796-3-giulio.benetti@micronovasrl.com>
+Message-ID: <20190522135906.30796-4-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Microblaze Gcc version < 8.x build hangs on compiling.
+With Microblaze Gcc version < 8.x build hangs on compiling first files.
 This is due to bug 85180:
 https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
-This package has been excluded from building if BUG_85180 is present.
-Bug shows up building ffmpeg with optimization.
+This package has been excluded from building if BR2_microblaze is
+enabled.
+Bug shows up building assimp with optimization but not when building
+with -O0.
 
 In config.mk if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 by:
-- add --disable-optimizations to FFMPEG_CONF_OPTS
-- passing -O0 to CFLAGS in FFMPEG_CONF_ENV
-Then remove 'depends on !BR2_microblaze' from Config.in
+- passing -O0 to ASSIMP_CXXFLAGS
+Then remove 'depends on !BR2_microblaze' and its comment if not
+available from Config.in
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
 V1->V2:
 * use BUG_85180 instead of BUG_71124 since they are the same bug
 
- package/ffmpeg/Config.in | 2 --
- package/ffmpeg/ffmpeg.mk | 5 +++++
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ package/assimp/Config.in | 5 -----
+ package/assimp/assimp.mk | 4 ++++
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/ffmpeg/Config.in b/package/ffmpeg/Config.in
-index eec7ce0f6b..a5c05d9c1c 100644
---- a/package/ffmpeg/Config.in
-+++ b/package/ffmpeg/Config.in
-@@ -7,8 +7,6 @@ config BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
- 	depends on !BR2_nios2
- 	# No support for ARMv7-M in the ARM assembly logic
- 	depends on !BR2_ARM_CPU_ARMV7M
--	# Microblaze build affected by gcc PR71124 (infinite loop)
+diff --git a/package/assimp/Config.in b/package/assimp/Config.in
+index 41c1bb348b..630758f3e7 100644
+--- a/package/assimp/Config.in
++++ b/package/assimp/Config.in
+@@ -1,9 +1,5 @@
+ config BR2_PACKAGE_ASSIMP
+ 	bool "assimp"
+-	# All gcc versions affected by
+-	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71124, that
+-	# cause an infinite loop in gcc when building this package.
 -	depends on !BR2_microblaze
- 	# m68k coldfire causes a build failure, because the check for
- 	# atomics (atomic_store) succeeds, which causes ffmpeg to
- 	# think atomic intrinsics are available, while they are
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 8c91b149f4..a3cc5be1a4 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -525,6 +525,11 @@ endif
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+@@ -16,5 +12,4 @@ config BR2_PACKAGE_ASSIMP
+ 	  http://www.assimp.org
  
- FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
+ comment "assimp needs a toolchain w/ C++"
+-	depends on !BR2_microblaze
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index 1316720423..5720f9793f 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
+@@ -24,6 +24,10 @@ ifeq ($(BR2_sh):$(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:y:)
+ ASSIMP_CXXFLAGS += -O2
+ endif
  
 +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+FFMPEG_CONF_OPTS += --disable-optimizations
-+FFMPEG_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O0"
++ASSIMP_CXXFLAGS += -O0
 +endif
 +
- # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
- define FFMPEG_CONFIGURE_CMDS
- 	(cd $(FFMPEG_SRCDIR) && rm -rf config.cache && \
+ ASSIMP_CONF_OPTS += -DASSIMP_BUILD_TESTS=OFF \
+ 	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(ASSIMP_CXXFLAGS)"
+ 
 -- 
 2.17.1
