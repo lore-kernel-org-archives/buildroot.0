@@ -1,46 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 May 2019 10:04:26 +0200
-Subject: [Buildroot] [PATCH] package/luarocks: bump to version 3.1.2
-In-Reply-To: <20190523094247.1483d073@windsurf.home> (Thomas Petazzoni's
- message of "Thu, 23 May 2019 09:42:47 +0200")
-References: <20190522153314.10699-1-francois.perrad@gadz.org>
- <20190522225048.5cd52098@windsurf.home>
- <87lfyxtzun.fsf@dell.be.48ers.dk>
- <20190523094247.1483d073@windsurf.home>
-Message-ID: <87d0k9tx4l.fsf@dell.be.48ers.dk>
+Date: Thu, 23 May 2019 10:07:57 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mono-gtksharp3: fix build with
+ latest mono
+In-Reply-To: <20190521202056.17117-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Tue, 21 May 2019 22:20:56 +0200")
+References: <20190521202056.17117-1-fontaine.fabrice@gmail.com>
+Message-ID: <878suxtwyq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > On Thu, 23 May 2019 09:05:36 +0200
- > Peter Korsgaard <peter@korsgaard.com> wrote:
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/7cae5b32285fe0edf69eab3297be9c6a4e76b7b8
 
- >> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:  
- >> 
- >> > On Wed, 22 May 2019 17:33:13 +0200
- >> > Francois Perrad <fperrad@gmail.com> wrote:  
- >> 
- >> >> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- >> >> ---
- >> >> package/luarocks/luarocks.hash | 2 +-
- >> >> package/luarocks/luarocks.mk   | 2 +-
- >> >> 2 files changed, 2 insertions(+), 2 deletions(-)  
- >> 
- >> > Applied to next, thanks.  
- >> 
- >> Should this go into master instead? The commit message again
- >> unfortunately does not explain it, but looking at the git history,
- >> 3.1.1..3.1.2 only seems to contain a bugfix:
- >> 
- >> https://github.com/luarocks/luarocks/commits/v3.1.2
+This is a failure on next, but as mono hasn't been updated in next I
+guess this applies to master.
 
- > Then, yes, presumably it should go to master.
-
-Committed to master, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
