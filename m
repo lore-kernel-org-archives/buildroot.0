@@ -1,231 +1,287 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 May 2019 11:08:07 +0200
-Subject: [Buildroot] [git commit branch/next] package/domoticz: bump to
- version 4.10717
-Message-ID: <20190523090431.2BFB089173@busybox.osuosl.org>
+Date: Thu, 23 May 2019 11:07:15 +0200
+Subject: [Buildroot] [git commit branch/next] package/openzwave: bump to
+ version 1.6
+Message-ID: <20190523090431.23B1C880D1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=527e8ca4b629be6bdd16f9d9f3c05f2690cd97bf
+commit: https://git.buildroot.net/buildroot/commit/?id=4d20e251fbc21acc786afc3f82dbb5caf4bd3eac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 - Remove all patches (already in version)
-- Add patch to fix version
+- udev is an optional dependency (disabled by default) since
+  https://github.com/OpenZWave/open-zwave/commit/89d5b3989fc2cfcf4db85ff9ec71e5c930d6fd33
+- Add an upstream patch to fix build
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/domoticz/0001-Bumped-version.patch         | 20 ------
- ...-appversion.default-bump-version-to-10717.patch | 23 +++++++
- ...s.txt-fix-build-with-python-and-cmake-3.7.patch | 40 ------------
- ...03-Fix-for-boot-1-70-get_io_service.patch.patch | 74 ----------------------
- package/domoticz/domoticz.hash                     |  2 +-
- package/domoticz/domoticz.mk                       |  2 +-
- 6 files changed, 25 insertions(+), 136 deletions(-)
+ .../openzwave/0001-Fix-compilation-of-MinOZW.patch | 37 --------------------
+ ...-Compilers-Get-it-Some-need-a-little-help.patch | 26 +++++++++++++++
+ ...ix-warning-on-wcsdup-implicit-declaration.patch | 29 ----------------
+ .../0003-Ensure-correct-git-repository-path.patch  | 29 ----------------
+ ...ation-error-in-regards-to-Werror-restrict.patch | 39 ----------------------
+ package/openzwave/Config.in                        |  5 ++-
+ package/openzwave/openzwave.hash                   |  2 +-
+ package/openzwave/openzwave.mk                     | 10 ++++--
+ 8 files changed, 37 insertions(+), 140 deletions(-)
 
-diff --git a/package/domoticz/0001-Bumped-version.patch b/package/domoticz/0001-Bumped-version.patch
+diff --git a/package/openzwave/0001-Fix-compilation-of-MinOZW.patch b/package/openzwave/0001-Fix-compilation-of-MinOZW.patch
 deleted file mode 100644
-index 70426ba1aa..0000000000
---- a/package/domoticz/0001-Bumped-version.patch
+index 773672e0ba..0000000000
+--- a/package/openzwave/0001-Fix-compilation-of-MinOZW.patch
 +++ /dev/null
-@@ -1,20 +0,0 @@
--From 98723b7da9467a49222b8a7ffaae276c5bc075c1 Mon Sep 17 00:00:00 2001
--From: gizmocuz <gizmocuz@users.noreply.github.com>
--Date: Thu, 28 Jun 2018 08:00:58 +0200
--Subject: [PATCH] Bumped version
+@@ -1,37 +0,0 @@
+-From 599e2a11c6f48dde744012ec45686c08e15f3059 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fabrice.fontaine@orange.com>
+-Date: Mon, 3 Oct 2016 10:35:52 +0200
+-Subject: [PATCH] Fix compilation of MinOZW (#991)
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from https://github.com/domoticz/domoticz/commit/98723b7da9467a49222b8a7ffaae276c5bc075c1]
-----
-- appversion.default | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/appversion.default b/appversion.default
--index beaa069bb..7d3530590 100644
----- a/appversion.default
--+++ b/appversion.default
--@@ -1,3 +1,3 @@
---#define APPVERSION 5876
--+#define APPVERSION 9700
-- #define APPHASH "b97777b"
-- #define APPDATE 1478691222
-diff --git a/package/domoticz/0001-appversion.default-bump-version-to-10717.patch b/package/domoticz/0001-appversion.default-bump-version-to-10717.patch
-new file mode 100644
-index 0000000000..df0f1b339a
---- /dev/null
-+++ b/package/domoticz/0001-appversion.default-bump-version-to-10717.patch
-@@ -0,0 +1,23 @@
-+From 4d8bbaf4bdffe4fa77a060cd7fa848f3001d46a8 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 21 May 2019 21:08:13 +0200
-+Subject: [PATCH] appversion.default: bump version to 10717
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/domoticz/domoticz/pull/3251]
-+---
-+ appversion.default | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/appversion.default b/appversion.default
-+index 7d3530590..6fc5766c2 100644
-+--- a/appversion.default
-++++ b/appversion.default
-+@@ -1,3 +1,3 @@
-+-#define APPVERSION 9700
-++#define APPVERSION 10717
-+ #define APPHASH "b97777b"
-+ #define APPDATE 1478691222
-+-- 
-+2.20.1
-+
-diff --git a/package/domoticz/0002-CMakeLists.txt-fix-build-with-python-and-cmake-3.7.patch b/package/domoticz/0002-CMakeLists.txt-fix-build-with-python-and-cmake-3.7.patch
-deleted file mode 100644
-index a0adbdfed9..0000000000
---- a/package/domoticz/0002-CMakeLists.txt-fix-build-with-python-and-cmake-3.7.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From 4b77662232c806b8aba7680405144ad51ac3671b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 29 Nov 2018 00:36:00 +0100
--Subject: [PATCH] CMakeLists.txt: fix build with python and cmake <= 3.7
--
--domoticz will fail to build with python and older cmake
--Indeed, find_package(PythonLibs 3.4) will not recognize python 3.7 until
--cmake 3.7 and the following commit:
--https://github.com/Kitware/CMake/commit/c31573b9641e0f1bc7a34149506db51f3494323b
--
--To fix this, add a call to find_package(PythonInterp 3.4). Indeed, if
--FindPythonInterp has already found the major and minor version, that
--version will be inserted between the user supplied versions and the
--stock version list since cmake in version 3.1 and
--https://github.com/Kitware/CMake/commit/3816cd2dc7a7cc220e4f1b1e87fee986545b9cb3
+-LIBDIR was used in cpp/examples/MinOZW/Makefile to add dynamic
+-libraries. However, as it was unset by default, the cross-compilation
+-could fail if the host had a library such as libnss3.so in /.
+-To fix this issue, this patch sets LIBDIR to top_buildir if it is unset
 -
 -Fixes:
-- - http://autobuild.buildroot.org/results/8e82501a7b49da628ec026132ffca44c0c813040
+-  http://autobuild.buildroot.net/results/68719fdf1320a69310bada6d3c47654dacdb5898
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/domoticz/domoticz/pull/2889]
+-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+-[Upstream commit: https://github.com/OpenZWave/open-zwave/commit/599e2a11c6f48dde744012ec45686c08e15f3059]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 ----
-- CMakeLists.txt | 1 +
-- 1 file changed, 1 insertion(+)
+- cpp/examples/MinOZW/Makefile | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
 -
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index f4e38b88..41003a0c 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -125,6 +125,7 @@ ENDIF(USE_BUILTIN_SQLITE)
+-diff --git a/cpp/examples/MinOZW/Makefile b/cpp/examples/MinOZW/Makefile
+-index e575632a3..95d684b77 100644
+---- a/cpp/examples/MinOZW/Makefile
+-+++ b/cpp/examples/MinOZW/Makefile
+-@@ -17,9 +17,11 @@ DEBUG_LDFLAGS	:= -g
 - 
-- option(USE_PYTHON "Use Python for Plugins and Event-Scripts" YES)
-- IF(USE_PYTHON)
--+  find_package(PythonInterp 3.4)
--   find_package(PythonLibs 3.4)
--   IF(PYTHONLIBS_FOUND)
--     MESSAGE(STATUS "Python3 includes found at: ${PYTHON_INCLUDE_PATH}")
---- 
--2.14.1
--
-diff --git a/package/domoticz/0003-Fix-for-boot-1-70-get_io_service.patch.patch b/package/domoticz/0003-Fix-for-boot-1-70-get_io_service.patch.patch
+- top_srcdir := $(abspath $(dir $(lastword $(MAKEFILE_LIST)))../../../)
+- 
+-+#where is put the temporary library
+-+LIBDIR  	?= $(top_builddir)
+- 
+- INCLUDES	:= -I $(top_srcdir)/cpp/src -I $(top_srcdir)/cpp/tinyxml/ -I $(top_srcdir)/cpp/hidapi/hidapi/
+--LIBS =  $(wildcard $(LIBDIR)/*.so $(LIBDIR)/*.dylib $(top_builddir)/*.so $(top_builddir)/*.dylib $(top_builddir)/cpp/build/*.so $(top_builddir)/cpp/build/*.dylib )
+-+LIBS =  $(wildcard $(LIBDIR)/*.so $(LIBDIR)/*.dylib $(top_builddir)/cpp/build/*.so $(top_builddir)/cpp/build/*.dylib )
+- LIBSDIR = $(abspath $(dir $(firstword $(LIBS))))
+- minozwsrc := $(notdir $(wildcard $(top_srcdir)/cpp/examples/MinOZW/*.cpp))
+- VPATH := $(top_srcdir)/cpp/examples/MinOZW
+diff --git a/package/openzwave/0001-Fix-issue-1783-Most-Compilers-Get-it-Some-need-a-little-help.patch b/package/openzwave/0001-Fix-issue-1783-Most-Compilers-Get-it-Some-need-a-little-help.patch
+new file mode 100644
+index 0000000000..51a06a20f1
+--- /dev/null
++++ b/package/openzwave/0001-Fix-issue-1783-Most-Compilers-Get-it-Some-need-a-little-help.patch
+@@ -0,0 +1,26 @@
++From 3b029a467e83bc7f0054e4dbba1e77e6eac7bc7f Mon Sep 17 00:00:00 2001
++From: Justin Hammond <Justin@dynam.ac>
++Date: Sat, 4 May 2019 02:58:15 +0800
++Subject: [PATCH] Fix issue #1783 - Most Compilers Get it, Some need a little
++ help
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from
++https://github.com/OpenZWave/open-zwave/commit/3b029a467e83bc7f0054e4dbba1e77e6eac7bc7f]
++---
++ cpp/src/CompatOptionManager.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/cpp/src/CompatOptionManager.cpp b/cpp/src/CompatOptionManager.cpp
++index 90c87b54d..2d9ac435e 100644
++--- a/cpp/src/CompatOptionManager.cpp
+++++ b/cpp/src/CompatOptionManager.cpp
++@@ -237,7 +237,7 @@ void CompatOptionManager::WriteXML
++ 	{
++ 		TiXmlElement* valElement = new TiXmlElement( it->first.c_str() );
++ 		char str[32];
++-		TiXmlText * text;
+++		TiXmlText * text = NULL;
++ //		std::cout << "Name " << it->first << " Type: " << m_CompatVals[it->second].type << std::endl;
++ 		switch (m_CompatVals[it->second].type) {
++ 			case COMPAT_FLAG_TYPE_BOOL:
+diff --git a/package/openzwave/0002-Fix-warning-on-wcsdup-implicit-declaration.patch b/package/openzwave/0002-Fix-warning-on-wcsdup-implicit-declaration.patch
 deleted file mode 100644
-index 28807fc0b0..0000000000
---- a/package/domoticz/0003-Fix-for-boot-1-70-get_io_service.patch.patch
+index 1fe30e41d8..0000000000
+--- a/package/openzwave/0002-Fix-warning-on-wcsdup-implicit-declaration.patch
 +++ /dev/null
-@@ -1,74 +0,0 @@
--From 9d226dab339f5767ec01ea1bcc9043ceee185cca Mon Sep 17 00:00:00 2001
--From: Rob Peters <info@domoticz.com>
--Date: Mon, 25 Mar 2019 08:50:23 +0100
--Subject: [PATCH] Fix for boot 1.70 get_io_service, fixed #3117
+@@ -1,29 +0,0 @@
+-From 0878d933223158343af3fe13e03bcd128e8b4cbc Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fabrice.fontaine@orange.com>
+-Date: Fri, 22 Apr 2016 17:06:27 +0200
+-Subject: [PATCH 1/1] Fix warning on wcsdup implicit declaration
 -
+-Define __GNU_SOURCE in cpp/hidapi/linux/hid.c (like already done in
+-cpp/hidapi/libusb/hid.c) to fix implicit declaration of wcsdup function
+-
+-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+----
+- cpp/hidapi/linux/hid.c | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/cpp/hidapi/linux/hid.c b/cpp/hidapi/linux/hid.c
+-index dbf9b9b..c3eb22b 100644
+---- a/cpp/hidapi/linux/hid.c
+-+++ b/cpp/hidapi/linux/hid.c
+-@@ -21,6 +21,8 @@
+-         http://github.com/signal11/hidapi .
+- ********************************************************/
+- 
+-+#define _GNU_SOURCE /* needed for wcsdup() before glibc 2.10 */
+-+
+- /* C */
+- #include <stdio.h>
+- #include <string.h>
+--- 
+-1.9.1
+-
+diff --git a/package/openzwave/0003-Ensure-correct-git-repository-path.patch b/package/openzwave/0003-Ensure-correct-git-repository-path.patch
+deleted file mode 100644
+index 6c40ec9d0f..0000000000
+--- a/package/openzwave/0003-Ensure-correct-git-repository-path.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From 89cdc83307f61422db21cc7965ea294862c128bf Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fabrice.fontaine@orange.com>
+-Date: Mon, 30 May 2016 10:37:42 +0200
+-Subject: [PATCH 2/2] Ensure correct git repository path
+-
+-Add "--git-dir ./.git" to ensure the correct git repository path is used (this
+-fix a bug when trying to add openzwave to buildroot build system)
+-
+-Signed-off-by: Fabrice Fontaine <fabrice.fontaine@orange.com>
+----
+- cpp/build/support.mk | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/cpp/build/support.mk b/cpp/build/support.mk
+-index 3f74c7e..f529b25 100644
+---- a/cpp/build/support.mk
+-+++ b/cpp/build/support.mk
+-@@ -29,7 +29,7 @@ GIT		:= $(shell which git)
+- ifeq ($(GIT),)
+- VERSION_REV ?= 0
+- else
+--GITVERSION	:= $(shell $(GIT) describe --long --tags --dirty 2>/dev/null | sed s/^v//)
+-+GITVERSION	:= $(shell $(GIT) --git-dir ./.git describe --long --tags --dirty 2>/dev/null | sed s/^v//)
+- ifeq ($(GITVERSION),)
+- GITVERSION	:= $(VERSION_MAJ).$(VERSION_MIN).-1
+- VERSION_REV	:= 0
+--- 
+-2.7.4
+-
+diff --git a/package/openzwave/0004-Fix-compilation-error-in-regards-to-Werror-restrict.patch b/package/openzwave/0004-Fix-compilation-error-in-regards-to-Werror-restrict.patch
+deleted file mode 100644
+index b3dbd8f88e..0000000000
+--- a/package/openzwave/0004-Fix-compilation-error-in-regards-to-Werror-restrict.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 14164e9920ce3482747483fc16654c82d3ce445f Mon Sep 17 00:00:00 2001
+-From: pipiche38 <pipiche38@users.noreply.github.com>
+-Date: Fri, 8 Jun 2018 15:13:39 +0200
+-Subject: [PATCH] Fix compilation error in regards to -Werror=restrict
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-/usr/share/domoticz/open-zwave/cpp/src/command_classes/DoorLockLogging.cpp: In member function ???virtual bool OpenZWave::DoorLockLogging::HandleMsg(const uint8*, uint32, uint32)???:
+-/usr/share/domoticz/open-zwave/cpp/src/command_classes/DoorLockLogging.cpp:312:15: error: passing argument 1 to restrict-qualified parameter aliases with argument 4 [-Werror=restrict]
+-      snprintf(usercode, sizeof(usercode), "%s %d", usercode, (int)_data[12+i]);
+-               ^~~~~~~~                             ~~~~~~~~
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 -[Retrieved from:
--https://github.com/domoticz/domoticz/commit/9d226dab339f5767ec01ea1bcc9043ceee185cca]
+-https://github.com/OpenZWave/open-zwave/commit/14164e9920ce3482747483fc16654c82d3ce445f]
 ----
-- hardware/Pinger.cpp                   | 10 ++++++++--
-- hardware/TCPProxy/tcpproxy_server.cpp |  8 +++++++-
-- 2 files changed, 15 insertions(+), 3 deletions(-)
+- cpp/src/command_classes/DoorLockLogging.cpp | 5 +++--
+- 1 file changed, 3 insertions(+), 2 deletions(-)
 -
--diff --git a/hardware/Pinger.cpp b/hardware/Pinger.cpp
--index 01a955ba4..184378738 100644
----- a/hardware/Pinger.cpp
--+++ b/hardware/Pinger.cpp
--@@ -18,6 +18,12 @@
-- 
-- #include <iostream>
-- 
--+#if BOOST_VERSION >= 107000
--+#define GET_IO_SERVICE(s) ((boost::asio::io_context&)(s).get_executor().context())
--+#else
--+#define GET_IO_SERVICE(s) ((s).get_io_service())
--+#endif
--+
-- class pinger
-- 	: private domoticz::noncopyable
-- {
--@@ -76,7 +82,7 @@ class pinger
-- 				num_tries_++;
-- 				if (num_tries_ > 4)
+-diff --git a/cpp/src/command_classes/DoorLockLogging.cpp b/cpp/src/command_classes/DoorLockLogging.cpp
+-index c235a8497..418f61b7d 100644
+---- a/cpp/src/command_classes/DoorLockLogging.cpp
+-+++ b/cpp/src/command_classes/DoorLockLogging.cpp
+-@@ -304,12 +304,13 @@ bool DoorLockLogging::HandleMsg
+- 			}
+- 			uint8 userid = (_data[10]);
+- 			uint8 usercodelength = (_data[11]);
+--			char usercode[254];
+-+			char usercode[254], tmpusercode[254];
+- 			snprintf(usercode, sizeof(usercode), "UserCode:");
+- 			if (usercodelength > 0)
+- 				for (int i = 0; i < usercodelength; i++ )
 - 				{
---					resolver_.get_io_service().stop();
--+					GET_IO_SERVICE(resolver_).stop();
+--					snprintf(usercode, sizeof(usercode), "%s %d", usercode, (int)_data[12+i]);
+-+					strncpy(tmpusercode, usercode, sizeof(tmpusercode));
+-+                                        snprintf(usercode, sizeof(usercode), "%s %d", tmpusercode, (int)_data[12+i]);
 - 				}
-- 				else
-- 				{
--@@ -118,7 +124,7 @@ class pinger
-- 			if (num_replies_++ == 0)
-- 				timer_.cancel();
-- 			m_PingState = true;
---			resolver_.get_io_service().stop();
--+			GET_IO_SERVICE(resolver_).stop();
-- 		}
-- 		else
-- 		{
--diff --git a/hardware/TCPProxy/tcpproxy_server.cpp b/hardware/TCPProxy/tcpproxy_server.cpp
--index fddac08de..60445d9c2 100644
----- a/hardware/TCPProxy/tcpproxy_server.cpp
--+++ b/hardware/TCPProxy/tcpproxy_server.cpp
--@@ -15,6 +15,12 @@
-- #include "stdafx.h"
-- #include "tcpproxy_server.h"
 - 
--+#if BOOST_VERSION >= 107000
--+#define GET_IO_SERVICE(s) ((boost::asio::io_context&)(s).get_executor().context())
--+#else
--+#define GET_IO_SERVICE(s) ((s).get_io_service())
--+#endif
--+
-- namespace tcp_proxy
-- {
-- 	bridge::bridge(boost::asio::io_service& ios)
--@@ -38,7 +44,7 @@ namespace tcp_proxy
-- 		boost::asio::ip::tcp::endpoint end;
-- 
-- 
---		boost::asio::io_service &ios=downstream_socket_.get_io_service();
--+		boost::asio::io_service &ios= GET_IO_SERVICE(downstream_socket_);
-- 		boost::asio::ip::tcp::resolver resolver(ios);
-- 		boost::asio::ip::tcp::resolver::query query(upstream_host, upstream_port, boost::asio::ip::resolver_query_base::numeric_service);
-- 		boost::asio::ip::tcp::resolver::iterator i = resolver.resolve(query);
-diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
-index 106d242d0d..3d974b3f8d 100644
---- a/package/domoticz/domoticz.hash
-+++ b/package/domoticz/domoticz.hash
-@@ -1,3 +1,3 @@
+- 			if (valid) {
+diff --git a/package/openzwave/Config.in b/package/openzwave/Config.in
+index 86f45dc7b6..7819a620d2 100644
+--- a/package/openzwave/Config.in
++++ b/package/openzwave/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_OPENZWAVE
+ 	bool "openzwave"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on BR2_USE_WCHAR
+ 	help
+ 	  Free software library that interfaces with selected Z-Wave
+@@ -12,6 +11,6 @@ config BR2_PACKAGE_OPENZWAVE
+ 
+ 	  http://www.openzwave.net
+ 
+-comment "openzwave needs udev and a toolchain w/ C++, threads, wchar"
++comment "openzwave needs a toolchain w/ C++, threads, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_PACKAGE_HAS_UDEV || !BR2_USE_WCHAR
++		!BR2_USE_WCHAR
+diff --git a/package/openzwave/openzwave.hash b/package/openzwave/openzwave.hash
+index f3a677bd47..154a6443c0 100644
+--- a/package/openzwave/openzwave.hash
++++ b/package/openzwave/openzwave.hash
+@@ -1,5 +1,5 @@
  # Locally computed:
--sha256	c31f185a1ffac01b86a77bf33e059a4403d814e826c9d6639c63c2e9afa55a46	domoticz-4.9700.tar.gz
-+sha256	c053a2161942529f56b748945ec297dcd67f449e68029fc886893a528891ad86	domoticz-4.10717.tar.gz
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	License.txt
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index 7f094d0976..9636e208d0 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -4,7 +4,7 @@
+-sha256	abfb4c7e7728e86ba374c2e0ef7de912594eb24a8c44935457352df844530238	openzwave-V1.5.tar.gz
++sha256	3b11dffa7608359c8c848451863e0287e17f5f101aeee7c2e89b7dc16f87050b	openzwave-v1.6.tar.gz
+ sha256	c8db08727d03bea1213cdb29459b4b489b0d68a0866765df40ff205c6cd7224b	license/license.txt
+ sha256	4da452226e9064b597020ad404e1c78d8175bc31ad7c1908485a92c0a4d70284	license/lgpl.txt
+ sha256	33ffdead480674d5f33e2934822a3b93c93e3f8c894667a3bf30bd1195b38f83	license/gpl.txt
+diff --git a/package/openzwave/openzwave.mk b/package/openzwave/openzwave.mk
+index 38515e3899..9da414d112 100644
+--- a/package/openzwave/openzwave.mk
++++ b/package/openzwave/openzwave.mk
+@@ -4,13 +4,12 @@
  #
  ################################################################################
  
--DOMOTICZ_VERSION = 4.9700
-+DOMOTICZ_VERSION = 4.10717
- DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
- DOMOTICZ_LICENSE = GPL-3.0
- DOMOTICZ_LICENSE_FILES = License.txt
+-OPENZWAVE_VERSION = V1.5
++OPENZWAVE_VERSION = v1.6
+ OPENZWAVE_SITE = $(call github,OpenZWave,open-zwave,$(OPENZWAVE_VERSION))
+ OPENZWAVE_LICENSE = LGPL-3.0+, GPL-3.0 (examples), Apache-2.0 (sh2ju.sh)
+ OPENZWAVE_LICENSE_FILES = license/license.txt license/lgpl.txt \
+ 	license/gpl.txt license/Apache-License-2.0.txt
+ 
+-OPENZWAVE_DEPENDENCIES = host-pkgconf udev
+ OPENZWAVE_INSTALL_STAGING = YES
+ 
+ # Set instlibdir to install libopenzwave.so* in the correct directory
+@@ -31,6 +30,13 @@ OPENZWAVE_MAKE_OPTS = \
+ 	sysconfdir=/etc/openzwave \
+ 	DOXYGEN=
+ 
++ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
++OPENZWAVE_DEPENDENCIES += host-pkgconf udev
++OPENZWAVE_MAKE_OPTS += USE_HID=1
++else
++OPENZWAVE_MAKE_OPTS += USE_HID=0
++endif
++
+ define OPENZWAVE_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(OPENZWAVE_MAKE_OPTS) -C $(@D)
+ endef
