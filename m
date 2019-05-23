@@ -1,79 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 May 2019 11:16:40 +0200
-Subject: [Buildroot] [git commit] package/x265: bump to version 3.0
-Message-ID: <20190602201234.D275E8EDA8@busybox.osuosl.org>
+Date: Thu, 23 May 2019 11:10:16 +0200
+Subject: [Buildroot] [git commit] package/fatcat: new host package
+Message-ID: <20190602201235.82DED81354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1b4e58d8029bfaefa689f56c1ff156449269c84f
+commit: https://git.buildroot.net/buildroot/commit/?id=08d6e63bdc545bb3e321ea0fdf377dd3a0d52609
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove second patch (already in version)
+Utility to manipulate FAT file systems, E.G. to tweak the output of
+genimage.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...mitives.patch => 0002-arm-asm-primitives.patch} |  0
- package/x265/0002-fix-build-error-on-ppc64le.patch | 23 ----------------------
- package/x265/x265.hash                             |  2 +-
- package/x265/x265.mk                               |  2 +-
- 4 files changed, 2 insertions(+), 25 deletions(-)
+ DEVELOPERS                    |  1 +
+ package/Config.in.host        |  1 +
+ package/fatcat/Config.in.host |  8 ++++++++
+ package/fatcat/fatcat.hash    |  3 +++
+ package/fatcat/fatcat.mk      | 12 ++++++++++++
+ 5 files changed, 25 insertions(+)
 
-diff --git a/package/x265/0003-arm-asm-primitives.patch b/package/x265/0002-arm-asm-primitives.patch
-similarity index 100%
-rename from package/x265/0003-arm-asm-primitives.patch
-rename to package/x265/0002-arm-asm-primitives.patch
-diff --git a/package/x265/0002-fix-build-error-on-ppc64le.patch b/package/x265/0002-fix-build-error-on-ppc64le.patch
-deleted file mode 100644
-index ca034477eb..0000000000
---- a/package/x265/0002-fix-build-error-on-ppc64le.patch
-+++ /dev/null
-@@ -1,23 +0,0 @@
--# HG changeset patch
--# User Jayashree <jayashree.c@multicorewareinc.com>
--# Date 1527224165 -19800
--# Node ID 4504219210793536d921ee4e0b3058698c630bf4
--# Parent  cc2c5e46f3c87d27e3602af30b06ba6a0fbe2704
--Fix build error on on ppc64le
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--
--Upstream status: commit 450421921
--
--diff --git a/source/common/param.cpp b/source/common/param.cpp
----- a/source/common/param.cpp
--+++ b/source/common/param.cpp
--@@ -633,7 +633,7 @@
--         if (bValueWasNull)
--             p->cpuid = atobool(value);
--         else
---            p->cpuid = parseCpuName(value, bError);
--+            p->cpuid = parseCpuName(value, bError, false);
-- #endif
--     }
--     OPT("fps")
-diff --git a/package/x265/x265.hash b/package/x265/x265.hash
-index 61e6181199..16ca5d3ce6 100644
---- a/package/x265/x265.hash
-+++ b/package/x265/x265.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256 6e59f9afc0c2b87a46f98e33b5159d56ffb3558a49d8e3d79cb7fdc6b7aaa863  x265_2.8.tar.gz
-+sha256 c5b9fc260cabbc4a81561a448f4ce9cad7218272b4011feabc3a6b751b2f0662  x265_3.0.tar.gz
- sha256 d8afb1bcc7a2cfc603683b168d6987ef0a48e59e0da3693bf55c5d33b67e2b49  COPYING
-diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-index fe317d09d0..4e3b3bfa8e 100644
---- a/package/x265/x265.mk
-+++ b/package/x265/x265.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--X265_VERSION = 2.8
-+X265_VERSION = 3.0
- X265_SOURCE = x265_$(X265_VERSION).tar.gz
- X265_SITE = https://bitbucket.org/multicoreware/x265/downloads
- X265_LICENSE = GPL-2.0+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d5a7b7d390..66dc2504ff 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1751,6 +1751,7 @@ F:	configs/sheevaplug_defconfig
+ F:	package/bats-core/
+ F:	package/docker-compose/
+ F:	package/dump1090/
++F:	package/fatcat/
+ F:	package/flickcurl/
+ F:	package/fscryptctl/
+ F:	package/ifmetric/
+diff --git a/package/Config.in.host b/package/Config.in.host
+index bc7e71882b..d1c6d0d81f 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -18,6 +18,7 @@ menu "Host utilities"
+ 	source "package/e2tools/Config.in.host"
+ 	source "package/f2fs-tools/Config.in.host"
+ 	source "package/faketime/Config.in.host"
++	source "package/fatcat/Config.in.host"
+ 	source "package/fwup/Config.in.host"
+ 	source "package/genext2fs/Config.in.host"
+ 	source "package/genimage/Config.in.host"
+diff --git a/package/fatcat/Config.in.host b/package/fatcat/Config.in.host
+new file mode 100644
+index 0000000000..2c5f66981b
+--- /dev/null
++++ b/package/fatcat/Config.in.host
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_HOST_FATCAT
++	bool "host fatcat"
++	help
++	  Fatcat is designed to manipulate FAT filesystems, in order
++	  to explore, extract, repair, recover and forensic them. It
++	  currently supports FAT12, FAT16 and FAT32.
++
++	  https://github.com/Gregwar/fatcat
+diff --git a/package/fatcat/fatcat.hash b/package/fatcat/fatcat.hash
+new file mode 100644
+index 0000000000..a5a6f670ad
+--- /dev/null
++++ b/package/fatcat/fatcat.hash
+@@ -0,0 +1,3 @@
++# Locally computed:
++sha256 d44f6bb80d20ed50095ace9e71df8da98037db9f22cda76bdd9724d37df69130  fatcat-1.0.6.tar.gz
++sha256 3ea03755e32cf7f5b12981de92a0fdad396448195fe0024990c9cbc388e9866c  LICENSE
+diff --git a/package/fatcat/fatcat.mk b/package/fatcat/fatcat.mk
+new file mode 100644
+index 0000000000..e4f8d757b6
+--- /dev/null
++++ b/package/fatcat/fatcat.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# fatcat
++#
++################################################################################
++
++FATCAT_VERSION = 1.0.6
++FATCAT_SITE = $(call github,Gregwar,fatcat,$(FATCAT_VERSION))
++FATCAT_LICENSE = MIT
++FATCAT_LICENSE_FILES = LICENSE
++
++$(eval $(host-cmake-package))
