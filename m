@@ -1,70 +1,45 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 23 May 2019 20:21:34 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/tcl: bump to version 8.6.9
-Message-ID: <20190523182134.10860-1-fontaine.fabrice@gmail.com>
+Date: Thu, 23 May 2019 20:54:43 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/gcr: bump to version 3.28.1
+Message-ID: <20190523185443.24933-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update first patch
+Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/tcl/0001-dont-build-compat.patch | 11 ++---------
- package/tcl/tcl.hash                     |  2 +-
- package/tcl/tcl.mk                       |  2 +-
- 3 files changed, 4 insertions(+), 11 deletions(-)
+ package/gcr/gcr.hash | 5 +++--
+ package/gcr/gcr.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/tcl/0001-dont-build-compat.patch b/package/tcl/0001-dont-build-compat.patch
-index 85c5c57df4..c0d5d85da7 100644
---- a/package/tcl/0001-dont-build-compat.patch
-+++ b/package/tcl/0001-dont-build-compat.patch
-@@ -7,20 +7,13 @@ anything buildroot is using as a standard C library will be good enough
- to not have broken behavior.
- 
- Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
-+[Fabrice: Update for 8.6.9]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
- 
- diff --git a/unix/tcl.m4 b/unix/tcl.m4
- --- a/unix/tcl.m4
- +++ b/unix/tcl.m4
--@@ -2466,7 +2466,7 @@ AC_DEFUN([SC_BUGGY_STRTOD], [
-- 		    }
-- 		    exit(0);
-- 		}], tcl_cv_strtod_buggy=ok, tcl_cv_strtod_buggy=buggy,
---		    tcl_cv_strtod_buggy=buggy)])
--+		    tcl_cv_strtod_buggy=ok)])
-- 	if test "$tcl_cv_strtod_buggy" = buggy; then
-- 	    AC_LIBOBJ([fixstrtod])
-- 	    USE_COMPAT=1
- @@ -2725,7 +2725,7 @@ AC_DEFUN([SC_TCL_CHECK_BROKEN_FUNC],[
-      if test ["$tcl_ok"] = 1; then
-  	AC_CACHE_CHECK([proper ]$1[ implementation], [tcl_cv_]$1[_unbroken],
-diff --git a/package/tcl/tcl.hash b/package/tcl/tcl.hash
-index 359b5433c2..913190b95c 100644
---- a/package/tcl/tcl.hash
-+++ b/package/tcl/tcl.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 a265409781e4b3edcc4ef822533071b34c3dc6790b893963809b9fe221befe07  tcl8.6.6-src.tar.gz
-+sha256 ad0cd2de2c87b9ba8086b43957a0de3eb2eb565c7159d5f53ccbba3feb915f4e  tcl8.6.9-src.tar.gz
- sha256 c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16  license.terms
-diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index b9fb7afbc6..6d750b3cd2 100644
---- a/package/tcl/tcl.mk
-+++ b/package/tcl/tcl.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/gcr/gcr.hash b/package/gcr/gcr.hash
+index 8b8b748b9e..a78f56517d 100644
+--- a/package/gcr/gcr.hash
++++ b/package/gcr/gcr.hash
+@@ -1,2 +1,3 @@
+-# From http://ftp.acc.umu.se/pub/gnome/sources/gcr/3.20/gcr-3.20.0.sha256sum
+-sha256	90572c626d8a708225560c42b4421f7941315247fa1679d4ef569bde7f4bb379	gcr-3.20.0.tar.xz
++# From http://ftp.acc.umu.se/pub/gnome/sources/gcr/3.28/gcr-3.28.1.sha256sum
++sha256	95204aa2111c301778ebfbe60975ce3ed698c958430ffcc2a785ac5e593d168b	gcr-3.28.1.tar.xz
++sha256	94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23	COPYING
+diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
+index 7cb35af836..7cf7ea79e5 100644
+--- a/package/gcr/gcr.mk
++++ b/package/gcr/gcr.mk
+@@ -4,8 +4,8 @@
+ #
  ################################################################################
  
- TCL_VERSION_MAJOR = 8.6
--TCL_VERSION = $(TCL_VERSION_MAJOR).6
-+TCL_VERSION = $(TCL_VERSION_MAJOR).9
- TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
- TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
- TCL_LICENSE = TCL
+-GCR_VERSION_MAJOR = 3.20
+-GCR_VERSION = $(GCR_VERSION_MAJOR).0
++GCR_VERSION_MAJOR = 3.28
++GCR_VERSION = $(GCR_VERSION_MAJOR).1
+ GCR_SITE = http://ftp.acc.umu.se/pub/gnome/sources/gcr/$(GCR_VERSION_MAJOR)
+ GCR_SOURCE = gcr-$(GCR_VERSION).tar.xz
+ GCR_DEPENDENCIES = host-intltool host-pkgconf libgcrypt libglib2 p11-kit
 -- 
 2.20.1
