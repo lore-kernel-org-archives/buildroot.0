@@ -1,42 +1,112 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 23 May 2019 23:25:11 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/gpsd: bump to version
- 3.18.1
-In-Reply-To: <CA+sos79OJ0fZ-F8k7QsNKEuMRXCEoz4wZhN6eNTr7oewLdGJpw@mail.gmail.com>
-References: <20190523200501.12716-1-fontaine.fabrice@gmail.com>
- <CA+sos79OJ0fZ-F8k7QsNKEuMRXCEoz4wZhN6eNTr7oewLdGJpw@mail.gmail.com>
-Message-ID: <CAPi7W82H-UfRm_ZumESTe3_BH4497TQMDwsaz+MJQCBiFDEzrQ@mail.gmail.com>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Fri, 24 May 2019 00:51:43 +0200
+Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
+ in cross file
+In-Reply-To: <6b2cee96-285e-9c98-d010-53b4581e6e96@mind.be>
+References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
+ <20190413182422.7e8f5f22@windsurf> <20190423232944.70aeddba@gmx.net>
+ <6f5eef5542a44d775baa396c7fa7c01a2e6e2c4d.camel@embedded.rocks>
+ <trinity-a5fd1873-52f7-4d2a-9195-2a9713d0b83a-1556612829462@3c-app-gmx-bs70>
+ <2e75711ff4c34669fce6f86c50b34897d92ecb76.camel@embedded.rocks>
+ <25be7377-dabe-41b6-68b3-f9d2a2537aad@mind.be>
+ <20190501210405.1448eeb1@gmx.net>
+ <6b2cee96-285e-9c98-d010-53b4581e6e96@mind.be>
+Message-ID: <21a0e19c8b10eb9dc82cbd05e2f40a3da9eb7777.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Beno?t,
+Hi all,
 
-Le jeu. 23 mai 2019 ? 22:48, Beno?t Th?baudeau
-<benoit.thebaudeau.dev@gmail.com> a ?crit :
->
-> Hi Fabrice,
->
-> On Thu, May 23, 2019 at 10:05 PM Fabrice Fontaine
-> <fontaine.fabrice@gmail.com> wrote:
-> >
-> > - Remove second patch (already in version)
-> > - Add a patch to fix build without man pages
->
-> [...]
->
-> Have you tested this with BR2_INSTALL_LIBSTDCPP set? I think that in
-> this case there is a C99-style "for (int i" somewhere in gpsd 3.18.1
-> that breaks the build because of the "-std=gnu++98" in CFLAGS and
-> CXXFLAGS.
-I tested with ./utils/test-pkg and LIBSTDCPP and it builds fine.
-However, you're right that there is a C99-style loop in driver_ubx.c.
-I'll retrieve upstream patch and send a v2 to fix it.
->
-> Best regards,
-> Beno?t
-Best Regards,
+thank you all for your ideas. Please take a look at my proposal
+below...
 
-Fabrice
+On Thu, 2019-05-02 at 14:17 +0200, Arnout Vandecappelle wrote:
+> 
+> On 01/05/2019 21:04, Peter Seiderer wrote:
+> > Hello Arnout,
+> > 
+> > On Wed, 1 May 2019 13:13:03 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+> > 
+> > > On 30/04/2019 13:04, J?rg Krause wrote:
+> > > > Hello Peter,
+> > > > 
+> > > > On Tue, 2019-04-30 at 10:27 +0200, Peter Seiderer wrote:  
+> > > [snip]
+> > > > > Would have expected the trick/non-trivial thing to add more than one
+> > > > > binary entry (to get the newlines for the entries right)...  
+> > > > 
+> > > > That's indeed a difficult case to solve. I didn't managed to get
+> > > > multpile binary entries added to the [binaries] field, e.g.
+> > > > 
+> > > > PKG_TARGET_BINARIES = \
+> > > > 	libgcrypt-config = '...' \
+> > > > 	llvm-config = '...'
+> > > > 
+> > > > .. will not work.
+> > > > 
+> > > > I spent some time to find a magic rule which splits the Makefile
+> > > > variable into a proper newline seperated string which can be used by
+> > > > sed, but I failed.
+> > > > 
+> > > > Maybe you have an idea?  
+> > > 
+> > >  Instead of sed, use the PRINTF macro and append to the file:
+> > > 
+> > > 	$Q$$(if $$($$(PKG)_TARGET_BINARIES),\
+> > > 		$$(call PRINTF,$$($$(PKG)_TARGET_BINARIES)) \
+> > > 		>> $$($$(PKG)_SRCDIR)/build/cross-compilation.conf  
+> > 
+> > Simple appending will not work, the extra binaries must be under the '[binaries]'
+> > section (maybe reordering the sections in the cross-compilation.conf.in template
+> > will work)
+> 
+>  It should work if the [binaries] part is at the end, right? And if binaries is
+> empty, that's OK, no?
+> 
+>  Alternatively, the [binaries] part could be included in the _TARGET_BINARIES
+> (which would then have to be renamed to _CROSS_COMPILATION_CONF). So for a
+> package that needs libgcrypt-config, it would be
+> 
+> define FOO_CROSS_COMPILATION_CONF
+> [binaries]
+> libgcrypt-config = '$(STAGING_DIR)/usr/bin/libgcrypt-config'
+> endef
+> 
+> > , does the printf approach fix the newline problem for more than one
+> > entry?
+> 
+>  It does, but you can't use _CROSS_COMPILATION_CONF = ..., you have to use
+> define, because the actual newlines have to be in the variable itself. Actually,
+> you can still use = assignment, but then you need to use $(sep), i.e.:
+> 
+> FOO_CROSS_COMPILATION_CONF = [binaries]$(sep)libgcrypt-config =
+> '$(STAGING_DIR)/usr/bin/libgcrypt-config'$(sep)
+> 
+> (which is ugly so don't do that :-)
+
+The package using the meson infrastructure defines:
+
+   define libfoo_MESON_CROSS_CONF_BINARIES
+   libgcrypt-config = '$(STAGING_DIR)/usr/bin/libgcrypt-config'
+   llvm-config = '$(STAGING_DIR)/usr/bin/llvm-config'
+   endef
+
+pkg-meson.mk is using PRINTF to a temporary file and sed is using this
+file as input for appending to the [binaries section]:
+
+   $Q$$(if $$($$(PKG)_MESON_CROSS_CONF_BINARIES), \
+   	$$(call PRINTF,$$($$(PKG)_MESON_CROSS_CONF_BINARIES))) \
+   	> $$($$(PKG)_SRCDIR)/build/cross-binaries.tmp
+   sed -i "s/^[ \t]*//" $$($$(PKG)_SRCDIR)/build/cross-binaries.tmp
+   sed -e "s%@TARGET_CROSS@%$$(TARGET_CROSS)%g" \
+       ...
+       -e  "/\[binaries\]/r $$($$(PKG)_SRCDIR)/build/cross-binaries.tmp" \
+       package/meson/cross-compilation.conf.in \
+       > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+   rm -f $$($$(PKG)_SRCDIR)/build/cross-binaries.tmp
+
+Best regards
+J?rg Krause
