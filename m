@@ -1,53 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 May 2019 10:03:41 +0200
-Subject: [Buildroot] [git commit] package/libcurl: security bump to version
- 7.65.0
-Message-ID: <20190523080209.9A2898D61B@busybox.osuosl.org>
+Date: Thu, 23 May 2019 10:03:58 +0200
+Subject: [Buildroot] [git commit] package/luarocks: bump to version 3.1.2
+Message-ID: <20190523080209.A42808D61B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f60180f5c835c9ce1c7ea48d7bb22df9ae67886
+commit: https://git.buildroot.net/buildroot/commit/?id=19b74fb003ceea11dbbbb2f0b953215c77e4bc25
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security vulnerabilities:
-
-- CVE-2019-5435: Integer overflows in curl_url_set()
-  https://curl.haxx.se/docs/CVE-2019-5435.html
-
-- CVE-2019-5436: TFTP receive buffer overflow
-  https://curl.haxx.se/docs/CVE-2019-5436.html
-
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/luarocks/luarocks.hash | 2 +-
+ package/luarocks/luarocks.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index d321adcd62..bece16dc0d 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.64.1.tar.xz.asc
-+# https://curl.haxx.se/download/curl-7.65.0.tar.xz.asc
- # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256 9252332a7f871ce37bfa7f78bdd0a0e3924d8187cc27cb57c76c9474a7168fb3  curl-7.64.1.tar.xz
-+sha256 7766d263929404f693905b5e5222aa0f2bdf8c66ab4b8758f0c0820a42b966cd  curl-7.65.0.tar.xz
- sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 852054a4bd..80bf2dd245 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
+diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
+index aed0274b5a..6936bfbbb6 100644
+--- a/package/luarocks/luarocks.hash
++++ b/package/luarocks/luarocks.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 3c26c102f8e69f81e12ea39037c770a00b6244e115a4c832e7a92feffdfad1aa  luarocks-3.1.1.tar.gz
++sha256 72a3b74f05b7fd011eed894dc34193ee80b3235fe58016ac9ffdbfceecc88950  luarocks-3.1.2.tar.gz
+ sha256 542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
+diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
+index 6a8254fd43..0d05b448a5 100644
+--- a/package/luarocks/luarocks.mk
++++ b/package/luarocks/luarocks.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.64.1
-+LIBCURL_VERSION = 7.65.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-LUAROCKS_VERSION = 3.1.1
++LUAROCKS_VERSION = 3.1.2
+ LUAROCKS_SITE = http://luarocks.org/releases
+ LUAROCKS_LICENSE = MIT
+ LUAROCKS_LICENSE_FILES = COPYING
