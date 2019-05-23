@@ -1,43 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 May 2019 10:03:58 +0200
-Subject: [Buildroot] [git commit] package/luarocks: bump to version 3.1.2
-Message-ID: <20190523080209.A42808D61B@busybox.osuosl.org>
+Date: Thu, 23 May 2019 10:06:45 +0200
+Subject: [Buildroot] [git commit] package/mono-gtksharp3: fix build with
+ latest mono
+Message-ID: <20190523080209.AA746885DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=19b74fb003ceea11dbbbb2f0b953215c77e4bc25
+commit: https://git.buildroot.net/buildroot/commit/?id=ceab2715da41e95f8481a3aee546be6170f0fd8c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/7cae5b32285fe0edf69eab3297be9c6a4e76b7b8
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index aed0274b5a..6936bfbbb6 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 3c26c102f8e69f81e12ea39037c770a00b6244e115a4c832e7a92feffdfad1aa  luarocks-3.1.1.tar.gz
-+sha256 72a3b74f05b7fd011eed894dc34193ee80b3235fe58016ac9ffdbfceecc88950  luarocks-3.1.2.tar.gz
- sha256 542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 6a8254fd43..0d05b448a5 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAROCKS_VERSION = 3.1.1
-+LUAROCKS_VERSION = 3.1.2
- LUAROCKS_SITE = http://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
+diff --git a/package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch b/package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch
+new file mode 100644
+index 0000000000..6596849a89
+--- /dev/null
++++ b/package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch
+@@ -0,0 +1,28 @@
++From c1b9bd4214b78dc426bc6e6a07c23a8ab4ab50ea Mon Sep 17 00:00:00 2001
++From: Jordi Mas <jmas@softcatala.org>
++Date: Tue, 12 Mar 2019 12:24:19 +0100
++Subject: [PATCH] Fixes MONO_PROFILE_ENTER_LEAVE undeclared when compiling with
++ newer versions of Mono (#266)
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/mono/gtk-sharp/commit/c1b9bd4214b78dc426bc6e6a07c23a8ab4ab50ea]
++---
++ gtk/gui-thread-check/profiler/gui-thread-check.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/gtk/gui-thread-check/profiler/gui-thread-check.c b/gtk/gui-thread-check/profiler/gui-thread-check.c
++index 11838e3b0..9f45fe6b2 100644
++--- a/gtk/gui-thread-check/profiler/gui-thread-check.c
+++++ b/gtk/gui-thread-check/profiler/gui-thread-check.c
++@@ -86,6 +86,10 @@ simple_method_enter (MonoProfiler *prof, MonoMethod *method)
++ 	}
++ }
++ 
+++#ifndef MONO_PROFILE_ENTER_LEAVE
+++#define MONO_PROFILE_ENTER_LEAVE (1 << 12)
+++#endif
+++
++ void
++ mono_profiler_startup (const char *desc)
++ {
