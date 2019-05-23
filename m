@@ -1,35 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 May 2019 16:33:13 +0200
-Subject: [Buildroot] [PATCH v1] package/busybox: Avoid "can't create
- /proc/sys/kernel/hotplug" error
-In-Reply-To: <20190523131444.36058-1-andriy.shevchenko@linux.intel.com> (Andy
- Shevchenko's message of "Thu, 23 May 2019 16:14:44 +0300")
-References: <20190523131444.36058-1-andriy.shevchenko@linux.intel.com>
-Message-ID: <87ftp5s0k6.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 23 May 2019 17:57:50 +0000
+Subject: [Buildroot] [Bug 11096] Upgrade from glibc 2.26 to 2.27 broke some
+ locales (ru_RU in particular)
+In-Reply-To: <bug-11096-163@https.bugs.busybox.net/>
+References: <bug-11096-163@https.bugs.busybox.net/>
+Message-ID: <bug-11096-163-rvlmunHFMl@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Andy" == Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=11096
 
- > At runtime on most of the modern kernels [1] S10mdev script produces an error:
- > /etc/init.d/S10mdev: line 9: can't create /proc/sys/kernel/hotplug: nonexistent directory
+MR. JAMES <janmejai9260918017@GMAIL.COM> changed:
 
- > since the commit
-
- >   caae7fa1d737 ("busybox: register mdev as hotplug helper when selected")
-
- > added it unconditionally.
-
- > Check the presence of procfs node before writing to it.
-
- > [1]: Linux kernels with the commit
- >        86d56134f1b6 ("kobject: Make support for uevent_helper optional.")
- >      applied.
-
-But how can mdev work on such setups?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+   Target Milestone|---                         |2019.05
+              Alias|                            |Jay, kumar
+                URL|                            |Www.naourjamesbug.in
+           Priority|P5                          |P4
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
