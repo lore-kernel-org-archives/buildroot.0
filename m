@@ -1,26 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 23 May 2019 10:07:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mono-gtksharp3: fix build with
- latest mono
-In-Reply-To: <20190521202056.17117-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Tue, 21 May 2019 22:20:56 +0200")
-References: <20190521202056.17117-1-fontaine.fabrice@gmail.com>
-Message-ID: <878suxtwyq.fsf@dell.be.48ers.dk>
+Date: Thu, 23 May 2019 10:03:41 +0200
+Subject: [Buildroot] [git commit] package/libcurl: security bump to version
+ 7.65.0
+Message-ID: <20190523080209.9A2898D61B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7f60180f5c835c9ce1c7ea48d7bb22df9ae67886
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/7cae5b32285fe0edf69eab3297be9c6a4e76b7b8
+Fixes the following security vulnerabilities:
 
-This is a failure on next, but as mono hasn't been updated in next I
-guess this applies to master.
+- CVE-2019-5435: Integer overflows in curl_url_set()
+  https://curl.haxx.se/docs/CVE-2019-5435.html
 
-Committed, thanks.
+- CVE-2019-5436: TFTP receive buffer overflow
+  https://curl.haxx.se/docs/CVE-2019-5436.html
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index d321adcd62..bece16dc0d 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.64.1.tar.xz.asc
++# https://curl.haxx.se/download/curl-7.65.0.tar.xz.asc
+ # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256 9252332a7f871ce37bfa7f78bdd0a0e3924d8187cc27cb57c76c9474a7168fb3  curl-7.64.1.tar.xz
++sha256 7766d263929404f693905b5e5222aa0f2bdf8c66ab4b8758f0c0820a42b966cd  curl-7.65.0.tar.xz
+ sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 852054a4bd..80bf2dd245 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.64.1
++LIBCURL_VERSION = 7.65.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
