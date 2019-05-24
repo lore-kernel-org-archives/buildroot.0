@@ -1,36 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 May 2019 21:53:24 +0200
-Subject: [Buildroot] [git commit] package/glibmm: use GLIBMM_CXXFLAGS
-Message-ID: <20190524194824.68C9A8DF55@busybox.osuosl.org>
+Date: Fri, 24 May 2019 21:53:09 +0200
+Subject: [Buildroot] [git commit] package/jasper: work around gcc bug 85180
+Message-ID: <20190524194824.61A358889F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72e0ff66e7be8cebfb79c1cbcab168ae1d843a61
+commit: https://git.buildroot.net/buildroot/commit/?id=9fc32f00091989564cf2f0b2bfda97bf0c3c75a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit 8d8d4ecaf1bc22a89d0f373e9d1655f59f283480 ("package/glibmm: work
-around gcc bug 85180") was incorrect reworked by me, and
-TARGET_CXXFLAGS was used instead of GLIBMM_CXXFLAGS, causing the
-Microblaze workaround to be ineffective. This new commit fixes this
-typo.
+With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+shows up when building jasper with optimization but not when building
+with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y,
+we force using -O0.
 
+Fixes:
+
+  http://autobuild.buildroot.net/results/5546087cdf684099525dc5824ed428cd0fd74283/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+[Thomas: tweak CFLAGS logic, improve commit log]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/glibmm/glibmm.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/jasper/jasper.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
-index a0abb7a49d..e66d56eac9 100644
---- a/package/glibmm/glibmm.mk
-+++ b/package/glibmm/glibmm.mk
-@@ -19,6 +19,6 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
- GLIBMM_CXXFLAGS += -O0
+diff --git a/package/jasper/jasper.mk b/package/jasper/jasper.mk
+index b544a7c1c6..31fded779b 100644
+--- a/package/jasper/jasper.mk
++++ b/package/jasper/jasper.mk
+@@ -25,4 +25,12 @@ else
+ JASPER_CONF_OPTS += -DJAS_ENABLE_LIBJPEG=OFF
  endif
  
--GLIBMM_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS)"
-+GLIBMM_CONF_ENV += CXXFLAGS="$(GLIBMM_CXXFLAGS)"
- 
- $(eval $(autotools-package))
++JASPER_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++JASPER_CFLAGS += -O0
++endif
++
++JASPER_CONF_OPTS += -DCMAKE_C_FLAGS="$(JASPER_CFLAGS)"
++
+ $(eval $(cmake-package))
