@@ -1,49 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 May 2019 21:56:24 +0200
-Subject: [Buildroot] [git commit] package/kismet: work around gcc bug 85180
-Message-ID: <20190524195030.6A1AB881B0@busybox.osuosl.org>
+Date: Fri, 24 May 2019 21:58:18 +0200
+Subject: [Buildroot] [PATCH v2 03/12] package/chocolate-doom: fix
+ BUG_85180 build timeout
+In-Reply-To: <20190521133932.81841-4-giulio.benetti@micronovasrl.com>
+References: <20190521133932.81841-1-giulio.benetti@micronovasrl.com>
+ <20190521133932.81841-4-giulio.benetti@micronovasrl.com>
+Message-ID: <20190524215818.153fb2b1@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7d313e980d9e68457d95ba23f1f077e7b53a606
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 21 May 2019 15:39:23 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-With Microblaze Gcc version < 8.x the build hangs due to bug 85180:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug shows up
-when building kismet with optimization but not when building with
--O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
-force using -O0.
+> With Microblaze Gcc version < 8.x build hangs on compiling last files
+> before linking.
+> This is due to bug 85180:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+> Bug shows up building chocolate-doom with optimization but not when
+> building with -O0.
+> 
+> If BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 passing it to
+> CFLAGS.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/e57/e570839576be8963dc6bd36342e2f857da3c6146/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>  package/chocolate-doom/chocolate-doom.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Fixes:
+Applied to master after tweaking the CFLAGS logic and the commit log.
+Thanks!
 
-  http://autobuild.buildroot.net/results/02f6e616631f05a4f15f31f2b2e67d65ba7afcb0/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-[Thomas: tweak CFLAGS logic, improve commit log]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/kismet/kismet.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/kismet/kismet.mk b/package/kismet/kismet.mk
-index cee814b52b..d3946d65f3 100644
---- a/package/kismet/kismet.mk
-+++ b/package/kismet/kismet.mk
-@@ -15,6 +15,14 @@ KISMET_LICENSE_FILES = debian/copyright
- # We touch configure.in:
- KISMET_AUTORECONF = YES
- 
-+KISMET_CXXFLAGS = $(TARGET_CXXFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+KISMET_CXXFLAGS += -O0
-+endif
-+
-+KISMET_CONF_ENV += CXXFLAGS="$(KISMET_CXXFLAGS)"
-+
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- KISMET_DEPENDENCIES += libcap
- endif
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
