@@ -1,101 +1,167 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 May 2019 10:11:23 +0200
-Subject: [Buildroot] [git commit branch/next] package/ofono: bump to version
- 1.29
-Message-ID: <20190524080607.DC65888C6F@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 24 May 2019 10:18:11 +0200
+Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
+ in cross file
+In-Reply-To: <21a0e19c8b10eb9dc82cbd05e2f40a3da9eb7777.camel@embedded.rocks>
+References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
+ <20190413182422.7e8f5f22@windsurf> <20190423232944.70aeddba@gmx.net>
+ <6f5eef5542a44d775baa396c7fa7c01a2e6e2c4d.camel@embedded.rocks>
+ <trinity-a5fd1873-52f7-4d2a-9195-2a9713d0b83a-1556612829462@3c-app-gmx-bs70>
+ <2e75711ff4c34669fce6f86c50b34897d92ecb76.camel@embedded.rocks>
+ <25be7377-dabe-41b6-68b3-f9d2a2537aad@mind.be>
+ <20190501210405.1448eeb1@gmx.net>
+ <6b2cee96-285e-9c98-d010-53b4581e6e96@mind.be>
+ <21a0e19c8b10eb9dc82cbd05e2f40a3da9eb7777.camel@embedded.rocks>
+Message-ID: <5418c607-aec9-91d3-940e-60dc46690f29@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=252ad90833cc379a1dc93e895e092503125c97cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Backport upstream patch which adds explicit_bzero() autoconf detection,
-which fixes br-arm-cortex-a9-glibc and br-arm-full-static build:
 
-In file included from ell/random.c:34:
-ell/missing.h:59:20: error: static declaration of ???explicit_bzero??? follows non-static declaration
- static inline void explicit_bzero(void *s, size_t n)
-                    ^~~~~~~~~~~~~~
-In file included from ./ell/util.h:26,
-                 from ell/private.h:26,
-                 from ell/random.c:33:
-/home/pvorel/br-test-pkg/br-arm-cortex-a9-glibc/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/string.h:435:13: note: previous declaration of ???explicit_bzero??? was here
- extern void explicit_bzero (void *__s, size_t __n) __THROW __nonnull ((1));
-             ^~~~~~~~~~~~~~
+On 24/05/2019 00:51, J?rg Krause wrote:
+> Hi all,
+> 
+> thank you all for your ideas. Please take a look at my proposal
+> below...
+> 
+> On Thu, 2019-05-02 at 14:17 +0200, Arnout Vandecappelle wrote:
+>>
+>> On 01/05/2019 21:04, Peter Seiderer wrote:
+>>> Hello Arnout,
+>>>
+>>> On Wed, 1 May 2019 13:13:03 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>
+>>>> On 30/04/2019 13:04, J?rg Krause wrote:
+>>>>> Hello Peter,
+>>>>>
+>>>>> On Tue, 2019-04-30 at 10:27 +0200, Peter Seiderer wrote:  
+>>>> [snip]
+>>>>>> Would have expected the trick/non-trivial thing to add more than one
+>>>>>> binary entry (to get the newlines for the entries right)...  
+>>>>>
+>>>>> That's indeed a difficult case to solve. I didn't managed to get
+>>>>> multpile binary entries added to the [binaries] field, e.g.
+>>>>>
+>>>>> PKG_TARGET_BINARIES = \
+>>>>> 	libgcrypt-config = '...' \
+>>>>> 	llvm-config = '...'
+>>>>>
+>>>>> .. will not work.
+>>>>>
+>>>>> I spent some time to find a magic rule which splits the Makefile
+>>>>> variable into a proper newline seperated string which can be used by
+>>>>> sed, but I failed.
+>>>>>
+>>>>> Maybe you have an idea?  
+>>>>
+>>>>  Instead of sed, use the PRINTF macro and append to the file:
+>>>>
+>>>> 	$Q$$(if $$($$(PKG)_TARGET_BINARIES),\
+>>>> 		$$(call PRINTF,$$($$(PKG)_TARGET_BINARIES)) \
+>>>> 		>> $$($$(PKG)_SRCDIR)/build/cross-compilation.conf  
+>>>
+>>> Simple appending will not work, the extra binaries must be under the '[binaries]'
+>>> section (maybe reordering the sections in the cross-compilation.conf.in template
+>>> will work)
+>>
+>>  It should work if the [binaries] part is at the end, right? And if binaries is
+>> empty, that's OK, no?
+>>
+>>  Alternatively, the [binaries] part could be included in the _TARGET_BINARIES
+>> (which would then have to be renamed to _CROSS_COMPILATION_CONF). So for a
+>> package that needs libgcrypt-config, it would be
+>>
+>> define FOO_CROSS_COMPILATION_CONF
+>> [binaries]
+>> libgcrypt-config = '$(STAGING_DIR)/usr/bin/libgcrypt-config'
+>> endef
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...uild-Add-check-for-explicit_bzero-support.patch | 28 ++++++++++++++++++++++
- package/ofono/ofono.hash                           |  2 +-
- package/ofono/ofono.mk                             |  5 +++-
- 3 files changed, 33 insertions(+), 2 deletions(-)
+ Is there any reason why this proposal doesn't work? AFAIU, it should be no
+problem to repeat the '[binaries]' part several times, right?
 
-diff --git a/package/ofono/0003-build-Add-check-for-explicit_bzero-support.patch b/package/ofono/0003-build-Add-check-for-explicit_bzero-support.patch
-new file mode 100644
-index 0000000000..b2507df3ff
---- /dev/null
-+++ b/package/ofono/0003-build-Add-check-for-explicit_bzero-support.patch
-@@ -0,0 +1,28 @@
-+From dff595671bf5a46f7c9231966a6cd7d2a0183076 Mon Sep 17 00:00:00 2001
-+From: Marcel Holtmann <marcel@holtmann.org>
-+Date: Wed, 15 May 2019 09:39:44 +0200
-+Subject: [PATCH] build: Add check for explicit_bzero support
-+
-+Upstream: dff595671bf5a46f7c9231966a6cd7d2a0183076
-+
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+---
-+ configure.ac | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index bacb7ac5..cad35c5d 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -54,6 +54,8 @@ AC_ARG_ENABLE(pie, AC_HELP_STRING([--enable-pie],
-+ 	fi
-+ ])
-+ 
-++AC_CHECK_FUNCS(explicit_bzero)
-++
-+ AC_CHECK_FUNC(signalfd, dummy=yes,
-+ 			AC_MSG_ERROR(signalfd support is required))
-+ 
-+-- 
-+2.21.0
-+
-diff --git a/package/ofono/ofono.hash b/package/ofono/ofono.hash
-index 2dbb9986c7..5204bb4fca 100644
---- a/package/ofono/ofono.hash
-+++ b/package/ofono/ofono.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/ofono/sha256sums.asc
--sha256 93bb2cedef54f897dd5200e22b072a6e38b5d9b44be57eebbbe8d513f0beb0e4	ofono-1.28.tar.xz
-+sha256 67f0f8e5740dea5b46309e40667d1e560be39c90ef08dd01ff9e9ce8e61f0679  ofono-1.29.tar.xz
- # Locally computed
- sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 0552a181fd..176d23ae05 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OFONO_VERSION = 1.28
-+OFONO_VERSION = 1.29
- OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- OFONO_LICENSE = GPL-2.0
-@@ -49,4 +49,7 @@ else
- OFONO_CONF_OPTS += --disable-bluetooth
- endif
- 
-+# required by 0003-build-Add-check-for-explicit_bzero-support.patch
-+OFONO_AUTORECONF = YES
-+
- $(eval $(autotools-package))
+ I'm insisting on this since I expect that we'll need to override something else
+at some point as well.
+
+>>> , does the printf approach fix the newline problem for more than one
+>>> entry?
+>>
+>>  It does, but you can't use _CROSS_COMPILATION_CONF = ..., you have to use
+>> define, because the actual newlines have to be in the variable itself. Actually,
+>> you can still use = assignment, but then you need to use $(sep), i.e.:
+>>
+>> FOO_CROSS_COMPILATION_CONF = [binaries]$(sep)libgcrypt-config =
+>> '$(STAGING_DIR)/usr/bin/libgcrypt-config'$(sep)
+>>
+>> (which is ugly so don't do that :-)
+> 
+> The package using the meson infrastructure defines:
+> 
+>    define libfoo_MESON_CROSS_CONF_BINARIES
+>    libgcrypt-config = '$(STAGING_DIR)/usr/bin/libgcrypt-config'
+>    llvm-config = '$(STAGING_DIR)/usr/bin/llvm-config'
+>    endef
+> 
+> pkg-meson.mk is using PRINTF to a temporary file and sed is using this
+> file as input for appending to the [binaries section]:
+> 
+>    $Q$$(if $$($$(PKG)_MESON_CROSS_CONF_BINARIES), \
+>    	$$(call PRINTF,$$($$(PKG)_MESON_CROSS_CONF_BINARIES))) \
+>    	> $$($$(PKG)_SRCDIR)/build/cross-binaries.tmp
+>    sed -i "s/^[ \t]*//" $$($$(PKG)_SRCDIR)/build/cross-binaries.tmp
+
+ I would rather have the PRINTF macro to be fixed not to insert these tabs. It's
+just an artefact of how make works, and can be fairly easily fixed, either by
+reordering the newlines in the PRINTF definition, or by putting a $(strip)
+around it (although the latter has potential side effect since it also replaces
+all internal whitespace with a single space).
+
+
+>    sed -e "s%@TARGET_CROSS@%$$(TARGET_CROSS)%g" \
+>        ...
+>        -e  "/\[binaries\]/r $$($$(PKG)_SRCDIR)/build/cross-binaries.tmp" \
+
+ Not many people understand the r command which makes this hard to read, but
+it's acceptable for me.
+
+>        package/meson/cross-compilation.conf.in \
+>        > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+>    rm -f $$($$(PKG)_SRCDIR)/build/cross-binaries.tmp
+
+
+ Maybe, however, we should drop the cross-compilation.conf.in and generate
+everything with PRINTF (assuming that PRINTF gets fixed first, of course):
+
+define meson_cross_compilation_conf_template
+# Note: Buildroot's and Meson's terminologies differ about the meaning
+# of 'build', 'host' and 'target':
+# - Buildroot's 'host' is Meson's 'build'
+# - Buildroot's 'target' is Meson's 'host'
+
+[binaries]
+c = '$(TARGET_CROSS)gcc'
+cpp = '$(TARGET_CROSS)g++'
+ar = '$(TARGET_CROSS)ar'
+strip = '$(TARGET_CROSS)strip'
+pkgconfig = '$(HOST_DIR)/usr/bin/pkg-config'
+$($(PKG)_MESON_CROSS_CONF_BINARIES)
+
+[properties]
+needs_exe_wrapper = true
+...
+endef
+
+
+	$(call PRINTF,$(meson_cross_compilation_conf_template)) \
+		> $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+
+
+(Note: even with the above, I would prefer to have a $($(PKG)_MESON_CROSS_CONF)
+that gets appended at the end and that has the [binaries] embedded in it; the
+above is assuming that that doesn't work for some reason.)
+
+
+ Regards,
+ Arnout
