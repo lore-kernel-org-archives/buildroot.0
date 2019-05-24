@@ -1,37 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 May 2019 23:15:38 +0200
-Subject: [Buildroot] [git commit] linux: build after intel-microcode if
- enabled for early loading support
-Message-ID: <20190524211100.0F472811FF@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 24 May 2019 23:18:59 +0200
+Subject: [Buildroot] [PATCH v2 7/7] package/flashbench: remove old check
+ if BR2_microblaze & BR2_sh2a
+In-Reply-To: <20190522135906.30796-8-giulio.benetti@micronovasrl.com>
+References: <10430096-81de-792a-8b49-c59ed5e9de2e@micronovasrl.com>
+ <20190522135906.30796-1-giulio.benetti@micronovasrl.com>
+ <20190522135906.30796-8-giulio.benetti@micronovasrl.com>
+Message-ID: <20190524231859.380b11f3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f26dc16ab4d087c8c3217c6d94cdc69d98aac2cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-To support building in (a subset of) the intel-microcode files into the
-kernel using the CONFIG_EXTRA_FIRMWARE option, we need to ensure that the
-microcode files are installed before the Linux kernel is built.
+On Wed, 22 May 2019 15:59:06 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/linux.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> Commit:
+> https://git.buildroot.net/buildroot/commit/?id=bad25aff36b70b55b34ea4580b45f657385ae9ac
+> removed sourcery toolchain already deprecated in 2014 causing build
+> failure. It was based on Gcc 4.6.2 and Buildroot doesn't use this
+> anymore.
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 51fd41fa15..dd182d06b2 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -64,7 +64,8 @@ LINUX_MAKE_ENV = \
- 	BR_BINARIES_DIR=$(BINARIES_DIR)
- 
- LINUX_INSTALL_IMAGES = YES
--LINUX_DEPENDENCIES = host-kmod
-+LINUX_DEPENDENCIES = host-kmod \
-+	$(if $(BR2_PACKAGE_INTEL_MICROCODE),intel-microcode)
- 
- # Starting with 4.16, the generated kconfig paser code is no longer
- # shipped with the kernel sources, so we need flex and bison, but
+This explanation is quite fuzzy. What is the relationship between the
+removal of those toolchains and this particular issue ? Also this
+commit only removes Microblaze toolchains, not SH2A toolchains.
+
+Since when the LLONG_MAX issue has been fixed ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
