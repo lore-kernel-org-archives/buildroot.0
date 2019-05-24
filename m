@@ -1,33 +1,55 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Fri, 24 May 2019 15:16:51 -0600
-Subject: [Buildroot] [PATCH 1/1] package/v4l2loopback: bump to version
- 0b8feb80fdef9a415d8250bca1790b3ff23e8391
-In-Reply-To: <20190524231309.4c7a4ec1@windsurf>
-References: <20190524203541.116482-1-james.hilliard1@gmail.com>
- <20190524231309.4c7a4ec1@windsurf>
-Message-ID: <CADvTj4oqmLMOdaj_5Ou_16Bh1goS+5YBnP_Eopuet7-LuskysQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 24 May 2019 23:15:38 +0200
+Subject: [Buildroot] [git commit] package/intel-microcode: install into
+ images for early loading support
+Message-ID: <20190524211100.07F81812F0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, May 24, 2019 at 3:13 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> On Fri, 24 May 2019 14:35:41 -0600
-> James Hilliard <james.hilliard1@gmail.com> wrote:
->
-> > This should fix a kernel 5.1.x compatibility issue.
->
-> This "should" ? Or does it ? Could you provide more details ? This
-> would help us decide whether this update should in master or next.
-Does, see https://github.com/umlaeute/v4l2loopback/commit/0b8feb80fdef9a415d8250bca1790b3ff23e8391
->
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+commit: https://git.buildroot.net/buildroot/commit/?id=7c5dfea804af7b3a8f24092a27c1ff63b62b3f70
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Microcode based security mitigation (E.G.  MDS) requires that the microcode
+gets loaded very early. This can be handled by one of:
+
+- Concatenating (a subset of) the intel-microcode files and write to
+  kernel/x86/microcode/GenuineIntel.bin in the initrd.  Requires that the
+  (first) initrd is external from the kernel and NOT compressed.
+
+- Build (a subset of) the intel-microcode files into the kernel using the
+  CONFIG_EXTRA_FIRMWARE option.
+
+Install the microcode files into images to support these use cases (E.G.
+through a post-build script for the initrd, or by pointing
+CONFIG_EXTRA_FIRMWARE_DIR to ${BR_BINARIES_DIR}, similar to how we include
+the .cpio image inside the kernel).
+
+Notice that there may be licensing concerns when embedded non-GPL firmware
+in the kernel.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/intel-microcode/intel-microcode.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index aa3b1f4dbb..43cdc3d0b8 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -9,6 +9,13 @@ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
+ INTEL_MICROCODE_REDISTRIBUTE = NO
++INTEL_MICROCODE_INSTALL_IMAGES = YES
++
++define INTEL_MICROCODE_INSTALL_IMAGES_CMDS
++	mkdir -p $(BINARIES_DIR)/intel-ucode
++	$(INSTALL) -m 0644 -t $(BINARIES_DIR)/intel-ucode \
++		$(@D)/intel-ucode/*
++endef
+ 
+ define INTEL_MICROCODE_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/lib/firmware/intel-ucode
