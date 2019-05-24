@@ -1,77 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 May 2019 22:16:08 +0200
-Subject: [Buildroot] [git commit] package/gstreamer/gst-ffmpeg: re-enable
- package when gcc bug 85180 is present
-Message-ID: <20190524201050.36CF583D89@busybox.osuosl.org>
+Date: Fri, 24 May 2019 22:17:17 +0200
+Subject: [Buildroot] [PATCH v2 07/12] package/gst-ffmpeg: re-enable
+ package if BUG_85180 is present
+In-Reply-To: <20190521133932.81841-8-giulio.benetti@micronovasrl.com>
+References: <20190521133932.81841-1-giulio.benetti@micronovasrl.com>
+ <20190521133932.81841-8-giulio.benetti@micronovasrl.com>
+Message-ID: <20190524221717.7bb838db@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2e55071b4e4223754225b1d38be67a8d1e1f03d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 21 May 2019 15:39:27 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-With Microblaze Gcc version < 8.x the build hangs to gcc bug 85180:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. This package has
-been excluded from building if the toolchain is affected by gcc bug
-85180. To be consistent with how we deal with this issue in other
-packages, we re-enable the package and instead work around the issue
-by building with -O0, since gcc bug 85180 manifests itself only when
-optimization is enabled.
+> With Microblaze Gcc version < 8.x build hangs on compiling first files.
+> This is due to bug 85180:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+> This package has been excluded from building if BUG_85180 is present.
+> Bug shows up building gst-ffmpeg with optimization but not when building
+> with -O0.
+> 
+> In config.mk if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 by:
+> - add --disable-optimizations to EXTRA_OPTS
+> - passing -O0 to CFLAGS in CONF_ENV
+> Then remove 'depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180' and its
+> comment if not available from Config.in
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>  package/gstreamer/gst-ffmpeg/Config.in     | 4 ----
+>  package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk | 5 +++++
+>  2 files changed, 5 insertions(+), 4 deletions(-)
 
-To achieve this:
+Applied to master after tweaking the CFLAGS logic and improving the
+commit log. Thanks!
 
-- add --disable-optimizations to EXTRA_OPTS, which gets passed down to
-  the built-in libav library
-- pass -O0 to CFLAGS in CONF_ENV
-
-Then we remove 'depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180' and its
-comment if not available from Config.in
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-[Thomas: tweak CFLAGS logic, improve commit log]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gstreamer/gst-ffmpeg/Config.in     | 4 ----
- package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk | 8 ++++++++
- 2 files changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/package/gstreamer/gst-ffmpeg/Config.in b/package/gstreamer/gst-ffmpeg/Config.in
-index 1e95d016f6..32bfdd53c6 100644
---- a/package/gstreamer/gst-ffmpeg/Config.in
-+++ b/package/gstreamer/gst-ffmpeg/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_GST_FFMPEG
- 	depends on !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
- 	# triggers https://gcc.gnu.org/bugzilla/show_bug.cgi?id=65151 on sh
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 || !BR2_sh
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180
- 	select BR2_PACKAGE_GST_PLUGINS_BASE
- 	help
- 	  GStreamer plugin containing one plugin with a set of
-@@ -29,6 +28,3 @@ endif
- 
- comment "gst-ffmpeg needs a toolchain w/ gcc >= 5"
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5 && BR2_sh
--
--comment "gst-ffmpeg needs a toolchain not affected by GCC bug 85180"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85180
-diff --git a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-index 6f41efb0a5..0d584a15b1 100644
---- a/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-+++ b/package/gstreamer/gst-ffmpeg/gst-ffmpeg.mk
-@@ -90,6 +90,14 @@ ifeq ($(BR2_STATIC_LIBS),)
- GST_FFMPEG_CONF_EXTRA_OPTS += --enable-pic
- endif
- 
-+GST_FFMPEG_CFLAGS = $(TARGET_CFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+GST_FFMPEG_CONF_EXTRA_OPTS += --disable-optimizations
-+GST_FFMPEG_CFLAGS += -O0
-+endif
-+
-+GST_FFMPEG_CONF_ENV += CFLAGS="$(GST_FFMPEG_CFLAGS)"
- GST_FFMPEG_CONF_OPTS += --with-ffmpeg-extra-configure="$(GST_FFMPEG_CONF_EXTRA_OPTS)"
- 
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
