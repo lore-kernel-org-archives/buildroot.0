@@ -1,53 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 24 May 2019 21:02:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/kvm-unit-tests: fix build without
- ssp
-Message-ID: <20190524190243.31508-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 24 May 2019 21:39:50 +0200
+Subject: [Buildroot] [git commit] package/chocolate-doom: work around gcc
+ bug 85180
+Message-ID: <20190524193402.6ED5A8DAF4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Makefile tries to detect stack-protector which will result in build
-failures if ssp is not available so disable stack protector is SSP is
-not available through EXTRA_CFLAGS
+commit: https://git.buildroot.net/buildroot/commit/?id=f20f59c4cc4187258e3fc7d19be4dccf3dfc837f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+With Microblaze Gcc version < 8.x the build hangs due to bug 85180:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug shows up
+when building chocolate-doom with optimization but not when building
+with -O0. To work around this bug, if
+BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y, we force using -O0.
 
 Fixes:
- - http://autobuild.buildroot.org/results/e6f767755ffdb5ecc014eb5ad7519814f075a60e
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  http://autobuild.buildroot.net/results/e570839576be8963dc6bd36342e2f857da3c6146/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+[Thomas: tweak CFLAGS logic, improve commit log]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kvm-unit-tests/kvm-unit-tests.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ package/chocolate-doom/chocolate-doom.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-index 92d67fb34b..ac1bb1f7aa 100644
---- a/package/kvm-unit-tests/kvm-unit-tests.mk
-+++ b/package/kvm-unit-tests/kvm-unit-tests.mk
-@@ -39,16 +39,21 @@ ifneq ($(BR2_x86_64),y)
- KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
- endif
+diff --git a/package/chocolate-doom/chocolate-doom.mk b/package/chocolate-doom/chocolate-doom.mk
+index 54121c43aa..8c16a7fa30 100644
+--- a/package/chocolate-doom/chocolate-doom.mk
++++ b/package/chocolate-doom/chocolate-doom.mk
+@@ -21,6 +21,14 @@ CHOCOLATE_DOOM_CONF_OPTS = \
+ 	--with-sdl-prefix=$(STAGING_DIR)/usr \
+ 	--with-sdl-exec-prefix=$(STAGING_DIR)/usr
  
-+# Don't force -fstack-protector when SSP is not available in toolchain
-+KVM_UNIT_TESTS_MAKE_OPTS += \
-+	EXTRA_CFLAGS=$(if $(BR2_TOOLCHAIN_HAS_SSP),,-fno-stack-protector)
++CHOCOLATE_DOOM_CFLAGS = $(TARGET_CFLAGS)
 +
- define KVM_UNIT_TESTS_CONFIGURE_CMDS
- 	cd $(@D) && ./configure $(KVM_UNIT_TESTS_CONF_OPTS)
- endef
- 
- define KVM_UNIT_TESTS_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) standalone
-+	$(TARGET_MAKE_ENV) $(MAKE) $(KVM_UNIT_TESTS_MAKE_OPTS) -C $(@D) \
-+		standalone
- endef
- 
- define KVM_UNIT_TESTS_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(MAKE) $(KVM_UNIT_TESTS_MAKE_OPTS) -C $(@D) \
- 		DESTDIR=$(TARGET_DIR)/usr/share/kvm-unit-tests/ \
- 		install
- endef
--- 
-2.20.1
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++CHOCOLATE_DOOM_CFLAGS += -O0
++endif
++
++CHOCOLATE_DOOM_CONF_ENV += CFLAGS="$(CHOCOLATE_DOOM_CFLAGS)"
++
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ CHOCOLATE_DOOM_DEPENDENCIES += libpng
+ CHOCOLATE_DOOM_CONF_OPTS += --with-libpng
