@@ -1,38 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 May 2019 23:16:37 +0200
-Subject: [Buildroot] [PATCH 1/3] package/intel-microcode: install into
- images for early loading support
-In-Reply-To: <20190520221712.22564-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 21 May 2019 00:17:10 +0200")
-References: <20190520221712.22564-1-peter@korsgaard.com>
-Message-ID: <87o93rpn7u.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 24 May 2019 23:16:38 +0200
+Subject: [Buildroot] [PATCH v2 2/7] package/ffmpeg: re-enable package if
+ BUG_85180 is present
+In-Reply-To: <20190522135906.30796-3-giulio.benetti@micronovasrl.com>
+References: <10430096-81de-792a-8b49-c59ed5e9de2e@micronovasrl.com>
+ <20190522135906.30796-1-giulio.benetti@micronovasrl.com>
+ <20190522135906.30796-3-giulio.benetti@micronovasrl.com>
+Message-ID: <20190524231638.20182c30@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+On Wed, 22 May 2019 15:59:01 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
- > Microcode based security mitigation (E.G.  MDS) requires that the microcode
- > gets loaded very early. This can be handled by one of:
+> With Microblaze Gcc version < 8.x build hangs on compiling.
+> This is due to bug 85180:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+> This package has been excluded from building if BUG_85180 is present.
+> Bug shows up building ffmpeg with optimization.
+> 
+> In config.mk if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 by:
+> - add --disable-optimizations to FFMPEG_CONF_OPTS
+> - passing -O0 to CFLAGS in FFMPEG_CONF_ENV
+> Then remove 'depends on !BR2_microblaze' from Config.in
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+> V1->V2:
+> * use BUG_85180 instead of BUG_71124 since they are the same bug
 
- > - Concatenating (a subset of) the intel-microcode files and write to
- >   kernel/x86/microcode/GenuineIntel.bin in the initrd.  Requires that the
- >   (first) initrd is external from the kernel and NOT compressed.
+Applied to master, thanks.
 
- > - Build (a subset of) the intel-microcode files into the kernel using the
- >   CONFIG_EXTRA_FIRMWARE option.
-
- > Install the microcode files into images to support these use cases (E.G.
- > through a post-build script for the initrd, or by pointing
- > CONFIG_EXTRA_FIRMWARE_DIR to ${BR_BINARIES_DIR}, similar to how we include
- > the .cpio image inside the kernel).
-
-As pointed out by Thomas on IRC, there may be licensing concerns when
-embedding non-GPL firmware inside the kernel.
-
-Committed after adding a note about that, thanks.
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
