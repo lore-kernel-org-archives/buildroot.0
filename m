@@ -1,218 +1,513 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 24 May 2019 15:57:45 +0200
-Subject: [Buildroot] [PATCH/next v2,
- 1/1] package/gpsd: bump to version 3.18.1
-Message-ID: <20190524135745.8823-1-fontaine.fabrice@gmail.com>
+Date: Fri, 24 May 2019 16:14:10 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/openzwave: fix strncat build
+ failure
+Message-ID: <20190524141410.26475-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove second patch (already in version)
-- Add a patch to fix build without man pages
-- Add a patch to remove C99-style loop
+Retrieve upstream patch that fix build strncat build failure.
+This patch also allow to disable the use of the embedded tinyxml library
+so use this new option and add a tinyxml dependency
+
+Fixes:
+ - http://autobuild.buildroot.org/results/cbe0671831d874a5b96a944b891fe1eea823667b
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Beno?t Th?baudeau):
- - Add second patch to fix C99-style loop
+ .../openzwave/0002-update-spec-files.patch    | 445 ++++++++++++++++++
+ package/openzwave/Config.in                   |   1 +
+ package/openzwave/openzwave.mk                |   4 +-
+ 3 files changed, 449 insertions(+), 1 deletion(-)
+ create mode 100644 package/openzwave/0002-update-spec-files.patch
 
- ...h-when-not-building-python-man-pages.patch | 59 +++++++++++++++++++
- ...-fix-build-with-reconfigure-disabled.patch | 49 ---------------
- ...-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch | 38 ++++++++++++
- package/gpsd/gpsd.hash                        |  2 +-
- package/gpsd/gpsd.mk                          |  2 +-
- 5 files changed, 99 insertions(+), 51 deletions(-)
- create mode 100644 package/gpsd/0002-SConstruct-Do-not-crash-when-not-building-python-man-pages.patch
- delete mode 100644 package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch
- create mode 100644 package/gpsd/0003-driver_ubx-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch
-
-diff --git a/package/gpsd/0002-SConstruct-Do-not-crash-when-not-building-python-man-pages.patch b/package/gpsd/0002-SConstruct-Do-not-crash-when-not-building-python-man-pages.patch
+diff --git a/package/openzwave/0002-update-spec-files.patch b/package/openzwave/0002-update-spec-files.patch
 new file mode 100644
-index 0000000000..75317af10e
+index 0000000000..0ba74ab108
 --- /dev/null
-+++ b/package/gpsd/0002-SConstruct-Do-not-crash-when-not-building-python-man-pages.patch
-@@ -0,0 +1,59 @@
-+From 02d21faebec245e1526449fb54e7078914d75db7 Mon Sep 17 00:00:00 2001
-+From: "Gary E. Miller" <gem@rellim.com>
-+Date: Thu, 1 Nov 2018 15:49:01 -0700
-+Subject: SConstruct:  Do not crash when not building python man pages.
++++ b/package/openzwave/0002-update-spec-files.patch
+@@ -0,0 +1,445 @@
++From 601e5fb16232a7984885e67fdddaf5b9c9dd8105 Mon Sep 17 00:00:00 2001
++From: Justin Hammond <justin@dynam.ac>
++Date: Mon, 6 May 2019 17:05:17 +0800
++Subject: [PATCH] update spec files
 +
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +[Retrieved from:
-+https://git.savannah.gnu.org/cgit/gpsd.git/commit/?id=02d21faebec245e1526449fb54e7078914d75db7]
++https://github.com/OpenZWave/open-zwave/commit/601e5fb16232a7984885e67fdddaf5b9c9dd8105]
 +---
-+ SConstruct | 13 +++++++++----
-+ 1 file changed, 9 insertions(+), 4 deletions(-)
++ cpp/build/Makefile                          |  22 ++-
++ cpp/build/support.mk                        |   7 +-
++ cpp/src/command_classes/DoorLockLogging.cpp |   4 +-
++ cpp/src/command_classes/UserCode.cpp        |   4 +-
++ dist/libopenzwave.spec                      | 152 --------------------
++ dist/openzwave.spec.in                      | 145 +++++++++++++++++++
++ distfiles.mk                                |   2 +-
++ 7 files changed, 174 insertions(+), 162 deletions(-)
++ delete mode 100644 dist/libopenzwave.spec
++ create mode 100644 dist/openzwave.spec.in
 +
-+diff --git a/SConstruct b/SConstruct
-+index 0fc3614..0226cd2 100644
-+--- a/SConstruct
-++++ b/SConstruct
-+@@ -1751,14 +1751,19 @@ if tiocmiwait:
-+         "ppscheck.8": "ppscheck.xml",
-+     })
++diff --git a/cpp/build/Makefile b/cpp/build/Makefile
++index bd9463c86..b404a87fd 100644
++--- a/cpp/build/Makefile
+++++ b/cpp/build/Makefile
++@@ -84,7 +84,19 @@ endif
++ #where to put the temporary library
++ LIBDIR	?= $(top_builddir)
 + 
-+-all_manpages = list(base_manpages.keys()) + list(python_manpages.keys())
-++all_manpages = list(base_manpages.keys())
-++if python_manpages:
-++    all_manpages += list(python_manpages.keys())
-+ 
-+ man_env = env.Clone()
-+ if man_env.GetOption('silent'):
-+     man_env['SPAWN'] = filtered_spawn  # Suppress stderr chatter
-+ manpage_targets = []
-+ if manbuilder:
-+-    items = list(base_manpages.items()) + list(python_manpages.items())
-++    items = list(base_manpages.items())
-++    if python_manpages:
-++        items += list(python_manpages.items())
++-INCLUDES	:= -I $(top_srcdir)/cpp/src -I $(top_srcdir)/cpp/tinyxml/
+++INCLUDES	:= -I $(top_srcdir)/cpp/src
 ++
-+     for (man, xml) in items:
-+         manpage_targets.append(man_env.Man(source=xml, target=man))
+++
+++ifeq ($(USE_BI_TXML), 1)
+++INCLUDES += -I $(top_srcdir)/cpp/tinyxml/
+++SOURCES_TXML =$(top_srcdir)/cpp/tinyxml/
+++tinyxml := $(notdir $(wildcard $(top_srcdir)/cpp/tinyxml/*.cpp))
+++else
+++LIBS+= -ltinyxml
+++endif
+++
+++
+++
 + 
-+@@ -1907,7 +1912,7 @@ if qt_env:
++ 
++ ifeq ($(USE_HID),1)
++@@ -105,12 +117,11 @@ LIBS += -ludev
++ endif
++ endif # USE_HID
++ 
++-SOURCES		:= $(top_srcdir)/cpp/src $(top_srcdir)/cpp/src/command_classes $(top_srcdir)/cpp/tinyxml \
+++SOURCES		:= $(top_srcdir)/cpp/src $(top_srcdir)/cpp/src/command_classes $(SOURCES_TXML) \
++ 	$(top_srcdir)/cpp/src/value_classes $(top_srcdir)/cpp/src/platform $(top_srcdir)/cpp/src/platform/unix $(SOURCES_HIDAPI) $(top_srcdir)/cpp/src/aes/
++-VPATH = $(top_srcdir)/cpp/src:$(top_srcdir)/cpp/src/command_classes:$(top_srcdir)/cpp/tinyxml:\
+++VPATH = $(top_srcdir)/cpp/src:$(top_srcdir)/cpp/src/command_classes:$(SOURCES_TXML):\
++ 	$(top_srcdir)/cpp/src/value_classes:$(top_srcdir)/cpp/src/platform:$(top_srcdir)/cpp/src/platform/unix:$(SOURCES_HIDAPI):$(top_srcdir)/cpp/src/aes/
++ 
++-tinyxml := $(notdir $(wildcard $(top_srcdir)/cpp/tinyxml/*.cpp))
++ 
++ ifeq ($(USE_HID),1)
++ ifeq ($(UNAME),Darwin)
++@@ -163,6 +174,9 @@ $(top_srcdir)/cpp/src/vers.cpp:
++ 	@echo 'uint16_t ozw_vers_minor = $(VERSION_MIN);' >> $(top_srcdir)/cpp/src/vers.cpp
++ 	@echo 'uint16_t ozw_vers_revision = $(VERSION_REV);' >> $(top_srcdir)/cpp/src/vers.cpp
++ 	@echo 'char ozw_version_string[] = "$(GITVERSION)";' >> $(top_srcdir)/cpp/src/vers.cpp
+++	@$(SED) \
+++		-e 's|[@]VERSION@|$(VERSION).$(VERSION_REV)|g' \
+++		< "$(top_srcdir)/dist/openzwave.spec.in" > "$(top_srcdir)/dist/openzwave.spec"
 + 
 + 
-+ maninstall = []
-+-for manpage in list(base_manpages.keys()) + list(python_manpages.keys()):
-++for manpage in all_manpages:
-+     if not manbuilder and not os.path.exists(manpage):
-+         continue
-+     section = manpage.split(".")[1]
-+@@ -2517,7 +2522,7 @@ if os.path.exists("gpsd.c") and os.path.exists(".gitignore"):
-+     if ".gitignore" in distfiles:
-+         distfiles.remove(".gitignore")
-+     distfiles += generated_sources
-+-    distfiles += list(base_manpages.keys()) + list(python_manpages.keys())
-++    distfiles += all_manpages
-+     if "packaging/rpm/gpsd.spec" not in distfiles:
-+         distfiles.append("packaging/rpm/gpsd.spec")
++ #$(OBJDIR)/vers.o:	$(top_builddir)/vers.cpp
++diff --git a/cpp/build/support.mk b/cpp/build/support.mk
++index 562a9b280..3ffd17e48 100644
++--- a/cpp/build/support.mk
+++++ b/cpp/build/support.mk
++@@ -8,8 +8,11 @@ BUILD	?= release
++ #the prefix to install the library into
++ PREFIX	?= /usr/local
 + 
-+-- 
-+cgit v1.0-41-gc330
-+
-diff --git a/package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch b/package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch
-deleted file mode 100644
-index 77badb31cf..0000000000
---- a/package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 21a752e827bc9e14de4b4c26aef4d0db7403a5b7 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Tue, 9 Oct 2018 15:22:46 +0300
--Subject: [PATCH] driver_greis: fix build with reconfigure disabled
--
--Unhide the definition of greis_parse_input and greis_event_hook since
--they are used unconditionally.
--
--Fixes the following build failure:
--
--driver_greis.c:969:25: error: 'greis_parse_input' undeclared here (not in a function); did you mean 'generic_parse_input'?
--     .parse_packet     = greis_parse_input,
--                         ^~~~~~~~~~~~~~~~~
--                         generic_parse_input
--driver_greis.c:973:25: error: 'greis_event_hook' undeclared here (not in a function)
--     .event_hook       = greis_event_hook,
--                         ^~~~~~~~~~~~~~~~
--
--Cc: Gregory Fong <gregory.fong@virginorbit.com>
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: http://lists.nongnu.org/archive/html/gpsd-dev/2018-10/msg00012.html
--
-- driver_greis.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/driver_greis.c b/driver_greis.c
--index 9eb148fc76cd..222bd9daf020 100644
----- a/driver_greis.c
--+++ b/driver_greis.c
--@@ -797,7 +797,6 @@ static ssize_t greis_control_send(struct gps_device_t *session,
-- }
-- #endif /* CONTROLSEND_ENABLE */
-- 
---#ifdef RECONFIGURE_ENABLE
-- static void greis_event_hook(struct gps_device_t *session, event_t event)
-- {
--     if (session->context->readonly)
--@@ -870,6 +869,7 @@ static gps_mask_t greis_parse_input(struct gps_device_t *session)
-- 	return 0;
-- }
-- 
--+#ifdef RECONFIGURE_ENABLE
-- /**
--  * Set port operating mode, speed, parity, stopbits etc. here.
--  * Note: parity is passed as 'N'/'E'/'O', but you should program
---- 
--2.19.1
--
-diff --git a/package/gpsd/0003-driver_ubx-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch b/package/gpsd/0003-driver_ubx-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch
-new file mode 100644
-index 0000000000..a9b40c64af
---- /dev/null
-+++ b/package/gpsd/0003-driver_ubx-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch
-@@ -0,0 +1,38 @@
-+From d685ab05952d7eadf012fc054032f0190cf2abda Mon Sep 17 00:00:00 2001
-+From: "Gary E. Miller" <gem@rellim.com>
-+Date: Fri, 26 Oct 2018 10:12:40 -0700
-+Subject: driver_ubx: Save UBX-RXM-RAWX data in rawdate_t.
-+
-+A step in getting u-blox 8 raw data into the new RAW JSON message.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved (and backported to keep only C99-style loop fix) from:
-+https://git.savannah.gnu.org/cgit/gpsd.git/commit/driver_ubx.c?id=d685ab05952d7eadf012fc054032f0190cf2abda]
-+---
-+ driver_ubx.c | 29 ++++++++++++++++++++++++++---
-+ 1 file changed, 26 insertions(+), 3 deletions(-)
-+
-+diff --git a/driver_ubx.c b/driver_ubx.c
-+index 585b2b9..0dccddf 100644
-+--- a/driver_ubx.c
-++++ b/driver_ubx.c
-+@@ -813,6 +813,7 @@ static gps_mask_t ubx_rxm_rawx(struct gps_device_t *session,
-+     int8_t leapS;
-+     uint8_t numMeas;
-+     uint8_t recStat;
-++    int i;
++-# build HID support by default
++-USE_HID ?= 1
+++# dont build HID support by default
+++USE_HID ?= 0
+++
+++# use builtin tinyXML by default 
+++USE_BI_TXML ?= 1
 + 
-+     if (16 > data_len) {
-+ 	gpsd_log(&session->context->errout, LOG_WARN,
-+@@ -830,6 +831,6 @@ static gps_mask_t ubx_rxm_rawx(struct gps_device_t *session,
-+ 	     "UBX_RXM_RAWX: rcvTow %f week %u leapS %d numMeas %u recStat %d\n",
-+ 	     rcvTow, week, leapS, numMeas, recStat);
++ #the System we are building on
++ UNAME  := $(shell uname -s)
++diff --git a/cpp/src/command_classes/DoorLockLogging.cpp b/cpp/src/command_classes/DoorLockLogging.cpp
++index a8d824cd5..f318b3e59 100644
++--- a/cpp/src/command_classes/DoorLockLogging.cpp
+++++ b/cpp/src/command_classes/DoorLockLogging.cpp
++@@ -268,13 +268,13 @@ bool DoorLockLogging::HandleMsg
++ 			}
++ 			uint8 userid = (_data[10]);
++ 			uint8 usercodelength = (_data[11]);
++-			char usercode[254], tmpusercode[254];
+++			char usercode[254], tmpusercode[10];
++ 			snprintf(usercode, sizeof(usercode), "UserCode:");
++ 			if (usercodelength > 0)
++ 				for (int i = 0; i < usercodelength; i++ )
++ 				{
++ 					snprintf(tmpusercode, sizeof(tmpusercode), "%d", (int)_data[12+i]);
++-					strncat(usercode, tmpusercode, sizeof(usercode) - strlen(usercode) - 1 );
+++					strncat(usercode, tmpusercode, 10);
++ 				}
 + 
-+-    for (int i = 0; i < numMeas; i++) {
-++    for (i = 0; i < numMeas; i++) {
-+         int off = 32 * i;
-+         double prMes = getled64((const char *)buf, off + 16);
-+         double cpMes = getled64((const char *)buf, off + 24);
-+-- 
-+cgit v1.0-41-gc330
-+
-diff --git a/package/gpsd/gpsd.hash b/package/gpsd/gpsd.hash
-index fe594ea28b..a6d4a65200 100644
---- a/package/gpsd/gpsd.hash
-+++ b/package/gpsd/gpsd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	48521f5158f5fda4c88a6f75e8bfc1ee67e999e3fc095e4a06cb8c2af56712f4	gpsd-3.18.tar.gz
-+sha256	5cb1e6d880ec9a52c62492dd0e3d77451b7c7ad625895bd652f6354215aec23e	gpsd-3.18.1.tar.gz
- sha256	71ff85d18bf063954cfc4251678d0e772223e21f80febbd99d5524c90f73f832	COPYING
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 0a17ddc93e..8edebe5fbf 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
++ 			if (valid) {
++diff --git a/cpp/src/command_classes/UserCode.cpp b/cpp/src/command_classes/UserCode.cpp
++index a58091aca..dab006731 100644
++--- a/cpp/src/command_classes/UserCode.cpp
+++++ b/cpp/src/command_classes/UserCode.cpp
++@@ -466,7 +466,9 @@ bool UserCode::HandleMsg
++ 					node->CreateValueString( ValueID::ValueGenre_User, GetCommandClassId(), _instance, i, str, "", false, false, data, 0 );
++ 				}
++ 				m_userCode[i].status = UserCode_Available;
++-				memcpy(&m_userCode[i].usercode, 0, 10);
+++				/* silly compilers */
+++				for (int j = 0; j < 10; j++)
+++					m_userCode[i].usercode[i] = 0;
++ 			}
++ 			if (m_com.GetFlagBool(COMPAT_FLAG_UC_EXPOSERAWVALUE)) {
++ 				node->CreateValueRaw( ValueID::ValueGenre_User, GetCommandClassId(), _instance, UserCodeIndex_RawValue, "Raw UserCode", "", false, false, 0, 0, 0);
++diff --git a/dist/libopenzwave.spec b/dist/libopenzwave.spec
++deleted file mode 100644
++index 3f29473dd..000000000
++--- a/dist/libopenzwave.spec
+++++ /dev/null
++@@ -1,152 +0,0 @@
++-Name: libopenzwave
++-%if 0%{?fedora} > 0
++-Group: Development/Libraries
++-%else
++-Group: Productivity/Networking/Other
++-%endif
++-Summary: Library to access Z-Wave interfaces
++-URL:http://code.google.com/p/open-zwave/
++-%if 0%{?suse_version} > 0
++-License: LGPL-2.0+
++-%else 
++-License: LGPLv2+
++-%endif
++-Version: 1.6.0
++-Release: 1
++-BuildRequires: gcc-c++ make libudev-devel doxygen graphviz
++-%if 0%{?fedora} >= 18
++-BuildRequires: systemd-devel pkgconfig
++-%else
++-%if 0%{?suse_version} >= 1220
++-BuildRequires: systemd-devel pkg-config
++-%else
++-BuildRequires: libudev-devel pkgconfig
++-%endif
++-%endif
++-Source0: open-zwave-%{version}.tar.gz
++-
++-
++-BuildRoot: %{_tmppath}/libopenzwave-root
++-
++-%description
++-OpenZWave is an open-source, cross-platform library designed to enable anyone to
++-add support for Z-Wave home-automation devices to their applications, without 
++-requiring any in depth knowledge of the Z-Wave protocol.
++-
++-Z-Wave employs a proprietary protocol which the owners, Sigma Designs, have 
++-chosen not to release into the public domain. There is also no official free 
++-or low-cost SDK that can be used to develop applications (The ControlThink SDK
++-is now tied exclusively to their own Z-Wave PC interface). The only way to 
++-obtain the protocol documentation and sample code is to purchase an expensive 
++-development kit, and sign a non-disclosure agreement (NDA) preventing the 
++-release of that knowledge.
++-
++-OpenZWave was created to fill that gap. We do not have the official 
++-documentation, have signed no NDA, and are free to develop the library as we 
++-see fit. Our knowledge comes from existing bodies of open-source code 
++-(principally the Z-Wave parts of LinuxMCE), and through examining the 
++-messages sent by Z-Wave devices.
++-
++-The goal of the project is to make a positive contribution to the Z-Wave 
++-community by creating a library that supports as much of the Z-Wave 
++-specification as possible, and that can be used as a "black-box" solution 
++-by anyone wanting to add Z-Wave to their application. It is NOT our aim 
++-to publish alternative documentation of the Z-Wave protocol, or to 
++-attempt to "punish" Sigma Designs for their decision to keep the 
++-protocol closed.
++-
++-%package -n libopenzwave-devel
++-Summary: Open-ZWave header files
++-%if 0%{?fedora} > 0
++-Group: Development/Libraries
++-%else
++-Group: Development/Libraries/C and C++
++-%endif
++-Requires: %{name} = %{version}-%{release}
++-
++-%description -n libopenzwave-devel
++-header files needed when you want to compile your own 
++-applications using openzwave
++-
++-%package -n openzwave
++-Summary: Open-ZWave Sample Executables
++-%if 0%{?fedora} > 0
++-Group: Development/Libraries
++-%else
++-Group: Development/Libraries/C and C++
++-%endif
++-Requires: %{name} = %{version}-%{release}
++-
++-%description -n openzwave
++-Sample Executables for OpenZWave
++-
++-%prep
++-
++-%setup -q -n open-zwave-%{version}
++-
++-
++-
++-
++-%build
++-major_ver=$(echo %{version} | awk -F \. {'print $1'})
++-minor_ver=$(echo %{version} | awk -F \. {'print $2'})
++-revision=$(echo %{version} | awk -F \. {'print $3'})
++-CPPFLAGS=-g VERSION_MAJ=$major_ver VERSION_MIN=$minor_ver VERSION_REV=$revision PREFIX=/usr sysconfdir=%{_sysconfdir}/openzwave/ includedir=%{_includedir} docdir=%{_defaultdocdir}/openzwave-%{version} instlibdir=%{_libdir} make %{?_smp_mflags}
++-
++-%install
++-rm -rf %{buildroot}/*
++-major_ver=$(echo %{version} | awk -F \. {'print $1'})
++-minor_ver=$(echo %{version} | awk -F \. {'print $2'})
++-revision=$(echo %{version} | awk -F \. {'print $3'})
++-mkdir -p %{buildroot}/%{_bindir}
++-mkdir -p %{buildroot}/%{_libdir}
++-mkdir -p %{buildroot}/%{_defaultdocdir}/openzwave-%{version}/
++-mkdir -p %{buildroot}/%{_sysconfdir}/
++-mkdir -p %{buildroot}/%{_includedir}/openzwave/
++-DESTDIR=%{buildroot} VERSION_MAJ=$major_ver VERSION_MIN=$minor_ver VERSION_REV=$revision PREFIX=/usr sysconfdir=%{_sysconfdir}/openzwave/ includedir=%{_includedir}/openzwave/ docdir=%{_defaultdocdir}/openzwave-%{version} instlibdir=%{_libdir} make install
++-cp -p INSTALL %{buildroot}/%{_defaultdocdir}/openzwave-%{version}/
++-cp -pr license %{buildroot}/%{_defaultdocdir}/openzwave-%{version}/
++-rm %{buildroot}%{_defaultdocdir}/openzwave-%{version}/Doxyfile.in
++-rm -rf %{buildroot}%{_defaultdocdir}/openzwave-%{version}/html/
++-
++-%files
++-%defattr(-,root,root,-)
++-%{_libdir}/libopenzwave.so.*
++-%dir %{_defaultdocdir}/openzwave-%{version}
++-%doc %{_defaultdocdir}/openzwave-%{version}/default.htm
++-%doc %{_defaultdocdir}/openzwave-%{version}/general/
++-%doc %{_defaultdocdir}/openzwave-%{version}/images+css/
++-%doc %{_defaultdocdir}/openzwave-%{version}/license/
++-%doc %{_defaultdocdir}/openzwave-%{version}/INSTALL
++-%config(noreplace) %{_sysconfdir}/openzwave/
++-
++-
++-
++-%files -n libopenzwave-devel
++-%defattr(-,root,root,-)
++-%{_bindir}/ozw_config
++-%{_includedir}/openzwave/
++-%{_libdir}/libopenzwave.so
++-%{_libdir}/pkgconfig/libopenzwave.pc
++-%dir %{_defaultdocdir}/openzwave-%{version}
++-%doc %{_defaultdocdir}/openzwave-%{version}/api/
++-
++-
++-%files -n openzwave
++-%defattr(-,root,root,-)
++-%{_bindir}/MinOZW
++-
++-
++-%post
++-/sbin/ldconfig 
++-
++-%post -n libopenzwave-devel
++-/sbin/ldconfig 
++-
++-%postun
++-/sbin/ldconfig 
++-
++-%changelog
++-* Tue Feb 04 2014 Justin Hammond+justin at dynam.ac - 1.0.730-1
++-- Initial Release
++-
++diff --git a/dist/openzwave.spec.in b/dist/openzwave.spec.in
++new file mode 100644
++index 000000000..4d7d22151
++--- /dev/null
+++++ b/dist/openzwave.spec.in
++@@ -0,0 +1,145 @@
+++Name:     openzwave
+++Version:  @VERSION@
+++Release:  1.0%{?dist}
+++Summary:  Sample Executables for OpenZWave
+++URL:      http://www.openzwave.net
+++License:  LGPLv3+
+++Source0:  http://old.openzwave.com/downloads/openzwave-%{version}.tar.gz
+++
+++# Use system tinyxml
+++#Patch1:   openzwave-tinyxml.patch
+++# Use system hidapi
+++#Patch2:   openzwave-hidapi.patch
+++# Fix FTBFS
+++#Patch3:   openzwave-1.5.0-format.patch
+++
+++BuildRequires: gcc-c++
+++BuildRequires: doxygen
+++BuildRequires: graphviz
+++BuildRequires: hidapi-devel
+++BuildRequires: systemd-devel
+++BuildRequires: tinyxml-devel
+++
+++
+++%description
+++OpenZWave is an open-source, cross-platform library designed to enable anyone to
+++add support for Z-Wave home-automation devices to their applications, without
+++requiring any in depth knowledge of the Z-Wave protocol.
+++
+++
+++%package -n libopenzwave
+++Summary: Library to access Z-Wave interfaces
+++
+++
+++%description -n libopenzwave
+++OpenZWave is an open-source, cross-platform library designed to enable anyone to
+++add support for Z-Wave home-automation devices to their applications, without
+++requiring any in depth knowledge of the Z-Wave protocol.
+++
+++
+++%package -n libopenzwave-devel
+++Summary: Open-ZWave header files
+++Requires: libopenzwave%{?_isa} = %{version}-%{release}
+++
+++
+++%description -n libopenzwave-devel
+++Header files needed when you want to compile your own
+++applications using openzwave
+++
+++
+++%package -n libopenzwave-devel-doc
+++Summary: Open-ZWave API documentation files
+++Requires: libopenzwave-devel%{?_isa} = %{version}-%{release}
+++
+++
+++%description -n libopenzwave-devel-doc
+++API documentation files needed when you want to compile your own
+++applications using openzwave
+++
+++
+++%prep
+++%setup -q -n openzwave-%{version}
+++#%patch1 -p1 -b.tinyxml
+++#%patch2 -p1 -b.hidapi
+++#%patch3 -p1 -b.format
+++
+++
+++%build
+++major_ver=$(echo %{version} | awk -F \. {'print $1'})
+++minor_ver=$(echo %{version} | awk -F \. {'print $2'})
+++revision=$(echo %{version} | awk -F \. {'print $3'})
+++CPPFLAGS="%{optflags} -Wformat -DOPENZWAVE_ENABLE_EXCEPTIONS" LDFLAGS="%{__global_ldflags}" VERSION_MAJ=$major_ver VERSION_MIN=$minor_ver VERSION_REV=$revision PREFIX=/usr sysconfdir=%{_sysconfdir}/openzwave/ includedir=%{_includedir} docdir=%{_defaultdocdir}/openzwave-%{version} instlibdir=%{_libdir} make %{?_smp_mflags}
+++
+++
+++%install
+++rm -rf %{buildroot}/*
+++major_ver=$(echo %{version} | awk -F \. {'print $1'})
+++minor_ver=$(echo %{version} | awk -F \. {'print $2'})
+++revision=$(echo %{version} | awk -F \. {'print $3'})
+++mkdir -p %{buildroot}/%{_bindir}
+++mkdir -p %{buildroot}/%{_libdir}
+++mkdir -p %{buildroot}/%{_defaultdocdir}/openzwave-%{version}/
+++mkdir -p %{buildroot}/%{_sysconfdir}/
+++mkdir -p %{buildroot}/%{_includedir}/openzwave/
+++DESTDIR=%{buildroot} VERSION_MAJ=$major_ver VERSION_MIN=$minor_ver VERSION_REV=$revision PREFIX=/usr sysconfdir=%{_sysconfdir}/openzwave/ includedir=%{_includedir}/openzwave/ docdir=%{_defaultdocdir}/openzwave-%{version} instlibdir=%{_libdir} make install
+++rm %{buildroot}%{_defaultdocdir}/openzwave-%{version}/Doxyfile.in
+++rm -rf %{buildroot}%{_defaultdocdir}/openzwave-%{version}/html/
+++rm -rf %{buildroot}%{_defaultdocdir}/openzwave-%{version}/default.htm
+++rm -rf %{buildroot}%{_defaultdocdir}/openzwave-%{version}/general/
+++rm -rf %{buildroot}%{_defaultdocdir}/openzwave-%{version}/images+css/
+++rm -rf %{buildroot}%{_defaultdocdir}/openzwave-%{version}/api/
+++
+++
+++%files
+++%{_bindir}/MinOZW
+++
+++
+++%files -n libopenzwave
+++%license license/*.txt
+++%doc docs/default.htm docs/general/ docs/images+css/
+++%{_libdir}/libopenzwave.so.*
+++%dir %{_sysconfdir}/openzwave/
+++%config(noreplace) %{_sysconfdir}/openzwave/*
+++
+++
+++%files -n libopenzwave-devel
+++%{_bindir}/ozw_config
+++%{_includedir}/openzwave/
+++%{_libdir}/libopenzwave.so
+++%{_libdir}/pkgconfig/libopenzwave.pc
+++
+++
+++%files -n libopenzwave-devel-doc
+++%doc docs/api/
+++
+++
+++%ldconfig_scriptlets -n libopenzwave
+++
+++
+++%changelog
+++* Fri Feb 01 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.0-0.20180624git1e36dcc.0
+++- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+++
+++* Wed Jul 18 2018 Michael Cronenworth <mike@cchtml.com> - 1.5.0-0.20180623git1e36dcc.0
+++- Update to 20180623 git checkout to fix FTBFS
+++- Drop patches that revert BARRIER_OPERATOR support and use newer version
+++
+++* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.0-0.20171212gitc3b0e31.0
+++- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+++
+++* Mon Feb 26 2018 Michael Cronenworth <mike@cchtml.com> - 1.5.0-0.20171211gitc3b0e31.0
+++- Update to 20171211 git checkout
+++- Revert new BARRIER_OPERATOR support and use older version
+++
+++* Thu Feb 08 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.0-0.20170725gitde1c0e6
+++- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+++
+++* Mon Jul 31 2017 Michael Cronenworth <mike@cchtml.com> - 1.5.0-0.20170724gitde1c0e6
+++- Update to a git checkout, execeptions patch is upstream
+++- Fixes crashing issues with domoticz
+++
+++* Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.4.164-2
+++- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+++
+++* Wed Jul 12 2017 Michael Cronenworth <mike@cchtml.com> - 1.4.164-1
+++- Initial spec
++diff --git a/distfiles.mk b/distfiles.mk
++index e68082967..9cf436a6f 100644
++--- a/distfiles.mk
+++++ b/distfiles.mk
++@@ -1273,7 +1273,7 @@ DISTFILES =	.gitignore \
++ 	debian/watch \
++ 	dist.mk \
++ 	dist/libopenzwave.changes \
++-	dist/libopenzwave.spec \
+++	dist/openzwave.spec \
++ 	distfiles.mk \
++ 	docs/Doxyfile.in \
++ 	docs/default.htm \
+diff --git a/package/openzwave/Config.in b/package/openzwave/Config.in
+index 7819a620d2..d86d358723 100644
+--- a/package/openzwave/Config.in
++++ b/package/openzwave/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_OPENZWAVE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_USE_WCHAR
++	select BR2_PACKAGE_TINYXML
+ 	help
+ 	  Free software library that interfaces with selected Z-Wave
+ 	  PC controllers, allowing anyone to create applications that
+diff --git a/package/openzwave/openzwave.mk b/package/openzwave/openzwave.mk
+index 9da414d112..3f9e177198 100644
+--- a/package/openzwave/openzwave.mk
++++ b/package/openzwave/openzwave.mk
+@@ -9,6 +9,7 @@ OPENZWAVE_SITE = $(call github,OpenZWave,open-zwave,$(OPENZWAVE_VERSION))
+ OPENZWAVE_LICENSE = LGPL-3.0+, GPL-3.0 (examples), Apache-2.0 (sh2ju.sh)
+ OPENZWAVE_LICENSE_FILES = license/license.txt license/lgpl.txt \
+ 	license/gpl.txt license/Apache-License-2.0.txt
++OPENZWAVE_DEPENDENCIES = tinyxml
  
--GPSD_VERSION = 3.18
-+GPSD_VERSION = 3.18.1
- GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
- GPSD_LICENSE = BSD-3-Clause
- GPSD_LICENSE_FILES = COPYING
+ OPENZWAVE_INSTALL_STAGING = YES
+ 
+@@ -28,7 +29,8 @@ OPENZWAVE_MAKE_OPTS = \
+ 	instlibdir=/usr/lib \
+ 	pkgconfigdir=/usr/lib/pkgconfig \
+ 	sysconfdir=/etc/openzwave \
+-	DOXYGEN=
++	DOXYGEN= \
++	USE_BI_TXML=0
+ 
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ OPENZWAVE_DEPENDENCIES += host-pkgconf udev
 -- 
 2.20.1
