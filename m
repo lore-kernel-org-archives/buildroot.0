@@ -1,75 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 May 2019 23:15:39 +0200
-Subject: [Buildroot] [git commit] package/intel-microcode: make target
- installation optional
-Message-ID: <20190524211100.196D9811FF@busybox.osuosl.org>
+Date: Fri, 24 May 2019 23:15:38 +0200
+Subject: [Buildroot] [git commit] linux: build after intel-microcode if
+ enabled for early loading support
+Message-ID: <20190524211100.0F472811FF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a134aeb99517d0d34e5be0b95159311f3974f4a5
+commit: https://git.buildroot.net/buildroot/commit/?id=f26dc16ab4d087c8c3217c6d94cdc69d98aac2cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For early microcode loading, there is no need to install the individual
-microcode files to /lib/firmware - So make that optional.
-
-Let the option default to y for backwards compatibility, and select it from
-iucode-tool as the init script relies on the /lib/firmware files.
+To support building in (a subset of) the intel-microcode files into the
+kernel using the CONFIG_EXTRA_FIRMWARE option, we need to ensure that the
+microcode files are installed before the Linux kernel is built.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intel-microcode/Config.in          | 9 +++++++++
- package/intel-microcode/intel-microcode.mk | 4 ++++
- package/iucode-tool/Config.in              | 1 +
- 3 files changed, 14 insertions(+)
+ linux/linux.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/intel-microcode/Config.in b/package/intel-microcode/Config.in
-index 3f9199ec93..4a45aa1ef3 100644
---- a/package/intel-microcode/Config.in
-+++ b/package/intel-microcode/Config.in
-@@ -7,3 +7,12 @@ config BR2_PACKAGE_INTEL_MICROCODE
- 	  proper kernel support are required to upload the microcode.
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 51fd41fa15..dd182d06b2 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -64,7 +64,8 @@ LINUX_MAKE_ENV = \
+ 	BR_BINARIES_DIR=$(BINARIES_DIR)
  
- 	  https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files
-+
-+config BR2_PACKAGE_INTEL_MICROCODE_INSTALL_TARGET
-+	bool "install microcode files to /lib/firmware in target"
-+	default y
-+	depends on BR2_PACKAGE_INTEL_MICROCODE
-+	help
-+	  Select this option to have the microcode files installed to
-+	  /lib/firmware/intel-ucode in the target root filesystem, in
-+	  addition to the images directory.
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index 43cdc3d0b8..dacb619a14 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -17,10 +17,14 @@ define INTEL_MICROCODE_INSTALL_IMAGES_CMDS
- 		$(@D)/intel-ucode/*
- endef
+ LINUX_INSTALL_IMAGES = YES
+-LINUX_DEPENDENCIES = host-kmod
++LINUX_DEPENDENCIES = host-kmod \
++	$(if $(BR2_PACKAGE_INTEL_MICROCODE),intel-microcode)
  
-+ifeq ($(BR2_PACKAGE_INTEL_MICROCODE_INSTALL_TARGET),y)
- define INTEL_MICROCODE_INSTALL_TARGET_CMDS
- 	mkdir -p $(TARGET_DIR)/lib/firmware/intel-ucode
- 	$(INSTALL) -m 0644 -t $(TARGET_DIR)/lib/firmware/intel-ucode \
- 		$(@D)/intel-ucode/*
- endef
-+else
-+INTEL_MICROCODE_INSTALL_TARGET = NO
-+endif
- 
- $(eval $(generic-package))
-diff --git a/package/iucode-tool/Config.in b/package/iucode-tool/Config.in
-index d81dabb196..f9f2521a42 100644
---- a/package/iucode-tool/Config.in
-+++ b/package/iucode-tool/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_IUCODE_TOOL
- 	bool "iucode-tool"
- 	depends on BR2_x86_64 || BR2_i386
- 	select BR2_PACKAGE_INTEL_MICROCODE
-+	select BR2_PACKAGE_INTEL_MICROCODE_INSTALL_TARGET
- 	select BR2_PACKAGE_ARGP_STANDALONE \
- 	       if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	help
+ # Starting with 4.16, the generated kconfig paser code is no longer
+ # shipped with the kernel sources, so we need flex and bison, but
