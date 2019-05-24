@@ -1,69 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 May 2019 22:03:32 +0200
-Subject: [Buildroot] [PATCH v2 10/12] package/libcpprestsdk: fix
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Fri, 24 May 2019 22:05:12 +0200
+Subject: [Buildroot] [PATCH v2 05/12] package/flare-engine: fix
  BUG_85180 build timeout
-In-Reply-To: <20190521133932.81841-11-giulio.benetti@micronovasrl.com>
+In-Reply-To: <20190524215853.4ee3ddbc@windsurf.home>
 References: <20190521133932.81841-1-giulio.benetti@micronovasrl.com>
- <20190521133932.81841-11-giulio.benetti@micronovasrl.com>
-Message-ID: <20190524220332.414e2a84@windsurf.home>
+ <20190521133932.81841-6-giulio.benetti@micronovasrl.com>
+ <20190524215853.4ee3ddbc@windsurf.home>
+Message-ID: <6fbb9a9d-b836-97dd-5bd2-f9d3dcb06a57@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 21 May 2019 15:39:30 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+Hello Thomas,
 
-> With Microblaze Gcc version < 8.x build hangs on compiling first files.
-> This is due to bug 85180:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
-> Bug shows up building libcpprestsdk with optimization but not when
-> building with -O0.
+Il 24/05/2019 21:58, Thomas Petazzoni ha scritto:
+> On Tue, 21 May 2019 15:39:25 +0200
+> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 > 
-> If BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 passing it to
-> CXXFLAGS.
+>> With Microblaze Gcc version < 8.x build hangs on compiling last files.
+>> This is due to bug 85180:
+>> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+>> Bug shows up building flare-engine with optimization but not when
+>> building with -O0.
+>>
+>> If BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 by:
+>> - setting CMAKE_BUILD_TYPE to Dummy to avoid CMakeLists.txt to impose
+>>    -O* and -g* flags
 > 
-> Fixes:
-> http://autobuild.buildroot.net/results/706/7065e14917a8bbc0faf21b29183ac55b6c800ee3/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  package/libcpprestsdk/libcpprestsdk.mk | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/libcpprestsdk/libcpprestsdk.mk b/package/libcpprestsdk/libcpprestsdk.mk
-> index e8dddeddd7..4be2cb20fb 100644
-> --- a/package/libcpprestsdk/libcpprestsdk.mk
-> +++ b/package/libcpprestsdk/libcpprestsdk.mk
-> @@ -36,4 +36,8 @@ else
->  LIBCPPRESTSDK_CONF_OPTS += -DCPPREST_EXCLUDE_WEBSOCKETS=ON
->  endif
->  
-> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-> +LIBCPPRESTSDK_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -O0"
-> +endif
+> Why does flare-engine need this, but not jasper, which is also a
+> CMake-based package ?
 
-This package is another example why this approach to override CXXFLAGS
-is not good. Indeed, after your commit, the package contained this:
+Because in flare-engine CMakeLists.txt there is no fallback to -O0, so 
+that was the only decent way to force CMake to generate Makefiles 
+without optimizations. I don't like it very much but it was the only way 
+I've found.
 
-ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-LIBCPPRESTSDK_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-endif
+Thank you for reviewing and improving all commit logs!
 
-ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-LIBCPPRESTSDK_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -O0"
-endif
-
-Guess what happens when BR2_TOOLCHAIN_HAS_LIBATOMIC=y *and*
-BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y ? You loose the -latomic flag. That's
-why I really prefer that we define an intermediate <pkg>_CXXFLAGS
-variable.
-
-I fixed that up, improved the commit log and applied to master. Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
+
+> Thanks,
+> 
+> Thomas
+> 
