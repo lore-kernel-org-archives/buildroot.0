@@ -1,43 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 24 May 2019 18:48:11 +0000
-Subject: [Buildroot] [Bug 11911] New: systemd v240 memory leak in
- systemd-journald (buildroot 2019.02 LTS affected)
-Message-ID: <bug-11911-163@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 24 May 2019 21:02:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/kvm-unit-tests: fix build without
+ ssp
+Message-ID: <20190524190243.31508-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11911
+Makefile tries to detect stack-protector which will result in build
+failures if ssp is not available so disable stack protector is SSP is
+not available through EXTRA_CFLAGS
 
-            Bug ID: 11911
-           Summary: systemd v240 memory leak in systemd-journald
-                    (buildroot 2019.02 LTS affected)
-           Product: buildroot
-           Version: 2019.02.2
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: major
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: jonah at sense.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+Fixes:
+ - http://autobuild.buildroot.org/results/e6f767755ffdb5ecc014eb5ad7519814f075a60e
 
-There has been a fix to a large memory leak in systemd-journald v240.  I
-believe that the buildroot LTS versions is affected.  Should the patch provided
-in the bug report be applied to the LTS branch?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/kvm-unit-tests/kvm-unit-tests.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-Bug report: https://github.com/systemd/systemd/issues/11502
-Accepted patch: https://github.com/systemd/systemd/pull/11527
-
-Alternatively, this fix has been incorporated into systemd v241, which has been
-incorporated into buildroot's master branch already.  So another solution would
-be to move buildroot LTS to use systemd v241.
-
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+index 92d67fb34b..ac1bb1f7aa 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.mk
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+@@ -39,16 +39,21 @@ ifneq ($(BR2_x86_64),y)
+ KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
+ endif
+ 
++# Don't force -fstack-protector when SSP is not available in toolchain
++KVM_UNIT_TESTS_MAKE_OPTS += \
++	EXTRA_CFLAGS=$(if $(BR2_TOOLCHAIN_HAS_SSP),,-fno-stack-protector)
++
+ define KVM_UNIT_TESTS_CONFIGURE_CMDS
+ 	cd $(@D) && ./configure $(KVM_UNIT_TESTS_CONF_OPTS)
+ endef
+ 
+ define KVM_UNIT_TESTS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) standalone
++	$(TARGET_MAKE_ENV) $(MAKE) $(KVM_UNIT_TESTS_MAKE_OPTS) -C $(@D) \
++		standalone
+ endef
+ 
+ define KVM_UNIT_TESTS_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++	$(TARGET_MAKE_ENV) $(MAKE) $(KVM_UNIT_TESTS_MAKE_OPTS) -C $(@D) \
+ 		DESTDIR=$(TARGET_DIR)/usr/share/kvm-unit-tests/ \
+ 		install
+ endef
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
