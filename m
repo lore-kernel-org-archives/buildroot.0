@@ -1,36 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 May 2019 23:18:59 +0200
-Subject: [Buildroot] [PATCH v2 7/7] package/flashbench: remove old check
- if BR2_microblaze & BR2_sh2a
-In-Reply-To: <20190522135906.30796-8-giulio.benetti@micronovasrl.com>
-References: <10430096-81de-792a-8b49-c59ed5e9de2e@micronovasrl.com>
- <20190522135906.30796-1-giulio.benetti@micronovasrl.com>
- <20190522135906.30796-8-giulio.benetti@micronovasrl.com>
-Message-ID: <20190524231859.380b11f3@windsurf>
+Date: Fri, 24 May 2019 23:24:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/v4l2loopback: bump to version
+ 0b8feb80fdef9a415d8250bca1790b3ff23e8391
+In-Reply-To: <CADvTj4oqmLMOdaj_5Ou_16Bh1goS+5YBnP_Eopuet7-LuskysQ@mail.gmail.com>
+References: <20190524203541.116482-1-james.hilliard1@gmail.com>
+ <20190524231309.4c7a4ec1@windsurf>
+ <CADvTj4oqmLMOdaj_5Ou_16Bh1goS+5YBnP_Eopuet7-LuskysQ@mail.gmail.com>
+Message-ID: <20190524232410.62e28210@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Fri, 24 May 2019 15:16:51 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-On Wed, 22 May 2019 15:59:06 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+> > This "should" ? Or does it ? Could you provide more details ? This
+> > would help us decide whether this update should in master or next.  
+> Does, see https://github.com/umlaeute/v4l2loopback/commit/0b8feb80fdef9a415d8250bca1790b3ff23e8391
 
-> Commit:
-> https://git.buildroot.net/buildroot/commit/?id=bad25aff36b70b55b34ea4580b45f657385ae9ac
-> removed sourcery toolchain already deprecated in 2014 causing build
-> failure. It was based on Gcc 4.6.2 and Buildroot doesn't use this
-> anymore.
-
-This explanation is quite fuzzy. What is the relationship between the
-removal of those toolchains and this particular issue ? Also this
-commit only removes Microblaze toolchains, not SH2A toolchains.
-
-Since when the LLONG_MAX issue has been fixed ?
-
-Best regards,
+Could you comment on what are the other commits between v0.12.1 and
+0b8feb80fdef9a415d8250bca1790b3ff23e8391 ? Only bug fixes, and we
+should take all of them to master ? Or should we just backport the
+Linux 5.1 fix ?
 
 Thomas
 -- 
