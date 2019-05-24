@@ -1,34 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 May 2019 21:58:53 +0200
-Subject: [Buildroot] [PATCH v2 05/12] package/flare-engine: fix
- BUG_85180 build timeout
-In-Reply-To: <20190521133932.81841-6-giulio.benetti@micronovasrl.com>
+Date: Fri, 24 May 2019 21:59:02 +0200
+Subject: [Buildroot] [PATCH v2 06/12] package/glibmm: fix BUG_85180
+ build timeout
+In-Reply-To: <20190521133932.81841-7-giulio.benetti@micronovasrl.com>
 References: <20190521133932.81841-1-giulio.benetti@micronovasrl.com>
- <20190521133932.81841-6-giulio.benetti@micronovasrl.com>
-Message-ID: <20190524215853.4ee3ddbc@windsurf.home>
+ <20190521133932.81841-7-giulio.benetti@micronovasrl.com>
+Message-ID: <20190524215902.07bcaa27@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 21 May 2019 15:39:25 +0200
+On Tue, 21 May 2019 15:39:26 +0200
 Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-> With Microblaze Gcc version < 8.x build hangs on compiling last files.
+> With Microblaze Gcc version < 8.x build hangs on compiling first files.
 > This is due to bug 85180:
 > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
-> Bug shows up building flare-engine with optimization but not when
-> building with -O0.
+> Bug shows up building glibmm with optimization but not when building
+> with -O0.
 > 
-> If BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 by:
-> - setting CMAKE_BUILD_TYPE to Dummy to avoid CMakeLists.txt to impose
->   -O* and -g* flags
+> If BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 passing it to
+> CXXFLAGS.
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/e19/e196d77626b877dc3454d21febe20a04877c02a9/
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>  package/glibmm/glibmm.mk | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Why does flare-engine need this, but not jasper, which is also a
-CMake-based package ?
-
-Thanks,
+Applied to master after tweaking the CFLAGS logic and the commit log.
+Thanks!
 
 Thomas
 -- 
