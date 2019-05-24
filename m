@@ -1,12 +1,13 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 May 2019 09:49:30 +0200
-Subject: [Buildroot] [PATCH v1] package/busybox: Avoid "can't create
- /proc/sys/kernel/hotplug" error
-In-Reply-To: <87ftp5s0k6.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Thu, 23 May 2019 16:33:13 +0200")
-References: <20190523131444.36058-1-andriy.shevchenko@linux.intel.com>
- <87ftp5s0k6.fsf@dell.be.48ers.dk>
-Message-ID: <87pno8qol1.fsf@dell.be.48ers.dk>
+Date: Fri, 24 May 2019 09:50:42 +0200
+Subject: [Buildroot] [PATCH] package: dropbear: add support for
+ displaying /etc/motd
+In-Reply-To: <87k1ehs41e.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Thu, 23 May 2019 15:18:05 +0200")
+References: <20190523121115.26098-1-ardeleanalex@gmail.com>
+ <20190523142857.625748aa@windsurf.home>
+ <87k1ehs41e.fsf@dell.be.48ers.dk>
+Message-ID: <87lfywqoj1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +16,20 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
->>>>> "Andy" == Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
- >> At runtime on most of the modern kernels [1] S10mdev script produces an error:
- >> /etc/init.d/S10mdev: line 9: can't create /proc/sys/kernel/hotplug: nonexistent directory
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+ > Hi,
 
- >> since the commit
+ >> This way, we have something that is much more flexible, as it allows
+ >> you to define whatever Dropbear option you like.
 
- >> caae7fa1d737 ("busybox: register mdev as hotplug helper when selected")
+ >> Note: this is just a suggestion; I don't know what other
+ >> maintainers/developers will think about it.
 
- >> added it unconditionally.
+ > Agreed, if we want such finegrained configuration then that would be the
+ > way to go.
 
- >> Check the presence of procfs node before writing to it.
-
- >> [1]: Linux kernels with the commit
- >> 86d56134f1b6 ("kobject: Make support for uevent_helper optional.")
- >> applied.
-
- > But how can mdev work on such setups?
-
-To be clear, if mdev needs CONFIG_UEVENT_HELPER=y for hotplug
-notifications, then we should rather force that in linux/linux.mk and
-mention the dependency in the mdev help text rather than silently not
-having hotplug work.
-
-I have marked this patch as changes requested in patchwork.
+Alexandru, will you send such a patch? In the mean time I have marked
+this patch as changes requested in patchwork.
 
 -- 
 Bye, Peter Korsgaard
