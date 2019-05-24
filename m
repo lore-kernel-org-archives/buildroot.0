@@ -1,50 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 May 2019 21:41:47 +0200
-Subject: [Buildroot] [git commit] package/ddrescue: work around gcc bug 85180
-Message-ID: <20190524194250.C943288C6F@busybox.osuosl.org>
+Date: Fri, 24 May 2019 21:53:24 +0200
+Subject: [Buildroot] [git commit] package/glibmm: use GLIBMM_CXXFLAGS
+Message-ID: <20190524194824.68C9A8DF55@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f5d554f4d24e374015e92cd1e75f748d615647f
+commit: https://git.buildroot.net/buildroot/commit/?id=72e0ff66e7be8cebfb79c1cbcab168ae1d843a61
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With Microblaze Gcc version < 8.x the build hangs due to gcc bug
-85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-shows up when building ddrescue with optimization but not when
-building with -O0. To work around this, if
-BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
+Commit 8d8d4ecaf1bc22a89d0f373e9d1655f59f283480 ("package/glibmm: work
+around gcc bug 85180") was incorrect reworked by me, and
+TARGET_CXXFLAGS was used instead of GLIBMM_CXXFLAGS, causing the
+Microblaze workaround to be ineffective. This new commit fixes this
+typo.
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/2af69401acb76be3d3fd427d1c58fed3af33bf9b/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-[Thomas: tweak CFLAGS logic, improve commit log]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ddrescue/ddrescue.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/glibmm/glibmm.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ddrescue/ddrescue.mk b/package/ddrescue/ddrescue.mk
-index 9432e7a16d..b7564d5971 100644
---- a/package/ddrescue/ddrescue.mk
-+++ b/package/ddrescue/ddrescue.mk
-@@ -18,8 +18,14 @@ define DDRESCUE_CONFIGURE_CMDS
- 	)
- endef
+diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
+index a0abb7a49d..e66d56eac9 100644
+--- a/package/glibmm/glibmm.mk
++++ b/package/glibmm/glibmm.mk
+@@ -19,6 +19,6 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+ GLIBMM_CXXFLAGS += -O0
+ endif
  
-+DDRESCUE_CXXFLAGS = $(TARGET_CXXFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+DDRESCUE_CXXFLAGS += -O0
-+endif
-+
- define DDRESCUE_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+	$(TARGET_MAKE_ENV) $(MAKE) CXXFLAGS="$(DDRESCUE_CXXFLAGS)" -C $(@D)
- endef
+-GLIBMM_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS)"
++GLIBMM_CONF_ENV += CXXFLAGS="$(GLIBMM_CXXFLAGS)"
  
- define DDRESCUE_INSTALL_TARGET_CMDS
+ $(eval $(autotools-package))
