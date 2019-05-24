@@ -1,37 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 24 May 2019 23:15:47 +0200
-Subject: [Buildroot] [PATCH v2 4/7] package/libnss: re-enable package if
- BUG_85862 is present
-In-Reply-To: <20190522135906.30796-5-giulio.benetti@micronovasrl.com>
+Date: Fri, 24 May 2019 23:16:01 +0200
+Subject: [Buildroot] [PATCH v2 3/7] package/assimp: re-enable package if
+ BR2_microblaze is enabled
+In-Reply-To: <20190522135906.30796-4-giulio.benetti@micronovasrl.com>
 References: <10430096-81de-792a-8b49-c59ed5e9de2e@micronovasrl.com>
  <20190522135906.30796-1-giulio.benetti@micronovasrl.com>
- <20190522135906.30796-5-giulio.benetti@micronovasrl.com>
-Message-ID: <20190524231547.35975ecf@windsurf>
+ <20190522135906.30796-4-giulio.benetti@micronovasrl.com>
+Message-ID: <20190524231601.535c4cdf@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 22 May 2019 15:59:03 +0200
+On Wed, 22 May 2019 15:59:02 +0200
 Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
->  # --gc-sections triggers binutils ld segfault
->  # https://sourceware.org/bugzilla/show_bug.cgi?id=21180
->  ifeq ($(BR2_microblaze),y)
-> @@ -33,7 +34,6 @@ LIBNSS_BUILD_VARS = \
->  	MOZILLA_CLIENT=1 \
->  	NSPR_INCLUDE_DIR=$(STAGING_DIR)/usr/include/nspr \
->  	NSPR_LIB_DIR=$(STAGING_DIR)/usr/lib \
-> -	BUILD_OPT=1 \
+> With Microblaze Gcc version < 8.x build hangs on compiling first files.
+> This is due to bug 85180:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+> This package has been excluded from building if BR2_microblaze is
+> enabled.
+> Bug shows up building assimp with optimization but not when building
+> with -O0.
+> 
+> In config.mk if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 by:
+> - passing -O0 to ASSIMP_CXXFLAGS
+> Then remove 'depends on !BR2_microblaze' and its comment if not
+> available from Config.in
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+> V1->V2:
+> * use BUG_85180 instead of BUG_71124 since they are the same bug
 
-In fact why are we building with BUILD_OPT=1 at all ? This adds some
-semi-random optimization flags decided by libnss. I guess we should not
-pass BUILD_OPT=1 at all, and simply pass CFLAGS=$(LIBNSS_CFLAGS), with
-LIBNSS_CFLAGS = $(TARGET_CFLAGS), with -O0 added to work around the
-Microblaze bug.
-
-What do you think ?
+Applied to master, thanks.
 
 Thomas
 -- 
