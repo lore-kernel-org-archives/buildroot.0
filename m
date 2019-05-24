@@ -1,100 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 May 2019 10:11:23 +0200
-Subject: [Buildroot] [git commit] package/ofono: bump to version 1.29
-Message-ID: <20190602201235.ACA0F81354@busybox.osuosl.org>
+Date: Fri, 24 May 2019 09:41:46 +0200
+Subject: [Buildroot] [git commit] package/tcl: bump to version 8.6.9
+Message-ID: <20190602201235.8ADF081354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=252ad90833cc379a1dc93e895e092503125c97cc
+commit: https://git.buildroot.net/buildroot/commit/?id=621cfb91354aaea2c41af96812eeac1711cd7484
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Backport upstream patch which adds explicit_bzero() autoconf detection,
-which fixes br-arm-cortex-a9-glibc and br-arm-full-static build:
+Update first patch
 
-In file included from ell/random.c:34:
-ell/missing.h:59:20: error: static declaration of ???explicit_bzero??? follows non-static declaration
- static inline void explicit_bzero(void *s, size_t n)
-                    ^~~~~~~~~~~~~~
-In file included from ./ell/util.h:26,
-                 from ell/private.h:26,
-                 from ell/random.c:33:
-/home/pvorel/br-test-pkg/br-arm-cortex-a9-glibc/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/string.h:435:13: note: previous declaration of ???explicit_bzero??? was here
- extern void explicit_bzero (void *__s, size_t __n) __THROW __nonnull ((1));
-             ^~~~~~~~~~~~~~
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...uild-Add-check-for-explicit_bzero-support.patch | 28 ++++++++++++++++++++++
- package/ofono/ofono.hash                           |  2 +-
- package/ofono/ofono.mk                             |  5 +++-
- 3 files changed, 33 insertions(+), 2 deletions(-)
+ package/tcl/0001-dont-build-compat.patch | 11 ++---------
+ package/tcl/tcl.hash                     |  2 +-
+ package/tcl/tcl.mk                       |  2 +-
+ 3 files changed, 4 insertions(+), 11 deletions(-)
 
-diff --git a/package/ofono/0003-build-Add-check-for-explicit_bzero-support.patch b/package/ofono/0003-build-Add-check-for-explicit_bzero-support.patch
-new file mode 100644
-index 0000000000..b2507df3ff
---- /dev/null
-+++ b/package/ofono/0003-build-Add-check-for-explicit_bzero-support.patch
-@@ -0,0 +1,28 @@
-+From dff595671bf5a46f7c9231966a6cd7d2a0183076 Mon Sep 17 00:00:00 2001
-+From: Marcel Holtmann <marcel@holtmann.org>
-+Date: Wed, 15 May 2019 09:39:44 +0200
-+Subject: [PATCH] build: Add check for explicit_bzero support
-+
-+Upstream: dff595671bf5a46f7c9231966a6cd7d2a0183076
-+
-+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-+---
-+ configure.ac | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/configure.ac b/configure.ac
-+index bacb7ac5..cad35c5d 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -54,6 +54,8 @@ AC_ARG_ENABLE(pie, AC_HELP_STRING([--enable-pie],
-+ 	fi
-+ ])
-+ 
-++AC_CHECK_FUNCS(explicit_bzero)
-++
-+ AC_CHECK_FUNC(signalfd, dummy=yes,
-+ 			AC_MSG_ERROR(signalfd support is required))
-+ 
-+-- 
-+2.21.0
-+
-diff --git a/package/ofono/ofono.hash b/package/ofono/ofono.hash
-index 2dbb9986c7..5204bb4fca 100644
---- a/package/ofono/ofono.hash
-+++ b/package/ofono/ofono.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/network/ofono/sha256sums.asc
--sha256 93bb2cedef54f897dd5200e22b072a6e38b5d9b44be57eebbbe8d513f0beb0e4	ofono-1.28.tar.xz
-+sha256 67f0f8e5740dea5b46309e40667d1e560be39c90ef08dd01ff9e9ce8e61f0679  ofono-1.29.tar.xz
- # Locally computed
- sha256 e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
-diff --git a/package/ofono/ofono.mk b/package/ofono/ofono.mk
-index 0552a181fd..176d23ae05 100644
---- a/package/ofono/ofono.mk
-+++ b/package/ofono/ofono.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/tcl/0001-dont-build-compat.patch b/package/tcl/0001-dont-build-compat.patch
+index 85c5c57df4..c0d5d85da7 100644
+--- a/package/tcl/0001-dont-build-compat.patch
++++ b/package/tcl/0001-dont-build-compat.patch
+@@ -7,20 +7,13 @@ anything buildroot is using as a standard C library will be good enough
+ to not have broken behavior.
+ 
+ Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
++[Fabrice: Update for 8.6.9]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+ 
+ diff --git a/unix/tcl.m4 b/unix/tcl.m4
+ --- a/unix/tcl.m4
+ +++ b/unix/tcl.m4
+-@@ -2466,7 +2466,7 @@ AC_DEFUN([SC_BUGGY_STRTOD], [
+- 		    }
+- 		    exit(0);
+- 		}], tcl_cv_strtod_buggy=ok, tcl_cv_strtod_buggy=buggy,
+--		    tcl_cv_strtod_buggy=buggy)])
+-+		    tcl_cv_strtod_buggy=ok)])
+- 	if test "$tcl_cv_strtod_buggy" = buggy; then
+- 	    AC_LIBOBJ([fixstrtod])
+- 	    USE_COMPAT=1
+ @@ -2725,7 +2725,7 @@ AC_DEFUN([SC_TCL_CHECK_BROKEN_FUNC],[
+      if test ["$tcl_ok"] = 1; then
+  	AC_CACHE_CHECK([proper ]$1[ implementation], [tcl_cv_]$1[_unbroken],
+diff --git a/package/tcl/tcl.hash b/package/tcl/tcl.hash
+index 359b5433c2..913190b95c 100644
+--- a/package/tcl/tcl.hash
++++ b/package/tcl/tcl.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 a265409781e4b3edcc4ef822533071b34c3dc6790b893963809b9fe221befe07  tcl8.6.6-src.tar.gz
++sha256 ad0cd2de2c87b9ba8086b43957a0de3eb2eb565c7159d5f53ccbba3feb915f4e  tcl8.6.9-src.tar.gz
+ sha256 c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16  license.terms
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index b9fb7afbc6..6d750b3cd2 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--OFONO_VERSION = 1.28
-+OFONO_VERSION = 1.29
- OFONO_SOURCE = ofono-$(OFONO_VERSION).tar.xz
- OFONO_SITE = $(BR2_KERNEL_MIRROR)/linux/network/ofono
- OFONO_LICENSE = GPL-2.0
-@@ -49,4 +49,7 @@ else
- OFONO_CONF_OPTS += --disable-bluetooth
- endif
- 
-+# required by 0003-build-Add-check-for-explicit_bzero-support.patch
-+OFONO_AUTORECONF = YES
-+
- $(eval $(autotools-package))
+ TCL_VERSION_MAJOR = 8.6
+-TCL_VERSION = $(TCL_VERSION_MAJOR).6
++TCL_VERSION = $(TCL_VERSION_MAJOR).9
+ TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
+ TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
+ TCL_LICENSE = TCL
