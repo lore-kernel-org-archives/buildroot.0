@@ -1,56 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 May 2019 10:04:33 +0200
-Subject: [Buildroot] [PATCH] core: make it possible to check flake8 like
- we check package
-In-Reply-To: <20190519164417.20124-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sun, 19 May 2019 18:44:17 +0200")
-References: <20190519164417.20124-1-yann.morin.1998@free.fr>
-Message-ID: <87ftp4qnvy.fsf@dell.be.48ers.dk>
+Date: Fri, 24 May 2019 10:12:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ofono: bump to version 1.29
+In-Reply-To: <20190521055644.11708-1-petr.vorel@gmail.com> (Petr Vorel's
+ message of "Tue, 21 May 2019 07:56:44 +0200")
+References: <20190521055644.11708-1-petr.vorel@gmail.com>
+Message-ID: <87blzsqnjc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
- > Move the code to run check-flake8 into the Makefile, like we
- > have for check-package, so that it is easy to run locally (and
- > not wait for someone to report a failure from their Gitlab
- > pipelines).
+ > Backport upstream patch which adds explicit_bzero() autoconf detection,
+ > which fixes br-arm-cortex-a9-glibc and br-arm-full-static build:
 
- > Since there is no "post-rule" in Makefiles, we resort to using
- > a little trick to remove the temporary file. Also, there is a
- > slight change in behaviour: the list of files is not reported,
- > and the number of processed files is not reported either (there
- > is little value in that; all that is important are the errors,
- > if any).
+ > In file included from ell/random.c:34:
+ > ell/missing.h:59:20: error: static declaration of ?explicit_bzero? follows non-static declaration
+ >  static inline void explicit_bzero(void *s, size_t n)
+ >                     ^~~~~~~~~~~~~~
+ > In file included from ./ell/util.h:26,
+ >                  from ell/private.h:26,
+ >                  from ell/random.c:33:
+ > /home/pvorel/br-test-pkg/br-arm-cortex-a9-glibc/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/string.h:435:13: note: previous declaration of ?explicit_bzero? was here
+ >  extern void explicit_bzero (void *__s, size_t __n) __THROW __nonnull ((1));
+ >              ^~~~~~~~~~~~~~
 
- > Regenerate .gitlab-ci.yml.
+ > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 
-..
- 
- > +check-flake8:
- > +	{ find * -type f -name '*.py'; \
- > +	  find * -type f -print0 | xargs -0 file | grep 'Python script' | cut -d':' -f1; \
- > +	} >files.txt
- > +	$(Q)python -m flake8 --statistics --count --max-line-length=132 \
- > +		$$(sort -u files.txt; rm -f files.txt)
- > +
-
-I know we had this already like this, but it would be nice to make the
-following improvements:
-
-- Use git ls-tree -r --name-only HEAD instead of find so it doesn't
-  check external files in output/build
-
-- No need for 2x find commands, file output for a .py file is presumably
-  also 'Python script' (and if not, then it probably isn't a python file)
-
-- A temporary file in the toplevel directory isn't really nice, and it
-  doesn't seem to be needed - Why not pipe the list of python scripts to
-
-  sort -u | xargs python -m flake8 ..
+Committed to next, thanks.
 
 -- 
 Bye, Peter Korsgaard
