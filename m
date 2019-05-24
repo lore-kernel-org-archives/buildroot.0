@@ -1,112 +1,89 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Fri, 24 May 2019 00:51:43 +0200
-Subject: [Buildroot] [PATCH 1/2] meson: add entry for libgcrypt-config
- in cross file
-In-Reply-To: <6b2cee96-285e-9c98-d010-53b4581e6e96@mind.be>
-References: <20190403183202.19682-1-joerg.krause@embedded.rocks>
- <20190413182422.7e8f5f22@windsurf> <20190423232944.70aeddba@gmx.net>
- <6f5eef5542a44d775baa396c7fa7c01a2e6e2c4d.camel@embedded.rocks>
- <trinity-a5fd1873-52f7-4d2a-9195-2a9713d0b83a-1556612829462@3c-app-gmx-bs70>
- <2e75711ff4c34669fce6f86c50b34897d92ecb76.camel@embedded.rocks>
- <25be7377-dabe-41b6-68b3-f9d2a2537aad@mind.be>
- <20190501210405.1448eeb1@gmx.net>
- <6b2cee96-285e-9c98-d010-53b4581e6e96@mind.be>
-Message-ID: <21a0e19c8b10eb9dc82cbd05e2f40a3da9eb7777.camel@embedded.rocks>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Fri, 24 May 2019 02:42:05 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/iproute2: bump to version 5.1.0
+Message-ID: <20190524004205.27400-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Drop patch accepted in upstream.
 
-thank you all for your ideas. Please take a look at my proposal
-below...
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ ...-ss-fix-compilation-under-glibc-2.18.patch | 39 -------------------
+ package/iproute2/iproute2.hash                |  2 +-
+ package/iproute2/iproute2.mk                  |  2 +-
+ 3 files changed, 2 insertions(+), 41 deletions(-)
+ delete mode 100644 package/iproute2/0001-ss-fix-compilation-under-glibc-2.18.patch
 
-On Thu, 2019-05-02 at 14:17 +0200, Arnout Vandecappelle wrote:
-> 
-> On 01/05/2019 21:04, Peter Seiderer wrote:
-> > Hello Arnout,
-> > 
-> > On Wed, 1 May 2019 13:13:03 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
-> > 
-> > > On 30/04/2019 13:04, J?rg Krause wrote:
-> > > > Hello Peter,
-> > > > 
-> > > > On Tue, 2019-04-30 at 10:27 +0200, Peter Seiderer wrote:  
-> > > [snip]
-> > > > > Would have expected the trick/non-trivial thing to add more than one
-> > > > > binary entry (to get the newlines for the entries right)...  
-> > > > 
-> > > > That's indeed a difficult case to solve. I didn't managed to get
-> > > > multpile binary entries added to the [binaries] field, e.g.
-> > > > 
-> > > > PKG_TARGET_BINARIES = \
-> > > > 	libgcrypt-config = '...' \
-> > > > 	llvm-config = '...'
-> > > > 
-> > > > .. will not work.
-> > > > 
-> > > > I spent some time to find a magic rule which splits the Makefile
-> > > > variable into a proper newline seperated string which can be used by
-> > > > sed, but I failed.
-> > > > 
-> > > > Maybe you have an idea?  
-> > > 
-> > >  Instead of sed, use the PRINTF macro and append to the file:
-> > > 
-> > > 	$Q$$(if $$($$(PKG)_TARGET_BINARIES),\
-> > > 		$$(call PRINTF,$$($$(PKG)_TARGET_BINARIES)) \
-> > > 		>> $$($$(PKG)_SRCDIR)/build/cross-compilation.conf  
-> > 
-> > Simple appending will not work, the extra binaries must be under the '[binaries]'
-> > section (maybe reordering the sections in the cross-compilation.conf.in template
-> > will work)
-> 
->  It should work if the [binaries] part is at the end, right? And if binaries is
-> empty, that's OK, no?
-> 
->  Alternatively, the [binaries] part could be included in the _TARGET_BINARIES
-> (which would then have to be renamed to _CROSS_COMPILATION_CONF). So for a
-> package that needs libgcrypt-config, it would be
-> 
-> define FOO_CROSS_COMPILATION_CONF
-> [binaries]
-> libgcrypt-config = '$(STAGING_DIR)/usr/bin/libgcrypt-config'
-> endef
-> 
-> > , does the printf approach fix the newline problem for more than one
-> > entry?
-> 
->  It does, but you can't use _CROSS_COMPILATION_CONF = ..., you have to use
-> define, because the actual newlines have to be in the variable itself. Actually,
-> you can still use = assignment, but then you need to use $(sep), i.e.:
-> 
-> FOO_CROSS_COMPILATION_CONF = [binaries]$(sep)libgcrypt-config =
-> '$(STAGING_DIR)/usr/bin/libgcrypt-config'$(sep)
-> 
-> (which is ugly so don't do that :-)
-
-The package using the meson infrastructure defines:
-
-   define libfoo_MESON_CROSS_CONF_BINARIES
-   libgcrypt-config = '$(STAGING_DIR)/usr/bin/libgcrypt-config'
-   llvm-config = '$(STAGING_DIR)/usr/bin/llvm-config'
-   endef
-
-pkg-meson.mk is using PRINTF to a temporary file and sed is using this
-file as input for appending to the [binaries section]:
-
-   $Q$$(if $$($$(PKG)_MESON_CROSS_CONF_BINARIES), \
-   	$$(call PRINTF,$$($$(PKG)_MESON_CROSS_CONF_BINARIES))) \
-   	> $$($$(PKG)_SRCDIR)/build/cross-binaries.tmp
-   sed -i "s/^[ \t]*//" $$($$(PKG)_SRCDIR)/build/cross-binaries.tmp
-   sed -e "s%@TARGET_CROSS@%$$(TARGET_CROSS)%g" \
-       ...
-       -e  "/\[binaries\]/r $$($$(PKG)_SRCDIR)/build/cross-binaries.tmp" \
-       package/meson/cross-compilation.conf.in \
-       > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
-   rm -f $$($$(PKG)_SRCDIR)/build/cross-binaries.tmp
-
-Best regards
-J?rg Krause
+diff --git a/package/iproute2/0001-ss-fix-compilation-under-glibc-2.18.patch b/package/iproute2/0001-ss-fix-compilation-under-glibc-2.18.patch
+deleted file mode 100644
+index b6934f5d17..0000000000
+--- a/package/iproute2/0001-ss-fix-compilation-under-glibc-2.18.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-From 9700927a008a803ac119bdf816bdc1baa69d705c Mon Sep 17 00:00:00 2001
+-From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+-Date: Wed, 20 Feb 2019 15:41:51 +0100
+-Subject: [PATCH] ss: fix compilation under glibc < 2.18
+-
+-Commit c759116a0b2b6da8df9687b0a40ac69050132c77 introduced support for
+-AF_VSOCK. This define is only provided since glibc version 2.18, so
+-compilation fails when using older toolchains.
+-
+-Provide the necessary definitions if needed.
+-
+-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+-Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
+----
+- misc/ss.c | 8 ++++++++
+- 1 file changed, 8 insertions(+)
+-
+-diff --git a/misc/ss.c b/misc/ss.c
+-index 9e821faf..766fdc5f 100644
+---- a/misc/ss.c
+-+++ b/misc/ss.c
+-@@ -51,6 +51,14 @@
+- #include <linux/tipc_netlink.h>
+- #include <linux/tipc_sockets_diag.h>
+- 
+-+/* AF_VSOCK/PF_VSOCK is only provided since glibc 2.18 */
+-+#ifndef PF_VSOCK
+-+#define PF_VSOCK 40
+-+#endif
+-+#ifndef AF_VSOCK
+-+#define AF_VSOCK PF_VSOCK
+-+#endif
+-+
+- #define MAGIC_SEQ 123456
+- #define BUF_CHUNK (1024 * 1024)
+- #define LEN_ALIGN(x) (((x) + 1) & ~1)
+--- 
+-2.19.2
+-
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index b7e3e701c5..5edee4614d 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	df047302a39650ef832c07e8dab5df7a23218cd398bd310c8628e386161d20ba  iproute2-5.0.0.tar.xz
++sha256	dc5a980873eabf6b00c0be976b6e5562b1400d47d1d07d2ac35d5e5acbcf7bcf  iproute2-5.1.0.tar.xz
+ sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 539db5e015..d0b239c653 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 5.0.0
++IPROUTE2_VERSION = 5.1.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+-- 
+2.21.0
