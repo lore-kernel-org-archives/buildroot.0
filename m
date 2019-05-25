@@ -1,92 +1,73 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 25 May 2019 17:54:03 +0200
-Subject: [Buildroot] Cannot cross-compile libopenssl on CentOS7
-In-Reply-To: <3cd11507-8aa5-4fbe-c07a-54d4aacb8e74@ice.rwth-aachen.de>
-References: <3cd11507-8aa5-4fbe-c07a-54d4aacb8e74@ice.rwth-aachen.de>
-Message-ID: <fb7027e2-8897-2cee-65e0-4b8929779a6c@mind.be>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Sat, 25 May 2019 20:01:16 +0300
+Subject: [Buildroot] [PATCH] linux: enable UEVENT_HELPER when mdev is
+ used
+In-Reply-To: <54a85c9f-1e14-de0d-c6cf-8201dea50e1d@mind.be>
+References: <20190525130755.25678-1-peter@korsgaard.com>
+ <54a85c9f-1e14-de0d-c6cf-8201dea50e1d@mind.be>
+Message-ID: <20190525170116.GE9224@smile.fi.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 21/05/2019 20:19, Lukas J?nger wrote:
-> Hi,
+On Sat, May 25, 2019 at 05:24:15PM +0200, Arnout Vandecappelle wrote:
+> On 25/05/2019 15:07, Peter Korsgaard wrote:
+> > S10mdev uses /proc/sys/kernel/hotplug, which is only available if
+> > CONFIG_UEVENT_HELPER is enabled in the kernel, so ensure it is.
 > 
-> I tried building a rootfs with buildroot on CentOS 7 and I require libopenssl. I
-> configured buildroot as seen in the attached .config.
-
- In the future, please post a defconfig instead of a full config. In this case:
-
-BR2_aarch64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
-BR2_PACKAGE_XEN=y
-BR2_PACKAGE_XEN_TOOLS=y
-
-
- Note that this is a configuration that gets tested by the autobuilders, and
-unless I'm mistaken, Matt has a RHEL7 autobuilder (CentOS7 should be the same).
-Thomas, do you know if we have other RHEL/CentOS 7 autobuilders?
-
- Anyway, there never was a build error with libopenssl on a RHEL7 machine...
-
-> Sadly, the build fails with this error:
+>  So, I take a look at it, and it's a little bit more complicated...
 > 
-> install libcrypto.a ->
-> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.a
+>  Busybox *does* have support for the "new" netlink-based uevent interface, but
+> that interface needs a daemon that keeps running and they separated that daemon
+> into a separate process, called uevent. So, in the "new" way, you should do
+> something like (not tried, just based on source code):
 > 
-> install libssl.a ->
-> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libssl.a
+> start-stop-daemon -S -b -x /sbin/uevent -- mdev
 > 
-> link
-> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
-> ->
-> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so.1.1
+>  But of course, that means that we have to be sure that the uevent executable is
+> in fact built for busybox. So we'd need to extend BUSYBOX_SET_MDEV to enable uevent.
 > 
-> install libcrypto.so ->
-> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
+>  Also, we can only use the uevent approach if netlink uevents are available.
+> They exist since 2.6.12, so I guess on that side we're safe. However, they also
+> depend on CONFIG_NET (because netlink does).
 > 
-> install libcrypto.so.1.1 ->
-> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
+>  So, these are our options:
 > 
-> /scratch/juenger/tmp/buildroot/output/host/bin/aarch64-linux-gnu-ar:
-> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so:
-> File format not recognized
-> /scratch/juenger/tmp/buildroot/output/host/bin/aarch64-linux-gnu-ar:
-> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so.new:
-> File format not recognized
+> 1. Bloat the kernel with legacy uevent helper support (this patch).
 > 
-> It seems to be related to this issue:
-> https://github.com/openssl/openssl/issues/6641
+> 2. Bloat the kernel with networking even if it is not used for anything else,
+> and bloat busybox with uevent (3.1 kb), and always use uevent.
+> 
+> 3. Use uevent in the init script but don't enforce anything (with potential
+> silent failures), and explain stuff in the mdev help text.
+> 
+> 4. Try out all possibilities in the init script - which still fails silently in
+> case neither CONFIG_UEVENT_HELPER nor CONFIG_NET is enabled in the kernel.
 
- Indeed looks similar. Can you execute the steps reported in that bug to verify
-if it really is the same?
+Since the UEVENT_HELPER had been made optional back in 2014 and I reported bug
+for mdev script in 2019 I would *speculate* that everybody nowadays are using
+udev, so, netlink is quite probably already enabled in the kernel.
 
- My perl-fu is not enough to understand what commit 356d634 does exactly, but
-AFAIU it should error out if the version is not high enough, no?
+>  In my opinion, we definitely should *not* go for option 1. I don't want to be
+> the one that forces the kernel to maintain legacy stuff.
 
+I second this.
 
-> I already tried upgrading the perl package with CPAN, but buildroot still fails.
-> I also tried upgrading the package with SCL, but that did not help either. It
-> might be because buildroot does not allow me to have PERL_MM_OPT defined, but
+> I would definitely use
+> uevent. On the other hand, I really don't like it when we force changes into
+> busybox or kernel configs. Since it's really likely that CONFIG_NET is enabled
+> in the kernel, and since our default busybox config (but not the minimal one)
+> does enable uevent, I think that option 3 is the way to go.
 
- What is PERL_MM_OPT supposed to do?
+Agree.
 
- Regards,
- Arnout
+>  By the way, with netlink, the event are properly serialized, and uevent makes
+> sure that only one mdev subprocess is created so it maintains the serialisation.
+> So, it is no longer needed to create /dev/mdev.seq (which, for some reason, we
+> currently don't do...).
 
-> I'm not sure. OpenSSL by itself without buildroot builds fine on the same system.
-> 
-> Do you have an idea on how to fix this?
-> 
-> Thanks,
-> Lukas
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+-- 
+With Best Regards,
+Andy Shevchenko
