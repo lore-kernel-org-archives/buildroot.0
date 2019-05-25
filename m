@@ -1,107 +1,56 @@
-From: Serhii Sakhno <sergei.sakhno@gmail.com>
-Date: Sun, 26 May 2019 01:00:58 +0300
-Subject: [Buildroot] [PATCH] package/python-entrypoints: new package
-Message-ID: <20190525220058.2796-1-sergei.sakhno@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 26 May 2019 00:22:09 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/kvm-unit-tests: fix build without ssp on x86_64
+Message-ID: <20190525222209.14372-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Serhii Sakhno <sergei.sakhno@gmail.com>
----
- package/Config.in                                 |  1 +
- package/Config.in.host                            |  1 +
- package/python-entrypoints/Config.in              |  6 ++++++
- package/python-entrypoints/Config.in.host         |  6 ++++++
- .../python-entrypoints/python-entrypoints.hash    |  5 +++++
- package/python-entrypoints/python-entrypoints.mk  | 15 +++++++++++++++
- 6 files changed, 34 insertions(+)
- create mode 100644 package/python-entrypoints/Config.in
- create mode 100644 package/python-entrypoints/Config.in.host
- create mode 100644 package/python-entrypoints/python-entrypoints.hash
- create mode 100644 package/python-entrypoints/python-entrypoints.mk
+Makefile tries to detect stack-protector which will result in build
+failure on x86_64 if ssp is not available on host compiler so disable
+stack protector through EXTRA_CFLAGS
 
-diff --git a/package/Config.in b/package/Config.in
-index f592e74a99..1e0d8d35f2 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -877,6 +877,7 @@ menu "External python modules"
- 	source "package/python-dpkt/Config.in"
- 	source "package/python-ecdsa/Config.in"
- 	source "package/python-engineio/Config.in"
-+	source "package/python-entrypoints/Config.in"
- 	source "package/python-enum/Config.in"
- 	source "package/python-enum34/Config.in"
- 	source "package/python-falcon/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index bc7e71882b..f81f498375 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -49,6 +49,7 @@ menu "Host utilities"
- 	source "package/pru-software-support/Config.in.host"
- 	source "package/pwgen/Config.in.host"
- 	source "package/python-cython/Config.in.host"
-+	source "package/python-entrypoints/Config.in.host"
- 	source "package/python-lxml/Config.in.host"
- 	source "package/python-six/Config.in.host"
- 	source "package/python-xlrd/Config.in.host"
-diff --git a/package/python-entrypoints/Config.in b/package/python-entrypoints/Config.in
-new file mode 100644
-index 0000000000..8253a04591
---- /dev/null
-+++ b/package/python-entrypoints/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_ENTRYPOINTS
-+	bool "python-entrypoints"
-+	help
-+	  Discover and load entry points from installed packages.
-+
-+	  https://github.com/takluyver/entrypoints
-diff --git a/package/python-entrypoints/Config.in.host b/package/python-entrypoints/Config.in.host
-new file mode 100644
-index 0000000000..353cbf4bdc
---- /dev/null
-+++ b/package/python-entrypoints/Config.in.host
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_HOST_PYTHON_ENTRYPOINTS
-+	bool "host python-entrypoints"
-+	help
-+	  Discover and load entry points from installed packages.
-+
-+	  https://github.com/takluyver/entrypoints
-diff --git a/package/python-entrypoints/python-entrypoints.hash b/package/python-entrypoints/python-entrypoints.hash
-new file mode 100644
-index 0000000000..c645452109
---- /dev/null
-+++ b/package/python-entrypoints/python-entrypoints.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/entrypoints/json
-+md5	c5c61ea2e46a0c50ea08f4af7955a0b1  entrypoints-0.3.tar.gz
-+sha256	c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451  entrypoints-0.3.tar.gz
-+# Locally computed sha256 checksums
-+sha256	de5fcd7349cdf399b0707a2a024833c4704743650133c72d6f0ff7561a03a848  LICENSE
-diff --git a/package/python-entrypoints/python-entrypoints.mk b/package/python-entrypoints/python-entrypoints.mk
-new file mode 100644
-index 0000000000..f30fce2dfd
---- /dev/null
-+++ b/package/python-entrypoints/python-entrypoints.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-entrypoints
-+#
-+################################################################################
-+
-+PYTHON_ENTRYPOINTS_VERSION = 0.3
-+PYTHON_ENTRYPOINTS_SOURCE = entrypoints-$(PYTHON_ENTRYPOINTS_VERSION).tar.gz
-+PYTHON_ENTRYPOINTS_SITE = https://files.pythonhosted.org/packages/b4/ef/063484f1f9ba3081e920ec9972c96664e2edb9fdc3d8669b0e3b8fc0ad7c
-+PYTHON_ENTRYPOINTS_SETUP_TYPE = distutils
-+PYTHON_ENTRYPOINTS_LICENSE = MIT
-+PYTHON_ENTRYPOINTS_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
-+$(eval $(host-python-package))
-\ No newline at end of file
+Fixes:
+ - http://autobuild.buildroot.org/results/e6f767755ffdb5ecc014eb5ad7519814f075a60e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Peter Korsgaard):
+ - Always disable stack-protector on x86_64 as we're using host compiler
+
+ package/kvm-unit-tests/kvm-unit-tests.mk | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
+index 92d67fb34b..72762d21f2 100644
+--- a/package/kvm-unit-tests/kvm-unit-tests.mk
++++ b/package/kvm-unit-tests/kvm-unit-tests.mk
+@@ -37,6 +37,8 @@ KVM_UNIT_TESTS_CONF_OPTS =\
+ # x86-64 cannot do.
+ ifneq ($(BR2_x86_64),y)
+ KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
++# Don't force -fstack-protector as we don't know if host compiler supports ssp 
++KVM_UNIT_TESTS_MAKE_OPTS += EXTRA_CFLAGS=-fno-stack-protector
+ endif
+ 
+ define KVM_UNIT_TESTS_CONFIGURE_CMDS
+@@ -44,11 +46,12 @@ define KVM_UNIT_TESTS_CONFIGURE_CMDS
+ endef
+ 
+ define KVM_UNIT_TESTS_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) standalone
++	$(TARGET_MAKE_ENV) $(MAKE) $(KVM_UNIT_TESTS_MAKE_OPTS) -C $(@D) \
++		standalone
+ endef
+ 
+ define KVM_UNIT_TESTS_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
++	$(TARGET_MAKE_ENV) $(MAKE) $(KVM_UNIT_TESTS_MAKE_OPTS) -C $(@D) \
+ 		DESTDIR=$(TARGET_DIR)/usr/share/kvm-unit-tests/ \
+ 		install
+ endef
 -- 
-2.21.0
+2.20.1
