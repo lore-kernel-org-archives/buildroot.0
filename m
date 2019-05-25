@@ -1,14 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 25 May 2019 17:31:44 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-05-08
-In-Reply-To: <a40a22a6-6b2b-0c03-95ed-78fd0461428d@free.fr>
-References: <20190509060042.1026E872A2@whitealder.osuosl.org>
- <20190509230324.0b03746e@windsurf.home>
- <8fd5700b-d81b-71da-7edb-c32248a32a4f@free.fr>
- <20190513133146.7a011b13@windsurf.home>
- <a40a22a6-6b2b-0c03-95ed-78fd0461428d@free.fr>
-Message-ID: <112312f0-39bd-e416-d8db-431b3dca27f4@mind.be>
+Date: Sat, 25 May 2019 17:54:03 +0200
+Subject: [Buildroot] Cannot cross-compile libopenssl on CentOS7
+In-Reply-To: <3cd11507-8aa5-4fbe-c07a-54d4aacb8e74@ice.rwth-aachen.de>
+References: <3cd11507-8aa5-4fbe-c07a-54d4aacb8e74@ice.rwth-aachen.de>
+Message-ID: <fb7027e2-8897-2cee-65e0-4b8929779a6c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,56 +12,78 @@ To: buildroot@busybox.net
 
 
 
-On 13/05/2019 17:59, Julien Boibessot wrote:
-> Thomas,
+On 21/05/2019 20:19, Lukas J?nger wrote:
+> Hi,
 > 
-> On 13/05/2019 13:31, Thomas Petazzoni wrote:
->> Hello,
->>
->> On Mon, 13 May 2019 13:20:54 +0200
->> Julien Boibessot <julien.boibessot@free.fr> wrote:
->>
->>> I have already brought this problem up a few times before but no one has
->>> a clue.
->>> My build system is consuming 100% CPU in conftest process when building
->>> libsodium.
->>>
->>> In this state I have to manually kill all conftest processes otherwise
->>> the build is blocked for days... :-)
->> Which configure test is it running when it's blocked ? 
-> 
-> when host-libsodium fails I would say it is blocked on:
-> 
-> ??? /checking whether segmentation violations can be caught when using the C
-> compiler.../
+> I tried building a rootfs with buildroot on CentOS 7 and I require libopenssl. I
+> configured buildroot as seen in the attached .config.
 
- I've taken a look at the code of that test. There's nothing really wrong with
-it, but it's pretty much undefined behaviour so the compiler is free to do
-stupid things.
+ In the future, please post a defconfig instead of a full config. In this case:
 
- Fortunately, we know that SIGSEGV can be caught since we know we're building on
-Linux, and anyway we don't care a lot for host-libsodium. So we can just set the
-cache variable ax_cv_check_cCATCHABLE_SEGV=yes.
+BR2_aarch64=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
+BR2_PACKAGE_XEN=y
+BR2_PACKAGE_XEN_TOOLS=y
+
+
+ Note that this is a configuration that gets tested by the autobuilders, and
+unless I'm mistaken, Matt has a RHEL7 autobuilder (CentOS7 should be the same).
+Thomas, do you know if we have other RHEL/CentOS 7 autobuilders?
+
+ Anyway, there never was a build error with libopenssl on a RHEL7 machine...
+
+> Sadly, the build fails with this error:
+> 
+> install libcrypto.a ->
+> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.a
+> 
+> install libssl.a ->
+> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libssl.a
+> 
+> link
+> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
+> ->
+> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so.1.1
+> 
+> install libcrypto.so ->
+> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
+> 
+> install libcrypto.so.1.1 ->
+> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
+> 
+> /scratch/juenger/tmp/buildroot/output/host/bin/aarch64-linux-gnu-ar:
+> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so:
+> File format not recognized
+> /scratch/juenger/tmp/buildroot/output/host/bin/aarch64-linux-gnu-ar:
+> /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so.new:
+> File format not recognized
+> 
+> It seems to be related to this issue:
+> https://github.com/openssl/openssl/issues/6641
+
+ Indeed looks similar. Can you execute the steps reported in that bug to verify
+if it really is the same?
+
+ My perl-fu is not enough to understand what commit 356d634 does exactly, but
+AFAIU it should error out if the version is not high enough, no?
+
+
+> I already tried upgrading the perl package with CPAN, but buildroot still fails.
+> I also tried upgrading the package with SCL, but that did not help either. It
+> might be because buildroot does not allow me to have PERL_MM_OPT defined, but
+
+ What is PERL_MM_OPT supposed to do?
 
  Regards,
  Arnout
 
+> I'm not sure. OpenSSL by itself without buildroot builds fine on the same system.
 > 
+> Do you have an idea on how to fix this?
 > 
->> What does
->> "strace" says about this conftest process that is stuck ?
->>
->> Can  you reproduce manually ? Does it happen every time libsodium is
->> built on your machine, or only once in a while ?
-> 
-> It sometimes can be reproduced manually but not as often as from BR build system.
-> I would say when it fails from BR build, I can kill it and reproduce the problem
-> once.
-> 
-> Most of the time it works well when build manually.
-> 
-> Best regards,
-> Julien
+> Thanks,
+> Lukas
 > 
 > _______________________________________________
 > buildroot mailing list
