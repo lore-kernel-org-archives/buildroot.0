@@ -1,73 +1,46 @@
-From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
-Date: Sat, 25 May 2019 16:23:45 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/gpsd: add skytraq option
-In-Reply-To: <20190525141726.27814-1-fontaine.fabrice@gmail.com>
-References: <20190525141726.27814-1-fontaine.fabrice@gmail.com>
-Message-ID: <CA+sos78POsu3Wh+ta62VhN5Usgo+E7jzTnTAanLk=owYo-BZ+A@mail.gmail.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Sat, 25 May 2019 17:35:24 +0300
+Subject: [Buildroot] [PATCH] linux: enable UEVENT_HELPER when mdev is
+ used
+In-Reply-To: <20190525130755.25678-1-peter@korsgaard.com>
+References: <20190525130755.25678-1-peter@korsgaard.com>
+Message-ID: <20190525143524.GD9224@smile.fi.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Fabrice,
+On Sat, May 25, 2019 at 03:07:55PM +0200, Peter Korsgaard wrote:
+> S10mdev uses /proc/sys/kernel/hotplug, which is only available if
+> CONFIG_UEVENT_HELPER is enabled in the kernel, so ensure it is.
+> 
 
-On Sat, May 25, 2019 at 4:17 PM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> skytraq support has been added in version 3.17 with
-> https://git.savannah.gnu.org/cgit/gpsd.git/commit/SConstruct?id=1456c9f50e718a394f2b633cf0773f3fd792cdaa
->
-> Allow the user to enable/disable it through an option and disable it by
-> default
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Thanks!
+
+> Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  package/gpsd/Config.in | 5 +++++
->  package/gpsd/gpsd.mk   | 3 +++
->  2 files changed, 8 insertions(+)
->
-> diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-> index e951c0154e..b32e778068 100644
-> --- a/package/gpsd/Config.in
-> +++ b/package/gpsd/Config.in
-> @@ -222,6 +222,11 @@ config BR2_PACKAGE_GPSD_SIRF
->         help
->           SiRF binary support
->
-> +config BR2_PACKAGE_GPSD_SKYTRAQ
-> +       bool "skytraq"
-> +       help
-> +         Skytraq support
-> +
->  config BR2_PACKAGE_GPSD_SUPERSTAR2
->         bool "SuperStarII"
->         help
-> diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-> index d2c7612526..29ffbd5cf2 100644
-> --- a/package/gpsd/gpsd.mk
-> +++ b/package/gpsd/gpsd.mk
-> @@ -144,6 +144,9 @@ endif
->  ifneq ($(BR2_PACKAGE_GPSD_SIRF),y)
->  GPSD_SCONS_OPTS += sirf=no
->  endif
-> +ifneq ($(BR2_PACKAGE_GPSD_SKYTRAQ),y)
-> +GPSD_SCONS_OPTS += skytraq=no
-> +endif
->  ifneq ($(BR2_PACKAGE_GPSD_SUPERSTAR2),y)
->  GPSD_SCONS_OPTS += superstar2=no
->  endif
-> --
-> 2.20.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>  linux/linux.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index dd182d06b2..3a5eee63df 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -333,6 +333,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
+>  	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV),
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
+> +	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
+> +		$(call KCONFIG_ENABLE_OPT,CONFIG_UEVENT_HELPER,$(@D)/.config))
+>  	$(if $(BR2_PACKAGE_AUDIT),
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config))
+> -- 
+> 2.11.0
+> 
 
-Just nitpicking: Skytraq could have a capital S in the bool config
-name. Other than that:
-Reviewed-by: Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com>
-
-Best regards,
-Beno?t
+-- 
+With Best Regards,
+Andy Shevchenko
