@@ -1,10 +1,14 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 25 May 2019 17:24:15 +0200
-Subject: [Buildroot] [PATCH] linux: enable UEVENT_HELPER when mdev is
- used
-In-Reply-To: <20190525130755.25678-1-peter@korsgaard.com>
-References: <20190525130755.25678-1-peter@korsgaard.com>
-Message-ID: <54a85c9f-1e14-de0d-c6cf-8201dea50e1d@mind.be>
+Date: Sat, 25 May 2019 17:31:44 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-05-08
+In-Reply-To: <a40a22a6-6b2b-0c03-95ed-78fd0461428d@free.fr>
+References: <20190509060042.1026E872A2@whitealder.osuosl.org>
+ <20190509230324.0b03746e@windsurf.home>
+ <8fd5700b-d81b-71da-7edb-c32248a32a4f@free.fr>
+ <20190513133146.7a011b13@windsurf.home>
+ <a40a22a6-6b2b-0c03-95ed-78fd0461428d@free.fr>
+Message-ID: <112312f0-39bd-e416-d8db-431b3dca27f4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,75 +17,59 @@ To: buildroot@busybox.net
 
 
 
-On 25/05/2019 15:07, Peter Korsgaard wrote:
-> S10mdev uses /proc/sys/kernel/hotplug, which is only available if
-> CONFIG_UEVENT_HELPER is enabled in the kernel, so ensure it is.
+On 13/05/2019 17:59, Julien Boibessot wrote:
+> Thomas,
+> 
+> On 13/05/2019 13:31, Thomas Petazzoni wrote:
+>> Hello,
+>>
+>> On Mon, 13 May 2019 13:20:54 +0200
+>> Julien Boibessot <julien.boibessot@free.fr> wrote:
+>>
+>>> I have already brought this problem up a few times before but no one has
+>>> a clue.
+>>> My build system is consuming 100% CPU in conftest process when building
+>>> libsodium.
+>>>
+>>> In this state I have to manually kill all conftest processes otherwise
+>>> the build is blocked for days... :-)
+>> Which configure test is it running when it's blocked ? 
+> 
+> when host-libsodium fails I would say it is blocked on:
+> 
+> ??? /checking whether segmentation violations can be caught when using the C
+> compiler.../
 
- So, I take a look at it, and it's a little bit more complicated...
+ I've taken a look at the code of that test. There's nothing really wrong with
+it, but it's pretty much undefined behaviour so the compiler is free to do
+stupid things.
 
- Busybox *does* have support for the "new" netlink-based uevent interface, but
-that interface needs a daemon that keeps running and they separated that daemon
-into a separate process, called uevent. So, in the "new" way, you should do
-something like (not tried, just based on source code):
-
-start-stop-daemon -S -b -x /sbin/uevent -- mdev
-
- But of course, that means that we have to be sure that the uevent executable is
-in fact built for busybox. So we'd need to extend BUSYBOX_SET_MDEV to enable uevent.
-
- Also, we can only use the uevent approach if netlink uevents are available.
-They exist since 2.6.12, so I guess on that side we're safe. However, they also
-depend on CONFIG_NET (because netlink does).
-
- So, these are our options:
-
-1. Bloat the kernel with legacy uevent helper support (this patch).
-
-2. Bloat the kernel with networking even if it is not used for anything else,
-and bloat busybox with uevent (3.1 kb), and always use uevent.
-
-3. Use uevent in the init script but don't enforce anything (with potential
-silent failures), and explain stuff in the mdev help text.
-
-4. Try out all possibilities in the init script - which still fails silently in
-case neither CONFIG_UEVENT_HELPER nor CONFIG_NET is enabled in the kernel.
-
-
- In my opinion, we definitely should *not* go for option 1. I don't want to be
-the one that forces the kernel to maintain legacy stuff. I would definitely use
-uevent. On the other hand, I really don't like it when we force changes into
-busybox or kernel configs. Since it's really likely that CONFIG_NET is enabled
-in the kernel, and since our default busybox config (but not the minimal one)
-does enable uevent, I think that option 3 is the way to go.
-
-
- By the way, with netlink, the event are properly serialized, and uevent makes
-sure that only one mdev subprocess is created so it maintains the serialisation.
-So, it is no longer needed to create /dev/mdev.seq (which, for some reason, we
-currently don't do...).
+ Fortunately, we know that SIGSEGV can be caught since we know we're building on
+Linux, and anyway we don't care a lot for host-libsodium. So we can just set the
+cache variable ax_cv_check_cCATCHABLE_SEGV=yes.
 
  Regards,
  Arnout
 
-
 > 
-> Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  linux/linux.mk | 2 ++
->  1 file changed, 2 insertions(+)
 > 
-> diff --git a/linux/linux.mk b/linux/linux.mk
-> index dd182d06b2..3a5eee63df 100644
-> --- a/linux/linux.mk
-> +++ b/linux/linux.mk
-> @@ -333,6 +333,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
->  	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV),
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
-> +	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
-> +		$(call KCONFIG_ENABLE_OPT,CONFIG_UEVENT_HELPER,$(@D)/.config))
->  	$(if $(BR2_PACKAGE_AUDIT),
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
->  		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config))
+>> What does
+>> "strace" says about this conftest process that is stuck ?
+>>
+>> Can  you reproduce manually ? Does it happen every time libsodium is
+>> built on your machine, or only once in a while ?
+> 
+> It sometimes can be reproduced manually but not as often as from BR build system.
+> I would say when it fails from BR build, I can kill it and reproduce the problem
+> once.
+> 
+> Most of the time it works well when build manually.
+> 
+> Best regards,
+> Julien
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
