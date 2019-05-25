@@ -1,149 +1,235 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Sat, 25 May 2019 16:00:00 +0200
-Subject: [Buildroot] [PATCH] mfgtools: bump version to 1.2.91
-Message-ID: <20190525140000.30870-1-bisson.gary@gmail.com>
+From: =?UTF-8?Q?Beno=C3=AEt_Th=C3=A9baudeau?= <benoit.thebaudeau.dev@gmail.com>
+Date: Sat, 25 May 2019 16:11:29 +0200
+Subject: [Buildroot] [PATCH/next v2,
+ 1/1] package/gpsd: bump to version 3.18.1
+In-Reply-To: <20190524135745.8823-1-fontaine.fabrice@gmail.com>
+References: <20190524135745.8823-1-fontaine.fabrice@gmail.com>
+Message-ID: <CA+sos7-4LiEFMWC2AOpAJF0Mb3TfMtJfv4i=gVNwkVwpsOoRXA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-NXP deprecated the old mfgtools code, also called mfgtools v2 although
-the releases were named v0.xx.
+Dear Fabrice,
 
-It has been replaced by the Universal Update Utility (uuu), also called
-mfgtools v3 although the releases are named v1.x.yy.
+On Fri, May 24, 2019 at 3:57 PM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> - Remove second patch (already in version)
+> - Add a patch to fix build without man pages
+> - Add a patch to remove C99-style loop
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2 (after review of Beno?t Th?baudeau):
+>  - Add second patch to fix C99-style loop
+>
+>  ...h-when-not-building-python-man-pages.patch | 59 +++++++++++++++++++
+>  ...-fix-build-with-reconfigure-disabled.patch | 49 ---------------
+>  ...-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch | 38 ++++++++++++
+>  package/gpsd/gpsd.hash                        |  2 +-
+>  package/gpsd/gpsd.mk                          |  2 +-
+>  5 files changed, 99 insertions(+), 51 deletions(-)
+>  create mode 100644 package/gpsd/0002-SConstruct-Do-not-crash-when-not-building-python-man-pages.patch
+>  delete mode 100644 package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch
+>  create mode 100644 package/gpsd/0003-driver_ubx-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch
+>
+> diff --git a/package/gpsd/0002-SConstruct-Do-not-crash-when-not-building-python-man-pages.patch b/package/gpsd/0002-SConstruct-Do-not-crash-when-not-building-python-man-pages.patch
+> new file mode 100644
+> index 0000000000..75317af10e
+> --- /dev/null
+> +++ b/package/gpsd/0002-SConstruct-Do-not-crash-when-not-building-python-man-pages.patch
+> @@ -0,0 +1,59 @@
+> +From 02d21faebec245e1526449fb54e7078914d75db7 Mon Sep 17 00:00:00 2001
+> +From: "Gary E. Miller" <gem@rellim.com>
+> +Date: Thu, 1 Nov 2018 15:49:01 -0700
+> +Subject: SConstruct:  Do not crash when not building python man pages.
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved from:
+> +https://git.savannah.gnu.org/cgit/gpsd.git/commit/?id=02d21faebec245e1526449fb54e7078914d75db7]
+> +---
+> + SConstruct | 13 +++++++++----
+> + 1 file changed, 9 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/SConstruct b/SConstruct
+> +index 0fc3614..0226cd2 100644
+> +--- a/SConstruct
+> ++++ b/SConstruct
+> +@@ -1751,14 +1751,19 @@ if tiocmiwait:
+> +         "ppscheck.8": "ppscheck.xml",
+> +     })
+> +
+> +-all_manpages = list(base_manpages.keys()) + list(python_manpages.keys())
+> ++all_manpages = list(base_manpages.keys())
+> ++if python_manpages:
+> ++    all_manpages += list(python_manpages.keys())
+> +
+> + man_env = env.Clone()
+> + if man_env.GetOption('silent'):
+> +     man_env['SPAWN'] = filtered_spawn  # Suppress stderr chatter
+> + manpage_targets = []
+> + if manbuilder:
+> +-    items = list(base_manpages.items()) + list(python_manpages.items())
+> ++    items = list(base_manpages.items())
+> ++    if python_manpages:
+> ++        items += list(python_manpages.items())
+> ++
+> +     for (man, xml) in items:
+> +         manpage_targets.append(man_env.Man(source=xml, target=man))
+> +
+> +@@ -1907,7 +1912,7 @@ if qt_env:
+> +
+> +
+> + maninstall = []
+> +-for manpage in list(base_manpages.keys()) + list(python_manpages.keys()):
+> ++for manpage in all_manpages:
+> +     if not manbuilder and not os.path.exists(manpage):
+> +         continue
+> +     section = manpage.split(".")[1]
+> +@@ -2517,7 +2522,7 @@ if os.path.exists("gpsd.c") and os.path.exists(".gitignore"):
+> +     if ".gitignore" in distfiles:
+> +         distfiles.remove(".gitignore")
+> +     distfiles += generated_sources
+> +-    distfiles += list(base_manpages.keys()) + list(python_manpages.keys())
+> ++    distfiles += all_manpages
+> +     if "packaging/rpm/gpsd.spec" not in distfiles:
+> +         distfiles.append("packaging/rpm/gpsd.spec")
+> +
+> +--
+> +cgit v1.0-41-gc330
+> +
+> diff --git a/package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch b/package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch
+> deleted file mode 100644
+> index 77badb31cf..0000000000
+> --- a/package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch
+> +++ /dev/null
+> @@ -1,49 +0,0 @@
+> -From 21a752e827bc9e14de4b4c26aef4d0db7403a5b7 Mon Sep 17 00:00:00 2001
+> -From: Baruch Siach <baruch@tkos.co.il>
+> -Date: Tue, 9 Oct 2018 15:22:46 +0300
+> -Subject: [PATCH] driver_greis: fix build with reconfigure disabled
+> -
+> -Unhide the definition of greis_parse_input and greis_event_hook since
+> -they are used unconditionally.
+> -
+> -Fixes the following build failure:
+> -
+> -driver_greis.c:969:25: error: 'greis_parse_input' undeclared here (not in a function); did you mean 'generic_parse_input'?
+> -     .parse_packet     = greis_parse_input,
+> -                         ^~~~~~~~~~~~~~~~~
+> -                         generic_parse_input
+> -driver_greis.c:973:25: error: 'greis_event_hook' undeclared here (not in a function)
+> -     .event_hook       = greis_event_hook,
+> -                         ^~~~~~~~~~~~~~~~
+> -
+> -Cc: Gregory Fong <gregory.fong@virginorbit.com>
+> -Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ----
+> -Upstream status: http://lists.nongnu.org/archive/html/gpsd-dev/2018-10/msg00012.html
+> -
+> - driver_greis.c | 2 +-
+> - 1 file changed, 1 insertion(+), 1 deletion(-)
+> -
+> -diff --git a/driver_greis.c b/driver_greis.c
+> -index 9eb148fc76cd..222bd9daf020 100644
+> ---- a/driver_greis.c
+> -+++ b/driver_greis.c
+> -@@ -797,7 +797,6 @@ static ssize_t greis_control_send(struct gps_device_t *session,
+> - }
+> - #endif /* CONTROLSEND_ENABLE */
+> -
+> --#ifdef RECONFIGURE_ENABLE
+> - static void greis_event_hook(struct gps_device_t *session, event_t event)
+> - {
+> -     if (session->context->readonly)
+> -@@ -870,6 +869,7 @@ static gps_mask_t greis_parse_input(struct gps_device_t *session)
+> -       return 0;
+> - }
+> -
+> -+#ifdef RECONFIGURE_ENABLE
+> - /**
+> -  * Set port operating mode, speed, parity, stopbits etc. here.
+> -  * Note: parity is passed as 'N'/'E'/'O', but you should program
+> ---
+> -2.19.1
+> -
+> diff --git a/package/gpsd/0003-driver_ubx-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch b/package/gpsd/0003-driver_ubx-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch
+> new file mode 100644
+> index 0000000000..a9b40c64af
+> --- /dev/null
+> +++ b/package/gpsd/0003-driver_ubx-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch
+> @@ -0,0 +1,38 @@
+> +From d685ab05952d7eadf012fc054032f0190cf2abda Mon Sep 17 00:00:00 2001
+> +From: "Gary E. Miller" <gem@rellim.com>
+> +Date: Fri, 26 Oct 2018 10:12:40 -0700
+> +Subject: driver_ubx: Save UBX-RXM-RAWX data in rawdate_t.
+> +
+> +A step in getting u-blox 8 raw data into the new RAW JSON message.
+> +
+> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> +[Retrieved (and backported to keep only C99-style loop fix) from:
+> +https://git.savannah.gnu.org/cgit/gpsd.git/commit/driver_ubx.c?id=d685ab05952d7eadf012fc054032f0190cf2abda]
+> +---
+> + driver_ubx.c | 29 ++++++++++++++++++++++++++---
+> + 1 file changed, 26 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/driver_ubx.c b/driver_ubx.c
+> +index 585b2b9..0dccddf 100644
+> +--- a/driver_ubx.c
+> ++++ b/driver_ubx.c
+> +@@ -813,6 +813,7 @@ static gps_mask_t ubx_rxm_rawx(struct gps_device_t *session,
+> +     int8_t leapS;
+> +     uint8_t numMeas;
+> +     uint8_t recStat;
+> ++    int i;
+> +
+> +     if (16 > data_len) {
+> +       gpsd_log(&session->context->errout, LOG_WARN,
+> +@@ -830,6 +831,6 @@ static gps_mask_t ubx_rxm_rawx(struct gps_device_t *session,
+> +            "UBX_RXM_RAWX: rcvTow %f week %u leapS %d numMeas %u recStat %d\n",
+> +            rcvTow, week, leapS, numMeas, recStat);
+> +
+> +-    for (int i = 0; i < numMeas; i++) {
+> ++    for (i = 0; i < numMeas; i++) {
+> +         int off = 32 * i;
+> +         double prMes = getled64((const char *)buf, off + 16);
+> +         double cpMes = getled64((const char *)buf, off + 24);
+> +--
+> +cgit v1.0-41-gc330
+> +
+> diff --git a/package/gpsd/gpsd.hash b/package/gpsd/gpsd.hash
+> index fe594ea28b..a6d4a65200 100644
+> --- a/package/gpsd/gpsd.hash
+> +++ b/package/gpsd/gpsd.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+> -sha256 48521f5158f5fda4c88a6f75e8bfc1ee67e999e3fc095e4a06cb8c2af56712f4        gpsd-3.18.tar.gz
+> +sha256 5cb1e6d880ec9a52c62492dd0e3d77451b7c7ad625895bd652f6354215aec23e        gpsd-3.18.1.tar.gz
+>  sha256 71ff85d18bf063954cfc4251678d0e772223e21f80febbd99d5524c90f73f832        COPYING
+> diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+> index 0a17ddc93e..8edebe5fbf 100644
+> --- a/package/gpsd/gpsd.mk
+> +++ b/package/gpsd/gpsd.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -GPSD_VERSION = 3.18
+> +GPSD_VERSION = 3.18.1
+>  GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
+>  GPSD_LICENSE = BSD-3-Clause
+>  GPSD_LICENSE_FILES = COPYING
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-This new tool actually resides in the same repository in the master
-branch whereas the old one is now in a 'linux' branch.
+Reviewed-by: Beno?t Th?baudeau <benoit.thebaudeau.dev@gmail.com>
 
-Since the old tool has issues building lately, let's switch to the new
-one. Note that uuu seems to be cleaner, supports much more features
-(i.MX8/8M/8QXP boot, fastboot etc..) and has a better documentation:
-https://github.com/NXPmicro/mfgtools/wiki
-
-Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
----
- package/mfgtools/mfgtools.hash |  6 ++---
- package/mfgtools/mfgtools.mk   | 31 ++++-------------------
- package/mfgtools/readme.txt    | 45 ++++++----------------------------
- 3 files changed, 15 insertions(+), 67 deletions(-)
-
-diff --git a/package/mfgtools/mfgtools.hash b/package/mfgtools/mfgtools.hash
-index 4932a80dba..c5ba57ec72 100644
---- a/package/mfgtools/mfgtools.hash
-+++ b/package/mfgtools/mfgtools.hash
-@@ -1,4 +1,4 @@
- # locally computed
--sha256  055d71227d18883d6e8bc9e854c076015f9a7749820a94272e19071bf0b25c89  mfgtools-v0.02.tar.gz
--sha256  2655559a6bb1179eae514f5c7166f4ede4f2453efa9cf4dc3c045cab5d57dede  LICENSE
--sha256  0963b6e5086bf454265b0f57821a02b681d1211e40ad74c310231cb4d94815c9  README.txt
-+sha256  378caa930fdc1b06d49abf26811827f12103d995438b91302a7c6e34368419f9  mfgtools-1.2.91.tar.gz
-+sha256  cc8d47f7b9260f6669ecd41c24554c552f17581d81ee8fc602c6d23edb8bf495  LICENSE
-+sha256  01a4b15843de543b01fb0600eba02248273182bcf11da60d2d7736440f0995b6  README.md
-diff --git a/package/mfgtools/mfgtools.mk b/package/mfgtools/mfgtools.mk
-index e4663a8af9..4d9e280738 100644
---- a/package/mfgtools/mfgtools.mk
-+++ b/package/mfgtools/mfgtools.mk
-@@ -4,31 +4,10 @@
- #
- ################################################################################
- 
--MFGTOOLS_VERSION = v0.02
--MFGTOOLS_SITE = $(call github,codeauroraforum,mfgtools,$(MFGTOOLS_VERSION))
--MFGTOOLS_SUBDIR = MfgToolLib
--MFGTOOLS_LICENSE = BSD-3-Clause or CPOL
--MFGTOOLS_LICENSE_FILES = LICENSE README.txt
--HOST_MFGTOOLS_DEPENDENCIES = host-libusb
--
--HOST_MFGTOOLS_CFLAGS = \
--	$(HOST_CFLAGS) $(HOST_LDFLAGS) -std=c++11 -lpthread \
--	-L$(@D)/MfgToolLib -lMfgToolLib -I$(@D)/MfgToolLib \
--	-lusb-1.0 -I$(HOST_DIR)/include/libusb-1.0 \
--	-fpermissive -Wno-write-strings
--
--define HOST_MFGTOOLS_CLI_BUILD
--	$(HOST_CONFIGURE_OPTS) $(MAKE) CC="$(HOSTCXX)" \
--		CFLAGS="$(HOST_MFGTOOLS_CFLAGS)" -C $(@D)/TestPrgm
--endef
--
--HOST_MFGTOOLS_POST_BUILD_HOOKS += HOST_MFGTOOLS_CLI_BUILD
--
--define HOST_MFGTOOLS_INSTALL_CMDS
--	$(INSTALL) -D -m 755 $(@D)/MfgToolLib/libMfgToolLib.so \
--		$(HOST_DIR)/lib/libMfgToolLib.so
--	$(INSTALL) -D -m 755 $(@D)/TestPrgm/mfgtoolcli \
--		$(HOST_DIR)/bin/mfgtoolcli
--endef
-+MFGTOOLS_VERSION = 1.2.91
-+MFGTOOLS_SITE = $(call github,NXPmicro,mfgtools,uuu_$(MFGTOOLS_VERSION))
-+MFGTOOLS_LICENSE = BSD-3-Clause
-+MFGTOOLS_LICENSE_FILES = LICENSE
-+HOST_MFGTOOLS_DEPENDENCIES = host-libusb host-bzip2 host-libzip host-zlib
- 
- $(eval $(host-cmake-package))
-diff --git a/package/mfgtools/readme.txt b/package/mfgtools/readme.txt
-index 320e6ec493..8a916d1cae 100644
---- a/package/mfgtools/readme.txt
-+++ b/package/mfgtools/readme.txt
-@@ -18,45 +18,16 @@ CONFIG_USB_MASS_STORAGE=y
- CONFIG_FSL_UTP=y
- CONFIG_MMC_BLOCK_MINORS=16
- 
--2. Go into the output and create the necessary folders
-+2. Run the MfgTools (now called uuu) client to boot the board from USB:
- 
--$ cd output
--$ mkdir -p "Profiles/Linux/OS Firmware/firmware"
-+$ ./output/host/bin/uuu output/images/u-boot.imx
- 
--3. Create your XML update script named ucl2.xml
-+At this point you can either flash your kernel and rootfs image directly from
-+U-Boot or use commands in order to load your ramdisk and execute commands from
-+Linux OS.
- 
--You can find a sample XML at:
--
--$ wget https://storage.googleapis.com/boundarydevices.com/ucl2.xml \
--  -O Profiles/Linux/OS\ Firmware/ucl2.xml
--
--4. Copy the U-Boot, Kernel and initramfs images to the appropriate
--folder
--
--$ cp images/u-boot.imx images/zImage images/imx6q-sabrelite.dtb \
--  images/rootfs.cpio.uboot Profiles/Linux/OS\ Firmware/firmware/
--
--5. Copy the prebuilt binaries to be flashed
--
--Depending on your ucl2.xml file, the sample doesn't flash anything.
--
--6. Run the MfgTools client:
--
--$ ./host/bin/mfgtoolcli -l mmc -s uboot_defconfig=imx \
--  -s dtbname=imx6q-sabrelite.dtb -s initramfs=rootfs.cpio.uboot \
--  -s mmc=1 -p 1
--
--For more information about the tools options, please read the
--"Manufacturing Tool V2 Quick Start Guide.docx" documentation contained
--in every mfgtools package from NXP website[1].
--
--Note: All the above commands require your Linux host user to have
--permissions to access the USB devices. Please make sure to have udev
--rules that allow the user to communicate with the BootROM IDs
--(Freescale USB recovery) as well as the one used for the UTP Linux
--image (0x066F:0x37FF).  Using 'sudo' in front of the mfgtoolcli
--command would also grant you the necessary permission but it is *not*
--recommended.
-+For more information about the tools options, please read this wiki:
-+https://github.com/NXPmicro/mfgtools/wiki
- 
- Also, if your U-Boot environment doesn't include mfgtools bootargs,
- make sure to set the following:
-@@ -65,5 +36,3 @@ setenv bootargs "console=${console},${baudrate} g_mass_storage.stall=0 \
- 	g_mass_storage.removable=1 g_mass_storage.idVendor=0x066F \
- 	g_mass_storage.idProduct=0x37FF g_mass_storage.iSerialNumber=\"\" \
- 	g_mass_storage.file=/fat"
--
--[1] http://www.nxp.com/products/software-and-tools/software-development-tools/i.mx-software-and-tools/i.mx-6-series-software-and-development-tool-resources:IMX6_SW
--- 
-2.20.1
+Best regards,
+Beno?t
