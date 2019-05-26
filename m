@@ -1,57 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 May 2019 22:59:57 +0200
-Subject: [Buildroot] [git commit] arch/csky: add support for the ck860 core
-Message-ID: <20190602201237.A8EA281354@busybox.osuosl.org>
+Date: Sun, 26 May 2019 14:50:08 +0200
+Subject: [Buildroot] [git commit] package/gpsd: add skytraq option
+Message-ID: <20190602201235.D38E28EDA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20d6e092d8be6b08c2a010c4c7354d8932079aa9
+commit: https://git.buildroot.net/buildroot/commit/?id=6f7a15cbe59ff21691769fd667425ff08a518d74
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ck860 is newest CPU core of C-SKY with high performance & SMP
-supported.
+skytraq support has been added in version 3.17 with
+https://git.savannah.gnu.org/cgit/gpsd.git/commit/SConstruct?id=1456c9f50e718a394f2b633cf0773f3fd792cdaa
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Allow the user to enable/disable it through an option and disable it
+by default.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Beno??t Th??baudeau <benoit.thebaudeau.dev@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- arch/Config.in.csky | 5 ++++-
- arch/arch.mk.csky   | 2 ++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+ package/gpsd/Config.in | 5 +++++
+ package/gpsd/gpsd.mk   | 3 +++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/arch/Config.in.csky b/arch/Config.in.csky
-index ebde7fe476..4bdfbfae4b 100644
---- a/arch/Config.in.csky
-+++ b/arch/Config.in.csky
-@@ -13,11 +13,14 @@ config BR2_ck807
- config BR2_ck810
- 	bool "ck810"
- 
-+config BR2_ck860
-+	bool "ck860"
-+
- endchoice
- 
- config BR2_CSKY_FPU
- 	bool "Enable FPU coprocessor"
--	depends on BR2_ck810 || BR2_ck807
-+	depends on BR2_ck810 || BR2_ck807 || BR2_ck860
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index e951c0154e..c1bebc30d7 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -222,6 +222,11 @@ config BR2_PACKAGE_GPSD_SIRF
  	help
- 	  You can say N here if your C-SKY CPU doesn't have a
- 	  Floating-Point Coprocessor or if you don't need FPU support
-diff --git a/arch/arch.mk.csky b/arch/arch.mk.csky
-index f2c90eb206..fb59ae22fd 100644
---- a/arch/arch.mk.csky
-+++ b/arch/arch.mk.csky
-@@ -11,6 +11,8 @@ else ifeq ($(BR2_ck807),y)
- GCC_TARGET_CPU := ck807
- else ifeq ($(BR2_ck810),y)
- GCC_TARGET_CPU := ck810
-+else ifeq ($(BR2_ck860),y)
-+GCC_TARGET_CPU := ck860
- endif
+ 	  SiRF binary support
  
- ifeq ($(BR2_CSKY_FPU),y)
++config BR2_PACKAGE_GPSD_SKYTRAQ
++	bool "Skytraq"
++	help
++	  Skytraq support
++
+ config BR2_PACKAGE_GPSD_SUPERSTAR2
+ 	bool "SuperStarII"
+ 	help
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 0a17ddc93e..6fe3d7388b 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -144,6 +144,9 @@ endif
+ ifneq ($(BR2_PACKAGE_GPSD_SIRF),y)
+ GPSD_SCONS_OPTS += sirf=no
+ endif
++ifneq ($(BR2_PACKAGE_GPSD_SKYTRAQ),y)
++GPSD_SCONS_OPTS += skytraq=no
++endif
+ ifneq ($(BR2_PACKAGE_GPSD_SUPERSTAR2),y)
+ GPSD_SCONS_OPTS += superstar2=no
+ endif
