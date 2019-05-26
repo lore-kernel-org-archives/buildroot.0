@@ -1,59 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 May 2019 21:06:11 +0200
+Date: Sun, 26 May 2019 21:07:50 +0200
 Subject: [Buildroot] [git commit branch/next]
- package/gstreamer1/gst1-plugins-good: add twolame plugin
-Message-ID: <20190526191650.F28718157D@busybox.osuosl.org>
+ package/gstreamer1/gst1-plugins-bad: add proxy plugin option
+Message-ID: <20190526191651.0CA4B8157D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e11760c82cea915e895752ee5262031e65899ee
+commit: https://git.buildroot.net/buildroot/commit/?id=0a94d906cf4cc4aae9fef3c0251e1e8087fe1821
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-This plugin was introduced in 1.16.0. It depends on the twolame
-package and allows a user to encode MP2s with TwoLAME.
+This plugin was introduced in 1.16.0. It is dependencyless and
+provides proxied inter-pipeline communication.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gstreamer1/gst1-plugins-good/Config.in            | 6 ++++++
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 7 +++++++
- 2 files changed, 13 insertions(+)
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 5 +++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 30a4876ee7..3af05ba6b4 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -389,6 +389,12 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_TAGLIB
- comment "taglib needs a toolchain w/ C++, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index e0757e96c9..c53ff66272 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -212,6 +212,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PNM
+ 	help
+ 	  PNM plugin
  
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_TWOLAME
-+	bool "twolame"
-+	select BR2_PACKAGE_TWOLAME
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PROXY
++	bool "proxy"
 +	help
-+	  twolame mp2 audio encoder plugin
++	  Proxy plugin
 +
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
- 	bool "vpx (webm)"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libvpx
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index 4ef128229a..462d5e1307 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -429,6 +429,13 @@ else
- GST1_PLUGINS_GOOD_CONF_OPTS += --disable-taglib
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE
+ 	bool "rawparse"
+ 	help
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index a66d3e32bf..d6414f9daa 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -344,6 +344,12 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-pnm
  endif
  
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_TWOLAME),y)
-+GST1_PLUGINS_GOOD_CONF_OPTS += --enable-twolame
-+GST1_PLUGINS_GOOD_DEPENDENCIES += twolame
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PROXY),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-proxy
 +else
-+GST1_PLUGINS_GOOD_CONF_OPTS += --disable-twolame
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-proxy
 +endif
 +
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX),y)
- GST1_PLUGINS_GOOD_CONF_OPTS += --enable-vpx
- GST1_PLUGINS_GOOD_DEPENDENCIES += libvpx
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-rawparse
+ else
