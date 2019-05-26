@@ -1,87 +1,520 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 May 2019 23:00:26 +0200
-Subject: [Buildroot] [git commit] package/gdb: add C-SKY specific version
-Message-ID: <20190602201237.CD9AD81354@busybox.osuosl.org>
+Date: Sun, 26 May 2019 15:05:59 +0200
+Subject: [Buildroot] [git commit] package/openzwave: fix strncat build
+ failure
+Message-ID: <20190602201235.ED12181354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=540354532c8263c4a953fce383a8413cc53c50eb
+commit: https://git.buildroot.net/buildroot/commit/?id=108e9638b67b7e6e219bf52f53cb434dfe870cb8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add gdb build for C-SKY Architecture:
+Retrieve upstream patch that fixes a build failure caused by
+strncat():
 
- - Support host-gdb
- - Support gdbserver for target
+error: 'char* strncat(char*, const char*, size_t)' output may be truncated copying between 0 and 253 bytes from a string of length 253
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+This patch also allow to disable the use of the bundled tinyxml
+library so use this new option and add a dependency of openzwave on
+tinyxml to use it as a regular external library.
+
+Fixes:
+
+  http://autobuild.buildroot.org/results/cbe0671831d874a5b96a944b891fe1eea823667b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gdb/Config.in      | 1 +
- package/gdb/Config.in.host | 2 ++
- package/gdb/gdb.hash       | 3 +++
- package/gdb/gdb.mk         | 6 ++++++
- 4 files changed, 12 insertions(+)
+ package/openzwave/0002-update-spec-files.patch | 445 +++++++++++++++++++++++++
+ package/openzwave/Config.in                    |   1 +
+ package/openzwave/openzwave.mk                 |   4 +-
+ 3 files changed, 449 insertions(+), 1 deletion(-)
 
-diff --git a/package/gdb/Config.in b/package/gdb/Config.in
-index 0c3465d145..ab3d2157b6 100644
---- a/package/gdb/Config.in
-+++ b/package/gdb/Config.in
-@@ -57,6 +57,7 @@ config BR2_PACKAGE_GDB_DEBUGGER
- 	bool "full debugger"
+diff --git a/package/openzwave/0002-update-spec-files.patch b/package/openzwave/0002-update-spec-files.patch
+new file mode 100644
+index 0000000000..0ba74ab108
+--- /dev/null
++++ b/package/openzwave/0002-update-spec-files.patch
+@@ -0,0 +1,445 @@
++From 601e5fb16232a7984885e67fdddaf5b9c9dd8105 Mon Sep 17 00:00:00 2001
++From: Justin Hammond <justin@dynam.ac>
++Date: Mon, 6 May 2019 17:05:17 +0800
++Subject: [PATCH] update spec files
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/OpenZWave/open-zwave/commit/601e5fb16232a7984885e67fdddaf5b9c9dd8105]
++---
++ cpp/build/Makefile                          |  22 ++-
++ cpp/build/support.mk                        |   7 +-
++ cpp/src/command_classes/DoorLockLogging.cpp |   4 +-
++ cpp/src/command_classes/UserCode.cpp        |   4 +-
++ dist/libopenzwave.spec                      | 152 --------------------
++ dist/openzwave.spec.in                      | 145 +++++++++++++++++++
++ distfiles.mk                                |   2 +-
++ 7 files changed, 174 insertions(+), 162 deletions(-)
++ delete mode 100644 dist/libopenzwave.spec
++ create mode 100644 dist/openzwave.spec.in
++
++diff --git a/cpp/build/Makefile b/cpp/build/Makefile
++index bd9463c86..b404a87fd 100644
++--- a/cpp/build/Makefile
+++++ b/cpp/build/Makefile
++@@ -84,7 +84,19 @@ endif
++ #where to put the temporary library
++ LIBDIR	?= $(top_builddir)
++ 
++-INCLUDES	:= -I $(top_srcdir)/cpp/src -I $(top_srcdir)/cpp/tinyxml/
+++INCLUDES	:= -I $(top_srcdir)/cpp/src
+++
+++
+++ifeq ($(USE_BI_TXML), 1)
+++INCLUDES += -I $(top_srcdir)/cpp/tinyxml/
+++SOURCES_TXML =$(top_srcdir)/cpp/tinyxml/
+++tinyxml := $(notdir $(wildcard $(top_srcdir)/cpp/tinyxml/*.cpp))
+++else
+++LIBS+= -ltinyxml
+++endif
+++
+++
+++
++ 
++ 
++ ifeq ($(USE_HID),1)
++@@ -105,12 +117,11 @@ LIBS += -ludev
++ endif
++ endif # USE_HID
++ 
++-SOURCES		:= $(top_srcdir)/cpp/src $(top_srcdir)/cpp/src/command_classes $(top_srcdir)/cpp/tinyxml \
+++SOURCES		:= $(top_srcdir)/cpp/src $(top_srcdir)/cpp/src/command_classes $(SOURCES_TXML) \
++ 	$(top_srcdir)/cpp/src/value_classes $(top_srcdir)/cpp/src/platform $(top_srcdir)/cpp/src/platform/unix $(SOURCES_HIDAPI) $(top_srcdir)/cpp/src/aes/
++-VPATH = $(top_srcdir)/cpp/src:$(top_srcdir)/cpp/src/command_classes:$(top_srcdir)/cpp/tinyxml:\
+++VPATH = $(top_srcdir)/cpp/src:$(top_srcdir)/cpp/src/command_classes:$(SOURCES_TXML):\
++ 	$(top_srcdir)/cpp/src/value_classes:$(top_srcdir)/cpp/src/platform:$(top_srcdir)/cpp/src/platform/unix:$(SOURCES_HIDAPI):$(top_srcdir)/cpp/src/aes/
++ 
++-tinyxml := $(notdir $(wildcard $(top_srcdir)/cpp/tinyxml/*.cpp))
++ 
++ ifeq ($(USE_HID),1)
++ ifeq ($(UNAME),Darwin)
++@@ -163,6 +174,9 @@ $(top_srcdir)/cpp/src/vers.cpp:
++ 	@echo 'uint16_t ozw_vers_minor = $(VERSION_MIN);' >> $(top_srcdir)/cpp/src/vers.cpp
++ 	@echo 'uint16_t ozw_vers_revision = $(VERSION_REV);' >> $(top_srcdir)/cpp/src/vers.cpp
++ 	@echo 'char ozw_version_string[] = "$(GITVERSION)";' >> $(top_srcdir)/cpp/src/vers.cpp
+++	@$(SED) \
+++		-e 's|[@]VERSION@|$(VERSION).$(VERSION_REV)|g' \
+++		< "$(top_srcdir)/dist/openzwave.spec.in" > "$(top_srcdir)/dist/openzwave.spec"
++ 
++ 
++ #$(OBJDIR)/vers.o:	$(top_builddir)/vers.cpp
++diff --git a/cpp/build/support.mk b/cpp/build/support.mk
++index 562a9b280..3ffd17e48 100644
++--- a/cpp/build/support.mk
+++++ b/cpp/build/support.mk
++@@ -8,8 +8,11 @@ BUILD	?= release
++ #the prefix to install the library into
++ PREFIX	?= /usr/local
++ 
++-# build HID support by default
++-USE_HID ?= 1
+++# dont build HID support by default
+++USE_HID ?= 0
+++
+++# use builtin tinyXML by default 
+++USE_BI_TXML ?= 1
++ 
++ #the System we are building on
++ UNAME  := $(shell uname -s)
++diff --git a/cpp/src/command_classes/DoorLockLogging.cpp b/cpp/src/command_classes/DoorLockLogging.cpp
++index a8d824cd5..f318b3e59 100644
++--- a/cpp/src/command_classes/DoorLockLogging.cpp
+++++ b/cpp/src/command_classes/DoorLockLogging.cpp
++@@ -268,13 +268,13 @@ bool DoorLockLogging::HandleMsg
++ 			}
++ 			uint8 userid = (_data[10]);
++ 			uint8 usercodelength = (_data[11]);
++-			char usercode[254], tmpusercode[254];
+++			char usercode[254], tmpusercode[10];
++ 			snprintf(usercode, sizeof(usercode), "UserCode:");
++ 			if (usercodelength > 0)
++ 				for (int i = 0; i < usercodelength; i++ )
++ 				{
++ 					snprintf(tmpusercode, sizeof(tmpusercode), "%d", (int)_data[12+i]);
++-					strncat(usercode, tmpusercode, sizeof(usercode) - strlen(usercode) - 1 );
+++					strncat(usercode, tmpusercode, 10);
++ 				}
++ 
++ 			if (valid) {
++diff --git a/cpp/src/command_classes/UserCode.cpp b/cpp/src/command_classes/UserCode.cpp
++index a58091aca..dab006731 100644
++--- a/cpp/src/command_classes/UserCode.cpp
+++++ b/cpp/src/command_classes/UserCode.cpp
++@@ -466,7 +466,9 @@ bool UserCode::HandleMsg
++ 					node->CreateValueString( ValueID::ValueGenre_User, GetCommandClassId(), _instance, i, str, "", false, false, data, 0 );
++ 				}
++ 				m_userCode[i].status = UserCode_Available;
++-				memcpy(&m_userCode[i].usercode, 0, 10);
+++				/* silly compilers */
+++				for (int j = 0; j < 10; j++)
+++					m_userCode[i].usercode[i] = 0;
++ 			}
++ 			if (m_com.GetFlagBool(COMPAT_FLAG_UC_EXPOSERAWVALUE)) {
++ 				node->CreateValueRaw( ValueID::ValueGenre_User, GetCommandClassId(), _instance, UserCodeIndex_RawValue, "Raw UserCode", "", false, false, 0, 0, 0);
++diff --git a/dist/libopenzwave.spec b/dist/libopenzwave.spec
++deleted file mode 100644
++index 3f29473dd..000000000
++--- a/dist/libopenzwave.spec
+++++ /dev/null
++@@ -1,152 +0,0 @@
++-Name: libopenzwave
++-%if 0%{?fedora} > 0
++-Group: Development/Libraries
++-%else
++-Group: Productivity/Networking/Other
++-%endif
++-Summary: Library to access Z-Wave interfaces
++-URL:http://code.google.com/p/open-zwave/
++-%if 0%{?suse_version} > 0
++-License: LGPL-2.0+
++-%else 
++-License: LGPLv2+
++-%endif
++-Version: 1.6.0
++-Release: 1
++-BuildRequires: gcc-c++ make libudev-devel doxygen graphviz
++-%if 0%{?fedora} >= 18
++-BuildRequires: systemd-devel pkgconfig
++-%else
++-%if 0%{?suse_version} >= 1220
++-BuildRequires: systemd-devel pkg-config
++-%else
++-BuildRequires: libudev-devel pkgconfig
++-%endif
++-%endif
++-Source0: open-zwave-%{version}.tar.gz
++-
++-
++-BuildRoot: %{_tmppath}/libopenzwave-root
++-
++-%description
++-OpenZWave is an open-source, cross-platform library designed to enable anyone to
++-add support for Z-Wave home-automation devices to their applications, without 
++-requiring any in depth knowledge of the Z-Wave protocol.
++-
++-Z-Wave employs a proprietary protocol which the owners, Sigma Designs, have 
++-chosen not to release into the public domain. There is also no official free 
++-or low-cost SDK that can be used to develop applications (The ControlThink SDK
++-is now tied exclusively to their own Z-Wave PC interface). The only way to 
++-obtain the protocol documentation and sample code is to purchase an expensive 
++-development kit, and sign a non-disclosure agreement (NDA) preventing the 
++-release of that knowledge.
++-
++-OpenZWave was created to fill that gap. We do not have the official 
++-documentation, have signed no NDA, and are free to develop the library as we 
++-see fit. Our knowledge comes from existing bodies of open-source code 
++-(principally the Z-Wave parts of LinuxMCE), and through examining the 
++-messages sent by Z-Wave devices.
++-
++-The goal of the project is to make a positive contribution to the Z-Wave 
++-community by creating a library that supports as much of the Z-Wave 
++-specification as possible, and that can be used as a "black-box" solution 
++-by anyone wanting to add Z-Wave to their application. It is NOT our aim 
++-to publish alternative documentation of the Z-Wave protocol, or to 
++-attempt to "punish" Sigma Designs for their decision to keep the 
++-protocol closed.
++-
++-%package -n libopenzwave-devel
++-Summary: Open-ZWave header files
++-%if 0%{?fedora} > 0
++-Group: Development/Libraries
++-%else
++-Group: Development/Libraries/C and C++
++-%endif
++-Requires: %{name} = %{version}-%{release}
++-
++-%description -n libopenzwave-devel
++-header files needed when you want to compile your own 
++-applications using openzwave
++-
++-%package -n openzwave
++-Summary: Open-ZWave Sample Executables
++-%if 0%{?fedora} > 0
++-Group: Development/Libraries
++-%else
++-Group: Development/Libraries/C and C++
++-%endif
++-Requires: %{name} = %{version}-%{release}
++-
++-%description -n openzwave
++-Sample Executables for OpenZWave
++-
++-%prep
++-
++-%setup -q -n open-zwave-%{version}
++-
++-
++-
++-
++-%build
++-major_ver=$(echo %{version} | awk -F \. {'print $1'})
++-minor_ver=$(echo %{version} | awk -F \. {'print $2'})
++-revision=$(echo %{version} | awk -F \. {'print $3'})
++-CPPFLAGS=-g VERSION_MAJ=$major_ver VERSION_MIN=$minor_ver VERSION_REV=$revision PREFIX=/usr sysconfdir=%{_sysconfdir}/openzwave/ includedir=%{_includedir} docdir=%{_defaultdocdir}/openzwave-%{version} instlibdir=%{_libdir} make %{?_smp_mflags}
++-
++-%install
++-rm -rf %{buildroot}/*
++-major_ver=$(echo %{version} | awk -F \. {'print $1'})
++-minor_ver=$(echo %{version} | awk -F \. {'print $2'})
++-revision=$(echo %{version} | awk -F \. {'print $3'})
++-mkdir -p %{buildroot}/%{_bindir}
++-mkdir -p %{buildroot}/%{_libdir}
++-mkdir -p %{buildroot}/%{_defaultdocdir}/openzwave-%{version}/
++-mkdir -p %{buildroot}/%{_sysconfdir}/
++-mkdir -p %{buildroot}/%{_includedir}/openzwave/
++-DESTDIR=%{buildroot} VERSION_MAJ=$major_ver VERSION_MIN=$minor_ver VERSION_REV=$revision PREFIX=/usr sysconfdir=%{_sysconfdir}/openzwave/ includedir=%{_includedir}/openzwave/ docdir=%{_defaultdocdir}/openzwave-%{version} instlibdir=%{_libdir} make install
++-cp -p INSTALL %{buildroot}/%{_defaultdocdir}/openzwave-%{version}/
++-cp -pr license %{buildroot}/%{_defaultdocdir}/openzwave-%{version}/
++-rm %{buildroot}%{_defaultdocdir}/openzwave-%{version}/Doxyfile.in
++-rm -rf %{buildroot}%{_defaultdocdir}/openzwave-%{version}/html/
++-
++-%files
++-%defattr(-,root,root,-)
++-%{_libdir}/libopenzwave.so.*
++-%dir %{_defaultdocdir}/openzwave-%{version}
++-%doc %{_defaultdocdir}/openzwave-%{version}/default.htm
++-%doc %{_defaultdocdir}/openzwave-%{version}/general/
++-%doc %{_defaultdocdir}/openzwave-%{version}/images+css/
++-%doc %{_defaultdocdir}/openzwave-%{version}/license/
++-%doc %{_defaultdocdir}/openzwave-%{version}/INSTALL
++-%config(noreplace) %{_sysconfdir}/openzwave/
++-
++-
++-
++-%files -n libopenzwave-devel
++-%defattr(-,root,root,-)
++-%{_bindir}/ozw_config
++-%{_includedir}/openzwave/
++-%{_libdir}/libopenzwave.so
++-%{_libdir}/pkgconfig/libopenzwave.pc
++-%dir %{_defaultdocdir}/openzwave-%{version}
++-%doc %{_defaultdocdir}/openzwave-%{version}/api/
++-
++-
++-%files -n openzwave
++-%defattr(-,root,root,-)
++-%{_bindir}/MinOZW
++-
++-
++-%post
++-/sbin/ldconfig 
++-
++-%post -n libopenzwave-devel
++-/sbin/ldconfig 
++-
++-%postun
++-/sbin/ldconfig 
++-
++-%changelog
++-* Tue Feb 04 2014 Justin Hammond+justin at dynam.ac - 1.0.730-1
++-- Initial Release
++-
++diff --git a/dist/openzwave.spec.in b/dist/openzwave.spec.in
++new file mode 100644
++index 000000000..4d7d22151
++--- /dev/null
+++++ b/dist/openzwave.spec.in
++@@ -0,0 +1,145 @@
+++Name:     openzwave
+++Version:  @VERSION@
+++Release:  1.0%{?dist}
+++Summary:  Sample Executables for OpenZWave
+++URL:      http://www.openzwave.net
+++License:  LGPLv3+
+++Source0:  http://old.openzwave.com/downloads/openzwave-%{version}.tar.gz
+++
+++# Use system tinyxml
+++#Patch1:   openzwave-tinyxml.patch
+++# Use system hidapi
+++#Patch2:   openzwave-hidapi.patch
+++# Fix FTBFS
+++#Patch3:   openzwave-1.5.0-format.patch
+++
+++BuildRequires: gcc-c++
+++BuildRequires: doxygen
+++BuildRequires: graphviz
+++BuildRequires: hidapi-devel
+++BuildRequires: systemd-devel
+++BuildRequires: tinyxml-devel
+++
+++
+++%description
+++OpenZWave is an open-source, cross-platform library designed to enable anyone to
+++add support for Z-Wave home-automation devices to their applications, without
+++requiring any in depth knowledge of the Z-Wave protocol.
+++
+++
+++%package -n libopenzwave
+++Summary: Library to access Z-Wave interfaces
+++
+++
+++%description -n libopenzwave
+++OpenZWave is an open-source, cross-platform library designed to enable anyone to
+++add support for Z-Wave home-automation devices to their applications, without
+++requiring any in depth knowledge of the Z-Wave protocol.
+++
+++
+++%package -n libopenzwave-devel
+++Summary: Open-ZWave header files
+++Requires: libopenzwave%{?_isa} = %{version}-%{release}
+++
+++
+++%description -n libopenzwave-devel
+++Header files needed when you want to compile your own
+++applications using openzwave
+++
+++
+++%package -n libopenzwave-devel-doc
+++Summary: Open-ZWave API documentation files
+++Requires: libopenzwave-devel%{?_isa} = %{version}-%{release}
+++
+++
+++%description -n libopenzwave-devel-doc
+++API documentation files needed when you want to compile your own
+++applications using openzwave
+++
+++
+++%prep
+++%setup -q -n openzwave-%{version}
+++#%patch1 -p1 -b.tinyxml
+++#%patch2 -p1 -b.hidapi
+++#%patch3 -p1 -b.format
+++
+++
+++%build
+++major_ver=$(echo %{version} | awk -F \. {'print $1'})
+++minor_ver=$(echo %{version} | awk -F \. {'print $2'})
+++revision=$(echo %{version} | awk -F \. {'print $3'})
+++CPPFLAGS="%{optflags} -Wformat -DOPENZWAVE_ENABLE_EXCEPTIONS" LDFLAGS="%{__global_ldflags}" VERSION_MAJ=$major_ver VERSION_MIN=$minor_ver VERSION_REV=$revision PREFIX=/usr sysconfdir=%{_sysconfdir}/openzwave/ includedir=%{_includedir} docdir=%{_defaultdocdir}/openzwave-%{version} instlibdir=%{_libdir} make %{?_smp_mflags}
+++
+++
+++%install
+++rm -rf %{buildroot}/*
+++major_ver=$(echo %{version} | awk -F \. {'print $1'})
+++minor_ver=$(echo %{version} | awk -F \. {'print $2'})
+++revision=$(echo %{version} | awk -F \. {'print $3'})
+++mkdir -p %{buildroot}/%{_bindir}
+++mkdir -p %{buildroot}/%{_libdir}
+++mkdir -p %{buildroot}/%{_defaultdocdir}/openzwave-%{version}/
+++mkdir -p %{buildroot}/%{_sysconfdir}/
+++mkdir -p %{buildroot}/%{_includedir}/openzwave/
+++DESTDIR=%{buildroot} VERSION_MAJ=$major_ver VERSION_MIN=$minor_ver VERSION_REV=$revision PREFIX=/usr sysconfdir=%{_sysconfdir}/openzwave/ includedir=%{_includedir}/openzwave/ docdir=%{_defaultdocdir}/openzwave-%{version} instlibdir=%{_libdir} make install
+++rm %{buildroot}%{_defaultdocdir}/openzwave-%{version}/Doxyfile.in
+++rm -rf %{buildroot}%{_defaultdocdir}/openzwave-%{version}/html/
+++rm -rf %{buildroot}%{_defaultdocdir}/openzwave-%{version}/default.htm
+++rm -rf %{buildroot}%{_defaultdocdir}/openzwave-%{version}/general/
+++rm -rf %{buildroot}%{_defaultdocdir}/openzwave-%{version}/images+css/
+++rm -rf %{buildroot}%{_defaultdocdir}/openzwave-%{version}/api/
+++
+++
+++%files
+++%{_bindir}/MinOZW
+++
+++
+++%files -n libopenzwave
+++%license license/*.txt
+++%doc docs/default.htm docs/general/ docs/images+css/
+++%{_libdir}/libopenzwave.so.*
+++%dir %{_sysconfdir}/openzwave/
+++%config(noreplace) %{_sysconfdir}/openzwave/*
+++
+++
+++%files -n libopenzwave-devel
+++%{_bindir}/ozw_config
+++%{_includedir}/openzwave/
+++%{_libdir}/libopenzwave.so
+++%{_libdir}/pkgconfig/libopenzwave.pc
+++
+++
+++%files -n libopenzwave-devel-doc
+++%doc docs/api/
+++
+++
+++%ldconfig_scriptlets -n libopenzwave
+++
+++
+++%changelog
+++* Fri Feb 01 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.0-0.20180624git1e36dcc.0
+++- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+++
+++* Wed Jul 18 2018 Michael Cronenworth <mike@cchtml.com> - 1.5.0-0.20180623git1e36dcc.0
+++- Update to 20180623 git checkout to fix FTBFS
+++- Drop patches that revert BARRIER_OPERATOR support and use newer version
+++
+++* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.0-0.20171212gitc3b0e31.0
+++- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+++
+++* Mon Feb 26 2018 Michael Cronenworth <mike@cchtml.com> - 1.5.0-0.20171211gitc3b0e31.0
+++- Update to 20171211 git checkout
+++- Revert new BARRIER_OPERATOR support and use older version
+++
+++* Thu Feb 08 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.0-0.20170725gitde1c0e6
+++- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+++
+++* Mon Jul 31 2017 Michael Cronenworth <mike@cchtml.com> - 1.5.0-0.20170724gitde1c0e6
+++- Update to a git checkout, execeptions patch is upstream
+++- Fixes crashing issues with domoticz
+++
+++* Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.4.164-2
+++- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+++
+++* Wed Jul 12 2017 Michael Cronenworth <mike@cchtml.com> - 1.4.164-1
+++- Initial spec
++diff --git a/distfiles.mk b/distfiles.mk
++index e68082967..9cf436a6f 100644
++--- a/distfiles.mk
+++++ b/distfiles.mk
++@@ -1273,7 +1273,7 @@ DISTFILES =	.gitignore \
++ 	debian/watch \
++ 	dist.mk \
++ 	dist/libopenzwave.changes \
++-	dist/libopenzwave.spec \
+++	dist/openzwave.spec \
++ 	distfiles.mk \
++ 	docs/Doxyfile.in \
++ 	docs/default.htm \
+diff --git a/package/openzwave/Config.in b/package/openzwave/Config.in
+index 7819a620d2..d86d358723 100644
+--- a/package/openzwave/Config.in
++++ b/package/openzwave/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_OPENZWAVE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_INSTALL_LIBSTDCPP
  	depends on BR2_USE_WCHAR
- 	depends on !BR2_sh
-+	depends on !BR2_csky
- 	select BR2_PACKAGE_NCURSES
- 
- comment "full gdb on target needs a toolchain w/ wchar"
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 9fdb0548b6..7ce26c1628 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -48,6 +48,7 @@ choice
- 	prompt "GDB debugger Version"
- 	default BR2_GDB_VERSION_8_1
- 	depends on !BR2_arc
-+	depends on !BR2_csky
++	select BR2_PACKAGE_TINYXML
  	help
- 	  Select the version of gdb you wish to use.
+ 	  Free software library that interfaces with selected Z-Wave
+ 	  PC controllers, allowing anyone to create applications that
+diff --git a/package/openzwave/openzwave.mk b/package/openzwave/openzwave.mk
+index 9da414d112..3f9e177198 100644
+--- a/package/openzwave/openzwave.mk
++++ b/package/openzwave/openzwave.mk
+@@ -9,6 +9,7 @@ OPENZWAVE_SITE = $(call github,OpenZWave,open-zwave,$(OPENZWAVE_VERSION))
+ OPENZWAVE_LICENSE = LGPL-3.0+, GPL-3.0 (examples), Apache-2.0 (sh2ju.sh)
+ OPENZWAVE_LICENSE_FILES = license/license.txt license/lgpl.txt \
+ 	license/gpl.txt license/Apache-License-2.0.txt
++OPENZWAVE_DEPENDENCIES = tinyxml
  
-@@ -95,6 +96,7 @@ config BR2_PACKAGE_GDB_NEEDS_CXX11
- config BR2_GDB_VERSION
- 	string
- 	default "arc-2019.03-rc1-gdb" if BR2_arc
-+	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
- 	default "7.12.1"   if BR2_GDB_VERSION_7_12
- 	default "8.0.1"    if BR2_GDB_VERSION_8_0
- 	default "8.1.1"    if BR2_GDB_VERSION_8_1 || !BR2_PACKAGE_HOST_GDB
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 9b7517eabf..f508b6bffc 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -6,3 +6,6 @@ sha512  2aa81cfd389bb48c35d7d9f95cc10e88b4f7ad4597bdde0f8f1fd312f60f10d9fb2cc6e5
+ OPENZWAVE_INSTALL_STAGING = YES
  
- # Locally calculated (fetched from Github)
- sha512  bc6dcd92991222418795c49b8fc13df7354b34ba7a7f1e4214b108776da0dad730259aa4611086694bc9291126f5182b449bbc22409aeadc44b89e7a42fb4e00 	gdb-arc-2019.03-rc1-gdb.tar.gz
-+
-+# Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
-+sha512  c421e1f3c0d6cfb3c04544573c0c4b0075c8d8e3d563c6c234fcc1e4c2167ab203d1e57aec3b58abd348dc46f8cf9b47b753d3a43dba3ea970c9c9a6bd78c07b	gdb-4ecb98fbc2f94dbe01b69384afbc515107de73df.tar.gz
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index a926961372..46d745a897 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -14,6 +14,12 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
- GDB_FROM_GIT = y
- endif
+@@ -28,7 +29,8 @@ OPENZWAVE_MAKE_OPTS = \
+ 	instlibdir=/usr/lib \
+ 	pkgconfigdir=/usr/lib/pkgconfig \
+ 	sysconfdir=/etc/openzwave \
+-	DOXYGEN=
++	DOXYGEN= \
++	USE_BI_TXML=0
  
-+ifeq ($(BR2_csky),y)
-+GDB_SITE = $(call github,c-sky,binutils-gdb,$(GDB_VERSION))
-+GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
-+GDB_FROM_GIT = y
-+endif
-+
- GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
- GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
- 
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ OPENZWAVE_DEPENDENCIES += host-pkgconf udev
