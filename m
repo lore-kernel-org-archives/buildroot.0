@@ -1,35 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 09:24:44 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/capnproto:
- replace utf-8 apostrophe by ascii single quote
-Message-ID: <20190526072357.AE1BE8E14E@busybox.osuosl.org>
+Date: Sun, 26 May 2019 09:25:37 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/madplay: replace
+ utf-8 hyphen by ascii hyphen
+Message-ID: <20190526072357.BD1758E14E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c36b38f72ac9d647156e2440ab2067109060f524
+commit: https://git.buildroot.net/buildroot/commit/?id=d492eb9f5fb297f6de45f999e36831f5edeb00f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2a725944484e4783e21282c13902d74d7d2c48ac)
+(cherry picked from commit c7820cab4eb4a93077676b73f6e951b996cfa220)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/capnproto/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/madplay/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/capnproto/Config.in b/package/capnproto/Config.in
-index 00328fa6ce..a979a334ff 100644
---- a/package/capnproto/Config.in
-+++ b/package/capnproto/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_CAPNPROTO
- 	  Cap'n Proto is an insanely fast data interchange format
- 	  and capability-based RPC system. Think JSON, except
- 	  binary. Or think Protocol Buffers, except faster. In
--	  fact, in benchmarks, Cap???n Proto is INFINITY TIMES
-+	  fact, in benchmarks, Cap'n Proto is INFINITY TIMES
- 	  faster than Protocol Buffers.
+diff --git a/package/madplay/Config.in b/package/madplay/Config.in
+index 922460e0c2..a3373057a1 100644
+--- a/package/madplay/Config.in
++++ b/package/madplay/Config.in
+@@ -6,8 +6,8 @@ config BR2_PACKAGE_MADPLAY
+ 	  Command-line front-end to libmad, a high-quality MPEG audio
+ 	  decoder.  It currently supports MPEG-1 and the MPEG-2
+ 	  extension to lower sampling frequencies, as well as the de
+-	  facto MPEG 2.5 format. All three audio layers ??? Layer I,
+-	  Layer II, and Layer III (i.e. MP3) ??? are fully implemented.
++	  facto MPEG 2.5 format. All three audio layers - Layer I,
++	  Layer II, and Layer III (i.e. MP3) - are fully implemented.
  
- 	  https://capnproto.org/index.html
+ 	  http://www.underbit.com/products/mad/
+ 
