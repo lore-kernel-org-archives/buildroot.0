@@ -1,52 +1,133 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 11:20:37 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/sqlite: bump to
- version 3.27.2
-Message-ID: <20190526091608.07EF280F7C@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 26 May 2019 11:43:47 +0200
+Subject: [Buildroot] [PATCH v2] package/python-numpy: fix occasional
+ build failure with lapack
+In-Reply-To: <e0f46b82-02c0-7a4d-a67b-f21faa5ceda3@micronovasrl.com>
+References: <eb24ad7d-6de2-085d-d3e0-9037c3d5cf81@micronovasrl.com>
+ <20190515210342.126951-1-giulio.benetti@micronovasrl.com>
+ <20190518221352.0630eaa6@windsurf>
+ <e0c589d1-ce45-0132-43da-db2605b81616@micronovasrl.com>
+ <74098714-11ae-9897-a5fb-71db0f04c44a@micronovasrl.com>
+ <e0f46b82-02c0-7a4d-a67b-f21faa5ceda3@micronovasrl.com>
+Message-ID: <d08e9569-ab62-3cd2-e1ab-64b5c8aa85b8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a762860052d1b498d54f0551f3a15c36dc98603
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 612f0bcb9672e70742d3ca0dd4fff9affa25d11d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 7be42a0aca..5e2bc7030a 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,6 +1,6 @@
- # From https://www.sqlite.org/download.html
--sha1 5d6dc7634ec59e7a6fffa8758c1e184b2522c2e5  sqlite-autoconf-3250300.tar.gz
-+sha1 5f5750e3f39b7b60394a2fb6ddb2371f848670e6  sqlite-autoconf-3270200.tar.gz
- # Calculated based on the hash above
--sha256 00ebf97be13928941940cc71de3d67e9f852698233cd98ce2d178fd08092f3dd  sqlite-autoconf-3250300.tar.gz
-+sha256 50c39e85ea28b5ecfdb3f9e860afe9ba606381e21836b2849efca6a0bfe6ef6e  sqlite-autoconf-3270200.tar.gz
- # Locally calculated
- sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 6cf5710e5d..95ededd8c4 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--SQLITE_VERSION = 3250300
-+SQLITE_VERSION = 3270200
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
--SQLITE_SITE = https://www.sqlite.org/2018
-+SQLITE_SITE = https://www.sqlite.org/2019
- SQLITE_LICENSE = Public domain
- SQLITE_LICENSE_FILES = tea/license.terms
- SQLITE_INSTALL_STAGING = YES
+On 20/05/2019 19:49, Giulio Benetti wrote:
+> Adding Samuel+,
+> 
+> Il 20/05/2019 19:48, Giulio Benetti ha scritto:
+>> Hello Thomas,
+>>
+>> Il 19/05/2019 16:47, Giulio Benetti ha scritto:
+>>> Hello Thomas, All,
+>>>
+>>> Il 18/05/2019 22:13, Thomas Petazzoni ha scritto:
+[snip]
+>>>> ? - What happens when both clapack and lapack are enabled ?
+>>>
+>>> Python-numpy will choose the accelerator according to this list:
+>>> https://www.numpy.org/devdocs/user/building.html#accelerated-blas-lapack-libraries
+>> This ^^^^^^^^^^^^^ is wrong.
+>> The problem is that both lapack and clapack library names are equal:
+>> liblapack.so
+
+ So, you are saying that if you build both lapack and clapack, you get only one
+.so file?
+
+
+>> So what happens here is that python-numpy will use clapack headers,
+>> then it will link with liblapack.so causing linking error.
+>> Because liblapack.so is from lapack(not clapack) due to alphabetical
+>> order when building.
+>>
+>> Basically clapack is the c implementation of lapack, but in lapack it's
+>> been implemented lapacke(a c interface) that makes clapack useless at
+>> this point.
+>>
+>> I see 2 options:
+>> - remove clapack completely because it's the same as lapacke(embedded in
+>> lapack)
+>> - make clapack and lapack exclusive selectable in their Config.in like:
+>> ?? (clapack Config.in)
+>> ?? depends on !BR2_PACKAGE_LAPACK
+>> ?? and:
+>> ?? (lapack Config.in)
+>> ?? depends on !BR2_PACKAGE_CLAPACK
+
+ We indeed have to make the mutually exclusive. There are a number of ways that
+we can do that.
+
+A. Add a dependency (not like above because it's a circular dependency).
+
+B. Turn it into a virtual package.
+
+C. Turn it into a choice (in addition to making it a virtual package).
+
+ The latter is probably the proper way. Cfr. how it was done for
+openssl/libressl and libjpeg/turbo-jpeg.
+
+
+>> But IMHO we should proceed with dropping clapack.
+
+ Why? it is maintained, and it is a dependency of armadillo...
+
+ I had a deeper look, and actually lapack and clapack are the same, just
+compiled differently: lapack is built with the fortran compiler, clapack is
+generated with f2c (by upstream) and built with the C compiler. AFAIU, anything
+that uses lapack should also be able to use clapack and vice versa.
+
+ We have two packages like that: numpy and armadillo. They both seem to support
+both lapack and clapack.
+
+ So, it seems indeed removing clapack is the appropriate thing. Except: lapack
+requires a fortran compiler, which is not always available. So in that sense, it
+would actually be more appropriate to remove lapack...
+
+ But maybe it would be better to normally use lapack, and only enable clapack
+when lapack isn't available (i.e. when there's no fortran compiler).
+
+ Regards,
+ Arnout
+
+>>>> Also, perhaps we need:
+>>>>
+>>>> ????select BR2_PACKAGE_LAPACK_COMPLEX if BR2_PACKAGE_LAPACK
+>>
+>> This ^^^^^^^^^^ instead never built succesfully.
+>> It built successfully only because I was trying to build with:
+>> make python-numpy-dirclean python-numpy
+>> instead of:
+>> make clean all
+>>
+>> So I had a mess of LAPACK libraries in my environment(sorry).
+>>
+>> Best regards--
+>> Giulio Benetti
+>> CTO
+>>
+>> MICRONOVA SRL
+>> Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+>> Tel. 049/8931563 - Fax 049/8931346
+>> Cod.Fiscale - P.IVA 02663420285
+>> Capitale Sociale ? 26.000 i.v.
+>> Iscritta al Reg. Imprese di Padova N. 02663420285
+>> Numero R.E.A. 258642
+>>
+>>>> in the Config.in file, so that it's a bit easier for users: they don't
+>>>> have to know they need that specific sub-option of lapack.
+>>>
+>>> If lapack selected yes, but that should come after adding a choice menu IMHO.
+>>>
+>>> Kind regards
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
