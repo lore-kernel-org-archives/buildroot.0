@@ -1,30 +1,86 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 27 May 2019 00:05:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/linuxptp: fix build with new
- headers
-In-Reply-To: <20190224204931.2759-1-panfilov.artyom@gmail.com>
-References: <20190224204931.2759-1-panfilov.artyom@gmail.com>
-Message-ID: <fda3acb4-bc2e-7b2c-46f3-eeea5ece2f60@mind.be>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Sun, 26 May 2019 20:24:33 -0300
+Subject: [Buildroot] [PATCH] package/tpm2-totp: fix error due to variable
+ used uninitialized
+Message-ID: <20190526232433.31654-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+From: Carlos Santos <unixmania@gmail.com>
 
+Some inline declarations of strtok_r (specifically in Sourcery CodeBench
+Lite 2016.11-19) contain code where an '__s' local variable can be used
+uninitialized.
 
-On 24/02/2019 21:49, Artem Panfilov wrote:
-> net_tstamp.h in recent kernel versions requires time.h for clockid_t.
-> 
-> Fixes:
->   http://autobuild.buildroot.net/results/93903e8abfeaa7df0b6525033fa63e29f2c9e7ae
-> Signed-off-by: Artem Panfilov <panfilov.artyom@gmail.com>
+When GCC expands that declaration in tpm2-totp, __s becomes an alias to
+a variable which fact is not initialized, but this is not relevant since
+the execution path leading to the uninitialized use is never followed.
 
- There should be an empty line above your Sob. I fixed that up and applied to
-master, thanks.
+Anyway, apply a patch already submitted upstream to fix the compilation
+error.
 
- There was some discussion if this was the proper approach, but the patch comes
-from upstream, and it's still failing in the autobuilders.
+Upstream bug report:
+  https://github.com/tpm2-software/tpm2-totp/issues/32
 
- Regards,
- Arnout
+Fixes:
+  http://autobuild.buildroot.net/results/5693a35e4d6bc76a1f46fe0e217abc49f7188aad/
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+ ...ion-failure-due-to-variable-may-be-u.patch | 42 +++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+ create mode 100644 package/tpm2-totp/0002-src-fix-compilation-failure-due-to-variable-may-be-u.patch
+
+diff --git a/package/tpm2-totp/0002-src-fix-compilation-failure-due-to-variable-may-be-u.patch b/package/tpm2-totp/0002-src-fix-compilation-failure-due-to-variable-may-be-u.patch
+new file mode 100644
+index 0000000000..a650ab49f4
+--- /dev/null
++++ b/package/tpm2-totp/0002-src-fix-compilation-failure-due-to-variable-may-be-u.patch
+@@ -0,0 +1,42 @@
++From 194f41635367452a7a3c9a75ebbada531bf4c58d Mon Sep 17 00:00:00 2001
++From: Carlos Santos <unixmania@gmail.com>
++Date: Sun, 26 May 2019 13:39:44 -0300
++Subject: [PATCH] src: fix compilation failure due to "variable may be used
++ uninitialized"
++
++Some inline declarations of strtok_r (specifically in Sourcery CodeBench
++Lite 2016.11-19) contain code where an '__s' local variable can be used
++uninitialized.
++
++When GCC expands that declaration in 'parse_pcrs', __s becomes an alias
++to the local variable 'saveptr', which in fact is not initialized, but
++this is not relevant, since the 'str' argument is knowingly not NULL
++when passed to strtok_r because it comes from 'optarg' in parse_opts.
++
++Anyway, initialize saveptr to NULL to prevent the compilation error.
++
++Fixes:
++  http://autobuild.buildroot.net/results/5693a35e4d6bc76a1f46fe0e217abc49f7188aad/
++
++Change-Id: I03ad3731774c56744f18154ec161c92ba002903d
++Signed-off-by: Carlos Santos <unixmania@gmail.com>
++---
++ src/tpm2-totp.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/tpm2-totp.c b/src/tpm2-totp.c
++index 3f60b4a..f28a4d6 100644
++--- a/src/tpm2-totp.c
+++++ b/src/tpm2-totp.c
++@@ -93,7 +93,7 @@ int
++ parse_pcrs(char *str, int *pcrs)
++ {
++     char *token;
++-    char *saveptr;
+++    char *saveptr = NULL;
++     char *endptr;
++     long pcr;
++ 
++-- 
++2.20.1
++
+-- 
+2.20.1
