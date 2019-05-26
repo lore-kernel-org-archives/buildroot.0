@@ -1,86 +1,102 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 26 May 2019 20:20:22 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/kvm-unit-tests: fix build without ssp on x86_64
-In-Reply-To: <20190525222209.14372-1-fontaine.fabrice@gmail.com>
-References: <20190525222209.14372-1-fontaine.fabrice@gmail.com>
-Message-ID: <d0c26970-8d47-c56f-3491-f636348b674d@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 26 May 2019 20:27:27 +0200
+Subject: [Buildroot] [git commit] package/qt5webkit-examples: fix build with
+ qt5webkit
+Message-ID: <20190526182330.4ACA18D206@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=497af2beb1250af93c17412d636dc2fe48a59f8a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes:
+ - http://autobuild.buildroot.org/results/68dd6f1ffed49f8e2570f7364e5e635573807d3e
 
-On 26/05/2019 00:22, Fabrice Fontaine wrote:
-> Makefile tries to detect stack-protector which will result in build
-> failure on x86_64 if ssp is not available on host compiler so disable
-> stack protector through EXTRA_CFLAGS
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .../0002-Fix-QWebView-path.patch                   | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
- I would like to actually understand the failure though... The error is:
-
-/usr/bin/ld: x86/realmode.o: in function `print_serial_u32':
-.../x86/realmode.c:104: undefined reference to `__stack_chk_fail'
-
- However, realmode.c is built with
-
-gcc  -mno-red-zone -m32 -O1 -g -MMD -MF x86/.realmode.d  -Wall -Wwrite-strings
--Wclobbered -Wempty-body -Wuninitialized -Wignored-qualifiers
--Wunused-but-set-parameter  -fno-omit-frame-pointer    -Wno-frame-address
--fno-pic  -no-pie -Wmissing-parameter-type -Wold-style-declaration
--Woverride-init -std=gnu99 -ffreestanding -I
-/data/buildroot/buildroot-test/instance-1/output/build/kvm-unit-tests-kvm-unit-tests-20171020/lib
--I
-/data/buildroot/buildroot-test/instance-1/output/build/kvm-unit-tests-kvm-unit-tests-20171020/lib/x86
--I lib   -c -o x86/realmode.o x86/realmode.c
-
- So, stack-protector is *not* enabled... So what the hell is going on here?
-
- It seems to only happen on Xogium's Arch Linux server. Maybe there's something
-weird going on with that server?
-
- Regards,
- Arnout
-
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/e6f767755ffdb5ecc014eb5ad7519814f075a60e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Peter Korsgaard):
->  - Always disable stack-protector on x86_64 as we're using host compiler
-> 
->  package/kvm-unit-tests/kvm-unit-tests.mk | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/kvm-unit-tests/kvm-unit-tests.mk b/package/kvm-unit-tests/kvm-unit-tests.mk
-> index 92d67fb34b..72762d21f2 100644
-> --- a/package/kvm-unit-tests/kvm-unit-tests.mk
-> +++ b/package/kvm-unit-tests/kvm-unit-tests.mk
-> @@ -37,6 +37,8 @@ KVM_UNIT_TESTS_CONF_OPTS =\
->  # x86-64 cannot do.
->  ifneq ($(BR2_x86_64),y)
->  KVM_UNIT_TESTS_CONF_OPTS += --cross-prefix="$(TARGET_CROSS)"
-> +# Don't force -fstack-protector as we don't know if host compiler supports ssp 
-> +KVM_UNIT_TESTS_MAKE_OPTS += EXTRA_CFLAGS=-fno-stack-protector
->  endif
->  
->  define KVM_UNIT_TESTS_CONFIGURE_CMDS
-> @@ -44,11 +46,12 @@ define KVM_UNIT_TESTS_CONFIGURE_CMDS
->  endef
->  
->  define KVM_UNIT_TESTS_BUILD_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) standalone
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(KVM_UNIT_TESTS_MAKE_OPTS) -C $(@D) \
-> +		standalone
->  endef
->  
->  define KVM_UNIT_TESTS_INSTALL_TARGET_CMDS
-> -	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-> +	$(TARGET_MAKE_ENV) $(MAKE) $(KVM_UNIT_TESTS_MAKE_OPTS) -C $(@D) \
->  		DESTDIR=$(TARGET_DIR)/usr/share/kvm-unit-tests/ \
->  		install
->  endef
-> 
+diff --git a/package/qt5/qt5webkit-examples/0002-Fix-QWebView-path.patch b/package/qt5/qt5webkit-examples/0002-Fix-QWebView-path.patch
+new file mode 100644
+index 0000000000..30aab30167
+--- /dev/null
++++ b/package/qt5/qt5webkit-examples/0002-Fix-QWebView-path.patch
+@@ -0,0 +1,73 @@
++From 9fa73707216bd55dff380031a33aca701a7d9c8b Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 12 May 2019 23:29:05 +0200
++Subject: [PATCH] Fix QWebView path
++
++QWebView is installed under QtWebKitWidgets
++
++Fixes:
++ - http://autobuild.buildroot.org/results/68dd6f1ffed49f8e2570f7364e5e635573807d3e
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ examples/webkitwidgets/formextractor/formextractor.ui           | 2 +-
++ examples/webkitwidgets/previewer/previewer.ui                   | 2 +-
++ examples/webkitwidgets/simpleselector/window.ui                 | 2 +-
++ .../xmlpatterns/qobjectxmlmodel/forms/mainwindow.ui             | 2 +-
++ 4 files changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/examples/webkitwidgets/formextractor/formextractor.ui b/examples/webkitwidgets/formextractor/formextractor.ui
++index 5c4afec..a38bdd5 100644
++--- a/examples/webkitwidgets/formextractor/formextractor.ui
+++++ b/examples/webkitwidgets/formextractor/formextractor.ui
++@@ -151,7 +151,7 @@
++   <customwidget>
++    <class>QWebView</class>
++    <extends>QWidget</extends>
++-   <header>QtWebKit/QWebView</header>
+++   <header>QtWebKitWidgets/QWebView</header>
++   </customwidget>
++  </customwidgets>
++  <resources/>
++diff --git a/examples/webkitwidgets/previewer/previewer.ui b/examples/webkitwidgets/previewer/previewer.ui
++index d4c9992..69adb2e 100644
++--- a/examples/webkitwidgets/previewer/previewer.ui
+++++ b/examples/webkitwidgets/previewer/previewer.ui
++@@ -74,7 +74,7 @@
++   <customwidget>
++    <class>QWebView</class>
++    <extends>QWidget</extends>
++-   <header>QtWebKit/QWebView</header>
+++   <header>QtWebKitWidgets/QWebView</header>
++   </customwidget>
++  </customwidgets>
++  <resources/>
++diff --git a/examples/webkitwidgets/simpleselector/window.ui b/examples/webkitwidgets/simpleselector/window.ui
++index aa824df..7906186 100644
++--- a/examples/webkitwidgets/simpleselector/window.ui
+++++ b/examples/webkitwidgets/simpleselector/window.ui
++@@ -64,7 +64,7 @@
++   <customwidget>
++    <class>QWebView</class>
++    <extends>QWidget</extends>
++-   <header>QtWebKit/QWebView</header>
+++   <header>QtWebKitWidgets/QWebView</header>
++   </customwidget>
++  </customwidgets>
++  <resources/>
++diff --git a/examples/webkitwidgets/xmlpatterns/qobjectxmlmodel/forms/mainwindow.ui b/examples/webkitwidgets/xmlpatterns/qobjectxmlmodel/forms/mainwindow.ui
++index ad43284..000cae7 100644
++--- a/examples/webkitwidgets/xmlpatterns/qobjectxmlmodel/forms/mainwindow.ui
+++++ b/examples/webkitwidgets/xmlpatterns/qobjectxmlmodel/forms/mainwindow.ui
++@@ -188,7 +188,7 @@ p, li { white-space: pre-wrap; }
++   <customwidget>
++    <class>QWebView</class>
++    <extends>QWidget</extends>
++-   <header>QtWebKit/QWebView</header>
+++   <header>QtWebKitWidgets/QWebView</header>
++   </customwidget>
++  </customwidgets>
++  <resources/>
++-- 
++2.20.1
++
