@@ -1,32 +1,31 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 May 2019 15:07:57 +0200
-Subject: [Buildroot] [PATCH/next v2,
- 1/1] package/gpsd: bump to version 3.18.1
-In-Reply-To: <20190524135745.8823-1-fontaine.fabrice@gmail.com>
-References: <20190524135745.8823-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190526150757.3a0d4c5f@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 26 May 2019 15:09:06 +0200
+Subject: [Buildroot] Npm install fails if package ships precompiled
+ binaries
+In-Reply-To: <CAH7nf8=GgAb1Hnorb0QRQZ6Y5ByWEV=B7b12yxcDyFcSyJHpXw@mail.gmail.com>
+References: <442f0048-d81d-8172-3efa-44cb80b34ac0@mind.be>
+ <CAH7nf8mdxiq2962Lch1xrkhpHms1nhoL+jXQNo22rYu6JPhttQ@mail.gmail.com>
+ <CAH7nf8=GgAb1Hnorb0QRQZ6Y5ByWEV=B7b12yxcDyFcSyJHpXw@mail.gmail.com>
+Message-ID: <5977f0cb-c6b0-f93c-40e7-d8920a527883@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 24 May 2019 15:57:45 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> - Remove second patch (already in version)
-> - Add a patch to fix build without man pages
-> - Add a patch to remove C99-style loop
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2 (after review of Beno?t Th?baudeau):
->  - Add second patch to fix C99-style loop
 
-Applied to next, thanks.
+On 15/05/2019 15:07, Stefano Guandalini wrote:
+> I'm building for ARM 64 on an x86_64 but I think the issue comes because the npm
+> package is shipped with binaries for "all" arch.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ Okay, so we should exclude /usr/lib/node_modules from the architecture check
+then. This means we wouldn't capture the cases where the npm module really
+doesn't supply binaries for the correct architecture. But I guess if you're
+using npm, you're lost anyway :-P.
+
+ Stefano, care to prepare a patch that adds this exception to the IGNORES list
+in support/scripts/check-bin-arch (with the appropriate comment).
+
+ Regards,
+ Arnout
