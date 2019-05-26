@@ -1,50 +1,82 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sun, 26 May 2019 22:15:42 +0200
-Subject: [Buildroot] [PATCH] package/gcc: don't build a toolchain for
- powerpc with spe ABI with gcc >= 8.x
-Message-ID: <20190526201542.18904-1-romain.naour@gmail.com>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Sun, 26 May 2019 22:14:54 +0200
+Subject: [Buildroot] [PATCH 1/1] Add libvirt (KVM) support
+In-Reply-To: <25259681-75b6-fe4b-bb4b-e9a903f48058@mind.be>
+References: <20190215173607.13773-1-christopher@lecroq.be>
+ <20190413222137.6c0cba37@windsurf>
+ <da50400b-6cf2-d87a-3a51-c54a46b7cea6@lecroq.be>
+ <a4a04e64-bf89-f21b-89fe-7b3e5b1e5d69@mind.be>
+ <CA+_SqVYm9vpx+Uuktb+s_TYu+Hzpu258AfNhUUkBTRK7K_SuOQ@mail.gmail.com>
+ <76055cea-ec05-aad3-1f27-39e07b48b12b@lecroq.be>
+ <25259681-75b6-fe4b-bb4b-e9a903f48058@mind.be>
+Message-ID: <CA+_SqVY2wACSL=-5rugRsL0O+kKJqHnqgSzc1ouuy=9gcoRDjQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The powerpc*-*-*spe* support has been deprecated in GCC 8 [1] and has
-been removed in GCC 9 [2].
+On Sun, May 26, 2019 at 3:21 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>  Hi Angelo, Christopher,
+>
+> On 15/04/2019 16:54, Christopher Peeters wrote:
+> > On 15/04/2019 16:06, Angelo Compagnucci wrote:
+> >> On Mon, Apr 15, 2019 at 2:23 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+> >>>  Hi Christopher,
+> >>>
+> >>>  Plese don't top-post, but reply inline like I do below.
+> >>>
+> >>> On 15/04/2019 09:46, Christopher Peeters wrote:
+> >>>> Hi Thomas,
+> >>>>
+> >>>> Thank you for your email. I wasn't aware about the commit title
+> >>>> conventions so I will fix this.
+> >>>>
+> >>>> The reason why I selected a different distribution is the lack of
+> >>>> support for Libvirt by the original distribution.
+> >>>  I would prefer in that case that we always use this other distribution (which
+> >>> is actually the same distribution, right? bionic == ubuntu1804...).
+> >> I wouldn't like to use this distribution if possible, is not the
+> >> official one and not maintained by canonical. The official one is:
+> >>
+> >> https://app.vagrantup.com/ubuntu/boxes/bionic64
+> > As I said before there's no support from Canonical for libvirt images.
+> > This can only be solved by Canonical. And if I look at Launchpad, it
+> > won't happen very soon. There's another question for LXC support open
+> > for more then a year now.
+> >
+> > An other option when preferring official images is to switch over to one
+> > of the following boxes since they do understand that source projects
+> > should support each other and therefore have support for libvirt in
+> > their Vagrant boxes. I haven't tested them though.
+> >
+> > - https://app.vagrantup.com/debian/boxes/stretch64
+>
+>  Without understanding all this vagrant stuff, I would say that simply switching
+> away from Ubuntu and to Debian sounds like the right thing to do, no? Debian
+> stable is definitely a distro we want to have supported at all times.
 
-While building with GCC 8, the build stop since we don't provide --enable-obsolete
-option.
+The only thing that bothers me is that the debian images for vagrant
+are not official and only maintained by a single person
+(https://app.vagrantup.com/debian).
+On the contrary, Ubuntu images are officially maintained by canonical
+into their efforts for ubuntu on cloud.
 
-For now, keep powerpcspe support in Buildroot but only for older compiler
-up to GCC 7.
+Alternatively we can switch to Fedora which is officially supported
+and supports libvirt, but we have to completetly rewrite the provision
+section of the vagrantfile.
 
-Note: Although we can't select Glibc for powerpcspe since commit [4], this
-support has been removed for the next version of Glibc (the upcoming 2.30).
-
-[1] https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
-[2] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=b31d0348ddada49453e3edaaf93a423fdc61dc79
-[3] https://sourceware.org/git/?p=glibc.git;a=commit;h=a053e878494080f7070cf92890e546057236c9c9
-[4] https://git.buildroot.net/buildroot/commit/?id=5777e3ffd99132a57e3d29659850eec14b1625f8
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gcc/Config.in.host | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 8e22a4c155..b477fe56e7 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -66,6 +66,9 @@ config BR2_GCC_VERSION_8_X
- 	bool "gcc 8.x"
- 	# Broken or unsupported architectures
- 	depends on !BR2_or1k
-+	# powerpc spe support has been deprecated since gcc 8.x.
-+	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
-+	depends on !BR2_powerpc_SPE
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- endchoice
--- 
-2.21.0
+>
+>  Regards,
+>  Arnout
+>
+> >
+> > - https://app.vagrantup.com/centos/boxes/7
+> >
+> > - https://app.vagrantup.com/fedora/boxes/29-atomic-host
+> >
+> > - https://app.vagrantup.com/opensuse/boxes/openSUSE-15.0-x86_64
+> >
+> > - https://app.vagrantup.com/archlinux/boxes/archlinux
+> >
