@@ -1,78 +1,38 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Sun, 26 May 2019 19:10:21 +0200
-Subject: [Buildroot] [PATCH v2] mfgtools: bump version to 1.2.91
-In-Reply-To: <20190526144628.1f0a246a@windsurf>
-References: <20190525141800.3991-1-bisson.gary@gmail.com>
- <20190526144628.1f0a246a@windsurf>
-Message-ID: <20190526171021.GA20322@t450s.lan>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 26 May 2019 19:20:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/qt5multimedia: fix install with
+ gstreamer 0.10 and QT 5.6
+Message-ID: <20190526172033.22792-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+QT 5.6 fails to correctly detect gstreamer support with gstreamer 0.10
+as a result libqgsttools_p.so is not built and build fails on:
+cp: cannot stat '/home/buildroot/autobuild/run/instance-1/output/host/xtensa-buildroot-linux-uclibc/sysroot/usr/lib/libqgsttools*.so.*': No such file or directory
 
-On Sun, May 26, 2019 at 02:46:28PM +0200, Thomas Petazzoni wrote:
-> Hello Gary,
-> 
-> On Sat, 25 May 2019 16:18:00 +0200
-> Gary Bisson <bisson.gary@gmail.com> wrote:
-> 
-> > NXP deprecated the old mfgtools code, also called mfgtools v2 although
-> > the releases were named v0.xx.
-> > 
-> > It has been replaced by the Universal Update Utility (uuu), also called
-> > mfgtools v3 although the releases are named v1.x.yy.
-> > 
-> > This new tool actually resides in the same repository in the master
-> > branch whereas the old one is now in a 'linux' branch.
-> > 
-> > Since the old tool has issues building lately, let's switch to the new
-> > one. Note that uuu seems to be cleaner, supports much more features
-> > (i.MX8/8M/8QXP boot, fastboot etc..) and has a better documentation:
-> > https://github.com/NXPmicro/mfgtools/wiki
-> > 
-> > Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-> 
-> Thanks for this patch. Unfortunately, it fails to build on my system,
-> with:
-> 
-> [100%] Linking CXX executable uuu
-> /usr/bin/ld: cannot find -lstdc++
-> collect2: error: ld returned 1 exit status
-> 
-> This is because it is passing -static-libstdc++ at link time, for some
-> odd reason.
-> 
-> Do you know why they are doing:
-> 
-> set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
-> 
-> in uuu/CMakeLists.txt. This seems pretty bogus for something that
-> should be just a regular user-space program.
-> 
-> Could you have a look into this ?
+Fixes:
+ - http://autobuild.buildroot.org/results/c88afcd365418e29c89f247d9d887b5f786b0ec8
 
-My understanding, looking at the git history and other comments, is that
-this tool is meant to be build for Windows/Linux/Mac OSes. And
-apparently Windows only supports to build statically.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/qt5/qt5multimedia/qt5multimedia.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You can see that someone removed that line for the 'APPLE' build, so
-I've offered a pull-request to NXP to only do so for WIN32 instead [1].
-
-However, while writing that PR, I linked to this thread archive and
-realized Joerg is already offering a patch for mfgtools [2].
-
-Adding Joerg to this thread then, I'll let you guys know if the PR is
-accepted. @Joerg, let me know if you want to do the next patch version,
-no need to do the same work twice ;)
-
-BTW, I saw that you made a change for the git commit version, I'd
-suggest sending a PR for that too instead of patching it in Buildroot.
-
-Regards,
-Gary
-
-[1] https://github.com/NXPmicro/mfgtools/pull/105
-[2] http://lists.busybox.net/pipermail/buildroot/2019-May/249362.html
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index 0a27c857e5..b8a1c4ff75 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -53,7 +53,7 @@ endef
+ ifeq ($(BR2_STATIC_LIBS),)
+ # since Qt5.10.1 libqgsttools was renamed to libQtMultimediaGstTools
+ # and is installed by the default target install step below
+-ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)x$(BR2_PACKAGE_GST_PLUGINS_BASE)$(BR2_PACKAGE_GST1_PLUGINS_BASE),xy)
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST)x$(BR2_PACKAGE_GST1_PLUGINS_BASE),xy)
+ define QT5MULTIMEDIA_INSTALL_TARGET_QGSTTOOLS_LIB
+ 	cp -dpf $(STAGING_DIR)/usr/lib/libqgsttools*.so.* $(TARGET_DIR)/usr/lib
+ endef
+-- 
+2.20.1
