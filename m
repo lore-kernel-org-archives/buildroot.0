@@ -1,74 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 11:08:53 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/postgresql:
- security bump to version 11.3
-Message-ID: <20190526091607.ADFD38E152@busybox.osuosl.org>
+Date: Sun, 26 May 2019 11:15:18 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/qt5enginio: needs
+ ssl
+Message-ID: <20190526091607.DFC6580F7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2568bf88eb8ce7f6949443be28c27e0d9666bf25
+commit: https://git.buildroot.net/buildroot/commit/?id=a9e57731814d1f2115bf0ddf30c07d96990aed42
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security issues:
+qt5enginio needs Qt5 with ssl support, a dependency could be added on
+BR2_PACKAGE_QT5BASE_OPENSSL but this proposal was rejected in the first
+iteration of this patch.
 
-CVE-2019-10129: Memory disclosure in partition routing
+Qt5 has ssl support through libressl on Qt 5.6 or openssl in latest Qt
+however we can't select libressl without adding a circular dependency as
+some packages (such as sqlcipher) force openssl through
+BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL.
 
-Prior to this release, a user running PostgreSQL 11 can read arbitrary bytes
-of server memory by executing a purpose-crafted INSERT statement to a
-partitioned table.
+Any solution at the Kconfig level that tries to select libressl will
+lead to circular dependencies. Since Qt 5.6 is more or less deprecated
+anyway, and since it is not tested in the autobuilders, solve this with
+a comment. The comment is only shown for Qt 5.6, when libressl is not
+selected. Note that it is also shown when qt5enginio is not selected.
 
-CVE-2019-10130: Selectivity estimators bypass row security policies
+Fixes:
+ - http://autobuild.buildroot.org/results/60678cab68ec9aa17184b8417b64b3b79adf428a
 
-PostgreSQL maintains statistics for tables by sampling data available in
-columns; this data is consulted during the query planning process.  Prior to
-this release, a user able to execute SQL queries with permissions to read a
-given column could craft a leaky operator that could read whatever data had
-been sampled from that column.  If this happened to include values from rows
-that the user is forbidden to see by a row security policy, the user could
-effectively bypass the policy.  This is fixed by only allowing a
-non-leakproof operator to use this data if there are no relevant row
-security policies for the table.
-
-For more details, see the release notes:
-https://www.postgresql.org/about/news/1939/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5ea93e24cb84cea76a977df05f6cd166d4693575)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit ac38d6ce9c2d00623661806650807e14d4731e52)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 8 ++++----
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/qt5/qt5enginio/Config.in | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index c4d7ab55bb..ba6e02d4d8 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,7 +1,7 @@
--# From https://ftp.postgresql.org/pub/source/v11.2/postgresql-11.2.tar.bz2.md5
--md5 19d43be679cb0d55363feb8926af3a0f  postgresql-11.2.tar.bz2
--# From https://ftp.postgresql.org/pub/source/v11.2/postgresql-11.2.tar.bz2.sha256
--sha256 2676b9ce09c21978032070b6794696e0aa5a476e3d21d60afc036dc0a9c09405  postgresql-11.2.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v11.3/postgresql-11.3.tar.bz2.md5
-+md5 c2a729b754b8de86a969c86ec25db076  postgresql-11.3.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v11.3/postgresql-11.3.tar.bz2.sha256
-+sha256 2a85e082fc225944821dfd23990e32dfcd2284c19060864b0ad4ca537d30522d  postgresql-11.3.tar.bz2
+diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
+index 102058e7c5..ac2d13b3ab 100644
+--- a/package/qt5/qt5enginio/Config.in
++++ b/package/qt5/qt5enginio/Config.in
+@@ -1,9 +1,8 @@
+ config BR2_PACKAGE_QT5ENGINIO
+ 	bool "qt5enginio"
+-	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_QT5BASE
+ 	select BR2_PACKAGE_QT5BASE_GUI
+ 	select BR2_PACKAGE_QT5BASE_NETWORK
++	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Qt is a cross-platform application and UI framework for
+ 	  developers using C++.
+@@ -15,3 +14,10 @@ config BR2_PACKAGE_QT5ENGINIO
+ 	  5.6 and not recommended for new design.
  
- # License file, Locally calculated
- sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 8f01460109..cd71bf468d 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 11.2
-+POSTGRESQL_VERSION = 11.3
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+ 	  http://doc.qt.io/archives/qt-5.5/enginio-index.html
++
++# Forcibly selecting libressl is not possible because it is from a choice, and
++# depending on it is also not possible because we select openssl. So just a
++# a warning.
++comment "qt5enginio needs libressl for Qt5.6"
++	depends on BR2_PACKAGE_QT5_VERSION_5_6
++	depends on !BR2_PACKAGE_LIBRESSL
