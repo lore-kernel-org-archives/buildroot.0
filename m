@@ -1,50 +1,30 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 May 2019 22:57:15 +0200
-Subject: [Buildroot] [PATCH V2 7/9] package/glibc: Add C-SKY support
-In-Reply-To: <1557305915-11247-7-git-send-email-guoren@kernel.org>
-References: <1557305915-11247-1-git-send-email-guoren@kernel.org>
- <1557305915-11247-7-git-send-email-guoren@kernel.org>
-Message-ID: <20190526225715.5c05bd21@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 26 May 2019 23:15:03 +0200
+Subject: [Buildroot] [PATCH 0/2] Some more netsurf fixes
+In-Reply-To: <2062251e-bdc4-8711-1725-336a9f84f86d@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 26 May 2019 13:42:05 +0200")
+References: <20190509202808.6741-1-thomas.petazzoni@bootlin.com>
+ <2062251e-bdc4-8711-1725-336a9f84f86d@mind.be>
+Message-ID: <87r28kkje0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-On Wed,  8 May 2019 16:58:33 +0800
-guoren at kernel.org wrote:
+Hi,
 
-> From: Guo Ren <ren_guo@c-sky.com>
-> 
-> Add glibc build for C-SKY Architecture.
-> 
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> ---
->  package/glibc/glibc.hash                | 2 ++
->  package/glibc/glibc.mk                  | 3 +++
->  toolchain/toolchain-buildroot/Config.in | 2 +-
->  3 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-> index 5316f03..6e47559 100644
-> --- a/package/glibc/glibc.hash
-> +++ b/package/glibc/glibc.hash
-> @@ -1,2 +1,4 @@
->  # This hash file is not used; instead, update the
->  # hash files in the per-version sub-directories.
+ >> issues for the past months, if my patches are not sufficient (and as I
+ >> said, they *are* fragile), I will propose to simply remove the netsurf
+ >> package.
 
-Well, did you see this comment ? If you did, why did you add some
-hashes to this file ? :-)
+ >  However, since indeed nobody stepped up, I'm definitely in favour of removing
+ > the package entirely.
 
-> +# Locally calculated (fetched from https://github.com/c-sky/glibc)
-> +sha512 9deb2deceefe347d72de13510a5baa3de00f94c684f3b25e136ca3660f61e65a69f2115abb488c2ab0fa93cda8535853ce1e13e186efcc8434ecc4049efd82b5  glibc-7630ed2fa60caea98f500e4a7a51b88f9bf1e176.tar.gz
+Me too, carrying a broken package that nobody is interested in fixing
+doesn't make much sense.
 
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
