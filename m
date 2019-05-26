@@ -1,48 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 26 May 2019 13:42:05 +0200
-Subject: [Buildroot] [PATCH 0/2] Some more netsurf fixes
-In-Reply-To: <20190509202808.6741-1-thomas.petazzoni@bootlin.com>
-References: <20190509202808.6741-1-thomas.petazzoni@bootlin.com>
-Message-ID: <2062251e-bdc4-8711-1725-336a9f84f86d@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 26 May 2019 13:43:23 +0200
+Subject: [Buildroot] [PATCH v2] package/python-numpy: fix occasional
+ build failure with lapack
+In-Reply-To: <d08e9569-ab62-3cd2-e1ab-64b5c8aa85b8@mind.be> (Arnout
+ Vandecappelle's message of "Sun, 26 May 2019 11:43:47 +0200")
+References: <eb24ad7d-6de2-085d-d3e0-9037c3d5cf81@micronovasrl.com>
+ <20190515210342.126951-1-giulio.benetti@micronovasrl.com>
+ <20190518221352.0630eaa6@windsurf>
+ <e0c589d1-ce45-0132-43da-db2605b81616@micronovasrl.com>
+ <74098714-11ae-9897-a5fb-71db0f04c44a@micronovasrl.com>
+ <e0f46b82-02c0-7a4d-a67b-f21faa5ceda3@micronovasrl.com>
+ <d08e9569-ab62-3cd2-e1ab-64b5c8aa85b8@mind.be>
+Message-ID: <87imtxl9us.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
+Hi,
 
-On 09/05/2019 22:28, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On my machine, netsurf does not even build due to commit
-> 6da049f8ae61b956d135526722ce58fc2f67626a. My PATCH 1/2 fixes that, but
-> it still remains fragile as CFLAGS/LDFLAGS are used for both building
-> target objects and host tools. For example, with my PATCH 1/2 applied,
-> if BR2_STATIC_LIBS is enabled, -static is passed in LDFLAGS, and
-> netsurf fails to build on my machine with "-lc not found" because it
-> passes -static when building host tools, and I don't have a static
-> glibc installed on my machine.
-> 
-> PATCH 2/2 disable static linking for netsurf, which was anyway failing
-> to build for months in the autobuilders.
-> 
-> To be honest, the netsurf build system is broken beyond repair, and is
-> a royal pain to work with. Since nobody has acted to fix those build
+ >>> But IMHO we should proceed with dropping clapack.
 
- I have taken a quick look, and it doesn't seem *that* bad... There's just
-nsgenbind that needs to be built for the host, and it could be done by make a
-host-netsurf package that sets NSLIB_TARG to empty, and set NSBUILD_TARG to
-empty in the target build. It seems to find the binary through PATH, so there's
-not even a need to patch anything.
+ >  Why? it is maintained, and it is a dependency of armadillo...
 
+ >  I had a deeper look, and actually lapack and clapack are the same, just
+ > compiled differently: lapack is built with the fortran compiler, clapack is
+ > generated with f2c (by upstream) and built with the C compiler. AFAIU, anything
+ > that uses lapack should also be able to use clapack and vice versa.
 
-> issues for the past months, if my patches are not sufficient (and as I
-> said, they *are* fragile), I will propose to simply remove the netsurf
-> package.
+ >  We have two packages like that: numpy and armadillo. They both seem to support
+ > both lapack and clapack.
 
- However, since indeed nobody stepped up, I'm definitely in favour of removing
-the package entirely.
+ >  So, it seems indeed removing clapack is the appropriate thing. Except: lapack
+ > requires a fortran compiler, which is not always available. So in that sense, it
+ > would actually be more appropriate to remove lapack...
 
- Regards,
- Arnout
+ >  But maybe it would be better to normally use lapack, and only enable clapack
+ > when lapack isn't available (i.e. when there's no fortran compiler).
+
+Not knowing anything about (c)lapack (or fortran), is there any
+performance advantage using lapack over clapack? Otherwise just always
+using clapack seems like the simplest solution.
+
+-- 
+Bye, Peter Korsgaard
