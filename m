@@ -1,35 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 09:27:53 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/python-pexpect:
- replace utf-8 apostrophe by ascii single quote
-Message-ID: <20190526072357.EEC718E14E@busybox.osuosl.org>
+Date: Sun, 26 May 2019 09:28:36 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/sane-backends:
+ replace utf-8 space by ascii character
+Message-ID: <20190526072358.08EDA8E14E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae93e5463e977a820c4ea32280e51a52fa76c4ba
+commit: https://git.buildroot.net/buildroot/commit/?id=936eab6deb5b5de15cd40c1c5013811858302543
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+
+Replace utf-8 NO-BREAK-SPACE (c2 a0) in comment line by simple
+ascii space character.
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7c3d8667feecd50efc1c8ff70cf586fe2ef7b112)
+(cherry picked from commit 02614478cc916efb499d9374022bf3e7f02f959d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pexpect/Config.in | 2 +-
+ package/sane-backends/sane-backends.hash | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-pexpect/Config.in b/package/python-pexpect/Config.in
-index 58a3af5783..cee4606c1b 100644
---- a/package/python-pexpect/Config.in
-+++ b/package/python-pexpect/Config.in
-@@ -4,7 +4,7 @@ config BR2_PACKAGE_PYTHON_PEXPECT
- 	help
- 	  Pexpect is a pure Python module for spawning child
- 	  applications; controlling them; and responding to expected
--	  patterns in their output. Pexpect works like Don Libes???
-+	  patterns in their output. Pexpect works like Don Libes'
- 	  Expect. Pexpect allows your script to spawn a child
- 	  application and control it as if a human were typing
- 	  commands.
+diff --git a/package/sane-backends/sane-backends.hash b/package/sane-backends/sane-backends.hash
+index ddf82500bb..09652c993f 100644
+--- a/package/sane-backends/sane-backends.hash
++++ b/package/sane-backends/sane-backends.hash
+@@ -1,5 +1,5 @@
+ # From https://gitlab.com/sane-project/backends/tags/RELEASE_1_0_27
+ sha256 293747bf37275c424ebb2c833f8588601a60b2f9653945d5a3194875355e36c9  sane-backends-1.0.27.tar.gz
+ 
+-#??Hash for license file
++# Hash for license file
+ sha256 dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa  COPYING
