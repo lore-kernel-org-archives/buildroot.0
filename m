@@ -1,64 +1,84 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 May 2019 21:05:39 +0200
-Subject: [Buildroot] [PATCH/next v2 1/1] package/libubootenv: fix build
- with musl and static lib
-In-Reply-To: <1558542756-8919-1-git-send-email-pjtexier@koncepto.io>
-References: <1558542756-8919-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190526210539.52863351@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 26 May 2019 21:15:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: fix static build
+ with libxml2 and lzma
+In-Reply-To: <c9b198de-1c73-32e2-8539-e1da4aa3b4cc@mind.be>
+References: <20190424194741.12464-1-fontaine.fabrice@gmail.com>
+ <c9b198de-1c73-32e2-8539-e1da4aa3b4cc@mind.be>
+Message-ID: <CAPi7W81CK6vtbSSkLmL9kXLkOoZO6yCUeH+WmwRo96ZGXNewww@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Pierre-Jean,
+Dear Arnout,
 
-On Wed, 22 May 2019 18:32:36 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+Le dim. 26 mai 2019 ? 20:51, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>
+>
+>
+> On 24/04/2019 21:47, Fabrice Fontaine wrote:
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/533c75836ba6281000b89a648fc653b9ff4685ee
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+>  Applied to master, thanks.
+>
+> > ---
+> >  ...-config-to-find-libxml2-dependencies.patch | 33 +++++++++++++++++++
+> >  1 file changed, 33 insertions(+)
+> >  create mode 100644 package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
+> >
+> > diff --git a/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch b/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
+> > new file mode 100644
+> > index 0000000000..ab549021e4
+> > --- /dev/null
+> > +++ b/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
+> > @@ -0,0 +1,33 @@
+> > +From e6a2e71831f0699e9759e0579a00eea5fcb93696 Mon Sep 17 00:00:00 2001
+> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +Date: Wed, 24 Apr 2019 20:23:00 +0200
+> > +Subject: [PATCH] FindXml2: use pkg-config to find libxml2 dependencies
+> > +
+> > +On UNIX, when statically built, libxml2 can depends on other libraries such
+> > +as lzma. These dependencies are already retrieved through pkg-config so
+> > +append them to LIBXML2_LIBRARIES otherwise static build will fail
+> > +
+> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > +[Upstream status: not sent yet]
+>
+>  Since your other patches were accepted, can you upstream this one as well?
+It's already done and merged:
+https://github.com/wireshark/wireshark/commit/580098d875b497e5d5aa36dfad10291668e7d392
+>
+>  Regards,
+>  Arnout
+>
+> > +---
+> > + cmake/modules/FindLibXml2.cmake | 4 ++++
+> > + 1 file changed, 4 insertions(+)
+> > +
+> > +diff --git a/cmake/modules/FindLibXml2.cmake b/cmake/modules/FindLibXml2.cmake
+> > +index 99d70af57d..2a4b1f470f 100644
+> > +--- a/cmake/modules/FindLibXml2.cmake
+> > ++++ b/cmake/modules/FindLibXml2.cmake
+> > +@@ -98,6 +98,10 @@ endif()
+> > +
+> > + set(LIBXML2_INCLUDE_DIRS ${LIBXML2_INCLUDE_DIR} ${PC_LIBXML_INCLUDE_DIRS})
+> > + set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY})
+> > ++# Include transitive dependencies for static linking.
+> > ++if(UNIX)
+> > ++    list(APPEND LIBXML2_LIBRARIES ${PC_LIBXML_LIBRARIES})
+> > ++endif()
+> > +
+> > + include(FindPackageHandleStandardArgs)
+> > + FIND_PACKAGE_HANDLE_STANDARD_ARGS(LibXml2
+> > +--
+> > +2.20.1
+> > +
+> >
+Best Regards,
 
-> Fixes:
-> 
->  - http://autobuild.buildroot.net/results/e18/e1837ccbe774071876642655b1fcffbd69dd7947/
->  - http://autobuild.buildroot.net/results/206/206f1eba0dec39de1c02d760fa8f961d5a3879d0/
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-
-Thanks for the patch. I have applied to next, but a few things were not
-completely perfect.
-
-First of all, this patch is fixing two separate build issues, which
-require separate libubootenv patches. So it should have been two
-Buildroot patches.
-
->  ...sts.txt-do-not-force-the-build-of-a-share.patch | 46 ++++++++++++++++++++++
->  .../0001-uboot_env-fix-build-with-musl-libc.patch  | 31 +++++++++++++++
->  ...nv-fix-compilation-for-glibc-version-2.28.patch | 40 +++++++++++++++++++
->  3 files changed, 117 insertions(+)
->  create mode 100644 package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
->  create mode 100644 package/libubootenv/0001-uboot_env-fix-build-with-musl-libc.patch
-
-You create two patches named 0001, and there was already one, so the
-numbering was no longer correct.
-
-> diff --git a/package/libubootenv/0001-uboot_env-fix-build-with-musl-libc.patch b/package/libubootenv/0001-uboot_env-fix-build-with-musl-libc.patch
-> new file mode 100644
-> index 0000000..605b40a
-> --- /dev/null
-> +++ b/package/libubootenv/0001-uboot_env-fix-build-with-musl-libc.patch
-> @@ -0,0 +1,31 @@
-> +From 113a4ea9ec48b9428b3abac21ecca7d8f11502fe Mon Sep 17 00:00:00 2001
-> +From: Pierre-Jean Texier <pjtexier@koncepto.io>
-> +Date: Tue, 21 May 2019 21:32:27 +0200
-> +Subject: [libubootenv][PATCH 1/2] uboot_env: fix build with musl libc
-
-Please generate patches with "git format-patch -N" to avoid the "x/y"
-in "PATCH x/y". Indeed, this 1/2 doesn't make sense: this patch is in
-fact part of a series of 4 patches!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fabrice
