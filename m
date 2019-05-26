@@ -1,33 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 26 May 2019 20:53:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pseudo: remove package
-In-Reply-To: <20190526205132.41d353fb@windsurf>
-References: <20190526154337.24842-1-fontaine.fabrice@gmail.com>
- <20190526205132.41d353fb@windsurf>
-Message-ID: <f3a749a5-9f5c-e329-5ece-c394e702d0c1@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 26 May 2019 20:55:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mender: bump to version 2.0.0
+In-Reply-To: <20190508154924.67828-1-aduskett@gmail.com>
+References: <20190508154924.67828-1-aduskett@gmail.com>
+Message-ID: <20190526205510.04cc44ea@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello Adam,
 
+On Wed,  8 May 2019 11:49:24 -0400
+aduskett at gmail.com wrote:
 
-On 26/05/2019 20:51, Thomas Petazzoni wrote:
-> Hello,
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> On Sun, 26 May 2019 17:43:37 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> 
->> pseudo is not used and fails to build without xattr so remove it
->>
->> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
-> We have a patch from you in patchwork that was fixing the xattr issue,
-> and bumping this package. Why did you change your mind ?
+> In addition:
+>   - Update hashes for license files.
 
- Because I wrote that pseudo should be removed. It's a host package without user
-or Config.in.host.
+As we have already explain a zillion times already, when the license
+hashes are changed, there *must* be an explanation in the commit log
+about what changed in the license file(s).
 
- Regards,
- Arnout
+> diff --git a/package/mender/Config.in b/package/mender/Config.in
+> index 5ab2304e49..e8c29bb33e 100644
+> --- a/package/mender/Config.in
+> +++ b/package/mender/Config.in
+> @@ -3,6 +3,7 @@ config BR2_PACKAGE_MENDER
+>  	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+>  	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	select BR2_PACKAGE_XZ # LZMA
+
+The "LZMA" comment is not necessary, we typically don't have such
+comments.
+
+Could you resend with an updated commit log that explains the license
+file changes ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
