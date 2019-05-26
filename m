@@ -1,45 +1,56 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 May 2019 21:26:21 +0200
-Subject: [Buildroot] [RFC PATCH 1/4] configs/bananapro_defconfig: bump
- Linux to 5.1.1
-In-Reply-To: <20190520193223.14071-1-b.bilas@grinn-global.com>
-References: <20190520193223.14071-1-b.bilas@grinn-global.com>
-Message-ID: <20190526212621.52c5c474@windsurf>
+Date: Sun, 26 May 2019 21:26:43 +0200
+Subject: [Buildroot] [git commit branch/next] boot/barebox: bump version to
+ 2019.05.0
+Message-ID: <20190526192032.B7E8D81428@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=9ff92de080ed4ea641a2a1a581f1482b65adb4ec
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 20 May 2019 21:32:20 +0200
-Bartosz Bilas <b.bilas@grinn-global.com> wrote:
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> ---
->  configs/bananapro_defconfig | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-
-Why did you split your changes into four patches ? As I understand it,
-the current bananapro_defconfig already supports WiFi, so if the bump
-to Linux 5.1.1 breaks WiFi and requires the fixes of the three other
-patches, then you should have a single patch that does all.
-
-Without this, you break bisectability: if I apply only your PATCH 1/4,
-then the WiFi feature which was working is no longer working.
-
-Of course, if WiFi was in fact not working with the current defconfig
-(i.e before any of your patches), then it's fine to split the patches.
-Just perhaps patches 2, 3 and 4 could be the same, because it's all
-about making WiFi work.
-
-Could you clarify this point, and send a new iteration ?
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index 6d639e31e9..d919cacc57 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2019.04.0"
++	bool "2019.05.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2019.04.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2019.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index dfbd94fca8..fb371ab671 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+-# From https://www.barebox.org/download/barebox-2019.04.0.tar.bz2.md5
+-md5 2d9619dfe6aaaf3b10d6327486e18571 barebox-2019.04.0.tar.bz2
++# From https://www.barebox.org/download/barebox-2019.05.0.tar.bz2.md5
++md5 2e721cce90f1ea1492710ca23680311f barebox-2019.05.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 d2834b612228b82bbaa713b26dec1fa770123bb02727400e4c56f6f2bffb01cc barebox-2019.04.0.tar.bz2
++sha256 704bb09b2bf1347e43ebb9138da32a7e1b4d13892fd187be98f4f9dae000501d barebox-2019.05.0.tar.bz2
