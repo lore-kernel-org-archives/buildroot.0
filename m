@@ -1,72 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 May 2019 09:41:46 +0200
-Subject: [Buildroot] [git commit] package/tcl: bump to version 8.6.9
-Message-ID: <20190602201235.8ADF081354@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 26 May 2019 21:20:01 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-bad: add
+ audiolatency plugin option
+Message-ID: <20190602201236.2FADC8EDF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=621cfb91354aaea2c41af96812eeac1711cd7484
+commit: https://git.buildroot.net/buildroot/commit/?id=65b5b613f09e9397fb0b24278d7ebace25bd5af2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update first patch
+This plugin was introduced in 1.16.0. It is dependencyless and
+provides a way to measure audio latency.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/tcl/0001-dont-build-compat.patch | 11 ++---------
- package/tcl/tcl.hash                     |  2 +-
- package/tcl/tcl.mk                       |  2 +-
- 3 files changed, 4 insertions(+), 11 deletions(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 5 +++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/tcl/0001-dont-build-compat.patch b/package/tcl/0001-dont-build-compat.patch
-index 85c5c57df4..c0d5d85da7 100644
---- a/package/tcl/0001-dont-build-compat.patch
-+++ b/package/tcl/0001-dont-build-compat.patch
-@@ -7,20 +7,13 @@ anything buildroot is using as a standard C library will be good enough
- to not have broken behavior.
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index c53ff66272..35d6bddd05 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -46,6 +46,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOFXBAD
+ 	help
+ 	  Audio filters plugin
  
- Signed-off-by: Andrew Ruder <andrew.ruder@elecsyscorp.com>
-+[Fabrice: Update for 8.6.9]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOLATENCY
++	bool "audiolatency"
++	help
++	  Audio latency plugin
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOMIXMATRIX
+ 	bool "audiomixmatrix"
+ 	help
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index d6414f9daa..ad1adbc385 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -132,6 +132,12 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-audiofxbad
+ endif
  
- diff --git a/unix/tcl.m4 b/unix/tcl.m4
- --- a/unix/tcl.m4
- +++ b/unix/tcl.m4
--@@ -2466,7 +2466,7 @@ AC_DEFUN([SC_BUGGY_STRTOD], [
-- 		    }
-- 		    exit(0);
-- 		}], tcl_cv_strtod_buggy=ok, tcl_cv_strtod_buggy=buggy,
---		    tcl_cv_strtod_buggy=buggy)])
--+		    tcl_cv_strtod_buggy=ok)])
-- 	if test "$tcl_cv_strtod_buggy" = buggy; then
-- 	    AC_LIBOBJ([fixstrtod])
-- 	    USE_COMPAT=1
- @@ -2725,7 +2725,7 @@ AC_DEFUN([SC_TCL_CHECK_BROKEN_FUNC],[
-      if test ["$tcl_ok"] = 1; then
-  	AC_CACHE_CHECK([proper ]$1[ implementation], [tcl_cv_]$1[_unbroken],
-diff --git a/package/tcl/tcl.hash b/package/tcl/tcl.hash
-index 359b5433c2..913190b95c 100644
---- a/package/tcl/tcl.hash
-+++ b/package/tcl/tcl.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 a265409781e4b3edcc4ef822533071b34c3dc6790b893963809b9fe221befe07  tcl8.6.6-src.tar.gz
-+sha256 ad0cd2de2c87b9ba8086b43957a0de3eb2eb565c7159d5f53ccbba3feb915f4e  tcl8.6.9-src.tar.gz
- sha256 c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16  license.terms
-diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
-index b9fb7afbc6..6d750b3cd2 100644
---- a/package/tcl/tcl.mk
-+++ b/package/tcl/tcl.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- TCL_VERSION_MAJOR = 8.6
--TCL_VERSION = $(TCL_VERSION_MAJOR).6
-+TCL_VERSION = $(TCL_VERSION_MAJOR).9
- TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
- TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
- TCL_LICENSE = TCL
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOLATENCY),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-audiolatency
++else
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-audiolatency
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_AUDIOMIXMATRIX),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-audiomixmatrix
+ else
