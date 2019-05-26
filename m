@@ -1,62 +1,57 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 May 2019 21:06:49 +0200
-Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-good: add
- option to enable/disable jack plugin
-Message-ID: <20190602201236.1F61D8EDF1@busybox.osuosl.org>
+Date: Sun, 26 May 2019 21:07:50 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-bad: add
+ proxy plugin option
+Message-ID: <20190602201236.27B768EDF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3b0edbba14c343b299b96dfdeeebc465a71ba78
+commit: https://git.buildroot.net/buildroot/commit/?id=0a94d906cf4cc4aae9fef3c0251e1e8087fe1821
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently there is no explicit way to turn the jack plugin on or off.
-Create a menu entry allowing users to disable or enable the plugin,
-like we have for other features (for example the Pulseaudio plugin).
+This plugin was introduced in 1.16.0. It is dependencyless and
+provides proxied inter-pipeline communication.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gstreamer1/gst1-plugins-good/Config.in            | 13 +++++++++++++
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk |  2 +-
- 2 files changed, 14 insertions(+), 1 deletion(-)
+ package/gstreamer1/gst1-plugins-bad/Config.in           | 5 +++++
+ package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 6 ++++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 3af05ba6b4..433084fd6b 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -345,6 +345,19 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_GDKPIXBUF
- comment "gdkpixbuf needs a toolchain w/ wchar, threads"
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index e0757e96c9..c53ff66272 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -212,6 +212,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PNM
+ 	help
+ 	  PNM plugin
  
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_JACK
-+	bool "jack"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	select BR2_PACKAGE_JACK2
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PROXY
++	bool "proxy"
 +	help
-+	  JACK audio source/sink plugin
++	  Proxy plugin
 +
-+comment "jack needs a toolchain w/ C++, dynamic library"
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE
+ 	bool "rawparse"
+ 	help
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index a66d3e32bf..d6414f9daa 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -344,6 +344,12 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-pnm
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PROXY),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-proxy
++else
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-proxy
++endif
 +
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_PULSE
- 	bool "pulseaudio"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pulseaudio
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index 462d5e1307..829d27a2da 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -30,7 +30,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS += \
- 
- GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
- 
--ifeq ($(BR2_PACKAGE_JACK2),y)
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_JACK),y)
- GST1_PLUGINS_GOOD_CONF_OPTS += --enable-jack
- GST1_PLUGINS_GOOD_DEPENDENCIES += jack2
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-rawparse
  else
