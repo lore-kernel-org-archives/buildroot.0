@@ -1,57 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 May 2019 21:07:50 +0200
-Subject: [Buildroot] [git commit branch/next]
- package/gstreamer1/gst1-plugins-bad: add proxy plugin option
-Message-ID: <20190526191651.0CA4B8157D@busybox.osuosl.org>
+Date: Sun, 26 May 2019 21:26:21 +0200
+Subject: [Buildroot] [RFC PATCH 1/4] configs/bananapro_defconfig: bump
+ Linux to 5.1.1
+In-Reply-To: <20190520193223.14071-1-b.bilas@grinn-global.com>
+References: <20190520193223.14071-1-b.bilas@grinn-global.com>
+Message-ID: <20190526212621.52c5c474@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a94d906cf4cc4aae9fef3c0251e1e8087fe1821
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-This plugin was introduced in 1.16.0. It is dependencyless and
-provides proxied inter-pipeline communication.
+On Mon, 20 May 2019 21:32:20 +0200
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gstreamer1/gst1-plugins-bad/Config.in           | 5 +++++
- package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk | 6 ++++++
- 2 files changed, 11 insertions(+)
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> ---
+>  configs/bananapro_defconfig | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index e0757e96c9..c53ff66272 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -212,6 +212,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PNM
- 	help
- 	  PNM plugin
- 
-+config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PROXY
-+	bool "proxy"
-+	help
-+	  Proxy plugin
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE
- 	bool "rawparse"
- 	help
-diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-index a66d3e32bf..d6414f9daa 100644
---- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-+++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
-@@ -344,6 +344,12 @@ else
- GST1_PLUGINS_BAD_CONF_OPTS += --disable-pnm
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_PROXY),y)
-+GST1_PLUGINS_BAD_CONF_OPTS += --enable-proxy
-+else
-+GST1_PLUGINS_BAD_CONF_OPTS += --disable-proxy
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RAWPARSE),y)
- GST1_PLUGINS_BAD_CONF_OPTS += --enable-rawparse
- else
+Why did you split your changes into four patches ? As I understand it,
+the current bananapro_defconfig already supports WiFi, so if the bump
+to Linux 5.1.1 breaks WiFi and requires the fixes of the three other
+patches, then you should have a single patch that does all.
+
+Without this, you break bisectability: if I apply only your PATCH 1/4,
+then the WiFi feature which was working is no longer working.
+
+Of course, if WiFi was in fact not working with the current defconfig
+(i.e before any of your patches), then it's fine to split the patches.
+Just perhaps patches 2, 3 and 4 could be the same, because it's all
+about making WiFi work.
+
+Could you clarify this point, and send a new iteration ?
+
+Thanks,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
