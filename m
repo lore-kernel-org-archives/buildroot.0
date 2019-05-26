@@ -1,82 +1,62 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 26 May 2019 20:41:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/botan: fix static build with
- atomic
-In-Reply-To: <20190428083918.5008-1-fontaine.fabrice@gmail.com>
-References: <20190428083918.5008-1-fontaine.fabrice@gmail.com>
-Message-ID: <393f41d5-b4b8-e18e-6458-1b69478082ee@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 26 May 2019 20:51:10 +0200
+Subject: [Buildroot] [git commit] package/wireshark: fix static build with
+ libxml2 and lzma
+Message-ID: <20190526184505.6CA5C8E507@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=ecb65269b8c7bf8fa724f8f8cd4b6b9aedb80ef4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes:
+ - http://autobuild.buildroot.org/results/533c75836ba6281000b89a648fc653b9ff4685ee
 
-On 28/04/2019 10:39, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.org/results/9db39b209a0f4be1e09b7e4ddb5e9a63da4fbbfa
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...e-pkg-config-to-find-libxml2-dependencies.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
- Applied to master, thanks.
-
-> ---
->  ...e.in-move-LDFLAGS-after-EXE_LINKS_TO.patch | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/botan/0003-makefile.in-move-LDFLAGS-after-EXE_LINKS_TO.patch
-> 
-> diff --git a/package/botan/0003-makefile.in-move-LDFLAGS-after-EXE_LINKS_TO.patch b/package/botan/0003-makefile.in-move-LDFLAGS-after-EXE_LINKS_TO.patch
-> new file mode 100644
-> index 0000000000..82186419d5
-> --- /dev/null
-> +++ b/package/botan/0003-makefile.in-move-LDFLAGS-after-EXE_LINKS_TO.patch
-> @@ -0,0 +1,38 @@
-> +From a837dd63f3ac5a9c206863c82b57c679cb72b8b7 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Sun, 28 Apr 2019 10:21:06 +0200
-> +Subject: [PATCH] makefile.in: move LDFLAGS after EXE_LINKS_TO
-> +
-> +Move LDFLAGS after EXE_LINKS_TO to allow the user to give additional
-> +libraries such as -latomic otherwise static build will fail:
-> +
-> +cli/tls_server.o build/obj/cli/tls_utils.o build/obj/cli/utils.o build/obj/cli/x509.o -L. -lbotan-2 -lboost_filesystem -lboost_system -lbz2 -lcrypto -llzma -lsqlite3 -lz -o botan
-> +/home/buildroot/autobuild/instance-1/output/host/bin/sparc-linux-g++ -Wl,-rpath=\$ORIGIN -pthread -static -latomic build/obj/test/main.o build/obj/test/test_aead.o build/obj/test/test_asn1.o build/obj/test/test_bigint.o build/obj/test/test_block.o build/obj/test/test_blowfish.o build/obj/test/test_c25519.o build/obj/test/test_certstor.o build/obj/test/test_compression.o build/obj/test/test_cryptobox.o build/obj/test/test_datastore.o build/obj/test/test_dh.o build/obj/test/test_dl_group.o build/obj/test/test_dlies.o build/obj/test/test_dsa.o build/obj/test/test_ecc_pointmul.o build/obj/test/test_ecdh.o build/obj/test/test_ecdsa.o build/obj/test/test_ecgdsa.o build/obj/test/test_ecies.o build/obj/test/test_eckcdsa.o build/obj/test/test_ed25519.o build/obj/test/test_elg.o build/obj/test/test_entropy.o build/obj/test/test_ffi.o build/obj/test/test_filters.o build/obj/test/test_fpe.o build/obj/test/test_gf2m.o build/obj/test/test_gost_3410.o build/obj/test/test_hash.o build/obj/test/test
->  _hash_id.o build/obj/test/test_kdf.o build/obj/test/test_keywrap.o build/obj/test/test_mac.o build/obj/test/test_mceliece.o build/obj/test/test_modes.o build/obj/test/test_mp.o build/obj/test/test_name_constraint.o build/obj/test/test_newhope.o build/obj/test/test_ocb.o build/obj/test/test_ocsp.o build/obj/test/test_octetstring.o build/obj/test/test_oid.o build/obj/test/test_os_utils.o build/obj/test/test_otp.o build/obj/test/test_package_transform.o build/obj/test/test_pad.o build/obj/test/test_passhash.o build/obj/test/test_pbkdf.o build/obj/test/test_pem.o build/obj/test/test_pk_pad.o build/obj/test/test_pkcs11.o build/obj/test/test_pkcs11_high_level.o build/obj/test/test_pkcs11_low_level.o build/obj/test/test_psk_db.o build/obj/test/test_pubkey.o build/obj/test/test_rfc6979.o build/obj/test/test_rng.o build/obj/test/test_rng_kat.o build/obj/test/test_rsa.o build/obj/test/test_runner.o build/obj/test/test_simd.o build/obj/test/test_siv.o build/obj/test/test_sm2.o build/obj/test/t
->  est_srp6.o build/obj/test/test_stream.o build/obj/test/test_tests.o build/obj/test/test_tls.o build/obj/test/test_tls_messages.o build/obj/test/test_tpm.o build/obj/test/test_tss.o build/obj/test/test_utils.o build/obj/test/test_workfactor.o build/obj/test/test_x509_dn.o build/obj/test/test_x509_path.o build/obj/test/test_xmss.o build/obj/test/tests.o build/obj/test/unit_ecc.o build/obj/test/unit_ecdh.o build/obj/test/unit_ecdsa.o build/obj/test/unit_tls.o build/obj/test/unit_tls_policy.o build/obj/test/unit_x509.o -L. -lbotan-2 -lboost_filesystem -lboost_system -lbz2 -lcrypto -llzma -lsqlite3 -lz -o botan-test
-
- git send-email (or something else?) screwed up this very long line. Could be
-good to avoid such long lines in the future :-)
-
- Regards,
- Arnout
-
-> +./libbotan-2.a(utils_filesystem.o): In function `Botan::get_files_recursive(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
-> +filesystem.cpp:(.text+0x758): undefined reference to `__atomic_fetch_sub_4'
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/9db39b209a0f4be1e09b7e4ddb5e9a63da4fbbfa
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/randombit/botan/pull/1916]
-> +---
-> + src/build-data/makefile.in | 2 +-
-> + 1 file changed, 1 insertion(+), 1 deletion(-)
-> +
-> +diff --git a/src/build-data/makefile.in b/src/build-data/makefile.in
-> +index 08c9c5421..7111c7b19 100644
-> +--- a/src/build-data/makefile.in
-> ++++ b/src/build-data/makefile.in
-> +@@ -71,7 +71,7 @@ $(CLI): $(LIBRARIES) $(CLIOBJS)
-> + 	$(POST_LINK_CMD)
-> + 
-> + $(TEST): $(LIBRARIES) $(TESTOBJS)
-> +-	$(EXE_LINK_CMD) $(ABI_FLAGS) $(LDFLAGS) $(TESTOBJS) $(EXE_LINKS_TO) %{output_to_exe}$@
-> ++	$(EXE_LINK_CMD) $(ABI_FLAGS) $(TESTOBJS) $(EXE_LINKS_TO) $(LDFLAGS) %{output_to_exe}$@
-> + 	$(POST_LINK_CMD)
-> + 
-> + %{if build_fuzzers}
-> +-- 
-> +2.20.1
-> +
-> 
+diff --git a/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch b/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
+new file mode 100644
+index 0000000000..ab549021e4
+--- /dev/null
++++ b/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
+@@ -0,0 +1,33 @@
++From e6a2e71831f0699e9759e0579a00eea5fcb93696 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 24 Apr 2019 20:23:00 +0200
++Subject: [PATCH] FindXml2: use pkg-config to find libxml2 dependencies
++
++On UNIX, when statically built, libxml2 can depends on other libraries such
++as lzma. These dependencies are already retrieved through pkg-config so
++append them to LIBXML2_LIBRARIES otherwise static build will fail
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent yet]
++---
++ cmake/modules/FindLibXml2.cmake | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/cmake/modules/FindLibXml2.cmake b/cmake/modules/FindLibXml2.cmake
++index 99d70af57d..2a4b1f470f 100644
++--- a/cmake/modules/FindLibXml2.cmake
+++++ b/cmake/modules/FindLibXml2.cmake
++@@ -98,6 +98,10 @@ endif()
++ 
++ set(LIBXML2_INCLUDE_DIRS ${LIBXML2_INCLUDE_DIR} ${PC_LIBXML_INCLUDE_DIRS})
++ set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY})
+++# Include transitive dependencies for static linking.
+++if(UNIX)
+++    list(APPEND LIBXML2_LIBRARIES ${PC_LIBXML_LIBRARIES})
+++endif()
++ 
++ include(FindPackageHandleStandardArgs)
++ FIND_PACKAGE_HANDLE_STANDARD_ARGS(LibXml2
++-- 
++2.20.1
++
