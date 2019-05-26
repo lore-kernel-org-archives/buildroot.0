@@ -1,69 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 11:18:27 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/samba4: fix build
- on mips64el
-Message-ID: <20190526091607.ED53D80F7C@busybox.osuosl.org>
+Date: Sun, 26 May 2019 11:20:37 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/sqlite: bump to
+ version 3.27.2
+Message-ID: <20190526091608.07EF280F7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b123c139f3cc59808700227082c5fb9b04b95f76
+commit: https://git.buildroot.net/buildroot/commit/?id=3a762860052d1b498d54f0551f3a15c36dc98603
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
-
-Fixes:
- - http://autobuild.buildroot.org/results/bae0508e84c905dc23ad7cf1153cd1e9d8e4d734
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit d033c614b0c17360e8e2d9b259574103d262e945)
+(cherry picked from commit 612f0bcb9672e70742d3ca0dd4fff9affa25d11d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ..._regfio.c-include-stdint.h-before-cmoka.h.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/samba4/0005-test_regfio.c-include-stdint.h-before-cmoka.h.patch b/package/samba4/0005-test_regfio.c-include-stdint.h-before-cmoka.h.patch
-new file mode 100644
-index 0000000000..2415d57d70
---- /dev/null
-+++ b/package/samba4/0005-test_regfio.c-include-stdint.h-before-cmoka.h.patch
-@@ -0,0 +1,38 @@
-+From bed8720dce64181c188c23a28506a88cd2e1ee4f Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 11 May 2019 00:07:50 +0200
-+Subject: [PATCH] test_regfio.c: include stdint.h before cmoka.h
-+
-+This fix the following build failure on mips64el:
-+/usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/host/mips64el-buildroot-linux-uclibc/sysroot/usr/include/stdint.h:122:27: error: conflicting types for 'uintptr_t'
-+ typedef unsigned long int uintptr_t;
-+                           ^
-+In file included from ../source3/registry/tests/test_regfio.c:23:0:
-+../third_party/cmocka/cmocka.h:126:28: note: previous declaration of 'uintptr_t' was here
-+       typedef unsigned int uintptr_t;
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/bae0508e84c905dc23ad7cf1153cd1e9d8e4d734
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://gitlab.com/samba-team/samba/merge_requests/442]
-+---
-+ source3/registry/tests/test_regfio.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/source3/registry/tests/test_regfio.c b/source3/registry/tests/test_regfio.c
-+index 86a217661f3..f945e653708 100644
-+--- a/source3/registry/tests/test_regfio.c
-++++ b/source3/registry/tests/test_regfio.c
-+@@ -20,6 +20,7 @@
-+ #include <stdarg.h>
-+ #include <stddef.h>
-+ #include <setjmp.h>
-++#include <stdint.h>
-+ #include <cmocka.h>
-+ 
-+ #include <errno.h>
-+-- 
-+2.20.1
-+
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 7be42a0aca..5e2bc7030a 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,6 +1,6 @@
+ # From https://www.sqlite.org/download.html
+-sha1 5d6dc7634ec59e7a6fffa8758c1e184b2522c2e5  sqlite-autoconf-3250300.tar.gz
++sha1 5f5750e3f39b7b60394a2fb6ddb2371f848670e6  sqlite-autoconf-3270200.tar.gz
+ # Calculated based on the hash above
+-sha256 00ebf97be13928941940cc71de3d67e9f852698233cd98ce2d178fd08092f3dd  sqlite-autoconf-3250300.tar.gz
++sha256 50c39e85ea28b5ecfdb3f9e860afe9ba606381e21836b2849efca6a0bfe6ef6e  sqlite-autoconf-3270200.tar.gz
+ # Locally calculated
+ sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 6cf5710e5d..95ededd8c4 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-SQLITE_VERSION = 3250300
++SQLITE_VERSION = 3270200
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+-SQLITE_SITE = https://www.sqlite.org/2018
++SQLITE_SITE = https://www.sqlite.org/2019
+ SQLITE_LICENSE = Public domain
+ SQLITE_LICENSE_FILES = tea/license.terms
+ SQLITE_INSTALL_STAGING = YES
