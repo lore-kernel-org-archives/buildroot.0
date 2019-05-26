@@ -1,95 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 May 2019 22:59:57 +0200
-Subject: [Buildroot] [git commit] package/binutils: add C-SKY specific
- version
-Message-ID: <20190602201237.BB38A81354@busybox.osuosl.org>
+Date: Sun, 26 May 2019 21:06:11 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-good: add
+ twolame plugin
+Message-ID: <20190602201236.176BF8EDF1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b80ddf406c15399a3e835e620f4b2121c92aab51
+commit: https://git.buildroot.net/buildroot/commit/?id=3e11760c82cea915e895752ee5262031e65899ee
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+This plugin was introduced in 1.16.0. It depends on the twolame
+package and allows a user to encode MP2s with TwoLAME.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/binutils/Config.in.host | 12 +++++++++++-
- package/binutils/binutils.hash  |  3 +++
- package/binutils/binutils.mk    |  7 +++++++
- 3 files changed, 21 insertions(+), 1 deletion(-)
+ package/gstreamer1/gst1-plugins-good/Config.in            | 6 ++++++
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 52b0ea22e7..d9b34d7a9b 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -7,28 +7,38 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index 30a4876ee7..3af05ba6b4 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -389,6 +389,12 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_TAGLIB
+ comment "taglib needs a toolchain w/ C++, wchar"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
  
- choice
- 	prompt "Binutils Version"
--	default BR2_BINUTILS_VERSION_2_31_X if !BR2_arc
-+	default BR2_BINUTILS_VERSION_2_31_X if !BR2_arc && !BR2_csky
- 	default BR2_BINUTILS_VERSION_ARC if BR2_arc
-+	default BR2_BINUTILS_VERSION_CSKY if BR2_csky
- 	help
- 	  Select the version of binutils you wish to use.
- 
- config BR2_BINUTILS_VERSION_2_30_X
- 	bool "binutils 2.30"
-+	depends on !BR2_csky
- 
- config BR2_BINUTILS_VERSION_2_31_X
- 	bool "binutils 2.31.1"
-+	depends on !BR2_csky
- 
- config BR2_BINUTILS_VERSION_2_32_X
- 	bool "binutils 2.32"
-+	depends on !BR2_csky
- 
- config BR2_BINUTILS_VERSION_ARC
- 	bool "binutils arc (2.31)"
- 	depends on BR2_arc
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_TWOLAME
++	bool "twolame"
++	select BR2_PACKAGE_TWOLAME
++	help
++	  twolame mp2 audio encoder plugin
 +
-+config BR2_BINUTILS_VERSION_CSKY
-+	bool "binutils csky"
-+	depends on BR2_csky
-+
- endchoice
- 
- config BR2_BINUTILS_VERSION
- 	string
- 	default "arc-2019.03-rc1"	if BR2_BINUTILS_VERSION_ARC
-+	default "c66d8bbcebfddf713b2b436e1b135e6b125a55a5" if BR2_BINUTILS_VERSION_CSKY
- 	default "2.30"		if BR2_BINUTILS_VERSION_2_30_X
- 	default "2.31.1"	if BR2_BINUTILS_VERSION_2_31_X
- 	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
-diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-index 4792208e45..125372cc6f 100644
---- a/package/binutils/binutils.hash
-+++ b/package/binutils/binutils.hash
-@@ -5,3 +5,6 @@ sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724a
- 
- # Locally calculated (fetched from Github)
- sha512  ceb0546cb73a29526f2f8916d855fbed52b2fc86b6706687cabf57b96df06932714820edec2f9038529790e7925304778ded0944babc985a39371eb08c6c7f52  binutils-gdb-arc-2019.03-rc1.tar.gz
-+
-+# Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
-+sha512  979552d4b3a4f31e9f3b9a7027321bd4eb3ac6c2d8deac1720e94e54f81d736db09c53c5d87c301010e307b64127e14400a036c7a35e5d63a954a4edd9cc8e2c  binutils-c66d8bbcebfddf713b2b436e1b135e6b125a55a5.tar.gz
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index 0b06f49d72..edb4be1869 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -20,6 +20,13 @@ BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,
- BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
- BINUTILS_FROM_GIT = y
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX
+ 	bool "vpx (webm)"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libvpx
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 4ef128229a..462d5e1307 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -429,6 +429,13 @@ else
+ GST1_PLUGINS_GOOD_CONF_OPTS += --disable-taglib
  endif
-+
-+ifeq ($(BR2_csky),y)
-+BINUTILS_SITE = $(call github,c-sky,binutils-gdb,$(BINUTILS_VERSION))
-+BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
-+BINUTILS_FROM_GIT = y
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_TWOLAME),y)
++GST1_PLUGINS_GOOD_CONF_OPTS += --enable-twolame
++GST1_PLUGINS_GOOD_DEPENDENCIES += twolame
++else
++GST1_PLUGINS_GOOD_CONF_OPTS += --disable-twolame
 +endif
 +
- BINUTILS_SITE ?= $(BR2_GNU_MIRROR)/binutils
- BINUTILS_SOURCE ?= binutils-$(BINUTILS_VERSION).tar.xz
- BINUTILS_EXTRA_CONFIG_OPTIONS = $(call qstrip,$(BR2_BINUTILS_EXTRA_CONFIG_OPTIONS))
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_VPX),y)
+ GST1_PLUGINS_GOOD_CONF_OPTS += --enable-vpx
+ GST1_PLUGINS_GOOD_DEPENDENCIES += libvpx
