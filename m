@@ -1,10 +1,11 @@
-From: LP C <lpdev@cordier.org>
-Date: Sun, 26 May 2019 16:08:47 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-05-08
-In-Reply-To: <112312f0-39bd-e416-d8db-431b3dca27f4@mind.be>
-References: <112312f0-39bd-e416-d8db-431b3dca27f4@mind.be>
-Message-ID: <1558874852.local-6573d1a7-8bd6-v1.5.5-b7939d38@getmailspring.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 26 May 2019 16:51:30 +0200
+Subject: [Buildroot] [PATCH v2 02/15] linux: disable Werror for powerpc
+ kernels
+In-Reply-To: <20190508150720.27946-3-romain.naour@gmail.com>
+References: <20190508150720.27946-1-romain.naour@gmail.com>
+ <20190508150720.27946-3-romain.naour@gmail.com>
+Message-ID: <e29e98bf-5dc1-2ef8-fe06-5d4570ae1faa@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,72 +14,89 @@ To: buildroot@busybox.net
 
 
 
-On May 25 2019, at 5:31 pm, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
-> On 13/05/2019 17:59, Julien Boibessot wrote:
-> > Thomas,
-> >
-> > On 13/05/2019 13:31, Thomas Petazzoni wrote:
-> > > Hello,
-> > >
-> > > On Mon, 13 May 2019 13:20:54 +0200
-> > > Julien Boibessot <julien.boibessot@free.fr> wrote:
-> > >
-> > > > I have already brought this problem up a few times before but no one has
-> > > > a clue.
-> > > > My build system is consuming 100% CPU in conftest process when building
-> > > > libsodium.
-> > > >
-> > > > In this state I have to manually kill all conftest processes otherwise
-> > > > the build is blocked for days... :-)
-> > >
-> > > Which configure test is it running when it's blocked ?
-> >
-> >
-> > when host-libsodium fails I would say it is blocked on:
-> > /checking whether segmentation violations can be caught when using the C
-> > compiler.../
->
->
-> I've taken a look at the code of that test. There's nothing really wrong with
-> it, but it's pretty much undefined behaviour so the compiler is free to do
-> stupid things.
->
-> Fortunately, we know that SIGSEGV can be caught since we know we're building on
-> Linux, and anyway we don't care a lot for host-libsodium. So we can just set the
-> cache variable ax_cv_check_cCATCHABLE_SEGV=yes.
->
-> Regards,
-> Arnout
->
-> >
-> >
-> > > What does
-> > > "strace" says about this conftest process that is stuck ?
-> > >
-> > > Can you reproduce manually ? Does it happen every time libsodium is
-> > > built on your machine, or only once in a while ?
-> >
-> >
-> > It sometimes can be reproduced manually but not as often as from BR build system.
-> > I would say when it fails from BR build, I can kill it and reproduce the problem
-> > once.
-> >
-> > Most of the time it works well when build manually.
-> > Best regards,
-> > Julien
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+On 08/05/2019 17:07, Romain Naour wrote:
+> From patch [1] included in kernel >= 5.0:
+> "The upcoming GCC 9 release extends the -Wmissing-attributes warnings
+> (enabled by -Wall) to C and aliases: it warns when particular function
+> attributes are missing in the aliases but not in their target.
+> 
+> In particular, it triggers for all the init/cleanup_module
+> aliases in the kernel (defined by the module_init/exit macros),
+> ending up being very noisy.
+> 
+> These aliases point to the __init/__exit functions of a module,
+> which are defined as __cold (among other attributes). However,
+> the aliases themselves do not have the __cold attribute.
+> 
+> Since the compiler behaves differently when compiling a __cold
+> function as well as when compiling paths leading to calls
+> to __cold functions, the warning is trying to point out
+> the possibly-forgotten attribute in the alias."
+> 
+> Werror is set by default while building ppc kernel [2], but
+> some warning can be introduced while building current kernel with
+> newer compiler (for example building kernel 4.19 with gcc 9.1).
+> 
+> For the same reason why we remove Werror in packages's compiler
+> flags. Building with Werror is not bulletproof when we start
+> using a newer compiler that introduce new warnings.
+> This is the case here.
+> 
+> Also this option is a bit strange since it's specific to ppc kernels:
+> "The intention is to make it harder for people to inadvertantly
+> introduce warnings in the arch/powerpc code."
+> Other kernel developers on other arch may be interested by a
+> similar/more generic option.
+> 
+> So, It's clearly intended for kernel developers.
 
-Hi Thomas,
-https://git.yoctoproject.org/cgit/cgit.cgi/meta-intel/tree/recipes-multimedia/libva/intel-media-driver/0001-linux-fix-build-when-using-musl.patch
-seems to fix the issue with musl. This patch does not break the build with standard libc. As it is a patch from yocto, can I use it directly or is there any license restriction to do so?
-Thanks,
-LP
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190526/1e3ffd0e/attachment.html>
+ Since buildroot is *also* intended for kernel developers, I don't think this is
+a good idea.
+
+ In fact, I don't like us forcing any options on the user. All this overriding
+of .config options in linux.mk (and busybox.mk as well) is IMO confusing and
+limiting user's freedom. So I don't like it if .config overrides get added.
+
+ Therefore, I prefer your v1 solution of just fixing the affected defconfigs.
+
+ Regards,
+ Arnout
+
+> 
+> Instead of backporting this patch [1] to kernel 4.19, select
+> unconditionally the Kconfig option CONFIG_PPC_DISABLE_WERROR
+> that allow to disable Werror.
+> 
+> Fixes:
+> https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435741
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=a6e60d84989fa0e91db7f236eda40453b0e44afa
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=ba55bd74360ea4b8b95e73ed79474d37ff482b36
+> [3] https://gitlab.com/bootlin/toolchains-builder
+> 
+> Fix-suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+> v2: add a shared fragment in board/fragments/linux and update
+>     qemu ppc* defconfigs. (Arnout)
+> 
+> v3: commit log (Yann)
+>     enable the option from linux.mk instead of the defconfig.
+> ---
+>  linux/linux.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/linux/linux.mk b/linux/linux.mk
+> index 51fd41fa15..85364451a8 100644
+> --- a/linux/linux.mk
+> +++ b/linux/linux.mk
+> @@ -315,6 +315,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
+>  	$(LINUX_FIXUP_CONFIG_ENDIANNESS)
+>  	$(if $(BR2_arm)$(BR2_armeb),
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
+> +	$(if $(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),
+> +		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR,$(@D)/.config))
+>  	$(if $(BR2_TARGET_ROOTFS_CPIO),
+>  		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
+>  	# As the kernel gets compiled before root filesystems are
+> 
