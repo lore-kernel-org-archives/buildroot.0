@@ -1,56 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 May 2019 21:26:43 +0200
-Subject: [Buildroot] [git commit branch/next] boot/barebox: bump version to
- 2019.05.0
-Message-ID: <20190526192032.B7E8D81428@busybox.osuosl.org>
+Date: Sun, 26 May 2019 21:28:10 +0200
+Subject: [Buildroot] [PATCH 0/5] gstreamer1: Plugin work
+In-Reply-To: <20190509224624.80437-1-aduskett@gmail.com>
+References: <20190509224624.80437-1-aduskett@gmail.com>
+Message-ID: <20190526212810.7ea8d8a4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ff92de080ed4ea641a2a1a581f1482b65adb4ec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello Adam,
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+On Thu,  9 May 2019 18:46:18 -0400
+aduskett at gmail.com wrote:
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index 6d639e31e9..d919cacc57 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2019.04.0"
-+	bool "2019.05.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2019.04.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2019.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index dfbd94fca8..fb371ab671 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# From https://www.barebox.org/download/barebox-2019.04.0.tar.bz2.md5
--md5 2d9619dfe6aaaf3b10d6327486e18571 barebox-2019.04.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2019.05.0.tar.bz2.md5
-+md5 2e721cce90f1ea1492710ca23680311f barebox-2019.05.0.tar.bz2
- 
- # Locally calculated
--sha256 d2834b612228b82bbaa713b26dec1fa770123bb02727400e4c56f6f2bffb01cc barebox-2019.04.0.tar.bz2
-+sha256 704bb09b2bf1347e43ebb9138da32a7e1b4d13892fd187be98f4f9dae000501d barebox-2019.05.0.tar.bz2
+> Adam Duskett (5):
+>   package/gstreamer1/gst1-plugins-good: Add twolame plugin
+>   package/gstreamer1/gst1-plugins-good: Add jack plugin
+>   package/gstreamer1/gst1-plugins-bad: add proxy plugin
+>   package/gstreamer1/gst1-plugins-bad: add audiolatency plugin
+>   package/gstreamer1/gst1-plugins-bad: Add bluez plugin
+
+I've applied to next, with some changes. First, the commit titles are
+not consistent in terms of lower-case vs. upper-case. You use "add" or
+"Add". I personally prefer lower-case.
+
+Secondly, the patches are not adding plugins, but adding options, so
+"add twolame plugin option" is more correct.
+
+I did some other changes to one patch, I'll reply to that one
+specifically.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
