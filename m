@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 13:50:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gdb: fix build of 8.0.1 with
+Date: Sun, 26 May 2019 13:51:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gdb: fix build of 7.12.1 with
  glibc 2.29
-In-Reply-To: <20190513211537.11741-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 13 May 2019 23:15:37 +0200")
-References: <20190513211537.11741-1-fontaine.fabrice@gmail.com>
-Message-ID: <878sutl9iv.fsf@dell.be.48ers.dk>
+In-Reply-To: <20190513212918.16335-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 13 May 2019 23:29:18 +0200")
+References: <20190513212918.16335-1-fontaine.fabrice@gmail.com>
+Message-ID: <874l5hl9hy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
