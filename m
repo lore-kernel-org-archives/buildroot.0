@@ -1,58 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 26 May 2019 22:15:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/supertux: fix debug build on
- uclibc/musl
-In-Reply-To: <20190526214536.479b9db9@windsurf>
-References: <20190526191814.3942-1-fontaine.fabrice@gmail.com>
- <20190526214536.479b9db9@windsurf>
-Message-ID: <94de6d4a-ba94-3f12-7692-44f942fde97e@mind.be>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 26 May 2019 22:15:42 +0200
+Subject: [Buildroot] [PATCH] package/gcc: don't build a toolchain for
+ powerpc with spe ABI with gcc >= 8.x
+Message-ID: <20190526201542.18904-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+The powerpc*-*-*spe* support has been deprecated in GCC 8 [1] and has
+been removed in GCC 9 [2].
 
+While building with GCC 8, the build stop since we don't provide --enable-obsolete
+option.
 
-On 26/05/2019 21:45, Thomas Petazzoni wrote:
-> Hello,
-> 
-> +Arnout in Cc.
-> 
-> On Sun, 26 May 2019 21:18:14 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> 
->> Always set CMAKE_BUILD_TYPE to Release otherwise supertux will be built
->> with -pg since:
->> https://github.com/SuperTux/supertux/commit/afd5f1b33c110104a7f286d6d7854157919a0a52
->>
->> This will result in the following build failure on uclibc or musl:
->> [ 77%] Linking C executable sq_static
->> CMakeFiles/sq_static.dir/sq.c.o: In function `quit':
->> /home/buildroot/autobuild/instance-3/output/build/supertux-0.6.0/external/squirrel/sq/sq.c:42: undefined reference to `__gnu_mcount_nc'
->>
->> Fixes:
->>  - http://autobuild.buildroot.org/results/b0b2e25af198d01713d1e2bcf38c77ae8ffbd7de
->>
->> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> 
-> So, it really seems like we want to stop using -DCMAKE_BUILD_TYPE=Debug
-> when BR2_ENABLE_DEBUG=y, like Arnout suggested in another thread.
+For now, keep powerpcspe support in Buildroot but only for older compiler
+up to GCC 7.
 
- I guess that means you agree with my analysis then? :-)
+Note: Although we can't select Glibc for powerpcspe since commit [4], this
+support has been removed for the next version of Glibc (the upcoming 2.30).
 
- Note, however, that the current patch can go to master, while the change of
-build type is definitely *not* for master...
+[1] https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+[2] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=b31d0348ddada49453e3edaaf93a423fdc61dc79
+[3] https://sourceware.org/git/?p=glibc.git;a=commit;h=a053e878494080f7070cf92890e546057236c9c9
+[4] https://git.buildroot.net/buildroot/commit/?id=5777e3ffd99132a57e3d29659850eec14b1625f8
 
- [Or maybe I misread your statement, I thought you meant that Fabrice should
-drop this patch and instead globally set build type to Release.]
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gcc/Config.in.host | 3 +++
+ 1 file changed, 3 insertions(+)
 
- Regards,
- Arnout
-
-> Packages are adding random flags when -DCMAKE_BUILD_TYPE=Debug, it is
-> not really usable, as BR2_ENABLE_DEBUG should only mean "add -g to
-> CFLAGS".
-> 
-> Thomas
-> 
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 8e22a4c155..b477fe56e7 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -66,6 +66,9 @@ config BR2_GCC_VERSION_8_X
+ 	bool "gcc 8.x"
+ 	# Broken or unsupported architectures
+ 	depends on !BR2_or1k
++	# powerpc spe support has been deprecated since gcc 8.x.
++	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
++	depends on !BR2_powerpc_SPE
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ endchoice
+-- 
+2.21.0
