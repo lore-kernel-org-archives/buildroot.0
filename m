@@ -1,23 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 11:10:49 +0200
-Subject: [Buildroot] [PATCH 1/1] support/dependencies: Add hint for
- ArchLinux when host needs IA32 libs
-In-Reply-To: <20190510054233.18724-1-vadim4j@gmail.com> (Vadim Kochan's
- message of "Fri, 10 May 2019 08:42:33 +0300")
-References: <20190510054233.18724-1-vadim4j@gmail.com>
-Message-ID: <87lfytmvhi.fsf@dell.be.48ers.dk>
+Date: Sun, 26 May 2019 11:12:15 +0200
+Subject: [Buildroot] [PATCH] package/cracklib: properly handle
+ BR2_SYSTEM_ENABLE_NLS=y configurations
+In-Reply-To: <20190509204340.6606-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Thu, 9 May 2019 22:43:40 +0200")
+References: <20190509204340.6606-1-thomas.petazzoni@bootlin.com>
+Message-ID: <87h89hmvf4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Vadim" == Vadim Kochan <vadim4j@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
- > Add hint about which package needs to be installed to provide IA32 libs
- > support for the host when it is needed.
+ > Use the TARGET_NLS_DEPENDENCIES and TARGET_NLS_LIBS variables to
+ > correctly handle BR2_SYSTEM_ENABLE_NLS=y configurations.
 
- > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+ > Fixes:
+
+ >   http://autobuild.buildroot.net/results/dda70b5b88c75d36c61fbf1cc5fca16ea8414582/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2019.02.x, thanks.
 
