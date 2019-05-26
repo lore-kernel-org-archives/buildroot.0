@@ -1,108 +1,599 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 26 May 2019 17:04:37 +0200
-Subject: [Buildroot] [PATCH v2 02/15] linux: disable Werror for powerpc
- kernels
-In-Reply-To: <e29e98bf-5dc1-2ef8-fe06-5d4570ae1faa@mind.be>
-References: <20190508150720.27946-1-romain.naour@gmail.com>
- <20190508150720.27946-3-romain.naour@gmail.com>
- <e29e98bf-5dc1-2ef8-fe06-5d4570ae1faa@mind.be>
-Message-ID: <20190526150437.GJ12162@scaer>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 26 May 2019 17:43:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pseudo: remove package
+Message-ID: <20190526154337.24842-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+pseudo is not used and fails to build without xattr so remove it
 
-On 2019-05-26 16:51 +0200, Arnout Vandecappelle spake thusly:
-> On 08/05/2019 17:07, Romain Naour wrote:
-[--SNIP--]
-> > Werror is set by default while building ppc kernel [2], but
-> > some warning can be introduced while building current kernel with
-> > newer compiler (for example building kernel 4.19 with gcc 9.1).
-> > 
-> > For the same reason why we remove Werror in packages's compiler
-> > flags. Building with Werror is not bulletproof when we start
-> > using a newer compiler that introduce new warnings.
-> > This is the case here.
->  Since buildroot is *also* intended for kernel developers, I don't think this is
-> a good idea.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...0001-Fix-mixed-tab-space-indentation.patch | 105 ---------
+ ...002-Fix-missing-parentheses-at-print.patch | 190 ----------------
+ ...0003-Make-it-compatible-with-python3.patch | 215 ------------------
+ package/pseudo/pseudo.hash                    |   2 -
+ package/pseudo/pseudo.mk                      |  29 ---
+ 5 files changed, 541 deletions(-)
+ delete mode 100644 package/pseudo/0001-Fix-mixed-tab-space-indentation.patch
+ delete mode 100644 package/pseudo/0002-Fix-missing-parentheses-at-print.patch
+ delete mode 100644 package/pseudo/0003-Make-it-compatible-with-python3.patch
+ delete mode 100644 package/pseudo/pseudo.hash
+ delete mode 100644 package/pseudo/pseudo.mk
 
-As I said on IRC, I disagree with this reasonning. Buildroot may *also*
-be used by package developpers, so by your reasoning, we should never
-remove -Werror from packages.
-
-Yes, yes, I get it that the kernel is special, but still, see below...
-
->  In fact, I don't like us forcing any options on the user. All this overriding
-> of .config options in linux.mk (and busybox.mk as well) is IMO confusing and
-> limiting user's freedom. So I don't like it if .config overrides get added.
-
-How is that different, for *this* case of -Werror, from passing
---disable-werror (or simmilar) like we do in a bunch of packages?
-
-Do you suggest that instead of setting a .config option, we introduce a
-post-patch hook that removes -Werror from the kernel's Makefile instead?
-
-Also, do you argue that we should remove all our $(call KCONFIG_SET_OPT,...)
-that we have "to make things just work and not puzzle the user"?
-
-Regards,
-Yann E. MORIN.
-
->  Therefore, I prefer your v1 solution of just fixing the affected defconfigs.
-> 
->  Regards,
->  Arnout
-> 
-> > 
-> > Instead of backporting this patch [1] to kernel 4.19, select
-> > unconditionally the Kconfig option CONFIG_PPC_DISABLE_WERROR
-> > that allow to disable Werror.
-> > 
-> > Fixes:
-> > https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435741
-> > 
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=a6e60d84989fa0e91db7f236eda40453b0e44afa
-> > [2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=ba55bd74360ea4b8b95e73ed79474d37ff482b36
-> > [3] https://gitlab.com/bootlin/toolchains-builder
-> > 
-> > Fix-suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> > ---
-> > v2: add a shared fragment in board/fragments/linux and update
-> >     qemu ppc* defconfigs. (Arnout)
-> > 
-> > v3: commit log (Yann)
-> >     enable the option from linux.mk instead of the defconfig.
-> > ---
-> >  linux/linux.mk | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/linux/linux.mk b/linux/linux.mk
-> > index 51fd41fa15..85364451a8 100644
-> > --- a/linux/linux.mk
-> > +++ b/linux/linux.mk
-> > @@ -315,6 +315,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
-> >  	$(LINUX_FIXUP_CONFIG_ENDIANNESS)
-> >  	$(if $(BR2_arm)$(BR2_armeb),
-> >  		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
-> > +	$(if $(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),
-> > +		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR,$(@D)/.config))
-> >  	$(if $(BR2_TARGET_ROOTFS_CPIO),
-> >  		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
-> >  	# As the kernel gets compiled before root filesystems are
-> > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/pseudo/0001-Fix-mixed-tab-space-indentation.patch b/package/pseudo/0001-Fix-mixed-tab-space-indentation.patch
+deleted file mode 100644
+index 6b62c1af94..0000000000
+--- a/package/pseudo/0001-Fix-mixed-tab-space-indentation.patch
++++ /dev/null
+@@ -1,105 +0,0 @@
+-From bf4e5310547603bf36e67dc4cba027963f16508e Mon Sep 17 00:00:00 2001
+-From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+-Date: Fri, 4 Nov 2016 11:53:48 -0400
+-Subject: [PATCH 1/3] Fix mixed tab/space indentation
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=utf-8
+-Content-Transfer-Encoding: 8bit
+-
+-CC="cc  -pipe -std=gnu99 -Wall -W -Wextra -fPIC -D_LARGEFILE64_SOURCE -D_ATFILE_SOURCE  -DPSEUDO_PREFIX='"/usr/local"' -DPSEUDO_SUFFIX='""' -DPSEUDO_BINDIR='"bin"' -DPSEUDO_LIBDIR='"lib64"' -DPSEUDO_LOCALSTATEDIR='"var/pseudo"' -DPSEUDO_VERSION='"1.8.1"' -DUSE_MEMORY_DB  -DPSEUDO_PASSWD_FALLBACK='""'   -DPSEUDO_XATTR_SUPPORT       -O2 -g " ./makewrappers "xattr=true"
+-  File "./makewrappers", line 327
+-    return """/* This function is not called if pseudo is configured --enable-force-async */
+-                                                                                           ^
+-TabError: inconsistent use of tabs and spaces in indentation
+-
+-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+----
+- makewrappers | 26 +++++++++++++-------------
+- 1 file changed, 13 insertions(+), 13 deletions(-)
+-
+-diff --git a/makewrappers b/makewrappers
+-index e9191ed..303e2cc 100755
+---- a/makewrappers
+-+++ b/makewrappers
+-@@ -324,7 +324,7 @@ class Function:
+- 
+-     def maybe_async_skip(self):
+-         if self.async_skip:
+--	    return """/* This function is not called if pseudo is configured --enable-force-async */
+-+            return """/* This function is not called if pseudo is configured --enable-force-async */
+- #ifdef PSEUDO_FORCE_ASYNC
+- 	if (!pseudo_allow_fsync) {
+- 		PROFILE_DONE;
+-@@ -333,7 +333,7 @@ class Function:
+- #endif
+- """ % self.async_skip
+-         else:
+--	    return ""
+-+            return ""
+- 
+-     def comment(self):
+-         """declare self (in a comment)"""
+-@@ -393,11 +393,11 @@ class Function:
+- 
+-     def rc_format(self):
+-         """the format string to use for the return value"""
+--	return typedata.get(self.type, { 'format': '[%s]', 'value': '"' + self.type + '"' })['format']
+-+        return typedata.get(self.type, { 'format': '[%s]', 'value': '"' + self.type + '"' })['format']
+- 
+-     def rc_value(self):
+-         """the value to pass for the format string for the return value"""
+--	return typedata.get(self.type, { 'format': '[%s]', 'value': '"' + self.type + '"' })['value']
+-+        return typedata.get(self.type, { 'format': '[%s]', 'value': '"' + self.type + '"' })['value']
+- 
+-     def rc_decl(self):
+-         """declare rc (if needed)"""
+-@@ -456,7 +456,7 @@ additional ports to include.
+-         self.name = port
+-         self.subports = []
+-         self.preports = []
+--	print port
+-+        print port
+- 
+-         if os.path.exists(self.portfile("pseudo_wrappers.c")):
+-             self.wrappers = self.portfile("pseudo_wrappers.c")
+-@@ -522,11 +522,11 @@ additional ports to include.
+-         return '#define PSEUDO_PORT_%s 1' % string.upper(self.name).replace('/', '_')
+- 
+-     def portdeps(self):
+--	deps = []
+--	if self.wrappers:
+--	    deps.append(self.wrappers)
+--	if self.portdef_file:
+--	    deps.append(self.portdef_file)
+-+        deps = []
+-+        if self.wrappers:
+-+            deps.append(self.wrappers)
+-+        if self.portdef_file:
+-+            deps.append(self.portdef_file)
+-         if deps:
+-             return 'pseudo_wrappers.o: %s' % ' '.join(deps)
+-         else:
+-@@ -590,7 +590,7 @@ def main(argv):
+- 
+-     for arg in argv:
+-         name, value = arg.split('=')
+--	os.environ["port_" + name] = value
+-+        os.environ["port_" + name] = value
+- 
+-     # error checking helpfully provided by the exception handler
+-     copyright_file = open('guts/COPYRIGHT')
+-@@ -599,9 +599,9 @@ def main(argv):
+- 
+-     for path in glob.glob('templates/*'):
+-         try:
+--	    print "Considering template: " + path
+-+            print "Considering template: " + path
+-             source = TemplateFile(path)
+--	    if source.name.endswith('.c') or source.name.endswith('.h'):
+-+            if source.name.endswith('.c') or source.name.endswith('.h'):
+-                 source.emit('copyright')
+-             source.emit('header')
+-             sources.append(source)
+--- 
+-2.10.1
+-
+diff --git a/package/pseudo/0002-Fix-missing-parentheses-at-print.patch b/package/pseudo/0002-Fix-missing-parentheses-at-print.patch
+deleted file mode 100644
+index b023fcf831..0000000000
+--- a/package/pseudo/0002-Fix-missing-parentheses-at-print.patch
++++ /dev/null
+@@ -1,190 +0,0 @@
+-From 6488a68ca715d8e18f899e536effceb548ed136e Mon Sep 17 00:00:00 2001
+-From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+-Date: Fri, 4 Nov 2016 12:23:25 -0400
+-Subject: [PATCH 2/3] Fix missing parentheses at print
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=utf-8
+-Content-Transfer-Encoding: 8bit
+-
+-CC="cc  -pipe -std=gnu99 -Wall -W -Wextra -fPIC -D_LARGEFILE64_SOURCE -D_ATFILE_SOURCE  -DPSEUDO_PREFIX='"/usr/local"' -DPSEUDO_SUFFIX='""' -DPSEUDO_BINDIR='"bin"' -DPSEUDO_LIBDIR='"lib64"' -DPSEUDO_LOCALSTATEDIR='"var/pseudo"' -DPSEUDO_VERSION='"1.8.1"' -DUSE_MEMORY_DB  -DPSEUDO_PASSWD_FALLBACK='""'   -DPSEUDO_XATTR_SUPPORT       -O2 -g " ./makewrappers "xattr=true"
+-  File "./makewrappers", line 459
+-    print port
+-             ^
+-SyntaxError: Missing parentheses in call to 'print'
+-
+-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+----
+- maketables      | 12 ++++++------
+- makewrappers    | 32 ++++++++++++++++----------------
+- templatefile.py |  8 ++++----
+- 3 files changed, 26 insertions(+), 26 deletions(-)
+-
+-diff --git a/maketables b/maketables
+-index b32312e..0726485 100755
+---- a/maketables
+-+++ b/maketables
+-@@ -73,7 +73,7 @@ class DataType:
+-             for col in columns:
+-                 indexed = False
+-                 if col.startswith("FLAGS"):
+--                    print "Flags: set for %s" % self.name
+-+                    print("Flags: set for %s" % self.name)
+-                     self.flags = True
+-                     continue
+-                 if col.startswith("INDEXED "):
+-@@ -248,7 +248,7 @@ def main():
+-             template_file.emit('header')
+-             templates.append(template_file)
+-         except IOError:
+--            print "Invalid or malformed template %s.  Aborting." % path
+-+            print("Invalid or malformed template %s.  Aborting." % path)
+-             exit(1)
+- 
+-     for filename in sys.argv[1:]:
+-@@ -256,15 +256,15 @@ def main():
+-         sys.stdout.write("%s: " % filename)
+-         datatype = DataType(filename)
+-         datatypes.append(datatype)
+--        print datatype.__repr__()
+--        print ""
+-+        print(datatype.__repr__())
+-+        print("")
+- 
+--    print "Writing datatypes...",
+-+    print("Writing datatypes...")
+-     for datatype in datatypes:
+-         # populate various tables and files with each datatype
+-         for template_file in templates:
+-             template_file.emit('body', datatype)
+--    print "done.  Cleaning up."
+-+    print("done.  Cleaning up.")
+-     
+-     for template_file in templates:
+-         # clean up files
+-diff --git a/makewrappers b/makewrappers
+-index 303e2cc..bac856b 100755
+---- a/makewrappers
+-+++ b/makewrappers
+-@@ -456,7 +456,7 @@ additional ports to include.
+-         self.name = port
+-         self.subports = []
+-         self.preports = []
+--        print port
+-+        print(port)
+- 
+-         if os.path.exists(self.portfile("pseudo_wrappers.c")):
+-             self.wrappers = self.portfile("pseudo_wrappers.c")
+-@@ -504,17 +504,17 @@ additional ports to include.
+-             prefuncs = pre.functions()
+-             for name in prefuncs.keys():
+-                 if name in mergedfuncs:
+--                    print "Warning: %s from %s overriding %s" % (name, pre.name, mergedfuncs[name].port)
+-+                    print("Warning: %s from %s overriding %s" % (name, pre.name, mergedfuncs[name].port))
+-                 mergedfuncs[name] = prefuncs[name]
+-         for name in self.funcs.keys():
+-             if name in mergedfuncs:
+--                print "Warning: %s from %s overriding %s" % (name, self.name, mergedfuncs[name].port)
+-+                print("Warning: %s from %s overriding %s" % (name, self.name, mergedfuncs[name].port))
+-             mergedfuncs[name] = self.funcs[name]
+-         for sub in self.subports:
+-             subfuncs = sub.functions()
+-             for name in subfuncs.keys():
+-                 if name in mergedfuncs:
+--                    print "Warning: %s from %s overriding %s" % (name, sub.name, mergedfuncs[name].port)
+-+                    print("Warning: %s from %s overriding %s" % (name, sub.name, mergedfuncs[name].port))
+-                 mergedfuncs[name] = subfuncs[name]
+-         return mergedfuncs
+- 
+-@@ -576,11 +576,11 @@ def process_wrapfuncs(port):
+-             func.directory = directory
+-             funcs[func.name] = func
+-             sys.stdout.write(".")
+--        except Exception, e:
+--            print "Parsing failed:", e
+-+        except Exception(e):
+-+            print("Parsing failed:", e)
+-             exit(1)
+-     funclist.close()
+--    print ""
+-+    print("")
+-     return funcs
+- 
+- def main(argv):
+-@@ -599,35 +599,35 @@ def main(argv):
+- 
+-     for path in glob.glob('templates/*'):
+-         try:
+--            print "Considering template: " + path
+-+            print("Considering template: " + path)
+-             source = TemplateFile(path)
+-             if source.name.endswith('.c') or source.name.endswith('.h'):
+-                 source.emit('copyright')
+-             source.emit('header')
+-             sources.append(source)
+-         except IOError:
+--            print "Invalid or malformed template %s.  Aborting." % path
+-+            print("Invalid or malformed template %s.  Aborting." % path)
+-             exit(1)
+- 
+-     try:
+-         port = Port('common', sources)
+- 
+-     except KeyError:
+--        print "Unknown uname -s result: '%s'." % uname_s
+--        print "Known system types are:"
+--        print "%-20s %-10s %s" % ("uname -s", "port name", "description")
+-+        print("Unknown uname -s result: '%s'." % uname_s)
+-+        print("Known system types are:")
+-+        print("%-20s %-10s %s" % ("uname -s", "port name", "description"))
+-         for key in host_ports:
+--            print "%-20s %-10s %s" % (key, host_ports[key],
+--                                      host_descrs[host_ports[key]])
+-+            print("%-20s %-10s %s" % (key, host_ports[key],
+-+                                      host_descrs[host_ports[key]]))
+- 
+-     # the per-function stuff
+--    print "Writing functions...",
+-+    print("Writing functions...")
+-     all_funcs = port.functions()
+-     for name in sorted(all_funcs.keys()):
+-         # populate various tables and files with each function
+-         for source in sources:
+-             source.emit('body', all_funcs[name])
+--    print "done.  Cleaning up."
+-+    print("done.  Cleaning up.")
+-     
+-     for source in sources:
+-         # clean up files
+-diff --git a/templatefile.py b/templatefile.py
+-index 2789b22..abf9a2c 100644
+---- a/templatefile.py
+-+++ b/templatefile.py
+-@@ -79,13 +79,13 @@ class TemplateFile:
+-                 return
+-             path = Template(self.path).safe_substitute(item)
+-             if os.path.exists(path):
+--                # print "We don't overwrite existing files."
+-+                # print("We don't overwrite existing files.")
+-                 return
+-             self.file = open(path, 'w')
+-             if not self.file:
+--                print "Couldn't open '%s' (expanded from %s), " \
+-+                print("Couldn't open '%s' (expanded from %s), " \
+-                       "not emitting '%s'." % \
+--                      (path, self.path, template)
+-+                      (path, self.path, template))
+-                 return
+- 
+-     def emit(self, template, item=None):
+-@@ -103,7 +103,7 @@ class TemplateFile:
+-                     self.file.write(templ.safe_substitute(item))
+-                     self.file.write("\n")
+-         else:
+--            print "Warning: Unknown template '%s'." % template
+-+            print("Warning: Unknown template '%s'." % template)
+- 
+-         if self.file_per_item:
+-             if self.file:
+--- 
+-2.10.1
+-
+diff --git a/package/pseudo/0003-Make-it-compatible-with-python3.patch b/package/pseudo/0003-Make-it-compatible-with-python3.patch
+deleted file mode 100644
+index 3bb74deacf..0000000000
+--- a/package/pseudo/0003-Make-it-compatible-with-python3.patch
++++ /dev/null
+@@ -1,215 +0,0 @@
+-From fcc10b1f4a9968af5cda1adb9e449df92939d5f2 Mon Sep 17 00:00:00 2001
+-From: =?utf-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@savoirfairelinux.com>
+-Date: Fri, 4 Nov 2016 15:58:46 -0400
+-Subject: [PATCH 3/3] Make it compatible with python3
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=utf-8
+-Content-Transfer-Encoding: 8bit
+-
+-Python scripts are now compatible with both version of python, 2 and 3.
+-
+-Helped-by: Damien Riegel <damien.riegel@savoirfairelinux.com>
+-Helped-by: Alexandre Leblanc <alexandre.leblanc@savoirfairelinux.com>
+-Signed-off-by: Ga?l PORTAY <gael.portay@savoirfairelinux.com>
+----
+- maketables   | 135 ++++++++++++++++++++++++++++++-----------------------------
+- makewrappers |   8 ++--
+- 2 files changed, 73 insertions(+), 70 deletions(-)
+-
+-diff --git a/maketables b/maketables
+-index 0726485..f74f2b1 100755
+---- a/maketables
+-+++ b/maketables
+-@@ -51,6 +51,7 @@ value.  (This is for consistency with C array bounds.)
+- import glob
+- import sys
+- import string
+-+import os
+- from templatefile import TemplateFile
+- 
+- class DataType:
+-@@ -58,74 +59,74 @@ class DataType:
+- 
+-     def __init__(self, path):
+-         """read the first line of path, then make tuples of the rest"""
+--        source = file(path)
+--        definition = source.readline().rstrip()
+--        self.name, qualifiers = string.split(definition, ': ', 2)
+--        if '; ' in qualifiers:
+--            self.prefix, columns = string.split(qualifiers, '; ')
+--        else:
+--            self.prefix = qualifiers
+--            columns = []
+--        self.flags = False
+--        if len(columns):
+--            self.columns = []
+--            columns = string.split(columns, ', ')
+--            for col in columns:
+--                indexed = False
+--                if col.startswith("FLAGS"):
+--                    print("Flags: set for %s" % self.name)
+--                    self.flags = True
+-+        with open(path,'r') as source:
+-+            definition = source.readline().rstrip()
+-+            self.name, qualifiers = definition.split(': ', 2)
+-+            if '; ' in qualifiers:
+-+                self.prefix, columns = qualifiers.split('; ')
+-+            else:
+-+                self.prefix = qualifiers
+-+                columns = []
+-+            self.flags = False
+-+            if len(columns):
+-+                self.columns = []
+-+                columns = columns.split(', ')
+-+                for col in columns:
+-+                    indexed = False
+-+                    if col.startswith("FLAGS"):
+-+                        print("Flags: set for %s" % self.name)
+-+                        self.flags = True
+-+                        continue
+-+                    if col.startswith("INDEXED "):
+-+                        col = col[8:]
+-+                        indexed = True
+-+                    if "=" in col:
+-+                        name, default = col.split(' = ')
+-+                    else:
+-+                        name, default = col, ""
+-+                    if " " in name:
+-+                        words = name.split(' ')
+-+                        name = words[-1]
+-+                        del words[-1]
+-+                        type = ' '.join(words)
+-+                    else:
+-+                        type = "char *"
+-+                    self.columns.append({"indexed":indexed, "type":type, "name":name, "value":default})
+-+            else:
+-+                self.columns = []
+-+            self.data = []
+-+            self.comments = []
+-+            index = 1
+-+            for line in source.readlines():
+-+                item = {}
+-+                if line.startswith('#'):
+-+                    self.comments.append(line.rstrip().replace('#', ''))
+-                     continue
+--                if col.startswith("INDEXED "):
+--                    col = col[8:]
+--                    indexed = True
+--                if "=" in col:
+--                    name, default = string.split(col, ' = ')
+--                else:
+--                    name, default = col, ""
+--                if " " in name:
+--                    words = string.split(name, ' ')
+--                    name = words[-1]
+--                    del words[-1]
+--                    type = ' '.join(words)
+--                else:
+--                    type = "char *"
+--                self.columns.append({"indexed":indexed, "type":type, "name":name, "value":default})
+--        else:
+--            self.columns = []
+--        self.data = []
+--        self.comments = []
+--        index = 1
+--        for line in source.readlines():
+--            item = {}
+--            if line.startswith('#'):
+--                self.comments.append(line.rstrip().replace('#', ''))
+--                continue
+--            # first entry on the line is the "real" name/id, following hunks
+--            # are additional columns
+--            cols = string.split(line.rstrip(), ', ')
+--            item["name"] = cols.pop(0)
+--            item["upper"] = item["name"].replace('-', '_').upper()
+--            column_list = []
+--            for col in self.columns:
+--                if len(cols) > 0:
+--                    value = cols.pop(0)
+--                    if col["indexed"]:
+--                        if not "max" in col:
+--                            col["max"] = value
+--                        if value > col["max"]:
+--                            col["max"] = value
+--                        if not "min" in col:
+--                            col["min"] = value
+--                        if value < col["min"]:
+--                            col["min"] = value
+--                    column_list.append({"name":col["name"], "value":value})
+--                else:
+--                    column_list.append({"name":col["name"], "value":col["value"]})
+--            item["cols"] = column_list
+--            item["index"] = index
+--            index = index + 1
+--            self.data.append(item)
+-+                # first entry on the line is the "real" name/id, following hunks
+-+                # are additional columns
+-+                cols = line.rstrip().split(', ')
+-+                item["name"] = cols.pop(0)
+-+                item["upper"] = item["name"].replace('-', '_').upper()
+-+                column_list = []
+-+                for col in self.columns:
+-+                    if len(cols) > 0:
+-+                        value = cols.pop(0)
+-+                        if col["indexed"]:
+-+                            if not "max" in col:
+-+                                col["max"] = value
+-+                            if value > col["max"]:
+-+                                col["max"] = value
+-+                            if not "min" in col:
+-+                                col["min"] = value
+-+                            if value < col["min"]:
+-+                                col["min"] = value
+-+                        column_list.append({"name":col["name"], "value":value})
+-+                    else:
+-+                        column_list.append({"name":col["name"], "value":col["value"]})
+-+                item["cols"] = column_list
+-+                item["index"] = index
+-+                index = index + 1
+-+                self.data.append(item)
+- 
+-     def __getitem__(self, key):
+-         """Make this object look like a dict for Templates to use"""
+-diff --git a/makewrappers b/makewrappers
+-index bac856b..ff08ba0 100755
+---- a/makewrappers
+-+++ b/makewrappers
+-@@ -453,6 +453,8 @@ additional ports to include.
+- """
+- 
+-     def __init__(self, port, sources):
+-+        if type(port) is not str:
+-+            port = str(port, encoding="ascii")
+-         self.name = port
+-         self.subports = []
+-         self.preports = []
+-@@ -483,7 +485,7 @@ additional ports to include.
+-             if retcode:
+-                 raise Exception("preports script failed for port %s" % self.name)
+- 
+--            for preport in string.split(portlist):
+-+            for preport in portlist.split():
+-                 next = Port(preport, sources)
+-                 self.preports.append(next)
+- 
+-@@ -494,7 +496,7 @@ additional ports to include.
+-             if retcode:
+-                 raise Exception("subports script failed for port %s" % self.name)
+- 
+--            for subport in string.split(portlist):
+-+            for subport in portlist.split():
+-                 next = Port(subport, sources)
+-                 self.subports.append(next)
+- 
+-@@ -519,7 +521,7 @@ additional ports to include.
+-         return mergedfuncs
+- 
+-     def define(self):
+--        return '#define PSEUDO_PORT_%s 1' % string.upper(self.name).replace('/', '_')
+-+        return '#define PSEUDO_PORT_%s 1' % self.name.upper().replace('/', '_')
+- 
+-     def portdeps(self):
+-         deps = []
+--- 
+-2.10.1
+-
+diff --git a/package/pseudo/pseudo.hash b/package/pseudo/pseudo.hash
+deleted file mode 100644
+index 1553a293fd..0000000000
+--- a/package/pseudo/pseudo.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed
+-sha256  7d4b767302f118fa1c3f89b551cf3f3f2aa92721dab86ff62f0600a394b8a81a  pseudo-45eca34c754d416a38bee90fb2d3c110a0b6cc5f.tar.gz
+diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
+deleted file mode 100644
+index 446427109f..0000000000
+--- a/package/pseudo/pseudo.mk
++++ /dev/null
+@@ -1,29 +0,0 @@
+-################################################################################
+-#
+-# pseudo
+-#
+-################################################################################
+-
+-PSEUDO_VERSION = 45eca34c754d416a38bee90fb2d3c110a0b6cc5f
+-PSEUDO_SITE = https://git.yoctoproject.org/git/pseudo
+-PSEUDO_SITE_METHOD = git
+-
+-# No "or later" clause.
+-PSEUDO_LICENSE = LGPL-2.1
+-PSEUDO_LICENSE_FILES = COPYING
+-
+-HOST_PSEUDO_DEPENDENCIES = host-attr host-sqlite
+-
+-# configure script is not generated by autoconf, so passing --libdir
+-# is necessary, even if the infrastructure passes --prefix already.
+-# It also does not use CFLAGS from the environment, they need to be
+-# specified with a custom --cflags option. Also force rpath to avoid
+-# a warning@configure time.
+-HOST_PSEUDO_CONF_OPTS = \
+-	--cflags="$(HOSTCFLAGS)" \
+-	--with-rpath=$(HOST_DIR)/lib \
+-	--bits=$(if $(filter %64,$(HOSTARCH)),64,32) \
+-	--libdir=$(HOST_DIR)/lib \
+-	--with-sqlite=$(HOST_DIR)
+-
+-$(eval $(host-autotools-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
