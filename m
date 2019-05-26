@@ -1,72 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 11:10:07 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] board/pc: drop unused
- grub-efi.cfg file
-Message-ID: <20190526091607.B4B938149A@busybox.osuosl.org>
+Date: Sun, 26 May 2019 11:22:04 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/samba4: security
+ bump to version 4.9.8
+Message-ID: <20190526091608.1C48F8149A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14ee52f93658e4271316123efbc71408ae7cb0c6
+commit: https://git.buildroot.net/buildroot/commit/?id=6cf301dad9ef7549b676afe757ff0a119c816851
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Following commit fee29b05bb7db25e37c8a5175ce00dc712554edf
-("configs/pc_x86_64_efi: use a GPT partition table"),
-board/pc/grub-efi.cfg is no longer used anywhere: the
-post-image-efi-gpt.sh script generates the grub configuration.
+Fixes the following security issues:
 
-Also, since post-image-efi-gpt.sh generates a grub configuration file
-that uses the root filesystem partition UUID as the root= kernel
-argument, the instructions in the readme.txt file to tweak root= from
-/dev/sda2 to /dev/vda2 is no longer relevant. This was noted in the
-commit log of fee29b05bb7db25e37c8a5175ce00dc712554edf:
+CVE-2018-16860: The checksum validation in the S4U2Self handler in the
+embedded Heimdal KDC did not first confirm that the checksum was keyed,
+allowing replacement of the requested target (client) principal.
 
-    The root filesystem location is passed to the kernel by a partition
-    UUID, so it is possible to boot on QEMU, directly from the disk image,
-    or dump the image to a physical device.
+For more details, see the advisory:
+https://www.samba.org/samba/security/CVE-2018-16860.html
 
-Fixes: #11841
-Cc: Pete Morici <pmorici@dev295.com>
-Cc: Carlos A. M. dos Santos <unixmania@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 79b8540d624ac4846ba341b1b9691eccacf0bc05)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7037a761eedced7ab9680ba7ad91a8bc29f1ec09)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/pc/grub-efi.cfg | 6 ------
- board/pc/readme.txt   | 8 +-------
- 2 files changed, 1 insertion(+), 13 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/board/pc/grub-efi.cfg b/board/pc/grub-efi.cfg
-deleted file mode 100644
-index 222301a4e0..0000000000
---- a/board/pc/grub-efi.cfg
-+++ /dev/null
-@@ -1,6 +0,0 @@
--set default="0"
--set timeout="5"
--
--menuentry "Buildroot" {
--	linux /bzImage root=/dev/sda2 rootwait console=tty1
--}
-diff --git a/board/pc/readme.txt b/board/pc/readme.txt
-index 895331b0af..41aec50d36 100644
---- a/board/pc/readme.txt
-+++ b/board/pc/readme.txt
-@@ -57,13 +57,7 @@ qemu-system-x86_64 \
- Emulation in qemu (UEFI)
- ========================
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 9576690e4f..7e82261b4e 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.9.7.tar.asc
+-sha256 44e5bc58dcae6d86ca8d5f269fa927f20ff91bce97cde86fe4e83addcb89c001  samba-4.9.7.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.9.8.tar.asc
++sha256 82ebb7c3f1847c39341dd97ff8b73f40fa83f5f794daeceb80f3c349ace3cf56  samba-4.9.8.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 941d4df1d6..d2f89e2c82 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--1. Edit grub-efi.cfg
--
--  Since the driver will show up in the virtual machine as /dev/vda,
--  change board/pc/grub-efi.cfg to use root=/dev/vda2 instead of
--  root=/dev/sda2. Then rebuild grub2 and the image.
--
--2. Run the emulation with:
-+Run the emulation with:
- 
- qemu-system-x86_64 \
- 	-M pc \
+-SAMBA4_VERSION = 4.9.7
++SAMBA4_VERSION = 4.9.8
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
