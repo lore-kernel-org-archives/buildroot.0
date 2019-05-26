@@ -1,42 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 May 2019 21:45:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/supertux: fix debug build on
- uclibc/musl
-In-Reply-To: <20190526191814.3942-1-fontaine.fabrice@gmail.com>
-References: <20190526191814.3942-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190526214536.479b9db9@windsurf>
+Date: Sun, 26 May 2019 21:50:30 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: add initial environment support
+In-Reply-To: <20190519191635.23814-1-michael@walle.cc>
+References: <20190519191635.23814-1-michael@walle.cc>
+Message-ID: <20190526215030.5c40a899@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Michael,
 
-+Arnout in Cc.
+Thanks for this patch! See below a number of comments.
 
-On Sun, 26 May 2019 21:18:14 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sun, 19 May 2019 21:16:35 +0200
+Michael Walle <michael@walle.cc> wrote:
 
-> Always set CMAKE_BUILD_TYPE to Release otherwise supertux will be built
-> with -pg since:
-> https://github.com/SuperTux/supertux/commit/afd5f1b33c110104a7f286d6d7854157919a0a52
-> 
-> This will result in the following build failure on uclibc or musl:
-> [ 77%] Linking C executable sq_static
-> CMakeFiles/sq_static.dir/sq.c.o: In function `quit':
-> /home/buildroot/autobuild/instance-3/output/build/supertux-0.6.0/external/squirrel/sq/sq.c:42: undefined reference to `__gnu_mcount_nc'
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/b0b2e25af198d01713d1e2bcf38c77ae8ffbd7de
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Since v2019.07 U-Boot supports extracting the compiled-in environment.
+> As a first step, add support to the environment generation in buildroot.
+> In the future, the text file may also be injected into the target
+> filesystem.
 
-So, it really seems like we want to stop using -DCMAKE_BUILD_TYPE=Debug
-when BR2_ENABLE_DEBUG=y, like Arnout suggested in another thread.
-Packages are adding random flags when -DCMAKE_BUILD_TYPE=Debug, it is
-not really usable, as BR2_ENABLE_DEBUG should only mean "add -g to
-CFLAGS".
+I'm not sure what you mean by "injected into the target filesystem".
+How would this be useful ? U-Boot would pick the environment from the
+root filesystem ?
+
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index 33b7e67ff7..92f00bf752 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -488,7 +488,19 @@ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
+>  	  The environment image will be called uboot-env.bin.
+>  
+>  if BR2_TARGET_UBOOT_ENVIMAGE
+> +choice
+> +	prompt "Environment image source"
+> +	default BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM
+> +
+> +config BR2_TARGET_UBOOT_ENVIMAGE_INITIAL
+> +	bool "Using the initial environment file"
+
+I'm not a fan of the "initial" terminology, although admittedly it's
+the one apparently chosen upstream. "built-in" would be a lot more
+logical, no ?
+
+Also, I think this option needs a help text that describes what it
+does, and the fact that it only works with U-Boot >= 2019.07.
+
+> +config BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM
+> +	bool "Using a custom environment file"
+
+Ditto, a help text would be good.
+
+Other than that, looks good to me. Could you just fix those minor
+details and send an updated version ?
+
+Thanks,
 
 Thomas
 -- 
