@@ -1,44 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:10:32 +0200
-Subject: [Buildroot] [git commit] package/netcat-openbsd: bump to version
- 1.195-2
-Message-ID: <20190602201236.7207781354@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 26 May 2019 14:35:12 +0200
+Subject: [Buildroot] [git commit] package/cog: bump version to 0.3.0
+Message-ID: <20190602201235.CC0D981354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4898de2081caf6664160e96a0fc8245fe19c7153
+commit: https://git.buildroot.net/buildroot/commit/?id=a911fe0ef8f0a17d59c7b533a0846f3606001a9a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Version 0.2.0 does not work with WPE WebKit 2.22.x, this is the
+first version which can be used with 2.24.x
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/netcat-openbsd/netcat-openbsd.hash | 2 +-
- package/netcat-openbsd/netcat-openbsd.mk   | 2 +-
+ package/cog/cog.hash | 2 +-
+ package/cog/cog.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/netcat-openbsd/netcat-openbsd.hash b/package/netcat-openbsd/netcat-openbsd.hash
-index 2cf4713449..cfa65ee24b 100644
---- a/package/netcat-openbsd/netcat-openbsd.hash
-+++ b/package/netcat-openbsd/netcat-openbsd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 06b04b163e8c923943b9fc276eea555625f615a530d5bd8fbdbc1af9b2b0d5db netcat-openbsd-debian_1.190-1.tar.gz
-+sha256 b46c11f83f66c41ad8f413e842c51a9fb2c495e9a2ed836e6ee75bc314545c30 netcat-openbsd-debian_1.195-2.tar.gz
- sha256 e2e86d58c38f044a49f51e45515747585db58a2305419c73323eaad88fcaef5c debian/copyright
-diff --git a/package/netcat-openbsd/netcat-openbsd.mk b/package/netcat-openbsd/netcat-openbsd.mk
-index b313116b3f..a2333531c0 100644
---- a/package/netcat-openbsd/netcat-openbsd.mk
-+++ b/package/netcat-openbsd/netcat-openbsd.mk
+diff --git a/package/cog/cog.hash b/package/cog/cog.hash
+index 97daf72744..39cf2afdbd 100644
+--- a/package/cog/cog.hash
++++ b/package/cog/cog.hash
+@@ -1,5 +1,5 @@
+ # Locally generated
+-sha256 a6abadb78395226bac2e1dd5467feab2cc8c493eab6894a09a51a8e072e38c06  cog-v0.2.0.tar.gz
++sha256 755c68029bbd05a17784262e56021362740783d15868dab9402a125ef35eedaf  cog-v0.3.0.tar.gz
+ 
+ # Hashes for license files:
+ sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index 44ea62185d..b56a772a25 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NETCAT_OPENBSD_VERSION = debian/1.190-1
-+NETCAT_OPENBSD_VERSION = debian/1.195-2
- NETCAT_OPENBSD_SITE = https://salsa.debian.org/debian/netcat-openbsd.git
- NETCAT_OPENBSD_SITE_METHOD = git
- NETCAT_OPENBSD_LICENSE = BSD-3-Clause
+-COG_VERSION = v0.2.0
++COG_VERSION = v0.3.0
+ COG_SITE = $(call github,Igalia,cog,$(COG_VERSION))
+ COG_INSTALL_STAGING = YES
+ COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
