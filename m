@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 May 2019 22:53:35 +0200
-Subject: [Buildroot] [PATCH V2 5/9] package/gcc: Add C-SKY support
-In-Reply-To: <1557305915-11247-5-git-send-email-guoren@kernel.org>
+Date: Sun, 26 May 2019 22:56:12 +0200
+Subject: [Buildroot] [PATCH V2 6/9] package/gdb: Add C-SKY support
+In-Reply-To: <1557305915-11247-6-git-send-email-guoren@kernel.org>
 References: <1557305915-11247-1-git-send-email-guoren@kernel.org>
- <1557305915-11247-5-git-send-email-guoren@kernel.org>
-Message-ID: <20190526225335.2d3e436d@windsurf>
+ <1557305915-11247-6-git-send-email-guoren@kernel.org>
+Message-ID: <20190526225612.333bad27@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,34 +13,76 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed,  8 May 2019 16:58:31 +0800
+On Wed,  8 May 2019 16:58:32 +0800
 guoren at kernel.org wrote:
 
-> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> index 8e22a4c..c123a84 100644
-> --- a/package/gcc/Config.in.host
-> +++ b/package/gcc/Config.in.host
-> @@ -3,6 +3,7 @@ comment "GCC Options"
->  choice
->  	prompt "GCC compiler Version"
->  	default BR2_GCC_VERSION_ARC if BR2_arc
-> +	default BR2_GCC_VERSION_CSKY if BR2_csky
->  	default BR2_GCC_VERSION_OR1K if BR2_or1k
->  	default BR2_GCC_VERSION_7_X
->  	help
-> @@ -14,6 +15,12 @@ config BR2_GCC_VERSION_ARC
->  	depends on BR2_arc
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
->  
-> +config BR2_GCC_VERSION_CSKY
-> +	bool "gcc csky"
-> +	# Only supported architecture
-> +	depends on BR2_csky
-> +	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+> From: Guo Ren <ren_guo@c-sky.com>
+> 
+> Add gdb build for C-SKY Architecture.
 
-I don't see what will prevent me from selecting an upstream gcc 6.x or
-7.x for C-SKY here. Are you sure you should not add a bunch of "depends
-on !BR2_csky" to the other gcc version options ?
+I think this should explain what is supported and not supported:
+
+ - Building host-gdb ?
+
+ - Building gdbserver for the target ?
+
+ - Building full gdb for the target ?
+
+> 
+> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+> ---
+>  package/gdb/Config.in.host | 1 +
+>  package/gdb/gdb.hash       | 2 ++
+>  package/gdb/gdb.mk         | 7 +++++++
+>  3 files changed, 10 insertions(+)
+> 
+> diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+> index 969168f..0aa7d0a 100644
+> --- a/package/gdb/Config.in.host
+> +++ b/package/gdb/Config.in.host
+> @@ -48,6 +48,7 @@ choice
+>  	prompt "GDB debugger Version"
+>  	default BR2_GDB_VERSION_8_1
+>  	depends on !BR2_arc
+> +	depends on !BR2_csky
+
+So building host-gdb is not possible ? Which means remote debugging is
+not possible ?
+
+This seems a bit odd because board/csky/readme.txt precisely suggests
+to use host-gdb:
+
+../host/bin/csky-linux-gdb -x ../../board/csky/gx6605s/gdbinit vmlinux
+
+>  	help
+>  	  Select the version of gdb you wish to use.
+>  
+> diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+> index 1104da5..90a60b0 100644
+> --- a/package/gdb/gdb.hash
+> +++ b/package/gdb/gdb.hash
+> @@ -6,3 +6,5 @@ sha512  2aa81cfd389bb48c35d7d9f95cc10e88b4f7ad4597bdde0f8f1fd312f60f10d9fb2cc6e5
+>  
+>  # Locally calculated (fetched from Github)
+>  sha512  8303e399e396f5c15dc976e48503fc7d45a720dd1a470443f755c5f2458d092b4392e7ae582abc251bc4b43a778ad784f764286a2a05abfc1649cbeeeb6e7d15 	gdb-arc-2018.09-release-gdb.tar.gz
+> +# Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
+> +sha512  c421e1f3c0d6cfb3c04544573c0c4b0075c8d8e3d563c6c234fcc1e4c2167ab203d1e57aec3b58abd348dc46f8cf9b47b753d3a43dba3ea970c9c9a6bd78c07b	gdb-4ecb98fbc2f94dbe01b69384afbc515107de73df.tar.gz
+> diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+> index a926961..460d21f 100644
+> --- a/package/gdb/gdb.mk
+> +++ b/package/gdb/gdb.mk
+> @@ -14,6 +14,13 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+>  GDB_FROM_GIT = y
+>  endif
+>  
+> +ifeq ($(BR2_csky),y)
+> +GDB_VERSION = 4ecb98fbc2f94dbe01b69384afbc515107de73df
+> +GDB_SITE = $(call github,c-sky,binutils-gdb,$(GDB_VERSION))
+> +GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+> +GDB_FROM_GIT = y
+> +endif
+
+And you confirm you support both gdbserver and full gdb on the target ?
 
 Thanks!
 
