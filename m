@@ -1,38 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 09:23:46 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/qemu: replace
- utf-8 space by ascii character
-Message-ID: <20190526072357.8E4187FF0C@busybox.osuosl.org>
+Date: Sun, 26 May 2019 09:26:31 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/python-idna:
+ replace utf-8 quote by ascii single quote
+Message-ID: <20190526072357.DF9F68E14E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bce546275f4f95e7567566ec882e8d553a2250a1
+commit: https://git.buildroot.net/buildroot/commit/?id=dcc7a1b82284602142e64ed10a62c1546945a7ca
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
-
-Replace utf-8 NO-BREAK-SPACE (c2 a0) in comment line by simple
-ascii space character.
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 5dd15ad1dba6f1aaeac896b8b8d8771bd892d4a9)
+(cherry picked from commit a83dab1e3e3804362fd01b4be9e9f857cb71b72b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qemu/qemu.mk | 2 +-
+ package/python-idna/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 30cd5972ef..b858efe3f7 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -9,7 +9,7 @@ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = http://download.qemu.org
- QEMU_LICENSE = GPL-2.0, LGPL-2.1, MIT, BSD-3-Clause, BSD-2-Clause, Others/BSD-1c
- QEMU_LICENSE_FILES = COPYING COPYING.LIB
--#??NOTE: there is no top-level license file for non-(L)GPL licenses;
-+# NOTE: there is no top-level license file for non-(L)GPL licenses;
- #       the non-(L)GPL license texts are specified in the affected
- #       individual source files.
+diff --git a/package/python-idna/Config.in b/package/python-idna/Config.in
+index 4ff4581d53..1fd56ceaf6 100644
+--- a/package/python-idna/Config.in
++++ b/package/python-idna/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_PYTHON_IDNA
+ 	help
+ 	  A library to support the Internationalised Domain Names in
+ 	  Applications (IDNA) protocol as specified in RFC 5891. This
+-	  version of the protocol is often referred to as ???IDNA2008???
++	  version of the protocol is often referred to as 'IDNA2008'
+ 	  and can produce different results from the earlier standard
+ 	  from 2003.
  
