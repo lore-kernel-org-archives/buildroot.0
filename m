@@ -1,35 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 09:24:52 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/collectd: replace
- utf-8 quote by ascii single quote
-Message-ID: <20190526072357.B4FBC8E152@busybox.osuosl.org>
+Date: Sun, 26 May 2019 09:24:35 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/vde2: replace
+ utf-8 space by ascii character
+Message-ID: <20190526072357.9D22B8E14E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f45e9eab5767a0e0208fa92971cc797937d536d
+commit: https://git.buildroot.net/buildroot/commit/?id=842d792259fb5d3998176c76f89e4deae76f0602
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+
+Replace utf-8 NO-BREAK-SPACE (c2 a0) in comment line by simple
+ascii space character.
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit ca5c5fe44c59d131f0c67afcc85979e2615d8373)
+(cherry picked from commit 91f03aefaa737f35943b0b7d537b4c57554a4f14)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/collectd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/vde2/vde2.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 3222547b68..0cf04b5180 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -389,7 +389,7 @@ config BR2_PACKAGE_COLLECTD_POSTGRESQL
- 	  Connects to and executes SQL statements on a PostgreSQL
- 	  database. It then reads back the results and, depending on the
- 	  configuration, the returned values are then converted into
--	  collectd ???value lists???.
-+	  collectd 'value lists'.
+diff --git a/package/vde2/vde2.mk b/package/vde2/vde2.mk
+index e2ec12416e..29337601c4 100644
+--- a/package/vde2/vde2.mk
++++ b/package/vde2/vde2.mk
+@@ -15,7 +15,7 @@ VDE2_INSTALL_STAGING = YES
+ VDE2_AUTORECONF = YES
  
- comment "postgresql support needs a toolchain w/ wchar"
- 	depends on !BR2_USE_WCHAR
+ # Reasons for enabling/disabling stuff:
+-#??- tuntap is enabled in the hope we're using a recent-enough toolchain
++# - tuntap is enabled in the hope we're using a recent-enough toolchain
+ #   that does have if_tun.h (virtually everything these days)
+ # - kvde_switch is disabled because it requires a patched kernel
+ # - cryptcab is disabled to not depend on openSSL
+@@ -34,7 +34,7 @@ VDE2_CONF_OPTS = \
+ 	--disable-python \
+ 	--enable-tuntap
+ 
+-#??Package does not build in parallel due to improper make rules
++# Package does not build in parallel due to improper make rules
+ VDE2_MAKE = $(MAKE1)
+ 
+ HOST_VDE2_CONF_OPTS = \
