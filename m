@@ -1,35 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 09:26:12 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/pngquant: replace
- utf-8 hyphen by ascii hyphen
-Message-ID: <20190526072357.CE6DC8E14E@busybox.osuosl.org>
+Date: Sun, 26 May 2019 09:26:21 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/python-gunicorn:
+ replace utf-8 quote by ascii single quote
+Message-ID: <20190526072357.D6EF28E14E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a7c82133f95ab95554ed148cf888ec280f59440c
+commit: https://git.buildroot.net/buildroot/commit/?id=b3b2e05274858fd65d08e11b6a316dc012e4ab15
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 4089cc389c3b20a9e226a233aa051a410b69056d)
+(cherry picked from commit fc5a3d9d842ba8f913cdfa2415cf971ef2ac4bbf)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pngquant/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/python-gunicorn/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/pngquant/Config.in b/package/pngquant/Config.in
-index c63f0f9d09..5fc93f60a2 100644
---- a/package/pngquant/Config.in
-+++ b/package/pngquant/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_PNGQUANT
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_ZLIB
+diff --git a/package/python-gunicorn/Config.in b/package/python-gunicorn/Config.in
+index 098c3fa6b0..518157bf93 100644
+--- a/package/python-gunicorn/Config.in
++++ b/package/python-gunicorn/Config.in
+@@ -3,8 +3,8 @@ config BR2_PACKAGE_PYTHON_GUNICORN
+ 	select BR2_PACKAGE_PYTHON_SSL if BR2_PACKAGE_PYTHON # runtime
+ 	select BR2_PACKAGE_PYTHON3_SSL if BR2_PACKAGE_PYTHON3 # runtime
  	help
--	  Lossy PNG compressor ??? pngquant command and libimagequant
-+	  Lossy PNG compressor - pngquant command and libimagequant
- 	  library
- 
- 	  https://pngquant.org
+-	  Gunicorn ???Green Unicorn??? is a Python WSGI HTTP Server for
+-	  UNIX. It???s a pre-fork worker model ported from Ruby???s
++	  Gunicorn 'Green Unicorn' is a Python WSGI HTTP Server for
++	  UNIX. It's a pre-fork worker model ported from Ruby's
+ 	  Unicorn project. The Gunicorn server is broadly compatible
+ 	  with various web frameworks, simply implemented, light on
+ 	  server resource usage, and fairly speedy.
