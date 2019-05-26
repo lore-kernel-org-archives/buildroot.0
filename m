@@ -1,62 +1,29 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 26 May 2019 20:51:10 +0200
-Subject: [Buildroot] [git commit] package/wireshark: fix static build with
- libxml2 and lzma
-Message-ID: <20190526184505.6CA5C8E507@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 26 May 2019 20:51:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pseudo: remove package
+In-Reply-To: <20190526154337.24842-1-fontaine.fabrice@gmail.com>
+References: <20190526154337.24842-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190526205132.41d353fb@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ecb65269b8c7bf8fa724f8f8cd4b6b9aedb80ef4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Fixes:
- - http://autobuild.buildroot.org/results/533c75836ba6281000b89a648fc653b9ff4685ee
+On Sun, 26 May 2019 17:43:37 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...e-pkg-config-to-find-libxml2-dependencies.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+> pseudo is not used and fails to build without xattr so remove it
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch b/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
-new file mode 100644
-index 0000000000..ab549021e4
---- /dev/null
-+++ b/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
-@@ -0,0 +1,33 @@
-+From e6a2e71831f0699e9759e0579a00eea5fcb93696 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 24 Apr 2019 20:23:00 +0200
-+Subject: [PATCH] FindXml2: use pkg-config to find libxml2 dependencies
-+
-+On UNIX, when statically built, libxml2 can depends on other libraries such
-+as lzma. These dependencies are already retrieved through pkg-config so
-+append them to LIBXML2_LIBRARIES otherwise static build will fail
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: not sent yet]
-+---
-+ cmake/modules/FindLibXml2.cmake | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/cmake/modules/FindLibXml2.cmake b/cmake/modules/FindLibXml2.cmake
-+index 99d70af57d..2a4b1f470f 100644
-+--- a/cmake/modules/FindLibXml2.cmake
-++++ b/cmake/modules/FindLibXml2.cmake
-+@@ -98,6 +98,10 @@ endif()
-+ 
-+ set(LIBXML2_INCLUDE_DIRS ${LIBXML2_INCLUDE_DIR} ${PC_LIBXML_INCLUDE_DIRS})
-+ set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY})
-++# Include transitive dependencies for static linking.
-++if(UNIX)
-++    list(APPEND LIBXML2_LIBRARIES ${PC_LIBXML_LIBRARIES})
-++endif()
-+ 
-+ include(FindPackageHandleStandardArgs)
-+ FIND_PACKAGE_HANDLE_STANDARD_ARGS(LibXml2
-+-- 
-+2.20.1
-+
+We have a patch from you in patchwork that was fixing the xattr issue,
+and bumping this package. Why did you change your mind ?
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
