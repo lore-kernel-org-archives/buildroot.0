@@ -1,61 +1,43 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 May 2019 21:31:57 +0200
-Subject: [Buildroot] [PATCH 5/5] package/gstreamer1/gst1-plugins-bad:
- Add bluez plugin
-In-Reply-To: <20190509224624.80437-7-aduskett@gmail.com>
-References: <20190509224624.80437-1-aduskett@gmail.com>
- <20190509224624.80437-7-aduskett@gmail.com>
-Message-ID: <20190526213157.36f34149@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 26 May 2019 19:32:41 +0000
+Subject: [Buildroot] [Bug 11906] the new version of mesa3d cannot support
+ etnaviv when compiled with --enable-autotools
+In-Reply-To: <bug-11906-163@https.bugs.busybox.net/>
+References: <bug-11906-163@https.bugs.busybox.net/>
+Message-ID: <bug-11906-163-6ilqi5esVD@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=11906
 
-On Thu,  9 May 2019 18:46:24 -0400
-aduskett at gmail.com wrote:
+--- Comment #2 from romain.naour at gmail.com ---
+Hi,
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Currently there is no explicit way to turn the bluez plugin on or off.
-> Create a menu entry allowing users to disable or enable the plugin.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/gstreamer1/gst1-plugins-bad/Config.in          | 10 ++++++++++
->  .../gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk    |  2 +-
->  2 files changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-> index 35d6bddd05..b0b253bf12 100644
-> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
-> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-> @@ -308,6 +308,16 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ASSRENDER
->  	bool "assrender"
->  	select BR2_PACKAGE_LIBASS
->  
-> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BLUEZ
-> +	bool "bluez"
-> +	depends on !BR2_STATIC_LIBS
+kmsro driver is currently only available for vc4 GPU since Buildroot (2019.05)
+currently use autotools build system. See [1].
 
-In this case, I think propagating all the dependencies of
-BR2_PACKAGE_BLUEZ_UTILS is more appropriate. I know they are already
-handled by the overall gstreamer1 dependencies, but I believe it is not
-unlikely that the dependencies of gstreamer1 change, and for this
-reason, replicating the complete bluez_utils dependencies make sense.
+As you noticed, building kmsro driver for etnaviv require to use the meson
+build system. There is an existing patch series in the patchwork doing so [2].
+There is even a patch adding the support for kmsro driver for etnaviv [3].
 
-I know we don't have a very strict rule about this, so it's really just
-a feeling for this specific case.
+It would be great if you can test this series and send a feedback (Tested-by).
+See [4] for further details.
 
-Besides that, bluez_utils is kinda deprecated. What about bluez5_utils
-support ?
+So this is not really a bug, this is a missing feature due to the late
+switching to meson build system in mesa3d package.
 
-Thanks!
+Best regards,
+Romain
 
-Thomas
+[1]
+https://git.buildroot.net/buildroot/commit/?id=c19e2f44cccf65f34c416ecda9a9ebd96608891f
+[2] http://patchwork.ozlabs.org/project/buildroot/list/?series=106301
+[3] http://patchwork.ozlabs.org/patch/1095779
+[4] http://nightly.buildroot.org/manual.html#_reviewing_and_testing_patches
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
