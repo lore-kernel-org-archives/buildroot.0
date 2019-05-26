@@ -1,56 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 11:21:05 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] docs/manual: clarify
- location of local.mk
-Message-ID: <20190526091608.1575880F7C@busybox.osuosl.org>
+Date: Sun, 26 May 2019 11:18:15 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/samba4: bump
+ version to 4.9.7
+Message-ID: <20190526091607.E636980F7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56f2a9d937c694f4da764bbfaff85551fa4ebe96
+commit: https://git.buildroot.net/buildroot/commit/?id=8875bffe685614d83511ebe2a216642a42be15d0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-In particular, the manual was incorrect when the user had selected an
-out-of-tree build.
+Release notes: https://www.samba.org/samba/history/samba-4.9.7.html
 
-Signed-off-by: Charlie Turner <cturner@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 59c3a4ff73e5a8d4cfcb95bbd0ac07a68628e954)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 8d365099fec760d3b25bd3d0640b6c8148689e9e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/using-buildroot-development.txt | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ package/samba4/samba4.hash | 4 ++--
+ package/samba4/samba4.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/docs/manual/using-buildroot-development.txt b/docs/manual/using-buildroot-development.txt
-index 3389a37b39..65a9f1a3f7 100644
---- a/docs/manual/using-buildroot-development.txt
-+++ b/docs/manual/using-buildroot-development.txt
-@@ -28,10 +28,22 @@ clean+.
- Therefore, Buildroot provides a specific mechanism for this use case:
- the +<pkg>_OVERRIDE_SRCDIR+ mechanism. Buildroot reads an _override_
- file, which allows the user to tell Buildroot the location of the
--source for certain packages. By default this _override_ file is named
--+local.mk+ and located in the top directory of the Buildroot source
--tree, but a different location can be specified through the
--+BR2_PACKAGE_OVERRIDE_FILE+ configuration option.
-+source for certain packages.
-+
-+The default location of the override file is +$(CONFIG_DIR)/local.mk+,
-+as defined by the +BR2_PACKAGE_OVERRIDE_FILE+ configuration option.
-++$(CONFIG_DIR)+ is the location of the Buildroot +.config+ file, so
-++local.mk+ by default lives side-by-side with the +.config+ file,
-+which means:
-+
-+* In the top-level Buildroot source directory for in-tree builds
-+  (i.e., when +O=+ is not used)
-+* In the out-of-tree directory for out-of-tree builds (i.e., when
-+  +O=+ is used)
-+
-+If a different location than these defaults is required, it can be
-+specified through the +BR2_PACKAGE_OVERRIDE_FILE+ configuration
-+option.
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 7762456cfd..9576690e4f 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.9.6.tar.asc
+-sha256 c9205a651a83d69e200fec9dd65e9fa360f0c75ab3275b3dcb74e5cbaec60807  samba-4.9.6.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.9.7.tar.asc
++sha256 44e5bc58dcae6d86ca8d5f269fa927f20ff91bce97cde86fe4e83addcb89c001  samba-4.9.7.tar.gz
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index f6dbda9dbb..941d4df1d6 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- In this _override_ file, Buildroot expects to find lines of the form:
- 
+-SAMBA4_VERSION = 4.9.6
++SAMBA4_VERSION = 4.9.7
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
