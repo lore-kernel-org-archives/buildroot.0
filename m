@@ -1,104 +1,98 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 13:52:59 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/uclibc: fix
- preadv/pwritev offset argument type
-Message-ID: <20190526114748.BD4D6810B6@busybox.osuosl.org>
+Date: Sun, 26 May 2019 13:48:22 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/gdb: fix build of
+ 8.0.1 with glibc 2.29
+Message-ID: <20190526114748.A8D17810B6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9f52b9c2922b9becd4e84dd724880f3e21a31ccc
+commit: https://git.buildroot.net/buildroot/commit/?id=6481df78e8edc822597fe67f7cb803da216a4520
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-preadv/pwritev don't provide separate version for 64-bit wide off_t,
-and default to 32-bit wide off_t, which results in a mismatch between
-declaration and definition for user programs built with
--D_FILE_OFFSET_BITS=64.
+Between glibc 2.28 and glibc 2.29, commit
+89983cb37c9319806a551e8fe9f3a11ff8f973e1 ("Update siginfo constants
+from Linux kernel (bug 21286)") was merged. This commit moved the
+TRAP_HWBKPT definition from an IA64-specific header to an
+architecture-agnostic header.
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+This change exhibited a build issue that until then was only visible
+on IA64 (which Buildroot does not support). This Buildroot commit
+backports a patch from gdb upstream (which is in gdb since 8.2) which
+mentions IA64 because it was originally meant to fix only the
+IA64-related issue. But the glibc change, this change has become
+visible on all architectures.
+
+Fixes:
+ - No autobuilder failures
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7eb857f199e0510b3de6de80569c123ed22e23c6)
+(cherry picked from commit b8b23ac20829776c841db94434fc42817ddfca61)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...3-preadv-pwritev-fix-offset-argument-type.patch | 71 ++++++++++++++++++++++
- 1 file changed, 71 insertions(+)
+ ...g-TRAP_HWBKPT-before-including-gdb_wait-h.patch | 54 ++++++++++++++++++++++
+ 1 file changed, 54 insertions(+)
 
-diff --git a/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch b/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
+diff --git a/package/gdb/8.0.1/0006-gdb-Fix-ia64-defining-TRAP_HWBKPT-before-including-gdb_wait-h.patch b/package/gdb/8.0.1/0006-gdb-Fix-ia64-defining-TRAP_HWBKPT-before-including-gdb_wait-h.patch
 new file mode 100644
-index 0000000000..ccc262b9c5
+index 0000000000..1e85d9314c
 --- /dev/null
-+++ b/package/uclibc/0003-preadv-pwritev-fix-offset-argument-type.patch
-@@ -0,0 +1,71 @@
-+From 1077d5bebffacfd4b09896ed890fb45a5b3c6dc6 Mon Sep 17 00:00:00 2001
-+From: Max Filippov <jcmvbkbc@gmail.com>
-+Date: Fri, 10 May 2019 07:13:19 -0700
-+Subject: [PATCH] preadv/pwritev: fix offset argument type
++++ b/package/gdb/8.0.1/0006-gdb-Fix-ia64-defining-TRAP_HWBKPT-before-including-gdb_wait-h.patch
+@@ -0,0 +1,54 @@
++From 5a6c3296a7a90694ad4042f6256f3da6d4fa4ee8 Mon Sep 17 00:00:00 2001
++From: James Clarke <jrtc27@jrtc27.com>
++Date: Fri, 19 Jan 2018 17:22:49 +0000
++Subject: [PATCH] gdb: Fix ia64 defining TRAP_HWBKPT before including
++ gdb_wait.h
 +
-+preadv/pwritev don't provide separate version for 64-bit wide off_t,
-+and default to 32-bit wide off_t, which results in a mismatch between
-+declaration and definition for user programs built with
-+-D_FILE_OFFSET_BITS=64.
-+Make offset argument of both functions __off64_t.
-+This fixes test misc/tst-preadvwritev on xtensa.
++On ia64, gdb_wait.h eventually includes siginfo-consts-arch.h, which
++contains an enum with TRAP_HWBKPT, along with a #define. Thus we cannot
++define TRAP_HWBKPT to 4 beforehand, and so gdb_wait.h must be included
++earlier; include it from linux-ptrace.h so it can never come afterwards.
 +
-+Backported from: 423e49023eeb ("preadv/pwritev: fix offset argument type")
-+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
++gdb/ChangeLog:
++
++	* nat/linux-ptrace.c: Remove unnecessary reinclusion of
++	gdb_ptrace.h, and move including gdb_wait.h ...
++	* nat/linux-ptrace.h: ... to here.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved (and updated to remove ChangeLog update) from:
++https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=5a6c3296a7a90694ad4042f6256f3da6d4fa4ee8]
 +---
-+ include/sys/uio.h                   | 4 ++--
-+ libc/sysdeps/linux/common/preadv.c  | 2 +-
-+ libc/sysdeps/linux/common/pwritev.c | 2 +-
-+ 3 files changed, 4 insertions(+), 4 deletions(-)
++ gdb/ChangeLog          | 6 ++++++
++ gdb/nat/linux-ptrace.c | 2 --
++ gdb/nat/linux-ptrace.h | 1 +
++ 3 files changed, 7 insertions(+), 2 deletions(-)
 +
-+diff --git a/include/sys/uio.h b/include/sys/uio.h
-+index aa766f9b1187..330426fec492 100644
-+--- a/include/sys/uio.h
-++++ b/include/sys/uio.h
-+@@ -59,7 +59,7 @@ extern ssize_t writev (int __fd, const struct iovec *__iovec, int __count);
-+    This function is a cancellation point and therefore not marked with
-+    __THROW.  */
-+ extern ssize_t preadv (int __fd, const struct iovec *__iovec, int __count,
-+-		       off_t __offset) __wur;
-++		       __off64_t __offset) __wur;
++diff --git a/gdb/nat/linux-ptrace.c b/gdb/nat/linux-ptrace.c
++index 5c4ddc9..1f21ef0 100644
++--- a/gdb/nat/linux-ptrace.c
+++++ b/gdb/nat/linux-ptrace.c
++@@ -21,8 +21,6 @@
++ #include "linux-procfs.h"
++ #include "linux-waitpid.h"
++ #include "buffer.h"
++-#include "gdb_wait.h"
++-#include "gdb_ptrace.h"
++ #ifdef HAVE_SYS_PROCFS_H
++ #include <sys/procfs.h>
++ #endif
++diff --git a/gdb/nat/linux-ptrace.h b/gdb/nat/linux-ptrace.h
++index 60967a3..dc180fb 100644
++--- a/gdb/nat/linux-ptrace.h
+++++ b/gdb/nat/linux-ptrace.h
++@@ -21,6 +21,7 @@
++ struct buffer;
 + 
-+ /* Write data pointed by the buffers described by IOVEC, which is a
-+    vector of COUNT 'struct iovec's, to file descriptor FD at the given
-+@@ -71,7 +71,7 @@ extern ssize_t preadv (int __fd, const struct iovec *__iovec, int __count,
-+    This function is a cancellation point and therefore not marked with
-+    __THROW.  */
-+ extern ssize_t pwritev (int __fd, const struct iovec *__iovec, int __count,
-+-			off_t __offset) __wur;
-++			__off64_t __offset) __wur;
-+ #endif	/* Use misc.  */
++ #include "nat/gdb_ptrace.h"
+++#include "gdb_wait.h"
 + 
-+ __END_DECLS
-+diff --git a/libc/sysdeps/linux/common/preadv.c b/libc/sysdeps/linux/common/preadv.c
-+index fd9dde4b999c..6a07d5df87e0 100644
-+--- a/libc/sysdeps/linux/common/preadv.c
-++++ b/libc/sysdeps/linux/common/preadv.c
-+@@ -21,7 +21,7 @@
-+ 
-+ #ifdef __NR_preadv
-+ ssize_t
-+-preadv (int fd, const struct iovec *vector, int count, off_t offset)
-++preadv (int fd, const struct iovec *vector, int count, __off64_t offset)
-+ {
-+   unsigned long pos_l, pos_h;
-+ 
-+diff --git a/libc/sysdeps/linux/common/pwritev.c b/libc/sysdeps/linux/common/pwritev.c
-+index bef5bcf69b46..f07c40e6de3c 100644
-+--- a/libc/sysdeps/linux/common/pwritev.c
-++++ b/libc/sysdeps/linux/common/pwritev.c
-+@@ -21,7 +21,7 @@
-+ 
-+ #ifdef __NR_pwritev
-+ ssize_t
-+-pwritev (int fd, const struct iovec *vector, int count, off_t offset)
-++pwritev (int fd, const struct iovec *vector, int count, __off64_t offset)
-+ {
-+   unsigned long pos_l, pos_h;
-+ 
++ #ifdef __UCLIBC__
++ #if !(defined(__UCLIBC_HAS_MMU__) || defined(__ARCH_HAS_MMU__))
 +-- 
-+2.11.0
++2.9.3
 +
