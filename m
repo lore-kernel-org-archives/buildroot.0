@@ -1,84 +1,50 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 26 May 2019 21:15:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: fix static build
- with libxml2 and lzma
-In-Reply-To: <c9b198de-1c73-32e2-8539-e1da4aa3b4cc@mind.be>
-References: <20190424194741.12464-1-fontaine.fabrice@gmail.com>
- <c9b198de-1c73-32e2-8539-e1da4aa3b4cc@mind.be>
-Message-ID: <CAPi7W81CK6vtbSSkLmL9kXLkOoZO6yCUeH+WmwRo96ZGXNewww@mail.gmail.com>
+Date: Sun, 26 May 2019 21:18:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/supertux: fix debug build on
+ uclibc/musl
+Message-ID: <20190526191814.3942-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout,
+Always set CMAKE_BUILD_TYPE to Release otherwise supertux will be built
+with -pg since:
+https://github.com/SuperTux/supertux/commit/afd5f1b33c110104a7f286d6d7854157919a0a52
 
-Le dim. 26 mai 2019 ? 20:51, Arnout Vandecappelle <arnout@mind.be> a ?crit :
->
->
->
-> On 24/04/2019 21:47, Fabrice Fontaine wrote:
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/533c75836ba6281000b89a648fc653b9ff4685ee
-> >
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->
->  Applied to master, thanks.
->
-> > ---
-> >  ...-config-to-find-libxml2-dependencies.patch | 33 +++++++++++++++++++
-> >  1 file changed, 33 insertions(+)
-> >  create mode 100644 package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
-> >
-> > diff --git a/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch b/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
-> > new file mode 100644
-> > index 0000000000..ab549021e4
-> > --- /dev/null
-> > +++ b/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
-> > @@ -0,0 +1,33 @@
-> > +From e6a2e71831f0699e9759e0579a00eea5fcb93696 Mon Sep 17 00:00:00 2001
-> > +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +Date: Wed, 24 Apr 2019 20:23:00 +0200
-> > +Subject: [PATCH] FindXml2: use pkg-config to find libxml2 dependencies
-> > +
-> > +On UNIX, when statically built, libxml2 can depends on other libraries such
-> > +as lzma. These dependencies are already retrieved through pkg-config so
-> > +append them to LIBXML2_LIBRARIES otherwise static build will fail
-> > +
-> > +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > +[Upstream status: not sent yet]
->
->  Since your other patches were accepted, can you upstream this one as well?
-It's already done and merged:
-https://github.com/wireshark/wireshark/commit/580098d875b497e5d5aa36dfad10291668e7d392
->
->  Regards,
->  Arnout
->
-> > +---
-> > + cmake/modules/FindLibXml2.cmake | 4 ++++
-> > + 1 file changed, 4 insertions(+)
-> > +
-> > +diff --git a/cmake/modules/FindLibXml2.cmake b/cmake/modules/FindLibXml2.cmake
-> > +index 99d70af57d..2a4b1f470f 100644
-> > +--- a/cmake/modules/FindLibXml2.cmake
-> > ++++ b/cmake/modules/FindLibXml2.cmake
-> > +@@ -98,6 +98,10 @@ endif()
-> > +
-> > + set(LIBXML2_INCLUDE_DIRS ${LIBXML2_INCLUDE_DIR} ${PC_LIBXML_INCLUDE_DIRS})
-> > + set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY})
-> > ++# Include transitive dependencies for static linking.
-> > ++if(UNIX)
-> > ++    list(APPEND LIBXML2_LIBRARIES ${PC_LIBXML_LIBRARIES})
-> > ++endif()
-> > +
-> > + include(FindPackageHandleStandardArgs)
-> > + FIND_PACKAGE_HANDLE_STANDARD_ARGS(LibXml2
-> > +--
-> > +2.20.1
-> > +
-> >
-Best Regards,
+This will result in the following build failure on uclibc or musl:
+[ 77%] Linking C executable sq_static
+CMakeFiles/sq_static.dir/sq.c.o: In function `quit':
+/home/buildroot/autobuild/instance-3/output/build/supertux-0.6.0/external/squirrel/sq/sq.c:42: undefined reference to `__gnu_mcount_nc'
 
-Fabrice
+Fixes:
+ - http://autobuild.buildroot.org/results/b0b2e25af198d01713d1e2bcf38c77ae8ffbd7de
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/supertux/supertux.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/supertux/supertux.mk b/package/supertux/supertux.mk
+index af25509da8..5842b17ba4 100644
+--- a/package/supertux/supertux.mk
++++ b/package/supertux/supertux.mk
+@@ -18,6 +18,7 @@ SUPERTUX_LICENSE_FILES = LICENSE.txt data/AUTHORS
+ SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype libcurl libgl libglew libglu \
+ 	libogg libpng libvorbis openal physfs sdl2 sdl2_image
+ 
++# CMAKE_BUILD_TYPE=Release: disable profiling code (-pg)
+ # ENABLE_BOOST_STATIC_LIBS=OFF: use boost shared libraries since supertux
+ # depends on !BR2_STATIC_LIBS and boost provide only shared libraries with
+ # BR2_SHARED_LIBS.
+@@ -28,6 +29,7 @@ SUPERTUX_DEPENDENCIES = host-pkgconf boost freetype libcurl libgl libglew libglu
+ # in physfs.h (CHECK_SYMBOL_EXISTS) doesn't work.
+ # ENABLE_OPENGLES2=OFF: Disable opengles2 for now.
+ SUPERTUX_CONF_OPTS += \
++	-DCMAKE_BUILD_TYPE=Release \
+ 	-DENABLE_BOOST_STATIC_LIBS=OFF \
+ 	-DBUILD_DOCUMENTATION=OFF \
+ 	-DENABLE_OPENGL=ON \
+-- 
+2.20.1
