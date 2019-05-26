@@ -1,66 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 11:15:18 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/qt5enginio: needs
- ssl
-Message-ID: <20190526091607.DFC6580F7C@busybox.osuosl.org>
+Date: Sun, 26 May 2019 11:10:27 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] support/dependencies: Add
+ hint for ArchLinux when host needs IA32 libs
+Message-ID: <20190526091607.C082A80F7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9e57731814d1f2115bf0ddf30c07d96990aed42
+commit: https://git.buildroot.net/buildroot/commit/?id=fc51e660ea1fe02030e50213284ff2ad3c36260a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-qt5enginio needs Qt5 with ssl support, a dependency could be added on
-BR2_PACKAGE_QT5BASE_OPENSSL but this proposal was rejected in the first
-iteration of this patch.
+Add hint about which package needs to be installed to provide IA32 libs
+support for the host when it is needed.
 
-Qt5 has ssl support through libressl on Qt 5.6 or openssl in latest Qt
-however we can't select libressl without adding a circular dependency as
-some packages (such as sqlcipher) force openssl through
-BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL.
-
-Any solution at the Kconfig level that tries to select libressl will
-lead to circular dependencies. Since Qt 5.6 is more or less deprecated
-anyway, and since it is not tested in the autobuilders, solve this with
-a comment. The comment is only shown for Qt 5.6, when libressl is not
-selected. Note that it is also shown when qt5enginio is not selected.
-
-Fixes:
- - http://autobuild.buildroot.org/results/60678cab68ec9aa17184b8417b64b3b79adf428a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit ac38d6ce9c2d00623661806650807e14d4731e52)
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 28878798cf557dadc58ebee9e1f39c62a29ffcea)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5enginio/Config.in | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ support/dependencies/dependencies.sh | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/qt5/qt5enginio/Config.in b/package/qt5/qt5enginio/Config.in
-index 102058e7c5..ac2d13b3ab 100644
---- a/package/qt5/qt5enginio/Config.in
-+++ b/package/qt5/qt5enginio/Config.in
-@@ -1,9 +1,8 @@
- config BR2_PACKAGE_QT5ENGINIO
- 	bool "qt5enginio"
--	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_QT5BASE
- 	select BR2_PACKAGE_QT5BASE_GUI
- 	select BR2_PACKAGE_QT5BASE_NETWORK
-+	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Qt is a cross-platform application and UI framework for
- 	  developers using C++.
-@@ -15,3 +14,10 @@ config BR2_PACKAGE_QT5ENGINIO
- 	  5.6 and not recommended for new design.
- 
- 	  http://doc.qt.io/archives/qt-5.5/enginio-index.html
-+
-+# Forcibly selecting libressl is not possible because it is from a choice, and
-+# depending on it is also not possible because we select openssl. So just a
-+# a warning.
-+comment "qt5enginio needs libressl for Qt5.6"
-+	depends on BR2_PACKAGE_QT5_VERSION_5_6
-+	depends on !BR2_PACKAGE_LIBRESSL
+diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
+index 826874baa2..60c63d7743 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -232,6 +232,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
+ 		echo "libstdc++6:i386, and zlib1g:i386)."
+ 		echo "If you're running a RedHat/Fedora distribution, install the glibc.i686 and"
+ 		echo "zlib.i686 packages."
++		echo "If you're running an ArchLinux distribution, install lib32-glibc."
+ 		echo "For other distributions, refer to the documentation on how to install the 32 bits"
+ 		echo "compatibility libraries."
+ 		exit 1
