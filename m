@@ -1,43 +1,40 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 26 May 2019 19:32:41 +0000
-Subject: [Buildroot] [Bug 11906] the new version of mesa3d cannot support
- etnaviv when compiled with --enable-autotools
-In-Reply-To: <bug-11906-163@https.bugs.busybox.net/>
-References: <bug-11906-163@https.bugs.busybox.net/>
-Message-ID: <bug-11906-163-6ilqi5esVD@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 26 May 2019 21:33:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/v4l2loopback: bump to version
+ 0b8feb80fdef9a415d8250bca1790b3ff23e8391
+In-Reply-To: <CADvTj4rh8At+7G-nt0uO1VSyYqkLt35npGi1smWrYOJ296XwDw@mail.gmail.com>
+References: <20190524203541.116482-1-james.hilliard1@gmail.com>
+ <20190524231309.4c7a4ec1@windsurf>
+ <CADvTj4oqmLMOdaj_5Ou_16Bh1goS+5YBnP_Eopuet7-LuskysQ@mail.gmail.com>
+ <20190524232410.62e28210@windsurf>
+ <CADvTj4rh8At+7G-nt0uO1VSyYqkLt35npGi1smWrYOJ296XwDw@mail.gmail.com>
+Message-ID: <20190526213318.3e54c484@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11906
+Hello James,
 
---- Comment #2 from romain.naour at gmail.com ---
-Hi,
+On Fri, 24 May 2019 15:40:33 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-kmsro driver is currently only available for vc4 GPU since Buildroot (2019.05)
-currently use autotools build system. See [1].
+> > Could you comment on what are the other commits between v0.12.1 and
+> > 0b8feb80fdef9a415d8250bca1790b3ff23e8391 ? Only bug fixes, and we
+> > should take all of them to master ? Or should we just backport the
+> > Linux 5.1 fix ?  
+> Other than a readme change there are no commits between v0.12.1 and
+> 0b8feb80fdef9a415d8250bca1790b3ff23e8391.
 
-As you noticed, building kmsro driver for etnaviv require to use the meson
-build system. There is an existing patch series in the patchwork doing so [2].
-There is even a patch adding the support for kmsro driver for etnaviv [3].
+I think in this case, it makes more sense to just "backport" the single
+patch that fixes this issue, and put it in package/v4l2loopback/. Could
+you send an updated version of your patch with this solution instead ?
 
-It would be great if you can test this series and send a feedback (Tested-by).
-See [4] for further details.
+Thanks a lot!
 
-So this is not really a bug, this is a missing feature due to the late
-switching to meson build system in mesa3d package.
-
-Best regards,
-Romain
-
-[1]
-https://git.buildroot.net/buildroot/commit/?id=c19e2f44cccf65f34c416ecda9a9ebd96608891f
-[2] http://patchwork.ozlabs.org/project/buildroot/list/?series=106301
-[3] http://patchwork.ozlabs.org/patch/1095779
-[4] http://nightly.buildroot.org/manual.html#_reviewing_and_testing_patches
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
