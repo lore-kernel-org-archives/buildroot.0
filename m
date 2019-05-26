@@ -1,56 +1,53 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 11:22:04 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/samba4: security
- bump to version 4.9.8
-Message-ID: <20190526091608.1C48F8149A@busybox.osuosl.org>
+Date: Sun, 26 May 2019 11:20:42 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/sqlite: security
+ bump version to 3.28.0
+Message-ID: <20190526091608.0ED3C80F7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6cf301dad9ef7549b676afe757ff0a119c816851
+commit: https://git.buildroot.net/buildroot/commit/?id=da6cedbd76037e87032abdf3509969165bc2661f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security issues:
+Release notes: https://www.sqlite.org/releaselog/3_28_0.html
 
-CVE-2018-16860: The checksum validation in the S4U2Self handler in the
-embedded Heimdal KDC did not first confirm that the checksum was keyed,
-allowing replacement of the requested target (client) principal.
+Fixes https://nvd.nist.gov/vuln/detail/CVE-2019-5018
 
-For more details, see the advisory:
-https://www.samba.org/samba/security/CVE-2018-16860.html
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7037a761eedced7ab9680ba7ad91a8bc29f1ec09)
+(cherry picked from commit cde99db79a6801e1e6fe48cf75cab65d5860c351)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 9576690e4f..7e82261b4e 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.7.tar.asc
--sha256 44e5bc58dcae6d86ca8d5f269fa927f20ff91bce97cde86fe4e83addcb89c001  samba-4.9.7.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.8.tar.asc
-+sha256 82ebb7c3f1847c39341dd97ff8b73f40fa83f5f794daeceb80f3c349ace3cf56  samba-4.9.8.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 941d4df1d6..d2f89e2c82 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 5e2bc7030a..9b7efe71d6 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,6 +1,6 @@
+ # From https://www.sqlite.org/download.html
+-sha1 5f5750e3f39b7b60394a2fb6ddb2371f848670e6  sqlite-autoconf-3270200.tar.gz
++sha1 01b9d8fc77085e144dddc87456c9783e53d09a53  sqlite-autoconf-3280000.tar.gz
+ # Calculated based on the hash above
+-sha256 50c39e85ea28b5ecfdb3f9e860afe9ba606381e21836b2849efca6a0bfe6ef6e  sqlite-autoconf-3270200.tar.gz
++sha256 d61b5286f062adfce5125eaf544d495300656908e61fca143517afcc0a89b7c3  sqlite-autoconf-3280000.tar.gz
+ # Locally calculated
+ sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 95ededd8c4..7e97c966b7 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.9.7
-+SAMBA4_VERSION = 4.9.8
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-SQLITE_VERSION = 3270200
++SQLITE_VERSION = 3280000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2019
+ SQLITE_LICENSE = Public domain
