@@ -1,53 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 11:20:42 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/sqlite: security
- bump version to 3.28.0
-Message-ID: <20190526091608.0ED3C80F7C@busybox.osuosl.org>
+Date: Sun, 26 May 2019 11:21:05 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] docs/manual: clarify
+ location of local.mk
+Message-ID: <20190526091608.1575880F7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da6cedbd76037e87032abdf3509969165bc2661f
+commit: https://git.buildroot.net/buildroot/commit/?id=56f2a9d937c694f4da764bbfaff85551fa4ebe96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Release notes: https://www.sqlite.org/releaselog/3_28_0.html
+In particular, the manual was incorrect when the user had selected an
+out-of-tree build.
 
-Fixes https://nvd.nist.gov/vuln/detail/CVE-2019-5018
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Charlie Turner <cturner@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cde99db79a6801e1e6fe48cf75cab65d5860c351)
+(cherry picked from commit 59c3a4ff73e5a8d4cfcb95bbd0ac07a68628e954)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/sqlite/sqlite.hash | 4 ++--
- package/sqlite/sqlite.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ docs/manual/using-buildroot-development.txt | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
-index 5e2bc7030a..9b7efe71d6 100644
---- a/package/sqlite/sqlite.hash
-+++ b/package/sqlite/sqlite.hash
-@@ -1,6 +1,6 @@
- # From https://www.sqlite.org/download.html
--sha1 5f5750e3f39b7b60394a2fb6ddb2371f848670e6  sqlite-autoconf-3270200.tar.gz
-+sha1 01b9d8fc77085e144dddc87456c9783e53d09a53  sqlite-autoconf-3280000.tar.gz
- # Calculated based on the hash above
--sha256 50c39e85ea28b5ecfdb3f9e860afe9ba606381e21836b2849efca6a0bfe6ef6e  sqlite-autoconf-3270200.tar.gz
-+sha256 d61b5286f062adfce5125eaf544d495300656908e61fca143517afcc0a89b7c3  sqlite-autoconf-3280000.tar.gz
- # Locally calculated
- sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
-diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
-index 95ededd8c4..7e97c966b7 100644
---- a/package/sqlite/sqlite.mk
-+++ b/package/sqlite/sqlite.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/manual/using-buildroot-development.txt b/docs/manual/using-buildroot-development.txt
+index 3389a37b39..65a9f1a3f7 100644
+--- a/docs/manual/using-buildroot-development.txt
++++ b/docs/manual/using-buildroot-development.txt
+@@ -28,10 +28,22 @@ clean+.
+ Therefore, Buildroot provides a specific mechanism for this use case:
+ the +<pkg>_OVERRIDE_SRCDIR+ mechanism. Buildroot reads an _override_
+ file, which allows the user to tell Buildroot the location of the
+-source for certain packages. By default this _override_ file is named
+-+local.mk+ and located in the top directory of the Buildroot source
+-tree, but a different location can be specified through the
+-+BR2_PACKAGE_OVERRIDE_FILE+ configuration option.
++source for certain packages.
++
++The default location of the override file is +$(CONFIG_DIR)/local.mk+,
++as defined by the +BR2_PACKAGE_OVERRIDE_FILE+ configuration option.
+++$(CONFIG_DIR)+ is the location of the Buildroot +.config+ file, so
+++local.mk+ by default lives side-by-side with the +.config+ file,
++which means:
++
++* In the top-level Buildroot source directory for in-tree builds
++  (i.e., when +O=+ is not used)
++* In the out-of-tree directory for out-of-tree builds (i.e., when
++  +O=+ is used)
++
++If a different location than these defaults is required, it can be
++specified through the +BR2_PACKAGE_OVERRIDE_FILE+ configuration
++option.
  
--SQLITE_VERSION = 3270200
-+SQLITE_VERSION = 3280000
- SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
- SQLITE_SITE = https://www.sqlite.org/2019
- SQLITE_LICENSE = Public domain
+ In this _override_ file, Buildroot expects to find lines of the form:
+ 
