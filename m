@@ -1,68 +1,56 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 26 May 2019 15:21:43 +0200
-Subject: [Buildroot] [PATCH 1/1] Add libvirt (KVM) support
-In-Reply-To: <76055cea-ec05-aad3-1f27-39e07b48b12b@lecroq.be>
-References: <20190215173607.13773-1-christopher@lecroq.be>
- <20190413222137.6c0cba37@windsurf>
- <da50400b-6cf2-d87a-3a51-c54a46b7cea6@lecroq.be>
- <a4a04e64-bf89-f21b-89fe-7b3e5b1e5d69@mind.be>
- <CA+_SqVYm9vpx+Uuktb+s_TYu+Hzpu258AfNhUUkBTRK7K_SuOQ@mail.gmail.com>
- <76055cea-ec05-aad3-1f27-39e07b48b12b@lecroq.be>
-Message-ID: <25259681-75b6-fe4b-bb4b-e9a903f48058@mind.be>
+Date: Sun, 26 May 2019 15:23:48 +0200
+Subject: [Buildroot] [PATCH 1/2] package/pseudo: fix build without xattr
+In-Reply-To: <20190508144521.9783-1-fontaine.fabrice@gmail.com>
+References: <20190508144521.9783-1-fontaine.fabrice@gmail.com>
+Message-ID: <e265dce7-dc7b-61e2-35bb-e3fc1a8c9775@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Angelo, Christopher,
 
-On 15/04/2019 16:54, Christopher Peeters wrote:
-> On 15/04/2019 16:06, Angelo Compagnucci wrote:
->> On Mon, Apr 15, 2019 at 2:23 PM Arnout Vandecappelle <arnout@mind.be> wrote:
->>>  Hi Christopher,
->>>
->>>  Plese don't top-post, but reply inline like I do below.
->>>
->>> On 15/04/2019 09:46, Christopher Peeters wrote:
->>>> Hi Thomas,
->>>>
->>>> Thank you for your email. I wasn't aware about the commit title
->>>> conventions so I will fix this.
->>>>
->>>> The reason why I selected a different distribution is the lack of
->>>> support for Libvirt by the original distribution.
->>>  I would prefer in that case that we always use this other distribution (which
->>> is actually the same distribution, right? bionic == ubuntu1804...).
->> I wouldn't like to use this distribution if possible, is not the
->> official one and not maintained by canonical. The official one is:
->>
->> https://app.vagrantup.com/ubuntu/boxes/bionic64
-> As I said before there's no support from Canonical for libvirt images.
-> This can only be solved by Canonical. And if I look at Launchpad, it
-> won't happen very soon. There's another question for LXC support open
-> for more then a year now.
-> 
-> An other option when preferring official images is to switch over to one
-> of the following boxes since they do understand that source projects
-> should support each other and therefore have support for libvirt in
-> their Vagrant boxes. I haven't tested them though.
-> 
-> - https://app.vagrantup.com/debian/boxes/stretch64
 
- Without understanding all this vagrant stuff, I would say that simply switching
-away from Ubuntu and to Debian sounds like the right thing to do, no? Debian
-stable is definitely a distro we want to have supported at all times.
+On 08/05/2019 16:45, Fabrice Fontaine wrote:
+> Build of host-pseudo without xattr fails on:
+> ports/linux/xattr/portdefs.h:1:10: fatal error: attr/xattr.h: No such file or directory
+>  #include <attr/xattr.h>
+> 
+> xattr is enabled since
+> http://git.yoctoproject.org/cgit/cgit.cgi/pseudo/commit/configure?id=6c6d0a3e4a4d382fd0b2e056a3ecffb015652767
+> 
+> So disable xattr through --enable-xattr=no as --disable-xattr is not
+> supported
+> 
+> Fixes:
+>  - No autobuilder failures
+
+ There's no autobuilder failure because pseudo is not used. It was introduced to
+replace fakeroot some time ago, but it brought too much pain.
+
+ Instead of these fixes, the package should just be removed.
 
  Regards,
  Arnout
 
 > 
-> - https://app.vagrantup.com/centos/boxes/7
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/pseudo/pseudo.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> - https://app.vagrantup.com/fedora/boxes/29-atomic-host
-> 
-> - https://app.vagrantup.com/opensuse/boxes/openSUSE-15.0-x86_64
-> 
-> - https://app.vagrantup.com/archlinux/boxes/archlinux
+> diff --git a/package/pseudo/pseudo.mk b/package/pseudo/pseudo.mk
+> index 446427109f..54abd2a8d8 100644
+> --- a/package/pseudo/pseudo.mk
+> +++ b/package/pseudo/pseudo.mk
+> @@ -24,6 +24,7 @@ HOST_PSEUDO_CONF_OPTS = \
+>  	--with-rpath=$(HOST_DIR)/lib \
+>  	--bits=$(if $(filter %64,$(HOSTARCH)),64,32) \
+>  	--libdir=$(HOST_DIR)/lib \
+> -	--with-sqlite=$(HOST_DIR)
+> +	--with-sqlite=$(HOST_DIR) \
+> +	--enable-xattr=no
+>  
+>  $(eval $(host-autotools-package))
 > 
