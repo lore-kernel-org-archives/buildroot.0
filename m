@@ -1,68 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 May 2019 14:17:09 +0200
-Subject: [Buildroot] [git commit branch/next] package/iputils: fix build
- with nettle
-Message-ID: <20190526122240.4077D8D7B3@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 26 May 2019 14:29:26 +0200
+Subject: [Buildroot] [PATCH v2] package/python-numpy: fix occasional
+ build failure with lapack
+In-Reply-To: <87imtxl9us.fsf@dell.be.48ers.dk>
+References: <eb24ad7d-6de2-085d-d3e0-9037c3d5cf81@micronovasrl.com>
+ <20190515210342.126951-1-giulio.benetti@micronovasrl.com>
+ <20190518221352.0630eaa6@windsurf>
+ <e0c589d1-ce45-0132-43da-db2605b81616@micronovasrl.com>
+ <74098714-11ae-9897-a5fb-71db0f04c44a@micronovasrl.com>
+ <e0f46b82-02c0-7a4d-a67b-f21faa5ceda3@micronovasrl.com>
+ <d08e9569-ab62-3cd2-e1ab-64b5c8aa85b8@mind.be>
+ <87imtxl9us.fsf@dell.be.48ers.dk>
+Message-ID: <a8d62ed2-4d1a-4447-4a9c-c33c845e97c5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b7f09c3e483913d26ec96306a6566fb3e89fd4a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes:
- - http://autobuild.buildroot.org/results/e86555090e27b631ba35214ef100aa9331844684
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...infod-ninfod_name.c-fix-build-with-nettle.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+On 26/05/2019 13:43, Peter Korsgaard wrote:
+>>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+> 
+> Hi,
+> 
+>  >>> But IMHO we should proceed with dropping clapack.
+> 
+>  >  Why? it is maintained, and it is a dependency of armadillo...
+> 
+>  >  I had a deeper look, and actually lapack and clapack are the same, just
+>  > compiled differently: lapack is built with the fortran compiler, clapack is
+>  > generated with f2c (by upstream) and built with the C compiler. AFAIU, anything
+>  > that uses lapack should also be able to use clapack and vice versa.
+> 
+>  >  We have two packages like that: numpy and armadillo. They both seem to support
+>  > both lapack and clapack.
+> 
+>  >  So, it seems indeed removing clapack is the appropriate thing. Except: lapack
+>  > requires a fortran compiler, which is not always available. So in that sense, it
+>  > would actually be more appropriate to remove lapack...
+> 
+>  >  But maybe it would be better to normally use lapack, and only enable clapack
+>  > when lapack isn't available (i.e. when there's no fortran compiler).
+> 
+> Not knowing anything about (c)lapack (or fortran), is there any
+> performance advantage using lapack over clapack? Otherwise just always
+> using clapack seems like the simplest solution.
 
-diff --git a/package/iputils/0001-ninfod-ninfod_name.c-fix-build-with-nettle.patch b/package/iputils/0001-ninfod-ninfod_name.c-fix-build-with-nettle.patch
-new file mode 100644
-index 0000000000..796185011a
---- /dev/null
-+++ b/package/iputils/0001-ninfod-ninfod_name.c-fix-build-with-nettle.patch
-@@ -0,0 +1,38 @@
-+From f209ebb91e65980bcdddce8cc12b00ec11623f76 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 21 May 2019 19:14:18 +0200
-+Subject: [PATCH] ninfod/ninfod_name.c: fix build with nettle
-+
-+Build of ninfod with nettle fails on:
-+/home/test/autobuild/run/instance-1/output/host/bin/mips64el-linux-gcc  -o ninfod/ninfod 'ninfod/0cb6efe@@ninfod at exe/ni_ifaddrs.c.o' 'ninfod/0cb6efe@@ninfod at exe/ninfod.c.o' 'ninfod/0cb6efe@@ninfod at exe/ninfod_addrs.c.o' 'ninfod/0cb6efe@@ninfod at exe/ninfod_core.c.o' 'ninfod/0cb6efe@@ninfod at exe/ninfod_name.c.o' -Wl,--no-undefined -Wl,--as-needed -Wl,-O1 -Wl,--start-group libcommon.a -lcap /home/test/autobuild/run/instance-1/output/host/usr/bin/../mips64el-buildroot-linux-uclibc/sysroot/usr/lib/libnettle.so -Wl,--end-group -pthread '-Wl,-rpath,$ORIGIN/..:/home/test/autobuild/run/instance-1/output/host/usr/bin/../mips64el-buildroot-linux-uclibc/sysroot/usr/lib' -Wl,-rpath-link,/home/test/autobuild/run/instance-1/output/build/iputils-s20190515/build/:/home/test/autobuild/run/instance-1/output/host/usr/bin/../mips64el-buildroot-linux-uclibc/sysroot/usr/lib
-+ninfod/0cb6efe@@ninfod at exe/ninfod_name.c.o: In function `init_nodeinfo_nodename':
-+ninfod_name.c:(.text+0x378): undefined reference to `MD5_Init'
-+
-+This error is raised because MD5_Init is not defined by nettle.
-+To fix this error, include iputils_md5dig.h if USE_NETTLE is defined.
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/e86555090e27b631ba35214ef100aa9331844684
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/iputils/iputils/pull/181]
-+---
-+ ninfod/ninfod_name.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/ninfod/ninfod_name.c b/ninfod/ninfod_name.c
-+index daf606d..525c93d 100644
-+--- a/ninfod/ninfod_name.c
-++++ b/ninfod/ninfod_name.c
-+@@ -95,7 +95,7 @@
-+ 
-+ #include <arpa/inet.h>
-+ 
-+-#if defined(HAVE_GCRYPT_H) || defined(USE_KERNEL_CRYPTO_API)
-++#if defined(HAVE_GCRYPT_H) || defined(USE_KERNEL_CRYPTO_API) || defined(USE_NETTLE)
-+ # include "iputils_md5dig.h"
-+ #elif defined(HAVE_GNUTLS_OPENSSL_H)
-+ # include <gnutls/openssl.h>
-+-- 
-+2.20.1
-+
+ Sounds OK to me.
+
+ Bernd, you're the only one who ever made a real contribution to lapack. Thoughts?
+
+ Benjamin, you originally contributed lapack. Any ideas?
+
+ Regards,
+ Arnout
