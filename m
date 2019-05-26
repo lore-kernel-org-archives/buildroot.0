@@ -1,12 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 26 May 2019 13:35:03 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-05-14
-In-Reply-To: <20190516110616.329beae6@windsurf>
-References: <20190515060039.F045C22920@silver.osuosl.org>
- <20190515221703.GC32757@momiji> <20190516083353.5cd7ae04@windsurf>
- <20190516115248.GB25918@momiji> <20190516110616.329beae6@windsurf>
-Message-ID: <c7e87b0d-434a-9ec8-7fa9-c0b743e3a0f0@mind.be>
+Date: Sun, 26 May 2019 13:42:05 +0200
+Subject: [Buildroot] [PATCH 0/2] Some more netsurf fixes
+In-Reply-To: <20190509202808.6741-1-thomas.petazzoni@bootlin.com>
+References: <20190509202808.6741-1-thomas.petazzoni@bootlin.com>
+Message-ID: <2062251e-bdc4-8711-1725-336a9f84f86d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,77 +12,37 @@ To: buildroot@busybox.net
 
 
 
-On 16/05/2019 11:06, Thomas Petazzoni wrote:
+On 09/05/2019 22:28, Thomas Petazzoni wrote:
 > Hello,
 > 
-> +Samuel Martin in the discussion.
+> On my machine, netsurf does not even build due to commit
+> 6da049f8ae61b956d135526722ce58fc2f67626a. My PATCH 1/2 fixes that, but
+> it still remains fragile as CFLAGS/LDFLAGS are used for both building
+> target objects and host tools. For example, with my PATCH 1/2 applied,
+> if BR2_STATIC_LIBS is enabled, -static is passed in LDFLAGS, and
+> netsurf fails to build on my machine with "-lc not found" because it
+> passes -static when building host tools, and I don't have a static
+> glibc installed on my machine.
 > 
-> On Thu, 16 May 2019 11:52:48 +0300
-> Adrian Perez de Castro <aperez@igalia.com> wrote:
+> PATCH 2/2 disable static linking for netsurf, which was anyway failing
+> to build for months in the autobuilders.
 > 
->>> This build has BR2_ENABLE_DEBUG=y, and when BR2_ENABLE_DEBUG=y, the
->>> CMake package infrastructure passes -DCMAKE_BUILD_TYPE=Debug. I assume
->>> that's under this condition that assertions become enabled.  
->>
->> On a related note: for debug builds done by packagers we usually recommend
->> building with ?-DCMAKE_BUILD_TYPE=RelWithDebInfo? because using the ?Debug?
->> produces excruciatingly slow WebKit binaries. To give you an idea: loading
->> some simple static HTML page over the network can take a couple of minutes.
->> Typically full ?Debug? builds are only ever used by WebKit developers.
-> 
-> I know there was so back and forth between Debug and RelWithDebInfo,
-> see the commit log of commit 104bb29e0490bfb487e2e665448dd3ca07fcc2b5:
-[snip]
->     Reverting to the previous situation, so Buildroot now chooses between
->     the 'Debug' and 'Release' config types, which are semantically closer
->     to what Buildroot does everywhere else:
->       * if BR2_ENABLE_DEBUG is set:
->         The CMake build type is set to Debug, which means:
->         - only -g option is passed by CMake;
->         - optimization is not forced, nor debug level, so they are kept
->           as-is;
->       * otherwise:
->         The CMake build type is set to Release, so no change in this case:
->         - Optimization level is forced to: -O3;
->         - no log nor assert due to -DNDEBUG (as expected);
->         - size optimization is ignored.
->     
->     Follow-up patches will fix the CMake flag variables that are appended by
->     CMake.
->     
->     Cc: Charles Hardin <ckhardin@exablox.com>
->     Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->     Cc: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
->     Signed-off-by: Samuel Martin <s.martin49@gmail.com>
->     Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->     Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-> 
-> So apparently, the issue with RelWithDebInfo is that it forces the
-> optimization level.
+> To be honest, the netsurf build system is broken beyond repair, and is
+> a royal pain to work with. Since nobody has acted to fix those build
 
- CMAKE_BUILD_TYPE basically does two things.
-
-1. In addition to CMAKE_C_FLAGS, CMAKE_C_FLAGS_<buildtype> is used (and the same
-for a bunch of other variables). The defaults of these variables set various
-debug and optimisation flags. Note that packages tend to add things both to
-CMAKE_C_FLAGS and CMAKE_C_FLAGS_RELEASE/DEBUG/...
-
-2. Package's CMakeLists.txt use it to do various things, e.g. build additional
-stuff in debug mode, or enable Werror, or .... Impossible to say in general what
-they will come up with.
-
- I think we should do the same as we did with autotools a while ago: we remove
-the --enable-debug and instead always build in "release" mode, but we force
-debug flags through CFLAGS. That's also how it's documented in the
-BR2_ENABLE_DEBUG help text.
-
- So, I think we should set CMAKE_BUILD_TYPE to Release - or even leave it empty,
-since that's the default. And then we only need to set CMAKE_C_FLAGS_RELEASE.
+ I have taken a quick look, and it doesn't seem *that* bad... There's just
+nsgenbind that needs to be built for the host, and it could be done by make a
+host-netsurf package that sets NSLIB_TARG to empty, and set NSBUILD_TARG to
+empty in the target build. It seems to find the binary through PATH, so there's
+not even a need to patch anything.
 
 
- By the way, while investigating this, I discovered that we set -DNDEBUG for
-CMake release, but we don't do that for other build systems. Sounds like a
-mistake...
+> issues for the past months, if my patches are not sufficient (and as I
+> said, they *are* fragile), I will propose to simply remove the netsurf
+> package.
+
+ However, since indeed nobody stepped up, I'm definitely in favour of removing
+the package entirely.
 
  Regards,
  Arnout
