@@ -1,37 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 26 May 2019 11:10:27 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] support/dependencies: Add
- hint for ArchLinux when host needs IA32 libs
-Message-ID: <20190526091607.C082A80F7C@busybox.osuosl.org>
+Date: Sun, 26 May 2019 11:10:07 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] board/pc: drop unused
+ grub-efi.cfg file
+Message-ID: <20190526091607.B4B938149A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc51e660ea1fe02030e50213284ff2ad3c36260a
+commit: https://git.buildroot.net/buildroot/commit/?id=14ee52f93658e4271316123efbc71408ae7cb0c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Add hint about which package needs to be installed to provide IA32 libs
-support for the host when it is needed.
+Following commit fee29b05bb7db25e37c8a5175ce00dc712554edf
+("configs/pc_x86_64_efi: use a GPT partition table"),
+board/pc/grub-efi.cfg is no longer used anywhere: the
+post-image-efi-gpt.sh script generates the grub configuration.
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Also, since post-image-efi-gpt.sh generates a grub configuration file
+that uses the root filesystem partition UUID as the root= kernel
+argument, the instructions in the readme.txt file to tweak root= from
+/dev/sda2 to /dev/vda2 is no longer relevant. This was noted in the
+commit log of fee29b05bb7db25e37c8a5175ce00dc712554edf:
+
+    The root filesystem location is passed to the kernel by a partition
+    UUID, so it is possible to boot on QEMU, directly from the disk image,
+    or dump the image to a physical device.
+
+Fixes: #11841
+Cc: Pete Morici <pmorici@dev295.com>
+Cc: Carlos A. M. dos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 28878798cf557dadc58ebee9e1f39c62a29ffcea)
+(cherry picked from commit 79b8540d624ac4846ba341b1b9691eccacf0bc05)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/dependencies/dependencies.sh | 1 +
- 1 file changed, 1 insertion(+)
+ board/pc/grub-efi.cfg | 6 ------
+ board/pc/readme.txt   | 8 +-------
+ 2 files changed, 1 insertion(+), 13 deletions(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 826874baa2..60c63d7743 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -232,6 +232,7 @@ if grep -q ^BR2_HOSTARCH_NEEDS_IA32_LIBS=y $BR2_CONFIG ; then
- 		echo "libstdc++6:i386, and zlib1g:i386)."
- 		echo "If you're running a RedHat/Fedora distribution, install the glibc.i686 and"
- 		echo "zlib.i686 packages."
-+		echo "If you're running an ArchLinux distribution, install lib32-glibc."
- 		echo "For other distributions, refer to the documentation on how to install the 32 bits"
- 		echo "compatibility libraries."
- 		exit 1
+diff --git a/board/pc/grub-efi.cfg b/board/pc/grub-efi.cfg
+deleted file mode 100644
+index 222301a4e0..0000000000
+--- a/board/pc/grub-efi.cfg
++++ /dev/null
+@@ -1,6 +0,0 @@
+-set default="0"
+-set timeout="5"
+-
+-menuentry "Buildroot" {
+-	linux /bzImage root=/dev/sda2 rootwait console=tty1
+-}
+diff --git a/board/pc/readme.txt b/board/pc/readme.txt
+index 895331b0af..41aec50d36 100644
+--- a/board/pc/readme.txt
++++ b/board/pc/readme.txt
+@@ -57,13 +57,7 @@ qemu-system-x86_64 \
+ Emulation in qemu (UEFI)
+ ========================
+ 
+-1. Edit grub-efi.cfg
+-
+-  Since the driver will show up in the virtual machine as /dev/vda,
+-  change board/pc/grub-efi.cfg to use root=/dev/vda2 instead of
+-  root=/dev/sda2. Then rebuild grub2 and the image.
+-
+-2. Run the emulation with:
++Run the emulation with:
+ 
+ qemu-system-x86_64 \
+ 	-M pc \
