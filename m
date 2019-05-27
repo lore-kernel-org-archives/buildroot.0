@@ -1,47 +1,45 @@
 From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 27 May 2019 12:50:21 -0600
-Subject: [Buildroot] [PATCH v2 1/1] package/v4l2loopback: bump to version
- 0.12.2
-Message-ID: <20190527185021.115590-1-james.hilliard1@gmail.com>
+Date: Mon, 27 May 2019 12:52:06 -0600
+Subject: [Buildroot] [PATCH 1/1] package/v4l2loopback: bump to version
+ 0b8feb80fdef9a415d8250bca1790b3ff23e8391
+In-Reply-To: <20190526213318.3e54c484@windsurf>
+References: <20190524203541.116482-1-james.hilliard1@gmail.com>
+ <20190524231309.4c7a4ec1@windsurf>
+ <CADvTj4oqmLMOdaj_5Ou_16Bh1goS+5YBnP_Eopuet7-LuskysQ@mail.gmail.com>
+ <20190524232410.62e28210@windsurf>
+ <CADvTj4rh8At+7G-nt0uO1VSyYqkLt35npGi1smWrYOJ296XwDw@mail.gmail.com>
+ <20190526213318.3e54c484@windsurf>
+Message-ID: <CADvTj4qM8t1ThUKFD5e0zPzSF4YztjVqx4LUZSYS5BpHyzRnGA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This fixes a kernel 5.1.x compatibility issue.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-
----
-Changes v1 -> v2:
-  - Use latest upstream tag instead of commit
----
- package/v4l2loopback/v4l2loopback.hash | 2 +-
- package/v4l2loopback/v4l2loopback.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/v4l2loopback/v4l2loopback.hash b/package/v4l2loopback/v4l2loopback.hash
-index 6d661d0a65..0598be486f 100644
---- a/package/v4l2loopback/v4l2loopback.hash
-+++ b/package/v4l2loopback/v4l2loopback.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	f2b9b7f8611c1a77b2f496ee505e49860121079c998bb735e4bb6b8954132348  v4l2loopback-v0.12.1.tar.gz
-+sha256	6d2c27a69d982bf39d7330b92f084fd0388beef486879320ccf263e4716cd549  v4l2loopback-v0.12.2.tar.gz
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/v4l2loopback/v4l2loopback.mk b/package/v4l2loopback/v4l2loopback.mk
-index 99879f9219..15c1ed6100 100644
---- a/package/v4l2loopback/v4l2loopback.mk
-+++ b/package/v4l2loopback/v4l2loopback.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--V4L2LOOPBACK_VERSION = v0.12.1
-+V4L2LOOPBACK_VERSION = v0.12.2
- V4L2LOOPBACK_SITE = $(call github,umlaeute,v4l2loopback,$(V4L2LOOPBACK_VERSION))
- V4L2LOOPBACK_LICENSE = GPL-2.0+
- V4L2LOOPBACK_LICENSE_FILES = COPYING
--- 
-2.20.1
+On Sun, May 26, 2019 at 1:33 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello James,
+>
+> On Fri, 24 May 2019 15:40:33 -0600
+> James Hilliard <james.hilliard1@gmail.com> wrote:
+>
+> > > Could you comment on what are the other commits between v0.12.1 and
+> > > 0b8feb80fdef9a415d8250bca1790b3ff23e8391 ? Only bug fixes, and we
+> > > should take all of them to master ? Or should we just backport the
+> > > Linux 5.1 fix ?
+> > Other than a readme change there are no commits between v0.12.1 and
+> > 0b8feb80fdef9a415d8250bca1790b3ff23e8391.
+>
+> I think in this case, it makes more sense to just "backport" the single
+> patch that fixes this issue, and put it in package/v4l2loopback/. Could
+> you send an updated version of your patch with this solution instead ?
+Upstream tagged v0.12.2 so I've changed my patch to update to that instead.
+>
+> Thanks a lot!
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
