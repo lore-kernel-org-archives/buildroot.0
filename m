@@ -1,253 +1,80 @@
-From: Victor Huesca <victor.huesca@bootlin.com>
-Date: Mon, 27 May 2019 17:39:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/sfml: new package
-Message-ID: <20190527153906.24339-1-victor.huesca@bootlin.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 27 May 2019 19:20:55 +0200
+Subject: [Buildroot] [PATCH v2 05/12] package/flare-engine: fix
+ BUG_85180 build timeout
+In-Reply-To: <20190524223027.6d05ee4c@windsurf.home>
+References: <20190521133932.81841-1-giulio.benetti@micronovasrl.com>
+ <20190521133932.81841-6-giulio.benetti@micronovasrl.com>
+ <20190524215853.4ee3ddbc@windsurf.home>
+ <6fbb9a9d-b836-97dd-5bd2-f9d3dcb06a57@micronovasrl.com>
+ <20190524223027.6d05ee4c@windsurf.home>
+Message-ID: <72277a65-f760-226c-0f65-3658b2751390@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
----
- package/Config.in      |   1 +
- package/sfml/Config.in | 116 +++++++++++++++++++++++++++++++++++++++++
- package/sfml/sfml.hash |   3 ++
- package/sfml/sfml.mk   |  79 ++++++++++++++++++++++++++++
- 4 files changed, 199 insertions(+)
- create mode 100644 package/sfml/Config.in
- create mode 100644 package/sfml/sfml.hash
- create mode 100644 package/sfml/sfml.mk
+Hello Thomas,
 
-diff --git a/package/Config.in b/package/Config.in
-index f592e74a99..149bda9c6b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -314,6 +314,7 @@ comment "Graphic libraries"
- 	source "package/sdl2_mixer/Config.in"
- 	source "package/sdl2_net/Config.in"
- 	source "package/sdl2_ttf/Config.in"
-+	source "package/sfml/Config.in"
- 	source "package/tk/Config.in"
- 
- comment "Other GUIs"
-diff --git a/package/sfml/Config.in b/package/sfml/Config.in
-new file mode 100644
-index 0000000000..76cf95df36
---- /dev/null
-+++ b/package/sfml/Config.in
-@@ -0,0 +1,116 @@
-+config BR2_PACKAGE_SFML
-+	bool "sfml"
-+	# depends on BR2_PACKAGE_HAS_UDEV
-+
-+	help
-+	  Simple and Fast Multimedia Library 2 - SFML provides a simple 
-+	  interface to the various components of your PC, to ease the 
-+	  development of games and multimedia applications. It is composed 
-+	  of five modules: system, window, graphics, audio and network. 
-+
-+	  https://www.sfml-dev.org/
-+
-+
-+if BR2_PACKAGE_SFML
-+
-+# X11 and OpenGL related stuff
-+
-+config BR2_PACKAGE_SFML_X11
-+	bool "X11 video driver"
-+	depends on BR2_PACKAGE_XORG7
-+	# select BR2_PACKAGE_XLIB_LIBX11
-+
-+comment "X11 video driver needs X.org"
-+	depends on !BR2_PACKAGE_XORG7
-+
-+config BR2_PACKAGE_SFML_OPENGL
-+	bool "OpenGL (GLX)"
-+	depends on BR2_PACKAGE_HAS_LIBGL && BR2_PACKAGE_SFML_X11
-+
-+comment "OpenGL support needs X11 and an OpenGL provider"
-+	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_SFML_X11
-+
-+
-+
-+
-+# Exemples
-+config BR2_PACKAGE_SFML_EXAMPLES
-+	bool "examples"
-+	help
-+	  This boolean option controls whether the SFML examples are 
-+	  built alongside the library or not.
-+
-+
-+
-+# Allow to select only Audio, Window, Graphics or Network
-+config BR2_PACKAGE_SFML_CUSTOM_MODULES
-+	bool "custom modules"
-+	help
-+	  Allow to select only a subset of modules.
-+
-+if BR2_PACKAGE_SFML_CUSTOM_MODULES
-+
-+config BR2_PACKAGE_SFML_AUDIO
-+	bool "audio"
-+	default y
-+	select BR2_PACKAGE_FLAC
-+	select BR2_PACKAGE_LIBOGG
-+	select BR2_PACKAGE_LIBVORBIS
-+	select BR2_PACKAGE_OPENAL
-+	help
-+	  This boolean option controls whether the SFML audio module 
-+	  is built or not.
-+
-+config BR2_PACKAGE_SFML_GRAPHICS
-+	bool "graphics"
-+	default y
-+	select BR2_PACKAGE_SFML_WINDOW
-+	select BR2_PACKAGE_FREETYPE
-+	select BR2_PACKAGE_JPEG
-+	help
-+	  This boolean option controls whether the SFML graphics module 
-+	  is built or not.
-+
-+config BR2_PACKAGE_SFML_WINDOW
-+	bool "window"
-+	default y
-+	depends on BR2_PACKAGE_SFML_X11
-+	help
-+	  This boolean option controls whether the SFML window module 
-+	  is built or not.
-+
-+config BR2_PACKAGE_SFML_NETWORK
-+	bool "network"
-+	default y
-+	help
-+	  This boolean option controls whether the SFML network module 
-+	  is built or not. 
-+
-+endif # BR2_PACKAGE_SFML_CUSTOM_MODULES
-+
-+
-+# TODO: Check if it can build w/ the internals libraries 
-+# Use buildroot libs by default
-+config BR2_PACKAGE_SFML_EXTLIB
-+	bool "extlibs"
-+	default y
-+	help
-+	  This boolean option controls whether the dependencies from 
-+	  the extlibs directory are used or whether the system 
-+	  dependencies are used. The stb_image_* header in the extlibs 
-+	  directory are used regardless of this option. 
-+
-+
-+config BR2_PACKAGE_SFML_PKGCONF
-+	bool "install pkg-config file"
-+	depends on BR2_PACKAGE_PKGCONF
-+	default y
-+	help
-+	  This boolean option controls whether CMake will install the 
-+	  pkg-config files on your system or not. 
-+
-+
-+endif
-+
-+comment "SFML needs a toolchain w/ thread support"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/sfml/sfml.hash b/package/sfml/sfml.hash
-new file mode 100644
-index 0000000000..c3d96836e2
---- /dev/null
-+++ b/package/sfml/sfml.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256	438c91a917cc8aa19e82c6f59f8714da353c488584a007d401efac8368e1c785	sfml-2.5.1.tar.gz
-+sha256	8143f9ad51ddf0a5b0629beabf8e1432ac3e5a2f3b62b510f3b16712e4bb9143	license.md
-\ No newline at end of file
-diff --git a/package/sfml/sfml.mk b/package/sfml/sfml.mk
-new file mode 100644
-index 0000000000..5db4c1b29e
---- /dev/null
-+++ b/package/sfml/sfml.mk
-@@ -0,0 +1,79 @@
-+################################################################################
-+#
-+# sfml
-+#
-+################################################################################
-+
-+SFML_VERSION = 2.5.1
-+SFML_SITE = $(call github,SFML,SFML,$(SFML_VERSION))
-+SFML_LICENSE = Zlib
-+SFML_LICENSE_FILES = license.md
-+SFML_INSTALL_STAGING = YES 
-+SFML_DEPENDENCIES = udev #pthread
-+
-+
-+# x-includes and x-libraries must be set for cross-compiling
-+# By default x_includes and x_libraries contains unsafe paths.
-+# (/usr/X11R6/include and /usr/X11R6/lib)
-+ifeq ($(BR2_PACKAGE_SFML_X11),y)
-+SFML_DEPENDENCIES += xlib_libX11 xlib_libXext
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SFML_OPENGL),y)
-+SFML_DEPENDENCIES += libgl
-+endif
-+
-+
-+# Make sure to disable documentation
-+SFML_CONF_OPTS += -DSFML_BUILD_DOC=OFF
-+
-+
-+# Build type
-+ifeq ($(BR2_ENABLE_DEBUG),y)
-+SFML_CONF_OPTS += -DCMAKE_BUILD_TYPE=Debug
-+else
-+SFML_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
-+endif
-+
-+
-+# Exemples
-+ifeq ($(BR2_PACKAGE_SFML_EXAMPLES),y)
-+SFML_CONF_OPTS += -DSFML_BUILD_EXAMPLES=ON
-+else
-+SFML_CONF_OPTS += -DSFML_BUILD_EXAMPLES=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SFML_AUDIO),y)
-+SFML_DEPENDENCIES += openal libogg libvorbis flac
-+SFML_CONF_OPTS += -DSFML_BUILD_AUDIO=ON
-+else
-+SFML_CONF_OPTS += -DSFML_BUILD_AUDIO=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SFML_GRAPHICS),y)
-+SFML_DEPENDENCIES += jpeg freetype
-+SFML_CONF_OPTS += -DSFML_BUILD_GRAPHICS=ON
-+else
-+SFML_CONF_OPTS += -DSFML_BUILD_GRAPHICS=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SFML_WINDOW),y)
-+SFML_CONF_OPTS += -DSFML_BUILD_WINDOW=ON
-+else
-+SFML_CONF_OPTS += -DSFML_BUILD_WINDOW=OFF
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SFML_NETWORK),y)
-+SFML_CONF_OPTS += -DSFML_BUILD_NETWORK=ON
-+endif
-+
-+# Do not used provided external libs
-+ifneq ($(BR2_PACKAGE_SFML_EXTLIB),y)
-+SFML_CONF_OPTS += -DSFML_USE_SYSTEM_DEP=ON
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SFML_PKGCONF),y)
-+SFML_CONF_OPTS += -DSFML_INSTALL_PKGCONFIG_FILES=ON
-+endif
-+
-+$(eval $(cmake-package))
-\ No newline at end of file
+Il 24/05/2019 22:30, Thomas Petazzoni ha scritto:
+> On Fri, 24 May 2019 22:05:12 +0200
+> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+> 
+>>> Why does flare-engine need this, but not jasper, which is also a
+>>> CMake-based package ?
+>>
+>> Because in flare-engine CMakeLists.txt there is no fallback to -O0, so
+>> that was the only decent way to force CMake to generate Makefiles
+>> without optimizations.
+> 
+> Could you be more specific ? How does it work for jasper and
+> libcpprestsdk, which are also based on CMake ?
+
+Yes, the problem here is that even if there's the way to append 
+something to CMAKE_CXX_FLAGS, then any other CMAKE_CXX_FLAGS_* will be 
+appended, so if I set CMAKE_CXX_FLAGS to -O0, I will obtain "-O0 -O2 -g".
+
+This is due to the fact that we fall into one of the cases of the next 
+if-elseif statements(in CMakeLists.txt):
+"
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+   set(CMAKE_CXX_FLAGS_RELEASE "-O2 -g0")
+   if(MINGW)
+     set(CMAKE_CXX_FLAGS_RELEASE "-Wl,-subsystem,windows 
+${CMAKE_CXX_FLAGS_RELEASE}")
+   endif()
+elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
+elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
+   set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -g0")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+   set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -pg")
+   set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-pg")
+   set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "-pg")
+   set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "-pg")
+endif()
+"
+where Release is the default and if BR2_ENABLE_DEBUG=y 
+CMAKE_BUILD_TYPE=RelWithDebInfo according to flare-engine.mk
+So I thought to set CMAKE_BUILD_TYPE to "Dummy" to jump over that 
+if-elseif. But just right now I've realized that's enough to give 
+-DCMAKE_BUILD_TYPE=
+Empty is enough to jump over if-elseif.
+Another way would be to patch CMakeLists.txt adding a fallback "else" to 
+those if-elseif
+
+What do you think?
+
+Best regards
 -- 
-2.21.0
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
