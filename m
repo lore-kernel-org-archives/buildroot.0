@@ -1,85 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 27 May 2019 10:54:05 +0200
-Subject: [Buildroot] [git commit] package/tpm2-totp: fix error due to
- variable used uninitialized
-Message-ID: <20190527084839.EE52D815D1@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 27 May 2019 11:06:06 +0200
+Subject: [Buildroot] [PATCH v2 1/7] package/sqlite: fix BUG_85180 build
+ timeout
+In-Reply-To: <6dcdb1eb-5d48-e773-9711-1df461c542e2@micronovasrl.com>
+References: <10430096-81de-792a-8b49-c59ed5e9de2e@micronovasrl.com>
+ <20190522135906.30796-1-giulio.benetti@micronovasrl.com>
+ <20190522135906.30796-2-giulio.benetti@micronovasrl.com>
+ <20190524222459.2fc91773@windsurf.home>
+ <6dcdb1eb-5d48-e773-9711-1df461c542e2@micronovasrl.com>
+Message-ID: <3e1c735b-0639-ffaf-9d96-7b51920668fc@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e58679c7b66956a71b9795065443ce918c3da23
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Thomas,
 
-Some inline declarations of strtok_r (specifically in Sourcery CodeBench
-Lite 2016.11-19) contain code where an '__s' local variable can be used
-uninitialized.
+Il 26/05/2019 00:14, Giulio Benetti ha scritto:
+> Il 24/05/2019 22:24, Thomas Petazzoni ha scritto:
+>> On Wed, 22 May 2019 15:59:00 +0200
+>> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+>>
+>>> With Microblaze Gcc version < 8.x build hangs on compiling last files
+>>> before linking.
+>>> This is due to bug 85180:
+>>> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+>>> Bug shows up building sqlite with optimization but not when building
+>>> with -O0.
+>>>
+>>> If BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 passing it to
+>>> SQLITE_CFLAGS.
+>>>
+>>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>>
+>> I cannot reproduce this timeout, and you don't have any autobuilder
+>> failure. Could you provide a configuration that exhibits the failure ?
 
-When GCC expands that declaration in tpm2-totp, __s becomes an alias to
-a variable which fact is not initialized, but this is not relevant since
-the execution path leading to the uninitialized use is never followed.
+Sure, the problems comes out building libnss with gcc4.9/5/6/7.
+Here is pastebin of my savedefconfig:
+https://pastebin.com/wmR8Dme3
 
-Anyway, apply a patch already submitted upstream to fix the compilation
-error.
+I use external toolchains, but they are BR toolchains.
+The commit log is not precise, need to improve it.
 
-Upstream bug report:
-  https://github.com/tpm2-software/tpm2-totp/issues/32
+Best regards
+-- 
+Giulio Benetti
+CTO
 
-Fixes:
-  http://autobuild.buildroot.net/results/5693a35e4d6bc76a1f46fe0e217abc49f7188aad/
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...pilation-failure-due-to-variable-may-be-u.patch | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
-
-diff --git a/package/tpm2-totp/0002-src-fix-compilation-failure-due-to-variable-may-be-u.patch b/package/tpm2-totp/0002-src-fix-compilation-failure-due-to-variable-may-be-u.patch
-new file mode 100644
-index 0000000000..a650ab49f4
---- /dev/null
-+++ b/package/tpm2-totp/0002-src-fix-compilation-failure-due-to-variable-may-be-u.patch
-@@ -0,0 +1,42 @@
-+From 194f41635367452a7a3c9a75ebbada531bf4c58d Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <unixmania@gmail.com>
-+Date: Sun, 26 May 2019 13:39:44 -0300
-+Subject: [PATCH] src: fix compilation failure due to "variable may be used
-+ uninitialized"
-+
-+Some inline declarations of strtok_r (specifically in Sourcery CodeBench
-+Lite 2016.11-19) contain code where an '__s' local variable can be used
-+uninitialized.
-+
-+When GCC expands that declaration in 'parse_pcrs', __s becomes an alias
-+to the local variable 'saveptr', which in fact is not initialized, but
-+this is not relevant, since the 'str' argument is knowingly not NULL
-+when passed to strtok_r because it comes from 'optarg' in parse_opts.
-+
-+Anyway, initialize saveptr to NULL to prevent the compilation error.
-+
-+Fixes:
-+  http://autobuild.buildroot.net/results/5693a35e4d6bc76a1f46fe0e217abc49f7188aad/
-+
-+Change-Id: I03ad3731774c56744f18154ec161c92ba002903d
-+Signed-off-by: Carlos Santos <unixmania@gmail.com>
-+---
-+ src/tpm2-totp.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/tpm2-totp.c b/src/tpm2-totp.c
-+index 3f60b4a..f28a4d6 100644
-+--- a/src/tpm2-totp.c
-++++ b/src/tpm2-totp.c
-+@@ -93,7 +93,7 @@ int
-+ parse_pcrs(char *str, int *pcrs)
-+ {
-+     char *token;
-+-    char *saveptr;
-++    char *saveptr = NULL;
-+     char *endptr;
-+     long pcr;
-+ 
-+-- 
-+2.20.1
-+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
