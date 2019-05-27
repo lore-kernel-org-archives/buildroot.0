@@ -1,39 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 May 2019 22:30:22 +0200
-Subject: [Buildroot] [PATCH V2 8/9] support/config.sub: Add C-SKY support
-In-Reply-To: <1557305915-11247-8-git-send-email-guoren@kernel.org>
-References: <1557305915-11247-1-git-send-email-guoren@kernel.org>
- <1557305915-11247-8-git-send-email-guoren@kernel.org>
-Message-ID: <20190527223022.1d1aaa5a@windsurf>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 27 May 2019 22:34:25 +0200
+Subject: [Buildroot] [PATCH v2 5/7] package/ecryptfs-utils: allow
+ building with GCC_BUG_85862 and on Microblaze
+In-Reply-To: <20190527211329.18c6678c@windsurf>
+References: <10430096-81de-792a-8b49-c59ed5e9de2e@micronovasrl.com>
+ <20190522135906.30796-1-giulio.benetti@micronovasrl.com>
+ <20190522135906.30796-6-giulio.benetti@micronovasrl.com>
+ <77c2dccf-73ae-a78f-c0d8-28842e103440@micronovasrl.com>
+ <20190527211329.18c6678c@windsurf>
+Message-ID: <e73ea003-a4ab-82d5-320b-956b126d2f3a@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Guo,
-
-On Wed,  8 May 2019 16:58:34 +0800
-guoren at kernel.org wrote:
-
-> From: Guo Ren <ren_guo@c-sky.com>
+Il 27/05/2019 21:13, Thomas Petazzoni ha scritto:
+> On Mon, 27 May 2019 19:28:32 +0200
+> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 > 
-> Enable gnuconfig for C-SKY Architecutre compiling.
+>> I've seen you've tagged this as Changes Requested:
+>> https://patchwork.ozlabs.org/patch/1103358/
+>>
+>> It is because of dependency to "keyutils" still not fixed right?
 > 
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> ---
->  support/gnuconfig/config.sub | 2 ++
->  1 file changed, 2 insertions(+)
+> Because this patch depends on the libnss patch, which was also marked
+> as Changes Requested.
 
-I've slightly improved the commit message, and applied to master. I've
-applied to master and not to next, because this commit is really
-important: without it, none of the autotools based packages can build
-on C-SKY (which is not yet tested in the autobuilders).
-
-Best regards,
-
-Thomas
+Ok, thanks.
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
