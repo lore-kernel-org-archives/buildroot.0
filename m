@@ -1,67 +1,59 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 May 2019 00:29:22 +0200
-Subject: [Buildroot] [PATCH 2/3] package/suricata: fix pcap static build
-In-Reply-To: <20190424202118.14795-2-fontaine.fabrice@gmail.com>
-References: <20190424202118.14795-1-fontaine.fabrice@gmail.com>
- <20190424202118.14795-2-fontaine.fabrice@gmail.com>
-Message-ID: <22c6a2a7-23e1-945d-f7bd-9f679a92ce58@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 28 May 2019 00:30:54 +0200
+Subject: [Buildroot] [git commit] package/libhtp: add -lz to htp.pc
+Message-ID: <20190527222459.ACC6A8E4A5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=94153b3330da9da93460b708cb70fee62f3e6723
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+This will fix static build of suricata.
 
-On 24/04/2019 22:21, Fabrice Fontaine wrote:
-> Fixes:
->  - no autobuilder failures yet
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Fixes:
+ - No autobuilder failures yet
 
- Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .../0002-htp.pc.in-add-lz-to-Libs.private.patch    | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
- Regards,
- Arnout
-
-> ---
->  ...figure.ac-fix-static-build-with-pcap.patch | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 package/suricata/0002-configure.ac-fix-static-build-with-pcap.patch
-> 
-> diff --git a/package/suricata/0002-configure.ac-fix-static-build-with-pcap.patch b/package/suricata/0002-configure.ac-fix-static-build-with-pcap.patch
-> new file mode 100644
-> index 0000000000..3312550620
-> --- /dev/null
-> +++ b/package/suricata/0002-configure.ac-fix-static-build-with-pcap.patch
-> @@ -0,0 +1,29 @@
-> +From 2660123b0c16d7f6a49747711be676c4119561c9 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Wed, 24 Apr 2019 20:35:20 +0200
-> +Subject: [PATCH] configure.ac: fix static build with pcap
-> +
-> +pcap can depends on nl-3 so use pkg-config to find these dependencies
-> +otherwise all AC_CHECK_LIB calls will fail when building statically
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: not sent yet]
-> +---
-> + configure.ac | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index ee59c9d8e..5ec341231 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -1331,6 +1331,7 @@
-> +     AC_CHECK_HEADERS([pcap.h pcap/pcap.h pcap/bpf.h])
-> + 
-> +     LIBPCAP=""
-> ++    PKG_CHECK_MODULES([PCAP],libpcap,[CPPFLAGS="${CPPFLAGS} ${PCAP_CFLAGS}" LIBS="${LIBS} ${PCAP_LIBS}"],[])
-> +     AC_CHECK_LIB(${PCAP_LIB_NAME}, pcap_open_live,, LIBPCAP="no")
-> +     if test "$LIBPCAP" = "no"; then
-> +         echo
-> +-- 
-> +2.20.1
-> +
-> 
+diff --git a/package/libhtp/0002-htp.pc.in-add-lz-to-Libs.private.patch b/package/libhtp/0002-htp.pc.in-add-lz-to-Libs.private.patch
+new file mode 100644
+index 0000000000..f79a9ebb3a
+--- /dev/null
++++ b/package/libhtp/0002-htp.pc.in-add-lz-to-Libs.private.patch
+@@ -0,0 +1,29 @@
++From 39e534ab696157b244ec226d649c789dcf423e42 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 24 Apr 2019 20:48:57 +0200
++Subject: [PATCH] htp.pc.in: add -lz to Libs.private
++
++zlib is a mandatory dependency so add it to Libs.private otherwise
++static linking of packages linking with htp (e.g. suricata) will fail.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: not sent yet]
++---
++ htp.pc.in | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/htp.pc.in b/htp.pc.in
++index 2fec995..9b1a6cc 100644
++--- a/htp.pc.in
+++++ b/htp.pc.in
++@@ -7,6 +7,6 @@ Name: @PACKAGE_NAME@
++ Description: A security-aware HTTP parser, designed for use in IDS/IPS and WAF products.
++ Version: @PACKAGE_VERSION@
++ Libs: -L${libdir} -lhtp
++-Libs.private: @LIBICONV@
+++Libs.private: -lz @LIBICONV@
++ Cflags: -I${includedir} -I${libdir}/htp/include
++ 
++-- 
++2.20.1
++
