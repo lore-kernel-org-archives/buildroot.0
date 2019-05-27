@@ -1,106 +1,69 @@
 From: Guo Ren <guoren@kernel.org>
-Date: Mon, 27 May 2019 14:43:48 +0800
-Subject: [Buildroot] [PATCH V2 2/9] arch/csky: Add ck860 and -mcpu
- compiler options
-In-Reply-To: <20190526224336.7cc43e96@windsurf>
+Date: Mon, 27 May 2019 14:52:05 +0800
+Subject: [Buildroot] [PATCH V2 3/9] arch/csky: Add toolchain build
+ framework.
+In-Reply-To: <20190526224452.64efb0f7@windsurf>
 References: <1557305915-11247-1-git-send-email-guoren@kernel.org>
- <1557305915-11247-2-git-send-email-guoren@kernel.org>
- <20190526224336.7cc43e96@windsurf>
-Message-ID: <20190527064348.GA9516@guoren-Inspiron-7460>
+ <1557305915-11247-3-git-send-email-guoren@kernel.org>
+ <20190526224452.64efb0f7@windsurf>
+Message-ID: <20190527065205.GA10067@guoren-Inspiron-7460>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thx Thomas,
-
-On Sun, May 26, 2019 at 10:43:36PM +0200, Thomas Petazzoni wrote:
-> > Add ck860 support and move -mcpu into arch.mk.csky.
+On Sun, May 26, 2019 at 10:44:52PM +0200, Thomas Petazzoni wrote:
+> On Wed,  8 May 2019 16:58:29 +0800
+> guoren at kernel.org wrote:
 > 
-> Adding ck860 support and moving -mcpu handling in arch.mk.csky are two
-> independent things. Please make the move to arch.mk.csky first without
-> ck860, as a cleanup, in a first patch, and then another patch does the
-> addition of ck860 support.
+> > From: Guo Ren <ren_guo@c-sky.com>
+> > 
+> > Enable csky buildroot build toolchain in framework.
+> > 
+> > Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+> > ---
+> >  arch/Config.in      | 1 -
+> >  package/Makefile.in | 9 +++++++++
+> >  2 files changed, 9 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/Config.in b/arch/Config.in
+> > index d82803c..db1199c 100644
+> > --- a/arch/Config.in
+> > +++ b/arch/Config.in
+> > @@ -77,7 +77,6 @@ config BR2_aarch64_be
+> >  
+> >  config BR2_csky
+> >  	bool "csky"
+> > -	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
+> 
+> The ordering is not good: you can't remove this "select" until all the
+> toolchain components have C-SKY support added. So this patch should
+> come later in the series, it should actually be one of the last patch,
+> and should be: "arch/csky: enable internal toolchain backend" or
+> something like that.
 Ok.
 
 > 
-> > +config BR2_ck860
-> > +	bool "ck860"
-> > +
-> >  endchoice
+> > diff --git a/package/Makefile.in b/package/Makefile.in
+> > index dc818a2..f05b9cc 100644
+> > --- a/package/Makefile.in
+> > +++ b/package/Makefile.in
+> > @@ -70,6 +70,15 @@ ABI := $(ABI)hf
+> >  endif
+> >  endif
 > >  
-> >  config BR2_CSKY_FPU
-> >  	bool "Enable FPU coprocessor"
-> > -	depends on BR2_ck810 || BR2_ck807
-> > +	depends on BR2_ck810 || BR2_ck807 || BR2_ck860
-> >  	help
-> >  	  You can say N here if your C-SKY CPU doesn't have a
-> >  	  Floating-Point Coprocessor or if you don't need FPU support
-> > @@ -25,7 +28,7 @@ config BR2_CSKY_FPU
-> >  
-> >  config BR2_CSKY_VDSP
-> >  	bool "Enable VDSP 3.0 enhanced instructions Co-processor"
-> > -	depends on BR2_ck860
-> > +	depends on BR2_CSKY_FPU
-> 
-> So in PATCH 1, VDSP is only for CK860, but now it's for all cores that
-> have a FPU, which includes CK810 and CK807. It should be consistent
-> from the start, i.e from the point where VDSP is introduced.
-Ok, I'll made a independent patch for VDSP introduce.
-
-> 
-> > -config BR2_GCC_TARGET_CPU
-> > -	default "ck610"		if (BR2_ck610 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
-> > -	default "ck807"		if (BR2_ck807 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
-> > -	default "ck807e"	if (BR2_ck807 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
-> > -	default "ck807f"	if (BR2_ck807 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
-> > -	default "ck807ef"	if (BR2_ck807 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
-> > -	default "ck810"		if (BR2_ck810 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
-> > -	default "ck810e"	if (BR2_ck810 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
-> > -	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
-> > -	default "ck810ef"	if (BR2_ck810 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
-> 
-> This should go to the patch cleaning up the logic to use arch.mk.csky.
-Ok.
-
-> 
-> 
-> > diff --git a/arch/arch.mk.csky b/arch/arch.mk.csky
-> > new file mode 100644
-> > index 0000000..fb59ae2
-> > --- /dev/null
-> > +++ b/arch/arch.mk.csky
-> > @@ -0,0 +1,26 @@
-> > +#
-> > +# Configure the GCC_TARGET_ARCH variable and append the
-> > +# appropriate C-SKY ISA extensions.
-> > +#
-> > +
+> > +# For C-SKY abiv1 & abiv2
 > > +ifeq ($(BR2_csky),y)
-> > +
 > > +ifeq ($(BR2_ck610),y)
-> > +GCC_TARGET_CPU := ck610
-> > +else ifeq ($(BR2_ck807),y)
-> > +GCC_TARGET_CPU := ck807
-> > +else ifeq ($(BR2_ck810),y)
-> > +GCC_TARGET_CPU := ck810
-> > +else ifeq ($(BR2_ck860),y)
-> > +GCC_TARGET_CPU := ck860
+> > +ABI = abiv1
+> > +else
+> > +ABI = abiv2
 > > +endif
-> > +
-> > +ifeq ($(BR2_CSKY_FPU),y)
-> > +GCC_TARGET_CPU := $(GCC_TARGET_CPU)f
 > > +endif
 > 
-> Same.
-> 
-> > +ifeq ($(BR2_CSKY_VDSP),y)
-> > +GCC_TARGET_CPU := $(GCC_TARGET_CPU)v
-> > +endif
-> 
-> This should go to the patch adding the BR2_CSKY_VDSP option.
-Yes.
+> This should be a separate patch.
+Ok.
 
 Best Regards
  Guo Ren
