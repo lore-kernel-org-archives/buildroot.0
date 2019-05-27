@@ -1,64 +1,34 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon, 27 May 2019 23:34:13 +0200
-Subject: [Buildroot] [PATCH v2 1/7] package/sqlite: fix BUG_85180 build
- timeout
-In-Reply-To: <179f2d44-b53a-774b-3a6f-d7676df6a827@mind.be>
-References: <10430096-81de-792a-8b49-c59ed5e9de2e@micronovasrl.com>
- <20190522135906.30796-1-giulio.benetti@micronovasrl.com>
- <20190522135906.30796-2-giulio.benetti@micronovasrl.com>
- <20190524222459.2fc91773@windsurf.home>
- <6dcdb1eb-5d48-e773-9711-1df461c542e2@micronovasrl.com>
- <3e1c735b-0639-ffaf-9d96-7b51920668fc@micronovasrl.com>
- <20190527113754.48973b30@windsurf>
- <88dab430-b338-8bac-92a2-026777946561@micronovasrl.com>
- <20190527114657.093a6fc8@windsurf>
- <5bd8815c-5183-2e54-da01-f5cf77e730ce@micronovasrl.com>
- <804fa487-03ea-5f5e-7867-6c5b44317585@micronovasrl.com>
- <6c108457-d8fb-0fb9-4375-8dd07179d400@mind.be>
- <f66a3b43-0bea-bfd8-fb76-28d728593981@micronovasrl.com>
- <179f2d44-b53a-774b-3a6f-d7676df6a827@mind.be>
-Message-ID: <1bf24038-b161-f3cb-236e-8a670de3616f@micronovasrl.com>
+Date: Mon, 27 May 2019 23:38:22 +0200
+Subject: [Buildroot] [PATCH v2 0/4] Fix and clean GCC BUG 68485 per-package
+In-Reply-To: <2e2b06bc-ee6a-7d38-5c14-a79dd51685dd@micronovasrl.com>
+References: <2e2b06bc-ee6a-7d38-5c14-a79dd51685dd@micronovasrl.com>
+Message-ID: <20190527213826.114001-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Introduce Gcc Bug 68485
+Fix Bug 68485 for brotli
+Clean up packages for:
+ - gpsd
+ - flann
+ - libspatialindex
 
+Giulio Benetti (4):
+  package/brotli: work aroung gcc bug 68485
+  package/gpsd: use common BR2_TOOLCHAIN_HAS_GCC_BUG_68485
+  package/flann: re-enable package on Microblaze
+  package/libspatialindex: use common BR2_TOOLCHAIN_HAS_BUG_68485
 
-Il 27/05/2019 23:28, Arnout Vandecappelle ha scritto:
-> 
-> 
-> On 27/05/2019 23:14, Giulio Benetti wrote:
->> Il 27/05/2019 23:11, Arnout Vandecappelle ha scritto:
->>>
->>>
->>> On 27/05/2019 20:10, Giulio Benetti wrote:
->>>> It's a Gcc 4.9 only bug that I need to submit to gcc bugzilla.
->>>
->>>  ? There's not much point to submit a bug for GCC 4.9, which is no longer
->>> maintained...
->>
->> Ah, I didn't know it's maintained anymore.
->> So in this case I can base the rule for using -O0 on
->> BR2_TOOLCHAIN_GCC_AT_LEAST_5 and comment on top of it.
->> At the moment sqlite is the only package suffering from this.
-> 
->   You mean, without introducing a _GCC_HAS_BUG_ option, right? Sounds good to me.
+ package/brotli/brotli.mk                   | 4 ++++
+ package/flann/Config.in                    | 4 ----
+ package/flann/flann.mk                     | 4 ++++
+ package/gpsd/gpsd.mk                       | 5 +----
+ package/libspatialindex/libspatialindex.mk | 4 +---
+ 5 files changed, 10 insertions(+), 11 deletions(-)
 
-Yes. I hope there won't be other packages affected by this, but since 
-4.9 is no longer maintained I don't see other way, excect adding 
-internal special _GCC_HAS_BUG_ but I think that could mess things up.
-
-Kind regards
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.17.1
