@@ -1,112 +1,361 @@
-From: Michael Walle <michael@walle.cc>
-Date: Mon, 27 May 2019 21:23:42 +0200
-Subject: [Buildroot] [PATCH v2] boot/uboot: add initial environment support
-Message-ID: <20190527192342.23406-1-michael@walle.cc>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 May 2019 22:09:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/sfml: new package
+In-Reply-To: <20190527153906.24339-1-victor.huesca@bootlin.com>
+References: <20190527153906.24339-1-victor.huesca@bootlin.com>
+Message-ID: <20190527220951.59246366@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since v2019.07 U-Boot supports extracting the compiled-in environment.
-As a first step, add support to the environment generation in buildroot.
-In the future, the text file may also be copied into the target
-filesystem, where it will be used by the uboot-tools.
+Hello Victor,
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
+Thanks for this contribution. There are (obviously) a number of issues
+with the patch, which is perfectly normal for a first submission of a
+not-so-trivial package. See below for all the comments.
 
-changes since v1:
- - rename _INITIAL to _BUILTIN
- - add help texts
- - make commit message little bit more clearer, hopefully ;)
+On Mon, 27 May 2019 17:39:06 +0200
+Victor Huesca <victor.huesca@bootlin.com> wrote:
 
- boot/uboot/Config.in | 24 ++++++++++++++++++++++++
- boot/uboot/uboot.mk  | 17 ++++++++++++++++-
- 2 files changed, 40 insertions(+), 1 deletion(-)
+> Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+> ---
+>  package/Config.in      |   1 +
+>  package/sfml/Config.in | 116 +++++++++++++++++++++++++++++++++++++++++
+>  package/sfml/sfml.hash |   3 ++
+>  package/sfml/sfml.mk   |  79 ++++++++++++++++++++++++++++
+>  4 files changed, 199 insertions(+)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 33b7e67ff7..45bbf88b6f 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -488,7 +488,30 @@ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
- 	  The environment image will be called uboot-env.bin.
- 
- if BR2_TARGET_UBOOT_ENVIMAGE
-+choice
-+	prompt "Environment image source"
-+	default BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM
-+
-+config BR2_TARGET_UBOOT_ENVIMAGE_BUILTIN
-+	bool "Using uboot's built-in environment file"
-+	help
-+	  Select this option if you want to build the image from
-+	  u-boot's built-in environment. The content will be the
-+	  same as the default environment of the u-boot binary.
-+
-+	  This feature requires commit
-+	  bdaa73a5b3923257add182b4ab8058dbfa33421b from upstream
-+	  U-Boot, available from versions 2019.07 or later.
-+
-+config BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM
-+	bool "Using a custom environment file"
-+	help
-+	  Select this option if you want to specify your own
-+	  custom environment file.
-+
-+endchoice
- 
-+if BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM
- config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
- 	string "Source files for environment"
- 	help
-@@ -497,6 +520,7 @@ config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
- 	  lines starting with a # are ignored.
- 
- 	  Multiple source files are concatenated in the order listed.
-+endif # BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM
- 
- config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
- 	string "Size of environment"
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index ae09c37d84..0da1f37cbd 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -271,9 +271,22 @@ define UBOOT_BUILD_OMAP_IFT
- endef
- 
- ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
--define UBOOT_GENERATE_ENV_IMAGE
-+ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM),y)
-+define UBOOT_CREATE_ENV_SOURCE
- 	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
- 		>$(@D)/buildroot-env.txt
-+endef
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE_BUILTIN),y)
-+UBOOT_MAKE_TARGET += u-boot-initial-env
-+define UBOOT_CREATE_ENV_SOURCE
-+	cp -dpf $(@D)/u-boot-initial-env $(@D)/buildroot-env.txt
-+endef
-+endif
-+
-+define UBOOT_GENERATE_ENV_IMAGE
-+	$(UBOOT_CREATE_ENV_SOURCE)
- 	$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
- 		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
- 		$(if $(filter "BIG",$(BR2_ENDIAN)),-b) \
-@@ -385,9 +398,11 @@ endef
- 
- ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
- ifeq ($(BR_BUILDING),y)
-+ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM),y)
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
- $(error Please define a source file for Uboot environment (BR2_TARGET_UBOOT_ENVIMAGE_SOURCE setting))
- endif
-+endif
- ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SIZE)),)
- $(error Please provide Uboot environment size (BR2_TARGET_UBOOT_ENVIMAGE_SIZE setting))
- endif
+You need to add an entry to the DEVELOPERS file for this package, so
+that you can receive e-mail notifications of build failures happening
+on the autobuilders, and be Cc'ed on patches that are posted on this
+package.
+
+> diff --git a/package/sfml/Config.in b/package/sfml/Config.in
+> new file mode 100644
+> index 0000000000..76cf95df36
+> --- /dev/null
+> +++ b/package/sfml/Config.in
+> @@ -0,0 +1,116 @@
+> +config BR2_PACKAGE_SFML
+> +	bool "sfml"
+> +	# depends on BR2_PACKAGE_HAS_UDEV
+
+Why is this commented ? I just tried a build, and it builds
+successfully without udev, so is it really a dependency ?
+
+> +
+
+Please drop this empty new line.
+
+> +	help
+> +	  Simple and Fast Multimedia Library 2 - SFML provides a simple 
+> +	  interface to the various components of your PC, to ease the 
+> +	  development of games and multimedia applications. It is composed 
+> +	  of five modules: system, window, graphics, audio and network. 
+> +
+> +	  https://www.sfml-dev.org/
+> +
+> +
+
+Two empty lines: keep only one.
+
+> +if BR2_PACKAGE_SFML
+> +
+> +# X11 and OpenGL related stuff
+> +
+> +config BR2_PACKAGE_SFML_X11
+> +	bool "X11 video driver"
+> +	depends on BR2_PACKAGE_XORG7
+> +	# select BR2_PACKAGE_XLIB_LIBX11
+
+Please don't keep comments.
+
+> +
+> +comment "X11 video driver needs X.org"
+> +	depends on !BR2_PACKAGE_XORG7
+> +
+> +config BR2_PACKAGE_SFML_OPENGL
+> +	bool "OpenGL (GLX)"
+> +	depends on BR2_PACKAGE_HAS_LIBGL && BR2_PACKAGE_SFML_X11
+> +
+> +comment "OpenGL support needs X11 and an OpenGL provider"
+> +	depends on !BR2_PACKAGE_HAS_LIBGL || !BR2_PACKAGE_SFML_X11
+> +
+> +
+> +
+> +
+
+Please keep only one empty line.
+
+> +# Exemples
+
+This comment is not needed (and uses the French spelling, it should
+have been Examples).
+
+> +config BR2_PACKAGE_SFML_EXAMPLES
+> +	bool "examples"
+> +	help
+> +	  This boolean option controls whether the SFML examples are 
+> +	  built alongside the library or not.
+> +
+> +
+> +
+
+Only one empty new line.
+
+> +# Allow to select only Audio, Window, Graphics or Network
+
+Comments are not needed.
+
+> +config BR2_PACKAGE_SFML_CUSTOM_MODULES
+> +	bool "custom modules"
+> +	help
+> +	  Allow to select only a subset of modules.
+
+Do we really need this option ?
+
+> +if BR2_PACKAGE_SFML_CUSTOM_MODULES
+> +
+> +config BR2_PACKAGE_SFML_AUDIO
+> +	bool "audio"
+> +	default y
+
+Defaulting to y is not really the classic Buildroot choice: we
+generally try to have a very minimal build by default.
+
+> +	select BR2_PACKAGE_FLAC
+
+BR2_PACKAGE_FLAC has a depends on BR2_USE_WCHAR, so you need to
+replicate this dependency.
+
+> +	select BR2_PACKAGE_LIBOGG
+> +	select BR2_PACKAGE_LIBVORBIS
+> +	select BR2_PACKAGE_OPENAL
+
+This option has the following dependencies:
+
+        depends on BR2_INSTALL_LIBSTDCPP
+        depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+        depends on BR2_PACKAGE_OPENAL_ARCH_SUPPORTS
+
+so you need to replicate these dependencies.
+
+> +	help
+> +	  This boolean option controls whether the SFML audio module 
+> +	  is built or not.
+> +
+> +config BR2_PACKAGE_SFML_GRAPHICS
+> +	bool "graphics"
+> +	default y
+> +	select BR2_PACKAGE_SFML_WINDOW
+
+This option has a depends on BR2_PACKAGE_SFML_X11, so you need to
+replicate this dependency.
+
+> +	select BR2_PACKAGE_FREETYPE
+> +	select BR2_PACKAGE_JPEG
+> +	help
+> +	  This boolean option controls whether the SFML graphics module 
+> +	  is built or not.
+> +
+> +config BR2_PACKAGE_SFML_WINDOW
+> +	bool "window"
+> +	default y
+> +	depends on BR2_PACKAGE_SFML_X11
+
+I am not really sure at this point of the articulation between
+BR2_PACKAGE_SFML_X11 and BR2_PACKAGE_SFML_WINDOW. What happens if
+BR2_PACKAGE_SFML_X11=y, but BR2_PACKAGE_SFML_WINDOW is disabled ?
+Your .mk file will only add xlib_{libX11,libXext} to the dependencies,
+but that's it.
+
+I'm not sure it makes sense to have separate options: SFML_WINDOW
+should just depend on BR2_PACKAGE_XORG7 and select
+BR2_PACKAGE_XLIB_{LIBX11,LIBXEXT}.
+
+> +	help
+> +	  This boolean option controls whether the SFML window module 
+> +	  is built or not.
+> +
+> +config BR2_PACKAGE_SFML_NETWORK
+> +	bool "network"
+> +	default y
+> +	help
+> +	  This boolean option controls whether the SFML network module 
+> +	  is built or not. 
+> +
+> +endif # BR2_PACKAGE_SFML_CUSTOM_MODULES
+> +
+> +
+
+Only one empty line.
+
+> +# TODO: Check if it can build w/ the internals libraries 
+> +# Use buildroot libs by default
+> +config BR2_PACKAGE_SFML_EXTLIB
+> +	bool "extlibs"
+> +	default y
+> +	help
+> +	  This boolean option controls whether the dependencies from 
+> +	  the extlibs directory are used or whether the system 
+> +	  dependencies are used. The stb_image_* header in the extlibs 
+> +	  directory are used regardless of this option. 
+
+We don't need this option: we never want to use bundled libraries, and
+always want to use external libraries built by separate Buildroot
+packages.
+
+> +config BR2_PACKAGE_SFML_PKGCONF
+> +	bool "install pkg-config file"
+> +	depends on BR2_PACKAGE_PKGCONF
+> +	default y
+> +	help
+> +	  This boolean option controls whether CMake will install the 
+> +	  pkg-config files on your system or not. 
+
+We don't need this option: it should be installed unconditionally.
+
+> +endif
+> +
+> +comment "SFML needs a toolchain w/ thread support"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
+
+You have a comment about a thread dependency, but you don't have any
+BR2_TOOLCHAIN_HAS_THREADS dependency anywhere, this does not make sense.
+
+Of course, if you read my review above, you will see that you will have
+many more dependencies than BR2_TOOLCHAIN_HAS_THREADS.
+
+> diff --git a/package/sfml/sfml.hash b/package/sfml/sfml.hash
+> new file mode 100644
+> index 0000000000..c3d96836e2
+> --- /dev/null
+> +++ b/package/sfml/sfml.hash
+> @@ -0,0 +1,3 @@
+> +# Locally calculated
+> +sha256	438c91a917cc8aa19e82c6f59f8714da353c488584a007d401efac8368e1c785	sfml-2.5.1.tar.gz
+> +sha256	8143f9ad51ddf0a5b0629beabf8e1432ac3e5a2f3b62b510f3b16712e4bb9143	license.md
+> \ No newline at end of file
+
+Please make sure the last line has a final newline.
+
+> diff --git a/package/sfml/sfml.mk b/package/sfml/sfml.mk
+> new file mode 100644
+> index 0000000000..5db4c1b29e
+> --- /dev/null
+> +++ b/package/sfml/sfml.mk
+> @@ -0,0 +1,79 @@
+> +################################################################################
+> +#
+> +# sfml
+> +#
+> +################################################################################
+> +
+> +SFML_VERSION = 2.5.1
+> +SFML_SITE = $(call github,SFML,SFML,$(SFML_VERSION))
+> +SFML_LICENSE = Zlib
+> +SFML_LICENSE_FILES = license.md
+> +SFML_INSTALL_STAGING = YES 
+> +SFML_DEPENDENCIES = udev #pthread
+
+You cannot have udev in the dependencies without having a "depends on
+BR2_PACKAGE_UDEV" in the Config.in file.
+
+> +# x-includes and x-libraries must be set for cross-compiling
+> +# By default x_includes and x_libraries contains unsafe paths.
+> +# (/usr/X11R6/include and /usr/X11R6/lib)
+
+And ? What are you doing about this ?
+
+> +ifeq ($(BR2_PACKAGE_SFML_X11),y)
+> +SFML_DEPENDENCIES += xlib_libX11 xlib_libXext
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SFML_OPENGL),y)
+> +SFML_DEPENDENCIES += libgl
+> +endif
+> +
+> +
+> +# Make sure to disable documentation
+
+Comment is not needed.
+
+> +SFML_CONF_OPTS += -DSFML_BUILD_DOC=OFF
+> +
+> +
+> +# Build type
+> +ifeq ($(BR2_ENABLE_DEBUG),y)
+> +SFML_CONF_OPTS += -DCMAKE_BUILD_TYPE=Debug
+> +else
+> +SFML_CONF_OPTS += -DCMAKE_BUILD_TYPE=Release
+> +endif
+
+This is not needed: CMAKE_BUILD_TYPE is already passed correctly by the
+cmake-package infrastructure.
+
+> +# Exemples
+
+This comment is not needed, and is in french :)
+
+> +ifeq ($(BR2_PACKAGE_SFML_EXAMPLES),y)
+> +SFML_CONF_OPTS += -DSFML_BUILD_EXAMPLES=ON
+> +else
+> +SFML_CONF_OPTS += -DSFML_BUILD_EXAMPLES=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SFML_AUDIO),y)
+> +SFML_DEPENDENCIES += openal libogg libvorbis flac
+> +SFML_CONF_OPTS += -DSFML_BUILD_AUDIO=ON
+> +else
+> +SFML_CONF_OPTS += -DSFML_BUILD_AUDIO=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SFML_GRAPHICS),y)
+> +SFML_DEPENDENCIES += jpeg freetype
+> +SFML_CONF_OPTS += -DSFML_BUILD_GRAPHICS=ON
+> +else
+> +SFML_CONF_OPTS += -DSFML_BUILD_GRAPHICS=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SFML_WINDOW),y)
+> +SFML_CONF_OPTS += -DSFML_BUILD_WINDOW=ON
+> +else
+> +SFML_CONF_OPTS += -DSFML_BUILD_WINDOW=OFF
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_SFML_NETWORK),y)
+> +SFML_CONF_OPTS += -DSFML_BUILD_NETWORK=ON
+> +endif
+> +
+> +# Do not used provided external libs
+> +ifneq ($(BR2_PACKAGE_SFML_EXTLIB),y)
+> +SFML_CONF_OPTS += -DSFML_USE_SYSTEM_DEP=ON
+> +endif
+
+This should be unconditionally set to "ON".
+
+> +ifeq ($(BR2_PACKAGE_SFML_PKGCONF),y)
+> +SFML_CONF_OPTS += -DSFML_INSTALL_PKGCONFIG_FILES=ON
+> +endif
+
+Ditto.
+
+> +
+> +$(eval $(cmake-package))
+> \ No newline at end of file
+
+Please have a final new line at the end of the file.
+
+Overall, most comments can be addressed fairly easily. The only
+significant comment is whether we want separate options for X11 and
+WINDOW.
+
+Best regards,
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
