@@ -1,123 +1,59 @@
-From: Guo Ren <guoren@kernel.org>
-Date: Mon, 27 May 2019 15:23:34 +0800
-Subject: [Buildroot] [PATCH V2 4/9] package/binutils: Add C-SKY support
-In-Reply-To: <20190526225211.439a62d0@windsurf>
-References: <1557305915-11247-1-git-send-email-guoren@kernel.org>
- <1557305915-11247-4-git-send-email-guoren@kernel.org>
- <20190526225211.439a62d0@windsurf>
-Message-ID: <20190527072334.GB10067@guoren-Inspiron-7460>
+From: Angelo Compagnucci <angelo@amarulasolutions.com>
+Date: Mon, 27 May 2019 09:24:49 +0200
+Subject: [Buildroot] [PATCH 1/1] Add libvirt (KVM) support
+In-Reply-To: <20190527090452.6124a023@windsurf>
+References: <20190215173607.13773-1-christopher@lecroq.be>
+ <20190413222137.6c0cba37@windsurf>
+ <da50400b-6cf2-d87a-3a51-c54a46b7cea6@lecroq.be>
+ <a4a04e64-bf89-f21b-89fe-7b3e5b1e5d69@mind.be>
+ <CA+_SqVYm9vpx+Uuktb+s_TYu+Hzpu258AfNhUUkBTRK7K_SuOQ@mail.gmail.com>
+ <76055cea-ec05-aad3-1f27-39e07b48b12b@lecroq.be>
+ <25259681-75b6-fe4b-bb4b-e9a903f48058@mind.be>
+ <CA+_SqVY2wACSL=-5rugRsL0O+kKJqHnqgSzc1ouuy=9gcoRDjQ@mail.gmail.com>
+ <20190527090452.6124a023@windsurf>
+Message-ID: <CA+_SqVY7iLUh=pgkh0pqFUWaEak1UoY4kzQaWVx8XcQn6pN9HQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thx Thomas,
-
-On Sun, May 26, 2019 at 10:52:11PM +0200, Thomas Petazzoni wrote:
+On Mon, May 27, 2019 at 9:04 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
 > Hello,
-> 
-> On Wed,  8 May 2019 16:58:30 +0800
-> guoren at kernel.org wrote:
-> 
-> > +if !BR2_csky
-> >  choice
-> >  	prompt "Binutils Version"
-> >  	default BR2_BINUTILS_VERSION_2_31_X if !BR2_arc
-> > @@ -32,6 +33,7 @@ config BR2_BINUTILS_VERSION
-> >  	default "2.30"		if BR2_BINUTILS_VERSION_2_30_X
-> >  	default "2.31.1"	if BR2_BINUTILS_VERSION_2_31_X
-> >  	default "2.32"		if BR2_BINUTILS_VERSION_2_32_X
-> > +endif
-> 
-> Let's do it like we do for the ARC architecture: add an option, and the
-> proper depends on. I.e:
-> 
-> choice
->         prompt "Binutils Version"
->         default BR2_BINUTILS_VERSION_ARC if BR2_arc
-> 	default BR2_BINUTILS_VERSION_CSKY if BR2_csky
->         default BR2_BINUTILS_VERSION_2_31_X
->         help
->           Select the version of binutils you wish to use.
-> 
-> config BR2_BINUTILS_VERSION_2_30_X
->         bool "binutils 2.30"
-> 	depends on !BR2_csky
-> 
-> config BR2_BINUTILS_VERSION_2_31_X
->         bool "binutils 2.31.1"
-> 	depends on !BR2_csky
-> 
-> config BR2_BINUTILS_VERSION_2_32_X
->         bool "binutils 2.32"
-> 	depends on !BR2_csky
-> 
-> config BR2_BINUTILS_VERSION_ARC
->         bool "binutils arc (2.31)"
->         depends on BR2_arc
-> 
-> config BR2_BINUTILS_VERSION_CSKY
->         bool "binutils csky (2.32)"
->         depends on BR2_csky
-> 
-> endchoice
-> 
-> config BR2_BINUTILS_VERSION
->         string
-> 	default "c66d8bbcebfddf713b2b436e1b135e6b125a55a5" if BR2_BINUTILS_VERSION_CSKY
->         default "arc-2019.03-rc1"       if BR2_BINUTILS_VERSION_ARC
->         default "2.30"          if BR2_BINUTILS_VERSION_2_30_X
->         default "2.31.1"        if BR2_BINUTILS_VERSION_2_31_X
->         default "2.32"          if BR2_BINUTILS_VERSION_2_32_X
-Ok, nice tips. Thx.
+>
+> On Sun, 26 May 2019 22:14:54 +0200
+> Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+>
+> > The only thing that bothers me is that the debian images for vagrant
+> > are not official and only maintained by a single person
+> > (https://app.vagrantup.com/debian).
+> > On the contrary, Ubuntu images are officially maintained by canonical
+> > into their efforts for ubuntu on cloud.
+> >
+> > Alternatively we can switch to Fedora which is officially supported
+> > and supports libvirt, but we have to completetly rewrite the provision
+> > section of the vagrantfile.
+>
+> Do we really need to make a choice here ?
+>
+> For Docker, our intention is to have several Dockerfiles for different
+> distributions, in support/docker/.
+>
+> What about having several Vagrantfiles, in support/vagrant/, also to
+> support different distributions ?
 
-> 
-> > diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-> > index c70ba13..cebfd06 100644
-> > --- a/package/binutils/binutils.mk
-> > +++ b/package/binutils/binutils.mk
-> > @@ -20,6 +20,14 @@ BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,
-> >  BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
-> >  BINUTILS_FROM_GIT = y
-> >  endif
-> > +
-> > +ifeq ($(BR2_csky),y)
-> > +BINUTILS_VERSION = c66d8bbcebfddf713b2b436e1b135e6b125a55a5
-> > +BINUTILS_SITE = $(call github,c-sky,binutils-gdb,$(BINUTILS_VERSION))
-> > +BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
-> > +BINUTILS_FROM_GIT = y
-> > +endif
-> 
-> Same here, please follow the same logic as the one used for ARC, for
-> consistency, i.e:
-> 
-> # Version is set when using buildroot toolchain.
-> # If not, we do like other packages
-> BINUTILS_VERSION = $(call qstrip,$(BR2_BINUTILS_VERSION))
-> ifeq ($(BINUTILS_VERSION),)
-> ifeq ($(BR2_arc),y)
-> BINUTILS_VERSION = arc-2019.03-rc1
-> else ifeq ($(BR2_csky),y)
-> BINUTILS_VERSION = c66d8bbcebfddf713b2b436e1b135e6b125a55a5
-> else
-> BINUTILS_VERSION = 2.31.1
-> endif
-> endif # BINUTILS_VERSION
-> 
-> ifeq ($(BINUTILS_VERSION),arc-2019.03-rc1)
-> BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
-> BINUTILS_SOURCE = binutils-gdb-$(BINUTILS_VERSION).tar.gz
-> BINUTILS_FROM_GIT = y
-> else ifeq ($(BINUTILS_VERSION),c66d8bbcebfddf713b2b436e1b135e6b125a55a5)
-> BINUTILS_SITE = $(call github,c-sky,binutils-gdb,$(BINUTILS_VERSION))
-> BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
-> BINUTILS_FROM_GIT = y
-> endif
-> 
-> What we're doing for ARC is made not the best, but being consistent in
-> how different architectures do it is much more important.
-Ok, follow the rules.
+It's totally fine for me to have multiple vagrantfiles. We can even
+add a little bit of logic to the vagrantfile (it's a ruby script after
+all) to add a sort of multi distribution support.
+I can try to hack something,
 
-Best Regards
- Guo Ren
+>
+> Best regards,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
