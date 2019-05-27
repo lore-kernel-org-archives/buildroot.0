@@ -1,59 +1,51 @@
-From: Angelo Compagnucci <angelo@amarulasolutions.com>
-Date: Mon, 27 May 2019 09:24:49 +0200
-Subject: [Buildroot] [PATCH 1/1] Add libvirt (KVM) support
-In-Reply-To: <20190527090452.6124a023@windsurf>
-References: <20190215173607.13773-1-christopher@lecroq.be>
- <20190413222137.6c0cba37@windsurf>
- <da50400b-6cf2-d87a-3a51-c54a46b7cea6@lecroq.be>
- <a4a04e64-bf89-f21b-89fe-7b3e5b1e5d69@mind.be>
- <CA+_SqVYm9vpx+Uuktb+s_TYu+Hzpu258AfNhUUkBTRK7K_SuOQ@mail.gmail.com>
- <76055cea-ec05-aad3-1f27-39e07b48b12b@lecroq.be>
- <25259681-75b6-fe4b-bb4b-e9a903f48058@mind.be>
- <CA+_SqVY2wACSL=-5rugRsL0O+kKJqHnqgSzc1ouuy=9gcoRDjQ@mail.gmail.com>
- <20190527090452.6124a023@windsurf>
-Message-ID: <CA+_SqVY7iLUh=pgkh0pqFUWaEak1UoY4kzQaWVx8XcQn6pN9HQ@mail.gmail.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Mon, 27 May 2019 15:27:17 +0800
+Subject: [Buildroot] [PATCH V2 5/9] package/gcc: Add C-SKY support
+In-Reply-To: <20190526225335.2d3e436d@windsurf>
+References: <1557305915-11247-1-git-send-email-guoren@kernel.org>
+ <1557305915-11247-5-git-send-email-guoren@kernel.org>
+ <20190526225335.2d3e436d@windsurf>
+Message-ID: <20190527072717.GA10769@guoren-Inspiron-7460>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, May 27, 2019 at 9:04 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
+Thx,
+
+On Sun, May 26, 2019 at 10:53:35PM +0200, Thomas Petazzoni wrote:
 > Hello,
->
-> On Sun, 26 May 2019 22:14:54 +0200
-> Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
->
-> > The only thing that bothers me is that the debian images for vagrant
-> > are not official and only maintained by a single person
-> > (https://app.vagrantup.com/debian).
-> > On the contrary, Ubuntu images are officially maintained by canonical
-> > into their efforts for ubuntu on cloud.
-> >
-> > Alternatively we can switch to Fedora which is officially supported
-> > and supports libvirt, but we have to completetly rewrite the provision
-> > section of the vagrantfile.
->
-> Do we really need to make a choice here ?
->
-> For Docker, our intention is to have several Dockerfiles for different
-> distributions, in support/docker/.
->
-> What about having several Vagrantfiles, in support/vagrant/, also to
-> support different distributions ?
+> 
+> On Wed,  8 May 2019 16:58:31 +0800
+> guoren at kernel.org wrote:
+> 
+> > diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+> > index 8e22a4c..c123a84 100644
+> > --- a/package/gcc/Config.in.host
+> > +++ b/package/gcc/Config.in.host
+> > @@ -3,6 +3,7 @@ comment "GCC Options"
+> >  choice
+> >  	prompt "GCC compiler Version"
+> >  	default BR2_GCC_VERSION_ARC if BR2_arc
+> > +	default BR2_GCC_VERSION_CSKY if BR2_csky
+> >  	default BR2_GCC_VERSION_OR1K if BR2_or1k
+> >  	default BR2_GCC_VERSION_7_X
+> >  	help
+> > @@ -14,6 +15,12 @@ config BR2_GCC_VERSION_ARC
+> >  	depends on BR2_arc
+> >  	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+> >  
+> > +config BR2_GCC_VERSION_CSKY
+> > +	bool "gcc csky"
+> > +	# Only supported architecture
+> > +	depends on BR2_csky
+> > +	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+> 
+> I don't see what will prevent me from selecting an upstream gcc 6.x or
+> 7.x for C-SKY here. Are you sure you should not add a bunch of "depends
+> on !BR2_csky" to the other gcc version options ?
+Yes, I'll add !BR2_csky to the other gcc version options.
 
-It's totally fine for me to have multiple vagrantfiles. We can even
-add a little bit of logic to the vagrantfile (it's a ruby script after
-all) to add a sort of multi distribution support.
-I can try to hack something,
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Best Regards
+ Guo Ren
