@@ -1,69 +1,49 @@
-From: Guo Ren <guoren@kernel.org>
-Date: Mon, 27 May 2019 14:52:05 +0800
-Subject: [Buildroot] [PATCH V2 3/9] arch/csky: Add toolchain build
- framework.
-In-Reply-To: <20190526224452.64efb0f7@windsurf>
-References: <1557305915-11247-1-git-send-email-guoren@kernel.org>
- <1557305915-11247-3-git-send-email-guoren@kernel.org>
- <20190526224452.64efb0f7@windsurf>
-Message-ID: <20190527065205.GA10067@guoren-Inspiron-7460>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 27 May 2019 09:04:52 +0200
+Subject: [Buildroot] [PATCH 1/1] Add libvirt (KVM) support
+In-Reply-To: <CA+_SqVY2wACSL=-5rugRsL0O+kKJqHnqgSzc1ouuy=9gcoRDjQ@mail.gmail.com>
+References: <20190215173607.13773-1-christopher@lecroq.be>
+ <20190413222137.6c0cba37@windsurf>
+ <da50400b-6cf2-d87a-3a51-c54a46b7cea6@lecroq.be>
+ <a4a04e64-bf89-f21b-89fe-7b3e5b1e5d69@mind.be>
+ <CA+_SqVYm9vpx+Uuktb+s_TYu+Hzpu258AfNhUUkBTRK7K_SuOQ@mail.gmail.com>
+ <76055cea-ec05-aad3-1f27-39e07b48b12b@lecroq.be>
+ <25259681-75b6-fe4b-bb4b-e9a903f48058@mind.be>
+ <CA+_SqVY2wACSL=-5rugRsL0O+kKJqHnqgSzc1ouuy=9gcoRDjQ@mail.gmail.com>
+Message-ID: <20190527090452.6124a023@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, May 26, 2019 at 10:44:52PM +0200, Thomas Petazzoni wrote:
-> On Wed,  8 May 2019 16:58:29 +0800
-> guoren at kernel.org wrote:
-> 
-> > From: Guo Ren <ren_guo@c-sky.com>
-> > 
-> > Enable csky buildroot build toolchain in framework.
-> > 
-> > Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> > ---
-> >  arch/Config.in      | 1 -
-> >  package/Makefile.in | 9 +++++++++
-> >  2 files changed, 9 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/Config.in b/arch/Config.in
-> > index d82803c..db1199c 100644
-> > --- a/arch/Config.in
-> > +++ b/arch/Config.in
-> > @@ -77,7 +77,6 @@ config BR2_aarch64_be
-> >  
-> >  config BR2_csky
-> >  	bool "csky"
-> > -	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
-> 
-> The ordering is not good: you can't remove this "select" until all the
-> toolchain components have C-SKY support added. So this patch should
-> come later in the series, it should actually be one of the last patch,
-> and should be: "arch/csky: enable internal toolchain backend" or
-> something like that.
-Ok.
+Hello,
 
-> 
-> > diff --git a/package/Makefile.in b/package/Makefile.in
-> > index dc818a2..f05b9cc 100644
-> > --- a/package/Makefile.in
-> > +++ b/package/Makefile.in
-> > @@ -70,6 +70,15 @@ ABI := $(ABI)hf
-> >  endif
-> >  endif
-> >  
-> > +# For C-SKY abiv1 & abiv2
-> > +ifeq ($(BR2_csky),y)
-> > +ifeq ($(BR2_ck610),y)
-> > +ABI = abiv1
-> > +else
-> > +ABI = abiv2
-> > +endif
-> > +endif
-> 
-> This should be a separate patch.
-Ok.
+On Sun, 26 May 2019 22:14:54 +0200
+Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-Best Regards
- Guo Ren
+> The only thing that bothers me is that the debian images for vagrant
+> are not official and only maintained by a single person
+> (https://app.vagrantup.com/debian).
+> On the contrary, Ubuntu images are officially maintained by canonical
+> into their efforts for ubuntu on cloud.
+> 
+> Alternatively we can switch to Fedora which is officially supported
+> and supports libvirt, but we have to completetly rewrite the provision
+> section of the vagrantfile.
+
+Do we really need to make a choice here ?
+
+For Docker, our intention is to have several Dockerfiles for different
+distributions, in support/docker/.
+
+What about having several Vagrantfiles, in support/vagrant/, also to
+support different distributions ?
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
