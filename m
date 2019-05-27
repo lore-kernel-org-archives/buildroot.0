@@ -1,45 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 27 May 2019 22:29:07 +0200
-Subject: [Buildroot] [git commit] support/gnuconfig/config.sub: add C-SKY
- support
-Message-ID: <20190527202257.D7B3C8E660@busybox.osuosl.org>
+Date: Mon, 27 May 2019 22:30:22 +0200
+Subject: [Buildroot] [PATCH V2 8/9] support/config.sub: Add C-SKY support
+In-Reply-To: <1557305915-11247-8-git-send-email-guoren@kernel.org>
+References: <1557305915-11247-1-git-send-email-guoren@kernel.org>
+ <1557305915-11247-8-git-send-email-guoren@kernel.org>
+Message-ID: <20190527223022.1d1aaa5a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=910b431d6383cd1ce4cd9eeb0a8466cb977c3789
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Guo,
 
-Modify config.sub so that it knows about the C-SKY
-architecture. Without this, all autotools projects fail to build on
-C-SKY.
+On Wed,  8 May 2019 16:58:34 +0800
+guoren at kernel.org wrote:
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-[Thomas: improved commit log]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/gnuconfig/config.sub | 2 ++
- 1 file changed, 2 insertions(+)
+> From: Guo Ren <ren_guo@c-sky.com>
+> 
+> Enable gnuconfig for C-SKY Architecutre compiling.
+> 
+> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+> ---
+>  support/gnuconfig/config.sub | 2 ++
+>  1 file changed, 2 insertions(+)
 
-diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
-index 6d86a1e2f7..45dd0a7d04 100755
---- a/support/gnuconfig/config.sub
-+++ b/support/gnuconfig/config.sub
-@@ -254,6 +254,7 @@ case $basic_machine in
- 	| arc | arceb \
- 	| arm | arm[bl]e | arme[lb] | armv[2-8] | armv[3-8][lb] | armv7[arm] \
- 	| avr | avr32 \
-+	| csky \
- 	| ba \
- 	| be32 | be64 \
- 	| bfin \
-@@ -376,6 +377,7 @@ case $basic_machine in
- 	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* | arceb-* \
- 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
- 	| avr-* | avr32-* \
-+	| csky-* \
- 	| ba-* \
- 	| be32-* | be64-* \
- 	| bfin-* | bs2000-* \
+I've slightly improved the commit message, and applied to master. I've
+applied to master and not to next, because this commit is really
+important: without it, none of the autotools based packages can build
+on C-SKY (which is not yet tested in the autobuilders).
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
