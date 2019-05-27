@@ -1,85 +1,47 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon, 27 May 2019 20:10:56 +0200
-Subject: [Buildroot] [PATCH v2 1/7] package/sqlite: fix BUG_85180 build
- timeout
-In-Reply-To: <5bd8815c-5183-2e54-da01-f5cf77e730ce@micronovasrl.com>
-References: <10430096-81de-792a-8b49-c59ed5e9de2e@micronovasrl.com>
- <20190522135906.30796-1-giulio.benetti@micronovasrl.com>
- <20190522135906.30796-2-giulio.benetti@micronovasrl.com>
- <20190524222459.2fc91773@windsurf.home>
- <6dcdb1eb-5d48-e773-9711-1df461c542e2@micronovasrl.com>
- <3e1c735b-0639-ffaf-9d96-7b51920668fc@micronovasrl.com>
- <20190527113754.48973b30@windsurf>
- <88dab430-b338-8bac-92a2-026777946561@micronovasrl.com>
- <20190527114657.093a6fc8@windsurf>
- <5bd8815c-5183-2e54-da01-f5cf77e730ce@micronovasrl.com>
-Message-ID: <804fa487-03ea-5f5e-7867-6c5b44317585@micronovasrl.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 27 May 2019 12:50:21 -0600
+Subject: [Buildroot] [PATCH v2 1/1] package/v4l2loopback: bump to version
+ 0.12.2
+Message-ID: <20190527185021.115590-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+This fixes a kernel 5.1.x compatibility issue.
 
-adding Atharva+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Il 27/05/2019 12:20, Giulio Benetti ha scritto:
-> Il 27/05/2019 11:46, Thomas Petazzoni ha scritto:
->> On Mon, 27 May 2019 11:44:45 +0200
->> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
->>
->>> Il 27/05/2019 11:37, Thomas Petazzoni ha scritto:
->>>> Hello,
->>>>
->>>> On Mon, 27 May 2019 11:06:06 +0200
->>>> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
->>>>>>> I cannot reproduce this timeout, and you don't have any autobuilder
->>>>>>> failure. Could you provide a configuration that exhibits the 
->>>>>>> failure ?
->>>>>
->>>>> Sure, the problems comes out building libnss with gcc4.9/5/6/7.
->>>>> Here is pastebin of my savedefconfig:
->>>>> https://pastebin.com/wmR8Dme3
->>>>
->>>> I still don't understand. You're mentioning libnss, but your defconfig
->>>> does not have libnss enabled. Am I missing something ?
->>>
->>> Oh sorry, I use that defconfig and then I give:
->>> "make libnss"
->>>
->>> that causes 85180.
->>
->> But then what is the relationship with sqlite ? Your original patch,
->> which I'm replying to, is about fixing a build timeout in sqlite.
-> 
-> Ah yes, sqlite is a dependency of libnss.
-> And now I've found that it happens only with Gcc 4.9
-> I've been confused because when compiling sqlite3.c file it takes a very 
-> long time with Gcc 5/6/7/8/9 and I thought they hanged.
-> Instead it hangs only with Gcc 4.9, so it's a different Gcc bug, not 85180.
-> Need to check in gcc bugzilla, otherwise I should submit a new bug.
+---
+Changes v1 -> v2:
+  - Use latest upstream tag instead of commit
+---
+ package/v4l2loopback/v4l2loopback.hash | 2 +-
+ package/v4l2loopback/v4l2loopback.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-It's a Gcc 4.9 only bug that I need to submit to gcc bugzilla.
-
-Atharva built it and found it hangs while compiling sqlite3.c as me.
-
-So, after submitting Gcc bug I'm going to add that bug to toolchain's 
-Config.in and setting -O0 in sqlite.mk if that bug=y
-
-Then I rewrite commit log and resubmit, but at this point this is not 
-part of this patchset.
-
-Right?
-
+diff --git a/package/v4l2loopback/v4l2loopback.hash b/package/v4l2loopback/v4l2loopback.hash
+index 6d661d0a65..0598be486f 100644
+--- a/package/v4l2loopback/v4l2loopback.hash
++++ b/package/v4l2loopback/v4l2loopback.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	f2b9b7f8611c1a77b2f496ee505e49860121079c998bb735e4bb6b8954132348  v4l2loopback-v0.12.1.tar.gz
++sha256	6d2c27a69d982bf39d7330b92f084fd0388beef486879320ccf263e4716cd549  v4l2loopback-v0.12.2.tar.gz
+ sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/v4l2loopback/v4l2loopback.mk b/package/v4l2loopback/v4l2loopback.mk
+index 99879f9219..15c1ed6100 100644
+--- a/package/v4l2loopback/v4l2loopback.mk
++++ b/package/v4l2loopback/v4l2loopback.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-V4L2LOOPBACK_VERSION = v0.12.1
++V4L2LOOPBACK_VERSION = v0.12.2
+ V4L2LOOPBACK_SITE = $(call github,umlaeute,v4l2loopback,$(V4L2LOOPBACK_VERSION))
+ V4L2LOOPBACK_LICENSE = GPL-2.0+
+ V4L2LOOPBACK_LICENSE_FILES = COPYING
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.20.1
