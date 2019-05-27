@@ -1,14 +1,12 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon, 27 May 2019 19:20:55 +0200
-Subject: [Buildroot] [PATCH v2 05/12] package/flare-engine: fix
- BUG_85180 build timeout
-In-Reply-To: <20190524223027.6d05ee4c@windsurf.home>
-References: <20190521133932.81841-1-giulio.benetti@micronovasrl.com>
- <20190521133932.81841-6-giulio.benetti@micronovasrl.com>
- <20190524215853.4ee3ddbc@windsurf.home>
- <6fbb9a9d-b836-97dd-5bd2-f9d3dcb06a57@micronovasrl.com>
- <20190524223027.6d05ee4c@windsurf.home>
-Message-ID: <72277a65-f760-226c-0f65-3658b2751390@micronovasrl.com>
+Date: Mon, 27 May 2019 19:28:32 +0200
+Subject: [Buildroot] [PATCH v2 5/7] package/ecryptfs-utils: allow
+ building with GCC_BUG_85862 and on Microblaze
+In-Reply-To: <20190522135906.30796-6-giulio.benetti@micronovasrl.com>
+References: <10430096-81de-792a-8b49-c59ed5e9de2e@micronovasrl.com>
+ <20190522135906.30796-1-giulio.benetti@micronovasrl.com>
+ <20190522135906.30796-6-giulio.benetti@micronovasrl.com>
+Message-ID: <77c2dccf-73ae-a78f-c0d8-28842e103440@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,56 +15,54 @@ To: buildroot@busybox.net
 
 Hello Thomas,
 
-Il 24/05/2019 22:30, Thomas Petazzoni ha scritto:
-> On Fri, 24 May 2019 22:05:12 +0200
-> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+Il 22/05/2019 15:59, Giulio Benetti ha scritto:
+> libnss gcc bug 85862 has been worked around and that caused build
+> failure on Microblaze.
 > 
->>> Why does flare-engine need this, but not jasper, which is also a
->>> CMake-based package ?
->>
->> Because in flare-engine CMakeLists.txt there is no fallback to -O0, so
->> that was the only decent way to force CMake to generate Makefiles
->> without optimizations.
+> Remove 'depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862' and 'depends on
+> !BR2_microblaze' from Config.in allowing this package to build.
 > 
-> Could you be more specific ? How does it work for jasper and
-> libcpprestsdk, which are also based on CMake ?
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>   package/ecryptfs-utils/Config.in | 6 ------
+>   1 file changed, 6 deletions(-)
+> 
+> diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+> index 6652d33e0e..68a659d33d 100644
+> --- a/package/ecryptfs-utils/Config.in
+> +++ b/package/ecryptfs-utils/Config.in
+> @@ -2,12 +2,10 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+>   	bool "ecryptfs-utils"
+>   	depends on BR2_USE_WCHAR # gettext
+>   	depends on BR2_USE_MMU # keyutils
+> -	depends on !BR2_microblaze # keyutils
+>   	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
+>   	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
+>   	depends on !BR2_MIPS_NABI32 # libnss
+>   	depends on !BR2_STATIC_LIBS # libnss, keyutils
+> -	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 # microblaze specific & GCC < 7.x
+>   	select BR2_PACKAGE_KEYUTILS
+>   	select BR2_PACKAGE_LIBNSS
+>   	# runtime dependency only, some scripts are using the
+> @@ -31,11 +29,7 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+>   	  http://ecryptfs.org
+>   
+>   comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynami library"
+> -	depends on !BR2_microblaze
+>   	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+>   	depends on BR2_USE_MMU
+>   	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+>   		BR2_STATIC_LIBS
+> -
+> -comment "ecryptfs needs a toolchain not affected by GCC bug 85862"
+> -	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862 # libnss
+> 
 
-Yes, the problem here is that even if there's the way to append 
-something to CMAKE_CXX_FLAGS, then any other CMAKE_CXX_FLAGS_* will be 
-appended, so if I set CMAKE_CXX_FLAGS to -O0, I will obtain "-O0 -O2 -g".
+I've seen you've tagged this as Changes Requested:
+https://patchwork.ozlabs.org/patch/1103358/
 
-This is due to the fact that we fall into one of the cases of the next 
-if-elseif statements(in CMakeLists.txt):
-"
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-   set(CMAKE_CXX_FLAGS_RELEASE "-O2 -g0")
-   if(MINGW)
-     set(CMAKE_CXX_FLAGS_RELEASE "-Wl,-subsystem,windows 
-${CMAKE_CXX_FLAGS_RELEASE}")
-   endif()
-elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O2 -g")
-elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
-   set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -g0")
-elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
-   set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -pg")
-   set(CMAKE_EXE_LINKER_FLAGS_DEBUG "-pg")
-   set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "-pg")
-   set(CMAKE_MODULE_LINKER_FLAGS_DEBUG "-pg")
-endif()
-"
-where Release is the default and if BR2_ENABLE_DEBUG=y 
-CMAKE_BUILD_TYPE=RelWithDebInfo according to flare-engine.mk
-So I thought to set CMAKE_BUILD_TYPE to "Dummy" to jump over that 
-if-elseif. But just right now I've realized that's enough to give 
--DCMAKE_BUILD_TYPE=
-Empty is enough to jump over if-elseif.
-Another way would be to patch CMakeLists.txt adding a fallback "else" to 
-those if-elseif
+It is because of dependency to "keyutils" still not fixed right?
 
-What do you think?
-
-Best regards
 -- 
 Giulio Benetti
 CTO
