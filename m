@@ -1,9 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 May 2019 09:54:52 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain: GCC bug 68485
-In-Reply-To: <20190527210510.70987-1-giulio.benetti@micronovasrl.com>
-References: <20190527210510.70987-1-giulio.benetti@micronovasrl.com>
-Message-ID: <126c5b6d-430f-671e-86e4-c8341aad5844@mind.be>
+Date: Tue, 28 May 2019 10:01:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: fix static build
+ with snappy
+In-Reply-To: <CAPi7W82-_WKmS6xY1i_hx8bT1Y61c_XA7Z97_Rahwc-Kn6mL3Q@mail.gmail.com>
+References: <20190526193431.22820-1-fontaine.fabrice@gmail.com>
+ <043a4286-f1ba-7989-aab3-8c10c0a6a639@mind.be>
+ <CAPi7W82-_WKmS6xY1i_hx8bT1Y61c_XA7Z97_Rahwc-Kn6mL3Q@mail.gmail.com>
+Message-ID: <108308af-95ab-f0aa-243f-39368fc8aa51@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,43 +15,94 @@ To: buildroot@busybox.net
 
 
 
-On 27/05/2019 23:05, Giulio Benetti wrote:
-> GCC <= 9.x hangs while building brotli for the Microblaze Arch:
-> http://autobuild.buildroot.net/results/d86/d86251974a0a348a64d9a1d1fd7d02dd4aff0792/
+On 28/05/2019 08:55, Fabrice Fontaine wrote:
+> Dear Arnout,
 > 
-> Reported:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485
-> 
-> Still not fixed. Every Microblaze Gcc version <= 9.x is affected.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> Le mar. 28 mai 2019 ? 00:00, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>>
+>>
+>>
+>> On 26/05/2019 21:34, Fabrice Fontaine wrote:
+>>> Fixes:
+>>>  - http://autobuild.buildroot.org/results/419468f0d7d3c2b64d420513aa9505c6de097ed2
+>>>
+>>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>> ---
+>>>  .../0005-FindSNAPPY-fix-static-build.patch    | 36 +++++++++++++++++++
+>>>  1 file changed, 36 insertions(+)
+>>>  create mode 100644 package/wireshark/0005-FindSNAPPY-fix-static-build.patch
+>>>
+>>> diff --git a/package/wireshark/0005-FindSNAPPY-fix-static-build.patch b/package/wireshark/0005-FindSNAPPY-fix-static-build.patch
+>>> new file mode 100644
+>>> index 0000000000..1218dca4f2
+>>> --- /dev/null
+>>> +++ b/package/wireshark/0005-FindSNAPPY-fix-static-build.patch
+>>> @@ -0,0 +1,36 @@
+>>> +From db32ad65197060a4474fd61dec4daddc9f59b7af Mon Sep 17 00:00:00 2001
+>>> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>> +Date: Wed, 24 Apr 2019 22:57:58 +0200
+>>> +Subject: [PATCH] FindSNAPPY: fix static build
+>>> +
+>>> +On UNIX, when statically built, snappy can depends on stdc++. This
+>>> +dependency can't be retrieved through pkg-config as the latest version
+>>> +of snappy (1.1.7) does not provide any .pc files so append -lstdc++
+>>> +manually to SNAPPY_LIBRARIES
+>>> +
+>>> +Change-Id: Ia3b9c09fed77eb69bfbe011d7c49c8ecc63d45d1
+>>
+>>  This looks like it comes from https://code.wireshark.org/review but I can't
+>> seem to find it there... What gives?
+> This patch hasn't been sent upstream yet.
 
- Applied to master (with a little rewording of the commit message), thanks.
+ I seem to be making the wrong assumptions all the time :-)
 
- I should have noticed that this was missing :-(
+ But in that case, I'd like to understand the fix a bit better...
+
+>>
+>>  Regards,
+>>  Arnout
+>>
+>>> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>>> +---
+>>> + cmake/modules/FindSNAPPY.cmake | 6 ++++++
+>>> + 1 file changed, 6 insertions(+)
+>>> +
+>>> +diff --git a/cmake/modules/FindSNAPPY.cmake b/cmake/modules/FindSNAPPY.cmake
+>>> +index 7964c9d145..ec5cf6fda8 100644
+>>> +--- a/cmake/modules/FindSNAPPY.cmake
+>>> ++++ b/cmake/modules/FindSNAPPY.cmake
+>>> +@@ -37,6 +37,12 @@ find_package_handle_standard_args( SNAPPY DEFAULT_MSG SNAPPY_LIBRARY SNAPPY_INCL
+>>> + if( SNAPPY_FOUND )
+>>> +   set( SNAPPY_INCLUDE_DIRS ${SNAPPY_INCLUDE_DIR} )
+>>> +   set( SNAPPY_LIBRARIES ${SNAPPY_LIBRARY} )
+>>> ++  # Include transitive dependencies for static linking.
+>>> ++  # Unfortunately snappy 1.1.7 does not provide any pc file so pkg-config can't
+>>> ++  # be used to retrieve lstdc++ dependency so add it manually
+>>> ++  if(UNIX)
+>>> ++    list( APPEND SNAPPY_LIBRARIES -lstdc++ )
+
+ I think the real problem is that linking happens with gcc instead of g++,
+right? -lstdc++ should be added automatically while linking (just like -lc). And
+it's important that this is done automatically, because in general it could be
+-lc++ instead of -lstdc++ (and who knows what it would be on MSVC++ and whatever
+crazy compilers are used to build Wireshark...).
+
+ So I think the real fix is to force linking with g++ instead of gcc when snappy
+is included. Unfortunately, I have no idea how to do that in CMake...
 
  Regards,
  Arnout
 
-> ---
->  toolchain/Config.in | 6 ++++++
->  1 file changed, 6 insertions(+)
+
+>>> ++  endif()
+>>> +   if (WIN32)
+>>> +     set ( SNAPPY_DLL_DIR "${SNAPPY_HINTS}/bin"
+>>> +       CACHE PATH "Path to Snappy DLL"
+>>> +--
+>>> +2.20.1
+>>> +
+>>>
+> Best Regards,
 > 
-> diff --git a/toolchain/Config.in b/toolchain/Config.in
-> index 829ecd442a..d01a96f8a8 100644
-> --- a/toolchain/Config.in
-> +++ b/toolchain/Config.in
-> @@ -131,6 +131,12 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
->  	default y if !BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS && \
->  		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
->  
-> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. This bug still
-> +# exists in gcc 9.x
-> +config BR2_TOOLCHAIN_HAS_GCC_BUG_68485
-> +	bool
-> +	default y if BR2_microblaze
-> +
->  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. This bug no
->  # longer exists in gcc 8.x.
->  config BR2_TOOLCHAIN_HAS_GCC_BUG_85180
+> Fabrice
 > 
