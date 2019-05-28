@@ -1,123 +1,129 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 28 May 2019 22:22:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wireshark: fix static build
- with snappy
-In-Reply-To: <108308af-95ab-f0aa-243f-39368fc8aa51@mind.be>
-References: <20190526193431.22820-1-fontaine.fabrice@gmail.com>
- <043a4286-f1ba-7989-aab3-8c10c0a6a639@mind.be>
- <CAPi7W82-_WKmS6xY1i_hx8bT1Y61c_XA7Z97_Rahwc-Kn6mL3Q@mail.gmail.com>
- <108308af-95ab-f0aa-243f-39368fc8aa51@mind.be>
-Message-ID: <CAPi7W818EK1X78K8TUsjauK6Ntc5XzsRQ8HZ66APBN88ksSAKA@mail.gmail.com>
+Date: Tue, 28 May 2019 22:32:30 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/wireshark: fix static build with snappy
+Message-ID: <20190528203230.24558-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Arnout,
+Fixes:
+ - http://autobuild.buildroot.org/results/419468f0d7d3c2b64d420513aa9505c6de097ed2
 
-Le mar. 28 mai 2019 ? 10:01, Arnout Vandecappelle <arnout@mind.be> a ?crit :
->
->
->
-> On 28/05/2019 08:55, Fabrice Fontaine wrote:
-> > Dear Arnout,
-> >
-> > Le mar. 28 mai 2019 ? 00:00, Arnout Vandecappelle <arnout@mind.be> a ?crit :
-> >>
-> >>
-> >>
-> >> On 26/05/2019 21:34, Fabrice Fontaine wrote:
-> >>> Fixes:
-> >>>  - http://autobuild.buildroot.org/results/419468f0d7d3c2b64d420513aa9505c6de097ed2
-> >>>
-> >>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >>> ---
-> >>>  .../0005-FindSNAPPY-fix-static-build.patch    | 36 +++++++++++++++++++
-> >>>  1 file changed, 36 insertions(+)
-> >>>  create mode 100644 package/wireshark/0005-FindSNAPPY-fix-static-build.patch
-> >>>
-> >>> diff --git a/package/wireshark/0005-FindSNAPPY-fix-static-build.patch b/package/wireshark/0005-FindSNAPPY-fix-static-build.patch
-> >>> new file mode 100644
-> >>> index 0000000000..1218dca4f2
-> >>> --- /dev/null
-> >>> +++ b/package/wireshark/0005-FindSNAPPY-fix-static-build.patch
-> >>> @@ -0,0 +1,36 @@
-> >>> +From db32ad65197060a4474fd61dec4daddc9f59b7af Mon Sep 17 00:00:00 2001
-> >>> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >>> +Date: Wed, 24 Apr 2019 22:57:58 +0200
-> >>> +Subject: [PATCH] FindSNAPPY: fix static build
-> >>> +
-> >>> +On UNIX, when statically built, snappy can depends on stdc++. This
-> >>> +dependency can't be retrieved through pkg-config as the latest version
-> >>> +of snappy (1.1.7) does not provide any .pc files so append -lstdc++
-> >>> +manually to SNAPPY_LIBRARIES
-> >>> +
-> >>> +Change-Id: Ia3b9c09fed77eb69bfbe011d7c49c8ecc63d45d1
-> >>
-> >>  This looks like it comes from https://code.wireshark.org/review but I can't
-> >> seem to find it there... What gives?
-> > This patch hasn't been sent upstream yet.
->
->  I seem to be making the wrong assumptions all the time :-)
->
->  But in that case, I'd like to understand the fix a bit better...
->
-> >>
-> >>  Regards,
-> >>  Arnout
-> >>
-> >>> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> >>> +---
-> >>> + cmake/modules/FindSNAPPY.cmake | 6 ++++++
-> >>> + 1 file changed, 6 insertions(+)
-> >>> +
-> >>> +diff --git a/cmake/modules/FindSNAPPY.cmake b/cmake/modules/FindSNAPPY.cmake
-> >>> +index 7964c9d145..ec5cf6fda8 100644
-> >>> +--- a/cmake/modules/FindSNAPPY.cmake
-> >>> ++++ b/cmake/modules/FindSNAPPY.cmake
-> >>> +@@ -37,6 +37,12 @@ find_package_handle_standard_args( SNAPPY DEFAULT_MSG SNAPPY_LIBRARY SNAPPY_INCL
-> >>> + if( SNAPPY_FOUND )
-> >>> +   set( SNAPPY_INCLUDE_DIRS ${SNAPPY_INCLUDE_DIR} )
-> >>> +   set( SNAPPY_LIBRARIES ${SNAPPY_LIBRARY} )
-> >>> ++  # Include transitive dependencies for static linking.
-> >>> ++  # Unfortunately snappy 1.1.7 does not provide any pc file so pkg-config can't
-> >>> ++  # be used to retrieve lstdc++ dependency so add it manually
-> >>> ++  if(UNIX)
-> >>> ++    list( APPEND SNAPPY_LIBRARIES -lstdc++ )
->
->  I think the real problem is that linking happens with gcc instead of g++,
-> right? -lstdc++ should be added automatically while linking (just like -lc). And
-> it's important that this is done automatically, because in general it could be
-> -lc++ instead of -lstdc++ (and who knows what it would be on MSVC++ and whatever
-> crazy compilers are used to build Wireshark...).
->
->  So I think the real fix is to force linking with g++ instead of gcc when snappy
-> is included. Unfortunately, I have no idea how to do that in CMake...
-We can do it through:
-if(SNAPPY_FOUND)
-        set_target_properties(tfshark PROPERTIES LINKER_LANGUAGE CXX)
-endif()
-However, we'll have to copy/paste these lines for the 6 executables
-that use the epan library (which links with snappy).
-I can send a v2 with this proposal and sent it upstream.
->
->  Regards,
->  Arnout
->
->
-> >>> ++  endif()
-> >>> +   if (WIN32)
-> >>> +     set ( SNAPPY_DLL_DIR "${SNAPPY_HINTS}/bin"
-> >>> +       CACHE PATH "Path to Snappy DLL"
-> >>> +--
-> >>> +2.20.1
-> >>> +
-> >>>
-> > Best Regards,
-> >
-> > Fabrice
-> >
-Best Regards,
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Arnout Vandecappelle):
+ - Set linker to CXX instead of adding -lstdc++ to LIBS
 
-Fabrice
+ ...s.txt-fix-static-linking-with-snappy.patch | 98 +++++++++++++++++++
+ 1 file changed, 98 insertions(+)
+ create mode 100644 package/wireshark/0005-CMakeLists.txt-fix-static-linking-with-snappy.patch
+
+diff --git a/package/wireshark/0005-CMakeLists.txt-fix-static-linking-with-snappy.patch b/package/wireshark/0005-CMakeLists.txt-fix-static-linking-with-snappy.patch
+new file mode 100644
+index 0000000000..e9233aa90f
+--- /dev/null
++++ b/package/wireshark/0005-CMakeLists.txt-fix-static-linking-with-snappy.patch
+@@ -0,0 +1,98 @@
++From eb226af7ae998cda6b9747d9e77692fda85563bc Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 28 May 2019 21:26:19 +0200
++Subject: [PATCH] CMakeLists.txt: fix static linking with snappy
++
++snappy is a C++ library so cxx linker must be used to avoid errors
++when statically linking:
++
++/home/buildroot/autobuild/instance-1/output/host/arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libsnappy.a(snappy.cc.o): In function `snappy::internal::WorkingMemory::GetHashTable(unsigned int, int*)':
++snappy.cc:(.text+0x358): undefined reference to `operator new[](unsigned int)'
++
++Fixes:
++ - http://autobuild.buildroot.org/results/faa65da84ace974426e220205f4665fc0a73bdfe
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ CMakeLists.txt | 30 ++++++++++++++++++++++++++++++
++ 1 file changed, 30 insertions(+)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index e2fdafc227..cf5b8dfd56 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -2191,6 +2191,11 @@ if(BUILD_wireshark AND QT_FOUND)
++ 	if(ENABLE_APPLICATION_BUNDLE OR WIN32)
++ 		set_target_properties(wireshark PROPERTIES OUTPUT_NAME Wireshark)
++ 	endif()
+++	# epan links with snappy which is a C++ library so use cxx linker to
+++	# avoid error when statically linking
+++	if(SNAPPY_FOUND)
+++		set_target_properties(wireshark PROPERTIES LINKER_LANGUAGE CXX)
+++	endif(SNAPPY_FOUND)
++ 
++ 	if(ENABLE_APPLICATION_BUNDLE)
++ 		add_dependencies(wireshark manpages)
++@@ -2306,6 +2311,11 @@ if(BUILD_tshark)
++ 	add_executable(tshark ${tshark_FILES})
++ 	set_extra_executable_properties(tshark "Executables")
++ 	target_link_libraries(tshark ${tshark_LIBS})
+++	# epan links with snappy which is a C++ library so use cxx linker to
+++	# avoid error when statically linking
+++	if(SNAPPY_FOUND)
+++		set_target_properties(tshark PROPERTIES LINKER_LANGUAGE CXX)
+++	endif(SNAPPY_FOUND)
++ 	install(TARGETS tshark RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
++ endif()
++ 
++@@ -2329,6 +2339,11 @@ if(BUILD_tfshark)
++ 	add_executable(tfshark ${tfshark_FILES})
++ 	set_extra_executable_properties(tfshark "Executables")
++ 	target_link_libraries(tfshark ${tfshark_LIBS})
+++	# epan links with snappy which is a C++ library so use cxx linker to
+++	# avoid error when statically linking
+++	if(SNAPPY_FOUND)
+++		set_target_properties(tfshark PROPERTIES LINKER_LANGUAGE CXX)
+++	endif(SNAPPY_FOUND)
++ 	install(TARGETS tfshark RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
++ endif()
++ 
++@@ -2352,6 +2367,11 @@ if(BUILD_rawshark AND PCAP_FOUND)
++ 	add_executable(rawshark ${rawshark_FILES})
++ 	set_extra_executable_properties(rawshark "Executables")
++ 	target_link_libraries(rawshark ${rawshark_LIBS})
+++	# epan links with snappy which is a C++ library so use cxx linker to
+++	# avoid error when statically linking
+++	if(SNAPPY_FOUND)
+++		set_target_properties(rawshark PROPERTIES LINKER_LANGUAGE CXX)
+++	endif(SNAPPY_FOUND)
++ 	install(TARGETS rawshark RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
++ endif()
++ 
++@@ -2383,6 +2403,11 @@ if(BUILD_sharkd)
++ 	if(WIN32)
++ 		target_link_libraries(sharkd "ws2_32.lib")
++ 	endif(WIN32)
+++	# epan links with snappy which is a C++ library so use cxx linker to
+++	# avoid error when statically linking
+++	if(SNAPPY_FOUND)
+++		set_target_properties(sharkd PROPERTIES LINKER_LANGUAGE CXX)
+++	endif(SNAPPY_FOUND)
++ 
++ 	install(TARGETS sharkd RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
++ endif()
++@@ -2400,6 +2425,11 @@ if(BUILD_dftest)
++ 	add_executable(dftest ${dftest_FILES})
++ 	set_extra_executable_properties(dftest "Tests")
++ 	target_link_libraries(dftest ${dftest_LIBS})
+++	# epan links with snappy which is a C++ library so use cxx linker to
+++	# avoid error when statically linking
+++	if(SNAPPY_FOUND)
+++		set_target_properties(dftest PROPERTIES LINKER_LANGUAGE CXX)
+++	endif(SNAPPY_FOUND)
++ endif()
++ 
++ if(BUILD_randpkt)
++-- 
++2.20.1
++
+-- 
+2.20.1
