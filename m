@@ -1,9 +1,7 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 28 May 2019 15:40:42 -0400
-Subject: [Buildroot] [PATCH v6 1/1] package/libglib2: bump to version 2.60.3
-In-Reply-To: <20190528194042.119121-1-aduskett@gmail.com>
-References: <20190528194042.119121-1-aduskett@gmail.com>
-Message-ID: <20190528194042.119121-2-aduskett@gmail.com>
+Date: Tue, 28 May 2019 15:48:11 -0400
+Subject: [Buildroot] [PATCH v7 1/1] package/libglib2: bump to version 2.60.3
+Message-ID: <20190528194811.120927-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -82,6 +80,10 @@ v5 -> v6:
   - Add LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE to fix finding
     glib-genmarshal. (Thanks to Arnout, Yann, and Thomas!)
 
+v6 -> v7:
+  - Removed inappropriate depends on !BR2_nds32 in the Config.in file.
+    This was used for some debugging and I missed it.
+
  ...01-fix-compile-time-atomic-detection.patch |   4 +-
  .../0002-add-option-to-build-tests.patch      | 103 +++++++++++++++
  package/libglib2/0002-disable-tests.patch     |  60 ---------
@@ -89,10 +91,9 @@ v5 -> v6:
  .../0003-remove-cpp-requirement.patch         |  96 ++++++++++++++
  ...mat-nonliteral-to-compiler-arguments.patch |  28 ++++
  ...dcode-python-path-into-various-tools.patch |  48 -------
- package/libglib2/Config.in                    |   2 +
  package/libglib2/libglib2.hash                |   4 +-
  package/libglib2/libglib2.mk                  | 122 ++++--------------
- 10 files changed, 261 insertions(+), 279 deletions(-)
+ 9 files changed, 259 insertions(+), 279 deletions(-)
  create mode 100644 package/libglib2/0002-add-option-to-build-tests.patch
  delete mode 100644 package/libglib2/0002-disable-tests.patch
  delete mode 100644 package/libglib2/0003-gdbus-Avoid-printing-null-strings.patch
@@ -559,25 +560,6 @@ index fa558e6dbf..0000000000
 --- 
 -2.14.1
 -
-diff --git a/package/libglib2/Config.in b/package/libglib2/Config.in
-index ea946ba05e..9f78b577e4 100644
---- a/package/libglib2/Config.in
-+++ b/package/libglib2/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBGLIB2
- 	depends on BR2_USE_WCHAR # gettext
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_nds32
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_LIBFFI
- 	select BR2_PACKAGE_PCRE
-@@ -16,5 +17,6 @@ config BR2_PACKAGE_LIBGLIB2
- 	  http://www.gtk.org/
- 
- comment "libglib2 needs a toolchain w/ wchar, threads"
-+	depends on !BR2_nds32
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
 index faa01ef563..763c645b85 100644
 --- a/package/libglib2/libglib2.hash
