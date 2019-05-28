@@ -1,106 +1,109 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 28 May 2019 21:17:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: fix build with musl
-Message-ID: <20190528191704.25405-1-fontaine.fabrice@gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Tue, 28 May 2019 15:40:41 -0400
+Subject: [Buildroot] [PATCH v6 0/1] package/libglib2: bump to version 2.60.3
+Message-ID: <20190528194042.119121-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/c703d45ab691641beabc3440f081a8bc195b4a23
+From: Adam Duskett <Aduskett@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../wpewebkit/0001-Fix-build-with-musl.patch  | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 package/wpewebkit/0001-Fix-build-with-musl.patch
+I tested this patch with test-pkg -a to make sure that every single supported
+architecture is supported. The nds32 failure is because libffi does not
+support nds32, which libglib2 selects.
 
-diff --git a/package/wpewebkit/0001-Fix-build-with-musl.patch b/package/wpewebkit/0001-Fix-build-with-musl.patch
-new file mode 100644
-index 0000000000..a436adf6ce
---- /dev/null
-+++ b/package/wpewebkit/0001-Fix-build-with-musl.patch
-@@ -0,0 +1,79 @@
-+From cc3c27a7e997ef157ed469127f185a7bb6eb1feb Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 27 May 2019 23:51:32 +0200
-+Subject: [PATCH] Fix build with musl
-+
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+[Retrieved (and slightly updated) from:
-+https://github.com/WebPlatformForEmbedded/meta-wpe/blob/master/recipes-wpe/wpewebkit/wpewebkit/0001-Fix-build-with-musl.patch]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Source/JavaScriptCore/runtime/MachineContext.h | 10 +++++-----
-+ Source/WTF/wtf/Platform.h                      |  2 +-
-+ 2 files changed, 6 insertions(+), 6 deletions(-)
-+
-+diff --git a/Source/JavaScriptCore/runtime/MachineContext.h b/Source/JavaScriptCore/runtime/MachineContext.h
-+index bf0bdc7a51a..78d2ec81838 100644
-+--- a/Source/JavaScriptCore/runtime/MachineContext.h
-++++ b/Source/JavaScriptCore/runtime/MachineContext.h
-+@@ -146,7 +146,7 @@ inline void*& stackPointer(mcontext_t& machineContext)
-+ #error Unknown Architecture
-+ #endif
-+
-+-#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
-++#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__) 
-+ 
-+ #if CPU(X86)
-+     return reinterpret_cast<void*&>((uintptr_t&) machineContext.gregs[REG_ESP]);
-+@@ -251,7 +251,7 @@ inline void*& framePointer(mcontext_t& machineContext)
-+ #error Unknown Architecture
-+ #endif
-+
-+-#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
-++#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__) 
-+ 
-+ // The following sequence depends on glibc's sys/ucontext.h.
-+ #if CPU(X86)
-+@@ -354,7 +354,7 @@ inline void*& instructionPointer(mcontext_t& machineContext)
-+ #error Unknown Architecture
-+ #endif
-+ 
-+-#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
-++#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__)
-+ 
-+ // The following sequence depends on glibc's sys/ucontext.h.
-+ #if CPU(X86)
-+@@ -466,7 +466,7 @@ inline void*& argumentPointer<1>(mcontext_t& machineContext)
-+ #error Unknown Architecture
-+ #endif
-+
-+-#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
-++#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__) 
-+ 
-+ // The following sequence depends on glibc's sys/ucontext.h.
-+ #if CPU(X86)
-+@@ -583,7 +583,7 @@ inline void*& llintInstructionPointer(mcontext_t& machineContext)
-+ #error Unknown Architecture
-+ #endif
-+
-+-#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
-++#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__) 
-+ 
-+ // The following sequence depends on glibc's sys/ucontext.h.
-+ #if CPU(X86)
-+diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
-+index e2a3388993f..95fe7c593cf 100644
-+--- a/Source/WTF/wtf/Platform.h
-++++ b/Source/WTF/wtf/Platform.h
-+@@ -683,7 +683,7 @@
-+ #define HAVE_CFNETWORK_STORAGE_PARTITIONING 1
-+ #endif
-+
-+-#if OS(DARWIN) || OS(FUCHSIA) || ((OS(FREEBSD) || defined(__GLIBC__) || defined(__BIONIC__)) && (CPU(X86) || CPU(X86_64) || CPU(ARM) || CPU(ARM64) || CPU(MIPS)))
-++#if OS(DARWIN) || OS(FUCHSIA) || ((OS(FREEBSD) || OS(LINUX) || defined(__BIONIC__)) && (CPU(X86) || CPU(X86_64) || CPU(ARM) || CPU(ARM64) || CPU(MIPS))) 
-+ #define HAVE_MACHINE_CONTEXT 1
-+ #endif
-+ 
-+-- 
-+2.20.1
-+
+./utils/test-pkg -a -c ./defconfig -p libglib2
+                 andes-nds32 [ 1/44]: FAILED
+                 arm-aarch64 [ 2/44]: OK
+            br-aarch64-glibc [ 3/44]: OK
+               br-arcle-hs38 [ 4/44]: OK
+                br-arm-basic [ 5/44]: SKIPPED
+      br-arm-cortex-a9-glibc [ 6/44]: OK
+       br-arm-cortex-a9-musl [ 7/44]: OK
+       br-arm-cortex-m4-full [ 8/44]: SKIPPED
+                 br-arm-full [ 9/44]: OK
+        br-arm-full-nothread [10/44]: SKIPPED
+          br-arm-full-static [11/44]: OK
+       br-i386-pentium4-full [12/44]: OK
+    br-i386-pentium-mmx-musl [13/44]: OK
+           br-m68k-5208-full [14/44]: SKIPPED
+          br-m68k-68040-full [15/44]: OK
+        br-microblazeel-full [16/44]: OK
+     br-mips32r6-el-hf-glibc [17/44]: OK
+          br-mips64-n64-full [18/44]: OK
+     br-mips64r6-el-hf-glibc [19/44]: OK
+          br-mipsel-o32-full [20/44]: OK
+              br-nios2-glibc [21/44]: OK
+          br-openrisc-uclibc [22/44]: OK
+   br-powerpc-603e-basic-cpp [23/44]: SKIPPED
+ br-powerpc64le-power8-glibc [24/44]: OK
+   br-powerpc64-power7-glibc [25/44]: OK
+      br-powerpc-e500mc-full [26/44]: OK
+                  br-riscv32 [27/44]: OK
+                  br-riscv64 [28/44]: OK
+                 br-sh4-full [29/44]: OK
+            br-sparc64-glibc [30/44]: OK
+             br-sparc-uclibc [31/44]: OK
+        br-x86-64-core2-full [32/44]: OK
+              br-x86-64-musl [33/44]: OK
+              br-xtensa-full [34/44]: OK
+           linaro-aarch64-be [35/44]: OK
+              linaro-aarch64 [36/44]: OK
+                  linaro-arm [37/44]: OK
+         sourcery-arm-armv4t [38/44]: OK
+                sourcery-arm [39/44]: OK
+         sourcery-arm-thumb2 [40/44]: OK
+             sourcery-mips64 [41/44]: OK
+               sourcery-mips [42/44]: OK
+              sourcery-nios2 [43/44]: OK
+             sourcery-x86-64 [44/44]: OK
+
+I ran the above on the following distributions:
+  - centos 6 (docker)
+  - centos 7 (docker)
+  - debian 8 (docker)
+  - ubuntu 14.04 (docker)
+  - Fedora 30 (Host machine)
+
+I have also tested this with several packages that use libglib2, such as:
+- gstreamer1
+- wireshark
+- gnupg
+- docker
+- dbus-glib
+- network-manager
+- refpolicy
+- pcre2
+- udisks
+- gnupg
+- gpsd
+
+Any feedback would be appreciated!
+
+Adam.
+
+Adam Duskett (1):
+  package/libglib2: bump to version 2.60.3
+
+ ...01-fix-compile-time-atomic-detection.patch |   4 +-
+ .../0002-add-option-to-build-tests.patch      | 103 +++++++++++++++
+ package/libglib2/0002-disable-tests.patch     |  60 ---------
+ ...03-gdbus-Avoid-printing-null-strings.patch |  73 -----------
+ .../0003-remove-cpp-requirement.patch         |  96 ++++++++++++++
+ ...mat-nonliteral-to-compiler-arguments.patch |  28 ++++
+ ...dcode-python-path-into-various-tools.patch |  48 -------
+ package/libglib2/Config.in                    |   2 +
+ package/libglib2/libglib2.hash                |   4 +-
+ package/libglib2/libglib2.mk                  | 122 ++++--------------
+ 10 files changed, 261 insertions(+), 279 deletions(-)
+ create mode 100644 package/libglib2/0002-add-option-to-build-tests.patch
+ delete mode 100644 package/libglib2/0002-disable-tests.patch
+ delete mode 100644 package/libglib2/0003-gdbus-Avoid-printing-null-strings.patch
+ create mode 100644 package/libglib2/0003-remove-cpp-requirement.patch
+ create mode 100644 package/libglib2/0004-Add-Wno-format-nonliteral-to-compiler-arguments.patch
+ delete mode 100644 package/libglib2/0004-Do-not-hardcode-python-path-into-various-tools.patch
+
 -- 
-2.20.1
+2.21.0
