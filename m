@@ -1,67 +1,60 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 May 2019 20:22:18 +0200
-Subject: [Buildroot] board/ci20 uboot problems due to fdt headers
-In-Reply-To: <8811f1b8-8019-912c-a54a-331aabcedbd1@igalia.com>
-References: <8811f1b8-8019-912c-a54a-331aabcedbd1@igalia.com>
-Message-ID: <230c7762-612e-6d59-5b5b-930d56a8df32@mind.be>
+Date: Tue, 28 May 2019 20:28:01 +0200
+Subject: [Buildroot] [PATCH 2/2] package/mender: better default
+ mender.config
+In-Reply-To: <20190528134105.30572-2-deinok@deinok.com>
+References: <20190528134105.30572-1-deinok@deinok.com>
+ <20190528134105.30572-2-deinok@deinok.com>
+Message-ID: <bc22f4e8-6547-5d9a-a50b-f60c42cf438c@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Raul,
 
+On 28/05/2019 15:41, deinok at deinok.com wrote:
+> From: Raul Hidalgo Caballero <deinok@deinok.com>
+> 
 
-On 28/05/2019 15:57, Paulo Matos wrote:
-> Hello,
-> 
-> I am attempting to build ci20 board on an archlinux host.
-> I am getting several errors build uboot that look like:
-> 
-> 
-> /usr/bin/gcc -O2 -isystem
-> /home/pmatos/Projects/igalia/buildroot/output/host/include -Wall
-> -Wstrict-prototypes -O2 -fomit-frame-pointer -include
-> /home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include/libfdt_env.h
-> -idirafter
-> /home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include
-> -idirafter
-> /home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include2
-> -idirafter
-> /home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include
-> -I
-> /home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/lib/libfdt
-> -I
-> /home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/tools
-> -DCONFIG_SYS_TEXT_BASE=0x80000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES
-> -D_GNU_SOURCE   -o fit_image.o fit_image.c -c
-> In file included from ../include/libfdt.h:54,
->                  from fdt_host.h:11,
->                  from mkimage.h:22,
->                  from aisimage.c:8:
-> /usr/include/libfdt_env.h:71:30: error: conflicting types for ?fdt64_t?
->  typedef uint64_t FDT_BITWISE fdt64_t;
->                               ^~~~~~~
-> In file included from <command-line>:
-> /home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include/libfdt_env.h:19:16:
-> note: previous declaration of ?fdt64_t? was here
->  typedef __be64 fdt64_t;
->                 ^~~~~~~
-> 
-> 
-> This seems to be related to a previous thread that seemed to end up
-> saying 'we have fixed that'.
-> 
-> http://lists.busybox.net/pipermail/buildroot/2018-April/217653.html
-> 
-> Does anyone know what the status of this is? As far as I understood the
-> problem is related to possible include headers installed in the host
-> clashing with the ones distributed with buildroot.
+ Please give a better explanation than "better" :-). The summary line is OK, but
+the body of the commit message should specify why it is better. Even if the
+explanation is obvious, like I say below.
 
- Indeed, it was fixed by commit bf733342324 and its follow-up f437bf547c. Which
-Buildroot version are you using? Anything more recent than 2018.02.1 should no
-longer have this issue.
+> Signed-off-by: Raul Hidalgo Caballero <deinok@deinok.com>
+> ---
+>  package/mender/mender.conf | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/mender/mender.conf b/package/mender/mender.conf
+> index 979f16aaf6..7eb9fb18b4 100644
+> --- a/package/mender/mender.conf
+> +++ b/package/mender/mender.conf
+> @@ -2,9 +2,9 @@
+>    "InventoryPollIntervalSeconds": 1800,
+>    "UpdatePollIntervalSeconds": 1800,
+>    "RetryPollIntervalSeconds": 300,
+> -  "RootfsPartA": "mmcblk0p2",
+> -  "RootfsPartB": "mmcblk0p3",
+> +  "RootfsPartA": "/dev/mmcblk0p1",
+> +  "RootfsPartB": "/dev/mmcblk0p2",
 
+ This one seems kind of obvious...
+
+ Mirza, how is it possible that this used to work for you?
+
+>    "ServerCertificate": "/etc/mender/server.crt",
+> -  "ServerURL": "https://docker.mender.io",
+> +  "ServerURL": "https://hosted.mender.io",
+
+ This one is also obvious: docker.mender.io doesn't exist, and according to
+wayback machine it never did. Well, it doesn't know hosted.mender.io either and
+that one definitely exists, so maybe it just changed name. Mirza?
 
  Regards,
  Arnout
+
+>    "TenantToken": "dummy"
+>  }
+> 
