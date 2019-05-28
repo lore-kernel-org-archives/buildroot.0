@@ -1,53 +1,59 @@
 From: Robert Hancock <hancock@sedsystems.ca>
-Date: Tue, 28 May 2019 17:40:28 -0600
-Subject: [Buildroot] [PATCH] package/chrony: add option for debug logging
-Message-ID: <1559086828-14718-1-git-send-email-hancock@sedsystems.ca>
+Date: Tue, 28 May 2019 17:41:24 -0600
+Subject: [Buildroot] [PATCH] package/gpsd: update systemd service file
+ binary path
+Message-ID: <1559086884-14807-1-git-send-email-hancock@sedsystems.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a BR2_PACKAGE_CHRONY_DEBUG_LOGGING config option to allow enabling
-compiled-in support for debug logging in Chrony. Enable by default as
-this makes it much easier to debug Chrony issues and should only be
-disabled by those very sensitive to binary size.
+The systemd gpsd.service file supplied by gpsd specifies a binary path
+of /usr/local/sbin/gpsd, while Buildroot installs the binary in
+/usr/sbin/gpsd. Update the path to match the actual binary location.
 
 Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
 ---
- package/chrony/Config.in | 8 ++++++++
- package/chrony/chrony.mk | 3 ++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ ...3-update-systemd-service-file-binary-path.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/gpsd/0003-update-systemd-service-file-binary-path.patch
 
-diff --git a/package/chrony/Config.in b/package/chrony/Config.in
-index 05d6fc1..b295e8d 100644
---- a/package/chrony/Config.in
-+++ b/package/chrony/Config.in
-@@ -6,3 +6,11 @@ config BR2_PACKAGE_CHRONY
- 	  accuracy of the system clock.
- 
- 	  http://chrony.tuxfamily.org/
+diff --git a/package/gpsd/0003-update-systemd-service-file-binary-path.patch b/package/gpsd/0003-update-systemd-service-file-binary-path.patch
+new file mode 100644
+index 0000000..32feb18
+--- /dev/null
++++ b/package/gpsd/0003-update-systemd-service-file-binary-path.patch
+@@ -0,0 +1,30 @@
++From c4c314f23bc6fec8d3ddadb49090eb3a2e84881d Mon Sep 17 00:00:00 2001
++From: Robert Hancock <hancock@sedsystems.ca>
++Date: Tue, 28 May 2019 17:13:25 -0600
++Subject: [PATCH] Update systemd service file binary path
 +
-+config BR2_PACKAGE_CHRONY_DEBUG_LOGGING
-+	bool "enable debug logging support"
-+	default y
-+	depends on BR2_PACKAGE_CHRONY
-+	help
-+	  Enable support for debug logging output from Chrony when enabled at
-+	  runtime. If disabled, code for debug logging will not be compiled in.
-diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
-index b5821b2..2d03fce 100644
---- a/package/chrony/chrony.mk
-+++ b/package/chrony/chrony.mk
-@@ -13,7 +13,8 @@ CHRONY_CONF_OPTS = \
- 	--host-system=Linux \
- 	--host-machine=$(BR2_ARCH) \
- 	--prefix=/usr \
--	--without-tomcrypt
-+	--without-tomcrypt \
-+	$(if $(BR2_PACKAGE_CHRONY_DEBUG_LOGGING),--enable-debug,--disable-debug)
- 
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- CHRONY_DEPENDENCIES += libcap
++The systemd gpsd.service file supplied by gpsd specifies a binary path
++of /usr/local/sbin/gpsd, while Buildroot installs the binary in
++/usr/sbin/gpsd. Update the path to match the actual binary location.
++
++Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
++---
++ systemd/gpsd.service | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/systemd/gpsd.service b/systemd/gpsd.service
++index c1f193c..2707ff9 100644
++--- a/systemd/gpsd.service
+++++ b/systemd/gpsd.service
++@@ -8,7 +8,7 @@ After=chronyd.service
++ Type=forking
++ EnvironmentFile=-/etc/default/gpsd
++ EnvironmentFile=-/etc/sysconfig/gpsd
++-ExecStart=/usr/local/sbin/gpsd $GPSD_OPTIONS $OPTIONS $DEVICES
+++ExecStart=/usr/sbin/gpsd $GPSD_OPTIONS $OPTIONS $DEVICES
++ 
++ [Install]
++ WantedBy=multi-user.target
++-- 
++1.8.3.1
++
 -- 
 1.8.3.1
