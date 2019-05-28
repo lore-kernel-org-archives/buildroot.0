@@ -1,27 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 May 2019 13:12:44 +0000
-Subject: [Buildroot] [Bug 11916] getfattr 2.4.48 issue
-In-Reply-To: <bug-11916-163@https.bugs.busybox.net/>
-References: <bug-11916-163@https.bugs.busybox.net/>
-Message-ID: <bug-11916-163-JUs6fbCtog@https.bugs.busybox.net/>
+From: deinok at deinok.com <deinok@deinok.com>
+Date: Tue, 28 May 2019 15:39:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mender-artifact: bump version to
+ 3.0.0
+Message-ID: <20190528133927.30396-1-deinok@deinok.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11916
+From: Raul Hidalgo Caballero <deinok@deinok.com>
 
---- Comment #1 from Jean-pierre Cartal <jpcartal@free.fr> ---
-Created attachment 8061
-  --> https://bugs.busybox.net/attachment.cgi?id=8061&action=edit
-Patch to avoid symbol version lookup issue
+Signed-off-by: Raul Hidalgo Caballero <deinok@deinok.com>
+---
+ package/mender-artifact/mender-artifact.hash | 2 +-
+ package/mender-artifact/mender-artifact.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This patch solves the issue by not linking setfattr and getfattr with libattr,
-and thus use the glibc version of the *xattr() functions.
-
-Add the libattr to only attr linking command where it is really needed.
-
+diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
+index d44244d31c..06b317f55e 100644
+--- a/package/mender-artifact/mender-artifact.hash
++++ b/package/mender-artifact/mender-artifact.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 fde448af4811600a130b243d59e21b1f9cdd60fd991bd418246c913ebf945206 2.4.0.tar.gz
++sha256 b1b80822282a750c3f94cf4954ac4b1de5a86a7a9c1c7f2541aaf21417a0ff5f 3.0.0.tar.gz
+ 
+ # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
+ # following command:
+diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
+index 90d0071d1a..41b7bd8040 100644
+--- a/package/mender-artifact/mender-artifact.mk
++++ b/package/mender-artifact/mender-artifact.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HOST_MENDER_ARTIFACT_VERSION = 2.4.0
++HOST_MENDER_ARTIFACT_VERSION = 3.0.0
+ HOST_MENDER_ARTIFACT_SITE = https://github.com/mendersoftware/mender-artifact/archive
+ HOST_MENDER_ARTIFACT_SOURCE = $(HOST_MENDER_ARTIFACT_VERSION).tar.gz
+ HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.17.1
