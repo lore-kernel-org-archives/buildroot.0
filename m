@@ -1,42 +1,45 @@
-From: Ottavio Campana <ottavio@campana.vi.it>
-Date: Tue, 28 May 2019 10:24:23 +0200
-Subject: [Buildroot] Changing the way the kernel is build from an external
- layer
-Message-ID: <CAD_3qOCONVb4P1EU1ARRpOEJx5AwB-8JUV1F8+vax6EudODWvA@mail.gmail.com>
+From: deinok at deinok.com <deinok@deinok.com>
+Date: Tue, 28 May 2019 10:52:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mender-artifact: bump version to
+ 3.0.0
+Message-ID: <20190528085201.9572-1-deinok@deinok.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: deinok <deinok@deinok.com>
 
-I am porting a BSP to buildroot, to make the full build of the system automatic.
+Signed-off-by: deinok <deinok@deinok.com>
+---
+ package/mender-artifact/mender-artifact.hash | 2 +-
+ package/mender-artifact/mender-artifact.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Everything is fine, but I have a problem with the kernel. The kernel
-is provided in form of a tarball, but inside the tarball also drivers
-are present. The contents of the tarball, once expanded, can be
-summarized as:
-
-source folder
-* kernel folder
-* first folder with a bunch of drivers
-* other folder with other drivers
-
-The contents of the content is not compatible with the tarball
-mechanism provided by buildroot, which expands the the tarball and
-expects to find the kernel sources at the first level. Moreover,
-drivers seem to have some hard coded paths to the kernel source.
-
-I would like to avoid patching the build script in buildroot. Is there
-a way to change the way the kernel is compiled by using scripts in an
-external layer? In chapter 9 of the buildroot I find many tools to
-change/add the packages, but I am not able to find a way to change the
-way the kernel is compiled.
-
-Thank you for your suggestions,
-
-Ottavio
-
+diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
+index d44244d31c..06b317f55e 100644
+--- a/package/mender-artifact/mender-artifact.hash
++++ b/package/mender-artifact/mender-artifact.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 fde448af4811600a130b243d59e21b1f9cdd60fd991bd418246c913ebf945206 2.4.0.tar.gz
++sha256 b1b80822282a750c3f94cf4954ac4b1de5a86a7a9c1c7f2541aaf21417a0ff5f 3.0.0.tar.gz
+ 
+ # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
+ # following command:
+diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
+index 90d0071d1a..41b7bd8040 100644
+--- a/package/mender-artifact/mender-artifact.mk
++++ b/package/mender-artifact/mender-artifact.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HOST_MENDER_ARTIFACT_VERSION = 2.4.0
++HOST_MENDER_ARTIFACT_VERSION = 3.0.0
+ HOST_MENDER_ARTIFACT_SITE = https://github.com/mendersoftware/mender-artifact/archive
+ HOST_MENDER_ARTIFACT_SOURCE = $(HOST_MENDER_ARTIFACT_VERSION).tar.gz
+ HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT
 -- 
-Non c'? pi? forza nella normalit?, c'? solo monotonia
+2.17.1
