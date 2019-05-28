@@ -1,36 +1,59 @@
-From: Jonah Petri <jonah@petri.us>
-Date: Tue, 28 May 2019 16:43:34 -0400
-Subject: [Buildroot] [PATCH 1/1] package/systemd: fix memory leak in
- systemd-journald
-In-Reply-To: <41542c46-571d-aabe-7cc4-3b90015ed24f@mind.be>
-References: <1559061746-21387-1-git-send-email-jonah@petri.us>
- <41542c46-571d-aabe-7cc4-3b90015ed24f@mind.be>
-Message-ID: <455D57E0-02D2-4C84-8507-E1DAEB6DEBA5@petri.us>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Tue, 28 May 2019 22:44:11 +0200
+Subject: [Buildroot] [PATCH/next v2 1/1] package/libubootenv: fix build
+ with musl and static lib
+In-Reply-To: <20190526210539.52863351@windsurf>
+References: <1558542756-8919-1-git-send-email-pjtexier@koncepto.io>
+ <20190526210539.52863351@windsurf>
+Message-ID: <b68fd2d1-301d-d2cc-66b1-26a43a6e137c@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> On 28/05/2019 18:42, Jonah Petri wrote:
->> Systemd-journald would leak memory when recording process info.  Add
->> patch files from upstream systemd.  Note that the patch from 2d5d2e0cc5
->> was taken as well in order to make the needed commit apply cleanly.
->> Bug report: https://github.com/systemd/systemd/issues/11502
->> Accepted patch: https://github.com/systemd/systemd/pull/11527
-> 
-> Just to be clear (Johan, correct me if I'm wrong), this is for 2019.02 only.
-> The patches are already included in v241 on master.
-> 
+Hello Thomas,
 
-Yes, sorry, I should have been clear on that.  This is for 2019.02 only.  Also, I should have referenced the bugzilla bug:
+Le 26/05/2019 ? 21:05, Thomas Petazzoni a ?crit?:Fixes:
+> Thanks for the patch. I have applied to next, but a few things were not
+> completely perfect.
+>
+> First of all, this patch is fixing two separate build issues, which
+> require separate libubootenv patches. So it should have been two
+> Buildroot patches.
 
-https://bugs.busybox.net/show_bug.cgi?id=11911 <https://bugs.busybox.net/show_bug.cgi?id=11911>
+Thanks for the feedback.
+>
+>>   ...sts.txt-do-not-force-the-build-of-a-share.patch | 46 ++++++++++++++++++++++
+>>   .../0001-uboot_env-fix-build-with-musl-libc.patch  | 31 +++++++++++++++
+>>   ...nv-fix-compilation-for-glibc-version-2.28.patch | 40 +++++++++++++++++++
+>>   3 files changed, 117 insertions(+)
+>>   create mode 100644 package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
+>>   create mode 100644 package/libubootenv/0001-uboot_env-fix-build-with-musl-libc.patch
+> You create two patches named 0001, and there was already one, so the
+> numbering was no longer correct.
 
-Best,
-Jonah
+Indeed, it is true that I forgot to pay attention to this.
+I'll be more vigilant next time.
 
+Regards
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190528/1f977289/attachment.html>
+Pierre-Jean
+>
+>> diff --git a/package/libubootenv/0001-uboot_env-fix-build-with-musl-libc.patch b/package/libubootenv/0001-uboot_env-fix-build-with-musl-libc.patch
+>> new file mode 100644
+>> index 0000000..605b40a
+>> --- /dev/null
+>> +++ b/package/libubootenv/0001-uboot_env-fix-build-with-musl-libc.patch
+>> @@ -0,0 +1,31 @@
+>> +From 113a4ea9ec48b9428b3abac21ecca7d8f11502fe Mon Sep 17 00:00:00 2001
+>> +From: Pierre-Jean Texier <pjtexier@koncepto.io>
+>> +Date: Tue, 21 May 2019 21:32:27 +0200
+>> +Subject: [libubootenv][PATCH 1/2] uboot_env: fix build with musl libc
+> Please generate patches with "git format-patch -N" to avoid the "x/y"
+> in "PATCH x/y". Indeed, this 1/2 doesn't make sense: this patch is in
+> fact part of a series of 4 patches!
+>
+> Best regards,
+>
+> Thomas
