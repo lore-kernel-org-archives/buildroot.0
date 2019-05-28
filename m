@@ -1,60 +1,35 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 28 May 2019 10:58:15 +0200
-Subject: [Buildroot] [PATCH v2 7/7] package/flashbench: remove old check
- if BR2_microblaze & BR2_sh2a
-In-Reply-To: <20190524231859.380b11f3@windsurf>
-References: <10430096-81de-792a-8b49-c59ed5e9de2e@micronovasrl.com>
- <20190522135906.30796-1-giulio.benetti@micronovasrl.com>
- <20190522135906.30796-8-giulio.benetti@micronovasrl.com>
- <20190524231859.380b11f3@windsurf>
-Message-ID: <ba8dfba9-e3e6-d93d-172f-31db3eafc2fe@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 28 May 2019 11:14:26 +0200
+Subject: [Buildroot] [PATCH]
+ toolchain/toolchain-external/toolchain-external-andes-nds32: add missing
+ dependencies/select
+Message-ID: <20190528091426.10302-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+This external toolchain is pre-built for x86, so it can only work on
+x86 and x86-64, and for the latter, the ia32 libraries are necessary.
 
-Il 24/05/2019 23:18, Thomas Petazzoni ha scritto:
-> Hello,
-> 
-> On Wed, 22 May 2019 15:59:06 +0200
-> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
-> 
->> Commit:
->> https://git.buildroot.net/buildroot/commit/?id=bad25aff36b70b55b34ea4580b45f657385ae9ac
->> removed sourcery toolchain already deprecated in 2014 causing build
->> failure. It was based on Gcc 4.6.2 and Buildroot doesn't use this
->> anymore.
-> 
-> This explanation is quite fuzzy. What is the relationship between the
-> removal of those toolchains and this particular issue ? 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../toolchain-external/toolchain-external-andes-nds32/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I improve commit log.
-
->Also this commit only removes Microblaze toolchains, not SH2A toolchains.
-
-I've messed up, I need to remove BR2_microblaze only.
-
-> Since when the LLONG_MAX issue has been fixed ?
-
-Need to check and report on commit log.
-
-Best regards
+diff --git a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
+index 2596fc3c8b..9c937b8c44 100644
+--- a/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-andes-nds32/Config.in
+@@ -2,6 +2,8 @@ config BR2_TOOLCHAIN_EXTERNAL_ANDES_NDS32
+ 	bool "Andes nds32"
+ 	depends on BR2_nds32
+ 	depends on !BR2_STATIC_LIBS
++	depends on BR2_HOSTARCH = "x86_64" || BR2_HOSTARCH = "x86"
++	select BR2_HOSTARCH_NEEDS_IA32_LIBS
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_17
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
-
-> Best regards,
-> 
-> Thomas
-> 
+2.21.0
