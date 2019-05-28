@@ -1,59 +1,27 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 28 May 2019 14:44:55 +0200
-Subject: [Buildroot] [PATCH] package/dropbear: add missing BSD-3-Clause
- license
-In-Reply-To: <20190528124102.21981-1-yegorslists@googlemail.com>
-References: <20190528124102.21981-1-yegorslists@googlemail.com>
-Message-ID: <CAGm1_kttn7Ae5YM22rzmt_04P45JCg+usSTEMrTE0A6R6ar-wA@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 28 May 2019 13:12:44 +0000
+Subject: [Buildroot] [Bug 11916] getfattr 2.4.48 issue
+In-Reply-To: <bug-11916-163@https.bugs.busybox.net/>
+References: <bug-11916-163@https.bugs.busybox.net/>
+Message-ID: <bug-11916-163-JUs6fbCtog@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, May 28, 2019 at 2:41 PM <yegorslists@googlemail.com> wrote:
->
-> From: Yegor Yefremov <yegorslists@googlemail.com>
->
-> According to the LICENSE file curve25519-donna is licensed under
-> BSD-3-Clause license.
->
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
->  package/dropbear/dropbear.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-> index e10c851606..c1a27f85c5 100644
-> --- a/package/dropbear/dropbear.mk
-> +++ b/package/dropbear/dropbear.mk
-> @@ -7,7 +7,7 @@
->  DROPBEAR_VERSION = 2019.78
->  DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
->  DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
-> -DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause
-> +DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause, BSD-3-Clause
->  DROPBEAR_LICENSE_FILES = LICENSE
->  DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
->  DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
-> --
-> 2.17.0
->
+https://bugs.busybox.net/show_bug.cgi?id=11916
 
-Btw what part of the LICENSE file shows at BSD-2-Clause-like license?
+--- Comment #1 from Jean-pierre Cartal <jpcartal@free.fr> ---
+Created attachment 8061
+  --> https://bugs.busybox.net/attachment.cgi?id=8061&action=edit
+Patch to avoid symbol version lookup issue
 
-I see only this:
+This patch solves the issue by not linking setfattr and getfattr with libattr,
+and thus use the glibc version of the *xattr() functions.
 
-loginrec.c
-loginrec.h
-atomicio.h
-atomicio.c
-and strlcat() (included in util.c) are from OpenSSH 3.6.1p2, and are licensed
-under the 2 point BSD license.
+Add the libattr to only attr linking command where it is really needed.
 
-loginrec is written primarily by Andre Lucas, atomicio.c by Theo de Raadt.
-
-strlcat() is (c) Todd C. Miller
-
-Regards,
-Yegor
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
