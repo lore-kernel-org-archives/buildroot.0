@@ -1,59 +1,61 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Tue, 28 May 2019 22:44:11 +0200
-Subject: [Buildroot] [PATCH/next v2 1/1] package/libubootenv: fix build
- with musl and static lib
-In-Reply-To: <20190526210539.52863351@windsurf>
-References: <1558542756-8919-1-git-send-email-pjtexier@koncepto.io>
- <20190526210539.52863351@windsurf>
-Message-ID: <b68fd2d1-301d-d2cc-66b1-26a43a6e137c@koncepto.io>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 28 May 2019 22:48:19 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/wireshark: fix static build with snappy
+In-Reply-To: <20190528224235.7b5a2647@windsurf.home>
+References: <20190528203230.24558-1-fontaine.fabrice@gmail.com>
+ <20190528224235.7b5a2647@windsurf.home>
+Message-ID: <CAPi7W81VmJbfES03hTnJte8L+9sA_cRExo7jJ9iCs68iq63ZHg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Dear Thomas and Arnout,
 
-Le 26/05/2019 ? 21:05, Thomas Petazzoni a ?crit?:Fixes:
-> Thanks for the patch. I have applied to next, but a few things were not
-> completely perfect.
+Le mar. 28 mai 2019 ? 22:42, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
 >
-> First of all, this patch is fixing two separate build issues, which
-> require separate libubootenv patches. So it should have been two
-> Buildroot patches.
-
-Thanks for the feedback.
+> Hello,
 >
->>   ...sts.txt-do-not-force-the-build-of-a-share.patch | 46 ++++++++++++++++++++++
->>   .../0001-uboot_env-fix-build-with-musl-libc.patch  | 31 +++++++++++++++
->>   ...nv-fix-compilation-for-glibc-version-2.28.patch | 40 +++++++++++++++++++
->>   3 files changed, 117 insertions(+)
->>   create mode 100644 package/libubootenv/0001-src-CMakeLists.txt-do-not-force-the-build-of-a-share.patch
->>   create mode 100644 package/libubootenv/0001-uboot_env-fix-build-with-musl-libc.patch
-> You create two patches named 0001, and there was already one, so the
-> numbering was no longer correct.
-
-Indeed, it is true that I forgot to pay attention to this.
-I'll be more vigilant next time.
-
-Regards
-
-Pierre-Jean
+> On Tue, 28 May 2019 22:32:30 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 >
->> diff --git a/package/libubootenv/0001-uboot_env-fix-build-with-musl-libc.patch b/package/libubootenv/0001-uboot_env-fix-build-with-musl-libc.patch
->> new file mode 100644
->> index 0000000..605b40a
->> --- /dev/null
->> +++ b/package/libubootenv/0001-uboot_env-fix-build-with-musl-libc.patch
->> @@ -0,0 +1,31 @@
->> +From 113a4ea9ec48b9428b3abac21ecca7d8f11502fe Mon Sep 17 00:00:00 2001
->> +From: Pierre-Jean Texier <pjtexier@koncepto.io>
->> +Date: Tue, 21 May 2019 21:32:27 +0200
->> +Subject: [libubootenv][PATCH 1/2] uboot_env: fix build with musl libc
-> Please generate patches with "git format-patch -N" to avoid the "x/y"
-> in "PATCH x/y". Indeed, this 1/2 doesn't make sense: this patch is in
-> fact part of a series of 4 patches!
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/419468f0d7d3c2b64d420513aa9505c6de097ed2
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > ---
+> > Changes v1 -> v2 (after review of Arnout Vandecappelle):
+> >  - Set linker to CXX instead of adding -lstdc++ to LIBS
+>
+> Is this really the right thing to do? Ideally a program written in C
+> should not have to know that a library it is using is written in C++.
+>
+> We already had a similar situation in Buildroot, and so far we have
+> added -lstdc++. For example:
+>
+> ifeq ($(BR2_PACKAGE_DIRECTFB),y)
+> LINKS_CONF_ENV = ac_cv_path_DIRECTFB_CONFIG=$(STAGING_DIR)/usr/bin/directfb-config
+> ifeq ($(BR2_STATIC_LIBS),y)
+> LINKS_CONF_ENV += LIBS=-lstdc++
+>
+> and there's a few other examples in the tree. To be honest, I don't
+> know what is the most correct solution, I'm just trying to make sure we
+> solve a given problem in the same way everywhere.
+I don't know either. You can apply the first or the second version of
+this patch.
+Then, I'll send the chosen version upstream. If they don't like it,
+I'll have the second solution as a fallback.
 >
 > Best regards,
 >
 > Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
+
+Fabrice
