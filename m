@@ -1,94 +1,106 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 28 May 2019 21:14:23 +0200
-Subject: [Buildroot] [PATCH v2] mfgtools: bump version to 1.2.91
-In-Reply-To: <20190526171021.GA20322@t450s.lan>
-References: <20190525141800.3991-1-bisson.gary@gmail.com>
- <20190526144628.1f0a246a@windsurf> <20190526171021.GA20322@t450s.lan>
-Message-ID: <50480e682caca0ad40949ed4de23e4eb6c36ae67.camel@embedded.rocks>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 28 May 2019 21:17:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wpewebkit: fix build with musl
+Message-ID: <20190528191704.25405-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Gary,
+Fixes:
+ - http://autobuild.buildroot.org/results/c703d45ab691641beabc3440f081a8bc195b4a23
 
-On Sun, 2019-05-26 at 19:10 +0200, Gary Bisson wrote:
-> Hi Thomas,
-> 
-> On Sun, May 26, 2019 at 02:46:28PM +0200, Thomas Petazzoni wrote:
-> > Hello Gary,
-> > 
-> > On Sat, 25 May 2019 16:18:00 +0200
-> > Gary Bisson <bisson.gary@gmail.com> wrote:
-> > 
-> > > NXP deprecated the old mfgtools code, also called mfgtools v2 although
-> > > the releases were named v0.xx.
-> > > 
-> > > It has been replaced by the Universal Update Utility (uuu), also called
-> > > mfgtools v3 although the releases are named v1.x.yy.
-> > > 
-> > > This new tool actually resides in the same repository in the master
-> > > branch whereas the old one is now in a 'linux' branch.
-> > > 
-> > > Since the old tool has issues building lately, let's switch to the new
-> > > one. Note that uuu seems to be cleaner, supports much more features
-> > > (i.MX8/8M/8QXP boot, fastboot etc..) and has a better documentation:
-> > > https://github.com/NXPmicro/mfgtools/wiki
-> > > 
-> > > Signed-off-by: Gary Bisson <bisson.gary@gmail.com>
-> > 
-> > Thanks for this patch. Unfortunately, it fails to build on my system,
-> > with:
-> > 
-> > [100%] Linking CXX executable uuu
-> > /usr/bin/ld: cannot find -lstdc++
-> > collect2: error: ld returned 1 exit status
-> > 
-> > This is because it is passing -static-libstdc++ at link time, for some
-> > odd reason.
-> > 
-> > Do you know why they are doing:
-> > 
-> > set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -static-libstdc++ -static-libgcc")
-> > 
-> > in uuu/CMakeLists.txt. This seems pretty bogus for something that
-> > should be just a regular user-space program.
-> > 
-> > Could you have a look into this ?
-> 
-> My understanding, looking at the git history and other comments, is that
-> this tool is meant to be build for Windows/Linux/Mac OSes. And
-> apparently Windows only supports to build statically.
-> 
-> You can see that someone removed that line for the 'APPLE' build, so
-> I've offered a pull-request to NXP to only do so for WIN32 instead [1].
-> 
-> However, while writing that PR, I linked to this thread archive and
-> realized Joerg is already offering a patch for mfgtools [2].
-> 
-> Adding Joerg to this thread then, I'll let you guys know if the PR is
-> accepted. @Joerg, let me know if you want to do the next patch version,
-> no need to do the same work twice ;)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../wpewebkit/0001-Fix-build-with-musl.patch  | 79 +++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+ create mode 100644 package/wpewebkit/0001-Fix-build-with-musl.patch
 
-I'm fine if you take over and integrate the overwrite gen_ver.sh hook
-as it solves a runtime issue.
-
-> BTW, I saw that you made a change for the git commit version, I'd
-> suggest sending a PR for that too instead of patching it in Buildroot.
-
-This change is not upstreamable. There has been a discussion upstream
-about missing gitversion.h in source tarballs: 
-https://github.com/NXPmicro/mfgtools/issues/77
-
-The conclusion was, that upstream does not support building uuu from a
-tarball. Therefore, the hook to overwrite the git version logic.
-
-> Regards,
-> Gary
-> 
-> [1] https://github.com/NXPmicro/mfgtools/pull/105
-> [2] http://lists.busybox.net/pipermail/buildroot/2019-May/249362.html
-
-Best regards
-J?rg Krause
+diff --git a/package/wpewebkit/0001-Fix-build-with-musl.patch b/package/wpewebkit/0001-Fix-build-with-musl.patch
+new file mode 100644
+index 0000000000..a436adf6ce
+--- /dev/null
++++ b/package/wpewebkit/0001-Fix-build-with-musl.patch
+@@ -0,0 +1,79 @@
++From cc3c27a7e997ef157ed469127f185a7bb6eb1feb Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 27 May 2019 23:51:32 +0200
++Subject: [PATCH] Fix build with musl
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++[Retrieved (and slightly updated) from:
++https://github.com/WebPlatformForEmbedded/meta-wpe/blob/master/recipes-wpe/wpewebkit/wpewebkit/0001-Fix-build-with-musl.patch]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Source/JavaScriptCore/runtime/MachineContext.h | 10 +++++-----
++ Source/WTF/wtf/Platform.h                      |  2 +-
++ 2 files changed, 6 insertions(+), 6 deletions(-)
++
++diff --git a/Source/JavaScriptCore/runtime/MachineContext.h b/Source/JavaScriptCore/runtime/MachineContext.h
++index bf0bdc7a51a..78d2ec81838 100644
++--- a/Source/JavaScriptCore/runtime/MachineContext.h
+++++ b/Source/JavaScriptCore/runtime/MachineContext.h
++@@ -146,7 +146,7 @@ inline void*& stackPointer(mcontext_t& machineContext)
++ #error Unknown Architecture
++ #endif
++
++-#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
+++#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__) 
++ 
++ #if CPU(X86)
++     return reinterpret_cast<void*&>((uintptr_t&) machineContext.gregs[REG_ESP]);
++@@ -251,7 +251,7 @@ inline void*& framePointer(mcontext_t& machineContext)
++ #error Unknown Architecture
++ #endif
++
++-#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
+++#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__) 
++ 
++ // The following sequence depends on glibc's sys/ucontext.h.
++ #if CPU(X86)
++@@ -354,7 +354,7 @@ inline void*& instructionPointer(mcontext_t& machineContext)
++ #error Unknown Architecture
++ #endif
++ 
++-#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
+++#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__)
++ 
++ // The following sequence depends on glibc's sys/ucontext.h.
++ #if CPU(X86)
++@@ -466,7 +466,7 @@ inline void*& argumentPointer<1>(mcontext_t& machineContext)
++ #error Unknown Architecture
++ #endif
++
++-#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
+++#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__) 
++ 
++ // The following sequence depends on glibc's sys/ucontext.h.
++ #if CPU(X86)
++@@ -583,7 +583,7 @@ inline void*& llintInstructionPointer(mcontext_t& machineContext)
++ #error Unknown Architecture
++ #endif
++
++-#elif OS(FUCHSIA) || defined(__GLIBC__) || defined(__BIONIC__)
+++#elif OS(FUCHSIA) || OS(LINUX) || defined(__BIONIC__) 
++ 
++ // The following sequence depends on glibc's sys/ucontext.h.
++ #if CPU(X86)
++diff --git a/Source/WTF/wtf/Platform.h b/Source/WTF/wtf/Platform.h
++index e2a3388993f..95fe7c593cf 100644
++--- a/Source/WTF/wtf/Platform.h
+++++ b/Source/WTF/wtf/Platform.h
++@@ -683,7 +683,7 @@
++ #define HAVE_CFNETWORK_STORAGE_PARTITIONING 1
++ #endif
++
++-#if OS(DARWIN) || OS(FUCHSIA) || ((OS(FREEBSD) || defined(__GLIBC__) || defined(__BIONIC__)) && (CPU(X86) || CPU(X86_64) || CPU(ARM) || CPU(ARM64) || CPU(MIPS)))
+++#if OS(DARWIN) || OS(FUCHSIA) || ((OS(FREEBSD) || OS(LINUX) || defined(__BIONIC__)) && (CPU(X86) || CPU(X86_64) || CPU(ARM) || CPU(ARM64) || CPU(MIPS))) 
++ #define HAVE_MACHINE_CONTEXT 1
++ #endif
++ 
++-- 
++2.20.1
++
+-- 
+2.20.1
