@@ -1,30 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 28 May 2019 11:32:22 +0200
-Subject: [Buildroot] [PATCH next 1/4] support/gnuconfig: update to
- 2019-05-28
-In-Reply-To: <20190528082938.5997-2-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Tue, 28 May 2019 10:29:34 +0200")
-References: <20190528082938.5997-1-thomas.petazzoni@bootlin.com>
- <20190528082938.5997-2-thomas.petazzoni@bootlin.com>
-Message-ID: <87imtu7wm1.fsf@dell.be.48ers.dk>
+From: Valerio Crini <vcrini@gmail.com>
+Date: Tue, 28 May 2019 12:48:59 +0200
+Subject: [Buildroot] Npm install fails if package ships precompiled
+ binaries
+In-Reply-To: <5977f0cb-c6b0-f93c-40e7-d8920a527883@mind.be>
+References: <442f0048-d81d-8172-3efa-44cb80b34ac0@mind.be>
+ <CAH7nf8mdxiq2962Lch1xrkhpHms1nhoL+jXQNo22rYu6JPhttQ@mail.gmail.com>
+ <CAH7nf8=GgAb1Hnorb0QRQZ6Y5ByWEV=B7b12yxcDyFcSyJHpXw@mail.gmail.com>
+ <5977f0cb-c6b0-f93c-40e7-d8920a527883@mind.be>
+Message-ID: <CAO-fR8SLKG=xFDYCBRSaKgCu5zp+c6jM1fW=Q+Y17R9n9LTRwQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hi Arnout,
+I've prepared the patch on behalf of Stefano.
+Do you prefer I send the patch generated with
+https://buildroot.org/downloads/manual/manual.html#submitting-patches
+with *git send-email* or attached to this email?
 
- > This update includes support for the C-SKY architecture.
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- > ---
- > Note: this was suggested by Peter for next, instead of just patching
- > the files to add csky support. It should be applied after
- > cherry-picking 910b431d6383cd1ce4cd9eeb0a8466cb977c3789 from master.
+Il giorno dom 26 mag 2019 alle ore 15:09 Arnout Vandecappelle <
+arnout@mind.be> ha scritto:
 
-Gnuconfig isn't huge (~100KB), but I wonder if it wouldn't be nicer to
-add a normal package (E.G. host-gnuconfig) for it (and add it to
-_DEPENDENCIES for pkg-autotools.mk) instead of carrying the files ourselves.
-
--- 
-Bye, Peter Korsgaard
+>
+>
+> On 15/05/2019 15:07, Stefano Guandalini wrote:
+> > I'm building for ARM 64 on an x86_64 but I think the issue comes because
+> the npm
+> > package is shipped with binaries for "all" arch.
+>
+>  Okay, so we should exclude /usr/lib/node_modules from the architecture
+> check
+> then. This means we wouldn't capture the cases where the npm module really
+> doesn't supply binaries for the correct architecture. But I guess if you're
+> using npm, you're lost anyway :-P.
+>
+>  Stefano, care to prepare a patch that adds this exception to the IGNORES
+> list
+> in support/scripts/check-bin-arch (with the appropriate comment).
+>
+>  Regards,
+>  Arnout
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190528/36179e90/attachment-0001.html>
