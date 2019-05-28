@@ -1,57 +1,45 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 28 May 2019 18:24:11 +0300
-Subject: [Buildroot] [PATCH] package/nano: bump to version 4.2
-Message-ID: <65c0aeb30f578b75c7df32344a22b4f1c65526fd.1559057051.git.baruch@tkos.co.il>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 28 May 2019 18:10:26 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/lapack: bump version to 3.8.0
+Message-ID: <20190528161026.30217-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use the usual enable/disable options for the libmagic optional
-dependency.
+Release notes: http://www.netlib.org/lapack/lapack-3.8.0.html
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Added license hash, adjusted source tarball URL.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/lapack/lapack.hash | 3 ++-
+ package/lapack/lapack.mk   | 3 +--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index eae648d16ef8..b7fd6a6cfd9b 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v3/nano-3.2.tar.xz.asc
-+# https://www.nano-editor.org/dist/v4/nano-4.2.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256 d12773af3589994b2e4982c5792b07c6240da5b86c5aef2103ab13b401fe6349  nano-3.2.tar.xz
-+sha256 1143defce62e391b241252ffdb6e5c1ded56cfe26d46ee81b796abe0ccc45df9  nano-4.2.tar.xz
- sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 206d210a169d..8a315154d270 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/lapack/lapack.hash b/package/lapack/lapack.hash
+index fd3feef554..395087e199 100644
+--- a/package/lapack/lapack.hash
++++ b/package/lapack/lapack.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+-sha256 f6c53fd9f56932f3ddb3d5e24c1c07e4cd9b3b08e7f89de9c867125eecc9a1c8  lapack-3.7.1.tgz
++sha256 deb22cc4a6120bff72621155a9917f485f96ef8319ac074a7afbc68aab88bcf6  lapack-3.8.0.tar.gz
++sha256 d56bd4441b999b80c88df04faf0d8b3d7d3b2bd781cf91242c4188e8a6d0f8be  LICENSE
+diff --git a/package/lapack/lapack.mk b/package/lapack/lapack.mk
+index 4e74bbd659..3b59214e4b 100644
+--- a/package/lapack/lapack.mk
++++ b/package/lapack/lapack.mk
+@@ -4,8 +4,7 @@
  #
  ################################################################################
  
--NANO_VERSION_MAJOR = 3
-+NANO_VERSION_MAJOR = 4
- NANO_VERSION = $(NANO_VERSION_MAJOR).2
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
-@@ -24,8 +24,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_FILE),y)
- NANO_DEPENDENCIES += file
-+NANO_CONF_OPTS += --enable-libmagic
- else
--NANO_CONF_ENV += ac_cv_lib_magic_magic_open=no
-+NANO_CONF_OPTS += --disable-libmagic
- endif
- 
- ifeq ($(BR2_PACKAGE_NANO_TINY),y)
+-LAPACK_VERSION = 3.7.1
+-LAPACK_SOURCE = lapack-$(LAPACK_VERSION).tgz
++LAPACK_VERSION = 3.8.0
+ LAPACK_LICENSE = BSD-3-Clause
+ LAPACK_LICENSE_FILES = LICENSE
+ LAPACK_SITE = http://www.netlib.org/lapack
 -- 
 2.20.1
