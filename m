@@ -1,50 +1,123 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 May 2019 22:07:41 +0200
-Subject: [Buildroot] [PATCH next 1/4] support/gnuconfig: update to
- 2019-05-28
-In-Reply-To: <87imtu7wm1.fsf@dell.be.48ers.dk>
-References: <20190528082938.5997-1-thomas.petazzoni@bootlin.com>
- <20190528082938.5997-2-thomas.petazzoni@bootlin.com>
- <87imtu7wm1.fsf@dell.be.48ers.dk>
-Message-ID: <20190528220741.432e8d92@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 28 May 2019 22:22:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/wireshark: fix static build
+ with snappy
+In-Reply-To: <108308af-95ab-f0aa-243f-39368fc8aa51@mind.be>
+References: <20190526193431.22820-1-fontaine.fabrice@gmail.com>
+ <043a4286-f1ba-7989-aab3-8c10c0a6a639@mind.be>
+ <CAPi7W82-_WKmS6xY1i_hx8bT1Y61c_XA7Z97_Rahwc-Kn6mL3Q@mail.gmail.com>
+ <108308af-95ab-f0aa-243f-39368fc8aa51@mind.be>
+Message-ID: <CAPi7W818EK1X78K8TUsjauK6Ntc5XzsRQ8HZ66APBN88ksSAKA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Dear Arnout,
 
-On Tue, 28 May 2019 11:32:22 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+Le mar. 28 mai 2019 ? 10:01, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>
+>
+>
+> On 28/05/2019 08:55, Fabrice Fontaine wrote:
+> > Dear Arnout,
+> >
+> > Le mar. 28 mai 2019 ? 00:00, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+> >>
+> >>
+> >>
+> >> On 26/05/2019 21:34, Fabrice Fontaine wrote:
+> >>> Fixes:
+> >>>  - http://autobuild.buildroot.org/results/419468f0d7d3c2b64d420513aa9505c6de097ed2
+> >>>
+> >>> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >>> ---
+> >>>  .../0005-FindSNAPPY-fix-static-build.patch    | 36 +++++++++++++++++++
+> >>>  1 file changed, 36 insertions(+)
+> >>>  create mode 100644 package/wireshark/0005-FindSNAPPY-fix-static-build.patch
+> >>>
+> >>> diff --git a/package/wireshark/0005-FindSNAPPY-fix-static-build.patch b/package/wireshark/0005-FindSNAPPY-fix-static-build.patch
+> >>> new file mode 100644
+> >>> index 0000000000..1218dca4f2
+> >>> --- /dev/null
+> >>> +++ b/package/wireshark/0005-FindSNAPPY-fix-static-build.patch
+> >>> @@ -0,0 +1,36 @@
+> >>> +From db32ad65197060a4474fd61dec4daddc9f59b7af Mon Sep 17 00:00:00 2001
+> >>> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >>> +Date: Wed, 24 Apr 2019 22:57:58 +0200
+> >>> +Subject: [PATCH] FindSNAPPY: fix static build
+> >>> +
+> >>> +On UNIX, when statically built, snappy can depends on stdc++. This
+> >>> +dependency can't be retrieved through pkg-config as the latest version
+> >>> +of snappy (1.1.7) does not provide any .pc files so append -lstdc++
+> >>> +manually to SNAPPY_LIBRARIES
+> >>> +
+> >>> +Change-Id: Ia3b9c09fed77eb69bfbe011d7c49c8ecc63d45d1
+> >>
+> >>  This looks like it comes from https://code.wireshark.org/review but I can't
+> >> seem to find it there... What gives?
+> > This patch hasn't been sent upstream yet.
+>
+>  I seem to be making the wrong assumptions all the time :-)
+>
+>  But in that case, I'd like to understand the fix a bit better...
+>
+> >>
+> >>  Regards,
+> >>  Arnout
+> >>
+> >>> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >>> +---
+> >>> + cmake/modules/FindSNAPPY.cmake | 6 ++++++
+> >>> + 1 file changed, 6 insertions(+)
+> >>> +
+> >>> +diff --git a/cmake/modules/FindSNAPPY.cmake b/cmake/modules/FindSNAPPY.cmake
+> >>> +index 7964c9d145..ec5cf6fda8 100644
+> >>> +--- a/cmake/modules/FindSNAPPY.cmake
+> >>> ++++ b/cmake/modules/FindSNAPPY.cmake
+> >>> +@@ -37,6 +37,12 @@ find_package_handle_standard_args( SNAPPY DEFAULT_MSG SNAPPY_LIBRARY SNAPPY_INCL
+> >>> + if( SNAPPY_FOUND )
+> >>> +   set( SNAPPY_INCLUDE_DIRS ${SNAPPY_INCLUDE_DIR} )
+> >>> +   set( SNAPPY_LIBRARIES ${SNAPPY_LIBRARY} )
+> >>> ++  # Include transitive dependencies for static linking.
+> >>> ++  # Unfortunately snappy 1.1.7 does not provide any pc file so pkg-config can't
+> >>> ++  # be used to retrieve lstdc++ dependency so add it manually
+> >>> ++  if(UNIX)
+> >>> ++    list( APPEND SNAPPY_LIBRARIES -lstdc++ )
+>
+>  I think the real problem is that linking happens with gcc instead of g++,
+> right? -lstdc++ should be added automatically while linking (just like -lc). And
+> it's important that this is done automatically, because in general it could be
+> -lc++ instead of -lstdc++ (and who knows what it would be on MSVC++ and whatever
+> crazy compilers are used to build Wireshark...).
+>
+>  So I think the real fix is to force linking with g++ instead of gcc when snappy
+> is included. Unfortunately, I have no idea how to do that in CMake...
+We can do it through:
+if(SNAPPY_FOUND)
+        set_target_properties(tfshark PROPERTIES LINKER_LANGUAGE CXX)
+endif()
+However, we'll have to copy/paste these lines for the 6 executables
+that use the epan library (which links with snappy).
+I can send a v2 with this proposal and sent it upstream.
+>
+>  Regards,
+>  Arnout
+>
+>
+> >>> ++  endif()
+> >>> +   if (WIN32)
+> >>> +     set ( SNAPPY_DLL_DIR "${SNAPPY_HINTS}/bin"
+> >>> +       CACHE PATH "Path to Snappy DLL"
+> >>> +--
+> >>> +2.20.1
+> >>> +
+> >>>
+> > Best Regards,
+> >
+> > Fabrice
+> >
+Best Regards,
 
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:  
-> 
->  > This update includes support for the C-SKY architecture.
->  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->  > ---
->  > Note: this was suggested by Peter for next, instead of just patching
->  > the files to add csky support. It should be applied after
->  > cherry-picking 910b431d6383cd1ce4cd9eeb0a8466cb977c3789 from master.  
-> 
-> Gnuconfig isn't huge (~100KB), but I wonder if it wouldn't be nicer to
-> add a normal package (E.G. host-gnuconfig) for it (and add it to
-> _DEPENDENCIES for pkg-autotools.mk) instead of carrying the files ourselves.
-
-It seemed like a good idea, so I took a stab at that. Unfortunately,
-our main Makefile has:
-
-GNU_HOST_NAME := $(shell support/gnuconfig/config.guess)
-
-which doesn't play very well with removing config.guess from
-support/gnuconfig/config.guess. Of course, we could keep
-support/gnuconfig/config.guess just for that purpose, and use
-host-gnuconfig for everything else, but it doesn't look great.
-
-Suggestions?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fabrice
