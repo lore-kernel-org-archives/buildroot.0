@@ -1,22 +1,29 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 May 2019 17:32:21 +0000
-Subject: [Buildroot] [Bug 11911] systemd v240 memory leak in
- systemd-journald (buildroot 2019.02 LTS affected)
-In-Reply-To: <bug-11911-163@https.bugs.busybox.net/>
-References: <bug-11911-163@https.bugs.busybox.net/>
-Message-ID: <bug-11911-163-5m7JZVPY8s@https.bugs.busybox.net/>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 28 May 2019 20:03:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/systemd: fix memory leak in
+ systemd-journald
+In-Reply-To: <1559061746-21387-1-git-send-email-jonah@petri.us>
+References: <1559061746-21387-1-git-send-email-jonah@petri.us>
+Message-ID: <41542c46-571d-aabe-7cc4-3b90015ed24f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11911
 
---- Comment #4 from Jonah <jonah@sense.com> ---
-Thanks, I submitted a patch to the list covering the addition of commit
-2d5d2e0cc5 in addition to eb1ec489ee.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+On 28/05/2019 18:42, Jonah Petri wrote:
+> Systemd-journald would leak memory when recording process info.  Add
+> patch files from upstream systemd.  Note that the patch from 2d5d2e0cc5
+> was taken as well in order to make the needed commit apply cleanly.
+> Bug report: https://github.com/systemd/systemd/issues/11502
+> Accepted patch: https://github.com/systemd/systemd/pull/11527
+
+ Just to be clear (Johan, correct me if I'm wrong), this is for 2019.02 only.
+The patches are already included in v241 on master.
+
+ Regards,
+ Arnout
+
+[snip]
