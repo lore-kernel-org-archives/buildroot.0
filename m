@@ -1,60 +1,57 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Tue, 28 May 2019 15:54:21 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-05-26
-In-Reply-To: <20190527060054.C8BD222176@silver.osuosl.org>
-References: <20190527060054.C8BD222176@silver.osuosl.org>
-Message-ID: <20190528155421.GB2515@momiji>
+From: Paulo Matos <pmatos@igalia.com>
+Date: Tue, 28 May 2019 15:57:53 +0200
+Subject: [Buildroot] board/ci20 uboot problems due to fdt headers
+Message-ID: <8811f1b8-8019-912c-a54a-331aabcedbd1@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hello,
 
-On Mon, 27 May 2019 06:00:47 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> Hello,
-> 
-> Build statistics for 2019-05-26
-> ===============================
-> 
->       branch |  OK | NOK | TIM | TOT |
->    2019.02.x |  10 |   0 |   1 |  11 |
->       master | 164 |  15 |   1 | 180 |
->         next |  48 |  20 |   0 |  68 |
-> 
-> Results for branch 'next'
-> =========================
-> 
-> Classification of failures by reason
-> ------------------------------------
-> 
->                     dhcp-4.4.1 | 6 
->              iputils-s20190515 | 3 
->                       iwd-0.13 | 2 
->                       ell-0.20 | 1 
-> libcamera-ab0188fc8bbb6f397... | 1 
->           libcdaudio-0.99.12p2 | 1 
->                   libssh-0.8.7 | 1 
-> libubootenv-8a7d4030bcb106d... | 1 
->                 openzwave-v1.6 | 1 
->        python-matplotlib-3.0.3 | 1 
->                 qt5base-5.12.2 | 1 
->           wpebackend-fdo-1.0.1 | 1 
+I am attempting to build ci20 board on an archlinux host.
+I am getting several errors build uboot that look like:
 
-This failure should not appear anymore now that wpebackend-fdo has been
-updated to version 1.2.0: it was caused by having the update to libwpe
-version 1.2.0 before the one for wpebackend-fdo ? next time I do a group
-of updates for WPE WebKit components I will make it explicit in the cover
-letter which ones cannot be merged isolated.
- 
-Cheers,
-?Adri?n
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: not available
-Type: application/pgp-signature
-Size: 195 bytes
-Desc: not available
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190528/a17fde64/attachment.asc>
+
+/usr/bin/gcc -O2 -isystem
+/home/pmatos/Projects/igalia/buildroot/output/host/include -Wall
+-Wstrict-prototypes -O2 -fomit-frame-pointer -include
+/home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include/libfdt_env.h
+-idirafter
+/home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include
+-idirafter
+/home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include2
+-idirafter
+/home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include
+-I
+/home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/lib/libfdt
+-I
+/home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/tools
+-DCONFIG_SYS_TEXT_BASE=0x80000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES
+-D_GNU_SOURCE   -o fit_image.o fit_image.c -c
+In file included from ../include/libfdt.h:54,
+                 from fdt_host.h:11,
+                 from mkimage.h:22,
+                 from aisimage.c:8:
+/usr/include/libfdt_env.h:71:30: error: conflicting types for ?fdt64_t?
+ typedef uint64_t FDT_BITWISE fdt64_t;
+                              ^~~~~~~
+In file included from <command-line>:
+/home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include/libfdt_env.h:19:16:
+note: previous declaration of ?fdt64_t? was here
+ typedef __be64 fdt64_t;
+                ^~~~~~~
+
+
+This seems to be related to a previous thread that seemed to end up
+saying 'we have fixed that'.
+
+http://lists.busybox.net/pipermail/buildroot/2018-April/217653.html
+
+Does anyone know what the status of this is? As far as I understood the
+problem is related to possible include headers installed in the host
+clashing with the ones distributed with buildroot.
+
+-- 
+Paulo Matos
