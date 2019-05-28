@@ -1,26 +1,53 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Tue, 28 May 2019 22:08:26 +0000
-Subject: [Buildroot] [Bug 11921] dahdi fails to build
-In-Reply-To: <bug-11921-163@https.bugs.busybox.net/>
-References: <bug-11921-163@https.bugs.busybox.net/>
-Message-ID: <bug-11921-163-XKeydEwJzk@https.bugs.busybox.net/>
+From: Robert Hancock <hancock@sedsystems.ca>
+Date: Tue, 28 May 2019 17:40:28 -0600
+Subject: [Buildroot] [PATCH] package/chrony: add option for debug logging
+Message-ID: <1559086828-14718-1-git-send-email-hancock@sedsystems.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11921
+Add a BR2_PACKAGE_CHRONY_DEBUG_LOGGING config option to allow enabling
+compiled-in support for debug logging in Chrony. Enable by default as
+this makes it much easier to debug Chrony issues and should only be
+disabled by those very sensitive to binary size.
 
---- Comment #3 from Davide Viti <zinosat@gmail.com> ---
-I've dropped the patches in "package/dahdi-linux/" and can see them applied.
+Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
+---
+ package/chrony/Config.in | 8 ++++++++
+ package/chrony/chrony.mk | 3 ++-
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
-I've tried to switch to version 3.0.0 and it now builds fine: will try to
-provide a patch
-
-thank you,
-Davide
-
+diff --git a/package/chrony/Config.in b/package/chrony/Config.in
+index 05d6fc1..b295e8d 100644
+--- a/package/chrony/Config.in
++++ b/package/chrony/Config.in
+@@ -6,3 +6,11 @@ config BR2_PACKAGE_CHRONY
+ 	  accuracy of the system clock.
+ 
+ 	  http://chrony.tuxfamily.org/
++
++config BR2_PACKAGE_CHRONY_DEBUG_LOGGING
++	bool "enable debug logging support"
++	default y
++	depends on BR2_PACKAGE_CHRONY
++	help
++	  Enable support for debug logging output from Chrony when enabled at
++	  runtime. If disabled, code for debug logging will not be compiled in.
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index b5821b2..2d03fce 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -13,7 +13,8 @@ CHRONY_CONF_OPTS = \
+ 	--host-system=Linux \
+ 	--host-machine=$(BR2_ARCH) \
+ 	--prefix=/usr \
+-	--without-tomcrypt
++	--without-tomcrypt \
++	$(if $(BR2_PACKAGE_CHRONY_DEBUG_LOGGING),--enable-debug,--disable-debug)
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ CHRONY_DEPENDENCIES += libcap
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+1.8.3.1
