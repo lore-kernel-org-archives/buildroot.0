@@ -1,74 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 May 2019 22:42:31 +0200
-Subject: [Buildroot] [PATCH 2/2] package/mender: better default
- mender.config
-In-Reply-To: <bc22f4e8-6547-5d9a-a50b-f60c42cf438c@mind.be>
-References: <20190528134105.30572-1-deinok@deinok.com>
- <20190528134105.30572-2-deinok@deinok.com>
- <bc22f4e8-6547-5d9a-a50b-f60c42cf438c@mind.be>
-Message-ID: <4c688d74-093a-dff4-20b4-f0baabb11465@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 28 May 2019 22:42:35 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/wireshark: fix static build with snappy
+In-Reply-To: <20190528203230.24558-1-fontaine.fabrice@gmail.com>
+References: <20190528203230.24558-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190528224235.7b5a2647@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello,
 
+On Tue, 28 May 2019 22:32:30 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-On 28/05/2019 20:28, Arnout Vandecappelle wrote:
->  Hi Raul,
+> Fixes:
+>  - http://autobuild.buildroot.org/results/419468f0d7d3c2b64d420513aa9505c6de097ed2
 > 
-> On 28/05/2019 15:41, deinok at deinok.com wrote:
->> From: Raul Hidalgo Caballero <deinok@deinok.com>
->>
-> 
->  Please give a better explanation than "better" :-). The summary line is OK, but
-> the body of the commit message should specify why it is better. Even if the
-> explanation is obvious, like I say below.
-> 
->> Signed-off-by: Raul Hidalgo Caballero <deinok@deinok.com>
->> ---
->>  package/mender/mender.conf | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/package/mender/mender.conf b/package/mender/mender.conf
->> index 979f16aaf6..7eb9fb18b4 100644
->> --- a/package/mender/mender.conf
->> +++ b/package/mender/mender.conf
->> @@ -2,9 +2,9 @@
->>    "InventoryPollIntervalSeconds": 1800,
->>    "UpdatePollIntervalSeconds": 1800,
->>    "RetryPollIntervalSeconds": 300,
->> -  "RootfsPartA": "mmcblk0p2",
->> -  "RootfsPartB": "mmcblk0p3",
->> +  "RootfsPartA": "/dev/mmcblk0p1",
->> +  "RootfsPartB": "/dev/mmcblk0p2",
-> 
->  This one seems kind of obvious...
-> 
->  Mirza, how is it possible that this used to work for you?
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2 (after review of Arnout Vandecappelle):
+>  - Set linker to CXX instead of adding -lstdc++ to LIBS
 
- Ha, it was already submitted before by Mirza! [1]
+Is this really the right thing to do? Ideally a program written in C
+should not have to know that a library it is using is written in C++.
 
- I'll go and apply that one instead.
+We already had a similar situation in Buildroot, and so far we have
+added -lstdc++. For example:
 
- Regards,
- Arnout
+ifeq ($(BR2_PACKAGE_DIRECTFB),y)
+LINKS_CONF_ENV = ac_cv_path_DIRECTFB_CONFIG=$(STAGING_DIR)/usr/bin/directfb-config
+ifeq ($(BR2_STATIC_LIBS),y)
+LINKS_CONF_ENV += LIBS=-lstdc++
 
-[1] http://patchwork.ozlabs.org/patch/1099369/
+and there's a few other examples in the tree. To be honest, I don't
+know what is the most correct solution, I'm just trying to make sure we
+solve a given problem in the same way everywhere.
 
-> 
->>    "ServerCertificate": "/etc/mender/server.crt",
->> -  "ServerURL": "https://docker.mender.io",
->> +  "ServerURL": "https://hosted.mender.io",
-> 
->  This one is also obvious: docker.mender.io doesn't exist, and according to
-> wayback machine it never did. Well, it doesn't know hosted.mender.io either and
-> that one definitely exists, so maybe it just changed name. Mirza?
-> 
->  Regards,
->  Arnout
-> 
->>    "TenantToken": "dummy"
->>  }
->>
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
