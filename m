@@ -1,56 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 28 May 2019 10:29:33 +0200
-Subject: [Buildroot] [PATCH next 0/4] Misc improvements to C-SKY support
-Message-ID: <20190528082938.5997-1-thomas.petazzoni@bootlin.com>
+Date: Tue, 28 May 2019 10:29:36 +0200
+Subject: [Buildroot] [PATCH next 3/4] configs/csky_gx6605s: use the C-SKY
+ external toolchain package
+In-Reply-To: <20190528082938.5997-1-thomas.petazzoni@bootlin.com>
+References: <20190528082938.5997-1-thomas.petazzoni@bootlin.com>
+Message-ID: <20190528082938.5997-4-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/csky_gx6605s_defconfig | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-This series brings some misc improvements to the C-SKY architecture
-support:
-
- - Update support/gnuconfig to have support for C-SKY. In master, we
-   have merged a patch from Guo that does the minimal change to
-   support C-SKY, but as suggested by Peter, it makes more sense to do
-   a complete update of the gnuconfig stuff in next, since upstream
-   has support for C-SKY.
-
- - Add a proper package for the C-SKY pre-built external toolchain,
-   use it for the C-SKY defconfig we have in the tree, and add testing
-   in the autobuilders for C-SKY.
-
-Thanks,
-
-Thomas
-
-Thomas Petazzoni (4):
-  support/gnuconfig: update to 2019-05-28
-  toolchain/toolchain-external/toolchain-external-csky: new package
-  configs/csky_gx6605s: use the C-SKY external toolchain package
-  support/config-fragments/autobuild: add testing for the C-SKY
-    architecture
-
- DEVELOPERS                                    |    1 +
- configs/csky_gx6605s_defconfig                |    9 +-
- .../config-fragments/autobuild/csky.config    |    3 +
- .../autobuild/toolchain-configs.csv           |    1 +
- support/gnuconfig/config.guess                |  836 +++---
- support/gnuconfig/config.sub                  | 2525 ++++++++---------
- toolchain/toolchain-external/Config.in        |    6 +
- .../toolchain-external-csky/Config.in         |   15 +
- .../toolchain-external-csky/Config.in.options |    9 +
- .../toolchain-external-csky.hash              |    2 +
- .../toolchain-external-csky.mk                |   11 +
- 11 files changed, 1823 insertions(+), 1595 deletions(-)
- create mode 100644 support/config-fragments/autobuild/csky.config
- create mode 100644 toolchain/toolchain-external/toolchain-external-csky/Config.in
- create mode 100644 toolchain/toolchain-external/toolchain-external-csky/Config.in.options
- create mode 100644 toolchain/toolchain-external/toolchain-external-csky/toolchain-external-csky.hash
- create mode 100644 toolchain/toolchain-external/toolchain-external-csky/toolchain-external-csky.mk
-
+diff --git a/configs/csky_gx6605s_defconfig b/configs/csky_gx6605s_defconfig
+index d0a2aadc6d..691f970844 100644
+--- a/configs/csky_gx6605s_defconfig
++++ b/configs/csky_gx6605s_defconfig
+@@ -1,12 +1,7 @@
+ BR2_csky=y
+ BR2_GLOBAL_PATCH_DIR="board/csky/gx6605s/patches"
+-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/c-sky/tools/raw/master/csky-linux-tools-x86_64-glibc-linux-4.9.56-20180128.tar.gz"
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="csky-linux"
+-BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
+-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+-BR2_TOOLCHAIN_EXTERNAL_CXX=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_CSKY=y
+ BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ BR2_LINUX_KERNEL=y
 -- 
 2.21.0
