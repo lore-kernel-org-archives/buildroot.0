@@ -1,49 +1,39 @@
 From: Thomas Huth <huth@tuxfamily.org>
-Date: Tue, 28 May 2019 08:18:22 +0200
-Subject: [Buildroot] [PATCH v2] package/ascii-invaders: Add the game
- ascii-invaders
-In-Reply-To: <20190527173200.2408159d@windsurf>
-References: <20190422081125.6659-1-huth@tuxfamily.org>
- <dd26f023-0386-71e8-65ec-fe6a89b0e276@tuxfamily.org>
- <92659568-1c39-473a-454e-376bff328229@tuxfamily.org>
- <20190527173200.2408159d@windsurf>
-Message-ID: <20190528081822.29f67611@thl530.multi.box>
+Date: Tue, 28 May 2019 08:41:15 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/barebox: add hash for the license
+ file
+In-Reply-To: <20190527153054.12381-1-b.bilas@grinn-global.com>
+References: <20190527153054.12381-1-b.bilas@grinn-global.com>
+Message-ID: <20190528084115.77e880c5@thl530.multi.box>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon, 27 May 2019 17:32:00 +0200
-schrieb Thomas Petazzoni <thomas.petazzoni@bootlin.com>:
+Am Mon, 27 May 2019 17:30:54 +0200
+schrieb Bartosz Bilas <b.bilas@grinn-global.com>:
 
-> Hello Thomas,
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> ---
+>  boot/barebox/barebox.hash | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> On Mon, 27 May 2019 17:22:09 +0200
-> Thomas Huth <huth@tuxfamily.org> wrote:
-> 
-> > >> +$(eval $(generic-package))
-> > >>    
-> > > 
-> > > Friendly *ping*    
-> > 
-> > Ping^2 ?  
-> 
-> Sorry for the lack of answer/feedback. However, sending pings is not
-> really useful: your patch cannot be lost because we have a tool
-> tracking all patches sent to the mailing list,
-> http://patchwork.ozlabs.org/project/buildroot/list/.
+> diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+> index fb371ab671..aa9038b9d4 100644
+> --- a/boot/barebox/barebox.hash
+> +++ b/boot/barebox/barebox.hash
+> @@ -3,3 +3,4 @@ md5 2e721cce90f1ea1492710ca23680311f
+> barebox-2019.05.0.tar.bz2 
+>  # Locally calculated
+>  sha256
+> 704bb09b2bf1347e43ebb9138da32a7e1b4d13892fd187be98f4f9dae000501d
+> barebox-2019.05.0.tar.bz2 +sha256
+> ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4
+> COPYING
 
-Ah, alright. Sorry, so far I mainly participated in projects where one
-was supposed to "ping" on the patches after a couple of weeks. Using
-patchwork is certainly the better idea.
-
-> As long as your
-> patch is still there, it is not lost. The queue of patches is
-> currently 227 patches, so your best chance to get your patch reviewed
-> and merged is to help by reviewing/testing patches submitted by
-> others :-)
-
-Ok, I'll have a try.
+The COPYING file is only a short description which refers to
+LICENSES/preferred/GPL-2.0 ... so I think you should provide a hash
+for that file, too?
 
  Thomas
