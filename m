@@ -1,8 +1,7 @@
 From: Robert Hancock <hancock@sedsystems.ca>
-Date: Tue, 28 May 2019 17:41:24 -0600
-Subject: [Buildroot] [PATCH] package/gpsd: update systemd service file
- binary path
-Message-ID: <1559086884-14807-1-git-send-email-hancock@sedsystems.ca>
+Date: Tue, 28 May 2019 17:25:57 -0600
+Subject: [Buildroot] [PATCH] gpsd: update systemd service file binary path
+Message-ID: <1559085957-14066-1-git-send-email-hancock@sedsystems.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
