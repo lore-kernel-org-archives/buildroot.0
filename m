@@ -1,47 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 May 2019 22:43:59 +0200
-Subject: [Buildroot] [PATCH 1/2] package/mender: update rootfs parts in
- mender.conf
-In-Reply-To: <20190514090450.20142-2-mirza.krak@northern.tech>
-References: <20190514090450.20142-1-mirza.krak@northern.tech>
- <20190514090450.20142-2-mirza.krak@northern.tech>
-Message-ID: <25b8caad-efc5-4694-a490-636c88a13897@mind.be>
+From: Jonah Petri <jonah@petri.us>
+Date: Tue, 28 May 2019 16:43:34 -0400
+Subject: [Buildroot] [PATCH 1/1] package/systemd: fix memory leak in
+ systemd-journald
+In-Reply-To: <41542c46-571d-aabe-7cc4-3b90015ed24f@mind.be>
+References: <1559061746-21387-1-git-send-email-jonah@petri.us>
+ <41542c46-571d-aabe-7cc4-3b90015ed24f@mind.be>
+Message-ID: <455D57E0-02D2-4C84-8507-E1DAEB6DEBA5@petri.us>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 14/05/2019 11:04, Mirza Krak wrote:
-> The configuration options (RootfsPartA/RootfsPartB) must
-> provide a valid path to a block devices.
+> On 28/05/2019 18:42, Jonah Petri wrote:
+>> Systemd-journald would leak memory when recording process info.  Add
+>> patch files from upstream systemd.  Note that the patch from 2d5d2e0cc5
+>> was taken as well in order to make the needed commit apply cleanly.
+>> Bug report: https://github.com/systemd/systemd/issues/11502
+>> Accepted patch: https://github.com/systemd/systemd/pull/11527
 > 
-> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
-
- Applied to master, thanks. This is clearly a bugfix, so master, not next.
-
- Regards,
- Arnout
-
-> ---
->  package/mender/mender.conf | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Just to be clear (Johan, correct me if I'm wrong), this is for 2019.02 only.
+> The patches are already included in v241 on master.
 > 
-> diff --git a/package/mender/mender.conf b/package/mender/mender.conf
-> index 979f16aaf6..f89118ac1b 100644
-> --- a/package/mender/mender.conf
-> +++ b/package/mender/mender.conf
-> @@ -2,8 +2,8 @@
->    "InventoryPollIntervalSeconds": 1800,
->    "UpdatePollIntervalSeconds": 1800,
->    "RetryPollIntervalSeconds": 300,
-> -  "RootfsPartA": "mmcblk0p2",
-> -  "RootfsPartB": "mmcblk0p3",
-> +  "RootfsPartA": "/dev/mmcblk0p2",
-> +  "RootfsPartB": "/dev/mmcblk0p3",
->    "ServerCertificate": "/etc/mender/server.crt",
->    "ServerURL": "https://docker.mender.io",
->    "TenantToken": "dummy"
-> 
+
+Yes, sorry, I should have been clear on that.  This is for 2019.02 only.  Also, I should have referenced the bugzilla bug:
+
+https://bugs.busybox.net/show_bug.cgi?id=11911 <https://bugs.busybox.net/show_bug.cgi?id=11911>
+
+Best,
+Jonah
+
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190528/1f977289/attachment.html>
