@@ -1,12 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 28 May 2019 20:16:42 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/barebox: add hash for the license
- file
-In-Reply-To: <86ace6ef-9f4c-8729-519a-cfc65abfa47d@grinn-global.com>
-References: <20190527153054.12381-1-b.bilas@grinn-global.com>
- <20190528084115.77e880c5@thl530.multi.box>
- <86ace6ef-9f4c-8729-519a-cfc65abfa47d@grinn-global.com>
-Message-ID: <fbd70fed-f646-a268-6f16-d8ba9caea2da@mind.be>
+Date: Tue, 28 May 2019 20:22:18 +0200
+Subject: [Buildroot] board/ci20 uboot problems due to fdt headers
+In-Reply-To: <8811f1b8-8019-912c-a54a-331aabcedbd1@igalia.com>
+References: <8811f1b8-8019-912c-a54a-331aabcedbd1@igalia.com>
+Message-ID: <230c7762-612e-6d59-5b5b-930d56a8df32@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,53 +12,56 @@ To: buildroot@busybox.net
 
 
 
-On 28/05/2019 18:53, Bartosz Bi?as wrote:
-> There is also BSD-3-Clause used in some files so there is necessity to complete
-> licence files with them. I will prepare a new patch with that.
+On 28/05/2019 15:57, Paulo Matos wrote:
+> Hello,
+> 
+> I am attempting to build ci20 board on an archlinux host.
+> I am getting several errors build uboot that look like:
+> 
+> 
+> /usr/bin/gcc -O2 -isystem
+> /home/pmatos/Projects/igalia/buildroot/output/host/include -Wall
+> -Wstrict-prototypes -O2 -fomit-frame-pointer -include
+> /home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include/libfdt_env.h
+> -idirafter
+> /home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include
+> -idirafter
+> /home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include2
+> -idirafter
+> /home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include
+> -I
+> /home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/lib/libfdt
+> -I
+> /home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/tools
+> -DCONFIG_SYS_TEXT_BASE=0x80000000 -DUSE_HOSTCC -D__KERNEL_STRICT_NAMES
+> -D_GNU_SOURCE   -o fit_image.o fit_image.c -c
+> In file included from ../include/libfdt.h:54,
+>                  from fdt_host.h:11,
+>                  from mkimage.h:22,
+>                  from aisimage.c:8:
+> /usr/include/libfdt_env.h:71:30: error: conflicting types for ?fdt64_t?
+>  typedef uint64_t FDT_BITWISE fdt64_t;
+>                               ^~~~~~~
+> In file included from <command-line>:
+> /home/pmatos/Projects/igalia/buildroot/output/build/uboot-dd3c1b95dac7d10b2ca5806f65e5c1050d7dd0fa/include/libfdt_env.h:19:16:
+> note: previous declaration of ?fdt64_t? was here
+>  typedef __be64 fdt64_t;
+>                 ^~~~~~~
+> 
+> 
+> This seems to be related to a previous thread that seemed to end up
+> saying 'we have fixed that'.
+> 
+> http://lists.busybox.net/pipermail/buildroot/2018-April/217653.html
+> 
+> Does anyone know what the status of this is? As far as I understood the
+> problem is related to possible include headers installed in the host
+> clashing with the ones distributed with buildroot.
 
- Can you also check (and specify in the commit message) if this file exists in
-*all* versions of barebox? It is possible to configure a custom version of
-barebox, so it can be pretty much anything...
+ Indeed, it was fixed by commit bf733342324 and its follow-up f437bf547c. Which
+Buildroot version are you using? Anything more recent than 2018.02.1 should no
+longer have this issue.
 
- Well, I checked myself: the LICENSES directory exists since 2019.04.0...
-
- There is unfortunately no simple way to conditionally add license files: if a
-file specified in _LICENSE_FILES doesn't exist, it's a hard error. You can use
-$(wildcard ...) but then you have to strip off the source directory again.
 
  Regards,
  Arnout
-
-> 
-> Best
-> Bartek
-> On 28.05.2019 08:41, Thomas Huth wrote:
->> Am Mon, 27 May 2019 17:30:54 +0200
->> schrieb Bartosz Bilas <b.bilas@grinn-global.com>:
->>
->>> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
->>> ---
->>> ? boot/barebox/barebox.hash | 1 +
->>> ? 1 file changed, 1 insertion(+)
->>>
->>> diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
->>> index fb371ab671..aa9038b9d4 100644
->>> --- a/boot/barebox/barebox.hash
->>> +++ b/boot/barebox/barebox.hash
->>> @@ -3,3 +3,4 @@ md5 2e721cce90f1ea1492710ca23680311f
->>> barebox-2019.05.0.tar.bz2
->>> ? # Locally calculated
->>> ? sha256
->>> 704bb09b2bf1347e43ebb9138da32a7e1b4d13892fd187be98f4f9dae000501d
->>> barebox-2019.05.0.tar.bz2 +sha256
->>> ab1122aa9f9073ad1ec824edcd970b16a6a7881a34a18fd56c080debb2dca5d4
->>> COPYING
->> The COPYING file is only a short description which refers to
->> LICENSES/preferred/GPL-2.0 ... so I think you should provide a hash
->> for that file, too?
->>
->> ? Thomas
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
