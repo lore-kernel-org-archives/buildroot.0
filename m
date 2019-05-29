@@ -1,145 +1,113 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Wed, 29 May 2019 08:37:27 -0400
-Subject: [Buildroot] [PATCH v2 1/1] package/mender: bump to version 2.0.0
-Message-ID: <20190529123727.47147-1-aduskett@gmail.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Wed, 29 May 2019 15:13:23 +0200
+Subject: [Buildroot] [PATCH] linux: enable UEVENT_HELPER when mdev is
+ used
+In-Reply-To: <54a85c9f-1e14-de0d-c6cf-8201dea50e1d@mind.be>
+References: <20190525130755.25678-1-peter@korsgaard.com>
+ <54a85c9f-1e14-de0d-c6cf-8201dea50e1d@mind.be>
+Message-ID: <f887e49a-0327-9bcb-f524-2a9aa2527edb@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Hello Arnout, Peter, Andy and all,
 
-In addition:
-  - Update hashes for license files due to copyright year change.
-  - Add hash for vendor/golang.org/x/text/LICENSE
-  - Add hash for vendor/github.com/mendersoftware/go-liblzma/LICENSE
-  - Add new dependency xz, as mender now depends on LZMA.
+On 5/25/19 5:24 PM, Arnout Vandecappelle wrote:
+> 
+> 
+> On 25/05/2019 15:07, Peter Korsgaard wrote:
+>> S10mdev uses /proc/sys/kernel/hotplug, which is only available if
+>> CONFIG_UEVENT_HELPER is enabled in the kernel, so ensure it is.
+> 
+>   So, I take a look at it, and it's a little bit more complicated...
+> 
+>   Busybox *does* have support for the "new" netlink-based uevent interface, but
+> that interface needs a daemon that keeps running and they separated that daemon
+> into a separate process, called uevent. So, in the "new" way, you should do
+> something like (not tried, just based on source code):
+> 
+> start-stop-daemon -S -b -x /sbin/uevent -- mdev
+> 
+>   But of course, that means that we have to be sure that the uevent executable is
+> in fact built for busybox. So we'd need to extend BUSYBOX_SET_MDEV to enable uevent.
+> 
+>   Also, we can only use the uevent approach if netlink uevents are available.
+> They exist since 2.6.12, so I guess on that side we're safe. However, they also
+> depend on CONFIG_NET (because netlink does).
+> 
+>   So, these are our options:
+> 
+> 1. Bloat the kernel with legacy uevent helper support (this patch).
+> 
+> 2. Bloat the kernel with networking even if it is not used for anything else,
+> and bloat busybox with uevent (3.1 kb), and always use uevent.
+> 
+> 3. Use uevent in the init script but don't enforce anything (with potential
+> silent failures), and explain stuff in the mdev help text.
+> 
+> 4. Try out all possibilities in the init script - which still fails silently in
+> case neither CONFIG_UEVENT_HELPER nor CONFIG_NET is enabled in the kernel.
+> 
+> 
+>   In my opinion, we definitely should *not* go for option 1. I don't want to be
+> the one that forces the kernel to maintain legacy stuff. I would definitely use
+> uevent. On the other hand, I really don't like it when we force changes into
+> busybox or kernel configs. Since it's really likely that CONFIG_NET is enabled
+> in the kernel, and since our default busybox config (but not the minimal one)
+> does enable uevent, I think that option 3 is the way to go.
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
-v1 -> v2:
- - Remove LZMA comment (Thomas)
- - Add "due to copyright year" at the end of "Update hashes for license files.
-   (Thomas)
+Couldn't we implement the following in S10mdev ?
 
- package/mender/Config.in   |  1 +
- package/mender/mender.hash | 45 ++++++++++++++++++++------------------
- package/mender/mender.mk   |  6 ++++-
- 3 files changed, 30 insertions(+), 22 deletions(-)
+- If both /proc/net/netlink and /sbin/uevent are present -> uevent 
+daemon + mdev
+- If /proc/sys/kernel/hotplug is present -> go for mdev as hotplug (and 
+init mdev.seq)
+- Otherwise -> print an error message.
 
-diff --git a/package/mender/Config.in b/package/mender/Config.in
-index 5ab2304e49..db1a5caa43 100644
---- a/package/mender/Config.in
-+++ b/package/mender/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_MENDER
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_XZ
- 	select BR2_PACKAGE_UBOOT_TOOLS # runtime
- 	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV # runtime
- 	help
-diff --git a/package/mender/mender.hash b/package/mender/mender.hash
-index 89aec239b1..70d3b858eb 100644
---- a/package/mender/mender.hash
-+++ b/package/mender/mender.hash
-@@ -1,41 +1,44 @@
- # Locally computed:
--sha256 caee18d1b8446df0cbb9a9c5a1c040d7eb1924332da94c3489494443a8077eb8 1.7.0.tar.gz
-+sha256 af37a11c4189097b485254c35450f289b078bc61f6a230d6540743f202d81b98 2.0.0.tar.gz
- 
- # Apache-2.0 license, locally computed
--sha256 98ed35b5a138f58164b5c0dbccd9d7f01ef4d84b9dba01e896f0a3241c50c0f7 LICENSE
-+sha256 beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2 LICENSE
- 
- # Vendor licenses
- # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
- 
- # Apache-2.0 license.
--sha256 98ed35b5a138f58164b5c0dbccd9d7f01ef4d84b9dba01e896f0a3241c50c0f7  vendor/github.com/mendersoftware/mendertesting/LICENSE
--sha256 3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/log/LICENSE
--sha256 bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/log/COPYING
--sha256 3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/scopestack/LICENSE
--sha256 bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/scopestack/COPYING
--sha256 b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  vendor/github.com/mendersoftware/mender-artifact/LICENSE
-+sha256  beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  LICENSE
-+sha256  beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  vendor/github.com/mendersoftware/mendertesting/LICENSE
-+sha256  3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/log/LICENSE
-+sha256  bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/log/COPYING
-+sha256  3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/scopestack/LICENSE
-+sha256  bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/scopestack/COPYING
-+sha256  beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  vendor/github.com/mendersoftware/mender-artifact/LICENSE
- 
- # BSD 2 Clause license.
--sha256 8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
-+sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
- 
- # BSD 3 Clause license.
--sha256 2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
--sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
--sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
--sha256 0634b008cee55ca01f0888d2f5aba2d34e66c3f52c31a4e16a5d5d33d0c2a03e  vendor/github.com/bmatsuo/lmdb-go/LICENSE.md
-+sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
-+sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
-+sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
-+sha256  0634b008cee55ca01f0888d2f5aba2d34e66c3f52c31a4e16a5d5d33d0c2a03e  vendor/github.com/bmatsuo/lmdb-go/LICENSE.md
-+sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/text/LICENSE
-+sha256  a284e538f3e5649ae6a8f32da2bbd18e9daabf2c1ebbfb99ed92e797b159be1a  vendor/github.com/mendersoftware/go-liblzma/LICENSE
- 
- # ISC license.
--sha256  3525392c6db3b804af76980b2c560ee9ec1abdadd907d76a26091df7c78f3a25  vendor/github.com/davecgh/go-spew/LICENSE
-+sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
- 
- # MIT license.
--sha256 51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/Sirupsen/logrus/LICENSE
--sha256 402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f  vendor/github.com/stretchr/testify/LICENSE
--sha256 402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f  vendor/github.com/stretchr/testify/LICENCE.txt
--sha256 fde7d610b9b95fc5a6304055c4dae951025b630aaa42a24e95ebf76675ae832c  vendor/github.com/stretchr/objx/LICENSE.md
--sha256 ffa15bdce332058a03a1d923910864fb6e58bf6df66a0e3914284725b327183e  vendor/github.com/ungerik/go-sysfs/LICENSE
-+sha256  51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/Sirupsen/logrus/LICENSE
-+sha256  dad2b0b2cc2dbdbf95ad5d800ef7588956e74dc2479014829d42be295125c25d  vendor/github.com/stretchr/testify/LICENSE
-+sha256  402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f  vendor/github.com/stretchr/testify/LICENCE.txt
-+sha256  fde7d610b9b95fc5a6304055c4dae951025b630aaa42a24e95ebf76675ae832c  vendor/github.com/stretchr/objx/LICENSE.md
-+sha256  ffa15bdce332058a03a1d923910864fb6e58bf6df66a0e3914284725b327183e  vendor/github.com/ungerik/go-sysfs/LICENSE
- 
- # OpenLDAP Public License
--sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
-+sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
- 
- # sha256 of all the vendor licenses combined
--sha256 b84b543cab0505452982422783c0e68b7bfa0a1de4a625753d325e0a8b2dacb1 LIC_FILES_CHKSUM.sha256
-+sha256 b4b6f1b6f923ae052ac1393ebcd302844db5e9306df37ce07d7c912f15746e3c LIC_FILES_CHKSUM.sha256
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index d56b634713..12a25fbbf3 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MENDER_VERSION = 1.7.0
-+MENDER_VERSION = 2.0.0
- MENDER_SITE = https://github.com/mendersoftware/mender/archive
- MENDER_SOURCE = $(MENDER_VERSION).tar.gz
- MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
-@@ -25,6 +25,8 @@ MENDER_LICENSE_FILES = \
- 	vendor/golang.org/x/sys/LICENSE \
- 	vendor/golang.org/x/net/LICENSE \
- 	vendor/github.com/bmatsuo/lmdb-go/LICENSE.md \
-+	vendor/golang.org/x/text/LICENSE \
-+	vendor/github.com/mendersoftware/go-liblzma/LICENSE \
- 	vendor/github.com/davecgh/go-spew/LICENSE \
- 	vendor/github.com/Sirupsen/logrus/LICENSE \
- 	vendor/github.com/stretchr/testify/LICENSE \
-@@ -33,6 +35,8 @@ MENDER_LICENSE_FILES = \
- 	vendor/github.com/ungerik/go-sysfs/LICENSE \
- 	vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
- 
-+MENDER_DEPENDENCIES = xz
-+
- MENDER_LDFLAGS = -X main.Version=$(MENDER_VERSION)
- 
- define MENDER_INSTALL_CONFIG_FILES
--- 
-2.21.0
+
+I have a patch for this, would I submit ?
+
+
+Best regards,
+
+Titouan
+
+> 
+> 
+>   By the way, with netlink, the event are properly serialized, and uevent makes
+> sure that only one mdev subprocess is created so it maintains the serialisation.
+> So, it is no longer needed to create /dev/mdev.seq (which, for some reason, we
+> currently don't do...).
+> 
+>   Regards,
+>   Arnout
+> 
+> 
+>>
+>> Reported-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+>> ---
+>>   linux/linux.mk | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/linux/linux.mk b/linux/linux.mk
+>> index dd182d06b2..3a5eee63df 100644
+>> --- a/linux/linux.mk
+>> +++ b/linux/linux.mk
+>> @@ -333,6 +333,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
+>>   		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
+>>   	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV),
+>>   		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
+>> +	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
+>> +		$(call KCONFIG_ENABLE_OPT,CONFIG_UEVENT_HELPER,$(@D)/.config))
+>>   	$(if $(BR2_PACKAGE_AUDIT),
+>>   		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
+>>   		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config))
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
