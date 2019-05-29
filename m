@@ -1,54 +1,62 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 29 May 2019 15:53:39 +0200
-Subject: [Buildroot] [PATCH 1/3] toolchain: introduce
- BR2_TOOLCHAIN_HAS_GCC_BUG_63261
+Date: Wed, 29 May 2019 15:53:41 +0200
+Subject: [Buildroot] [PATCH 3/3] package/dmalloc: re-enable package on
+ Microblaze
 In-Reply-To: <20190529135341.23842-1-giulio.benetti@micronovasrl.com>
 References: <20190529135341.23842-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190529135341.23842-2-giulio.benetti@micronovasrl.com>
+Message-ID: <20190529135341.23842-4-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-GCC hangs while building fxload for the Microblaze Arch using following
-defconfig:
-'
-BR2_microblazeel=y
-BR2_ENABLE_DEBUG=y
-BR2_OPTIMIZE_2=y
-BR2_KERNEL_HEADERS_5_0=y
-BR2_GCC_VERSION_7_X=y
-BR2_PACKAGE_FXLOAD=y
-'
+With Microblaze Gcc version < 8.x build gives:
+'Error: operation combines symbols in different segments'
+This is due to bug 63261:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63261. To avoid this,
+the dmalloc package has a !BR2_microblaze dependency. However, gcc bug
+63261 only triggers when optimization is enabled, so we can work around
+the issue by passing -O0, which is what we do in other Buildroot
+packages to work around this bug.
 
-Reported:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63261
-
-Fixed on Gcc 8.x
+So, this commit passes -O0 when BR2_TOOLCHAIN_HAS_GCC_BUG_63261, and
+re-enables dmalloc on Microblaze.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- toolchain/Config.in | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/dmalloc/Config.in  | 4 ----
+ package/dmalloc/dmalloc.mk | 4 ++++
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 7726ae6fae..f73a5364fc 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -113,6 +113,13 @@ config BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
- 	depends on !BR2_or1k
- 	depends on !BR2_xtensa
+diff --git a/package/dmalloc/Config.in b/package/dmalloc/Config.in
+index e5be109332..0c01970b04 100644
+--- a/package/dmalloc/Config.in
++++ b/package/dmalloc/Config.in
+@@ -1,9 +1,5 @@
+ config BR2_PACKAGE_DMALLOC
+ 	bool "dmalloc"
+-	# On some packages, Microblaze gcc has issues when debugging
+-	# symbols are enabled: "Error: operation combines symbols in
+-	# different segments".
+-	depends on !(BR2_microblaze && BR2_ENABLE_DEBUG)
+ 	help
+ 	  A debug memory allocation library which is a drop in
+ 	  replacement for the system's malloc, realloc, calloc, free and
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index 6ebb44c5c0..da03373879 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -35,6 +35,10 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ DMALLOC_CFLAGS += -marm
+ endif
  
-+# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63261. This bug no
-+# longer exists in gcc 8.x.
-+config BR2_TOOLCHAIN_HAS_GCC_BUG_63261
-+	bool
-+	default y if BR2_microblaze
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_63261),y)
++DMALLOC_CFLAGS=-O0
++endif
 +
- # Prior to gcc 7.x, exception_ptr, nested_exception and future from
- # libstdc++ would only be provided on architectures that support
- # always lock-free atomic ints. See
+ DMALLOC_CONF_ENV = CFLAGS="$(DMALLOC_CFLAGS)"
+ 
+ define DMALLOC_POST_PATCH
 -- 
 2.17.1
