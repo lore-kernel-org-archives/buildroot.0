@@ -1,46 +1,70 @@
-From: Alexandru Ardelean <ardeleanalex@gmail.com>
-Date: Wed, 29 May 2019 09:51:41 +0300
-Subject: [Buildroot] [PATCH] package: dropbear: add support for
- displaying /etc/motd
-In-Reply-To: <87lfywqoj1.fsf@dell.be.48ers.dk>
-References: <20190523121115.26098-1-ardeleanalex@gmail.com>
- <20190523142857.625748aa@windsurf.home> <87k1ehs41e.fsf@dell.be.48ers.dk>
- <87lfywqoj1.fsf@dell.be.48ers.dk>
-Message-ID: <CA+U=Dsp5Ebtte+RrVbbKKzy_2F+dEeyv174zTVtS=UoQPSCV=g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 29 May 2019 08:53:35 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/wireshark: fix static build with snappy
+In-Reply-To: <19f31deb-ea26-23aa-e2f7-eca629875ab2@mind.be>
+References: <20190528203230.24558-1-fontaine.fabrice@gmail.com>
+ <20190528224235.7b5a2647@windsurf.home>
+ <CAPi7W81VmJbfES03hTnJte8L+9sA_cRExo7jJ9iCs68iq63ZHg@mail.gmail.com>
+ <19f31deb-ea26-23aa-e2f7-eca629875ab2@mind.be>
+Message-ID: <20190529085335.35bcbc35@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, May 24, 2019 at 10:50 AM Peter Korsgaard <peter@korsgaard.com> wrote:
->
-> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
->
-> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
->  > Hi,
->
->  >> This way, we have something that is much more flexible, as it allows
->  >> you to define whatever Dropbear option you like.
->
->  >> Note: this is just a suggestion; I don't know what other
->  >> maintainers/developers will think about it.
->
->  > Agreed, if we want such finegrained configuration then that would be the
->  > way to go.
->
-> Alexandru, will you send such a patch? In the mean time I have marked
-> this patch as changes requested in patchwork.
+Hello,
 
-Yes.
+On Tue, 28 May 2019 23:04:28 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Sorry for the late reply.
-I left the thread unread (I do it as personal task-tracker), and I did
-not notice this mail.
+> >> Is this really the right thing to do? Ideally a program written in C
+> >> should not have to know that a library it is using is written in C++.  
+> 
+>  Hm, good point... Snappy provides a C wrapper, so there should indeed not be a
+> need for the client to use the C++ linker. Of course, there also shouldn't be a
+> need for the client to link with libstdc++ :-).
 
-Thanks
-Alex
+There is no need to link with libstdc++ when dynamic linking is used,
+which to me is another indication that using the C++ linker is not the
+right approach. Adding -lstdc++ is only necessary in static linking
+configuration, for the usual reason that libA -> libB -> libC in static
+linking scenarios requires passing -lC when linking libA.
 
->
-> --
-> Bye, Peter Korsgaard
+> >> and there's a few other examples in the tree. To be honest, I don't
+> >> know what is the most correct solution, I'm just trying to make
+> >> sure we solve a given problem in the same way everywhere.  
+> 
+>  In most other cases we don't do any patching but we pass it through
+> LIBS or similar. I don't think that that's possible with CMake.
+> 
+>  For ICU, we patch the .pc file, which is the proper thing to do, but
+> Snappy doesn't have a .pc file.
+
+Yes, but to me that's another indication that the right thing to do is
+to pass -lstdc++: if the packages were better, they would be using .pc
+files, and we would be able to specify -lstdc++ in their Libs.private.
+Once again, it shows that using the C++ linker is (to me) not the right
+approach.
+
+> > I don't know either. You can apply the first or the second version
+> > of this patch.  
+> 
+>  I reset its state to New. Now Thomas can decide :-)
+
+For the reasons stated above, I think I prefer v1.
+
+>  Maybe just send both versions upstream, since you have them both
+> now. Then they can choose which one they like better.
+
+The most correct solution for upstream would be for snappy to provide
+a .pc file, and for wireshark to use it.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
