@@ -1,49 +1,89 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 30 May 2019 00:25:01 +0200
-Subject: [Buildroot] [PATCH] package/flare-engine: fix check-package
- failure
-In-Reply-To: <20190529183233.3544-1-giulio.benetti@micronovasrl.com>
-References: <20190529183233.3544-1-giulio.benetti@micronovasrl.com>
-Message-ID: <3ae3e90a-91be-6bd5-b682-80c8ad28f047@mind.be>
+From: Robert Hancock <hancock@sedsystems.ca>
+Date: Wed, 29 May 2019 17:02:41 -0600
+Subject: [Buildroot] [PATCH] package/gpsd: Fix systemd service installation
+ and paths
+Message-ID: <1559170961-14091-1-git-send-email-hancock@sedsystems.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fix several issues with systemd service file installation for gpsd:
 
+-systemd support in the gpsd build was defaulting to enabled or not
+based on whether the host system had systemd directories present. Set
+this explicitly based on whether BR2_INIT_SYSTEMD is set.
 
-On 29/05/2019 20:32, Giulio Benetti wrote:
-> Check-package gives error on flare-engine due to trailing whitespace in
-> flare-engine.mk comment inserted with commit:
-> https://git.buildroot.net/buildroot/commit/?id=1203cca1b51eefb4ee236d998ab6ec32bdd087d8
-> 
-> Remove trailing whitespace in flare-engine.mk comment.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+-The installed systemd service files referenced paths in /usr/local when
+the actual binaries are installed in /usr. Replace /usr/local with /usr
+in the installed service files.
 
- Applied to master, thanks.
+-When BR2_PACKAGE_HAS_UDEV was enabled, all of the binaries were
+re-installed again, along with the udev rules, as part of the
+post-install hooks. Just choose between using install and udev-install
+based on whether udev is enabled to avoid redundant re-installations.
 
- I *really* shouldn't have applied that flare-engine patch to master :-)
+Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
+---
+ package/gpsd/gpsd.mk | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
- Regards,
- Arnout
-
-> ---
->  package/flare-engine/flare-engine.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
-> index 3ed0256901..8a656d695f 100644
-> --- a/package/flare-engine/flare-engine.mk
-> +++ b/package/flare-engine/flare-engine.mk
-> @@ -21,7 +21,7 @@ endif
->  
->  ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
->  # CMakeLists.txt sets CMAKE_CXX_FLAGS_<BUILD_TYPE> depending on
-> -# BUILD_TYPE, and this comes after the generic CMAKE_CXX_FLAGS. 
-> +# BUILD_TYPE, and this comes after the generic CMAKE_CXX_FLAGS.
->  # Override CMAKE_BUILD_TYPE so no overrides are applied.
->  FLARE_ENGINE_CONF_OPTS += -DCMAKE_BUILD_TYPE=Buildroot
->  FLARE_ENGINE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -O0"
-> 
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index d2c7612..a5c7477 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -24,7 +24,8 @@ GPSD_SCONS_OPTS = \
+ 	sysroot=$(STAGING_DIR)\
+ 	strip=no\
+ 	python=no \
+-	qt=no
++	qt=no \
++	systemd=$(if $(BR2_INIT_SYSTEMD),yes,no)
+ 
+ ifeq ($(BR2_PACKAGE_NCURSES),y)
+ GPSD_DEPENDENCIES += ncurses
+@@ -216,7 +217,7 @@ define GPSD_INSTALL_TARGET_CMDS
+ 		DESTDIR=$(TARGET_DIR) \
+ 		$(HOST_DIR)/bin/python2 $(SCONS) \
+ 		$(GPSD_SCONS_OPTS) \
+-		install)
++		$(if $(BR2_PACKAGE_HAS_UDEV),udev-install,install))
+ endef
+ 
+ define GPSD_INSTALL_INIT_SYSV
+@@ -224,6 +225,14 @@ define GPSD_INSTALL_INIT_SYSV
+ 	$(SED) 's,^DEVICES=.*,DEVICES=$(BR2_PACKAGE_GPSD_DEVICES),' $(TARGET_DIR)/etc/init.d/S50gpsd
+ endef
+ 
++define GPSD_INSTALL_INIT_SYSTEMD
++# systemd unit files are installed automatically, but need to update the
++# /usr/local path references in the provided files to /usr.
++	$(SED) 's%/usr/local%/usr%' \
++		$(TARGET_DIR)/usr/lib/systemd/system/gpsd.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/gpsdctl at .service
++endef
++
+ define GPSD_INSTALL_STAGING_CMDS
+ 	(cd $(@D); \
+ 		$(GPSD_SCONS_ENV) \
+@@ -233,16 +242,10 @@ define GPSD_INSTALL_STAGING_CMDS
+ 		install)
+ endef
+ 
+-# After installing the udev rule, make it writable so that this
++# After the udev rule is installed, make it writable so that this
+ # package can be re-built/re-installed.
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+ define GPSD_INSTALL_UDEV_RULES
+-	(cd $(@D); \
+-		$(GPSD_SCONS_ENV) \
+-		DESTDIR=$(TARGET_DIR) \
+-		$(HOST_DIR)/bin/python2 $(SCONS) \
+-		$(GPSD_SCONS_OPTS) \
+-		udev-install)
+ 	chmod u+w $(TARGET_DIR)/lib/udev/rules.d/25-gpsd.rules
+ endef
+ 
+-- 
+1.8.3.1
