@@ -1,41 +1,79 @@
-From: yegorslists at googlemail.com <yegorslists@googlemail.com>
-Date: Wed, 29 May 2019 09:07:01 +0200
-Subject: [Buildroot] [PATCH v2] package/dropbear: rework license information
-Message-ID: <20190529070701.8913-1-yegorslists@googlemail.com>
+From: guoren at kernel.org <guoren@kernel.org>
+Date: Wed, 29 May 2019 15:18:38 +0800
+Subject: [Buildroot] [PATCH V3 00/10] Update arch/csky for buildroot
+Message-ID: <1559114328-23357-1-git-send-email-guoren@kernel.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Yegor Yefremov <yegorslists@googlemail.com>
+From: Guo Ren <ren_guo@c-sky.com>
 
-According to the LICENSE file curve25519-donna is licensed under
-BSD-3-Clause license.
+This is the 3th patchset for arch/csky update for buildroot, it includes:
 
-There is only BSD-2-Clause license mentioned so remove
-BSD-2-Clause-like.
+ - Support VDSP
+ - Support new CPU ck860
+ - Support toolchain build in buildroot
+ - Add qemu defconfigs
 
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes v1 -> v2:
-  - remove BSD-2-Clause-like license (suggested by Arnout Vandecappelle)
+Changes in V3:
+ - Fixup the sequence logic of patches
+ - Fixup binutils version select
+ - Fixup gdb.mk
+ - Fixup glibc.hash to seperate dir 
 
- package/dropbear/dropbear.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in V2:
+ - Seperate gcc gdb glibc gdb from one patch
 
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index e10c851606..9c995c3894 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -7,7 +7,7 @@
- DROPBEAR_VERSION = 2019.78
- DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
- DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
--DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause
-+DROPBEAR_LICENSE = MIT, BSD-2-Clause, BSD-3-Clause
- DROPBEAR_LICENSE_FILES = LICENSE
- DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
- DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
+Guo Ren (10):
+  arch/csky: Use VDSP instead of DSP
+  arch/csky: Add ck860 supported
+  arch/csky: Add FLOAT_ABI compiler options
+  arch/csky: Add ABI variable for toolchain build
+  package/binutils: Add C-SKY support
+  package/gcc: Add C-SKY support
+  package/gdb: Add C-SKY support
+  package/glibc: Add C-SKY support
+  configs/qemu_cskyXXX_virt: new defconfig
+  arch/csky: Enable csky toolchain build
+
+ .gitlab-ci.yml                                     |   4 +
+ arch/Config.in                                     |   1 -
+ arch/Config.in.csky                                |  26 +-
+ arch/arch.mk.csky                                  |  26 +
+ board/qemu/csky/610_defconfig                      | 526 ++++++++++++++++++++
+ board/qemu/csky/807_defconfig                      | 531 ++++++++++++++++++++
+ board/qemu/csky/810_defconfig                      | 531 ++++++++++++++++++++
+ board/qemu/csky/860_defconfig                      | 533 +++++++++++++++++++++
+ configs/qemu_csky610_virt_defconfig                |  29 ++
+ configs/qemu_csky807_virt_defconfig                |  30 ++
+ configs/qemu_csky810_virt_defconfig                |  30 ++
+ configs/qemu_csky860_virt_defconfig                |  30 ++
+ package/Makefile.in                                |   9 +
+ package/binutils/Config.in.host                    |  11 +-
+ package/binutils/binutils.hash                     |   2 +
+ package/binutils/binutils.mk                       |   7 +
+ package/gcc/Config.in.host                         |  13 +
+ package/gcc/gcc.hash                               |   2 +
+ package/gcc/gcc.mk                                 |   3 +
+ package/gdb/Config.in.host                         |   2 +
+ package/gdb/gdb.hash                               |   2 +
+ package/gdb/gdb.mk                                 |   6 +
+ .../glibc.hash                                     |   2 +
+ package/glibc/glibc.mk                             |   3 +
+ toolchain/toolchain-buildroot/Config.in            |   2 +-
+ 25 files changed, 2343 insertions(+), 18 deletions(-)
+ create mode 100644 arch/arch.mk.csky
+ create mode 100644 board/qemu/csky/610_defconfig
+ create mode 100644 board/qemu/csky/807_defconfig
+ create mode 100644 board/qemu/csky/810_defconfig
+ create mode 100644 board/qemu/csky/860_defconfig
+ create mode 100644 configs/qemu_csky610_virt_defconfig
+ create mode 100644 configs/qemu_csky807_virt_defconfig
+ create mode 100644 configs/qemu_csky810_virt_defconfig
+ create mode 100644 configs/qemu_csky860_virt_defconfig
+ create mode 100644 package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash
+
 -- 
-2.17.0
+2.7.4
