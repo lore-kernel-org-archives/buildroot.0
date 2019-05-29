@@ -1,10 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 28 May 2019 23:35:25 -0400
-Subject: [Buildroot] [PATCH 07/19] package/fontconfig: add hash for license
- file
+Date: Tue, 28 May 2019 23:35:27 -0400
+Subject: [Buildroot] [PATCH 09/19] package/gperf: add hash for license file
 In-Reply-To: <20190529033537.128311-1-aduskett@gmail.com>
 References: <20190529033537.128311-1-aduskett@gmail.com>
-Message-ID: <20190529033537.128311-8-aduskett@gmail.com>
+Message-ID: <20190529033537.128311-10-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,18 +14,18 @@ From: Adam Duskett <Aduskett@gmail.com>
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/fontconfig/fontconfig.hash | 3 +++
+ package/gperf/gperf.hash | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/fontconfig/fontconfig.hash b/package/fontconfig/fontconfig.hash
-index 5243c09615..153f00c3d8 100644
---- a/package/fontconfig/fontconfig.hash
-+++ b/package/fontconfig/fontconfig.hash
+diff --git a/package/gperf/gperf.hash b/package/gperf/gperf.hash
+index 370235c627..21c76605b5 100644
+--- a/package/gperf/gperf.hash
++++ b/package/gperf/gperf.hash
 @@ -1,2 +1,5 @@
- # From https://lists.freedesktop.org/archives/fontconfig/2018-August/006324.html
- sha256 f655dd2a986d7aa97e052261b36aa67b0a64989496361eca8d604e6414006741 fontconfig-2.13.1.tar.bz2
+ # Locally calculated after checking pgp signature
+ sha256	767112a204407e62dbc3106647cf839ed544f3cf5d0f0523aaa2508623aad63e	gperf-3.0.4.tar.gz
 +
 +# Locally calculated
-+sha256 fa4cd9ab005185e10cd8f7504518856c7dd36c01e766c2bac87f4fc638e9f886 COPYING
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
 -- 
 2.21.0
