@@ -1,114 +1,36 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Wed, 29 May 2019 11:27:16 -0700
-Subject: [Buildroot] [PATCH] package/dosfstools: introduce sanitation step
- during install
-Message-ID: <20190529182716.12080-1-mmayer@broadcom.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 29 May 2019 20:32:33 +0200
+Subject: [Buildroot] [PATCH] package/flare-engine: fix check-package failure
+Message-ID: <20190529183233.3544-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We can't install dosfstools into the target directory directly, because
-it'll install *all* binaries, even the disabled ones.
+Check-package gives error on flare-engine due to trailing whitespace in
+flare-engine.mk comment inserted with commit:
+https://git.buildroot.net/buildroot/commit/?id=1203cca1b51eefb4ee236d998ab6ec32bdd087d8
 
-Also, we can't just delete dosfstools binaries from the target
-directory after installing them, because some tools of the same name
-may be provided by other packages (specifically Busybox). When a tool
-is disabled in dosfstools, it only means that dosfstools shouldn't
-install its own copy, not that it is okay to remove a tool that might
-already be there.
+Remove trailing whitespace in flare-engine.mk comment.
 
-To avoid any issues, we install dosfstools into a temporary location,
-remove the binaries that have been disabled in the Buildroot
-configuration, and only then copy the rest to the target location.
-
-We also extend sanitation to include man pages, so only man pages for
-enabled tools are copied to the target.
-
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
+ package/flare-engine/flare-engine.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-We discovered the issue at hand because we are using Busybox for most
-of our tools, including FAT related tools. When we needed to add
-fsck.fat to our root file system, we had to enable DOSFSTOOLS, because
-Busybox doesn't provide it. And suddenly all our FAT related tools
-(except fsck.fat) had disappeared from the rootfs! That was not at all
-the idea.
-
-The reason, as it turned out, was DOSFSTOOLS doing it sanitation
-directly inside the target directory, which indiscriminately removed
-binaries, even if they were enabled via a different package (BUSYBOX in
-our case).
-
-Hence the approach using a temporary install location.
-
- package/dosfstools/dosfstools.mk | 29 ++++++++++++++++++++++++++---
- 1 file changed, 26 insertions(+), 3 deletions(-)
-
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index 6eb0851d0e23..30a35e3f9b8f 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -10,6 +10,7 @@ DOSFSTOOLS_SITE = https://github.com/dosfstools/dosfstools/releases/download/v$(
- DOSFSTOOLS_LICENSE = GPL-3.0+
- DOSFSTOOLS_LICENSE_FILES = COPYING
- DOSFSTOOLS_CONF_OPTS = --enable-compat-symlinks --exec-prefix=/
-+DOSFSTOOLS_TEMP=$(BASE_DIR)/build/dosfstools-install
- HOST_DOSFSTOOLS_CONF_OPTS = --enable-compat-symlinks
+diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
+index 3ed0256901..8a656d695f 100644
+--- a/package/flare-engine/flare-engine.mk
++++ b/package/flare-engine/flare-engine.mk
+@@ -21,7 +21,7 @@ endif
  
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-@@ -24,26 +25,48 @@ DOSFSTOOLS_CONF_OPTS += LIBS="-liconv"
- DOSFSTOOLS_DEPENDENCIES += libiconv
- endif
- 
-+# Install into temporary location
-+DOSFSTOOLS_INSTALL_TARGET_OPTS = \
-+	DESTDIR=$(DOSFSTOOLS_TEMP) \
-+	install
-+
-+# Clean out our temporary install location before installation
-+define DOSFSTOOLS_CLEAR_TEMP
-+	rm -rf $(DOSFSTOOLS_TEMP)
-+endef
-+DOSFSTOOLS_PRE_INSTALL_TARGET_HOOKS += DOSFSTOOLS_CLEAR_TEMP
-+
-+# Sanitize temporary install location after installation
- ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),)
- define DOSFSTOOLS_REMOVE_FATLABEL
--	rm -f $(addprefix $(TARGET_DIR)/sbin/,dosfslabel fatlabel)
-+	rm -f $(addprefix $(DOSFSTOOLS_TEMP)/sbin/,dosfslabel fatlabel)
-+	rm -f $(addprefix $(DOSFSTOOLS_TEMP)/usr/share/man/man8/,dosfslabel.8 fatlabel.8)
- endef
- DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FATLABEL
- endif
- 
- ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT),)
- define DOSFSTOOLS_REMOVE_FSCK_FAT
--	rm -f $(addprefix $(TARGET_DIR)/sbin/,fsck.fat dosfsck fsck.msdos fsck.vfat)
-+	rm -f $(addprefix $(DOSFSTOOLS_TEMP)/sbin/,fsck.fat dosfsck fsck.msdos fsck.vfat)
-+	rm -f $(addprefix $(DOSFSTOOLS_TEMP)/usr/share/man/man8/,fsck.fat.8 dosfsck.8 fsck.msdos.8 fsck.vfat.8)
- endef
- DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FSCK_FAT
- endif
- 
- ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT),)
- define DOSFSTOOLS_REMOVE_MKFS_FAT
--	rm -f $(addprefix $(TARGET_DIR)/sbin/,mkfs.fat mkdosfs mkfs.msdos mkfs.vfat)
-+	rm -f $(addprefix $(DOSFSTOOLS_TEMP)/sbin/,mkfs.fat mkdosfs mkfs.msdos mkfs.vfat)
-+	rm -f $(addprefix $(DOSFSTOOLS_TEMP)/usr/share/man/man8/,mkfs.fat.8 mkdosfs.8 mkfs.msdos.8 mkfs.vfat.8)
- endef
- DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_MKFS_FAT
- endif
- 
-+# Install what's left into the actual target directory
-+define DOSFSTOOLS_TARGET_INSTALL
-+	tar -C $(DOSFSTOOLS_TEMP) -c -f - . | tar -C $(TARGET_DIR) -x -f -
-+	rm -rf $(DOSFSTOOLS_TEMP)
-+endef
-+DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_TARGET_INSTALL
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+ # CMakeLists.txt sets CMAKE_CXX_FLAGS_<BUILD_TYPE> depending on
+-# BUILD_TYPE, and this comes after the generic CMAKE_CXX_FLAGS. 
++# BUILD_TYPE, and this comes after the generic CMAKE_CXX_FLAGS.
+ # Override CMAKE_BUILD_TYPE so no overrides are applied.
+ FLARE_ENGINE_CONF_OPTS += -DCMAKE_BUILD_TYPE=Buildroot
+ FLARE_ENGINE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -O0"
 -- 
 2.17.1
