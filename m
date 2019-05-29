@@ -1,44 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 May 2019 11:23:17 +0200
-Subject: [Buildroot] [PATCH V3 01/10] arch/csky: Use VDSP instead of DSP
-In-Reply-To: <CAJF2gTQfu_FAck2YM5b=d8QaYQhBHoCSeG4tvL1i8a1=7vgofA@mail.gmail.com>
-References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
- <1559114328-23357-2-git-send-email-guoren@kernel.org>
- <20190529092128.36183371@windsurf.home>
- <CAJF2gTQC8UigBniC_RKUVFddX=PnN7O9GyBZXcxyXuPBg9WNHw@mail.gmail.com>
- <20190529095629.2b28cbb7@windsurf.home>
- <CAJF2gTT5N6ST9Ph-L+bX2WtNx4ENu0wQ2uQ63D=3C-Zqoit+3w@mail.gmail.com>
- <20190529103824.58560e4e@windsurf.home>
- <CAJF2gTQfu_FAck2YM5b=d8QaYQhBHoCSeG4tvL1i8a1=7vgofA@mail.gmail.com>
-Message-ID: <20190529112317.08fe1013@windsurf.home>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Wed, 29 May 2019 11:30:26 +0200
+Subject: [Buildroot] [PATCH for-next 1/2] package/efl: bump to version 1.22.2
+Message-ID: <20190529093027.11911-1-romain.naour@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+See https://www.enlightenment.org/news/efl-1.22.2
 
-On Wed, 29 May 2019 17:02:29 +0800
-Guo Ren <guoren@kernel.org> wrote:
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+---
+ package/efl/efl.hash | 4 ++--
+ package/efl/efl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> DSP is no use in current buildroot and gcc default enable the DSP
-> feature for C-SKY.
-> So DSP is part of our standard ISA, we needn't put it in -mcpu=xxx.
-
-"DSP is no use in current Buildroot" is not correct. The option exists,
-and it changes the BR2_GCC_TARGET_CPU value. So it *is* used: it adds
-"e" to BR2_GCC_TARGET_CPU. So this explanation is not really
-good/sufficient.
-
-I am willing to help you formulate this properly, but since I still
-don't understand why you are dropping the DSP option, I can't really
-help by proposing a better wording.
-
-Best regards,
-
-Thomas
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index bef0a73ff1..f9015681ee 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,5 +1,5 @@
+-# From https://download.enlightenment.org/rel/libs/efl/efl-1.22.1.tar.xz.sha256
+-sha256 20d3e5e945d54ae46ec916c7341b5dec24f904b6c0123b4d3ecb8cd8d596ae12 efl-1.22.1.tar.xz
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.22.2.tar.xz.sha256
++sha256 1699891f825911622de0aa77fe1140eff7335aba619d2352485e54dcff6b1cd0 efl-1.22.2.tar.xz
+ 
+ sha256 d949e42ca8fd48d275c397c5fc2ac34c9b63ada715dcaf1a670e17bb62964341  COMPLIANCE
+ sha256 1f0597d326e2fdb54aa2f0caec6d8bb0afb9941ef32475f017ed02ca214fcf37  COPYING
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 959ed0cc3b..6f7c09ffa3 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EFL_VERSION = 1.22.1
++EFL_VERSION = 1.22.2
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+, FTL, MIT
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
