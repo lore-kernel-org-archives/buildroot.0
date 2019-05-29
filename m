@@ -1,43 +1,145 @@
-From: Guo Ren <guoren@kernel.org>
-Date: Wed, 29 May 2019 20:34:34 +0800
-Subject: [Buildroot] [PATCH V3 01/10] arch/csky: Use VDSP instead of DSP
-In-Reply-To: <20190529135836.1a907b0e@windsurf.home>
-References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
- <1559114328-23357-2-git-send-email-guoren@kernel.org>
- <20190529092128.36183371@windsurf.home>
- <CAJF2gTQC8UigBniC_RKUVFddX=PnN7O9GyBZXcxyXuPBg9WNHw@mail.gmail.com>
- <20190529095629.2b28cbb7@windsurf.home>
- <CAJF2gTT5N6ST9Ph-L+bX2WtNx4ENu0wQ2uQ63D=3C-Zqoit+3w@mail.gmail.com>
- <20190529103824.58560e4e@windsurf.home>
- <CAJF2gTQfu_FAck2YM5b=d8QaYQhBHoCSeG4tvL1i8a1=7vgofA@mail.gmail.com>
- <20190529112317.08fe1013@windsurf.home>
- <CAJF2gTRf_kzuqM_takvwNHU3sBfTBjqOBDv4xbqwnS9E9f9uTQ@mail.gmail.com>
- <20190529135836.1a907b0e@windsurf.home>
-Message-ID: <CAJF2gTS5V8tL-KbLCXt2O6bPp3GpEZKPuVv0Zv9OKArKGy3izQ@mail.gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Wed, 29 May 2019 08:37:27 -0400
+Subject: [Buildroot] [PATCH v2 1/1] package/mender: bump to version 2.0.0
+Message-ID: <20190529123727.47147-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 29, 2019 at 7:58 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Wed, 29 May 2019 17:45:19 +0800
-> Guo Ren <guoren@kernel.org> wrote:
->
-> > > I am willing to help you formulate this properly, but since I still
-> > > don't understand why you are dropping the DSP option, I can't really
-> > > help by proposing a better wording.
-> > DSP extention is no longer used for C-SKY and there is no defconfig
-> > use "e" extension in buildroot.
->
-> Not having a defconfig doesn't mean something is not supported. There
-> are tons of features in Buildroot that are not enabled by defconfig,
-> and still we do support them.
-Agree, remove defconfig sentence.
+From: Adam Duskett <Aduskett@gmail.com>
 
-Best Regards
- Guo Ren
+In addition:
+  - Update hashes for license files due to copyright year change.
+  - Add hash for vendor/golang.org/x/text/LICENSE
+  - Add hash for vendor/github.com/mendersoftware/go-liblzma/LICENSE
+  - Add new dependency xz, as mender now depends on LZMA.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+v1 -> v2:
+ - Remove LZMA comment (Thomas)
+ - Add "due to copyright year" at the end of "Update hashes for license files.
+   (Thomas)
+
+ package/mender/Config.in   |  1 +
+ package/mender/mender.hash | 45 ++++++++++++++++++++------------------
+ package/mender/mender.mk   |  6 ++++-
+ 3 files changed, 30 insertions(+), 22 deletions(-)
+
+diff --git a/package/mender/Config.in b/package/mender/Config.in
+index 5ab2304e49..db1a5caa43 100644
+--- a/package/mender/Config.in
++++ b/package/mender/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_MENDER
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	select BR2_PACKAGE_XZ
+ 	select BR2_PACKAGE_UBOOT_TOOLS # runtime
+ 	select BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV # runtime
+ 	help
+diff --git a/package/mender/mender.hash b/package/mender/mender.hash
+index 89aec239b1..70d3b858eb 100644
+--- a/package/mender/mender.hash
++++ b/package/mender/mender.hash
+@@ -1,41 +1,44 @@
+ # Locally computed:
+-sha256 caee18d1b8446df0cbb9a9c5a1c040d7eb1924332da94c3489494443a8077eb8 1.7.0.tar.gz
++sha256 af37a11c4189097b485254c35450f289b078bc61f6a230d6540743f202d81b98 2.0.0.tar.gz
+ 
+ # Apache-2.0 license, locally computed
+-sha256 98ed35b5a138f58164b5c0dbccd9d7f01ef4d84b9dba01e896f0a3241c50c0f7 LICENSE
++sha256 beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2 LICENSE
+ 
+ # Vendor licenses
+ # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
+ 
+ # Apache-2.0 license.
+-sha256 98ed35b5a138f58164b5c0dbccd9d7f01ef4d84b9dba01e896f0a3241c50c0f7  vendor/github.com/mendersoftware/mendertesting/LICENSE
+-sha256 3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/log/LICENSE
+-sha256 bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/log/COPYING
+-sha256 3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/scopestack/LICENSE
+-sha256 bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/scopestack/COPYING
+-sha256 b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1  vendor/github.com/mendersoftware/mender-artifact/LICENSE
++sha256  beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  LICENSE
++sha256  beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  vendor/github.com/mendersoftware/mendertesting/LICENSE
++sha256  3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/log/LICENSE
++sha256  bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/log/COPYING
++sha256  3591f687e2d6f49c83b1ec69577e8110afbde80be5ec81791bd86d2838ccd3de  vendor/github.com/mendersoftware/scopestack/LICENSE
++sha256  bbb303820971c294a9a8e5eba5affcf1379036e877ea61c11cbf9400b2949483  vendor/github.com/mendersoftware/scopestack/COPYING
++sha256  beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2  vendor/github.com/mendersoftware/mender-artifact/LICENSE
+ 
+ # BSD 2 Clause license.
+-sha256 8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
++sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
+ 
+ # BSD 3 Clause license.
+-sha256 2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
+-sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
+-sha256 2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
+-sha256 0634b008cee55ca01f0888d2f5aba2d34e66c3f52c31a4e16a5d5d33d0c2a03e  vendor/github.com/bmatsuo/lmdb-go/LICENSE.md
++sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
++sha256  0634b008cee55ca01f0888d2f5aba2d34e66c3f52c31a4e16a5d5d33d0c2a03e  vendor/github.com/bmatsuo/lmdb-go/LICENSE.md
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/text/LICENSE
++sha256  a284e538f3e5649ae6a8f32da2bbd18e9daabf2c1ebbfb99ed92e797b159be1a  vendor/github.com/mendersoftware/go-liblzma/LICENSE
+ 
+ # ISC license.
+-sha256  3525392c6db3b804af76980b2c560ee9ec1abdadd907d76a26091df7c78f3a25  vendor/github.com/davecgh/go-spew/LICENSE
++sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
+ 
+ # MIT license.
+-sha256 51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/Sirupsen/logrus/LICENSE
+-sha256 402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f  vendor/github.com/stretchr/testify/LICENSE
+-sha256 402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f  vendor/github.com/stretchr/testify/LICENCE.txt
+-sha256 fde7d610b9b95fc5a6304055c4dae951025b630aaa42a24e95ebf76675ae832c  vendor/github.com/stretchr/objx/LICENSE.md
+-sha256 ffa15bdce332058a03a1d923910864fb6e58bf6df66a0e3914284725b327183e  vendor/github.com/ungerik/go-sysfs/LICENSE
++sha256  51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/Sirupsen/logrus/LICENSE
++sha256  dad2b0b2cc2dbdbf95ad5d800ef7588956e74dc2479014829d42be295125c25d  vendor/github.com/stretchr/testify/LICENSE
++sha256  402f39eed8a1851385d0703999aa9f23d067c2ea3e15c63c074e389cbf8f8f8f  vendor/github.com/stretchr/testify/LICENCE.txt
++sha256  fde7d610b9b95fc5a6304055c4dae951025b630aaa42a24e95ebf76675ae832c  vendor/github.com/stretchr/objx/LICENSE.md
++sha256  ffa15bdce332058a03a1d923910864fb6e58bf6df66a0e3914284725b327183e  vendor/github.com/ungerik/go-sysfs/LICENSE
+ 
+ # OpenLDAP Public License
+-sha256 310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
++sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
+ 
+ # sha256 of all the vendor licenses combined
+-sha256 b84b543cab0505452982422783c0e68b7bfa0a1de4a625753d325e0a8b2dacb1 LIC_FILES_CHKSUM.sha256
++sha256 b4b6f1b6f923ae052ac1393ebcd302844db5e9306df37ce07d7c912f15746e3c LIC_FILES_CHKSUM.sha256
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index d56b634713..12a25fbbf3 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MENDER_VERSION = 1.7.0
++MENDER_VERSION = 2.0.0
+ MENDER_SITE = https://github.com/mendersoftware/mender/archive
+ MENDER_SOURCE = $(MENDER_VERSION).tar.gz
+ MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
+@@ -25,6 +25,8 @@ MENDER_LICENSE_FILES = \
+ 	vendor/golang.org/x/sys/LICENSE \
+ 	vendor/golang.org/x/net/LICENSE \
+ 	vendor/github.com/bmatsuo/lmdb-go/LICENSE.md \
++	vendor/golang.org/x/text/LICENSE \
++	vendor/github.com/mendersoftware/go-liblzma/LICENSE \
+ 	vendor/github.com/davecgh/go-spew/LICENSE \
+ 	vendor/github.com/Sirupsen/logrus/LICENSE \
+ 	vendor/github.com/stretchr/testify/LICENSE \
+@@ -33,6 +35,8 @@ MENDER_LICENSE_FILES = \
+ 	vendor/github.com/ungerik/go-sysfs/LICENSE \
+ 	vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
+ 
++MENDER_DEPENDENCIES = xz
++
+ MENDER_LDFLAGS = -X main.Version=$(MENDER_VERSION)
+ 
+ define MENDER_INSTALL_CONFIG_FILES
+-- 
+2.21.0
