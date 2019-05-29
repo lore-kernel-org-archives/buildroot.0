@@ -1,104 +1,64 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Wed, 29 May 2019 16:25:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/busybox: update S10mdev
-Message-ID: <20190529142528.256795-1-titouan.christophe@railnova.eu>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 29 May 2019 16:29:17 +0200
+Subject: [Buildroot] [PATCH 1/3] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_GCC_BUG_63261
+In-Reply-To: <20190529155936.6b61692f@windsurf.home>
+References: <20190529135341.23842-1-giulio.benetti@micronovasrl.com>
+ <20190529135341.23842-2-giulio.benetti@micronovasrl.com>
+ <20190529155936.6b61692f@windsurf.home>
+Message-ID: <f7870ce7-56f9-ce83-37c7-4d6cf125eafa@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Avoid race conditions in mdev invocations
-* use the uevent daemon if possible
-* fallback to hotplug (as before) and initialize /dev/mdev.seq
-* otherwise print an error message and do nothing else
+Hello Thomas,
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- package/busybox/S10mdev | 66 +++++++++++++++++++++++++++++++++++------
- 1 file changed, 57 insertions(+), 9 deletions(-)
+Il 29/05/2019 15:59, Thomas Petazzoni ha scritto:
+> Hello Giulio,
+> 
+> Thanks for all this work on Microblaze toolchain bugs!
 
-diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
-index 7075b77016..f1a836da32 100644
---- a/package/busybox/S10mdev
-+++ b/package/busybox/S10mdev
-@@ -1,20 +1,68 @@
- #!/bin/sh
- #
--# Start mdev....
-+# Start mdev, using the uevent daemon whereas possible
- #
- 
--case "$1" in
--  start)
--	echo "Starting mdev..."
--	echo /sbin/mdev >/proc/sys/kernel/hotplug
-+DAEMON="uevent"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+has_uevent_and_netlink() {
-+	[ -f /proc/net/netlink ] && [ -x /sbin/uevent ]
-+}
-+
-+has_hotplug() {
-+	[ -w /proc/sys/kernel/hotplug ]
-+}
-+
-+
-+start() {
-+	if has_uevent_and_netlink; then
-+		echo -n "Starting mdev within uevent... "
-+		start-stop-daemon -S -b -m -p $PIDFILE -x /sbin/uevent -- /sbin/mdev
-+		[ $? -eq 0 ] && echo "OK" || echo "FAIL"
-+	elif has_hotplug; then
-+		echo "Installing mdev as hotplug helper"
-+		# Initialize the seq counter to prevent plug/unplug races
-+		touch /dev/mdev.seq
-+		echo /sbin/mdev > /proc/sys/kernel/hotplug
-+	else
-+		echo "ERROR: neither netlink+uevent nor hotplug are available"
-+		echo "       Unable to start mdev !"
-+		exit 1
-+	fi
-+
-+	# Run boot time /sys scan
- 	/sbin/mdev -s
-+
- 	# coldplug modules
- 	find /sys/ -name modalias -print0 | xargs -0 sort -u | tr '\n' '\0' | \
- 	    xargs -0 modprobe -abq
--	;;
--  stop)
--	;;
--  restart|reload)
-+}
-+
-+stop() {
-+	if has_uevent_and_netlink; then
-+		echo -n "Stopping mdev within uevent... "
-+		start-stop-daemon -K -p $PIDFILE
-+		[ $? -eq 0 ] && echo "OK" || echo "FAIL"
-+	elif has_hotplug; then
-+		echo "Uninstalling mdev from hotplug helper"
-+		echo > /proc/sys/kernel/hotplug
-+	else
-+		echo "ERROR: neither netlink+uevent nor hotplug are available"
-+		echo "       Unable to stop mdev !"
-+		exit 1
-+	fi
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+
-+case "$1" in
-+  start|stop|restart)
-+	$1
- 	;;
-   *)
- 	echo "Usage: $0 {start|stop|restart}"
+It's a pleasure and this allows me to lear a lot starting from the base 
+thanks to you all :)
+
+> On Wed, 29 May 2019 15:53:39 +0200
+> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+> 
+>> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63261. This bug no
+>> +# longer exists in gcc 8.x.
+>> +config BR2_TOOLCHAIN_HAS_GCC_BUG_63261
+>> +	bool
+>> +	default y if BR2_microblaze
+>> +	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+> 
+> If I understand correctly, this bug only triggers when
+> BR2_ENABLE_DEBUG=y, so this option should have a:
+> 
+> 	depends on BR2_ENABLE_DEBUG
+> 
+> perhaps ?
+
+Oops, yes I've forgotten it, thanks for pointing me that.
+
+> Semantically, the toolchain is indeed always affected by bug 63261, but
+> it only manifests itself when BR2_ENABLE_DEBUG=y, and it's easier to
+> have this information in one place (where
+> BR2_TOOLCHAIN_HAS_GCC_BUG_63261) rather than in each package.
+
+Yes, I'm going to write this ^^^ in cover letter on v2 patchset.
+
+Thanks
+Best regards
 -- 
-2.21.0
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
