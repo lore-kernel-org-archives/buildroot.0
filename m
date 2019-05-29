@@ -1,9 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 28 May 2019 23:35:32 -0400
-Subject: [Buildroot] [PATCH 14/19] package/parted: add hash for license file
+Date: Tue, 28 May 2019 23:35:31 -0400
+Subject: [Buildroot] [PATCH 13/19] package/ncurses: add hash for license file
 In-Reply-To: <20190529033537.128311-1-aduskett@gmail.com>
 References: <20190529033537.128311-1-aduskett@gmail.com>
-Message-ID: <20190529033537.128311-15-aduskett@gmail.com>
+Message-ID: <20190529033537.128311-14-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +14,18 @@ From: Adam Duskett <Aduskett@gmail.com>
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/parted/parted.hash | 3 +++
+ package/ncurses/ncurses.hash | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/parted/parted.hash b/package/parted/parted.hash
-index e31ae3c4ce..7b04128bea 100644
---- a/package/parted/parted.hash
-+++ b/package/parted/parted.hash
+diff --git a/package/ncurses/ncurses.hash b/package/ncurses/ncurses.hash
+index 045625ae3b..f6683959fd 100644
+--- a/package/ncurses/ncurses.hash
++++ b/package/ncurses/ncurses.hash
 @@ -1,2 +1,5 @@
  # Locally calculated after checking pgp signature
- sha256	858b589c22297cacdf437f3baff6f04b333087521ab274f7ab677cb8c6bb78e4  parted-3.2.tar.xz
+ sha256	aa057eeeb4a14d470101eff4597d5833dcef5965331be3528c08d99cebaa0d17	ncurses-6.1.tar.gz
 +
 +# Locally calculated
-+sha256	0abbff814cd00e2b0b6d08395af2b419c1a92026c4b4adacbb65ccda45fa58cf  COPYING
++sha256	3c7bc1dd475a5e5dcc7bdf13268a0313ff69e3765689444eb95b5893f61b3d1e	README
 -- 
 2.21.0
