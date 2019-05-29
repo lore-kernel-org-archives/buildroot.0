@@ -1,102 +1,61 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 29 May 2019 12:52:17 +0200
-Subject: [Buildroot] [PATCH for-next] package/zziplib: new package
-Message-ID: <20190529105217.24928-1-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 29 May 2019 13:58:36 +0200
+Subject: [Buildroot] [PATCH V3 01/10] arch/csky: Use VDSP instead of DSP
+In-Reply-To: <CAJF2gTRf_kzuqM_takvwNHU3sBfTBjqOBDv4xbqwnS9E9f9uTQ@mail.gmail.com>
+References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
+ <1559114328-23357-2-git-send-email-guoren@kernel.org>
+ <20190529092128.36183371@windsurf.home>
+ <CAJF2gTQC8UigBniC_RKUVFddX=PnN7O9GyBZXcxyXuPBg9WNHw@mail.gmail.com>
+ <20190529095629.2b28cbb7@windsurf.home>
+ <CAJF2gTT5N6ST9Ph-L+bX2WtNx4ENu0wQ2uQ63D=3C-Zqoit+3w@mail.gmail.com>
+ <20190529103824.58560e4e@windsurf.home>
+ <CAJF2gTQfu_FAck2YM5b=d8QaYQhBHoCSeG4tvL1i8a1=7vgofA@mail.gmail.com>
+ <20190529112317.08fe1013@windsurf.home>
+ <CAJF2gTRf_kzuqM_takvwNHU3sBfTBjqOBDv4xbqwnS9E9f9uTQ@mail.gmail.com>
+Message-ID: <20190529135836.1a907b0e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Force the build system to use python2 interpreter.
+Hello,
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
-Tested using test-pkg with the useful subset of toolchains.
----
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/zziplib/Config.in    | 11 +++++++++++
- package/zziplib/zziplib.hash |  3 +++
- package/zziplib/zziplib.mk   | 18 ++++++++++++++++++
- 5 files changed, 34 insertions(+)
- create mode 100644 package/zziplib/Config.in
- create mode 100644 package/zziplib/zziplib.hash
- create mode 100644 package/zziplib/zziplib.mk
+On Wed, 29 May 2019 17:45:19 +0800
+Guo Ren <guoren@kernel.org> wrote:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 66dc2504ff..29fc91dabb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1949,6 +1949,7 @@ F:	package/tk/
- F:	package/upower/
- F:	package/waffle/
- F:	package/xenomai/
-+F:	package/zziplib/
- F:	toolchain/toolchain-external/toolchain-external-arm-aarch64/
- F:	toolchain/toolchain-external/toolchain-external-arm-aarch64-be/
- F:	toolchain/toolchain-external/toolchain-external-arm-arm/
-diff --git a/package/Config.in b/package/Config.in
-index 6f1c4593e6..f61009410d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1189,6 +1189,7 @@ menu "Compression and decompression"
- 	source "package/snappy/Config.in"
- 	source "package/szip/Config.in"
- 	source "package/zlib/Config.in"
-+	source "package/zziplib/Config.in"
- endmenu
- 
- menu "Crypto"
-diff --git a/package/zziplib/Config.in b/package/zziplib/Config.in
-new file mode 100644
-index 0000000000..6b55572a4d
---- /dev/null
-+++ b/package/zziplib/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_ZZIPLIB
-+	bool "zziplib"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  The zziplib provides read access to zipped files in a
-+	  zip-archive, using compression based solely on free algorithms
-+	  provided by zlib. It also provides a functionality to overlay
-+	  the archive filesystem with the filesystem of the operating
-+	  system environment.
-+
-+	  http://zziplib.sourceforge.net
-diff --git a/package/zziplib/zziplib.hash b/package/zziplib/zziplib.hash
-new file mode 100644
-index 0000000000..ab191cc21e
---- /dev/null
-+++ b/package/zziplib/zziplib.hash
-@@ -0,0 +1,3 @@
-+# sha256 locally computed
-+sha256 846246d7cdeee405d8d21e2922c6e97f55f24ecbe3b6dcf5778073a88f120544  zziplib-v0.13.69.tar.gz
-+sha256 94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  COPYING.LIB
-diff --git a/package/zziplib/zziplib.mk b/package/zziplib/zziplib.mk
-new file mode 100644
-index 0000000000..7b0dd5283d
---- /dev/null
-+++ b/package/zziplib/zziplib.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# zziplib
-+#
-+################################################################################
-+
-+ZZIPLIB_VERSION = v0.13.69
-+ZZIPLIB_SITE = $(call github,gdraheim,zziplib,$(ZZIPLIB_VERSION))
-+ZZIPLIB_LICENSE = LGPL-2.0+ or MPL-1.1
-+ZZIPLIB_LICENSE_FILES = COPYING.LIB
-+ZZIPLIB_INSTALL_STAGING = YES
-+
-+ZZIPLIB_DEPENDENCIES = host-pkgconf host-python zlib
-+
-+# zziplib is not python3 friendly, so force the python interpreter
-+ZZIPLIB_CONF_OPTS = ac_cv_path_PYTHON=$(HOST_DIR)/bin/python2
-+
-+$(eval $(autotools-package))
+> > I am willing to help you formulate this properly, but since I still
+> > don't understand why you are dropping the DSP option, I can't really
+> > help by proposing a better wording.  
+> DSP extention is no longer used for C-SKY and there is no defconfig
+> use "e" extension in buildroot.
+
+Not having a defconfig doesn't mean something is not supported. There
+are tons of features in Buildroot that are not enabled by defconfig,
+and still we do support them.
+
+> Change commit log, like this:
+> 
+> Subject: Change DSP to VDSP for -mcpu
+> 
+> DSP extention is no longer used for C-SKY gcc and there is no
+> defconfig use "e" extension
+> in buildroot.
+
+Again, the defconfig aspect is irrelevant. Only the fact the extension
+is no longer used for C-SKY is relevant.
+
+> VDSP is C-SKY enhanced extension instruction set for SIMD, AI and DSP
+> operation. It could be supported by abiv2 (ck807, ck810, ck860).
+> 
+> Is that OK?
+
+Yes, with the change above.
+
+Thanks!
+
+Thomas
 -- 
-2.21.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
