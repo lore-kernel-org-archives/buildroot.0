@@ -1,39 +1,35 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Wed, 29 May 2019 17:16:54 +0200
-Subject: [Buildroot] [PATCH for-next 2/3] package/swig: enable PCRE regex
- matching in host-swig
-In-Reply-To: <20190529151655.7098-1-romain.naour@gmail.com>
-References: <20190529151655.7098-1-romain.naour@gmail.com>
-Message-ID: <20190529151655.7098-2-romain.naour@gmail.com>
+From: Thomas Huth <huth@tuxfamily.org>
+Date: Wed, 29 May 2019 17:18:58 +0200
+Subject: [Buildroot] [PATCH 05/19] package/dbus-glib: add hash for
+ license file
+In-Reply-To: <20190529033537.128311-6-aduskett@gmail.com>
+References: <20190529033537.128311-1-aduskett@gmail.com>
+ <20190529033537.128311-6-aduskett@gmail.com>
+Message-ID: <b0c2449f-6afa-365f-0c0f-ce23b05c3f5e@tuxfamily.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The upcoming ogre package needs a host swig binary with PCRE
-regex support.
+On 29/05/2019 05.35, aduskett at gmail.com wrote:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/dbus-glib/dbus-glib.hash | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/dbus-glib/dbus-glib.hash b/package/dbus-glib/dbus-glib.hash
+> index 8a80b71b45..098832431e 100644
+> --- a/package/dbus-glib/dbus-glib.hash
+> +++ b/package/dbus-glib/dbus-glib.hash
+> @@ -1,2 +1,5 @@
+>  # Locally calculated after checking pgp signature
+>  sha256 7ce4760cf66c69148f6bd6c92feaabb8812dee30846b24cd0f7395c436d7e825  dbus-glib-0.110.tar.gz
+> +
+> +# Locally calculated
+> +sha256 ef1634fc21d9112dca08f2557313584719d534d05213cf14f3c77938506266b4  COPYING
+> 
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
----
- package/swig/swig.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/swig/swig.mk b/package/swig/swig.mk
-index 157d3a39a6..892b0abe30 100644
---- a/package/swig/swig.mk
-+++ b/package/swig/swig.mk
-@@ -7,9 +7,9 @@
- SWIG_VERSION_MAJOR = 3.0
- SWIG_VERSION = $(SWIG_VERSION_MAJOR).12
- SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
--HOST_SWIG_DEPENDENCIES = host-bison
-+HOST_SWIG_DEPENDENCIES = host-bison host-pcre
- HOST_SWIG_CONF_OPTS = \
--	--without-pcre \
-+	--with-pcre \
- 	--disable-ccache \
- 	--without-octave
- SWIG_LICENSE = GPL-3.0+, BSD-2-Clause, BSD-3-Clause
--- 
-2.21.0
+Reviewed-by: Thomas Huth <huth@tuxfamily.org>
