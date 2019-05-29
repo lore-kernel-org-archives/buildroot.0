@@ -1,208 +1,35 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Wed, 29 May 2019 17:05:08 +0200
-Subject: [Buildroot] [PATCH 2/2] package/Config.in: fix alphabetical order
-In-Reply-To: <1559142308-3303-1-git-send-email-jerzy.m.grzegorek@gmail.com>
-References: <1559142308-3303-1-git-send-email-jerzy.m.grzegorek@gmail.com>
-Message-ID: <1559142308-3303-2-git-send-email-jerzy.m.grzegorek@gmail.com>
+From: Thomas Huth <huth@tuxfamily.org>
+Date: Wed, 29 May 2019 17:14:58 +0200
+Subject: [Buildroot] [PATCH 04/19] package/cmake: add hash for license
+ file
+In-Reply-To: <20190529033537.128311-5-aduskett@gmail.com>
+References: <20190529033537.128311-1-aduskett@gmail.com>
+ <20190529033537.128311-5-aduskett@gmail.com>
+Message-ID: <9626aacb-db88-5b67-4362-68e56e890b72@tuxfamily.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
----
- package/Config.in | 44 ++++++++++++++++++++++----------------------
- 1 file changed, 22 insertions(+), 22 deletions(-)
+On 29/05/2019 05.35, aduskett at gmail.com wrote:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/cmake/cmake.hash | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+> index f138ac79a1..9e0159a3c8 100644
+> --- a/package/cmake/cmake.hash
+> +++ b/package/cmake/cmake.hash
+> @@ -1,2 +1,5 @@
+>  # From http://www.cmake.org/files/v3.8/cmake-3.8.2-SHA-256.txt
+>  sha256 da3072794eb4c09f2d782fcee043847b99bb4cf8d4573978d9b2024214d6e92d  cmake-3.8.2.tar.gz
+> +
+> +# Locally calculated
+> +sha256 af3030e1bf1af2f534430fdfe3cfc5a617966648a2a7f0c06a631adc92be1e5f  Copyright.txt
+> 
 
-diff --git a/package/Config.in b/package/Config.in
-index e89d0cfc8b..aec91bfdcd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -287,10 +287,10 @@ comment "Graphic libraries"
- 	source "package/directfb/Config.in"
- 	source "package/directfb-examples/Config.in"
- 	source "package/efl/Config.in"
-+	source "package/fb-test-app/Config.in"
- 	source "package/fbdump/Config.in"
- 	source "package/fbgrab/Config.in"
- 	source "package/fbset/Config.in"
--	source "package/fb-test-app/Config.in"
- 	source "package/fbterm/Config.in"
- 	source "package/fbv/Config.in"
- 	source "package/freerdp/Config.in"
-@@ -302,23 +302,23 @@ comment "Graphic libraries"
- 	source "package/ocrad/Config.in"
- 	source "package/psplash/Config.in"
- 	source "package/sdl/Config.in"
--	source "package/sdl_gfx/Config.in"
--	source "package/sdl_image/Config.in"
--	source "package/sdl_mixer/Config.in"
--	source "package/sdl_net/Config.in"
--	source "package/sdl_sound/Config.in"
--	source "package/sdl_ttf/Config.in"
- 	source "package/sdl2/Config.in"
- 	source "package/sdl2_gfx/Config.in"
- 	source "package/sdl2_image/Config.in"
- 	source "package/sdl2_mixer/Config.in"
- 	source "package/sdl2_net/Config.in"
- 	source "package/sdl2_ttf/Config.in"
-+	source "package/sdl_gfx/Config.in"
-+	source "package/sdl_image/Config.in"
-+	source "package/sdl_mixer/Config.in"
-+	source "package/sdl_net/Config.in"
-+	source "package/sdl_sound/Config.in"
-+	source "package/sdl_ttf/Config.in"
- 	source "package/tk/Config.in"
- 
- comment "Other GUIs"
--	source "package/qt5/Config.in"
- 	source "package/kf5/Config.in"
-+	source "package/qt5/Config.in"
- if BR2_PACKAGE_QT5
- comment "QT libraries and helper libraries"
- 	source "package/cutelyst/Config.in"
-@@ -459,8 +459,8 @@ endmenu
- 	source "package/kbd/Config.in"
- 	source "package/lcdproc/Config.in"
- 	source "package/libuio/Config.in"
--	source "package/linuxconsoletools/Config.in"
- 	source "package/linux-backports/Config.in"
-+	source "package/linuxconsoletools/Config.in"
- 	source "package/lirc-tools/Config.in"
- 	source "package/lm-sensors/Config.in"
- 	source "package/lshw/Config.in"
-@@ -629,12 +629,15 @@ menu "Lua libraries/modules"
- 	source "package/lua-messagepack/Config.in"
- 	source "package/lua-msgpack-native/Config.in"
- 	source "package/lua-periphery/Config.in"
-+	source "package/lua-resty-http/Config.in"
-+	source "package/lua-sailor/Config.in"
- 	source "package/lua-sdl2/Config.in"
- 	source "package/lua-std-debug/Config.in"
- 	source "package/lua-std-normalize/Config.in"
- 	source "package/lua-stdlib/Config.in"
- 	source "package/lua-testmore/Config.in"
- 	source "package/lua-utf8/Config.in"
-+	source "package/lua-valua/Config.in"
- 	source "package/luabitop/Config.in"
- 	source "package/luadbi/Config.in"
- 	source "package/luadbi-sqlite3/Config.in"
-@@ -645,12 +648,9 @@ menu "Lua libraries/modules"
- 	source "package/lualogging/Config.in"
- 	source "package/luaossl/Config.in"
- 	source "package/luaposix/Config.in"
--	source "package/lua-resty-http/Config.in"
--	source "package/lua-sailor/Config.in"
- 	source "package/luasec/Config.in"
- 	source "package/luasocket/Config.in"
- 	source "package/luasql-sqlite3/Config.in"
--	source "package/lua-valua/Config.in"
- 	source "package/lutok/Config.in"
- 	source "package/luv/Config.in"
- 	source "package/luvi/Config.in"
-@@ -739,13 +739,13 @@ menu "Perl libraries/modules"
- 	source "package/perl-lwp-mediatypes/Config.in"
- 	source "package/perl-mail-dkim/Config.in"
- 	source "package/perl-mailtools/Config.in"
--	source "package/perl-mime-base64-urlsafe/Config.in"
- 	source "package/perl-mime-base64/Config.in"
-+	source "package/perl-mime-base64-urlsafe/Config.in"
- 	source "package/perl-mime-tools/Config.in"
- 	source "package/perl-module-implementation/Config.in"
- 	source "package/perl-module-runtime/Config.in"
--	source "package/perl-mojolicious-plugin-authentication/Config.in"
- 	source "package/perl-mojolicious/Config.in"
-+	source "package/perl-mojolicious-plugin-authentication/Config.in"
- 	source "package/perl-moo/Config.in"
- 	source "package/perl-net-dns/Config.in"
- 	source "package/perl-net-http/Config.in"
-@@ -764,8 +764,8 @@ menu "Perl libraries/modules"
- 	source "package/perl-role-tiny/Config.in"
- 	source "package/perl-stream-buffered/Config.in"
- 	source "package/perl-sub-exporter-progressive/Config.in"
--	source "package/perl-sub-quote/Config.in"
- 	source "package/perl-sub-install/Config.in"
-+	source "package/perl-sub-quote/Config.in"
- 	source "package/perl-sys-cpu/Config.in"
- 	source "package/perl-sys-meminfo/Config.in"
- 	source "package/perl-sys-mmap/Config.in"
-@@ -816,9 +816,9 @@ menu "External python modules"
- 	source "package/python-aiohttp-security/Config.in"
- 	source "package/python-aiohttp-session/Config.in"
- 	source "package/python-aiohttp-sse/Config.in"
-+	source "package/python-aiojobs/Config.in"
- 	source "package/python-aiomonitor/Config.in"
- 	source "package/python-aiorwlock/Config.in"
--	source "package/python-aiojobs/Config.in"
- 	source "package/python-alsaaudio/Config.in"
- 	source "package/python-argh/Config.in"
- 	source "package/python-arrow/Config.in"
-@@ -869,8 +869,8 @@ menu "External python modules"
- 	source "package/python-dicttoxml/Config.in"
- 	source "package/python-django/Config.in"
- 	source "package/python-docker/Config.in"
--	source "package/python-dockerpty/Config.in"
- 	source "package/python-docker-pycreds/Config.in"
-+	source "package/python-dockerpty/Config.in"
- 	source "package/python-docopt/Config.in"
- 	source "package/python-docutils/Config.in"
- 	source "package/python-dominate/Config.in"
-@@ -882,8 +882,8 @@ menu "External python modules"
- 	source "package/python-falcon/Config.in"
- 	source "package/python-fire/Config.in"
- 	source "package/python-flask/Config.in"
--	source "package/python-flask-cors/Config.in"
- 	source "package/python-flask-babel/Config.in"
-+	source "package/python-flask-cors/Config.in"
- 	source "package/python-flask-jsonrpc/Config.in"
- 	source "package/python-flask-login/Config.in"
- 	source "package/python-flask-sqlalchemy/Config.in"
-@@ -916,9 +916,9 @@ menu "External python modules"
- 	source "package/python-jaraco-classes/Config.in"
- 	source "package/python-jedi/Config.in"
- 	source "package/python-jinja2/Config.in"
-+	source "package/python-json-schema-validator/Config.in"
- 	source "package/python-jsonmodels/Config.in"
- 	source "package/python-jsonschema/Config.in"
--	source "package/python-json-schema-validator/Config.in"
- 	source "package/python-keyring/Config.in"
- 	source "package/python-libconfig/Config.in"
- 	source "package/python-libusb1/Config.in"
-@@ -1263,8 +1263,8 @@ menu "Graphics"
- 	source "package/cairo/Config.in"
- 	source "package/cairomm/Config.in"
- 	source "package/chipmunk/Config.in"
--	source "package/exiv2/Config.in"
- 	source "package/exempi/Config.in"
-+	source "package/exiv2/Config.in"
- 	source "package/fltk/Config.in"
- 	source "package/fontconfig/Config.in"
- 	source "package/freetype/Config.in"
-@@ -1845,8 +1845,8 @@ menu "Networking applications"
- 	source "package/bind/Config.in"
- 	source "package/bird/Config.in"
- 	source "package/bluez-tools/Config.in"
--	source "package/bluez_utils/Config.in"
- 	source "package/bluez5_utils/Config.in"
-+	source "package/bluez_utils/Config.in"
- 	source "package/bmon/Config.in"
- 	source "package/boa/Config.in"
- 	source "package/boinc/Config.in"
-@@ -1956,13 +1956,13 @@ menu "Networking applications"
- 	source "package/nbd/Config.in"
- 	source "package/ncftp/Config.in"
- 	source "package/ndisc6/Config.in"
-+	source "package/net-tools/Config.in"
- 	source "package/netatalk/Config.in"
- 	source "package/netcat/Config.in"
- 	source "package/netcat-openbsd/Config.in"
- 	source "package/netplug/Config.in"
- 	source "package/netsnmp/Config.in"
- 	source "package/netstat-nat/Config.in"
--	source "package/net-tools/Config.in"
- 	source "package/network-manager/Config.in"
- 	source "package/nfacct/Config.in"
- 	source "package/nftables/Config.in"
--- 
-2.17.1
+Reviewed-by: Thomas Huth <huth@tuxfamily.org>
