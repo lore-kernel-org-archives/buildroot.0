@@ -1,48 +1,78 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Wed, 29 May 2019 22:17:40 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-cython: bump to version
- 0.29.9
-Message-ID: <20190529191740.30683-1-asafka7@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 29 May 2019 22:50:35 +0200
+Subject: [Buildroot] board/ci20 uboot problems due to fdt headers
+In-Reply-To: <79a7e587-214c-3a9e-b846-c88bccc06c83@igalia.com>
+References: <8811f1b8-8019-912c-a54a-331aabcedbd1@igalia.com>
+ <230c7762-612e-6d59-5b5b-930d56a8df32@mind.be>
+ <79a7e587-214c-3a9e-b846-c88bccc06c83@igalia.com>
+Message-ID: <38bc5257-5fcb-625a-f2d8-8391cc0d0d5e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 39ce8963b2..87aa565523 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5	074f70ec8bd0a6bf5cf658508c63a999  Cython-0.29.5.tar.gz
--sha256	9d5290d749099a8e446422adfb0aa2142c711284800fb1eb70f595101e32cbf1  Cython-0.29.5.tar.gz
-+md5	bc0cca4658947bf2fb3fc10e8d090182  Cython-0.29.9.tar.gz
-+sha256	b88e033c06d29f3f3c760a3fb9837dce6e124d627bd562d1cdf93e9da16df215  Cython-0.29.9.tar.gz
- # Locally computed sha256 checksums
- sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 9ab4ebb2a9..bd9f322d53 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CYTHON_VERSION = 0.29.5
-+PYTHON_CYTHON_VERSION = 0.29.9
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/e0/31/4a166556f92c469d8291d4b03a187f325c773c330fffc1e798bf83d947f2
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/69/ab/b18f7f2e61c12e5e859c86b6d37f73971679d5f5c5c97d6cc7ff8916468a
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
--- 
-2.20.1
+
+On 29/05/2019 08:54, Paulo Matos wrote:
+> 
+> 
+> On 28/05/2019 20:22, Arnout Vandecappelle wrote:
+>>
+>>  Indeed, it was fixed by commit bf733342324 and its follow-up f437bf547c. Which
+>> Buildroot version are you using? Anything more recent than 2018.02.1 should no
+>> longer have this issue.
+>>
+> 
+> 
+> Apologies for not mentioning it but I am using tip of master, which is
+> why I was surprised when I saw this error come up again. Not doing
+> anything special.
+> 
+> On arch `pacman -Ss dtc` installs /usr/include/libfdt.h, which seems to
+> conflict with the ones from uboot.
+> 
+> Should I report this?
+
+ You did :-)
+
+ It can indeed easily be reproduced with the ci20 defconfig.
+
+ The issue is that in U-Boot commit 01286329b27b27eaeda045b469d41b1d9fce545a,
+$(SRCTREE) was renamed to $(srctree). So, any commit before that (i.e. any
+version before 2014.04) will not match the sed pattern from our uboot.mk and
+will not be fixed.
+
+ The solution is to add an addition substitution pattern in uboot.mk that does
+the same on SRCTREE instead of srctree.
+
+ In addition, commit 0de71d507157c4bd4fddcd3a419140d2b986eed2 moved it from
+libfdt to lib/libfdt. In other words, before 2010.06, the pattern matches even
+less... But that's easily fixed by making the lib/ part optional.
+
+ Oh, but actually, the fix simply doesn't work on older U-Boot versions -
+Buildroot commit f437bf547ca4484 disables it if scripts/dtc/libfdt doesn't
+exist... If that directory doesn't exist, the bundled libfdt.h, libfdt_env.h and
+fdt.h reside in ${srctree}/include. However, that directory also contains a
+bunch of files that may collide with the files from /usr/include that we want
+for host compilation...
+
+ So, I think the solution might be something like this:
+
+define UBOOT_FIXUP_LIBFDT_INCLUDE
+	$(Q)if [ -d $(@D)/scripts/dtc/libfdt ]; then \
+		mkdir -p $(@D)/scripts/dtc/libfdt; \
+		cd $(@D)/scripts/dts/libfdt; \
+		ln -s ../../../include/fdt.h .; \
+		ln -s ../../../include/libfdt*.h .; \
+	fi
+	$(Q)$(SED) \
+		's%-I$$(srctree)/lib/libfdt%-I$$(srctree)/scripts/dtc/libfdt%' \
+		's%-I$$(SRCTREE)\(/lib\)\?/libfdt%-I$$(SRCTREE)/scripts/dtc/libfdt%' \
+		$(@D)/tools/Makefile
+endef
+
+ Of course, this was completely untested. Any takers to create a patch from this?
+
+ Regards,
+ Arnout
