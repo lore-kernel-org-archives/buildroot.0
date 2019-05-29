@@ -1,102 +1,70 @@
-From: Matthew Weber <matthew.weber@collins.com>
-Date: Wed, 29 May 2019 10:58:09 -0500
-Subject: [Buildroot] [External] Re: Cannot cross-compile libopenssl on
- CentOS7
-In-Reply-To: <fb7027e2-8897-2cee-65e0-4b8929779a6c@mind.be>
-References: <3cd11507-8aa5-4fbe-c07a-54d4aacb8e74@ice.rwth-aachen.de>
- <fb7027e2-8897-2cee-65e0-4b8929779a6c@mind.be>
-Message-ID: <CANQCQpZ5NMp5K1UR+o_OGB6anXZ+t_Erf52qo2QgBJo0Mxtu7Q@mail.gmail.com>
+From: Robert Hancock <hancock@sedsystems.ca>
+Date: Wed, 29 May 2019 11:10:45 -0600
+Subject: [Buildroot] [PATCH] gpsd: update systemd service file binary
+ path
+In-Reply-To: <1559085957-14066-1-git-send-email-hancock@sedsystems.ca>
+References: <1559085957-14066-1-git-send-email-hancock@sedsystems.ca>
+Message-ID: <5f060b4a-e642-307a-4c6a-6a938b0b4d82@sedsystems.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,
+Sorry, ignore this patch, it is a dupe of "package/gpsd: update systemd
+service file binary path".
 
-On Sat, May 25, 2019 at 10:54 AM Arnout Vandecappelle <arnout@mind.be> wrote:
->
->
->
-> On 21/05/2019 20:19, Lukas J?nger wrote:
-> > Hi,
-> >
-> > I tried building a rootfs with buildroot on CentOS 7 and I require libopenssl. I
-> > configured buildroot as seen in the attached .config.
->
->  In the future, please post a defconfig instead of a full config. In this case:
->
-> BR2_aarch64=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
-> BR2_PACKAGE_XEN=y
-> BR2_PACKAGE_XEN_TOOLS=y
->
->
->  Note that this is a configuration that gets tested by the autobuilders, and
-> unless I'm mistaken, Matt has a RHEL7 autobuilder (CentOS7 should be the same).
+On 2019-05-28 5:25 p.m., Robert Hancock wrote:
+> The systemd gpsd.service file supplied by gpsd specifies a binary path
+> of /usr/local/sbin/gpsd, while Buildroot installs the binary in
+> /usr/sbin/gpsd. Update the path to match the actual binary location.
+> 
+> Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
+> ---
+>  ...3-update-systemd-service-file-binary-path.patch | 30 ++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 package/gpsd/0003-update-systemd-service-file-binary-path.patch
+> 
+> diff --git a/package/gpsd/0003-update-systemd-service-file-binary-path.patch b/package/gpsd/0003-update-systemd-service-file-binary-path.patch
+> new file mode 100644
+> index 0000000..32feb18
+> --- /dev/null
+> +++ b/package/gpsd/0003-update-systemd-service-file-binary-path.patch
+> @@ -0,0 +1,30 @@
+> +From c4c314f23bc6fec8d3ddadb49090eb3a2e84881d Mon Sep 17 00:00:00 2001
+> +From: Robert Hancock <hancock@sedsystems.ca>
+> +Date: Tue, 28 May 2019 17:13:25 -0600
+> +Subject: [PATCH] Update systemd service file binary path
+> +
+> +The systemd gpsd.service file supplied by gpsd specifies a binary path
+> +of /usr/local/sbin/gpsd, while Buildroot installs the binary in
+> +/usr/sbin/gpsd. Update the path to match the actual binary location.
+> +
+> +Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
+> +---
+> + systemd/gpsd.service | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/systemd/gpsd.service b/systemd/gpsd.service
+> +index c1f193c..2707ff9 100644
+> +--- a/systemd/gpsd.service
+> ++++ b/systemd/gpsd.service
+> +@@ -8,7 +8,7 @@ After=chronyd.service
+> + Type=forking
+> + EnvironmentFile=-/etc/default/gpsd
+> + EnvironmentFile=-/etc/sysconfig/gpsd
+> +-ExecStart=/usr/local/sbin/gpsd $GPSD_OPTIONS $OPTIONS $DEVICES
+> ++ExecStart=/usr/sbin/gpsd $GPSD_OPTIONS $OPTIONS $DEVICES
+> + 
+> + [Install]
+> + WantedBy=multi-user.target
+> +-- 
+> +1.8.3.1
+> +
+> 
 
-Correct, I've got a RHEL7.4 builder running.  I've also just tested
-the above defconfig without any problems.
-
-> Thomas, do you know if we have other RHEL/CentOS 7 autobuilders?
->
->  Anyway, there never was a build error with libopenssl on a RHEL7 machine...
->
-> > Sadly, the build fails with this error:
-> >
-> > install libcrypto.a ->
-> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.a
-> >
-> > install libssl.a ->
-> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libssl.a
-> >
-> > link
-> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
-> > ->
-> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so.1.1
-> >
-> > install libcrypto.so ->
-> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
-> >
-> > install libcrypto.so.1.1 ->
-> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
-> >
-> > /scratch/juenger/tmp/buildroot/output/host/bin/aarch64-linux-gnu-ar:
-> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so:
-> > File format not recognized
-> > /scratch/juenger/tmp/buildroot/output/host/bin/aarch64-linux-gnu-ar:
-> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so.new:
-> > File format not recognized
-> >
-> > It seems to be related to this issue:
-> > https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_openssl_openssl_issues_6641&d=DwIDaQ&c=ilBQI1lupc9Y65XwNblLtw&r=y1sOV0GV8NZUkffv7oCRxs2Sd3nOBS-NxDM3NY8lOgs&m=5H6BWknkyVnfm0N08GNowwODLs39QqUq7cGT-Ju0_sc&s=RMnPDCEVBOu94Zyi4fmm3y7thjFeTY67GFVhIi21Za8&e=
->
->  Indeed looks similar. Can you execute the steps reported in that bug to verify
-> if it really is the same?
->
->  My perl-fu is not enough to understand what commit 356d634 does exactly, but
-> AFAIU it should error out if the version is not high enough, no?
->
->
-> > I already tried upgrading the perl package with CPAN, but buildroot still fails.
-> > I also tried upgrading the package with SCL, but that did not help either. It
-> > might be because buildroot does not allow me to have PERL_MM_OPT defined, but
->
->  What is PERL_MM_OPT supposed to do?
->
->  Regards,
->  Arnout
->
-> > I'm not sure. OpenSSL by itself without buildroot builds fine on the same system.
-> >
-> > Do you have an idea on how to fix this?
-> >
-> > Thanks,
-> > Lukas
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > https://urldefense.proofpoint.com/v2/url?u=http-3A__lists.busybox.net_mailman_listinfo_buildroot&d=DwIDaQ&c=ilBQI1lupc9Y65XwNblLtw&r=y1sOV0GV8NZUkffv7oCRxs2Sd3nOBS-NxDM3NY8lOgs&m=5H6BWknkyVnfm0N08GNowwODLs39QqUq7cGT-Ju0_sc&s=8nhFGgQtE3nTqMbUS_nwvHR-ulO8oQSxOejiBk6fFJA&e=
-> >
+-- 
+Robert Hancock
+Senior Software Developer
+SED Systems, a division of Calian Ltd.
+Email: hancock at sedsystems.ca
