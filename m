@@ -1,9 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 28 May 2019 23:35:22 -0400
-Subject: [Buildroot] [PATCH 04/19] package/cmake: add hash for license file
+Date: Tue, 28 May 2019 23:35:24 -0400
+Subject: [Buildroot] [PATCH 06/19] package/dbus-python: add hash for license
+ file
 In-Reply-To: <20190529033537.128311-1-aduskett@gmail.com>
 References: <20190529033537.128311-1-aduskett@gmail.com>
-Message-ID: <20190529033537.128311-5-aduskett@gmail.com>
+Message-ID: <20190529033537.128311-7-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +15,18 @@ From: Adam Duskett <Aduskett@gmail.com>
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/cmake/cmake.hash | 3 +++
+ package/dbus-python/dbus-python.hash | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
-index f138ac79a1..9e0159a3c8 100644
---- a/package/cmake/cmake.hash
-+++ b/package/cmake/cmake.hash
+diff --git a/package/dbus-python/dbus-python.hash b/package/dbus-python/dbus-python.hash
+index 991bb42787..5bf2f507c6 100644
+--- a/package/dbus-python/dbus-python.hash
++++ b/package/dbus-python/dbus-python.hash
 @@ -1,2 +1,5 @@
- # From http://www.cmake.org/files/v3.8/cmake-3.8.2-SHA-256.txt
- sha256 da3072794eb4c09f2d782fcee043847b99bb4cf8d4573978d9b2024214d6e92d  cmake-3.8.2.tar.gz
+ # Locally calculated after checking pgp signature
+ sha256	abf12bbb765e300bf8e2a1b2f32f85949eab06998dbda127952c31cb63957b6f	dbus-python-1.2.8.tar.gz
 +
 +# Locally calculated
-+sha256 af3030e1bf1af2f534430fdfe3cfc5a617966648a2a7f0c06a631adc92be1e5f  Copyright.txt
++sha256	1e4562245383fdb5203b1769789e5b28bba21af4923aea7e8b2614f7f93623c0	COPYING
 -- 
 2.21.0
