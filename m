@@ -1,40 +1,43 @@
-From: Guo Ren <guoren@kernel.org>
-Date: Wed, 29 May 2019 16:12:25 +0800
-Subject: [Buildroot] [PATCH V3 01/10] arch/csky: Use VDSP instead of DSP
-In-Reply-To: <20190529095629.2b28cbb7@windsurf.home>
-References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
- <1559114328-23357-2-git-send-email-guoren@kernel.org>
- <20190529092128.36183371@windsurf.home>
- <CAJF2gTQC8UigBniC_RKUVFddX=PnN7O9GyBZXcxyXuPBg9WNHw@mail.gmail.com>
- <20190529095629.2b28cbb7@windsurf.home>
-Message-ID: <CAJF2gTT5N6ST9Ph-L+bX2WtNx4ENu0wQ2uQ63D=3C-Zqoit+3w@mail.gmail.com>
+From: Thomas Huth <huth@tuxfamily.org>
+Date: Wed, 29 May 2019 10:14:10 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/barebox: add hash for the license
+ file
+In-Reply-To: <fbd70fed-f646-a268-6f16-d8ba9caea2da@mind.be>
+References: <20190527153054.12381-1-b.bilas@grinn-global.com>
+ <20190528084115.77e880c5@thl530.multi.box>
+ <86ace6ef-9f4c-8729-519a-cfc65abfa47d@grinn-global.com>
+ <fbd70fed-f646-a268-6f16-d8ba9caea2da@mind.be>
+Message-ID: <20190529101410.445880c4@thl530.multi.box>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 29, 2019 at 3:56 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Guo,
->
-> On Wed, 29 May 2019 15:30:45 +0800
-> Guo Ren <guoren@kernel.org> wrote:
->
-> > OK, two pathes.
->
-> Not just two patches: also a better commit log for the DSP -> VDSP
-> change.
+Am Tue, 28 May 2019 20:16:42 +0200
+schrieb Arnout Vandecappelle <arnout@mind.be>:
 
-I want these two patches:
+> 
+> 
+> On 28/05/2019 18:53, Bartosz Bi?as wrote:
+> > There is also BSD-3-Clause used in some files so there is necessity
+> > to complete licence files with them. I will prepare a new patch
+> > with that.
+> 
+>  Can you also check (and specify in the commit message) if this file
+> exists in *all* versions of barebox? It is possible to configure a
+> custom version of barebox, so it can be pretty much anything...
+> 
+>  Well, I checked myself: the LICENSES directory exists since
+> 2019.04.0...
+> 
+>  There is unfortunately no simple way to conditionally add license
+> files: if a file specified in _LICENSE_FILES doesn't exist, it's a
+> hard error. You can use $(wildcard ...) but then you have to strip
+> off the source directory again.
 
-1. Remove DSP, because it's no use in current buildroot.
-2. Add VDSP support
+Hmm, don't we have the problem with the hash of the tarball itself
+already? If you specify another version, the hash of the tar.bz2 file
+certainly does not match anymore...
 
-Here is my commit log for Introduce VDSP feature:
-
-VDSP is C-SKY enhanced extension instruction set for SIMD, AI and DSP
-operation. It could be support by abiv2 (ck807, ck810, ck860).
-
-Is that OK?
+ Thomas
