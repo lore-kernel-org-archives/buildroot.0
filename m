@@ -1,57 +1,49 @@
-From: Guo Ren <guoren@kernel.org>
-Date: Wed, 29 May 2019 16:53:29 +0800
-Subject: [Buildroot] [PATCH V3 03/10] arch/csky: Add FLOAT_ABI compiler
- options
-In-Reply-To: <20190529103930.35f88870@windsurf.home>
-References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
- <1559114328-23357-4-git-send-email-guoren@kernel.org>
- <20190529092307.6c78996b@windsurf.home>
- <CAJF2gTSgReEOOJAvXY=MraqTLV4DwkKOqsbQ-4rBdNiaibxQfQ@mail.gmail.com>
- <20190529095739.18d4d3c8@windsurf.home>
- <CAJF2gTRb4W=ZUz4-WxPwzdaQMMo1suwPsxU47QeGdjfBvgs3og@mail.gmail.com>
- <20190529103930.35f88870@windsurf.home>
-Message-ID: <CAJF2gTQtG+Az=GmKqJkZa0KSDXU=Q=Hp-UD+z92ixoN=X38L-Q@mail.gmail.com>
+From: Thomas Huth <huth@tuxfamily.org>
+Date: Wed, 29 May 2019 10:59:16 +0200
+Subject: [Buildroot] [PATCH 03/19] package/bzip2: add hash for license
+ file
+In-Reply-To: <20190529033537.128311-4-aduskett@gmail.com>
+References: <20190529033537.128311-1-aduskett@gmail.com>
+ <20190529033537.128311-4-aduskett@gmail.com>
+Message-ID: <20190529105916.465f5e49@thl530.multi.box>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thx,
+Am Tue, 28 May 2019 23:35:21 -0400
+schrieb aduskett at gmail.com:
 
-On Wed, May 29, 2019 at 4:39 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Guo,
->
-> On Wed, 29 May 2019 16:30:43 +0800
-> Guo Ren <guoren@kernel.org> wrote:
->
-> > OK, change the commit log with:
-> >
-> > C-SKY CPU is seperated into two ABIs:
-> >  - abiv1: mcore based ELF_NUM:39 and do not support FPU & VDSP. (CPU: 610)
-> >  - abiv2: C-SKY own ISA with ELF_NUM:252 and support FPU & VDSP. (CPU:
-> > 807, 810, 860)
-> >
-> > So we don't care BR2_GCC_TARGET_FLOAT_ABI for abiv1, because it based
-> > on CSKY_FPU and it'll
-> > never be selected by ck610.
->
-> This last part is not correct: BR2_GCC_TARGET_FLOAT_ABI *will* have a
-> value for abiv1. Except the value will always be "soft" because there's
-> no FPU support in ck610, which is the only core using abiv1. So saying
-> "We don't care about BR2_GCC_TARGET_FLOAT_ABI for abiv1" is not correct.
-Yes, Approved and I'll change it like this:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Also add a standard sha256 hash for the package itself.
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/bzip2/bzip2.hash | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/package/bzip2/bzip2.hash b/package/bzip2/bzip2.hash
+> index 60b0a191ef..684fe73109 100644
+> --- a/package/bzip2/bzip2.hash
+> +++ b/package/bzip2/bzip2.hash
+> @@ -1,2 +1,6 @@
+>  # From http://www.bzip.org/downloads.html
 
-C-SKY CPU is seperated into two ABIs:
- - abiv1: mcore based ELF_NUM:39 and do not support FPU & VDSP. (CPU: 610)
- - abiv2: C-SKY own ISA with ELF_NUM:252 and support FPU & VDSP. (CPU:
-807, 810, 860)
+While you're at it, you could remove that URL (or change it to a
+version from archive.org) - it does not seem to contain the md5sum
+anymore.
 
-BR2_GCC_TARGET_FLOAT_ABI *will* have a value for abiv1. Except the
-value will always be "soft"
-because there's no FPU support in ck610, which is the only core using abiv1.
+>  md5	00b516f4704d4a7cb50a1d97e6e8e15b	bzip2-1.0.6.tar.gz
+> +
+> +# Locally calculated
+> +sha256
+> a2848f34fcd5d6cf47def00461fcb528a0484d8edef8208d6d2e2909dc61d9cd
+> bzip2-1.0.6.tar.gz +sha256
+> 4919cfb14a73cd64fcef67b107613970cf1659a09aa675dba31314f373bc7204
+> LICENSE 
 
-Best Regards
- Guo Ren
+I get the same values.
+
+Reviewed-by: Thomas Huth <huth@tuxfamily.org>
