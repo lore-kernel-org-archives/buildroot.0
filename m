@@ -1,47 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 May 2019 10:38:24 +0200
-Subject: [Buildroot] [PATCH V3 01/10] arch/csky: Use VDSP instead of DSP
-In-Reply-To: <CAJF2gTT5N6ST9Ph-L+bX2WtNx4ENu0wQ2uQ63D=3C-Zqoit+3w@mail.gmail.com>
+Date: Wed, 29 May 2019 10:39:30 +0200
+Subject: [Buildroot] [PATCH V3 03/10] arch/csky: Add FLOAT_ABI compiler
+ options
+In-Reply-To: <CAJF2gTRb4W=ZUz4-WxPwzdaQMMo1suwPsxU47QeGdjfBvgs3og@mail.gmail.com>
 References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
- <1559114328-23357-2-git-send-email-guoren@kernel.org>
- <20190529092128.36183371@windsurf.home>
- <CAJF2gTQC8UigBniC_RKUVFddX=PnN7O9GyBZXcxyXuPBg9WNHw@mail.gmail.com>
- <20190529095629.2b28cbb7@windsurf.home>
- <CAJF2gTT5N6ST9Ph-L+bX2WtNx4ENu0wQ2uQ63D=3C-Zqoit+3w@mail.gmail.com>
-Message-ID: <20190529103824.58560e4e@windsurf.home>
+ <1559114328-23357-4-git-send-email-guoren@kernel.org>
+ <20190529092307.6c78996b@windsurf.home>
+ <CAJF2gTSgReEOOJAvXY=MraqTLV4DwkKOqsbQ-4rBdNiaibxQfQ@mail.gmail.com>
+ <20190529095739.18d4d3c8@windsurf.home>
+ <CAJF2gTRb4W=ZUz4-WxPwzdaQMMo1suwPsxU47QeGdjfBvgs3og@mail.gmail.com>
+Message-ID: <20190529103930.35f88870@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Guo,
 
-On Wed, 29 May 2019 16:12:25 +0800
+On Wed, 29 May 2019 16:30:43 +0800
 Guo Ren <guoren@kernel.org> wrote:
 
-> > Not just two patches: also a better commit log for the DSP -> VDSP
-> > change.  
+> OK, change the commit log with:
 > 
-> I want these two patches:
+> C-SKY CPU is seperated into two ABIs:
+>  - abiv1: mcore based ELF_NUM:39 and do not support FPU & VDSP. (CPU: 610)
+>  - abiv2: C-SKY own ISA with ELF_NUM:252 and support FPU & VDSP. (CPU:
+> 807, 810, 860)
 > 
-> 1. Remove DSP, because it's no use in current buildroot.
-> 2. Add VDSP support
+> So we don't care BR2_GCC_TARGET_FLOAT_ABI for abiv1, because it based
+> on CSKY_FPU and it'll
+> never be selected by ck610.
 
-OK, but then please split in yet another patch the fact of using
-arch.mk.csky to build the GCC_TARGET_CPU variable.
-
-> Here is my commit log for Introduce VDSP feature:
-> 
-> VDSP is C-SKY enhanced extension instruction set for SIMD, AI and DSP
-> operation. It could be support by abiv2 (ck807, ck810, ck860).
-> 
-> Is that OK?
-
-Yes. But please add a proper commit log in the patch removing the DSP
-option.
-
-Thanks,
+This last part is not correct: BR2_GCC_TARGET_FLOAT_ABI *will* have a
+value for abiv1. Except the value will always be "soft" because there's
+no FPU support in ck610, which is the only core using abiv1. So saying
+"We don't care about BR2_GCC_TARGET_FLOAT_ABI for abiv1" is not correct.
 
 Thomas
 -- 
