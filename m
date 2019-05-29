@@ -1,68 +1,102 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 29 May 2019 17:57:09 +0200
-Subject: [Buildroot] [PATCH 2/2] package/haproxy: re-enable package on
- Microblaze
-In-Reply-To: <20190529155709.31207-1-giulio.benetti@micronovasrl.com>
-References: <20190529155709.31207-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190529155709.31207-3-giulio.benetti@micronovasrl.com>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Wed, 29 May 2019 10:58:09 -0500
+Subject: [Buildroot] [External] Re: Cannot cross-compile libopenssl on
+ CentOS7
+In-Reply-To: <fb7027e2-8897-2cee-65e0-4b8929779a6c@mind.be>
+References: <3cd11507-8aa5-4fbe-c07a-54d4aacb8e74@ice.rwth-aachen.de>
+ <fb7027e2-8897-2cee-65e0-4b8929779a6c@mind.be>
+Message-ID: <CANQCQpZ5NMp5K1UR+o_OGB6anXZ+t_Erf52qo2QgBJo0Mxtu7Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Microblaze Gcc version < 8.x build gives:
-'internal compiler error: in do_output_reload, at reload1.c:7978'
-This is due to bug 90620:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90620. To avoid this, the
-haproxy package has a !BR2_microblaze dependency. However, gcc bug
-90620 only triggers when optimization is enabled, so we can work
-around the issue by passing -O0, which is what we do in other
-Buildroot packages to work around this bug.
+All,
 
-So, this commit passes -O0 when BR2_TOOLCHAIN_HAS_GCC_BUG_90620, and
-re-enables haproxy on Microblaze.
+On Sat, May 25, 2019 at 10:54 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 21/05/2019 20:19, Lukas J?nger wrote:
+> > Hi,
+> >
+> > I tried building a rootfs with buildroot on CentOS 7 and I require libopenssl. I
+> > configured buildroot as seen in the attached .config.
+>
+>  In the future, please post a defconfig instead of a full config. In this case:
+>
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
+> BR2_PACKAGE_XEN=y
+> BR2_PACKAGE_XEN_TOOLS=y
+>
+>
+>  Note that this is a configuration that gets tested by the autobuilders, and
+> unless I'm mistaken, Matt has a RHEL7 autobuilder (CentOS7 should be the same).
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
- package/haproxy/Config.in  | 2 --
- package/haproxy/haproxy.mk | 9 ++++++++-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+Correct, I've got a RHEL7.4 builder running.  I've also just tested
+the above defconfig without any problems.
 
-diff --git a/package/haproxy/Config.in b/package/haproxy/Config.in
-index 670de5a3ee..db63143a74 100644
---- a/package/haproxy/Config.in
-+++ b/package/haproxy/Config.in
-@@ -1,8 +1,6 @@
- config BR2_PACKAGE_HAPROXY_ARCH_SUPPORTS
- 	bool
- 	default y
--	# internal compiler error: in do_output_reload, at reload1.c:7978
--	depends on !BR2_microblaze
- 	# src/proto_http.c:6330:1: internal compiler error: Segmentation fault
- 	depends on !BR2_nios2
- 	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60040
-diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
-index e382f61f8e..fde9d5edc6 100644
---- a/package/haproxy/haproxy.mk
-+++ b/package/haproxy/haproxy.mk
-@@ -69,9 +69,16 @@ endif
- 
- HAPROXY_MAKE_OPTS += ADDLIB="$(HAPROXY_LIBS)"
- 
-+HAPROXY_CFLAGS = $(TARGET_CFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_90620),y)
-+HAPROXY_CFLAGS += -O0
-+endif
-+
- define HAPROXY_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
--		$(HAPROXY_MAKE_OPTS) -C $(@D)
-+		$(HAPROXY_MAKE_OPTS) CFLAGS="$(HAPROXY_CFLAGS)" \
-+		 -C $(@D)
- endef
- 
- define HAPROXY_INSTALL_TARGET_CMDS
--- 
-2.17.1
+> Thomas, do you know if we have other RHEL/CentOS 7 autobuilders?
+>
+>  Anyway, there never was a build error with libopenssl on a RHEL7 machine...
+>
+> > Sadly, the build fails with this error:
+> >
+> > install libcrypto.a ->
+> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.a
+> >
+> > install libssl.a ->
+> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libssl.a
+> >
+> > link
+> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
+> > ->
+> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so.1.1
+> >
+> > install libcrypto.so ->
+> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
+> >
+> > install libcrypto.so.1.1 ->
+> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so
+> >
+> > /scratch/juenger/tmp/buildroot/output/host/bin/aarch64-linux-gnu-ar:
+> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so:
+> > File format not recognized
+> > /scratch/juenger/tmp/buildroot/output/host/bin/aarch64-linux-gnu-ar:
+> > /scratch/juenger/tmp/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/lib/libcrypto.so.new:
+> > File format not recognized
+> >
+> > It seems to be related to this issue:
+> > https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_openssl_openssl_issues_6641&d=DwIDaQ&c=ilBQI1lupc9Y65XwNblLtw&r=y1sOV0GV8NZUkffv7oCRxs2Sd3nOBS-NxDM3NY8lOgs&m=5H6BWknkyVnfm0N08GNowwODLs39QqUq7cGT-Ju0_sc&s=RMnPDCEVBOu94Zyi4fmm3y7thjFeTY67GFVhIi21Za8&e=
+>
+>  Indeed looks similar. Can you execute the steps reported in that bug to verify
+> if it really is the same?
+>
+>  My perl-fu is not enough to understand what commit 356d634 does exactly, but
+> AFAIU it should error out if the version is not high enough, no?
+>
+>
+> > I already tried upgrading the perl package with CPAN, but buildroot still fails.
+> > I also tried upgrading the package with SCL, but that did not help either. It
+> > might be because buildroot does not allow me to have PERL_MM_OPT defined, but
+>
+>  What is PERL_MM_OPT supposed to do?
+>
+>  Regards,
+>  Arnout
+>
+> > I'm not sure. OpenSSL by itself without buildroot builds fine on the same system.
+> >
+> > Do you have an idea on how to fix this?
+> >
+> > Thanks,
+> > Lukas
+> >
+> > _______________________________________________
+> > buildroot mailing list
+> > buildroot at busybox.net
+> > https://urldefense.proofpoint.com/v2/url?u=http-3A__lists.busybox.net_mailman_listinfo_buildroot&d=DwIDaQ&c=ilBQI1lupc9Y65XwNblLtw&r=y1sOV0GV8NZUkffv7oCRxs2Sd3nOBS-NxDM3NY8lOgs&m=5H6BWknkyVnfm0N08GNowwODLs39QqUq7cGT-Ju0_sc&s=8nhFGgQtE3nTqMbUS_nwvHR-ulO8oQSxOejiBk6fFJA&e=
+> >
