@@ -1,62 +1,99 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 29 May 2019 16:51:32 +0200
-Subject: [Buildroot] [PATCH v3 3/3] package/dmalloc: re-enable package on
- Microblaze
-In-Reply-To: <20190529145132.57042-1-giulio.benetti@micronovasrl.com>
-References: <20190529145132.57042-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190529145132.57042-4-giulio.benetti@micronovasrl.com>
+From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Date: Wed, 29 May 2019 17:05:07 +0200
+Subject: [Buildroot] [PATCH 1/2] checkpackagelib/lib_config.py: check
+ packages alphabetical order in {Config.in, Config.in.host}
+Message-ID: <1559142308-3303-1-git-send-email-jerzy.m.grzegorek@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Microblaze Gcc version < 8.x build gives:
-'Error: operation combines symbols in different segments'
-This is due to bug 63261:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63261. To avoid this,
-the dmalloc package has a !BR2_microblaze dependency. However, gcc bug
-63261 only triggers when optimization is enabled, so we can work around
-the issue by passing -O0, which is what we do in other Buildroot
-packages to work around this bug.
-
-So, this commit passes -O0 when BR2_TOOLCHAIN_HAS_GCC_BUG_63261, and
-re-enables dmalloc on Microblaze.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
 ---
- package/dmalloc/Config.in  | 4 ----
- package/dmalloc/dmalloc.mk | 4 ++++
- 2 files changed, 4 insertions(+), 4 deletions(-)
+TODO - checking of menu of comments and menu of menus
 
-diff --git a/package/dmalloc/Config.in b/package/dmalloc/Config.in
-index e5be109332..0c01970b04 100644
---- a/package/dmalloc/Config.in
-+++ b/package/dmalloc/Config.in
-@@ -1,9 +1,5 @@
- config BR2_PACKAGE_DMALLOC
- 	bool "dmalloc"
--	# On some packages, Microblaze gcc has issues when debugging
--	# symbols are enabled: "Error: operation combines symbols in
--	# different segments".
--	depends on !(BR2_microblaze && BR2_ENABLE_DEBUG)
- 	help
- 	  A debug memory allocation library which is a drop in
- 	  replacement for the system's malloc, realloc, calloc, free and
-diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
-index 6ebb44c5c0..38b2c02027 100644
---- a/package/dmalloc/dmalloc.mk
-+++ b/package/dmalloc/dmalloc.mk
-@@ -35,6 +35,10 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
- DMALLOC_CFLAGS += -marm
- endif
+ utils/checkpackagelib/lib_config.py | 64 +++++++++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
+
+diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+index 89d44da57e..1b3a66f6e1 100644
+--- a/utils/checkpackagelib/lib_config.py
++++ b/utils/checkpackagelib/lib_config.py
+@@ -60,6 +60,67 @@ class AttributesOrder(_CheckFunction):
+                     text]
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_63261),y)
-+DMALLOC_CFLAGS += -O0
-+endif
+ 
++class CommentsMenusPackagesOrder(_CheckFunction):
++    level = {"": 0,
++             "-menu": 1, "-menu-menu": 2,
++             "-menu-menu-comment": 3, "-menu-menu-if": 3, "-menu-menu-menu": 3,
++             "-menu-menu-comment-if": 4, "-menu-menu-if-if": 4,
++             "-menu-menu-menu-if": 4, "-menu-menu-if-menu": 4,
++             "-menu-menu-comment-if-comment": 5, "-menu-menu-if-if-comment": 5,
++             "-menu-menu-if-if-menu": 5, "-menu-menu-menu-if-comment": 5,
++             "-menu-menu-menu-if-menu": 5}
 +
- DMALLOC_CONF_ENV = CFLAGS="$(DMALLOC_CFLAGS)"
- 
- define DMALLOC_POST_PATCH
++    print_package_warning = [True, True, True, True, True, True]
++    menu_of_packages = ["", "", "", "", "", ""]
++    package = ["", "", "", "", "", ""]
++    new_package = ["", "", "", "", "", ""]
++
++    def before(self):
++        self.state = ""
++
++    def check_line(self, lineno, text):
++        if text.startswith("comment") or text.startswith("if") or text.startswith("menu"):
++
++            if text.startswith("comment"):
++                if not self.state.endswith("comment"):
++                    self.state += "-comment"
++
++            elif text.startswith("if") or text.startswith("menu"):
++                if text.startswith("if"):
++                    self.state += "-if"
++
++                elif text.startswith("menu"):
++                    self.state += "-menu"
++
++            self.package[self.level[self.state]] = ""
++            self.print_package_warning[self.level[self.state]] = True
++            self.menu_of_packages[self.level[self.state]] = text[:-1]
++
++        elif text.startswith("endif") or text.startswith("endmenu"):
++            if self.state.endswith("comment"):
++                self.state = self.state[:-8]
++
++            if text.startswith("endif"):
++                self.state = self.state[:-3]
++
++            else:
++                self.state = self.state[:-5]
++
++        elif text.startswith('\tsource "package/'):
++            self.new_package[self.level[self.state]] = text[17: -(len(self.filename)-5):]
++
++            if self.package[self.level[self.state]] != "" and \
++               self.print_package_warning[self.level[self.state]] and \
++               self.new_package[self.level[self.state]] < self.package[self.level[self.state]]:
++                self.print_package_warning[self.level[self.state]] = False
++                return ["{}:{}: Packages in: {}, are not alphabetically ordered\n"
++                        "                  correct order: '-', digits, capitals, '_', lowercase"
++                        .format(self.filename, lineno, self.menu_of_packages[self.level[self.state]]),
++                        text]
++
++            self.package[self.level[self.state]] = self.new_package[self.level[self.state]]
++
++
+ class HelpText(_CheckFunction):
+     HELP_TEXT_FORMAT = re.compile("^\t  .{,62}$")
+     URL_ONLY = re.compile("^(http|https|git)://\S*$")
+@@ -141,3 +202,6 @@ class Indent(_CheckFunction):
+                 return ["{}:{}: should not be indented"
+                         .format(self.filename, lineno),
+                         text]
++
++
++
 -- 
 2.17.1
