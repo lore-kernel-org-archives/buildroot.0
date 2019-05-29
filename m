@@ -1,50 +1,66 @@
-From: Thomas Huth <huth@tuxfamily.org>
-Date: Wed, 29 May 2019 11:00:47 +0200
-Subject: [Buildroot] [PATCH v2] package/dropbear: rework license
- information
-In-Reply-To: <20190529070701.8913-1-yegorslists@googlemail.com>
-References: <20190529070701.8913-1-yegorslists@googlemail.com>
-Message-ID: <20190529110047.19e54599@thl530.multi.box>
+From: Guo Ren <guoren@kernel.org>
+Date: Wed, 29 May 2019 17:02:29 +0800
+Subject: [Buildroot] [PATCH V3 01/10] arch/csky: Use VDSP instead of DSP
+In-Reply-To: <20190529103824.58560e4e@windsurf.home>
+References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
+ <1559114328-23357-2-git-send-email-guoren@kernel.org>
+ <20190529092128.36183371@windsurf.home>
+ <CAJF2gTQC8UigBniC_RKUVFddX=PnN7O9GyBZXcxyXuPBg9WNHw@mail.gmail.com>
+ <20190529095629.2b28cbb7@windsurf.home>
+ <CAJF2gTT5N6ST9Ph-L+bX2WtNx4ENu0wQ2uQ63D=3C-Zqoit+3w@mail.gmail.com>
+ <20190529103824.58560e4e@windsurf.home>
+Message-ID: <CAJF2gTQfu_FAck2YM5b=d8QaYQhBHoCSeG4tvL1i8a1=7vgofA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Wed, 29 May 2019 09:07:01 +0200
-schrieb yegorslists at googlemail.com:
+On Wed, May 29, 2019 at 4:38 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello,
+>
+> On Wed, 29 May 2019 16:12:25 +0800
+> Guo Ren <guoren@kernel.org> wrote:
+>
+> > > Not just two patches: also a better commit log for the DSP -> VDSP
+> > > change.
+> >
+> > I want these two patches:
+> >
+> > 1. Remove DSP, because it's no use in current buildroot.
+> > 2. Add VDSP support
+>
+> OK, but then please split in yet another patch the fact of using
+> arch.mk.csky to build the GCC_TARGET_CPU variable.
 
-> From: Yegor Yefremov <yegorslists@googlemail.com>
-> 
-> According to the LICENSE file curve25519-donna is licensed under
-> BSD-3-Clause license.
-> 
-> There is only BSD-2-Clause license mentioned so remove
-> BSD-2-Clause-like.
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> ---
-> Changes v1 -> v2:
->   - remove BSD-2-Clause-like license (suggested by Arnout
-> Vandecappelle)
-> 
->  package/dropbear/dropbear.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/package/dropbear/dropbear.mk
-> b/package/dropbear/dropbear.mk index e10c851606..9c995c3894 100644
-> --- a/package/dropbear/dropbear.mk
-> +++ b/package/dropbear/dropbear.mk
-> @@ -7,7 +7,7 @@
->  DROPBEAR_VERSION = 2019.78
->  DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
->  DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
-> -DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause
-> +DROPBEAR_LICENSE = MIT, BSD-2-Clause, BSD-3-Clause
->  DROPBEAR_LICENSE_FILES = LICENSE
->  DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
->  DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
+I changemind and I'll follow the above patches which you prior mentioned
 
-Ok, that makes even more sense than v1, indeed.
+- One switching to using arch.mk.sky, without changing DSP -> VDSP
+- A follow-up one changing DSP -> VDSP, with a commit log that
+   explains why you make this chang
 
-Reviewed-by: Thomas Huth <huth@tuxfamily.org>
+>
+> > Here is my commit log for Introduce VDSP feature:
+> >
+> > VDSP is C-SKY enhanced extension instruction set for SIMD, AI and DSP
+> > operation. It could be support by abiv2 (ck807, ck810, ck860).
+> >
+> > Is that OK?
+>
+> Yes. But please add a proper commit log in the patch removing the DSP
+> option.
+DSP -> VDSP, with a commit log, like this:
+
+Subject: Change DSP to VDSP for -mcpu
+
+DSP is no use in current buildroot and gcc default enable the DSP
+feature for C-SKY.
+So DSP is part of our standard ISA, we needn't put it in -mcpu=xxx.
+
+VDSP is C-SKY enhanced extension instruction set for SIMD, AI and DSP
+operation. It could be support by abiv2 (ck807, ck810, ck860).
+
+Best Regards
+ Guo Ren
