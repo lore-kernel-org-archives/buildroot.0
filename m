@@ -1,9 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 28 May 2019 23:35:34 -0400
-Subject: [Buildroot] [PATCH 16/19] package/swig: add hashes for license files
+Date: Tue, 28 May 2019 23:35:35 -0400
+Subject: [Buildroot] [PATCH 17/19] package/udisks: add hash for license file
 In-Reply-To: <20190529033537.128311-1-aduskett@gmail.com>
 References: <20190529033537.128311-1-aduskett@gmail.com>
-Message-ID: <20190529033537.128311-17-aduskett@gmail.com>
+Message-ID: <20190529033537.128311-18-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,18 +14,16 @@ From: Adam Duskett <Aduskett@gmail.com>
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/swig/swig.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/udisks/udisks.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/swig/swig.hash b/package/swig/swig.hash
-index 77c93a96d6..8a3e476c61 100644
---- a/package/swig/swig.hash
-+++ b/package/swig/swig.hash
-@@ -1,2 +1,5 @@
- # Locally computed:
- sha256	7cf9f447ae7ed1c51722efc45e7f14418d15d7a1e143ac9f09a668999f4fc94d	swig-3.0.12.tar.gz
-+sha256	f53abaeed775018d519a1b9615f0ca17894772bd9ca21c2a156bf340ac41c13e	LICENSE
-+sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	LICENSE-GPL
-+sha256	7f50d942373a871211c5efee03f3db2f9efd1cff1002b0ef8e3748baa611a5c2	LICENSE-UNIVERSITIES
+diff --git a/package/udisks/udisks.hash b/package/udisks/udisks.hash
+index 7ad4326b1c..b40161e323 100644
+--- a/package/udisks/udisks.hash
++++ b/package/udisks/udisks.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 f2ec82eb0ea7e01dc299b5b29b3c18cdf861236ec43dcff66b3552b4b31c6f71  udisks-1.0.5.tar.gz
++sha256 7d30f41a79a9b453b4972a6d7e3425ff104b39232891bde8ba659f1adb21f771  COPYING
 -- 
 2.21.0
