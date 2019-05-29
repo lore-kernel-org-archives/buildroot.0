@@ -1,40 +1,67 @@
-From: Thomas Huth <huth@tuxfamily.org>
-Date: Wed, 29 May 2019 11:06:09 +0200
-Subject: [Buildroot] [PATCH 01/19] package/acl: add hashes for license
- files
-In-Reply-To: <20190529033537.128311-2-aduskett@gmail.com>
-References: <20190529033537.128311-1-aduskett@gmail.com>
- <20190529033537.128311-2-aduskett@gmail.com>
-Message-ID: <20190529110609.74e1b5d1@thl530.multi.box>
+From: Guo Ren <guoren@kernel.org>
+Date: Wed, 29 May 2019 17:06:39 +0800
+Subject: [Buildroot] [PATCH V3 01/10] arch/csky: Use VDSP instead of DSP
+In-Reply-To: <CAJF2gTQfu_FAck2YM5b=d8QaYQhBHoCSeG4tvL1i8a1=7vgofA@mail.gmail.com>
+References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
+ <1559114328-23357-2-git-send-email-guoren@kernel.org>
+ <20190529092128.36183371@windsurf.home>
+ <CAJF2gTQC8UigBniC_RKUVFddX=PnN7O9GyBZXcxyXuPBg9WNHw@mail.gmail.com>
+ <20190529095629.2b28cbb7@windsurf.home>
+ <CAJF2gTT5N6ST9Ph-L+bX2WtNx4ENu0wQ2uQ63D=3C-Zqoit+3w@mail.gmail.com>
+ <20190529103824.58560e4e@windsurf.home>
+ <CAJF2gTQfu_FAck2YM5b=d8QaYQhBHoCSeG4tvL1i8a1=7vgofA@mail.gmail.com>
+Message-ID: <CAJF2gTQ3Q+b2+CPc+QP2Zpey53+=8Lf12=TJWjrr6Sig27npBw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 28 May 2019 23:35:19 -0400
-schrieb aduskett at gmail.com:
-
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/acl/acl.hash | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/acl/acl.hash b/package/acl/acl.hash
-> index 091092a1c5..500976cee2 100644
-> --- a/package/acl/acl.hash
-> +++ b/package/acl/acl.hash
-> @@ -1,2 +1,7 @@
->  # Locally calculated after checking pgp signature
->  sha256
-> 06be9865c6f418d851ff4494e12406568353b891ffe1f596b34693c387af26c7
-> acl-2.2.53.tar.gz + +# Locally calculated
-> +sha256
-> a45a845012742796534f7e91fe623262ccfb99460a2bd04015bd28d66fba95b8
-> doc/COPYING +sha256
-> 01b1f9f2c8ee648a7a596a1abe8aa4ed7899b1c9e5551bda06da6e422b04aa55
-> doc/COPYING.LGPL +
-
-Reviewed-by: Thomas Huth <huth@tuxfamily.org>
+On Wed, May 29, 2019 at 5:02 PM Guo Ren <guoren@kernel.org> wrote:
+>
+> On Wed, May 29, 2019 at 4:38 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+> >
+> > Hello,
+> >
+> > On Wed, 29 May 2019 16:12:25 +0800
+> > Guo Ren <guoren@kernel.org> wrote:
+> >
+> > > > Not just two patches: also a better commit log for the DSP -> VDSP
+> > > > change.
+> > >
+> > > I want these two patches:
+> > >
+> > > 1. Remove DSP, because it's no use in current buildroot.
+> > > 2. Add VDSP support
+> >
+> > OK, but then please split in yet another patch the fact of using
+> > arch.mk.csky to build the GCC_TARGET_CPU variable.
+>
+> I changemind and I'll follow the above patches which you prior mentioned
+>
+> - One switching to using arch.mk.sky, without changing DSP -> VDSP
+> - A follow-up one changing DSP -> VDSP, with a commit log that
+>    explains why you make this chang
+>
+> >
+> > > Here is my commit log for Introduce VDSP feature:
+> > >
+> > > VDSP is C-SKY enhanced extension instruction set for SIMD, AI and DSP
+> > > operation. It could be support by abiv2 (ck807, ck810, ck860).
+> > >
+> > > Is that OK?
+> >
+> > Yes. But please add a proper commit log in the patch removing the DSP
+> > option.
+> DSP -> VDSP, with a commit log, like this:
+>
+> Subject: Change DSP to VDSP for -mcpu
+>
+> DSP is no use in current buildroot and gcc default enable the DSP
+> feature for C-SKY.
+> So DSP is part of our standard ISA, we needn't put it in -mcpu=xxx.
+>
+> VDSP is C-SKY enhanced extension instruction set for SIMD, AI and DSP
+> operation. It could be support by abiv2 (ck807, ck810, ck860).
+Correct: It is supported by abiv2.
