@@ -1,9 +1,9 @@
 From: guoren at kernel.org <guoren@kernel.org>
-Date: Wed, 29 May 2019 15:18:45 +0800
-Subject: [Buildroot] [PATCH V3 07/10] package/gdb: Add C-SKY support
+Date: Wed, 29 May 2019 15:18:46 +0800
+Subject: [Buildroot] [PATCH V3 08/10] package/glibc: Add C-SKY support
 In-Reply-To: <1559114328-23357-1-git-send-email-guoren@kernel.org>
 References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
-Message-ID: <1559114328-23357-8-git-send-email-guoren@kernel.org>
+Message-ID: <1559114328-23357-9-git-send-email-guoren@kernel.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,64 +12,50 @@ To: buildroot@busybox.net
 
 From: Guo Ren <ren_guo@c-sky.com>
 
-Add gdb build for C-SKY Architecture:
-
- - Support host-gdb
- - Support gdbserver for target
+Add glibc build for C-SKY Architecture.
 
 Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 ---
- package/gdb/Config.in.host | 2 ++
- package/gdb/gdb.hash       | 2 ++
- package/gdb/gdb.mk         | 6 ++++++
- 3 files changed, 10 insertions(+)
+ package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash | 2 ++
+ package/glibc/glibc.mk                                            | 3 +++
+ toolchain/toolchain-buildroot/Config.in                           | 2 +-
+ 3 files changed, 6 insertions(+), 1 deletion(-)
+ create mode 100644 package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index 969168f..76a0eca 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -48,6 +48,7 @@ choice
- 	prompt "GDB debugger Version"
- 	default BR2_GDB_VERSION_8_1
- 	depends on !BR2_arc
-+	depends on !BR2_csky
- 	help
- 	  Select the version of gdb you wish to use.
- 
-@@ -95,6 +96,7 @@ config BR2_PACKAGE_GDB_NEEDS_CXX11
- config BR2_GDB_VERSION
- 	string
- 	default "arc-2018.09-release-gdb" if BR2_arc
-+	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
- 	default "7.12.1"   if BR2_GDB_VERSION_7_12
- 	default "8.0.1"    if BR2_GDB_VERSION_8_0
- 	default "8.1.1"    if BR2_GDB_VERSION_8_1 || !BR2_PACKAGE_HOST_GDB
-diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
-index 1104da5..90a60b0 100644
---- a/package/gdb/gdb.hash
-+++ b/package/gdb/gdb.hash
-@@ -6,3 +6,5 @@ sha512  2aa81cfd389bb48c35d7d9f95cc10e88b4f7ad4597bdde0f8f1fd312f60f10d9fb2cc6e5
- 
- # Locally calculated (fetched from Github)
- sha512  8303e399e396f5c15dc976e48503fc7d45a720dd1a470443f755c5f2458d092b4392e7ae582abc251bc4b43a778ad784f764286a2a05abfc1649cbeeeb6e7d15 	gdb-arc-2018.09-release-gdb.tar.gz
-+# Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
-+sha512  c421e1f3c0d6cfb3c04544573c0c4b0075c8d8e3d563c6c234fcc1e4c2167ab203d1e57aec3b58abd348dc46f8cf9b47b753d3a43dba3ea970c9c9a6bd78c07b	gdb-4ecb98fbc2f94dbe01b69384afbc515107de73df.tar.gz
-diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
-index a926961..46d745a 100644
---- a/package/gdb/gdb.mk
-+++ b/package/gdb/gdb.mk
-@@ -14,6 +14,12 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
- GDB_FROM_GIT = y
- endif
- 
-+ifeq ($(BR2_csky),y)
-+GDB_SITE = $(call github,c-sky,binutils-gdb,$(GDB_VERSION))
-+GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
-+GDB_FROM_GIT = y
-+endif
-+
- GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
- GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
- 
+diff --git a/package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash b/package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash
+new file mode 100644
+index 0000000..a61bd65
+--- /dev/null
++++ b/package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash
+@@ -0,0 +1,2 @@
++# Locally calculated (fetched from https://github.com/c-sky/glibc)
++sha512 9deb2deceefe347d72de13510a5baa3de00f94c684f3b25e136ca3660f61e65a69f2115abb488c2ab0fa93cda8535853ce1e13e186efcc8434ecc4049efd82b5  glibc-7630ed2fa60caea98f500e4a7a51b88f9bf1e176.tar.gz
+diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
+index 0345f1f..c4ddf8b 100644
+--- a/package/glibc/glibc.mk
++++ b/package/glibc/glibc.mk
+@@ -10,6 +10,9 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
+ else ifeq ($(BR2_RISCV_32),y)
+ GLIBC_VERSION = 06983fe52cfe8e4779035c27e8cc5d2caab31531
+ GLIBC_SITE = $(call github,riscv,riscv-glibc,$(GLIBC_VERSION))
++else ifeq ($(BR2_csky),y)
++GLIBC_VERSION = 7630ed2fa60caea98f500e4a7a51b88f9bf1e176
++GLIBC_SITE = $(call github,c-sky,glibc,$(GLIBC_VERSION))
+ else
+ # Generate version string using:
+ #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index beb17a2..d9f16e2 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -48,7 +48,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
+ 		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
+ 		   BR2_riscv       || BR2_sh         || BR2_sparc64     || \
+ 		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
+-		   (BR2_arcle && BR2_ARC_ATOMIC_EXT)
++		   (BR2_arcle && BR2_ARC_ATOMIC_EXT) || BR2_csky
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
 -- 
 2.7.4
