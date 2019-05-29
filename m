@@ -1,96 +1,59 @@
-From: Robert Hancock <hancock@sedsystems.ca>
-Date: Wed, 29 May 2019 16:07:37 -0600
-Subject: [Buildroot] [PATCH] package/chrony: add option for debug logging
-In-Reply-To: <375f6faa-1016-2446-88ab-13dc449e5c1a@mind.be>
-References: <1559086828-14718-1-git-send-email-hancock@sedsystems.ca>
- <375f6faa-1016-2446-88ab-13dc449e5c1a@mind.be>
-Message-ID: <b96bc92f-ec2a-acec-9667-228014c12e3f@sedsystems.ca>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 30 May 2019 00:09:00 +0200
+Subject: [Buildroot] libftdi1 licenses
+In-Reply-To: <20190529105046.62ab50f7@thl530.multi.box>
+References: <CAGm1_ktUkdhxROJMqgO5UHaOFf7dmaj2rYVvruOTjay5C8XLnA@mail.gmail.com>
+ <20190529105046.62ab50f7@thl530.multi.box>
+Message-ID: <285099f2-a48c-4cfa-2783-e6bca62558f4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2019-05-29 3:01 p.m., Arnout Vandecappelle wrote:
->  Hi Robert,
-> 
-> On 29/05/2019 01:40, Robert Hancock wrote:
->> Add a BR2_PACKAGE_CHRONY_DEBUG_LOGGING config option to allow enabling
->> compiled-in support for debug logging in Chrony. Enable by default as
->> this makes it much easier to debug Chrony issues and should only be
->> disabled by those very sensitive to binary size.
-> 
->  How big is the size difference (compared to the size of chrony itself)? Please
-> report this in the commit message.
 
-On 32-bit ARM, the chronyd binary goes from 149632 bytes to 174208 bytes
-and chronyc from 59008 to 63104 bytes, so about 14% difference. I can
-add a note about the rough binary size difference to the config option
-if we want to keep it.
 
+On 29/05/2019 10:50, Thomas Huth wrote:
+> Am Wed, 29 May 2019 09:40:52 +0200
+> schrieb Yegor Yefremov <yegorslists@googlemail.com>:
 > 
->  If it is less than 10%, I think we prefer to drop the Config.in option and
-> unconditionally enable debug. That is, assuming that this doesn't force other
-> options (-g for example) into the compilation. Normally it shouldn't since we
-> override CFLAGS.
-> 
->  Peter, can you confirm that we prefer without the Kconfig option?
-> 
->>
->> Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
->> ---
->>  package/chrony/Config.in | 8 ++++++++
->>  package/chrony/chrony.mk | 3 ++-
->>  2 files changed, 10 insertions(+), 1 deletion(-)
->>
->> diff --git a/package/chrony/Config.in b/package/chrony/Config.in
->> index 05d6fc1..b295e8d 100644
->> --- a/package/chrony/Config.in
->> +++ b/package/chrony/Config.in
->> @@ -6,3 +6,11 @@ config BR2_PACKAGE_CHRONY
->>  	  accuracy of the system clock.
->>  
->>  	  http://chrony.tuxfamily.org/
->> +
->> +config BR2_PACKAGE_CHRONY_DEBUG_LOGGING
->> +	bool "enable debug logging support"
->> +	default y
->> +	depends on BR2_PACKAGE_CHRONY
->> +	help
->> +	  Enable support for debug logging output from Chrony when enabled at
->> +	  runtime. If disabled, code for debug logging will not be compiled in.
->> diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
->> index b5821b2..2d03fce 100644
->> --- a/package/chrony/chrony.mk
->> +++ b/package/chrony/chrony.mk
->> @@ -13,7 +13,8 @@ CHRONY_CONF_OPTS = \
->>  	--host-system=Linux \
->>  	--host-machine=$(BR2_ARCH) \
->>  	--prefix=/usr \
->> -	--without-tomcrypt
->> +	--without-tomcrypt \
->> +	$(if $(BR2_PACKAGE_CHRONY_DEBUG_LOGGING),--enable-debug,--disable-debug)
-> 
->  If it is unconditional, add a comment like:
-> 
-> # --enable-debug to make sure debug logging is compiled in and can be used when
-> # enabled at runtime.
-> 
->  Regards,
->  Arnout
-> 
->>  
->>  ifeq ($(BR2_PACKAGE_LIBCAP),y)
->>  CHRONY_DEPENDENCIES += libcap
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+>> FOSSology scan reveals that src/ftdi_stream.c contains MIT license.
 
--- 
-Robert Hancock
-Senior Software Developer
-SED Systems, a division of Calian Ltd.
-Email: hancock at sedsystems.ca
+ Hard to be sure... It is "adapted from" a MIT-licensed file. If the original
+author has agreed, it may just have been relicensed to LGPL-2.1.
+
+ So, as Thomas suggests: better ask upstream.
+
+>>
+>> Some CMake scripts are licensed under LGPL 2.1
+>> (cmake/UseLibFTDI1.cmake). Should this also be mentioned?
+
+ No, we don't take into account the files used during build, only what ends up
+on the target. Well, give or take :-). Otherwise, every autotools package would
+also have to mention GPL for config.guess and config.sub (and usually more).
+
+
+> It's obviously not only the cmake files that contain LGPL 2.1 code, but
+> also some .c files:
+> 
+> $ grep -r Lesser */*.c
+> src/ftdi.c: *   it under the terms of the GNU Lesser General Public License           *
+> src/ftdi_stream.c: *   it under the terms of the GNU Lesser General Public License           *
+
+ In fact, it looks like it is *all* licensed under LGPL-2.1 now. The COPYING.LIB
+file, however, has not been updated...
+
+
+> ... so IMHO yes, this should be mentioned.
+> 
+> Even better: Get in touch with the libfdtdi1 folks and ask them to fix
+> their license information (i.e. either use "Library GPL" in the .c
+> files or update the LICENSE and COPYING.LIB files to "Lesser GPL").
+
+ +1 to that.
+
+ There's another bug in Buildroot's license info: the GPL exception for ftdipp1
+is not mentioned.
+
+ Regards,
+ Arnout
