@@ -1,61 +1,73 @@
-From: Guo Ren <guoren@kernel.org>
-Date: Wed, 29 May 2019 17:45:19 +0800
-Subject: [Buildroot] [PATCH V3 01/10] arch/csky: Use VDSP instead of DSP
-In-Reply-To: <20190529112317.08fe1013@windsurf.home>
-References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
- <1559114328-23357-2-git-send-email-guoren@kernel.org>
- <20190529092128.36183371@windsurf.home>
- <CAJF2gTQC8UigBniC_RKUVFddX=PnN7O9GyBZXcxyXuPBg9WNHw@mail.gmail.com>
- <20190529095629.2b28cbb7@windsurf.home>
- <CAJF2gTT5N6ST9Ph-L+bX2WtNx4ENu0wQ2uQ63D=3C-Zqoit+3w@mail.gmail.com>
- <20190529103824.58560e4e@windsurf.home>
- <CAJF2gTQfu_FAck2YM5b=d8QaYQhBHoCSeG4tvL1i8a1=7vgofA@mail.gmail.com>
- <20190529112317.08fe1013@windsurf.home>
-Message-ID: <CAJF2gTRf_kzuqM_takvwNHU3sBfTBjqOBDv4xbqwnS9E9f9uTQ@mail.gmail.com>
+From: Alexandru Ardelean <ardeleanalex@gmail.com>
+Date: Wed, 29 May 2019 13:27:06 +0300
+Subject: [Buildroot] [PATCH] dropbear: add build opt to provide file with
+ localoptions.h
+In-Reply-To: <20190523121115.26098-1-ardeleanalex@gmail.com>
+References: <20190523121115.26098-1-ardeleanalex@gmail.com>
+Message-ID: <20190529102706.31865-1-alexandru.ardelean@analog.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: Alexandru Ardelean <ardeleanalex@gmail.com>
 
-On Wed, May 29, 2019 at 5:23 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Wed, 29 May 2019 17:02:29 +0800
-> Guo Ren <guoren@kernel.org> wrote:
->
-> > DSP is no use in current buildroot and gcc default enable the DSP
-> > feature for C-SKY.
-> > So DSP is part of our standard ISA, we needn't put it in -mcpu=xxx.
->
-> "DSP is no use in current Buildroot" is not correct. The option exists,
-> and it changes the BR2_GCC_TARGET_CPU value. So it *is* used: it adds
-> "e" to BR2_GCC_TARGET_CPU. So this explanation is not really
-> good/sufficient.
->
-> I am willing to help you formulate this properly, but since I still
-> don't understand why you are dropping the DSP option, I can't really
-> help by proposing a better wording.
-DSP extention is no longer used for C-SKY and there is no defconfig
-use "e" extension in buildroot.
-I have regretted submitting it to the buildroot.
+Based on discussion here:
+  https://patchwork.ozlabs.org/patch/1104071/
+Thomas suggested to implement an option to specify a file that gets
+appended to the `localoptions.h` of dropbear, as well as providing the code
+for this
 
-Change commit log, like this:
+This patch implements the changes.
+The patch was tested successfully with the DO_MOTD option, which the
+initial patch tried to address.
 
-Subject: Change DSP to VDSP for -mcpu
+Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
+---
+Changelog v1 -> v2:
+* re-implemented with suggestions from Thomas
+* tested patch with `#define DO_MOTD 1` option
 
-DSP extention is no longer used for C-SKY gcc and there is no
-defconfig use "e" extension
-in buildroot.
+ package/dropbear/Config.in   | 7 +++++++
+ package/dropbear/dropbear.mk | 8 ++++++++
+ 2 files changed, 15 insertions(+)
 
-VDSP is C-SKY enhanced extension instruction set for SIMD, AI and DSP
-operation. It could be supported by abiv2 (ck807, ck810, ck860).
-
-Is that OK?
-
-Best Regards
- Guo Ren
+diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+index 62f77bad9d..bc8d80ecf4 100644
+--- a/package/dropbear/Config.in
++++ b/package/dropbear/Config.in
+@@ -66,4 +66,11 @@ config BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO
+ 	    DSA public keys
+ 	    Diffie-Hellman Group1 key exchange
+ 
++config BR2_PACKAGE_DROPBEAR_CONFIG_FILE
++	string "path to dropbear config file"
++	help
++	  Path to a file whose contents will be appended to Dropbear
++	  localoptions.h. It can be used to tweak the Dropbear
++	  configuration.
++
+ endif
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index d93faa48ea..86c7769c51 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -124,6 +124,14 @@ ifneq ($(BR2_PACKAGE_DROPBEAR_LASTLOG),y)
+ DROPBEAR_CONF_OPTS += --disable-lastlog
+ endif
+ 
++DROPBEAR_CONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_DROPBEAR_CONFIG_FILE))
++ifneq ($(DROPBEAR_CONFIG_FILE),)
++define DROPBEAR_APPEND_CONFIG_FILE
++	cat $(DROPBEAR_CONFIG_FILE) >> $(@D)/localoptions.h
++endef
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_APPEND_CONFIG_FILE
++endif
++
+ define DROPBEAR_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -m 755 $(@D)/dropbearmulti $(TARGET_DIR)/usr/sbin/dropbear
+ 	for f in $(DROPBEAR_TARGET_BINS); do \
+-- 
+2.20.1
