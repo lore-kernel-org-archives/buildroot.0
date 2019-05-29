@@ -1,44 +1,53 @@
 From: Guo Ren <guoren@kernel.org>
-Date: Wed, 29 May 2019 15:30:14 +0800
-Subject: [Buildroot] [PATCH V3 03/10] arch/csky: Add FLOAT_ABI compiler
- options
-In-Reply-To: <20190529092307.6c78996b@windsurf.home>
+Date: Wed, 29 May 2019 15:30:45 +0800
+Subject: [Buildroot] [PATCH V3 01/10] arch/csky: Use VDSP instead of DSP
+In-Reply-To: <20190529092128.36183371@windsurf.home>
 References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
- <1559114328-23357-4-git-send-email-guoren@kernel.org>
- <20190529092307.6c78996b@windsurf.home>
-Message-ID: <CAJF2gTSgReEOOJAvXY=MraqTLV4DwkKOqsbQ-4rBdNiaibxQfQ@mail.gmail.com>
+ <1559114328-23357-2-git-send-email-guoren@kernel.org>
+ <20190529092128.36183371@windsurf.home>
+Message-ID: <CAJF2gTQC8UigBniC_RKUVFddX=PnN7O9GyBZXcxyXuPBg9WNHw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 29, 2019 at 3:23 PM Thomas Petazzoni
+OK, two pathes.
+
+On Wed, May 29, 2019 at 3:21 PM Thomas Petazzoni
 <thomas.petazzoni@bootlin.com> wrote:
 >
-> Hello,
+> Hello Guo,
 >
-> On Wed, 29 May 2019 15:18:41 +0800
+> Thanks for this new iteration. I apologize, but unfortunately it's
+> still not good, and doesn't match the suggestions I did.
+>
+> On Wed, 29 May 2019 15:18:39 +0800
 > guoren at kernel.org wrote:
 >
 > > From: Guo Ren <ren_guo@c-sky.com>
 > >
-> > This is only for abiv2 and abiv1 don't support FPU.
-> >
-> > Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+> > Use VDSP enhanced instructions Co-processor instead of DSP.
 >
-> What is abiv1 vs. abiv2 ? Also, in your next commit, abiv1 is
-> apparently used for ck610, but here this BR2_GCC_TARGET_FLOAT_ABI is
-> defined for all cases, which seems to contradict your commit log.
-abiv1 contain: ck610
-abiv2 contain: ck807 ck810 ck860
-
-Abiv1 is almost the same as mcore and it's ELF_CODE is 39
-Abiv2 is C-SKY own ISA and it's ELF_CODE is 252
-
-We don't support FPU in abiv1, because its opcode width is only
-16-bits and we don't want
-to continue developing it.
-
-Best Regards
- Guo Ren
+> Your commit log should explain why.
+>
+> > Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+> > ---
+> >  arch/Config.in.csky | 17 +++--------------
+> >  arch/arch.mk.csky   | 24 ++++++++++++++++++++++++
+>
+> The change to using arch.mk.csky should be done separately. So this
+> commit should be split into two:
+>
+>  - One switching to using arch.mk.sky, without changing DSP -> VDSP
+>
+>  - A follow-up one changing DSP -> VDSP, with a commit log that
+>    explains why you make this chang
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
