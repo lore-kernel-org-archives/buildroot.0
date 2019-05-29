@@ -1,42 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 May 2019 09:57:39 +0200
-Subject: [Buildroot] [PATCH V3 03/10] arch/csky: Add FLOAT_ABI compiler
- options
-In-Reply-To: <CAJF2gTSgReEOOJAvXY=MraqTLV4DwkKOqsbQ-4rBdNiaibxQfQ@mail.gmail.com>
-References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
- <1559114328-23357-4-git-send-email-guoren@kernel.org>
- <20190529092307.6c78996b@windsurf.home>
- <CAJF2gTSgReEOOJAvXY=MraqTLV4DwkKOqsbQ-4rBdNiaibxQfQ@mail.gmail.com>
-Message-ID: <20190529095739.18d4d3c8@windsurf.home>
+From: Mirza Krak <mirza.krak@northern.tech>
+Date: Wed, 29 May 2019 10:03:06 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mender: bump version to 2.0
+In-Reply-To: <2432947d-67c5-60d5-3174-156522058c7a@mind.be>
+References: <20190528115919.26194-1-deinok@deinok.com>
+ <CADHdJwDRQe+LkHcTGdgYSJEDxVjBu0Qnj3gY7Zm2mouCCqVs9A@mail.gmail.com>
+ <2432947d-67c5-60d5-3174-156522058c7a@mind.be>
+Message-ID: <CADHdJwDpOxDOz8tdpFg_tp0yfGVccp_EMft1Z3GLWY86rUBAhA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On Tue, May 28, 2019 at 10:39 PM Arnout Vandecappelle <arnout@mind.be>
+wrote:
 
-On Wed, 29 May 2019 15:30:14 +0800
-Guo Ren <guoren@kernel.org> wrote:
+>
+>
+> On 28/05/2019 20:47, Mirza Krak wrote:
+> > On Tue, May 28, 2019 at 1:59 PM <deinok@deinok.com> wrote:
+> >>
+> >> From: deinok <deinok@deinok.com>
+> >>
+> >> Signed-off-by: deinok <deinok@deinok.com>
+> >> ---
+> >>  package/mender/Config.in   | 1 +
+> >>  package/mender/mender.hash | 2 +-
+> >>  package/mender/mender.mk   | 3 ++-
+> >>  3 files changed, 4 insertions(+), 2 deletions(-)
+> >
+> >
+> > There is already a patch pending for the 2.0.0 bump, [1].
+> >
+> > [1]. https://patchwork.ozlabs.org/patch/1097130/
+>
+>  That one, however, is marked as Changes Requested because it failed to
+> explain
+> why the license file hashes have changed.
+>
 
-> > What is abiv1 vs. abiv2 ? Also, in your next commit, abiv1 is
-> > apparently used for ck610, but here this BR2_GCC_TARGET_FLOAT_ABI is
-> > defined for all cases, which seems to contradict your commit log.  
-> abiv1 contain: ck610
-> abiv2 contain: ck807 ck810 ck860
-> 
-> Abiv1 is almost the same as mcore and it's ELF_CODE is 39
-> Abiv2 is C-SKY own ISA and it's ELF_CODE is 252
-> 
-> We don't support FPU in abiv1, because its opcode width is only
-> 16-bits and we don't want to continue developing it.
+Yeah I noticed that, but what I was trying to get at was to try to
+coordinate this instead of creating duplicates.
 
-Ah, and indeed BR2_CSKY_FPU cannot be selected for BR2_ck610.
 
-Please explain all of this in the commit log. Thanks!
+>  Since this patch doesn't even update the license file hashes, I've alse
+> marked
+> it as changes requested. Hint: test the version bump with 'make
+> legal-info'.
+>
 
-Thomas
+For info to who ever creates a v2 patch, the license hash change in
+mendersoftware/mender is due to a an update to copyright year in the
+LICENSE file. The vendor hashes only seem to have different indentation and
+that is why git produced a diff, the hashes seem to be the same.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Mirza Krak | Embedded Solutions Architect | https://mender.io
+
+ Northern.tech AS <https://northern.tech> | @northerntechHQ
+<https://twitter.com/northerntechhq>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190529/cef1c851/attachment.html>
