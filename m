@@ -1,58 +1,64 @@
-From: Robert Hancock <hancock@sedsystems.ca>
-Date: Tue, 28 May 2019 17:25:57 -0600
-Subject: [Buildroot] [PATCH] gpsd: update systemd service file binary path
-Message-ID: <1559085957-14066-1-git-send-email-hancock@sedsystems.ca>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Tue, 28 May 2019 23:35:18 -0400
+Subject: [Buildroot] [PATCH 00/19] Add missing license file hashes for
+ various packages
+Message-ID: <20190529033537.128311-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The systemd gpsd.service file supplied by gpsd specifies a binary path
-of /usr/local/sbin/gpsd, while Buildroot installs the binary in
-/usr/sbin/gpsd. Update the path to match the actual binary location.
+From: Adam Duskett <Aduskett@gmail.com>
 
-Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
----
- ...3-update-systemd-service-file-binary-path.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
- create mode 100644 package/gpsd/0003-update-systemd-service-file-binary-path.patch
+These are just some packages I found today that don't have hashes for their
+respective license files.
 
-diff --git a/package/gpsd/0003-update-systemd-service-file-binary-path.patch b/package/gpsd/0003-update-systemd-service-file-binary-path.patch
-new file mode 100644
-index 0000000..32feb18
---- /dev/null
-+++ b/package/gpsd/0003-update-systemd-service-file-binary-path.patch
-@@ -0,0 +1,30 @@
-+From c4c314f23bc6fec8d3ddadb49090eb3a2e84881d Mon Sep 17 00:00:00 2001
-+From: Robert Hancock <hancock@sedsystems.ca>
-+Date: Tue, 28 May 2019 17:13:25 -0600
-+Subject: [PATCH] Update systemd service file binary path
-+
-+The systemd gpsd.service file supplied by gpsd specifies a binary path
-+of /usr/local/sbin/gpsd, while Buildroot installs the binary in
-+/usr/sbin/gpsd. Update the path to match the actual binary location.
-+
-+Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
-+---
-+ systemd/gpsd.service | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/systemd/gpsd.service b/systemd/gpsd.service
-+index c1f193c..2707ff9 100644
-+--- a/systemd/gpsd.service
-++++ b/systemd/gpsd.service
-+@@ -8,7 +8,7 @@ After=chronyd.service
-+ Type=forking
-+ EnvironmentFile=-/etc/default/gpsd
-+ EnvironmentFile=-/etc/sysconfig/gpsd
-+-ExecStart=/usr/local/sbin/gpsd $GPSD_OPTIONS $OPTIONS $DEVICES
-++ExecStart=/usr/sbin/gpsd $GPSD_OPTIONS $OPTIONS $DEVICES
-+ 
-+ [Install]
-+ WantedBy=multi-user.target
-+-- 
-+1.8.3.1
-+
+I also added a sha256sum hash for the bzip2-1.0.6.tar.gz archive, as it seems
+like a fairly standard shasum to have for packages.
+
+
+Adam Duskett (19):
+  package/acl: add hashes for license files
+  package/attr: add hashes for license files
+  package/bzip2: add license hash
+  package/cmake: add hash for license file
+  package/dbus-glib: add hash for license file
+  package/dbus-python: add hash for license file
+  package/fontconfig: add hash for license file
+  package/gmp: add hashes for license files
+  package/gperf: add hash for license file
+  package/intltool: add hash for license file
+  package/kmod: add hash for license file
+  package/libxml-parser-perl: add hash for license file
+  package/ncurses: add hash for license file
+  package/parted: add hash for license file
+  package/polkit: add hash for license file
+  package/swig: add hashes for license files
+  package/udisks: add hash for license file
+  package/ustr: add hashes for license files
+  package/wireless_tools: add hash for license file
+
+ package/acl/acl.hash                               | 5 +++++
+ package/attr/attr.hash                             | 4 ++++
+ package/bzip2/bzip2.hash                           | 4 ++++
+ package/cmake/cmake.hash                           | 3 +++
+ package/dbus-glib/dbus-glib.hash                   | 3 +++
+ package/dbus-python/dbus-python.hash               | 3 +++
+ package/fontconfig/fontconfig.hash                 | 3 +++
+ package/gmp/gmp.hash                               | 4 ++++
+ package/gperf/gperf.hash                           | 3 +++
+ package/intltool/intltool.hash                     | 1 +
+ package/kmod/kmod.hash                             | 3 +++
+ package/libxml-parser-perl/libxml-parser-perl.hash | 1 +
+ package/ncurses/ncurses.hash                       | 3 +++
+ package/parted/parted.hash                         | 3 +++
+ package/polkit/polkit.hash                         | 3 +++
+ package/swig/swig.hash                             | 3 +++
+ package/udisks/udisks.hash                         | 1 +
+ package/ustr/ustr.hash                             | 5 +++++
+ package/wireless_tools/wireless_tools.hash         | 1 +
+ 19 files changed, 56 insertions(+)
+
 -- 
-1.8.3.1
+2.21.0
