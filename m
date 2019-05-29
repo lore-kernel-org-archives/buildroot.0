@@ -1,94 +1,77 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 29 May 2019 22:55:07 +0200
-Subject: [Buildroot] board/ci20 uboot problems due to fdt headers
-In-Reply-To: <38bc5257-5fcb-625a-f2d8-8391cc0d0d5e@mind.be>
-References: <8811f1b8-8019-912c-a54a-331aabcedbd1@igalia.com>
- <230c7762-612e-6d59-5b5b-930d56a8df32@mind.be>
- <79a7e587-214c-3a9e-b846-c88bccc06c83@igalia.com>
- <38bc5257-5fcb-625a-f2d8-8391cc0d0d5e@mind.be>
-Message-ID: <e3da5ac7-bc79-d5b5-d954-be21ea314432@micronovasrl.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 29 May 2019 23:01:21 +0200
+Subject: [Buildroot] [PATCH] package/chrony: add option for debug logging
+In-Reply-To: <1559086828-14718-1-git-send-email-hancock@sedsystems.ca>
+References: <1559086828-14718-1-git-send-email-hancock@sedsystems.ca>
+Message-ID: <375f6faa-1016-2446-88ab-13dc449e5c1a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout, Pablo,
+ Hi Robert,
 
-Il 29/05/2019 22:50, Arnout Vandecappelle ha scritto:
-> 
-> 
-> On 29/05/2019 08:54, Paulo Matos wrote:
->>
->>
->> On 28/05/2019 20:22, Arnout Vandecappelle wrote:
->>>
->>>   Indeed, it was fixed by commit bf733342324 and its follow-up f437bf547c. Which
->>> Buildroot version are you using? Anything more recent than 2018.02.1 should no
->>> longer have this issue.
->>>
->>
->>
->> Apologies for not mentioning it but I am using tip of master, which is
->> why I was surprised when I saw this error come up again. Not doing
->> anything special.
->>
->> On arch `pacman -Ss dtc` installs /usr/include/libfdt.h, which seems to
->> conflict with the ones from uboot.
->>
->> Should I report this?
-> 
->   You did :-)
-> 
->   It can indeed easily be reproduced with the ci20 defconfig.
-> 
->   The issue is that in U-Boot commit 01286329b27b27eaeda045b469d41b1d9fce545a,
-> $(SRCTREE) was renamed to $(srctree). So, any commit before that (i.e. any
-> version before 2014.04) will not match the sed pattern from our uboot.mk and
-> will not be fixed.
-> 
->   The solution is to add an addition substitution pattern in uboot.mk that does
-> the same on SRCTREE instead of srctree.
-> 
->   In addition, commit 0de71d507157c4bd4fddcd3a419140d2b986eed2 moved it from
-> libfdt to lib/libfdt. In other words, before 2010.06, the pattern matches even
-> less... But that's easily fixed by making the lib/ part optional.
-> 
->   Oh, but actually, the fix simply doesn't work on older U-Boot versions -
-> Buildroot commit f437bf547ca4484 disables it if scripts/dtc/libfdt doesn't
-> exist... If that directory doesn't exist, the bundled libfdt.h, libfdt_env.h and
-> fdt.h reside in ${srctree}/include. However, that directory also contains a
-> bunch of files that may collide with the files from /usr/include that we want
-> for host compilation...
-> 
->   So, I think the solution might be something like this:
-> 
-> define UBOOT_FIXUP_LIBFDT_INCLUDE
-> 	$(Q)if [ -d $(@D)/scripts/dtc/libfdt ]; then \
-> 		mkdir -p $(@D)/scripts/dtc/libfdt; \
-> 		cd $(@D)/scripts/dts/libfdt; \
-> 		ln -s ../../../include/fdt.h .; \
-> 		ln -s ../../../include/libfdt*.h .; \
-> 	fi
-> 	$(Q)$(SED) \
-> 		's%-I$$(srctree)/lib/libfdt%-I$$(srctree)/scripts/dtc/libfdt%' \
-> 		's%-I$$(SRCTREE)\(/lib\)\?/libfdt%-I$$(SRCTREE)/scripts/dtc/libfdt%' \
-> 		$(@D)/tools/Makefile
-> endef
-> 
->   Of course, this was completely untested. Any takers to create a patch from this?
+On 29/05/2019 01:40, Robert Hancock wrote:
+> Add a BR2_PACKAGE_CHRONY_DEBUG_LOGGING config option to allow enabling
+> compiled-in support for debug logging in Chrony. Enable by default as
+> this makes it much easier to debug Chrony issues and should only be
+> disabled by those very sensitive to binary size.
 
-Here I am :)
-Going to work on it soon.
+ How big is the size difference (compared to the size of chrony itself)? Please
+report this in the commit message.
 
--- 
-Giulio Benetti
-CTO
+ If it is less than 10%, I think we prefer to drop the Config.in option and
+unconditionally enable debug. That is, assuming that this doesn't force other
+options (-g for example) into the compilation. Normally it shouldn't since we
+override CFLAGS.
 
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+ Peter, can you confirm that we prefer without the Kconfig option?
+
+> 
+> Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
+> ---
+>  package/chrony/Config.in | 8 ++++++++
+>  package/chrony/chrony.mk | 3 ++-
+>  2 files changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/chrony/Config.in b/package/chrony/Config.in
+> index 05d6fc1..b295e8d 100644
+> --- a/package/chrony/Config.in
+> +++ b/package/chrony/Config.in
+> @@ -6,3 +6,11 @@ config BR2_PACKAGE_CHRONY
+>  	  accuracy of the system clock.
+>  
+>  	  http://chrony.tuxfamily.org/
+> +
+> +config BR2_PACKAGE_CHRONY_DEBUG_LOGGING
+> +	bool "enable debug logging support"
+> +	default y
+> +	depends on BR2_PACKAGE_CHRONY
+> +	help
+> +	  Enable support for debug logging output from Chrony when enabled at
+> +	  runtime. If disabled, code for debug logging will not be compiled in.
+> diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+> index b5821b2..2d03fce 100644
+> --- a/package/chrony/chrony.mk
+> +++ b/package/chrony/chrony.mk
+> @@ -13,7 +13,8 @@ CHRONY_CONF_OPTS = \
+>  	--host-system=Linux \
+>  	--host-machine=$(BR2_ARCH) \
+>  	--prefix=/usr \
+> -	--without-tomcrypt
+> +	--without-tomcrypt \
+> +	$(if $(BR2_PACKAGE_CHRONY_DEBUG_LOGGING),--enable-debug,--disable-debug)
+
+ If it is unconditional, add a comment like:
+
+# --enable-debug to make sure debug logging is compiled in and can be used when
+# enabled at runtime.
+
+ Regards,
+ Arnout
+
+>  
+>  ifeq ($(BR2_PACKAGE_LIBCAP),y)
+>  CHRONY_DEPENDENCIES += libcap
+> 
