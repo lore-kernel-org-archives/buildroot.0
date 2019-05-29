@@ -1,49 +1,50 @@
 From: Thomas Huth <huth@tuxfamily.org>
-Date: Wed, 29 May 2019 10:59:16 +0200
-Subject: [Buildroot] [PATCH 03/19] package/bzip2: add hash for license
- file
-In-Reply-To: <20190529033537.128311-4-aduskett@gmail.com>
-References: <20190529033537.128311-1-aduskett@gmail.com>
- <20190529033537.128311-4-aduskett@gmail.com>
-Message-ID: <20190529105916.465f5e49@thl530.multi.box>
+Date: Wed, 29 May 2019 11:00:47 +0200
+Subject: [Buildroot] [PATCH v2] package/dropbear: rework license
+ information
+In-Reply-To: <20190529070701.8913-1-yegorslists@googlemail.com>
+References: <20190529070701.8913-1-yegorslists@googlemail.com>
+Message-ID: <20190529110047.19e54599@thl530.multi.box>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 28 May 2019 23:35:21 -0400
-schrieb aduskett at gmail.com:
+Am Wed, 29 May 2019 09:07:01 +0200
+schrieb yegorslists at googlemail.com:
 
-> From: Adam Duskett <Aduskett@gmail.com>
+> From: Yegor Yefremov <yegorslists@googlemail.com>
 > 
-> Also add a standard sha256 hash for the package itself.
+> According to the LICENSE file curve25519-donna is licensed under
+> BSD-3-Clause license.
 > 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> There is only BSD-2-Clause license mentioned so remove
+> BSD-2-Clause-like.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 > ---
->  package/bzip2/bzip2.hash | 4 ++++
->  1 file changed, 4 insertions(+)
+> Changes v1 -> v2:
+>   - remove BSD-2-Clause-like license (suggested by Arnout
+> Vandecappelle)
 > 
-> diff --git a/package/bzip2/bzip2.hash b/package/bzip2/bzip2.hash
-> index 60b0a191ef..684fe73109 100644
-> --- a/package/bzip2/bzip2.hash
-> +++ b/package/bzip2/bzip2.hash
-> @@ -1,2 +1,6 @@
->  # From http://www.bzip.org/downloads.html
+>  package/dropbear/dropbear.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/dropbear/dropbear.mk
+> b/package/dropbear/dropbear.mk index e10c851606..9c995c3894 100644
+> --- a/package/dropbear/dropbear.mk
+> +++ b/package/dropbear/dropbear.mk
+> @@ -7,7 +7,7 @@
+>  DROPBEAR_VERSION = 2019.78
+>  DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
+>  DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+> -DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause
+> +DROPBEAR_LICENSE = MIT, BSD-2-Clause, BSD-3-Clause
+>  DROPBEAR_LICENSE_FILES = LICENSE
+>  DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
+>  DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
 
-While you're at it, you could remove that URL (or change it to a
-version from archive.org) - it does not seem to contain the md5sum
-anymore.
-
->  md5	00b516f4704d4a7cb50a1d97e6e8e15b	bzip2-1.0.6.tar.gz
-> +
-> +# Locally calculated
-> +sha256
-> a2848f34fcd5d6cf47def00461fcb528a0484d8edef8208d6d2e2909dc61d9cd
-> bzip2-1.0.6.tar.gz +sha256
-> 4919cfb14a73cd64fcef67b107613970cf1659a09aa675dba31314f373bc7204
-> LICENSE 
-
-I get the same values.
+Ok, that makes even more sense than v1, indeed.
 
 Reviewed-by: Thomas Huth <huth@tuxfamily.org>
