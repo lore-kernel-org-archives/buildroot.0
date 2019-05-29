@@ -1,39 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 29 May 2019 08:49:08 +0200
-Subject: [Buildroot] [PATCH v2 4/6]
- toolchain/toolchain-external/toolchain-external-csky: new package
-In-Reply-To: <CAJF2gTT5zJFuQkCwBi4q9hNwVJ6WyGD5fyNqLaxH3MUB1f7EjA@mail.gmail.com>
-References: <20190528203416.32261-1-thomas.petazzoni@bootlin.com>
- <20190528203416.32261-5-thomas.petazzoni@bootlin.com>
- <CAJF2gTT5zJFuQkCwBi4q9hNwVJ6WyGD5fyNqLaxH3MUB1f7EjA@mail.gmail.com>
-Message-ID: <20190529084908.53c4058e@windsurf.home>
+From: Alexandru Ardelean <ardeleanalex@gmail.com>
+Date: Wed, 29 May 2019 09:51:41 +0300
+Subject: [Buildroot] [PATCH] package: dropbear: add support for
+ displaying /etc/motd
+In-Reply-To: <87lfywqoj1.fsf@dell.be.48ers.dk>
+References: <20190523121115.26098-1-ardeleanalex@gmail.com>
+ <20190523142857.625748aa@windsurf.home> <87k1ehs41e.fsf@dell.be.48ers.dk>
+ <87lfywqoj1.fsf@dell.be.48ers.dk>
+Message-ID: <CA+U=Dsp5Ebtte+RrVbbKKzy_2F+dEeyv174zTVtS=UoQPSCV=g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Guo,
+On Fri, May 24, 2019 at 10:50 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>
+> >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>  > Hi,
+>
+>  >> This way, we have something that is much more flexible, as it allows
+>  >> you to define whatever Dropbear option you like.
+>
+>  >> Note: this is just a suggestion; I don't know what other
+>  >> maintainers/developers will think about it.
+>
+>  > Agreed, if we want such finegrained configuration then that would be the
+>  > way to go.
+>
+> Alexandru, will you send such a patch? In the mean time I have marked
+> this patch as changes requested in patchwork.
 
-On Wed, 29 May 2019 13:48:31 +0800
-Guo Ren <guoren@kernel.org> wrote:
+Yes.
 
-> I'll delete toolchain-external-csky after toolchain buildroot is ready.
-> csky-linux-tools-x86_64-glibc-linux-4.9.56-20180128.tar.gz is only
-> support abiv1: ck610.
-> For abiv2: ck807, ck810, ck860 need another toolchain.
-> 
-> So I don't want to add toolchain-external-csky and I'll change
-> gx6605s_defconfig to toolchain
-> buildroot in future.
+Sorry for the late reply.
+I left the thread unread (I do it as personal task-tracker), and I did
+not notice this mail.
 
-OK. This makes the second part of my patch series a bit useless then,
-I'll mark patches 4/6 to 6/6 as Rejected then.
+Thanks
+Alex
 
-Thanks for the feedback!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+> --
+> Bye, Peter Korsgaard
