@@ -1,10 +1,10 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 29 May 2019 16:51:31 +0200
-Subject: [Buildroot] [PATCH v3 2/3] package/fxload: re-enable package on
+Date: Wed, 29 May 2019 16:51:32 +0200
+Subject: [Buildroot] [PATCH v3 3/3] package/dmalloc: re-enable package on
  Microblaze
 In-Reply-To: <20190529145132.57042-1-giulio.benetti@micronovasrl.com>
 References: <20190529145132.57042-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190529145132.57042-3-giulio.benetti@micronovasrl.com>
+Message-ID: <20190529145132.57042-4-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,55 +14,49 @@ To: buildroot@busybox.net
 With Microblaze Gcc version < 8.x build gives:
 'Error: operation combines symbols in different segments'
 This is due to bug 63261:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63261. To avoid this, the
-fxload package has a !BR2_microblaze dependency. However, gcc bug
-63261 only triggers when optimization is enabled, so we can work
-around the issue by passing -O0, which is what we do in other
-Buildroot packages to work around this bug.
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63261. To avoid this,
+the dmalloc package has a !BR2_microblaze dependency. However, gcc bug
+63261 only triggers when optimization is enabled, so we can work around
+the issue by passing -O0, which is what we do in other Buildroot
+packages to work around this bug.
 
 So, this commit passes -O0 when BR2_TOOLCHAIN_HAS_GCC_BUG_63261, and
-re-enables fxload on Microblaze.
+re-enables dmalloc on Microblaze.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/fxload/Config.in | 4 ----
- package/fxload/fxload.mk | 9 ++++++++-
- 2 files changed, 8 insertions(+), 5 deletions(-)
+ package/dmalloc/Config.in  | 4 ----
+ package/dmalloc/dmalloc.mk | 4 ++++
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/fxload/Config.in b/package/fxload/Config.in
-index 88cc6d1e5f..f4d6ef54f5 100644
---- a/package/fxload/Config.in
-+++ b/package/fxload/Config.in
+diff --git a/package/dmalloc/Config.in b/package/dmalloc/Config.in
+index e5be109332..0c01970b04 100644
+--- a/package/dmalloc/Config.in
++++ b/package/dmalloc/Config.in
 @@ -1,9 +1,5 @@
- config BR2_PACKAGE_FXLOAD
- 	bool "fxload"
--	# Hits gcc PR63261 on Microblaze with debugging symbols
--	# enabled. Since this package is unlikely to be useful on
--	# Microblaze, just disable it on this architecture.
--	depends on !BR2_microblaze
+ config BR2_PACKAGE_DMALLOC
+ 	bool "dmalloc"
+-	# On some packages, Microblaze gcc has issues when debugging
+-	# symbols are enabled: "Error: operation combines symbols in
+-	# different segments".
+-	depends on !(BR2_microblaze && BR2_ENABLE_DEBUG)
  	help
- 	  This program is conveniently able to download firmware into
- 	  FX, FX2, and FX2LP EZ-USB devices, as well as the original
-diff --git a/package/fxload/fxload.mk b/package/fxload/fxload.mk
-index 94b11d0f1e..23c513b1c0 100644
---- a/package/fxload/fxload.mk
-+++ b/package/fxload/fxload.mk
-@@ -9,8 +9,15 @@ FXLOAD_SITE = http://downloads.sourceforge.net/project/linux-hotplug/fxload/$(FX
- FXLOAD_LICENSE = GPL-2.0+
- FXLOAD_LICENSE_FILES = COPYING
+ 	  A debug memory allocation library which is a drop in
+ 	  replacement for the system's malloc, realloc, calloc, free and
+diff --git a/package/dmalloc/dmalloc.mk b/package/dmalloc/dmalloc.mk
+index 6ebb44c5c0..38b2c02027 100644
+--- a/package/dmalloc/dmalloc.mk
++++ b/package/dmalloc/dmalloc.mk
+@@ -35,6 +35,10 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ DMALLOC_CFLAGS += -marm
+ endif
  
-+FXLOAD_CFLAGS = $(TARGET_CFLAGS)
-+
 +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_63261),y)
-+FXLOAD_CFLAGS += -O0
++DMALLOC_CFLAGS += -O0
 +endif
 +
- define FXLOAD_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) all
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) \
-+	CFLAGS="$(FXLOAD_CFLAGS)" -C $(@D) all
- endef
+ DMALLOC_CONF_ENV = CFLAGS="$(DMALLOC_CFLAGS)"
  
- define FXLOAD_INSTALL_TARGET_CMDS
+ define DMALLOC_POST_PATCH
 -- 
 2.17.1
