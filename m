@@ -1,39 +1,27 @@
-From: Thomas Huth <huth@tuxfamily.org>
-Date: Wed, 29 May 2019 17:30:16 +0200
-Subject: [Buildroot] [PATCH 08/19] package/gmp: add hashes for license
- files
-In-Reply-To: <20190529033537.128311-9-aduskett@gmail.com>
-References: <20190529033537.128311-1-aduskett@gmail.com>
- <20190529033537.128311-9-aduskett@gmail.com>
-Message-ID: <5b818649-03e1-c308-7837-b17a132ac779@tuxfamily.org>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Wed, 29 May 2019 17:57:07 +0200
+Subject: [Buildroot] [PATCH 0/2] treat gcc bug 90620 in a common way
+Message-ID: <20190529155709.31207-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 29/05/2019 05.35, aduskett at gmail.com wrote:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/gmp/gmp.hash | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/gmp/gmp.hash b/package/gmp/gmp.hash
-> index f4793cd93c..417b9d17bf 100644
-> --- a/package/gmp/gmp.hash
-> +++ b/package/gmp/gmp.hash
-> @@ -1,2 +1,6 @@
->  # Locally calculated after checking pgp signature
->  sha256	87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912	gmp-6.1.2.tar.xz
-> +
-> +# Locally calculated
-> +sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LESSERv3
-> +sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
-> 
+As done for other Gcc bugs introduce and use
+BR2_TOOLCHAIN_HAS_GCC_BUG_90620 in affected package:
+- haproxy
+This is more consistent than checking same conditions for every package
+and putting a comment on top of it.
 
-There is also a COPYINGv3 in the tarball ... but as far as I can see, it
-only applies to demos and test programs, so this should be fine.
+Giulio Benetti (2):
+  toolchain: introduce BR2_TOOLCHAIN_HAS_GCC_BUG_90620
+  package/haproxy: re-enable package on Microblaze
 
-Reviewed-by: Thomas Huth <huth@tuxfamily.org>
+ package/haproxy/Config.in  | 2 --
+ package/haproxy/haproxy.mk | 9 ++++++++-
+ toolchain/Config.in        | 8 ++++++++
+ 3 files changed, 16 insertions(+), 3 deletions(-)
+
+-- 
+2.17.1
