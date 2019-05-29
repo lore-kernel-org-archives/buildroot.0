@@ -1,51 +1,41 @@
-From: Guo Ren <guoren@kernel.org>
-Date: Wed, 29 May 2019 16:30:43 +0800
-Subject: [Buildroot] [PATCH V3 03/10] arch/csky: Add FLOAT_ABI compiler
- options
-In-Reply-To: <20190529095739.18d4d3c8@windsurf.home>
-References: <1559114328-23357-1-git-send-email-guoren@kernel.org>
- <1559114328-23357-4-git-send-email-guoren@kernel.org>
- <20190529092307.6c78996b@windsurf.home>
- <CAJF2gTSgReEOOJAvXY=MraqTLV4DwkKOqsbQ-4rBdNiaibxQfQ@mail.gmail.com>
- <20190529095739.18d4d3c8@windsurf.home>
-Message-ID: <CAJF2gTRb4W=ZUz4-WxPwzdaQMMo1suwPsxU47QeGdjfBvgs3og@mail.gmail.com>
+From: Thomas Huth <huth@tuxfamily.org>
+Date: Wed, 29 May 2019 10:33:00 +0200
+Subject: [Buildroot] [PATCH] package/dropbear: add missing BSD-3-Clause
+ license
+In-Reply-To: <20190528124102.21981-1-yegorslists@googlemail.com>
+References: <20190528124102.21981-1-yegorslists@googlemail.com>
+Message-ID: <20190529103300.548c1a05@thl530.multi.box>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, May 29, 2019 at 3:57 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Wed, 29 May 2019 15:30:14 +0800
-> Guo Ren <guoren@kernel.org> wrote:
->
-> > > What is abiv1 vs. abiv2 ? Also, in your next commit, abiv1 is
-> > > apparently used for ck610, but here this BR2_GCC_TARGET_FLOAT_ABI is
-> > > defined for all cases, which seems to contradict your commit log.
-> > abiv1 contain: ck610
-> > abiv2 contain: ck807 ck810 ck860
-> >
-> > Abiv1 is almost the same as mcore and it's ELF_CODE is 39
-> > Abiv2 is C-SKY own ISA and it's ELF_CODE is 252
-> >
-> > We don't support FPU in abiv1, because its opcode width is only
-> > 16-bits and we don't want to continue developing it.
->
-> Ah, and indeed BR2_CSKY_FPU cannot be selected for BR2_ck610.
->
-> Please explain all of this in the commit log. Thanks!
->
-OK, change the commit log with:
+Am Tue, 28 May 2019 14:41:02 +0200
+schrieb yegorslists at googlemail.com:
 
-C-SKY CPU is seperated into two ABIs:
- - abiv1: mcore based ELF_NUM:39 and do not support FPU & VDSP. (CPU: 610)
- - abiv2: C-SKY own ISA with ELF_NUM:252 and support FPU & VDSP. (CPU:
-807, 810, 860)
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> According to the LICENSE file curve25519-donna is licensed under
+> BSD-3-Clause license.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  package/dropbear/dropbear.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/dropbear/dropbear.mk
+> b/package/dropbear/dropbear.mk index e10c851606..c1a27f85c5 100644
+> --- a/package/dropbear/dropbear.mk
+> +++ b/package/dropbear/dropbear.mk
+> @@ -7,7 +7,7 @@
+>  DROPBEAR_VERSION = 2019.78
+>  DROPBEAR_SITE = https://matt.ucc.asn.au/dropbear/releases
+>  DROPBEAR_SOURCE = dropbear-$(DROPBEAR_VERSION).tar.bz2
+> -DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause
+> +DROPBEAR_LICENSE = MIT, BSD-2-Clause-like, BSD-2-Clause, BSD-3-Clause
+>  DROPBEAR_LICENSE_FILES = LICENSE
+>  DROPBEAR_TARGET_BINS = dropbearkey dropbearconvert scp
+>  DROPBEAR_PROGRAMS = dropbear $(DROPBEAR_TARGET_BINS)
 
-So we don't care BR2_GCC_TARGET_FLOAT_ABI for abiv1, because it based
-on CSKY_FPU and it'll
-never be selected by ck610.
+Reviewed-by: Thomas Huth <huth@tuxfamily.org>
