@@ -1,28 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:27:39 +0200
-Subject: [Buildroot] [git commit branch/next] package/libxml-parser-perl:
- add hash for license file
-Message-ID: <20190530223346.B5AF38123D@busybox.osuosl.org>
+Date: Fri, 31 May 2019 00:23:43 +0200
+Subject: [Buildroot] [git commit branch/next] package/dbus-glib: add hash
+ for license file
+Message-ID: <20190530223346.76BE18E72C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3709506d722f8d745fbf8ecbcea698b8ea60aaf
+commit: https://git.buildroot.net/buildroot/commit/?id=8d85a345b521b0652463bc1eee55ee368b44a0c6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Reviewed-by: Thomas Huth <huth@tuxfamily.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxml-parser-perl/libxml-parser-perl.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/dbus-glib/dbus-glib.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/libxml-parser-perl/libxml-parser-perl.hash b/package/libxml-parser-perl/libxml-parser-perl.hash
-index d8e0df5a27..1e2a1c4665 100644
---- a/package/libxml-parser-perl/libxml-parser-perl.hash
-+++ b/package/libxml-parser-perl/libxml-parser-perl.hash
-@@ -1,2 +1,3 @@
- # locally computed hash
- sha256 1ae9d07ee9c35326b3d9aad56eae71a6730a73a116b9fe9e8a4758b7cc033216 XML-Parser-2.44.tar.gz
-+sha256 a008c782e078102720266824c1e87875bafbf25ffae4b173dc135f9a4e1c672e README
+diff --git a/package/dbus-glib/dbus-glib.hash b/package/dbus-glib/dbus-glib.hash
+index 8a80b71b45..098832431e 100644
+--- a/package/dbus-glib/dbus-glib.hash
++++ b/package/dbus-glib/dbus-glib.hash
+@@ -1,2 +1,5 @@
+ # Locally calculated after checking pgp signature
+ sha256 7ce4760cf66c69148f6bd6c92feaabb8812dee30846b24cd0f7395c436d7e825  dbus-glib-0.110.tar.gz
++
++# Locally calculated
++sha256 ef1634fc21d9112dca08f2557313584719d534d05213cf14f3c77938506266b4  COPYING
