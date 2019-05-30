@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:30:39 +0200
-Subject: [Buildroot] [PATCH 14/19] package/parted: add hash for license
+Date: Fri, 31 May 2019 00:31:10 +0200
+Subject: [Buildroot] [PATCH 15/19] package/polkit: add hash for license
  file
-In-Reply-To: <20190529033537.128311-15-aduskett@gmail.com>
- (aduskett@gmail.com's message of "Tue, 28 May 2019 23:35:32 -0400")
+In-Reply-To: <20190529033537.128311-16-aduskett@gmail.com>
+ (aduskett@gmail.com's message of "Tue, 28 May 2019 23:35:33 -0400")
 References: <20190529033537.128311-1-aduskett@gmail.com>
- <20190529033537.128311-15-aduskett@gmail.com>
-Message-ID: <871s0fzib4.fsf@dell.be.48ers.dk>
+ <20190529033537.128311-16-aduskett@gmail.com>
+Message-ID: <87woi7y3pt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
