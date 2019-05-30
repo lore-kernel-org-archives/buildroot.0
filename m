@@ -1,43 +1,29 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 30 May 2019 12:33:05 +0200
-Subject: [Buildroot] [PATCH v2] autobuild-run: fix copy_if_exists()
-Message-ID: <20190530103305.37919-1-giulio.benetti@micronovasrl.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 30 May 2019 12:33:58 +0200
+Subject: [Buildroot] [PATCH v2 1/6] package/lmbench: use
+ UPDATE_CONFIG_HOOK instead of CONFIG_UPDATE
+In-Reply-To: <20190528203416.32261-2-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Tue, 28 May 2019 22:34:11 +0200")
+References: <20190528203416.32261-1-thomas.petazzoni@bootlin.com>
+ <20190528203416.32261-2-thomas.petazzoni@bootlin.com>
+Message-ID: <87ftow44fd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Under copy_if_exists() 'dir' variable is referenced as 'd' leading to
-exception.
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Substitute 'd' and 'dir' with 'directory' in copy_if_exists(), since
-'dir' is a keyword in Python.
+ > jimtcl, perl, usb_modeswitch and x264 are registering
+ > UPDATE_CONFIG_HOOK as a post patch hook to get their gnuconfig files
+ > updated. lmbench is the only package calling CONFIG_UPDATE directly,
+ > so for consistency, let's make it use the same logic as jimtcl, perl,
+ > usb_modeswitch and x264.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
-Changes:
-V1->V2: change 'dir' and 'd' into 'directory'
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
- scripts/autobuild-run | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Committed to next, thanks.
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 56bab25..8d58a83 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -488,9 +488,9 @@ def send_results(result, **kwargs):
-     shutil.copyfile(os.path.join(outputdir, "branch"),
-                     os.path.join(resultdir, "branch"))
- 
--    def copy_if_exists(dir, src, dst=None):
--        if os.path.exists(os.path.join(outputdir, d, src)):
--            shutil.copyfile(os.path.join(outputdir, d, src),
-+    def copy_if_exists(directory, src, dst=None):
-+        if os.path.exists(os.path.join(outputdir, directory, src)):
-+            shutil.copyfile(os.path.join(outputdir, directory, src),
-                             os.path.join(resultdir, src if dst is None else dst))
- 
-     copy_if_exists("build", "build-time.log")
 -- 
-2.17.1
+Bye, Peter Korsgaard
