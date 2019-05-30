@@ -1,38 +1,38 @@
 From: Thomas Huth <huth@tuxfamily.org>
-Date: Thu, 30 May 2019 16:03:28 +0200
-Subject: [Buildroot] [PATCH 09/19] package/gperf: add hash for license
+Date: Thu, 30 May 2019 16:09:52 +0200
+Subject: [Buildroot] [PATCH 11/19] package/kmod: add hash for license
  file
-In-Reply-To: <20190529033537.128311-10-aduskett@gmail.com>
+In-Reply-To: <20190529033537.128311-12-aduskett@gmail.com>
 References: <20190529033537.128311-1-aduskett@gmail.com>
- <20190529033537.128311-10-aduskett@gmail.com>
-Message-ID: <20190530160328.3f697228@thl530.multi.box>
+ <20190529033537.128311-12-aduskett@gmail.com>
+Message-ID: <20190530160952.12b156d7@thl530.multi.box>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 28 May 2019 23:35:27 -0400
+Am Tue, 28 May 2019 23:35:29 -0400
 schrieb aduskett at gmail.com:
 
 > From: Adam Duskett <Aduskett@gmail.com>
 > 
 > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > ---
->  package/gperf/gperf.hash | 3 +++
+>  package/kmod/kmod.hash | 3 +++
 >  1 file changed, 3 insertions(+)
 > 
-> diff --git a/package/gperf/gperf.hash b/package/gperf/gperf.hash
-> index 370235c627..21c76605b5 100644
-> --- a/package/gperf/gperf.hash
-> +++ b/package/gperf/gperf.hash
+> diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
+> index 0e8f034e06..f970093cf1 100644
+> --- a/package/kmod/kmod.hash
+> +++ b/package/kmod/kmod.hash
 > @@ -1,2 +1,5 @@
->  # Locally calculated after checking pgp signature
->  sha256
-> 767112a204407e62dbc3106647cf839ed544f3cf5d0f0523aaa2508623aad63e
-> gperf-3.0.4.tar.gz + +# Locally calculated
-> +sha256
-> 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903
-> COPYING
+>  # From
+> https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
+> sha256
+> 7165e6496656159dcb909a91ed708a0fe273a4b128b4b1dc997ccb5189eef1cd
+> kmod-25.tar.xz + +# Locally calculated +sha256
+> 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3
+> libkmod/COPYING
 
 Reviewed-by: Thomas Huth <huth@tuxfamily.org>
