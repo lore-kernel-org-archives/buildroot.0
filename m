@@ -1,51 +1,49 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 01:07:41 +0200
-Subject: [Buildroot] [PATCH] package/libnss: security bump to version 3.42.1
-Message-ID: <20190530230741.14323-1-peter@korsgaard.com>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Thu, 30 May 2019 16:43:22 -0700
+Subject: [Buildroot] [PATCH] package/dosfstools: introduce sanitation
+ step during install
+In-Reply-To: <87tvdb1tba.fsf@dell.be.48ers.dk>
+References: <20190529182716.12080-1-mmayer@broadcom.com>
+ <931fdea6-0e1b-0074-1b14-df0c6a29f899@mind.be>
+ <CAGt4E5uynqGo1Th2PB8Wq3-JKSYbcR+Drc3AuarUPKPivmeYJw@mail.gmail.com>
+ <87tvdb1tba.fsf@dell.be.48ers.dk>
+Message-ID: <CAGt4E5vEsXtbyfyP+SJxHEYwLm09=uEYjsrCQqL80zb8dHphEw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+On Thu, 30 May 2019 at 15:16, Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> >>>>> "Markus" == Markus Mayer <mmayer@broadcom.com> writes:
+>
+> Hi,
+>
+>  >> However, I'm wondering... dosfstools only installs things in /sbin,
+>  >> /usr/share/man and /usr/share/doc. The latter two get deleted in
+>  >> target-finalize. Wouldn't it be a lot easier then to manually install the
+>  >> programs we need to sbin, instead of installing everything and removing what is
+>  >> not needed?
+>
+>  > I had that first, actually. But then I was thinking that would
+>  > duplicate the install logic (or at least a part of it) in the package
+>  > makefile. It is unlikely, but it could lead to some unexpected
+>  > dependencies between upstream tar-ball and Buildroot makefile after an
+>  > update of dosfstools. But maybe that isn't a big problem or there
+>  > wouldn't be any more of a dependency than with the approach above.
+>
+>  > I'm open to either approach. Does anybody have any thoughts one way or another?
+>
+> Manually installing the specific binaries we want seems like the
+> simplest / clearest option to me.
+>
+> Care to send a patch doing that? Thanks!
 
-(3.41) CVE-2018-12404: Cache side-channel variant of the Bleichenbacher
-attack
+Done.
 
-(3.42.1) CVE-2018-18508: Add additional null checks to several CMS functions
-to fix a rare CMS crash.  Thanks to Hanno B?ck and Damian Poddebniak for the
-discovery and fixes
+Regards,
+-Markus
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 9c3cefd818..1d600f14ef 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_39_RTM/src/SHA256SUMS
--sha256	6be64dd76f212415cc8bc34343ac1e7389048db4db9a023a84873c411dc5864b  nss-3.39.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_42_1_RTM/src/SHA256SUMS
-+sha256	087db37d38fd49dfd584dd2a8b5baa7fc88de7c9bd97c0c2d5be4abcafc61fc6  nss-3.42.1.tar.gz
- # Locally calculated
- sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 73c9b08fd2..89d614fe1c 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBNSS_VERSION = 3.39
-+LIBNSS_VERSION = 3.42.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
--- 
-2.11.0
+> --
+> Bye, Peter Korsgaard
