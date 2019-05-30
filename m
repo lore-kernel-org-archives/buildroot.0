@@ -1,46 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 20 May 2019 11:11:03 +0200
-Subject: [Buildroot] [git commit] package/powertop: bump to version 2.10
-Message-ID: <20190602201234.BC63981354@busybox.osuosl.org>
+Date: Fri, 31 May 2019 00:20:43 +0200
+Subject: [Buildroot] [git commit] package/acl: add hashes for license files
+Message-ID: <20190602201236.79CB181354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1fbbfd872b1aea64ec128db2363346b1df1318b
+commit: https://git.buildroot.net/buildroot/commit/?id=fbf9132734de6db9b63dae0746aeab6e180479ed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license file
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Reviewed-by: Thomas Huth <huth@tuxfamily.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/powertop/powertop.hash | 3 ++-
- package/powertop/powertop.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/acl/acl.hash | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/powertop/powertop.hash b/package/powertop/powertop.hash
-index 0f9acdc277..13e938d505 100644
---- a/package/powertop/powertop.hash
-+++ b/package/powertop/powertop.hash
-@@ -1,2 +1,3 @@
- # Locally-generated hash
--sha256	aa7fb7d8e9a00f05e7d8a7a2866d85929741e0d03a5bf40cab22d2021c959250	powertop-v2.9.tar.gz
-+sha256	d3b7459eaba7d01c8841dd33a3b4d369416c01e9bd8951b0d88234cf18fe4a75	powertop-v2.10.tar.gz
-+sha256	b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259	COPYING
-diff --git a/package/powertop/powertop.mk b/package/powertop/powertop.mk
-index cf5e8d4ffb..e4472080e8 100644
---- a/package/powertop/powertop.mk
-+++ b/package/powertop/powertop.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--POWERTOP_VERSION = 2.9
--POWERTOP_SITE = https://01.org/sites/default/files/downloads/powertop
-+POWERTOP_VERSION = 2.10
-+POWERTOP_SITE = https://01.org/sites/default/files/downloads
- POWERTOP_SOURCE = powertop-v$(POWERTOP_VERSION).tar.gz
- POWERTOP_DEPENDENCIES = pciutils ncurses libnl host-pkgconf \
- 	$(TARGET_NLS_DEPENDENCIES)
+diff --git a/package/acl/acl.hash b/package/acl/acl.hash
+index 091092a1c5..50c32d7734 100644
+--- a/package/acl/acl.hash
++++ b/package/acl/acl.hash
+@@ -1,2 +1,6 @@
+ # Locally calculated after checking pgp signature
+ sha256  06be9865c6f418d851ff4494e12406568353b891ffe1f596b34693c387af26c7  acl-2.2.53.tar.gz
++
++# Locally calculated
++sha256  a45a845012742796534f7e91fe623262ccfb99460a2bd04015bd28d66fba95b8  doc/COPYING
++sha256  01b1f9f2c8ee648a7a596a1abe8aa4ed7899b1c9e5551bda06da6e422b04aa55  doc/COPYING.LGPL
