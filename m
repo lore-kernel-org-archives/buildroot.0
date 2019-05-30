@@ -1,47 +1,36 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 30 May 2019 23:29:06 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/grpc: fix build with uclibc on x86_64
-Message-ID: <20190530212906.3797-1-fontaine.fabrice@gmail.com>
+Date: Thu, 30 May 2019 23:30:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/i2pd: fix static build with atomic
+Message-ID: <20190530213022.3878-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On x86_64 if GPR_MUSL_LIBC_COMPAT is not set, grpc tries to link with
-memcpy at GLIBC_2.2.5, see:
-https://github.com/grpc/grpc/blob/618a3f561d4a93f263cca23abad086ed8f4d5e86/src/core/lib/gpr/wrap_memcpy.cc
+Use CMAKE_REQUIRED_LIBRARIES otherwise -latomic won't be at the end of
+the line
 
 Fixes:
- - http://autobuild.buildroot.org/results/20d6f2489a4e291a53bd514da66105eb607e1014
+ - http://autobuild.buildroot.org/results/9dd1c34917d4c67bdf4b1aaff3e9c087c8149f6f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
- - Pass TARGET_CXXFLAGS to CMAKE_CXX_FLAGS
+ package/i2pd/i2pd.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- package/grpc/grpc.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 9506e0268a..29facfc19b 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -33,6 +33,14 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- GRPC_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
+index 5fa815c21d..9755752c02 100644
+--- a/package/i2pd/i2pd.mk
++++ b/package/i2pd/i2pd.mk
+@@ -22,7 +22,7 @@ I2PD_CONF_OPTS += -DWITH_GUI=OFF
+ I2PD_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-I2PD_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
++I2PD_CONF_OPTS += -DCMAKE_REQUIRED_LIBRARIES=-latomic
  endif
  
-+# Set GPR_MUSL_LIBC_COMPAT otherwise build will fail on x86_64 with uclibc
-+# because grpc tries to link with memcpy at GLIBC_2.2.5
-+ifeq ($(BR2_x86_64):$(BR2_TOOLCHAIN_USES_GLIBC),y:)
-+GRPC_CONF_OPTS += \
-+	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -DGPR_MUSL_LIBC_COMPAT" \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DGPR_MUSL_LIBC_COMPAT"
-+endif
-+
- HOST_GRPC_CONF_OPTS = \
- 	-D_gRPC_CARES_LIBRARIES=cares \
- 	-DgRPC_CARES_PROVIDER=none \
+ ifeq ($(BR2_STATIC_LIBS),y)
 -- 
 2.20.1
