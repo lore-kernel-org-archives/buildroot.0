@@ -1,30 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:30:46 +0200
-Subject: [Buildroot] [git commit branch/next] package/polkit: add hash for
+Date: Fri, 31 May 2019 00:31:42 +0200
+Subject: [Buildroot] [git commit branch/next] package/udisks: add hash for
  license file
-Message-ID: <20190530223346.C4AC58123D@busybox.osuosl.org>
+Message-ID: <20190530223346.D3E3B8E840@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=70245b35d8e8ef222ff63b3cdb647afee3e22fb6
+commit: https://git.buildroot.net/buildroot/commit/?id=206e8aae12ad92a0febe994e2f3cf4b0e2b91a5e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/polkit/polkit.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/udisks/udisks.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/polkit/polkit.hash b/package/polkit/polkit.hash
-index 1fe8607fbf..6368091c4a 100644
---- a/package/polkit/polkit.hash
-+++ b/package/polkit/polkit.hash
-@@ -1,2 +1,5 @@
- # Locally calculated after checking pgp signature
- sha256	8fdc7cc8ba4750fcce1a4db9daa759c12afebc7901237e1c993c38f08985e1df	polkit-0.105.tar.gz
-+
-+# Locally calculated
-+sha256	d2e2aa973e29c75e1b492e67ea7b7da9de2d501d49a934657971fd74f9a0b0a8	COPYING
+diff --git a/package/udisks/udisks.hash b/package/udisks/udisks.hash
+index 7ad4326b1c..b40161e323 100644
+--- a/package/udisks/udisks.hash
++++ b/package/udisks/udisks.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 f2ec82eb0ea7e01dc299b5b29b3c18cdf861236ec43dcff66b3552b4b31c6f71  udisks-1.0.5.tar.gz
++sha256 7d30f41a79a9b453b4972a6d7e3425ff104b39232891bde8ba659f1adb21f771  COPYING
