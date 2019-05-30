@@ -1,28 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:31:42 +0200
-Subject: [Buildroot] [git commit branch/next] package/udisks: add hash for
- license file
-Message-ID: <20190530223346.D3E3B8E840@busybox.osuosl.org>
+Date: Fri, 31 May 2019 00:32:50 +0200
+Subject: [Buildroot] [git commit branch/next] package/wireless_tools: add
+ hash for license file
+Message-ID: <20190530223346.E2E698E840@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=206e8aae12ad92a0febe994e2f3cf4b0e2b91a5e
+commit: https://git.buildroot.net/buildroot/commit/?id=b2f34198a83ded719aad49817156c2a41f4ffe67
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/udisks/udisks.hash | 1 +
+ package/wireless_tools/wireless_tools.hash | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/udisks/udisks.hash b/package/udisks/udisks.hash
-index 7ad4326b1c..b40161e323 100644
---- a/package/udisks/udisks.hash
-+++ b/package/udisks/udisks.hash
+diff --git a/package/wireless_tools/wireless_tools.hash b/package/wireless_tools/wireless_tools.hash
+index 587c9772ef..50a3f62b84 100644
+--- a/package/wireless_tools/wireless_tools.hash
++++ b/package/wireless_tools/wireless_tools.hash
 @@ -1,2 +1,3 @@
- # Locally calculated
- sha256 f2ec82eb0ea7e01dc299b5b29b3c18cdf861236ec43dcff66b3552b4b31c6f71  udisks-1.0.5.tar.gz
-+sha256 7d30f41a79a9b453b4972a6d7e3425ff104b39232891bde8ba659f1adb21f771  COPYING
+ # locally computed hash
+ sha256 abd9c5c98abf1fdd11892ac2f8a56737544fe101e1be27c6241a564948f34c63 wireless_tools.30.pre9.tar.gz
++sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
