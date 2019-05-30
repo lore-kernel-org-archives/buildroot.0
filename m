@@ -1,74 +1,65 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 May 2019 22:59:57 +0200
-Subject: [Buildroot] [git commit] arch/csky: remove BR2_CSKY_DSP option
-Message-ID: <20190602201237.89B3981354@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 31 May 2019 00:43:11 +0200
+Subject: [Buildroot] [git commit] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.0.5
+Message-ID: <20190602201237.3A08B801CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55c642287819a062d52e7f290c76ada778772fba
+commit: https://git.buildroot.net/buildroot/commit/?id=4554610bde56b0b7f140f6833fc44ebfb7cd7310
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The DSP extention is in fact no longer used for C-SKY, nor supported
-by C-SKY gcc, so we remove it.
-
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Thomas: split from the VDSP patch, add Config.in.legacy]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy    | 7 +++++++
- arch/Config.in.csky | 4 ----
- arch/arch.mk.csky   | 4 ----
- 3 files changed, 7 insertions(+), 8 deletions(-)
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index a32cbcb6f2..2cf00a0aac 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index 22e3e1d28e..5cb34d36bc 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
  
- comment "Legacy options removed in 2019.05"
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 19.0.3
++MESA3D_HEADERS_VERSION = 19.0.5
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index d4d20c64bf..5a3eb1fa0f 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2019-April/000510.html
+-md5 d03bf14e42c0e54ebae5730712ccc408 mesa-19.0.3.tar.xz
+-sha1 e028365fb8c7ae73bb0f01807c9137ec856c8e52 mesa-19.0.3.tar.xz
+-sha256 f027244e38dc309a4c12db45ef79be81ab62c797a50a88d566e4edb6159fc4d5 mesa-19.0.3.tar.xz
+-sha512 aa170577252aa4157e4bd49076bbf6207e4aada9fc9f23b255de332e816f9c63e5661f752f2f276dd43e232a8926866004e2a2ff9ad4b411330969c2a9a7ffa0 mesa-19.0.3.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2019-May/000515.html
++md5 1509a3251d459fd8b6fadf9329669dc1  mesa-19.0.5.tar.xz
++sha1 647352d5989d3ca9b5c83fe06ed1d84f341f6ad5  mesa-19.0.5.tar.xz
++sha256 6aecb7f67c136768692fb3c33a54196186c6c4fcafab7973516a355e1a54f831  mesa-19.0.5.tar.xz
++sha512 aecd5ee54ac0316d5e318dbea0abdc06f23e67d75d36eb82d6cf6a396c9e850e1ccf4fa8815f8c4097b6039ebb1524673189350cbfd4b766ce75ce17c26d9d8d  mesa-19.0.5.tar.xz
+ # License
+ sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 576e8f0a2d..630f181ddb 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+config BR2_CSKY_DSP
-+	bool "C-SKY DSP support removed"
-+	select BR2_LEGACY
-+	help
-+	 C-SKY DSP instruction support for ck810 / ck807 was removed,
-+	 as it was no longer supported in C-SKY gcc.
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_COMPOSITOR
- 	bool "compositor moved to gst1-plugins-base"
- 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_COMPOSITOR
-diff --git a/arch/Config.in.csky b/arch/Config.in.csky
-index a9d6548d8e..9c893da5f8 100644
---- a/arch/Config.in.csky
-+++ b/arch/Config.in.csky
-@@ -23,10 +23,6 @@ config BR2_CSKY_FPU
- 	  Floating-Point Coprocessor or if you don't need FPU support
- 	  for your user-space programs.
- 
--config BR2_CSKY_DSP
--	bool "Enable DSP enhanced instructions"
--	depends on BR2_ck810 || BR2_ck807
--
- config BR2_ARCH
- 	default "csky"
- 
-diff --git a/arch/arch.mk.csky b/arch/arch.mk.csky
-index a39fbd43c2..677c3223ed 100644
---- a/arch/arch.mk.csky
-+++ b/arch/arch.mk.csky
-@@ -13,10 +13,6 @@ else ifeq ($(BR2_ck810),y)
- GCC_TARGET_CPU := ck810
- endif
- 
--ifeq ($(BR2_CSKY_DSP),y)
--GCC_TARGET_CPU := $(GCC_TARGET_CPU)e
--endif
--
- ifeq ($(BR2_CSKY_FPU),y)
- GCC_TARGET_CPU := $(GCC_TARGET_CPU)f
- endif
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 19.0.3
++MESA3D_VERSION = 19.0.5
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
