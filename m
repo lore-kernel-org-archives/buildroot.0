@@ -1,60 +1,44 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 May 2019 12:37:04 +0200
-Subject: [Buildroot] [git commit branch/next] package/nano: bump to version
- 4.2
-Message-ID: <20190530103124.4270D8E7B7@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 30 May 2019 12:48:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/grpc: fix build with uclibc on
+ x86_64
+Message-ID: <20190530104848.24885-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92aea4221050e01131634faee562b2753f75361c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On x86_64 if GPR_MUSL_LIBC_COMPAT is not set, grpc tries to link with
+memcpy at GLIBC_2.2.5, see:
+https://github.com/grpc/grpc/blob/618a3f561d4a93f263cca23abad086ed8f4d5e86/src/core/lib/gpr/wrap_memcpy.cc
 
-Use the usual enable/disable options for the libmagic optional
-dependency.
+Fixes:
+ - http://autobuild.buildroot.org/results/20d6f2489a4e291a53bd514da66105eb607e1014
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/grpc/grpc.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index eae648d16e..b7fd6a6cfd 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v3/nano-3.2.tar.xz.asc
-+# https://www.nano-editor.org/dist/v4/nano-4.2.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256 d12773af3589994b2e4982c5792b07c6240da5b86c5aef2103ab13b401fe6349  nano-3.2.tar.xz
-+sha256 1143defce62e391b241252ffdb6e5c1ded56cfe26d46ee81b796abe0ccc45df9  nano-4.2.tar.xz
- sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 206d210a16..8a315154d2 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NANO_VERSION_MAJOR = 3
-+NANO_VERSION_MAJOR = 4
- NANO_VERSION = $(NANO_VERSION_MAJOR).2
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
-@@ -24,8 +24,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_FILE),y)
- NANO_DEPENDENCIES += file
-+NANO_CONF_OPTS += --enable-libmagic
- else
--NANO_CONF_ENV += ac_cv_lib_magic_magic_open=no
-+NANO_CONF_OPTS += --disable-libmagic
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 9506e0268a..8da9f95a18 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -33,6 +33,14 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ GRPC_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
  endif
  
- ifeq ($(BR2_PACKAGE_NANO_TINY),y)
++# Set GPR_MUSL_LIBC_COMPAT otherwise build will fail on x86_64 with uclibc
++# because grpc tries to link with memcpy at GLIBC_2.2.5
++ifeq ($(BR2_x86_64):$(BR2_TOOLCHAIN_USES_GLIBC),y:)
++GRPC_CONF_OPTS += \
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -DGPR_MUSL_LIBC_COMPAT" \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CFLAGS) -DGPR_MUSL_LIBC_COMPAT"
++endif
++
+ HOST_GRPC_CONF_OPTS = \
+ 	-D_gRPC_CARES_LIBRARIES=cares \
+ 	-DgRPC_CARES_PROVIDER=none \
+-- 
+2.20.1
