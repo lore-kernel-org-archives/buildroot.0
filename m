@@ -1,214 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 May 2019 15:03:39 +0200
-Subject: [Buildroot] [git commit] package/gpsd: bump to version 3.18.1
-Message-ID: <20190602201235.E3BE281354@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 31 May 2019 00:42:16 +0200
+Subject: [Buildroot] [git commit] package/libva: bump version to 2.4.1
+Message-ID: <20190602201237.3078B8EDF3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9386d72e742c410b7a7e155dee6542dca2c3f045
+commit: https://git.buildroot.net/buildroot/commit/?id=e8a37cad6aa78d1b13504e3fee199880e97c3a05
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove second patch (already in version)
-- Add a patch to fix build without man pages
-- Add a patch to remove C99-style loop
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Beno??t Th??baudeau <benoit.thebaudeau.dev@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-crash-when-not-building-python-man-pages.patch | 59 ++++++++++++++++++++++
- ...greis-fix-build-with-reconfigure-disabled.patch | 49 ------------------
- ...r_ubx-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch | 38 ++++++++++++++
- package/gpsd/gpsd.hash                             |  2 +-
- package/gpsd/gpsd.mk                               |  2 +-
- 5 files changed, 99 insertions(+), 51 deletions(-)
+ package/libva/libva.hash | 6 +++---
+ package/libva/libva.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gpsd/0002-SConstruct-Do-not-crash-when-not-building-python-man-pages.patch b/package/gpsd/0002-SConstruct-Do-not-crash-when-not-building-python-man-pages.patch
-new file mode 100644
-index 0000000000..75317af10e
---- /dev/null
-+++ b/package/gpsd/0002-SConstruct-Do-not-crash-when-not-building-python-man-pages.patch
-@@ -0,0 +1,59 @@
-+From 02d21faebec245e1526449fb54e7078914d75db7 Mon Sep 17 00:00:00 2001
-+From: "Gary E. Miller" <gem@rellim.com>
-+Date: Thu, 1 Nov 2018 15:49:01 -0700
-+Subject: SConstruct:  Do not crash when not building python man pages.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved from:
-+https://git.savannah.gnu.org/cgit/gpsd.git/commit/?id=02d21faebec245e1526449fb54e7078914d75db7]
-+---
-+ SConstruct | 13 +++++++++----
-+ 1 file changed, 9 insertions(+), 4 deletions(-)
-+
-+diff --git a/SConstruct b/SConstruct
-+index 0fc3614..0226cd2 100644
-+--- a/SConstruct
-++++ b/SConstruct
-+@@ -1751,14 +1751,19 @@ if tiocmiwait:
-+         "ppscheck.8": "ppscheck.xml",
-+     })
-+ 
-+-all_manpages = list(base_manpages.keys()) + list(python_manpages.keys())
-++all_manpages = list(base_manpages.keys())
-++if python_manpages:
-++    all_manpages += list(python_manpages.keys())
-+ 
-+ man_env = env.Clone()
-+ if man_env.GetOption('silent'):
-+     man_env['SPAWN'] = filtered_spawn  # Suppress stderr chatter
-+ manpage_targets = []
-+ if manbuilder:
-+-    items = list(base_manpages.items()) + list(python_manpages.items())
-++    items = list(base_manpages.items())
-++    if python_manpages:
-++        items += list(python_manpages.items())
-++
-+     for (man, xml) in items:
-+         manpage_targets.append(man_env.Man(source=xml, target=man))
-+ 
-+@@ -1907,7 +1912,7 @@ if qt_env:
-+ 
-+ 
-+ maninstall = []
-+-for manpage in list(base_manpages.keys()) + list(python_manpages.keys()):
-++for manpage in all_manpages:
-+     if not manbuilder and not os.path.exists(manpage):
-+         continue
-+     section = manpage.split(".")[1]
-+@@ -2517,7 +2522,7 @@ if os.path.exists("gpsd.c") and os.path.exists(".gitignore"):
-+     if ".gitignore" in distfiles:
-+         distfiles.remove(".gitignore")
-+     distfiles += generated_sources
-+-    distfiles += list(base_manpages.keys()) + list(python_manpages.keys())
-++    distfiles += all_manpages
-+     if "packaging/rpm/gpsd.spec" not in distfiles:
-+         distfiles.append("packaging/rpm/gpsd.spec")
-+ 
-+-- 
-+cgit v1.0-41-gc330
-+
-diff --git a/package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch b/package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch
-deleted file mode 100644
-index 77badb31cf..0000000000
---- a/package/gpsd/0002-driver_greis-fix-build-with-reconfigure-disabled.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 21a752e827bc9e14de4b4c26aef4d0db7403a5b7 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Tue, 9 Oct 2018 15:22:46 +0300
--Subject: [PATCH] driver_greis: fix build with reconfigure disabled
--
--Unhide the definition of greis_parse_input and greis_event_hook since
--they are used unconditionally.
--
--Fixes the following build failure:
--
--driver_greis.c:969:25: error: 'greis_parse_input' undeclared here (not in a function); did you mean 'generic_parse_input'?
--     .parse_packet     = greis_parse_input,
--                         ^~~~~~~~~~~~~~~~~
--                         generic_parse_input
--driver_greis.c:973:25: error: 'greis_event_hook' undeclared here (not in a function)
--     .event_hook       = greis_event_hook,
--                         ^~~~~~~~~~~~~~~~
--
--Cc: Gregory Fong <gregory.fong@virginorbit.com>
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: http://lists.nongnu.org/archive/html/gpsd-dev/2018-10/msg00012.html
--
-- driver_greis.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/driver_greis.c b/driver_greis.c
--index 9eb148fc76cd..222bd9daf020 100644
----- a/driver_greis.c
--+++ b/driver_greis.c
--@@ -797,7 +797,6 @@ static ssize_t greis_control_send(struct gps_device_t *session,
-- }
-- #endif /* CONTROLSEND_ENABLE */
-- 
---#ifdef RECONFIGURE_ENABLE
-- static void greis_event_hook(struct gps_device_t *session, event_t event)
-- {
--     if (session->context->readonly)
--@@ -870,6 +869,7 @@ static gps_mask_t greis_parse_input(struct gps_device_t *session)
-- 	return 0;
-- }
-- 
--+#ifdef RECONFIGURE_ENABLE
-- /**
--  * Set port operating mode, speed, parity, stopbits etc. here.
--  * Note: parity is passed as 'N'/'E'/'O', but you should program
---- 
--2.19.1
--
-diff --git a/package/gpsd/0003-driver_ubx-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch b/package/gpsd/0003-driver_ubx-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch
-new file mode 100644
-index 0000000000..a9b40c64af
---- /dev/null
-+++ b/package/gpsd/0003-driver_ubx-Save-UBX-RXM-RAWX-data-in-rawdate_t.patch
-@@ -0,0 +1,38 @@
-+From d685ab05952d7eadf012fc054032f0190cf2abda Mon Sep 17 00:00:00 2001
-+From: "Gary E. Miller" <gem@rellim.com>
-+Date: Fri, 26 Oct 2018 10:12:40 -0700
-+Subject: driver_ubx: Save UBX-RXM-RAWX data in rawdate_t.
-+
-+A step in getting u-blox 8 raw data into the new RAW JSON message.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Retrieved (and backported to keep only C99-style loop fix) from:
-+https://git.savannah.gnu.org/cgit/gpsd.git/commit/driver_ubx.c?id=d685ab05952d7eadf012fc054032f0190cf2abda]
-+---
-+ driver_ubx.c | 29 ++++++++++++++++++++++++++---
-+ 1 file changed, 26 insertions(+), 3 deletions(-)
-+
-+diff --git a/driver_ubx.c b/driver_ubx.c
-+index 585b2b9..0dccddf 100644
-+--- a/driver_ubx.c
-++++ b/driver_ubx.c
-+@@ -813,6 +813,7 @@ static gps_mask_t ubx_rxm_rawx(struct gps_device_t *session,
-+     int8_t leapS;
-+     uint8_t numMeas;
-+     uint8_t recStat;
-++    int i;
-+ 
-+     if (16 > data_len) {
-+ 	gpsd_log(&session->context->errout, LOG_WARN,
-+@@ -830,6 +831,6 @@ static gps_mask_t ubx_rxm_rawx(struct gps_device_t *session,
-+ 	     "UBX_RXM_RAWX: rcvTow %f week %u leapS %d numMeas %u recStat %d\n",
-+ 	     rcvTow, week, leapS, numMeas, recStat);
-+ 
-+-    for (int i = 0; i < numMeas; i++) {
-++    for (i = 0; i < numMeas; i++) {
-+         int off = 32 * i;
-+         double prMes = getled64((const char *)buf, off + 16);
-+         double cpMes = getled64((const char *)buf, off + 24);
-+-- 
-+cgit v1.0-41-gc330
-+
-diff --git a/package/gpsd/gpsd.hash b/package/gpsd/gpsd.hash
-index fe594ea28b..a6d4a65200 100644
---- a/package/gpsd/gpsd.hash
-+++ b/package/gpsd/gpsd.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	48521f5158f5fda4c88a6f75e8bfc1ee67e999e3fc095e4a06cb8c2af56712f4	gpsd-3.18.tar.gz
-+sha256	5cb1e6d880ec9a52c62492dd0e3d77451b7c7ad625895bd652f6354215aec23e	gpsd-3.18.1.tar.gz
- sha256	71ff85d18bf063954cfc4251678d0e772223e21f80febbd99d5524c90f73f832	COPYING
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 6fe3d7388b..4bad1a322f 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 06b7de5762..661eedf16a 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/intel/libva/releases/download/2.4.0/libva-2.4.0.tar.bz2.sha1sum
+-sha1 2e7b69ebb615d039b9253d4708eeec889b812dbf  libva-2.4.0.tar.bz2
++# From https://github.com/intel/libva/releases/download/2.4.1/libva-2.4.1.tar.bz2.sha1sum
++sha1 5aeffc9929b4a9a5ebbed94adf065d08fc50bcf9  libva-2.4.1.tar.bz2
+ # Locally computed
+-sha256 99263056c21593a26f2ece812aee6fe60142b49e6cd46cb33c8dddf18fc19391  libva-2.4.0.tar.bz2
++sha256 e9e053908591b121793eaa5d8aa37675b4cd3af4b12f1f377dff4767f39cee70  libva-2.4.1.tar.bz2
+ sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 8a21c11b6c..e876a1a3d0 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GPSD_VERSION = 3.18
-+GPSD_VERSION = 3.18.1
- GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
- GPSD_LICENSE = BSD-3-Clause
- GPSD_LICENSE_FILES = COPYING
+-LIBVA_VERSION = 2.4.0
++LIBVA_VERSION = 2.4.1
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
+ LIBVA_LICENSE = MIT
