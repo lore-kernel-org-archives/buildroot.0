@@ -1,36 +1,71 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 30 May 2019 23:30:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/i2pd: fix static build with atomic
-Message-ID: <20190530213022.3878-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 30 May 2019 23:43:36 +0200
+Subject: [Buildroot] [PATCH] package/libopenssl: security bump to version
+ 1.1.1c
+Message-ID: <20190530214336.16338-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use CMAKE_REQUIRED_LIBRARIES otherwise -latomic won't be at the end of
-the line
+Fixes the following security issues:
 
-Fixes:
- - http://autobuild.buildroot.org/results/9dd1c34917d4c67bdf4b1aaff3e9c087c8149f6f
+Prevent over long nonces in ChaCha20-Poly1305 (CVE-2019-1543)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ChaCha20-Poly1305 is an AEAD cipher, and requires a unique nonce input for
+every encryption operation.  RFC 7539 specifies that the nonce value (IV)
+should be 96 bits (12 bytes).  OpenSSL allows a variable nonce length and
+front pads the nonce with 0 bytes if it is less than 12 bytes.  However it
+also incorrectly allows a nonce to be set of up to 16 bytes.  In this case
+only the last 12 bytes are significant and any additional leading bytes are
+ignored.
+
+It is a requirement of using this cipher that nonce values are unique.
+Messages encrypted using a reused nonce value are susceptible to serious
+confidentiality and integrity attacks.  If an application changes the
+default nonce length to be longer than 12 bytes and then makes a change to
+the leading bytes of the nonce expecting the new value to be a new unique
+nonce then such an application could inadvertently encrypt messages with a
+reused nonce.
+
+Additionally the ignored bytes in a long nonce are not covered by the
+integrity guarantee of this cipher.  Any application that relies on the
+integrity of these ignored leading bytes of a long nonce may be further
+affected.  Any OpenSSL internal use of this cipher, including in SSL/TLS, is
+safe because no such use sets such a long nonce value.  However user
+applications that use this cipher directly and set a non-default nonce
+length to be longer than 12 bytes may be vulnerable.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/i2pd/i2pd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libopenssl/libopenssl.hash | 2 +-
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/i2pd/i2pd.mk b/package/i2pd/i2pd.mk
-index 5fa815c21d..9755752c02 100644
---- a/package/i2pd/i2pd.mk
-+++ b/package/i2pd/i2pd.mk
-@@ -22,7 +22,7 @@ I2PD_CONF_OPTS += -DWITH_GUI=OFF
- I2PD_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 3a8192c46c..753f447abe 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+ # From https://www.openssl.org/source/openssl-1.1.1b.tar.gz.sha256
+-sha256	5c557b023230413dfb0756f3137a13e6d726838ccd1430888ad15bfb2b43ea4b	openssl-1.1.1b.tar.gz
++sha256	f6fb3079ad15076154eda9413fed42877d668e7069d9b87396d0804fdb3f4c90	openssl-1.1.1c.tar.gz
  
- ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--I2PD_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
-+I2PD_CONF_OPTS += -DCMAKE_REQUIRED_LIBRARIES=-latomic
- endif
+ # License files
+ sha256	c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c	LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index b7eff06c80..064b71bb2e 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_STATIC_LIBS),y)
+-LIBOPENSSL_VERSION = 1.1.1b
++LIBOPENSSL_VERSION = 1.1.1c
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
 -- 
-2.20.1
+2.11.0
