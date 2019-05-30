@@ -1,31 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:27:16 +0200
-Subject: [Buildroot] [git commit branch/next] package/kmod: add hash for
+Date: Fri, 31 May 2019 00:25:58 +0200
+Subject: [Buildroot] [git commit branch/next] package/gperf: add hash for
  license file
-Message-ID: <20190530223346.A79F98E840@busybox.osuosl.org>
+Message-ID: <20190530223346.988B18E72C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6de14a717d25344061d33a8b1a0addf805ef4d3c
+commit: https://git.buildroot.net/buildroot/commit/?id=b4190996b53c900ee02a7589847dc9f94ab350d1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Reviewed-by: Thomas Huth <huth@tuxfamily.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kmod/kmod.hash | 3 +++
+ package/gperf/gperf.hash | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
-index 0e8f034e06..f970093cf1 100644
---- a/package/kmod/kmod.hash
-+++ b/package/kmod/kmod.hash
+diff --git a/package/gperf/gperf.hash b/package/gperf/gperf.hash
+index 370235c627..21c76605b5 100644
+--- a/package/gperf/gperf.hash
++++ b/package/gperf/gperf.hash
 @@ -1,2 +1,5 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
- sha256 7165e6496656159dcb909a91ed708a0fe273a4b128b4b1dc997ccb5189eef1cd  kmod-25.tar.xz
+ # Locally calculated after checking pgp signature
+ sha256	767112a204407e62dbc3106647cf839ed544f3cf5d0f0523aaa2508623aad63e	gperf-3.0.4.tar.gz
 +
 +# Locally calculated
-+sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libkmod/COPYING
++sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
