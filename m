@@ -1,36 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:17:41 +0200
-Subject: [Buildroot] [git commit] package/matchbox-panel: fix build with NLS
-Message-ID: <20190530221751.B224D8E7B0@busybox.osuosl.org>
+Date: Fri, 31 May 2019 00:20:33 +0200
+Subject: [Buildroot] [PATCH 01/19] package/acl: add hashes for license
+ files
+In-Reply-To: <20190529033537.128311-2-aduskett@gmail.com>
+ (aduskett@gmail.com's message of "Tue, 28 May 2019 23:35:19 -0400")
+References: <20190529033537.128311-1-aduskett@gmail.com>
+ <20190529033537.128311-2-aduskett@gmail.com>
+Message-ID: <87lfyn1t5a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=46668b157a84713b894fc171af071a85ea9e96b8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/3e72c2c2baae3a70fb5145b1b09a1f3716e4bce2
+ > From: Adam Duskett <Aduskett@gmail.com>
+ > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+ > ---
+ >  package/acl/acl.hash | 5 +++++
+ >  1 file changed, 5 insertions(+)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/matchbox-panel/matchbox-panel.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > diff --git a/package/acl/acl.hash b/package/acl/acl.hash
+ > index 091092a1c5..500976cee2 100644
+ > --- a/package/acl/acl.hash
+ > +++ b/package/acl/acl.hash
+ > @@ -1,2 +1,7 @@
+ >  # Locally calculated after checking pgp signature
+ >  sha256  06be9865c6f418d851ff4494e12406568353b891ffe1f596b34693c387af26c7  acl-2.2.53.tar.gz
+ > +
+ > +# Locally calculated
+ > +sha256  a45a845012742796534f7e91fe623262ccfb99460a2bd04015bd28d66fba95b8  doc/COPYING
+ > +sha256  01b1f9f2c8ee648a7a596a1abe8aa4ed7899b1c9e5551bda06da6e422b04aa55  doc/COPYING.LGPL
+ > +
 
-diff --git a/package/matchbox-panel/matchbox-panel.mk b/package/matchbox-panel/matchbox-panel.mk
-index 344d8fde49..aaa7236824 100644
---- a/package/matchbox-panel/matchbox-panel.mk
-+++ b/package/matchbox-panel/matchbox-panel.mk
-@@ -10,7 +10,8 @@ MATCHBOX_PANEL_SOURCE = matchbox-panel-$(MATCHBOX_PANEL_VERSION).tar.bz2
- MATCHBOX_PANEL_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-panel/$(MATCHBOX_PANEL_VERSION_MAJOR)
- MATCHBOX_PANEL_LICENSE = GPL-2.0+
- MATCHBOX_PANEL_LICENSE_FILES = COPYING
--MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib
-+MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib $(TARGET_NLS_DEPENDENCIES)
-+MATCHBOX_PANEL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- MATCHBOX_PANEL_CONF_OPTS = --enable-expat --enable-dnotify
- 
- ifeq ($(BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR),y)
+Committed to next after fixing the check-package warning, thanks:
+
+Applying: package/acl: add hashes for license files
+package/acl/acl.hash:7: empty line at end of file
+
+-- 
+Bye, Peter Korsgaard
