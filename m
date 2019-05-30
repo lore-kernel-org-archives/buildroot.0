@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:43:53 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/libva: bump version to
- 2.4.1
-In-Reply-To: <20190530105359.20994-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Thu, 30 May 2019 12:53:59 +0200")
-References: <20190530105359.20994-1-bernd.kuhls@t-online.de>
-Message-ID: <87tvdbwok6.fsf@dell.be.48ers.dk>
+Date: Fri, 31 May 2019 00:43:58 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.0.5
+In-Reply-To: <20190530105424.21062-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Thu, 30 May 2019 12:54:24 +0200")
+References: <20190530105424.21062-1-bernd.kuhls@t-online.de>
+Message-ID: <87pnnzwok1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
