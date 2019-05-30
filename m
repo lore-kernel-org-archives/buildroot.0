@@ -1,51 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 May 2019 15:01:47 +0200
-Subject: [Buildroot] [git commit] package/php: security bump version to 7.3.6
-Message-ID: <20190530125543.E77508100B@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@collins.com>
+Date: Thu, 30 May 2019 08:08:34 -0500
+Subject: [Buildroot] [External] Re: Cannot cross-compile libopenssl on
+ CentOS7
+In-Reply-To: <8a5da948-026b-bd8c-3870-be16402204b8@mind.be>
+References: <3cd11507-8aa5-4fbe-c07a-54d4aacb8e74@ice.rwth-aachen.de>
+ <fb7027e2-8897-2cee-65e0-4b8929779a6c@mind.be>
+ <CANQCQpZ5NMp5K1UR+o_OGB6anXZ+t_Erf52qo2QgBJo0Mxtu7Q@mail.gmail.com>
+ <8a5da948-026b-bd8c-3870-be16402204b8@mind.be>
+Message-ID: <CANQCQpb38SmYT3RHwF5-ibbTdXy77Qjenm3M8WGABW05fQ6xvQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8d27812ac1b12713921f2f7bfaf274980674de68
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Arnout,
 
-Release notes: https://www.php.net/archive/2019.php#id2019-05-30-1
 
-Fixes
-CVE 2019-11038: https://bugs.php.net/bug.php?id=77973
-CVE 2019-11039: https://bugs.php.net/bug.php?id=78069
-CVE 2019-11040: https://bugs.php.net/bug.php?id=77988
+On Wed, May 29, 2019 at 4:52 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+>
+>
+> On 29/05/2019 17:58, Matthew Weber wrote:
+> > All,
+> >
+> > On Sat, May 25, 2019 at 10:54 AM Arnout Vandecappelle <arnout@mind.be> wrote:
+> >>
+> >>
+> >> On 21/05/2019 20:19, Lukas J?nger wrote:
+> >>> Hi,
+> >>>
+> >>> I tried building a rootfs with buildroot on CentOS 7 and I require libopenssl. I
+>
+>  Lukas, you never mentioned which Buildroot version you're using.
+>
+> >>> configured buildroot as seen in the attached .config.
+> >>  In the future, please post a defconfig instead of a full config. In this case:
+> >>
+> >> BR2_aarch64=y
+> >> BR2_TOOLCHAIN_EXTERNAL=y
+> >> BR2_TOOLCHAIN_EXTERNAL_LINARO_AARCH64=y
+> >> BR2_PACKAGE_XEN=y
+> >> BR2_PACKAGE_XEN_TOOLS=y
+> >>
+> >>
+> >>  Note that this is a configuration that gets tested by the autobuilders, and
+> >> unless I'm mistaken, Matt has a RHEL7 autobuilder (CentOS7 should be the same).
+> > Correct, I've got a RHEL7.4 builder running.  I've also just tested
+> > the above defconfig without any problems.
+>
+>  And which version of Text::Template is installed on it?
+>
+>  Oh, hang on, maybe you just don't have the module installed at all, and the
+> openssl build system works around it somehow?
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/php/php.hash b/package/php/php.hash
-index b764f8a507..d88433e8c0 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 e1011838a46fd4a195c8453b333916622d7ff5bce4aca2d9d99afac142db2472  php-7.3.5.tar.xz
-+sha256 fefc8967daa30ebc375b2ab2857f97da94ca81921b722ddac86b29e15c54a164  php-7.3.6.tar.xz
- 
- # License file
- sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index ed71c96c8a..de7c0c0d5a 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PHP_VERSION = 7.3.5
-+PHP_VERSION = 7.3.6
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+Not installed (checked for
+/usr/share/perl5/vendor_perl/Text/Template.pm and it doesn't exist  )
