@@ -1,44 +1,38 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 30 May 2019 15:23:41 +0200
-Subject: [Buildroot] [PATCH] package/openmpi: fix build failure due to Gcc
- Bug 68485
-Message-ID: <20190530132341.62716-1-giulio.benetti@micronovasrl.com>
+From: Thomas Huth <huth@tuxfamily.org>
+Date: Thu, 30 May 2019 16:03:28 +0200
+Subject: [Buildroot] [PATCH 09/19] package/gperf: add hash for license
+ file
+In-Reply-To: <20190529033537.128311-10-aduskett@gmail.com>
+References: <20190529033537.128311-1-aduskett@gmail.com>
+ <20190529033537.128311-10-aduskett@gmail.com>
+Message-ID: <20190530160328.3f697228@thl530.multi.box>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Package openmpi manifests Microblaze Gcc Bug 68485 resulting in a build
-failure due to an Internal Compiler Error.
+Am Tue, 28 May 2019 23:35:27 -0400
+schrieb aduskett at gmail.com:
 
-As done for other packages in Buildroot work around this Gcc Bug by
-setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y.
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/gperf/gperf.hash | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/gperf/gperf.hash b/package/gperf/gperf.hash
+> index 370235c627..21c76605b5 100644
+> --- a/package/gperf/gperf.hash
+> +++ b/package/gperf/gperf.hash
+> @@ -1,2 +1,5 @@
+>  # Locally calculated after checking pgp signature
+>  sha256
+> 767112a204407e62dbc3106647cf839ed544f3cf5d0f0523aaa2508623aad63e
+> gperf-3.0.4.tar.gz + +# Locally calculated
+> +sha256
+> 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903
+> COPYING
 
-Fixes:
-http://autobuild.buildroot.net/results/8f3/8f334427e7475154d69469f8ee4efab6df80e403/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
- package/openmpi/openmpi.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/openmpi/openmpi.mk b/package/openmpi/openmpi.mk
-index 8d9eafd631..b682e6e74e 100644
---- a/package/openmpi/openmpi.mk
-+++ b/package/openmpi/openmpi.mk
-@@ -38,4 +38,12 @@ else
- OPENMPI_CONF_OPTS += --enable-mpi-fortran=no
- endif
- 
-+OPENMPI_CFLAGS = $(TARGET_CFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
-+OPENMPI_CFLAGS += -O0
-+endif
-+
-+OPENMPI_CONF_ENV = CFLAGS="$(OPENMPI_CFLAGS)"
-+
- $(eval $(autotools-package))
--- 
-2.17.1
+Reviewed-by: Thomas Huth <huth@tuxfamily.org>
