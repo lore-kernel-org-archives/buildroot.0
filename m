@@ -1,28 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:26:25 +0200
-Subject: [Buildroot] [git commit] package/intltool: add hash for license file
-Message-ID: <20190602201236.C2C6E81354@busybox.osuosl.org>
+Date: Fri, 31 May 2019 00:22:05 +0200
+Subject: [Buildroot] [git commit] package/bzip2: add hash for license file
+Message-ID: <20190602201236.8921F81354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4158585c1314193ddb22a6951aec38b434ac260b
+commit: https://git.buildroot.net/buildroot/commit/?id=cc7581a850fcae8de601b9678f65a00d46db76af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Also add a standard sha256 hash for the package itself.
+
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Reviewed-by: Thomas Huth <huth@tuxfamily.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intltool/intltool.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/bzip2/bzip2.hash | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/intltool/intltool.hash b/package/intltool/intltool.hash
-index f6f41dc709..de1df87bc7 100644
---- a/package/intltool/intltool.hash
-+++ b/package/intltool/intltool.hash
-@@ -3,3 +3,4 @@ md5	12e517cac2b57a0121cda351570f1e63 intltool-0.51.0.tar.gz
- 
- # Locally calculated
- sha256 67c74d94196b153b774ab9f89b2fa6c6ba79352407037c8c14d5aeb334e959cd  intltool-0.51.0.tar.gz
-+sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/bzip2/bzip2.hash b/package/bzip2/bzip2.hash
+index 60b0a191ef..ffe94aa454 100644
+--- a/package/bzip2/bzip2.hash
++++ b/package/bzip2/bzip2.hash
+@@ -1,2 +1,6 @@
+ # From http://www.bzip.org/downloads.html
+ md5	00b516f4704d4a7cb50a1d97e6e8e15b	bzip2-1.0.6.tar.gz
++
++# Locally calculated
++sha256	a2848f34fcd5d6cf47def00461fcb528a0484d8edef8208d6d2e2909dc61d9cd	bzip2-1.0.6.tar.gz
++sha256	4919cfb14a73cd64fcef67b107613970cf1659a09aa675dba31314f373bc7204	LICENSE
