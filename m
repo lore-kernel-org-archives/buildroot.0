@@ -1,29 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:26:25 +0200
-Subject: [Buildroot] [git commit branch/next] package/intltool: add hash for
+Date: Fri, 31 May 2019 00:27:16 +0200
+Subject: [Buildroot] [git commit branch/next] package/kmod: add hash for
  license file
-Message-ID: <20190530223346.A083D8E72C@busybox.osuosl.org>
+Message-ID: <20190530223346.A79F98E840@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4158585c1314193ddb22a6951aec38b434ac260b
+commit: https://git.buildroot.net/buildroot/commit/?id=6de14a717d25344061d33a8b1a0addf805ef4d3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Reviewed-by: Thomas Huth <huth@tuxfamily.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/intltool/intltool.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/kmod/kmod.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/intltool/intltool.hash b/package/intltool/intltool.hash
-index f6f41dc709..de1df87bc7 100644
---- a/package/intltool/intltool.hash
-+++ b/package/intltool/intltool.hash
-@@ -3,3 +3,4 @@ md5	12e517cac2b57a0121cda351570f1e63 intltool-0.51.0.tar.gz
- 
- # Locally calculated
- sha256 67c74d94196b153b774ab9f89b2fa6c6ba79352407037c8c14d5aeb334e959cd  intltool-0.51.0.tar.gz
-+sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
+index 0e8f034e06..f970093cf1 100644
+--- a/package/kmod/kmod.hash
++++ b/package/kmod/kmod.hash
+@@ -1,2 +1,5 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
+ sha256 7165e6496656159dcb909a91ed708a0fe273a4b128b4b1dc997ccb5189eef1cd  kmod-25.tar.xz
++
++# Locally calculated
++sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libkmod/COPYING
