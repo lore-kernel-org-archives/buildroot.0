@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:24:09 +0200
-Subject: [Buildroot] [PATCH 05/19] package/dbus-glib: add hash for
+Date: Fri, 31 May 2019 00:24:31 +0200
+Subject: [Buildroot] [PATCH 06/19] package/dbus-python: add hash for
  license file
-In-Reply-To: <20190529033537.128311-6-aduskett@gmail.com>
- (aduskett@gmail.com's message of "Tue, 28 May 2019 23:35:23 -0400")
+In-Reply-To: <20190529033537.128311-7-aduskett@gmail.com>
+ (aduskett@gmail.com's message of "Tue, 28 May 2019 23:35:24 -0400")
 References: <20190529033537.128311-1-aduskett@gmail.com>
- <20190529033537.128311-6-aduskett@gmail.com>
-Message-ID: <874l5b1sza.fsf@dell.be.48ers.dk>
+ <20190529033537.128311-7-aduskett@gmail.com>
+Message-ID: <87zhn3zilc.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
