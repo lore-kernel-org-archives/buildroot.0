@@ -1,83 +1,45 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 20 May 2019 21:17:08 +0200
-Subject: [Buildroot] [git commit] package/powertop: fix build failure due to
- PATH_MAX
-Message-ID: <20190602201235.106F8800FA@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 31 May 2019 00:36:56 +0200
+Subject: [Buildroot] [git commit] package/terminology: bump to version 1.4.1
+Message-ID: <20190602201237.1F45B8EDEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=11ad081737e76df848cedbf24c77ec35cfbf31e9
+commit: https://git.buildroot.net/buildroot/commit/?id=8d2ee5e7afa40052f4ecfd6f01184fa556fe3dc7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/a0b3337cf4a827e6566f8b15b6bb180f0dcef7a3
+See https://www.enlightenment.org/news/2019-05-24-terminology-1.4.1
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-wakeup_xxx.h-include-limits.h.patch       | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+ package/terminology/terminology.hash | 4 ++--
+ package/terminology/terminology.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/powertop/0002-wakeup_xxx.h-include-limits.h.patch b/package/powertop/0002-wakeup_xxx.h-include-limits.h.patch
-new file mode 100644
-index 0000000000..821de8b948
---- /dev/null
-+++ b/package/powertop/0002-wakeup_xxx.h-include-limits.h.patch
-@@ -0,0 +1,54 @@
-+From 4c24fdd8e0a42359df7308155b2d43c28a5e02fd Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 20 May 2019 20:25:00 +0200
-+Subject: [PATCH] wakeup_xxx.h: include limits.h
-+
-+limits.h must be included to define PATH_MAX otherwise build will fail
-+on:
-+
-+In file included from wakeup/wakeup_ethernet.cpp:45:0:
-+wakeup/wakeup_ethernet.h:35:16: error: 'PATH_MAX' was not declared in this scope
-+  char eth_path[PATH_MAX];
-+
-+In file included from wakeup/wakeup_usb.cpp:45:0:
-+wakeup/wakeup_usb.h:35:16: error: 'PATH_MAX' was not declared in this scope
-+  char usb_path[PATH_MAX];
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a0b3337cf4a827e6566f8b15b6bb180f0dcef7a3
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status:
-+https://lists.01.org/pipermail/powertop/2019-May/002052.html]
-+---
-+ src/wakeup/wakeup_ethernet.h | 1 +
-+ src/wakeup/wakeup_usb.h      | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/src/wakeup/wakeup_ethernet.h b/src/wakeup/wakeup_ethernet.h
-+index 682bf95..e0fa628 100644
-+--- a/src/wakeup/wakeup_ethernet.h
-++++ b/src/wakeup/wakeup_ethernet.h
-+@@ -25,6 +25,7 @@
-+ #ifndef _INCLUDE_GUARD_ETHERNET_WAKEUP_H
-+ #define _INCLUDE_GUARD_ETHERNET_WAKEUP_H
-+ 
-++#include <limits.h>
-+ #include <vector>
-+ 
-+ #include "wakeup.h"
-+diff --git a/src/wakeup/wakeup_usb.h b/src/wakeup/wakeup_usb.h
-+index f7a1f7e..15898e3 100644
-+--- a/src/wakeup/wakeup_usb.h
-++++ b/src/wakeup/wakeup_usb.h
-+@@ -25,6 +25,7 @@
-+ #ifndef _INCLUDE_GUARD_USB_WAKEUP_H
-+ #define _INCLUDE_GUARD_USB_WAKEUP_H
-+ 
-++#include <limits.h>
-+ #include <vector>
-+ 
-+ #include "wakeup.h"
-+-- 
-+2.20.1
-+
+diff --git a/package/terminology/terminology.hash b/package/terminology/terminology.hash
+index 6b96ed72ad..45885ca301 100644
+--- a/package/terminology/terminology.hash
++++ b/package/terminology/terminology.hash
+@@ -1,3 +1,3 @@
+-# From https://sourceforge.net/p/enlightenment/mailman/message/36626985/
+-sha256  ed5904ba5eb11c67790964306ec260b4134e2a443ef5abd5105610d9943b3e60  terminology-1.4.0.tar.xz
++# From https://www.enlightenment.org/news/2019-05-24-terminology-1.4.1
++sha256  d7b8b35fa38cb6a8746435c44f3517c47324d4c8362b35878ec90c9254d9a956  terminology-1.4.1.tar.xz
+ sha256  a907d434f4691990ed8f2826ff7546672e9934a26c798351da12ed544dadc628  COPYING
+diff --git a/package/terminology/terminology.mk b/package/terminology/terminology.mk
+index 09b4e536a9..633daf5a02 100644
+--- a/package/terminology/terminology.mk
++++ b/package/terminology/terminology.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TERMINOLOGY_VERSION = 1.4.0
++TERMINOLOGY_VERSION = 1.4.1
+ TERMINOLOGY_SOURCE = terminology-$(TERMINOLOGY_VERSION).tar.xz
+ TERMINOLOGY_SITE = https://download.enlightenment.org/rel/apps/terminology
+ TERMINOLOGY_LICENSE = BSD-2-Clause
