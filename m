@@ -1,42 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 May 2019 12:33:34 +0200
-Subject: [Buildroot] [git commit branch/next] support/gnuconfig: update
- README.buildroot with reality
-Message-ID: <20190530103124.3B1B780163@busybox.osuosl.org>
+Date: Thu, 30 May 2019 12:33:26 +0200
+Subject: [Buildroot] [git commit branch/next] package/lmbench: use
+ UPDATE_CONFIG_HOOK instead of CONFIG_UPDATE
+Message-ID: <20190530103124.36C8B83D8B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=93e4f2d5ed52e04f99797790af1c489770b9d9d6
+commit: https://git.buildroot.net/buildroot/commit/?id=2b8b6767ab1cc803a888cca91730732945f95b85
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-4 out of 5 packages who are not using autotools but needed their
-gnuconfig files updated were not complying with the recommandation in
-support/gnuconfig/README.buildroot. The fifth package was converted to
-be like the others: use UPDATE_CONFIG_HOOK as a <pkg>_POST_PATCH_HOOKS
-rather than calling the CONFIG_UPDATE macro directly.
-
-Now that all packages are consistent, update the README.buildroot file
-to match the reality.
+jimtcl, perl, usb_modeswitch and x264 are registering
+UPDATE_CONFIG_HOOK as a post patch hook to get their gnuconfig files
+updated. lmbench is the only package calling CONFIG_UPDATE directly,
+so for consistency, let's make it use the same logic as jimtcl, perl,
+usb_modeswitch and x264.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/gnuconfig/README.buildroot | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/lmbench/lmbench.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/support/gnuconfig/README.buildroot b/support/gnuconfig/README.buildroot
-index a71ed93010..7ba2a332a4 100644
---- a/support/gnuconfig/README.buildroot
-+++ b/support/gnuconfig/README.buildroot
-@@ -10,7 +10,7 @@ If for some reason your package does not use the autotools-package
- infrastructure, you can request the config.guess and/or config.sub
- files of your package to be updated by using:
+diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
+index c52d6a5a39..2f3b19b5f8 100644
+--- a/package/lmbench/lmbench.mk
++++ b/package/lmbench/lmbench.mk
+@@ -18,8 +18,9 @@ LMBENCH_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
+ LMBENCH_LDLIBS = `$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`
+ endif
  
--      $(call CONFIG_UPDATE,directory-of-your-package-sources)
-+<pkg>_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
- 
- --- UPDATE ---
- GNU config is now managed in git, so to update:
++LMBENCH_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
++
+ define LMBENCH_CONFIGURE_CMDS
+-	$(call CONFIG_UPDATE,$(@D))
+ 	sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
+ 	sed -i 's/LDLIBS=/LDLIBS+=/g' $(@D)/scripts/build
+ 	sed -i '/cd .*doc/d' $(@D)/src/Makefile
