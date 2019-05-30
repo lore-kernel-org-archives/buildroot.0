@@ -1,38 +1,83 @@
-From: Thomas Huth <huth@tuxfamily.org>
-Date: Thu, 30 May 2019 17:03:17 +0200
-Subject: [Buildroot] [PATCH 14/19] package/parted: add hash for license
- file
-In-Reply-To: <20190529033537.128311-15-aduskett@gmail.com>
-References: <20190529033537.128311-1-aduskett@gmail.com>
- <20190529033537.128311-15-aduskett@gmail.com>
-Message-ID: <20190530170317.36644b61@thl530.multi.box>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Thu, 30 May 2019 18:36:58 +0300
+Subject: [Buildroot] [PATCH] package/iproute2: fix build with musl libc
+Message-ID: <11c8a42df1cd751e113215c26dc2ed701e3d716d.1559230618.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 28 May 2019 23:35:32 -0400
-schrieb aduskett at gmail.com:
+Add a patch fixing collision of definitions between libc and kernel
+headers.
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/parted/parted.hash | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/parted/parted.hash b/package/parted/parted.hash
-> index e31ae3c4ce..7b04128bea 100644
-> --- a/package/parted/parted.hash
-> +++ b/package/parted/parted.hash
-> @@ -1,2 +1,5 @@
->  # Locally calculated after checking pgp signature
->  sha256
-> 858b589c22297cacdf437f3baff6f04b333087521ab274f7ab677cb8c6bb78e4
-> parted-3.2.tar.xz + +# Locally calculated
-> +sha256
-> 0abbff814cd00e2b0b6d08395af2b419c1a92026c4b4adacbb65ccda45fa58cf
-> COPYING
+Fixes:
+http://autobuild.buildroot.net/results/d38d3a84c61f37747c652382646839a69de16463/
+http://autobuild.buildroot.net/results/41bd8e53b51a96f1b29d7ba0d8661a6dfc958415/
 
-Reviewed-by: Thomas Huth <huth@tuxfamily.org>
+Cc: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+---
+ ...ix-libc-and-kernel-headers-collision.patch | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
+ create mode 100644 package/iproute2/0001-devlink-fix-libc-and-kernel-headers-collision.patch
+
+diff --git a/package/iproute2/0001-devlink-fix-libc-and-kernel-headers-collision.patch b/package/iproute2/0001-devlink-fix-libc-and-kernel-headers-collision.patch
+new file mode 100644
+index 000000000000..e111b71032f7
+--- /dev/null
++++ b/package/iproute2/0001-devlink-fix-libc-and-kernel-headers-collision.patch
+@@ -0,0 +1,51 @@
++From 602128d22db86bd67e11dec8fe40a73832c222c9 Mon Sep 17 00:00:00 2001
++From: Baruch Siach <baruch@tkos.co.il>
++Date: Thu, 30 May 2019 18:22:40 +0300
++Subject: [PATCH] devlink: fix libc and kernel headers collision
++
++Since commit 2f1242efe9d ("devlink: Add devlink health show command") we
++use the sys/sysinfo.h header for the sysinfo(2) system call. But since
++iproute2 carries a local version of the kernel struct sysinfo, this
++causes a collision with libc that do not rely on kernel defined sysinfo
++like musl libc:
++
++In file included from devlink.c:25:0:
++.../sysroot/usr/include/sys/sysinfo.h:10:8: error: redefinition of 'struct sysinfo'
++ struct sysinfo {
++        ^~~~~~~
++In file included from ../include/uapi/linux/kernel.h:5:0,
++                 from ../include/uapi/linux/netlink.h:5,
++                 from ../include/uapi/linux/genetlink.h:6,
++                 from devlink.c:21:
++../include/uapi/linux/sysinfo.h:8:8: note: originally defined here
++ struct sysinfo {
++		^~~~~~~
++
++Rely on the kernel header alone to avoid kernel and userspace headers
++collision of definitions.
++
++Cc: Aya Levin <ayal@mellanox.com>
++Cc: Moshe Shemesh <moshe@mellanox.com>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: http://patchwork.ozlabs.org/patch/1107817/
++
++ devlink/devlink.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/devlink/devlink.c b/devlink/devlink.c
++index 436935f88bda..d7a6ce94f0e6 100644
++--- a/devlink/devlink.c
+++++ b/devlink/devlink.c
++@@ -22,7 +22,7 @@
++ #include <linux/devlink.h>
++ #include <libmnl/libmnl.h>
++ #include <netinet/ether.h>
++-#include <sys/sysinfo.h>
+++#include <linux/sysinfo.h>
++ #include <sys/queue.h>
++ 
++ #include "SNAPSHOT.h"
++-- 
++2.20.1
++
+-- 
+2.20.1
