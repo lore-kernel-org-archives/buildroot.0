@@ -1,56 +1,59 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 May 2019 23:00:42 +0200
-Subject: [Buildroot] [git commit] package/glibc: add C-SKY specific version
-Message-ID: <20190602201237.D8F5B81354@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 30 May 2019 12:37:04 +0200
+Subject: [Buildroot] [git commit] package/nano: bump to version 4.2
+Message-ID: <20190602201236.57B3F81354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=634255f84c01aa7dfe4f59349d4b9e03495731e7
+commit: https://git.buildroot.net/buildroot/commit/?id=92aea4221050e01131634faee562b2753f75361c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash | 2 ++
- package/glibc/glibc.mk                                            | 3 +++
- toolchain/toolchain-buildroot/Config.in                           | 2 +-
- 3 files changed, 6 insertions(+), 1 deletion(-)
+Use the usual enable/disable options for the libmagic optional
+dependency.
 
-diff --git a/package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash b/package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash
-new file mode 100644
-index 0000000000..a61bd65f80
---- /dev/null
-+++ b/package/glibc/7630ed2fa60caea98f500e4a7a51b88f9bf1e176/glibc.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated (fetched from https://github.com/c-sky/glibc)
-+sha512 9deb2deceefe347d72de13510a5baa3de00f94c684f3b25e136ca3660f61e65a69f2115abb488c2ab0fa93cda8535853ce1e13e186efcc8434ecc4049efd82b5  glibc-7630ed2fa60caea98f500e4a7a51b88f9bf1e176.tar.gz
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index 9cfca73e85..26873f3101 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -10,6 +10,9 @@ GLIBC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,glibc,$(GLIBC_VE
- else ifeq ($(BR2_RISCV_32),y)
- GLIBC_VERSION = 06983fe52cfe8e4779035c27e8cc5d2caab31531
- GLIBC_SITE = $(call github,riscv,riscv-glibc,$(GLIBC_VERSION))
-+else ifeq ($(BR2_csky),y)
-+GLIBC_VERSION = 7630ed2fa60caea98f500e4a7a51b88f9bf1e176
-+GLIBC_SITE = $(call github,c-sky,glibc,$(GLIBC_VERSION))
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index eae648d16e..b7fd6a6cfd 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v3/nano-3.2.tar.xz.asc
++# https://www.nano-editor.org/dist/v4/nano-4.2.tar.xz.asc
+ # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
+-sha256 d12773af3589994b2e4982c5792b07c6240da5b86c5aef2103ab13b401fe6349  nano-3.2.tar.xz
++sha256 1143defce62e391b241252ffdb6e5c1ded56cfe26d46ee81b796abe0ccc45df9  nano-4.2.tar.xz
+ sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 206d210a16..8a315154d2 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NANO_VERSION_MAJOR = 3
++NANO_VERSION_MAJOR = 4
+ NANO_VERSION = $(NANO_VERSION_MAJOR).2
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+@@ -24,8 +24,9 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_FILE),y)
+ NANO_DEPENDENCIES += file
++NANO_CONF_OPTS += --enable-libmagic
  else
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
-diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-index beb17a218b..d9f16e2a3a 100644
---- a/toolchain/toolchain-buildroot/Config.in
-+++ b/toolchain/toolchain-buildroot/Config.in
-@@ -48,7 +48,7 @@ config BR2_TOOLCHAIN_BUILDROOT_GLIBC
- 		   BR2_powerpc     || BR2_powerpc64  || BR2_powerpc64le || \
- 		   BR2_riscv       || BR2_sh         || BR2_sparc64     || \
- 		   BR2_x86_64      || BR2_microblaze || BR2_nios2       || \
--		   (BR2_arcle && BR2_ARC_ATOMIC_EXT)
-+		   (BR2_arcle && BR2_ARC_ATOMIC_EXT) || BR2_csky
- 	depends on BR2_USE_MMU
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+-NANO_CONF_ENV += ac_cv_lib_magic_magic_open=no
++NANO_CONF_OPTS += --disable-libmagic
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_NANO_TINY),y)
