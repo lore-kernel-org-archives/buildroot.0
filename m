@@ -1,25 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:17:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/matchbox-panel: fix build with
- NLS
-In-Reply-To: <20190530095651.31543-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 30 May 2019 11:56:51 +0200")
-References: <20190530095651.31543-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pnnz1t9y.fsf@dell.be.48ers.dk>
+Date: Fri, 31 May 2019 00:17:41 +0200
+Subject: [Buildroot] [git commit] package/matchbox-panel: fix build with NLS
+Message-ID: <20190530221751.B224D8E7B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=46668b157a84713b894fc171af071a85ea9e96b8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/3e72c2c2baae3a70fb5145b1b09a1f3716e4bce2
+Fixes:
+ - http://autobuild.buildroot.org/results/3e72c2c2baae3a70fb5145b1b09a1f3716e4bce2
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/matchbox-panel/matchbox-panel.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/matchbox-panel/matchbox-panel.mk b/package/matchbox-panel/matchbox-panel.mk
+index 344d8fde49..aaa7236824 100644
+--- a/package/matchbox-panel/matchbox-panel.mk
++++ b/package/matchbox-panel/matchbox-panel.mk
+@@ -10,7 +10,8 @@ MATCHBOX_PANEL_SOURCE = matchbox-panel-$(MATCHBOX_PANEL_VERSION).tar.bz2
+ MATCHBOX_PANEL_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-panel/$(MATCHBOX_PANEL_VERSION_MAJOR)
+ MATCHBOX_PANEL_LICENSE = GPL-2.0+
+ MATCHBOX_PANEL_LICENSE_FILES = COPYING
+-MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib
++MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib $(TARGET_NLS_DEPENDENCIES)
++MATCHBOX_PANEL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
+ MATCHBOX_PANEL_CONF_OPTS = --enable-expat --enable-dnotify
+ 
+ ifeq ($(BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR),y)
