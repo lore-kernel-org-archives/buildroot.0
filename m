@@ -1,83 +1,102 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Thu, 30 May 2019 18:36:58 +0300
-Subject: [Buildroot] [PATCH] package/iproute2: fix build with musl libc
-Message-ID: <11c8a42df1cd751e113215c26dc2ed701e3d716d.1559230618.git.baruch@tkos.co.il>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Thu, 30 May 2019 10:50:16 -0700
+Subject: [Buildroot] [PATCH v2] package/dosfstools: introduce sanitation
+ step during install
+Message-ID: <20190530175016.3633-1-mmayer@broadcom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch fixing collision of definitions between libc and kernel
-headers.
+We can't install dosfstools into the target directory directly, because
+it'll install *all* binaries, even the disabled ones.
 
-Fixes:
-http://autobuild.buildroot.net/results/d38d3a84c61f37747c652382646839a69de16463/
-http://autobuild.buildroot.net/results/41bd8e53b51a96f1b29d7ba0d8661a6dfc958415/
+Also, we can't just delete dosfstools binaries from the target
+directory after installing them, because some tools of the same name
+may be provided by other packages (specifically Busybox). When a tool
+is disabled in dosfstools, it only means that dosfstools shouldn't
+install its own copy, not that it is okay to remove a tool that might
+already be there.
 
-Cc: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+To avoid any issues, we install dosfstools into a temporary location,
+remove the binaries that have been disabled in the Buildroot
+configuration, and only then copy the rest to the target location.
+
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 ---
- ...ix-libc-and-kernel-headers-collision.patch | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
- create mode 100644 package/iproute2/0001-devlink-fix-libc-and-kernel-headers-collision.patch
 
-diff --git a/package/iproute2/0001-devlink-fix-libc-and-kernel-headers-collision.patch b/package/iproute2/0001-devlink-fix-libc-and-kernel-headers-collision.patch
-new file mode 100644
-index 000000000000..e111b71032f7
---- /dev/null
-+++ b/package/iproute2/0001-devlink-fix-libc-and-kernel-headers-collision.patch
-@@ -0,0 +1,51 @@
-+From 602128d22db86bd67e11dec8fe40a73832c222c9 Mon Sep 17 00:00:00 2001
-+From: Baruch Siach <baruch@tkos.co.il>
-+Date: Thu, 30 May 2019 18:22:40 +0300
-+Subject: [PATCH] devlink: fix libc and kernel headers collision
+This is still of the "install first, remove later" variety. Arnout's
+other concerns have been addressed.  Let me know what you think.
+
+Changes since v1:
+
+- don't bother removing man page files
+- use rsync instead of tar to copy files to the destination
+
+ package/dosfstools/dosfstools.mk | 26 +++++++++++++++++++++++---
+ 1 file changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index 6eb0851d0e23..50501e0ef22d 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -10,6 +10,7 @@ DOSFSTOOLS_SITE = https://github.com/dosfstools/dosfstools/releases/download/v$(
+ DOSFSTOOLS_LICENSE = GPL-3.0+
+ DOSFSTOOLS_LICENSE_FILES = COPYING
+ DOSFSTOOLS_CONF_OPTS = --enable-compat-symlinks --exec-prefix=/
++DOSFSTOOLS_TEMP=$(BASE_DIR)/build/dosfstools-install
+ HOST_DOSFSTOOLS_CONF_OPTS = --enable-compat-symlinks
+ 
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+@@ -24,26 +25,45 @@ DOSFSTOOLS_CONF_OPTS += LIBS="-liconv"
+ DOSFSTOOLS_DEPENDENCIES += libiconv
+ endif
+ 
++# Install into temporary location
++DOSFSTOOLS_INSTALL_TARGET_OPTS = \
++	DESTDIR=$(DOSFSTOOLS_TEMP) \
++	install
 +
-+Since commit 2f1242efe9d ("devlink: Add devlink health show command") we
-+use the sys/sysinfo.h header for the sysinfo(2) system call. But since
-+iproute2 carries a local version of the kernel struct sysinfo, this
-+causes a collision with libc that do not rely on kernel defined sysinfo
-+like musl libc:
++# Clean out our temporary install location before installation
++define DOSFSTOOLS_CLEAR_TEMP
++	rm -rf $(DOSFSTOOLS_TEMP)
++endef
++DOSFSTOOLS_PRE_INSTALL_TARGET_HOOKS += DOSFSTOOLS_CLEAR_TEMP
 +
-+In file included from devlink.c:25:0:
-+.../sysroot/usr/include/sys/sysinfo.h:10:8: error: redefinition of 'struct sysinfo'
-+ struct sysinfo {
-+        ^~~~~~~
-+In file included from ../include/uapi/linux/kernel.h:5:0,
-+                 from ../include/uapi/linux/netlink.h:5,
-+                 from ../include/uapi/linux/genetlink.h:6,
-+                 from devlink.c:21:
-+../include/uapi/linux/sysinfo.h:8:8: note: originally defined here
-+ struct sysinfo {
-+		^~~~~~~
++# Sanitize temporary install location after installation
+ ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),)
+ define DOSFSTOOLS_REMOVE_FATLABEL
+-	rm -f $(addprefix $(TARGET_DIR)/sbin/,dosfslabel fatlabel)
++	rm -f $(addprefix $(DOSFSTOOLS_TEMP)/sbin/,dosfslabel fatlabel)
+ endef
+ DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FATLABEL
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT),)
+ define DOSFSTOOLS_REMOVE_FSCK_FAT
+-	rm -f $(addprefix $(TARGET_DIR)/sbin/,fsck.fat dosfsck fsck.msdos fsck.vfat)
++	rm -f $(addprefix $(DOSFSTOOLS_TEMP)/sbin/,fsck.fat dosfsck fsck.msdos fsck.vfat)
+ endef
+ DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FSCK_FAT
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT),)
+ define DOSFSTOOLS_REMOVE_MKFS_FAT
+-	rm -f $(addprefix $(TARGET_DIR)/sbin/,mkfs.fat mkdosfs mkfs.msdos mkfs.vfat)
++	rm -f $(addprefix $(DOSFSTOOLS_TEMP)/sbin/,mkfs.fat mkdosfs mkfs.msdos mkfs.vfat)
+ endef
+ DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_MKFS_FAT
+ endif
+ 
++# Install what's left into the actual target directory
++define DOSFSTOOLS_TARGET_INSTALL
++	rsync -a $(DOSFSTOOLS_TEMP)/ $(TARGET_DIR)
++	rm -rf $(DOSFSTOOLS_TEMP)
++endef
++DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_TARGET_INSTALL
 +
-+Rely on the kernel header alone to avoid kernel and userspace headers
-+collision of definitions.
-+
-+Cc: Aya Levin <ayal@mellanox.com>
-+Cc: Moshe Shemesh <moshe@mellanox.com>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: http://patchwork.ozlabs.org/patch/1107817/
-+
-+ devlink/devlink.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/devlink/devlink.c b/devlink/devlink.c
-+index 436935f88bda..d7a6ce94f0e6 100644
-+--- a/devlink/devlink.c
-++++ b/devlink/devlink.c
-+@@ -22,7 +22,7 @@
-+ #include <linux/devlink.h>
-+ #include <libmnl/libmnl.h>
-+ #include <netinet/ether.h>
-+-#include <sys/sysinfo.h>
-++#include <linux/sysinfo.h>
-+ #include <sys/queue.h>
-+ 
-+ #include "SNAPSHOT.h"
-+-- 
-+2.20.1
-+
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-2.20.1
+2.17.1
