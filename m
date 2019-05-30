@@ -1,33 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:22:05 +0200
-Subject: [Buildroot] [git commit] package/bzip2: add hash for license file
-Message-ID: <20190602201236.8921F81354@busybox.osuosl.org>
+Date: Fri, 31 May 2019 00:23:09 +0200
+Subject: [Buildroot] [git commit] package/cmake: add hash for license file
+Message-ID: <20190602201236.90AC281354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc7581a850fcae8de601b9678f65a00d46db76af
+commit: https://git.buildroot.net/buildroot/commit/?id=08fa51ca33fe146bf0fcc01fb71a96006413205f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Also add a standard sha256 hash for the package itself.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Reviewed-by: Thomas Huth <huth@tuxfamily.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bzip2/bzip2.hash | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/cmake/cmake.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/bzip2/bzip2.hash b/package/bzip2/bzip2.hash
-index 60b0a191ef..ffe94aa454 100644
---- a/package/bzip2/bzip2.hash
-+++ b/package/bzip2/bzip2.hash
-@@ -1,2 +1,6 @@
- # From http://www.bzip.org/downloads.html
- md5	00b516f4704d4a7cb50a1d97e6e8e15b	bzip2-1.0.6.tar.gz
+diff --git a/package/cmake/cmake.hash b/package/cmake/cmake.hash
+index f138ac79a1..9e0159a3c8 100644
+--- a/package/cmake/cmake.hash
++++ b/package/cmake/cmake.hash
+@@ -1,2 +1,5 @@
+ # From http://www.cmake.org/files/v3.8/cmake-3.8.2-SHA-256.txt
+ sha256 da3072794eb4c09f2d782fcee043847b99bb4cf8d4573978d9b2024214d6e92d  cmake-3.8.2.tar.gz
 +
 +# Locally calculated
-+sha256	a2848f34fcd5d6cf47def00461fcb528a0484d8edef8208d6d2e2909dc61d9cd	bzip2-1.0.6.tar.gz
-+sha256	4919cfb14a73cd64fcef67b107613970cf1659a09aa675dba31314f373bc7204	LICENSE
++sha256 af3030e1bf1af2f534430fdfe3cfc5a617966648a2a7f0c06a631adc92be1e5f  Copyright.txt
