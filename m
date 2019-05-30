@@ -1,44 +1,44 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 30 May 2019 12:48:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/grpc: fix build with uclibc on
- x86_64
-Message-ID: <20190530104848.24885-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 30 May 2019 12:53:59 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/libva: bump version to 2.4.1
+Message-ID: <20190530105359.20994-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On x86_64 if GPR_MUSL_LIBC_COMPAT is not set, grpc tries to link with
-memcpy at GLIBC_2.2.5, see:
-https://github.com/grpc/grpc/blob/618a3f561d4a93f263cca23abad086ed8f4d5e86/src/core/lib/gpr/wrap_memcpy.cc
-
-Fixes:
- - http://autobuild.buildroot.org/results/20d6f2489a4e291a53bd514da66105eb607e1014
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/grpc/grpc.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/libva/libva.hash | 6 +++---
+ package/libva/libva.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 9506e0268a..8da9f95a18 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -33,6 +33,14 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
- GRPC_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
- endif
+diff --git a/package/libva/libva.hash b/package/libva/libva.hash
+index 06b7de5762..661eedf16a 100644
+--- a/package/libva/libva.hash
++++ b/package/libva/libva.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/intel/libva/releases/download/2.4.0/libva-2.4.0.tar.bz2.sha1sum
+-sha1 2e7b69ebb615d039b9253d4708eeec889b812dbf  libva-2.4.0.tar.bz2
++# From https://github.com/intel/libva/releases/download/2.4.1/libva-2.4.1.tar.bz2.sha1sum
++sha1 5aeffc9929b4a9a5ebbed94adf065d08fc50bcf9  libva-2.4.1.tar.bz2
+ # Locally computed
+-sha256 99263056c21593a26f2ece812aee6fe60142b49e6cd46cb33c8dddf18fc19391  libva-2.4.0.tar.bz2
++sha256 e9e053908591b121793eaa5d8aa37675b4cd3af4b12f1f377dff4767f39cee70  libva-2.4.1.tar.bz2
+ sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
+diff --git a/package/libva/libva.mk b/package/libva/libva.mk
+index 8a21c11b6c..e876a1a3d0 100644
+--- a/package/libva/libva.mk
++++ b/package/libva/libva.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+# Set GPR_MUSL_LIBC_COMPAT otherwise build will fail on x86_64 with uclibc
-+# because grpc tries to link with memcpy at GLIBC_2.2.5
-+ifeq ($(BR2_x86_64):$(BR2_TOOLCHAIN_USES_GLIBC),y:)
-+GRPC_CONF_OPTS += \
-+	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -DGPR_MUSL_LIBC_COMPAT" \
-+	-DCMAKE_CXX_FLAGS="$(TARGET_CFLAGS) -DGPR_MUSL_LIBC_COMPAT"
-+endif
-+
- HOST_GRPC_CONF_OPTS = \
- 	-D_gRPC_CARES_LIBRARIES=cares \
- 	-DgRPC_CARES_PROVIDER=none \
+-LIBVA_VERSION = 2.4.0
++LIBVA_VERSION = 2.4.1
+ LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
+ LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
+ LIBVA_LICENSE = MIT
 -- 
 2.20.1
