@@ -1,102 +1,100 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Thu, 30 May 2019 10:50:16 -0700
-Subject: [Buildroot] [PATCH v2] package/dosfstools: introduce sanitation
- step during install
-Message-ID: <20190530175016.3633-1-mmayer@broadcom.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 30 May 2019 20:09:09 +0200
+Subject: [Buildroot] [PATCH] infra/pkg-kconfig: do not rely on package's
+ .config as a timestamp
+Message-ID: <20190530180909.14418-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We can't install dosfstools into the target directory directly, because
-it'll install *all* binaries, even the disabled ones.
+Since linux-4.19, the kernel's build system internally touches its
+.config file.
 
-Also, we can't just delete dosfstools binaries from the target
-directory after installing them, because some tools of the same name
-may be provided by other packages (specifically Busybox). When a tool
-is disabled in dosfstools, it only means that dosfstools shouldn't
-install its own copy, not that it is okay to remove a tool that might
-already be there.
+However, we currently used that file as a timestamp to detect whether
+our kconfig fixups were to be (re)applied or not, which in turn is used
+to decide whether we should (re)build the package or not.
 
-To avoid any issues, we install dosfstools into a temporary location,
-remove the binaries that have been disabled in the Buildroot
-configuration, and only then copy the rest to the target location.
+But with latest kernel versions, this timestamp heuristic is now broken,
+and we always rebuild the kernel on subsequent builds.
 
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+We fix that by introducing a spearate timestamp file of our own, which
+we know the kernel (or the kconfig-based packages, for that matters)
+does not use.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
+ package/pkg-kconfig.mk | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-This is still of the "install first, remove later" variety. Arnout's
-other concerns have been addressed.  Let me know what you think.
-
-Changes since v1:
-
-- don't bother removing man page files
-- use rsync instead of tar to copy files to the destination
-
- package/dosfstools/dosfstools.mk | 26 +++++++++++++++++++++++---
- 1 file changed, 23 insertions(+), 3 deletions(-)
-
-diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-index 6eb0851d0e23..50501e0ef22d 100644
---- a/package/dosfstools/dosfstools.mk
-+++ b/package/dosfstools/dosfstools.mk
-@@ -10,6 +10,7 @@ DOSFSTOOLS_SITE = https://github.com/dosfstools/dosfstools/releases/download/v$(
- DOSFSTOOLS_LICENSE = GPL-3.0+
- DOSFSTOOLS_LICENSE_FILES = COPYING
- DOSFSTOOLS_CONF_OPTS = --enable-compat-symlinks --exec-prefix=/
-+DOSFSTOOLS_TEMP=$(BASE_DIR)/build/dosfstools-install
- HOST_DOSFSTOOLS_CONF_OPTS = --enable-compat-symlinks
- 
- ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-@@ -24,26 +25,45 @@ DOSFSTOOLS_CONF_OPTS += LIBS="-liconv"
- DOSFSTOOLS_DEPENDENCIES += libiconv
- endif
- 
-+# Install into temporary location
-+DOSFSTOOLS_INSTALL_TARGET_OPTS = \
-+	DESTDIR=$(DOSFSTOOLS_TEMP) \
-+	install
-+
-+# Clean out our temporary install location before installation
-+define DOSFSTOOLS_CLEAR_TEMP
-+	rm -rf $(DOSFSTOOLS_TEMP)
-+endef
-+DOSFSTOOLS_PRE_INSTALL_TARGET_HOOKS += DOSFSTOOLS_CLEAR_TEMP
-+
-+# Sanitize temporary install location after installation
- ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),)
- define DOSFSTOOLS_REMOVE_FATLABEL
--	rm -f $(addprefix $(TARGET_DIR)/sbin/,dosfslabel fatlabel)
-+	rm -f $(addprefix $(DOSFSTOOLS_TEMP)/sbin/,dosfslabel fatlabel)
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 60aae387ca..d62be0fd03 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -24,7 +24,7 @@ define kconfig-package-update-config
+ 	fi
+ 	$(Q)mkdir -p $(dir $($(PKG)_KCONFIG_FILE))
+ 	cp -f $($(PKG)_DIR)/$(1) $($(PKG)_KCONFIG_FILE)
+-	$(Q)touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
++	$(Q)touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_STAMP_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
  endef
- DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FATLABEL
- endif
  
- ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT),)
- define DOSFSTOOLS_REMOVE_FSCK_FAT
--	rm -f $(addprefix $(TARGET_DIR)/sbin/,fsck.fat dosfsck fsck.msdos fsck.vfat)
-+	rm -f $(addprefix $(DOSFSTOOLS_TEMP)/sbin/,fsck.fat dosfsck fsck.msdos fsck.vfat)
- endef
- DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FSCK_FAT
- endif
+ PKG_KCONFIG_COMMON_OPTS = \
+@@ -61,6 +61,12 @@ $(2)_KCONFIG_FIXUP_CMDS ?=
+ $(2)_KCONFIG_FRAGMENT_FILES ?=
+ $(2)_KCONFIG_DOTCONFIG ?= .config
  
- ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT),)
- define DOSFSTOOLS_REMOVE_MKFS_FAT
--	rm -f $(addprefix $(TARGET_DIR)/sbin/,mkfs.fat mkdosfs mkfs.msdos mkfs.vfat)
-+	rm -f $(addprefix $(DOSFSTOOLS_TEMP)/sbin/,mkfs.fat mkdosfs mkfs.msdos mkfs.vfat)
- endef
- DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_MKFS_FAT
- endif
- 
-+# Install what's left into the actual target directory
-+define DOSFSTOOLS_TARGET_INSTALL
-+	rsync -a $(DOSFSTOOLS_TEMP)/ $(TARGET_DIR)
-+	rm -rf $(DOSFSTOOLS_TEMP)
-+endef
-+DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_TARGET_INSTALL
++# Do not use $(2)_KCONFIG_DOTCONFIG as stamp file, because the package
++# buildsystem (e.g. linux >= 4.19) may touch it, thus rendering our
++# timestamps out of date, thus re-trigerring the build of the package.
++# Instead, use a specific file of our own as timestamp.
++$(2)_KCONFIG_STAMP_DOTCONFIG = .stamp_dotconfig
 +
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+ # The config file as well as the fragments could be in-tree, so before
+ # depending on them the package should be extracted (and patched) first.
+ #
+@@ -116,23 +122,24 @@ endef
+ # fragments are merged together to .config, after the package has been patched.
+ # Since the file could be a defconfig file it needs to be expanded to a
+ # full .config first.
+-$$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
++$$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
+ 	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
+ 		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
+-		$$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@))
++		$$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@D)/$$($(2)_KCONFIG_DOTCONFIG))
+ 	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
+-		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
++		$$(@D)/$$($(2)_KCONFIG_DOTCONFIG) $$($(2)_KCONFIG_FRAGMENT_FILES)
+ 	$$($(2)_REGEN_DOT_CONFIG)
++	$$(Q)touch $$(@D)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
+ 
+ # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
+ # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
+ # it explicitly. It doesn't hurt to always have it though.
+-$$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): | $(1)-patch
++$$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG): | $(1)-patch
+ 
+ # Some packages may need additional tools to be present by the time their
+ # kconfig structure is parsed (e.g. the linux kernel may need to call to
+ # the compiler to test its features).
+-$$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): | $$($(2)_KCONFIG_DEPENDENCIES)
++$$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG): | $$($(2)_KCONFIG_DEPENDENCIES)
+ 
+ # In order to get a usable, consistent configuration, some fixup may be needed.
+ # The exact rules are specified by the package .mk file.
+@@ -142,7 +149,7 @@ define $(2)_FIXUP_DOT_CONFIG
+ 	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
+ endef
+ 
+-$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG)
++$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
+ 	$$($(2)_FIXUP_DOT_CONFIG)
+ 
+ # Before running configure, the configuration file should be present and fixed
 -- 
-2.17.1
+2.20.1
