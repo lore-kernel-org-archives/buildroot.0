@@ -1,34 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 30 May 2019 11:56:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/matchbox-panel: fix build with NLS
-Message-ID: <20190530095651.31543-1-fontaine.fabrice@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 30 May 2019 12:03:45 +0200
+Subject: [Buildroot] [buildroot-test] autobuild-run: fix copy_if_exists()
+Message-ID: <20190530100345.8275-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/3e72c2c2baae3a70fb5145b1b09a1f3716e4bce2
+Under copy_if_exists() 'dir' variable is referenced as 'd' leading to
+exception.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Substitute 'd' with 'dir' in copy_if_exists().
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/matchbox-panel/matchbox-panel.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ scripts/autobuild-run | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/matchbox-panel/matchbox-panel.mk b/package/matchbox-panel/matchbox-panel.mk
-index 344d8fde49..aaa7236824 100644
---- a/package/matchbox-panel/matchbox-panel.mk
-+++ b/package/matchbox-panel/matchbox-panel.mk
-@@ -10,7 +10,8 @@ MATCHBOX_PANEL_SOURCE = matchbox-panel-$(MATCHBOX_PANEL_VERSION).tar.bz2
- MATCHBOX_PANEL_SITE = http://downloads.yoctoproject.org/releases/matchbox/matchbox-panel/$(MATCHBOX_PANEL_VERSION_MAJOR)
- MATCHBOX_PANEL_LICENSE = GPL-2.0+
- MATCHBOX_PANEL_LICENSE_FILES = COPYING
--MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib
-+MATCHBOX_PANEL_DEPENDENCIES = matchbox-lib $(TARGET_NLS_DEPENDENCIES)
-+MATCHBOX_PANEL_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- MATCHBOX_PANEL_CONF_OPTS = --enable-expat --enable-dnotify
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 56bab25..5687ebd 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -489,8 +489,8 @@ def send_results(result, **kwargs):
+                     os.path.join(resultdir, "branch"))
  
- ifeq ($(BR2_PACKAGE_MATCHBOX_STARTUP_MONITOR),y)
+     def copy_if_exists(dir, src, dst=None):
+-        if os.path.exists(os.path.join(outputdir, d, src)):
+-            shutil.copyfile(os.path.join(outputdir, d, src),
++        if os.path.exists(os.path.join(outputdir, dir, src)):
++            shutil.copyfile(os.path.join(outputdir, dir, src),
+                             os.path.join(resultdir, src if dst is None else dst))
+ 
+     copy_if_exists("build", "build-time.log")
 -- 
-2.20.1
+2.17.1
