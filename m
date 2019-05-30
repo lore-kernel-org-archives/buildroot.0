@@ -1,57 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 26 May 2019 14:50:08 +0200
-Subject: [Buildroot] [git commit] package/gpsd: add skytraq option
-Message-ID: <20190602201235.D38E28EDA8@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 31 May 2019 00:37:42 +0200
+Subject: [Buildroot] [git commit] package/iwd: bump to version 0.18
+Message-ID: <20190602201237.279C68EDEF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f7a15cbe59ff21691769fd667425ff08a518d74
+commit: https://git.buildroot.net/buildroot/commit/?id=d96da137f2160906bfbc3fe3387dec798722085b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-skytraq support has been added in version 3.17 with
-https://git.savannah.gnu.org/cgit/gpsd.git/commit/SConstruct?id=1456c9f50e718a394f2b633cf0773f3fd792cdaa
+Fix build with ell 0.20
 
-Allow the user to enable/disable it through an option and disable it
-by default.
+Fixes:
+ - http://autobuild.buildroot.org/results/2bd1fb482ee5d963fa335d1fddd90ee6cf96a0d6
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Beno??t Th??baudeau <benoit.thebaudeau.dev@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gpsd/Config.in | 5 +++++
- package/gpsd/gpsd.mk   | 3 +++
- 2 files changed, 8 insertions(+)
+ package/iwd/iwd.hash | 2 +-
+ package/iwd/iwd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index e951c0154e..c1bebc30d7 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -222,6 +222,11 @@ config BR2_PACKAGE_GPSD_SIRF
- 	help
- 	  SiRF binary support
+diff --git a/package/iwd/iwd.hash b/package/iwd/iwd.hash
+index d8eefc064c..a24521ba79 100644
+--- a/package/iwd/iwd.hash
++++ b/package/iwd/iwd.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 e416bd549474b2940b0e43ac680795fbafe2b4965fe6a977cd4c1caa1a05e897 iwd-0.13.tar.gz
++sha256 28e67c9a55182d08407be34e85cb31de482ba7fd50571fa34d7a16e289bd2e7f iwd-0.18.tar.gz
  
-+config BR2_PACKAGE_GPSD_SKYTRAQ
-+	bool "Skytraq"
-+	help
-+	  Skytraq support
-+
- config BR2_PACKAGE_GPSD_SUPERSTAR2
- 	bool "SuperStarII"
- 	help
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 0a17ddc93e..6fe3d7388b 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -144,6 +144,9 @@ endif
- ifneq ($(BR2_PACKAGE_GPSD_SIRF),y)
- GPSD_SCONS_OPTS += sirf=no
- endif
-+ifneq ($(BR2_PACKAGE_GPSD_SKYTRAQ),y)
-+GPSD_SCONS_OPTS += skytraq=no
-+endif
- ifneq ($(BR2_PACKAGE_GPSD_SUPERSTAR2),y)
- GPSD_SCONS_OPTS += superstar2=no
- endif
+ # License files
+ sha256 ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5 COPYING
+diff --git a/package/iwd/iwd.mk b/package/iwd/iwd.mk
+index 63736947cf..1e68c320d7 100644
+--- a/package/iwd/iwd.mk
++++ b/package/iwd/iwd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IWD_VERSION = 0.13
++IWD_VERSION = 0.18
+ IWD_SITE = https://git.kernel.org/pub/scm/network/wireless/iwd.git
+ IWD_SITE_METHOD = git
+ IWD_LICENSE = LGPL-2.1+
