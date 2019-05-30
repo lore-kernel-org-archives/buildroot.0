@@ -1,100 +1,136 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 30 May 2019 20:09:09 +0200
-Subject: [Buildroot] [PATCH] infra/pkg-kconfig: do not rely on package's
- .config as a timestamp
-Message-ID: <20190530180909.14418-1-yann.morin.1998@free.fr>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Thu, 30 May 2019 22:29:45 +0200
+Subject: [Buildroot] [PATCH v2] boot/uboot: add initial environment
+ support
+In-Reply-To: <20190527192342.23406-1-michael@walle.cc>
+References: <20190527192342.23406-1-michael@walle.cc>
+Message-ID: <79073dd4-ee7c-587b-6b19-dbf73dfc931c@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since linux-4.19, the kernel's build system internally touches its
-.config file.
+Hi,
 
-However, we currently used that file as a timestamp to detect whether
-our kconfig fixups were to be (re)applied or not, which in turn is used
-to decide whether we should (re)build the package or not.
+Le 27/05/2019 ? 21:23, Michael Walle a ?crit?:
+> Since v2019.07 U-Boot supports extracting the compiled-in environment.
+> As a first step, add support to the environment generation in buildroot.
+> In the future, the text file may also be copied into the target
+> filesystem, where it will be used by the uboot-tools.
 
-But with latest kernel versions, this timestamp heuristic is now broken,
-and we always rebuild the kernel on subsequent builds.
+In fact, u-boot-initial-env file can also be used
+by SWUpdate [1] and libubootenv [2] now ;).
 
-We fix that by introducing a spearate timestamp file of our own, which
-we know the kernel (or the kconfig-based packages, for that matters)
-does not use.
+>
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>
+> changes since v1:
+>   - rename _INITIAL to _BUILTIN
+>   - add help texts
+>   - make commit message little bit more clearer, hopefully ;)
+>
+>   boot/uboot/Config.in | 24 ++++++++++++++++++++++++
+>   boot/uboot/uboot.mk  | 17 ++++++++++++++++-
+>   2 files changed, 40 insertions(+), 1 deletion(-)
+>
+> diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+> index 33b7e67ff7..45bbf88b6f 100644
+> --- a/boot/uboot/Config.in
+> +++ b/boot/uboot/Config.in
+> @@ -488,7 +488,30 @@ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
+>   	  The environment image will be called uboot-env.bin.
+>   
+>   if BR2_TARGET_UBOOT_ENVIMAGE
+> +choice
+> +	prompt "Environment image source"
+> +	default BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM
+> +
+> +config BR2_TARGET_UBOOT_ENVIMAGE_BUILTIN
+> +	bool "Using uboot's built-in environment file"
+> +	help
+> +	  Select this option if you want to build the image from
+> +	  u-boot's built-in environment. The content will be the
+> +	  same as the default environment of the u-boot binary.
+> +
+> +	  This feature requires commit
+> +	  bdaa73a5b3923257add182b4ab8058dbfa33421b from upstream
+> +	  U-Boot, available from versions 2019.07 or later.
+> +
+> +config BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM
+> +	bool "Using a custom environment file"
+> +	help
+> +	  Select this option if you want to specify your own
+> +	  custom environment file.
+> +
+> +endchoice
+>   
+> +if BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM
+>   config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
+>   	string "Source files for environment"
+>   	help
+> @@ -497,6 +520,7 @@ config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
+>   	  lines starting with a # are ignored.
+>   
+>   	  Multiple source files are concatenated in the order listed.
+> +endif # BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM
+>   
+>   config BR2_TARGET_UBOOT_ENVIMAGE_SIZE
+>   	string "Size of environment"
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index ae09c37d84..0da1f37cbd 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -271,9 +271,22 @@ define UBOOT_BUILD_OMAP_IFT
+>   endef
+>   
+>   ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
+> -define UBOOT_GENERATE_ENV_IMAGE
+> +ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM),y)
+> +define UBOOT_CREATE_ENV_SOURCE
+>   	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
+>   		>$(@D)/buildroot-env.txt
+> +endef
+> +endif
+> +
+> +ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE_BUILTIN),y)
+> +UBOOT_MAKE_TARGET += u-boot-initial-env
+> +define UBOOT_CREATE_ENV_SOURCE
+> +	cp -dpf $(@D)/u-boot-initial-env $(@D)/buildroot-env.txt
+> +endef
+> +endif
+> +
+> +define UBOOT_GENERATE_ENV_IMAGE
+> +	$(UBOOT_CREATE_ENV_SOURCE)
+>   	$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+>   		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+>   		$(if $(filter "BIG",$(BR2_ENDIAN)),-b) \
+> @@ -385,9 +398,11 @@ endef
+>   
+>   ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
+>   ifeq ($(BR_BUILDING),y)
+> +ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE_CUSTOM),y)
+>   ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
+>   $(error Please define a source file for Uboot environment (BR2_TARGET_UBOOT_ENVIMAGE_SOURCE setting))
+>   endif
+> +endif
+>   ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SIZE)),)
+>   $(error Please provide Uboot environment size (BR2_TARGET_UBOOT_ENVIMAGE_SIZE setting))
+>   endif
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
----
- package/pkg-kconfig.mk | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+Otherwise, tested on NXP WaRP7 with BR2_TARGET_UBOOT_ENVIMAGE_BUILTIN 
+config option.
+Setup : U-Boot master and libubootenv package (buildroot -next).
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 60aae387ca..d62be0fd03 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -24,7 +24,7 @@ define kconfig-package-update-config
- 	fi
- 	$(Q)mkdir -p $(dir $($(PKG)_KCONFIG_FILE))
- 	cp -f $($(PKG)_DIR)/$(1) $($(PKG)_KCONFIG_FILE)
--	$(Q)touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
-+	$(Q)touch --reference $($(PKG)_DIR)/$($(PKG)_KCONFIG_STAMP_DOTCONFIG) $($(PKG)_KCONFIG_FILE)
- endef
- 
- PKG_KCONFIG_COMMON_OPTS = \
-@@ -61,6 +61,12 @@ $(2)_KCONFIG_FIXUP_CMDS ?=
- $(2)_KCONFIG_FRAGMENT_FILES ?=
- $(2)_KCONFIG_DOTCONFIG ?= .config
- 
-+# Do not use $(2)_KCONFIG_DOTCONFIG as stamp file, because the package
-+# buildsystem (e.g. linux >= 4.19) may touch it, thus rendering our
-+# timestamps out of date, thus re-trigerring the build of the package.
-+# Instead, use a specific file of our own as timestamp.
-+$(2)_KCONFIG_STAMP_DOTCONFIG = .stamp_dotconfig
-+
- # The config file as well as the fragments could be in-tree, so before
- # depending on them the package should be extracted (and patched) first.
- #
-@@ -116,23 +122,24 @@ endef
- # fragments are merged together to .config, after the package has been patched.
- # Since the file could be a defconfig file it needs to be expanded to a
- # full .config first.
--$$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
-+$$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG): $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES)
- 	$$(Q)$$(if $$($(2)_KCONFIG_DEFCONFIG), \
- 		$$($(2)_KCONFIG_MAKE) $$($(2)_KCONFIG_DEFCONFIG), \
--		$$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@))
-+		$$(INSTALL) -m 0644 -D $$($(2)_KCONFIG_FILE) $$(@D)/$$($(2)_KCONFIG_DOTCONFIG))
- 	$$(Q)support/kconfig/merge_config.sh -m -O $$(@D) \
--		$$(@) $$($(2)_KCONFIG_FRAGMENT_FILES)
-+		$$(@D)/$$($(2)_KCONFIG_DOTCONFIG) $$($(2)_KCONFIG_FRAGMENT_FILES)
- 	$$($(2)_REGEN_DOT_CONFIG)
-+	$$(Q)touch $$(@D)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
- 
- # If _KCONFIG_FILE or _KCONFIG_FRAGMENT_FILES exists, this dependency is
- # already implied, but if we only have a _KCONFIG_DEFCONFIG we have to add
- # it explicitly. It doesn't hurt to always have it though.
--$$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): | $(1)-patch
-+$$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG): | $(1)-patch
- 
- # Some packages may need additional tools to be present by the time their
- # kconfig structure is parsed (e.g. the linux kernel may need to call to
- # the compiler to test its features).
--$$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG): | $$($(2)_KCONFIG_DEPENDENCIES)
-+$$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG): | $$($(2)_KCONFIG_DEPENDENCIES)
- 
- # In order to get a usable, consistent configuration, some fixup may be needed.
- # The exact rules are specified by the package .mk file.
-@@ -142,7 +149,7 @@ define $(2)_FIXUP_DOT_CONFIG
- 	$$(Q)touch $$($(2)_DIR)/.stamp_kconfig_fixup_done
- endef
- 
--$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/$$($(2)_KCONFIG_DOTCONFIG)
-+$$($(2)_DIR)/.stamp_kconfig_fixup_done: $$($(2)_DIR)/$$($(2)_KCONFIG_STAMP_DOTCONFIG)
- 	$$($(2)_FIXUP_DOT_CONFIG)
- 
- # Before running configure, the configuration file should be present and fixed
+Tested-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+
+
+[1] - 
+https://github.com/sbabic/swupdate/blob/fa06a75f3d8b3a58fedf4d5d036c526062c74386/bootloader/uboot.c#L130
+[2] - 
+https://github.com/sbabic/libubootenv/blob/master/src/fw_printenv.c#L125
+
 -- 
-2.20.1
+Best regards,
+Pierre-Jean Texier
