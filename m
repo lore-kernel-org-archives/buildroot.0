@@ -1,32 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:25:17 +0200
-Subject: [Buildroot] [git commit branch/next] package/gmp: add hashes for
- license files
-Message-ID: <20190530223346.901D08E72C@busybox.osuosl.org>
+Date: Fri, 31 May 2019 00:24:16 +0200
+Subject: [Buildroot] [git commit branch/next] package/dbus-python: add hash
+ for license file
+Message-ID: <20190530223346.7F22B8E72C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b5b082416de476679b47d21538bb1f7a6b9c844
+commit: https://git.buildroot.net/buildroot/commit/?id=20c6b05fcba509c6f95feb84eaabe0e9472b22e4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Reviewed-by: Thomas Huth <huth@tuxfamily.org>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gmp/gmp.hash | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/dbus-python/dbus-python.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/gmp/gmp.hash b/package/gmp/gmp.hash
-index f4793cd93c..417b9d17bf 100644
---- a/package/gmp/gmp.hash
-+++ b/package/gmp/gmp.hash
-@@ -1,2 +1,6 @@
+diff --git a/package/dbus-python/dbus-python.hash b/package/dbus-python/dbus-python.hash
+index 991bb42787..5bf2f507c6 100644
+--- a/package/dbus-python/dbus-python.hash
++++ b/package/dbus-python/dbus-python.hash
+@@ -1,2 +1,5 @@
  # Locally calculated after checking pgp signature
- sha256	87b565e89a9a684fe4ebeeddb8399dce2599f9c9049854ca8c0dfbdea0e21912	gmp-6.1.2.tar.xz
+ sha256	abf12bbb765e300bf8e2a1b2f32f85949eab06998dbda127952c31cb63957b6f	dbus-python-1.2.8.tar.gz
 +
 +# Locally calculated
-+sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LESSERv3
-+sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
++sha256	1e4562245383fdb5203b1769789e5b28bba21af4923aea7e8b2614f7f93623c0	COPYING
