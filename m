@@ -1,52 +1,28 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 May 2019 23:00:42 +0200
-Subject: [Buildroot] [git commit] package/linux-headers: restrict versions
- available on C-SKY
-Message-ID: <20190602201237.E1CAD81354@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 31 May 2019 00:27:39 +0200
+Subject: [Buildroot] [git commit] package/libxml-parser-perl: add hash for
+ license file
+Message-ID: <20190602201236.D05E08EDA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac652bef62bb806cd46a0185056e81db76548d02
+commit: https://git.buildroot.net/buildroot/commit/?id=e3709506d722f8d745fbf8ecbcea698b8ea60aaf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The C-SKY architecture was merged in the upstream Linux kernel
-4.20. Therefore, kernel headers from a Linux version earlier than that
-cannot be used to build a C-SKY toolchain.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-headers/Config.in.host | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/libxml-parser-perl/libxml-parser-perl.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 2042702eb9..2945bbf09e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -29,20 +29,24 @@ config BR2_KERNEL_HEADERS_AS_KERNEL
- config BR2_KERNEL_HEADERS_4_4
- 	bool "Linux 4.4.x kernel headers"
- 	depends on !BR2_riscv
-+	depends on !BR2_csky
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4
- 
- config BR2_KERNEL_HEADERS_4_9
- 	bool "Linux 4.9.x kernel headers"
- 	depends on !BR2_riscv
-+	depends on !BR2_csky
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_9
- 
- config BR2_KERNEL_HEADERS_4_14
- 	bool "Linux 4.14.x kernel headers"
- 	depends on !BR2_riscv
-+	depends on !BR2_csky
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14
- 
- config BR2_KERNEL_HEADERS_4_19
- 	bool "Linux 4.19.x kernel headers"
-+	depends on !BR2_csky
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
- 
- config BR2_KERNEL_HEADERS_5_0
+diff --git a/package/libxml-parser-perl/libxml-parser-perl.hash b/package/libxml-parser-perl/libxml-parser-perl.hash
+index d8e0df5a27..1e2a1c4665 100644
+--- a/package/libxml-parser-perl/libxml-parser-perl.hash
++++ b/package/libxml-parser-perl/libxml-parser-perl.hash
+@@ -1,2 +1,3 @@
+ # locally computed hash
+ sha256 1ae9d07ee9c35326b3d9aad56eae71a6730a73a116b9fe9e8a4758b7cc033216 XML-Parser-2.44.tar.gz
++sha256 a008c782e078102720266824c1e87875bafbf25ffae4b173dc135f9a4e1c672e README
