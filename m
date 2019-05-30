@@ -1,65 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:43:11 +0200
-Subject: [Buildroot] [git commit branch/next] package/{mesa3d,
- mesa3d-headers}: bump version to 19.0.5
-Message-ID: <20190530224415.2FEC98E55A@busybox.osuosl.org>
+Date: Fri, 31 May 2019 01:07:41 +0200
+Subject: [Buildroot] [PATCH] package/libnss: security bump to version 3.42.1
+Message-ID: <20190530230741.14323-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4554610bde56b0b7f140f6833fc44ebfb7cd7310
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Fixes the following security issues:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+(3.41) CVE-2018-12404: Cache side-channel variant of the Bleichenbacher
+attack
+
+(3.42.1) CVE-2018-18508: Add additional null checks to several CMS functions
+to fix a rare CMS crash.  Thanks to Hanno B?ck and Damian Poddebniak for the
+discovery and fixes
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 22e3e1d28e..5cb34d36bc 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 19.0.3
-+MESA3D_HEADERS_VERSION = 19.0.5
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index d4d20c64bf..5a3eb1fa0f 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,7 +1,7 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2019-April/000510.html
--md5 d03bf14e42c0e54ebae5730712ccc408 mesa-19.0.3.tar.xz
--sha1 e028365fb8c7ae73bb0f01807c9137ec856c8e52 mesa-19.0.3.tar.xz
--sha256 f027244e38dc309a4c12db45ef79be81ab62c797a50a88d566e4edb6159fc4d5 mesa-19.0.3.tar.xz
--sha512 aa170577252aa4157e4bd49076bbf6207e4aada9fc9f23b255de332e816f9c63e5661f752f2f276dd43e232a8926866004e2a2ff9ad4b411330969c2a9a7ffa0 mesa-19.0.3.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2019-May/000515.html
-+md5 1509a3251d459fd8b6fadf9329669dc1  mesa-19.0.5.tar.xz
-+sha1 647352d5989d3ca9b5c83fe06ed1d84f341f6ad5  mesa-19.0.5.tar.xz
-+sha256 6aecb7f67c136768692fb3c33a54196186c6c4fcafab7973516a355e1a54f831  mesa-19.0.5.tar.xz
-+sha512 aecd5ee54ac0316d5e318dbea0abdc06f23e67d75d36eb82d6cf6a396c9e850e1ccf4fa8815f8c4097b6039ebb1524673189350cbfd4b766ce75ce17c26d9d8d  mesa-19.0.5.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 576e8f0a2d..630f181ddb 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 9c3cefd818..1d600f14ef 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_39_RTM/src/SHA256SUMS
+-sha256	6be64dd76f212415cc8bc34343ac1e7389048db4db9a023a84873c411dc5864b  nss-3.39.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_42_1_RTM/src/SHA256SUMS
++sha256	087db37d38fd49dfd584dd2a8b5baa7fc88de7c9bd97c0c2d5be4abcafc61fc6  nss-3.42.1.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 73c9b08fd2..89d614fe1c 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 19.0.3
-+MESA3D_VERSION = 19.0.5
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+-LIBNSS_VERSION = 3.39
++LIBNSS_VERSION = 3.42.1
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
+-- 
+2.11.0
