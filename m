@@ -1,153 +1,100 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Wed, 29 May 2019 19:49:59 -0700
-Subject: [Buildroot] [PATCH] package/dosfstools: introduce sanitation
- step during install
-In-Reply-To: <931fdea6-0e1b-0074-1b14-df0c6a29f899@mind.be>
-References: <20190529182716.12080-1-mmayer@broadcom.com>
- <931fdea6-0e1b-0074-1b14-df0c6a29f899@mind.be>
-Message-ID: <CAGt4E5uynqGo1Th2PB8Wq3-JKSYbcR+Drc3AuarUPKPivmeYJw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 30 May 2019 06:00:33 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-05-29
+Message-ID: <20190530060042.D84E18758B@whitealder.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 29 May 2019 at 15:22, Arnout Vandecappelle <arnout@mind.be> wrote:
->
->  Hi Markus,
->
-> On 29/05/2019 20:27, Markus Mayer wrote:
-> > We can't install dosfstools into the target directory directly, because
-> > it'll install *all* binaries, even the disabled ones.
-> >
-> > Also, we can't just delete dosfstools binaries from the target
-> > directory after installing them, because some tools of the same name
-> > may be provided by other packages (specifically Busybox). When a tool
-> > is disabled in dosfstools, it only means that dosfstools shouldn't
-> > install its own copy, not that it is okay to remove a tool that might
-> > already be there.
-> >
-> > To avoid any issues, we install dosfstools into a temporary location,
-> > remove the binaries that have been disabled in the Buildroot
-> > configuration, and only then copy the rest to the target location.
->
->  Not a bad idea.
->
->
-> > We also extend sanitation to include man pages, so only man pages for
-> > enabled tools are copied to the target.
->
->  Since man pages anyway get removed in target-finalize, there isn't much point
-> to doing this.
+Hello,
 
-No problem. I'll remove that part.
+Build statistics for 2019-05-29
+===============================
 
-> > Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-> > ---
-> >
-> > We discovered the issue at hand because we are using Busybox for most
-> > of our tools, including FAT related tools. When we needed to add
-> > fsck.fat to our root file system, we had to enable DOSFSTOOLS, because
-> > Busybox doesn't provide it. And suddenly all our FAT related tools
-> > (except fsck.fat) had disappeared from the rootfs! That was not at all
-> > the idea.
-> >
-> > The reason, as it turned out, was DOSFSTOOLS doing it sanitation
-> > directly inside the target directory, which indiscriminately removed
-> > binaries, even if they were enabled via a different package (BUSYBOX in
-> > our case).
-> >
-> > Hence the approach using a temporary install location.
-> >
-> >  package/dosfstools/dosfstools.mk | 29 ++++++++++++++++++++++++++---
-> >  1 file changed, 26 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-> > index 6eb0851d0e23..30a35e3f9b8f 100644
-> > --- a/package/dosfstools/dosfstools.mk
-> > +++ b/package/dosfstools/dosfstools.mk
-> > @@ -10,6 +10,7 @@ DOSFSTOOLS_SITE = https://github.com/dosfstools/dosfstools/releases/download/v$(
-> >  DOSFSTOOLS_LICENSE = GPL-3.0+
-> >  DOSFSTOOLS_LICENSE_FILES = COPYING
-> >  DOSFSTOOLS_CONF_OPTS = --enable-compat-symlinks --exec-prefix=/
-> > +DOSFSTOOLS_TEMP=$(BASE_DIR)/build/dosfstools-install
-> >  HOST_DOSFSTOOLS_CONF_OPTS = --enable-compat-symlinks
-> >
-> >  ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
-> > @@ -24,26 +25,48 @@ DOSFSTOOLS_CONF_OPTS += LIBS="-liconv"
-> >  DOSFSTOOLS_DEPENDENCIES += libiconv
-> >  endif
-> >
-> > +# Install into temporary location
-> > +DOSFSTOOLS_INSTALL_TARGET_OPTS = \
-> > +     DESTDIR=$(DOSFSTOOLS_TEMP) \
-> > +     install
-> > +
-> > +# Clean out our temporary install location before installation
-> > +define DOSFSTOOLS_CLEAR_TEMP
-> > +     rm -rf $(DOSFSTOOLS_TEMP)
-> > +endef
-> > +DOSFSTOOLS_PRE_INSTALL_TARGET_HOOKS += DOSFSTOOLS_CLEAR_TEMP
-> > +
-> > +# Sanitize temporary install location after installation
-> >  ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),)
-> >  define DOSFSTOOLS_REMOVE_FATLABEL
-> > -     rm -f $(addprefix $(TARGET_DIR)/sbin/,dosfslabel fatlabel)
-> > +     rm -f $(addprefix $(DOSFSTOOLS_TEMP)/sbin/,dosfslabel fatlabel)
-> > +     rm -f $(addprefix $(DOSFSTOOLS_TEMP)/usr/share/man/man8/,dosfslabel.8 fatlabel.8)
-> >  endef
-> >  DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FATLABEL
-> >  endif
-> >
-> >  ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT),)
-> >  define DOSFSTOOLS_REMOVE_FSCK_FAT
-> > -     rm -f $(addprefix $(TARGET_DIR)/sbin/,fsck.fat dosfsck fsck.msdos fsck.vfat)
-> > +     rm -f $(addprefix $(DOSFSTOOLS_TEMP)/sbin/,fsck.fat dosfsck fsck.msdos fsck.vfat)
-> > +     rm -f $(addprefix $(DOSFSTOOLS_TEMP)/usr/share/man/man8/,fsck.fat.8 dosfsck.8 fsck.msdos.8 fsck.vfat.8)
-> >  endef
-> >  DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FSCK_FAT
-> >  endif
-> >
-> >  ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT),)
-> >  define DOSFSTOOLS_REMOVE_MKFS_FAT
-> > -     rm -f $(addprefix $(TARGET_DIR)/sbin/,mkfs.fat mkdosfs mkfs.msdos mkfs.vfat)
-> > +     rm -f $(addprefix $(DOSFSTOOLS_TEMP)/sbin/,mkfs.fat mkdosfs mkfs.msdos mkfs.vfat)
-> > +     rm -f $(addprefix $(DOSFSTOOLS_TEMP)/usr/share/man/man8/,mkfs.fat.8 mkdosfs.8 mkfs.msdos.8 mkfs.vfat.8)
-> >  endef
-> >  DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_MKFS_FAT
-> >  endif
-> >
-> > +# Install what's left into the actual target directory
-> > +define DOSFSTOOLS_TARGET_INSTALL
-> > +     tar -C $(DOSFSTOOLS_TEMP) -c -f - . | tar -C $(TARGET_DIR) -x -f -
->
->  We generally use rsync to copy files, not the tar trick.
+      branch |  OK | NOK | TIM | TOT |
+   2019.02.x |  20 |   0 |   0 |  20 |
+      master | 155 |  16 |   0 | 171 |
+        next |  43 |  17 |   0 |  60 |
 
-Sure. I'll change that.
+Results for branch 'next'
+=========================
 
->  However, I'm wondering... dosfstools only installs things in /sbin,
-> /usr/share/man and /usr/share/doc. The latter two get deleted in
-> target-finalize. Wouldn't it be a lot easier then to manually install the
-> programs we need to sbin, instead of installing everything and removing what is
-> not needed?
+Classification of failures by reason
+------------------------------------
 
-I had that first, actually. But then I was thinking that would
-duplicate the install logic (or at least a part of it) in the package
-makefile. It is unlikely, but it could lead to some unexpected
-dependencies between upstream tar-ball and Buildroot makefile after an
-update of dosfstools. But maybe that isn't a big problem or there
-wouldn't be any more of a dependency than with the approach above.
-
-I'm open to either approach. Does anybody have any thoughts one way or another?
+                      ell-0.20 | 4 
+                      iwd-0.13 | 3 
+                cracklib-2.9.7 | 2 
+                    dhcp-4.4.1 | 2 
+              domoticz-4.10717 | 2 
+             iputils-s20190515 | 1 
+          qt5multimedia-5.12.2 | 1 
+             qt5wayland-5.12.2 | 1 
+  vdr-plugin-vnsiserver-v1.8.0 | 1 
 
 
->  Regards,
->  Arnout
->
-> > +     rm -rf $(DOSFSTOOLS_TEMP)
-> > +endef
-> > +DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_TARGET_INSTALL
-> > +
-> >  $(eval $(autotools-package))
-> >  $(eval $(host-autotools-package))
-> >
+Detail of failures
+------------------
+
+        m68k |                 cracklib-2.9.7 | NOK | http://autobuild.buildroot.net/results/07243239de6001721fdf61ce8aabcea1baea9159 |     
+         arm |                 cracklib-2.9.7 | NOK | http://autobuild.buildroot.net/results/3f507250825e64ff01d6bee198c5834ac523e321 |     
+      xtensa |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/a8c778b597341d6f6a46c845ae972b5bb4ff4e38 | ORPH
+      xtensa |                     dhcp-4.4.1 | NOK | http://autobuild.buildroot.net/results/788ed47b1e81b8ce6cddb8cfc6cf7c7b4a3180e1 | ORPH
+     aarch64 |               domoticz-4.10717 | NOK | http://autobuild.buildroot.net/results/02106ceaf03c794ba8e4e479bafdf0135d9a61ec |     
+ powerpc64le |               domoticz-4.10717 | NOK | http://autobuild.buildroot.net/results/e5dcb9e4638f9058b24e087856a61d00505ba25b |     
+         arm |                       ell-0.20 | NOK | http://autobuild.buildroot.net/results/d9fd5492ce9dda3a517d364a7ecd047ded8c14ce |     
+         arm |                       ell-0.20 | NOK | http://autobuild.buildroot.net/results/fbc3f6022d588a021a69bc2a7d51f17811190ef6 |     
+      xtensa |                       ell-0.20 | NOK | http://autobuild.buildroot.net/results/93f2262786b1f75d290312e961ed2524d1849b2e |     
+        or1k |                       ell-0.20 | NOK | http://autobuild.buildroot.net/results/2e203628ef874ea91a503f7a8109cbdd1953aa53 |     
+      xtensa |              iputils-s20190515 | NOK | http://autobuild.buildroot.net/results/a55c2a1efbc4c3a6b98a9cc711373c1a06bbd672 |     
+     aarch64 |                       iwd-0.13 | NOK | http://autobuild.buildroot.net/results/36ce0a0cd20e890f0d9faa375cf131159153030e |     
+         arm |                       iwd-0.13 | NOK | http://autobuild.buildroot.net/results/0ffb869d69aa37c1a3b8b71c46bd84e722e89750 |     
+     sparc64 |                       iwd-0.13 | NOK | http://autobuild.buildroot.net/results/56de7281c7b52fbc2d536442284ffc29143dc490 |     
+     aarch64 |           qt5multimedia-5.12.2 | NOK | http://autobuild.buildroot.net/results/8b20ec816d545e343d2b4acf00c775c14d59529e |     
+        mips |              qt5wayland-5.12.2 | NOK | http://autobuild.buildroot.net/results/ab40513ca85e1a4299bfb4ebf5b41a44a8710b04 |     
+      x86_64 |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/fc12b2265dd10565267dfa96a046ae67158fe764 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                   netsurf-3.8 | 5 
+                qt5base-5.12.2 | 2 
+                   mimic-1.1.0 | 1 
+                 openmpi-4.0.0 | 1 
+                 python3-3.7.3 | 1 
+              qt5enginio-1.6.3 | 1 
+             qt5wayland-5.12.2 | 1 
+              spandsp-20180108 | 1 
+                    tekui-1.12 | 1 
+  vdr-plugin-vnsiserver-v1.8.0 | 1 
+               wireshark-3.0.1 | 1 
+
+
+Detail of failures
+------------------
+
+     powerpc |                    mimic-1.1.0 | NOK | http://autobuild.buildroot.net/results/721ea59c9cab617099bc546f2cd4f52d81b6ed22 |     
+      xtensa |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/fc1f3dd001a71469d27699f5acfa19f861ebbebf |     
+      xtensa |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/39516aa2f21c991ebebb4b94d040e4604c25bd25 |     
+         arc |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/363d8f80fffcbdebbe3683e6690549c1a33b8374 |     
+         arc |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/0fa746c62fc8846cc7799ba4118266054811683e |     
+         arc |                    netsurf-3.8 | NOK | http://autobuild.buildroot.net/results/696314aa2262bd5b178a4fdbc59ffc981d992511 |     
+microblazeel |                  openmpi-4.0.0 | NOK | http://autobuild.buildroot.net/results/8f334427e7475154d69469f8ee4efab6df80e403 | ORPH
+      x86_64 |                  python3-3.7.3 | NOK | http://autobuild.buildroot.net/results/ae4b08cd1d544329ab1718e81361cd7d75314f99 |     
+      x86_64 |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/759eecc48d131ac9f04a57d69fb1cd54c60e697f |     
+     aarch64 |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/51cdbdf8b0e77579472be95f65816d43a92845df |     
+         arm |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/12c96ec6eb31561bd7fb59ddf0c831252909d92f |     
+   powerpc64 |              qt5wayland-5.12.2 | NOK | http://autobuild.buildroot.net/results/e15440ad86433e8b140fa62c40845454a1b9d295 |     
+        i686 |               spandsp-20180108 | NOK | http://autobuild.buildroot.net/results/9acf6aa4c75425730905838753b0558175660da7 |     
+     sparc64 |                     tekui-1.12 | NOK | http://autobuild.buildroot.net/results/7cba3df35ef53422830e1940bd110f8f2d4f04b1 |     
+  aarch64_be |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/55147a51936628e474ed8377927d4ace29574b70 |     
+     powerpc |                wireshark-3.0.1 | NOK | http://autobuild.buildroot.net/results/ebdaae6574419beda6e5ef83f591d21b90ff4b2a | ORPH
+
+
+-- 
+http://autobuild.buildroot.net
