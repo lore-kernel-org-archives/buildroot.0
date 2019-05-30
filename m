@@ -1,28 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:32:50 +0200
-Subject: [Buildroot] [git commit] package/wireless_tools: add hash for
- license file
-Message-ID: <20190602201237.0FA20801CD@busybox.osuosl.org>
+Date: Fri, 31 May 2019 00:36:52 +0200
+Subject: [Buildroot] [git commit] package/efl: bump to version 1.22.2
+Message-ID: <20190602201237.1780A81354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2f34198a83ded719aad49817156c2a41f4ffe67
+commit: https://git.buildroot.net/buildroot/commit/?id=6aab9c5980e1769c48fb327f45ee30ed7fe97416
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+See https://www.enlightenment.org/news/efl-1.22.2
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/wireless_tools/wireless_tools.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/efl/efl.hash | 4 ++--
+ package/efl/efl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/wireless_tools/wireless_tools.hash b/package/wireless_tools/wireless_tools.hash
-index 587c9772ef..50a3f62b84 100644
---- a/package/wireless_tools/wireless_tools.hash
-+++ b/package/wireless_tools/wireless_tools.hash
-@@ -1,2 +1,3 @@
- # locally computed hash
- sha256 abd9c5c98abf1fdd11892ac2f8a56737544fe101e1be27c6241a564948f34c63 wireless_tools.30.pre9.tar.gz
-+sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670 COPYING
+diff --git a/package/efl/efl.hash b/package/efl/efl.hash
+index bef0a73ff1..f9015681ee 100644
+--- a/package/efl/efl.hash
++++ b/package/efl/efl.hash
+@@ -1,5 +1,5 @@
+-# From https://download.enlightenment.org/rel/libs/efl/efl-1.22.1.tar.xz.sha256
+-sha256 20d3e5e945d54ae46ec916c7341b5dec24f904b6c0123b4d3ecb8cd8d596ae12 efl-1.22.1.tar.xz
++# From https://download.enlightenment.org/rel/libs/efl/efl-1.22.2.tar.xz.sha256
++sha256 1699891f825911622de0aa77fe1140eff7335aba619d2352485e54dcff6b1cd0 efl-1.22.2.tar.xz
+ 
+ sha256 d949e42ca8fd48d275c397c5fc2ac34c9b63ada715dcaf1a670e17bb62964341  COMPLIANCE
+ sha256 1f0597d326e2fdb54aa2f0caec6d8bb0afb9941ef32475f017ed02ca214fcf37  COPYING
+diff --git a/package/efl/efl.mk b/package/efl/efl.mk
+index 959ed0cc3b..6f7c09ffa3 100644
+--- a/package/efl/efl.mk
++++ b/package/efl/efl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EFL_VERSION = 1.22.1
++EFL_VERSION = 1.22.2
+ EFL_SOURCE = efl-$(EFL_VERSION).tar.xz
+ EFL_SITE = http://download.enlightenment.org/rel/libs/efl
+ EFL_LICENSE = BSD-2-Clause, LGPL-2.1+, GPL-2.0+, FTL, MIT
