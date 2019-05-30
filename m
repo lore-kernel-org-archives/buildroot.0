@@ -1,7 +1,7 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 30 May 2019 12:03:45 +0200
-Subject: [Buildroot] [buildroot-test] autobuild-run: fix copy_if_exists()
-Message-ID: <20190530100345.8275-1-giulio.benetti@micronovasrl.com>
+Date: Thu, 30 May 2019 12:33:05 +0200
+Subject: [Buildroot] [PATCH v2] autobuild-run: fix copy_if_exists()
+Message-ID: <20190530103305.37919-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,25 +11,31 @@ To: buildroot@busybox.net
 Under copy_if_exists() 'dir' variable is referenced as 'd' leading to
 exception.
 
-Substitute 'd' with 'dir' in copy_if_exists().
+Substitute 'd' and 'dir' with 'directory' in copy_if_exists(), since
+'dir' is a keyword in Python.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- scripts/autobuild-run | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Changes:
+V1->V2: change 'dir' and 'd' into 'directory'
+
+ scripts/autobuild-run | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 56bab25..5687ebd 100755
+index 56bab25..8d58a83 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -489,8 +489,8 @@ def send_results(result, **kwargs):
+@@ -488,9 +488,9 @@ def send_results(result, **kwargs):
+     shutil.copyfile(os.path.join(outputdir, "branch"),
                      os.path.join(resultdir, "branch"))
  
-     def copy_if_exists(dir, src, dst=None):
+-    def copy_if_exists(dir, src, dst=None):
 -        if os.path.exists(os.path.join(outputdir, d, src)):
 -            shutil.copyfile(os.path.join(outputdir, d, src),
-+        if os.path.exists(os.path.join(outputdir, dir, src)):
-+            shutil.copyfile(os.path.join(outputdir, dir, src),
++    def copy_if_exists(directory, src, dst=None):
++        if os.path.exists(os.path.join(outputdir, directory, src)):
++            shutil.copyfile(os.path.join(outputdir, directory, src),
                              os.path.join(resultdir, src if dst is None else dst))
  
      copy_if_exists("build", "build-time.log")
