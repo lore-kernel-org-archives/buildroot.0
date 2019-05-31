@@ -1,45 +1,92 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 May 2019 21:29:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/i2pd: fix static build with
- atomic
-In-Reply-To: <CAPi7W81OFgz-a8_Fjdvi_LrfwgkWs3KnO6MV=SAVpGjpXdjaSQ@mail.gmail.com>
-References: <20190530213022.3878-1-fontaine.fabrice@gmail.com>
- <20190531164042.49667958@windsurf>
- <CAPi7W81OFgz-a8_Fjdvi_LrfwgkWs3KnO6MV=SAVpGjpXdjaSQ@mail.gmail.com>
-Message-ID: <20190531212946.75199930@windsurf>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Fri, 31 May 2019 12:41:59 -0700
+Subject: [Buildroot] [PATCH v4] package/dosfstools: introduce custom install
+ routine
+Message-ID: <20190531194159.2566-1-mmayer@broadcom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+We can't use dosfstools' install target, because it'll install *all*
+binaries, even the disabled ones. Also, we can't just delete dosfstools
+binaries from the target directory after installing them, because other
+packages (specifically Busybox) may provide tools of the same name, and
+we may end up deleting those instead.
 
-On Fri, 31 May 2019 16:54:15 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+To avoid any issues, we create our own install routines, which only
+copy the enabled binaries into the target location.
 
-> > It would be nice to not introduce a third way of doing the same
-> > thing :-)  
-> I know but in this case, this is the only solution that does not
-> impact upstream.
-> upstream choose to link through
-> target_link_libraries( "${PROJECT_NAME}" libi2pd libi2pdclient
-> ${DL_LIB} ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} ${ZLIB_LIBRARY}
-> ${CMAKE_THREAD_LIBS_INIT} ${MINGW_EXTRA} ${DL_LIB}
-> ${CMAKE_REQUIRED_LIBRARIES})
-> 
-> Because of this, if we pass -latomic through CMAKE_EXE_LINKER_FLAGS or
-> CMAKE_CXX_FLAGS, it'll always be placed before Boost_Libraries and all
-> the other dependencies.
-> I can try to find a way to fix this but I didn't take time to do so as
-> it was quicker to just use CMAKE_REQUIRED_LIBRARIES.
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+---
+Changes since v3:
+- use $(INSTALL) -D -m 0755 $(@D)/src ...
+- don't use post-install hooks
+- instead call install macros from custom install target
 
-Shouldn't we find a canonical way of adding the -latomic dependency
-handling directly in the CMakeLists.txt files of all those packages ?
-Ultimately, this should be the right thing to do, no ?
+Changes since v2:
+- use custom install routine that only copies the binaries we want
 
-Thomas
+Changes since v1:
+- don't bother removing man page files
+- use rsync instead of tar to copy files to the destination
+
+ package/dosfstools/dosfstools.mk | 34 +++++++++++++++++++++-----------
+ 1 file changed, 22 insertions(+), 12 deletions(-)
+
+diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
+index 6eb0851d0e23..cf2233e5819b 100644
+--- a/package/dosfstools/dosfstools.mk
++++ b/package/dosfstools/dosfstools.mk
+@@ -24,26 +24,36 @@ DOSFSTOOLS_CONF_OPTS += LIBS="-liconv"
+ DOSFSTOOLS_DEPENDENCIES += libiconv
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),)
+-define DOSFSTOOLS_REMOVE_FATLABEL
+-	rm -f $(addprefix $(TARGET_DIR)/sbin/,dosfslabel fatlabel)
++ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),y)
++define DOSFSTOOLS_INSTALL_FATLABEL
++	$(INSTALL) -D -m 0755 $(@D)/src/fatlabel $(TARGET_DIR)/sbin
++	ln -sf fatlabel $(TARGET_DIR)/sbin/dosfslabel
+ endef
+-DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FATLABEL
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT),)
+-define DOSFSTOOLS_REMOVE_FSCK_FAT
+-	rm -f $(addprefix $(TARGET_DIR)/sbin/,fsck.fat dosfsck fsck.msdos fsck.vfat)
++ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT),y)
++define DOSFSTOOLS_INSTALL_FSCK_FAT
++	$(INSTALL) -D -m 0755 $(@D)/src/fsck.fat $(TARGET_DIR)/sbin
++	ln -sf fsck.fat $(TARGET_DIR)/sbin/fsck.vfat
++	ln -sf fsck.fat $(TARGET_DIR)/sbin/fsck.msdos
++	ln -sf fsck.fat $(TARGET_DIR)/sbin/dosfsck
+ endef
+-DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FSCK_FAT
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT),)
+-define DOSFSTOOLS_REMOVE_MKFS_FAT
+-	rm -f $(addprefix $(TARGET_DIR)/sbin/,mkfs.fat mkdosfs mkfs.msdos mkfs.vfat)
++ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT),y)
++define DOSFSTOOLS_INSTALL_MKFS_FAT
++	$(INSTALL) -D -m 0755 $(@D)/src/mkfs.fat $(TARGET_DIR)/sbin
++	ln -sf mkfs.fat $(TARGET_DIR)/sbin/mkdosfs
++	ln -sf mkfs.fat $(TARGET_DIR)/sbin/mkfs.msdos
++	ln -sf mkfs.fat $(TARGET_DIR)/sbin/mkfs.vfat
+ endef
+-DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_MKFS_FAT
+ endif
+ 
++define DOSFSTOOLS_INSTALL_TARGET_CMDS
++	$(call DOSFSTOOLS_INSTALL_FATLABEL)
++	$(call DOSFSTOOLS_INSTALL_FSCK_FAT)
++	$(call DOSFSTOOLS_INSTALL_MKFS_FAT)
++endef
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.17.1
