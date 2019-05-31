@@ -1,47 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 24 May 2019 09:43:24 +0200
-Subject: [Buildroot] [git commit] package/gcr: bump to version 3.28.1
-Message-ID: <20190602201235.95FBA81354@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 31 May 2019 22:59:57 +0200
+Subject: [Buildroot] [git commit] arch/csky: remove BR2_CSKY_DSP option
+Message-ID: <20190602201237.89B3981354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5d5376566e630f1bf9e201129213126541688897
+commit: https://git.buildroot.net/buildroot/commit/?id=55c642287819a062d52e7f290c76ada778772fba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license file
+The DSP extention is in fact no longer used for C-SKY, nor supported
+by C-SKY gcc, so we remove it.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Thomas: split from the VDSP patch, add Config.in.legacy]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gcr/gcr.hash | 5 +++--
- package/gcr/gcr.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ Config.in.legacy    | 7 +++++++
+ arch/Config.in.csky | 4 ----
+ arch/arch.mk.csky   | 4 ----
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/gcr/gcr.hash b/package/gcr/gcr.hash
-index 8b8b748b9e..a78f56517d 100644
---- a/package/gcr/gcr.hash
-+++ b/package/gcr/gcr.hash
-@@ -1,2 +1,3 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/gcr/3.20/gcr-3.20.0.sha256sum
--sha256	90572c626d8a708225560c42b4421f7941315247fa1679d4ef569bde7f4bb379	gcr-3.20.0.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/gcr/3.28/gcr-3.28.1.sha256sum
-+sha256	95204aa2111c301778ebfbe60975ce3ed698c958430ffcc2a785ac5e593d168b	gcr-3.28.1.tar.xz
-+sha256	94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23	COPYING
-diff --git a/package/gcr/gcr.mk b/package/gcr/gcr.mk
-index 7cb35af836..7cf7ea79e5 100644
---- a/package/gcr/gcr.mk
-+++ b/package/gcr/gcr.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/Config.in.legacy b/Config.in.legacy
+index a32cbcb6f2..2cf00a0aac 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
--GCR_VERSION_MAJOR = 3.20
--GCR_VERSION = $(GCR_VERSION_MAJOR).0
-+GCR_VERSION_MAJOR = 3.28
-+GCR_VERSION = $(GCR_VERSION_MAJOR).1
- GCR_SITE = http://ftp.acc.umu.se/pub/gnome/sources/gcr/$(GCR_VERSION_MAJOR)
- GCR_SOURCE = gcr-$(GCR_VERSION).tar.xz
- GCR_DEPENDENCIES = host-intltool host-pkgconf libgcrypt libglib2 p11-kit
+ comment "Legacy options removed in 2019.05"
+ 
++config BR2_CSKY_DSP
++	bool "C-SKY DSP support removed"
++	select BR2_LEGACY
++	help
++	 C-SKY DSP instruction support for ck810 / ck807 was removed,
++	 as it was no longer supported in C-SKY gcc.
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_COMPOSITOR
+ 	bool "compositor moved to gst1-plugins-base"
+ 	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_COMPOSITOR
+diff --git a/arch/Config.in.csky b/arch/Config.in.csky
+index a9d6548d8e..9c893da5f8 100644
+--- a/arch/Config.in.csky
++++ b/arch/Config.in.csky
+@@ -23,10 +23,6 @@ config BR2_CSKY_FPU
+ 	  Floating-Point Coprocessor or if you don't need FPU support
+ 	  for your user-space programs.
+ 
+-config BR2_CSKY_DSP
+-	bool "Enable DSP enhanced instructions"
+-	depends on BR2_ck810 || BR2_ck807
+-
+ config BR2_ARCH
+ 	default "csky"
+ 
+diff --git a/arch/arch.mk.csky b/arch/arch.mk.csky
+index a39fbd43c2..677c3223ed 100644
+--- a/arch/arch.mk.csky
++++ b/arch/arch.mk.csky
+@@ -13,10 +13,6 @@ else ifeq ($(BR2_ck810),y)
+ GCC_TARGET_CPU := ck810
+ endif
+ 
+-ifeq ($(BR2_CSKY_DSP),y)
+-GCC_TARGET_CPU := $(GCC_TARGET_CPU)e
+-endif
+-
+ ifeq ($(BR2_CSKY_FPU),y)
+ GCC_TARGET_CPU := $(GCC_TARGET_CPU)f
+ endif
