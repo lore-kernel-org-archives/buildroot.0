@@ -1,74 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 May 2019 22:36:39 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/grpc: fix build with uclibc on x86_64
-In-Reply-To: <20190530212906.3797-1-fontaine.fabrice@gmail.com>
-References: <20190530212906.3797-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190531223639.41441600@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 31 May 2019 22:43:27 +0200
+Subject: [Buildroot] [PATCH v4] package/dosfstools: introduce custom
+ install routine
+In-Reply-To: <CAGt4E5v_jOJrTdPTRbkyuQEEDGA6AyFfZN4jH+g=a_=eK8PSfQ@mail.gmail.com>
+References: <20190531194159.2566-1-mmayer@broadcom.com>
+ <20190531200625.GB3407@scaer>
+ <CAGt4E5v_jOJrTdPTRbkyuQEEDGA6AyFfZN4jH+g=a_=eK8PSfQ@mail.gmail.com>
+Message-ID: <20190531204327.GC3407@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Markus, All,
 
-On Thu, 30 May 2019 23:29:06 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On 2019-05-31 13:35 -0700, Markus Mayer spake thusly:
+> On Fri, 31 May 2019 at 13:06, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2019-05-31 12:41 -0700, Markus Mayer spake thusly:
+> > > We can't use dosfstools' install target, because it'll install *all*
+> > > binaries, even the disabled ones. Also, we can't just delete dosfstools
+> > > binaries from the target directory after installing them, because other
+> > > packages (specifically Busybox) may provide tools of the same name, and
+> > If busybox installs applets also installed by dosfstools, then we also
+> > want to expand the exsiting list to also cover dosfstools:
+> >     https://git.buildroot.org/buildroot/tree/package/busybox/busybox.mk#n24
+> > Can you send a (separate) patch doing so?
+> Will do.
 
-> On x86_64 if GPR_MUSL_LIBC_COMPAT is not set, grpc tries to link with
-> memcpy at GLIBC_2.2.5, see:
-> https://github.com/grpc/grpc/blob/618a3f561d4a93f263cca23abad086ed8f4d5e86/src/core/lib/gpr/wrap_memcpy.cc
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/20d6f2489a4e291a53bd514da66105eb607e1014
+Great, thanks.
 
-The downside of setting GPR_MUSL_LIBC_COMPAT is that it doesn't change
-just this memcpy() wrapping horror, it also impacts another part of the
-gRPC code in src/core/lib/gpr/cpu_linux.c:
+> I think busybox is the only other package. Maybe my wording was a bit
+> too general.
 
-static void init_num_cpus() {
-#ifndef GPR_MUSL_LIBC_COMPAT
-  if (sched_getcpu() < 0) {
-    gpr_log(GPR_ERROR, "Error determining current CPU: %s\n", strerror(errno));
-    ncpus = 1;
-    return;
-  }
-#endif
-  /* This must be signed. sysconf returns -1 when the number cannot be
-     determined */
-  ncpus = static_cast<int>(sysconf(_SC_NPROCESSORS_CONF));
-  if (ncpus < 1) {
-    gpr_log(GPR_ERROR, "Cannot determine number of CPUs: assuming 1");
-    ncpus = 1;
-  }
-}
+Ok, sounds sane. Thanks for the feedback!
 
-unsigned gpr_cpu_current_cpu(void) {
-#ifdef GPR_MUSL_LIBC_COMPAT
-  // sched_getcpu() is undefined on musl
-  return 0;
-#else
-  if (gpr_cpu_num_cores() == 1) {
-    return 0;
-  }
-  int cpu = sched_getcpu();
-  if (cpu < 0) {
-    gpr_log(GPR_ERROR, "Error determining current CPU: %s\n", strerror(errno));
-    return 0;
-  }
-  if (static_cast<unsigned>(cpu) >= gpr_cpu_num_cores()) {
-    gpr_log(GPR_ERROR, "Cannot handle hot-plugged CPUs");
-    return 0;
-  }
-  return static_cast<unsigned>(cpu);
-#endif
-}
+Regards,
+Yann E. MORIN.
 
-I don't know how much this matters, but it's worth considering.
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
