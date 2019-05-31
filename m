@@ -1,112 +1,91 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Fri, 31 May 2019 08:32:54 -0700
-Subject: [Buildroot] [PATCH v3] package/dosfstools: introduce custom
- install routine
-In-Reply-To: <20190531163457.7b5a978c@windsurf>
-References: <20190530234226.28013-1-mmayer@broadcom.com>
- <20190531163457.7b5a978c@windsurf>
-Message-ID: <CAGt4E5ugVZfpy_pcrQ0ZSPm1y5xupb1NCmU+uzm7LzWsej92sQ@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 31 May 2019 17:35:55 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/opencv3: bump to version 3.4.6
+Message-ID: <20190531153555.4444-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 31 May 2019 at 07:35, Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> Thanks for this patch.
->
-> On Thu, 30 May 2019 16:42:26 -0700
-> Markus Mayer <mmayer@broadcom.com> wrote:
->
-> > -ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),)
-> > -define DOSFSTOOLS_REMOVE_FATLABEL
-> > -     rm -f $(addprefix $(TARGET_DIR)/sbin/,dosfslabel fatlabel)
-> > +ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),y)
-> > +define DOSFSTOOLS_INSTALL_FATLABEL
-> > +     install -c -p $(DOSFSTOOLS_BUILDDIR)src/fatlabel $(TARGET_DIR)/sbin
->
-> Please use:
->
->         $(INSTALL) -D -m 0755 $(@D)/src/fatlabel $(TARGET_DIR)/sbin/fatlabel
->
-> since that's what we use everywhere for insatllation.
+- Remove patch (already in version)
+- Update hash of license file (update in year:
+  https://github.com/opencv/opencv/commit/14d943f588474cee3cdb8f91e8f7fb7e8af7ad8b)
 
-Sure.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...otobuf-fix-compilation-issue-on-s390.patch | 38 -------------------
+ package/opencv3/opencv3.hash                  |  4 +-
+ package/opencv3/opencv3.mk                    |  2 +-
+ 3 files changed, 3 insertions(+), 41 deletions(-)
+ delete mode 100644 package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch
 
-> > +# Actual installation happens via the post install hooks. Define a no-op install
-> > +# command, so we don't end up calling "make install."
-> > +define DOSFSTOOLS_INSTALL_TARGET_CMDS
-> > +     @/bin/true
->
-> Nope, that's not how we want to do it. Instead, we want this:
->
-> define DOSFSTOOLS_INSTALL_TARGET_CMDS
->         $(DOSFSTOOLS_INSTALL_FATLABEL)
->         $(DOSFSTOOLS_INSTALL_FSCK_FAT)
->         $(DOSFSTOOLS_INSTALL_MKFS_FAT)
-> endef
->
-> and of course, not register the DOSFSTOOLS_INSTALL_* defines as
-> post-install target hooks.
-
-Right. Won't I have to define the install macros as empty if they are
-supposed to be noops?
-
-Like this:
-
-ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),y)
-define DOSFSTOOLS_REMOVE_FATLABEL
-... install code here ...
-endef
-else
-# empty declaration
-define DOSFSTOOLS_REMOVE_FATLABEL
-endef
-endif
-
-I had that before, but thought the if-else portion with an empty macro
-definition might be frowned upon. Or does it just ignore unknown
-macros and the above is not necessary?
-
-> I'm also wondering if we could factorize the logic a bit, but I'm not
-> sure it's worth the effort. It would give something like this:
->
-> DOSFSTOOLS_INSTALL_FILES_$(BR2_PACKAGE_DOSFSTOOLS_FATLABEL) += fatlabel
-> DOSFSTOOLS_INSTALL_SYMLINKS_$(BR2_PACKAGE_DOSFSTOOLS_FATLABEL) += dosfslabel:fatlabel
->
-> DOSFSTOOLS_INSTALL_FILES_$(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT) += fsck.fat
-> DOSFSTOOLS_INSTALL_SYMLINKS_$(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT) += fsck.vfat:fsck.fat fsck.mkdos:fsck.fat dosfsck:fsck.fat
->
-> DOSFSTOOLS_INSTALL_FILES_$(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT) += mkfs.fat
-> DOSFSTOOLS_INSTALL_SYMLINKS_$(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT) += mkdosfs:mkfs.fat mkfs.msdos:mkfs.fat mkfs.vfat:mkfs.fat
->
-> define DOSFSTOOLS_INSTALL_TARGET_CMDS
->         $(foreach f,$(DOSFSTOOLS_INSTALL_FILES_y), \
->                 $(INSTALL) -D -m 0744 $(@D)/src/$(f) $(TARGET_DIR)/sbin/$(f)
-
-0755 I imagine? :-)
-
->         )
->
->         $(foreach l,$(DOSFSTOOLS_INSTALL_SYMLINKS_y), \
->                 ln -s $(word 2,$(subst :, ,$(l))) $(TARGET_DIR)/sbin/$(word 1,$(subst :, ,$(l)))
->         )
-> endef
->
-> But admittedly, it becomes a bit hackish, and we don't do that anywhere
-> in Buildroot today. So probably sticking to three
-> DOSFSTOOLS_INSTALL_<foo> defines is better for now.
-
-This is an interesting approach. But I'll likely stick with the other one.
-
-> Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch b/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch
+deleted file mode 100644
+index 7743eae533..0000000000
+--- a/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From ac9ec55b37b2dd3b224144b4f20857a80719b750 Mon Sep 17 00:00:00 2001
+-From: Loic Devulder <ldevulder@suse.de>
+-Date: Fri, 28 Sep 2018 15:33:18 +0200
+-Subject: [PATCH] 3rdparty/protobuf: fix compilation issue on s390
+-
+-This commit fixes an issue while trying to compile
+-on s390x architecture.
+-
+-This is simply a backport of a fixe already applied
+-in official protobuf code:
+-- https://github.com/protocolbuffers/protobuf/pull/3955
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/opencv/opencv/commit/ac9ec55b37b2dd3b224144b4f20857a80719b750]
+----
+- .../protobuf/stubs/atomicops_internals_generic_gcc.h      | 8 ++++++++
+- 1 file changed, 8 insertions(+)
+-
+-diff --git a/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h b/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
+-index 0b0b06ce6cf..075c406abab 100644
+---- a/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
+-+++ b/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
+-@@ -146,6 +146,14 @@ inline Atomic64 NoBarrier_Load(volatile const Atomic64* ptr) {
+-   return __atomic_load_n(ptr, __ATOMIC_RELAXED);
+- }
+- 
+-+inline Atomic64 Release_CompareAndSwap(volatile Atomic64* ptr,
+-+                                       Atomic64 old_value,
+-+                                       Atomic64 new_value) {
+-+  __atomic_compare_exchange_n(ptr, &old_value, new_value, false,
+-+                              __ATOMIC_RELEASE, __ATOMIC_ACQUIRE);
+-+  return old_value;
+-+}
+-+
+- #endif // defined(__LP64__)
+- 
+- }  // namespace internal
+diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
+index 34baf260d4..0b88b52da5 100644
+--- a/package/opencv3/opencv3.hash
++++ b/package/opencv3/opencv3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 4eef85759d5450b183459ff216b4c0fa43e87a4f6aa92c8af649f89336f002ec  opencv3-3.4.3.tar.gz
+-sha256 fea311907cb6271b05ff5843b238e0f2edb6f204a3432975211030d20704b321  LICENSE
++sha256 e7d311ff97f376b8ee85112e2b536dbf4bdf1233673500175ed7cf21a0089f6d  opencv3-3.4.6.tar.gz
++sha256 488b640f88bc72a1f9bbb985bde8352ed8826b863f0b3e14f7038c44bf95d6bc  LICENSE
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 49b29d9f1e..5ffff1ae9f 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENCV3_VERSION = 3.4.3
++OPENCV3_VERSION = 3.4.6
+ OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
+ OPENCV3_INSTALL_STAGING = YES
+ OPENCV3_LICENSE = BSD-3-Clause
+-- 
+2.20.1
