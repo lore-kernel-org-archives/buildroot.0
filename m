@@ -1,56 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 23:40:52 +0200
-Subject: [Buildroot] [PATCH] package/netsurf: disallow on archs requiring
- ABI specific CFLAGS
-Message-ID: <20190531214052.14297-1-peter@korsgaard.com>
+From: Robert Hancock <hancock@sedsystems.ca>
+Date: Fri, 31 May 2019 16:18:15 -0600
+Subject: [Buildroot] [PATCH] package/gpsd: Fix systemd service
+ installation and paths
+In-Reply-To: <20190531231124.54d5a076@windsurf>
+References: <1559170961-14091-1-git-send-email-hancock@sedsystems.ca>
+ <20190531231124.54d5a076@windsurf>
+Message-ID: <2fe4d417-ed59-cb97-35b8-73e5fa701c21@sedsystems.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/67ef520d82ea529a9fe593d83a3aeae5f8b0ee5d/
-http://autobuild.buildroot.net/results/eafc3e4be571d5ecee549a11530ac4e508f31782/
-http://autobuild.buildroot.net/results/ba7f30833fef54162a82f4b336a72d6599594526/
+On 2019-05-31 3:11 p.m., Thomas Petazzoni wrote:
+> Hello Robert,
+> 
+> Thanks for this patch!
+> 
+> On Wed, 29 May 2019 17:02:41 -0600
+> Robert Hancock <hancock@sedsystems.ca> wrote:
+> 
+>> Fix several issues with systemd service file installation for gpsd:
+>>
+>> -systemd support in the gpsd build was defaulting to enabled or not
+>> based on whether the host system had systemd directories present. Set
+>> this explicitly based on whether BR2_INIT_SYSTEMD is set.
+>>
+>> -The installed systemd service files referenced paths in /usr/local when
+>> the actual binaries are installed in /usr. Replace /usr/local with /usr
+>> in the installed service files.
+> 
+> I have not looked into the gpsd build system, but I was wondering if
+> there was a way to convince gpsd to produce those files with the right
+> prefix (i.e /usr instead or /usr/local).
 
-The netsurf build system mixes up host and target CFLAGS, so it isn't
-compatible with architectures where we pass ABI specicif compiler flags (in
-TARGET_ABI).
+As far as I can see, no - the service files are just part of the gpsd
+source tree and the build system installs them as-is, there's no
+mechanism provided to set the prefix etc.
 
-Add a _ARCH_SUPPORTS kconfig variable matching the TARGET_ABI logic we have
-in package/Makefile.in, and use it to disallow netsurf for those
-architectures.
+> 
+>> -When BR2_PACKAGE_HAS_UDEV was enabled, all of the binaries were
+>> re-installed again, along with the udev rules, as part of the
+>> post-install hooks. Just choose between using install and udev-install
+>> based on whether udev is enabled to avoid redundant re-installations.
+> 
+> This should be part of a separate patch, because it's not a fix, just
+> an unrelated optimization.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/netsurf/Config.in | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+I suppose it wasn't obvious from the description, but this issue
+actually caused problems with fixing the systemd service file paths,
+since we would fix the paths after the files were installed, but then
+udev-install was being run afterwards and reinstalled everything, which
+wiped out our fix.
 
-diff --git a/package/netsurf/Config.in b/package/netsurf/Config.in
-index 30b2695309..4f7d5c2713 100644
---- a/package/netsurf/Config.in
-+++ b/package/netsurf/Config.in
-@@ -1,10 +1,20 @@
-+# netsurf mixes up host and target CFLAGS, so it isn't compatible with
-+# architectures where we pass ABI specific compiler flags (TARGET_ABI)
-+config BR2_PACKAGE_NETSURF_ARCH_SUPPORTS
-+	bool
-+	default y if !((BR2_arc && BR2_ARC_ATOMIC_EXT) || \
-+		BR2_powerpc_8540 || BR2_powerpc_8548 || BR2_powerpc_e500mc || \
-+		BR2_xtensa)
-+
- comment "netsurf needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-+	depends on BR2_PACKAGE_NETSURF_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_NETSURF
- 	bool "netsurf"
- 	# static linking support is broken beyond repair
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_PACKAGE_NETSURF_ARCH_SUPPORTS
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+> 
+> But in fact, the systemd fixes could also be two separate patches.
+> 
+> Thanks,
+> 
+> Thomas
+> 
+
 -- 
-2.11.0
+Robert Hancock
+Senior Software Developer
+SED Systems, a division of Calian Ltd.
+Email: hancock at sedsystems.ca
