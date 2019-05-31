@@ -1,42 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 22 May 2019 22:50:01 +0200
-Subject: [Buildroot] [git commit] package/luarocks: bump to version 3.1.2
-Message-ID: <20190602201235.614F78EDA8@busybox.osuosl.org>
+Date: Fri, 31 May 2019 22:59:52 +0200
+Subject: [Buildroot] [git commit] support/gnuconfig: update to 2019-05-28
+Message-ID: <20190602201237.778F681354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1bc70929249d072655834fa685205c1a2e6b5e19
+commit: https://git.buildroot.net/buildroot/commit/?id=ff9f778c66f466859acfbb65d43256262c49795c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This update includes support for the C-SKY architecture.
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index aed0274b5a..6936bfbbb6 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 3c26c102f8e69f81e12ea39037c770a00b6244e115a4c832e7a92feffdfad1aa  luarocks-3.1.1.tar.gz
-+sha256 72a3b74f05b7fd011eed894dc34193ee80b3235fe58016ac9ffdbfceecc88950  luarocks-3.1.2.tar.gz
- sha256 542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 6a8254fd43..0d05b448a5 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LUAROCKS_VERSION = 3.1.1
-+LUAROCKS_VERSION = 3.1.2
- LUAROCKS_SITE = http://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ support/gnuconfig/config.guess |  836 ++++++++-----
+ support/gnuconfig/config.sub   | 2527 ++++++++++++++++++++--------------------
+ 2 files changed, 1773 insertions(+), 1590 deletions(-)
+
+Patch is too large, so refusing to show it
