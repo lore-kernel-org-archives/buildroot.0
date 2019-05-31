@@ -1,118 +1,179 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 31 May 2019 10:46:28 +0200
-Subject: [Buildroot] [PATCH] package/chrony: add option for debug logging
-In-Reply-To: <b96bc92f-ec2a-acec-9667-228014c12e3f@sedsystems.ca>
-References: <1559086828-14718-1-git-send-email-hancock@sedsystems.ca>
- <375f6faa-1016-2446-88ab-13dc449e5c1a@mind.be>
- <b96bc92f-ec2a-acec-9667-228014c12e3f@sedsystems.ca>
-Message-ID: <e7c6fe4d-d8b6-94e4-8ee9-68008995ac2e@mind.be>
+From: Mirza Krak <mirza.krak@northern.tech>
+Date: Fri, 31 May 2019 14:32:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mender: update readme.txt
+Message-ID: <20190531123205.13418-1-mirza.krak@northern.tech>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Provide additional details on how Mender works within Buildroot.
 
+Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+---
+ package/mender/readme.txt | 147 +++++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 139 insertions(+), 8 deletions(-)
 
-On 30/05/2019 00:07, Robert Hancock wrote:
-> On 2019-05-29 3:01 p.m., Arnout Vandecappelle wrote:
->>  Hi Robert,
->>
->> On 29/05/2019 01:40, Robert Hancock wrote:
->>> Add a BR2_PACKAGE_CHRONY_DEBUG_LOGGING config option to allow enabling
->>> compiled-in support for debug logging in Chrony. Enable by default as
->>> this makes it much easier to debug Chrony issues and should only be
->>> disabled by those very sensitive to binary size.
->>
->>  How big is the size difference (compared to the size of chrony itself)? Please
->> report this in the commit message.
-> 
-> On 32-bit ARM, the chronyd binary goes from 149632 bytes to 174208 bytes
-> and chronyc from 59008 to 63104 bytes, so about 14% difference. I can
-> add a note about the rough binary size difference to the config option
-> if we want to keep it.
-
- That's enough of a size difference to make it a Config.in option, IMO,
-especially since it's not something that most people would want.
-
- The latter would make me think whether we should even have such an option. You
-can achieve the same by putting the following in an external.mk (not local.mk,
-unfortunately):
-
-CHRONY_CONF_OPTS += --enable-debug
-
- However, it's just a small thing and doesn't really make maintainability more
-difficult.
-
- There's no need to respin, the 14% can be added while applying. If you want to
-make our life easier and do make a respin, please add:
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-(I don't have time to apply it now).
-
- Regards,
- Arnout
-
-> 
->>
->>  If it is less than 10%, I think we prefer to drop the Config.in option and
->> unconditionally enable debug. That is, assuming that this doesn't force other
->> options (-g for example) into the compilation. Normally it shouldn't since we
->> override CFLAGS.
->>
->>  Peter, can you confirm that we prefer without the Kconfig option?
->>
->>>
->>> Signed-off-by: Robert Hancock <hancock@sedsystems.ca>
->>> ---
->>>  package/chrony/Config.in | 8 ++++++++
->>>  package/chrony/chrony.mk | 3 ++-
->>>  2 files changed, 10 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/package/chrony/Config.in b/package/chrony/Config.in
->>> index 05d6fc1..b295e8d 100644
->>> --- a/package/chrony/Config.in
->>> +++ b/package/chrony/Config.in
->>> @@ -6,3 +6,11 @@ config BR2_PACKAGE_CHRONY
->>>  	  accuracy of the system clock.
->>>  
->>>  	  http://chrony.tuxfamily.org/
->>> +
->>> +config BR2_PACKAGE_CHRONY_DEBUG_LOGGING
->>> +	bool "enable debug logging support"
->>> +	default y
->>> +	depends on BR2_PACKAGE_CHRONY
->>> +	help
->>> +	  Enable support for debug logging output from Chrony when enabled at
->>> +	  runtime. If disabled, code for debug logging will not be compiled in.
->>> diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
->>> index b5821b2..2d03fce 100644
->>> --- a/package/chrony/chrony.mk
->>> +++ b/package/chrony/chrony.mk
->>> @@ -13,7 +13,8 @@ CHRONY_CONF_OPTS = \
->>>  	--host-system=Linux \
->>>  	--host-machine=$(BR2_ARCH) \
->>>  	--prefix=/usr \
->>> -	--without-tomcrypt
->>> +	--without-tomcrypt \
->>> +	$(if $(BR2_PACKAGE_CHRONY_DEBUG_LOGGING),--enable-debug,--disable-debug)
->>
->>  If it is unconditional, add a comment like:
->>
->> # --enable-debug to make sure debug logging is compiled in and can be used when
->> # enabled at runtime.
->>
->>  Regards,
->>  Arnout
->>
->>>  
->>>  ifeq ($(BR2_PACKAGE_LIBCAP),y)
->>>  CHRONY_DEPENDENCIES += libcap
->>>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
->>
-> 
+diff --git a/package/mender/readme.txt b/package/mender/readme.txt
+index 329b2a42f2..1afc7b6268 100644
+--- a/package/mender/readme.txt
++++ b/package/mender/readme.txt
+@@ -3,16 +3,147 @@
+ Default configurations files
+ ----------------------------
+ 
+-Buildroot comes with a default artifact_info and device_type configuration files
+-in /etc/mender. They contain default values, and thus they should be overridden
+-on a production system.
++Mender is an open source over-the-air (OTA) software updater for embedded Linux
++devices. Mender comprises a client running at the embedded device, as well as a
++server that manages deployments across many devices. There is also various
++tooling around the Mender project, such as 'mender-artifact' which is used to
++create Mender Artifacts that are compatible with the Mender client and server.
+ 
+-The simplest way to do it is to change these files in an overlay or in a post
+-build script.
++Mender aims to address this challenge with a robust and easy to use updater
++for embedded Linux devices, which is open source and available to anyone.
+ 
+-Configuring mender with certificates
++Robustness is ensured with atomic image-based deployments using a dual A/B
++rootfs partition layout. This makes it always possible to roll back to a
++working state, even when losing power at any time during the update process.
++
++The official documentation is a good resource to get an in depth understanding
++of how Mender works:
++
++    https://docs.mender.io
++
++In Buildroot the following packages are provided:
++
++- BR2_PACKAGE_MENDER
++    - This will install the client on target rootfs
++- BR2_PACKAGE_HOST_MENDER_ARTIFACT
++    - This will install the 'mender-artifact' tool in host rootfs.
++
++To fully utilize atomic image-based deployments using the A/B update strategy,
++additional integration is required in the bootloader. This integration is board
++specific.
++
++Currently supported bootloaders are GRUB and U-boot, and for reference
++integrations please visit:
++
++    https://github.com/mendersoftware/buildroot-mender
++
++Default configurations files
++----------------------------
++
++Buildroot comes with a default configuration and there a couple of files that
++need your attention:
++
++- /etc/mender/mender.conf
++    - main configuration file for the Mender client
++    - https://docs.mender.io/client-configuration/configuration-file/configuration-options
++
++- /etc/mender/artifact_info
++    - The name of the image or update that will be built. This is what the
++      device will report that it is running, and different updates must have
++      different names
++
++- /var/lib/mender/device_type
++    - A string that defines the type of device
++
++Mender server configuration
++---------------------------
++
++The Mender server can be setup in different ways, and how you configure the
++Mender client differs slightly depending on which server environment is used.
++
++- Mender demo environment
++
++This is if you have followed the Getting started documentation where you
++launch a Mender server locally and to configure your environment to connect to
++this local server you need to provide the IP address of the server on the local
++network.
++
++By default the demo environment will connect to 'docker.mender.io' and
++'s3.docker.mender.io' and we need to make sure that these are resolved to the
++local IP address of the running server by adding the following entry to
++'/etc/hosts'
++
++    <ip address of demo environment> docker.mender.io s3.docker.mender.io
++
++This is required because the communication between client and server is
++utilizing TLS and the provided demo server certificate (server.crt) is only
++valid for 'docker.mender.io' and 's3.docker.mender.io' domains.
++
++- Hosted Mender
++
++To authenticate the Mender client with the Hosted Mender server you need a
++tenant token.
++
++To get your tenant token:
++
++- log in to https://hosted.mender.io
++- click your email at the top right and then ?My organization?
++- press the ?COPY TO CLIPBOARD?
++- assign content of clipboard to TenantToken
++
++Example mender.conf options for Hosted Mender:
++
++    {
++      ...
++      "ServerURL": "https://hosted.mender.io",
++      "TenantToken": "<paste tenant token here>"
++      ...
++    }
++
++
++Creating Mender Artifacts
++-------------------------
++
++To create Mender Artifacts based on Buildroot build output you must include
++BR2_PACKAGE_HOST_MENDER_ARTIFACT in your configuration, and then you
++would typically create the Mender Artifact in a post image script
++(BR2_ROOTFS_POST_IMAGE_SCRIPT). Below is an example of such a script:
++
++    #!/bin/sh
++
++    set -e
++    set -x
++
++    device_type=$(cat ${TARGET_DIR}/var/lib/mender/device_type | sed 's/[^=]*=//')
++    artifact_name=$(cat ${TARGET_DIR}/etc/mender/artifact_info | sed 's/[^=]*=//')
++
++    if [ -z "${device_type}" ] || [ -z "${artifact_name}" ]; then
++        echo "missing files required by Mender"
++        exit 1
++    fi
++
++    ${HOST_DIR}/usr/bin/mender-artifact write rootfs-image \
++        --update ${BINARIES_DIR}/rootfs.ext4 \
++        --output-path ${BINARIES_DIR}/${artifact_name}.mender \
++        --artifact-name ${artifact_name} \
++        --device-type ${device_type}
++
++As you can see some properties are extracted from target rootfs, and this is
++because these values are used for compatibility checks, meaning that the
++information must be present in both rootfs and in Mender Artifact meta data.
++
++- device_type - must be an exact match between rootfs and Mender Artifact
++                meta-data to apply update. You can set an array of devices
++                here as well, e.g if your image is compatible with multiple
++                hardware revisions
++
++- artifact_name - must be an exact match between rootfs and Mender Artifact
++                  meta-data to apply update.
++
++Configuring Mender with certificates
+ ------------------------------------
+ 
+ Mender uses TLS to communicate with the management server, and if you use a
+-CA-signed certificate on the server, you should select the ca-certificates
+-package otherwise it doesn't work.
++CA-signed certificate on the server, you must include
++BR2_PACKAGE_CA_CERTIFICATES in your configuration to authenticate TLS
++connections.
+-- 
+2.11.0
