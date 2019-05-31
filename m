@@ -1,65 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 May 2019 21:24:10 +0200
-Subject: [Buildroot] [PATCH v3] package/dosfstools: introduce custom
- install routine
-In-Reply-To: <CAGt4E5ugVZfpy_pcrQ0ZSPm1y5xupb1NCmU+uzm7LzWsej92sQ@mail.gmail.com>
-References: <20190530234226.28013-1-mmayer@broadcom.com>
- <20190531163457.7b5a978c@windsurf>
- <CAGt4E5ugVZfpy_pcrQ0ZSPm1y5xupb1NCmU+uzm7LzWsej92sQ@mail.gmail.com>
-Message-ID: <20190531212410.28aca8d7@windsurf>
+Date: Fri, 31 May 2019 21:29:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/i2pd: fix static build with
+ atomic
+In-Reply-To: <CAPi7W81OFgz-a8_Fjdvi_LrfwgkWs3KnO6MV=SAVpGjpXdjaSQ@mail.gmail.com>
+References: <20190530213022.3878-1-fontaine.fabrice@gmail.com>
+ <20190531164042.49667958@windsurf>
+ <CAPi7W81OFgz-a8_Fjdvi_LrfwgkWs3KnO6MV=SAVpGjpXdjaSQ@mail.gmail.com>
+Message-ID: <20190531212946.75199930@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Markus,
+Hello,
 
-On Fri, 31 May 2019 08:32:54 -0700
-Markus Mayer <mmayer@broadcom.com> wrote:
+On Fri, 31 May 2019 16:54:15 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Right. Won't I have to define the install macros as empty if they are
-> supposed to be noops?
+> > It would be nice to not introduce a third way of doing the same
+> > thing :-)  
+> I know but in this case, this is the only solution that does not
+> impact upstream.
+> upstream choose to link through
+> target_link_libraries( "${PROJECT_NAME}" libi2pd libi2pdclient
+> ${DL_LIB} ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} ${ZLIB_LIBRARY}
+> ${CMAKE_THREAD_LIBS_INIT} ${MINGW_EXTRA} ${DL_LIB}
+> ${CMAKE_REQUIRED_LIBRARIES})
 > 
-> Like this:
-> 
-> ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),y)
-> define DOSFSTOOLS_REMOVE_FATLABEL
-> ... install code here ...
-> endef
-> else
-> # empty declaration
-> define DOSFSTOOLS_REMOVE_FATLABEL
-> endef
-> endif
+> Because of this, if we pass -latomic through CMAKE_EXE_LINKER_FLAGS or
+> CMAKE_CXX_FLAGS, it'll always be placed before Boost_Libraries and all
+> the other dependencies.
+> I can try to find a way to fix this but I didn't take time to do so as
+> it was quicker to just use CMAKE_REQUIRED_LIBRARIES.
 
-No: undefined variables in make are automatically empty, so there's no
-need for this else condition. We use this principle all over Buildroot.
-
-
-> > define DOSFSTOOLS_INSTALL_TARGET_CMDS
-> >         $(foreach f,$(DOSFSTOOLS_INSTALL_FILES_y), \
-> >                 $(INSTALL) -D -m 0744 $(@D)/src/$(f) $(TARGET_DIR)/sbin/$(f)  
-> 
-> 0755 I imagine? :-)
-
-Yes, indeed, sorry.
-
-> >         $(foreach l,$(DOSFSTOOLS_INSTALL_SYMLINKS_y), \
-> >                 ln -s $(word 2,$(subst :, ,$(l))) $(TARGET_DIR)/sbin/$(word 1,$(subst :, ,$(l)))
-> >         )
-> > endef
-> >
-> > But admittedly, it becomes a bit hackish, and we don't do that anywhere
-> > in Buildroot today. So probably sticking to three
-> > DOSFSTOOLS_INSTALL_<foo> defines is better for now.  
-> 
-> This is an interesting approach. But I'll likely stick with the other one.
-
-Yes, as I said, I think it makes more sense to stick to the simpler
-approach for now.
-
-Thanks!
+Shouldn't we find a canonical way of adding the -latomic dependency
+handling directly in the CMakeLists.txt files of all those packages ?
+Ultimately, this should be the right thing to do, no ?
 
 Thomas
 -- 
