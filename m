@@ -1,42 +1,58 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 31 May 2019 22:43:27 +0200
-Subject: [Buildroot] [PATCH v4] package/dosfstools: introduce custom
- install routine
-In-Reply-To: <CAGt4E5v_jOJrTdPTRbkyuQEEDGA6AyFfZN4jH+g=a_=eK8PSfQ@mail.gmail.com>
-References: <20190531194159.2566-1-mmayer@broadcom.com>
- <20190531200625.GB3407@scaer>
- <CAGt4E5v_jOJrTdPTRbkyuQEEDGA6AyFfZN4jH+g=a_=eK8PSfQ@mail.gmail.com>
-Message-ID: <20190531204327.GC3407@scaer>
+Date: Fri, 31 May 2019 22:49:39 +0200
+Subject: [Buildroot] [PATCH v2] autobuild-run: fix copy_if_exists()
+In-Reply-To: <20190530103305.37919-1-giulio.benetti@micronovasrl.com>
+References: <20190530103305.37919-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190531204939.GD3407@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Markus, All,
+Giulio, All,
 
-On 2019-05-31 13:35 -0700, Markus Mayer spake thusly:
-> On Fri, 31 May 2019 at 13:06, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2019-05-31 12:41 -0700, Markus Mayer spake thusly:
-> > > We can't use dosfstools' install target, because it'll install *all*
-> > > binaries, even the disabled ones. Also, we can't just delete dosfstools
-> > > binaries from the target directory after installing them, because other
-> > > packages (specifically Busybox) may provide tools of the same name, and
-> > If busybox installs applets also installed by dosfstools, then we also
-> > want to expand the exsiting list to also cover dosfstools:
-> >     https://git.buildroot.org/buildroot/tree/package/busybox/busybox.mk#n24
-> > Can you send a (separate) patch doing so?
-> Will do.
+On 2019-05-30 12:33 +0200, Giulio Benetti spake thusly:
+> Under copy_if_exists() 'dir' variable is referenced as 'd' leading to
+> exception.
+> 
+> Substitute 'd' and 'dir' with 'directory' in copy_if_exists(), since
+> 'dir' is a keyword in Python.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 
-Great, thanks.
-
-> I think busybox is the only other package. Maybe my wording was a bit
-> too general.
-
-Ok, sounds sane. Thanks for the feedback!
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+> Changes:
+> V1->V2: change 'dir' and 'd' into 'directory'
+> 
+>  scripts/autobuild-run | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+> index 56bab25..8d58a83 100755
+> --- a/scripts/autobuild-run
+> +++ b/scripts/autobuild-run
+> @@ -488,9 +488,9 @@ def send_results(result, **kwargs):
+>      shutil.copyfile(os.path.join(outputdir, "branch"),
+>                      os.path.join(resultdir, "branch"))
+>  
+> -    def copy_if_exists(dir, src, dst=None):
+> -        if os.path.exists(os.path.join(outputdir, d, src)):
+> -            shutil.copyfile(os.path.join(outputdir, d, src),
+> +    def copy_if_exists(directory, src, dst=None):
+> +        if os.path.exists(os.path.join(outputdir, directory, src)):
+> +            shutil.copyfile(os.path.join(outputdir, directory, src),
+>                              os.path.join(resultdir, src if dst is None else dst))
+>  
+>      copy_if_exists("build", "build-time.log")
+> -- 
+> 2.17.1
+> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
