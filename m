@@ -1,59 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 30 May 2019 12:37:04 +0200
-Subject: [Buildroot] [git commit] package/nano: bump to version 4.2
-Message-ID: <20190602201236.57B3F81354@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 31 May 2019 22:59:52 +0200
+Subject: [Buildroot] [git commit] support/gnuconfig/config.sub: add C-SKY
+ support
+Message-ID: <20190602201237.682EB801CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92aea4221050e01131634faee562b2753f75361c
+commit: https://git.buildroot.net/buildroot/commit/?id=2213636675b061732da0dbcfc80b55cdcd310666
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Use the usual enable/disable options for the libmagic optional
-dependency.
+Modify config.sub so that it knows about the C-SKY
+architecture. Without this, all autotools projects fail to build on
+C-SKY.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+[Thomas: improved commit log]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nano/nano.hash | 4 ++--
- package/nano/nano.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ support/gnuconfig/config.sub | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/nano/nano.hash b/package/nano/nano.hash
-index eae648d16e..b7fd6a6cfd 100644
---- a/package/nano/nano.hash
-+++ b/package/nano/nano.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.nano-editor.org/dist/v3/nano-3.2.tar.xz.asc
-+# https://www.nano-editor.org/dist/v4/nano-4.2.tar.xz.asc
- # using key BFD009061E535052AD0DF2150D28D4D2A0ACE884
--sha256 d12773af3589994b2e4982c5792b07c6240da5b86c5aef2103ab13b401fe6349  nano-3.2.tar.xz
-+sha256 1143defce62e391b241252ffdb6e5c1ded56cfe26d46ee81b796abe0ccc45df9  nano-4.2.tar.xz
- sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/nano/nano.mk b/package/nano/nano.mk
-index 206d210a16..8a315154d2 100644
---- a/package/nano/nano.mk
-+++ b/package/nano/nano.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NANO_VERSION_MAJOR = 3
-+NANO_VERSION_MAJOR = 4
- NANO_VERSION = $(NANO_VERSION_MAJOR).2
- NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
- NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
-@@ -24,8 +24,9 @@ endif
- 
- ifeq ($(BR2_PACKAGE_FILE),y)
- NANO_DEPENDENCIES += file
-+NANO_CONF_OPTS += --enable-libmagic
- else
--NANO_CONF_ENV += ac_cv_lib_magic_magic_open=no
-+NANO_CONF_OPTS += --disable-libmagic
- endif
- 
- ifeq ($(BR2_PACKAGE_NANO_TINY),y)
+diff --git a/support/gnuconfig/config.sub b/support/gnuconfig/config.sub
+index 6d86a1e2f7..45dd0a7d04 100755
+--- a/support/gnuconfig/config.sub
++++ b/support/gnuconfig/config.sub
+@@ -254,6 +254,7 @@ case $basic_machine in
+ 	| arc | arceb \
+ 	| arm | arm[bl]e | arme[lb] | armv[2-8] | armv[3-8][lb] | armv7[arm] \
+ 	| avr | avr32 \
++	| csky \
+ 	| ba \
+ 	| be32 | be64 \
+ 	| bfin \
+@@ -376,6 +377,7 @@ case $basic_machine in
+ 	| alphapca5[67]-* | alpha64pca5[67]-* | arc-* | arceb-* \
+ 	| arm-*  | armbe-* | armle-* | armeb-* | armv*-* \
+ 	| avr-* | avr32-* \
++	| csky-* \
+ 	| ba-* \
+ 	| be32-* | be64-* \
+ 	| bfin-* | bs2000-* \
