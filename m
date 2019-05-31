@@ -1,59 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 10:27:59 +0200
-Subject: [Buildroot] [git commit] package/ell: fix build with uclibc
-Message-ID: <20190602201237.47C1B81354@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 31 May 2019 22:59:57 +0200
+Subject: [Buildroot] [git commit] arch/csky: move GCC_TARGET_CPU calculation
+ to arch.mk.csky
+Message-ID: <20190602201237.7FA448EDA8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1bb7f78bfc1503e5388648b1ae8022c3378325bd
+commit: https://git.buildroot.net/buildroot/commit/?id=d26bd58502f024927755950c0ba3f880ca1b50a5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/444c9deb728fb041e560d940145f96cc4f455080
+Calculating GCC_TARGET_CPU requires combining multiple flags, which
+isn't very nicely expressed in Config.in, so let's move this into
+arch.mk.csky, similarly to what is done in arch.mk.riscv.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Thomas: rework commit log]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../ell/0001-ell-ecc.h-fix-build-with-uclibc.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ arch/Config.in.csky | 11 -----------
+ arch/arch.mk.csky   | 24 ++++++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 11 deletions(-)
 
-diff --git a/package/ell/0001-ell-ecc.h-fix-build-with-uclibc.patch b/package/ell/0001-ell-ecc.h-fix-build-with-uclibc.patch
+diff --git a/arch/Config.in.csky b/arch/Config.in.csky
+index 420e831c21..a9d6548d8e 100644
+--- a/arch/Config.in.csky
++++ b/arch/Config.in.csky
+@@ -33,17 +33,6 @@ config BR2_ARCH
+ config BR2_ENDIAN
+ 	default "LITTLE"
+ 
+-config BR2_GCC_TARGET_CPU
+-	default "ck610"		if (BR2_ck610 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+-	default "ck807"		if (BR2_ck807 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+-	default "ck807e"	if (BR2_ck807 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+-	default "ck807f"	if (BR2_ck807 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
+-	default "ck807ef"	if (BR2_ck807 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+-	default "ck810"		if (BR2_ck810 && !BR2_CSKY_FPU && !BR2_CSKY_DSP)
+-	default "ck810e"	if (BR2_ck810 && !BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+-	default "ck810f"	if (BR2_ck810 &&  BR2_CSKY_FPU && !BR2_CSKY_DSP)
+-	default "ck810ef"	if (BR2_ck810 &&  BR2_CSKY_FPU &&  BR2_CSKY_DSP)
+-
+ config BR2_READELF_ARCH_NAME
+ 	default "CSKY"
+ 
+diff --git a/arch/arch.mk.csky b/arch/arch.mk.csky
 new file mode 100644
-index 0000000000..f64e3d9a87
+index 0000000000..a39fbd43c2
 --- /dev/null
-+++ b/package/ell/0001-ell-ecc.h-fix-build-with-uclibc.patch
-@@ -0,0 +1,31 @@
-+From 3ca3044859f40d7c595daf0a93393352e4999fb7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Thu, 30 May 2019 23:46:27 +0200
-+Subject: [PATCH] ell/ecc.h: fix build with uclibc
++++ b/arch/arch.mk.csky
+@@ -0,0 +1,24 @@
++#
++# Configure the GCC_TARGET_ARCH variable and append the
++# appropriate C-SKY ISA extensions.
++#
 +
-+ssize_t is defined in sys/types.h
++ifeq ($(BR2_csky),y)
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/444c9deb728fb041e560d940145f96cc4f455080
++ifeq ($(BR2_ck610),y)
++GCC_TARGET_CPU := ck610
++else ifeq ($(BR2_ck807),y)
++GCC_TARGET_CPU := ck807
++else ifeq ($(BR2_ck810),y)
++GCC_TARGET_CPU := ck810
++endif
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ ell/ecc.h | 2 ++
-+ 1 file changed, 2 insertions(+)
++ifeq ($(BR2_CSKY_DSP),y)
++GCC_TARGET_CPU := $(GCC_TARGET_CPU)e
++endif
 +
-+diff --git a/ell/ecc.h b/ell/ecc.h
-+index 26a5889..65c49e8 100644
-+--- a/ell/ecc.h
-++++ b/ell/ecc.h
-+@@ -27,6 +27,8 @@
-+ extern "C" {
-+ #endif
-+ 
-++#include <sys/types.h> // for ssize_t
-++
-+ #define L_ECC_MAX_DIGITS 6
-+ #define L_ECC_SCALAR_MAX_BYTES		L_ECC_MAX_DIGITS * 8
-+ #define L_ECC_POINT_MAX_BYTES		L_ECC_SCALAR_MAX_BYTES * 2
-+-- 
-+2.20.1
++ifeq ($(BR2_CSKY_FPU),y)
++GCC_TARGET_CPU := $(GCC_TARGET_CPU)f
++endif
 +
++endif
