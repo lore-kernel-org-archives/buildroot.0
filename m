@@ -1,180 +1,87 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 18 May 2019 22:56:16 +0200
-Subject: [Buildroot] [git commit] package/skeleton-init-openrc: new package
-Message-ID: <20190602201234.7C2FD81354@busybox.osuosl.org>
+Date: Fri, 31 May 2019 23:00:26 +0200
+Subject: [Buildroot] [git commit] package/gdb: add C-SKY specific version
+Message-ID: <20190602201237.CD9AD81354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a840e485d174c74bf2e4cd81ad48e184992cd3db
+commit: https://git.buildroot.net/buildroot/commit/?id=540354532c8263c4a953fce383a8413cc53c50eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This basic skeleton is similar to skeleton-init-sysv.
-All links in /var are same as in skeleton-init-sysv to be compatible
-with current default filesystem scheme.
+Add gdb build for C-SKY Architecture:
 
-Exceptions:
+ - Support host-gdb
+ - Support gdbserver for target
 
-* /dev/shm and /dev/pts dirs were removed, since they are created by
-  openrc devfs service
-* /etc/fstab does not need /dev/shm, /dev/pts and /sys entries
-  becuse they are mounted by devfs and sysfs services respectively
-
-Signed-off-by: Micha?? ??yszczek <michal.lyszczek@bofc.pl>
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                         |  1 +
- package/Config.in                                  |  1 +
- package/skeleton-init-openrc/Config.in             |  7 +++++++
- .../skeleton-init-openrc/skeleton-init-openrc.mk   | 22 ++++++++++++++++++++++
- package/skeleton-init-openrc/skeleton/dev/log      |  1 +
- package/skeleton-init-openrc/skeleton/etc/fstab    |  3 +++
- package/skeleton-init-openrc/skeleton/var/cache    |  1 +
- package/skeleton-init-openrc/skeleton/var/lib/misc |  1 +
- package/skeleton-init-openrc/skeleton/var/lock     |  1 +
- package/skeleton-init-openrc/skeleton/var/log      |  1 +
- package/skeleton-init-openrc/skeleton/var/run      |  1 +
- package/skeleton-init-openrc/skeleton/var/spool    |  1 +
- package/skeleton-init-openrc/skeleton/var/tmp      |  1 +
- 13 files changed, 42 insertions(+)
+ package/gdb/Config.in      | 1 +
+ package/gdb/Config.in.host | 2 ++
+ package/gdb/gdb.hash       | 3 +++
+ package/gdb/gdb.mk         | 6 ++++++
+ 4 files changed, 12 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3b5d2faae2..59b47e38fe 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1616,6 +1616,7 @@ F:	board/pine64/rock64
- F:	configs/rock64_defconfig
- F:	configs/socrates_cyclone5_defconfig
- F:	package/openrc/
-+F:	package/skeleton-init-openrc/
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index 0c3465d145..ab3d2157b6 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -57,6 +57,7 @@ config BR2_PACKAGE_GDB_DEBUGGER
+ 	bool "full debugger"
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_sh
++	depends on !BR2_csky
+ 	select BR2_PACKAGE_NCURSES
  
- N:	Michel Stempin <michel.stempin@wanadoo.fr>
- F:	board/licheepi/
-diff --git a/package/Config.in b/package/Config.in
-index ff07dce000..e5b26dd33f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -5,6 +5,7 @@ menu "Target packages"
- 	source "package/skeleton-custom/Config.in"
- 	source "package/skeleton-init-common/Config.in"
- 	source "package/skeleton-init-none/Config.in"
-+	source "package/skeleton-init-openrc/Config.in"
- 	source "package/skeleton-init-systemd/Config.in"
- 	source "package/skeleton-init-sysv/Config.in"
+ comment "full gdb on target needs a toolchain w/ wchar"
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 9fdb0548b6..7ce26c1628 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -48,6 +48,7 @@ choice
+ 	prompt "GDB debugger Version"
+ 	default BR2_GDB_VERSION_8_1
+ 	depends on !BR2_arc
++	depends on !BR2_csky
+ 	help
+ 	  Select the version of gdb you wish to use.
  
-diff --git a/package/skeleton-init-openrc/Config.in b/package/skeleton-init-openrc/Config.in
-new file mode 100644
-index 0000000000..8f4dd17ebd
---- /dev/null
-+++ b/package/skeleton-init-openrc/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_SKELETON_INIT_OPENRC
-+	bool
-+	select BR2_PACKAGE_HAS_SKELETON
-+	select BR2_PACKAGE_SKELETON_INIT_COMMON
+@@ -95,6 +96,7 @@ config BR2_PACKAGE_GDB_NEEDS_CXX11
+ config BR2_GDB_VERSION
+ 	string
+ 	default "arc-2019.03-rc1-gdb" if BR2_arc
++	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
+ 	default "7.12.1"   if BR2_GDB_VERSION_7_12
+ 	default "8.0.1"    if BR2_GDB_VERSION_8_0
+ 	default "8.1.1"    if BR2_GDB_VERSION_8_1 || !BR2_PACKAGE_HOST_GDB
+diff --git a/package/gdb/gdb.hash b/package/gdb/gdb.hash
+index 9b7517eabf..f508b6bffc 100644
+--- a/package/gdb/gdb.hash
++++ b/package/gdb/gdb.hash
+@@ -6,3 +6,6 @@ sha512  2aa81cfd389bb48c35d7d9f95cc10e88b4f7ad4597bdde0f8f1fd312f60f10d9fb2cc6e5
+ 
+ # Locally calculated (fetched from Github)
+ sha512  bc6dcd92991222418795c49b8fc13df7354b34ba7a7f1e4214b108776da0dad730259aa4611086694bc9291126f5182b449bbc22409aeadc44b89e7a42fb4e00 	gdb-arc-2019.03-rc1-gdb.tar.gz
 +
-+config BR2_PACKAGE_PROVIDES_SKELETON
-+	default "skeleton-init-openrc" if BR2_PACKAGE_SKELETON_INIT_OPENRC
-diff --git a/package/skeleton-init-openrc/skeleton-init-openrc.mk b/package/skeleton-init-openrc/skeleton-init-openrc.mk
-new file mode 100644
-index 0000000000..5ee2192093
---- /dev/null
-+++ b/package/skeleton-init-openrc/skeleton-init-openrc.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# skeleton-init-openrc
-+#
-+################################################################################
++# Locally calculated (fetched from https://github.com/c-sky/binutils-gdb)
++sha512  c421e1f3c0d6cfb3c04544573c0c4b0075c8d8e3d563c6c234fcc1e4c2167ab203d1e57aec3b58abd348dc46f8cf9b47b753d3a43dba3ea970c9c9a6bd78c07b	gdb-4ecb98fbc2f94dbe01b69384afbc515107de73df.tar.gz
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index a926961372..46d745a897 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -14,6 +14,12 @@ GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
+ GDB_FROM_GIT = y
+ endif
+ 
++ifeq ($(BR2_csky),y)
++GDB_SITE = $(call github,c-sky,binutils-gdb,$(GDB_VERSION))
++GDB_SOURCE = gdb-$(GDB_VERSION).tar.gz
++GDB_FROM_GIT = y
++endif
 +
-+# The skeleton can't depend on the toolchain, since all packages depends on the
-+# skeleton and the toolchain is a target package, as is skeleton.
-+# Hence, skeleton would depends on the toolchain and the toolchain would depend
-+# on skeleton.
-+SKELETON_INIT_OPENRC_ADD_TOOLCHAIN_DEPENDENCY = NO
-+SKELETON_INIT_OPENRC_ADD_SKELETON_DEPENDENCY = NO
-+
-+SKELETON_INIT_OPENRC_DEPENDENCIES = skeleton-init-common
-+
-+SKELETON_INIT_OPENRC_PROVIDES = skeleton
-+
-+define SKELETON_INIT_OPENRC_INSTALL_TARGET_CMDS
-+	$(call SYSTEM_RSYNC,$(SKELETON_INIT_OPENRC_PKGDIR)/skeleton,$(TARGET_DIR))
-+endef
-+
-+$(eval $(generic-package))
-diff --git a/package/skeleton-init-openrc/skeleton/dev/log b/package/skeleton-init-openrc/skeleton/dev/log
-new file mode 120000
-index 0000000000..d96b3b1cb8
---- /dev/null
-+++ b/package/skeleton-init-openrc/skeleton/dev/log
-@@ -0,0 +1 @@
-+../tmp/log
-\ No newline at end of file
-diff --git a/package/skeleton-init-openrc/skeleton/etc/fstab b/package/skeleton-init-openrc/skeleton/etc/fstab
-new file mode 100644
-index 0000000000..3ec96cf634
---- /dev/null
-+++ b/package/skeleton-init-openrc/skeleton/etc/fstab
-@@ -0,0 +1,3 @@
-+# <file system>	<mount pt>	<type>	<options>	<dump>	<pass>
-+tmpfs		/tmp		tmpfs	mode=1777	0	0
-+tmpfs		/run		tmpfs	mode=0755,nosuid,nodev	0	0
-diff --git a/package/skeleton-init-openrc/skeleton/var/cache b/package/skeleton-init-openrc/skeleton/var/cache
-new file mode 120000
-index 0000000000..1431b0e432
---- /dev/null
-+++ b/package/skeleton-init-openrc/skeleton/var/cache
-@@ -0,0 +1 @@
-+../tmp
-\ No newline at end of file
-diff --git a/package/skeleton-init-openrc/skeleton/var/lib/misc b/package/skeleton-init-openrc/skeleton/var/lib/misc
-new file mode 120000
-index 0000000000..f1fde8c107
---- /dev/null
-+++ b/package/skeleton-init-openrc/skeleton/var/lib/misc
-@@ -0,0 +1 @@
-+../../tmp
-\ No newline at end of file
-diff --git a/package/skeleton-init-openrc/skeleton/var/lock b/package/skeleton-init-openrc/skeleton/var/lock
-new file mode 120000
-index 0000000000..1431b0e432
---- /dev/null
-+++ b/package/skeleton-init-openrc/skeleton/var/lock
-@@ -0,0 +1 @@
-+../tmp
-\ No newline at end of file
-diff --git a/package/skeleton-init-openrc/skeleton/var/log b/package/skeleton-init-openrc/skeleton/var/log
-new file mode 120000
-index 0000000000..1431b0e432
---- /dev/null
-+++ b/package/skeleton-init-openrc/skeleton/var/log
-@@ -0,0 +1 @@
-+../tmp
-\ No newline at end of file
-diff --git a/package/skeleton-init-openrc/skeleton/var/run b/package/skeleton-init-openrc/skeleton/var/run
-new file mode 120000
-index 0000000000..84ba55b912
---- /dev/null
-+++ b/package/skeleton-init-openrc/skeleton/var/run
-@@ -0,0 +1 @@
-+../run
-\ No newline at end of file
-diff --git a/package/skeleton-init-openrc/skeleton/var/spool b/package/skeleton-init-openrc/skeleton/var/spool
-new file mode 120000
-index 0000000000..1431b0e432
---- /dev/null
-+++ b/package/skeleton-init-openrc/skeleton/var/spool
-@@ -0,0 +1 @@
-+../tmp
-\ No newline at end of file
-diff --git a/package/skeleton-init-openrc/skeleton/var/tmp b/package/skeleton-init-openrc/skeleton/var/tmp
-new file mode 120000
-index 0000000000..1431b0e432
---- /dev/null
-+++ b/package/skeleton-init-openrc/skeleton/var/tmp
-@@ -0,0 +1 @@
-+../tmp
-\ No newline at end of file
+ GDB_LICENSE = GPL-2.0+, LGPL-2.0+, GPL-3.0+, LGPL-3.0+
+ GDB_LICENSE_FILES = COPYING COPYING.LIB COPYING3 COPYING3.LIB
+ 
