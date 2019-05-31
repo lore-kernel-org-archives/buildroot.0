@@ -1,91 +1,94 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 31 May 2019 12:16:50 -0500
-Subject: [Buildroot] [PATCH 2/6] package/python-iptables: new package
+Date: Fri, 31 May 2019 12:16:53 -0500
+Subject: [Buildroot] [PATCH 5/6] package/python-txdbus: new package
 In-Reply-To: <20190531171654.17906-1-matthew.weber@rockwellcollins.com>
 References: <20190531171654.17906-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20190531171654.17906-2-matthew.weber@rockwellcollins.com>
+Message-ID: <20190531171654.17906-5-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package provides Python bindings for iptables.
+Implements a native Python implementation of DBus for Twisted.
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
 ---
- DEVELOPERS                                   |  1 +
- package/Config.in                            |  1 +
- package/python-iptables/Config.in            |  7 +++++++
- package/python-iptables/python-iptables.hash |  3 +++
- package/python-iptables/python-iptables.mk   | 12 ++++++++++++
- 5 files changed, 24 insertions(+)
- create mode 100644 package/python-iptables/Config.in
- create mode 100644 package/python-iptables/python-iptables.hash
- create mode 100644 package/python-iptables/python-iptables.mk
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/python-txdbus/Config.in          |  9 +++++++++
+ package/python-txdbus/python-txdbus.hash |  3 +++
+ package/python-txdbus/python-txdbus.mk   | 13 +++++++++++++
+ 5 files changed, 27 insertions(+)
+ create mode 100644 package/python-txdbus/Config.in
+ create mode 100644 package/python-txdbus/python-txdbus.hash
+ create mode 100644 package/python-txdbus/python-txdbus.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index ddab99c9de..0aa5b1754d 100644
+index b53e98259f..3ca48deff6 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1520,6 +1520,7 @@ F:	package/protobuf-c/
- F:	package/protobuf/
- F:	package/python-colorama/
- F:	package/python-flask-cors/
-+F:	package/python-iptables/
- F:	package/python-ipy/
- F:	package/python-posix-ipc/
+@@ -1527,6 +1527,7 @@ F:	package/python-pycairo/
  F:	package/python-pypcap/
+ F:	package/python-pyrex/
+ F:	package/python-tinyrpc/
++F:	package/python-txdbus/
+ F:	package/raptor/
+ F:	package/rcw/
+ F:	package/rng-tools/
 diff --git a/package/Config.in b/package/Config.in
-index 0c784eac0e..13b43ec0dd 100644
+index 0080cdd625..e68defd5f4 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -909,6 +909,7 @@ menu "External python modules"
- 	source "package/python-iowait/Config.in"
- 	source "package/python-ipaddr/Config.in"
- 	source "package/python-ipaddress/Config.in"
-+	source "package/python-iptables/Config.in"
- 	source "package/python-ipy/Config.in"
- 	source "package/python-ipython/Config.in"
- 	source "package/python-ipython-genutils/Config.in"
-diff --git a/package/python-iptables/Config.in b/package/python-iptables/Config.in
+@@ -1078,6 +1078,7 @@ menu "External python modules"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
++	source "package/python-txdbus/Config.in"
+ 	source "package/python-txtorcon/Config.in"
+ 	source "package/python-typepy/Config.in"
+ 	source "package/python-typing/Config.in"
+diff --git a/package/python-txdbus/Config.in b/package/python-txdbus/Config.in
 new file mode 100644
-index 0000000000..e55359963e
+index 0000000000..f38bbf93f0
 --- /dev/null
-+++ b/package/python-iptables/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_IPTABLES
-+	bool "python-iptables"
-+	select BR2_PACKAGE_IPTABLES # runtime dependency
++++ b/package/python-txdbus/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PYTHON_TXDBUS
++	bool "python-txdbus"
++	select BR2_PACKAGE_PYTHON_TWISTED # runtime
++	select BR2_PACKAGE_PYTHON_SIX # runtime
 +	help
-+	  Python bindings for iptables.
++	  A native Python implementation of the DBus protocol for
++	  Twisted applications.
 +
-+	  https://github.com/ldx/python-iptables
-diff --git a/package/python-iptables/python-iptables.hash b/package/python-iptables/python-iptables.hash
++	  https://github.com/cocagne/txdbus
+diff --git a/package/python-txdbus/python-txdbus.hash b/package/python-txdbus/python-txdbus.hash
 new file mode 100644
-index 0000000000..fffc38bae7
+index 0000000000..38760fada6
 --- /dev/null
-+++ b/package/python-iptables/python-iptables.hash
++++ b/package/python-txdbus/python-txdbus.hash
 @@ -0,0 +1,3 @@
-+# md5, sha256 from https://pypi.org/pypi/python-iptables/json
-+md5	3761a77c28ca0adc69f4e0e11af2f321  python-iptables-0.13.0.tar.gz
-+sha256	53b09257467681d7ea547cd3140eccd8c70effb3748af4b56ffed2f6011189e7  python-iptables-0.13.0.tar.gz
-diff --git a/package/python-iptables/python-iptables.mk b/package/python-iptables/python-iptables.mk
++# md5, sha256 from https://pypi.org/pypi/txdbus/json
++md5	f17c9204c7f56365c297ba68e6840900  txdbus-1.1.0.tar.gz
++sha256	6ff57f42c58d935956024b3c6824c1019db7d233d0af86aa0573b73b63b0817c  txdbus-1.1.0.tar.gz
+diff --git a/package/python-txdbus/python-txdbus.mk b/package/python-txdbus/python-txdbus.mk
 new file mode 100644
-index 0000000000..c431c457cc
+index 0000000000..08429baac8
 --- /dev/null
-+++ b/package/python-iptables/python-iptables.mk
-@@ -0,0 +1,12 @@
++++ b/package/python-txdbus/python-txdbus.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-iptables
++# python-txdbus
 +#
 +################################################################################
 +
-+PYTHON_IPTABLES_VERSION = 0.13.0
-+PYTHON_IPTABLES_SITE = https://files.pythonhosted.org/packages/6e/3a/866f5b1bccc6a4d94811f84304d700da14518ff55b80e08ff2241b3221bf
-+PYTHON_IPTABLES_SETUP_TYPE = setuptools
-+PYTHON_IPTABLES_LICENSE = Apache-2.0
++PYTHON_TXDBUS_VERSION = 1.1.0
++PYTHON_TXDBUS_SOURCE = txdbus-$(PYTHON_TXDBUS_VERSION).tar.gz
++PYTHON_TXDBUS_SITE = https://files.pythonhosted.org/packages/8e/7c/0b8726b82943ae99dc71b8fe20e2e0beb7feb4ef61105865021a64f08b16
++PYTHON_TXDBUS_SETUP_TYPE = setuptools
++PYTHON_TXDBUS_LICENSE = MIT
 +
 +$(eval $(python-package))
 -- 
