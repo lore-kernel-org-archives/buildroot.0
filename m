@@ -1,39 +1,49 @@
-From: Valerio Crini <vcrini@gmail.com>
-Date: Fri, 31 May 2019 09:58:00 +0200
-Subject: [Buildroot] [PATCH 1/1] support/scripts: add node modules to
- check-bin-arch's IGNORES list
-Message-ID: <20190531075800.7064-1-vcrini@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 31 May 2019 09:59:51 +0200
+Subject: [Buildroot] [PATCH] package/libopenssl: security bump to
+ version 1.1.1c
+In-Reply-To: <20190530214336.16338-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 30 May 2019 23:43:36 +0200")
+References: <20190530214336.16338-1-peter@korsgaard.com>
+Message-ID: <87lfynvytk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Valerio Crini <valerio.crini@docomodigital.com>
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Some node modules as stf ship compiled binaries causing check-bin-arch script
-to return errors.
+ > Fixes the following security issues:
+ > Prevent over long nonces in ChaCha20-Poly1305 (CVE-2019-1543)
 
-Signed-off-by: Valerio Crini <valerio.crini@docomodigital.com>
----
- support/scripts/check-bin-arch | 5 +++++
- 1 file changed, 5 insertions(+)
+ > ChaCha20-Poly1305 is an AEAD cipher, and requires a unique nonce input for
+ > every encryption operation.  RFC 7539 specifies that the nonce value (IV)
+ > should be 96 bits (12 bytes).  OpenSSL allows a variable nonce length and
+ > front pads the nonce with 0 bytes if it is less than 12 bytes.  However it
+ > also incorrectly allows a nonce to be set of up to 16 bytes.  In this case
+ > only the last 12 bytes are significant and any additional leading bytes are
+ > ignored.
 
-diff --git a/support/scripts/check-bin-arch b/support/scripts/check-bin-arch
-index 3449bd1aeb..a276b75b92 100755
---- a/support/scripts/check-bin-arch
-+++ b/support/scripts/check-bin-arch
-@@ -25,6 +25,11 @@ declare -a IGNORES=(
- 	# it for a different architecture (e.g. i386 grub on x86_64).
- 	"/lib/grub"
- 	"/usr/lib/grub"
-+
-+	# Skip files in /usr/lib/node_modules, since it is possible to have it
-+	# for a different architecture (e.g. stf module has some packages already
-+	# compiled for several architectures).
-+	"/usr/lib/node_modules"
- )
- 
- while getopts p:l:r:a:i: OPT ; do
+ > It is a requirement of using this cipher that nonce values are unique.
+ > Messages encrypted using a reused nonce value are susceptible to serious
+ > confidentiality and integrity attacks.  If an application changes the
+ > default nonce length to be longer than 12 bytes and then makes a change to
+ > the leading bytes of the nonce expecting the new value to be a new unique
+ > nonce then such an application could inadvertently encrypt messages with a
+ > reused nonce.
+
+ > Additionally the ignored bytes in a long nonce are not covered by the
+ > integrity guarantee of this cipher.  Any application that relies on the
+ > integrity of these ignored leading bytes of a long nonce may be further
+ > affected.  Any OpenSSL internal use of this cipher, including in SSL/TLS, is
+ > safe because no such use sets such a long nonce value.  However user
+ > applications that use this cipher directly and set a non-default nonce
+ > length to be longer than 12 bytes may be vulnerable.
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
