@@ -1,160 +1,74 @@
-From: Markus Mayer <mmayer@broadcom.com>
-Date: Fri, 31 May 2019 13:35:49 -0700
-Subject: [Buildroot] [PATCH v4] package/dosfstools: introduce custom
- install routine
-In-Reply-To: <20190531200625.GB3407@scaer>
-References: <20190531194159.2566-1-mmayer@broadcom.com>
- <20190531200625.GB3407@scaer>
-Message-ID: <CAGt4E5v_jOJrTdPTRbkyuQEEDGA6AyFfZN4jH+g=a_=eK8PSfQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 31 May 2019 22:36:39 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/grpc: fix build with uclibc on x86_64
+In-Reply-To: <20190530212906.3797-1-fontaine.fabrice@gmail.com>
+References: <20190530212906.3797-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190531223639.41441600@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 31 May 2019 at 13:06, Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Markus, All,
->
-> On 2019-05-31 12:41 -0700, Markus Mayer spake thusly:
-> > We can't use dosfstools' install target, because it'll install *all*
-> > binaries, even the disabled ones. Also, we can't just delete dosfstools
-> > binaries from the target directory after installing them, because other
-> > packages (specifically Busybox) may provide tools of the same name, and
->
-> If busybox installs applets also installed by dosfstools, then we also
-> want to expand the exsiting list to also cover dosfstools:
->     https://git.buildroot.org/buildroot/tree/package/busybox/busybox.mk#n24
->
-> Can you send a (separate) patch doing so?
+Hello,
 
-Will do.
+On Thu, 30 May 2019 23:29:06 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> As for "other packages", which one do you refer to? We want to ensure
-> that those other packages and dosfstools do not compete to install their
-> files, so we want to guarantee the ordering between those, so we need an
-> explicit dependency too.
+> On x86_64 if GPR_MUSL_LIBC_COMPAT is not set, grpc tries to link with
+> memcpy at GLIBC_2.2.5, see:
+> https://github.com/grpc/grpc/blob/618a3f561d4a93f263cca23abad086ed8f4d5e86/src/core/lib/gpr/wrap_memcpy.cc
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/20d6f2489a4e291a53bd514da66105eb607e1014
 
-I think busybox is the only other package. Maybe my wording was a bit
-too general.
+The downside of setting GPR_MUSL_LIBC_COMPAT is that it doesn't change
+just this memcpy() wrapping horror, it also impacts another part of the
+gRPC code in src/core/lib/gpr/cpu_linux.c:
 
-> However, I checked in Ubtuntu 19.04, and all the files referenced in
-> this patch ({mkfs,fsck).{fat,vfat,msdos} or mkdosfs or dosfsck) are only
-> provided by dosfstools. I also could not readily identify a package in
-> Buildroot that could provide them either...
+static void init_num_cpus() {
+#ifndef GPR_MUSL_LIBC_COMPAT
+  if (sched_getcpu() < 0) {
+    gpr_log(GPR_ERROR, "Error determining current CPU: %s\n", strerror(errno));
+    ncpus = 1;
+    return;
+  }
+#endif
+  /* This must be signed. sysconf returns -1 when the number cannot be
+     determined */
+  ncpus = static_cast<int>(sysconf(_SC_NPROCESSORS_CONF));
+  if (ncpus < 1) {
+    gpr_log(GPR_ERROR, "Cannot determine number of CPUs: assuming 1");
+    ncpus = 1;
+  }
+}
 
-We have:
+unsigned gpr_cpu_current_cpu(void) {
+#ifdef GPR_MUSL_LIBC_COMPAT
+  // sched_getcpu() is undefined on musl
+  return 0;
+#else
+  if (gpr_cpu_num_cores() == 1) {
+    return 0;
+  }
+  int cpu = sched_getcpu();
+  if (cpu < 0) {
+    gpr_log(GPR_ERROR, "Error determining current CPU: %s\n", strerror(errno));
+    return 0;
+  }
+  if (static_cast<unsigned>(cpu) >= gpr_cpu_num_cores()) {
+    gpr_log(GPR_ERROR, "Cannot handle hot-plugged CPUs");
+    return 0;
+  }
+  return static_cast<unsigned>(cpu);
+#endif
+}
 
-$ grep DOS build/busybox-1.30.1/.config
-CONFIG_DOS2UNIX=y
-CONFIG_UNIX2DOS=y
-CONFIG_MKDOSFS=y
+I don't know how much this matters, but it's worth considering.
 
-That results in:
-
-[...]
--rwxr-xr-x 1 mmayer mmayer  58088 May 31 12:37 fsck.fat
-lrwxrwxrwx 1 mmayer mmayer      8 May 31 12:37 fsck.vfat -> fsck.fat
-lrwxrwxrwx 1 mmayer mmayer      8 May 31 12:37 fsck.msdos -> fsck.fat
-lrwxrwxrwx 1 mmayer mmayer      8 May 31 12:37 dosfsck -> fsck.fat
-lrwxrwxrwx 1 mmayer mmayer     14 May 31 13:32 mkdosfs -> ../bin/busybox
-lrwxrwxrwx 1 mmayer mmayer     14 May 31 13:32 mkfs.vfat -> ../bin/busybox
-
-fsck.fat comes from dosfstools, but mkdosfs is provided by busybox.
-
-Regards,
--Markus
-
-> Regards,
-> Yann E. MORIN.
->
-> > we may end up deleting those instead.
-> >
-> > To avoid any issues, we create our own install routines, which only
-> > copy the enabled binaries into the target location.
-> >
-> > Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-> > ---
-> > Changes since v3:
-> > - use $(INSTALL) -D -m 0755 $(@D)/src ...
-> > - don't use post-install hooks
-> > - instead call install macros from custom install target
-> >
-> > Changes since v2:
-> > - use custom install routine that only copies the binaries we want
-> >
-> > Changes since v1:
-> > - don't bother removing man page files
-> > - use rsync instead of tar to copy files to the destination
-> >
-> >  package/dosfstools/dosfstools.mk | 34 +++++++++++++++++++++-----------
-> >  1 file changed, 22 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/package/dosfstools/dosfstools.mk b/package/dosfstools/dosfstools.mk
-> > index 6eb0851d0e23..cf2233e5819b 100644
-> > --- a/package/dosfstools/dosfstools.mk
-> > +++ b/package/dosfstools/dosfstools.mk
-> > @@ -24,26 +24,36 @@ DOSFSTOOLS_CONF_OPTS += LIBS="-liconv"
-> >  DOSFSTOOLS_DEPENDENCIES += libiconv
-> >  endif
-> >
-> > -ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),)
-> > -define DOSFSTOOLS_REMOVE_FATLABEL
-> > -     rm -f $(addprefix $(TARGET_DIR)/sbin/,dosfslabel fatlabel)
-> > +ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),y)
-> > +define DOSFSTOOLS_INSTALL_FATLABEL
-> > +     $(INSTALL) -D -m 0755 $(@D)/src/fatlabel $(TARGET_DIR)/sbin
-> > +     ln -sf fatlabel $(TARGET_DIR)/sbin/dosfslabel
-> >  endef
-> > -DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FATLABEL
-> >  endif
-> >
-> > -ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT),)
-> > -define DOSFSTOOLS_REMOVE_FSCK_FAT
-> > -     rm -f $(addprefix $(TARGET_DIR)/sbin/,fsck.fat dosfsck fsck.msdos fsck.vfat)
-> > +ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FSCK_FAT),y)
-> > +define DOSFSTOOLS_INSTALL_FSCK_FAT
-> > +     $(INSTALL) -D -m 0755 $(@D)/src/fsck.fat $(TARGET_DIR)/sbin
-> > +     ln -sf fsck.fat $(TARGET_DIR)/sbin/fsck.vfat
-> > +     ln -sf fsck.fat $(TARGET_DIR)/sbin/fsck.msdos
-> > +     ln -sf fsck.fat $(TARGET_DIR)/sbin/dosfsck
-> >  endef
-> > -DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_FSCK_FAT
-> >  endif
-> >
-> > -ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT),)
-> > -define DOSFSTOOLS_REMOVE_MKFS_FAT
-> > -     rm -f $(addprefix $(TARGET_DIR)/sbin/,mkfs.fat mkdosfs mkfs.msdos mkfs.vfat)
-> > +ifeq ($(BR2_PACKAGE_DOSFSTOOLS_MKFS_FAT),y)
-> > +define DOSFSTOOLS_INSTALL_MKFS_FAT
-> > +     $(INSTALL) -D -m 0755 $(@D)/src/mkfs.fat $(TARGET_DIR)/sbin
-> > +     ln -sf mkfs.fat $(TARGET_DIR)/sbin/mkdosfs
-> > +     ln -sf mkfs.fat $(TARGET_DIR)/sbin/mkfs.msdos
-> > +     ln -sf mkfs.fat $(TARGET_DIR)/sbin/mkfs.vfat
-> >  endef
-> > -DOSFSTOOLS_POST_INSTALL_TARGET_HOOKS += DOSFSTOOLS_REMOVE_MKFS_FAT
-> >  endif
-> >
-> > +define DOSFSTOOLS_INSTALL_TARGET_CMDS
-> > +     $(call DOSFSTOOLS_INSTALL_FATLABEL)
-> > +     $(call DOSFSTOOLS_INSTALL_FSCK_FAT)
-> > +     $(call DOSFSTOOLS_INSTALL_MKFS_FAT)
-> > +endef
-> > +
-> >  $(eval $(autotools-package))
-> >  $(eval $(host-autotools-package))
-> > --
-> > 2.17.1
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
