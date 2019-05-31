@@ -1,32 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 May 2019 16:25:00 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: add Mirza Krak to
+Date: Fri, 31 May 2019 16:25:05 +0200
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: add Mirza Krak to
  mender-artifact package
-Message-ID: <20190531142502.AD41581428@busybox.osuosl.org>
+In-Reply-To: <20190531123942.14217-1-mirza.krak@northern.tech>
+References: <20190531123942.14217-1-mirza.krak@northern.tech>
+Message-ID: <20190531162505.20aa109b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e00e1a8ba718aa969157e90d39f0e9ec8156f3ed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 31 May 2019 14:39:42 +0200
+Mirza Krak <mirza.krak@northern.tech> wrote:
 
-Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+> ---
+>  DEVELOPERS | 1 +
+>  1 file changed, 1 insertion(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 1149fcb508..e36f1c4109 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1633,6 +1633,7 @@ F:	package/shadowsocks-libev/
- 
- N:	Mirza Krak <mirza.krak@northern.tech>
- F:	package/mender/
-+F:	package/mender-artifact/
- 
- N:	Morgan Delestre <m.delestre@sinters.fr>
- F:	package/monkey/
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
