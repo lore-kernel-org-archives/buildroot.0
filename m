@@ -1,35 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 May 2019 23:00:42 +0200
-Subject: [Buildroot] [git commit] arch/csky: enable internal toolchain
- support
-Message-ID: <20190602201237.EA26981354@busybox.osuosl.org>
+Date: Fri, 31 May 2019 22:59:57 +0200
+Subject: [Buildroot] [git commit] package/Makefile: add C-SKY ABI variable
+ value
+Message-ID: <20190602201237.B221881354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6fe2fabdb87e114207f1cfb3ede32c137f3371f9
+commit: https://git.buildroot.net/buildroot/commit/?id=9f0e3ff8a09a9352a9772195f06d454b827a6aab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that we have support for C-SKY in gcc, binutils and glibc, we can
-use Buildroot to build a C-SKY toolchain.
+In preparation for adding support for the C-SKY architecture in the
+internal toolchain backend, we need to make sure that GNU_TARGET_NAME
+will contain the appropriate ABI, i.e abiv1 or abiv2 depending on the
+selected C-SKY core.
 
 Signed-off-by: Guo Ren <ren_guo@c-sky.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- arch/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/Makefile.in | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index d82803c828..db1199c6a2 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -77,7 +77,6 @@ config BR2_aarch64_be
+diff --git a/package/Makefile.in b/package/Makefile.in
+index dc818a2c18..f05b9cc3aa 100644
+--- a/package/Makefile.in
++++ b/package/Makefile.in
+@@ -70,6 +70,15 @@ ABI := $(ABI)hf
+ endif
+ endif
  
- config BR2_csky
- 	bool "csky"
--	select BR2_ARCH_HAS_NO_TOOLCHAIN_BUILDROOT
- 	select BR2_ARCH_HAS_MMU_MANDATORY
- 	help
- 	  csky is processor IP from china.
++# For C-SKY abiv1 & abiv2
++ifeq ($(BR2_csky),y)
++ifeq ($(BR2_ck610),y)
++ABI = abiv1
++else
++ABI = abiv2
++endif
++endif
++
+ # For FSL PowerPC there's SPE
+ ifeq ($(BR2_powerpc_SPE),y)
+ ABI = spe
