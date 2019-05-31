@@ -1,65 +1,92 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 00:43:11 +0200
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 19.0.5
-Message-ID: <20190602201237.3A08B801CD@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 31 May 2019 22:26:22 +0200
+Subject: [Buildroot] [git commit] package/opencv3: bump to version 3.4.6
+Message-ID: <20190602201237.566DA801CD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4554610bde56b0b7f140f6833fc44ebfb7cd7310
+commit: https://git.buildroot.net/buildroot/commit/?id=dc21a64386fba8b9dd6a0e7dbd2786d7a7ae82f3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+- Remove patch (already in version)
+- Update hash of license file (update in year:
+  https://github.com/opencv/opencv/commit/14d943f588474cee3cdb8f91e8f7fb7e8af7ad8b)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 22e3e1d28e..5cb34d36bc 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 19.0.3
-+MESA3D_HEADERS_VERSION = 19.0.5
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index d4d20c64bf..5a3eb1fa0f 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,7 +1,7 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2019-April/000510.html
--md5 d03bf14e42c0e54ebae5730712ccc408 mesa-19.0.3.tar.xz
--sha1 e028365fb8c7ae73bb0f01807c9137ec856c8e52 mesa-19.0.3.tar.xz
--sha256 f027244e38dc309a4c12db45ef79be81ab62c797a50a88d566e4edb6159fc4d5 mesa-19.0.3.tar.xz
--sha512 aa170577252aa4157e4bd49076bbf6207e4aada9fc9f23b255de332e816f9c63e5661f752f2f276dd43e232a8926866004e2a2ff9ad4b411330969c2a9a7ffa0 mesa-19.0.3.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2019-May/000515.html
-+md5 1509a3251d459fd8b6fadf9329669dc1  mesa-19.0.5.tar.xz
-+sha1 647352d5989d3ca9b5c83fe06ed1d84f341f6ad5  mesa-19.0.5.tar.xz
-+sha256 6aecb7f67c136768692fb3c33a54196186c6c4fcafab7973516a355e1a54f831  mesa-19.0.5.tar.xz
-+sha512 aecd5ee54ac0316d5e318dbea0abdc06f23e67d75d36eb82d6cf6a396c9e850e1ccf4fa8815f8c4097b6039ebb1524673189350cbfd4b766ce75ce17c26d9d8d  mesa-19.0.5.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 576e8f0a2d..630f181ddb 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ty-protobuf-fix-compilation-issue-on-s390.patch | 38 ----------------------
+ package/opencv3/opencv3.hash                       |  4 +--
+ package/opencv3/opencv3.mk                         |  2 +-
+ 3 files changed, 3 insertions(+), 41 deletions(-)
+
+diff --git a/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch b/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch
+deleted file mode 100644
+index 7743eae533..0000000000
+--- a/package/opencv3/0001-3rdparty-protobuf-fix-compilation-issue-on-s390.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From ac9ec55b37b2dd3b224144b4f20857a80719b750 Mon Sep 17 00:00:00 2001
+-From: Loic Devulder <ldevulder@suse.de>
+-Date: Fri, 28 Sep 2018 15:33:18 +0200
+-Subject: [PATCH] 3rdparty/protobuf: fix compilation issue on s390
+-
+-This commit fixes an issue while trying to compile
+-on s390x architecture.
+-
+-This is simply a backport of a fixe already applied
+-in official protobuf code:
+-- https://github.com/protocolbuffers/protobuf/pull/3955
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/opencv/opencv/commit/ac9ec55b37b2dd3b224144b4f20857a80719b750]
+----
+- .../protobuf/stubs/atomicops_internals_generic_gcc.h      | 8 ++++++++
+- 1 file changed, 8 insertions(+)
+-
+-diff --git a/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h b/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
+-index 0b0b06ce6cf..075c406abab 100644
+---- a/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
+-+++ b/3rdparty/protobuf/src/google/protobuf/stubs/atomicops_internals_generic_gcc.h
+-@@ -146,6 +146,14 @@ inline Atomic64 NoBarrier_Load(volatile const Atomic64* ptr) {
+-   return __atomic_load_n(ptr, __ATOMIC_RELAXED);
+- }
+- 
+-+inline Atomic64 Release_CompareAndSwap(volatile Atomic64* ptr,
+-+                                       Atomic64 old_value,
+-+                                       Atomic64 new_value) {
+-+  __atomic_compare_exchange_n(ptr, &old_value, new_value, false,
+-+                              __ATOMIC_RELEASE, __ATOMIC_ACQUIRE);
+-+  return old_value;
+-+}
+-+
+- #endif // defined(__LP64__)
+- 
+- }  // namespace internal
+diff --git a/package/opencv3/opencv3.hash b/package/opencv3/opencv3.hash
+index 34baf260d4..0b88b52da5 100644
+--- a/package/opencv3/opencv3.hash
++++ b/package/opencv3/opencv3.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 4eef85759d5450b183459ff216b4c0fa43e87a4f6aa92c8af649f89336f002ec  opencv3-3.4.3.tar.gz
+-sha256 fea311907cb6271b05ff5843b238e0f2edb6f204a3432975211030d20704b321  LICENSE
++sha256 e7d311ff97f376b8ee85112e2b536dbf4bdf1233673500175ed7cf21a0089f6d  opencv3-3.4.6.tar.gz
++sha256 488b640f88bc72a1f9bbb985bde8352ed8826b863f0b3e14f7038c44bf95d6bc  LICENSE
+diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
+index 292ce81432..8820b9da04 100644
+--- a/package/opencv3/opencv3.mk
++++ b/package/opencv3/opencv3.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 19.0.3
-+MESA3D_VERSION = 19.0.5
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+-OPENCV3_VERSION = 3.4.3
++OPENCV3_VERSION = 3.4.6
+ OPENCV3_SITE = $(call github,opencv,opencv,$(OPENCV3_VERSION))
+ OPENCV3_INSTALL_STAGING = YES
+ OPENCV3_LICENSE = BSD-3-Clause
