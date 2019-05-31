@@ -1,53 +1,72 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 10:00:52 +0200
-Subject: [Buildroot] [git commit] package/libnss: security bump to version
- 3.42.1
-Message-ID: <20190531080318.222D180FAB@busybox.osuosl.org>
+Date: Fri, 31 May 2019 09:58:59 +0200
+Subject: [Buildroot] [git commit] package/libopenssl: security bump to
+ version 1.1.1c
+Message-ID: <20190531080318.1D1F78E840@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8c0bff1b4f3f5d3c1cb3a848d65b0b11fb59b1f4
+commit: https://git.buildroot.net/buildroot/commit/?id=cfedfdee95df8878a15b4d3d11c5ca3b99481de1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes the following security issues:
 
-(3.41) CVE-2018-12404: Cache side-channel variant of the Bleichenbacher
-attack
+Prevent over long nonces in ChaCha20-Poly1305 (CVE-2019-1543)
 
-(3.42.1) CVE-2018-18508: Add additional null checks to several CMS functions
-to fix a rare CMS crash.  Thanks to Hanno B??ck and Damian Poddebniak for the
-discovery and fixes
+ChaCha20-Poly1305 is an AEAD cipher, and requires a unique nonce input for
+every encryption operation.  RFC 7539 specifies that the nonce value (IV)
+should be 96 bits (12 bytes).  OpenSSL allows a variable nonce length and
+front pads the nonce with 0 bytes if it is less than 12 bytes.  However it
+also incorrectly allows a nonce to be set of up to 16 bytes.  In this case
+only the last 12 bytes are significant and any additional leading bytes are
+ignored.
+
+It is a requirement of using this cipher that nonce values are unique.
+Messages encrypted using a reused nonce value are susceptible to serious
+confidentiality and integrity attacks.  If an application changes the
+default nonce length to be longer than 12 bytes and then makes a change to
+the leading bytes of the nonce expecting the new value to be a new unique
+nonce then such an application could inadvertently encrypt messages with a
+reused nonce.
+
+Additionally the ignored bytes in a long nonce are not covered by the
+integrity guarantee of this cipher.  Any application that relies on the
+integrity of these ignored leading bytes of a long nonce may be further
+affected.  Any OpenSSL internal use of this cipher, including in SSL/TLS, is
+safe because no such use sets such a long nonce value.  However user
+applications that use this cipher directly and set a non-default nonce
+length to be longer than 12 bytes may be vulnerable.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libopenssl/libopenssl.hash | 2 +-
+ package/libopenssl/libopenssl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index 9c3cefd818..1d600f14ef 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_39_RTM/src/SHA256SUMS
--sha256	6be64dd76f212415cc8bc34343ac1e7389048db4db9a023a84873c411dc5864b  nss-3.39.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_42_1_RTM/src/SHA256SUMS
-+sha256	087db37d38fd49dfd584dd2a8b5baa7fc88de7c9bd97c0c2d5be4abcafc61fc6  nss-3.42.1.tar.gz
- # Locally calculated
- sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 73c9b08fd2..89d614fe1c 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index 3a8192c46c..753f447abe 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+ # From https://www.openssl.org/source/openssl-1.1.1b.tar.gz.sha256
+-sha256	5c557b023230413dfb0756f3137a13e6d726838ccd1430888ad15bfb2b43ea4b	openssl-1.1.1b.tar.gz
++sha256	f6fb3079ad15076154eda9413fed42877d668e7069d9b87396d0804fdb3f4c90	openssl-1.1.1c.tar.gz
+ 
+ # License files
+ sha256	c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c	LICENSE
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index b7eff06c80..064b71bb2e 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.39
-+LIBNSS_VERSION = 3.42.1
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-LIBOPENSSL_VERSION = 1.1.1b
++LIBOPENSSL_VERSION = 1.1.1c
+ LIBOPENSSL_SITE = https://www.openssl.org/source
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = OpenSSL or SSLeay
