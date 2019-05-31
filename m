@@ -1,54 +1,68 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 31 May 2019 20:41:25 +0200
-Subject: [Buildroot] [PATCH] infra/pkg-kconfig: do not rely on package's
- .config as a timestamp
-In-Reply-To: <87y32nwonn.fsf@dell.be.48ers.dk>
-References: <20190530180909.14418-1-yann.morin.1998@free.fr>
- <87y32nwonn.fsf@dell.be.48ers.dk>
-Message-ID: <20190531184125.GC3173@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 31 May 2019 21:24:10 +0200
+Subject: [Buildroot] [PATCH v3] package/dosfstools: introduce custom
+ install routine
+In-Reply-To: <CAGt4E5ugVZfpy_pcrQ0ZSPm1y5xupb1NCmU+uzm7LzWsej92sQ@mail.gmail.com>
+References: <20190530234226.28013-1-mmayer@broadcom.com>
+ <20190531163457.7b5a978c@windsurf>
+ <CAGt4E5ugVZfpy_pcrQ0ZSPm1y5xupb1NCmU+uzm7LzWsej92sQ@mail.gmail.com>
+Message-ID: <20190531212410.28aca8d7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Hello Markus,
 
-On 2019-05-31 00:41 +0200, Peter Korsgaard spake thusly:
-> >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
-> 
->  > Since linux-4.19, the kernel's build system internally touches its
->  > .config file.
-> 
->  > However, we currently used that file as a timestamp to detect whether
->  > our kconfig fixups were to be (re)applied or not, which in turn is used
->  > to decide whether we should (re)build the package or not.
-> 
->  > But with latest kernel versions, this timestamp heuristic is now broken,
->  > and we always rebuild the kernel on subsequent builds.
-> 
->  > We fix that by introducing a spearate timestamp file of our own, which
->  > we know the kernel (or the kconfig-based packages, for that matters)
->  > does not use.
-> 
->  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
->  > Cc: Thomas De Schampheleire <patrickdepinguin@gmail.com>
->  > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->  > Cc: Arnout Vandecappelle <arnout@mind.be>
-> 
-> Committed, thanks.
+On Fri, 31 May 2019 08:32:54 -0700
+Markus Mayer <mmayer@broadcom.com> wrote:
 
-Thanks.
+> Right. Won't I have to define the install macros as empty if they are
+> supposed to be noops?
+> 
+> Like this:
+> 
+> ifeq ($(BR2_PACKAGE_DOSFSTOOLS_FATLABEL),y)
+> define DOSFSTOOLS_REMOVE_FATLABEL
+> ... install code here ...
+> endef
+> else
+> # empty declaration
+> define DOSFSTOOLS_REMOVE_FATLABEL
+> endef
+> endif
 
-This is also a candidate for 2019.02.x, on which it applies cleanly.
+No: undefined variables in make are automatically empty, so there's no
+need for this else condition. We use this principle all over Buildroot.
 
-Regards,
-Yann E. MORIN.
 
+> > define DOSFSTOOLS_INSTALL_TARGET_CMDS
+> >         $(foreach f,$(DOSFSTOOLS_INSTALL_FILES_y), \
+> >                 $(INSTALL) -D -m 0744 $(@D)/src/$(f) $(TARGET_DIR)/sbin/$(f)  
+> 
+> 0755 I imagine? :-)
+
+Yes, indeed, sorry.
+
+> >         $(foreach l,$(DOSFSTOOLS_INSTALL_SYMLINKS_y), \
+> >                 ln -s $(word 2,$(subst :, ,$(l))) $(TARGET_DIR)/sbin/$(word 1,$(subst :, ,$(l)))
+> >         )
+> > endef
+> >
+> > But admittedly, it becomes a bit hackish, and we don't do that anywhere
+> > in Buildroot today. So probably sticking to three
+> > DOSFSTOOLS_INSTALL_<foo> defines is better for now.  
+> 
+> This is an interesting approach. But I'll likely stick with the other one.
+
+Yes, as I said, I think it makes more sense to stick to the simpler
+approach for now.
+
+Thanks!
+
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
