@@ -1,29 +1,48 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 23:02:14 +0200
-Subject: [Buildroot] [PATCH v2 3/6] support/gnuconfig: update to
- 2019-05-28
-In-Reply-To: <20190531145734.280f09b8@windsurf> (Thomas Petazzoni's message of
- "Fri, 31 May 2019 14:57:34 +0200")
-References: <20190528203416.32261-1-thomas.petazzoni@bootlin.com>
- <20190528203416.32261-4-thomas.petazzoni@bootlin.com>
- <877ea844ag.fsf@dell.be.48ers.dk> <20190530143805.39abac31@windsurf>
- <87y32o2jel.fsf@dell.be.48ers.dk> <20190531145734.280f09b8@windsurf>
-Message-ID: <878sumwd61.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 31 May 2019 23:03:55 +0200
+Subject: [Buildroot] [PATCH V4 00/11] Update arch/csky for buildroot
+In-Reply-To: <1559284748-32011-1-git-send-email-guoren@kernel.org>
+References: <1559284748-32011-1-git-send-email-guoren@kernel.org>
+Message-ID: <20190531230355.7d8112bc@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello Guo,
 
-Hi,
+On Fri, 31 May 2019 14:38:57 +0800
+guoren at kernel.org wrote:
 
- > Overall, I am no longer so sure of the benefits vs. complexity
- > trade-off here. The above issues can be resolved for sure, but is it
- > worth it, compared to just having those two files in our tree ?
+> Guo Ren (11):
+>   arch/csky: Add arch.mk.csky for -mcpu=xxx
+>   arch/csky: Change DSP to VDSP for -mcpu
+>   arch/csky: Add ck860 supported
+>   arch/csky: Add FLOAT_ABI compiler options
+>   arch/csky: Add ABI variable for toolchain build
+>   package/binutils: Add C-SKY support
+>   package/gcc: Add C-SKY support
+>   package/gdb: Add C-SKY support
+>   package/glibc: Add C-SKY support
+>   configs/qemu_cskyXXX_virt: new defconfig
+>   arch/csky: Enable csky toolchain build
 
-Indeed, lets drop that for now.
+I have applied the entire series to the next branch, except patch
+"configs/qemu_cskyXXX_virt: new defconfig".
 
+I made some changes in several patches, especially in the commit logs.
+I'll reply to some of the individual patches when I did more than
+changing the commit log.
+
+I had to add one patch to package/linux-headers, so that only Linux
+kernel versions that have C-SKY support can be selected. This was
+missing in your series.
+
+Thanks a lot for this contribution!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
