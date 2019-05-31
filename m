@@ -1,51 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 31 May 2019 23:11:24 +0200
-Subject: [Buildroot] [PATCH] package/gpsd: Fix systemd service
- installation and paths
-In-Reply-To: <1559170961-14091-1-git-send-email-hancock@sedsystems.ca>
-References: <1559170961-14091-1-git-send-email-hancock@sedsystems.ca>
-Message-ID: <20190531231124.54d5a076@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 31 May 2019 23:40:40 +0200
+Subject: [Buildroot] [PATCH] package/netsurf: remove package
+In-Reply-To: <20190531081957.12781-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 31 May 2019 10:19:56 +0200")
+References: <20190531081957.12781-1-peter@korsgaard.com>
+Message-ID: <874l5awbdz.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Robert,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Thanks for this patch!
+ > The package causes a large amount of build failures, E.G.:
+ > http://autobuild.buildroot.net/results/eaf/eafc3e4be571d5ecee549a11530ac4e508f31782/
 
-On Wed, 29 May 2019 17:02:41 -0600
-Robert Hancock <hancock@sedsystems.ca> wrote:
+ > Caused by the custom build system mixing up host and target compiler flags.
+ > The original submitter seems no longer active in fixing the package, so lets
+ > drop it rather than releasing with a known broken package.
 
-> Fix several issues with systemd service file installation for gpsd:
-> 
-> -systemd support in the gpsd build was defaulting to enabled or not
-> based on whether the host system had systemd directories present. Set
-> this explicitly based on whether BR2_INIT_SYSTEMD is set.
-> 
-> -The installed systemd service files referenced paths in /usr/local when
-> the actual binaries are installed in /usr. Replace /usr/local with /usr
-> in the installed service files.
+ > If these issues gets fixed upstream then the package can be re-added.
 
-I have not looked into the gpsd build system, but I was wondering if
-there was a way to convince gpsd to produce those files with the right
-prefix (i.e /usr instead or /usr/local).
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-> -When BR2_PACKAGE_HAS_UDEV was enabled, all of the binaries were
-> re-installed again, along with the udev rules, as part of the
-> post-install hooks. Just choose between using install and udev-install
-> based on whether udev is enabled to avoid redundant re-installations.
+During discussions about this on IRC there was some doubts about
+removing the package this close to the release, so I have instead sent a
+patch disabling it for architectures where we pass ABI specific CFLAGS
+(as the build system ends up passing those to the host compiler as well)
+and marked this patch as superseeded.
 
-This should be part of a separate patch, because it's not a fix, just
-an unrelated optimization.
-
-But in fact, the systemd fixes could also be two separate patches.
-
-Thanks,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
