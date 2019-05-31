@@ -1,29 +1,46 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 31 May 2019 22:53:05 +0200
-Subject: [Buildroot] [PATCH] infra/pkg-kconfig: do not rely on package's
- .config as a timestamp
-In-Reply-To: <20190531184125.GC3173@scaer> (Yann E. MORIN's message of "Fri,
- 31 May 2019 20:41:25 +0200")
-References: <20190530180909.14418-1-yann.morin.1998@free.fr>
- <87y32nwonn.fsf@dell.be.48ers.dk> <20190531184125.GC3173@scaer>
-Message-ID: <87d0jywdla.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 31 May 2019 22:52:57 +0200
+Subject: [Buildroot] [git commit] package/openmpi: fix build failure due to
+ Gcc Bug 68485
+Message-ID: <20190531205323.42A8F8EA00@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=86752a62116488e90c8a4dd8c0d5595d48362ebb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Hi,
+Package openmpi manifests Microblaze Gcc Bug 68485 resulting in a build
+failure due to an Internal Compiler Error.
 
- >> Committed, thanks.
+As done for other packages in Buildroot work around this Gcc Bug by
+setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y.
 
- > Thanks.
+Fixes:
+http://autobuild.buildroot.net/results/8f3/8f334427e7475154d69469f8ee4efab6df80e403/
 
- > This is also a candidate for 2019.02.x, on which it applies cleanly.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/openmpi/openmpi.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Yes, I will sync 2019.02.x after I get 2019.05 out the door.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/openmpi/openmpi.mk b/package/openmpi/openmpi.mk
+index 8d9eafd631..b682e6e74e 100644
+--- a/package/openmpi/openmpi.mk
++++ b/package/openmpi/openmpi.mk
+@@ -38,4 +38,12 @@ else
+ OPENMPI_CONF_OPTS += --enable-mpi-fortran=no
+ endif
+ 
++OPENMPI_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
++OPENMPI_CFLAGS += -O0
++endif
++
++OPENMPI_CONF_ENV = CFLAGS="$(OPENMPI_CFLAGS)"
++
+ $(eval $(autotools-package))
