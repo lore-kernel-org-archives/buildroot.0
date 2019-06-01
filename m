@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 09:01:23 +0200
+Date: Sat, 1 Jun 2019 09:04:45 +0200
 Subject: [Buildroot] [PATCH] package/netsurf: disallow on archs
  requiring ABI specific CFLAGS
-In-Reply-To: <20190601073351.4bf75739@thl530.multi.box>
+In-Reply-To: <20190531214052.14297-1-peter@korsgaard.com>
 References: <20190531214052.14297-1-peter@korsgaard.com>
- <20190601073351.4bf75739@thl530.multi.box>
-Message-ID: <20190601090123.4ff808f5@windsurf>
+Message-ID: <20190601090445.44405bb9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,29 +13,36 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 1 Jun 2019 07:33:51 +0200
-Thomas Huth <huth@tuxfamily.org> wrote:
+On Fri, 31 May 2019 23:40:52 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> >  comment "netsurf needs a toolchain w/ dynamic library"
-> >  	depends on BR2_STATIC_LIBS
-> > +	depends on BR2_PACKAGE_NETSURF_ARCH_SUPPORTS  
+> Fixes:
+> http://autobuild.buildroot.net/results/67ef520d82ea529a9fe593d83a3aeae5f8b0ee5d/
+> http://autobuild.buildroot.net/results/eafc3e4be571d5ecee549a11530ac4e508f31782/
+> http://autobuild.buildroot.net/results/ba7f30833fef54162a82f4b336a72d6599594526/
 > 
-> First, the comment is now not accurate anymore. It should also say
-> something about the architectures where it is not available.
-
-No, we never put comments about architecture dependencies, because
-there's nothing the user can do about it.
-
-> Then the logic below says that PACKAGE_NETSURF depends on "!STATIC_LIBS
-> *AND* NETSURF_ARCH_SUPPORT". The dependency of the comment above is
-> inverted, so I think this rather should be:
+> The netsurf build system mixes up host and target CFLAGS, so it isn't
+> compatible with architectures where we pass ABI specicif compiler flags (in
+> TARGET_ABI).
 > 
->        depends on BR2_STATIC_LIBS || !BR2_PACKAGE_NETSURF_ARCH_SUPPORTS
+> Add a _ARCH_SUPPORTS kconfig variable matching the TARGET_ABI logic we have
+> in package/Makefile.in, and use it to disallow netsurf for those
+> architectures.
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-No, because we precisely don't want the comment to show up when we're
-on an architecture that cannot support the package.
+I understand the idea, but we need to realize it has some drawbacks:
 
-Best regards,
+ - If we add additional flags for some architecture, this will have to
+   be updated.
+
+ - If some custom flags are passed in BR2_TARGET_OPTIMIZATION, I would
+   assume it would also cause a build failure, no ?
+
+If we really can't remove the package, then I'm fine with this patch as
+a stop-gap measure. But I think removing the package is the sanest
+thing to do. If anything, removing the package might wake up the people
+using it so that they fix it.
 
 Thomas
 -- 
