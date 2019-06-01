@@ -1,39 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 09:23:52 +0200
-Subject: [Buildroot] [git commit branch/next] package/swig: enable PCRE
+Date: Sat, 1 Jun 2019 09:28:02 +0200
+Subject: [Buildroot] [PATCH for-next 2/3] package/swig: enable PCRE
  regex matching in host-swig
-Message-ID: <20190601072405.8D9918E2DF@busybox.osuosl.org>
+In-Reply-To: <20190529151655.7098-2-romain.naour@gmail.com>
+References: <20190529151655.7098-1-romain.naour@gmail.com>
+ <20190529151655.7098-2-romain.naour@gmail.com>
+Message-ID: <20190601092802.2b4102ac@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ad8ed6bc4b18a69adbf104e236564efeea66bba9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-The upcoming ogre package needs a host swig binary with PCRE
-regex support.
++Arnout, Yann, Peter in Cc.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/swig/swig.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Wed, 29 May 2019 17:16:54 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-diff --git a/package/swig/swig.mk b/package/swig/swig.mk
-index 157d3a39a6..892b0abe30 100644
---- a/package/swig/swig.mk
-+++ b/package/swig/swig.mk
-@@ -7,9 +7,9 @@
- SWIG_VERSION_MAJOR = 3.0
- SWIG_VERSION = $(SWIG_VERSION_MAJOR).12
- SWIG_SITE = http://downloads.sourceforge.net/project/swig/swig/swig-$(SWIG_VERSION)
--HOST_SWIG_DEPENDENCIES = host-bison
-+HOST_SWIG_DEPENDENCIES = host-bison host-pcre
- HOST_SWIG_CONF_OPTS = \
--	--without-pcre \
-+	--with-pcre \
- 	--disable-ccache \
- 	--without-octave
- SWIG_LICENSE = GPL-3.0+, BSD-2-Clause, BSD-3-Clause
+> The upcoming ogre package needs a host swig binary with PCRE
+> regex support.
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  package/swig/swig.mk | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+
+I never really like the addition of mandatory host package dependencies
+just for the sake of one use case. I was considering adding a hidden
+BR2_PACKAGE_HOST_PCRE option for this, but since pcre takes only 17
+seconds to build, maybe it was not worth the effort. So I've applied to
+next as-is, but I'd be interested to know what Arnout/Peter/Yann thing
+about adding a hidden BR2_PACKAGE_HOST_PCRE hidden option for that kind
+of situation. We had decided to not systematically add such options in
+all host packages, but that we could add some in a case-by-case basis.
+This case-by-case basis however will look "weird": ogre would have
+host-swig in its <pkg>_DEPENDENCIES, but in Config.in would select
+BR2_PACKAGE_HOST_PCRE and not BR2_PACKAGE_HOST_SWIG. This could start
+getting a bit clunky.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com													
