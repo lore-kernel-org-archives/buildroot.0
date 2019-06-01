@@ -1,37 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Jun 2019 09:37:20 +0200
-Subject: [Buildroot] [git commit] package/mender-artifact: needs host-xz
-Message-ID: <20190602201238.812ED811FB@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 1 Jun 2019 15:08:57 +0200
+Subject: [Buildroot] [git commit] package/luv: bump to version 1.29.1-1
+Message-ID: <20190602201238.5A62F81354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=852df15f317fed37c780e79a253907ee1241cad7
+commit: https://git.buildroot.net/buildroot/commit/?id=3dbe3d2bf018e3c4c107f35b39af8e1bf55c9a7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-host-xz (for lzma) is needed since version 3.0.0 and
-https://github.com/mendersoftware/mender-artifact/commit/8f1b79b03fded3a923d948878905ac5fefe59893
-
-Fixes:
- - http://autobuild.buildroot.org/results/c7cecf8946e9d4b4ae118b5f7597638c70decd3f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mender-artifact/mender-artifact.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/luv/luv.hash | 2 +-
+ package/luv/luv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
-index 7ca8e7280f..f8b364166f 100644
---- a/package/mender-artifact/mender-artifact.mk
-+++ b/package/mender-artifact/mender-artifact.mk
-@@ -22,6 +22,7 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	vendor/github.com/stretchr/testify/LICENSE \
- 	vendor/github.com/urfave/cli/LICENSE \
- 	vendor/github.com/sirupsen/logrus/LICENSE
-+HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
+diff --git a/package/luv/luv.hash b/package/luv/luv.hash
+index e6e47b0d5e..507299f9df 100644
+--- a/package/luv/luv.hash
++++ b/package/luv/luv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 d7eca8a9d7f126ed478fa76ce6a4e5d6e9f79309ddbceaae01060f4edc6bf242  luv-1.28.0-1.tar.gz
++sha256 430d5d8ad6b22e3e6284b8cdcfc7cea93e7459039bc12375a8a89bfbd034751c  luv-1.29.1-1.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/luv/luv.mk b/package/luv/luv.mk
+index 084311a761..d1f7b06e85 100644
+--- a/package/luv/luv.mk
++++ b/package/luv/luv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- HOST_MENDER_ARTIFACT_LDFLAGS = -X main.Version=$(HOST_MENDER_ARTIFACT_VERSION)
- 
+-LUV_VERSION = 1.28.0-1
++LUV_VERSION = 1.29.1-1
+ LUV_SITE = https://github.com/luvit/luv/releases/download/$(LUV_VERSION)
+ LUV_LICENSE = Apache-2.0
+ LUV_LICENSE_FILES = LICENSE.txt
