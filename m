@@ -1,30 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 23:08:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openjdk: needs host-gawk
-In-Reply-To: <20190601160620.15220-1-fontaine.fabrice@gmail.com>
-References: <20190601160620.15220-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190601230830.06d59211@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  1 Jun 2019 23:11:03 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/mender-artifact: needs host-xz
+Message-ID: <20190601211103.12210-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  1 Jun 2019 18:06:20 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+host-xz (for lzma) is needed since version 3.0.0 and
+https://github.com/mendersoftware/mender-artifact/commit/8f1b79b03fded3a923d948878905ac5fefe59893
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/bb1bb1cf8b58bf28039186866ed01521114acb72
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/openjdk/openjdk.mk | 1 +
->  1 file changed, 1 insertion(+)
+Fixes:
+ - http://autobuild.buildroot.org/results/c7cecf8946e9d4b4ae118b5f7597638c70decd3f
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mender-artifact/mender-artifact.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
+diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
+index 7ca8e7280f..f8b364166f 100644
+--- a/package/mender-artifact/mender-artifact.mk
++++ b/package/mender-artifact/mender-artifact.mk
+@@ -22,6 +22,7 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
+ 	vendor/github.com/stretchr/testify/LICENSE \
+ 	vendor/github.com/urfave/cli/LICENSE \
+ 	vendor/github.com/sirupsen/logrus/LICENSE
++HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
+ 
+ HOST_MENDER_ARTIFACT_LDFLAGS = -X main.Version=$(HOST_MENDER_ARTIFACT_VERSION)
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
