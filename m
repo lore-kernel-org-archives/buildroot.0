@@ -1,47 +1,102 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 14:11:27 +0200
-Subject: [Buildroot] [git commit] package/lapack: bump version to 3.8.0
-Message-ID: <20190602201238.20C32811FB@busybox.osuosl.org>
+Date: Sat, 1 Jun 2019 09:20:19 +0200
+Subject: [Buildroot] [git commit] package/zziplib: new package
+Message-ID: <20190602201238.00B6A81354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26d5558b5d93c15957bc78aea028ab30a4297558
+commit: https://git.buildroot.net/buildroot/commit/?id=7bd759514d8d69e7b7c146ba22632246c1866c18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: http://www.netlib.org/lapack/lapack-3.8.0.html
+Force the build system to use python2 interpreter.
 
-Added license hash, adjusted source tarball URL.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[Thomas: add docs/COPYING.MPL docs/copying.htm to the license files.]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/lapack/lapack.hash | 3 ++-
- package/lapack/lapack.mk   | 3 +--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/zziplib/Config.in    | 11 +++++++++++
+ package/zziplib/zziplib.hash |  5 +++++
+ package/zziplib/zziplib.mk   | 18 ++++++++++++++++++
+ 5 files changed, 36 insertions(+)
 
-diff --git a/package/lapack/lapack.hash b/package/lapack/lapack.hash
-index fd3feef554..395087e199 100644
---- a/package/lapack/lapack.hash
-+++ b/package/lapack/lapack.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256 f6c53fd9f56932f3ddb3d5e24c1c07e4cd9b3b08e7f89de9c867125eecc9a1c8  lapack-3.7.1.tgz
-+sha256 deb22cc4a6120bff72621155a9917f485f96ef8319ac074a7afbc68aab88bcf6  lapack-3.8.0.tar.gz
-+sha256 d56bd4441b999b80c88df04faf0d8b3d7d3b2bd781cf91242c4188e8a6d0f8be  LICENSE
-diff --git a/package/lapack/lapack.mk b/package/lapack/lapack.mk
-index 4e74bbd659..3b59214e4b 100644
---- a/package/lapack/lapack.mk
-+++ b/package/lapack/lapack.mk
-@@ -4,8 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 66dc2504ff..29fc91dabb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1949,6 +1949,7 @@ F:	package/tk/
+ F:	package/upower/
+ F:	package/waffle/
+ F:	package/xenomai/
++F:	package/zziplib/
+ F:	toolchain/toolchain-external/toolchain-external-arm-aarch64/
+ F:	toolchain/toolchain-external/toolchain-external-arm-aarch64-be/
+ F:	toolchain/toolchain-external/toolchain-external-arm-arm/
+diff --git a/package/Config.in b/package/Config.in
+index 6f1c4593e6..f61009410d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1189,6 +1189,7 @@ menu "Compression and decompression"
+ 	source "package/snappy/Config.in"
+ 	source "package/szip/Config.in"
+ 	source "package/zlib/Config.in"
++	source "package/zziplib/Config.in"
+ endmenu
  
--LAPACK_VERSION = 3.7.1
--LAPACK_SOURCE = lapack-$(LAPACK_VERSION).tgz
-+LAPACK_VERSION = 3.8.0
- LAPACK_LICENSE = BSD-3-Clause
- LAPACK_LICENSE_FILES = LICENSE
- LAPACK_SITE = http://www.netlib.org/lapack
+ menu "Crypto"
+diff --git a/package/zziplib/Config.in b/package/zziplib/Config.in
+new file mode 100644
+index 0000000000..6b55572a4d
+--- /dev/null
++++ b/package/zziplib/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_ZZIPLIB
++	bool "zziplib"
++	select BR2_PACKAGE_ZLIB
++	help
++	  The zziplib provides read access to zipped files in a
++	  zip-archive, using compression based solely on free algorithms
++	  provided by zlib. It also provides a functionality to overlay
++	  the archive filesystem with the filesystem of the operating
++	  system environment.
++
++	  http://zziplib.sourceforge.net
+diff --git a/package/zziplib/zziplib.hash b/package/zziplib/zziplib.hash
+new file mode 100644
+index 0000000000..1f6b55ec18
+--- /dev/null
++++ b/package/zziplib/zziplib.hash
+@@ -0,0 +1,5 @@
++# sha256 locally computed
++sha256 846246d7cdeee405d8d21e2922c6e97f55f24ecbe3b6dcf5778073a88f120544  zziplib-v0.13.69.tar.gz
++sha256 94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  docs/COPYING.LIB
++sha256 c2aa7d58cebd24cb877bbf11d6b13a4bb7cd08b9d7db5d3037ca06c46bf4cfd8  docs/COPYING.MPL
++sha256 1c6da11efe8c43ee853fe5b21501dd72b81831ae84d58ea376bddc0620a5c361  docs/copying.htm
+diff --git a/package/zziplib/zziplib.mk b/package/zziplib/zziplib.mk
+new file mode 100644
+index 0000000000..04129fdd97
+--- /dev/null
++++ b/package/zziplib/zziplib.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# zziplib
++#
++################################################################################
++
++ZZIPLIB_VERSION = v0.13.69
++ZZIPLIB_SITE = $(call github,gdraheim,zziplib,$(ZZIPLIB_VERSION))
++ZZIPLIB_LICENSE = LGPL-2.0+ or MPL-1.1
++ZZIPLIB_LICENSE_FILES = docs/COPYING.LIB docs/COPYING.MPL docs/copying.htm
++ZZIPLIB_INSTALL_STAGING = YES
++
++ZZIPLIB_DEPENDENCIES = host-pkgconf host-python zlib
++
++# zziplib is not python3 friendly, so force the python interpreter
++ZZIPLIB_CONF_OPTS = ac_cv_path_PYTHON=$(HOST_DIR)/bin/python2
++
++$(eval $(autotools-package))
