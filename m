@@ -1,70 +1,100 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  1 Jun 2019 12:20:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/opencv: fix build due to gcc bug
- 68485
-Message-ID: <20190601102032.28968-1-fontaine.fabrice@gmail.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Sat,  1 Jun 2019 12:34:49 +0200
+Subject: [Buildroot] [PATCH] package/alsa-lib: bump to version 1.1.9
+Message-ID: <20190601103449.32716-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Microblaze Gcc version <= 9.x the build fails due to gcc bug 68485:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. The bug show up when
-building opencv with optimization but not when building with -O0. To
-work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_68458=y, we force using
--O0.
+Drop patch 0002 which is included in the new version.
 
-Fixes:
- - http://autobuild.buildroot.org/results/17fff0f312ebd520ba3341976ba56fd8c85ee376
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/opencv/opencv.mk | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ ...onally-enable-libdl-in-AM_PATH_ALSA-.patch | 49 -------------------
+ package/alsa-lib/alsa-lib.hash                |  2 +-
+ package/alsa-lib/alsa-lib.mk                  |  2 +-
+ 3 files changed, 2 insertions(+), 51 deletions(-)
+ delete mode 100644 package/alsa-lib/0002-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch
 
-diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
-index ccc2d820da..4c15075fe0 100644
---- a/package/opencv/opencv.mk
-+++ b/package/opencv/opencv.mk
-@@ -10,6 +10,7 @@ OPENCV_INSTALL_STAGING = YES
- OPENCV_LICENSE = BSD-3-Clause
- OPENCV_LICENSE_FILES = LICENSE
- OPENCV_SUPPORTS_IN_SOURCE_BUILD = NO
-+OPENCV_CXXFLAGS = $(TARGET_CXXFLAGS)
+diff --git a/package/alsa-lib/0002-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch b/package/alsa-lib/0002-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch
+deleted file mode 100644
+index 3aab64e5e8..0000000000
+--- a/package/alsa-lib/0002-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch
++++ /dev/null
+@@ -1,49 +0,0 @@
+-From 2aba563bd077fda94fb9c2c33002ee0ac119b345 Mon Sep 17 00:00:00 2001
+-From: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+-Date: Fri, 13 Apr 2018 09:13:46 +0200
+-Subject: [PATCH] alsa-lib: conditionally enable libdl in AM_PATH_ALSA m4 macro
+-MIME-Version: 1.0
+-Content-Type: text/plain; charset=UTF-8
+-Content-Transfer-Encoding: 8bit
+-
+-The AM_PATH_ALSA macro in utils/alsa.m4 unconditionally uses -ldl. This
+-breaks compilation of alsa-utils (and probably other packages using this
+-macro) for targets that do not support dynamic loading, such as for
+-Blackfin FLAT binaries.
+-
+-This patch updates the macro to check if dlopen is available, and use that
+-result to conditionally add -ldl to the list of libraries.
+-
+-Signed-off-by: Thomas De Schampheleire <thomas.de.schampheleire@gmail.com>
+-[J?rg: update for 1.1.6]
+-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+-Upstream: http://mailman.alsa-project.org/pipermail/alsa-devel/2018-November/141377.html
+----
+- utils/alsa.m4 | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/utils/alsa.m4 b/utils/alsa.m4
+-index e12310df..a5c5a292 100644
+---- a/utils/alsa.m4
+-+++ b/utils/alsa.m4
+-@@ -44,6 +44,8 @@ if test "$alsa_inc_prefix" != "" ; then
+- fi
+- AC_MSG_RESULT($ALSA_CFLAGS)
+- 
+-+AC_CHECK_LIB(c, dlopen, LIBDL="", [AC_CHECK_LIB(dl, dlopen, LIBDL="-ldl")])
+-+
+- dnl add any special lib dirs
+- AC_MSG_CHECKING(for ALSA LDFLAGS)
+- if test "$alsa_prefix" != "" ; then
+-@@ -52,7 +54,7 @@ if test "$alsa_prefix" != "" ; then
+- fi
+- 
+- dnl add the alsa library
+--ALSA_LIBS="$ALSA_LIBS -lasound -lm -ldl -lpthread"
+-+ALSA_LIBS="$ALSA_LIBS -lasound -lm $LIBDL -lpthread"
+- LIBS="$ALSA_LIBS $LIBS"
+- AC_MSG_RESULT($ALSA_LIBS)
+- 
+--- 
+-2.14.3
+-
+diff --git a/package/alsa-lib/alsa-lib.hash b/package/alsa-lib/alsa-lib.hash
+index 4373a2a592..54b2a27ddf 100644
+--- a/package/alsa-lib/alsa-lib.hash
++++ b/package/alsa-lib/alsa-lib.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 9d6000b882a3b2df56300521225d69717be6741b71269e488bb20a20783bdc09  alsa-lib-1.1.7.tar.bz2
++sha256 488373aef5396682f3a411a6d064ae0ad196b9c96269d0bb912fbdeec94b994b  alsa-lib-1.1.9.tar.bz2
+ sha256 32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+ sha256 bfe16cf823bcff261fc6a062c07ee96660e3c39678f42f39a788a68dbc234ced  aserver/COPYING
+diff --git a/package/alsa-lib/alsa-lib.mk b/package/alsa-lib/alsa-lib.mk
+index 9de45d2089..fecf7d7cfa 100644
+--- a/package/alsa-lib/alsa-lib.mk
++++ b/package/alsa-lib/alsa-lib.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # OpenCV component options
- OPENCV_CONF_OPTS += \
-@@ -166,6 +167,10 @@ OPENCV_CONF_OPTS += \
- 
- OPENCV_DEPENDENCIES += zlib
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
-+OPENCV_CXXFLAGS += -O0
-+endif
-+
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_FFMPEG),y)
- OPENCV_CONF_OPTS += -DWITH_FFMPEG=ON
- OPENCV_DEPENDENCIES += ffmpeg bzip2
-@@ -195,8 +200,8 @@ OPENCV_CONF_OPTS += -DWITH_GTK=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_OPENCV_WITH_JASPER),y)
--OPENCV_CONF_OPTS += -DWITH_JASPER=ON \
--	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -D__STDC_LIMIT_MACROS"
-+OPENCV_CONF_OPTS += -DWITH_JASPER=ON
-+OPENCV_CXXFLAGS += -D__STDC_LIMIT_MACROS
- OPENCV_DEPENDENCIES += jasper
- else
- OPENCV_CONF_OPTS += -DWITH_JASPER=OFF
-@@ -232,6 +237,8 @@ else
- OPENCV_CONF_OPTS += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
- endif
- 
-+OPENCV_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(OPENCV_CXXFLAGS)"
-+
- # Installation hooks:
- define OPENCV_CLEAN_INSTALL_DOC
- 	$(RM) -fr $(TARGET_DIR)/usr/share/OpenCV/doc
+-ALSA_LIB_VERSION = 1.1.7
++ALSA_LIB_VERSION = 1.1.9
+ ALSA_LIB_SOURCE = alsa-lib-$(ALSA_LIB_VERSION).tar.bz2
+ ALSA_LIB_SITE = ftp://ftp.alsa-project.org/pub/lib
+ ALSA_LIB_LICENSE = LGPL-2.1+ (library), GPL-2.0+ (aserver)
 -- 
-2.20.1
+2.21.0
