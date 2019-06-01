@@ -1,26 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 15:08:26 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/python-matplotlib: depends
- on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
-In-Reply-To: <20190526155223.26168-1-fontaine.fabrice@gmail.com>
-References: <20190526155223.26168-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190601150826.1f3a0840@windsurf>
+Date: Sat, 1 Jun 2019 15:08:34 +0200
+Subject: [Buildroot] [PATCH] package/alsa-lib: bump to version 1.1.9
+In-Reply-To: <20190601103449.32716-1-joerg.krause@embedded.rocks>
+References: <20190601103449.32716-1-joerg.krause@embedded.rocks>
+Message-ID: <20190601150834.69968f10@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 26 May 2019 17:52:23 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat,  1 Jun 2019 12:34:49 +0200
+J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/038d50784ec80b35e3daff1966df07a1b52780b3
+> Drop patch 0002 which is included in the new version.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 > ---
->  package/python-matplotlib/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  ...onally-enable-libdl-in-AM_PATH_ALSA-.patch | 49 -------------------
+>  package/alsa-lib/alsa-lib.hash                |  2 +-
+>  package/alsa-lib/alsa-lib.mk                  |  2 +-
+>  3 files changed, 2 insertions(+), 51 deletions(-)
+>  delete mode 100644 package/alsa-lib/0002-alsa-lib-conditionally-enable-libdl-in-AM_PATH_ALSA-.patch
 
 Applied to next, thanks.
 
