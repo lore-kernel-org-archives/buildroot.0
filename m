@@ -1,42 +1,89 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 14:47:17 +0200
-Subject: [Buildroot] [git commit branch/next] package/python-matplotlib:
- rewrap Config.in help text
-Message-ID: <20190601124731.E6F1381DBC@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  1 Jun 2019 14:54:52 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/oprofile: bump to version 1.3.0
+Message-ID: <20190601125452.1332-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2311987335b75a54375ef4cd0e3698684d37911b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Remove second patch (already in version)
 
-The wrapping looked somewhat arbitrary, and not optimized to fill in
-the 72 characters we allow.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-matplotlib/Config.in | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ ...ve-replace-basename-with-op_basename.patch | 34 -------------------
+ package/oprofile/oprofile.hash                |  6 ++--
+ package/oprofile/oprofile.mk                  |  2 +-
+ 3 files changed, 4 insertions(+), 38 deletions(-)
+ delete mode 100644 package/oprofile/0002-oparchive-replace-basename-with-op_basename.patch
 
-diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
-index 13a5c74ec4..99ad30aa08 100644
---- a/package/python-matplotlib/Config.in
-+++ b/package/python-matplotlib/Config.in
-@@ -13,11 +13,10 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB
- 	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
- 	select BR2_PACKAGE_ZLIB # runtime
- 	help
--	  Matplotlib strives to produce publication
--	  quality 2D graphics for interactive graphing,
--	  scientific publishing, user interface
--	  development and web application servers targeting
--	  multiple user interfaces and hardcopy output
-+	  Matplotlib strives to produce publication quality 2D
-+	  graphics for interactive graphing, scientific publishing,
-+	  user interface development and web application servers
-+	  targeting multiple user interfaces and hardcopy output
- 	  formats.
+diff --git a/package/oprofile/0002-oparchive-replace-basename-with-op_basename.patch b/package/oprofile/0002-oparchive-replace-basename-with-op_basename.patch
+deleted file mode 100644
+index a2b580dad7..0000000000
+--- a/package/oprofile/0002-oparchive-replace-basename-with-op_basename.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 5da92e18a538c630cb06a3dbb2affd9bfc128901 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 5 Jun 2018 13:31:34 +0200
+-Subject: [PATCH] oparchive: replace basename with op_basename
+-
+-Use op_basename instead of basename in oparchive function.
+-This seems to be the intended use as there is no include on libgen.h for
+-the standard basename and the argument is a const char* instead of a
+-char*.
+-
+-Fixes:
+- - http://autobuild.buildroot.net/results/06fbff267063e09f7bc06adb08c896f861ecdb1d
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- pp/oparchive.cpp | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/pp/oparchive.cpp b/pp/oparchive.cpp
+-index 6221e148..274152ba 100644
+---- a/pp/oparchive.cpp
+-+++ b/pp/oparchive.cpp
+-@@ -261,7 +261,7 @@ int oparchive(options::spec const & spec)
+- 		/* determine the session name of sample file */
+- 		int offset = sample_name.find('{');
+- 		string base_samples_dir = sample_name.substr(0, offset-1);
+--		string session = basename(base_samples_dir.c_str());
+-+		string session = op_basename(base_samples_dir.c_str());
+- 		/* Get rid of the the archive_path from the name */
+- 		string sample_base = sample_name.substr(offset);
+- 		string sample_archive_file = dest_samples_dir + "/" + session + "/" + sample_base;
+--- 
+-2.14.1
+-
+diff --git a/package/oprofile/oprofile.hash b/package/oprofile/oprofile.hash
+index 737137e0dd..d1d96c6232 100644
+--- a/package/oprofile/oprofile.hash
++++ b/package/oprofile/oprofile.hash
+@@ -1,6 +1,6 @@
+-# From http://sourceforge.net/projects/oprofile/files/oprofile/oprofile-1.2.0/
+-sha1	7bf28b74953bd042ff23dc53c399be96d37f144c	oprofile-1.2.0.tar.gz
+-md5	4fcd3920984dcb607314b2e225086c3a		oprofile-1.2.0.tar.gz
++# From http://sourceforge.net/projects/oprofile/files/oprofile/oprofile-1.3.0/
++sha1	7daa0cca8587e399cb3df9eb817c6a39ffea2082	oprofile-1.3.0.tar.gz
++md5	bd998df5521ebedae31e71cd3fb6200b		oprofile-1.3.0.tar.gz
  
- 	  https://matplotlib.org/
+ # Hash for license file:
+ sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
+diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
+index 2b82194406..cc41e5c6da 100644
+--- a/package/oprofile/oprofile.mk
++++ b/package/oprofile/oprofile.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPROFILE_VERSION = 1.2.0
++OPROFILE_VERSION = 1.3.0
+ OPROFILE_SITE = http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-$(OPROFILE_VERSION)
+ OPROFILE_LICENSE = GPL-2.0+
+ OPROFILE_LICENSE_FILES = COPYING
+-- 
+2.20.1
