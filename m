@@ -1,49 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 1 Jun 2019 14:47:17 +0200
-Subject: [Buildroot] [git commit branch/next] Config.in.legacy: fix
- check-package warnings
-Message-ID: <20190601124731.F416E7FBF5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-matplotlib:
+ drop redundant !PYTHON dependency
+Message-ID: <20190601124732.04A5381DBC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6295b1ddbabe6a59e6e52203467525b6dce1319
+commit: https://git.buildroot.net/buildroot/commit/?id=02a449038e87632f0bcfded8df527bd0a95be355
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes the following warnings:
+Having both:
 
-Config.in.legacy:153: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-Config.in.legacy:154: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-Config.in.legacy:155: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
-Config.in.legacy:156: help text: <tab><2 spaces><62 chars> (http://nightly.buildroot.org/#writing-rules-config-in)
+       depends on !BR2_PACKAGE_PYTHON
+       depends on BR2_PACKAGE_PYTHON3
 
-which were introduced in commit
-55c642287819a062d52e7f290c76ada778772fba ("arch/csky: remove
-BR2_CSKY_DSP option")
+is kind of useless, and we don't do that for any other Python package
+that needs Python 3. So, this commit just drops the depends on
+!BR2_PACKAGE_PYTHON.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ package/python-matplotlib/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index f299181447..c13399acda 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -150,10 +150,10 @@ config BR2_CSKY_DSP
- 	bool "C-SKY DSP support removed"
- 	select BR2_LEGACY
- 	help
--	 C-SKY DSP instruction support for ck810 / ck807 was removed,
--	 as it was no longer supported in C-SKY gcc. Perhaps the VDSP
--	 instructions should be used instead, using the BR2_CSKY_VDSP
--	 option.
-+	  C-SKY DSP instruction support for ck810 / ck807 was removed,
-+	  as it was no longer supported in C-SKY gcc. Perhaps the VDSP
-+	  instructions should be used instead, using the BR2_CSKY_VDSP
-+	  option.
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_COMPOSITOR
- 	bool "compositor moved to gst1-plugins-base"
+diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
+index 99ad30aa08..c5cb94dac7 100644
+--- a/package/python-matplotlib/Config.in
++++ b/package/python-matplotlib/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_MATPLOTLIB
+ 	bool "python-matplotlib"
+-	depends on !BR2_PACKAGE_PYTHON
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_FREETYPE # runtime
