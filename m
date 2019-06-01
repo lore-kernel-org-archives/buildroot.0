@@ -1,57 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 1 Jun 2019 10:16:25 +0200
-Subject: [Buildroot] [git commit] package/netsurf: disallow on archs
- requiring ABI specific CFLAGS
-Message-ID: <20190601081651.63FD68D2BB@busybox.osuosl.org>
+Date: Sat, 01 Jun 2019 10:44:46 +0200
+Subject: [Buildroot] [PATCH for-next 2/3] package/swig: enable PCRE
+ regex matching in host-swig
+In-Reply-To: <20190601092802.2b4102ac@windsurf> (Thomas Petazzoni's message of
+ "Sat, 1 Jun 2019 09:28:02 +0200")
+References: <20190529151655.7098-1-romain.naour@gmail.com>
+ <20190529151655.7098-2-romain.naour@gmail.com>
+ <20190601092802.2b4102ac@windsurf>
+Message-ID: <87imtpvgn5.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=18855d79e2e86dc646182bd6f4861c491a05c624
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Fixes:
-http://autobuild.buildroot.net/results/67ef520d82ea529a9fe593d83a3aeae5f8b0ee5d/
-http://autobuild.buildroot.net/results/eafc3e4be571d5ecee549a11530ac4e508f31782/
-http://autobuild.buildroot.net/results/ba7f30833fef54162a82f4b336a72d6599594526/
+ > Hello,
+ > +Arnout, Yann, Peter in Cc.
 
-The netsurf build system mixes up host and target CFLAGS, so it isn't
-compatible with architectures where we pass ABI specific compiler flags (in
-TARGET_ABI).
+ > On Wed, 29 May 2019 17:16:54 +0200
+ > Romain Naour <romain.naour@gmail.com> wrote:
 
-Add a _ARCH_SUPPORTS kconfig variable matching the TARGET_ABI logic we have
-in package/Makefile.in, and use it to disallow netsurf for those
-architectures.
+ >> The upcoming ogre package needs a host swig binary with PCRE
+ >> regex support.
+ >> 
+ >> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+ >> ---
+ >> package/swig/swig.mk | 4 ++--
+ >> 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/netsurf/Config.in | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ > I never really like the addition of mandatory host package dependencies
+ > just for the sake of one use case. I was considering adding a hidden
+ > BR2_PACKAGE_HOST_PCRE option for this, but since pcre takes only 17
+ > seconds to build, maybe it was not worth the effort. So I've applied to
+ > next as-is, but I'd be interested to know what Arnout/Peter/Yann thing
+ > about adding a hidden BR2_PACKAGE_HOST_PCRE hidden option for that kind
+ > of situation. We had decided to not systematically add such options in
+ > all host packages, but that we could add some in a case-by-case basis.
+ > This case-by-case basis however will look "weird": ogre would have
+ > host-swig in its <pkg>_DEPENDENCIES, but in Config.in would select
+ > BR2_PACKAGE_HOST_PCRE and not BR2_PACKAGE_HOST_SWIG. This could start
+ > getting a bit clunky.
 
-diff --git a/package/netsurf/Config.in b/package/netsurf/Config.in
-index 30b2695309..4f7d5c2713 100644
---- a/package/netsurf/Config.in
-+++ b/package/netsurf/Config.in
-@@ -1,10 +1,20 @@
-+# netsurf mixes up host and target CFLAGS, so it isn't compatible with
-+# architectures where we pass ABI specific compiler flags (TARGET_ABI)
-+config BR2_PACKAGE_NETSURF_ARCH_SUPPORTS
-+	bool
-+	default y if !((BR2_arc && BR2_ARC_ATOMIC_EXT) || \
-+		BR2_powerpc_8540 || BR2_powerpc_8548 || BR2_powerpc_e500mc || \
-+		BR2_xtensa)
-+
- comment "netsurf needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
-+	depends on BR2_PACKAGE_NETSURF_ARCH_SUPPORTS
- 
- config BR2_PACKAGE_NETSURF
- 	bool "netsurf"
- 	# static linking support is broken beyond repair
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_PACKAGE_NETSURF_ARCH_SUPPORTS
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+I think just having it unconditionally enabled is OK for now.
+
+-- 
+Bye, Peter Korsgaard
