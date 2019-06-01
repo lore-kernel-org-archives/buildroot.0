@@ -1,41 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 14:25:39 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libnfc: support pcsc-lite
-In-Reply-To: <20190527111550.4bbf2dcc@windsurf>
-References: <CABWPoFHO0c4GoBmS0qBFhS=XGEz4qhUMF6+REWwkrngv0ZCbVg@mail.gmail.com>
- <20190527111550.4bbf2dcc@windsurf>
-Message-ID: <20190601142539.423b02a9@windsurf>
+Date: Sat, 1 Jun 2019 14:27:40 +0200
+Subject: [Buildroot] [PATCH] arch/Config.in.powerpc: remove unused gcc
+ target abi options for powerpc
+In-Reply-To: <20190526174246.14651-1-romain.naour@gmail.com>
+References: <20190526174246.14651-1-romain.naour@gmail.com>
+Message-ID: <20190601142740.289f9933@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Raul,
+On Sun, 26 May 2019 19:42:46 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-On Mon, 27 May 2019 11:15:50 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-
-> Here as well: please send with git send-email so that we can do a
-> proper review.
+> gcc target abi options for powerpc were added by [1] and renamed by [2]
+> to BR2_PPC_ABI_* but never used. Since always BR2_GCC_TARGET_ABI is empty
+> when using a powerpc toolchain.
 > 
-> A few comments though:
+> Buildroot currently support SPE and Classic target ABI, nothing seems
+> to require a specific gcc target abi option.
 > 
->  - We need you to use your real name as the patch author and for the
->    Signed-off-by line
+> This patch is a cleanup like commit [3].
 > 
->  - Why are you making pcsc-lite a mandatory dependency of libnfc ?
->    Since libnfc builds fine today with pcsc-lite, it means it should be
->    an optional dependency. Either add a sub-option to enable the
->    different libnfc drivers, or automatically add pcsc-lite to the
->    dependencies if BR2_PACKAGE_PCSC_LITE=y.
+> [1] 7d8a59b40e46fa6ed84a5b78644327e97d04adef
+> [2] 98175bd43dbfc70f473cca6759bc8a2f4e655734
+> [3] fd08153b9d677d654add6c580b9ccc5c27d672e2
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Cyril Bur <cyrilbur@gmail.com>
+> Cc: Sam Bobroff <sam.bobroff@au1.ibm.com>
+> ---
+>  arch/Config.in.powerpc | 8 --------
+>  1 file changed, 8 deletions(-)
 
-I just wanted to make sure that you have seen my comments on this
-patch. I'm marking it as "Changes Requested" in our patch tracking
-system. Therefore, if you don't send an updated version of the patch,
-we will forget about it.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
