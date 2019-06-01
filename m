@@ -1,39 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 14:47:17 +0200
-Subject: [Buildroot] [git commit] package/python-matplotlib: drop redundant
- !PYTHON dependency
-Message-ID: <20190602201238.43565801CD@busybox.osuosl.org>
+Date: Sat, 1 Jun 2019 15:08:52 +0200
+Subject: [Buildroot] [git commit] package/libuv: bump to version 1.29.1
+Message-ID: <20190602201238.52E6E811FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02a449038e87632f0bcfded8df527bd0a95be355
+commit: https://git.buildroot.net/buildroot/commit/?id=d2273e14fca808301f05f587b33a0af3df7d3bcf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Having both:
-
-       depends on !BR2_PACKAGE_PYTHON
-       depends on BR2_PACKAGE_PYTHON3
-
-is kind of useless, and we don't do that for any other Python package
-that needs Python 3. So, this commit just drops the depends on
-!BR2_PACKAGE_PYTHON.
-
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-matplotlib/Config.in | 1 -
- 1 file changed, 1 deletion(-)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
-index 99ad30aa08..c5cb94dac7 100644
---- a/package/python-matplotlib/Config.in
-+++ b/package/python-matplotlib/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_MATPLOTLIB
- 	bool "python-matplotlib"
--	depends on !BR2_PACKAGE_PYTHON
- 	depends on BR2_PACKAGE_PYTHON3
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	select BR2_PACKAGE_FREETYPE # runtime
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index b237bd81dd..81ba5b2672 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  ca62158fd35dfc06e37400f5ae5d0f18dde1ffc4c140738fff6f95b036a8b6f1  libuv-v1.29.0.tar.gz
++sha256  bdde1140087ce97080ea323c3598553ece00a24ae63ac568be78bef3e97f3e25  libuv-v1.29.1.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index ef6fc1af12..cbf6e384bc 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUV_VERSION = v1.29.0
++LIBUV_VERSION = v1.29.1
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
