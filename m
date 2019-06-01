@@ -1,89 +1,77 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  1 Jun 2019 14:54:52 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/oprofile: bump to version 1.3.0
-Message-ID: <20190601125452.1332-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 1 Jun 2019 15:03:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mpd: fix static build with
+ tremor and vorbis
+In-Reply-To: <20190601124231.25075-1-fontaine.fabrice@gmail.com>
+References: <20190601124231.25075-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190601150329.0147d083@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove second patch (already in version)
+Hello Fabrice,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...ve-replace-basename-with-op_basename.patch | 34 -------------------
- package/oprofile/oprofile.hash                |  6 ++--
- package/oprofile/oprofile.mk                  |  2 +-
- 3 files changed, 4 insertions(+), 38 deletions(-)
- delete mode 100644 package/oprofile/0002-oparchive-replace-basename-with-op_basename.patch
+On Sat,  1 Jun 2019 14:42:31 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-diff --git a/package/oprofile/0002-oparchive-replace-basename-with-op_basename.patch b/package/oprofile/0002-oparchive-replace-basename-with-op_basename.patch
-deleted file mode 100644
-index a2b580dad7..0000000000
---- a/package/oprofile/0002-oparchive-replace-basename-with-op_basename.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 5da92e18a538c630cb06a3dbb2affd9bfc128901 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 5 Jun 2018 13:31:34 +0200
--Subject: [PATCH] oparchive: replace basename with op_basename
--
--Use op_basename instead of basename in oparchive function.
--This seems to be the intended use as there is no include on libgen.h for
--the standard basename and the argument is a const char* instead of a
--char*.
--
--Fixes:
-- - http://autobuild.buildroot.net/results/06fbff267063e09f7bc06adb08c896f861ecdb1d
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- pp/oparchive.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/pp/oparchive.cpp b/pp/oparchive.cpp
--index 6221e148..274152ba 100644
----- a/pp/oparchive.cpp
--+++ b/pp/oparchive.cpp
--@@ -261,7 +261,7 @@ int oparchive(options::spec const & spec)
-- 		/* determine the session name of sample file */
-- 		int offset = sample_name.find('{');
-- 		string base_samples_dir = sample_name.substr(0, offset-1);
---		string session = basename(base_samples_dir.c_str());
--+		string session = op_basename(base_samples_dir.c_str());
-- 		/* Get rid of the the archive_path from the name */
-- 		string sample_base = sample_name.substr(offset);
-- 		string sample_archive_file = dest_samples_dir + "/" + session + "/" + sample_base;
---- 
--2.14.1
--
-diff --git a/package/oprofile/oprofile.hash b/package/oprofile/oprofile.hash
-index 737137e0dd..d1d96c6232 100644
---- a/package/oprofile/oprofile.hash
-+++ b/package/oprofile/oprofile.hash
-@@ -1,6 +1,6 @@
--# From http://sourceforge.net/projects/oprofile/files/oprofile/oprofile-1.2.0/
--sha1	7bf28b74953bd042ff23dc53c399be96d37f144c	oprofile-1.2.0.tar.gz
--md5	4fcd3920984dcb607314b2e225086c3a		oprofile-1.2.0.tar.gz
-+# From http://sourceforge.net/projects/oprofile/files/oprofile/oprofile-1.3.0/
-+sha1	7daa0cca8587e399cb3df9eb817c6a39ffea2082	oprofile-1.3.0.tar.gz
-+md5	bd998df5521ebedae31e71cd3fb6200b		oprofile-1.3.0.tar.gz
- 
- # Hash for license file:
- sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 2b82194406..cc41e5c6da 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPROFILE_VERSION = 1.2.0
-+OPROFILE_VERSION = 1.3.0
- OPROFILE_SITE = http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-$(OPROFILE_VERSION)
- OPROFILE_LICENSE = GPL-2.0+
- OPROFILE_LICENSE_FILES = COPYING
+> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+> index d3844391a2..039c2402c2 100644
+> --- a/package/mpd/Config.in
+> +++ b/package/mpd/Config.in
+> @@ -9,7 +9,6 @@ menuconfig BR2_PACKAGE_MPD
+>  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+>  	select BR2_PACKAGE_BOOST
+>  	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+> -	select BR2_PACKAGE_MPD_TREMOR if !(BR2_PACKAGE_MPD_MAD || BR2_PACKAGE_MPD_MPG123 || BR2_PACKAGE_MPD_VORBIS || BR2_PACKAGE_MPD_WAVPACK || BR2_PACKAGE_MPD_FLAC || BR2_PACKAGE_MPD_MUSEPACK || BR2_PACKAGE_MPD_FFMPEG)
+
+Why was this select here in the first place ? Does it build fine with
+no sub-option enabled ?
+
+>  	help
+>  	  MPD is a flexible, powerful, server-side application
+>  	  for playing music. Through plugins and libraries
+> @@ -132,18 +131,20 @@ config BR2_PACKAGE_MPD_OPUS
+>  	  Select this if you want to play back OPUS encoded files.
+>  
+>  config BR2_PACKAGE_MPD_TREMOR
+> -	bool "tremor"
+> +	bool "tremor" if !BR2_SOFT_FLOAT
+>  	select BR2_PACKAGE_LIBOGG
+>  	select BR2_PACKAGE_TREMOR
+> +	default y if !BR2_SOFT_FLOAT
+>  	help
+>  	  Enable vorbis input support.
+>  	  Select this if you want to play back OGG files on softfloat
+>  	  targets.
+
+So for soft float targets, we should use tremor, but you make it depend
+on !BR2_SOFT_FLOAT.
+
+>  config BR2_PACKAGE_MPD_VORBIS
+> -	bool "vorbis"
+> +	bool "vorbis" if BR2_SOFT_FLOAT
+>  	select BR2_PACKAGE_LIBOGG
+>  	select BR2_PACKAGE_LIBVORBIS
+> +	default y if BR2_SOFT_FLOAT
+>  	help
+>  	  Enable vorbis input/streaming support.
+>  	  Select this if you want to play back OGG files on hardfloat
+
+And for hard float targets, we should use vorbis, but you make it
+available only on soft-float targets.
+
+This seems weird.
+
+Also, I am not sure why you are not just adding a depends on
+BR2_SOFT_FLOAT in one case, and a "depends on !BR2_SOFT_FLOAT" in the
+other case.
+
+Thanks,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
