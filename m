@@ -1,65 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 11:44:49 +0200
-Subject: [Buildroot] [git commit branch/next] package/dropbear: add option
- to provide file with localoptions.h
-Message-ID: <20190601094453.207F28E2E3@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  1 Jun 2019 12:20:32 +0200
+Subject: [Buildroot] [PATCH 1/1] package/opencv: fix build due to gcc bug
+ 68485
+Message-ID: <20190601102032.28968-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26708469adc3f5e4194f176fa51f1ce280b0b357
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+With Microblaze Gcc version <= 9.x the build fails due to gcc bug 68485:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. The bug show up when
+building opencv with optimization but not when building with -O0. To
+work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_68458=y, we force using
+-O0.
 
-As discussed in https://patchwork.ozlabs.org/patch/1104071/, this
-commit adds a new option that allows the user to provide a file that
-contains custom definitions to tweak the Dropbear configuration. It
-will be appended to Dropbear's localoptions.h file before the build.
+Fixes:
+ - http://autobuild.buildroot.org/results/17fff0f312ebd520ba3341976ba56fd8c85ee376
 
-The patch was tested successfully with the DO_MOTD option.
-
-Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Alexandru Ardelean <ardeleanalex@gmail.com>
-[Thomas: tweak commit log, rename config option.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/dropbear/Config.in   | 7 +++++++
- package/dropbear/dropbear.mk | 8 ++++++++
- 2 files changed, 15 insertions(+)
+ package/opencv/opencv.mk | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
-index 62f77bad9d..e14a670c19 100644
---- a/package/dropbear/Config.in
-+++ b/package/dropbear/Config.in
-@@ -66,4 +66,11 @@ config BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO
- 	    DSA public keys
- 	    Diffie-Hellman Group1 key exchange
+diff --git a/package/opencv/opencv.mk b/package/opencv/opencv.mk
+index ccc2d820da..4c15075fe0 100644
+--- a/package/opencv/opencv.mk
++++ b/package/opencv/opencv.mk
+@@ -10,6 +10,7 @@ OPENCV_INSTALL_STAGING = YES
+ OPENCV_LICENSE = BSD-3-Clause
+ OPENCV_LICENSE_FILES = LICENSE
+ OPENCV_SUPPORTS_IN_SOURCE_BUILD = NO
++OPENCV_CXXFLAGS = $(TARGET_CXXFLAGS)
  
-+config BR2_PACKAGE_DROPBEAR_LOCALOPTIONS_FILE
-+	string "path to custom localoptions.h definitions file"
-+	help
-+	  Path to a file whose contents will be appended to Dropbear
-+	  localoptions.h. It can be used to tweak the Dropbear
-+	  configuration.
-+
- endif
-diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
-index e10c851606..185f8c4341 100644
---- a/package/dropbear/dropbear.mk
-+++ b/package/dropbear/dropbear.mk
-@@ -124,6 +124,14 @@ ifneq ($(BR2_PACKAGE_DROPBEAR_LASTLOG),y)
- DROPBEAR_CONF_OPTS += --disable-lastlog
- endif
+ # OpenCV component options
+ OPENCV_CONF_OPTS += \
+@@ -166,6 +167,10 @@ OPENCV_CONF_OPTS += \
  
-+DROPBEAR_LOCALOPTIONS_FILE = $(call qstrip,$(BR2_PACKAGE_DROPBEAR_LOCALOPTIONS_FILE))
-+ifneq ($(DROPBEAR_LOCALOPTIONS_FILE),)
-+define DROPBEAR_APPEND_LOCALOPTIONS_FILE
-+	cat $(DROPBEAR_LOCALOPTIONS_FILE) >> $(@D)/localoptions.h
-+endef
-+DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_APPEND_LOCALOPTIONS_FILE
+ OPENCV_DEPENDENCIES += zlib
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
++OPENCV_CXXFLAGS += -O0
 +endif
 +
- define DROPBEAR_INSTALL_TARGET_CMDS
- 	$(INSTALL) -m 755 $(@D)/dropbearmulti $(TARGET_DIR)/usr/sbin/dropbear
- 	for f in $(DROPBEAR_TARGET_BINS); do \
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_FFMPEG),y)
+ OPENCV_CONF_OPTS += -DWITH_FFMPEG=ON
+ OPENCV_DEPENDENCIES += ffmpeg bzip2
+@@ -195,8 +200,8 @@ OPENCV_CONF_OPTS += -DWITH_GTK=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPENCV_WITH_JASPER),y)
+-OPENCV_CONF_OPTS += -DWITH_JASPER=ON \
+-	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -D__STDC_LIMIT_MACROS"
++OPENCV_CONF_OPTS += -DWITH_JASPER=ON
++OPENCV_CXXFLAGS += -D__STDC_LIMIT_MACROS
+ OPENCV_DEPENDENCIES += jasper
+ else
+ OPENCV_CONF_OPTS += -DWITH_JASPER=OFF
+@@ -232,6 +237,8 @@ else
+ OPENCV_CONF_OPTS += -DWITH_V4L=OFF -DWITH_LIBV4L=OFF
+ endif
+ 
++OPENCV_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(OPENCV_CXXFLAGS)"
++
+ # Installation hooks:
+ define OPENCV_CLEAN_INSTALL_DOC
+ 	$(RM) -fr $(TARGET_DIR)/usr/share/OpenCV/doc
+-- 
+2.20.1
