@@ -1,49 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 01 Jun 2019 10:44:46 +0200
-Subject: [Buildroot] [PATCH for-next 2/3] package/swig: enable PCRE
- regex matching in host-swig
-In-Reply-To: <20190601092802.2b4102ac@windsurf> (Thomas Petazzoni's message of
- "Sat, 1 Jun 2019 09:28:02 +0200")
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 1 Jun 2019 11:24:56 +0200
+Subject: [Buildroot] [PATCH for-next 3/3] package/ogre: new package
+In-Reply-To: <20190529151655.7098-3-romain.naour@gmail.com>
 References: <20190529151655.7098-1-romain.naour@gmail.com>
- <20190529151655.7098-2-romain.naour@gmail.com>
- <20190601092802.2b4102ac@windsurf>
-Message-ID: <87imtpvgn5.fsf@dell.be.48ers.dk>
+ <20190529151655.7098-3-romain.naour@gmail.com>
+Message-ID: <20190601112456.50402535@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Hello Romain,
 
- > Hello,
- > +Arnout, Yann, Peter in Cc.
+On Wed, 29 May 2019 17:16:55 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
- > On Wed, 29 May 2019 17:16:54 +0200
- > Romain Naour <romain.naour@gmail.com> wrote:
+> +OGRE_VERSION = 1.12.0
+> +OGRE_SITE = $(call github,OGRECave,ogre,v$(OGRE_VERSION))
+> +OGRE_LICENSE = MIT with exceptions (main library), MIT (DeferredShadingMedia samples), Public Domain (samples and plugins), Zlib (tinyxml)
 
- >> The upcoming ogre package needs a host swig binary with PCRE
- >> regex support.
- >> 
- >> Signed-off-by: Romain Naour <romain.naour@gmail.com>
- >> ---
- >> package/swig/swig.mk | 4 ++--
- >> 1 file changed, 2 insertions(+), 2 deletions(-)
+Could you comment a bit on where you found those license terms ? The
+LICENSE file only contains the normal MIT license text. Just picking a
+random file (OgreFileSystem.cpp) from the main library shows just the
+regular MIT license (I don't see any exception).
 
- > I never really like the addition of mandatory host package dependencies
- > just for the sake of one use case. I was considering adding a hidden
- > BR2_PACKAGE_HOST_PCRE option for this, but since pcre takes only 17
- > seconds to build, maybe it was not worth the effort. So I've applied to
- > next as-is, but I'd be interested to know what Arnout/Peter/Yann thing
- > about adding a hidden BR2_PACKAGE_HOST_PCRE hidden option for that kind
- > of situation. We had decided to not systematically add such options in
- > all host packages, but that we could add some in a case-by-case basis.
- > This case-by-case basis however will look "weird": ogre would have
- > host-swig in its <pkg>_DEPENDENCIES, but in Config.in would select
- > BR2_PACKAGE_HOST_PCRE and not BR2_PACKAGE_HOST_SWIG. This could start
- > getting a bit clunky.
+PlugIns/CgProgramManager/src/OgreCgPlugin.cpp which is a plugin, shows
+a MIT license.
 
-I think just having it unconditionally enabled is OK for now.
+Could you perhaps add a comment above this line that justifies this
+licensing description ?
 
+Thanks!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
