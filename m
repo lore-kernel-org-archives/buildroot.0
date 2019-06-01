@@ -1,49 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 09:28:02 +0200
-Subject: [Buildroot] [PATCH for-next 2/3] package/swig: enable PCRE
- regex matching in host-swig
-In-Reply-To: <20190529151655.7098-2-romain.naour@gmail.com>
-References: <20190529151655.7098-1-romain.naour@gmail.com>
- <20190529151655.7098-2-romain.naour@gmail.com>
-Message-ID: <20190601092802.2b4102ac@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 01 Jun 2019 10:15:57 +0200
+Subject: [Buildroot] [PATCH] package/netsurf: disallow on archs
+ requiring ABI specific CFLAGS
+In-Reply-To: <20190601090445.44405bb9@windsurf> (Thomas Petazzoni's message of
+ "Sat, 1 Jun 2019 09:04:45 +0200")
+References: <20190531214052.14297-1-peter@korsgaard.com>
+ <20190601090445.44405bb9@windsurf>
+Message-ID: <87pnnxvhz6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-+Arnout, Yann, Peter in Cc.
+ > Hello,
+ > On Fri, 31 May 2019 23:40:52 +0200
+ > Peter Korsgaard <peter@korsgaard.com> wrote:
 
-On Wed, 29 May 2019 17:16:54 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
+ >> Fixes:
+ >> http://autobuild.buildroot.net/results/67ef520d82ea529a9fe593d83a3aeae5f8b0ee5d/
+ >> http://autobuild.buildroot.net/results/eafc3e4be571d5ecee549a11530ac4e508f31782/
+ >> http://autobuild.buildroot.net/results/ba7f30833fef54162a82f4b336a72d6599594526/
+ >> 
+ >> The netsurf build system mixes up host and target CFLAGS, so it isn't
+ >> compatible with architectures where we pass ABI specicif compiler flags (in
+ >> TARGET_ABI).
+ >> 
+ >> Add a _ARCH_SUPPORTS kconfig variable matching the TARGET_ABI logic we have
+ >> in package/Makefile.in, and use it to disallow netsurf for those
+ >> architectures.
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-> The upcoming ogre package needs a host swig binary with PCRE
-> regex support.
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> ---
->  package/swig/swig.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+ > I understand the idea, but we need to realize it has some drawbacks:
 
-I never really like the addition of mandatory host package dependencies
-just for the sake of one use case. I was considering adding a hidden
-BR2_PACKAGE_HOST_PCRE option for this, but since pcre takes only 17
-seconds to build, maybe it was not worth the effort. So I've applied to
-next as-is, but I'd be interested to know what Arnout/Peter/Yann thing
-about adding a hidden BR2_PACKAGE_HOST_PCRE hidden option for that kind
-of situation. We had decided to not systematically add such options in
-all host packages, but that we could add some in a case-by-case basis.
-This case-by-case basis however will look "weird": ogre would have
-host-swig in its <pkg>_DEPENDENCIES, but in Config.in would select
-BR2_PACKAGE_HOST_PCRE and not BR2_PACKAGE_HOST_SWIG. This could start
-getting a bit clunky.
+ >  - If we add additional flags for some architecture, this will have to
+ >    be updated.
 
-Best regards,
+Correct, but the autobuilders will presumably show us pretty fast.
 
-Thomas
+
+ >  - If some custom flags are passed in BR2_TARGET_OPTIMIZATION, I would
+ >    assume it would also cause a build failure, no ?
+
+Yes - If they are ABI specific, E.G. not understood by the host compiler.
+
+
+ > If we really can't remove the package, then I'm fine with this patch as
+ > a stop-gap measure. But I think removing the package is the sanest
+ > thing to do. If anything, removing the package might wake up the people
+ > using it so that they fix it.
+
+I agree, I only created this patch as there was pushback on IRC against
+removing netsurf this close to the release.
+
+I'll apply this for master and then revisit the removal once we have next
+merged.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com													
+Bye, Peter Korsgaard
