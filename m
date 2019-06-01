@@ -1,90 +1,301 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 15:14:12 +0200
-Subject: [Buildroot] [git commit] package/oprofile: bump to version 1.3.0
-Message-ID: <20190602201238.69ED1811FB@busybox.osuosl.org>
+Date: Sat, 1 Jun 2019 15:11:43 +0200
+Subject: [Buildroot] [git commit] package/speexdsp: bump to version 1.2.0
+Message-ID: <20190602201238.625B2811FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2888bd1592a2737ec7a446d60b1da27247d262ab
+commit: https://git.buildroot.net/buildroot/commit/?id=09c9f0d22b294572f03eb9ae5054517975d1e703
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove second patch (already in version)
+Drop patch 0001 which is included in the new release.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...archive-replace-basename-with-op_basename.patch | 34 ----------------------
- package/oprofile/oprofile.hash                     |  6 ++--
- package/oprofile/oprofile.mk                       |  2 +-
- 3 files changed, 4 insertions(+), 38 deletions(-)
+ .../0001-port-resample-neon-to-aarch64.patch       | 250 ---------------------
+ package/speexdsp/speexdsp.hash                     |   2 +-
+ package/speexdsp/speexdsp.mk                       |   2 +-
+ 3 files changed, 2 insertions(+), 252 deletions(-)
 
-diff --git a/package/oprofile/0002-oparchive-replace-basename-with-op_basename.patch b/package/oprofile/0002-oparchive-replace-basename-with-op_basename.patch
+diff --git a/package/speexdsp/0001-port-resample-neon-to-aarch64.patch b/package/speexdsp/0001-port-resample-neon-to-aarch64.patch
 deleted file mode 100644
-index a2b580dad7..0000000000
---- a/package/oprofile/0002-oparchive-replace-basename-with-op_basename.patch
+index 7f3da9c407..0000000000
+--- a/package/speexdsp/0001-port-resample-neon-to-aarch64.patch
 +++ /dev/null
-@@ -1,34 +0,0 @@
--From 5da92e18a538c630cb06a3dbb2affd9bfc128901 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 5 Jun 2018 13:31:34 +0200
--Subject: [PATCH] oparchive: replace basename with op_basename
+@@ -1,250 +0,0 @@
+-From: Frank Barchard <fbarchard@google.com>
+-Date: Thu, 21 Jul 2016 23:01:19 +0000 (-0700)
+-Subject: resample: port resample_neon.h to aarch64
+-X-Git-Url: https://git.xiph.org/?p=speexdsp.git;a=commitdiff_plain;h=3282cc7c3cd30cd1c092ad1e7ff03bd20d75c088
 -
--Use op_basename instead of basename in oparchive function.
--This seems to be the intended use as there is no include on libgen.h for
--the standard basename and the argument is a const char* instead of a
--char*.
+-resample: port resample_neon.h to aarch64
 -
--Fixes:
-- - http://autobuild.buildroot.net/results/06fbff267063e09f7bc06adb08c896f861ecdb1d
+-port optimized inner_product_single and WORD2INT(x) for fixed
+-and floating point from 32 bit armv7 NEON to aarch64 NEON.
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Patch downloaded from upstream repo to fix aarch64 build error:
+-https://git.xiph.org/?p=speexdsp.git;a=commitdiff;h=3282cc7c3cd30cd1c092ad1e7ff03bd20d75c088#patch1
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ----
-- pp/oparchive.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/pp/oparchive.cpp b/pp/oparchive.cpp
--index 6221e148..274152ba 100644
----- a/pp/oparchive.cpp
--+++ b/pp/oparchive.cpp
--@@ -261,7 +261,7 @@ int oparchive(options::spec const & spec)
-- 		/* determine the session name of sample file */
-- 		int offset = sample_name.find('{');
-- 		string base_samples_dir = sample_name.substr(0, offset-1);
---		string session = basename(base_samples_dir.c_str());
--+		string session = op_basename(base_samples_dir.c_str());
-- 		/* Get rid of the the archive_path from the name */
-- 		string sample_base = sample_name.substr(offset);
-- 		string sample_archive_file = dest_samples_dir + "/" + session + "/" + sample_base;
---- 
--2.14.1
--
-diff --git a/package/oprofile/oprofile.hash b/package/oprofile/oprofile.hash
-index 737137e0dd..d1d96c6232 100644
---- a/package/oprofile/oprofile.hash
-+++ b/package/oprofile/oprofile.hash
-@@ -1,6 +1,6 @@
--# From http://sourceforge.net/projects/oprofile/files/oprofile/oprofile-1.2.0/
--sha1	7bf28b74953bd042ff23dc53c399be96d37f144c	oprofile-1.2.0.tar.gz
--md5	4fcd3920984dcb607314b2e225086c3a		oprofile-1.2.0.tar.gz
-+# From http://sourceforge.net/projects/oprofile/files/oprofile/oprofile-1.3.0/
-+sha1	7daa0cca8587e399cb3df9eb817c6a39ffea2082	oprofile-1.3.0.tar.gz
-+md5	bd998df5521ebedae31e71cd3fb6200b		oprofile-1.3.0.tar.gz
- 
- # Hash for license file:
- sha256	32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670	COPYING
-diff --git a/package/oprofile/oprofile.mk b/package/oprofile/oprofile.mk
-index 2b82194406..cc41e5c6da 100644
---- a/package/oprofile/oprofile.mk
-+++ b/package/oprofile/oprofile.mk
+-diff --git a/libspeexdsp/resample_neon.h b/libspeexdsp/resample_neon.h
+-index 0acbd27..e14ffe1 100644
+---- a/libspeexdsp/resample_neon.h
+-+++ b/libspeexdsp/resample_neon.h
+-@@ -36,14 +36,24 @@
+-    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- */
+- 
+--#include <arm_neon.h>
+--
+- #ifdef FIXED_POINT
+--#ifdef __thumb2__
+-+#if defined(__aarch64__)
+-+static inline int32_t saturate_32bit_to_16bit(int32_t a) {
+-+    int32_t ret;
+-+    asm ("fmov s0, %w[a]\n"
+-+         "sqxtn h0, s0\n"
+-+         "sxtl v0.4s, v0.4h\n"
+-+         "fmov %w[ret], s0\n"
+-+         : [ret] "=r" (ret)
+-+         : [a] "r" (a)
+-+         : "v0" );
+-+    return ret;
+-+}
+-+#elif defined(__thumb2__)
+- static inline int32_t saturate_32bit_to_16bit(int32_t a) {
+-     int32_t ret;
+-     asm ("ssat %[ret], #16, %[a]"
+--         : [ret] "=&r" (ret)
+-+         : [ret] "=r" (ret)
+-          : [a] "r" (a)
+-          : );
+-     return ret;
+-@@ -54,7 +64,7 @@ static inline int32_t saturate_32bit_to_16bit(int32_t a) {
+-     asm ("vmov.s32 d0[0], %[a]\n"
+-          "vqmovn.s32 d0, q0\n"
+-          "vmov.s16 %[ret], d0[0]\n"
+--         : [ret] "=&r" (ret)
+-+         : [ret] "=r" (ret)
+-          : [a] "r" (a)
+-          : "q0");
+-     return ret;
+-@@ -64,7 +74,63 @@ static inline int32_t saturate_32bit_to_16bit(int32_t a) {
+- #define WORD2INT(x) (saturate_32bit_to_16bit(x))
+- 
+- #define OVERRIDE_INNER_PRODUCT_SINGLE
+--/* Only works when len % 4 == 0 */
+-+/* Only works when len % 4 == 0 and len >= 4 */
+-+#if defined(__aarch64__)
+-+static inline int32_t inner_product_single(const int16_t *a, const int16_t *b, unsigned int len)
+-+{
+-+    int32_t ret;
+-+    uint32_t remainder = len % 16;
+-+    len = len - remainder;
+-+
+-+    asm volatile ("	 cmp %w[len], #0\n"
+-+		  "	 b.ne 1f\n"
+-+		  "	 ld1 {v16.4h}, [%[b]], #8\n"
+-+		  "	 ld1 {v20.4h}, [%[a]], #8\n"
+-+		  "	 subs %w[remainder], %w[remainder], #4\n"
+-+		  "	 smull v0.4s, v16.4h, v20.4h\n"
+-+		  "      b.ne 4f\n"
+-+		  "	 b 5f\n"
+-+		  "1:"
+-+		  "	 ld1 {v16.4h, v17.4h, v18.4h, v19.4h}, [%[b]], #32\n"
+-+		  "	 ld1 {v20.4h, v21.4h, v22.4h, v23.4h}, [%[a]], #32\n"
+-+		  "	 subs %w[len], %w[len], #16\n"
+-+		  "	 smull v0.4s, v16.4h, v20.4h\n"
+-+		  "	 smlal v0.4s, v17.4h, v21.4h\n"
+-+		  "	 smlal v0.4s, v18.4h, v22.4h\n"
+-+		  "	 smlal v0.4s, v19.4h, v23.4h\n"
+-+		  "	 b.eq 3f\n"
+-+		  "2:"
+-+		  "	 ld1 {v16.4h, v17.4h, v18.4h, v19.4h}, [%[b]], #32\n"
+-+		  "	 ld1 {v20.4h, v21.4h, v22.4h, v23.4h}, [%[a]], #32\n"
+-+		  "	 subs %w[len], %w[len], #16\n"
+-+		  "	 smlal v0.4s, v16.4h, v20.4h\n"
+-+		  "	 smlal v0.4s, v17.4h, v21.4h\n"
+-+		  "	 smlal v0.4s, v18.4h, v22.4h\n"
+-+		  "	 smlal v0.4s, v19.4h, v23.4h\n"
+-+		  "	 b.ne 2b\n"
+-+		  "3:"
+-+		  "	 cmp %w[remainder], #0\n"
+-+		  "	 b.eq 5f\n"
+-+		  "4:"
+-+		  "	 ld1 {v18.4h}, [%[b]], #8\n"
+-+		  "	 ld1 {v22.4h}, [%[a]], #8\n"
+-+		  "	 subs %w[remainder], %w[remainder], #4\n"
+-+		  "	 smlal v0.4s, v18.4h, v22.4h\n"
+-+		  "	 b.ne 4b\n"
+-+		  "5:"
+-+		  "	 saddlv d0, v0.4s\n"
+-+		  "	 sqxtn s0, d0\n"
+-+		  "	 sqrshrn h0, s0, #15\n"
+-+		  "	 sxtl v0.4s, v0.4h\n"
+-+		  "	 fmov %w[ret], s0\n"
+-+		  : [ret] "=r" (ret), [a] "+r" (a), [b] "+r" (b),
+-+		    [len] "+r" (len), [remainder] "+r" (remainder)
+-+		  :
+-+		  : "cc", "v0",
+-+		    "v16", "v17", "v18", "v19", "v20", "v21", "v22", "v23");
+-+    return ret;
+-+}
+-+#else
+- static inline int32_t inner_product_single(const int16_t *a, const int16_t *b, unsigned int len)
+- {
+-     int32_t ret;
+-@@ -112,33 +178,104 @@ static inline int32_t inner_product_single(const int16_t *a, const int16_t *b, u
+- 		  "	 vqmovn.s64 d0, q0\n"
+- 		  "	 vqrshrn.s32 d0, q0, #15\n"
+- 		  "	 vmov.s16 %[ret], d0[0]\n"
+--		  : [ret] "=&r" (ret), [a] "+r" (a), [b] "+r" (b),
+-+		  : [ret] "=r" (ret), [a] "+r" (a), [b] "+r" (b),
+- 		    [len] "+r" (len), [remainder] "+r" (remainder)
+- 		  :
+- 		  : "cc", "q0",
+--		    "d16", "d17", "d18", "d19",
+--		    "d20", "d21", "d22", "d23");
+-+		    "d16", "d17", "d18", "d19", "d20", "d21", "d22", "d23");
+- 
+-     return ret;
+- }
+--#elif defined(FLOATING_POINT)
+-+#endif  // !defined(__aarch64__)
+- 
+-+#elif defined(FLOATING_POINT)
+-+#if defined(__aarch64__)
+-+static inline int32_t saturate_float_to_16bit(float a) {
+-+    int32_t ret;
+-+    asm ("fcvtas s1, %s[a]\n"
+-+         "sqxtn h1, s1\n"
+-+         "sxtl v1.4s, v1.4h\n"
+-+         "fmov %w[ret], s1\n"
+-+         : [ret] "=r" (ret)
+-+         : [a] "w" (a)
+-+         : "v1");
+-+    return ret;
+-+}
+-+#else
+- static inline int32_t saturate_float_to_16bit(float a) {
+-     int32_t ret;
+-     asm ("vmov.f32 d0[0], %[a]\n"
+-          "vcvt.s32.f32 d0, d0, #15\n"
+-          "vqrshrn.s32 d0, q0, #15\n"
+-          "vmov.s16 %[ret], d0[0]\n"
+--         : [ret] "=&r" (ret)
+-+         : [ret] "=r" (ret)
+-          : [a] "r" (a)
+-          : "q0");
+-     return ret;
+- }
+-+#endif
+-+
+- #undef WORD2INT
+- #define WORD2INT(x) (saturate_float_to_16bit(x))
+- 
+- #define OVERRIDE_INNER_PRODUCT_SINGLE
+--/* Only works when len % 4 == 0 */
+-+/* Only works when len % 4 == 0 and len >= 4 */
+-+#if defined(__aarch64__)
+-+static inline float inner_product_single(const float *a, const float *b, unsigned int len)
+-+{
+-+    float ret;
+-+    uint32_t remainder = len % 16;
+-+    len = len - remainder;
+-+
+-+    asm volatile ("	 cmp %w[len], #0\n"
+-+		  "	 b.ne 1f\n"
+-+		  "	 ld1 {v16.4s}, [%[b]], #16\n"
+-+		  "	 ld1 {v20.4s}, [%[a]], #16\n"
+-+		  "	 subs %w[remainder], %w[remainder], #4\n"
+-+		  "	 fmul v1.4s, v16.4s, v20.4s\n"
+-+		  "      b.ne 4f\n"
+-+		  "	 b 5f\n"
+-+		  "1:"
+-+		  "	 ld1 {v16.4s, v17.4s, v18.4s, v19.4s}, [%[b]], #64\n"
+-+		  "	 ld1 {v20.4s, v21.4s, v22.4s, v23.4s}, [%[a]], #64\n"
+-+		  "	 subs %w[len], %w[len], #16\n"
+-+		  "	 fmul v1.4s, v16.4s, v20.4s\n"
+-+		  "	 fmul v2.4s, v17.4s, v21.4s\n"
+-+		  "	 fmul v3.4s, v18.4s, v22.4s\n"
+-+		  "	 fmul v4.4s, v19.4s, v23.4s\n"
+-+		  "	 b.eq 3f\n"
+-+		  "2:"
+-+		  "	 ld1 {v16.4s, v17.4s, v18.4s, v19.4s}, [%[b]], #64\n"
+-+		  "	 ld1 {v20.4s, v21.4s, v22.4s, v23.4s}, [%[a]], #64\n"
+-+		  "	 subs %w[len], %w[len], #16\n"
+-+		  "	 fmla v1.4s, v16.4s, v20.4s\n"
+-+		  "	 fmla v2.4s, v17.4s, v21.4s\n"
+-+		  "	 fmla v3.4s, v18.4s, v22.4s\n"
+-+		  "	 fmla v4.4s, v19.4s, v23.4s\n"
+-+		  "	 b.ne 2b\n"
+-+		  "3:"
+-+		  "	 fadd v16.4s, v1.4s, v2.4s\n"
+-+		  "	 fadd v17.4s, v3.4s, v4.4s\n"
+-+		  "	 cmp %w[remainder], #0\n"
+-+		  "	 fadd v1.4s, v16.4s, v17.4s\n"
+-+		  "	 b.eq 5f\n"
+-+		  "4:"
+-+		  "	 ld1 {v18.4s}, [%[b]], #16\n"
+-+		  "	 ld1 {v22.4s}, [%[a]], #16\n"
+-+		  "	 subs %w[remainder], %w[remainder], #4\n"
+-+		  "	 fmla v1.4s, v18.4s, v22.4s\n"
+-+		  "	 b.ne 4b\n"
+-+		  "5:"
+-+		  "	 faddp v1.4s, v1.4s, v1.4s\n"
+-+		  "	 faddp %[ret].4s, v1.4s, v1.4s\n"
+-+		  : [ret] "=w" (ret), [a] "+r" (a), [b] "+r" (b),
+-+		    [len] "+r" (len), [remainder] "+r" (remainder)
+-+		  :
+-+		  : "cc", "v1", "v2", "v3", "v4",
+-+		    "v16", "v17", "v18", "v19", "v20", "v21", "v22", "v23");
+-+    return ret;
+-+}
+-+#else
+- static inline float inner_product_single(const float *a, const float *b, unsigned int len)
+- {
+-     float ret;
+-@@ -191,11 +328,12 @@ static inline float inner_product_single(const float *a, const float *b, unsigne
+- 		  "	 vadd.f32 d0, d0, d1\n"
+- 		  "	 vpadd.f32 d0, d0, d0\n"
+- 		  "	 vmov.f32 %[ret], d0[0]\n"
+--		  : [ret] "=&r" (ret), [a] "+r" (a), [b] "+r" (b),
+-+		  : [ret] "=r" (ret), [a] "+r" (a), [b] "+r" (b),
+- 		    [len] "+l" (len), [remainder] "+l" (remainder)
+- 		  :
+--		  : "cc", "q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8",
+--                    "q9", "q10", "q11");
+-+		  : "cc", "q0", "q1", "q2", "q3",
+-+		    "q4", "q5", "q6", "q7", "q8", "q9", "q10", "q11");
+-     return ret;
+- }
+-+#endif  // defined(__aarch64__)
+- #endif
+diff --git a/package/speexdsp/speexdsp.hash b/package/speexdsp/speexdsp.hash
+index 5c3d6b96f3..955c4c0a0c 100644
+--- a/package/speexdsp/speexdsp.hash
++++ b/package/speexdsp/speexdsp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 e896489e045d11933723a94b9dd6f8e7d3d4e0d4b34c9612bcb2f4204261130c  speexdsp-20ed3452074664ad07e380e51321b148acebdf20.tar.gz
++sha256 3f3997997f3af3e7382b44abc9d2a55db5bd8754b22e798e2d16ac309cd6474a  speexdsp-SpeexDSP-1.2.0.tar.gz
+ sha256 671bb5d8fd3c6b05a2e831d90f978ac27965c92bd8ea6d16b3df76e3440c0e9f  COPYING
+diff --git a/package/speexdsp/speexdsp.mk b/package/speexdsp/speexdsp.mk
+index 09c8285688..f5a46cd9de 100644
+--- a/package/speexdsp/speexdsp.mk
++++ b/package/speexdsp/speexdsp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPROFILE_VERSION = 1.2.0
-+OPROFILE_VERSION = 1.3.0
- OPROFILE_SITE = http://downloads.sourceforge.net/project/oprofile/oprofile/oprofile-$(OPROFILE_VERSION)
- OPROFILE_LICENSE = GPL-2.0+
- OPROFILE_LICENSE_FILES = COPYING
+-SPEEXDSP_VERSION = 20ed3452074664ad07e380e51321b148acebdf20
++SPEEXDSP_VERSION = SpeexDSP-1.2.0
+ SPEEXDSP_SITE = https://git.xiph.org/speexdsp.git
+ SPEEXDSP_SITE_METHOD = git
+ SPEEXDSP_LICENSE = BSD-3-Clause
