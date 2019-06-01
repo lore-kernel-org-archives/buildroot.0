@@ -1,28 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 15:09:41 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libuv: bump to version 1.29.1
-In-Reply-To: <20190601104344.12469-1-joerg.krause@embedded.rocks>
-References: <20190601104344.12469-1-joerg.krause@embedded.rocks>
-Message-ID: <20190601150941.07ce6780@windsurf>
+Date: Sat, 1 Jun 2019 15:10:25 +0200
+Subject: [Buildroot] [git commit] package/network-manager: drop
+ --disable-ifnet
+Message-ID: <20190601131045.C829E817BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  1 Jun 2019 12:43:43 +0200
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=dc3e4dbae412012af653cddb32e912c8a9b7839d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  package/libuv/libuv.hash | 2 +-
->  package/libuv/libuv.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+ifnet has been drop since version 1.12.0 and
+https://github.com/NetworkManager/NetworkManager/commit/0474441e2258eeecb356e2aa3cde5c7328828646
 
-Both applied to next, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/network-manager/network-manager.mk | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index c0a9ba0bdb..4ed89231fb 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -29,8 +29,7 @@ NETWORK_MANAGER_CONF_OPTS = \
+ 	--without-docs \
+ 	--with-crypto=gnutls \
+ 	--with-iptables=/usr/sbin/iptables \
+-	--disable-ifupdown \
+-	--disable-ifnet
++	--disable-ifupdown
+ 
+ ifeq ($(BR2_PACKAGE_OFONO),y)
+ NETWORK_MANAGER_DEPENDENCIES += ofono
