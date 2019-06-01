@@ -1,40 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 14:27:40 +0200
-Subject: [Buildroot] [PATCH] arch/Config.in.powerpc: remove unused gcc
- target abi options for powerpc
-In-Reply-To: <20190526174246.14651-1-romain.naour@gmail.com>
-References: <20190526174246.14651-1-romain.naour@gmail.com>
-Message-ID: <20190601142740.289f9933@windsurf>
+Date: Sat, 1 Jun 2019 14:27:43 +0200
+Subject: [Buildroot] [PATCH] package/gcc: don't build a toolchain for
+ powerpc with spe ABI with gcc >= 8.x
+In-Reply-To: <20190526201542.18904-1-romain.naour@gmail.com>
+References: <20190526201542.18904-1-romain.naour@gmail.com>
+Message-ID: <20190601142743.55885b32@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 26 May 2019 19:42:46 +0200
+On Sun, 26 May 2019 22:15:42 +0200
 Romain Naour <romain.naour@gmail.com> wrote:
 
-> gcc target abi options for powerpc were added by [1] and renamed by [2]
-> to BR2_PPC_ABI_* but never used. Since always BR2_GCC_TARGET_ABI is empty
-> when using a powerpc toolchain.
+> The powerpc*-*-*spe* support has been deprecated in GCC 8 [1] and has
+> been removed in GCC 9 [2].
 > 
-> Buildroot currently support SPE and Classic target ABI, nothing seems
-> to require a specific gcc target abi option.
+> While building with GCC 8, the build stop since we don't provide --enable-obsolete
+> option.
 > 
-> This patch is a cleanup like commit [3].
+> For now, keep powerpcspe support in Buildroot but only for older compiler
+> up to GCC 7.
 > 
-> [1] 7d8a59b40e46fa6ed84a5b78644327e97d04adef
-> [2] 98175bd43dbfc70f473cca6759bc8a2f4e655734
-> [3] fd08153b9d677d654add6c580b9ccc5c27d672e2
+> Note: Although we can't select Glibc for powerpcspe since commit [4], this
+> support has been removed for the next version of Glibc (the upcoming 2.30).
+> 
+> [1] https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+> [2] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=b31d0348ddada49453e3edaaf93a423fdc61dc79
+> [3] https://sourceware.org/git/?p=glibc.git;a=commit;h=a053e878494080f7070cf92890e546057236c9c9
+> [4] https://git.buildroot.net/buildroot/commit/?id=5777e3ffd99132a57e3d29659850eec14b1625f8
 > 
 > Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Cyril Bur <cyrilbur@gmail.com>
-> Cc: Sam Bobroff <sam.bobroff@au1.ibm.com>
 > ---
->  arch/Config.in.powerpc | 8 --------
->  1 file changed, 8 deletions(-)
+>  package/gcc/Config.in.host | 3 +++
+>  1 file changed, 3 insertions(+)
 
 Applied to master, thanks.
 
