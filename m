@@ -1,56 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 14:26:29 +0200
-Subject: [Buildroot] [git commit] arch/Config.in.powerpc: remove unused gcc
- target abi options for powerpc
-Message-ID: <20190601122745.BE4E98E8C6@busybox.osuosl.org>
+Date: Sat, 1 Jun 2019 14:26:34 +0200
+Subject: [Buildroot] [git commit] package/gcc: don't build a toolchain for
+ powerpc with spe ABI with gcc >= 8.x
+Message-ID: <20190601122745.C9F7381456@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eda77e17c170d865e4d6bd4a8fc69772b479c3da
+commit: https://git.buildroot.net/buildroot/commit/?id=2df8b1417bc50f52202c6ddc21ccbfe4b109694e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-gcc target abi options for powerpc were added by [1] and renamed by [2]
-to BR2_PPC_ABI_* but never used. Since always BR2_GCC_TARGET_ABI is empty
-when using a powerpc toolchain.
+The powerpc*-*-*spe* support has been deprecated in GCC 8 [1] and has
+been removed in GCC 9 [2].
 
-Buildroot currently support SPE and Classic target ABI, nothing seems
-to require a specific gcc target abi option.
+While building with GCC 8, the build stop since we don't provide --enable-obsolete
+option.
 
-This patch is a cleanup like commit [3].
+For now, keep powerpcspe support in Buildroot but only for older compiler
+up to GCC 7.
 
-[1] 7d8a59b40e46fa6ed84a5b78644327e97d04adef
-[2] 98175bd43dbfc70f473cca6759bc8a2f4e655734
-[3] fd08153b9d677d654add6c580b9ccc5c27d672e2
+Note: Although we can't select Glibc for powerpcspe since commit [4], this
+support has been removed for the next version of Glibc (the upcoming 2.30).
+
+[1] https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+[2] https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=b31d0348ddada49453e3edaaf93a423fdc61dc79
+[3] https://sourceware.org/git/?p=glibc.git;a=commit;h=a053e878494080f7070cf92890e546057236c9c9
+[4] https://git.buildroot.net/buildroot/commit/?id=5777e3ffd99132a57e3d29659850eec14b1625f8
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Cyril Bur <cyrilbur@gmail.com>
-Cc: Sam Bobroff <sam.bobroff@au1.ibm.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- arch/Config.in.powerpc | 8 --------
- 1 file changed, 8 deletions(-)
+ package/gcc/Config.in.host | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/Config.in.powerpc b/arch/Config.in.powerpc
-index 7a452a630a..394f2e625c 100644
---- a/arch/Config.in.powerpc
-+++ b/arch/Config.in.powerpc
-@@ -205,14 +205,6 @@ config BR2_GCC_TARGET_CPU
- 	default "power7"	if BR2_powerpc_power7
- 	default "power8"	if BR2_powerpc_power8
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 8e22a4c155..b477fe56e7 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -66,6 +66,9 @@ config BR2_GCC_VERSION_8_X
+ 	bool "gcc 8.x"
+ 	# Broken or unsupported architectures
+ 	depends on !BR2_or1k
++	# powerpc spe support has been deprecated since gcc 8.x.
++	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
++	depends on !BR2_powerpc_SPE
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
  
--config BR2_GCC_TARGET_ABI
--	default "altivec"		if BR2_PPC_ABI_altivec
--	default "no-altivec"		if BR2_PPC_ABI_no-altivec
--	default "spe"			if BR2_PPC_ABI_spe
--	default "no-spe"		if BR2_PPC_ABI_no-spe
--	default "ibmlongdouble"		if BR2_PPC_ABI_ibmlongdouble
--	default "ieeelongdouble"	if BR2_PPC_ABI_ieeelongdouble
--
- config BR2_READELF_ARCH_NAME
- 	default "PowerPC"	if BR2_powerpc
- 	default "PowerPC64"	if BR2_powerpc64 || BR2_powerpc64le
+ endchoice
