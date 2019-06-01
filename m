@@ -1,35 +1,38 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat,  1 Jun 2019 22:33:50 +0200
-Subject: [Buildroot] [PATCH 1/2] toolchain: allow architectures to enforce
- compilation flags
+Date: Sat,  1 Jun 2019 22:33:51 +0200
+Subject: [Buildroot] [PATCH 2/2] arch/arc: arc7x0 always needs -matomic
 In-Reply-To: <cover.1559421222.git.yann.morin.1998@free.fr>
 References: <cover.1559421222.git.yann.morin.1998@free.fr>
-Message-ID: <f0402014099dc18144166238a89a982002edc546.1559421222.git.yann.morin.1998@free.fr>
+Message-ID: <16241cb355b045ba585ba806f0f4c829f5aea9f8.1559421222.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+As reported by Alexey:
+    https://patchwork.ozlabs.org/patch/1087480/
+    https://patchwork.ozlabs.org/patch/1087471/
+
+Reported-by: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
+Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 ---
- toolchain/toolchain-wrapper.mk | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arch.mk.arc | 4 ++++
+ 1 file changed, 4 insertions(+)
+ create mode 100644 arch/arch.mk.arc
 
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index ca66fa7ba4..8f872506ec 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -17,6 +17,7 @@ TOOLCHAIN_WRAPPER_ARGS = $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
- 
- TOOLCHAIN_WRAPPER_OPTS = \
-+	$(ARCH_TOOLCHAIN_WRAPPER_OPTS) \
- 	$(call qstrip,$(BR2_SSP_OPTION)) \
- 	$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
- 
+diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
+new file mode 100644
+index 0000000000..d324e5c1e1
+--- /dev/null
++++ b/arch/arch.mk.arc
+@@ -0,0 +1,4 @@
++# ARC7x0 needs -matomic, always
++ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
++ARCH_TOOLCHAIN_WRAPPER_OPTS = -matomic
++endif
 -- 
 2.20.1
