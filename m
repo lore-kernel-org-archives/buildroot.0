@@ -1,42 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 15:26:45 +0200
-Subject: [Buildroot] [PATCH] linux: enable UEVENT_HELPER when mdev is
- used
-In-Reply-To: <38daf6b1-3749-66f4-93b9-7f1222c7da16@mind.be>
-References: <20190525130755.25678-1-peter@korsgaard.com>
- <54a85c9f-1e14-de0d-c6cf-8201dea50e1d@mind.be>
- <f887e49a-0327-9bcb-f524-2a9aa2527edb@railnova.eu>
- <38daf6b1-3749-66f4-93b9-7f1222c7da16@mind.be>
-Message-ID: <20190601152645.2ad18a4e@windsurf>
+Date: Sat, 1 Jun 2019 15:30:41 +0200
+Subject: [Buildroot] [PATCH 1/4] boot/optee-os: support external TA SDK
+In-Reply-To: <20190517084556.12242-1-etienne.carriere@linaro.org>
+References: <20190517084556.12242-1-etienne.carriere@linaro.org>
+Message-ID: <20190601153041.6855248e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Etienne,
 
-On Wed, 29 May 2019 15:57:22 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
+On Fri, 17 May 2019 10:45:53 +0200
+Etienne Carriere <etienne.carriere@linaro.org> wrote:
 
->  If you anyway have it, submit it, and we can discuss based on that.
+> It happens that Buildroot is used to generate the embedded filesystem
+> not not the boot images that which are built from another environment(s).
 
-Titouan has submitted his patch:
+not not -> but not
 
-  http://patchwork.ozlabs.org/patch/1107175/
+that which -> which
 
-The commit title is probably not the best, but other than that, the
-idea looks good to me.
+> In such case OP-TEE SDK get built outside of Buildroot. This SDK is
 
->  It would be nice if you could also do a preparatory patch that converts the
-> file to the "canonical init script format" (cfr. e.g.
-> package/rsyslog/S01rsyslogd). mdev doesn't have arguments or a default, so that
-> simplifies things a little.
+get -> gets
 
-Since the change to S10mdev from Titouan is kind of a fix, I would
-actually not make the conversion to the "canonical format" a
-requirement that should be done as a preparatory patch, but that's
-admittedly a minor detail.
+> needed by other OP-TEE packages in Buildroot to generate .ta files.
+> 
+> This change introduces BR2_TARGET_OPTEE_OS_SDK_PATH for configuration
+> to provide the path of an external OP-TEE SDK.
+> 
+> This configuration is mandated when neither BR2_TARGET_OPTEE_OS_CORE
+> nor BR2_TARGET_OPTEE_OS_SDK are enable while BR2_TARGET_OPTEE_OS=y.
+
+enable -> enabled
+
+> 
+> When BR2_TARGET_OPTEE_OS_SDK_PATH is defined, the build stage of
+> optee-os copies the SDK file tree into optee-os build tree, for these
+> to be installed during target/staging install.
+> 
+> With this change BR2_TARGET_OPTEE_OS_SERVICES no more selects
+> BR2_TARGET_OPTEE_OS_CORE as .ta files can be build from external SDK.
+> 
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+
+To be honest, I am not convinced we want to support such a special use
+case. It makes the whole OP-TEE packaging more complicated. I don't
+think we need to support use cases where some random part of the system
+gets built by Buildroot, and another part is built externally.
+
+So unless you can convince me that the use case is really important, I
+would be tempted to not accepted this patch series. I'm Cc'ing a bunch
+of other folks so that they can share their opinion.
+
+Best regards,
 
 Thomas
 -- 
