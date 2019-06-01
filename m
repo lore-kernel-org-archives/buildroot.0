@@ -1,102 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 1 Jun 2019 09:20:19 +0200
-Subject: [Buildroot] [git commit branch/next] package/zziplib: new package
-Message-ID: <20190601072102.CFE108DE65@busybox.osuosl.org>
+Date: Sat, 1 Jun 2019 09:22:03 +0200
+Subject: [Buildroot] [PATCH for-next 1/3] package/zziplib: new package
+In-Reply-To: <20190529151655.7098-1-romain.naour@gmail.com>
+References: <20190529151655.7098-1-romain.naour@gmail.com>
+Message-ID: <20190601092203.0c32b7f3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7bd759514d8d69e7b7c146ba22632246c1866c18
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-Force the build system to use python2 interpreter.
+On Wed, 29 May 2019 17:16:53 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-[Thomas: add docs/COPYING.MPL docs/copying.htm to the license files.]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/zziplib/Config.in    | 11 +++++++++++
- package/zziplib/zziplib.hash |  5 +++++
- package/zziplib/zziplib.mk   | 18 ++++++++++++++++++
- 5 files changed, 36 insertions(+)
+> +ZZIPLIB_VERSION = v0.13.69
+> +ZZIPLIB_SITE = $(call github,gdraheim,zziplib,$(ZZIPLIB_VERSION))
+> +ZZIPLIB_LICENSE = LGPL-2.0+ or MPL-1.1
+> +ZZIPLIB_LICENSE_FILES = COPYING.LIB
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 66dc2504ff..29fc91dabb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1949,6 +1949,7 @@ F:	package/tk/
- F:	package/upower/
- F:	package/waffle/
- F:	package/xenomai/
-+F:	package/zziplib/
- F:	toolchain/toolchain-external/toolchain-external-arm-aarch64/
- F:	toolchain/toolchain-external/toolchain-external-arm-aarch64-be/
- F:	toolchain/toolchain-external/toolchain-external-arm-arm/
-diff --git a/package/Config.in b/package/Config.in
-index 6f1c4593e6..f61009410d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1189,6 +1189,7 @@ menu "Compression and decompression"
- 	source "package/snappy/Config.in"
- 	source "package/szip/Config.in"
- 	source "package/zlib/Config.in"
-+	source "package/zziplib/Config.in"
- endmenu
- 
- menu "Crypto"
-diff --git a/package/zziplib/Config.in b/package/zziplib/Config.in
-new file mode 100644
-index 0000000000..6b55572a4d
---- /dev/null
-+++ b/package/zziplib/Config.in
-@@ -0,0 +1,11 @@
-+config BR2_PACKAGE_ZZIPLIB
-+	bool "zziplib"
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  The zziplib provides read access to zipped files in a
-+	  zip-archive, using compression based solely on free algorithms
-+	  provided by zlib. It also provides a functionality to overlay
-+	  the archive filesystem with the filesystem of the operating
-+	  system environment.
-+
-+	  http://zziplib.sourceforge.net
-diff --git a/package/zziplib/zziplib.hash b/package/zziplib/zziplib.hash
-new file mode 100644
-index 0000000000..1f6b55ec18
---- /dev/null
-+++ b/package/zziplib/zziplib.hash
-@@ -0,0 +1,5 @@
-+# sha256 locally computed
-+sha256 846246d7cdeee405d8d21e2922c6e97f55f24ecbe3b6dcf5778073a88f120544  zziplib-v0.13.69.tar.gz
-+sha256 94b03f1a60a7fd5007149530626a895a6ef5a8b9342abfd56860c5f3956f5d23  docs/COPYING.LIB
-+sha256 c2aa7d58cebd24cb877bbf11d6b13a4bb7cd08b9d7db5d3037ca06c46bf4cfd8  docs/COPYING.MPL
-+sha256 1c6da11efe8c43ee853fe5b21501dd72b81831ae84d58ea376bddc0620a5c361  docs/copying.htm
-diff --git a/package/zziplib/zziplib.mk b/package/zziplib/zziplib.mk
-new file mode 100644
-index 0000000000..04129fdd97
---- /dev/null
-+++ b/package/zziplib/zziplib.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# zziplib
-+#
-+################################################################################
-+
-+ZZIPLIB_VERSION = v0.13.69
-+ZZIPLIB_SITE = $(call github,gdraheim,zziplib,$(ZZIPLIB_VERSION))
-+ZZIPLIB_LICENSE = LGPL-2.0+ or MPL-1.1
-+ZZIPLIB_LICENSE_FILES = docs/COPYING.LIB docs/COPYING.MPL docs/copying.htm
-+ZZIPLIB_INSTALL_STAGING = YES
-+
-+ZZIPLIB_DEPENDENCIES = host-pkgconf host-python zlib
-+
-+# zziplib is not python3 friendly, so force the python interpreter
-+ZZIPLIB_CONF_OPTS = ac_cv_path_PYTHON=$(HOST_DIR)/bin/python2
-+
-+$(eval $(autotools-package))
+I have added docs/COPYING.MPL and docs/copying.htm to the license
+files, and therefore also used docs/COPYING.LIB for consistency.
+
+Applied to next with those changes, thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
