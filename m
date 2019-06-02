@@ -1,40 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 02 Jun 2019 20:12:45 -0000
-Subject: [Buildroot] [git commit] package/busybox: select individual
- libraries when SELinux is enabled
-Message-ID: <20190602201234.688418EDA8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libuv: bump to version 1.29.0
+Message-ID: <20190602201234.3243D81354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=769d4c6160a106a57271ff8ffc7c2011c39bfad2
+commit: https://git.buildroot.net/buildroot/commit/?id=ea5238ff1fe935aec50cc20fcdb36daf3df46131
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-From the help test of individual binaries:
-
-  With this option enabled, each applet is a separate binary, which is
-  needed for proper operation with SELinux
-
-As such, it makes sense to select this option when SELinux support is
-selected as well.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/busybox/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/busybox/Config.in b/package/busybox/Config.in
-index e5c5f89a4d..bab00bf835 100644
---- a/package/busybox/Config.in
-+++ b/package/busybox/Config.in
-@@ -42,6 +42,7 @@ config BR2_PACKAGE_BUSYBOX_SELINUX
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on !BR2_arc
-+	select BR2_PACKAGE_BUSYBOX_INDIVIDUAL_BINARIES
- 	select BR2_PACKAGE_LIBSELINUX
- 	help
- 	  Enable SELinux support in BusyBox. Please note that
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 7f51dfc923..b237bd81dd 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  9ab338062e5b73bd4a05b7fcb77a0745c925c0be9118e0946434946a262cdad5  libuv-v1.28.0.tar.gz
++sha256  ca62158fd35dfc06e37400f5ae5d0f18dde1ffc4c140738fff6f95b036a8b6f1  libuv-v1.29.0.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 00b13f26bc..ef6fc1af12 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUV_VERSION = v1.28.0
++LIBUV_VERSION = v1.29.0
+ LIBUV_SITE = $(call github,libuv,libuv,$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
