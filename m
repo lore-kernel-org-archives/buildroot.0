@@ -1,33 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 2 Jun 2019 10:16:25 +0200
-Subject: [Buildroot] [git commit] docs/website/news.html: add 2019.05
- announcement link
-Message-ID: <20190602081743.2B7AB815E9@busybox.osuosl.org>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  2 Jun 2019 10:51:30 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/opencv3: objdetect needs
+ calib3d
+Message-ID: <20190602085130.30353-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa9efbc9015c0f199e61f40043530860995c70d5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+objdetect needs calib3d since version 3.4.4 and
+https://github.com/opencv/opencv/commit/53ec8f286b7d475fa5a799023595bd4dc73e5c81
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/37d0a5ba57de4c52b6e0ec99aedaca71f3397fbb
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- docs/website/news.html | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ package/opencv3/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index c2225d1813..edcfb94d65 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -20,7 +20,8 @@
- 	<p>The stable 2019.05 release is out - Thanks to everyone
- 	  contributing and testing the release candidates. See the
- 	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.05">CHANGES</a>
--	  file for more details
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-June/251548.html">announcement</a>
- 	  and go to the <a href="/downloads/">downloads page</a> to pick up the
- 	  <a href="/downloads/buildroot-2019.05.tar.bz2">2019.05 release</a>.</p>
-       </div>
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index 61405a7c64..3a6ff8e80c 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -140,6 +140,7 @@ config BR2_PACKAGE_OPENCV3_LIB_ML
+ config BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
+ 	bool "objdetect"
+ 	# opencv_core dependency is already enabled
++	select BR2_PACKAGE_OPENCV3_LIB_CALIB3D
+ 	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
+ 	select BR2_PACKAGE_OPENCV3_LIB_ML
+ 	help
+-- 
+2.20.1
