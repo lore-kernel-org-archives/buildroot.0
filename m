@@ -1,49 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sun, 02 Jun 2019 20:12:44 -0000
-Subject: [Buildroot] [git commit] package/python-requests: bump to version
- 2.22.0
-Message-ID: <20190602201234.435EB81354@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] iproute2: bump to version 5.0.0
+Message-ID: <20190602201233.79F75800FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69b5ef90923ae8b4033993ff32e666868160cd88
+commit: https://git.buildroot.net/buildroot/commit/?id=8af35b92cc44441404f5d7c02389b3a192775163
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-requests/python-requests.hash | 4 ++--
- package/python-requests/python-requests.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Drop upstream patch.
 
-diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
-index 46f62c75c5..42f45d3a44 100644
---- a/package/python-requests/python-requests.hash
-+++ b/package/python-requests/python-requests.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/requests/json
--md5	1bcd0e0977c3f8db1848ba0e2b7ab904  requests-2.21.0.tar.gz
--sha256	502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e  requests-2.21.0.tar.gz
-+md5	ee28bee2de76e9198fc41e48f3a7dd47  requests-2.22.0.tar.gz
-+sha256	11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4  requests-2.22.0.tar.gz
- # Locally computed sha256 checksums
- sha256	be41abac2c40f8530307e8d172c590b476f4a488bc6a68f8de57b7cf64786687  LICENSE
-diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
-index 3d8542fcdf..e64db94523 100644
---- a/package/python-requests/python-requests.mk
-+++ b/package/python-requests/python-requests.mk
-@@ -4,9 +4,9 @@
+Cc: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Tested-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0002-f_flower-fix-build-with-musl-libc.patch   | 31 ----------------------
+ package/iproute2/iproute2.hash                     |  2 +-
+ package/iproute2/iproute2.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 33 deletions(-)
+
+diff --git a/package/iproute2/0002-f_flower-fix-build-with-musl-libc.patch b/package/iproute2/0002-f_flower-fix-build-with-musl-libc.patch
+deleted file mode 100644
+index 71b652d9d4..0000000000
+--- a/package/iproute2/0002-f_flower-fix-build-with-musl-libc.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 28747146622a49c3e7b5c5b36dc02c6a64124770 Mon Sep 17 00:00:00 2001
+-From: Hans Dedecker <dedeckeh@gmail.com>
+-Date: Wed, 23 Jan 2019 22:02:31 +0100
+-Subject: [PATCH] f_flower: fix build with musl libc
+-
+-XATTR_SIZE_MAX requires the usage of linux/limits.h; let's include it
+-
+-Signed-off-by: Hans Dedecker <dedeckeh@gmail.com>
+-Signed-off-by: Stephen Hemminger <stephen@networkplumber.org>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+----
+-Upstream status: commit 2874714662
+-
+- tc/f_flower.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/tc/f_flower.c b/tc/f_flower.c
+-index c563666702b5..9659e894dd1f 100644
+---- a/tc/f_flower.c
+-+++ b/tc/f_flower.c
+-@@ -14,6 +14,7 @@
+- #include <unistd.h>
+- #include <string.h>
+- #include <net/if.h>
+-+#include <linux/limits.h>
+- #include <linux/if_arp.h>
+- #include <linux/if_ether.h>
+- #include <linux/ip.h>
+--- 
+-2.20.1
+-
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 28862ce19c..b7e3e701c5 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256	c8adaa6a40f888476b23acb283cfa30c0dd55f07b5aa20663ed5ba2ef1f6fda8  iproute2-4.20.0.tar.xz
++sha256	df047302a39650ef832c07e8dab5df7a23218cd398bd310c8628e386161d20ba  iproute2-5.0.0.tar.xz
+ sha256	e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4	COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 13b1f90f37..539db5e015 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_REQUESTS_VERSION = 2.21.0
-+PYTHON_REQUESTS_VERSION = 2.22.0
- PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
--PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/52/2c/514e4ac25da2b08ca5a464c50463682126385c4272c18193876e91f4bc38
-+PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/01/62/ddcf76d1d19885e8579acb1b1df26a852b03472c0e46d2b959a714c90608
- PYTHON_REQUESTS_SETUP_TYPE = setuptools
- PYTHON_REQUESTS_LICENSE = Apache-2.0
- PYTHON_REQUESTS_LICENSE_FILES = LICENSE
+-IPROUTE2_VERSION = 4.20.0
++IPROUTE2_VERSION = 5.0.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
