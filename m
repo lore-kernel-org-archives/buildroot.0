@@ -1,72 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 02 Jun 2019 20:12:44 -0000
-Subject: [Buildroot] [git commit] boot/optee-os: bump version to 3.5.0
-Message-ID: <20190602201233.B754D8EDEF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-requests: bump to version
+ 2.22.0
+Message-ID: <20190602201234.435EB81354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f274d52a590591f3c4d976466182cf11b6ddc28
+commit: https://git.buildroot.net/buildroot/commit/?id=69b5ef90923ae8b4033993ff32e666868160cd88
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump OP-TEE OS package version to OP-TEE release 3.5.0.
-
-The hash of the license file changed due to a fairly minor change in
-the file:
-
-  -Unless it has its own copyright/license embedded in its body, each source file
-  +Unless it has its own copyright/license embedded in its body, each file
-
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-[Thomas: update the license file hash]
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/optee-os/3.4.0/optee-os.hash | 4 ----
- boot/optee-os/Config.in           | 4 ++--
- boot/optee-os/optee-os.hash       | 4 ++++
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-requests/python-requests.hash | 4 ++--
+ package/python-requests/python-requests.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/boot/optee-os/3.4.0/optee-os.hash b/boot/optee-os/3.4.0/optee-os.hash
-deleted file mode 100644
-index 07afdfac8f..0000000000
---- a/boot/optee-os/3.4.0/optee-os.hash
-+++ /dev/null
-@@ -1,4 +0,0 @@
--# From https://github.com/OP-TEE/optee_os/archive/3.4.0.tar.gz
--sha256 51d42ac7aa780ec8d8ee471eff689a29a7621aacace046722b1490b62ec2d481  optee-os-3.4.0.tar.gz
--# Locally computed
--sha256 fda8385993f112d7ca61b88b54ba5b4cbeec7e43a0f9b317d5186703c1985e8f  LICENSE
-diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-index a1f1b910ac..c17c698a9a 100644
---- a/boot/optee-os/Config.in
-+++ b/boot/optee-os/Config.in
-@@ -18,7 +18,7 @@ choice
- 	  Select the version of OP-TEE OS you want to use
+diff --git a/package/python-requests/python-requests.hash b/package/python-requests/python-requests.hash
+index 46f62c75c5..42f45d3a44 100644
+--- a/package/python-requests/python-requests.hash
++++ b/package/python-requests/python-requests.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/requests/json
+-md5	1bcd0e0977c3f8db1848ba0e2b7ab904  requests-2.21.0.tar.gz
+-sha256	502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e  requests-2.21.0.tar.gz
++md5	ee28bee2de76e9198fc41e48f3a7dd47  requests-2.22.0.tar.gz
++sha256	11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4  requests-2.22.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	be41abac2c40f8530307e8d172c590b476f4a488bc6a68f8de57b7cf64786687  LICENSE
+diff --git a/package/python-requests/python-requests.mk b/package/python-requests/python-requests.mk
+index 3d8542fcdf..e64db94523 100644
+--- a/package/python-requests/python-requests.mk
++++ b/package/python-requests/python-requests.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_OPTEE_OS_LATEST
--	bool "3.4.0"
-+	bool "3.5.0"
- 	help
- 	  Use the latest release tag from the OP-TEE OS official Git
- 	  repository.
-@@ -50,7 +50,7 @@ endif
- 
- config BR2_TARGET_OPTEE_OS_VERSION
- 	string
--	default "3.4.0"		if BR2_TARGET_OPTEE_OS_LATEST
-+	default "3.5.0"		if BR2_TARGET_OPTEE_OS_LATEST
- 	default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
- 				if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
- 
-diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
-new file mode 100644
-index 0000000000..1c8f5d6b31
---- /dev/null
-+++ b/boot/optee-os/optee-os.hash
-@@ -0,0 +1,4 @@
-+# From https://github.com/OP-TEE/optee_os/archive/3.5.0.tar.gz
-+sha256 a02fe8e7fdee9653e9207059071735a839b1255fdaf311a2a6cfd185a4cee6a2  optee-os-3.5.0.tar.gz
-+# Locally computed
-+sha256 1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
+-PYTHON_REQUESTS_VERSION = 2.21.0
++PYTHON_REQUESTS_VERSION = 2.22.0
+ PYTHON_REQUESTS_SOURCE = requests-$(PYTHON_REQUESTS_VERSION).tar.gz
+-PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/52/2c/514e4ac25da2b08ca5a464c50463682126385c4272c18193876e91f4bc38
++PYTHON_REQUESTS_SITE = https://files.pythonhosted.org/packages/01/62/ddcf76d1d19885e8579acb1b1df26a852b03472c0e46d2b959a714c90608
+ PYTHON_REQUESTS_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_LICENSE = Apache-2.0
+ PYTHON_REQUESTS_LICENSE_FILES = LICENSE
