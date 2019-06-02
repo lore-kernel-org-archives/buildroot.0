@@ -1,42 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 02 Jun 2019 20:12:43 -0000
-Subject: [Buildroot] [git commit] package/libopenh264: bump version to v1.8.0
-Message-ID: <20190602201233.82300800FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ninja: always use host-python3
+Message-ID: <20190602201233.E09CD81354@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=037cf1d5a1e226a8314d14356003f575bb2bf435
+commit: https://git.buildroot.net/buildroot/commit/?id=f8886a07a29d4760a107192bf2f31049694c5287
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libopenh264/libopenh264.hash | 2 +-
- package/libopenh264/libopenh264.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The current logic selects Python3 for the host only if Python3 is
+selected for the target, otherwise it selects Python2.
 
-diff --git a/package/libopenh264/libopenh264.hash b/package/libopenh264/libopenh264.hash
-index b9cd9ed53e..f8a63f523e 100644
---- a/package/libopenh264/libopenh264.hash
-+++ b/package/libopenh264/libopenh264.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 9c07c38d7de00046c9c52b12c76a2af7648b70d05bd5460c8b67f6895738653f  libopenh264-v1.7.0.tar.gz
-+sha256 08670017fd0bb36594f14197f60bebea27b895511251c7c64df6cd33fc667d34  libopenh264-v1.8.0.tar.gz
- sha256 dd5c1c9668512530fa5a96e4c29ac4033d70a7eeb0eed7a42fddb6dd794ebdbb  LICENSE
-diff --git a/package/libopenh264/libopenh264.mk b/package/libopenh264/libopenh264.mk
-index 233e7971f4..96979a9d43 100644
---- a/package/libopenh264/libopenh264.mk
-+++ b/package/libopenh264/libopenh264.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+As Meson, the only package infrastructure using ninja, needs Python 3,
+it is desirable to also depend on Python 3 on the host for the ninja
+host package.
+
+Otherwise, if no Python interpreter is selected for the target, both
+Python 2 and Python 3 are build for the host, which is time consuming
+without any benefit.
+
+For example when building libmpdclient (and all its target and host
+dependencies) the actual elapsed time for is reduced from around 286s
+to 207s as reported by `time -p make clean all`.
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ninja/ninja.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/package/ninja/ninja.mk b/package/ninja/ninja.mk
+index 9d6f30e9fe..f29ab0a930 100644
+--- a/package/ninja/ninja.mk
++++ b/package/ninja/ninja.mk
+@@ -9,7 +9,12 @@ NINJA_SITE = $(call github,ninja-build,ninja,$(NINJA_VERSION))
+ NINJA_LICENSE = Apache-2.0
+ NINJA_LICENSE_FILES = COPYING
  
--LIBOPENH264_VERSION = v1.7.0
-+LIBOPENH264_VERSION = v1.8.0
- LIBOPENH264_SITE = $(call github,cisco,openh264,$(LIBOPENH264_VERSION))
- LIBOPENH264_LICENSE = BSD-2-Clause
- LIBOPENH264_LICENSE_FILES = LICENSE
+-HOST_NINJA_DEPENDENCIES = $(if $(BR2_PACKAGE_PYTHON3),host-python3,host-python)
++# Although Ninja supports both Python2 and Python3, we enforce Python3
++# on the host for the following reason: Meson is the only package
++# using Ninja so far and Meson requires Python3. In this way, we
++# prevent both Python2 and Python3 from being created on the host,
++# which is time consuming and without benefit.
++HOST_NINJA_DEPENDENCIES = host-python3
+ 
+ define HOST_NINJA_BUILD_CMDS
+ 	(cd $(@D); ./configure.py --bootstrap)
