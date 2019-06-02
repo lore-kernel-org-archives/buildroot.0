@@ -1,54 +1,26 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  2 Jun 2019 22:07:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5wayland: examples needs opengl
- with qt latest
-Message-ID: <20190602200734.29324-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 02 Jun 2019 20:12:43 -0000
+Subject: [Buildroot] [git commit] package/redis: bump to 5.0.4
+Message-ID: <20190602201233.71889800FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-WIth Qt latest, if opengl is not enabled, qt5wayland examples won't be
-built:
-make[3]: Entering directory `/home/dawncrow/buildroot-test/scripts/instance-0/output/build/qt5wayland-5.12.2/examples/wayland'
-Some of the required modules (qtConfig(opengl)) are not available.
-Skipped.
-make[3]: Leaving directory `/home/dawncrow/buildroot-test/scripts/instance-0/output/build/qt5wayland-5.12.2/examples/wayland'
+commit: https://git.buildroot.net/buildroot/commit/?id=6ee03e29cf984fb236e1a0923f12d8ea4213aaf6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-And build will fail on:
-cp: cannot stat '/home/dawncrow/buildroot-test/scripts/instance-0/output/host/sparc64-buildroot-linux-gnu/sysroot/usr/lib/qt/examples/wayland': No such file or directory
+* Redis 5 now supports reproducible builds via SOURCE_DATE_EPOCH
+* Add myself to DEVELOPERS for Redis
 
-Fixes:
- - http://autobuild.buildroot.org/results/902322ca156c14044d4ce53ab2c77f30dd854c98
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/qt5/qt5wayland/qt5wayland.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ DEVELOPERS                      | 3 +++
+ package/redis/0001-uclibc.patch | 9 ++++++---
+ package/redis/redis.hash        | 2 +-
+ package/redis/redis.mk          | 2 +-
+ 4 files changed, 11 insertions(+), 5 deletions(-)
 
-diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
-index 449640c881..0bda596f3b 100644
---- a/package/qt5/qt5wayland/qt5wayland.mk
-+++ b/package/qt5/qt5wayland/qt5wayland.mk
-@@ -60,10 +60,18 @@ endif
- endif
- 
- ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-+ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-+ifeq ($(BR2_PACKAGE_QT5BASE_OPENGL),y)
- define QT5WAYLAND_INSTALL_TARGET_EXAMPLES
- 	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/wayland $(TARGET_DIR)/usr/lib/qt/examples/
- endef
- endif
-+else
-+define QT5WAYLAND_INSTALL_TARGET_EXAMPLES
-+	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/wayland $(TARGET_DIR)/usr/lib/qt/examples/
-+endef
-+endif
-+endif
- 
- define QT5WAYLAND_INSTALL_TARGET_CMDS
- 	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WaylandClient.so* $(TARGET_DIR)/usr/lib
--- 
-2.20.1
+Patch is too large, so refusing to show it
