@@ -1,196 +1,126 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sun, 02 Jun 2019 20:12:44 -0000
-Subject: [Buildroot] [git commit] package/optee-test: bump version to 3.5.0
-Message-ID: <20190602201233.C7EE58EDF1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dt-utils: bump to v2019.01.0
+Message-ID: <20190602201233.F16B3800FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26701e2705fb4e3e79bd50d37dc8779e9e7c92f6
+commit: https://git.buildroot.net/buildroot/commit/?id=e3fa1c18209baf7dd5b58ca73d292151952b1e6a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump OP-TEE Test package version to release 3.5.0. This
-change updates patches on OP-TEE Test package accordingly.
+Also drop patch which is part of new release.
 
-Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ession-4100-update-string-conversion-loop.patch | 72 ----------------------
- ...41xx-prevent-unsafe-loop-optimizations-bu.patch | 63 +++++++++++++++++++
- package/optee-test/optee-test.hash                 |  4 +-
- package/optee-test/optee-test.mk                   |  2 +-
- 4 files changed, 66 insertions(+), 75 deletions(-)
+ ...pilation-for-glibc-version-2.27.9000-36.f.patch | 75 ----------------------
+ package/dt-utils/dt-utils.hash                     |  2 +-
+ package/dt-utils/dt-utils.mk                       |  2 +-
+ 3 files changed, 2 insertions(+), 77 deletions(-)
 
-diff --git a/package/optee-test/0001-regression-4100-update-string-conversion-loop.patch b/package/optee-test/0001-regression-4100-update-string-conversion-loop.patch
+diff --git a/package/dt-utils/0001-src-fix-compilation-for-glibc-version-2.27.9000-36.f.patch b/package/dt-utils/0001-src-fix-compilation-for-glibc-version-2.27.9000-36.f.patch
 deleted file mode 100644
-index 62862867be..0000000000
---- a/package/optee-test/0001-regression-4100-update-string-conversion-loop.patch
+index 8c2f585946..0000000000
+--- a/package/dt-utils/0001-src-fix-compilation-for-glibc-version-2.27.9000-36.f.patch
 +++ /dev/null
-@@ -1,72 +0,0 @@
--From 88714fc174b91950c9e1c53a9832fc6d4ffa6e2a Mon Sep 17 00:00:00 2001
--From: Etienne Carriere <etienne.carriere@linaro.org>
--Date: Sun, 17 Feb 2019 22:44:44 +0100
--Subject: [PATCH] regression 4100: update string conversion loop
+@@ -1,75 +0,0 @@
+-From 1c80e31872aec9f2ef7eca6a52aa89c0ea759d8f Mon Sep 17 00:00:00 2001
+-From: Enrico Joerns <ejo@pengutronix.de>
+-Date: Wed, 5 Sep 2018 12:28:28 +0200
+-Subject: [PATCH] src: fix compilation for glibc version 2.27.9000-36.fc29 and
+- newer
 -
--Change the loop used to convert string into numerical value.
--The original loop was fine but its implementation hits toolchain
--unsafe-loop-optimizations feature. The new implementation
--proposed here simplifies a bit the loop and prevents toolchain
--from complaining when directive -Werror=unsafe-loop-optimizations
--is enabled.
+-As recent glibc versions (>= 2.27.9000-36.fc29) also define 'struct
+-statx' which is also defined in linux/stat.h, compilation fails with
+-error:
 -
--Issue reported by the Buildroot cross toolchain [1] with the
--following error traces:
+-| In file included from ../dt-utils-2018.05.0/src/crypto/digest.c:24:
+-| [..]/usr/include/linux/stat.h:56:8: error: redefinition of 'struct statx_timestamp'
+-|  struct statx_timestamp {
+-|         ^~~~~~~~~~~~~~~
+-| In file included from [..]/usr/include/sys/stat.h:446,
+-|                  from ../dt-utils-2018.05.0/src/dt/common.h:15,
+-|                  from ../dt-utils-2018.05.0/src/crypto/digest.c:19:
+-| [..]/usr/include/bits/statx.h:25:8: note: originally defined here
+-|  struct statx_timestamp
+-|         ^~~~~~~~~~~~~~~
+-| In file included from ../dt-utils-2018.05.0/src/crypto/digest.c:24:
+-| [..]/usr/include/linux/stat.h:99:8: error: redefinition of 'struct statx'
+-|  struct statx {
+-|         ^~~~~
+-| In file included from [..]/usr/include/sys/stat.h:446,
+-|                  from ../dt-utils-2018.05.0/src/dt/common.h:15,
+-|                  from ../dt-utils-2018.05.0/src/crypto/digest.c:19:
+-| [..]/usr/include/bits/statx.h:36:8: note: originally defined here
+-|  struct statx
+-|         ^~~~~
 -
--build/armv7/build/optee-test-3.4.0/host/xtest/regression_4100.c:447:8: error: missed loop optimization, the loop counter may overflow [-Werror=unsafe-loop-optimizations]
--  while (spos) {
--        ^
--build/optee-test-3.4.0/host/xtest/regression_4100.c:454:6: error: missed loop optimization, the loop counter may overflow [-Werror=unsafe-loop-optimizations]
--   if (!spos)
--      ^
+-The linux/stat.h originates from the code that was copied from barebox
+-but is not explicitly required to be linux/stat.h instead of sys/stat.h
+-and we do not actually use struct statx.
 -
--[1] arm-buildroot-linux-uclibcgnueabihf-gcc.br_real (Buildroot 2019.02-git-00933-gb75e93c) 7.4.0
+-Thus it is safe to simply replace occurrences of linux/stat.h by
+-sys/stat.h to fix compilation.
 -
--Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+-Signed-off-by: Enrico Joerns <ejo@pengutronix.de>
+-[Thomas: backport from upstream.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ----
-- host/xtest/regression_4100.c | 25 ++++++++++++++-----------
-- 1 file changed, 14 insertions(+), 11 deletions(-)
+- src/barebox-state/backend_storage.c | 2 +-
+- src/crypto/digest.c                 | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
 -
--diff --git a/host/xtest/regression_4100.c b/host/xtest/regression_4100.c
--index b477f38..88346d4 100644
----- a/host/xtest/regression_4100.c
--+++ b/host/xtest/regression_4100.c
--@@ -445,21 +445,24 @@ static TEEC_Result convert_from_string(ADBG_Case_t *c, TEEC_Session *s,
-- 		return TEEC_ERROR_OUT_OF_MEMORY;
-- 
-- 	while (spos) {
---		spos--;
---		nibble = digit_value(str[spos]);
---		if (nibble == -1)
--+		nibble = digit_value(str[spos - 1]);
--+		if (nibble == -1) {
--+			spos--;
-- 			break;
--+		}
-- 		os[ospos] = nibble;
-- 
---		if (!spos)
---			break;
--+		if (spos > 1) {
--+			nibble = digit_value(str[spos - 2]);
--+			if (nibble == -1) {
--+				spos -= 2;
--+				break;
--+			}
--+			os[ospos] |= nibble << 4;
--+			ospos--;
--+			spos--;
--+		}
-- 		spos--;
---		nibble = digit_value(str[spos]);
---		if (nibble == -1)
---			break;
---
---		os[ospos] |= nibble << 4;
---		ospos--;
-- 	}
-- 
-- 	if (spos)
+-diff --git a/src/barebox-state/backend_storage.c b/src/barebox-state/backend_storage.c
+-index 53fe829..1052656 100644
+---- a/src/barebox-state/backend_storage.c
+-+++ b/src/barebox-state/backend_storage.c
+-@@ -19,7 +19,7 @@
+- #include <linux/kernel.h>
+- #include <linux/list.h>
+- #include <linux/mtd/mtd-abi.h>
+--#include <linux/stat.h>
+-+#include <sys/stat.h>
+- #include <linux/fs.h>
+- #include <malloc.h>
+- #include <printk.h>
+-diff --git a/src/crypto/digest.c b/src/crypto/digest.c
+-index 7a8c3c0..8353412 100644
+---- a/src/crypto/digest.c
+-+++ b/src/crypto/digest.c
+-@@ -21,7 +21,7 @@
+- #include <malloc.h>
+- #include <fs.h>
+- #include <fcntl.h>
+--#include <linux/stat.h>
+-+#include <sys/stat.h>
+- #include <errno.h>
+- #include <module.h>
+- #include <linux/err.h>
 --- 
--2.20.1
+-2.19.2
 -
-diff --git a/package/optee-test/0001-regression-41xx-prevent-unsafe-loop-optimizations-bu.patch b/package/optee-test/0001-regression-41xx-prevent-unsafe-loop-optimizations-bu.patch
-new file mode 100644
-index 0000000000..8b6871f4e3
---- /dev/null
-+++ b/package/optee-test/0001-regression-41xx-prevent-unsafe-loop-optimizations-bu.patch
-@@ -0,0 +1,63 @@
-+From 5a83a50c47c46c54a443aa18ed6456416fa27a98 Mon Sep 17 00:00:00 2001
-+From: Etienne Carriere <etienne.carriere@linaro.org>
-+Date: Thu, 25 Apr 2019 10:19:05 +0200
-+Subject: [PATCH] regression 41xx: prevent unsafe-loop-optimizations build
-+ error
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Add -Wno-unsafe-loop-optimizations directive since regression_4100.c
-+fails to build on some recent toolchains as GCC 7.3.0 and 7.4.0 with
-+an error trace like below. Note building with GCC 8.2.1 does not
-+reproduce the build issue.
-+
-+/path/to/optee_test/host/xtest/regression_4100.c: In function ???convert_from_string???:
-+/path/to/optee_test/host/xtest/regression_4100.c:448:8: error: missed loop optimization, the loop counter may overflow [-Werror=unsafe-loop-optimizations]
-+  while (spos) {
-+        ^
-+/path/to/optee_test/host/xtest/regression_4100.c:455:6: error: missed loop optimization, the loop counter may overflow [-Werror=unsafe-loop-optimizations]
-+   if (!spos)
-+      ^
-+
-+The GNU Makefile build sequence defines -Wno-unsafe-loop-optimizations
-+for the whole xtest sources while CMake build sequence defines it
-+specifically for regression_4100.c among xtest source files.
-+
-+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-+Reviewed-by: Jerome Forissier <jerome.forissier@linaro.org>
-+---
-+ host/xtest/CMakeLists.txt | 4 ++++
-+ host/xtest/Makefile       | 1 +
-+ 2 files changed, 5 insertions(+)
-+
-+diff --git a/host/xtest/CMakeLists.txt b/host/xtest/CMakeLists.txt
-+index 1f3a6f4..3868bcd 100644
-+--- a/host/xtest/CMakeLists.txt
-++++ b/host/xtest/CMakeLists.txt
-+@@ -61,6 +61,10 @@ set (SRC
-+ 	xtest_test.c
-+ )
-+ 
-++set_source_files_properties(
-++	regression_4100.c PROPERTIES COMPILE_FLAGS -Wno-unsafe-loop-optimizations
-++)
-++
-+ if (CFG_GP_SOCKETS)
-+ 	list (APPEND SRC
-+ 		regression_2000.c
-+diff --git a/host/xtest/Makefile b/host/xtest/Makefile
-+index f226500..e930d9c 100644
-+--- a/host/xtest/Makefile
-++++ b/host/xtest/Makefile
-+@@ -155,6 +155,7 @@ CFLAGS += -Wall -Wcast-align -Werror \
-+ 	  -Wshadow -Wstrict-prototypes -Wswitch-default \
-+ 	  -Wwrite-strings \
-+ 	  -Wno-declaration-after-statement \
-++	  -Wno-unsafe-loop-optimizations \
-+ 	  -Wno-missing-field-initializers -Wno-format-zero-length
-+ endif
-+ 
-+-- 
-+2.17.1
-+
-diff --git a/package/optee-test/optee-test.hash b/package/optee-test/optee-test.hash
-index c8ae51b8ee..a99cf0bd40 100644
---- a/package/optee-test/optee-test.hash
-+++ b/package/optee-test/optee-test.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/OP-TEE/optee_test/archive/3.4.0.tar.gz
--sha256 755904c5b845763a2460c32c21100a57c713009b6b88cc3fc21f0e5be8645e2b  optee-test-3.4.0.tar.gz
-+# From https://github.com/OP-TEE/optee_test/archive/3.5.0.tar.gz
-+sha256 19118b7002a618bb2519cf7d0d61feb90e8574148f69b29260344119ac855520  optee-test-3.5.0.tar.gz
+diff --git a/package/dt-utils/dt-utils.hash b/package/dt-utils/dt-utils.hash
+index 5805adf361..3610fe164f 100644
+--- a/package/dt-utils/dt-utils.hash
++++ b/package/dt-utils/dt-utils.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256 6e6810981f0ddab9e0d44399d0700a15d9f760a3c2843cc866659c2074139ae7  LICENSE.md
-diff --git a/package/optee-test/optee-test.mk b/package/optee-test/optee-test.mk
-index abed09d5e3..935cdfa860 100644
---- a/package/optee-test/optee-test.mk
-+++ b/package/optee-test/optee-test.mk
+-sha256 d0f53c76bc9f821a6506c8db3b623922d82570a017a9a40ad118bd7c957672b6  dt-utils-v2018.05.0.tar.gz
++sha256 61440ab222543268923175eb5c7425076d2b8bce4c1dfc177f2eb3873449af7c  dt-utils-v2019.01.0.tar.gz
+ sha256 a45932c79317d15116eadbf1c9c6fc59117ec3c4621db3a876066defa723963b  COPYING
+diff --git a/package/dt-utils/dt-utils.mk b/package/dt-utils/dt-utils.mk
+index 3dbadc7b9e..25c287d434 100644
+--- a/package/dt-utils/dt-utils.mk
++++ b/package/dt-utils/dt-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPTEE_TEST_VERSION = 3.4.0
-+OPTEE_TEST_VERSION = 3.5.0
- OPTEE_TEST_SITE = $(call github,OP-TEE,optee_test,$(OPTEE_TEST_VERSION))
- OPTEE_TEST_LICENSE = GPL-2.0, BSD-2-Clause,
- OPTEE_TEST_LICENSE_FILES = LICENSE.md
+-DT_UTILS_VERSION = v2018.05.0
++DT_UTILS_VERSION = v2019.01.0
+ DT_UTILS_SITE = https://git.pengutronix.de/git/tools/dt-utils
+ DT_UTILS_SITE_METHOD = git
+ DT_UTILS_LICENSE = GPL-2.0
