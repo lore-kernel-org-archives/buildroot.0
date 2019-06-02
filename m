@@ -1,98 +1,62 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 2 Jun 2019 12:32:18 +0200
-Subject: [Buildroot] [PATCH V5 1/2] configs/qemu_cskyXXX_virt: new
- defconfig
-In-Reply-To: <1559468510-22085-1-git-send-email-guoren@kernel.org>
-References: <1559468510-22085-1-git-send-email-guoren@kernel.org>
-Message-ID: <20190602123218.244963b8@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  2 Jun 2019 12:45:17 +0200
+Subject: [Buildroot] [PATCH/next 1/3] package/x11r7/xapp_mkfontscale: bump
+ version to 1.2.1
+Message-ID: <20190602104519.7789-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Guo,
+Updated license hash after upstream commit
+https://gitlab.freedesktop.org/xorg/app/mkfontscale/commit/8609ad731b9c9c670a815c915055ae416d2396d8
 
-On Sun,  2 Jun 2019 17:41:49 +0800
-guoren at kernel.org wrote:
+Release notes:
+https://lists.x.org/archives/xorg-announce/2019-March/002988.html
 
-> From: Guo Ren <ren_guo@c-sky.com>
-> 
-> Add C-SKY defconfig for QEMU virt machine.
-> 
-> Tested with https://gitlab.com/c-sky/buildroot/pipelines
-> 
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+This version bump "now includes the mkfontdir script previously
+distributed separately for compatibility with older X11 versions."
 
-Thanks, it looks a lot better, but there are still a few things to
-improve.
+Removing the buildroot package host-xapp_mkfontdir will be done by
+subsequent patches.
 
-First, the readme.txt file should be in the same patch.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/x11r7/xapp_mkfontscale/xapp_mkfontscale.hash | 12 ++++++------
+ package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-Second, you should update the DEVELOPES file so that it covers those
-additional files (board/qemu/csky and configs/qemu_csky*).
-
-See below for other comments.
-
-
-> diff --git a/board/qemu/csky/linux-ck610.config.fragment b/board/qemu/csky/linux-ck610.config.fragment
-> new file mode 100644
-> index 0000000..d80d0ee
-> --- /dev/null
-> +++ b/board/qemu/csky/linux-ck610.config.fragment
-> @@ -0,0 +1,5 @@
-> +CONFIG_COMPILE_TEST=y
-> +CONFIG_CPU_CK610=y
-> +CONFIG_CPU_PM_WAIT=y
-> +CONFIG_CSKY_APB_INTC=y
-> +CONFIG_GX6605S_TIMER=y
-
-Thanks, this is _much_ better!
-
-> diff --git a/configs/qemu_csky610_virt_defconfig b/configs/qemu_csky610_virt_defconfig
-> new file mode 100644
-> index 0000000..9a82d57
-> --- /dev/null
-> +++ b/configs/qemu_csky610_virt_defconfig
-> @@ -0,0 +1,20 @@
-> +# Architecture
-> +BR2_csky=y
-> +BR2_ck610=y
-
-You need to add an option like this:
-
-# Linux headers same as kernel, a 5.0 series
-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
-
-> +# System
-> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-
-Please don't enable mdev.
-
-> +BR2_TARGET_ROOTFS_INITRAMFS=y
-> +
-> +# Toolchain
-> +BR2_OPTIMIZE_2=y
-> +BR2_SHARED_STATIC_LIBS=y
-> +BR2_TOOLCHAIN_BUILDROOT_CXX=y
-> +BR2_PACKAGE_HOST_GDB=y
-
-Please remove those options.
-
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
-> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config.fragment"
-
-And of course, it should be changed similarly in all other defconfigs.
-
-Thanks,
-
-Thomas
+diff --git a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.hash b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.hash
+index b0776a412b..cbcdb1700b 100644
+--- a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.hash
++++ b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-March/002855.html
+-md5 987c438e79f5ddb84a9c5726a1610819  mkfontscale-1.1.3.tar.bz2
+-sha1 2fdbd7c6cc5b0678f2c5d10d2350a809d576e9e5  mkfontscale-1.1.3.tar.bz2
+-sha256 1e98df69ee5f4542d711e140e1d93e2c3f2775407ccbb7849110d52b91782a6a  mkfontscale-1.1.3.tar.bz2
+-sha512 509e2f9cd55cf87cc3968c8767bf3f2386016278db8b7be75b7df34bf61f52519dd2778f3b9881ffbe30cc2fe26089c0a5b2c33af46bc7727f46dad83f030a62  mkfontscale-1.1.3.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-March/002988.html
++md5 215940de158b1a3d8b3f8b442c606e2f  mkfontscale-1.2.1.tar.bz2
++sha1 fb9d0458a4476a237609b676f9cebcc64b0a8a85  mkfontscale-1.2.1.tar.bz2
++sha256 ca0495eb974a179dd742bfa6199d561bda1c8da4a0c5a667f21fd82aaab6bac7  mkfontscale-1.2.1.tar.bz2
++sha512 4d243160e1f7f8dfa6a8f53349c1a42a55fc99426455ebdef58352c5e951fce8b4f1fbd1061a76c9a148095b002eac372db1ae5e2647d2ccb4886635b317b18c  mkfontscale-1.2.1.tar.bz2
+ # Locally computed
+-sha256 90f0a1bfee2ed42c63473ded631c0463bf38b3d193733ccfc35394c713a0701d  COPYING
++sha256 80df6f5b759f7775042313e4586506db60f26fd15b98b532cf518bd8cf1e8488  COPYING
+diff --git a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+index a07d2f4fbd..11d9cc952f 100644
+--- a/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
++++ b/package/x11r7/xapp_mkfontscale/xapp_mkfontscale.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XAPP_MKFONTSCALE_VERSION = 1.1.3
++XAPP_MKFONTSCALE_VERSION = 1.2.1
+ XAPP_MKFONTSCALE_SOURCE = mkfontscale-$(XAPP_MKFONTSCALE_VERSION).tar.bz2
+ XAPP_MKFONTSCALE_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_MKFONTSCALE_LICENSE = MIT
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
