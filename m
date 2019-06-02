@@ -1,32 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 02 Jun 2019 20:12:44 -0000
-Subject: [Buildroot] [git commit] configs/liteboard: bump U-Boot to 2019.04
-Message-ID: <20190602201233.97A7F800FA@busybox.osuosl.org>
+Date: Sun, 02 Jun 2019 20:12:45 -0000
+Subject: [Buildroot] [git commit] configs/liteboard: bump Linux to 5.1.1
+Message-ID: <20190602201233.89AF8800FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6e9bbd6b9a073f6d40c87908f598baae321d234
+commit: https://git.buildroot.net/buildroot/commit/?id=987d6521d1202ed7d664abb3d7b6307011696144
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/grinn_liteboard_defconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/grinn_liteboard_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/configs/grinn_liteboard_defconfig b/configs/grinn_liteboard_defconfig
-index 09656331e5..f2c1da33e3 100644
+index 84f1735e22..09656331e5 100644
 --- a/configs/grinn_liteboard_defconfig
 +++ b/configs/grinn_liteboard_defconfig
-@@ -15,7 +15,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.03"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="liteboard"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
+@@ -1,11 +1,11 @@
+ BR2_arm=y
+ BR2_cortex_a7=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_16=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/grinn/liteboard/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.2"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.1"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-liteboard"
