@@ -1,13 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 2 Jun 2019 15:20:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/i2pd: fix static build with
- atomic
-In-Reply-To: <20190531212946.75199930@windsurf>
-References: <20190530213022.3878-1-fontaine.fabrice@gmail.com>
- <20190531164042.49667958@windsurf>
- <CAPi7W81OFgz-a8_Fjdvi_LrfwgkWs3KnO6MV=SAVpGjpXdjaSQ@mail.gmail.com>
- <20190531212946.75199930@windsurf>
-Message-ID: <b466be9d-176f-d1ac-4f1e-c80d1c0bf37b@mind.be>
+Date: Sun, 2 Jun 2019 15:26:24 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/grpc: fix build with uclibc on x86_64
+In-Reply-To: <20190530212906.3797-1-fontaine.fabrice@gmail.com>
+References: <20190530212906.3797-1-fontaine.fabrice@gmail.com>
+Message-ID: <5549b47c-d8ec-531d-639c-712ae9e69215@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,55 +13,54 @@ To: buildroot@busybox.net
 
 
 
-On 31/05/2019 21:29, Thomas Petazzoni wrote:
-> Hello,
-> 
-> On Fri, 31 May 2019 16:54:15 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-> 
->>> It would be nice to not introduce a third way of doing the same
->>> thing :-)  
->> I know but in this case, this is the only solution that does not
->> impact upstream.
->> upstream choose to link through
->> target_link_libraries( "${PROJECT_NAME}" libi2pd libi2pdclient
->> ${DL_LIB} ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} ${ZLIB_LIBRARY}
->> ${CMAKE_THREAD_LIBS_INIT} ${MINGW_EXTRA} ${DL_LIB}
->> ${CMAKE_REQUIRED_LIBRARIES})
->>
->> Because of this, if we pass -latomic through CMAKE_EXE_LINKER_FLAGS or
->> CMAKE_CXX_FLAGS, it'll always be placed before Boost_Libraries and all
->> the other dependencies.
->> I can try to find a way to fix this but I didn't take time to do so as
->> it was quicker to just use CMAKE_REQUIRED_LIBRARIES.
-> 
-> Shouldn't we find a canonical way of adding the -latomic dependency
-> handling directly in the CMakeLists.txt files of all those packages ?
-> Ultimately, this should be the right thing to do, no ?
+On 30/05/2019 23:29, Fabrice Fontaine wrote:
+> On x86_64 if GPR_MUSL_LIBC_COMPAT is not set, grpc tries to link with
+> memcpy at GLIBC_2.2.5, see:
+> https://github.com/grpc/grpc/blob/618a3f561d4a93f263cca23abad086ed8f4d5e86/src/core/lib/gpr/wrap_memcpy.cc
 
- I won't comment (yet) about how we should do it in Buildroot, but I think the
-proper way to do this in CMake itself would be something like:
+ The comment above that memcpy wrapper says:
 
-target_link_libraries(<target> PUBLIC atomic)
+ * Provide a wrapped memcpy for targets that need to be backwards
+ * compatible with older libc's.
 
- The PUBLIC bit makes sure that the library is not just linked with, but that is
-it also included in the generated .cmake file that is used by other packages to
-find the include and libs options. As I mentioned earlier, though, I don't think
-CMake has support for the equivalent of pkg-onfig Libs.private.
 
- For packages that provide a custom CMake config file, like boost, we could
-update that config file and add something like:
+ We definitely *don't* want to be backward compatible with older libcs (even on
+glibc, we might configure it to not provide the older ABI).
 
-set_property(TARGET <target> APPEND PROPERTY INTERFACE_LINK_LIBRARIES atomic)
-
- This gets complicated by three elements, though:
-1. The boost cmake config files are generated.
-2. There's also a boost library called 'atomic', it might clash.
-3. For upstream boost, they'd want to detect the "must link with atomic" case
-within their build system, probably.
-
- As to the cases we have already: CMAKE_EXE_LINKER_FLAGS is definitely more
-appropriate than CMAKE_CXX_FLAGS.
+ So, isn't there a way to avoid linking with this stuff entirely?
 
  Regards,
  Arnout
+
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/20d6f2489a4e291a53bd514da66105eb607e1014
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2:
+>  - Pass TARGET_CXXFLAGS to CMAKE_CXX_FLAGS
+> 
+>  package/grpc/grpc.mk | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+> index 9506e0268a..29facfc19b 100644
+> --- a/package/grpc/grpc.mk
+> +++ b/package/grpc/grpc.mk
+> @@ -33,6 +33,14 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+>  GRPC_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+>  endif
+>  
+> +# Set GPR_MUSL_LIBC_COMPAT otherwise build will fail on x86_64 with uclibc
+> +# because grpc tries to link with memcpy at GLIBC_2.2.5
+> +ifeq ($(BR2_x86_64):$(BR2_TOOLCHAIN_USES_GLIBC),y:)
+> +GRPC_CONF_OPTS += \
+> +	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -DGPR_MUSL_LIBC_COMPAT" \
+> +	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DGPR_MUSL_LIBC_COMPAT"
+> +endif
+> +
+>  HOST_GRPC_CONF_OPTS = \
+>  	-D_gRPC_CARES_LIBRARIES=cares \
+>  	-DgRPC_CARES_PROVIDER=none \
+> 
