@@ -1,49 +1,35 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  2 Jun 2019 18:43:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openzwave: needs dynamic library
-Message-ID: <20190602164323.23858-1-fontaine.fabrice@gmail.com>
+Date: Sun,  2 Jun 2019 21:19:22 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/poppler: fix build with cmake
+ < 3.10
+Message-ID: <20190602191922.9491-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-openzwave always build and install a dynamic library so add a dependency
-to !BR2_STATIC_LIBS as domoticz is the only package that use openzwave
-and it already depends on !BR2_STATIC_LIBS.
-
-This behavior has not changed from 1.5 to 1.6 even if there is only a
-build failure with 1.6.
-
 Fixes:
- - http://autobuild.buildroot.org/results/f6c8c4072b2cd5b6e9aa548f41ab000e152f1add
+ - http://autobuild.buildroot.org/results/f9e24d38d3aa4519615c5a0ae7f62af610df976f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/openzwave/Config.in | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ package/poppler/poppler.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/openzwave/Config.in b/package/openzwave/Config.in
-index d86d358723..f2a4ca5225 100644
---- a/package/openzwave/Config.in
-+++ b/package/openzwave/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_OPENZWAVE
- 	bool "openzwave"
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_TINYXML
- 	help
-@@ -12,6 +13,6 @@ config BR2_PACKAGE_OPENZWAVE
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index a2bb7e3049..56998dd530 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -20,6 +20,9 @@ POPPLER_CONF_OPTS = \
+ 	-DENABLE_GOBJECT_INTROSPECTION=OFF \
+ 	-DENABLE_GTK_DOC=OFF
  
- 	  http://www.openzwave.net
- 
--comment "openzwave needs a toolchain w/ C++, threads, wchar"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_USE_WCHAR
-+comment "openzwave needs a toolchain w/ C++, dynamic library, threads, wchar"
-+	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++# cmake older than 3.10 require this to avoid try_run() in FindThreads
++POPPLER_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ POPPLER_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
+ endif
 -- 
 2.20.1
