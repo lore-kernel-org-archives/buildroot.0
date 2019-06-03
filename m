@@ -1,115 +1,161 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Mon, 3 Jun 2019 18:44:50 +0200
-Subject: [Buildroot] [PATCH] linux: enable UEVENT_HELPER when mdev is
- used
-In-Reply-To: <87muiyu380.fsf@dell.be.48ers.dk>
-References: <20190525130755.25678-1-peter@korsgaard.com>
- <54a85c9f-1e14-de0d-c6cf-8201dea50e1d@mind.be>
- <87mujanw9q.fsf@dell.be.48ers.dk>
- <d3a724b9-b9c9-b399-0f32-b3f93d3511a3@mind.be>
- <87muiyu380.fsf@dell.be.48ers.dk>
-Message-ID: <9f9e57ff-ba24-a4c0-7be8-48e048e4138f@railnova.eu>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 3 Jun 2019 19:52:19 +0200
+Subject: [Buildroot] [PATCH v3] package/exiv2: cleanup options and
+ licenses
+In-Reply-To: <20190603142604.4441-1-nicolas.serafini@sensefly.com>
+References: <20190603142604.4441-1-nicolas.serafini@sensefly.com>
+Message-ID: <20190603195219.39c2e532@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi all,
+Hello Nicolas,
 
-On 6/3/19 4:56 PM, Peter Korsgaard wrote:
->>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
-> 
-> Hi,
-> 
->   >> > start-stop-daemon -S -b -x /sbin/uevent -- mdev
->   >>
->   >> Ahh, so busybox now has a clone of s6-uevent-listener / mdevd-netlink? I
->   >> wasn't aware of that.
-> 
->   >  It has been added in 2015 :-)
-> 
-> As I said, I don't use mdev ;)
-> 
->   >> > 1. Bloat the kernel with legacy uevent helper support (this patch).
->   >>
->   >> This is not really bloat, as it just makes the existing implicit
->   >> dependency explicit.
-> 
->   >  It is "bloat" because there is a way to avoid it, but the user can't disable it
->   > (even if the user modifies the init script to use uevent so it becomes unneeded,
->   > Buildroot forces the kernel option on).
-> 
-> Correct.
-> 
-> 
->   >> > 2. Bloat the kernel with networking even if it is not used for anything else,
->   >> > and bloat busybox with uevent (3.1 kb), and always use uevent.
->   >>
->   >> Networking support adds significant bloat, the other options afaik not.
-> 
->   >  Note that it's just CONFIG_NET, not CONFIG_INET. Without CONFIG_NET, you don't
->   > have e.g. the socket() syscall. 90% of the packages will not work (at runtime).
->   > So we're kind of in the same domain as with a custom uClibc config that disables
->   > stuff that most packages depend on.
-> 
-> How will the uevent daemon work without socket()?
-> 
->   >> > 3. Use uevent in the init script but don't enforce anything (with potential
->   >> > silent failures), and explain stuff in the mdev help text.
->   >>
->   >> > 4. Try out all possibilities in the init script - which still fails silently in
->   >> > case neither CONFIG_UEVENT_HELPER nor CONFIG_NET is enabled in the kernel.
->   >>
->   >> >  In my opinion, we definitely should *not* go for option 1. I don't want to be
->   >> > the one that forces the kernel to maintain legacy stuff. I would definitely use
->   >> > uevent.
->   >>
->   >> What advantage does uevent have over the legacy uevent helper? Just
->   >> serialization or anything else?
-> 
->   >  It's also more efficient IIUC, but I don't know much of the details.
->   > Admittedly, that efficiency probably goes away with uevent, because it stems
->   > from avoiding a fork, but uevent does exactly that.
-> 
-> Indeed. Notice that Denys has just merged the daemon mode (-d) support
-> for mdev, so from a performance PoV, that is probably what we should
-> support rather than uevent + mdev:
-> 
-> http://lists.busybox.net/pipermail/busybox/2019-June/087305.html
+On Mon, 3 Jun 2019 14:26:54 +0000, Nicolas Serafini <nicolas.serafini@sensefly.com> wrote:
 
+> exiv2 no longer requires a commercial option for lens database
+> integration since version 0.27.
 
-This is great news !
+...requires a NON commercial option...
 
-Even then, the S10mdev init script has to be modified to start mdev in 
-daemon mode. I could add this to 
-http://patchwork.ozlabs.org/patch/1107175/. However, I don't see a good 
-way to check if FEATURE_MDEV_DAEMON=y.
+See below...
 
-I could try to search for the daemon option in the help text
-(`mdev 2>&1 | grep "runs mdev as daemon"`),
-but this look a bit hackish to me.
+>
+> BR2_PACKAGE_EXIV2_LENSDATA existed only as a separate option for
+> licensing issues. Since these problems have gone away and the lens
+> database is only 80KB of data, the BR2_PACKAGE_EXIV2_LENSDATA option
+> has also been removed.
 
-> 
-> 
->   >> I don't use mdev myself, so I don't really care a lot about what option
->   >> we go for longer term, but given how close 2019.05 is, the only valid
->   >> options for the release are this patch or nothing.
-> 
->   >  As Andy indicated, this bug has existed for several years. I really don't see
->   > the need to fix it for 2019.05.
-> 
-> .. so I didn't.
-> 
-> 
->   >> Ahh yes, a patch adding an 'echo >/dev/mdev.seq' to S10mdev would be
->   >> nice.
-> 
->   >  But not needed if we use uevent :-)
-> 
-> Not if we unconditionally do it, no.
-> 
+Links to the upstream removal announcements/commits would be nice, e.g.
+
+[1] https://github.com/Exiv2/exiv2/commit/07f63003b7f50dd7d8719585ba54623e0f60c3c4#diff-04c6e90faac2675aa89e2176d2eec7d8
+
+[2] https://github.com/Exiv2/exiv2/commit/085d8a309aafb8ed5a72cad027a1a0ea974938d9#diff-272ceadb8458515b2ae4b5630a6029cc
+
+>
+> Legacy handling for the removed options _COMMERCIAL and _LENSDATA is
+> not needed, since now they are always enabled.
+>
+> Add the dedicated BSD-3-Clause license file for CMakeLists.txt,
+> config/FindEXPAT.cmake and config/FindMSGFMT.cmake files.
+>
+> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+>
+> ---
+> Changes v2 -> v3:
+>   - fix EXIV2_LICENSE spacer
+>   - explain why _LENSTADA is removed
+>
+> Changes v1 -> v2:
+>   - remove _LENSDATA option (suggested by Arnout Vandecappelle)
+>   - remove commercial license in Config.in help
+>   - add missing BSD-3-Clause flag
+>   - Add details to the patch message
+>
+> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+> ---
+>  package/exiv2/Config.in  | 23 -----------------------
+>  package/exiv2/exiv2.hash |  1 +
+>  package/exiv2/exiv2.mk   | 17 +++--------------
+>  3 files changed, 4 insertions(+), 37 deletions(-)
+>
+> diff --git a/package/exiv2/Config.in b/package/exiv2/Config.package/exiv2/.exiv2.mk.swpin
+> index acce81c593..72c2a88040 100644
+> --- a/package/exiv2/Config.in
+> +++ b/package/exiv2/Config.in
+> @@ -16,24 +16,10 @@ config BR2_PACKAGE_EXIV2
+>  	  access to the Exif, IPTC and XMP metadata of images in
+>  	  various formats.
+>
+> -	  Exiv2 is available under the GPLv2+ or under a commercial
+> -	  license.
+> -
+>  	  http://www.exiv2.org/
+>
+>  if BR2_PACKAGE_EXIV2
+>
+> -config BR2_PACKAGE_EXIV2_COMMERCIAL
+> -	bool "Enable commercial"
+> -	help
+> -	  Build the commercial version for closed source project.
+> -
+> -	  The Nikon lens name database and the NLS support is disabled
+> -	  for copyright reasons.
+> -
+> -	  A commercial license request is needed.
+> -	  http://www.exiv2.org/download.html#license
+> -
+>  config BR2_PACKAGE_EXIV2_PNG
+>  	bool "PNG image support"
+>  	select BR2_PACKAGE_ZLIB
+> @@ -46,13 +32,4 @@ config BR2_PACKAGE_EXIV2_XMP
+>  	help
+>  	  Build with XMP support
+>
+> -config BR2_PACKAGE_EXIV2_LENSDATA
+> -	bool "Nikon lens name database"
+> -	depends on !BR2_PACKAGE_EXIV2_COMMERCIAL
+
+Here it is, LENSDATA is only available in case of '!BR2_PACKAGE_EXIV2_COMMERCIAL'...
+
+> -	help
+> -	  Integrate Nikon lens name database.
+> -
+> -	  This database is integrated but comes from a thirdparty:
+> -	  http://www.rottmerhusen.com/objektives/lensid/thirdparty.html.
+> -
+>  endif
+> diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
+> index f99cb8cb87..b753c03854 100644
+> --- a/package/exiv2/exiv2.hash
+> +++ b/package/exiv2/exiv2.hash
+> @@ -1,3 +1,4 @@
+>  # Locally calculated
+>  sha256 1b3766b2c203ce213a4195de14d61694017ec1a69d15d4575bccecef130990fe exiv2-0.27.1.tar.gz
+>  sha256 a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66 COPYING
+> +sha256 46cde7dc11e64c78d650b4851b88f6704b4665ff60f22a1caf68ceb15e217e5b COPYING-CMAKE-SCRIPTS
+> diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
+> index ba9d9b7303..f26c7a6683 100644
+> --- a/package/exiv2/exiv2.mk
+> +++ b/package/exiv2/exiv2.mk
+> @@ -7,27 +7,16 @@
+>  EXIV2_VERSION = 0.27.1
+>  EXIV2_SITE = $(call github,Exiv2,exiv2,$(EXIV2_VERSION))
+>  EXIV2_INSTALL_STAGING = YES
+> +EXIV2_LICENSE = GPL-2.0+, BSD-3-Clause
+> +EXIV2_LICENSE_FILES = COPYING COPYING-CMAKE-SCRIPTS
+>
+>  EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
+> +EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=ON
+>
+>  # The following CMake variable disables a TRY_RUN call in the -pthread
+>  # test which is not allowed when cross-compiling.
+>  EXIV2_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+>
+> -ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),)
+> -EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=OFF
+> -endif
+
+And here, if LENSDATA is not set give -DEXIV2_ENABLE_LENSDATA=OFF...
+
+Maybe keep the LENSDATA option?
 
 Regards,
+Peter
 
-Titouan
+> -
+> -ifeq ($(BR2_PACKAGE_EXIV2_COMMERCIAL),y)
+> -EXIV2_LICENSE = commercial
+> -# NLS support is disabled in commercial version due to the copyright
+> -# of the translated texts.
+> -EXIV2_CONF_OPTS += -DEXIV2_ENABLE_COMMERCIAL=ON -DEXIV2_ENABLE_NLS=OFF
+> -else
+> -EXIV2_LICENSE = GPL-2.0+
+> -EXIV2_LICENSE_FILES = COPYING
+> -endif
+> -
+>  ifeq ($(BR2_PACKAGE_EXIV2_PNG),y)
+>  EXIV2_CONF_OPTS += -DEXIV2_ENABLE_PNG=ON
+>  EXIV2_DEPENDENCIES += zlib
