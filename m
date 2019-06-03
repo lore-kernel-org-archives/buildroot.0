@@ -1,28 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sun, 02 Jun 2019 20:14:34 +0000
-Subject: [Buildroot] [Bug 11926] Cross compiled Qt applications aren't
- working anymore
-In-Reply-To: <bug-11926-163@https.bugs.busybox.net/>
-References: <bug-11926-163@https.bugs.busybox.net/>
-Message-ID: <bug-11926-163-9mYtrlVimr@https.bugs.busybox.net/>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon,  3 Jun 2019 04:42:18 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: Drop support for some packages from
+ Francois Perrad
+Message-ID: <20190603024218.15550-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11926
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ DEVELOPERS | 5 -----
+ 1 file changed, 5 deletions(-)
 
---- Comment #2 from ramtheconqueror at gmail.com ---
-Even the Qt cinematic experience which is compiled as part of the buildroot is
-not working a well.
-
-# CinematicExperience-demo
-/usr/share/Qt5/CinematicExperience/Qt5_CinematicExperience: error while loading
-shared libraries:
-/home/ram/work/Linux-tool/buildroot-output/2019.05-rc3/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/libGLESv2.so:
-cannot open shared object file: No such file or directory
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e36f1c410..4cc8c9d08 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -860,12 +860,10 @@ N:	Francois Perrad <francois.perrad@gadz.org>
+ F:	board/olimex/a20_olinuxino
+ F:	configs/olimex_a20_olinuxino_*
+ F:	package/4th/
+-F:	package/botan/
+ F:	package/chipmunk/
+ F:	package/cog/
+ F:	package/dado/
+ F:	package/ficl/
+-F:	package/gdbm/
+ F:	package/libtomcrypt/
+ F:	package/libtommath/
+ F:	package/libwpe/
+@@ -882,9 +880,6 @@ F:	package/netsurf/
+ F:	package/perl*
+ F:	package/pkg-perl.mk
+ F:	package/pkg-luarocks.mk
+-F:	package/qemu/
+-F:	package/sdl2_mixer/
+-F:	package/sdl2_net/
+ F:	package/tekui/
+ F:	package/wpebackend-fdo/
+ F:	package/wpewebkit/
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
