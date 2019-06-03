@@ -1,41 +1,46 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 3 Jun 2019 08:20:18 -0500
-Subject: [Buildroot] SELinux and buildroot
-In-Reply-To: <CAKON4OyuQ2mR7LRdC1VS79C6Eo6oCLshXLX4b_hEHjnrYfopjQ@mail.gmail.com>
-References: <CAKON4OyuQ2mR7LRdC1VS79C6Eo6oCLshXLX4b_hEHjnrYfopjQ@mail.gmail.com>
-Message-ID: <CANQCQpb4UToSpY9TF=H78W+9YSQrTfCiJTfY7cD9uWh+qY1SbQ@mail.gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 03 Jun 2019 14:07:32 +0000
+Subject: [Buildroot] [Bug 11926] Cross compiled Qt applications aren't
+ working anymore
+In-Reply-To: <bug-11926-163@https.bugs.busybox.net/>
+References: <bug-11926-163@https.bugs.busybox.net/>
+Message-ID: <bug-11926-163-5QT7NSo6oj@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jon,
+https://bugs.busybox.net/show_bug.cgi?id=11926
 
+--- Comment #4 from ramtheconqueror at gmail.com ---
+(In reply to Thomas Petazzoni from comment #3)
+Hello Thomas,
 
-On Sun, Jun 2, 2019 at 9:41 AM jonsmirl at gmail.com <jonsmirl@gmail.com> wrote:
->
-> Is there an example of a basic buildroot system properly locked down
-> with selinux policies around somewhere that I can use as a guide?
->
+I've reverted that change and still no use.
 
-I believe Thomas was working on a runtime test that captured a working
-basic busybox configuration.  I've also CC'd Adam as he was supporting
-IRC discussion on this topic last week.
+[Paths]
+Prefix=@@HOST_DIR@@
+Sysroot=@@STAGING_DIR@@
+Headers=/usr/include/qt5
+Libraries=/usr/lib
+LibraryExecutables=/usr/libexec
+Binaries=/usr/bin
+Plugins=/usr/lib/qt/plugins
+Examples=/usr/lib/qt/examples
+Qml2Imports=/usr/qml
+Imports=/usr/imports
+Translations=/usr/translations
+Examples=/usr/lib/qt/examples
+Demos=/usr/lib/qt/examples
+Tests=/usr/tests
+Settings=/usr
+Documentation=/usr/doc
+ArchData=/usr
+Data=/usr
 
-Note, there were some patches as part of the original SELinux support
-to Buildroot, however those are quite old and wouldn't apply to the
-current refpolicy.  I believe the kernel and rootfilesystem config
-also wouldn't be terribly beneficial.  Here are the links to those
-patchsets.
+Anything else please? Thanks for your help.
 
-Really old refpolicy changes we had to make for an embedded target.
-Good example of what might need to be touched.
-http://patchwork.ozlabs.org/patch/427128/
-
-Example target defconfig and filesystem adjustments
-http://patchwork.ozlabs.org/patch/641331/
-http://patchwork.ozlabs.org/patch/641333/
-
-Good luck!
-Matt
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
