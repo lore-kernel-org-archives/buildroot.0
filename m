@@ -1,18 +1,17 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Mon,  3 Jun 2019 14:48:07 +0530
-Subject: [Buildroot] [PATCH 2/3] autobuild-run: initial implementation of
- do_reproducible_build()
+Date: Mon,  3 Jun 2019 14:48:08 +0530
+Subject: [Buildroot] [PATCH 3/3] autobuild-run: initial implementation of
+ check_reproducibility()
 In-Reply-To: <20190603091808.2928-1-itsatharva@gmail.com>
 References: <20190603091808.2928-1-itsatharva@gmail.com>
-Message-ID: <20190603091808.2928-2-itsatharva@gmail.com>
+Message-ID: <20190603091808.2928-3-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new function will call do_build() twice to produce two builds
-and then check their reproducibility
+Find out differences in built images, if any
 
 Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 ---
@@ -20,53 +19,53 @@ Signed-off-by: Atharva Lele <itsatharva@gmail.com>
  1 file changed, 38 insertions(+)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 9f8aabb..329803a 100755
+index 329803a..0e24211 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -455,6 +455,44 @@ def do_build(**kwargs):
-     log_write(log, "INFO: build successful")
-     return 0
+@@ -394,6 +394,44 @@ def stop_on_build_hang(monitor_thread_hung_build_flag,
+                 break
+         monitor_thread_stop_flag.wait(30)
  
-+def do_reproducible_build(**kwargs):
-+    """Run the builds for reproducibility testing
++def check_reproducibility(**kwargs):
++    """Check reproducibility of builds
 +
-+    Build twice with the same configuration. Calls do_build() to
-+    perform the actual build.
++    Use diffoscope on the built images, if diffoscope is not
++    installed, fallback to cmp
 +    """
 +
++    log = kwargs['log']
 +    idir = "instance-%d" % kwargs['instance']
 +    outputdir = os.path.join(idir, "output")
-+    f = open(os.path.join(outputdir, "logfile"), "w+")
-+    log = kwargs['log']
++    diffoscope_output = os.path.join(outputdir, "diffoscope-results.txt")
++    # Using only tar images for now
++    build_1_image = os.path.join(outputdir, "images-1", "rootfs.tar")
++    build_2_image = os.path.join(outputdir, "images", "rootfs.tar")
++
++    # Prefix to point diffoscope towards cross-tools
++    prefix = subprocess.check_output(["make", "printvars", "VARS=TARGET_CROSS"])
++    # Remove TARGET_CROSS= and \n from the string
++    prefix = prefix[13:-1]
++
++    try:
++        log_write(log, "INFO: running diffoscope on images")
++        ret = subprocess.call(["diffoscope", build_1_image, build_2_image,
++                            "--tool-prefix-binutils", prefix,
++                            "--text", diffoscope_output])
++    except OSError as e:
++        if e.errno == errno.ENOENT:
++            log_write(log, "INFO: diffoscope not installed, falling back to cmp")
++        ret = subprocess.call(["cmp", "build_1_image", "build_2_image", "-b", ">", diffoscope_output])
 +    
-+    # Start the first build
-+    log_write(log, "INFO: Reproducible Build Test, starting build 1")
-+    ret = do_build(**kwargs)
 +    if ret != 0:
-+        log_write(log, "INFO: build 1 failed, skipping build 2")
-+        return ret
++        log_write(log, "INFO: Build is non-reproducible.")
++        return -1
 +    
-+    # First build has been built, move files and start build 2
-+    os.rename(os.path.join(outputdir, "images"), os.path.join(outputdir, "images-1"))
++    # rootfs images match byte-for-byte -> reproducible image
++    log_write(log, "INFO: Build is reproducible!")
++    return 0
 +
-+    # Clean up build 1
-+    cmd = ["make", "O=%s" % outputdir, "clean"] \
-+          + kwargs['make_opts'].split()
-+    subprocess.call(cmd, stdout=f, stderr=f)
-+
-+    # Start the second build
-+    log_write(log, "INFO: Reproducible Build Test, starting build 2")
-+    ret = do_build(**kwargs)
-+    if ret != 0:
-+        log_write(log, "INFO: build 2 failed")
-+        return ret
-+
-+    # Assuming both have built successfully
-+    ret = check_reproducibility()
-+    return ret
-+
- def send_results(result, **kwargs):
-     """Prepare and store/send tarball with results
+ def do_build(**kwargs):
+     """Run the build itself"""
  
 -- 
 2.20.1
