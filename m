@@ -1,161 +1,42 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 3 Jun 2019 19:52:19 +0200
-Subject: [Buildroot] [PATCH v3] package/exiv2: cleanup options and
- licenses
-In-Reply-To: <20190603142604.4441-1-nicolas.serafini@sensefly.com>
-References: <20190603142604.4441-1-nicolas.serafini@sensefly.com>
-Message-ID: <20190603195219.39c2e532@gmx.net>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Mon, 3 Jun 2019 20:22:38 +0200
+Subject: [Buildroot] [PATCH 1/3] package/xorcurses: new package
+In-Reply-To: <20190422075548.435d4eca@thl530.multi.box>
+References: <20190223205657.18394-1-huth@tuxfamily.org>
+ <20190223205657.18394-2-huth@tuxfamily.org>
+ <CAKcgs2wiC6CcCwqb04G-VqwxdRULhSeQbEXUW+aMwdfwNFz8pw@mail.gmail.com>
+ <20190422075548.435d4eca@thl530.multi.box>
+Message-ID: <CAKcgs2z0TB-1FNek1MVr7g2yBnyTsXmT-u+snbUvkQ-5OLu+KA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Nicolas,
+Hello Thomas,
 
-On Mon, 3 Jun 2019 14:26:54 +0000, Nicolas Serafini <nicolas.serafini@sensefly.com> wrote:
 
-> exiv2 no longer requires a commercial option for lens database
-> integration since version 0.27.
+Le lun. 22 avr. 2019 ? 07:56, Thomas Huth <huth@tuxfamily.org> a ?crit :
+>
+> Am Sat, 16 Mar 2019 17:57:28 +0100
+> schrieb Gilles Talis <gilles.talis@gmail.com>:
+>
+> > Hello Thomas,
+> >
+> > Thanks for your contribution. Please find some comments below.
+>
+>  Hi Gilles,
+>
+> thanks a lot for your review! I finally found some spare time to look
+> into this again, but I have some questions below...
+All apologies for not coming back sooner on your patch.
 
-...requires a NON commercial option...
 
-See below...
+> There does not seem to be a license file in the tarball here, they just
+> mention in the README that the game is licensed under the GPL. I guess
+> I can skip the hash for the license file in this case?
+This is correct. If there's no actual license file, you can skip the
+hash for it.
 
->
-> BR2_PACKAGE_EXIV2_LENSDATA existed only as a separate option for
-> licensing issues. Since these problems have gone away and the lens
-> database is only 80KB of data, the BR2_PACKAGE_EXIV2_LENSDATA option
-> has also been removed.
-
-Links to the upstream removal announcements/commits would be nice, e.g.
-
-[1] https://github.com/Exiv2/exiv2/commit/07f63003b7f50dd7d8719585ba54623e0f60c3c4#diff-04c6e90faac2675aa89e2176d2eec7d8
-
-[2] https://github.com/Exiv2/exiv2/commit/085d8a309aafb8ed5a72cad027a1a0ea974938d9#diff-272ceadb8458515b2ae4b5630a6029cc
-
->
-> Legacy handling for the removed options _COMMERCIAL and _LENSDATA is
-> not needed, since now they are always enabled.
->
-> Add the dedicated BSD-3-Clause license file for CMakeLists.txt,
-> config/FindEXPAT.cmake and config/FindMSGFMT.cmake files.
->
-> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
->
-> ---
-> Changes v2 -> v3:
->   - fix EXIV2_LICENSE spacer
->   - explain why _LENSTADA is removed
->
-> Changes v1 -> v2:
->   - remove _LENSDATA option (suggested by Arnout Vandecappelle)
->   - remove commercial license in Config.in help
->   - add missing BSD-3-Clause flag
->   - Add details to the patch message
->
-> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
-> ---
->  package/exiv2/Config.in  | 23 -----------------------
->  package/exiv2/exiv2.hash |  1 +
->  package/exiv2/exiv2.mk   | 17 +++--------------
->  3 files changed, 4 insertions(+), 37 deletions(-)
->
-> diff --git a/package/exiv2/Config.in b/package/exiv2/Config.package/exiv2/.exiv2.mk.swpin
-> index acce81c593..72c2a88040 100644
-> --- a/package/exiv2/Config.in
-> +++ b/package/exiv2/Config.in
-> @@ -16,24 +16,10 @@ config BR2_PACKAGE_EXIV2
->  	  access to the Exif, IPTC and XMP metadata of images in
->  	  various formats.
->
-> -	  Exiv2 is available under the GPLv2+ or under a commercial
-> -	  license.
-> -
->  	  http://www.exiv2.org/
->
->  if BR2_PACKAGE_EXIV2
->
-> -config BR2_PACKAGE_EXIV2_COMMERCIAL
-> -	bool "Enable commercial"
-> -	help
-> -	  Build the commercial version for closed source project.
-> -
-> -	  The Nikon lens name database and the NLS support is disabled
-> -	  for copyright reasons.
-> -
-> -	  A commercial license request is needed.
-> -	  http://www.exiv2.org/download.html#license
-> -
->  config BR2_PACKAGE_EXIV2_PNG
->  	bool "PNG image support"
->  	select BR2_PACKAGE_ZLIB
-> @@ -46,13 +32,4 @@ config BR2_PACKAGE_EXIV2_XMP
->  	help
->  	  Build with XMP support
->
-> -config BR2_PACKAGE_EXIV2_LENSDATA
-> -	bool "Nikon lens name database"
-> -	depends on !BR2_PACKAGE_EXIV2_COMMERCIAL
-
-Here it is, LENSDATA is only available in case of '!BR2_PACKAGE_EXIV2_COMMERCIAL'...
-
-> -	help
-> -	  Integrate Nikon lens name database.
-> -
-> -	  This database is integrated but comes from a thirdparty:
-> -	  http://www.rottmerhusen.com/objektives/lensid/thirdparty.html.
-> -
->  endif
-> diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
-> index f99cb8cb87..b753c03854 100644
-> --- a/package/exiv2/exiv2.hash
-> +++ b/package/exiv2/exiv2.hash
-> @@ -1,3 +1,4 @@
->  # Locally calculated
->  sha256 1b3766b2c203ce213a4195de14d61694017ec1a69d15d4575bccecef130990fe exiv2-0.27.1.tar.gz
->  sha256 a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66 COPYING
-> +sha256 46cde7dc11e64c78d650b4851b88f6704b4665ff60f22a1caf68ceb15e217e5b COPYING-CMAKE-SCRIPTS
-> diff --git a/package/exiv2/exiv2.mk b/package/exiv2/exiv2.mk
-> index ba9d9b7303..f26c7a6683 100644
-> --- a/package/exiv2/exiv2.mk
-> +++ b/package/exiv2/exiv2.mk
-> @@ -7,27 +7,16 @@
->  EXIV2_VERSION = 0.27.1
->  EXIV2_SITE = $(call github,Exiv2,exiv2,$(EXIV2_VERSION))
->  EXIV2_INSTALL_STAGING = YES
-> +EXIV2_LICENSE = GPL-2.0+, BSD-3-Clause
-> +EXIV2_LICENSE_FILES = COPYING COPYING-CMAKE-SCRIPTS
->
->  EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
-> +EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=ON
->
->  # The following CMake variable disables a TRY_RUN call in the -pthread
->  # test which is not allowed when cross-compiling.
->  EXIV2_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
->
-> -ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),)
-> -EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=OFF
-> -endif
-
-And here, if LENSDATA is not set give -DEXIV2_ENABLE_LENSDATA=OFF...
-
-Maybe keep the LENSDATA option?
-
-Regards,
-Peter
-
-> -
-> -ifeq ($(BR2_PACKAGE_EXIV2_COMMERCIAL),y)
-> -EXIV2_LICENSE = commercial
-> -# NLS support is disabled in commercial version due to the copyright
-> -# of the translated texts.
-> -EXIV2_CONF_OPTS += -DEXIV2_ENABLE_COMMERCIAL=ON -DEXIV2_ENABLE_NLS=OFF
-> -else
-> -EXIV2_LICENSE = GPL-2.0+
-> -EXIV2_LICENSE_FILES = COPYING
-> -endif
-> -
->  ifeq ($(BR2_PACKAGE_EXIV2_PNG),y)
->  EXIV2_CONF_OPTS += -DEXIV2_ENABLE_PNG=ON
->  EXIV2_DEPENDENCIES += zlib
+thanks
+Gilles.
