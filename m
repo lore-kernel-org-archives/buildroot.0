@@ -1,48 +1,34 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon,  3 Jun 2019 20:59:38 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/at91bootstrap3: bump to version 3.8.12
-Message-ID: <1559588378-13429-1-git-send-email-pjtexier@koncepto.io>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon,  3 Jun 2019 21:19:51 +0200
+Subject: [Buildroot] [PATCH] arch/nds32: force syntax colouring to kconfig.
+Message-ID: <20190603191951.22360-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
----
- boot/at91bootstrap3/Config.in           | 4 ++--
- boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+It is too sad when an editor picks up the wrong syntax...
 
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index f6c310a..afdc7e7 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -19,7 +19,7 @@ choice
- 	prompt "AT91 Bootstrap 3 version"
+Like was done in e837837791 for all the other archs, force
+syntax to kconfig for nds32 too.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Nylon Chen <nylon7@andestech.com>
+---
+ arch/Config.in.nds32 | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
+index f268883662..322ff49f2e 100644
+--- a/arch/Config.in.nds32
++++ b/arch/Config.in.nds32
+@@ -9,3 +9,6 @@ config BR2_ENDIAN
  
- config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
--	bool "3.8.6"
-+	bool "3.8.12"
- 
- config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	bool "Custom Git repository"
-@@ -44,7 +44,7 @@ endif
- 
- config BR2_TARGET_AT91BOOTSTRAP3_VERSION
- 	string
--	default "v3.8.6" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+	default "v3.8.12" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
- 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
- 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 
-diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
-index e904a46..cfeb9c8 100644
---- a/boot/at91bootstrap3/at91bootstrap3.hash
-+++ b/boot/at91bootstrap3/at91bootstrap3.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	a2e9ec6f42ee3b5a805fe215257b63070b6c498d57c568c46fcb18fd1b38ea7e  at91bootstrap3-v3.8.6.tar.gz
-+sha256	e25324b6f38725ad2ebfd946cb9e144f0d5889e2885992c7196a82b41fe45ee4  at91bootstrap3-v3.8.12.tar.gz
+ config BR2_READELF_ARCH_NAME
+ 	default "Andes Technology compact code size embedded RISC processor family"
++
++# vim: ft=kconfig
++# -*- mode:kconfig; -*-
 -- 
-2.7.4
+2.20.1
