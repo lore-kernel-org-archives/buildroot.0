@@ -1,57 +1,45 @@
-From: Brett Gyarfas <brett.gyarfas@ontera.bio>
-Date: Mon,  3 Jun 2019 14:44:36 -0700
-Subject: [Buildroot] [PATCH 1/1] package/nanomsg: bump version to 1.1.5
-Message-ID: <20190603214436.20590-1-brett.gyarfas@ontera.bio>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon,  3 Jun 2019 18:40:39 -0400
+Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: fix license hash
+Message-ID: <20190603224039.98733-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Brett Gyarfas <brett.gyarfas@ontera.bio>
+From: Adam Duskett <Aduskett@gmail.com>
+
+The new license is under license.md not license.rst, which will cause
+"make legal-info" to fail.
+
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/nanomsg/nanomsg.hash | 4 ++--
- package/nanomsg/nanomsg.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ boot/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nanomsg/nanomsg.hash b/package/nanomsg/nanomsg.hash
-index 5164a754ea..ed67a7e3ff 100644
---- a/package/nanomsg/nanomsg.hash
-+++ b/package/nanomsg/nanomsg.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256 24afdeb71b2e362e8a003a7ecc906e1b84fd9f56ce15ec567481d1bb33132cc7  nanomsg-1.0.0.tar.gz
-+sha256 218b31ae1534ab897cb5c419973603de9ca1a5f54df2e724ab4a188eb416df5a  nanomsg-1.1.5.tar.gz
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+index 394071865e..d67b49cae8 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256 6dae02acd85278394bfad6e2683e186e5332a711e4491ac4632ad6480f6e5494 arm-trusted-firmware-v1.4.tar.gz
+-sha256 487795b8023df866259fa159bab94706b747fb0d623b7913f1c4955c0ab5f164  license.rst
++sha256 b3eb7d1ad5552ee71bd1031c7db7300d0d184e1236e2cd41fbc1e1e7c76a0e63  license.md
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 9a23e3d336..f87373ffe6 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -6,7 +6,7 @@
  
- # Hash for license file:
--sha256 4e51f6a04312ea7c5f4f0e92d91b6415c1eeb09bdaf86a6fd11d93499457c07a  COPYING
-+sha256 9755181e27175cb3510b4da8629caa406fb355a19aa8e7d55f06bf8ab33323c4  COPYING
-diff --git a/package/nanomsg/nanomsg.mk b/package/nanomsg/nanomsg.mk
-index 3b1c2ca0c4..b86e8c128a 100644
---- a/package/nanomsg/nanomsg.mk
-+++ b/package/nanomsg/nanomsg.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
+ ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
+-ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
++ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.md
  
--NANOMSG_VERSION = 1.0.0
-+NANOMSG_VERSION = 1.1.5
- NANOMSG_SITE = $(call github,nanomsg,nanomsg,$(NANOMSG_VERSION))
- NANOMSG_INSTALL_STAGING = YES
- NANOMSG_LICENSE = MIT
+ ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
+ # Handle custom ATF tarballs as specified by the configuration
 -- 
-2.17.1
-
-
--- 
-
-Two Pore Guys is proud to announce that our company has changed names. We 
-are now Ontera. Our new website is available at www.ontera.bio.
-
--- 
-This message and any attachment are confidential and may be privileged or 
-otherwise protected from disclosure. If you are not the intended recipient, 
-you must not copy this message or attachment or disclose the contents to 
-any other person. If you have received this transmission in error, please 
-notify the sender immediately and delete the message and any attachment 
-from your system.
+2.21.0
