@@ -1,35 +1,22 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 3 Jun 2019 08:12:49 +0200
-Subject: [Buildroot] [git commit] package/busybox: add dependency on
- dosfstools
-Message-ID: <20190603061321.391DD8D793@busybox.osuosl.org>
+Date: Mon, 03 Jun 2019 08:13:30 +0200
+Subject: [Buildroot] [PATCH] DEVELOPERS: Drop support for some packages
+ from Francois Perrad
+In-Reply-To: <20190603024218.15550-1-francois.perrad@gadz.org> (Francois
+ Perrad's message of "Mon, 3 Jun 2019 04:42:18 +0200")
+References: <20190603024218.15550-1-francois.perrad@gadz.org>
+Message-ID: <87sgsrtcvp.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca42df21110b5e32f76caea8d1664bdbf213be76
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Francois" == Francois Perrad <fperrad@gmail.com> writes:
 
-dosfstools and busybox may each install mkfs.vfat, so dosfstools must
-be installed before busybox.
+ > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/busybox/busybox.mk | 1 +
- 1 file changed, 1 insertion(+)
+Committed, thanks.
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 67b91500e9..e606068a90 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -32,6 +32,7 @@ BUSYBOX_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_DEBIANUTILS),debianutils) \
- 	$(if $(BR2_PACKAGE_DIFFUTILS),diffutils) \
- 	$(if $(BR2_PACKAGE_DOS2UNIX),dos2unix) \
-+	$(if $(BR2_PACKAGE_DOSFSTOOLS),dosfstools) \
- 	$(if $(BR2_PACKAGE_E2FSPROGS),e2fsprogs) \
- 	$(if $(BR2_PACKAGE_FBSET),fbset) \
- 	$(if $(BR2_PACKAGE_GAWK),gawk) \
+-- 
+Bye, Peter Korsgaard
