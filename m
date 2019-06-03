@@ -1,34 +1,62 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon,  3 Jun 2019 21:19:51 +0200
-Subject: [Buildroot] [PATCH] arch/nds32: force syntax colouring to kconfig.
-Message-ID: <20190603191951.22360-1-yann.morin.1998@free.fr>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon,  3 Jun 2019 21:51:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libva: fix build with gcc < 5
+Message-ID: <20190603195107.2347-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It is too sad when an editor picks up the wrong syntax...
+Fixes:
+ - http://autobuild.buildroot.org/results/96fe1667190e1e08d672984f147ec8e8f5e2f4f1
 
-Like was done in e837837791 for all the other archs, force
-syntax to kconfig for nds32 too.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Nylon Chen <nylon7@andestech.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- arch/Config.in.nds32 | 3 +++
- 1 file changed, 3 insertions(+)
+ ...a-va_trace-unbreak-with-C89-after-b369467.patch | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch
 
-diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
-index f268883662..322ff49f2e 100644
---- a/arch/Config.in.nds32
-+++ b/arch/Config.in.nds32
-@@ -9,3 +9,6 @@ config BR2_ENDIAN
- 
- config BR2_READELF_ARCH_NAME
- 	default "Andes Technology compact code size embedded RISC processor family"
+diff --git a/package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch b/package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch
+new file mode 100644
+index 0000000000..19192742c8
+--- /dev/null
++++ b/package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch
+@@ -0,0 +1,35 @@
++From 6724011e8b52901f13dded130f0b47e8bdbd4dda Mon Sep 17 00:00:00 2001
++From: Jan Beich <jbeich@FreeBSD.org>
++Date: Wed, 10 Apr 2019 11:37:28 +0000
++Subject: [PATCH] va/va_trace: unbreak with C89 after b3694671c784
 +
-+# vim: ft=kconfig
-+# -*- mode:kconfig; -*-
++va/va_trace.c: In function 'va_TraceVAEncMiscParameterBuffer':
++va/va_trace.c:3281: error: 'for' loop initial declaration used outside C99 mode
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/intel/libva/commit/6724011e8b52901f13dded130f0b47e8bdbd4dda]
++---
++ va/va_trace.c | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/va/va_trace.c b/va/va_trace.c
++index 0a17e5cd..d41f62c1 100755
++--- a/va/va_trace.c
+++++ b/va/va_trace.c
++@@ -3271,6 +3271,7 @@ static void va_TraceVAEncMiscParameterBuffer(
++     }
++     case VAEncMiscParameterTypeROI:
++     {
+++        int i;
++         VAEncMiscParameterBufferROI *p = (VAEncMiscParameterBufferROI *)tmp->data;
++ 
++         va_TraceMsg(trace_ctx, "\t--VAEncMiscParameterBufferROI\n");
++@@ -3278,7 +3279,7 @@ static void va_TraceVAEncMiscParameterBuffer(
++         va_TraceMsg(trace_ctx, "\tmax_delta_qp = %d\n", p->max_delta_qp);
++         va_TraceMsg(trace_ctx, "\tmin_delta_qp = %d\n", p->min_delta_qp);
++         va_TraceMsg(trace_ctx, "\troi_flags.bits.roi_value_is_qp_delta = %d\n", p->roi_flags.bits.roi_value_is_qp_delta);
++-        for (int i = 0; i < p->num_roi; i++) {
+++        for (i = 0; i < p->num_roi; i++) {
++             va_TraceMsg(trace_ctx, "\troi[%d].roi_rectangle.x      = %d\n", i, p->roi[i].roi_rectangle.x);
++             va_TraceMsg(trace_ctx, "\troi[%d].roi_rectangle.y      = %d\n", i, p->roi[i].roi_rectangle.y);
++             va_TraceMsg(trace_ctx, "\troi[%d].roi_rectangle.width  = %d\n", i, p->roi[i].roi_rectangle.width);
 -- 
-2.20.1
+2.14.1
