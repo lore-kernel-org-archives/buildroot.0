@@ -1,45 +1,59 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon,  3 Jun 2019 18:40:39 -0400
-Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: fix license hash
-Message-ID: <20190603224039.98733-1-aduskett@gmail.com>
+From: Yang Zhonghua <happy2discover@gmail.com>
+Date: Tue, 4 Jun 2019 09:46:24 +0800
+Subject: [Buildroot] Got errors when I tried to build rootfs with wayland,
+ qt5 on an i.MX 6dl board
+Message-ID: <CA+bU9VcvgR241rkG7utoG2LzwaJd__Ja8BesweeWpAb_VZz6hQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Hey guys,
 
-The new license is under license.md not license.rst, which will cause
-"make legal-info" to fail.
+Here are what I hope,
+1. on an i.MX 6dl/6q board
+2. wayland backend, weston
+3. a low kernel version, 4.1.15
+4. qt5, at least 5.9
+5. run a qt application via wayland
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- boot/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
- boot/arm-trusted-firmware/arm-trusted-firmware.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
-index 394071865e..d67b49cae8 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
- sha256 6dae02acd85278394bfad6e2683e186e5332a711e4491ac4632ad6480f6e5494 arm-trusted-firmware-v1.4.tar.gz
--sha256 487795b8023df866259fa159bab94706b747fb0d623b7913f1c4955c0ab5f164  license.rst
-+sha256 b3eb7d1ad5552ee71bd1031c7db7300d0d184e1236e2cd41fbc1e1e7c76a0e63  license.md
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 9a23e3d336..f87373ffe6 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -6,7 +6,7 @@
- 
- ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
- ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
--ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
-+ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.md
- 
- ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
- # Handle custom ATF tarballs as specified by the configuration
--- 
-2.21.0
+Here are my steps,
+Thanks for y_morin first, who helped me in freenode #buildroot!
+1. chosen 2019.02.2 for selecting BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
+2. chosen configs/imx6-sabresd_qt5_defconfig to make
+3. changed toolchain -> C library from uClibc-ng to glibc
+4. selected Target packages -> Hardware handling -> Freescale i.MX
+libraries -> imx-gpu-viv -> Output option(wayland)
+5. make
+
+Then I got errors as follows,
+qeglfsvivintegration.cpp: In member function ?virtual void
+QEglFSVivIntegration::platformInit()?:
+qeglfsvivintegration.cpp:68:41: error: invalid conversion from ?void*? to
+?EGLNativeDisplayType {aka wl_display*}? [-fpermissive]
+     mNativeDisplay = fbGetDisplayByIndex(framebufferIndex());
+                      ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
+qeglfsvivintegration.cpp: In member function ?virtual wl_egl_window*
+QEglFSVivIntegration::createNativeWindow(QPlatformWindow*, const QSize&,
+const QSurfaceFormat&)?:
+qeglfsvivintegration.cpp:91:51: error: invalid conversion from ?void*? to
+?EGLNativeWindowType {aka wl_egl_window*}? [-fpermissive]
+     EGLNativeWindowType eglWindow = fbCreateWindow(mNativeDisplay, 0, 0,
+size.width(), size.height());
+
+ ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Makefile:1273: recipe for target '.obj/qeglfsvivintegration.o' failed
+
+Could someone tell me how to solve the above errors?
+Do I need change some qt code?
+Should I change some configs?
+My .config file link is https://pastebin.com/rJceBU0L
+
+looking forward to your reply!
+
+happy2discover at gmail.com
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190604/405d74f9/attachment.html>
