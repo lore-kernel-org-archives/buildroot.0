@@ -1,50 +1,33 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue,  4 Jun 2019 08:44:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openjdk: sets AWK
-Message-ID: <20190604064446.6929-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 4 Jun 2019 09:07:27 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libubootenv: needs threads
+In-Reply-To: <20190603195926.3684-1-fontaine.fabrice@gmail.com>
+References: <20190603195926.3684-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190604090727.36a7bd01@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-AWK must be set to $(HOST_DIR)/bin/gawk otherwise build fails on:
-/bin/bash: gawk: command not found
+Hello,
 
-When build fails, config.log contains the following line:
+On Mon,  3 Jun 2019 21:59:26 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-configure:13709: checking for gawk
-configure:13725: found /home/buildroot/autobuild/run/instance-3/output/host/bin/gawk
-configure:13736: result: gawk
-[...]
-ac_cv_prog_AWK=gawk
+> Fixes:
+>  - http://autobuild.buildroot.org/results/813e8951530c093f46b38bf8c3b467ab6535c95b
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Fixes:
- - http://autobuild.buildroot.org/results/43c5d08f599e8f44b59a576d243ae1c7b27de7a3
+From a very quick glance at the code and a quick build test, the
+<pthread.h> include doesn't seem to be necessary. Perhaps it should
+simply be removed ?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/openjdk/openjdk.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Best regards,
 
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 318e4bade3..2002da7386 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -46,12 +46,13 @@ OPENJDK_DEPENDENCIES += libffi
- endif
- 
- # OpenJDK ignores some variables unless passed via the environment.
--# These variables are PATH, LD, CC, CXX, and CPP.
-+# These variables are PATH, AWK, LD, CC, CXX, and CPP.
- # OpenJDK defaults ld to the ld binary but passes -Xlinker and -z as
- # arguments during the linking process, which causes compilation failures.
- # To fix this issue, LD is set to point to gcc.
- OPENJDK_CONF_ENV = \
- 	PATH=$(BR_PATH) \
-+	AWK=$(HOST_DIR)/bin/gawk \
- 	CC=$(TARGET_CC) \
- 	CPP=$(TARGET_CPP) \
- 	CXX=$(TARGET_CXX) \
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
