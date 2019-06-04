@@ -1,67 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Jun 2019 15:47:12 +0200
-Subject: [Buildroot] [PATCH 1/3] autobuild-run: do reproducible builds
- tests if BR2_REPRODUCIBLE=y
-In-Reply-To: <20190603091808.2928-1-itsatharva@gmail.com>
-References: <20190603091808.2928-1-itsatharva@gmail.com>
-Message-ID: <c7f197ec-ca1d-7014-efcf-787e39c800ed@mind.be>
+From: Sergio Prado <sergio.prado@e-labworks.com>
+Date: Tue, 4 Jun 2019 10:53:01 -0300
+Subject: [Buildroot] [buildroot] any plan to adopt snort3?
+In-Reply-To: <CAJPHfYMoGWDpcjGmRMqrpO=4FH+YgouJY-HXexJ4AAQEt1LkPA@mail.gmail.com>
+References: <CAJPHfYMoGWDpcjGmRMqrpO=4FH+YgouJY-HXexJ4AAQEt1LkPA@mail.gmail.com>
+Message-ID: <CANu7NGtcq0Jw2sv+wOMgU8mzdhNW2W=ypAxuVPtpB9i3szJrWw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Atharva,
+Hi Yi,
 
-On 03/06/2019 11:18, Atharva Lele wrote:
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-> ---
->  scripts/autobuild-run | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index ef2f2a5..9f8aabb 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -652,7 +652,15 @@ def run_instance(**kwargs):
->              log_write(kwargs['log'], "WARN: failed to generate configuration")
->              continue
->  
-> -        ret = do_build(**kwargs)
-> +        # Check if the build test is supposed to be a reproducible test
-> +        outputdir = os.path.abspath(os.path.join(idir, "output"))
+Are you part of the project community? Do you know the plans for Snort 2?
 
- These path names get constructed over and over again in a few different places.
-I think it would be worth to create a Builder class that has those common things
-as fields, and that gets (almost?) all the preceding functions as members.
+I know Snort 3 has been in development for a while, but Snort 2 is still
+the official version according to the downloads page:
 
- However, that's a completely different refactoring, not really a blocking point
-for merging this.
+https://snort.org/downloads
+
+Best regards,
+
+Sergio Prado
+Embedded Labworks
+Mobile: +55 11 97123-3420
 
 
-> +        with open(os.path.join(outputdir, ".config"), "r") as fconf:
-> +            if "BR2_REPRODUCIBLE=y" in fconf.read():
+Em ter, 4 de jun de 2019 ?s 10:18, Yi Zheng <goodmenzy@gmail.com> escreveu:
 
- I would add a \n to the match string, but that's a minor nit of course.
-
-> +                log_write(kwargs['log'], "INFO: Reproducible Build Test")
-> +                ret = do_reproducible_build(**kwargs)
-
- The order of your patches is wrong: this patch calls a function that is only
-defined by patch 2, so patch 2 should be first. But that one again calls a
-function that is defined by patch 3, so patch 3 should be first.
-
- However, I don't think it's worth splitting this in three patches. The other
-two just add two new functions that don't get called, so there's not much reason
-to keep it separate.
-
- Regards,
- Arnout
-
-> +            else:
-> +                log_write(kwargs['log'], "INFO: Non Reproducible Build Test")
-> +                ret = do_build(**kwargs)
->  
->          send_results(ret, **kwargs)
->  
-> 
+> FYI
+>
+> https://github.com/snort3/snort3.git
+>
+>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190604/03eb92f7/attachment.html>
