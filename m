@@ -1,73 +1,62 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue,  4 Jun 2019 18:07:39 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/boost: work around gcc bug 85180
- for boost-fiber option
-In-Reply-To: <20190604160739.124905-1-giulio.benetti@micronovasrl.com>
-References: <20190604160739.124905-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190604160739.124905-2-giulio.benetti@micronovasrl.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Tue, 4 Jun 2019 18:25:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/exiv2: cleanup options and
+ licenses
+In-Reply-To: <8e7755d7-831f-4945-d04f-b63d9ebc67c2@mind.be>
+References: <20190507103639.94701-1-nicolas.serafini@sensefly.com>
+ <bdcad4a5-2ba7-ed8c-8fc3-3de53bd2aa0d@mind.be>
+ <20190508102742.0000138c@sensefly.com>
+ <8e7755d7-831f-4945-d04f-b63d9ebc67c2@mind.be>
+Message-ID: <20190604182559.2a52cf10@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Microblaze Gcc version < 8.x the build hangs due to gcc bug
-85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-shows up when building boost with boost-fiber enabled and optimization
-but not when building with -O0. To work around this, if
-BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y and boost-fiber is selected we force
-using -O0.
+Hello Arnout, Nicolas,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
-Changes:
-V1->V2:
-* remove 'depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180' and its comment
-  from Config.in
-* reword taking into account boost-fiber option
+On Wed, 8 May 2019 10:44:38 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
 
- package/boost/Config.in | 5 ++---
- package/boost/boost.mk  | 4 ++++
- 2 files changed, 6 insertions(+), 3 deletions(-)
+> On 08/05/2019 10:27, Nicolas Serafini wrote:
+> >>>  config BR2_PACKAGE_EXIV2_LENSDATA
+> >>> -	bool "Nikon lens name database"
+> >>> -	depends on !BR2_PACKAGE_EXIV2_COMMERCIAL
+> >>> +	bool "Include lens data"
+> >> How big is this lens data? Is it worth keeping an option for it?
+> > Yes you are right we can remove it. The binary is only 80KB less with
+> > the lensdata option disabled.
+> >
+> > Do I need to add a Config.in.legacy option if I remove it.
+>
+>  No, same as for the _COMMERCIAL option. The legacy handling is there to make
+> sure that people who update Buildroot and had some option enabled will be able
+> to do whatever is needed to keep the same behaviour.
+>
+>  It is useful to mention explicitly in the commit message why legacy handling is
+> skipped. Something like: "Legacy handling for the removed options _COMMERCIAL
+> and _LENSDATA is not needed, since now they are always enabled."
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 783e86dc09..88b964847f 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -137,7 +137,6 @@ config BR2_PACKAGE_BOOST_FIBER
- 	# since mips32r2/mips64r2.
- 	depends on !BR2_MIPS_CPU_MIPS32 && !BR2_MIPS_CPU_MIPS64
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180
- 	select BR2_PACKAGE_BOOST_CONTEXT
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
- 	select BR2_PACKAGE_BOOST_SYSTEM
-@@ -148,9 +147,9 @@ comment "boost-fiber needs a toolchain w/ NPTL"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
--comment "boost-fiber needs a toolchain not affected by GCC bug 64735, 85180"
-+comment "boost-fiber needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || BR2_TOOLCHAIN_HAS_GCC_BUG_85180
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 
- config BR2_PACKAGE_BOOST_FILESYSTEM
- 	bool "boost-filesystem"
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index a2d8395fd4..04869ed685 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -50,6 +50,10 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_WAVE),,wave)
- 
- BOOST_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+BOOST_TARGET_CXXFLAGS += -O0
-+endif
-+
- BOOST_FLAGS = --with-toolset=gcc
- 
- ifeq ($(BR2_PACKAGE_ICU),y)
--- 
-2.17.1
+Disagree with this reasoning, o.k. for the enable-_LENSDATA option, NAK for the
+_COMMERCIAL one (users who selected _COMMERCIAL before will now get GPL-2.0+
+without warning/notice)...
+
+Regards,
+Peter
+
+>
+> > The default
+> > state in exiv2 CMakeList is enabled.
+>
+>  It is a good idea to still add the -D...=ON explicitly, because:
+> - it makes sure that the same behaviour is kept if the default changes; and
+> - if the option changes name, is removed, ... there is a warning in the
+> configure step, so there's a better chance that whoever is doing the bump will
+> notice it.
+>
+>  Regards,
+>  Arnout
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
