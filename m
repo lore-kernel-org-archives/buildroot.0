@@ -1,43 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 04 Jun 2019 23:48:35 +0200
-Subject: [Buildroot] [PATCH] package/luv: update hash
-In-Reply-To: <df7e1253c2361068caac03f64a778589db1e6507.camel@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?= Krause"'s message of "Tue, 04 Jun 2019 20:37:42
- +0200")
-References: <20190604142527.30307-1-joerg.krause@embedded.rocks>
- <87h895o14z.fsf@tarshish>
- <df7e1253c2361068caac03f64a778589db1e6507.camel@embedded.rocks>
-Message-ID: <87muixxbrg.fsf@dell.be.48ers.dk>
+Date: Tue, 4 Jun 2019 23:41:23 +0200
+Subject: [Buildroot] [git commit] package/nanomsg: bump version to 1.1.5
+Message-ID: <20190604214833.D133F8EF29@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=487922329abcf343b22705a94095f3c8ae23a738
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Hi Baruch,
- > On Tue, 2019-06-04 at 17:50 +0300, Baruch Siach wrote:
- >> Hi J?rg,
- >> 
- >> On Tue, Jun 04 2019, J?rg Krause wrote:
- >> 
- >> > Upstream removed (using git force-push) and recreated version 1.29.1-1
- >> > and re-uploaded the source tarball. Therefore, the hash has changed and
- >> > needs to be updated.
- >> 
- >> What about the file at the default backup site?
- >> 
- >> http://sources.buildroot.net/luv/luv-1.29.1-1.tar.gz
- >> 
- >> It's the old file.
+Signed-off-by: Brett Gyarfas <brett.gyarfas@ontera.bio>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nanomsg/nanomsg.hash | 4 ++--
+ package/nanomsg/nanomsg.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > I didn't know that the files are backed up. Is it possible to replace
- > this?
-
-Sure, I will do that right away.
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/nanomsg/nanomsg.hash b/package/nanomsg/nanomsg.hash
+index 5164a754ea..ed67a7e3ff 100644
+--- a/package/nanomsg/nanomsg.hash
++++ b/package/nanomsg/nanomsg.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256 24afdeb71b2e362e8a003a7ecc906e1b84fd9f56ce15ec567481d1bb33132cc7  nanomsg-1.0.0.tar.gz
++sha256 218b31ae1534ab897cb5c419973603de9ca1a5f54df2e724ab4a188eb416df5a  nanomsg-1.1.5.tar.gz
+ 
+ # Hash for license file:
+-sha256 4e51f6a04312ea7c5f4f0e92d91b6415c1eeb09bdaf86a6fd11d93499457c07a  COPYING
++sha256 9755181e27175cb3510b4da8629caa406fb355a19aa8e7d55f06bf8ab33323c4  COPYING
+diff --git a/package/nanomsg/nanomsg.mk b/package/nanomsg/nanomsg.mk
+index 3b1c2ca0c4..b86e8c128a 100644
+--- a/package/nanomsg/nanomsg.mk
++++ b/package/nanomsg/nanomsg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NANOMSG_VERSION = 1.0.0
++NANOMSG_VERSION = 1.1.5
+ NANOMSG_SITE = $(call github,nanomsg,nanomsg,$(NANOMSG_VERSION))
+ NANOMSG_INSTALL_STAGING = YES
+ NANOMSG_LICENSE = MIT
