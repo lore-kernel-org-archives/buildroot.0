@@ -1,73 +1,107 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 4 Jun 2019 23:41:06 +0200
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{9, 14,
- 19}.x / 5.{0, 1}.x series
-Message-ID: <20190604214833.CB5DE8EC29@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 5 Jun 2019 00:59:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/exiv2: cleanup options and
+ licenses
+In-Reply-To: <20190604182559.2a52cf10@gmx.net>
+References: <20190507103639.94701-1-nicolas.serafini@sensefly.com>
+ <bdcad4a5-2ba7-ed8c-8fc3-3de53bd2aa0d@mind.be>
+ <20190508102742.0000138c@sensefly.com>
+ <8e7755d7-831f-4945-d04f-b63d9ebc67c2@mind.be>
+ <20190604182559.2a52cf10@gmx.net>
+Message-ID: <032fd98f-fda9-8b80-658e-453001b3b063@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b827a3f50e392adcdacfb56181ee7b29a5f6acd6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 10 +++++-----
- package/linux-headers/Config.in.host | 10 +++++-----
- 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index c2e0c12748..a6a16deee0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -121,7 +121,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.1.5" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.1.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 7dc87f108e..edb3839e0f 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 d79f90f5ca97befbfee4e247204b2ac4f45e7bb03d63a79184bc748cf3cf6ddb  linux-5.1.5.tar.xz
--sha256 0bf0d5c64dafc1184e9aafd2f3ebb77aa88ddee881a7766436258feaa214d9ec  linux-5.0.19.tar.xz
-+sha256 9d68a206b0808d81ce582c861d0bda0d1095bcbd0f181db063665b68fc9cf478  linux-5.1.6.tar.xz
-+sha256 3ba720f3189e5a08e7c533da8c12595d662a6c11d3466db6a0ff164ef4e54b68  linux-5.0.20.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 097b52fe8a872259f4a3dba571b2eaf7b9863d9cde5399c6b316dec0ef57e67a  linux-4.19.46.tar.xz
--sha256 c8a3f40ef877e18b3d2890e0954f2d81b6d012a7321836ca4e5b036ef93f68f5  linux-4.14.122.tar.xz
--sha256 532e4b7b0103806dad9124fd09d15d19594eca08e7f900e94ff805d3b4171ee3  linux-4.9.179.tar.xz
-+sha256 5d08f3890e7ca2b94529675120f170c5b764f795e6dd184a1190c23a40ef5365  linux-4.19.47.tar.xz
-+sha256 25f58cb56bde388ac9bcee984f5f2d0ca094b0a8af6b92ad1f5b2fd0e6725b85  linux-4.14.123.tar.xz
-+sha256 d25a490d62a3e96a587333e163862585eac4086fc8d4893b4ec1711e7d387c5f  linux-4.9.180.tar.xz
- sha256 1a450217d381bb7fd259d026d3b7a57c717e8d1f66754cd6fcc9df3c4a8a6a7a  linux-4.4.180.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 377478c1c7..f75e834505 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -302,11 +302,11 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.180"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.179"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.122"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.46"	if BR2_KERNEL_HEADERS_4_19
--	default "5.0.19"	if BR2_KERNEL_HEADERS_5_0
--	default "5.1.5"		if BR2_KERNEL_HEADERS_5_1
-+	default "4.9.180"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.123"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.47"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.0.20"	if BR2_KERNEL_HEADERS_5_0
-+	default "5.1.6"		if BR2_KERNEL_HEADERS_5_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+On 04/06/2019 18:25, Peter Seiderer wrote:
+> Hello Arnout, Nicolas,
+> 
+> On Wed, 8 May 2019 10:44:38 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+> 
+>> On 08/05/2019 10:27, Nicolas Serafini wrote:
+>>>>>  config BR2_PACKAGE_EXIV2_LENSDATA
+>>>>> -	bool "Nikon lens name database"
+>>>>> -	depends on !BR2_PACKAGE_EXIV2_COMMERCIAL
+>>>>> +	bool "Include lens data"
+>>>> How big is this lens data? Is it worth keeping an option for it?
+>>> Yes you are right we can remove it. The binary is only 80KB less with
+>>> the lensdata option disabled.
+>>>
+>>> Do I need to add a Config.in.legacy option if I remove it.
+>>
+>>  No, same as for the _COMMERCIAL option. The legacy handling is there to make
+>> sure that people who update Buildroot and had some option enabled will be able
+>> to do whatever is needed to keep the same behaviour.
+>>
+>>  It is useful to mention explicitly in the commit message why legacy handling is
+>> skipped. Something like: "Legacy handling for the removed options _COMMERCIAL
+>> and _LENSDATA is not needed, since now they are always enabled."
+> 
+> Disagree with this reasoning, o.k. for the enable-_LENSDATA option, NAK for the
+> _COMMERCIAL one (users who selected _COMMERCIAL before will now get GPL-2.0+
+> without warning/notice)...
+
+ OK, so I studied this in a bit more detail, and it's actually more complicated
+than that...
+
+ The Nikon lens data has a different license, which is this:
+
+// Free use in non-commercial, GPL or open source software only!
+// Please contact me for adding lenses or use in commercial software.
+
+ So the problem is not so much that you force GPL; it is that you are not
+allowed to use this in commercial software.
+
+ So, at first sight, we should keep the LENSDATA option as an option, mention in
+the help text that it cannot be used for commercial use, and if the option is
+selected update EXIV2_LICENSE with something like "Rottmerhusen non-commercial
+license" and add src/nikonmn_int.cpp to EXIV2_LICENSE_FILES.
+
+ However, I wonder about the validity of this thing. First, the piece of code is
+just a database - in principle, it's not copyrightable. Second, the same
+database is also included in exiftool, and that source code doesn't have a
+similar clause (exiftool is Artistic-licensed). Third, I tried to look up the
+real source (http://rottmerhusen.com) but that site has gone down and the
+wayback machine doesn't give me anything with such a license.
+
+ If we would package exiv2 now, we probably never would have noticed this
+license issue...
+
+
+ So, let's go for the simple and pragmatic solution: keep the _LENSDATA option,
+maybe mention in the help text something about the non-commercial use.
+
+ Which is, essentially, v1 of this patch...
+
+ Nicolas, sorry for the back-and-forth, and thank you for your patience.
+
+ Peter, thanks for finding this issue.
+
+ Regards,
+ Arnout
+
+> 
+> Regards,
+> Peter
+> 
+>>
+>>> The default
+>>> state in exiv2 CMakeList is enabled.
+>>
+>>  It is a good idea to still add the -D...=ON explicitly, because:
+>> - it makes sure that the same behaviour is kept if the default changes; and
+>> - if the option changes name, is removed, ... there is a warning in the
+>> configure step, so there's a better chance that whoever is doing the bump will
+>> notice it.
+>>
+>>  Regards,
+>>  Arnout
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
