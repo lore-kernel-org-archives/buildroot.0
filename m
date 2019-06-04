@@ -1,33 +1,102 @@
-From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Tue,  4 Jun 2019 16:25:27 +0200
-Subject: [Buildroot] [PATCH] package/luv: update hash
-Message-ID: <20190604142527.30307-1-joerg.krause@embedded.rocks>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 4 Jun 2019 16:26:21 +0200
+Subject: [Buildroot] [PATCH 3/3] autobuild-run: initial implementation
+ of check_reproducibility()
+In-Reply-To: <20190603091808.2928-3-itsatharva@gmail.com>
+References: <20190603091808.2928-1-itsatharva@gmail.com>
+ <20190603091808.2928-3-itsatharva@gmail.com>
+Message-ID: <6e5f9452-d277-5fae-908d-470135390980@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upstream removed (using git force-push) and recreated version 1.29.1-1
-and re-uploaded the source tarball. Therefore, the hash has changed and
-needs to be updated.
+ Hi Atharva,
 
-See:
-https://github.com/luvit/luv/issues/330
+On 03/06/2019 11:18, Atharva Lele wrote:
+> Find out differences in built images, if any
+> 
+> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+> ---
+>  scripts/autobuild-run | 38 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+> 
+> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+> index 329803a..0e24211 100755
+> --- a/scripts/autobuild-run
+> +++ b/scripts/autobuild-run
+> @@ -394,6 +394,44 @@ def stop_on_build_hang(monitor_thread_hung_build_flag,
+>                  break
+>          monitor_thread_stop_flag.wait(30)
+>  
+> +def check_reproducibility(**kwargs):
+> +    """Check reproducibility of builds
+> +
+> +    Use diffoscope on the built images, if diffoscope is not
+> +    installed, fallback to cmp
+> +    """
+> +
+> +    log = kwargs['log']
+> +    idir = "instance-%d" % kwargs['instance']
+> +    outputdir = os.path.join(idir, "output")
+> +    diffoscope_output = os.path.join(outputdir, "diffoscope-results.txt")
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- package/luv/luv.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Put it directly in the results directory, i.e.
+os.path.join(outputdir, "results", "diffoscope.txt")
+That way, it becomes part of the results tarball and will get uploaded to the
+server. And it may even appear on the website without any further change.
 
-diff --git a/package/luv/luv.hash b/package/luv/luv.hash
-index 507299f9df..02d61b0f24 100644
---- a/package/luv/luv.hash
-+++ b/package/luv/luv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 430d5d8ad6b22e3e6284b8cdcfc7cea93e7459039bc12375a8a89bfbd034751c  luv-1.29.1-1.tar.gz
-+sha256 572cf3887f4ca03d2761664aa8a098909b445164d8263015693893902558d4cd  luv-1.29.1-1.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
--- 
-2.21.0
+> +    # Using only tar images for now
+> +    build_1_image = os.path.join(outputdir, "images-1", "rootfs.tar")
+> +    build_2_image = os.path.join(outputdir, "images", "rootfs.tar")
+
+ How can we be sure that a tarball is generated?
+
+> +
+> +    # Prefix to point diffoscope towards cross-tools
+> +    prefix = subprocess.check_output(["make", "printvars", "VARS=TARGET_CROSS"])
+
+ Don't you need to pass the -C and O= options here?
+
+> +    # Remove TARGET_CROSS= and \n from the string
+> +    prefix = prefix[13:-1]
+> +
+> +    try:
+> +        log_write(log, "INFO: running diffoscope on images")
+> +        ret = subprocess.call(["diffoscope", build_1_image, build_2_image,
+> +                            "--tool-prefix-binutils", prefix,
+> +                            "--text", diffoscope_output])
+
+ Use kwargs['sysinfo'].has("diffoscope") to check availability, rather than
+handling the exception. Though Yann may havea different opinion on that.
+
+> +    except OSError as e:
+> +        if e.errno == errno.ENOENT:
+> +            log_write(log, "INFO: diffoscope not installed, falling back to cmp")
+> +        ret = subprocess.call(["cmp", "build_1_image", "build_2_image", "-b", ">", diffoscope_output])
+> +    
+> +    if ret != 0:
+> +        log_write(log, "INFO: Build is non-reproducible.")
+> +        return -1
+
+ Return -3 here, and handle -3 in send_results. For the time being, it should
+still be NOK, but later the web frontend can be updated to also accept NREP or
+something like that as a result.
+
+> +    
+> +    # rootfs images match byte-for-byte -> reproducible image
+> +    log_write(log, "INFO: Build is reproducible!")
+
+ We don't have a "Success" log message for the normal build, so no need to add
+one for reproducible I guess.
+
+ Regards,
+ Arnout
+
+> +    return 0
+> +
+>  def do_build(**kwargs):
+>      """Run the build itself"""
+>  
+> 
