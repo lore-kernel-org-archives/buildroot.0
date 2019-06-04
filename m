@@ -1,52 +1,37 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 4 Jun 2019 22:21:50 +0200
-Subject: [Buildroot] [PATCH for-next 2/3] package/swig: enable PCRE
- regex matching in host-swig
-In-Reply-To: <20190601092802.2b4102ac@windsurf>
-References: <20190529151655.7098-1-romain.naour@gmail.com>
- <20190529151655.7098-2-romain.naour@gmail.com>
- <20190601092802.2b4102ac@windsurf>
-Message-ID: <a28bad79-391c-87e7-4bf5-f94ba7dfc233@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  4 Jun 2019 23:07:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mender-artifact: fix lzma detection
+Message-ID: <20190604210753.15731-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Use CGO_CFLAGS and CGO_LDFLAGS to help mender-artifact to find lzma.h
+and link with liblzma (with a correct rpath)
 
+Fixes:
+ - http://autobuild.buildroot.org/results/b436d50a11687afa7021efc7eedd24fc337b0994
 
-On 01/06/2019 09:28, Thomas Petazzoni wrote:
-> Hello,
-> 
-> +Arnout, Yann, Peter in Cc.
-> 
-> On Wed, 29 May 2019 17:16:54 +0200
-> Romain Naour <romain.naour@gmail.com> wrote:
-> 
->> The upcoming ogre package needs a host swig binary with PCRE
->> regex support.
->>
->> Signed-off-by: Romain Naour <romain.naour@gmail.com>
->> ---
->>  package/swig/swig.mk | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> I never really like the addition of mandatory host package dependencies
-> just for the sake of one use case. I was considering adding a hidden
-> BR2_PACKAGE_HOST_PCRE option for this, but since pcre takes only 17
-> seconds to build, maybe it was not worth the effort. So I've applied to
-> next as-is, but I'd be interested to know what Arnout/Peter/Yann thing
-> about adding a hidden BR2_PACKAGE_HOST_PCRE hidden option for that kind
-> of situation. We had decided to not systematically add such options in
-> all host packages, but that we could add some in a case-by-case basis.
-> This case-by-case basis however will look "weird": ogre would have
-> host-swig in its <pkg>_DEPENDENCIES, but in Config.in would select
-> BR2_PACKAGE_HOST_PCRE and not BR2_PACKAGE_HOST_SWIG. This could start
-> getting a bit clunky.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/mender-artifact/mender-artifact.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
- It could be
-
-	select BR2_PACKAGE_HOST_PCRE # build swig with PCRE support
-
- Regards,
- Arnout
+diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
+index f8b364166f..730bc69338 100644
+--- a/package/mender-artifact/mender-artifact.mk
++++ b/package/mender-artifact/mender-artifact.mk
+@@ -24,6 +24,9 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
+ 	vendor/github.com/sirupsen/logrus/LICENSE
+ HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
+ 
++HOST_MENDER_ARTIFACT_GO_ENV = \
++	CGO_CFLAGS=-I$(HOST_DIR)/usr/include \
++	CGO_LDFLAGS="-L$(HOST_DIR)/lib -Wl,-rpath,$(HOST_DIR)/lib"
+ HOST_MENDER_ARTIFACT_LDFLAGS = -X main.Version=$(HOST_MENDER_ARTIFACT_VERSION)
+ 
+ HOST_MENDER_ARTIFACT_BUILD_TARGETS = cli/mender-artifact
+-- 
+2.14.1
