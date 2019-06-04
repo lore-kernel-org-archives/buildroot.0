@@ -1,43 +1,43 @@
-From: Thomas Huth <huth@tuxfamily.org>
-Date: Tue, 4 Jun 2019 09:56:05 +0200
-Subject: [Buildroot] [PATCH 1/2] package/qemu: Move patches to version
- directory
-In-Reply-To: <1559564887-4088-1-git-send-email-guoren@kernel.org>
-References: <1559564887-4088-1-git-send-email-guoren@kernel.org>
-Message-ID: <20190604095605.7c9e7ef1@thl530.multi.box>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Tue, 04 Jun 2019 08:20:13 +0000
+Subject: [Buildroot] [Bug 11931] New: Bugs in
+ support/scripts/apply-patches.sh
+Message-ID: <bug-11931-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Mon,  3 Jun 2019 20:28:06 +0800
-schrieb guoren at kernel.org:
+https://bugs.busybox.net/show_bug.cgi?id=11931
 
-> From: Guo Ren <ren_guo@c-sky.com>
-> 
-> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  ...ix-usage-of-mcontext-structure-on-ARM-uCl.patch | 35 -------------
->  .../qemu/0002-configure-improve-usbfs-check.patch  | 60
-> ---------------------- ...ix-usage-of-mcontext-structure-on-ARM-uCl.patch
-> | 35 +++++++++++++ .../3.1.0/0002-configure-improve-usbfs-check.patch
-> | 60 ++++++++++++++++++++++ 4 files changed, 95 insertions(+), 95
-> deletions(-) delete mode 100644
-> package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-> delete mode 100644
-> package/qemu/0002-configure-improve-usbfs-check.patch create mode
-> 100644
-> package/qemu/3.1.0/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-> create mode 100644
-> package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch
+            Bug ID: 11931
+           Summary: Bugs in support/scripts/apply-patches.sh
+           Product: buildroot
+           Version: 2019.02.2
+          Hardware: All
+                OS: All
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: escape at linux.alibaba.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-At least the usbfs patch seems to be included in QEMU v4.0, so maybe it
-would be better to bump the version to 4.0 first?
+Created attachment 8076
+  --> https://bugs.busybox.net/attachment.cgi?id=8076&action=edit
+patch to fix this bug
 
-Thomas, did you ever send the first patch to upstream QEMU, too? Looks
-like a valid patch to me, so I think it should be accepted there,
-too...?
+Code line 120 to line 128 is to check whether the patch containing "rename
+from" and "rename to". But it directly use grep to find, ignoring the patch may
+be a tar file or else. It can only work on patch of textfile form. Besides, if
+version of patch is higher than 2.7, rejecting patches containing "rename from"
+and "rename to" is unnecessary, because it can work correctly. So it should
+check verison of patch first than unpack the patch to find whether it contains
+"rename from"
 
- Thomas H
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
