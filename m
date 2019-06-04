@@ -1,59 +1,91 @@
-From: Yang Zhonghua <happy2discover@gmail.com>
-Date: Tue, 4 Jun 2019 09:46:24 +0800
-Subject: [Buildroot] Got errors when I tried to build rootfs with wayland,
- qt5 on an i.MX 6dl board
-Message-ID: <CA+bU9VcvgR241rkG7utoG2LzwaJd__Ja8BesweeWpAb_VZz6hQ@mail.gmail.com>
+From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+Date: Tue,  4 Jun 2019 08:39:27 +0300
+Subject: [Buildroot] [PATCH] ARC: Add support for ARC HS48 v3.1 processor
+Message-ID: <20190604053927.29319-1-Evgeniy.Didin@synopsys.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey guys,
+This patch introduces recently released significant
+update to ARC HS family: ARC HS48.
 
-Here are what I hope,
-1. on an i.MX 6dl/6q board
-2. wayland backend, weston
-3. a low kernel version, 4.1.15
-4. qt5, at least 5.9
-5. run a qt application via wayland
+One of the major ARC HS48 features is dual-issue pipeline
+which requires a little bit modified instruction scheduling compared
+to single-issue cores (HS38), thus new "-mcpu/--with-cpu=hs4x".
 
+Also to address some peculiarities of early designs based on
+HS48 we introduced yet another "-mcpu/--with-cpu=hs4x_rel1" which
+we're going to use as well on some of our development boards.
 
-Here are my steps,
-Thanks for y_morin first, who helped me in freenode #buildroot!
-1. chosen 2019.02.2 for selecting BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL
-2. chosen configs/imx6-sabresd_qt5_defconfig to make
-3. changed toolchain -> C library from uClibc-ng to glibc
-4. selected Target packages -> Hardware handling -> Freescale i.MX
-libraries -> imx-gpu-viv -> Output option(wayland)
-5. make
+Note, there is a prerequisite patch:
+	https://patchwork.ozlabs.org/patch/995220/
 
-Then I got errors as follows,
-qeglfsvivintegration.cpp: In member function ?virtual void
-QEglFSVivIntegration::platformInit()?:
-qeglfsvivintegration.cpp:68:41: error: invalid conversion from ?void*? to
-?EGLNativeDisplayType {aka wl_display*}? [-fpermissive]
-     mNativeDisplay = fbGetDisplayByIndex(framebufferIndex());
-                      ~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~
-qeglfsvivintegration.cpp: In member function ?virtual wl_egl_window*
-QEglFSVivIntegration::createNativeWindow(QPlatformWindow*, const QSize&,
-const QSurfaceFormat&)?:
-qeglfsvivintegration.cpp:91:51: error: invalid conversion from ?void*? to
-?EGLNativeWindowType {aka wl_egl_window*}? [-fpermissive]
-     EGLNativeWindowType eglWindow = fbCreateWindow(mNativeDisplay, 0, 0,
-size.width(), size.height());
+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: arc-buildroot at synopsys.com
+---
+ arch/Config.in.arc | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
- ~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Makefile:1273: recipe for target '.obj/qeglfsvivintegration.o' failed
-
-Could someone tell me how to solve the above errors?
-Do I need change some qt code?
-Should I change some configs?
-My .config file link is https://pastebin.com/rJceBU0L
-
-looking forward to your reply!
-
-happy2discover at gmail.com
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190604/405d74f9/attachment.html>
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 69bb1504a9..8e9cd96dd2 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -30,12 +30,21 @@ config BR2_archs38_full
+ 
+ 	  It corresponds to "hs38_slc_full" ARC HS template in ARChitect.
+ 
++
++config BR2_archs4x_rel31
++        bool "ARC HS48 rel 31"
++        help
++	   Latest release of HS48 processor
++           - Dual- and quad multiply and MC oprations
++           - Double-precision FPU
++
++
+ endchoice
+ 
+ # Choice of atomic instructions presence
+ config BR2_ARC_ATOMIC_EXT
+ 	bool "Atomic extension (LLOCK/SCOND instructions)"
+-	default y if BR2_arc770d || BR2_archs38 || BR2_archs38_full
++	default y if BR2_arc770d || BR2_archs38 || BR2_archs38_full || BR2_archs4x_rel31
+ 
+ config BR2_ARCH
+ 	default "arc"	if BR2_arcle
+@@ -54,10 +63,11 @@ config BR2_GCC_TARGET_CPU
+ 	default "arc700" if BR2_arc770d
+ 	default "archs"	 if BR2_archs38
+ 	default "hs38_linux"	 if BR2_archs38_full
++	default "hs4x_rel31" if BR2_archs4x_rel31
+ 
+ config BR2_READELF_ARCH_NAME
+ 	default "ARCompact"	if BR2_arc750d || BR2_arc770d
+-	default "ARCv2"		if BR2_archs38 || BR2_archs38_full
++	default "ARCv2"		if BR2_archs38 || BR2_archs38_full || BR2_archs4x_rel31
+ 
+ choice
+ 	prompt "MMU Page Size"
+@@ -77,7 +87,7 @@ choice
+ 
+ config BR2_ARC_PAGE_SIZE_4K
+ 	bool "4KB"
+-	depends on BR2_arc770d || BR2_archs38 || BR2_archs38_full
++	depends on BR2_arc770d || BR2_archs38 || BR2_archs38_full || BR2_archs4x_rel31
+ 
+ config BR2_ARC_PAGE_SIZE_8K
+ 	bool "8KB"
+@@ -87,7 +97,7 @@ config BR2_ARC_PAGE_SIZE_8K
+ 
+ config BR2_ARC_PAGE_SIZE_16K
+ 	bool "16KB"
+-	depends on BR2_arc770d || BR2_archs38 || BR2_archs38_full
++	depends on BR2_arc770d || BR2_archs38 || BR2_archs38_full || BR2_archs4x_rel31
+ 
+ endchoice
+ 
+-- 
+2.16.2
