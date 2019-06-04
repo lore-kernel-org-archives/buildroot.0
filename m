@@ -1,97 +1,108 @@
-From: Ivan Bagarolo <ivan.bagarolo@micronovasrl.com>
-Date: Tue, 4 Jun 2019 16:02:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libva: fix build with gcc < 5
-In-Reply-To: <20190603195107.2347-1-fontaine.fabrice@gmail.com>
-References: <20190603195107.2347-1-fontaine.fabrice@gmail.com>
-Message-ID: <abdd937b-8e79-a1e8-d7c3-2a2bb3628e56@micronovasrl.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 4 Jun 2019 16:11:24 +0200
+Subject: [Buildroot] [PATCH 2/3] autobuild-run: initial implementation
+ of do_reproducible_build()
+In-Reply-To: <20190603091808.2928-2-itsatharva@gmail.com>
+References: <20190603091808.2928-1-itsatharva@gmail.com>
+ <20190603091808.2928-2-itsatharva@gmail.com>
+Message-ID: <05ad9712-a908-5739-d97c-f774e85cea2b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
 
-Il 03/06/2019 21:51, Fabrice Fontaine ha scritto:
-> Fixes:
->   - http://autobuild.buildroot.org/results/96fe1667190e1e08d672984f147ec8e8f5e2f4f1
+
+On 03/06/2019 11:18, Atharva Lele wrote:
+> This new function will call do_build() twice to produce two builds
+> and then check their reproducibility
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Tested-by: Ivan Bagarolo <ivan.bagarolo@micronovasrl.com>
-
+> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 > ---
->   ...a-va_trace-unbreak-with-C89-after-b369467.patch | 35 ++++++++++++++++++++++
->   1 file changed, 35 insertions(+)
->   create mode 100644 package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch
+>  scripts/autobuild-run | 38 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
 > 
-> diff --git a/package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch b/package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch
-> new file mode 100644
-> index 0000000000..19192742c8
-> --- /dev/null
-> +++ b/package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch
-> @@ -0,0 +1,35 @@
-> +From 6724011e8b52901f13dded130f0b47e8bdbd4dda Mon Sep 17 00:00:00 2001
-> +From: Jan Beich <jbeich@FreeBSD.org>
-> +Date: Wed, 10 Apr 2019 11:37:28 +0000
-> +Subject: [PATCH] va/va_trace: unbreak with C89 after b3694671c784
+> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+> index 9f8aabb..329803a 100755
+> --- a/scripts/autobuild-run
+> +++ b/scripts/autobuild-run
+> @@ -455,6 +455,44 @@ def do_build(**kwargs):
+>      log_write(log, "INFO: build successful")
+>      return 0
+>  
+> +def do_reproducible_build(**kwargs):
+> +    """Run the builds for reproducibility testing
 > +
-> +va/va_trace.c: In function 'va_TraceVAEncMiscParameterBuffer':
-> +va/va_trace.c:3281: error: 'for' loop initial declaration used outside C99 mode
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Retrieved from:
-> +https://github.com/intel/libva/commit/6724011e8b52901f13dded130f0b47e8bdbd4dda]
-> +---
-> + va/va_trace.c | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
+> +    Build twice with the same configuration. Calls do_build() to
+> +    perform the actual build.
+> +    """
 > +
-> +diff --git a/va/va_trace.c b/va/va_trace.c
-> +index 0a17e5cd..d41f62c1 100755
-> +--- a/va/va_trace.c
-> ++++ b/va/va_trace.c
-> +@@ -3271,6 +3271,7 @@ static void va_TraceVAEncMiscParameterBuffer(
-> +     }
-> +     case VAEncMiscParameterTypeROI:
-> +     {
-> ++        int i;
-> +         VAEncMiscParameterBufferROI *p = (VAEncMiscParameterBufferROI *)tmp->data;
+> +    idir = "instance-%d" % kwargs['instance']
+> +    outputdir = os.path.join(idir, "output")
+> +    f = open(os.path.join(outputdir, "logfile"), "w+")
+> +    log = kwargs['log']
+> +    
+> +    # Start the first build
+> +    log_write(log, "INFO: Reproducible Build Test, starting build 1")
+> +    ret = do_build(**kwargs)
+> +    if ret != 0:
+> +        log_write(log, "INFO: build 1 failed, skipping build 2")
+> +        return ret
+> +    
+> +    # First build has been built, move files and start build 2
+> +    os.rename(os.path.join(outputdir, "images"), os.path.join(outputdir, "images-1"))
+
+ I would actually prefer to do the second build in a different output directory,
+so we have at least two differences that can be checked (time and path).
+
+ It could be done my adding outputdir to kwargs and calculating it once in the
+prepare step. Note that because kwargs is a dict, it is possible for the
+prepare_build function to update it and it will become visible to the other
+functions.
+
+ However, that can be done in a later patch. Or if you want to do it now, it
+should be done as a first patch (moving outputdir into kwargs).
+
 > +
-> +         va_TraceMsg(trace_ctx, "\t--VAEncMiscParameterBufferROI\n");
-> +@@ -3278,7 +3279,7 @@ static void va_TraceVAEncMiscParameterBuffer(
-> +         va_TraceMsg(trace_ctx, "\tmax_delta_qp = %d\n", p->max_delta_qp);
-> +         va_TraceMsg(trace_ctx, "\tmin_delta_qp = %d\n", p->min_delta_qp);
-> +         va_TraceMsg(trace_ctx, "\troi_flags.bits.roi_value_is_qp_delta = %d\n", p->roi_flags.bits.roi_value_is_qp_delta);
-> +-        for (int i = 0; i < p->num_roi; i++) {
-> ++        for (i = 0; i < p->num_roi; i++) {
-> +             va_TraceMsg(trace_ctx, "\troi[%d].roi_rectangle.x      = %d\n", i, p->roi[i].roi_rectangle.x);
-> +             va_TraceMsg(trace_ctx, "\troi[%d].roi_rectangle.y      = %d\n", i, p->roi[i].roi_rectangle.y);
-> +             va_TraceMsg(trace_ctx, "\troi[%d].roi_rectangle.width  = %d\n", i, p->roi[i].roi_rectangle.width);
+> +    # Clean up build 1
+> +    cmd = ["make", "O=%s" % outputdir, "clean"] \
+> +          + kwargs['make_opts'].split()
+
+ Too much copying from do_build() :-) make_opts isn't needed here.
+
+> +    subprocess.call(cmd, stdout=f, stderr=f)
+
+ Better move the opening of the logfile here, and do it with with:. Yes,
+do_build doesn't do it that way, but it should :-). Actually, I'd prefer this to
+be redirected to devnull like is done in gen_config(): make clean doesn't
+generate interesting output.
+
+ Note that if the second build would be done in a different output dir, this
+wouldn't be needed. It should be sufficient to copy the .config file to the new
+output dir and run do_build again. But then, of course, the second output dir
+should also be removed by prepare.
+
+
+> +    # Start the second build
+> +    log_write(log, "INFO: Reproducible Build Test, starting build 2")
+> +    ret = do_build(**kwargs)
+
+ It probably isn't needed for the second build to repeat legal-info. But that
+shouldn't make much of a difference anyway, so OK.
+
+ Regards,
+ Arnout
+
+> +    if ret != 0:
+> +        log_write(log, "INFO: build 2 failed")
+> +        return ret
+> +
+> +    # Assuming both have built successfully
+> +    ret = check_reproducibility()
+> +    return ret
+> +
+>  def send_results(result, **kwargs):
+>      """Prepare and store/send tarball with results
+>  
 > 
-
--- 
-Ivan Bagarolo
-
-*?*
-
-*R&D**- Micronovasrl*
-Sede: Via Niedda 3 - 35010 Vigonza (PD)
-Tel. +39 049 8931563 - Fax. +39 049 8931346
-Cod. Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
-Sito WEB: _http://www.micronovasrl.com_
-
-------------------------------------------------------------------------
-
-/Ai sensi della Normativa sulla Privacy, D.L. n. 196/2003, si precisa
-che le informazioni e i dati contenuti in questo documento e negli
-allegati sono strettamente riservate e ad uso esclusivo del
-destinatario. Il destinatario pu? richiederne la cancellazione, la
-comunicazione, l'aggiornamento, la rettifica e l'integrazione secondo
-quanto disposto dall'Art.7. In caso di ricevimento anche parziale del
-seguente documento da parte di un soggetto diverso dal destinatario
-indicato, questi ? in ogni caso diffidato dal leggerlo e/o farne uso a
-qualsiasi titolo ed ? pregato di contattarci telefonicamente ai numeri
-sopra indicati, nonch? distruggere il messaggio e i file allegati,
-erroneamente ricevuti./
