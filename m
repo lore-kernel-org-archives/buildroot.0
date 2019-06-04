@@ -1,8 +1,8 @@
 From: Shyam Saini <shyam.saini@amarulasolutions.com>
-Date: Tue,  4 Jun 2019 13:03:25 +0530
-Subject: [Buildroot] [PATCH V2] board/friendlyarm: Add initial support for
+Date: Tue,  4 Jun 2019 13:20:37 +0530
+Subject: [Buildroot] [PATCH V3] board/friendlyarm: Add initial support for
  NanoPc T4 board
-Message-ID: <20190604073325.10083-1-shyam.saini@amarulasolutions.com>
+Message-ID: <20190604075037.10659-1-shyam.saini@amarulasolutions.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -22,6 +22,8 @@ V1->V2: Use linux 5.1
 	Add empty line after section header
 	Add space after # in defconfig
 	Fix alphabetical order in DEVELOPERS file
+
+V2->V3: Fix alphabetical order in DEVELOPERS file 
 ---
  .gitlab-ci.yml                            |  1 +
  DEVELOPERS                                | 10 +++---
@@ -61,12 +63,12 @@ index e4a089e6f5..a4b2c3da95 100644
 -F:     configs/nanopi_m4_defconfig
 -F:     board/orangepi/orangepi-rk3399/
 -F:     configs/orangepi_rk3399_defconfig
-+F:	board/friendlyarm/nanopi-m4/
 +F:	board/friendlyarm/nanopc-t4/
++F:	board/friendlyarm/nanopi-m4/
  F:	board/olimex/a33_olinuxino/
 +F:	board/orangepi/orangepi-rk3399/
-+F:	configs/nanopi_m4_defconfig
 +F:	configs/nanopc_t4_defconfig
++F:	configs/nanopi_m4_defconfig
  F:	configs/olimex_a33_olinuxino_defconfig
 +F:	configs/orangepi_rk3399_defconfig
  
