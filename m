@@ -1,79 +1,102 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 5 Jun 2019 10:03:10 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mender-artifact: fix lzma
- detection
-In-Reply-To: <CADHdJwCpXFQr_RgC3O-+oe51taxzaUPZZoQgK5ph501tVMP0WQ@mail.gmail.com>
-References: <20190604210753.15731-1-fontaine.fabrice@gmail.com>
- <CADHdJwCqoc-iEtLy6m_k6HtK74TXThi5+jCK=rzFw3FM+ThvsQ@mail.gmail.com>
- <CAPi7W814HMZOEJshjpbgxMw2B4WBjTnY-LqgDo59fm7DYLsSmg@mail.gmail.com>
- <CADHdJwCpXFQr_RgC3O-+oe51taxzaUPZZoQgK5ph501tVMP0WQ@mail.gmail.com>
-Message-ID: <CAPi7W81P8fke+2Sp-+D9kQCHrjG2G+gp+oP=csFa3rwVmD42aw@mail.gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Wed, 5 Jun 2019 11:51:48 +0300
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad:
+ add wpe plugin option
+In-Reply-To: <20190605055125.38900-1-james.hilliard1@gmail.com>
+References: <20190605055125.38900-1-james.hilliard1@gmail.com>
+Message-ID: <20190605115148.GB20297@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le mer. 5 juin 2019 ? 09:58, Mirza Krak <mirza.krak@northern.tech> a ?crit :
+Hello,
 
-> On Wed, Jun 5, 2019 at 9:47 AM Fabrice Fontaine <
-> fontaine.fabrice at gmail.com> wrote:
->
->> Hello,
->>
->> Le mer. 5 juin 2019 ? 09:36, Mirza Krak <mirza.krak@northern.tech> a
->> ?crit :
->> >
->> > On Tue, Jun 4, 2019 at 11:08 PM Fabrice Fontaine
->> > <fontaine.fabrice@gmail.com> wrote:
->> > >
->> > > Use CGO_CFLAGS and CGO_LDFLAGS to help mender-artifact to find lzma.h
->> > > and link with liblzma (with a correct rpath)
->> > >
->> > > Fixes:
->> > >  -
->> http://autobuild.buildroot.org/results/b436d50a11687afa7021efc7eedd24fc337b0994
->> >
->> > I also sent a patch [1] trying to resolve these build errors, but my
->> > approach was to patch the pkg-golang.mk instead of mender-artifact.mk
->> > as I would expect this problem to exist for any golang host package
->> > that is using CGO, and is not isolated to mender-artifact.mk (though
->> > is is probably the only package in Buildroot that does use CGO in host
->> > environment).
->> I missed your patch, I think your approach is better and so I'll set
->> my patch as Not Applicable.
->> However, your patch will add HOST_{C,LD}FLAGS to CGO_{C,LD}FLAGS for
->> host but also for target packages. I think this modification should be
->> done only for host packages.
->
->
-> It should not as GO_HOST_ENV is only used when building host package.
->
-OK
+On Tue,  4 Jun 2019 23:51:25 -0600, James Hilliard <james.hilliard1@gmail.com> wrote:
+> Removed gst1-plugins-bad dependency from wpewebkit gstreamer-gl option
+> so that there isn't a circular dependency with gst1-plugins-bad.
+> 
+> It appears that wpewebkit gstreamer-gl only has a runtime dependency on
+> gst1-plugins-bad.
 
->
->
->> Moreover, you didn't get any rpath
->> related errors?
->>
->
-> Not when using HOST_LDFLAGS variable, which sets "-Wl,-rpath" correctly.
->
-OK, then your patch is definitely better than mine :-)
+That's correct.
 
->
-> --
-> Mirza Krak | Embedded Solutions Architect | https://mender.io
->
->  Northern.tech AS <https://northern.tech> | @northerntechHQ
-> <https://twitter.com/northerntechhq>
->
-Best Regards,
+By the way, thanks for submitting a patch for enabling the WPE GStreamer
+element ? I completely forgot about it when making the update to WPE
+WebKit 2.24.x  :-)
 
-Fabrice
+(Note to self: have an option to enable the WPEQt API when the needed
+Qt dependencies are enabled.)
 
->
->
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+
+Reviewed-by: Adrian Perez de Castro <aperez@igalia.com>
+
+> ---
+>  package/gstreamer1/gst1-plugins-bad/Config.in          | 10 ++++++++++
+>  .../gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk    |  7 +++++++
+>  package/wpewebkit/wpewebkit.mk                         |  1 -
+>  3 files changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+> index e1e7b05a59..3d19012e95 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> @@ -583,6 +583,16 @@ comment "webrtcdsp needs a toolchain w/ C++, NPTL, gcc >= 4.8"
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+>  		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+>  
+> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WPE
+> +	bool "wpe"
+> +	default y
+> +	depends on BR2_PACKAGE_WPEWEBKIT
+> +	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+> +
+> +comment "wpe needs the gst1-plugins-base opengl library and wpewebkit"
+> +	depends on !BR2_PACKAGE_WPEWEBKIT \
+> +		|| !BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+> +
+>  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265
+>  	bool "x265"
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> index 32edde4901..c6e2877dde 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> @@ -698,6 +698,13 @@ else
+>  GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtcdsp
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WPE),y)
+> +GST1_PLUGINS_BAD_CONF_OPTS += --enable-wpe
+> +GST1_PLUGINS_BAD_DEPENDENCIES += wpewebkit
+> +else
+> +GST1_PLUGINS_BAD_CONF_OPTS += --disable-wpe
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265),y)
+>  GST1_PLUGINS_BAD_CONF_OPTS += --enable-x265
+>  GST1_PLUGINS_BAD_DEPENDENCIES += x265
+> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+> index b59a1f793a..4dc4a29064 100644
+> --- a/package/wpewebkit/wpewebkit.mk
+> +++ b/package/wpewebkit/wpewebkit.mk
+> @@ -34,7 +34,6 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_WPEWEBKIT_USE_GSTREAMER_GL),y)
+>  WPEWEBKIT_CONF_OPTS += -DUSE_GSTREAMER_GL=ON
+> -WPEWEBKIT_DEPENDENCIES += gst1-plugins-bad
+>  else
+>  WPEWEBKIT_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
+>  endif
+> -- 
+> 2.20.1
+> 
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190605/8f7c8091/attachment.html>
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190605/1b0db9a8/attachment.asc>
