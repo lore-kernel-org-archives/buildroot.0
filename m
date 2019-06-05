@@ -1,71 +1,107 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 5 Jun 2019 23:00:24 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] {linux,
- linux-headers}: bump 4.{9, 14, 19}.x / 5.{0, 1}.x series
-Message-ID: <20190605210240.3B59F8EF8A@busybox.osuosl.org>
+Date: Wed, 5 Jun 2019 22:57:03 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/netsurf: change
+ how CFLAGS/LDFLAGS are passed
+Message-ID: <20190605210240.1D0108D206@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db8ad8d1c2bf5ef0540605c4888b82d68ff60926
+commit: https://git.buildroot.net/buildroot/commit/?id=a906c4c4feb6b821b3d39ba3232783a5961260fb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Including mitigation for the "ZombieLoad" speculative execution
-vulnerability.
+Fixes:
+http://autobuild.buildroot.net/results/eeb2863c6237aac8428e49a5ee514d43088b0fb8
+http://autobuild.buildroot.net/results/f938fd1515f1d6e11b57aa6e314135789da52a44
 
+In commit 6da049f8ae61b956d135526722ce58fc2f67626a ("package/netsurf:
+fix build"), the CC variable passed to netsurf's build system was
+extended to pass some special -I and -L options needed for netsurf to
+find its own headers/libraries.
+
+Unfortunately, on some systems (including mine), it breaks the build,
+due to:
+
+  toolpath_ := $(shell /bin/which $(CC__))
+
+when $(CC__) contains some -I/-L options, they are considered to be
+options "to which", which causes the funny:
+
+/usr/bin/make install --directory=libnslog HOST=arm-buildroot-linux-uclibcgnueabi PREFIX=/home/thomas/projets/outputs/shared-netsurf/build/netsurf-3.8/tmpusr Q=@ WARNFLAGS='-Wall -W -Wno-error' DESTDIR=
+make[3]: warning: jobserver unavailable: using -j1.  Add '+' to parent make rule.
+/bin/which: invalid option -- 'I'
+/bin/which: invalid option -- '/'
+/bin/which: invalid option -- 'h'
+/bin/which: invalid option -- 'o'
+/bin/which: invalid option -- 'm'
+/bin/which: invalid option -- 'e'
+/bin/which: invalid option -- '/'
+/bin/which: invalid option -- 't'
+/bin/which: invalid option -- 'h'
+/bin/which: invalid option -- 'o'
+/bin/which: invalid option -- 'm'
+/bin/which: invalid option -- 's'
+/bin/which: invalid option -- '/'
+[...]
+/bin/which: invalid option -- 'l'
+/bin/which: invalid option -- 'b'
+/bin/which: --read-alias, -i: Warning: stdin is a tty.
+
+and the build simply hangs.
+
+We cannot pass CFLAGS/LDFLAGS as make options, as they would override
+the CFLAGS definitions in netsurf Makefiles. However, those Makefiles
+use the construct:
+
+CFLAGS := $(CFLAGS) -more-flags
+
+so by passing CFLAGS and LDFLAGS through the make environment, which
+can achieve our goal.
+
+It is worth mentioning that it remains very fragile, because
+CFLAGS/LDFLAGS are used both for building target objects but also some
+host tools. The netsurf build system is really not good.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Peter: drop 5.{0, 1}.x bump]
-(cherry picked from commit 0644b8f79c12f1ac85e68c83ca51fbb6b3027a18)
+(cherry picked from commit 1da0a84f788c637b6a2ce4eda5bb77b7ce7abe06)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 7 ++++---
- package/linux-headers/Config.in.host | 6 +++---
- 3 files changed, 8 insertions(+), 7 deletions(-)
+ package/netsurf/netsurf.mk | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 369d366a7d..63ff4b8849 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -122,7 +122,7 @@ endif
+diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
+index e617707ade..31cf9e62b8 100644
+--- a/package/netsurf/netsurf.mk
++++ b/package/netsurf/netsurf.mk
+@@ -70,13 +70,18 @@ define NETSURF_CONFIGURE_CMDS
+ 	$(NETSURF_CURL_CONFIGURE_CMDS)
+ endef
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.19.42" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.19.43" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.176-cip31" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 4213acfef1..9941af6e65 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,5 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
--sha256 f809d76010d575979362551fda3190569502973d5e2a972e78b9093a3526da26  linux-4.19.42.tar.xz
--sha256 687d73abd4b9af66ec30bdccdf96193e04316f9f5a1c7b8d74732c10b4729a15  linux-4.14.118.tar.xz
--sha256 d98434f91f9df2bf36c7896ca747b7cf98be2e3a491073fd26e3f53cda07500c  linux-4.9.175.tar.xz
-+sha256 111619a1fab2368bf4da05c079e44bf25ee00ee250694c1b8e536f2ed5d2df57  linux-4.19.43.tar.xz
-+sha256 5615b713389d74044eaa57032dab674228116b63ed358086c33bd929d7ad3b7c  linux-4.14.119.tar.xz
-+sha256 2a94d008c0737f01d4b78f669a3c40e334cacebe4d62eb25252171cee205b178  linux-4.9.176.tar.xz
-+sha256 2c6a9d2765ef182f2470afed5af74de6c435ba9aaf422af54db8c5dc2b4f27d1  linux-4.4.179.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index c9d18e6bfc..74b30e39bc 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -288,9 +288,9 @@ endchoice
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.179"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.175"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.118"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.42"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.9.176"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.119"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.43"	if BR2_KERNEL_HEADERS_4_19
- 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
++NETSURF_MAKE_ENV = \
++	$(TARGET_MAKE_ENV) \
++	CFLAGS="$(TARGET_CFLAGS) -I$(@D)/tmpusr/include" \
++	LDFLAGS="$(TARGET_LDFLAGS) -L$(@D)/tmpusr/lib"
++
+ NETSURF_MAKE_OPTS = \
+ 	TARGET=$(NETSURF_FRONTEND) \
+ 	BISON="$(HOST_DIR)/bin/bison" \
+ 	FLEX="$(HOST_DIR)/bin/flex" \
+ 	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
+ 	BUILD_CC="$(HOSTCC)" \
+-	CC="$(TARGET_CC) -I$(@D)/tmpusr/include -L$(@D)/tmpusr/lib" \
++	CC="$(TARGET_CC)" \
+ 	AR="$(TARGET_AR)" \
+ 	TMP_PREFIX=$(@D)/tmpusr \
+ 	NETSURF_CONFIG="$(NETSURF_CONFIG)" \
+@@ -84,7 +89,7 @@ NETSURF_MAKE_OPTS = \
+ 
+ define NETSURF_BUILD_CMDS
+ 	mkdir -p $(@D)/tmpusr
+-	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(NETSURF_MAKE_OPTS) \
++	$(NETSURF_MAKE_ENV) $(MAKE) -C $(@D) $(NETSURF_MAKE_OPTS) \
+ 		build
+ endef
+ 
