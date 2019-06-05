@@ -1,50 +1,96 @@
-From: Yi Zheng <goodmenzy@gmail.com>
-Date: Wed, 5 Jun 2019 09:19:08 +0800
-Subject: [Buildroot] [buildroot] any plan to adopt snort3?
-In-Reply-To: <CANu7NGtcq0Jw2sv+wOMgU8mzdhNW2W=ypAxuVPtpB9i3szJrWw@mail.gmail.com>
-References: <CAJPHfYMoGWDpcjGmRMqrpO=4FH+YgouJY-HXexJ4AAQEt1LkPA@mail.gmail.com>
- <CANu7NGtcq0Jw2sv+wOMgU8mzdhNW2W=ypAxuVPtpB9i3szJrWw@mail.gmail.com>
-Message-ID: <CAJPHfYOfzG6bg63k1gcpQeq8xiJPycZLnpDiD8J14gPZ1bdx+w@mail.gmail.com>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Tue, 4 Jun 2019 19:47:33 -0700
+Subject: [Buildroot] [PATCH v2] package/coreutils: allow building
+ individual binaries
+In-Reply-To: <20190411185658.57ea2a38@windsurf.home>
+References: <20190410201746.14678-1-mmayer@broadcom.com>
+ <20190411185658.57ea2a38@windsurf.home>
+Message-ID: <CAGt4E5t2OntaMm_cFL_GVJOXnZyEphaqrMBaOFXOVyotOvrOtQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks for your reply.
+Hi Thomas,
 
-I'm not a developer on snort. I am just involved to use this project.
-I have read the docs for several days. Very little experience on that.
+It's been a while, but I had a chance to look at this again.
 
-Being a new comer, I think Sont3 has a more friendly doc than version 2.
+On Thu, 11 Apr 2019 at 09:56, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Wed, 10 Apr 2019 13:17:46 -0700
+> Markus Mayer <mmayer@broadcom.com> wrote:
+>
+> > We add configuration option BR2_PACKAGE_COREUTILS_INDIVIDUAL_BINARIES
+> > so that coreutils can be built and installed as individual binaries.
+> > It can be used if the target file system doesn't support symlinks or
+> > symlinks are undesirable.
+> >
+> > The approach is modelled after Busybox's similarly named configuration
+> > option.
+> >
+> > Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+>
+> I tested this, with BR2_ROOTFS_MERGED_USR and got some broken symlinks
+> in /bin. I believe your patch is not sufficient. Indeed, it doesn't
+> take care of the following parts of coreutils.mk:
+>
+> ifeq ($(BR2_ROOTFS_MERGED_USR),)
+> define COREUTILS_CLEANUP_BIN
+>         # some things go in /bin rather than /usr/bin
+>         $(foreach f,$(COREUTILS_BIN_PROGS), \
+>                 rm -f $(TARGET_DIR)/usr/bin/$(f) && \
+>                 ln -sf ../usr/bin/coreutils $(TARGET_DIR)/bin/$(f)
+>         )
+> endef
+> COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CLEANUP_BIN
+> endif
 
-Sergio Prado <sergio.prado@e-labworks.com> ?2019?6?4??? ??9:53???
+You are saying above that you tried it *with* BR2_ROOTFS_MERGED_USR
+and got broken links, but the above seems to be a problem if
+BR2_ROOTFS_MERGED_USR is *disabled*, because the macro won't be
+executed if it is enabled.
 
-> Hi Yi,
+> This probably needs to be changed to move applets from /usr/bin to /bin
+> rather than changing the symlinks.
+
+I am not sure I am following. Why would we need to move applets from
+/usr/bin to /bin? Shouldn't we let coreutils install its applets where
+it sees fit? Or is the idea here that Buildroot wants to install
+binaries in a different location than coreutils would? If the latter
+is the case, yes, it would make sense to move the binaries rather than
+creating symlinks.
+
+> define COREUTILS_CLEANUP
+>         # link for archaic shells
+>         ln -fs coreutils $(TARGET_DIR)/usr/bin/[
+>         # gnu thinks chroot is in bin, debian thinks it's in sbin
+>         rm -f $(TARGET_DIR)/usr/bin/chroot
+>         ln -sf ../bin/coreutils $(TARGET_DIR)/usr/sbin/chroot
+> endef
 >
-> Are you part of the project community? Do you know the plans for Snort 2?
+> The symlink logic here also needs to be adjusted I guess.
+
+Yes. Creating a symlink [ -> coreutils definitely won't work if we are
+using individual binaries. It'll have to point to "test" instead. And
+the solution for chroot would be similar to the symlinks above where
+we move the binary instead of creating the link.
+
+Does the proposed solution make sense?
+
+Thanks,
+-Markus
+
+
+
+
+> Could you fix this and retest ?
 >
-> I know Snort 3 has been in development for a while, but Snort 2 is still
-> the official version according to the downloads page:
+> Thanks,
 >
-> https://snort.org/downloads
->
-> Best regards,
->
-> Sergio Prado
-> Embedded Labworks
-> Mobile: +55 11 97123-3420
->
->
-> Em ter, 4 de jun de 2019 ?s 10:18, Yi Zheng <goodmenzy@gmail.com>
-> escreveu:
->
->> FYI
->>
->> https://github.com/snort3/snort3.git
->>
->>
->>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190605/ffd26f3b/attachment.html>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
