@@ -1,65 +1,86 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed,  5 Jun 2019 14:13:35 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libnss: use correct CFLAGS and
- LDFLAGS
-In-Reply-To: <20190524231547.35975ecf@windsurf>
+Date: Wed, 5 Jun 2019 14:14:51 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libnss: re-enable package on
+ microblaze
+In-Reply-To: <20190605121336.2512-2-giulio.benetti@micronovasrl.com>
 References: <20190524231547.35975ecf@windsurf>
-Message-ID: <20190605121336.2512-1-giulio.benetti@micronovasrl.com>
+ <20190605121336.2512-1-giulio.benetti@micronovasrl.com>
+ <20190605121336.2512-2-giulio.benetti@micronovasrl.com>
+Message-ID: <f6f75a41-1b35-9cdf-b0a4-a1f368407bcf@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Actually libnss is configure with BUILD_OPT=1 that doesn't take into
-account TARGET_CFLAGS nor TARGET_LDFLAGS resulting in pre-chosen
-optimizations and debugging symbols.
+Hello Thomas,
 
-Can't pass TARGET_CFLAGS through CFLAGS or similar otherwise other
-iternal libnss will be overwritten(i.e. -fPIC), so prefer to append
-TARGET_CFLAGS at the end of Linux.mk as well as TARGET_LDFLAGS according
-to internal libnss Makefile system's names. And obviously remove
-BUILD_OPT=1 from BUILD_VARS.
+adding you in Cc
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
- package/libnss/libnss.mk | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+Il 05/06/2019 14:13, Giulio Benetti ha scritto:
+> With Microblaze Gcc version < 8.x the build hangs due to bug 85862:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85862
+> To avoid this, the libnss package has a !BR2_TOOLCHAIN_HAS_GCC_BUG_85862
+> dependency. However, gcc bug 85862 only triggers when optimization is
+> enabled, so we can work around the issue by passing -O0, which is what
+> we do in other Buildroot packages to work around this bug.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>   package/libnss/Config.in | 4 ----
+>   package/libnss/libnss.mk | 8 +++++++-
+>   2 files changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/package/libnss/Config.in b/package/libnss/Config.in
+> index 34ddb91dfa..599c9a6536 100644
+> --- a/package/libnss/Config.in
+> +++ b/package/libnss/Config.in
+> @@ -3,7 +3,6 @@ config BR2_PACKAGE_LIBNSS
+>   	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
+>   	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
+>   	depends on !BR2_STATIC_LIBS
+> -	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862
+>   	select BR2_PACKAGE_LIBNSPR
+>   	select BR2_PACKAGE_SQLITE
+>   	select BR2_PACKAGE_ZLIB
+> @@ -19,6 +18,3 @@ config BR2_PACKAGE_LIBNSS
+>   comment "libnss needs a toolchain w/ threads, dynamic library"
+>   	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+>   	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+> -
+> -comment "libnss needs a toolchain not affected by GCC bug 85862"
+> -	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862
+> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+> index 484c79e9da..893ff80154 100644
+> --- a/package/libnss/libnss.mk
+> +++ b/package/libnss/libnss.mk
+> @@ -13,9 +13,15 @@ LIBNSS_DEPENDENCIES = libnspr sqlite zlib
+>   LIBNSS_LICENSE = MPL-2.0
+>   LIBNSS_LICENSE_FILES = nss/COPYING
+>   
+> +LIBNSS_CFLAGS = $(TARGET_CFLAGS)
+> +
+> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85862),y)
+> +LIBNSS_CFLAGS += -O0
+> +endif
+> +
+>   # Need to pass down TARGET_CFLAGS and TARGET_LDFLAGS
+>   define LIBNSS_FIXUP_LINUX_MK
+> -	echo 'OS_CFLAGS += ${TARGET_CFLAGS}' >> $(@D)/nss/coreconf/Linux.mk
+> +	echo 'OS_CFLAGS += ${LIBNSS_CFLAGS}' >> $(@D)/nss/coreconf/Linux.mk
+>   	echo 'LDFLAGS += ${TARGET_LDFLAGS}' >> $(@D)/nss/coreconf/Linux.mk
+>   endef
+>   
+> 
 
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 89d614fe1c..484c79e9da 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -13,6 +13,14 @@ LIBNSS_DEPENDENCIES = libnspr sqlite zlib
- LIBNSS_LICENSE = MPL-2.0
- LIBNSS_LICENSE_FILES = nss/COPYING
- 
-+# Need to pass down TARGET_CFLAGS and TARGET_LDFLAGS
-+define LIBNSS_FIXUP_LINUX_MK
-+	echo 'OS_CFLAGS += ${TARGET_CFLAGS}' >> $(@D)/nss/coreconf/Linux.mk
-+	echo 'LDFLAGS += ${TARGET_LDFLAGS}' >> $(@D)/nss/coreconf/Linux.mk
-+endef
-+
-+LIBNSS_PRE_CONFIGURE_HOOKS += LIBNSS_FIXUP_LINUX_MK
-+
- # --gc-sections triggers binutils ld segfault
- # https://sourceware.org/bugzilla/show_bug.cgi?id=21180
- ifeq ($(BR2_microblaze),y)
-@@ -33,7 +41,6 @@ LIBNSS_BUILD_VARS = \
- 	MOZILLA_CLIENT=1 \
- 	NSPR_INCLUDE_DIR=$(STAGING_DIR)/usr/include/nspr \
- 	NSPR_LIB_DIR=$(STAGING_DIR)/usr/lib \
--	BUILD_OPT=1 \
- 	NS_USE_GCC=1 \
- 	NSS_DISABLE_GTESTS=1 \
- 	NSS_USE_SYSTEM_SQLITE=1 \
-@@ -102,7 +109,6 @@ HOST_LIBNSS_BUILD_VARS = \
- 	MOZILLA_CLIENT=1 \
- 	NSPR_INCLUDE_DIR=$(HOST_DIR)/include/nspr \
- 	NSPR_LIB_DIR=$(HOST_DIR)/lib \
--	BUILD_OPT=1 \
- 	NS_USE_GCC=1 \
- 	NSS_DISABLE_GTESTS=1 \
- 	NSS_USE_SYSTEM_SQLITE=1 \
 -- 
-2.17.1
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
