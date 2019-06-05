@@ -1,46 +1,77 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Wed, 5 Jun 2019 07:38:17 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-06-03
-In-Reply-To: <20190604060132.577D1261F7@silver.osuosl.org>
-References: <20190604060132.577D1261F7@silver.osuosl.org>
-Message-ID: <20190605053816.GA13851@itchy>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue,  4 Jun 2019 23:51:25 -0600
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad: add
+ wpe plugin option
+Message-ID: <20190605055125.38900-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
-On 2019-06-04 06:00, Thomas Petazzoni wrote:
->      riscv32 |              host-cargo-0.26.0 | NOK | http://autobuild.buildroot.net/results/725b7cf05a18479109f61b712f14e99a0e2fb784 |
+Removed gst1-plugins-bad dependency from wpewebkit gstreamer-gl option
+so that there isn't a circular dependency with gst1-plugins-bad.
 
-The following autobuild issues are related:
+It appears that wpewebkit gstreamer-gl only has a runtime dependency on
+gst1-plugins-bad.
 
-- http://autobuild.buildroot.net/results/725b7cf05a18479109f61b712f14e99a0e2fb784
-- http://autobuild.buildroot.net/results/c81b9009ce7b29a30102b15823a788ffab9fe8d7
-- http://autobuild.buildroot.net/results/48c106e650bc85b5ce67bf4d8995adbf95184c9c
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in          | 10 ++++++++++
+ .../gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk    |  7 +++++++
+ package/wpewebkit/wpewebkit.mk                         |  1 -
+ 3 files changed, 17 insertions(+), 1 deletion(-)
 
-The build fails with:
-
-```
-error: failed to run custom build command for `libgit2-sys v0.6.19`
-process didn't exit successfully: `/home/mark/buildroot-test/instance-0/output/build/host-cargo-0.26.0/target/release/build/libgit2-sys-c06c5b9b1557d938/build-script-build` (exit code: 101)
---- stdout
-running: "cmake" "/home/mark/buildroot-test/instance-0/output/build/host-cargo-0.26.0/vendor/libgit2-sys/libgit2" "-DBUILD_SHARED_LIBS=OFF" "-DBUILD_CLAR=OFF" "-DCMAKE_INSTALL_PREFIX=/home/mark/buildroot-test/instance-0/output/build/host-cargo-0.26.0/target/release/build/libgit2-sys-e26df87de24b01ca/out" "-DCMAKE_C_FLAGS= -ffunction-sections -fdata-sections -fPIC -m64" "-DCMAKE_C_COMPILER=/usr/bin/cc" "-DCMAKE_CXX_FLAGS= -ffunction-sections -fdata-sections -fPIC -m64" "-DCMAKE_CXX_COMPILER=/usr/bin/c++" "-DCMAKE_BUILD_TYPE=Release"
-
---- stderr
-cmake: /home/mark/buildroot-test/instance-0/output/host/lib/libcurl.so.4: no version information available (required by cmake)
-cmake: symbol lookup error: /usr/lib/x86_64-linux-gnu/libxml2.so.2: undefined symbol: UCNV_TO_U_CALLBACK_STOP_60
-thread 'main' panicked at '
-command did not execute successfully, got: exit code: 12
-```
-
-So, libxml2.so from the system (/usr/lib/x86_64-linux-gnu/libxml2.so.2) is used
-when linking, and it appears to be looking for symbols from ICU built without
---disable-renaming. I'll check why libgit2-sys wants to use this one.
-
-Regards,
-
---
-ELB
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index e1e7b05a59..3d19012e95 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -583,6 +583,16 @@ comment "webrtcdsp needs a toolchain w/ C++, NPTL, gcc >= 4.8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+ 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
++config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WPE
++	bool "wpe"
++	default y
++	depends on BR2_PACKAGE_WPEWEBKIT
++	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
++
++comment "wpe needs the gst1-plugins-base opengl library and wpewebkit"
++	depends on !BR2_PACKAGE_WPEWEBKIT \
++		|| !BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265
+ 	bool "x265"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 32edde4901..c6e2877dde 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -698,6 +698,13 @@ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtcdsp
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WPE),y)
++GST1_PLUGINS_BAD_CONF_OPTS += --enable-wpe
++GST1_PLUGINS_BAD_DEPENDENCIES += wpewebkit
++else
++GST1_PLUGINS_BAD_CONF_OPTS += --disable-wpe
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265),y)
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-x265
+ GST1_PLUGINS_BAD_DEPENDENCIES += x265
+diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+index b59a1f793a..4dc4a29064 100644
+--- a/package/wpewebkit/wpewebkit.mk
++++ b/package/wpewebkit/wpewebkit.mk
+@@ -34,7 +34,6 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_WPEWEBKIT_USE_GSTREAMER_GL),y)
+ WPEWEBKIT_CONF_OPTS += -DUSE_GSTREAMER_GL=ON
+-WPEWEBKIT_DEPENDENCIES += gst1-plugins-bad
+ else
+ WPEWEBKIT_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
+ endif
+-- 
+2.20.1
