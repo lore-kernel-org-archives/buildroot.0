@@ -1,74 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Jun 2019 17:35:02 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libopenssl:
- security bump to version 1.1.1c
-Message-ID: <20190606154048.383C67F881@busybox.osuosl.org>
+Date: Thu, 6 Jun 2019 16:53:04 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/assimp: re-enable
+ package on Microblaze
+Message-ID: <20190606154047.64BA281922@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b32265736e3329b60594e62682ccd876be5574a
+commit: https://git.buildroot.net/buildroot/commit/?id=c64c2c362ccf991edb853044c7725aaa1d0fe90e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security issues:
+With Microblaze ccc version < 8.x the build hangs due to bug 85180:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. To avoid this, the
+assimp package has a !BR2_microblaze dependency. However, gcc bug
+85180 only triggers when optimization is enabled, so we can work
+around the issue by passing -O0, which is what we do in other
+Buildroot packages to work around this bug.
 
-Prevent over long nonces in ChaCha20-Poly1305 (CVE-2019-1543)
+So, this commit passes -O0 when BR2_TOOLCHAIN_HAS_GCC_BUG_85180, and
+re-enables assimp on Microblaze.
 
-ChaCha20-Poly1305 is an AEAD cipher, and requires a unique nonce input for
-every encryption operation.  RFC 7539 specifies that the nonce value (IV)
-should be 96 bits (12 bytes).  OpenSSL allows a variable nonce length and
-front pads the nonce with 0 bytes if it is less than 12 bytes.  However it
-also incorrectly allows a nonce to be set of up to 16 bytes.  In this case
-only the last 12 bytes are significant and any additional leading bytes are
-ignored.
+Note that the comment was talking about gcc bug 71124, but this gcc
+bug is a duplicate of 85180. Since all Buildroot packages now use the
+reference to gcc bug 85180 and the option is named
+BR2_TOOLCHAIN_HAS_GCC_BUG_85180, we use this naming as well for
+assimp.
 
-It is a requirement of using this cipher that nonce values are unique.
-Messages encrypted using a reused nonce value are susceptible to serious
-confidentiality and integrity attacks.  If an application changes the
-default nonce length to be longer than 12 bytes and then makes a change to
-the leading bytes of the nonce expecting the new value to be a new unique
-nonce then such an application could inadvertently encrypt messages with a
-reused nonce.
-
-Additionally the ignored bytes in a long nonce are not covered by the
-integrity guarantee of this cipher.  Any application that relies on the
-integrity of these ignored leading bytes of a long nonce may be further
-affected.  Any OpenSSL internal use of this cipher, including in SSL/TLS, is
-safe because no such use sets such a long nonce value.  However user
-applications that use this cipher directly and set a non-default nonce
-length to be longer than 12 bytes may be vulnerable.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cfedfdee95df8878a15b4d3d11c5ca3b99481de1)
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b7c9a7d60261c5836ac707835c8e98f81655106e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libopenssl/libopenssl.hash | 2 +-
- package/libopenssl/libopenssl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/assimp/Config.in | 5 -----
+ package/assimp/assimp.mk | 4 ++++
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index 3a8192c46c..753f447abe 100644
---- a/package/libopenssl/libopenssl.hash
-+++ b/package/libopenssl/libopenssl.hash
-@@ -1,5 +1,5 @@
- # From https://www.openssl.org/source/openssl-1.1.1b.tar.gz.sha256
--sha256	5c557b023230413dfb0756f3137a13e6d726838ccd1430888ad15bfb2b43ea4b	openssl-1.1.1b.tar.gz
-+sha256	f6fb3079ad15076154eda9413fed42877d668e7069d9b87396d0804fdb3f4c90	openssl-1.1.1c.tar.gz
+diff --git a/package/assimp/Config.in b/package/assimp/Config.in
+index 41c1bb348b..630758f3e7 100644
+--- a/package/assimp/Config.in
++++ b/package/assimp/Config.in
+@@ -1,9 +1,5 @@
+ config BR2_PACKAGE_ASSIMP
+ 	bool "assimp"
+-	# All gcc versions affected by
+-	# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71124, that
+-	# cause an infinite loop in gcc when building this package.
+-	depends on !BR2_microblaze
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_ZLIB
+ 	help
+@@ -16,5 +12,4 @@ config BR2_PACKAGE_ASSIMP
+ 	  http://www.assimp.org
  
- # License files
- sha256	c32913b33252e71190af2066f08115c69bc9fddadf3bf29296e20c835389841c	LICENSE
-diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
-index b7eff06c80..064b71bb2e 100644
---- a/package/libopenssl/libopenssl.mk
-+++ b/package/libopenssl/libopenssl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ comment "assimp needs a toolchain w/ C++"
+-	depends on !BR2_microblaze
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/assimp/assimp.mk b/package/assimp/assimp.mk
+index 1316720423..5720f9793f 100644
+--- a/package/assimp/assimp.mk
++++ b/package/assimp/assimp.mk
+@@ -24,6 +24,10 @@ ifeq ($(BR2_sh):$(BR2_STATIC_LIBS):$(BR2_TOOLCHAIN_GCC_AT_LEAST_6),y:y:)
+ ASSIMP_CXXFLAGS += -O2
+ endif
  
--LIBOPENSSL_VERSION = 1.1.1b
-+LIBOPENSSL_VERSION = 1.1.1c
- LIBOPENSSL_SITE = https://www.openssl.org/source
- LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
- LIBOPENSSL_LICENSE = OpenSSL or SSLeay
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++ASSIMP_CXXFLAGS += -O0
++endif
++
+ ASSIMP_CONF_OPTS += -DASSIMP_BUILD_TESTS=OFF \
+ 	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(ASSIMP_CXXFLAGS)"
+ 
