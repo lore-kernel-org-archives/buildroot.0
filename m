@@ -1,43 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Jun 2019 17:26:28 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mender: install
- additional inventory scripts
-Message-ID: <20190606154047.DE3BE800B8@busybox.osuosl.org>
+Date: Thu, 6 Jun 2019 16:53:31 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/intel-microcode:
+ install into images for early loading support
+Message-ID: <20190606154047.6C8D07FA9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6669b433d0720167163ab1795d15ebf8a5f51c7
+commit: https://git.buildroot.net/buildroot/commit/?id=68469b5764d846c16c5e0c54f8aab7223c979931
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-There are two additional inventory scripts provided in
-the Mender client repository, let's install them.
+Microcode based security mitigation (E.G.  MDS) requires that the microcode
+gets loaded very early. This can be handled by one of:
 
-- mender-inventory-os
-    - will push content of /etc/os-release
-- mender-inventory-rootfs-type
-    - will push filesystem type of rootfs
+- Concatenating (a subset of) the intel-microcode files and write to
+  kernel/x86/microcode/GenuineIntel.bin in the initrd.  Requires that the
+  (first) initrd is external from the kernel and NOT compressed.
 
-Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit bbb4bc7dfacb205c3f87f63e5e762a5f82d92f55)
+- Build (a subset of) the intel-microcode files into the kernel using the
+  CONFIG_EXTRA_FIRMWARE option.
+
+Install the microcode files into images to support these use cases (E.G.
+through a post-build script for the initrd, or by pointing
+CONFIG_EXTRA_FIRMWARE_DIR to ${BR_BINARIES_DIR}, similar to how we include
+the .cpio image inside the kernel).
+
+Notice that there may be licensing concerns when embedded non-GPL firmware
+in the kernel.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 7c5dfea804af7b3a8f24092a27c1ff63b62b3f70)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mender/mender.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/intel-microcode/intel-microcode.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index 07f6e5e5f9..d56b634713 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -46,7 +46,7 @@ define MENDER_INSTALL_CONFIG_FILES
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index aa3b1f4dbb..43cdc3d0b8 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -9,6 +9,13 @@ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
+ INTEL_MICROCODE_REDISTRIBUTE = NO
++INTEL_MICROCODE_INSTALL_IMAGES = YES
++
++define INTEL_MICROCODE_INSTALL_IMAGES_CMDS
++	mkdir -p $(BINARIES_DIR)/intel-ucode
++	$(INSTALL) -m 0644 -t $(BINARIES_DIR)/intel-ucode \
++		$(@D)/intel-ucode/*
++endef
  
- 	$(INSTALL) -D -m 0755 $(@D)/support/mender-device-identity \
- 		$(TARGET_DIR)/usr/share/mender/identity/mender-device-identity
--	$(foreach f,hostinfo network, \
-+	$(foreach f,hostinfo network os rootfs-type, \
- 		$(INSTALL) -D -m 0755 $(@D)/support/mender-inventory-$(f) \
- 			$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-$(f)
- 	)
+ define INTEL_MICROCODE_INSTALL_TARGET_CMDS
+ 	mkdir -p $(TARGET_DIR)/lib/firmware/intel-ucode
