@@ -1,30 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Jun 2019 14:46:27 +0200
-Subject: [Buildroot] [PATCH v2 01/12] toolchain: specify GCC_BUG_85180
- is true only if GCC version < 8.x
-In-Reply-To: <20190521133932.81841-2-giulio.benetti@micronovasrl.com> (Giulio
- Benetti's message of "Tue, 21 May 2019 15:39:21 +0200")
-References: <20190521133932.81841-1-giulio.benetti@micronovasrl.com>
- <20190521133932.81841-2-giulio.benetti@micronovasrl.com>
-Message-ID: <87v9xilw4c.fsf@dell.be.48ers.dk>
+Date: Thu, 06 Jun 2019 14:46:37 +0200
+Subject: [Buildroot] [PATCH] package/libcurl: security bump to version
+ 7.65.0
+In-Reply-To: <20190522155004.30024-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Wed, 22 May 2019 17:50:04 +0200")
+References: <20190522155004.30024-1-peter@korsgaard.com>
+Message-ID: <87r286lw42.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Bug 85180:
- > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
- > has been fixed on Gcc version >= 8.x
+ > Fixes the following security vulnerabilities:
+ > - CVE-2019-5435: Integer overflows in curl_url_set()
+ >   https://curl.haxx.se/docs/CVE-2019-5435.html
 
- > So:
- > - add 'depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8' to 'config
- >   BR2_TOOLCHAIN_HAS_GCC_BUG_85180'.
+ > - CVE-2019-5436: TFTP receive buffer overflow
+ >   https://curl.haxx.se/docs/CVE-2019-5436.html
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
- > Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2019.02.x, thanks.
 
