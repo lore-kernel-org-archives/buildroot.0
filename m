@@ -1,42 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 6 Jun 2019 19:45:12 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 6 Jun 2019 20:48:28 +0200
 Subject: [Buildroot] [PATCH v4] package/exiv2: cleanup options and
  licenses
 In-Reply-To: <20190606151549.GA2560@scaer>
 References: <20190605134957.27400-1-nicolas.serafini@sensefly.com>
  <20190605234535.1abf3c33@gmx.net>
- <2a9e28d2-1dfc-5a66-e0f4-16241adca391@mind.be>
- <20190606151549.GA2560@scaer>
-Message-ID: <20190606174512.GA13603@scaer>
+ <2a9e28d2-1dfc-5a66-e0f4-16241adca391@mind.be> <20190606151549.GA2560@scaer>
+Message-ID: <db2a5114-2e1e-e88a-2f6c-20cd7af9bb0e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-All,,
 
-On 2019-06-06 17:15 +0200, Yann E. MORIN spake thusly:
-[--SNIP--]
-> [...] Instead, we should have done
-> something like:
->     package/exiv2/exiv2.mk:
->     ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),y)
->     EXIV2_LICENSE := $(EXIV2_LICENSE), Proprietary/Unknown (Nikon lens database)
->     endif
 
-Scratch that part about the lens data; I read the current consdition
-backwards...
+On 06/06/2019 17:15, Yann E. MORIN wrote:
+>>  That said, it doesn't really hurt to have a legacy entry, so let's add it after
+>> all.
+> We did not add such a legacy entry for the Qt5 license drop, there is no
+> reason to add one here either.
 
-Even then, it does not change the rest of the reasoning.
+ For qt5, there was no Config.in option to which we could apply legacy. There
+was only the inverse (BR2_PACKAGE_QT5BASE_LICENSE_APPROVED) so we'd have to
+trigger legacy in case that option was *not* enabled, which isn't possible.
 
-Regards,
-Yann E. MORIN.
+ I repeat: it doesn't hurt to add a legacy entry, and it may help someone who
+thought that they could use the Buildroot exiv2 package for the thing for which
+they had a commercial license.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ Regards,
+ Arnout
