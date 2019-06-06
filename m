@@ -1,12 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 07 Jun 2019 00:06:30 +0200
-Subject: [Buildroot] [PATCH 2/3] package/gdb: switch to 8.2 as the
- default version
-In-Reply-To: <20190605124016.13770-2-romain.naour@gmail.com> (Romain Naour's
- message of "Wed, 5 Jun 2019 14:40:15 +0200")
+Date: Fri, 07 Jun 2019 00:06:35 +0200
+Subject: [Buildroot] [PATCH 3/3] package/gdb: remove gdb 8.0.x
+In-Reply-To: <20190605124016.13770-3-romain.naour@gmail.com> (Romain Naour's
+ message of "Wed, 5 Jun 2019 14:40:16 +0200")
 References: <20190605124016.13770-1-romain.naour@gmail.com>
- <20190605124016.13770-2-romain.naour@gmail.com>
-Message-ID: <87r286cqs9.fsf@dell.be.48ers.dk>
+ <20190605124016.13770-3-romain.naour@gmail.com>
+Message-ID: <87muiucqs4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,30 +14,13 @@ To: buildroot@busybox.net
 
 >>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > 8.3 is around, 8.2 has already seen a point release, so it's time to
- > make 8.2 the default version for gdb.
+ > 8.3 is around and 8.2 is the default version, so drop
+ > 8.0. Keep 7.12 which is the latest version that doesn't
+ > requires C++11 support.
 
  > Signed-off-by: Romain Naour <romain.naour@gmail.com>
- > ---
- >  package/gdb/Config.in.host | 2 +-
- >  1 file changed, 1 insertion(+), 1 deletion(-)
 
- > diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
- > index f9a67d18dd..a395016082 100644
- > --- a/package/gdb/Config.in.host
- > +++ b/package/gdb/Config.in.host
- > @@ -46,7 +46,7 @@ config BR2_PACKAGE_HOST_GDB_SIM
- 
- >  choice
- >  	prompt "GDB debugger Version"
- > -	default BR2_GDB_VERSION_8_1
- > +	default BR2_GDB_VERSION_8_2
- >  	depends on !BR2_arc
- >  	depends on !BR2_csky
- >  	help
-
-You forgot to also update the BR2_GDB_VERSION logic. Committed with that
-fixed, thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
