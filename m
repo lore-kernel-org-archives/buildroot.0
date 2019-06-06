@@ -1,35 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Jun 2019 09:35:27 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libupnp18: add upstream patch
- to fix runtime crash with musl
-In-Reply-To: <20190509110438.31340-2-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Thu, 9 May 2019 13:04:38 +0200")
-References: <20190509110438.31340-1-joerg.krause@embedded.rocks>
- <20190509110438.31340-2-joerg.krause@embedded.rocks>
-Message-ID: <87muivupxc.fsf@dell.be.48ers.dk>
+Date: Thu, 6 Jun 2019 09:34:50 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libupnp18: needs
+ host-pkgconf
+Message-ID: <20190606073555.2E27D8E9EE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=08946413c2110abe0555d599270698f6c2542a45
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Applications build with a musl 1.1.20+ toolchain and linked with libupnpp will
- > crash at runtime with `Illegal instruction` as musl is more strict with
- > trying to detach an already detached thread resulting in undefined
- > behaviour.
+Otherwise build fails with:
 
- > Upstream status:
- > https://github.com/mrjimenez/pupnp/issues/102
+```
+configure.ac:630: error: possibly undefined macro: AC_MSG_ERROR
+      If this token and others are legitimate, please use m4_pattern_allow.
+```
 
- > Backported from:
- > https://github.com/mrjimenez/pupnp/commit/04b454f693d0c71336252380d08f1d02967e133e
+Fixes:
 
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+  http://autobuild.buildroot.net/results/6d734e45ec923dfa7549e0480b3d8913fc29fddd/
 
-Committed to 2019.02.x, thanks.
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit ffc51049ab83c2c1a35e0826405c2cad0316f14b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libupnp18/libupnp18.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libupnp18/libupnp18.mk b/package/libupnp18/libupnp18.mk
+index 5154be5316..35e8dc4a47 100644
+--- a/package/libupnp18/libupnp18.mk
++++ b/package/libupnp18/libupnp18.mk
+@@ -11,12 +11,13 @@ LIBUPNP18_CONF_ENV = ac_cv_lib_compat_ftime=no
+ LIBUPNP18_INSTALL_STAGING = YES
+ LIBUPNP18_LICENSE = BSD-3-Clause
+ LIBUPNP18_LICENSE_FILES = COPYING
++LIBUPNP18_DEPENDENCIES = host-pkgconf
+ # We're patching configure.ac
+ LIBUPNP18_AUTORECONF = YES
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ LIBUPNP18_CONF_OPTS += --enable-open-ssl
+-LIBUPNP18_DEPENDENCIES += host-pkgconf openssl
++LIBUPNP18_DEPENDENCIES += openssl
+ else
+ LIBUPNP18_CONF_OPTS += --disable-open-ssl
+ endif
