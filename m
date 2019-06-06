@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Jun 2019 22:33:44 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/libcurl: bump
+Date: Thu, 6 Jun 2019 22:36:10 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libcurl: bump
  version to 7.65.1
-Message-ID: <20190606203548.513B38F0B0@busybox.osuosl.org>
+Message-ID: <20190606203554.EE65D8F0B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec7b1d7987beaabffc7db5b5fd7165693df9280d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9c788c3614478227256f5fd6dd6072a59076c693
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes a number of bugs discovered after the 7.65.0 release.
 
