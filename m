@@ -1,50 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Jun 2019 09:41:48 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] tslib: update to 1.20
-Message-ID: <20190606074234.8AB84813D5@busybox.osuosl.org>
+Date: Thu, 6 Jun 2019 09:41:08 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/intel-microcode:
+ security bump to version 20190514a
+Message-ID: <20190606074234.7A70988528@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07aba4fa5cfa77c85c81c82132b1ddd7477bcf8a
+commit: https://git.buildroot.net/buildroot/commit/?id=23430e2b2e245bd90bd9f52113f4a87837750218
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-The release page has a changelog overview:
-https://github.com/libts/tslib/releases
+Includes MDS mitigation (RIDL, Fallout, Zombieload), INTEL-SA-00223
 
-Signed-off-by: Martin Kepplinger <martink@posteo.de>
+Move to the Intel github repo as this release is not yet available on
+downloadmirror.intel.com.
+
+Update license hash because of copyright year and DOS/UNIX newlines change.
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 75139dfecd89bf4098f4a394abeee5650ee59f87)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit cc01d562d3f40c145b0d50c118f7b8b862881a19)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tslib/tslib.hash | 4 ++--
- package/tslib/tslib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/intel-microcode/Config.in            | 2 ++
+ package/intel-microcode/intel-microcode.hash | 4 ++--
+ package/intel-microcode/intel-microcode.mk   | 6 ++----
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/tslib/tslib.hash b/package/tslib/tslib.hash
-index 269d8f95fe..b250783fda 100644
---- a/package/tslib/tslib.hash
-+++ b/package/tslib/tslib.hash
-@@ -1,5 +1,5 @@
--# https://github.com/libts/tslib/releases/download/1.19/tslib-1.19.tar.xz.sha256
--sha256  efe1fef16a00dc818f1d8e402877184dadf331f1b0dd1fbfeeb2698ee8647f4d  tslib-1.19.tar.xz
-+# https://github.com/libts/tslib/releases/download/1.20/tslib-1.20.tar.xz.sha256
-+sha256  fda8c088e348b40cc68269460d562778aa4ad8f8c2281f147b09f305ba714777  tslib-1.20.tar.xz
- 
+diff --git a/package/intel-microcode/Config.in b/package/intel-microcode/Config.in
+index 495ebd727f..3f9199ec93 100644
+--- a/package/intel-microcode/Config.in
++++ b/package/intel-microcode/Config.in
+@@ -5,3 +5,5 @@ config BR2_PACKAGE_INTEL_MICROCODE
+ 	  This package provides an Intel microcode data file that can be
+ 	  used to correct processor errors. The iucode-tool package and
+ 	  proper kernel support are required to upload the microcode.
++
++	  https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 183ba5aeec..257cc85c41 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
  # Locally computed
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  COPYING
-diff --git a/package/tslib/tslib.mk b/package/tslib/tslib.mk
-index 9d21647033..6d6e85033b 100644
---- a/package/tslib/tslib.mk
-+++ b/package/tslib/tslib.mk
-@@ -4,7 +4,7 @@
+-sha256 46ab18699ec42eb6cc01ee1846ec4d7ca979766dee2156f92d69e2f6df548137  microcode-20180807a.tgz
+-sha256 c4698c6105d59fec11ad0929e77a003445c560c7706c089990030acbf10c9372  license
++sha256 9e67903a5b62b51f5e031b59a8046d3dff226834d79899799943803481a55d20  intel-microcode-microcode-20190514a.tar.gz
++sha256 1f8bf63fc2b1b486c507b98ff7d283c7eb58c7945746b94188a310d6787cbee5  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index ed4ad628dd..aa3b1f4dbb 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,10 +4,8 @@
  #
  ################################################################################
  
--TSLIB_VERSION = 1.19
-+TSLIB_VERSION = 1.20
- TSLIB_SITE = https://github.com/libts/tslib/releases/download/$(TSLIB_VERSION)
- TSLIB_SOURCE = tslib-$(TSLIB_VERSION).tar.xz
- TSLIB_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
+-INTEL_MICROCODE_VERSION = 20180807a
+-INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
+-INTEL_MICROCODE_SITE = https://downloadmirror.intel.com/28087/eng
+-INTEL_MICROCODE_STRIP_COMPONENTS = 0
++INTEL_MICROCODE_VERSION = microcode-20190514a
++INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
+ INTEL_MICROCODE_REDISTRIBUTE = NO
