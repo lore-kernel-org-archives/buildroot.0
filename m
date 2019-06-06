@@ -1,52 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Jun 2019 14:15:33 +0200
-Subject: [Buildroot] [git commit] package/autossh: bump version to 1.4g
-Message-ID: <20190606122122.312A283D89@busybox.osuosl.org>
+Date: Thu, 6 Jun 2019 14:17:34 +0200
+Subject: [Buildroot] [git commit] package/libcurl: bump version to 7.65.1
+Message-ID: <20190606122122.3961B813E0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fe4716001edfa4bb79b62ec4805e344f93971a2a
+commit: https://git.buildroot.net/buildroot/commit/?id=1272878fd087b52b313e1e30d075574ae5265030
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Version 1.4g most notably addresses a bug that could see an alarm signal
-occur without a handler, causing autossh to exit inappropriately.
+Fixes a number of bugs discovered after the 7.65.0 release.
 
-Signed-off-by: Einar Jon Gunnarsson <tolvupostur@gmail.com>
+https://daniel.haxx.se/blog/2019/06/05/7-65-1-patched-up-and-ready-to-go/
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/autossh/autossh.hash | 10 +++++-----
- package/autossh/autossh.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/autossh/autossh.hash b/package/autossh/autossh.hash
-index 5c6cfbc98f..226003f89e 100644
---- a/package/autossh/autossh.hash
-+++ b/package/autossh/autossh.hash
-@@ -1,6 +1,6 @@
--# From http://www.harding.motd.ca/autossh/autossh-1.4f.cksums
--sha256 0172e5e1bea40c642e0ef025334be3aadd4ff3b4d62c0b177ed88a8384e2f8f2  autossh-1.4f.tgz
--sha1 28189c42ab2e05448596a44adc9d62071172fe9b  autossh-1.4f.tgz
--md5 432ed721a71b8af4b5763b5c484f80df  autossh-1.4f.tgz
-+# From http://www.harding.motd.ca/autossh/autossh-1.4g.cksums
-+sha256 5fc3cee3361ca1615af862364c480593171d0c54ec156de79fc421e31ae21277  autossh-1.4g.tgz
-+sha1 bd88da0e296b8d85722ee9e7c314e9319e5b2db8  autossh-1.4g.tgz
-+md5 2b804bc1bf6d2f2afaa526d02df7c0a2  autossh-1.4g.tgz
- # Locally computed
--sha256 b6938db718166520533b1d56b01e1eb5f0ad508624478e674938b8f507b66d98  autossh.c
-+sha256 014ec5a85a8899d4ea0e0a886bb3fc4c72b4bbec6414093ba1fdac5b178c25b4  autossh.c
-diff --git a/package/autossh/autossh.mk b/package/autossh/autossh.mk
-index 5af8b735c2..899e5cdb52 100644
---- a/package/autossh/autossh.mk
-+++ b/package/autossh/autossh.mk
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index bece16dc0d..f5e90e0aa8 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.65.0.tar.xz.asc
++# https://curl.haxx.se/download/curl-7.65.1.tar.xz.asc
+ # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256 7766d263929404f693905b5e5222aa0f2bdf8c66ab4b8758f0c0820a42b966cd  curl-7.65.0.tar.xz
++sha256 f6c22074877f235aebc7c53057dbc7ee82358f8ae58bfb767e955c18c859a77a  curl-7.65.1.tar.xz
+ sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 80bf2dd245..abf7c0bf59 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--AUTOSSH_VERSION = 1.4f
-+AUTOSSH_VERSION = 1.4g
- AUTOSSH_SITE = http://www.harding.motd.ca/autossh
- AUTOSSH_SOURCE = autossh-$(AUTOSSH_VERSION).tgz
- AUTOSSH_LICENSE = Modified BSD
+-LIBCURL_VERSION = 7.65.0
++LIBCURL_VERSION = 7.65.1
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
