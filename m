@@ -1,67 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 06 Jun 2019 13:40:59 +0000
-Subject: [Buildroot] [Bug 11946] New: wilink-bt-firmware: moved from github
- to http://git.ti.com/ti-bt
-Message-ID: <bug-11946-163@https.bugs.busybox.net/>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu,  6 Jun 2019 16:40:59 +0200
+Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.4
+Message-ID: <20190606144059.24133-1-brgl@bgdev.pl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11946
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-            Bug ID: 11946
-           Summary: wilink-bt-firmware: moved from github to
-                    http://git.ti.com/ti-bt
-           Product: buildroot
-           Version: unspecified
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: mzweerspenko+bugzilla at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+This release mostly affects the testing framework but also contains fixes
+for C++ bindings.
 
-On my compulab sbc iot i.mx7 gateway the ble doens't work with the old
-firmware. There is a newer version on git://git.ti.com/ti-bt/service-packs.git
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+---
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-The path only changed a bit:
-cp $(@D)/initscripts/TIInit_*.bts $(TARGET_DIR)/lib/firmware/ti-connectivity
-
-I only have this hardware so ? cant test it any further that this.
-
-<Addendum>
-11.8.32 isn't a library version number but a hardware one.
-bluez5_utils-5.50/tools/hciattach_ti.c:    sprintf(firmware_file_name,
-FIRMWARE_DIRECTORY "TIInit_%d.%d.%d.bts", chip, maj_ver, min_ver);
-
-<device log>
-
-<<Current version from github>>
-device# Found a Texas Instruments' chip!
-Firmware file : /lib/firmware/ti-connectivity/TIInit_11.8.32.bts
-Loaded BTS script version 1
-texas: changing baud rate to 3000000, flow control to 1
-Initialization timed out.
-
-<< current version from git://git.ti.com/ti-bt/service-packs.git >>
-device# Found a Texas Instruments' chip!
-Firmware file : /lib/firmware/ti-connectivity/TIInit_11.8.32.bts
-Loaded BTS script version 1
-texas: changing baud rate to 3000000, flow control to 1
-Device setup complete
-
-device# blescan
-Scanning for devices...
-    Device (new): 03:FF:FF:3f:FF:38 (random), -87 dBm (not connectable)
-    Device (new): 04:FF:2b:FF:a5:55 (random), -77 dBm (not connectable)
-    Device (new): 0c:FF:90:FF:15:90 (random), -92 dBm (not connectable)
-
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 6c896622b6..2faa8bbbbb 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 6ec837f23e8f2196e5976dec4ac81403170830075e7f33ede1394eaf67f2e962  libgpiod-1.3.tar.xz
++sha256 ebde83aaf14be3abd33e7a90faa487a2ee231e242897afe7fdefb765386b3c8b  libgpiod-1.4.tar.xz
+ # Hash for license file
+ sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 76fa3399dc..07fa050007 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBGPIOD_VERSION = 1.3
++LIBGPIOD_VERSION = 1.4
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.21.0
