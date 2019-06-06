@@ -1,229 +1,34 @@
-From: Nicolas Serafini <nicolas.serafini@sensefly.com>
-Date: Thu, 6 Jun 2019 15:21:33 +0000
-Subject: [Buildroot] [PATCH v4] package/exiv2: cleanup options and
- licenses
-In-Reply-To: <2a9e28d2-1dfc-5a66-e0f4-16241adca391@mind.be>
-References: <20190605134957.27400-1-nicolas.serafini@sensefly.com>
- <20190605234535.1abf3c33@gmx.net>
- <2a9e28d2-1dfc-5a66-e0f4-16241adca391@mind.be>
-Message-ID: <20190606172131.000010f8@sensefly.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 06 Jun 2019 17:22:01 +0200
+Subject: [Buildroot] [PATCH 1/1] package/supertux: fix debug build on
+ uclibc/musl
+In-Reply-To: <20190526191814.3942-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 26 May 2019 21:18:14 +0200")
+References: <20190526191814.3942-1-fontaine.fabrice@gmail.com>
+Message-ID: <8736kmivs6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout, Peter,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-On Thu, 6 Jun 2019 15:02:13 +0200 Arnout Vandecappelle <arnout@mind.be> wrote:
+ > Always set CMAKE_BUILD_TYPE to Release otherwise supertux will be built
+ > with -pg since:
+ > https://github.com/SuperTux/supertux/commit/afd5f1b33c110104a7f286d6d7854157919a0a52
 
->
->
->On 05/06/2019 23:45, Peter Seiderer wrote:
->> Hello Nicolas, Arnout,
->> 
->> On Wed, 5 Jun 2019 13:51:06 +0000, Nicolas Serafini
->> <nicolas.serafini@sensefly.com> wrote:
->> 
->>> exiv2 no longer requires a non commercial option for lens database
->>> integration since version 0.27. See [1] and [2]
->>>
->>> The BR2_PACKAGE_EXIV2_LENSDATA option is maintained because the
->>> src/nikonmn_int.cpp file always specifies that the Nikon lens name
->>> database is free to use in non-commercial, GPL or open source
->>> software only.
->>>
->>> Legacy handling for the removed option COMMERCIAL is not needed,
->>> since now it's always enabled.
->> 
->> NAK - users which own a commercial license (maybe for an old release
->> of exiv2) may be very surprised if they link, after an buildroot
->> update, against GPL library (which means there own software must
->> published under GPL), instead of linking private/commercial software
->> against a library the bought a commercial license for...
->> 
->> Commercial license for exiv2 is something complete different than
->> an commercial license for the lens data (and the logic is
->> commercial exiv2 excludes the lens data availability (GPL-only (or
->> maybe separate commercial license for the lens data, but no one
->> knows where to get it))...
->> 
->> So please add an Config.in.legacy entry mentioning the commercial
->> license for exiv2 is gone...
->
-> Okay, apparently I misunderstood again... I didn't realize the
-> commercial
->license was actually gone, I thought it was just the CMake option.
->
-> This commercial license stuff is anyway tricky... In principle, it
-> only applies
->to the particular version to which it applies - which may even be
->different source code than the one we use. So a simple version bump
->essentially has the same effect as we have here now. In other words,
->according to the reasoning above, every version bump should entail a
->legacy entry.
->
-> See also commits ce79e0b23063 and 8569e78.
->
-> The only reasonable, reliable way to use a package that you get under
-> a
->different license, is to create a separate package for it.
->
->
-> That said, it doesn't really hurt to have a legacy entry, so let's
-> add it after
->all.
->
-> Nicolas, if you grow tired of all this back-and-forth (which I
-> completely
->understand :-): we can do this legacy entry while applying.
+ > This will result in the following build failure on uclibc or musl:
+ > [ 77%] Linking C executable sq_static
+ > CMakeFiles/sq_static.dir/sq.c.o: In function `quit':
+ > /home/buildroot/autobuild/instance-3/output/build/supertux-0.6.0/external/squirrel/sq/sq.c:42: undefined reference to `__gnu_mcount_nc'
 
-No problem that's why we make reviews. :-)
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/b0b2e25af198d01713d1e2bcf38c77ae8ffbd7de
 
-I'm traveling the next few days so I'm very happy that I let you
-take care of the legacy entry so we can finalize this patch.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Thank you for your help 
+Committed to 2019.02.x, thanks.
 
-Regards,
-Nicolas
-
->
->
-> Regards,
-> Arnout
->
->
->> 
->>>
->>> Add the dedicated BSD-3-Clause license file for CMakeLists.txt,
->>> config/FindEXPAT.cmake and config/FindMSGFMT.cmake files.
->>>
->>> [1]
->>> https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FExiv2%2Fexiv2%2Fcommit%2F07f63003b7f50dd7d8719585ba54623e0f60c3c4&amp;data=02%7C01%7Cnicolas.serafini%40sensefly.com%7Cbfbd1264187d4807f40308d6ea7f3acc%7Cff7d991b392248038418ab806a3414a6%7C1%7C0%7C636954229503429875&amp;sdata=oyl3AbmtEtLAk%2B7Xh1I02pxSnTZ5UktPRTHXm%2FyA%2BdY%3D&amp;reserved=0
->>> [2]
->>> https://eur02.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FExiv2%2Fexiv2%2Fcommit%2F085d8a309aafb8ed5a72cad027a1a0ea974938d9&amp;data=02%7C01%7Cnicolas.serafini%40sensefly.com%7Cbfbd1264187d4807f40308d6ea7f3acc%7Cff7d991b392248038418ab806a3414a6%7C1%7C0%7C636954229503439870&amp;sdata=AuoO9KgWyU8w2VwpbgHurigkjhcD05e54mvKP7EdMg4%3D&amp;reserved=0
->>>
->>> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
->>>
->>> ---
->>> Changes v3 -> v4:
->>>   - bring back LENSDATA option with new help message (thanks to
->>> Peter and Arnout)
->>>   - fix and update patch message
->>>
->>> Changes v2 -> v3:
->>>   - fix EXIV2_LICENSE spacer
->>>   - explain why LENSTADA is removed
->>>
->>> Changes v1 -> v2:
->>>   - remove LENSDATA option (suggested by Arnout Vandecappelle)
->>>   - remove commercial license in Config.in help
->>>   - add missing BSD-3-Clause flag
->>>   - add details to the patch message
->>>
->>> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
->>> ---
->>>  package/exiv2/Config.in  | 20 +++-----------------
->>>  package/exiv2/exiv2.hash |  1 +
->>>  package/exiv2/exiv2.mk   | 16 +++++-----------
->>>  3 files changed, 9 insertions(+), 28 deletions(-)
->>>
->>> diff --git a/package/exiv2/Config.in b/package/exiv2/Config.in
->>> index acce81c593..3e3e502751 100644
->>> --- a/package/exiv2/Config.in
->>> +++ b/package/exiv2/Config.in
->>> @@ -16,24 +16,10 @@ config BR2_PACKAGE_EXIV2
->>>  	  access to the Exif, IPTC and XMP metadata of images in
->>>  	  various formats.
->>>
->>> -	  Exiv2 is available under the GPLv2+ or under a commercial
->>> -	  license.
->>> -
->>>  	  https://eur02.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.exiv2.org%2F&amp;data=02%7C01%7Cnicolas.serafini%40sensefly.com%7Cbfbd1264187d4807f40308d6ea7f3acc%7Cff7d991b392248038418ab806a3414a6%7C1%7C0%7C636954229503439870&amp;sdata=9sHLdiCd3FVUl67cdmce8xWBDoYw9Stu4tmYYNGD%2F%2F4%3D&amp;reserved=0
->>>
->>>  if BR2_PACKAGE_EXIV2
->>>
->>> -config BR2_PACKAGE_EXIV2_COMMERCIAL
->>> -	bool "Enable commercial"
->>> -	help
->>> -	  Build the commercial version for closed source project.
->>> -
->>> -	  The Nikon lens name database and the NLS support is
->>> disabled
->>> -	  for copyright reasons.
->>> -
->>> -	  A commercial license request is needed.
->>> -
->>> https://eur02.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.exiv2.org%2Fdownload.html%23license&amp;data=02%7C01%7Cnicolas.serafini%40sensefly.com%7Cbfbd1264187d4807f40308d6ea7f3acc%7Cff7d991b392248038418ab806a3414a6%7C1%7C0%7C636954229503439870&amp;sdata=aayXVhvcE%2FsdDzpkBL8LUdv55%2FPVlNXAyipYee2fAS0%3D&amp;reserved=0
->>> - config BR2_PACKAGE_EXIV2_PNG
->>>  	bool "PNG image support"
->>>  	select BR2_PACKAGE_ZLIB
->>> @@ -48,11 +34,11 @@ config BR2_PACKAGE_EXIV2_XMP
->>>
->>>  config BR2_PACKAGE_EXIV2_LENSDATA
->>>  	bool "Nikon lens name database"
->>> -	depends on !BR2_PACKAGE_EXIV2_COMMERCIAL
->>>  	help
->>>  	  Integrate Nikon lens name database.
->>>
->>> -	  This database is integrated but comes from a thirdparty:
->>> -
->>> https://eur02.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.rottmerhusen.com%2Fobjektives%2Flensid%2Fthirdparty.html&amp;data=02%7C01%7Cnicolas.serafini%40sensefly.com%7Cbfbd1264187d4807f40308d6ea7f3acc%7Cff7d991b392248038418ab806a3414a6%7C1%7C0%7C636954229503439870&amp;sdata=E6ZMTxLUvJP1bRk%2F3A7JAPEDzKu6nIgCzqqK4w12PgM%3D&amp;reserved=0.
->>> +	  This database comes from a thirdparty and is free to use
->>> in
->>> +	  non-commercial, GPL or open source software only.
->>> +	  For more informations src/nikonmn_int.cpp.
->> 
->> ....For more information see src/nikonmn_int.cpp.
->> 
->> Regards,
->> Peter
->> 
->>>
->>>  endif
->>> diff --git a/package/exiv2/exiv2.hash b/package/exiv2/exiv2.hash
->>> index f99cb8cb87..b753c03854 100644
->>> --- a/package/exiv2/exiv2.hash
->>> +++ b/package/exiv2/exiv2.hash
->>> @@ -1,3 +1,4 @@
->>>  # Locally calculated
->>>  sha256
->>> 1b3766b2c203ce213a4195de14d61694017ec1a69d15d4575bccecef130990fe
->>> exiv2-0.27.1.tar.gz sha256
->>> a7ba75cb966aca374711e2af49e5f3aea6a4443a803440f5d93e73a5a1222f66
->>> COPYING +sha256
->>> 46cde7dc11e64c78d650b4851b88f6704b4665ff60f22a1caf68ceb15e217e5b
->>> COPYING-CMAKE-SCRIPTS diff --git a/package/exiv2/exiv2.mk
->>> b/package/exiv2/exiv2.mk index ba9d9b7303..93af9382db 100644 ---
->>> a/package/exiv2/exiv2.mk +++ b/package/exiv2/exiv2.mk @@ -7,6 +7,8
->>> @@ EXIV2_VERSION = 0.27.1 EXIV2_SITE = $(call
->>> github,Exiv2,exiv2,$(EXIV2_VERSION)) EXIV2_INSTALL_STAGING = YES
->>> +EXIV2_LICENSE = GPL-2.0+, BSD-3-Clause
->>> +EXIV2_LICENSE_FILES = COPYING COPYING-CMAKE-SCRIPTS
->>>
->>>  EXIV2_CONF_OPTS += -DEXIV2_ENABLE_BUILD_SAMPLES=OFF
->>>
->>> @@ -14,18 +16,10 @@ EXIV2_CONF_OPTS +=
->>> -DEXIV2_ENABLE_BUILD_SAMPLES=OFF # test which is not allowed when
->>> cross-compiling. EXIV2_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
->>>
->>> -ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),)
->>> -EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=OFF
->>> -endif
->>> -
->>> -ifeq ($(BR2_PACKAGE_EXIV2_COMMERCIAL),y)
->>> -EXIV2_LICENSE = commercial
->>> -# NLS support is disabled in commercial version due to the
->>> copyright -# of the translated texts.
->>> -EXIV2_CONF_OPTS += -DEXIV2_ENABLE_COMMERCIAL=ON
->>> -DEXIV2_ENABLE_NLS=OFF +ifeq ($(BR2_PACKAGE_EXIV2_LENSDATA),y)
->>> +EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=ON
->>>  else
->>> -EXIV2_LICENSE = GPL-2.0+
->>> -EXIV2_LICENSE_FILES = COPYING
->>> +EXIV2_CONF_OPTS += -DEXIV2_ENABLE_LENSDATA=OFF
->>>  endif
->>>
->>>  ifeq ($(BR2_PACKAGE_EXIV2_PNG),y)
->> 
+-- 
+Bye, Peter Korsgaard
