@@ -1,34 +1,43 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Jun 2019 17:20:16 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/flare-engine: fix
- typo in comment
-Message-ID: <20190606154047.B7A1B7FB93@busybox.osuosl.org>
+Date: Thu, 6 Jun 2019 17:06:51 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/gpsd: fix
+ BR2_PACKAGE_GPSD_MAX_{CLIENT, DEV} options
+Message-ID: <20190606154047.8DFAA81D5B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99b9fddc9cfbabb2c75ea331318302b9c4ce24d3
+commit: https://git.buildroot.net/buildroot/commit/?id=52b3f8187f4b9f492e39cd9a2cae2148b79c4181
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 56b6bd893a3ed45511a97f18a8c61d74e093cd4b)
+limited_max_clients and limited_max_devices have been renamed in 3.12
+as max_clients and max_devices, respectively.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Beno??t Th??baudeau <benoit.thebaudeau.dev@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 87cc11688d9f8bd88ef45643961255d0bfa2d67b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/flare-engine/flare-engine.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gpsd/gpsd.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
-index 1ec50bfed4..3ed0256901 100644
---- a/package/flare-engine/flare-engine.mk
-+++ b/package/flare-engine/flare-engine.mk
-@@ -22,7 +22,7 @@ endif
- ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
- # CMakeLists.txt sets CMAKE_CXX_FLAGS_<BUILD_TYPE> depending on
- # BUILD_TYPE, and this comes after the generic CMAKE_CXX_FLAGS. 
--# Overrice CMAKE_BUILD_TYPE so no overrides are applied.
-+# Override CMAKE_BUILD_TYPE so no overrides are applied.
- FLARE_ENGINE_CONF_OPTS += -DCMAKE_BUILD_TYPE=Buildroot
- FLARE_ENGINE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -O0"
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 48d21348b9..bc9fcf27c7 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -195,10 +195,10 @@ ifeq ($(BR2_PACKAGE_GPSD_FIXED_PORT_SPEED),y)
+ GPSD_SCONS_OPTS += fixed_port_speed=$(BR2_PACKAGE_GPSD_FIXED_PORT_SPEED_VALUE)
  endif
+ ifeq ($(BR2_PACKAGE_GPSD_MAX_CLIENT),y)
+-GPSD_SCONS_OPTS += limited_max_clients=$(BR2_PACKAGE_GPSD_MAX_CLIENT_VALUE)
++GPSD_SCONS_OPTS += max_clients=$(BR2_PACKAGE_GPSD_MAX_CLIENT_VALUE)
+ endif
+ ifeq ($(BR2_PACKAGE_GPSD_MAX_DEV),y)
+-GPSD_SCONS_OPTS += limited_max_devices=$(BR2_PACKAGE_GPSD_MAX_DEV_VALUE)
++GPSD_SCONS_OPTS += max_devices=$(BR2_PACKAGE_GPSD_MAX_DEV_VALUE)
+ endif
+ 
+ GPSD_SCONS_ENV += LDFLAGS="$(GPSD_LDFLAGS)" CFLAGS="$(GPSD_CFLAGS)"
