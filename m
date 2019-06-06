@@ -1,29 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Jun 2019 17:35:29 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libopenssl: fix static build
-In-Reply-To: <20190531133928.19568-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 31 May 2019 15:39:28 +0200")
-References: <20190531133928.19568-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r286g20u.fsf@dell.be.48ers.dk>
+Date: Thu, 06 Jun 2019 17:36:09 +0200
+Subject: [Buildroot] [PATCH] package/libnss: security bump to version
+ 3.42.1
+In-Reply-To: <CACXmViYvjeLaZzGKaCkMRGaXJ9crGubZ=1QJTyQugKiykkw2og@mail.gmail.com>
+ (Peter Korsgaard's message of "Fri, 31 May 2019 10:04:36 +0200")
+References: <20190530230741.14323-1-peter@korsgaard.com>
+ <CACXmViYvjeLaZzGKaCkMRGaXJ9crGubZ=1QJTyQugKiykkw2og@mail.gmail.com>
+Message-ID: <87muiug1zq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > no-dso option has been removed with
- > https://github.com/openssl/openssl/commit/31b6ed76dfd53529b74e79830c81372d0b756929
-
- > To fix this error, use "gcc" target in static builds. This target is
- > very minimalistic, we need to manually pass -lpthread and
- > -DOPENSSL_THREADS however we can also remove libdl workarounds
-
- > Fixes:
- >  - http://autobuild.buildroot.org/results/96d6b89d20980e8f7fa450b832474a81d492b315
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > On Fri, May 31, 2019 at 1:07 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> 
+ >> Fixes the following security issues:
+ >> 
+ >> (3.41) CVE-2018-12404: Cache side-channel variant of the Bleichenbacher
+ >> attack
+ >> 
+ >> (3.42.1) CVE-2018-18508: Add additional null checks to several CMS functions
+ >> to fix a rare CMS crash.  Thanks to Hanno B?ck and Damian Poddebniak for the
+ >> discovery and fixes
+ >> 
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed to 2019.02.x, thanks.
 
