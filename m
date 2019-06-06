@@ -1,28 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Jun 2019 23:52:05 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nanomsg: fix legal-info failure
-In-Reply-To: <1559852666-19259-1-git-send-email-pjtexier@koncepto.io>
- (Pierre-Jean Texier's message of "Thu, 6 Jun 2019 22:24:26 +0200")
-References: <1559852666-19259-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <87zhmucrga.fsf@dell.be.48ers.dk>
+Date: Fri, 07 Jun 2019 00:06:02 +0200
+Subject: [Buildroot] [PATCH 1/3] package/gdb: bump to version 8.3
+In-Reply-To: <20190605124016.13770-1-romain.naour@gmail.com> (Romain Naour's
+ message of "Wed, 5 Jun 2019 14:40:14 +0200")
+References: <20190605124016.13770-1-romain.naour@gmail.com>
+Message-ID: <87v9xicqt1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
+>>>>> "Romain" == Romain Naour <romain.naour@gmail.com> writes:
 
- > After version bump, the sha256 has been updated
- > while the COPYING file remains unchanged.
+ > Rebase local patches.
+ > See:
+ > https://lists.gnu.org/archive/html/info-gnu/2019-05/msg00007.html
 
- > Fixes:
- >  - http://autobuild.buildroot.net/results/ec1cb0216ebedc5c7bd2c8719460db28b666a24f/
-
- > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
- > ---
- > Now make legal-info is OK: 
- -> COPYING: OK (sha256: 4e51f6a04312ea7c5f4f0e92d91b6415c1eeb09bdaf86a6fd11d93499457c07a)
+ > Signed-off-by: Romain Naour <romain.naour@gmail.com>
 
 Committed, thanks.
 
