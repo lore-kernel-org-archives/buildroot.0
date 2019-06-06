@@ -1,27 +1,39 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Jun 2019 17:39:13 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/v4l2loopback: bump to
- version 0.12.2
-In-Reply-To: <20190527185021.115590-1-james.hilliard1@gmail.com> (James
- Hilliard's message of "Mon, 27 May 2019 12:50:21 -0600")
-References: <20190527185021.115590-1-james.hilliard1@gmail.com>
-Message-ID: <875zpig1um.fsf@dell.be.48ers.dk>
+Date: Thu, 6 Jun 2019 16:50:55 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/glibmm: use
+ GLIBMM_CXXFLAGS
+Message-ID: <20190606154047.2A5928141E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ecaedd39a8b0aa8d3e4142adb15e1993e310a747
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > This fixes a kernel 5.1.x compatibility issue.
- > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Commit 8d8d4ecaf1bc22a89d0f373e9d1655f59f283480 ("package/glibmm: work
+around gcc bug 85180") was incorrect reworked by me, and
+TARGET_CXXFLAGS was used instead of GLIBMM_CXXFLAGS, causing the
+Microblaze workaround to be ineffective. This new commit fixes this
+typo.
 
- > ---
- > Changes v1 -> v2:
- >   - Use latest upstream tag instead of commit
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 72e0ff66e7be8cebfb79c1cbcab168ae1d843a61)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/glibmm/glibmm.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2019.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/glibmm/glibmm.mk b/package/glibmm/glibmm.mk
+index a0abb7a49d..e66d56eac9 100644
+--- a/package/glibmm/glibmm.mk
++++ b/package/glibmm/glibmm.mk
+@@ -19,6 +19,6 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+ GLIBMM_CXXFLAGS += -O0
+ endif
+ 
+-GLIBMM_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS)"
++GLIBMM_CONF_ENV += CXXFLAGS="$(GLIBMM_CXXFLAGS)"
+ 
+ $(eval $(autotools-package))
