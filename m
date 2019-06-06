@@ -1,31 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Jun 2019 17:32:49 +0200
-Subject: [Buildroot] [PATCH v2] package/dropbear: rework license
- information
-In-Reply-To: <20190529070701.8913-1-yegorslists@googlemail.com>
- (yegorslists@googlemail.com's message of "Wed, 29 May 2019 09:07:01
- +0200")
-References: <20190529070701.8913-1-yegorslists@googlemail.com>
-Message-ID: <878suehgpq.fsf@dell.be.48ers.dk>
+Date: Thu, 06 Jun 2019 17:33:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/matchbox-panel: fix build with
+ NLS
+In-Reply-To: <20190530095651.31543-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 30 May 2019 11:56:51 +0200")
+References: <20190530095651.31543-1-fontaine.fabrice@gmail.com>
+Message-ID: <874l52hgoy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "yegorslists" == yegorslists  <yegorslists@googlemail.com> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > From: Yegor Yefremov <yegorslists@googlemail.com>
- > According to the LICENSE file curve25519-donna is licensed under
- > BSD-3-Clause license.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/3e72c2c2baae3a70fb5145b1b09a1f3716e4bce2
 
- > There is only BSD-2-Clause license mentioned so remove
- > BSD-2-Clause-like.
-
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
- > ---
- > Changes v1 -> v2:
- >   - remove BSD-2-Clause-like license (suggested by Arnout Vandecappelle)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2019.02.x, thanks.
 
