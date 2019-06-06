@@ -1,37 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Jun 2019 17:19:01 +0200
-Subject: [Buildroot] [PATCH V2 8/9] support/config.sub: Add C-SKY support
-In-Reply-To: <20190527223022.1d1aaa5a@windsurf> (Thomas Petazzoni's message of
- "Mon, 27 May 2019 22:30:22 +0200")
-References: <1557305915-11247-1-git-send-email-guoren@kernel.org>
- <1557305915-11247-8-git-send-email-guoren@kernel.org>
- <20190527223022.1d1aaa5a@windsurf>
-Message-ID: <87k1dyivx6.fsf@dell.be.48ers.dk>
+Date: Thu, 06 Jun 2019 17:20:42 +0200
+Subject: [Buildroot] [git commit] package/flare-engine: re-enable
+ package on microblaze
+In-Reply-To: <20190527213701.2BAC18DAA9@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Mon, 27 May 2019 23:37:42 +0200")
+References: <20190527213701.2BAC18DAA9@busybox.osuosl.org>
+Message-ID: <87ftomivud.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Hello Guo,
- > On Wed,  8 May 2019 16:58:34 +0800
- > guoren at kernel.org wrote:
+ > commit: https://git.buildroot.net/buildroot/commit/?id=1203cca1b51eefb4ee236d998ab6ec32bdd087d8
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- >> From: Guo Ren <ren_guo@c-sky.com>
- >> 
- >> Enable gnuconfig for C-SKY Architecutre compiling.
- >> 
- >> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
- >> ---
- >> support/gnuconfig/config.sub | 2 ++
- >> 1 file changed, 2 insertions(+)
+ > With Microblaze Gcc version < 8.x the build hangs due to bug 85180:
+ > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+ > To avoid this, the flare-engine package has a
+ > !BR2_TOOLCHAIN_HAS_GCC_BUG_85180 dependency. However, gcc bug 85180 only
+ > triggers when optimization is enabled, so we can work around the issue
+ > by passing -O0, which is what we do in other Buildroot packages to work
+ > around this bug.
 
- > I've slightly improved the commit message, and applied to master. I've
- > applied to master and not to next, because this commit is really
- > important: without it, none of the autotools based packages can build
- > on C-SKY (which is not yet tested in the autobuilders).
+ > So, this commit passes -O0 when BR2_TOOLCHAIN_HAS_GCC_BUG_85180, and
+ > re-enables flare-engine on Microblaze. It is not enough to set
+ > CMAKE_CXX_FLAGS, because flare-engine's CMakeLists.txt sets
+ > CMAKE_CXX_FLAGS_<BUILD_TYPE> (depending on the value of
+ > CMAKE_BUILD_TYPE), and the build-type-specific flags come after the
+ > generic flags, so our -O0 gets overridden again. Therefore, also set
+ > CMAKE_BUILD_TYPE to the dummy value Buildroot.
+
+ > Fixes:
+ > http://autobuild.buildroot.net/results/706/7065e14917a8bbc0faf21b29183ac55b6c800ee3/
+
+ > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+ > [Arnout: extend explanatory comment and update commit log]
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Committed to 2019.02.x, thanks.
 
