@@ -1,43 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Jun 2019 09:27:12 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libssh2: fix
- build with openssl and atomic
-Message-ID: <20190606073243.33DBD8F059@busybox.osuosl.org>
+Date: Thu, 06 Jun 2019 09:35:18 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libupnp18: needs host-pkgconf
+In-Reply-To: <20190509110438.31340-1-joerg.krause@embedded.rocks>
+ (=?utf-8?Q?=22J=C3=B6rg?=
+ Krause"'s message of "Thu, 9 May 2019 13:04:37 +0200")
+References: <20190509110438.31340-1-joerg.krause@embedded.rocks>
+Message-ID: <87r287upxl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75d410af26c1535579185217c912cba866264e58
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/e381eefa39307f1c8eb22f872df438b3fe0352dd
+ > Otherwise build fails with:
+ > ```
+ > configure.ac:630: error: possibly undefined macro: AC_MSG_ERROR
+ >       If this token and others are legitimate, please use m4_pattern_allow.
+ > ```
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 42d89c9b29f0699661488b9109e77e3577f63e62)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libssh2/libssh2.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 
-diff --git a/package/libssh2/libssh2.mk b/package/libssh2/libssh2.mk
-index ed0dd40bec..abee1f8c77 100644
---- a/package/libssh2/libssh2.mk
-+++ b/package/libssh2/libssh2.mk
-@@ -26,9 +26,12 @@ LIBSSH2_CONF_OPTS += --with-libgcrypt-prefix=$(STAGING_DIR)/usr \
- # linking
- LIBSSH2_CONF_ENV += LIBS="`$(STAGING_DIR)/usr/bin/libgcrypt-config --libs`"
- else ifeq ($(BR2_PACKAGE_LIBSSH2_OPENSSL),y)
--LIBSSH2_DEPENDENCIES += openssl
-+LIBSSH2_DEPENDENCIES += host-pkgconf openssl
- LIBSSH2_CONF_OPTS += --with-libssl-prefix=$(STAGING_DIR)/usr \
- 	--with-crypto=openssl
-+# configure.ac forgets to link to dependent libraries of openssl breaking static
-+# linking
-+LIBSSH2_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- endif
- 
- # Add zlib support if enabled
+Committed to 2019.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
