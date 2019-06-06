@@ -1,80 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Jun 2019 17:20:10 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/flare-engine:
- re-enable package on microblaze
-Message-ID: <20190606154047.ACDB481922@busybox.osuosl.org>
+Date: Thu, 6 Jun 2019 17:29:44 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/python-cython:
+ bump to version 0.29.9
+Message-ID: <20190606154048.0D5008271C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84b577c1de8396833d67f30dc43222179521ef2a
+commit: https://git.buildroot.net/buildroot/commit/?id=74debfb99b986c0dfefeff5ab71274c341f3edf2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-With Microblaze Gcc version < 8.x the build hangs due to bug 85180:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
-To avoid this, the flare-engine package has a
-!BR2_TOOLCHAIN_HAS_GCC_BUG_85180 dependency. However, gcc bug 85180 only
-triggers when optimization is enabled, so we can work around the issue
-by passing -O0, which is what we do in other Buildroot packages to work
-around this bug.
+Fixes a number of crashes / bugs. For details, see:
+https://github.com/cython/cython/blob/master/CHANGES.rst
 
-So, this commit passes -O0 when BR2_TOOLCHAIN_HAS_GCC_BUG_85180, and
-re-enables flare-engine on Microblaze. It is not enough to set
-CMAKE_CXX_FLAGS, because flare-engine's CMakeLists.txt sets
-CMAKE_CXX_FLAGS_<BUILD_TYPE> (depending on the value of
-CMAKE_BUILD_TYPE), and the build-type-specific flags come after the
-generic flags, so our -O0 gets overridden again. Therefore, also set
-CMAKE_BUILD_TYPE to the dummy value Buildroot.
-
-Fixes:
-http://autobuild.buildroot.net/results/706/7065e14917a8bbc0faf21b29183ac55b6c800ee3/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-[Arnout: extend explanatory comment and update commit log]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
-(cherry picked from commit 1203cca1b51eefb4ee236d998ab6ec32bdd087d8)
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit f2c9e9707ed7a67a3a878248f300afc17bd0919c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/flare-engine/Config.in       | 4 ----
- package/flare-engine/flare-engine.mk | 8 ++++++++
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ package/python-cython/python-cython.hash | 4 ++--
+ package/python-cython/python-cython.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/flare-engine/Config.in b/package/flare-engine/Config.in
-index e299a6b7de..cdcb018948 100644
---- a/package/flare-engine/Config.in
-+++ b/package/flare-engine/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_FLARE_ENGINE
- 	bool "flare-engine"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS # SDL2
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180
- 	select BR2_PACKAGE_SDL2
- 	select BR2_PACKAGE_SDL2_IMAGE
- 	select BR2_PACKAGE_SDL2_MIXER
-@@ -18,6 +17,3 @@ config BR2_PACKAGE_FLARE_ENGINE
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index 39ce8963b2..87aa565523 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cython/json
+-md5	074f70ec8bd0a6bf5cf658508c63a999  Cython-0.29.5.tar.gz
+-sha256	9d5290d749099a8e446422adfb0aa2142c711284800fb1eb70f595101e32cbf1  Cython-0.29.5.tar.gz
++md5	bc0cca4658947bf2fb3fc10e8d090182  Cython-0.29.9.tar.gz
++sha256	b88e033c06d29f3f3c760a3fb9837dce6e124d627bd562d1cdf93e9da16df215  Cython-0.29.9.tar.gz
+ # Locally computed sha256 checksums
+ sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+ sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index 9ab4ebb2a9..bd9f322d53 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- comment "flare-engine needs a toolchain w/ C++, dynamic library"
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS
--
--comment "flare-engine needs a toolchain not affected by GCC bug 85180"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85180
-diff --git a/package/flare-engine/flare-engine.mk b/package/flare-engine/flare-engine.mk
-index 2f36602348..1ec50bfed4 100644
---- a/package/flare-engine/flare-engine.mk
-+++ b/package/flare-engine/flare-engine.mk
-@@ -19,4 +19,12 @@ ifeq ($(BR2_ENABLE_DEBUG),y)
- FLARE_ENGINE_CONF_OPTS += -DCMAKE_BUILD_TYPE=RelWithDebInfo
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+# CMakeLists.txt sets CMAKE_CXX_FLAGS_<BUILD_TYPE> depending on
-+# BUILD_TYPE, and this comes after the generic CMAKE_CXX_FLAGS. 
-+# Overrice CMAKE_BUILD_TYPE so no overrides are applied.
-+FLARE_ENGINE_CONF_OPTS += -DCMAKE_BUILD_TYPE=Buildroot
-+FLARE_ENGINE_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -O0"
-+endif
-+
- $(eval $(cmake-package))
+-PYTHON_CYTHON_VERSION = 0.29.5
++PYTHON_CYTHON_VERSION = 0.29.9
+ PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/e0/31/4a166556f92c469d8291d4b03a187f325c773c330fffc1e798bf83d947f2
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/69/ab/b18f7f2e61c12e5e859c86b6d37f73971679d5f5c5c97d6cc7ff8916468a
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
