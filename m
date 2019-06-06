@@ -1,47 +1,46 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Jun 2019 23:57:49 +0200
-Subject: [Buildroot] [git commit] package/gdb: switch to 8.2 as the default
- version
-Message-ID: <20190606220726.AB50F810D6@busybox.osuosl.org>
+Date: Thu, 6 Jun 2019 23:50:04 +0200
+Subject: [Buildroot] [git commit] libgpiod: bump version to v1.4
+Message-ID: <20190606220726.8819E8ED8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f776f4bf915c6fc15687baaa34310ce2a0f98574
+commit: https://git.buildroot.net/buildroot/commit/?id=a2df8d567dd0cda514c8b7507ab58680689a2471
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-8.3 is around, 8.2 has already seen a point release, so it's time to
-make 8.2 the default version for gdb.
+This release mostly affects the testing framework but also contains fixes
+for C++ bindings.
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-[Peter: also update BR2_GDB_VERSION logic]
+Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/gdb/Config.in.host | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
-index f9a67d18dd..214c79f293 100644
---- a/package/gdb/Config.in.host
-+++ b/package/gdb/Config.in.host
-@@ -46,7 +46,7 @@ config BR2_PACKAGE_HOST_GDB_SIM
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 6c896622b6..2faa8bbbbb 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256 6ec837f23e8f2196e5976dec4ac81403170830075e7f33ede1394eaf67f2e962  libgpiod-1.3.tar.xz
++sha256 ebde83aaf14be3abd33e7a90faa487a2ee231e242897afe7fdefb765386b3c8b  libgpiod-1.4.tar.xz
+ # Hash for license file
+ sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index 76fa3399dc..07fa050007 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- choice
- 	prompt "GDB debugger Version"
--	default BR2_GDB_VERSION_8_1
-+	default BR2_GDB_VERSION_8_2
- 	depends on !BR2_arc
- 	depends on !BR2_csky
- 	help
-@@ -105,7 +105,7 @@ config BR2_GDB_VERSION
- 	default "4ecb98fbc2f94dbe01b69384afbc515107de73df" if BR2_csky
- 	default "7.12.1"   if BR2_GDB_VERSION_7_12
- 	default "8.0.1"    if BR2_GDB_VERSION_8_0
--	default "8.1.1"    if BR2_GDB_VERSION_8_1 || !BR2_PACKAGE_HOST_GDB
--	default "8.2.1"    if BR2_GDB_VERSION_8_2
-+	default "8.1.1"    if BR2_GDB_VERSION_8_1
-+	default "8.2.1"    if BR2_GDB_VERSION_8_2 || !BR2_PACKAGE_HOST_GDB
- 	default "8.3"	   if BR2_GDB_VERSION_8_3
- 	depends on BR2_PACKAGE_GDB || BR2_PACKAGE_HOST_GDB
+-LIBGPIOD_VERSION = 1.3
++LIBGPIOD_VERSION = 1.4
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
