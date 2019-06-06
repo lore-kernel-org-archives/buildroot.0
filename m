@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Jun 2019 17:05:24 +0200
-Subject: [Buildroot] [PATCH v2 06/12] package/glibmm: fix BUG_85180
- build timeout
-In-Reply-To: <20190521133932.81841-7-giulio.benetti@micronovasrl.com> (Giulio
- Benetti's message of "Tue, 21 May 2019 15:39:26 +0200")
+Date: Thu, 06 Jun 2019 17:05:32 +0200
+Subject: [Buildroot] [PATCH v2 07/12] package/gst-ffmpeg: re-enable
+ package if BUG_85180 is present
+In-Reply-To: <20190521133932.81841-8-giulio.benetti@micronovasrl.com> (Giulio
+ Benetti's message of "Tue, 21 May 2019 15:39:27 +0200")
 References: <20190521133932.81841-1-giulio.benetti@micronovasrl.com>
- <20190521133932.81841-7-giulio.benetti@micronovasrl.com>
-Message-ID: <878suekb4b.fsf@dell.be.48ers.dk>
+ <20190521133932.81841-8-giulio.benetti@micronovasrl.com>
+Message-ID: <874l52kb43.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,14 +18,15 @@ To: buildroot@busybox.net
  > With Microblaze Gcc version < 8.x build hangs on compiling first files.
  > This is due to bug 85180:
  > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
- > Bug shows up building glibmm with optimization but not when building
+ > This package has been excluded from building if BUG_85180 is present.
+ > Bug shows up building gst-ffmpeg with optimization but not when building
  > with -O0.
 
- > If BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 passing it to
- > CXXFLAGS.
-
- > Fixes:
- > http://autobuild.buildroot.net/results/e19/e196d77626b877dc3454d21febe20a04877c02a9/
+ > In config.mk if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 by:
+ > - add --disable-optimizations to EXTRA_OPTS
+ > - passing -O0 to CFLAGS in CONF_ENV
+ > Then remove 'depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180' and its
+ > comment if not available from Config.in
 
  > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 
