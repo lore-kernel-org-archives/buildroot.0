@@ -1,68 +1,41 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Jun 2019 09:41:08 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/intel-microcode:
- security bump to version 20190514a
-Message-ID: <20190606074234.7A70988528@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu,  6 Jun 2019 11:09:59 +0200
+Subject: [Buildroot] [PATCH] package/snort: work around gcc bug 85180
+Message-ID: <20190606090959.122857-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=23430e2b2e245bd90bd9f52113f4a87837750218
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+shows up when building snort with optimization but not when building
+with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
+force using -O0.
 
-Includes MDS mitigation (RIDL, Fallout, Zombieload), INTEL-SA-00223
+Fixes:
+http://autobuild.buildroot.net/results/d24/d2412710f6cfbfc069e7858e507e28555baafa3e/
 
-Move to the Intel github repo as this release is not yet available on
-downloadmirror.intel.com.
-
-Update license hash because of copyright year and DOS/UNIX newlines change.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cc01d562d3f40c145b0d50c118f7b8b862881a19)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/intel-microcode/Config.in            | 2 ++
- package/intel-microcode/intel-microcode.hash | 4 ++--
- package/intel-microcode/intel-microcode.mk   | 6 ++----
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ package/snort/snort.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/intel-microcode/Config.in b/package/intel-microcode/Config.in
-index 495ebd727f..3f9199ec93 100644
---- a/package/intel-microcode/Config.in
-+++ b/package/intel-microcode/Config.in
-@@ -5,3 +5,5 @@ config BR2_PACKAGE_INTEL_MICROCODE
- 	  This package provides an Intel microcode data file that can be
- 	  used to correct processor errors. The iucode-tool package and
- 	  proper kernel support are required to upload the microcode.
-+
-+	  https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files
-diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
-index 183ba5aeec..257cc85c41 100644
---- a/package/intel-microcode/intel-microcode.hash
-+++ b/package/intel-microcode/intel-microcode.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 46ab18699ec42eb6cc01ee1846ec4d7ca979766dee2156f92d69e2f6df548137  microcode-20180807a.tgz
--sha256 c4698c6105d59fec11ad0929e77a003445c560c7706c089990030acbf10c9372  license
-+sha256 9e67903a5b62b51f5e031b59a8046d3dff226834d79899799943803481a55d20  intel-microcode-microcode-20190514a.tar.gz
-+sha256 1f8bf63fc2b1b486c507b98ff7d283c7eb58c7945746b94188a310d6787cbee5  license
-diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
-index ed4ad628dd..aa3b1f4dbb 100644
---- a/package/intel-microcode/intel-microcode.mk
-+++ b/package/intel-microcode/intel-microcode.mk
-@@ -4,10 +4,8 @@
- #
- ################################################################################
+diff --git a/package/snort/snort.mk b/package/snort/snort.mk
+index c767d7c545..191ef673d7 100644
+--- a/package/snort/snort.mk
++++ b/package/snort/snort.mk
+@@ -20,6 +20,10 @@ SNORT_CONF_OPTS = \
+ 	--with-libpcap-includes=$(STAGING_DIR)/usr/include/pcap \
+ 	--disable-static-daq
  
--INTEL_MICROCODE_VERSION = 20180807a
--INTEL_MICROCODE_SOURCE = microcode-$(INTEL_MICROCODE_VERSION).tgz
--INTEL_MICROCODE_SITE = https://downloadmirror.intel.com/28087/eng
--INTEL_MICROCODE_STRIP_COMPONENTS = 0
-+INTEL_MICROCODE_VERSION = microcode-20190514a
-+INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,$(INTEL_MICROCODE_VERSION))
- INTEL_MICROCODE_LICENSE = PROPRIETARY
- INTEL_MICROCODE_LICENSE_FILES = license
- INTEL_MICROCODE_REDISTRIBUTE = NO
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++SNORT_CFLAGS += -O0
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ SNORT_DEPENDENCIES += libtirpc host-pkgconf
+ SNORT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
+-- 
+2.17.1
