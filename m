@@ -1,25 +1,25 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 06 Jun 2019 10:39:21 +0000
-Subject: [Buildroot] [Bug 11926] Cross compiled Qt applications aren't
- working anymore
-In-Reply-To: <bug-11926-163@https.bugs.busybox.net/>
-References: <bug-11926-163@https.bugs.busybox.net/>
-Message-ID: <bug-11926-163-jbNjnUIDbd@https.bugs.busybox.net/>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 06 Jun 2019 14:17:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/autossh: bump version to 1.4g
+In-Reply-To: <1559764619-8118-1-git-send-email-tolvupostur@gmail.com> (Einar
+ Jon Gunnarsson's message of "Wed, 5 Jun 2019 21:56:58 +0200")
+References: <1559764619-8118-1-git-send-email-tolvupostur@gmail.com>
+Message-ID: <87lfyenc1i.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11926
+>>>>> "Einar" == Einar Jon Gunnarsson <tolvupostur@gmail.com> writes:
 
---- Comment #5 from ramtheconqueror at gmail.com ---
-Hello,
+ > Version 1.4g most notably addresses a bug that could see an alarm signal
+ > occur without a handler, causing autossh to exit inappropriately.
 
-2019.05 released with this P5 blocker?
+Committed, thanks.
 
-Any workaround for this problem please?
+Does this mean that we also want this on the 2019.02.x (LTS) and
+2019.05.x (stable) branches?
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Bye, Peter Korsgaard
