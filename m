@@ -1,34 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Jun 2019 17:22:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/supertux: fix debug build on
- uclibc/musl
-In-Reply-To: <20190526191814.3942-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 26 May 2019 21:18:14 +0200")
-References: <20190526191814.3942-1-fontaine.fabrice@gmail.com>
-Message-ID: <8736kmivs6.fsf@dell.be.48ers.dk>
+Date: Thu, 06 Jun 2019 17:24:47 +0200
+Subject: [Buildroot] [git commit] package/brotli: work around gcc bug
+ 68485
+In-Reply-To: <20190527220327.636798E6D4@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Tue, 28 May 2019 00:09:03 +0200")
+References: <20190527220327.636798E6D4@busybox.osuosl.org>
+Message-ID: <87y32ehh34.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Always set CMAKE_BUILD_TYPE to Release otherwise supertux will be built
- > with -pg since:
- > https://github.com/SuperTux/supertux/commit/afd5f1b33c110104a7f286d6d7854157919a0a52
+ > commit: https://git.buildroot.net/buildroot/commit/?id=39dde1ffb6a7111c2fa2b340c940e4d3e685aa29
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > This will result in the following build failure on uclibc or musl:
- > [ 77%] Linking C executable sq_static
- > CMakeFiles/sq_static.dir/sq.c.o: In function `quit':
- > /home/buildroot/autobuild/instance-3/output/build/supertux-0.6.0/external/squirrel/sq/sq.c:42: undefined reference to `__gnu_mcount_nc'
+ > With Microblaze Gcc version <= 9.x the build fails due to gcc bug 68485:
+ > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. The bug show up when
+ > building brotli with optimization but not when building with -O0. To
+ > work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_68458=y, we force using
+ > -O0.
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/b0b2e25af198d01713d1e2bcf38c77ae8ffbd7de
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ >   http://autobuild.buildroot.net/results/d86/d86251974a0a348a64d9a1d1fd7d02dd4aff0792/
 
-Committed to 2019.02.x, thanks.
+ > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > ---
+ >  package/brotli/brotli.mk | 4 ++++
+ >  1 file changed, 4 insertions(+)
+
+ > diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
+ > index 2c1ad48753..248bfb9daf 100644
+ > --- a/package/brotli/brotli.mk
+ > +++ b/package/brotli/brotli.mk
+ > @@ -14,4 +14,8 @@ BROTLI_CONF_OPTS = \
+ >  	-DBROTLI_DISABLE_TESTS=ON \
+ >  	-DBROTLI_BUNDLED_MODE=OFF
+ 
+ > +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
+ > +BROTLI_CONF_OPTS += -DCMAKE_C_FLAGS="-O0"
+
+Hmm, why is this not "$(TARGET_C_FLAGS) -O0" like for the other
+packages?
 
 -- 
 Bye, Peter Korsgaard
