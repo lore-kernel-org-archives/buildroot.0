@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Jun 2019 22:37:19 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/exim: add
+Date: Thu, 6 Jun 2019 22:37:26 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/exim: add
  upstream security fix for CVE-2019-10149
-Message-ID: <20190606203704.2FC568F14B@busybox.osuosl.org>
+Message-ID: <20190606203711.C4335884AE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc5213f7df41209f12ff4f52338b9a2a91a96884
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2b7794de83d9e7a1b6eaa81a07a471efc11b8a5c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 A flaw was found in Exim versions 4.87 to 4.91 (inclusive).  Improper
 validation of recipient address in deliver_message() function in
