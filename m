@@ -1,70 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Jun 2019 17:10:41 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/botan: fix static
- build with atomic
-Message-ID: <20190606154047.95E5481D5B@busybox.osuosl.org>
+Date: Thu, 6 Jun 2019 17:29:38 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/python-cython:
+ bump to version 0.29.5
+Message-ID: <20190606154048.056708271C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3880c159fe845b9a144fd0c21cecd1ce90e979b7
+commit: https://git.buildroot.net/buildroot/commit/?id=c477a97d5dc6d60430b586c6c01f3bab8bce326b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes:
- - http://autobuild.buildroot.org/results/9db39b209a0f4be1e09b7e4ddb5e9a63da4fbbfa
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-(cherry picked from commit b79439af44591aaf061a4757de43de3374ffde29)
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c809f1b352b5f457499d952c75e2133e6e7a4b26)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...kefile.in-move-LDFLAGS-after-EXE_LINKS_TO.patch | 38 ++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ package/python-cython/python-cython.hash | 4 ++--
+ package/python-cython/python-cython.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/botan/0003-makefile.in-move-LDFLAGS-after-EXE_LINKS_TO.patch b/package/botan/0003-makefile.in-move-LDFLAGS-after-EXE_LINKS_TO.patch
-new file mode 100644
-index 0000000000..82186419d5
---- /dev/null
-+++ b/package/botan/0003-makefile.in-move-LDFLAGS-after-EXE_LINKS_TO.patch
-@@ -0,0 +1,38 @@
-+From a837dd63f3ac5a9c206863c82b57c679cb72b8b7 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 28 Apr 2019 10:21:06 +0200
-+Subject: [PATCH] makefile.in: move LDFLAGS after EXE_LINKS_TO
-+
-+Move LDFLAGS after EXE_LINKS_TO to allow the user to give additional
-+libraries such as -latomic otherwise static build will fail:
-+
-+cli/tls_server.o build/obj/cli/tls_utils.o build/obj/cli/utils.o build/obj/cli/x509.o -L. -lbotan-2 -lboost_filesystem -lboost_system -lbz2 -lcrypto -llzma -lsqlite3 -lz -o botan
-+/home/buildroot/autobuild/instance-1/output/host/bin/sparc-linux-g++ -Wl,-rpath=\$ORIGIN -pthread -static -latomic build/obj/test/main.o build/obj/test/test_aead.o build/obj/test/test_asn1.o build/obj/test/test_bigint.o build/obj/test/test_block.o build/obj/test/test_blowfish.o build/obj/test/test_c25519.o build/obj/test/test_certstor.o build/obj/test/test_compression.o build/obj/test/test_cryptobox.o build/obj/test/test_datastore.o build/obj/test/test_dh.o build/obj/test/test_dl_group.o build/obj/test/test_dlies.o build/obj/test/test_dsa.o build/obj/test/test_ecc_pointmul.o build/obj/test/test_ecdh.o build/obj/test/test_ecdsa.o build/obj/test/test_ecgdsa.o build/obj/test/test_ecies.o build/obj/test/test_eckcdsa.o build/obj/test/test_ed25519.o build/obj/test/test_elg.o build/obj/test/test_entropy.o build/obj/test/test_ffi.o build/obj/test/test_filters.o build/obj/test/test_fpe.o build/obj/test/test_gf2m.o build/obj/test/test_gost_3410.o build/obj/test/test_hash.o build/obj/test/test
- _hash_id.o build/obj/test/test_kdf.o build/obj/test/test_keywrap.o build/obj/test/test_mac.o build/obj/test/test_mceliece.o build/obj/test/test_modes.o build/obj/test/test_mp.o build/obj/test/test_name_constraint.o build/obj/test/test_newhope.o build/obj/test/test_ocb.o build/obj/test/test_ocsp.o build/obj/test/test_octetstring.o build/obj/test/test_oid.o build/obj/test/test_os_utils.o build/obj/test/test_otp.o build/obj/test/test_package_transform.o build/obj/test/test_pad.o build/obj/test/test_passhash.o build/obj/test/test_pbkdf.o build/obj/test/test_pem.o build/obj/test/test_pk_pad.o build/obj/test/test_pkcs11.o build/obj/test/test_pkcs11_high_level.o build/obj/test/test_pkcs11_low_level.o build/obj/test/test_psk_db.o build/obj/test/test_pubkey.o build/obj/test/test_rfc6979.o build/obj/test/test_rng.o build/obj/test/test_rng_kat.o build/obj/test/test_rsa.o build/obj/test/test_runner.o build/obj/test/test_simd.o build/obj/test/test_siv.o build/obj/test/test_sm2.o build/obj/test/t
- est_srp6.o build/obj/test/test_stream.o build/obj/test/test_tests.o build/obj/test/test_tls.o build/obj/test/test_tls_messages.o build/obj/test/test_tpm.o build/obj/test/test_tss.o build/obj/test/test_utils.o build/obj/test/test_workfactor.o build/obj/test/test_x509_dn.o build/obj/test/test_x509_path.o build/obj/test/test_xmss.o build/obj/test/tests.o build/obj/test/unit_ecc.o build/obj/test/unit_ecdh.o build/obj/test/unit_ecdsa.o build/obj/test/unit_tls.o build/obj/test/unit_tls_policy.o build/obj/test/unit_x509.o -L. -lbotan-2 -lboost_filesystem -lboost_system -lbz2 -lcrypto -llzma -lsqlite3 -lz -o botan-test
-+./libbotan-2.a(utils_filesystem.o): In function `Botan::get_files_recursive(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)':
-+filesystem.cpp:(.text+0x758): undefined reference to `__atomic_fetch_sub_4'
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/9db39b209a0f4be1e09b7e4ddb5e9a63da4fbbfa
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/randombit/botan/pull/1916]
-+---
-+ src/build-data/makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/src/build-data/makefile.in b/src/build-data/makefile.in
-+index 08c9c5421..7111c7b19 100644
-+--- a/src/build-data/makefile.in
-++++ b/src/build-data/makefile.in
-+@@ -71,7 +71,7 @@ $(CLI): $(LIBRARIES) $(CLIOBJS)
-+ 	$(POST_LINK_CMD)
-+ 
-+ $(TEST): $(LIBRARIES) $(TESTOBJS)
-+-	$(EXE_LINK_CMD) $(ABI_FLAGS) $(LDFLAGS) $(TESTOBJS) $(EXE_LINKS_TO) %{output_to_exe}$@
-++	$(EXE_LINK_CMD) $(ABI_FLAGS) $(TESTOBJS) $(EXE_LINKS_TO) $(LDFLAGS) %{output_to_exe}$@
-+ 	$(POST_LINK_CMD)
-+ 
-+ %{if build_fuzzers}
-+-- 
-+2.20.1
-+
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index db0549c2d2..39ce8963b2 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cython/json
+-md5	867c8b48f15a5249f476dc5a2cb58758  Cython-0.29.4.tar.gz
+-sha256	d1ee3d39c73a094ae5b6e2f9263ae0dc61af1b549a0869ade8c3c30325ed9f26  Cython-0.29.4.tar.gz
++md5	074f70ec8bd0a6bf5cf658508c63a999  Cython-0.29.5.tar.gz
++sha256	9d5290d749099a8e446422adfb0aa2142c711284800fb1eb70f595101e32cbf1  Cython-0.29.5.tar.gz
+ # Locally computed sha256 checksums
+ sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+ sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index fbe11e8087..9ab4ebb2a9 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CYTHON_VERSION = 0.29.4
++PYTHON_CYTHON_VERSION = 0.29.5
+ PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/cf/e2/03af631ca4a2cf7bc392dd8785c7cc427bff3af4bf5864cdde734f80d052
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/e0/31/4a166556f92c469d8291d4b03a187f325c773c330fffc1e798bf83d947f2
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
