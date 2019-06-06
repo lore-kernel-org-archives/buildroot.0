@@ -1,38 +1,47 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Thu,  6 Jun 2019 15:02:46 +0200
-Subject: [Buildroot] [PATCH 1/1] linux/linux-ext-xenomai: add check-package
- exclusion comment
-Message-ID: <20190606130246.8637-1-sebastien.szymanski@armadeus.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu,  6 Jun 2019 15:03:04 +0200
+Subject: [Buildroot] [PATCH 2/2] package/prboom: work around gcc bug 85180
+In-Reply-To: <20190606130304.129551-1-giulio.benetti@micronovasrl.com>
+References: <20190606130304.129551-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190606130304.129551-2-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-check-package wrongly warns against LINUX_EXTRA_DOWNLOADS var:
+With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+shows up when building prboom with optimization but not when building
+with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
+force using -O0.
 
- linux/linux-ext-xenomai.mk:15: possible typo: LINUX_EXTRA_DOWNLOADS -> *XENOMAI*
- 34 lines processed
- 1 warnings generated
+Fixes:
+http://autobuild.buildroot.net/results/e72/e72a2070ab7e9a093c3c70002ee94ee57a6154f6/
 
-Add a TypoInPackageVariable exclusion comment to remove this warning.
-
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- linux/linux-ext-xenomai.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/prboom/prboom.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/linux/linux-ext-xenomai.mk b/linux/linux-ext-xenomai.mk
-index c7c112dac3..5ec6891bbf 100644
---- a/linux/linux-ext-xenomai.mk
-+++ b/linux/linux-ext-xenomai.mk
-@@ -12,6 +12,7 @@ XENOMAI_ADEOS_PATCH = $(call qstrip,$(BR2_LINUX_KERNEL_EXT_XENOMAI_ADEOS_PATCH))
- ifneq ($(filter ftp://% http://% https://%,$(XENOMAI_ADEOS_PATCH)),)
- XENOMAI_ADEOS_PATCH_NAME = $(notdir $(XENOMAI_ADEOS_PATCH))
- XENOMAI_ADEOS_PATCH_PATH = $(LINUX_DL_DIR)/$(XENOMAI_ADEOS_PATCH_NAME)
-+# check-package TypoInPackageVariable
- LINUX_EXTRA_DOWNLOADS += $(XENOMAI_ADEOS_PATCH)
- BR_NO_CHECK_HASH_FOR += $(XENOMAI_ADEOS_PATCH_NAME)
- else
+diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
+index 6d9b55e9f6..1ba8d968ab 100644
+--- a/package/prboom/prboom.mk
++++ b/package/prboom/prboom.mk
+@@ -18,6 +18,14 @@ endef
+ 
+ PRBOOM_PRE_CONFIGURE_HOOKS += PRBOOM_FIXUP_CONFIGURE
+ 
++PRBOOM_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++PRBOOM_CFLAGS += -O0
++endif
++
++PRBOOM_CONF_ENV += CFLAGS="$(PRBOOM_CFLAGS)"
++
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ PRBOOM_DEPENDENCIES += libpng
+ endif
 -- 
-2.19.2
+2.17.1
