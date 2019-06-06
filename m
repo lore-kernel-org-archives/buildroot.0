@@ -1,63 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Jun 2019 14:48:25 +0200
-Subject: [Buildroot] [PATCH/next 1/1] package/webkitgtk: bump to version
- 2.24.2
-In-Reply-To: <8736l3rkbf.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Fri, 24 May 2019 16:36:20 +0200")
-References: <20190522082734.33964-1-aperez@igalia.com>
- <8736l3rkbf.fsf@dell.be.48ers.dk>
-Message-ID: <87muiulw12.fsf@dell.be.48ers.dk>
+Date: Thu, 6 Jun 2019 14:23:08 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] toolchain: gcc bug 85180
+ is fixed in gcc >= 8.x
+Message-ID: <20190606124825.CF00983A8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=a421e81f3953cec167fabbf9300395aca8975202
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
- >> This is a new major release which brings in many improvements and new
- >> features. For a complete list, please refer to the release notes:
+Gcc bug 85180 (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180) has
+been fixed on Gcc version >= 8.x, so this commit adjusts the
+BR2_TOOLCHAIN_HAS_GCC_BUG_85180 option to no longer be true when the
+gcc version is >= 8.x.
 
- >> https://webkitgtk.org/2019/03/13/webkitgtk2.24.0-released.html
- >> https://webkitgtk.org/2019/04/09/webkitgtk2.24.1-released.html
- >> https://webkitgtk.org/2019/05/17/webkitgtk2.24.2-released.html
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a94dd1ce9c48a079bfa22c0af718a00a6b4ba237)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
- >> Updating to version 2.24.2 also includes fixes for CVE-2019-6201,
- >> CVE-2019-6251, CVE-2019-7285, CVE-2019-7292, CVE-2019-8503,
- >> CVE-2019-8506, CVE-2019-8515, CVE-2019-8518, CVE-2019-8523,
- >> CVE-2019-8524, CVE-2019-8535, CVE-2019-8536, CVE-2019-8544,
- >> CVE-2019-8551, CVE-2019-8558, CVE-2019-8559, CVE-2019-8563,
- >> CVE-2019-11070, CVE-2019-6237, CVE-2019-8571, CVE-2019-8583,
- >> CVE-2019-8584, CVE-2019-8586, CVE-2019-8587, CVE-2019-8594,
- >> CVE-2019-8595, CVE-2019-8596, CVE-2019-8597, CVE-2019-8601,
- >> CVE-2019-8607, CVE-2019-8608, CVE-2019-8609, CVE-2019-8610,
- >> CVE-2019-8615, CVE-2019-8611, CVE-2019-8619, CVE-2019-8622, and
- >> CVE-2019-8623.
-
- >> The detailed security advisories can be found at:
-
- >> https://webkitgtk.org/security/WSA-2019-0002.html
- >> https://webkitgtk.org/security/WSA-2019-0003.html
-
- >> The BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS_JIT configuration symbol is not
- >> needed anymore, because the logic to decide whether the JavaScriptCore
- >> JIT spport can be enabled has been improved upstream.
-
- >> One of the new features in 2.24.x is the support for JPEG2000 images,
- >> which is implemented using the OpenJPEG library. Therefore now
- >> BR2_PACKAGE_OPENJPEG is selected.
-
- >> This adds one small patch which did not make it to the 2.24.2 release
- >> which solves a build issue when the building the GStreamer GL elements
- >> is disabled.
-
- >> Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-
- > I know you marked this for next, but given the security fixes I have
- > applied it for master, thanks.
-
-Committed to 2019.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index bcbc3cf984..87d7bc30bb 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -129,6 +129,7 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ config BR2_TOOLCHAIN_HAS_GCC_BUG_85180
+ 	bool
+ 	default y if BR2_microblaze
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85862
+ # An infinite loop exists in the find_base_term() logic of 6.x
