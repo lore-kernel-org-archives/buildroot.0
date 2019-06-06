@@ -1,55 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Jun 2019 17:29:44 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/python-cython:
- bump to version 0.29.9
-Message-ID: <20190606154048.0D5008271C@busybox.osuosl.org>
+Date: Thu, 6 Jun 2019 17:35:56 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/libnss: security
+ bump to version 3.42.1
+Message-ID: <20190606154048.46EC98136B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74debfb99b986c0dfefeff5ab71274c341f3edf2
+commit: https://git.buildroot.net/buildroot/commit/?id=32433179b35e363af6aa1233ce3fbdfbbdf6580e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes a number of crashes / bugs. For details, see:
-https://github.com/cython/cython/blob/master/CHANGES.rst
+Fixes the following security issues:
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+(3.41) CVE-2018-12404: Cache side-channel variant of the Bleichenbacher
+attack
+
+(3.42.1) CVE-2018-18508: Add additional null checks to several CMS functions
+to fix a rare CMS crash.  Thanks to Hanno B??ck and Damian Poddebniak for the
+discovery and fixes
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit f2c9e9707ed7a67a3a878248f300afc17bd0919c)
+(cherry picked from commit 8c0bff1b4f3f5d3c1cb3a848d65b0b11fb59b1f4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 39ce8963b2..87aa565523 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5	074f70ec8bd0a6bf5cf658508c63a999  Cython-0.29.5.tar.gz
--sha256	9d5290d749099a8e446422adfb0aa2142c711284800fb1eb70f595101e32cbf1  Cython-0.29.5.tar.gz
-+md5	bc0cca4658947bf2fb3fc10e8d090182  Cython-0.29.9.tar.gz
-+sha256	b88e033c06d29f3f3c760a3fb9837dce6e124d627bd562d1cdf93e9da16df215  Cython-0.29.9.tar.gz
- # Locally computed sha256 checksums
- sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 9ab4ebb2a9..bd9f322d53 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 9c3cefd818..1d600f14ef 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_39_RTM/src/SHA256SUMS
+-sha256	6be64dd76f212415cc8bc34343ac1e7389048db4db9a023a84873c411dc5864b  nss-3.39.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_42_1_RTM/src/SHA256SUMS
++sha256	087db37d38fd49dfd584dd2a8b5baa7fc88de7c9bd97c0c2d5be4abcafc61fc6  nss-3.42.1.tar.gz
+ # Locally calculated
+ sha256	a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 73c9b08fd2..89d614fe1c 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CYTHON_VERSION = 0.29.5
-+PYTHON_CYTHON_VERSION = 0.29.9
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/e0/31/4a166556f92c469d8291d4b03a187f325c773c330fffc1e798bf83d947f2
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/69/ab/b18f7f2e61c12e5e859c86b6d37f73971679d5f5c5c97d6cc7ff8916468a
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+-LIBNSS_VERSION = 3.39
++LIBNSS_VERSION = 3.42.1
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
