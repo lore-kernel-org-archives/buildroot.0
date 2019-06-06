@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 06 Jun 2019 09:37:45 +0200
-Subject: [Buildroot] [PATCH 2/3] package/pcsc-lite: fix license
-In-Reply-To: <20190518214349.5979-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 18 May 2019 23:43:48 +0200")
+Date: Thu, 06 Jun 2019 09:37:50 +0200
+Subject: [Buildroot] [PATCH 3/3] package/pcsc-lite: security bump to
+ version 1.8.25
+In-Reply-To: <20190518214349.5979-3-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 18 May 2019 23:43:49 +0200")
 References: <20190518214349.5979-1-fontaine.fabrice@gmail.com>
- <20190518214349.5979-2-fontaine.fabrice@gmail.com>
-Message-ID: <87ef47upti.fsf@dell.be.48ers.dk>
+ <20190518214349.5979-3-fontaine.fabrice@gmail.com>
+Message-ID: <87a7evuptd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,9 +15,16 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > pcsc-lite is not only licensed under BSD-3-Clause, so retrieve licenses
- > from COPYING (BSD-2-Clause, GPL-3.0+, MIT, ISC) and add GPL-3.0.txt to
- > license files
+ > Contains the following security related fixes:
+ >  - Race condition possibility; CWE-362: Concurrent Execution using
+ >    Shared Resource with Improper Synchronization ('Race Condition'):
+ >    https://github.com/LudovicRousseau/PCSC/commit/36c8eae890dc81f0e25ebf0be1c6a969ffd9543a
+ >  - Fix realloc error handling:
+ >    https://github.com/LudovicRousseau/PCSC/commit/430043842e05a300f1dda1b93fcfa8fceadd81e5
+
+ > Update hash of COPYING and remove MIT from licenses because sd-daemon
+ > files were removed:
+ > https://github.com/LudovicRousseau/PCSC/commit/0984e0f4a03e5e29bb5725b6f149f56c9e9c73c2
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
