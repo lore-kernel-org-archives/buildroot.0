@@ -1,78 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 6 Jun 2019 09:35:12 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libupnp18: add
- upstream patch to fix runtime crash with musl
-Message-ID: <20190606073555.38DF18F05B@busybox.osuosl.org>
+Date: Thu, 06 Jun 2019 09:37:41 +0200
+Subject: [Buildroot] [PATCH 1/3] package/pcsc-lite: drop unneeded first
+ patch
+In-Reply-To: <20190518214349.5979-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 18 May 2019 23:43:47 +0200")
+References: <20190518214349.5979-1-fontaine.fabrice@gmail.com>
+Message-ID: <87imtjuptm.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84558f4792488dd2333a38769421b29f4957be8e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Applications build with a musl 1.1.20+ toolchain and linked with libupnpp will
-crash at runtime with `Illegal instruction` as musl is more strict with
-trying to detach an already detached thread resulting in undefined
-behaviour.
+ > This patch is not needed as static build has been disabled since
+ > commit ad8c327053f3736881e1ef6d7b394b3a500ed8fa
 
-Upstream status:
-https://github.com/mrjimenez/pupnp/issues/102
+ > Moreover, pthread dependency should be correclty retrieved from
+ > libusb-1.0.pc
 
-Backported from:
-https://github.com/mrjimenez/pupnp/commit/04b454f693d0c71336252380d08f1d02967e133e
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 165fcefc60f6f4054f01702ae74546f019fbbf9b)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...to-detach-detached-thread-the-result-is-u.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+Committed to 2019.02.x, thanks.
 
-diff --git a/package/libupnp18/0002-Do-not-try-to-detach-detached-thread-the-result-is-u.patch b/package/libupnp18/0002-Do-not-try-to-detach-detached-thread-the-result-is-u.patch
-new file mode 100644
-index 0000000000..601ea89be7
---- /dev/null
-+++ b/package/libupnp18/0002-Do-not-try-to-detach-detached-thread-the-result-is-u.patch
-@@ -0,0 +1,39 @@
-+From 04b454f693d0c71336252380d08f1d02967e133e Mon Sep 17 00:00:00 2001
-+From: Jean-Francois Dockes <jf@dockes.org>
-+Date: Sun, 27 Jan 2019 10:44:17 +0100
-+Subject: [PATCH] Do not try to detach detached thread, the result is
-+ undefined. Fixes issue #102
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Fixes runtime crash with musl 1.1.20+. The problem is that libupnp is
-+calling pthread_detach() on a thread which was created in the detached state.
-+
-+Backported from: 04b454f693d0c71336252380d08f1d02967e133e
-+
-+(cherry picked from commit 386b7ed79146ecf7a3bba49f48cb8f41a9b49170)
-+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-+---
-+ upnp/src/threadutil/ThreadPool.c | 5 -----
-+ 1 file changed, 5 deletions(-)
-+
-+diff --git a/upnp/src/threadutil/ThreadPool.c b/upnp/src/threadutil/ThreadPool.c
-+index d272907..5e590ed 100644
-+--- a/upnp/src/threadutil/ThreadPool.c
-++++ b/upnp/src/threadutil/ThreadPool.c
-+@@ -651,11 +651,6 @@ static int CreateWorker(
-+ 	rc = ithread_create(&temp, &attr, WorkerThread, tp);
-+ 	ithread_attr_destroy(&attr);
-+ 	if (rc == 0) {
-+-		rc = ithread_detach(temp);
-+-		/* ithread_detach will return EINVAL if thread has been
-+-		 successfully detached by ithread_create */
-+-		if (rc == EINVAL)
-+-			rc = 0;
-+ 		tp->pendingWorkerThreadStart = 1;
-+ 		/* wait until the new worker thread starts */
-+ 		while (tp->pendingWorkerThreadStart) {
-+-- 
-+2.21.0
-+
+-- 
+Bye, Peter Korsgaard
