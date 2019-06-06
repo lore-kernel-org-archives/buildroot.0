@@ -1,46 +1,35 @@
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu,  6 Jun 2019 16:40:59 +0200
-Subject: [Buildroot] [PATCH] libgpiod: bump version to v1.4
-Message-ID: <20190606144059.24133-1-brgl@bgdev.pl>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 06 Jun 2019 17:00:14 +0200
+Subject: [Buildroot] [PATCH v2 2/7] package/ffmpeg: re-enable package if
+ BUG_85180 is present
+In-Reply-To: <20190522135906.30796-3-giulio.benetti@micronovasrl.com> (Giulio
+ Benetti's message of "Wed, 22 May 2019 15:59:01 +0200")
+References: <10430096-81de-792a-8b49-c59ed5e9de2e@micronovasrl.com>
+ <20190522135906.30796-1-giulio.benetti@micronovasrl.com>
+ <20190522135906.30796-3-giulio.benetti@micronovasrl.com>
+Message-ID: <87ftomlpxd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
 
-This release mostly affects the testing framework but also contains fixes
-for C++ bindings.
+ > With Microblaze Gcc version < 8.x build hangs on compiling.
+ > This is due to bug 85180:
+ > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180
+ > This package has been excluded from building if BUG_85180 is present.
+ > Bug shows up building ffmpeg with optimization.
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- package/libgpiod/libgpiod.hash | 2 +-
- package/libgpiod/libgpiod.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > In config.mk if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y force using -O0 by:
+ > - add --disable-optimizations to FFMPEG_CONF_OPTS
+ > - passing -O0 to CFLAGS in FFMPEG_CONF_ENV
+ > Then remove 'depends on !BR2_microblaze' from Config.in
 
-diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
-index 6c896622b6..2faa8bbbbb 100644
---- a/package/libgpiod/libgpiod.hash
-+++ b/package/libgpiod/libgpiod.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
--sha256 6ec837f23e8f2196e5976dec4ac81403170830075e7f33ede1394eaf67f2e962  libgpiod-1.3.tar.xz
-+sha256 ebde83aaf14be3abd33e7a90faa487a2ee231e242897afe7fdefb765386b3c8b  libgpiod-1.4.tar.xz
- # Hash for license file
- sha256 ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
-diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
-index 76fa3399dc..07fa050007 100644
---- a/package/libgpiod/libgpiod.mk
-+++ b/package/libgpiod/libgpiod.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBGPIOD_VERSION = 1.3
-+LIBGPIOD_VERSION = 1.4
- LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
- LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
- LIBGPIOD_LICENSE = LGPL-2.1+
+ > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+
+Committed to 2019.02.x, thanks.
+
 -- 
-2.21.0
+Bye, Peter Korsgaard
