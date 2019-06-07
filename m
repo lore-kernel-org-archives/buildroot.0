@@ -1,64 +1,53 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 Jun 2019 10:36:23 +0200
-Subject: [Buildroot] [git commit] Update for 2019.02.3
-Message-ID: <20190607083835.4149A8B7AF@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 7 Jun 2019 10:39:40 +0200
+Subject: [Buildroot] [PATCH v2 2/3] autobuild-run: initial
+ implementation of do_reproducible_build()
+In-Reply-To: <20190607103338.0431cf9e@windsurf>
+References: <20190607064657.3571-1-itsatharva@gmail.com>
+ <20190607064657.3571-2-itsatharva@gmail.com>
+ <20190607103338.0431cf9e@windsurf>
+Message-ID: <e4f040d2-1b8c-73a1-9142-eb4dac4a3570@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c700c8ba7cf3baf72ee99d0f929579cc2c79c808
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Peter: drop Makefile changes]
-(cherry picked from commit 3e8b918b871f484b3ef57832aa41982e368d74c2)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
 
-diff --git a/CHANGES b/CHANGES
-index 35a094b70f..0ab5749aca 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -114,6 +114,38 @@
- 	#11761: Building custom kernel 5.1-rc3 or later breaks on objtool
- 	#11816: Only selected coreutils binaries are installed
- 
-+2019.02.3, Released June 7th, 2019
-+
-+	Important / security related fixes.
-+
-+	Infra: pkg-config: Use a dedicated timestamp file rather than
-+	.config as that gets touched by linux-4.19+, causing repeated
-+	builds.
-+
-+	check-bin-arch: Also ignore /usr/lib/grub to support merged
-+	/usr setups, similar to how /lib/grub is ignored.
-+
-+	gnuconfig/config.sub: Add C-SKY architecture support.
-+
-+	Updated/fixed packages: assimp, atftp, atop, botan, busybox,
-+	ca-certificates, chocolate-doom, cjson, coreutils, cracklib,
-+	ddrescue, dhcp, docker-cli, docker-containerd, docker-engine,
-+	dosfstools, dovecot, dovecot-pigeonhole, dropbear, exim,
-+	ffmpeg, flare-engine, gcc, gdb, gerbera, glibmm, go, gpsd,
-+	gst-ffmpeg, gst1-plugins-bad, gst1-plugins-base, imagemagick,
-+	intel-microcode, jasper, kf5-kcoreaddons, kismet, libcurl,
-+	libglib2, libnss, libopenssl, libsigrok, libssh2, libupnp18,
-+	linuxptp, luajit, lynx, matchbox-panel, mender,
-+	netcat-openbsd, netsurf, nfs-utils, opus, orc, owfs,
-+	pcsc-lite, php, popt, postgresql, python, python-cython,
-+	python-django, python-ply, qt5enginio, rpm, runc, samba4,
-+	sqlite, subversion, supertux, systemd, tslib, uclibc,
-+	v4l2loopback, webkitgtk, woff2
-+
-+	#11816: Only selected coreutils binaries are installed
-+	#11841: grub-efi.cfg not used when building EFI disk image
-+	#11911: systemd v240 memory leak in systemd-journald
-+
- 2019.02.2, Released April 29th, 2019
- 
- 	Important / security related fixes.
+On 07/06/2019 10:33, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Fri,  7 Jun 2019 12:16:56 +0530
+> Atharva Lele <itsatharva@gmail.com> wrote:
+> 
+>> This new function will call do_build() twice to produce two builds
+>> and then check their reproducibility
+>>
+>> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+> 
+> So, if I read the implementation correctly, in this first step, we
+> build twice in the same output path, i.e the only variation between the
+> first and the second build is the time at which the build takes place.
+> 
+> We discussed on IRC that we could easily also change the output path
+> (i.e build location) between the first and second build. But perhaps
+> this is something that is planned to do in a second step, and you want
+> to make progress with a simpler initial solution ?
+
+ Exactly.
+
+ Though the solution with a different output path is probably even simpler, in
+the end.
+
+ The issue, though, is that it requires a bit of refactoring of the
+autobuild-run code, so it takes a bit of time to develop and even more time to
+review. On the other hand, we want to start running reproducibility tests as
+soon as possible, so we can get some results from the autobuilders and have an
+idea of how bad it is.
+
+ Therefore, we've chosen to resubmit the patches with the same output dir and
+hope that they can be applied quickly. Hint, hint :-)
+
+ Regards,
+ Arnout
