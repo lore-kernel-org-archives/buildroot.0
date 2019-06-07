@@ -1,68 +1,89 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 7 Jun 2019 08:40:27 +0200
-Subject: [Buildroot] [git commit] package/brotli: work around gcc bug
- 68485
-In-Reply-To: <87y32ehh34.fsf@dell.be.48ers.dk>
-References: <20190527220327.636798E6D4@busybox.osuosl.org>
- <87y32ehh34.fsf@dell.be.48ers.dk>
-Message-ID: <b01b61c5-4105-efb8-37db-bb5f0479b568@micronovasrl.com>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Fri,  7 Jun 2019 12:16:55 +0530
+Subject: [Buildroot] [PATCH v2 1/3] autobuild-run: initial implementation of
+ check_reproducibility()
+Message-ID: <20190607064657.3571-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Find out differences in built images, if any
 
-Il 06/06/2019 17:24, Peter Korsgaard ha scritto:
->>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
-> 
->   > commit: https://git.buildroot.net/buildroot/commit/?id=39dde1ffb6a7111c2fa2b340c940e4d3e685aa29
->   > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-> 
->   > With Microblaze Gcc version <= 9.x the build fails due to gcc bug 68485:
->   > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. The bug show up when
->   > building brotli with optimization but not when building with -O0. To
->   > work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_68458=y, we force using
->   > -O0.
-> 
->   > Fixes:
-> 
->   >   http://autobuild.buildroot.net/results/d86/d86251974a0a348a64d9a1d1fd7d02dd4aff0792/
-> 
->   > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->   > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->   > ---
->   >  package/brotli/brotli.mk | 4 ++++
->   >  1 file changed, 4 insertions(+)
-> 
->   > diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
->   > index 2c1ad48753..248bfb9daf 100644
->   > --- a/package/brotli/brotli.mk
->   > +++ b/package/brotli/brotli.mk
->   > @@ -14,4 +14,8 @@ BROTLI_CONF_OPTS = \
->   >  	-DBROTLI_DISABLE_TESTS=ON \
->   >  	-DBROTLI_BUNDLED_MODE=OFF
->   
->   > +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
->   > +BROTLI_CONF_OPTS += -DCMAKE_C_FLAGS="-O0"
-> 
-> Hmm, why is this not "$(TARGET_C_FLAGS) -O0" like for the other
-> packages?
+Add diffoscope to list of optional programs
 
-Because CFLAGS were needed only once in that package.
-Anyway, if you say, I can modify it and use a BROTLI_CFLAGS intermediate 
-variable.
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 
-Best regards
+---
+Changes v1 -> v2:
+  - move diffoscope output to results dir (suggested by arnout)
+  - fix make printvars call
+  - Add diffoscope to DEFAULT_OPTIONAL_PROGS
+
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+---
+ scripts/autobuild-run | 41 ++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 40 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index ef2f2a5..5d76583 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -204,7 +204,7 @@ def get_branch():
+ 
+ class SystemInfo:
+     DEFAULT_NEEDED_PROGS = ["make", "git", "gcc"]
+-    DEFAULT_OPTIONAL_PROGS = ["bzr", "java", "javac", "jar"]
++    DEFAULT_OPTIONAL_PROGS = ["bzr", "diffoscope", "java", "javac", "jar"]
+ 
+     def __init__(self):
+         self.needed_progs = list(self.__class__.DEFAULT_NEEDED_PROGS)
+@@ -394,6 +394,45 @@ def stop_on_build_hang(monitor_thread_hung_build_flag,
+                 break
+         monitor_thread_stop_flag.wait(30)
+ 
++def check_reproducibility(**kwargs):
++    """Check reproducibility of builds
++
++    Use diffoscope on the built images, if diffoscope is not
++    installed, fallback to cmp
++    """
++
++    log = kwargs['log']
++    idir = "instance-%d" % kwargs['instance']
++    outputdir = os.path.join(idir, "output")
++    srcdir = os.path.join(idir, "buildroot")
++    diffoscope_output = os.path.join(outputdir, "results", "diffoscope-results.txt")
++    # Using only tar images for now
++    build_1_image = os.path.join(outputdir, "images-1", "rootfs.tar")
++    build_2_image = os.path.join(outputdir, "images", "rootfs.tar")
++
++    # Prefix to point diffoscope towards cross-tools
++    prefix = subprocess.check_output(["make", "O=%s" % outputdir, "-C", srcdir, "printvars", "VARS=TARGET_CROSS"])
++    # Remove TARGET_CROSS= and \n from the string
++    prefix = prefix[13:-1]
++
++    if kwargs['sysinfo'].has("diffoscope"):
++        log_write(log, "INFO: running diffoscope on images")
++        ret = subprocess.call(["diffoscope", build_1_image, build_2_image,
++                            "--tool-prefix-binutils", prefix,
++                            "--text", diffoscope_output])
++    else:
++        if e.errno == errno.ENOENT:
++            log_write(log, "INFO: diffoscope not installed, falling back to cmp")
++        ret = subprocess.call(["cmp", "build_1_image", "build_2_image", "-b", ">", diffoscope_output])
++    
++    if ret != 0:
++        log_write(log, "INFO: Build is non-reproducible.")
++        return -1
++    
++    # rootfs images match byte-for-byte -> reproducible image
++    log_write(log, "INFO: Build is reproducible!")
++    return 0
++
+ def do_build(**kwargs):
+     """Run the build itself"""
+ 
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.20.1
