@@ -1,83 +1,54 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  7 Jun 2019 23:49:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iputils: fix static build with
- gcrypt
-Message-ID: <20190607214931.30262-1-fontaine.fabrice@gmail.com>
+Date: Fri, 7 Jun 2019 23:52:21 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2019-06-05 (meson rpath problem)
+In-Reply-To: <20190606211454.GA5153@x230>
+References: <5cf8ac0a.1c69fb81.34b7d.30a7SMTPIN_ADDED_MISSING@mx.google.com>
+ <20190606211454.GA5153@x230>
+Message-ID: <CAPi7W81wCUmD9picZpprpRDD4Fbv7QUpcxZkCUc38AvQux2U5Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.net/results/fb698e3e903869978bd5e69d791ec362317b7981
+Dear Petr,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...n.build-fix-static-build-with-gcrypt.patch | 55 +++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100644 package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
+Le jeu. 6 juin 2019 ? 23:14, Petr Vorel <petr.vorel@gmail.com> a ?crit :
+>
+> Hi,
+>
+> > This is the list of Buildroot build failures that occured on
+> > 2019-06-05, and for which you are a registered architecture developer
+> > or package developer. Please help us improving the quality of
+> > Buildroot by investigating those build failures and sending patches to
+> > fix them. Thanks!
+>
+> > Results for the 'master' branch
+> > ===============================
+>
+> > Build failures related to your packages:
+>
+> >         i586 |              iputils-s20190515 | http://autobuild.buildroot.net/results/fb698e3e903869978bd5e69d791ec362317b7981
+>
+> Errors are like
+> visibility.c:(.text+0x1a): undefined reference to `gpg_strerror'
+> look like rpath issue similar to [1]. But I have no clue how to fix it in meson,
+> which iputils uses. There are requirements for it in upstream [2], lack of it
+> leaded us [3] (and openembedded [4]) to workaround it. But that's obviously not
+> enough for i586 build. Any tip / hint to fix it?
+This is a "common" static build issue due to the fact that gcrypt does
+not provide a pkgconfig file. To find gpg-error, a call to
+cc.find_library must be added. I sent a patch a few minutes ago.
+>
+>
+> Kind regards,
+> Petr
+>
+> [1] https://patchwork.ozlabs.org/patch/763789/
+> [2] https://github.com/mesonbuild/meson/issues/2567
+> [3] https://git.busybox.net/buildroot/tree/package/meson/0001-Only-fix-RPATH-if-install_rpath-is-not-empty.patch
+> [4] http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-devtools/meson/meson/disable-rpath-handling.patch?h=master
+Best Regards,
 
-diff --git a/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch b/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
-new file mode 100644
-index 0000000000..de58b7e03e
---- /dev/null
-+++ b/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
-@@ -0,0 +1,55 @@
-+From 940f19a51e334ac23a4bc43bbcb17dfc5cea3cf0 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 7 Jun 2019 23:17:13 +0200
-+Subject: [PATCH] meson.build: fix static build with gcrypt
-+
-+Use dependency instead of cc.find_library to find gcrypt dependencies
-+such as gpg-error otherwise static build will fail
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/fb698e3e903869978bd5e69d791ec362317b7981
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/iputils/iputils/pull/185]
-+---
-+ meson.build        | 3 ++-
-+ ninfod/meson.build | 2 +-
-+ 2 files changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 84e4360..68de2b0 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -106,6 +106,7 @@ if crypto == 'nettle'
-+ 	conf.set('USE_NETTLE', 1, description : 'If set use nettle crypto library.')
-+ elif crypto == 'gcrypt'
-+ 	crypto_dep = cc.find_library('gcrypt')
-++	gpg_error_dep = cc.find_library('gpg-error')
-+ 	conf.set('USE_GCRYPT', 1, description : 'If set use gcrypt crypto library.')
-+ elif crypto == 'openssl'
-+ 	crypto_dep = dependency('openssl')
-+@@ -241,7 +242,7 @@ libcommon = static_library(
-+ 
-+ if build_ping == true
-+ 	executable('ping', ['ping.c', 'ping_common.c', 'ping6_common.c', git_version_h],
-+-		dependencies : [m_dep, cap_dep, idn_dep, crypto_dep, resolv_dep],
-++		dependencies : [m_dep, cap_dep, idn_dep, crypto_dep, gpg_error_dep, resolv_dep],
-+ 		link_with : [libcommon],
-+ 		install: true)
-+ 	meson.add_install_script('build-aux/setcap-setuid.sh',
-+diff --git a/ninfod/meson.build b/ninfod/meson.build
-+index a0ee94d..1e7aa26 100644
-+--- a/ninfod/meson.build
-++++ b/ninfod/meson.build
-+@@ -10,7 +10,7 @@ ninfod_sources = files('''
-+ 	ninfod_name.c
-+ '''.split())
-+ executable('ninfod', [ninfod_sources, git_version_h],
-+-	dependencies : [cap_dep, crypto_dep, rt_dep, threads],
-++	dependencies : [cap_dep, crypto_dep, gpg_error_dep, rt_dep, threads],
-+ 	link_with : [libcommon],
-+ 	include_directories : inc,
-+ 	install: true,
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+Fabrice
