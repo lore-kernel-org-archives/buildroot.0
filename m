@@ -1,47 +1,37 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Fri,  7 Jun 2019 12:16:57 +0530
-Subject: [Buildroot] [PATCH v2 3/3] autobuild-run: do reproducible builds
- tests if BR2_REPRODUCIBLE=y
-In-Reply-To: <20190607064657.3571-1-itsatharva@gmail.com>
-References: <20190607064657.3571-1-itsatharva@gmail.com>
-Message-ID: <20190607064657.3571-3-itsatharva@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 07 Jun 2019 08:52:59 +0200
+Subject: [Buildroot] [git commit] package/brotli: work around gcc bug
+ 68485
+In-Reply-To: <b01b61c5-4105-efb8-37db-bb5f0479b568@micronovasrl.com> (Giulio
+ Benetti's message of "Fri, 7 Jun 2019 08:40:27 +0200")
+References: <20190527220327.636798E6D4@busybox.osuosl.org>
+ <87y32ehh34.fsf@dell.be.48ers.dk>
+ <b01b61c5-4105-efb8-37db-bb5f0479b568@micronovasrl.com>
+Message-ID: <87imthdgz8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
 
----
-Changes v1 -> v2:
-  - add trailing newline character to BR2_REPRODUCIBLE=y (suggested by arnout)
+Hi,
 
-Signed-off-by: Atharva Lele <itsatharva@gmail.com>
----
- scripts/autobuild-run | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ >> > +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
+ >> > +BROTLI_CONF_OPTS += -DCMAKE_C_FLAGS="-O0"
+ >> 
+ >> Hmm, why is this not "$(TARGET_C_FLAGS) -O0" like for the other
+ >> packages?
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index a4ddb5b..bdbb48b 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -731,7 +731,15 @@ def run_instance(**kwargs):
-             log_write(kwargs['log'], "WARN: failed to generate configuration")
-             continue
- 
--        ret = do_build(**kwargs)
-+        # Check if the build test is supposed to be a reproducible test
-+        outputdir = os.path.abspath(os.path.join(idir, "output"))
-+        with open(os.path.join(outputdir, ".config"), "r") as fconf:
-+            if "BR2_REPRODUCIBLE=y\n" in fconf.read():
-+                log_write(kwargs['log'], "INFO: Reproducible Build Test")
-+                ret = do_reproducible_build(**kwargs)
-+            else:
-+                log_write(kwargs['log'], "INFO: Non Reproducible Build Test")
-+                ret = do_build(**kwargs)
- 
-         send_results(ret, **kwargs)
- 
+ > Because CFLAGS were needed only once in that package.
+
+Yes, but we should still pass TARGET_CFLAGS as well.
+
+ > Anyway, if you say, I can modify it and use a BROTLI_CFLAGS
+ > intermediate variable.
+
+That is less important, but we shouldn't drop TARGET_CFLAGS.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
