@@ -1,61 +1,98 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 7 Jun 2019 10:26:25 +0200
-Subject: [Buildroot] [PATCH 1/1] utils/genrandconfing: randomly enable
- BR2_REPRODUCIBLE 10% of the times
-In-Reply-To: <20190607081559.327-1-itsatharva@gmail.com>
-References: <20190607081559.327-1-itsatharva@gmail.com>
-Message-ID: <ceec03d9-abba-e911-0b31-3d026f2f172a@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 07 Jun 2019 10:28:44 +0200
+Subject: [Buildroot] Buildroot 2019.02.3 released
+Message-ID: <87ef45dcjn.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi,
 
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-On 07/06/2019 10:15, Atharva Lele wrote:
-> Initial patch to start reproducibility testing.
-> 
-> Also enable tar filesystem to compare images since diffoscope works well
-> with tar.
-> 
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-> ---
->  utils/genrandconfig | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/utils/genrandconfig b/utils/genrandconfig
-> index 5f3fe23260..b7d7bf7763 100755
-> --- a/utils/genrandconfig
-> +++ b/utils/genrandconfig
-> @@ -366,6 +366,14 @@ def gen_config(args):
->      if randint(0, 4) == 0:
->          configlines.append("BR2_SYSTEM_ENABLE_NLS=y\n")
->  
-> +    # Randomly enable BR2_REPRODUCIBLE 10% of times
-> +    # also enable tar filesystem images for testing
-> +    if randint(0, 10) == 0:
-> +        configlines.append("BR2_REPRODUCIBLE=y\n")
-> +        configlines.append("BR2_TARGET_ROOTFS_TAR=y\n")
-> +        configlines.append("BR2_TARGET_ROOTFS_TAR_NONE=y\n")
-> +        configlines.append("BR2_TARGET_ROOTFS_TAR_OPTIONS=\"\"\n")
+Buildroot 2019.02.3 is released - Go download it at:
 
- Both of these last two lines are the defaults, nobody else is going to set
-them, so there's no need to set them explicitly.
+http://buildroot.org/downloads/buildroot-2019.02.3.tar.gz
 
- Other than that,
+or
 
- Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+http://buildroot.org/downloads/buildroot-2019.02.3.tar.bz2
 
-[In other words: if you respin the patch according to the feedback I gave, you
-can add my Reviewed-by tag. But I don't want to add it to this version, that's
-why it's indented with a space, so patchwork doesn't pick it up.]
+Or get it from Git:
 
- Regards,
- Arnout
+git://git.buildroot.org/buildroot
 
-> +
->      # Write out the configuration file
->      if not os.path.exists(args.outputdir):
->          os.makedirs(args.outputdir)
-> 
+Buildroot 2019.02.3 is a bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2019.02.2 release.
+
+- Infra: pkg-config: Use a dedicated timestamp file rather than
+  .config as that gets touched by linux-4.19+, causing repeated
+  builds.
+
+- check-bin-arch: Also ignore /usr/lib/grub to support merged
+  /usr setups, similar to how /lib/grub is ignored.
+
+- gnuconfig/config.sub: Add C-SKY architecture support.
+
+- Security fixes for atftp, cjson, dovecot, exim, gst1-plugins-base,
+  imagemagick, intel-microcode, libcurl, libnss, libopenssl, pcsc-lite,
+  php, postgresql, python, python-django, samba4, sqlite, webkitgtk
+
+- Fixes for download/compilation/runtime issues in assimp, atop, botan,
+  chocolate-doom, coreutils, cracklib, ddrescue, docker-cli,
+  docker-containerd, docker-engine, dosfstools, ffmpeg, flare-engine,
+  gcc, gdb, gerbera, glibmm, go, gpsd, gst-ffmpeg, gst1-plugins-bad,
+  jasper, kf5-kcoreaddons, kismet, libglib2, libssh2, libupnp18,
+  linuxptp, lynx, matchbox-panel, mender, netcat-openbsd, netsurf,
+  nfs-utils, opus, orc, owfs, pcsc-lite, postgresql, python-cython,
+  qt5enginio, rpm, runc, samba4, subversion, supertux, systemd, tslib,
+  uclibc, v4l2loopback
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.3
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2019.02.2..
+
+    35  Peter Korsgaard
+    25  Fabrice Fontaine
+    18  Peter Seiderer
+    15  Giulio Benetti
+     6  Bernd Kuhls
+     6  Thomas Petazzoni
+     5  J?rg Krause
+     4  Christian Stewart
+     3  Mirza Krak
+     3  Vadim Kochan
+     2  Adam Duskett
+     2  Angelo Compagnucci
+     2  Arnout Vandecappelle (Essensium/Mind)
+     2  Asaf Kahlon
+     2  James Hilliard
+     2  Markus Mayer
+     2  Martin Kepplinger
+     2  Yann E. MORIN
+     1  Adrian Perez de Castro
+     1  Alex Xu
+     1  Artem Panfilov
+     1  Charlie Turner
+     1  Francois Perrad
+     1  Grzegorz Blach
+     1  Guo Ren
+     1  John Keeping
+     1  Jonah Petri
+     1  Max Filippov
+     1  Petr Vorel
+     1  Romain Naour
+     1  Yegor Yefremov
+
+-- 
+Bye, Peter Korsgaard
