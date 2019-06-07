@@ -1,42 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 7 Jun 2019 10:44:34 +0200
-Subject: [Buildroot] [PATCH v2 2/3] autobuild-run: initial
- implementation of do_reproducible_build()
-In-Reply-To: <e4f040d2-1b8c-73a1-9142-eb4dac4a3570@mind.be>
-References: <20190607064657.3571-1-itsatharva@gmail.com>
- <20190607064657.3571-2-itsatharva@gmail.com>
- <20190607103338.0431cf9e@windsurf>
- <e4f040d2-1b8c-73a1-9142-eb4dac4a3570@mind.be>
-Message-ID: <20190607104434.7ba3712d@windsurf>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Fri,  7 Jun 2019 14:25:58 +0530
+Subject: [Buildroot] [PATCH v2 1/1] utils/genrandconfing: randomly enable
+ BR2_REPRODUCIBLE 10% of the times
+Message-ID: <20190607085558.1580-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 7 Jun 2019 10:39:40 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
+Initial patch to start reproducibility testing.
 
->  Exactly.
-> 
->  Though the solution with a different output path is probably even simpler, in
-> the end.
-> 
->  The issue, though, is that it requires a bit of refactoring of the
-> autobuild-run code, so it takes a bit of time to develop and even more time to
-> review. On the other hand, we want to start running reproducibility tests as
-> soon as possible, so we can get some results from the autobuilders and have an
-> idea of how bad it is.
+Also enable tar filesystem to compare images since diffoscope works well
+with tar.
 
-Makes sense.
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 
->  Therefore, we've chosen to resubmit the patches with the same output dir and
-> hope that they can be applied quickly. Hint, hint :-)
+---
+Changes v1 -> v2:
+  - Remove unnecessary lines that were default anyway (suggested by Arnout)
 
-Hehe :-)
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+---
+ utils/genrandconfig | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Thomas
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 5f3fe23260..aa5e151b7f 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -366,6 +366,12 @@ def gen_config(args):
+     if randint(0, 4) == 0:
+         configlines.append("BR2_SYSTEM_ENABLE_NLS=y\n")
+ 
++    # Randomly enable BR2_REPRODUCIBLE 10% of times
++    # also enable tar filesystem images for testing
++    if randint(0, 10) == 0:
++        configlines.append("BR2_REPRODUCIBLE=y\n")
++        configlines.append("BR2_TARGET_ROOTFS_TAR=y\n")
++
+     # Write out the configuration file
+     if not os.path.exists(args.outputdir):
+         os.makedirs(args.outputdir)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
