@@ -1,100 +1,64 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 7 Jun 2019 10:38:42 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2019.02.3
-Message-ID: <20190607083835.562CA83C44@busybox.osuosl.org>
+Date: Fri, 7 Jun 2019 10:36:23 +0200
+Subject: [Buildroot] [git commit] Update for 2019.02.3
+Message-ID: <20190607083835.4149A8B7AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e15c6b6c1de14aa91fce02aa98b37f89c5ac54d3
+commit: https://git.buildroot.net/buildroot/commit/?id=c700c8ba7cf3baf72ee99d0f929579cc2c79c808
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[Peter: drop Makefile changes]
+(cherry picked from commit 3e8b918b871f484b3ef57832aa41982e368d74c2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ CHANGES | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 3fe5833727..ac25140e6a 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -8,37 +8,37 @@
-     <div class="panel-heading">Download</div>
-     <div class="panel-body">
+diff --git a/CHANGES b/CHANGES
+index 35a094b70f..0ab5749aca 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -114,6 +114,38 @@
+ 	#11761: Building custom kernel 5.1-rc3 or later breaks on objtool
+ 	#11816: Only selected coreutils binaries are installed
  
--      <h3 style="text-align: center;">Latest long term support release: <b>2019.02.2</b></h3>
-+      <h3 style="text-align: center;">Latest long term support release: <b>2019.02.3</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.02.2.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2019.02.2.tar.gz">buildroot-2019.02.2.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2019.02.2.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.02.3.tar.gz">buildroot-2019.02.3.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.02.3.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.02.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.02.2.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.02.3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2019.02.2.tar.bz2">buildroot-2019.02.2.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2019.02.2.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.02.3.tar.bz2">buildroot-2019.02.3.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.02.3.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index edcfb94d65..8d38108eb7 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li class="timeline-inverted">
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2019.02.3 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>7 June 2019</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2019.02.3 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2019.02.2 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.3">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-June/252046.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2019.02.3.tar.bz2">2019.02.3 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
++2019.02.3, Released June 7th, 2019
 +
-   <li>
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
++	Important / security related fixes.
++
++	Infra: pkg-config: Use a dedicated timestamp file rather than
++	.config as that gets touched by linux-4.19+, causing repeated
++	builds.
++
++	check-bin-arch: Also ignore /usr/lib/grub to support merged
++	/usr setups, similar to how /lib/grub is ignored.
++
++	gnuconfig/config.sub: Add C-SKY architecture support.
++
++	Updated/fixed packages: assimp, atftp, atop, botan, busybox,
++	ca-certificates, chocolate-doom, cjson, coreutils, cracklib,
++	ddrescue, dhcp, docker-cli, docker-containerd, docker-engine,
++	dosfstools, dovecot, dovecot-pigeonhole, dropbear, exim,
++	ffmpeg, flare-engine, gcc, gdb, gerbera, glibmm, go, gpsd,
++	gst-ffmpeg, gst1-plugins-bad, gst1-plugins-base, imagemagick,
++	intel-microcode, jasper, kf5-kcoreaddons, kismet, libcurl,
++	libglib2, libnss, libopenssl, libsigrok, libssh2, libupnp18,
++	linuxptp, luajit, lynx, matchbox-panel, mender,
++	netcat-openbsd, netsurf, nfs-utils, opus, orc, owfs,
++	pcsc-lite, php, popt, postgresql, python, python-cython,
++	python-django, python-ply, qt5enginio, rpm, runc, samba4,
++	sqlite, subversion, supertux, systemd, tslib, uclibc,
++	v4l2loopback, webkitgtk, woff2
++
++	#11816: Only selected coreutils binaries are installed
++	#11841: grub-efi.cfg not used when building EFI disk image
++	#11911: systemd v240 memory leak in systemd-journald
++
+ 2019.02.2, Released April 29th, 2019
+ 
+ 	Important / security related fixes.
