@@ -1,40 +1,67 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Fri,  7 Jun 2019 19:13:14 +0200
-Subject: [Buildroot] [PATCH] package/luarocks: bump to version 3.1.3
-Message-ID: <20190607171314.28685-1-francois.perrad@gadz.org>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Fri,  7 Jun 2019 19:34:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libevent: bump to version 2.1.10
+Message-ID: <1559928848-27814-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/luarocks/luarocks.hash | 2 +-
- package/luarocks/luarocks.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+See: https://github.com/libevent/libevent/releases/tag/release-2.1.10-stable
 
-diff --git a/package/luarocks/luarocks.hash b/package/luarocks/luarocks.hash
-index 6936bfbbb..0e65659c4 100644
---- a/package/luarocks/luarocks.hash
-+++ b/package/luarocks/luarocks.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 72a3b74f05b7fd011eed894dc34193ee80b3235fe58016ac9ffdbfceecc88950  luarocks-3.1.2.tar.gz
-+sha256 c573435f495aac159e34eaa0a3847172a2298eb6295fcdc35d565f9f9b990513  luarocks-3.1.3.tar.gz
- sha256 542ad0ee9b8ba582437ca7b4d0959c9b9432f25d2067f144d017188a7a84dd2f  COPYING
-diff --git a/package/luarocks/luarocks.mk b/package/luarocks/luarocks.mk
-index 0d05b448a..d7d0e4077 100644
---- a/package/luarocks/luarocks.mk
-+++ b/package/luarocks/luarocks.mk
+Also fix check-package warning.
+
+Fixes:
+
+$. ./utils/check-package package/libevent/* -v
+package/libevent/0001-Disable-building-test-programs.patch:4: generate your patches with 'git format-patch -N'
+Subject: [PATCH 1/2] Disable building test programs
+76 lines processed
+1 warnings generated
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/libevent/0001-Disable-building-test-programs.patch | 2 +-
+ package/libevent/libevent.hash                             | 2 +-
+ package/libevent/libevent.mk                               | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libevent/0001-Disable-building-test-programs.patch b/package/libevent/0001-Disable-building-test-programs.patch
+index a1ce774..cac05ec 100644
+--- a/package/libevent/0001-Disable-building-test-programs.patch
++++ b/package/libevent/0001-Disable-building-test-programs.patch
+@@ -1,7 +1,7 @@
+ From 4b5a135fa681e85eb6988a379f59f3c7a41cc48c Mon Sep 17 00:00:00 2001
+ From: Gilles Talis <gilles.talis@gmail.com>
+ Date: Fri, 21 Jun 2013 15:25:11 -0700
+-Subject: [PATCH 1/2] Disable building test programs
++Subject: [PATCH] Disable building test programs
+ 
+ We are not really interested in building test programs.
+ Moreover, these programs use fork() function that is
+diff --git a/package/libevent/libevent.hash b/package/libevent/libevent.hash
+index aa0358b..8933197 100644
+--- a/package/libevent/libevent.hash
++++ b/package/libevent/libevent.hash
+@@ -1,4 +1,4 @@
+ # locally computed
+ md5	f3eeaed018542963b7d2416ef1135ecc	libevent-2.1.8-stable.tar.gz
+-sha1	2a1b8bb7a262d3fd0ed6a080a20991a6eed675ec	libevent-2.1.8-stable.tar.gz
++sha1	609b14bd2eeb3b48272b607656fa9e1d3318c5e2	libevent-2.1.10-stable.tar.gz
+ sha256	ff02effc9b331edcdac387d198691bfa3e575e7d244ad10cb826aa51ef085670	LICENSE
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index f0c989a..e0c0b25 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUAROCKS_VERSION = 3.1.2
-+LUAROCKS_VERSION = 3.1.3
- LUAROCKS_SITE = http://luarocks.org/releases
- LUAROCKS_LICENSE = MIT
- LUAROCKS_LICENSE_FILES = COPYING
+-LIBEVENT_VERSION = 2.1.8-stable
++LIBEVENT_VERSION = 2.1.10-stable
+ LIBEVENT_SITE = https://github.com/libevent/libevent/releases/download/release-$(LIBEVENT_VERSION)
+ LIBEVENT_INSTALL_STAGING = YES
+ LIBEVENT_LICENSE = BSD-3-Clause, OpenBSD
 -- 
-2.20.1
+2.7.4
