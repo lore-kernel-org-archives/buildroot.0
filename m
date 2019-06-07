@@ -1,49 +1,75 @@
-From: Thomas Huth <huth@tuxfamily.org>
-Date: Fri, 7 Jun 2019 09:19:15 +0200
-Subject: [Buildroot] [PATCH] package/kmsxx: work around gcc bug 85180
-In-Reply-To: <7edbb3f8-65fa-4ea5-c2b4-e60b387ddac2@micronovasrl.com>
-References: <20190606131035.47417-1-giulio.benetti@micronovasrl.com>
- <20190607080838.46d5065d@thl530.multi.box>
- <7edbb3f8-65fa-4ea5-c2b4-e60b387ddac2@micronovasrl.com>
-Message-ID: <20190607091915.284a4c74@thl530.multi.box>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 7 Jun 2019 09:36:49 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] Update for 2019.02.3
+Message-ID: <20190607073747.BA8218375A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Fri, 7 Jun 2019 08:39:07 +0200
-schrieb Giulio Benetti <giulio.benetti@micronovasrl.com>:
+commit: https://git.buildroot.net/buildroot/commit/?id=3e8b918b871f484b3ef57832aa41982e368d74c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-> Hello Thomas H.,
-> 
-> adding Thomas P.+
-> 
-> Il 07/06/2019 08:08, Thomas Huth ha scritto:
-> > Am Thu,  6 Jun 2019 15:10:35 +0200
-> > schrieb Giulio Benetti <giulio.benetti@micronovasrl.com>:
-> >   
-> >> With Microblaze Gcc version < 8.x the build hangs due to gcc bug
-> >> 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-> >> shows up when building kmsxx with optimization but not when
-> >> building with -O0. To work around this, if
-> >> BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.  
-> > 
-> > According to the description in the bugzilla, the bug should also go
-> > away when compiling with -fno-dse ... so wouldn't it be better to
-> > use "-fno-dse" here instead of disabling the optimizations
-> > completely?  
-> 
-> Honestly I've completely missed that possible solution and didn't
-> even tested.
-> 
-> Anyway it's been discussed on IRC channel to keep a common work
-> around for every different GCC_BUG_*, so since many packages are
-> affected by Bug 85180 and -O0 seemed to work every time Thomas P.
-> suggested to always keep that flag as solution.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES  | 32 ++++++++++++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 34 insertions(+), 2 deletions(-)
 
-Well, if -fno-dse is also "fixing" this bug, maybe you could add
-"-fno-dse" to the global compiler flags instead of manually fixing each
-and every package with -O0? ... anyway, just my 0.02 ?.
-
- Thomas H
+diff --git a/CHANGES b/CHANGES
+index e5021f7f90..e3d7ad3bf8 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,35 @@
++2019.02.3, Released June 7th, 2019
++
++	Important / security related fixes.
++
++	Infra: pkg-config: Use a dedicated timestamp file rather than
++	.config as that gets touched by linux-4.19+, causing repeated
++	builds.
++
++	check-bin-arch: Also ignore /usr/lib/grub to support merged
++	/usr setups, similar to how /lib/grub is ignored.
++
++	gnuconfig/config.sub: Add C-SKY architecture support.
++
++	Updated/fixed packages: assimp, atftp, atop, botan, busybox,
++	ca-certificates, chocolate-doom, cjson, coreutils, cracklib,
++	ddrescue, dhcp, docker-cli, docker-containerd, docker-engine,
++	dosfstools, dovecot, dovecot-pigeonhole, dropbear, exim,
++	ffmpeg, flare-engine, gcc, gdb, gerbera, glibmm, go, gpsd,
++	gst-ffmpeg, gst1-plugins-bad, gst1-plugins-base, imagemagick,
++	intel-microcode, jasper, kf5-kcoreaddons, kismet, libcurl,
++	libglib2, libnss, libopenssl, libsigrok, libssh2, libupnp18,
++	linuxptp, luajit, lynx, matchbox-panel, mender,
++	netcat-openbsd, netsurf, nfs-utils, opus, orc, owfs,
++	pcsc-lite, php, popt, postgresql, python, python-cython,
++	python-django, python-ply, qt5enginio, rpm, runc, samba4,
++	sqlite, subversion, supertux, systemd, tslib, uclibc,
++	v4l2loopback, webkitgtk, woff2
++
++	#11816: Only selected coreutils binaries are installed
++	#11841: grub-efi.cfg not used when building EFI disk image
++	#11911: systemd v240 memory leak in systemd-journald
++
+ 2019.02.2, Released April 29th, 2019
+ 
+ 	Important / security related fixes.
+diff --git a/Makefile b/Makefile
+index c510b7cbaa..2c8146e87a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2019.02.2
++export BR2_VERSION := 2019.02.3
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1556527000
++BR2_VERSION_EPOCH = 1559893000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
