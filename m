@@ -1,79 +1,81 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Sat, 8 Jun 2019 14:02:35 -0400
-Subject: [Buildroot] [PATCH 1/1] package/meson: Fix linking of
- shared/static libs with static libs
-In-Reply-To: <20190521185447.2de12554@gmx.net>
-References: <20190514184245.92222-1-aduskett@gmail.com>
- <20190518215637.2ea2ea51@windsurf>
- <20190520202615.37fbd048@gmx.net> <20190520204517.52564b80@windsurf.home>
- <20190521185447.2de12554@gmx.net>
-Message-ID: <CAFSsvmrURSufHb2dV+fLcLmpJXRON=yLqAg0G_FZRsnDDD=QrQ@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 8 Jun 2019 20:45:15 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gst1-plugins-bad:
+ bluez-plugin depends on bluez5_utils
+Message-ID: <20190608184649.0F9AD8B4DD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello;
+commit: https://git.buildroot.net/buildroot/commit/?id=7c28f2d659c05cf1af1f6051d0668a252457dc0e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-I asked for an update on this pull request on github here:
-https://github.com/mesonbuild/meson/pull/3939#issuecomment-492355588
+autotools doesn't throw an error if bluez_utils is found and is older than
+version 5. It just doesn't build the plugin. As such, select bluez5_utils
+instead. This was found with the meson conversion, because meson does
+throw an error.
 
-And it seems that the general consensus will be to fix the link_whole behavior,
-but strip out or rework a lot of this patch. Mainly because many other projects
-already have workarounds, such as gstreamer, mesa, and libglib.
+All dependencies of bluez5_utils are added, though some of them are
+already implicit by gstreamer1 itself. This simplifies things if the
+dependencies change in the future (suggested by Thomas).
 
-On Tue, May 21, 2019 at 12:54 PM Peter Seiderer <ps.report@gmx.net> wrote:
->
-> Hello Thomas,
->
-> On Mon, 20 May 2019 20:45:17 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->
-> > Hello Peter,
-> >
-> > Thanks for your feedback!
-> >
-> > On Mon, 20 May 2019 20:26:15 +0200
-> > Peter Seiderer <ps.report@gmx.net> wrote:
-> >
-> > > I can confirm the patch fixes the gstreamer static build/static libs
-> > > problem (see [1])....
-> > >
-> > > But as it is a (not yet) upstream committed bugfix, maybe it is better to
-> > > wait for a upstream committ and/or next meson version bump?
-> >
-> > That would of course be the best approach...
-> >
-> > > On the other side the gstreamer folks where bored with waiting for the
-> > > meson fix to be accepted and committed an workaround for the problem
-> > > already (see [2])...
-> > >
-> > > Conclusion: Take the patch in case there is already a buildroot
-> > > in-tree package which needs the fix (or commit the patch with
-> > > in series with a in-tree user), otherwise wait for meson
-> > > upstream...
-> >
-> > ... however, if it starts holding off bumping too many packages, I
-> > guess we'll have to take this patch. Having to add a !BR2_STATIC_LIBS
-> > dependency to libglib2 would be really horrible, considering the number
-> > of reverse dependencies that libglib2 has.
->
-> As far as I know only gstreamer itself is affected (the only package
-> linking a static library using an internal static helper library)?
-> But the first other package affected by this bug justifies the
-> patch applied ;-)
->
-> >
-> > At least, if the problem is acknowledged upstream, we know it will be
-> > fixed at some point. Perhaps not with the exact patch we will have, but
-> > at least it will be fixed, which means we won't have to carry this
-> > patch forever.
->
-> Yes...
->
-> Regards,
-> Peter
->
-> >
-> > Thomas
->
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[Arnout: add bluez5_utils comment to dependencies, extend commit log]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/gstreamer1/gst1-plugins-bad/Config.in      | 22 +++++++++++++++-------
+ .../gst1-plugins-bad/gst1-plugins-bad.mk           |  2 +-
+ 2 files changed, 16 insertions(+), 8 deletions(-)
+
+diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+index e1e7b05a59..fa04a23bdf 100644
+--- a/package/gstreamer1/gst1-plugins-bad/Config.in
++++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+@@ -310,17 +310,25 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_ASSRENDER
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BLUEZ
+ 	bool "bluez"
+-	depends on !BR2_STATIC_LIBS # bluez_utils
+-	depends on BR2_USE_WCHAR # bluez_utils
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez_utils
+-	depends on BR2_USE_MMU # bluez_utils
+-	select BR2_PACKAGE_BLUEZ_UTILS
++	depends on BR2_USE_WCHAR # bluez5_utils -> libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # bluez5_utils -> dbus, libglib2
++	depends on BR2_USE_MMU # bluez5_utils -> dbus
++	depends on !BR2_STATIC_LIBS # bluez5_utils -> uses dlfcn
++	depends on !BR2_PACKAGE_BLUEZ_UTILS # bluez5_utils -> conflicts with 4.x version
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # bluez5_utils
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # bluez5_utils
++	select BR2_PACKAGE_BLUEZ5_UTILS
+ 	help
+ 	  Bluetooth audio A2DP/AVDTP sink, AVDTP source plugin
+ 
+-comment "bluez plugin needs a toolchain w/ wchar, threads, dynamic library"
++comment "bluez plugin needs a toolchain w/ wchar, threads, headers >= 3.4, dynamic library"
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 || BR2_STATIC_LIBS
++	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
++
++comment "bluez plugin conflicts with older bluez-utils version"
++	depends on BR2_PACKAGE_BLUEZ_UTILS
+ 
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BZ2
+ 	bool "bz2"
+diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+index 32edde4901..e21ffae3d9 100644
+--- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
++++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+@@ -84,7 +84,7 @@ GST1_PLUGINS_BAD_CONF_OPTS += --enable-orc
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_BLUEZ),y)
+-GST1_PLUGINS_BAD_DEPENDENCIES += bluez_utils
++GST1_PLUGINS_BAD_DEPENDENCIES += bluez5_utils
+ GST1_PLUGINS_BAD_CONF_OPTS += --enable-bluez
+ else
+ GST1_PLUGINS_BAD_CONF_OPTS += --disable-bluez
