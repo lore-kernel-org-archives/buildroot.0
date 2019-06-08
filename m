@@ -1,99 +1,111 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 8 Jun 2019 22:32:38 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/iputils: fix static build with gcrypt
-In-Reply-To: <20190608193929.6484-1-fontaine.fabrice@gmail.com>
-References: <20190608193929.6484-1-fontaine.fabrice@gmail.com>
-Message-ID: <4468d909-0bf9-939a-39e3-c57fb1f52aaa@mind.be>
+Date: Sat, 8 Jun 2019 22:40:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/meson: Fix linking of
+ shared/static libs with static libs
+In-Reply-To: <CAFSsvmrURSufHb2dV+fLcLmpJXRON=yLqAg0G_FZRsnDDD=QrQ@mail.gmail.com>
+References: <20190514184245.92222-1-aduskett@gmail.com>
+ <20190518215637.2ea2ea51@windsurf> <20190520202615.37fbd048@gmx.net>
+ <20190520204517.52564b80@windsurf.home> <20190521185447.2de12554@gmx.net>
+ <CAFSsvmrURSufHb2dV+fLcLmpJXRON=yLqAg0G_FZRsnDDD=QrQ@mail.gmail.com>
+Message-ID: <5872cf77-632a-9881-b53e-bffaef22d1cd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Adam,
 
-
-On 08/06/2019 21:39, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.net/results/fb698e3e903869978bd5e69d791ec362317b7981
+On 08/06/2019 20:02, Adam Duskett wrote:
+> Hello;
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> I asked for an update on this pull request on github here:
+> https://github.com/mesonbuild/meson/pull/3939#issuecomment-492355588
 
- Applied to master, thanks.
+ Thanks for following this up.
+
+> 
+> And it seems that the general consensus will be to fix the link_whole behavior,
+> but strip out or rework a lot of this patch. Mainly because many other projects
+> already have workarounds, such as gstreamer, mesa, and libglib.
+
+ I read the following:
+
+"I don't think this PR can go in as-is anymore because projects have added
+workarounds that will cause errors now. I think the last time I checked, Mesa
+was one such project."
+
+
+ So maybe we should just try to combine this patch with Mesa master converted to
+meson, and see if it blows up...
+
+
+ Or, we could take the safer route, and just fix individual packages (AFAIU
+currently just gstreamer) until upstream meson figures it out.
+
+ I'm more inclined towards the second option. The gstreamer patch can simply be
+included as part of the meson conversion.
 
  Regards,
  Arnout
 
-> ---
-> Changes v1 -> v2:
->  - Update patch to avoid breaking build with other crypto libraries
 > 
->  ...n.build-fix-static-build-with-gcrypt.patch | 58 +++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
-> 
-> diff --git a/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch b/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
-> new file mode 100644
-> index 0000000000..07bf4387dc
-> --- /dev/null
-> +++ b/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
-> @@ -0,0 +1,58 @@
-> +From 40123757a799fac0446e33055b33a540bf725589 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Fri, 7 Jun 2019 23:17:13 +0200
-> +Subject: [PATCH] meson.build: fix static build with gcrypt
-> +
-> +gcrypt depends on gpg-error so save the result of
-> +dependency('gpg-error') in gpg_error_dep and use it when needed to fix
-> +static build
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.net/results/fb698e3e903869978bd5e69d791ec362317b7981
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/iputils/iputils/pull/185]
-> +---
-> + meson.build        | 5 ++++-
-> + ninfod/meson.build | 2 +-
-> + 2 files changed, 5 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/meson.build b/meson.build
-> +index 84e4360..24bda0c 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -119,6 +119,9 @@ elif crypto == 'none'
-> + 		description : 'If set RFC6744 random does not use any CRYPTO lib.')
-> + endif
-> + 
-> ++# gpg-error is a dependency of gcrypt
-> ++gpg_error_dep = dependency('gpg-error', required : false)
-> ++
-> + systemd = dependency('systemd', required : false)
-> + systemdunitdir = get_option('systemdunitdir')
-> + if systemdunitdir == '' and systemd.found()
-> +@@ -241,7 +244,7 @@ libcommon = static_library(
-> + 
-> + if build_ping == true
-> + 	executable('ping', ['ping.c', 'ping_common.c', 'ping6_common.c', git_version_h],
-> +-		dependencies : [m_dep, cap_dep, idn_dep, crypto_dep, resolv_dep],
-> ++		dependencies : [m_dep, cap_dep, idn_dep, crypto_dep, gpg_error_dep, resolv_dep],
-> + 		link_with : [libcommon],
-> + 		install: true)
-> + 	meson.add_install_script('build-aux/setcap-setuid.sh',
-> +diff --git a/ninfod/meson.build b/ninfod/meson.build
-> +index a0ee94d..1e7aa26 100644
-> +--- a/ninfod/meson.build
-> ++++ b/ninfod/meson.build
-> +@@ -10,7 +10,7 @@ ninfod_sources = files('''
-> + 	ninfod_name.c
-> + '''.split())
-> + executable('ninfod', [ninfod_sources, git_version_h],
-> +-	dependencies : [cap_dep, crypto_dep, rt_dep, threads],
-> ++	dependencies : [cap_dep, crypto_dep, gpg_error_dep, rt_dep, threads],
-> + 	link_with : [libcommon],
-> + 	include_directories : inc,
-> + 	install: true,
-> +-- 
-> +2.20.1
-> +
+> On Tue, May 21, 2019 at 12:54 PM Peter Seiderer <ps.report@gmx.net> wrote:
+>>
+>> Hello Thomas,
+>>
+>> On Mon, 20 May 2019 20:45:17 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>>
+>>> Hello Peter,
+>>>
+>>> Thanks for your feedback!
+>>>
+>>> On Mon, 20 May 2019 20:26:15 +0200
+>>> Peter Seiderer <ps.report@gmx.net> wrote:
+>>>
+>>>> I can confirm the patch fixes the gstreamer static build/static libs
+>>>> problem (see [1])....
+>>>>
+>>>> But as it is a (not yet) upstream committed bugfix, maybe it is better to
+>>>> wait for a upstream committ and/or next meson version bump?
+>>>
+>>> That would of course be the best approach...
+>>>
+>>>> On the other side the gstreamer folks where bored with waiting for the
+>>>> meson fix to be accepted and committed an workaround for the problem
+>>>> already (see [2])...
+>>>>
+>>>> Conclusion: Take the patch in case there is already a buildroot
+>>>> in-tree package which needs the fix (or commit the patch with
+>>>> in series with a in-tree user), otherwise wait for meson
+>>>> upstream...
+>>>
+>>> ... however, if it starts holding off bumping too many packages, I
+>>> guess we'll have to take this patch. Having to add a !BR2_STATIC_LIBS
+>>> dependency to libglib2 would be really horrible, considering the number
+>>> of reverse dependencies that libglib2 has.
+>>
+>> As far as I know only gstreamer itself is affected (the only package
+>> linking a static library using an internal static helper library)?
+>> But the first other package affected by this bug justifies the
+>> patch applied ;-)
+>>
+>>>
+>>> At least, if the problem is acknowledged upstream, we know it will be
+>>> fixed at some point. Perhaps not with the exact patch we will have, but
+>>> at least it will be fixed, which means we won't have to carry this
+>>> patch forever.
+>>
+>> Yes...
+>>
+>> Regards,
+>> Peter
+>>
+>>>
+>>> Thomas
+>>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 > 
