@@ -1,79 +1,90 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 8 Jun 2019 20:53:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libva: fix build with gcc < 5
-In-Reply-To: <20190603195107.2347-1-fontaine.fabrice@gmail.com>
-References: <20190603195107.2347-1-fontaine.fabrice@gmail.com>
-Message-ID: <91091659-da59-704e-4fb4-edf294009ede@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 8 Jun 2019 20:53:51 +0200
+Subject: [Buildroot] [git commit] package/grpc: fix build with uclibc on
+ x86_64
+Message-ID: <20190608185738.E92AB8E8C4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=0cd2df5f8ac5ea8b56765cc34f2d17d4b3b04b4d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+On x86_64 if GPR_MUSL_LIBC_COMPAT is not set, grpc tries to link with
+memcpy at GLIBC_2.2.5, see:
+https://github.com/grpc/grpc/blob/618a3f561d4a93f263cca23abad086ed8f4d5e86/src/core/lib/gpr/wrap_memcpy.cc
 
-On 03/06/2019 21:51, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.org/results/96fe1667190e1e08d672984f147ec8e8f5e2f4f1
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Add a new GPR_DISABLE_WRAPPED_MEMCPY to disable wrapped memory without
+changing CPU behavior
 
- Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/20d6f2489a4e291a53bd514da66105eb607e1014
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ..._memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch | 34 ++++++++++++++++++++++
+ package/grpc/grpc.mk                               |  8 +++++
+ 2 files changed, 42 insertions(+)
 
-> ---
->  ...a-va_trace-unbreak-with-C89-after-b369467.patch | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
->  create mode 100644 package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch
-> 
-> diff --git a/package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch b/package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch
-> new file mode 100644
-> index 0000000000..19192742c8
-> --- /dev/null
-> +++ b/package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch
-> @@ -0,0 +1,35 @@
-> +From 6724011e8b52901f13dded130f0b47e8bdbd4dda Mon Sep 17 00:00:00 2001
-> +From: Jan Beich <jbeich@FreeBSD.org>
-> +Date: Wed, 10 Apr 2019 11:37:28 +0000
-> +Subject: [PATCH] va/va_trace: unbreak with C89 after b3694671c784
-> +
-> +va/va_trace.c: In function 'va_TraceVAEncMiscParameterBuffer':
-> +va/va_trace.c:3281: error: 'for' loop initial declaration used outside C99 mode
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Retrieved from:
-> +https://github.com/intel/libva/commit/6724011e8b52901f13dded130f0b47e8bdbd4dda]
-
- I actually prefer it if you put your SoB below the upstream reference. That
-makes it clearer (at least to me) that the SoB wasn't there in the original commit.
-
- But it doesn't matter much, so I've applied as-is now.
-
- Regards,
- Arnout
-
-> +---
-> + va/va_trace.c | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/va/va_trace.c b/va/va_trace.c
-> +index 0a17e5cd..d41f62c1 100755
-> +--- a/va/va_trace.c
-> ++++ b/va/va_trace.c
-> +@@ -3271,6 +3271,7 @@ static void va_TraceVAEncMiscParameterBuffer(
-> +     }
-> +     case VAEncMiscParameterTypeROI:
-> +     {
-> ++        int i;
-> +         VAEncMiscParameterBufferROI *p = (VAEncMiscParameterBufferROI *)tmp->data;
-> + 
-> +         va_TraceMsg(trace_ctx, "\t--VAEncMiscParameterBufferROI\n");
-> +@@ -3278,7 +3279,7 @@ static void va_TraceVAEncMiscParameterBuffer(
-> +         va_TraceMsg(trace_ctx, "\tmax_delta_qp = %d\n", p->max_delta_qp);
-> +         va_TraceMsg(trace_ctx, "\tmin_delta_qp = %d\n", p->min_delta_qp);
-> +         va_TraceMsg(trace_ctx, "\troi_flags.bits.roi_value_is_qp_delta = %d\n", p->roi_flags.bits.roi_value_is_qp_delta);
-> +-        for (int i = 0; i < p->num_roi; i++) {
-> ++        for (i = 0; i < p->num_roi; i++) {
-> +             va_TraceMsg(trace_ctx, "\troi[%d].roi_rectangle.x      = %d\n", i, p->roi[i].roi_rectangle.x);
-> +             va_TraceMsg(trace_ctx, "\troi[%d].roi_rectangle.y      = %d\n", i, p->roi[i].roi_rectangle.y);
-> +             va_TraceMsg(trace_ctx, "\troi[%d].roi_rectangle.width  = %d\n", i, p->roi[i].roi_rectangle.width);
-> 
+diff --git a/package/grpc/0003-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch b/package/grpc/0003-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch
+new file mode 100644
+index 0000000000..ad64804470
+--- /dev/null
++++ b/package/grpc/0003-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch
+@@ -0,0 +1,34 @@
++From be030314805137cd63b46ea6eaa702b608669910 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 2 Jun 2019 17:45:47 +0200
++Subject: [PATCH] wrap_memcpy.cc: add GPR_DISABLE_WRAPPED_MEMCPY
++
++Add GPR_DISABLE_WRAPPED_MEMCPY to allow the user to disable wrapped
++memcpy. This will fix build on x86_64 on musl/uclibc without changing
++the cpu behavior.
++
++Fixes:
++ - http://autobuild.buildroot.org/results/20d6f2489a4e291a53bd514da66105eb607e1014
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/grpc/grpc/pull/19207]
++---
++ src/core/lib/gpr/wrap_memcpy.cc | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/core/lib/gpr/wrap_memcpy.cc b/src/core/lib/gpr/wrap_memcpy.cc
++index 9b8608e056..38b76acf95 100644
++--- a/src/core/lib/gpr/wrap_memcpy.cc
+++++ b/src/core/lib/gpr/wrap_memcpy.cc
++@@ -28,7 +28,7 @@
++ 
++ extern "C" {
++ #ifdef __linux__
++-#if defined(__x86_64__) && !defined(GPR_MUSL_LIBC_COMPAT)
+++#if defined(__x86_64__) && !defined(GPR_MUSL_LIBC_COMPAT) && !defined(GPR_DISABLE_WRAPPED_MEMCPY)
++ __asm__(".symver memcpy,memcpy at GLIBC_2.2.5");
++ void* __wrap_memcpy(void* destination, const void* source, size_t num) {
++   return memcpy(destination, source, num);
++-- 
++2.20.1
++
+diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
+index 9506e0268a..1a5f8855a1 100644
+--- a/package/grpc/grpc.mk
++++ b/package/grpc/grpc.mk
+@@ -33,6 +33,14 @@ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ GRPC_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
+ endif
+ 
++# Set GPR_DISABLE_WRAPPED_MEMCPY otherwise build will fail on x86_64 with uclibc
++# because grpc tries to link with memcpy at GLIBC_2.2.5
++ifeq ($(BR2_x86_64):$(BR2_TOOLCHAIN_USES_GLIBC),y:)
++GRPC_CONF_OPTS += \
++	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -DGPR_DISABLE_WRAPPED_MEMCPY" \
++	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -DGPR_DISABLE_WRAPPED_MEMCPY"
++endif
++
+ HOST_GRPC_CONF_OPTS = \
+ 	-D_gRPC_CARES_LIBRARIES=cares \
+ 	-DgRPC_CARES_PROVIDER=none \
