@@ -1,111 +1,114 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 8 Jun 2019 22:40:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/meson: Fix linking of
- shared/static libs with static libs
-In-Reply-To: <CAFSsvmrURSufHb2dV+fLcLmpJXRON=yLqAg0G_FZRsnDDD=QrQ@mail.gmail.com>
-References: <20190514184245.92222-1-aduskett@gmail.com>
- <20190518215637.2ea2ea51@windsurf> <20190520202615.37fbd048@gmx.net>
- <20190520204517.52564b80@windsurf.home> <20190521185447.2de12554@gmx.net>
- <CAFSsvmrURSufHb2dV+fLcLmpJXRON=yLqAg0G_FZRsnDDD=QrQ@mail.gmail.com>
-Message-ID: <5872cf77-632a-9881-b53e-bffaef22d1cd@mind.be>
+Date: Sat, 8 Jun 2019 22:54:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-bad:
+ add wpe plugin option
+In-Reply-To: <20190605055125.38900-1-james.hilliard1@gmail.com>
+References: <20190605055125.38900-1-james.hilliard1@gmail.com>
+Message-ID: <0a023992-228e-28a7-2f13-3348de8293cd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Adam,
 
-On 08/06/2019 20:02, Adam Duskett wrote:
-> Hello;
+
+On 05/06/2019 07:51, James Hilliard wrote:
+> Removed gst1-plugins-bad dependency from wpewebkit gstreamer-gl option
+> so that there isn't a circular dependency with gst1-plugins-bad.
+
+ This should be a separate patch, with a commit message that explains why the
+dependency isn't needed. My guess is that it's a runtime dependency because the
+GL plugin is loaded dynamically.
+
+ That patch should also add a '# runtime' comment in the wpewebkit Config.in, i.e.:
+
+config BR2_PACKAGE_WPEWEBKIT_USE_GSTREAMER_GL
+        bool "use gstreamer-gl"
+        default y
+        depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+        select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL # runtime
+
+
+ Also, I wonder if the same doesn't apply to the gst1-plugins-good, gst1-libav
+and possibly even gst1-plugins-base dependencies.
+
+
 > 
-> I asked for an update on this pull request on github here:
-> https://github.com/mesonbuild/meson/pull/3939#issuecomment-492355588
-
- Thanks for following this up.
-
+> It appears that wpewebkit gstreamer-gl only has a runtime dependency on
+> gst1-plugins-bad.
 > 
-> And it seems that the general consensus will be to fix the link_whole behavior,
-> but strip out or rework a lot of this patch. Mainly because many other projects
-> already have workarounds, such as gstreamer, mesa, and libglib.
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/gstreamer1/gst1-plugins-bad/Config.in          | 10 ++++++++++
+>  .../gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk    |  7 +++++++
+>  package/wpewebkit/wpewebkit.mk                         |  1 -
+>  3 files changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
+> index e1e7b05a59..3d19012e95 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-bad/Config.in
+> @@ -583,6 +583,16 @@ comment "webrtcdsp needs a toolchain w/ C++, NPTL, gcc >= 4.8"
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
+>  		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+>  
+> +config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WPE
+> +	bool "wpe"
+> +	default y
+> +	depends on BR2_PACKAGE_WPEWEBKIT
 
- I read the following:
+ We normally select packages instead of depending on them. Yes, that implies
+copying all its dependencies.
 
-"I don't think this PR can go in as-is anymore because projects have added
-workarounds that will cause errors now. I think the last time I checked, Mesa
-was one such project."
-
-
- So maybe we should just try to combine this patch with Mesa master converted to
-meson, and see if it blows up...
+ If there is a good reason to use a depends instead of select, please explain it
+in the commit message.
 
 
- Or, we could take the safer route, and just fix individual packages (AFAIU
-currently just gstreamer) until upstream meson figures it out.
+ Also, just to be clear: there is no dependency on
+BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA or BR2_PACKAGE_WPEWEBKIT_USE_GSTREAMER_GL ?
 
- I'm more inclined towards the second option. The gstreamer patch can simply be
-included as part of the meson conversion.
 
  Regards,
  Arnout
 
-> 
-> On Tue, May 21, 2019 at 12:54 PM Peter Seiderer <ps.report@gmx.net> wrote:
->>
->> Hello Thomas,
->>
->> On Mon, 20 May 2019 20:45:17 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
->>
->>> Hello Peter,
->>>
->>> Thanks for your feedback!
->>>
->>> On Mon, 20 May 2019 20:26:15 +0200
->>> Peter Seiderer <ps.report@gmx.net> wrote:
->>>
->>>> I can confirm the patch fixes the gstreamer static build/static libs
->>>> problem (see [1])....
->>>>
->>>> But as it is a (not yet) upstream committed bugfix, maybe it is better to
->>>> wait for a upstream committ and/or next meson version bump?
->>>
->>> That would of course be the best approach...
->>>
->>>> On the other side the gstreamer folks where bored with waiting for the
->>>> meson fix to be accepted and committed an workaround for the problem
->>>> already (see [2])...
->>>>
->>>> Conclusion: Take the patch in case there is already a buildroot
->>>> in-tree package which needs the fix (or commit the patch with
->>>> in series with a in-tree user), otherwise wait for meson
->>>> upstream...
->>>
->>> ... however, if it starts holding off bumping too many packages, I
->>> guess we'll have to take this patch. Having to add a !BR2_STATIC_LIBS
->>> dependency to libglib2 would be really horrible, considering the number
->>> of reverse dependencies that libglib2 has.
->>
->> As far as I know only gstreamer itself is affected (the only package
->> linking a static library using an internal static helper library)?
->> But the first other package affected by this bug justifies the
->> patch applied ;-)
->>
->>>
->>> At least, if the problem is acknowledged upstream, we know it will be
->>> fixed at some point. Perhaps not with the exact patch we will have, but
->>> at least it will be fixed, which means we won't have to carry this
->>> patch forever.
->>
->> Yes...
->>
->> Regards,
->> Peter
->>
->>>
->>> Thomas
->>
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> +	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+> +
+> +comment "wpe needs the gst1-plugins-base opengl library and wpewebkit"
+> +	depends on !BR2_PACKAGE_WPEWEBKIT \
+> +		|| !BR2_PACKAGE_GST1_PLUGINS_BASE_HAS_LIB_OPENGL
+> +
+>  config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265
+>  	bool "x265"
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> diff --git a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> index 32edde4901..c6e2877dde 100644
+> --- a/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> +++ b/package/gstreamer1/gst1-plugins-bad/gst1-plugins-bad.mk
+> @@ -698,6 +698,13 @@ else
+>  GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtcdsp
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WPE),y)
+> +GST1_PLUGINS_BAD_CONF_OPTS += --enable-wpe
+> +GST1_PLUGINS_BAD_DEPENDENCIES += wpewebkit
+> +else
+> +GST1_PLUGINS_BAD_CONF_OPTS += --disable-wpe
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_X265),y)
+>  GST1_PLUGINS_BAD_CONF_OPTS += --enable-x265
+>  GST1_PLUGINS_BAD_DEPENDENCIES += x265
+> diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
+> index b59a1f793a..4dc4a29064 100644
+> --- a/package/wpewebkit/wpewebkit.mk
+> +++ b/package/wpewebkit/wpewebkit.mk
+> @@ -34,7 +34,6 @@ endif
+>  
+>  ifeq ($(BR2_PACKAGE_WPEWEBKIT_USE_GSTREAMER_GL),y)
+>  WPEWEBKIT_CONF_OPTS += -DUSE_GSTREAMER_GL=ON
+> -WPEWEBKIT_DEPENDENCIES += gst1-plugins-bad
+>  else
+>  WPEWEBKIT_CONF_OPTS += -DUSE_GSTREAMER_GL=OFF
+>  endif
 > 
