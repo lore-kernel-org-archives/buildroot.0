@@ -1,41 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 8 Jun 2019 18:35:09 +0200
-Subject: [Buildroot] [PATCH v4] package/exiv2: cleanup options and
- licenses
-In-Reply-To: <20190605134957.27400-1-nicolas.serafini@sensefly.com>
-References: <20190605134957.27400-1-nicolas.serafini@sensefly.com>
-Message-ID: <62343e6e-f380-1a54-a41d-5c04cdc4332e@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 8 Jun 2019 18:37:24 +0200
+Subject: [Buildroot] [git commit] package/libubootenv: fix build with
+ 'nothread' toolchain
+Message-ID: <20190608163712.6B85E8EC53@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=afc0b3838fc778523ee53ef9cc3b3bebcd720401
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+<pthread.h> include doesn't seem to be necessary inside the library.
+So, drop the header completely.
 
-On 05/06/2019 15:51, Nicolas Serafini wrote:
-> exiv2 no longer requires a non commercial option for lens database
-> integration since version 0.27. See [1] and [2]
-> 
-> The BR2_PACKAGE_EXIV2_LENSDATA option is maintained because the
-> src/nikonmn_int.cpp file always specifies that the Nikon lens name
-> database is free to use in non-commercial, GPL or open source software
-> only.
-> 
-> Legacy handling for the removed option COMMERCIAL is not needed, since
-> now it's always enabled.
-> 
-> Add the dedicated BSD-3-Clause license file for CMakeLists.txt,
-> config/FindEXPAT.cmake and config/FindMSGFMT.cmake files.
-> 
-> [1] https://github.com/Exiv2/exiv2/commit/07f63003b7f50dd7d8719585ba54623e0f60c3c4
-> [2] https://github.com/Exiv2/exiv2/commit/085d8a309aafb8ed5a72cad027a1a0ea974938d9
-> 
-> Signed-off-by: Nicolas Serafini <nicolas.serafini@sensefly.com>
+Fixes:
+ - http://autobuild.buildroot.org/results/813e8951530c093f46b38bf8c3b467ab6535c95b
 
- In the end, I applied to master as is, without the legacy. Peter, if you feel
-strongly about it, you can still add the legacy entry later, and we can have
-some more discussion about it :-)
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...05-uboot_env-remove-pthread.h-header-file.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
- Regards,
- Arnout
+diff --git a/package/libubootenv/0005-uboot_env-remove-pthread.h-header-file.patch b/package/libubootenv/0005-uboot_env-remove-pthread.h-header-file.patch
+new file mode 100644
+index 0000000000..7a7e2a019b
+--- /dev/null
++++ b/package/libubootenv/0005-uboot_env-remove-pthread.h-header-file.patch
+@@ -0,0 +1,29 @@
++From ac4f795f2c0a81d5b55ce825f3d4c933fbc9e44c Mon Sep 17 00:00:00 2001
++From: Pierre-Jean Texier <pjtexier@koncepto.io>
++Date: Tue, 4 Jun 2019 11:43:47 +0200
++Subject: [libubootenv][PATCH] uboot_env: remove <pthread.h> header file
++
++<pthread.h> include doesn't seem to be necessary inside the library.
++So, drop the header completely.
++
++Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
++[Upstream status: http://patchwork.ozlabs.org/patch/1109822/]
++---
++ src/uboot_env.c | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/src/uboot_env.c b/src/uboot_env.c
++index e8483bf..3f1bb3b 100644
++--- a/src/uboot_env.c
+++++ b/src/uboot_env.c
++@@ -24,7 +24,6 @@
++ #include <fcntl.h>
++ #include <errno.h>
++ #include <ctype.h>
++-#include <pthread.h>
++ #include <signal.h>
++ #include <sys/file.h>
++ #include <sys/types.h>
++-- 
++2.7.4
++
