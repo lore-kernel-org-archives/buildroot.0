@@ -1,9 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 8 Jun 2019 18:55:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openjdk: sets AWK
-In-Reply-To: <20190604064446.6929-1-fontaine.fabrice@gmail.com>
-References: <20190604064446.6929-1-fontaine.fabrice@gmail.com>
-Message-ID: <8bfabb0f-4e1b-ed6d-0617-c463d0185b48@mind.be>
+Date: Sat, 8 Jun 2019 19:03:47 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: fix license
+ hash
+In-Reply-To: <20190603224039.98733-1-aduskett@gmail.com>
+References: <20190603224039.98733-1-aduskett@gmail.com>
+Message-ID: <629a1777-181a-2947-8326-918258ce35c0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,55 +13,58 @@ To: buildroot@busybox.net
 
 
 
-On 04/06/2019 08:44, Fabrice Fontaine wrote:
-> AWK must be set to $(HOST_DIR)/bin/gawk otherwise build fails on:
-> /bin/bash: gawk: command not found
+On 04/06/2019 00:40, aduskett at gmail.com wrote:
+> From: Adam Duskett <Aduskett@gmail.com>
 > 
-> When build fails, config.log contains the following line:
-> 
-> configure:13709: checking for gawk
-> configure:13725: found /home/buildroot/autobuild/run/instance-3/output/host/bin/gawk
-> configure:13736: result: gawk
-> [...]
-> ac_cv_prog_AWK=gawk
+> The new license
 
- ... which is correct.
+ However, our default version (v1.4) doesn't have this new license... So with
+this patch, it will fail when BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION is
+selected.
 
- Except that the PATH in configure is different from the PATH in make, because
-we forget to set it...
+ This is incredibly annoying :-( We can't add both files, since legal-info
+requires the license files to exist. So I'm not sure what we can do about it...
+except maybe set LICENSE_FILES only for the
+BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION case.
 
- So instead, could you try setting $(TARGET_MAKE_ENV) in OPENJDK_BUILD_CMDS and
-see if that helps?
+ Actually, also LICENSE itself only makes sense when we now the exact version.
+Since it's BSD-licensed, a custom version may just as well be distributed under
+some more restrictive license...
+
+ At the risk of making life complicated :-), I'm pulling Yann into this discussion.
 
  Regards,
  Arnout
 
+> is under license.md not license.rst, which will cause
+> "make legal-info" to fail.
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/43c5d08f599e8f44b59a576d243ae1c7b27de7a3
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > ---
->  package/openjdk/openjdk.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  boot/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
+>  boot/arm-trusted-firmware/arm-trusted-firmware.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-> index 318e4bade3..2002da7386 100644
-> --- a/package/openjdk/openjdk.mk
-> +++ b/package/openjdk/openjdk.mk
-> @@ -46,12 +46,13 @@ OPENJDK_DEPENDENCIES += libffi
->  endif
+> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+> index 394071865e..d67b49cae8 100644
+> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+> @@ -1,3 +1,3 @@
+>  # Locally calculated
+>  sha256 6dae02acd85278394bfad6e2683e186e5332a711e4491ac4632ad6480f6e5494 arm-trusted-firmware-v1.4.tar.gz
+> -sha256 487795b8023df866259fa159bab94706b747fb0d623b7913f1c4955c0ab5f164  license.rst
+> +sha256 b3eb7d1ad5552ee71bd1031c7db7300d0d184e1236e2cd41fbc1e1e7c76a0e63  license.md
+> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> index 9a23e3d336..f87373ffe6 100644
+> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+> @@ -6,7 +6,7 @@
 >  
->  # OpenJDK ignores some variables unless passed via the environment.
-> -# These variables are PATH, LD, CC, CXX, and CPP.
-> +# These variables are PATH, AWK, LD, CC, CXX, and CPP.
->  # OpenJDK defaults ld to the ld binary but passes -Xlinker and -z as
->  # arguments during the linking process, which causes compilation failures.
->  # To fix this issue, LD is set to point to gcc.
->  OPENJDK_CONF_ENV = \
->  	PATH=$(BR_PATH) \
-> +	AWK=$(HOST_DIR)/bin/gawk \
->  	CC=$(TARGET_CC) \
->  	CPP=$(TARGET_CPP) \
->  	CXX=$(TARGET_CXX) \
+>  ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
+>  ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
+> -ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
+> +ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.md
+>  
+>  ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
+>  # Handle custom ATF tarballs as specified by the configuration
 > 
