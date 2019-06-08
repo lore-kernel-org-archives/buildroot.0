@@ -1,55 +1,88 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 8 Jun 2019 22:28:52 +0200
-Subject: [Buildroot] [PATCH v3] mfgtools: bump revision to latest uuu
- version
-In-Reply-To: <20190608105337.19879-1-bisson.gary@gmail.com>
-References: <20190608105337.19879-1-bisson.gary@gmail.com>
-Message-ID: <508662af-e726-deb8-497d-a87309ab2af3@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 8 Jun 2019 22:31:20 +0200
+Subject: [Buildroot] [git commit] package/iputils: fix static build with
+ gcrypt
+Message-ID: <20190608203201.923D48F30E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Gary,
+commit: https://git.buildroot.net/buildroot/commit/?id=2b1c847e2fd80ea5ba46cfeb9a2b52f8c4b0efe6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 08/06/2019 12:53, Gary Bisson wrote:
-> NXP deprecated the old mfgtools code, also called mfgtools v2 although
-> the releases were named v0.xx.
-> 
-> It has been replaced by the Universal Update Utility (uuu), also called
-> mfgtools v3.0 although the releases are named v1.x.yy.
-> 
-> This new tool actually resides in the same repository in the master
-> branch whereas the old one is now in a 'linux' branch.
-> 
-> Since the old tool has issues building lately, let's switch to the new
-> one. Note that uuu seems to be cleaner, supports much more features
-> (i.MX8/8M/8QXP boot, fastboot etc..) and has a better documentation:
-> https://github.com/NXPmicro/mfgtools/wiki
+Fixes:
+ - http://autobuild.buildroot.net/results/fb698e3e903869978bd5e69d791ec362317b7981
 
- Does it also offer the same API? If you have some scripts using mfgtools, will
-they work unchanged with uuu?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...-meson.build-fix-static-build-with-gcrypt.patch | 58 ++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
- If not, then I think uuu should be an entirely new package. We could choose to
-deprecate mfgtools immediately, but we'd need a legacy entry if the API has changed.
-
-[snip]
-> +2. Run the MfgTools (now called uuu) client to boot the board from USB:
->  
-> +$ ./output/host/bin/uuu output/images/u-boot.imx
-[snip]
-> -$ ./host/bin/mfgtoolcli -l mmc -s uboot_defconfig=imx \
-> -  -s dtbname=imx6q-sabrelite.dtb -s initramfs=rootfs.cpio.uboot \
-> -  -s mmc=1 -p 1
-
- Yup, the API has definitely changed...
-
- So, I'm in favour of creating BR2_PACKAGE_HOST_UUU and killing
-BR2_PACKAGE_HOST_MFGTOOLS.
-
- I marked the patch as Not Applicable in patchwork. If you convince me to do it
-this way after all, we can fish it up again.
-
- Regards,
- Arnout
+diff --git a/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch b/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
+new file mode 100644
+index 0000000000..07bf4387dc
+--- /dev/null
++++ b/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
+@@ -0,0 +1,58 @@
++From 40123757a799fac0446e33055b33a540bf725589 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 7 Jun 2019 23:17:13 +0200
++Subject: [PATCH] meson.build: fix static build with gcrypt
++
++gcrypt depends on gpg-error so save the result of
++dependency('gpg-error') in gpg_error_dep and use it when needed to fix
++static build
++
++Fixes:
++ - http://autobuild.buildroot.net/results/fb698e3e903869978bd5e69d791ec362317b7981
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/iputils/iputils/pull/185]
++---
++ meson.build        | 5 ++++-
++ ninfod/meson.build | 2 +-
++ 2 files changed, 5 insertions(+), 2 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index 84e4360..24bda0c 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -119,6 +119,9 @@ elif crypto == 'none'
++ 		description : 'If set RFC6744 random does not use any CRYPTO lib.')
++ endif
++ 
+++# gpg-error is a dependency of gcrypt
+++gpg_error_dep = dependency('gpg-error', required : false)
+++
++ systemd = dependency('systemd', required : false)
++ systemdunitdir = get_option('systemdunitdir')
++ if systemdunitdir == '' and systemd.found()
++@@ -241,7 +244,7 @@ libcommon = static_library(
++ 
++ if build_ping == true
++ 	executable('ping', ['ping.c', 'ping_common.c', 'ping6_common.c', git_version_h],
++-		dependencies : [m_dep, cap_dep, idn_dep, crypto_dep, resolv_dep],
+++		dependencies : [m_dep, cap_dep, idn_dep, crypto_dep, gpg_error_dep, resolv_dep],
++ 		link_with : [libcommon],
++ 		install: true)
++ 	meson.add_install_script('build-aux/setcap-setuid.sh',
++diff --git a/ninfod/meson.build b/ninfod/meson.build
++index a0ee94d..1e7aa26 100644
++--- a/ninfod/meson.build
+++++ b/ninfod/meson.build
++@@ -10,7 +10,7 @@ ninfod_sources = files('''
++ 	ninfod_name.c
++ '''.split())
++ executable('ninfod', [ninfod_sources, git_version_h],
++-	dependencies : [cap_dep, crypto_dep, rt_dep, threads],
+++	dependencies : [cap_dep, crypto_dep, gpg_error_dep, rt_dep, threads],
++ 	link_with : [libcommon],
++ 	include_directories : inc,
++ 	install: true,
++-- 
++2.20.1
++
