@@ -1,84 +1,45 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Sat, 8 Jun 2019 13:51:07 +0200
-Subject: [Buildroot] [PATCH] package/kmsxx: work around gcc bug 85180
-In-Reply-To: <51e11b8d-8dc6-9bca-1590-e7d190022852@mind.be>
-References: <20190606131035.47417-1-giulio.benetti@micronovasrl.com>
- <20190607080838.46d5065d@thl530.multi.box>
- <7edbb3f8-65fa-4ea5-c2b4-e60b387ddac2@micronovasrl.com>
- <20190607091915.284a4c74@thl530.multi.box>
- <51e11b8d-8dc6-9bca-1590-e7d190022852@mind.be>
-Message-ID: <f321ba2f-2563-dacc-75c2-d86826c9be95@micronovasrl.com>
+Date: Sat, 8 Jun 2019 13:52:35 +0200
+Subject: [Buildroot] [git commit] package/brotli: work around gcc bug
+ 68485
+In-Reply-To: <87imthdgz8.fsf@dell.be.48ers.dk>
+References: <20190527220327.636798E6D4@busybox.osuosl.org>
+ <87y32ehh34.fsf@dell.be.48ers.dk>
+ <b01b61c5-4105-efb8-37db-bb5f0479b568@micronovasrl.com>
+ <87imthdgz8.fsf@dell.be.48ers.dk>
+Message-ID: <586a4f9a-7ba2-d882-920c-c3f9a4f10591@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout, Thomas H.,
+Hi Peter,
 
-Il 08/06/2019 12:56, Arnout Vandecappelle ha scritto:
+Il 07/06/2019 08:52, Peter Korsgaard ha scritto:
+>>>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
 > 
+> Hi,
 > 
-> On 07/06/2019 09:19, Thomas Huth wrote:
->> Am Fri, 7 Jun 2019 08:39:07 +0200
->> schrieb Giulio Benetti <giulio.benetti@micronovasrl.com>:
->>
->>> Hello Thomas H.,
->>>
->>> adding Thomas P.+
->>>
->>> Il 07/06/2019 08:08, Thomas Huth ha scritto:
->>>> Am Thu,  6 Jun 2019 15:10:35 +0200
->>>> schrieb Giulio Benetti <giulio.benetti@micronovasrl.com>:
->>>>    
->>>>> With Microblaze Gcc version < 8.x the build hangs due to gcc bug
->>>>> 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
->>>>> shows up when building kmsxx with optimization but not when
->>>>> building with -O0. To work around this, if
->>>>> BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
->>>>
->>>> According to the description in the bugzilla, the bug should also go
->>>> away when compiling with -fno-dse ... so wouldn't it be better to
->>>> use "-fno-dse" here instead of disabling the optimizations
->>>> completely?
->>>
->>> Honestly I've completely missed that possible solution and didn't
->>> even tested.
->>>
->>> Anyway it's been discussed on IRC channel to keep a common work
->>> around for every different GCC_BUG_*, so since many packages are
->>> affected by Bug 85180 and -O0 seemed to work every time Thomas P.
->>> suggested to always keep that flag as solution.
+>   >> > +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
+>   >> > +BROTLI_CONF_OPTS += -DCMAKE_C_FLAGS="-O0"
+>   >>
+>   >> Hmm, why is this not "$(TARGET_C_FLAGS) -O0" like for the other
+>   >> packages?
 > 
->   It's not the same solution for every GCC_BUG_* that we want, it is the same
-> solution for every package. So we don't want to use -O2 -g0 in one package and
-> -O0 in another package.
-
-Yes you'r right.
-
->   If the -fno-dse also works, that would be an even better solution.
-
-Yes, I was thinking about it and you've beaten me on time :)
-
->> Well, if -fno-dse is also "fixing" this bug, maybe you could add
->> "-fno-dse" to the global compiler flags instead of manually fixing each
->> and every package with -O0? ... anyway, just my 0.02 ?.
+>   > Because CFLAGS were needed only once in that package.
 > 
->   That's a good idea, actually...
+> Yes, but we should still pass TARGET_CFLAGS as well.
 
-Yes, Thomas H. is totally right.
+Damn it, you're right, $(TARGET_CFLAGS) got lost..
 
->   And very easy to test if it works: just remove the definition of GCC_BUG_85180
-> (so the -O0 is never passed), add -fno-dse to the toolchain wrapper flags, and
-> build all affected packages with a toolchain that is known to be broken.
+>   > Anyway, if you say, I can modify it and use a BROTLI_CFLAGS
+>   > intermediate variable.
+> 
+> That is less important, but we shouldn't drop TARGET_CFLAGS.
+> 
 
-Yep, I'm going to do that starting from Monday.
-
->   Great for Giulio's patch count: so many patches adding this stuff, and then the
-> same number of patches removing it again :-)
-
-:) yes, 10 patches more, more or less. This way easier to produce them 
-though.
+I'm going to fix this.
 
 Best regards
 -- 
