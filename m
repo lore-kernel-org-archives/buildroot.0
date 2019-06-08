@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 8 Jun 2019 22:28:09 +0200
+Date: Sat, 8 Jun 2019 22:28:52 +0200
 Subject: [Buildroot] [PATCH v3] mfgtools: bump revision to latest uuu
  version
 In-Reply-To: <20190608105337.19879-1-bisson.gary@gmail.com>
 References: <20190608105337.19879-1-bisson.gary@gmail.com>
-Message-ID: <cfe0721d-fbce-bb84-cf59-6353d7348ab8@mind.be>
+Message-ID: <508662af-e726-deb8-497d-a87309ab2af3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
