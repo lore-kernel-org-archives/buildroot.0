@@ -1,33 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 8 Jun 2019 12:04:02 +0200
-Subject: [Buildroot] [git commit] arch: Fix typo breaking use of core-avx2
- arch
-Message-ID: <20190608100705.0E73E8ED93@busybox.osuosl.org>
+Date: Sat, 08 Jun 2019 12:08:56 +0200
+Subject: [Buildroot] [PATCH 2/2] arch: Add support for Westmere targets
+In-Reply-To: <20190607125313.20376-2-esben@geanix.com> (Esben Haabendal's
+ message of "Fri, 7 Jun 2019 14:53:13 +0200")
+References: <20190607125313.20376-1-esben@geanix.com>
+ <20190607125313.20376-2-esben@geanix.com>
+Message-ID: <87sgskbd8n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=498a1fabe80aeb1652475b9061b82ba065915183
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Esben" == Esben Haabendal <esben@geanix.com> writes:
 
-Signed-off-by: Esben Haabendal <esben@geanix.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- arch/Config.in.x86 | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > The westmere line of x86_64 targets lies between nehalem (corei7) and
+ > sandybridge (corei7-avx).  Allowing use of -march=westmere enables use of AES
+ > instruction set on these targets.
 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index ce91317dc6..3f6983ac1b 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -236,7 +236,7 @@ config BR2_ARCH
- 	default "i686"		if BR2_x86_core2 && BR2_i386
- 	default "i686"		if BR2_x86_corei7 && BR2_i386
- 	default "i686"		if BR2_x86_corei7_avx && BR2_i386
--	default "i686"		if BR2_x86_corei7_avx2 && BR2_i386
-+	default "i686"		if BR2_x86_core_avx2 && BR2_i386
- 	default "i686"		if BR2_x86_atom && BR2_i386
- 	default "i686"		if BR2_x86_silvermont && BR2_i386
- 	default "i686"		if BR2_x86_opteron && BR2_i386
+ > Signed-off-by: Esben Haabendal <esben@geanix.com>
+ > ---
+ >  arch/Config.in.x86         | 10 ++++++++++
+ >  package/openblas/Config.in |  2 +-
+ >  2 files changed, 11 insertions(+), 1 deletion(-)
+
+ > diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+ > index 3f6983ac1b63..26496b8d08e9 100644
+ > --- a/arch/Config.in.x86
+ > +++ b/arch/Config.in.x86
+ > @@ -101,6 +101,15 @@ config BR2_x86_corei7
+ >  	select BR2_X86_CPU_HAS_SSSE3
+ >  	select BR2_X86_CPU_HAS_SSE4
+ >  	select BR2_X86_CPU_HAS_SSE42
+ > +config BR2_x86_westmere
+ > +	bool "westmere"
+ > +	select BR2_X86_CPU_HAS_MMX
+ > +	select BR2_X86_CPU_HAS_SSE
+ > +	select BR2_X86_CPU_HAS_SSE2
+ > +	select BR2_X86_CPU_HAS_SSE3
+ > +	select BR2_X86_CPU_HAS_SSSE3
+ > +	select BR2_X86_CPU_HAS_SSE4
+ > +	select BR2_X86_CPU_HAS_SSE42
+ >  config BR2_x86_corei7_avx
+ >  	bool "corei7-avx"
+ >  	select BR2_X86_CPU_HAS_MMX
+ > @@ -235,6 +244,7 @@ config BR2_ARCH
+ >  	default "i686"		if BR2_x86_nocona && BR2_i386
+ >  	default "i686"		if BR2_x86_core2 && BR2_i386
+ >  	default "i686"		if BR2_x86_corei7 && BR2_i386
+ > +	default "i686"		if BR2_x86_westmere && BR2_i386
+ >  	default "i686"		if BR2_x86_corei7_avx && BR2_i386
+ >  	default "i686"		if BR2_x86_core_avx2 && BR2_i386
+ >  	default "i686"		if BR2_x86_atom && BR2_i386
+
+No BR2_GCC_TARGET_ARCH? That doesn't seem right.
+
+> diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+ > index 8e71a43f982c..c8a516bb9f93 100644
+ > --- a/package/openblas/Config.in
+ > +++ b/package/openblas/Config.in
+ > @@ -6,7 +6,7 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+ >  	default "PRESCOTT"     if BR2_x86_prescott || BR2_x86_nocona
+ >  	default "BANIAS"       if BR2_x86_pentium_m
+ >  	default "CORE2"        if BR2_x86_core2
+ > -	default "NEHALEM"      if BR2_x86_corei7 || BR2_x86_silvermont
+ > +	default "NEHALEM"      if BR2_x86_corei7 || BR2_x86_westmere || BR2_x86_silvermont
+
+Please put this openblas change in a separate patch. I know we don't do
+it consistently, but please sort these alphabetically - E.G. put
+westmere after silvermont.
+
+-- 
+Bye, Peter Korsgaard
