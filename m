@@ -1,36 +1,36 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Sun, 9 Jun 2019 00:17:50 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libevent: fix build with openssl
-In-Reply-To: <20190608215756.30417-1-fontaine.fabrice@gmail.com>
-References: <20190608215756.30417-1-fontaine.fabrice@gmail.com>
-Message-ID: <18d7c1dd-3b32-7577-175c-792c08404865@koncepto.io>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 9 Jun 2019 01:44:24 +0200
+Subject: [Buildroot] [git commit] package/poppler: use THREAD_PTHREAD_ARG=OFF
+Message-ID: <20190608234527.987B48B454@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=589bc51d7cfa20af87b8e7bea854ed59a587b309
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 08/06/2019 ? 23:57, Fabrice Fontaine a ?crit?:
-> Since bump to version 2.1.10 in commit
-> 3c8e79db8375f83a8e6a1d58ade697447903b6b0, openssl detection is broken.
-> Add a patch to fix it otherwise libwebsock fails to build
+As noted by Fabrice, all other packages that show CMake's FindThreads
+issue fix it by setting THREAD_PTHREAD_ARG=OFF instead of setting
+THREAD_HAVE_PTHREAD_ARG=ON. So, for consistency, do the same for
+poppler.
 
-Indeed.
-I had not tested openssl configuration after bump to version 2.1.10.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/poppler/poppler.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks for the fix.
-
-> 
-> Fixes:
->   -http://autobuild.buildroot.org/results/be32afa364a6b387195cdb5166fb23e9610451a7
-> 
-> Signed-off-by: Fabrice Fontaine<fontaine.fabrice@gmail.com>
-> ---
-
-Tested-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-
--- 
-Best regards,
-Pierre-Jean Texier
+diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+index ebb918de03..ffa65f68ce 100644
+--- a/package/poppler/poppler.mk
++++ b/package/poppler/poppler.mk
+@@ -21,7 +21,7 @@ POPPLER_CONF_OPTS = \
+ 	-DENABLE_GTK_DOC=OFF
+ 
+ # cmake older than 3.10 requires this to avoid try_run() in FindThreads
+-POPPLER_CONF_OPTS += -DTHREADS_HAVE_PTHREAD_ARG=ON
++POPPLER_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+ 
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+ POPPLER_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
