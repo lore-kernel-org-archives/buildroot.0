@@ -1,70 +1,94 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 8 Jun 2019 13:46:31 +0200
-Subject: [Buildroot] [PATCH v2 3/3] autobuild-run: do reproducible
- builds tests if BR2_REPRODUCIBLE=y
-In-Reply-To: <20190607064657.3571-3-itsatharva@gmail.com>
-References: <20190607064657.3571-1-itsatharva@gmail.com>
- <20190607064657.3571-3-itsatharva@gmail.com>
-Message-ID: <db6bdc68-100a-b68d-44b6-e9c89c4ce8a6@mind.be>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sat, 8 Jun 2019 13:51:07 +0200
+Subject: [Buildroot] [PATCH] package/kmsxx: work around gcc bug 85180
+In-Reply-To: <51e11b8d-8dc6-9bca-1590-e7d190022852@mind.be>
+References: <20190606131035.47417-1-giulio.benetti@micronovasrl.com>
+ <20190607080838.46d5065d@thl530.multi.box>
+ <7edbb3f8-65fa-4ea5-c2b4-e60b387ddac2@micronovasrl.com>
+ <20190607091915.284a4c74@thl530.multi.box>
+ <51e11b8d-8dc6-9bca-1590-e7d190022852@mind.be>
+Message-ID: <f321ba2f-2563-dacc-75c2-d86826c9be95@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout, Thomas H.,
 
-
-On 07/06/2019 08:46, Atharva Lele wrote:
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+Il 08/06/2019 12:56, Arnout Vandecappelle ha scritto:
 > 
-> ---
-> Changes v1 -> v2:
->   - add trailing newline character to BR2_REPRODUCIBLE=y (suggested by arnout)
 > 
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-> ---
->  scripts/autobuild-run | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+> On 07/06/2019 09:19, Thomas Huth wrote:
+>> Am Fri, 7 Jun 2019 08:39:07 +0200
+>> schrieb Giulio Benetti <giulio.benetti@micronovasrl.com>:
+>>
+>>> Hello Thomas H.,
+>>>
+>>> adding Thomas P.+
+>>>
+>>> Il 07/06/2019 08:08, Thomas Huth ha scritto:
+>>>> Am Thu,  6 Jun 2019 15:10:35 +0200
+>>>> schrieb Giulio Benetti <giulio.benetti@micronovasrl.com>:
+>>>>    
+>>>>> With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+>>>>> 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+>>>>> shows up when building kmsxx with optimization but not when
+>>>>> building with -O0. To work around this, if
+>>>>> BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
+>>>>
+>>>> According to the description in the bugzilla, the bug should also go
+>>>> away when compiling with -fno-dse ... so wouldn't it be better to
+>>>> use "-fno-dse" here instead of disabling the optimizations
+>>>> completely?
+>>>
+>>> Honestly I've completely missed that possible solution and didn't
+>>> even tested.
+>>>
+>>> Anyway it's been discussed on IRC channel to keep a common work
+>>> around for every different GCC_BUG_*, so since many packages are
+>>> affected by Bug 85180 and -O0 seemed to work every time Thomas P.
+>>> suggested to always keep that flag as solution.
 > 
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index a4ddb5b..bdbb48b 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -731,7 +731,15 @@ def run_instance(**kwargs):
->              log_write(kwargs['log'], "WARN: failed to generate configuration")
->              continue
->  
-> -        ret = do_build(**kwargs)
-> +        # Check if the build test is supposed to be a reproducible test
-> +        outputdir = os.path.abspath(os.path.join(idir, "output"))
-> +        with open(os.path.join(outputdir, ".config"), "r") as fconf:
-> +            if "BR2_REPRODUCIBLE=y\n" in fconf.read():
-> +                log_write(kwargs['log'], "INFO: Reproducible Build Test")
-> +                ret = do_reproducible_build(**kwargs)
+>   It's not the same solution for every GCC_BUG_* that we want, it is the same
+> solution for every package. So we don't want to use -O2 -g0 in one package and
+> -O0 in another package.
 
- It's maybe a little bit a silly thing or a micro-optimisation, but this way,
-the .config file is kept open during the entire build. So I think a better way
-to do it would be:
+Yes you'r right.
 
-        with ...:
-            reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
-        if reproducible:
-            ...
+>   If the -fno-dse also works, that would be an even better solution.
 
+Yes, I was thinking about it and you've beaten me on time :)
 
-> +            else:
-> +                log_write(kwargs['log'], "INFO: Non Reproducible Build Test")
-
- Both log messages are redundant, I think. The reproducible one is immediately
-followed by "INFO: Reproducible Build Test, starting build 1". The
-non-reproducible one is immediately followed by "INFO: build started" which also
-makes it pretty clear it's not a reproducible build.
-
- Regards,
- Arnout
-
-> +                ret = do_build(**kwargs)
->  
->          send_results(ret, **kwargs)
->  
+>> Well, if -fno-dse is also "fixing" this bug, maybe you could add
+>> "-fno-dse" to the global compiler flags instead of manually fixing each
+>> and every package with -O0? ... anyway, just my 0.02 ?.
 > 
+>   That's a good idea, actually...
+
+Yes, Thomas H. is totally right.
+
+>   And very easy to test if it works: just remove the definition of GCC_BUG_85180
+> (so the -O0 is never passed), add -fno-dse to the toolchain wrapper flags, and
+> build all affected packages with a toolchain that is known to be broken.
+
+Yep, I'm going to do that starting from Monday.
+
+>   Great for Giulio's patch count: so many patches adding this stuff, and then the
+> same number of patches removing it again :-)
+
+:) yes, 10 patches more, more or less. This way easier to produce them 
+though.
+
+Best regards
+-- 
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
