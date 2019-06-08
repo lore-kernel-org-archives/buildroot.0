@@ -1,43 +1,37 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 8 Jun 2019 21:49:57 +0200
-Subject: [Buildroot] [git commit] package/poppler: add missing end-of-line
- backslash
-Message-ID: <20190608195230.39DF68E8C6@busybox.osuosl.org>
+Date: Sat, 8 Jun 2019 21:53:24 +0200
+Subject: [Buildroot] [git commit] package/opencv3: objdetect needs calib3d
+Message-ID: <20190608195308.7678D8EC1F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4f6b94d515c1538a3fb650d5e7cc6a406f308421
+commit: https://git.buildroot.net/buildroot/commit/?id=7c165e442f1803570fecc2b2cff82d44e3eee783
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Commit c6bef18dab5d "bump version to 0.77.0" converted the
-POPPLER_CONF_OPTS variable to one entry per line, but a backslash was
-forgotten at the end of one of the lines. Thus, the last bit of the
-configuration options weren't applied.
+objdetect needs calib3d since version 3.4.4 and
+https://github.com/opencv/opencv/commit/53ec8f286b7d475fa5a799023595bd4dc73e5c81
 
-Fortunately, all of those were alread at their default value, so not
-much was lost.
+Fixes:
+ - http://autobuild.buildroot.org/results/37d0a5ba57de4c52b6e0ec99aedaca71f3397fbb
 
-It does fix a check-package warning though:
-package/poppler/poppler.mk:17: unexpected indent with tabs
-
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/poppler/poppler.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/opencv3/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
-index 37566504e9..ebb918de03 100644
---- a/package/poppler/poppler.mk
-+++ b/package/poppler/poppler.mk
-@@ -13,7 +13,7 @@ POPPLER_LICENSE_FILES = COPYING
- POPPLER_INSTALL_STAGING = YES
- 
- POPPLER_CONF_OPTS = \
--	-DENABLE_UNSTABLE_API_ABI_HEADERS=ON
-+	-DENABLE_UNSTABLE_API_ABI_HEADERS=ON \
- 	-DBUILD_GTK_TESTS=OFF \
- 	-DBUILD_QT5_TESTS=OFF \
- 	-DBUILD_CPP_TESTS=OFF \
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index 61405a7c64..3a6ff8e80c 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -140,6 +140,7 @@ config BR2_PACKAGE_OPENCV3_LIB_ML
+ config BR2_PACKAGE_OPENCV3_LIB_OBJDETECT
+ 	bool "objdetect"
+ 	# opencv_core dependency is already enabled
++	select BR2_PACKAGE_OPENCV3_LIB_CALIB3D
+ 	select BR2_PACKAGE_OPENCV3_LIB_IMGPROC
+ 	select BR2_PACKAGE_OPENCV3_LIB_ML
+ 	help
