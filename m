@@ -1,70 +1,79 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 8 Jun 2019 19:03:47 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: fix license
- hash
-In-Reply-To: <20190603224039.98733-1-aduskett@gmail.com>
-References: <20190603224039.98733-1-aduskett@gmail.com>
-Message-ID: <629a1777-181a-2947-8326-918258ce35c0@mind.be>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Sat, 8 Jun 2019 14:02:35 -0400
+Subject: [Buildroot] [PATCH 1/1] package/meson: Fix linking of
+ shared/static libs with static libs
+In-Reply-To: <20190521185447.2de12554@gmx.net>
+References: <20190514184245.92222-1-aduskett@gmail.com>
+ <20190518215637.2ea2ea51@windsurf>
+ <20190520202615.37fbd048@gmx.net> <20190520204517.52564b80@windsurf.home>
+ <20190521185447.2de12554@gmx.net>
+Message-ID: <CAFSsvmrURSufHb2dV+fLcLmpJXRON=yLqAg0G_FZRsnDDD=QrQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hello;
 
+I asked for an update on this pull request on github here:
+https://github.com/mesonbuild/meson/pull/3939#issuecomment-492355588
 
-On 04/06/2019 00:40, aduskett at gmail.com wrote:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> The new license
+And it seems that the general consensus will be to fix the link_whole behavior,
+but strip out or rework a lot of this patch. Mainly because many other projects
+already have workarounds, such as gstreamer, mesa, and libglib.
 
- However, our default version (v1.4) doesn't have this new license... So with
-this patch, it will fail when BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION is
-selected.
-
- This is incredibly annoying :-( We can't add both files, since legal-info
-requires the license files to exist. So I'm not sure what we can do about it...
-except maybe set LICENSE_FILES only for the
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION case.
-
- Actually, also LICENSE itself only makes sense when we now the exact version.
-Since it's BSD-licensed, a custom version may just as well be distributed under
-some more restrictive license...
-
- At the risk of making life complicated :-), I'm pulling Yann into this discussion.
-
- Regards,
- Arnout
-
-> is under license.md not license.rst, which will cause
-> "make legal-info" to fail.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  boot/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
->  boot/arm-trusted-firmware/arm-trusted-firmware.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
-> index 394071865e..d67b49cae8 100644
-> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.hash
-> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
->  sha256 6dae02acd85278394bfad6e2683e186e5332a711e4491ac4632ad6480f6e5494 arm-trusted-firmware-v1.4.tar.gz
-> -sha256 487795b8023df866259fa159bab94706b747fb0d623b7913f1c4955c0ab5f164  license.rst
-> +sha256 b3eb7d1ad5552ee71bd1031c7db7300d0d184e1236e2cd41fbc1e1e7c76a0e63  license.md
-> diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> index 9a23e3d336..f87373ffe6 100644
-> --- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> +++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-> @@ -6,7 +6,7 @@
->  
->  ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
->  ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
-> -ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
-> +ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.md
->  
->  ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
->  # Handle custom ATF tarballs as specified by the configuration
-> 
+On Tue, May 21, 2019 at 12:54 PM Peter Seiderer <ps.report@gmx.net> wrote:
+>
+> Hello Thomas,
+>
+> On Mon, 20 May 2019 20:45:17 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+>
+> > Hello Peter,
+> >
+> > Thanks for your feedback!
+> >
+> > On Mon, 20 May 2019 20:26:15 +0200
+> > Peter Seiderer <ps.report@gmx.net> wrote:
+> >
+> > > I can confirm the patch fixes the gstreamer static build/static libs
+> > > problem (see [1])....
+> > >
+> > > But as it is a (not yet) upstream committed bugfix, maybe it is better to
+> > > wait for a upstream committ and/or next meson version bump?
+> >
+> > That would of course be the best approach...
+> >
+> > > On the other side the gstreamer folks where bored with waiting for the
+> > > meson fix to be accepted and committed an workaround for the problem
+> > > already (see [2])...
+> > >
+> > > Conclusion: Take the patch in case there is already a buildroot
+> > > in-tree package which needs the fix (or commit the patch with
+> > > in series with a in-tree user), otherwise wait for meson
+> > > upstream...
+> >
+> > ... however, if it starts holding off bumping too many packages, I
+> > guess we'll have to take this patch. Having to add a !BR2_STATIC_LIBS
+> > dependency to libglib2 would be really horrible, considering the number
+> > of reverse dependencies that libglib2 has.
+>
+> As far as I know only gstreamer itself is affected (the only package
+> linking a static library using an internal static helper library)?
+> But the first other package affected by this bug justifies the
+> patch applied ;-)
+>
+> >
+> > At least, if the problem is acknowledged upstream, we know it will be
+> > fixed at some point. Perhaps not with the exact patch we will have, but
+> > at least it will be fixed, which means we won't have to carry this
+> > patch forever.
+>
+> Yes...
+>
+> Regards,
+> Peter
+>
+> >
+> > Thomas
+>
