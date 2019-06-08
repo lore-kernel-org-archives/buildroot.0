@@ -1,89 +1,56 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  8 Jun 2019 21:39:29 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/iputils: fix static build with gcrypt
-Message-ID: <20190608193929.6484-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 8 Jun 2019 21:41:06 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/poppler: fix build with
+ cmake < 3.10
+In-Reply-To: <20190602191922.9491-1-fontaine.fabrice@gmail.com>
+References: <20190602191922.9491-1-fontaine.fabrice@gmail.com>
+Message-ID: <e2df5d8e-3dcc-3c59-6805-2b67336c6f23@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.net/results/fb698e3e903869978bd5e69d791ec362317b7981
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Update patch to avoid breaking build with other crypto libraries
 
- ...n.build-fix-static-build-with-gcrypt.patch | 58 +++++++++++++++++++
- 1 file changed, 58 insertions(+)
- create mode 100644 package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
+On 02/06/2019 21:19, Fabrice Fontaine wrote:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/f9e24d38d3aa4519615c5a0ae7f62af610df976f
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/poppler/poppler.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+> index a2bb7e3049..56998dd530 100644
+> --- a/package/poppler/poppler.mk
+> +++ b/package/poppler/poppler.mk
+> @@ -20,6 +20,9 @@ POPPLER_CONF_OPTS = \
+>  	-DENABLE_GOBJECT_INTROSPECTION=OFF \
+>  	-DENABLE_GTK_DOC=OFF
+>  
+> +# cmake older than 3.10 require this to avoid try_run() in FindThreads
+> +POPPLER_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
 
-diff --git a/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch b/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
-new file mode 100644
-index 0000000000..07bf4387dc
---- /dev/null
-+++ b/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
-@@ -0,0 +1,58 @@
-+From 40123757a799fac0446e33055b33a540bf725589 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 7 Jun 2019 23:17:13 +0200
-+Subject: [PATCH] meson.build: fix static build with gcrypt
-+
-+gcrypt depends on gpg-error so save the result of
-+dependency('gpg-error') in gpg_error_dep and use it when needed to fix
-+static build
-+
-+Fixes:
-+ - http://autobuild.buildroot.net/results/fb698e3e903869978bd5e69d791ec362317b7981
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/iputils/iputils/pull/185]
-+---
-+ meson.build        | 5 ++++-
-+ ninfod/meson.build | 2 +-
-+ 2 files changed, 5 insertions(+), 2 deletions(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 84e4360..24bda0c 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -119,6 +119,9 @@ elif crypto == 'none'
-+ 		description : 'If set RFC6744 random does not use any CRYPTO lib.')
-+ endif
-+ 
-++# gpg-error is a dependency of gcrypt
-++gpg_error_dep = dependency('gpg-error', required : false)
-++
-+ systemd = dependency('systemd', required : false)
-+ systemdunitdir = get_option('systemdunitdir')
-+ if systemdunitdir == '' and systemd.found()
-+@@ -241,7 +244,7 @@ libcommon = static_library(
-+ 
-+ if build_ping == true
-+ 	executable('ping', ['ping.c', 'ping_common.c', 'ping6_common.c', git_version_h],
-+-		dependencies : [m_dep, cap_dep, idn_dep, crypto_dep, resolv_dep],
-++		dependencies : [m_dep, cap_dep, idn_dep, crypto_dep, gpg_error_dep, resolv_dep],
-+ 		link_with : [libcommon],
-+ 		install: true)
-+ 	meson.add_install_script('build-aux/setcap-setuid.sh',
-+diff --git a/ninfod/meson.build b/ninfod/meson.build
-+index a0ee94d..1e7aa26 100644
-+--- a/ninfod/meson.build
-++++ b/ninfod/meson.build
-+@@ -10,7 +10,7 @@ ninfod_sources = files('''
-+ 	ninfod_name.c
-+ '''.split())
-+ executable('ninfod', [ninfod_sources, git_version_h],
-+-	dependencies : [cap_dep, crypto_dep, rt_dep, threads],
-++	dependencies : [cap_dep, crypto_dep, gpg_error_dep, rt_dep, threads],
-+ 	link_with : [libcommon],
-+ 	include_directories : inc,
-+ 	install: true,
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+ This made no sense to me: we do have threads (because we depend on it), and the
+compiler does accept the -pthread argument (and it is preferred over -lpthread
+for static scenarios), so why set it to OFF?
+
+ In addition, the key option is THREAD_HAVE_PTHREAD_ARG, not THREAD_PTHREAD_ARG.
+
+ So I changed the patch to set THREAD_HAVE_PTHREAD_ARG=ON.
+
+ Note that static linking still fails horribly with dozens of missing libraries
+(cfr. [1]). I think we should disable it for static.
+
+ Regards,
+ Arnout
+
+[1] http://autobuild.buildroot.net/results/e409863724005a0c182476612187a322a16a7db8
+
+> +
+>  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+>  POPPLER_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
+>  endif
+> 
