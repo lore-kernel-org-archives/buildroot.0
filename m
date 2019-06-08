@@ -1,69 +1,82 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 8 Jun 2019 22:16:44 +0200
-Subject: [Buildroot] [PATCH v3,
- 2/2] package/mpd: fix static build with tremor and vorbis
-In-Reply-To: <20190601143456.23326-2-fontaine.fabrice@gmail.com>
-References: <20190601143456.23326-1-fontaine.fabrice@gmail.com>
- <20190601143456.23326-2-fontaine.fabrice@gmail.com>
-Message-ID: <2fab7725-7991-61c2-d5b7-2b3272d5b3a2@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat, 8 Jun 2019 22:21:29 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/poppler: fix build with
+ cmake < 3.10
+In-Reply-To: <1cf9a9f0-4621-fae3-3cd1-a0632e539031@mind.be>
+References: <20190602191922.9491-1-fontaine.fabrice@gmail.com>
+ <e2df5d8e-3dcc-3c59-6805-2b67336c6f23@mind.be>
+ <1cf9a9f0-4621-fae3-3cd1-a0632e539031@mind.be>
+Message-ID: <CAPi7W812BPvxYRoC7sT-4XMycvK59+ddr7rnMwRvOZEsS87ibA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Dear Arnout,
 
+Le sam. 8 juin 2019 ? 21:41, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+>
+>
+>
+> On 08/06/2019 21:41, Arnout Vandecappelle wrote:
+> >
+> >
+> > On 02/06/2019 21:19, Fabrice Fontaine wrote:
+> >> Fixes:
+> >>  - http://autobuild.buildroot.org/results/f9e24d38d3aa4519615c5a0ae7f62af610df976f
+> >>
+> >> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >> ---
+> >>  package/poppler/poppler.mk | 3 +++
+> >>  1 file changed, 3 insertions(+)
+> >>
+> >> diff --git a/package/poppler/poppler.mk b/package/poppler/poppler.mk
+> >> index a2bb7e3049..56998dd530 100644
+> >> --- a/package/poppler/poppler.mk
+> >> +++ b/package/poppler/poppler.mk
+> >> @@ -20,6 +20,9 @@ POPPLER_CONF_OPTS = \
+> >>      -DENABLE_GOBJECT_INTROSPECTION=OFF \
+> >>      -DENABLE_GTK_DOC=OFF
+> >>
+> >> +# cmake older than 3.10 require this to avoid try_run() in FindThreads
+> >> +POPPLER_CONF_OPTS += -DTHREADS_PTHREAD_ARG=OFF
+> >
+> >  This made no sense to me: we do have threads (because we depend on it), and the
+> > compiler does accept the -pthread argument (and it is preferred over -lpthread
+> > for static scenarios), so why set it to OFF?
+> >
+> >  In addition, the key option is THREAD_HAVE_PTHREAD_ARG, not THREAD_PTHREAD_ARG.
+We're already passing -DTHREADS_PTHREAD_ARG=OFF to exiv2, i2pd,
+rabbitmq-c, xerces, librtlsdr, libssh and paho-mqtt-cpp.
+The commit message of librltsdr commit [1] specifies that setting this
+variable to OFF only disable the TRY_RUN call.
 
-On 01/06/2019 16:34, Fabrice Fontaine wrote:
-> mpd can't be built statically with tremor and vorbis, build fails on:
-> block.c:(.text+0x11c): multiple definition of `vorbis_block_init'
-> /usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libvorbisidec.a(block.o):block.c:(.text+0x0): first defined here
-> /usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: Disabling relaxation: it will not work with multiple definitions
-> /usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libvorbis.a(block.o): In function `_vorbis_block_alloc':
-> 
-> Fix this by making both options mutually exclusive
-> 
-> It should be noted that upstream removed the possibility to enable
-> tremor and vorbis at the same time since version 0.21.6 and
-> https://github.com/MusicPlayerDaemon/MPD/commit/c18cd941aaa4c16ac713bc4f1e16ada5281d689e
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/60c721a82ffd668bebf02d80bca83780d6cdb2f2
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Should we update all these packages to use your new proposal?
+> >
+> >  So I changed the patch to set THREAD_HAVE_PTHREAD_ARG=ON.
+>
+>  ... and applied to master, thanks. In case it wasn't obvious :-)
+>
+>  Regards,
+>  Arnout
+>
+> >
+> >  Note that static linking still fails horribly with dozens of missing libraries
+> > (cfr. [1]). I think we should disable it for static.
+> >
+> >  Regards,
+> >  Arnout
+> >
+> > [1] http://autobuild.buildroot.net/results/e409863724005a0c182476612187a322a16a7db8
+> >
+> >> +
+> >>  ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> >>  POPPLER_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -latomic"
+> >>  endif
+> >>
+Best Regards,
 
- Both applied to master, thanks.
+Fabrice
 
-> ---
-> Changes v2 -> v3 (after review of Thomas Petazzoni):
->  - Move drop of tremor select in a dedicated patch
->  - Remove BR2_SOFT_FLOAT dependency and make both options mutually
->    exclusive
-> 
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Drop default and replace it by a dependency on BR2_SOFT_FLOAT or
->    !BR2_SOFT_FLOAT
-> 
->  package/mpd/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-> index 20a7421481..b8478c5b76 100644
-> --- a/package/mpd/Config.in
-> +++ b/package/mpd/Config.in
-> @@ -134,6 +134,7 @@ config BR2_PACKAGE_MPD_TREMOR
->  	bool "tremor"
->  	select BR2_PACKAGE_LIBOGG
->  	select BR2_PACKAGE_TREMOR
-> +	depends on !BR2_PACKAGE_MPD_VORBIS
-
- depends should come before select. check-package complained about this. Fixed
-before applying.
-
- Regards,
- Arnout
-
->  	help
->  	  Enable vorbis input support.
->  	  Select this if you want to play back OGG files on softfloat
-> 
+[1] https://git.buildroot.net/buildroot/commit/package/librtlsdr?id=4c6eace6f756d15ae9639a503c9245d1e7fb12a9
