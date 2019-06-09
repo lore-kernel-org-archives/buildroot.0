@@ -1,48 +1,62 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 10 Jun 2019 00:27:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/weston: needs headers >= 4.4
-Message-ID: <20190609222703.30345-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 10 Jun 2019 00:27:35 +0200
+Subject: [Buildroot] [PATCH 3/3] configs/imx7dpico: Add Wifi support
+In-Reply-To: <20190609145749.28766-3-offougajoris@gmail.com>
+References: <20190609145749.28766-1-offougajoris@gmail.com>
+ <20190609145749.28766-3-offougajoris@gmail.com>
+Message-ID: <4edcf1af-da47-096a-3dc1-fe2866991d9f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-weston includes input-event-codes.h since version 5.0.91 and
-https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
 
-input-event-codes.h is available only since kernel 4.4 and
-https://github.com/torvalds/linux/commit/f902dd893427eade90f7eaf858e5ff8b150a5a12
 
-Fixes:
- - http://autobuild.buildroot.org/results/210c2759900f15ea0030d088f6f45cd8bb199b29
+On 09/06/2019 16:57, Joris Offouga wrote:
+> imx7dpico has a BCM4339 Wifi chip. Add Wifi support by default
+> to allow a better customer experience.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/weston/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ I wasn't sure if this one depended on the kernel bump to 5.1, so I haven't
+applied yet. Also, minor nits below.
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index f874b0cc6a..1b1882b388 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -1,6 +1,6 @@
--comment "weston needs udev and a toolchain w/ locale, threads, dynamic library, headers >= 3.0"
-+comment "weston needs udev and a toolchain w/ locale, threads, dynamic library, headers >= 4.4"
- 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4 || BR2_STATIC_LIBS || \
- 		!BR2_ENABLE_LOCALE
- 
- config BR2_PACKAGE_WESTON
-@@ -9,7 +9,7 @@ config BR2_PACKAGE_WESTON
- 	depends on BR2_PACKAGE_HAS_UDEV
- 	depends on !BR2_STATIC_LIBS # wayland
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4 # input-event-codes.h
- 	select BR2_PACKAGE_WAYLAND
- 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 	select BR2_PACKAGE_LIBXKBCOMMON
--- 
-2.20.1
+[snip]
+> diff --git a/configs/imx7dpico_defconfig b/configs/imx7dpico_defconfig
+> index cd12e282ef..6b1184f672 100644
+> --- a/configs/imx7dpico_defconfig
+> +++ b/configs/imx7dpico_defconfig
+> @@ -28,6 +28,18 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+>  BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+>  BR2_TARGET_UBOOT_FORMAT_IMG=y
+>  
+> +
+
+ Spurious empty line here.
+
+> +# wifi firmware for brcm43439
+> +BR2_PACKAGE_LINUX_FIRMWARE=y
+> +BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
+> +
+> +# For automatic firmware loading
+> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+> +
+> +# wireless packages
+> +BR2_PACKAGE_WIRELESS_TOOLS=y
+> +BR2_PACKAGE_WPA_SUPPLICANT=y
+> +BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+
+ ... and a missing empty line here.
+
+ With those two things fixed, you can add my
+
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+ Also, don't forget to keep Pierre-Jean's Tested-by tag.
+
+ Regards,
+ Arnout
+
+>  # required tools to create the eMMC image
+>  BR2_PACKAGE_HOST_DOSFSTOOLS=y
+>  BR2_PACKAGE_HOST_GENIMAGE=y
+> 
