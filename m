@@ -1,50 +1,55 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 10 Jun 2019 01:07:02 +0200
-Subject: [Buildroot] [PATCH 1/1] iputils: set the permissions with
- IPUTILS_PERMISSIONS
-Message-ID: <20190609230702.7068-1-petr.vorel@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 10 Jun 2019 01:07:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cargo: needs host-libxml2
+In-Reply-To: <20190609210835.31236-1-fontaine.fabrice@gmail.com>
+References: <20190609210835.31236-1-fontaine.fabrice@gmail.com>
+Message-ID: <9adf69a9-b764-d5c5-e484-958bb9f8548f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-for arping, clockdiff and ping. These require root permission for
-socket(). Upstream solution (script setcap-setuid.sh) requires
-setcap binary on the host and cap_net_raw+ep + libcap or setting
-setuid root executable which is dangerous).
 
-This restores behavior used for version s20180629 (which was used
-for ping and traceroute6, but we don't build traceroute6 since s20190515).
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
-Hi,
+On 09/06/2019 23:08, Fabrice Fontaine wrote:
+> host-cargo needs host-libxml2 to avoid depending on an unworking
+> libxml2:
+> 
+> --- stderr
+> cmake: /home/mark/buildroot-test/instance-1/output/host/lib/libcurl.so.4: no version information available (required by cmake)
+> cmake: symbol lookup error: /usr/lib/x86_64-linux-gnu/libxml2.so.2: undefined symbol: UCNV_TO_U_CALLBACK_STOP_60
+> thread 'main' panicked at '
+> command did not execute successfully, got: exit code: 127
 
-it'd be great also create symlink ping -> ping6, but don't know how.
+ I would like to understand this one a little more before blindly linking with
+host-libxml2...
 
-Kind regards,
-Petr
----
- package/iputils/iputils.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ I can't see anything in cargo's sources that refers to libxml2, except some of
+the vendored curl stuff, but those bits are only used on win32.
 
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index d9a51ece2a..8be54b4788 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -52,4 +52,12 @@ endif
- # XSL Stylesheets for DocBook 5 not packaged for buildroot
- IPUTILS_CONF_OPTS += -DBUILD_MANS=false -DBUILD_HTML_MANS=false
- 
-+# handle permissions ourselves
-+IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
-+define IPUTILS_PERMISSIONS
-+	/bin/arping      f 4755 0 0 - - - - -
-+	/bin/clockdiff   f 4755 0 0 - - - - -
-+	/bin/ping        f 4755 0 0 - - - - -
-+endef
-+
- $(eval $(meson-package))
--- 
-2.20.1
+ Regards,
+ Arnout
+
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/017854ca4cce8c0e4f7b41b407e44cb91e8b09a0
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/cargo/cargo.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/cargo/cargo.mk b/package/cargo/cargo.mk
+> index a387281b4c..dd0b93b304 100644
+> --- a/package/cargo/cargo.mk
+> +++ b/package/cargo/cargo.mk
+> @@ -28,6 +28,7 @@ HOST_CARGO_DEPENDENCIES = \
+>  	host-libhttpparser \
+>  	host-libssh2 \
+>  	host-libcurl \
+> +	host-libxml2 \
+>  	host-rustc \
+>  	host-cargo-bin
+>  
+> 
