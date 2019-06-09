@@ -1,54 +1,99 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 9 Jun 2019 23:27:59 +0200
-Subject: [Buildroot] [git commit] package/iputils: fix license
-Message-ID: <20190609213032.B76C780FF0@busybox.osuosl.org>
+Date: Sun, 9 Jun 2019 23:29:05 +0200
+Subject: [Buildroot] [git commit] package/iputils: fix build without setcap
+Message-ID: <20190609213032.B82258F3FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07d213be0cbe3a516ab537822e8a75c52edac6b6
+commit: https://git.buildroot.net/buildroot/commit/?id=549e8a7e338999a988935a9f24f44416f568ebc4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Replace nfinfod/COPYING by LICENSE, Documentation/LICENSE.BSD3 and
-  Documentation/LICENSE.GPL2 which are available since version s20180629
-  and
-  https://github.com/iputils/iputils/commit/686ee13130550aa4cb2937842504b2131f0934c6
-- BSD-4-Clause has been removed since version s20180629 and
-  https://github.com/iputils/iputils/commit/f69eeac80de413248fd3d7d4d4244af22a81e055
+Fixes:
+ - http://autobuild.buildroot.org/results/711718ecf20d6cc28953e089a6e5516cfb4b9031
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/iputils/iputils.hash | 4 +++-
- package/iputils/iputils.mk   | 5 ++---
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ ...004-build-sys-Make-setcap-really-optional.patch | 71 ++++++++++++++++++++++
+ 1 file changed, 71 insertions(+)
 
-diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-index 57b9ccf6a4..613414ce5c 100644
---- a/package/iputils/iputils.hash
-+++ b/package/iputils/iputils.hash
-@@ -1,3 +1,5 @@
- # Locally computed
- sha256 9b5125eb5ef9f4e947ad8fdddcf77f538f53b8f47b53eb5bc5347cb16d01c8fd  iputils-s20190515.tar.gz
--sha256 966075293e45785230c19415bcda15bd07c75bead4fe73332d1a4b9c45bb321f  ninfod/COPYING
-+sha256 b8ea785d12fa6a44916601104dd746216957e93f13a26d3eb858b3b5a4ad66ab  LICENSE
-+sha256 9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documentation/LICENSE.GPL2
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 6eae32d594..d9a51ece2a 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -13,9 +13,8 @@
- 
- IPUTILS_VERSION = s20190515
- IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
--IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause, BSD-4-Clause
--# Only includes a license file for BSD
--IPUTILS_LICENSE_FILES = ninfod/COPYING
-+IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
-+IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
- IPUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- 
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
+diff --git a/package/iputils/0004-build-sys-Make-setcap-really-optional.patch b/package/iputils/0004-build-sys-Make-setcap-really-optional.patch
+new file mode 100644
+index 0000000000..0024f3fa6f
+--- /dev/null
++++ b/package/iputils/0004-build-sys-Make-setcap-really-optional.patch
+@@ -0,0 +1,71 @@
++From 473be6467f995865244e7e68b2fa587a4ee79551 Mon Sep 17 00:00:00 2001
++From: Michael Weiss <dev.primeos@gmail.com>
++Date: Thu, 16 May 2019 09:44:27 +0000
++Subject: [PATCH] build-sys: Make setcap really optional
++
++The setcap dependency is marked as optional but meson.build depends on
++setcap.path():
++
++meson.build:246:7: ERROR:  add_install_script args must be strings
++
++[Retrieved from:
++https://github.com/iputils/iputils/commit/473be6467f995865244e7e68b2fa587a4ee79551]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ meson.build | 11 +++++++----
++ 1 file changed, 7 insertions(+), 4 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index 8af9e18..95c778a 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -221,10 +221,13 @@ config_h = configure_file(
++ setcap = find_program('setcap', '/usr/sbin/setcap', '/sbin/setcap', required : false)
++ if get_option('NO_SETCAP_OR_SUID')
++ 	perm_type = 'none'
+++	setcap_path = '/dev/null'
++ elif cap_dep.found() and setcap.found()
++ 	perm_type = 'caps'
+++	setcap_path = setcap.path()
++ else
++ 	perm_type = 'setuid'
+++	setcap_path = '/dev/null'
++ endif
++ 
++ ############################################################
++@@ -243,7 +246,7 @@ if build_ping == true
++ 		join_paths(get_option('prefix'), get_option('bindir')),
++ 		'ping',
++ 		perm_type,
++-		setcap.path()
+++		setcap_path
++ 	)
++ endif
++ 
++@@ -263,7 +266,7 @@ if build_traceroute6 == true
++ 		join_paths(get_option('prefix'), get_option('bindir')),
++ 		'traceroute6',
++ 		perm_type,
++-		setcap.path()
+++		setcap_path
++ 	)
++ endif
++ 
++@@ -276,7 +279,7 @@ if build_clockdiff == true
++ 		join_paths(get_option('prefix'), get_option('bindir')),
++ 		'clockdiff',
++ 		perm_type,
++-		setcap.path()
+++		setcap_path
++ 	)
++ endif
++ 
++@@ -306,7 +309,7 @@ if build_arping == true
++ 		join_paths(get_option('prefix'), get_option('bindir')),
++ 		'arping',
++ 		perm_type,
++-		setcap.path()
+++		setcap_path
++ 	)
++ endif
++ 
