@@ -1,62 +1,68 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Jun 2019 00:27:35 +0200
-Subject: [Buildroot] [PATCH 3/3] configs/imx7dpico: Add Wifi support
-In-Reply-To: <20190609145749.28766-3-offougajoris@gmail.com>
-References: <20190609145749.28766-1-offougajoris@gmail.com>
- <20190609145749.28766-3-offougajoris@gmail.com>
-Message-ID: <4edcf1af-da47-096a-3dc1-fe2866991d9f@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 10 Jun 2019 00:28:33 +0200
+Subject: [Buildroot] [git commit] package/gpsd: fix isync build without nmea
+Message-ID: <20190609222904.5A8B58EC1B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=0b2a2fc13e2703df388a1f0f2f9e8b262c820aa4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Upstream suggested to move the definition of NMEA_DOLLAR out of the
+ifdef.
 
-On 09/06/2019 16:57, Joris Offouga wrote:
-> imx7dpico has a BCM4339 Wifi chip. Add Wifi support by default
-> to allow a better customer experience.
+Fixes:
+ - http://autobuild.buildroot.org/results/7757ff82623eb5db8cbd9cdf69baf308fd0b0666
 
- I wasn't sure if this one depended on the kernel bump to 5.1, so I haven't
-applied yet. Also, minor nits below.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...ket_states.h-fix-isync-build-without-NMEA.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-[snip]
-> diff --git a/configs/imx7dpico_defconfig b/configs/imx7dpico_defconfig
-> index cd12e282ef..6b1184f672 100644
-> --- a/configs/imx7dpico_defconfig
-> +++ b/configs/imx7dpico_defconfig
-> @@ -28,6 +28,18 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
->  BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
->  BR2_TARGET_UBOOT_FORMAT_IMG=y
->  
-> +
-
- Spurious empty line here.
-
-> +# wifi firmware for brcm43439
-> +BR2_PACKAGE_LINUX_FIRMWARE=y
-> +BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
-> +
-> +# For automatic firmware loading
-> +BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-> +
-> +# wireless packages
-> +BR2_PACKAGE_WIRELESS_TOOLS=y
-> +BR2_PACKAGE_WPA_SUPPLICANT=y
-> +BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
-
- ... and a missing empty line here.
-
- With those two things fixed, you can add my
-
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Also, don't forget to keep Pierre-Jean's Tested-by tag.
-
- Regards,
- Arnout
-
->  # required tools to create the eMMC image
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
->  BR2_PACKAGE_HOST_GENIMAGE=y
-> 
+diff --git a/package/gpsd/0004-packet_states.h-fix-isync-build-without-NMEA.patch b/package/gpsd/0004-packet_states.h-fix-isync-build-without-NMEA.patch
+new file mode 100644
+index 0000000000..1a36bc8429
+--- /dev/null
++++ b/package/gpsd/0004-packet_states.h-fix-isync-build-without-NMEA.patch
+@@ -0,0 +1,37 @@
++From a6561fbf2a53972e552b1619c8711092c72c2199 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 9 Jun 2019 11:52:55 +0200
++Subject: [PATCH] packet_states.h: fix isync build without NMEA
++
++Build fails if isync is enabled without nmea because NMEA_DOLLAR is not
++defined.
++
++Fix this build failure by always defining NMEA_DOLLAR
++
++Fixes:
++ - http://autobuild.buildroot.org/results/7757ff82623eb5db8cbd9cdf69baf308fd0b0666
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://gitlab.com/gpsd/gpsd/merge_requests/11]
++---
++ packet_states.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/packet_states.h b/packet_states.h
++index 4c3a3208..0adbeb1d 100644
++--- a/packet_states.h
+++++ b/packet_states.h
++@@ -3,9 +3,9 @@
++ 
++    COMMENT_BODY,	/* pound comment for a test load */
++    COMMENT_RECOGNIZED,	/* comment recognized */
+++   NMEA_DOLLAR,		/* we've seen first character of NMEA leader */
++ 
++ #ifdef NMEA0183_ENABLE
++-   NMEA_DOLLAR,		/* we've seen first character of NMEA leader */
++    NMEA_BANG,		/* we've seen first character of an AIS message '!' */
++    NMEA_PUB_LEAD,	/* seen second character of NMEA G leader */
++    NMEA_VENDOR_LEAD,	/* seen second character of NMEA P leader */
++-- 
++2.20.1
++
