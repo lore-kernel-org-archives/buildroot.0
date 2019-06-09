@@ -1,9 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  9 Jun 2019 11:38:14 +0200
-Subject: [Buildroot] [PATCH 4/4] package/iputils: fix build without setcap
-In-Reply-To: <20190609093814.14169-1-fontaine.fabrice@gmail.com>
-References: <20190609093814.14169-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190609093814.14169-4-fontaine.fabrice@gmail.com>
+Date: Sun,  9 Jun 2019 12:48:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gpsd: fix isync build without nmea
+Message-ID: <20190609104803.22169-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,90 +9,58 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/711718ecf20d6cc28953e089a6e5516cfb4b9031
+ - http://autobuild.buildroot.org/results/7757ff82623eb5db8cbd9cdf69baf308fd0b0666
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...uild-sys-Make-setcap-really-optional.patch | 71 +++++++++++++++++++
- 1 file changed, 71 insertions(+)
- create mode 100644 package/iputils/0004-build-sys-Make-setcap-really-optional.patch
+ ...tates.h-fix-isync-build-without-NMEA.patch | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/gpsd/0004-packet_states.h-fix-isync-build-without-NMEA.patch
 
-diff --git a/package/iputils/0004-build-sys-Make-setcap-really-optional.patch b/package/iputils/0004-build-sys-Make-setcap-really-optional.patch
+diff --git a/package/gpsd/0004-packet_states.h-fix-isync-build-without-NMEA.patch b/package/gpsd/0004-packet_states.h-fix-isync-build-without-NMEA.patch
 new file mode 100644
-index 0000000000..0024f3fa6f
+index 0000000000..3ae6a64aad
 --- /dev/null
-+++ b/package/iputils/0004-build-sys-Make-setcap-really-optional.patch
-@@ -0,0 +1,71 @@
-+From 473be6467f995865244e7e68b2fa587a4ee79551 Mon Sep 17 00:00:00 2001
-+From: Michael Weiss <dev.primeos@gmail.com>
-+Date: Thu, 16 May 2019 09:44:27 +0000
-+Subject: [PATCH] build-sys: Make setcap really optional
++++ b/package/gpsd/0004-packet_states.h-fix-isync-build-without-NMEA.patch
+@@ -0,0 +1,39 @@
++From da57b3d59e94b1a2e2ea6167c47cf822c7715626 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 9 Jun 2019 11:52:55 +0200
++Subject: [PATCH] packet_states.h: fix isync build without NMEA
 +
-+The setcap dependency is marked as optional but meson.build depends on
-+setcap.path():
++Build fails if isync is enabled without nmea because NMEA_DOLLAR is not
++defined.
 +
-+meson.build:246:7: ERROR:  add_install_script args must be strings
++Fix this build failure by defining NMEA_DOLLAR if STASH_ENABLE is set
 +
-+[Retrieved from:
-+https://github.com/iputils/iputils/commit/473be6467f995865244e7e68b2fa587a4ee79551]
++Fixes:
++ - http://autobuild.buildroot.org/results/7757ff82623eb5db8cbd9cdf69baf308fd0b0666
++
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://gitlab.com/gpsd/gpsd/merge_requests/11]
 +---
-+ meson.build | 11 +++++++----
-+ 1 file changed, 7 insertions(+), 4 deletions(-)
++ packet_states.h | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
 +
-+diff --git a/meson.build b/meson.build
-+index 8af9e18..95c778a 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -221,10 +221,13 @@ config_h = configure_file(
-+ setcap = find_program('setcap', '/usr/sbin/setcap', '/sbin/setcap', required : false)
-+ if get_option('NO_SETCAP_OR_SUID')
-+ 	perm_type = 'none'
-++	setcap_path = '/dev/null'
-+ elif cap_dep.found() and setcap.found()
-+ 	perm_type = 'caps'
-++	setcap_path = setcap.path()
-+ else
-+ 	perm_type = 'setuid'
-++	setcap_path = '/dev/null'
-+ endif
++diff --git a/packet_states.h b/packet_states.h
++index 4c3a3208..f2f04dcf 100644
++--- a/packet_states.h
+++++ b/packet_states.h
++@@ -4,8 +4,11 @@
++    COMMENT_BODY,	/* pound comment for a test load */
++    COMMENT_RECOGNIZED,	/* comment recognized */
 + 
-+ ############################################################
-+@@ -243,7 +246,7 @@ if build_ping == true
-+ 		join_paths(get_option('prefix'), get_option('bindir')),
-+ 		'ping',
-+ 		perm_type,
-+-		setcap.path()
-++		setcap_path
-+ 	)
-+ endif
-+ 
-+@@ -263,7 +266,7 @@ if build_traceroute6 == true
-+ 		join_paths(get_option('prefix'), get_option('bindir')),
-+ 		'traceroute6',
-+ 		perm_type,
-+-		setcap.path()
-++		setcap_path
-+ 	)
-+ endif
-+ 
-+@@ -276,7 +279,7 @@ if build_clockdiff == true
-+ 		join_paths(get_option('prefix'), get_option('bindir')),
-+ 		'clockdiff',
-+ 		perm_type,
-+-		setcap.path()
-++		setcap_path
-+ 	)
-+ endif
-+ 
-+@@ -306,7 +309,7 @@ if build_arping == true
-+ 		join_paths(get_option('prefix'), get_option('bindir')),
-+ 		'arping',
-+ 		perm_type,
-+-		setcap.path()
-++		setcap_path
-+ 	)
-+ endif
-+ 
++-#ifdef NMEA0183_ENABLE
+++#if defined(NMEA0183_ENABLE) || defined(STASH_ENABLE)
++    NMEA_DOLLAR,		/* we've seen first character of NMEA leader */
+++#endif /* NMEA0183_ENABLE || STASH_ENABLE */
+++
+++#ifdef NMEA0183_ENABLE
++    NMEA_BANG,		/* we've seen first character of an AIS message '!' */
++    NMEA_PUB_LEAD,	/* seen second character of NMEA G leader */
++    NMEA_VENDOR_LEAD,	/* seen second character of NMEA P leader */
++-- 
++2.20.1
++
 -- 
 2.20.1
