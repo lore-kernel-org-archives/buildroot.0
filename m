@@ -1,44 +1,87 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 10 Jun 2019 00:34:56 +0200
-Subject: [Buildroot] [PATCH 4/4] package/iputils: fix build without
- setcap
-In-Reply-To: <CAPi7W80ms+GTYwC9Q6usykCFxWjA7+1FSy2-KR3qW16RFdEBPA@mail.gmail.com>
-References: <20190609093814.14169-1-fontaine.fabrice@gmail.com>
- <20190609093814.14169-4-fontaine.fabrice@gmail.com>
- <dd4f00c5-f8ae-1758-48e4-bab512adb2a2@mind.be>
- <20190609214531.GA17515@x230>
- <CAPi7W80ms+GTYwC9Q6usykCFxWjA7+1FSy2-KR3qW16RFdEBPA@mail.gmail.com>
-Message-ID: <20190609223456.GA26152@x230>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 10 Jun 2019 00:31:40 +0200
+Subject: [Buildroot] [git commit] package/samba4: drop unneeded second patch
+Message-ID: <20190609223756.4658A881E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+commit: https://git.buildroot.net/buildroot/commit/?id=df859a83f6f53c3e9cc4d1d11abd58f47bed1489
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-...
-> > >  So, three questions:
-> > > 1. Shouldn't we do the same with an IPUTILS_PERMISSIONS setting?
-> > I removed IPUTILS_PERMISSIONS in 9ffcd9279e ("package/iputils: bump to version s20190515"),
-> > but it looks like it's better to use it (thus we don't depend on /sbin/setcap).
+This patch is not needed since version 4.9.0 and
+https://github.com/samba-team/samba/commit/859698d29b547217356851094ed8188236e717b6
+which solved the issue by avoiding calling this function.
 
-> > > 2. Does this interact in any way with USE_CAP?
-> > No.
-Sorry, yes, in a sense that if setcap binary is on host and USE_CAP defined
-than setcap-setuid.sh script would set cap_net_raw+ep.
+Also renumber the remaining patches.
 
-> > > > + if get_option('NO_SETCAP_OR_SUID')
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...pilation-of-Samba-4.7.4-with-disabled-ADS.patch | 41 ----------------------
+ ...uild-on-64bit-platforms-by-including-std.patch} |  0
+ ...able-build-of-manpages-and-documentation.patch} |  0
+ ...regfio.c-include-stdint.h-before-cmoka.h.patch} |  0
+ 4 files changed, 41 deletions(-)
 
-> > > 3. Shouldn't we set this option, since we probably don't want to use
-> > > /sbin/setcap, ever?
-> > IMHO yes.
-> Thanks for your help in answering those questions.
-> Could you send the patch setting back IPUTILS_PERMISSIONS and using
-> NO_SETCAP_OR_SUID?
-> From my understanding, permissions should be set to ping and
-> traceroute6 as done before the dump but also to clockdiff and arping.
-Thanks, good point. Yes, it's in meson.build, socket permission requires that.
-
-Kind regards,
-Petr
+diff --git a/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch b/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
+deleted file mode 100644
+index 45d3050a39..0000000000
+--- a/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From da2f2cf8e7a1dfcb661b707e4649cec1e8a0e79c Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Thu, 9 Aug 2018 10:03:06 +0200
+-Subject: [PATCH] Fix compilation of Samba 4.7.4 with disabled ADS
+-
+-Downloaded from upstream mailinglist
+-https://lists.samba.org/archive/samba-technical/2017-December/124629.html
+-
+-Patch originates from FreeBSD:
+-https://svnweb.freebsd.org/ports/head/net/samba47/files/patch-source3__libads__kerberos_keytab.c?revision=457119&view=markup
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- source3/libads/kerberos_keytab.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/source3/libads/kerberos_keytab.c b/source3/libads/kerberos_keytab.c
+-index 37ac7ba985e..71250962090 100644
+---- a/source3/libads/kerberos_keytab.c
+-+++ b/source3/libads/kerberos_keytab.c
+-@@ -32,8 +32,6 @@
+- 
+- #ifdef HAVE_KRB5
+- 
+--#ifdef HAVE_ADS
+--
+- /* This MAX_NAME_LEN is a constant defined in krb5.h */
+- #ifndef MAX_KEYTAB_NAME_LEN
+- #define MAX_KEYTAB_NAME_LEN 1100
+-@@ -85,6 +83,8 @@ out:
+- 	return ret;
+- }
+- 
+-+#ifdef HAVE_ADS
+-+
+- /**********************************************************************
+-  Adds a single service principal, i.e. 'host' to the system keytab
+- ***********************************************************************/
+--- 
+-2.14.4
+-
+diff --git a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch b/package/samba4/0002-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
+similarity index 100%
+rename from package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
+rename to package/samba4/0002-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
+diff --git a/package/samba4/0004-Disable-build-of-manpages-and-documentation.patch b/package/samba4/0003-Disable-build-of-manpages-and-documentation.patch
+similarity index 100%
+rename from package/samba4/0004-Disable-build-of-manpages-and-documentation.patch
+rename to package/samba4/0003-Disable-build-of-manpages-and-documentation.patch
+diff --git a/package/samba4/0005-test_regfio.c-include-stdint.h-before-cmoka.h.patch b/package/samba4/0004-test_regfio.c-include-stdint.h-before-cmoka.h.patch
+similarity index 100%
+rename from package/samba4/0005-test_regfio.c-include-stdint.h-before-cmoka.h.patch
+rename to package/samba4/0004-test_regfio.c-include-stdint.h-before-cmoka.h.patch
