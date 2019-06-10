@@ -1,64 +1,42 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 10 Jun 2019 11:51:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/ncmpc: fix build without NLS
-Message-ID: <20190610095146.2385-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 10 Jun 2019 12:01:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/weston: needs headers >= 4.4
+In-Reply-To: <20190610093702.GD13603@scaer>
+References: <20190609222703.30345-1-fontaine.fabrice@gmail.com>
+ <20190610093702.GD13603@scaer>
+Message-ID: <20190610100112.GE13603@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Use nls option to enable/disable NLS depending on BR2_SYSTEM_ENABLE_NLS
-(and fix second patch) to avoid a build failure if libintl.h is found
-but xgettext is not available:
+Fabrice, All,
 
-Has header "libintl.h" : YES
-Library intl found: NO
+On 2019-06-10 11:37 +0200, Yann E. MORIN spake thusly:
+> On 2019-06-10 00:27 +0200, Fabrice Fontaine spake thusly:
+> > weston includes input-event-codes.h since version 5.0.91 and
+> > https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
+> 
+> Actually, that include is in fact not needed. Just remove it, and it
+> still builds! ;-)
 
-po/meson.build:28:5: ERROR: Can not do gettext because xgettext is not installed.
+So, even with a toolchain with headers 4.20, it is not needed to include
+linux/input-event-codes.h.
 
-Fixes:
- - http://autobuild.buildroot.org/results/0ab0a42fd4c5c9fd5891f3b84287bd788f763ba4
+That's because it is pulled in from linux/input.h, which it self is
+pulled in from libevdev/libevdev.h.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../ncmpc/0002-meson.build-link-with-lintl-if-needed.patch    | 4 ++--
- package/ncmpc/ncmpc.mk                                        | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+So, the patch I suggested earlier is probably the better technically,
+but one that just includes linux/input.h instead is simpler.
 
-diff --git a/package/ncmpc/0002-meson.build-link-with-lintl-if-needed.patch b/package/ncmpc/0002-meson.build-link-with-lintl-if-needed.patch
-index 248086fb65..9f599c89e9 100644
---- a/package/ncmpc/0002-meson.build-link-with-lintl-if-needed.patch
-+++ b/package/ncmpc/0002-meson.build-link-with-lintl-if-needed.patch
-@@ -18,13 +18,13 @@ index 2e6defc..28e9d29 100644
- --- a/meson.build
- +++ b/meson.build
- @@ -42,6 +42,7 @@ else
-+   error('libintl.h not found')
-  endif
-  conf.set('ENABLE_NLS', enable_nls)
-++intl_dep = cc.find_library('intl', required: false)
-  if enable_nls
--+  intl_dep = cc.find_library('intl', required: false)
-    conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
-    subdir('po')
-- endif
- @@ -356,6 +357,7 @@ ncmpc = executable('ncmpc',
-      boost_dep,
-      pcre_dep,
-diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
-index f0fe3fe374..d2204c71c6 100644
---- a/package/ncmpc/ncmpc.mk
-+++ b/package/ncmpc/ncmpc.mk
-@@ -19,7 +19,8 @@ NCMPC_LICENSE_FILES = COPYING
- 
- NCMPC_CONF_OPTS = \
- 	-Dcurses=ncurses \
--	-Ddocumentation=disabled
-+	-Ddocumentation=disabled \
-+	$(if $(BR2_SYSTEM_ENABLE_NLS),-Dnls=enabled,-Dnls=disabled)
- 
- ifeq ($(BR2_PACKAGE_LIRC_TOOLS),y)
- NCMPC_DEPENDENCIES += lirc-tools
+Regards,
+Yann E. MORIN.
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
