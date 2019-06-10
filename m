@@ -1,42 +1,27 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 10 Jun 2019 23:57:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/poppler: needs wchar
-Message-ID: <20190610215733.17107-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 10 Jun 2019 23:57:40 +0200
+Subject: [Buildroot] [PATCH v2 2/3] configs/imx7dpico: Bump Linux and
+ U-Boot
+In-Reply-To: <20190610194144.25958-2-offougajoris@gmail.com>
+References: <20190610194144.25958-1-offougajoris@gmail.com>
+ <20190610194144.25958-2-offougajoris@gmail.com>
+Message-ID: <9ed4ca9f-3934-9857-8f62-5a798de3aeb4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/2c8695b75c3241359e739d88726430cbfe47a5bd
+ Series applied to master, thanks, with one little change here.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/poppler/Config.in | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+On 10/06/2019 21:41, Joris Offouga wrote:
+[snip]
+>  # required tools to create the eMMC image
+>  BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> @@ -34,6 +34,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+>  BR2_PACKAGE_HOST_MTOOLS=y
 
-diff --git a/package/poppler/Config.in b/package/poppler/Config.in
-index 6ff6215e29..521e3e65a8 100644
---- a/package/poppler/Config.in
-+++ b/package/poppler/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_POPPLER
- 	bool "poppler"
-+	depends on BR2_USE_WCHAR
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS
-@@ -29,6 +30,7 @@ config BR2_PACKAGE_POPPLER_UTILS
- 
- endif
- 
--comment "poppler needs a toolchain w/ C++, threads, dynamic library, gcc >= 5"
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
-+comment "poppler needs a toolchain w/ wchar, C++, threads, dynamic library, gcc >= 5"
-+	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
--- 
-2.20.1
+ Since no FAT filesystem is created any more, dosfstools and mtools are not needed.
+
+ Regards,
+ Arnout
