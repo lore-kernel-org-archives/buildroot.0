@@ -1,59 +1,42 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Jun 2019 23:56:11 +0200
-Subject: [Buildroot] [PATCH v3 1/1] package/swupdate: bump to version
- 2019.04
-In-Reply-To: <1560196536-2565-1-git-send-email-pjtexier@koncepto.io>
-References: <1560196536-2565-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <4eb72728-02df-77cd-c030-9727c8ca3b0e@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 10 Jun 2019 23:57:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/poppler: needs wchar
+Message-ID: <20190610215733.17107-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+ - http://autobuild.buildroot.org/results/2c8695b75c3241359e739d88726430cbfe47a5bd
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/poppler/Config.in | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-On 10/06/2019 21:55, Pierre-Jean Texier wrote:
-> New features in this release:
->  - Improved documentation
->  - delta updates based on rdiff library
->  - support for libubootenv
->  - dry-run option
->  - CA certificates for signed images
->  - Fix security leak in parser
-> 
-> This commit also:
->  - introduce BR2_PACKAGE_LIBRSYNC for 'rdiff' Handler
->  - introduce BR2_PACKAGE_LIBUBOOTENV
->  - drop upstreamed patch
->  - backport upstream patches (important fix)
->  - regenerate the default swupdate.config. Now
->    CONFIG_GUNZIP is always enabled because gunzip
->    is provided by the default busybox config.
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-
- Applied to master with the change mentioned below, thanks.
-
-[snip]
-> diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-> index ca2eaf2..53f8b09 100644
-> --- a/package/swupdate/Config.in
-> +++ b/package/swupdate/Config.in
-> @@ -34,6 +34,10 @@ config BR2_PACKAGE_SWUPDATE
->  	    support for setting the U-Boot environment.
->  	  * Select BR2_PACKAGE_ZEROMQ to add support for using a
->  	    remote handler.
-> +	  * Select BR2_PACKAGE_LIBRSYNC to add support for using
-> +	    rdiff handler.
-> +	  * Select BR2_PACKAGE_LIBUBOOTENV and BR2_PACKAGE_ZLIB to add
-
- ZLIB is seleced by libubootenv, so there's no need to mention it here.
-
- Regards,
- Arnout
-
-> +	    support for setting the U-Boot environment with the new API.
->  
->  	  https://sbabic.github.io/swupdate
-[snip]
+diff --git a/package/poppler/Config.in b/package/poppler/Config.in
+index 6ff6215e29..521e3e65a8 100644
+--- a/package/poppler/Config.in
++++ b/package/poppler/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_POPPLER
+ 	bool "poppler"
++	depends on BR2_USE_WCHAR
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+@@ -29,6 +30,7 @@ config BR2_PACKAGE_POPPLER_UTILS
+ 
+ endif
+ 
+-comment "poppler needs a toolchain w/ C++, threads, dynamic library, gcc >= 5"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
++comment "poppler needs a toolchain w/ wchar, C++, threads, dynamic library, gcc >= 5"
++	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
+-- 
+2.20.1
