@@ -1,54 +1,48 @@
 From: Mirza Krak <mirza.krak@northern.tech>
-Date: Mon, 10 Jun 2019 17:40:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkg-golang: do not set static
- linking for host target
-Message-ID: <20190610154007.28310-1-mirza.krak@northern.tech>
+Date: Mon, 10 Jun 2019 17:41:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-golang: add cflags/ldflags
+ to GO_HOST_ENV
+In-Reply-To: <CADHdJwCLHm2fvahK=uEo2fH-rJyHzCo9m4=-d1auXy-GdC8KFg@mail.gmail.com>
+References: <20190603092101.8658-1-mirza.krak@northern.tech>
+ <7ccf0442-d03f-05f8-c9c5-338f975b5d3b@mind.be>
+ <CADHdJwD4BkLGeaEmC4q8L+0R0RWeHmaH2CMyhn1RNHtpm7c8eQ@mail.gmail.com>
+ <0eb1cbd8-c143-432d-ebd3-7d25fb719ccc@mind.be>
+ <CADHdJwCLHm2fvahK=uEo2fH-rJyHzCo9m4=-d1auXy-GdC8KFg@mail.gmail.com>
+Message-ID: <CADHdJwCqTWC6UCO-3E9ZbzAW8urb80RZ7CLCWiH9MBaLghtDwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current logic will set the "-static" flag when building go
-host packages if BR2_STATIC_LIBS is set, this will not work as
-there is no support to link host packages statically.
+On Mon, Jun 10, 2019 at 5:12 PM Mirza Krak <mirza.krak@northern.tech> wrote:
+>
 
-Fix this by applying this logic only for target builds.
+< snip >
 
-Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
----
+> > >
+> > > Will compare defconfigs but I suspect it is related to,
+> > >
+> > >       BR2_STATIC_LIBS=y
+> > >
+> > > being set in the erroneous build.
+> >
+> >  It may be related, but it shouldn't be: the build of host packages should not
+> > depend on the setting of BR2_STATIC_LIBS on the target.
+> >
+> > > This not something that I use
+> > > locally.
+> >
+> >  You can try to reproduce locally using the config from the autobuilder.
+>
+> Thanks for the pointers, I will investigate further.
 
-Fixes: http://autobuild.buildroot.net/results/f9b/f9ba64ab4c8d7fa6cb301fab37ee4141ba442f61/build-end.log
 
- package/pkg-golang.mk | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+I believe that I found the cause of this, patch sent
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index 72e8f6b7af..e47de17aba 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -58,10 +58,6 @@ define inner-golang-package
+      https://patchwork.ozlabs.org/patch/1113150/
 
- $(2)_WORKSPACE ?= _gopath
+-- 
+Mirza Krak | Embedded Solutions Architect | https://mender.io
 
--ifeq ($(BR2_STATIC_LIBS),y)
--$(2)_LDFLAGS += -extldflags '-static'
--endif
--
- $(2)_BUILD_OPTS += \
- 	-ldflags "$$($(2)_LDFLAGS)" \
- 	-tags "$$($(2)_TAGS)" \
-@@ -106,6 +102,11 @@ endif
- # file.
- ifndef $(2)_BUILD_CMDS
- ifeq ($(4),target)
-+
-+ifeq ($(BR2_STATIC_LIBS),y)
-+$(2)_LDFLAGS += -extldflags '-static'
-+endif
-+
- # Build package for target
- define $(2)_BUILD_CMDS
- 	$$(foreach d,$$($(2)_BUILD_TARGETS),\
---
-2.11.0
+ Northern.tech AS | @northerntechHQ
