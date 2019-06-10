@@ -1,10 +1,12 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Jun 2019 16:53:13 +0200
-Subject: [Buildroot] [PATCH] docs: use-case for un-ignoring VCS
- directories and overridden source dir
-In-Reply-To: <31212b9d2c0481e0618401c0dc8f1d6d7ce18710.1560173933.git.jan.kundrat@cesnet.cz>
-References: <31212b9d2c0481e0618401c0dc8f1d6d7ce18710.1560173933.git.jan.kundrat@cesnet.cz>
-Message-ID: <52e170d7-9035-8b68-0be4-37d97853e4c9@mind.be>
+Date: Mon, 10 Jun 2019 16:55:16 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-golang: add cflags/ldflags
+ to GO_HOST_ENV
+In-Reply-To: <CADHdJwD4BkLGeaEmC4q8L+0R0RWeHmaH2CMyhn1RNHtpm7c8eQ@mail.gmail.com>
+References: <20190603092101.8658-1-mirza.krak@northern.tech>
+ <7ccf0442-d03f-05f8-c9c5-338f975b5d3b@mind.be>
+ <CADHdJwD4BkLGeaEmC4q8L+0R0RWeHmaH2CMyhn1RNHtpm7c8eQ@mail.gmail.com>
+Message-ID: <0eb1cbd8-c143-432d-ebd3-7d25fb719ccc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,39 +15,60 @@ To: buildroot@busybox.net
 
 
 
-On 10/06/2019 15:37, Jan Kundr?t wrote:
-> Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
-> Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Fixes: a27078d32d Allow overriding the VCS exclude list with *_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS
+On 10/06/2019 14:10, Mirza Krak wrote:
+> On Mon, Jun 10, 2019 at 1:53 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>>
+>>
+>>
+>> On 03/06/2019 11:21, Mirza Krak wrote:
+>>> If a go host package is built using cgo, it needs access
+>>> to HOST_CFLAGS/HOST_LDFLAGS to utilize host packages it
+>>> might depend on.
+>>>
+>>> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+>>
+>>  I apparently forgot to mention that I applied this to master, thanks. However...
+>>
+>>> ---
+>>>
+>>> This fixes current build errors of mender-artifact-3.0.0:
+>>>
+>>> http://autobuild.buildroot.net/results/dd1a6dac03dd3b68ee63761c33dbb01c328d4f14/build-end.log
+>>
+>>  Still failing:
+>>
+>> http://autobuild.buildroot.net/results/f9b/f9ba64ab4c8d7fa6cb301fab37ee4141ba442f61/build-end.log
+>>
+>>  I think the problem is that it is being linked statically, but host-xz only
+>> builds the shared library...
+> 
+> I do not believe that it would try to link statically, at least that
+> was not the intention.
 
- Not really a Fixes thing - we always do documentation updates in a separate commit.
+ Doesn't Go always link statically?
 
+> However I am not able to reproduce this
+> locally.
 
- Applied to master, thanks. Thanks for the quick turnaround!
+ Maybe you have liblzma.a installed on your host system?
+
+> 
+> Will compare defconfigs but I suspect it is related to,
+> 
+>       BR2_STATIC_LIBS=y
+> 
+> being set in the erroneous build.
+
+ It may be related, but it shouldn't be: the build of host packages should not
+depend on the setting of BR2_STATIC_LIBS on the target.
+
+> This not something that I use
+> locally.
+
+ You can try to reproduce locally using the config from the autobuilder.
 
  Regards,
  Arnout
 
-> ---
->  docs/manual/using-buildroot-development.txt | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/docs/manual/using-buildroot-development.txt b/docs/manual/using-buildroot-development.txt
-> index 65a9f1a3f7..da6dd822fb 100644
-> --- a/docs/manual/using-buildroot-development.txt
-> +++ b/docs/manual/using-buildroot-development.txt
-> @@ -109,3 +109,13 @@ WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
->  	--exclude WebDriverTests --exclude WebKitBuild --exclude WebKitLibraries \
->  	--exclude WebKit.xcworkspace --exclude Websites --exclude Examples
->  ------------------
-> +
-> +By default, Buildroot skips syncing of VCS artifacts (e.g., the *.git* and
-> +*.svn* directories). Some packages prefer to have these VCS directories
-> +available during build, for example for automatically determining a precise
-> +commit reference for version information. To undo this built-in filtering at a
-> +cost of a slower speed, add these directories back:
-> +
-> +------------------
-> +LINUX_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = --include .git
-> +------------------
-> 
+
+> Maybe this is also what you where referring to? 
