@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Jun 2019 00:18:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/poppler: needs wchar
-In-Reply-To: <20190610215733.17107-1-fontaine.fabrice@gmail.com>
-References: <20190610215733.17107-1-fontaine.fabrice@gmail.com>
-Message-ID: <aab9ef9d-5bcb-e283-2a95-5a5d763cea31@mind.be>
+Date: Tue, 11 Jun 2019 00:20:19 +0200
+Subject: [Buildroot] [PATCH 0/2] Fix linking gerbera with taglib
+In-Reply-To: <20190610212023.9483-1-joerg.krause@embedded.rocks>
+References: <20190610212023.9483-1-joerg.krause@embedded.rocks>
+Message-ID: <b4cc5acf-8381-c229-7ff4-e78f6bc373da@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,41 +12,42 @@ To: buildroot@busybox.net
 
 
 
-On 10/06/2019 23:57, Fabrice Fontaine wrote:
-> Fixes:
->  - http://autobuild.buildroot.org/results/2c8695b75c3241359e739d88726430cbfe47a5bd
+On 10/06/2019 23:20, J?rg Krause wrote:
+> This series fixes linking gerbera with taglib.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> The first commit adds an upstream patch to tagblib, which fixes `taglib-config`
+> to output the correct paths when cross-compiling.
+> 
+> The second commit add an upstream patch to gerbera, which fixes the
+> behaviour of `find_program(taglib-config)` when cross-compiling. By
+> default, `find_program()` only searches on the host for binaries.
+> However, in the case of `taglib-config` it should only search in the
+> sysroot path for `taglib-config`.
 
- Applied to master, thanks.
+ I think both patches are wrong/incomplete. Still, because they are upstream,
+and they fix the issue, I've pushed to master, thanks.
+
+ I'll comment in the individual patches why I think they are wrong.
 
  Regards,
  Arnout
 
-> ---
->  package/poppler/Config.in | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/poppler/Config.in b/package/poppler/Config.in
-> index 6ff6215e29..521e3e65a8 100644
-> --- a/package/poppler/Config.in
-> +++ b/package/poppler/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_POPPLER
->  	bool "poppler"
-> +	depends on BR2_USE_WCHAR
->  	depends on BR2_INSTALL_LIBSTDCPP
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on !BR2_STATIC_LIBS
-> @@ -29,6 +30,7 @@ config BR2_PACKAGE_POPPLER_UTILS
->  
->  endif
->  
-> -comment "poppler needs a toolchain w/ C++, threads, dynamic library, gcc >= 5"
-> -	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-> -		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_5
-> +comment "poppler needs a toolchain w/ wchar, C++, threads, dynamic library, gcc >= 5"
-> +	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
-> +		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
+> Note, that the issue has been detected by the autobuilder for version 1.3.0 of
+> gerbera (current version is 1.3.1), but it is still present.
+> 
+> Fixes:
+> http://autobuild.buildroot.org/results/e95/e9548f8d43abe3a2f2aab4acaa19289af2b9737d
+> http://autobuild.buildroot.org/results/efa/efa203e07c2dd5aed09c0ed23e3bd56fa2dadd2a
+> 
+> J?rg Krause (2):
+>   package/taglib: add upstream patch to fix taglib-config
+>   package/gerbera: add upstream patch to fix find_program with
+>     taglib-config
+> 
+>  ...m-taglib-config-when-cross-compiling.patch | 46 +++++++++++++
+>  ...-config-file-for-cross-compiling-906.patch | 66 +++++++++++++++++++
+>  2 files changed, 112 insertions(+)
+>  create mode 100644 package/gerbera/0002-Fix-find_program-taglib-config-when-cross-compiling.patch
+>  create mode 100644 package/taglib/0001-fix-taglib-config-file-for-cross-compiling-906.patch
 > 
