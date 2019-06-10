@@ -1,10 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Jun 2019 20:45:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkg-golang: do not set static
- linking for host target
-In-Reply-To: <20190610154007.28310-1-mirza.krak@northern.tech>
-References: <20190610154007.28310-1-mirza.krak@northern.tech>
-Message-ID: <16a75f6d-2849-c806-e530-d8e88b8a54ae@mind.be>
+Date: Mon, 10 Jun 2019 21:00:34 +0200
+Subject: [Buildroot] [PATCH 2/3] boards/freescale/common: Introduce
+ template_no_boot_part
+In-Reply-To: <92e649a9-01cc-4d44-1dce-ddc6df982b5e@gmail.com>
+References: <20190609145749.28766-1-offougajoris@gmail.com>
+ <20190609145749.28766-2-offougajoris@gmail.com>
+ <846ee132-b3e6-e60f-50a7-39cf34a9bb1b@mind.be>
+ <92e649a9-01cc-4d44-1dce-ddc6df982b5e@gmail.com>
+Message-ID: <ad33ba2d-ea04-9fce-6bd0-7112bdce7ca5@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,59 +16,38 @@ To: buildroot@busybox.net
 
 
 
-On 10/06/2019 17:40, Mirza Krak wrote:
-> The current logic will set the "-static" flag when building go
-> host packages if BR2_STATIC_LIBS is set, this will not work as
-> there is no support to link host packages statically.
+On 10/06/2019 20:43, Joris Offouga wrote:
+> Hi Arnoud,
 > 
-> Fix this by applying this logic only for target builds.
+> Le 10/06/2019 ? 00:17, Arnout Vandecappelle a ?crit?:
+>> On 09/06/2019 16:57, Joris Offouga wrote:
+[snip]
+>>> diff --git a/board/freescale/common/imx/genimage.cfg.template_no_boot_part b/board/freescale/common/imx/genimage.cfg.template_no_boot_part
+>>> new file mode 100644
+>>> index 0000000000..9e19b4ee3e
+>>> --- /dev/null
+>>> +++ b/board/freescale/common/imx/genimage.cfg.template_no_boot_part
+>>> @@ -0,0 +1,23 @@
+>>> +# Minimal SD card image for the Freescale boards Template
+>>> +#
+>>> +# We mimic the .sdcard Freescale's image format:
+>>> +# * the SD card must have 1 kB free space at the beginning,
+>>  Is this one going to be used by anything in practice? I expect that anything
+>> that uses this kind of layout is *not* going to use the .imx format, since
+>> that's considered kind of deprecated...
 > 
-> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
-
- Applied to master, thanks.
-
-
-> ---
+> It depends on the targets, imx7dpico has migrated to the SPL and so its u-boot
+> has gone from .imx to .img,
 > 
-> Fixes: http://autobuild.buildroot.net/results/f9b/f9ba64ab4c8d7fa6cb301fab37ee4141ba442f61/build-end.log
+> Example of the warp7 on 2019.01 it's still .imx.
 
- This should have gone above the --- and the Sob. Unfortunately, I hadn't
-noticed, so now I pushed it without the fixes tag...
+ OK, let me rephrase it then: does U-Boot 2019.01 have any configuration without
+boot FAT partition, but which uses the .imx format instead of SPL?
+
+ In any case, I think this enimage.cfg.template_no_boot_part should only be
+introduced when there is something that actually uses it. Now it is just dead code.
 
  Regards,
  Arnout
 
-> 
->  package/pkg-golang.mk | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-> index 72e8f6b7af..e47de17aba 100644
-> --- a/package/pkg-golang.mk
-> +++ b/package/pkg-golang.mk
-> @@ -58,10 +58,6 @@ define inner-golang-package
-> 
->  $(2)_WORKSPACE ?= _gopath
-> 
-> -ifeq ($(BR2_STATIC_LIBS),y)
-> -$(2)_LDFLAGS += -extldflags '-static'
-> -endif
-> -
->  $(2)_BUILD_OPTS += \
->  	-ldflags "$$($(2)_LDFLAGS)" \
->  	-tags "$$($(2)_TAGS)" \
-> @@ -106,6 +102,11 @@ endif
->  # file.
->  ifndef $(2)_BUILD_CMDS
->  ifeq ($(4),target)
-> +
-> +ifeq ($(BR2_STATIC_LIBS),y)
-> +$(2)_LDFLAGS += -extldflags '-static'
-> +endif
-> +
->  # Build package for target
->  define $(2)_BUILD_CMDS
->  	$$(foreach d,$$($(2)_BUILD_TARGETS),\
-> --
-> 2.11.0
-> 
+[snip]
