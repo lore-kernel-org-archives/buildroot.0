@@ -1,43 +1,42 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Mon, 10 Jun 2019 11:19:13 +0200
-Subject: [Buildroot] [PATCH 1/1] package/cargo: needs host-libxml2
-In-Reply-To: <9adf69a9-b764-d5c5-e484-958bb9f8548f@mind.be>
-References: <20190609210835.31236-1-fontaine.fabrice@gmail.com>
- <9adf69a9-b764-d5c5-e484-958bb9f8548f@mind.be>
-Message-ID: <20190610091913.GA23106@ned>
+From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
+Date: Mon, 10 Jun 2019 11:27:16 +0200
+Subject: [Buildroot] [PATCH] Allow overriding the VCS exclude list with
+ *_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS
+Message-ID: <0c1450782e9b2f0a44af5ab18ccfda69d385f900.1560158856.git.jan.kundrat@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi!
+We have some internal packages which automatically bake a version string
+from the git checkout, and we usually combine these with a
+*_OVERRIDE_SRCDIR. I would like to let Buildroot *not* skip the .git
+directory when picking up sources from the local checkout.  It turns out
+that the existing mechanism (*_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) only
+supports adding to the exclude list because `rsync` simply uses the
+first match from the provided filtering rules.
 
-On 2019-06-10 01:07, Arnout Vandecappelle wrote:
->
->
-> On 09/06/2019 23:08, Fabrice Fontaine wrote:
-> > host-cargo needs host-libxml2 to avoid depending on an unworking
-> > libxml2:
-> >
-> > --- stderr
-> > cmake: /home/mark/buildroot-test/instance-1/output/host/lib/libcurl.so.4: no version information available (required by cmake)
-> > cmake: symbol lookup error: /usr/lib/x86_64-linux-gnu/libxml2.so.2: undefined symbol: UCNV_TO_U_CALLBACK_STOP_60
-> > thread 'main' panicked at '
-> > command did not execute successfully, got: exit code: 127
->
->  I would like to understand this one a little more before blindly linking with
-> host-libxml2...
->
->  I can't see anything in cargo's sources that refers to libxml2, except some of
-> the vendored curl stuff, but those bits are only used on win32.
+Solve this by using the user-provided values first. If they match, then
+`rsync` won't exclude stuff based on the generic VCS exclude patterns.
 
-Same here. I tried to reproduce the issue in a chrooted Debian Stretch,
-without success, even when adding libxml2-devel to the mix.
+Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-What is the configuration of the autobuilder?
-
-Regards,
-
---
-ELB
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 3b5ee7b356..b00967c648 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -184,7 +184,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+ 	@mkdir -p $(@D)
+ 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+-	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
++	rsync -au --chmod=u=rwX,go=rX $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
+ 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	@$(call step_end,rsync)
+ 	$(Q)touch $@
+-- 
+2.21.0
