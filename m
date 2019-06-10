@@ -1,68 +1,91 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Jun 2019 20:35:49 +0200
-Subject: [Buildroot] [PATCH 1/5] package/freescale-imx: add option for
- i.MX8MM
-In-Reply-To: <20190610101924.9124-2-juju@cotds.org>
-References: <20190610101924.9124-1-juju@cotds.org>
- <20190610101924.9124-2-juju@cotds.org>
-Message-ID: <13aae951-20e1-33b5-e2af-d249d6d2d86b@mind.be>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon, 10 Jun 2019 20:39:02 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/swupdate: bump to version
+ 2019.04
+In-Reply-To: <40dcf91d-c7c3-c377-5204-eade8cd1d234@mind.be>
+References: <1560180656-17519-1-git-send-email-pjtexier@koncepto.io>
+ <40dcf91d-c7c3-c377-5204-eade8cd1d234@mind.be>
+Message-ID: <57798f6f-bace-1e4c-a5c6-6ba13f711d00@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Julien,
+Hi Arnout,
 
-On 10/06/2019 12:19, Julien Olivain wrote:
-> The i.MX8MMini is slightly different from the i.MX8M. The main
-> difference of interrest here is that the i.MX8MMini has no HDMI
-> support. The boot image must not include the HDMI signed firmware,
-> which is why we need this new configuration option.
+Le 10/06/2019 ? 19:59, Arnout Vandecappelle a ?crit?:
+>   Hi Pierre-Jean,
 > 
-> Signed-off-by: Julien Olivain <juju@cotds.org>
-> ---
->  package/freescale-imx/Config.in | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+> On 10/06/2019 17:30, Pierre-Jean Texier wrote:
+>> New features in this release:
+>>   - Improved documentation
+>>   - delta updates based on rdiff library
+>>   - support for libubootenv
+>>   - dry-run option
+>>   - CA certificates for signed images
+>>   - Fix security leak in parser
+>>
+>> This commit also:
+>>   - introduce BR2_PACKAGE_LIBRSYNC
+>>   - introduce BR2_PACKAGE_LIBUBOOTENV
+>>   - drop upstreamed patch
+>>   - backport upstream patches (important fix)
 > 
-> diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-> index fcceacdc9e..f010aab87b 100644
-> --- a/package/freescale-imx/Config.in
-> +++ b/package/freescale-imx/Config.in
-> @@ -43,6 +43,9 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
->  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
->  	bool "imx8m"
->  
-> +config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
-> +	bool "imx8mm"
-> +
->  config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
->  	bool "imx8x"
->  endchoice
-> @@ -77,7 +80,8 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
->  	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
->  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S || \
->  		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
-> -		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
-> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
-> +		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
+>   Please also mention that you regenerate the default swupdate.config, and that
+> you always enable CONFIG_GUNZIP because gunzip is provided by the default
+> busybox config.
 
- Here, you set BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU, but you don't add a value
-for BR2_PACKAGE_FREESCALE_IMX_PLATFORM, which will be used by the imx-lib
-package. Now, I don't think the imx-lib package is even relevant for imx8, but
-it *can* be built... Or maybe we should revisit the conditions on that package.
+Indeed, I will do in v3.
 
- Also, in imx-gpu-viv/Config.in, for IMX8M, only the wayland output is enabled,
-but now for IMX8MM, you allow all outputs. Is that intended?
-
-
- Anyway, these things can be fixed up in follow-up patches, if needed, so I've
-applied the entire series to master, thanks.
-
- Regards,
- Arnout
-
->  
->  source "package/freescale-imx/imx-alsa-plugins/Config.in"
->  source "package/freescale-imx/imx-codec/Config.in"
 > 
+> [snip]
+>> diff --git a/package/swupdate/0001-archive-handler-set-locale-for-libarchive.patch b/package/swupdate/0001-archive-handler-set-locale-for-libarchive.patch
+>> new file mode 100644
+>> index 0000000..7403097
+>> --- /dev/null
+>> +++ b/package/swupdate/0001-archive-handler-set-locale-for-libarchive.patch
+>> @@ -0,0 +1,64 @@
+>> +From 95a2b9961119aac80aea1eeabbc1cd52b72d876a Mon Sep 17 00:00:00 2001
+>> +From: James Hilliard <james.hilliard1@gmail.com>
+>> +Date: Sat, 4 May 2019 11:38:37 -0600
+>> +Subject: [PATCH] archive handler: set locale for libarchive
+>> +
+>> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+>> +[Backported from: 95a2b9961119aac80aea1eeabbc1cd52b72d876a]
+> 
+>   You need to add your Signed-off-by here. This is a short way for you to
+> assert that you are entitled to contribute the patch under upstream's
+> GPL license.  See  http://elinux.org/Developer_Certificate_Of_Origin
+> for more details. It is needed here in addition to the commit message of the
+> Buildroot commit, because the license of the package may be different than
+> Buildroot's.
+> 
+>   Same for the other two patches.
+
+Ok sorry for that, I will update patches in v3.
+
+> 
+> [snip]
+>> @@ -95,6 +98,10 @@ else
+>>   SWUPDATE_MAKE_ENV += HAVE_ZLIB=n
+>>   endif
+>>   
+>> +ifeq ($(BR2_PACKAGE_LIBRSYNC),y)
+>> +SWUPDATE_DEPENDENCIES += librsync
+>> +endif
+> 
+>   Nothing in .config needed for this?
+
+No, just a simple dependency.
+
+Thanks for the review !
+
+> 
+>   Regards,
+>   Arnout
+> 
+
+-- 
+Best regards,
+Pierre-Jean Texier
