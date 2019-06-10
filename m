@@ -1,101 +1,32 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Tue, 11 Jun 2019 00:35:21 +0200
-Subject: [Buildroot] [git commit] package/git: bump to version 2.22.0
-Message-ID: <20190610223650.734AB8F4C8@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 11 Jun 2019 00:37:38 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mdadm: fix patch number
+In-Reply-To: <20190610221635.19496-1-fontaine.fabrice@gmail.com>
+References: <20190610221635.19496-1-fontaine.fabrice@gmail.com>
+Message-ID: <6ec7a3b3-b3f6-505b-ba0e-90925e3b1939@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8aa5ee1721dbe07e12855612a8cc631e290a1eea
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove patch with NLS fix because it is was added into latest version.
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...1-configure.ac-Properly-check-for-libintl.patch | 49 ----------------------
- package/git/git.hash                               |  2 +-
- package/git/git.mk                                 |  2 +-
- 3 files changed, 2 insertions(+), 51 deletions(-)
+On 11/06/2019 00:16, Fabrice Fontaine wrote:
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/git/0001-configure.ac-Properly-check-for-libintl.patch b/package/git/0001-configure.ac-Properly-check-for-libintl.patch
-deleted file mode 100644
-index 2f367f547a..0000000000
---- a/package/git/0001-configure.ac-Properly-check-for-libintl.patch
-+++ /dev/null
-@@ -1,49 +0,0 @@
--From 01da08fd60a0bdb2994f85f943dba148d9321d4d Mon Sep 17 00:00:00 2001
--From: Vadim Kochan <vadim4j@gmail.com>
--Date: Wed, 17 Apr 2019 01:25:40 +0300
--Subject: [PATCH 1/1] configure.ac: Properly check for libintl
--
--Some libc implementations like uclibc or musl provides
--gettext stubs via libintl library but this case is not checked
--by AC_CHECK_LIBRARY(c, gettext ...) because gcc has gettext as builtin
--which passess the check.
--
--So check it with included libintl.h where gettext may unfold into
--libintl_gettext which will cause check to fail if libintl_gettext are
--needed to be linked with -lintl.
--
--Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-----
-- configure.ac | 16 +++++++++++++---
-- 1 file changed, 13 insertions(+), 3 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 7f84151..0b8e25f 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -762,9 +762,19 @@ AC_CHECK_LIB([c], [basename],
-- GIT_CONF_SUBST([NEEDS_LIBGEN])
-- test -n "$NEEDS_LIBGEN" && LIBS="$LIBS -lgen"
-- 
---AC_CHECK_LIB([c], [gettext],
---[LIBC_CONTAINS_LIBINTL=YesPlease],
---[LIBC_CONTAINS_LIBINTL=])
--+AC_DEFUN([LIBINTL_SRC], [
--+AC_LANG_PROGRAM([[
--+#include <libintl.h>
--+]],[[
--+char *msg = gettext("test");
--+]])])
--+
--+AC_MSG_CHECKING([if libc contains libintl])
--+AC_LINK_IFELSE([LIBINTL_SRC],
--+	[AC_MSG_RESULT([yes])
--+	LIBC_CONTAINS_LIBINTL=YesPlease],
--+	[AC_MSG_RESULT([no])
--+	LIBC_CONTAINS_LIBINTL=])
-- GIT_CONF_SUBST([LIBC_CONTAINS_LIBINTL])
-- 
-- #
---- 
--2.14.1
--
-diff --git a/package/git/git.hash b/package/git/git.hash
-index 35c8774d75..e02fd0d181 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,4 +1,4 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256 dfb71b053cbc38a9c5b08c2fe8b5eae210b4e3b63892426923e10cfd6ba63862  git-2.16.5.tar.xz
-+sha256 159e4b599f8af4612e70b666600a3139541f8bacc18124daf2cbe8d1b934f29f  git-2.22.0.tar.xz
- sha256 5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256 1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index 804a6e2325..8d1fcd2399 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.16.5
-+GIT_VERSION = 2.22.0
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
+ Both applied to master, thanks.
+
+ Regards,
+ Arnout
+
+> ---
+>  ...n.patch => 0001-add-install-targets-for-mdadm-and-mdmon.patch} | 0
+>  1 file changed, 0 insertions(+), 0 deletions(-)
+>  rename package/mdadm/{0010-add-install-targets-for-mdadm-and-mdmon.patch => 0001-add-install-targets-for-mdadm-and-mdmon.patch} (100%)
+> 
+> diff --git a/package/mdadm/0010-add-install-targets-for-mdadm-and-mdmon.patch b/package/mdadm/0001-add-install-targets-for-mdadm-and-mdmon.patch
+> similarity index 100%
+> rename from package/mdadm/0010-add-install-targets-for-mdadm-and-mdmon.patch
+> rename to package/mdadm/0001-add-install-targets-for-mdadm-and-mdmon.patch
+> 
