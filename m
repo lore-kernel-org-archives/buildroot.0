@@ -1,179 +1,397 @@
-From: Joris Offouga <offougajoris@gmail.com>
-Date: Mon, 10 Jun 2019 21:41:44 +0200
-Subject: [Buildroot] [PATCH v2 3/3] configs/imx7dpico: Add Wifi support
-In-Reply-To: <20190610194144.25958-1-offougajoris@gmail.com>
-References: <20190610194144.25958-1-offougajoris@gmail.com>
-Message-ID: <20190610194144.25958-3-offougajoris@gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon, 10 Jun 2019 21:55:36 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/swupdate: bump to version 2019.04
+Message-ID: <1560196536-2565-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-imx7dpico has a BCM4339 Wifi chip. Add Wifi support by default
-to allow a better customer experience.
+New features in this release:
+ - Improved documentation
+ - delta updates based on rdiff library
+ - support for libubootenv
+ - dry-run option
+ - CA certificates for signed images
+ - Fix security leak in parser
 
-Signed-off-by: Joris Offouga <offougajoris@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Tested-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+This commit also:
+ - introduce BR2_PACKAGE_LIBRSYNC for 'rdiff' Handler
+ - introduce BR2_PACKAGE_LIBUBOOTENV
+ - drop upstreamed patch
+ - backport upstream patches (important fix)
+ - regenerate the default swupdate.config. Now
+   CONFIG_GUNZIP is always enabled because gunzip
+   is provided by the default busybox config.
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
-changes v1 -> v2
- - fix empty line
- - add reviewed-by and tested-by
-  
- board/technexion/imx7dpico/readme.txt         | 11 +++
- .../lib/firmware/brcm/brcmfmac4339-sdio.txt   | 99 +++++++++++++++++++
- configs/imx7dpico_defconfig                   | 12 +++
- 3 files changed, 122 insertions(+)
- create mode 100644 board/technexion/imx7dpico/rootfs_overlay/lib/firmware/brcm/brcmfmac4339-sdio.txt
+Changes v2 -> v3
+ - add missing 'Signed-off-by' in patches (after review of Arnout Vandecappelle)
+ - rework commit log  (after review of Arnout Vandecappelle)
 
-diff --git a/board/technexion/imx7dpico/readme.txt b/board/technexion/imx7dpico/readme.txt
-index 07e089c38e..1b9e80a0fd 100644
---- a/board/technexion/imx7dpico/readme.txt
-+++ b/board/technexion/imx7dpico/readme.txt
-@@ -57,4 +57,15 @@ To boot your newly created system:
-   emulator at 115200 bps, 8n1;
- - power on the board.
- 
-+Using Wifi
-+==========
-+
-+# modprobe brcmfmac
-+# iwconfig wlan0 essid ACCESSPOINTNAME
-+# wpa_passphrase ACCESSPOINTNAME > /etc/wpa.conf
-+(enter the wifi password and press enter)
-+# wpa_supplicant -Dwext -iwlan0 -c /etc/wpa.conf &
-+# udhcpc -i wlan0
-+# ping buildroot.org
-+
- Enjoy!
-diff --git a/board/technexion/imx7dpico/rootfs_overlay/lib/firmware/brcm/brcmfmac4339-sdio.txt b/board/technexion/imx7dpico/rootfs_overlay/lib/firmware/brcm/brcmfmac4339-sdio.txt
+Changes v1 -> v2
+ - add librsync dependency (suggested by Peter Korsgaard)
+ - add libubootenv dependency (suggested by Peter Korsgaard)
+ - backport fixes (suggested by James Hilliard)
+ - Update the default config file (make swupdate-menuconfig / make swupdate-update-config)
+
+ .../swupdate/0001-Makefile-fix-static-build.patch  | 62 ---------------------
+ ...archive-handler-set-locale-for-libarchive.patch | 65 ++++++++++++++++++++++
+ ...a-fix-segfault-in-image-property-handling.patch | 42 ++++++++++++++
+ ...ix-script-format-when-CONFIG_UBOOT_NEWAPI.patch | 44 +++++++++++++++
+ package/swupdate/Config.in                         |  4 ++
+ package/swupdate/swupdate.config                   | 12 ++--
+ package/swupdate/swupdate.hash                     |  2 +-
+ package/swupdate/swupdate.mk                       |  9 ++-
+ 8 files changed, 170 insertions(+), 70 deletions(-)
+ delete mode 100644 package/swupdate/0001-Makefile-fix-static-build.patch
+ create mode 100644 package/swupdate/0001-archive-handler-set-locale-for-libarchive.patch
+ create mode 100644 package/swupdate/0002-Lua-fix-segfault-in-image-property-handling.patch
+ create mode 100644 package/swupdate/0003-u-boot-fix-script-format-when-CONFIG_UBOOT_NEWAPI.patch
+
+diff --git a/package/swupdate/0001-Makefile-fix-static-build.patch b/package/swupdate/0001-Makefile-fix-static-build.patch
+deleted file mode 100644
+index 56901f9..0000000
+--- a/package/swupdate/0001-Makefile-fix-static-build.patch
++++ /dev/null
+@@ -1,62 +0,0 @@
+-From 15a324f8c67548f219256a5a75ba8123cc5bdac6 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 4 Mar 2019 21:51:36 +0100
+-Subject: [PATCH] Makefile: fix static build
+-
+-Don't build and install lua_swupdate.so if HAVE_LUA isn't set to y
+-otherwise build will fail if the toolchain only suports building static
+-libraries
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/c11c4d26983e0347d96f3dda62e6d72b031967bb
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/sbabic/swupdate/pull/49]
+----
+- Makefile | 12 +++++++++---
+- 1 file changed, 9 insertions(+), 3 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index cfeb9a6..cac99b5 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -369,11 +369,15 @@ tools-bins	:= $(patsubst $(tools-y)/%.c,$(tools-y)/%,$(wildcard $(tools-y)/*.c))
+- tools-bins-unstr:= $(patsubst %,%_unstripped,$(tools-bins))
+- tools-all	:= $(tools-objs)
+- 
+-+ifeq ($(HAVE_LUA),y)
+-+lua_swupdate	:= lua_swupdate.so
+-+endif
+-+
+- shared-dirs	:= $(shareds-y)
+- shared-libs	:= $(patsubst %,%/built-in.o, $(shareds-y))
+- shared-all	:= $(shared-libs)
+- 
+--all: swupdate ${tools-bins} lua_swupdate.so
+-+all: swupdate ${tools-bins} ${lua_swupdate}
+- 
+- # Do modpost on a prelinked vmlinux. The finally linked vmlinux has
+- # relevant sections renamed as per the linker script.
+-@@ -434,7 +438,6 @@ install: all
+- 	install -d ${DESTDIR}/usr/bin
+- 	install -d ${DESTDIR}/usr/include
+- 	install -d ${DESTDIR}/usr/lib
+--	install -d ${DESTDIR}/usr/lib/lua/$(LUAVER)
+- 	install -m 755 swupdate ${DESTDIR}/usr/bin
+- 	for i in ${tools-bins};do \
+- 		install -m 755 $$i ${DESTDIR}/usr/bin; \
+-@@ -443,7 +446,10 @@ install: all
+- 	install -m 0644 include/swupdate_status.h ${DESTDIR}/usr/include
+- 	install -m 0644 include/progress_ipc.h ${DESTDIR}/usr/include
+- 	install -m 0755 ipc/lib.a ${DESTDIR}/usr/lib/libswupdate.a
+--	install -m 0755 lua_swupdate.so $(DESTDIR)/usr/lib/lua/$(LUAVER)
+-+	if [ $(HAVE_LUA) = y ]; then \
+-+		install -d ${DESTDIR}/usr/lib/lua/$(LUAVER); \
+-+		install -m 0755 ${lua_swupdate} $(DESTDIR)/usr/lib/lua/$(LUAVER); \
+-+	fi
+- 
+- PHONY += run-tests
+- tests: \
+--- 
+-2.14.1
+-
+diff --git a/package/swupdate/0001-archive-handler-set-locale-for-libarchive.patch b/package/swupdate/0001-archive-handler-set-locale-for-libarchive.patch
 new file mode 100644
-index 0000000000..1ddd929504
+index 0000000..30bad66
 --- /dev/null
-+++ b/board/technexion/imx7dpico/rootfs_overlay/lib/firmware/brcm/brcmfmac4339-sdio.txt
-@@ -0,0 +1,99 @@
-+#AP6335_NVRAM_V1.5_03112014
-+NVRAMRev=$Rev: 410316 $
-+sromrev=11
-+boardrev=0x1203
-+boardtype=0x06c5
-+boardflags=0x00000c01
-+boardflags2=0x00002000
-+boardflags3=0x101188
-+macaddr=00:90:4c:c5:12:38
-+ccode=0
-+regrev=0
-+antswitch=0
-+pdgain2g=7
-+pdgain5g=7
-+tworangetssi2g=0
-+tworangetssi5g=0
-+femctrl=7
-+pcieingress_war=15
-+vendid=0x14e4
-+devid=0x43ae
-+manfid=0x2d0
-+nocrc=1
-+otpimagesize=502
-+xtalfreq=37400
-+extpagain2g=2
-+pdetrange2g=2
-+extpagain5g=2
-+pdetrange5g=2
-+rxgains2gelnagaina0=0
-+rxgains2gtrisoa0=7
-+rxgains2gtrelnabypa0=0
-+rxgains5gelnagaina0=0
-+rxgains5gtrisoa0=11
-+rxgains5gtrelnabypa0=0
-+rxchain=1
-+txchain=1
-+aa2g=1
-+aa5g=1
-+tssipos5g=0
-+tssipos2g=0
-+pa2ga0=-161,6269,-723
-+pa2gccka0=-116,7568,-852
-+pa5ga0=0xFF61,0x163C,0xFD55,0xFF5D,0x1671,0xFD4F,0xFF5F,0x16CA,0xFD45,0xFF60,0x1676,0xFD4D
-+pa5gbw40a0=0xFF61,0x163C,0xFD55,0xFF5D,0x1671,0xFD4F,0xFF5F,0x16CA,0xFD45,0xFF60,0x1676,0xFD4D
-+pa5gbw80a0=0xFF61,0x163C,0xFD55,0xFF5D,0x1671,0xFD4F,0xFF5F,0x16CA,0xFD45,0xFF60,0x1676,0xFD4D
-+pdoffset40ma0=0
-+pdoffset80ma0=0
-+pdoffsetcckma0=0
-+maxp2ga0=75
-+maxp5ga0=64,64,72,72
-+cckbw202gpo=0x0000
-+cckbw20ul2gpo=0x0
-+mcsbw202gpo=0x99445533
-+mcsbw402gpo=0x99775533
-+dot11agofdmhrbw202gpo=0x2233
-+ofdmlrbw202gpo=0x0000
-+tssifloor2g=500
-+mcsbw205glpo=0x66333330
-+mcsbw405glpo=0x66665530
-+mcsbw805glpo=0xAA555530
-+mcsbw1605glpo=0x99555530
-+mcsbw205gmpo=0x99BB5530
-+mcsbw405gmpo=0x99BB5530
-+mcsbw805gmpo=0xEE555530
-+mcsbw1605gmpo=0x99555530
-+mcsbw205ghpo=0x99995530
-+mcsbw405ghpo=0x99BB5530
-+mcsbw805ghpo=0xEE555530
-+mcsbw1605ghpo=0x99555530
-+mcslr5glpo=0x0000
-+mcslr5gmpo=0x0000
-+mcslr5ghpo=0x0000
-+sb20in40hrrpo=0x0
-+sb20in80and160hr5glpo=0x0
-+sb40and80hr5glpo=0x0
-+sb20in80and160hr5gmpo=0x0
-+sb40and80hr5gmpo=0x0
-+sb20in80and160hr5ghpo=0x0
-+sb40and80hr5ghpo=0x0
-+sb20in40lrpo=0x0
-+sb20in80and160lr5glpo=0x0
-+sb40and80lr5glpo=0x0
-+sb20in80and160lr5gmpo=0x0
-+sb40and80lr5gmpo=0x0
-+sb20in80and160lr5ghpo=0x0
-+sb40and80lr5ghpo=0x0
-+dot11agduphrpo=0x0
-+dot11agduplrpo=0x0
-+phycal_tempdelta=25
-+cckdigfilttype=2
-+pacalidx2g=65
-+dacrate2g=160
-+swctrlmap_5g=0x00000008,0x00000010,0x00000008,0x000000,0x038
-+swctrlmap_2g=0x00000001,0x00000002,0x00000001,0x040002,0x0ff
-+swctrlmapext_5g=0x00000000,0x00000000,0x00000000,0x000000,0x000
-+swctrlmapext_2g=0x00000000,0x00000000,0x00000000,0x000000,0x000
-+rssicorrnorm_c0=3,3
-+rssicorrnorm5g_c0=2,3,4,2,3,3,0,1,2,0,1,2
-+muxenab=0x10
-diff --git a/configs/imx7dpico_defconfig b/configs/imx7dpico_defconfig
-index cd12e282ef..056f549d0b 100644
---- a/configs/imx7dpico_defconfig
-+++ b/configs/imx7dpico_defconfig
-@@ -28,6 +28,18 @@ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
++++ b/package/swupdate/0001-archive-handler-set-locale-for-libarchive.patch
+@@ -0,0 +1,65 @@
++From 95a2b9961119aac80aea1eeabbc1cd52b72d876a Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Sat, 4 May 2019 11:38:37 -0600
++Subject: [PATCH] archive handler: set locale for libarchive
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[Backported from: 95a2b9961119aac80aea1eeabbc1cd52b72d876a]
++Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
++---
++ handlers/archive_handler.c | 18 ++++++++++++++++++
++ 1 file changed, 18 insertions(+)
++
++diff --git a/handlers/archive_handler.c b/handlers/archive_handler.c
++index 7f12761..993bc10 100644
++--- a/handlers/archive_handler.c
+++++ b/handlers/archive_handler.c
++@@ -6,6 +6,7 @@
++  */
++ 
++ #include <sys/types.h>
+++#include <locale.h>
++ #include <stdio.h>
++ #include <sys/stat.h>
++ #include <unistd.h>
++@@ -68,6 +69,8 @@ copy_data(struct archive *ar, struct archive *aw)
++ static void *
++ extract(void *p)
++ {
+++	locale_t archive_locale;
+++	locale_t old_locale;
++ 	struct archive *a;
++ 	struct archive *ext = NULL;
++ 	struct archive_entry *entry = NULL;
++@@ -77,6 +80,20 @@ extract(void *p)
++ 	flags = data->flags;
++ 	int exitval = -EFAULT;
++ 
+++	/*
+++	 * Enable system locale - change from the standard (C) to system locale.
+++	 * This allows libarchive (in case it is activated) to handle filenames.
+++	 * We only change LC_CTYPE since libarchive only needs the charset set.
+++	 * We don't use LC_ALL because it causes problems on some systems.
+++	 * We restore the original LC_CTYPE after extraction to avoid side effects.
+++	 * We use uselocale instead of setlocale to avoid setting LC_CTYPE globally.
+++	 * See on libarchive Website for a more complete description of the issue:
+++	 *  https://github.com/libarchive/libarchive/issues/587
+++	 *  https://github.com/libarchive/libarchive/wiki/Filenames
+++	 */
+++	archive_locale = newlocale(LC_CTYPE_MASK, "", (locale_t)0);
+++	old_locale = uselocale(archive_locale);
+++
++ 	a = archive_read_new();
++ 	if (!a) {
++ 		goto out;
++@@ -155,6 +172,7 @@ out:
++ 		archive_read_free(a);
++ 	}
++ 
+++	uselocale(old_locale);
++ 	data->exitval = exitval;
++ 	pthread_exit(NULL);
++ }
++-- 
++2.7.4
++
+diff --git a/package/swupdate/0002-Lua-fix-segfault-in-image-property-handling.patch b/package/swupdate/0002-Lua-fix-segfault-in-image-property-handling.patch
+new file mode 100644
+index 0000000..5577547
+--- /dev/null
++++ b/package/swupdate/0002-Lua-fix-segfault-in-image-property-handling.patch
+@@ -0,0 +1,42 @@
++From ee17493d470ae7fd7b34241f263cfa6d790ce1b3 Mon Sep 17 00:00:00 2001
++From: Christian Storm <christian.storm@siemens.com>
++Date: Tue, 21 May 2019 14:45:51 +0200
++Subject: [PATCH] Lua: fix segfault in image property handling
++
++table2image() calls lua_dump_table() with the 'key' parameter being
++NULL and the 'img' parameter set. Subsequently, dict_insert_value() is
++called with key == NULL if the Lua stack key's type is string or number,
++segfaulting SWUpdate.
++
++Signed-off-by: Christian Storm <christian.storm@siemens.com>
++Reported-by: Akihiro Suzuki <akihiro27.suzuki@toshiba.co.jp>
++Acked-by: Stefano Babic <sbabic@denx.de>
++[Backported from: ee17493d470ae7fd7b34241f263cfa6d790ce1b3]
++Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
++---
++ corelib/lua_interface.c | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
++
++diff --git a/corelib/lua_interface.c b/corelib/lua_interface.c
++index d4ebe4a..443f149 100644
++--- a/corelib/lua_interface.c
+++++ b/corelib/lua_interface.c
++@@ -80,11 +80,11 @@ static void lua_dump_table(lua_State *L, char *str, struct img_type *img, const
++ 					lua_tostring(L, -1),
++ 					lua_tostring(L, -2));
++ 				if (img) {
++-					TRACE("Inserting property %s[%s] = %s",
++-							key,
++-							lua_tostring(L, -1),
+++					TRACE("Inserting property %s = %s",
+++							key ? key : lua_tostring(L, -1),
++ 							lua_tostring(L, -2));
++-					dict_insert_value(&img->properties, key,
+++					dict_insert_value(&img->properties,
+++							key ? key : lua_tostring(L, -1),
++ 							lua_tostring(L, -2));
++ 				}
++ 				break;
++-- 
++2.7.4
++
+diff --git a/package/swupdate/0003-u-boot-fix-script-format-when-CONFIG_UBOOT_NEWAPI.patch b/package/swupdate/0003-u-boot-fix-script-format-when-CONFIG_UBOOT_NEWAPI.patch
+new file mode 100644
+index 0000000..f07896e
+--- /dev/null
++++ b/package/swupdate/0003-u-boot-fix-script-format-when-CONFIG_UBOOT_NEWAPI.patch
+@@ -0,0 +1,44 @@
++From f811c91c06bffe32f46472524059914987e653ba Mon Sep 17 00:00:00 2001
++From: Christian Storm <christian.storm@siemens.com>
++Date: Tue, 21 May 2019 16:20:02 +0200
++Subject: [PATCH] u-boot: fix script format when !CONFIG_UBOOT_NEWAPI
++
++When !CONFIG_UBOOT_NEWAPI and hence linking against U-Boot's
++tools/env/lib.a, SWUpdate's bootloader/uboot.c calls lib.a's
++fw_parse_script() which expects input to be in format, quoting:
++ ...
++ * Each line has a couple with name, value:
++ * <white spaces>variable_name<white spaces>variable_value
++
++This was changed in SWUpdate by commit dab1b70 "Unify bootloader
++script format" to be '='-separated instead of space-separated,
++hence breaking the integration with the "old" libubootenv binding.
++
++Signed-off-by: Christian Storm <christian.storm@siemens.com>
++Reported-by: Akihiro Suzuki <akihiro27.suzuki@toshiba.co.jp>
++Acked-by: Stefano Babic <sbabic@denx.de>
++[Backported from: f811c91c06bffe32f46472524059914987e653ba]
++Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
++---
++ corelib/installer.c | 4 ++++
++ 1 file changed, 4 insertions(+)
++
++diff --git a/corelib/installer.c b/corelib/installer.c
++index edfcb6a..2dda40a 100644
++--- a/corelib/installer.c
+++++ b/corelib/installer.c
++@@ -169,7 +169,11 @@ static int update_bootloader_env(struct swupdate_cfg *cfg, const char *script)
++ 
++ 		if (!key || !value)
++ 			continue;
+++#if defined(CONFIG_UBOOT) && !defined(CONFIG_UBOOT_NEWAPI)
+++		snprintf(buf, sizeof(buf), "%s %s\n", key, value);
+++#else
++ 		snprintf(buf, sizeof(buf), "%s=%s\n", key, value);
+++#endif
++ 		if (write(fd, buf, strlen(buf)) != (ssize_t)strlen(buf)) {
++ 			  TRACE("Error saving temporary bootloader environment file");
++ 			  close(fd);
++-- 
++2.7.4
++
+diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
+index ca2eaf2..53f8b09 100644
+--- a/package/swupdate/Config.in
++++ b/package/swupdate/Config.in
+@@ -34,6 +34,10 @@ config BR2_PACKAGE_SWUPDATE
+ 	    support for setting the U-Boot environment.
+ 	  * Select BR2_PACKAGE_ZEROMQ to add support for using a
+ 	    remote handler.
++	  * Select BR2_PACKAGE_LIBRSYNC to add support for using
++	    rdiff handler.
++	  * Select BR2_PACKAGE_LIBUBOOTENV and BR2_PACKAGE_ZLIB to add
++	    support for setting the U-Boot environment with the new API.
  
-+# wifi firmware for brcm43439
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_BRCM_BCM43XX=y
+ 	  https://sbabic.github.io/swupdate
+ 
+diff --git a/package/swupdate/swupdate.config b/package/swupdate/swupdate.config
+index 730ebe5..3cb39d8 100644
+--- a/package/swupdate/swupdate.config
++++ b/package/swupdate/swupdate.config
+@@ -49,16 +49,13 @@ CONFIG_EXTRA_LDLIBS=""
+ # CONFIG_DEBUG is not set
+ # CONFIG_WERROR is not set
+ # CONFIG_NOCLEANUP is not set
+-
+-#
+-# EFI Boot Guard needs libebgenv and libz
+-#
++# CONFIG_BOOTLOADER_EBG is not set
++CONFIG_BOOTLOADER_NONE=y
++# CONFIG_BOOTLOADER_GRUB is not set
+ 
+ #
+ # U-Boot support needs libubootenv, libz
+ #
+-CONFIG_BOOTLOADER_NONE=y
+-# CONFIG_BOOTLOADER_GRUB is not set
+ 
+ #
+ # Image downloading support needs libcurl
+@@ -83,6 +80,7 @@ CONFIG_MONGOOSEIPV6=y
+ #
+ # SSL support needs libcrypto, libssl
+ #
++CONFIG_GUNZIP=y
+ 
+ #
+ # Parser Features
+@@ -103,6 +101,7 @@ CONFIG_PARSERROOT=""
+ # ubivol support needs libubi
+ #
+ CONFIG_RAW=y
++# CONFIG_RDIFFHANDLER is not set
+ # CONFIG_SHELLSCRIPTHANDLER is not set
+ 
+ #
+@@ -121,3 +120,4 @@ CONFIG_RAW=y
+ # SWU forwarder requires libcurl
+ #
+ # CONFIG_BOOTLOADERHANDLER is not set
++# CONFIG_UCFWHANDLER is not set
+diff --git a/package/swupdate/swupdate.hash b/package/swupdate/swupdate.hash
+index 138bd6d..8194de6 100644
+--- a/package/swupdate/swupdate.hash
++++ b/package/swupdate/swupdate.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  a65884ca18523cde1b0744d952d6f91462dbd4ad07941305f5684c6d4ec833dc  swupdate-2018.11.tar.gz
++sha256  96b2c59558e847ddb7c23b666c1bbe61e03ab90a64c30d233bd5e9029df8519b  swupdate-2019.04.tar.gz
+ sha256  43492b377cf2fb67942d1dd231146bd4e6578646ad13ef289297c9dd75cbc478  Licenses/Exceptions
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Licenses/lgpl-2.1.txt
+diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
+index 78f23ec..39d7d38 100644
+--- a/package/swupdate/swupdate.mk
++++ b/package/swupdate/swupdate.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SWUPDATE_VERSION = 2018.11
++SWUPDATE_VERSION = 2019.04
+ SWUPDATE_SITE = $(call github,sbabic,swupdate,$(SWUPDATE_VERSION))
+ SWUPDATE_LICENSE = GPL-2.0+ with OpenSSL exception, LGPL-2.1+, MIT
+ SWUPDATE_LICENSE_FILES = Licenses/Exceptions Licenses/gpl-2.0.txt \
+@@ -77,6 +77,9 @@ endif
+ ifeq ($(BR2_PACKAGE_UBOOT_TOOLS),y)
+ SWUPDATE_DEPENDENCIES += uboot-tools
+ SWUPDATE_MAKE_ENV += HAVE_LIBUBOOTENV=y
++else ifeq ($(BR2_PACKAGE_LIBUBOOTENV),y)
++SWUPDATE_DEPENDENCIES += libubootenv
++SWUPDATE_MAKE_ENV += HAVE_LIBUBOOTENV=y
+ else
+ SWUPDATE_MAKE_ENV += HAVE_LIBUBOOTENV=n
+ endif
+@@ -95,6 +98,10 @@ else
+ SWUPDATE_MAKE_ENV += HAVE_ZLIB=n
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBRSYNC),y)
++SWUPDATE_DEPENDENCIES += librsync
++endif
 +
-+# For automatic firmware loading
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+
-+# wireless packages
-+BR2_PACKAGE_WIRELESS_TOOLS=y
-+BR2_PACKAGE_WPA_SUPPLICANT=y
-+BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
-+
- # required tools to create the eMMC image
- BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
+ SWUPDATE_BUILD_CONFIG = $(@D)/.config
+ 
+ SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
 -- 
-2.17.1
+2.7.4
