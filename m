@@ -1,64 +1,76 @@
 From: Joris Offouga <offougajoris@gmail.com>
-Date: Mon, 10 Jun 2019 21:12:47 +0200
-Subject: [Buildroot] [PATCH 2/3] boards/freescale/common: Introduce
- template_no_boot_part
-In-Reply-To: <ad33ba2d-ea04-9fce-6bd0-7112bdce7ca5@mind.be>
-References: <20190609145749.28766-1-offougajoris@gmail.com>
- <20190609145749.28766-2-offougajoris@gmail.com>
- <846ee132-b3e6-e60f-50a7-39cf34a9bb1b@mind.be>
- <92e649a9-01cc-4d44-1dce-ddc6df982b5e@gmail.com>
- <ad33ba2d-ea04-9fce-6bd0-7112bdce7ca5@mind.be>
-Message-ID: <ced8f263-e3ab-4d1e-3f8b-ae4ca85665bc@gmail.com>
+Date: Mon, 10 Jun 2019 21:35:34 +0200
+Subject: [Buildroot] [PATCH 1/3] boards/freescale/common: Introduce
+ template_no_boot_part_spl
+Message-ID: <20190610193540.25174-1-offougajoris@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This includes the no_boot_part_spl templates which use a /boot
+included in rootfs.
 
-Le 10/06/2019 ? 21:00, Arnout Vandecappelle a ?crit?:
->
-> On 10/06/2019 20:43, Joris Offouga wrote:
->> Hi Arnoud,
->>
->> Le 10/06/2019 ? 00:17, Arnout Vandecappelle a ?crit?:
->>> On 09/06/2019 16:57, Joris Offouga wrote:
-> [snip]
->>>> diff --git a/board/freescale/common/imx/genimage.cfg.template_no_boot_part b/board/freescale/common/imx/genimage.cfg.template_no_boot_part
->>>> new file mode 100644
->>>> index 0000000000..9e19b4ee3e
->>>> --- /dev/null
->>>> +++ b/board/freescale/common/imx/genimage.cfg.template_no_boot_part
->>>> @@ -0,0 +1,23 @@
->>>> +# Minimal SD card image for the Freescale boards Template
->>>> +#
->>>> +# We mimic the .sdcard Freescale's image format:
->>>> +# * the SD card must have 1 kB free space at the beginning,
->>>   Is this one going to be used by anything in practice? I expect that anything
->>> that uses this kind of layout is *not* going to use the .imx format, since
->>> that's considered kind of deprecated...
->> It depends on the targets, imx7dpico has migrated to the SPL and so its u-boot
->> has gone from .imx to .img,
->>
->> Example of the warp7 on 2019.01 it's still .imx.
->   OK, let me rephrase it then: does U-Boot 2019.01 have any configuration without
-> boot FAT partition, but which uses the .imx format instead of SPL?
->
->   In any case, I think this enimage.cfg.template_no_boot_part should only be
-> introduced when there is something that actually uses it. Now it is just dead code.
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Tested-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ .../genimage.cfg.template_no_boot_part_spl    | 30 +++++++++++++++++++
+ board/freescale/common/imx/post-image.sh      |  4 +++
+ 2 files changed, 34 insertions(+)
+ create mode 100644 board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
 
-I see you are right if a target will need it it will introduce the 
-variable I drop this file,
-
-thanks for review
-
-Best regards,
-
-Joris
-
->
->   Regards,
->   Arnout
->
-> [snip]
->
+diff --git a/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl b/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
+new file mode 100644
+index 0000000000..9cdecc6ce0
+--- /dev/null
++++ b/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
+@@ -0,0 +1,30 @@
++# Minimal SD card image for the Freescale boards Template for SPL Boot
++#
++# We mimic the .sdcard Freescale's image format:
++# * the SD card must have 1 kB free space at the beginning,
++# * SPL is at the offset expected by ROM,
++# * U-Boot is at the offset expected by SPL,
++# * The first partition is expected to be an ext2 and have a /boot directory.
++#
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition spl {
++    in-partition-table = "no"
++    image = "SPL"
++    offset = 1024
++  }
++
++  partition u-boot-img {
++    in-partition-table = "no"
++    image = "u-boot.img"
++    offset = 69K
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext2"
++  }
++}
+diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
+index d07ad2ef5d..12756c63d5 100755
+--- a/board/freescale/common/imx/post-image.sh
++++ b/board/freescale/common/imx/post-image.sh
+@@ -38,6 +38,10 @@ genimage_type()
+ 		echo "genimage.cfg.template_imx8"
+ 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X=y$" ${BR2_CONFIG}; then
+ 		echo "genimage.cfg.template_imx8"
++	elif grep -Eq "^BR2_LINUX_KERNEL_INSTALL_TARGET=y$" ${BR2_CONFIG}; then
++		if grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
++		    echo "genimage.cfg.template_no_boot_part_spl"
++		fi
+ 	elif grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
+ 		echo "genimage.cfg.template_spl"
+ 	else
+-- 
+2.17.1
