@@ -1,174 +1,128 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 10 Jun 2019 10:56:56 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/samba4: drop third patch
-Message-ID: <20190610085656.22736-1-fontaine.fabrice@gmail.com>
+Date: Mon, 10 Jun 2019 11:00:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libgit2: security bump to version
+ 0.27.8
+Message-ID: <20190610090041.26269-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Drop third patch which is not upstreamable and set XSLTPROC to false
-instead to disable documentation
+Fixing the following list of issues (fixed in 0.27.6 and 0.27.5):
+
+    The function family git__strtol is used to parse integers
+    from a buffer. As the functions do not take a buffer length as
+    argument, they will scan either until the end of the current
+    number or until a NUL byte is encountered. Many callers have
+    been misusing the function and called it on potentially
+    non-NUL-terminated buffers, resulting in possible out-of-bounds
+    reads. Callers have been fixed to use git__strntol functions
+    instead and git__strtol functions were removed.
+
+    The function git__strntol64 relied on the undefined behavior
+    of signed integer overflows. While the code tried to detect
+    such overflows after they have happened, this is unspecified
+    behavior and may lead to weird behavior on uncommon platforms.
+
+    In the case where git__strntol32 was unable to parse an
+    integer because it doesn't fit into an int32_t, it printed an
+    error message containing the string that is currently being
+    parsed. The code didn't truncate the string though, which
+    caused it to print the complete string until a NUL byte is
+    encountered and not only the currently parsed number. In case
+    where the string was not NUL terminated, this could have lead
+    to an out-of-bounds read.
+
+    When parsing tags, all unknown fields that appear before the
+    tag message are skipped. This skipping is done by using a plain
+    strstr(buffer, "\n\n") to search for the two newlines that
+    separate tag fields from tag message. As it is not possible to
+    supply a buffer length to strstr, this call may skip over the
+    buffer's end and thus result in an out of bounds read. As
+    strstr may return a pointer that is out of bounds, the
+    following computation of buffer_end - buffer will overflow
+    and result in an allocation of an invalid length. Note that
+    when reading objects from the object database, we make sure to
+    always NUL terminate them, making the use of strstr safe.
+
+    When parsing the "encoding" field of a commit, we may perform
+    an out of bounds read due to using git__prefixcmp instead of
+    git__prefixncmp. This can result in the parsed commit object
+    containing uninitialized data in both its message encoding and
+    message fields. Note that when reading objects from the object
+    database, we make sure to always NUL terminate them, making the
+    use of strstr safe.
+
+    Submodule URLs and paths with a leading "-" are now ignored.
+    This is due to the recently discovered CVE-2018-17456, which
+    can lead to arbitrary code execution in upstream git. While
+    libgit2 itself is not vulnerable, it can be used to inject
+    options in an implementation which performs a recursive clone
+    by executing an external command.
+
+    When running repack while doing repo writes,
+    packfile_load__cb() could see some temporary files in the
+    directory that were bigger than the usual, and makes memcmp
+    overflow on the p->pack_name string. This issue was reported
+    and fixed by bisho.
+
+    The configuration file parser used unbounded recursion to parse
+    multiline variables, which could lead to a stack overflow. The
+    issue was reported by the oss-fuzz project, issue 10048 and
+    fixed by Nelson Elhage.
+
+    The fix to the unbounded recursion introduced a memory leak in
+    the config parser. While this leak was never in a public
+    release, the oss-fuzz project reported this as issue 10127. The
+    fix was implemented by Nelson Elhage and Patrick Steinhardt.
+
+    When parsing "ok" packets received via the smart protocol, our
+    parsing code did not correctly verify the bounds of the
+    packets, which could result in a heap-buffer overflow. The
+    issue was reported by the oss-fuzz project, issue 9749 and
+    fixed by Patrick Steinhardt.
+
+    The parsing code for the smart protocol has been tightened in
+    general, fixing heap-buffer overflows when parsing the packet
+    type as well as for "ACK" and "unpack" packets. The issue was
+    discovered and fixed by Patrick Steinhardt.
+
+    Fixed potential integer overflows on platforms with 16 bit
+    integers when parsing packets for the smart protocol. The issue
+    was discovered and fixed by Patrick Steinhardt.
+
+    Fixed potential NULL pointer dereference when parsing
+    configuration files which have "include.path" or
+    "includeIf..path" statements without a value.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Arnout Vandecappelle):
- - Use false instead of False
+ package/libgit2/libgit2.hash | 2 +-
+ package/libgit2/libgit2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- ...-build-of-manpages-and-documentation.patch | 123 ------------------
- ...o.c-include-stdint.h-before-cmoka.h.patch} |   0
- package/samba4/samba4.mk                      |   3 +-
- 3 files changed, 2 insertions(+), 124 deletions(-)
- delete mode 100644 package/samba4/0003-Disable-build-of-manpages-and-documentation.patch
- rename package/samba4/{0004-test_regfio.c-include-stdint.h-before-cmoka.h.patch => 0003-test_regfio.c-include-stdint.h-before-cmoka.h.patch} (100%)
-
-diff --git a/package/samba4/0003-Disable-build-of-manpages-and-documentation.patch b/package/samba4/0003-Disable-build-of-manpages-and-documentation.patch
-deleted file mode 100644
-index ad8712634e..0000000000
---- a/package/samba4/0003-Disable-build-of-manpages-and-documentation.patch
-+++ /dev/null
-@@ -1,123 +0,0 @@
--From 3cd608170b99492bdd5fe3b7b8e7db61af199845 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Thu, 9 Aug 2018 09:59:06 +0200
--Subject: [PATCH] Disable build of manpages and documentation
--
--This patch fixes a bug described in an upstream bug report
--https://bugzilla.samba.org/show_bug.cgi?id=9515
--which was closed as WONTFIX by disabling the build of manpages and
--documentation.
--
--If installed on the host, samba4 uses the docbook-xsl package to build
--parts of the documentation. This package is broken, on Debian for
--example the bug reported to samba4 was fixed in the docbook-xsl package:
--https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=765567
--
--Since we do not provide a host version of docbook-xsl we need to disable
--the build of manpages and documentation.
--
--Patch was downloaded from
--https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/network/samba/patches/samba-950-no-man.patch
--
--[Bernd: rebased for samba-4.8.5]
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- buildtools/wafsamba/wafsamba.py | 10 ++++-----
-- docs-xml/wscript_build          | 40 ++++++++++++++++-----------------
-- source4/scripting/wscript_build |  4 ++--
-- 3 files changed, 27 insertions(+), 27 deletions(-)
--
--diff --git a/buildtools/wafsamba/wafsamba.py b/buildtools/wafsamba/wafsamba.py
--index 4bb19d070e2..a255d841111 100644
----- a/buildtools/wafsamba/wafsamba.py
--+++ b/buildtools/wafsamba/wafsamba.py
--@@ -335,9 +335,9 @@ def SAMBA_LIBRARY(bld, libname, source,
--         else:
--             bld.PKG_CONFIG_FILES(pc_files, vnum=vnum)
-- 
---    if (manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and
---        bld.env['XSLTPROC_MANPAGES']):
---        bld.MANPAGES(manpages, install)
--+#    if (manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and
--+#        bld.env['XSLTPROC_MANPAGES']):
--+#        bld.MANPAGES(manpages, install)
-- 
-- 
-- Build.BuildContext.SAMBA_LIBRARY = SAMBA_LIBRARY
--@@ -442,8 +442,8 @@ def SAMBA_BINARY(bld, binname, source,
--         samba_ldflags  = pie_ldflags
--         )
-- 
---    if manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
---        bld.MANPAGES(manpages, install)
--+#    if manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
--+#        bld.MANPAGES(manpages, install)
-- 
-- Build.BuildContext.SAMBA_BINARY = SAMBA_BINARY
-- 
--diff --git a/docs-xml/wscript_build b/docs-xml/wscript_build
--index ec5d28fc62a..f81c125bcd4 100644
----- a/docs-xml/wscript_build
--+++ b/docs-xml/wscript_build
--@@ -148,23 +148,23 @@ bld.SAMBA_GENERATOR(parameter_all,
--                     rule=smbdotconf_generate_parameter_list,
--                     dep_vars=bld.dynconfig_varnames())
-- 
---def SMBDOTCONF_MANPAGE(bld, target):
---    ''' assemble and build smb.conf.5 manual page'''
---    bld.SAMBAMANPAGES(target, parameter_all)
---
---if ('XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']):
---
---    SMBDOTCONF_MANPAGE(bld, 'manpages/smb.conf.5')
---    bld.SAMBAMANPAGES(manpages)
---
---    if bld.CONFIG_SET('WITH_PAM_MODULES') and bld.CONFIG_SET('HAVE_PAM_START'):
---        bld.SAMBAMANPAGES(pam_winbind_manpages)
---
---    if bld.CONFIG_SET('HAVE_KRB5_LOCATE_PLUGIN_H'):
---        bld.SAMBAMANPAGES(krb5_locator_manpages)
---
---    if bld.CONFIG_SET('HAVE_KRB5_LOCALAUTH_PLUGIN_H'):
---        bld.SAMBAMANPAGES(krb5_localauth_manpages)
---
---    if bld.SAMBA3_IS_ENABLED_MODULE('vfs_zfsacl'):
---        bld.SAMBAMANPAGES('manpages/vfs_zfsacl.8')
--+#def SMBDOTCONF_MANPAGE(bld, target):
--+#    ''' assemble and build smb.conf.5 manual page'''
--+#    bld.SAMBAMANPAGES(target, parameter_all)
--+#
--+#if ('XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']):
--+#
--+#    SMBDOTCONF_MANPAGE(bld, 'manpages/smb.conf.5')
--+#    bld.SAMBAMANPAGES(manpages)
--+#
--+#    if bld.CONFIG_SET('WITH_PAM_MODULES') and bld.CONFIG_SET('HAVE_PAM_START'):
--+#        bld.SAMBAMANPAGES(pam_winbind_manpages)
--+#
--+#    if bld.CONFIG_SET('HAVE_KRB5_LOCATE_PLUGIN_H'):
--+#        bld.SAMBAMANPAGES(krb5_locator_manpages)
--+#
--+#    if bld.CONFIG_SET('HAVE_KRB5_LOCALAUTH_PLUGIN_H'):
--+#        bld.SAMBAMANPAGES(krb5_localauth_manpages)
--+#
--+#    if bld.SAMBA3_IS_ENABLED_MODULE('vfs_zfsacl'):
--+#        bld.SAMBAMANPAGES('manpages/vfs_zfsacl.8')
--diff --git a/source4/scripting/wscript_build b/source4/scripting/wscript_build
--index 2f53cce12b7..9841ae0a116 100644
----- a/source4/scripting/wscript_build
--+++ b/source4/scripting/wscript_build
--@@ -12,8 +12,8 @@ if sbin_files:
--     bld.INSTALL_FILES('${SBINDIR}',
--                       sbin_files,
--                       chmod=MODE_755, python_fixup=True, flat=True)
---    if 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
---        bld.MANPAGES(man_files, True)
--+#    if 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
--+#        bld.MANPAGES(man_files, True)
-- 
-- if bld.CONFIG_SET('AD_DC_BUILD_IS_ENABLED'):
--     bld.INSTALL_FILES('${BINDIR}',
---- 
--2.18.0
--
-diff --git a/package/samba4/0004-test_regfio.c-include-stdint.h-before-cmoka.h.patch b/package/samba4/0003-test_regfio.c-include-stdint.h-before-cmoka.h.patch
-similarity index 100%
-rename from package/samba4/0004-test_regfio.c-include-stdint.h-before-cmoka.h.patch
-rename to package/samba4/0003-test_regfio.c-include-stdint.h-before-cmoka.h.patch
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 4ca3aaa615..6e80e473c1 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -21,7 +21,8 @@ SAMBA4_CFLAGS = $(TARGET_CFLAGS)
- SAMBA4_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- SAMBA4_CONF_ENV = \
- 	CFLAGS="$(SAMBA4_CFLAGS)" \
--	LDFLAGS="$(SAMBA4_LDFLAGS)"
-+	LDFLAGS="$(SAMBA4_LDFLAGS)" \
-+	XSLTPROC=false
+diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
+index 41ab87bf4d..51eb7a96ce 100644
+--- a/package/libgit2/libgit2.hash
++++ b/package/libgit2/libgit2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	0b7ca31cb959ff1b22afa0da8621782afe61f99242bf716c403802ffbdb21d51  libgit2-v0.27.4.tar.gz
++sha256	0b7ca31cb959ff1b22afa0da8621782afe61f99242bf716c403802ffbdb21d51  libgit2-v0.27.8.tar.gz
+ sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
+diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
+index 551e3dea62..6c64aa67c8 100644
+--- a/package/libgit2/libgit2.mk
++++ b/package/libgit2/libgit2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- SAMBA4_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
+-LIBGIT2_VERSION = v0.27.4
++LIBGIT2_VERSION = v0.27.8
+ LIBGIT2_SITE = $(call github,libgit2,libgit2,$(LIBGIT2_VERSION))
+ LIBGIT2_LICENSE = GPL-2.0 with linking exception
+ LIBGIT2_LICENSE_FILES = COPYING
 -- 
 2.20.1
