@@ -1,91 +1,158 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon, 10 Jun 2019 20:39:02 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/swupdate: bump to version
- 2019.04
-In-Reply-To: <40dcf91d-c7c3-c377-5204-eade8cd1d234@mind.be>
-References: <1560180656-17519-1-git-send-email-pjtexier@koncepto.io>
- <40dcf91d-c7c3-c377-5204-eade8cd1d234@mind.be>
-Message-ID: <57798f6f-bace-1e4c-a5c6-6ba13f711d00@koncepto.io>
+From: Joris Offouga <offougajoris@gmail.com>
+Date: Mon, 10 Jun 2019 20:43:14 +0200
+Subject: [Buildroot] [PATCH 2/3] boards/freescale/common: Introduce
+ template_no_boot_part
+In-Reply-To: <846ee132-b3e6-e60f-50a7-39cf34a9bb1b@mind.be>
+References: <20190609145749.28766-1-offougajoris@gmail.com>
+ <20190609145749.28766-2-offougajoris@gmail.com>
+ <846ee132-b3e6-e60f-50a7-39cf34a9bb1b@mind.be>
+Message-ID: <92e649a9-01cc-4d44-1dce-ddc6df982b5e@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Hi Arnoud,
 
-Le 10/06/2019 ? 19:59, Arnout Vandecappelle a ?crit?:
->   Hi Pierre-Jean,
-> 
-> On 10/06/2019 17:30, Pierre-Jean Texier wrote:
->> New features in this release:
->>   - Improved documentation
->>   - delta updates based on rdiff library
->>   - support for libubootenv
->>   - dry-run option
->>   - CA certificates for signed images
->>   - Fix security leak in parser
+Le 10/06/2019 ? 00:17, Arnout Vandecappelle a ?crit?:
+>   Okay, this explains a lot... I should have read this patch before looking at
+> the previous one.
+>
+>   So basically, patch 1 and 2 should be swapped.
+Yes, i fix to v2
+>
+>   Note that I like this very much, I think it's silly that most of our defconfigs
+> still use a FAT partition.
+>
+> On 09/06/2019 16:57, Joris Offouga wrote:
+>> This includes the no_boot_part templates which use a /boot
+>> included in rootfs.
 >>
->> This commit also:
->>   - introduce BR2_PACKAGE_LIBRSYNC
->>   - introduce BR2_PACKAGE_LIBUBOOTENV
->>   - drop upstreamed patch
->>   - backport upstream patches (important fix)
-> 
->   Please also mention that you regenerate the default swupdate.config, and that
-> you always enable CONFIG_GUNZIP because gunzip is provided by the default
-> busybox config.
-
-Indeed, I will do in v3.
-
-> 
-> [snip]
->> diff --git a/package/swupdate/0001-archive-handler-set-locale-for-libarchive.patch b/package/swupdate/0001-archive-handler-set-locale-for-libarchive.patch
+>> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+>> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+>> ---
+>>   .../imx/genimage.cfg.template_no_boot_part    | 23 +++++++++++++++
+>>   .../genimage.cfg.template_no_boot_part_spl    | 29 +++++++++++++++++++
+>>   board/freescale/common/imx/post-image.sh      |  6 ++++
+>>   3 files changed, 58 insertions(+)
+>>   create mode 100644 board/freescale/common/imx/genimage.cfg.template_no_boot_part
+>>   create mode 100644 board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
+>>
+>> diff --git a/board/freescale/common/imx/genimage.cfg.template_no_boot_part b/board/freescale/common/imx/genimage.cfg.template_no_boot_part
 >> new file mode 100644
->> index 0000000..7403097
+>> index 0000000000..9e19b4ee3e
 >> --- /dev/null
->> +++ b/package/swupdate/0001-archive-handler-set-locale-for-libarchive.patch
->> @@ -0,0 +1,64 @@
->> +From 95a2b9961119aac80aea1eeabbc1cd52b72d876a Mon Sep 17 00:00:00 2001
->> +From: James Hilliard <james.hilliard1@gmail.com>
->> +Date: Sat, 4 May 2019 11:38:37 -0600
->> +Subject: [PATCH] archive handler: set locale for libarchive
+>> +++ b/board/freescale/common/imx/genimage.cfg.template_no_boot_part
+>> @@ -0,0 +1,23 @@
+>> +# Minimal SD card image for the Freescale boards Template
+>> +#
+>> +# We mimic the .sdcard Freescale's image format:
+>> +# * the SD card must have 1 kB free space at the beginning,
+>   Is this one going to be used by anything in practice? I expect that anything
+> that uses this kind of layout is *not* going to use the .imx format, since
+> that's considered kind of deprecated...
+
+It depends on the targets, imx7dpico has migrated to the SPL and so its 
+u-boot has gone from .imx to .img,
+
+Example of the warp7 on 2019.01 it's still .imx.
+
+so I think that should not be removed.
+
+>
+>   So my suggestion would be to remove it (also from the post-image script).
+>
+>> +# * U-Boot is dumped as is,
+>> +# * a single root filesystem partition is required (ext2, ext3 or ext4)
+>> +#
 >> +
->> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
->> +[Backported from: 95a2b9961119aac80aea1eeabbc1cd52b72d876a]
-> 
->   You need to add your Signed-off-by here. This is a short way for you to
-> assert that you are entitled to contribute the patch under upstream's
-> GPL license.  See  http://elinux.org/Developer_Certificate_Of_Origin
-> for more details. It is needed here in addition to the commit message of the
-> Buildroot commit, because the license of the package may be different than
-> Buildroot's.
-> 
->   Same for the other two patches.
+>> +image sdcard.img {
+>> +  hdimage {
+>> +  }
+>> +
+>> +  partition u-boot {
+>> +    in-partition-table = "no"
+>> +    image = "%UBOOTBIN%"
+>> +    offset = 1024
+>> +  }
+>> +
+>> +  partition rootfs {
+>> +    partition-type = 0x83
+>> +    image = "rootfs.ext2"
+>> +  }
+>> +}
+>> diff --git a/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl b/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
+>> new file mode 100644
+>> index 0000000000..6d3ae183e3
+>> --- /dev/null
+>> +++ b/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
+>> @@ -0,0 +1,29 @@
+>> +# Minimal SD card image for the Freescale boards Template for SPL Boot
+>> +#
+>> +# We mimic the .sdcard Freescale's image format:
+>> +# * the SD card must have 1 kB free space at the beginning,
+>> +# * U-Boot is dumped as is,
+>   Mention SPL here. And mention that SPL is at the offset expected by ROM, while
+> U-Boot is at the offset expected by SPL.
+Yes, i add to v2
+>
+>> +# * a single root filesystem partition is required (ext2, ext3 or ext4)
+>   Well, to be precise: the first partition is expected to be an ext2 and have a
+> /boot directory.
 
-Ok sorry for that, I will update patches in v3.
+and this
 
-> 
-> [snip]
->> @@ -95,6 +98,10 @@ else
->>   SWUPDATE_MAKE_ENV += HAVE_ZLIB=n
->>   endif
->>   
->> +ifeq ($(BR2_PACKAGE_LIBRSYNC),y)
->> +SWUPDATE_DEPENDENCIES += librsync
->> +endif
-> 
->   Nothing in .config needed for this?
 
-No, just a simple dependency.
+Best regards,
 
-Thanks for the review !
+Joris
 
-> 
+>
 >   Regards,
 >   Arnout
-> 
-
--- 
-Best regards,
-Pierre-Jean Texier
+>
+>> +#
+>> +
+>> +image sdcard.img {
+>> +  hdimage {
+>> +  }
+>> +
+>> +  partition spl {
+>> +    in-partition-table = "no"
+>> +    image = "SPL"
+>> +    offset = 1024
+>> +  }
+>> +
+>> +  partition u-boot-img {
+>> +    in-partition-table = "no"
+>> +    image = "u-boot.img"
+>> +    offset = 69K
+>> +  }
+>> +
+>> +  partition rootfs {
+>> +    partition-type = 0x83
+>> +    image = "rootfs.ext2"
+>> +  }
+>> +}
+>> diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
+>> index 12a5bea73b..851ce97c57 100755
+>> --- a/board/freescale/common/imx/post-image.sh
+>> +++ b/board/freescale/common/imx/post-image.sh
+>> @@ -36,6 +36,12 @@ genimage_type()
+>>   		echo "genimage.cfg.template_imx8"
+>>   	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X=y$" ${BR2_CONFIG}; then
+>>   		echo "genimage.cfg.template_imx8"
+>> +	elif grep -Eq "^BR2_LINUX_KERNEL_INSTALL_TARGET=y$" ${BR2_CONFIG}; then
+>> +		if grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
+>> +		    echo "genimage.cfg.template_no_boot_part_spl"
+>> +		else
+>> +		    echo "genimage.cfg.template_no_boot_part"
+>> +		fi
+>>   	elif grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
+>>   		echo "genimage.cfg.template_spl"
+>>   	else
+>>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190610/75f76e40/attachment.html>
