@@ -1,42 +1,35 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Jun 2019 12:01:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/weston: needs headers >= 4.4
-In-Reply-To: <20190610093702.GD13603@scaer>
-References: <20190609222703.30345-1-fontaine.fabrice@gmail.com>
- <20190610093702.GD13603@scaer>
-Message-ID: <20190610100112.GE13603@scaer>
+From: Julien Olivain <juju@cotds.org>
+Date: Mon, 10 Jun 2019 12:19:19 +0200
+Subject: [Buildroot] [PATCH 0/5] configs/imx8mmpico: new defconfig
+Message-ID: <20190610101924.9124-1-juju@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+This patch series add support for i.MX8M Mini SoC and a new defconfig
+for the Technexion i.MX8M Mini Pico board.
 
-On 2019-06-10 11:37 +0200, Yann E. MORIN spake thusly:
-> On 2019-06-10 00:27 +0200, Fabrice Fontaine spake thusly:
-> > weston includes input-event-codes.h since version 5.0.91 and
-> > https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
-> 
-> Actually, that include is in fact not needed. Just remove it, and it
-> still builds! ;-)
+Julien Olivain (5):
+  package/freescale-imx: add option for i.MX8MM
+  package/freescale-imx/firmware-imx: add support for i.MX8MM
+  package/imx-mkimage: add support for i.MX8MM
+  board/freescale/common/imx: add support for i.MX8MM
+  configs/imx8mmpico: new defconfig
 
-So, even with a toolchain with headers 4.20, it is not needed to include
-linux/input-event-codes.h.
-
-That's because it is pulled in from linux/input.h, which it self is
-pulled in from libevdev/libevdev.h.
-
-So, the patch I suggested earlier is probably the better technically,
-but one that just includes linux/input.h instead is simpler.
-
-Regards,
-Yann E. MORIN.
+ .gitlab-ci.yml                                |  1 +
+ DEVELOPERS                                    |  2 +
+ .../common/imx/imx8-bootloader-prepare.sh     |  7 ++
+ board/freescale/common/imx/post-image.sh      |  4 +
+ board/technexion/imx8mmpico/readme.txt        | 96 +++++++++++++++++++
+ configs/imx8mmpico_defconfig                  | 39 ++++++++
+ package/freescale-imx/Config.in               |  6 +-
+ .../firmware-imx/firmware-imx.mk              |  2 +-
+ package/imx-mkimage/imx-mkimage.mk            |  2 +-
+ 9 files changed, 156 insertions(+), 3 deletions(-)
+ create mode 100644 board/technexion/imx8mmpico/readme.txt
+ create mode 100644 configs/imx8mmpico_defconfig
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.21.0
