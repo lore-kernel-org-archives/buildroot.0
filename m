@@ -1,27 +1,22 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Jun 2019 23:57:40 +0200
-Subject: [Buildroot] [PATCH v2 2/3] configs/imx7dpico: Bump Linux and
- U-Boot
-In-Reply-To: <20190610194144.25958-2-offougajoris@gmail.com>
-References: <20190610194144.25958-1-offougajoris@gmail.com>
- <20190610194144.25958-2-offougajoris@gmail.com>
-Message-ID: <9ed4ca9f-3934-9857-8f62-5a798de3aeb4@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 11 Jun 2019 00:16:34 +0200
+Subject: [Buildroot] [PATCH 1/2] package/mdadm: fix patch number
+Message-ID: <20190610221635.19496-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Series applied to master, thanks, with one little change here.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...n.patch => 0001-add-install-targets-for-mdadm-and-mdmon.patch} | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename package/mdadm/{0010-add-install-targets-for-mdadm-and-mdmon.patch => 0001-add-install-targets-for-mdadm-and-mdmon.patch} (100%)
 
-On 10/06/2019 21:41, Joris Offouga wrote:
-[snip]
->  # required tools to create the eMMC image
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> @@ -34,6 +34,7 @@ BR2_PACKAGE_HOST_GENIMAGE=y
->  BR2_PACKAGE_HOST_MTOOLS=y
-
- Since no FAT filesystem is created any more, dosfstools and mtools are not needed.
-
- Regards,
- Arnout
+diff --git a/package/mdadm/0010-add-install-targets-for-mdadm-and-mdmon.patch b/package/mdadm/0001-add-install-targets-for-mdadm-and-mdmon.patch
+similarity index 100%
+rename from package/mdadm/0010-add-install-targets-for-mdadm-and-mdmon.patch
+rename to package/mdadm/0001-add-install-targets-for-mdadm-and-mdmon.patch
+-- 
+2.20.1
