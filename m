@@ -1,159 +1,69 @@
-From: Joris Offouga <offougajoris@gmail.com>
-Date: Mon, 10 Jun 2019 20:43:51 +0200
-Subject: [Buildroot] [PATCH 2/3] boards/freescale/common: Introduce
- template_no_boot_part
-In-Reply-To: <92e649a9-01cc-4d44-1dce-ddc6df982b5e@gmail.com>
-References: <20190609145749.28766-1-offougajoris@gmail.com>
- <20190609145749.28766-2-offougajoris@gmail.com>
- <846ee132-b3e6-e60f-50a7-39cf34a9bb1b@mind.be>
- <92e649a9-01cc-4d44-1dce-ddc6df982b5e@gmail.com>
-Message-ID: <a652eff1-90f4-a30c-8956-6b94d9f91888@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 10 Jun 2019 20:43:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mariadb: security bump to
+ version 10.3.15
+In-Reply-To: <20190610134749.4356-1-bluemrp9@gmail.com>
+References: <20190610134749.4356-1-bluemrp9@gmail.com>
+Message-ID: <d4a79f6c-d174-7836-b233-ae60c2c9f991@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout*, sorry
 
-Le 10/06/2019 ? 20:43, Joris Offouga a ?crit?:
->
-> Hi Arnoud,
->
-> Le 10/06/2019 ? 00:17, Arnout Vandecappelle a ?crit?:
->>   Okay, this explains a lot... I should have read this patch before looking at
->> the previous one.
->>
->>   So basically, patch 1 and 2 should be swapped.
-> Yes, i fix to v2
->>   Note that I like this very much, I think it's silly that most of our defconfigs
->> still use a FAT partition.
->>
->> On 09/06/2019 16:57, Joris Offouga wrote:
->>> This includes the no_boot_part templates which use a /boot
->>> included in rootfs.
->>>
->>> Signed-off-by: Joris Offouga<offougajoris@gmail.com>
->>> Signed-off-by: Pierre-Jean Texier<pjtexier@koncepto.io>
->>> ---
->>>   .../imx/genimage.cfg.template_no_boot_part    | 23 +++++++++++++++
->>>   .../genimage.cfg.template_no_boot_part_spl    | 29 +++++++++++++++++++
->>>   board/freescale/common/imx/post-image.sh      |  6 ++++
->>>   3 files changed, 58 insertions(+)
->>>   create mode 100644 board/freescale/common/imx/genimage.cfg.template_no_boot_part
->>>   create mode 100644 board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
->>>
->>> diff --git a/board/freescale/common/imx/genimage.cfg.template_no_boot_part b/board/freescale/common/imx/genimage.cfg.template_no_boot_part
->>> new file mode 100644
->>> index 0000000000..9e19b4ee3e
->>> --- /dev/null
->>> +++ b/board/freescale/common/imx/genimage.cfg.template_no_boot_part
->>> @@ -0,0 +1,23 @@
->>> +# Minimal SD card image for the Freescale boards Template
->>> +#
->>> +# We mimic the .sdcard Freescale's image format:
->>> +# * the SD card must have 1 kB free space at the beginning,
->>   Is this one going to be used by anything in practice? I expect that anything
->> that uses this kind of layout is *not* going to use the .imx format, since
->> that's considered kind of deprecated...
->
-> It depends on the targets, imx7dpico has migrated to the SPL and so 
-> its u-boot has gone from .imx to .img,
->
-> Example of the warp7 on 2019.01 it's still .imx.
->
-> so I think that should not be removed.
->
->>   So my suggestion would be to remove it (also from the post-image script).
->>
->>> +# * U-Boot is dumped as is,
->>> +# * a single root filesystem partition is required (ext2, ext3 or ext4)
->>> +#
->>> +
->>> +image sdcard.img {
->>> +  hdimage {
->>> +  }
->>> +
->>> +  partition u-boot {
->>> +    in-partition-table = "no"
->>> +    image = "%UBOOTBIN%"
->>> +    offset = 1024
->>> +  }
->>> +
->>> +  partition rootfs {
->>> +    partition-type = 0x83
->>> +    image = "rootfs.ext2"
->>> +  }
->>> +}
->>> diff --git a/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl b/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
->>> new file mode 100644
->>> index 0000000000..6d3ae183e3
->>> --- /dev/null
->>> +++ b/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
->>> @@ -0,0 +1,29 @@
->>> +# Minimal SD card image for the Freescale boards Template for SPL Boot
->>> +#
->>> +# We mimic the .sdcard Freescale's image format:
->>> +# * the SD card must have 1 kB free space at the beginning,
->>> +# * U-Boot is dumped as is,
->>   Mention SPL here. And mention that SPL is at the offset expected by ROM, while
->> U-Boot is at the offset expected by SPL.
-> Yes, i add to v2
->>> +# * a single root filesystem partition is required (ext2, ext3 or ext4)
->>   Well, to be precise: the first partition is expected to be an ext2 and have a
->> /boot directory.
->
-> and this
->
->
-> Best regards,
->
-> Joris
->
->>   Regards,
->>   Arnout
->>
->>> +#
->>> +
->>> +image sdcard.img {
->>> +  hdimage {
->>> +  }
->>> +
->>> +  partition spl {
->>> +    in-partition-table = "no"
->>> +    image = "SPL"
->>> +    offset = 1024
->>> +  }
->>> +
->>> +  partition u-boot-img {
->>> +    in-partition-table = "no"
->>> +    image = "u-boot.img"
->>> +    offset = 69K
->>> +  }
->>> +
->>> +  partition rootfs {
->>> +    partition-type = 0x83
->>> +    image = "rootfs.ext2"
->>> +  }
->>> +}
->>> diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
->>> index 12a5bea73b..851ce97c57 100755
->>> --- a/board/freescale/common/imx/post-image.sh
->>> +++ b/board/freescale/common/imx/post-image.sh
->>> @@ -36,6 +36,12 @@ genimage_type()
->>>   		echo "genimage.cfg.template_imx8"
->>>   	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X=y$" ${BR2_CONFIG}; then
->>>   		echo "genimage.cfg.template_imx8"
->>> +	elif grep -Eq "^BR2_LINUX_KERNEL_INSTALL_TARGET=y$" ${BR2_CONFIG}; then
->>> +		if grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
->>> +		    echo "genimage.cfg.template_no_boot_part_spl"
->>> +		else
->>> +		    echo "genimage.cfg.template_no_boot_part"
->>> +		fi
->>>   	elif grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
->>>   		echo "genimage.cfg.template_spl"
->>>   	else
->>>
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190610/93e36f66/attachment.html>
+
+On 10/06/2019 15:47, Ryan Coe wrote:
+> Release notes:
+> https://mariadb.com/kb/en/library/mariadb-10315-release-notes/
+> 
+> Changelog:
+> https://mariadb.com/kb/en/mariadb-10315-changelog/
+
+[snip]
+> 
+> diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+> index db24f7bb9b..857005695d 100644
+> --- a/package/mariadb/mariadb.hash
+> +++ b/package/mariadb/mariadb.hash
+> @@ -1,8 +1,8 @@
+> -# From https://downloads.mariadb.org/mariadb/10.3.13
+> -md5 603ce42e35b9a688f2cca05275acb5cb  mariadb-10.3.13.tar.gz
+> -sha1 08467885412184e99b835732913d445fd2c4b1b3  mariadb-10.3.13.tar.gz
+> -sha256 b2aa857ef5b84f85a7ea60a1eac7b34c0ca5151c71a0d44ce2d7fb028d71459a  mariadb-10.3.13.tar.gz
+> -sha512 3cbd93291aa43b235e5b81d953ea69fb32df54fb518f922f69b5485952f01fae693c77b0efac37f414ed7ff132d3b58f899812bdb7be8a5b344c3640e2c3a0dd  mariadb-10.3.13.tar.gz
+> +# From https://downloads.mariadb.org/mariadb/10.3.15
+> +md5 08edd8b5060a181e6dd3c6aac23218cd  mariadb-10.3.15.tar.gz
+> +sha1 134f6a1ee6bf3048580eca945a51cb3c9bda7cbe  mariadb-10.3.15.tar.gz
+> +sha256 27f391a54d544f93850d4edfb3ef1b4cf24f8e27e61e51727b0e7d31bb4d6968  mariadb-10.3.15.tar.gz
+> +sha512 35332ac32cba27fef1b4ddd2209236853f4309756fd121fbdbd2b6be0651e817cedc80e276b89ccfa4bc76760811434fab45a4d380d0ebd500c7d9bd7377fe93  mariadb-10.3.15.tar.gz
+>  
+>  # Hash for license files
+>  sha256 43f4b5b13cecbbdb04a180cbf6c2bd64237819d1a32165b7d475c1b392e6a8d1  README.md
+
+ legal-info fails:
+
+ERROR: README.md has wrong sha256 hash:
+ERROR: expected: 43f4b5b13cecbbdb04a180cbf6c2bd64237819d1a32165b7d475c1b392e6a8d1
+ERROR: got     : a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8
+
+ Could you check what has changed in the README, update the hash, and explain
+the changes in the commit message?
+
+ Regards,
+ Arnout
+
+> diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+> index 356dd29af3..cfb08eb664 100644
+> --- a/package/mariadb/mariadb.mk
+> +++ b/package/mariadb/mariadb.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -MARIADB_VERSION = 10.3.13
+> +MARIADB_VERSION = 10.3.15
+>  MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+>  MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+>  # Tarball no longer contains LGPL license text
+> 
