@@ -1,42 +1,97 @@
-From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
-Date: Mon, 10 Jun 2019 11:27:16 +0200
-Subject: [Buildroot] [PATCH] Allow overriding the VCS exclude list with
- *_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS
-Message-ID: <0c1450782e9b2f0a44af5ab18ccfda69d385f900.1560158856.git.jan.kundrat@cesnet.cz>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 10 Jun 2019 11:37:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/weston: needs headers >= 4.4
+In-Reply-To: <20190609222703.30345-1-fontaine.fabrice@gmail.com>
+References: <20190609222703.30345-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190610093702.GD13603@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We have some internal packages which automatically bake a version string
-from the git checkout, and we usually combine these with a
-*_OVERRIDE_SRCDIR. I would like to let Buildroot *not* skip the .git
-directory when picking up sources from the local checkout.  It turns out
-that the existing mechanism (*_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) only
-supports adding to the exclude list because `rsync` simply uses the
-first match from the provided filtering rules.
+Fabrice, All,
 
-Solve this by using the user-provided values first. If they match, then
-`rsync` won't exclude stuff based on the generic VCS exclude patterns.
+On 2019-06-10 00:27 +0200, Fabrice Fontaine spake thusly:
+> weston includes input-event-codes.h since version 5.0.91 and
+> https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
 
-Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
----
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Actually, that include is in fact not needed. Just remove it, and it
+still builds! ;-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 3b5ee7b356..b00967c648 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -184,7 +184,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
- 	@mkdir -p $(@D)
- 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
--	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
-+	rsync -au --chmod=u=rwX,go=rX $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
- 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	@$(call step_end,rsync)
- 	$(Q)touch $@
+The only #define that is needed from that header is EV_KEY, which
+before 4.4 was provided in linux/input.h
+
+So, I'd rather we find a solution with upstream to include the correct
+header, along the lines of:
+
+    diff --git a/compositor/main.c b/compositor/main.c
+    index 945f99ae..d3fdb1e4 100644
+    --- a/compositor/main.c
+    +++ b/compositor/main.c
+    @@ -42,7 +42,11 @@
+     #include <sys/socket.h>
+     #include <libinput.h>
+     #include <libevdev/libevdev.h>
+    +#if define HAS_LINUX_INPUT_EVENT_CODES_H
+     #include <linux/input-event-codes.h>
+    +#else
+    +#include <linux/input.h>
+    +#endif
+     #include <sys/time.h>
+     #include <linux/limits.h>
+     
+
+I'll let you come up with the meson part of that ;-)
+
+(Note: it works if we just remove the include, because linux/input.h
+seems to be pulled by another header, but for correctness-sake, we have
+to include it explicitly.)
+
+Regards,
+Yann E. MORIN.
+
+> input-event-codes.h is available only since kernel 4.4 and
+> https://github.com/torvalds/linux/commit/f902dd893427eade90f7eaf858e5ff8b150a5a12
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/210c2759900f15ea0030d088f6f45cd8bb199b29
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/weston/Config.in | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/weston/Config.in b/package/weston/Config.in
+> index f874b0cc6a..1b1882b388 100644
+> --- a/package/weston/Config.in
+> +++ b/package/weston/Config.in
+> @@ -1,6 +1,6 @@
+> -comment "weston needs udev and a toolchain w/ locale, threads, dynamic library, headers >= 3.0"
+> +comment "weston needs udev and a toolchain w/ locale, threads, dynamic library, headers >= 4.4"
+>  	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS || \
+> -		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || BR2_STATIC_LIBS || \
+> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4 || BR2_STATIC_LIBS || \
+>  		!BR2_ENABLE_LOCALE
+>  
+>  config BR2_PACKAGE_WESTON
+> @@ -9,7 +9,7 @@ config BR2_PACKAGE_WESTON
+>  	depends on BR2_PACKAGE_HAS_UDEV
+>  	depends on !BR2_STATIC_LIBS # wayland
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+> -	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_4 # input-event-codes.h
+>  	select BR2_PACKAGE_WAYLAND
+>  	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+>  	select BR2_PACKAGE_LIBXKBCOMMON
+> -- 
+> 2.20.1
+> 
+
 -- 
-2.21.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
