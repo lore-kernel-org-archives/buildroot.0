@@ -1,43 +1,87 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Jun 2019 14:00:48 +0200
-Subject: [Buildroot] [PATCH 4/4] package/iputils: fix build without
- setcap
-In-Reply-To: <20190609223926.GB26152@x230>
-References: <20190609093814.14169-1-fontaine.fabrice@gmail.com>
- <20190609093814.14169-4-fontaine.fabrice@gmail.com>
- <dd4f00c5-f8ae-1758-48e4-bab512adb2a2@mind.be> <20190609214531.GA17515@x230>
- <CAPi7W80ms+GTYwC9Q6usykCFxWjA7+1FSy2-KR3qW16RFdEBPA@mail.gmail.com>
- <20190609223926.GB26152@x230>
-Message-ID: <b6526d34-3d18-edba-ed44-0c5c376f4afd@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 10 Jun 2019 14:06:56 +0200
+Subject: [Buildroot] [PATCH v3,
+ 1/1] package/weston: fix build with headers < 4.4
+Message-ID: <20190610120656.4958-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+weston includes input-event-codes.h since version 5.0.91 and
+https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
 
+input-event-codes.h is available only since kernel 4.4 and
+https://github.com/torvalds/linux/commit/f902dd893427eade90f7eaf858e5ff8b150a5a12
 
-On 10/06/2019 00:39, Petr Vorel wrote:
-> Hi,
-> 
->> Could you send the patch setting back IPUTILS_PERMISSIONS and using
->> NO_SETCAP_OR_SUID?
-> Going to do it.
+To fix this build failure, check for the availability of this header
+before including it and fallback to linux/input.h (for EV_KEY) if needed
 
- I wonder a bit about the setcap though. As I understand it, you would use
-*either* setcap *or* setuid. Before the bump, IPUTILS_PERMISSIONS would do
-setuid. Clearly, setcap is way better.
+It should be noted that we could just drop linux/input.h as it is
+already pulled in from libevdev/libevdev.h
 
- Is there any reason not to use setcap (or actually, xattrs)? Maybe some
-filesystems don't support xattrs - iso9660 for example?
+Fixes:
+ - http://autobuild.buildroot.org/results/210c2759900f15ea0030d088f6f45cd8bb199b29
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v2 -> v3 (after upstream review):
+ - Always include linux/input.h
 
->> From my understanding, permissions should be set to ping and
->> traceroute6 as done before the dump but also to clockdiff and arping.
-> Also it's needed to create symlink from ping to ping6.
-> But haven't find a way how.
+Changes v1 -> v2 (after review of Yann E. Morin):
+ - Add a patch to drop include on input-event-codes.h instead of
+   requiring headers >= 4.4 
 
- Just do it in a post-install hook, no?
+ .../0002-Fix-build-with-kernel-4.4.patch      | 40 +++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+ create mode 100644 package/weston/0002-Fix-build-with-kernel-4.4.patch
 
- Regards,
- Arnout
+diff --git a/package/weston/0002-Fix-build-with-kernel-4.4.patch b/package/weston/0002-Fix-build-with-kernel-4.4.patch
+new file mode 100644
+index 0000000000..89390e0e28
+--- /dev/null
++++ b/package/weston/0002-Fix-build-with-kernel-4.4.patch
+@@ -0,0 +1,40 @@
++From 137b811ecd566086f7eb42c1e49e7c0cf27fb85e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 10 Jun 2019 12:02:03 +0200
++Subject: [PATCH] Fix build with kernel < 4.4
++
++weston includes input-event-codes.h since version 5.0.91 and
++https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
++
++input-event-codes.h is available only since kernel 4.4 and
++https://github.com/torvalds/linux/commit/f902dd893427eade90f7eaf858e5ff8b150a5a12
++
++To fix this build failure, replace include on linux/input-event-codes.h
++by linux/input.h
++
++Fixes:
++ - http://autobuild.buildroot.org/results/210c2759900f15ea0030d088f6f45cd8bb199b29
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/wayland/weston/merge_requests/184]
++---
++ compositor/main.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/compositor/main.c b/compositor/main.c
++index 945f99ae..bf4062af 100644
++--- a/compositor/main.c
+++++ b/compositor/main.c
++@@ -42,7 +42,7 @@
++ #include <sys/socket.h>
++ #include <libinput.h>
++ #include <libevdev/libevdev.h>
++-#include <linux/input-event-codes.h>
+++#include <linux/input.h>
++ #include <sys/time.h>
++ #include <linux/limits.h>
++ 
++-- 
++2.20.1
++
+-- 
+2.20.1
