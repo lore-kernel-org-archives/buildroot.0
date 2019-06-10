@@ -1,10 +1,14 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Jun 2019 13:53:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkg-golang: add cflags/ldflags
- to GO_HOST_ENV
-In-Reply-To: <20190603092101.8658-1-mirza.krak@northern.tech>
-References: <20190603092101.8658-1-mirza.krak@northern.tech>
-Message-ID: <7ccf0442-d03f-05f8-c9c5-338f975b5d3b@mind.be>
+Date: Mon, 10 Jun 2019 14:00:48 +0200
+Subject: [Buildroot] [PATCH 4/4] package/iputils: fix build without
+ setcap
+In-Reply-To: <20190609223926.GB26152@x230>
+References: <20190609093814.14169-1-fontaine.fabrice@gmail.com>
+ <20190609093814.14169-4-fontaine.fabrice@gmail.com>
+ <dd4f00c5-f8ae-1758-48e4-bab512adb2a2@mind.be> <20190609214531.GA17515@x230>
+ <CAPi7W80ms+GTYwC9Q6usykCFxWjA7+1FSy2-KR3qW16RFdEBPA@mail.gmail.com>
+ <20190609223926.GB26152@x230>
+Message-ID: <b6526d34-3d18-edba-ed44-0c5c376f4afd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,53 +17,27 @@ To: buildroot@busybox.net
 
 
 
-On 03/06/2019 11:21, Mirza Krak wrote:
-> If a go host package is built using cgo, it needs access
-> to HOST_CFLAGS/HOST_LDFLAGS to utilize host packages it
-> might depend on.
+On 10/06/2019 00:39, Petr Vorel wrote:
+> Hi,
 > 
-> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
+>> Could you send the patch setting back IPUTILS_PERMISSIONS and using
+>> NO_SETCAP_OR_SUID?
+> Going to do it.
 
- I apparently forgot to mention that I applied this to master, thanks. However...
+ I wonder a bit about the setcap though. As I understand it, you would use
+*either* setcap *or* setuid. Before the bump, IPUTILS_PERMISSIONS would do
+setuid. Clearly, setcap is way better.
 
-> ---
-> 
-> This fixes current build errors of mender-artifact-3.0.0:
-> 
-> http://autobuild.buildroot.net/results/dd1a6dac03dd3b68ee63761c33dbb01c328d4f14/build-end.log
+ Is there any reason not to use setcap (or actually, xattrs)? Maybe some
+filesystems don't support xattrs - iso9660 for example?
 
- Still failing:
 
-http://autobuild.buildroot.net/results/f9b/f9ba64ab4c8d7fa6cb301fab37ee4141ba442f61/build-end.log
+>> From my understanding, permissions should be set to ping and
+>> traceroute6 as done before the dump but also to clockdiff and arping.
+> Also it's needed to create symlink from ping to ping6.
+> But haven't find a way how.
 
- I think the problem is that it is being linked statically, but host-xz only
-builds the shared library...
+ Just do it in a post-install hook, no?
 
  Regards,
  Arnout
-
-> 
->  package/pkg-golang.mk | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-> index b4e8a53065..72e8f6b7af 100644
-> --- a/package/pkg-golang.mk
-> +++ b/package/pkg-golang.mk
-> @@ -35,6 +35,8 @@ GO_TARGET_ENV = \
->  	$(GO_COMMON_ENV)
-> 
->  GO_HOST_ENV = \
-> +	CGO_CFLAGS="$(HOST_CFLAGS)" \
-> +	CGO_LDFLAGS="$(HOST_LDFLAGS)" \
->  	$(GO_COMMON_ENV)
-> 
->  ################################################################################
-> --
-> 2.11.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
