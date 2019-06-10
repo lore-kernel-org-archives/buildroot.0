@@ -1,125 +1,65 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 10 Jun 2019 12:41:02 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/weston: fix build with headers < 4.4
-In-Reply-To: <20190610103326.30812-1-fontaine.fabrice@gmail.com>
-References: <20190610103326.30812-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190610104102.GF13603@scaer>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 10 Jun 2019 13:53:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pkg-golang: add cflags/ldflags
+ to GO_HOST_ENV
+In-Reply-To: <20190603092101.8658-1-mirza.krak@northern.tech>
+References: <20190603092101.8658-1-mirza.krak@northern.tech>
+Message-ID: <7ccf0442-d03f-05f8-c9c5-338f975b5d3b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
 
-On 2019-06-10 12:33 +0200, Fabrice Fontaine spake thusly:
-> weston includes input-event-codes.h since version 5.0.91 and
-> https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
-> 
-> input-event-codes.h is available only since kernel 4.4 and
-> https://github.com/torvalds/linux/commit/f902dd893427eade90f7eaf858e5ff8b150a5a12
-> 
-> To fix this build failure, check for the availability of this header
-> before including it and fallback to linux/input.h (for EV_KEY) if needed
-> 
-> It should be noted that we could just drop linux/input.h as it is
-> already pulled in from libevdev/libevdev.h
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/210c2759900f15ea0030d088f6f45cd8bb199b29
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+On 03/06/2019 11:21, Mirza Krak wrote:
+> If a go host package is built using cgo, it needs access
+> to HOST_CFLAGS/HOST_LDFLAGS to utilize host packages it
+> might depend on.
+> 
+> Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
 
-Thanks! :-)
-
-Regards,
-Yann E. MORIN.
+ I apparently forgot to mention that I applied this to master, thanks. However...
 
 > ---
-> Changes v1 -> v2 (after review of Yann E. Morin):
->  - Add a patch to drop include on input-event-codes.h instead of
->    requiring headers >= 4.4 
 > 
->  .../0002-Fix-build-with-kernel-4.4.patch      | 59 +++++++++++++++++++
->  1 file changed, 59 insertions(+)
->  create mode 100644 package/weston/0002-Fix-build-with-kernel-4.4.patch
+> This fixes current build errors of mender-artifact-3.0.0:
 > 
-> diff --git a/package/weston/0002-Fix-build-with-kernel-4.4.patch b/package/weston/0002-Fix-build-with-kernel-4.4.patch
-> new file mode 100644
-> index 0000000000..05b499794e
-> --- /dev/null
-> +++ b/package/weston/0002-Fix-build-with-kernel-4.4.patch
-> @@ -0,0 +1,59 @@
-> +From f2459cdf188a720384099b82ec40cf1915299552 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Mon, 10 Jun 2019 12:02:03 +0200
-> +Subject: [PATCH] Fix build with kernel < 4.4
-> +
-> +weston includes input-event-codes.h since version 5.0.91 and
-> +https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
-> +
-> +input-event-codes.h is available only since kernel 4.4 and
-> +https://github.com/torvalds/linux/commit/f902dd893427eade90f7eaf858e5ff8b150a5a12
-> +
-> +To fix this build failure, check for the availability of this header
-> +before including it and fallback to linux/input.h (for EV_KEY) if needed
-> +
-> +It should be noted that we could just drop linux/input.h as it is
-> +already pulled in from libevdev/libevdev.h
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/210c2759900f15ea0030d088f6f45cd8bb199b29
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status:
-> +https://gitlab.freedesktop.org/wayland/weston/merge_requests/184]
-> +---
-> + compositor/main.c | 4 ++++
-> + meson.build       | 1 +
-> + 2 files changed, 5 insertions(+)
-> +
-> +diff --git a/compositor/main.c b/compositor/main.c
-> +index 945f99ae..dfac03f6 100644
-> +--- a/compositor/main.c
-> ++++ b/compositor/main.c
-> +@@ -42,7 +42,11 @@
-> + #include <sys/socket.h>
-> + #include <libinput.h>
-> + #include <libevdev/libevdev.h>
-> ++#ifdef HAVE_LINUX_INPUT_EVENT_CODES_H
-> + #include <linux/input-event-codes.h>
-> ++#else
-> ++#include <linux/input.h>
-> ++#endif
-> + #include <sys/time.h>
-> + #include <linux/limits.h>
-> + 
-> +diff --git a/meson.build b/meson.build
-> +index 55190028..a728d903 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -85,6 +85,7 @@ foreach func : optional_libc_funcs
-> + endforeach
-> + 
-> + optional_system_headers = [
-> ++	'linux/input-event-codes.h',
-> + 	'linux/sync_file.h'
-> + ]
-> + foreach hdr : optional_system_headers
-> +-- 
-> +2.20.1
-> +
-> -- 
-> 2.20.1
-> 
+> http://autobuild.buildroot.net/results/dd1a6dac03dd3b68ee63761c33dbb01c328d4f14/build-end.log
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ Still failing:
+
+http://autobuild.buildroot.net/results/f9b/f9ba64ab4c8d7fa6cb301fab37ee4141ba442f61/build-end.log
+
+ I think the problem is that it is being linked statically, but host-xz only
+builds the shared library...
+
+ Regards,
+ Arnout
+
+> 
+>  package/pkg-golang.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+> index b4e8a53065..72e8f6b7af 100644
+> --- a/package/pkg-golang.mk
+> +++ b/package/pkg-golang.mk
+> @@ -35,6 +35,8 @@ GO_TARGET_ENV = \
+>  	$(GO_COMMON_ENV)
+> 
+>  GO_HOST_ENV = \
+> +	CGO_CFLAGS="$(HOST_CFLAGS)" \
+> +	CGO_LDFLAGS="$(HOST_LDFLAGS)" \
+>  	$(GO_COMMON_ENV)
+> 
+>  ################################################################################
+> --
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
