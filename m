@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 10 Jun 2019 14:06:56 +0200
-Subject: [Buildroot] [PATCH v3,
+Date: Mon, 10 Jun 2019 14:09:26 +0200
+Subject: [Buildroot] [PATCH v4,
  1/1] package/weston: fix build with headers < 4.4
-Message-ID: <20190610120656.4958-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190610120926.5150-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,17 +15,17 @@ https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c31
 input-event-codes.h is available only since kernel 4.4 and
 https://github.com/torvalds/linux/commit/f902dd893427eade90f7eaf858e5ff8b150a5a12
 
-To fix this build failure, check for the availability of this header
-before including it and fallback to linux/input.h (for EV_KEY) if needed
-
-It should be noted that we could just drop linux/input.h as it is
-already pulled in from libevdev/libevdev.h
+To fix this build failure, replace include on linux/input-event-codes.h
+by linux/input.h
 
 Fixes:
  - http://autobuild.buildroot.org/results/210c2759900f15ea0030d088f6f45cd8bb199b29
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v3 -> v4:
+ - Fix commit message
+
 Changes v2 -> v3 (after upstream review):
  - Always include linux/input.h
 
