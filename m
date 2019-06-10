@@ -1,9 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Jun 2019 00:20:19 +0200
-Subject: [Buildroot] [PATCH 0/2] Fix linking gerbera with taglib
-In-Reply-To: <20190610212023.9483-1-joerg.krause@embedded.rocks>
+Date: Tue, 11 Jun 2019 00:25:18 +0200
+Subject: [Buildroot] [PATCH 1/2] package/taglib: add upstream patch to
+ fix taglib-config
+In-Reply-To: <20190610212023.9483-2-joerg.krause@embedded.rocks>
 References: <20190610212023.9483-1-joerg.krause@embedded.rocks>
-Message-ID: <b4cc5acf-8381-c229-7ff4-e78f6bc373da@mind.be>
+ <20190610212023.9483-2-joerg.krause@embedded.rocks>
+Message-ID: <3a548d14-a85d-76c7-18c0-1037ac1ad5a9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,41 +15,23 @@ To: buildroot@busybox.net
 
 
 On 10/06/2019 23:20, J?rg Krause wrote:
-> This series fixes linking gerbera with taglib.
-> 
-> The first commit adds an upstream patch to tagblib, which fixes `taglib-config`
-> to output the correct paths when cross-compiling.
-> 
-> The second commit add an upstream patch to gerbera, which fixes the
-> behaviour of `find_program(taglib-config)` when cross-compiling. By
-> default, `find_program()` only searches on the host for binaries.
-> However, in the case of `taglib-config` it should only search in the
-> sysroot path for `taglib-config`.
+> +-prefix=${CMAKE_INSTALL_PREFIX}
+> +-exec_prefix=${CMAKE_INSTALL_PREFIX}
+> +-libdir=${LIB_INSTALL_DIR}
+> +-includedir=${INCLUDE_INSTALL_DIR}
+> ++prefix=@CMAKE_SYSROOT@@CMAKE_INSTALL_PREFIX@
+> ++exec_prefix=@CMAKE_SYSROOT@@CMAKE_INSTALL_PREFIX@
 
- I think both patches are wrong/incomplete. Still, because they are upstream,
-and they fix the issue, I've pushed to master, thanks.
+ I believe it is wrong to include CMAKE_SYSROOT here. In general, this is not
+necessarily the place where the package will be installed. We happen to do that
+now, but for example both OpenWrt and OpenEmbedded install with a different
+DESTDIR, and dependent packages see a different sysroot.
 
- I'll comment in the individual patches why I think they are wrong.
+ We have the TAGLIB_CONFIG_SCRIPT infra to handle this situation. It will add
+the appropriate sysroot to the _prefix variables.
 
  Regards,
  Arnout
 
-> 
-> Note, that the issue has been detected by the autobuilder for version 1.3.0 of
-> gerbera (current version is 1.3.1), but it is still present.
-> 
-> Fixes:
-> http://autobuild.buildroot.org/results/e95/e9548f8d43abe3a2f2aab4acaa19289af2b9737d
-> http://autobuild.buildroot.org/results/efa/efa203e07c2dd5aed09c0ed23e3bd56fa2dadd2a
-> 
-> J?rg Krause (2):
->   package/taglib: add upstream patch to fix taglib-config
->   package/gerbera: add upstream patch to fix find_program with
->     taglib-config
-> 
->  ...m-taglib-config-when-cross-compiling.patch | 46 +++++++++++++
->  ...-config-file-for-cross-compiling-906.patch | 66 +++++++++++++++++++
->  2 files changed, 112 insertions(+)
->  create mode 100644 package/gerbera/0002-Fix-find_program-taglib-config-when-cross-compiling.patch
->  create mode 100644 package/taglib/0001-fix-taglib-config-file-for-cross-compiling-906.patch
-> 
+> ++libdir=${exec_prefix}/lib
+> ++includedir=${prefix}/include
