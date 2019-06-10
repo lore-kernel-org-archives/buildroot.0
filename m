@@ -1,45 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Jun 2019 00:33:31 +0200
-Subject: [Buildroot] [PATCH 2/2] package/gerbera: add upstream patch to
- fix find_program with taglib-config
-In-Reply-To: <20190610212023.9483-3-joerg.krause@embedded.rocks>
-References: <20190610212023.9483-1-joerg.krause@embedded.rocks>
- <20190610212023.9483-3-joerg.krause@embedded.rocks>
-Message-ID: <e198cc50-3e78-b2df-ccc1-269af7fad363@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Tue, 11 Jun 2019 00:36:58 +0200
+Subject: [Buildroot] [git commit] package/mdadm: bump to version 4.1
+Message-ID: <20190610223650.831918F4C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=4d7462918cf4fb53e5ac1d6ad3f038b4c180a705
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Add hash for license file
 
-On 10/06/2019 23:20, J?rg Krause wrote:
-[snip]
-> ++            if (CMAKE_CROSSCOMPILING)
-> ++              set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ONLY)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/mdadm/mdadm.hash | 4 +++-
+ package/mdadm/mdadm.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
- Again, this is wrong IMO. The executables in the sysroot are not supposed to be
-executed on the host.
-
- What we really should do is to copy those config scripts to some other
-location, and add that to the PATH.
-
- Besides, I think gerbera should be using the .pc file rather than the
-taglib-config script.
-
- Moreover, I think taglib should install a TaglibConfig.cmake file so CMake
-packages like gerbera can pick that up directly rather than having to write a
-FindTaglib file.
-
- Regards,
- Arnout
-
-> ++            endif(CMAKE_CROSSCOMPILING)
-> +             find_program(TAGLIBCONFIG_EXECUTABLE NAMES taglib-config PATHS
-> + 		   ${BIN_INSTALL_DIR}
-> +             )
-> +-- 
-> +2.22.0
-> +
-> 
+diff --git a/package/mdadm/mdadm.hash b/package/mdadm/mdadm.hash
+index 6132a6d8ca..b15cb4e031 100644
+--- a/package/mdadm/mdadm.hash
++++ b/package/mdadm/mdadm.hash
+@@ -1,2 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/raid/mdadm/sha256sums.asc
+-sha256 1d6ae7f24ced3a0fa7b5613b32f4a589bb4881e3946a5a2c3724056254ada3a9  mdadm-4.0.tar.xz
++sha256 ab7688842908d3583a704d491956f31324c3a5fc9f6a04653cb75d19f1934f4a  mdadm-4.1.tar.xz
++# Locally calculated
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
+index b2ed5049aa..171782712f 100644
+--- a/package/mdadm/mdadm.mk
++++ b/package/mdadm/mdadm.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MDADM_VERSION = 4.0
++MDADM_VERSION = 4.1
+ MDADM_SOURCE = mdadm-$(MDADM_VERSION).tar.xz
+ MDADM_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/raid/mdadm
+ MDADM_LICENSE = GPL-2.0+
