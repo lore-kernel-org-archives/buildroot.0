@@ -1,49 +1,62 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 10 Jun 2019 15:14:53 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/openjdk: set PATH before calling make
-Message-ID: <20190610131453.12186-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 10 Jun 2019 15:17:30 +0200
+Subject: [Buildroot] [Lua 0/2] Lua modules removal
+In-Reply-To: <CAB0FRsv_L8kG_g5uXdd=80WJptzRFvZ1EFpSwuS3A8P5Xu1-6A@mail.gmail.com>
+References: <20190608211827.7731-1-francois.perrad@gadz.org>
+ <cb9f5645-6484-7ccc-ca81-3e79ccb51a9d@mind.be>
+ <CAB0FRsv_L8kG_g5uXdd=80WJptzRFvZ1EFpSwuS3A8P5Xu1-6A@mail.gmail.com>
+Message-ID: <1994ec5b-511f-2314-d54b-6ec18bc63a74@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-PATH must be set to $(BR_PATH) thanks to $(TARGET_MAKE_ENV) before
-calling make otherwise build fails on:
-/bin/bash: gawk: command not found
 
-When build fails, config.log contains the following line:
 
-configure:13709: checking for gawk
-configure:13725: found /home/buildroot/autobuild/run/instance-3/output/host/bin/gawk
-configure:13736: result: gawk
-[...]
-ac_cv_prog_AWK=gawk
+On 10/06/2019 10:31, Fran?ois Perrad wrote:
+> 
+> 
+> Le?dim. 9 juin 2019 ??22:37, Arnout Vandecappelle <arnout@mind.be
+> <mailto:arnout@mind.be>> a ?crit?:
+> 
+> 
+> 
+>     On 08/06/2019 23:18, Francois Perrad wrote:
+>     > This serie removes 2 Lua modules which are Lua 5.1 only
+>     > and not actively maintained by upstream.
+> 
+>     ?This needs a bit more context though... Is the intention to remove Lua 5.1? And
+>     what about luajit?
+> 
+> 
+> This is a step in order to remove Lua 5.1, but not LuaJIT which stay as is.
 
-Fixes:
- - http://autobuild.buildroot.org/results/43c5d08f599e8f44b59a576d243ae1c7b27de7a3
+ So, aren't these two packages relevant for LuaJIT then?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Arnout Vandecappelle):
- - Set PATH thanks to $(TARGET_MAKE_ENV) instead of setting AWK
+ Regards,
+ Arnout
 
- package/openjdk/openjdk.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 318e4bade3..91a00870c5 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -109,7 +109,7 @@ endef
- # Make -jn is unsupported. Instead, set the "--with-jobs=" configure option,
- # and use $(MAKE1).
- define OPENJDK_BUILD_CMDS
--	$(MAKE1) -C $(@D) legacy-jre-image
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) legacy-jre-image
- endef
- 
- # Calling make install always builds and installs the JDK instead of the JRE,
--- 
-2.20.1
+> In otherways, Lua evolves :
+> - Lua 5.3.5 will be the last one of its serie
+> - Lua 5.4 is up coming (lua-5.4.0-alpha is already available)
+> - Lua 5.2.4 was released on 2015
+> - Lua 5.1.5 was released on 2012.
+> 
+> Lua has two sides :
+> - an interpreter which could be used with various modules
+> - a library used as optional dependency
+> This serie handles only the interpreter side.
+> 
+> Fran?ois
+> 
+>     ?We tend to not remove unmaintained packages unless there is a good reason
+>     for it.
+> 
+>     ?Regards,
+>     ?Arnout
+>     _______________________________________________
+>     buildroot mailing list
+>     buildroot at busybox.net <mailto:buildroot@busybox.net>
+>     http://lists.busybox.net/mailman/listinfo/buildroot
+> 
