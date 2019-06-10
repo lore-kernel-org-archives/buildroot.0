@@ -1,43 +1,43 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 10 Jun 2019 11:16:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/openzwave: needs NPTL
-Message-ID: <20190610091628.29284-1-fontaine.fabrice@gmail.com>
+From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Date: Mon, 10 Jun 2019 11:19:13 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cargo: needs host-libxml2
+In-Reply-To: <9adf69a9-b764-d5c5-e484-958bb9f8548f@mind.be>
+References: <20190609210835.31236-1-fontaine.fabrice@gmail.com>
+ <9adf69a9-b764-d5c5-e484-958bb9f8548f@mind.be>
+Message-ID: <20190610091913.GA23106@ned>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-openzwave needs pthread_setname_np
+Hi!
 
-Fixes:
- - http://autobuild.buildroot.org/results/d50a79384eb346078fd83ad3a1ba8b8a04cc4d53
+On 2019-06-10 01:07, Arnout Vandecappelle wrote:
+>
+>
+> On 09/06/2019 23:08, Fabrice Fontaine wrote:
+> > host-cargo needs host-libxml2 to avoid depending on an unworking
+> > libxml2:
+> >
+> > --- stderr
+> > cmake: /home/mark/buildroot-test/instance-1/output/host/lib/libcurl.so.4: no version information available (required by cmake)
+> > cmake: symbol lookup error: /usr/lib/x86_64-linux-gnu/libxml2.so.2: undefined symbol: UCNV_TO_U_CALLBACK_STOP_60
+> > thread 'main' panicked at '
+> > command did not execute successfully, got: exit code: 127
+>
+>  I would like to understand this one a little more before blindly linking with
+> host-libxml2...
+>
+>  I can't see anything in cargo's sources that refers to libxml2, except some of
+> the vendored curl stuff, but those bits are only used on win32.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/openzwave/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Same here. I tried to reproduce the issue in a chrooted Debian Stretch,
+without success, even when adding libxml2-devel to the mix.
 
-diff --git a/package/openzwave/Config.in b/package/openzwave/Config.in
-index f2a4ca5225..b5c1b620c6 100644
---- a/package/openzwave/Config.in
-+++ b/package/openzwave/Config.in
-@@ -1,6 +1,6 @@
- config BR2_PACKAGE_OPENZWAVE
- 	bool "openzwave"
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_USE_WCHAR
-@@ -13,6 +13,6 @@ config BR2_PACKAGE_OPENZWAVE
- 
- 	  http://www.openzwave.net
- 
--comment "openzwave needs a toolchain w/ C++, dynamic library, threads, wchar"
-+comment "openzwave needs a toolchain w/ C++, dynamic library, NPTL, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_USE_WCHAR
--- 
-2.20.1
+What is the configuration of the autobuilder?
+
+Regards,
+
+--
+ELB
