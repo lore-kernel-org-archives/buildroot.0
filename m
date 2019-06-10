@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 10 Jun 2019 11:00:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libgit2: security bump to version
- 0.27.8
-Message-ID: <20190610090041.26269-1-fontaine.fabrice@gmail.com>
+Date: Mon, 10 Jun 2019 11:03:28 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libgit2: security bump to version 0.27.8
+Message-ID: <20190610090328.28495-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -98,18 +98,21 @@ Fixing the following list of issues (fixed in 0.27.6 and 0.27.5):
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix hash
+
  package/libgit2/libgit2.hash | 2 +-
  package/libgit2/libgit2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/libgit2/libgit2.hash b/package/libgit2/libgit2.hash
-index 41ab87bf4d..51eb7a96ce 100644
+index 41ab87bf4d..29b829291c 100644
 --- a/package/libgit2/libgit2.hash
 +++ b/package/libgit2/libgit2.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
 -sha256	0b7ca31cb959ff1b22afa0da8621782afe61f99242bf716c403802ffbdb21d51  libgit2-v0.27.4.tar.gz
-+sha256	0b7ca31cb959ff1b22afa0da8621782afe61f99242bf716c403802ffbdb21d51  libgit2-v0.27.8.tar.gz
++sha256	8313873d49dc01e8b880ec334d7430ae67496a89aaa8c6e7bbd3affb47a00c76  libgit2-v0.27.8.tar.gz
  sha256	d9a8038088df84fde493fa33a0f1e537252eeb9642122aa4b862690197152813  COPYING
 diff --git a/package/libgit2/libgit2.mk b/package/libgit2/libgit2.mk
 index 551e3dea62..6c64aa67c8 100644
