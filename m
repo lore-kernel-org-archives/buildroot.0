@@ -1,53 +1,45 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Mon, 10 Jun 2019 10:31:17 +0200
-Subject: [Buildroot] [Lua 0/2] Lua modules removal
-In-Reply-To: <cb9f5645-6484-7ccc-ca81-3e79ccb51a9d@mind.be>
-References: <20190608211827.7731-1-francois.perrad@gadz.org>
- <cb9f5645-6484-7ccc-ca81-3e79ccb51a9d@mind.be>
-Message-ID: <CAB0FRsv_L8kG_g5uXdd=80WJptzRFvZ1EFpSwuS3A8P5Xu1-6A@mail.gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Mon, 10 Jun 2019 10:33:20 +0200
+Subject: [Buildroot] [PATCH 1/5] package/perl-cookie-baker: bump to version
+ 0.11
+Message-ID: <20190610083324.7607-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le dim. 9 juin 2019 ? 22:37, Arnout Vandecappelle <arnout@mind.be> a ?crit :
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/perl-cookie-baker/perl-cookie-baker.hash | 4 ++--
+ package/perl-cookie-baker/perl-cookie-baker.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
->
->
-> On 08/06/2019 23:18, Francois Perrad wrote:
-> > This serie removes 2 Lua modules which are Lua 5.1 only
-> > and not actively maintained by upstream.
->
->  This needs a bit more context though... Is the intention to remove Lua
-> 5.1? And
-> what about luajit?
->
->
-This is a step in order to remove Lua 5.1, but not LuaJIT which stay as is.
-In otherways, Lua evolves :
-- Lua 5.3.5 will be the last one of its serie
-- Lua 5.4 is up coming (lua-5.4.0-alpha is already available)
-- Lua 5.2.4 was released on 2015
-- Lua 5.1.5 was released on 2012.
-
-Lua has two sides :
-- an interpreter which could be used with various modules
-- a library used as optional dependency
-This serie handles only the interpreter side.
-
-Fran?ois
-
- We tend to not remove unmaintained packages unless there is a good reason
-> for it.
->
->  Regards,
->  Arnout
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190610/89399ced/attachment.html>
+diff --git a/package/perl-cookie-baker/perl-cookie-baker.hash b/package/perl-cookie-baker/perl-cookie-baker.hash
+index 8d0d63b17..3b056c46c 100644
+--- a/package/perl-cookie-baker/perl-cookie-baker.hash
++++ b/package/perl-cookie-baker/perl-cookie-baker.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    20f6f16689df949db86645652c1ebe38 Cookie-Baker-0.10.tar.gz
+-sha256 b42bad15b12da4cdc5c90c902faf3ad484281a42203fa4e7652866434f6fa4dd Cookie-Baker-0.10.tar.gz
++md5    bc8f95893d6ec3093a62d1957e1908f2 Cookie-Baker-0.11.tar.gz
++sha256 59275f474e07c0aa3611e3e684b894e7db913333d8214420be63f12ec18cd7ab Cookie-Baker-0.11.tar.gz
+ 
+ # computed by scancpan
+ sha256 b4ce94671fa219074d4e91e2268652d6bf9764cebcc7a5e27bfc14897745ca4c LICENSE
+diff --git a/package/perl-cookie-baker/perl-cookie-baker.mk b/package/perl-cookie-baker/perl-cookie-baker.mk
+index 45ecdc96c..27c88f3e5 100644
+--- a/package/perl-cookie-baker/perl-cookie-baker.mk
++++ b/package/perl-cookie-baker/perl-cookie-baker.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_COOKIE_BAKER_VERSION = 0.10
++PERL_COOKIE_BAKER_VERSION = 0.11
+ PERL_COOKIE_BAKER_SOURCE = Cookie-Baker-$(PERL_COOKIE_BAKER_VERSION).tar.gz
+ PERL_COOKIE_BAKER_SITE = $(BR2_CPAN_MIRROR)/authors/id/K/KA/KAZEBURO
+ PERL_COOKIE_BAKER_DEPENDENCIES = host-perl-module-build-tiny
+-- 
+2.20.1
