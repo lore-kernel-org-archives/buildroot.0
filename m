@@ -1,49 +1,65 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 10 Jun 2019 20:10:55 +0200
-Subject: [Buildroot] [git commit] package/freescale-imx: add option for
- i.MX8MM
-Message-ID: <20190610183348.CE3FB8F690@busybox.osuosl.org>
+Date: Mon, 10 Jun 2019 20:22:38 +0200
+Subject: [Buildroot] [git commit] board/freescale/common/imx: add support
+ for i.MX8MM
+Message-ID: <20190610183348.E65198F690@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fabf916a8db85e5d578e97cd6ff17d7c436a351
+commit: https://git.buildroot.net/buildroot/commit/?id=92ac758c40f80487362b69db955564fdaaa05827
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The i.MX8MMini is slightly different from the i.MX8M. The main
-difference of interrest here is that the i.MX8MMini has no HDMI
-support. The firmware blobs must not include the HDMI signed firmware,
-which is why we need this new configuration option.
+For the boot image creation for the i.MX8MM, the main differences with
+i.MX8M are that there is no HDMI firmware image passed, and the ATF
+load address is different.
 
 Signed-off-by: Julien Olivain <juju@cotds.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/freescale-imx/Config.in | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ board/freescale/common/imx/imx8-bootloader-prepare.sh | 7 +++++++
+ board/freescale/common/imx/post-image.sh              | 4 ++++
+ 2 files changed, 11 insertions(+)
 
-diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
-index fcceacdc9e..f010aab87b 100644
---- a/package/freescale-imx/Config.in
-+++ b/package/freescale-imx/Config.in
-@@ -43,6 +43,9 @@ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
- 	bool "imx8m"
+diff --git a/board/freescale/common/imx/imx8-bootloader-prepare.sh b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+index 3b319693ea..df528b0df5 100755
+--- a/board/freescale/common/imx/imx8-bootloader-prepare.sh
++++ b/board/freescale/common/imx/imx8-bootloader-prepare.sh
+@@ -15,6 +15,13 @@ main ()
+ 		rm -f ${BINARIES_DIR}/u-boot.its
  
-+config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
-+	bool "imx8mm"
+ 		${HOST_DIR}/bin/mkimage_imx8 -fit -signed_hdmi ${BINARIES_DIR}/signed_hdmi_imx8m.bin -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
++	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y$" ${BR2_CONFIG}; then
++		cat ${BINARIES_DIR}/u-boot-spl.bin ${BINARIES_DIR}/lpddr4_pmu_train_fw.bin > ${BINARIES_DIR}/u-boot-spl-ddr.bin
++		BL31=${BINARIES_DIR}/bl31.bin BL33=${BINARIES_DIR}/u-boot.bin ATF_LOAD_ADDR=0x00920000 ${HOST_DIR}/bin/mkimage_fit_atf.sh ${UBOOT_DTB} > ${BINARIES_DIR}/u-boot.its
++		${HOST_DIR}/bin/mkimage -E -p 0x3000 -f ${BINARIES_DIR}/u-boot.its ${BINARIES_DIR}/u-boot.itb
++		rm -f ${BINARIES_DIR}/u-boot.its
 +
- config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X
- 	bool "imx8x"
- endchoice
-@@ -77,7 +80,8 @@ config BR2_PACKAGE_FREESCALE_IMX_HAS_VIV_GPU
- 	default y if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6S || \
- 		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX7 || \
--		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M || \
-+		BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM
- 
- source "package/freescale-imx/imx-alsa-plugins/Config.in"
- source "package/freescale-imx/imx-codec/Config.in"
++		${HOST_DIR}/bin/mkimage_imx8 -fit -loader ${BINARIES_DIR}/u-boot-spl-ddr.bin 0x7E1000 -second_loader ${BINARIES_DIR}/u-boot.itb 0x40200000 0x60000 -out ${BINARIES_DIR}/imx8-boot-sd.bin
+ 	else
+ 		${HOST_DIR}/bin/mkimage_imx8 -commit > ${BINARIES_DIR}/mkimg.commit
+ 		cat ${BINARIES_DIR}/u-boot.bin ${BINARIES_DIR}/mkimg.commit > ${BINARIES_DIR}/u-boot-hash.bin
+diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
+index 12a5bea73b..d07ad2ef5d 100755
+--- a/board/freescale/common/imx/post-image.sh
++++ b/board/freescale/common/imx/post-image.sh
+@@ -34,6 +34,8 @@ genimage_type()
+ {
+ 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
+ 		echo "genimage.cfg.template_imx8"
++	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y$" ${BR2_CONFIG}; then
++		echo "genimage.cfg.template_imx8"
+ 	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8X=y$" ${BR2_CONFIG}; then
+ 		echo "genimage.cfg.template_imx8"
+ 	elif grep -Eq "^BR2_TARGET_UBOOT_SPL=y$" ${BR2_CONFIG}; then
+@@ -47,6 +49,8 @@ imx_offset()
+ {
+ 	if grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8M=y$" ${BR2_CONFIG}; then
+ 		echo "33K"
++	elif grep -Eq "^BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX8MM=y$" ${BR2_CONFIG}; then
++		echo "33K"
+ 	else
+ 		echo "32K"
+ 	fi
