@@ -1,71 +1,78 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Jun 2019 19:59:27 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/swupdate: bump to version
- 2019.04
-In-Reply-To: <1560180656-17519-1-git-send-email-pjtexier@koncepto.io>
-References: <1560180656-17519-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <40dcf91d-c7c3-c377-5204-eade8cd1d234@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 10 Jun 2019 20:09:15 +0200
+Subject: [Buildroot] [git commit] package/weston: fix build with headers <
+ 4.4
+Message-ID: <20190610180858.D90068F689@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Pierre-Jean,
+commit: https://git.buildroot.net/buildroot/commit/?id=e531877e8c3de78a6d065a4b2dac7c22079d4d72
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 10/06/2019 17:30, Pierre-Jean Texier wrote:
-> New features in this release:
->  - Improved documentation
->  - delta updates based on rdiff library
->  - support for libubootenv
->  - dry-run option
->  - CA certificates for signed images
->  - Fix security leak in parser
-> 
-> This commit also:
->  - introduce BR2_PACKAGE_LIBRSYNC
->  - introduce BR2_PACKAGE_LIBUBOOTENV
->  - drop upstreamed patch
->  - backport upstream patches (important fix)
+weston includes input-event-codes.h since version 5.0.91 and
+https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
 
- Please also mention that you regenerate the default swupdate.config, and that
-you always enable CONFIG_GUNZIP because gunzip is provided by the default
-busybox config.
+input-event-codes.h is available only since kernel 4.4 and
+https://github.com/torvalds/linux/commit/f902dd893427eade90f7eaf858e5ff8b150a5a12
 
-[snip]
-> diff --git a/package/swupdate/0001-archive-handler-set-locale-for-libarchive.patch b/package/swupdate/0001-archive-handler-set-locale-for-libarchive.patch
-> new file mode 100644
-> index 0000000..7403097
-> --- /dev/null
-> +++ b/package/swupdate/0001-archive-handler-set-locale-for-libarchive.patch
-> @@ -0,0 +1,64 @@
-> +From 95a2b9961119aac80aea1eeabbc1cd52b72d876a Mon Sep 17 00:00:00 2001
-> +From: James Hilliard <james.hilliard1@gmail.com>
-> +Date: Sat, 4 May 2019 11:38:37 -0600
-> +Subject: [PATCH] archive handler: set locale for libarchive
-> +
-> +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> +[Backported from: 95a2b9961119aac80aea1eeabbc1cd52b72d876a]
+To fix this build failure, replace include on linux/input-event-codes.h
+by linux/input.h
 
- You need to add your Signed-off-by here. This is a short way for you to
-assert that you are entitled to contribute the patch under upstream's
-GPL license.  See  http://elinux.org/Developer_Certificate_Of_Origin
-for more details. It is needed here in addition to the commit message of the
-Buildroot commit, because the license of the package may be different than
-Buildroot's.
+Fixes:
+ - http://autobuild.buildroot.org/results/210c2759900f15ea0030d088f6f45cd8bb199b29
 
- Same for the other two patches.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ .../weston/0002-Fix-build-with-kernel-4.4.patch    | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-[snip]
-> @@ -95,6 +98,10 @@ else
->  SWUPDATE_MAKE_ENV += HAVE_ZLIB=n
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBRSYNC),y)
-> +SWUPDATE_DEPENDENCIES += librsync
-> +endif
-
- Nothing in .config needed for this?
-
- Regards,
- Arnout
+diff --git a/package/weston/0002-Fix-build-with-kernel-4.4.patch b/package/weston/0002-Fix-build-with-kernel-4.4.patch
+new file mode 100644
+index 0000000000..89390e0e28
+--- /dev/null
++++ b/package/weston/0002-Fix-build-with-kernel-4.4.patch
+@@ -0,0 +1,40 @@
++From 137b811ecd566086f7eb42c1e49e7c0cf27fb85e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 10 Jun 2019 12:02:03 +0200
++Subject: [PATCH] Fix build with kernel < 4.4
++
++weston includes input-event-codes.h since version 5.0.91 and
++https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
++
++input-event-codes.h is available only since kernel 4.4 and
++https://github.com/torvalds/linux/commit/f902dd893427eade90f7eaf858e5ff8b150a5a12
++
++To fix this build failure, replace include on linux/input-event-codes.h
++by linux/input.h
++
++Fixes:
++ - http://autobuild.buildroot.org/results/210c2759900f15ea0030d088f6f45cd8bb199b29
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/wayland/weston/merge_requests/184]
++---
++ compositor/main.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/compositor/main.c b/compositor/main.c
++index 945f99ae..bf4062af 100644
++--- a/compositor/main.c
+++++ b/compositor/main.c
++@@ -42,7 +42,7 @@
++ #include <sys/socket.h>
++ #include <libinput.h>
++ #include <libevdev/libevdev.h>
++-#include <linux/input-event-codes.h>
+++#include <linux/input.h>
++ #include <sys/time.h>
++ #include <linux/limits.h>
++ 
++-- 
++2.20.1
++
