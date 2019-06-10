@@ -1,62 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 10 Jun 2019 15:17:30 +0200
-Subject: [Buildroot] [Lua 0/2] Lua modules removal
-In-Reply-To: <CAB0FRsv_L8kG_g5uXdd=80WJptzRFvZ1EFpSwuS3A8P5Xu1-6A@mail.gmail.com>
-References: <20190608211827.7731-1-francois.perrad@gadz.org>
- <cb9f5645-6484-7ccc-ca81-3e79ccb51a9d@mind.be>
- <CAB0FRsv_L8kG_g5uXdd=80WJptzRFvZ1EFpSwuS3A8P5Xu1-6A@mail.gmail.com>
-Message-ID: <1994ec5b-511f-2314-d54b-6ec18bc63a74@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 10 Jun 2019 15:29:11 +0200
+Subject: [Buildroot] [git commit] Allow overriding the VCS exclude list with
+ *_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS
+Message-ID: <20190610132902.E21FF7FC8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=a27078d32d1e23963ff50cd0ab014d033b287af7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+We have some internal packages which automatically bake a version string
+from the git checkout, and we usually combine these with a
+*_OVERRIDE_SRCDIR. I would like to let Buildroot *not* skip the .git
+directory when picking up sources from the local checkout.  It turns out
+that the existing mechanism (*_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) only
+supports adding to the exclude list because `rsync` simply uses the
+first match from the provided filtering rules.
 
-On 10/06/2019 10:31, Fran?ois Perrad wrote:
-> 
-> 
-> Le?dim. 9 juin 2019 ??22:37, Arnout Vandecappelle <arnout@mind.be
-> <mailto:arnout@mind.be>> a ?crit?:
-> 
-> 
-> 
->     On 08/06/2019 23:18, Francois Perrad wrote:
->     > This serie removes 2 Lua modules which are Lua 5.1 only
->     > and not actively maintained by upstream.
-> 
->     ?This needs a bit more context though... Is the intention to remove Lua 5.1? And
->     what about luajit?
-> 
-> 
-> This is a step in order to remove Lua 5.1, but not LuaJIT which stay as is.
+Solve this by using the user-provided values first. If they match, then
+`rsync` won't exclude stuff based on the generic VCS exclude patterns.
 
- So, aren't these two packages relevant for LuaJIT then?
+Signed-off-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/pkg-generic.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Regards,
- Arnout
-
-> In otherways, Lua evolves :
-> - Lua 5.3.5 will be the last one of its serie
-> - Lua 5.4 is up coming (lua-5.4.0-alpha is already available)
-> - Lua 5.2.4 was released on 2015
-> - Lua 5.1.5 was released on 2012.
-> 
-> Lua has two sides :
-> - an interpreter which could be used with various modules
-> - a library used as optional dependency
-> This serie handles only the interpreter side.
-> 
-> Fran?ois
-> 
->     ?We tend to not remove unmaintained packages unless there is a good reason
->     for it.
-> 
->     ?Regards,
->     ?Arnout
->     _______________________________________________
->     buildroot mailing list
->     buildroot at busybox.net <mailto:buildroot@busybox.net>
->     http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 3b5ee7b356..b00967c648 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -184,7 +184,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
+ 	@mkdir -p $(@D)
+ 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+-	rsync -au --chmod=u=rwX,go=rX $(RSYNC_VCS_EXCLUSIONS) $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
++	rsync -au --chmod=u=rwX,go=rX $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
+ 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	@$(call step_end,rsync)
+ 	$(Q)touch $@
