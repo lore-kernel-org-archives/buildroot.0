@@ -1,51 +1,46 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 11 Jun 2019 21:36:38 +0200
-Subject: [Buildroot] [PATCH] package/python-numpy: optionnaly depends on
- lapack not clapack
-Message-ID: <20190611193638.32741-1-romain.naour@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 11 Jun 2019 22:16:20 +0200
+Subject: [Buildroot] [git commit] package/python-lxml: bump to version 4.3.4
+Message-ID: <20190611202321.CC85C8F5BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python-numpy needs cblas which is only provided by lapack, otherwise
-there is an exeption while importing numpy due to a missing symbol
-cblas_sgemm.
+commit: https://git.buildroot.net/buildroot/commit/?id=d122c688990904d7ef10fb5f142b4645cf8b6098
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-python code:
-    import numpy as np
-    list = [1,2,3,4]
-    arr = np.array(list)
-    print (arr)
-
-python Error:
-ImportError: /usr/lib/python3.7/site-packages/numpy/core/_multiarray_umath.cpython-37m-arm-linux-gnueabi.so: undefined symbol: cblas_sgemm
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Asaf Kahlon <asafka7@gmail.com>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-numpy/python-numpy.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/python-lxml/python-lxml.hash | 2 +-
+ package/python-lxml/python-lxml.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-index 5d2fbfc7ad..5086d783db 100644
---- a/package/python-numpy/python-numpy.mk
-+++ b/package/python-numpy/python-numpy.mk
-@@ -15,9 +15,9 @@ PYTHON_NUMPY_LICENSE_FILES = LICENSE.txt doc/sphinxext/LICENSE.txt \
- 			numpy/core/src/multiarray/dragon4.c
- PYTHON_NUMPY_SETUP_TYPE = setuptools
+diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
+index 9696d8534d..f37c673807 100644
+--- a/package/python-lxml/python-lxml.hash
++++ b/package/python-lxml/python-lxml.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  4a03dd682f8e35a10234904e0b9508d705ff98cf962c5851ed052e9340df3d90  lxml-4.3.3.tar.gz
++sha256  3ce1c49d4b4a7bc75fb12acb3a6247bb7a91fe420542e6d671ba9187d12a12c2  lxml-4.3.4.tar.gz
+ sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
+ sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
+ sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
+diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
+index e80d056653..3b867d46a4 100644
+--- a/package/python-lxml/python-lxml.mk
++++ b/package/python-lxml/python-lxml.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_CLAPACK),y)
--PYTHON_NUMPY_DEPENDENCIES += clapack
--PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
-+ifeq ($(BR2_PACKAGE_LAPACK),y)
-+PYTHON_NUMPY_DEPENDENCIES += lapack
-+PYTHON_NUMPY_SITE_CFG_LIBS += blas cblas lapack
- else
- PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
- endif
--- 
-2.20.1
+-PYTHON_LXML_VERSION = 4.3.3
+-PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/7d/29/174d70f303016c58bd790c6c86e6e86a9d18239fac314d55a9b7be501943
++PYTHON_LXML_VERSION = 4.3.4
++PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/da/b5/d3e0d22649c63e92cb0902847da9ae155c1e801178ab5d272308f35f726e
+ PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
+ 
+ # Not including the GPL, because it is used only for the test scripts.
