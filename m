@@ -1,103 +1,109 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Jun 2019 06:00:42 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-06-10
-Message-ID: <20190611060050.0BE6687AFF@hemlock.osuosl.org>
+From: Nicolas Cavallari <Nicolas.Cavallari@green-communications.fr>
+Date: Tue, 11 Jun 2019 09:31:15 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libgit2: security bump to version 0.27.8
+In-Reply-To: <20190610090328.28495-1-fontaine.fabrice@gmail.com>
+References: <20190610090328.28495-1-fontaine.fabrice@gmail.com>
+Message-ID: <b9177a32-f068-9011-8920-b8e016cdd74f@green-communications.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+On 10/06/2019 11:03, Fabrice Fontaine wrote:
+> Fixing the following list of issues (fixed in 0.27.6 and 0.27.5):
+> 
+>     The function family git__strtol is used to parse integers
+>     from a buffer. As the functions do not take a buffer length as
+>     argument, they will scan either until the end of the current
+>     number or until a NUL byte is encountered. Many callers have
+>     been misusing the function and called it on potentially
+>     non-NUL-terminated buffers, resulting in possible out-of-bounds
+>     reads. Callers have been fixed to use git__strntol functions
+>     instead and git__strtol functions were removed.
+> 
+>     The function git__strntol64 relied on the undefined behavior
+>     of signed integer overflows. While the code tried to detect
+>     such overflows after they have happened, this is unspecified
+>     behavior and may lead to weird behavior on uncommon platforms.
+> 
+>     In the case where git__strntol32 was unable to parse an
+>     integer because it doesn't fit into an int32_t, it printed an
+>     error message containing the string that is currently being
+>     parsed. The code didn't truncate the string though, which
+>     caused it to print the complete string until a NUL byte is
+>     encountered and not only the currently parsed number. In case
+>     where the string was not NUL terminated, this could have lead
+>     to an out-of-bounds read.
+> 
+>     When parsing tags, all unknown fields that appear before the
+>     tag message are skipped. This skipping is done by using a plain
+>     strstr(buffer, "\n\n") to search for the two newlines that
+>     separate tag fields from tag message. As it is not possible to
+>     supply a buffer length to strstr, this call may skip over the
+>     buffer's end and thus result in an out of bounds read. As
+>     strstr may return a pointer that is out of bounds, the
+>     following computation of buffer_end - buffer will overflow
+>     and result in an allocation of an invalid length. Note that
+>     when reading objects from the object database, we make sure to
+>     always NUL terminate them, making the use of strstr safe.
+> 
+>     When parsing the "encoding" field of a commit, we may perform
+>     an out of bounds read due to using git__prefixcmp instead of
+>     git__prefixncmp. This can result in the parsed commit object
+>     containing uninitialized data in both its message encoding and
+>     message fields. Note that when reading objects from the object
+>     database, we make sure to always NUL terminate them, making the
+>     use of strstr safe.
+> 
+>     Submodule URLs and paths with a leading "-" are now ignored.
+>     This is due to the recently discovered CVE-2018-17456, which
+>     can lead to arbitrary code execution in upstream git. While
+>     libgit2 itself is not vulnerable, it can be used to inject
+>     options in an implementation which performs a recursive clone
+>     by executing an external command.
+> 
+>     When running repack while doing repo writes,
+>     packfile_load__cb() could see some temporary files in the
+>     directory that were bigger than the usual, and makes memcmp
+>     overflow on the p->pack_name string. This issue was reported
+>     and fixed by bisho.
+> 
+>     The configuration file parser used unbounded recursion to parse
+>     multiline variables, which could lead to a stack overflow. The
+>     issue was reported by the oss-fuzz project, issue 10048 and
+>     fixed by Nelson Elhage.
+> 
+>     The fix to the unbounded recursion introduced a memory leak in
+>     the config parser. While this leak was never in a public
+>     release, the oss-fuzz project reported this as issue 10127. The
+>     fix was implemented by Nelson Elhage and Patrick Steinhardt.
+> 
+>     When parsing "ok" packets received via the smart protocol, our
+>     parsing code did not correctly verify the bounds of the
+>     packets, which could result in a heap-buffer overflow. The
+>     issue was reported by the oss-fuzz project, issue 9749 and
+>     fixed by Patrick Steinhardt.
+> 
+>     The parsing code for the smart protocol has been tightened in
+>     general, fixing heap-buffer overflows when parsing the packet
+>     type as well as for "ACK" and "unpack" packets. The issue was
+>     discovered and fixed by Patrick Steinhardt.
+> 
+>     Fixed potential integer overflows on platforms with 16 bit
+>     integers when parsing packets for the smart protocol. The issue
+>     was discovered and fixed by Patrick Steinhardt.
+> 
+>     Fixed potential NULL pointer dereference when parsing
+>     configuration files which have "include.path" or
+>     "includeIf..path" statements without a value.
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Build statistics for 2019-06-10
-===============================
+Acked-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+Tested-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 
-      branch |  OK | NOK | TIM | TOT |
-   2019.02.x |  17 |   2 |   0 |  19 |
-   2019.05.x |  23 |   2 |   0 |  25 |
-      master | 188 |  21 |   1 | 210 |
-
-Results for branch '2019.05.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-kvm-unit-tests-kvm-unit-tes... | 1 
-             openjdk-jdk-12+33 | 1 
-
-
-Detail of failures
-------------------
-
-      x86_64 | kvm-unit-tests-kvm-unit-tes... | NOK | http://autobuild.buildroot.net/results/77d159d935ffc351bfc6e18d2a637803ecd8d573 |     
-   powerpc64 |              openjdk-jdk-12+33 | NOK | http://autobuild.buildroot.net/results/6afebe3ff4221cd6cfc67af02b20f1fe05a299a8 |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-    host-mender-artifact-3.0.0 | 5 
-libwebsock-3c1615eeadb0b582... | 3 
-  vdr-plugin-vnsiserver-v1.8.0 | 2 
-                   cups-2.2.10 | 1 
-               host-efl-1.22.2 | 1 
-           host-mfgtools-v0.02 | 1 
-   host-xapp_mkfontscale-1.1.3 | 1 
-                  libssh-0.8.7 | 1 
-                 mesa3d-19.0.6 | 1 
-                         mimic | 1 
-                   mimic-1.1.0 | 1 
-        network-manager-1.18.0 | 1 
-                poppler-0.77.0 | 1 
-           udpxy-1.0.23-9-prod | 1 
-               wireshark-3.0.2 | 1 
-
-
-Detail of failures
-------------------
-
- powerpc64le |                    cups-2.2.10 | NOK | http://autobuild.buildroot.net/results/c4e0f6a3c79c9cb083a08f811b7d4838efef50f9 |     
-         arm |                host-efl-1.22.2 | NOK | http://autobuild.buildroot.net/results/b4744a79697777b0d40c6e070ac5c1c95076271d |     
-        m68k |     host-mender-artifact-3.0.0 | NOK | http://autobuild.buildroot.net/results/c82b10b6db02b2a87c45f41bd35bc0c5d5beddc6 |     
-         arm |     host-mender-artifact-3.0.0 | NOK | http://autobuild.buildroot.net/results/0fc486fc037c697b7605f330aafc6a64dd2bc675 |     
-        i686 |     host-mender-artifact-3.0.0 | NOK | http://autobuild.buildroot.net/results/1a62dba60f96275ea15471ee7f8588475b2ce5f9 |     
-         arm |     host-mender-artifact-3.0.0 | NOK | http://autobuild.buildroot.net/results/f9ba64ab4c8d7fa6cb301fab37ee4141ba442f61 |     
-        m68k |     host-mender-artifact-3.0.0 | NOK | http://autobuild.buildroot.net/results/71853edaac4d9ed2a29b579e4abf62a68691dbfb |     
-         arm |            host-mfgtools-v0.02 | NOK | http://autobuild.buildroot.net/results/42644ede89ad15b2ebcc307a9121d5b647629978 |     
-         arm |    host-xapp_mkfontscale-1.1.3 | NOK | http://autobuild.buildroot.net/results/b5ec2d2d17e64ca7b85ebd7e4d0d880eaa661170 |     
-      xtensa |                   libssh-0.8.7 | NOK | http://autobuild.buildroot.net/results/f03d4225b6c3a3ec8558f96a6a8c91c0318aa6bc |     
-     aarch64 | libwebsock-3c1615eeadb0b582... | NOK | http://autobuild.buildroot.net/results/bfbb6d3e31033cc598f2288bce8f1447e79f09b0 |     
-     aarch64 | libwebsock-3c1615eeadb0b582... | NOK | http://autobuild.buildroot.net/results/e2cbd9396caea7890996dd6b9e88e7236e46fd1a |     
-     riscv32 | libwebsock-3c1615eeadb0b582... | NOK | http://autobuild.buildroot.net/results/3bc54e2fdce307007b68f5323594666b15343d62 |     
-         sh4 |                  mesa3d-19.0.6 | NOK | http://autobuild.buildroot.net/results/1ea031c402f5416851e2a5467cee76f906a6be2a |     
-        or1k |                          mimic | TIM | http://autobuild.buildroot.net/results/751953b121670bb51e3f16f63a9223311f119b6e |     
-     powerpc |                    mimic-1.1.0 | NOK | http://autobuild.buildroot.net/results/0f0e7521f47cb92ea3ceab6af56a0618c4cf218a |     
-       nios2 |         network-manager-1.18.0 | NOK | http://autobuild.buildroot.net/results/e47c7d855b452079a165ad4540b2e5ccd4162e19 | ORPH
-     powerpc |                 poppler-0.77.0 | NOK | http://autobuild.buildroot.net/results/2c8695b75c3241359e739d88726430cbfe47a5bd |     
-        i686 |            udpxy-1.0.23-9-prod | NOK | http://autobuild.buildroot.net/results/114adf08cd94473b59ff46819b27578466647e4a |     
-     riscv32 |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/40268ca7d9ba32963de239923cd2ca18a0011b37 |     
-         arm |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/de2e7db30aec888419c22dea08f4f769d9577afd |     
-     powerpc |                wireshark-3.0.2 | NOK | http://autobuild.buildroot.net/results/1284723ae2886cfe05b8337d6cdd184ba1d7e5c7 | ORPH
-
-Results for branch '2019.02.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                   glm-0.9.8.4 | 2 
-
-
-Detail of failures
-------------------
-
-        i686 |                    glm-0.9.8.4 | NOK | http://autobuild.buildroot.net/results/b01e79868cb2ec843adcf1f72662a23018eb1a0c | ORPH
-        i686 |                    glm-0.9.8.4 | NOK | http://autobuild.buildroot.net/results/f02e8842bcae2fb69294def3fc29bd305cefe007 | ORPH
-
-
--- 
-http://autobuild.buildroot.net
+(tried check-pkg against multiple configurations, found no failure not
+ attributed to libressl or zlib-ng failing to compile by themselves.
+ also quickly runtime-tested on an i686 host)
