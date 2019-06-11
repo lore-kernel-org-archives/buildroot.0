@@ -1,46 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Jun 2019 22:16:20 +0200
-Subject: [Buildroot] [git commit] package/python-lxml: bump to version 4.3.4
-Message-ID: <20190611202321.CC85C8F5BB@busybox.osuosl.org>
+Date: Tue, 11 Jun 2019 22:16:30 +0200
+Subject: [Buildroot] [git commit] package/python-psutil: bump to version
+ 5.6.3
+Message-ID: <20190611202321.DB2628F5BB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d122c688990904d7ef10fb5f142b4645cf8b6098
+commit: https://git.buildroot.net/buildroot/commit/?id=1e85ba540876bc9299d8c28236fd122dc2a36554
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License update: change phrasing for Github to recognize
+it's BSD-3-Clause.
 
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-lxml/python-lxml.hash | 2 +-
- package/python-lxml/python-lxml.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-psutil/python-psutil.hash | 6 +++---
+ package/python-psutil/python-psutil.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-lxml/python-lxml.hash b/package/python-lxml/python-lxml.hash
-index 9696d8534d..f37c673807 100644
---- a/package/python-lxml/python-lxml.hash
-+++ b/package/python-lxml/python-lxml.hash
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index a7d49a9ab6..e61bffa840 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
 @@ -1,5 +1,5 @@
- # Locally computed
--sha256  4a03dd682f8e35a10234904e0b9508d705ff98cf962c5851ed052e9340df3d90  lxml-4.3.3.tar.gz
-+sha256  3ce1c49d4b4a7bc75fb12acb3a6247bb7a91fe420542e6d671ba9187d12a12c2  lxml-4.3.4.tar.gz
- sha256  41d49dd406aa0e1548a6d5f21a30d6bf638b3cd96eb7289dd348d83ed2e40392  LICENSES.txt
- sha256  69edb445c1335a8312d4c09271847e9956d84f0d9f724d125340cc3fad767b2a  doc/licenses/BSD.txt
- sha256  0497ae8138811ef4466ede653bab7a59feb3d3c14f9ed50fc33a00aeb5bec32e  doc/licenses/elementtree.txt
-diff --git a/package/python-lxml/python-lxml.mk b/package/python-lxml/python-lxml.mk
-index e80d056653..3b867d46a4 100644
---- a/package/python-lxml/python-lxml.mk
-+++ b/package/python-lxml/python-lxml.mk
-@@ -4,8 +4,8 @@
+ # md5, sha256 from https://pypi.org/pypi/psutil/json
+-md5	571962acd249bcfbae317884af47c402  psutil-5.6.2.tar.gz
+-sha256	828e1c3ca6756c54ac00f1427fdac8b12e21b8a068c3bb9b631a1734cada25ed  psutil-5.6.2.tar.gz
++md5	1bbc1788588cc3c2c461cd98a830ba72  psutil-5.6.3.tar.gz
++sha256	863a85c1c0a5103a12c05a35e59d336e1d665747e531256e061213e2e90f63f3  psutil-5.6.3.tar.gz
+ # Locally computed sha256 checksums
+-sha256	bb073826b0dfb43b631c38ad5d9844cda74cc631d2a5569ad8798be4274a3e17  LICENSE
++sha256	24c12984500caa07ffdce19eebc06396c5e6d244b573bc6c438f4a6ef8e56c1b  LICENSE
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index ed1a9051c8..bb4d58930f 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LXML_VERSION = 4.3.3
--PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/7d/29/174d70f303016c58bd790c6c86e6e86a9d18239fac314d55a9b7be501943
-+PYTHON_LXML_VERSION = 4.3.4
-+PYTHON_LXML_SITE = https://files.pythonhosted.org/packages/da/b5/d3e0d22649c63e92cb0902847da9ae155c1e801178ab5d272308f35f726e
- PYTHON_LXML_SOURCE = lxml-$(PYTHON_LXML_VERSION).tar.gz
- 
- # Not including the GPL, because it is used only for the test scripts.
+-PYTHON_PSUTIL_VERSION = 5.6.2
++PYTHON_PSUTIL_VERSION = 5.6.3
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/c6/c1/beed5e4eaa1345901b595048fab1c85aee647ea0fc02d9e8bf9aceb81078
++PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/1c/ca/5b8c1fe032a458c2c4bcbe509d1401dca9dda35c7fc46b36bb81c2834740
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
