@@ -1,56 +1,45 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 11 Jun 2019 22:55:43 +0200
-Subject: [Buildroot] [PATCH 1/2] infra/pkg-meson: allow packages to expand
- their CFLAGS/CXXFLAGS/LDFLAGS
+Date: Tue, 11 Jun 2019 22:55:44 +0200
+Subject: [Buildroot] [PATCH 2/2] package/libglib2: fix NLS build on musl and
+ uclibc
 In-Reply-To: <cover.1560286529.git.yann.morin.1998@free.fr>
 References: <cover.1560286529.git.yann.morin.1998@free.fr>
-Message-ID: <4a99ac5f8c5f10cfc9bb20b33423aceca4773fa0.1560286529.git.yann.morin.1998@free.fr>
+Message-ID: <348952c2f966fb8c1ccb5b18418b3a8596925645.1560286529.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Some packages will want to pass extra CFLAGS, CXXFLAGS, or LDFLAGS.
-For example, they may want/have to pass $(TARGET_NLS_LIBS), like
-libglib2 when the toolchain is based on musl or uClibc (because meson
-does not have all the necessary infra internally to properly and reliably
-detect the presence of, or need for linking with, -lintl.
+libglib2 uses a very crude and error-prone way to detect the intl
+functions, which basically fails when the C library is not glibc.
+
+Now that a meson pacakge can specify its LDFLAGS, use that to pass the
+infrastructure-provided TARGET_NLS_LIBS to link with.
+
+Fixes:
+    http://autobuild.buildroot.org/results/f0d/f0d85d76786343d767fba9c7c5c01f042ecfc018/
+    [...]
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/pkg-meson.mk | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ package/libglib2/libglib2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 886fcf7205..8512a3559d 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -49,6 +49,10 @@ $(2)_CONF_ENV		?=
- $(2)_CONF_OPTS		?=
- $(2)_NINJA_ENV		?=
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 78d6e5ab32..04f747cec7 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -31,6 +31,8 @@ LIBGLIB2_DEPENDENCIES = \
+ 	host-pkgconf host-libglib2 \
+ 	libffi pcre util-linux zlib $(TARGET_NLS_DEPENDENCIES)
  
-+$(2)_CFLAGS ?= $$(TARGET_CFLAGS)
-+$(2)_LDFLAGS ?= $$(TARGET_LDFLAGS)
-+$(2)_CXXFLAGS ?= $$(TARGET_CXXFLAGS)
++LIBGLIB2_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
 +
- #
- # Configure step. Only define it if not already defined by the package
- # .mk file. And take care of the differences between host and target
-@@ -67,9 +71,9 @@ define $(2)_CONFIGURE_CMDS
- 	    -e "s%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
- 	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
- 	    -e "s%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g" \
--	    -e "s%@TARGET_CFLAGS@%$$(HOST_MESON_SED_CFLAGS)%g" \
--	    -e "s%@TARGET_LDFLAGS@%$$(HOST_MESON_SED_LDFLAGS)%g" \
--	    -e "s%@TARGET_CXXFLAGS@%$$(HOST_MESON_SED_CXXFLAGS)%g" \
-+	    -e "s%@TARGET_CFLAGS@%$$(if $$($(2)_CFLAGS),`printf '"%s"$$(comma) ' $$($(2)_CFLAGS)`)%g" \
-+	    -e "s%@TARGET_LDFLAGS@%$$(if $$($(2)_LDFLAGS),`printf '"%s"$$(comma) ' $$($(2)_LDFLAGS)`)%g" \
-+	    -e "s%@TARGET_CXXFLAGS@%$$(if $$($(2)_CXXFLAGS),`printf '"%s"$$(comma) ' $$($(2)_CXXFLAGS)`)%g" \
- 	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
- 	    package/meson/cross-compilation.conf.in \
- 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+ HOST_LIBGLIB2_DEPENDENCIES = \
+ 	host-gettext \
+ 	host-libffi \
 -- 
 2.20.1
