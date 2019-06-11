@@ -1,36 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 11 Jun 2019 11:52:31 +0200
-Subject: [Buildroot] [PATCH v3] mfgtools: bump revision to latest uuu
- version
-In-Reply-To: <20190611081559.GA24465@t450s.lan>
-References: <20190608105337.19879-1-bisson.gary@gmail.com>
- <cfe0721d-fbce-bb84-cf59-6353d7348ab8@mind.be>
- <20190611081559.GA24465@t450s.lan>
-Message-ID: <1f9e1d82-380b-bc03-475f-5c3283ac7f7e@mind.be>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 11 Jun 2019 12:29:42 +0200
+Subject: [Buildroot] [PATCH v3 00/15] Add gcc 9.1
+Message-ID: <20190611102957.7145-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Before adding gcc 9.1 [1] to Buildroot, add some fixes for issues discovered
+by toolchain-builder [2] that are trigged by this new compiler version.
+(disable powerpc Werror, uClibc-ng asm sparc and ARC glibc).
 
+Then add gcc 9.1 for internal and extenal toolchain backend and switch gcc 8.x
+as default compiler.
 
-On 11/06/2019 10:15, Gary Bisson wrote:
->>  So, I'm in favour of creating BR2_PACKAGE_HOST_UUU and killing
->> BR2_PACKAGE_HOST_MFGTOOLS.
->>
->>  I marked the patch as Not Applicable in patchwork. If you convince me to do it
->> this way after all, we can fish it up again.
-> 
-> Ok I can do that. I'll offer another series that deprecates mfgtools and creates
-> a new uuu package.
+Thanks to Yann E. MORIN for providing a patch series that add new ARM cores
+added by gcc 9.1.
 
- Maybe first Peter and Thomas can confirm that this is the right approach?
+Each new ARM core has been build tested for aarch64:
+https://gitlab.com/kubu93/buildroot/pipelines/60318953
 
- In summary: the current version of mfgtools creates a completely different
-program called uuu that is used in a completely different way. In other words,
-existing scripts will no longer work. Because of this, my proposal is to create
-a new package for it, and move the existing mfgtools to legacy.
+Finally, enable the new ork1 (openrisc) that will replace in the following
+series the old gcc fork (gcc 5.x).
 
- Regards,
- Arnout
+[1] https://gcc.gnu.org/gcc-9/changes.html
+[2] https://gitlab.com/kubu93/toolchains-builder/pipelines/59794237
+
+Romain Naour (9):
+  package/glibc/arc: fix build issue with gcc-9.1
+  linux: disable Werror for powerpc kernels
+  package/uclibc: remove asm constraint
+  toolchain: add gcc 9 entry
+  package/gcc: add support for gcc 9.1
+  arch: add BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+  toolchain-external: add gcc 9 entry
+  package/gcc: switch to gcc 8.x as the default
+  package/gcc: enable gcc 9.1 for ork1 (openrisc)
+
+Yann E. MORIN (6):
+  arch/arm: move dependency on 64-bit down to individual cores
+  arch/arm: some cores have a different name with gcc-9
+  arch/arm: saphira is in fact an armv8.4a
+  arch/arm: add two new 64-bit-only armv8a cores
+  arch/arm: add two new cortex-based armv8.2a cores
+  arch/arm: add two new non-cortex-based armv8.2a cores
+
+ arch/Config.in                                |   4 +
+ arch/Config.in.arm                            |  95 +++++++++--
+ linux/linux.mk                                |   2 +
+ package/gcc/Config.in.host                    |   8 +-
+ package/gcc/gcc.hash                          |   2 +
+ package/gcc/gcc.mk                            |   4 +-
+ ...Add-support-for-GCC-9-attribute-copy.patch | 160 ++++++++++++++++++
+ ...arc-syscalls.h-remove-asm-constraint.patch |  46 +++++
+ toolchain/Config.in                           |   5 +
+ .../Config.in.options                         |   6 +
+ 10 files changed, 313 insertions(+), 19 deletions(-)
+ create mode 100644 package/glibc/arc-2018.09-release/0001-Add-support-for-GCC-9-attribute-copy.patch
+ create mode 100644 package/uclibc/0003-RFC-sparc-syscalls.h-remove-asm-constraint.patch
+
+-- 
+2.17.1
