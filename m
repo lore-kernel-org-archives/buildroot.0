@@ -1,41 +1,72 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Tue, 11 Jun 2019 19:33:58 +0200
-Subject: [Buildroot] [PATCH 2/2] package/rauc: update legal info
-In-Reply-To: <1560274438-22422-1-git-send-email-pjtexier@koncepto.io>
-References: <1560274438-22422-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <1560274438-22422-2-git-send-email-pjtexier@koncepto.io>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Tue, 11 Jun 2019 14:19:00 -0400
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: remove bindir prefix
+ from gio-2.0.pc
+In-Reply-To: <20190611173015.2205-1-fontaine.fabrice@gmail.com>
+References: <20190611173015.2205-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAFSsvmpxfJWxeLvm-GT3-MtGq8+jh9RYUKQH1f+Onq2HEXaP+w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
----
- package/rauc/rauc.hash | 1 +
- package/rauc/rauc.mk   | 1 +
- 2 files changed, 2 insertions(+)
+All;
 
-diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
-index c7b73f7..ad4f744 100644
---- a/package/rauc/rauc.hash
-+++ b/package/rauc/rauc.hash
-@@ -1,3 +1,4 @@
- # Locally calculated, after verifying against
- # https://github.com/rauc/rauc/releases/download/v1.1/rauc-1.1.tar.xz.asc
- sha256 e49086da3a72564806963d2309e8e2b255492fb314db61f84c9b4cebece98e3f rauc-1.1.tar.xz
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551 COPYING
-diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
-index fa324e6..47ce242 100644
---- a/package/rauc/rauc.mk
-+++ b/package/rauc/rauc.mk
-@@ -8,6 +8,7 @@ RAUC_VERSION = 1.1
- RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
- RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
- RAUC_LICENSE = LGPL-2.1
-+RAUC_LICENSE_FILES = COPYING
- RAUC_DEPENDENCIES = host-pkgconf openssl libglib2
- 
- ifeq ($(BR2_PACKAGE_RAUC_NETWORK),y)
--- 
-2.7.4
+Openembedded has a patch for this that might be even better for us to use:
+https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-core/glib-2.0/glib-2.0/0001-Do-not-write-bindir-into-pkg-config-files.patch
+
+If not, then consider this an
+Acked-by: Adam Duskett <aduskett@gmail.com>
+
+On Tue, Jun 11, 2019 at 1:30 PM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Apply LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE to gio-2.0.pc so
+> ${bindir} prefix is also removed for gbus-codegen otherwise build of
+> packages using this binary will fail if gbus-codegen is not installed on
+> host
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/5c0e4f3d33e01198688d58388aabe159bd005234
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libglib2/libglib2.mk | 16 ++++++++++------
+>  1 file changed, 10 insertions(+), 6 deletions(-)
+>
+> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+> index 78d6e5ab32..c8db706684 100644
+> --- a/package/libglib2/libglib2.mk
+> +++ b/package/libglib2/libglib2.mk
+> @@ -85,13 +85,17 @@ endef
+>
+>  LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
+>
+> -# Newer versions of libglib2 prefix glib-genmarshal, gobject-query, and
+> -# glib-mkenums with ${bindir}. Unfortunately, this will resolve to the host
+> -# systems /bin/ directory, which will cause compilation issues if the host does
+> -# not have these programs. By removing the ${bindir}/ prefix, these programs
+> -# are resolved in PATH instead.
+> +# Newer versions of libglib2 prefix glib-genmarshal, gobject-query,
+> +# glib-mkenums, glib_compile_schemas, glib_compile_resources and gdbus-codegen
+> +# with ${bindir}. Unfortunately, this will resolve to the host systems /bin/
+> +# directory, which will cause compilation issues if the host does not have these
+> +# programs. By removing the ${bindir}/ prefix, these programs are resolved in
+> +# PATH instead.
+>  define LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE
+> -       $(SED) 's%$${bindir}/%%g' $(STAGING_DIR)/usr/lib/pkgconfig/glib-2.0.pc
+> +       for file in glib-2.0.pc gio-2.0.pc ; do \
+> +               $(SED) 's%$${bindir}/%%g' \
+> +                       $(STAGING_DIR)/usr/lib/pkgconfig/$$file ; \
+> +       done
+>  endef
+>  LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE
+>
+> --
+> 2.20.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
