@@ -1,32 +1,62 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Jun 2019 23:00:43 +0200
-Subject: [Buildroot] [PATCH 1/2] infra/pkg-meson: allow packages to
- expand their CFLAGS/CXXFLAGS/LDFLAGS
-In-Reply-To: <4a99ac5f8c5f10cfc9bb20b33423aceca4773fa0.1560286529.git.yann.morin.1998@free.fr>
-References: <cover.1560286529.git.yann.morin.1998@free.fr>
- <4a99ac5f8c5f10cfc9bb20b33423aceca4773fa0.1560286529.git.yann.morin.1998@free.fr>
-Message-ID: <20190611230043.6d986a3c@windsurf>
+Date: Tue, 11 Jun 2019 23:00:54 +0200
+Subject: [Buildroot] [PATCH v2] package/mariadb: security bump to
+ version 10.3.15
+In-Reply-To: <20190610233025.5275-1-bluemrp9@gmail.com>
+References: <20190610233025.5275-1-bluemrp9@gmail.com>
+Message-ID: <20190611230054.0f18be69@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 11 Jun 2019 22:55:43 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Mon, 10 Jun 2019 16:30:25 -0700
+Ryan Coe <bluemrp9@gmail.com> wrote:
 
-> Some packages will want to pass extra CFLAGS, CXXFLAGS, or LDFLAGS.
-> For example, they may want/have to pass $(TARGET_NLS_LIBS), like
-> libglib2 when the toolchain is based on musl or uClibc (because meson
-> does not have all the necessary infra internally to properly and reliably
-> detect the presence of, or need for linking with, -lintl.
+> The licensing text in README.md has changed slightly. The reference to
+> COPYING.LESSER has been removed. The file itself has been gone for awhile
+> now. COPYING.thirdparty has also been renamed to THIRDPARTY.
 > 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Adam Duskett <aduskett@gmail.com>
-> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> Release notes:
+> https://mariadb.com/kb/en/library/mariadb-10315-release-notes/
+> 
+> Changelog:
+> https://mariadb.com/kb/en/mariadb-10315-changelog/
+> 
+> Fixes the following security vulnerabilities:
+> 
+> CVE-2019-2614 - Vulnerability in the MySQL Server component of Oracle MySQL
+> (subcomponent: Server: Replication). Supported versions that are affected
+> are 5.6.43 and prior, 5.7.25 and prior and 8.0.15 and prior. Difficult to
+> exploit vulnerability allows high privileged attacker with network access
+> via multiple protocols to compromise MySQL Server. Successful attacks of
+> this vulnerability can result in unauthorized ability to cause a hang or
+> frequently repeatable crash (complete DOS) of MySQL Server.
+> 
+> CVE-2019-2627 - Vulnerability in the MySQL Server component of Oracle MySQL
+> (subcomponent: Server: Security: Privileges). Supported versions that are
+> affected are 5.6.43 and prior, 5.7.25 and prior and 8.0.15 and prior.
+> Easily exploitable vulnerability allows high privileged attacker with
+> network access via multiple protocols to compromise MySQL Server.
+> Successful attacks of this vulnerability can result in unauthorized ability
+> to cause a hang or frequently repeatable crash (complete DOS) of MySQL
+> Server.
+> 
+> CVE-2019-2628 - Vulnerability in the MySQL Server component of Oracle MySQL
+> (subcomponent: InnoDB). Supported versions that are affected are 5.7.25 and
+> prior and 8.0.15 and prior. Easily exploitable vulnerability allows high
+> privileged attacker with network access via multiple protocols to
+> compromise MySQL Server. Successful attacks of this vulnerability can
+> result in unauthorized ability to cause a hang or frequently repeatable
+> crash (complete DOS) of MySQL Server.
+> 
+> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - Fix hash of README.md (suggested by Arnout Vandecappelle)
 
-This looks highly similar to
-http://patchwork.ozlabs.org/patch/1089760/, which seems more complete.
+Applied to master, thanks.
 
 Thomas
 -- 
