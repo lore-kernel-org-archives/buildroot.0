@@ -1,35 +1,46 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Jun 2019 13:07:21 +0200
-Subject: [Buildroot] [PATCH v3] mfgtools: bump revision to latest uuu
- version
-In-Reply-To: <1f9e1d82-380b-bc03-475f-5c3283ac7f7e@mind.be>
-References: <20190608105337.19879-1-bisson.gary@gmail.com>
- <cfe0721d-fbce-bb84-cf59-6353d7348ab8@mind.be>
- <20190611081559.GA24465@t450s.lan>
- <1f9e1d82-380b-bc03-475f-5c3283ac7f7e@mind.be>
-Message-ID: <20190611130721.02cb7cd2@windsurf>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Tue, 11 Jun 2019 18:02:34 +0530
+Subject: [Buildroot] [PATCH] autobuild-run: move creation of result
+ directory to run_instance()
+Message-ID: <20190611123234.11385-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 11 Jun 2019 11:52:31 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
+We need the result directory to be present when the check_reproducibility()
+function (implemented in the next patch) executes. As of now the results
+directory is created in the send_results() function which executes after
+check_reproducibility() will.
 
->  Maybe first Peter and Thomas can confirm that this is the right approach?
-> 
->  In summary: the current version of mfgtools creates a completely different
-> program called uuu that is used in a completely different way. In other words,
-> existing scripts will no longer work. Because of this, my proposal is to create
-> a new package for it, and move the existing mfgtools to legacy.
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+---
+ scripts/autobuild-run | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-I agree that a new separate package is better.
-
-Best regards,
-
-Thomas
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index ef2f2a5..190a254 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -470,8 +470,6 @@ def send_results(result, **kwargs):
+     srcdir = os.path.join(idir, "buildroot")
+     resultdir = os.path.join(outputdir, "results")
+ 
+-    os.mkdir(resultdir)
+-
+     shutil.copyfile(os.path.join(outputdir, ".config"),
+                     os.path.join(resultdir, "config"))
+     shutil.copyfile(os.path.join(outputdir, "defconfig"),
+@@ -647,6 +645,9 @@ def run_instance(**kwargs):
+         if ret != 0:
+             continue
+ 
++        resultdir = os.path.join(idir, "output", "results")
++        os.mkdir(resultdir)
++
+         ret = gen_config(**kwargs)
+         if ret != 0:
+             log_write(kwargs['log'], "WARN: failed to generate configuration")
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
