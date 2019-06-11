@@ -1,106 +1,51 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Tue, 11 Jun 2019 22:49:46 +0200
-Subject: [Buildroot] [PATCH v2 2/2] checkpackagelib/lib_config.py: check
- packages alphabetical order in {Config.in, Config.in.host}
-In-Reply-To: <20190611204946.3848-1-jerzy.m.grzegorek@gmail.com>
-References: <20190611204946.3848-1-jerzy.m.grzegorek@gmail.com>
-Message-ID: <20190611204946.3848-2-jerzy.m.grzegorek@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 11 Jun 2019 22:45:03 +0200
+Subject: [Buildroot] [git commit] package/freeswitch: add optional support
+ for libopenh264
+Message-ID: <20190611204943.EF4F588F8D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=f969712a988c70522e336675b3d0f6ce0412ca73
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Changes v1 -> v2:
- - swap patches 1 and 2 (Arnout)
- - drop trailing lines (copy/paste side effect)
- - rewrap lines to < 80 chars
- - add variable to cut lines to < 80 chars
- - change alphabetical order of '_" to go before digits (Arnout)
+ package/freeswitch/freeswitch.hash | 1 +
+ package/freeswitch/freeswitch.mk   | 7 +++++++
+ 2 files changed, 8 insertions(+)
 
-TODO : checking of menu of comments and menu of menus
----
-
- utils/checkpackagelib/lib_config.py | 65 +++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
-
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index 89d44da57e..642634fc44 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -60,6 +60,71 @@ class AttributesOrder(_CheckFunction):
-                     text]
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 1c5de7bcc5..d80934d436 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -6,6 +6,7 @@ sha1 c6eb7de942a61604774ca08ac8070244b7c3167a freeswitch-1.8.6.tar.xz
+ sha256 b87f47e57d13de2b901bd1e4eb85491178e59a159a2831d7430abe7947f0d3a4 freeswitch-1.8.6.tar.xz
+ # Locally computed
+ sha256 75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
++sha256 c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
+ sha256 e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
+ sha256 1eefb2ea1db0af7729a9d8a27d7c65d8a37ab185393f935b029aac6828ce315a  libs/apr-util/LICENSE
+ sha256 8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  libs/libvpx/LICENSE
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 8c0c7fb118..1c49b8d814 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
+@@ -220,6 +220,13 @@ FREESWITCH_DEPENDENCIES += libmemcached
+ FREESWITCH_ENABLED_MODULES += applications/mod_memcache
+ endif
  
- 
-+class CommentsMenusPackagesOrder(_CheckFunction):
-+    level = {"": 0,
-+             "-menu": 1, "-menu-menu": 2,
-+             "-menu-menu-comment": 3, "-menu-menu-if": 3, "-menu-menu-menu": 3,
-+             "-menu-menu-comment-if": 4, "-menu-menu-if-if": 4,
-+             "-menu-menu-menu-if": 4, "-menu-menu-if-menu": 4,
-+             "-menu-menu-comment-if-comment": 5, "-menu-menu-if-if-comment": 5,
-+             "-menu-menu-if-if-menu": 5, "-menu-menu-menu-if-comment": 5,
-+             "-menu-menu-menu-if-menu": 5}
++ifeq ($(BR2_PACKAGE_LIBOPENH264),y)
++FREESWITCH_LICENSE := $(FREESWITCH_LICENSE), BSD-2-Clause (libopenh264)
++FREESWITCH_LICENSE_FILES += docs/OPENH264_BINARY_LICENSE.txt
++FREESWITCH_DEPENDENCIES += libopenh264
++FREESWITCH_ENABLED_MODULES += codecs/mod_openh264
++endif
 +
-+    print_package_warning = [True, True, True, True, True, True]
-+    menu_of_packages = ["", "", "", "", "", ""]
-+    package = ["", "", "", "", "", ""]
-+    new_package = ["", "", "", "", "", ""]
-+
-+    def before(self):
-+        self.state = ""
-+
-+    def check_line(self, lineno, text):
-+        if text.startswith("comment") or text.startswith("if") or \
-+           text.startswith("menu"):
-+
-+            if text.startswith("comment"):
-+                if not self.state.endswith("-comment"):
-+                    self.state += "-comment"
-+
-+            elif text.startswith("if") or text.startswith("menu"):
-+                if text.startswith("if"):
-+                    self.state += "-if"
-+
-+                elif text.startswith("menu"):
-+                    self.state += "-menu"
-+
-+            level = self.level[self.state]
-+            self.package[level] = ""
-+            self.print_package_warning[level] = True
-+            self.menu_of_packages[level] = text[:-1]
-+
-+        elif text.startswith("endif") or text.startswith("endmenu"):
-+            if self.state.endswith("comment"):
-+                self.state = self.state[:-8]
-+
-+            if text.startswith("endif"):
-+                self.state = self.state[:-3]
-+
-+            elif text.startswith("endmenu"):
-+                self.state = self.state[:-5]
-+
-+        elif text.startswith('\tsource "package/'):
-+            level = self.level[self.state]
-+            self.new_package[level] = text[17: -(len(self.filename)-5):]
-+
-+            if self.package[level] != "" and \
-+               self.print_package_warning[level] and \
-+               self.new_package[level].replace('_', '.') < self.package[level].replace('_', '.'):
-+                self.print_package_warning[level] = False
-+                return ["{}:{}: Packages in: {},\n                  are not "
-+                        "alphabetically ordered;\n                  correct "
-+                        "order: '-', '_', digits, capitals, lowercase"
-+                        .format(self.filename, lineno, self.menu_of_packages[level]),
-+                        text]
-+
-+            self.package[level] = self.new_package[level]
-+
-+
- class HelpText(_CheckFunction):
-     HELP_TEXT_FORMAT = re.compile("^\t  .{,62}$")
-     URL_ONLY = re.compile("^(http|https|git)://\S*$")
--- 
-2.17.1
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ FREESWITCH_DEPENDENCIES += libpng
+ FREESWITCH_ENABLED_MODULES += formats/mod_png
