@@ -1,54 +1,49 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 11 Jun 2019 19:30:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: remove bindir prefix from
- gio-2.0.pc
-Message-ID: <20190611173015.2205-1-fontaine.fabrice@gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Tue, 11 Jun 2019 19:33:57 +0200
+Subject: [Buildroot] [PATCH 1/2] package/rauc: bump to version 1.1
+Message-ID: <1560274438-22422-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apply LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE to gio-2.0.pc so
-${bindir} prefix is also removed for gbus-codegen otherwise build of
-packages using this binary will fail if gbus-codegen is not installed on
-host
+See: https://github.com/rauc/rauc/releases/tag/v1.1
 
-Fixes:
- - http://autobuild.buildroot.org/results/5c0e4f3d33e01198688d58388aabe159bd005234
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/libglib2/libglib2.mk | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
+Tested on WaRP7:
+	Welcome to Buildroot
+	buildroot login: root
+	# rauc --version
+	rauc 1.1
+	
+ package/rauc/rauc.hash | 4 ++--
+ package/rauc/rauc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 78d6e5ab32..c8db706684 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -85,13 +85,17 @@ endef
+diff --git a/package/rauc/rauc.hash b/package/rauc/rauc.hash
+index 54c6c93..c7b73f7 100644
+--- a/package/rauc/rauc.hash
++++ b/package/rauc/rauc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated, after verifying against
+-# https://github.com/rauc/rauc/releases/download/v0.4/rauc-0.4.tar.xz.asc
+-sha256 8875ab0d02b4cb38a211b236855361c18b874b385e6f18dde394ac699f2cf2aa rauc-1.0.tar.xz
++# https://github.com/rauc/rauc/releases/download/v1.1/rauc-1.1.tar.xz.asc
++sha256 e49086da3a72564806963d2309e8e2b255492fb314db61f84c9b4cebece98e3f rauc-1.1.tar.xz
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 3848a01..fa324e6 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
- 
--# Newer versions of libglib2 prefix glib-genmarshal, gobject-query, and
--# glib-mkenums with ${bindir}. Unfortunately, this will resolve to the host
--# systems /bin/ directory, which will cause compilation issues if the host does
--# not have these programs. By removing the ${bindir}/ prefix, these programs
--# are resolved in PATH instead.
-+# Newer versions of libglib2 prefix glib-genmarshal, gobject-query,
-+# glib-mkenums, glib_compile_schemas, glib_compile_resources and gdbus-codegen
-+# with ${bindir}. Unfortunately, this will resolve to the host systems /bin/
-+# directory, which will cause compilation issues if the host does not have these
-+# programs. By removing the ${bindir}/ prefix, these programs are resolved in
-+# PATH instead.
- define LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE
--	$(SED) 's%$${bindir}/%%g' $(STAGING_DIR)/usr/lib/pkgconfig/glib-2.0.pc
-+	for file in glib-2.0.pc gio-2.0.pc ; do \
-+		$(SED) 's%$${bindir}/%%g' \
-+			$(STAGING_DIR)/usr/lib/pkgconfig/$$file ; \
-+	done
- endef
- LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE
- 
+-RAUC_VERSION = 1.0
++RAUC_VERSION = 1.1
+ RAUC_SITE = https://github.com/rauc/rauc/releases/download/v$(RAUC_VERSION)
+ RAUC_SOURCE = rauc-$(RAUC_VERSION).tar.xz
+ RAUC_LICENSE = LGPL-2.1
 -- 
-2.20.1
+2.7.4
