@@ -1,52 +1,53 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Tue, 11 Jun 2019 18:04:16 +0530
-Subject: [Buildroot] [PATCH v3 3/3] autobuild-run: do reproducible builds
- tests if BR2_REPRODUCIBLE=y
-In-Reply-To: <20190611123416.11533-1-itsatharva@gmail.com>
-References: <20190611123416.11533-1-itsatharva@gmail.com>
-Message-ID: <20190611123416.11533-3-itsatharva@gmail.com>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Tue, 11 Jun 2019 15:26:05 +0200
+Subject: [Buildroot] [toolchain-builder ] configs/common: enable Fortran
+ support
+Message-ID: <20190611132605.26354-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fortran depends on wchar only for architectures requiring libquadmath.
 
+Since uclibc toolchain built by toolchain-builder enable locales (so wchar
+is automatically selected), it's safe to enable unconditionally Fortran
+support for all toolchains.
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 ---
-Changes v2 -> v3:
-  - use reproducible flag so that .config i snot kept open for the entire
-    build duration. (suggested by arnout)
-  - remove reduntant logging (suggested by arnout)
+ build.sh              | 5 +++++
+ configs/common.config | 1 +
+ 2 files changed, 6 insertions(+)
 
-Changes v1 -> v2:
-  - add trailing newline character to BR2_REPRODUCIBLE=y (suggested by arnout)
-
-Signed-off-by: Atharva Lele <itsatharva@gmail.com>
----
- scripts/autobuild-run | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 5ba6092..4fbd507 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -727,7 +727,14 @@ def run_instance(**kwargs):
-             log_write(kwargs['log'], "WARN: failed to generate configuration")
-             continue
- 
--        ret = do_build(**kwargs)
-+        # Check if the build test is supposed to be a reproducible test
-+        outputdir = os.path.abspath(os.path.join(idir, "output"))
-+        with open(os.path.join(outputdir, ".config"), "r") as fconf:
-+            reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
-+            if reproducible:
-+                ret = do_reproducible_build(**kwargs)
-+            else:
-+                ret = do_build(**kwargs)
- 
-         send_results(ret, **kwargs)
- 
+diff --git a/build.sh b/build.sh
+index 5b28b88..835d714 100755
+--- a/build.sh
++++ b/build.sh
+@@ -309,6 +309,11 @@ function make_br_fragment {
+     else
+         echo "# BR2_TOOLCHAIN_EXTERNAL_CXX is not set" >> ${fragment_file}
+     fi
++    if grep "BR2_TOOLCHAIN_BUILDROOT_FORTRAN=y" ${configfile} > /dev/null 2>&1; then
++        echo "BR2_TOOLCHAIN_EXTERNAL_FORTRAN=y" >> ${fragment_file}
++    else
++        echo "# BR2_TOOLCHAIN_EXTERNAL_FORTRAN is not set" >> ${fragment_file}
++    fi
+     if grep "BR2_TOOLCHAIN_HAS_SSP=y" ${configfile} > /dev/null 2>&1; then
+         echo "BR2_TOOLCHAIN_EXTERNAL_HAS_SSP=y" >> ${fragment_file}
+     else
+diff --git a/configs/common.config b/configs/common.config
+index 7f728ad..85ae490 100644
+--- a/configs/common.config
++++ b/configs/common.config
+@@ -1,6 +1,7 @@
+ BR2_WGET="wget --passive-ftp -nd -t 3 --no-check-certificate"
+ BR2_GNU_MIRROR="http://ftp.gnu.org/pub/gnu"
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
++BR2_TOOLCHAIN_BUILDROOT_FORTRAN=y
+ BR2_INIT_NONE=y
+ # BR2_PACKAGE_BUSYBOX is not set
+ # BR2_TARGET_ROOTFS_TAR is not set
 -- 
 2.20.1
