@@ -1,30 +1,50 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Jun 2019 22:50:50 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/freeswitch: bump version to
- 1.8.6
-In-Reply-To: <20190611051655.31679-1-bernd.kuhls@t-online.de>
-References: <20190611051655.31679-1-bernd.kuhls@t-online.de>
-Message-ID: <20190611225050.77390158@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Tue, 11 Jun 2019 22:55:40 +0200
+Subject: [Buildroot] [PATCH 0/2] package/libglib2: fix build with NLS on
+ musl/uclibc (branch yem/meson-per-pkg-flags)
+Message-ID: <cover.1560286529.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 11 Jun 2019 07:16:54 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Hello All!
 
-> Updated license hash after upstream commit
-> https://freeswitch.org/stash/projects/FS/repos/freeswitch/commits/a1f3b4862e7fd44a37862ae84c0e79f89c9bc0d8
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v2: no changes
+Under musl or uclibc, we need -lintl when NLS is enabled.
 
-Both patches applied to master. Thanks!
 
-Thomas
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 04efb17c863606cdbc2405d01c3d48d6868c5245
+
+  package/vlc: bump version to 3.0.7 (2019-06-11 00:54:16 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 348952c2f966fb8c1ccb5b18418b3a8596925645
+
+  package/libglib2: fix NLS build on musl and uclibc (2019-06-11 22:52:30 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      infra/pkg-meson: allow packages to expand their CFLAGS/CXXFLAGS/LDFLAGS
+      package/libglib2: fix NLS build on musl and uclibc
+
+ package/libglib2/libglib2.mk |  2 ++
+ package/pkg-meson.mk         | 10 +++++++---
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
