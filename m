@@ -1,62 +1,91 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Tue, 11 Jun 2019 16:57:25 -0400
-Subject: [Buildroot] [PATCH 1/2] infra/pkg-meson: allow packages to
- expand their CFLAGS/CXXFLAGS/LDFLAGS
-In-Reply-To: <4a99ac5f8c5f10cfc9bb20b33423aceca4773fa0.1560286529.git.yann.morin.1998@free.fr>
-References: <cover.1560286529.git.yann.morin.1998@free.fr>
- <4a99ac5f8c5f10cfc9bb20b33423aceca4773fa0.1560286529.git.yann.morin.1998@free.fr>
-Message-ID: <CAFSsvmrPg2FPoC6CzjNprcQmOXUhDdMLunOwrcSDnkySFMg3Kw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 11 Jun 2019 22:58:17 +0200
+Subject: [Buildroot] [git commit] package/mariadb: security bump to version
+ 10.3.15
+Message-ID: <20190611205807.E58EE8F5EB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Acked-by: Adam Duskett <aduskett@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=033844c44df13da70d9ca19e4ad057b9e730aef6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, Jun 11, 2019 at 4:55 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Some packages will want to pass extra CFLAGS, CXXFLAGS, or LDFLAGS.
-> For example, they may want/have to pass $(TARGET_NLS_LIBS), like
-> libglib2 when the toolchain is based on musl or uClibc (because meson
-> does not have all the necessary infra internally to properly and reliably
-> detect the presence of, or need for linking with, -lintl.
->
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Adam Duskett <aduskett@gmail.com>
-> Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-> ---
->  package/pkg-meson.mk | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
->
-> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-> index 886fcf7205..8512a3559d 100644
-> --- a/package/pkg-meson.mk
-> +++ b/package/pkg-meson.mk
-> @@ -49,6 +49,10 @@ $(2)_CONF_ENV                ?=
->  $(2)_CONF_OPTS         ?=
->  $(2)_NINJA_ENV         ?=
->
-> +$(2)_CFLAGS ?= $$(TARGET_CFLAGS)
-> +$(2)_LDFLAGS ?= $$(TARGET_LDFLAGS)
-> +$(2)_CXXFLAGS ?= $$(TARGET_CXXFLAGS)
-> +
->  #
->  # Configure step. Only define it if not already defined by the package
->  # .mk file. And take care of the differences between host and target
-> @@ -67,9 +71,9 @@ define $(2)_CONFIGURE_CMDS
->             -e "s%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
->             -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
->             -e "s%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g" \
-> -           -e "s%@TARGET_CFLAGS@%$$(HOST_MESON_SED_CFLAGS)%g" \
-> -           -e "s%@TARGET_LDFLAGS@%$$(HOST_MESON_SED_LDFLAGS)%g" \
-> -           -e "s%@TARGET_CXXFLAGS@%$$(HOST_MESON_SED_CXXFLAGS)%g" \
-> +           -e "s%@TARGET_CFLAGS@%$$(if $$($(2)_CFLAGS),`printf '"%s"$$(comma) ' $$($(2)_CFLAGS)`)%g" \
-> +           -e "s%@TARGET_LDFLAGS@%$$(if $$($(2)_LDFLAGS),`printf '"%s"$$(comma) ' $$($(2)_LDFLAGS)`)%g" \
-> +           -e "s%@TARGET_CXXFLAGS@%$$(if $$($(2)_CXXFLAGS),`printf '"%s"$$(comma) ' $$($(2)_CXXFLAGS)`)%g" \
->             -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
->             package/meson/cross-compilation.conf.in \
->             > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
-> --
-> 2.20.1
->
+The licensing text in README.md has changed slightly. The reference to
+COPYING.LESSER has been removed. The file itself has been gone for awhile
+now. COPYING.thirdparty has also been renamed to THIRDPARTY.
+
+Release notes:
+https://mariadb.com/kb/en/library/mariadb-10315-release-notes/
+
+Changelog:
+https://mariadb.com/kb/en/mariadb-10315-changelog/
+
+Fixes the following security vulnerabilities:
+
+CVE-2019-2614 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Replication). Supported versions that are affected
+are 5.6.43 and prior, 5.7.25 and prior and 8.0.15 and prior. Difficult to
+exploit vulnerability allows high privileged attacker with network access
+via multiple protocols to compromise MySQL Server. Successful attacks of
+this vulnerability can result in unauthorized ability to cause a hang or
+frequently repeatable crash (complete DOS) of MySQL Server.
+
+CVE-2019-2627 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: Server: Security: Privileges). Supported versions that are
+affected are 5.6.43 and prior, 5.7.25 and prior and 8.0.15 and prior.
+Easily exploitable vulnerability allows high privileged attacker with
+network access via multiple protocols to compromise MySQL Server.
+Successful attacks of this vulnerability can result in unauthorized ability
+to cause a hang or frequently repeatable crash (complete DOS) of MySQL
+Server.
+
+CVE-2019-2628 - Vulnerability in the MySQL Server component of Oracle MySQL
+(subcomponent: InnoDB). Supported versions that are affected are 5.7.25 and
+prior and 8.0.15 and prior. Easily exploitable vulnerability allows high
+privileged attacker with network access via multiple protocols to
+compromise MySQL Server. Successful attacks of this vulnerability can
+result in unauthorized ability to cause a hang or frequently repeatable
+crash (complete DOS) of MySQL Server.
+
+Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mariadb/mariadb.hash | 12 ++++++------
+ package/mariadb/mariadb.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
+index db24f7bb9b..1f478013c8 100644
+--- a/package/mariadb/mariadb.hash
++++ b/package/mariadb/mariadb.hash
+@@ -1,9 +1,9 @@
+-# From https://downloads.mariadb.org/mariadb/10.3.13
+-md5 603ce42e35b9a688f2cca05275acb5cb  mariadb-10.3.13.tar.gz
+-sha1 08467885412184e99b835732913d445fd2c4b1b3  mariadb-10.3.13.tar.gz
+-sha256 b2aa857ef5b84f85a7ea60a1eac7b34c0ca5151c71a0d44ce2d7fb028d71459a  mariadb-10.3.13.tar.gz
+-sha512 3cbd93291aa43b235e5b81d953ea69fb32df54fb518f922f69b5485952f01fae693c77b0efac37f414ed7ff132d3b58f899812bdb7be8a5b344c3640e2c3a0dd  mariadb-10.3.13.tar.gz
++# From https://downloads.mariadb.org/mariadb/10.3.15
++md5 08edd8b5060a181e6dd3c6aac23218cd  mariadb-10.3.15.tar.gz
++sha1 134f6a1ee6bf3048580eca945a51cb3c9bda7cbe  mariadb-10.3.15.tar.gz
++sha256 27f391a54d544f93850d4edfb3ef1b4cf24f8e27e61e51727b0e7d31bb4d6968  mariadb-10.3.15.tar.gz
++sha512 35332ac32cba27fef1b4ddd2209236853f4309756fd121fbdbd2b6be0651e817cedc80e276b89ccfa4bc76760811434fab45a4d380d0ebd500c7d9bd7377fe93  mariadb-10.3.15.tar.gz
+ 
+ # Hash for license files
+-sha256 43f4b5b13cecbbdb04a180cbf6c2bd64237819d1a32165b7d475c1b392e6a8d1  README.md
++sha256 a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
+index 356dd29af3..cfb08eb664 100644
+--- a/package/mariadb/mariadb.mk
++++ b/package/mariadb/mariadb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MARIADB_VERSION = 10.3.13
++MARIADB_VERSION = 10.3.15
+ MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
+ MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
+ # Tarball no longer contains LGPL license text
