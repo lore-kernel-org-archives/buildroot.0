@@ -1,36 +1,36 @@
-From: Esben Haabendal <esben@geanix.com>
-Date: Tue, 11 Jun 2019 10:44:10 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/openblas: Handle new westmere
- target architecture
-In-Reply-To: <20190611084410.4422-1-esben@geanix.com>
-References: <20190611084410.4422-1-esben@geanix.com>
-Message-ID: <20190611084410.4422-2-esben@geanix.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 11 Jun 2019 11:52:31 +0200
+Subject: [Buildroot] [PATCH v3] mfgtools: bump revision to latest uuu
+ version
+In-Reply-To: <20190611081559.GA24465@t450s.lan>
+References: <20190608105337.19879-1-bisson.gary@gmail.com>
+ <cfe0721d-fbce-bb84-cf59-6353d7348ab8@mind.be>
+ <20190611081559.GA24465@t450s.lan>
+Message-ID: <1f9e1d82-380b-bc03-475f-5c3283ac7f7e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Nehalem, the predecessor to westmere, is best match for westmere
-architecture in current openblas.
 
-Signed-off-by: Esben Haabendal <esben@geanix.com>
----
- package/openblas/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/openblas/Config.in b/package/openblas/Config.in
-index 8e71a43f982c..c8a516bb9f93 100644
---- a/package/openblas/Config.in
-+++ b/package/openblas/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
- 	default "PRESCOTT"     if BR2_x86_prescott || BR2_x86_nocona
- 	default "BANIAS"       if BR2_x86_pentium_m
- 	default "CORE2"        if BR2_x86_core2
--	default "NEHALEM"      if BR2_x86_corei7 || BR2_x86_silvermont
-+	default "NEHALEM"      if BR2_x86_corei7 || BR2_x86_westmere || BR2_x86_silvermont
- 	default "SANDYBRIDGE"  if BR2_x86_corei7_avx
- 	default "HASWELL"      if BR2_x86_core_avx2
- 	default "ATOM"         if BR2_x86_atom
--- 
-2.21.0
+On 11/06/2019 10:15, Gary Bisson wrote:
+>>  So, I'm in favour of creating BR2_PACKAGE_HOST_UUU and killing
+>> BR2_PACKAGE_HOST_MFGTOOLS.
+>>
+>>  I marked the patch as Not Applicable in patchwork. If you convince me to do it
+>> this way after all, we can fish it up again.
+> 
+> Ok I can do that. I'll offer another series that deprecates mfgtools and creates
+> a new uuu package.
+
+ Maybe first Peter and Thomas can confirm that this is the right approach?
+
+ In summary: the current version of mfgtools creates a completely different
+program called uuu that is used in a completely different way. In other words,
+existing scripts will no longer work. Because of this, my proposal is to create
+a new package for it, and move the existing mfgtools to legacy.
+
+ Regards,
+ Arnout
