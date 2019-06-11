@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Jun 2019 22:31:13 +0200
-Subject: [Buildroot] [PATCH 1/2] package/rauc: bump to version 1.1
-In-Reply-To: <1560274438-22422-1-git-send-email-pjtexier@koncepto.io>
-References: <1560274438-22422-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190611223113.16ff11f3@windsurf>
+Date: Tue, 11 Jun 2019 22:37:46 +0200
+Subject: [Buildroot] [git commit] package/git: fix build with curl
+Message-ID: <20190611204338.7FFD38F914@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 11 Jun 2019 19:33:57 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2f64c7a8be665f3fb6b14721af872cd16c91d755
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> See: https://github.com/rauc/rauc/releases/tag/v1.1
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
-> Tested on WaRP7:
-> 	Welcome to Buildroot
-> 	buildroot login: root
-> 	# rauc --version
-> 	rauc 1.1
-> 	
->  package/rauc/rauc.hash | 4 ++--
->  package/rauc/rauc.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+curl-config path can be set through ac_cv_prog_CURL_CONFIG and not
+ac_cv_prog_curl_config
 
-Both patches applied to master. Thanks!
+Fixes:
+ - http://autobuild.buildroot.org/results/4b22f761795d8760dac6ddfd40934259f0135a4d
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/git/git.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 8d1fcd2399..1b4a1a51e9 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -35,7 +35,7 @@ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ GIT_DEPENDENCIES += libcurl
+ GIT_CONF_OPTS += --with-curl
+ GIT_CONF_ENV += \
+-	ac_cv_prog_curl_config=$(STAGING_DIR)/usr/bin/$(LIBCURL_CONFIG_SCRIPTS)
++	ac_cv_prog_CURL_CONFIG=$(STAGING_DIR)/usr/bin/$(LIBCURL_CONFIG_SCRIPTS)
+ else
+ GIT_CONF_OPTS += --without-curl
+ endif
