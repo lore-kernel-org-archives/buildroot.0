@@ -1,71 +1,87 @@
-From: Gary Bisson <bisson.gary@gmail.com>
-Date: Tue, 11 Jun 2019 10:15:59 +0200
-Subject: [Buildroot] [PATCH v3] mfgtools: bump revision to latest uuu
- version
-In-Reply-To: <cfe0721d-fbce-bb84-cf59-6353d7348ab8@mind.be>
-References: <20190608105337.19879-1-bisson.gary@gmail.com>
- <cfe0721d-fbce-bb84-cf59-6353d7348ab8@mind.be>
-Message-ID: <20190611081559.GA24465@t450s.lan>
+From: Esben Haabendal <esben@geanix.com>
+Date: Tue, 11 Jun 2019 10:42:41 +0200
+Subject: [Buildroot] [PATCH 2/2] arch: Add support for Westmere targets
+In-Reply-To: <87sgskbd8n.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sat, 08 Jun 2019 12:08:56 +0200")
+References: <20190607125313.20376-1-esben@geanix.com>
+ <20190607125313.20376-2-esben@geanix.com>
+ <87sgskbd8n.fsf@dell.be.48ers.dk>
+Message-ID: <87a7eoa4xq.fsf@geanix.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Sat, Jun 08, 2019 at 10:28:09PM +0200, Arnout Vandecappelle wrote:
->  Hi Gary,
-> 
-> On 08/06/2019 12:53, Gary Bisson wrote:
-> > NXP deprecated the old mfgtools code, also called mfgtools v2 although
-> > the releases were named v0.xx.
-> > 
-> > It has been replaced by the Universal Update Utility (uuu), also called
-> > mfgtools v3.0 although the releases are named v1.x.yy.
-> > 
-> > This new tool actually resides in the same repository in the master
-> > branch whereas the old one is now in a 'linux' branch.
-> > 
-> > Since the old tool has issues building lately, let's switch to the new
-> > one. Note that uuu seems to be cleaner, supports much more features
-> > (i.MX8/8M/8QXP boot, fastboot etc..) and has a better documentation:
-> > https://github.com/NXPmicro/mfgtools/wiki
-> 
->  Does it also offer the same API? If you have some scripts using mfgtools, will
-> they work unchanged with uuu?
-> 
->  If not, then I think uuu should be an entirely new package. We could choose to
-> deprecate mfgtools immediately, but we'd need a legacy entry if the API has changed.
+>>>>>> "Esben" == Esben Haabendal <esben@geanix.com> writes:
+>
+>  > The westmere line of x86_64 targets lies between nehalem (corei7) and
+>  > sandybridge (corei7-avx).  Allowing use of -march=westmere enables use of AES
+>  > instruction set on these targets.
+>
+>  > Signed-off-by: Esben Haabendal <esben@geanix.com>
+>  > ---
+>  >  arch/Config.in.x86         | 10 ++++++++++
+>  >  package/openblas/Config.in |  2 +-
+>  >  2 files changed, 11 insertions(+), 1 deletion(-)
+>
+>  > diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+>  > index 3f6983ac1b63..26496b8d08e9 100644
+>  > --- a/arch/Config.in.x86
+>  > +++ b/arch/Config.in.x86
+>  > @@ -101,6 +101,15 @@ config BR2_x86_corei7
+>  >  	select BR2_X86_CPU_HAS_SSSE3
+>  >  	select BR2_X86_CPU_HAS_SSE4
+>  >  	select BR2_X86_CPU_HAS_SSE42
+>  > +config BR2_x86_westmere
+>  > +	bool "westmere"
+>  > +	select BR2_X86_CPU_HAS_MMX
+>  > +	select BR2_X86_CPU_HAS_SSE
+>  > +	select BR2_X86_CPU_HAS_SSE2
+>  > +	select BR2_X86_CPU_HAS_SSE3
+>  > +	select BR2_X86_CPU_HAS_SSSE3
+>  > +	select BR2_X86_CPU_HAS_SSE4
+>  > +	select BR2_X86_CPU_HAS_SSE42
+>  >  config BR2_x86_corei7_avx
+>  >  	bool "corei7-avx"
+>  >  	select BR2_X86_CPU_HAS_MMX
+>  > @@ -235,6 +244,7 @@ config BR2_ARCH
+>  >  	default "i686"		if BR2_x86_nocona && BR2_i386
+>  >  	default "i686"		if BR2_x86_core2 && BR2_i386
+>  >  	default "i686"		if BR2_x86_corei7 && BR2_i386
+>  > +	default "i686"		if BR2_x86_westmere && BR2_i386
+>  >  	default "i686"		if BR2_x86_corei7_avx && BR2_i386
+>  >  	default "i686"		if BR2_x86_core_avx2 && BR2_i386
+>  >  	default "i686"		if BR2_x86_atom && BR2_i386
+>
+> No BR2_GCC_TARGET_ARCH? That doesn't seem right.
 
-No the API has changed as the tool was apparently re-developed from the
-ground up.
+Definitely not right.
 
-The idea of keeping the same package name although it broke the API is
-that:
-1- it's still in the same repository
-2- NXP still mentions it as mfgtools (although sometimes calling it uuu)
-  -> all new NXP releases will use that new tool
+>> diff --git a/package/openblas/Config.in b/package/openblas/Config.in
+>  > index 8e71a43f982c..c8a516bb9f93 100644
+>  > --- a/package/openblas/Config.in
+>  > +++ b/package/openblas/Config.in
+>  > @@ -6,7 +6,7 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
+>  >  	default "PRESCOTT"     if BR2_x86_prescott || BR2_x86_nocona
+>  >  	default "BANIAS"       if BR2_x86_pentium_m
+>  >  	default "CORE2"        if BR2_x86_core2
+>  > -	default "NEHALEM"      if BR2_x86_corei7 || BR2_x86_silvermont
+>  > + default "NEHALEM" if BR2_x86_corei7 || BR2_x86_westmere ||
+>  > BR2_x86_silvermont
+>
+> Please put this openblas change in a separate patch. I know we don't do
+> it consistently, but please sort these alphabetically - E.G. put
+> westmere after silvermont.
 
-> [snip]
-> > +2. Run the MfgTools (now called uuu) client to boot the board from USB:
-> >  
-> > +$ ./output/host/bin/uuu output/images/u-boot.imx
-> [snip]
-> > -$ ./host/bin/mfgtoolcli -l mmc -s uboot_defconfig=imx \
-> > -  -s dtbname=imx6q-sabrelite.dtb -s initramfs=rootfs.cpio.uboot \
-> > -  -s mmc=1 -p 1
-> 
->  Yup, the API has definitely changed...
-> 
->  So, I'm in favour of creating BR2_PACKAGE_HOST_UUU and killing
-> BR2_PACKAGE_HOST_MFGTOOLS.
-> 
->  I marked the patch as Not Applicable in patchwork. If you convince me to do it
-> this way after all, we can fish it up again.
+Ok, will do.
 
-Ok I can do that. I'll offer another series that deprecates mfgtools and creates
-a new uuu package.
+I just tried to keep the split identical to the most recent similar
+change, which is 1eecd462ae05 ("arch: add Atom CPUs as Silvermont
+Architecture target").
 
-Regards,
-Gary
+Sending v2...
+
+/Esben
