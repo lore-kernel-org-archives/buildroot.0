@@ -1,41 +1,36 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Jun 2019 17:08:04 +0200
-Subject: [Buildroot] [PATCH 2/2] package/gerbera: add upstream patch to
- fix find_program with taglib-config
-In-Reply-To: <e198cc50-3e78-b2df-ccc1-269af7fad363@mind.be>
-References: <20190610212023.9483-1-joerg.krause@embedded.rocks>
- <20190610212023.9483-3-joerg.krause@embedded.rocks>
- <e198cc50-3e78-b2df-ccc1-269af7fad363@mind.be>
-Message-ID: <20190611170804.0e17d415@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 11 Jun 2019 19:05:21 +0200
+Subject: [Buildroot] [PATCH 1/1] package/git: fix build with curl
+Message-ID: <20190611170521.11183-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 11 Jun 2019 00:33:31 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
+curl-config path can be set through ac_cv_prog_CURL_CONFIG and not
+ac_cv_prog_curl_config
 
-> > ++            if (CMAKE_CROSSCOMPILING)
-> > ++              set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ONLY)  
-> 
->  Again, this is wrong IMO. The executables in the sysroot are not supposed to be
-> executed on the host.
-> 
->  What we really should do is to copy those config scripts to some other
-> location, and add that to the PATH.
+Fixes:
+ - http://autobuild.buildroot.org/results/4b22f761795d8760dac6ddfd40934259f0135a4d
 
-Not so simple: what do you do to differentiate between foo-config
-describing foo for the host and foo-config describing foo for the
-target ?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/git/git.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, you could install the foo-config in a different directory than
-$(HOST_DIR)/bin, but what if some package needs both foo-config for the
-host and foo-config for the target, when building its code for the
-target ?
-
-Thomas
+diff --git a/package/git/git.mk b/package/git/git.mk
+index 8d1fcd2399..1b4a1a51e9 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -35,7 +35,7 @@ ifeq ($(BR2_PACKAGE_LIBCURL),y)
+ GIT_DEPENDENCIES += libcurl
+ GIT_CONF_OPTS += --with-curl
+ GIT_CONF_ENV += \
+-	ac_cv_prog_curl_config=$(STAGING_DIR)/usr/bin/$(LIBCURL_CONFIG_SCRIPTS)
++	ac_cv_prog_CURL_CONFIG=$(STAGING_DIR)/usr/bin/$(LIBCURL_CONFIG_SCRIPTS)
+ else
+ GIT_CONF_OPTS += --without-curl
+ endif
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
