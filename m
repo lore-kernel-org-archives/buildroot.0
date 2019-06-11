@@ -1,65 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 11 Jun 2019 23:00:54 +0200
-Subject: [Buildroot] [PATCH v2] package/mariadb: security bump to
- version 10.3.15
-In-Reply-To: <20190610233025.5275-1-bluemrp9@gmail.com>
-References: <20190610233025.5275-1-bluemrp9@gmail.com>
-Message-ID: <20190611230054.0f18be69@windsurf>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Tue, 11 Jun 2019 23:26:33 +0200
+Subject: [Buildroot] [PATCH 1/3] package/iputils: Reenable traceroute6
+Message-ID: <20190611212635.24372-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 10 Jun 2019 16:30:25 -0700
-Ryan Coe <bluemrp9@gmail.com> wrote:
+Bump to s20190515 removed traceroute6 build (it's not built by default
+since this version in upstream). Reenable it again.
 
-> The licensing text in README.md has changed slightly. The reference to
-> COPYING.LESSER has been removed. The file itself has been gone for awhile
-> now. COPYING.thirdparty has also been renamed to THIRDPARTY.
-> 
-> Release notes:
-> https://mariadb.com/kb/en/library/mariadb-10315-release-notes/
-> 
-> Changelog:
-> https://mariadb.com/kb/en/mariadb-10315-changelog/
-> 
-> Fixes the following security vulnerabilities:
-> 
-> CVE-2019-2614 - Vulnerability in the MySQL Server component of Oracle MySQL
-> (subcomponent: Server: Replication). Supported versions that are affected
-> are 5.6.43 and prior, 5.7.25 and prior and 8.0.15 and prior. Difficult to
-> exploit vulnerability allows high privileged attacker with network access
-> via multiple protocols to compromise MySQL Server. Successful attacks of
-> this vulnerability can result in unauthorized ability to cause a hang or
-> frequently repeatable crash (complete DOS) of MySQL Server.
-> 
-> CVE-2019-2627 - Vulnerability in the MySQL Server component of Oracle MySQL
-> (subcomponent: Server: Security: Privileges). Supported versions that are
-> affected are 5.6.43 and prior, 5.7.25 and prior and 8.0.15 and prior.
-> Easily exploitable vulnerability allows high privileged attacker with
-> network access via multiple protocols to compromise MySQL Server.
-> Successful attacks of this vulnerability can result in unauthorized ability
-> to cause a hang or frequently repeatable crash (complete DOS) of MySQL
-> Server.
-> 
-> CVE-2019-2628 - Vulnerability in the MySQL Server component of Oracle MySQL
-> (subcomponent: InnoDB). Supported versions that are affected are 5.7.25 and
-> prior and 8.0.15 and prior. Easily exploitable vulnerability allows high
-> privileged attacker with network access via multiple protocols to
-> compromise MySQL Server. Successful attacks of this vulnerability can
-> result in unauthorized ability to cause a hang or frequently repeatable
-> crash (complete DOS) of MySQL Server.
-> 
-> Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - Fix hash of README.md (suggested by Arnout Vandecappelle)
+Fixes: 9ffcd9279e ("package/iputils: bump to version s20190515")
 
-Applied to master, thanks.
+This requires fix similar to one in 0003-meson.build-fix-build-with-NLS.patch
+http://autobuild.buildroot.org/results/0a8a3efe734ac7fb3a68ba505277681857dc0a3d
 
-Thomas
+Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ .../0005-traceroute6-fix-build-with-NLS.patch | 30 +++++++++++++++++++
+ package/iputils/iputils.mk                    |  3 ++
+ 2 files changed, 33 insertions(+)
+ create mode 100644 package/iputils/0005-traceroute6-fix-build-with-NLS.patch
+
+diff --git a/package/iputils/0005-traceroute6-fix-build-with-NLS.patch b/package/iputils/0005-traceroute6-fix-build-with-NLS.patch
+new file mode 100644
+index 0000000000..70315c551b
+--- /dev/null
++++ b/package/iputils/0005-traceroute6-fix-build-with-NLS.patch
+@@ -0,0 +1,30 @@
++From b18c6c48e4dabaf8bf9b178b3deca631fc79c96e Mon Sep 17 00:00:00 2001
++From: Petr Vorel <petr.vorel@gmail.com>
++Date: Tue, 11 Jun 2019 21:51:58 +0200
++Subject: [PATCH] traceroute6: fix build with NLS
++
++commit 418d8be ("build-sys: fix build with NLS") fixed problems for
++default packages using libintl. Fix also traceroute6 (build it must be
++enabled with -DBUILD_TRACEROUTE6=true)
++
++Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
++Upstream status: 81bfb31a714641b70c2a7c7d9ce12cf08f98a372
++---
++ meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/meson.build b/meson.build
++index 2b545b6..85db8a6 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -266,7 +266,7 @@ endif
++
++ if build_traceroute6 == true
++	executable('traceroute6', ['traceroute6.c', git_version_h],
++-		dependencies : [cap_dep, idn_dep],
+++		dependencies : [cap_dep, intl_dep, idn_dep],
++		link_with : [libcommon],
++		install: true)
++	meson.add_install_script('build-aux/setcap-setuid.sh',
++--
++2.21.0
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 8be54b4788..01d2388bab 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -49,6 +49,8 @@ IPUTILS_CONF_OPTS += -DUSE_CRYPTO=none
+ IPUTILS_CONF_OPTS += -DBUILD_NINFOD=false
+ endif
+ 
++IPUTILS_CONF_OPTS += -DBUILD_TRACEROUTE6=true
++
+ # XSL Stylesheets for DocBook 5 not packaged for buildroot
+ IPUTILS_CONF_OPTS += -DBUILD_MANS=false -DBUILD_HTML_MANS=false
+ 
+@@ -58,6 +60,7 @@ define IPUTILS_PERMISSIONS
+ 	/bin/arping      f 4755 0 0 - - - - -
+ 	/bin/clockdiff   f 4755 0 0 - - - - -
+ 	/bin/ping        f 4755 0 0 - - - - -
++	/bin/traceroute6 f 4755 0 0 - - - - -
+ endef
+ 
+ $(eval $(meson-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
