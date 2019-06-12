@@ -1,74 +1,131 @@
-From: Fragkiskos Sigalas <frasigal@gmail.com>
-Date: Thu, 13 Jun 2019 00:53:15 +0300
-Subject: [Buildroot] add option to run docker with initramfs
-In-Reply-To: <20190612201856.GH2647@scaer>
-References: <CAL+Nh7PQaDFU_SrWoV_W7-H=s6Y4ALHeC3A_LUozY+SnyXo3Lw@mail.gmail.com>
- <20190612201856.GH2647@scaer>
-Message-ID: <CAL+Nh7PV+5toCMzScou2PauqijFZ6aogKbTK2P-umgAuZZvpVg@mail.gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Thu, 13 Jun 2019 01:43:41 +0300
+Subject: [Buildroot] [RFC PATCH/next 2/2] package/cage: new package
+In-Reply-To: <20190517112107.50d4ab47@windsurf>
+References: <20190516220836.24543-1-aperez@igalia.com>
+ <20190516220836.24543-3-aperez@igalia.com>	<20190517112107.50d4ab47@windsurf>
+Message-ID: <20190613014341.GB851@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
+Hi,
 
-In order to use pivot_root a real device is needed, alas initramfs space is
-not a real one.
-Config.in for util-linux in busybox states:
+On Fri, 17 May 2019 11:21:07 +0200, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> Hello Adrian,
+> 
+> On Fri, 17 May 2019 01:08:36 +0300
+> Adrian Perez de Castro <aperez@igalia.com> wrote:
+> 
+> > diff --git a/package/cage/0001-Updates-for-wlroots-0.6.0.patch b/package/cage/0001-Updates-for-wlroots-0.6.0.patch
+> > new file mode 100644
+> > index 0000000000..57e5a1289a
+> > --- /dev/null
+> > +++ b/package/cage/0001-Updates-for-wlroots-0.6.0.patch
+> > @@ -0,0 +1,264 @@
+> > +From 86b9d6719e52cbddda4fb6d055e60e9caf9a57ff Mon Sep 17 00:00:00 2001
+> > +From: Jente Hidskes <hjdskes@gmail.com>
+> > +Date: Fri, 3 May 2019 19:39:19 +0200
+> > +Subject: [PATCH 1/3] CI: use wlroots 0.6.0
+> > +
+> > +Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> > +[Upstream status: https://github.com/Hjdskes/cage/pull/65]
+> > +
+> > +---
+> > + .builds/alpine.yml    | 4 ++--
+> > + .builds/archlinux.yml | 4 ++--
+> > + .builds/freebsd.yml   | 4 ++--
+> > + 3 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> These CI related changes are really not relevant in the context of
+> Buildroot.
+> 
+> > +From 08ecd52a3313d00d06cc4e12d4d3243865af5dd0 Mon Sep 17 00:00:00 2001
+> > +From: Drew DeVault <sir@cmpwn.com>
+> > +Date: Thu, 25 Apr 2019 11:40:25 -0400
+> > +Subject: [PATCH 2/3] Update to wlroots 0.6.0
+> 
+> Please use one .patch file for each patch.
+> 
+> Your SoB is missing.
 
-The pivot_root utility swaps the mount points for the root filesystem
-        with some other mounted filesystem. This allows you to do all sorts
-        of wild and crazy things with your Linux system and is far more
-        powerful than 'chroot'.
+I have been waiting for the release of Cage 0.1.1 [1], which makes this
+patch unneeded and I will drop it in v2 of the patch set.
 
-        Note: This is for initrd in linux 2.4. Under initramfs (introduced
-        in linux 2.6) use switch_root instead.
 
-So in case of initramfs switch_root should be used instead. I think that
-dockerd
-uses MS_MOVE with chroot, but this is of less or no importance.
+> > +From 711aebb4d20848d2d9052e0483cd301c7022b844 Mon Sep 17 00:00:00 2001
+> > +From: Jente Hidskes <hjdskes@gmail.com>
+> > +Date: Fri, 3 May 2019 20:53:19 +0200
+> > +Subject: [PATCH 3/3] output: don't submit too much damage
+> > +
+> > +See https://github.com/swaywm/wlroots/issues/1666#issue-436967396 and
+> > +the linked changes
+> > +https://github.com/swaywm/wlroots/pull/1668/files#diff-95fe5e5b411cc64a5dc31e2b72669a0d
+> 
+> Ditto.
+> 
+> 
+> > + 		view_for_each_surface(view, send_frame_done, &now);
+> > diff --git a/package/cage/Config.in b/package/cage/Config.in
+> > new file mode 100644
+> > index 0000000000..07dc4c9da3
+> > --- /dev/null
+> > +++ b/package/cage/Config.in
+> > @@ -0,0 +1,24 @@
+> > +config BR2_PACKAGE_CAGE
+> > +	bool "cage"
+> > +	depends on !BR2_STATIC_LIBS # wlroots
+> > +	depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
+> 
+> wlroots (in your submission) has plenty of other depends on you need to
+> replicate:
+> 
+> +	depends on !BR2_STATIC_LIBS # mesa3d, wayland
+> +	depends on BR2_INSTALL_LIBSTDCPP # freedrp, mesa3d
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm, wayland
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # mesa3d
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # mesa3d
+> +	depends on BR2_ENABLE_LOCALE # libinput
+> +	depends on BR2_PACKAGE_HAS_UDEV # libinput
+> +	depends on BR2_PACKAGE_HAS_LIBEGL
+> +	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+> +	depends on BR2_PACKAGE_HAS_LIBGLES
 
-On Wed, Jun 12, 2019 at 11:19 PM Yann E. MORIN <yann.morin.1998@free.fr>
-wrote:
+It would be nice if those would be automagically propagated?I always end
+up messing them in one way or another when adding new packages O:-)
 
-> Frank, All,
->
-> On 2019-06-12 19:18 +0300, Fragkiskos Sigalas spake thusly:
-> > By default docker uses pivot_root which is not available in initramfs.
->
-> pivot_root is provided by either util-linux or busybox; it has (AFAICT)
-> no relation to whether running from an initramfs or any other filesystem).
->
-> Our default configuration for busybox eeven enables pivot_root.
->
-> So, it looks like your could very well add pivot_root to your initramfs,
-> in fact.
->
-> Regards,
-> Yann E. MORIN.
->
-> > The way to override the default behaviour is to define an
-> > environment variable DOCKER_RAMDISK when starting the daemon (weirdly
-> enough there appears to be no respective command line option).
-> > Would it make sense to add such an option in the docker package?
->
->
->
-> --
->
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics'
-> conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___
->      |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is
-> no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v
->  conspiracy.  |
->
-> '------------------------------^-------^------------------^--------------------'
->
+I'll review them for v2.
+
+> > +	select BR2_PACKAGE_WLROOTS
+> > +	help
+> > +	  Kiosk compositor for Wayland, which displays a single
+> > +	  maximized application at a time.
+> > +
+> > +	  https://www.hjdskes.nl/projects/cage/
+> > +
+> > +if BR2_PACKAGE_CAGE
+> > +
+> > +config BR2_PACKAGE_CAGE_XWAYLAND
+> > +	bool "XWayland support"
+> > +	depends on BR2_PACKAGE_XORG7 # wlroots
+> 
+> Not necessary, because you have a "depends on
+> BR2_PACKAGE_WLROOTS_XWAYLAND" below.
+
+True.
+
+Thanks for the review,
+?Adri?n
+
+---
+[1] https://github.com/Hjdskes/cage/releases/tag/v0.1.1
+
 -------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190613/ff6a5296/attachment.html>
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190613/1c93ffa6/attachment.asc>
