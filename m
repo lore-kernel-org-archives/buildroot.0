@@ -1,99 +1,85 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 12 Jun 2019 16:50:20 +0200
-Subject: [Buildroot] [PATCH 0/4] Sanetize packages version
-In-Reply-To: <627e16bb-a937-a00e-7d03-7373c69433ca@bootlin.com>
-References: <20190612064209.23619-1-victor.huesca@bootlin.com>
- <20190612092624.1ca7836d@windsurf>
- <627e16bb-a937-a00e-7d03-7373c69433ca@bootlin.com>
-Message-ID: <20190612165020.441113ee@windsurf>
+From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
+Date: Wed, 12 Jun 2019 17:07:52 +0200
+Subject: [Buildroot] [PATCH] boot/uboot: cover more u-boot versions when
+ fixing up libfdt include paths
+Message-ID: <20190612150752.18508-1-patrickdepinguin@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
 
-On Wed, 12 Jun 2019 10:39:18 +0200
-Victor Huesca <victor.huesca@bootlin.com> wrote:
+The original UBOOT_FIXUP_LIBFDT_INCLUDE hook only works for u-boot versions
+starting from v2017.11.
 
-> >  (2) As suggested by Victor, add a separate variable that tells the Git
-> >      download logic what is the actual tag/version to fetch, i.e:
-> > 
-> >     AT_VERSION = 3.1.23
-> >     AT_GIT_COMMIT = release/$(AT_UPSTREAM_VERSION)
-> > 
-> > Perhaps option (1) is the easiest ? But it has the drawback that
-> > <pkg>_VERSION doesn't contain just the actual version, but like we do
-> > today, some possibly semi-random stuff in addition to the version (like
-> > "release/1.2.3" or "foo-1.2.3).  
-> 
-> Changing the version variable does not impact the archive name inside
-> the DL_DIR.
+As older u-boot versions are still in common use today, e.g. in the
+ci20_defconfig, extend the hook to cover a wider range of u-boot versions.
 
-Which type of packages are you talking about here ? Github-fetched
-packages (which are in fact regular tarballs), regular tarballs, or
-Git-fetched packages.
+The main code change was proposed by Arnout Vandecappelle in [1].
+Testing and comment changes were done by Thomas De Schampheleire.
 
-> For these packages the tarball name is the one specify in
-> the <pkg>_SOURCE variable which stay the same after the patch.
+[1] http://lists.busybox.net/pipermail/buildroot/2019-May/251231.html
 
-I am not sure what the "these" in "these packages" refers to.
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+---
+ boot/uboot/uboot.mk | 34 +++++++++++++++++++++++++++-------
+ 1 file changed, 27 insertions(+), 7 deletions(-)
 
-> In contrast, all github fetched packages are impacted by changing the
-> <pkg>_VERSION variable and as you point out, this cause a re-download on
-> client side (on the server side we could use hardlinks so the disk-space
-> is not impacted). I would add that it also impact the hash file that
-> needs to match the new archive name.
 
-I am not sure to follow you here. Are you saying that what Arnout
-proposed doesn't work ? Or that it works ?
+Arnout: I hope you don't mind attributing this commit to you. Otherwise, do let
+me know... (I take the blame for all problems with it :-D)
 
-> >> Also, there are a few packages that use the <pkg>_VERSION variable to store
-> >> more than just the version. For example gap-madam-bin-maxi have a suffix  
-> > 
-> > I don't see a gap-madam-bin-maxi package in Buildroot. I am missing
-> > something ?  
-> 
-> Oupsy, I don't know what appended here, I meant the gpu-amd-bin-mx51
-> subpackage of freescale-imx which is suffixed by either "-fb" or "-x11".
 
-For this one, I believe it is a mistake for the "version" to contain
--fb or -x11, the package should do this:
 
-GPU_AMD_BIN_MX51_VERSION = 11.09.01
-ifeq ($(BR2_PACKAGE_GPU_AMD_BIN_MX51_OUTPUT_FB),y)
-GPU_AMD_BIN_MX51_SOURCE = amd-gpu-bin-mx51-$(GPU_AMD_BIN_MX51_VERSION)-fb.bin
-else
-GPU_AMD_BIN_MX51_SOURCE = amd-gpu-x11-bin-mx51-$(GPU_AMD_BIN_MX51_VERSION)-x11.bin
-GPU_AMD_BIN_MX51_DEPENDENCIES = libxcb xlib_libX11 xlib_libXext \
-        xlib_libXrender xlib_libXau xlib_libXdmcp
-endif
-
-> > Kodi has two different entries in release-monitoring.org:
-> > 
-> >  https://release-monitoring.org/project/5511/, which has only the
-> >  version, but seems to be outdated
-> > 
-> >   https://release-monitoring.org/project/20547/, which has the version
-> >   + codename, and seems to be updated
-> > 
-> > So it looks like we should use the second one, and therefore keep the
-> > code name ?  
-> 
-> The second entry was not originally present. I added it myself because
-> as you say the first one is pretty outdated. I preferred add a new entry
-> rather than edit the existing one because the version scheme changed
-> (this is now using the github repo) and could break one of the multiple
-> disto that already map kodi.
-
-OK, but then it answers your initial question: for Kodi itself, we
-should use the "17.3-Foo" string as the version.
-
-Best regards,
-
-Thomas
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index ae09c37d84..5417f2b8cc 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -201,15 +201,35 @@ define UBOOT_APPLY_LOCAL_PATCHES
+ endef
+ UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_LOCAL_PATCHES
+ 
+-# This is equivalent to upstream commit
+-# http://git.denx.de/?p=u-boot.git;a=commitdiff;h=e0d20dc1521e74b82dbd69be53a048847798a90a. It
+-# fixes a build failure when libfdt-devel is installed system-wide.
+-# This only works when scripts/dtc/libfdt exists (E.G. versions containing
+-# http://git.denx.de/?p=u-boot.git;a=commitdiff;h=c0e032e0090d6541549b19cc47e06ccd1f302893)
++# Fixup inclusion of libfdt headers, which can fail in older u-boot versions
++# when libfdt-devel is installed system-wide.
++# The core change is equivalent to upstream commit
++# e0d20dc1521e74b82dbd69be53a048847798a90a (first in v2018.03). However, the fixup
++# is complicated by the fact that the underlying u-boot code changed multiple
++# times in history:
++# - The directory scripts/dtc/libfdt only exists since upstream commit
++#   c0e032e0090d6541549b19cc47e06ccd1f302893 (first in v2017.11). For earlier
++#   versions, create a dummy scripts/dtc/libfdt directory with symlinks for the
++#   fdt-related files. This allows to use the same -I<path> option for both
++#   cases.
++# - The variable 'srctree' used to be called 'SRCTREE' before upstream commit
++#   01286329b27b27eaeda045b469d41b1d9fce545a (first in v2014.04).
++# - The original location for libfdt, 'lib/libfdt/', used to be simply
++#   'libfdt' before upstream commit 0de71d507157c4bd4fddcd3a419140d2b986eed2
++#   (first in v2010.06). Make the 'lib' part optional in the substitution to
++#   handle this.
+ define UBOOT_FIXUP_LIBFDT_INCLUDE
+-	if [ -d $(@D)/scripts/dtc/libfdt ]; then \
+-		$(SED) 's%-I$$(srctree)/lib/libfdt%-I$$(srctree)/scripts/dtc/libfdt%' $(@D)/tools/Makefile; \
++	$(Q)if [ ! -d $(@D)/scripts/dtc/libfdt ]; then \
++		mkdir -p $(@D)/scripts/dtc/libfdt; \
++		cd $(@D)/scripts/dtc/libfdt; \
++		ln -s ../../../include/fdt.h .; \
++		ln -s ../../../include/libfdt*.h .; \
++		ln -s ../../../lib/libfdt/libfdt_internal.h .; \
+ 	fi
++	$(Q)$(SED) \
++		's%-I\ *\$$(srctree)/lib/libfdt%-I$$(srctree)/scripts/dtc/libfdt%; \
++		s%-I\ *\$$(SRCTREE)\(/lib\)\?/libfdt%-I$$(SRCTREE)/scripts/dtc/libfdt%' \
++		$(@D)/tools/Makefile
+ endef
+ UBOOT_POST_PATCH_HOOKS += UBOOT_FIXUP_LIBFDT_INCLUDE
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
