@@ -1,41 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 12 Jun 2019 17:46:24 +0200
-Subject: [Buildroot] [PATCH 1/2] infra/pkg-meson: allow packages to
- expand their CFLAGS/CXXFLAGS/LDFLAGS
-In-Reply-To: <20190611230043.6d986a3c@windsurf>
-References: <cover.1560286529.git.yann.morin.1998@free.fr>
- <4a99ac5f8c5f10cfc9bb20b33423aceca4773fa0.1560286529.git.yann.morin.1998@free.fr>
- <20190611230043.6d986a3c@windsurf>
-Message-ID: <20190612154624.GB2647@scaer>
+Date: Wed, 12 Jun 2019 17:58:44 +0200
+Subject: [Buildroot] [PATCH v3] mfgtools: bump revision to latest uuu
+ version
+In-Reply-To: <1f9e1d82-380b-bc03-475f-5c3283ac7f7e@mind.be>
+References: <20190608105337.19879-1-bisson.gary@gmail.com>
+ <cfe0721d-fbce-bb84-cf59-6353d7348ab8@mind.be>
+ <20190611081559.GA24465@t450s.lan>
+ <1f9e1d82-380b-bc03-475f-5c3283ac7f7e@mind.be>
+Message-ID: <20190612155844.GC2647@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Arnout, Gary, All,
 
-On 2019-06-11 23:00 +0200, Thomas Petazzoni spake thusly:
-> On Tue, 11 Jun 2019 22:55:43 +0200
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> > Some packages will want to pass extra CFLAGS, CXXFLAGS, or LDFLAGS.
-> > For example, they may want/have to pass $(TARGET_NLS_LIBS), like
-> > libglib2 when the toolchain is based on musl or uClibc (because meson
-> > does not have all the necessary infra internally to properly and reliably
-> > detect the presence of, or need for linking with, -lintl.
+On 2019-06-11 11:52 +0200, Arnout Vandecappelle spake thusly:
+> On 11/06/2019 10:15, Gary Bisson wrote:
+> >>  So, I'm in favour of creating BR2_PACKAGE_HOST_UUU and killing
+> >> BR2_PACKAGE_HOST_MFGTOOLS.
+> >>
+> >>  I marked the patch as Not Applicable in patchwork. If you convince me to do it
+> >> this way after all, we can fish it up again.
 > > 
-> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > Cc: Adam Duskett <aduskett@gmail.com>
-> > Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+> > Ok I can do that. I'll offer another series that deprecates mfgtools and creates
+> > a new uuu package.
 > 
-> This looks highly similar to
-> http://patchwork.ozlabs.org/patch/1089760/, which seems more complete.
+>  Maybe first Peter and Thomas can confirm that this is the right approach?
+> 
+>  In summary: the current version of mfgtools creates a completely different
+> program called uuu that is used in a completely different way. In other words,
+> existing scripts will no longer work. Because of this, my proposal is to create
+> a new package for it, and move the existing mfgtools to legacy.
 
-Hmm. It indeed looks to achieve the same goal, I'll look into it in more
-details shortly.
+Why ditch the older one? People are almost certain to have scripts that
+rely on it, and since the new one is not a drop-in replacement, we can
+keep the old one.
 
 Regards,
 Yann E. MORIN.
+
+>  Regards,
+>  Arnout
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
