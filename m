@@ -1,82 +1,167 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 12 Jun 2019 19:05:06 +0200
-Subject: [Buildroot] [PATCH v3] mfgtools: bump revision to latest uuu
- version
-In-Reply-To: <20190612164102.GA6917@t450s.lan>
-References: <20190608105337.19879-1-bisson.gary@gmail.com>
- <cfe0721d-fbce-bb84-cf59-6353d7348ab8@mind.be>
- <20190611081559.GA24465@t450s.lan>
- <1f9e1d82-380b-bc03-475f-5c3283ac7f7e@mind.be>
- <20190612155844.GC2647@scaer> <20190612164102.GA6917@t450s.lan>
-Message-ID: <20190612170506.GF2647@scaer>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Wed, 12 Jun 2019 21:09:28 +0200
+Subject: [Buildroot] [PATCH] package/luasyslog: new package
+Message-ID: <20190612190928.30403-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gary, All,
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/Config.in                             |  1 +
+ package/luasyslog/0001-compat-Lua-5.3.patch   | 52 +++++++++++++++++++
+ package/luasyslog/Config.in                   |  7 +++
+ package/luasyslog/luasyslog.hash              |  3 ++
+ package/luasyslog/luasyslog.mk                | 11 ++++
+ .../testing/tests/package/test_luasyslog.py   | 25 +++++++++
+ 6 files changed, 99 insertions(+)
+ create mode 100644 package/luasyslog/0001-compat-Lua-5.3.patch
+ create mode 100644 package/luasyslog/Config.in
+ create mode 100644 package/luasyslog/luasyslog.hash
+ create mode 100644 package/luasyslog/luasyslog.mk
+ create mode 100644 support/testing/tests/package/test_luasyslog.py
 
-On 2019-06-12 18:41 +0200, Gary Bisson spake thusly:
-> On Wed, Jun 12, 2019 at 05:58:44PM +0200, Yann E. MORIN wrote:
-[--SNIP--]
-> > Why ditch the older one? People are almost certain to have scripts that
-> > rely on it, and since the new one is not a drop-in replacement, we can
-> > keep the old one.
-> 
-> Reasons behind that change were:
-> 1- the current code keeps having build issues
-
-14 build failures since it was introduced 1.5 years ago, that's not
-really breaking all over the place either. ;-) Besides, it really
-started to break in May this year, and they all happen on Xogium's
-autobuilder. Bisecting should be relatively easy, there are only about
-29 commits between 2019.05-rc1 (where it seems it was still working) and
-1cbc8172 (the first known failure).
-
-> 2- the upstream project doesn't accept any patch anymore [1]
-> 3- all NXP releases now use this new version, it doesn't provide scripts
->    for the old tool any longer, even for imx6/7 releases [2]
-
-Well, I'm not speaking about the upstream tools, but tools that people
-will have written for their own use, which we may never have heard of.
-If they use it, it works for them, so why remove it?
-
-> 4- the code is ugly (Windows tool ported to Linux at some point)
-
-When has upstream code quality been a concern for us? ;-)
-
-> 5- this tool is pretty much useless without imx-uuc, right now imx-uuc
->    is working with both, but nothing is for sure about future uuc
->    releases.
-
-Ah, that is indeed a good reason to drop it: if the imx-uuc, which we
-ship for the target, needs to go hand-in-hand with mfgtools/uuu, then it
-makes sense to even completely drop mfgtools.
-
-This is actually the only reason that I find valid, and it is a
-compeling reason.
-
-So yes: rename the package to imx-uuu, and completely drop mfgtools.
-
-Thanks for the detailed explanations!
-
-Regards,
-Yann E. MORIN.
-
-> But if you feel strongly about maintaining that package on our own in BR
-> let me know.
-> 
-> Regards,
-> Gary
-> 
-> [1] https://github.com/NXPmicro/mfgtools/pull/104
-> [2] https://www.nxp.com/webapp/Download?colCode=imx-yocto-L4.14.98_2.0.0_ga
-
+diff --git a/package/Config.in b/package/Config.in
+index f592e74a9..d2ba8c483 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -650,6 +650,7 @@ menu "Lua libraries/modules"
+ 	source "package/luasec/Config.in"
+ 	source "package/luasocket/Config.in"
+ 	source "package/luasql-sqlite3/Config.in"
++	source "package/luasyslog/Config.in"
+ 	source "package/lua-valua/Config.in"
+ 	source "package/lutok/Config.in"
+ 	source "package/luv/Config.in"
+diff --git a/package/luasyslog/0001-compat-Lua-5.3.patch b/package/luasyslog/0001-compat-Lua-5.3.patch
+new file mode 100644
+index 000000000..6c2c1e591
+--- /dev/null
++++ b/package/luasyslog/0001-compat-Lua-5.3.patch
+@@ -0,0 +1,52 @@
++From b3347655bd31c4f1fd9e101787a84da0c98f2f8f Mon Sep 17 00:00:00 2001
++From: Francois Perrad <francois.perrad@gadz.org>
++Date: Wed, 12 Jun 2019 20:47:18 +0200
++Subject: [PATCH] compat Lua 5.3
++
++Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
++---
++ lsyslog.c  | 8 ++++++--
++ syslog.lua | 4 ++--
++ 2 files changed, 8 insertions(+), 4 deletions(-)
++
++diff --git a/luasyslog-1.0.0/lsyslog.c b/luasyslog-1.0.0/lsyslog.c
++index cd512dc..57121da 100644
++--- a/luasyslog-1.0.0/lsyslog.c
+++++ b/luasyslog-1.0.0/lsyslog.c
++@@ -136,7 +136,7 @@
++ 	lua_settable(L, -3);
++ }
++ 
++-static const struct luaL_reg lsysloglib[] =
+++static const struct luaL_Reg lsysloglib[] =
++ {
++ 	{"open", lsyslog_open},
++ 	{"close", lsyslog_close},
++@@ -146,7 +146,11 @@
++ 
++ int luaopen_lsyslog(lua_State *L)
++ {
++-	luaL_openlib(L, "lsyslog", lsysloglib, 0);
+++#if LUA_VERSION_NUM >= 502
+++	luaL_newlib(L, lsysloglib);
+++#else
+++	luaL_register(L, "lsyslog", lsysloglib);
+++#endif
++ 
++ 	set_info(L);
++ 	return 1;
++diff --git a/luasyslog-1.0.0/syslog.lua b/luasyslog-1.0.0/syslog.lua
++index febda00..f4d98ec 100644
++--- a/luasyslog-1.0.0/syslog.lua
+++++ b/luasyslog-1.0.0/syslog.lua
++@@ -1,5 +1,5 @@
++-require"logging"
++-require"lsyslog"
+++local logging = require"logging"
+++local lsyslog = require"lsyslog"
++ 
++ local convert =
++ {
++-- 
++2.20.1
++
+diff --git a/package/luasyslog/Config.in b/package/luasyslog/Config.in
+new file mode 100644
+index 000000000..814e7ad37
+--- /dev/null
++++ b/package/luasyslog/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_LUASYSLOG
++	bool "luasyslog"
++	select BR2_PACKAGE_LUALOGGING # runtime
++	help
++	  Syslog logging for Lua.
++
++	  http://lua.net-core.org/sputnik.lua?p=Telesto:About
+diff --git a/package/luasyslog/luasyslog.hash b/package/luasyslog/luasyslog.hash
+new file mode 100644
+index 000000000..02a0d838a
+--- /dev/null
++++ b/package/luasyslog/luasyslog.hash
+@@ -0,0 +1,3 @@
++# computed by luarocks/buildroot
++sha256 e807a614b77108ca25aeed061faf73b7ef00708f5bfebb9e4f03d27f3d453e7b  luasyslog-1.0.0-2.src.rock
++sha256 c1ed5cbf3fc02836d3fc5d2354818a5c151c1cd75fcc0bf240dbf8d2b36a3c1d  luasyslog-1.0.0/COPYING
+diff --git a/package/luasyslog/luasyslog.mk b/package/luasyslog/luasyslog.mk
+new file mode 100644
+index 000000000..1d88b6056
+--- /dev/null
++++ b/package/luasyslog/luasyslog.mk
+@@ -0,0 +1,11 @@
++################################################################################
++#
++# luasyslog
++#
++################################################################################
++
++LUASYSLOG_VERSION = 1.0.0-2
++LUASYSLOG_LICENSE = MIT
++LUASYSLOG_LICENSE_FILES = $(LUASYSLOG_SUBDIR)/COPYING
++
++$(eval $(luarocks-package))
+diff --git a/support/testing/tests/package/test_luasyslog.py b/support/testing/tests/package/test_luasyslog.py
+new file mode 100644
+index 000000000..4eb5402d0
+--- /dev/null
++++ b/support/testing/tests/package/test_luasyslog.py
+@@ -0,0 +1,25 @@
++from tests.package.test_lua import TestLuaBase
++
++
++class TestLuaLuasyslog(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUA=y
++        BR2_PACKAGE_LUASYSLOG=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("logging.syslog")
++
++
++class TestLuajitLuasyslog(TestLuaBase):
++    config = TestLuaBase.config + \
++        """
++        BR2_PACKAGE_LUAJIT=y
++        BR2_PACKAGE_LUASYSLOG=y
++        """
++
++    def test_run(self):
++        self.login()
++        self.module_test("logging.syslog")
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
