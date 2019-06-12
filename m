@@ -1,108 +1,76 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Wed, 12 Jun 2019 15:34:18 +0530
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-06-10
-In-Reply-To: <f788114a-968d-cd2e-7893-0af9ec25ce62@mind.be>
-References: <20190611060050.0BE6687AFF@hemlock.osuosl.org>
- <20190612053352.GA6981@tungsten.ozlabs.ibm.com>
- <20190612084927.4e224933@windsurf>
- <20190612070200.GB6981@tungsten.ozlabs.ibm.com>
- <20190612090647.388b2517@windsurf>
- <f788114a-968d-cd2e-7893-0af9ec25ce62@mind.be>
-Message-ID: <CABM+sgonOwJK4FM_k1toYhmW4tNALUzyKXoTGAuwtFro5-KRww@mail.gmail.com>
+From: Joel Stanley <joel@jms.id.au>
+Date: Wed, 12 Jun 2019 22:19:38 +0930
+Subject: [Buildroot] [PATCH] board: Add PowerPC mac99
+Message-ID: <20190612124938.20129-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->  Didn't we say at some point that under BR2_REPRODUCIBLE, we should
-always build
-> all host packages?
+PowerPC kernel developers were after a userspace for testing 32-bit
+powerpc kernels. This machine both suits that requirement and has
+support in qemu. It's also a fairly common piece of 32-bit ppc hardware.
 
-What is the reason behind this? I looked for it but did not find much
-valuable information.
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+ DEVELOPERS                          |  2 ++
+ board/qemu/ppc-mac99/linux.fragment |  3 +++
+ board/qemu/ppc-mac99/readme.txt     |  5 +++++
+ configs/qemu_ppc_mac99_defconfig    | 10 ++++++++++
+ 4 files changed, 20 insertions(+)
+ create mode 100644 board/qemu/ppc-mac99/linux.fragment
+ create mode 100644 board/qemu/ppc-mac99/readme.txt
+ create mode 100644 configs/qemu_ppc_mac99_defconfig
 
-> Atharva, better put this on your list of things to do :-)
-
-Of course :)
-
-Regards,
-Atharva Lele
-
-
-On Wed, Jun 12, 2019 at 1:56 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-
->
->
-> On 12/06/2019 09:06, Thomas Petazzoni wrote:
-> > Hello,
-> >
-> > On Wed, 12 Jun 2019 17:02:01 +1000
-> > Sam Bobroff <sbobroff@linux.ibm.com> wrote:
-> >
-> >> Ah, right. So that hack is no good, and it suggests that no hack on
-> >> the buildroot side can work as long as GZIP is being overwritten by the
-> >> package's build system. I'll have a go hacking the build system in cups
-> >> to rename the GZIP variable but hopefully their upstream will fix it
-> >> soon :-)
-> >>
-> >> At least some of the compressed files are part of some kind of test
-> data,
-> >> so I'll see if they're the only ones and could perhaps be left out
-> >> entirely.
-> >
-> > Alternatively, Buildroot could use a gzip wrapper, installed in
-> > $(HOST_DIR)/bin to pass this -n option when BR2_REPRODUCIBLE=y.
->
->  That sounds like the right thing to do. We only need to do install that
-> wrapper
-> if BR2_REPRODUCIBLE=y.
->
->  However, I'm afraid this will turn up packages that explicitly use
-> /bin/gzip
-> without looking at $PATH... So those will have to be fixed again...
->
-> > The
-> > gzip man page says that using the GZIP environment variable is
-> > "obsolescent":
-> >
-> >       The obsolescent environment variable GZIP can hold a set of
-> default  options
-> >        for  gzip.   These  options  are interpreted first and can be
-> overwritten by
-> >        explicit command line parameters.  As this can  cause  problems
-> when  using
-> >        scripts,  this  feature  is  supported  only for options that are
-> reasonably
-> >        likely to not cause too much harm, and gzip warns if it is used.
-> This  fea?
-> >        ture will be removed in a future release of gzip.
-> >
-> >        You  can  use  an  alias  or script instead.  For example, if
-> gzip is in the
-> >        directory /usr/bin you can prepend $HOME/bin to your PATH and
-> create an exe?
-> >        cutable script $HOME/bin/gzip containing the following:
-> >
-> >              #! /bin/sh
-> >              export PATH=/usr/bin
-> >              exec gzip -9 "$@"
-> >
-> > Of course, if we go in this direction, we have to take care of what
-> > happens if host-gzip is installed, as it would overwrite the wrapper.
->
->  Didn't we say at some point that under BR2_REPRODUCIBLE, we should always
-> build
-> all host packages? So the wrapper would be installed as part of host-gzip.
->
->  Atharva, better put this on your list of things to do :-)
->
->
->  Regards,
->  Arnout
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190612/51e59f93/attachment.html>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b64f8b8a94ce..691ce719a276 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1143,6 +1143,8 @@ N:	Joel Stanley <joel@jms.id.au>
+ F:	package/pdbg/
+ F:	board/qemu/ppc64le-pseries/
+ F:	configs/qemu_ppc64le_pseries_defconfig
++F:	board/qemu/ppc-mac99/
++F:	configs/qemu_ppc_mac99_defconfig
+ 
+ N:	Johan Derycke <johanderycke@gmail.com>
+ F:	package/python-libconfig/
+diff --git a/board/qemu/ppc-mac99/linux.fragment b/board/qemu/ppc-mac99/linux.fragment
+new file mode 100644
+index 000000000000..b1975f8253f7
+--- /dev/null
++++ b/board/qemu/ppc-mac99/linux.fragment
+@@ -0,0 +1,3 @@
++CONFIG_SERIAL_PMACZILOG=y
++CONFIG_SERIAL_PMACZILOG_TTYS=y
++CONFIG_SERIAL_PMACZILOG_CONSOLE=y
+diff --git a/board/qemu/ppc-mac99/readme.txt b/board/qemu/ppc-mac99/readme.txt
+new file mode 100644
+index 000000000000..dfb42a56b85d
+--- /dev/null
++++ b/board/qemu/ppc-mac99/readme.txt
+@@ -0,0 +1,5 @@
++Run the emulation with:
++
++  qemu-system-ppc -nographic -vga none -M mac99 -cpu g4 -m 1G -kernel mac99/images/vmlinux -drive file=mac99/images/rootfs.ext2,format=raw -net nic,model=sungem -net user -append "root=/dev/sda"
++
++Tested with QEMU 3.1.0
+diff --git a/configs/qemu_ppc_mac99_defconfig b/configs/qemu_ppc_mac99_defconfig
+new file mode 100644
+index 000000000000..daddaddb369f
+--- /dev/null
++++ b/configs/qemu_ppc_mac99_defconfig
+@@ -0,0 +1,10 @@
++BR2_powerpc=y
++BR2_powerpc_7400=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_SYSTEM_DHCP="eth0"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_DEFCONFIG="pmac32"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-mac99/linux.fragment"
++BR2_LINUX_KERNEL_VMLINUX=y
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
+-- 
+2.20.1
