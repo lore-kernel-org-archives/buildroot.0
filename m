@@ -1,85 +1,90 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Wed, 12 Jun 2019 17:07:52 +0200
-Subject: [Buildroot] [PATCH] boot/uboot: cover more u-boot versions when
- fixing up libfdt include paths
-Message-ID: <20190612150752.18508-1-patrickdepinguin@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Wed, 12 Jun 2019 17:35:45 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-06-10
+In-Reply-To: <f788114a-968d-cd2e-7893-0af9ec25ce62@mind.be>
+References: <20190611060050.0BE6687AFF@hemlock.osuosl.org>
+ <20190612053352.GA6981@tungsten.ozlabs.ibm.com>
+ <20190612084927.4e224933@windsurf>
+ <20190612070200.GB6981@tungsten.ozlabs.ibm.com>
+ <20190612090647.388b2517@windsurf>
+ <f788114a-968d-cd2e-7893-0af9ec25ce62@mind.be>
+Message-ID: <20190612153545.GA2647@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be>
+Arnout, All,
 
-The original UBOOT_FIXUP_LIBFDT_INCLUDE hook only works for u-boot versions
-starting from v2017.11.
+On 2019-06-12 10:26 +0200, Arnout Vandecappelle spake thusly:
+> On 12/06/2019 09:06, Thomas Petazzoni wrote:
+> > On Wed, 12 Jun 2019 17:02:01 +1000
+> > Sam Bobroff <sbobroff@linux.ibm.com> wrote:
+> >> Ah, right. So that hack is no good, and it suggests that no hack on
+> >> the buildroot side can work as long as GZIP is being overwritten by the
+> >> package's build system. I'll have a go hacking the build system in cups
+> >> to rename the GZIP variable but hopefully their upstream will fix it
+> >> soon :-)
+> > Alternatively, Buildroot could use a gzip wrapper, installed in
+> > $(HOST_DIR)/bin to pass this -n option when BR2_REPRODUCIBLE=y. 
+>  That sounds like the right thing to do. We only need to do install that wrapper
+> if BR2_REPRODUCIBLE=y.
 
-As older u-boot versions are still in common use today, e.g. in the
-ci20_defconfig, extend the hook to cover a wider range of u-boot versions.
+Yes, the wrapper thinggy is the best.
 
-The main code change was proposed by Arnout Vandecappelle in [1].
-Testing and comment changes were done by Thomas De Schampheleire.
+>  However, I'm afraid this will turn up packages that explicitly use /bin/gzip
+> without looking at $PATH... So those will have to be fixed again...
 
-[1] http://lists.busybox.net/pipermail/buildroot/2019-May/251231.html
+Yup, but that's not like we are not used to these kind of stupidity,
+aren't we? ;-)
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
----
- boot/uboot/uboot.mk | 34 +++++++++++++++++++++++++++-------
- 1 file changed, 27 insertions(+), 7 deletions(-)
+> > The
+> > gzip man page says that using the GZIP environment variable is
+> > "obsolescent":
+[--SNIP--]
 
+That alone mandates the use of the wrapper.
 
-Arnout: I hope you don't mind attributing this commit to you. Otherwise, do let
-me know... (I take the blame for all problems with it :-D)
+> > Of course, if we go in this direction, we have to take care of what
+> > happens if host-gzip is installed, as it would overwrite the wrapper.
+>  Didn't we say at some point that under BR2_REPRODUCIBLE, we should always build
+> all host packages? So the wrapper would be installed as part of host-gzip.
 
+Hmm.. I usually advocate for maximising the number of host packages to
+build, so as to indeed improve reproducibility.
 
+But ultimately, I'd like we identify those host tools that indeed
+generate non-reproducible output, and so we build our. Otherwise, rely
+on the host provided tools.
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index ae09c37d84..5417f2b8cc 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -201,15 +201,35 @@ define UBOOT_APPLY_LOCAL_PATCHES
- endef
- UBOOT_POST_PATCH_HOOKS += UBOOT_APPLY_LOCAL_PATCHES
- 
--# This is equivalent to upstream commit
--# http://git.denx.de/?p=u-boot.git;a=commitdiff;h=e0d20dc1521e74b82dbd69be53a048847798a90a. It
--# fixes a build failure when libfdt-devel is installed system-wide.
--# This only works when scripts/dtc/libfdt exists (E.G. versions containing
--# http://git.denx.de/?p=u-boot.git;a=commitdiff;h=c0e032e0090d6541549b19cc47e06ccd1f302893)
-+# Fixup inclusion of libfdt headers, which can fail in older u-boot versions
-+# when libfdt-devel is installed system-wide.
-+# The core change is equivalent to upstream commit
-+# e0d20dc1521e74b82dbd69be53a048847798a90a (first in v2018.03). However, the fixup
-+# is complicated by the fact that the underlying u-boot code changed multiple
-+# times in history:
-+# - The directory scripts/dtc/libfdt only exists since upstream commit
-+#   c0e032e0090d6541549b19cc47e06ccd1f302893 (first in v2017.11). For earlier
-+#   versions, create a dummy scripts/dtc/libfdt directory with symlinks for the
-+#   fdt-related files. This allows to use the same -I<path> option for both
-+#   cases.
-+# - The variable 'srctree' used to be called 'SRCTREE' before upstream commit
-+#   01286329b27b27eaeda045b469d41b1d9fce545a (first in v2014.04).
-+# - The original location for libfdt, 'lib/libfdt/', used to be simply
-+#   'libfdt' before upstream commit 0de71d507157c4bd4fddcd3a419140d2b986eed2
-+#   (first in v2010.06). Make the 'lib' part optional in the substitution to
-+#   handle this.
- define UBOOT_FIXUP_LIBFDT_INCLUDE
--	if [ -d $(@D)/scripts/dtc/libfdt ]; then \
--		$(SED) 's%-I$$(srctree)/lib/libfdt%-I$$(srctree)/scripts/dtc/libfdt%' $(@D)/tools/Makefile; \
-+	$(Q)if [ ! -d $(@D)/scripts/dtc/libfdt ]; then \
-+		mkdir -p $(@D)/scripts/dtc/libfdt; \
-+		cd $(@D)/scripts/dtc/libfdt; \
-+		ln -s ../../../include/fdt.h .; \
-+		ln -s ../../../include/libfdt*.h .; \
-+		ln -s ../../../lib/libfdt/libfdt_internal.h .; \
- 	fi
-+	$(Q)$(SED) \
-+		's%-I\ *\$$(srctree)/lib/libfdt%-I$$(srctree)/scripts/dtc/libfdt%; \
-+		s%-I\ *\$$(SRCTREE)\(/lib\)\?/libfdt%-I$$(SRCTREE)/scripts/dtc/libfdt%' \
-+		$(@D)/tools/Makefile
- endef
- UBOOT_POST_PATCH_HOOKS += UBOOT_FIXUP_LIBFDT_INCLUDE
- 
+And ultimately, I'd like that the reproducible option also applies to
+the host packages too, so that we can produce reproducible toolchains
+and SDKs as well. So, where do we draw the line? Surely, we're not going
+to build our own host toolchain. so reproducibility of the host packages
+will be limited to some extent, and only guaranteed on the system (i.e.
+the machine and distribution) that actually did the build.
+
+So, we'd have two levels of reproducibility: a high level for things
+that go in target/ and staging/ (since we handle more tools), and a
+lower level for things that go in host/ (since we can't handle all
+tools).
+
+Regards,
+Yann E. MORIN.
+
+>  Atharva, better put this on your list of things to do :-)
+> 
+> 
+>  Regards,
+>  Arnout
+> 
+
 -- 
-2.21.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
