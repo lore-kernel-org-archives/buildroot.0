@@ -1,131 +1,116 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 12 Jun 2019 18:23:04 +0200
-Subject: [Buildroot] [buildroot] patch for systemd,
- add systemd-journal-remote
-In-Reply-To: <CAJPHfYMpP_hw_JhrGd3a8CHH4p6gBoP7TQsZSb+kjB5F=VM5Uw@mail.gmail.com>
-References: <CAJPHfYMpP_hw_JhrGd3a8CHH4p6gBoP7TQsZSb+kjB5F=VM5Uw@mail.gmail.com>
-Message-ID: <20190612162304.GD2647@scaer>
+Date: Wed, 12 Jun 2019 18:37:10 +0200
+Subject: [Buildroot] [PATCH v6 1/2] meson: add per package optional
+ compiler/linker flags
+In-Reply-To: <20190423205302.14382-1-ps.report@gmx.net>
+References: <20190423205302.14382-1-ps.report@gmx.net>
+Message-ID: <20190612163710.GE2647@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yi, All,
+Peter, All,
 
-On 2019-06-12 08:04 +0800, Yi Zheng spake thusly:
-> Here is my patch on systemd, which provides an option to select
-> whether to build  'systemd-journal-remote' command.
-> 
-> Could you please have an review, and submit the patch to the offical repo?
+On 2019-04-23 22:53 +0200, Peter Seiderer spake thusly:
+> Add LIBFOO_MESON_CFLAGS, LIBFOO_MESON_LDFLAGS and LIBFOO_MESON_CXXFLAGS
+> variables to allow per package additional compiler/linker flags.
 
-Sending to the mailing list like you did _is_ the correct way to send
-submission to add new feature to Buildroot.
+So, this patch (or a variation based on it) is starting to get very much
+needed to fix the build of libglib2:
+    http://autobuild.buildroot.org/?reason=libglib2-2.60.3
 
-Yet, here are a few comments:
+I did not know about this patch, so I sent that one instead:
+    https://patchwork.ozlabs.org/patch/1114211/
 
-Use "git send-email" to send the patch: this will send an email
-properly formatted with the patch
+Of course, it looks like yours is better and I successfully used it to
+fix the above issues. Wee! \o/
 
-The commit log for the patch should lokok like:
+However, I have a few comments about it, see below...
 
-    topic: small one-line description
-
-    A few mult-line description that explains what the patch
-    does in a bit more details than the title does
-
-    Signed-off-by: Your Real NAME <your-emal@adress>
-
-Which in this case could translate to something like:
-
-    package/systemd: add option to enable systemd-journal-remote
-
-    systemd-journal-remote was added in systemd v211, so add a new option
-    to enable or disable it.
-
-    Signed-off-by: Yi Zheng <goodmenzy@gmail.com>
-
-Be sure to run "make check-package" to catch any coding-style issues
-(there are some).
-
-See also a few comments below...
-
->  I have checked that it works.
-> 
-> Thanks.
-
-> From cf907fd68480cf8573e552bb433246478edfd512 Mon Sep 17 00:00:00 2001
-> From: Brock Zheng Techyauld Ltd <yzheng@techyauld.com>
-> Date: Tue, 11 Jun 2019 21:33:40 +0800
-> Subject: [PATCH 17/17] systemd: add systemd-journal-remote supporting
-> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 > ---
->  package/systemd/Config.in  | 13 +++++++++++++
->  package/systemd/systemd.mk |  4 ++++
->  2 files changed, 17 insertions(+)
+[--SNIP--]
+> diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> index 49e27f5527..70128f6bad 100644
+> --- a/package/meson/meson.mk
+> +++ b/package/meson/meson.mk
+> @@ -60,6 +60,9 @@ define HOST_MESON_INSTALL_CROSS_CONF
+>  	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
+>  	    -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
+>  	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
+> +	    -e "s%@PKG_TARGET_CFLAGS@%%g" \
+> +	    -e "s%@PKG_TARGET_LDFLAGS@%%g" \
+> +	    -e "s%@PKG_TARGET_CXXFLAGS@%%g" \
+
+Actually, if someone wants to use that file outside of Buildroot, and
+also happend to need to pass special C/LD/CXXFLAGS for their package,
+how are they expected to do so? Can't we just install it as a template
+too?
+
+(But given that I don't like meson, I am OK that we don't want to offer
+this to external users and just decide to leave them out in the cold,
+where they belong. OK, I'm out in the box for the next 5 minutes! ;-] 
+
+>  	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
+>  	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
+>  	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
+> diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+> index 886fcf7205..9974b1e513 100644
+> --- a/package/pkg-meson.mk
+> +++ b/package/pkg-meson.mk
+> @@ -57,6 +57,10 @@ $(2)_NINJA_ENV		?=
+>  ifndef $(2)_CONFIGURE_CMDS
+>  ifeq ($(4),target)
 > 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index 92ffc7cc5a..ca27ac3eed 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -112,6 +112,19 @@ config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
->  	default "x64"   if BR2_x86_64
->  	depends on BR2_PACKAGE_SYSTEMD_BOOT
->  
-> +config BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE
-> +        bool "receive serialized journal events and store them to journal files"
+> +$(2)_MESON_SED_CFLAGS = $(if $($(2)_MESON_CFLAGS),`printf '"%s"$(comma) ' $($(2)_MESON_CFLAGS)`)
+> +$(2)_MESON_SED_LDFLAGS = $(if $($(2)_MESON_LDFLAGS),`printf '"%s"$(comma) ' $($(2)_MESON_LDFLAGS)`)
+> +$(2)_MESON_SED_CXXFLAGS = $(if $($(2)_MESON_CXXFLAGS),`printf '"%s"$(comma) ' $$($$(2)_MESON_CXXFLAGS)`)
 
-Shorten the prompt to just "enable systemd-journal-remote".
+There are two things I am not too fond about those variables:
 
-> +	depends on BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+1. for the other package infras, when a package wants to pass extra such
+flags, the package is responsible for carrying the original TARGET_CFLAGS
+(LD, CXX), and this is not automatic. With your path, this would make it
+automatic for meson, thus diverging from the usual practice.
 
-Since it depends on BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY, it should be
-located after it, below.
+It also precludes packages from actualyl overriding the default flags,
+like we currently have to do to override -ON for some packages under
+mucroblaze for example.
 
-> +	select BR2_PACKAGE_LIBCURL
-> +	help
-> +          systemd-journal-remote is a command to receive serialized journal
-> +          events and store them to journal files. Input streams are in the
-> +          Journal Export Format[1], i.e. like the output from journalctl
-> +          --output=export. For transport over the network, this serialized
-> +          stream is usually carried over an HTTPS connection.
-> +
-> +	  https://www.freedesktop.org/software/systemd/man/systemd-journal-remote.service.html
-> +
->  config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
->  	bool "HTTP server for journal events"
->  	select BR2_PACKAGE_LIBMICROHTTPD
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 0797d27f4e..d68a8ba956 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -179,6 +179,10 @@ else
->  SYSTEMD_CONF_OPTS += -Dmicrohttpd=false -Dqrencode=false
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE),y)
-> +SYSTEMD_CONF_OPTS += -Dremote=true
-> +endif
-
-Please also explicitly disable it when the option is not set, like all
-the other options are handled (see BR2_PACKAGE_SYSTEMD_HWDB for an
-example).
+2. The naming is not nice to me: why do we need to have "MESON" in the
+variable name at all? Surely, fir the other infras, we just write things
+like:
+    FOO_CFLAGS = $(TARGET_CFLAGS) -DMY_STUFF
+not:
+    FOO_AUTOTOOLS_CFLAGS = $(TARGET_CFLAGS) -DMY_STUFF
+    FOO_CMAKE_CFLAGS = $(TARGET_CFLAGS) -DMY_STUFF
+    etc...
 
 Regards,
 Yann E. MORIN.
 
->  ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
->  SYSTEMD_DEPENDENCIES += libselinux
->  SYSTEMD_CONF_OPTS += -Dselinux=true
-> -- 
-> 2.22.0
+>  # Configure package for target
+>  #
+>  #
+> @@ -70,6 +74,9 @@ define $(2)_CONFIGURE_CMDS
+>  	    -e "s%@TARGET_CFLAGS@%$$(HOST_MESON_SED_CFLAGS)%g" \
+>  	    -e "s%@TARGET_LDFLAGS@%$$(HOST_MESON_SED_LDFLAGS)%g" \
+>  	    -e "s%@TARGET_CXXFLAGS@%$$(HOST_MESON_SED_CXXFLAGS)%g" \
+> +	    -e "s%@PKG_TARGET_CFLAGS@%$$($$(PKG)_MESON_SED_CFLAGS)%g" \
+> +	    -e "s%@PKG_TARGET_LDFLAGS@%$$($$(PKG)_MESON_SED_LDFLAGS)%g" \
+> +	    -e "s%@PKG_TARGET_CXXFLAGS@%$$($$(PKG)_MESON_SED_CXXFLAGS)%g" \
+>  	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
+>  	    package/meson/cross-compilation.conf.in \
+>  	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+> --
+> 2.21.0
 > 
-
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
-
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
