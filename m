@@ -1,21 +1,30 @@
-From: Victor Huesca <victor.huesca@bootlin.com>
-Date: Wed, 12 Jun 2019 10:39:18 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 12 Jun 2019 10:51:57 +0200
 Subject: [Buildroot] [PATCH 0/4] Sanetize packages version
 In-Reply-To: <20190612092624.1ca7836d@windsurf>
 References: <20190612064209.23619-1-victor.huesca@bootlin.com>
  <20190612092624.1ca7836d@windsurf>
-Message-ID: <627e16bb-a937-a00e-7d03-7373c69433ca@bootlin.com>
+Message-ID: <3e5a390a-1d1b-2619-4d36-0538946982f8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Wed, 12 Jun 2019 09:26 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
+On 12/06/2019 09:26, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Wed, 12 Jun 2019 08:42:05 +0200
+> Victor Huesca <victor.huesca@bootlin.com> wrote:
+> 
+>> In particular packages fetched via git cannot be easily sanitized. The
+>> implementation behind the git method is to use the <pkg>_VERSION after the
+>> rope cloning to checkout the version tag. A workaround could be to add a
+>> new variable to the infrastructure that can be set to specify the tag for
+>> these cases.
+> 
 > I guess an example of this is the "at" package, which has:
 > 
 > AT_VERSION = release/3.1.23
@@ -52,31 +61,34 @@ Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 > 
 >     AT_VERSION = 3.1.23
 >     AT_GIT_COMMIT = release/$(AT_UPSTREAM_VERSION)
-> 
+
+ I'm in favour of this second solution, but call the variable $(PKG)_REVISION.
+
+ Actually, I think _DL_VERSION already covers it. The only thing we have to do
+is to make the assignment conditional, i.e. allow pre-assigned _DL_VERSION.
+
+ Alternatively, we introdcue a _REVISION ?= _VERSION and use that for
+_DL_VERSION instead of _VERSION.
+
+ Regards,
+ Arnout
+
+
 > Perhaps option (1) is the easiest ? But it has the drawback that
 > <pkg>_VERSION doesn't contain just the actual version, but like we do
 > today, some possibly semi-random stuff in addition to the version (like
 > "release/1.2.3" or "foo-1.2.3).
-
-Changing the version variable does not impact the archive name inside
-the DL_DIR. For these packages the tarball name is the one specify in
-the <pkg>_SOURCE variable which stay the same after the patch.
-
-In contrast, all github fetched packages are impacted by changing the
-<pkg>_VERSION variable and as you point out, this cause a re-download on
-client side (on the server side we could use hardlinks so the disk-space
-is not impacted). I would add that it also impact the hash file that
-needs to match the new archive name.
-
+> 
 >> Also, there are a few packages that use the <pkg>_VERSION variable to store
 >> more than just the version. For example gap-madam-bin-maxi have a suffix
 > 
 > I don't see a gap-madam-bin-maxi package in Buildroot. I am missing
 > something ?
-
-Oupsy, I don't know what appended here, I meant the gpu-amd-bin-mx51
-subpackage of freescale-imx which is suffixed by either "-fb" or "-x11".
-
+> 
+>> depending on whereas the frame buffer is selected. An other example is lua-
+>> coatpersistent which seems to have two backends  and store this in the
+>> version variable.
+>>
 >> A last case I found is the case of Kodi. Kodi's major versions have a
 >> codename in addition to the version number (eg. 18.2 "Leia" or 17.3 "Krypton").
 >> This codename may or not be consider as an inherent part of the version. I
@@ -93,18 +105,8 @@ subpackage of freescale-imx which is suffixed by either "-fb" or "-x11".
 > 
 > So it looks like we should use the second one, and therefore keep the
 > code name ?
-
-The second entry was not originally present. I added it myself because
-as you say the first one is pretty outdated. I preferred add a new entry
-rather than edit the existing one because the version scheme changed
-(this is now using the github repo) and could break one of the multiple
-disto that already map kodi.
-
-
-Best regards,
-Victor
-
--- 
-Victor Huesca, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+> 
+> Best regards,
+> 
+> Thomas
+> 
