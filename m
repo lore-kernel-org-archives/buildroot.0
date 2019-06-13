@@ -1,41 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Jun 2019 21:11:54 +0200
-Subject: [Buildroot] [PATCH] package/dbus: security bump to version
- 1.12.16
-In-Reply-To: <20190612214030.12995-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Wed, 12 Jun 2019 23:40:30 +0200")
-References: <20190612214030.12995-1-peter@korsgaard.com>
-Message-ID: <87v9x9gv0l.fsf@dell.be.48ers.dk>
+Date: Thu, 13 Jun 2019 21:12:56 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2019-06-12
+In-Reply-To: <20190613145230.GI2647@scaer> (Yann E. MORIN's message of "Thu,
+ 13 Jun 2019 16:52:30 +0200")
+References: <20190613060039.852C7154CFA@zimbra96-e16.priv.proxad.net>
+ <20190613145230.GI2647@scaer>
+Message-ID: <87r27xguyv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > Fixes the following security issues:
- > - CVE-2019-12749: Do not attempt to carry out DBUS_COOKIE_SHA1
- >   authentication for identities that differ from the user running the
- >   DBusServer.  Previously, a local attacker could manipulate symbolic links
- >   in their own home directory to bypass authentication and connect to a
- >   DBusServer with elevated privileges.  The standard system and session
- >   dbus-daemons in their default configuration were immune to this attack
- >   because they did not allow DBUS_COOKIE_SHA1, but third-party users of
- >   DBusServer such as Upstart could be vulnerable.  Thanks to Joe Vennix of
- >   Apple Information Security.
+ > Peter, All,
+ > On 2019-06-13 06:00 -0000, Thomas Petazzoni spake thusly:
+ >> Results for the '2019.05.x' branch
+ >> arm |                   weston-6.0.0 | http://autobuild.buildroot.net/results/5dd9d881cc71a81d6408590d6a8fa92372661ae9
 
- >   For details, see the advisory:
- >   https://www.openwall.com/lists/oss-security/2019/06/11/2
+ > This requires a backport of e531877e8c (package/weston: fix build with
+ > headers < 4.4)
 
- > Also contains a number of other smaller fixes, including fixes for memory
- > leaks.  For details, see NEWS:
+Yes, I will get to it this weekend.
 
- > https://gitlab.freedesktop.org/dbus/dbus/blob/dbus-1.12/NEWS
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed, thanks.
+Thanks for the heads up.
 
 -- 
 Bye, Peter Korsgaard
