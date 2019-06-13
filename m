@@ -1,93 +1,63 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Wed, 12 Jun 2019 23:50:29 -0300
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: remove bindir prefix
- from gio-2.0.pc
-In-Reply-To: <20190611192244.GG13603@scaer>
-References: <20190611173015.2205-1-fontaine.fabrice@gmail.com>
- <CAFSsvmpxfJWxeLvm-GT3-MtGq8+jh9RYUKQH1f+Onq2HEXaP+w@mail.gmail.com>
- <20190611192244.GG13603@scaer>
-Message-ID: <CAJ4jsactJaxDsU96MZym3Wu+UuUUtkcpXfET-LT1B6a=9nEUgQ@mail.gmail.com>
+From: Yi Zheng <goodmenzy@gmail.com>
+Date: Thu, 13 Jun 2019 11:05:27 +0800
+Subject: [Buildroot] [PATCH] systemd: add option to enable
+ systemd-journal-remote
+Message-ID: <CAJPHfYNGkrW8MWGQyaWgehg_wAQ=3eoNWVZHEh=DyhbebJhJTA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 11, 2019 at 4:22 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Adam, All,
->
-> On 2019-06-11 14:19 -0400, Adam Duskett spake thusly:
-> > Openembedded has a patch for this that might be even better for us to use:
-> > https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-core/glib-2.0/glib-2.0/0001-Do-not-write-bindir-into-pkg-config-files.patch
->
-> As discussed on IRC (Fabrice, you should *really* join):
->
-> Upstream glib refused that patch, because they do want to have the
-> paths.
->
-> So it has zero chance to be applied, so we'll have to carry it over and
-> over.
->
-> So, I prefer we go with the hook. Still, see comments below...
->
-> > If not, then consider this an
-> > Acked-by: Adam Duskett <aduskett@gmail.com>
-> >
-> > On Tue, Jun 11, 2019 at 1:30 PM Fabrice Fontaine
-> > <fontaine.fabrice@gmail.com> wrote:
-> > >
-> > > Apply LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE to gio-2.0.pc so
-> > > ${bindir} prefix is also removed for gbus-codegen otherwise build of
-> > > packages using this binary will fail if gbus-codegen is not installed on
-> > > host
-> > >
-> > > Fixes:
-> > >  - http://autobuild.buildroot.org/results/5c0e4f3d33e01198688d58388aabe159bd005234
-> > >
-> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > > ---
-> > >  package/libglib2/libglib2.mk | 16 ++++++++++------
-> > >  1 file changed, 10 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-> > > index 78d6e5ab32..c8db706684 100644
-> > > --- a/package/libglib2/libglib2.mk
-> > > +++ b/package/libglib2/libglib2.mk
-> > > @@ -85,13 +85,17 @@ endef
-> > >
-> > >  LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
-> > >
-> > > -# Newer versions of libglib2 prefix glib-genmarshal, gobject-query, and
-> > > -# glib-mkenums with ${bindir}. Unfortunately, this will resolve to the host
-> > > -# systems /bin/ directory, which will cause compilation issues if the host does
-> > > -# not have these programs. By removing the ${bindir}/ prefix, these programs
-> > > -# are resolved in PATH instead.
-> > > +# Newer versions of libglib2 prefix glib-genmarshal, gobject-query,
-> > > +# glib-mkenums, glib_compile_schemas, glib_compile_resources and gdbus-codegen
-> > > +# with ${bindir}. Unfortunately, this will resolve to the host systems /bin/
-> > > +# directory, which will cause compilation issues if the host does not have these
-> > > +# programs. By removing the ${bindir}/ prefix, these programs are resolved in
-> > > +# PATH instead.
-> > >  define LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE
-> > > -       $(SED) 's%$${bindir}/%%g' $(STAGING_DIR)/usr/lib/pkgconfig/glib-2.0.pc
-> > > +       for file in glib-2.0.pc gio-2.0.pc ; do \
-> > > +               $(SED) 's%$${bindir}/%%g' \
-> > > +                       $(STAGING_DIR)/usr/lib/pkgconfig/$$file ; \
->
-> IF the sed fails (for whatever reason), you'll miss the error, so...
->
-> > > +       done
->
-> ... prefer using $(foreach ...) instead of a shell loop.
+    systemd-journal-remote was added in systemd v211, so add a new option
+    to enable or disable it.
 
-Or simply
+    Signed-off-by: Yi Zheng <goodmenzy@gmail.com>
+---
+ package/systemd/Config.in  | 15 +++++++++++++++
+ package/systemd/systemd.mk |  4 ++++
+ 2 files changed, 19 insertions(+)
 
-define LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE
-        $(SED) 's%$${bindir}/%%g' \
-                $(STAGING_DIR)/usr/lib/pkgconfig/glib-2.0.pc \
-                $(STAGING_DIR)/usr/lib/pkgconfig/gio-2.0.pc
-endef
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 92ffc7cc5a..3ec529b214 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -122,6 +122,21 @@ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
 
--- 
-Carlos Santos <unixmania@gmail.com>
+          http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
+
++config BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE
++       bool "enable systemd-journal-remote"
++       default n
++       depends on BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
++       select BR2_PACKAGE_LIBCURL
++       help
++         systemd-journal-remote is a command to receive serialized
++         journal events and store them to journal files. Input
++         streams are in the Journal Export Format[1], i.e. like the
++         output from journalctl --output=export. For transport over
++         the network, this serialized stream is usually carried over
++         an HTTPS connection.
++
++         https://www.freedesktop.org/software/systemd/man/systemd-journal-remote.service.html
++
+ config BR2_PACKAGE_SYSTEMD_BACKLIGHT
+        bool "enable backlight support"
+        help
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index edc4a9ecc1..b7e36d9eb9 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -178,6 +178,10 @@ else
+ SYSTEMD_CONF_OPTS += -Dmicrohttpd=false -Dqrencode=false
+ endif
+
++ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE),y)
++SYSTEMD_CONF_OPTS += -Dremote=true
++endif
++
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ SYSTEMD_DEPENDENCIES += libselinux
+ SYSTEMD_CONF_OPTS += -Dselinux=true
+--
+2.22.0
