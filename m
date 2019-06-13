@@ -1,54 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 13 Jun 2019 21:17:55 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/libglib2: remove bindir prefix from gio-2.0.pc
-Message-ID: <20190613191755.18349-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 13 Jun 2019 21:37:44 +0200
+Subject: [Buildroot] [PATCH 1/1] iputils: set the permissions with
+ IPUTILS_PERMISSIONS
+In-Reply-To: <7191f609-e5d8-7bd6-77ca-83296f96d0f1@mind.be> (Arnout
+ Vandecappelle's message of "Mon, 10 Jun 2019 23:26:37 +0200")
+References: <20190609230702.7068-1-petr.vorel@gmail.com>
+ <4bdc9d15-b7c2-3b46-bdda-306147fa8d94@mind.be>
+ <20190610200645.GA10261@x230>
+ <7191f609-e5d8-7bd6-77ca-83296f96d0f1@mind.be>
+Message-ID: <87muilgttj.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apply LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE to gio-2.0.pc so
-${bindir} prefix is also removed for gbus-codegen otherwise build of
-packages using this binary will fail if gbus-codegen is not installed on
-host
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/5c0e4f3d33e01198688d58388aabe159bd005234
+ > On 10/06/2019 22:06, Petr Vorel wrote:
+ >> Hi Arnout,
+ >> 
+ >>> Applied to master, thanks. I updated the commit message a little.
+ >> Thanks! You've been faster, I might try to think about setcap (xattr) use if
+ >> USE_CAP=true, and setuid if USE_CAP=false.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2 (after review of Yann E. Morin and Carlos Santos):
- - Drop shell loop and use addprefix
+ >  Great!
 
- package/libglib2/libglib2.mk | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ >> Is there an easy way to detect
+ >> iso9660 usage?
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 78d6e5ab32..207352fa37 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -85,13 +85,14 @@ endef
- 
- LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
- 
--# Newer versions of libglib2 prefix glib-genmarshal, gobject-query, and
--# glib-mkenums with ${bindir}. Unfortunately, this will resolve to the host
--# systems /bin/ directory, which will cause compilation issues if the host does
--# not have these programs. By removing the ${bindir}/ prefix, these programs
--# are resolved in PATH instead.
-+# Newer versions of libglib2 prefix glib-genmarshal, gobject-query,
-+# glib-mkenums, glib_compile_schemas, glib_compile_resources and gdbus-codegen
-+# with ${bindir}. Unfortunately, this will resolve to the host systems /bin/
-+# directory, which will cause compilation issues if the host does not have these
-+# programs. By removing the ${bindir}/ prefix, these programs are resolved in
-+# PATH instead.
- define LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE
--	$(SED) 's%$${bindir}/%%g' $(STAGING_DIR)/usr/lib/pkgconfig/glib-2.0.pc
-+	$(SED) 's%$${bindir}/%%g' $(addprefix $(STAGING_DIR)/usr/lib/pkgconfig/, glib-2.0.pc gio-2.0.pc)
- endef
- LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE
- 
+ >  BR2_TARGET_ROOTFS_ISO9660 of course. Well, that one is special actually because
+ > in case of BR2_TARGET_ROOTFS_INITRAMFS or BR2_TARGET_ROOTFS_ISO9660_INITRD, the
+ > rootfs is not actually stored in the iso9660.
+
+ >  But I don't know which other filesystems lack support for xattrs.
+
+axfs, cramfs, romfs and yaffs2 as well afaik.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
