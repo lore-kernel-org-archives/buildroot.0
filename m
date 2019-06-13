@@ -1,42 +1,33 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 13 Jun 2019 22:02:35 +0000
-Subject: [Buildroot] [Bug 11961] New: libpri build failure
-Message-ID: <bug-11961-163@https.bugs.busybox.net/>
+From: Christian Stewart <christian@paral.in>
+Date: Thu, 13 Jun 2019 16:36:38 -0700
+Subject: [Buildroot] [PATCH 1/1] package/docker-engine: add disable
+ pivot_root option
+In-Reply-To: <1560458829-20187-1-git-send-email-frasigal@gmail.com>
+References: <1560458829-20187-1-git-send-email-frasigal@gmail.com>
+Message-ID: <CA+h8R2pOU_+gL_Su1+b0ibEWBOkVTWKGtg9bRvQKjQ1mivVF+Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11961
+Hi Frank,
 
-            Bug ID: 11961
-           Summary: libpri build failure
-           Product: buildroot
-           Version: 2019.02.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: zinosat at tiscali.it
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
 
-Created attachment 8096
-  --> https://bugs.busybox.net/attachment.cgi?id=8096&action=edit
-libpri build failure
+On Thu, Jun 13, 2019 at 1:47 PM Frank Sigalas <frasigal@gmail.com> wrote:
 
-I've tried to include libpri in a build based on pc_x86_64_bios_defconfig and
-using x86-64-core-i7--glibc--bleeding-edge-2018.11-1.tar.bz2
+> Sets the environment variable DOCKER_RAMDISK before starting dockerd.
+>
+> Signed-off-by: Frank Sigalas <frasigal@gmail.com>
+>
 
-it fails to build: see the attached log for details.
+I have not had a chance to test this yet, but it looks OK at a first scan.
 
-thank you
-Davide
+I wonder if we should select this automatically in the case that the system
+is built as a ramdisk and/or linked into the kernel?
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Best,
+Christian
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190613/9b12e6d7/attachment.html>
