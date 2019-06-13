@@ -1,233 +1,101 @@
-From: guoren at kernel.org <guoren@kernel.org>
-Date: Thu, 13 Jun 2019 23:14:30 +0800
-Subject: [Buildroot] [PATCH V7] configs/qemu_cskyXXX_virt: new defconfig
-Message-ID: <1560438870-25124-1-git-send-email-guoren@kernel.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 13 Jun 2019 17:35:49 +0200
+Subject: [Buildroot] [PATCH] systemd: add option to enable
+ systemd-journal-remote
+In-Reply-To: <CAJPHfYNGkrW8MWGQyaWgehg_wAQ=3eoNWVZHEh=DyhbebJhJTA@mail.gmail.com>
+References: <CAJPHfYNGkrW8MWGQyaWgehg_wAQ=3eoNWVZHEh=DyhbebJhJTA@mail.gmail.com>
+Message-ID: <20190613153549.GJ2647@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Guo Ren <ren_guo@c-sky.com>
+Yi, All,
 
-Add C-SKY defconfig for QEMU virt machine.
+Thanks for this new iteration. :-)
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
+I still have a few comments, see below.
 
-Changes in V7:
- - Fixup compile error without LINUX_HEADERS_CUSTOM_5_0 
+On 2019-06-13 11:05 +0800, Yi Zheng spake thusly:
+>     systemd-journal-remote was added in systemd v211, so add a new option
+>     to enable or disable it.
+> 
+>     Signed-off-by: Yi Zheng <goodmenzy@gmail.com>
 
----
- .gitlab-ci.yml                              |  4 ++++
- DEVELOPERS                                  |  2 ++
- board/qemu/csky/linux-ck610.config.fragment |  5 +++++
- board/qemu/csky/linux-ck807.config.fragment |  5 +++++
- board/qemu/csky/linux-ck810.config.fragment |  5 +++++
- board/qemu/csky/linux-ck860.config.fragment |  9 +++++++++
- board/qemu/csky/readme.txt                  | 12 ++++++++++++
- configs/qemu_csky610_virt_defconfig         | 17 +++++++++++++++++
- configs/qemu_csky807_virt_defconfig         | 17 +++++++++++++++++
- configs/qemu_csky810_virt_defconfig         | 17 +++++++++++++++++
- configs/qemu_csky860_virt_defconfig         | 17 +++++++++++++++++
- 11 files changed, 110 insertions(+)
- create mode 100644 board/qemu/csky/linux-ck610.config.fragment
- create mode 100644 board/qemu/csky/linux-ck807.config.fragment
- create mode 100644 board/qemu/csky/linux-ck810.config.fragment
- create mode 100644 board/qemu/csky/linux-ck860.config.fragment
- create mode 100644 board/qemu/csky/readme.txt
- create mode 100644 configs/qemu_csky610_virt_defconfig
- create mode 100644 configs/qemu_csky807_virt_defconfig
- create mode 100644 configs/qemu_csky810_virt_defconfig
- create mode 100644 configs/qemu_csky860_virt_defconfig
+These lines should not be indented; I did indent them in my previous
+reply just to make them stand out. "git send-email" would not have
+indented those lines, if you had been able to use it (alas, you had
+to use the gmail web UI to pass through the GFW).
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 2557ce1..bdaf8ad 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -249,6 +249,10 @@ qemu_aarch64_virt_defconfig: { extends: .defconfig }
- qemu_arm_versatile_defconfig: { extends: .defconfig }
- qemu_arm_versatile_nommu_defconfig: { extends: .defconfig }
- qemu_arm_vexpress_defconfig: { extends: .defconfig }
-+qemu_csky610_virt_defconfig: { extends: .defconfig }
-+qemu_csky807_virt_defconfig: { extends: .defconfig }
-+qemu_csky810_virt_defconfig: { extends: .defconfig }
-+qemu_csky860_virt_defconfig: { extends: .defconfig }
- qemu_m68k_mcf5208_defconfig: { extends: .defconfig }
- qemu_m68k_q800_defconfig: { extends: .defconfig }
- qemu_microblazebe_mmu_defconfig: { extends: .defconfig }
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b64f8b8..207eca8 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -973,7 +973,9 @@ F:	package/reaver/
- N:	Guo Ren <ren_guo@c-sky.com>
- F:	arch/Config.in.csky
- F:	board/csky/
-+F:	board/qemu/csky
- F:	configs/csky_*
-+F:	configs/qemu_csky*
- 
- N:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
- F:	configs/arm_juno_defconfig
-diff --git a/board/qemu/csky/linux-ck610.config.fragment b/board/qemu/csky/linux-ck610.config.fragment
-new file mode 100644
-index 0000000..d80d0ee
---- /dev/null
-+++ b/board/qemu/csky/linux-ck610.config.fragment
-@@ -0,0 +1,5 @@
-+CONFIG_COMPILE_TEST=y
-+CONFIG_CPU_CK610=y
-+CONFIG_CPU_PM_WAIT=y
-+CONFIG_CSKY_APB_INTC=y
-+CONFIG_GX6605S_TIMER=y
-diff --git a/board/qemu/csky/linux-ck807.config.fragment b/board/qemu/csky/linux-ck807.config.fragment
-new file mode 100644
-index 0000000..b6974f0
---- /dev/null
-+++ b/board/qemu/csky/linux-ck807.config.fragment
-@@ -0,0 +1,5 @@
-+CONFIG_COMPILE_TEST=y
-+CONFIG_CPU_CK807=y
-+# CONFIG_CPU_HAS_FPU is not set
-+CONFIG_CPU_PM_WAIT=y
-+CONFIG_CSKY_APB_INTC=y
-diff --git a/board/qemu/csky/linux-ck810.config.fragment b/board/qemu/csky/linux-ck810.config.fragment
-new file mode 100644
-index 0000000..50fa1f4
---- /dev/null
-+++ b/board/qemu/csky/linux-ck810.config.fragment
-@@ -0,0 +1,5 @@
-+CONFIG_COMPILE_TEST=y
-+CONFIG_CPU_CK810=y
-+# CONFIG_CPU_HAS_FPU is not set
-+CONFIG_CPU_PM_WAIT=y
-+CONFIG_CSKY_APB_INTC=y
-diff --git a/board/qemu/csky/linux-ck860.config.fragment b/board/qemu/csky/linux-ck860.config.fragment
-new file mode 100644
-index 0000000..e8f6af1
---- /dev/null
-+++ b/board/qemu/csky/linux-ck860.config.fragment
-@@ -0,0 +1,9 @@
-+CONFIG_COMPILE_TEST=y
-+CONFIG_CPU_CK860=y
-+# CONFIG_CPU_HAS_FPU is not set
-+CONFIG_CPU_PM_WAIT=y
-+CONFIG_SMP=y
-+CONFIG_HOTPLUG_CPU=y
-+CONFIG_CSKY_APB_INTC=y
-+CONFIG_CSKY_MPINTC=y
-+CONFIG_CSKY_MP_TIMER=y
-diff --git a/board/qemu/csky/readme.txt b/board/qemu/csky/readme.txt
-new file mode 100644
-index 0000000..89d68aa
---- /dev/null
-+++ b/board/qemu/csky/readme.txt
-@@ -0,0 +1,12 @@
-+Run with qemu:
-+
-+For ck860 smp:
-+ qemu-system-cskyv2 -M virt -cpu ck860 -smp 2 -nographic -kernel vmlinux
-+
-+For ck810/ck807:
-+ qemu-system-cskyv2 -M virt -nographic -kernel vmlinux
-+
-+For ck610:
-+ qemu-system-cskyv1 -M virt -nographic -kernel vmlinux
-+
-+The login prompt will appear in the terminal that started Qemu. Username is root and no password.
-diff --git a/configs/qemu_csky610_virt_defconfig b/configs/qemu_csky610_virt_defconfig
-new file mode 100644
-index 0000000..6433c5e
---- /dev/null
-+++ b/configs/qemu_csky610_virt_defconfig
-@@ -0,0 +1,17 @@
-+# Architecture
-+BR2_csky=y
-+BR2_ck610=y
-+
-+# System
-+BR2_ROOTFS_DEVICE_CREATION_STATIC=y
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+
-+# linux kernel header, the same version with linux kernel
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config.fragment"
-diff --git a/configs/qemu_csky807_virt_defconfig b/configs/qemu_csky807_virt_defconfig
-new file mode 100644
-index 0000000..fbbf9b3
---- /dev/null
-+++ b/configs/qemu_csky807_virt_defconfig
-@@ -0,0 +1,17 @@
-+# Architecture
-+BR2_csky=y
-+BR2_ck807=y
-+
-+# System
-+BR2_ROOTFS_DEVICE_CREATION_STATIC=y
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+
-+# linux kernel header, the same version with linux kernel
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck807.config.fragment"
-diff --git a/configs/qemu_csky810_virt_defconfig b/configs/qemu_csky810_virt_defconfig
-new file mode 100644
-index 0000000..df8b4be
---- /dev/null
-+++ b/configs/qemu_csky810_virt_defconfig
-@@ -0,0 +1,17 @@
-+# Architecture
-+BR2_csky=y
-+BR2_ck810=y
-+
-+# System
-+BR2_ROOTFS_DEVICE_CREATION_STATIC=y
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+
-+# linux kernel header, the same version with linux kernel
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck810.config.fragment"
-diff --git a/configs/qemu_csky860_virt_defconfig b/configs/qemu_csky860_virt_defconfig
-new file mode 100644
-index 0000000..b8d6ac2
---- /dev/null
-+++ b/configs/qemu_csky860_virt_defconfig
-@@ -0,0 +1,17 @@
-+# Architecture
-+BR2_csky=y
-+BR2_ck860=y
-+
-+# System
-+BR2_ROOTFS_DEVICE_CREATION_STATIC=y
-+BR2_TARGET_ROOTFS_INITRAMFS=y
-+
-+# linux kernel header, the same version with linux kernel
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck860.config.fragment"
+We have other people from RPC, that seem to manage sending patches that
+are correctly formatted. I wonder how they manage...
+
+> ---
+>  package/systemd/Config.in  | 15 +++++++++++++++
+>  package/systemd/systemd.mk |  4 ++++
+>  2 files changed, 19 insertions(+)
+> 
+> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+> index 92ffc7cc5a..3ec529b214 100644
+> --- a/package/systemd/Config.in
+> +++ b/package/systemd/Config.in
+> @@ -122,6 +122,21 @@ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+> 
+>           http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
+> 
+> +config BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE
+> +       bool "enable systemd-journal-remote"
+> +       default n
+> +       depends on BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+> +       select BR2_PACKAGE_LIBCURL
+> +       help
+
+Because you did not send this with git send-mail, the TAB indentation
+has been replaced by spaces.
+
+> +         systemd-journal-remote is a command to receive serialized
+> +         journal events and store them to journal files. Input
+> +         streams are in the Journal Export Format[1], i.e. like the
+> +         output from journalctl --output=export. For transport over
+> +         the network, this serialized stream is usually carried over
+> +         an HTTPS connection.
+> +
+> +         https://www.freedesktop.org/software/systemd/man/systemd-journal-remote.service.html
+> +
+>  config BR2_PACKAGE_SYSTEMD_BACKLIGHT
+>         bool "enable backlight support"
+>         help
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index edc4a9ecc1..b7e36d9eb9 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -178,6 +178,10 @@ else
+>  SYSTEMD_CONF_OPTS += -Dmicrohttpd=false -Dqrencode=false
+>  endif
+> 
+> +ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE),y)
+> +SYSTEMD_CONF_OPTS += -Dremote=true
+> +endif
+
+You seemed to have missed in my previous review, that we also want an
+explicit disable when the option is not set; see for example how it is
+done for BR2_PACKAGE_SYSTEMD_HWDB.
+
+Regards,
+Yann E. MORIN.
+
+> +
+>  ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+>  SYSTEMD_DEPENDENCIES += libselinux
+>  SYSTEMD_CONF_OPTS += -Dselinux=true
+> --
+> 2.22.0
+
 -- 
-2.7.4
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
