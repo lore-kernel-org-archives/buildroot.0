@@ -1,11 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Jun 2019 13:26:47 +0200
-Subject: [Buildroot] [PATCH 1/2] lmbench: mark scripts/build as bash
- script
-In-Reply-To: <20190612233934.14805-2-mmayer@broadcom.com>
-References: <20190612233934.14805-1-mmayer@broadcom.com>
- <20190612233934.14805-2-mmayer@broadcom.com>
-Message-ID: <20190613132647.61a5571b@windsurf>
+Date: Thu, 13 Jun 2019 13:28:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vdr-plugin-vnsiserver: needs
+ host-gettext
+In-Reply-To: <20190613045042.31272-1-bernd.kuhls@t-online.de>
+References: <20190613045042.31272-1-bernd.kuhls@t-online.de>
+Message-ID: <20190613132842.21409a0f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,34 +13,35 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 12 Jun 2019 16:39:33 -0700
-Markus Mayer <mmayer@broadcom.com> wrote:
+On Thu, 13 Jun 2019 06:50:42 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> While bash supports the "+=" operator for environment variables,
-> /bin/sh does not. scripts/build is making use of "+=" but declares
-> itself to be a /bin/sh script. This leads to errors of the form
->     ../scripts/build: 21: ../scripts/build: LDLIBS+= -lm: not found
-> and doesn't change the contents of LDLIBS as was the intention.
+> msgfmt is needed to build vdr-plugin-vnsiserver
+> https://github.com/FernetMenta/vdr-plugin-vnsiserver/blob/master/Makefile#L106
 > 
-> Therefore, we change the interpreter to /bin/bash, which makes things
-> work as intended.
+> On hosts which provide msgfmt the build succeeds
 > 
-> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-> ---
->  package/lmbench/0001-build_use_bash.patch | 8 ++++++++
->  1 file changed, 8 insertions(+)
->  create mode 100644 package/lmbench/0001-build_use_bash.patch
+> msgmerge -U --no-wrap --no-location --backup=none -q -N po/lt_LT.po po/vnsiserver.pot
+> msgmerge -U --no-wrap --no-location --backup=none -q -N po/de_DE.po po/vnsiserver.pot
+> msgfmt -c -o po/lt_LT.mo po/lt_LT.po
+> msgfmt -c -o po/de_DE.mo po/de_DE.po
 > 
-> diff --git a/package/lmbench/0001-build_use_bash.patch b/package/lmbench/0001-build_use_bash.patch
-> new file mode 100644
-> index 000000000000..c68ed2ef7ac4
-> --- /dev/null
-> +++ b/package/lmbench/0001-build_use_bash.patch
+> On other systems the build fails:
+> 
+> msgmerge -U --no-wrap --no-location --backup=none -q -N po/de_DE.po po/vnsiserver.pot
+> msgmerge -U --no-wrap --no-location --backup=none -q -N po/lt_LT.po po/vnsiserver.pot
+> fopen: No such file or directory
+> fopen: No such file or directory
+> 
+> Hopefully fixes
+> http://autobuild.buildroot.net/results/777/77784c9c169b7cee63ad331c5af9eede1ab0ee00/
+> and many others.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-We need all patches to have a description + Signed-off-by line.
-Ideally, they should be generated using git format-patch, but since
-there is apparently no upstream git repo for lmbench, that is not a
-requirement.
+I think we have a better proposal for this:
+http://patchwork.ozlabs.org/patch/1074926/. I switched it back to the
+"New" state.
 
 Best regards,
 
