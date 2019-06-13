@@ -1,63 +1,79 @@
-From: Yi Zheng <goodmenzy@gmail.com>
-Date: Thu, 13 Jun 2019 11:05:27 +0800
-Subject: [Buildroot] [PATCH] systemd: add option to enable
- systemd-journal-remote
-Message-ID: <CAJPHfYNGkrW8MWGQyaWgehg_wAQ=3eoNWVZHEh=DyhbebJhJTA@mail.gmail.com>
+From: Joel Stanley <joel@jms.id.au>
+Date: Thu, 13 Jun 2019 13:12:08 +0930
+Subject: [Buildroot] [PATCH v2] board: Add PowerPC mac99
+Message-ID: <20190613034208.29451-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-    systemd-journal-remote was added in systemd v211, so add a new option
-    to enable or disable it.
+PowerPC kernel developers were after a userspace for testing 32-bit
+powerpc kernels. This machine both suits that requirement and has
+support in qemu. It's also a fairly common piece of 32-bit ppc hardware.
 
-    Signed-off-by: Yi Zheng <goodmenzy@gmail.com>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Tested-by: Daniel Axtens <dja@axtens.net>
 ---
- package/systemd/Config.in  | 15 +++++++++++++++
- package/systemd/systemd.mk |  4 ++++
- 2 files changed, 19 insertions(+)
+v2: Use default output directory for qemu command line in readme
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 92ffc7cc5a..3ec529b214 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -122,6 +122,21 @@ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
+ DEVELOPERS                          |  2 ++
+ board/qemu/ppc-mac99/linux.fragment |  3 +++
+ board/qemu/ppc-mac99/readme.txt     |  5 +++++
+ configs/qemu_ppc_mac99_defconfig    | 10 ++++++++++
+ 4 files changed, 20 insertions(+)
+ create mode 100644 board/qemu/ppc-mac99/linux.fragment
+ create mode 100644 board/qemu/ppc-mac99/readme.txt
+ create mode 100644 configs/qemu_ppc_mac99_defconfig
 
-          http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
-
-+config BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE
-+       bool "enable systemd-journal-remote"
-+       default n
-+       depends on BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
-+       select BR2_PACKAGE_LIBCURL
-+       help
-+         systemd-journal-remote is a command to receive serialized
-+         journal events and store them to journal files. Input
-+         streams are in the Journal Export Format[1], i.e. like the
-+         output from journalctl --output=export. For transport over
-+         the network, this serialized stream is usually carried over
-+         an HTTPS connection.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b64f8b8a94ce..691ce719a276 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1143,6 +1143,8 @@ N:	Joel Stanley <joel@jms.id.au>
+ F:	package/pdbg/
+ F:	board/qemu/ppc64le-pseries/
+ F:	configs/qemu_ppc64le_pseries_defconfig
++F:	board/qemu/ppc-mac99/
++F:	configs/qemu_ppc_mac99_defconfig
+ 
+ N:	Johan Derycke <johanderycke@gmail.com>
+ F:	package/python-libconfig/
+diff --git a/board/qemu/ppc-mac99/linux.fragment b/board/qemu/ppc-mac99/linux.fragment
+new file mode 100644
+index 000000000000..b1975f8253f7
+--- /dev/null
++++ b/board/qemu/ppc-mac99/linux.fragment
+@@ -0,0 +1,3 @@
++CONFIG_SERIAL_PMACZILOG=y
++CONFIG_SERIAL_PMACZILOG_TTYS=y
++CONFIG_SERIAL_PMACZILOG_CONSOLE=y
+diff --git a/board/qemu/ppc-mac99/readme.txt b/board/qemu/ppc-mac99/readme.txt
+new file mode 100644
+index 000000000000..a8a18db5b9ab
+--- /dev/null
++++ b/board/qemu/ppc-mac99/readme.txt
+@@ -0,0 +1,5 @@
++Run the emulation with:
 +
-+         https://www.freedesktop.org/software/systemd/man/systemd-journal-remote.service.html
++  qemu-system-ppc -nographic -vga none -M mac99 -cpu g4 -m 1G -kernel output/images/vmlinux -drive file=output/images/rootfs.ext2,format=raw -net nic,model=sungem -net user -append "root=/dev/sda"
 +
- config BR2_PACKAGE_SYSTEMD_BACKLIGHT
-        bool "enable backlight support"
-        help
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index edc4a9ecc1..b7e36d9eb9 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -178,6 +178,10 @@ else
- SYSTEMD_CONF_OPTS += -Dmicrohttpd=false -Dqrencode=false
- endif
-
-+ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE),y)
-+SYSTEMD_CONF_OPTS += -Dremote=true
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
- SYSTEMD_DEPENDENCIES += libselinux
- SYSTEMD_CONF_OPTS += -Dselinux=true
---
-2.22.0
++Tested with QEMU 3.1.0
+diff --git a/configs/qemu_ppc_mac99_defconfig b/configs/qemu_ppc_mac99_defconfig
+new file mode 100644
+index 000000000000..daddaddb369f
+--- /dev/null
++++ b/configs/qemu_ppc_mac99_defconfig
+@@ -0,0 +1,10 @@
++BR2_powerpc=y
++BR2_powerpc_7400=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_SYSTEM_DHCP="eth0"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_DEFCONFIG="pmac32"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-mac99/linux.fragment"
++BR2_LINUX_KERNEL_VMLINUX=y
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
+-- 
+2.20.1
