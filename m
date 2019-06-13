@@ -1,31 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 13 Jun 2019 21:12:56 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2019-06-12
-In-Reply-To: <20190613145230.GI2647@scaer> (Yann E. MORIN's message of "Thu,
- 13 Jun 2019 16:52:30 +0200")
-References: <20190613060039.852C7154CFA@zimbra96-e16.priv.proxad.net>
- <20190613145230.GI2647@scaer>
-Message-ID: <87r27xguyv.fsf@dell.be.48ers.dk>
+Date: Thu, 13 Jun 2019 21:09:51 +0200
+Subject: [Buildroot] [git commit] arch: Add support for Westmere targets
+Message-ID: <20190613191301.71AD27FE20@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=97651ce275198ed650da7944b967d93a79127bd9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Peter, All,
- > On 2019-06-13 06:00 -0000, Thomas Petazzoni spake thusly:
- >> Results for the '2019.05.x' branch
- >> arm |                   weston-6.0.0 | http://autobuild.buildroot.net/results/5dd9d881cc71a81d6408590d6a8fa92372661ae9
+The westmere line of x86_64 targets lies between nehalem (corei7) and
+sandybridge (corei7-avx).  Allowing use of -march=westmere enables use of
+AES instruction set on these targets.
 
- > This requires a backport of e531877e8c (package/weston: fix build with
- > headers < 4.4)
+Signed-off-by: Esben Haabendal <esben@geanix.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ arch/Config.in.x86 | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Yes, I will get to it this weekend.
-
-Thanks for the heads up.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index 3f6983ac1b..eb655adbca 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -101,6 +101,15 @@ config BR2_x86_corei7
+ 	select BR2_X86_CPU_HAS_SSSE3
+ 	select BR2_X86_CPU_HAS_SSE4
+ 	select BR2_X86_CPU_HAS_SSE42
++config BR2_x86_westmere
++	bool "westmere"
++	select BR2_X86_CPU_HAS_MMX
++	select BR2_X86_CPU_HAS_SSE
++	select BR2_X86_CPU_HAS_SSE2
++	select BR2_X86_CPU_HAS_SSE3
++	select BR2_X86_CPU_HAS_SSSE3
++	select BR2_X86_CPU_HAS_SSE4
++	select BR2_X86_CPU_HAS_SSE42
+ config BR2_x86_corei7_avx
+ 	bool "corei7-avx"
+ 	select BR2_X86_CPU_HAS_MMX
+@@ -235,6 +244,7 @@ config BR2_ARCH
+ 	default "i686"		if BR2_x86_nocona && BR2_i386
+ 	default "i686"		if BR2_x86_core2 && BR2_i386
+ 	default "i686"		if BR2_x86_corei7 && BR2_i386
++	default "i686"		if BR2_x86_westmere && BR2_i386
+ 	default "i686"		if BR2_x86_corei7_avx && BR2_i386
+ 	default "i686"		if BR2_x86_core_avx2 && BR2_i386
+ 	default "i686"		if BR2_x86_atom && BR2_i386
+@@ -271,6 +281,7 @@ config BR2_GCC_TARGET_ARCH
+ 	default "corei7-avx"	if BR2_x86_corei7_avx
+ 	default "core-avx2"	if BR2_x86_core_avx2
+ 	default "atom"		if BR2_x86_atom
++	default "westmere"	if BR2_x86_westmere
+ 	default "silvermont"	if BR2_x86_silvermont
+ 	default "k8"		if BR2_x86_opteron
+ 	default "k8-sse3"	if BR2_x86_opteron_sse3
