@@ -1,123 +1,93 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu, 13 Jun 2019 03:08:36 +0300
-Subject: [Buildroot] [PATCH v2 2/2] package/cage: new package
-In-Reply-To: <20190613000836.41302-1-aperez@igalia.com>
-References: <20190613000836.41302-1-aperez@igalia.com>
-Message-ID: <20190613000836.41302-3-aperez@igalia.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Wed, 12 Jun 2019 23:50:29 -0300
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: remove bindir prefix
+ from gio-2.0.pc
+In-Reply-To: <20190611192244.GG13603@scaer>
+References: <20190611173015.2205-1-fontaine.fabrice@gmail.com>
+ <CAFSsvmpxfJWxeLvm-GT3-MtGq8+jh9RYUKQH1f+Onq2HEXaP+w@mail.gmail.com>
+ <20190611192244.GG13603@scaer>
+Message-ID: <CAJ4jsactJaxDsU96MZym3Wu+UuUUtkcpXfET-LT1B6a=9nEUgQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Cage is a "kiosk" Wayland compositor, which shows a single maximized
-application at a time and limits user interaction to that application.
+On Tue, Jun 11, 2019 at 4:22 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> Adam, All,
+>
+> On 2019-06-11 14:19 -0400, Adam Duskett spake thusly:
+> > Openembedded has a patch for this that might be even better for us to use:
+> > https://github.com/openembedded/openembedded-core/blob/master/meta/recipes-core/glib-2.0/glib-2.0/0001-Do-not-write-bindir-into-pkg-config-files.patch
+>
+> As discussed on IRC (Fabrice, you should *really* join):
+>
+> Upstream glib refused that patch, because they do want to have the
+> paths.
+>
+> So it has zero chance to be applied, so we'll have to carry it over and
+> over.
+>
+> So, I prefer we go with the hook. Still, see comments below...
+>
+> > If not, then consider this an
+> > Acked-by: Adam Duskett <aduskett@gmail.com>
+> >
+> > On Tue, Jun 11, 2019 at 1:30 PM Fabrice Fontaine
+> > <fontaine.fabrice@gmail.com> wrote:
+> > >
+> > > Apply LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE to gio-2.0.pc so
+> > > ${bindir} prefix is also removed for gbus-codegen otherwise build of
+> > > packages using this binary will fail if gbus-codegen is not installed on
+> > > host
+> > >
+> > > Fixes:
+> > >  - http://autobuild.buildroot.org/results/5c0e4f3d33e01198688d58388aabe159bd005234
+> > >
+> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> > > ---
+> > >  package/libglib2/libglib2.mk | 16 ++++++++++------
+> > >  1 file changed, 10 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+> > > index 78d6e5ab32..c8db706684 100644
+> > > --- a/package/libglib2/libglib2.mk
+> > > +++ b/package/libglib2/libglib2.mk
+> > > @@ -85,13 +85,17 @@ endef
+> > >
+> > >  LIBGLIB2_POST_INSTALL_TARGET_HOOKS += LIBGLIB2_REMOVE_DEV_FILES
+> > >
+> > > -# Newer versions of libglib2 prefix glib-genmarshal, gobject-query, and
+> > > -# glib-mkenums with ${bindir}. Unfortunately, this will resolve to the host
+> > > -# systems /bin/ directory, which will cause compilation issues if the host does
+> > > -# not have these programs. By removing the ${bindir}/ prefix, these programs
+> > > -# are resolved in PATH instead.
+> > > +# Newer versions of libglib2 prefix glib-genmarshal, gobject-query,
+> > > +# glib-mkenums, glib_compile_schemas, glib_compile_resources and gdbus-codegen
+> > > +# with ${bindir}. Unfortunately, this will resolve to the host systems /bin/
+> > > +# directory, which will cause compilation issues if the host does not have these
+> > > +# programs. By removing the ${bindir}/ prefix, these programs are resolved in
+> > > +# PATH instead.
+> > >  define LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE
+> > > -       $(SED) 's%$${bindir}/%%g' $(STAGING_DIR)/usr/lib/pkgconfig/glib-2.0.pc
+> > > +       for file in glib-2.0.pc gio-2.0.pc ; do \
+> > > +               $(SED) 's%$${bindir}/%%g' \
+> > > +                       $(STAGING_DIR)/usr/lib/pkgconfig/$$file ; \
+>
+> IF the sed fails (for whatever reason), you'll miss the error, so...
+>
+> > > +       done
+>
+> ... prefer using $(foreach ...) instead of a shell loop.
 
-https://www.hjdskes.nl/projects/cage/
+Or simply
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+define LIBGLIB2_REMOVE_BINDIR_PREFIX_FROM_PC_FILE
+        $(SED) 's%$${bindir}/%%g' \
+                $(STAGING_DIR)/usr/lib/pkgconfig/glib-2.0.pc \
+                $(STAGING_DIR)/usr/lib/pkgconfig/gio-2.0.pc
+endef
 
----
-Changes v1 -> v2:
-  - Reviewed dependencies (as per Thomas' suggestions)
-  - Switched to Cage 0.1.1, which does not require patching to build
-    with wlroots 0.6.0
-
----
- package/Config.in      |  1 +
- package/cage/Config.in | 32 ++++++++++++++++++++++++++++++++
- package/cage/cage.hash |  5 +++++
- package/cage/cage.mk   | 19 +++++++++++++++++++
- 4 files changed, 57 insertions(+)
- create mode 100644 package/cage/Config.in
- create mode 100644 package/cage/cage.hash
- create mode 100644 package/cage/cage.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index a7d70b6b48..bb7c97d3fd 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -329,6 +329,7 @@ comment "QT libraries and helper libraries"
- 	source "package/quazip/Config.in"
- 	source "package/qwt/Config.in"
- endif
-+	source "package/cage/Config.in"
- 	source "package/tekui/Config.in"
- 	source "package/weston/Config.in"
- 	source "package/x11r7/Config.in"
-diff --git a/package/cage/Config.in b/package/cage/Config.in
-new file mode 100644
-index 0000000000..e1f428a701
---- /dev/null
-+++ b/package/cage/Config.in
-@@ -0,0 +1,32 @@
-+config BR2_PACKAGE_CAGE
-+	bool "cage"
-+	depends on !BR2_STATIC_LIBS # wlroots
-+	depends on BR2_INSTALL_LIBSTDCPP # wlroots
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # wlroots
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_1 # wlroots
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # wlroots
-+	depends on BR2_ENABLE_LOCALE # wlroots
-+	depends on BR2_PACKAGE_HAS_UDEV # wlroots
-+	depends on BR2_PACKAGE_HAS_LIBEGL # wlroots
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # wlroots
-+	depends on BR2_PACKAGE_HAS_LIBGLES # wlroots
-+	select BR2_PACKAGE_WLROOTS
-+	help
-+	  Kiosk compositor for Wayland, which displays a single
-+	  maximized application at a time.
-+
-+	  https://www.hjdskes.nl/projects/cage/
-+
-+if BR2_PACKAGE_CAGE
-+
-+config BR2_PACKAGE_CAGE_XWAYLAND
-+	bool "XWayland support"
-+	depends on BR2_PACKAGE_XORG7 # wlroots
-+	depends on BR2_PACKAGE_WLROOTS_XWAYLAND
-+	help
-+	  Enable support for running X11 applications through XWayland
-+
-+comment "XWayland supports needs X.org and support in wlroots enabled"
-+	depends on !BR2_PACKAGE_XORG7 || !BR2_PACKAGE_WLROOTS_XWAYLAND
-+
-+endif
-diff --git a/package/cage/cage.hash b/package/cage/cage.hash
-new file mode 100644
-index 0000000000..166932bc15
---- /dev/null
-+++ b/package/cage/cage.hash
-@@ -0,0 +1,5 @@
-+# Generated locally
-+sha256 63efbe96cf307381f2bedf9b80153343e255970a70d612515da7dc325dd49478  v0.1.1.tar.gz
-+
-+# Hashes for license files:
-+sha256 1fd28695090b961ed2846627365489228d84f784bff60a90e933febcedaeb65d  LICENSE
-diff --git a/package/cage/cage.mk b/package/cage/cage.mk
-new file mode 100644
-index 0000000000..db7369276a
---- /dev/null
-+++ b/package/cage/cage.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# cage
-+#
-+################################################################################
-+
-+CAGE_VERSION = 0.1.1
-+CAGE_SITE = https://github.com/Hjdskes/cage/archive
-+CAGE_SOURCE = v$(CAGE_VERSION).tar.gz
-+CAGE_LICENSE = MIT
-+CAGE_DEPENDENCIES = host-pkgconf wlroots
-+
-+ifeq ($(BR2_PACKAGE_CAGE_XWAYLAND),y)
-+CAGE_CONF_OPTS = -Dxwayland=true
-+else
-+CAGE_CONF_OPTS = -Dxwayland=false
-+endif
-+
-+$(eval $(meson-package))
 -- 
-2.22.0
+Carlos Santos <unixmania@gmail.com>
