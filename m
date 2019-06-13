@@ -1,80 +1,109 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 13 Jun 2019 22:23:08 +0200
-Subject: [Buildroot] [PATCH v3 3/3] autobuild-run: do reproducible
- builds tests if BR2_REPRODUCIBLE=y
-In-Reply-To: <20190611123416.11533-3-itsatharva@gmail.com>
-References: <20190611123416.11533-1-itsatharva@gmail.com>
- <20190611123416.11533-3-itsatharva@gmail.com>
-Message-ID: <20190613202308.GM2647@scaer>
+From: Frank Sigalas <frasigal@gmail.com>
+Date: Thu, 13 Jun 2019 23:47:09 +0300
+Subject: [Buildroot] [PATCH 1/1] package/docker-engine: add disable
+ pivot_root option
+Message-ID: <1560458829-20187-1-git-send-email-frasigal@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On 2019-06-11 18:04 +0530, Atharva Lele spake thusly:
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> 
-> ---
-> Changes v2 -> v3:
->   - use reproducible flag so that .config i snot kept open for the entire
->     build duration. (suggested by arnout)
+Sets the environment variable DOCKER_RAMDISK before starting dockerd.
 
-Sorry, but that is still the case, see below...
+Signed-off-by: Frank Sigalas <frasigal@gmail.com>
+---
+ package/docker-engine/Config.in          |  5 +++++
+ package/docker-engine/S60dockerd-ramdisk | 38 ++++++++++++++++++++++++++++++++
+ package/docker-engine/docker-engine.mk   |  8 ++++++-
+ 3 files changed, 50 insertions(+), 1 deletion(-)
+ create mode 100644 package/docker-engine/S60dockerd-ramdisk
 
->   - remove reduntant logging (suggested by arnout)
-> 
-> Changes v1 -> v2:
->   - add trailing newline character to BR2_REPRODUCIBLE=y (suggested by arnout)
-> 
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-> ---
->  scripts/autobuild-run | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index 5ba6092..4fbd507 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -727,7 +727,14 @@ def run_instance(**kwargs):
->              log_write(kwargs['log'], "WARN: failed to generate configuration")
->              continue
->  
-> -        ret = do_build(**kwargs)
-> +        # Check if the build test is supposed to be a reproducible test
-> +        outputdir = os.path.abspath(os.path.join(idir, "output"))
-> +        with open(os.path.join(outputdir, ".config"), "r") as fconf:
-> +            reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
-> +            if reproducible:
-> +                ret = do_reproducible_build(**kwargs)
-> +            else:
-> +                ret = do_build(**kwargs)
-
-This whole if reproducible block is still indented inside the with
-block, so you'r still having .config opened during the whole build.
-
-You need to do (basically):
-
-    with open(os.path.join(outputdir, ".config"), "r") as fconf:
-        reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
-    build = do_reproducible_build if reproducible else do_build
-    ret = build(**kwargs)
-
-Regards,
-Yann E. MORIN.
-
->  
->          send_results(ret, **kwargs)
->  
-> -- 
-> 2.20.1
-> 
-
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 1fd229f..5405b3d 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -48,6 +48,11 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
+ 	help
+ 	  Build the vfs filesystem driver for Docker.
+ 
++config BR2_PACKAGE_DOCKER_ENGINE_RAMDISK
++	bool "disable pivot_root"
++	help
++	  Disable pivot_root to run docker in ramdisk.
++
+ endif
+ 
+ comment "docker-engine needs a glibc or musl toolchain w/ threads"
+diff --git a/package/docker-engine/S60dockerd-ramdisk b/package/docker-engine/S60dockerd-ramdisk
+new file mode 100644
+index 0000000..a1092b6
+--- /dev/null
++++ b/package/docker-engine/S60dockerd-ramdisk
+@@ -0,0 +1,38 @@
++#!/bin/sh
++
++NAME=dockerd
++DAEMON=/usr/bin/$NAME
++PIDFILE=/var/run/$NAME.pid
++DAEMON_ARGS=""
++
++[ -r /etc/default/$NAME ] && . /etc/default/$NAME $1
++
++do_start() {
++        echo -n "Starting $NAME: "
++        start-stop-daemon --start --quiet --background --make-pidfile \
++		--pidfile $PIDFILE --exec /usr/bin/env DOCKER_RAMDISK=1 $DAEMON -- $DAEMON_ARGS \
++                && echo "OK" || echo "FAIL"
++}
++
++do_stop() {
++        echo -n "Stopping $NAME: "
++        start-stop-daemon --stop --quiet --pidfile $PIDFILE \
++                && echo "OK" || echo "FAIL"
++}
++
++case "$1" in
++        start)
++                do_start
++                ;;
++        stop)
++                do_stop
++                ;;
++        restart)
++                do_stop
++                sleep 1
++                do_start
++                ;;
++	*)
++                echo "Usage: $0 {start|stop|restart}"
++                exit 1
++esac
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 50d4129..d4608fb 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -51,6 +51,12 @@ else
+ DOCKER_ENGINE_TAGS += exclude_graphdriver_vfs
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_RAMDISK),y)
++DOCKER_ENGINE_INIT_SCRIPT = S60dockerd-ramdisk
++else
++DOCKER_ENGINE_INIT_SCRIPT = S60dockerd
++endif
++
+ DOCKER_ENGINE_INSTALL_BINS = $(notdir $(DOCKER_ENGINE_BUILD_TARGETS))
+ 
+ define DOCKER_ENGINE_RUN_AUTOGEN
+@@ -74,7 +80,7 @@ define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+ endef
+ 
+ define DOCKER_ENGINE_INSTALL_INIT_SYSV
+-	$(INSTALL) -D -m 755 package/docker-engine/S60dockerd \
++	$(INSTALL) -D -m 755 package/docker-engine/$(DOCKER_ENGINE_INIT_SCRIPT) \
+ 		$(TARGET_DIR)/etc/init.d/S60dockerd
+ endef
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
