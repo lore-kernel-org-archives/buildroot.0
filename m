@@ -1,58 +1,57 @@
 From: Markus Mayer <mmayer@broadcom.com>
-Date: Thu, 13 Jun 2019 12:50:46 -0700
-Subject: [Buildroot] [PATCH v2 1/2] lmbench: mark scripts/build as bash
- script
+Date: Thu, 13 Jun 2019 12:50:47 -0700
+Subject: [Buildroot] [PATCH v2 2/2] lmbench: install the lmbench script on
+ the target
 In-Reply-To: <20190613195047.24870-1-mmayer@broadcom.com>
 References: <20190613195047.24870-1-mmayer@broadcom.com>
-Message-ID: <20190613195047.24870-2-mmayer@broadcom.com>
+Message-ID: <20190613195047.24870-3-mmayer@broadcom.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-scripts/build makes use of the "+=" operator which is not supported by
-/bin/sh. We switch to /bin/bash in order to avoid errors of the form
-
-    ../scripts/build: 21: ../scripts/build: LDLIBS+= -lm: not found
+We want to install the lmbench script along with the other executables,
+so we add it to the appropriate list.
 
 Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 ---
- ...-scripts-build-use-bin-bash-as-shell.patch | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/lmbench/0001-scripts-build-use-bin-bash-as-shell.patch
+ ...e-add-lmbench-to-list-of-executables.patch | 29 +++++++++++++++++++
+ 1 file changed, 29 insertions(+)
+ create mode 100644 package/lmbench/0002-src-Makefile-add-lmbench-to-list-of-executables.patch
 
-diff --git a/package/lmbench/0001-scripts-build-use-bin-bash-as-shell.patch b/package/lmbench/0001-scripts-build-use-bin-bash-as-shell.patch
+diff --git a/package/lmbench/0002-src-Makefile-add-lmbench-to-list-of-executables.patch b/package/lmbench/0002-src-Makefile-add-lmbench-to-list-of-executables.patch
 new file mode 100644
-index 000000000000..649a5f922454
+index 000000000000..5b8f44ae1d21
 --- /dev/null
-+++ b/package/lmbench/0001-scripts-build-use-bin-bash-as-shell.patch
-@@ -0,0 +1,28 @@
-+From 02a538c2b4b54b41d23dbd7668714ea4d2016131 Mon Sep 17 00:00:00 2001
++++ b/package/lmbench/0002-src-Makefile-add-lmbench-to-list-of-executables.patch
+@@ -0,0 +1,29 @@
++From c158a02561c64d0cd236f86db24cc20d0378eb72 Mon Sep 17 00:00:00 2001
 +From: Markus Mayer <mmayer@broadcom.com>
-+Date: Thu, 13 Jun 2019 12:27:04 -0700
-+Subject: [PATCH 1/2] scripts/build: use /bin/bash as shell
++Date: Thu, 13 Jun 2019 12:28:54 -0700
++Subject: [PATCH 2/2] src/Makefile: add lmbench to list of executables
 +
-+scripts/build makes use of the "+=" operator which is not supported by
-+/bin/sh. We switch to /bin/bash in order to avoid errors of the form
-+
-+    ../scripts/build: 21: ../scripts/build: LDLIBS+= -lm: not found
++We want to install the lmbench script along with the other executables,
++so we add it to the appropriate list.
 +
 +Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 +---
-+ scripts/build | 2 +-
++ src/Makefile | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/scripts/build b/scripts/build
-+index 34a1371d0056..60b755cd2320 100755
-+--- a/scripts/build
-++++ b/scripts/build
-+@@ -1,4 +1,4 @@
-+-#!/bin/sh
-++#!/bin/bash
-+ 
-+ CC=${CC-`../scripts/compiler`}
-+ MAKE=${MAKE-`../scripts/make`}
++diff --git a/src/Makefile b/src/Makefile
++index 4962815b5fe7..70dbc6794898 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -98,7 +98,7 @@ EXES =	$O/bw_file_rd $O/bw_mem $O/bw_mmap_rd $O/bw_pipe $O/bw_tcp 	\
++ 	$O/lat_select $O/lat_pipe $O/lat_rpc $O/lat_syscall $O/lat_tcp	\
++ 	$O/lat_udp $O/lat_mmap $O/mhz $O/lat_proc $O/lat_pagefault	\
++ 	$O/lat_connect $O/lat_fs $O/lat_sig $O/lat_mem_rd $O/lat_ctx	\
++-	$O/lat_sem 							\
+++	$O/lat_sem $O/lmbench						\
++ 	$O/memsize $O/lat_unix $O/lmdd $O/timing_o $O/enough		\
++ 	$O/msleep $O/loop_o $O/lat_fifo $O/lmhttp $O/lat_http		\
++ 	$O/lat_fcntl $O/disk $O/lat_unix_connect $O/flushdisk		\
 +-- 
 +2.17.1
 +
