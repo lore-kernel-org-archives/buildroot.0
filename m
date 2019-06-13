@@ -1,52 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 13 Jun 2019 13:28:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vdr-plugin-vnsiserver: needs
- host-gettext
-In-Reply-To: <20190613045042.31272-1-bernd.kuhls@t-online.de>
-References: <20190613045042.31272-1-bernd.kuhls@t-online.de>
-Message-ID: <20190613132842.21409a0f@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 13 Jun 2019 16:52:30 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2019-06-12
+In-Reply-To: <20190613060039.852C7154CFA@zimbra96-e16.priv.proxad.net>
+References: <20190613060039.852C7154CFA@zimbra96-e16.priv.proxad.net>
+Message-ID: <20190613145230.GI2647@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Peter, All,
 
-On Thu, 13 Jun 2019 06:50:42 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On 2019-06-13 06:00 -0000, Thomas Petazzoni spake thusly:
+> Results for the '2019.05.x' branch
+>          arm |                   weston-6.0.0 | http://autobuild.buildroot.net/results/5dd9d881cc71a81d6408590d6a8fa92372661ae9
 
-> msgfmt is needed to build vdr-plugin-vnsiserver
-> https://github.com/FernetMenta/vdr-plugin-vnsiserver/blob/master/Makefile#L106
-> 
-> On hosts which provide msgfmt the build succeeds
-> 
-> msgmerge -U --no-wrap --no-location --backup=none -q -N po/lt_LT.po po/vnsiserver.pot
-> msgmerge -U --no-wrap --no-location --backup=none -q -N po/de_DE.po po/vnsiserver.pot
-> msgfmt -c -o po/lt_LT.mo po/lt_LT.po
-> msgfmt -c -o po/de_DE.mo po/de_DE.po
-> 
-> On other systems the build fails:
-> 
-> msgmerge -U --no-wrap --no-location --backup=none -q -N po/de_DE.po po/vnsiserver.pot
-> msgmerge -U --no-wrap --no-location --backup=none -q -N po/lt_LT.po po/vnsiserver.pot
-> fopen: No such file or directory
-> fopen: No such file or directory
-> 
-> Hopefully fixes
-> http://autobuild.buildroot.net/results/777/77784c9c169b7cee63ad331c5af9eede1ab0ee00/
-> and many others.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This requires a backport of e531877e8c (package/weston: fix build with
+headers < 4.4)
 
-I think we have a better proposal for this:
-http://patchwork.ozlabs.org/patch/1074926/. I switched it back to the
-"New" state.
+Regards,
+Yann E. MORIN.
 
-Best regards,
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
