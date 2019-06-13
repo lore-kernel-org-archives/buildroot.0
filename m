@@ -1,79 +1,52 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Thu, 13 Jun 2019 13:12:08 +0930
-Subject: [Buildroot] [PATCH v2] board: Add PowerPC mac99
-Message-ID: <20190613034208.29451-1-joel@jms.id.au>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 13 Jun 2019 06:50:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vdr-plugin-vnsiserver: needs
+ host-gettext
+Message-ID: <20190613045042.31272-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-PowerPC kernel developers were after a userspace for testing 32-bit
-powerpc kernels. This machine both suits that requirement and has
-support in qemu. It's also a fairly common piece of 32-bit ppc hardware.
+msgfmt is needed to build vdr-plugin-vnsiserver
+https://github.com/FernetMenta/vdr-plugin-vnsiserver/blob/master/Makefile#L106
 
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Tested-by: Daniel Axtens <dja@axtens.net>
+On hosts which provide msgfmt the build succeeds
+
+msgmerge -U --no-wrap --no-location --backup=none -q -N po/lt_LT.po po/vnsiserver.pot
+msgmerge -U --no-wrap --no-location --backup=none -q -N po/de_DE.po po/vnsiserver.pot
+msgfmt -c -o po/lt_LT.mo po/lt_LT.po
+msgfmt -c -o po/de_DE.mo po/de_DE.po
+
+On other systems the build fails:
+
+msgmerge -U --no-wrap --no-location --backup=none -q -N po/de_DE.po po/vnsiserver.pot
+msgmerge -U --no-wrap --no-location --backup=none -q -N po/lt_LT.po po/vnsiserver.pot
+fopen: No such file or directory
+fopen: No such file or directory
+
+Hopefully fixes
+http://autobuild.buildroot.net/results/777/77784c9c169b7cee63ad331c5af9eede1ab0ee00/
+and many others.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: Use default output directory for qemu command line in readme
+ package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- DEVELOPERS                          |  2 ++
- board/qemu/ppc-mac99/linux.fragment |  3 +++
- board/qemu/ppc-mac99/readme.txt     |  5 +++++
- configs/qemu_ppc_mac99_defconfig    | 10 ++++++++++
- 4 files changed, 20 insertions(+)
- create mode 100644 board/qemu/ppc-mac99/linux.fragment
- create mode 100644 board/qemu/ppc-mac99/readme.txt
- create mode 100644 configs/qemu_ppc_mac99_defconfig
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b64f8b8a94ce..691ce719a276 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1143,6 +1143,8 @@ N:	Joel Stanley <joel@jms.id.au>
- F:	package/pdbg/
- F:	board/qemu/ppc64le-pseries/
- F:	configs/qemu_ppc64le_pseries_defconfig
-+F:	board/qemu/ppc-mac99/
-+F:	configs/qemu_ppc_mac99_defconfig
+diff --git a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
+index 20644d3f6b..0919cf722e 100644
+--- a/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
++++ b/package/vdr-plugin-vnsiserver/vdr-plugin-vnsiserver.mk
+@@ -8,7 +8,7 @@ VDR_PLUGIN_VNSISERVER_VERSION = v1.8.0
+ VDR_PLUGIN_VNSISERVER_SITE = $(call github,FernetMenta,vdr-plugin-vnsiserver,$(VDR_PLUGIN_VNSISERVER_VERSION))
+ VDR_PLUGIN_VNSISERVER_LICENSE = GPL-2.0+
+ VDR_PLUGIN_VNSISERVER_LICENSE_FILES = COPYING
+-VDR_PLUGIN_VNSISERVER_DEPENDENCIES = vdr
++VDR_PLUGIN_VNSISERVER_DEPENDENCIES = host-gettext vdr
  
- N:	Johan Derycke <johanderycke@gmail.com>
- F:	package/python-libconfig/
-diff --git a/board/qemu/ppc-mac99/linux.fragment b/board/qemu/ppc-mac99/linux.fragment
-new file mode 100644
-index 000000000000..b1975f8253f7
---- /dev/null
-+++ b/board/qemu/ppc-mac99/linux.fragment
-@@ -0,0 +1,3 @@
-+CONFIG_SERIAL_PMACZILOG=y
-+CONFIG_SERIAL_PMACZILOG_TTYS=y
-+CONFIG_SERIAL_PMACZILOG_CONSOLE=y
-diff --git a/board/qemu/ppc-mac99/readme.txt b/board/qemu/ppc-mac99/readme.txt
-new file mode 100644
-index 000000000000..a8a18db5b9ab
---- /dev/null
-+++ b/board/qemu/ppc-mac99/readme.txt
-@@ -0,0 +1,5 @@
-+Run the emulation with:
-+
-+  qemu-system-ppc -nographic -vga none -M mac99 -cpu g4 -m 1G -kernel output/images/vmlinux -drive file=output/images/rootfs.ext2,format=raw -net nic,model=sungem -net user -append "root=/dev/sda"
-+
-+Tested with QEMU 3.1.0
-diff --git a/configs/qemu_ppc_mac99_defconfig b/configs/qemu_ppc_mac99_defconfig
-new file mode 100644
-index 000000000000..daddaddb369f
---- /dev/null
-+++ b/configs/qemu_ppc_mac99_defconfig
-@@ -0,0 +1,10 @@
-+BR2_powerpc=y
-+BR2_powerpc_7400=y
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_DEFCONFIG="pmac32"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-mac99/linux.fragment"
-+BR2_LINUX_KERNEL_VMLINUX=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+# BR2_TARGET_ROOTFS_TAR is not set
+ VDR_PLUGIN_VNSISERVER_CXXFLAGS = CXXFLAGS="$(TARGET_CXXFLAGS) -std=c++11 -fPIC"
+ 
 -- 
 2.20.1
