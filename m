@@ -1,67 +1,54 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 14 Jun 2019 22:28:45 +0200
-Subject: [Buildroot] [PATCH v4 4/4] autobuild-run: do reproducible
+Date: Fri, 14 Jun 2019 22:35:54 +0200
+Subject: [Buildroot] [PATCH v3 3/3] autobuild-run: do reproducible
  builds tests if BR2_REPRODUCIBLE=y
-In-Reply-To: <20190614105539.16301-4-itsatharva@gmail.com>
-References: <20190614105539.16301-1-itsatharva@gmail.com>
- <20190614105539.16301-4-itsatharva@gmail.com>
-Message-ID: <20190614202845.GO2647@scaer>
+In-Reply-To: <b7f3b46f-6be2-615a-108e-2197111460d3@mind.be>
+References: <20190611123416.11533-1-itsatharva@gmail.com>
+ <20190611123416.11533-3-itsatharva@gmail.com>
+ <20190613202308.GM2647@scaer>
+ <CABM+sgrKRi873Pu3PBpqP-m6JtkHhJRMgvNPus2p+0uEja8YFA@mail.gmail.com>
+ <b7f3b46f-6be2-615a-108e-2197111460d3@mind.be>
+Message-ID: <20190614203554.GP2647@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Atharva, All,
+Arnout, All,
 
-On 2019-06-14 16:25 +0530, Atharva Lele spake thusly:
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+On 2019-06-14 10:47 +0200, Arnout Vandecappelle spake thusly:
+> On 14/06/2019 10:46, Atharva Lele wrote:
+> >> You need to do (basically):
+> > 
+> >>? ? with open(os.path.join(outputdir, ".config"), "r") as fconf:
+> >>? ? ? ? reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
+> >>? ? build = do_reproducible_build if reproducible else do_build
+> >>? ? ret = build(**kwargs)
+> > 
+> > It would still work if I just unindent the if-else block too right? This is what
+> > I actually intended to do
+> > It's working for me in testing..
+> > Like this:
+> > 
+> > ? ? with open(os.path.join(outputdir, ".config"), "r") as fconf:
+> > ? ? ? ? reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
+> > ? ? if reproducible:
+> > ? ? ? ? ret = do_reproducible_build(**kwargs)
+> > ? ? else:
+> > ? ? ? ? ret = do_build(**kwargs)
+> 
+>  Yes, and I prefer that version. Yann considers the '... if ... else ...'
+> construct more pythonese, but I kind of like explicit conditions :-)
 
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Well, if we use a language, we should write with the idioms of that
+language. Python is not C, so we should not write Python as we would C.
+
+That notwithstanding, I'm no Python expert either, so I'm also OK with
+the more "traditional and conventional" ways. ;-)
 
 Regards,
 Yann E. MORIN.
-
-> ---
-> Changes v3 -> v4:
->   - Fix indentation level for if-else, otherwise file still remains open
->     for the duration of the build.
-> 
-> Changes v2 -> v3:
->   - use reproducible flag so that .config is not kept open for the entire
->     build duration. (suggested by arnout)
->   - remove reduntant logging (suggested by arnout)
-> 
-> Changes v1 -> v2:
->   - add trailing newline character to BR2_REPRODUCIBLE=y (suggested by arnout)
-> ---
->  scripts/autobuild-run | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index b641694..6426c9e 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -727,7 +727,14 @@ def run_instance(**kwargs):
->              log_write(kwargs['log'], "WARN: failed to generate configuration")
->              continue
->  
-> -        ret = do_build(**kwargs)
-> +        # Check if the build test is supposed to be a reproducible test
-> +        outputdir = os.path.abspath(os.path.join(idir, "output"))
-> +        with open(os.path.join(outputdir, ".config"), "r") as fconf:
-> +            reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
-> +        if reproducible:
-> +            ret = do_reproducible_build(**kwargs)
-> +        else:
-> +            ret = do_build(**kwargs)
->  
->          send_results(ret, **kwargs)
->  
-> -- 
-> 2.20.1
-> 
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
