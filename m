@@ -1,66 +1,43 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Fri, 14 Jun 2019 14:23:14 +0530
-Subject: [Buildroot] [PATCH v3 3/3] autobuild-run: do reproducible
- builds tests if BR2_REPRODUCIBLE=y
-In-Reply-To: <b7f3b46f-6be2-615a-108e-2197111460d3@mind.be>
-References: <20190611123416.11533-1-itsatharva@gmail.com>
- <20190611123416.11533-3-itsatharva@gmail.com>
- <20190613202308.GM2647@scaer>
- <CABM+sgrKRi873Pu3PBpqP-m6JtkHhJRMgvNPus2p+0uEja8YFA@mail.gmail.com>
- <b7f3b46f-6be2-615a-108e-2197111460d3@mind.be>
-Message-ID: <CABM+sgrjcMGPoZfQQfVWsB4sp9BZ74HgndVmZZEktC4zHmO-Kg@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Fri, 14 Jun 2019 11:43:28 +0200
+Subject: [Buildroot] [PATCH] package/brotli: add missing TARGET_CFLAGS on
+ Bug 68485
+In-Reply-To: <87imthdgz8.fsf@dell.be.48ers.dk>
+References: <87imthdgz8.fsf@dell.be.48ers.dk>
+Message-ID: <20190614094328.119792-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> Yann considers the '... if ... else ...' construct more pythonese,
-> but I kind of like explicit conditions :-)
+When building with Bug 68485 only '-O0' flag is used loosing
+TARGET_CFLAGS. Add BROTLI_CFLAGS variable initialized with TARGET_FLAGS
+and if Bug 68485 is present append '-O0' to it. Then pass it to
+CMAKE_C_FLAGS.
 
-Haha I do see his point of view. For me, I've only worked with C for the
-last 2 years at university and my last internship so it's a bit hard to
-'talk' in
-pythonese.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/brotli/brotli.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Regards,
-Atharva Lele
-
-
-On Fri, Jun 14, 2019 at 2:17 PM Arnout Vandecappelle <arnout@mind.be> wrote:
-
->
->
-> On 14/06/2019 10:46, Atharva Lele wrote:
-> >> You need to do (basically):
-> >
-> >>    with open(os.path.join(outputdir, ".config"), "r") as fconf:
-> >>        reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
-> >>    build = do_reproducible_build if reproducible else do_build
-> >>    ret = build(**kwargs)
-> >
-> > It would still work if I just unindent the if-else block too right? This
-> is what
-> > I actually intended to do
-> > It's working for me in testing..
-> > Like this:
-> >
-> >     with open(os.path.join(outputdir, ".config"), "r") as fconf:
-> >         reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
-> >     if reproducible:
-> >         ret = do_reproducible_build(**kwargs)
-> >     else:
-> >         ret = do_build(**kwargs)
->
->  Yes, and I prefer that version. Yann considers the '... if ... else ...'
-> construct more pythonese, but I kind of like explicit conditions :-)
->
->  Regards,
->  Arnout
->
->
-> [snip]
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190614/e12fa2c2/attachment.html>
+diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
+index 248bfb9daf..134f480895 100644
+--- a/package/brotli/brotli.mk
++++ b/package/brotli/brotli.mk
+@@ -14,8 +14,12 @@ BROTLI_CONF_OPTS = \
+ 	-DBROTLI_DISABLE_TESTS=ON \
+ 	-DBROTLI_BUNDLED_MODE=OFF
+ 
++BROTLI_CFLAGS = $(TARGET_CFLAGS)
++
+ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
+-BROTLI_CONF_OPTS += -DCMAKE_C_FLAGS="-O0"
++BROTLI_CFLAGS += -O0
+ endif
+ 
++BROTLI_CONF_OPTS += -DCMAKE_C_FLAGS="$(BROTLI_CFLAGS)"
++
+ $(eval $(cmake-package))
+-- 
+2.17.1
