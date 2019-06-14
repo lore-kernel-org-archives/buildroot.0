@@ -1,51 +1,45 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 14 Jun 2019 23:03:20 +0200
-Subject: [Buildroot] [PATCH 01/27] package/keyutils: re-enable package on
- microblaze
+Date: Fri, 14 Jun 2019 23:03:21 +0200
+Subject: [Buildroot] [PATCH 02/27] package/ecryptfs-utils: re-enable package
+ on microblaze
 In-Reply-To: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
 References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190614210346.121013-2-giulio.benetti@micronovasrl.com>
+Message-ID: <20190614210346.121013-3-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-keyutils has a !BR2_microblaze introduced by commit:
-https://git.buildroot.net/buildroot/commit/?id=20e0926f4469a3486629cfd6fa7f449f2b659aa8
-that points 2 possible build failures:
-- "warning: dereferencing type-punned pointer will break strict-aliasing
-  rules" treated as an error. But this warning is not treated as an
-  error anymore since -Werror flag is not used after last version bumps
-- glibc does not export the resolver symbols resulting in linking
-  failure. But glibc used was version 2.3.6 that is not used anymore
-  since. It's been released in 2005.
-
-So re-enable package for Microblaze by removing 'depends on
-!BR2_microblaze' from keyutils Config.in
+Package has a keyutils dependency causing build failure on Microblaze,
+but keyutils build has been worked around with previous patch, so we can
+re-enable package ecryptfs-utils on Microblaze by removing 'depends on
+!BR2_microblaze'.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/keyutils/Config.in | 2 --
+ package/ecryptfs-utils/Config.in | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/package/keyutils/Config.in b/package/keyutils/Config.in
-index 6f0758f473..7813de3799 100644
---- a/package/keyutils/Config.in
-+++ b/package/keyutils/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_KEYUTILS
- 	bool "keyutils"
--	depends on !BR2_microblaze
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS # dlopen
- 	help
-@@ -10,6 +9,5 @@ config BR2_PACKAGE_KEYUTILS
- 	  http://people.redhat.com/~dhowells/keyutils/
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index 6652d33e0e..b589368a6a 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	bool "ecryptfs-utils"
+ 	depends on BR2_USE_WCHAR # gettext
+ 	depends on BR2_USE_MMU # keyutils
+-	depends on !BR2_microblaze # keyutils
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
+ 	depends on !BR2_MIPS_NABI32 # libnss
+@@ -31,7 +30,6 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	  http://ecryptfs.org
  
- comment "keyutils needs a toolchain w/ dynamic library"
+ comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynami library"
 -	depends on !BR2_microblaze
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
  	depends on BR2_USE_MMU
- 	depends on BR2_STATIC_LIBS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
 -- 
 2.17.1
