@@ -1,45 +1,45 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 14 Jun 2019 23:03:24 +0200
-Subject: [Buildroot] [PATCH 05/27] package/ecryptfs-utils: remove libnss gcc
- bug dependency
+Date: Fri, 14 Jun 2019 23:03:25 +0200
+Subject: [Buildroot] [PATCH 06/27] package/stress-ng: re-enable package on
+ microblaze
 In-Reply-To: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
 References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190614210346.121013-6-giulio.benetti@micronovasrl.com>
+Message-ID: <20190614210346.121013-7-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Package libnss has BR2_TOOLCHAIN_HAS_GCC_BUG_85862 dependency and since
-ecryptfs-utils depends on libnss it has to have this dependency too. But
-libnss has been worked around for Gcc Bug 85862 on previous patch, then
-we can remove 'depends on !BR_TOOLCHAIN_HAS_GCC_BUG_85862' and its
-comment from Config.in.
+Package stress-ng has a dependency to keyutils, but keyutils has been
+re-enabled with previous patch. Re-enable package by removing 'depends
+on !BR_microblaze' from stress-ng Config.in.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/ecryptfs-utils/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ package/stress-ng/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-index b589368a6a..68a659d33d 100644
---- a/package/ecryptfs-utils/Config.in
-+++ b/package/ecryptfs-utils/Config.in
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
- 	depends on !BR2_MIPS_NABI32 # libnss
- 	depends on !BR2_STATIC_LIBS # libnss, keyutils
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 # microblaze specific & GCC < 7.x
- 	select BR2_PACKAGE_KEYUTILS
- 	select BR2_PACKAGE_LIBNSS
- 	# runtime dependency only, some scripts are using the
-@@ -34,6 +33,3 @@ comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynami library"
+diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
+index fe92a7eb40..4fcfa3554c 100644
+--- a/package/stress-ng/Config.in
++++ b/package/stress-ng/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_STRESS_NG
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	# perf.c needs PERF_COUNT_HW_REF_CPU_CYCLES
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+-	depends on !BR2_microblaze # keyutils
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2 and ARC
+ 	depends on !BR2_nios2
+ 	depends on !BR2_arc
+@@ -21,7 +20,7 @@ config BR2_PACKAGE_STRESS_NG
+ 	  http://kernel.ubuntu.com/~cking/stress-ng/
+ 
+ comment "stress-ng needs a glibc or uClibc toolchain w/ dynamic library, headers >= 3.3"
+-	depends on !BR2_microblaze && !BR2_nios2 && !BR2_arc
++	depends on !BR2_nios2 && !BR2_arc
  	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
- 		BR2_STATIC_LIBS
--
--comment "ecryptfs needs a toolchain not affected by GCC bug 85862"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862 # libnss
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3 \
+ 		|| BR2_TOOLCHAIN_USES_MUSL
 -- 
 2.17.1
