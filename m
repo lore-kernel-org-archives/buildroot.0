@@ -1,68 +1,45 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 14 Jun 2019 23:03:23 +0200
-Subject: [Buildroot] [PATCH 04/27] package/libnss: re-enable package on
- microblaze
+Date: Fri, 14 Jun 2019 23:03:24 +0200
+Subject: [Buildroot] [PATCH 05/27] package/ecryptfs-utils: remove libnss gcc
+ bug dependency
 In-Reply-To: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
 References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190614210346.121013-5-giulio.benetti@micronovasrl.com>
+Message-ID: <20190614210346.121013-6-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Microblaze Gcc version < 8.x the build hangs due to bug 85862:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85862
-To avoid this, the libnss package has a !BR2_TOOLCHAIN_HAS_GCC_BUG_85862
-dependency. However, gcc bug 85862 only triggers when optimization is
-enabled, so we can work around the issue by passing -O0, which is what
-we do in other Buildroot packages to work around this bug.
+Package libnss has BR2_TOOLCHAIN_HAS_GCC_BUG_85862 dependency and since
+ecryptfs-utils depends on libnss it has to have this dependency too. But
+libnss has been worked around for Gcc Bug 85862 on previous patch, then
+we can remove 'depends on !BR_TOOLCHAIN_HAS_GCC_BUG_85862' and its
+comment from Config.in.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/libnss/Config.in | 4 ----
- package/libnss/libnss.mk | 8 +++++++-
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ package/ecryptfs-utils/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/libnss/Config.in b/package/libnss/Config.in
-index 34ddb91dfa..599c9a6536 100644
---- a/package/libnss/Config.in
-+++ b/package/libnss/Config.in
-@@ -3,7 +3,6 @@ config BR2_PACKAGE_LIBNSS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnspr
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnspr
- 	depends on !BR2_STATIC_LIBS
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862
- 	select BR2_PACKAGE_LIBNSPR
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_ZLIB
-@@ -19,6 +18,3 @@ config BR2_PACKAGE_LIBNSS
- comment "libnss needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index b589368a6a..68a659d33d 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
+ 	depends on !BR2_MIPS_NABI32 # libnss
+ 	depends on !BR2_STATIC_LIBS # libnss, keyutils
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 # microblaze specific & GCC < 7.x
+ 	select BR2_PACKAGE_KEYUTILS
+ 	select BR2_PACKAGE_LIBNSS
+ 	# runtime dependency only, some scripts are using the
+@@ -34,6 +33,3 @@ comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynami library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+ 		BR2_STATIC_LIBS
 -
--comment "libnss needs a toolchain not affected by GCC bug 85862"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 484c79e9da..893ff80154 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -13,9 +13,15 @@ LIBNSS_DEPENDENCIES = libnspr sqlite zlib
- LIBNSS_LICENSE = MPL-2.0
- LIBNSS_LICENSE_FILES = nss/COPYING
- 
-+LIBNSS_CFLAGS = $(TARGET_CFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85862),y)
-+LIBNSS_CFLAGS += -O0
-+endif
-+
- # Need to pass down TARGET_CFLAGS and TARGET_LDFLAGS
- define LIBNSS_FIXUP_LINUX_MK
--	echo 'OS_CFLAGS += ${TARGET_CFLAGS}' >> $(@D)/nss/coreconf/Linux.mk
-+	echo 'OS_CFLAGS += ${LIBNSS_CFLAGS}' >> $(@D)/nss/coreconf/Linux.mk
- 	echo 'LDFLAGS += ${TARGET_LDFLAGS}' >> $(@D)/nss/coreconf/Linux.mk
- endef
- 
+-comment "ecryptfs needs a toolchain not affected by GCC bug 85862"
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862 # libnss
 -- 
 2.17.1
