@@ -1,47 +1,40 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 14 Jun 2019 23:03:32 +0200
-Subject: [Buildroot] [PATCH 13/27] package/kmsxx: work around gcc bug 85180
+Date: Fri, 14 Jun 2019 23:03:33 +0200
+Subject: [Buildroot] [PATCH 14/27] package/gpsd: use common
+ BR2_TOOLCHAIN_HAS_GCC_BUG_68485
 In-Reply-To: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
 References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190614210346.121013-14-giulio.benetti@micronovasrl.com>
+Message-ID: <20190614210346.121013-15-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Microblaze Gcc version < 8.x the build hangs due to gcc bug
-85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-shows up when building kmsxx with optimization but not when building
-with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
-force using -O0.
-
-Fixes:
-http://autobuild.buildroot.net/results/360/360f19645e76314048c75424bb4b64da91742f47/
+Workaround for Gcc ICE works ok, but it's issued if BR2_microblaze=y
+with a local comment. Let's use BR2_TOOLCHAIN_HAS_GCC_BUG_68485 instead
+to avoid repeating ICE bug comment for every package affected from it.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/kmsxx/kmsxx.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ package/gpsd/gpsd.mk | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
-index c664d52361..829beb1d68 100644
---- a/package/kmsxx/kmsxx.mk
-+++ b/package/kmsxx/kmsxx.mk
-@@ -12,6 +12,14 @@ KMSXX_INSTALL_STAGING = YES
- KMSXX_DEPENDENCIES = libdrm host-pkgconf
- KMSXX_CONF_OPTS = -DKMSXX_ENABLE_PYTHON=OFF
+diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+index 16d919450f..a0853dbfd8 100644
+--- a/package/gpsd/gpsd.mk
++++ b/package/gpsd/gpsd.mk
+@@ -42,10 +42,7 @@ else
+ GPSD_SCONS_OPTS += libgpsmm=no
+ endif
  
-+KMSXX_CXXFLAGS = $(TARGET_CXXFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+KMSXX_CXXFLAGS += -O0
-+endif
-+
-+KMSXX_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(KMSXX_CXXFLAGS)"
-+
- ifeq ($(BR2_PACKAGE_KMSXX_INSTALL_TESTS),y)
- KMSXX_TESTS = \
- 	fbtest kmsblank kmscapture \
+-# prevents from triggering GCC ICE
+-# A bug was reported to the gcc bug tracker:
+-# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485
+-ifeq ($(BR2_microblaze),y)
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
+ GPSD_CFLAGS += -O0
+ endif
+ 
 -- 
 2.17.1
