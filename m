@@ -1,59 +1,84 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 14 Jun 2019 22:35:54 +0200
-Subject: [Buildroot] [PATCH v3 3/3] autobuild-run: do reproducible
- builds tests if BR2_REPRODUCIBLE=y
-In-Reply-To: <b7f3b46f-6be2-615a-108e-2197111460d3@mind.be>
-References: <20190611123416.11533-1-itsatharva@gmail.com>
- <20190611123416.11533-3-itsatharva@gmail.com>
- <20190613202308.GM2647@scaer>
- <CABM+sgrKRi873Pu3PBpqP-m6JtkHhJRMgvNPus2p+0uEja8YFA@mail.gmail.com>
- <b7f3b46f-6be2-615a-108e-2197111460d3@mind.be>
-Message-ID: <20190614203554.GP2647@scaer>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Fri, 14 Jun 2019 23:03:19 +0200
+Subject: [Buildroot] [PATCH 00/27] Microblaze clean up
+Message-ID: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+This patch series works around various Gcc bugs and re-enables Microblaze
+packages depending on these work-arounds. It also fixes some little build
+bugs considered as Gcc bugs and some package has been re-enabled because
+its build failure was due to very very old toolchains.
 
-On 2019-06-14 10:47 +0200, Arnout Vandecappelle spake thusly:
-> On 14/06/2019 10:46, Atharva Lele wrote:
-> >> You need to do (basically):
-> > 
-> >>? ? with open(os.path.join(outputdir, ".config"), "r") as fconf:
-> >>? ? ? ? reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
-> >>? ? build = do_reproducible_build if reproducible else do_build
-> >>? ? ret = build(**kwargs)
-> > 
-> > It would still work if I just unindent the if-else block too right? This is what
-> > I actually intended to do
-> > It's working for me in testing..
-> > Like this:
-> > 
-> > ? ? with open(os.path.join(outputdir, ".config"), "r") as fconf:
-> > ? ? ? ? reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
-> > ? ? if reproducible:
-> > ? ? ? ? ret = do_reproducible_build(**kwargs)
-> > ? ? else:
-> > ? ? ? ? ret = do_build(**kwargs)
-> 
->  Yes, and I prefer that version. Yann considers the '... if ... else ...'
-> construct more pythonese, but I kind of like explicit conditions :-)
+Note that this patchset is not splitted into smaller patchset because of
+packages dependencies and it would have been more difficult to understand
+the sequence of all the patches.
 
-Well, if we use a language, we should write with the idioms of that
-language. Python is not C, so we should not write Python as we would C.
+Giulio Benetti (27):
+  package/keyutils: re-enable package on microblaze
+  package/ecryptfs-utils: re-enable package on microblaze
+  package/libnss: use correct CFLAGS and LDFLAGS
+  package/libnss: re-enable package on microblaze
+  package/ecryptfs-utils: remove libnss gcc bug dependency
+  package/stress-ng: re-enable package on microblaze
+  package/bullet: re-enable package when gcc bug 85180 is present
+  package/boost: allow building on microblaze
+  package/boost: work around gcc bug 85180 for boost-fiber option
+  package/snort: work around gcc bug 85180
+  package/prboom: avoid using hardcoded optimization flags
+  package/prboom: work around gcc bug 85180
+  package/kmsxx: work around gcc bug 85180
+  package/gpsd: use common BR2_TOOLCHAIN_HAS_GCC_BUG_68485
+  package/flann: re-enable package on microblaze
+  package/libspatialindex: use common BR2_TOOLCHAIN_HAS_BUG_68485
+  package/lua-cqueues: fix build failure due to Gcc Bug 68485
+  toolchain: introduce BR2_TOOLCHAIN_HAS_GCC_BUG_63261
+  package/fxload: re-enable package on microblaze
+  package/dmalloc: re-enable package on microblaze
+  toolchain: introduce BR2_TOOLCHAIN_HAS_GCC_BUG_90620
+  package/haproxy: re-enable package on microblaze
+  package/tvheadend: fix PIE build failures
+  package/tvheadend: re-enable package on microblaze
+  package/qt5/qt5webengine: re-enable building if BUG_85682=y on Qt5
+    Latest
+  package/sqlite: work around build timeout
+  package/flashbench: remove old toolchain microblaze & sh2a workaround
 
-That notwithstanding, I'm no Python expert either, so I'm also OK with
-the more "traditional and conventional" ways. ;-)
-
-Regards,
-Yann E. MORIN.
+ package/boost/Config.in                       |  6 ++--
+ package/boost/boost.mk                        |  4 +++
+ package/bullet/Config.in                      |  4 ---
+ package/bullet/bullet.mk                      |  4 +++
+ package/dmalloc/Config.in                     |  4 ---
+ package/dmalloc/dmalloc.mk                    |  4 +++
+ package/ecryptfs-utils/Config.in              |  6 ----
+ package/flann/Config.in                       |  4 ---
+ package/flann/flann.mk                        |  4 +++
+ package/flashbench/flashbench.mk              |  9 +----
+ package/fxload/Config.in                      |  4 ---
+ package/fxload/fxload.mk                      |  9 ++++-
+ package/gpsd/gpsd.mk                          |  5 +--
+ package/haproxy/Config.in                     |  2 --
+ package/haproxy/haproxy.mk                    |  9 ++++-
+ package/keyutils/Config.in                    |  2 --
+ package/kmsxx/kmsxx.mk                        |  8 +++++
+ package/libnss/Config.in                      |  4 ---
+ package/libnss/libnss.mk                      | 16 +++++++--
+ package/libspatialindex/libspatialindex.mk    |  4 +--
+ package/lua-cqueues/lua-cqueues.mk            |  9 ++++-
+ package/prboom/prboom.mk                      | 15 ++++++++
+ package/qt5/qt5webengine/Config.in            |  6 ----
+ package/snort/snort.mk                        |  4 +++
+ package/sqlite/sqlite.mk                      |  6 ++++
+ package/stress-ng/Config.in                   |  3 +-
+ ...pie-linking-according-to-disable-pie.patch | 34 +++++++++++++++++++
+ package/tvheadend/Config.in                   |  2 --
+ package/tvheadend/tvheadend.mk                |  4 +++
+ toolchain/Config.in                           | 15 ++++++++
+ 30 files changed, 147 insertions(+), 63 deletions(-)
+ create mode 100644 package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.17.1
