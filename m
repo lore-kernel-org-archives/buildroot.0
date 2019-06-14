@@ -1,43 +1,49 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 14 Jun 2019 11:43:28 +0200
-Subject: [Buildroot] [PATCH] package/brotli: add missing TARGET_CFLAGS on
- Bug 68485
-In-Reply-To: <87imthdgz8.fsf@dell.be.48ers.dk>
-References: <87imthdgz8.fsf@dell.be.48ers.dk>
-Message-ID: <20190614094328.119792-1-giulio.benetti@micronovasrl.com>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Fri, 14 Jun 2019 16:25:36 +0530
+Subject: [Buildroot] [PATCH v4 1/4] autobuild-run: move creation of result
+ directory to run_instance()
+Message-ID: <20190614105539.16301-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When building with Bug 68485 only '-O0' flag is used loosing
-TARGET_CFLAGS. Add BROTLI_CFLAGS variable initialized with TARGET_FLAGS
-and if Bug 68485 is present append '-O0' to it. Then pass it to
-CMAKE_C_FLAGS.
+We need the result directory to be present when the check_reproducibility()
+function (implemented in the next patch) executes. As of now the results
+directory is created in the send_results() function which executes after
+check_reproducibility() will.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+
 ---
- package/brotli/brotli.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Changes v4: Add new patch to series
+---
+ scripts/autobuild-run | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
-index 248bfb9daf..134f480895 100644
---- a/package/brotli/brotli.mk
-+++ b/package/brotli/brotli.mk
-@@ -14,8 +14,12 @@ BROTLI_CONF_OPTS = \
- 	-DBROTLI_DISABLE_TESTS=ON \
- 	-DBROTLI_BUNDLED_MODE=OFF
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index ef2f2a5..190a254 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -470,8 +470,6 @@ def send_results(result, **kwargs):
+     srcdir = os.path.join(idir, "buildroot")
+     resultdir = os.path.join(outputdir, "results")
  
-+BROTLI_CFLAGS = $(TARGET_CFLAGS)
-+
- ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
--BROTLI_CONF_OPTS += -DCMAKE_C_FLAGS="-O0"
-+BROTLI_CFLAGS += -O0
- endif
+-    os.mkdir(resultdir)
+-
+     shutil.copyfile(os.path.join(outputdir, ".config"),
+                     os.path.join(resultdir, "config"))
+     shutil.copyfile(os.path.join(outputdir, "defconfig"),
+@@ -647,6 +645,9 @@ def run_instance(**kwargs):
+         if ret != 0:
+             continue
  
-+BROTLI_CONF_OPTS += -DCMAKE_C_FLAGS="$(BROTLI_CFLAGS)"
++        resultdir = os.path.join(idir, "output", "results")
++        os.mkdir(resultdir)
 +
- $(eval $(cmake-package))
+         ret = gen_config(**kwargs)
+         if ret != 0:
+             log_write(kwargs['log'], "WARN: failed to generate configuration")
 -- 
-2.17.1
+2.20.1
