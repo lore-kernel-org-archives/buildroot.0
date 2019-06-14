@@ -1,43 +1,44 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 14 Jun 2019 23:03:29 +0200
-Subject: [Buildroot] [PATCH 10/27] package/snort: work around gcc bug 85180
+Date: Fri, 14 Jun 2019 23:03:30 +0200
+Subject: [Buildroot] [PATCH 11/27] package/prboom: avoid using hardcoded
+ optimization flags
 In-Reply-To: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
 References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190614210346.121013-11-giulio.benetti@micronovasrl.com>
+Message-ID: <20190614210346.121013-12-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Microblaze Gcc version < 8.x the build hangs due to gcc bug
-85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-shows up when building snort with optimization but not when building
-with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
-force using -O0.
+Package prboom builds using -O2 flag ignoring Buildroot settings, this
+is due to the fact that -O2 is appended at the end of CFLAGS.
 
-Fixes:
-http://autobuild.buildroot.net/results/d24/d2412710f6cfbfc069e7858e507e28555baafa3e/
+Remove -O2 from 'configure' file, this way CFLAGS will contain Buildroot
+CFLAGS.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/snort/snort.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/prboom/prboom.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/snort/snort.mk b/package/snort/snort.mk
-index c767d7c545..191ef673d7 100644
---- a/package/snort/snort.mk
-+++ b/package/snort/snort.mk
-@@ -20,6 +20,10 @@ SNORT_CONF_OPTS = \
- 	--with-libpcap-includes=$(STAGING_DIR)/usr/include/pcap \
- 	--disable-static-daq
+diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
+index d370ae3fa5..6d9b55e9f6 100644
+--- a/package/prboom/prboom.mk
++++ b/package/prboom/prboom.mk
+@@ -11,6 +11,13 @@ PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
+ PRBOOM_LICENSE = GPL-2.0+
+ PRBOOM_LICENSE_FILES = COPYING
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+SNORT_CFLAGS += -O0
-+endif
++# Remove imposed -O2 CFLAG to use TARGET_CFLAGS
++define PRBOOM_FIXUP_CONFIGURE
++	sed -i 's:-O2::g' $(@D)/configure
++endef
 +
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- SNORT_DEPENDENCIES += libtirpc host-pkgconf
- SNORT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
++PRBOOM_PRE_CONFIGURE_HOOKS += PRBOOM_FIXUP_CONFIGURE
++
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ PRBOOM_DEPENDENCIES += libpng
+ endif
 -- 
 2.17.1
