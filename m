@@ -1,50 +1,53 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 14 Jun 2019 23:03:36 +0200
-Subject: [Buildroot] [PATCH 17/27] package/lua-cqueues: fix build failure
- due to Gcc Bug 68485
+Date: Fri, 14 Jun 2019 23:03:37 +0200
+Subject: [Buildroot] [PATCH 18/27] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_GCC_BUG_63261
 In-Reply-To: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
 References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190614210346.121013-18-giulio.benetti@micronovasrl.com>
+Message-ID: <20190614210346.121013-19-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Package lua-cqueues manifests Microblaze Gcc Bug 68485 resulting in a
-build failure due to an Internal Compiler Error.
+GCC hangs while building fxload for the Microblaze Arch using following
+defconfig:
+'
+BR2_microblazeel=y
+BR2_OPTIMIZE_2=y
+BR2_KERNEL_HEADERS_5_0=y
+BR2_GCC_VERSION_7_X=y
+BR2_PACKAGE_FXLOAD=y
+'
 
-As done for other packages in Buildroot work around this Gcc Bug by
-setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y.
+Reported:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63261
 
-Fixes:
-http://autobuild.buildroot.net/results/c35/c35964dda4e2328c2c1f3b2388677b68c5ed461e/
+This bug has been fixed on Gcc 8.x.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/lua-cqueues/lua-cqueues.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ toolchain/Config.in | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/lua-cqueues/lua-cqueues.mk b/package/lua-cqueues/lua-cqueues.mk
-index 4f31c3277f..42dacc1946 100644
---- a/package/lua-cqueues/lua-cqueues.mk
-+++ b/package/lua-cqueues/lua-cqueues.mk
-@@ -10,8 +10,15 @@ LUA_CQUEUES_LICENSE = MIT
- LUA_CQUEUES_LICENSE_FILES = LICENSE
- LUA_CQUEUES_DEPENDENCIES = luainterpreter openssl host-m4
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index 7726ae6fae..f73a5364fc 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -113,6 +113,13 @@ config BR2_TOOLCHAIN_SUPPORTS_VARIADIC_MI_THUNK
+ 	depends on !BR2_or1k
+ 	depends on !BR2_xtensa
  
-+LUA_CQUEUES_CFLAGS = $(TARGET_CFLAGS)
++# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63261. This bug no
++# longer exists in gcc 8.x.
++config BR2_TOOLCHAIN_HAS_GCC_BUG_63261
++	bool
++	default y if BR2_microblaze
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
 +
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
-+LUA_CQUEUES_CFLAGS += -O0
-+endif
-+
- define LUA_CQUEUES_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) -C $(@D) \
-+	$(TARGET_MAKE_ENV) $(MAKE1) $(TARGET_CONFIGURE_OPTS) \
-+		CFLAGS="$(LUA_CQUEUES_CFLAGS)" -C $(@D) \
- 		prefix="$(STAGING_DIR)/usr" all$(LUAINTERPRETER_ABIVER)
- endef
- 
+ # Prior to gcc 7.x, exception_ptr, nested_exception and future from
+ # libstdc++ would only be provided on architectures that support
+ # always lock-free atomic ints. See
 -- 
 2.17.1
