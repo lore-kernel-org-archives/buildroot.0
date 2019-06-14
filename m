@@ -1,87 +1,38 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Fri, 14 Jun 2019 16:25:38 +0530
-Subject: [Buildroot] [PATCH v4 3/4] autobuild-run: initial implementation of
- do_reproducible_build()
-In-Reply-To: <20190614105539.16301-1-itsatharva@gmail.com>
-References: <20190614105539.16301-1-itsatharva@gmail.com>
-Message-ID: <20190614105539.16301-3-itsatharva@gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Fri, 14 Jun 2019 18:24:23 +0200
+Subject: [Buildroot] [PATCH 1/1] iputils: set the permissions with
+ IPUTILS_PERMISSIONS
+In-Reply-To: <87muilgttj.fsf@dell.be.48ers.dk>
+References: <20190609230702.7068-1-petr.vorel@gmail.com>
+ <4bdc9d15-b7c2-3b46-bdda-306147fa8d94@mind.be>
+ <20190610200645.GA10261@x230>
+ <7191f609-e5d8-7bd6-77ca-83296f96d0f1@mind.be>
+ <87muilgttj.fsf@dell.be.48ers.dk>
+Message-ID: <20190614162422.GB4812@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This new function will call do_build() twice to produce two builds
-and then check their reproducibility.
+Hi Peter,
 
-Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+>  >> Is there an easy way to detect
+>  >> iso9660 usage?
 
----
-Changes v3 -> v4:
-  - Remove spaces on empty lines (suggested by Yann)
+>  >  BR2_TARGET_ROOTFS_ISO9660 of course. Well, that one is special actually because
+>  > in case of BR2_TARGET_ROOTFS_INITRAMFS or BR2_TARGET_ROOTFS_ISO9660_INITRD, the
+>  > rootfs is not actually stored in the iso9660.
 
-Changes v2 -> v3:
-  - make clean outputs to logfile, similar to other make calls (suggested by y_morin)
-  - Output dir needs abspath (suggested by y_morin)
-  - Directly use make clean as arguments rather than putting it into a variable
-  - Added missing period at end of commit message (suggested by arnout)
+>  >  But I don't know which other filesystems lack support for xattrs.
 
-Changes v1 -> v2:
-  - make clean outputs to devnull (suggested by arnout)
-  - remove unnecessary arguments to make clean (suggested by arnout)
----
- scripts/autobuild-run | 37 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 37 insertions(+)
+> axfs, cramfs, romfs and yaffs2 as well afaik.
+Thanks a lot.
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index a053446..b641694 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -492,6 +492,43 @@ def do_build(**kwargs):
-     log_write(log, "INFO: build successful")
-     return 0
- 
-+def do_reproducible_build(**kwargs):
-+    """Run the builds for reproducibility testing
-+
-+    Build twice with the same configuration. Calls do_build() to
-+    perform the actual build.
-+    """
-+
-+    idir = "instance-%d" % kwargs['instance']
-+    outputdir = os.path.abspath(os.path.join(idir, "output"))
-+    srcdir = os.path.join(idir, "buildroot")
-+    log = kwargs['log']
-+
-+    # Start the first build
-+    log_write(log, "INFO: Reproducible Build Test, starting build 1")
-+    ret = do_build(**kwargs)
-+    if ret != 0:
-+        log_write(log, "INFO: build 1 failed, skipping build 2")
-+        return ret
-+
-+    # First build has been built, move files and start build 2
-+    os.rename(os.path.join(outputdir, "images"), os.path.join(outputdir, "images-1"))
-+
-+    # Clean up build 1
-+    f = open(os.path.join(outputdir, "logfile"), "w+")
-+    subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir, "clean"], stdout=f, stderr=f)
-+
-+    # Start the second build
-+    log_write(log, "INFO: Reproducible Build Test, starting build 2")
-+    ret = do_build(**kwargs)
-+    if ret != 0:
-+        log_write(log, "INFO: build 2 failed")
-+        return ret
-+
-+    # Assuming both have built successfully
-+    ret = check_reproducibility(**kwargs)
-+    return ret
-+
- def send_results(result, **kwargs):
-     """Prepare and store/send tarball with results
- 
--- 
-2.20.1
+I guess BR2_TARGET_ROOTFS_TAR (and other tarballs supported)
+supports xattrs (--xattrs-include='*' in fs/tar/tar.mk).
+
+It'd be nice if buildroot has BR2_TARGET_ROOTFS_HAS_XATTRS.
+
+Kind regards,
+Petr
