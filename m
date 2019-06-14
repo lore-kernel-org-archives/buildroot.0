@@ -1,9 +1,9 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 14 Jun 2019 23:03:31 +0200
-Subject: [Buildroot] [PATCH 12/27] package/prboom: work around gcc bug 85180
+Date: Fri, 14 Jun 2019 23:03:32 +0200
+Subject: [Buildroot] [PATCH 13/27] package/kmsxx: work around gcc bug 85180
 In-Reply-To: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
 References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190614210346.121013-13-giulio.benetti@micronovasrl.com>
+Message-ID: <20190614210346.121013-14-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,36 +12,36 @@ To: buildroot@busybox.net
 
 With Microblaze Gcc version < 8.x the build hangs due to gcc bug
 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-shows up when building prboom with optimization but not when building
+shows up when building kmsxx with optimization but not when building
 with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
 force using -O0.
 
 Fixes:
-http://autobuild.buildroot.net/results/e72/e72a2070ab7e9a093c3c70002ee94ee57a6154f6/
+http://autobuild.buildroot.net/results/360/360f19645e76314048c75424bb4b64da91742f47/
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/prboom/prboom.mk | 8 ++++++++
+ package/kmsxx/kmsxx.mk | 8 ++++++++
  1 file changed, 8 insertions(+)
 
-diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
-index 6d9b55e9f6..1ba8d968ab 100644
---- a/package/prboom/prboom.mk
-+++ b/package/prboom/prboom.mk
-@@ -18,6 +18,14 @@ endef
+diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
+index c664d52361..829beb1d68 100644
+--- a/package/kmsxx/kmsxx.mk
++++ b/package/kmsxx/kmsxx.mk
+@@ -12,6 +12,14 @@ KMSXX_INSTALL_STAGING = YES
+ KMSXX_DEPENDENCIES = libdrm host-pkgconf
+ KMSXX_CONF_OPTS = -DKMSXX_ENABLE_PYTHON=OFF
  
- PRBOOM_PRE_CONFIGURE_HOOKS += PRBOOM_FIXUP_CONFIGURE
- 
-+PRBOOM_CFLAGS = $(TARGET_CFLAGS)
++KMSXX_CXXFLAGS = $(TARGET_CXXFLAGS)
 +
 +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+PRBOOM_CFLAGS += -O0
++KMSXX_CXXFLAGS += -O0
 +endif
 +
-+PRBOOM_CONF_ENV += CFLAGS="$(PRBOOM_CFLAGS)"
++KMSXX_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(KMSXX_CXXFLAGS)"
 +
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- PRBOOM_DEPENDENCIES += libpng
- endif
+ ifeq ($(BR2_PACKAGE_KMSXX_INSTALL_TESTS),y)
+ KMSXX_TESTS = \
+ 	fbtest kmsblank kmscapture \
 -- 
 2.17.1
