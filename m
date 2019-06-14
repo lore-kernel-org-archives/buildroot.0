@@ -1,10 +1,11 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 14 Jun 2019 22:26:26 +0200
-Subject: [Buildroot] [PATCH v4 1/4] autobuild-run: move creation of
- result directory to run_instance()
-In-Reply-To: <20190614105539.16301-1-itsatharva@gmail.com>
+Date: Fri, 14 Jun 2019 22:28:45 +0200
+Subject: [Buildroot] [PATCH v4 4/4] autobuild-run: do reproducible
+ builds tests if BR2_REPRODUCIBLE=y
+In-Reply-To: <20190614105539.16301-4-itsatharva@gmail.com>
 References: <20190614105539.16301-1-itsatharva@gmail.com>
-Message-ID: <20190614202626.GN2647@scaer>
+ <20190614105539.16301-4-itsatharva@gmail.com>
+Message-ID: <20190614202845.GO2647@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +15,8 @@ To: buildroot@busybox.net
 Atharva, All,
 
 On 2019-06-14 16:25 +0530, Atharva Lele spake thusly:
-> We need the result directory to be present when the check_reproducibility()
-> function (implemented in the next patch) executes. As of now the results
-> directory is created in the send_results() function which executes after
-> check_reproducibility() will.
-> 
 > Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
 Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
@@ -27,34 +24,41 @@ Regards,
 Yann E. MORIN.
 
 > ---
-> Changes v4: Add new patch to series
+> Changes v3 -> v4:
+>   - Fix indentation level for if-else, otherwise file still remains open
+>     for the duration of the build.
+> 
+> Changes v2 -> v3:
+>   - use reproducible flag so that .config is not kept open for the entire
+>     build duration. (suggested by arnout)
+>   - remove reduntant logging (suggested by arnout)
+> 
+> Changes v1 -> v2:
+>   - add trailing newline character to BR2_REPRODUCIBLE=y (suggested by arnout)
 > ---
->  scripts/autobuild-run | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  scripts/autobuild-run | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
 > 
 > diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index ef2f2a5..190a254 100755
+> index b641694..6426c9e 100755
 > --- a/scripts/autobuild-run
 > +++ b/scripts/autobuild-run
-> @@ -470,8 +470,6 @@ def send_results(result, **kwargs):
->      srcdir = os.path.join(idir, "buildroot")
->      resultdir = os.path.join(outputdir, "results")
->  
-> -    os.mkdir(resultdir)
-> -
->      shutil.copyfile(os.path.join(outputdir, ".config"),
->                      os.path.join(resultdir, "config"))
->      shutil.copyfile(os.path.join(outputdir, "defconfig"),
-> @@ -647,6 +645,9 @@ def run_instance(**kwargs):
->          if ret != 0:
+> @@ -727,7 +727,14 @@ def run_instance(**kwargs):
+>              log_write(kwargs['log'], "WARN: failed to generate configuration")
 >              continue
 >  
-> +        resultdir = os.path.join(idir, "output", "results")
-> +        os.mkdir(resultdir)
-> +
->          ret = gen_config(**kwargs)
->          if ret != 0:
->              log_write(kwargs['log'], "WARN: failed to generate configuration")
+> -        ret = do_build(**kwargs)
+> +        # Check if the build test is supposed to be a reproducible test
+> +        outputdir = os.path.abspath(os.path.join(idir, "output"))
+> +        with open(os.path.join(outputdir, ".config"), "r") as fconf:
+> +            reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
+> +        if reproducible:
+> +            ret = do_reproducible_build(**kwargs)
+> +        else:
+> +            ret = do_build(**kwargs)
+>  
+>          send_results(ret, **kwargs)
+>  
 > -- 
 > 2.20.1
 > 
