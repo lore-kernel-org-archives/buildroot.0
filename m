@@ -1,72 +1,40 @@
-From: Fragkiskos Sigalas <frasigal@gmail.com>
-Date: Fri, 14 Jun 2019 10:22:26 +0300
-Subject: [Buildroot] [PATCH 1/1] package/docker-engine: add disable
- pivot_root option
-In-Reply-To: <87imt8hcb1.fsf@dell.be.48ers.dk>
-References: <1560458829-20187-1-git-send-email-frasigal@gmail.com>
- <14308_1560493044_5D033BF4_14308_222_1_20190614061722.GA2485@r-lnx-nyma7486-2>
- <87imt8hcb1.fsf@dell.be.48ers.dk>
-Message-ID: <CAL+Nh7PxfvhP5ynR=bnJMT9WX5c548zo3vkae8rTOFoXdHySLA@mail.gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 14 Jun 2019 09:58:47 +0200
+Subject: [Buildroot] [PATCH v3 2/3] autobuild-run: initial
+ implementation of do_reproducible_build()
+In-Reply-To: <20190613201358.GL2647@scaer>
+References: <20190611123416.11533-1-itsatharva@gmail.com>
+ <20190611123416.11533-2-itsatharva@gmail.com> <20190613201358.GL2647@scaer>
+Message-ID: <ddb67691-4212-9b76-1a34-74622dfe8ee3@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann, All,
 
-Your suggestion would work indeed, thank you! Therefore I agree that this
-patch is not needed.
 
-Regards,
-Frank
+On 13/06/2019 22:13, Yann E. MORIN wrote:
+> Atharva, All,
+> 
+> On 2019-06-11 18:04 +0530, Atharva Lele spake thusly:
+[snip]
+>> +    # Clean up build 1
+>> +    f = open(os.path.join(outputdir, "logfile"), "w+")
+>> +    subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir, "clean"], stdout=f, stderr=f)
+> 
+> Since we do create a small Makefile wrapper in $(O), you could simplify
+> this a little with:
+> 
+>     subprocess.call(["make", "-C", outputdir, "clean"], stdout=f, stderr=f)
+> 
+> Ditto in the existing do_build() function. Can be improved upon when you
+> introduce the Builder class.
 
-On Fri, Jun 14, 2019 at 10:10 AM Peter Korsgaard <peter@korsgaard.com>
-wrote:
+ This is bikeshedding, obviously, but I don't like that proposal. I think an
+explicit O= -C is easier to read and understand.
 
-> >>>>>   <yann.morin@orange.com> writes:
->
->  > Frank, All,
->  > On 2019-06-13 23:47 +0300, Frank Sigalas spake thusly:
->  >> Sets the environment variable DOCKER_RAMDISK before starting dockerd.
->
->  > [--SNIP--]
->  >> diff --git a/package/docker-engine/S60dockerd-ramdisk
-> b/package/docker-engine/S60dockerd-ramdisk
->  >> new file mode 100644
->  >> index 0000000..a1092b6
->  >> --- /dev/null
->  >> +++ b/package/docker-engine/S60dockerd-ramdisk
->  >> @@ -0,0 +1,38 @@
->  >> +#!/bin/sh
->  >> +
->  >> +NAME=dockerd
->  >> +DAEMON=/usr/bin/$NAME
->  >> +PIDFILE=/var/run/$NAME.pid
->  >> +DAEMON_ARGS=""
->  >> +
->  >> +[ -r /etc/default/$NAME ] && . /etc/default/$NAME $1
->
->  > The existing package/docker-engine/S60dockerd script also parses
->  > similarly named file, so why can't you provide (e.g. in an overlay) this
->  > configuraiton file taht would just contain:
->
->  >     export DOCKER_RAMDISK=1
->
->  > The config files in /etc/default/ are the place where such local
->  > customisations mustr be done.
->
->  > Besides, your solution does not cover the systemd case anyway (for which
->  > Christian alrady provided an example). But that is not even needed
->  > either, because this is still a local customisation.
->
-> Yes, I wonder if running dockerd from an initramfs is really such a
-> common setup that we want a dedicated option for it rather than just
-> letting people add such customization in their overlay?
->
-> --
-> Bye, Peter Korsgaard
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190614/3c2ee1ef/attachment.html>
+ Shorter is not better :-)
+
+ Regards,
+ Arnout
