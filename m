@@ -1,10 +1,9 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 14 Jun 2019 23:03:28 +0200
-Subject: [Buildroot] [PATCH 09/27] package/boost: work around gcc bug 85180
- for boost-fiber option
+Date: Fri, 14 Jun 2019 23:03:29 +0200
+Subject: [Buildroot] [PATCH 10/27] package/snort: work around gcc bug 85180
 In-Reply-To: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
 References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190614210346.121013-10-giulio.benetti@micronovasrl.com>
+Message-ID: <20190614210346.121013-11-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,55 +12,32 @@ To: buildroot@busybox.net
 
 With Microblaze Gcc version < 8.x the build hangs due to gcc bug
 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-shows up when building boost with boost-fiber enabled and optimization
-but not when building with -O0. To work around this, if
-BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y and boost-fiber is selected we force
-using -O0.
+shows up when building snort with optimization but not when building
+with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
+force using -O0.
+
+Fixes:
+http://autobuild.buildroot.net/results/d24/d2412710f6cfbfc069e7858e507e28555baafa3e/
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/boost/Config.in | 5 ++---
- package/boost/boost.mk  | 4 ++++
- 2 files changed, 6 insertions(+), 3 deletions(-)
+ package/snort/snort.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 783e86dc09..88b964847f 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -137,7 +137,6 @@ config BR2_PACKAGE_BOOST_FIBER
- 	# since mips32r2/mips64r2.
- 	depends on !BR2_MIPS_CPU_MIPS32 && !BR2_MIPS_CPU_MIPS64
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180
- 	select BR2_PACKAGE_BOOST_CONTEXT
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
- 	select BR2_PACKAGE_BOOST_SYSTEM
-@@ -148,9 +147,9 @@ comment "boost-fiber needs a toolchain w/ NPTL"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 
--comment "boost-fiber needs a toolchain not affected by GCC bug 64735, 85180"
-+comment "boost-fiber needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || BR2_TOOLCHAIN_HAS_GCC_BUG_85180
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 
- config BR2_PACKAGE_BOOST_FILESYSTEM
- 	bool "boost-filesystem"
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index a2d8395fd4..04869ed685 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -50,6 +50,10 @@ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_WAVE),,wave)
- 
- BOOST_TARGET_CXXFLAGS = $(TARGET_CXXFLAGS)
+diff --git a/package/snort/snort.mk b/package/snort/snort.mk
+index c767d7c545..191ef673d7 100644
+--- a/package/snort/snort.mk
++++ b/package/snort/snort.mk
+@@ -20,6 +20,10 @@ SNORT_CONF_OPTS = \
+ 	--with-libpcap-includes=$(STAGING_DIR)/usr/include/pcap \
+ 	--disable-static-daq
  
 +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+BOOST_TARGET_CXXFLAGS += -O0
++SNORT_CFLAGS += -O0
 +endif
 +
- BOOST_FLAGS = --with-toolset=gcc
- 
- ifeq ($(BR2_PACKAGE_ICU),y)
+ ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
+ SNORT_DEPENDENCIES += libtirpc host-pkgconf
+ SNORT_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
 -- 
 2.17.1
