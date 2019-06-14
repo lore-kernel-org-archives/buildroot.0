@@ -1,129 +1,135 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 14 Jun 2019 06:00:50 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-06-13
-Message-ID: <20190614060058.A3C938785E@whitealder.osuosl.org>
+From: yann.morin at orange.com <yann.morin@orange.com>
+Date: Fri, 14 Jun 2019 08:17:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/docker-engine: add disable
+ pivot_root option
+In-Reply-To: <1560458829-20187-1-git-send-email-frasigal@gmail.com>
+References: <1560458829-20187-1-git-send-email-frasigal@gmail.com>
+Message-ID: <14308_1560493044_5D033BF4_14308_222_1_20190614061722.GA2485@r-lnx-nyma7486-2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Frank, All,
 
-Build statistics for 2019-06-13
-===============================
+On 2019-06-13 23:47 +0300, Frank Sigalas spake thusly:
+> Sets the environment variable DOCKER_RAMDISK before starting dockerd.
 
-      branch |  OK | NOK | TIM | TOT |
-   2019.02.x |  21 |   1 |   0 |  22 |
-   2019.05.x |  19 |   2 |   0 |  21 |
-      master | 181 |  50 |   0 | 231 |
+[--SNIP--]
+> diff --git a/package/docker-engine/S60dockerd-ramdisk b/package/docker-engine/S60dockerd-ramdisk
+> new file mode 100644
+> index 0000000..a1092b6
+> --- /dev/null
+> +++ b/package/docker-engine/S60dockerd-ramdisk
+> @@ -0,0 +1,38 @@
+> +#!/bin/sh
+> +
+> +NAME=dockerd
+> +DAEMON=/usr/bin/$NAME
+> +PIDFILE=/var/run/$NAME.pid
+> +DAEMON_ARGS=""
+> +
+> +[ -r /etc/default/$NAME ] && . /etc/default/$NAME $1
 
-Results for branch '2019.05.x'
-==============================
+The existing package/docker-engine/S60dockerd script also parses
+similarly named file, so why can't you provide (e.g. in an overlay) this
+configuraiton file taht would just contain:
 
-Classification of failures by reason
-------------------------------------
+    export DOCKER_RAMDISK=1
 
-   host-xapp_mkfontscale-1.1.3 | 1 
-               wireshark-3.0.2 | 1 
+The config files in /etc/default/ are the place where such local
+customisations mustr be done.
 
+Besides, your solution does not cover the systemd case anyway (for which
+Christian alrady provided an example). But that is not even needed
+either, because this is still a local customisation.
 
-Detail of failures
-------------------
+Regards,
+Yann E. MORIN.
 
-   powerpc64 |    host-xapp_mkfontscale-1.1.3 | NOK | http://autobuild.buildroot.net/results/a82f542329cab4bd546b5fdc6e2328b8d443d222 |     
-         arm |                wireshark-3.0.2 | NOK | http://autobuild.buildroot.net/results/d3ffdbf753f3bcc31623ed78a925e24f7c579285 | ORPH
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-               libglib2-2.60.3 | 24
-          modem-manager-1.10.0 | 11
-                   cups-2.2.10 | 3 
-  vdr-plugin-vnsiserver-v1.8.0 | 2 
-              domoticz-4.10717 | 1 
-                    efl-1.22.2 | 1 
-fs/tar/tar.mk:32: /home/mar... | 1 
-                      gzip-1.9 | 1 
-           host-mfgtools-v0.02 | 1 
-           host-nodejs-10.15.3 | 1 
-libcamera-ab0188fc8bbb6f397... | 1 
-               libgtk3-3.22.30 | 1 
-              qt5enginio-1.6.3 | 1 
-               wireshark-3.0.2 | 1 
-
-
-Detail of failures
-------------------
-
-    mips64el |                    cups-2.2.10 | NOK | http://autobuild.buildroot.net/results/8bcec1c7c4a6bb0dcca6f4e8b6df2d0e57f72091 |     
-         arm |                    cups-2.2.10 | NOK | http://autobuild.buildroot.net/results/83b5ada17d8178788d53bf13060c19b8608204b1 |     
-     riscv64 |                    cups-2.2.10 | NOK | http://autobuild.buildroot.net/results/84fde1ecd700360ac32945299152ddbaf7563549 |     
-         sh4 |               domoticz-4.10717 | NOK | http://autobuild.buildroot.net/results/828c5a684f223036795f97b1524c19f1d26fd3d0 |     
-         arm |                     efl-1.22.2 | NOK | http://autobuild.buildroot.net/results/c19152ac2168803d93d9f58faea306ca8e59b074 |     
-     riscv64 | fs/tar/tar.mk:32: /home/mar... | NOK | http://autobuild.buildroot.net/results/2e5a9dfc6907e9ddc6952d3482e7b09864b615f0 |     
-         arm |                       gzip-1.9 | NOK | http://autobuild.buildroot.net/results/c3b0f45ceabfa52b4545b1543b2a03769261a358 | ORPH
-         arm |            host-mfgtools-v0.02 | NOK | http://autobuild.buildroot.net/results/4cdcb418b251c192b4a0f84801c41ed35e3c1426 |     
-      x86_64 |            host-nodejs-10.15.3 | NOK | http://autobuild.buildroot.net/results/52fd072a2bd7122e0d89ed80b82bf2e2f3303012 |     
-      x86_64 | libcamera-ab0188fc8bbb6f397... | NOK | http://autobuild.buildroot.net/results/f6dd4c60c04892c8b1669e6000fce7edb2b6349e |     
-         arc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/dbcad97764d6da31b918c43d50e78b2ff2bb05cf |     
-         arm |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/af4e4703cf35229bd682ebe093c7a60b4b6d5357 |     
-        i686 |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/e5445d76b8091bc334de530e2ecd5d4a63c01d00 |     
-      mipsel |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/5db3458aeed95686a9ea795ffc4782118d3ce4e6 |     
-      xtensa |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/d76290808f9a669d471be184ffc6580d2ec9d2e6 |     
-     powerpc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/39aa3e5062e6364dab7b29e41871b815bbd27166 |     
-        i686 |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/27c2fa27435982b0ff1ca6fac471544566e935ff |     
-        i686 |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/65d162d4b17d455c5ab0158bbf710f078779cb5c |     
-    mips64el |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/34cff714968d56975de18d6e9d1d1eea03cd7acc |     
-         arm |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/99008d03bf011699b7e0fab101891af810ba3c41 |     
-       sparc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/306c43f554bc539befe5b94c43721caae20a92d3 |     
-         arm |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/5a458774665a937792d9ab3642d275183d3358bf |     
-         arm |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/58c36eaf9e86a699f03528e37a60d71b70da2867 |     
-         arm |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/308384ec5642de7b2fda4533983c0a6d0ae56ec0 |     
-        i686 |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/d55a09a1ff1543f6fd5d9f4023067983252d25ac |     
-      x86_64 |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/223f6f4751692acf0d2868c34d1f809fc086adc0 |     
-       sparc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/c01e4f28422591180726ac355de7241211dec859 |     
-         arm |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/f55a7b44903b71f445ace68f45fecf683c46681f |     
-    mips64el |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/b63615c542c45fa66cc708afa7718319ddf774d1 |     
-      mipsel |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/0767a709199cb1b3f8d426a89cbe11c913dacac8 |     
-     powerpc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/a2447419573c77423986e805c679838968bdca3f |     
-        or1k |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/7ce2b96f4e6dbc4d16998d9b2f8244c7ed885ea8 |     
-         sh4 |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/9fab8efaaaa054e139020c0016aff14bc88503b1 |     
-      xtensa |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/1f65c271cd3c8a237431a5080d8cf38bf4de29a4 |     
-         arc |                libgtk3-3.22.30 | NOK | http://autobuild.buildroot.net/results/508f09e02232dbeb89bd88828dbe93ef70f310e0 |     
-         arm |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/57bda3f234b601e40cc0f34a7af2c40812a86721 |     
-microblazeel |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/635676264c6d6c755d1726a0dea8f416d96d7a3d |     
-      xtensa |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/7b6989839a122350770a6962f1291a8582c3330c |     
-       nios2 |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/e1aaf6fab1e4851362997737e8612a74e750c2fc |     
- powerpc64le |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/092096369172dc109cebcbbd3a1c92e52d80efb2 |     
-         arc |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/f8bd36fc9e509d4e400c39e84e6d6154d8d82d63 |     
-         arm |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/33744247280d615c27ac2f1d376cabad0534c998 |     
-       sparc |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/6c8e3373f2f4031eb42d6a757a7f5bab40034d04 |     
-     aarch64 |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/c0a33f4b692c1c158e950ae1587adf09376c213e |     
-    mips64el |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/2c982ce92da80a52a7dd9383fae6290c04663c61 |     
-         arc |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/01d7e0fff7c5c371240c4619e2f7a5e2ad58c1f4 |     
-      xtensa |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/fdac041e9ae24422059e647d3fae2446e2196106 |     
-     riscv32 |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/4712c6931ca728ceffeac9ecc12279c3e415cb03 |     
-     sparc64 |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/c6ec11d10ae9a35221e7f9bf1f9b76b01f407c44 |     
-         arm |                wireshark-3.0.2 | NOK | http://autobuild.buildroot.net/results/46465c5d23572db402e1b01877b500926457dfab | ORPH
-
-Results for branch '2019.02.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                   glm-0.9.8.4 | 1 
-
-
-Detail of failures
-------------------
-
-      x86_64 |                    glm-0.9.8.4 | NOK | http://autobuild.buildroot.net/results/b7b941974dca8c02ec5e5dd561d81a7a87b2fd87 | ORPH
-
+> +do_start() {
+> +        echo -n "Starting $NAME: "
+> +        start-stop-daemon --start --quiet --background --make-pidfile \
+> +		--pidfile $PIDFILE --exec /usr/bin/env DOCKER_RAMDISK=1 $DAEMON -- $DAEMON_ARGS \
+> +                && echo "OK" || echo "FAIL"
+> +}
+> +
+> +do_stop() {
+> +        echo -n "Stopping $NAME: "
+> +        start-stop-daemon --stop --quiet --pidfile $PIDFILE \
+> +                && echo "OK" || echo "FAIL"
+> +}
+> +
+> +case "$1" in
+> +        start)
+> +                do_start
+> +                ;;
+> +        stop)
+> +                do_stop
+> +                ;;
+> +        restart)
+> +                do_stop
+> +                sleep 1
+> +                do_start
+> +                ;;
+> +	*)
+> +                echo "Usage: $0 {start|stop|restart}"
+> +                exit 1
+> +esac
+> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+> index 50d4129..d4608fb 100644
+> --- a/package/docker-engine/docker-engine.mk
+> +++ b/package/docker-engine/docker-engine.mk
+> @@ -51,6 +51,12 @@ else
+>  DOCKER_ENGINE_TAGS += exclude_graphdriver_vfs
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_DOCKER_ENGINE_RAMDISK),y)
+> +DOCKER_ENGINE_INIT_SCRIPT = S60dockerd-ramdisk
+> +else
+> +DOCKER_ENGINE_INIT_SCRIPT = S60dockerd
+> +endif
+> +
+>  DOCKER_ENGINE_INSTALL_BINS = $(notdir $(DOCKER_ENGINE_BUILD_TARGETS))
+>  
+>  define DOCKER_ENGINE_RUN_AUTOGEN
+> @@ -74,7 +80,7 @@ define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
+>  endef
+>  
+>  define DOCKER_ENGINE_INSTALL_INIT_SYSV
+> -	$(INSTALL) -D -m 755 package/docker-engine/S60dockerd \
+> +	$(INSTALL) -D -m 755 package/docker-engine/$(DOCKER_ENGINE_INIT_SCRIPT) \
+>  		$(TARGET_DIR)/etc/init.d/S60dockerd
+>  endef
+>  
+> -- 
+> 2.7.4
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
-http://autobuild.buildroot.net
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
