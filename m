@@ -1,32 +1,54 @@
-From: Michael Walle <michael@walle.cc>
-Date: Sun, 16 Jun 2019 14:37:53 +0200
-Subject: [Buildroot] [PATCH v2] boot/uboot: add initial environment
- support
-In-Reply-To: <20190527192342.23406-1-michael@walle.cc>
-References: <20190527192342.23406-1-michael@walle.cc>
-Message-ID: <9c7aacfe80527ce9a76d3150b431be36@walle.cc>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Sun, 16 Jun 2019 15:24:01 +0200
+Subject: [Buildroot] [PATCH 1/2] package/taglib: add upstream patch to
+ fix taglib-config
+In-Reply-To: <3a548d14-a85d-76c7-18c0-1037ac1ad5a9@mind.be>
+References: <20190610212023.9483-1-joerg.krause@embedded.rocks>
+ <20190610212023.9483-2-joerg.krause@embedded.rocks>
+ <3a548d14-a85d-76c7-18c0-1037ac1ad5a9@mind.be>
+Message-ID: <15e6479684371e8406659c0f54c8bbc1eb5dc428.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am 2019-05-27 21:23, schrieb Michael Walle:
-> Since v2019.07 U-Boot supports extracting the compiled-in environment.
-> As a first step, add support to the environment generation in 
-> buildroot.
-> In the future, the text file may also be copied into the target
-> filesystem, where it will be used by the uboot-tools.
-> 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
-> 
-> changes since v1:
->  - rename _INITIAL to _BUILTIN
->  - add help texts
->  - make commit message little bit more clearer, hopefully ;)
-> 
+Hi Arnout,
 
-ping? :)
+thanks for your review!
 
--michael
+On Tue, 2019-06-11 at 00:25 +0200, Arnout Vandecappelle wrote:
+> 
+> On 10/06/2019 23:20, J?rg Krause wrote:
+> > +-prefix=${CMAKE_INSTALL_PREFIX}
+> > +-exec_prefix=${CMAKE_INSTALL_PREFIX}
+> > +-libdir=${LIB_INSTALL_DIR}
+> > +-includedir=${INCLUDE_INSTALL_DIR}
+> > ++prefix=@CMAKE_SYSROOT@@CMAKE_INSTALL_PREFIX@
+> > ++exec_prefix=@CMAKE_SYSROOT@@CMAKE_INSTALL_PREFIX@
+> 
+>  I believe it is wrong to include CMAKE_SYSROOT here. In general, this is not
+> necessarily the place where the package will be installed. We happen to do that
+> now, but for example both OpenWrt and OpenEmbedded install with a different
+> DESTDIR, and dependent packages see a different sysroot.
+
+I see! The upstream patch was sent by me, so I will find a better
+solution.
+
+>  We have the TAGLIB_CONFIG_SCRIPT infra to handle this situation. It will add
+> the appropriate sysroot to the _prefix variables.
+
+I've checked and used TAGLIB_CONFIG_SCRIPTS instead of applying the
+patch. The current sed commands to fix the package configuration file
+does not work for taglib-config:
+
+```
+# ./output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/bin/taglib-config --libs
+-L/usr/lib -ltag
+```
+
+To get taglib-config work with our CONFIG_SCRIPTS, it needs to be fixed
+the way the patch does, just without using CMAKE_SYSROOT.
+
+Best regards
+J?rg Krause
