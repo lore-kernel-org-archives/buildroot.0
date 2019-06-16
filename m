@@ -1,68 +1,76 @@
-From: Aleksander Morgado <aleksander@aleksander.es>
-Date: Sun, 16 Jun 2019 13:40:31 +0200
-Subject: [Buildroot] [PATCH] modem-manager: depend on host-libglib2
-In-Reply-To: <8736k9sube.fsf@tarshish>
-References: <20190616101128.14729-1-aleksander@aleksander.es>
- <8736k9sube.fsf@tarshish>
-Message-ID: <CAAP7ucJH=ztHzENDrLcMe+NCn2=X1tMqv2hJOzyypnEmZ+d7hQ@mail.gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Sun, 16 Jun 2019 14:31:45 +0200
+Subject: [Buildroot] uboot tools: fw_setenv can break environment/cause
+ bricks
+In-Reply-To: <20190616085940.56230607@windsurf>
+References: <CAFr9PXmhFW_8QLF8noyyNxJkLe-UzAR9Sq9dkkPpReFN3jzaSQ@mail.gmail.com>
+ <20190616085940.56230607@windsurf>
+Message-ID: <04225a72-aed1-7ac5-d80d-2022f05c2370@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-> On Sun, Jun 16 2019, Aleksander Morgado wrote:
-> > The build requires the gdbus-codegen tool from glib2, which isn't
-> > installed in target.
-> >
-> > Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-> > ---
-> >
-> > Hey,
-> >
-> > I'm getting build failures like this one reported via email:
-> > http://autobuild.buildroot.net/results/5d3e6449887b4cdbfbc0ddc672fa374896cfb102/build-end.log
-> >
-> > Not truly sure if this is the correct fix for the issue, but it looks like it could be?
-> >
-> > What I don't know is why gdbus-codegen isn't found, but glib-mkenums (also provided by glib2) doesn't have the same problem.
-> >
-> > Cheers!
-> >
-> > ---
-> >  package/modem-manager/modem-manager.mk | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
-> > index aa27dc9ce5..41e37bd655 100644
-> > --- a/package/modem-manager/modem-manager.mk
-> > +++ b/package/modem-manager/modem-manager.mk
-> > @@ -9,7 +9,7 @@ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
-> >  MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
-> >  MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
-> >  MODEM_MANAGER_LICENSE_FILES = COPYING COPYING.LIB
-> > -MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool libglib2
-> > +MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool host-libglib2 libglib2
->
-> libglib2 depends on host-libglib2 already. So technically this doesn't
-> change anything.
->
-> Have you verified that the build failure is fixed with your patch
-> applied?
->
+Hi Thomas, Hi Daniel,
 
-See, I wasn't getting the build failure locally anyway myself... so
-this was kind of a blind attempt of fixing this, which looks like it's
-totally wrong :D
+Le 16/06/2019 ? 08:59, Thomas Petazzoni a ?crit?:
+> Hello,
+> 
+> On Sat, 15 Jun 2019 20:43:44 +0900
+> Daniel Palmer <daniel@0x0f.com> wrote:
+> 
+>> I just noticed this and couldn't find any other reports of it.
+>>
+>> If you enable BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV you get fw_printenv
+>> and fw_setenv built for the target but they are built with a u-boot
+>> configuration that isn't for the target as it uses it's own copy of
+>> the source and not the one configured in the bootloader section.
+>>
+>> That works in most cases but if you have uninitialised or broken
+>> environment fw_setenv will write what it thinks is the default
+>> environment with a bootcmd that tries to boot via bootp with an NFS
+>> root which will probably brick many targets.
+>>
+>> I'm think if u-boot is enabled in the bootloader section there should
+>> probably be an option there to install those tools configured for the
+>> target that blocks the uboot tools package.
+> 
+> I'm adding Pierre-Jean in Cc, as he has been posting patches related
+> exactly to this not long ago, if I remember correctly.
 
-I got pointed to this not-yet-commited patch, which explains my issue
-and why only gdbus-codegen (provided by gio) was failing and not
-glib-mkenums (provided by glib):
-https://patchwork.ozlabs.org/patch/1115572/
+Thanks Thomas.
 
-The MM build failure will definitely go away once that patch is
-merged, sorry for the noise!
+Indeed, the need to synchronize the U-Boot and u-boot-tools package has 
+always been a problem because the fw_printenv/fw_setenv tools from 
+U-Boot must be always be built for exactly the same default environment.
+
+That is why there is now a new project to remove this 'hard link' 
+(libubootenv). Libubootenv [1][2] is fully hardware independent, and it 
+also provides fw_setenv & fw_printenv tools (+ a library). So there is 
+no need for synchronization between U-Boot and libubootenv.
+
+The other advantage with 'libubootenv' is, if you have uninitialized or 
+broken environment on the persistent storage.
+You have the ability to use a default environment (a file to be passed 
+as a parameter with fw_* tools in fact).
+
+FYI, there is a patch [3] to generate this default environment with 
+Buildroot.
+After that, you are able to put this last one in /etc for libubootenv [4].
+
+For sure, you can read more information at the different links.
+
+Best Regards,
+
+[1] - 
+https://groups.google.com/forum/#!searchin/swupdate/libubootenv%7Csort:date/swupdate/2wcIyfexOro/iADiuQRtBQAJ
+[2] - https://github.com/sbabic/libubootenv
+[3] - http://patchwork.ozlabs.org/patch/1105926/
+[4] - 
+https://github.com/sbabic/libubootenv/commit/edb580a42e46f76543edd0d6fd603881c6294eca
 
 -- 
-Aleksander
-https://aleksander.es
+Pierre-Jean Texier
+Embedded Linux Engineer
+https://koncepto.io
