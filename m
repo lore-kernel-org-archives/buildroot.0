@@ -1,137 +1,48 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Sun, 16 Jun 2019 22:15:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/busybox: update S10mdev
-In-Reply-To: <20190614172647.GA32315@smile.fi.intel.com>
-References: <20190529142528.256795-1-titouan.christophe@railnova.eu>
- <20190614172647.GA32315@smile.fi.intel.com>
-Message-ID: <f5b12853-22d5-2d4a-8ddc-0e66f97c788e@railnova.eu>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 16 Jun 2019 22:16:20 +0200
+Subject: [Buildroot] [PATCH v3 2/3] package/pugixml: enable install of
+ pugixml.pc
+In-Reply-To: <20190616201621.23912-1-bernd.kuhls@t-online.de>
+References: <20190616201621.23912-1-bernd.kuhls@t-online.de>
+Message-ID: <20190616201621.23912-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andy,
+Needed for waylandpp >= 0.2.4 to detect pugixml:
+https://github.com/NilsBrause/waylandpp/commit/0a61175003a0a34038e39092918768360d2dd1da#diff-af3b638bc2a3e6c650974192a53c7291R39
 
-Thank you for following up !
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v3: no changes
+v2: changed variables for HOST_PUGIXML_CONF_OPTS (Thomas)
 
-On 6/14/19 7:26 PM, Andy Shevchenko wrote:
-> On Wed, May 29, 2019 at 04:25:28PM +0200, Titouan Christophe wrote:
->> Avoid race conditions in mdev invocations
->> * use the uevent daemon if possible
->> * fallback to hotplug (as before) and initialize /dev/mdev.seq
->> * otherwise print an error message and do nothing else
->>
-> 
-> Thanks!
-> 
-> Tested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-> 
-> What are we going to do with this?
-> As of today Buildroot can not be used with mdev in current state.
+ package/pugixml/pugixml.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-In the meantime Busybox did introduce the daemon mode for mdev, which 
-renders this patch obsolete (see the thread "linux: enable UEVENT_HELPER 
-when mdev is used" over there 
-http://lists.busybox.net/pipermail/buildroot/2019-June/251744.html).
-
-I discussed this with Arnout on IRC, and the outcome is that we will 
-adapt the S10mdev script to use the new daemon mode as soon as the next 
-Busybox release is available.
-
-In the meantime, I guess the best option is to keep this patched script 
-out of tree (this is what I'm doing right now).
-
-Best regards,
-
-Titouan
-
-> 
->> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
->> ---
->>   package/busybox/S10mdev | 66 +++++++++++++++++++++++++++++++++++------
->>   1 file changed, 57 insertions(+), 9 deletions(-)
->>
->> diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
->> index 7075b77016..f1a836da32 100644
->> --- a/package/busybox/S10mdev
->> +++ b/package/busybox/S10mdev
->> @@ -1,20 +1,68 @@
->>   #!/bin/sh
->>   #
->> -# Start mdev....
->> +# Start mdev, using the uevent daemon whereas possible
->>   #
->>   
->> -case "$1" in
->> -  start)
->> -	echo "Starting mdev..."
->> -	echo /sbin/mdev >/proc/sys/kernel/hotplug
->> +DAEMON="uevent"
->> +PIDFILE="/var/run/$DAEMON.pid"
->> +
->> +has_uevent_and_netlink() {
->> +	[ -f /proc/net/netlink ] && [ -x /sbin/uevent ]
->> +}
->> +
->> +has_hotplug() {
->> +	[ -w /proc/sys/kernel/hotplug ]
->> +}
->> +
->> +
->> +start() {
->> +	if has_uevent_and_netlink; then
->> +		echo -n "Starting mdev within uevent... "
->> +		start-stop-daemon -S -b -m -p $PIDFILE -x /sbin/uevent -- /sbin/mdev
->> +		[ $? -eq 0 ] && echo "OK" || echo "FAIL"
->> +	elif has_hotplug; then
->> +		echo "Installing mdev as hotplug helper"
->> +		# Initialize the seq counter to prevent plug/unplug races
->> +		touch /dev/mdev.seq
->> +		echo /sbin/mdev > /proc/sys/kernel/hotplug
->> +	else
->> +		echo "ERROR: neither netlink+uevent nor hotplug are available"
->> +		echo "       Unable to start mdev !"
->> +		exit 1
->> +	fi
->> +
->> +	# Run boot time /sys scan
->>   	/sbin/mdev -s
->> +
->>   	# coldplug modules
->>   	find /sys/ -name modalias -print0 | xargs -0 sort -u | tr '\n' '\0' | \
->>   	    xargs -0 modprobe -abq
->> -	;;
->> -  stop)
->> -	;;
->> -  restart|reload)
->> +}
->> +
->> +stop() {
->> +	if has_uevent_and_netlink; then
->> +		echo -n "Stopping mdev within uevent... "
->> +		start-stop-daemon -K -p $PIDFILE
->> +		[ $? -eq 0 ] && echo "OK" || echo "FAIL"
->> +	elif has_hotplug; then
->> +		echo "Uninstalling mdev from hotplug helper"
->> +		echo > /proc/sys/kernel/hotplug
->> +	else
->> +		echo "ERROR: neither netlink+uevent nor hotplug are available"
->> +		echo "       Unable to stop mdev !"
->> +		exit 1
->> +	fi
->> +}
->> +
->> +restart() {
->> +	stop
->> +	start
->> +}
->> +
->> +
->> +case "$1" in
->> +  start|stop|restart)
->> +	$1
->>   	;;
->>     *)
->>   	echo "Usage: $0 {start|stop|restart}"
-> 
+diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
+index 6f214c4de8..368f958920 100644
+--- a/package/pugixml/pugixml.mk
++++ b/package/pugixml/pugixml.mk
+@@ -15,6 +15,7 @@ PUGIXML_INSTALL_STAGING = YES
+ # force-enable this option to support older gcc versions. See also:
+ # https://gcc.gnu.org/onlinedocs/gcc/Long-Long.html
+ PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
++HOST_PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
+ 
+ ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),)
+ PUGIXML_BUILD_DEFINES += PUGIXML_NO_XPATH
+@@ -30,5 +31,9 @@ ifdef PUGIXML_BUILD_DEFINES
+ PUGIXML_CONF_OPTS += -DBUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
+ endif
+ 
++HOST_PUGIXML_CONF_OPTS += \
++	-DBUILD_PKGCONFIG=ON \
++	-DBUILD_DEFINES="$(subst $(space),;,$(HOST_PUGIXML_BUILD_DEFINES))"
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
+-- 
+2.20.1
