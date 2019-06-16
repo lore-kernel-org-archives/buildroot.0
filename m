@@ -1,215 +1,265 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Sun, 16 Jun 2019 11:18:47 +0300
-Subject: [Buildroot] [PATCH] board: solidrun: add Clearfog GT-8K
-Message-ID: <0131577d7afceede1aa59bf7b98dc3bda9249df5.1560673127.git.baruch@tkos.co.il>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 16 Jun 2019 10:19:20 +0200
+Subject: [Buildroot] [PATCH] package/weston: fix build with latest freerdp
+Message-ID: <20190616081920.32741-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add support for the SolidRun Armada 8040 based Clearfog GT-8K. This
-board has the same processor as the Macchiatobin, so we can reuse the
-Macchiatobin U-Boot and image definitions.
+Commit 942da943f3 (package/freerdp: security bump to version 2.0.0-rc4)
+backported a patch from master, that bumps FreeRDP for security fixes.
 
-The kernel fragment enables drivers that are necessary to make
-networking ports work (SFP, Ethernet port, and Ethernet switch).
+However, the FreeRDP development process is, well, a bit weird, as they
+have been in the rc phase for the past two years now (2.0.0-rc0 was on
+2017-07-24). As such, they still continue to do huge code refactoring
+and cleanup and stuff, even though this is the rc phase. Their API thus
+changed quite a bit between rc2 and rc4.
 
-Cc: Jan Kundr?t <jan.kundrat@cesnet.cz>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Thus the backport now breaks weston.
+
+We do not have the problem on master or 2019.05.x, because we are using
+a more recent weston (6.0.0) which has the fix already. But on 2019.02.x,
+we're still using an older weston (5.0.0), which misses the fix.
+
+Backport the fix from upstream.
+
+Fixes (2019.02.x):
+    http://autobuild.buildroot.net/results/5fb140acadf26b7f38d3f5c07a4f8dd4dc9acb9e
+    http://autobuild.buildroot.org/results/b16610516a8514cf45860a48d693dd0db275e8d9
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Alexey Lukyanchuk <skif@skif-web.ru>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                    |  2 +
- board/solidrun/clearfog_gt_8k/extlinux.conf   |  4 ++
- board/solidrun/clearfog_gt_8k/genimage.cfg    |  1 +
- .../clearfog_gt_8k/linux-extras.config        |  4 ++
- .../clearfog_gt_8k/post-build-mainline.sh     |  1 +
- board/solidrun/clearfog_gt_8k/readme.txt      | 61 +++++++++++++++++++
- .../clearfog_gt_8k/uboot-fragment.config      |  1 +
- configs/solidrun_clearfog_gt_8k_defconfig     | 46 ++++++++++++++
- 8 files changed, 120 insertions(+)
- create mode 100644 board/solidrun/clearfog_gt_8k/extlinux.conf
- create mode 120000 board/solidrun/clearfog_gt_8k/genimage.cfg
- create mode 100644 board/solidrun/clearfog_gt_8k/linux-extras.config
- create mode 120000 board/solidrun/clearfog_gt_8k/post-build-mainline.sh
- create mode 100644 board/solidrun/clearfog_gt_8k/readme.txt
- create mode 120000 board/solidrun/clearfog_gt_8k/uboot-fragment.config
- create mode 100644 configs/solidrun_clearfog_gt_8k_defconfig
+ ...fix-compilation-with-FreeRDP-2.0-rc4.patch | 218 ++++++++++++++++++
+ 1 file changed, 218 insertions(+)
+ create mode 100644 package/weston/0002-rdp-compositor-fix-compilation-with-FreeRDP-2.0-rc4.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4cc8c9d0877e..9bf2d334e522 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -253,6 +253,8 @@ F:	package/pulseview/
- F:	package/sigrok-cli/
- 
- N:	Baruch Siach <baruch@tkos.co.il>
-+F:	board/solidrun/clearfog_gt_8k/
-+F:	configs/solidrun_clearfog_gt_8k_defconfig
- F:	package/18xx-ti-utils/
- F:	package/daemon/
- F:	package/dropbear/
-diff --git a/board/solidrun/clearfog_gt_8k/extlinux.conf b/board/solidrun/clearfog_gt_8k/extlinux.conf
+diff --git a/package/weston/0002-rdp-compositor-fix-compilation-with-FreeRDP-2.0-rc4.patch b/package/weston/0002-rdp-compositor-fix-compilation-with-FreeRDP-2.0-rc4.patch
 new file mode 100644
-index 000000000000..aae0c0d5fb51
+index 0000000000..fe2303d42e
 --- /dev/null
-+++ b/board/solidrun/clearfog_gt_8k/extlinux.conf
-@@ -0,0 +1,4 @@
-+label Clearfog GT-8K Linux
-+  kernel /boot/Image
-+  devicetree /boot/armada-8040-clearfog-gt-8k.dtb
-+  append console=ttyS0,115200n8 root=/dev/mmcblk1p1 rootwait
-diff --git a/board/solidrun/clearfog_gt_8k/genimage.cfg b/board/solidrun/clearfog_gt_8k/genimage.cfg
-new file mode 120000
-index 000000000000..0cc2754ff6c5
---- /dev/null
-+++ b/board/solidrun/clearfog_gt_8k/genimage.cfg
-@@ -0,0 +1 @@
-+../macchiatobin/genimage.cfg
-\ No newline at end of file
-diff --git a/board/solidrun/clearfog_gt_8k/linux-extras.config b/board/solidrun/clearfog_gt_8k/linux-extras.config
-new file mode 100644
-index 000000000000..bce2a2e9d20c
---- /dev/null
-+++ b/board/solidrun/clearfog_gt_8k/linux-extras.config
-@@ -0,0 +1,4 @@
-+CONFIG_MARVELL_PHY=y
-+CONFIG_SFP=y
-+CONFIG_NET_DSA=y
-+CONFIG_NET_DSA_MV88E6XXX=y
-diff --git a/board/solidrun/clearfog_gt_8k/post-build-mainline.sh b/board/solidrun/clearfog_gt_8k/post-build-mainline.sh
-new file mode 120000
-index 000000000000..a8c9a52437f2
---- /dev/null
-+++ b/board/solidrun/clearfog_gt_8k/post-build-mainline.sh
-@@ -0,0 +1 @@
-+../macchiatobin/post-build-mainline.sh
-\ No newline at end of file
-diff --git a/board/solidrun/clearfog_gt_8k/readme.txt b/board/solidrun/clearfog_gt_8k/readme.txt
-new file mode 100644
-index 000000000000..1648ffa38dc3
---- /dev/null
-+++ b/board/solidrun/clearfog_gt_8k/readme.txt
-@@ -0,0 +1,61 @@
-+Intro
-+=====
++++ b/package/weston/0002-rdp-compositor-fix-compilation-with-FreeRDP-2.0-rc4.patch
+@@ -0,0 +1,218 @@
++From 7b7d9d316a9ce9b4f5f50ba766c2963b0fdcbaa5 Mon Sep 17 00:00:00 2001
++From: David Fort <contact@hardening-consulting.com>
++Date: Tue, 4 Dec 2018 23:25:39 +0100
++Subject: [PATCH] rdp-compositor: fix compilation with FreeRDP 2.0-rc4
 +
-+The default configuration described below will allow you to start
-+experimenting with the buildroot environment for the SolidRun Clearfog GT-8K
-+based on the Marvell Armada 8040 SoC.
++Some members have been removed from FreeRDP structs, so let's use local
++variables.
 +
-+This default configuration will bring up the board and allow shell command
-+line access through the serial console.
++[yann.morin.1998 at free.fr: backport from upstream]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 +
-+How to build
-+============
++---
++ libweston/compositor-rdp.c | 86 +++++++++++++++++++-------------------
++ 1 file changed, 43 insertions(+), 43 deletions(-)
 +
-+  $ make solidrun_clearfog_gt_8k_defconfig
-+  $ make
++diff --git a/libweston/compositor-rdp.c b/libweston/compositor-rdp.c
++index 134e7298..871a0a3e 100644
++--- a/libweston/compositor-rdp.c
+++++ b/libweston/compositor-rdp.c
++@@ -67,19 +67,19 @@
++ #endif
++ 
++ #ifdef HAVE_SURFACE_BITS_BMP
++-#define SURFACE_BPP(cmd) cmd->bmp.bpp
++-#define SURFACE_CODECID(cmd) cmd->bmp.codecID
++-#define SURFACE_WIDTH(cmd) cmd->bmp.width
++-#define SURFACE_HEIGHT(cmd) cmd->bmp.height
++-#define SURFACE_BITMAP_DATA(cmd) cmd->bmp.bitmapData
++-#define SURFACE_BITMAP_DATA_LEN(cmd) cmd->bmp.bitmapDataLength
+++#define SURFACE_BPP(cmd) cmd.bmp.bpp
+++#define SURFACE_CODECID(cmd) cmd.bmp.codecID
+++#define SURFACE_WIDTH(cmd) cmd.bmp.width
+++#define SURFACE_HEIGHT(cmd) cmd.bmp.height
+++#define SURFACE_BITMAP_DATA(cmd) cmd.bmp.bitmapData
+++#define SURFACE_BITMAP_DATA_LEN(cmd) cmd.bmp.bitmapDataLength
++ #else
++-#define SURFACE_BPP(cmd) cmd->bpp
++-#define SURFACE_CODECID(cmd) cmd->codecID
++-#define SURFACE_WIDTH(cmd) cmd->width
++-#define SURFACE_HEIGHT(cmd) cmd->height
++-#define SURFACE_BITMAP_DATA(cmd) cmd->bitmapData
++-#define SURFACE_BITMAP_DATA_LEN(cmd) cmd->bitmapDataLength
+++#define SURFACE_BPP(cmd) cmd.bpp
+++#define SURFACE_CODECID(cmd) cmd.codecID
+++#define SURFACE_WIDTH(cmd) cmd.width
+++#define SURFACE_HEIGHT(cmd) cmd.height
+++#define SURFACE_BITMAP_DATA(cmd) cmd.bitmapData
+++#define SURFACE_BITMAP_DATA_LEN(cmd) cmd.bitmapDataLength
++ #endif
++ 
++ #include <freerdp/freerdp.h>
++@@ -198,7 +198,7 @@ rdp_peer_refresh_rfx(pixman_region32_t *damage, pixman_image_t *image, freerdp_p
++ 	uint32_t *ptr;
++ 	RFX_RECT *rfxRect;
++ 	rdpUpdate *update = peer->update;
++-	SURFACE_BITS_COMMAND *cmd = &update->surface_bits_command;
+++	SURFACE_BITS_COMMAND cmd;
++ 	RdpPeerContext *context = (RdpPeerContext *)peer->context;
++ 
++ 	Stream_Clear(context->encode_stream);
++@@ -208,14 +208,14 @@ rdp_peer_refresh_rfx(pixman_region32_t *damage, pixman_image_t *image, freerdp_p
++ 	height = (damage->extents.y2 - damage->extents.y1);
++ 
++ #ifdef HAVE_SKIP_COMPRESSION
++-	cmd->skipCompression = TRUE;
+++	cmd.skipCompression = TRUE;
++ #else
++-	memset(cmd, 0, sizeof(*cmd));
+++	memset(&cmd, 0, sizeof(*cmd));
++ #endif
++-	cmd->destLeft = damage->extents.x1;
++-	cmd->destTop = damage->extents.y1;
++-	cmd->destRight = damage->extents.x2;
++-	cmd->destBottom = damage->extents.y2;
+++	cmd.destLeft = damage->extents.x1;
+++	cmd.destTop = damage->extents.y1;
+++	cmd.destRight = damage->extents.x2;
+++	cmd.destBottom = damage->extents.y2;
++ 	SURFACE_BPP(cmd) = 32;
++ 	SURFACE_CODECID(cmd) = peer->settings->RemoteFxCodecId;
++ 	SURFACE_WIDTH(cmd) = width;
++@@ -245,7 +245,7 @@ rdp_peer_refresh_rfx(pixman_region32_t *damage, pixman_image_t *image, freerdp_p
++ 	SURFACE_BITMAP_DATA_LEN(cmd) = Stream_GetPosition(context->encode_stream);
++ 	SURFACE_BITMAP_DATA(cmd) = Stream_Buffer(context->encode_stream);
++ 
++-	update->SurfaceBits(update->context, cmd);
+++	update->SurfaceBits(update->context, &cmd);
++ }
++ 
++ 
++@@ -255,7 +255,7 @@ rdp_peer_refresh_nsc(pixman_region32_t *damage, pixman_image_t *image, freerdp_p
++ 	int width, height;
++ 	uint32_t *ptr;
++ 	rdpUpdate *update = peer->update;
++-	SURFACE_BITS_COMMAND *cmd = &update->surface_bits_command;
+++	SURFACE_BITS_COMMAND cmd;
++ 	RdpPeerContext *context = (RdpPeerContext *)peer->context;
++ 
++ 	Stream_Clear(context->encode_stream);
++@@ -265,15 +265,15 @@ rdp_peer_refresh_nsc(pixman_region32_t *damage, pixman_image_t *image, freerdp_p
++ 	height = (damage->extents.y2 - damage->extents.y1);
++ 
++ #ifdef HAVE_SKIP_COMPRESSION
++-	cmd->skipCompression = TRUE;
+++	cmd.skipCompression = TRUE;
++ #else
++ 	memset(cmd, 0, sizeof(*cmd));
++ #endif
++ 
++-	cmd->destLeft = damage->extents.x1;
++-	cmd->destTop = damage->extents.y1;
++-	cmd->destRight = damage->extents.x2;
++-	cmd->destBottom = damage->extents.y2;
+++	cmd.destLeft = damage->extents.x1;
+++	cmd.destTop = damage->extents.y1;
+++	cmd.destRight = damage->extents.x2;
+++	cmd.destBottom = damage->extents.y2;
++ 	SURFACE_BPP(cmd) = 32;
++ 	SURFACE_CODECID(cmd) = peer->settings->NSCodecId;
++ 	SURFACE_WIDTH(cmd) = width;
++@@ -289,7 +289,7 @@ rdp_peer_refresh_nsc(pixman_region32_t *damage, pixman_image_t *image, freerdp_p
++ 	SURFACE_BITMAP_DATA_LEN(cmd) = Stream_GetPosition(context->encode_stream);
++ 	SURFACE_BITMAP_DATA(cmd) = Stream_Buffer(context->encode_stream);
++ 
++-	update->SurfaceBits(update->context, cmd);
+++	update->SurfaceBits(update->context, &cmd);
++ }
++ 
++ static void
++@@ -310,8 +310,8 @@ static void
++ rdp_peer_refresh_raw(pixman_region32_t *region, pixman_image_t *image, freerdp_peer *peer)
++ {
++ 	rdpUpdate *update = peer->update;
++-	SURFACE_BITS_COMMAND *cmd = &update->surface_bits_command;
++-	SURFACE_FRAME_MARKER *marker = &update->surface_frame_marker;
+++	SURFACE_BITS_COMMAND cmd;
+++	SURFACE_FRAME_MARKER marker;
++ 	pixman_box32_t *rect, subrect;
++ 	int nrects, i;
++ 	int heightIncrement, remainingHeight, top;
++@@ -320,18 +320,18 @@ rdp_peer_refresh_raw(pixman_region32_t *region, pixman_image_t *image, freerdp_p
++ 	if (!nrects)
++ 		return;
++ 
++-	marker->frameId++;
++-	marker->frameAction = SURFACECMD_FRAMEACTION_BEGIN;
++-	update->SurfaceFrameMarker(peer->context, marker);
+++	marker.frameId++;
+++	marker.frameAction = SURFACECMD_FRAMEACTION_BEGIN;
+++	update->SurfaceFrameMarker(peer->context, &marker);
++ 
++-	memset(cmd, 0, sizeof(*cmd));
+++	memset(&cmd, 0, sizeof(cmd));
++ 	SURFACE_BPP(cmd) = 32;
++ 	SURFACE_CODECID(cmd) = 0;
++ 
++ 	for (i = 0; i < nrects; i++, rect++) {
++ 		/*weston_log("rect(%d,%d, %d,%d)\n", rect->x1, rect->y1, rect->x2, rect->y2);*/
++-		cmd->destLeft = rect->x1;
++-		cmd->destRight = rect->x2;
+++		cmd.destLeft = rect->x1;
+++		cmd.destRight = rect->x2;
++ 		SURFACE_WIDTH(cmd) = rect->x2 - rect->x1;
++ 
++ 		heightIncrement = peer->settings->MultifragMaxRequestSize / (16 + SURFACE_WIDTH(cmd) * 4);
++@@ -343,8 +343,8 @@ rdp_peer_refresh_raw(pixman_region32_t *region, pixman_image_t *image, freerdp_p
++ 
++ 		while (remainingHeight) {
++ 			   SURFACE_HEIGHT(cmd) = (remainingHeight > heightIncrement) ? heightIncrement : remainingHeight;
++-			   cmd->destTop = top;
++-			   cmd->destBottom = top + SURFACE_HEIGHT(cmd);
+++			   cmd.destTop = top;
+++			   cmd.destBottom = top + SURFACE_HEIGHT(cmd);
++ 			   SURFACE_BITMAP_DATA_LEN(cmd) = SURFACE_WIDTH(cmd) * SURFACE_HEIGHT(cmd) * 4;
++ 			   SURFACE_BITMAP_DATA(cmd) = (BYTE *)realloc(SURFACE_BITMAP_DATA(cmd), SURFACE_BITMAP_DATA_LEN(cmd));
++ 
++@@ -353,15 +353,15 @@ rdp_peer_refresh_raw(pixman_region32_t *region, pixman_image_t *image, freerdp_p
++ 			   pixman_image_flipped_subrect(&subrect, image, SURFACE_BITMAP_DATA(cmd));
++ 
++ 			   /*weston_log("*  sending (%d,%d, %d,%d)\n", subrect.x1, subrect.y1, subrect.x2, subrect.y2); */
++-			   update->SurfaceBits(peer->context, cmd);
+++			   update->SurfaceBits(peer->context, &cmd);
++ 
++ 			   remainingHeight -= SURFACE_HEIGHT(cmd);
++ 			   top += SURFACE_HEIGHT(cmd);
++ 		}
++ 	}
++ 
++-	marker->frameAction = SURFACECMD_FRAMEACTION_END;
++-	update->SurfaceFrameMarker(peer->context, marker);
+++	marker.frameAction = SURFACECMD_FRAMEACTION_END;
+++	update->SurfaceFrameMarker(peer->context, &marker);
++ }
++ 
++ static void
++@@ -956,7 +956,7 @@ xf_peer_activate(freerdp_peer* client)
++ 	pixman_box32_t box;
++ 	pixman_region32_t damage;
++ 	char seat_name[50];
++-
+++	POINTER_SYSTEM_UPDATE pointer_system;
++ 
++ 	peerCtx = (RdpPeerContext *)client->context;
++ 	b = peerCtx->rdpBackend;
++@@ -1056,8 +1056,8 @@ xf_peer_activate(freerdp_peer* client)
++ 
++ 	/* disable pointer on the client side */
++ 	pointer = client->update->pointer;
++-	pointer->pointer_system.type = SYSPTR_NULL;
++-	pointer->PointerSystem(client->context, &pointer->pointer_system);
+++	pointer_system.type = SYSPTR_NULL;
+++	pointer->PointerSystem(client->context, &pointer_system);
++ 
++ 	/* sends a full refresh */
++ 	box.x1 = 0;
++-- 
++2.20.1
 +
-+How to write the SD card
-+========================
-+
-+Once the build process is finished you will have an image file named
-+"sdcard.img" in the output/images/ directory.
-+
-+Copy the bootable "sdcard.img" onto an SD card with "dd":
-+
-+  $ sudo dd if=output/images/sdcard.img of=/dev/sdX bs=1M conv=fsync
-+
-+How to boot the board
-+=====================
-+
-+The Clearfog GT-8K can be setup to load the bootloader from different sources
-+including eMMC, SPI flash, and SD-card.
-+
-+To select boot from SD-card the DIP switches in SW6 (at the bottom of the
-+board) should be configured as follows:
-+
-+  SW6: 11010
-+
-+Insert the micro SDcard in the Cleargfog GT-8K and power it up.
-+
-+Serial console
-+==============
-+
-+The serial console is accessible at the J27 pins header (TTL UART) with the
-+following pinout (pin #1 is marked with triangle on the PCB):
-+
-+  pin #1: Ground
-+  pin #2: Armada 8040 Rx
-+  pin #3: Armada 8040 Tx
-+
-+Enable the switch (yellow) Ethernet ports
-+=========================================
-+
-+To enable the Clearfog GT-8K internal switch port make sure to load the
-+'mv88e6xxx' kernel module, and up the switch up-link port (eth2 by default):
-+
-+  modprobe mv88e6xxx
-+  ifconfig eth2 up
-+
-+Then you can configure each switch port separately. These port are named
-+'lan1' to 'lan4' by default. 'lan1' is closest to the USB port, while 'lan4'
-+is closest to the blue Ethernet port.
-diff --git a/board/solidrun/clearfog_gt_8k/uboot-fragment.config b/board/solidrun/clearfog_gt_8k/uboot-fragment.config
-new file mode 120000
-index 000000000000..996c4aa6b6fb
---- /dev/null
-+++ b/board/solidrun/clearfog_gt_8k/uboot-fragment.config
-@@ -0,0 +1 @@
-+../macchiatobin/uboot-fragment.config
-\ No newline at end of file
-diff --git a/configs/solidrun_clearfog_gt_8k_defconfig b/configs/solidrun_clearfog_gt_8k_defconfig
-new file mode 100644
-index 000000000000..a44038e66392
---- /dev/null
-+++ b/configs/solidrun_clearfog_gt_8k_defconfig
-@@ -0,0 +1,46 @@
-+BR2_aarch64=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
-+BR2_TARGET_GENERIC_HOSTNAME="clearfog-gt-8k"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for SolidRun Clearfog GT-8K"
-+
-+# Firmware
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
-+# This commit corresponds to release armada-18.09.4
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="711ecd32afe465b38052b5ba374c825b158eea18"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_UBOOT_AS_BL33=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="USE_COHERENT_MEM=0"
-+BR2_TARGET_BINARIES_MARVELL=y
-+BR2_TARGET_BINARIES_MARVELL_8040=y
-+BR2_TARGET_MV_DDR_MARVELL=y
-+
-+# U-Boot
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="clearfog_gt_8k"
-+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog_gt_8k/uboot-fragment.config"
-+
-+# Kernel
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.9"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog_gt_8k/linux-extras.config"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="marvell/armada-8040-clearfog-gt-8k"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+# rootfs
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/solidrun/clearfog_gt_8k/post-build-mainline.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/solidrun/clearfog_gt_8k/genimage.cfg"
 -- 
 2.20.1
