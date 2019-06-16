@@ -1,49 +1,137 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Jun 2019 22:13:38 +0200
-Subject: [Buildroot] [PATCH buildroot-test] web/import.inc.php: account for
- failures that contain an images/ path
-Message-ID: <20190616201338.4593-1-thomas.petazzoni@bootlin.com>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Sun, 16 Jun 2019 22:15:04 +0200
+Subject: [Buildroot] [PATCH 1/1] package/busybox: update S10mdev
+In-Reply-To: <20190614172647.GA32315@smile.fi.intel.com>
+References: <20190529142528.256795-1-titouan.christophe@railnova.eu>
+ <20190614172647.GA32315@smile.fi.intel.com>
+Message-ID: <f5b12853-22d5-2d4a-8ddc-0e66f97c788e@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With the testing of BR2_REPRODUCIBLE=y recently added and its
-generation of a tar filesystem, we are now testing the tar filesystem
-generation logic, and this reveals some interesting breakage, such as:
+Hello Andy,
 
-  http://autobuild.buildroot.net/results/fe3/fe378bca29c86a681ba9ad40386cb89248195c50/build-end.log
+Thank you for following up !
 
-However, the "reason" deduced from the build log by the PHP logic is a
-bit crappy, it's
-"/home/br-user/autobuild/run/instance-0/output/images/rootfs.tar".
+On 6/14/19 7:26 PM, Andy Shevchenko wrote:
+> On Wed, May 29, 2019 at 04:25:28PM +0200, Titouan Christophe wrote:
+>> Avoid race conditions in mdev invocations
+>> * use the uevent daemon if possible
+>> * fallback to hotplug (as before) and initialize /dev/mdev.seq
+>> * otherwise print an error message and do nothing else
+>>
+> 
+> Thanks!
+> 
+> Tested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+> 
+> What are we going to do with this?
+> As of today Buildroot can not be used with mdev in current state.
 
-This commit adjusts the ugly PHP code with even more ugliness to take
-into account the fact that a path may look like
-foo/thing/build/<pkg>-<version>/.stamp_something or like
-foo/thing/images/rootfs.tar.
+In the meantime Busybox did introduce the daemon mode for mdev, which 
+renders this patch obsolete (see the thread "linux: enable UEVENT_HELPER 
+when mdev is used" over there 
+http://lists.busybox.net/pipermail/buildroot/2019-June/251744.html).
 
-The reasons extracted for the two previous examples would be
-"<pkg>-<version>" (like is done today) and "rootfs.tar".
+I discussed this with Arnout on IRC, and the outcome is that we will 
+adapt the S10mdev script to use the new daemon mode as soon as the next 
+Busybox release is available.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- web/import.inc.php | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+In the meantime, I guess the best option is to keep this patched script 
+out of tree (this is what I'm doing right now).
 
-diff --git a/web/import.inc.php b/web/import.inc.php
-index 5b5462e..956c6d8 100644
---- a/web/import.inc.php
-+++ b/web/import.inc.php
-@@ -231,7 +231,7 @@ function import_result($buildid, $filename)
-       $reason = "none";
-     else {
- 	$tmp = Array();
--	exec("tail -3 " . $thisbuildfinaldir . "build-end.log | grep -v '\[_all\]' | grep 'make.*: \*\*\*' | sed 's,.*\[\([^\]*\)\] Error.*,\\1,' | sed 's,.*/build/\([^/]*\)/.*,\\1,'", $tmp);
-+	exec("tail -3 " . $thisbuildfinaldir . "build-end.log | grep -v '\[_all\]' | grep 'make.*: \*\*\*' | sed 's,.*\[\([^\]*\)\] Error.*,\\1,' | sed 's,.*/\(images\|build\)/\([^/]*\).*,\\2,'", $tmp);
- 	if (trim($tmp[0]))
- 	  $reason = $tmp[0];
- 	else {
--- 
-2.21.0
+Best regards,
+
+Titouan
+
+> 
+>> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+>> ---
+>>   package/busybox/S10mdev | 66 +++++++++++++++++++++++++++++++++++------
+>>   1 file changed, 57 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
+>> index 7075b77016..f1a836da32 100644
+>> --- a/package/busybox/S10mdev
+>> +++ b/package/busybox/S10mdev
+>> @@ -1,20 +1,68 @@
+>>   #!/bin/sh
+>>   #
+>> -# Start mdev....
+>> +# Start mdev, using the uevent daemon whereas possible
+>>   #
+>>   
+>> -case "$1" in
+>> -  start)
+>> -	echo "Starting mdev..."
+>> -	echo /sbin/mdev >/proc/sys/kernel/hotplug
+>> +DAEMON="uevent"
+>> +PIDFILE="/var/run/$DAEMON.pid"
+>> +
+>> +has_uevent_and_netlink() {
+>> +	[ -f /proc/net/netlink ] && [ -x /sbin/uevent ]
+>> +}
+>> +
+>> +has_hotplug() {
+>> +	[ -w /proc/sys/kernel/hotplug ]
+>> +}
+>> +
+>> +
+>> +start() {
+>> +	if has_uevent_and_netlink; then
+>> +		echo -n "Starting mdev within uevent... "
+>> +		start-stop-daemon -S -b -m -p $PIDFILE -x /sbin/uevent -- /sbin/mdev
+>> +		[ $? -eq 0 ] && echo "OK" || echo "FAIL"
+>> +	elif has_hotplug; then
+>> +		echo "Installing mdev as hotplug helper"
+>> +		# Initialize the seq counter to prevent plug/unplug races
+>> +		touch /dev/mdev.seq
+>> +		echo /sbin/mdev > /proc/sys/kernel/hotplug
+>> +	else
+>> +		echo "ERROR: neither netlink+uevent nor hotplug are available"
+>> +		echo "       Unable to start mdev !"
+>> +		exit 1
+>> +	fi
+>> +
+>> +	# Run boot time /sys scan
+>>   	/sbin/mdev -s
+>> +
+>>   	# coldplug modules
+>>   	find /sys/ -name modalias -print0 | xargs -0 sort -u | tr '\n' '\0' | \
+>>   	    xargs -0 modprobe -abq
+>> -	;;
+>> -  stop)
+>> -	;;
+>> -  restart|reload)
+>> +}
+>> +
+>> +stop() {
+>> +	if has_uevent_and_netlink; then
+>> +		echo -n "Stopping mdev within uevent... "
+>> +		start-stop-daemon -K -p $PIDFILE
+>> +		[ $? -eq 0 ] && echo "OK" || echo "FAIL"
+>> +	elif has_hotplug; then
+>> +		echo "Uninstalling mdev from hotplug helper"
+>> +		echo > /proc/sys/kernel/hotplug
+>> +	else
+>> +		echo "ERROR: neither netlink+uevent nor hotplug are available"
+>> +		echo "       Unable to stop mdev !"
+>> +		exit 1
+>> +	fi
+>> +}
+>> +
+>> +restart() {
+>> +	stop
+>> +	start
+>> +}
+>> +
+>> +
+>> +case "$1" in
+>> +  start|stop|restart)
+>> +	$1
+>>   	;;
+>>     *)
+>>   	echo "Usage: $0 {start|stop|restart}"
+> 
