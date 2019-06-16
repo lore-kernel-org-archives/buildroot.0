@@ -1,73 +1,43 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Jun 2019 22:20:18 +0200
-Subject: [Buildroot] [PATCH 1/2] package/iputils: move binaries to the
- location also used by Busybox
-In-Reply-To: <20190616200919.4378-1-thomas.petazzoni@bootlin.com>
-References: <20190616200919.4378-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190616202018.GC2216@scaer>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 16 Jun 2019 22:23:36 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/flatbuffers: bump version to
+ v1.11.0
+Message-ID: <20190616202337.27216-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: initial version
 
-On 2019-06-16 22:09 +0200, Thomas Petazzoni spake thusly:
-> iputils installs several programs that are also implemented as applets
-> in Busybox. Two of these (arping and tftpd) are installed by iputils
-> in /bin, while Busybox installs them in /usr/sbin, causing both to be
-> present if both iputils and busybox are enabled.
-> 
-> This commit moves the binaries installed by iputils to /usr/sbin, so
-> that only these are installed (Busybox will be installed later thanks
-> to its optional dependency on iputils, but it will not override the
-> tools installed by iputils).
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/iputils/iputils.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> index 8be54b4788..fbf586729b 100644
-> --- a/package/iputils/iputils.mk
-> +++ b/package/iputils/iputils.mk
-> @@ -52,6 +52,16 @@ endif
->  # XSL Stylesheets for DocBook 5 not packaged for buildroot
->  IPUTILS_CONF_OPTS += -DBUILD_MANS=false -DBUILD_HTML_MANS=false
->  
-> +# move iputils binaries to the same location as where Busybox installs
-> +# the corresponding applets, so that we have a single version of the
-> +# tools (from iputils)
-> +define IPUTILS_MOVE_BINARIES
-> +	mv $(TARGET_DIR)/usr/bin/arping $(TARGET_DIR)/usr/sbin/arping
-> +	mv $(TARGET_DIR)/usr/bin/ping $(TARGET_DIR)/bin/ping
+ package/flatbuffers/flatbuffers.hash | 2 +-
+ package/flatbuffers/flatbuffers.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-This one will fail with a merged /usr, I guess...
-
-Regards,
-Yann E. MORIN.
-
-> +	mv $(TARGET_DIR)/usr/bin/tftpd $(TARGET_DIR)/usr/sbin/tftpd
-> +endef
-> +IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_BINARIES
-> +
->  # handle permissions ourselves
->  IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
->  define IPUTILS_PERMISSIONS
-> -- 
-> 2.21.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+diff --git a/package/flatbuffers/flatbuffers.hash b/package/flatbuffers/flatbuffers.hash
+index 7afe849cd7..3cd737273a 100644
+--- a/package/flatbuffers/flatbuffers.hash
++++ b/package/flatbuffers/flatbuffers.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	3714e3db8c51e43028e10ad7adffb9a36fc4aa5b1a363c2d0c4303dd1be59a7c	flatbuffers-v1.10.0.tar.gz
++sha256	3f4a286642094f45b1b77228656fbd7ea123964f19502f9ecfd29933fd23a50b	flatbuffers-v1.11.0.tar.gz
+ sha256	7ec9661a8afafab1eee3523d6f1a193eff76314a5ab10b4ce96aefd87621b0c3	LICENSE.txt
+diff --git a/package/flatbuffers/flatbuffers.mk b/package/flatbuffers/flatbuffers.mk
+index 69054885ea..8252a1616c 100644
+--- a/package/flatbuffers/flatbuffers.mk
++++ b/package/flatbuffers/flatbuffers.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLATBUFFERS_VERSION = v1.10.0
++FLATBUFFERS_VERSION = v1.11.0
+ FLATBUFFERS_SITE = $(call github,google,flatbuffers,$(FLATBUFFERS_VERSION))
+ FLATBUFFERS_LICENSE = Apache-2.0
+ FLATBUFFERS_LICENSE_FILES = LICENSE.txt
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
