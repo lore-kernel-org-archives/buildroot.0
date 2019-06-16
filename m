@@ -1,35 +1,20 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 16 Jun 2019 13:45:36 +0200
+From: Aleksander Morgado <aleksander@aleksander.es>
+Date: Sun, 16 Jun 2019 13:40:31 +0200
 Subject: [Buildroot] [PATCH] modem-manager: depend on host-libglib2
 In-Reply-To: <8736k9sube.fsf@tarshish>
 References: <20190616101128.14729-1-aleksander@aleksander.es>
  <8736k9sube.fsf@tarshish>
-Message-ID: <20190616114536.GA2216@scaer>
+Message-ID: <CAAP7ucJH=ztHzENDrLcMe+NCn2=X1tMqv2hJOzyypnEmZ+d7hQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Baruch, Aleksander, Al,
-
-On 2019-06-16 13:23 +0300, Baruch Siach spake thusly:
 > On Sun, Jun 16 2019, Aleksander Morgado wrote:
 > > The build requires the gdbus-codegen tool from glib2, which isn't
 > > installed in target.
-
-As I explained on IRC, this is already the case, via the dbus-glib ->
-libglib2 -? host-libglib2 dependency chain.
-
-So, as Baruch notes, this patch would probably not solve the issue.
-
-Instead, we have a patch that should fix the issue:
-
-    https://patchwork.ozlabs.org/patch/1115572/
-
-Regards,
-Yann E. MORIN.
-
+> >
 > > Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
 > > ---
 > >
@@ -58,31 +43,26 @@ Yann E. MORIN.
 > >  MODEM_MANAGER_LICENSE_FILES = COPYING COPYING.LIB
 > > -MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool libglib2
 > > +MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool host-libglib2 libglib2
-> 
+>
 > libglib2 depends on host-libglib2 already. So technically this doesn't
 > change anything.
-> 
+>
 > Have you verified that the build failure is fixed with your patch
 > applied?
-> 
-> >  MODEM_MANAGER_INSTALL_STAGING = YES
-> >  MODEM_MANAGER_CONF_OPTS = --disable-more-warnings
-> 
-> baruch
-> 
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+>
+
+See, I wasn't getting the build failure locally anyway myself... so
+this was kind of a blind attempt of fixing this, which looks like it's
+totally wrong :D
+
+I got pointed to this not-yet-commited patch, which explains my issue
+and why only gdbus-codegen (provided by gio) was failing and not
+glib-mkenums (provided by glib):
+https://patchwork.ozlabs.org/patch/1115572/
+
+The MM build failure will definitely go away once that patch is
+merged, sorry for the noise!
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Aleksander
+https://aleksander.es
