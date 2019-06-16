@@ -1,55 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 16 Jun 2019 22:09:18 +0200
-Subject: [Buildroot] [PATCH 2/2] package/iputils: fix IPUTILS_PERMISSIONS
-In-Reply-To: <20190616200919.4378-1-thomas.petazzoni@bootlin.com>
-References: <20190616200919.4378-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190616200919.4378-2-thomas.petazzoni@bootlin.com>
+Date: Sun, 16 Jun 2019 22:13:38 +0200
+Subject: [Buildroot] [PATCH buildroot-test] web/import.inc.php: account for
+ failures that contain an images/ path
+Message-ID: <20190616201338.4593-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The IPUTILS_PERMISSIONS variable was wrong, because iputils installs
-its programs in /usr/bin, not in /bin. It probably was only tested
-with the merged /usr option enabled.
+With the testing of BR2_REPRODUCIBLE=y recently added and its
+generation of a tar filesystem, we are now testing the tar filesystem
+generation logic, and this reveals some interesting breakage, such as:
 
-This commit fixes IPUTILS_PERMISSIONS, taking into account the change
-done in "package/iputils: move binaries to the location also used by
-Busybox":
+  http://autobuild.buildroot.net/results/fe3/fe378bca29c86a681ba9ad40386cb89248195c50/build-end.log
 
- - arping is moved by the post-install target hook to /usr/sbin
+However, the "reason" deduced from the build log by the PHP logic is a
+bit crappy, it's
+"/home/br-user/autobuild/run/instance-0/output/images/rootfs.tar".
 
- - clockdiff is installed by iputils in /usr/bin
+This commit adjusts the ugly PHP code with even more ugliness to take
+into account the fact that a path may look like
+foo/thing/build/<pkg>-<version>/.stamp_something or like
+foo/thing/images/rootfs.tar.
 
- - ping is moved by the post-install target hook to /bin, which makes
-   the previously incorrect path in IPUTILS_PERMISSIONS now correct
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/fe378bca29c86a681ba9ad40386cb89248195c50/
+The reasons extracted for the two previous examples would be
+"<pkg>-<version>" (like is done today) and "rootfs.tar".
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/iputils/iputils.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ web/import.inc.php | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index fbf586729b..394c19a943 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -65,9 +65,9 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_BINARIES
- # handle permissions ourselves
- IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
- define IPUTILS_PERMISSIONS
--	/bin/arping      f 4755 0 0 - - - - -
--	/bin/clockdiff   f 4755 0 0 - - - - -
--	/bin/ping        f 4755 0 0 - - - - -
-+	/usr/sbin/arping      f 4755 0 0 - - - - -
-+	/usr/bin/clockdiff    f 4755 0 0 - - - - -
-+	/bin/ping             f 4755 0 0 - - - - -
- endef
- 
- $(eval $(meson-package))
+diff --git a/web/import.inc.php b/web/import.inc.php
+index 5b5462e..956c6d8 100644
+--- a/web/import.inc.php
++++ b/web/import.inc.php
+@@ -231,7 +231,7 @@ function import_result($buildid, $filename)
+       $reason = "none";
+     else {
+ 	$tmp = Array();
+-	exec("tail -3 " . $thisbuildfinaldir . "build-end.log | grep -v '\[_all\]' | grep 'make.*: \*\*\*' | sed 's,.*\[\([^\]*\)\] Error.*,\\1,' | sed 's,.*/build/\([^/]*\)/.*,\\1,'", $tmp);
++	exec("tail -3 " . $thisbuildfinaldir . "build-end.log | grep -v '\[_all\]' | grep 'make.*: \*\*\*' | sed 's,.*\[\([^\]*\)\] Error.*,\\1,' | sed 's,.*/\(images\|build\)/\([^/]*\).*,\\2,'", $tmp);
+ 	if (trim($tmp[0]))
+ 	  $reason = $tmp[0];
+ 	else {
 -- 
 2.21.0
