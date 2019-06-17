@@ -1,54 +1,66 @@
-From: Jared Bents <jared.bents@rockwellcollins.com>
-Date: Mon, 17 Jun 2019 15:27:23 -0500
-Subject: [Buildroot] [External] Re: [PATCH v2 1/1] package/hostapd: add
- debug information options
-In-Reply-To: <20190617210223.77a97ee2@windsurf>
-References: <20190617153533.26255-1-jared.bents@rockwellcollins.com>
- <20190617194121.64c14291@windsurf>
- <CAM=7fbd717PmwGE5Dh4Wi4AGhY14Pb7tabG7qrxCsgdCgDQ-LQ@mail.gmail.com>
- <20190617210223.77a97ee2@windsurf>
-Message-ID: <CAM=7fbdLrLEWdC+hKVUywG273Z6CHkuT2irQ1f_7ogDj6aapfg@mail.gmail.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 17 Jun 2019 22:32:36 +0200
+Subject: [Buildroot] [PATCH 2/2] package/iputils: fix IPUTILS_PERMISSIONS
+In-Reply-To: <20190616200919.4378-2-thomas.petazzoni@bootlin.com>
+References: <20190616200919.4378-1-thomas.petazzoni@bootlin.com>
+ <20190616200919.4378-2-thomas.petazzoni@bootlin.com>
+Message-ID: <20190617203235.GB8498@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jun 17, 2019 at 2:02 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Mon, 17 Jun 2019 12:56:08 -0500
-> Jared Bents <jared.bents@collins.com> wrote:
->
-> > > Could you explain what CONFIG_DEBUG_FILE is doing compared to
-> > > CONFIG_DEBUG_SYSLOG, and why one is conditional and not the other ? Do
-> > > we really want CONFIG_DEBUG_FILE unconditionally ?
-> >
-> > I based it off of wpa_supplicant's implementation for each.  In
-> > wpa_supplicant, CONFIG_DEBUG_FILE is turned on unconditionally while
-> > CONFIG_DEBUG_SYSLOG is optional.  CONFIG_DEBUG_FILE enables a runtime
-> > option (-f) to specify a file to direct the hostapd output to instead
-> > of stdout.  CONFIG_DEBUG_SYSLOG enables a runtime option (-s) to have
-> > the output go to syslog instead of stdout.  These are purely optional
-> > at runtime as if neither of the -f or -s command line arguments are
-> > used, the output will go to stdout as before.
->
-> What is the size impact of each option, compared to the overall
-> installation size of hostapd ?
+Hi Thomas,
 
-I haven't been able to determine a size impact.  When trying to see a
-size difference, I am getting sizes for hostapd varying between 1.4M
-and 1.6M without any real correlation with whether I have one of the
-two options selected, both selected, or neither of them selected
+> The IPUTILS_PERMISSIONS variable was wrong, because iputils installs
+> its programs in /usr/bin, not in /bin. It probably was only tested
+> with the merged /usr option enabled.
+
+> This commit fixes IPUTILS_PERMISSIONS, taking into account the change
+> done in "package/iputils: move binaries to the location also used by
+> Busybox":
+
+>  - arping is moved by the post-install target hook to /usr/sbin
+
+>  - clockdiff is installed by iputils in /usr/bin
+
+>  - ping is moved by the post-install target hook to /bin, which makes
+>    the previously incorrect path in IPUTILS_PERMISSIONS now correct
+
+> Fixes:
+
+>   http://autobuild.buildroot.net/results/fe378bca29c86a681ba9ad40386cb89248195c50/
+
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  package/iputils/iputils.mk | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+
+> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+> index fbf586729b..394c19a943 100644
+> --- a/package/iputils/iputils.mk
+> +++ b/package/iputils/iputils.mk
+> @@ -65,9 +65,9 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_BINARIES
+>  # handle permissions ourselves
+>  IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
+>  define IPUTILS_PERMISSIONS
+> -	/bin/arping      f 4755 0 0 - - - - -
+> -	/bin/clockdiff   f 4755 0 0 - - - - -
+> -	/bin/ping        f 4755 0 0 - - - - -
+> +	/usr/sbin/arping      f 4755 0 0 - - - - -
+> +	/usr/bin/clockdiff    f 4755 0 0 - - - - -
+> +	/bin/ping             f 4755 0 0 - - - - -
+
+again thanks for the fix and sorry for introducing bug.
+Acked-by: Petr Vorel <petr.vorel@gmail.com>
+
+The only thing to consider:
+Upstream doesn't care much about systems without usr merge.
+I wonder if systems without it (unset BR2_ROOTFS_MERGED_USR),
+whether we want to have /bin/ping and symlinked it into /usr/bin/ping.
+I see this is handled for coreutils (COREUTILS_BIN_PROGS).
 
 
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://urldefense.proofpoint.com/v2/url?u=https-3A__bootlin.com&d=DwICAg&c=ilBQI1lupc9Y65XwNblLtw&r=04jwxyh4njdMBVpO4oXKRLEInKSiF8pfOjV75AsF1bU&m=PmA5YY-0KdN5c4F6VT2nEv0Iwi2cNaKyRwDGKIuEyFM&s=k9ILTT4pycZsRW8MEQf9QNxS0p855aHiN9tZ3rBWwBA&e=
-
-Jared
+Kind regards,
+Petr
