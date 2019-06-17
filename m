@@ -1,106 +1,75 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Jun 2019 06:00:55 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-06-16
-Message-ID: <20190617060103.D60A187397@hemlock.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 17 Jun 2019 09:23:17 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.{0, 1}.x series
+Message-ID: <20190617072318.9756-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-Build statistics for 2019-06-16
-===============================
-
-      branch |  OK | NOK | TIM | TOT |
-   2019.02.x |  15 |   0 |   0 |  15 |
-   2019.05.x |  21 |   2 |   0 |  23 |
-      master | 179 |  39 |   2 | 220 |
-
-Results for branch '2019.05.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-             host-cargo-0.26.0 | 1 
-                suricata-4.1.3 | 1 
-
-
-Detail of failures
-------------------
-
-     riscv32 |              host-cargo-0.26.0 | NOK | http://autobuild.buildroot.net/results/dcc13af687d8a1d6eaa9f61a0b03bd3ca39c281b |     
-        m68k |                 suricata-4.1.3 | NOK | http://autobuild.buildroot.net/results/ddd50bde717c0e5d95501baf95038a38f17d9ae0 |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-               libglib2-2.60.3 | 17
-          modem-manager-1.10.0 | 8 
-                   cups-2.2.10 | 3 
-           host-mfgtools-v0.02 | 2 
-                qt5base-5.12.2 | 2 
-/home/br-user/autobuild/run... | 1 
-/home/peko/autobuild/instan... | 1 
-              domoticz-4.10717 | 1 
-                      gzip-1.9 | 1 
-                host-libsodium | 1 
-               libsigsegv-2.12 | 1 
-                        prboom | 1 
-  vdr-plugin-vnsiserver-v1.8.0 | 1 
-               wireshark-3.0.2 | 1 
-
-
-Detail of failures
-------------------
-
-       nios2 | /home/br-user/autobuild/run... | NOK | http://autobuild.buildroot.net/results/fe378bca29c86a681ba9ad40386cb89248195c50 |     
-microblazeel | /home/peko/autobuild/instan... | NOK | http://autobuild.buildroot.net/results/c9bdde0e4834e8264c906c1645f62cbe208d3668 |     
-         arc |                    cups-2.2.10 | NOK | http://autobuild.buildroot.net/results/2a4ce16748f2052c5348ae8958b78fe23d7d5339 |     
-         arm |                    cups-2.2.10 | NOK | http://autobuild.buildroot.net/results/d139392208e444f76b1e701a01206dabcf455530 |     
-     sparc64 |                    cups-2.2.10 | NOK | http://autobuild.buildroot.net/results/f4f2586d3d5d728b233fbf06985587ba4e25e52d |     
-    mips64el |               domoticz-4.10717 | NOK | http://autobuild.buildroot.net/results/d9baf8f7c614f82d4c8c019e7dc29a2055398483 |     
-         arm |                       gzip-1.9 | NOK | http://autobuild.buildroot.net/results/c6c52f08a77752049c242d1dcec3d6dc0d52e6d8 | ORPH
-         arm |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/16b44e1d6ecd0d5ef99efa66c70c46cd6deb5dd6 |     
-         arm |            host-mfgtools-v0.02 | NOK | http://autobuild.buildroot.net/results/5fa83a95f29859961ddf700e0e8d43e19a0bca42 |     
-         arm |            host-mfgtools-v0.02 | NOK | http://autobuild.buildroot.net/results/7718444cd0f21a80f9f798fb6aeeec4d09fa6723 |     
-     powerpc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/e7fde15a72b83c3f3ced6759e0492bb3f63f9ca5 |     
-      xtensa |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/5cf0045dde46d74f7b3f4e53124bc984e3be4e3b |     
-         arm |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/2bc993d8c0eb0d7e1e616c9ba6930907c62c30c4 |     
-microblazeel |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/38e45d0dc3a8ae6dbdfb6b0aaacf1ca2f955b900 |     
-         arm |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/4727cd32a70156f9e58561ed94cb029cefce65b0 |     
-       sparc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/0f5084a95a4230a9a9b9bba48b0847b37ded5c76 |     
-         arc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/6fa3ac4b3bfded1d71df2f349df60e38e682991e |     
-         arm |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/1e1b28f51b5ab2e90ddf9b6fe95b79a7487d233e |     
-        or1k |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/e26b33b54f1d4e07f95b41b177d4f759c1a59a26 |     
-      mipsel |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/fc3b77e37306291de7f3de551df6809869fc47d0 |     
-        or1k |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/9f60cbc55f58b429998d43c251a5c3e64e8686db |     
-    mips64el |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/b395d0ead98badf4a7a394fb14f61ad39ecf63fd |     
-        or1k |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/ceb34dfe7de11dd1abc343a387d4b72fb44005ab |     
-        or1k |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/13d862325b6d9a9c7a54df9398c42ee8a0799f4a |     
-         arm |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/66678ea3c798d61db6ac4e3e58c2e54019b4e988 |     
-     powerpc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/7b161ddd569f30c995d4d41aebd6d770ae4bc84e |     
-      xtensa |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/b68b94f31343785480cde3069aa3614e6f6c7344 |     
-     nds32le |                libsigsegv-2.12 | NOK | http://autobuild.buildroot.net/results/9ef252db3145967bbe8031a62f32d2c62976fc37 |     
-         arm |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/761f5d696372aa97531ef7bb699a5458f61ab181 |     
-         arc |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/5b057fdaa0882eb26a7603944e7f4c23bd418f77 |     
-   powerpc64 |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/863da315f5c9c0aa76ede7e917929b038977bdbc |     
-         arc |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/eaf04379e8c1e5d229ad00bbf3b2b46905b2bcf4 |     
-        i686 |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/5b8e8ce9a90309692064c62036351d69fb6fd04b |     
-      mipsel |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/e352cd0de06c423b3403c174d768a2b989528043 |     
-         arc |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/9bc21c1950809c9f3f38fcbe6dd3803658cee8d2 |     
-    mips64el |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/04c02d62acf016ffa39aca13689d868243b5cde8 |     
-microblazeel |                         prboom | TIM | http://autobuild.buildroot.net/results/91433ab30cdfb996edc76eb0fcc0734cf1d38491 |     
-  aarch64_be |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/8a2390b863efa50726f67c31133018d7805470c7 |     
-      x86_64 |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/5bc448911c96ddd0f2675a259c7713b3dc938fff |     
-  aarch64_be |   vdr-plugin-vnsiserver-v1.8.0 | NOK | http://autobuild.buildroot.net/results/11d440d004476f1b1a8a8409a4165409e7cb0936 |     
-     powerpc |                wireshark-3.0.2 | NOK | http://autobuild.buildroot.net/results/3515e18f2a54a4c8d19c326206a2ab08a1ac0dcc | ORPH
-
-
+diff --git a/linux/Config.in b/linux/Config.in
+index a6a16deee0..95ee1cf542 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -121,7 +121,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.1.6" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.1.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index edb3839e0f..6477991daa 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256 9d68a206b0808d81ce582c861d0bda0d1095bcbd0f181db063665b68fc9cf478  linux-5.1.6.tar.xz
+-sha256 3ba720f3189e5a08e7c533da8c12595d662a6c11d3466db6a0ff164ef4e54b68  linux-5.0.20.tar.xz
++sha256 39063041532579cb7e9fab5837313a8e6639c1c583cd39c72b313b3abfa9fbcf  linux-5.1.10.tar.xz
++sha256 98d307a546c95a215dee675ffa4b63c2a7a29e7af839f0d8dfb96dbb61aac2d7  linux-5.0.21.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 5d08f3890e7ca2b94529675120f170c5b764f795e6dd184a1190c23a40ef5365  linux-4.19.47.tar.xz
+-sha256 25f58cb56bde388ac9bcee984f5f2d0ca094b0a8af6b92ad1f5b2fd0e6725b85  linux-4.14.123.tar.xz
+-sha256 d25a490d62a3e96a587333e163862585eac4086fc8d4893b4ec1711e7d387c5f  linux-4.9.180.tar.xz
+-sha256 1a450217d381bb7fd259d026d3b7a57c717e8d1f66754cd6fcc9df3c4a8a6a7a  linux-4.4.180.tar.xz
++sha256 7afa920d776f8ca3fc3ced5026cc02c5ccc960c58314050982c307589b5a8d70  linux-4.19.51.tar.xz
++sha256 6a2e89504d8560b132ab743a0206ffce026bff2697b705819421c5f125633970  linux-4.14.126.tar.xz
++sha256 8fcd223e11cba322801bc38cdb8b581d64c0115f585dcb6604de8561b574fced  linux-4.9.181.tar.xz
++sha256 b2ab69813192d49b1b7f89257a3319ef3fd73a54f441f3296d68b744b1c681d3  linux-4.4.181.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index f75e834505..eb957b4f12 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -301,12 +301,12 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.180"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.180"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.123"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.47"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.0.20"	if BR2_KERNEL_HEADERS_5_0
+-	default "5.1.6"		if BR2_KERNEL_HEADERS_5_1
++	default "4.4.181"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.181"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.126"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.51"	if BR2_KERNEL_HEADERS_4_19
++	default "5.0.21"	if BR2_KERNEL_HEADERS_5_0
++	default "5.1.10"	if BR2_KERNEL_HEADERS_5_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-http://autobuild.buildroot.net
+2.11.0
