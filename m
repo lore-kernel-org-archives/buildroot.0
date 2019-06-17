@@ -1,67 +1,42 @@
-From: jared.bents at rockwellcollins.com <jared.bents@rockwellcollins.com>
-Date: Mon, 17 Jun 2019 10:17:10 -0500
-Subject: [Buildroot] [PATCH v1 1/1] package/hostapd: add debug information
- options
-Message-ID: <20190617151710.21576-1-jared.bents@rockwellcollins.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Mon, 17 Jun 2019 09:17:20 -0600
+Subject: [Buildroot] [PATCH 1/1] package/meson: bump to version 0.51.0
+Message-ID: <20190617151720.60502-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jared Bents <jared.bents@rockwellcollins.com>
-
-hostapd 2.7 added compile time options to include
-redirecting the output from stdout to a file or syslog
-like wpa_supplicant
-
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/hostapd/Config.in  | 5 +++++
- package/hostapd/hostapd.mk | 8 +++++++-
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
-index 37c1126859..c569979835 100644
---- a/package/hostapd/Config.in
-+++ b/package/hostapd/Config.in
-@@ -28,6 +28,11 @@ config BR2_PACKAGE_HOSTAPD_DRIVER_NL80211
- 	help
- 	  Enable support for drivers using the nl80211 kernel interface.
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index 9e60fa6349..da031e8cd7 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.50.1/meson-0.50.1.tar.gz.asc
+-sha256 f68f56d60c80a77df8fc08fa1016bc5831605d4717b622c96212573271e14ecc meson-0.50.1.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.51.0/meson-0.51.0.tar.gz.asc
++sha256 2f75fdf6d586d3595c03a07afcd0eaae11f68dd33fea5906a434d22a409ed63f meson-0.51.0.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index cf62b0ddde..5b5100cccc 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_HOSTAPD_DEBUG_SYSLOG
-+	bool "Enable syslog support"
-+	help
-+	  Enable support for sending debug messages to syslog.
-+
- comment "nl80211 driver needs a toolchain w/ threads"
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS
- 
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 550f887206..49af54feb5 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -31,7 +31,9 @@ HOSTAPD_LICENSE = BSD-3-Clause
- HOSTAPD_LICENSE_FILES = README
- HOSTAPD_CONFIG_SET =
- 
--HOSTAPD_CONFIG_ENABLE = CONFIG_INTERNAL_LIBTOMMATH
-+HOSTAPD_CONFIG_ENABLE = \
-+	CONFIG_INTERNAL_LIBTOMMATH \
-+	CONFIG_DEBUG_FILE
- 
- HOSTAPD_CONFIG_DISABLE =
- 
-@@ -58,6 +60,10 @@ HOSTAPD_PATCH += https://github.com/pritambaral/hostapd-rtl871xdrv/raw/master/rt
- HOSTAPD_CONFIG_SET += CONFIG_DRIVER_RTW
- endif
- 
-+ifeq ($(BR2_PACKAGE_HOSTAPD_DEBUG_SYSLOG),y)
-+HOSTAPD_CONFIG_ENABLE += CONFIG_DEBUG_SYSLOG
-+endif
-+
- ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_WIRED),y)
- HOSTAPD_CONFIG_ENABLE += CONFIG_DRIVER_WIRED
- endif
+-MESON_VERSION = 0.50.1
++MESON_VERSION = 0.51.0
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
 -- 
-2.18.0
+2.20.1
