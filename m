@@ -1,66 +1,69 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Jun 2019 21:28:36 +0200
-Subject: [Buildroot] [git commit] package/systemd: add option to enable
- systemd-journal-remote
-Message-ID: <20190617193821.1570F8F544@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 17 Jun 2019 21:39:22 +0200
+Subject: [Buildroot] [PATCH buildroot-test] web/import.inc.php: account
+ for failures that contain an images/ path
+In-Reply-To: <20190616201338.4593-1-thomas.petazzoni@bootlin.com>
+References: <20190616201338.4593-1-thomas.petazzoni@bootlin.com>
+Message-ID: <ae30e2fd-d790-5040-4cca-ca53b17d13d1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2dbce34b3a2c8fc1a854395f6c33df658371eae4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-systemd-journal-remote was added in systemd v211, so add a new option
-to enable or disable it.
 
-Signed-off-by: Yi Zheng <goodmenzy@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/systemd/Config.in  | 14 ++++++++++++++
- package/systemd/systemd.mk |  6 ++++++
- 2 files changed, 20 insertions(+)
+On 16/06/2019 22:13, Thomas Petazzoni wrote:
+> With the testing of BR2_REPRODUCIBLE=y recently added and its
+> generation of a tar filesystem, we are now testing the tar filesystem
+> generation logic, and this reveals some interesting breakage, such as:
+> 
+>   http://autobuild.buildroot.net/results/fe3/fe378bca29c86a681ba9ad40386cb89248195c50/build-end.log
+> 
+> However, the "reason" deduced from the build log by the PHP logic is a
+> bit crappy, it's
+> "/home/br-user/autobuild/run/instance-0/output/images/rootfs.tar".
+> 
+> This commit adjusts the ugly PHP code with even more ugliness to take
 
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 92ffc7cc5a..ad72a269ef 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -122,6 +122,20 @@ config BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
- 
- 	  http://www.freedesktop.org/software/systemd/man/systemd-journal-gatewayd.service.html
- 
-+config BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE
-+	bool "enable systemd-journal-remote"
-+	depends on BR2_PACKAGE_SYSTEMD_JOURNAL_GATEWAY
-+	select BR2_PACKAGE_LIBCURL
-+	help
-+	  systemd-journal-remote is a command to receive serialized
-+	  journal events and store them to journal files. Input
-+	  streams are in the Journal Export Format[1], i.e. like the
-+	  output from journalctl --output=export. For transport over
-+	  the network, this serialized stream is usually carried over
-+	  an HTTPS connection.
-+
-+	  https://www.freedesktop.org/software/systemd/man/systemd-journal-remote.service.html
-+
- config BR2_PACKAGE_SYSTEMD_BACKLIGHT
- 	bool "enable backlight support"
- 	help
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index edc4a9ecc1..e8fd7967bd 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -178,6 +178,12 @@ else
- SYSTEMD_CONF_OPTS += -Dmicrohttpd=false -Dqrencode=false
- endif
- 
-+ifeq ($(BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE),y)
-+SYSTEMD_CONF_OPTS += -Dremote=true
-+else
-+SYSTEMD_CONF_OPTS += -Dremote=false
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
- SYSTEMD_DEPENDENCIES += libselinux
- SYSTEMD_CONF_OPTS += -Dselinux=true
+ This sounds like a great idea :-)
+
+ Note that the Python code already has similar logic to extract the reason. Why
+don't we save that logic as part of the tarball in a "reason" file, and extract
+it from there?
+
+ I know someone who has been working on the autobuild_run script lately who
+could certainly do that :-)
+
+ That said, we still have to support the legacy database which doesn't have that
+"reason" file. So it's still useful to apply this patch.
+
+ Regards,
+ Arnout
+
+> into account the fact that a path may look like
+> foo/thing/build/<pkg>-<version>/.stamp_something or like
+> foo/thing/images/rootfs.tar.
+> 
+> The reasons extracted for the two previous examples would be
+> "<pkg>-<version>" (like is done today) and "rootfs.tar".
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  web/import.inc.php | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/web/import.inc.php b/web/import.inc.php
+> index 5b5462e..956c6d8 100644
+> --- a/web/import.inc.php
+> +++ b/web/import.inc.php
+> @@ -231,7 +231,7 @@ function import_result($buildid, $filename)
+>        $reason = "none";
+>      else {
+>  	$tmp = Array();
+> -	exec("tail -3 " . $thisbuildfinaldir . "build-end.log | grep -v '\[_all\]' | grep 'make.*: \*\*\*' | sed 's,.*\[\([^\]*\)\] Error.*,\\1,' | sed 's,.*/build/\([^/]*\)/.*,\\1,'", $tmp);
+> +	exec("tail -3 " . $thisbuildfinaldir . "build-end.log | grep -v '\[_all\]' | grep 'make.*: \*\*\*' | sed 's,.*\[\([^\]*\)\] Error.*,\\1,' | sed 's,.*/\(images\|build\)/\([^/]*\).*,\\2,'", $tmp);
+>  	if (trim($tmp[0]))
+>  	  $reason = $tmp[0];
+>  	else {
+> 
