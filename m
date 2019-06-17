@@ -1,75 +1,100 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 17 Jun 2019 09:23:17 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{0, 1}.x series
-Message-ID: <20190617072318.9756-1-peter@korsgaard.com>
+From: Sergey Naumov <sknaumov@gmail.com>
+Date: Mon, 17 Jun 2019 12:31:02 +0300
+Subject: [Buildroot] Buildroot 2016.05: no path to staging for one toolchain
+Message-ID: <CAH3pVZN5cJfVmgiFxfNKgLy1YZO3ArpZc3DmRgGCc9Gv=Ya4Kw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+Hello.
 
-diff --git a/linux/Config.in b/linux/Config.in
-index a6a16deee0..95ee1cf542 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -121,7 +121,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.1.6" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.1.10" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index edb3839e0f..6477991daa 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 9d68a206b0808d81ce582c861d0bda0d1095bcbd0f181db063665b68fc9cf478  linux-5.1.6.tar.xz
--sha256 3ba720f3189e5a08e7c533da8c12595d662a6c11d3466db6a0ff164ef4e54b68  linux-5.0.20.tar.xz
-+sha256 39063041532579cb7e9fab5837313a8e6639c1c583cd39c72b313b3abfa9fbcf  linux-5.1.10.tar.xz
-+sha256 98d307a546c95a215dee675ffa4b63c2a7a29e7af839f0d8dfb96dbb61aac2d7  linux-5.0.21.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 5d08f3890e7ca2b94529675120f170c5b764f795e6dd184a1190c23a40ef5365  linux-4.19.47.tar.xz
--sha256 25f58cb56bde388ac9bcee984f5f2d0ca094b0a8af6b92ad1f5b2fd0e6725b85  linux-4.14.123.tar.xz
--sha256 d25a490d62a3e96a587333e163862585eac4086fc8d4893b4ec1711e7d387c5f  linux-4.9.180.tar.xz
--sha256 1a450217d381bb7fd259d026d3b7a57c717e8d1f66754cd6fcc9df3c4a8a6a7a  linux-4.4.180.tar.xz
-+sha256 7afa920d776f8ca3fc3ced5026cc02c5ccc960c58314050982c307589b5a8d70  linux-4.19.51.tar.xz
-+sha256 6a2e89504d8560b132ab743a0206ffce026bff2697b705819421c5f125633970  linux-4.14.126.tar.xz
-+sha256 8fcd223e11cba322801bc38cdb8b581d64c0115f585dcb6604de8561b574fced  linux-4.9.181.tar.xz
-+sha256 b2ab69813192d49b1b7f89257a3319ef3fd73a54f441f3296d68b744b1c681d3  linux-4.4.181.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index f75e834505..eb957b4f12 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -301,12 +301,12 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.180"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.180"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.123"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.47"	if BR2_KERNEL_HEADERS_4_19
--	default "5.0.20"	if BR2_KERNEL_HEADERS_5_0
--	default "5.1.6"		if BR2_KERNEL_HEADERS_5_1
-+	default "4.4.181"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.181"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.126"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.51"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.0.21"	if BR2_KERNEL_HEADERS_5_0
-+	default "5.1.10"	if BR2_KERNEL_HEADERS_5_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
--- 
-2.11.0
+I've integrated multiple external toolchains into Buildroot so far, but I
+see the issue I've never seen before:
+
+When compiling openssl, zlib.h header can't be found. I checked paths
+compiler looks for headers, and see the following:
+
+
+
+
+
+
+
+
+
+
+
+
+
+*~/git/buildroot-oem/output/build/openssl-1.0.2k/crypto/comp$
+LD_LIBRARY_PATH=/home/snaumov/git/buildroot-oem/toolchain/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21.Rel1.2/usr/lib
+/home/snaumov/git/buildroot-oem/output/host/usr/bin/mips-linux-gcc -I..
+-I../.. -I../modes -I../asn1 -I../evp -I../../include  -fPIC -DOPENSSL_PIC
+-DZLIB_SHARED -DZLIB -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN
+-DHAVE_DLFCN_H -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os  -ffunction-sections -fdata-sections
+-fomit-frame-pointer -Wall   -c -o c_zlib.o c_zlib.c -E -Wp,-v#include
+"..." search starts here:#include <...> search starts
+here: .. ../.. ../modes ../asn1 ../evp ../../include
+/home/snaumov/git/buildroot-oem/toolchain/rsdk-1.5.6-5281-EB-2.6.30-0.9.30.3-131105/include
+/home/snaumov/git/buildroot-oem/toolchain/rsdk-1.5.6-5281-EB-2.6.30-0.9.30.3-131105/include/gccEnd
+of search list.c_zlib.c:25:19: error: zlib.h: No such file or directory*
+
+For other toolchains I see also a path to buildroot staging dir. At the
+same time I see that this path is not provided as an additional -I argument
+to compiler:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*~/git/buildroot-oem/output/build/openssl-1.0.2k/crypto/comp$
+LD_LIBRARY_PATH=/home/snaumov/git/buildroot-oem/toolchain/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21.Rel1.2/usr/lib
+/home/snaumov/git/buildroot-oem/output/host/usr/bin/mips-linux-gcc -I..
+-I../.. -I../modes -I../asn1 -I../evp -I../../include  -fPIC -DOPENSSL_PIC
+-DZLIB_SHARED -DZLIB -DOPENSSL_THREADS -D_REENTRANT -DDSO_DLFCN
+-DHAVE_DLFCN_H -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+-D_FILE_OFFSET_BITS=64  -Os  -ffunction-sections -fdata-sections
+-fomit-frame-pointer -Wall   -c -o c_zlib.o c_zlib.c -E -Wp,-vignoring
+duplicate directory
+"/home/snaumov/git/buildroot-oem/toolchain/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21.Rel1.2/usr/bin/../lib/gcc/../../lib/gcc/mips-unknown-linux-uclibc/4.6.2/include"ignoring
+nonexistent directory
+"/home/snaumov/git/buildroot-oem/output/host/usr/mips-buildroot-linux-uclibc/sysroot/usr/local/include"ignoring
+duplicate directory
+"/home/snaumov/git/buildroot-oem/toolchain/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21.Rel1.2/usr/bin/../lib/gcc/../../lib/gcc/mips-unknown-linux-uclibc/4.6.2/include-fixed"ignoring
+duplicate directory
+"/home/snaumov/git/buildroot-oem/toolchain/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21.Rel1.2/usr/bin/../lib/gcc/../../lib/gcc/mips-unknown-linux-uclibc/4.6.2/../../../../mips-unknown-linux-uclibc/include"#include
+"..." search starts here:#include <...> search starts
+here: .. ../.. ../modes ../asn1 ../evp ../../include
+/home/snaumov/git/buildroot-oem/toolchain/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21.Rel1.2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.6.2/include
+/home/snaumov/git/buildroot-oem/toolchain/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21.Rel1.2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.6.2/include-fixed
+/home/snaumov/git/buildroot-oem/toolchain/crosstools-mips-gcc-4.6-linux-3.4-uclibc-0.9.32-binutils-2.21.Rel1.2/usr/bin/../lib/gcc/mips-unknown-linux-uclibc/4.6.2/../../../../mips-unknown-linux-uclibc/include
+/home/snaumov/git/buildroot-oem/output/host/usr/mips-buildroot-linux-uclibc/sysroot/usr/includeEnd
+of search list.*
+
+The highlighted directory is clearly out of toolchain and
+buildroot-specific. I thought that it could be related to
+toolchain-wrapper, but I see that in both cases exactly the same options
+are used to build it and there is no sysroot/usr/include path embedded into
+the binary. Where should I look at to add path to the staging dir?
+
+Thanks in advance,
+Sergey.
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190617/8bac8caa/attachment.html>
