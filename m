@@ -1,32 +1,90 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Jun 2019 21:04:44 +0200
-Subject: [Buildroot] [PATCH] package/wireguard: bump version to
- 0.0.20190601
-In-Reply-To: <20190616214820.14628-1-peter@korsgaard.com>
-References: <20190616214820.14628-1-peter@korsgaard.com>
-Message-ID: <20190617210444.6f3fe843@windsurf>
+Date: Mon, 17 Jun 2019 21:05:24 +0200
+Subject: [Buildroot] [git commit] package/python: add upstream security fix
+ for CVE-2019-9948
+Message-ID: <20190617190452.DCEE68F574@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 16 Jun 2019 23:48:20 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6522aad76a250e2f59669c7eb3aa1565502db117
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For details of the changes, see the announcement:
-> https://lists.zx2c4.com/pipermail/wireguard/2019-June/004196.html
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  package/wireguard/wireguard.hash | 4 ++--
->  package/wireguard/wireguard.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Fixes CVE-2019-9948: Unnecessary URL scheme exists to allow file:// reading
+file in urllib.
 
-Applied to master, thanks.
+https://bugs.python.org/issue35907
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...VE-2019-9948-urllib-rejects-local_file-sc.patch | 59 ++++++++++++++++++++++
+ 1 file changed, 59 insertions(+)
+
+diff --git a/package/python/0035-bpo-35907-CVE-2019-9948-urllib-rejects-local_file-sc.patch b/package/python/0035-bpo-35907-CVE-2019-9948-urllib-rejects-local_file-sc.patch
+new file mode 100644
+index 0000000000..5ca1433465
+--- /dev/null
++++ b/package/python/0035-bpo-35907-CVE-2019-9948-urllib-rejects-local_file-sc.patch
+@@ -0,0 +1,59 @@
++From b15bde8058e821b383d81fcae68b335a752083ca Mon Sep 17 00:00:00 2001
++From: SH <push0ebp@gmail.com>
++Date: Wed, 22 May 2019 06:12:23 +0900
++Subject: [PATCH] bpo-35907, CVE-2019-9948: urllib rejects local_file:// scheme
++  (GH-11842)
++
++ CVE-2019-9948: Avoid file reading as disallowing the unnecessary URL scheme in urllib.urlopen().
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ Lib/test/test_urllib.py                                           | 7 +++++++
++ Lib/urllib.py                                                     | 4 +++-
++ Misc/NEWS.d/next/Library/2019-02-13-17-21-10.bpo-35907.ckk2zg.rst | 1 +
++ 3 files changed, 11 insertions(+), 1 deletion(-)
++ create mode 100644 Misc/NEWS.d/next/Library/2019-02-13-17-21-10.bpo-35907.ckk2zg.rst
++
++diff --git a/Lib/test/test_urllib.py b/Lib/test/test_urllib.py
++index d7778d4194..ae1f6c0b29 100644
++--- a/Lib/test/test_urllib.py
+++++ b/Lib/test/test_urllib.py
++@@ -1048,6 +1048,13 @@ class URLopener_Tests(unittest.TestCase):
++             "spam://c:|windows%/:=&?~#+!$,;'@()*[]|/path/"),
++             "//c:|windows%/:=&?~#+!$,;'@()*[]|/path/")
++ 
+++    def test_local_file_open(self):
+++        class DummyURLopener(urllib.URLopener):
+++            def open_local_file(self, url):
+++                return url
+++        for url in ('local_file://example', 'local-file://example'):
+++            self.assertRaises(IOError, DummyURLopener().open, url)
+++            self.assertRaises(IOError, urllib.urlopen, url)
++ 
++ # Just commented them out.
++ # Can't really tell why keep failing in windows and sparc.
++diff --git a/Lib/urllib.py b/Lib/urllib.py
++index d85504a5cb..156879dd0a 100644
++--- a/Lib/urllib.py
+++++ b/Lib/urllib.py
++@@ -203,7 +203,9 @@ class URLopener:
++         name = 'open_' + urltype
++         self.type = urltype
++         name = name.replace('-', '_')
++-        if not hasattr(self, name):
+++
+++        # bpo-35907: disallow the file reading with the type not allowed
+++        if not hasattr(self, name) or name == 'open_local_file':
++             if proxy:
++                 return self.open_unknown_proxy(proxy, fullurl, data)
++             else:
++diff --git a/Misc/NEWS.d/next/Library/2019-02-13-17-21-10.bpo-35907.ckk2zg.rst b/Misc/NEWS.d/next/Library/2019-02-13-17-21-10.bpo-35907.ckk2zg.rst
++new file mode 100644
++index 0000000000..bb187d8d65
++--- /dev/null
+++++ b/Misc/NEWS.d/next/Library/2019-02-13-17-21-10.bpo-35907.ckk2zg.rst
++@@ -0,0 +1 @@
+++CVE-2019-9948: Avoid file reading as disallowing the unnecessary URL scheme in urllib.urlopen
++-- 
++2.11.0
++
