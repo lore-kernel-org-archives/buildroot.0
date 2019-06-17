@@ -1,67 +1,67 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Jun 2019 12:51:06 +0200
-Subject: [Buildroot] [PATCH v3 2/3] package/pugixml: enable install of
- pugixml.pc
-In-Reply-To: <20190616201621.23912-2-bernd.kuhls@t-online.de>
-References: <20190616201621.23912-1-bernd.kuhls@t-online.de>
- <20190616201621.23912-2-bernd.kuhls@t-online.de>
-Message-ID: <20190617125106.67d8ccf1@windsurf>
+From: jared.bents at rockwellcollins.com <jared.bents@rockwellcollins.com>
+Date: Mon, 17 Jun 2019 10:17:10 -0500
+Subject: [Buildroot] [PATCH v1 1/1] package/hostapd: add debug information
+ options
+Message-ID: <20190617151710.21576-1-jared.bents@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 16 Jun 2019 22:16:20 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+From: Jared Bents <jared.bents@rockwellcollins.com>
 
-> Needed for waylandpp >= 0.2.4 to detect pugixml:
-> https://github.com/NilsBrause/waylandpp/commit/0a61175003a0a34038e39092918768360d2dd1da#diff-af3b638bc2a3e6c650974192a53c7291R39
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
-> v3: no changes
-> v2: changed variables for HOST_PUGIXML_CONF_OPTS (Thomas)
-> 
->  package/pugixml/pugixml.mk | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
-> index 6f214c4de8..368f958920 100644
-> --- a/package/pugixml/pugixml.mk
-> +++ b/package/pugixml/pugixml.mk
-> @@ -15,6 +15,7 @@ PUGIXML_INSTALL_STAGING = YES
->  # force-enable this option to support older gcc versions. See also:
->  # https://gcc.gnu.org/onlinedocs/gcc/Long-Long.html
->  PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
-> +HOST_PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
+hostapd 2.7 added compile time options to include
+redirecting the output from stdout to a file or syslog
+like wpa_supplicant
 
-How is this related to install the .pc file ? Shouldn't this go in PATCH 1/3 ?
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+---
+ package/hostapd/Config.in  | 5 +++++
+ package/hostapd/hostapd.mk | 8 +++++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
->  
->  ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),)
->  PUGIXML_BUILD_DEFINES += PUGIXML_NO_XPATH
-> @@ -30,5 +31,9 @@ ifdef PUGIXML_BUILD_DEFINES
->  PUGIXML_CONF_OPTS += -DBUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
->  endif
->  
-> +HOST_PUGIXML_CONF_OPTS += \
-> +	-DBUILD_PKGCONFIG=ON \
-
-I understand why this is in this patch.
-
-> +	-DBUILD_DEFINES="$(subst $(space),;,$(HOST_PUGIXML_BUILD_DEFINES))"
-
-But this should be in PATCH 1/3, no ?
-
-In fact, is it really useful to split PATCH 1/3 and 2/3 ? Both are just
-about enabling the host variant of pugixml, we don't really need to
-separate the installation of the .pc file in another patch.
-
-Thanks,
-
-Thomas
+diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
+index 37c1126859..c569979835 100644
+--- a/package/hostapd/Config.in
++++ b/package/hostapd/Config.in
+@@ -28,6 +28,11 @@ config BR2_PACKAGE_HOSTAPD_DRIVER_NL80211
+ 	help
+ 	  Enable support for drivers using the nl80211 kernel interface.
+ 
++config BR2_PACKAGE_HOSTAPD_DEBUG_SYSLOG
++	bool "Enable syslog support"
++	help
++	  Enable support for sending debug messages to syslog.
++
+ comment "nl80211 driver needs a toolchain w/ threads"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ 
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 550f887206..49af54feb5 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -31,7 +31,9 @@ HOSTAPD_LICENSE = BSD-3-Clause
+ HOSTAPD_LICENSE_FILES = README
+ HOSTAPD_CONFIG_SET =
+ 
+-HOSTAPD_CONFIG_ENABLE = CONFIG_INTERNAL_LIBTOMMATH
++HOSTAPD_CONFIG_ENABLE = \
++	CONFIG_INTERNAL_LIBTOMMATH \
++	CONFIG_DEBUG_FILE
+ 
+ HOSTAPD_CONFIG_DISABLE =
+ 
+@@ -58,6 +60,10 @@ HOSTAPD_PATCH += https://github.com/pritambaral/hostapd-rtl871xdrv/raw/master/rt
+ HOSTAPD_CONFIG_SET += CONFIG_DRIVER_RTW
+ endif
+ 
++ifeq ($(BR2_PACKAGE_HOSTAPD_DEBUG_SYSLOG),y)
++HOSTAPD_CONFIG_ENABLE += CONFIG_DEBUG_SYSLOG
++endif
++
+ ifeq ($(BR2_PACKAGE_HOSTAPD_DRIVER_WIRED),y)
+ HOSTAPD_CONFIG_ENABLE += CONFIG_DRIVER_WIRED
+ endif
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.18.0
