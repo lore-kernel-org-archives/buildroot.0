@@ -1,42 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Jun 2019 20:25:54 +0200
-Subject: [Buildroot] [git commit] package/libsocketcan: add license file
- details
-Message-ID: <20190617182558.F1F3B7FE0F@busybox.osuosl.org>
+Date: Mon, 17 Jun 2019 20:25:49 +0200
+Subject: [Buildroot] [git commit] package/libsocketcan: bump to version
+ 0.0.11
+Message-ID: <20190617182558.EA5FC8F541@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=315580e8e734335a6d3bb8592bce7eaa8175abcf
+commit: https://git.buildroot.net/buildroot/commit/?id=8bce68ba74329f7d749dbe392592601b9b8e4939
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add LICENSE file
+This includes the following changes:
+
+0ff01ae v0.0.11
+b217774 Add configure switch for error logging
+15af38a Add compile option to disable error logging
+9679a3f Add interface to retrieve link statistics
+6f13cef Get link information only from specified interface
+f5392c3 Fix parse_rtattr() does not completely initialize
+4ea9ec7 Update can_set_ctrlmode() documentation
+5938ac7 Update CAN netlink header
+0c91940 GNUmakefile: include LICENSE file in tarball
+4608afb configure: back to trunk
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libsocketcan/libsocketcan.hash | 1 +
- package/libsocketcan/libsocketcan.mk   | 1 +
- 2 files changed, 2 insertions(+)
+ package/libsocketcan/libsocketcan.hash | 2 +-
+ package/libsocketcan/libsocketcan.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/libsocketcan/libsocketcan.hash b/package/libsocketcan/libsocketcan.hash
-index 7cb5c8ebbf..7e40493fbf 100644
+index 2546c66cf2..7cb5c8ebbf 100644
 --- a/package/libsocketcan/libsocketcan.hash
 +++ b/package/libsocketcan/libsocketcan.hash
-@@ -1,2 +1,3 @@
+@@ -1,2 +1,2 @@
  # Locally calculated
- sha256	28923f47b3f3191ff966866aa45823325b6e3b4fce72f056e5d87d64e4d6699d	libsocketcan-0.0.11.tar.bz2
-+sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE
+-sha256	3c83e386c3fa7673141658472ae0b0e2a9f5849bf52fd9f7b22b04fd98ec7b6e	libsocketcan-0.0.10.tar.bz2
++sha256	28923f47b3f3191ff966866aa45823325b6e3b4fce72f056e5d87d64e4d6699d	libsocketcan-0.0.11.tar.bz2
 diff --git a/package/libsocketcan/libsocketcan.mk b/package/libsocketcan/libsocketcan.mk
-index 7456e0b75b..dca8ede6e9 100644
+index 31ed0d39ab..7456e0b75b 100644
 --- a/package/libsocketcan/libsocketcan.mk
 +++ b/package/libsocketcan/libsocketcan.mk
-@@ -9,5 +9,6 @@ LIBSOCKETCAN_SITE = http://www.pengutronix.de/software/libsocketcan/download
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBSOCKETCAN_VERSION = 0.0.10
++LIBSOCKETCAN_VERSION = 0.0.11
+ LIBSOCKETCAN_SITE = http://www.pengutronix.de/software/libsocketcan/download
  LIBSOCKETCAN_SOURCE = libsocketcan-$(LIBSOCKETCAN_VERSION).tar.bz2
  LIBSOCKETCAN_INSTALL_STAGING = YES
- LIBSOCKETCAN_LICENSE = LGPL-2.1+
-+LIBSOCKETCAN_LICENSE_FILES = LICENSE
- 
- $(eval $(autotools-package))
