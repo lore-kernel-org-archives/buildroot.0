@@ -1,52 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Jun 2019 20:22:36 +0200
-Subject: [Buildroot] [PATCH buildroot-test 2/2] scripts/autobuild-run:
- support changing repo
-In-Reply-To: <20190617182236.23918-1-thomas.petazzoni@bootlin.com>
-References: <20190617182236.23918-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190617182236.23918-2-thomas.petazzoni@bootlin.com>
+Date: Mon, 17 Jun 2019 20:15:17 +0200
+Subject: [Buildroot] [git commit] package/pugixml: enable host build
+Message-ID: <20190617182318.AFBBF812AB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The current logic in prepare_build() assumes that the "origin" repo
-never changes. However, if one regularly changes his autobuild-run
-configuration, switching being repository, this is not
-true. Currently, it requires manually wiping out the Buildroot clone
-in every autobuild instance when changing the repository to pull from.
+commit: https://git.buildroot.net/buildroot/commit/?id=8d71c636a32a83dc4e17163b011c1f60e23da6b2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-So instead, use:
+Needed for host-waylandpp >= 0.2.5
+https://github.com/NilsBrause/waylandpp/commit/433ce65b681c27d54e1e6b9a602f1c8291aabd54
 
- git fetch <repo> <branch>
- git checkout FETCH_HEAD
-
-which will easily allow switching from one repo to the other.
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- scripts/autobuild-run | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/pugixml/pugixml.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 6fea389..ce88ea4 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -330,12 +330,12 @@ def prepare_build(**kwargs):
+diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
+index 8edaddd827..368f958920 100644
+--- a/package/pugixml/pugixml.mk
++++ b/package/pugixml/pugixml.mk
+@@ -15,6 +15,7 @@ PUGIXML_INSTALL_STAGING = YES
+ # force-enable this option to support older gcc versions. See also:
+ # https://gcc.gnu.org/onlinedocs/gcc/Long-Long.html
+ PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
++HOST_PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
  
-     # Update the Buildroot sources.
-     abssrcdir = os.path.abspath(srcdir)
--    ret = subprocess.call(["git", "fetch", "origin"], cwd=abssrcdir, stdout=log, stderr=log)
-+    ret = subprocess.call(["git", "fetch", kwargs['repo'], branch], cwd=abssrcdir, stdout=log, stderr=log)
-     if ret != 0:
-         log_write(log, "ERROR: could not fetch Buildroot sources")
-         return -1
+ ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),)
+ PUGIXML_BUILD_DEFINES += PUGIXML_NO_XPATH
+@@ -30,4 +31,9 @@ ifdef PUGIXML_BUILD_DEFINES
+ PUGIXML_CONF_OPTS += -DBUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
+ endif
  
--    ret = subprocess.call(["git", "checkout", "--detach", "origin/%s" % branch], cwd=abssrcdir, stdout=log, stderr=log)
-+    ret = subprocess.call(["git", "checkout", "FETCH_HEAD"], cwd=abssrcdir, stdout=log, stderr=log)
-     if ret != 0:
-         log_write(log, "ERROR: could not check out Buildroot sources")
-         return -1
--- 
-2.21.0
++HOST_PUGIXML_CONF_OPTS += \
++	-DBUILD_PKGCONFIG=ON \
++	-DBUILD_DEFINES="$(subst $(space),;,$(HOST_PUGIXML_BUILD_DEFINES))"
++
+ $(eval $(cmake-package))
++$(eval $(host-cmake-package))
