@@ -1,107 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Jun 2019 20:34:23 +0200
-Subject: [Buildroot] [git commit] configs/bananapro: bump Linux to 5.1.1
-Message-ID: <20190617190228.690988F58A@busybox.osuosl.org>
+Date: Mon, 17 Jun 2019 21:03:28 +0200
+Subject: [Buildroot] [PATCH v2 1/1] bananapro: bump Linux to 5.1.1
+In-Reply-To: <20190617170127.7487-1-b.bilas@grinn-global.com>
+References: <20190617170127.7487-1-b.bilas@grinn-global.com>
+Message-ID: <20190617210328.622d4709@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9b35241663cd5b076ad2dd1332cc4f9260b14e28
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 17 Jun 2019 19:01:27 +0200
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...ot-dts-sun7i-a20-bananapro.dts-disable-00.patch | 44 ++++++++++++++++++++++
- .../brcm/brcmfmac43362-sdio.lemaker,bananapro.txt  |  1 +
- configs/bananapro_defconfig                        |  7 ++--
- 3 files changed, 49 insertions(+), 3 deletions(-)
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+> ---
+> Changes v1 -> v2:
+>   - combine changes into one patch (suggested by Thomas)
+> ---
+>  ...s-sun7i-a20-bananapro.dts-disable-00.patch | 44 +++++++++++++++++++
+>  .../brcmfmac43362-sdio.lemaker,bananapro.txt  |  1 +
+>  configs/bananapro_defconfig                   |  7 +--
+>  3 files changed, 49 insertions(+), 3 deletions(-)
+>  create mode 100644 board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch
+>  create mode 120000 board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.lemaker,bananapro.txt
 
-diff --git a/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch b/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch
-new file mode 100644
-index 0000000000..c8e8c03753
---- /dev/null
-+++ b/board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch
-@@ -0,0 +1,44 @@
-+From 896e82ab14e7e4e361ffa7c81def787907c1bf4c Mon Sep 17 00:00:00 2001
-+From: Bartosz Bilas <b.bilas@grinn-global.com>
-+Date: Sun, 19 May 2019 21:04:35 +0200
-+Subject: [PATCH] arch/arm/boot/dts/sun7i-a20-bananapro.dts: disable 00B
-+ IRQ for brcm wifi module
-+
-+	BugLink: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=908438
-+
-+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-+---
-+ arch/arm/boot/dts/sun7i-a20-bananapro.dts | 16 +++++++++++++---
-+ 1 file changed, 13 insertions(+), 3 deletions(-)
-+
-+diff --git a/arch/arm/boot/dts/sun7i-a20-bananapro.dts b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
-+index 0176e9de0..93b3340f5 100644
-+--- a/arch/arm/boot/dts/sun7i-a20-bananapro.dts
-++++ b/arch/arm/boot/dts/sun7i-a20-bananapro.dts
-+@@ -160,9 +160,19 @@
-+ 	brcmf: wifi at 1 {
-+ 		reg = <1>;
-+ 		compatible = "brcm,bcm4329-fmac";
-+-		interrupt-parent = <&pio>;
-+-		interrupts = <7 15 IRQ_TYPE_LEVEL_LOW>;
-+-		interrupt-names = "host-wake";
-++		/*
-++		 * OOB interrupt support is broken ATM, often the first irq
-++		 * does not get seen resulting in the drv probe failing with:
-++		 *
-++		 * brcmfmac: brcmf_sdio_bus_rxctl: resumed on timeout
-++		 * brcmfmac: brcmf_bus_started: failed: -110
-++		 * brcmfmac: brcmf_attach: dongle is not responding: err=-110
-++		 * brcmfmac: brcmf_sdio_firmware_callback: brcmf_attach failed
-++		 *
-++		 * interrupt-parent = <&pio>;
-++		 * interrupts = <7 15 IRQ_TYPE_LEVEL_LOW>;
-++		 * interrupt-names = "host-wake";
-++		 */
-+ 	};
-+ };
-+ 
-+-- 
-+2.21.0
-+
-diff --git a/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.lemaker,bananapro.txt b/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.lemaker,bananapro.txt
-new file mode 120000
-index 0000000000..93947975ee
---- /dev/null
-+++ b/board/lemaker/bananapro/rootfs_overlay/lib/firmware/brcm/brcmfmac43362-sdio.lemaker,bananapro.txt
-@@ -0,0 +1 @@
-+brcmfmac43362-sdio.txt
-\ No newline at end of file
-diff --git a/configs/bananapro_defconfig b/configs/bananapro_defconfig
-index a6433ee597..56166c9428 100644
---- a/configs/bananapro_defconfig
-+++ b/configs/bananapro_defconfig
-@@ -1,11 +1,12 @@
- # Architecture
- BR2_arm=y
- BR2_cortex_a7=y
-+BR2_GLOBAL_PATCH_DIR="board/lemaker/bananapro/patches"
- BR2_ARM_EABIHF=y
- BR2_ARM_FPU_NEON_VFPV4=y
- 
--# Linux headers same as kernel, a 4.14 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_14=y
-+# Linux headers same as kernel, a 5.1 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
- 
- # Toolchain
- BR2_TOOLCHAIN_BUILDROOT_WCHAR=y
-@@ -22,7 +23,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/lemaker/bananapro/post-image.sh"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.14.116"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.1"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/lemaker/bananapro/linux-wifi.fragment"
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
