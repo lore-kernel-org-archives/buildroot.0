@@ -1,55 +1,67 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Mon, 17 Jun 2019 15:04:56 +0530
-Subject: [Buildroot] [PATCH v5 4/4] autobuild-run: do reproducible builds
- tests if BR2_REPRODUCIBLE=y
-In-Reply-To: <20190617093456.6110-1-itsatharva@gmail.com>
-References: <20190617093456.6110-1-itsatharva@gmail.com>
-Message-ID: <20190617093456.6110-4-itsatharva@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 17 Jun 2019 12:51:06 +0200
+Subject: [Buildroot] [PATCH v3 2/3] package/pugixml: enable install of
+ pugixml.pc
+In-Reply-To: <20190616201621.23912-2-bernd.kuhls@t-online.de>
+References: <20190616201621.23912-1-bernd.kuhls@t-online.de>
+ <20190616201621.23912-2-bernd.kuhls@t-online.de>
+Message-ID: <20190617125106.67d8ccf1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+On Sun, 16 Jun 2019 22:16:20 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
----
-Changes v3 -> v4:
-  - Fix indentation level for if-else, otherwise file still remains open
-    for the duration of the build.
+> Needed for waylandpp >= 0.2.4 to detect pugixml:
+> https://github.com/NilsBrause/waylandpp/commit/0a61175003a0a34038e39092918768360d2dd1da#diff-af3b638bc2a3e6c650974192a53c7291R39
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+> v3: no changes
+> v2: changed variables for HOST_PUGIXML_CONF_OPTS (Thomas)
+> 
+>  package/pugixml/pugixml.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/package/pugixml/pugixml.mk b/package/pugixml/pugixml.mk
+> index 6f214c4de8..368f958920 100644
+> --- a/package/pugixml/pugixml.mk
+> +++ b/package/pugixml/pugixml.mk
+> @@ -15,6 +15,7 @@ PUGIXML_INSTALL_STAGING = YES
+>  # force-enable this option to support older gcc versions. See also:
+>  # https://gcc.gnu.org/onlinedocs/gcc/Long-Long.html
+>  PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
+> +HOST_PUGIXML_BUILD_DEFINES += PUGIXML_HAS_LONG_LONG
 
-Changes v2 -> v3:
-  - use reproducible flag so that .config is not kept open for the entire
-    build duration. (suggested by arnout)
-  - remove reduntant logging (suggested by arnout)
+How is this related to install the .pc file ? Shouldn't this go in PATCH 1/3 ?
 
-Changes v1 -> v2:
-  - add trailing newline character to BR2_REPRODUCIBLE=y (suggested by arnout)
----
- scripts/autobuild-run | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+>  
+>  ifeq ($(BR2_PACKAGE_PUGIXML_XPATH_SUPPORT),)
+>  PUGIXML_BUILD_DEFINES += PUGIXML_NO_XPATH
+> @@ -30,5 +31,9 @@ ifdef PUGIXML_BUILD_DEFINES
+>  PUGIXML_CONF_OPTS += -DBUILD_DEFINES="$(subst $(space),;,$(PUGIXML_BUILD_DEFINES))"
+>  endif
+>  
+> +HOST_PUGIXML_CONF_OPTS += \
+> +	-DBUILD_PKGCONFIG=ON \
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 339fbde..601fb31 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -727,7 +727,14 @@ def run_instance(**kwargs):
-             log_write(kwargs['log'], "WARN: failed to generate configuration")
-             continue
- 
--        ret = do_build(**kwargs)
-+        # Check if the build test is supposed to be a reproducible test
-+        outputdir = os.path.abspath(os.path.join(idir, "output"))
-+        with open(os.path.join(outputdir, ".config"), "r") as fconf:
-+            reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
-+        if reproducible:
-+            ret = do_reproducible_build(**kwargs)
-+        else:
-+            ret = do_build(**kwargs)
- 
-         send_results(ret, **kwargs)
- 
+I understand why this is in this patch.
+
+> +	-DBUILD_DEFINES="$(subst $(space),;,$(HOST_PUGIXML_BUILD_DEFINES))"
+
+But this should be in PATCH 1/3, no ?
+
+In fact, is it really useful to split PATCH 1/3 and 2/3 ? Both are just
+about enabling the host variant of pugixml, we don't really need to
+separate the installation of the .pc file in another patch.
+
+Thanks,
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
