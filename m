@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Jun 2019 20:25:10 +0200
-Subject: [Buildroot] [PATCH v3 3/3] package/waylandpp: bump version
-In-Reply-To: <20190616201621.23912-3-bernd.kuhls@t-online.de>
-References: <20190616201621.23912-1-bernd.kuhls@t-online.de>
- <20190616201621.23912-3-bernd.kuhls@t-online.de>
-Message-ID: <20190617202510.34810360@windsurf>
+Date: Mon, 17 Jun 2019 20:25:54 +0200
+Subject: [Buildroot] [git commit] package/libsocketcan: add license file
+ details
+Message-ID: <20190617182558.F1F3B7FE0F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=315580e8e734335a6d3bb8592bce7eaa8175abcf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun, 16 Jun 2019 22:16:21 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Add LICENSE file
 
-> Removed patch applied upstream:
-> https://github.com/NilsBrause/waylandpp/commit/242c2c9a188b1a972978fc05dbe70d102bc7c4e1
-> 
-> Bundled pugixml was removed:
-> https://github.com/NilsBrause/waylandpp/commit/433ce65b681c27d54e1e6b9a602f1c8291aabd54
-> 
-> Use host-pugixml instead and bump to HEAD to include a patch which
-> fixes a linking error:
-> https://github.com/NilsBrause/waylandpp/commit/41063c3e1de245bb7ea0c940e7400bd876bee25e
-> 
-> Updated license hash due to upstream commit:
-> https://github.com/NilsBrause/waylandpp/commit/f255d61ffd982614c0659be1742383dab06710a2
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libsocketcan/libsocketcan.hash | 1 +
+ package/libsocketcan/libsocketcan.mk   | 1 +
+ 2 files changed, 2 insertions(+)
 
-Thanks, applied to master. Could you ask upstream to cut a new release,
-since the recent fixes are quite important ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libsocketcan/libsocketcan.hash b/package/libsocketcan/libsocketcan.hash
+index 7cb5c8ebbf..7e40493fbf 100644
+--- a/package/libsocketcan/libsocketcan.hash
++++ b/package/libsocketcan/libsocketcan.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256	28923f47b3f3191ff966866aa45823325b6e3b4fce72f056e5d87d64e4d6699d	libsocketcan-0.0.11.tar.bz2
++sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE
+diff --git a/package/libsocketcan/libsocketcan.mk b/package/libsocketcan/libsocketcan.mk
+index 7456e0b75b..dca8ede6e9 100644
+--- a/package/libsocketcan/libsocketcan.mk
++++ b/package/libsocketcan/libsocketcan.mk
+@@ -9,5 +9,6 @@ LIBSOCKETCAN_SITE = http://www.pengutronix.de/software/libsocketcan/download
+ LIBSOCKETCAN_SOURCE = libsocketcan-$(LIBSOCKETCAN_VERSION).tar.bz2
+ LIBSOCKETCAN_INSTALL_STAGING = YES
+ LIBSOCKETCAN_LICENSE = LGPL-2.1+
++LIBSOCKETCAN_LICENSE_FILES = LICENSE
+ 
+ $(eval $(autotools-package))
