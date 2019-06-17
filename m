@@ -1,42 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 17 Jun 2019 20:27:04 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libsocketcan: bump to version
- 0.0.11
-In-Reply-To: <1560693940-10828-1-git-send-email-pjtexier@koncepto.io>
-References: <1560693940-10828-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190617202704.7fcbd70d@windsurf>
+Date: Mon, 17 Jun 2019 20:28:05 +0200
+Subject: [Buildroot] [git commit] package/gdb: disable for nds32
+Message-ID: <20190617182724.2036A815E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 16 Jun 2019 16:05:39 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=93173c614ef04c988e04647c653381727e2d3092
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This includes the following changes:
-> 
-> 0ff01ae v0.0.11
-> b217774 Add configure switch for error logging
-> 15af38a Add compile option to disable error logging
-> 9679a3f Add interface to retrieve link statistics
-> 6f13cef Get link information only from specified interface
-> f5392c3 Fix parse_rtattr() does not completely initialize
-> 4ea9ec7 Update can_set_ctrlmode() documentation
-> 5938ac7 Update CAN netlink header
-> 0c91940 GNUmakefile: include LICENSE file in tarball
-> 4608afb configure: back to trunk
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
->  package/libsocketcan/libsocketcan.hash | 2 +-
->  package/libsocketcan/libsocketcan.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+There is no support for nds32 in gdb.
 
-Both patches applied to master. Thanks!
+Fixes:
+  http://autobuild.buildroot.net/results/1a40b1ac5f06c856c2e30dbbb4e485022c438c72
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Nylon Chen <nylon7@andestech.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gdb/Config.in      | 1 +
+ package/gdb/Config.in.host | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index ab3d2157b6..6340bc49d5 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_GDB_ARCH_SUPPORTS
+ 	depends on !BR2_microblaze
+ 	depends on !BR2_nios2
+ 	depends on !BR2_or1k
++	depends on !BR2_nds32
+ 
+ comment "gdb/gdbserver needs a toolchain w/ threads, threads debug"
+ 	depends on BR2_PACKAGE_GDB_ARCH_SUPPORTS
+diff --git a/package/gdb/Config.in.host b/package/gdb/Config.in.host
+index 83ca8c8ff2..6c17ceb0b2 100644
+--- a/package/gdb/Config.in.host
++++ b/package/gdb/Config.in.host
+@@ -8,6 +8,7 @@ config BR2_PACKAGE_HOST_GDB_ARCH_SUPPORTS
+ 	depends on !BR2_nios2
+ 	depends on !BR2_or1k
+ 	depends on !BR2_riscv
++	depends on !BR2_nds32
+ 
+ comment "Host GDB Options"
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
