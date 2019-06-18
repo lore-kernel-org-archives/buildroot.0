@@ -1,26 +1,57 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Tue, 18 Jun 2019 17:35:11 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mongoose: bump to version 6.15
-In-Reply-To: <877e9jyvjs.fsf@dell.be.48ers.dk>
-References: <1560639244-18856-1-git-send-email-pjtexier@koncepto.io>
- <877e9jyvjs.fsf@dell.be.48ers.dk>
-Message-ID: <f16f8e80-6802-cb45-b007-cda5cca0ae77@koncepto.io>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Tue, 18 Jun 2019 18:43:52 +0300
+Subject: [Buildroot] [PATCH v1] fb-test-app: Revert upstream 77bdfc6 "add
+ function to place framebuffer ..."
+Message-ID: <20190618154352.50597-1-andriy.shevchenko@linux.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+The patch breaks at least hotplug displays to work.
 
-Le 18/06/2019 ? 13:36, Peter Korsgaard a ?crit?:
-> Given that 6.14 and 6.15 fixes a number of issues (and don't really add
-> new features), would this also be applicable for our stable branches
-> (2019.02 and 2019.05)?
+More details in submitted PR to the upstream, i.e.
+https://github.com/prpplague/fb-test-app/pull/5.
 
-Indeed, I think it would be interesting to apply this to stable branches.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ .../0001-update-version-number.patch          | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/fb-test-app/0001-update-version-number.patch
 
+diff --git a/package/fb-test-app/0001-update-version-number.patch b/package/fb-test-app/0001-update-version-number.patch
+new file mode 100644
+index 0000000000..84d59be2e9
+--- /dev/null
++++ b/package/fb-test-app/0001-update-version-number.patch
+@@ -0,0 +1,27 @@
++From 063ec650960c2d79ac51f5c5f026cb05343a33e2 Mon Sep 17 00:00:00 2001
++From: David Anders <danders.dev@gmail.com>
++Date: Thu, 25 Sep 2014 11:52:11 -0500
++Subject: [PATCH 1/1] update version number
++
++---
++ Makefile | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/Makefile b/Makefile
++index fecbbe4..ef786a2 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -1,8 +1,8 @@
++ VERSION = 1
++-PATCHLEVEL = 0
+++PATCHLEVEL = 1
++ SUBLEVEL = 0
++ EXTRAVERSION = .git
++-NAME = tablet_rosa
+++NAME = rosetta
++ 
++ ifdef CROSS_COMPILE
++ 	CC=$(CROSS_COMPILE)gcc
++-- 
++2.20.1
++
 -- 
-Pierre-Jean Texier
-Embedded Linux Engineer
-https://koncepto.io
+2.20.1
