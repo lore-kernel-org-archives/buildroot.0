@@ -1,122 +1,374 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Jun 2019 06:00:47 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-06-17
-Message-ID: <20190618060056.C643F875F4@hemlock.osuosl.org>
+From: Sam Bobroff <sbobroff@linux.ibm.com>
+Date: Tue, 18 Jun 2019 15:38:52 +1000
+Subject: [Buildroot] [PATCH 1/1] package/cups: bump to version 2.2.11 and
+ add gzip fix
+Message-ID: <b2b6ccb8327f40de1bdaaf1e07b11183af5f6e92.1560836325.git.sbobroff@linux.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+This patch bumps cups to version 2.2.11 so that an upstream fix will
+apply cleanly.
 
-Build statistics for 2019-06-17
-===============================
+The upstream fix corrects a build failure when GZIP is set in the
+build environment, as it is for buildroot's reproducible builds, as
+shown below:
 
-      branch |  OK | NOK | TIM | TOT |
-   2019.02.x |  18 |   0 |   1 |  19 |
-   2019.05.x |  16 |   0 |   0 |  16 |
-      master | 175 |  53 |   1 | 229 |
+gzip: /bin/gzip.gz: Permission denied
+gzip: /bin/gzip.gz: Permission denied
+Makefile:114: recipe for target 'install-data' failed
 
-Results for branch 'master'
-===========================
+The patch will be included upstream in version 2.2.12.
 
-Classification of failures by reason
-------------------------------------
+Fixes:
+ - http://autobuild.buildroot.net/results/c4e0f6a3c79c9cb083a08f811b7d4838efef50f9/
 
-               libglib2-2.60.3 | 22
-          modem-manager-1.10.0 | 12
-                   cups-2.2.10 | 3 
-             host-cargo-0.26.0 | 2 
-/home/test/autobuild/run/in... | 1 
-fs/tar/tar.mk:32: /home/mar... | 1 
-                      gzip-1.9 | 1 
-               host-efl-1.22.2 | 1 
-             iputils-s20190515 | 1 
-          libcdaudio-0.99.12p2 | 1 
-                 libidn2-2.1.0 | 1 
-          libtorrent-rasterbar | 1 
-libuio-ca28ff0f69d89a789a47... | 1 
-                 python3-3.7.3 | 1 
-                qt5base-5.12.2 | 1 
-              qt5enginio-1.6.3 | 1 
-            qt5location-5.12.2 | 1 
-         qt5xmlpatterns-5.12.2 | 1 
-           udpxy-1.0.23-9-prod | 1 
+Signed-off-by: Sam Bobroff <sbobroff@linux.ibm.com>
+---
+Hi,
 
+As discussed elsewhere on the list in a thread starting with...
 
-Detail of failures
-------------------
+http://lists.busybox.net/pipermail/buildroot/2019-June/252416.html
 
-      xtensa | /home/test/autobuild/run/in... | NOK | http://autobuild.buildroot.net/results/583ca4a407295cf0769c0122868c9d00eb29d3c1 |     
-    mips64el |                    cups-2.2.10 | NOK | http://autobuild.buildroot.net/results/2a7032a2c8dc684ee0996e57497356bf7688c572 |     
-     aarch64 |                    cups-2.2.10 | NOK | http://autobuild.buildroot.net/results/58e20c3ab927b89228976affd061e5f8fe102d41 |     
-        or1k |                    cups-2.2.10 | NOK | http://autobuild.buildroot.net/results/bc4d3113751c45bcedaad752b547712792d506bf |     
-     riscv32 | fs/tar/tar.mk:32: /home/mar... | NOK | http://autobuild.buildroot.net/results/89705a21989ffaedd1b2b8bb77a142d1783b1092 |     
-         arm |                       gzip-1.9 | NOK | http://autobuild.buildroot.net/results/bd6bea0c1237c2fb8dc80ec6720ad7f1ef188486 | ORPH
-         arc |              host-cargo-0.26.0 | NOK | http://autobuild.buildroot.net/results/0943158d6e7ec0ebe6d6354dea312fa594155c33 |     
-     riscv32 |              host-cargo-0.26.0 | NOK | http://autobuild.buildroot.net/results/39185f274a8465726de109d14798d6d9488f2d77 |     
-         arm |                host-efl-1.22.2 | NOK | http://autobuild.buildroot.net/results/b323760d20a218d8b55d60f985ae24d9626c5cf4 |     
-         arm |              iputils-s20190515 | NOK | http://autobuild.buildroot.net/results/331a3b42f44888075b42797402c96f92fade5b58 |     
-         arm |           libcdaudio-0.99.12p2 | NOK | http://autobuild.buildroot.net/results/a804955a94fdf2016521e438999ac41de7fbbcf4 | ORPH
-        i686 |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/65f7c9a5e508285c4f670e615bc9ad841a449a9a |     
-     powerpc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/253ab5f8b33fb9fb706794fa6038245db3e11790 |     
-        i686 |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/ddcad8d82b4af9d61eede8af669af75ea0ce860d |     
-         arc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/4b7bc3c817379fb1fff6a2e27483cd367f5e6b12 |     
-       sparc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/4625974f257e327421aaee33de394fd000ea8056 |     
-      mipsel |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/e8cc052999fe9b9959a3e1bc9af679fce4744d1c |     
-         arc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/597a9851a0bc385306a1ccf4fb7f8d761b2e8e22 |     
-    mips64el |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/d456d428e37a8a2e12f57655fc79313cd713e359 |     
-         arc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/bf0192658f6065d320b6a411173be4a302914526 |     
-         arm |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/a848d2b152864467963b32837a3a701b06995743 |     
-     powerpc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/42358f391373d7a482eb60dbc264ed2408f43036 |     
-        i686 |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/a527c5fff3a7456cfbefb46d8f0dcff2401c67a2 |     
-        m68k |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/0e838135545b329cdbb768b0914d8769767b55e6 |     
-      xtensa |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/04a9198ca12106d5ebc3271e4b4f6a4b6fd4b68b |     
-      xtensa |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/3dc117eadead282b068d24dd0bb35521bf2fb6c4 |     
-        i586 |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/b13144a0693a44fce32adea14ca9711160a786dd |     
-         arm |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/44ccd9bb3c43cbc800c780513a990b397f61d55f |     
-        or1k |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/6800c6a71a254af261a1ce0d6932403f798290e5 |     
-      xtensa |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/a6d0f13e83414717a0818bfb859dbdd99859c713 |     
-    mips64el |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/ba67524d2c76f1870e669d5f8579a11cf9d7e124 |     
-     powerpc |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/6d1397d8f1bdc2c43502350f004c28e0213428ba |     
-      mipsel |                libglib2-2.60.3 | NOK | http://autobuild.buildroot.net/results/9ba7ce8e1a16f869df5bf8d8d42bc673f0515a5a |     
-      x86_64 |                  libidn2-2.1.0 | NOK | http://autobuild.buildroot.net/results/7cd60e8eab565f1f2de0700c352f06c850eb100a |     
-microblazeel |           libtorrent-rasterbar | TIM | http://autobuild.buildroot.net/results/410e75676abc6bbabe9029ecda969e3d909f3e18 |     
-     nds32le | libuio-ca28ff0f69d89a789a47... | NOK | http://autobuild.buildroot.net/results/ed5ed805c3582076a906b57019d9a13d01b794b2 |     
- powerpc64le |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/9ce577144078936af0a3afa5982f3efe98ac29aa |     
-         arc |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/09293dc9ba1e2173fbee9cd32a7c85621a34bda0 |     
-    mips64el |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/2743b260f45ea31987fdb0e3626b7f42be42e78d |     
-        i586 |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/ff337c5b1a3c2f4cc4ee147feb44985bfeb3590d |     
-        mips |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/59244078afbe9890a09dc1ea2b5c44b2a5dfd925 |     
-         arc |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/fbe602bcaa731d15dc9dde3d5eb70c6b20378fe5 |     
-         arm |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/b5e54a1e58ec5201623b120d043839bb48a2d2a5 |     
-         arm |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/7b570151bc0d2a1fa18c5febcbb8526cdea00e51 |     
-         arm |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/c449817e751ceb26db28106b5fb444e0129b76e9 |     
-         arc |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/7129caa30735a1dc0a1c0c7b878b268e6c6436a4 |     
-       nios2 |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/e83c104b25c1feee55983c5101aad3251bc6f058 |     
-      xtensa |           modem-manager-1.10.0 | NOK | http://autobuild.buildroot.net/results/4a372ac67839a4f997825a142079951645a29898 |     
-      x86_64 |                  python3-3.7.3 | NOK | http://autobuild.buildroot.net/results/eae6063b29cb7d3b09a4032cefc1f66f9203111a |     
-  aarch64_be |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/5c406f4bd157d394ef88e33d3ee63cfe79e0eff6 |     
-      xtensa |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/73cc66dcb10e58a006fd08496c5159cf50b62262 |     
-microblazeel |             qt5location-5.12.2 | NOK | http://autobuild.buildroot.net/results/bef146f2df1be4f020f12845e809f48c9348d41d |     
-  aarch64_be |          qt5xmlpatterns-5.12.2 | NOK | http://autobuild.buildroot.net/results/1606496d2d7b3edb00dd4ed5e8bb0ecc8b45a048 |     
-         arm |            udpxy-1.0.23-9-prod | NOK | http://autobuild.buildroot.net/results/28e0324857cf7e8de88ccc04968b3de1bb45ded6 |     
+... the cups package currently fails to build when BR2_REPRODUCIBLE=y due to
+the upstream package using an environment variable 'GZIP'. While discussion of
+how/if to address this within buildroot is ongling, the upstream maintainer has
+already patched the issue in the cups package, so we might as well take
+advantage of it.
 
-Results for branch '2019.02.x'
-==============================
+Cheers,
+Sam.
 
-Classification of failures by reason
-------------------------------------
+ ...tead-of-GZIP-to-avoid-install-issues.patch | 294 ++++++++++++++++++
+ package/cups/cups.hash                        |   2 +-
+ package/cups/cups.mk                          |   2 +-
+ 3 files changed, 296 insertions(+), 2 deletions(-)
+ create mode 100644 package/cups/0005-Use-GZIPPROG-instead-of-GZIP-to-avoid-install-issues.patch
 
-                host-libsodium | 1 
-
-
-Detail of failures
-------------------
-
-microblazeel |                 host-libsodium | TIM | http://autobuild.buildroot.net/results/0bd5e9af644c6e60b00a516b702cd5daab682603 |     
-
-
+diff --git a/package/cups/0005-Use-GZIPPROG-instead-of-GZIP-to-avoid-install-issues.patch b/package/cups/0005-Use-GZIPPROG-instead-of-GZIP-to-avoid-install-issues.patch
+new file mode 100644
+index 0000000000..cee4292eca
+--- /dev/null
++++ b/package/cups/0005-Use-GZIPPROG-instead-of-GZIP-to-avoid-install-issues.patch
+@@ -0,0 +1,294 @@
++Backported from upstream (with a slight edit to drop a changelog hunk).
++This can be dropped after the next cups release (2.2.12).
++
++commit 3676fc318a458f71df76620a7e66f5c5807cf9b1
++Author: Michael R Sweet <michael.r.sweet@gmail.com>
++Date:   Wed Jun 12 08:37:06 2019 -0400
++
++    Use GZIPPROG instead of GZIP to avoid install issues (Issue #5595)
++
++Signed-off-by: Sam Bobroff <sbobroff@linux.ibm.com>
++
++diff --git a/Makedefs.in b/Makedefs.in
++index f614c0c1d..8541b4976 100644
++--- a/Makedefs.in
+++++ b/Makedefs.in
++@@ -1,7 +1,7 @@
++ #
++ # Common makefile definitions for CUPS.
++ #
++-# Copyright 2007-2018 by Apple Inc.
+++# Copyright 2007-2019 by Apple Inc.
++ # Copyright 1997-2007 by Easy Software Products, all rights reserved.
++ #
++ # These coded instructions, statements, and computer programs are the
++@@ -29,7 +29,7 @@ CHMOD		=	@CHMOD@
++ CXX		=	@LIBTOOL_CXX@ @CXX@
++ DSO		=	@DSO@
++ DSOXX		=	@DSOXX@
++-GZIP		=	@GZIP@
+++GZIPPROG	=	@GZIPPROG@
++ INSTALL		=	@INSTALL@
++ LD		=	@LD@
++ LD_CC		=	@LD_CC@
++diff --git a/config-scripts/cups-common.m4 b/config-scripts/cups-common.m4
++index a1185bccc..0859efe08 100644
++--- a/config-scripts/cups-common.m4
+++++ b/config-scripts/cups-common.m4
++@@ -1,7 +1,7 @@
++ dnl
++ dnl Common configuration stuff for CUPS.
++ dnl
++-dnl Copyright 2007-2017 by Apple Inc.
+++dnl Copyright 2007-2019 by Apple Inc.
++ dnl Copyright 1997-2007 by Easy Software Products, all rights reserved.
++ dnl
++ dnl These coded instructions, statements, and computer programs are the
++@@ -42,7 +42,11 @@ AC_PROG_CXX(clang++ c++ g++)
++ AC_PROG_RANLIB
++ AC_PATH_PROG(AR,ar)
++ AC_PATH_PROG(CHMOD,chmod)
++-AC_PATH_PROG(GZIP,gzip)
+++AC_PATH_PROG(GZIPPROG,gzip)
+++AC_MSG_CHECKING(for install-sh script)
+++INSTALL="`pwd`/install-sh"
+++AC_SUBST(INSTALL)
+++AC_MSG_RESULT(using $INSTALL)
++ AC_PATH_PROG(LD,ld)
++ AC_PATH_PROG(LN,ln)
++ AC_PATH_PROG(MKDIR,mkdir)
++@@ -51,6 +55,7 @@ AC_PATH_PROG(RM,rm)
++ AC_PATH_PROG(RMDIR,rmdir)
++ AC_PATH_PROG(SED,sed)
++ AC_PATH_PROG(XDGOPEN,xdg-open)
+++
++ if test "x$XDGOPEN" = x; then
++ 	CUPS_HTMLVIEW="htmlview"
++ else
++@@ -58,11 +63,6 @@ else
++ fi
++ AC_SUBST(CUPS_HTMLVIEW)
++ 
++-AC_MSG_CHECKING(for install-sh script)
++-INSTALL="`pwd`/install-sh"
++-AC_SUBST(INSTALL)
++-AC_MSG_RESULT(using $INSTALL)
++-
++ if test "x$AR" = x; then
++ 	AC_MSG_ERROR([Unable to find required library archive command.])
++ fi
++@@ -266,14 +266,14 @@ dnl ZLIB
++ INSTALL_GZIP=""
++ LIBZ=""
++ AC_CHECK_HEADER(zlib.h,
++-    AC_CHECK_LIB(z, gzgets,
+++    AC_CHECK_LIB(z, gzgets,[
++ 	AC_DEFINE(HAVE_LIBZ)
++ 	LIBZ="-lz"
++ 	LIBS="$LIBS -lz"
++ 	AC_CHECK_LIB(z, inflateCopy, AC_DEFINE(HAVE_INFLATECOPY))
++-	if test "x$GZIP" != z; then
+++	if test "x$GZIPPROG" != x; then
++ 		INSTALL_GZIP="-z"
++-	fi))
+++	fi]))
++ AC_SUBST(INSTALL_GZIP)
++ AC_SUBST(LIBZ)
++ 
++diff --git a/configure b/configure
++index 368906141..629fdddba 100755
++--- a/configure
+++++ b/configure
++@@ -1,6 +1,6 @@
++ #! /bin/sh
++ # Guess values for system-dependent variables and create Makefiles.
++-# Generated by GNU Autoconf 2.69 for CUPS 2.2.11.
+++# Generated by GNU Autoconf 2.69 for CUPS 2.2.12.
++ #
++ # Report bugs to <https://github.com/apple/cups/issues>.
++ #
++@@ -580,8 +580,8 @@ MAKEFLAGS=
++ # Identity of this package.
++ PACKAGE_NAME='CUPS'
++ PACKAGE_TARNAME='cups'
++-PACKAGE_VERSION='2.2.11'
++-PACKAGE_STRING='CUPS 2.2.11'
+++PACKAGE_VERSION='2.2.12'
+++PACKAGE_STRING='CUPS 2.2.12'
++ PACKAGE_BUGREPORT='https://github.com/apple/cups/issues'
++ PACKAGE_URL='https://www.cups.org/'
++ 
++@@ -762,7 +762,6 @@ LIBPAPER
++ LIBMALLOC
++ PKGCONFIG
++ INSTALLSTATIC
++-INSTALL
++ CUPS_HTMLVIEW
++ XDGOPEN
++ SED
++@@ -772,7 +771,8 @@ MV
++ MKDIR
++ LN
++ LD
++-GZIP
+++INSTALL
+++GZIPPROG
++ CHMOD
++ AR
++ RANLIB
++@@ -1480,7 +1480,7 @@ if test "$ac_init_help" = "long"; then
++   # Omit some internal or obsolete options to make the list less imposing.
++   # This message is too long to be a string in the A/UX 3.1 sh.
++   cat <<_ACEOF
++-\`configure' configures CUPS 2.2.11 to adapt to many kinds of systems.
+++\`configure' configures CUPS 2.2.12 to adapt to many kinds of systems.
++ 
++ Usage: $0 [OPTION]... [VAR=VALUE]...
++ 
++@@ -1545,7 +1545,7 @@ fi
++ 
++ if test -n "$ac_init_help"; then
++   case $ac_init_help in
++-     short | recursive ) echo "Configuration of CUPS 2.2.11:";;
+++     short | recursive ) echo "Configuration of CUPS 2.2.12:";;
++    esac
++   cat <<\_ACEOF
++ 
++@@ -1726,7 +1726,7 @@ fi
++ test -n "$ac_init_help" && exit $ac_status
++ if $ac_init_version; then
++   cat <<\_ACEOF
++-CUPS configure 2.2.11
+++CUPS configure 2.2.12
++ generated by GNU Autoconf 2.69
++ 
++ Copyright (C) 2012 Free Software Foundation, Inc.
++@@ -2190,7 +2190,7 @@ cat >config.log <<_ACEOF
++ This file contains any messages produced by compilers while
++ running configure, to aid debugging if configure makes a mistake.
++ 
++-It was created by CUPS $as_me 2.2.11, which was
+++It was created by CUPS $as_me 2.2.12, which was
++ generated by GNU Autoconf 2.69.  Invocation command line was
++ 
++   $ $0 $@
++@@ -2711,7 +2711,7 @@ done
++ ac_config_headers="$ac_config_headers config.h"
++ 
++ 
++-CUPS_VERSION="2.2.11"
+++CUPS_VERSION="2.2.12"
++ CUPS_REVISION=""
++ CUPS_BUILD="cups-$CUPS_VERSION"
++ 
++@@ -3948,12 +3948,12 @@ fi
++ set dummy gzip; ac_word=$2
++ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
++ $as_echo_n "checking for $ac_word... " >&6; }
++-if ${ac_cv_path_GZIP+:} false; then :
+++if ${ac_cv_path_GZIPPROG+:} false; then :
++   $as_echo_n "(cached) " >&6
++ else
++-  case $GZIP in
+++  case $GZIPPROG in
++   [\\/]* | ?:[\\/]*)
++-  ac_cv_path_GZIP="$GZIP" # Let the user override the test with a path.
+++  ac_cv_path_GZIPPROG="$GZIPPROG" # Let the user override the test with a path.
++   ;;
++   *)
++   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++@@ -3963,7 +3963,7 @@ do
++   test -z "$as_dir" && as_dir=.
++     for ac_exec_ext in '' $ac_executable_extensions; do
++   if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
++-    ac_cv_path_GZIP="$as_dir/$ac_word$ac_exec_ext"
+++    ac_cv_path_GZIPPROG="$as_dir/$ac_word$ac_exec_ext"
++     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
++     break 2
++   fi
++@@ -3974,16 +3974,22 @@ IFS=$as_save_IFS
++   ;;
++ esac
++ fi
++-GZIP=$ac_cv_path_GZIP
++-if test -n "$GZIP"; then
++-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GZIP" >&5
++-$as_echo "$GZIP" >&6; }
+++GZIPPROG=$ac_cv_path_GZIPPROG
+++if test -n "$GZIPPROG"; then
+++  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GZIPPROG" >&5
+++$as_echo "$GZIPPROG" >&6; }
++ else
++   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
++ $as_echo "no" >&6; }
++ fi
++ 
++ 
+++{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for install-sh script" >&5
+++$as_echo_n "checking for install-sh script... " >&6; }
+++INSTALL="`pwd`/install-sh"
+++
+++{ $as_echo "$as_me:${as_lineno-$LINENO}: result: using $INSTALL" >&5
+++$as_echo "using $INSTALL" >&6; }
++ # Extract the first word of "ld", so it can be a program name with args.
++ set dummy ld; ac_word=$2
++ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
++@@ -4304,6 +4310,7 @@ $as_echo "no" >&6; }
++ fi
++ 
++ 
+++
++ if test "x$XDGOPEN" = x; then
++ 	CUPS_HTMLVIEW="htmlview"
++ else
++@@ -4311,13 +4318,6 @@ else
++ fi
++ 
++ 
++-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for install-sh script" >&5
++-$as_echo_n "checking for install-sh script... " >&6; }
++-INSTALL="`pwd`/install-sh"
++-
++-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: using $INSTALL" >&5
++-$as_echo "using $INSTALL" >&6; }
++-
++ if test "x$AR" = x; then
++ 	as_fn_error $? "Unable to find required library archive command." "$LINENO" 5
++ fi
++@@ -5718,7 +5718,8 @@ fi
++ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_z_gzgets" >&5
++ $as_echo "$ac_cv_lib_z_gzgets" >&6; }
++ if test "x$ac_cv_lib_z_gzgets" = xyes; then :
++-  $as_echo "#define HAVE_LIBZ 1" >>confdefs.h
+++
+++	$as_echo "#define HAVE_LIBZ 1" >>confdefs.h
++ 
++ 	LIBZ="-lz"
++ 	LIBS="$LIBS -lz"
++@@ -5763,7 +5764,7 @@ if test "x$ac_cv_lib_z_inflateCopy" = xyes; then :
++ 
++ fi
++ 
++-	if test "x$GZIP" != z; then
+++	if test "x$GZIPPROG" != x; then
++ 		INSTALL_GZIP="-z"
++ 	fi
++ fi
++@@ -10832,7 +10833,7 @@ cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
++ # report actual input values of CONFIG_FILES etc. instead of their
++ # values after options handling.
++ ac_log="
++-This file was extended by CUPS $as_me 2.2.11, which was
+++This file was extended by CUPS $as_me 2.2.12, which was
++ generated by GNU Autoconf 2.69.  Invocation command line was
++ 
++   CONFIG_FILES    = $CONFIG_FILES
++@@ -10895,7 +10896,7 @@ _ACEOF
++ cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1
++ ac_cs_config="`$as_echo "$ac_configure_args" | sed 's/^ //; s/[\\""\`\$]/\\\\&/g'`"
++ ac_cs_version="\\
++-CUPS config.status 2.2.11
+++CUPS config.status 2.2.12
++ configured by $0, generated by GNU Autoconf 2.69,
++   with options \\"\$ac_cs_config\\"
++ 
+diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+index 3d238d61e6..1353b553d1 100644
+--- a/package/cups/cups.hash
++++ b/package/cups/cups.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated:
+-sha256 77c8b2b3bb7fe8b5fbfffc307f2c817b2d7ec67b657f261a1dd1c61ab81205bb  cups-2.2.10-source.tar.gz
++sha256 f58010813fd6903f690cdb0c0b91e4d1bc9e5b9570c28734229ba3ed2908b76c  cups-2.2.11-source.tar.gz
+ sha256 6e0e0ffbde118aae709f7ef65590de9071e8b2cd322f84fd645c6b64f3cc452c  LICENSE.txt
+diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+index b91fe7ac4c..1333b5402e 100644
+--- a/package/cups/cups.mk
++++ b/package/cups/cups.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CUPS_VERSION = 2.2.10
++CUPS_VERSION = 2.2.11
+ CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+ CUPS_SITE = https://github.com/apple/cups/releases/download/v$(CUPS_VERSION)
+ CUPS_LICENSE = GPL-2.0, LGPL-2.0
 -- 
-http://autobuild.buildroot.net
+2.19.0.2.gcad72f5712
