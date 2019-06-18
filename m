@@ -1,44 +1,60 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 18 Jun 2019 10:45:35 +0200
-Subject: [Buildroot] [PATCH 4/4] package/libtorrent-rasterbar: work around
- gcc bug 85180
-In-Reply-To: <20190618084535.75870-1-giulio.benetti@micronovasrl.com>
-References: <20190618084535.75870-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190618084535.75870-5-giulio.benetti@micronovasrl.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Jun 2019 11:31:19 +0200
+Subject: [Buildroot] [PATCH 1/2] package/taglib: add upstream patch to
+ fix taglib-config
+In-Reply-To: <15e6479684371e8406659c0f54c8bbc1eb5dc428.camel@embedded.rocks>
+References: <20190610212023.9483-1-joerg.krause@embedded.rocks>
+ <20190610212023.9483-2-joerg.krause@embedded.rocks>
+ <3a548d14-a85d-76c7-18c0-1037ac1ad5a9@mind.be>
+ <15e6479684371e8406659c0f54c8bbc1eb5dc428.camel@embedded.rocks>
+Message-ID: <effb44bc-af64-a179-5757-7d933015ed0f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Microblaze Gcc version < 8.x the build hangs due to gcc bug
-85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-shows up when building libtorrent-rasterbar with optimization but not
-when building with -O0. To work around this, if
-BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
 
-Fixes:
-http://autobuild.buildroot.net/results/410/410e75676abc6bbabe9029ecda969e3d909f3e18/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
- package/libtorrent-rasterbar/libtorrent-rasterbar.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+On 16/06/2019 15:24, J?rg Krause wrote:
+> Hi Arnout,
+> 
+> thanks for your review!
+> 
+> On Tue, 2019-06-11 at 00:25 +0200, Arnout Vandecappelle wrote:
+>>
+>> On 10/06/2019 23:20, J?rg Krause wrote:
+>>> +-prefix=${CMAKE_INSTALL_PREFIX}
+>>> +-exec_prefix=${CMAKE_INSTALL_PREFIX}
+>>> +-libdir=${LIB_INSTALL_DIR}
+>>> +-includedir=${INCLUDE_INSTALL_DIR}
+>>> ++prefix=@CMAKE_SYSROOT@@CMAKE_INSTALL_PREFIX@
+>>> ++exec_prefix=@CMAKE_SYSROOT@@CMAKE_INSTALL_PREFIX@
+>>
+>>  I believe it is wrong to include CMAKE_SYSROOT here. In general, this is not
+>> necessarily the place where the package will be installed. We happen to do that
+>> now, but for example both OpenWrt and OpenEmbedded install with a different
+>> DESTDIR, and dependent packages see a different sysroot.
+> 
+> I see! The upstream patch was sent by me, so I will find a better
+> solution.
+> 
+>>  We have the TAGLIB_CONFIG_SCRIPT infra to handle this situation. It will add
+>> the appropriate sysroot to the _prefix variables.
+> 
+> I've checked and used TAGLIB_CONFIG_SCRIPTS instead of applying the
+> patch. The current sed commands to fix the package configuration file
+> does not work for taglib-config:
+> 
+> ```
+> # ./output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/bin/taglib-config --libs
+> -L/usr/lib -ltag
+> ```
+> 
+> To get taglib-config work with our CONFIG_SCRIPTS, it needs to be fixed
+> the way the patch does, just without using CMAKE_SYSROOT.
 
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-index 012e972f1d..1d132382e1 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-@@ -21,6 +21,10 @@ ifeq ($(BR2_m68k_cf),y)
- LIBTORRENT_RASTERBAR_CXXFLAGS += -fno-defer-pop
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+LIBTORRENT_RASTERBAR_CXXFLAGS += -O0
-+endif
-+
- LIBTORRENT_RASTERBAR_CONF_OPTS += CXXFLAGS="$(LIBTORRENT_RASTERBAR_CXXFLAGS)"
- 
- ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
--- 
-2.17.1
+ Yes, that was actually what I intended to say. Sorry for not being clearer.
+
+ Regards,
+ Arnout
