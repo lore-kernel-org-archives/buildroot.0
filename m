@@ -1,10 +1,14 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 18 Jun 2019 23:41:28 +0200
-Subject: [Buildroot] [PATCH buildroot-test] scripts/autobuild-run:
- reduce disk space consumption of build results
-In-Reply-To: <20190618144149.1242-1-thomas.petazzoni@bootlin.com>
-References: <20190618144149.1242-1-thomas.petazzoni@bootlin.com>
-Message-ID: <63c64f60-f14e-2b6f-0a3e-3fc2e3abe539@mind.be>
+Date: Wed, 19 Jun 2019 00:05:07 +0200
+Subject: [Buildroot] [External] Re: [PATCH v2 1/1] package/hostapd: add
+ debug information options
+In-Reply-To: <CAM=7fbdLrLEWdC+hKVUywG273Z6CHkuT2irQ1f_7ogDj6aapfg@mail.gmail.com>
+References: <20190617153533.26255-1-jared.bents@rockwellcollins.com>
+ <20190617194121.64c14291@windsurf>
+ <CAM=7fbd717PmwGE5Dh4Wi4AGhY14Pb7tabG7qrxCsgdCgDQ-LQ@mail.gmail.com>
+ <20190617210223.77a97ee2@windsurf>
+ <CAM=7fbdLrLEWdC+hKVUywG273Z6CHkuT2irQ1f_7ogDj6aapfg@mail.gmail.com>
+Message-ID: <45689e33-2ed3-2568-521a-b12e1245a4fc@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,115 +17,50 @@ To: buildroot@busybox.net
 
 
 
-On 18/06/2019 16:41, Thomas Petazzoni wrote:
-> In commit e0635d4f7a2c926944609876ea9129245306cdea ("autobuild-run:
-> also copy packages files lists if they exist"), we added some logic in
-> autobuild-run to copy the package file lists as part of the build
-> results. This means these files are now collected on the
-> autobuild.buildroot.org machine.
+On 17/06/2019 22:27, Jared Bents wrote:
+> On Mon, Jun 17, 2019 at 2:02 PM Thomas Petazzoni
+> <thomas.petazzoni@bootlin.com> wrote:
+>>
+>> Hello,
+>>
+>> On Mon, 17 Jun 2019 12:56:08 -0500
+>> Jared Bents <jared.bents@collins.com> wrote:
+>>
+>>>> Could you explain what CONFIG_DEBUG_FILE is doing compared to
+>>>> CONFIG_DEBUG_SYSLOG, and why one is conditional and not the other ? Do
+>>>> we really want CONFIG_DEBUG_FILE unconditionally ?
+>>>
+>>> I based it off of wpa_supplicant's implementation for each.  In
+>>> wpa_supplicant, CONFIG_DEBUG_FILE is turned on unconditionally while
+>>> CONFIG_DEBUG_SYSLOG is optional.  CONFIG_DEBUG_FILE enables a runtime
+>>> option (-f) to specify a file to direct the hostapd output to instead
+>>> of stdout.  CONFIG_DEBUG_SYSLOG enables a runtime option (-s) to have
+>>> the output go to syslog instead of stdout.  These are purely optional
+>>> at runtime as if neither of the -f or -s command line arguments are
+>>> used, the output will go to stdout as before.
+>>
+>> What is the size impact of each option, compared to the overall
+>> installation size of hostapd ?
 > 
-> However, it turns out that those files are taking a significant amount
-> of disk space, especially considered to the other files stored as part
-> of the build results. Taking
-> http://autobuild.buildroot.net/results/2ec994e1bb737c6b75c79f743763ebb690481604/
-> as an example, we have:
-> 
-> -rw-rw-r-- 1 thomas thomas    6 18 juin  16:01 branch
-> -rw-rw-r-- 1 thomas thomas  31K 18 juin  16:01 build-end.log
-> -rw-rw-r-- 1 thomas thomas 450K 18 juin  16:01 build-time.log
-> -rw-rw-r-- 1 thomas thomas 105K 18 juin  16:01 config
-> -rw-rw-r-- 1 thomas thomas  12K 18 juin  16:01 defconfig
-> -rw-rw-r-- 1 thomas thomas   40 18 juin  16:01 gitid
-> -rw-rw-r-- 1 thomas thomas 189K 18 juin  16:01 licenses-manifest.csv
-> -rw-rw-r-- 1 thomas thomas 4,7M 18 juin  16:01 packages-file-list-host.txt
-> -rw-rw-r-- 1 thomas thomas 2,2M 18 juin  16:01 packages-file-list-staging.txt
-> -rw-rw-r-- 1 thomas thomas 3,5M 18 juin  16:01 packages-file-list.txt
-> -rw-rw-r-- 1 thomas thomas    2 18 juin  16:01 status
-> -rw-rw-r-- 1 thomas thomas   25 18 juin  16:01 submitter
-> 
-> So the package file lists are several MBs large and it makes the total
-> build result data weight 12 MB.
-> 
-> The below patch proposes to store the build-time.log,
-> licenses-manifest.csv and packages-file-list* files gzip-compressed in
-> the build results. This reduces the total size of the build results to
-> 1.2 MB, i.e dividing by 10 the disk space consumption.
-> 
-> While files like the build-end.log are very frequently used and nice
-> to access directly uncompessed, the other files are much less often
-> needed to analyze a build result, and having to uncompress them prior
-> to usage seems reasonable.
+> I haven't been able to determine a size impact.  When trying to see a
+> size difference, I am getting sizes for hostapd varying between 1.4M
+> and 1.6M without any real correlation with whether I have one of the
+> two options selected, both selected, or neither of them selected
 
- I agree with that.
+ I've done a native build of all combinations, with -g0 and strip, and it always
+gives 380K.
 
- I also checked if we shouldn't use a better compression than gz instead, so I
-tried xz, but it's only 10-20% better on these files. So better to stick to the
-more standard gzip.
+ Which is not surprising. The only difference is one additional condition and
+function call. The syslog option might make a tiny difference when linking
+statically (which I haven't tried) because it doesn't need to include the
+openlog() and syslog() functions.
 
+ So no, it's not worth to make this configurable.
 
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  scripts/autobuild-run | 25 +++++++++++++++----------
-
- However, I think it's more appropriate to do the zipping on the server. The
-server gets a bzipped tarball, so compressing its contents is not so sensible.
-Also, doing it server side makes it easier to do compression of the existing
-files on the server (since there is no "waiting time" until all autobuilders
-have been updated). And you're anyway already doing a bunch of manipulations
-there. Finally, I don't think the extra load on the server is going to make a
-difference.
-
- Oh, and Atharva will be glad that he doesn't have to rebase his patches :-)
+ For wpa_supplicant, the syslog option was added in 2013. I guess at the time
+nobody wondered about the size impact. The file option was forced on in 2015 -
+at that time, the size impact was considered and measured to be 963 bytes so no
+user-configurable option was added for it.
 
  Regards,
  Arnout
-
-
-
->  1 file changed, 15 insertions(+), 10 deletions(-)
-> 
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index 601fb31..925d95f 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -145,6 +145,7 @@ from distutils.version import StrictVersion
->  import platform
->  from threading import Thread, Event
->  import datetime
-> +import gzip
->  
->  if sys.hexversion >= 0x3000000:
->      import configparser
-> @@ -551,16 +552,20 @@ def send_results(result, **kwargs):
->      shutil.copyfile(os.path.join(outputdir, "branch"),
->                      os.path.join(resultdir, "branch"))
->  
-> -    def copy_if_exists(directory, src, dst=None):
-> -        if os.path.exists(os.path.join(outputdir, directory, src)):
-> -            shutil.copyfile(os.path.join(outputdir, directory, src),
-> -                            os.path.join(resultdir, src if dst is None else dst))
-> -
-> -    copy_if_exists("build", "build-time.log")
-> -    copy_if_exists("build", "packages-file-list.txt")
-> -    copy_if_exists("build", "packages-file-list-host.txt")
-> -    copy_if_exists("build", "packages-file-list-staging.txt")
-> -    copy_if_exists("legal-info", "manifest.csv", "licenses-manifest.csv")
-> +    def copy_compress_if_exists(directory, src, dst=None):
-> +        srcfile = os.path.join(outputdir, directory, src)
-> +        dstfile = os.path.join(resultdir, src if dst is None else dst) + ".gz"
-> +        if not os.path.exists(srcfile):
-> +            return
-> +        with open(srcfile, 'rb') as f_in:
-> +            with gzip.open(dstfile, 'wb') as f_out:
-> +                shutil.copyfileobj(f_in, f_out)
-> +
-> +    copy_compress_if_exists("build", "build-time.log")
-> +    copy_compress_if_exists("build", "packages-file-list.txt")
-> +    copy_compress_if_exists("build", "packages-file-list-host.txt")
-> +    copy_compress_if_exists("build", "packages-file-list-staging.txt")
-> +    copy_compress_if_exists("legal-info", "manifest.csv", "licenses-manifest.csv")
->  
->      subprocess.call(["git log -n 1 --pretty=format:%%H > %s" % \
->                       os.path.join(resultdir, "gitid")],
-> 
