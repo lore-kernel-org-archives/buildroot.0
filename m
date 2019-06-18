@@ -1,32 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Jun 2019 19:56:00 +0200
-Subject: [Buildroot] [PATCH 1/3] toolchain-external: update Arm ARM
- toolchain 8.3-2019.03
-In-Reply-To: <20190605115532.5015-1-romain.naour@gmail.com>
-References: <20190605115532.5015-1-romain.naour@gmail.com>
-Message-ID: <20190618195600.365db925@windsurf>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 18 Jun 2019 12:15:24 -0600
+Subject: [Buildroot] [PATCH 1/1] kmod: bump version to 26
+Message-ID: <20190618181524.32924-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Romain,
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/kmod/kmod.hash | 2 +-
+ package/kmod/kmod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Wed,  5 Jun 2019 13:55:30 +0200
-Romain Naour <romain.naour@gmail.com> wrote:
-
-> Update to gcc 8.1 and gcc 8.2.
-
-It updates to gcc 8.1 and gcc 8.2 at the same time ? Seems weird!
-
-In fact, it updates to gcc 8.3, gdb 8.2 and binutils 2.32. I fixed that
-up in all three patches, and applied them to master.
-
-Thanks!
-
-Thomas
+diff --git a/package/kmod/kmod.hash b/package/kmod/kmod.hash
+index f970093cf1..b4beabff46 100644
+--- a/package/kmod/kmod.hash
++++ b/package/kmod/kmod.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/utils/kernel/kmod/sha256sums.asc
+-sha256 7165e6496656159dcb909a91ed708a0fe273a4b128b4b1dc997ccb5189eef1cd  kmod-25.tar.xz
++sha256 57bb22c8bb56435991f6b0810a042b0a65e2f1e217551efa58235b7034cdbb9d  kmod-26.tar.xz
+ 
+ # Locally calculated
+ sha256 6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  libkmod/COPYING
+diff --git a/package/kmod/kmod.mk b/package/kmod/kmod.mk
+index ea5d291133..a5bcf2f2d6 100644
+--- a/package/kmod/kmod.mk
++++ b/package/kmod/kmod.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KMOD_VERSION = 25
++KMOD_VERSION = 26
+ KMOD_SOURCE = kmod-$(KMOD_VERSION).tar.xz
+ KMOD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kmod
+ KMOD_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
