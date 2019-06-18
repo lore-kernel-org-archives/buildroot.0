@@ -1,68 +1,68 @@
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date: Tue, 18 Jun 2019 18:47:09 +0300
-Subject: [Buildroot] [PATCH v1] fb-test-app: Revert upstream 77bdfc6
- "add function to place framebuffer ..."
-In-Reply-To: <20190618154352.50597-1-andriy.shevchenko@linux.intel.com>
-References: <20190618154352.50597-1-andriy.shevchenko@linux.intel.com>
-Message-ID: <20190618154709.GS9224@smile.fi.intel.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 18 Jun 2019 18:36:20 +0200
+Subject: [Buildroot] [PATCH 1/1] package/flatbuffers: fix musl build
+Message-ID: <20190618163620.28204-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 18, 2019 at 06:43:52PM +0300, Andy Shevchenko wrote:
-> The patch breaks at least hotplug displays to work.
-> 
-> More details in submitted PR to the upstream, i.e.
-> https://github.com/prpplague/fb-test-app/pull/5.
+Retrieve upstream patch that check availability of strtoull_l before
+using it
 
-Please, ignore. Just sent a proper one.
+Fixes:
+ - http://autobuild.buildroot.org/results/18f9eecae551c2db6544c7432f23e541bae0d8b9
 
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  .../0001-update-version-number.patch          | 27 +++++++++++++++++++
->  1 file changed, 27 insertions(+)
->  create mode 100644 package/fb-test-app/0001-update-version-number.patch
-> 
-> diff --git a/package/fb-test-app/0001-update-version-number.patch b/package/fb-test-app/0001-update-version-number.patch
-> new file mode 100644
-> index 0000000000..84d59be2e9
-> --- /dev/null
-> +++ b/package/fb-test-app/0001-update-version-number.patch
-> @@ -0,0 +1,27 @@
-> +From 063ec650960c2d79ac51f5c5f026cb05343a33e2 Mon Sep 17 00:00:00 2001
-> +From: David Anders <danders.dev@gmail.com>
-> +Date: Thu, 25 Sep 2014 11:52:11 -0500
-> +Subject: [PATCH 1/1] update version number
-> +
-> +---
-> + Makefile | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/Makefile b/Makefile
-> +index fecbbe4..ef786a2 100644
-> +--- a/Makefile
-> ++++ b/Makefile
-> +@@ -1,8 +1,8 @@
-> + VERSION = 1
-> +-PATCHLEVEL = 0
-> ++PATCHLEVEL = 1
-> + SUBLEVEL = 0
-> + EXTRAVERSION = .git
-> +-NAME = tablet_rosa
-> ++NAME = rosetta
-> + 
-> + ifdef CROSS_COMPILE
-> + 	CC=$(CROSS_COMPILE)gcc
-> +-- 
-> +2.20.1
-> +
-> -- 
-> 2.20.1
-> 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...0001-Add-detection-of-strtoull_l-function.patch | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/flatbuffers/0001-Add-detection-of-strtoull_l-function.patch
 
+diff --git a/package/flatbuffers/0001-Add-detection-of-strtoull_l-function.patch b/package/flatbuffers/0001-Add-detection-of-strtoull_l-function.patch
+new file mode 100644
+index 0000000000..f3e82101bb
+--- /dev/null
++++ b/package/flatbuffers/0001-Add-detection-of-strtoull_l-function.patch
+@@ -0,0 +1,38 @@
++From bff7ffbc5130cd46caf33b76b4bb0593fcd15066 Mon Sep 17 00:00:00 2001
++From: Vladimir Glavnyy <31897320+vglavnyy@users.noreply.github.com>
++Date: Fri, 10 May 2019 00:15:29 +0700
++Subject: [PATCH] Add detection of strtoull_l function (#5333) (#5337)
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Retrieved from:
++https://github.com/google/flatbuffers/commit/bff7ffbc5130cd46caf33b76b4bb0593fcd15066]
++---
++ CMakeLists.txt | 12 +++++++++---
++ 1 file changed, 9 insertions(+), 3 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 0640c37b5..30be238fe 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -42,12 +42,18 @@ if(DEFINED FLATBUFFERS_MAX_PARSING_DEPTH)
++   message(STATUS "FLATBUFFERS_MAX_PARSING_DEPTH: ${FLATBUFFERS_MAX_PARSING_DEPTH}")
++ endif()
++ 
++-# Auto-detect locale-narrow 'strtod_l' function.
+++# Auto-detect locale-narrow 'strtod_l' and  'strtoull_l' functions.
++ if(NOT DEFINED FLATBUFFERS_LOCALE_INDEPENDENT)
+++  set(FLATBUFFERS_LOCALE_INDEPENDENT 0)
++   if(MSVC)
++-    check_cxx_symbol_exists(_strtof_l stdlib.h FLATBUFFERS_LOCALE_INDEPENDENT)
+++    check_cxx_symbol_exists(_strtof_l stdlib.h FLATBUFFERS_HAS_STRTOF_L)
+++    check_cxx_symbol_exists(_strtoui64_l stdlib.h FLATBUFFERS_HAS_STRTOULL_L)
++   else()
++-    check_cxx_symbol_exists(strtof_l stdlib.h FLATBUFFERS_LOCALE_INDEPENDENT)
+++    check_cxx_symbol_exists(strtof_l stdlib.h FLATBUFFERS_HAS_STRTOF_L)
+++    check_cxx_symbol_exists(strtoull_l stdlib.h FLATBUFFERS_HAS_STRTOULL_L)
+++  endif()
+++  if(FLATBUFFERS_HAS_STRTOF_L AND FLATBUFFERS_HAS_STRTOULL_L)
+++    set(FLATBUFFERS_LOCALE_INDEPENDENT 1)
++   endif()
++ endif()
++ add_definitions(-DFLATBUFFERS_LOCALE_INDEPENDENT=$<BOOL:${FLATBUFFERS_LOCALE_INDEPENDENT}>)
 -- 
-With Best Regards,
-Andy Shevchenko
+2.14.1
