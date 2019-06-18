@@ -1,46 +1,45 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 18 Jun 2019 09:01:52 +0200
-Subject: [Buildroot] [PATCH 2/2] package/iputils: fix IPUTILS_PERMISSIONS
-In-Reply-To: <20190618084948.0a451f1b@windsurf>
-References: <20190616200919.4378-1-thomas.petazzoni@bootlin.com>
- <20190616200919.4378-2-thomas.petazzoni@bootlin.com>
- <20190617203235.GB8498@x230> <20190618084948.0a451f1b@windsurf>
-Message-ID: <20190618070151.GD8350@x230>
+From: Yi Zheng <goodmenzy@gmail.com>
+Date: Tue, 18 Jun 2019 15:05:10 +0800
+Subject: [Buildroot] [PATCH] systemd: add option to enable
+ systemd-journal-remote
+In-Reply-To: <20190617214007.537f8ac6@windsurf>
+References: <CAJPHfYNGkrW8MWGQyaWgehg_wAQ=3eoNWVZHEh=DyhbebJhJTA@mail.gmail.com>
+ <20190617214007.537f8ac6@windsurf>
+Message-ID: <CAJPHfYOb4mHgw_CWZXm6jhRGO+zAbBPNPCrHs1m7MRkmVJ=e4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+Thanks a lot!
+It is very hard for me to use gmail.
+VPS linkage is not stable in China.
 
-> Hello,
+Thanks for your kindness to fixup that patch to fulfill the coding standards.
 
-> On Mon, 17 Jun 2019 22:32:36 +0200
-> Petr Vorel <petr.vorel@gmail.com> wrote:
-
-> > The only thing to consider:
-> > Upstream doesn't care much about systems without usr merge.
-> > I wonder if systems without it (unset BR2_ROOTFS_MERGED_USR),
-> > whether we want to have /bin/ping and symlinked it into /usr/bin/ping.
-> > I see this is handled for coreutils (COREUTILS_BIN_PROGS).
-
-> What COREUTILS_CLEANUP_BIN is doing is not to install a symlink
-> between /bin/foo and /usr/bin/foo. Indeed, such a symlink is not
-> necessary: both /bin and /usr/bin are in the PATH, so having /bin/foo
-> and /usr/bin/foo is totally useless.
-
-> What COREUTILS_CLEANUP_BIN does is to make sure that in a
-> non-BR2_ROOTFS_MERGED_USR case, the symlinks to coreutils are installed
-> in the same location as the corresponding Busybox applets, so that we
-> properly handle the conflict between Busybox applets and full-blown
-> variants, as I explained in my reply to your comments on PATCH 1/2.
-
-Thanks for an explanation.
-
-Kind regards,
-Petr
-
-> Best regards,
-
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> ?2019?6?18??? ??3:40???
+>
+> Hello Yi,
+>
+> On Thu, 13 Jun 2019 11:05:27 +0800
+> Yi Zheng <goodmenzy@gmail.com> wrote:
+>
+> >     systemd-journal-remote was added in systemd v211, so add a new option
+> >     to enable or disable it.
+> >
+> >     Signed-off-by: Yi Zheng <goodmenzy@gmail.com>
+> > ---
+> >  package/systemd/Config.in  | 15 +++++++++++++++
+> >  package/systemd/systemd.mk |  4 ++++
+> >  2 files changed, 19 insertions(+)
+>
+> I have fixed the various issues pointed by Yann (formatting issues in
+> the commit log and Config.in file, missing "else" condition to
+> explicitly disable the option), and applied to master. Thanks!
+>
 > Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
