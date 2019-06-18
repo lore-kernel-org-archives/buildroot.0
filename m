@@ -1,40 +1,61 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Tue, 18 Jun 2019 10:45:33 +0200
-Subject: [Buildroot] [PATCH 2/4] toolchain: bug 90620 has not been fixed in
- gcc 8.x
+Date: Tue, 18 Jun 2019 10:45:34 +0200
+Subject: [Buildroot] [PATCH 3/4] package/qt5/qt5base: work around gcc bug
+ 90620
 In-Reply-To: <20190618084535.75870-1-giulio.benetti@micronovasrl.com>
 References: <20190618084535.75870-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190618084535.75870-3-giulio.benetti@micronovasrl.com>
+Message-ID: <20190618084535.75870-4-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Gcc bug 90620 appears on gcc 8.x so remove version check dependency and
-keep only the BR2_microblaze one.
+With Microblaze Gcc version <= 9.x the build hangs due to gcc bug
+90620: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90620. The bug
+shows up when building qt5base with optimization but not when
+building with -O0. To work around this, if
+BR2_TOOLCHAIN_HAS_GCC_BUG_90620=y we force using -O0.
+
+Fixes:
+http://autobuild.buildroot.net/results/4e5/4e563f5fc38ec681a730a576c5f056bc092db74e/
+http://autobuild.buildroot.net/results/348/3482bd950c7ab5608666807a7ab7ea857c767333/
+http://autobuild.buildroot.net/results/835/8351e3fbd6a39d05da6a6e7a978329d718dfc109/
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- toolchain/Config.in | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/qt5/qt5base/qt5base.mk | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 3f562e8d3c..db3ce3cf24 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -154,11 +154,10 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_85862
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index c732e766f3..e682ae3c7d 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -33,6 +33,14 @@ ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
+ QT5BASE_CONFIGURE_OPTS += -no-optimize-debug
+ endif
  
- # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90620
- # ICE: in do_output_reload, at reload1.c:7978 on microblaze.
--# It's been fixed on Gcc 8.x but reappeared on Gcc 9.x
-+# It's still not fixed in gcc 9.x
- config BR2_TOOLCHAIN_HAS_GCC_BUG_90620
- 	bool
- 	default y if BR2_microblaze
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 
- config BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	bool
++QT5BASE_CFLAGS = $(TARGET_CFLAGS)
++QT5BASE_CXXFLAGS = $(TARGET_CXXFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_90620),y)
++QT5BASE_CFLAGS += -O0
++QT5BASE_CXXFLAGS += -O0
++endif
++
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
+ QT5BASE_DEPENDENCIES += pcre
+ else
+@@ -350,8 +358,8 @@ define QT5BASE_CONFIGURE_CMDS
+ 		-nomake tests \
+ 		-device buildroot \
+ 		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
+-		-device-option BR_COMPILER_CFLAGS="$(TARGET_CFLAGS)" \
+-		-device-option BR_COMPILER_CXXFLAGS="$(TARGET_CXXFLAGS)" \
++		-device-option BR_COMPILER_CFLAGS="$(QT5BASE_CFLAGS)" \
++		-device-option BR_COMPILER_CXXFLAGS="$(QT5BASE_CXXFLAGS)" \
+ 		$(QT5BASE_CONFIGURE_OPTS) \
+ 	)
+ endef
 -- 
 2.17.1
