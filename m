@@ -1,67 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 17 Jun 2019 23:24:44 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/iputils: fix
- IPUTILS_PERMISSIONS
-In-Reply-To: <20190617171747.7713-2-thomas.petazzoni@bootlin.com>
-References: <20190617171747.7713-1-thomas.petazzoni@bootlin.com>
- <20190617171747.7713-2-thomas.petazzoni@bootlin.com>
-Message-ID: <e697c0cc-1dfa-f38d-843b-61ea12b8fcf2@mind.be>
+From: Jan Willem Janssen <j.w.janssen@lxtreme.nl>
+Date: Tue, 18 Jun 2019 07:24:15 +0200
+Subject: [Buildroot] [PATCH] package/dnsmasq: bump version to 2.80
+Message-ID: <20190618052415.27541-1-j.w.janssen@lxtreme.nl>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Both applied to master, thanks.
+Also automatically enable UBus support when UBus itself is enabled.
 
-On 17/06/2019 19:17, Thomas Petazzoni wrote:
-> The IPUTILS_PERMISSIONS variable was wrong, because iputils installs
-> its programs in /usr/bin, not in /bin. It probably was only tested
-> with the merged /usr option enabled.
-> 
-> This commit fixes IPUTILS_PERMISSIONS, taking into account the change
-> done in "package/iputils: move binaries to the location also used by
+Signed-off-by: Jan Willem Janssen <j.w.janssen@lxtreme.nl>
+---
+ package/dnsmasq/dnsmasq.hash | 1 +
+ package/dnsmasq/dnsmasq.mk   | 7 ++++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
- I've added the has of the actual commit here.
-
- Regards,
- Arnout
-
-> Busybox":
-> 
->  - arping is moved by the post-install target hook to /usr/sbin
-> 
->  - clockdiff is installed by iputils in /usr/bin
-> 
->  - ping is moved by the post-install target hook to /bin, which makes
->    the previously incorrect path in IPUTILS_PERMISSIONS now correct
-> 
-> Fixes:
-> 
->   http://autobuild.buildroot.net/results/fe378bca29c86a681ba9ad40386cb89248195c50/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-> Changes since v1: None
-> ---
->  package/iputils/iputils.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> index 7bd756f040..052110878a 100644
-> --- a/package/iputils/iputils.mk
-> +++ b/package/iputils/iputils.mk
-> @@ -66,9 +66,9 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_MOVE_BINARIES
->  # handle permissions ourselves
->  IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
->  define IPUTILS_PERMISSIONS
-> -	/bin/arping      f 4755 0 0 - - - - -
-> -	/bin/clockdiff   f 4755 0 0 - - - - -
-> -	/bin/ping        f 4755 0 0 - - - - -
-> +	/usr/sbin/arping      f 4755 0 0 - - - - -
-> +	/usr/bin/clockdiff    f 4755 0 0 - - - - -
-> +	/bin/ping             f 4755 0 0 - - - - -
->  endef
->  
->  $(eval $(meson-package))
-> 
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 322f8df5cc..18a539277e 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,6 +1,7 @@
+ # Locally calculated after checking pgp signature
+ # http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.79.tar.xz.asc
+ sha256	78ad74f5ca14fd85a8bac93f764cd9d60b27579e90eabd3687ca7b030e67861f	dnsmasq-2.79.tar.xz
++sha256	cdaba2785e92665cf090646cba6f94812760b9d7d8c8d0cfb07ac819377a63bb	dnsmasq-2.80.tar.xz
+ # Locally calculated
+ sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 79c5619966..366cebf012 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DNSMASQ_VERSION = 2.79
++DNSMASQ_VERSION = 2.80
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+@@ -67,6 +67,11 @@ define DNSMASQ_INSTALL_DBUS
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_UBUS),y)
++DNSMASQ_DEPENDENCIES += ubus
++DNSMASQ_COPTS += -DHAVE_UBUS
++endif
++
+ define DNSMASQ_FIX_PKGCONFIG
+ 	$(SED) 's^PKG_CONFIG = pkg-config^PKG_CONFIG = $(PKG_CONFIG_HOST_BINARY)^' \
+ 		$(DNSMASQ_DIR)/Makefile
+-- 
+2.20.1
