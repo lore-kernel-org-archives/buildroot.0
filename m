@@ -1,71 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Jun 2019 08:46:57 +0200
-Subject: [Buildroot] [PATCH 1/2] package/iputils: move binaries to the
- location also used by Busybox
-In-Reply-To: <20190617202402.GA8498@x230>
+Date: Tue, 18 Jun 2019 08:49:48 +0200
+Subject: [Buildroot] [PATCH 2/2] package/iputils: fix IPUTILS_PERMISSIONS
+In-Reply-To: <20190617203235.GB8498@x230>
 References: <20190616200919.4378-1-thomas.petazzoni@bootlin.com>
- <20190617202402.GA8498@x230>
-Message-ID: <20190618084657.64bd21e4@windsurf>
+ <20190616200919.4378-2-thomas.petazzoni@bootlin.com>
+ <20190617203235.GB8498@x230>
+Message-ID: <20190618084948.0a451f1b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Petr,
+Hello,
 
-Thanks for the feedback.
-
-On Mon, 17 Jun 2019 22:24:03 +0200
+On Mon, 17 Jun 2019 22:32:36 +0200
 Petr Vorel <petr.vorel@gmail.com> wrote:
 
-> > iputils installs several programs that are also implemented as applets
-> > in Busybox. Two of these (arping and tftpd) are installed by iputils
-> > in /bin, while Busybox installs them in /usr/sbin, causing both to be  
->      ^
-> I guess you mean /usr/bin
+> The only thing to consider:
+> Upstream doesn't care much about systems without usr merge.
+> I wonder if systems without it (unset BR2_ROOTFS_MERGED_USR),
+> whether we want to have /bin/ping and symlinked it into /usr/bin/ping.
+> I see this is handled for coreutils (COREUTILS_BIN_PROGS).
 
-Gah, indeed. Unfortunately, the v2 of my patch has already been applied
-by Arnout, and it has the same issue.
+What COREUTILS_CLEANUP_BIN is doing is not to install a symlink
+between /bin/foo and /usr/bin/foo. Indeed, such a symlink is not
+necessary: both /bin and /usr/bin are in the PATH, so having /bin/foo
+and /usr/bin/foo is totally useless.
 
-> Although I'm not keen on changing binary default location,
-> this is simple straightforward solution. Alternative would be to disable busybox
-> config CONFIG_ARPING (with support/kconfig/merge_config.sh), but that'd be too
-> complicated. Thus ack
+What COREUTILS_CLEANUP_BIN does is to make sure that in a
+non-BR2_ROOTFS_MERGED_USR case, the symlinks to coreutils are installed
+in the same location as the corresponding Busybox applets, so that we
+properly handle the conflict between Busybox applets and full-blown
+variants, as I explained in my reply to your comments on PATCH 1/2.
 
-Adjusting the Busybox configuration is not the choice we have made to
-solve this problem. Instead, the way we have chosen to solve the
-conflict between Busybox applets and the "full-blown" variant of the
-same tools is by:
-
- - Making "busybox" depend on all packages that provide the full-blown
-   variants, so that those full-blown variants are built/installed
-   before Busybox.
-
- - Ensure the Busybox installation process does not overwrite the
-   full-blown variants when they are already installed.
-
-This ensures that at the end of the build, if a full-blown variant is
-installed, it takes precedence over the Busybox applet.
-
-The drawback is while the Busybox symlink is not installed, the actual
-code is present in the Busybox binary.
-
-> Just small research about iputils install directories.
-> busybox keeps mixed dirs /usr/{s,}bin and /{s,}bin (locations which were before
-> usrmerge concept), ping is indeed in /bin [1].
-> Debian chose also mixing /usr/{s,}bin and /{s,}bin [2]
-> 
-> But I'm concern about /{usr/,}/bin vs. /{usr/,}/sbin.
-> iputils before starting to use  meson didn't have any default location.
-> There was iputils.spec file [3] (now deleted), which suggested some locations,
-> but was marked as for testing purposes only. It had different paths than busybox
-> and Debian use. I guess I have to accept that there was no consensus and
-> therefore are differences in paths across both upstreams and distros.
-
-Due to the way we handle the Busybox applet vs. full-blown variant
-conflict (detailed above), we really need the full-blown variant to be
-installed at the same location as the corresponding Busybox applet.
+Best regards,
 
 Thomas
 -- 
