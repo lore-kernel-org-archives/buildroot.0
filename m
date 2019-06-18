@@ -1,45 +1,52 @@
-From: Yi Zheng <goodmenzy@gmail.com>
-Date: Tue, 18 Jun 2019 15:05:10 +0800
-Subject: [Buildroot] [PATCH] systemd: add option to enable
- systemd-journal-remote
-In-Reply-To: <20190617214007.537f8ac6@windsurf>
-References: <CAJPHfYNGkrW8MWGQyaWgehg_wAQ=3eoNWVZHEh=DyhbebJhJTA@mail.gmail.com>
- <20190617214007.537f8ac6@windsurf>
-Message-ID: <CAJPHfYOb4mHgw_CWZXm6jhRGO+zAbBPNPCrHs1m7MRkmVJ=e4g@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 18 Jun 2019 09:14:03 +0200
+Subject: [Buildroot] [PATCH v5 1/4] autobuild-run: move creation of
+ result directory to run_instance()
+In-Reply-To: <20190617200609.4276a61a@windsurf>
+References: <20190617093456.6110-1-itsatharva@gmail.com>
+ <20190617200609.4276a61a@windsurf>
+Message-ID: <20190618091403.582cd799@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thanks a lot!
-It is very hard for me to use gmail.
-VPS linkage is not stable in China.
+Hello Atharva,
 
-Thanks for your kindness to fixup that patch to fulfill the coding standards.
+On Mon, 17 Jun 2019 20:06:09 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> ?2019?6?18??? ??3:40???
->
-> Hello Yi,
->
-> On Thu, 13 Jun 2019 11:05:27 +0800
-> Yi Zheng <goodmenzy@gmail.com> wrote:
->
-> >     systemd-journal-remote was added in systemd v211, so add a new option
-> >     to enable or disable it.
-> >
-> >     Signed-off-by: Yi Zheng <goodmenzy@gmail.com>
-> > ---
-> >  package/systemd/Config.in  | 15 +++++++++++++++
-> >  package/systemd/systemd.mk |  4 ++++
-> >  2 files changed, 19 insertions(+)
->
-> I have fixed the various issues pointed by Yann (formatting issues in
-> the commit log and Config.in file, missing "else" condition to
-> explicitly disable the option), and applied to master. Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> I have applied the series to buildroot-test, thanks!
+
+So, the first results in the autobuilders with this applied have
+appeared:
+
+  http://autobuild.buildroot.net/results/0f3/0f35347a0d4b29fa7b657f42eb3d4d176ad75410/
+  http://autobuild.buildroot.net/results/128/128675664dbce8f35e5a710e85791708263a92f8/
+
+I see two problems:
+
+ - The output in build-end.log does not show any indication that the
+   overall build failure is caused by the build being non-reproducible.
+   What build-end.log shows is just a "make legal-info" that ends up
+   successfully, which is very confusing since the build status is
+   "failure", but the log doesn't show any sort of failure.
+
+   I think the check_reproducibility() function should at least show
+   something in the build log.
+
+ - The reason of the failures, visible at
+   http://autobuild.buildroot.net/?submitter=Thomas+Petazzoni+(Bootlin+server)&status=NOK
+   are just "unknown". We really want to have a better "reason". I
+   guess the easiest here would be to move the calculation of the
+   "reason" into autobuild-run instead of having it server-side, as
+   Arnout has suggested in a separate discussion yesterday.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
