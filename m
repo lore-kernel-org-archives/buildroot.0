@@ -1,59 +1,61 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Jun 2019 09:17:11 +0200
-Subject: [Buildroot] [PATCH 1/2] package/iputils: move binaries to the
- location also used by Busybox
-In-Reply-To: <20190618065929.GC8350@x230>
-References: <20190616200919.4378-1-thomas.petazzoni@bootlin.com>
- <20190617202402.GA8498@x230> <20190618084657.64bd21e4@windsurf>
- <20190618065929.GC8350@x230>
-Message-ID: <20190618091711.3b3ca1b8@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 18 Jun 2019 09:34:54 +0200
+Subject: [Buildroot] [PATCH v5 1/4] autobuild-run: move creation of
+ result directory to run_instance()
+In-Reply-To: <20190618091403.582cd799@windsurf>
+References: <20190617093456.6110-1-itsatharva@gmail.com>
+ <20190617200609.4276a61a@windsurf> <20190618091403.582cd799@windsurf>
+Message-ID: <7971482d-2efd-4bb0-d105-56746c5039d4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
 
-On Tue, 18 Jun 2019 08:59:29 +0200
-Petr Vorel <petr.vorel@gmail.com> wrote:
 
-> > Adjusting the Busybox configuration is not the choice we have made to
-> > solve this problem. Instead, the way we have chosen to solve the
-> > conflict between Busybox applets and the "full-blown" variant of the
-> > same tools is by:  
+On 18/06/2019 09:14, Thomas Petazzoni wrote:
+> Hello Atharva,
 > 
-> >  - Making "busybox" depend on all packages that provide the full-blown
-> >    variants, so that those full-blown variants are built/installed
-> >    before Busybox.  
+> On Mon, 17 Jun 2019 20:06:09 +0200
+> Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 > 
-> >  - Ensure the Busybox installation process does not overwrite the
-> >    full-blown variants when they are already installed.  
+>> I have applied the series to buildroot-test, thanks!
 > 
-> > This ensures that at the end of the build, if a full-blown variant is
-> > installed, it takes precedence over the Busybox applet.  
+> So, the first results in the autobuilders with this applied have
+> appeared:
 > 
-> > The drawback is while the Busybox symlink is not installed, the actual
-> > code is present in the Busybox binary.  
+>   http://autobuild.buildroot.net/results/0f3/0f35347a0d4b29fa7b657f42eb3d4d176ad75410/
+>   http://autobuild.buildroot.net/results/128/128675664dbce8f35e5a710e85791708263a92f8/
 > 
-> Thanks for an explanation. Having a bit bigger binary it's not a big deal.
-> If this is a problem for any reason, fortunately user can supply it's own
-> busybox config.
-> I guess you took this direction because it's much simpler than messing with
-> busybox config (the solution I suggested).
+> I see two problems:
+> 
+>  - The output in build-end.log does not show any indication that the
+>    overall build failure is caused by the build being non-reproducible.
+>    What build-end.log shows is just a "make legal-info" that ends up
+>    successfully, which is very confusing since the build status is
+>    "failure", but the log doesn't show any sort of failure.
+> 
+>    I think the check_reproducibility() function should at least show
+>    something in the build log.
 
-Yes, that's exactly the reason. It would require to keep track of which
-Busybox options need to be disabled, depending on which other Buildroot
-packages/options are enabled.
+ You can see it through the existence of the "reproducible_results" file.
 
-That being said, the current solution also requires that all packages
-install their programs in the same location as the corresponding
-Busybox applets, which also requires some maintenance effort.
+ But it would indeed be a good idea to use that file as the build log instead of
+the normal log.
 
-None of the solutions is perfect, and a trade-off has to be made.
+ Atharva?
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+
+>  - The reason of the failures, visible at
+>    http://autobuild.buildroot.net/?submitter=Thomas+Petazzoni+(Bootlin+server)&status=NOK
+>    are just "unknown". We really want to have a better "reason". I
+>    guess the easiest here would be to move the calculation of the
+>    "reason" into autobuild-run instead of having it server-side, as
+>    Arnout has suggested in a separate discussion yesterday.
+
+ Ack, that was the plan. The "unkown" is exactly what we expected. I think it's
+OK for a few weeks.
+
+ Regards,
+ Arnout
