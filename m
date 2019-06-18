@@ -1,27 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 18 Jun 2019 19:54:53 +0200
-Subject: [Buildroot] [PATCH v2] fb-test-app: Revert upstream 77bdfc6
- "add function to place framebuffer ..."
-In-Reply-To: <20190618154650.51149-1-andriy.shevchenko@linux.intel.com>
-References: <20190618154650.51149-1-andriy.shevchenko@linux.intel.com>
-Message-ID: <20190618195453.0140a482@windsurf>
+Date: Tue, 18 Jun 2019 19:56:00 +0200
+Subject: [Buildroot] [PATCH 1/3] toolchain-external: update Arm ARM
+ toolchain 8.3-2019.03
+In-Reply-To: <20190605115532.5015-1-romain.naour@gmail.com>
+References: <20190605115532.5015-1-romain.naour@gmail.com>
+Message-ID: <20190618195600.365db925@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 18 Jun 2019 18:46:50 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+Hello Romain,
 
-> The patch breaks at least hotplug displays to work.
-> 
-> More details in submitted PR to the upstream, i.e.
-> https://github.com/prpplague/fb-test-app/pull/5.
+On Wed,  5 Jun 2019 13:55:30 +0200
+Romain Naour <romain.naour@gmail.com> wrote:
 
-This link does not exist.
+> Update to gcc 8.1 and gcc 8.2.
 
-Best regards,
+It updates to gcc 8.1 and gcc 8.2 at the same time ? Seems weird!
+
+In fact, it updates to gcc 8.3, gdb 8.2 and binutils 2.32. I fixed that
+up in all three patches, and applied them to master.
+
+Thanks!
 
 Thomas
 -- 
