@@ -1,16 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Jun 2019 21:32:00 +0200
-Subject: [Buildroot] [PATCH] linux: enable UEVENT_HELPER when mdev is
- used
-In-Reply-To: <9f9e57ff-ba24-a4c0-7be8-48e048e4138f@railnova.eu> (Titouan
- Christophe's message of "Mon, 3 Jun 2019 18:44:50 +0200")
-References: <20190525130755.25678-1-peter@korsgaard.com>
- <54a85c9f-1e14-de0d-c6cf-8201dea50e1d@mind.be>
- <87mujanw9q.fsf@dell.be.48ers.dk>
- <d3a724b9-b9c9-b399-0f32-b3f93d3511a3@mind.be>
- <87muiyu380.fsf@dell.be.48ers.dk>
- <9f9e57ff-ba24-a4c0-7be8-48e048e4138f@railnova.eu>
-Message-ID: <87sgs6heq7.fsf@dell.be.48ers.dk>
+Date: Tue, 18 Jun 2019 21:33:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/busybox: update S10mdev
+In-Reply-To: <f5b12853-22d5-2d4a-8ddc-0e66f97c788e@railnova.eu> (Titouan
+ Christophe's message of "Sun, 16 Jun 2019 22:15:04 +0200")
+References: <20190529142528.256795-1-titouan.christophe@railnova.eu>
+ <20190614172647.GA32315@smile.fi.intel.com>
+ <f5b12853-22d5-2d4a-8ddc-0e66f97c788e@railnova.eu>
+Message-ID: <87o92uheo2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -21,22 +17,18 @@ To: buildroot@busybox.net
 
 Hi,
 
- >> Indeed. Notice that Denys has just merged the daemon mode (-d) support
- >> for mdev, so from a performance PoV, that is probably what we should
- >> support rather than uevent + mdev:
- >> 
- >> http://lists.busybox.net/pipermail/busybox/2019-June/087305.html
+ > In the meantime Busybox did introduce the daemon mode for mdev, which
+ > renders this patch obsolete (see the thread "linux: enable
+ > UEVENT_HELPER when mdev is used" over there
+ > http://lists.busybox.net/pipermail/buildroot/2019-June/251744.html).
 
- > This is great news !
+ > I discussed this with Arnout on IRC, and the outcome is that we will
+ > adapt the S10mdev script to use the new daemon mode as soon as the
+ > next Busybox release is available.
 
- > Even then, the S10mdev init script has to be modified to start mdev in
- > daemon mode. I could add this to
- > http://patchwork.ozlabs.org/patch/1107175/. However, I don't see a
- > good way to check if FEATURE_MDEV_DAEMON=y.
+Busybox 1.31.0 was released last week with this new daemon option:
 
-We would just forcibly enable that option when building busybox when
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV is enabled, similar to the other
-mdev options.
+https://busybox.net/
 
 -- 
 Bye, Peter Korsgaard
