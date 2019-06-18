@@ -1,30 +1,42 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Tue, 18 Jun 2019 13:55:43 +0530
-Subject: [Buildroot] [PATCH v5 1/4] autobuild-run: move creation of
- result directory to run_instance()
-In-Reply-To: <7971482d-2efd-4bb0-d105-56746c5039d4@mind.be>
-References: <20190617093456.6110-1-itsatharva@gmail.com>
- <20190617200609.4276a61a@windsurf>
- <20190618091403.582cd799@windsurf>
- <7971482d-2efd-4bb0-d105-56746c5039d4@mind.be>
-Message-ID: <CABM+sgqBtX1TrTYUFQSL+4rG2KqrBsyc80H45s1x-c6qTQAJjQ@mail.gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 18 Jun 2019 10:45:32 +0200
+Subject: [Buildroot] [PATCH 1/4] package/qt5/qt5base: disable predefined -Og
+ optimization
+In-Reply-To: <20190618084535.75870-1-giulio.benetti@micronovasrl.com>
+References: <20190618084535.75870-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190618084535.75870-2-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jun 18, 2019 at 1:04 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+Starting from Qt5 5.9.0 -optimize-debug is enabled by default causing
+-Og flag to be appended to CFLAGS and consequently override
+TARGET_CFLAGS. We don't want this so let's pass -no-optimize-debug to
+QT5BASE_CONFIGURE_OPTS if QT5_VERSION_LATEST=y.
 
->
->  But it would indeed be a good idea to use that file as the build log
-> instead of
-> the normal log.
->
->  Atharva?
->
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/qt5/qt5base/qt5base.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Yes, that'll be what I work on once I finish the builder-class. Is that OK?
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190618/07e844e8/attachment.html>
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index e4ae120631..c732e766f3 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -27,6 +27,12 @@ QT5BASE_CONFIGURE_OPTS += \
+ 	-no-pch \
+ 	-shared
+ 
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
++# starting from version 5.9.0 -optimize-debug is enabled by default and
++# it overrides -O* with -Og that is not what we want
++QT5BASE_CONFIGURE_OPTS += -no-optimize-debug
++endif
++
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
+ QT5BASE_DEPENDENCIES += pcre
+ else
+-- 
+2.17.1
