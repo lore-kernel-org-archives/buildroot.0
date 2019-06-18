@@ -1,42 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 18 Jun 2019 13:57:31 +0200
-Subject: [Buildroot] [PATCH 2/4] Config.in.legacy: add legacy entry for
- 4.20.x headers
+Date: Tue, 18 Jun 2019 13:57:32 +0200
+Subject: [Buildroot] [PATCH 3/4] amarula_vyasa_rk3288_defconfig: use
+ same-as-kernel option for kernel headers
 In-Reply-To: <20190618115733.28551-1-peter@korsgaard.com>
 References: <20190618115733.28551-1-peter@korsgaard.com>
-Message-ID: <20190618115733.28551-2-peter@korsgaard.com>
+Message-ID: <20190618115733.28551-3-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit b3bba8e4254 (package/linux-headers: drop support 4.20 headers)
-removed the option for 4.20.x kernel headers, but forgot to add a legacy
-option.  Add that now.
+Instead of the to-be-removed 5.0 option.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Config.in.legacy | 7 +++++++
- 1 file changed, 7 insertions(+)
+ configs/amarula_vyasa_rk3288_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 75d6c723a9..2b8dc3b1ee 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -153,6 +153,13 @@ config BR2_GDB_VERSION_8_0
- 	  The 8.0.x version of gdb has been removed. Use a newer
- 	  version instead.
+diff --git a/configs/amarula_vyasa_rk3288_defconfig b/configs/amarula_vyasa_rk3288_defconfig
+index 6fd46b6455..760ad3f9f4 100644
+--- a/configs/amarula_vyasa_rk3288_defconfig
++++ b/configs/amarula_vyasa_rk3288_defconfig
+@@ -4,7 +4,7 @@ BR2_cortex_a17=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
-+config BR2_KERNEL_HEADERS_4_20
-+	bool "kernel headers version 4.20.x are no longer supported"
-+	select BR2_LEGACY
-+	help
-+	  Version 4.20.x of the Linux kernel headers are no longer
-+	  maintained upstream and are now removed.
-+
- comment "Legacy options removed in 2019.05"
+ # Linux headers same as kernel, a 5.0 series
+-BR2_KERNEL_HEADERS_5_0=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
  
- config BR2_CSKY_DSP
+ # Bootloader
+ BR2_TARGET_UBOOT=y
 -- 
 2.11.0
