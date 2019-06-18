@@ -1,60 +1,51 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 19 Jun 2019 07:01:29 +0200
-Subject: [Buildroot] [PATCH 1/1] iputils: set the permissions with
- IPUTILS_PERMISSIONS
-In-Reply-To: <4da3ae28-a8f3-7f49-0583-083b5ea15f75@mind.be>
-References: <20190609230702.7068-1-petr.vorel@gmail.com>
- <4bdc9d15-b7c2-3b46-bdda-306147fa8d94@mind.be>
- <20190610200645.GA10261@x230>
- <7191f609-e5d8-7bd6-77ca-83296f96d0f1@mind.be>
- <87muilgttj.fsf@dell.be.48ers.dk> <20190614162422.GB4812@x230>
- <87wohjxdsk.fsf@dell.be.48ers.dk> <20190618205211.GC20410@x230>
- <4da3ae28-a8f3-7f49-0583-083b5ea15f75@mind.be>
-Message-ID: <20190619050127.GA21810@dell5510>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 18 Jun 2019 19:57:41 +0200
+Subject: [Buildroot] [git commit] package/keyutils: re-enable package on
+ microblaze
+Message-ID: <20190619052057.9380F8F5C2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+commit: https://git.buildroot.net/buildroot/commit/?id=7e8812922d35d2af9d71cf462dd065698360bde7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> >>  > It'd be nice if buildroot has BR2_TARGET_ROOTFS_HAS_XATTRS.
+keyutils has a !BR2_microblaze introduced by commit:
+https://git.buildroot.net/buildroot/commit/?id=20e0926f4469a3486629cfd6fa7f449f2b659aa8
+that points 2 possible build failures:
+- "warning: dereferencing type-punned pointer will break strict-aliasing
+  rules" treated as an error. But this warning is not treated as an
+  error anymore since -Werror flag is not used after last version bumps
+- glibc does not export the resolver symbols resulting in linking
+  failure. But glibc used was version 2.3.6 that is not used anymore
+  since. It's been released in 2005.
 
-> >> The problem is that you can enable several rootfs formats at the same
-> >> time (E.G. tar and cramfs), so we would need to only use xattrs if no
-> >> file system without xattrs support is enabled.
+So re-enable package for Microblaze by removing 'depends on
+!BR2_microblaze' from keyutils Config.in
 
->  So maybe we could add a system option BR2_SYSTEM_XATTR that enables the use of
-> xattr.
-+1
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/keyutils/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
->  Currently we have nothing using xattr, but there are quite a few packages that
-> could benefit from it, e.g. libpcap, and SELinux stuff.
-And IMA+EVM kernel features.
-
->  We could use that option to enable xattr instead of setuid where relevant, and
-> to disable filesystems that don't support xattr.
-
-
-> >> And things would break if you do a build with E.G. only tar rootfs
-> >> support and then afterwards enable cramfs without doing a clean
-> >> rebuild - Yes, I know you are not supposed to do that, but it does
-> >> happen.
-
->  I don't think we need to worry about that. But actually, with the
-> BR2_SYSTEM_XATTR option, it would even work since it's only taken into account
-> during finalize.
-
-
-> > Thanks for detailed info. I guess in that case is setuid really the only option.
-
->  It isn't, but the alternatives are a lot of work :-)
-:-). Do you plan to work on it? If not, I might do in next few weeks (I'm quite
-busy during summer).
-
->  Regards,
->  Arnout
-
-Kind regards,
-Petr
+diff --git a/package/keyutils/Config.in b/package/keyutils/Config.in
+index 6f0758f473..7813de3799 100644
+--- a/package/keyutils/Config.in
++++ b/package/keyutils/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_KEYUTILS
+ 	bool "keyutils"
+-	depends on !BR2_microblaze
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # dlopen
+ 	help
+@@ -10,6 +9,5 @@ config BR2_PACKAGE_KEYUTILS
+ 	  http://people.redhat.com/~dhowells/keyutils/
+ 
+ comment "keyutils needs a toolchain w/ dynamic library"
+-	depends on !BR2_microblaze
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS
