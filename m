@@ -1,32 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 19 Jun 2019 12:02:45 +0000
-Subject: [Buildroot] [Bug 11776] qt5webengine 5.12.2 build failed with arm
- toolchain and linaro toolchain
-In-Reply-To: <bug-11776-163@https.bugs.busybox.net/>
-References: <bug-11776-163@https.bugs.busybox.net/>
-Message-ID: <bug-11776-163-4qBYMjY6qJ@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 19 Jun 2019 14:14:51 +0200
+Subject: [Buildroot] [git commit] package/ecryptfs-utils: re-enable package
+ on microblaze
+Message-ID: <20190619121416.1E0C0822C6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11776
+commit: https://git.buildroot.net/buildroot/commit/?id=23efe3d5122e42871f646d1607e424eff521567f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
---- Comment #1 from romain.naour at gmail.com ---
-Hi,
+ecryptfs-utils was not available on Microblaze due to its dependency
+on keyutils, which itself was not available on Microblaze due to build
+issues. However, now that keyutils has been re-enabled on Microblaze,
+we can also re-enable ecryptfs-utils on this architecture.
 
-This could be related to kernel headers version used by the ARM toolchain [1].
-Can you test with the Arm AArch64 toolchain 8.3-2019.03 recently updated ?
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+[Thomas: rework commit log]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ecryptfs-utils/Config.in | 2 --
+ 1 file changed, 2 deletions(-)
 
-Note, there are two different issues... I'm not sure about the second issue.
-
-[1]
-https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=b7d624ab431227af376787148cd7d474088c03aa
-
-Best regards,
-Romain
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index 6652d33e0e..b589368a6a 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	bool "ecryptfs-utils"
+ 	depends on BR2_USE_WCHAR # gettext
+ 	depends on BR2_USE_MMU # keyutils
+-	depends on !BR2_microblaze # keyutils
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnss -> libnspr
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
+ 	depends on !BR2_MIPS_NABI32 # libnss
+@@ -31,7 +30,6 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	  http://ecryptfs.org
+ 
+ comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynami library"
+-	depends on !BR2_microblaze
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
