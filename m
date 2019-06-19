@@ -1,69 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Jun 2019 21:37:07 +0200
-Subject: [Buildroot] [PATCH 11/27] package/prboom: avoid using hardcoded
- optimization flags
-In-Reply-To: <20190614210346.121013-12-giulio.benetti@micronovasrl.com>
-References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
- <20190614210346.121013-12-giulio.benetti@micronovasrl.com>
-Message-ID: <20190619213707.68d086b3@windsurf>
+Date: Wed, 19 Jun 2019 21:37:27 +0200
+Subject: [Buildroot] [git commit] package/kmsxx: work around gcc bug 85180
+Message-ID: <20190619194107.1A84E82709@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Giulio,
+commit: https://git.buildroot.net/buildroot/commit/?id=10fe80b909328698ab58f88a8291b1da26e87d3c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 14 Jun 2019 23:03:30 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+shows up when building kmsxx with optimization but not when building
+with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
+force using -O0.
 
-> Package prboom builds using -O2 flag ignoring Buildroot settings, this
-> is due to the fact that -O2 is appended at the end of CFLAGS.
-> 
-> Remove -O2 from 'configure' file, this way CFLAGS will contain Buildroot
-> CFLAGS.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  package/prboom/prboom.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
-> index d370ae3fa5..6d9b55e9f6 100644
-> --- a/package/prboom/prboom.mk
-> +++ b/package/prboom/prboom.mk
-> @@ -11,6 +11,13 @@ PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
->  PRBOOM_LICENSE = GPL-2.0+
->  PRBOOM_LICENSE_FILES = COPYING
->  
-> +# Remove imposed -O2 CFLAG to use TARGET_CFLAGS
-> +define PRBOOM_FIXUP_CONFIGURE
-> +	sed -i 's:-O2::g' $(@D)/configure
-> +endef
-> +
-> +PRBOOM_PRE_CONFIGURE_HOOKS += PRBOOM_FIXUP_CONFIGURE
+Fixes:
+http://autobuild.buildroot.net/results/360/360f19645e76314048c75424bb4b64da91742f47/
 
-I am not a big fan of this "blind" sed that replaces every -O2 in the
-configure script with nothing.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/kmsxx/kmsxx.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Patching configure.ac + autoreconf would be nicer, especially since
-anyway prboom depends on sdl, and sdl already depends on the autotools
-machinery.
-
-However, ideally the configure.ac script should be fixed to *not* add
-flags to CFLAGS. CFLAGS is a user variable, the configure script is not
-supposed to use it. See
-https://www.gnu.org/software/automake/manual/html_node/Flag-Variables-Ordering.html.
-But well, fixing the prboom configure.ac is probably too much effort
-comparing to the benefits.
-
-So just do a patch that gets rid of the -O2 in the configure.ac, and
-that will be good enough.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
+index c664d52361..829beb1d68 100644
+--- a/package/kmsxx/kmsxx.mk
++++ b/package/kmsxx/kmsxx.mk
+@@ -12,6 +12,14 @@ KMSXX_INSTALL_STAGING = YES
+ KMSXX_DEPENDENCIES = libdrm host-pkgconf
+ KMSXX_CONF_OPTS = -DKMSXX_ENABLE_PYTHON=OFF
+ 
++KMSXX_CXXFLAGS = $(TARGET_CXXFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++KMSXX_CXXFLAGS += -O0
++endif
++
++KMSXX_CONF_OPTS += -DCMAKE_CXX_FLAGS="$(KMSXX_CXXFLAGS)"
++
+ ifeq ($(BR2_PACKAGE_KMSXX_INSTALL_TESTS),y)
+ KMSXX_TESTS = \
+ 	fbtest kmsblank kmscapture \
