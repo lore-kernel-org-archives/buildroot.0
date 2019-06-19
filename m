@@ -1,38 +1,35 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Jun 2019 21:58:15 +0200
-Subject: [Buildroot] [PATCH 17/27] package/lua-cqueues: fix build
- failure due to Gcc Bug 68485
-In-Reply-To: <20190614210346.121013-18-giulio.benetti@micronovasrl.com>
-References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
- <20190614210346.121013-18-giulio.benetti@micronovasrl.com>
-Message-ID: <20190619215815.7f525aff@windsurf>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Wed, 19 Jun 2019 22:05:43 +0200
+Subject: [Buildroot] [PATCH 2/2] package/haveged: fix legal-info
+In-Reply-To: <1560974743-20081-1-git-send-email-pjtexier@koncepto.io>
+References: <1560974743-20081-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <1560974743-20081-2-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 14 Jun 2019 23:03:36 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+Add hash for COPYING file
 
-> Package lua-cqueues manifests Microblaze Gcc Bug 68485 resulting in a
-> build failure due to an Internal Compiler Error.
-> 
-> As done for other packages in Buildroot work around this Gcc Bug by
-> setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/c35/c35964dda4e2328c2c1f3b2388677b68c5ed461e/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  package/lua-cqueues/lua-cqueues.mk | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
+Fixes:
 
-Applied to master, thanks.
+$: make haveged-legal-info
+ >>> haveged 1.9.4 Collecting legal info
+ ERROR: No hash found for COPYING
 
-Thomas
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/haveged/haveged.hash | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/haveged/haveged.hash b/package/haveged/haveged.hash
+index d98e1d9..0489418 100644
+--- a/package/haveged/haveged.hash
++++ b/package/haveged/haveged.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256  c4959d3cb1fa6391d16a3aa1ba4d82cd3a0d497206ae4b87d638088c0664e5aa	haveged-1.9.4.tar.gz
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.7.4
