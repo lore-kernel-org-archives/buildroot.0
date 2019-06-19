@@ -1,63 +1,39 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Jun 2019 08:50:34 +0200
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 19 Jun 2019 08:52:30 +0200
 Subject: [Buildroot] [PATCH 1/1] iputils: set the permissions with
  IPUTILS_PERMISSIONS
-In-Reply-To: <20190619050127.GA21810@dell5510>
-References: <20190609230702.7068-1-petr.vorel@gmail.com>
- <4bdc9d15-b7c2-3b46-bdda-306147fa8d94@mind.be> <20190610200645.GA10261@x230>
+In-Reply-To: <a8c71118-cf7d-bef8-f164-2ce13643dfec@mind.be>
+References: <4bdc9d15-b7c2-3b46-bdda-306147fa8d94@mind.be>
+ <20190610200645.GA10261@x230>
  <7191f609-e5d8-7bd6-77ca-83296f96d0f1@mind.be>
  <87muilgttj.fsf@dell.be.48ers.dk> <20190614162422.GB4812@x230>
  <87wohjxdsk.fsf@dell.be.48ers.dk> <20190618205211.GC20410@x230>
  <4da3ae28-a8f3-7f49-0583-083b5ea15f75@mind.be>
  <20190619050127.GA21810@dell5510>
-Message-ID: <a8c71118-cf7d-bef8-f164-2ce13643dfec@mind.be>
+ <a8c71118-cf7d-bef8-f164-2ce13643dfec@mind.be>
+Message-ID: <20190619065228.GA30987@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout,
+
+...
+> >>> Thanks for detailed info. I guess in that case is setuid really the only option.
+
+> >>  It isn't, but the alternatives are a lot of work :-)
+> > :-). Do you plan to work on it? If not, I might do in next few weeks (I'm quite
+> > busy during summer).
+
+>  I don't do any work myself, I just occasionally apply patches :-) And I think
+> for Peter it's pretty much the same thing.
+Thanks for info. Adding into my todo list :)
+
+>  Regards,
+>  Arnout
 
 
-On 19/06/2019 07:01, Petr Vorel wrote:
-> Hi Arnout,
-> 
->>>>  > It'd be nice if buildroot has BR2_TARGET_ROOTFS_HAS_XATTRS.
-> 
->>>> The problem is that you can enable several rootfs formats at the same
->>>> time (E.G. tar and cramfs), so we would need to only use xattrs if no
->>>> file system without xattrs support is enabled.
-> 
->>  So maybe we could add a system option BR2_SYSTEM_XATTR that enables the use of
->> xattr.
-> +1
-> 
->>  Currently we have nothing using xattr, but there are quite a few packages that
->> could benefit from it, e.g. libpcap, and SELinux stuff.
-> And IMA+EVM kernel features.
-> 
->>  We could use that option to enable xattr instead of setuid where relevant, and
->> to disable filesystems that don't support xattr.
-> 
-> 
->>>> And things would break if you do a build with E.G. only tar rootfs
->>>> support and then afterwards enable cramfs without doing a clean
->>>> rebuild - Yes, I know you are not supposed to do that, but it does
->>>> happen.
-> 
->>  I don't think we need to worry about that. But actually, with the
->> BR2_SYSTEM_XATTR option, it would even work since it's only taken into account
->> during finalize.
-> 
-> 
->>> Thanks for detailed info. I guess in that case is setuid really the only option.
-> 
->>  It isn't, but the alternatives are a lot of work :-)
-> :-). Do you plan to work on it? If not, I might do in next few weeks (I'm quite
-> busy during summer).
-
- I don't do any work myself, I just occasionally apply patches :-) And I think
-for Peter it's pretty much the same thing.
-
- Regards,
- Arnout
+Kind regards,
+Petr
