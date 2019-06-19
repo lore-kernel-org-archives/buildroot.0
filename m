@@ -1,45 +1,69 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 19 Jun 2019 20:24:22 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/libidn2: bump to version 2.2.0
-Message-ID: <20190619182422.6237-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 19 Jun 2019 21:37:07 +0200
+Subject: [Buildroot] [PATCH 11/27] package/prboom: avoid using hardcoded
+ optimization flags
+In-Reply-To: <20190614210346.121013-12-giulio.benetti@micronovasrl.com>
+References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
+ <20190614210346.121013-12-giulio.benetti@micronovasrl.com>
+Message-ID: <20190619213707.68d086b3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
-Changes v1 -> v2:
- - Fix package's name
+Hello Giulio,
 
- package/libidn2/libidn2.hash | 2 +-
- package/libidn2/libidn2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri, 14 Jun 2019 23:03:30 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
-index 300cedb479..3dae7f7590 100644
---- a/package/libidn2/libidn2.hash
-+++ b/package/libidn2/libidn2.hash
-@@ -1,5 +1,5 @@
- # Calculated locally after checking signature
--sha256	032398dbaa9537af43f51a8d94e967e3718848547b1b2a4eb3138b20cad11d32	libidn2-2.1.0.tar.gz
-+sha256	fc734732b506d878753ec6606982bf7b936e868c25c30ddb0d83f7d7056381fe	libidn2-2.2.0.tar.gz
- 
- # Hash for license files:
- sha256	73483f797a83373fca1b968c11785b98c4fc4803cdc7d3210811ca8b075d6d76	COPYING
-diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-index 7112553fea..10f179ebcc 100644
---- a/package/libidn2/libidn2.mk
-+++ b/package/libidn2/libidn2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBIDN2_VERSION = 2.1.0
-+LIBIDN2_VERSION = 2.2.0
- LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN2_LICENSE := GPL-2.0+ or LGPL-3.0+ (library)
- LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
+> Package prboom builds using -O2 flag ignoring Buildroot settings, this
+> is due to the fact that -O2 is appended at the end of CFLAGS.
+> 
+> Remove -O2 from 'configure' file, this way CFLAGS will contain Buildroot
+> CFLAGS.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>  package/prboom/prboom.mk | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
+> index d370ae3fa5..6d9b55e9f6 100644
+> --- a/package/prboom/prboom.mk
+> +++ b/package/prboom/prboom.mk
+> @@ -11,6 +11,13 @@ PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
+>  PRBOOM_LICENSE = GPL-2.0+
+>  PRBOOM_LICENSE_FILES = COPYING
+>  
+> +# Remove imposed -O2 CFLAG to use TARGET_CFLAGS
+> +define PRBOOM_FIXUP_CONFIGURE
+> +	sed -i 's:-O2::g' $(@D)/configure
+> +endef
+> +
+> +PRBOOM_PRE_CONFIGURE_HOOKS += PRBOOM_FIXUP_CONFIGURE
+
+I am not a big fan of this "blind" sed that replaces every -O2 in the
+configure script with nothing.
+
+Patching configure.ac + autoreconf would be nicer, especially since
+anyway prboom depends on sdl, and sdl already depends on the autotools
+machinery.
+
+However, ideally the configure.ac script should be fixed to *not* add
+flags to CFLAGS. CFLAGS is a user variable, the configure script is not
+supposed to use it. See
+https://www.gnu.org/software/automake/manual/html_node/Flag-Variables-Ordering.html.
+But well, fixing the prboom configure.ac is probably too much effort
+comparing to the benefits.
+
+So just do a patch that gets rid of the -O2 in the configure.ac, and
+that will be good enough.
+
+Thanks!
+
+Thomas
 -- 
-2.20.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
