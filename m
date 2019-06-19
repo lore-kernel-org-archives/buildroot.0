@@ -1,35 +1,42 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Jun 2019 13:18:00 +0200
-Subject: [Buildroot] [git commit] package/logrotate: fix legal-info
-Message-ID: <20190619112006.1D2DE80FC6@busybox.osuosl.org>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Wed, 19 Jun 2019 14:33:30 +0300
+Subject: [Buildroot] [PATCH v2] fb-test-app: Revert upstream 77bdfc6
+ "add function to place framebuffer ..."
+In-Reply-To: <20190619130704.39b323bc@windsurf>
+References: <20190618154650.51149-1-andriy.shevchenko@linux.intel.com>
+ <20190618195453.0140a482@windsurf>
+ <20190619110543.GB9224@smile.fi.intel.com>
+ <20190619130704.39b323bc@windsurf>
+Message-ID: <20190619113330.GF9224@smile.fi.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=38626b4b63bf877c3cfeb356a4b0dc0e79bdbc75
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, Jun 19, 2019 at 01:07:04PM +0200, Thomas Petazzoni wrote:
+> On Wed, 19 Jun 2019 14:05:43 +0300
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > On Tue, Jun 18, 2019 at 07:54:53PM +0200, Thomas Petazzoni wrote:
+> > > On Tue, 18 Jun 2019 18:46:50 +0300
+> > > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-Add hash for COPYING file
+> > > > The patch breaks at least hotplug displays to work.
+> > > > 
+> > > > More details in submitted PR to the upstream, i.e.
+> > > > https://github.com/prpplague/fb-test-app/pull/5.  
+> > > 
+> > > This link does not exist.  
+> > 
+> > First time in my life I see such a reaction to the bug report. So, owner
+> > basically removed repository completely without any word to say.
+> 
+> Ah, ah, interesting indeed! This is quite surprising from David Anders
+> to be honest. Perhaps we could contact him separately and see what
+> happened ?
 
-Fixes:
+I don't know the guy.
 
-$: make logrotate-legal-info
- >>> logrotate 3.15.0 Collecting legal info
- ERROR: No hash found for COPYING
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/logrotate/logrotate.hash | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
-index d83f69f194..b147405197 100644
---- a/package/logrotate/logrotate.hash
-+++ b/package/logrotate/logrotate.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
- sha256 011b9e2c7dc785f702f960dc15b7871bd46e53a9a6e336299e4f3d22022986fd  logrotate-3.15.0.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+-- 
+With Best Regards,
+Andy Shevchenko
