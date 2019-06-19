@@ -1,161 +1,282 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 19 Jun 2019 23:06:22 +0200
-Subject: [Buildroot] [PATCH 2/4] package: remove 'v' prefix from
- tarball-fetched packages
-In-Reply-To: <20190612064209.23619-3-victor.huesca@bootlin.com>
-References: <20190612064209.23619-1-victor.huesca@bootlin.com>
- <20190612064209.23619-3-victor.huesca@bootlin.com>
-Message-ID: <3afd50b3-5cf1-d240-a7b9-f2f352411f70@mind.be>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 19 Jun 2019 23:30:07 +0200
+Subject: [Buildroot] [PATCH v2 2/3] iputils: Update upstream status on
+ patches
+In-Reply-To: <20190619213008.7883-1-petr.vorel@gmail.com>
+References: <20190619213008.7883-1-petr.vorel@gmail.com>
+Message-ID: <20190619213008.7883-2-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- [Adam, a Go-related question for you below.]
+Patch 0002-meson.build-fix-static-build-with-gcrypt.patch replaced with
+0002-build-sys-fix-static-build-gcrypt-dependency-gpg-err.patch
 
-On 12/06/2019 08:42, Victor Huesca wrote:
-> On Github, a large number of projects name their tag vXYZ (i.e v3.0,
-> v0.1, etc.). In some packages we do:
-> 
->  <pkg>_VERSION = v0.3
->  <pkg>_SITE = https://github.com/foo/bar/archive
-> 
-> And in some other packages we do:
-> 
->  <pkg>_VERSION = 0.3
->  <pkg>_SITE = https://github.com/foo/bar/archive
->  <pkg>_SOURCE = v$(FOOBAR_VERSION).tar.gz
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+ ...-ninfod_name.c-fix-build-with-nettle.patch |  4 +-
+ ...atic-build-gcrypt-dependency-gpg-err.patch | 51 ++++++++++++++++
+ ...n.build-fix-static-build-with-gcrypt.patch | 58 -------------------
+ .../0003-meson.build-fix-build-with-NLS.patch | 45 ++++++++------
+ ...uild-sys-Make-setcap-really-optional.patch |  3 +-
+ 5 files changed, 80 insertions(+), 81 deletions(-)
+ create mode 100644 package/iputils/0002-build-sys-fix-static-build-gcrypt-dependency-gpg-err.patch
+ delete mode 100644 package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
 
- This is actually a bad example. If the _SITE looks like that, it is wrong,
-because an /archive URL is an automatically generated one and should use the
-github helper. Uploaded tarballs have a URL like luvi: releases/download.
-
- So I think there should be a separate patch that converts those packages to use
-the github helper.
-
-(As a side note: the github helper is not that useful these days; it used to be
-important because github was changing their URLs all the time, but now they're
-stable since many years so it's not so useful anymore. Still, at least it makes
-sure that people fetch a properly named tarball rather than a tarball which is
-named 'vsomething' without reference to the package.)
-
-
-> I.e in one case we consider the version to be v0.3, in the other case
-> we consider 0.3 to be the version.
-> 
-> The problem with v0.3 is that when used in conjunction with
-> release-monitoring.org, it doesn't work very well, because
-> release-monitoring.org has the concept of "version prefix" and using
-> that they drop the "v" prefix for the version.
-> 
-> Therefore, a number of packages in Buildroot have a version that
-> doesn't match with release-monitoring.org because Buildroot has 'v0.3'
-> and release-monitoring.org has '0.3'.
-> 
-> Since really the version number of 0.3, is makes sense to update our
-> packages to drop this 'v'.
-> 
-> This commit only addresses the case of tarball packages where
-> the prefix is simply 'v'. Other cases will be handled by separate
-> commits.
-
- Please make a note here about the impact this has on DL_DIR and
-sources.buildroot.org (i.e. that you get duplicated tarballs). That should have
-been in that first patch already as well, but I already pushed it :-(.
-
-> 
-> Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
-> ---
->  package/dt/dt.mk                                            | 4 ++--
->  package/flannel/flannel.mk                                  | 6 +++---
->  package/fwts/fwts.mk                                        | 3 ++-
->  .../gst1-plugins-bayer2rgb-neon.mk                          | 4 ++--
->  package/kompexsqlite/kompexsqlite.mk                        | 4 ++--
->  package/luvi/luvi.mk                                        | 4 ++--
->  package/openpowerlink/openpowerlink.mk                      | 4 ++--
->  package/perl-class-std-fast/perl-class-std-fast.mk          | 4 ++--
->  package/perl-net-snmp/perl-net-snmp.mk                      | 4 ++--
->  package/portaudio/portaudio.mk                              | 4 ++--
->  package/pru-software-support/pru-software-support.hash      | 2 +-
->  package/pru-software-support/pru-software-support.mk        | 4 ++--
->  package/spidev_test/spidev_test.mk                          | 6 +++---
->  package/sslh/sslh.mk                                        | 3 ++-
->  14 files changed, 29 insertions(+), 27 deletions(-)
-> 
-> diff --git a/package/dt/dt.mk b/package/dt/dt.mk
-> index 8ec7788883..1963a7ecc5 100644
-> --- a/package/dt/dt.mk
-> +++ b/package/dt/dt.mk
-> @@ -4,9 +4,9 @@
->  #
->  ################################################################################
->  
-> -DT_VERSION = v18.32
-> +DT_VERSION = 18.32
->  DT_SITE = http://pkgs.fedoraproject.org/repo/pkgs/dt/$(DT_SOURCE)/3054aeaaba047a1dbe90c2132a382ee2
-> -DT_SOURCE = dt-source-$(DT_VERSION).tar.gz
-> +DT_SOURCE = dt-source-v$(DT_VERSION).tar.gz
->  DT_STRIP_COMPONENTS = 2
->  DT_LICENSE = ISC-like
->  DT_LICENSE_FILES = LICENSE
-> diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
-> index d00d2df92c..e944012358 100644
-> --- a/package/flannel/flannel.mk
-> +++ b/package/flannel/flannel.mk
-> @@ -4,14 +4,14 @@
->  #
->  ################################################################################
->  
-> -FLANNEL_VERSION = v0.5.5
-> +FLANNEL_VERSION = 0.5.5
->  FLANNEL_SITE = https://github.com/coreos/flannel/archive
-> -FLANNEL_SOURCE = $(FLANNEL_VERSION).tar.gz
-> +FLANNEL_SOURCE = v$(FLANNEL_VERSION).tar.gz
->  
->  FLANNEL_LICENSE = Apache-2.0
->  FLANNEL_LICENSE_FILES = LICENSE
->  
-> -FLANNEL_LDFLAGS = -X github.com/coreos/flannel/version.Version=$(FLANNEL_VERSION)
-> +FLANNEL_LDFLAGS = -X github.com/coreos/flannel/version.Version=v$(FLANNEL_VERSION)
-
- I don't think this is really needed. Adam, do you think the v belongs in there
-or not? BTW, if the v is removed, it should be noted in the commit log.
-
-[snip]
-> diff --git a/package/pru-software-support/pru-software-support.mk b/package/pru-software-support/pru-software-support.mk
-> index f30ff6b5e3..cb266b87bb 100644
-> --- a/package/pru-software-support/pru-software-support.mk
-> +++ b/package/pru-software-support/pru-software-support.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -PRU_SOFTWARE_SUPPORT_VERSION = v5.1.0
-> -PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/$(PRU_SOFTWARE_SUPPORT_VERSION)?
-> +PRU_SOFTWARE_SUPPORT_VERSION = 5.1.0
-> +PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/$(PRU_SOFTWARE_SUPPORT_VERSION)
-
- It might be just me, but this doesn't look correct... Definitely should be
-explained in the commit message (and therefore, a separate patch).
-
->  PRU_SOFTWARE_SUPPORT_LICENSE =  BSD-3-Clause, GPL-2.0, Public Domain
->  PRU_SOFTWARE_SUPPORT_LICENSE_FILES = PRU-Package-v5.0-Manifest.html
->  PRU_SOFTWARE_SUPPORT_DEPENDENCIES = host-ti-cgt-pru host-pru-software-support
-[snip]
-
- Otherwise looks good to me. It would be nice to generally split it up into
-patches that only contain changes that are really the same pattern. So e.g. the
-spidev-test patch is a little different, so it should be a separate patch.
-
- Also, I wonder it it's a good idea to make this change for all packages. It
-might be better to limit to packages that actually exist on
-release-monitoring.org. Otherwise, it might happen that when it appears on
-release-monitoring, some package *does* have a prefix, and that would be silly...
-
- Obviously, one way to make sure all of them are on release-monitoring is to add
-the ones which are missing :-)
-
-
- Regards,
- Arnout
+diff --git a/package/iputils/0001-ninfod-ninfod_name.c-fix-build-with-nettle.patch b/package/iputils/0001-ninfod-ninfod_name.c-fix-build-with-nettle.patch
+index 796185011a..5d522f53ef 100644
+--- a/package/iputils/0001-ninfod-ninfod_name.c-fix-build-with-nettle.patch
++++ b/package/iputils/0001-ninfod-ninfod_name.c-fix-build-with-nettle.patch
+@@ -15,7 +15,7 @@ Fixes:
+  - http://autobuild.buildroot.org/results/e86555090e27b631ba35214ef100aa9331844684
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/iputils/iputils/pull/181]
++Upstream status: commit f209ebb91e65980bcdddce8cc12b00ec11623f76
+ ---
+  ninfod/ninfod_name.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+@@ -34,5 +34,5 @@ index daf606d..525c93d 100644
+  #elif defined(HAVE_GNUTLS_OPENSSL_H)
+  # include <gnutls/openssl.h>
+ -- 
+-2.20.1
++2.21.0
+ 
+diff --git a/package/iputils/0002-build-sys-fix-static-build-gcrypt-dependency-gpg-err.patch b/package/iputils/0002-build-sys-fix-static-build-gcrypt-dependency-gpg-err.patch
+new file mode 100644
+index 0000000000..aaf6a0d392
+--- /dev/null
++++ b/package/iputils/0002-build-sys-fix-static-build-gcrypt-dependency-gpg-err.patch
+@@ -0,0 +1,51 @@
++From eabe21164bbb29dead1a902b6d6e910f6892e3a7 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 7 Jun 2019 23:17:13 +0200
++Subject: [PATCH] build-sys: fix static build gcrypt dependency gpg-error
++
++The gcrypt depends on gpg-error, so find it's availability and link with it
++when needed to fix static build.
++
++Fixes:
++- http://autobuild.buildroot.net/results/fb698e3e903869978bd5e69d791ec362317b7981
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream status: commit eabe21164bbb29dead1a902b6d6e910f6892e3a7
++---
++ meson.build | 12 +++++++-----
++ 1 file changed, 7 insertions(+), 5 deletions(-)
++
++diff --git a/meson.build b/meson.build
++index 84e4360..3766edc 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -101,20 +101,22 @@ else
++ endif
++
++ crypto = get_option('USE_CRYPTO')
+++crypto_dep = []
++ if crypto == 'nettle'
++-	crypto_dep = dependency('nettle')
+++	crypto_dep += dependency('nettle')
++	conf.set('USE_NETTLE', 1, description : 'If set use nettle crypto library.')
++ elif crypto == 'gcrypt'
++-	crypto_dep = cc.find_library('gcrypt')
+++	crypto_dep += cc.find_library('gcrypt')
+++	crypto_dep += dependency('gpg-error', required : true)
++	conf.set('USE_GCRYPT', 1, description : 'If set use gcrypt crypto library.')
++ elif crypto == 'openssl'
++-	crypto_dep = dependency('openssl')
+++	crypto_dep += dependency('openssl')
++	conf.set('USE_OPENSSL', 1, description : 'if set use openssl crypto library.')
++ elif crypto == 'kernel'
++-	crypto_dep = dependency('disabler-appears-to-disable-executable-build', required : false)
+++	crypto_dep += dependency('disabler-appears-to-disable-executable-build', required : false)
++	conf.set('USE_KERNEL_CRYPTO_API', 1, description : 'if set use Linux kernel Crypto API.')
++ elif crypto == 'none'
++-	crypto_dep = dependency('disabler-appears-to-disable-executable-build', required : false)
+++	crypto_dep += dependency('disabler-appears-to-disable-executable-build', required : false)
++	conf.set('PING6_NONCE_MEMORY', 1,
++		description : 'If set RFC6744 random does not use any CRYPTO lib.')
++ endif
++--
++2.21.0
+diff --git a/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch b/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
+deleted file mode 100644
+index 07bf4387dc..0000000000
+--- a/package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
++++ /dev/null
+@@ -1,58 +0,0 @@
+-From 40123757a799fac0446e33055b33a540bf725589 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Fri, 7 Jun 2019 23:17:13 +0200
+-Subject: [PATCH] meson.build: fix static build with gcrypt
+-
+-gcrypt depends on gpg-error so save the result of
+-dependency('gpg-error') in gpg_error_dep and use it when needed to fix
+-static build
+-
+-Fixes:
+- - http://autobuild.buildroot.net/results/fb698e3e903869978bd5e69d791ec362317b7981
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/iputils/iputils/pull/185]
+----
+- meson.build        | 5 ++++-
+- ninfod/meson.build | 2 +-
+- 2 files changed, 5 insertions(+), 2 deletions(-)
+-
+-diff --git a/meson.build b/meson.build
+-index 84e4360..24bda0c 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -119,6 +119,9 @@ elif crypto == 'none'
+- 		description : 'If set RFC6744 random does not use any CRYPTO lib.')
+- endif
+- 
+-+# gpg-error is a dependency of gcrypt
+-+gpg_error_dep = dependency('gpg-error', required : false)
+-+
+- systemd = dependency('systemd', required : false)
+- systemdunitdir = get_option('systemdunitdir')
+- if systemdunitdir == '' and systemd.found()
+-@@ -241,7 +244,7 @@ libcommon = static_library(
+- 
+- if build_ping == true
+- 	executable('ping', ['ping.c', 'ping_common.c', 'ping6_common.c', git_version_h],
+--		dependencies : [m_dep, cap_dep, idn_dep, crypto_dep, resolv_dep],
+-+		dependencies : [m_dep, cap_dep, idn_dep, crypto_dep, gpg_error_dep, resolv_dep],
+- 		link_with : [libcommon],
+- 		install: true)
+- 	meson.add_install_script('build-aux/setcap-setuid.sh',
+-diff --git a/ninfod/meson.build b/ninfod/meson.build
+-index a0ee94d..1e7aa26 100644
+---- a/ninfod/meson.build
+-+++ b/ninfod/meson.build
+-@@ -10,7 +10,7 @@ ninfod_sources = files('''
+- 	ninfod_name.c
+- '''.split())
+- executable('ninfod', [ninfod_sources, git_version_h],
+--	dependencies : [cap_dep, crypto_dep, rt_dep, threads],
+-+	dependencies : [cap_dep, crypto_dep, gpg_error_dep, rt_dep, threads],
+- 	link_with : [libcommon],
+- 	include_directories : inc,
+- 	install: true,
+--- 
+-2.20.1
+-
+diff --git a/package/iputils/0003-meson.build-fix-build-with-NLS.patch b/package/iputils/0003-meson.build-fix-build-with-NLS.patch
+index f6fd737f43..1c999ba750 100644
+--- a/package/iputils/0003-meson.build-fix-build-with-NLS.patch
++++ b/package/iputils/0003-meson.build-fix-build-with-NLS.patch
+@@ -1,44 +1,51 @@
+-From 8719555a530a8981214f1a35df4b17838dc5f3e8 Mon Sep 17 00:00:00 2001
++From 418d8bea5424d8a14a21fd7928747a233557618c Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 9 Jun 2019 10:55:35 +0200
+-Subject: [PATCH] meson.build: fix build with NLS
++Date: Sun, 9 Jun 2019 18:38:37 +0200
++Subject: [PATCH] build-sys: fix build with NLS
+ 
+ With some toolchains, intl is needed for NLS support so search for this
+-library and use if needed
++library and use if needed.
+ 
+ Fixes:
+  - http://autobuild.buildroot.org/results/0a8a3efe734ac7fb3a68ba505277681857dc0a3d
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+--[Upstream status: not sent yet]
++Upstream status: commit 418d8bea5424d8a14a21fd7928747a233557618c
+ ---
+  meson.build | 11 +++++++----
+  1 file changed, 7 insertions(+), 4 deletions(-)
+ 
+ diff --git a/meson.build b/meson.build
+-index 24bda0c..53a3995 100644
++index 3766edc..2b545b6 100644
+ --- a/meson.build
+ +++ b/meson.build
+-@@ -88,6 +88,9 @@ if opt == true
+- 	subdir ('po')
++@@ -77,6 +77,8 @@ if opt != ''
++	conf.set_quoted('DEFAULT_DEVICE', opt, description : 'arping default device.')
+  endif
+  
+ +# Some systems needs intl for gettext
+-+intl_dep = cc.find_library('intl', required : false)
+-+
+- opt = get_option('USE_IDN')
+++intl_dep = []
++ opt = get_option('USE_GETTEXT')
+  if opt == true
+- 	idn_dep = cc.find_library('idn2', required : false)
+-@@ -244,7 +247,7 @@ libcommon = static_library(
++	prefix = get_option('prefix')
++@@ -86,6 +88,7 @@ if opt == true
++	conf.set('ENABLE_NLS', 1, description : 'If set enable I18N.')
++	conf.set_quoted('LOCALEDIR', join_paths(prefix, localedir))
++	subdir ('po')
+++	intl_dep += cc.find_library('intl', required : false)
++ endif
++
++ opt = get_option('USE_IDN')
++@@ -243,7 +246,7 @@ libcommon = static_library(
+  
+  if build_ping == true
+  	executable('ping', ['ping.c', 'ping_common.c', 'ping6_common.c', git_version_h],
+--		dependencies : [m_dep, cap_dep, idn_dep, crypto_dep, gpg_error_dep, resolv_dep],
+-+		dependencies : [m_dep, cap_dep, idn_dep, intl_dep, crypto_dep, gpg_error_dep, resolv_dep],
++-		dependencies : [m_dep, cap_dep, idn_dep, crypto_dep, resolv_dep],
+++		dependencies : [m_dep, cap_dep, idn_dep, intl_dep, crypto_dep, resolv_dep],
+  		link_with : [libcommon],
+  		install: true)
+  	meson.add_install_script('build-aux/setcap-setuid.sh',
+-@@ -257,7 +260,7 @@ endif
++@@ -256,7 +259,7 @@ endif
+  
+  if build_tracepath == true
+  	executable('tracepath', ['tracepath.c', git_version_h],
+@@ -47,7 +54,7 @@ index 24bda0c..53a3995 100644
+  		link_with : [libcommon],
+  		install: true)
+  endif
+-@@ -277,7 +280,7 @@ endif
++@@ -276,7 +279,7 @@ endif
+  
+  if build_clockdiff == true
+  	executable('clockdiff', ['clockdiff.c', git_version_h],
+@@ -56,7 +63,7 @@ index 24bda0c..53a3995 100644
+  		link_with : [libcommon],
+  		install: true)
+  	meson.add_install_script('build-aux/setcap-setuid.sh',
+-@@ -307,7 +310,7 @@ endif
++@@ -306,7 +309,7 @@ endif
+  
+  if build_arping == true
+  	executable('arping', ['arping.c', git_version_h],
+@@ -66,5 +73,5 @@ index 24bda0c..53a3995 100644
+  		install: true)
+  	meson.add_install_script('build-aux/setcap-setuid.sh',
+ -- 
+-2.20.1
++2.21.0
+ 
+diff --git a/package/iputils/0004-build-sys-Make-setcap-really-optional.patch b/package/iputils/0004-build-sys-Make-setcap-really-optional.patch
+index 0024f3fa6f..5ebd1db026 100644
+--- a/package/iputils/0004-build-sys-Make-setcap-really-optional.patch
++++ b/package/iputils/0004-build-sys-Make-setcap-really-optional.patch
+@@ -8,9 +8,8 @@ setcap.path():
+ 
+ meson.build:246:7: ERROR:  add_install_script args must be strings
+ 
+-[Retrieved from:
+-https://github.com/iputils/iputils/commit/473be6467f995865244e7e68b2fa587a4ee79551]
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream status: commit 473be6467f995865244e7e68b2fa587a4ee79551
+ ---
+  meson.build | 11 +++++++----
+  1 file changed, 7 insertions(+), 4 deletions(-)
+-- 
+2.21.0
