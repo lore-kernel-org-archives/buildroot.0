@@ -1,58 +1,44 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Wed, 19 Jun 2019 18:42:56 +0200
-Subject: [Buildroot] [PATCH 2/3] package/busybox: convert S10mdev to the
- canonical init script format
-In-Reply-To: <20190619164257.183607-1-titouan.christophe@railnova.eu>
-References: <20190619164257.183607-1-titouan.christophe@railnova.eu>
-Message-ID: <20190619164257.183607-3-titouan.christophe@railnova.eu>
+From: Alistair Francis <alistair.francis@wdc.com>
+Date: Wed, 19 Jun 2019 09:54:05 -0700
+Subject: [Buildroot] [PATCH v2 1/2] configs/qemu_riscv64_virt: Update to 5.1
+ kernel
+Message-ID: <20190619165406.19615-1-alistair.francis@wdc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- package/busybox/S10mdev | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+Update the 64-bit defconfig to use the latest kernel.
 
-diff --git a/package/busybox/S10mdev b/package/busybox/S10mdev
-index 7075b77016..efef4290ba 100644
---- a/package/busybox/S10mdev
-+++ b/package/busybox/S10mdev
-@@ -3,21 +3,24 @@
- # Start mdev....
- #
+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+---
+v2:
+ - Keep kernel version hard coded
+
+ configs/qemu_riscv64_virt_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+index 12afac44fb..c0b1a43925 100644
+--- a/configs/qemu_riscv64_virt_defconfig
++++ b/configs/qemu_riscv64_virt_defconfig
+@@ -10,13 +10,13 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
+ # Filesystem
+ BR2_TARGET_ROOTFS_EXT2=y
  
--case "$1" in
--  start)
-+
-+start() {
- 	echo "Starting mdev..."
- 	echo /sbin/mdev >/proc/sys/kernel/hotplug
- 	/sbin/mdev -s
- 	# coldplug modules
--	find /sys/ -name modalias -print0 | xargs -0 sort -u | tr '\n' '\0' | \
--	    xargs -0 modprobe -abq
--	;;
--  stop)
--	;;
--  restart|reload)
-+	find /sys/ -name modalias -print0 | \
-+		xargs -0 sort -u | \
-+		tr '\n' '\0' | \
-+		xargs -0 modprobe -abq
-+}
-+
-+case "$1" in
-+  start)
-+	"$1"
- 	;;
-   *)
--	echo "Usage: $0 {start|stop|restart}"
-+	echo "Usage: $0 start"
- 	exit 1
- esac
+-# Linux headers same as kernel, a 4.20 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
++# Linux headers same as kernel, a 5.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.20.17"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.12"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_IMAGE=y
  
 -- 
-2.21.0
+2.22.0
