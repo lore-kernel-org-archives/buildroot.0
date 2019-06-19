@@ -1,130 +1,41 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 19 Jun 2019 10:51:50 +0300
+From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Date: Wed, 19 Jun 2019 10:34:18 +0200
 Subject: [Buildroot] [PATCH] board: solidrun: add Clearfog GT-8K
-In-Reply-To: <20190617212014.25208cc9@windsurf>
+In-Reply-To: <20190619075150.4qfrc7pgrtlawenu@sapphire.tkos.co.il>
 References: <0131577d7afceede1aa59bf7b98dc3bda9249df5.1560673127.git.baruch@tkos.co.il>
  <20190617212014.25208cc9@windsurf>
-Message-ID: <20190619075150.4qfrc7pgrtlawenu@sapphire.tkos.co.il>
+ <20190619075150.4qfrc7pgrtlawenu@sapphire.tkos.co.il>
+Message-ID: <7116874d-4321-49d8-89dd-ff77d519d6e7@cesnet.cz>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+> The CONFIG_NET_DSA symbol has
+>
+>   depends on BRIDGE || BRIDGE=n
+>
+> The arm64 defconfig has
+>
+>   CONFIG_BRIDGE=m
+>
+> So CONFIG_NET_DSA transforms to 'm' in the final kernel configuration. 
+> CONFIG_NET_DSA_MV88E6XXX depends on CONFIG_NET_DSA, so it is set to 'm' as 
+> well.
+>
+> The mv88e6xxx is a mdio_bus device that does not provide a 
+> modalias sysfs node 
+> under /sys/devices. So the S10mdev script does not load it automatically on 
+> boot.
 
-On Mon, Jun 17, 2019 at 09:20:14PM +0200, Thomas Petazzoni wrote:
-> This mostly looks good, I just have one question (below), and some
-> minor nits that I would have ignored if I didn't had the question.
-> 
-> The commit title should preferably be:
-> 
-> 	configs/solidrun_clearfog_gt_8k: new defconfig
+Hi Baruch,
+my involvement with this platform is limited to just the Clearfog Base 
+because that's what we're using internally. I therefore cannot really 
+comment on the patch.
 
-I'll fix that if I do v2.
+That said, I think that this module vs. built-in is something which can go 
+to the commit message.
 
-> On Sun, 16 Jun 2019 11:18:47 +0300
-> Baruch Siach <baruch@tkos.co.il> wrote:
-> 
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 4cc8c9d0877e..9bf2d334e522 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -253,6 +253,8 @@ F:	package/pulseview/
-> >  F:	package/sigrok-cli/
-> >  
-> >  N:	Baruch Siach <baruch@tkos.co.il>
-> > +F:	board/solidrun/clearfog_gt_8k/
-> 
-> I think we more commonly use "-" as a separate in board directory names
-> instead of "_", so there's not a strong convention on this.
-
-I see quite a few board directory names with underscores:
-
-socrates_cyclone5
-at91sam9x5ek_mmc
-sama5d27_som1_ek_mmc
-sama5d2_xplained_mmc
-sama5d3_xplained_mmc
-sama5d4_xplained_mmc
-s6lx9_microboard
-icorem6_rqs
-t1040_t2080
-a10_olinuxino
-a13_olinuxino
-a20_olinuxino
-imx233_olinuxino
-x86_64
-
-> > diff --git a/board/solidrun/clearfog_gt_8k/linux-extras.config b/board/solidrun/clearfog_gt_8k/linux-extras.config
-> > new file mode 100644
-> > index 000000000000..bce2a2e9d20c
-> > --- /dev/null
-> > +++ b/board/solidrun/clearfog_gt_8k/linux-extras.config
-> > @@ -0,0 +1,4 @@
-> > +CONFIG_MARVELL_PHY=y
-> > +CONFIG_SFP=y
-> > +CONFIG_NET_DSA=y
-> > +CONFIG_NET_DSA_MV88E6XXX=y
-> 
-> So the switch driver is enabled to be built in the kernel image
-> itself...
-> 
-> > +Enable the switch (yellow) Ethernet ports
-> > +=========================================
-> > +
-> > +To enable the Clearfog GT-8K internal switch port make sure to load the
-> > +'mv88e6xxx' kernel module, and up the switch up-link port (eth2 by default):
-> > +
-> > +  modprobe mv88e6xxx
-> 
-> ... but you tell people to load it as a kernel module ?
-> 
-> This seems weird. Am I missing something ?
-
-The CONFIG_NET_DSA symbol has
-
-  depends on BRIDGE || BRIDGE=n
-
-The arm64 defconfig has
-
-  CONFIG_BRIDGE=m
-
-So CONFIG_NET_DSA transforms to 'm' in the final kernel configuration. 
-CONFIG_NET_DSA_MV88E6XXX depends on CONFIG_NET_DSA, so it is set to 'm' as 
-well.
-
-The mv88e6xxx is a mdio_bus device that does not provide a modalias sysfs node 
-under /sys/devices. So the S10mdev script does not load it automatically on 
-boot.
-
-> > diff --git a/configs/solidrun_clearfog_gt_8k_defconfig b/configs/solidrun_clearfog_gt_8k_defconfig
-> > new file mode 100644
-> > index 000000000000..a44038e66392
-> > --- /dev/null
-> > +++ b/configs/solidrun_clearfog_gt_8k_defconfig
-> > @@ -0,0 +1,46 @@
-> > +BR2_aarch64=y
-> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
-> > +BR2_TARGET_GENERIC_HOSTNAME="clearfog-gt-8k"
-> > +BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for SolidRun Clearfog GT-8K"
-> > +
-> > +# Firmware
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/MarvellEmbeddedProcessors/atf-marvell.git"
-> > +# This commit corresponds to release armada-18.09.4
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="711ecd32afe465b38052b5ba374c825b158eea18"
-> > +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="a80x0_mcbin"
-> 
-> So there is no ATF configuration specifically for the GT-8K platform ?
-
-The Macchiatobin and Clearfog GT-8K look identical as far as ATF is concerned.
-
-Thanks for your review,
-baruch
-
--- 
-     http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch at tkos.co.il - tel: +972.2.679.5364, http://www.tkos.co.il -
+With kind regards,
+Jan
