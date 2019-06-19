@@ -1,48 +1,63 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Jun 2019 08:48:51 +0200
-Subject: [Buildroot] [EXTERNAL] [autobuild.buildroot.net] Your build
- results for 2019-06-13
-In-Reply-To: <20190619061619.GC24143@tungsten.ozlabs.ibm.com>
-References: <2t43n5cdd4-1@m0098420.ppops.net>
- <20190619061619.GC24143@tungsten.ozlabs.ibm.com>
-Message-ID: <20190619084851.5500ad30@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 19 Jun 2019 08:50:34 +0200
+Subject: [Buildroot] [PATCH 1/1] iputils: set the permissions with
+ IPUTILS_PERMISSIONS
+In-Reply-To: <20190619050127.GA21810@dell5510>
+References: <20190609230702.7068-1-petr.vorel@gmail.com>
+ <4bdc9d15-b7c2-3b46-bdda-306147fa8d94@mind.be> <20190610200645.GA10261@x230>
+ <7191f609-e5d8-7bd6-77ca-83296f96d0f1@mind.be>
+ <87muilgttj.fsf@dell.be.48ers.dk> <20190614162422.GB4812@x230>
+ <87wohjxdsk.fsf@dell.be.48ers.dk> <20190618205211.GC20410@x230>
+ <4da3ae28-a8f3-7f49-0583-083b5ea15f75@mind.be>
+ <20190619050127.GA21810@dell5510>
+Message-ID: <a8c71118-cf7d-bef8-f164-2ce13643dfec@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Sam,
 
-On Wed, 19 Jun 2019 16:16:19 +1000
-Sam Bobroff <sbobroff@linux.ibm.com> wrote:
 
-> I tried to replicate the modem-manager build failure, but it succeeded
-> (I'm using br-reproduce-build). The error is odd as well:
+On 19/06/2019 07:01, Petr Vorel wrote:
+> Hi Arnout,
 > 
-> make[4]: Entering directory '/home/buildroot/build/instance-0/output/build/modem-manager-1.10.0/libmm-glib/generated'
->   GEN      mm-enums-types.h
->   GEN      mm-errors-types.h
->   GEN      mm-gdbus-manager.c
-> /bin/sh: line 1: /usr/bin/gdbus-codegen: No such file or directory
->   GEN      mm-gdbus-sim.c
-> /bin/sh: line 1: /usr/bin/gdbus-codegen: No such file or directory
->   GEN      mm-gdbus-sms.c
->   GEN      mm-gdbus-call.c
-> /bin/sh: line 1: /usr/bin/gdbus-codegen: No such file or directory
-> Makefile:1173: recipe for target 'mm-gdbus-sim.c' failed
-> make[4]: *** [mm-gdbus-sim.c] Error 127
-> make[4]: *** Waiting for unfinished jobs....
-> Makefile:1149: recipe for target 'mm-gdbus-manager.c' failed
-> make[4]: *** [mm-gdbus-manager.c] Error 127
+>>>>  > It'd be nice if buildroot has BR2_TARGET_ROOTFS_HAS_XATTRS.
+> 
+>>>> The problem is that you can enable several rootfs formats at the same
+>>>> time (E.G. tar and cramfs), so we would need to only use xattrs if no
+>>>> file system without xattrs support is enabled.
+> 
+>>  So maybe we could add a system option BR2_SYSTEM_XATTR that enables the use of
+>> xattr.
+> +1
+> 
+>>  Currently we have nothing using xattr, but there are quite a few packages that
+>> could benefit from it, e.g. libpcap, and SELinux stuff.
+> And IMA+EVM kernel features.
+> 
+>>  We could use that option to enable xattr instead of setuid where relevant, and
+>> to disable filesystems that don't support xattr.
+> 
+> 
+>>>> And things would break if you do a build with E.G. only tar rootfs
+>>>> support and then afterwards enable cramfs without doing a clean
+>>>> rebuild - Yes, I know you are not supposed to do that, but it does
+>>>> happen.
+> 
+>>  I don't think we need to worry about that. But actually, with the
+>> BR2_SYSTEM_XATTR option, it would even work since it's only taken into account
+>> during finalize.
+> 
+> 
+>>> Thanks for detailed info. I guess in that case is setuid really the only option.
+> 
+>>  It isn't, but the alternatives are a lot of work :-)
+> :-). Do you plan to work on it? If not, I might do in next few weeks (I'm quite
+> busy during summer).
 
-This issue is already fixed by
-https://git.buildroot.org/buildroot/commit/?id=739c581663285db6efb3559969e9e04f873a38f7.
+ I don't do any work myself, I just occasionally apply patches :-) And I think
+for Peter it's pretty much the same thing.
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ Regards,
+ Arnout
