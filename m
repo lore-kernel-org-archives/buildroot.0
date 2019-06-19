@@ -1,119 +1,252 @@
-From: Alistair Francis <alistair.francis@wdc.com>
-Date: Tue, 18 Jun 2019 16:53:58 -0700
-Subject: [Buildroot] [PATCH 2/2] configs/qemu_riscv32_virt: Update to 5.1
- kernel
-In-Reply-To: <20190618235358.10613-1-alistair.francis@wdc.com>
-References: <20190618235358.10613-1-alistair.francis@wdc.com>
-Message-ID: <20190618235358.10613-2-alistair.francis@wdc.com>
+From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Date: Wed, 19 Jun 2019 12:07:07 +1000
+Subject: [Buildroot] [PATCH] host-localedef: Compile against glibc-2.29
+Message-ID: <20190619020707.3798-1-sam@mendozajonas.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the 32-bit defconfig to use the latest kernel. This requires a
-patch to revert a ABI to ensure that the glibc port continues to work.
+In glibc 2.27 the following change occurred:
+"Statically compiled applications attempting to load locales compiled
+for the GNU C Library version 2.27 will fail and fall back to the
+builtin C/POSIX locale."
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+This impacts us since upstream buildroot uses a localdef built against
+an older eglibc release [0].
+
+This is a combination of my patch to move to glibc and Peter Seiderer's
+patch to avoid building all of glibc just for localedef.
+
+ [0] https://bugs.busybox.net/show_bug.cgi?id=11096
+
+Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+[localedef build & fixups:]
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- ...ert-riscv-Use-latest-system-call-ABI.patch | 66 +++++++++++++++++++
- configs/qemu_riscv32_virt_defconfig           |  9 +--
- 2 files changed, 68 insertions(+), 7 deletions(-)
- create mode 100644 board/qemu/riscv32-virt/0001-Revert-riscv-Use-latest-system-call-ABI.patch
+This is an update to a previous very similar patch, but updated for
+glibc 2.29 now that Buildroot has moved to it.
 
-diff --git a/board/qemu/riscv32-virt/0001-Revert-riscv-Use-latest-system-call-ABI.patch b/board/qemu/riscv32-virt/0001-Revert-riscv-Use-latest-system-call-ABI.patch
+
+ .../0001-Don-t-include-xlocale.h.patch        | 50 --------------
+ ...ACK-only-build-and-install-localedef.patch | 65 +++++++++++++++++++
+ .../localedef.hash                            |  7 ++
+ package/localedef/localedef.hash              |  4 +-
+ package/localedef/localedef.mk                | 45 ++++++++++---
+ 5 files changed, 110 insertions(+), 61 deletions(-)
+ delete mode 100644 package/localedef/0001-Don-t-include-xlocale.h.patch
+ create mode 100644 package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0001-HACK-only-build-and-install-localedef.patch
+ create mode 100644 package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/localedef.hash
+
+diff --git a/package/localedef/0001-Don-t-include-xlocale.h.patch b/package/localedef/0001-Don-t-include-xlocale.h.patch
+deleted file mode 100644
+index 9a6c2f8e90..0000000000
+--- a/package/localedef/0001-Don-t-include-xlocale.h.patch
++++ /dev/null
+@@ -1,50 +0,0 @@
+-From: Bernhard Walle <bernhard@bwalle.de>
+-Date: Mon, 2 Oct 2017 16:55:23 +0200
+-Subject: [PATCH] Don't include <xlocale.h>
+-
+-This header has been removed in glibc 2.26:
+-
+-https://abi-laboratory.pro/tracker/changelog/glibc/2.26/log.html
+-
+------------------------- >8 ------------------------
+-* The nonstandard header <xlocale.h> has been removed.  Most programs should
+-  use <locale.h> instead.  If you have a specific need for the definition of
+-  locale_t with no other declarations, please contact
+-  libc-alpha at sourceware.org and explain.
+------------------------- 8< ------------------------
+-
+-Signed-off-by: Bernhard Walle <bernhard@bwalle.de>
+-
+-Upstream: https://git.pengutronix.de/cgit/ptxdist/tree/patches/localedef-eglibc-2.14.1-r17443-ptx1/0003-Don-t-include-xlocale.h.patch
+-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+----
+- eglibc/locale/langinfo.h | 2 +-
+- eglibc/locale/locale.h   | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/eglibc/locale/langinfo.h b/eglibc/locale/langinfo.h
+-index 0a5336507196..76707a4584c1 100644
+---- a/eglibc/locale/langinfo.h
+-+++ b/eglibc/locale/langinfo.h
+-@@ -589,7 +589,7 @@ extern char *nl_langinfo (nl_item __item) __THROW;
+-    more information.  */
+- 
+- /* Get locale datatype definition.  */
+--# include <xlocale.h>
+-+# include <locale.h>
+- 
+- /* Just like nl_langinfo but get the information from the locale object L.  */
+- extern char *nl_langinfo_l (nl_item __item, __locale_t __l);
+-diff --git a/eglibc/locale/locale.h b/eglibc/locale/locale.h
+-index 2aa19e76acb2..18be711a2d40 100644
+---- a/eglibc/locale/locale.h
+-+++ b/eglibc/locale/locale.h
+-@@ -143,7 +143,7 @@ __END_NAMESPACE_STD
+-    This is a proof-of-concept implementation.  */
+- 
+- /* Get locale datatype definition.  */
+--# include <xlocale.h>
+-+# include_next <locale.h>
+- 
+- /* Return a reference to a data structure representing a set of locale
+-    datasets.  Unlike for the CATEGORY parameter for `setlocale' the
+diff --git a/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0001-HACK-only-build-and-install-localedef.patch
 new file mode 100644
-index 0000000000..e0dfaa1501
+index 0000000000..d327008c1d
 --- /dev/null
-+++ b/board/qemu/riscv32-virt/0001-Revert-riscv-Use-latest-system-call-ABI.patch
-@@ -0,0 +1,66 @@
-+From 15f62343916fcb3cae82e618da28eaa82bc8c007 Mon Sep 17 00:00:00 2001
-+From: Alistair Francis <alistair.francis@wdc.com>
-+Date: Tue, 16 Apr 2019 09:03:41 -0700
-+Subject: [PATCH] Revert "riscv: Use latest system call ABI"
++++ b/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/0001-HACK-only-build-and-install-localedef.patch
+@@ -0,0 +1,65 @@
++From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
++From: Michael Olbrich <m.olbrich@pengutronix.de>
++Date: Mon, 21 May 2018 16:45:02 +0200
++Subject: [PATCH] HACK: only build and install localedef
 +
-+This reverts commit d4c08b9776b392e20efc6198ebe1bc8ec1911d9b.
++Signed-off-by: Michael Olbrich <m.olbrich@pengutronix.de>
 +
-+The latest RISC-V 32bit glibc submission doesn't work with this patch,
-+so let's revert it. This revert can be reverted when the glibc
-+submission is updated to work on the 5.1 kernel.
-+
-+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
++Upstream: https://git.pengutronix.de/cgit/ptxdist/plain/patches/localedef-glibc-2.27/0001-HACK-only-build-and-install-localedef.patch?id=47116f66f411d4dadfce42c2fdd6d41b351ccfd4
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 +---
-+ arch/riscv/Kconfig                   | 1 +
-+ arch/riscv/include/uapi/asm/unistd.h | 5 ++++-
-+ arch/riscv/kernel/vdso/Makefile      | 2 --
-+ 3 files changed, 5 insertions(+), 3 deletions(-)
++ Rules           | 14 ++++++++++----
++ locale/Makefile |  6 +++---
++ 2 files changed, 13 insertions(+), 7 deletions(-)
 +
-+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-+index eb56c82d8aa1..43dd2680c696 100644
-+--- a/arch/riscv/Kconfig
-++++ b/arch/riscv/Kconfig
-+@@ -11,6 +11,7 @@ config 32BIT
++diff --git a/Rules b/Rules
++index 16afa6acaa..6c208db788 100644
++--- a/Rules
+++++ b/Rules
++@@ -190,10 +190,16 @@ binaries-shared-notests = $(filter-out $(binaries-pie) $(binaries-static), \
++ 				       $(binaries-all-notests))
 + 
-+ config RISCV
-+ 	def_bool y
-++	select ARCH_32BIT_OFF_T if !64BIT
-+ 	# even on 32-bit, physical (and DMA) addresses are > 32-bits
-+ 	select PHYS_ADDR_T_64BIT
-+ 	select OF
-+diff --git a/arch/riscv/include/uapi/asm/unistd.h b/arch/riscv/include/uapi/asm/unistd.h
-+index 0e2eeeb1fd27..486a288b454c 100644
-+--- a/arch/riscv/include/uapi/asm/unistd.h
-++++ b/arch/riscv/include/uapi/asm/unistd.h
-+@@ -17,8 +17,11 @@
++ ifneq "$(strip $(binaries-shared-notests))" ""
++-$(addprefix $(objpfx),$(binaries-shared-notests)): %: %.o \
++-  $(sort $(filter $(common-objpfx)lib%,$(link-libc))) \
++-  $(addprefix $(csu-objpfx),start.o) $(+preinit) $(+postinit)
++-	$(+link)
+++$(addprefix $(objpfx),$(binaries-shared-notests)): %: %.o
+++	$(CC) -o $@ \
+++	      $(sysdep-LDFLAGS) $(LDFLAGS) $(LDFLAGS-$(@F)) \
+++	      $(combreloc-LDFLAGS) $(relro-LDFLAGS) $(hashstyle-LDFLAGS) \
+++	      $(filter-out $(addprefix $(csu-objpfx),start.o \
+++						     $(start-installed-name))\
+++			   $(+preinit) \
+++			   $(link-extra-libs) \
+++			   $(common-objpfx)libc% $(+postinit),$^) \
+++	      $(link-extra-libs)
++ endif
 + 
-+ #ifdef __LP64__
-+ #define __ARCH_WANT_NEW_STAT
-+-#define __ARCH_WANT_SET_GET_RLIMIT
-+ #endif /* __LP64__ */
-++#define __ARCH_WANT_SET_GET_RLIMIT
-++#ifndef __LP64__
-++#define __ARCH_WANT_TIME32_SYSCALLS
-++#endif
++ ifneq "$(strip $(binaries-shared-tests))" ""
++diff --git a/locale/Makefile b/locale/Makefile
++index 764e751c36..c28322d71f 100644
++--- a/locale/Makefile
+++++ b/locale/Makefile
++@@ -32,15 +32,15 @@ categories	= ctype messages monetary numeric time paper name \
++ 		  address telephone measurement identification collate
++ aux		= $(categories:%=lc-%) $(categories:%=C-%) SYS_libc C_name \
++ 		  xlocale localename global-locale coll-lookup
++-others		= localedef locale
+++others		= localedef
++ #others-static	= localedef locale
++-install-bin	= localedef locale
+++install-bin	= localedef
++ extra-objs	= $(localedef-modules:=.o) $(localedef-aux:=.o) \
++ 		  $(locale-modules:=.o) $(lib-modules:=.o)
++ generated 	+= C-translit.h
++ before-compile	+= $(objpfx)C-translit.h
 + 
-+ #include <asm-generic/unistd.h>
++-extra-libs	= libBrokenLocale
+++#extra-libs	= libBrokenLocale
++ extra-libs-others = $(extra-libs)
 + 
-+diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
-+index fec62b24df89..eed1c137f618 100644
-+--- a/arch/riscv/kernel/vdso/Makefile
-++++ b/arch/riscv/kernel/vdso/Makefile
-+@@ -2,11 +2,9 @@
-+ 
-+ # Symbols present in the vdso
-+ vdso-syms  = rt_sigreturn
-+-ifdef CONFIG_64BIT
-+ vdso-syms += gettimeofday
-+ vdso-syms += clock_gettime
-+ vdso-syms += clock_getres
-+-endif
-+ vdso-syms += getcpu
-+ vdso-syms += flush_icache
-+ 
++ libBrokenLocale-routines = broken_cur_max
 +-- 
 +2.21.0
 +
-diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
-index 84f7b6ab9c..77ac411258 100644
---- a/configs/qemu_riscv32_virt_defconfig
-+++ b/configs/qemu_riscv32_virt_defconfig
-@@ -10,15 +10,10 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- # Filesystem
- BR2_TARGET_ROOTFS_EXT2=y
+diff --git a/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/localedef.hash b/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/localedef.hash
+new file mode 100644
+index 0000000000..f9b0eede9e
+--- /dev/null
++++ b/package/localedef/2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436/localedef.hash
+@@ -0,0 +1,7 @@
++# Locally calculated (fetched from Github)
++sha256  a5d4cbe7eceaefd8bce1104994379818169961b59346d2f3897966912237b1e6  localedef-2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436.tar.gz
++
++# Hashes for license files
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
++sha256  35bdb41dc0bcb10702ddacbd51ec4c0fe6fb3129f734e8c85fc02e4d3eb0ce3f  LICENSES
+diff --git a/package/localedef/localedef.hash b/package/localedef/localedef.hash
+index ee14fb16b8..5316f03b10 100644
+--- a/package/localedef/localedef.hash
++++ b/package/localedef/localedef.hash
+@@ -1,2 +1,2 @@
+-# Locally calculated
+-sha256 9a60f7cdab6fb39adf23a12102f2d950d5f07f0cd7e51e85ec327e07440a79c6  localedef-eglibc-2.14.1-r17443-ptx1.tar.bz2
++# This hash file is not used; instead, update the
++# hash files in the per-version sub-directories.
+diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
+index 11d9ba3848..880d868838 100644
+--- a/package/localedef/localedef.mk
++++ b/package/localedef/localedef.mk
+@@ -4,19 +4,46 @@
+ #
+ ################################################################################
  
--# Linux headers same as kernel, a 4.20 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_20=y
--
- # Kernel
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.20.17"
--BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
--BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/riscv32-virt/linux.config.fragment"
-+BR2_LINUX_KERNEL_DEFCONFIG="rv32"
-+BR2_LINUX_KERNEL_PATCH="board/qemu/riscv32-virt/0001-Revert-riscv-Use-latest-system-call-ABI.patch"
- BR2_LINUX_KERNEL_IMAGE=y
+-LOCALEDEF_VERSION = 2.14.1-r17443-ptx1
+-LOCALEDEF_SOURCE = localedef-eglibc-$(LOCALEDEF_VERSION).tar.bz2
+-LOCALEDEF_SITE = http://www.pengutronix.de/software/ptxdist/temporary-src
++# Use the same VERSION and SITE as target glibc
++# As in glibc.mk, generate version string using:
++#   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
++LOCALEDEF_VERSION = 2.29-11-ge28ad442e73b00ae2047d89c8cc7f9b2a0de5436
++LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
++LOCALEDEF_DEPENDENCIES = $(BR2_MAKE_HOST_DEPENDENCY)
  
- # Bootloader
+-HOST_LOCALEDEF_CONF_OPTS += \
+-	--prefix=/usr \
+-	--with-glibc=./eglibc
++HOST_LOCALEDEF_CONF_ENV += ac_cv_prog_MAKE="$(BR2_MAKE)"
+ 
+-HOST_LOCALEDEF_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -fgnu89-inline"
++# Even though we use the autotools-package infrastructure, we have to override
++# the default configure commands for since we have to build out-of-tree, but we
++# can't use the same 'symbolic link to configure' used with the gcc packages.
++define HOST_LOCALEDEF_CONFIGURE_CMDS
++	mkdir -p $(@D)/build
++	# Do the configuration
++	(cd $(@D)/build; \
++		$(HOST_LOCALEDEF_CONF_ENV) \
++		$(HOST_CONFIGURE_OPTS) \
++		$(SHELL) $(@D)/configure \
++		libc_cv_forced_unwind=yes \
++		libc_cv_ssp=no \
++		--target=$(GNU_HOST_NAME) \
++		--host=$(GNU_HOST_NAME) \
++		--build=$(GNU_HOST_NAME) \
++		--prefix=/usr \
++		--with-pkgversion="Buildroot" \
++		--without-cvs \
++		--disable-profile \
++		--without-gd \
++		--enable-obsolete-rpc)
++endef
++
++define HOST_LOCALEDEF_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(BR2_MAKE1) $(HOST_LOCALEDEF_MAKE_OPTS) \
++		-C $(@D)/build locale/others
++endef
+ 
+-# The makefile does not implement an install target
++# The makefile does not implement an install target for localedef
+ define HOST_LOCALEDEF_INSTALL_CMDS
+-	$(INSTALL) -D -m 0755 $(@D)/localedef $(HOST_DIR)/bin/localedef
++	$(INSTALL) -D -m 0755 $(@D)/build/locale/localedef $(HOST_DIR)/bin/localedef
+ endef
+ 
+ $(eval $(host-autotools-package))
 -- 
-2.22.0
+2.21.0
