@@ -1,45 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Jun 2019 14:34:04 +0200
-Subject: [Buildroot] [PATCH 04/27] package/libnss: re-enable package on
+Date: Wed, 19 Jun 2019 14:35:22 +0200
+Subject: [Buildroot] [git commit] package/stress-ng: re-enable package on
  microblaze
-In-Reply-To: <20190614210346.121013-5-giulio.benetti@micronovasrl.com>
-References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
- <20190614210346.121013-5-giulio.benetti@micronovasrl.com>
-Message-ID: <20190619143404.5a1452a6@windsurf>
+Message-ID: <20190619123537.9821E81484@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 14 Jun 2019 23:03:23 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5f9d78a4c4b5d3300aac923a372d14b9e4aa25e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-> index 484c79e9da..893ff80154 100644
-> --- a/package/libnss/libnss.mk
-> +++ b/package/libnss/libnss.mk
-> @@ -13,9 +13,15 @@ LIBNSS_DEPENDENCIES = libnspr sqlite zlib
->  LIBNSS_LICENSE = MPL-2.0
->  LIBNSS_LICENSE_FILES = nss/COPYING
->  
-> +LIBNSS_CFLAGS = $(TARGET_CFLAGS)
-> +
-> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85862),y)
-> +LIBNSS_CFLAGS += -O0
-> +endif
-> +
->  # Need to pass down TARGET_CFLAGS and TARGET_LDFLAGS
->  define LIBNSS_FIXUP_LINUX_MK
-> -	echo 'OS_CFLAGS += ${TARGET_CFLAGS}' >> $(@D)/nss/coreconf/Linux.mk
-> +	echo 'OS_CFLAGS += ${LIBNSS_CFLAGS}' >> $(@D)/nss/coreconf/Linux.mk
+Package stress-ng has a dependency to keyutils, but keyutils has been
+re-enabled with previous patch. Re-enable package by removing 'depends
+on !BR_microblaze' from stress-ng Config.in.
 
-Please use $(...) to reference make variables.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/stress-ng/Config.in | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
+index fe92a7eb40..4fcfa3554c 100644
+--- a/package/stress-ng/Config.in
++++ b/package/stress-ng/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_STRESS_NG
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	# perf.c needs PERF_COUNT_HW_REF_CPU_CYCLES
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
+-	depends on !BR2_microblaze # keyutils
+ 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2 and ARC
+ 	depends on !BR2_nios2
+ 	depends on !BR2_arc
+@@ -21,7 +20,7 @@ config BR2_PACKAGE_STRESS_NG
+ 	  http://kernel.ubuntu.com/~cking/stress-ng/
+ 
+ comment "stress-ng needs a glibc or uClibc toolchain w/ dynamic library, headers >= 3.3"
+-	depends on !BR2_microblaze && !BR2_nios2 && !BR2_arc
++	depends on !BR2_nios2 && !BR2_arc
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3 \
+ 		|| BR2_TOOLCHAIN_USES_MUSL
