@@ -1,43 +1,37 @@
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 19 Jun 2019 14:42:53 -0300
-Subject: [Buildroot] [PATCH] configs/mx51evk: Bump kernel version
-Message-ID: <20190619174253.24352-1-festevam@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 19 Jun 2019 20:09:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: drop wchar dependency on
+ IDN option
+Message-ID: <20190619180903.2467-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump the kernel version to 5.1.10.
+wchar dependency on IDN option has been added with commit
+126a2e75f5948b30f842862906fca8ed99ffff26 because of libintl
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+However libintl dependency has been dropped with commit
+bbcbed1829057121f9f9459f62f913626206e823 so remove unneeded wchar
+dependency
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- configs/mx51evk_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/dnsmasq/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/configs/mx51evk_defconfig b/configs/mx51evk_defconfig
-index 3c2d56132d..0cb8f476cd 100644
---- a/configs/mx51evk_defconfig
-+++ b/configs/mx51evk_defconfig
-@@ -2,8 +2,8 @@
- BR2_arm=y
- BR2_cortex_a8=y
+diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
+index 262aca688e..cec68a9eba 100644
+--- a/package/dnsmasq/Config.in
++++ b/package/dnsmasq/Config.in
+@@ -29,7 +29,6 @@ config BR2_PACKAGE_DNSMASQ_DNSSEC
  
--# Linux headers same as kernel, a 4.17 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
-+# Linux headers same as kernel, a 5.1 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
- 
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -28,7 +28,7 @@ BR2_TARGET_UBOOT_FORMAT_IMX=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.2"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.10"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx51-babbage"
+ config BR2_PACKAGE_DNSMASQ_IDN
+ 	bool "IDN support"
+-	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_LIBIDN
+ 	help
+ 	  Enable IDN support in dnsmasq.
 -- 
-2.17.1
+2.20.1
