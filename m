@@ -1,7 +1,7 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 19 Jun 2019 20:22:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libdin2: bump to version 2.2.0
-Message-ID: <20190619182235.5832-1-fontaine.fabrice@gmail.com>
+Date: Wed, 19 Jun 2019 20:24:22 +0200
+Subject: [Buildroot] [PATCH v2,1/1] package/libidn2: bump to version 2.2.0
+Message-ID: <20190619182422.6237-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,6 +10,9 @@ To: buildroot@busybox.net
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
+Changes v1 -> v2:
+ - Fix package's name
+
  package/libidn2/libidn2.hash | 2 +-
  package/libidn2/libidn2.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
