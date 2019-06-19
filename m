@@ -1,55 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 19 Jun 2019 13:50:40 +0200
-Subject: [Buildroot] [PATCH] toolchain: bump ARC tools to arc-2019.03
- release
-In-Reply-To: <20190619092532.40543-1-Evgeniy.Didin@synopsys.com>
-References: <20190619092532.40543-1-Evgeniy.Didin@synopsys.com>
-Message-ID: <20190619135040.188ebb3d@windsurf>
+Date: Wed, 19 Jun 2019 13:51:21 +0200
+Subject: [Buildroot] [git commit] package/dnsmasq: bump version to 2.80
+Message-ID: <20190619115127.2E47A82283@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 19 Jun 2019 12:25:32 +0300
-Evgeniy Didin <Evgeniy.Didin@synopsys.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=26c876cd072bcceb67e11b4d173bd848f89476c3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> This commit finally bumps ARC tools to the most recent arc-2018.09 release version.
-> 
-> ARC GNU tools of version arc-2018.09 bring some quite significant changes like:
->  * Binutils v2.32.51.20190308 with additional ARC patches
->  * GCC 8.3.1 with additional ARC patches
->  * glibc 2.29 with additional ARC patches
-> More information on this release could be found here:
->  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2019.03-release
-> 
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: arc-buildroot at synopsys.com
-> Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-> ---
->  package/binutils/Config.in.host                                       | 2 +-
->  .../0001-poison-system-directories.patch                              | 0
->  package/binutils/binutils.hash                                        | 2 +-
->  package/binutils/binutils.mk                                          | 4 ++--
->  package/gcc/Config.in.host                                            | 2 +-
->  .../{arc-2019.03-rc1 => arc-2019.03-release}/0100-uclibc-conf.patch   | 0
->  package/gcc/gcc.hash                                                  | 2 +-
->  package/gdb/Config.in.host                                            | 2 +-
->  package/gdb/gdb.hash                                                  | 2 +-
->  package/glibc/{arc-2019.03-rc1 => arc-2019.03-release}/glibc.hash     | 2 +-
->  package/glibc/glibc.mk                                                | 2 +-
->  11 files changed, 10 insertions(+), 10 deletions(-)
->  rename package/binutils/{arc-2019.03-rc1 => arc-2019.03-release}/0001-poison-system-directories.patch (100%)
->  rename package/gcc/{arc-2019.03-rc1 => arc-2019.03-release}/0100-uclibc-conf.patch (100%)
->  rename package/glibc/{arc-2019.03-rc1 => arc-2019.03-release}/glibc.hash (75%)
+Also automatically enable UBus support when UBus itself is enabled.
 
-Applied to master after fixing the typoes in the commit log that were
-pointed by Baruch.
+Signed-off-by: Jan Willem Janssen <j.w.janssen@lxtreme.nl>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dnsmasq/dnsmasq.hash | 1 +
+ package/dnsmasq/dnsmasq.mk   | 7 ++++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dnsmasq/dnsmasq.hash b/package/dnsmasq/dnsmasq.hash
+index 322f8df5cc..18a539277e 100644
+--- a/package/dnsmasq/dnsmasq.hash
++++ b/package/dnsmasq/dnsmasq.hash
+@@ -1,6 +1,7 @@
+ # Locally calculated after checking pgp signature
+ # http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.79.tar.xz.asc
+ sha256	78ad74f5ca14fd85a8bac93f764cd9d60b27579e90eabd3687ca7b030e67861f	dnsmasq-2.79.tar.xz
++sha256	cdaba2785e92665cf090646cba6f94812760b9d7d8c8d0cfb07ac819377a63bb	dnsmasq-2.80.tar.xz
+ # Locally calculated
+ sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING-v3
+diff --git a/package/dnsmasq/dnsmasq.mk b/package/dnsmasq/dnsmasq.mk
+index 79c5619966..366cebf012 100644
+--- a/package/dnsmasq/dnsmasq.mk
++++ b/package/dnsmasq/dnsmasq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DNSMASQ_VERSION = 2.79
++DNSMASQ_VERSION = 2.80
+ DNSMASQ_SOURCE = dnsmasq-$(DNSMASQ_VERSION).tar.xz
+ DNSMASQ_SITE = http://thekelleys.org.uk/dnsmasq
+ DNSMASQ_MAKE_ENV = $(TARGET_MAKE_ENV) CC="$(TARGET_CC)"
+@@ -67,6 +67,11 @@ define DNSMASQ_INSTALL_DBUS
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_UBUS),y)
++DNSMASQ_DEPENDENCIES += ubus
++DNSMASQ_COPTS += -DHAVE_UBUS
++endif
++
+ define DNSMASQ_FIX_PKGCONFIG
+ 	$(SED) 's^PKG_CONFIG = pkg-config^PKG_CONFIG = $(PKG_CONFIG_HOST_BINARY)^' \
+ 		$(DNSMASQ_DIR)/Makefile
