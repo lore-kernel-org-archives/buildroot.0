@@ -1,93 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Jun 2019 21:51:51 +0200
-Subject: [Buildroot] [git commit] package/python-colorama: new package
-Message-ID: <20190620200119.8262A82BD0@busybox.osuosl.org>
+Date: Thu, 20 Jun 2019 22:01:56 +0200
+Subject: [Buildroot] [git commit] package/python-iptables: new package
+Message-ID: <20190620200119.8BE4781509@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff85ea4fdfb47c9657ff4842bd96a618e3ab5a9b
+commit: https://git.buildroot.net/buildroot/commit/?id=b7ad8d7879aba739ebba0df63bb6ce9461cda2d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This package provides a simple cross-platform API for printing
-colored terminal text.
+This package provides Python bindings for iptables.
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+[Thomas: add license file]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  DEVELOPERS                                   |  1 +
  package/Config.in                            |  1 +
- package/python-colorama/Config.in            |  6 ++++++
- package/python-colorama/python-colorama.hash |  5 +++++
- package/python-colorama/python-colorama.mk   | 14 ++++++++++++++
+ package/python-iptables/Config.in            |  7 +++++++
+ package/python-iptables/python-iptables.hash |  5 +++++
+ package/python-iptables/python-iptables.mk   | 13 +++++++++++++
  5 files changed, 27 insertions(+)
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 9d806db6f7..10e97ed53c 100644
+index 10e97ed53c..b416cd45e8 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1525,6 +1525,7 @@ F:	package/policycoreutils/
- F:	package/proftpd/
- F:	package/protobuf-c/
+@@ -1527,6 +1527,7 @@ F:	package/protobuf-c/
  F:	package/protobuf/
-+F:	package/python-colorama/
+ F:	package/python-colorama/
  F:	package/python-flask-cors/
++F:	package/python-iptables/
  F:	package/python-ipy/
  F:	package/python-posix-ipc/
+ F:	package/python-pypcap/
 diff --git a/package/Config.in b/package/Config.in
-index 1ef6bcab22..9130140868 100644
+index 9130140868..07edde8d42 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -853,6 +853,7 @@ menu "External python modules"
- 	source "package/python-cherrypy/Config.in"
- 	source "package/python-click/Config.in"
- 	source "package/python-coherence/Config.in"
-+	source "package/python-colorama/Config.in"
- 	source "package/python-configobj/Config.in"
- 	source "package/python-configshell-fb/Config.in"
- 	source "package/python-constantly/Config.in"
-diff --git a/package/python-colorama/Config.in b/package/python-colorama/Config.in
+@@ -914,6 +914,7 @@ menu "External python modules"
+ 	source "package/python-iowait/Config.in"
+ 	source "package/python-ipaddr/Config.in"
+ 	source "package/python-ipaddress/Config.in"
++	source "package/python-iptables/Config.in"
+ 	source "package/python-ipy/Config.in"
+ 	source "package/python-ipython/Config.in"
+ 	source "package/python-ipython-genutils/Config.in"
+diff --git a/package/python-iptables/Config.in b/package/python-iptables/Config.in
 new file mode 100644
-index 0000000000..911effb3d3
+index 0000000000..e55359963e
 --- /dev/null
-+++ b/package/python-colorama/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_COLORAMA
-+	bool "python-colorama"
++++ b/package/python-iptables/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_IPTABLES
++	bool "python-iptables"
++	select BR2_PACKAGE_IPTABLES # runtime dependency
 +	help
-+	  Cross-platform colored terminal text.
++	  Python bindings for iptables.
 +
-+	  https://github.com/tartley/colorama
-diff --git a/package/python-colorama/python-colorama.hash b/package/python-colorama/python-colorama.hash
++	  https://github.com/ldx/python-iptables
+diff --git a/package/python-iptables/python-iptables.hash b/package/python-iptables/python-iptables.hash
 new file mode 100644
-index 0000000000..06f61f80af
+index 0000000000..3c83a15b8c
 --- /dev/null
-+++ b/package/python-colorama/python-colorama.hash
++++ b/package/python-iptables/python-iptables.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/colorama/json
-+md5	f927529cd1735f6f50ee2c61628e9c1f  colorama-0.4.1.tar.gz
-+sha256	05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d  colorama-0.4.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256	cac35c02686e5d04a5a7140bfb3b36e73aed496656e891102e428886d7930318  LICENSE.txt
-diff --git a/package/python-colorama/python-colorama.mk b/package/python-colorama/python-colorama.mk
++# md5, sha256 from https://pypi.org/pypi/python-iptables/json
++md5	3761a77c28ca0adc69f4e0e11af2f321  python-iptables-0.13.0.tar.gz
++sha256	53b09257467681d7ea547cd3140eccd8c70effb3748af4b56ffed2f6011189e7  python-iptables-0.13.0.tar.gz
++# Locally calculated
++sha256  b827789c74144d9bb92595ed3bc568aef767a7e8d930fba61c2cdd9f6ec27599  NOTICE
+diff --git a/package/python-iptables/python-iptables.mk b/package/python-iptables/python-iptables.mk
 new file mode 100644
-index 0000000000..2f4bc5e1f1
+index 0000000000..4aed474e39
 --- /dev/null
-+++ b/package/python-colorama/python-colorama.mk
-@@ -0,0 +1,14 @@
++++ b/package/python-iptables/python-iptables.mk
+@@ -0,0 +1,13 @@
 +################################################################################
 +#
-+# python-colorama
++# python-iptables
 +#
 +################################################################################
 +
-+PYTHON_COLORAMA_VERSION = 0.4.1
-+PYTHON_COLORAMA_SOURCE = colorama-$(PYTHON_COLORAMA_VERSION).tar.gz
-+PYTHON_COLORAMA_SITE = https://files.pythonhosted.org/packages/76/53/e785891dce0e2f2b9f4b4ff5bc6062a53332ed28833c7afede841f46a5db
-+PYTHON_COLORAMA_SETUP_TYPE = setuptools
-+PYTHON_COLORAMA_LICENSE = BSD-3-Clause
-+PYTHON_COLORAMA_LICENSE_FILES = LICENSE.txt
++PYTHON_IPTABLES_VERSION = 0.13.0
++PYTHON_IPTABLES_SITE = https://files.pythonhosted.org/packages/6e/3a/866f5b1bccc6a4d94811f84304d700da14518ff55b80e08ff2241b3221bf
++PYTHON_IPTABLES_SETUP_TYPE = setuptools
++PYTHON_IPTABLES_LICENSE = Apache-2.0
++PYTHON_IPTABLES_LICENSE_FILES = NOTICE
 +
 +$(eval $(python-package))
