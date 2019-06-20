@@ -1,44 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Jun 2019 16:01:17 +0200
-Subject: [Buildroot] [git commit] package/libidn2: bump to version 2.2.0
-Message-ID: <20190620140045.812BB814D4@busybox.osuosl.org>
+Date: Thu, 20 Jun 2019 16:01:45 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/libidn2: bump to version 2.2.0
+In-Reply-To: <20190619182422.6237-1-fontaine.fabrice@gmail.com>
+References: <20190619182422.6237-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190620160145.55269a26@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4455af3f7fe154b9928efa1ff8601ffec92c5b1a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 19 Jun 2019 20:24:22 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libidn2/libidn2.hash | 2 +-
- package/libidn2/libidn2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+> Changes v1 -> v2:
+>  - Fix package's name
 
-diff --git a/package/libidn2/libidn2.hash b/package/libidn2/libidn2.hash
-index 300cedb479..3dae7f7590 100644
---- a/package/libidn2/libidn2.hash
-+++ b/package/libidn2/libidn2.hash
-@@ -1,5 +1,5 @@
- # Calculated locally after checking signature
--sha256	032398dbaa9537af43f51a8d94e967e3718848547b1b2a4eb3138b20cad11d32	libidn2-2.1.0.tar.gz
-+sha256	fc734732b506d878753ec6606982bf7b936e868c25c30ddb0d83f7d7056381fe	libidn2-2.2.0.tar.gz
- 
- # Hash for license files:
- sha256	73483f797a83373fca1b968c11785b98c4fc4803cdc7d3210811ca8b075d6d76	COPYING
-diff --git a/package/libidn2/libidn2.mk b/package/libidn2/libidn2.mk
-index 7112553fea..10f179ebcc 100644
---- a/package/libidn2/libidn2.mk
-+++ b/package/libidn2/libidn2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBIDN2_VERSION = 2.1.0
-+LIBIDN2_VERSION = 2.2.0
- LIBIDN2_SITE = $(BR2_GNU_MIRROR)/libidn
- LIBIDN2_LICENSE := GPL-2.0+ or LGPL-3.0+ (library)
- LIBIDN2_LICENSE_FILES = COPYING COPYINGv2 COPYING.LESSERv3 COPYING.unicode
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
