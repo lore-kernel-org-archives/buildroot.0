@@ -1,35 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Jun 2019 15:57:15 +0200
-Subject: [Buildroot] [PATCH v2 2/2] configs/qemu_riscv32_virt: Update to
- 5.1 kernel
-In-Reply-To: <20190619165406.19615-2-alistair.francis@wdc.com>
-References: <20190619165406.19615-1-alistair.francis@wdc.com>
- <20190619165406.19615-2-alistair.francis@wdc.com>
-Message-ID: <20190620155715.23c40f26@windsurf>
+Date: Thu, 20 Jun 2019 15:58:22 +0200
+Subject: [Buildroot] [git commit] package/dnsmasq: drop wchar dependency on
+ IDN option
+Message-ID: <20190620135752.5AB42822B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 19 Jun 2019 09:54:06 -0700
-Alistair Francis <alistair.francis@wdc.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a895bd3426d3f80327600becdc40e46ae6c33a40
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->  # Kernel
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.20.17"
-> -BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> -BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/riscv32-virt/linux.config.fragment"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.12"
-> +BR2_LINUX_KERNEL_DEFCONFIG="rv32"
-> +BR2_LINUX_KERNEL_PATCH="board/qemu/riscv32-virt/0001-Revert-riscv-Use-latest-system-call-ABI.patch"
+wchar dependency on IDN option has been added with commit
+126a2e75f5948b30f842862906fca8ed99ffff26 because of libintl
 
-We prefer using the BR2_GLOBAL_PATCH_DIR mechanism nowadays, so I've
-adjusted your patch to use that and applied. Thanks!
+However libintl dependency has been dropped with commit
+bbcbed1829057121f9f9459f62f913626206e823 so remove unneeded wchar
+dependency
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dnsmasq/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/package/dnsmasq/Config.in b/package/dnsmasq/Config.in
+index 262aca688e..cec68a9eba 100644
+--- a/package/dnsmasq/Config.in
++++ b/package/dnsmasq/Config.in
+@@ -29,7 +29,6 @@ config BR2_PACKAGE_DNSMASQ_DNSSEC
+ 
+ config BR2_PACKAGE_DNSMASQ_IDN
+ 	bool "IDN support"
+-	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_LIBIDN
+ 	help
+ 	  Enable IDN support in dnsmasq.
