@@ -1,133 +1,48 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Jun 2019 21:43:45 +0200
-Subject: [Buildroot] [PATCH 2/4] package: remove 'v' prefix from
- tarball-fetched packages
-In-Reply-To: <1835cbdf-374d-97ed-5811-ee58b77a8fa0@bootlin.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 20 Jun 2019 21:46:15 +0200
+Subject: [Buildroot] [PATCH 1/4] package: remove 'v' prefix from
+ github-fetched packages
+In-Reply-To: <348e13f5-efeb-7136-3315-ce437b12dad6@mind.be>
 References: <20190612064209.23619-1-victor.huesca@bootlin.com>
- <20190612064209.23619-3-victor.huesca@bootlin.com>
- <3afd50b3-5cf1-d240-a7b9-f2f352411f70@mind.be>
- <20190620081339.48ebdbb5@windsurf>
- <1835cbdf-374d-97ed-5811-ee58b77a8fa0@bootlin.com>
-Message-ID: <0ad8b81e-0a85-cf11-b98c-0e7390b4d160@mind.be>
+ <20190612064209.23619-2-victor.huesca@bootlin.com>
+ <35a7118e-cdf1-b29e-bceb-6c02ecef187e@mind.be>
+ <20190620083110.4986e5fa@windsurf>
+ <348e13f5-efeb-7136-3315-ce437b12dad6@mind.be>
+Message-ID: <20190620214615.5c60748c@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+On Thu, 20 Jun 2019 21:33:44 +0200
+Arnout Vandecappelle <arnout@mind.be> wrote:
 
-
-On 20/06/2019 11:23, Victor Huesca wrote:
+> On 20/06/2019 08:31, Thomas Petazzoni wrote:
+> > On Wed, 19 Jun 2019 22:50:01 +0200
+> > Arnout Vandecappelle <arnout@mind.be> wrote:  
+> [snip]
+> >>  It would also be nice if we had some formal way of checking that new packages
+> >> do this correctly. Actually, it would be good if pkg-stats could generate a
+> >> report in a human-readable format so it could be used as part of the review flow
+> >> to check if the mapping with release-monitoring is OK (plus all the other things
+> >> pkg-stats evaluates).  
+> > 
+> > Hm, yes, could be an interesting idea. Just a new pkg-stats option ?  
 > 
-> 
-> Le 20/06/2019 ? 08:13, Thomas Petazzoni a ?crit?:
->> Hello,
->>
->> On Wed, 19 Jun 2019 23:06:22 +0200
->> Arnout Vandecappelle <arnout@mind.be> wrote:
->>
->>>> -FLANNEL_VERSION = v0.5.5
->>>> +FLANNEL_VERSION = 0.5.5
->>>>  FLANNEL_SITE = https://github.com/coreos/flannel/archive
->>>> -FLANNEL_SOURCE = $(FLANNEL_VERSION).tar.gz
->>>> +FLANNEL_SOURCE = v$(FLANNEL_VERSION).tar.gz
->>>>  
->>>>  FLANNEL_LICENSE = Apache-2.0
->>>>  FLANNEL_LICENSE_FILES = LICENSE
->>>>  
->>>> -FLANNEL_LDFLAGS = -X github.com/coreos/flannel/version.Version=$(FLANNEL_VERSION)
->>>> +FLANNEL_LDFLAGS = -X github.com/coreos/flannel/version.Version=v$(FLANNEL_VERSION)  
->>>
->>>  I don't think this is really needed. Adam, do you think the v belongs in there
->>> or not? BTW, if the v is removed, it should be noted in the commit log.
->>
->> Let's see Adam's answer, but what Victor did here is what preserves the
->> existing behavior.
-> 
-> Yep, that what I tried to do here.
+>  Actually, since pkg-stats is in support/scripts it's currently not supposed to
+> be user-visible. So I'd rather turn it around: make the text output to stdout
+> the default, and add an option to generate HTML.
 
- Fair enough.
+While I agree, I don't understand the relationship with pkg-stats being
+in support/scripts. Are you saying that we should then add a "make
+<pkg>-check-upstream-version" target that would call pkg-stats with the
+right options ?
 
+I'm a bit confused here.
 
->>>> -PRU_SOFTWARE_SUPPORT_VERSION = v5.1.0
->>>> -PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/$(PRU_SOFTWARE_SUPPORT_VERSION)?
->>>> +PRU_SOFTWARE_SUPPORT_VERSION = 5.1.0
->>>> +PRU_SOFTWARE_SUPPORT_SITE = https://git.ti.com/pru-software-support-package/pru-software-support-package/archive-tarball/$(PRU_SOFTWARE_SUPPORT_VERSION)  
->>>
->>>  It might be just me, but this doesn't look correct... Definitely should be
->>> explained in the commit message (and therefore, a separate patch).
->>
->> Indeed, this looks weird, a "v" should have been added before $(PRU_SOFTWARE_SUPPORT_VERSION)
-> 
-> I double checked this package and you're right.
-> This one is sneaky since a file with .tar.gz extension is downloaded
-> anyway but in reality it is only html page...
-
- The hash would catch it, and since the source name has changed it would not be
-retrieved from sources.buildroot.org, so a simple 'make pru-software-support'
-would have caught it...
-
-
-> Anyway the tarball is not available anymore on the website and I did not
-> found the location of releases tarball. However the git repo is still
-> available (cf.
-> https://git.ti.com/pru-software-support-package/pru-software-support-package)
-> so I can fix this package to make it use git instead in a separate patch?
-
- I believe git.ti.com has automatic tarball creation - there's another package
-uses it I believe. Most likely, however, that tarball will have a different
-hash, so you should compare the tarball contents to check if it's really the same.
-
-> 
->>>  Otherwise looks good to me. It would be nice to generally split it up into
->>> patches that only contain changes that are really the same pattern. So e.g. the
->>> spidev-test patch is a little different, so it should be a separate patch.
->>>
->>>  Also, I wonder it it's a good idea to make this change for all packages. It
->>> might be better to limit to packages that actually exist on
->>> release-monitoring.org. Otherwise, it might happen that when it appears on
->>> release-monitoring, some package *does* have a prefix, and that would be silly...
->>
->> Well, I think if a package on release-monitoring.org has a prefix, then
->> it is its release-monitoring.org definition that is wrong and should be
->> fixed.
-> 
-> I haven't seen yet a prefix that require to be kept on
-> release-monitoring. The only packages that have a suffix in addition to
-> their version number is when this suffix correspond to beta and the
-> actual release kept the same version number.
-
- Kodi has the -Leia suffix, but I think that that's appropriate.
-
-> If you find any unnecessary prefix on release-monitoring don't hesitate
-> to signal it to me so I can fix it.
-> 
->>>  Obviously, one way to make sure all of them are on release-monitoring is to add
->>> the ones which are missing :-)
->>
->> Victor has already added on release-monitoring.org a number of our
->> packages. But it's really a massive effort, and I don't think we can
->> expect one single person to do it all, it will be a very gradual
->> process.
-
- Indeed, so to know which ones to add, a good approach is to do it for the ones
-you're looking at anyway :-)
-
-
-> I'm working on a script that would add a mapping for packages already
-> present on release-monitoring but that doesn't have a mapping to buildroot.
-> The goal is not to add every package but to reduce drastically the
-> simplest cases where buildroot tends to add a prefix not present in the
-> RM entry (like lua, python or xorg packages).
-
- Ah, so the idea is to add a release-monitoring mapping for those, rather than
-handling it in pkg-stats? That's probably a good idea indeed.
-
- Note that the script would still need manual verification of each affected
-package if it really is the same one. I've seen a few where the Buildroot guess
-was quite off, usually because there are a few packages with very similar names
-on release-monitoring (typically because bindings for several languages have the
-same name).
-
- Regards,
- Arnout
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
