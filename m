@@ -1,12 +1,12 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 20 Jun 2019 11:37:50 +0200
-Subject: [Buildroot] [PATCH 08/27] package/boost: allow building on
- microblaze
-In-Reply-To: <20190619175611.085941ec@windsurf>
+Date: Thu, 20 Jun 2019 11:39:47 +0200
+Subject: [Buildroot] [PATCH 09/27] package/boost: work around gcc bug
+ 85180 for boost-fiber option
+In-Reply-To: <20190619175821.422e1e0b@windsurf>
 References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
- <20190614210346.121013-9-giulio.benetti@micronovasrl.com>
- <20190619175611.085941ec@windsurf>
-Message-ID: <56623956-7711-ab78-4bb6-daa8a4bef47e@micronovasrl.com>
+ <20190614210346.121013-10-giulio.benetti@micronovasrl.com>
+ <20190619175821.422e1e0b@windsurf>
+Message-ID: <f24aacfa-2777-2507-cba4-a0947a9c0326@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,54 +15,58 @@ To: buildroot@busybox.net
 
 Hello Thomas,
 
-Il 19/06/2019 17:56, Thomas Petazzoni ha scritto:
-> Hello,
-> 
-> On Fri, 14 Jun 2019 23:03:27 +0200
+Il 19/06/2019 17:58, Thomas Petazzoni ha scritto:
+> On Fri, 14 Jun 2019 23:03:28 +0200
 > Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 > 
->> Package boost builds correctly on Microblaze with Gcc 4.9/5/6/7/8/9 so
->> add 'default y if BR2_microblaze' to
->> BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS.
+>> With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+>> 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+>> shows up when building boost with boost-fiber enabled and optimization
+>> but not when building with -O0. To work around this, if
+>> BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y and boost-fiber is selected we force
+>> using -O0.
 >>
 >> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 >> ---
->>   package/boost/Config.in | 1 +
->>   1 file changed, 1 insertion(+)
+>>   package/boost/Config.in | 5 ++---
+>>   package/boost/boost.mk  | 4 ++++
+>>   2 files changed, 6 insertions(+), 3 deletions(-)
 >>
 >> diff --git a/package/boost/Config.in b/package/boost/Config.in
->> index 4e6bbff6df..783e86dc09 100644
+>> index 783e86dc09..88b964847f 100644
 >> --- a/package/boost/Config.in
 >> +++ b/package/boost/Config.in
->> @@ -78,6 +78,7 @@ config BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
->>   	default y if BR2_mipsel
->>   	default y if BR2_powerpc
->>   	default y if BR2_x86_64
->> +	default y if BR2_microblaze
+>> @@ -137,7 +137,6 @@ config BR2_PACKAGE_BOOST_FIBER
+>>   	# since mips32r2/mips64r2.
+>>   	depends on !BR2_MIPS_CPU_MIPS32 && !BR2_MIPS_CPU_MIPS64
+>>   	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
+>> -	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180
 > 
-> The commit title is misleading: it's not boost that you allow to build
-> on Microblaze (this is already possible), but the "context" module of
-> boost.
+> Since we are probably not going to allow building boost-context on
+> Microblaze, I think this patch should simply be to remove the
+> BR2_TOOLCHAIN_HAS_GCC_BUG_85180 dependency. Indeed, this option already
+> has the BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS dependency that
+> prevents from being selected on Microblaze.
 > 
-> However, reading the page
-> https://www.boost.org/doc/libs/1_70_0/libs/context/doc/html/context/architectures.html,
-> it doesn't seem like Microblaze is part of the supported architectures.
-> 
-> Below the table, there is a note that says "If the architecture is not
-> supported but the platform provides ucontext_t, Boost.Context should be
-> compiled with BOOST_USE_UCONTEXT and b2 property
-> context-impl=ucontext.".
-> 
-> But we're not passing BOOST_USE_UCONTEXT nor context-impl=ucontext. Is
-> this happening automatically somehow ?
-> 
-> So overall, I think this needs more research/verification, and I'm not
-> sure it's really worth the effort. Whoever cares enough about
-> Microblaze and needs the boost-context module can always work on this.
+> If we ever add Microblaze to BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS,
+> and the gcc bug is still there, then we will see build failures and we
+> can fix them at this point.
 
-Yes, I agree. I drop this patch.
+Yes, you're right.
 
-Thank you
+>> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
+>> +BOOST_TARGET_CXXFLAGS += -O0
+>> +endif
+> 
+> Also, this choice had the drawback that Boost was always built with -O0
+> on Microblaze, even if the Fiber module was not selected.
+
+Oh yes, I've missed that.
+
+Anyway I will only remove BR2_TOOLCHAIN_HAS_GCC_BUG_85180 dependency and 
+reword.
+
+Thank you!
 -- 
 Giulio Benetti
 CTO
