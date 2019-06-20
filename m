@@ -1,45 +1,36 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Jun 2019 21:46:15 +0200
-Subject: [Buildroot] [PATCH 1/4] package: remove 'v' prefix from
- github-fetched packages
-In-Reply-To: <348e13f5-efeb-7136-3315-ce437b12dad6@mind.be>
-References: <20190612064209.23619-1-victor.huesca@bootlin.com>
- <20190612064209.23619-2-victor.huesca@bootlin.com>
- <35a7118e-cdf1-b29e-bceb-6c02ecef187e@mind.be>
- <20190620083110.4986e5fa@windsurf>
- <348e13f5-efeb-7136-3315-ce437b12dad6@mind.be>
-Message-ID: <20190620214615.5c60748c@windsurf>
+Date: Thu, 20 Jun 2019 21:49:50 +0200
+Subject: [Buildroot] [PATCH/next 1/1] package/x11r7/xserver_xorg-server:
+ bump version to 1.20.5
+In-Reply-To: <20190602100321.7601-1-bernd.kuhls@t-online.de>
+References: <20190602100321.7601-1-bernd.kuhls@t-online.de>
+Message-ID: <20190620214950.0a3a0c87@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 20 Jun 2019 21:33:44 +0200
-Arnout Vandecappelle <arnout@mind.be> wrote:
+On Sun,  2 Jun 2019 12:03:21 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> On 20/06/2019 08:31, Thomas Petazzoni wrote:
-> > On Wed, 19 Jun 2019 22:50:01 +0200
-> > Arnout Vandecappelle <arnout@mind.be> wrote:  
-> [snip]
-> >>  It would also be nice if we had some formal way of checking that new packages
-> >> do this correctly. Actually, it would be good if pkg-stats could generate a
-> >> report in a human-readable format so it could be used as part of the review flow
-> >> to check if the mapping with release-monitoring is OK (plus all the other things
-> >> pkg-stats evaluates).  
-> > 
-> > Hm, yes, could be an interesting idea. Just a new pkg-stats option ?  
-> 
->  Actually, since pkg-stats is in support/scripts it's currently not supposed to
-> be user-visible. So I'd rather turn it around: make the text output to stdout
-> the default, and add an option to generate HTML.
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  .../0001-modesettings-needs-dri2.patch                 |  0
+>  ...02-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch |  0
+>  .../0003-Remove-check-for-useSIGIO-option.patch        |  0
+>  .../0004-include-misc.h-fix-uClibc-build.patch         |  0
+>  ...hw-xwayland-Makefile.am-fix-build-without-glx.patch |  0
+>  package/x11r7/xserver_xorg-server/Config.in            |  4 ++--
+>  .../x11r7/xserver_xorg-server/xserver_xorg-server.hash | 10 +++++-----
+>  7 files changed, 7 insertions(+), 7 deletions(-)
+>  rename package/x11r7/xserver_xorg-server/{1.20.4 => 1.20.5}/0001-modesettings-needs-dri2.patch (100%)
+>  rename package/x11r7/xserver_xorg-server/{1.20.4 => 1.20.5}/0002-configure.ac-Fix-check-for-CLOCK_MONOTONIC.patch (100%)
+>  rename package/x11r7/xserver_xorg-server/{1.20.4 => 1.20.5}/0003-Remove-check-for-useSIGIO-option.patch (100%)
+>  rename package/x11r7/xserver_xorg-server/{1.20.4 => 1.20.5}/0004-include-misc.h-fix-uClibc-build.patch (100%)
+>  rename package/x11r7/xserver_xorg-server/{1.20.4 => 1.20.5}/0005-hw-xwayland-Makefile.am-fix-build-without-glx.patch (100%)
 
-While I agree, I don't understand the relationship with pkg-stats being
-in support/scripts. Are you saying that we should then add a "make
-<pkg>-check-upstream-version" target that would call pkg-stats with the
-right options ?
-
-I'm a bit confused here.
+Applied to master, thanks.
 
 Thomas
 -- 
