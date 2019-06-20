@@ -1,114 +1,153 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Jun 2019 22:32:29 +0200
-Subject: [Buildroot] [PATCH 0/4] Sanetize packages version
-In-Reply-To: <a5f09272-46f4-5092-8f4f-12d319b7266c@bootlin.com>
-References: <20190612064209.23619-1-victor.huesca@bootlin.com>
- <20190612092624.1ca7836d@windsurf>
- <627e16bb-a937-a00e-7d03-7373c69433ca@bootlin.com>
- <20190612165020.441113ee@windsurf>
- <a5f09272-46f4-5092-8f4f-12d319b7266c@bootlin.com>
-Message-ID: <da51251f-4903-fd0c-0e49-7cb0d9f5ea3c@mind.be>
+From: Adam Duskett <aduskett@gmail.com>
+Date: Thu, 20 Jun 2019 16:38:10 -0400
+Subject: [Buildroot] [PATCH 1/1] package/libfribidi: bump to version
+ v1.0.5
+In-Reply-To: <874l51ohme.fsf@tarshish>
+References: <20190606171720.79017-1-aduskett@gmail.com>
+ <874l51ohme.fsf@tarshish>
+Message-ID: <CAFSsvmoeuLn7h3hyVDN+Va2dhuQJsFyyF6hfTPwNn7CLGLdGAA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Victor,
+Hey Baruch;
 
- Just to be clear: for these complex cases, it's better to make patches per
-individual package
+On Fri, Jun 7, 2019 at 5:43 AM Baruch Siach <baruch@tkos.co.il> wrote:
+>
+> Hi Adam,
+>
+> On Thu, Jun 06 2019, aduskett wrote:
+> > From: Adam Duskett <Aduskett@gmail.com>
+> >
+> > Changes include:
+> >   - Changing the URL to GitHub, as the old URL was no longer valid resulting in
+> >     the tar file being the HTML from www.fribidi.org.
+> >
+> >   - Switching the package to a meson package.
+> >
+> >   - Adding fix-meson.patch from
+> >     http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-support/fribidi/fribidi/meson.patch
+> >     which fixes the error: "Can not use target gen-unicode-version as a
+> >     generator because it is cross-built and no exe wrapper is defined."
+> >
+> >   - Add a sha256 hash for the license file.
+> >
+> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> > ---
+> >  package/libfribidi/0001-fix-meson.patch | 42 +++++++++++++++++++++++++
+> >  package/libfribidi/libfribidi.hash      |  5 +--
+> >  package/libfribidi/libfribidi.mk        | 16 +++-------
+> >  3 files changed, 50 insertions(+), 13 deletions(-)
+> >  create mode 100644 package/libfribidi/0001-fix-meson.patch
+> >
+> > diff --git a/package/libfribidi/0001-fix-meson.patch b/package/libfribidi/0001-fix-meson.patch
+> > new file mode 100644
+> > index 0000000000..638d2dd140
+> > --- /dev/null
+> > +++ b/package/libfribidi/0001-fix-meson.patch
+> > @@ -0,0 +1,42 @@
+> > +From f5feb6c599adb52f24656f8589868039b0d14272 Mon Sep 17 00:00:00 2001
+> > +From: Heiko Becker <heirecka@exherbo.org>
+> > +Date: Fri, 7 Sep 2018 20:57:11 +0200
+> > +Subject: [PATCH] Build generator executables natively
+> > +
+> > +They are run during the build and not installed in the end. Without
+> > +this one gets the following error from meson: "ERROR: Can not use
+> > +target gen-unicode-version as a generator because it is cross-built
+> > +and no exe wrapper is defined. You might want to set it to native
+> > +instead."
+> > +
+> > +Closes #87.
+> > +Signed-off-by: Ross Burton <ross.burton@intel.com>
+> > +Signed-off-by: Adam Duskett <aduskett@gmail.com>
+> > +---
+> > + gen.tab/meson.build | 6 ++++--
+> > + 1 file changed, 4 insertions(+), 2 deletions(-)
+> > +
+> > +diff --git a/gen.tab/meson.build b/gen.tab/meson.build
+> > +index 6006d98..8c21e98 100644
+> > +--- a/gen.tab/meson.build
+> > ++++ b/gen.tab/meson.build
+> > +@@ -33,7 +33,8 @@ gen_unicode_version = executable('gen-unicode-version',
+> > +   'gen-unicode-version.c',
+> > +   include_directories: incs,
+> > +   c_args: native_args,
+> > +-  install: false)
+> > ++  install: false,
+> > ++  native: true)
+> > +
+> > + fribidi_unicode_version_h = custom_target('fribidi-unicode-version.h',
+> > +   input: files('unidata/ReadMe.txt', 'unidata/BidiMirroring.txt'),
+> > +@@ -67,7 +68,8 @@ foreach tab : tabs
+> > +     gen_prog_src, 'packtab.c',
+> > +     include_directories: incs,
+> > +     c_args: native_args,
+> > +-    install: false)
+> > ++    install: false,
+> > ++    native: true)
+> > +
+> > +   tab_inc_file = custom_target(gen_prog_name,
+> > +     input: gen_prog_inputs,
+> > diff --git a/package/libfribidi/libfribidi.hash b/package/libfribidi/libfribidi.hash
+> > index 79b5dd3185..d2c71d0cfe 100644
+> > --- a/package/libfribidi/libfribidi.hash
+> > +++ b/package/libfribidi/libfribidi.hash
+> > @@ -1,2 +1,3 @@
+> > -# From http://www.fribidi.org/download/fribidi-0.19.7.tar.bz2.sha256
+> > -sha256       08222a6212bbc2276a2d55c3bf370109ae4a35b689acbc66571ad2a670595a8e        fribidi-0.19.7.tar.bz2
+> > +# Locally caclulated
+> > +sha256       aee3a93d081c293eaca9157700f17dc780a0b6674bc911decc5aaa43aec9abd7        fribidi-v1.0.5.tar.gz
+> > +sha256       32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b        COPYING
+> > diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
+> > index a7a8519181..a01ecf6953 100644
+> > --- a/package/libfribidi/libfribidi.mk
+> > +++ b/package/libfribidi/libfribidi.mk
+> > @@ -4,19 +4,13 @@
+> >  #
+> >  ################################################################################
+> >
+> > -LIBFRIBIDI_VERSION = 0.19.7
+> > -LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.bz2
+> > -LIBFRIBIDI_SITE = http://www.fribidi.org/download
+> > +LIBFRIBIDI_VERSION = v1.0.5
+> > +LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.gz
+> > +LIBFRIBIDI_SITE = $(call github,fribidi,fribidi,$(LIBFRIBIDI_VERSION))
+> >  LIBFRIBIDI_LICENSE = LGPL-2.1+
+> >  LIBFRIBIDI_LICENSE_FILES = COPYING
+> >  LIBFRIBIDI_INSTALL_STAGING = YES
+> > -# Ships a beta libtool version hence our patch doesn't apply.
+> > -# Run autoreconf to regenerate ltmain.sh.
+> > -LIBFRIBIDI_AUTORECONF = YES
+> >  LIBFRIBIDI_DEPENDENCIES = host-pkgconf
+> > -# libglib2 dependency causes a build failure, and this optional
+> > -# dependency is going to be removed upstream, see
+> > -# https://github.com/behdad/fribidi/pull/14
+> > -LIBFRIBIDI_CONF_OPTS = --with-glib=no
+>
+> So what happened with the glib dependency then. Is it gone? Please
+> explain in the commit log.
+>
+It is indeed gone. The new version is meson based and does not have
+the option to specify weather or not to use glib.
 
-On 19/06/2019 17:35, Victor Huesca wrote:
-[snip]
-> Here is a list of the different packages I found that does have a
-> prefix/suffix in their _VERSION variable, for most of them I'm not sure
-> if the prefix/suffix should be consider part of the version, any opinion
-> on it?
-> 
-> - android-tools:        4.2.2+git20130218
-> The downloaded version is fetch from launchpad, the RM version
-> corresponds to the android version because sources for this tool are not
-> distributed alone.
+I hope that helps!
 
- I wonder why we're using this launchpad version instead of the upstream
-version. Maybe the original contributor (a certain Thomas P) remembers that?
-
-
-> - bandwidthd:           2.0.1-auto-r11
-> The downloaded version is not the original bandwithd but a fork that
-> uses automake, this fork appends -auto-rXX to the actual version.
-
- We should keep the suffix then.
-
- Actually, there's another fork under NethServer that seems a little more
-active. It's also used by OpenWrt.
-
- But the sourceforge repo that hasn't seen activity in 15 years that
-release-monitoring refers to is definitely not OK :-)
-
-
-
-> - imx-alsa-plugins:     rel_imx_4.9.x_1.0.0_ga
-> - imx-mkimage:          rel_imx_4.14.78_1.0.0_ga
-> I The 4.9.x seems to be related to freescale but I'm not sure about the
-> *_ga suffix.
-
- The 4.9.x / 4.14.78 is the kernel version; the 1.0.0 is the freescale release
-on top of that. Obviously these packages really have nothing to do with the
-kernel version, but they distribute everything as a single SDK and the kernel
-version is the anchor.
-
-
-> - luarocks fetched packages: luasql-0.2.2.1-1
-> A large amount of lua packages have a -1 suffix. This suffix is not
-> present on release-monitoring, so I think we should remove it.
-> The thing is: the `luarocks-package` function seems to use the
-> <pkg>_VERSION variable.
-> Remove suffix for those packages will probably require to modify a bit
-> the way luarocks packages are handle.
-
- Hm, good point... The -1 is the packaging version. Sometimes it needs to be
-repackaged and you get a -2. And for some reason, sometimes it's -0.
-
- I don't see a convenient way to work around this...
-
-
-> If we achieve to modify these packages, the only packages left would be
-> those with a commit id as version.
-
- Commit ID is no problem.
-
-
->>>> Kodi has two different entries in release-monitoring.org:
->>>>
->>>>  https://release-monitoring.org/project/5511/, which has only the
->>>>  version, but seems to be outdated
->>>>
->>>>   https://release-monitoring.org/project/20547/, which has the version
->>>>   + codename, and seems to be updated
->>>>
->>>> So it looks like we should use the second one, and therefore keep the
->>>> code name ?  
->>>
->>> The second entry was not originally present. I added it myself because
->>> as you say the first one is pretty outdated. I preferred add a new entry
->>> rather than edit the existing one because the version scheme changed
->>> (this is now using the github repo) and could break one of the multiple
->>> disto that already map kodi.
->>
->> OK, but then it answers your initial question: for Kodi itself, we
->> should use the "17.3-Foo" string as the version.
-> 
-> Alright, there is still the question of all kodi's plugins. While the
-> majority use the codename suffix, a bunch of them are not. This
-> situation will probably improve with the next bump as kodi's team seems
-> more consistent with their release tags since 18.1-Leia.
-> 
-> As those inconsistencies are not related to buildroot but rather to kodi
-> itself, I suggest to let the situation as it is.
-
- Ack.
-
- Regards,
- Arnout
+Adam
+> baruch
+>
+> > +LIBFRIBIDI_CONF_OPTS = -Ddocs=false
+> >
+> > -$(eval $(autotools-package))
+> > +$(eval $(meson-package))
+>
+>
+> --
+>      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
+> =}------------------------------------------------ooO--U--Ooo------------{=
+>    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
