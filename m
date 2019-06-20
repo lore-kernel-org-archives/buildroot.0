@@ -1,52 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Jun 2019 21:02:15 +0200
-Subject: [Buildroot] [PATCH v2 2/2] configs/qemu_riscv32_virt: Update to
- 5.1 kernel
-In-Reply-To: <CAKmqyKPecJMDpJu+R8cZ7jEc_UbOeMvJszViZ=siVJV_HVUY+A@mail.gmail.com>
-References: <20190619165406.19615-1-alistair.francis@wdc.com>
- <20190619165406.19615-2-alistair.francis@wdc.com>
- <20190620155715.23c40f26@windsurf>
- <CAKmqyKMudH+KpKrF3kwkK6SudHt0Ysg_v1JnBS_BO9jXk3DR+g@mail.gmail.com>
- <58cf6eb8-6e90-1a36-1339-ba5a12c51cad@embecosm.com>
- <CAKmqyKPR0-FfVgENsyM7hodee-aOTYd4odPqB9axx0_secq4MQ@mail.gmail.com>
- <CAKmqyKOA1JxWX0EZ1aBa5AGYBbTpDPXPusUthfR-Y3QXyg4ZzQ@mail.gmail.com>
- <20190620202630.133c7d35@windsurf>
- <CAKmqyKPecJMDpJu+R8cZ7jEc_UbOeMvJszViZ=siVJV_HVUY+A@mail.gmail.com>
-Message-ID: <20190620210215.08baafe7@windsurf>
+Date: Thu, 20 Jun 2019 20:57:11 +0200
+Subject: [Buildroot] [git commit] package/coreutils: rename
+ COREUTILS_CLEANUP_BIN to a more sensible name
+Message-ID: <20190620192137.C6C5D82283@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 20 Jun 2019 11:26:06 -0700
-Alistair Francis <alistair23@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=14644a66b60a4115f20f101f08966414852e446c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Yep, the problem is that the glibc port isn't upstream so it isn't
-> stable. The kernel has progressed ahead of the latest glibc upstrem
-> submission (what we are using in buildroot). To fix this we are
-> reverting the patch from the kernel. Hopefully in the future we can
-> update glibc and then remove the patch.
+COREUTILS_CLEANUP_BIN doesn't mean much, what it really does is fixing
+the location of binaries, so let's rename to a more sensible name.
 
-For riscv32 we are *not* using upstream glibc:
+This is done in preparation to the introduction of support for
+building coreutils as individual binaries.
 
-else ifeq ($(BR2_RISCV_32),y)
-GLIBC_VERSION = 06983fe52cfe8e4779035c27e8cc5d2caab31531
-GLIBC_SITE = $(call github,riscv,riscv-glibc,$(GLIBC_VERSION))
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/coreutils/coreutils.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-so if this glibc fork has been updated to cope with the recent kernel
-change, I think we should update glibc instead of reverting the patch
-from the kernel.
-
-This would also address my comment that building a riscv32
-configuration doesn't work out of the box. Of course, we would have to
-disallow selecting kernel headers < 5.1 on riscv32, but that's
-perfectly possible.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 8e5518f638..5e7e0c6ea0 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -96,14 +96,14 @@ COREUTILS_DEPENDENCIES += openssl
+ endif
+ 
+ ifeq ($(BR2_ROOTFS_MERGED_USR),)
+-define COREUTILS_CLEANUP_BIN
++define COREUTILS_FIX_BIN_LOCATION
+ 	# some things go in /bin rather than /usr/bin
+ 	$(foreach f,$(COREUTILS_BIN_PROGS), \
+ 		rm -f $(TARGET_DIR)/usr/bin/$(f) && \
+ 		ln -sf ../usr/bin/coreutils $(TARGET_DIR)/bin/$(f)
+ 	)
+ endef
+-COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CLEANUP_BIN
++COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_FIX_BIN_LOCATION
+ endif
+ 
+ ifeq ($(BR2_STATIC_LIBS),y)
