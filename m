@@ -1,22 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jun 2019 13:32:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gzip: bump to version 1.10
-In-Reply-To: <20190619213742.13005-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 19 Jun 2019 23:37:42 +0200")
-References: <20190619213742.13005-1-fontaine.fabrice@gmail.com>
-Message-ID: <87sgs48pax.fsf@dell.be.48ers.dk>
+Date: Thu, 20 Jun 2019 13:27:17 +0200
+Subject: [Buildroot] [git commit] amarula_vyasa_rk3288_defconfig: use
+ same-as-kernel option for kernel headers
+Message-ID: <20190620113223.F0147821C1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b769e54a92fe71b01fd5a899ccf60af668d8a60d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Remove patch (already in version)
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Instead of the to-be-removed 5.0 option.
 
-Committed, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/amarula_vyasa_rk3288_defconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/configs/amarula_vyasa_rk3288_defconfig b/configs/amarula_vyasa_rk3288_defconfig
+index 6fd46b6455..760ad3f9f4 100644
+--- a/configs/amarula_vyasa_rk3288_defconfig
++++ b/configs/amarula_vyasa_rk3288_defconfig
+@@ -4,7 +4,7 @@ BR2_cortex_a17=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+ # Linux headers same as kernel, a 5.0 series
+-BR2_KERNEL_HEADERS_5_0=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+ 
+ # Bootloader
+ BR2_TARGET_UBOOT=y
