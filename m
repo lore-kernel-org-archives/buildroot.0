@@ -1,40 +1,42 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Thu, 20 Jun 2019 18:02:34 +0200
-Subject: [Buildroot] [PATCH 0/3] Update Busybox to 1.31 and use mdev
- daemon mode
-In-Reply-To: <87a7ecffta.fsf@dell.be.48ers.dk>
-References: <20190619164257.183607-1-titouan.christophe@railnova.eu>
- <20190620163154.7a6b743b@windsurf> <87a7ecffta.fsf@dell.be.48ers.dk>
-Message-ID: <db790277-70c6-47d5-6ea5-02444579522d@railnova.eu>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 20 Jun 2019 18:13:59 +0200
+Subject: [Buildroot] [PATCH 22/27] package/haproxy: re-enable package on
+ microblaze
+In-Reply-To: <20190614210346.121013-23-giulio.benetti@micronovasrl.com>
+References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
+ <20190614210346.121013-23-giulio.benetti@micronovasrl.com>
+Message-ID: <20190620181359.6ed46ea5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello all,
+On Fri, 14 Jun 2019 23:03:41 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-On 6/20/19 5:16 PM, Peter Korsgaard wrote:
->>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+> With Microblaze Gcc version < 8.x build gives:
+> 'internal compiler error: in do_output_reload, at reload1.c:7978'
+> This is due to bug 90620:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90620. To avoid this, the
+> haproxy package has a !BR2_microblaze dependency. However, gcc bug
+> 90620 only triggers when optimization is enabled, so we can work
+> around the issue by passing -O0, which is what we do in other
+> Buildroot packages to work around this bug.
 > 
->   > On Wed, 19 Jun 2019 18:42:54 +0200
->   > Titouan Christophe <titouan.christophe@railnova.eu> wrote:
+> So, this commit passes -O0 when BR2_TOOLCHAIN_HAS_GCC_BUG_90620, and
+> re-enables haproxy on Microblaze.
 > 
->   >> Titouan Christophe (3):
->   >> package/busybox: bump version to 1.31.0
->   >> package/busybox: convert S10mdev to the canonical init script format
->   >> package/busybox: run mdev in daemon mode
-> 
->   > Series applied. Thanks!
-> 
-> Yes, thanks. We still need to force CONFIG_NET=y in the Linux kernel if
-> mdev is enabled, right?
-> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>  package/haproxy/Config.in  | 2 --
+>  package/haproxy/haproxy.mk | 9 ++++++++-
+>  2 files changed, 8 insertions(+), 3 deletions(-)
 
-Yes, since mdev is now launched in daemon mode CONFIG_NET is now needed. 
-Didn't think of enforcing that in the kernel config, I'm preparing a 
-patch right now.
+Applied to master, thanks.
 
-Regards,
-
-Titouan
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
