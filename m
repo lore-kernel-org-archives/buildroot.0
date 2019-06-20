@@ -1,77 +1,30 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 20 Jun 2019 12:07:24 +0200
-Subject: [Buildroot] [PATCH v4 14/15] arch/arm: add two new non-cortex-based
- armv8.2a cores
-In-Reply-To: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
-References: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190620100725.105587-15-giulio.benetti@micronovasrl.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Thu, 20 Jun 2019 13:10:28 +0300
+Subject: [Buildroot] [PATCH 2/3] package/busybox: convert S10mdev to the
+ canonical init script format
+In-Reply-To: <20190619164257.183607-3-titouan.christophe@railnova.eu>
+References: <20190619164257.183607-1-titouan.christophe@railnova.eu>
+ <20190619164257.183607-3-titouan.christophe@railnova.eu>
+Message-ID: <20190620101028.GS9224@smile.fi.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+On Wed, Jun 19, 2019 at 06:42:56PM +0200, Titouan Christophe wrote:
+> Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 
-The Neoverse N1 CPU was supported in GCC earlier through the codename Ares [1].
+> -	find /sys/ -name modalias -print0 | xargs -0 sort -u | tr '\n' '\0' | \
+> -	    xargs -0 modprobe -abq
 
-[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=37cf0ddecfd1eb5c6852a44135af5a92e5103931
+> +	find /sys/ -name modalias -print0 | \
+> +		xargs -0 sort -u | \
+> +		tr '\n' '\0' | \
+> +		xargs -0 modprobe -abq
 
-Build tested:
-https://gitlab.com/kubu93/buildroot/pipelines/60318953
+How this indentation change related to the topic?
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[Romain: rename BR2_ares to BR2_neoverse_n1]
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
----
-v2: add neoverse-e1 (Yann)
-    reorder alphabetically after renaming ares to neoverse-n1.
-
-Note: The Neoverse E1 CPU needs at least binutils 2.32 to support Speculative Store
-Bypass Safe instruction (SSBS) which is part of ARMv8.5-A architecture extensions.
-Postpone the support for this new ARM core.
-See: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=104fefeebb544b7745bb353b63110afa46119647
----
- arch/Config.in.arm | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index a664cfe0e2..eea77cdabe 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -512,6 +512,22 @@ config BR2_cortex_a76_a55
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
-+config BR2_neoverse_n1
-+	bool "neoverse-N1 (alias ares)"
-+	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
-+config BR2_tsv110
-+	bool "tsv110"
-+	depends on BR2_ARCH_IS_64
-+	select BR2_ARM_CPU_HAS_FP_ARMV8
-+	select BR2_ARM_CPU_ARMV8A
-+	select BR2_ARCH_HAS_MMU_OPTIONAL
-+	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- 
- comment "armv8.4a cores"
- config BR2_saphira
-@@ -877,6 +893,8 @@ config BR2_GCC_TARGET_CPU
- 	default "cortex-a75.cortex-a55"	if BR2_cortex_a75_a55
- 	default "cortex-a76"	if BR2_cortex_a76
- 	default "cortex-a76.cortex-a55"	if BR2_cortex_a76_a55
-+	default "neoverse-n1"	if BR2_neoverse_n1
-+	default "tsv110"	if BR2_tsv110
- 	# armv8.4a
- 	default "saphira"	if BR2_saphira
- 
 -- 
-2.17.1
+With Best Regards,
+Andy Shevchenko
