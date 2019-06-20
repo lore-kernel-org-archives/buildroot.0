@@ -1,27 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jun 2019 13:30:53 +0200
-Subject: [Buildroot] [PATCH 2/2] package/haveged: fix legal-info
-In-Reply-To: <1560974743-20081-2-git-send-email-pjtexier@koncepto.io>
- (Pierre-Jean Texier's message of "Wed, 19 Jun 2019 22:05:43 +0200")
-References: <1560974743-20081-1-git-send-email-pjtexier@koncepto.io>
- <1560974743-20081-2-git-send-email-pjtexier@koncepto.io>
-Message-ID: <87wohg8pea.fsf@dell.be.48ers.dk>
+Date: Thu, 20 Jun 2019 13:32:54 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gzip: bump to version 1.10
+In-Reply-To: <20190619213742.13005-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 19 Jun 2019 23:37:42 +0200")
+References: <20190619213742.13005-1-fontaine.fabrice@gmail.com>
+Message-ID: <87sgs48pax.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Add hash for COPYING file
- > Fixes:
-
- > $: make haveged-legal-info
- >>>> haveged 1.9.4 Collecting legal info
- >  ERROR: No hash found for COPYING
-
- > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+ > Remove patch (already in version)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
