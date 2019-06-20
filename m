@@ -1,82 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Jun 2019 20:54:24 +0200
-Subject: [Buildroot] [PATCH] qemu/riscv32-virt: Fix missing
- linux-headers patch
-In-Reply-To: <20190620175648.7969-1-alistair.francis@wdc.com>
-References: <20190620175648.7969-1-alistair.francis@wdc.com>
-Message-ID: <20190620205424.10702057@windsurf>
+Date: Thu, 20 Jun 2019 21:02:15 +0200
+Subject: [Buildroot] [PATCH v2 2/2] configs/qemu_riscv32_virt: Update to
+ 5.1 kernel
+In-Reply-To: <CAKmqyKPecJMDpJu+R8cZ7jEc_UbOeMvJszViZ=siVJV_HVUY+A@mail.gmail.com>
+References: <20190619165406.19615-1-alistair.francis@wdc.com>
+ <20190619165406.19615-2-alistair.francis@wdc.com>
+ <20190620155715.23c40f26@windsurf>
+ <CAKmqyKMudH+KpKrF3kwkK6SudHt0Ysg_v1JnBS_BO9jXk3DR+g@mail.gmail.com>
+ <58cf6eb8-6e90-1a36-1339-ba5a12c51cad@embecosm.com>
+ <CAKmqyKPR0-FfVgENsyM7hodee-aOTYd4odPqB9axx0_secq4MQ@mail.gmail.com>
+ <CAKmqyKOA1JxWX0EZ1aBa5AGYBbTpDPXPusUthfR-Y3QXyg4ZzQ@mail.gmail.com>
+ <20190620202630.133c7d35@windsurf>
+ <CAKmqyKPecJMDpJu+R8cZ7jEc_UbOeMvJszViZ=siVJV_HVUY+A@mail.gmail.com>
+Message-ID: <20190620210215.08baafe7@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Francis,
+On Thu, 20 Jun 2019 11:26:06 -0700
+Alistair Francis <alistair23@gmail.com> wrote:
 
-+Yann in Cc.
+> Yep, the problem is that the glibc port isn't upstream so it isn't
+> stable. The kernel has progressed ahead of the latest glibc upstrem
+> submission (what we are using in buildroot). To fix this we are
+> reverting the patch from the kernel. Hopefully in the future we can
+> update glibc and then remove the patch.
 
-First of all, my apologies for breaking the build with my change.
+For riscv32 we are *not* using upstream glibc:
 
-On Thu, 20 Jun 2019 10:56:48 -0700
-Alistair Francis <alistair.francis@wdc.com> wrote:
+else ifeq ($(BR2_RISCV_32),y)
+GLIBC_VERSION = 06983fe52cfe8e4779035c27e8cc5d2caab31531
+GLIBC_SITE = $(call github,riscv,riscv-glibc,$(GLIBC_VERSION))
 
-> Commit f9993797959 "configs/qemu_riscv32_virt: update to 5.1 kernel"
-> broke the qemu/riscv32-virt machine build as the BR2_LINUX_KERNEL_PATCH
-> mechanism was replaced with the BR2_GLOBAL_PATCH_DIR mechanism when the
-> patch was applied. This results in the linux-headers not having the
-> patch applied which causes a glibc build failure.
-> 
-> Add a symbolic link to ensure the linux patch is applied to linux and
-> linux-headers.
-> 
-> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-> ---
->  board/qemu/riscv32-virt/patches/linux-headers | 1 +
->  1 file changed, 1 insertion(+)
->  create mode 120000 board/qemu/riscv32-virt/patches/linux-headers
-> 
-> diff --git a/board/qemu/riscv32-virt/patches/linux-headers b/board/qemu/riscv32-virt/patches/linux-headers
-> new file mode 120000
-> index 0000000000..9c52cb36f4
-> --- /dev/null
-> +++ b/board/qemu/riscv32-virt/patches/linux-headers
-> @@ -0,0 +1 @@
-> +linux
-> \ No newline at end of file
+so if this glibc fork has been updated to cope with the recent kernel
+change, I think we should update glibc instead of reverting the patch
+from the kernel.
 
-I understand the problem, but I am not sure it is the right solution.
-Indeed, when the option BR2_KERNEL_HEADERS_AS_KERNEL is enabled, we
-really expect that linux-headers will use the same source code as the
-kernel, including all patches. The linux-headers.mk is already doing
-some effort to achieve this, but it does not do it entirely due do
-BR2_GLOBAL_PATCH_DIR patches.
-
-So what I would propose instead is this:
-
-diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-index 95432ade83..46f270a0e1 100644
---- a/package/linux-headers/linux-headers.mk
-+++ b/package/linux-headers/linux-headers.mk
-@@ -60,7 +60,8 @@ endif # LINUX_HEADERS_CUSTOM_TARBALL
- # Apply any necessary patches if we are using the headers from a kernel
- # build.
- ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
--LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
-+LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH)) \
-+       $(wildcard $(addsuffix /linux,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))))
- 
- # We rely on the generic package infrastructure to download and apply
- # remote patches (downloaded from ftp, http or https). For local
-
-Yann, what do you think of this ?
-
-However, Francis & Mark: it is not normal that we can't build a RISC-V
-32 toolchain out of the box, as I reported separately. So while this
-linux-headers/linux patch consistency issue is real, I think we need
-something better for RISC-V 32. Indeed a user who would build a RISC-V
-32 system, but not for Qemu, would not use this defconfig, and would
-therefore not have this patch. Do you expect this issue to be resolved
-in the near future on the kernel side ?
+This would also address my comment that building a riscv32
+configuration doesn't work out of the box. Of course, we would have to
+disallow selecting kernel headers < 5.1 on riscv32, but that's
+perfectly possible.
 
 Best regards,
 
