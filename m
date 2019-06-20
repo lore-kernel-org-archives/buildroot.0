@@ -1,35 +1,45 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Thu, 20 Jun 2019 18:59:44 +0200
-Subject: [Buildroot] [PATCH 1/1] linux: Force CONFIG_NET=y when using
- mdev+devtempfs for /dev management
-Message-ID: <20190620165944.71127-1-titouan.christophe@railnova.eu>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Thu, 20 Jun 2019 10:01:01 -0700
+Subject: [Buildroot] [PATCH v2 2/2] configs/qemu_riscv32_virt: Update to
+ 5.1 kernel
+In-Reply-To: <20190620155715.23c40f26@windsurf>
+References: <20190619165406.19615-1-alistair.francis@wdc.com>
+ <20190619165406.19615-2-alistair.francis@wdc.com>
+ <20190620155715.23c40f26@windsurf>
+Message-ID: <CAKmqyKMudH+KpKrF3kwkK6SudHt0Ysg_v1JnBS_BO9jXk3DR+g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since mdev was switched to the daemon mode introduced in Busybox 1.31.0,
-it requires CONFIG_NET to be enabled in the kernel such that the mdev
-daemon can listen to netlink events.
+On Thu, Jun 20, 2019 at 6:57 AM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> On Wed, 19 Jun 2019 09:54:06 -0700
+> Alistair Francis <alistair.francis@wdc.com> wrote:
+>
+> >  # Kernel
+> >  BR2_LINUX_KERNEL=y
+> >  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> > -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.20.17"
+> > -BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> > -BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/riscv32-virt/linux.config.fragment"
+> > +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.12"
+> > +BR2_LINUX_KERNEL_DEFCONFIG="rv32"
+> > +BR2_LINUX_KERNEL_PATCH="board/qemu/riscv32-virt/0001-Revert-riscv-Use-latest-system-call-ABI.patch"
+>
+> We prefer using the BR2_GLOBAL_PATCH_DIR mechanism nowadays, so I've
+> adjusted your patch to use that and applied. Thanks!
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- linux/linux.mk | 2 ++
- 1 file changed, 2 insertions(+)
+The BR2_GLOBAL_PATCH_DIR system looks really cool, I'll be sure to use
+that next time. Thanks
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index dd182d06b2..7468f1be60 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -333,6 +333,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
-+	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_AUDIT),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config))
--- 
-2.21.0
+Alistair
+
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
