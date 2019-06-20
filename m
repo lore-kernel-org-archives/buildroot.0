@@ -1,42 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Jun 2019 18:13:59 +0200
-Subject: [Buildroot] [PATCH 22/27] package/haproxy: re-enable package on
- microblaze
-In-Reply-To: <20190614210346.121013-23-giulio.benetti@micronovasrl.com>
-References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
- <20190614210346.121013-23-giulio.benetti@micronovasrl.com>
-Message-ID: <20190620181359.6ed46ea5@windsurf>
+Date: Thu, 20 Jun 2019 18:14:49 +0200
+Subject: [Buildroot] [git commit] support/download/git: fix formatting of
+ error message
+Message-ID: <20190620161402.F2155837B0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 14 Jun 2019 23:03:41 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8dd1a41630fff72638b7942c926c2f50095ab0d6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> With Microblaze Gcc version < 8.x build gives:
-> 'internal compiler error: in do_output_reload, at reload1.c:7978'
-> This is due to bug 90620:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90620. To avoid this, the
-> haproxy package has a !BR2_microblaze dependency. However, gcc bug
-> 90620 only triggers when optimization is enabled, so we can work
-> around the issue by passing -O0, which is what we do in other
-> Buildroot packages to work around this bug.
-> 
-> So, this commit passes -O0 when BR2_TOOLCHAIN_HAS_GCC_BUG_90620, and
-> re-enables haproxy on Microblaze.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  package/haproxy/Config.in  | 2 --
->  package/haproxy/haproxy.mk | 9 ++++++++-
->  2 files changed, 8 insertions(+), 3 deletions(-)
+'.' should be at the end of the sentence, not the beginning of a new
+line.
 
-Applied to master, thanks.
+Signed-off-by: John Keeping <john@metanate.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/download/git | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/support/download/git b/support/download/git
+index 17ca04eb98..075f665bbf 100755
+--- a/support/download/git
++++ b/support/download/git
+@@ -130,7 +130,7 @@ fi
+ # scratch won't help, so we don't want to trash the repository for a
+ # missing commit. We just exit without going through the ERR trap.
+ if ! _git rev-parse --quiet --verify "'${cset}^{commit}'" >/dev/null 2>&1; then
+-    printf "Commit '%s' does not exist in this repository\n." "${cset}"
++    printf "Commit '%s' does not exist in this repository.\n" "${cset}"
+     exit 1
+ fi
+ 
