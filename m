@@ -1,38 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Jun 2019 21:27:20 +0200
-Subject: [Buildroot] [git commit] arch/Config.in.nds32: force syntax
- colouring to kconfig
-Message-ID: <20190620192639.E6C5F814DB@busybox.osuosl.org>
+Date: Thu, 20 Jun 2019 21:27:42 +0200
+Subject: [Buildroot] [PATCH] arch/nds32: force syntax colouring to
+ kconfig.
+In-Reply-To: <20190603191951.22360-1-yann.morin.1998@free.fr>
+References: <20190603191951.22360-1-yann.morin.1998@free.fr>
+Message-ID: <20190620212742.25d97ac3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=faa13ee58099d0dbebf24cd545a416f22e1e87b6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  3 Jun 2019 21:19:51 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-It is too sad when an editor picks up the wrong syntax...
+> It is too sad when an editor picks up the wrong syntax...
+> 
+> Like was done in e837837791 for all the other archs, force
+> syntax to kconfig for nds32 too.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Nylon Chen <nylon7@andestech.com>
+> ---
+>  arch/Config.in.nds32 | 3 +++
+>  1 file changed, 3 insertions(+)
 
-Like was done in e837837791 for all the other archs, force
-syntax to kconfig for nds32 too.
+Applied to master, thanks.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Nylon Chen <nylon7@andestech.com>
-Reviewed-by:Nylon Chen <nylon7@andestech.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- arch/Config.in.nds32 | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/Config.in.nds32 b/arch/Config.in.nds32
-index f268883662..322ff49f2e 100644
---- a/arch/Config.in.nds32
-+++ b/arch/Config.in.nds32
-@@ -9,3 +9,6 @@ config BR2_ENDIAN
- 
- config BR2_READELF_ARCH_NAME
- 	default "Andes Technology compact code size embedded RISC processor family"
-+
-+# vim: ft=kconfig
-+# -*- mode:kconfig; -*-
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
