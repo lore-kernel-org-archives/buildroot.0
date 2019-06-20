@@ -1,41 +1,64 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 19 Jun 2019 23:49:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/davfs2: bump to version 1.5.5
-Message-ID: <20190619214926.26685-1-fontaine.fabrice@gmail.com>
+From: Sam Bobroff <sbobroff@linux.ibm.com>
+Date: Thu, 20 Jun 2019 10:19:53 +1000
+Subject: [Buildroot] [EXTERNAL] [autobuild.buildroot.net] Your build
+ results for 2019-06-13
+In-Reply-To: <20190619084851.5500ad30@windsurf>
+References: <2t43n5cdd4-1@m0098420.ppops.net>
+ <20190619061619.GC24143@tungsten.ozlabs.ibm.com>
+ <20190619084851.5500ad30@windsurf>
+Message-ID: <20190620001953.GA5542@tungsten.ozlabs.ibm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/davfs2/davfs2.hash | 2 +-
- package/davfs2/davfs2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Wed, Jun 19, 2019 at 08:48:51AM +0200, Thomas Petazzoni wrote:
+> Hello Sam,
+> 
+> On Wed, 19 Jun 2019 16:16:19 +1000
+> Sam Bobroff <sbobroff@linux.ibm.com> wrote:
+> 
+> > I tried to replicate the modem-manager build failure, but it succeeded
+> > (I'm using br-reproduce-build). The error is odd as well:
+> > 
+> > make[4]: Entering directory '/home/buildroot/build/instance-0/output/build/modem-manager-1.10.0/libmm-glib/generated'
+> >   GEN      mm-enums-types.h
+> >   GEN      mm-errors-types.h
+> >   GEN      mm-gdbus-manager.c
+> > /bin/sh: line 1: /usr/bin/gdbus-codegen: No such file or directory
+> >   GEN      mm-gdbus-sim.c
+> > /bin/sh: line 1: /usr/bin/gdbus-codegen: No such file or directory
+> >   GEN      mm-gdbus-sms.c
+> >   GEN      mm-gdbus-call.c
+> > /bin/sh: line 1: /usr/bin/gdbus-codegen: No such file or directory
+> > Makefile:1173: recipe for target 'mm-gdbus-sim.c' failed
+> > make[4]: *** [mm-gdbus-sim.c] Error 127
+> > make[4]: *** Waiting for unfinished jobs....
+> > Makefile:1149: recipe for target 'mm-gdbus-manager.c' failed
+> > make[4]: *** [mm-gdbus-manager.c] Error 127
+> 
+> This issue is already fixed by
+> https://git.buildroot.org/buildroot/commit/?id=739c581663285db6efb3559969e9e04f873a38f7.
+> 
+> Best regards,
+> 
+> Thomas
 
-diff --git a/package/davfs2/davfs2.hash b/package/davfs2/davfs2.hash
-index 102659a38d..7e2078bec5 100644
---- a/package/davfs2/davfs2.hash
-+++ b/package/davfs2/davfs2.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256 c9c4e0f0912a782386216b2147eb9c36c47f193b8fcf3d637719e0b9fe7c96e0  davfs2-1.5.4.tar.gz
-+sha256 587c6a25ad78109995a7ccb8e60aa1c491b149f2c99d47033f3d5e648430ad2f  davfs2-1.5.5.tar.gz
- # License file, locally calculated
- sha256 0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
-diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
-index f2b2fdbe41..90f73f4df0 100644
---- a/package/davfs2/davfs2.mk
-+++ b/package/davfs2/davfs2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DAVFS2_VERSION = 1.5.4
-+DAVFS2_VERSION = 1.5.5
- DAVFS2_SITE = http://download.savannah.nongnu.org/releases/davfs2
- DAVFS2_LICENSE = GPL-3.0+
- DAVFS2_LICENSE_FILES = COPYING
--- 
-2.20.1
+Ah, thanks. So I couldn't replicate it because my host was different (it
+has a gdbus-codegen binary).
+
+Cheers,
+Sam.
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> 
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 488 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190620/ade301e6/attachment.asc>
