@@ -1,69 +1,77 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 20 Jun 2019 12:07:25 +0200
-Subject: [Buildroot] [PATCH v4 15/15] package/gcc: enable gcc 9.1 for ork1
- (openrisc)
+Date: Thu, 20 Jun 2019 12:07:23 +0200
+Subject: [Buildroot] [PATCH v4 13/15] arch/arm: add two new cortex-based
+ armv8.2a cores
 In-Reply-To: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
 References: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190620100725.105587-16-giulio.benetti@micronovasrl.com>
+Message-ID: <20190620100725.105587-14-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Romain Naour <romain.naour@gmail.com>
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-openrisc support has been added with gcc 9.1.
-Keep for now the old gcc 5 fork for ork1.
+The cortex-a76 implements the full amrv8.2a extensions, and some
+optional extensions from the armv8.3a, armv8.4a, and armv8.5a sets,
+but none of their mandatory extensions, which means that it does not
+qualify for better than an armv8.2a:
+    https://developer.arm.com/products/processors/cortex-a/cortex-a76
+    http://infocenter.arm.com/help/topic/com.arm.doc.100798_0301_00_en/giq1479805174793.html
+    http://infocenter.arm.com/help/topic/com.arm.doc.100798_0301_00_en/fjv1477559794375.html
 
-https://gcc.gnu.org/gcc-9/changes.html
+Also, gcc fits it in the armv8.2a category, too:
+    https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/aarch64/aarch64-cores.def;h=67ce42fb8aacd4c246295f32151a03b1f318ae44;hb=HEAD#l97
 
-Tested using qemu_or1k_defconfig.
+Build tested:
+https://gitlab.com/kubu93/buildroot/pipelines/60318953
 
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
-v3: rebase patch on top of master branch sha1:
-    04efb17c863606cdbc2405d01c3d48d6868c5245 (Giulio)
----
- package/gcc/Config.in.host | 2 --
- package/gcc/gcc.mk         | 4 ++--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ arch/Config.in.arm | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 15f1e8f06a..80129ae2ef 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -86,8 +86,6 @@ config BR2_GCC_VERSION_8_X
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 4685b72510..a664cfe0e2 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -494,6 +494,24 @@ config BR2_cortex_a75_a55
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
++config BR2_cortex_a76
++	bool "cortex-A76"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
++config BR2_cortex_a76_a55
++	bool "cortex-A76/A55 big.LITTLE"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
  
- config BR2_GCC_VERSION_9_X
- 	bool "gcc 9.x"
--	# Broken or unsupported architectures
--	depends on !BR2_or1k
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 
- endchoice
-diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
-index abc29c7df0..46ad16df13 100644
---- a/package/gcc/gcc.mk
-+++ b/package/gcc/gcc.mk
-@@ -13,7 +13,7 @@ GCC_VERSION = $(call qstrip,$(BR2_GCC_VERSION))
- ifeq ($(BR2_GCC_VERSION_ARC),y)
- GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
- GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
--else ifeq ($(BR2_or1k),y)
-+else ifeq ($(BR2_GCC_VERSION_OR1K),y)
- GCC_SITE = $(call github,openrisc,or1k-gcc,$(GCC_VERSION))
- GCC_SOURCE = gcc-$(GCC_VERSION).tar.gz
- else ifeq ($(BR2_csky),y)
-@@ -180,7 +180,7 @@ else
- HOST_GCC_COMMON_CONF_OPTS += --without-isl --without-cloog
- endif
- 
--ifeq ($(BR2_arc)$(BR2_or1k),y)
-+ifeq ($(BR2_arc)$(BR2_GCC_VERSION_OR1K),y)
- HOST_GCC_COMMON_DEPENDENCIES += host-flex host-bison
- endif
+ comment "armv8.4a cores"
+ config BR2_saphira
+@@ -857,6 +875,8 @@ config BR2_GCC_TARGET_CPU
+ 	default "cortex-a55"	if BR2_cortex_a55
+ 	default "cortex-a75"	if BR2_cortex_a75
+ 	default "cortex-a75.cortex-a55"	if BR2_cortex_a75_a55
++	default "cortex-a76"	if BR2_cortex_a76
++	default "cortex-a76.cortex-a55"	if BR2_cortex_a76_a55
+ 	# armv8.4a
+ 	default "saphira"	if BR2_saphira
  
 -- 
 2.17.1
