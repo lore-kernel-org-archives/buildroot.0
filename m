@@ -1,20 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jun 2019 13:29:08 +0200
-Subject: [Buildroot] [PATCH] configs/mx51evk: Bump kernel version
-In-Reply-To: <20190619174253.24352-1-festevam@gmail.com> (Fabio Estevam's
- message of "Wed, 19 Jun 2019 14:42:53 -0300")
-References: <20190619174253.24352-1-festevam@gmail.com>
-Message-ID: <875zp0a41n.fsf@dell.be.48ers.dk>
+Date: Thu, 20 Jun 2019 13:30:48 +0200
+Subject: [Buildroot] [PATCH 1/2] package/haveged: bump to version 1.9.4
+In-Reply-To: <1560974743-20081-1-git-send-email-pjtexier@koncepto.io>
+ (Pierre-Jean Texier's message of "Wed, 19 Jun 2019 22:05:42 +0200")
+References: <1560974743-20081-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <871rzoa3yv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
+>>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
 
- > Bump the kernel version to 5.1.10.
- > Signed-off-by: Fabio Estevam <festevam@gmail.com>
+ > See https://github.com/jirka-h/haveged/releases/tag/1.9.4
+ > Also change the site location, upstream release
+ > mechanism has switched to using github.
+
+ > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 
 Committed, thanks.
 
