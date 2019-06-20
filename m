@@ -1,34 +1,74 @@
-From: Joel Carlson <JoelsonCarl@gmail.com>
-Date: Thu, 20 Jun 2019 11:27:02 -0600
-Subject: [Buildroot] [RFC PATCH] download/git: ban branch references
-In-Reply-To: <20190619151817.6331-1-john@metanate.com>
-References: <20190619151817.6331-1-john@metanate.com>
-Message-ID: <CA+1k=2Zy3fgq+QQ9r7YYvz6+p7QFxSnmeCVEB+_yDmweziAA-Q@mail.gmail.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Thu, 20 Jun 2019 10:40:21 -0700
+Subject: [Buildroot] [PATCH v2 2/2] configs/qemu_riscv32_virt: Update to
+ 5.1 kernel
+In-Reply-To: <58cf6eb8-6e90-1a36-1339-ba5a12c51cad@embecosm.com>
+References: <20190619165406.19615-1-alistair.francis@wdc.com>
+ <20190619165406.19615-2-alistair.francis@wdc.com>
+ <20190620155715.23c40f26@windsurf>
+ <CAKmqyKMudH+KpKrF3kwkK6SudHt0Ysg_v1JnBS_BO9jXk3DR+g@mail.gmail.com>
+ <58cf6eb8-6e90-1a36-1339-ba5a12c51cad@embecosm.com>
+Message-ID: <CAKmqyKPR0-FfVgENsyM7hodee-aOTYd4odPqB9axx0_secq4MQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jun 19, 2019 at 9:19 AM John Keeping <john@metanate.com> wrote:
+On Thu, Jun 20, 2019 at 10:13 AM Mark Corbin <mark.corbin@embecosm.com> wrote:
 >
-> As described in the manual, using a branch name as a version is not
-> supported.  However, nothing enforces this so it is easy to specify a
-> branch name either accidentally or because new developers have not read
-> through the manual.
+> Hello Alistair
+>
+> On 20/06/2019 18:01, Alistair Francis wrote:
+> > On Thu, Jun 20, 2019 at 6:57 AM Thomas Petazzoni
+> > <thomas.petazzoni@bootlin.com> wrote:
+> >> On Wed, 19 Jun 2019 09:54:06 -0700
+> >> Alistair Francis <alistair.francis@wdc.com> wrote:
+> >>
+> >>>  # Kernel
+> >>>  BR2_LINUX_KERNEL=y
+> >>>  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> >>> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.20.17"
+> >>> -BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> >>> -BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/riscv32-virt/linux.config.fragment"
+> >>> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.12"
+> >>> +BR2_LINUX_KERNEL_DEFCONFIG="rv32"
+> >>> +BR2_LINUX_KERNEL_PATCH="board/qemu/riscv32-virt/0001-Revert-riscv-Use-latest-system-call-ABI.patch"
+> >> We prefer using the BR2_GLOBAL_PATCH_DIR mechanism nowadays, so I've
+> >> adjusted your patch to use that and applied. Thanks!
+> > The BR2_GLOBAL_PATCH_DIR system looks really cool, I'll be sure to use
+> > that next time. Thanks
+> >
+> > Alistair
+>
+> I can't get the updated 32-bit QEMU configuration to build - there is a
+> problem with glibc...
+>
+> In file included from ../sysdeps/unix/sysv/linux/lowlevellock-futex.h:23:0,
+>                  from ../sysdeps/nptl/lowlevellock.h:23,
+>                  from ../sysdeps/nptl/libc-lockP.h:33,
+>                  from ../sysdeps/nptl/libc-lock.h:184,
+>                  from gconv_db.c:26:
+> gconv_db.c: In function '__gconv_find_transform':
+> ../sysdeps/unix/sysv/linux/riscv/sysdep.h:120:31: error: '__NR_futex'
+> undeclared (first use in this function); did you mean
+>  '__futex'?
+>
+> The updated 64-bit version works without any problems.
 
-At a more general discussion level, I have to admit I like having the
-ability to use a branch name even if it isn't supported. During
-development I find it easier to use a branch name and just delete the
-cached version to force it to re-download when I know I have new
-updates.  I can switch to a tag when I have a version I actually want
-tagged and "final."  Otherwise I'd have to keep tagging changes and
-updating what tag to grab in the config or package file to pull in new
-changes.
+Yep, it's not working for me now either. I think the Linux patch is
+somehow not being applied. I'll investigate.
 
-Granted, it isn't a huge inconvenience to switch how I do things, and
-I could see it being useful to "idiot-proof" for people who don't
-realize the potential problems with using branch names.  But I at
-least wanted to make my opinion known that I like it the way it is.
+Alistair
 
--Joel
+>
+> Is there an issue with the patch revert for glibc?
+>
+> Thanks
+>
+> Mark
+>
+> --
+> Mark Corbin
+> Embecosm Ltd.
+> https://www.embecosm.com
