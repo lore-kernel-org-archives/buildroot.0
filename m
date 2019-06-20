@@ -1,37 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Jun 2019 18:14:49 +0200
-Subject: [Buildroot] [git commit] support/download/git: fix formatting of
- error message
-Message-ID: <20190620161402.F2155837B0@busybox.osuosl.org>
+Date: Thu, 20 Jun 2019 18:15:02 +0200
+Subject: [Buildroot] [PATCH] download/git: fix formatting of error
+ message
+In-Reply-To: <20190619150526.31746-1-john@metanate.com>
+References: <20190619150526.31746-1-john@metanate.com>
+Message-ID: <20190620181502.53b33c90@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8dd1a41630fff72638b7942c926c2f50095ab0d6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 19 Jun 2019 16:05:26 +0100
+John Keeping <john@metanate.com> wrote:
 
-'.' should be at the end of the sentence, not the beginning of a new
-line.
+> '.' should be at the end of the sentence, not the beginning of a new
+> line.
+> 
+> Signed-off-by: John Keeping <john@metanate.com>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+> ---
+>  support/download/git | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: John Keeping <john@metanate.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/download/git | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/support/download/git b/support/download/git
-index 17ca04eb98..075f665bbf 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -130,7 +130,7 @@ fi
- # scratch won't help, so we don't want to trash the repository for a
- # missing commit. We just exit without going through the ERR trap.
- if ! _git rev-parse --quiet --verify "'${cset}^{commit}'" >/dev/null 2>&1; then
--    printf "Commit '%s' does not exist in this repository\n." "${cset}"
-+    printf "Commit '%s' does not exist in this repository.\n" "${cset}"
-     exit 1
- fi
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
