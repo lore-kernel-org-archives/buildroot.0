@@ -1,58 +1,114 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Jun 2019 23:07:59 +0200
-Subject: [Buildroot] [PATCH 1/4] package: remove 'v' prefix from
- github-fetched packages
-In-Reply-To: <20190620214615.5c60748c@windsurf>
-References: <20190612064209.23619-1-victor.huesca@bootlin.com>
- <20190612064209.23619-2-victor.huesca@bootlin.com>
- <35a7118e-cdf1-b29e-bceb-6c02ecef187e@mind.be>
- <20190620083110.4986e5fa@windsurf>
- <348e13f5-efeb-7136-3315-ce437b12dad6@mind.be>
- <20190620214615.5c60748c@windsurf>
-Message-ID: <6df042d5-7b20-3f4e-365f-9f7dd53c16a3@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 20 Jun 2019 23:20:28 +0200
+Subject: [Buildroot] [git commit] package: remove non-conventional
+ prefix/suffix from tarball-fetched packages
+Message-ID: <20190620212602.EC8B78392B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=360a0621476c9cc188b5403b64f6509df1a6da9a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+While most projects name their tarball <name>-<version>, where
+<version> is just the version number, some other projects add some
+prefix and/or suffix to their version number.
 
-On 20/06/2019 21:46, Thomas Petazzoni wrote:
-> On Thu, 20 Jun 2019 21:33:44 +0200
-> Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
->> On 20/06/2019 08:31, Thomas Petazzoni wrote:
->>> On Wed, 19 Jun 2019 22:50:01 +0200
->>> Arnout Vandecappelle <arnout@mind.be> wrote:  
->> [snip]
->>>>  It would also be nice if we had some formal way of checking that new packages
->>>> do this correctly. Actually, it would be good if pkg-stats could generate a
->>>> report in a human-readable format so it could be used as part of the review flow
->>>> to check if the mapping with release-monitoring is OK (plus all the other things
->>>> pkg-stats evaluates).  
->>>
->>> Hm, yes, could be an interesting idea. Just a new pkg-stats option ?  
->>
->>  Actually, since pkg-stats is in support/scripts it's currently not supposed to
->> be user-visible. So I'd rather turn it around: make the text output to stdout
->> the default, and add an option to generate HTML.
-> 
-> While I agree, I don't understand the relationship with pkg-stats being
-> in support/scripts. Are you saying that we should then add a "make
-> <pkg>-check-upstream-version" target that would call pkg-stats with the
-> right options ?
+In Buildroot, we currently encode the full version (with its
+prefix/suffix) in the <pkg>_VERSION variable. However, that doesn't
+work well to match version numbers with the release-monitoring.org
+website, which filters such prefixes/suffixes.
 
- Scripts in support/scripts are supposed to be Buildroot-internal scripts.
-Scripts that are to be called by users should be in utils/.
+This commit therefore removes the prefix/suffix from tarball-fetched
+packages. The name of the files being downloaded does not change.
 
- So, since it's in support/scripts, we're allowed to break compatibility.
+Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/libcuefile/libcuefile.mk       | 4 ++--
+ package/libevent/libevent.mk           | 5 +++--
+ package/lshw/lshw.mk                   | 3 ++-
+ package/mksh/mksh.mk                   | 4 ++--
+ package/zynq-boot-bin/zynq-boot-bin.mk | 4 ++--
+ 5 files changed, 11 insertions(+), 9 deletions(-)
 
- Regards,
- Arnout
-
-> 
-> I'm a bit confused here.
-> 
-> Thomas
-> 
+diff --git a/package/libcuefile/libcuefile.mk b/package/libcuefile/libcuefile.mk
+index 66b589b193..891c1eec37 100644
+--- a/package/libcuefile/libcuefile.mk
++++ b/package/libcuefile/libcuefile.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBCUEFILE_VERSION = r475
++LIBCUEFILE_VERSION = 475
+ LIBCUEFILE_SITE = http://files.musepack.net/source
+-LIBCUEFILE_SOURCE = libcuefile_$(LIBCUEFILE_VERSION).tar.gz
++LIBCUEFILE_SOURCE = libcuefile_r$(LIBCUEFILE_VERSION).tar.gz
+ LIBCUEFILE_INSTALL_STAGING = YES
+ LIBCUEFILE_LICENSE = GPL-2.0+
+ LIBCUEFILE_LICENSE_FILES = COPYING
+diff --git a/package/libevent/libevent.mk b/package/libevent/libevent.mk
+index e0c0b2517d..1d4cd2651f 100644
+--- a/package/libevent/libevent.mk
++++ b/package/libevent/libevent.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-LIBEVENT_VERSION = 2.1.10-stable
+-LIBEVENT_SITE = https://github.com/libevent/libevent/releases/download/release-$(LIBEVENT_VERSION)
++LIBEVENT_VERSION = 2.1.10
++LIBEVENT_SITE = https://github.com/libevent/libevent/releases/download/release-$(LIBEVENT_VERSION)-stable
++LIBEVENT_SOURCE = libevent-$(LIBEVENT_VERSION)-stable.tar.gz
+ LIBEVENT_INSTALL_STAGING = YES
+ LIBEVENT_LICENSE = BSD-3-Clause, OpenBSD
+ LIBEVENT_LICENSE_FILES = LICENSE
+diff --git a/package/lshw/lshw.mk b/package/lshw/lshw.mk
+index 4195c073e2..3e8cee2e2e 100644
+--- a/package/lshw/lshw.mk
++++ b/package/lshw/lshw.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-LSHW_VERSION = B.02.18
++LSHW_VERSION = 02.18
+ LSHW_SITE = http://ezix.org/software/files
++LSHW_SOURCE = lshw-B.$(LSHW_VERSION).tar.gz
+ LSHW_LICENSE = GPL-2.0
+ LSHW_LICENSE_FILES = COPYING
+ 
+diff --git a/package/mksh/mksh.mk b/package/mksh/mksh.mk
+index 4fa0e020af..3347dd66cb 100644
+--- a/package/mksh/mksh.mk
++++ b/package/mksh/mksh.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-MKSH_VERSION = R55
+-MKSH_SOURCE = mksh-$(MKSH_VERSION).tgz
++MKSH_VERSION = 55
++MKSH_SOURCE = mksh-R$(MKSH_VERSION).tgz
+ MKSH_SITE = https://www.mirbsd.org/MirOS/dist/mir/mksh
+ # For MirOS License see https://www.mirbsd.org/TaC-mksh.txt
+ MKSH_LICENSE = MirOS, ISC
+diff --git a/package/zynq-boot-bin/zynq-boot-bin.mk b/package/zynq-boot-bin/zynq-boot-bin.mk
+index c56203fb68..deba5f4096 100644
+--- a/package/zynq-boot-bin/zynq-boot-bin.mk
++++ b/package/zynq-boot-bin/zynq-boot-bin.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-ZYNQ_BOOT_BIN_VERSION = xilinx-v2015.1
++ZYNQ_BOOT_BIN_VERSION = 2015.1
+ ZYNQ_BOOT_BIN_SOURCE = zynq-boot-bin.py
+-ZYNQ_BOOT_BIN_SITE = https://raw.githubusercontent.com/Xilinx/u-boot-xlnx/$(ZYNQ_BOOT_BIN_VERSION)/tools
++ZYNQ_BOOT_BIN_SITE = https://raw.githubusercontent.com/Xilinx/u-boot-xlnx/xilinx-v$(ZYNQ_BOOT_BIN_VERSION)/tools
+ ZYNQ_BOOT_BIN_LICENSE = GPL-3.0+
+ 
+ HOST_ZYNQ_BOOT_BIN_DEPENDENCIES = host-python
