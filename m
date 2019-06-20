@@ -1,153 +1,88 @@
-From: Adam Duskett <aduskett@gmail.com>
-Date: Thu, 20 Jun 2019 16:38:10 -0400
-Subject: [Buildroot] [PATCH 1/1] package/libfribidi: bump to version
- v1.0.5
-In-Reply-To: <874l51ohme.fsf@tarshish>
-References: <20190606171720.79017-1-aduskett@gmail.com>
- <874l51ohme.fsf@tarshish>
-Message-ID: <CAFSsvmoeuLn7h3hyVDN+Va2dhuQJsFyyF6hfTPwNn7CLGLdGAA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 20 Jun 2019 22:43:14 +0200
+Subject: [Buildroot] [PATCH] qemu/riscv32-virt: Fix missing
+ linux-headers patch
+In-Reply-To: <20190620205424.10702057@windsurf>
+References: <20190620175648.7969-1-alistair.francis@wdc.com>
+ <20190620205424.10702057@windsurf>
+Message-ID: <20190620204314.GL2216@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hey Baruch;
+Thomas, Alistair, Mark, All,
 
-On Fri, Jun 7, 2019 at 5:43 AM Baruch Siach <baruch@tkos.co.il> wrote:
->
-> Hi Adam,
->
-> On Thu, Jun 06 2019, aduskett wrote:
-> > From: Adam Duskett <Aduskett@gmail.com>
-> >
-> > Changes include:
-> >   - Changing the URL to GitHub, as the old URL was no longer valid resulting in
-> >     the tar file being the HTML from www.fribidi.org.
-> >
-> >   - Switching the package to a meson package.
-> >
-> >   - Adding fix-meson.patch from
-> >     http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-support/fribidi/fribidi/meson.patch
-> >     which fixes the error: "Can not use target gen-unicode-version as a
-> >     generator because it is cross-built and no exe wrapper is defined."
-> >
-> >   - Add a sha256 hash for the license file.
-> >
-> > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> > ---
-> >  package/libfribidi/0001-fix-meson.patch | 42 +++++++++++++++++++++++++
-> >  package/libfribidi/libfribidi.hash      |  5 +--
-> >  package/libfribidi/libfribidi.mk        | 16 +++-------
-> >  3 files changed, 50 insertions(+), 13 deletions(-)
-> >  create mode 100644 package/libfribidi/0001-fix-meson.patch
-> >
-> > diff --git a/package/libfribidi/0001-fix-meson.patch b/package/libfribidi/0001-fix-meson.patch
-> > new file mode 100644
-> > index 0000000000..638d2dd140
-> > --- /dev/null
-> > +++ b/package/libfribidi/0001-fix-meson.patch
-> > @@ -0,0 +1,42 @@
-> > +From f5feb6c599adb52f24656f8589868039b0d14272 Mon Sep 17 00:00:00 2001
-> > +From: Heiko Becker <heirecka@exherbo.org>
-> > +Date: Fri, 7 Sep 2018 20:57:11 +0200
-> > +Subject: [PATCH] Build generator executables natively
-> > +
-> > +They are run during the build and not installed in the end. Without
-> > +this one gets the following error from meson: "ERROR: Can not use
-> > +target gen-unicode-version as a generator because it is cross-built
-> > +and no exe wrapper is defined. You might want to set it to native
-> > +instead."
-> > +
-> > +Closes #87.
-> > +Signed-off-by: Ross Burton <ross.burton@intel.com>
-> > +Signed-off-by: Adam Duskett <aduskett@gmail.com>
-> > +---
-> > + gen.tab/meson.build | 6 ++++--
-> > + 1 file changed, 4 insertions(+), 2 deletions(-)
-> > +
-> > +diff --git a/gen.tab/meson.build b/gen.tab/meson.build
-> > +index 6006d98..8c21e98 100644
-> > +--- a/gen.tab/meson.build
-> > ++++ b/gen.tab/meson.build
-> > +@@ -33,7 +33,8 @@ gen_unicode_version = executable('gen-unicode-version',
-> > +   'gen-unicode-version.c',
-> > +   include_directories: incs,
-> > +   c_args: native_args,
-> > +-  install: false)
-> > ++  install: false,
-> > ++  native: true)
-> > +
-> > + fribidi_unicode_version_h = custom_target('fribidi-unicode-version.h',
-> > +   input: files('unidata/ReadMe.txt', 'unidata/BidiMirroring.txt'),
-> > +@@ -67,7 +68,8 @@ foreach tab : tabs
-> > +     gen_prog_src, 'packtab.c',
-> > +     include_directories: incs,
-> > +     c_args: native_args,
-> > +-    install: false)
-> > ++    install: false,
-> > ++    native: true)
-> > +
-> > +   tab_inc_file = custom_target(gen_prog_name,
-> > +     input: gen_prog_inputs,
-> > diff --git a/package/libfribidi/libfribidi.hash b/package/libfribidi/libfribidi.hash
-> > index 79b5dd3185..d2c71d0cfe 100644
-> > --- a/package/libfribidi/libfribidi.hash
-> > +++ b/package/libfribidi/libfribidi.hash
-> > @@ -1,2 +1,3 @@
-> > -# From http://www.fribidi.org/download/fribidi-0.19.7.tar.bz2.sha256
-> > -sha256       08222a6212bbc2276a2d55c3bf370109ae4a35b689acbc66571ad2a670595a8e        fribidi-0.19.7.tar.bz2
-> > +# Locally caclulated
-> > +sha256       aee3a93d081c293eaca9157700f17dc780a0b6674bc911decc5aaa43aec9abd7        fribidi-v1.0.5.tar.gz
-> > +sha256       32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b        COPYING
-> > diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
-> > index a7a8519181..a01ecf6953 100644
-> > --- a/package/libfribidi/libfribidi.mk
-> > +++ b/package/libfribidi/libfribidi.mk
-> > @@ -4,19 +4,13 @@
-> >  #
-> >  ################################################################################
-> >
-> > -LIBFRIBIDI_VERSION = 0.19.7
-> > -LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.bz2
-> > -LIBFRIBIDI_SITE = http://www.fribidi.org/download
-> > +LIBFRIBIDI_VERSION = v1.0.5
-> > +LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.gz
-> > +LIBFRIBIDI_SITE = $(call github,fribidi,fribidi,$(LIBFRIBIDI_VERSION))
-> >  LIBFRIBIDI_LICENSE = LGPL-2.1+
-> >  LIBFRIBIDI_LICENSE_FILES = COPYING
-> >  LIBFRIBIDI_INSTALL_STAGING = YES
-> > -# Ships a beta libtool version hence our patch doesn't apply.
-> > -# Run autoreconf to regenerate ltmain.sh.
-> > -LIBFRIBIDI_AUTORECONF = YES
-> >  LIBFRIBIDI_DEPENDENCIES = host-pkgconf
-> > -# libglib2 dependency causes a build failure, and this optional
-> > -# dependency is going to be removed upstream, see
-> > -# https://github.com/behdad/fribidi/pull/14
-> > -LIBFRIBIDI_CONF_OPTS = --with-glib=no
->
-> So what happened with the glib dependency then. Is it gone? Please
-> explain in the commit log.
->
-It is indeed gone. The new version is meson based and does not have
-the option to specify weather or not to use glib.
+On 2019-06-20 20:54 +0200, Thomas Petazzoni spake thusly:
+> +Yann in Cc.
 
-I hope that helps!
+I seem to consistently been dragged into weird corner-cases... ;-)
 
-Adam
-> baruch
->
-> > +LIBFRIBIDI_CONF_OPTS = -Ddocs=false
-> >
-> > -$(eval $(autotools-package))
-> > +$(eval $(meson-package))
->
->
-> --
->      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->    - baruch at tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> On Thu, 20 Jun 2019 10:56:48 -0700
+> Alistair Francis <alistair.francis@wdc.com> wrote:
+> > Add a symbolic link to ensure the linux patch is applied to linux and
+> > linux-headers.
+[--SNIP--]
+> I understand the problem, but I am not sure it is the right solution.
+> Indeed, when the option BR2_KERNEL_HEADERS_AS_KERNEL is enabled, we
+> really expect that linux-headers will use the same source code as the
+> kernel, including all patches. The linux-headers.mk is already doing
+> some effort to achieve this, but it does not do it entirely due do
+> BR2_GLOBAL_PATCH_DIR patches.
+
+Agreed.
+
+> So what I would propose instead is this:
+> 
+> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
+> index 95432ade83..46f270a0e1 100644
+> --- a/package/linux-headers/linux-headers.mk
+> +++ b/package/linux-headers/linux-headers.mk
+> @@ -60,7 +60,8 @@ endif # LINUX_HEADERS_CUSTOM_TARBALL
+>  # Apply any necessary patches if we are using the headers from a kernel
+>  # build.
+>  ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
+> -LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
+> +LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH)) \
+> +       $(wildcard $(addsuffix /linux,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))))
+>  
+>  # We rely on the generic package infrastructure to download and apply
+>  # remote patches (downloaded from ftp, http or https). For local
+> 
+> Yann, what do you think of this ?
+
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+> However, Francis & Mark: it is not normal that we can't build a RISC-V
+> 32 toolchain out of the box, as I reported separately. So while this
+> linux-headers/linux patch consistency issue is real, I think we need
+> something better for RISC-V 32. Indeed a user who would build a RISC-V
+> 32 system, but not for Qemu, would not use this defconfig, and would
+> therefore not have this patch. Do you expect this issue to be resolved
+> in the near future on the kernel side ?
+
+So, upstream is broken. Our response is usually that we patch it, and
+cary the patch(es) in the package directory (or in a per-version
+subdirectory thereof).
+
+However, for the kernel, it is more complex, because we usually can't
+know what version the user will end up using (and it is definitely not
+uncommon that they go with a non upstream kernel), and so we can't have
+an automatic way to locate that patch. And even if we could, it may or
+may not apply (e.g. not on older kernels that don't have riscv).
+
+So, besides providing a defconfig, like this one for qemu or for a real
+board, which has the patch we can point users at, I don;t see what we
+can do. Oh, yes I see: we can wait the kernel to get fixed. ;-)
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
