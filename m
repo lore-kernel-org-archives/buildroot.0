@@ -1,37 +1,93 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Jun 2019 21:51:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/opencv: fix build due to gcc
- bug 68485
-In-Reply-To: <20190601102032.28968-1-fontaine.fabrice@gmail.com>
-References: <20190601102032.28968-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190620215126.18bc3e11@windsurf>
+Date: Thu, 20 Jun 2019 21:51:51 +0200
+Subject: [Buildroot] [git commit] package/python-colorama: new package
+Message-ID: <20190620200119.8262A82BD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat,  1 Jun 2019 12:20:32 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ff85ea4fdfb47c9657ff4842bd96a618e3ab5a9b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> With Microblaze Gcc version <= 9.x the build fails due to gcc bug 68485:
-> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. The bug show up when
-> building opencv with optimization but not when building with -O0. To
-> work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_68458=y, we force using
-> -O0.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/17fff0f312ebd520ba3341976ba56fd8c85ee376
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/opencv/opencv.mk | 11 +++++++++--
->  1 file changed, 9 insertions(+), 2 deletions(-)
+This package provides a simple cross-platform API for printing
+colored terminal text.
 
-Applied to master, thanks.
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                   |  1 +
+ package/Config.in                            |  1 +
+ package/python-colorama/Config.in            |  6 ++++++
+ package/python-colorama/python-colorama.hash |  5 +++++
+ package/python-colorama/python-colorama.mk   | 14 ++++++++++++++
+ 5 files changed, 27 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9d806db6f7..10e97ed53c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1525,6 +1525,7 @@ F:	package/policycoreutils/
+ F:	package/proftpd/
+ F:	package/protobuf-c/
+ F:	package/protobuf/
++F:	package/python-colorama/
+ F:	package/python-flask-cors/
+ F:	package/python-ipy/
+ F:	package/python-posix-ipc/
+diff --git a/package/Config.in b/package/Config.in
+index 1ef6bcab22..9130140868 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -853,6 +853,7 @@ menu "External python modules"
+ 	source "package/python-cherrypy/Config.in"
+ 	source "package/python-click/Config.in"
+ 	source "package/python-coherence/Config.in"
++	source "package/python-colorama/Config.in"
+ 	source "package/python-configobj/Config.in"
+ 	source "package/python-configshell-fb/Config.in"
+ 	source "package/python-constantly/Config.in"
+diff --git a/package/python-colorama/Config.in b/package/python-colorama/Config.in
+new file mode 100644
+index 0000000000..911effb3d3
+--- /dev/null
++++ b/package/python-colorama/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_COLORAMA
++	bool "python-colorama"
++	help
++	  Cross-platform colored terminal text.
++
++	  https://github.com/tartley/colorama
+diff --git a/package/python-colorama/python-colorama.hash b/package/python-colorama/python-colorama.hash
+new file mode 100644
+index 0000000000..06f61f80af
+--- /dev/null
++++ b/package/python-colorama/python-colorama.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/colorama/json
++md5	f927529cd1735f6f50ee2c61628e9c1f  colorama-0.4.1.tar.gz
++sha256	05eed71e2e327246ad6b38c540c4a3117230b19679b875190486ddd2d721422d  colorama-0.4.1.tar.gz
++# Locally computed sha256 checksums
++sha256	cac35c02686e5d04a5a7140bfb3b36e73aed496656e891102e428886d7930318  LICENSE.txt
+diff --git a/package/python-colorama/python-colorama.mk b/package/python-colorama/python-colorama.mk
+new file mode 100644
+index 0000000000..2f4bc5e1f1
+--- /dev/null
++++ b/package/python-colorama/python-colorama.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-colorama
++#
++################################################################################
++
++PYTHON_COLORAMA_VERSION = 0.4.1
++PYTHON_COLORAMA_SOURCE = colorama-$(PYTHON_COLORAMA_VERSION).tar.gz
++PYTHON_COLORAMA_SITE = https://files.pythonhosted.org/packages/76/53/e785891dce0e2f2b9f4b4ff5bc6062a53332ed28833c7afede841f46a5db
++PYTHON_COLORAMA_SETUP_TYPE = setuptools
++PYTHON_COLORAMA_LICENSE = BSD-3-Clause
++PYTHON_COLORAMA_LICENSE_FILES = LICENSE.txt
++
++$(eval $(python-package))
