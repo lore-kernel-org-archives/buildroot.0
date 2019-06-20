@@ -1,36 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Jun 2019 16:36:43 +0200
-Subject: [Buildroot] [PATCH 24/27] package/tvheadend: re-enable package
- on microblaze
-In-Reply-To: <20190614210346.121013-25-giulio.benetti@micronovasrl.com>
-References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
- <20190614210346.121013-25-giulio.benetti@micronovasrl.com>
-Message-ID: <20190620163643.6f0060ce@windsurf>
+Date: Thu, 20 Jun 2019 16:39:35 +0200
+Subject: [Buildroot] [git commit] package/sqlite: work around build timeout
+ on Microblaze
+Message-ID: <20190620143935.95026814D5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 14 Jun 2019 23:03:43 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=79bea6cf60665c4a17a5066a2043b05aa45eca85
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Package tvheadend has been disabled on microblaze with this commit:
-> https://git.buildroot.net/buildroot/commit/?id=e1a59357e4dfe8fe9c9119d4b2bc9e4ec36eb3d0
-> but commit log says that build failure is due to "some assertion
-> failure in binutils", that is true. But those assertion failures in
-> binutils are caused by package's Makefile itself that has been fixed by
-> previous patch. So re-enable package for microblaze.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  package/tvheadend/Config.in | 2 --
->  1 file changed, 2 deletions(-)
+With Microblaze Gcc version 4.9 build hangs due to a bug discovered
+for Gcc 4.9 only. Since Gcc 4.9 is not maintaned anymore it doesn't
+make sense to report this bug in Gcc bugzilla and use
+BR2_TOOLCHAIN_HAS_GCC_BUG_. So let's check if we're building for
+Microblaze with Gcc version < 5.x and work around the bug forcing the
+use of -O0.
 
-Applied to master, thanks.
+To reproduce this bug build with following defconfig:
+'
+BR2_microblazeel=y
+BR2_ENABLE_DEBUG=y
+BR2_OPTIMIZE_2=y
+BR2_KERNEL_HEADERS_5_0=y
+BR2_TOOLCHAIN_BUILDROOT_LOCALE=y
+BR2_GCC_VERSION_4_9_X=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_TOOLCHAIN_BUILDROOT_FORTRAN=y
+BR2_GCC_ENABLE_LTO=y
+BR2_PACKAGE_SQLITE=y
+'
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sqlite/sqlite.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index 7e97c966b7..d4cdefe34d 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -39,8 +39,14 @@ ifeq ($(BR2_PACKAGE_SQLITE_NO_SYNC),y)
+ SQLITE_CFLAGS += -DSQLITE_NO_SYNC
+ endif
+ 
++# Building with Microblaze Gcc 4.9 makes compiling to hang.
++# Work around using -O0
++ifeq ($(BR2_microblaze):$(BR2_TOOLCHAIN_GCC_AT_LEAST_5),y:)
++SQLITE_CFLAGS += $(TARGET_CFLAGS) -O0
++else
+ # fallback to standard -O3 when -Ofast is present to avoid -ffast-math
+ SQLITE_CFLAGS += $(subst -Ofast,-O3,$(TARGET_CFLAGS))
++endif
+ 
+ SQLITE_CONF_ENV = CFLAGS="$(SQLITE_CFLAGS)"
+ 
