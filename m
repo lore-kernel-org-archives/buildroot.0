@@ -1,87 +1,53 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Thu, 20 Jun 2019 15:40:33 +0200
-Subject: [Buildroot] [PATCH 11/27] package/prboom: avoid using hardcoded
- optimization flags
-In-Reply-To: <20190619213707.68d086b3@windsurf>
-References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
- <20190614210346.121013-12-giulio.benetti@micronovasrl.com>
- <20190619213707.68d086b3@windsurf>
-Message-ID: <f710440d-3816-d979-b16b-c9dd77a085ae@micronovasrl.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 20 Jun 2019 15:48:09 +0200
+Subject: [Buildroot] [PATCH] package/zip: adjust the version to 3.0
+Message-ID: <20190620134809.10007-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+According to the project homepage at
+http://infozip.sourceforge.net/Zip.html, the version is really named
+3.0. This is also how it's called inside the zip30.ann file in the
+source code, which says "We have posted Zip 3.0, July 5th 2008".
 
-Il 19/06/2019 21:37, Thomas Petazzoni ha scritto:
-> Hello Giulio,
-> 
-> On Fri, 14 Jun 2019 23:03:30 +0200
-> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
-> 
->> Package prboom builds using -O2 flag ignoring Buildroot settings, this
->> is due to the fact that -O2 is appended at the end of CFLAGS.
->>
->> Remove -O2 from 'configure' file, this way CFLAGS will contain Buildroot
->> CFLAGS.
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->> ---
->>   package/prboom/prboom.mk | 7 +++++++
->>   1 file changed, 7 insertions(+)
->>
->> diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
->> index d370ae3fa5..6d9b55e9f6 100644
->> --- a/package/prboom/prboom.mk
->> +++ b/package/prboom/prboom.mk
->> @@ -11,6 +11,13 @@ PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
->>   PRBOOM_LICENSE = GPL-2.0+
->>   PRBOOM_LICENSE_FILES = COPYING
->>   
->> +# Remove imposed -O2 CFLAG to use TARGET_CFLAGS
->> +define PRBOOM_FIXUP_CONFIGURE
->> +	sed -i 's:-O2::g' $(@D)/configure
->> +endef
->> +
->> +PRBOOM_PRE_CONFIGURE_HOOKS += PRBOOM_FIXUP_CONFIGURE
-> 
-> I am not a big fan of this "blind" sed that replaces every -O2 in the
-> configure script with nothing.
-> 
-> Patching configure.ac + autoreconf would be nicer, especially since
-> anyway prboom depends on sdl, and sdl already depends on the autotools
-> machinery.
+So the fact that the tarball is named zip30.tgz is just because
+upstream wanted to avoid having two dots (perhaps by habit of the old
+DOS 8.3 file name limitation ?).
 
-Yes, it's really cleaner.
+The version is also named "3.0" in the SourceForge RSS at [0] that
+release-monitoring.org is using for this package [1]. Therefore, by
+using "3.0" as the version, we will match the version known by
+release-monitoring.org.
 
-> However, ideally the configure.ac script should be fixed to *not* add
-> flags to CFLAGS. CFLAGS is a user variable, the configure script is not
-> supposed to use it. See
-> https://www.gnu.org/software/automake/manual/html_node/Flag-Variables-Ordering.html.
+Of course the tarball name is still zip30.tgz so we tweak the
+ZIP_VERSION value appropriately.
 
-Interesting document.
+[0] https://sourceforge.net/projects/infozip/rss?path=/
+[1] https://release-monitoring.org/project/10080/
 
-> But well, fixing the prboom configure.ac is probably too much effort
-> comparing to the benefits.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/zip/zip.mk | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-I agree.
-
-> So just do a patch that gets rid of the -O2 in the configure.ac, and
-> that will be good enough.
-
-Ok
-
-Thank you
+diff --git a/package/zip/zip.mk b/package/zip/zip.mk
+index 0bd3d3c11f..ca52c74fb1 100644
+--- a/package/zip/zip.mk
++++ b/package/zip/zip.mk
+@@ -4,8 +4,9 @@
+ #
+ ################################################################################
+ 
+-ZIP_VERSION = 30
+-ZIP_SOURCE = zip$(ZIP_VERSION).tgz
++ZIP_VERSION = 3.0
++# The version is really 3.0, but the tarball is named zip30.tgz
++ZIP_SOURCE = zip$(subst .,,$(ZIP_VERSION)).tgz
+ ZIP_SITE = ftp://ftp.info-zip.org/pub/infozip/src
+ ZIP_LICENSE = Info-ZIP
+ ZIP_LICENSE_FILES = LICENSE
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+2.21.0
