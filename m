@@ -1,36 +1,50 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 20 Jun 2019 21:33:44 +0200
-Subject: [Buildroot] [PATCH 1/4] package: remove 'v' prefix from
- github-fetched packages
-In-Reply-To: <20190620083110.4986e5fa@windsurf>
-References: <20190612064209.23619-1-victor.huesca@bootlin.com>
- <20190612064209.23619-2-victor.huesca@bootlin.com>
- <35a7118e-cdf1-b29e-bceb-6c02ecef187e@mind.be>
- <20190620083110.4986e5fa@windsurf>
-Message-ID: <348e13f5-efeb-7136-3315-ce437b12dad6@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 20 Jun 2019 21:34:05 +0200
+Subject: [Buildroot] [git commit] boot/at91bootstrap3: bump to version 3.8.12
+Message-ID: <20190620193312.910818295F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=4bb7ea037e15575454652b0745238d47441fe00e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ boot/at91bootstrap3/Config.in           | 4 ++--
+ boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 20/06/2019 08:31, Thomas Petazzoni wrote:
-> On Wed, 19 Jun 2019 22:50:01 +0200
-> Arnout Vandecappelle <arnout@mind.be> wrote:
-[snip]
->>  It would also be nice if we had some formal way of checking that new packages
->> do this correctly. Actually, it would be good if pkg-stats could generate a
->> report in a human-readable format so it could be used as part of the review flow
->> to check if the mapping with release-monitoring is OK (plus all the other things
->> pkg-stats evaluates).
-> 
-> Hm, yes, could be an interesting idea. Just a new pkg-stats option ?
-
- Actually, since pkg-stats is in support/scripts it's currently not supposed to
-be user-visible. So I'd rather turn it around: make the text output to stdout
-the default, and add an option to generate HTML.
-
- Regards,
- Arnout
+diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
+index f6c310af23..afdc7e77ea 100644
+--- a/boot/at91bootstrap3/Config.in
++++ b/boot/at91bootstrap3/Config.in
+@@ -19,7 +19,7 @@ choice
+ 	prompt "AT91 Bootstrap 3 version"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+-	bool "3.8.6"
++	bool "3.8.12"
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 	bool "Custom Git repository"
+@@ -44,7 +44,7 @@ endif
+ 
+ config BR2_TARGET_AT91BOOTSTRAP3_VERSION
+ 	string
+-	default "v3.8.6" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
++	default "v3.8.12" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
+ 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
+ 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
+ 
+diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
+index e904a46e50..cfeb9c8dc0 100644
+--- a/boot/at91bootstrap3/at91bootstrap3.hash
++++ b/boot/at91bootstrap3/at91bootstrap3.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	a2e9ec6f42ee3b5a805fe215257b63070b6c498d57c568c46fcb18fd1b38ea7e  at91bootstrap3-v3.8.6.tar.gz
++sha256	e25324b6f38725ad2ebfd946cb9e144f0d5889e2885992c7196a82b41fe45ee4  at91bootstrap3-v3.8.12.tar.gz
