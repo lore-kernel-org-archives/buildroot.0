@@ -1,113 +1,76 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Thu, 20 Jun 2019 13:07:48 -0700
-Subject: [Buildroot] [PATCH] qemu/riscv32-virt: Fix missing
- linux-headers patch
-In-Reply-To: <20190620205424.10702057@windsurf>
-References: <20190620175648.7969-1-alistair.francis@wdc.com>
- <20190620205424.10702057@windsurf>
-Message-ID: <CAKmqyKMzuRye_2h45M0FMcTx0iUDFvz_uizw0O3BxQ9STgp5bQ@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Thu, 20 Jun 2019 22:16:45 +0200
+Subject: [Buildroot] [git commit] package/coreutils: allow building as
+ individual binaries
+In-Reply-To: <20190620192137.DB4A482283@busybox.osuosl.org>
+References: <20190620192137.DB4A482283@busybox.osuosl.org>
+Message-ID: <20190620201645.GK2216@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 20, 2019 at 11:54 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Francis,
->
-> +Yann in Cc.
->
-> First of all, my apologies for breaking the build with my change.
+Thomas, Markus, All,
 
-No worries.
+On 2019-06-20 21:04 +0200, Thomas Petazzoni spake thusly:
+> We add configuration option BR2_PACKAGE_COREUTILS_INDIVIDUAL_BINARIES
+> so that coreutils can be built and installed as individual binaries.
+> It can be used if the target file system doesn't support symlinks or
+> symlinks are undesirable.
+[--SNIP--]
+> @@ -111,16 +130,28 @@ COREUTILS_CONF_OPTS += --enable-no-install-program=stdbuf
+>  endif
+>  
+>  # link for archaic shells
+> +ifeq ($(BR2_PACKAGE_COREUTILS_INDIVIDUAL_BINARIES),y)
+> +define COREUTILS_CREATE_TEST_SYMLINK
+> +	ln -fs test $(TARGET_DIR)/usr/bin/[
+> +endef
+> +else
+>  define COREUTILS_CREATE_TEST_SYMLINK
+>  	ln -fs coreutils $(TARGET_DIR)/usr/bin/[
+>  endef
+> +endif
+>  COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CREATE_TEST_SYMLINK
 
->
-> On Thu, 20 Jun 2019 10:56:48 -0700
-> Alistair Francis <alistair.francis@wdc.com> wrote:
->
-> > Commit f9993797959 "configs/qemu_riscv32_virt: update to 5.1 kernel"
-> > broke the qemu/riscv32-virt machine build as the BR2_LINUX_KERNEL_PATCH
-> > mechanism was replaced with the BR2_GLOBAL_PATCH_DIR mechanism when the
-> > patch was applied. This results in the linux-headers not having the
-> > patch applied which causes a glibc build failure.
-> >
-> > Add a symbolic link to ensure the linux patch is applied to linux and
-> > linux-headers.
-> >
-> > Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-> > ---
-> >  board/qemu/riscv32-virt/patches/linux-headers | 1 +
-> >  1 file changed, 1 insertion(+)
-> >  create mode 120000 board/qemu/riscv32-virt/patches/linux-headers
-> >
-> > diff --git a/board/qemu/riscv32-virt/patches/linux-headers b/board/qemu/riscv32-virt/patches/linux-headers
-> > new file mode 120000
-> > index 0000000000..9c52cb36f4
-> > --- /dev/null
-> > +++ b/board/qemu/riscv32-virt/patches/linux-headers
-> > @@ -0,0 +1 @@
-> > +linux
-> > \ No newline at end of file
->
-> I understand the problem, but I am not sure it is the right solution.
-> Indeed, when the option BR2_KERNEL_HEADERS_AS_KERNEL is enabled, we
-> really expect that linux-headers will use the same source code as the
-> kernel, including all patches. The linux-headers.mk is already doing
-> some effort to achieve this, but it does not do it entirely due do
-> BR2_GLOBAL_PATCH_DIR patches.
->
-> So what I would propose instead is this:
->
-> diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-> index 95432ade83..46f270a0e1 100644
-> --- a/package/linux-headers/linux-headers.mk
-> +++ b/package/linux-headers/linux-headers.mk
-> @@ -60,7 +60,8 @@ endif # LINUX_HEADERS_CUSTOM_TARBALL
->  # Apply any necessary patches if we are using the headers from a kernel
->  # build.
->  ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
-> -LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
-> +LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH)) \
-> +       $(wildcard $(addsuffix /linux,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))))
->
->  # We rely on the generic package infrastructure to download and apply
->  # remote patches (downloaded from ftp, http or https). For local
+If we are single-binary, then test is it self a symlink to coreutils
+already, as done by the install of coreutils.
 
-This is fine with me, although I haven't tested to make sure it works.
+If we're multi-binary, then test is standalone.
 
->
-> Yann, what do you think of this ?
->
-> However, Francis & Mark: it is not normal that we can't build a RISC-V
-> 32 toolchain out of the box, as I reported separately. So while this
-> linux-headers/linux patch consistency issue is real, I think we need
-> something better for RISC-V 32. Indeed a user who would build a RISC-V
-> 32 system, but not for Qemu, would not use this defconfig, and would
-> therefore not have this patch. Do you expect this issue to be resolved
-> in the near future on the kernel side ?
+So, in either case, doing the [ -> test symlink should have been valid,
+no?
 
-Ah, now I understand what you mean.
+(sorry I did not reply earlier, I only thought about it after seeing
+Thomas' split patches.)
 
-Yes this is a bad situation.
+Regards,
+Yann E. MORIN.
 
-From my understanding the glibc port for RV32 is basically done, it
-just needs a little bit of cleaning and then more effort to submit it.
-In saying that no one is really pushing for it at the moment. I'll
-take a look to see if I can help get it in.
+>  # gnu thinks chroot is in bin, debian thinks it's in sbin
+> +ifeq ($(BR2_PACKAGE_COREUTILS_INDIVIDUAL_BINARIES),y)
+> +define COREUTILS_FIX_CHROOT_LOCATION
+> +	mv $(TARGET_DIR)/usr/bin/chroot $(TARGET_DIR)/usr/sbin
+> +endef
+> +else
+>  define COREUTILS_FIX_CHROOT_LOCATION
+>  	rm -f $(TARGET_DIR)/usr/bin/chroot
+>  	ln -sf ../bin/coreutils $(TARGET_DIR)/usr/sbin/chroot
+>  endef
+> +endif
+>  COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_FIX_CHROOT_LOCATION
+>  
+>  $(eval $(autotools-package))
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-In the meantime we can either apply a patch to Linux, or we should be
-able to user older kernel headers (I think 5.0 should be fine). Is
-that a better solution?
-
-Alistair
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
