@@ -1,44 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 20 Jun 2019 16:36:10 +0200
-Subject: [Buildroot] [git commit] package/tvheadend: re-enable package on
- microblaze
-Message-ID: <20190620143534.5E6A282A89@busybox.osuosl.org>
+Date: Thu, 20 Jun 2019 16:36:39 +0200
+Subject: [Buildroot] [PATCH 23/27] package/tvheadend: fix PIE build
+ failures
+In-Reply-To: <20190614210346.121013-24-giulio.benetti@micronovasrl.com>
+References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
+ <20190614210346.121013-24-giulio.benetti@micronovasrl.com>
+Message-ID: <20190620163639.60ffebd4@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a2cee5037f9a7dcb732c7cddb873537dae718068
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 14 Jun 2019 23:03:42 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-Package tvheadend has been disabled on microblaze with this commit:
-https://git.buildroot.net/buildroot/commit/?id=e1a59357e4dfe8fe9c9119d4b2bc9e4ec36eb3d0
-but commit log says that build failure is due to "some assertion
-failure in binutils", that is true. But those assertion failures in
-binutils are caused by package's Makefile itself that has been fixed by
-previous patch. So re-enable package for microblaze.
+> Package tvheadend builds using '-pie' linker flag in any case. This
+> leads to linking failure if toolchain doesn't support 'pie'.
+> 
+> Add patch to fix tvheadend's Makefile bug where '-pie' flag is hardcoded
+> making it depend on '--disable-pie' as compiler's flags already are
+> treated.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>  ...pie-linking-according-to-disable-pie.patch | 34 +++++++++++++++++++
+>  package/tvheadend/tvheadend.mk                |  4 +++
+>  2 files changed, 38 insertions(+)
+>  create mode 100644 package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/tvheadend/Config.in | 2 --
- 1 file changed, 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/tvheadend/Config.in b/package/tvheadend/Config.in
-index 5db644400c..909d955c02 100644
---- a/package/tvheadend/Config.in
-+++ b/package/tvheadend/Config.in
-@@ -1,12 +1,10 @@
- comment "tvheadend needs a toolchain w/ NPTL, headers >= 3.2, dynamic library"
--	depends on !BR2_microblazeel
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2 || BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 
- config BR2_PACKAGE_TVHEADEND
- 	bool "tvheadend"
--	depends on !BR2_microblazeel # assertion failure in binutils
- 	depends on !BR2_STATIC_LIBS # dladdr()
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_2
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
