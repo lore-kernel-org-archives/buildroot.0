@@ -1,24 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 20 Jun 2019 13:28:36 +0200
-Subject: [Buildroot] [PATCH 4/4] package/linux-headers: drop support for
- 5.x headers
-In-Reply-To: <20190618115733.28551-4-peter@korsgaard.com> (Peter Korsgaard's
- message of "Tue, 18 Jun 2019 13:57:33 +0200")
-References: <20190618115733.28551-1-peter@korsgaard.com>
- <20190618115733.28551-4-peter@korsgaard.com>
-Message-ID: <87a7eca42j.fsf@dell.be.48ers.dk>
+Date: Thu, 20 Jun 2019 13:29:08 +0200
+Subject: [Buildroot] [PATCH] configs/mx51evk: Bump kernel version
+In-Reply-To: <20190619174253.24352-1-festevam@gmail.com> (Fabio Estevam's
+ message of "Wed, 19 Jun 2019 14:42:53 -0300")
+References: <20190619174253.24352-1-festevam@gmail.com>
+Message-ID: <875zp0a41n.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Fabio" == Fabio Estevam <festevam@gmail.com> writes:
 
- > The 5.0.x series is now EOL and vulnerable to the "TCP SACK PANIC" issue.
- > Drop support for it in linux-headers.
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > Bump the kernel version to 5.1.10.
+ > Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
 Committed, thanks.
 
