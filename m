@@ -1,83 +1,36 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Thu, 20 Jun 2019 10:54:27 -0700
-Subject: [Buildroot] [PATCH v2 2/2] configs/qemu_riscv32_virt: Update to
- 5.1 kernel
-In-Reply-To: <CAKmqyKPR0-FfVgENsyM7hodee-aOTYd4odPqB9axx0_secq4MQ@mail.gmail.com>
-References: <20190619165406.19615-1-alistair.francis@wdc.com>
- <20190619165406.19615-2-alistair.francis@wdc.com>
- <20190620155715.23c40f26@windsurf>
- <CAKmqyKMudH+KpKrF3kwkK6SudHt0Ysg_v1JnBS_BO9jXk3DR+g@mail.gmail.com>
- <58cf6eb8-6e90-1a36-1339-ba5a12c51cad@embecosm.com>
- <CAKmqyKPR0-FfVgENsyM7hodee-aOTYd4odPqB9axx0_secq4MQ@mail.gmail.com>
-Message-ID: <CAKmqyKOA1JxWX0EZ1aBa5AGYBbTpDPXPusUthfR-Y3QXyg4ZzQ@mail.gmail.com>
+From: Alistair Francis <alistair.francis@wdc.com>
+Date: Thu, 20 Jun 2019 10:56:48 -0700
+Subject: [Buildroot] [PATCH] qemu/riscv32-virt: Fix missing linux-headers
+ patch
+Message-ID: <20190620175648.7969-1-alistair.francis@wdc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 20, 2019 at 10:40 AM Alistair Francis <alistair23@gmail.com> wrote:
->
-> On Thu, Jun 20, 2019 at 10:13 AM Mark Corbin <mark.corbin@embecosm.com> wrote:
-> >
-> > Hello Alistair
-> >
-> > On 20/06/2019 18:01, Alistair Francis wrote:
-> > > On Thu, Jun 20, 2019 at 6:57 AM Thomas Petazzoni
-> > > <thomas.petazzoni@bootlin.com> wrote:
-> > >> On Wed, 19 Jun 2019 09:54:06 -0700
-> > >> Alistair Francis <alistair.francis@wdc.com> wrote:
-> > >>
-> > >>>  # Kernel
-> > >>>  BR2_LINUX_KERNEL=y
-> > >>>  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> > >>> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.20.17"
-> > >>> -BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-> > >>> -BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/riscv32-virt/linux.config.fragment"
-> > >>> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.12"
-> > >>> +BR2_LINUX_KERNEL_DEFCONFIG="rv32"
-> > >>> +BR2_LINUX_KERNEL_PATCH="board/qemu/riscv32-virt/0001-Revert-riscv-Use-latest-system-call-ABI.patch"
-> > >> We prefer using the BR2_GLOBAL_PATCH_DIR mechanism nowadays, so I've
-> > >> adjusted your patch to use that and applied. Thanks!
-> > > The BR2_GLOBAL_PATCH_DIR system looks really cool, I'll be sure to use
-> > > that next time. Thanks
-> > >
-> > > Alistair
-> >
-> > I can't get the updated 32-bit QEMU configuration to build - there is a
-> > problem with glibc...
-> >
-> > In file included from ../sysdeps/unix/sysv/linux/lowlevellock-futex.h:23:0,
-> >                  from ../sysdeps/nptl/lowlevellock.h:23,
-> >                  from ../sysdeps/nptl/libc-lockP.h:33,
-> >                  from ../sysdeps/nptl/libc-lock.h:184,
-> >                  from gconv_db.c:26:
-> > gconv_db.c: In function '__gconv_find_transform':
-> > ../sysdeps/unix/sysv/linux/riscv/sysdep.h:120:31: error: '__NR_futex'
-> > undeclared (first use in this function); did you mean
-> >  '__futex'?
-> >
-> > The updated 64-bit version works without any problems.
->
-> Yep, it's not working for me now either. I think the Linux patch is
-> somehow not being applied. I'll investigate.
+Commit f9993797959 "configs/qemu_riscv32_virt: update to 5.1 kernel"
+broke the qemu/riscv32-virt machine build as the BR2_LINUX_KERNEL_PATCH
+mechanism was replaced with the BR2_GLOBAL_PATCH_DIR mechanism when the
+patch was applied. This results in the linux-headers not having the
+patch applied which causes a glibc build failure.
 
-The conversion to the BR2_GLOBAL_PATCH_DIR mechanism broke the build.
-I'll send a patch now that fixes it.
+Add a symbolic link to ensure the linux patch is applied to linux and
+linux-headers.
 
-Alistair
+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+---
+ board/qemu/riscv32-virt/patches/linux-headers | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 120000 board/qemu/riscv32-virt/patches/linux-headers
 
->
-> Alistair
->
-> >
-> > Is there an issue with the patch revert for glibc?
-> >
-> > Thanks
-> >
-> > Mark
-> >
-> > --
-> > Mark Corbin
-> > Embecosm Ltd.
-> > https://www.embecosm.com
+diff --git a/board/qemu/riscv32-virt/patches/linux-headers b/board/qemu/riscv32-virt/patches/linux-headers
+new file mode 120000
+index 0000000000..9c52cb36f4
+--- /dev/null
++++ b/board/qemu/riscv32-virt/patches/linux-headers
+@@ -0,0 +1 @@
++linux
+\ No newline at end of file
+-- 
+2.22.0
