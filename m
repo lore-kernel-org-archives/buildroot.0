@@ -1,31 +1,64 @@
-From: =?gb18030?B?hKK80rWT?= <liu.jialu@qq.com>
-Date: Thu, 20 Jun 2019 17:56:30 +0800
-Subject: [Buildroot] csky_gx6605s_defconfig add "BR2_TOOLCHAIN_EXTERNAL=y"
-Message-ID: <tencent_2664A2093675DB6268415CDB@qq.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Thu, 20 Jun 2019 12:07:10 +0200
+Subject: [Buildroot] [PATCH v4 00/15] Add gcc 9.1
+Message-ID: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-hi?
-           buildroot source: git clone git://git.buildroot.net/buildroot
-          
+Before adding gcc 9.1 [1] to Buildroot, add some fixes for issues discovered
+by toolchain-builder [2] that are trigged by this new compiler version.
+(disable powerpc Werror, uClibc-ng asm sparc and ARC glibc).
 
-all BR2_TOOLCHAIN_EXTERNAL_* items depend on BR2_TOOLCHAIN_EXTERNAL=y
+Then add gcc 9.1 for internal and extenal toolchain backend and switch gcc 8.x
+as default compiler.
 
+Thanks to Yann E. MORIN for providing a patch series that add new ARM cores
+added by gcc 9.1.
 
-diff --git a/configs/csky_gx6605s_defconfig b/configs/csky_gx6605s_defconfig
-index d0a2aad..22e9e0c 100644
---- a/configs/csky_gx6605s_defconfig
-+++ b/configs/csky_gx6605s_defconfig
-@@ -1,5 +1,6 @@
- BR2_csky=y
- BR2_GLOBAL_PATCH_DIR="board/csky/gx6605s/patches"
-+BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
- BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/c-sky/tools/raw/master/csky-linux-tools-x86_64-glibc-linux-4.9.56-20180128.tar.gz"
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="csky-linux"
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190620/8ae9a883/attachment.html>
+Each new ARM core has been build tested for aarch64:
+https://gitlab.com/kubu93/buildroot/pipelines/60318953
+
+Finally, enable the new ork1 (openrisc) that will replace in the following
+series the old gcc fork (gcc 5.x).
+
+[1] https://gcc.gnu.org/gcc-9/changes.html
+[2] https://gitlab.com/kubu93/toolchains-builder/pipelines/59794237
+
+Romain Naour (9):
+  package/glibc/arc: fix build issue with gcc-9.1
+  linux: disable Werror for powerpc kernels
+  package/uclibc: remove asm constraint
+  toolchain: add gcc 9 entry
+  package/gcc: add support for gcc 9.1
+  arch: add BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+  toolchain-external: add gcc 9 entry
+  package/gcc: switch to gcc 8.x as the default
+  package/gcc: enable gcc 9.1 for ork1 (openrisc)
+
+Yann E. MORIN (6):
+  arch/arm: move dependency on 64-bit down to individual cores
+  arch/arm: some cores have a different name with gcc-9
+  arch/arm: saphira is in fact an armv8.4a
+  arch/arm: add two new 64-bit-only armv8a cores
+  arch/arm: add two new cortex-based armv8.2a cores
+  arch/arm: add two new non-cortex-based armv8.2a cores
+
+ arch/Config.in                                |   4 +
+ arch/Config.in.arm                            |  95 +++++++++--
+ linux/linux.mk                                |   2 +
+ package/gcc/Config.in.host                    |   8 +-
+ package/gcc/gcc.hash                          |   2 +
+ package/gcc/gcc.mk                            |   4 +-
+ ...Add-support-for-GCC-9-attribute-copy.patch | 160 ++++++++++++++++++
+ ...arc-syscalls.h-remove-asm-constraint.patch |  46 +++++
+ toolchain/Config.in                           |   5 +
+ .../Config.in.options                         |   6 +
+ 10 files changed, 313 insertions(+), 19 deletions(-)
+ create mode 100644 package/glibc/arc-2018.09-release/0001-Add-support-for-GCC-9-attribute-copy.patch
+ create mode 100644 package/uclibc/0003-RFC-sparc-syscalls.h-remove-asm-constraint.patch
+
+-- 
+2.17.1
