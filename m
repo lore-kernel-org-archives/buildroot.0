@@ -1,77 +1,99 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Thu, 20 Jun 2019 11:26:06 -0700
-Subject: [Buildroot] [PATCH v2 2/2] configs/qemu_riscv32_virt: Update to
- 5.1 kernel
-In-Reply-To: <20190620202630.133c7d35@windsurf>
-References: <20190619165406.19615-1-alistair.francis@wdc.com>
- <20190619165406.19615-2-alistair.francis@wdc.com>
- <20190620155715.23c40f26@windsurf>
- <CAKmqyKMudH+KpKrF3kwkK6SudHt0Ysg_v1JnBS_BO9jXk3DR+g@mail.gmail.com>
- <58cf6eb8-6e90-1a36-1339-ba5a12c51cad@embecosm.com>
- <CAKmqyKPR0-FfVgENsyM7hodee-aOTYd4odPqB9axx0_secq4MQ@mail.gmail.com>
- <CAKmqyKOA1JxWX0EZ1aBa5AGYBbTpDPXPusUthfR-Y3QXyg4ZzQ@mail.gmail.com>
- <20190620202630.133c7d35@windsurf>
-Message-ID: <CAKmqyKPecJMDpJu+R8cZ7jEc_UbOeMvJszViZ=siVJV_HVUY+A@mail.gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Thu, 20 Jun 2019 20:38:13 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/python-periphery: new package
+Message-ID: <1561055893-22140-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 20, 2019 at 11:26 AM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello,
->
-> On Thu, 20 Jun 2019 10:54:27 -0700
-> Alistair Francis <alistair23@gmail.com> wrote:
->
-> > > Yep, it's not working for me now either. I think the Linux patch is
-> > > somehow not being applied. I'll investigate.
-> >
-> > The conversion to the BR2_GLOBAL_PATCH_DIR mechanism broke the build.
-> > I'll send a patch now that fixes it.
->
-> Argh, sorry about that :-/
->
-> However, if the patch is needed to be able to build the toolchain, then
-> there is a larger problem: it shouldn't be just this defconfig that has
-> the patch.
->
-> In fact, now that I think of it, I remember doing a rebuild of
-> toolchains recently, and riscv32 was indeed failing with:
->
-> In file included from ../sysdeps/unix/sysv/linux/lowlevellock-futex.h:23:0,
->                  from ../sysdeps/nptl/lowlevellock.h:23,
->                  from ../sysdeps/nptl/libc-lockP.h:33,
->                  from ../sysdeps/nptl/libc-lock.h:184,
->                  from gconv_db.c:26:
-> gconv_db.c: In function '__gconv_find_transform':
-> ../sysdeps/unix/sysv/linux/riscv/sysdep.h:120:31: error: '__NR_futex' undeclared (first use in this function); did you mean '__futex'?
->  #define SYS_ify(syscall_name) __NR_##syscall_name
->                                ^
-> ../sysdeps/unix/sysv/linux/riscv/sysdep.h:232:38: note: in definition of macro 'internal_syscall4'
->   register long int __a7 asm ("a7") = number;   \
->                                       ^~~~~~
-> ../sysdeps/unix/sysv/linux/riscv/sysdep.h:151:24: note: in expansion of macro 'SYS_ify'
->   internal_syscall##nr (SYS_ify (name), err, args)
->                         ^~~~~~~
->
-> And this should be fixed somehow.
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+Changes v1 -> v2
+ - remove 'v' prefix in PYTHON_PERIPHERY_VERSION
+ 
+ Scanpy was not used because the archive in pythonhosted
+ does not contain the license file.
+ 
+ With the github repo : make python-periphery-legal-info 
+   >>> python-periphery 1.1.1 Collecting legal info
+   LICENSE: OK (sha256: db1bea825e728d8bcdf6c220d79c74370a9fcb63a4f9153c2cece2b63e177aa4)
+ 
+ DEVELOPERS                                     |  1 +
+ package/Config.in                              |  1 +
+ package/python-periphery/Config.in             |  7 +++++++
+ package/python-periphery/python-periphery.hash |  3 +++
+ package/python-periphery/python-periphery.mk   | 13 +++++++++++++
+ 5 files changed, 25 insertions(+)
+ create mode 100644 package/python-periphery/Config.in
+ create mode 100644 package/python-periphery/python-periphery.hash
+ create mode 100644 package/python-periphery/python-periphery.mk
 
-Yep, the problem is that the glibc port isn't upstream so it isn't
-stable. The kernel has progressed ahead of the latest glibc upstrem
-submission (what we are using in buildroot). To fix this we are
-reverting the patch from the kernel. Hopefully in the future we can
-update glibc and then remove the patch.
-
-Alistair
-
->
-> Best regards,
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 9d806db..3fec0f7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1855,6 +1855,7 @@ F:	package/trace-cmd/
+ 
+ N:	Pierre-Jean Texier <pjtexier@koncepto.io>
+ F:	package/libubootenv/
++F:	package/python-periphery/
+ 
+ N:	Pieter De Gendt <pieter.degendt@gmail.com>
+ F:	package/libvips/
+diff --git a/package/Config.in b/package/Config.in
+index 1ef6bca..d70ce20 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -964,6 +964,7 @@ menu "External python modules"
+ 	source "package/python-pathpy/Config.in"
+ 	source "package/python-pathtools/Config.in"
+ 	source "package/python-pathvalidate/Config.in"
++	source "package/python-periphery/Config.in"
+ 	source "package/python-pexpect/Config.in"
+ 	source "package/python-pickleshare/Config.in"
+ 	source "package/python-pigpio/Config.in"
+diff --git a/package/python-periphery/Config.in b/package/python-periphery/Config.in
+new file mode 100644
+index 0000000..99585b0
+--- /dev/null
++++ b/package/python-periphery/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PERIPHERY
++	bool "python-periphery"
++	help
++	  A pure Python 2/3 library for peripheral I/O (GPIO, LED,
++	  PWM, SPI, I2C, MMIO, Serial) in Linux.
++
++	  https://github.com/vsergeev/python-periphery
+diff --git a/package/python-periphery/python-periphery.hash b/package/python-periphery/python-periphery.hash
+new file mode 100644
+index 0000000..de988b3
+--- /dev/null
++++ b/package/python-periphery/python-periphery.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 a9a0a0ac02b8c3a954281777e92a15ec41abd311eb8732b50a2faaa9df62f1df  python-periphery-1.1.1.tar.gz
++sha256 db1bea825e728d8bcdf6c220d79c74370a9fcb63a4f9153c2cece2b63e177aa4  LICENSE
+diff --git a/package/python-periphery/python-periphery.mk b/package/python-periphery/python-periphery.mk
+new file mode 100644
+index 0000000..150ac1c
+--- /dev/null
++++ b/package/python-periphery/python-periphery.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-periphery
++#
++################################################################################
++
++PYTHON_PERIPHERY_VERSION = 1.1.1
++PYTHON_PERIPHERY_SITE = $(call github,vsergeev,python-periphery,v$(PYTHON_PERIPHERY_VERSION))
++PYTHON_PERIPHERY_LICENSE = MIT
++PYTHON_PERIPHERY_LICENSE_FILES = LICENSE
++PYTHON_PERIPHERY_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
+-- 
+2.7.4
