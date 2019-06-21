@@ -1,45 +1,44 @@
-From: John Keeping <john@metanate.com>
-Date: Fri, 21 Jun 2019 13:36:24 +0100
-Subject: [Buildroot] [RFC PATCH] download/git: ban branch references
-In-Reply-To: <CA+1k=2Zy3fgq+QQ9r7YYvz6+p7QFxSnmeCVEB+_yDmweziAA-Q@mail.gmail.com>
-References: <20190619151817.6331-1-john@metanate.com>
- <CA+1k=2Zy3fgq+QQ9r7YYvz6+p7QFxSnmeCVEB+_yDmweziAA-Q@mail.gmail.com>
-Message-ID: <20190621131846.0f8f74e4@donbot>
+From: Victor Huesca <victor.huesca@bootlin.com>
+Date: Fri, 21 Jun 2019 14:37:11 +0200
+Subject: [Buildroot] [PATCH buildroot-test 3/4] web/schema.sql: add indexes
+ on the database schema
+In-Reply-To: <20190621123712.8060-1-victor.huesca@bootlin.com>
+References: <20190621123712.8060-1-victor.huesca@bootlin.com>
+Message-ID: <20190621123712.8060-4-victor.huesca@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 20 Jun 2019 11:27:02 -0600
-Joel Carlson <JoelsonCarl@gmail.com> wrote:
+Add indexes on the two columns of `symbol_per_result` to improve significantly
+queries involving symbols (this is an over 80M rows table).
+This table is heavily used to retrieve results matching a symbols and it is not
+an option filter symbols without these indexes.
 
-> On Wed, Jun 19, 2019 at 9:19 AM John Keeping <john@metanate.com> wrote:
-> >
-> > As described in the manual, using a branch name as a version is not
-> > supported.  However, nothing enforces this so it is easy to specify a
-> > branch name either accidentally or because new developers have not read
-> > through the manual.  
-> 
-> At a more general discussion level, I have to admit I like having the
-> ability to use a branch name even if it isn't supported. During
-> development I find it easier to use a branch name and just delete the
-> cached version to force it to re-download when I know I have new
-> updates.  I can switch to a tag when I have a version I actually want
-> tagged and "final."  Otherwise I'd have to keep tagging changes and
-> updating what tag to grab in the config or package file to pull in new
-> changes.
-> 
-> Granted, it isn't a huge inconvenience to switch how I do things, and
-> I could see it being useful to "idiot-proof" for people who don't
-> realize the potential problems with using branch names.  But I at
-> least wanted to make my opinion known that I like it the way it is.
+Also mark these same columns as foreign keys to ensure integrity of the
+database.
 
-I'm curious what advantages you see to this method compared to
-_OVERRIDE_SRCDIR.  I find pointing to an external version of the source
-to be more flexible and generally faster than pulling from Git every
-time.
+Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+---
+ web/schema.sql | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-
-Regards,
-John
+diff --git a/web/schema.sql b/web/schema.sql
+index 65fd883..8b854a2 100644
+--- a/web/schema.sql
++++ b/web/schema.sql
+@@ -27,5 +27,10 @@ CREATE TABLE `symbol_per_result` (
+   `id` int(11) NOT NULL AUTO_INCREMENT,
+   `result_id` int(11) NOT NULL DEFAULT '0',
+   `symbol_id` int(11) NOT NULL DEFAULT '0',
+-  PRIMARY KEY (`id`)
++  PRIMARY KEY (`id`),
++  CONSTRAINT `fk_result_id` FOREIGN KEY (`result_id`) REFERENCES `results`(`id`),
++  CONSTRAINT `fk_symbol_id` FOREIGN KEY (`symbol_id`) REFERENCES `config_symbol`(`id`),
++  INDEX `ix_symbol_id`(`symbol_id`),
++  INDEX `ix_result_id`(`result_id`)
++
+ ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- 
+2.21.0
