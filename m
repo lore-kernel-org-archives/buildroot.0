@@ -1,174 +1,360 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Thu, 20 Jun 2019 15:58:23 -0700
-Subject: [Buildroot] [PATCH] qemu/riscv32-virt: Fix missing
- linux-headers patch
-In-Reply-To: <20190620204314.GL2216@scaer>
-References: <20190620175648.7969-1-alistair.francis@wdc.com>
- <20190620205424.10702057@windsurf> <20190620204314.GL2216@scaer>
-Message-ID: <CAKmqyKPV=Bqum0_sxAdyhRKDcfQp9ie1dr6E5zVBEN70usmwQA@mail.gmail.com>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Thu, 20 Jun 2019 22:42:32 -0300
+Subject: [Buildroot] [PATCH] package/util-linux: bump to version 2.34
+Message-ID: <20190621014232.9282-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, Jun 20, 2019 at 1:43 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Thomas, Alistair, Mark, All,
->
-> On 2019-06-20 20:54 +0200, Thomas Petazzoni spake thusly:
-> > +Yann in Cc.
->
-> I seem to consistently been dragged into weird corner-cases... ;-)
->
-> > On Thu, 20 Jun 2019 10:56:48 -0700
-> > Alistair Francis <alistair.francis@wdc.com> wrote:
-> > > Add a symbolic link to ensure the linux patch is applied to linux and
-> > > linux-headers.
-> [--SNIP--]
-> > I understand the problem, but I am not sure it is the right solution.
-> > Indeed, when the option BR2_KERNEL_HEADERS_AS_KERNEL is enabled, we
-> > really expect that linux-headers will use the same source code as the
-> > kernel, including all patches. The linux-headers.mk is already doing
-> > some effort to achieve this, but it does not do it entirely due do
-> > BR2_GLOBAL_PATCH_DIR patches.
->
-> Agreed.
->
-> > So what I would propose instead is this:
-> >
-> > diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-> > index 95432ade83..46f270a0e1 100644
-> > --- a/package/linux-headers/linux-headers.mk
-> > +++ b/package/linux-headers/linux-headers.mk
-> > @@ -60,7 +60,8 @@ endif # LINUX_HEADERS_CUSTOM_TARBALL
-> >  # Apply any necessary patches if we are using the headers from a kernel
-> >  # build.
-> >  ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
-> > -LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
-> > +LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH)) \
-> > +       $(wildcard $(addsuffix /linux,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))))
-> >
-> >  # We rely on the generic package infrastructure to download and apply
-> >  # remote patches (downloaded from ftp, http or https). For local
-> >
-> > Yann, what do you think of this ?
->
-> Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
->
-> > However, Francis & Mark: it is not normal that we can't build a RISC-V
-> > 32 toolchain out of the box, as I reported separately. So while this
-> > linux-headers/linux patch consistency issue is real, I think we need
-> > something better for RISC-V 32. Indeed a user who would build a RISC-V
-> > 32 system, but not for Qemu, would not use this defconfig, and would
-> > therefore not have this patch. Do you expect this issue to be resolved
-> > in the near future on the kernel side ?
->
-> So, upstream is broken. Our response is usually that we patch it, and
-> cary the patch(es) in the package directory (or in a per-version
-> subdirectory thereof).
->
-> However, for the kernel, it is more complex, because we usually can't
-> know what version the user will end up using (and it is definitely not
-> uncommon that they go with a non upstream kernel), and so we can't have
-> an automatic way to locate that patch. And even if we could, it may or
-> may not apply (e.g. not on older kernels that don't have riscv).
->
-> So, besides providing a defconfig, like this one for qemu or for a real
-> board, which has the patch we can point users at, I don;t see what we
-> can do. Oh, yes I see: we can wait the kernel to get fixed. ;-)
+From: Carlos Santos <unixmania@gmail.com>
 
-I started looking at fixing glibc, but it seems to be a large task as
-without __ARCH_WANT_TIME32_SYSCALLS defined in the kernel we need to
-implement a lot of syscalls in glibc.
+- Remove patches already applied upstream.
+- Update file hash.
+- Add an option to select the new "hardlink" command (off by defaul)
+- hardlink uses libpcre2-8 if pcre2 is detected at config time so add a
+  build dependency on pcre2, if it's selected.
+- Change selections to reflect that libblkid now does not depend on
+  libuuid anymore
 
-Alistair
+Full release notes available at
 
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+  https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.34/v2.34-ReleaseNotes
 
-On Thu, Jun 20, 2019 at 1:43 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> Thomas, Alistair, Mark, All,
->
-> On 2019-06-20 20:54 +0200, Thomas Petazzoni spake thusly:
-> > +Yann in Cc.
->
-> I seem to consistently been dragged into weird corner-cases... ;-)
->
-> > On Thu, 20 Jun 2019 10:56:48 -0700
-> > Alistair Francis <alistair.francis@wdc.com> wrote:
-> > > Add a symbolic link to ensure the linux patch is applied to linux and
-> > > linux-headers.
-> [--SNIP--]
-> > I understand the problem, but I am not sure it is the right solution.
-> > Indeed, when the option BR2_KERNEL_HEADERS_AS_KERNEL is enabled, we
-> > really expect that linux-headers will use the same source code as the
-> > kernel, including all patches. The linux-headers.mk is already doing
-> > some effort to achieve this, but it does not do it entirely due do
-> > BR2_GLOBAL_PATCH_DIR patches.
->
-> Agreed.
->
-> > So what I would propose instead is this:
-> >
-> > diff --git a/package/linux-headers/linux-headers.mk b/package/linux-headers/linux-headers.mk
-> > index 95432ade83..46f270a0e1 100644
-> > --- a/package/linux-headers/linux-headers.mk
-> > +++ b/package/linux-headers/linux-headers.mk
-> > @@ -60,7 +60,8 @@ endif # LINUX_HEADERS_CUSTOM_TARBALL
-> >  # Apply any necessary patches if we are using the headers from a kernel
-> >  # build.
-> >  ifeq ($(BR2_KERNEL_HEADERS_AS_KERNEL),y)
-> > -LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH))
-> > +LINUX_HEADERS_PATCHES = $(call qstrip,$(BR2_LINUX_KERNEL_PATCH)) \
-> > +       $(wildcard $(addsuffix /linux,$(call qstrip,$(BR2_GLOBAL_PATCH_DIR))))
-> >
-> >  # We rely on the generic package infrastructure to download and apply
-> >  # remote patches (downloaded from ftp, http or https). For local
-> >
-> > Yann, what do you think of this ?
->
-> Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
->
-> > However, Francis & Mark: it is not normal that we can't build a RISC-V
-> > 32 toolchain out of the box, as I reported separately. So while this
-> > linux-headers/linux patch consistency issue is real, I think we need
-> > something better for RISC-V 32. Indeed a user who would build a RISC-V
-> > 32 system, but not for Qemu, would not use this defconfig, and would
-> > therefore not have this patch. Do you expect this issue to be resolved
-> > in the near future on the kernel side ?
->
-> So, upstream is broken. Our response is usually that we patch it, and
-> cary the patch(es) in the package directory (or in a per-version
-> subdirectory thereof).
->
-> However, for the kernel, it is more complex, because we usually can't
-> know what version the user will end up using (and it is definitely not
-> uncommon that they go with a non upstream kernel), and so we can't have
-> an automatic way to locate that patch. And even if we could, it may or
-> may not apply (e.g. not on older kernels that don't have riscv).
->
-> So, besides providing a defconfig, like this one for qemu or for a real
-> board, which has the patch we can point users at, I don;t see what we
-> can do. Oh, yes I see: we can wait the kernel to get fixed. ;-)
->
-> Regards,
-> Yann E. MORIN.
->
-> --
-> .-----------------.--------------------.------------------.--------------------.
-> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-> '------------------------------^-------^------------------^--------------------'
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+ ...se-poweroff-if-shutdown-is-not-found.patch | 86 -------------------
+ ...tty-fix-output-of-escaped-characters.patch | 26 ------
+ ...rch-fix-obscure-sparc32bash-use-case.patch | 84 ------------------
+ ...alue-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch | 32 -------
+ package/util-linux/Config.in                  |  6 +-
+ package/util-linux/util-linux.hash            |  4 +-
+ package/util-linux/util-linux.mk              |  6 +-
+ 7 files changed, 12 insertions(+), 232 deletions(-)
+ delete mode 100644 package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch
+ delete mode 100644 package/util-linux/0002-agetty-fix-output-of-escaped-characters.patch
+ delete mode 100644 package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch
+ delete mode 100644 package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch
+
+diff --git a/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch b/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch
+deleted file mode 100644
+index b97be2ef07..0000000000
+--- a/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch
++++ /dev/null
+@@ -1,86 +0,0 @@
+-From e1686b25acdedb34cc357f08f0dd3ca01c559dfd Mon Sep 17 00:00:00 2001
+-From: Justin Chen <justinpopo6@gmail.com>
+-Date: Thu, 1 Nov 2018 11:10:38 -0700
+-Subject: [PATCH] rtcwake: use poweroff if shutdown is not found
+-
+-Some systems do not have the shutdown command. Use poweroff as an
+-alternative.
+-
+-Signed-off-by: Justin Chen <justinpopo6@gmail.com>
+----
+- include/pathnames.h |  1 +
+- sys-utils/rtcwake.c | 39 +++++++++++++++++++++++++++------------
+- 2 files changed, 28 insertions(+), 12 deletions(-)
+-
+-diff --git a/include/pathnames.h b/include/pathnames.h
+-index 3d5052e6f..ed8ea330d 100644
+---- a/include/pathnames.h
+-+++ b/include/pathnames.h
+-@@ -53,6 +53,7 @@
+- # define _PATH_LOGIN		"/bin/login"
+- #endif
+- #define _PATH_SHUTDOWN		"/sbin/shutdown"
+-+#define _PATH_POWEROFF		"/sbin/poweroff"
+- 
+- #define _PATH_TERMCOLORS_DIRNAME "terminal-colors.d"
+- #define _PATH_TERMCOLORS_DIR	"/etc/" _PATH_TERMCOLORS_DIRNAME
+-diff --git a/sys-utils/rtcwake.c b/sys-utils/rtcwake.c
+-index b63c64627..029f00f9b 100644
+---- a/sys-utils/rtcwake.c
+-+++ b/sys-utils/rtcwake.c
+-@@ -28,6 +28,7 @@
+- #include <stdlib.h>
+- #include <string.h>
+- #include <sys/ioctl.h>
+-+#include <sys/stat.h>
+- #include <sys/time.h>
+- #include <sys/types.h>
+- #include <termios.h>
+-@@ -582,18 +583,32 @@ int main(int argc, char **argv)
+- 		char *arg[5];
+- 		int i = 0;
+- 
+--		if (ctl.verbose)
+--			printf(_("suspend mode: off; executing %s\n"),
+--						_PATH_SHUTDOWN);
+--		arg[i++] = _PATH_SHUTDOWN;
+--		arg[i++] = "-h";
+--		arg[i++] = "-P";
+--		arg[i++] = "now";
+--		arg[i]   = NULL;
+--		if (!ctl.dryrun) {
+--			execv(arg[0], arg);
+--			warn(_("failed to execute %s"), _PATH_SHUTDOWN);
+--			rc = EXIT_FAILURE;
+-+		if (!access(_PATH_SHUTDOWN, X_OK)) {
+-+			arg[i++] = _PATH_SHUTDOWN;
+-+			arg[i++] = "-h";
+-+			arg[i++] = "-P";
+-+			arg[i++] = "now";
+-+			arg[i]   = NULL;
+-+		} else if (!access(_PATH_POWEROFF, X_OK)) {
+-+			arg[i++] = _PATH_POWEROFF;
+-+			arg[i]   = NULL;
+-+		} else {
+-+			arg[i] 	 = NULL;
+-+		}
+-+
+-+		if (arg[0]) {
+-+			if (ctl.verbose)
+-+				printf(_("suspend mode: off; executing %s\n"),
+-+						arg[0]);
+-+			if (!ctl.dryrun) {
+-+				execv(arg[0], arg);
+-+				warn(_("failed to execute %s"), arg[0]);
+-+				rc = EX_EXEC_ENOENT;
+-+			}
+-+		} else {
+-+			/* Failed to find shutdown command */
+-+			warn(_("failed to find shutdown command"));
+-+			rc = EX_EXEC_ENOENT;
+- 		}
+- 		break;
+- 	}
+--- 
+-2.17.1
+-
+diff --git a/package/util-linux/0002-agetty-fix-output-of-escaped-characters.patch b/package/util-linux/0002-agetty-fix-output-of-escaped-characters.patch
+deleted file mode 100644
+index fcd9731348..0000000000
+--- a/package/util-linux/0002-agetty-fix-output-of-escaped-characters.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 73c5a3cc748b853936319e6cdc94159a6974db52 Mon Sep 17 00:00:00 2001
+-From: Christian Hesse <mail@eworm.de>
+-Date: Wed, 7 Nov 2018 13:55:06 +0100
+-Subject: [PATCH] agetty: fix output of escaped characters
+-
+-Signed-off-by: Christian Hesse <mail@eworm.de>
+----
+- term-utils/agetty.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/term-utils/agetty.c b/term-utils/agetty.c
+-index 05a269abb..b9f08728e 100644
+---- a/term-utils/agetty.c
+-+++ b/term-utils/agetty.c
+-@@ -2755,7 +2755,7 @@ static void output_special_char(struct issue *ie,
+- 		break;
+- 	}
+- 	default:
+--		putchar(c);
+-+		putc(c, ie->output);
+- 		break;
+- 	}
+- }
+--- 
+-2.17.1
+-
+diff --git a/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch b/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch
+deleted file mode 100644
+index 70588b863e..0000000000
+--- a/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch
++++ /dev/null
+@@ -1,84 +0,0 @@
+-From 3fa06e049012218d883d0e1251df86bafbc446bf Mon Sep 17 00:00:00 2001
+-From: Karel Zak <kzak@redhat.com>
+-Date: Thu, 22 Nov 2018 11:03:35 +0100
+-Subject: [PATCH] setarch: fix obscure sparc32bash use-case
+-
+-Reported-by: Carlos Santos <casantos@datacom.com.br>
+-Signed-off-by: Karel Zak <kzak@redhat.com>
+-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+----
+- sys-utils/setarch.c | 28 ++++++++++++++++++----------
+- 1 file changed, 18 insertions(+), 10 deletions(-)
+-
+-diff --git a/sys-utils/setarch.c b/sys-utils/setarch.c
+-index a733f7b3c..7c0a63fbb 100644
+---- a/sys-utils/setarch.c
+-+++ b/sys-utils/setarch.c
+-@@ -268,6 +268,7 @@ int main(int argc, char *argv[])
+- 	int c;
+- 	struct arch_domain *doms, *target;
+- 	unsigned long pers_value = 0;
+-+	char *shell = NULL, *shell_arg = NULL;
+- 
+- 	/* Options without equivalent short options */
+- 	enum {
+-@@ -310,14 +311,14 @@ int main(int argc, char *argv[])
+- 	archwrapper = strcmp(program_invocation_short_name, "setarch") != 0;
+- 	if (archwrapper) {
+- 		arch = program_invocation_short_name;	/* symlinks to setarch */
+--#if defined(__sparc64__) || defined(__sparc__)
+-+
+-+		/* Don't use ifdef sparc here, we get "Unrecognized architecture"
+-+		 * error message later if necessary */
+- 		if (strcmp(arch, "sparc32bash") == 0) {
+--			if (set_arch(arch, 0L, 0))
+--				err(EXIT_FAILURE, _("Failed to set personality to %s"), arch);
+--			execl("/bin/bash", "", NULL);
+--			errexec("/bin/bash");
+-+			shell = "/bin/bash";
+-+			shell_arg = "";
+-+			goto set_arch;
+- 		}
+--#endif
+- 	} else {
+- 		if (1 < argc && *argv[1] != '-') {
+- 			arch = argv[1];
+-@@ -391,6 +392,7 @@ int main(int argc, char *argv[])
+- 	argc -= optind;
+- 	argv += optind;
+- 
+-+set_arch:
+- 	/* get execution domain (architecture) */
+- 	if (arch) {
+- 		doms = init_arch_domains();
+-@@ -422,17 +424,23 @@ int main(int argc, char *argv[])
+- 	if (arch)
+- 		verify_arch_domain(target, arch);
+- 
+-+	if (!argc) {
+-+		shell = "/bin/sh";
+-+		shell_arg = "-sh";
+-+	}
+- 	if (verbose) {
+--		printf(_("Execute command `%s'.\n"), argc ? argv[0] : "/bin/sh");
+-+		printf(_("Execute command `%s'.\n"), shell ? shell : argv[0]);
+- 		/* flush all output streams before exec */
+- 		fflush(NULL);
+- 	}
+- 
+--	if (!argc) {
+--		execl("/bin/sh", "-sh", NULL);
+--		errexec("/bin/sh");
+-+	/* Execute shell */
+-+	if (shell) {
+-+		execl(shell, shell_arg, NULL);
+-+		errexec(shell);
+- 	}
+- 
+-+	/* Execute on command line specified command */
+- 	execvp(argv[0], argv);
+- 	errexec(argv[0]);
+- }
+--- 
+-2.14.5
+-
+diff --git a/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch b/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch
+deleted file mode 100644
+index 381c25382a..0000000000
+--- a/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 963413a1adf6767ab17712097e288e1a346f63a7 Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Fri, 4 Jan 2019 22:38:25 -0800
+-Subject: [PATCH] ldattach: Check for value of _HAVE_STRUCT_TERMIOS_C_ISPEED
+-
+-in glibc 2.29+ checking for just existence of _HAVE_STRUCT_TERMIOS_C_ISPEED
+-won't be enough, the value has to be checked
+-
+-see
+-https://sourceware.org/git/?p=glibc.git;a=commit;h=e5a50db36eaa6e8c6427b3a971563240b633ca85
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/karelzak/util-linux/commit/963413a1adf6767ab17712097e288e1a346f63a7]
+----
+- sys-utils/ldattach.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/sys-utils/ldattach.c b/sys-utils/ldattach.c
+-index d33d68535..fb50711eb 100644
+---- a/sys-utils/ldattach.c
+-+++ b/sys-utils/ldattach.c
+-@@ -242,7 +242,7 @@ static int my_cfsetspeed(struct termios *ts, int speed)
+- 	 * -- we have to bypass glibc and set the speed manually (because glibc
+- 	 *    checks for speed and supports Bxxx bit rates only)...
+- 	 */
+--#ifdef _HAVE_STRUCT_TERMIOS_C_ISPEED
+-+#if _HAVE_STRUCT_TERMIOS_C_ISPEED
+- # define BOTHER 0010000		/* non standard rate */
+- 	dbg("using non-standard speeds");
+- 	ts->c_ospeed = ts->c_ispeed = speed;
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index a5a137bfe0..e1ddcd6410 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -12,7 +12,6 @@ if BR2_PACKAGE_UTIL_LINUX
+ config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	bool "libblkid"
+ 	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  Install libblkid.
+ 
+@@ -135,6 +134,11 @@ config BR2_PACKAGE_UTIL_LINUX_FSCK
+ 	help
+ 	  Check and repair a linux filesystem
+ 
++config BR2_PACKAGE_UTIL_LINUX_HARDLINK
++	bool "hardlink"
++	help
++	  Query or set the hardware clock (RTC)
++
+ config BR2_PACKAGE_UTIL_LINUX_HWCLOCK
+ 	bool "hwclock"
+ 	help
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index ed503a12ed..7a83a03c1d 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -1,5 +1,5 @@
+-# From https://www.kernel.org/pub/linux/utils/util-linux/v2.33/sha256sums.asc
+-sha256 f261b9d73c35bfeeea04d26941ac47ee1df937bd3b0583e748217c1ea423658a  util-linux-2.33.tar.xz
++# From https://www.kernel.org/pub/linux/utils/util-linux/v2.34/sha256sums.asc
++sha256 743f9d0c7252b6db246b659c1e1ce0bd45d8d4508b4dfa427bbb4a3e9b9f62b5  util-linux-2.34.tar.xz
+ # License files, locally calculated
+ sha256 4335620e8f478ee4dc4d26540448d39469091ef1d8e3fbbbb8bf753206ceac74  README.licensing
+ sha256 9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index c176d364ce..99ec39467f 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UTIL_LINUX_VERSION_MAJOR = 2.33
++UTIL_LINUX_VERSION_MAJOR = 2.34
+ UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+@@ -91,6 +91,9 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
+ # Used by login-utils
+ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
+ 
++# Used by hardlink
++UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_PCRE2),pcre2)
++
+ # Disable/Enable utilities
+ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_BINARIES),--enable-all-programs,--disable-all-programs) \
+@@ -104,6 +107,7 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FDFORMAT),--enable-fdformat,--disable-fdformat) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_HARDLINK),--enable-hardlink,--disable-hardlink) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_HWCLOCK),--enable-hwclock,--disable-hwclock) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCRM),--enable-ipcrm,--disable-ipcrm) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCS),--enable-ipcs,--disable-ipcs) \
+-- 
+2.18.1
