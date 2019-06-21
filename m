@@ -1,43 +1,32 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 21 Jun 2019 22:39:12 +0200
-Subject: [Buildroot] [git commit] package/libressl: bump to version 2.9.2
-Message-ID: <20190621203924.A912E82BD0@busybox.osuosl.org>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Fri, 21 Jun 2019 22:39:58 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-daemon: bump to version
+ 2.2.3
+In-Reply-To: <20190621222855.1f986822@windsurf>
+References: <1561121063-19216-1-git-send-email-pjtexier@koncepto.io>
+ <20190621222855.1f986822@windsurf>
+Message-ID: <dccc59e4-be69-e346-8c9c-79db8adbd335@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b93c71c83dd4dd5422c8cb258e97b4f08fb1a42a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi Thomas,
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libressl/libressl.hash | 2 +-
- package/libressl/libressl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Le 21/06/2019 ? 22:28, Thomas Petazzoni a ?crit?:
+> I have applied both patches. However, for your patches that add the
+> hashes of the license files, the title "fix legal-info" is a bit
+> incorrect. Indeed, the legal-info is not wrong, it's just that the
+> hashes are missing for the license files. So a better commit title is
+> "add hashes for license files".
 
-diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
-index 9e5cbf22e9..e3e5dbe00b 100644
---- a/package/libressl/libressl.hash
-+++ b/package/libressl/libressl.hash
-@@ -1,4 +1,4 @@
- # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
--sha256 39e4dd856694dc10d564201e4549c46d2431601a2b10f3422507e24ccc8f62f8  libressl-2.9.1.tar.gz
-+sha256 c4c78167fae325b47aebd8beb54b6041d6f6a56b3743f4bd5d79b15642f9d5d4  libressl-2.9.2.tar.gz
- # Locally computed
- sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
-diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
-index 4e9796d3ab..2d0f6fc50f 100644
---- a/package/libressl/libressl.mk
-+++ b/package/libressl/libressl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBRESSL_VERSION = 2.9.1
-+LIBRESSL_VERSION = 2.9.2
- LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
- LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
- LIBRESSL_LICENSE_FILES = COPYING
+Ok sure I understand, thanks for pointing this.
+I'll be more explicit next time :).
+
+Thanks !
+
+-- 
+Pierre-Jean Texier
+Embedded Linux Engineer
+https://koncepto.io
