@@ -1,178 +1,139 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Fri, 21 Jun 2019 14:17:24 +0530
-Subject: [Buildroot] [PATCH 13/19] autobuild-run: define instance directory
- as a part of Builder class
+Date: Fri, 21 Jun 2019 14:17:26 +0530
+Subject: [Buildroot] [PATCH 15/19] autobuild-run: remove kwargs argument
+ from function calls and definitions
 In-Reply-To: <20190621084730.16411-1-itsatharva@gmail.com>
 References: <20190621084730.16411-1-itsatharva@gmail.com>
-Message-ID: <20190621084730.16411-13-itsatharva@gmail.com>
+Message-ID: <20190621084730.16411-15-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We need idir as a class member before moving log out of kwargs.
-
 Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 ---
- scripts/autobuild-run | 49 +++++++++++++++++++------------------------
- 1 file changed, 22 insertions(+), 27 deletions(-)
+ scripts/autobuild-run | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 0db2995..e69020c 100755
+index ff8ef0a..7c390c1 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -290,6 +290,9 @@ class Builder:
-         self.buildpid = buildpid
-         self.debug = debug
+@@ -298,7 +298,7 @@ class Builder:
+         else:
+             self.log = open(os.path.join(self.idir, "instance.log"), "a+")
  
-+        # frequently needed directories
-+        self.idir = "instance-%d" % self.instance
-+
-     def prepare_build(self, **kwargs):
+-    def prepare_build(self, **kwargs):
++    def prepare_build(self):
          """Prepare for the next build of the specified instance
  
-@@ -298,13 +301,12 @@ class Builder:
-         code, and cleaning up remaining stuff from previous builds.
-         """
+         This function prepares the build by making sure all the needed
+@@ -375,7 +375,7 @@ class Builder:
  
--        idir = "instance-%d" % self.instance
-         log = kwargs['log']
+         return 0
  
-         log_write(log, "INFO: preparing a new build")
- 
-         # Create the download directory if it doesn't exist
--        dldir = os.path.join(idir, "dl")
-+        dldir = os.path.join(self.idir, "dl")
-         if not os.path.exists(dldir):
-             os.mkdir(dldir)
- 
-@@ -339,7 +341,7 @@ class Builder:
- 
-         # Clone Buildroot. This only happens if the source directory
-         # didn't exist already.
--        srcdir = os.path.join(idir, "buildroot")
-+        srcdir = os.path.join(self.idir, "buildroot")
-         if not os.path.exists(srcdir):
-             ret = subprocess.call(["git", "clone", self.repo, srcdir],
-                                 stdout=log, stderr=log)
-@@ -360,7 +362,7 @@ class Builder:
-             return -1
- 
-         # Create an empty output directory. We remove it first, in case a previous build was aborted.
--        outputdir = os.path.join(idir, "output")
-+        outputdir = os.path.join(self.idir, "output")
-         if os.path.exists(outputdir):
-             # shutil.rmtree doesn't remove write-protected files
-             subprocess.call(["rm", "-rf", outputdir])
-@@ -372,10 +374,9 @@ class Builder:
- 
-     def gen_config(self, **kwargs):
+-    def gen_config(self, **kwargs):
++    def gen_config(self):
          """Generate a new random configuration."""
--        idir = "instance-%d" % self.instance
-         log = kwargs['log']
--        outputdir = os.path.abspath(os.path.join(idir, "output"))
--        srcdir = os.path.join(idir, "buildroot")
-+        outputdir = os.path.abspath(os.path.join(self.idir, "output"))
-+        srcdir = os.path.join(self.idir, "buildroot")
+         outputdir = os.path.abspath(os.path.join(self.idir, "output"))
+         srcdir = os.path.join(self.idir, "buildroot")
+@@ -417,7 +417,7 @@ class Builder:
+                     break
+             monitor_thread_stop_flag.wait(30)
  
-         log_write(log, "INFO: generate the configuration")
+-    def check_reproducibility(self, **kwargs):
++    def check_reproducibility(self):
+         """Check reproducibility of builds
  
-@@ -422,9 +423,8 @@ class Builder:
-         """
+         Use diffoscope on the built images, if diffoscope is not
+@@ -452,7 +452,7 @@ class Builder:
+         log_write(self.log, "INFO: Build is reproducible!")
+         return 0
  
-         log = kwargs['log']
--        idir = "instance-%d" % self.instance
--        outputdir = os.path.join(idir, "output")
--        srcdir = os.path.join(idir, "buildroot")
-+        outputdir = os.path.join(self.idir, "output")
-+        srcdir = os.path.join(self.idir, "buildroot")
-         reproducible_results = os.path.join(outputdir, "results", "reproducible_results")
-         # Using only tar images for now
-         build_1_image = os.path.join(outputdir, "images-1", "rootfs.tar")
-@@ -454,16 +454,15 @@ class Builder:
-     def do_build(self, **kwargs):
+-    def do_build(self, **kwargs):
++    def do_build(self):
          """Run the build itself"""
  
--        idir = "instance-%d" % self.instance
-         log = kwargs['log']
- 
          # We need the absolute path to use with O=, because the relative
-         # path to the output directory here is not relative to the
-         # Buildroot sources, but to the location of the autobuilder
-         # script.
--        dldir = os.path.abspath(os.path.join(idir, "dl"))
--        outputdir = os.path.abspath(os.path.join(idir, "output"))
--        srcdir = os.path.join(idir, "buildroot")
-+        dldir = os.path.abspath(os.path.join(self.idir, "dl"))
-+        outputdir = os.path.abspath(os.path.join(self.idir, "output"))
-+        srcdir = os.path.join(self.idir, "buildroot")
-         f = open(os.path.join(outputdir, "logfile"), "w+")
-         log_write(log, "INFO: build started")
+@@ -509,7 +509,7 @@ class Builder:
+         log_write(self.log, "INFO: build successful")
+         return 0
  
-@@ -518,9 +517,8 @@ class Builder:
-         perform the actual build.
-         """
+-    def do_reproducible_build(self, **kwargs):
++    def do_reproducible_build(self):
+         """Run the builds for reproducibility testing
  
--        idir = "instance-%d" % self.instance
--        outputdir = os.path.abspath(os.path.join(idir, "output"))
--        srcdir = os.path.join(idir, "buildroot")
-+        outputdir = os.path.abspath(os.path.join(self.idir, "output"))
-+        srcdir = os.path.join(self.idir, "buildroot")
-         log = kwargs['log']
+         Build twice with the same configuration. Calls do_build() to
+@@ -521,7 +521,7 @@ class Builder:
  
          # Start the first build
-@@ -556,11 +554,10 @@ class Builder:
-         are available) or stores them locally as tarballs.
-         """
+         log_write(self.log, "INFO: Reproducible Build Test, starting build 1")
+-        ret = self.do_build(**kwargs)
++        ret = self.do_build()
+         if ret != 0:
+             log_write(self.log, "INFO: build 1 failed, skipping build 2")
+             return ret
+@@ -535,16 +535,16 @@ class Builder:
  
--        idir = "instance-%d" % self.instance
-         log = kwargs['log']
+         # Start the second build
+         log_write(self.log, "INFO: Reproducible Build Test, starting build 2")
+-        ret = self.do_build(**kwargs)
++        ret = self.do_build()
+         if ret != 0:
+             log_write(self.log, "INFO: build 2 failed")
+             return ret
  
--        outputdir = os.path.abspath(os.path.join(idir, "output"))
--        srcdir = os.path.join(idir, "buildroot")
-+        outputdir = os.path.abspath(os.path.join(self.idir, "output"))
-+        srcdir = os.path.join(self.idir, "buildroot")
-         resultdir = os.path.join(outputdir, "results")
+         # Assuming both have built successfully
+-        ret = self.check_reproducibility(**kwargs)
++        ret = self.check_reproducibility()
+         return ret
  
-         shutil.copyfile(os.path.join(outputdir, ".config"),
-@@ -719,16 +716,14 @@ class Builder:
-         results.
-         """
+-    def send_results(self, result, **kwargs):
++    def send_results(self, result):
+         """Prepare and store/send tarball with results
  
--        idir = "instance-%d" % self.instance
--
-         # If it doesn't exist, create the instance directory
--        if not os.path.exists(idir):
--            os.mkdir(idir)
-+        if not os.path.exists(self.idir):
-+            os.mkdir(self.idir)
+         This function prepares the tarball with the results, and either
+@@ -705,7 +705,7 @@ class Builder:
+             os.rename(os.path.join(outputdir, "results.tar.bz2"), resultfilename)
+             log_write(self.log, "INFO: results saved as %s" % resultfilename)
  
-         if self.debug:
-             kwargs['log'] = sys.stdout
-         else:
--            kwargs['log'] = open(os.path.join(idir, "instance.log"), "a+")
-+            kwargs['log'] = open(os.path.join(self.idir, "instance.log"), "a+")
-         log_write(kwargs['log'], "INFO: instance started")
+-    def run_instance(self, **kwargs):
++    def run_instance(self):
+         """Main per-instance loop
  
+         Prepare the build, generate a configuration, run the build, and submit the
+@@ -721,14 +721,14 @@ class Builder:
          while True:
-@@ -738,7 +733,7 @@ class Builder:
+             check_version()
+ 
+-            ret = self.prepare_build(**kwargs)
++            ret = self.prepare_build()
              if ret != 0:
                  continue
  
--            resultdir = os.path.join(idir, "output", "results")
-+            resultdir = os.path.join(self.idir, "output", "results")
+             resultdir = os.path.join(self.idir, "output", "results")
              os.mkdir(resultdir)
  
-             ret = self.gen_config(**kwargs)
-@@ -747,7 +742,7 @@ class Builder:
+-            ret = self.gen_config(**kwargs)
++            ret = self.gen_config()
+             if ret != 0:
+                 log_write(self.log, "WARN: failed to generate configuration")
                  continue
- 
-             # Check if the build test is supposed to be a reproducible test
--            outputdir = os.path.abspath(os.path.join(idir, "output"))
-+            outputdir = os.path.abspath(os.path.join(self.idir, "output"))
+@@ -738,11 +738,11 @@ class Builder:
              with open(os.path.join(outputdir, ".config"), "r") as fconf:
                  reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
              if reproducible:
+-                ret = self.do_reproducible_build(**kwargs)
++                ret = self.do_reproducible_build()
+             else:
+-                ret = self.do_build(**kwargs)
++                ret = self.do_build()
+ 
+-            self.send_results(ret, **kwargs)
++            self.send_results(ret)
+ 
+ # args / config file merging inspired by:
+ # https://github.com/docopt/docopt/blob/master/examples/config_file_example.py
 -- 
 2.20.1
