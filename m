@@ -1,46 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 21 Jun 2019 22:34:31 +0200
-Subject: [Buildroot] [PATCH v2] package/python-pycairo: new package
-In-Reply-To: <20190621201955.40745-1-matthew.weber@rockwellcollins.com>
-References: <20190621201955.40745-1-matthew.weber@rockwellcollins.com>
-Message-ID: <20190621223431.7d6f7bfa@windsurf>
+Date: Fri, 21 Jun 2019 22:36:55 +0200
+Subject: [Buildroot] [git commit] package/uboot-tools: fix legal-info
+Message-ID: <20190621203651.075BF81191@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 21 Jun 2019 15:19:55 -0500
-Matt Weber <matthew.weber@rockwellcollins.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c5540aac66be192a51e0e139714a37811b72e21f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> A Python module providing bindings for the cairo graphics library.
-> 
-> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> ---
-> Changes
-> v1 -> v2
-> [Thomas P
->  - Fixed typo in Config.in "select on" -> "select"
->  - Added mk dependency on cairo and removed comment about it just
->    being a runtime dependency
->  - Updated LGPL to be 2.1 and or'd with MPL
->  - Added license files for LGPL and MPL
->  - Added new license file hashes
-> ---
->  DEVELOPERS                                 |  1 +
->  package/Config.in                          |  1 +
->  package/python-pycairo/Config.in           |  7 +++++++
->  package/python-pycairo/python-pycairo.hash |  7 +++++++
->  package/python-pycairo/python-pycairo.mk   | 15 +++++++++++++++
->  5 files changed, 31 insertions(+)
->  create mode 100644 package/python-pycairo/Config.in
->  create mode 100644 package/python-pycairo/python-pycairo.hash
->  create mode 100644 package/python-pycairo/python-pycairo.mk
+Add hash for LICENSE file
 
-Applied to master, thanks.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+$: make uboot-tools-legal-info
+ >>> uboot-tools 2019.04 Collecting legal info
+ ERROR: No hash found for Licenses/gpl-2.0.txt
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/uboot-tools/uboot-tools.hash | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
+index 9a92018235..b8b06a2911 100644
+--- a/package/uboot-tools/uboot-tools.hash
++++ b/package/uboot-tools/uboot-tools.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  76b7772d156b3ddd7644c8a1736081e55b78828537ff714065d21dbade229bef  u-boot-2019.04.tar.bz2
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
