@@ -1,60 +1,45 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 21 Jun 2019 18:48:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: fix build with ubus and NLS
-Message-ID: <20190621164856.1094-1-fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 21 Jun 2019 18:51:10 +0200
+Subject: [Buildroot] [PATCH 21/27] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_GCC_BUG_90620
+In-Reply-To: <a74261b8-c5b7-86a5-4a56-479247f92da4@micronovasrl.com>
+References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
+ <20190614210346.121013-22-giulio.benetti@micronovasrl.com>
+ <20190620181408.308b4443@windsurf>
+ <a74261b8-c5b7-86a5-4a56-479247f92da4@micronovasrl.com>
+Message-ID: <20190621185110.1fe1f814@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/c0b27754b7ede024c095bdf0b3616e6f6be48c6d
+Hello,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- .../0001-Makefile-fix-i18n-build-with-ubus.patch   | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/dnsmasq/0001-Makefile-fix-i18n-build-with-ubus.patch
+On Fri, 21 Jun 2019 11:22:00 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-diff --git a/package/dnsmasq/0001-Makefile-fix-i18n-build-with-ubus.patch b/package/dnsmasq/0001-Makefile-fix-i18n-build-with-ubus.patch
-new file mode 100644
-index 0000000000..e42549beac
---- /dev/null
-+++ b/package/dnsmasq/0001-Makefile-fix-i18n-build-with-ubus.patch
-@@ -0,0 +1,33 @@
-+From 08572cffb641004d86072f12aec4d6489454b897 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 21 Jun 2019 09:26:20 +0200
-+Subject: [PATCH] Makefile: fix i18n build with ubus
-+
-+Commit caf4d571e6d86285a3690cfcc8de9c5f394320a8 forgot adding
-+ubus_libs to build_libs for all-i18n target
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/c0b27754b7ede024c095bdf0b3616e6f6be48c6d
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to simon at thekelleys.org.uk]
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 3fb7cbe..78e25f0 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -111,7 +111,7 @@ all-i18n : $(BUILDDIR)
-+  top="$(top)" \
-+  i18n=-DLOCALEDIR=\'\"$(LOCALEDIR)\"\' \
-+  build_cflags="$(version) $(dbus_cflags) $(idn2_cflags) $(idn_cflags) $(ct_cflags) $(lua_cflags) $(nettle_cflags)" \
-+- build_libs="$(dbus_libs) $(idn2_libs) $(idn_libs) $(ct_libs) $(lua_libs) $(sunos_libs) $(nettle_libs) $(gmp_libs)"  \
-++ build_libs="$(dbus_libs) $(idn2_libs) $(idn_libs) $(ct_libs) $(lua_libs) $(sunos_libs) $(nettle_libs) $(gmp_libs) $(ubus_libs)"  \
-+  -f $(top)/Makefile dnsmasq
-+ 	for f in `cd $(PO); echo *.po`; do \
-+ 		cd $(top) && cd $(BUILDDIR) && $(MAKE) top="$(top)" -f $(top)/Makefile $${f%.po}.mo; \
-+-- 
-+2.14.1
-+
+> >> Originally reported for gpsd:  
+> 
+> I've just realized that is not originally reported for gpsd and...
+> 
+> >> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90620
+> >>
+> >> Fixed on Gcc 8.x but regressed in Gcc 9.x.  
+> 
+> I've messed up with all these patches, since there is a patch that fixes
+> this patch:
+> https://patchwork.ozlabs.org/patch/1117724/
+> 
+> Sorry, but they were a lot of patches and I missed to squash them into 
+> only one.
+
+OK, no worries. Considering the amount of patches and different gcc
+bugs/situations, I can certainly understand that the patch series will
+need some adjustments/fixes once applied.
+
+Thomas
 -- 
-2.14.1
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
