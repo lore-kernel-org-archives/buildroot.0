@@ -1,43 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 21 Jun 2019 22:27:24 +0200
-Subject: [Buildroot] [PATCH] support/testing/infra/emulator: increase memory
- size used by Qemu
-Message-ID: <20190621202724.19242-1-thomas.petazzoni@bootlin.com>
+Date: Fri, 21 Jun 2019 22:28:55 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-daemon: bump to version
+ 2.2.3
+In-Reply-To: <1561121063-19216-1-git-send-email-pjtexier@koncepto.io>
+References: <1561121063-19216-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20190621222855.1f986822@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By default, Qemu emulates a system with 128 MB of RAM. This is not
-sufficient for some test cases we have, such as TestPerlDBDmysql,
-where the initramfs is quite large. Therefore, this commit extends the
-RAM size emulated by Qemu to 256 MB.
+On Fri, 21 Jun 2019 14:44:22 +0200
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-Fixes:
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> ---
+>  package/python-daemon/python-daemon.hash | 6 +++---
+>  package/python-daemon/python-daemon.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/237108668
+I have applied both patches. However, for your patches that add the
+hashes of the license files, the title "fix legal-info" is a bit
+incorrect. Indeed, the legal-info is not wrong, it's just that the
+hashes are missing for the license files. So a better commit title is
+"add hashes for license files".
 
-Thanks to Arnout for the analysis of the issue.
+Thanks!
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/testing/infra/emulator.py | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 802e89d4b4..3d3e1750c6 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -38,7 +38,8 @@ class Emulator(object):
- 
-         qemu_cmd = ["qemu-system-{}".format(qemu_arch),
-                     "-serial", "stdio",
--                    "-display", "none"]
-+                    "-display", "none",
-+                    "-m", "256"]
- 
-         if options:
-             qemu_cmd += options
+Thomas
 -- 
-2.21.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
