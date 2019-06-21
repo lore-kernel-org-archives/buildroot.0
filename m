@@ -1,567 +1,356 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 21 Jun 2019 22:45:58 +0200
-Subject: [Buildroot] [git commit] package/openssh: bump to version 8.0p1
-Message-ID: <20190621205317.E2D09826DC@busybox.osuosl.org>
+Date: Fri, 21 Jun 2019 23:02:19 +0200
+Subject: [Buildroot] [git commit] package/util-linux: bump to version 2.34
+Message-ID: <20190622054332.8C2458280B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=50fcc48a1d8af6f403de392ffd638e20b4195c5b
+commit: https://git.buildroot.net/buildroot/commit/?id=bb216ed060b16e09b2027ef242347b2f2e3c97dc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also remove upstream patches.
+- Remove patches already applied upstream.
+- Update file hash.
+- Add an option to select the new "hardlink" command (off by default)
+- hardlink uses libpcre2-8 if pcre2 is detected at config time so add a
+  build dependency on pcre2, if it's selected.
+- Change selections to reflect that libblkid now does not depend on
+  libuuid anymore
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Full release notes available at
+
+  https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.34/v2.34-ReleaseNotes
+
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...sallow-empty-incoming-filename-or-ones-th.patch |  39 ---
- ...nitize-scp-filenames-via-snmprintf.-To-do.patch | 275 ---------------------
- ...eck-in-scp-client-that-filenames-sent-dur.patch | 186 --------------
- package/openssh/openssh.hash                       |   4 +-
- package/openssh/openssh.mk                         |   2 +-
- 5 files changed, 3 insertions(+), 503 deletions(-)
+ ...ake-use-poweroff-if-shutdown-is-not-found.patch | 86 ----------------------
+ ...2-agetty-fix-output-of-escaped-characters.patch | 26 -------
+ ...-setarch-fix-obscure-sparc32bash-use-case.patch | 84 ---------------------
+ ...for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch | 32 --------
+ package/util-linux/Config.in                       |  6 +-
+ package/util-linux/util-linux.hash                 |  4 +-
+ package/util-linux/util-linux.mk                   |  6 +-
+ 7 files changed, 12 insertions(+), 232 deletions(-)
 
-diff --git a/package/openssh/0001-upstream-disallow-empty-incoming-filename-or-ones-th.patch b/package/openssh/0001-upstream-disallow-empty-incoming-filename-or-ones-th.patch
+diff --git a/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch b/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch
 deleted file mode 100644
-index 2b5a958d13..0000000000
---- a/package/openssh/0001-upstream-disallow-empty-incoming-filename-or-ones-th.patch
+index b97be2ef07..0000000000
+--- a/package/util-linux/0001-rtcwake-use-poweroff-if-shutdown-is-not-found.patch
 +++ /dev/null
-@@ -1,39 +0,0 @@
--From 6010c0303a422a9c5fa8860c061bf7105eb7f8b2 Mon Sep 17 00:00:00 2001
--From: "djm at openbsd.org" <djm@openbsd.org>
--Date: Fri, 16 Nov 2018 03:03:10 +0000
--Subject: [PATCH] upstream: disallow empty incoming filename or ones that refer
-- to the
+@@ -1,86 +0,0 @@
+-From e1686b25acdedb34cc357f08f0dd3ca01c559dfd Mon Sep 17 00:00:00 2001
+-From: Justin Chen <justinpopo6@gmail.com>
+-Date: Thu, 1 Nov 2018 11:10:38 -0700
+-Subject: [PATCH] rtcwake: use poweroff if shutdown is not found
 -
--current directory; based on report/patch from Harry Sintonen
+-Some systems do not have the shutdown command. Use poweroff as an
+-alternative.
 -
--OpenBSD-Commit-ID: f27651b30eaee2df49540ab68d030865c04f6de9
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-Signed-off-by: Justin Chen <justinpopo6@gmail.com>
 ----
--Upstream status (openssh-portable): commit 6010c0303a422
+- include/pathnames.h |  1 +
+- sys-utils/rtcwake.c | 39 +++++++++++++++++++++++++++------------
+- 2 files changed, 28 insertions(+), 12 deletions(-)
 -
-- scp.c | 5 +++--
-- 1 file changed, 3 insertions(+), 2 deletions(-)
--
--diff --git a/scp.c b/scp.c
--index 60682c68769b..4f3fdcd3db89 100644
----- a/scp.c
--+++ b/scp.c
--@@ -1,4 +1,4 @@
---/* $OpenBSD: scp.c,v 1.197 2018/06/01 04:31:48 dtucker Exp $ */
--+/* $OpenBSD: scp.c,v 1.198 2018/11/16 03:03:10 djm Exp $ */
-- /*
--  * scp - secure remote copy.  This is basically patched BSD rcp which
--  * uses ssh to do the data transfer (instead of using rcmd).
--@@ -1106,7 +1106,8 @@ sink(int argc, char **argv)
-- 			SCREWUP("size out of range");
-- 		size = (off_t)ull;
-- 
---		if ((strchr(cp, '/') != NULL) || (strcmp(cp, "..") == 0)) {
--+		if (*cp == '\0' || strchr(cp, '/') != NULL ||
--+		    strcmp(cp, ".") == 0 || strcmp(cp, "..") == 0) {
-- 			run_err("error: unexpected filename: %s", cp);
-- 			exit(1);
-- 		}
---- 
--2.20.1
--
-diff --git a/package/openssh/0002-upstream-Sanitize-scp-filenames-via-snmprintf.-To-do.patch b/package/openssh/0002-upstream-Sanitize-scp-filenames-via-snmprintf.-To-do.patch
-deleted file mode 100644
-index e5d137ef11..0000000000
---- a/package/openssh/0002-upstream-Sanitize-scp-filenames-via-snmprintf.-To-do.patch
-+++ /dev/null
-@@ -1,275 +0,0 @@
--From 5979bdfeca813dd7e997a1edb0f928d77ce70304 Mon Sep 17 00:00:00 2001
--From: "dtucker at openbsd.org" <dtucker@openbsd.org>
--Date: Wed, 23 Jan 2019 08:01:46 +0000
--Subject: [PATCH] upstream: Sanitize scp filenames via snmprintf. To do this we
-- move
--
--the progressmeter formatting outside of signal handler context and have the
--atomicio callback called for EINTR too.  bz#2434 with contributions from djm
--and jjelen at redhat.com, ok djm@
--
--OpenBSD-Commit-ID: 1af61c1f70e4f3bd8ab140b9f1fa699481db57d8
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status (openssh-portable): backported from commit 8976f1c4b27
-----
-- atomicio.c      | 20 ++++++++++++++-----
-- progressmeter.c | 53 ++++++++++++++++++++++---------------------------
-- progressmeter.h |  3 ++-
-- scp.c           |  1 +
-- sftp-client.c   | 16 ++++++++-------
-- 5 files changed, 51 insertions(+), 42 deletions(-)
--
--diff --git a/atomicio.c b/atomicio.c
--index f854a06f5f50..d91bd7621c12 100644
----- a/atomicio.c
--+++ b/atomicio.c
--@@ -1,4 +1,4 @@
---/* $OpenBSD: atomicio.c,v 1.28 2016/07/27 23:18:12 djm Exp $ */
--+/* $OpenBSD: atomicio.c,v 1.29 2019/01/23 08:01:46 dtucker Exp $ */
-- /*
--  * Copyright (c) 2006 Damien Miller. All rights reserved.
--  * Copyright (c) 2005 Anil Madhavapeddy. All rights reserved.
--@@ -65,9 +65,14 @@ atomicio6(ssize_t (*f) (int, void *, size_t), int fd, void *_s, size_t n,
-- 		res = (f) (fd, s + pos, n - pos);
-- 		switch (res) {
-- 		case -1:
---			if (errno == EINTR)
--+			if (errno == EINTR) {
--+				/* possible SIGALARM, update callback */
--+				if (cb != NULL && cb(cb_arg, 0) == -1) {
--+					errno = EINTR;
--+					return pos;
--+				}
-- 				continue;
---			if (errno == EAGAIN || errno == EWOULDBLOCK) {
--+			} else if (errno == EAGAIN || errno == EWOULDBLOCK) {
-- #ifndef BROKEN_READ_COMPARISON
-- 				(void)poll(&pfd, 1, -1);
+-diff --git a/include/pathnames.h b/include/pathnames.h
+-index 3d5052e6f..ed8ea330d 100644
+---- a/include/pathnames.h
+-+++ b/include/pathnames.h
+-@@ -53,6 +53,7 @@
+- # define _PATH_LOGIN		"/bin/login"
 - #endif
--@@ -122,9 +127,14 @@ atomiciov6(ssize_t (*f) (int, const struct iovec *, int), int fd,
-- 		res = (f) (fd, iov, iovcnt);
-- 		switch (res) {
-- 		case -1:
---			if (errno == EINTR)
--+			if (errno == EINTR) {
--+				/* possible SIGALARM, update callback */
--+				if (cb != NULL && cb(cb_arg, 0) == -1) {
--+					errno = EINTR;
--+					return pos;
--+				}
-- 				continue;
---			if (errno == EAGAIN || errno == EWOULDBLOCK) {
--+			} else if (errno == EAGAIN || errno == EWOULDBLOCK) {
-- #ifndef BROKEN_READV_COMPARISON
-- 				(void)poll(&pfd, 1, -1);
-- #endif
--diff --git a/progressmeter.c b/progressmeter.c
--index fe9bf52e4c90..add462dde500 100644
----- a/progressmeter.c
--+++ b/progressmeter.c
--@@ -1,4 +1,4 @@
---/* $OpenBSD: progressmeter.c,v 1.45 2016/06/30 05:17:05 dtucker Exp $ */
--+/* $OpenBSD: progressmeter.c,v 1.46 2019/01/23 08:01:46 dtucker Exp $ */
-- /*
--  * Copyright (c) 2003 Nils Nordman.  All rights reserved.
--  *
--@@ -31,6 +31,7 @@
+- #define _PATH_SHUTDOWN		"/sbin/shutdown"
+-+#define _PATH_POWEROFF		"/sbin/poweroff"
 - 
-- #include <errno.h>
-- #include <signal.h>
--+#include <stdarg.h>
-- #include <stdio.h>
+- #define _PATH_TERMCOLORS_DIRNAME "terminal-colors.d"
+- #define _PATH_TERMCOLORS_DIR	"/etc/" _PATH_TERMCOLORS_DIRNAME
+-diff --git a/sys-utils/rtcwake.c b/sys-utils/rtcwake.c
+-index b63c64627..029f00f9b 100644
+---- a/sys-utils/rtcwake.c
+-+++ b/sys-utils/rtcwake.c
+-@@ -28,6 +28,7 @@
+- #include <stdlib.h>
 - #include <string.h>
-- #include <time.h>
--@@ -39,6 +40,7 @@
-- #include "progressmeter.h"
-- #include "atomicio.h"
-- #include "misc.h"
--+#include "utf8.h"
+- #include <sys/ioctl.h>
+-+#include <sys/stat.h>
+- #include <sys/time.h>
+- #include <sys/types.h>
+- #include <termios.h>
+-@@ -582,18 +583,32 @@ int main(int argc, char **argv)
+- 		char *arg[5];
+- 		int i = 0;
 - 
-- #define DEFAULT_WINSIZE 80
-- #define MAX_WINSIZE 512
--@@ -61,7 +63,7 @@ static void setscreensize(void);
-- void refresh_progress_meter(void);
-- 
-- /* signal handler for updating the progress meter */
---static void update_progress_meter(int);
--+static void sig_alarm(int);
-- 
-- static double start;		/* start progress */
-- static double last_update;	/* last progress update */
--@@ -74,6 +76,7 @@ static long stalled;		/* how long we have been stalled */
-- static int bytes_per_second;	/* current speed in bytes per second */
-- static int win_size;		/* terminal window size */
-- static volatile sig_atomic_t win_resized; /* for window resizing */
--+static volatile sig_atomic_t alarm_fired;
-- 
-- /* units for format_size */
-- static const char unit[] = " KMGT";
--@@ -126,9 +129,17 @@ refresh_progress_meter(void)
-- 	off_t bytes_left;
-- 	int cur_speed;
-- 	int hours, minutes, seconds;
---	int i, len;
-- 	int file_len;
-- 
--+	if ((!alarm_fired && !win_resized) || !can_output())
--+		return;
--+	alarm_fired = 0;
+--		if (ctl.verbose)
+--			printf(_("suspend mode: off; executing %s\n"),
+--						_PATH_SHUTDOWN);
+--		arg[i++] = _PATH_SHUTDOWN;
+--		arg[i++] = "-h";
+--		arg[i++] = "-P";
+--		arg[i++] = "now";
+--		arg[i]   = NULL;
+--		if (!ctl.dryrun) {
+--			execv(arg[0], arg);
+--			warn(_("failed to execute %s"), _PATH_SHUTDOWN);
+--			rc = EXIT_FAILURE;
+-+		if (!access(_PATH_SHUTDOWN, X_OK)) {
+-+			arg[i++] = _PATH_SHUTDOWN;
+-+			arg[i++] = "-h";
+-+			arg[i++] = "-P";
+-+			arg[i++] = "now";
+-+			arg[i]   = NULL;
+-+		} else if (!access(_PATH_POWEROFF, X_OK)) {
+-+			arg[i++] = _PATH_POWEROFF;
+-+			arg[i]   = NULL;
+-+		} else {
+-+			arg[i] 	 = NULL;
+-+		}
 -+
--+	if (win_resized) {
--+		setscreensize();
--+		win_resized = 0;
--+	}
--+
-- 	transferred = *counter - (cur_pos ? cur_pos : start_pos);
-- 	cur_pos = *counter;
-- 	now = monotime_double();
--@@ -158,16 +169,11 @@ refresh_progress_meter(void)
-- 
-- 	/* filename */
-- 	buf[0] = '\0';
---	file_len = win_size - 35;
--+	file_len = win_size - 36;
-- 	if (file_len > 0) {
---		len = snprintf(buf, file_len + 1, "\r%s", file);
---		if (len < 0)
---			len = 0;
---		if (len >= file_len + 1)
---			len = file_len;
---		for (i = len; i < file_len; i++)
---			buf[i] = ' ';
---		buf[file_len] = '\0';
--+		buf[0] = '\r';
--+		snmprintf(buf+1, sizeof(buf)-1 , &file_len, "%*s",
--+		    file_len * -1, file);
-- 	}
-- 
-- 	/* percent of transfer done */
--@@ -228,22 +234,11 @@ refresh_progress_meter(void)
-- 
-- /*ARGSUSED*/
-- static void
---update_progress_meter(int ignore)
--+sig_alarm(int ignore)
-- {
---	int save_errno;
---
---	save_errno = errno;
---
---	if (win_resized) {
---		setscreensize();
---		win_resized = 0;
---	}
---	if (can_output())
---		refresh_progress_meter();
---
---	signal(SIGALRM, update_progress_meter);
--+	signal(SIGALRM, sig_alarm);
--+	alarm_fired = 1;
-- 	alarm(UPDATE_INTERVAL);
---	errno = save_errno;
-- }
-- 
-- void
--@@ -259,10 +254,9 @@ start_progress_meter(const char *f, off_t filesize, off_t *ctr)
-- 	bytes_per_second = 0;
-- 
-- 	setscreensize();
---	if (can_output())
---		refresh_progress_meter();
--+	refresh_progress_meter();
-- 
---	signal(SIGALRM, update_progress_meter);
--+	signal(SIGALRM, sig_alarm);
-- 	signal(SIGWINCH, sig_winch);
-- 	alarm(UPDATE_INTERVAL);
-- }
--@@ -286,6 +280,7 @@ stop_progress_meter(void)
-- static void
-- sig_winch(int sig)
-- {
--+	signal(SIGWINCH, sig_winch);
-- 	win_resized = 1;
-- }
-- 
--diff --git a/progressmeter.h b/progressmeter.h
--index bf179dca6518..8f6678060195 100644
----- a/progressmeter.h
--+++ b/progressmeter.h
--@@ -1,4 +1,4 @@
---/* $OpenBSD: progressmeter.h,v 1.3 2015/01/14 13:54:13 djm Exp $ */
--+/* $OpenBSD: progressmeter.h,v 1.4 2019/01/23 08:01:46 dtucker Exp $ */
-- /*
--  * Copyright (c) 2002 Nils Nordman.  All rights reserved.
--  *
--@@ -24,4 +24,5 @@
--  */
-- 
-- void	start_progress_meter(const char *, off_t, off_t *);
--+void	refresh_progress_meter(void);
-- void	stop_progress_meter(void);
--diff --git a/scp.c b/scp.c
--index 4f3fdcd3db89..4a342a63873c 100644
----- a/scp.c
--+++ b/scp.c
--@@ -585,6 +585,7 @@ scpio(void *_cnt, size_t s)
-- 	off_t *cnt = (off_t *)_cnt;
-- 
-- 	*cnt += s;
--+	refresh_progress_meter();
-- 	if (limit_kbps > 0)
-- 		bandwidth_limit(&bwlimit, s);
-- 	return 0;
--diff --git a/sftp-client.c b/sftp-client.c
--index 4986d6d8d291..2bc698f868bc 100644
----- a/sftp-client.c
--+++ b/sftp-client.c
--@@ -101,7 +101,9 @@ sftpio(void *_bwlimit, size_t amount)
-- {
-- 	struct bwlimit *bwlimit = (struct bwlimit *)_bwlimit;
-- 
---	bandwidth_limit(bwlimit, amount);
--+	refresh_progress_meter();
--+	if (bwlimit != NULL)
--+		bandwidth_limit(bwlimit, amount);
-- 	return 0;
-- }
-- 
--@@ -121,8 +123,8 @@ send_msg(struct sftp_conn *conn, struct sshbuf *m)
-- 	iov[1].iov_base = (u_char *)sshbuf_ptr(m);
-- 	iov[1].iov_len = sshbuf_len(m);
-- 
---	if (atomiciov6(writev, conn->fd_out, iov, 2,
---	    conn->limit_kbps > 0 ? sftpio : NULL, &conn->bwlimit_out) !=
--+	if (atomiciov6(writev, conn->fd_out, iov, 2, sftpio,
--+	    conn->limit_kbps > 0 ? &conn->bwlimit_out : NULL) !=
-- 	    sshbuf_len(m) + sizeof(mlen))
-- 		fatal("Couldn't send packet: %s", strerror(errno));
-- 
--@@ -138,8 +140,8 @@ get_msg_extended(struct sftp_conn *conn, struct sshbuf *m, int initial)
-- 
-- 	if ((r = sshbuf_reserve(m, 4, &p)) != 0)
-- 		fatal("%s: buffer error: %s", __func__, ssh_err(r));
---	if (atomicio6(read, conn->fd_in, p, 4,
---	    conn->limit_kbps > 0 ? sftpio : NULL, &conn->bwlimit_in) != 4) {
--+	if (atomicio6(read, conn->fd_in, p, 4, sftpio,
--+	    conn->limit_kbps > 0 ? &conn->bwlimit_in : NULL) != 4) {
-- 		if (errno == EPIPE || errno == ECONNRESET)
-- 			fatal("Connection closed");
-- 		else
--@@ -157,8 +159,8 @@ get_msg_extended(struct sftp_conn *conn, struct sshbuf *m, int initial)
-- 
-- 	if ((r = sshbuf_reserve(m, msg_len, &p)) != 0)
-- 		fatal("%s: buffer error: %s", __func__, ssh_err(r));
---	if (atomicio6(read, conn->fd_in, p, msg_len,
---	    conn->limit_kbps > 0 ? sftpio : NULL, &conn->bwlimit_in)
--+	if (atomicio6(read, conn->fd_in, p, msg_len, sftpio,
--+	    conn->limit_kbps > 0 ? &conn->bwlimit_in : NULL)
-- 	    != msg_len) {
-- 		if (errno == EPIPE)
-- 			fatal("Connection closed");
---- 
--2.20.1
--
-diff --git a/package/openssh/0003-upstream-check-in-scp-client-that-filenames-sent-dur.patch b/package/openssh/0003-upstream-check-in-scp-client-that-filenames-sent-dur.patch
-deleted file mode 100644
-index 98ce5cd876..0000000000
---- a/package/openssh/0003-upstream-check-in-scp-client-that-filenames-sent-dur.patch
-+++ /dev/null
-@@ -1,186 +0,0 @@
--From f853123eda6b279a87be48e18bbea8dec82a94f2 Mon Sep 17 00:00:00 2001
--From: "djm at openbsd.org" <djm@openbsd.org>
--Date: Sat, 26 Jan 2019 22:41:28 +0000
--Subject: [PATCH] upstream: check in scp client that filenames sent during
--
--remote->local directory copies satisfy the wildcard specified by the user.
--
--This checking provides some protection against a malicious server
--sending unexpected filenames, but it comes at a risk of rejecting wanted
--files due to differences between client and server wildcard expansion rules.
--
--For this reason, this also adds a new -T flag to disable the check.
--
--reported by Harry Sintonen
--fix approach suggested by markus@;
--has been in snaps for ~1wk courtesy deraadt@
--
--OpenBSD-Commit-ID: 00f44b50d2be8e321973f3c6d014260f8f7a8eda
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status (openssh-portable): backported from commit 8976f1c4b2
-----
-- scp.1 | 12 +++++++++++-
-- scp.c | 37 +++++++++++++++++++++++++++++--------
-- 2 files changed, 40 insertions(+), 9 deletions(-)
--
--diff --git a/scp.1 b/scp.1
--index 0e5cc1b2d675..397e7709195a 100644
----- a/scp.1
--+++ b/scp.1
--@@ -18,7 +18,7 @@
-- .Nd secure copy (remote file copy program)
-- .Sh SYNOPSIS
-- .Nm scp
---.Op Fl 346BCpqrv
--+.Op Fl 346BCpqrTv
-- .Op Fl c Ar cipher
-- .Op Fl F Ar ssh_config
-- .Op Fl i Ar identity_file
--@@ -208,6 +208,16 @@ to use for the encrypted connection.
-- The program must understand
-- .Xr ssh 1
-- options.
--+.It Fl T
--+Disable strict filename checking.
--+By default when copying files from a remote host to a local directory
--+.Nm
--+checks that the received filenames match those requested on the command-line
--+to prevent the remote end from sending unexpected or unwanted files.
--+Because of differences in how various operating systems and shells interpret
--+filename wildcards, these checks may cause wanted files to be rejected.
--+This option disables these checks at the expense of fully trusting that
--+the server will not send unexpected filenames.
-- .It Fl v
-- Verbose mode.
-- Causes
--diff --git a/scp.c b/scp.c
--index 4a342a63873c..7b0a08efb274 100644
----- a/scp.c
--+++ b/scp.c
--@@ -94,6 +94,7 @@
-- #include <dirent.h>
-- #include <errno.h>
-- #include <fcntl.h>
--+#include <fnmatch.h>
-- #include <limits.h>
-- #include <locale.h>
-- #include <pwd.h>
--@@ -375,14 +376,14 @@ void verifydir(char *);
-- struct passwd *pwd;
-- uid_t userid;
-- int errs, remin, remout;
---int pflag, iamremote, iamrecursive, targetshouldbedirectory;
--+int Tflag, pflag, iamremote, iamrecursive, targetshouldbedirectory;
-- 
-- #define	CMDNEEDS	64
-- char cmd[CMDNEEDS];		/* must hold "rcp -r -p -d\0" */
-- 
-- int response(void);
-- void rsource(char *, struct stat *);
---void sink(int, char *[]);
--+void sink(int, char *[], const char *);
-- void source(int, char *[]);
-- void tolocal(int, char *[]);
-- void toremote(int, char *[]);
--@@ -421,8 +422,9 @@ main(int argc, char **argv)
-- 	addargs(&args, "-oRemoteCommand=none");
-- 	addargs(&args, "-oRequestTTY=no");
-- 
---	fflag = tflag = 0;
---	while ((ch = getopt(argc, argv, "dfl:prtvBCc:i:P:q12346S:o:F:")) != -1)
--+	fflag = Tflag = tflag = 0;
--+	while ((ch = getopt(argc, argv,
--+	    "dfl:prtTvBCc:i:P:q12346S:o:F:")) != -1) {
-- 		switch (ch) {
-- 		/* User-visible flags. */
-- 		case '1':
--@@ -501,9 +503,13 @@ main(int argc, char **argv)
-- 			setmode(0, O_BINARY);
-- #endif
-- 			break;
--+		case 'T':
--+			Tflag = 1;
--+			break;
-- 		default:
-- 			usage();
+-+		if (arg[0]) {
+-+			if (ctl.verbose)
+-+				printf(_("suspend mode: off; executing %s\n"),
+-+						arg[0]);
+-+			if (!ctl.dryrun) {
+-+				execv(arg[0], arg);
+-+				warn(_("failed to execute %s"), arg[0]);
+-+				rc = EX_EXEC_ENOENT;
+-+			}
+-+		} else {
+-+			/* Failed to find shutdown command */
+-+			warn(_("failed to find shutdown command"));
+-+			rc = EX_EXEC_ENOENT;
 - 		}
--+	}
+- 		break;
+- 	}
+--- 
+-2.17.1
+-
+diff --git a/package/util-linux/0002-agetty-fix-output-of-escaped-characters.patch b/package/util-linux/0002-agetty-fix-output-of-escaped-characters.patch
+deleted file mode 100644
+index fcd9731348..0000000000
+--- a/package/util-linux/0002-agetty-fix-output-of-escaped-characters.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From 73c5a3cc748b853936319e6cdc94159a6974db52 Mon Sep 17 00:00:00 2001
+-From: Christian Hesse <mail@eworm.de>
+-Date: Wed, 7 Nov 2018 13:55:06 +0100
+-Subject: [PATCH] agetty: fix output of escaped characters
+-
+-Signed-off-by: Christian Hesse <mail@eworm.de>
+----
+- term-utils/agetty.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/term-utils/agetty.c b/term-utils/agetty.c
+-index 05a269abb..b9f08728e 100644
+---- a/term-utils/agetty.c
+-+++ b/term-utils/agetty.c
+-@@ -2755,7 +2755,7 @@ static void output_special_char(struct issue *ie,
+- 		break;
+- 	}
+- 	default:
+--		putchar(c);
+-+		putc(c, ie->output);
+- 		break;
+- 	}
+- }
+--- 
+-2.17.1
+-
+diff --git a/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch b/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch
+deleted file mode 100644
+index 70588b863e..0000000000
+--- a/package/util-linux/0003-setarch-fix-obscure-sparc32bash-use-case.patch
++++ /dev/null
+@@ -1,84 +0,0 @@
+-From 3fa06e049012218d883d0e1251df86bafbc446bf Mon Sep 17 00:00:00 2001
+-From: Karel Zak <kzak@redhat.com>
+-Date: Thu, 22 Nov 2018 11:03:35 +0100
+-Subject: [PATCH] setarch: fix obscure sparc32bash use-case
+-
+-Reported-by: Carlos Santos <casantos@datacom.com.br>
+-Signed-off-by: Karel Zak <kzak@redhat.com>
+-Signed-off-by: Carlos Santos <casantos@datacom.com.br>
+----
+- sys-utils/setarch.c | 28 ++++++++++++++++++----------
+- 1 file changed, 18 insertions(+), 10 deletions(-)
+-
+-diff --git a/sys-utils/setarch.c b/sys-utils/setarch.c
+-index a733f7b3c..7c0a63fbb 100644
+---- a/sys-utils/setarch.c
+-+++ b/sys-utils/setarch.c
+-@@ -268,6 +268,7 @@ int main(int argc, char *argv[])
+- 	int c;
+- 	struct arch_domain *doms, *target;
+- 	unsigned long pers_value = 0;
+-+	char *shell = NULL, *shell_arg = NULL;
+- 
+- 	/* Options without equivalent short options */
+- 	enum {
+-@@ -310,14 +311,14 @@ int main(int argc, char *argv[])
+- 	archwrapper = strcmp(program_invocation_short_name, "setarch") != 0;
+- 	if (archwrapper) {
+- 		arch = program_invocation_short_name;	/* symlinks to setarch */
+--#if defined(__sparc64__) || defined(__sparc__)
+-+
+-+		/* Don't use ifdef sparc here, we get "Unrecognized architecture"
+-+		 * error message later if necessary */
+- 		if (strcmp(arch, "sparc32bash") == 0) {
+--			if (set_arch(arch, 0L, 0))
+--				err(EXIT_FAILURE, _("Failed to set personality to %s"), arch);
+--			execl("/bin/bash", "", NULL);
+--			errexec("/bin/bash");
+-+			shell = "/bin/bash";
+-+			shell_arg = "";
+-+			goto set_arch;
+- 		}
+--#endif
+- 	} else {
+- 		if (1 < argc && *argv[1] != '-') {
+- 			arch = argv[1];
+-@@ -391,6 +392,7 @@ int main(int argc, char *argv[])
 - 	argc -= optind;
 - 	argv += optind;
 - 
--@@ -534,7 +540,7 @@ main(int argc, char **argv)
-- 	}
-- 	if (tflag) {
-- 		/* Receive data. */
---		sink(argc, argv);
--+		sink(argc, argv, NULL);
-- 		exit(errs != 0);
-- 	}
-- 	if (argc < 2)
--@@ -792,7 +798,7 @@ tolocal(int argc, char **argv)
-- 			continue;
-- 		}
-- 		free(bp);
---		sink(1, argv + argc - 1);
--+		sink(1, argv + argc - 1, src);
-- 		(void) close(remin);
-- 		remin = remout = -1;
-- 	}
--@@ -968,7 +974,7 @@ rsource(char *name, struct stat *statp)
-- 	 (sizeof(type) != 4 && sizeof(type) != 8))
+-+set_arch:
+- 	/* get execution domain (architecture) */
+- 	if (arch) {
+- 		doms = init_arch_domains();
+-@@ -422,17 +424,23 @@ int main(int argc, char *argv[])
+- 	if (arch)
+- 		verify_arch_domain(target, arch);
 - 
-- void
---sink(int argc, char **argv)
--+sink(int argc, char **argv, const char *src)
-- {
-- 	static BUF buffer;
-- 	struct stat stb;
--@@ -984,6 +990,7 @@ sink(int argc, char **argv)
-- 	unsigned long long ull;
-- 	int setimes, targisdir, wrerrno = 0;
-- 	char ch, *cp, *np, *targ, *why, *vect[1], buf[2048], visbuf[2048];
--+	char *src_copy = NULL, *restrict_pattern = NULL;
-- 	struct timeval tv[2];
-- 
-- #define	atime	tv[0]
--@@ -1008,6 +1015,17 @@ sink(int argc, char **argv)
-- 	(void) atomicio(vwrite, remout, "", 1);
-- 	if (stat(targ, &stb) == 0 && S_ISDIR(stb.st_mode))
-- 		targisdir = 1;
--+	if (src != NULL && !iamrecursive && !Tflag) {
--+		/*
--+		 * Prepare to try to restrict incoming filenames to match
--+		 * the requested destination file glob.
--+		 */
--+		if ((src_copy = strdup(src)) == NULL)
--+			fatal("strdup failed");
--+		if ((restrict_pattern = strrchr(src_copy, '/')) != NULL) {
--+			*restrict_pattern++ = '\0';
--+		}
+-+	if (!argc) {
+-+		shell = "/bin/sh";
+-+		shell_arg = "-sh";
 -+	}
-- 	for (first = 1;; first = 0) {
-- 		cp = buf;
-- 		if (atomicio(read, remin, cp, 1) != 1)
--@@ -1112,6 +1130,9 @@ sink(int argc, char **argv)
-- 			run_err("error: unexpected filename: %s", cp);
-- 			exit(1);
-- 		}
--+		if (restrict_pattern != NULL &&
--+		    fnmatch(restrict_pattern, cp, 0) != 0)
--+			SCREWUP("filename does not match request");
-- 		if (targisdir) {
-- 			static char *namebuf;
-- 			static size_t cursize;
--@@ -1149,7 +1170,7 @@ sink(int argc, char **argv)
-- 					goto bad;
-- 			}
-- 			vect[0] = xstrdup(np);
---			sink(1, vect);
--+			sink(1, vect, src);
-- 			if (setimes) {
-- 				setimes = 0;
-- 				if (utimes(vect[0], tv) < 0)
+- 	if (verbose) {
+--		printf(_("Execute command `%s'.\n"), argc ? argv[0] : "/bin/sh");
+-+		printf(_("Execute command `%s'.\n"), shell ? shell : argv[0]);
+- 		/* flush all output streams before exec */
+- 		fflush(NULL);
+- 	}
+- 
+--	if (!argc) {
+--		execl("/bin/sh", "-sh", NULL);
+--		errexec("/bin/sh");
+-+	/* Execute shell */
+-+	if (shell) {
+-+		execl(shell, shell_arg, NULL);
+-+		errexec(shell);
+- 	}
+- 
+-+	/* Execute on command line specified command */
+- 	execvp(argv[0], argv);
+- 	errexec(argv[0]);
+- }
 --- 
--2.20.1
+-2.14.5
 -
-diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
-index 26b143c059..f4ae9042a1 100644
---- a/package/openssh/openssh.hash
-+++ b/package/openssh/openssh.hash
-@@ -1,4 +1,4 @@
--# From http://www.openssh.com/txt/release-7.9 (base64 encoded)
--sha256 6b4b3ba2253d84ed3771c8050728d597c91cfce898713beb7b64a305b6f11aad  openssh-7.9p1.tar.gz
-+# From http://www.openssh.com/txt/release-8.0 (base64 encoded)
-+sha256 bd943879e69498e8031eb6b7f44d08cdc37d59a7ab689aa0b437320c3481fd68  openssh-8.0p1.tar.gz
- # Locally calculated
- sha256 05a4c25ef464e19656c5259bd4f4da8428efab01044f3541b79fbb3ff209350f  LICENCE
-diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-index d21640e43e..85c570ce40 100644
---- a/package/openssh/openssh.mk
-+++ b/package/openssh/openssh.mk
+diff --git a/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch b/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch
+deleted file mode 100644
+index 381c25382a..0000000000
+--- a/package/util-linux/0004-ldattach-Check-for-value-of_HAVE_STRUCT_TERMIOS_C_ISPEED.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 963413a1adf6767ab17712097e288e1a346f63a7 Mon Sep 17 00:00:00 2001
+-From: Khem Raj <raj.khem@gmail.com>
+-Date: Fri, 4 Jan 2019 22:38:25 -0800
+-Subject: [PATCH] ldattach: Check for value of _HAVE_STRUCT_TERMIOS_C_ISPEED
+-
+-in glibc 2.29+ checking for just existence of _HAVE_STRUCT_TERMIOS_C_ISPEED
+-won't be enough, the value has to be checked
+-
+-see
+-https://sourceware.org/git/?p=glibc.git;a=commit;h=e5a50db36eaa6e8c6427b3a971563240b633ca85
+-
+-Signed-off-by: Khem Raj <raj.khem@gmail.com>
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/karelzak/util-linux/commit/963413a1adf6767ab17712097e288e1a346f63a7]
+----
+- sys-utils/ldattach.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/sys-utils/ldattach.c b/sys-utils/ldattach.c
+-index d33d68535..fb50711eb 100644
+---- a/sys-utils/ldattach.c
+-+++ b/sys-utils/ldattach.c
+-@@ -242,7 +242,7 @@ static int my_cfsetspeed(struct termios *ts, int speed)
+- 	 * -- we have to bypass glibc and set the speed manually (because glibc
+- 	 *    checks for speed and supports Bxxx bit rates only)...
+- 	 */
+--#ifdef _HAVE_STRUCT_TERMIOS_C_ISPEED
+-+#if _HAVE_STRUCT_TERMIOS_C_ISPEED
+- # define BOTHER 0010000		/* non standard rate */
+- 	dbg("using non-standard speeds");
+- 	ts->c_ospeed = ts->c_ispeed = speed;
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index a5a137bfe0..acde9e5474 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -12,7 +12,6 @@ if BR2_PACKAGE_UTIL_LINUX
+ config BR2_PACKAGE_UTIL_LINUX_LIBBLKID
+ 	bool "libblkid"
+ 	depends on BR2_USE_MMU # fork()
+-	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+ 	  Install libblkid.
+ 
+@@ -135,6 +134,11 @@ config BR2_PACKAGE_UTIL_LINUX_FSCK
+ 	help
+ 	  Check and repair a linux filesystem
+ 
++config BR2_PACKAGE_UTIL_LINUX_HARDLINK
++	bool "hardlink"
++	help
++	  Consolidate duplicate files via hardlinks
++
+ config BR2_PACKAGE_UTIL_LINUX_HWCLOCK
+ 	bool "hwclock"
+ 	help
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index ed503a12ed..7a83a03c1d 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -1,5 +1,5 @@
+-# From https://www.kernel.org/pub/linux/utils/util-linux/v2.33/sha256sums.asc
+-sha256 f261b9d73c35bfeeea04d26941ac47ee1df937bd3b0583e748217c1ea423658a  util-linux-2.33.tar.xz
++# From https://www.kernel.org/pub/linux/utils/util-linux/v2.34/sha256sums.asc
++sha256 743f9d0c7252b6db246b659c1e1ce0bd45d8d4508b4dfa427bbb4a3e9b9f62b5  util-linux-2.34.tar.xz
+ # License files, locally calculated
+ sha256 4335620e8f478ee4dc4d26540448d39469091ef1d8e3fbbbb8bf753206ceac74  README.licensing
+ sha256 9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index c176d364ce..99ec39467f 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPENSSH_VERSION = 7.9p1
-+OPENSSH_VERSION = 8.0p1
- OPENSSH_SITE = http://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable
- OPENSSH_LICENSE = BSD-3-Clause, BSD-2-Clause, Public Domain
- OPENSSH_LICENSE_FILES = LICENCE
+-UTIL_LINUX_VERSION_MAJOR = 2.33
++UTIL_LINUX_VERSION_MAJOR = 2.34
+ UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR)
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+@@ -91,6 +91,9 @@ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_ZLIB),zlib)
+ # Used by login-utils
+ UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_LINUX_PAM),linux-pam)
+ 
++# Used by hardlink
++UTIL_LINUX_DEPENDENCIES += $(if $(BR2_PACKAGE_PCRE2),pcre2)
++
+ # Disable/Enable utilities
+ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_BINARIES),--enable-all-programs,--disable-all-programs) \
+@@ -104,6 +107,7 @@ UTIL_LINUX_CONF_OPTS += \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FALLOCATE),--enable-fallocate,--disable-fallocate) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FDFORMAT),--enable-fdformat,--disable-fdformat) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_FSCK),--enable-fsck,--disable-fsck) \
++	$(if $(BR2_PACKAGE_UTIL_LINUX_HARDLINK),--enable-hardlink,--disable-hardlink) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_HWCLOCK),--enable-hwclock,--disable-hwclock) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCRM),--enable-ipcrm,--disable-ipcrm) \
+ 	$(if $(BR2_PACKAGE_UTIL_LINUX_IPCS),--enable-ipcs,--disable-ipcs) \
