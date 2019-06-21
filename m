@@ -1,61 +1,39 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Fri, 21 Jun 2019 11:22:00 +0200
-Subject: [Buildroot] [PATCH 21/27] toolchain: introduce
- BR2_TOOLCHAIN_HAS_GCC_BUG_90620
-In-Reply-To: <20190620181408.308b4443@windsurf>
-References: <20190614210346.121013-1-giulio.benetti@micronovasrl.com>
- <20190614210346.121013-22-giulio.benetti@micronovasrl.com>
- <20190620181408.308b4443@windsurf>
-Message-ID: <a74261b8-c5b7-86a5-4a56-479247f92da4@micronovasrl.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 21 Jun 2019 11:46:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cups: bump to version 2.2.11
+ and add gzip fix
+In-Reply-To: <20190620182345.61c30d6a@windsurf> (Thomas Petazzoni's message of
+ "Thu, 20 Jun 2019 18:23:45 +0200")
+References: <b2b6ccb8327f40de1bdaaf1e07b11183af5f6e92.1560836325.git.sbobroff@linux.ibm.com>
+ <20190620182345.61c30d6a@windsurf>
+Message-ID: <871rznfezo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Il 20/06/2019 18:14, Thomas Petazzoni ha scritto:
-> On Fri, 14 Jun 2019 23:03:40 +0200
-> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
-> 
->> GCC fails on building haproxy for the Microblaze Arch:
->> http://autobuild.buildroot.org/results/64706f96db793777de9d3ec63b0a47d776cf33fd/build-end.log
->>
->> Originally reported for gpsd:
+Hi,
 
-I've just realized that is not originally reported for gpsd and...
+ > This patch is not properly formatted: it is not formatted with "git
+ > format-patch". In addition, putting a comment before the patch (even if
+ > it's formatted with git format-patch) makes it impossible to apply the
+ > patch with "git am".
 
->> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90620
->>
->> Fixed on Gcc 8.x but regressed in Gcc 9.x.
+ > The canonical way of generating such patch is:
 
-I've messed up with all these patches, since there is a patch that fixes
-this patch:
-https://patchwork.ozlabs.org/patch/1117724/
+ > 	git cherry-pick -x 3676fc318a458f71df76620a7e66f5c5807cf9b1
+ > 	add your Signed-off-by in the commit log + any comment
 
-Sorry, but they were a lot of patches and I missed to squash them into 
-only one.
+NIT: git cherry-pick also understands the -s option to add
+signed-off-by, so you can use:
 
-Best regards
+git cherry-pick -sx <commit>
+
+And then just git commit --amend to add any needed comments to the
+commit message.
+
 -- 
-Giulio Benetti
-CTO
-
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
-
->> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->> ---
->>   toolchain/Config.in | 8 ++++++++
->>   1 file changed, 8 insertions(+)
-> 
-> Applied to master, thanks.
-> 
-> Thomas
-> 
+Bye, Peter Korsgaard
