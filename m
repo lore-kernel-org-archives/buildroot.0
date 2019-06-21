@@ -1,50 +1,72 @@
 From: Carlo Caione <ccaione@baylibre.com>
-Date: Fri, 21 Jun 2019 11:23:36 +0100
-Subject: [Buildroot] [PATCH 0/3] Add jailhouse package
-Message-ID: <20190621102339.22286-1-ccaione@baylibre.com>
+Date: Fri, 21 Jun 2019 11:23:38 +0100
+Subject: [Buildroot] [PATCH 2/3] package/python-jailhouse: new package
+In-Reply-To: <20190621102339.22286-1-ccaione@baylibre.com>
+References: <20190621102339.22286-1-ccaione@baylibre.com>
+Message-ID: <20190621102339.22286-3-ccaione@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jailhouse is a partitioning Hypervisor based on Linux. It is able to run 
-bare-metal applications or (adapted) operating systems besides Linux. 
-For this purpose, it configures CPU and device virtualization features 
-of the hardware platform in a way that none of these domains, called 
-"cells" here, can interfere with each other in an unacceptable way.
+Add the Python interface for the Jailhouse Hypervisor.
 
 https://github.com/siemens/jailhouse
 
-The package is composed by at least 3 elements:
-- The source code
-- A python library installed with pip at 'make install' time
-- A set of python helpers using the python library
-
-Since we do not want to use pip to install the library, I created and 
-additional python-jailhouse package to support a clean installation.
-
-@Asaf, @Yegor
-Sorry for sending this again. I got bounced the first time because I was 
-not subscribed with this email address.
-
-Carlo Caione (3):
-  package/jailhouse: new package
-  package/python-jailhouse: new package
-  package/jailhouse: introduce python helpers
-
- package/Config.in                            |  2 +
- package/jailhouse/Config.in                  | 26 +++++++++++++
- package/jailhouse/jailhouse.hash             |  2 +
- package/jailhouse/jailhouse.mk               | 40 ++++++++++++++++++++
- package/python-jailhouse/Config.in           |  7 ++++
- package/python-jailhouse/python-jailhouse.mk | 14 +++++++
- 6 files changed, 91 insertions(+)
- create mode 100644 package/jailhouse/Config.in
- create mode 100644 package/jailhouse/jailhouse.hash
- create mode 100644 package/jailhouse/jailhouse.mk
+Signed-off-by: Carlo Caione <ccaione@baylibre.com>
+---
+ package/Config.in                            |  1 +
+ package/python-jailhouse/Config.in           |  7 +++++++
+ package/python-jailhouse/python-jailhouse.mk | 14 ++++++++++++++
+ 3 files changed, 22 insertions(+)
  create mode 100644 package/python-jailhouse/Config.in
  create mode 100644 package/python-jailhouse/python-jailhouse.mk
 
+diff --git a/package/Config.in b/package/Config.in
+index 8b6a9322e4..6c6e35f919 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -917,6 +917,7 @@ menu "External python modules"
+ 	source "package/python-ipython-genutils/Config.in"
+ 	source "package/python-iso8601/Config.in"
+ 	source "package/python-itsdangerous/Config.in"
++	source "package/python-jailhouse/Config.in"
+ 	source "package/python-jaraco-classes/Config.in"
+ 	source "package/python-jedi/Config.in"
+ 	source "package/python-jinja2/Config.in"
+diff --git a/package/python-jailhouse/Config.in b/package/python-jailhouse/Config.in
+new file mode 100644
+index 0000000000..744169dc33
+--- /dev/null
++++ b/package/python-jailhouse/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_JAILHOUSE
++	bool "python-jailhouse"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  A Python interface for the Jailhouse Hypervisor.
++
++	  https://github.com/siemens/jailhouse
+diff --git a/package/python-jailhouse/python-jailhouse.mk b/package/python-jailhouse/python-jailhouse.mk
+new file mode 100644
+index 0000000000..9a07531315
+--- /dev/null
++++ b/package/python-jailhouse/python-jailhouse.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-jailhouse
++#
++################################################################################
++
++PYTHON_JAILHOUSE_VERSION = 0.10
++PYTHON_JAILHOUSE_SITE = $(call github,siemens,jailhouse,v$(JAILHOUSE_VERSION))
++PYTHON_JAILHOUSE_LICENSE = GPL-2.0
++PYTHON_JAILHOUSE_LICENSE_FILES = COPYING
++
++PYTHON_JAILHOUSE_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
 -- 
 2.20.1
