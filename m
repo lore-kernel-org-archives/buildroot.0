@@ -1,62 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 21 Jun 2019 22:38:18 +0200
-Subject: [Buildroot] [git commit] package/dnsmasq: fix build with ubus and
- NLS
-Message-ID: <20190621203750.7469982BD0@busybox.osuosl.org>
+Date: Fri, 21 Jun 2019 22:39:12 +0200
+Subject: [Buildroot] [git commit] package/libressl: bump to version 2.9.2
+Message-ID: <20190621203924.A912E82BD0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5c4d9c644a45549cd2a26501d4169bbaac2169e7
+commit: https://git.buildroot.net/buildroot/commit/?id=b93c71c83dd4dd5422c8cb258e97b4f08fb1a42a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/c0b27754b7ede024c095bdf0b3616e6f6be48c6d
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-Makefile-fix-i18n-build-with-ubus.patch   | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dnsmasq/0001-Makefile-fix-i18n-build-with-ubus.patch b/package/dnsmasq/0001-Makefile-fix-i18n-build-with-ubus.patch
-new file mode 100644
-index 0000000000..e42549beac
---- /dev/null
-+++ b/package/dnsmasq/0001-Makefile-fix-i18n-build-with-ubus.patch
-@@ -0,0 +1,33 @@
-+From 08572cffb641004d86072f12aec4d6489454b897 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 21 Jun 2019 09:26:20 +0200
-+Subject: [PATCH] Makefile: fix i18n build with ubus
-+
-+Commit caf4d571e6d86285a3690cfcc8de9c5f394320a8 forgot adding
-+ubus_libs to build_libs for all-i18n target
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/c0b27754b7ede024c095bdf0b3616e6f6be48c6d
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: sent to simon at thekelleys.org.uk]
-+---
-+ Makefile | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/Makefile b/Makefile
-+index 3fb7cbe..78e25f0 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -111,7 +111,7 @@ all-i18n : $(BUILDDIR)
-+  top="$(top)" \
-+  i18n=-DLOCALEDIR=\'\"$(LOCALEDIR)\"\' \
-+  build_cflags="$(version) $(dbus_cflags) $(idn2_cflags) $(idn_cflags) $(ct_cflags) $(lua_cflags) $(nettle_cflags)" \
-+- build_libs="$(dbus_libs) $(idn2_libs) $(idn_libs) $(ct_libs) $(lua_libs) $(sunos_libs) $(nettle_libs) $(gmp_libs)"  \
-++ build_libs="$(dbus_libs) $(idn2_libs) $(idn_libs) $(ct_libs) $(lua_libs) $(sunos_libs) $(nettle_libs) $(gmp_libs) $(ubus_libs)"  \
-+  -f $(top)/Makefile dnsmasq
-+ 	for f in `cd $(PO); echo *.po`; do \
-+ 		cd $(top) && cd $(BUILDDIR) && $(MAKE) top="$(top)" -f $(top)/Makefile $${f%.po}.mo; \
-+-- 
-+2.14.1
-+
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 9e5cbf22e9..e3e5dbe00b 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256 39e4dd856694dc10d564201e4549c46d2431601a2b10f3422507e24ccc8f62f8  libressl-2.9.1.tar.gz
++sha256 c4c78167fae325b47aebd8beb54b6041d6f6a56b3743f4bd5d79b15642f9d5d4  libressl-2.9.2.tar.gz
+ # Locally computed
+ sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index 4e9796d3ab..2d0f6fc50f 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBRESSL_VERSION = 2.9.1
++LIBRESSL_VERSION = 2.9.2
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
