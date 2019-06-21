@@ -1,60 +1,45 @@
-From: Carlo Caione <ccaione@baylibre.com>
-Date: Fri, 21 Jun 2019 11:23:39 +0100
-Subject: [Buildroot] [PATCH 3/3] package/jailhouse: introduce python helpers
-In-Reply-To: <20190621102339.22286-1-ccaione@baylibre.com>
-References: <20190621102339.22286-1-ccaione@baylibre.com>
-Message-ID: <20190621102339.22286-4-ccaione@baylibre.com>
+From: John Keeping <john@metanate.com>
+Date: Fri, 21 Jun 2019 13:36:24 +0100
+Subject: [Buildroot] [RFC PATCH] download/git: ban branch references
+In-Reply-To: <CA+1k=2Zy3fgq+QQ9r7YYvz6+p7QFxSnmeCVEB+_yDmweziAA-Q@mail.gmail.com>
+References: <20190619151817.6331-1-john@metanate.com>
+ <CA+1k=2Zy3fgq+QQ9r7YYvz6+p7QFxSnmeCVEB+_yDmweziAA-Q@mail.gmail.com>
+Message-ID: <20190621131846.0f8f74e4@donbot>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Compile the python helpers tool as a separate BR2 package depending on
-the pyjailhouse library.
+On Thu, 20 Jun 2019 11:27:02 -0600
+Joel Carlson <JoelsonCarl@gmail.com> wrote:
 
-Signed-off-by: Carlo Caione <ccaione@baylibre.com>
----
- package/jailhouse/Config.in    | 12 ++++++++++++
- package/jailhouse/jailhouse.mk |  6 ++++++
- 2 files changed, 18 insertions(+)
+> On Wed, Jun 19, 2019 at 9:19 AM John Keeping <john@metanate.com> wrote:
+> >
+> > As described in the manual, using a branch name as a version is not
+> > supported.  However, nothing enforces this so it is easy to specify a
+> > branch name either accidentally or because new developers have not read
+> > through the manual.  
+> 
+> At a more general discussion level, I have to admit I like having the
+> ability to use a branch name even if it isn't supported. During
+> development I find it easier to use a branch name and just delete the
+> cached version to force it to re-download when I know I have new
+> updates.  I can switch to a tag when I have a version I actually want
+> tagged and "final."  Otherwise I'd have to keep tagging changes and
+> updating what tag to grab in the config or package file to pull in new
+> changes.
+> 
+> Granted, it isn't a huge inconvenience to switch how I do things, and
+> I could see it being useful to "idiot-proof" for people who don't
+> realize the potential problems with using branch names.  But I at
+> least wanted to make my opinion known that I like it the way it is.
 
-diff --git a/package/jailhouse/Config.in b/package/jailhouse/Config.in
-index 385acdd627..b189822dae 100644
---- a/package/jailhouse/Config.in
-+++ b/package/jailhouse/Config.in
-@@ -12,3 +12,15 @@ comment "Jailhouse needs a Linux kernel to be built"
- 
- comment "Jailhouse only supports X86_64, ARMv8 or ARMv7 with virtualization extensions"
- 	depends on !(BR2_ARM_CPU_ARMV7A || BR2_aarch64 || BR2_x86_64)
-+
-+if BR2_PACKAGE_JAILHOUSE
-+
-+config BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS
-+	bool "Jailhouse helper scripts"
-+	select BR2_PACKAGE_PYTHON_JAILHOUSE
-+	help
-+	  Python-based helpers for the Jailhouse Hypervison".
-+
-+	  https://github.com/siemens/jailhouse
-+
-+endif
-diff --git a/package/jailhouse/jailhouse.mk b/package/jailhouse/jailhouse.mk
-index 78de8f6dc8..2065812369 100644
---- a/package/jailhouse/jailhouse.mk
-+++ b/package/jailhouse/jailhouse.mk
-@@ -16,6 +16,12 @@ JAILHOUSE_MAKE_OPTS = \
- 	KDIR="$(LINUX_DIR)" \
- 	DESTDIR="$(TARGET_DIR)"
- 
-+ifeq ($(BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS),y)
-+JAILHOUSE_MAKE_OPTS += PYTHON_PIP_USABLE="yes"
-+else
-+JAILHOUSE_MAKE_OPTS += PYTHON_PIP_USABLE="no"
-+endif
-+
- define JAILHOUSE_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(JAILHOUSE_MAKE_OPTS) -C $(@D)
- endef
--- 
-2.20.1
+I'm curious what advantages you see to this method compared to
+_OVERRIDE_SRCDIR.  I find pointing to an external version of the source
+to be more flexible and generally faster than pulling from Git every
+time.
+
+
+Regards,
+John
