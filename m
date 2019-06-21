@@ -1,10 +1,10 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Fri, 21 Jun 2019 14:17:14 +0530
-Subject: [Buildroot] [PATCH 03/19] autobuild-run: move njobs from kwargs to
- Builder class
+Date: Fri, 21 Jun 2019 14:17:15 +0530
+Subject: [Buildroot] [PATCH 04/19] autobuild-run: move sysinfo from kwargs
+ to Builder class
 In-Reply-To: <20190621084730.16411-1-itsatharva@gmail.com>
 References: <20190621084730.16411-1-itsatharva@gmail.com>
-Message-ID: <20190621084730.16411-3-itsatharva@gmail.com>
+Message-ID: <20190621084730.16411-4-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,39 +17,40 @@ Signed-off-by: Atharva Lele <itsatharva@gmail.com>
  1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 291cd9f..82b8f45 100755
+index 82b8f45..22452cf 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -271,8 +271,9 @@ class SystemInfo:
+@@ -271,9 +271,10 @@ class SystemInfo:
          return not missing_requirements
  
  class Builder:
--    def __init__(self, instance):
-+    def __init__(self, instance, njobs):
+-    def __init__(self, instance, njobs):
++    def __init__(self, instance, njobs, sysinfo):
          self.instance = instance
-+        self.njobs = njobs
+         self.njobs = njobs
++        self.sysinfo = sysinfo
  
      def prepare_build(self, **kwargs):
          """Prepare for the next build of the specified instance
-@@ -455,7 +456,7 @@ class Builder:
-         cmd = ["nice", "-n", str(nice),
-                 "make", "O=%s" % outputdir,
-                 "-C", srcdir, "BR2_DL_DIR=%s" % dldir,
--                "BR2_JLEVEL=%s" % kwargs['njobs']] \
-+                "BR2_JLEVEL=%s" % self.njobs] \
-             + kwargs['make_opts'].split()
-         sub = subprocess.Popen(cmd, stdout=f, stderr=f)
+@@ -416,7 +417,7 @@ class Builder:
+         build_2_image = os.path.join(outputdir, "images", "rootfs.tar")
  
-@@ -843,9 +844,8 @@ def main():
+         with open(reproducible_results, 'w') as diff:
+-            if kwargs['sysinfo'].has("diffoscope"):
++            if self.sysinfo.has("diffoscope"):
+                 # Prefix to point diffoscope towards cross-tools
+                 prefix = subprocess.check_output(["make", "O=%s" % outputdir, "-C", srcdir, "printvars", "VARS=TARGET_CROSS"])
+                 # Remove TARGET_CROSS= and \n from the string
+@@ -844,9 +845,8 @@ def main():
      buildpid = multiprocessing.Array('i', int(args['--ninstances']))
      processes = []
      for i in range(0, int(args['--ninstances'])):
--        builder = Builder(i)
-+        builder = Builder(i, args['--njobs'])
+-        builder = Builder(i, args['--njobs'])
++        builder = Builder(i, args['--njobs'], sysinfo)
          p = multiprocessing.Process(target=builder.run_instance, kwargs=dict(
--                njobs = args['--njobs'],
-                 sysinfo = sysinfo,
+-                sysinfo = sysinfo,
                  http_url = args['--http-url'],
                  http_login = args['--http-login'],
+                 http_password = args['--http-password'],
 -- 
 2.20.1
