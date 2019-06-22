@@ -1,47 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 19:28:12 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/python-periphery: new package
-In-Reply-To: <1561055893-22140-1-git-send-email-pjtexier@koncepto.io>
-References: <1561055893-22140-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190622192812.3abffc71@windsurf>
+Date: Sat, 22 Jun 2019 19:28:36 +0200
+Subject: [Buildroot] [git commit] support/testing/infra/emulator: increase
+ memory size used by Qemu
+Message-ID: <20190622172742.B56C281F0B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 20 Jun 2019 20:38:13 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=345c29a4b7321952b916c1b4eb88a03e136919be
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
-> Changes v1 -> v2
->  - remove 'v' prefix in PYTHON_PERIPHERY_VERSION
->  
->  Scanpy was not used because the archive in pythonhosted
->  does not contain the license file.
->  
->  With the github repo : make python-periphery-legal-info 
->    >>> python-periphery 1.1.1 Collecting legal info  
->    LICENSE: OK (sha256: db1bea825e728d8bcdf6c220d79c74370a9fcb63a4f9153c2cece2b63e177aa4)
->  
->  DEVELOPERS                                     |  1 +
->  package/Config.in                              |  1 +
->  package/python-periphery/Config.in             |  7 +++++++
->  package/python-periphery/python-periphery.hash |  3 +++
->  package/python-periphery/python-periphery.mk   | 13 +++++++++++++
->  5 files changed, 25 insertions(+)
->  create mode 100644 package/python-periphery/Config.in
->  create mode 100644 package/python-periphery/python-periphery.hash
->  create mode 100644 package/python-periphery/python-periphery.mk
+By default, Qemu emulates a system with 128 MB of RAM. This is not
+sufficient for some test cases we have, such as TestPerlDBDmysql,
+where the initramfs is quite large. Therefore, this commit extends the
+RAM size emulated by Qemu to 256 MB.
 
-Applied to master, thanks. It would be good to notify upstream that the
-LICENSE file is missing in the "official" tarball available from PyPi.
+Fixes:
 
-Thanks!
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/237108668
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks to Arnout for the analysis of the issue.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/infra/emulator.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index 802e89d4b4..3d3e1750c6 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -38,7 +38,8 @@ class Emulator(object):
+ 
+         qemu_cmd = ["qemu-system-{}".format(qemu_arch),
+                     "-serial", "stdio",
+-                    "-display", "none"]
++                    "-display", "none",
++                    "-m", "256"]
+ 
+         if options:
+             qemu_cmd += options
