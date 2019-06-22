@@ -1,47 +1,54 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 22 Jun 2019 19:20:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version to
- 4.9.9
-Message-ID: <20190622172045.10483-1-bernd.kuhls@t-online.de>
+Date: Sat, 22 Jun 2019 19:22:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: bump version to 3.0.7.1
+Message-ID: <20190622172245.22653-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://www.samba.org/samba/history/samba-4.9.9.html
-
-Fixes CVE-2019-12435.
+Fixes green-flickering bug with Windows AMD drivers:
+https://forum.videolan.org/viewtopic.php?p=492405#p492405
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/vlc/vlc.hash | 12 ++++++------
+ package/vlc/vlc.mk   |  2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 7e82261b4e..60c724e4b8 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.8.tar.asc
--sha256 82ebb7c3f1847c39341dd97ff8b73f40fa83f5f794daeceb80f3c349ace3cf56  samba-4.9.8.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.9.tar.asc
-+sha256 af0bf46abc74c62c5a8fe7b567103684b7bf4ce086d32bcd2f6681f592bf63ca  samba-4.9.9.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 6e80e473c1..6aaf81bf13 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
+index 9cda094337..ba053ea963 100644
+--- a/package/vlc/vlc.hash
++++ b/package/vlc/vlc.hash
+@@ -1,9 +1,9 @@
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.sha256
+-sha256 5cb5fe140f0f4bae3e0a613fb5f516270f62e2dbde6de27fa78ea9f43cd73916 vlc-3.0.7.tar.xz
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.sha1
+-sha1 8c9f96a11199e813ec718c3d1885501a557e336f vlc-3.0.7.tar.xz
+-# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.md5
+-md5 230932ec40185856af28f82ec2e38b8a vlc-3.0.7.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.sha256
++sha256 0655804371096772f06104b75c21cde8a76e3b6c8a2fdadc97914f082c6264f5 vlc-3.0.7.1.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.sha1
++sha1 3f6f9e56695eeea662b86602963721f1ac7afd23 vlc-3.0.7.1.tar.xz
++# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.md5
++md5 1adf2fe21070378b0e45ad163d3b232d vlc-3.0.7.1.tar.xz
+ # Locally computed
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
+index 1f58823ad3..a736643159 100644
+--- a/package/vlc/vlc.mk
++++ b/package/vlc/vlc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.9.8
-+SAMBA4_VERSION = 4.9.9
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-VLC_VERSION = 3.0.7
++VLC_VERSION = 3.0.7.1
+ VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
+ VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
+ VLC_LICENSE = GPL-2.0+, LGPL-2.1+
 -- 
 2.20.1
