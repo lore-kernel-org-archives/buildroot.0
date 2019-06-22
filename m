@@ -1,34 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 19:30:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/znc: security bump version to
- 1.7.4
-In-Reply-To: <20190622170251.12521-1-bernd.kuhls@t-online.de>
-References: <20190622170251.12521-1-bernd.kuhls@t-online.de>
-Message-ID: <20190622193037.3e0273e5@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 22 Jun 2019 19:30:50 +0200
+Subject: [Buildroot] [PATCH 1/1] package/postgresql: security bump version
+ to 11.4
+Message-ID: <20190622173050.14275-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 22 Jun 2019 19:02:51 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Release notes: https://www.postgresql.org/docs/11/release-11-4.html
 
-> Changelog: https://wiki.znc.in/ChangeLog/1.7.4
-> 
-> Fixes CVE-2019-12816:
-> http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-12816
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/znc/znc.hash | 2 +-
->  package/znc/znc.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes CVE-2019-10164.
 
-Applied to master, thanks.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/postgresql/postgresql.hash | 8 ++++----
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Thomas
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index ba6e02d4d8..d70ed7428d 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,7 +1,7 @@
+-# From https://ftp.postgresql.org/pub/source/v11.3/postgresql-11.3.tar.bz2.md5
+-md5 c2a729b754b8de86a969c86ec25db076  postgresql-11.3.tar.bz2
+-# From https://ftp.postgresql.org/pub/source/v11.3/postgresql-11.3.tar.bz2.sha256
+-sha256 2a85e082fc225944821dfd23990e32dfcd2284c19060864b0ad4ca537d30522d  postgresql-11.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v11.4/postgresql-11.4.tar.bz2.md5
++md5 dab5eed8a5f9204bf2f03a209eead4c3  postgresql-11.4.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v11.4/postgresql-11.4.tar.bz2.sha256
++sha256 02802ddffd1590805beddd1e464dd28a46a41a5f1e1df04bab4f46663195cc8b  postgresql-11.4.tar.bz2
+ 
+ # License file, Locally calculated
+ sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 94e69c2d17..ae4b525a6e 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-POSTGRESQL_VERSION = 11.3
++POSTGRESQL_VERSION = 11.4
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
