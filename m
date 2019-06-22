@@ -1,23 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 19:30:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvncserver: add optional
- systemd dependency
-In-Reply-To: <20190622163855.19659-1-fontaine.fabrice@gmail.com>
-References: <20190622163855.19659-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190622193000.1a86e680@windsurf>
+Date: Sat, 22 Jun 2019 19:30:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/znc: security bump version to
+ 1.7.4
+In-Reply-To: <20190622170251.12521-1-bernd.kuhls@t-online.de>
+References: <20190622170251.12521-1-bernd.kuhls@t-online.de>
+Message-ID: <20190622193037.3e0273e5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 22 Jun 2019 18:38:55 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 22 Jun 2019 19:02:51 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Changelog: https://wiki.znc.in/ChangeLog/1.7.4
+> 
+> Fixes CVE-2019-12816:
+> http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-12816
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/libvncserver/libvncserver.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  package/znc/znc.hash | 2 +-
+>  package/znc/znc.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
