@@ -1,43 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 21:31:49 +0200
-Subject: [Buildroot] [git commit] toolchain: add gcc 9 entry
-Message-ID: <20190622194127.EFA898165D@busybox.osuosl.org>
+Date: Sat, 22 Jun 2019 21:42:16 +0200
+Subject: [Buildroot] [git commit] package/gcc: switch to gcc 8.x as the
+ default
+Message-ID: <20190622194128.2475D83452@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c389e162784d49b731f4aec5dedcc87e7583cbda
+commit: https://git.buildroot.net/buildroot/commit/?id=0a8cc22331b9891f95696c401a4790dd35bccacd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In order to add gcc 9 support for internal and external toolchain in
-follow-up commits, introduce BR2_TOOLCHAIN_GCC_AT_LEAST_9 symbol.
+Even if gcc 7 is still maintained for some time (gcc 7.5 is pending),
+switch to gcc 8.x since it has been released since 2018-05-02 and
+gcc 9.x is available since 2019-05-03.
+
+We have been having toolchains in the autobuilders with gcc
+8.x for a while, so the vast majority of the problems should have
+already been solved.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- toolchain/Config.in | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/gcc/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 82d2658a1d..db3ce3cf24 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -521,10 +521,15 @@ config BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	bool
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 66c59c66c4..239353d3f7 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -5,7 +5,7 @@ choice
+ 	default BR2_GCC_VERSION_ARC if BR2_arc
+ 	default BR2_GCC_VERSION_CSKY if BR2_csky
+ 	default BR2_GCC_VERSION_OR1K if BR2_or1k
+-	default BR2_GCC_VERSION_7_X
++	default BR2_GCC_VERSION_8_X
+ 	help
+ 	  Select the version of gcc you wish to use.
  
-+config BR2_TOOLCHAIN_GCC_AT_LEAST_9
-+	bool
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+
- # This order guarantees that the highest version is set, as kconfig
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_GCC_AT_LEAST
- 	string
-+	default "9"	if BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 	default "8"	if BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	default "7"	if BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 	default "6"	if BR2_TOOLCHAIN_GCC_AT_LEAST_6
