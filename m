@@ -1,48 +1,45 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Sat, 22 Jun 2019 14:59:52 +0200
-Subject: [Buildroot] [PATCH 1/1] package/whois: bump to version 5.4.3
-Message-ID: <1561208392-11096-1-git-send-email-pjtexier@koncepto.io>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 22 Jun 2019 15:19:36 +0200
+Subject: [Buildroot] [PATCH] package/coreutils: simplify the [ -> test
+ symlink
+Message-ID: <20190622131936.10121-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Also change the site location, see:
- - https://release-monitoring.org/project/5128/
+Wheter we are mutli-call or multi-binaries, test is either a symlink to
+coreutils or a standalone binary.
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Consequently, test always exists, and so we can simplify the [ symlink.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Markus Mayer <mmayer@broadcom.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/whois/whois.hash | 4 ++--
- package/whois/whois.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/coreutils/coreutils.mk | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index 41ef935..c161018 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,5 +1,5 @@
--# From http://snapshot.debian.org/archive/debian/20181026T220636Z/pool/main/w/whois/whois_5.4.0.dsc
--sha256	3775ae0cfaa6dd8d886e5233c4826225cddcb88c99c2a08130d14e15fe58e378	whois_5.4.0.tar.xz
-+# From http://ftp.debian.org/debian/pool/main/w/whois/whois_5.4.3.dsc
-+sha256	fefa84029f70985db19743e51c4a8b318a169426babeaa824a27110c26090fc3	whois_5.4.3.tar.xz
+diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
+index 6b8f3ba4b8..55aa92e753 100644
+--- a/package/coreutils/coreutils.mk
++++ b/package/coreutils/coreutils.mk
+@@ -130,15 +130,9 @@ COREUTILS_CONF_OPTS += --enable-no-install-program=stdbuf
+ endif
  
- # Hash for license file:
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index 712ad91..3aa556b 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+ # link for archaic shells
+-ifeq ($(BR2_PACKAGE_COREUTILS_INDIVIDUAL_BINARIES),y)
+ define COREUTILS_CREATE_TEST_SYMLINK
+ 	ln -fs test $(TARGET_DIR)/usr/bin/[
+ endef
+-else
+-define COREUTILS_CREATE_TEST_SYMLINK
+-	ln -fs coreutils $(TARGET_DIR)/usr/bin/[
+-endef
+-endif
+ COREUTILS_POST_INSTALL_TARGET_HOOKS += COREUTILS_CREATE_TEST_SYMLINK
  
--WHOIS_VERSION = 5.4.0
--WHOIS_SITE = http://snapshot.debian.org/archive/debian/20181026T220636Z/pool/main/w/whois
-+WHOIS_VERSION = 5.4.3
-+WHOIS_SITE = http://ftp.debian.org/debian/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- WHOIS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
+ # gnu thinks chroot is in bin, debian thinks it's in sbin
 -- 
-2.7.4
+2.20.1
