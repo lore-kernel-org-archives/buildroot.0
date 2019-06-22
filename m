@@ -1,38 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 10:06:15 +0200
-Subject: [Buildroot] [PATCH v2 1/3] package/iputils: Reenable traceroute6
-In-Reply-To: <20190619213008.7883-1-petr.vorel@gmail.com>
+Date: Sat, 22 Jun 2019 10:06:50 +0200
+Subject: [Buildroot] [PATCH v2 2/3] iputils: Update upstream status on
+ patches
+In-Reply-To: <20190619213008.7883-2-petr.vorel@gmail.com>
 References: <20190619213008.7883-1-petr.vorel@gmail.com>
-Message-ID: <20190622100615.2f4502d9@windsurf>
+ <20190619213008.7883-2-petr.vorel@gmail.com>
+Message-ID: <20190622100650.6de1b05b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 19 Jun 2019 23:30:06 +0200
+On Wed, 19 Jun 2019 23:30:07 +0200
 Petr Vorel <petr.vorel@gmail.com> wrote:
 
-> Bump to s20190515 removed traceroute6 build (it's not built by default
-> since this version in upstream). Reenable it again.
+> Patch 0002-meson.build-fix-static-build-with-gcrypt.patch replaced with
+> 0002-build-sys-fix-static-build-gcrypt-dependency-gpg-err.patch
 > 
-> Fixes: 9ffcd9279e ("package/iputils: bump to version s20190515")
-> 
-> This requires fix similar to one in 0003-meson.build-fix-build-with-NLS.patch [1]
-> 
-> traceroute6 is in /usr/sbin, so no need to handle busybox problem
-> (6e18892733 "package/iputils: move binaries to the location also used by
-> Busybox").
-> 
-> [1] http://autobuild.buildroot.org/results/0a8a3efe734ac7fb3a68ba505277681857dc0a3d
-> 
-> Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 > ---
-> Changes v1->v2:
-> * Fix traceroute6 path in IPUTILS_PERMISSIONS, it must be /usr/bin/traceroute6
+>  ...-ninfod_name.c-fix-build-with-nettle.patch |  4 +-
+>  ...atic-build-gcrypt-dependency-gpg-err.patch | 51 ++++++++++++++++
+>  ...n.build-fix-static-build-with-gcrypt.patch | 58 -------------------
+>  .../0003-meson.build-fix-build-with-NLS.patch | 45 ++++++++------
+>  ...uild-sys-Make-setcap-really-optional.patch |  3 +-
+>  5 files changed, 80 insertions(+), 81 deletions(-)
+>  create mode 100644 package/iputils/0002-build-sys-fix-static-build-gcrypt-dependency-gpg-err.patch
+>  delete mode 100644 package/iputils/0002-meson.build-fix-static-build-with-gcrypt.patch
 
-Applied to master, thanks.
+Fixed the commit title prefix to be "package/iputils" not just
+"iputils". Also, I prefer when the part after the ":" doesn't start
+with an upper-case letter. Applied with those minor nits fixed. Thanks!
 
 Thomas
 -- 
