@@ -1,43 +1,61 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 22 Jun 2019 20:38:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rtmpdump: bump version
-Message-ID: <20190622183857.31568-1-bernd.kuhls@t-online.de>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Sun, 23 Jun 2019 00:11:16 +0530
+Subject: [Buildroot] [PATCH v2 1/3] autobuild-run: create reason file on
+ build failures
+Message-ID: <20190622184118.5627-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added tarball and license hashes.
+When a build fails, we calculate the reason of failure on
+the server side as well as client side. To solve this redundancy
+we only calculate on the client side and submit a file which
+contains the reason of failure.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 ---
- package/rtmpdump/rtmpdump.hash | 3 +++
- package/rtmpdump/rtmpdump.mk   | 2 +-
- 2 files changed, 4 insertions(+), 1 deletion(-)
- create mode 100644 package/rtmpdump/rtmpdump.hash
+NOTE: This series depends on work from builder-class series
 
-diff --git a/package/rtmpdump/rtmpdump.hash b/package/rtmpdump/rtmpdump.hash
-new file mode 100644
-index 0000000000..6e85a58419
---- /dev/null
-+++ b/package/rtmpdump/rtmpdump.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256 b98fceba5155c5a1ee3f26550ea94144c72d8b8c5a050c213bb55dab330ad6ff  rtmpdump-c5f04a58fc2aeea6296ca7c44ee4734c18401aa3.tar.gz
-+sha256 03fe7ca91cc28e99b4003d5b3bd4ce3b084d4c475fdf9975cf0e7fdf4dc739cd  librtmp/COPYING
-diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
-index 03cdd9d00f..bc68b7a836 100644
---- a/package/rtmpdump/rtmpdump.mk
-+++ b/package/rtmpdump/rtmpdump.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Changes v1 -> v2:
+  - Split commit into two, one for adding reason file and one for
+    accounting for reproducibility failures (next patch).
+---
+ scripts/autobuild-run | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+index 92afb26..c18d8aa 100755
+--- a/scripts/autobuild-run
++++ b/scripts/autobuild-run
+@@ -596,6 +596,11 @@ class Builder:
+             # not found
+             return None
  
--RTMPDUMP_VERSION = fa8646daeb19dfd12c181f7d19de708d623704c0
-+RTMPDUMP_VERSION = c5f04a58fc2aeea6296ca7c44ee4734c18401aa3
- RTMPDUMP_SITE = git://git.ffmpeg.org/rtmpdump
- RTMPDUMP_INSTALL_STAGING = YES
- # Note that rtmpdump is GPL-2.0 but librtmp has its own license and since we only
++        reason = get_failure_reason()
++        if reason:
++            with open(os.path.join(self.resultdir, "reason"), "w+") as reasonf:
++                reasonf.write("-".join(reason))
++
+         def extract_end_log(resultfile):
+             """Save the last part of the build log, starting from the failed package"""
+ 
+@@ -604,7 +609,6 @@ class Builder:
+                                 (os.path.join(self.outputdir, "logfile"), resultfile)],
+                                 shell=True)
+ 
+-            reason = get_failure_reason()
+             if not reason:
+                 extract_last_500_lines()
+             else:
+@@ -628,7 +632,6 @@ class Builder:
+         def copy_config_log_files():
+             """Recursively copy any config.log files from the failing package"""
+ 
+-            reason = get_failure_reason()
+             if not reason:
+                 return
+ 
 -- 
 2.20.1
