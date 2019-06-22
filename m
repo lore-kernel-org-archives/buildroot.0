@@ -1,83 +1,40 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 22 Jun 2019 20:25:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xapp_sessreg: bump version to
- 1.1.2
-Message-ID: <20190622182536.4356-1-bernd.kuhls@t-online.de>
+Date: Sat, 22 Jun 2019 20:28:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mjpg-streamer: bump version
+Message-ID: <20190622182855.12075-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch which was applied upstream:
-https://gitlab.freedesktop.org/xorg/app/sessreg/commit/5b403d124c32c20fddc73bc5ae3c7e1febdf1bc4
-
-Added all hashes provided by upstream, added license hash.
-
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- .../0001-missing_path_wtmpx.patch             | 24 -------------------
- package/x11r7/xapp_sessreg/xapp_sessreg.hash  |  9 +++++--
- package/x11r7/xapp_sessreg/xapp_sessreg.mk    |  2 +-
- 3 files changed, 8 insertions(+), 27 deletions(-)
- delete mode 100644 package/x11r7/xapp_sessreg/0001-missing_path_wtmpx.patch
+ package/mjpg-streamer/mjpg-streamer.hash | 2 +-
+ package/mjpg-streamer/mjpg-streamer.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/x11r7/xapp_sessreg/0001-missing_path_wtmpx.patch b/package/x11r7/xapp_sessreg/0001-missing_path_wtmpx.patch
-deleted file mode 100644
-index 0be242c0b2..0000000000
---- a/package/x11r7/xapp_sessreg/0001-missing_path_wtmpx.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--Fix missing defines _PATH_WTMPX/_PATH_UTMPX in musl
--
--Downloaded from
--https://cgit.gentoo.org/proj/musl.git/tree/x11-apps/sessreg/files/sessreg-1.1.0-missing_path_wtmpx.patch
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -Naur sessreg-1.1.0.orig/sessreg.h sessreg-1.1.0/sessreg.h
----- sessreg-1.1.0.orig/sessreg.h	2015-01-20 05:00:27.000000000 +0000
--+++ sessreg-1.1.0/sessreg.h	2016-02-23 11:54:42.057000000 +0000
--@@ -103,6 +103,13 @@
-- # define TTYS_FILE	"/etc/ttys"
-- #endif
-- 
--+#ifndef _PATH_WTMPX
--+# define _PATH_WTMPX	"/var/log/wtmp"
--+#endif
--+#ifndef _PATH_UTMPX
--+# define _PATH_UTMPX	"/var/log/utmp"
--+#endif
--+
-- #ifndef WTMPX_FILE
-- # define WTMPX_FILE	_PATH_WTMPX
-- #endif
-diff --git a/package/x11r7/xapp_sessreg/xapp_sessreg.hash b/package/x11r7/xapp_sessreg/xapp_sessreg.hash
-index 47495b23df..12a7d3689a 100644
---- a/package/x11r7/xapp_sessreg/xapp_sessreg.hash
-+++ b/package/x11r7/xapp_sessreg/xapp_sessreg.hash
-@@ -1,2 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2017-February/002778.html
--sha256 78a76ae3f3f6a26547a34630d1b740f42344848b5fb6d7c9c7f7da255e35a6e1  sessreg-1.1.1.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-June/002994.html
-+md5 92be564d4be7d8aa7b5024057b715210  sessreg-1.1.2.tar.bz2
-+sha1 169c1ff9fb152b4b4ca0cfbd3e1aee33af042016  sessreg-1.1.2.tar.bz2
-+sha256 dfcb9e954273ace63879aec053c7880466f8755752a35aa9ced3fa5f04fd2c33  sessreg-1.1.2.tar.bz2
-+sha512 7e3c2bdcadb7133aace463b58d8c6108d315ec95d2a42509073eeddc7f02644092a4b3168bd3b426c041736a016291092e0bf8368acd620dbeff96d53d12f98c  sessreg-1.1.2.tar.bz2
-+# Locally computed
-+sha256 ac8f5cc696e6c473aea4caaf18650316dc8912fcf0f370cae1df5f395cea8631  COPYING
-diff --git a/package/x11r7/xapp_sessreg/xapp_sessreg.mk b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
-index 46935aed9a..7f488e2423 100644
---- a/package/x11r7/xapp_sessreg/xapp_sessreg.mk
-+++ b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
+diff --git a/package/mjpg-streamer/mjpg-streamer.hash b/package/mjpg-streamer/mjpg-streamer.hash
+index 76716266b9..0a08151a4b 100644
+--- a/package/mjpg-streamer/mjpg-streamer.hash
++++ b/package/mjpg-streamer/mjpg-streamer.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 d2c2c9dbc95332245f34247f4a0791d741d1ae875084f9886442f48a01b01d81  mjpg-streamer-ddb69b7b4f114f3c2ca01adf55712792ca8aed43.tar.gz
++sha256 bd934363b5cb6ef3665aa2dfa15d08b72bbfe84ca60f7c342fe8ae1f94e19201  mjpg-streamer-501f6362c5afddcfb41055f97ae484252c85c912.tar.gz
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  mjpg-streamer-experimental/LICENSE
+diff --git a/package/mjpg-streamer/mjpg-streamer.mk b/package/mjpg-streamer/mjpg-streamer.mk
+index 4077a3dcbc..d5980dbf15 100644
+--- a/package/mjpg-streamer/mjpg-streamer.mk
++++ b/package/mjpg-streamer/mjpg-streamer.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_SESSREG_VERSION = 1.1.1
-+XAPP_SESSREG_VERSION = 1.1.2
- XAPP_SESSREG_SOURCE = sessreg-$(XAPP_SESSREG_VERSION).tar.bz2
- XAPP_SESSREG_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_SESSREG_LICENSE = MIT
+-MJPG_STREAMER_VERSION = ddb69b7b4f114f3c2ca01adf55712792ca8aed43
++MJPG_STREAMER_VERSION = 501f6362c5afddcfb41055f97ae484252c85c912
+ MJPG_STREAMER_SITE = $(call github,jacksonliam,mjpg-streamer,$(MJPG_STREAMER_VERSION))
+ MJPG_STREAMER_SUBDIR = mjpg-streamer-experimental
+ MJPG_STREAMER_LICENSE = GPL-2.0+
 -- 
 2.20.1
