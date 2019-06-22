@@ -1,43 +1,40 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 22 Jun 2019 19:59:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/eudev: bump version to 3.2.8
-Message-ID: <20190622175953.12449-1-bernd.kuhls@t-online.de>
+Date: Sat, 22 Jun 2019 20:01:31 +0200
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: Remove Markos Chandras
+Message-ID: <20190622180131.12597-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Email bounces:
+
+<markos.chandras@imgtec.com>: host
+    mxa-00376f01.gslb.pphosted.com[185.132.180.163] said: 550 5.1.1 User
+    Unknown (in reply to RCPT TO command)
+
+Last mailing list postings date back to 2015.
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/eudev/eudev.hash | 4 ++--
- package/eudev/eudev.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/eudev/eudev.hash b/package/eudev/eudev.hash
-index 33556a2d25..d1541d0c82 100644
---- a/package/eudev/eudev.hash
-+++ b/package/eudev/eudev.hash
-@@ -1,5 +1,5 @@
- # From http://dev.gentoo.org/~blueness/eudev/
--md5 c75d99910c1791dd9430d26ab76059c0  eudev-3.2.7.tar.gz
-+md5 ce166b3fdd910c2a4a840378f48fedaf  eudev-3.2.8.tar.gz
- # Locally calculated
--sha256 3004614bd253c1f98558460215027aaf60d7592c70be27fd384ec01db87bf062  eudev-3.2.7.tar.gz
-+sha256 61e4948e9e51271c3cce2bb5311a30b206dd03ef011062e6c627fb007e43f6b8  eudev-3.2.8.tar.gz
- sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/eudev/eudev.mk b/package/eudev/eudev.mk
-index d88e010c28..78d0ea670e 100644
---- a/package/eudev/eudev.mk
-+++ b/package/eudev/eudev.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0955838272..19816c6858 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1432,10 +1432,6 @@ F:	boot/riscv-pk/
+ F:	configs/qemu_riscv32_virt_defconfig
+ F:	configs/qemu_riscv64_virt_defconfig
  
--EUDEV_VERSION = 3.2.7
-+EUDEV_VERSION = 3.2.8
- EUDEV_SITE = http://dev.gentoo.org/~blueness/eudev
- EUDEV_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- EUDEV_LICENSE_FILES = COPYING
+-N:	Markos Chandras <markos.chandras@imgtec.com>
+-F:	package/harfbuzz/
+-F:	package/libsecret/
+-
+ N:	Martin Bark <martin@barkynet.com>
+ F:	board/raspberrypi/
+ F:	configs/raspberrypi3_defconfig
 -- 
 2.20.1
