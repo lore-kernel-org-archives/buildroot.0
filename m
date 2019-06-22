@@ -1,54 +1,88 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 22 Jun 2019 19:22:45 +0200
-Subject: [Buildroot] [PATCH 1/1] package/vlc: bump version to 3.0.7.1
-Message-ID: <20190622172245.22653-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 22 Jun 2019 17:51:01 +0200
+Subject: [Buildroot] [git commit] package/python-periphery: new package
+Message-ID: <20190622172538.1197C813FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes green-flickering bug with Windows AMD drivers:
-https://forum.videolan.org/viewtopic.php?p=492405#p492405
+commit: https://git.buildroot.net/buildroot/commit/?id=134baa08ea45d2f4496b18782be03b2dc2738a4a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/vlc/vlc.hash | 12 ++++++------
- package/vlc/vlc.mk   |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ DEVELOPERS                                     |  1 +
+ package/Config.in                              |  1 +
+ package/python-periphery/Config.in             |  7 +++++++
+ package/python-periphery/python-periphery.hash |  3 +++
+ package/python-periphery/python-periphery.mk   | 13 +++++++++++++
+ 5 files changed, 25 insertions(+)
 
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index 9cda094337..ba053ea963 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,9 +1,9 @@
--# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.sha256
--sha256 5cb5fe140f0f4bae3e0a613fb5f516270f62e2dbde6de27fa78ea9f43cd73916 vlc-3.0.7.tar.xz
--# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.sha1
--sha1 8c9f96a11199e813ec718c3d1885501a557e336f vlc-3.0.7.tar.xz
--# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.md5
--md5 230932ec40185856af28f82ec2e38b8a vlc-3.0.7.tar.xz
-+# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.sha256
-+sha256 0655804371096772f06104b75c21cde8a76e3b6c8a2fdadc97914f082c6264f5 vlc-3.0.7.1.tar.xz
-+# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.sha1
-+sha1 3f6f9e56695eeea662b86602963721f1ac7afd23 vlc-3.0.7.1.tar.xz
-+# From http://download.videolan.org/pub/videolan/vlc/3.0.7.1/vlc-3.0.7.1.tar.xz.md5
-+md5 1adf2fe21070378b0e45ad163d3b232d vlc-3.0.7.1.tar.xz
- # Locally computed
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 1f58823ad3..a736643159 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index aa55d7c141..2b0d185097 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1860,6 +1860,7 @@ F:	package/trace-cmd/
  
--VLC_VERSION = 3.0.7
-+VLC_VERSION = 3.0.7.1
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
--- 
-2.20.1
+ N:	Pierre-Jean Texier <pjtexier@koncepto.io>
+ F:	package/libubootenv/
++F:	package/python-periphery/
+ 
+ N:	Pieter De Gendt <pieter.degendt@gmail.com>
+ F:	package/libvips/
+diff --git a/package/Config.in b/package/Config.in
+index f980e979e3..bc529e0b56 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -966,6 +966,7 @@ menu "External python modules"
+ 	source "package/python-pathpy/Config.in"
+ 	source "package/python-pathtools/Config.in"
+ 	source "package/python-pathvalidate/Config.in"
++	source "package/python-periphery/Config.in"
+ 	source "package/python-pexpect/Config.in"
+ 	source "package/python-pickleshare/Config.in"
+ 	source "package/python-pigpio/Config.in"
+diff --git a/package/python-periphery/Config.in b/package/python-periphery/Config.in
+new file mode 100644
+index 0000000000..99585b0f56
+--- /dev/null
++++ b/package/python-periphery/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_PERIPHERY
++	bool "python-periphery"
++	help
++	  A pure Python 2/3 library for peripheral I/O (GPIO, LED,
++	  PWM, SPI, I2C, MMIO, Serial) in Linux.
++
++	  https://github.com/vsergeev/python-periphery
+diff --git a/package/python-periphery/python-periphery.hash b/package/python-periphery/python-periphery.hash
+new file mode 100644
+index 0000000000..de988b337e
+--- /dev/null
++++ b/package/python-periphery/python-periphery.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 a9a0a0ac02b8c3a954281777e92a15ec41abd311eb8732b50a2faaa9df62f1df  python-periphery-1.1.1.tar.gz
++sha256 db1bea825e728d8bcdf6c220d79c74370a9fcb63a4f9153c2cece2b63e177aa4  LICENSE
+diff --git a/package/python-periphery/python-periphery.mk b/package/python-periphery/python-periphery.mk
+new file mode 100644
+index 0000000000..150ac1ca9a
+--- /dev/null
++++ b/package/python-periphery/python-periphery.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# python-periphery
++#
++################################################################################
++
++PYTHON_PERIPHERY_VERSION = 1.1.1
++PYTHON_PERIPHERY_SITE = $(call github,vsergeev,python-periphery,v$(PYTHON_PERIPHERY_VERSION))
++PYTHON_PERIPHERY_LICENSE = MIT
++PYTHON_PERIPHERY_LICENSE_FILES = LICENSE
++PYTHON_PERIPHERY_SETUP_TYPE = setuptools
++
++$(eval $(python-package))
