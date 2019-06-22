@@ -1,54 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 20:11:43 +0200
-Subject: [Buildroot] [git commit] package/freetype: bump version to 2.10.0
-Message-ID: <20190622181100.4F9E7821C0@busybox.osuosl.org>
+Date: Sat, 22 Jun 2019 19:53:53 +0200
+Subject: [Buildroot] [git commit] package/postgresql: security bump version
+ to 11.4
+Message-ID: <20190622181100.3DCA7821C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f04f0f9f57b2805fec3b85be89055aa499986dfb
+commit: https://git.buildroot.net/buildroot/commit/?id=b262c7d578e7b15b95d68bead7cb8f0a97755d20
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://sourceforge.net/projects/freetype/files/freetype2/2.10.0/
+Release notes: https://www.postgresql.org/docs/11/release-11-4.html
+
+Fixes CVE-2019-10164.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/freetype/freetype.hash | 8 ++++----
- package/freetype/freetype.mk   | 2 +-
+ package/postgresql/postgresql.hash | 8 ++++----
+ package/postgresql/postgresql.mk   | 2 +-
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
-index c98674c7c2..2095d6eaec 100644
---- a/package/freetype/freetype.hash
-+++ b/package/freetype/freetype.hash
-@@ -1,9 +1,9 @@
--# From https://sourceforge.net/projects/freetype/files/freetype2/2.9.1/
--md5 60ef7d8160cd4bf8cb118ee9d65367ca freetype-2.9.1.tar.bz2
--sha1 220c82062171c513e4017c523d196933c9de4a7d freetype-2.9.1.tar.bz2
-+# From https://sourceforge.net/projects/freetype/files/freetype2/2.10.0/
-+md5 a717e6925b61b9dda946322ecd278a42 freetype-2.10.0.tar.bz2
-+sha1 f6abf03e0e3189a0de883981c57d3861b5d314f5 freetype-2.10.0.tar.bz2
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index ba6e02d4d8..d70ed7428d 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,7 +1,7 @@
+-# From https://ftp.postgresql.org/pub/source/v11.3/postgresql-11.3.tar.bz2.md5
+-md5 c2a729b754b8de86a969c86ec25db076  postgresql-11.3.tar.bz2
+-# From https://ftp.postgresql.org/pub/source/v11.3/postgresql-11.3.tar.bz2.sha256
+-sha256 2a85e082fc225944821dfd23990e32dfcd2284c19060864b0ad4ca537d30522d  postgresql-11.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v11.4/postgresql-11.4.tar.bz2.md5
++md5 dab5eed8a5f9204bf2f03a209eead4c3  postgresql-11.4.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v11.4/postgresql-11.4.tar.bz2.sha256
++sha256 02802ddffd1590805beddd1e464dd28a46a41a5f1e1df04bab4f46663195cc8b  postgresql-11.4.tar.bz2
  
- # Locally calculated
--sha256	db8d87ea720ea9d5edc5388fc7a0497bb11ba9fe972245e0f7f4c7e8b1e1e84d	freetype-2.9.1.tar.bz2
-+sha256	fccc62928c65192fff6c98847233b28eb7ce05f12d2fea3f6cc90e8b4e5fbe06	freetype-2.10.0.tar.bz2
- sha256	fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb	docs/LICENSE.TXT
- sha256	08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1	docs/FTL.TXT
- sha256	c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18	docs/GPLv2.TXT
-diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
-index 7167061568..44a9464d13 100644
---- a/package/freetype/freetype.mk
-+++ b/package/freetype/freetype.mk
+ # License file, Locally calculated
+ sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 94e69c2d17..ae4b525a6e 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREETYPE_VERSION = 2.9.1
-+FREETYPE_VERSION = 2.10.0
- FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
- FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
- FREETYPE_INSTALL_STAGING = YES
+-POSTGRESQL_VERSION = 11.3
++POSTGRESQL_VERSION = 11.4
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
