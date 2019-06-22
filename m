@@ -1,38 +1,27 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 20:07:23 +0200
-Subject: [Buildroot] [PATCH 1/2] autobuild-run: create reason file on
- build failures
-In-Reply-To: <20190622174449.4340-1-itsatharva@gmail.com>
-References: <20190622174449.4340-1-itsatharva@gmail.com>
-Message-ID: <20190622200723.1810910f@windsurf>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Sat, 22 Jun 2019 20:07:29 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/python-periphery: new package
+In-Reply-To: <20190622192812.3abffc71@windsurf>
+References: <1561055893-22140-1-git-send-email-pjtexier@koncepto.io>
+ <20190622192812.3abffc71@windsurf>
+Message-ID: <78cad1ea-9ad1-8d2b-f96a-9b9e2cee903d@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Thomas,
 
-On Sat, 22 Jun 2019 23:14:48 +0530
-Atharva Lele <itsatharva@gmail.com> wrote:
+Le 22/06/2019 ? 19:28, Thomas Petazzoni a ?crit?:
+> Applied to master, thanks. It would be good to notify upstream that the
+> LICENSE file is missing in the "official" tarball available from PyPi.
 
-> When a build fails, we calculate the reason of failure on
-> the server side as well as client side. To solve this redundancy
-> we only calculate on the client side and submit a file which
-> contains the reason of failure.
-> 
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+Indeed, I will do.
 
-This should have been two separate commits:
+Thanks,
 
- - One making autobuild-run generate the reason file, with the logic to
-   calculate the reason as it exists today
-
- - A second one that improves the reason calculation logic to take into
-   account the BR2_REPRODUCIBLE=y case
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Pierre-Jean Texier
+Embedded Linux Engineer
+https://koncepto.io
