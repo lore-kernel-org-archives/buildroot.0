@@ -1,69 +1,73 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 22 Jun 2019 21:22:27 +0200
-Subject: [Buildroot] [PATCH v6 1/2] meson: add per package optional
- compiler/linker flags
-In-Reply-To: <20190622211330.10b68b47@windsurf>
-References: <20190423205302.14382-1-ps.report@gmx.net>
- <20190612163710.GE2647@scaer> <20190622211330.10b68b47@windsurf>
-Message-ID: <20190622192227.GF13664@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 22 Jun 2019 21:30:09 +0200
+Subject: [Buildroot] [git commit] package/uclibc: backport patch to remove
+ asm constraint on sparc
+Message-ID: <20190622192928.9CA14821AC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=08d25f394266eea15c64ed5c583d6af86103166f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-06-22 21:13 +0200, Thomas Petazzoni spake thusly:
-> On Wed, 12 Jun 2019 18:37:10 +0200
-> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> 
-> > > diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-> > > index 49e27f5527..70128f6bad 100644
-> > > --- a/package/meson/meson.mk
-> > > +++ b/package/meson/meson.mk
-> > > @@ -60,6 +60,9 @@ define HOST_MESON_INSTALL_CROSS_CONF
-> > >  	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
-> > >  	    -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
-> > >  	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
-> > > +	    -e "s%@PKG_TARGET_CFLAGS@%%g" \
-> > > +	    -e "s%@PKG_TARGET_LDFLAGS@%%g" \
-> > > +	    -e "s%@PKG_TARGET_CXXFLAGS@%%g" \  
-> > 
-> > Actually, if someone wants to use that file outside of Buildroot, and
-> > also happend to need to pass special C/LD/CXXFLAGS for their package,
-> > how are they expected to do so? Can't we just install it as a template
-                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > too?
-    ^^^^
-> 
-> If we keep @PKG_TARGET_CFLAGS@, @PKG_TARGET_LDFLAGS@, etc. in the
-> cross-compilation.conf, then it is no longer usable as-is: users will
-> _have_ to fixup those @PKG_TARGET_foo@, even if they don't need to pass
-> additional CFLAGS to their package.
-> 
-> I think what Peter S. did here is the best we can do. A better solution
-> would be for Meson to support command line provided cflags/ldflags, but
-> that's not supported, and if it was supported, this whole patch
-> wouldn't be necessary.
+uClibc-ng don't build with gcc 9.1 [1] on sparc due to a new check
+that "catch illegal asm constraint usage" [2]. This issue has been
+fixed in upstream uclibc-ng, so we simply backport the fix.
 
-As I explained on IRC: we would install the file like Peter does, but
-also install the template as well, so that:
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+[Thomas: backport the patch that was applied to upstream uclibc-ng]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../uclibc/0004-sparc-remove-asm-constraint.patch  | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-  - packages that don't need extra flags can be built as-is
-
-  - while for packages that do require extra flag, the user can use the
-    template to generate a custom file
-
-and thus we have the best of both worlds.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/uclibc/0004-sparc-remove-asm-constraint.patch b/package/uclibc/0004-sparc-remove-asm-constraint.patch
+new file mode 100644
+index 0000000000..2fbe8cda51
+--- /dev/null
++++ b/package/uclibc/0004-sparc-remove-asm-constraint.patch
+@@ -0,0 +1,40 @@
++From 75a1a2a9fec8a310a18ff7d63ead95f3a0d1b11b Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@gmail.com>
++Date: Fri, 24 May 2019 12:42:04 +0200
++Subject: [PATCH] sparc: remove asm constraint
++
++uClibc-ng don't build with gcc 9.1 [1] due to a new check that
++"catch illegal asm constraint usage" [2].
++gcc 9.1 print this error:
++"invalid hard register usage between earlyclobber operand and input operand"
++The asm constraint is present in uClibc since it support sparc (back in 2002)[3].
++Note: There is no such constraint is Glibc counterpart code [4].
++[1] https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435757
++[2] https://github.com/gcc-mirror/gcc/commit/b782636f28f5c378897c238081d28d7a4a6ca578
++[3] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=3b6d086531102b6d09ce852feb1e370d5dca3ce9
++[4]
+++https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/sparc/sysdep.h;h=981b2a26b7a91093f821c97876
+++e55bc4be2d9f8a;hb=HEAD
++
++(cherry picked from commit c2eaf6c30d930b65a8bcf5f912ef8873a6f4eb20)
++Signed-off-by: Romain Naour <romain.naour@gmail.com>
++---
++ libc/sysdeps/linux/sparc/bits/syscalls.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/libc/sysdeps/linux/sparc/bits/syscalls.h b/libc/sysdeps/linux/sparc/bits/syscalls.h
++index 75af7a157..28edc0568 100644
++--- a/libc/sysdeps/linux/sparc/bits/syscalls.h
+++++ b/libc/sysdeps/linux/sparc/bits/syscalls.h
++@@ -33,7 +33,7 @@
++             register long __g1 __asm__("g1") = sys_num;     \
++             LOAD_ARGS_##nr(args)                            \
++             __asm__ __volatile__( __SYSCALL_STRING          \
++-                : "=r" (__res), "=&r" (__o0)                \
+++                : "=r" (__res), "=r" (__o0)                \
++                 : "1" (__o0) ASM_ARGS_##nr, "r" (__g1)     \
++                 : __SYSCALL_CLOBBERS );                                   \
++         }                                                   \
++-- 
++2.21.0
++
