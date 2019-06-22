@@ -1,53 +1,54 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 22 Jun 2019 20:11:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXi: bump version to
- 1.7.10
-Message-ID: <20190622181151.26793-1-bernd.kuhls@t-online.de>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 22 Jun 2019 20:11:43 +0200
+Subject: [Buildroot] [git commit] package/freetype: bump version to 2.10.0
+Message-ID: <20190622181100.4F9E7821C0@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added all hashes provided by upstream, added license hash.
+commit: https://git.buildroot.net/buildroot/commit/?id=f04f0f9f57b2805fec3b85be89055aa499986dfb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switched _SITE to https.
+Changelog:
+https://sourceforge.net/projects/freetype/files/freetype2/2.10.0/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libXi/xlib_libXi.hash | 9 +++++++--
- package/x11r7/xlib_libXi/xlib_libXi.mk   | 4 ++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ package/freetype/freetype.hash | 8 ++++----
+ package/freetype/freetype.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xlib_libXi/xlib_libXi.hash b/package/x11r7/xlib_libXi/xlib_libXi.hash
-index 9f2c3e30b7..1235631321 100644
---- a/package/x11r7/xlib_libXi/xlib_libXi.hash
-+++ b/package/x11r7/xlib_libXi/xlib_libXi.hash
-@@ -1,2 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2017-January/002768.html
--sha256 c2e6b8ff84f9448386c1b5510a5cf5a16d788f76db018194dacdc200180faf45  libXi-1.7.9.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-June/002999.html
-+md5 62c4af0839072024b4b1c8cbe84216c7  libXi-1.7.10.tar.bz2
-+sha1 79052e50ea07ce2431f8988a60553d9091d46207  libXi-1.7.10.tar.bz2
-+sha256 36a30d8f6383a72e7ce060298b4b181fd298bc3a135c8e201b7ca847f5f81061  libXi-1.7.10.tar.bz2
-+sha512 591f0860bf5904897587c4990d6c852f3729a212d1ef390362d41242440e078221877c31db2232d5cc81727fe97f4e194b077f7de917e251e60641bbd06ee218  libXi-1.7.10.tar.bz2
-+# Locally computed
-+sha256 9392174bc86e291369fd2f61f3ed325962735a5f5c585ce8d7ebd365e2a5639f  COPYING
-diff --git a/package/x11r7/xlib_libXi/xlib_libXi.mk b/package/x11r7/xlib_libXi/xlib_libXi.mk
-index 2833738911..de7f3a7d3c 100644
---- a/package/x11r7/xlib_libXi/xlib_libXi.mk
-+++ b/package/x11r7/xlib_libXi/xlib_libXi.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index c98674c7c2..2095d6eaec 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,9 +1,9 @@
+-# From https://sourceforge.net/projects/freetype/files/freetype2/2.9.1/
+-md5 60ef7d8160cd4bf8cb118ee9d65367ca freetype-2.9.1.tar.bz2
+-sha1 220c82062171c513e4017c523d196933c9de4a7d freetype-2.9.1.tar.bz2
++# From https://sourceforge.net/projects/freetype/files/freetype2/2.10.0/
++md5 a717e6925b61b9dda946322ecd278a42 freetype-2.10.0.tar.bz2
++sha1 f6abf03e0e3189a0de883981c57d3861b5d314f5 freetype-2.10.0.tar.bz2
+ 
+ # Locally calculated
+-sha256	db8d87ea720ea9d5edc5388fc7a0497bb11ba9fe972245e0f7f4c7e8b1e1e84d	freetype-2.9.1.tar.bz2
++sha256	fccc62928c65192fff6c98847233b28eb7ce05f12d2fea3f6cc90e8b4e5fbe06	freetype-2.10.0.tar.bz2
+ sha256	fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb	docs/LICENSE.TXT
+ sha256	08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1	docs/FTL.TXT
+ sha256	c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18	docs/GPLv2.TXT
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 7167061568..44a9464d13 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XLIB_LIBXI_VERSION = 1.7.9
-+XLIB_LIBXI_VERSION = 1.7.10
- XLIB_LIBXI_SOURCE = libXi-$(XLIB_LIBXI_VERSION).tar.bz2
--XLIB_LIBXI_SITE = http://xorg.freedesktop.org/releases/individual/lib
-+XLIB_LIBXI_SITE = https://xorg.freedesktop.org/releases/individual/lib
- XLIB_LIBXI_LICENSE = MIT
- XLIB_LIBXI_LICENSE_FILES = COPYING
- XLIB_LIBXI_INSTALL_STAGING = YES
--- 
-2.20.1
+-FREETYPE_VERSION = 2.9.1
++FREETYPE_VERSION = 2.10.0
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
+ FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
+ FREETYPE_INSTALL_STAGING = YES
