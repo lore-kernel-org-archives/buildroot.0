@@ -1,58 +1,45 @@
-From: =?UTF-8?Q?Fran=C3=A7ois_Perrad?= <francois.perrad@gadz.org>
-Date: Sat, 22 Jun 2019 08:47:03 +0200
-Subject: [Buildroot] [PATCH] support/testing/infra/emulator: increase
- memory size used by Qemu
-In-Reply-To: <20190621202724.19242-1-thomas.petazzoni@bootlin.com>
-References: <20190621202724.19242-1-thomas.petazzoni@bootlin.com>
-Message-ID: <CAB0FRstaxLAbwM0Jp04wNQLBseYN7wKGNFnTnvZtqR9Eu1O7zg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 22 Jun 2019 08:48:11 +0200
+Subject: [Buildroot] [PATCH-2019.02.x] package/ffmpeg: bump version to 3.4.6
+Message-ID: <20190622064811.2998-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le ven. 21 juin 2019 ? 23:15, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-a ?crit :
+Fixes a number of bugs discovered after the 3.4.5 release:
+https://git.ffmpeg.org/gitweb/ffmpeg.git/shortlog/n3.4.6
 
-> By default, Qemu emulates a system with 128 MB of RAM. This is not
-> sufficient for some test cases we have, such as TestPerlDBDmysql,
-> where the initramfs is quite large. Therefore, this commit extends the
-> RAM size emulated by Qemu to 256 MB.
->
-> Fixes:
->
->   https://gitlab.com/buildroot.org/buildroot/-/jobs/237108668
->
-> Thanks to Arnout for the analysis of the issue.
->
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->
-
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
-
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
->  support/testing/infra/emulator.py | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/support/testing/infra/emulator.py
-> b/support/testing/infra/emulator.py
-> index 802e89d4b4..3d3e1750c6 100644
-> --- a/support/testing/infra/emulator.py
-> +++ b/support/testing/infra/emulator.py
-> @@ -38,7 +38,8 @@ class Emulator(object):
->
->          qemu_cmd = ["qemu-system-{}".format(qemu_arch),
->                      "-serial", "stdio",
-> -                    "-display", "none"]
-> +                    "-display", "none",
-> +                    "-m", "256"]
->
->          if options:
->              qemu_cmd += options
-> --
-> 2.21.0
->
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190622/158a4824/attachment.html>
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index e00c4ec56c..e945130d88 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 741cbd6394eaed370774ca4cc089eaafbc54d0824b9aa360d4b3b0cbcbc4a92c  ffmpeg-3.4.5.tar.xz
++sha256 3572279cb139d9e39dcfbc23edf438ff5311ec3fc5d0dcb3558e49591e5cb83e  ffmpeg-3.4.6.tar.xz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
+ sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  LICENSE.md
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 1e1004c378..d26555a506 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 3.4.5
++FFMPEG_VERSION = 3.4.6
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
+-- 
+2.11.0
