@@ -1,217 +1,661 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 22 Jun 2019 15:33:10 +0200
-Subject: [Buildroot] [PATCH 2/2] package/libvncserver: bump to version 0.9.12
-In-Reply-To: <20190622133310.9709-1-fontaine.fabrice@gmail.com>
-References: <20190622133310.9709-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190622133310.9709-2-fontaine.fabrice@gmail.com>
+From: Nathan Ford <nford@westpond.com>
+Date: Sat, 22 Jun 2019 09:50:47 -0400
+Subject: [Buildroot] [Bug 11776] New: qt5webengine 5.12.2 build failed
+ with arm toolchain and linaro toolchain
+In-Reply-To: <CAOgXH4fTF-m_KqGocZz7p_Mfv5Nq+wNnJv3n3WjSuaVALRZOAg@mail.gmail.com>
+References: <bug-11776-163@https.bugs.busybox.net/>
+ <CAOgXH4fdUqmL=s1t1wu7eBxwP7mKEKWv5p2ez7uoD7oH7V=TmA@mail.gmail.com>
+ <02804c6d-653e-15da-ecf7-2c770ecb8b1f@230ruedubac.fr>
+ <CAOgXH4dUVJziNh756o-6VLkVVaQrDaLcw_tjWa5Pd9GNtO-Rug@mail.gmail.com>
+ <03545c68-3409-aad6-15a3-0e7de8cbff78@230ruedubac.fr>
+ <CAOgXH4fTF-m_KqGocZz7p_Mfv5Nq+wNnJv3n3WjSuaVALRZOAg@mail.gmail.com>
+Message-ID: <CAOgXH4cgXYXgRL3WVAQfmpLBTUKBhS7qm8JxyiOp+GdcEAHHnw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove patch (already in version)
-- autotools is no more available, switch to cmake
-- Disable ffmpeg (used for example)
-- Add LZO dependency (to avoid using internal LZO) through the new
-  WITH_LZO option added by
-  https://github.com/LibVNC/libvncserver/commit/139da17b6ed0ccd1acd824a87972182834671f92
-- Add hash for license file
+It's possible this change is the culprit. Still digging.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...Limit-client-cut-text-length-to-1-MB.patch | 65 -------------------
- package/libvncserver/Config.in                |  1 +
- package/libvncserver/libvncserver.hash        |  3 +-
- package/libvncserver/libvncserver.mk          | 45 ++++++-------
- 4 files changed, 26 insertions(+), 88 deletions(-)
- delete mode 100644 package/libvncserver/0001-Limit-client-cut-text-length-to-1-MB.patch
+a/qt5webengine-5.11.2/src/3rdparty/chromium/build/config/linux/pkg_config.gni
+ 2018-08-27 04:21:31.000000000 -0400
++++
+b/qt5webengine-5.12.2/src/3rdparty/chromium/build/config/linux/pkg_config.gni
+  2019-03-07 04:23:57.000000000 -0500
+@@ -101,13 +101,18 @@
+     }
 
-diff --git a/package/libvncserver/0001-Limit-client-cut-text-length-to-1-MB.patch b/package/libvncserver/0001-Limit-client-cut-text-length-to-1-MB.patch
-deleted file mode 100644
-index 84a537640d..0000000000
---- a/package/libvncserver/0001-Limit-client-cut-text-length-to-1-MB.patch
-+++ /dev/null
-@@ -1,65 +0,0 @@
--From 28afb6c537dc82ba04d5f245b15ca7205c6dbb9c Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
--Date: Mon, 26 Feb 2018 13:48:00 +0100
--Subject: [PATCH] Limit client cut text length to 1 MB
--
--This patch constrains a client cut text length to 1 MB. Otherwise
--a client could make server allocate 2 GB of memory and that seems to
--be to much to classify it as a denial of service.
--
--The limit also prevents from an integer overflow followed by copying
--an uninitilized memory when processing msg.cct.length value larger
--than SIZE_MAX or INT_MAX - sz_rfbClientCutTextMsg.
--
--This patch also corrects accepting length value of zero (malloc(0) is
--interpreted on differnet systems differently).
--
--CVE-2018-7225
--<https://github.com/LibVNC/libvncserver/issues/218>
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- libvncserver/rfbserver.c | 20 +++++++++++++++++++-
-- 1 file changed, 19 insertions(+), 1 deletion(-)
--
--diff --git a/libvncserver/rfbserver.c b/libvncserver/rfbserver.c
--index 116c488..4fc4d9d 100644
----- a/libvncserver/rfbserver.c
--+++ b/libvncserver/rfbserver.c
--@@ -88,6 +88,8 @@
-- #include <errno.h>
-- /* strftime() */
-- #include <time.h>
--+/* PRIu32 */
--+#include <inttypes.h>
-- 
-- #ifdef LIBVNCSERVER_WITH_WEBSOCKETS
-- #include "rfbssl.h"
--@@ -2575,7 +2577,23 @@ rfbProcessClientNormalMessage(rfbClientPtr cl)
-- 
-- 	msg.cct.length = Swap32IfLE(msg.cct.length);
-- 
---	str = (char *)malloc(msg.cct.length);
--+	/* uint32_t input is passed to malloc()'s size_t argument,
--+	 * to rfbReadExact()'s int argument, to rfbStatRecordMessageRcvd()'s int
--+	 * argument increased of sz_rfbClientCutTextMsg, and to setXCutText()'s int
--+	 * argument. Here we impose a limit of 1 MB so that the value fits
--+	 * into all of the types to prevent from misinterpretation and thus
--+	 * from accessing uninitialized memory (CVE-2018-7225) and also to
--+	 * prevent from a denial-of-service by allocating to much memory in
--+	 * the server. */
--+	if (msg.cct.length > 1<<20) {
--+	    rfbLog("rfbClientCutText: too big cut text length requested: %" PRIu32 "\n",
--+		    msg.cct.length);
--+	    rfbCloseClient(cl);
--+	    return;
--+	}
--+
--+	/* Allow zero-length client cut text. */
--+	str = (char *)calloc(msg.cct.length ? msg.cct.length : 1, 1);
-- 	if (str == NULL) {
-- 		rfbLogPerror("rfbProcessClientNormalMessage: not enough memory");
-- 		rfbCloseClient(cl);
---- 
--2.11.0
--
-diff --git a/package/libvncserver/Config.in b/package/libvncserver/Config.in
-index d5fac82e87..c8042905ce 100644
---- a/package/libvncserver/Config.in
-+++ b/package/libvncserver/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBVNCSERVER
- 	depends on BR2_USE_MMU # VNCommand.c uses fork()
- 	# binutils issue (bad expression)
- 	depends on !BR2_nios2
-+	select BR2_PACKAGE_LZO
- 	help
- 	  libvncserver is a VNC server/client library.
- 
-diff --git a/package/libvncserver/libvncserver.hash b/package/libvncserver/libvncserver.hash
-index 8d994e4b6a..d98d78d766 100644
---- a/package/libvncserver/libvncserver.hash
-+++ b/package/libvncserver/libvncserver.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
--sha256  193d630372722a532136fd25c5326b2ca1a636cbb8bf9bb115ef869c804d2894  LibVNCServer-0.9.11.tar.gz
-+sha256  33cbbb4e15bb390f723c311b323cef4a43bcf781984f92d92adda3243a116136  LibVNCServer-0.9.12.tar.gz
-+sha256  4d23c8c814e5baf007d854f01d8502e77dc56a41144934e003fb32c4e052d20f  COPYING
-diff --git a/package/libvncserver/libvncserver.mk b/package/libvncserver/libvncserver.mk
-index 8063570d98..3805b2faaa 100644
---- a/package/libvncserver/libvncserver.mk
-+++ b/package/libvncserver/libvncserver.mk
-@@ -4,66 +4,67 @@
- #
- ################################################################################
- 
--LIBVNCSERVER_VERSION = 0.9.11
-+LIBVNCSERVER_VERSION = 0.9.12
- LIBVNCSERVER_SOURCE = LibVNCServer-$(LIBVNCSERVER_VERSION).tar.gz
- LIBVNCSERVER_SITE = https://github.com/LibVNC/libvncserver/archive
- LIBVNCSERVER_LICENSE = GPL-2.0+
- LIBVNCSERVER_LICENSE_FILES = COPYING
- LIBVNCSERVER_INSTALL_STAGING = YES
--LIBVNCSERVER_CONFIG_SCRIPTS = libvncserver-config
--LIBVNCSERVER_DEPENDENCIES = host-pkgconf
--
--# Upstream decided to remove generated autotools files from the
--# tarball, so we need to generate them.
--LIBVNCSERVER_AUTORECONF = YES
--
--# libvncserver does not get along with newer libva versions
--# https://github.com/LibVNC/libvncserver/issues/11
--LIBVNCSERVER_CONF_OPTS += --without-libva
-+LIBVNCSERVER_DEPENDENCIES = host-pkgconf lzo
-+LIBVNCSERVER_CONF_OPTS = -DWITH_LZO=ON
- 
- # only used for examples
--LIBVNCSERVER_CONF_OPTS += --with-sdl-config=/bin/false
-+LIBVNCSERVER_CONF_OPTS += \
-+	-DWITH_FFMPEG=OFF \
-+	-DWITH_SDL=OFF
- 
- ifneq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--LIBVNCSERVER_CONF_OPTS += --without-pthread
-+LIBVNCSERVER_CONF_OPTS += -DWITH_THREADS=ON
-+else
-+LIBVNCSERVER_CONF_OPTS += -DWITH_THREADS=OFF
- endif
- 
- # openssl supports needs NPTL thread support
- ifeq ($(BR2_PACKAGE_OPENSSL)$(BR2_TOOLCHAIN_HAS_THREADS_NPTL),yy)
-+LIBVNCSERVER_CONF_OPTS += -DWITH_OPENSSL=ON
- LIBVNCSERVER_DEPENDENCIES += openssl
- else
--LIBVNCSERVER_CONF_OPTS += --without-crypto --without-ssl
-+LIBVNCSERVER_CONF_OPTS += -DWITH_OPENSSL=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
--LIBVNCSERVER_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
-+LIBVNCSERVER_CONF_OPTS += -DWITH_GCRYPT=ON
- LIBVNCSERVER_DEPENDENCIES += libgcrypt
- else
--LIBVNCSERVER_CONF_OPTS += --without-gcrypt
-+LIBVNCSERVER_CONF_OPTS += -DWITH_GCRYPT=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGCRYPT),yy)
--LIBVNCSERVER_DEPENDENCIES += gnutls host-pkgconf
-+LIBVNCSERVER_CONF_OPTS += -DWITH_GNUTLS=ON
-+LIBVNCSERVER_DEPENDENCIES += gnutls
- else
--LIBVNCSERVER_CONF_OPTS += --without-gnutls
-+LIBVNCSERVER_CONF_OPTS += -DWITH_GNUTLS=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_JPEG),y)
-+LIBVNCSERVER_CONF_OPTS += -DWITH_JPEG=ON
- LIBVNCSERVER_DEPENDENCIES += jpeg
- else
--LIBVNCSERVER_CONF_OPTS += --without-jpeg
-+LIBVNCSERVER_CONF_OPTS += -DWITH_JPEG=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
-+LIBVNCSERVER_CONF_OPTS += -DWITH_PNG=ON
- LIBVNCSERVER_DEPENDENCIES += libpng
- else
--LIBVNCSERVER_CONF_OPTS += --without-png
-+LIBVNCSERVER_CONF_OPTS += -DWITH_PNG=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_ZLIB),y)
-+LIBVNCSERVER_CONF_OPTS += -DWITH_ZLIB=ON
- LIBVNCSERVER_DEPENDENCIES += zlib
- else
--LIBVNCSERVER_CONF_OPTS += --without-zlib
-+LIBVNCSERVER_CONF_OPTS += -DWITH_ZLIB=OFF
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(cmake-package))
--- 
-2.20.1
+     pkgresult = exec_script(pkg_config_script, args, "value")
+-    include_dirs = pkgresult[0]
+     cflags = pkgresult[1]
+
++    # We want the system include paths to use -isystem instead of -I to
+suppress
++    # warnings in those headers.
++    foreach(include, pkgresult[0]) {
++      include_relativized = rebase_path(include, root_build_dir)
++      cflags += [ "-isystem$include_relativized" ]
++    }
++
+     if (!defined(invoker.ignore_libs) || !invoker.ignore_libs) {
+       libs = pkgresult[2]
+       lib_dirs = pkgresult[3]
+-      ldflags = pkgresult[4]
+     }
+
+     forward_variables_from(invoker,
+
+On Sat, Jun 22, 2019 at 8:50 AM Nathan Ford <nford@westpond.com> wrote:
+
+> The .ninja files are created by the gn tool (
+> qt5webengine-5.12.2/src/3rdparty/gn ). This tool uses the BUILD.gn files to
+> then create the .ninja files.
+>
+> --Nate
+>
+>
+>
+> On Tue, Jun 18, 2019 at 10:15 AM David Barbion <davidb@230ruedubac.fr>
+> wrote:
+>
+>> Hi,
+>>
+>> I took a few minutes to dig into it and found that the an include path
+>> points to
+>> -isystem../../../../../host/x86_64-buildroot-linux-gnu/sysroot/usr/include
+>> (which contains pure c stdlib.h)
+>>
+>> This include path is defined in the file
+>> qt5webengine-5.12.2/src/core/release/obj/skia/skia.ninja and is built
+>> dynamically by a tool called ninja.
+>>
+>> If I remove the declaration, the compilation continues...
+>>
+>> I can't figure out how the file skia.ninja is created...
+>>
+>> David.
+>> On 18/06/2019 15:41, Nathan Ford wrote:
+>>
+>> Unfortunately I have not had time to dig in to this, nor have I been able
+>> to find a work around.
+>>
+>> Sorry :(
+>>
+>> --Nate
+>>
+>> On Mon, Jun 17, 2019 at 4:41 PM David Barbion <davidb@230ruedubac.fr>
+>> wrote:
+>>
+>>> Hello,
+>>>
+>>> I'm facing the exact same problem. I'm on 2019.05. Target is x86_64.
+>>>
+>>> Search engines did not give me relevant information...
+>>> David.
+>>> On 11/06/2019 03:21, Nathan Ford wrote:
+>>>
+>>> Does anyone have any ideas / fixes for this issue? I'm running into the
+>>> latter ' fatal error: stdlib.h: No such file or directory' since updating
+>>> to buildroot-2019.05. While not exactly the same as the above from an
+>>> include path perspective, the final error is the same ( pasted below ).
+>>>
+>>> I've tried 4 different toolchains:
+>>>  - External gcc 6.3.0
+>>>  - External gcc 8.3.0
+>>>  - Buildroot built 8.x
+>>>  - Buildroot built 7.x
+>>> and all produce the same error.
+>>>
+>>> 2019.02.1 with the same buildroot config compiles fine ( with the
+>>> external 6.3.0 toolchain ).
+>>>
+>>> Does any one have any ideas or pointers on where to look to figure this
+>>> out?
+>>>
+>>> Thanks,
+>>> --Nate
+>>>
+>>> FAILED: obj/skia/skia/SkNullCanvas.o
+>>> /home/nate/wpt/flexstream-1u/buildroot/output_container/host/bin/x86_64-mx400-linux-gnu-g++
+>>> -MMD -MF obj/skia/skia/SkNullCanvas.o.d -DV8_DEPRECATION_WARNINGS
+>>> -DUSE_UDEV -DUSE_AURA=1 -DUSE_NSS_CERTS=1 -DUSE_OZONE=1 -DNO_TCMALLOC
+>>> -DFULL_SAFE_BROWSING -DSAFE_BROWSING_CSD -DSAFE_BROWSING_DB_LOCAL
+>>> -DCHROMIUM_BUILD -DFIELDTRIAL_TESTING_ENABLED -DTOOLKIT_QT
+>>> -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+>>> -DCR_SYSROOT_HASH=4e7db513b0faeea8fb410f70c9909e8736f5c0ab -DNDEBUG
+>>> -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0
+>>> -DSK_IGNORE_LINEONLY_AA_CONVEX_PATH_OPTS -DSK_HAS_PNG_LIBRARY
+>>> -DSK_HAS_WEBP_LIBRARY -DSK_HAS_JPEG_LIBRARY -DSK_SUPPORT_GPU=1
+>>> -DSK_GPU_WORKAROUNDS_HEADER=\"gpu/config/gpu_driver_bug_workaround_autogen.h\"
+>>> -DSK_GAMMA_EXPONENT=1.2 -DSK_GAMMA_CONTRAST=0.2
+>>> -DSK_DEFAULT_FONT_CACHE_LIMIT=20971520 -DWEBP_EXTERN=extern
+>>> -DUSE_SYSTEM_LIBJPEG -DU_USING_ICU_NAMESPACE=0 -DU_ENABLE_DYLOAD=0
+>>> -DU_STATIC_IMPLEMENTATION -DICU_UTIL_DATA_IMPL=ICU_UTIL_DATA_FILE
+>>> -DUCHAR_TYPE=uint16_t -Igen -I../../3rdparty/chromium
+>>> -I../../3rdparty/chromium/skia/config -I../../3rdparty/chromium/skia/ext
+>>> -I../../3rdparty/chromium/third_party/skia/include/c
+>>> -I../../3rdparty/chromium/third_party/skia/include/config
+>>> -I../../3rdparty/chromium/third_party/skia/include/core
+>>> -I../../3rdparty/chromium/third_party/skia/include/effects
+>>> -I../../3rdparty/chromium/third_party/skia/include/encode
+>>> -I../../3rdparty/chromium/third_party/skia/include/gpu
+>>> -I../../3rdparty/chromium/third_party/skia/include/images
+>>> -I../../3rdparty/chromium/third_party/skia/include/lazy
+>>> -I../../3rdparty/chromium/third_party/skia/include/pathops
+>>> -I../../3rdparty/chromium/third_party/skia/include/pdf
+>>> -I../../3rdparty/chromium/third_party/skia/include/pipe
+>>> -I../../3rdparty/chromium/third_party/skia/include/ports
+>>> -I../../3rdparty/chromium/third_party/skia/include/utils
+>>> -I../../3rdparty/chromium/third_party/skia/src/gpu
+>>> -I../../3rdparty/chromium/third_party/skia/src/sksl
+>>> -I../../3rdparty/chromium/third_party/skia/include/codec
+>>> -I../../3rdparty/chromium/third_party/skia/include/private
+>>> -I../../3rdparty/chromium/third_party/skia/include/client/android
+>>> -I../../3rdparty/chromium/third_party/skia/src/codec
+>>> -I../../3rdparty/chromium/third_party/skia/src/core
+>>> -I../../3rdparty/chromium/third_party/skia/src/image
+>>> -I../../3rdparty/chromium/third_party/skia/src/images
+>>> -I../../3rdparty/chromium/third_party/skia/src/opts
+>>> -I../../3rdparty/chromium/third_party/skia/src/pdf
+>>> -I../../3rdparty/chromium/third_party/skia/src/ports
+>>> -I../../3rdparty/chromium/third_party/skia/src/shaders
+>>> -I../../3rdparty/chromium/third_party/skia/src/shaders/gradients
+>>> -I../../3rdparty/chromium/third_party/skia/src/sfnt
+>>> -I../../3rdparty/chromium/third_party/skia/src/utils
+>>> -I../../3rdparty/chromium/third_party/skia/src/lazy
+>>> -I../../3rdparty/chromium/third_party/skia/third_party/gif
+>>> -I../../3rdparty/chromium/third_party/skia/src/effects/gradients -Igen
+>>> -I../../3rdparty/chromium/third_party/libwebp/src
+>>> -I../../3rdparty/chromium/third_party/icu/source/common
+>>> -I../../3rdparty/chromium/third_party/icu/source/i18n -fno-strict-aliasing
+>>> --param=ssp-buffer-size=4 -fstack-protector -Wno-builtin-macro-redefined
+>>> -D__DATE__= -D__TIME__= -D__TIMESTAMP__= -funwind-tables -fPIC -pipe
+>>> -pthread -m64 -fno-omit-frame-pointer -g0 -fvisibility=hidden
+>>> -Wno-unused-local-typedefs -Wno-maybe-uninitialized
+>>> -Wno-deprecated-declarations -fno-delete-null-pointer-checks -Wno-comments
+>>> -Wno-dangling-else -Wno-packed-not-aligned -Wno-missing-field-initializers
+>>> -Wno-unused-parameter -O2 -fno-ident -fdata-sections -ffunction-sections
+>>> -isystem../../../../../host/x86_64-buildroot-linux-gnu/sysroot/usr/include/libpng16
+>>> -isystem../../../../../host/x86_64-buildroot-linux-gnu/sysroot/usr/include
+>>> -isystem../../../../../host/x86_64-buildroot-linux-gnu/sysroot/usr/include/freetype2
+>>> -isystem../../../../../host/x86_64-buildroot-linux-gnu/sysroot/usr/include
+>>> -std=gnu++14 -fno-exceptions -fno-rtti
+>>> --sysroot=../../../../../host/x86_64-buildroot-linux-gnu/sysroot
+>>> -fvisibility-inlines-hidden -Wno-narrowing -Wno-attributes
+>>> -Wno-class-memaccess -Wno-subobject-linkage -c
+>>> ../../3rdparty/chromium/third_party/skia/src/utils/SkNullCanvas.cpp -o
+>>> obj/skia/skia/SkNullCanvas.o
+>>> In file included from
+>>> /opt/toolchains/x86_64-mx400-linux-gnu/x86_64-mx400-linux-gnu/include/c++/8.3.0/ext/string_conversions.h:41,
+>>>                  from
+>>> /opt/toolchains/x86_64-mx400-linux-gnu/x86_64-mx400-linux-gnu/include/c++/8.3.0/bits/basic_string.h:6400,
+>>>                  from
+>>> /opt/toolchains/x86_64-mx400-linux-gnu/x86_64-mx400-linux-gnu/include/c++/8.3.0/string:52,
+>>>                  from
+>>> /opt/toolchains/x86_64-mx400-linux-gnu/x86_64-mx400-linux-gnu/include/c++/8.3.0/stdexcept:39,
+>>>                  from
+>>> /opt/toolchains/x86_64-mx400-linux-gnu/x86_64-mx400-linux-gnu/include/c++/8.3.0/array:39,
+>>>                  from
+>>> /opt/toolchains/x86_64-mx400-linux-gnu/x86_64-mx400-linux-gnu/include/c++/8.3.0/tuple:39,
+>>>                  from
+>>> /opt/toolchains/x86_64-mx400-linux-gnu/x86_64-mx400-linux-gnu/include/c++/8.3.0/functional:54,
+>>>                  from
+>>> ../../3rdparty/chromium/third_party/skia/include/core/SkRefCnt.h:15,
+>>>                  from
+>>> ../../3rdparty/chromium/third_party/skia/include/core/SkPaint.h:26,
+>>>                  from
+>>> ../../3rdparty/chromium/third_party/skia/include/core/SkCanvas.h:25,
+>>>                  from
+>>> ../../3rdparty/chromium/third_party/skia/include/utils/SkNullCanvas.h:11,
+>>>                  from
+>>> ../../3rdparty/chromium/third_party/skia/src/utils/SkNullCanvas.cpp:8:
+>>> /opt/toolchains/x86_64-mx400-linux-gnu/x86_64-mx400-linux-gnu/include/c++/8.3.0/cstdlib:75:15:
+>>> fatal error: stdlib.h: No such file or directory
+>>>
+>>> On Thu, Apr 11, 2019 at 5:04 AM <bugzilla@busybox.net> wrote:
+>>>
+>>>> https://bugs.busybox.net/show_bug.cgi?id=11776
+>>>>
+>>>>             Bug ID: 11776
+>>>>            Summary: qt5webengine 5.12.2 build failed with arm toolchain
+>>>>                     and linaro toolchain
+>>>>            Product: buildroot
+>>>>            Version: unspecified
+>>>>           Hardware: All
+>>>>                 OS: Linux
+>>>>             Status: NEW
+>>>>           Severity: normal
+>>>>           Priority: P5
+>>>>          Component: Other
+>>>>           Assignee: unassigned at buildroot.uclibc.org
+>>>>           Reporter: jacky at ticctv.cn
+>>>>                 CC: buildroot at uclibc.org
+>>>>   Target Milestone: ---
+>>>>
+>>>> I'm using the least buildroot (commit
+>>>> 4e3be3ae9d4c9f1b0c035eee0c923a724f9a9316)
+>>>> to build qt5webengine. The qt5webengine version is  v5.12.2.
+>>>> I use arm toolchain and linaro toolchain for building, but both failed.
+>>>>
+>>>> Here is the build log for arm toolchain:
+>>>> dev at Dev:^buildroot-qt$make
+>>>> >>> qt5webengine 5.12.2 Building
+>>>>
+>>>> PATH="/home/dev/buildroot-qt/host/bin:/home/dev/buildroot-qt/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+>>>>
+>>>> PATH=/home/dev/buildroot-qt/build/qt5webengine-5.12.2/host-bin:"/home/dev/buildroot-qt/host/bin:/home/dev/buildroot-qt/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+>>>> NINJAFLAGS="-j9"
+>>>>
+>>>> GN_PKG_CONFIG_HOST=/home/dev/buildroot-qt/build/qt5webengine-5.12.2/host-bin/host-pkg-config
+>>>> /usr/bin/make -j9 -C /home/dev/buildroot-qt/build/qt5webengine-5.12.2
+>>>> cd src/ && ( test -e Makefile || /home/dev/buildroot-qt/host/bin/qmake
+>>>> -o
+>>>> Makefile /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/src.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile
+>>>> cd buildtools/ && ( test -e Makefile ||
+>>>> /home/dev/buildroot-qt/host/bin/qmake
+>>>> -o Makefile
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/buildtools/
+>>>> buildtools.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile
+>>>> cd webengine/ui/ && ( test -e Makefile ||
+>>>> /home/dev/buildroot-qt/host/bin/qmake
+>>>> -o Makefile
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/webengine/ui/
+>>>> ui.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile
+>>>> cd webengine/ui2/ && ( test -e Makefile ||
+>>>> /home/dev/buildroot-qt/host/bin/qmake -o Makefile
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/webengine/ui2/
+>>>> ui2.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile
+>>>> ( test -e Makefile.configure_host ||
+>>>> /home/dev/buildroot-qt/host/bin/qmake -o
+>>>> Makefile.configure_host
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/buildtools/
+>>>> configure_host.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile.configure_host
+>>>> ( test -e Makefile.ninja || /home/dev/buildroot-qt/host/bin/qmake -o
+>>>> Makefile.ninja
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/buildtools/
+>>>> ninja.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile.ninja
+>>>> make[4]: Nothing to be done for 'first'.
+>>>> make[4]: Nothing to be done for 'first'.
+>>>> make[5]: Nothing to be done for 'first'.
+>>>> ( test -e Makefile.configure_target ||
+>>>> /home/dev/buildroot-qt/host/bin/qmake -o
+>>>> Makefile.configure_target
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/buildtools/
+>>>> configure_target.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile.configure_target
+>>>> make[5]: Nothing to be done for 'first'.
+>>>> ( test -e Makefile.gn || /home/dev/buildroot-qt/host/bin/qmake -o
+>>>> Makefile.gn
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/buildtools/gn.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile.gn
+>>>> make[5]: Nothing to be done for 'first'.
+>>>> make[5]: Nothing to be done for 'first'.
+>>>> cd core/ && ( test -e Makefile || /home/dev/buildroot-qt/host/bin/qmake
+>>>> -o
+>>>> Makefile /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/core/
+>>>> core.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile
+>>>> ( test -e Makefile.core_headers ||
+>>>> /home/dev/buildroot-qt/host/bin/qmake -o
+>>>> Makefile.core_headers
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/core/
+>>>> core_headers.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile.core_headers
+>>>> make[5]: Nothing to be done for 'first'.
+>>>> ( test -e Makefile.core_generator ||
+>>>> /home/dev/buildroot-qt/host/bin/qmake -o
+>>>> Makefile.core_generator
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/core/
+>>>> core_generator.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile.core_generator
+>>>> make[5]: Nothing to be done for 'first'.
+>>>> ( test -e Makefile.gn_run || /home/dev/buildroot-qt/host/bin/qmake -o
+>>>> Makefile.gn_run
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/core/gn_run.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile.gn_run
+>>>> ninja -j9 -C
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/core/debug
+>>>> QtWebEngineCore
+>>>> ninja: Entering directory
+>>>> `/home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/core/debug'
+>>>> [1/11410] CXX obj/sandbox/linux/seccomp_bpf/syscall_sets.o
+>>>> FAILED: obj/sandbox/linux/seccomp_bpf/syscall_sets.o
+>>>> /home/dev/buildroot-qt/host/bin/aarch64-linux-gnu-g++ -MMD -MF
+>>>> obj/sandbox/linux/seccomp_bpf/syscall_sets.o.d -DSANDBOX_IMPLEMENTATION
+>>>> -DV8_DEPRECATION_WARNINGS -DUSE_UDEV -DUSE_AURA=1 -DUSE_NSS_CERTS=1
+>>>> -DUSE_OZONE=1 -DNO_TCMALLOC -DFULL_SAFE_BROWSING -DSAFE_BROWSING_CSD
+>>>> -DSAFE_BROWSING_DB_LOCAL -DCHROMIUM_BUILD -DFIELDTRIAL_TESTING_ENABLED
+>>>> -DTOOLKIT_QT -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
+>>>> -D_LARGEFILE64_SOURCE
+>>>> -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS
+>>>> -DCR_SYSROOT_HASH=37dfa5f22e2c0e847cee34f9848eb31230c33d35 -D_DEBUG
+>>>> -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1 -Igen
+>>>> -I../../3rdparty/chromium -fno-strict-aliasing --param=ssp-buffer-size=4
+>>>> -fstack-protector -Wno-builtin-macro-redefined -D__DATE__= -D__TIME__=
+>>>> -D__TIMESTAMP__= -funwind-tables -fPIC -pipe -pthread -Wall
+>>>> -Wno-unused-local-typedefs -Wno-maybe-uninitialized
+>>>> -Wno-deprecated-declarations -fno-delete-null-pointer-checks
+>>>> -Wno-comments
+>>>> -Wno-dangling-else -Wno-packed-not-aligned
+>>>> -Wno-missing-field-initializers
+>>>> -Wno-unused-parameter -O0 -fno-omit-frame-pointer -g2
+>>>> -fvisibility=hidden
+>>>> -std=gnu++14 -Wno-narrowing -Wno-attributes -Wno-class-memaccess
+>>>> -Wno-subobject-linkage -fno-exceptions -fno-rtti
+>>>> --sysroot=../../../../../host/aarch64-buildroot-linux-gnu/sysroot
+>>>> -fvisibility-inlines-hidden -c
+>>>> ../../3rdparty/chromium/sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc
+>>>> -o
+>>>> obj/sandbox/linux/seccomp_bpf/syscall_sets.o
+>>>> In file included from
+>>>>
+>>>> ../../3rdparty/chromium/sandbox/linux/system_headers/arm64_linux_syscalls.h:8,
+>>>>                  from
+>>>>
+>>>> ../../3rdparty/chromium/sandbox/linux/system_headers/linux_syscalls.h:33,
+>>>>                  from
+>>>>
+>>>> ../../3rdparty/chromium/sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc:8:
+>>>> ../../3rdparty/chromium/sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc:
+>>>> In
+>>>> static member function 'static bool
+>>>> sandbox::SyscallSets::IsFileSystem(int)':
+>>>>
+>>>> ../../3rdparty/chromium/sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc:112:10:
+>>>> error: '__NR3264_fstatat' was not declared in this scope
+>>>>      case __NR_newfstatat:  // fstatat(). EPERM not a valid errno.
+>>>>           ^~~~~~~~~~~~~~~
+>>>> ../../3rdparty/chromium/sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc:
+>>>> In
+>>>> static member function 'static bool
+>>>> sandbox::SyscallSets::IsAllowedFileSystemAccessViaFd(int)':
+>>>>
+>>>> ../../3rdparty/chromium/sandbox/linux/seccomp-bpf-helpers/syscall_sets.cc:161:10:
+>>>> error: '__NR3264_fstat' was not declared in this scope
+>>>>      case __NR_fstat:
+>>>>           ^~~~~~~~~~
+>>>> [9/11410] CXX
+>>>>
+>>>> obj/services/service_manager/sandbox/sandbox/bpf_cros_arm_gpu_policy_linux.o
+>>>> ninja: build stopped: subcommand failed.
+>>>> Makefile.gn_run:336: recipe for target 'run_ninja' failed
+>>>> make[5]: *** [run_ninja] Error 1
+>>>> Makefile:82: recipe for target 'sub-gn_run-pro-make_first' failed
+>>>> make[4]: *** [sub-gn_run-pro-make_first] Error 2
+>>>> Makefile:79: recipe for target 'sub-core-make_first' failed
+>>>> make[3]: *** [sub-core-make_first] Error 2
+>>>> Makefile:48: recipe for target 'sub-src-make_first' failed
+>>>> make[2]: *** [sub-src-make_first] Error 2
+>>>> package/pkg-generic.mk:238: recipe for target
+>>>> '/home/dev/buildroot-qt/build/qt5webengine-5.12.2/.stamp_built' failed
+>>>> make[1]: ***
+>>>> [/home/dev/buildroot-qt/build/qt5webengine-5.12.2/.stamp_built]
+>>>> Error 2
+>>>> Makefile:23: recipe for target '_all' failed
+>>>> make: *** [_all] Error 2
+>>>>
+>>>>
+>>>>
+>>>> Here is the build log for linaro toolchain:
+>>>> dev at Dev:^buildroot-qt$make
+>>>> >>> qt5webengine 5.12.2 Building
+>>>>
+>>>> PATH="/home/dev/buildroot-qt/host/bin:/home/dev/buildroot-qt/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+>>>>
+>>>> PATH=/home/dev/buildroot-qt/build/qt5webengine-5.12.2/host-bin:"/home/dev/buildroot-qt/host/bin:/home/dev/buildroot-qt/host/sbin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+>>>> NINJAFLAGS="-j9"
+>>>>
+>>>> GN_PKG_CONFIG_HOST=/home/dev/buildroot-qt/build/qt5webengine-5.12.2/host-bin/host-pkg-config
+>>>> /usr/bin/make -j9 -C /home/dev/buildroot-qt/build/qt5webengine-5.12.2
+>>>> cd src/ && ( test -e Makefile || /home/dev/buildroot-qt/host/bin/qmake
+>>>> -o
+>>>> Makefile /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/src.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile
+>>>> cd buildtools/ && ( test -e Makefile ||
+>>>> /home/dev/buildroot-qt/host/bin/qmake
+>>>> -o Makefile
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/buildtools/
+>>>> buildtools.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile
+>>>> cd webengine/ui/ && ( test -e Makefile ||
+>>>> /home/dev/buildroot-qt/host/bin/qmake
+>>>> -o Makefile
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/webengine/ui/
+>>>> ui.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile
+>>>> cd webengine/ui2/ && ( test -e Makefile ||
+>>>> /home/dev/buildroot-qt/host/bin/qmake -o Makefile
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/webengine/ui2/
+>>>> ui2.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile
+>>>> make[4]: Nothing to be done for 'first'.
+>>>> make[4]: Nothing to be done for 'first'.
+>>>> ( test -e Makefile.configure_host ||
+>>>> /home/dev/buildroot-qt/host/bin/qmake -o
+>>>> Makefile.configure_host
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/buildtools/
+>>>> configure_host.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile.configure_host
+>>>> ( test -e Makefile.ninja || /home/dev/buildroot-qt/host/bin/qmake -o
+>>>> Makefile.ninja
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/buildtools/
+>>>> ninja.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile.ninja
+>>>> make[5]: Nothing to be done for 'first'.
+>>>> ( test -e Makefile.configure_target ||
+>>>> /home/dev/buildroot-qt/host/bin/qmake -o
+>>>> Makefile.configure_target
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/buildtools/
+>>>> configure_target.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile.configure_target
+>>>> make[5]: Nothing to be done for 'first'.
+>>>> ( test -e Makefile.gn || /home/dev/buildroot-qt/host/bin/qmake -o
+>>>> Makefile.gn
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/buildtools/gn.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile.gn
+>>>> make[5]: Nothing to be done for 'first'.
+>>>> make[5]: Nothing to be done for 'first'.
+>>>> cd core/ && ( test -e Makefile || /home/dev/buildroot-qt/host/bin/qmake
+>>>> -o
+>>>> Makefile /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/core/
+>>>> core.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile
+>>>> ( test -e Makefile.core_headers ||
+>>>> /home/dev/buildroot-qt/host/bin/qmake -o
+>>>> Makefile.core_headers
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/core/
+>>>> core_headers.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile.core_headers
+>>>> make[5]: Nothing to be done for 'first'.
+>>>> ( test -e Makefile.core_generator ||
+>>>> /home/dev/buildroot-qt/host/bin/qmake -o
+>>>> Makefile.core_generator
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/core/
+>>>> core_generator.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile.core_generator
+>>>> make[5]: Nothing to be done for 'first'.
+>>>> ( test -e Makefile.gn_run || /home/dev/buildroot-qt/host/bin/qmake -o
+>>>> Makefile.gn_run
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/core/gn_run.pro
+>>>> WEBENGINE_CONFIG+=use_system_ffmpeg QT_CONFIG-=alsa ) && /usr/bin/make
+>>>> -f
+>>>> Makefile.gn_run
+>>>> ninja -j9 -C
+>>>> /home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/core/debug
+>>>> QtWebEngineCore
+>>>> ninja: Entering directory
+>>>> `/home/dev/buildroot-qt/build/qt5webengine-5.12.2/src/core/debug'
+>>>> [1/11212] CXX obj/skia/skia/convolver.o
+>>>> FAILED: obj/skia/skia/convolver.o
+>>>> /home/dev/buildroot-qt/host/bin/aarch64-linux-gnu-g++ -MMD -MF
+>>>> obj/skia/skia/convolver.o.d -DV8_DEPRECATION_WARNINGS -DUSE_UDEV
+>>>> -DUSE_AURA=1
+>>>> -DUSE_NSS_CERTS=1 -DUSE_OZONE=1 -DNO_TCMALLOC -DFULL_SAFE_BROWSING
+>>>> -DSAFE_BROWSING_CSD -DSAFE_BROWSING_DB_LOCAL -DCHROMIUM_BUILD
+>>>> -DFIELDTRIAL_TESTING_ENABLED -DTOOLKIT_QT -D_FILE_OFFSET_BITS=64
+>>>> -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+>>>> -DCR_SYSROOT_HASH=37dfa5f22e2c0e847cee34f9848eb31230c33d35 -D_DEBUG
+>>>> -DDYNAMIC_ANNOTATIONS_ENABLED=1 -DWTF_USE_DYNAMIC_ANNOTATIONS=1
+>>>> -DSK_IGNORE_LINEONLY_AA_CONVEX_PATH_OPTS -DSK_HAS_PNG_LIBRARY
+>>>> -DSK_HAS_WEBP_LIBRARY -DSK_HAS_JPEG_LIBRARY -DSK_SUPPORT_GPU=1
+>>>>
+>>>> -DSK_GPU_WORKAROUNDS_HEADER=\"gpu/config/gpu_driver_bug_workaround_autogen.h\"
+>>>> -DSK_GAMMA_EXPONENT=1.2 -DSK_GAMMA_CONTRAST=0.2
+>>>> -DSK_DEFAULT_FONT_CACHE_LIMIT=20971520 -DWEBP_EXTERN=extern
+>>>> -DUSE_LIBJPEG_TURBO=1 -DU_USING_ICU_NAMESPACE=0 -DU_ENABLE_DYLOAD=0
+>>>> -DU_STATIC_IMPLEMENTATION -DICU_UTIL_DATA_IMPL=ICU_UTIL_DATA_FILE
+>>>> -DUCHAR_TYPE=uint16_t -Igen -I../../3rdparty/chromium
+>>>> -I../../3rdparty/chromium/skia/config -I../../3rdparty/chromium/skia/ext
+>>>> -I../../3rdparty/chromium/third_party/skia/include/c
+>>>> -I../../3rdparty/chromium/third_party/skia/include/config
+>>>> -I../../3rdparty/chromium/third_party/skia/include/core
+>>>> -I../../3rdparty/chromium/third_party/skia/include/effects
+>>>> -I../../3rdparty/chromium/third_party/skia/include/encode
+>>>> -I../../3rdparty/chromium/third_party/skia/include/gpu
+>>>> -I../../3rdparty/chromium/third_party/skia/include/images
+>>>> -I../../3rdparty/chromium/third_party/skia/include/lazy
+>>>> -I../../3rdparty/chromium/third_party/skia/include/pathops
+>>>> -I../../3rdparty/chromium/third_party/skia/include/pdf
+>>>> -I../../3rdparty/chromium/third_party/skia/include/pipe
+>>>> -I../../3rdparty/chromium/third_party/skia/include/ports
+>>>> -I../../3rdparty/chromium/third_party/skia/include/utils
+>>>> -I../../3rdparty/chromium/third_party/skia/src/gpu
+>>>> -I../../3rdparty/chromium/third_party/skia/src/sksl
+>>>> -I../../3rdparty/chromium/third_party/skia/include/codec
+>>>> -I../../3rdparty/chromium/third_party/skia/include/private
+>>>> -I../../3rdparty/chromium/third_party/skia/include/client/android
+>>>> -I../../3rdparty/chromium/third_party/skia/src/codec
+>>>> -I../../3rdparty/chromium/third_party/skia/src/core
+>>>> -I../../3rdparty/chromium/third_party/skia/src/image
+>>>> -I../../3rdparty/chromium/third_party/skia/src/images
+>>>> -I../../3rdparty/chromium/third_party/skia/src/opts
+>>>> -I../../3rdparty/chromium/third_party/skia/src/pdf
+>>>> -I../../3rdparty/chromium/third_party/skia/src/ports
+>>>> -I../../3rdparty/chromium/third_party/skia/src/shaders
+>>>> -I../../3rdparty/chromium/third_party/skia/src/shaders/gradients
+>>>> -I../../3rdparty/chromium/third_party/skia/src/sfnt
+>>>> -I../../3rdparty/chromium/third_party/skia/src/utils
+>>>> -I../../3rdparty/chromium/third_party/skia/src/lazy
+>>>> -I../../3rdparty/chromium/third_party/skia/third_party/gif
+>>>> -I../../3rdparty/chromium/third_party/skia/src/effects/gradients
+>>>> -I../../3rdparty/chromium/third_party/libwebp/src
+>>>> -I../../3rdparty/chromium/third_party/libpng
+>>>> -I../../3rdparty/chromium/third_party/zlib
+>>>> -I../../3rdparty/chromium/third_party/libjpeg_turbo
+>>>> -I../../3rdparty/chromium/third_party/icu/source/common
+>>>> -I../../3rdparty/chromium/third_party/icu/source/i18n
+>>>> -fno-strict-aliasing
+>>>> --param=ssp-buffer-size=4 -fstack-protector -Wno-builtin-macro-redefined
+>>>> -D__DATE__= -D__TIME__= -D__TIMESTAMP__= -funwind-tables -fPIC -pipe
+>>>> -pthread
+>>>> -O0 -fno-omit-frame-pointer -g2 -fvisibility=hidden
+>>>> -Wno-unused-local-typedefs
+>>>> -Wno-maybe-uninitialized -Wno-deprecated-declarations
+>>>> -fno-delete-null-pointer-checks -Wno-comments -Wno-dangling-else
+>>>> -Wno-packed-not-aligned -Wno-missing-field-initializers
+>>>> -Wno-unused-parameter
+>>>>
+>>>> -isystem../../../../../host/aarch64-buildroot-linux-gnu/sysroot/usr/include/freetype2
+>>>>
+>>>> -isystem../../../../../host/aarch64-buildroot-linux-gnu/sysroot/usr/include
+>>>> -std=gnu++14 -fno-exceptions -fno-rtti
+>>>> --sysroot=../../../../../host/aarch64-buildroot-linux-gnu/sysroot
+>>>> -fvisibility-inlines-hidden -Wno-narrowing -Wno-attributes
+>>>> -Wno-class-memaccess
+>>>> -Wno-subobject-linkage -c ../../3rdparty/chromium/skia/ext/convolver.cc
+>>>> -o
+>>>> obj/skia/skia/convolver.o
+>>>> In file included from
+>>>>
+>>>> /home/dev/buildroot-qt/host/opt/ext-toolchain/aarch64-linux-gnu/include/c++/7.3.1/bits/stl_algo.h:59:0,
+>>>>                  from
+>>>>
+>>>> /home/dev/buildroot-qt/host/opt/ext-toolchain/aarch64-linux-gnu/include/c++/7.3.1/algorithm:62,
+>>>>                  from ../../3rdparty/chromium/skia/ext/convolver.cc:5:
+>>>>
+>>>> /home/dev/buildroot-qt/host/opt/ext-toolchain/aarch64-linux-gnu/include/c++/7.3.1/cstdlib:75:15:
+>>>> fatal error: stdlib.h: No such file or directory
+>>>>  #include_next <stdlib.h>
+>>>>                ^~~~~~~~~~
+>>>> compilation terminated.
+>>>>
+>>>> --
+>>>> You are receiving this mail because:
+>>>> You are on the CC list for the bug.
+>>>> _______________________________________________
+>>>> buildroot mailing list
+>>>> buildroot at busybox.net
+>>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>>
+>>>
+>>> _______________________________________________
+>>> buildroot mailing listbuildroot at busybox.nethttp://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190622/bffd7a78/attachment.html>
