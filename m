@@ -1,50 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 07:46:49 +0200
-Subject: [Buildroot] [PATCH] package/util-linux: bump to version 2.34
-In-Reply-To: <20190621014232.9282-1-unixmania@gmail.com>
-References: <20190621014232.9282-1-unixmania@gmail.com>
-Message-ID: <20190622074649.27df8177@windsurf>
+Date: Sat, 22 Jun 2019 07:49:21 +0200
+Subject: [Buildroot] [PATCH] toolchain: bump ARC tools to arc-2019.03
+ release
+In-Reply-To: <20190619092532.40543-1-Evgeniy.Didin@synopsys.com>
+References: <20190619092532.40543-1-Evgeniy.Didin@synopsys.com>
+Message-ID: <20190622074921.43631db1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Carlos,
+Hello,
 
-On Thu, 20 Jun 2019 22:42:32 -0300
-unixmania at gmail.com wrote:
+On Wed, 19 Jun 2019 12:25:32 +0300
+Evgeniy Didin <Evgeniy.Didin@synopsys.com> wrote:
 
-> From: Carlos Santos <unixmania@gmail.com>
+> This commit finally bumps ARC tools to the most recent arc-2018.09 release version.
 > 
-> - Remove patches already applied upstream.
-> - Update file hash.
-> - Add an option to select the new "hardlink" command (off by defaul)
-> - hardlink uses libpcre2-8 if pcre2 is detected at config time so add a
->   build dependency on pcre2, if it's selected.
-> - Change selections to reflect that libblkid now does not depend on
->   libuuid anymore
-> 
-> Full release notes available at
-> 
->   https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.34/v2.34-ReleaseNotes
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> ARC GNU tools of version arc-2018.09 bring some quite significant changes like:
+>  * Binutils v2.32.51.20190308 with additional ARC patches
+>  * GCC 8.3.1 with additional ARC patches
+>  * glibc 2.29 with additional ARC patches
+> More information on this release could be found here:
+>  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2019.03-release
 
-Thanks, I have applied, after doing one change. See below.
+This release seems to have a new compiler bug, affecting a number of
+packages. The failure looks like this:
 
-> +config BR2_PACKAGE_UTIL_LINUX_HARDLINK
-> +	bool "hardlink"
-> +	help
-> +	  Query or set the hardware clock (RTC)
+   internal compiler error: in arc_legitimize_pic_address, at config/arc/arc.c:6104
 
-Repeat after me: "copy/paste is bad", "copy/paste is bad" :-)
+See:
 
-I fixed that up to a more appropriate description of hardlink :)
+  http://autobuild.buildroot.net/results/288/28860e57593db31438d8516c0d3c6c3d6403c07e/build-end.log
+  http://autobuild.buildroot.net/results/bd6/bd6bddbc20c98e9c903e1c9defebc2f5ddef7abc/build-end.log
+  http://autobuild.buildroot.net/results/4b6/4b688cecce61ef885ea1f3f72ac50d8bfb2364b6/build-end.log
 
-Thanks a lot for taking care of this version bump.
+Did you already notice those failures ?
 
-Best regards,
+Thanks!
 
 Thomas
 -- 
