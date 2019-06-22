@@ -1,35 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 17:48:49 +0200
-Subject: [Buildroot] [git commit] package/libvncserver: fix homepage
-Message-ID: <20190622154813.121888293F@busybox.osuosl.org>
+Date: Sat, 22 Jun 2019 17:49:42 +0200
+Subject: [Buildroot] [PATCH 1/2] package/qemu: Move patches to version
+ directory
+In-Reply-To: <1559564887-4088-1-git-send-email-guoren@kernel.org>
+References: <1559564887-4088-1-git-send-email-guoren@kernel.org>
+Message-ID: <20190622174942.472127c5@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5324d7e07a2a0e6db48b6fdd4d38c4a18d53a77b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  3 Jun 2019 20:28:06 +0800
+guoren at kernel.org wrote:
 
-libvncserver homepage is https://libvnc.github.io/, last version on
-sourceforge is 0.9.9 (seven years ago)
+> From: Guo Ren <ren_guo@c-sky.com>
+> 
+> Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  ...ix-usage-of-mcontext-structure-on-ARM-uCl.patch | 35 -------------
+>  .../qemu/0002-configure-improve-usbfs-check.patch  | 60 ----------------------
+>  ...ix-usage-of-mcontext-structure-on-ARM-uCl.patch | 35 +++++++++++++
+>  .../3.1.0/0002-configure-improve-usbfs-check.patch | 60 ++++++++++++++++++++++
+>  4 files changed, 95 insertions(+), 95 deletions(-)
+>  delete mode 100644 package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+>  delete mode 100644 package/qemu/0002-configure-improve-usbfs-check.patch
+>  create mode 100644 package/qemu/3.1.0/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
+>  create mode 100644 package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libvncserver/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks, both patches applied!
 
-diff --git a/package/libvncserver/Config.in b/package/libvncserver/Config.in
-index 460aa784e9..d5fac82e87 100644
---- a/package/libvncserver/Config.in
-+++ b/package/libvncserver/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_LIBVNCSERVER
- 	help
- 	  libvncserver is a VNC server/client library.
- 
--	  http://libvncserver.sourceforge.net/
-+	  https://libvnc.github.io/
- 
- if BR2_PACKAGE_LIBVNCSERVER
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
