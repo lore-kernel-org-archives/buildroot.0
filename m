@@ -1,73 +1,58 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 21:30:09 +0200
-Subject: [Buildroot] [git commit] package/uclibc: backport patch to remove
- asm constraint on sparc
-Message-ID: <20190622192928.9CA14821AC@busybox.osuosl.org>
+Date: Sat, 22 Jun 2019 21:31:29 +0200
+Subject: [Buildroot] [PATCH v4 03/15] package/uclibc: remove asm
+ constraint
+In-Reply-To: <20190620100725.105587-4-giulio.benetti@micronovasrl.com>
+References: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
+ <20190620100725.105587-4-giulio.benetti@micronovasrl.com>
+Message-ID: <20190622213129.256f4756@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=08d25f394266eea15c64ed5c583d6af86103166f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 20 Jun 2019 12:07:13 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-uClibc-ng don't build with gcc 9.1 [1] on sparc due to a new check
-that "catch illegal asm constraint usage" [2]. This issue has been
-fixed in upstream uclibc-ng, so we simply backport the fix.
+> From: Romain Naour <romain.naour@gmail.com>
+> 
+> uClibc-ng don't build with gcc 9.1 [1] due to a new check that
+> "catch illegal asm constraint usage" [2].
+> 
+> gcc 9.1 print this error:
+> "invalid hard register usage between earlyclobber operand and input operand"
+> 
+> The asm constraint is present in uClibc since it support sparc (back in 2002)[3].
+> 
+> Note: There is no such constraint is Glibc counterpart code [4].
+> 
+> [1] https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435757
+> [2] https://github.com/gcc-mirror/gcc/commit/b782636f28f5c378897c238081d28d7a4a6ca578
+> [3] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=3b6d086531102b6d09ce852feb1e370d5dca3ce9
+> [4] https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/sparc/sysdep.h;h=981b2a26b7a91093f821c97876e55bc4be2d9f8a;hb=HEAD
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> Cc: Waldemar Brodkorb <wbx@openadk.org>
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+> I did not fully analyze the asm code to understand why the constraint is present.
+> I lightly tested using qemu_sparc_ss10_defconfig.
+> Any help is welcome(Romain)
+> ---
+>  ...arc-syscalls.h-remove-asm-constraint.patch | 46 +++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+>  create mode 100644 package/uclibc/0003-RFC-sparc-syscalls.h-remove-asm-constraint.patch
 
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
-Cc: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-[Thomas: backport the patch that was applied to upstream uclibc-ng]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../uclibc/0004-sparc-remove-asm-constraint.patch  | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+Since the patch was applied upstream in uclibc-ng, I backported the
+uclibc-ng patch. Of course the code is the same, but the file name was
+a bit different. Also, I updated the commit log to indicate that we're
+talking about a sparc issue.
 
-diff --git a/package/uclibc/0004-sparc-remove-asm-constraint.patch b/package/uclibc/0004-sparc-remove-asm-constraint.patch
-new file mode 100644
-index 0000000000..2fbe8cda51
---- /dev/null
-+++ b/package/uclibc/0004-sparc-remove-asm-constraint.patch
-@@ -0,0 +1,40 @@
-+From 75a1a2a9fec8a310a18ff7d63ead95f3a0d1b11b Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@gmail.com>
-+Date: Fri, 24 May 2019 12:42:04 +0200
-+Subject: [PATCH] sparc: remove asm constraint
-+
-+uClibc-ng don't build with gcc 9.1 [1] due to a new check that
-+"catch illegal asm constraint usage" [2].
-+gcc 9.1 print this error:
-+"invalid hard register usage between earlyclobber operand and input operand"
-+The asm constraint is present in uClibc since it support sparc (back in 2002)[3].
-+Note: There is no such constraint is Glibc counterpart code [4].
-+[1] https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435757
-+[2] https://github.com/gcc-mirror/gcc/commit/b782636f28f5c378897c238081d28d7a4a6ca578
-+[3] https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=3b6d086531102b6d09ce852feb1e370d5dca3ce9
-+[4]
-++https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/sparc/sysdep.h;h=981b2a26b7a91093f821c97876
-++e55bc4be2d9f8a;hb=HEAD
-+
-+(cherry picked from commit c2eaf6c30d930b65a8bcf5f912ef8873a6f4eb20)
-+Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+---
-+ libc/sysdeps/linux/sparc/bits/syscalls.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/libc/sysdeps/linux/sparc/bits/syscalls.h b/libc/sysdeps/linux/sparc/bits/syscalls.h
-+index 75af7a157..28edc0568 100644
-+--- a/libc/sysdeps/linux/sparc/bits/syscalls.h
-++++ b/libc/sysdeps/linux/sparc/bits/syscalls.h
-+@@ -33,7 +33,7 @@
-+             register long __g1 __asm__("g1") = sys_num;     \
-+             LOAD_ARGS_##nr(args)                            \
-+             __asm__ __volatile__( __SYSCALL_STRING          \
-+-                : "=r" (__res), "=&r" (__o0)                \
-++                : "=r" (__res), "=r" (__o0)                \
-+                 : "1" (__o0) ASM_ARGS_##nr, "r" (__g1)     \
-+                 : __SYSCALL_CLOBBERS );                                   \
-+         }                                                   \
-+-- 
-+2.21.0
-+
+Applied with those changes. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
