@@ -1,42 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 21:42:16 +0200
-Subject: [Buildroot] [git commit] package/gcc: switch to gcc 8.x as the
- default
-Message-ID: <20190622194128.2475D83452@busybox.osuosl.org>
+Date: Sat, 22 Jun 2019 21:42:03 +0200
+Subject: [Buildroot] [git commit] toolchain-external: add gcc 9 entry
+Message-ID: <20190622194128.1948B8165D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a8cc22331b9891f95696c401a4790dd35bccacd
+commit: https://git.buildroot.net/buildroot/commit/?id=910c7f239598f114970215a90a1b338afa65f680
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Even if gcc 7 is still maintained for some time (gcc 7.5 is pending),
-switch to gcc 8.x since it has been released since 2018-05-02 and
-gcc 9.x is available since 2019-05-03.
-
-We have been having toolchains in the autobuilders with gcc
-8.x for a while, so the vast majority of the problems should have
-already been solved.
+This patch allows to use an external toolchain based on gcc 9.
 
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gcc/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../toolchain-external/toolchain-external-custom/Config.in.options  | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 66c59c66c4..239353d3f7 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -5,7 +5,7 @@ choice
- 	default BR2_GCC_VERSION_ARC if BR2_arc
- 	default BR2_GCC_VERSION_CSKY if BR2_csky
- 	default BR2_GCC_VERSION_OR1K if BR2_or1k
--	default BR2_GCC_VERSION_7_X
-+	default BR2_GCC_VERSION_8_X
- 	help
- 	  Select the version of gcc you wish to use.
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index cb7095632f..a2cc97f936 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -27,6 +27,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
  
+ choice
+ 	bool "External toolchain gcc version"
++	default BR2_TOOLCHAIN_EXTERNAL_GCC_9   if BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+ 	default BR2_TOOLCHAIN_EXTERNAL_GCC_8   if BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	default BR2_TOOLCHAIN_EXTERNAL_GCC_7   if BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 	default BR2_TOOLCHAIN_EXTERNAL_GCC_6   if BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+@@ -38,8 +39,13 @@ choice
+ 	  Set to the gcc version that is used by your external
+ 	  toolchain.
+ 
++config BR2_TOOLCHAIN_EXTERNAL_GCC_9
++	bool "9.x"
++	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
++
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_8
+ 	bool "8.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_7
