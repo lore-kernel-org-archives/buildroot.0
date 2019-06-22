@@ -1,49 +1,43 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 20:50:57 +0200
-Subject: [Buildroot] [git commit] package/libtorrent-rasterbar: work around
- gcc bug 85180
-Message-ID: <20190622185146.ADE62852B2@busybox.osuosl.org>
+Date: Sat, 22 Jun 2019 20:36:08 +0200
+Subject: [Buildroot] [git commit] package/qt5/qt5base: disable predefined
+ -Og optimization
+Message-ID: <20190622185146.8B40682B9F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81dcff92e623445f2a25a17cff67b78999b070f1
+commit: https://git.buildroot.net/buildroot/commit/?id=5857ab6a96be17615a05ff4e6a91d8f475890980
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Microblaze, building libtorrent-rasterbar with gcc version < 8.x
-and optimization enabled causes gcc to enter an infinite loop and
-hangs the build.
-
-This is due to gcc bug 85180
-(https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180).
-
-The bug shows up when building libtorrent-rasterbar with optimization
-but not when building with -O0. To work around this, if
-BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
-
-Fixes:
-http://autobuild.buildroot.net/results/410/410e75676abc6bbabe9029ecda969e3d909f3e18/
+Starting from Qt5 5.9.0, -optimize-debug is enabled by default for
+debug builds causing -Og flag to be appended to CFLAGS and
+consequently override TARGET_CFLAGS. We don't want this so let's pass
+-no-optimize-debug to QT5BASE_CONFIGURE_OPTS if QT5_VERSION_LATEST=y.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libtorrent-rasterbar/libtorrent-rasterbar.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/qt5/qt5base/qt5base.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-index 012e972f1d..1d132382e1 100644
---- a/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-+++ b/package/libtorrent-rasterbar/libtorrent-rasterbar.mk
-@@ -21,6 +21,10 @@ ifeq ($(BR2_m68k_cf),y)
- LIBTORRENT_RASTERBAR_CXXFLAGS += -fno-defer-pop
- endif
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index e4ae120631..f4b40913f4 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -27,6 +27,13 @@ QT5BASE_CONFIGURE_OPTS += \
+ 	-no-pch \
+ 	-shared
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+LIBTORRENT_RASTERBAR_CXXFLAGS += -O0
++# starting from version 5.9.0, -optimize-debug is enabled by default
++# for debug builds and it overrides -O* with -Og which is not what we
++# want.
++ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
++QT5BASE_CONFIGURE_OPTS += -no-optimize-debug
 +endif
 +
- LIBTORRENT_RASTERBAR_CONF_OPTS += CXXFLAGS="$(LIBTORRENT_RASTERBAR_CXXFLAGS)"
- 
- ifeq ($(BR2_ENABLE_LOCALE)$(BR2_PACKAGE_LIBICONV),y)
+ ifeq ($(BR2_PACKAGE_QT5_VERSION_5_6),y)
+ QT5BASE_DEPENDENCIES += pcre
+ else
