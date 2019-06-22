@@ -1,32 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 17:50:13 +0200
-Subject: [Buildroot] [PATCH] package/coreutils: simplify the [ -> test
- symlink
-In-Reply-To: <20190622131936.10121-1-yann.morin.1998@free.fr>
-References: <20190622131936.10121-1-yann.morin.1998@free.fr>
-Message-ID: <20190622175013.2c6cdd12@windsurf>
+Date: Sat, 22 Jun 2019 17:50:24 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libvncserver: fix homepage
+In-Reply-To: <20190622133310.9709-1-fontaine.fabrice@gmail.com>
+References: <20190622133310.9709-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190622175024.2154db09@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 22 Jun 2019 15:19:36 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+On Sat, 22 Jun 2019 15:33:09 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Wheter we are mutli-call or multi-binaries, test is either a symlink to
-> coreutils or a standalone binary.
+> libvncserver homepage is https://libvnc.github.io/, last version on
+> sourceforge is 0.9.9 (seven years ago)
 > 
-> Consequently, test always exists, and so we can simplify the [ symlink.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Markus Mayer <mmayer@broadcom.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/coreutils/coreutils.mk | 6 ------
->  1 file changed, 6 deletions(-)
+>  package/libvncserver/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
+Both applied to master, thanks.
 
 Thomas
 -- 
