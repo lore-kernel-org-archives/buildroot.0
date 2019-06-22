@@ -1,28 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 17:50:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/alsa-utils: bump to version
- 1.1.9
-In-Reply-To: <1561204558-23794-1-git-send-email-pjtexier@koncepto.io>
-References: <1561204558-23794-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190622175000.711aa026@windsurf>
+Date: Sat, 22 Jun 2019 17:50:13 +0200
+Subject: [Buildroot] [PATCH] package/coreutils: simplify the [ -> test
+ symlink
+In-Reply-To: <20190622131936.10121-1-yann.morin.1998@free.fr>
+References: <20190622131936.10121-1-yann.morin.1998@free.fr>
+Message-ID: <20190622175013.2c6cdd12@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 22 Jun 2019 13:55:58 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+On Sat, 22 Jun 2019 15:19:36 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-> Also remove the patch that have been upstreamed
+> Wheter we are mutli-call or multi-binaries, test is either a symlink to
+> coreutils or a standalone binary.
 > 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> Consequently, test always exists, and so we can simplify the [ symlink.
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Markus Mayer <mmayer@broadcom.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  ...-topology.c-drop-unneeded-dlfcn.h-include.patch | 29 ----------------------
->  package/alsa-utils/alsa-utils.hash                 |  2 +-
->  package/alsa-utils/alsa-utils.mk                   |  2 +-
->  3 files changed, 2 insertions(+), 31 deletions(-)
->  delete mode 100644 package/alsa-utils/0001-topology-topology.c-drop-unneeded-dlfcn.h-include.patch
+>  package/coreutils/coreutils.mk | 6 ------
+>  1 file changed, 6 deletions(-)
 
 Applied to master, thanks.
 
