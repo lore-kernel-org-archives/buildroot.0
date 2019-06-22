@@ -1,42 +1,69 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 22 Jun 2019 21:14:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/monit: bump to version 5.25.3
-Message-ID: <20190622191435.31025-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 22 Jun 2019 21:22:27 +0200
+Subject: [Buildroot] [PATCH v6 1/2] meson: add per package optional
+ compiler/linker flags
+In-Reply-To: <20190622211330.10b68b47@windsurf>
+References: <20190423205302.14382-1-ps.report@gmx.net>
+ <20190612163710.GE2647@scaer> <20190622211330.10b68b47@windsurf>
+Message-ID: <20190622192227.GF13664@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/monit/monit.hash | 4 ++--
- package/monit/monit.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Thomas, All,
 
-diff --git a/package/monit/monit.hash b/package/monit/monit.hash
-index d1c09f137c..3f528590d6 100644
---- a/package/monit/monit.hash
-+++ b/package/monit/monit.hash
-@@ -1,4 +1,4 @@
--# From https://mmonit.com/monit/dist/monit-5.25.2.tar.gz.sha256:
--sha256  aa0ce6361d1155e43e30a86dcff00b2003d434f221c360981ced830275abc64a  monit-5.25.2.tar.gz
-+# From https://mmonit.com/monit/dist/monit-5.25.3.tar.gz.sha256:
-+sha256  c10258c8839d20864d30390e7cbf2ff5e0480a67a6fb80c02aa457d6e3390569  monit-5.25.3.tar.gz
- # Locally computed
- sha256  d5a4f52b1a5e1e7fe14e01a76aac8b08dc6bbea15466058f271456c97aac1ada  COPYING
-diff --git a/package/monit/monit.mk b/package/monit/monit.mk
-index 906ed842d6..980da13cb6 100644
---- a/package/monit/monit.mk
-+++ b/package/monit/monit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONIT_VERSION = 5.25.2
-+MONIT_VERSION = 5.25.3
- MONIT_SITE = http://mmonit.com/monit/dist
- MONIT_LICENSE = AGPL-3.0 with OpenSSL exception
- MONIT_LICENSE_FILES = COPYING
+On 2019-06-22 21:13 +0200, Thomas Petazzoni spake thusly:
+> On Wed, 12 Jun 2019 18:37:10 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> 
+> > > diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+> > > index 49e27f5527..70128f6bad 100644
+> > > --- a/package/meson/meson.mk
+> > > +++ b/package/meson/meson.mk
+> > > @@ -60,6 +60,9 @@ define HOST_MESON_INSTALL_CROSS_CONF
+> > >  	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
+> > >  	    -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
+> > >  	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
+> > > +	    -e "s%@PKG_TARGET_CFLAGS@%%g" \
+> > > +	    -e "s%@PKG_TARGET_LDFLAGS@%%g" \
+> > > +	    -e "s%@PKG_TARGET_CXXFLAGS@%%g" \  
+> > 
+> > Actually, if someone wants to use that file outside of Buildroot, and
+> > also happend to need to pass special C/LD/CXXFLAGS for their package,
+> > how are they expected to do so? Can't we just install it as a template
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > too?
+    ^^^^
+> 
+> If we keep @PKG_TARGET_CFLAGS@, @PKG_TARGET_LDFLAGS@, etc. in the
+> cross-compilation.conf, then it is no longer usable as-is: users will
+> _have_ to fixup those @PKG_TARGET_foo@, even if they don't need to pass
+> additional CFLAGS to their package.
+> 
+> I think what Peter S. did here is the best we can do. A better solution
+> would be for Meson to support command line provided cflags/ldflags, but
+> that's not supported, and if it was supported, this whole patch
+> wouldn't be necessary.
+
+As I explained on IRC: we would install the file like Peter does, but
+also install the template as well, so that:
+
+  - packages that don't need extra flags can be built as-is
+
+  - while for packages that do require extra flag, the user can use the
+    template to generate a custom file
+
+and thus we have the best of both worlds.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
