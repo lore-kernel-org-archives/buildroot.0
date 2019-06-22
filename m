@@ -1,47 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 19:53:57 +0200
-Subject: [Buildroot] [git commit] package/libbluray: bump version to 1.1.2
-Message-ID: <20190622181100.45FDC8438B@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 22 Jun 2019 20:15:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xfont_encodings: bump version
+ to 1.0.5
+Message-ID: <20190622181528.6305-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=99e9d1ab085251e417107234af34f838c61883f8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Added all hashes provided by upstream, added license hash.
 
-Changelog:
-https://code.videolan.org/videolan/libbluray/blob/master/ChangeLog
+Switched _SITE to https.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libbluray/libbluray.hash | 5 +++--
- package/libbluray/libbluray.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/x11r7/xfont_encodings/xfont_encodings.hash | 9 +++++++--
+ package/x11r7/xfont_encodings/xfont_encodings.mk   | 4 ++--
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/package/libbluray/libbluray.hash b/package/libbluray/libbluray.hash
-index 9a35c5dafb..1757192b00 100644
---- a/package/libbluray/libbluray.hash
-+++ b/package/libbluray/libbluray.hash
-@@ -1,3 +1,4 @@
--# From http://get.videolan.org/libbluray/1.0.2/libbluray-1.0.2.tar.bz2.sha512
--sha512 e1360ad08aa6cc67a80efa81a09004faebbe31105f1961494f82f655e3e7378b198ee3bc534b0d0c2bfec726939b11b545cc8bbfa30794fc647432dadf71089b  libbluray-1.0.2.tar.bz2
-+# From http://get.videolan.org/libbluray/1.1.2/libbluray-1.1.2.tar.bz2.sha512
-+sha512 5a82af6c1840a1dcb31d06d90203c68e2c4f0bbadc9212eb0bb2776d42b0ab3793a769ebe07b3051be151e8b15876874d5a0658292f72b7126dd915a1ada3fe7  libbluray-1.1.2.tar.bz2
+diff --git a/package/x11r7/xfont_encodings/xfont_encodings.hash b/package/x11r7/xfont_encodings/xfont_encodings.hash
+index 56c1ad2737..30dc92760b 100644
+--- a/package/x11r7/xfont_encodings/xfont_encodings.hash
++++ b/package/x11r7/xfont_encodings/xfont_encodings.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2010-October/001466.html
+-sha1	24ace2470403f85a0d393769204029bd8247992a	encodings-1.0.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-June/002998.html
++md5 bbae4f247b88ccde0e85ed6a403da22a  encodings-1.0.5.tar.bz2
++sha1 7ffec76dba1cfd5040c5b43ccfae930c83ddf92e  encodings-1.0.5.tar.bz2
++sha256 bd96e16143a044b19e87f217cf6a3763a70c561d1076aad6f6d862ec41774a31  encodings-1.0.5.tar.bz2
++sha512 920e49f0b3545f181a1574ca3280ac9adef1e68fe27566c195dd7013f728d355c0d759132789357fcf8fa7391fcbe1e17edf2bd85aa5611df5a4d99740011008  encodings-1.0.5.tar.bz2
 +# Locally computed
- sha256 b3aa400aca6d2ba1f0bd03bd98d03d1fe7489a3bbb26969d72016360af8a5c9d  COPYING
-diff --git a/package/libbluray/libbluray.mk b/package/libbluray/libbluray.mk
-index 3d7ce351c1..49ee933d0a 100644
---- a/package/libbluray/libbluray.mk
-+++ b/package/libbluray/libbluray.mk
-@@ -4,7 +4,7 @@
++sha256 13b4a0f9431f0fdd6ee36ed386e0b7d1eb429c5cb88df73353896078cbb5a137  COPYING
+diff --git a/package/x11r7/xfont_encodings/xfont_encodings.mk b/package/x11r7/xfont_encodings/xfont_encodings.mk
+index 9c5c9f30bf..06d9973813 100644
+--- a/package/x11r7/xfont_encodings/xfont_encodings.mk
++++ b/package/x11r7/xfont_encodings/xfont_encodings.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBBLURAY_VERSION = 1.0.2
-+LIBBLURAY_VERSION = 1.1.2
- LIBBLURAY_SITE = http://get.videolan.org/libbluray/$(LIBBLURAY_VERSION)
- LIBBLURAY_SOURCE = libbluray-$(LIBBLURAY_VERSION).tar.bz2
- LIBBLURAY_INSTALL_STAGING = YES
+-XFONT_ENCODINGS_VERSION = 1.0.4
++XFONT_ENCODINGS_VERSION = 1.0.5
+ XFONT_ENCODINGS_SOURCE = encodings-$(XFONT_ENCODINGS_VERSION).tar.bz2
+-XFONT_ENCODINGS_SITE = http://xorg.freedesktop.org/releases/individual/font
++XFONT_ENCODINGS_SITE = https://xorg.freedesktop.org/releases/individual/font
+ XFONT_ENCODINGS_LICENSE = Public Domain
+ XFONT_ENCODINGS_LICENSE_FILES = COPYING
+ 
+-- 
+2.20.1
