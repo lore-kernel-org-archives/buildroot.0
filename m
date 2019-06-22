@@ -1,32 +1,60 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 10:08:05 +0200
-Subject: [Buildroot] [PATCH v2 3/3] package/iputils: create ping6
- symlink in post install target hook
-In-Reply-To: <20190619213008.7883-3-petr.vorel@gmail.com>
-References: <20190619213008.7883-1-petr.vorel@gmail.com>
- <20190619213008.7883-3-petr.vorel@gmail.com>
-Message-ID: <20190622100805.30242505@windsurf>
+Date: Sat, 22 Jun 2019 10:13:46 +0200
+Subject: [Buildroot] [git commit] package/lmbench: mark scripts/build as
+ bash script
+Message-ID: <20190622081335.4351481F77@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 19 Jun 2019 23:30:08 +0200
-Petr Vorel <petr.vorel@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=037d5ffcb67dc72d37db7a0383145e9e99b36fc7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> +# upstream requires distros to create symlink
-> +define IPUTILS_CREATE_PING6_SYMLINK
-> +ln -sv $(TARGET_DIR)/bin/ping $(TARGET_DIR)/bin/ping6
+scripts/build makes use of the "+=" operator which is not supported by
+a pure POSIX shell. We switch to /bin/bash in order to avoid errors of
+the form:
 
-Such commands are normally indented. Also instead of -sv, you should
-have used -sf. The verbosity is not needed, but the -f is needed so
-that reinstallation of the package works properly.
+    ../scripts/build: 21: ../scripts/build: LDLIBS+= -lm: not found
 
-I've applied after fixing this. Thanks a lot!
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-scripts-build-use-bin-bash-as-shell.patch | 28 ++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/lmbench/0001-scripts-build-use-bin-bash-as-shell.patch b/package/lmbench/0001-scripts-build-use-bin-bash-as-shell.patch
+new file mode 100644
+index 0000000000..b7e1dc64d0
+--- /dev/null
++++ b/package/lmbench/0001-scripts-build-use-bin-bash-as-shell.patch
+@@ -0,0 +1,28 @@
++From 02a538c2b4b54b41d23dbd7668714ea4d2016131 Mon Sep 17 00:00:00 2001
++From: Markus Mayer <mmayer@broadcom.com>
++Date: Thu, 13 Jun 2019 12:27:04 -0700
++Subject: [PATCH] scripts/build: use /bin/bash as shell
++
++scripts/build makes use of the "+=" operator which is not supported by
++/bin/sh. We switch to /bin/bash in order to avoid errors of the form
++
++    ../scripts/build: 21: ../scripts/build: LDLIBS+= -lm: not found
++
++Signed-off-by: Markus Mayer <mmayer@broadcom.com>
++---
++ scripts/build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/scripts/build b/scripts/build
++index 34a1371d0056..60b755cd2320 100755
++--- a/scripts/build
+++++ b/scripts/build
++@@ -1,4 +1,4 @@
++-#!/bin/sh
+++#!/bin/bash
++ 
++ CC=${CC-`../scripts/compiler`}
++ MAKE=${MAKE-`../scripts/make`}
++-- 
++2.17.1
++
