@@ -1,47 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 21:41:23 +0200
-Subject: [Buildroot] [PATCH v4 06/15] arch: add
- BR2_ARCH_NEEDS_GCC_AT_LEAST_9
-In-Reply-To: <20190620100725.105587-7-giulio.benetti@micronovasrl.com>
-References: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
- <20190620100725.105587-7-giulio.benetti@micronovasrl.com>
-Message-ID: <20190622214123.01ff23dc@windsurf>
+Date: Sat, 22 Jun 2019 21:38:23 +0200
+Subject: [Buildroot] [git commit] arch: add BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+Message-ID: <20190622194128.125C4802D9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 20 Jun 2019 12:07:16 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=16951722d7c257383aaf736dd492b2d301be9875
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Romain Naour <romain.naour@gmail.com>
-> 
-> This new symbol will be used by architectures introduced with gcc 9 and
-> by external toolchains based on gcc 9.
-> 
-> [1] https://gcc.gnu.org/gcc-9/changes.html
-> 
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
-> v3: rebase patch on top of master branch sha1:
->     04efb17c863606cdbc2405d01c3d48d6868c5245 (Giulio)
-> ---
->  arch/Config.in             | 4 ++++
->  package/gcc/Config.in.host | 1 +
->  2 files changed, 5 insertions(+)
+This new symbol will be used by architectures introduced with gcc 9 and
+by external toolchains based on gcc 9.
 
-Applied to master, thanks. Shouldn't we be using this a bit more ?
+[1] https://gcc.gnu.org/gcc-9/changes.html
 
-I believe C-SKY could select BR2_ARCH_NEEDS_GCC_AT_LEAST_9, and ARC
-could select BR2_ARCH_NEEDS_GCC_AT_LEAST_8, this would allow to remove
-a few "depends !" from package/gcc/Config.in.host.
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ arch/Config.in             | 4 ++++
+ package/gcc/Config.in.host | 1 +
+ 2 files changed, 5 insertions(+)
 
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/arch/Config.in b/arch/Config.in
+index db1199c6a2..d8d841b1a2 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -301,6 +301,10 @@ config BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	bool
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 
++config BR2_ARCH_NEEDS_GCC_AT_LEAST_9
++	bool
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
++
+ # The following string values are defined by the individual
+ # Config.in.$ARCH files
+ config BR2_ARCH
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 758c843ffe..66c59c66c4 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -75,6 +75,7 @@ config BR2_GCC_VERSION_7_X
+ 
+ config BR2_GCC_VERSION_8_X
+ 	bool "gcc 8.x"
++	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+ 	# Broken or unsupported architectures
+ 	depends on !BR2_csky
+ 	depends on !BR2_or1k
