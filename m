@@ -1,33 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 17:06:08 +0200
-Subject: [Buildroot] [git commit] package/qemu: move patches to a per
- version directory
-Message-ID: <20190622154514.2C36A8280A@busybox.osuosl.org>
+Date: Sat, 22 Jun 2019 17:48:31 +0200
+Subject: [Buildroot] [PATCH 1/1] package/whois: bump to version 5.4.3
+In-Reply-To: <1561208392-11096-1-git-send-email-pjtexier@koncepto.io>
+References: <1561208392-11096-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20190622174831.1d877d9a@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c1f51443782fe63950dfe2a9489b36c503953b4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 22 Jun 2019 14:59:52 +0200
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-This is done in preparation to the introduction of the support for a
-different Qemu version, used on the C-SKY architecture.
+> Also change the site location, see:
+>  - https://release-monitoring.org/project/5128/
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch       | 0
- package/qemu/{ => 3.1.0}/0002-configure-improve-usbfs-check.patch         | 0
- 2 files changed, 0 insertions(+), 0 deletions(-)
+Nope, changing the site location is not a good idea, see below.
 
-diff --git a/package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch b/package/qemu/3.1.0/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-similarity index 100%
-rename from package/qemu/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-rename to package/qemu/3.1.0/0001-user-exec-fix-usage-of-mcontext-structure-on-ARM-uCl.patch
-diff --git a/package/qemu/0002-configure-improve-usbfs-check.patch b/package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch
-similarity index 100%
-rename from package/qemu/0002-configure-improve-usbfs-check.patch
-rename to package/qemu/3.1.0/0002-configure-improve-usbfs-check.patch
+> -WHOIS_VERSION = 5.4.0
+> -WHOIS_SITE = http://snapshot.debian.org/archive/debian/20181026T220636Z/pool/main/w/whois
+> +WHOIS_VERSION = 5.4.3
+> +WHOIS_SITE = http://ftp.debian.org/debian/pool/main/w/whois
+
+The problem with ftp.debian.org URLs is that they are not stable. As
+Debian moves forward, whois 5.4.3 will become no longer packaged in
+Debian, and will disappear from ftp.debian.org. snapshot.debian.org
+URLs however are stable. So we should continue to use a
+snapshot.debian.org URL.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
