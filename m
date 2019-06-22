@@ -1,38 +1,50 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 22 Jun 2019 17:48:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/whois: bump to version 5.4.3
-In-Reply-To: <1561208392-11096-1-git-send-email-pjtexier@koncepto.io>
-References: <1561208392-11096-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190622174831.1d877d9a@windsurf>
+Date: Sat, 22 Jun 2019 17:47:08 +0200
+Subject: [Buildroot] [git commit] package/gptfdisk: bump to version 1.0.4
+Message-ID: <20190622154813.00DAA8293F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 22 Jun 2019 14:59:52 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=417c23514301b3e4e24497580b05588ca9449230
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Also change the site location, see:
->  - https://release-monitoring.org/project/5128/
+Add hash for license file
 
-Nope, changing the site location is not a good idea, see below.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gptfdisk/gptfdisk.hash | 9 +++++----
+ package/gptfdisk/gptfdisk.mk   | 2 +-
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-> -WHOIS_VERSION = 5.4.0
-> -WHOIS_SITE = http://snapshot.debian.org/archive/debian/20181026T220636Z/pool/main/w/whois
-> +WHOIS_VERSION = 5.4.3
-> +WHOIS_SITE = http://ftp.debian.org/debian/pool/main/w/whois
-
-The problem with ftp.debian.org URLs is that they are not stable. As
-Debian moves forward, whois 5.4.3 will become no longer packaged in
-Debian, and will disappear from ftp.debian.org. snapshot.debian.org
-URLs however are stable. So we should continue to use a
-snapshot.debian.org URL.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gptfdisk/gptfdisk.hash b/package/gptfdisk/gptfdisk.hash
+index d55797c05a..0e52d9917f 100644
+--- a/package/gptfdisk/gptfdisk.hash
++++ b/package/gptfdisk/gptfdisk.hash
+@@ -1,5 +1,6 @@
+-# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.3/
+-md5 07b625a583b66c8c5840be5923f3e3fe  gptfdisk-1.0.3.tar.gz
+-sha1 9a74bbe7805d562316e92417f71e4b03155308e6  gptfdisk-1.0.3.tar.gz
++# From http://sourceforge.net/projects/gptfdisk/files/gptfdisk/1.0.4/
++md5 5ecc3c44913bb6b53d3708d1ac7ac295  gptfdisk-1.0.4.tar.gz
++sha1 4c2d60bedd4eac1014727e3b126de96966205410  gptfdisk-1.0.4.tar.gz
+ # Locally computed
+-sha256 89fd5aec35c409d610a36cb49c65b442058565ed84042f767bba614b8fc91b5c  gptfdisk-1.0.3.tar.gz
++sha256 b663391a6876f19a3cd901d862423a16e2b5ceaa2f4a3b9bb681e64b9c7ba78d  gptfdisk-1.0.4.tar.gz
++sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/gptfdisk/gptfdisk.mk b/package/gptfdisk/gptfdisk.mk
+index b669e22aa8..afe4a72886 100644
+--- a/package/gptfdisk/gptfdisk.mk
++++ b/package/gptfdisk/gptfdisk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GPTFDISK_VERSION = 1.0.3
++GPTFDISK_VERSION = 1.0.4
+ GPTFDISK_SITE = http://downloads.sourceforge.net/sourceforge/gptfdisk
+ GPTFDISK_LICENSE = GPL-2.0+
+ GPTFDISK_LICENSE_FILES = COPYING
