@@ -1,52 +1,73 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Sat, 22 Jun 2019 23:18:33 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/whois: bump to version 5.4.3
-Message-ID: <1561238313-3236-1-git-send-email-pjtexier@koncepto.io>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 23 Jun 2019 00:35:38 +0200
+Subject: [Buildroot] [PATCH v4 08/15] package/gcc: switch to gcc 8.x as
+ the default
+In-Reply-To: <20190622214410.4bc6022e@windsurf>
+References: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
+ <20190620100725.105587-9-giulio.benetti@micronovasrl.com>
+ <20190622214410.4bc6022e@windsurf>
+Message-ID: <29b577b0-8c65-7038-929b-ad2828ec7495@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See changelog:
- - https://github.com/rfc1036/whois/blob/master/debian/changelog
+Hi Thomas,
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
----
-Changes v1 -> v2
- - do not change site location (requested by Thomas Petazzoni)
- - add changelog URL in commit log
+Le 22/06/2019 ? 21:44, Thomas Petazzoni a ?crit?:
+> On Thu, 20 Jun 2019 12:07:18 +0200
+> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+> 
+>> From: Romain Naour <romain.naour@gmail.com>
+>>
+>> Even if gcc 7 is still maintained for some time (gcc 7.5 is pending),
+>> switch to gcc 8.x since it has been released since 2018-05-02 and
+>> gcc 9.x is available since 2019-05-03.
+>>
+>> We have been having toolchains in the autobuilders with gcc
+>> 8.x for a while, so the vast majority of the problems should have
+>> already been solved.
+>>
+>> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+>> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+>> ---
+>> v3: rebase patch on top of master branch sha1:
+>>     04efb17c863606cdbc2405d01c3d48d6868c5245 (Giulio)
+>> ---
+>>  package/gcc/Config.in.host | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Applied to master, thanks.
 
- package/whois/whois.hash | 4 ++--
- package/whois/whois.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Thanks for merging this series :)
 
-diff --git a/package/whois/whois.hash b/package/whois/whois.hash
-index 41ef935..4a5c598 100644
---- a/package/whois/whois.hash
-+++ b/package/whois/whois.hash
-@@ -1,5 +1,5 @@
--# From http://snapshot.debian.org/archive/debian/20181026T220636Z/pool/main/w/whois/whois_5.4.0.dsc
--sha256	3775ae0cfaa6dd8d886e5233c4826225cddcb88c99c2a08130d14e15fe58e378	whois_5.4.0.tar.xz
-+# From http://snapshot.debian.org/archive/debian/20190622T150200Z/pool/main/w/whois/whois_5.4.3.dsc
-+sha256	fefa84029f70985db19743e51c4a8b318a169426babeaa824a27110c26090fc3	whois_5.4.3.tar.xz
- 
- # Hash for license file:
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
-diff --git a/package/whois/whois.mk b/package/whois/whois.mk
-index 712ad91..a5f013a 100644
---- a/package/whois/whois.mk
-+++ b/package/whois/whois.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--WHOIS_VERSION = 5.4.0
--WHOIS_SITE = http://snapshot.debian.org/archive/debian/20181026T220636Z/pool/main/w/whois
-+WHOIS_VERSION = 5.4.3
-+WHOIS_SITE = http://snapshot.debian.org/archive/debian/20190622T150200Z/pool/main/w/whois
- WHOIS_SOURCE = whois_$(WHOIS_VERSION).tar.xz
- WHOIS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- WHOIS_MAKE_ENV = $(TARGET_MAKE_ENV)
--- 
-2.7.4
+> 
+> What do we do with the older gcc versions ? We now have 4.9, 5, 6, 7, 8
+> and 9, which is quite a bit more than the normal number of 3 versions
+> we want to support.
+> 
+> Arnout: do you still think gcc 4.9 is needed at this point ? If it is
+> the case, should we keep gcc 4.9, but drop gcc 5 and 6 ?
+
+Currently glibc >= 2.29 needs gcc >= 5 on all architectures.
+So we can only build a toolchain with gcc 4.9 with uClibc and musl.
+The upcoming release of glibc will require at least gcc 6.2 on all architectures
+[1].
+
+If a toolchain with gcc 4.9 is really needed, it can be build with the 2019.02
+LTS version.
+
+Thomas, I have the same question about gdb 7.12.x.
+
+[1]
+https://sourceware.org/git/?p=glibc.git;a=commit;h=4dcbbc3b28aaeafe23e1a30db84055aa6f6fa987
+
+Best regards,
+Romain
+
+> 
+> Best regards,
+> 
+> Thomas
+> 
