@@ -1,60 +1,29 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 23 Jun 2019 10:25:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvncserver: fix build without C++
-Message-ID: <20190623082551.1679-1-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 23 Jun 2019 11:26:59 +0200
+Subject: [Buildroot] [PATCH v4 06/15] arch: add
+ BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+In-Reply-To: <20190622214123.01ff23dc@windsurf> (Thomas Petazzoni's message of
+ "Sat, 22 Jun 2019 21:41:23 +0200")
+References: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
+ <20190620100725.105587-7-giulio.benetti@micronovasrl.com>
+ <20190622214123.01ff23dc@windsurf>
+Message-ID: <877e9cfy8s.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/16aaa4e86a2dbf1acf95f10d5131b0f7b8a3d61a
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...1-CMakeLists.txt-fix-build-without-C.patch | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch
+ > Applied to master, thanks. Shouldn't we be using this a bit more ?
 
-diff --git a/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch b/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch
-new file mode 100644
-index 0000000000..591c97fd6a
---- /dev/null
-+++ b/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch
-@@ -0,0 +1,33 @@
-+From 868f0a9fa60bb45ee6cf762f323c5b3964b2ee69 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 23 Jun 2019 10:18:59 +0200
-+Subject: [PATCH] CMakeLists.txt: fix build without C++
-+
-+Specify that libvncserver is a C project file otherwise build will fail
-+if no C++ compiler is found by cmake
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/16aaa4e86a2dbf1acf95f10d5131b0f7b8a3d61a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/LibVNC/libvncserver/pull/317]
-+---
-+ CMakeLists.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 0d3b4dc..ad609ae 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,7 +1,7 @@
-+ cmake_minimum_required(VERSION 3.4)
-+ cmake_policy(SET CMP0037 NEW)
-+ 
-+-project(LibVNCServer)
-++project(LibVNCServer C)
-+ include(CheckFunctionExists)
-+ include(CheckSymbolExists)
-+ include(CheckIncludeFile)
-+-- 
-+2.20.1
-+
+ > I believe C-SKY could select BR2_ARCH_NEEDS_GCC_AT_LEAST_9, and ARC
+ > could select BR2_ARCH_NEEDS_GCC_AT_LEAST_8, this would allow to remove
+ > a few "depends !" from package/gcc/Config.in.host.
+
+Yes, that could be a nice cleanup - Even though we don't have a lot of
+such conditionals.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
