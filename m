@@ -1,55 +1,36 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 23 Jun 2019 10:07:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/davfs2: bump to version 1.5.5
-In-Reply-To: <87fto0g38k.fsf@dell.be.48ers.dk>
-References: <20190619214926.26685-1-fontaine.fabrice@gmail.com>
- <87fto0g38k.fsf@dell.be.48ers.dk>
-Message-ID: <CAPi7W80YxQ-XV=4yW95JGJEBEPnT2g=MeYvv+EOrZFdg8ekmTg@mail.gmail.com>
+Date: Sun, 23 Jun 2019 10:13:42 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xorgproto: enable legacy
+Message-ID: <20190623081342.6098-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Dear Peter,
+xproxymngproto is needed by xfindproxy but it is now disabled by default
+Enable it thanks to --enable-legacy
 
-Le dim. 23 juin 2019 ? 09:39, Peter Korsgaard <peter@korsgaard.com> a ?crit :
->
-> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
->
->  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->  > ---
->  >  package/davfs2/davfs2.hash | 2 +-
->  >  package/davfs2/davfs2.mk   | 2 +-
->  >  2 files changed, 2 insertions(+), 2 deletions(-)
->
->  > diff --git a/package/davfs2/davfs2.hash b/package/davfs2/davfs2.hash
->  > index 102659a38d..7e2078bec5 100644
->  > --- a/package/davfs2/davfs2.hash
->  > +++ b/package/davfs2/davfs2.hash
->  > @@ -1,4 +1,4 @@
->  >  # Locally calculated
->  > -sha256 c9c4e0f0912a782386216b2147eb9c36c47f193b8fcf3d637719e0b9fe7c96e0  davfs2-1.5.4.tar.gz
->  > +sha256 587c6a25ad78109995a7ccb8e60aa1c491b149f2c99d47033f3d5e648430ad2f  davfs2-1.5.5.tar.gz
->  >  # License file, locally calculated
->  >  sha256 0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
->  > diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
->  > index f2b2fdbe41..90f73f4df0 100644
->  > --- a/package/davfs2/davfs2.mk
->  > +++ b/package/davfs2/davfs2.mk
->  > @@ -4,7 +4,7 @@
->  >  #
->  >  ################################################################################
->
->  > -DAVFS2_VERSION = 1.5.4
->  > +DAVFS2_VERSION = 1.5.5
->
-> Would this be suitable for 2019.02.x?
-Yes, it could, there is a fix for an infinite loop:
-https://savannah.nongnu.org/bugs/?50083.
->
-> --
-> Bye, Peter Korsgaard
-Best Regards,
+Fixes:
+ - http://autobuild.buildroot.org/results/4b21400c36e8ba7a8222f9da962f79e42c6146d3
 
-Fabrice
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/x11r7/xorgproto/xorgproto.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/x11r7/xorgproto/xorgproto.mk b/package/x11r7/xorgproto/xorgproto.mk
+index 9e8abd4c6a..458efbc731 100644
+--- a/package/x11r7/xorgproto/xorgproto.mk
++++ b/package/x11r7/xorgproto/xorgproto.mk
+@@ -47,6 +47,8 @@ XORGPROTO_LICENSE_FILES = \
+ 	COPYING-xineramaproto
+ XORGPROTO_INSTALL_STAGING = YES
+ XORGPROTO_INSTALL_TARGET = NO
++# xproxymngproto is needed by xfindproxy
++XORGPROTO_CONF_OPTS += --enable-legacy
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+2.20.1
