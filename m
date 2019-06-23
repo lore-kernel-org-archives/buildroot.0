@@ -1,56 +1,84 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 12:53:02 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xcalc: bump version to
- 1.1.0
-Message-ID: <20190623105426.686DB8293F@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 12:54:13 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xapp_sessreg: bump version
+ to 1.1.2
+Message-ID: <20190623105426.7131884389@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d4478438a0d93104d51a039b4ea0cbb4f1c950c7
+commit: https://git.buildroot.net/buildroot/commit/?id=433db5d36a175e5c4ad0a520e32c3e60fb57289c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switched _SITE to https.
+Removed patch which was applied upstream:
+https://gitlab.freedesktop.org/xorg/app/sessreg/commit/5b403d124c32c20fddc73bc5ae3c7e1febdf1bc4
+
+Added all hashes provided by upstream, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xapp_xcalc/xapp_xcalc.hash | 10 +++++-----
- package/x11r7/xapp_xcalc/xapp_xcalc.mk   |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ .../xapp_sessreg/0001-missing_path_wtmpx.patch     | 24 ----------------------
+ package/x11r7/xapp_sessreg/xapp_sessreg.hash       |  9 ++++++--
+ package/x11r7/xapp_sessreg/xapp_sessreg.mk         |  2 +-
+ 3 files changed, 8 insertions(+), 27 deletions(-)
 
-diff --git a/package/x11r7/xapp_xcalc/xapp_xcalc.hash b/package/x11r7/xapp_xcalc/xapp_xcalc.hash
-index 283fd7e51e..d7fac37ea6 100644
---- a/package/x11r7/xapp_xcalc/xapp_xcalc.hash
-+++ b/package/x11r7/xapp_xcalc/xapp_xcalc.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2019-February/002946.html
--md5 c0be45f8c26187474b763d634535d8d8  xcalc-1.0.7.tar.bz2
--sha1 f31c5a9789435b4c5a575d636f1e2ae4f96104c4  xcalc-1.0.7.tar.bz2
--sha256 70d271d1655f90ed0d4011f58022c441e1832f01eb3450c691799b131b557f21  xcalc-1.0.7.tar.bz2
--sha512 890cb9399e3c55816318ab5f0152ddba05ee141cbae6032759a3b762742ab54df8fcf0394dacc539299f93f27cbbb17aee5cbda5dde8b169a7099f20a1a38388  xcalc-1.0.7.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-June/002996.html
-+md5 3b566e47c76356cecaa71eb431767ae1  xcalc-1.1.0.tar.bz2
-+sha1 0537f7ee56558cf80133c6b49c4757c1166aaeb6  xcalc-1.1.0.tar.bz2
-+sha256 d5d746954465afc3da1f355d721882806568fb04b4d059c027702c0d16a3b5eb  xcalc-1.1.0.tar.bz2
-+sha512 877aab7bb08f409a21c26b841f4d91eb6993914ed0d26512e47d6b3d2b3e0b231158901415a106cfb45de43f03f253bf2a8733f986538d4ee810afe0e54f98d5  xcalc-1.1.0.tar.bz2
- # Locally computed
- sha256 8dd69dbec37866a41d3040c5c478aca46e0b50c30319f178064d5e2ed9d3f912  COPYING
-diff --git a/package/x11r7/xapp_xcalc/xapp_xcalc.mk b/package/x11r7/xapp_xcalc/xapp_xcalc.mk
-index 5cf3ca653b..b917d9e98e 100644
---- a/package/x11r7/xapp_xcalc/xapp_xcalc.mk
-+++ b/package/x11r7/xapp_xcalc/xapp_xcalc.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/x11r7/xapp_sessreg/0001-missing_path_wtmpx.patch b/package/x11r7/xapp_sessreg/0001-missing_path_wtmpx.patch
+deleted file mode 100644
+index 0be242c0b2..0000000000
+--- a/package/x11r7/xapp_sessreg/0001-missing_path_wtmpx.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-Fix missing defines _PATH_WTMPX/_PATH_UTMPX in musl
+-
+-Downloaded from
+-https://cgit.gentoo.org/proj/musl.git/tree/x11-apps/sessreg/files/sessreg-1.1.0-missing_path_wtmpx.patch
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-
+-diff -Naur sessreg-1.1.0.orig/sessreg.h sessreg-1.1.0/sessreg.h
+---- sessreg-1.1.0.orig/sessreg.h	2015-01-20 05:00:27.000000000 +0000
+-+++ sessreg-1.1.0/sessreg.h	2016-02-23 11:54:42.057000000 +0000
+-@@ -103,6 +103,13 @@
+- # define TTYS_FILE	"/etc/ttys"
+- #endif
+- 
+-+#ifndef _PATH_WTMPX
+-+# define _PATH_WTMPX	"/var/log/wtmp"
+-+#endif
+-+#ifndef _PATH_UTMPX
+-+# define _PATH_UTMPX	"/var/log/utmp"
+-+#endif
+-+
+- #ifndef WTMPX_FILE
+- # define WTMPX_FILE	_PATH_WTMPX
+- #endif
+diff --git a/package/x11r7/xapp_sessreg/xapp_sessreg.hash b/package/x11r7/xapp_sessreg/xapp_sessreg.hash
+index 47495b23df..12a7d3689a 100644
+--- a/package/x11r7/xapp_sessreg/xapp_sessreg.hash
++++ b/package/x11r7/xapp_sessreg/xapp_sessreg.hash
+@@ -1,2 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-February/002778.html
+-sha256 78a76ae3f3f6a26547a34630d1b740f42344848b5fb6d7c9c7f7da255e35a6e1  sessreg-1.1.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-June/002994.html
++md5 92be564d4be7d8aa7b5024057b715210  sessreg-1.1.2.tar.bz2
++sha1 169c1ff9fb152b4b4ca0cfbd3e1aee33af042016  sessreg-1.1.2.tar.bz2
++sha256 dfcb9e954273ace63879aec053c7880466f8755752a35aa9ced3fa5f04fd2c33  sessreg-1.1.2.tar.bz2
++sha512 7e3c2bdcadb7133aace463b58d8c6108d315ec95d2a42509073eeddc7f02644092a4b3168bd3b426c041736a016291092e0bf8368acd620dbeff96d53d12f98c  sessreg-1.1.2.tar.bz2
++# Locally computed
++sha256 ac8f5cc696e6c473aea4caaf18650316dc8912fcf0f370cae1df5f395cea8631  COPYING
+diff --git a/package/x11r7/xapp_sessreg/xapp_sessreg.mk b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
+index 46935aed9a..7f488e2423 100644
+--- a/package/x11r7/xapp_sessreg/xapp_sessreg.mk
++++ b/package/x11r7/xapp_sessreg/xapp_sessreg.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XCALC_VERSION = 1.0.7
-+XAPP_XCALC_VERSION = 1.1.0
- XAPP_XCALC_SOURCE = xcalc-$(XAPP_XCALC_VERSION).tar.bz2
--XAPP_XCALC_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XCALC_SITE = https://xorg.freedesktop.org/releases/individual/app
- XAPP_XCALC_LICENSE = MIT
- XAPP_XCALC_LICENSE_FILES = COPYING
- XAPP_XCALC_INSTALL_TARGET_OPTS = DESTDIR=$(TARGET_DIR) install-exec install-data
+-XAPP_SESSREG_VERSION = 1.1.1
++XAPP_SESSREG_VERSION = 1.1.2
+ XAPP_SESSREG_SOURCE = sessreg-$(XAPP_SESSREG_VERSION).tar.bz2
+ XAPP_SESSREG_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_SESSREG_LICENSE = MIT
