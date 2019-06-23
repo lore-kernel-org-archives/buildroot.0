@@ -1,76 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 22:12:48 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/ncmpc: fix build
- without NLS
-Message-ID: <20190623201225.8C1EA826DB@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 22:13:42 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] manual/contribute.txt:
+ fix typo
+Message-ID: <20190623201242.5EE13826DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6220c022d190631da9ffce45fd8c3d209afefa7a
+commit: https://git.buildroot.net/buildroot/commit/?id=2781648579ef6188adf5ae8e612dd6b1ab906a02
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-The build fails if libintl.h is found but xgettext is not available:
-
-Has header "libintl.h" : YES
-Library intl found: NO
-
-po/meson.build:28:5: ERROR: Can not do gettext because xgettext is not installed.
-
-This is because enable_nls defaults to true if libintl.h is found. Use
-the nls option to enable/disable NLS explicitly, depending on
-BR2_SYSTEM_ENABLE_NLS,
-
-Also, fix the second patch to always look for libintl, even if NLS is
-not enabled. The enable_nls option disables processing the po files, but
-the gettext calls in the source are still there, so we need to link with
-libintl anyway.
-
-Fixes:
- - http://autobuild.buildroot.org/results/0ab0a42fd4c5c9fd5891f3b84287bd788f763ba4
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <juju@cotds.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 56fb7401b9a69cb9ffac09a7a02d65706765e7ba)
+(cherry picked from commit 0c48904f76af5d97dd3da334caecfe1fe521f072)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncmpc/0002-meson.build-link-with-lintl-if-needed.patch | 4 ++--
- package/ncmpc/ncmpc.mk                                         | 3 ++-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ docs/manual/contribute.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/ncmpc/0002-meson.build-link-with-lintl-if-needed.patch b/package/ncmpc/0002-meson.build-link-with-lintl-if-needed.patch
-index 248086fb65..9f599c89e9 100644
---- a/package/ncmpc/0002-meson.build-link-with-lintl-if-needed.patch
-+++ b/package/ncmpc/0002-meson.build-link-with-lintl-if-needed.patch
-@@ -18,13 +18,13 @@ index 2e6defc..28e9d29 100644
- --- a/meson.build
- +++ b/meson.build
- @@ -42,6 +42,7 @@ else
-+   error('libintl.h not found')
-  endif
-  conf.set('ENABLE_NLS', enable_nls)
-++intl_dep = cc.find_library('intl', required: false)
-  if enable_nls
--+  intl_dep = cc.find_library('intl', required: false)
-    conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
-    subdir('po')
-- endif
- @@ -356,6 +357,7 @@ ncmpc = executable('ncmpc',
-      boost_dep,
-      pcre_dep,
-diff --git a/package/ncmpc/ncmpc.mk b/package/ncmpc/ncmpc.mk
-index f0fe3fe374..d2204c71c6 100644
---- a/package/ncmpc/ncmpc.mk
-+++ b/package/ncmpc/ncmpc.mk
-@@ -19,7 +19,8 @@ NCMPC_LICENSE_FILES = COPYING
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index 5530ce1546..868600d5d0 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -402,7 +402,7 @@ the problem is complex, it is OK to add more paragraphs. All paragraphs
+ should be wrapped at 72 characters.
  
- NCMPC_CONF_OPTS = \
- 	-Dcurses=ncurses \
--	-Ddocumentation=disabled
-+	-Ddocumentation=disabled \
-+	$(if $(BR2_SYSTEM_ENABLE_NLS),-Dnls=enabled,-Dnls=disabled)
+ A paragraph that explains the root cause of the problem. Again, more
+-than on paragraph is OK.
++than one paragraph is OK.
  
- ifeq ($(BR2_PACKAGE_LIRC_TOOLS),y)
- NCMPC_DEPENDENCIES += lirc-tools
+ Finally, one or more paragraphs that explain how the problem is solved.
+ Don't hesitate to explain complex solutions in detail.
