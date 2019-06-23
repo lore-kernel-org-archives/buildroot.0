@@ -1,25 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 22:16:46 +0200
-Subject: [Buildroot] [PATCH] docs: use-case for un-ignoring VCS
- directories and overridden source dir
-In-Reply-To: <31212b9d2c0481e0618401c0dc8f1d6d7ce18710.1560173933.git.jan.kundrat@cesnet.cz>
- ("Jan =?utf-8?Q?Kundr=C3=A1t=22's?= message of "Mon, 10 Jun 2019 15:37:12
- +0200")
-References: <31212b9d2c0481e0618401c0dc8f1d6d7ce18710.1560173933.git.jan.kundrat@cesnet.cz>
-Message-ID: <871rzkcb0x.fsf@dell.be.48ers.dk>
+Date: Sun, 23 Jun 2019 22:18:34 +0200
+Subject: [Buildroot] [PATCH v4,
+ 1/1] package/weston: fix build with headers < 4.4
+In-Reply-To: <20190610120926.5150-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 10 Jun 2019 14:09:26 +0200")
+References: <20190610120926.5150-1-fontaine.fabrice@gmail.com>
+Message-ID: <87wohcawdh.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Jan" == Jan Kundr?t <jan.kundrat@cesnet.cz> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
- > Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > Fixes: a27078d32d Allow overriding the VCS exclude list with *_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS
+ > weston includes input-event-codes.h since version 5.0.91 and
+ > https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
 
-Committed to 2019.02.x and 2019.05.x, thanks.
+ > input-event-codes.h is available only since kernel 4.4 and
+ > https://github.com/torvalds/linux/commit/f902dd893427eade90f7eaf858e5ff8b150a5a12
+
+ > To fix this build failure, replace include on linux/input-event-codes.h
+ > by linux/input.h
+
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/210c2759900f15ea0030d088f6f45cd8bb199b29
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v3 -> v4:
+ >  - Fix commit message
+
+Committed to 2019.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
