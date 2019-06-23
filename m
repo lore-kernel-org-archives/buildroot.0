@@ -1,38 +1,37 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 12:42:35 +0200
-Subject: [Buildroot] [git commit] package/xorgproto: enable legacy
-Message-ID: <20190623104321.D15D780359@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 12:42:30 +0200
+Subject: [Buildroot] [git commit] package/harfbuzz: fix build with cairo
+Message-ID: <20190623104321.C936681882@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5534a166fb947a1bef517a2110018168e5dd59aa
+commit: https://git.buildroot.net/buildroot/commit/?id=ced273e4f1a0048319441a01be367c0bb65f6a2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-xproxymngproto is needed by xfindproxy but it is now disabled by default
-Enable it thanks to --enable-legacy
+harfbuzz needs svg support on cairo
 
 Fixes:
- - http://autobuild.buildroot.org/results/4b21400c36e8ba7a8222f9da962f79e42c6146d3
+ - http://autobuild.buildroot.org/results/f6c0b85fa476e0f52cc06f0133d2e4f9920f7556
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xorgproto/xorgproto.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/harfbuzz/harfbuzz.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/x11r7/xorgproto/xorgproto.mk b/package/x11r7/xorgproto/xorgproto.mk
-index 9e8abd4c6a..458efbc731 100644
---- a/package/x11r7/xorgproto/xorgproto.mk
-+++ b/package/x11r7/xorgproto/xorgproto.mk
-@@ -47,6 +47,8 @@ XORGPROTO_LICENSE_FILES = \
- 	COPYING-xineramaproto
- XORGPROTO_INSTALL_STAGING = YES
- XORGPROTO_INSTALL_TARGET = NO
-+# xproxymngproto is needed by xfindproxy
-+XORGPROTO_CONF_OPTS += --enable-legacy
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index ded5e554e6..1144133254 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -30,7 +30,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ HARFBUZZ_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) -pthread"
+ endif
  
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-ifeq ($(BR2_PACKAGE_CAIRO),y)
++ifeq ($(BR2_PACKAGE_CAIRO_SVG),y)
+ HARFBUZZ_DEPENDENCIES += cairo
+ HARFBUZZ_CONF_OPTS += --with-cairo=yes
+ else
