@@ -1,35 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 17:08:47 +0200
-Subject: [Buildroot] [git commit] package/util-linux: minix needs MMU
-Message-ID: <20190623151817.534AB814B4@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 17:08:52 +0200
+Subject: [Buildroot] [git commit] package/python3: drop unrecognized option
+Message-ID: <20190623151817.5E3987FE93@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=97fc2cb9c7732f99ab42438e782318f0607a8721
+commit: https://git.buildroot.net/buildroot/commit/?id=440eaa41d2514c51eaa25e138d2980c06189d568
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - http://autobuild.buildroot.org/results/87801e1a3c628e00ccb0c57afc2b46cc735c6018
+--enable-old-stdlib-cache is not recognozed since at least version
+3.6.3, see:
+http://autobuild.buildroot.org/results/b957f956100fc36c7d5ffab1d7df41a65ae52ded
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/util-linux/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/python3/python3.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-index acde9e5474..39eb2c03a0 100644
---- a/package/util-linux/Config.in
-+++ b/package/util-linux/Config.in
-@@ -217,6 +217,7 @@ config BR2_PACKAGE_UTIL_LINUX_MESG
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 2211cfed81..ca834059fb 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -70,10 +70,6 @@ else
+ PYTHON3_CONF_OPTS += --with-expat=none
+ endif
  
- config BR2_PACKAGE_UTIL_LINUX_MINIX
- 	bool "minix"
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Minix filesystem support
- 
+-ifeq ($(BR2_PACKAGE_PYTHON3_PYC_ONLY),y)
+-PYTHON3_CONF_OPTS += --enable-old-stdlib-cache
+-endif
+-
+ ifeq ($(BR2_PACKAGE_PYTHON3_SQLITE),y)
+ PYTHON3_DEPENDENCIES += sqlite
+ else
