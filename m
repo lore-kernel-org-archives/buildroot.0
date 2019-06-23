@@ -1,26 +1,28 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 16:03:20 +0200
-Subject: [Buildroot] [PATCH] boot/mv-ddr-marvell: fix build with GCC 8
-In-Reply-To: <5347115f55229181585fe3229ea82f3f89698435.1561265461.git.baruch@tkos.co.il>
-References: <5347115f55229181585fe3229ea82f3f89698435.1561265461.git.baruch@tkos.co.il>
-Message-ID: <20190623160320.77fdc524@windsurf>
+Date: Sun, 23 Jun 2019 16:03:40 +0200
+Subject: [Buildroot] [PATCH 1/1] package/x11r7/xlib_libXi: bump version
+ to 1.7.10
+In-Reply-To: <20190622181151.26793-1-bernd.kuhls@t-online.de>
+References: <20190622181151.26793-1-bernd.kuhls@t-online.de>
+Message-ID: <20190623160340.0f0c110e@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 23 Jun 2019 07:51:01 +0300
-Baruch Siach <baruch@tkos.co.il> wrote:
+On Sat, 22 Jun 2019 20:11:51 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> Add upstream patch fixing a build warning that is considered as error.
+> Added all hashes provided by upstream, added license hash.
 > 
-> Cc: Sergey Matyukevich <geomatsi@gmail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> Switched _SITE to https.
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  ...raining_leveling.c-uninitialized-var.patch | 31 +++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
+>  package/x11r7/xlib_libXi/xlib_libXi.hash | 9 +++++++--
+>  package/x11r7/xlib_libXi/xlib_libXi.mk   | 4 ++--
+>  2 files changed, 9 insertions(+), 4 deletions(-)
 
 Applied to master, thanks.
 
