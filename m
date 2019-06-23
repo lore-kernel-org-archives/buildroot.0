@@ -1,135 +1,62 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 22:59:11 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/vlc: security
- bump to version 3.0.7
-Message-ID: <20190623210054.22CB88816A@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 23:06:40 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/freeswitch: bump
+ version to 1.8.6
+Message-ID: <20190623210543.070C682679@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=385e1455b5927cfc5a7115782704f534003513f6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0d9520968edfc92e422779c705b764a77fbe7442
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Fixes the following security issues:
- * Fix multiple buffer overflows in the ps demuxer
- * Fix a buffer overflow when copying a biplanar YUV image
- * Fix multiple buffer overflows in the faad decoder
- * Fix buffer overflow in the svcdsub decoder
- * Fix buffer overflows in the ogg muxer & demuxer
- * Fix buffer overflows in libavformat demuxer
- * Fix multiple buffer overflows in the MKV demuxer
- * Fix a buffer overflow in the MP4 demuxer
- * Fix a buffer overflow in the textst decoder
- * Fix a buffer overflow in the webvtt decoder
- * Fix a buffer overflow in the ASF demux
- * Fix a buffer overflow in the UPNP SD
- * Fix use after free in the ogg demuxer
- * Fix multiple use after free in the MKV demuxer
- * Fix multiple use after free in the DMO decoder
- * Fix integer underflow in the MKV demuxer
- * Fix an updater NULL pointer dereference on invalid signing keys
- * Fix NULL pointer dereference in the MKV demuxer
- * Fix an integer overflow in the spudec decoder
- * Fix an integer overflow in the nsc demuxer
- * Fix an integer overflow in the avi demuxer
- * Fix reads of uninitialized pointers in the MKV demuxer
- * Fix a floating point exception in the MKV demuxer
- * Fix an infinite loop in the flac packetizer
-
-For more details, see the NEWS file:
-https://www.videolan.org/developers/vlc-branch/NEWS
-
-Removed patch 0010, applied upstream.
+Updated license hash after upstream commit
+https://freeswitch.org/stash/projects/FS/repos/freeswitch/commits/a1f3b4862e7fd44a37862ae84c0e79f89c9bc0d8
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 04efb17c863606cdbc2405d01c3d48d6868c5245)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 2df2bde27f0434e57bf8da1669336f62cde8e14e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../vlc/0010-codec-vpx-Detect-libvpx-1.8.0.patch   | 41 ----------------------
- package/vlc/vlc.hash                               | 12 +++----
- package/vlc/vlc.mk                                 |  2 +-
- 3 files changed, 7 insertions(+), 48 deletions(-)
+ package/freeswitch/freeswitch.hash | 14 +++++++-------
+ package/freeswitch/freeswitch.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/vlc/0010-codec-vpx-Detect-libvpx-1.8.0.patch b/package/vlc/0010-codec-vpx-Detect-libvpx-1.8.0.patch
-deleted file mode 100644
-index 2c352310bd..0000000000
---- a/package/vlc/0010-codec-vpx-Detect-libvpx-1.8.0.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 2688feb2742a6021ca211ae5c106b12c3d822946 Mon Sep 17 00:00:00 2001
--From: Danny Milosavljevic <dannym@scratchpost.org>
--Date: Mon, 11 Feb 2019 16:07:12 +0100
--Subject: [PATCH] codec: vpx: Detect libvpx 1.8.0 and, if detected, use fewer
-- frame formats in the chroma_table
--
--Signed-off-by: Steve Lhomme <robux4@ycbcr.xyz>
--(cherry picked from commit 5575fe3eb3fd46bada8662268b74d03493476a84)
--
--Downloaded from upstream commit
--https://git.videolan.org/?p=vlc/vlc-3.0.git;a=commitdiff;h=2688feb2742a6021ca211ae5c106b12c3d822946
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- modules/codec/vpx.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/modules/codec/vpx.c b/modules/codec/vpx.c
--index 2b1e37818d..aba180361f 100644
----- a/modules/codec/vpx.c
--+++ b/modules/codec/vpx.c
--@@ -116,6 +116,7 @@ static const struct
--     { VLC_CODEC_I440, VPX_IMG_FMT_I440, 8, 0 },
-- 
--     { VLC_CODEC_YV12, VPX_IMG_FMT_YV12, 8, 0 },
--+#if VPX_IMAGE_ABI_VERSION < 5
--     { VLC_CODEC_YUVA, VPX_IMG_FMT_444A, 8, 0 },
--     { VLC_CODEC_YUYV, VPX_IMG_FMT_YUY2, 8, 0 },
--     { VLC_CODEC_UYVY, VPX_IMG_FMT_UYVY, 8, 0 },
--@@ -128,7 +129,7 @@ static const struct
-- 
--     { VLC_CODEC_ARGB, VPX_IMG_FMT_ARGB, 8, 0 },
--     { VLC_CODEC_BGRA, VPX_IMG_FMT_ARGB_LE, 8, 0 },
---
--+#endif
--     { VLC_CODEC_GBR_PLANAR, VPX_IMG_FMT_I444, 8, 1 },
--     { VLC_CODEC_GBR_PLANAR_10L, VPX_IMG_FMT_I44416, 10, 1 },
-- 
---- 
--2.11.0
--
-diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-index e2c5fecfad..9cda094337 100644
---- a/package/vlc/vlc.hash
-+++ b/package/vlc/vlc.hash
-@@ -1,9 +1,9 @@
--# From http://download.videolan.org/pub/videolan/vlc/3.0.6/vlc-3.0.6.tar.xz.sha256
--sha256 18c16d4be0f34861d0aa51fbd274fb87f0cab3b7119757ead93f3db3a1f27ed3 vlc-3.0.6.tar.xz
--# From http://download.videolan.org/pub/videolan/vlc/3.0.6/vlc-3.0.6.tar.xz.sha1
--sha1 b35168c1811b07844d861311bd0f2194f4bb82ac vlc-3.0.6.tar.xz
--# From http://download.videolan.org/pub/videolan/vlc/3.0.6/vlc-3.0.6.tar.xz.md5
--md5 4ff71d262e070fd19f86a1c3542c7b4e vlc-3.0.6.tar.xz
-+# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.sha256
-+sha256 5cb5fe140f0f4bae3e0a613fb5f516270f62e2dbde6de27fa78ea9f43cd73916 vlc-3.0.7.tar.xz
-+# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.sha1
-+sha1 8c9f96a11199e813ec718c3d1885501a557e336f vlc-3.0.7.tar.xz
-+# From http://download.videolan.org/pub/videolan/vlc/3.0.7/vlc-3.0.7.tar.xz.md5
-+md5 230932ec40185856af28f82ec2e38b8a vlc-3.0.7.tar.xz
+diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
+index 6f90c21564..1c5de7bcc5 100644
+--- a/package/freeswitch/freeswitch.hash
++++ b/package/freeswitch/freeswitch.hash
+@@ -1,11 +1,11 @@
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.5.tar.xz.md5
+-md5 e3d750ed0bbf13ce6fe228af9af07bcd freeswitch-1.8.5.tar.xz
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.5.tar.xz.sha1
+-sha1 e9f95b42ed9dd41437a65bddbb5c1f647436e426 freeswitch-1.8.5.tar.xz
+-# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.5.tar.xz.sha256
+-sha256 503a551be5d6df06162ea9d98a952b6fb524852ce2352fe3ca3a36a76995b046 freeswitch-1.8.5.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.6.tar.xz.md5
++md5 cadec07057786cfb0bb805edc279d752 freeswitch-1.8.6.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.6.tar.xz.sha1
++sha1 c6eb7de942a61604774ca08ac8070244b7c3167a freeswitch-1.8.6.tar.xz
++# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.6.tar.xz.sha256
++sha256 b87f47e57d13de2b901bd1e4eb85491178e59a159a2831d7430abe7947f0d3a4 freeswitch-1.8.6.tar.xz
  # Locally computed
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-index 8dbaf86a08..1f58823ad3 100644
---- a/package/vlc/vlc.mk
-+++ b/package/vlc/vlc.mk
+-sha256 10299420c1e8602c0daf5a59d022621cd72a9148d1f0f33501edb3db3445c7fe  COPYING
++sha256 75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
+ sha256 e8e26b16da14aa3e6ed5c22c705fdc1f45d6225fca461ea9f7314bcdfdc414c4  libs/apr/LICENSE
+ sha256 1eefb2ea1db0af7729a9d8a27d7c65d8a37ab185393f935b029aac6828ce315a  libs/apr-util/LICENSE
+ sha256 8267348d5af1262c11d1a08de2f5afc77457755f1ac658627dd9acf71011d615  libs/libvpx/LICENSE
+diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
+index 0b7544d097..8c0c7fb118 100644
+--- a/package/freeswitch/freeswitch.mk
++++ b/package/freeswitch/freeswitch.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--VLC_VERSION = 3.0.6
-+VLC_VERSION = 3.0.7
- VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
- VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
- VLC_LICENSE = GPL-2.0+, LGPL-2.1+
+-FREESWITCH_VERSION = 1.8.5
++FREESWITCH_VERSION = 1.8.6
+ FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
+ FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
+ # External modules need headers/libs from staging
