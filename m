@@ -1,43 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 21:46:05 +0200
-Subject: [Buildroot] [PATCH v1] libcdaudio: fix compile on host systems
- without C++ support
-In-Reply-To: <20190113214722.15104-1-ps.report@gmx.net>
-References: <20190113214722.15104-1-ps.report@gmx.net>
-Message-ID: <20190623214605.14a93a24@windsurf>
+From: Alexander Dahl <post@lespocky.de>
+Date: Sun, 23 Jun 2019 21:59:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/monit: bump to version 5.25.3
+In-Reply-To: <87pnn4dtt3.fsf@dell.be.48ers.dk>
+References: <20190622191435.31025-1-fontaine.fabrice@gmail.com>
+ <87pnn4dtt3.fsf@dell.be.48ers.dk>
+Message-ID: <20190623195915.5qep73s2w6qxu6cm@falbala.home.lespocky.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 13 Jan 2019 22:47:22 +0100
-Peter Seiderer <ps.report@gmx.net> wrote:
+Hei hei,
 
-> Delivered libcdaudio configure tries to run a C++ check with the
-> host C preprocessor. Fix it by enabling autoreconf  (needs
-> a patch for configure.ac/Makefile.am removing ancient lines).
+On Sun, Jun 23, 2019 at 08:45:44PM +0200, Peter Korsgaard wrote:
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 > 
-> Fixes [1]:
+>  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > 
->   checking how to run the C++ preprocessor... /lib/cpp
->   configure: error: C++ preprocessor "/lib/cpp" fails sanity check
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Is this a candidate for 2019.02.x / 2019.05.x?
 
-Contrary to what your commit title says, the problem does not occur
-when the host system lacks C++ support, it's when the target toolchain
-doesn't have C++ support. I have an Arch Linux system here (which is
-where the failure happens), and the host system has C++ support, but
-doesn't provide /lib/cpp.
+According to https://mmonit.com/monit/changes/ ?
 
-I fixed up the commit title, commit log, and comment in the .mk file
-and applied.
+IMHO good to have it in LTS, minor importance in other releases?
 
-Thanks!
+Greets
+Alex
 
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+/"\ ASCII RIBBON | ?With the first link, the chain is forged. The first
+\ / CAMPAIGN     | speech censured, the first thought forbidden, the
+ X  AGAINST      | first freedom denied, chains us all irrevocably.?
+/ \ HTML MAIL    | (Jean-Luc Picard, quoting Judge Aaron Satie)
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: signature.asc
+Type: application/pgp-signature
+Size: 833 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190623/b7e1b96e/attachment.asc>
