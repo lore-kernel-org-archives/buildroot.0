@@ -1,51 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 12:52:35 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: bump version to
- 1.6.8
-Message-ID: <20190623105426.5E9EE8293F@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 12:52:22 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXi: bump version to
+ 1.7.10
+Message-ID: <20190623105426.4D6E28293F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a1ec659e8b0acee53de3862bfc222e4839dc125
+commit: https://git.buildroot.net/buildroot/commit/?id=8d21e32d31b518e4d41a1560345323fd5008cfab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Added all hashes provided by upstream, added license hash.
+
+Switched _SITE to https.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.hash | 10 +++++-----
- package/x11r7/xlib_libX11/xlib_libX11.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/x11r7/xlib_libXi/xlib_libXi.hash | 9 +++++++--
+ package/x11r7/xlib_libXi/xlib_libXi.mk   | 4 ++--
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
-index 5dac4f1149..26f043d65e 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.hash
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-October/002921.html
--md5 034fdd6cc5393974d88aec6f5bc96162  libX11-1.6.7.tar.bz2
--sha1 5076f7853713d7db958a05f6fd1c18f7e111a0ad  libX11-1.6.7.tar.bz2
--sha256 910e9e30efba4ad3672ca277741c2728aebffa7bc526f04dcfa74df2e52a1348  libX11-1.6.7.tar.bz2
--sha512 edd2273b9dadbbf90ad8d7b5715db29eb120a5a22ad2595f697e56532cc24b84e358580c00548fa6be8e9d26601a2b2cdab32272c59266709534317abbd05cd5  libX11-1.6.7.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-June/002997.html
-+md5 c5fa5a86a20e3591bed6c046498d4b8f  libX11-1.6.8.tar.bz2
-+sha1 f1ea96fe472a981d378b4f2eec90dcd063f9a407  libX11-1.6.8.tar.bz2
-+sha256 b289a845c189e251e0e884cc0f9269bbe97c238df3741e854ec4c17c21e473d5  libX11-1.6.8.tar.bz2
-+sha512 1de8e0ec466308bc48946d1ce7a7dc6bd3120b1b365cd01afd1bd51dd7369e3d1870dd379b0b7c5b07699095d59761bd23e2e02ab60929de32c39b6885016e76  libX11-1.6.8.tar.bz2
- # Locally computed
- sha256 2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index 87929c42ed..f0e52e0877 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/x11r7/xlib_libXi/xlib_libXi.hash b/package/x11r7/xlib_libXi/xlib_libXi.hash
+index 9f2c3e30b7..1235631321 100644
+--- a/package/x11r7/xlib_libXi/xlib_libXi.hash
++++ b/package/x11r7/xlib_libXi/xlib_libXi.hash
+@@ -1,2 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-January/002768.html
+-sha256 c2e6b8ff84f9448386c1b5510a5cf5a16d788f76db018194dacdc200180faf45  libXi-1.7.9.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-June/002999.html
++md5 62c4af0839072024b4b1c8cbe84216c7  libXi-1.7.10.tar.bz2
++sha1 79052e50ea07ce2431f8988a60553d9091d46207  libXi-1.7.10.tar.bz2
++sha256 36a30d8f6383a72e7ce060298b4b181fd298bc3a135c8e201b7ca847f5f81061  libXi-1.7.10.tar.bz2
++sha512 591f0860bf5904897587c4990d6c852f3729a212d1ef390362d41242440e078221877c31db2232d5cc81727fe97f4e194b077f7de917e251e60641bbd06ee218  libXi-1.7.10.tar.bz2
++# Locally computed
++sha256 9392174bc86e291369fd2f61f3ed325962735a5f5c585ce8d7ebd365e2a5639f  COPYING
+diff --git a/package/x11r7/xlib_libXi/xlib_libXi.mk b/package/x11r7/xlib_libXi/xlib_libXi.mk
+index 2833738911..de7f3a7d3c 100644
+--- a/package/x11r7/xlib_libXi/xlib_libXi.mk
++++ b/package/x11r7/xlib_libXi/xlib_libXi.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XLIB_LIBX11_VERSION = 1.6.7
-+XLIB_LIBX11_VERSION = 1.6.8
- XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
- XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
- XLIB_LIBX11_LICENSE = MIT
+-XLIB_LIBXI_VERSION = 1.7.9
++XLIB_LIBXI_VERSION = 1.7.10
+ XLIB_LIBXI_SOURCE = libXi-$(XLIB_LIBXI_VERSION).tar.bz2
+-XLIB_LIBXI_SITE = http://xorg.freedesktop.org/releases/individual/lib
++XLIB_LIBXI_SITE = https://xorg.freedesktop.org/releases/individual/lib
+ XLIB_LIBXI_LICENSE = MIT
+ XLIB_LIBXI_LICENSE_FILES = COPYING
+ XLIB_LIBXI_INSTALL_STAGING = YES
