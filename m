@@ -1,27 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 17:19:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/python3: drop unrecognized
- option
-In-Reply-To: <20190623120641.13814-1-fontaine.fabrice@gmail.com>
-References: <20190623120641.13814-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190623171957.6966f621@windsurf>
+Date: Sun, 23 Jun 2019 16:06:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/rtmpdump: bump version
+In-Reply-To: <20190622183857.31568-1-bernd.kuhls@t-online.de>
+References: <20190622183857.31568-1-bernd.kuhls@t-online.de>
+Message-ID: <20190623160644.14525e02@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 23 Jun 2019 14:06:41 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 22 Jun 2019 20:38:57 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-> --enable-old-stdlib-cache is not recognozed since at least version
-> 3.6.3, see:
-> http://autobuild.buildroot.org/results/b957f956100fc36c7d5ffab1d7df41a65ae52ded
+> Added tarball and license hashes.
 > 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 > ---
->  package/python3/python3.mk | 4 ----
->  1 file changed, 4 deletions(-)
+>  package/rtmpdump/rtmpdump.hash | 3 +++
+>  package/rtmpdump/rtmpdump.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
+>  create mode 100644 package/rtmpdump/rtmpdump.hash
 
 Applied to master, thanks.
 
