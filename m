@@ -1,32 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 16:03:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/efivar: bump version to 37
-In-Reply-To: <20190623024614.53491-1-james.hilliard1@gmail.com>
-References: <20190623024614.53491-1-james.hilliard1@gmail.com>
-Message-ID: <20190623160315.3d10e4df@windsurf>
+Date: Sun, 23 Jun 2019 16:03:20 +0200
+Subject: [Buildroot] [PATCH] boot/mv-ddr-marvell: fix build with GCC 8
+In-Reply-To: <5347115f55229181585fe3229ea82f3f89698435.1561265461.git.baruch@tkos.co.il>
+References: <5347115f55229181585fe3229ea82f3f89698435.1561265461.git.baruch@tkos.co.il>
+Message-ID: <20190623160320.77fdc524@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 22 Jun 2019 20:46:14 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Sun, 23 Jun 2019 07:51:01 +0300
+Baruch Siach <baruch@tkos.co.il> wrote:
 
-> Backport patches required to build with gcc-9.
+> Add upstream patch fixing a build warning that is considered as error.
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Cc: Sergey Matyukevich <geomatsi@gmail.com>
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 > ---
->  .../efivar/0001-Allow-build-with-uClibc.patch |  11 +-
->  ..._guid-handle-misaligned-guid-pointer.patch |  62 +++++++
->  ...es-Werror-address-of-packed-member-c.patch | 174 ++++++++++++++++++
->  ...r-of-Werror-address-of-packed-member.patch |  57 ++++++
->  package/efivar/efivar.hash                    |   2 +-
->  package/efivar/efivar.mk                      |   2 +-
->  6 files changed, 300 insertions(+), 8 deletions(-)
->  create mode 100644 package/efivar/0002-dp.h-make-format_guid-handle-misaligned-guid-pointer.patch
->  create mode 100644 package/efivar/0003-Fix-all-the-places-Werror-address-of-packed-member-c.patch
->  create mode 100644 package/efivar/0004-Fix-another-error-of-Werror-address-of-packed-member.patch
+>  ...raining_leveling.c-uninitialized-var.patch | 31 +++++++++++++++++++
+>  1 file changed, 31 insertions(+)
+>  create mode 100644 boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
 
 Applied to master, thanks.
 
