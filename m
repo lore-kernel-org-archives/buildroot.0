@@ -1,174 +1,90 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 22:05:46 +0200
+Date: Sun, 23 Jun 2019 22:05:39 +0200
 Subject: [Buildroot] [git commit branch/2019.02.x] package/samba4: drop
- third patch
-Message-ID: <20190623200600.9E699810FE@busybox.osuosl.org>
+ unneeded second patch
+Message-ID: <20190623200600.9557786AC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=db479016f5ad8157235b2f4f16e1789b72eeed46
+commit: https://git.buildroot.net/buildroot/commit/?id=558cd377ccd158884f3f3c4e5eb0423e65950b91
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Drop third patch which is not upstreamable and set XSLTPROC to false
-instead to disable documentation
+This patch is not needed since version 4.9.0 and
+https://github.com/samba-team/samba/commit/859698d29b547217356851094ed8188236e717b6
+which solved the issue by avoiding calling this function.
+
+Also renumber the remaining patches.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 48a9848cd60b492fe0770830b7f043f4cd52de5f)
+(cherry picked from commit df859a83f6f53c3e9cc4d1d11abd58f47bed1489)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...sable-build-of-manpages-and-documentation.patch | 123 ---------------------
- ...regfio.c-include-stdint.h-before-cmoka.h.patch} |   0
- package/samba4/samba4.mk                           |   3 +-
- 3 files changed, 2 insertions(+), 124 deletions(-)
+ ...pilation-of-Samba-4.7.4-with-disabled-ADS.patch | 41 ----------------------
+ ...uild-on-64bit-platforms-by-including-std.patch} |  0
+ ...able-build-of-manpages-and-documentation.patch} |  0
+ ...regfio.c-include-stdint.h-before-cmoka.h.patch} |  0
+ 4 files changed, 41 deletions(-)
 
-diff --git a/package/samba4/0003-Disable-build-of-manpages-and-documentation.patch b/package/samba4/0003-Disable-build-of-manpages-and-documentation.patch
+diff --git a/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch b/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
 deleted file mode 100644
-index ad8712634e..0000000000
---- a/package/samba4/0003-Disable-build-of-manpages-and-documentation.patch
+index 45d3050a39..0000000000
+--- a/package/samba4/0002-Fix-compilation-of-Samba-4.7.4-with-disabled-ADS.patch
 +++ /dev/null
-@@ -1,123 +0,0 @@
--From 3cd608170b99492bdd5fe3b7b8e7db61af199845 Mon Sep 17 00:00:00 2001
+@@ -1,41 +0,0 @@
+-From da2f2cf8e7a1dfcb661b707e4649cec1e8a0e79c Mon Sep 17 00:00:00 2001
 -From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Thu, 9 Aug 2018 09:59:06 +0200
--Subject: [PATCH] Disable build of manpages and documentation
+-Date: Thu, 9 Aug 2018 10:03:06 +0200
+-Subject: [PATCH] Fix compilation of Samba 4.7.4 with disabled ADS
 -
--This patch fixes a bug described in an upstream bug report
--https://bugzilla.samba.org/show_bug.cgi?id=9515
--which was closed as WONTFIX by disabling the build of manpages and
--documentation.
+-Downloaded from upstream mailinglist
+-https://lists.samba.org/archive/samba-technical/2017-December/124629.html
 -
--If installed on the host, samba4 uses the docbook-xsl package to build
--parts of the documentation. This package is broken, on Debian for
--example the bug reported to samba4 was fixed in the docbook-xsl package:
--https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=765567
+-Patch originates from FreeBSD:
+-https://svnweb.freebsd.org/ports/head/net/samba47/files/patch-source3__libads__kerberos_keytab.c?revision=457119&view=markup
 -
--Since we do not provide a host version of docbook-xsl we need to disable
--the build of manpages and documentation.
--
--Patch was downloaded from
--https://github.com/LibreELEC/LibreELEC.tv/blob/master/packages/network/samba/patches/samba-950-no-man.patch
--
--[Bernd: rebased for samba-4.8.5]
 -Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ----
-- buildtools/wafsamba/wafsamba.py | 10 ++++-----
-- docs-xml/wscript_build          | 40 ++++++++++++++++-----------------
-- source4/scripting/wscript_build |  4 ++--
-- 3 files changed, 27 insertions(+), 27 deletions(-)
+- source3/libads/kerberos_keytab.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
 -
--diff --git a/buildtools/wafsamba/wafsamba.py b/buildtools/wafsamba/wafsamba.py
--index 4bb19d070e2..a255d841111 100644
----- a/buildtools/wafsamba/wafsamba.py
--+++ b/buildtools/wafsamba/wafsamba.py
--@@ -335,9 +335,9 @@ def SAMBA_LIBRARY(bld, libname, source,
--         else:
--             bld.PKG_CONFIG_FILES(pc_files, vnum=vnum)
+-diff --git a/source3/libads/kerberos_keytab.c b/source3/libads/kerberos_keytab.c
+-index 37ac7ba985e..71250962090 100644
+---- a/source3/libads/kerberos_keytab.c
+-+++ b/source3/libads/kerberos_keytab.c
+-@@ -32,8 +32,6 @@
 - 
---    if (manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and
---        bld.env['XSLTPROC_MANPAGES']):
---        bld.MANPAGES(manpages, install)
--+#    if (manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and
--+#        bld.env['XSLTPROC_MANPAGES']):
--+#        bld.MANPAGES(manpages, install)
+- #ifdef HAVE_KRB5
 - 
-- 
-- Build.BuildContext.SAMBA_LIBRARY = SAMBA_LIBRARY
--@@ -442,8 +442,8 @@ def SAMBA_BINARY(bld, binname, source,
--         samba_ldflags  = pie_ldflags
--         )
-- 
---    if manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
---        bld.MANPAGES(manpages, install)
--+#    if manpages is not None and 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
--+#        bld.MANPAGES(manpages, install)
-- 
-- Build.BuildContext.SAMBA_BINARY = SAMBA_BINARY
-- 
--diff --git a/docs-xml/wscript_build b/docs-xml/wscript_build
--index ec5d28fc62a..f81c125bcd4 100644
----- a/docs-xml/wscript_build
--+++ b/docs-xml/wscript_build
--@@ -148,23 +148,23 @@ bld.SAMBA_GENERATOR(parameter_all,
--                     rule=smbdotconf_generate_parameter_list,
--                     dep_vars=bld.dynconfig_varnames())
-- 
---def SMBDOTCONF_MANPAGE(bld, target):
---    ''' assemble and build smb.conf.5 manual page'''
---    bld.SAMBAMANPAGES(target, parameter_all)
+--#ifdef HAVE_ADS
 --
---if ('XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']):
---
---    SMBDOTCONF_MANPAGE(bld, 'manpages/smb.conf.5')
---    bld.SAMBAMANPAGES(manpages)
---
---    if bld.CONFIG_SET('WITH_PAM_MODULES') and bld.CONFIG_SET('HAVE_PAM_START'):
---        bld.SAMBAMANPAGES(pam_winbind_manpages)
---
---    if bld.CONFIG_SET('HAVE_KRB5_LOCATE_PLUGIN_H'):
---        bld.SAMBAMANPAGES(krb5_locator_manpages)
---
---    if bld.CONFIG_SET('HAVE_KRB5_LOCALAUTH_PLUGIN_H'):
---        bld.SAMBAMANPAGES(krb5_localauth_manpages)
---
---    if bld.SAMBA3_IS_ENABLED_MODULE('vfs_zfsacl'):
---        bld.SAMBAMANPAGES('manpages/vfs_zfsacl.8')
--+#def SMBDOTCONF_MANPAGE(bld, target):
--+#    ''' assemble and build smb.conf.5 manual page'''
--+#    bld.SAMBAMANPAGES(target, parameter_all)
--+#
--+#if ('XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']):
--+#
--+#    SMBDOTCONF_MANPAGE(bld, 'manpages/smb.conf.5')
--+#    bld.SAMBAMANPAGES(manpages)
--+#
--+#    if bld.CONFIG_SET('WITH_PAM_MODULES') and bld.CONFIG_SET('HAVE_PAM_START'):
--+#        bld.SAMBAMANPAGES(pam_winbind_manpages)
--+#
--+#    if bld.CONFIG_SET('HAVE_KRB5_LOCATE_PLUGIN_H'):
--+#        bld.SAMBAMANPAGES(krb5_locator_manpages)
--+#
--+#    if bld.CONFIG_SET('HAVE_KRB5_LOCALAUTH_PLUGIN_H'):
--+#        bld.SAMBAMANPAGES(krb5_localauth_manpages)
--+#
--+#    if bld.SAMBA3_IS_ENABLED_MODULE('vfs_zfsacl'):
--+#        bld.SAMBAMANPAGES('manpages/vfs_zfsacl.8')
--diff --git a/source4/scripting/wscript_build b/source4/scripting/wscript_build
--index 2f53cce12b7..9841ae0a116 100644
----- a/source4/scripting/wscript_build
--+++ b/source4/scripting/wscript_build
--@@ -12,8 +12,8 @@ if sbin_files:
--     bld.INSTALL_FILES('${SBINDIR}',
--                       sbin_files,
--                       chmod=MODE_755, python_fixup=True, flat=True)
---    if 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
---        bld.MANPAGES(man_files, True)
--+#    if 'XSLTPROC_MANPAGES' in bld.env and bld.env['XSLTPROC_MANPAGES']:
--+#        bld.MANPAGES(man_files, True)
+- /* This MAX_NAME_LEN is a constant defined in krb5.h */
+- #ifndef MAX_KEYTAB_NAME_LEN
+- #define MAX_KEYTAB_NAME_LEN 1100
+-@@ -85,6 +83,8 @@ out:
+- 	return ret;
+- }
 - 
-- if bld.CONFIG_SET('AD_DC_BUILD_IS_ENABLED'):
--     bld.INSTALL_FILES('${BINDIR}',
+-+#ifdef HAVE_ADS
+-+
+- /**********************************************************************
+-  Adds a single service principal, i.e. 'host' to the system keytab
+- ***********************************************************************/
 --- 
--2.18.0
+-2.14.4
 -
-diff --git a/package/samba4/0004-test_regfio.c-include-stdint.h-before-cmoka.h.patch b/package/samba4/0003-test_regfio.c-include-stdint.h-before-cmoka.h.patch
+diff --git a/package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch b/package/samba4/0002-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
 similarity index 100%
-rename from package/samba4/0004-test_regfio.c-include-stdint.h-before-cmoka.h.patch
-rename to package/samba4/0003-test_regfio.c-include-stdint.h-before-cmoka.h.patch
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index d2f89e2c82..e0426a66da 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -21,7 +21,8 @@ SAMBA4_CFLAGS = $(TARGET_CFLAGS)
- SAMBA4_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- SAMBA4_CONF_ENV = \
- 	CFLAGS="$(SAMBA4_CFLAGS)" \
--	LDFLAGS="$(SAMBA4_LDFLAGS)"
-+	LDFLAGS="$(SAMBA4_LDFLAGS)" \
-+	XSLTPROC=false
- 
- ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
- SAMBA4_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
+rename from package/samba4/0003-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
+rename to package/samba4/0002-Fix-uClibc-build-on-64bit-platforms-by-including-std.patch
+diff --git a/package/samba4/0004-Disable-build-of-manpages-and-documentation.patch b/package/samba4/0003-Disable-build-of-manpages-and-documentation.patch
+similarity index 100%
+rename from package/samba4/0004-Disable-build-of-manpages-and-documentation.patch
+rename to package/samba4/0003-Disable-build-of-manpages-and-documentation.patch
+diff --git a/package/samba4/0005-test_regfio.c-include-stdint.h-before-cmoka.h.patch b/package/samba4/0004-test_regfio.c-include-stdint.h-before-cmoka.h.patch
+similarity index 100%
+rename from package/samba4/0005-test_regfio.c-include-stdint.h-before-cmoka.h.patch
+rename to package/samba4/0004-test_regfio.c-include-stdint.h-before-cmoka.h.patch
