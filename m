@@ -1,114 +1,71 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 17:37:01 +0200
-Subject: [Buildroot] [git commit] package/imagemagick: add optional SVG
- support to host variant
-Message-ID: <20190623155616.8C84E81D9F@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 17:34:49 +0200
+Subject: [Buildroot] [git commit] package/imagemagick: add prompt for host
+ variant
+Message-ID: <20190623155616.8163882807@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a7a584b246e522e52868432efa3734767cc2ace
+commit: https://git.buildroot.net/buildroot/commit/?id=39719172100ae2b26330e9ebffd68f36354b943c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-SVG can be regarded as the "source code" for assets, like logos or other
-graphical elements.
+Sometimes, it is required to call imagemagick from a post-build script
+or the likes, so we have to allow the user to enable the host variant
+for imagemagick.
 
-However, SVG needs to be rendered, which requires an XML parser and an
-SVG "parser/rendered". As such, it has various runtime impacts, like
-bad performance or security. As such, SVG are often pre-rendered to the
-required sizes/depths/resolutions into other format, such as PNG, at
-build time.
-
-While rsvg-convert (from host-librsvg) would allow the rendering, it
-does not allow more complex tasks taht ImageMagick allows for:
-compositing more than one image, 2D transforamtions (rotation, skew...).
-
-Yet, SVG support in ImageMagick relies on librsvg, which adds quite a
-few dependencies, and thus has a noticeable impact on the build time.
-
-Add an option to allow concerned users to enable/disable SVG support
-in ImageMagick.
-
-Enabling SVG support relies on librsvg, which in turns relies on a few
-additional packages that ImageMagick can also optionally use. So,
-automatically enable the corresponding support as well.
+Update the linux package to select the host variant now.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
+ linux/Config.in                    |  1 +
+ package/Config.in.host             |  1 +
  package/imagemagick/Config.in.host | 13 +++++++++++++
- package/imagemagick/imagemagick.mk | 28 +++++++++++++++++++++++-----
- 2 files changed, 36 insertions(+), 5 deletions(-)
+ 3 files changed, 15 insertions(+)
 
+diff --git a/linux/Config.in b/linux/Config.in
+index 0bc9612551..9b8db5d4c0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -2,6 +2,7 @@ menu "Kernel"
+ 
+ config BR2_LINUX_KERNEL
+ 	bool "Linux Kernel"
++	select BR2_PACKAGE_HOST_IMAGEMAGICK if BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH != ""
+ 	help
+ 	  Enable this option if you want to build a Linux kernel for
+ 	  your embedded device
+diff --git a/package/Config.in.host b/package/Config.in.host
+index d1c6d0d81f..1501889b72 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -28,6 +28,7 @@ menu "Host utilities"
+ 	source "package/go-bootstrap/Config.in.host"
+ 	source "package/google-breakpad/Config.in.host"
+ 	source "package/gptfdisk/Config.in.host"
++	source "package/imagemagick/Config.in.host"
+ 	source "package/imx-mkimage/Config.in.host"
+ 	source "package/imx-usb-loader/Config.in.host"
+ 	source "package/jq/Config.in.host"
 diff --git a/package/imagemagick/Config.in.host b/package/imagemagick/Config.in.host
-index 56d45df537..bbe23baa6f 100644
---- a/package/imagemagick/Config.in.host
+new file mode 100644
+index 0000000000..56d45df537
+--- /dev/null
 +++ b/package/imagemagick/Config.in.host
-@@ -11,3 +11,16 @@ config BR2_PACKAGE_HOST_IMAGEMAGICK
- 	  B??zier curves.
- 
- 	  http://www.imagemagick.org/
-+
-+if BR2_PACKAGE_HOST_IMAGEMAGICK
-+
-+config BR2_PACKAGE_HOST_IMAGEMAGICK_SVG
-+	bool "SVG support"
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_HOST_IMAGEMAGICK
++	bool "host imagemagick"
 +	help
-+	  Say 'y' here is you need ImageMagick tools (like convert)
-+	  to support SVG.
++	  ImageMagick(R) is a software suite to create, edit, and
++	  compose bitmap images. It can read, convert and write images
++	  in a variety of formats (about 100) including DPX, EXR, GIF,
++	  JPEG, JPEG-2000, PDF, PhotoCD, PNG, Postscript, SVG, and TIFF.
++	  Use ImageMagick to translate, flip, mirror, rotate, scale,
++	  shear and transform images, adjust image colors, apply various
++	  special effects, or draw text, lines, polygons, ellipses and
++	  B??zier curves.
 +
-+	  This is not enabled by default, as it brings quite a few
-+	  extra dependencies, and thus extra build time.
-+
-+endif
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 5ea79bed49..be350e88ed 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -168,15 +168,10 @@ HOST_IMAGEMAGICK_CONF_OPTS = \
- 	--without-x \
- 	--without-bzlib \
- 	--without-fftw \
--	--without-fontconfig \
--	--without-freetype \
- 	--without-lcms \
- 	--without-lzma \
--	--without-pango \
--	--without-rsvg \
- 	--without-tiff \
- 	--without-webp \
--	--without-xml \
- 	--with-jpeg \
- 	--with-png \
- 	--with-zlib
-@@ -187,5 +182,28 @@ HOST_IMAGEMAGICK_DEPENDENCIES = \
- 	host-pkgconf \
- 	host-zlib
- 
-+ifeq ($(BR2_PACKAGE_HOST_IMAGEMAGICK_SVG),y)
-+HOST_IMAGEMAGICK_DEPENDENCIES += \
-+	host-fontconfig \
-+	host-freetype \
-+	host-librsvg \
-+	host-libxml2 \
-+	host-pango
-+HOST_IMAGEMAGICK_CONF_ENV += ac_cv_path_xml2_config=$(HOST_DIR)/bin/xml2-config
-+HOST_IMAGEMAGICK_CONF_OPTS += \
-+	--with-fontconfig \
-+	--with-freetype \
-+	--with-pango \
-+	--with-rsvg \
-+	--with-xml
-+else
-+HOST_IMAGEMAGICK_CONF_OPTS += \
-+	--without-fontconfig \
-+	--without-freetype \
-+	--without-pango \
-+	--without-rsvg \
-+	--without-xml
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
++	  http://www.imagemagick.org/
