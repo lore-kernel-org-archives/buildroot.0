@@ -1,26 +1,27 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 16:06:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rtmpdump: bump version
-In-Reply-To: <20190622183857.31568-1-bernd.kuhls@t-online.de>
-References: <20190622183857.31568-1-bernd.kuhls@t-online.de>
-Message-ID: <20190623160644.14525e02@windsurf>
+Date: Sun, 23 Jun 2019 17:20:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libiio: bump to version 0.18
+In-Reply-To: <1561295439-11676-1-git-send-email-pjtexier@koncepto.io>
+References: <1561295439-11676-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20190623172000.62878304@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 22 Jun 2019 20:38:57 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Sun, 23 Jun 2019 15:10:39 +0200
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-> Added tarball and license hashes.
+> See https://github.com/analogdevicesinc/libiio/releases
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 > ---
->  package/rtmpdump/rtmpdump.hash | 3 +++
->  package/rtmpdump/rtmpdump.mk   | 2 +-
->  2 files changed, 4 insertions(+), 1 deletion(-)
->  create mode 100644 package/rtmpdump/rtmpdump.hash
+>  ...ll-of-binaries-with-a-static-only-library.patch | 44 ++++++++++++++++++++++
+>  package/libiio/libiio.hash                         |  2 +-
+>  package/libiio/libiio.mk                           |  2 +-
+>  3 files changed, 46 insertions(+), 2 deletions(-)
+>  create mode 100644 package/libiio/0001-fix-install-of-binaries-with-a-static-only-library.patch
 
 Applied to master, thanks.
 
