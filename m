@@ -1,31 +1,106 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 22:20:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkg-golang: do not set static
- linking for host target
-In-Reply-To: <20190610154007.28310-1-mirza.krak@northern.tech> (Mirza Krak's
- message of "Mon, 10 Jun 2019 17:40:07 +0200")
-References: <20190610154007.28310-1-mirza.krak@northern.tech>
-Message-ID: <87sgs0aw9k.fsf@dell.be.48ers.dk>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Sun, 23 Jun 2019 16:31:15 -0400
+Subject: [Buildroot] [PATCH v11 1/5] package/libiberty: new package
+Message-ID: <20190623203119.21707-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mirza" == Mirza Krak <mirza.krak@northern.tech> writes:
+From: Adam Duskett <Aduskett@gmail.com>
 
- > The current logic will set the "-static" flag when building go
- > host packages if BR2_STATIC_LIBS is set, this will not work as
- > there is no support to link host packages statically.
+Some packages, like prelink-cross, will want to use libiberty but do
+not bundle their own instance (which is good!).
 
- > Fix this by applying this logic only for target builds.
+However, libiberty is made for being bundled in packages: all GNU
+packages that use libiberty (gcc, binutils, gdb et al...) all have
+their own bundled variant. This means that there is no official
+upstream for libiberty; the closest being as part of the
+combined binutils-gdb tree.
 
- > Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
- > ---
+So we introduce a new host-only package, that installs just libiberty
+from a binutils released tarball.
 
- > Fixes: http://autobuild.buildroot.net/results/f9b/f9ba64ab4c8d7fa6cb301fab37ee4141ba442f61/build-end.log
+Again, as libiberty is usually bundled in packages, it usually only
+install a static version. Furthermore, it does not obey to the usual
+--enable-shared and --disable-static flags; it only ever builds a
+static version.
 
-Committed to 2019.05.x, thanks.
+Furthermore, this library is not built with -fPIC, but some packages
+may pick it to build shared objects. This is the case for host-gdb,
+for example, which accidentally picks that library instead of its
+internal one.
 
+So, rather than fix the various gdb versions and variants we can use,
+we ensure that the libiberty we install is usable in shared objects,
+and we ensure it is always built before host-gdb.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+Changes v1 -> v11:
+  - Add this patch to the series
+
+ DEVELOPERS                       |  1 +
+ package/libiberty/libiberty.hash |  2 ++
+ package/libiberty/libiberty.mk   | 27 +++++++++++++++++++++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 package/libiberty/libiberty.hash
+ create mode 100644 package/libiberty/libiberty.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ce3fcb2de8..0da0fa9437 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2324,6 +2324,7 @@ F:	package/keyutils/
+ F:	package/libbsd/
+ F:	package/libedit/
+ F:	package/libgsm/
++F:	package/libiberty/
+ F:	package/libinput/
+ F:	package/libiscsi/
+ F:	package/libpri/
+diff --git a/package/libiberty/libiberty.hash b/package/libiberty/libiberty.hash
+new file mode 100644
+index 0000000000..270f38dfa7
+--- /dev/null
++++ b/package/libiberty/libiberty.hash
+@@ -0,0 +1,2 @@
++# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
++sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
+diff --git a/package/libiberty/libiberty.mk b/package/libiberty/libiberty.mk
+new file mode 100644
+index 0000000000..17976fdd4f
+--- /dev/null
++++ b/package/libiberty/libiberty.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# libiberty
++#
++################################################################################
++
++LIBIBERTY_VERSION = 2.32
++LIBIBERTY_SOURCE = binutils-$(LIBIBERTY_VERSION).tar.xz
++LIBIBERTY_SITE = $(BR2_GNU_MIRROR)/binutils
++LIBIBERTY_DL_SUBDIR = binutils
++LIBIBERTY_SUBDIR = libiberty
++
++# We explicitly disable multilib, as we do in binutils.
++# By default, libiberty installs nothing, so we must force it.
++HOST_LIBIBERTY_CONF_OPTS = \
++	--disable-multilib \
++	--enable-install-libiberty
++
++# Some packages (e.g. host-gdb) will pick this library and build shared
++# objects with it. But libiberty does not honour the --enable-shared and
++# --disable-static flags; it only ever builds a static library no matter
++# what. So we must force -fPIC in build flags.
++HOST_LIBIBERTY_CONF_ENV = \
++	CFLAGS="$(HOST_CFLAGS) -fPIC" \
++	LDFLAGS="$(HOST_LDFLAGS) -fPIC"
++
++$(eval $(host-autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.21.0
