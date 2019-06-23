@@ -1,36 +1,60 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 23 Jun 2019 10:13:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xorgproto: enable legacy
-Message-ID: <20190623081342.6098-1-fontaine.fabrice@gmail.com>
+Date: Sun, 23 Jun 2019 10:25:51 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvncserver: fix build without C++
+Message-ID: <20190623082551.1679-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-xproxymngproto is needed by xfindproxy but it is now disabled by default
-Enable it thanks to --enable-legacy
-
 Fixes:
- - http://autobuild.buildroot.org/results/4b21400c36e8ba7a8222f9da962f79e42c6146d3
+ - http://autobuild.buildroot.org/results/16aaa4e86a2dbf1acf95f10d5131b0f7b8a3d61a
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/x11r7/xorgproto/xorgproto.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ ...1-CMakeLists.txt-fix-build-without-C.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch
 
-diff --git a/package/x11r7/xorgproto/xorgproto.mk b/package/x11r7/xorgproto/xorgproto.mk
-index 9e8abd4c6a..458efbc731 100644
---- a/package/x11r7/xorgproto/xorgproto.mk
-+++ b/package/x11r7/xorgproto/xorgproto.mk
-@@ -47,6 +47,8 @@ XORGPROTO_LICENSE_FILES = \
- 	COPYING-xineramaproto
- XORGPROTO_INSTALL_STAGING = YES
- XORGPROTO_INSTALL_TARGET = NO
-+# xproxymngproto is needed by xfindproxy
-+XORGPROTO_CONF_OPTS += --enable-legacy
- 
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch b/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch
+new file mode 100644
+index 0000000000..591c97fd6a
+--- /dev/null
++++ b/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch
+@@ -0,0 +1,33 @@
++From 868f0a9fa60bb45ee6cf762f323c5b3964b2ee69 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 23 Jun 2019 10:18:59 +0200
++Subject: [PATCH] CMakeLists.txt: fix build without C++
++
++Specify that libvncserver is a C project file otherwise build will fail
++if no C++ compiler is found by cmake
++
++Fixes:
++ - http://autobuild.buildroot.org/results/16aaa4e86a2dbf1acf95f10d5131b0f7b8a3d61a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/LibVNC/libvncserver/pull/317]
++---
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 0d3b4dc..ad609ae 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,7 +1,7 @@
++ cmake_minimum_required(VERSION 3.4)
++ cmake_policy(SET CMP0037 NEW)
++ 
++-project(LibVNCServer)
+++project(LibVNCServer C)
++ include(CheckFunctionExists)
++ include(CheckSymbolExists)
++ include(CheckIncludeFile)
++-- 
++2.20.1
++
 -- 
 2.20.1
