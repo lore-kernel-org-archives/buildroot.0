@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 23:07:40 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mariadb: security
+Date: Sun, 23 Jun 2019 23:07:50 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/mariadb: security
  bump to version 10.3.15
-Message-ID: <20190623210643.5D8B283EB2@busybox.osuosl.org>
+Message-ID: <20190623210651.CA4AA83EB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e335f33cebfb5d0cab803d76dc6751582d69294a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=334fdcc9c8fda5e577dd92647f42b45d1900c1c4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 The licensing text in README.md has changed slightly. The reference to
 COPYING.LESSER has been removed. The file itself has been gone for awhile
