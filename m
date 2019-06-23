@@ -1,40 +1,37 @@
-From: Carlos Santos <unixmania@gmail.com>
-Date: Sun, 23 Jun 2019 10:19:52 -0300
-Subject: [Buildroot] [PATCH 1/1] package/util-linux: minix needs MMU
-In-Reply-To: <20190623114053.8775-1-fontaine.fabrice@gmail.com>
-References: <20190623114053.8775-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAJ4jsadMUTrRBX5mzks89Ectqt6Jj-G+5GuiAMsbrg20e33OiQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 23 Jun 2019 16:03:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/efivar: bump version to 37
+In-Reply-To: <20190623024614.53491-1-james.hilliard1@gmail.com>
+References: <20190623024614.53491-1-james.hilliard1@gmail.com>
+Message-ID: <20190623160315.3d10e4df@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jun 23, 2019 at 8:40 AM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/87801e1a3c628e00ccb0c57afc2b46cc735c6018
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/util-linux/Config.in | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
-> index acde9e5474..39eb2c03a0 100644
-> --- a/package/util-linux/Config.in
-> +++ b/package/util-linux/Config.in
-> @@ -217,6 +217,7 @@ config BR2_PACKAGE_UTIL_LINUX_MESG
->
->  config BR2_PACKAGE_UTIL_LINUX_MINIX
->         bool "minix"
-> +       depends on BR2_USE_MMU # fork()
->         help
->           Minix filesystem support
->
-> --
-> 2.20.1
->
+On Sat, 22 Jun 2019 20:46:14 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Tested-by: Carlos Santos <unixmania@gmail.com>
+> Backport patches required to build with gcc-9.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  .../efivar/0001-Allow-build-with-uClibc.patch |  11 +-
+>  ..._guid-handle-misaligned-guid-pointer.patch |  62 +++++++
+>  ...es-Werror-address-of-packed-member-c.patch | 174 ++++++++++++++++++
+>  ...r-of-Werror-address-of-packed-member.patch |  57 ++++++
+>  package/efivar/efivar.hash                    |   2 +-
+>  package/efivar/efivar.mk                      |   2 +-
+>  6 files changed, 300 insertions(+), 8 deletions(-)
+>  create mode 100644 package/efivar/0002-dp.h-make-format_guid-handle-misaligned-guid-pointer.patch
+>  create mode 100644 package/efivar/0003-Fix-all-the-places-Werror-address-of-packed-member-c.patch
+>  create mode 100644 package/efivar/0004-Fix-another-error-of-Werror-address-of-packed-member.patch
+
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
