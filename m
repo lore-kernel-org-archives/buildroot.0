@@ -1,42 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 22:16:21 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] docs: use-case for
- un-ignoring VCS directories and overridden source dir
-Message-ID: <20190623201522.CCE97826DB@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 22:16:46 +0200
+Subject: [Buildroot] [PATCH] docs: use-case for un-ignoring VCS
+ directories and overridden source dir
+In-Reply-To: <31212b9d2c0481e0618401c0dc8f1d6d7ce18710.1560173933.git.jan.kundrat@cesnet.cz>
+ ("Jan =?utf-8?Q?Kundr=C3=A1t=22's?= message of "Mon, 10 Jun 2019 15:37:12
+ +0200")
+References: <31212b9d2c0481e0618401c0dc8f1d6d7ce18710.1560173933.git.jan.kundrat@cesnet.cz>
+Message-ID: <871rzkcb0x.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17729645c61209e9dd042d24eb1cc9009709ecaa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Jan" == Jan Kundr?t <jan.kundrat@cesnet.cz> writes:
 
-Signed-off-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
-Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Fixes: a27078d32d Allow overriding the VCS exclude list with *_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit f52809cbd2329dabb7ce98683ca884ca04c118f0)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/using-buildroot-development.txt | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ > Signed-off-by: Jan Kundr?t <jan.kundrat@cesnet.cz>
+ > Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Fixes: a27078d32d Allow overriding the VCS exclude list with *_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS
 
-diff --git a/docs/manual/using-buildroot-development.txt b/docs/manual/using-buildroot-development.txt
-index 65a9f1a3f7..da6dd822fb 100644
---- a/docs/manual/using-buildroot-development.txt
-+++ b/docs/manual/using-buildroot-development.txt
-@@ -109,3 +109,13 @@ WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
- 	--exclude WebDriverTests --exclude WebKitBuild --exclude WebKitLibraries \
- 	--exclude WebKit.xcworkspace --exclude Websites --exclude Examples
- ------------------
-+
-+By default, Buildroot skips syncing of VCS artifacts (e.g., the *.git* and
-+*.svn* directories). Some packages prefer to have these VCS directories
-+available during build, for example for automatically determining a precise
-+commit reference for version information. To undo this built-in filtering at a
-+cost of a slower speed, add these directories back:
-+
-+------------------
-+LINUX_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = --include .git
-+------------------
+Committed to 2019.02.x and 2019.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
