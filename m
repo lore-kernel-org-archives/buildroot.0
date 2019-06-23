@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 22:15:55 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] docs: use-case for
+Date: Sun, 23 Jun 2019 22:16:21 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] docs: use-case for
  un-ignoring VCS directories and overridden source dir
-Message-ID: <20190623201503.9466B826DB@busybox.osuosl.org>
+Message-ID: <20190623201522.CCE97826DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=10e05d4a3c9b1bd1da978efbeaba3bc26d883fe4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=17729645c61209e9dd042d24eb1cc9009709ecaa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Signed-off-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
 Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
