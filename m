@@ -1,90 +1,95 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 21:39:08 +0200
-Subject: [Buildroot] [git commit] utils/test-pkg: clean output dir for
- successful builds
-Message-ID: <20190623194340.898748270C@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 21:44:12 +0200
+Subject: [Buildroot] [git commit] package/libcdaudio: fix build with
+ toolchains lacking C++ support
+Message-ID: <20190623194340.926068270C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=72bf48606cc5ccf5c48c631d265cbe52d8001a62
+commit: https://git.buildroot.net/buildroot/commit/?id=8307fd013292d6f02116b8f4054c70746dddc009
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-test-pkg will use gigabytes of space when testing all toolchains.
-Nevertheless, you are normally only interested in the actual build / host
-tree when there is a build failure.
+When the target toolchain does not support C++, the provided
+libcdaudio configure script tries to run a check with the C++
+pre-processor provided by the host (/lib/cpp) which may not exist on
+some systems.
 
-Do a 'make clean' for successful builds to save disk space, unless the new
-option '-k/--keep' is set.
-Note that the logfile and configuration is always retained for inspection.
+This issue is fixed by autoreconfiguring the package, as newly
+generated configure scripts do not have this issue.
 
-Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+Fixes:
+
+  http://autobuild.buildroot.net/results/f725a41ef992c42ceef7514d1a8dcac99e6b9114/
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- utils/test-pkg | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+ .../0001-libcdaudio-enable-autoreconf.patch        | 43 ++++++++++++++++++++++
+ package/libcdaudio/libcdaudio.mk                   |  3 ++
+ 2 files changed, 46 insertions(+)
 
-diff --git a/utils/test-pkg b/utils/test-pkg
-index 8ffeea34f5..f3b34d5d0d 100755
---- a/utils/test-pkg
-+++ b/utils/test-pkg
-@@ -13,17 +13,18 @@ do_clean() {
- main() {
-     local o O opts
-     local cfg dir pkg random toolchains_csv toolchain all number mode
--    local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
-+    local ret nb nb_skip nb_fail nb_legal nb_tc build_dir keep
-     local -a toolchains
-     local pkg_br_name
- 
--    o='hac:d:n:p:r:t:'
--    O='help,all,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
-+    o='hakc:d:n:p:r:t:'
-+    O='help,all,keep,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
-     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
-     eval set -- "${opts}"
- 
-     random=0
-     all=0
-+    keep=0
-     number=0
-     mode=0
-     toolchains_csv="${TOOLCHAINS_CSV}"
-@@ -35,6 +36,9 @@ main() {
-         (-a|--all)
-             all=1; shift 1
-             ;;
-+        (-k|--keep)
-+            keep=1; shift 1
-+            ;;
-         (-c|--config-snippet)
-             cfg="${2}"; shift 2
-             ;;
-@@ -176,6 +180,12 @@ build_one() {
-     if ! make O="${dir}" legal-info >> "${dir}/logfile" 2>&1; then
-         return 3
-     fi
+diff --git a/package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch b/package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch
+new file mode 100644
+index 0000000000..ab2296c042
+--- /dev/null
++++ b/package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch
+@@ -0,0 +1,43 @@
++From 9c2873b1d9292bcf43c862b6777d41c40521424c Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Sun, 13 Jan 2019 22:27:42 +0100
++Subject: [PATCH] libcdaudio: enable autoreconf
 +
-+    # If we get here, the build was successful. Clean up the build/host
-+    # directories to save disk space, unless 'keep' was set.
-+    if [ ${keep} -ne 1 ]; then
-+        make O="${dir}" clean >> "${dir}/logfile" 2>&1
-+    fi
- }
- 
- help() {
-@@ -236,6 +246,11 @@ Options:
-         try. If not specified, the toolchains in ${TOOLCHAINS_CSV} will be
-         used.
- 
-+    -k, --keep
-+        Keep the build directories even if the build succeeds.
-+        Note: the logfile and configuration is always retained, even without
-+        this option.
++Fixes the following two autoreconf errors (by simple removing of the
++two offending lines):
 +
- Example:
++  configure.ac:20: error: automatic de-ANSI-fication support has been removed
++
++  Makefile.am:2: error: automatic de-ANSI-fication support has been removed
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ Makefile.am  | 1 -
++ configure.ac | 1 -
++ 2 files changed, 2 deletions(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index f639dd8..a32cfe6 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -1,5 +1,4 @@
++ ## Process this file with automake to produce Makefile.in
++-AUTOMAKE_OPTIONS = ansi2knr
++ SUBDIRS = src
++ 
++ bin_SCRIPTS = libcdaudio-config
++diff --git a/configure.ac b/configure.ac
++index bbdd42d..6699ceb 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -17,7 +17,6 @@ AM_CONFIG_HEADER(config.h)
++ AC_PROG_AWK
++ AC_PROG_CC
++ AC_PROG_CPP
++-AM_C_PROTOTYPES
++ AM_PROG_CC_STDC
++ AC_PROG_INSTALL
++ AC_PROG_LN_S
++-- 
++2.20.1
++
+diff --git a/package/libcdaudio/libcdaudio.mk b/package/libcdaudio/libcdaudio.mk
+index 5d421eba7a..651289d7e4 100644
+--- a/package/libcdaudio/libcdaudio.mk
++++ b/package/libcdaudio/libcdaudio.mk
+@@ -11,4 +11,7 @@ LIBCDAUDIO_CONFIG_SCRIPTS = libcdaudio-config
+ LIBCDAUDIO_LICENSE = GPL-2.0+
+ LIBCDAUDIO_LICENSE_FILES = COPYING
  
-     Testing libcec would require a config snippet that contains:
++# fix configure failure when the toolchain doesn't have C++ support
++LIBCDAUDIO_AUTORECONF = YES
++
+ $(eval $(autotools-package))
