@@ -1,22 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 21:06:37 +0200
-Subject: [Buildroot] [PATCH 1/2] arch: Fix typo breaking use of
- core-avx2 arch
-In-Reply-To: <20190607125313.20376-1-esben@geanix.com> (Esben Haabendal's
- message of "Fri, 7 Jun 2019 14:53:12 +0200")
-References: <20190607125313.20376-1-esben@geanix.com>
-Message-ID: <87lfxsdsua.fsf@dell.be.48ers.dk>
+Date: Sun, 23 Jun 2019 21:05:53 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] arch: Fix typo breaking
+ use of core-avx2 arch
+Message-ID: <20190623190540.3DDD087FED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Esben" == Esben Haabendal <esben@geanix.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=76e1aeba4f989b77c8c8cfcf37f48d0cba799bdf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > Signed-off-by: Esben Haabendal <esben@geanix.com>
+Signed-off-by: Esben Haabendal <esben@geanix.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 498a1fabe80aeb1652475b9061b82ba065915183)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ arch/Config.in.x86 | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed to 2019.02.x and 2019.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index f7c53a0fae..85cfb9f5eb 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -236,7 +236,7 @@ config BR2_ARCH
+ 	default "i686"		if BR2_x86_core2 && BR2_i386
+ 	default "i686"		if BR2_x86_corei7 && BR2_i386
+ 	default "i686"		if BR2_x86_corei7_avx && BR2_i386
+-	default "i686"		if BR2_x86_corei7_avx2 && BR2_i386
++	default "i686"		if BR2_x86_core_avx2 && BR2_i386
+ 	default "i686"		if BR2_x86_atom && BR2_i386
+ 	default "i686"		if BR2_x86_silvermont && BR2_i386
+ 	default "i686"		if BR2_x86_opteron && BR2_i386
