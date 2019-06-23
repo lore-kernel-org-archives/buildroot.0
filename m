@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 23:10:19 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/dbus: security
+Date: Sun, 23 Jun 2019 23:10:29 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/dbus: security
  bump to version 1.12.16
-Message-ID: <20190623210921.E182A867D3@busybox.osuosl.org>
+Message-ID: <20190623210928.85215814C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=59a1de1472ba106d68c265cfd17203fa315f812d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=841c2742002d1948c05af885874aba4349ea2a85
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes the following security issues:
 
