@@ -1,35 +1,29 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 21:40:34 +0200
-Subject: [Buildroot] [PATCHv3 1/2] utils/test-pkg: fix long option
- parsing
-In-Reply-To: <20190205212142.2244-1-patrickdepinguin@gmail.com>
-References: <20190205212142.2244-1-patrickdepinguin@gmail.com>
-Message-ID: <20190623214034.5c9dc4fa@windsurf>
+Date: Sun, 23 Jun 2019 21:41:00 +0200
+Subject: [Buildroot] [PATCH 1/1] linux-firmware: add options to install
+ more Mediatek firmwares.
+In-Reply-To: <20190104154951.21807-1-nicolas.cavallari@green-communications.fr>
+References: <20190104154951.21807-1-nicolas.cavallari@green-communications.fr>
+Message-ID: <20190623214100.33755e11@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue,  5 Feb 2019 22:21:41 +0100
-Thomas De Schampheleire <patrickdepinguin@gmail.com> wrote:
+On Fri,  4 Jan 2019 16:49:51 +0100
+Nicolas Cavallari <nicolas.cavallari@green-communications.fr> wrote:
 
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Add option to install the MT7650 bluetooth firmware and the
+> MT76x2e wifi firmware.
 > 
-> The long option parsing of test-pkg is broken because:
-> - some long options are not declared
-> - there should be a comma between long options, the colon does not replace
-> it.
-> 
-> This change also revealed that the declaration of 'toolchains-dir' should
-> have been 'toolchains-csv', originally introduced in commit ed59f81a3cb4ddb.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
 > ---
->  utils/test-pkg | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  package/linux-firmware/Config.in         | 10 ++++++++++
+>  package/linux-firmware/linux-firmware.mk | 12 ++++++++++++
+>  2 files changed, 22 insertions(+)
 
-Both patches applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
