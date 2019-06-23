@@ -1,31 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 21:20:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pkg-golang: add cflags/ldflags
- to GO_HOST_ENV
-In-Reply-To: <20190603092101.8658-1-mirza.krak@northern.tech> (Mirza Krak's
- message of "Mon, 3 Jun 2019 11:21:01 +0200")
-References: <20190603092101.8658-1-mirza.krak@northern.tech>
-Message-ID: <87d0j4ds7x.fsf@dell.be.48ers.dk>
+Date: Sun, 23 Jun 2019 21:20:33 +0200
+Subject: [Buildroot] [PATCH v3,1/2] package/mpd: drop tremor select
+In-Reply-To: <20190601143456.23326-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 1 Jun 2019 16:34:55 +0200")
+References: <20190601143456.23326-1-fontaine.fabrice@gmail.com>
+Message-ID: <878stsds72.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Mirza" == Mirza Krak <mirza.krak@northern.tech> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > If a go host package is built using cgo, it needs access
- > to HOST_CFLAGS/HOST_LDFLAGS to utilize host packages it
- > might depend on.
+ > Drop tremor select added by commit
+ > d428dddf680b067c13ba9a08bfd502c7286cffe7
 
- > Signed-off-by: Mirza Krak <mirza.krak@northern.tech>
- > ---
+ > Indeed, nowadays, mpd can be built successfully even if there is no
+ > input plugin selected
 
- > This fixes current build errors of mender-artifact-3.0.0:
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- > http://autobuild.buildroot.net/results/dd1a6dac03dd3b68ee63761c33dbb01c328d4f14/build-end.log
-
-Committed to 2019.05.x, thanks.
+Committed to 2019.02.x and 2019.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
