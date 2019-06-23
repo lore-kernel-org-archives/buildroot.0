@@ -1,37 +1,80 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 22:18:34 +0200
-Subject: [Buildroot] [PATCH v4,
- 1/1] package/weston: fix build with headers < 4.4
-In-Reply-To: <20190610120926.5150-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 10 Jun 2019 14:09:26 +0200")
-References: <20190610120926.5150-1-fontaine.fabrice@gmail.com>
-Message-ID: <87wohcawdh.fsf@dell.be.48ers.dk>
+Date: Sun, 23 Jun 2019 22:17:16 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/weston: fix build
+ with headers < 4.4
+Message-ID: <20190623201741.914BD867E4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=9f916d55052f83f3ccd06d24a729a73cc6116553
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
- > weston includes input-event-codes.h since version 5.0.91 and
- > https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
+weston includes input-event-codes.h since version 5.0.91 and
+https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
 
- > input-event-codes.h is available only since kernel 4.4 and
- > https://github.com/torvalds/linux/commit/f902dd893427eade90f7eaf858e5ff8b150a5a12
+input-event-codes.h is available only since kernel 4.4 and
+https://github.com/torvalds/linux/commit/f902dd893427eade90f7eaf858e5ff8b150a5a12
 
- > To fix this build failure, replace include on linux/input-event-codes.h
- > by linux/input.h
+To fix this build failure, replace include on linux/input-event-codes.h
+by linux/input.h
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/210c2759900f15ea0030d088f6f45cd8bb199b29
+Fixes:
+ - http://autobuild.buildroot.org/results/210c2759900f15ea0030d088f6f45cd8bb199b29
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v3 -> v4:
- >  - Fix commit message
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+(cherry picked from commit e531877e8c3de78a6d065a4b2dac7c22079d4d72)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../weston/0002-Fix-build-with-kernel-4.4.patch    | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-Committed to 2019.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/weston/0002-Fix-build-with-kernel-4.4.patch b/package/weston/0002-Fix-build-with-kernel-4.4.patch
+new file mode 100644
+index 0000000000..89390e0e28
+--- /dev/null
++++ b/package/weston/0002-Fix-build-with-kernel-4.4.patch
+@@ -0,0 +1,40 @@
++From 137b811ecd566086f7eb42c1e49e7c0cf27fb85e Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 10 Jun 2019 12:02:03 +0200
++Subject: [PATCH] Fix build with kernel < 4.4
++
++weston includes input-event-codes.h since version 5.0.91 and
++https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
++
++input-event-codes.h is available only since kernel 4.4 and
++https://github.com/torvalds/linux/commit/f902dd893427eade90f7eaf858e5ff8b150a5a12
++
++To fix this build failure, replace include on linux/input-event-codes.h
++by linux/input.h
++
++Fixes:
++ - http://autobuild.buildroot.org/results/210c2759900f15ea0030d088f6f45cd8bb199b29
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status:
++https://gitlab.freedesktop.org/wayland/weston/merge_requests/184]
++---
++ compositor/main.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/compositor/main.c b/compositor/main.c
++index 945f99ae..bf4062af 100644
++--- a/compositor/main.c
+++++ b/compositor/main.c
++@@ -42,7 +42,7 @@
++ #include <sys/socket.h>
++ #include <libinput.h>
++ #include <libevdev/libevdev.h>
++-#include <linux/input-event-codes.h>
+++#include <linux/input.h>
++ #include <sys/time.h>
++ #include <linux/limits.h>
++ 
++-- 
++2.20.1
++
