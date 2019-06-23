@@ -1,51 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 21:19:45 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mpd: fix static
- build with tremor and vorbis
-Message-ID: <20190623192024.5BE81880E6@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Jun 2019 21:31:34 +0200
+Subject: [Buildroot] [PATCH 3/3] package/imagemagick: add optional SVG
+ support to host variant
+In-Reply-To: <20190623180156.199080f6@windsurf>
+References: <20190219131530.16364-1-yann.morin@orange.com>
+ <10113_1550582141_5C6C017D_10113_121_1_7e3ed6b6-813f-4db4-a9e2-21152669dd30@OPEXCLILMA1.corporate.adroot.infra.ftgroup>
+ <20190623180156.199080f6@windsurf>
+Message-ID: <20190623193134.GL13664@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fad7b2f590f8e9f0ffd3f3e15b7fe4db9af145b2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+Thomas, All,
 
-mpd can't be built statically with tremor and vorbis, build fails on:
-block.c:(.text+0x11c): multiple definition of `vorbis_block_init'
-/usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libvorbisidec.a(block.o):block.c:(.text+0x0): first defined here
-/usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: Disabling relaxation: it will not work with multiple definitions
-/usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libvorbis.a(block.o): In function `_vorbis_block_alloc':
+On 2019-06-23 18:01 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 19 Feb 2019 14:15:30 +0100
+> <yann.morin@orange.com> wrote:
+> > From: "Yann E. MORIN" <yann.morin@orange.com>
+> > SVG can be regarded as the "source code" for assets, like logos or other
+> > graphical elements.
+[--SNIP--]
+> Applied to master after fixing the various typos in the commit log,
+> thanks.
 
-Fix this by making both options mutually exclusive
+It looks like my alter-ego has the same love for typoes as I do. ;-)
 
-It should be noted that upstream explicitly removed the possibility to
-enable tremor and vorbis at the same time since version 0.21.6 and
-https://github.com/MusicPlayerDaemon/MPD/commit/c18cd941aaa4c16ac713bc4f1e16ada5281d689e
-Since we only have 0.20.23, it is still possible to build them together,
-but there is clearly no need to allow it.
+Regards,
+Yann E. MORIN.
 
-Fixes:
- - http://autobuild.buildroot.org/results/60c721a82ffd668bebf02d80bca83780d6cdb2f2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 5395b1ca450aff8823b77c2910ead19f727f4651)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mpd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 20a7421481..923f0c2201 100644
---- a/package/mpd/Config.in
-+++ b/package/mpd/Config.in
-@@ -132,6 +132,7 @@ config BR2_PACKAGE_MPD_OPUS
- 
- config BR2_PACKAGE_MPD_TREMOR
- 	bool "tremor"
-+	depends on !BR2_PACKAGE_MPD_VORBIS
- 	select BR2_PACKAGE_LIBOGG
- 	select BR2_PACKAGE_TREMOR
- 	help
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
