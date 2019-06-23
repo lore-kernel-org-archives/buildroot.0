@@ -1,31 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 12:41:51 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/whois: bump to version 5.4.3
-In-Reply-To: <1561238313-3236-1-git-send-email-pjtexier@koncepto.io>
-References: <1561238313-3236-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190623124151.369b85d0@windsurf>
+Date: Sun, 23 Jun 2019 12:42:35 +0200
+Subject: [Buildroot] [git commit] package/xorgproto: enable legacy
+Message-ID: <20190623104321.D15D780359@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 22 Jun 2019 23:18:33 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5534a166fb947a1bef517a2110018168e5dd59aa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> See changelog:
->  - https://github.com/rfc1036/whois/blob/master/debian/changelog
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
-> Changes v1 -> v2
->  - do not change site location (requested by Thomas Petazzoni)
->  - add changelog URL in commit log
+xproxymngproto is needed by xfindproxy but it is now disabled by default
+Enable it thanks to --enable-legacy
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/4b21400c36e8ba7a8222f9da962f79e42c6146d3
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/x11r7/xorgproto/xorgproto.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/x11r7/xorgproto/xorgproto.mk b/package/x11r7/xorgproto/xorgproto.mk
+index 9e8abd4c6a..458efbc731 100644
+--- a/package/x11r7/xorgproto/xorgproto.mk
++++ b/package/x11r7/xorgproto/xorgproto.mk
+@@ -47,6 +47,8 @@ XORGPROTO_LICENSE_FILES = \
+ 	COPYING-xineramaproto
+ XORGPROTO_INSTALL_STAGING = YES
+ XORGPROTO_INSTALL_TARGET = NO
++# xproxymngproto is needed by xfindproxy
++XORGPROTO_CONF_OPTS += --enable-legacy
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
