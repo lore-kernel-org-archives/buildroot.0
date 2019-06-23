@@ -1,51 +1,40 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 21:19:54 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/mpd: fix static
- build with tremor and vorbis
-Message-ID: <20190623192005.6AAA1811F8@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 21:19:51 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/mpd: drop tremor
+ select
+Message-ID: <20190623192005.637FF818E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=485642264936d10bb3ca212463c65da783d6788a
+commit: https://git.buildroot.net/buildroot/commit/?id=9f4dcbe4660719f2013e2886354b9f3d75e41002
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-mpd can't be built statically with tremor and vorbis, build fails on:
-block.c:(.text+0x11c): multiple definition of `vorbis_block_init'
-/usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libvorbisidec.a(block.o):block.c:(.text+0x0): first defined here
-/usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/7.4.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: Disabling relaxation: it will not work with multiple definitions
-/usr/lfs/v0/rc-buildroot-test/scripts/instance-2/output/host/bin/../sparc-buildroot-linux-uclibc/sysroot/usr/lib/libvorbis.a(block.o): In function `_vorbis_block_alloc':
+Drop tremor select added by commit
+d428dddf680b067c13ba9a08bfd502c7286cffe7
 
-Fix this by making both options mutually exclusive
-
-It should be noted that upstream explicitly removed the possibility to
-enable tremor and vorbis at the same time since version 0.21.6 and
-https://github.com/MusicPlayerDaemon/MPD/commit/c18cd941aaa4c16ac713bc4f1e16ada5281d689e
-Since we only have 0.20.23, it is still possible to build them together,
-but there is clearly no need to allow it.
-
-Fixes:
- - http://autobuild.buildroot.org/results/60c721a82ffd668bebf02d80bca83780d6cdb2f2
+Indeed, nowadays, mpd can be built successfully even if there is no
+input plugin selected.
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 5395b1ca450aff8823b77c2910ead19f727f4651)
+(cherry picked from commit 5d4ee34c39a23089496db8445c6d91b137745b41)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mpd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/mpd/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
 diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-index 20a7421481..923f0c2201 100644
+index d3844391a2..20a7421481 100644
 --- a/package/mpd/Config.in
 +++ b/package/mpd/Config.in
-@@ -132,6 +132,7 @@ config BR2_PACKAGE_MPD_OPUS
- 
- config BR2_PACKAGE_MPD_TREMOR
- 	bool "tremor"
-+	depends on !BR2_PACKAGE_MPD_VORBIS
- 	select BR2_PACKAGE_LIBOGG
- 	select BR2_PACKAGE_TREMOR
+@@ -9,7 +9,6 @@ menuconfig BR2_PACKAGE_MPD
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+-	select BR2_PACKAGE_MPD_TREMOR if !(BR2_PACKAGE_MPD_MAD || BR2_PACKAGE_MPD_MPG123 || BR2_PACKAGE_MPD_VORBIS || BR2_PACKAGE_MPD_WAVPACK || BR2_PACKAGE_MPD_FLAC || BR2_PACKAGE_MPD_MUSEPACK || BR2_PACKAGE_MPD_FFMPEG)
  	help
+ 	  MPD is a flexible, powerful, server-side application
+ 	  for playing music. Through plugins and libraries
