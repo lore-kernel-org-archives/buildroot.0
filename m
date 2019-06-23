@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 21:05:53 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] arch: Fix typo breaking
+Date: Sun, 23 Jun 2019 21:05:45 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] arch: Fix typo breaking
  use of core-avx2 arch
-Message-ID: <20190623190540.3DDD087FED@busybox.osuosl.org>
+Message-ID: <20190623190545.5BE53880D8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=76e1aeba4f989b77c8c8cfcf37f48d0cba799bdf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9d6887c228703e945e7248bdfbb767ae832d4348
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Signed-off-by: Esben Haabendal <esben@geanix.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
