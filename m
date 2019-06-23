@@ -1,25 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 22:06:42 +0200
-Subject: [Buildroot] [PATCH v2,1/1] package/samba4: drop third patch
-In-Reply-To: <20190610085656.22736-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 10 Jun 2019 10:56:56 +0200")
-References: <20190610085656.22736-1-fontaine.fabrice@gmail.com>
-Message-ID: <87v9wwcbhp.fsf@dell.be.48ers.dk>
+Date: Sun, 23 Jun 2019 22:06:58 +0200
+Subject: [Buildroot] [PATCH 1/1] package/samba4: security bump version
+ to 4.9.9
+In-Reply-To: <20190622172045.10483-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 22 Jun 2019 19:20:45 +0200")
+References: <20190622172045.10483-1-bernd.kuhls@t-online.de>
+Message-ID: <87r27kcbh9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Drop third patch which is not upstreamable and set XSLTPROC to false
- > instead to disable documentation
+ > Release notes: https://www.samba.org/samba/history/samba-4.9.9.html
+ > Fixes CVE-2019-12435.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- > Changes v1 -> v2 (after review of Arnout Vandecappelle):
- >  - Use false instead of False
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed to 2019.02.x and 2019.05.x, thanks.
 
