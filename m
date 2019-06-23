@@ -1,38 +1,68 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 23:09:01 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/openblas: Handle
- new westmere target architecture
-Message-ID: <20190623210851.6F2FE867D3@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 23:10:19 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/dbus: security
+ bump to version 1.12.16
+Message-ID: <20190623210921.E182A867D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a62cfb297693e4ee1e403c42d4a6b74e587e0cd
+commit: https://git.buildroot.net/buildroot/commit/?id=59a1de1472ba106d68c265cfd17203fa315f812d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Nehalem, the predecessor to westmere, is best match for westmere
-architecture in current openblas.
+Fixes the following security issues:
 
-Signed-off-by: Esben Haabendal <esben@geanix.com>
+- CVE-2019-12749: Do not attempt to carry out DBUS_COOKIE_SHA1
+  authentication for identities that differ from the user running the
+  DBusServer.  Previously, a local attacker could manipulate symbolic links
+  in their own home directory to bypass authentication and connect to a
+  DBusServer with elevated privileges.  The standard system and session
+  dbus-daemons in their default configuration were immune to this attack
+  because they did not allow DBUS_COOKIE_SHA1, but third-party users of
+  DBusServer such as Upstart could be vulnerable.  Thanks to Joe Vennix of
+  Apple Information Security.
+
+  For details, see the advisory:
+  https://www.openwall.com/lists/oss-security/2019/06/11/2
+
+Also contains a number of other smaller fixes, including fixes for memory
+leaks.  For details, see NEWS:
+
+https://gitlab.freedesktop.org/dbus/dbus/blob/dbus-1.12/NEWS
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit b04f1deab3ddf57db63490cdc5532fc7d448483e)
+(cherry picked from commit 992b106d1de70b2bf1ad6a2211b937f5534b2c8a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openblas/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/dbus/dbus.hash | 4 ++--
+ package/dbus/dbus.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openblas/Config.in b/package/openblas/Config.in
-index 8e71a43f98..04538c2d7a 100644
---- a/package/openblas/Config.in
-+++ b/package/openblas/Config.in
-@@ -6,7 +6,7 @@ config BR2_PACKAGE_OPENBLAS_DEFAULT_TARGET
- 	default "PRESCOTT"     if BR2_x86_prescott || BR2_x86_nocona
- 	default "BANIAS"       if BR2_x86_pentium_m
- 	default "CORE2"        if BR2_x86_core2
--	default "NEHALEM"      if BR2_x86_corei7 || BR2_x86_silvermont
-+	default "NEHALEM"      if BR2_x86_corei7 || BR2_x86_silvermont || BR2_x86_westmere
- 	default "SANDYBRIDGE"  if BR2_x86_corei7_avx
- 	default "HASWELL"      if BR2_x86_core_avx2
- 	default "ATOM"         if BR2_x86_atom
+diff --git a/package/dbus/dbus.hash b/package/dbus/dbus.hash
+index 92c0c94210..9529d2e04f 100644
+--- a/package/dbus/dbus.hash
++++ b/package/dbus/dbus.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.10.tar.gz.asc
++# https://dbus.freedesktop.org/releases/dbus/dbus-1.12.16.tar.gz.asc
+ # using key 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
+-sha256	4b693d24976258c3f2fa9cc33ad9288c5fbfa7a16481dbd9a8a429f7aa8cdcf7  dbus-1.12.10.tar.gz
++sha256	54a22d2fa42f2eb2a871f32811c6005b531b9613b1b93a0d269b05e7549fec80  dbus-1.12.16.tar.gz
+ # Locally calculated
+ sha256	0e46f54efb12d04ab5c33713bacd0e140c9a35b57ae29e03c853203266e8f3a1  COPYING
+diff --git a/package/dbus/dbus.mk b/package/dbus/dbus.mk
+index 0a56de5a4e..a4043864d1 100644
+--- a/package/dbus/dbus.mk
++++ b/package/dbus/dbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DBUS_VERSION = 1.12.10
++DBUS_VERSION = 1.12.16
+ DBUS_SITE = https://dbus.freedesktop.org/releases/dbus
+ DBUS_LICENSE = AFL-2.1 or GPL-2.0+ (library, tools), GPL-2.0+ (tools)
+ DBUS_LICENSE_FILES = COPYING
