@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 22:05:52 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/samba4: security
+Date: Sun, 23 Jun 2019 22:05:11 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/samba4: security
  bump version to 4.9.9
-Message-ID: <20190623200600.A8C30810FE@busybox.osuosl.org>
+Message-ID: <20190623200608.5047986AC8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81994e16316ecda0c160fb255a5cbac7b6669d83
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1f404c1e14124dc14dd4f7f0b947faea3b9aec47
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Release notes: https://www.samba.org/samba/history/samba-4.9.9.html
 
