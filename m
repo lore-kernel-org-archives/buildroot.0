@@ -1,50 +1,42 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 22:14:45 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/openjdk: set PATH
- before calling make
-Message-ID: <20190623201503.89D94826DB@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 22:15:55 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] docs: use-case for
+ un-ignoring VCS directories and overridden source dir
+Message-ID: <20190623201503.9466B826DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=80dcda334c493678c435066e81c82a4bd68eabd9
+commit: https://git.buildroot.net/buildroot/commit/?id=10e05d4a3c9b1bd1da978efbeaba3bc26d883fe4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-PATH must be set to $(BR_PATH) thanks to $(TARGET_MAKE_ENV) before
-calling make otherwise build fails on:
-/bin/bash: gawk: command not found
-
-When build fails, config.log contains the following line:
-
-configure:13709: checking for gawk
-configure:13725: found /home/buildroot/autobuild/run/instance-3/output/host/bin/gawk
-configure:13736: result: gawk
-[...]
-ac_cv_prog_AWK=gawk
-
-Fixes:
- - http://autobuild.buildroot.org/results/43c5d08f599e8f44b59a576d243ae1c7b27de7a3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Jan Kundr??t <jan.kundrat@cesnet.cz>
+Suggested-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Fixes: a27078d32d Allow overriding the VCS exclude list with *_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 10aa85ac8a399cf03e7c59c849c97e0265a29377)
+(cherry picked from commit f52809cbd2329dabb7ce98683ca884ca04c118f0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/openjdk/openjdk.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/manual/using-buildroot-development.txt | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 318e4bade3..91a00870c5 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -109,7 +109,7 @@ endef
- # Make -jn is unsupported. Instead, set the "--with-jobs=" configure option,
- # and use $(MAKE1).
- define OPENJDK_BUILD_CMDS
--	$(MAKE1) -C $(@D) legacy-jre-image
-+	$(TARGET_MAKE_ENV) $(MAKE1) -C $(@D) legacy-jre-image
- endef
- 
- # Calling make install always builds and installs the JDK instead of the JRE,
+diff --git a/docs/manual/using-buildroot-development.txt b/docs/manual/using-buildroot-development.txt
+index 65a9f1a3f7..da6dd822fb 100644
+--- a/docs/manual/using-buildroot-development.txt
++++ b/docs/manual/using-buildroot-development.txt
+@@ -109,3 +109,13 @@ WEBKITGTK_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = \
+ 	--exclude WebDriverTests --exclude WebKitBuild --exclude WebKitLibraries \
+ 	--exclude WebKit.xcworkspace --exclude Websites --exclude Examples
+ ------------------
++
++By default, Buildroot skips syncing of VCS artifacts (e.g., the *.git* and
++*.svn* directories). Some packages prefer to have these VCS directories
++available during build, for example for automatically determining a precise
++commit reference for version information. To undo this built-in filtering at a
++cost of a slower speed, add these directories back:
++
++------------------
++LINUX_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS = --include .git
++------------------
