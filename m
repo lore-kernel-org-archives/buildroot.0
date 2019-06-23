@@ -1,83 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 20:23:08 +0200
-Subject: [Buildroot] [PATCH v2,1/1] gnuchess: needs -fPIC
-In-Reply-To: <20190113141329.4d526438@windsurf.home>
-References: <20190112175505.14348-1-fontaine.fabrice@gmail.com>
- <20190113141329.4d526438@windsurf.home>
-Message-ID: <20190623202308.536031c8@windsurf>
+Date: Sun, 23 Jun 2019 20:37:54 +0200
+Subject: [Buildroot] Generation of locales
+In-Reply-To: <a7f64d7d-6e93-3d7b-e1d0-ab77dde72e11@onet.eu>
+References: <a7f64d7d-6e93-3d7b-e1d0-ab77dde72e11@onet.eu>
+Message-ID: <20190623203754.5e0ff0ba@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Witold,
 
-On Sun, 13 Jan 2019 14:13:29 +0100
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Sorry for the very long delay before this reply.
 
-> I'm sorry but this doesn't make sense to me. -fPIC is for Position
-> Independent Code, which is needed when building shared libraries. Here
-> we are building with -static on Cortex-M which doesn't even have
-> support for shared libraries. So building with -fPIC doesn't make sense
-> I believe. It seems to be more a workaround than a real fix.
+On Fri, 4 Jan 2019 11:38:01 +0100
+WK <sdrb@onet.eu> wrote:
+
+> I noticed that compiling buildroot a few times without "make clean" the 
+> size of locale-archive file in $(TARGET_DIR)/usr/lib/locale is increasing.
 > 
-> Perhaps this should be discussed with upstream binutils, or at least a
-> proper investigation be done about those relocation types ?
+> The strange thing is that it occures about three times and then it stops 
+> increasing.
 
-OK, so I had a closer look into this, finally.
+I was not able to reproduce. I built the following defconfig:
 
-What happens from my understanding is that building gnuchess with
-optimization enabled (at least -O2) causes some movt/movw instructions
-to be generated in the move.o object file:
+BR2_arm=y
+BR2_cortex_a8=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_LINARO_ARM=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+BR2_GENERATE_LOCALE="fr_FR.UTF-8 en_US.UTF-8"
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
 
-380:       f240 0c00       movw    ip, #0
-388:       f2c0 0c00       movt    ip, #0
+After the first build, the size of output/target/usr/lib/locale was:
 
-These instructions refer to a global variable called PawnHashKey,
-declared in another C file. Because of it being a global variable, a
-relocation is added for those instructions:
+$ du -sb output/target/usr/lib/locale/
+1678944	output/target/usr/lib/locale/
 
-00000380  00003f2f R_ARM_THM_MOVW_AB 00000000   PawnHashKey
-00000388  00003f30 R_ARM_THM_MOVT_AB 00000000   PawnHashKey
-00000464  00003f2f R_ARM_THM_MOVW_AB 00000000   PawnHashKey
-00000470  00003f30 R_ARM_THM_MOVT_AB 00000000   PawnHashKey
+Then I restarted "make" (without doing "make clean"), and looked at the
+size again, and it was exactly the same.
 
-And the problem is that those special relocation types are not
-understood by elf2flt.
+Could you provide a defconfig + scenario that allows to reproduce the
+issue, and indicate which version of Buildroot you're using ? We
+recently updated localedef, perhaps the behavior changed ?
 
-If you change the optimization flag to -O0, then the problem doesn't
-occur because these movt/movw instructions are not generated. The fact
-that -fPIC also works around the problem is probably due to the fact
-that in a Position Independent logic, such relocations maybe don't
-exist (?) or perhaps it was pure luck that the generated code was
-different.
-
-Interestingly, Romain Naour also faced this issue a while ago when
-building binutils on Cortex-M, and that lead to commit
-49f574237983ae2e69e4a4c43df7be98902a63be. Romain reported a bug to
-binutils (https://sourceware.org/bugzilla/show_bug.cgi?id=20552), but
-now I believe that the bug report is incorrect: the actual issue is in
-elf2flt.
-
-For example, the Linux kernel module loading code has support for these
-relocation types:
-
-  https://elixir.bootlin.com/linux/v4.5/source/arch/arm/kernel/module.c#L258
-
-so they seem to be legitimate.
-
-Therefore I guess the issue is in elf2flt, and I reported a bug at
-https://github.com/uclinux-dev/elf2flt/issues/11.
-
-In the mean time, I'm not sure what to do. Indeed, we don't care about
-gnuchess on Cortex-M, but the same issue affects building binutils,
-which may be a bit more important (for libbfd).
-
-Should we simply add a work-around in gnuchess, to build in -O0 for the
-time being ?
-
-Best regards,
+Thanks,
 
 Thomas
 -- 
