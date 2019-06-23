@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 22:09:27 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] Allow overriding the VCS
+Date: Sun, 23 Jun 2019 22:09:19 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] Allow overriding the VCS
  exclude list with *_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS
-Message-ID: <20190623200831.4B64E826A9@busybox.osuosl.org>
+Message-ID: <20190623200836.693C6826A9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17463b4f776ebe7befc65b7937ad5586a32c3d1d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4a58ecffde578c876fc08f3f5b3e01b3b45f007e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 We have some internal packages which automatically bake a version string
 from the git checkout, and we usually combine these with a
@@ -32,7 +32,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index cbe885aaaa..21778f448f 100644
+index e44f5d913c..06f29762ed 100644
 --- a/package/pkg-generic.mk
 +++ b/package/pkg-generic.mk
 @@ -184,7 +184,7 @@ $(BUILD_DIR)/%/.stamp_rsynced:
