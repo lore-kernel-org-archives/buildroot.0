@@ -1,31 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 23:32:30 +0200
-Subject: [Buildroot] [PATCH 2/3] package/python: add upstream security
- fix for CVE-2019-9636
-In-Reply-To: <20190616211712.824-2-peter@korsgaard.com> (Peter Korsgaard's
- message of "Sun, 16 Jun 2019 23:17:10 +0200")
-References: <20190616211712.824-1-peter@korsgaard.com>
- <20190616211712.824-2-peter@korsgaard.com>
-Message-ID: <87blyo9edt.fsf@dell.be.48ers.dk>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Sun, 23 Jun 2019 23:31:36 +0200
+Subject: [Buildroot] [PATCH 1/1] package/hiawatha: bump to version 1.9
+Message-ID: <1561325496-9765-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+See https://gitlab.com/hsleisink/hiawatha/-/releases
 
- > Fixes CVE-2019-9636: urlsplit does not handle NFKC normalization
- > https://bugs.python.org/issue36216
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/hiawatha/hiawatha.hash | 2 +-
+ package/hiawatha/hiawatha.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > The fix unfortunately introduced regressions, so also apply the followup
- > fixes.
-
- > https://bugs.python.org/issue36742
-
- > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-Committed to 2019.02.x and 2019.05.x, thanks.
-
+diff --git a/package/hiawatha/hiawatha.hash b/package/hiawatha/hiawatha.hash
+index 7d98c01..8c3dcd3 100644
+--- a/package/hiawatha/hiawatha.hash
++++ b/package/hiawatha/hiawatha.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 0f013afc71284bab7267b0d80a51133a8fd4248575dbcbabf338cf826095cda8  hiawatha-10.8.1.tar.gz
++sha256 74dd43812272c3ddbf067b6d4da1773cdeef2ffe71e8f164449fabf8431752b8  hiawatha-10.9.tar.gz
+ sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index 776efc1..e740ed9 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HIAWATHA_VERSION = 10.8.1
++HIAWATHA_VERSION = 10.9
+ HIAWATHA_SITE = https://www.hiawatha-webserver.org/files
+ HIAWATHA_DEPENDENCIES = zlib
+ HIAWATHA_LICENSE = GPL-2.0
 -- 
-Bye, Peter Korsgaard
+2.7.4
