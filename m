@@ -1,56 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 18:01:56 +0200
-Subject: [Buildroot] [PATCH 3/3] package/imagemagick: add optional SVG
- support to host variant
-In-Reply-To: <10113_1550582141_5C6C017D_10113_121_1_7e3ed6b6-813f-4db4-a9e2-21152669dd30@OPEXCLILMA1.corporate.adroot.infra.ftgroup>
-References: <20190219131530.16364-1-yann.morin@orange.com>
- <10113_1550582141_5C6C017D_10113_121_1_7e3ed6b6-813f-4db4-a9e2-21152669dd30@OPEXCLILMA1.corporate.adroot.infra.ftgroup>
-Message-ID: <20190623180156.199080f6@windsurf>
+Date: Sun, 23 Jun 2019 18:04:14 +0200
+Subject: [Buildroot] [git commit] package/rauc: allow use of host-libp11 for
+ crypto hardware support in host-rauc
+Message-ID: <20190623160320.0EF077FC35@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 19 Feb 2019 14:15:30 +0100
-<yann.morin@orange.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8d95b3210cac9264e3368d559c7c33cb7c7efe03
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: "Yann E. MORIN" <yann.morin@orange.com>
-> 
-> SVG can be regarded as the "source code" for assets, like logos or other
-> graphical elements.
-> 
-> However, SVG needs to be rendered, which requires an XML parser and an
-> SVG "parser/rendered". As such, it has various runtime impacts, like
-> bad performance or security. As such, SVG are often pre-rendered to the
-> required sizes/depths/resolutions into other format, such as PNG, at
-> build time.
-> 
-> While rsvg-convert (from host-librsvg) would allow the rendering, it
-> does not allow more complex tasks taht ImageMagick allows for:
-> compositing more than one image, 2D transforamtions (rotation, skew...).
-> 
-> Yet, SVG support in ImageMagick relies on librsvg, which adds quite a
-> feq dependencies, and thus has a noticeable impact on the build time.
-> 
-> Add an option to allow concerned users to enable/disable SVG suppot in
-> ImageMagick.
-> 
-> Enabling SVG support relies on librsvg, which in turns relies on a few
-> additional packages that ImageMagick can also optionally use. So,
-> autoamtically enable the corresponding support as well.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
-> ---
->  package/imagemagick/Config.in.host | 13 +++++++++++++
->  package/imagemagick/imagemagick.mk | 28 +++++++++++++++++++++++-----
->  2 files changed, 36 insertions(+), 5 deletions(-)
+To use a private key stored on a hardware crypto module, such as an HSM
+or smart card, rauc needs OpenSSL to have support for pkcs11 modules.
+OpenSSL achieves this through the libp11 library.
 
-Applied to master after fixing the various typos in the commit log,
-thanks.
+The libp11 engine for OpenSSL is a dynamic module, so the dependency is
+at rauc's runtime, rather than openssl's or rauc's build time.  However,
+it still needs to be added as a dependency, so that anything that uses
+host-rauc when building can be assured that host-rauc is fully
+functional.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+As this is a runtime dependency, there's no need for a target
+dependency.  And it's only used for signing updates, which isn't done on
+the target anyway.
+
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/rauc/rauc.mk | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 47ce242ca1..88a1006bc0 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -30,7 +30,12 @@ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ RAUC_DEPENDENCIES += systemd
+ endif
+ 
+-HOST_RAUC_DEPENDENCIES = host-pkgconf host-openssl host-libglib2 host-squashfs
++HOST_RAUC_DEPENDENCIES = \
++	host-pkgconf \
++	host-openssl \
++	host-libglib2 \
++	host-squashfs \
++	$(if $(BR2_PACKAGE_HOST_LIBP11),host-libp11)
+ HOST_RAUC_CONF_OPTS += --disable-network --disable-json --disable-service
+ 
+ $(eval $(autotools-package))
