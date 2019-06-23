@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 22:13:42 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] manual/contribute.txt:
+Date: Sun, 23 Jun 2019 22:13:50 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] manual/contribute.txt:
  fix typo
-Message-ID: <20190623201242.5EE13826DB@busybox.osuosl.org>
+Message-ID: <20190623201250.37D72826DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2781648579ef6188adf5ae8e612dd6b1ab906a02
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=269e89be986bcc6e52c725e7bb676cb70b67ae02
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Signed-off-by: Julien Olivain <juju@cotds.org>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
