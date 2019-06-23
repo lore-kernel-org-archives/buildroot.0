@@ -1,46 +1,35 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 09:39:07 +0200
-Subject: [Buildroot] [PATCH 1/1] package/davfs2: bump to version 1.5.5
-In-Reply-To: <20190619214926.26685-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Wed, 19 Jun 2019 23:49:26 +0200")
-References: <20190619214926.26685-1-fontaine.fabrice@gmail.com>
-Message-ID: <87fto0g38k.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 23 Jun 2019 09:59:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/harfbuzz: fix build with cairo
+Message-ID: <20190623075907.13362-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+harfbuzz needs svg support on cairo
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- > ---
- >  package/davfs2/davfs2.hash | 2 +-
- >  package/davfs2/davfs2.mk   | 2 +-
- >  2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/f6c0b85fa476e0f52cc06f0133d2e4f9920f7556
 
- > diff --git a/package/davfs2/davfs2.hash b/package/davfs2/davfs2.hash
- > index 102659a38d..7e2078bec5 100644
- > --- a/package/davfs2/davfs2.hash
- > +++ b/package/davfs2/davfs2.hash
- > @@ -1,4 +1,4 @@
- >  # Locally calculated
- > -sha256 c9c4e0f0912a782386216b2147eb9c36c47f193b8fcf3d637719e0b9fe7c96e0  davfs2-1.5.4.tar.gz
- > +sha256 587c6a25ad78109995a7ccb8e60aa1c491b149f2c99d47033f3d5e648430ad2f  davfs2-1.5.5.tar.gz
- >  # License file, locally calculated
- >  sha256 0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
- > diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
- > index f2b2fdbe41..90f73f4df0 100644
- > --- a/package/davfs2/davfs2.mk
- > +++ b/package/davfs2/davfs2.mk
- > @@ -4,7 +4,7 @@
- >  #
- >  ################################################################################
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/harfbuzz/harfbuzz.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index ded5e554e6..1144133254 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
+@@ -30,7 +30,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+ HARFBUZZ_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) -pthread"
+ endif
  
- > -DAVFS2_VERSION = 1.5.4
- > +DAVFS2_VERSION = 1.5.5
-
-Would this be suitable for 2019.02.x?
-
+-ifeq ($(BR2_PACKAGE_CAIRO),y)
++ifeq ($(BR2_PACKAGE_CAIRO_SVG),y)
+ HARFBUZZ_DEPENDENCIES += cairo
+ HARFBUZZ_CONF_OPTS += --with-cairo=yes
+ else
 -- 
-Bye, Peter Korsgaard
+2.20.1
