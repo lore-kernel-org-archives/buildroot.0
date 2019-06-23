@@ -1,23 +1,26 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 12:37:46 +0200
-Subject: [Buildroot] [PATCH 1/1] package/monit: bump to version 5.25.3
-In-Reply-To: <20190622191435.31025-1-fontaine.fabrice@gmail.com>
-References: <20190622191435.31025-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190623123746.6a554cbe@windsurf>
+Date: Sun, 23 Jun 2019 12:41:51 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/whois: bump to version 5.4.3
+In-Reply-To: <1561238313-3236-1-git-send-email-pjtexier@koncepto.io>
+References: <1561238313-3236-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20190623124151.369b85d0@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 22 Jun 2019 21:14:35 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Sat, 22 Jun 2019 23:18:33 +0200
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> See changelog:
+>  - https://github.com/rfc1036/whois/blob/master/debian/changelog
+> 
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 > ---
->  package/monit/monit.hash | 4 ++--
->  package/monit/monit.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> Changes v1 -> v2
+>  - do not change site location (requested by Thomas Petazzoni)
+>  - add changelog URL in commit log
 
 Applied to master, thanks.
 
