@@ -1,51 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 23:00:17 +0200
-Subject: [Buildroot] [PATCH 1/2] package/taglib: add upstream patch to
- fix taglib-config
-In-Reply-To: <20190610212023.9483-2-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Mon, 10 Jun 2019 23:20:22 +0200")
-References: <20190610212023.9483-1-joerg.krause@embedded.rocks>
- <20190610212023.9483-2-joerg.krause@embedded.rocks>
-Message-ID: <87imswaufy.fsf@dell.be.48ers.dk>
+Date: Sun, 23 Jun 2019 23:01:19 +0200
+Subject: [Buildroot] [PATCH 1/1] package/vlc: bump version to 3.0.7
+In-Reply-To: <20190607190935.15629-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 7 Jun 2019 21:09:35 +0200")
+References: <20190607190935.15629-1-bernd.kuhls@t-online.de>
+Message-ID: <87ef3kaue8.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > The current taglib-config program does not work when cross-compiling as it only
- > returns paths to the host, which breaks building programs which link against
- > taglib.
+ > Removed patch 0010, applied upstream.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
- > For example gerbera uses `taglib-config` and it fails with:
-
- > ```
- > [..]
- > -- Found TagLib: -L/usr/lib -ltag
- > [..]
- > arm-linux-gnueabihf-g++: ERROR: unsafe header/library path used in cross-compilation: '-L/usr/lib'
- > ```
-
- > Before the patch the output of `taglib-config` is:
- > ```
- > $ ./output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/bin/taglib-config --libs
- > -L/usr/lib -ltag
- > ```
-
- > Add a patch from upstream which fixes taglib-config.
-
- > After applying the fix, the pkg-config file is correct:
- > ```
- > $ ./output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/bin/taglib-config --libs
- > -L/home/joerg/Development/git/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib -ltag
- > ```
-
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-
-Committed to 2019.02.x and 2019.05.x, thanks.
+Committed to 2019.02.x and 2019.05.x after adjusting the commit message
+to expain that this fixes a number of security issues, thanks.
 
 -- 
 Bye, Peter Korsgaard
