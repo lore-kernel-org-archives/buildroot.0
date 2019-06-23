@@ -1,28 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 16:06:40 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mjpg-streamer: bump version
-In-Reply-To: <20190622182855.12075-1-bernd.kuhls@t-online.de>
-References: <20190622182855.12075-1-bernd.kuhls@t-online.de>
-Message-ID: <20190623160640.28c00fbd@windsurf>
+Date: Sun, 23 Jun 2019 17:08:47 +0200
+Subject: [Buildroot] [git commit] package/util-linux: minix needs MMU
+Message-ID: <20190623151817.534AB814B4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 22 Jun 2019 20:28:55 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=97fc2cb9c7732f99ab42438e782318f0607a8721
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/mjpg-streamer/mjpg-streamer.hash | 2 +-
->  package/mjpg-streamer/mjpg-streamer.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/87801e1a3c628e00ccb0c57afc2b46cc735c6018
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Tested-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/util-linux/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index acde9e5474..39eb2c03a0 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -217,6 +217,7 @@ config BR2_PACKAGE_UTIL_LINUX_MESG
+ 
+ config BR2_PACKAGE_UTIL_LINUX_MINIX
+ 	bool "minix"
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Minix filesystem support
+ 
