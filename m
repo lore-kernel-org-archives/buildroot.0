@@ -1,7 +1,9 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Sun, 23 Jun 2019 17:23:36 -0400
-Subject: [Buildroot] [PATCH v12 0/6] gobject-introspection: new package
-Message-ID: <20190623212342.41809-1-aduskett@gmail.com>
+Date: Sun, 23 Jun 2019 17:23:37 -0400
+Subject: [Buildroot] [PATCH v12 1/6] package/libiberty: new package
+In-Reply-To: <20190623212342.41809-1-aduskett@gmail.com>
+References: <20190623212342.41809-1-aduskett@gmail.com>
+Message-ID: <20190623212342.41809-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,75 +12,96 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-GOI: the return of the revenge!
+Some packages, like prelink-cross, will want to use libiberty but do
+not bundle their own instance (which is good!).
 
-Introduced in goi 1.60.x, autotools is no longer supported.
+However, libiberty is made for being bundled in packages: all GNU
+packages that use libiberty (gcc, binutils, gdb et al...) all have
+their own bundled variant. This means that there is no official
+upstream for libiberty; the closest being as part of the
+combined binutils-gdb tree.
 
-A thousand foot view of this patch series includes:
-- Adding the new libiberty package and making gdb depend on it.
-- Bumping GOI to 1.60.2 and converting to meson 
-- Introducing several patches that are meson specific.
-- Removing several patches that were autotools specific
-- Lots of frustration.
+So we introduce a new host-only package, that installs just libiberty
+from a binutils released tarball.
 
+Again, as libiberty is usually bundled in packages, it usually only
+install a static version. Furthermore, it does not obey to the usual
+--enable-shared and --disable-static flags; it only ever builds a
+static version.
 
-Enjoy!
+Furthermore, this library is not built with -fPIC, but some packages
+may pick it to build shared objects. This is the case for host-gdb,
+for example, which accidentally picks that library instead of its
+internal one.
 
-Adam
+So, rather than fix the various gdb versions and variants we can use,
+we ensure that the libiberty we install is usable in shared objects,
+and we ensure it is always built before host-gdb.
 
-Adam Duskett (6):
-  package/libiberty: new package
-  package/prelink-cross: new package
-  package/gdb: depend on libiberty
-  package/meson: prevent python include path manipulation
-  package/qemu: drop host kernel version check
-  package/gobject-introspection: new package
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+Changes v1 -> v11:
+  - Add this patch to the series
 
- DEVELOPERS                                    |   3 +
- package/Config.in                             |   1 +
- package/gdb/gdb.mk                            |   4 +-
- ...lete-upstream-attempt-at-cross-compi.patch |  33 ++++
- ...d-cross-compilation-support-to-meson.patch | 163 ++++++++++++++++++
- ...d-disable-tests-when-cross-compiling.patch |  27 +++
- ...canner-add-use-binary-wrapper-option.patch |  52 ++++++
- ...scanner-add-a-use-ldd-wrapper-option.patch |  48 ++++++
- ...scanner-add-a-lib-dirs-envvar-option.patch |  73 ++++++++
- .../0007-Add-rpath-links-to-ccompiler.patch   |  29 ++++
- ...-error-return-codes-from-ldd-wrapper.patch |  28 +++
- package/gobject-introspection/Config.in       |  26 +++
- .../gobject-introspection/g-ir-compiler.in    |   2 +
- .../g-ir-scanner-lddwrapper.in                |   2 +
- .../g-ir-scanner-qemuwrapper.in               |  17 ++
- package/gobject-introspection/g-ir-scanner.in |   7 +
- .../gobject-introspection.hash                |   4 +
- .../gobject-introspection.mk                  | 103 +++++++++++
- package/libiberty/libiberty.hash              |   2 +
- package/libiberty/libiberty.mk                |  27 +++
- ...-environment-when-calling-pkg-config.patch |  48 ++++++
- package/prelink-cross/prelink-cross.hash      |   3 +
- package/prelink-cross/prelink-cross.mk        |  15 ++
- package/qemu/qemu.mk                          |  22 ---
- 24 files changed, 716 insertions(+), 23 deletions(-)
- create mode 100644 package/gobject-introspection/0001-Revert-an-incomplete-upstream-attempt-at-cross-compi.patch
- create mode 100644 package/gobject-introspection/0002-add-cross-compilation-support-to-meson.patch
- create mode 100644 package/gobject-introspection/0003-meson.build-disable-tests-when-cross-compiling.patch
- create mode 100644 package/gobject-introspection/0004-giscanner-add-use-binary-wrapper-option.patch
- create mode 100644 package/gobject-introspection/0005-giscanner-add-a-use-ldd-wrapper-option.patch
- create mode 100644 package/gobject-introspection/0006-giscanner-add-a-lib-dirs-envvar-option.patch
- create mode 100644 package/gobject-introspection/0007-Add-rpath-links-to-ccompiler.patch
- create mode 100644 package/gobject-introspection/0008-ignore-error-return-codes-from-ldd-wrapper.patch
- create mode 100644 package/gobject-introspection/Config.in
- create mode 100644 package/gobject-introspection/g-ir-compiler.in
- create mode 100644 package/gobject-introspection/g-ir-scanner-lddwrapper.in
- create mode 100644 package/gobject-introspection/g-ir-scanner-qemuwrapper.in
- create mode 100644 package/gobject-introspection/g-ir-scanner.in
- create mode 100644 package/gobject-introspection/gobject-introspection.hash
- create mode 100644 package/gobject-introspection/gobject-introspection.mk
+ DEVELOPERS                       |  1 +
+ package/libiberty/libiberty.hash |  2 ++
+ package/libiberty/libiberty.mk   | 27 +++++++++++++++++++++++++++
+ 3 files changed, 30 insertions(+)
  create mode 100644 package/libiberty/libiberty.hash
  create mode 100644 package/libiberty/libiberty.mk
- create mode 100644 package/meson/0002-python-module-do-not-manipulate-the-environment-when-calling-pkg-config.patch
- create mode 100644 package/prelink-cross/prelink-cross.hash
- create mode 100644 package/prelink-cross/prelink-cross.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ce3fcb2de8..0da0fa9437 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2324,6 +2324,7 @@ F:	package/keyutils/
+ F:	package/libbsd/
+ F:	package/libedit/
+ F:	package/libgsm/
++F:	package/libiberty/
+ F:	package/libinput/
+ F:	package/libiscsi/
+ F:	package/libpri/
+diff --git a/package/libiberty/libiberty.hash b/package/libiberty/libiberty.hash
+new file mode 100644
+index 0000000000..270f38dfa7
+--- /dev/null
++++ b/package/libiberty/libiberty.hash
+@@ -0,0 +1,2 @@
++# From ftp://gcc.gnu.org/pub/binutils/releases/sha512.sum
++sha512  d326408f12a03d9a61a9de56584c2af12f81c2e50d2d7e835d51565df8314df01575724afa1e43bd0db45cfc9916b41519b67dfce03232aa4978704492a6994a  binutils-2.32.tar.xz
+diff --git a/package/libiberty/libiberty.mk b/package/libiberty/libiberty.mk
+new file mode 100644
+index 0000000000..17976fdd4f
+--- /dev/null
++++ b/package/libiberty/libiberty.mk
+@@ -0,0 +1,27 @@
++################################################################################
++#
++# libiberty
++#
++################################################################################
++
++LIBIBERTY_VERSION = 2.32
++LIBIBERTY_SOURCE = binutils-$(LIBIBERTY_VERSION).tar.xz
++LIBIBERTY_SITE = $(BR2_GNU_MIRROR)/binutils
++LIBIBERTY_DL_SUBDIR = binutils
++LIBIBERTY_SUBDIR = libiberty
++
++# We explicitly disable multilib, as we do in binutils.
++# By default, libiberty installs nothing, so we must force it.
++HOST_LIBIBERTY_CONF_OPTS = \
++	--disable-multilib \
++	--enable-install-libiberty
++
++# Some packages (e.g. host-gdb) will pick this library and build shared
++# objects with it. But libiberty does not honour the --enable-shared and
++# --disable-static flags; it only ever builds a static library no matter
++# what. So we must force -fPIC in build flags.
++HOST_LIBIBERTY_CONF_ENV = \
++	CFLAGS="$(HOST_CFLAGS) -fPIC" \
++	LDFLAGS="$(HOST_LDFLAGS) -fPIC"
++
++$(eval $(host-autotools-package))
 -- 
 2.21.0
