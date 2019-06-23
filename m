@@ -1,21 +1,68 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 20:45:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/monit: bump to version 5.25.3
-In-Reply-To: <20190622191435.31025-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 22 Jun 2019 21:14:35 +0200")
-References: <20190622191435.31025-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pnn4dtt3.fsf@dell.be.48ers.dk>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 23 Jun 2019 12:52:32 -0600
+Subject: [Buildroot] [PATCH 1/1] package/harfbuzz: fix build without
+ cairo-svg
+Message-ID: <20190623185232.61138-1-james.hilliard1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+Fixes:
+test-ot-color.cc:40:10: fatal error: cairo-svg.h: No such file or directory
+   40 | #include <cairo-svg.h>
+      |          ^~~~~~~~~~~~~
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ ...airo-svg-dependency-to-test-ot-color.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/harfbuzz/0001-Add-missing-cairo-svg-dependency-to-test-ot-color.patch
 
-Is this a candidate for 2019.02.x / 2019.05.x?
-
+diff --git a/package/harfbuzz/0001-Add-missing-cairo-svg-dependency-to-test-ot-color.patch b/package/harfbuzz/0001-Add-missing-cairo-svg-dependency-to-test-ot-color.patch
+new file mode 100644
+index 0000000000..ea759e5afc
+--- /dev/null
++++ b/package/harfbuzz/0001-Add-missing-cairo-svg-dependency-to-test-ot-color.patch
+@@ -0,0 +1,38 @@
++From c2d7dfc68ffcb389c9f73b5ef94da7b270bdcf9e Mon Sep 17 00:00:00 2001
++From: James Hilliard <james.hilliard1@gmail.com>
++Date: Sat, 22 Jun 2019 19:38:48 -0600
++Subject: [PATCH] Add missing cairo-svg dependency to test-ot-color
++
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++[james.hilliard1 at gmail.com: backport from upstream commit
++c2d7dfc68ffcb389c9f73b5ef94da7b270bdcf9e]
++---
++ src/test-ot-color.cc | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/src/test-ot-color.cc b/src/test-ot-color.cc
++index 44bd2eb6..e9126c06 100644
++--- a/src/test-ot-color.cc
+++++ b/src/test-ot-color.cc
++@@ -25,7 +25,9 @@
++ 
++ #include "hb.hh"
++ 
++-#ifndef HB_NO_COLOR
+++#include <cairo.h>
+++
+++#if !defined(HB_NO_COLOR) && defined(CAIRO_HAS_SVG_SURFACE)
++ 
++ #include "hb-ot.h"
++ 
++@@ -35,7 +37,6 @@
++ #include FT_FREETYPE_H
++ #include FT_GLYPH_H
++ 
++-#include <cairo.h>
++ #include <cairo-ft.h>
++ #include <cairo-svg.h>
++ 
++-- 
++2.20.1
++
 -- 
-Bye, Peter Korsgaard
+2.20.1
