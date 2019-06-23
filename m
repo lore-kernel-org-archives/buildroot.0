@@ -1,116 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 23 Jun 2019 18:59:23 +0200
-Subject: [Buildroot] [PATCHv3 2/2] utils/test-pkg: clean output dir for
- successful builds
-In-Reply-To: <20190205212142.2244-2-patrickdepinguin@gmail.com>
-References: <20190205212142.2244-1-patrickdepinguin@gmail.com>
- <20190205212142.2244-2-patrickdepinguin@gmail.com>
-Message-ID: <20190623165923.GJ13664@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 23 Jun 2019 19:14:31 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: fix license
+ hash
+In-Reply-To: <20190609132127.GC13603@scaer>
+References: <20190603224039.98733-1-aduskett@gmail.com>
+ <629a1777-181a-2947-8326-918258ce35c0@mind.be>
+ <20190609132127.GC13603@scaer>
+Message-ID: <20190623191431.45640019@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Thomas, All,
+On Sun, 9 Jun 2019 15:21:27 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-On 2019-02-05 22:21 +0100, Thomas De Schampheleire spake thusly:
-> From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> 
-> test-pkg will use gigabytes of space when testing all toolchains.
-> Nevertheless, you are normally only interested in the actual build / host
-> tree when there is a build failure.
-> 
-> Do a 'make clean' for successful builds to save disk space, unless the new
-> option '-k/--keep' is set.
-> Note that the logfile and configuration is always retained for inspection.
-> 
-> Signed-off-by: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+>     ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION),y)
+>     ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
+>     ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.txt  # Valid for v1.4
+>     endif
 
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+I agree with this.
 
-Regards,
-Yann E. MORIN.
-
-> ---
->  utils/test-pkg | 21 ++++++++++++++++++---
->  1 file changed, 18 insertions(+), 3 deletions(-)
-> 
-> v3: add missing help entry for --keep
-> v2: make the feature optional via '--keep' (feedback Arnout and Peter)
-> 
-> diff --git a/utils/test-pkg b/utils/test-pkg
-> index 087f9ddca9..c2aec0784d 100755
-> --- a/utils/test-pkg
-> +++ b/utils/test-pkg
-> @@ -6,16 +6,17 @@ TOOLCHAINS_CSV='support/config-fragments/autobuild/toolchain-configs.csv'
->  main() {
->      local o O opts
->      local cfg dir pkg random toolchains_csv toolchain all number mode
-> -    local ret nb nb_skip nb_fail nb_legal nb_tc build_dir
-> +    local ret nb nb_skip nb_fail nb_legal nb_tc build_dir keep
->      local -a toolchains
->  
-> -    o='hac:d:n:p:r:t:'
-> -    O='help,all,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
-> +    o='hakc:d:n:p:r:t:'
-> +    O='help,all,keep,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
->      opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
->      eval set -- "${opts}"
->  
->      random=0
->      all=0
-> +    keep=0
->      number=0
->      mode=0
->      toolchains_csv="${TOOLCHAINS_CSV}"
-> @@ -27,6 +28,9 @@ main() {
->          (-a|--all)
->              all=1; shift 1
->              ;;
-> +        (-k|--keep)
-> +            keep=1; shift 1
-> +            ;;
->          (-c|--config-snippet)
->              cfg="${2}"; shift 2
->              ;;
-> @@ -161,6 +165,12 @@ build_one() {
->      if ! make O="${dir}" legal-info >> "${dir}/logfile" 2>&1; then
->          return 3
->      fi
-> +
-> +    # If we get here, the build was successful. Clean up the build/host
-> +    # directories to save disk space, unless 'keep' was set.
-> +    if [ ${keep} -ne 1 ]; then
-> +        make O="${dir}" clean >> "${dir}/logfile" 2>&1
-> +    fi
->  }
->  
->  help() {
-> @@ -221,6 +231,11 @@ Options:
->          try. If not specified, the toolchains in ${TOOLCHAINS_CSV} will be
->          used.
->  
-> +    -k, --keep
-> +        Keep the build directories even if the build succeeds.
-> +        Note: the logfile and configuration is always retained, even without
-> +        this option.
-> +
->  Example:
->  
->      Testing libcec would require a config snippet that contains:
-> -- 
-> 2.19.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
