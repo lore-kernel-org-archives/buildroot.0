@@ -1,59 +1,61 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 12:42:25 +0200
-Subject: [Buildroot] [git commit] boot/mv-ddr-marvell: fix build with GCC 8
-Message-ID: <20190623104321.B8A6783D76@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 12:42:40 +0200
+Subject: [Buildroot] [git commit] package/libvncserver: fix build without C++
+Message-ID: <20190623104321.DB65081238@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d45784e8891fb05b2800a686b8d481118f9ca3ce
+commit: https://git.buildroot.net/buildroot/commit/?id=ca393d7a5b77d877573cdbb7029949d229bce062
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add upstream patch fixing a build warning that is considered as error.
+Fixes:
+ - http://autobuild.buildroot.org/results/16aaa4e86a2dbf1acf95f10d5131b0f7b8a3d61a
 
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...dr4_training_leveling.c-uninitialized-var.patch | 31 ++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ .../0001-CMakeLists.txt-fix-build-without-C.patch  | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch b/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
+diff --git a/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch b/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch
 new file mode 100644
-index 0000000000..eada18b473
+index 0000000000..591c97fd6a
 --- /dev/null
-+++ b/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
-@@ -0,0 +1,31 @@
-+From 5867fcad6e88af3d843bfa831648d84a53732d57 Mon Sep 17 00:00:00 2001
-+From: Heinrich Schuchardt <xypron.glpk@gmx.de>
-+Date: Wed, 19 Dec 2018 17:17:13 +0100
-+Subject: [PATCH] mv_ddr: mv_ddr4_training_leveling.c: uninitialized variable
++++ b/package/libvncserver/0001-CMakeLists.txt-fix-build-without-C.patch
+@@ -0,0 +1,33 @@
++From 868f0a9fa60bb45ee6cf762f323c5b3964b2ee69 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 23 Jun 2019 10:18:59 +0200
++Subject: [PATCH] CMakeLists.txt: fix build without C++
 +
-+With GCC 8.2 uninitialized variables lead to a build error.
++Specify that libvncserver is a C project file otherwise build will fail
++if no C++ compiler is found by cmake
 +
-+Signed-off-by: Heinrich Schuchardt <xypron.glpk@gmx.de>
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++Fixes:
++ - http://autobuild.buildroot.org/results/16aaa4e86a2dbf1acf95f10d5131b0f7b8a3d61a
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/LibVNC/libvncserver/pull/317]
 +---
-+Upstream status: commit 5867fcad6e8
-+
-+ mv_ddr4_training_leveling.c | 2 +-
++ CMakeLists.txt | 2 +-
 + 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/mv_ddr4_training_leveling.c b/mv_ddr4_training_leveling.c
-+index 144e21a03c01..cb95389f5466 100644
-+--- a/mv_ddr4_training_leveling.c
-++++ b/mv_ddr4_training_leveling.c
-+@@ -368,7 +368,7 @@ static int mv_ddr4_dynamic_pb_wl_supp(u32 dev_num, enum mv_wl_supp_mode ecc_mode
-+ 	u32 subphy_num = ddr3_tip_dev_attr_get(dev_num, MV_ATTR_OCTET_PER_INTERFACE);
-+ 	u8 compare_result = 0;
-+ 	u32 orig_phase;
-+-	u32 rd_data, wr_data;
-++	u32 rd_data, wr_data = 0;
-+ 	u32 flag, step;
-+ 	struct mv_ddr_topology_map *tm = mv_ddr_topology_map_get();
-+ 	u32 ecc_phy_access_id;
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 0d3b4dc..ad609ae 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,7 +1,7 @@
++ cmake_minimum_required(VERSION 3.4)
++ cmake_policy(SET CMP0037 NEW)
++ 
++-project(LibVNCServer)
+++project(LibVNCServer C)
++ include(CheckFunctionExists)
++ include(CheckSymbolExists)
++ include(CheckIncludeFile)
 +-- 
 +2.20.1
 +
