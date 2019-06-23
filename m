@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 23:06:40 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/freeswitch: bump
+Date: Sun, 23 Jun 2019 23:06:32 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/freeswitch: bump
  version to 1.8.6
-Message-ID: <20190623210543.070C682679@busybox.osuosl.org>
+Message-ID: <20190623210548.1A5678270E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d9520968edfc92e422779c705b764a77fbe7442
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=423bd5c767c865fdc0647d2be410dd76c5486bf2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Updated license hash after upstream commit
 https://freeswitch.org/stash/projects/FS/repos/freeswitch/commits/a1f3b4862e7fd44a37862ae84c0e79f89c9bc0d8
