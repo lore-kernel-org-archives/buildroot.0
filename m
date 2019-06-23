@@ -1,55 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 12:52:30 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xfont_encodings: bump
- version to 1.0.5
-Message-ID: <20190623105426.568B58293F@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 12:52:35 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: bump version to
+ 1.6.8
+Message-ID: <20190623105426.5E9EE8293F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eef40d0f495cdba812afa90e04946208b1d4fb54
+commit: https://git.buildroot.net/buildroot/commit/?id=7a1ec659e8b0acee53de3862bfc222e4839dc125
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Added all hashes provided by upstream, added license hash.
-
-Switched _SITE to https.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xfont_encodings/xfont_encodings.hash | 9 +++++++--
- package/x11r7/xfont_encodings/xfont_encodings.mk   | 4 ++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ package/x11r7/xlib_libX11/xlib_libX11.hash | 10 +++++-----
+ package/x11r7/xlib_libX11/xlib_libX11.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/x11r7/xfont_encodings/xfont_encodings.hash b/package/x11r7/xfont_encodings/xfont_encodings.hash
-index 56c1ad2737..30dc92760b 100644
---- a/package/x11r7/xfont_encodings/xfont_encodings.hash
-+++ b/package/x11r7/xfont_encodings/xfont_encodings.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2010-October/001466.html
--sha1	24ace2470403f85a0d393769204029bd8247992a	encodings-1.0.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-June/002998.html
-+md5 bbae4f247b88ccde0e85ed6a403da22a  encodings-1.0.5.tar.bz2
-+sha1 7ffec76dba1cfd5040c5b43ccfae930c83ddf92e  encodings-1.0.5.tar.bz2
-+sha256 bd96e16143a044b19e87f217cf6a3763a70c561d1076aad6f6d862ec41774a31  encodings-1.0.5.tar.bz2
-+sha512 920e49f0b3545f181a1574ca3280ac9adef1e68fe27566c195dd7013f728d355c0d759132789357fcf8fa7391fcbe1e17edf2bd85aa5611df5a4d99740011008  encodings-1.0.5.tar.bz2
-+# Locally computed
-+sha256 13b4a0f9431f0fdd6ee36ed386e0b7d1eb429c5cb88df73353896078cbb5a137  COPYING
-diff --git a/package/x11r7/xfont_encodings/xfont_encodings.mk b/package/x11r7/xfont_encodings/xfont_encodings.mk
-index 9c5c9f30bf..06d9973813 100644
---- a/package/x11r7/xfont_encodings/xfont_encodings.mk
-+++ b/package/x11r7/xfont_encodings/xfont_encodings.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.hash b/package/x11r7/xlib_libX11/xlib_libX11.hash
+index 5dac4f1149..26f043d65e 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.hash
++++ b/package/x11r7/xlib_libX11/xlib_libX11.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-October/002921.html
+-md5 034fdd6cc5393974d88aec6f5bc96162  libX11-1.6.7.tar.bz2
+-sha1 5076f7853713d7db958a05f6fd1c18f7e111a0ad  libX11-1.6.7.tar.bz2
+-sha256 910e9e30efba4ad3672ca277741c2728aebffa7bc526f04dcfa74df2e52a1348  libX11-1.6.7.tar.bz2
+-sha512 edd2273b9dadbbf90ad8d7b5715db29eb120a5a22ad2595f697e56532cc24b84e358580c00548fa6be8e9d26601a2b2cdab32272c59266709534317abbd05cd5  libX11-1.6.7.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-June/002997.html
++md5 c5fa5a86a20e3591bed6c046498d4b8f  libX11-1.6.8.tar.bz2
++sha1 f1ea96fe472a981d378b4f2eec90dcd063f9a407  libX11-1.6.8.tar.bz2
++sha256 b289a845c189e251e0e884cc0f9269bbe97c238df3741e854ec4c17c21e473d5  libX11-1.6.8.tar.bz2
++sha512 1de8e0ec466308bc48946d1ce7a7dc6bd3120b1b365cd01afd1bd51dd7369e3d1870dd379b0b7c5b07699095d59761bd23e2e02ab60929de32c39b6885016e76  libX11-1.6.8.tar.bz2
+ # Locally computed
+ sha256 2daec087a88e7c9b8082557cdeebad5bbb8155a4137472f0b22e269cd99d0c1e  COPYING
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index 87929c42ed..f0e52e0877 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XFONT_ENCODINGS_VERSION = 1.0.4
-+XFONT_ENCODINGS_VERSION = 1.0.5
- XFONT_ENCODINGS_SOURCE = encodings-$(XFONT_ENCODINGS_VERSION).tar.bz2
--XFONT_ENCODINGS_SITE = http://xorg.freedesktop.org/releases/individual/font
-+XFONT_ENCODINGS_SITE = https://xorg.freedesktop.org/releases/individual/font
- XFONT_ENCODINGS_LICENSE = Public Domain
- XFONT_ENCODINGS_LICENSE_FILES = COPYING
- 
+-XLIB_LIBX11_VERSION = 1.6.7
++XLIB_LIBX11_VERSION = 1.6.8
+ XLIB_LIBX11_SOURCE = libX11-$(XLIB_LIBX11_VERSION).tar.bz2
+ XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBX11_LICENSE = MIT
