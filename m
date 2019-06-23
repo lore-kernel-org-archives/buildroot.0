@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 23 Jun 2019 23:09:07 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] arch: Add support for
+Date: Sun, 23 Jun 2019 23:08:56 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] arch: Add support for
  Westmere targets
-Message-ID: <20190623210842.03E8C867D3@busybox.osuosl.org>
+Message-ID: <20190623210851.6792D867D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2a4e994b5461268ec75e700489ca0762c398823
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=39a9d0181938e6cb759b7bb8e8bdf3eac32020dc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 The westmere line of x86_64 targets lies between nehalem (corei7) and
 sandybridge (corei7-avx).  Allowing use of -march=westmere enables use of
