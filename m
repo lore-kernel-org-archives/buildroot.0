@@ -1,37 +1,59 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 12:42:30 +0200
-Subject: [Buildroot] [git commit] package/harfbuzz: fix build with cairo
-Message-ID: <20190623104321.C936681882@busybox.osuosl.org>
+Date: Sun, 23 Jun 2019 12:42:25 +0200
+Subject: [Buildroot] [git commit] boot/mv-ddr-marvell: fix build with GCC 8
+Message-ID: <20190623104321.B8A6783D76@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ced273e4f1a0048319441a01be367c0bb65f6a2d
+commit: https://git.buildroot.net/buildroot/commit/?id=d45784e8891fb05b2800a686b8d481118f9ca3ce
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-harfbuzz needs svg support on cairo
+Add upstream patch fixing a build warning that is considered as error.
 
-Fixes:
- - http://autobuild.buildroot.org/results/f6c0b85fa476e0f52cc06f0133d2e4f9920f7556
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/harfbuzz/harfbuzz.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...dr4_training_leveling.c-uninitialized-var.patch | 31 ++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index ded5e554e6..1144133254 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
-@@ -30,7 +30,7 @@ ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
- HARFBUZZ_CONF_ENV = LDFLAGS="$(TARGET_LDFLAGS) -pthread"
- endif
- 
--ifeq ($(BR2_PACKAGE_CAIRO),y)
-+ifeq ($(BR2_PACKAGE_CAIRO_SVG),y)
- HARFBUZZ_DEPENDENCIES += cairo
- HARFBUZZ_CONF_OPTS += --with-cairo=yes
- else
+diff --git a/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch b/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
+new file mode 100644
+index 0000000000..eada18b473
+--- /dev/null
++++ b/boot/mv-ddr-marvell/0001-mv_ddr-mv_ddr4_training_leveling.c-uninitialized-var.patch
+@@ -0,0 +1,31 @@
++From 5867fcad6e88af3d843bfa831648d84a53732d57 Mon Sep 17 00:00:00 2001
++From: Heinrich Schuchardt <xypron.glpk@gmx.de>
++Date: Wed, 19 Dec 2018 17:17:13 +0100
++Subject: [PATCH] mv_ddr: mv_ddr4_training_leveling.c: uninitialized variable
++
++With GCC 8.2 uninitialized variables lead to a build error.
++
++Signed-off-by: Heinrich Schuchardt <xypron.glpk@gmx.de>
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++---
++Upstream status: commit 5867fcad6e8
++
++ mv_ddr4_training_leveling.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/mv_ddr4_training_leveling.c b/mv_ddr4_training_leveling.c
++index 144e21a03c01..cb95389f5466 100644
++--- a/mv_ddr4_training_leveling.c
+++++ b/mv_ddr4_training_leveling.c
++@@ -368,7 +368,7 @@ static int mv_ddr4_dynamic_pb_wl_supp(u32 dev_num, enum mv_wl_supp_mode ecc_mode
++ 	u32 subphy_num = ddr3_tip_dev_attr_get(dev_num, MV_ATTR_OCTET_PER_INTERFACE);
++ 	u8 compare_result = 0;
++ 	u32 orig_phase;
++-	u32 rd_data, wr_data;
+++	u32 rd_data, wr_data = 0;
++ 	u32 flag, step;
++ 	struct mv_ddr_topology_map *tm = mv_ddr_topology_map_get();
++ 	u32 ecc_phy_access_id;
++-- 
++2.20.1
++
