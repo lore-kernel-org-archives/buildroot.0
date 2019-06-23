@@ -1,52 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 17:32:35 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/arcturus_ucp1020: Bump Linux
- and U-Boot
-In-Reply-To: <20190618203203.14575-1-oleks@arcturusnetworks.com>
-References: <20190618203203.14575-1-oleks@arcturusnetworks.com>
-Message-ID: <20190623173235.49d4b079@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 23 Jun 2019 17:38:16 +0200
+Subject: [Buildroot] [PATCHv2] package/libglib2: fix NLS build on musl and
+ uclibc
+Message-ID: <20190623153816.14016-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Oleksandr,
+libglib2 uses a very crude and error-prone way to detect the intl
+functions, which basically fails when the C library is not glibc.
 
-On Tue, 18 Jun 2019 16:32:03 -0400
-Oleksandr Zhadan <oleks@arcturusnetworks.com> wrote:
+Now that a meson pacakge can specify its LDFLAGS, use that to pass the
+infrastructure-provided TARGET_NLS_LIBS to link with.
 
-> Bump Linux and U-Boot versions.
-> 
-> Linux dot_config and patches is no longer needed.
-> 
-> Signed-off-by: Oleksandr Zhadan <oleks@arcturusnetworks.com>
-> Signed-off-by: Michael Durrant <mdurrant@arcturusnetworks.com>
+Fixes:
+    http://autobuild.buildroot.org/results/f0d/f0d85d76786343d767fba9c7c5c01f042ecfc018/
+    [...]
 
-I've applied, after doing one change. See below.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
->  # Kernel
->  BR2_LINUX_KERNEL=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.1.27"
-> -BR2_LINUX_KERNEL_PATCH="board/arcturus/ppc-ucp1020/patches/linux"
-> -BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> -BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/arcturus/ppc-ucp1020/configs/linux-4.1.x.config"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,ArcturusNetworks,uCP1020-kernel,v20190618)/linux-v20190618.tar.gz"
+---
+Note: a few lines above, we do export LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
+but this does not work at all and has been broken by the conversion over
+to meson, and will need to be addressed by another patch.
 
-You're using a tarball download for the kernel, which is good.
+---
+Changes v1 -> v2:
+  - rebase on master
+---
+ package/libglib2/libglib2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
-> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/ArcturusNetworks/uCP1020-uboot.git"
-
-But a Git download for U-Boot, while you could have also used a tarball
-download, exactly like for the kernel.
-
-So I fixed that up and applied. Thanks!
-
-Thomas
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 207352fa37..bbc0d11e23 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -17,6 +17,8 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
+ endif
+ 
++LIBGLIB2_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
++
+ HOST_LIBGLIB2_CONF_OPTS = \
+ 	-Ddtrace=false \
+ 	-Dfam=false \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
