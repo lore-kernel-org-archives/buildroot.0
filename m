@@ -1,52 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 23 Jun 2019 18:09:32 +0200
-Subject: [Buildroot] [PATCH] initramfs: drop comment against multiple
- formats
-In-Reply-To: <20190126001901.3090-1-vivien.didelot@gmail.com>
-References: <20190126001901.3090-1-vivien.didelot@gmail.com>
-Message-ID: <20190623180932.09bb8cfe@windsurf>
+Date: Sun, 23 Jun 2019 18:10:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bird: add a unprivileged user
+In-Reply-To: <20190318110547.177223b9@windsurf>
+References: <20190205105630.17008-1-adrien@gallouet.fr>
+ <20190317174946.28ee07a5@windsurf>
+ <CAFtSRGCunAxWP2VizuD_yY8zzqnOqksuzKz-F=PiFHv+JdOb7A@mail.gmail.com>
+ <20190318110547.177223b9@windsurf>
+Message-ID: <20190623181055.518d5d0f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vivien,
+On Mon, 18 Mar 2019 11:05:47 +0100
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-On Fri, 25 Jan 2019 19:19:01 -0500
-Vivien Didelot <vivien.didelot@gmail.com> wrote:
-
-> This patch removes an old comment against having multiple filesystem
-> formats which doesn't bring any value.
+> > If your prefer to wait, I'll resubmit a patch with the start-stop-daemon
+> > script later.  
 > 
-> It is also wrong per-se: one may want to use Buildroot to prepare a
-> custom distribution containing a kernel+initramfs and a persistent
-> default rootfs to pivot to.
-> 
-> Signed-off-by: Vivien Didelot <vivien.didelot@gmail.com>
+> Yes, indeed, I think it makes more sense to have the new user created
+> together with an init script that actually uses it.
 
-I understand your point, but I think we need to keep a comment. Indeed,
-the use-cases for generating both an initramfs and another rootfs image
-are very specific, and users (especially newcomers!) should still
-understand that when building an initramfs with Buildroot, it's the
-entire root filesystem that goes in the initramfs.
+Unless I missed it, we didn't receive a new patch that adds the init
+script for bird. I'm now going to mark the "package/bird: add a
+unprivileged user" patch as "Changes Requested" in patchwork. So if you
+don't resubmit a new patch, we will forget about this topic.
 
-Perhaps we should reword it like this:
+Thanks!
 
-	Note that enabling this initramfs option together with another
-	filesystem format may not make sense: you would end up having
-	two identical root filesystems, one embedded inside the kernel
-	image (initramfs) and one separately. Indeed, Buildroot is
-	unable to generate an initramfs with different contents than
-	the root filesystem. However, we still allow generating both an
-	initramfs and a normal rootfs image in the same configuration
-	as they are some specific use-cases for it.
-
-Would that work for you ?
-
-Best regards,
-
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, CTO, Bootlin
 Embedded Linux and Kernel engineering
