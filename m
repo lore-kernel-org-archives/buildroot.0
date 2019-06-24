@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 22:16:22 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/monit: bump to
+Date: Mon, 24 Jun 2019 22:16:29 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/monit: bump to
  version 5.25.3
-Message-ID: <20190624201519.6CBEC826B2@busybox.osuosl.org>
+Message-ID: <20190624201525.C59C0826B2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a76845e21ecb1617031e88b8af0a0875bb24ecb9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1818dae1e052b0b02f9699cb0821c2ff252071ab
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
