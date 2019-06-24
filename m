@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 21:56:13 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x]
+Date: Mon, 24 Jun 2019 21:58:48 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x]
  support/testing/infra/emulator: increase memory size used by Qemu
-Message-ID: <20190624195738.25C6181E5A@busybox.osuosl.org>
+Message-ID: <20190624195745.53018818E9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a9416689465dfd61e946ba0ee0779cb47dfaca6c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=564ab80ac1380fbb4036947c8e7ff5bb66259e5c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 By default, Qemu emulates a system with 128 MB of RAM. This is not
 sufficient for some test cases we have, such as TestPerlDBDmysql,
