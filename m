@@ -1,74 +1,81 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 Date: Mon, 24 Jun 2019 22:25:47 +0200
-Subject: [Buildroot] [PATCH 0/4] libglib: fix build with NLS or in Thumb
- mode (branch yem/meson-per-pkg-flags)
-Message-ID: <cover.1561407936.git.yann.morin.1998@free.fr>
+Subject: [Buildroot] [PATCH 1/4] package/meson: fix empty arguments in
+ cross-compilation.conf
+In-Reply-To: <cover.1561407936.git.yann.morin.1998@free.fr>
+References: <cover.1561407936.git.yann.morin.1998@free.fr>
+Message-ID: <b2af8b4ce7f359d3d8392d1bd7340146726c1ae0.1561407936.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+When TARGET_CFLAGS (or _LDFLAGS or _CXXFLAGS) are empty, but were
+constructed by appending other variables, like:
 
-With meson, it is impossible to pass extra CFLAGS or override them
-entirely from the command line (i.e. neither in the environment nor as
-command line arguments). Worse, if we were to do so, they would be
-passed to the host compiler, not the target compiler.
+    TARGET_CFLAGS = $(SOMETHING) $(SOMETHING_ELSE)
 
-This series adds two changes to the meson infrastructure:
-  - a fix for when the *FLAGS variables are empty ut with spaces,
-  - the ability for packages to pass their own *FLAGS if they need to.
+and both variables are empty, then $(TARGET_CFLAGS) is _not_ the
+null-string; it's value is a string made of a single space.
 
-Finally, two changes are done in libglib2, that take advantage of this
-new feature:
-  - fix the build when the external gettext provides the i18n functions,
-  - fix the build on ARM in Thumb mode.
+This means that the construct:
 
-Thanks to Peter S. for the initial infra patch, thanks to Thomas for a
-previous review, and thanks to Adam for investigting a bug that led to
-the first patch and parts of the second patch, as well as proof-reading
-my crappy commit logs; any leftover typo is entirely his fault, now!
-Muahaha! ;-]
+    $(if $(TARGET_CFLAGS),true,false)
 
+will in fact return 'true'.
 
-Regards,
-Yann E. MORIN.
+In our case, it means that we will call:
 
+    `printf '"%s", ' `
 
-The following changes since commit cd1b1773dd6cf585c18ea836192787b1f20727ad
+which expands to just:
 
-  package/libglib2: security bump to version 2.60.4 (2019-06-24 06:36:21 +0200)
+    "",
 
+which we are then happy to insert as-is in the generated
+cross-compilation.conf.
 
-are available in the git repository at:
+Then meson, will happily call the compiler with an empty argument.
 
-  git://git.buildroot.org/~ymorin/git/buildroot.git
+The compiler is less happy, though:
 
-for you to fetch changes up to cc3b7eda26b3838277ec43a1c956dbb8c55cf602
+    arm-none-linux-gnueabi-gcc: error: : No such file or directory
 
-  package/libglib2: fix build on ARM in Thumb mode (2019-06-24 21:58:51 +0200)
+And this is not even trivial to debug either... The only clue being that
+there seems to be something missing between ': :'
 
+We fix that testing the $(strip)ed value. We can still pass the
+non-$(strip) expansion, because the shell will just do it for us, and we
+are then sure there is at least one non-blank word in there.
 
-----------------------------------------------------------------
-Peter Seiderer (1):
-      infra/pkg-meson: allow packages to pass custom compiler/linker flags
+Thanks a lot to Adam for his invaluable help debugging this!
 
-Yann E. MORIN (3):
-      package/meson: fix empty arguments in cross-compilation.conf
-      package/libglib2: fix NLS build on musl and uclibc
-      package/libglib2: fix build on ARM in Thumb mode
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/meson/meson.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- docs/manual/adding-packages-meson.txt | 12 ++++++++++++
- package/libglib2/libglib2.mk          |  5 ++++-
- package/meson/meson.mk                | 20 +++++++++++++-------
- package/pkg-meson.mk                  | 14 +++++++++++---
- 4 files changed, 40 insertions(+), 11 deletions(-)
-
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 5b5100cccc..511be05a46 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -45,9 +45,9 @@ else
+ HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
+ endif
+ 
+-HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
+-HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+-HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
++HOST_MESON_SED_CFLAGS = $(if $(strip $(TARGET_CFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
++HOST_MESON_SED_LDFLAGS = $(if $(strip $(TARGET_LDFLAGS)),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
++HOST_MESON_SED_CXXFLAGS = $(if $(strip $(TARGET_CXXFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
+ 
+ # Generate a Meson cross-compilation.conf suitable for use with the
+ # SDK
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
