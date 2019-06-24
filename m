@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 21:59:25 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/znc: security
+Date: Mon, 24 Jun 2019 21:59:53 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/znc: security
  bump version to 1.7.4
-Message-ID: <20190624195823.9989681E89@busybox.osuosl.org>
+Message-ID: <20190624195850.8FD6C812B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b050129452b1808e3e7cd0b5ae43b2f781cbdf0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=96820cf10f76a428e8e831d05950f86bfaf1d487
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Changelog: https://wiki.znc.in/ChangeLog/1.7.4
 
