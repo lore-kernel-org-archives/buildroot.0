@@ -1,72 +1,277 @@
-From: John Keeping <john@metanate.com>
-Date: Mon, 24 Jun 2019 12:32:23 +0100
-Subject: [Buildroot] [PATCH v2 1/2] download/git: fetch all refs from the
- remote
-In-Reply-To: <20190624123027.485c128f@donbot>
-References: <20190624123027.485c128f@donbot>
-Message-ID: <20190624113224.22685-1-john@metanate.com>
+From: guoren at kernel.org <guoren@kernel.org>
+Date: Mon, 24 Jun 2019 19:43:01 +0800
+Subject: [Buildroot] [PATCH V2] configs/csky_gx6605s: bump kernel to 5.0 and
+ use buildroot toolchain
+Message-ID: <1561376581-19568-1-git-send-email-guoren@kernel.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Instead of fetching branches and tags then following up with another
-request in case the specified version is a special branch like a pull
-request, simply mirror the remote repository and fetch all of its refs.
+From: Guo Ren <ren_guo@c-sky.com>
 
-This allows using a raw commit hash pointing to anything reachable on
-the remote (for example a commit in a pull request which is not yet in a
-branch), even if the server has not set allowReachableSHA1InWant.
+The most thing is to use the toolchain compiled by buildroot itself. And
+we also bump kernel to 5.0 with kernel.org.
 
-There is one subtlety to this which is that Git will not let us update
-the ref of a branch which is checked out.  Ideally we would just detach
-HEAD to bypass this problem, but that doesn't work in an empty
-repository when we are on an unborn branch.  Instead, we create an
-unborn branch of our own pointing to a ref which is very unlikely to
-exist.
+Gx6605s' PHYS_OFFSET if 0x10000000 and we make qemu and gx6605s the same
+for maintain. This PHYS_OFFSET is also OK for 610 qemu.
 
-Signed-off-by: John Keeping <john@metanate.com>
+In this patch we add gx6605s.dts in board/csky, because linux-5.0
+doesn't contain gx6605s.dts in its tree.
+
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/download/git | 25 ++++++++++++-------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+ board/csky/gx6605s/gx6605s.dts                     | 155 +++++++++++++++++++++
+ ...-cmdline-for-serial-console-and-rootfs-on.patch |  25 ----
+ board/qemu/csky/linux-ck610.config.fragment        |   1 +
+ configs/csky_gx6605s_defconfig                     |  30 ++--
+ 4 files changed, 172 insertions(+), 39 deletions(-)
+ create mode 100644 board/csky/gx6605s/gx6605s.dts
+ delete mode 100644 board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
 
-diff --git a/support/download/git b/support/download/git
-index 075f665bbf..02bf01bb95 100755
---- a/support/download/git
-+++ b/support/download/git
-@@ -111,20 +111,19 @@ fi
- 
- _git remote set-url origin "'${uri}'"
- 
-+# We will use an explicit refspec, so we don't want any automatic
-+# mapping from Git. This will fail if the key doesn't exist and we don't
-+# want to delete the repository in that case so we ignore errors from
-+# this command.
-+_git config --unset-all remote.origin.fetch || true
+diff --git a/board/csky/gx6605s/gx6605s.dts b/board/csky/gx6605s/gx6605s.dts
+new file mode 100644
+index 0000000..e4d46f5
+--- /dev/null
++++ b/board/csky/gx6605s/gx6605s.dts
+@@ -0,0 +1,155 @@
++/dts-v1/;
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/input/input.h>
 +
- printf "Fetching all references\n"
--_git fetch origin
--_git fetch origin -t
++/ {
++	model = "C-SKY gx6605s";
++	compatible = "csky,gx6605s";
++	#address-cells = <1>;
++	#size-cells = <1>;
++
++	memory {
++		device_type = "memory";
++		reg = <0x10000000 0x04000000>;
++	};
++
++	soc {
++		#address-cells = <1>;
++		#size-cells = <1>;
++		compatible = "simple-bus";
++		ranges;
++
++		dummy_apb: apb-clock {
++			compatible = "fixed-clock";
++			clock-frequency = <27000000>;
++			clock-output-names = "dummy_apb";
++			#clock-cells = <0>;
++		};
++
++		intc: interrupt-controller at 500000 {
++			compatible = "csky,gx6605s-intc";
++			reg = <0x00500000 0x400>;
++			interrupt-controller;
++			#interrupt-cells = <1>;
++		};
++
++		timer at 20a000 {
++			compatible = "csky,gx6605s-timer";
++			reg = <0x0020a000 0x400>;
++			clocks = <&dummy_apb>;
++			interrupts = <10>;
++			interrupt-parent = <&intc>;
++		};
++
++		ehci-hcd at 900000 {
++			compatible = "generic-ehci";
++			reg = <0x00900000 0x400>;
++			interrupt-parent = <&intc>;
++			interrupts = <59>;
++		};
++
++		ohci-hcd0 at a00000 {
++			compatible = "generic-ohci";
++			reg = <0x00a00000 0x400>;
++			interrupt-parent = <&intc>;
++			interrupts = <58>;
++		};
++
++		ohci-hcd1 at b00000 {
++			compatible = "generic-ohci";
++			reg = <0x00b00000 0x400>;
++			interrupt-parent = <&intc>;
++			interrupts = <57>;
++		};
++
++		serial at 403000 {
++			compatible = "ns16550a";
++			reg = <0x00403000 0x400>;
++			interrupt-parent = <&intc>;
++			interrupts = <15>;
++			clock-frequency = <29491200>;
++			baud = <115200>;
++			reg-shift = <2>;
++			reg-io-width = <1>;
++		};
++
++		gpio0: gpio at 305000 {
++			compatible = "wd,mbl-gpio";
++			reg-names = "dirout", "dat", "set", "clr";
++			reg = <0x305000 4>, <0x305004 4>, <0x305008 4>, <0x30500c 4>;
++			bgpio-base = <0>;
++			#gpio-cells = <2>;
++			gpio-controller;
++		};
++
++		gpio_buttons {
++			compatible = "gpio-keys-polled";
++			#address-cells = <1>;
++			#size-cells = <0>;
++			poll-interval = <100>;
++			autorepeat;
++
++			button0 {
++				label = "button8";
++				linux,code = <KEY_LEFT>;
++				gpios = <&gpio0 8 GPIO_ACTIVE_LOW>;
++			};
++
++			button1 {
++				label = "button6";
++				linux,code = <KEY_RIGHT>;
++				gpios = <&gpio0 6 GPIO_ACTIVE_LOW>;
++			};
++
++			button2 {
++				label = "button5";
++				linux,code = <KEY_UP>;
++				gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
++			};
++
++			button3 {
++				label = "button9";
++				linux,code = <KEY_DOWN>;
++				gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
++			};
++
++			button4 {
++				label = "button7";
++				linux,code = <KEY_ENTER>;
++				gpios = <&gpio0 7 GPIO_ACTIVE_LOW>;
++			};
++		};
++
++		gpio_leds {
++			compatible = "gpio-leds";
++
++			led0 {
++				label = "led10";
++				gpios = <&gpio0 10 GPIO_ACTIVE_LOW>;
++				linux,default-trigger = "heartbeat";
++			};
++
++			led1 {
++				label = "led11";
++				gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;
++				linux,default-trigger = "timer";
++			};
++
++			led2 {
++				label = "led12";
++				gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
++				linux,default-trigger = "default-on";
++			};
++
++			led3 {
++				label = "led13";
++				gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
++				linux,default-trigger = "default-on";
++			};
++		};
++	};
++
++	chosen {
++		bootargs = "console=ttyS0,115200 init=/sbin/init root=/dev/sda2 rw rootwait";
++	};
++};
+diff --git a/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch b/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
+deleted file mode 100644
+index 1da1a75..0000000
+--- a/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
++++ /dev/null
+@@ -1,25 +0,0 @@
+-From 7e3f2c482bc16537a093e87a27f0d465804a88e4 Mon Sep 17 00:00:00 2001
+-From: Julien Olivain <juju@cotds.org>
+-Date: Tue, 11 Dec 2018 23:04:46 +0100
+-Subject: [PATCH] csky: update cmdline for serial console and rootfs on sda1
 -
--# Try to get the special refs exposed by some forges (pull-requests for
--# github, changes for gerrit...). There is no easy way to know whether
--# the cset the user passed us is such a special ref or a tag or a sha1
--# or whatever else. We'll eventually fail at checking out that cset,
--# below, if there is an issue anyway. Since most of the cset we're gonna
--# have to clone are not such special refs, consign the output to oblivion
--# so as not to alarm unsuspecting users, but still trace it as a warning.
--if ! _git fetch origin "'${cset}:${cset}'" >/dev/null 2>&1; then
--    printf "Could not fetch special ref '%s'; assuming it is not special.\n" "${cset}"
--fi
-+# We can't update a checked-out branch and if we've just created a new
-+# repo there aren't any commits to checkout a detached head, so we point
-+# HEAD at a ref which really shouldn't exist, creating a temporary
-+# unborn branch.
-+_git symbolic-ref HEAD refs/buildroot-invalid-branch
-+_git fetch --prune origin +refs/*:refs/*
- 
- # Check that the changeset does exist. If it does not, re-cloning from
- # scratch won't help, so we don't want to trash the repository for a
+-Signed-off-by: Julien Olivain <juju@cotds.org>
+----
+- arch/csky/boot/dts/gx6605s.dts | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/arch/csky/boot/dts/gx6605s.dts b/arch/csky/boot/dts/gx6605s.dts
+-index ce56106af967..f5d60b21e6f9 100644
+---- a/arch/csky/boot/dts/gx6605s.dts
+-+++ b/arch/csky/boot/dts/gx6605s.dts
+-@@ -155,6 +155,6 @@
+- 	};
+- 
+- 	chosen {
+--		bootargs = "console=tty0 init=/sbin/init root=/dev/sda2 rw rootwait";
+-+		bootargs = "console=ttyS0,115200 init=/sbin/init root=/dev/sda1 rw rootwait";
+- 	};
+- };
+--- 
+-2.19.2
+-
+diff --git a/board/qemu/csky/linux-ck610.config.fragment b/board/qemu/csky/linux-ck610.config.fragment
+index d80d0ee..b690c7d 100644
+--- a/board/qemu/csky/linux-ck610.config.fragment
++++ b/board/qemu/csky/linux-ck610.config.fragment
+@@ -1,5 +1,6 @@
+ CONFIG_COMPILE_TEST=y
+ CONFIG_CPU_CK610=y
+ CONFIG_CPU_PM_WAIT=y
++CONFIG_RAM_BASE=0x10000000
+ CONFIG_CSKY_APB_INTC=y
+ CONFIG_GX6605S_TIMER=y
+diff --git a/configs/csky_gx6605s_defconfig b/configs/csky_gx6605s_defconfig
+index d0a2aad..4dc05eb 100644
+--- a/configs/csky_gx6605s_defconfig
++++ b/configs/csky_gx6605s_defconfig
+@@ -1,18 +1,20 @@
++# Architecture
+ BR2_csky=y
+-BR2_GLOBAL_PATCH_DIR="board/csky/gx6605s/patches"
+-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+-BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/c-sky/tools/raw/master/csky-linux-tools-x86_64-glibc-linux-4.9.56-20180128.tar.gz"
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="csky-linux"
+-BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
+-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
+-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+-BR2_TOOLCHAIN_EXTERNAL_CXX=y
+-BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y
++BR2_ck610=y
++
++# System
++BR2_ROOTFS_DEVICE_CREATION_STATIC=y
++BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++
++# linux kernel header, the same version with linux kernel
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
++
++# Kernel
+ BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/c-sky/linux-4.9.y/archive/6064a9bdf48cefbccc4f6472dd04251f0dec1931.tar.gz"
+-BR2_LINUX_KERNEL_DEFCONFIG="gx66xx"
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="gx6605s"
+-BR2_TARGET_ROOTFS_EXT2=y
++BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/csky/gx6605s/gx6605s.dts"
 -- 
-2.22.0
+2.7.4
