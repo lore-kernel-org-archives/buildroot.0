@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 21:51:19 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/lmbench: use
+Date: Mon, 24 Jun 2019 21:54:13 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/lmbench: use
  UPDATE_CONFIG_HOOK instead of CONFIG_UPDATE
-Message-ID: <20190624195256.C06158270B@busybox.osuosl.org>
+Message-ID: <20190624195325.EEB968130C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=68fab715eff1265216a320e799e5e3cda267a148
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d2891ca33a4e2c96d79ef19c9f5d7724d7e2a04f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 jimtcl, perl, usb_modeswitch and x264 are registering
 UPDATE_CONFIG_HOOK as a post patch hook to get their gnuconfig files
