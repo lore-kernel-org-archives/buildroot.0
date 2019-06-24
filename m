@@ -1,261 +1,47 @@
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 24 Jun 2019 12:11:45 -0600
-Subject: [Buildroot] [PATCH v2 1/1] package/weston: replace autotools with
- meson
-Message-ID: <20190624181145.107293-1-james.hilliard1@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Jun 2019 20:39:32 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/mongoose: bump to
+ version 6.15
+Message-ID: <20190624183832.D3256880E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The autotools build system is in the process of being deprecated and
-replaced with meson for weston.
+commit: https://git.buildroot.net/buildroot/commit/?id=14fcd2ffbc60a31e6261be705af13e0d0319a52a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-We need to enable pango when building demo clients since it is required
-by meson.
+See https://github.com/cesanta/mongoose/releases/tag/6.15
 
-The dbus option in autotools is replaced with launcher-logind in meson.
-
-We need to explicitly set the image-webp option to avoid failures when
-building without webp.
-
-Replaced WESTON_NATIVE_BACKEND with backend-default in meson.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit da7fdfe6a3f9f1ee9439654e5f4d003fa538f9b2)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
-Changes v1 -> v2:
-  - Require both systemd and dbus for launcher-logind
-  - Move dmabuf-v4l out of egl/gl block
-  - Update imx-gpu-g2d requirement block
----
- package/weston/Config.in |  13 +++++
- package/weston/weston.mk | 107 +++++++++++++++++++--------------------
- 2 files changed, 65 insertions(+), 55 deletions(-)
+ package/mongoose/mongoose.hash | 2 +-
+ package/mongoose/mongoose.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index f874b0cc6a..243da7b6f3 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -100,7 +100,20 @@ comment "XWayland support needs libepoxy and X.org enabled"
+diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
+index 86ebe8efbf..92f35a7113 100644
+--- a/package/mongoose/mongoose.hash
++++ b/package/mongoose/mongoose.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	ec7956b8f2845f6c22e19ab38a0c32c9b379087f0038c7db661b34812f225911  mongoose-6.13.tar.gz
++sha256	ed9b44690f9660d25562e45472d486c086bcc916bf49f39f22e0a90444d44454  mongoose-6.15.tar.gz
+ sha256	fdc34eeea97327d75c83492abd34f1a3200c53dec04422ecda8071dc60a36d10  LICENSE
+diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
+index 653c83c7d4..c4a703d3cf 100644
+--- a/package/mongoose/mongoose.mk
++++ b/package/mongoose/mongoose.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_WESTON_DEMO_CLIENTS
- 	bool "demo clients"
-+	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
-+	depends on BR2_USE_WCHAR # pango
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # pango
-+	depends on BR2_USE_MMU # pango
-+	depends on BR2_INSTALL_LIBSTDCPP # pango
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
-+	select BR2_PACKAGE_PANGO
- 	help
- 	  This enables the installation of Weston's demo clients.
- 
-+comment "demo clients needs OpenGL EGL and a toolchain w/ wchar, threads, C++"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_MESA3D_OPENGL_EGL
-+
- endif
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 152ffe1cf7..3766039198 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -8,7 +8,6 @@ ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),y)
- WESTON_VERSION = rel_imx_4.9.51_8mq_ga
- WESTON_SITE = https://source.codeaurora.org/external/imx/weston-imx
- WESTON_SITE_METHOD = git
--WESTON_AUTORECONF = YES
- else
- WESTON_VERSION = 6.0.0
- WESTON_SITE = http://wayland.freedesktop.org/releases
-@@ -18,30 +17,27 @@ WESTON_LICENSE = MIT
- WESTON_LICENSE_FILES = COPYING
- 
- WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
--	libxkbcommon pixman libpng jpeg udev cairo libinput libdrm \
--	$(if $(BR2_PACKAGE_WEBP),webp)
-+	libxkbcommon pixman libpng jpeg udev cairo libinput libdrm
- 
- WESTON_CONF_OPTS = \
--	--with-dtddir=$(STAGING_DIR)/usr/share/wayland \
--	--disable-headless-compositor \
--	--disable-colord \
--	--disable-devdocs \
--	--disable-setuid-install \
--	--enable-autotools
--
--WESTON_MAKE_OPTS = \
--	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
--
--# Uses VIDIOC_EXPBUF, only available from 3.8+
--ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),)
--WESTON_CONF_OPTS += --disable-simple-dmabuf-v4l-client
-+	-Dbuild.pkg_config_path=$(HOST_DIR)/lib/pkgconfig \
-+	-Dremoting=false \
-+	-Dbackend-headless=false \
-+	-Dcolor-management-colord=false \
-+	-Dsimple-dmabuf-drm=auto
-+
-+ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_SYSTEMD),yy)
-+WESTON_CONF_OPTS += -Dlauncher-logind=true
-+WESTON_DEPENDENCIES += dbus systemd
-+else
-+WESTON_CONF_OPTS += -Dlauncher-logind=false
- endif
- 
--ifeq ($(BR2_PACKAGE_DBUS),y)
--WESTON_CONF_OPTS += --enable-dbus
--WESTON_DEPENDENCIES += dbus
-+ifeq ($(BR2_PACKAGE_WEBP),y)
-+WESTON_CONF_OPTS += -Dimage-webp=true
-+WESTON_DEPENDENCIES += webp
- else
--WESTON_CONF_OPTS += --disable-dbus
-+WESTON_CONF_OPTS += -Dimage-webp=false
- endif
- 
- # weston-launch must be u+s root in order to work properly
-@@ -52,102 +48,103 @@ endef
- define WESTON_USERS
- 	- - weston-launch -1 - - - - Weston launcher group
- endef
--WESTON_CONF_OPTS += --enable-weston-launch
-+WESTON_CONF_OPTS += -Dweston-launch=true
- WESTON_DEPENDENCIES += linux-pam
- else
--WESTON_CONF_OPTS += --disable-weston-launch
-+WESTON_CONF_OPTS += -Dweston-launch=false
- endif
- 
--ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL),y)
--ifeq ($(BR2_PACKAGE_IMX_GPU_G2D),y)
-+ifeq ($(BR2_PACKAGE_IMX_GPU_VIV_OUTPUT_WL)$(BR2_PACKAGE_IMX_GPU_G2D),yy)
- WESTON_DEPENDENCIES += imx-gpu-g2d
--# --enable-imxg2d actually disables it, so no CONF_OPTS
--else
--WESTON_CONF_OPTS += --disable-imxg2d
- endif
-+
-+# Uses VIDIOC_EXPBUF, only available from 3.8+
-+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),)
-+WESTON_CONF_OPTS +=	-Dsimple-clients=dmabuf-v4l
-+else
-+WESTON_CONF_OPTS +=	-Dsimple-clients=
- endif
- 
- ifeq ($(BR2_PACKAGE_HAS_LIBEGL_WAYLAND)$(BR2_PACKAGE_HAS_LIBGLES),yy)
--WESTON_CONF_OPTS += --enable-egl
-+WESTON_CONF_OPTS += -Drenderer-gl=true
- WESTON_DEPENDENCIES += libegl libgles
- else
- WESTON_CONF_OPTS += \
--	--disable-egl \
--	--disable-simple-dmabuf-drm-client \
--	--disable-simple-egl-clients
-+	-Drenderer-gl=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_RDP),y)
- WESTON_DEPENDENCIES += freerdp
--WESTON_CONF_OPTS += --enable-rdp-compositor
-+WESTON_CONF_OPTS += -Dbackend-rdp=true
- else
--WESTON_CONF_OPTS += --disable-rdp-compositor
-+WESTON_CONF_OPTS += -Dbackend-rdp=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
- WESTON_CONF_OPTS += \
--	--enable-fbdev-compositor \
--	WESTON_NATIVE_BACKEND=fbdev-backend.so
-+	-Dbackend-fbdev=true \
-+	-Dbackend-default=fbdev
- else
--WESTON_CONF_OPTS += --disable-fbdev-compositor
-+WESTON_CONF_OPTS += -Dbackend-fbdev=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_DRM),y)
- WESTON_CONF_OPTS += \
--	--enable-drm-compositor \
--	WESTON_NATIVE_BACKEND=drm-backend.so
-+	-Dbackend-drm=true \
-+	-Dbackend-default=drm
- else
--WESTON_CONF_OPTS += --disable-drm-compositor
-+WESTON_CONF_OPTS += -Dbackend-drm=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_X11),y)
- WESTON_CONF_OPTS += \
--	--enable-x11-compositor \
--	WESTON_NATIVE_BACKEND=x11-backend.so
-+	-Dbackend-x11=true \
-+	-Dbackend-default=x11
- WESTON_DEPENDENCIES += libxcb xlib_libX11
- else
--WESTON_CONF_OPTS += --disable-x11-compositor
-+WESTON_CONF_OPTS += -Dbackend-x11=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_XWAYLAND),y)
--WESTON_CONF_OPTS += --enable-xwayland
-+WESTON_CONF_OPTS += -Dxwayland=true
- WESTON_DEPENDENCIES += cairo libepoxy libxcb xlib_libX11 xlib_libXcursor
- else
--WESTON_CONF_OPTS += --disable-xwayland
-+WESTON_CONF_OPTS += -Dxwayland=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBVA),y)
--WESTON_CONF_OPTS += --enable-vaapi-recorder
-+WESTON_CONF_OPTS += -Dbackend-drm-screencast-vaapi=true
- WESTON_DEPENDENCIES += libva
- else
--WESTON_CONF_OPTS += --disable-vaapi-recorder
-+WESTON_CONF_OPTS += -Dbackend-drm-screencast-vaapi=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LCMS2),y)
--WESTON_CONF_OPTS += --enable-lcms
-+WESTON_CONF_OPTS += -Dcolor-management-lcms=true
- WESTON_DEPENDENCIES += lcms2
- else
--WESTON_CONF_OPTS += --disable-lcms
-+WESTON_CONF_OPTS += -Dcolor-management-lcms=false
- endif
- 
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
--WESTON_CONF_OPTS += --enable-systemd-login --enable-systemd-notify
-+WESTON_CONF_OPTS += -Dsystemd=true
- WESTON_DEPENDENCIES += systemd
- else
--WESTON_CONF_OPTS += --disable-systemd-login --disable-systemd-notify
-+WESTON_CONF_OPTS += -Dsystemd=false
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
--WESTON_CONF_OPTS += --enable-junit-xml
-+WESTON_CONF_OPTS += -Dtest-junit-xml=true
- WESTON_DEPENDENCIES += libxml2
- else
--WESTON_CONF_OPTS += --disable-junit-xml
-+WESTON_CONF_OPTS += -Dtest-junit-xml=false
- endif
- 
- ifeq ($(BR2_PACKAGE_WESTON_DEMO_CLIENTS),y)
--WESTON_CONF_OPTS += --enable-demo-clients-install
-+WESTON_CONF_OPTS += -Ddemo-clients=true
-+WESTON_DEPENDENCIES += pango
- else
--WESTON_CONF_OPTS += --disable-demo-clients-install
-+WESTON_CONF_OPTS += -Ddemo-clients=false
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
--- 
-2.20.1
+-MONGOOSE_VERSION = 6.13
++MONGOOSE_VERSION = 6.15
+ MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
+ MONGOOSE_LICENSE = GPL-2.0
+ MONGOOSE_LICENSE_FILES = LICENSE
