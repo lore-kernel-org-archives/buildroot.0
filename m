@@ -1,57 +1,66 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Jun 2019 22:25:49 +0200
-Subject: [Buildroot] [PATCH 3/4] package/libglib2: fix NLS build on musl and
- uclibc
+Date: Mon, 24 Jun 2019 22:25:50 +0200
+Subject: [Buildroot] [PATCH 4/4] package/libglib2: fix build on ARM in Thumb
+ mode
 In-Reply-To: <cover.1561407936.git.yann.morin.1998@free.fr>
 References: <cover.1561407936.git.yann.morin.1998@free.fr>
-Message-ID: <45dbff9960329788c21a9a6b02e93fda6a217adf.1561407936.git.yann.morin.1998@free.fr>
+Message-ID: <cc3b7eda26b3838277ec43a1c956dbb8c55cf602.1561407936.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libglib2 uses a very crude and error-prone way to detect the intl
-functions, which basically fails when the C library is not glibc.
+Commit 4102db0f7 (package/libglib2: bump to version 2.60.3) did convert
+libglib2 over to meson. In doing so, it left a very corner-case along.
 
-Now that a meson package can specify its LDFLAGS, use that to pass the
-infrastructure-provided TARGET_NLS_LIBS to link with.
+When the target is an ARM CPU and the build is in thumb mode, then we
+want to ensure that libglib2 is still biuld in arm mode (because if
+inline asm).
 
-Fixes:
-    http://autobuild.buildroot.org/results/f0d/f0d85d76786343d767fba9c7c5c01f042ecfc018/
-    [...]
+But with meson, CFLAGS from the environment are passed to the host
+compiler, so the build breaks, and the meson log contains:
+
+    Appending CFLAGS from environment: '-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -marm'
+    No LDFLAGS in the environment, not changing global flags.
+    No CPPFLAGS in the environment, not changing global flags.
+    Sanity testing C compiler: cc
+    Is cross compiler: False.
+    Sanity check compiler command line: cc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -marm [...]/build/libglib2-2.60.4/build/meson-private/sanitycheckc.c -o [...]/build/libglib2-2.60.4/build/meson-private/sanitycheckc.exe
+    Sanity check compile stdout:
+    -----
+    Sanity check compile stderr:
+    cc: error: unrecognized command line option ?-marm?; did you mean ?-mabm??
+    -----
+    meson.build:1:0: ERROR: Compiler cc can not compile programs.
+
+Fix that by using the new per-package CFLAGS feature of the meson infra.
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Note: a few lines above, we do export LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
-but this does not work at all and was broken by the conversion over to
-meson, and will need to be addressed by another patch.
-
----
-Changes v2 -> v3:
-  - rebased on master, with libglib2 2.60.4
-
-Changes v1 -> v2:
-  - rebased on master
----
- package/libglib2/libglib2.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libglib2/libglib2.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 28a50f96a4..28f404b74a 100644
+index 28f404b74a..38941ca79d 100644
 --- a/package/libglib2/libglib2.mk
 +++ b/package/libglib2/libglib2.mk
-@@ -12,6 +12,8 @@ LIBGLIB2_LICENSE = LGPL-2.1+
+@@ -12,11 +12,12 @@ LIBGLIB2_LICENSE = LGPL-2.1+
  LIBGLIB2_LICENSE_FILES = COPYING
  LIBGLIB2_INSTALL_STAGING = YES
  
-+LIBGLIB2_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
-+
++LIBGLIB2_CFLAGS = $(TARGET_CFLAGS)
+ LIBGLIB2_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
  # glib/valgrind.h contains inline asm not compatible with thumb1
  ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
- LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
+-LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
++LIBGLIB2_CFLAGS += -marm
+ endif
+ 
+ HOST_LIBGLIB2_CONF_OPTS = \
 -- 
 2.20.1
