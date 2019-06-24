@@ -1,57 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 21:25:31 +0200
-Subject: [Buildroot] [PATCH 1/1] package/davfs2: bump to version 1.5.5
-In-Reply-To: <CAPi7W80YxQ-XV=4yW95JGJEBEPnT2g=MeYvv+EOrZFdg8ekmTg@mail.gmail.com>
- (Fabrice Fontaine's message of "Sun, 23 Jun 2019 10:07:31 +0200")
-References: <20190619214926.26685-1-fontaine.fabrice@gmail.com>
- <87fto0g38k.fsf@dell.be.48ers.dk>
- <CAPi7W80YxQ-XV=4yW95JGJEBEPnT2g=MeYvv+EOrZFdg8ekmTg@mail.gmail.com>
-Message-ID: <87pnn2lr9w.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Jun 2019 21:53:47 +0200
+Subject: [Buildroot] [PATCH v2 1/2] lmbench: mark scripts/build as bash
+ script
+In-Reply-To: <20190613195047.24870-2-mmayer@broadcom.com> (Markus Mayer's
+ message of "Thu, 13 Jun 2019 12:50:46 -0700")
+References: <20190613195047.24870-1-mmayer@broadcom.com>
+ <20190613195047.24870-2-mmayer@broadcom.com>
+Message-ID: <87lfxqlpys.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Markus" == Markus Mayer <mmayer@broadcom.com> writes:
 
- > Dear Peter,
- > Le dim. 23 juin 2019 ? 09:39, Peter Korsgaard <peter@korsgaard.com> a ?crit :
- >> 
- >> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
- >> 
- >> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- >> > ---
- >> >  package/davfs2/davfs2.hash | 2 +-
- >> >  package/davfs2/davfs2.mk   | 2 +-
- >> >  2 files changed, 2 insertions(+), 2 deletions(-)
- >> 
- >> > diff --git a/package/davfs2/davfs2.hash b/package/davfs2/davfs2.hash
- >> > index 102659a38d..7e2078bec5 100644
- >> > --- a/package/davfs2/davfs2.hash
- >> > +++ b/package/davfs2/davfs2.hash
- >> > @@ -1,4 +1,4 @@
- >> >  # Locally calculated
- >> > -sha256 c9c4e0f0912a782386216b2147eb9c36c47f193b8fcf3d637719e0b9fe7c96e0  davfs2-1.5.4.tar.gz
- >> > +sha256 587c6a25ad78109995a7ccb8e60aa1c491b149f2c99d47033f3d5e648430ad2f  davfs2-1.5.5.tar.gz
- >> >  # License file, locally calculated
- >> >  sha256 0ae0485a5bd37a63e63603596417e4eb0e653334fa6c7f932ca3a0e85d4af227  COPYING
- >> > diff --git a/package/davfs2/davfs2.mk b/package/davfs2/davfs2.mk
- >> > index f2b2fdbe41..90f73f4df0 100644
- >> > --- a/package/davfs2/davfs2.mk
- >> > +++ b/package/davfs2/davfs2.mk
- >> > @@ -4,7 +4,7 @@
- >> >  #
- >> >  ################################################################################
- >> 
- >> > -DAVFS2_VERSION = 1.5.4
- >> > +DAVFS2_VERSION = 1.5.5
- >> 
- >> Would this be suitable for 2019.02.x?
- > Yes, it could, there is a fix for an infinite loop:
- > https://savannah.nongnu.org/bugs/?50083.
+ > scripts/build makes use of the "+=" operator which is not supported by
+ > /bin/sh. We switch to /bin/bash in order to avoid errors of the form
 
-Ok - Committed to 2019.02.x and 2019.05.x, thanks.
+ >     ../scripts/build: 21: ../scripts/build: LDLIBS+= -lm: not found
+
+ > Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+
+Committed to 2019.02.x and 2019.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
