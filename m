@@ -1,66 +1,30 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 24 Jun 2019 22:25:50 +0200
-Subject: [Buildroot] [PATCH 4/4] package/libglib2: fix build on ARM in Thumb
- mode
-In-Reply-To: <cover.1561407936.git.yann.morin.1998@free.fr>
-References: <cover.1561407936.git.yann.morin.1998@free.fr>
-Message-ID: <cc3b7eda26b3838277ec43a1c956dbb8c55cf602.1561407936.git.yann.morin.1998@free.fr>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 24 Jun 2019 22:31:41 +0200
+Subject: [Buildroot] [PATCH 02/19] autobuild-run: move instance variable
+ from kwargs to Builder class
+In-Reply-To: <20190621084730.16411-2-itsatharva@gmail.com>
+References: <20190621084730.16411-1-itsatharva@gmail.com>
+ <20190621084730.16411-2-itsatharva@gmail.com>
+Message-ID: <ac88b445-dfe1-9a12-76d6-3aa97687583a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Commit 4102db0f7 (package/libglib2: bump to version 2.60.3) did convert
-libglib2 over to meson. In doing so, it left a very corner-case along.
 
-When the target is an ARM CPU and the build is in thumb mode, then we
-want to ensure that libglib2 is still biuld in arm mode (because if
-inline asm).
 
-But with meson, CFLAGS from the environment are passed to the host
-compiler, so the build breaks, and the meson log contains:
+On 21/06/2019 10:47, Atharva Lele wrote:
+> As discussed in the previous patch, these common variables are needed
+> in many functions, and it'll be better to have them as part of the class.
+> This will make the code cleaner and make it easier to introduce variability
+> for reproducibility testing. Succeeding patches will move all variables from
+> kwargs to the Builder constructor.
+> 
+> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 
-    Appending CFLAGS from environment: '-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -marm'
-    No LDFLAGS in the environment, not changing global flags.
-    No CPPFLAGS in the environment, not changing global flags.
-    Sanity testing C compiler: cc
-    Is cross compiler: False.
-    Sanity check compiler command line: cc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -marm [...]/build/libglib2-2.60.4/build/meson-private/sanitycheckc.c -o [...]/build/libglib2-2.60.4/build/meson-private/sanitycheckc.exe
-    Sanity check compile stdout:
-    -----
-    Sanity check compile stderr:
-    cc: error: unrecognized command line option ?-marm?; did you mean ?-mabm??
-    -----
-    meson.build:1:0: ERROR: Compiler cc can not compile programs.
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
-Fix that by using the new per-package CFLAGS feature of the meson infra.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libglib2/libglib2.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 28f404b74a..38941ca79d 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -12,11 +12,12 @@ LIBGLIB2_LICENSE = LGPL-2.1+
- LIBGLIB2_LICENSE_FILES = COPYING
- LIBGLIB2_INSTALL_STAGING = YES
- 
-+LIBGLIB2_CFLAGS = $(TARGET_CFLAGS)
- LIBGLIB2_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- 
- # glib/valgrind.h contains inline asm not compatible with thumb1
- ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
--LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
-+LIBGLIB2_CFLAGS += -marm
- endif
- 
- HOST_LIBGLIB2_CONF_OPTS = \
--- 
-2.20.1
+ Regards,
+ Arnout
