@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 24 Jun 2019 23:41:02 +0200
-Subject: [Buildroot] [PATCH 11/19] autobuild-run: move buildpid from
- kwargs to Builder class
-In-Reply-To: <20190621084730.16411-11-itsatharva@gmail.com>
+Date: Mon, 24 Jun 2019 23:43:37 +0200
+Subject: [Buildroot] [PATCH 12/19] autobuild-run: move debug from kwargs
+ to Builder class
+In-Reply-To: <20190621084730.16411-12-itsatharva@gmail.com>
 References: <20190621084730.16411-1-itsatharva@gmail.com>
- <20190621084730.16411-11-itsatharva@gmail.com>
-Message-ID: <0397fd49-ae7f-dd63-3df6-ff5cabfbea53@mind.be>
+ <20190621084730.16411-12-itsatharva@gmail.com>
+Message-ID: <0556e79d-0415-9371-db3f-85adc92997d7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
