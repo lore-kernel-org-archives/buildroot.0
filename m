@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 21:53:47 +0200
-Subject: [Buildroot] [PATCH v2 1/2] lmbench: mark scripts/build as bash
- script
-In-Reply-To: <20190613195047.24870-2-mmayer@broadcom.com> (Markus Mayer's
- message of "Thu, 13 Jun 2019 12:50:46 -0700")
+Date: Mon, 24 Jun 2019 21:53:57 +0200
+Subject: [Buildroot] [PATCH v2 2/2] lmbench: install the lmbench script
+ on the target
+In-Reply-To: <20190613195047.24870-3-mmayer@broadcom.com> (Markus Mayer's
+ message of "Thu, 13 Jun 2019 12:50:47 -0700")
 References: <20190613195047.24870-1-mmayer@broadcom.com>
- <20190613195047.24870-2-mmayer@broadcom.com>
-Message-ID: <87lfxqlpys.fsf@dell.be.48ers.dk>
+ <20190613195047.24870-3-mmayer@broadcom.com>
+Message-ID: <87h88elpyi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,10 +15,8 @@ To: buildroot@busybox.net
 
 >>>>> "Markus" == Markus Mayer <mmayer@broadcom.com> writes:
 
- > scripts/build makes use of the "+=" operator which is not supported by
- > /bin/sh. We switch to /bin/bash in order to avoid errors of the form
-
- >     ../scripts/build: 21: ../scripts/build: LDLIBS+= -lm: not found
+ > We want to install the lmbench script along with the other executables,
+ > so we add it to the appropriate list.
 
  > Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 
