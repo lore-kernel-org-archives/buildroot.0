@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 21:09:05 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/tvheadend: fix
+Date: Mon, 24 Jun 2019 21:09:54 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/tvheadend: fix
  PIE build failures
-Message-ID: <20190624190837.3B79B81F57@busybox.osuosl.org>
+Message-ID: <20190624190853.191E781F57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05626b340a43a0249f248bb048e5400830430033
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=0224c932103ba948234ab5dc2c24ec2a50e56269
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Package tvheadend builds using '-pie' linker flag in any case. This
 leads to linking failure if toolchain doesn't support 'pie'.
