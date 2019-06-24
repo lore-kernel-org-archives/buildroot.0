@@ -1,33 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 21:59:05 +0200
-Subject: [Buildroot] [PATCH] support/testing/infra/emulator: increase
- memory size used by Qemu
-In-Reply-To: <20190621202724.19242-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Fri, 21 Jun 2019 22:27:24 +0200")
-References: <20190621202724.19242-1-thomas.petazzoni@bootlin.com>
-Message-ID: <878stqlppy.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Jun 2019 21:59:25 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/znc: security
+ bump version to 1.7.4
+Message-ID: <20190624195823.9989681E89@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7b050129452b1808e3e7cd0b5ae43b2f781cbdf0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
- > By default, Qemu emulates a system with 128 MB of RAM. This is not
- > sufficient for some test cases we have, such as TestPerlDBDmysql,
- > where the initramfs is quite large. Therefore, this commit extends the
- > RAM size emulated by Qemu to 256 MB.
+Changelog: https://wiki.znc.in/ChangeLog/1.7.4
 
- > Fixes:
+Fixes CVE-2019-12816:
+http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-12816
 
- >   https://gitlab.com/buildroot.org/buildroot/-/jobs/237108668
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 3269f2a761db8317945f0ca259cafb2a928b3265)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/znc/znc.hash | 2 +-
+ package/znc/znc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > Thanks to Arnout for the analysis of the issue.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2019.02.x and 2019.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/znc/znc.hash b/package/znc/znc.hash
+index b685a7bf7b..216d105f23 100644
+--- a/package/znc/znc.hash
++++ b/package/znc/znc.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 1e4cc31837a1e8e6cc310873659a167cec16a3fd4281cbc3bf364e42352c113d  znc-1.7.3.tar.gz
++sha256 b1a32921a8e6d79ee6c5900c8d07293026966db7c05aaac48984231befc49b71  znc-1.7.4.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/znc/znc.mk b/package/znc/znc.mk
+index fdc147a8a1..24795886ae 100644
+--- a/package/znc/znc.mk
++++ b/package/znc/znc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZNC_VERSION = 1.7.3
++ZNC_VERSION = 1.7.4
+ ZNC_SITE = http://znc.in/releases/archive
+ ZNC_LICENSE = Apache-2.0
+ ZNC_LICENSE_FILES = LICENSE
