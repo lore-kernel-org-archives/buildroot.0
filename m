@@ -1,277 +1,203 @@
-From: guoren at kernel.org <guoren@kernel.org>
-Date: Mon, 24 Jun 2019 19:43:01 +0800
-Subject: [Buildroot] [PATCH V2] configs/csky_gx6605s: bump kernel to 5.0 and
- use buildroot toolchain
-Message-ID: <1561376581-19568-1-git-send-email-guoren@kernel.org>
+From: John Faith <jfaith@impinj.com>
+Date: Mon, 24 Jun 2019 15:45:45 +0000
+Subject: [Buildroot] [PATCH 2/2] sdbusplus: new package
+In-Reply-To: <20190624154451.22199-1-jfaith@impinj.com>
+References: <20190624154451.22199-1-jfaith@impinj.com>
+Message-ID: <20190624154451.22199-2-jfaith@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Guo Ren <ren_guo@c-sky.com>
+From: Trent Piepho <tpiepho@impinj.com>
 
-The most thing is to use the toolchain compiled by buildroot itself. And
-we also bump kernel to 5.0 with kernel.org.
+A C++ library for interacting with sd-bus and a C++ bindings generator.
 
-Gx6605s' PHYS_OFFSET if 0x10000000 and we make qemu and gx6605s the same
-for maintain. This PHYS_OFFSET is also OK for 610 qemu.
+The host build produces a code generation tool, sdbus++ while the target
+build gives libsdbusplus.
 
-In this patch we add gx6605s.dts in board/csky, because linux-5.0
-doesn't contain gx6605s.dts in its tree.
+The target build of sdbusplus tries to use the code generator tool,
+which we do not build for the target, to build an example program.
+Disable the examples to fix this.
 
-Signed-off-by: Guo Ren <ren_guo@c-sky.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+The code generator requires host-python-pyyaml, since this isn't built
+on the target, the target build does not require python-pyyaml.
+
+The host package includes a code and documentation generation program,
+which is useful for including in a buildroot SDK, even if no target
+packages built need it.  So make it a selected host package.
+
+Signed-off-by: John Faith <jfaith@impinj.com>
+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 ---
- board/csky/gx6605s/gx6605s.dts                     | 155 +++++++++++++++++++++
- ...-cmdline-for-serial-console-and-rootfs-on.patch |  25 ----
- board/qemu/csky/linux-ck610.config.fragment        |   1 +
- configs/csky_gx6605s_defconfig                     |  30 ++--
- 4 files changed, 172 insertions(+), 39 deletions(-)
- create mode 100644 board/csky/gx6605s/gx6605s.dts
- delete mode 100644 board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ package/Config.in.host                        |  1 +
+ ...x-example-build-with-disable-sdbuspp.patch | 42 +++++++++++++++++++
+ package/sdbusplus/Config.in                   | 12 ++++++
+ package/sdbusplus/Config.in.host              | 10 +++++
+ package/sdbusplus/sdbusplus.hash              |  2 +
+ package/sdbusplus/sdbusplus.mk                | 21 ++++++++++
+ 8 files changed, 90 insertions(+)
+ create mode 100644 package/sdbusplus/0001-build-Fix-example-build-with-disable-sdbuspp.patch
+ create mode 100644 package/sdbusplus/Config.in
+ create mode 100644 package/sdbusplus/Config.in.host
+ create mode 100644 package/sdbusplus/sdbusplus.hash
+ create mode 100644 package/sdbusplus/sdbusplus.mk
 
-diff --git a/board/csky/gx6605s/gx6605s.dts b/board/csky/gx6605s/gx6605s.dts
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e9c521f400..08ef4f74eb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1176,6 +1176,7 @@ F:	package/dhcpcd/
+ 
+ N:	John Faith <jfaith@impinj.com>
+ F:	package/python-inflection/
++F:	package/sdbusplus/
+ 
+ N:	Jonathan Ben Avraham <yba@tkos.co.il>
+ F:	arch/Config.in.xtensa
+diff --git a/package/Config.in b/package/Config.in
+index d501b5a65b..73aeed26a1 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -513,6 +513,7 @@ endmenu
+ 	source "package/rtl8723bu/Config.in"
+ 	source "package/rtl8821au/Config.in"
+ 	source "package/sane-backends/Config.in"
++	source "package/sdbusplus/Config.in"
+ 	source "package/sdparm/Config.in"
+ 	source "package/sedutil/Config.in"
+ 	source "package/setserial/Config.in"
+diff --git a/package/Config.in.host b/package/Config.in.host
+index 1501889b72..835dd04237 100644
+--- a/package/Config.in.host
++++ b/package/Config.in.host
+@@ -61,6 +61,7 @@ menu "Host utilities"
+ 	source "package/rustc/Config.in.host"
+ 	source "package/s6-rc/Config.in.host"
+ 	source "package/sam-ba/Config.in.host"
++	source "package/sdbusplus/Config.in.host"
+ 	source "package/squashfs/Config.in.host"
+ 	source "package/sunxi-tools/Config.in.host"
+ 	source "package/swig/Config.in.host"
+diff --git a/package/sdbusplus/0001-build-Fix-example-build-with-disable-sdbuspp.patch b/package/sdbusplus/0001-build-Fix-example-build-with-disable-sdbuspp.patch
 new file mode 100644
-index 0000000..e4d46f5
+index 0000000000..1262ced0f2
 --- /dev/null
-+++ b/board/csky/gx6605s/gx6605s.dts
-@@ -0,0 +1,155 @@
-+/dts-v1/;
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
++++ b/package/sdbusplus/0001-build-Fix-example-build-with-disable-sdbuspp.patch
+@@ -0,0 +1,42 @@
++From c5d5a94f8e554f160e3f120b826e97b2961e2706 Mon Sep 17 00:00:00 2001
++From: Trent Piepho <tpiepho@impinj.com>
++Date: Mon, 14 May 2018 16:17:38 -0700
++Subject: [PATCH] build: Fix example build with --disable-sdbuspp
 +
-+/ {
-+	model = "C-SKY gx6605s";
-+	compatible = "csky,gx6605s";
-+	#address-cells = <1>;
-+	#size-cells = <1>;
++The calculator server examples uses the sdbus++ python program to build.
++If this has been disabled, then trying to use it to build the example
++could fail.  For instance, if python and all necessary python packages
++are not available.  This might be the case when cross building the only
++the library component for a target system.
 +
-+	memory {
-+		device_type = "memory";
-+		reg = <0x10000000 0x04000000>;
-+	};
++Don't build the calculator example when sdbus++ has been disabled.
 +
-+	soc {
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		compatible = "simple-bus";
-+		ranges;
++Signed-off-by: Trent Piepho <tpiepho@impinj.com>
++---
++ example/Makefile.am | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
 +
-+		dummy_apb: apb-clock {
-+			compatible = "fixed-clock";
-+			clock-frequency = <27000000>;
-+			clock-output-names = "dummy_apb";
-+			#clock-cells = <0>;
-+		};
++diff --git a/example/Makefile.am b/example/Makefile.am
++index 2cf8941..b0c3a4f 100644
++--- a/example/Makefile.am
+++++ b/example/Makefile.am
++@@ -1,4 +1,7 @@
++-noinst_PROGRAMS = calculator-server list-users
+++noinst_PROGRAMS = list-users
+++
+++if WANT_SDBUSPP
+++noinst_PROGRAMS += calculator-server
++ 
++ calculator_server_generated_files = \
++ 	net/poettering/Calculator/server.hpp \
++@@ -8,6 +11,7 @@ calculator_server_generated_files = \
++ 
++ calculator_markdown_generated_files = \
++ 	calculator.md
+++endif
++ 
++ calculator_server_SOURCES = \
++ 	calculator-server.cpp $(calculator_server_generated_files)
++-- 
++2.14.3
 +
-+		intc: interrupt-controller at 500000 {
-+			compatible = "csky,gx6605s-intc";
-+			reg = <0x00500000 0x400>;
-+			interrupt-controller;
-+			#interrupt-cells = <1>;
-+		};
+diff --git a/package/sdbusplus/Config.in b/package/sdbusplus/Config.in
+new file mode 100644
+index 0000000000..578d2d5bd7
+--- /dev/null
++++ b/package/sdbusplus/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_SDBUSPLUS
++	bool "sdbusplus"
++	depends on BR2_INSTALL_LIBSTDCPP
++	select BR2_PACKAGE_SYSTEMD
++	select BR2_PACKAGE_HOST_PKGCONF
++	help
++	  A C++ library for sd-bus with a bindings and doc generator.
 +
-+		timer at 20a000 {
-+			compatible = "csky,gx6605s-timer";
-+			reg = <0x0020a000 0x400>;
-+			clocks = <&dummy_apb>;
-+			interrupts = <10>;
-+			interrupt-parent = <&intc>;
-+		};
++	  This will build the target library.  See the host package for
++	  the bindings and documentation generation program.
 +
-+		ehci-hcd at 900000 {
-+			compatible = "generic-ehci";
-+			reg = <0x00900000 0x400>;
-+			interrupt-parent = <&intc>;
-+			interrupts = <59>;
-+		};
++	  https://github.com/openbmc/sdbusplus
+diff --git a/package/sdbusplus/Config.in.host b/package/sdbusplus/Config.in.host
+new file mode 100644
+index 0000000000..03f55c4c4f
+--- /dev/null
++++ b/package/sdbusplus/Config.in.host
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_HOST_SDBUSPLUS
++	bool "host-sdbusplus"
++	select BR2_PACKAGE_HOST_PKGCONF
++	help
++	  A C++ library for sd-bus with a bindings and doc generator.
 +
-+		ohci-hcd0 at a00000 {
-+			compatible = "generic-ohci";
-+			reg = <0x00a00000 0x400>;
-+			interrupt-parent = <&intc>;
-+			interrupts = <58>;
-+		};
++	  This will be the host side generation tool for bindings and
++	  documentation.
 +
-+		ohci-hcd1 at b00000 {
-+			compatible = "generic-ohci";
-+			reg = <0x00b00000 0x400>;
-+			interrupt-parent = <&intc>;
-+			interrupts = <57>;
-+		};
++	  https://github.com/openbmc/sdbusplus
+diff --git a/package/sdbusplus/sdbusplus.hash b/package/sdbusplus/sdbusplus.hash
+new file mode 100644
+index 0000000000..5b616970d5
+--- /dev/null
++++ b/package/sdbusplus/sdbusplus.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  9136215c5fc849c33555db4210f17d844864c1b0790fe35026d594af965aa09d  sdbusplus-28dc36d509ba8f77ffb5726cc7d5f0184f8054b1.tar.gz
+diff --git a/package/sdbusplus/sdbusplus.mk b/package/sdbusplus/sdbusplus.mk
+new file mode 100644
+index 0000000000..b1b3d5c138
+--- /dev/null
++++ b/package/sdbusplus/sdbusplus.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# sdbusplus
++#
++################################################################################
 +
-+		serial at 403000 {
-+			compatible = "ns16550a";
-+			reg = <0x00403000 0x400>;
-+			interrupt-parent = <&intc>;
-+			interrupts = <15>;
-+			clock-frequency = <29491200>;
-+			baud = <115200>;
-+			reg-shift = <2>;
-+			reg-io-width = <1>;
-+		};
++SDBUSPLUS_VERSION = 28dc36d509ba8f77ffb5726cc7d5f0184f8054b1
++SDBUSPLUS_SITE = $(call github,openbmc,sdbusplus,$(SDBUSPLUS_VERSION))
++SDBUSPLUS_DEPENDENCIES = host-autoconf-archive host-pkgconf systemd
++HOST_SDBUSPLUS_DEPENDENCIES = host-autoconf-archive host-pkgconf \
++	$(PKG_PYTHON_HOST_PYTHON) host-python-inflection host-python-mako host-python-pyyaml
++SDBUSPLUS_CONF_OPTS = --disable-sdbuspp
++HOST_SDBUSPLUS_CONF_OPTS = --disable-libsdbusplus
++SDBUSPLUS_AUTORECONF = YES
++SDBUSPLUS_AUTORECONF_OPTS = --include=$(HOST_DIR)/usr/share/autoconf-archive
++SDBUSPLUS_INSTALL_STAGING = YES
++SDBUSPLUS_LICENSE = Apache-2.0
++SDBUSPLUS_LICENSE_FILES = LICENSE
 +
-+		gpio0: gpio at 305000 {
-+			compatible = "wd,mbl-gpio";
-+			reg-names = "dirout", "dat", "set", "clr";
-+			reg = <0x305000 4>, <0x305004 4>, <0x305008 4>, <0x30500c 4>;
-+			bgpio-base = <0>;
-+			#gpio-cells = <2>;
-+			gpio-controller;
-+		};
-+
-+		gpio_buttons {
-+			compatible = "gpio-keys-polled";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			poll-interval = <100>;
-+			autorepeat;
-+
-+			button0 {
-+				label = "button8";
-+				linux,code = <KEY_LEFT>;
-+				gpios = <&gpio0 8 GPIO_ACTIVE_LOW>;
-+			};
-+
-+			button1 {
-+				label = "button6";
-+				linux,code = <KEY_RIGHT>;
-+				gpios = <&gpio0 6 GPIO_ACTIVE_LOW>;
-+			};
-+
-+			button2 {
-+				label = "button5";
-+				linux,code = <KEY_UP>;
-+				gpios = <&gpio0 5 GPIO_ACTIVE_LOW>;
-+			};
-+
-+			button3 {
-+				label = "button9";
-+				linux,code = <KEY_DOWN>;
-+				gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
-+			};
-+
-+			button4 {
-+				label = "button7";
-+				linux,code = <KEY_ENTER>;
-+				gpios = <&gpio0 7 GPIO_ACTIVE_LOW>;
-+			};
-+		};
-+
-+		gpio_leds {
-+			compatible = "gpio-leds";
-+
-+			led0 {
-+				label = "led10";
-+				gpios = <&gpio0 10 GPIO_ACTIVE_LOW>;
-+				linux,default-trigger = "heartbeat";
-+			};
-+
-+			led1 {
-+				label = "led11";
-+				gpios = <&gpio0 11 GPIO_ACTIVE_LOW>;
-+				linux,default-trigger = "timer";
-+			};
-+
-+			led2 {
-+				label = "led12";
-+				gpios = <&gpio0 12 GPIO_ACTIVE_LOW>;
-+				linux,default-trigger = "default-on";
-+			};
-+
-+			led3 {
-+				label = "led13";
-+				gpios = <&gpio0 13 GPIO_ACTIVE_LOW>;
-+				linux,default-trigger = "default-on";
-+			};
-+		};
-+	};
-+
-+	chosen {
-+		bootargs = "console=ttyS0,115200 init=/sbin/init root=/dev/sda2 rw rootwait";
-+	};
-+};
-diff --git a/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch b/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
-deleted file mode 100644
-index 1da1a75..0000000
---- a/board/csky/gx6605s/patches/linux/0001-csky-update-cmdline-for-serial-console-and-rootfs-on.patch
-+++ /dev/null
-@@ -1,25 +0,0 @@
--From 7e3f2c482bc16537a093e87a27f0d465804a88e4 Mon Sep 17 00:00:00 2001
--From: Julien Olivain <juju@cotds.org>
--Date: Tue, 11 Dec 2018 23:04:46 +0100
--Subject: [PATCH] csky: update cmdline for serial console and rootfs on sda1
--
--Signed-off-by: Julien Olivain <juju@cotds.org>
-----
-- arch/csky/boot/dts/gx6605s.dts | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/arch/csky/boot/dts/gx6605s.dts b/arch/csky/boot/dts/gx6605s.dts
--index ce56106af967..f5d60b21e6f9 100644
----- a/arch/csky/boot/dts/gx6605s.dts
--+++ b/arch/csky/boot/dts/gx6605s.dts
--@@ -155,6 +155,6 @@
-- 	};
-- 
-- 	chosen {
---		bootargs = "console=tty0 init=/sbin/init root=/dev/sda2 rw rootwait";
--+		bootargs = "console=ttyS0,115200 init=/sbin/init root=/dev/sda1 rw rootwait";
-- 	};
-- };
---- 
--2.19.2
--
-diff --git a/board/qemu/csky/linux-ck610.config.fragment b/board/qemu/csky/linux-ck610.config.fragment
-index d80d0ee..b690c7d 100644
---- a/board/qemu/csky/linux-ck610.config.fragment
-+++ b/board/qemu/csky/linux-ck610.config.fragment
-@@ -1,5 +1,6 @@
- CONFIG_COMPILE_TEST=y
- CONFIG_CPU_CK610=y
- CONFIG_CPU_PM_WAIT=y
-+CONFIG_RAM_BASE=0x10000000
- CONFIG_CSKY_APB_INTC=y
- CONFIG_GX6605S_TIMER=y
-diff --git a/configs/csky_gx6605s_defconfig b/configs/csky_gx6605s_defconfig
-index d0a2aad..4dc05eb 100644
---- a/configs/csky_gx6605s_defconfig
-+++ b/configs/csky_gx6605s_defconfig
-@@ -1,18 +1,20 @@
-+# Architecture
- BR2_csky=y
--BR2_GLOBAL_PATCH_DIR="board/csky/gx6605s/patches"
--BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/c-sky/tools/raw/master/csky-linux-tools-x86_64-glibc-linux-4.9.56-20180128.tar.gz"
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="csky-linux"
--BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
--BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
--BR2_TOOLCHAIN_EXTERNAL_CXX=y
--BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y
-+BR2_ck610=y
-+
-+# System
-+BR2_ROOTFS_DEVICE_CREATION_STATIC=y
-+BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+
-+# linux kernel header, the same version with linux kernel
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
-+
-+# Kernel
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="https://github.com/c-sky/linux-4.9.y/archive/6064a9bdf48cefbccc4f6472dd04251f0dec1931.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="gx66xx"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="gx6605s"
--BR2_TARGET_ROOTFS_EXT2=y
-+BR2_LINUX_KERNEL_CUSTOM_DTS_PATH="board/csky/gx6605s/gx6605s.dts"
++$(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-2.7.4
+2.19.1
