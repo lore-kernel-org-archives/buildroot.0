@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 20:45:01 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/logrotate: fix
+Date: Mon, 24 Jun 2019 20:45:27 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/logrotate: fix
  legal-info
-Message-ID: <20190624184404.AACB482283@busybox.osuosl.org>
+Message-ID: <20190624184426.EDA2D81432@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cbbabb1cb3a84849d611493b461e68e388e7bde5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=4e299e5ba81c2f5dd4b995e6984e3dfedbaa8c9e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Add hash for COPYING file
 
