@@ -1,36 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Jun 2019 06:13:05 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/harfbuzz: fix build without
- cairo-svg
-In-Reply-To: <20190623190309.61714-1-james.hilliard1@gmail.com>
-References: <20190623190309.61714-1-james.hilliard1@gmail.com>
-Message-ID: <20190624061305.62a4e523@windsurf>
+Date: Mon, 24 Jun 2019 06:23:33 +0200
+Subject: [Buildroot] [PATCH] package/icu: adjust version information
+Message-ID: <20190624042333.1946-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 23 Jun 2019 13:03:09 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+The icu upstream developers have a strange way of labelling their versions:
 
-> Fixes:
-> http://autobuild.buildroot.org/results/f6c0b85fa476e0f52cc06f0133d2e4f9920f7556
-> test-ot-color.cc:40:10: fatal error: cairo-svg.h: No such file or directory
->    40 | #include <cairo-svg.h>
->       |          ^~~~~~~~~~~~~
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...airo-svg-dependency-to-test-ot-color.patch | 38 +++++++++++++++++++
->  package/harfbuzz/harfbuzz.mk                  |  2 +-
->  2 files changed, 39 insertions(+), 1 deletion(-)
->  create mode 100644 package/harfbuzz/0001-Add-missing-cairo-svg-dependency-to-test-ot-color.patch
+ - The Github tags are named release-XX-Y, and therefore the versions
+   referenced by by Release Monitoring look like 60-2 or 64-1.
 
-Applied to master, thanks.
+ - The tarballs contain the version with an underscore separator, i.e
+   60_2 or 64_1.
 
-Thomas
+ - The directories on http://download.icu-project.org/files/icu4c/
+   contain the version with a dot separator, i.e 60.2 or 64.1.
+
+In order to have our <pkg>_VERSION match the one on Release
+Monitoring, we adjust it to use the underscore separator, and then
+further tweak the ICU_SOURCE and ICU_SITE definitions to keep
+everything working.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/icu/icu.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index a9466c8322..7bc1b97624 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -4,9 +4,12 @@
+ #
+ ################################################################################
+ 
+-ICU_VERSION = 60.2
+-ICU_SOURCE = icu4c-$(subst .,_,$(ICU_VERSION))-src.tgz
+-ICU_SITE = http://download.icu-project.org/files/icu4c/$(ICU_VERSION)
++# Git tags (and therefore versions on release-monitoring.org) use the
++# XX-Y format, but the tarballs are named XX_Y and the containing
++# directories XX.Y.
++ICU_VERSION = 60-2
++ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
++ICU_SITE = http://download.icu-project.org/files/icu4c/$(subst -,.,$(ICU_VERSION))
+ ICU_LICENSE = ICU License
+ ICU_LICENSE_FILES = LICENSE
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
