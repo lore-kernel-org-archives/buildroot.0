@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 21:03:22 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] {linux,
+Date: Mon, 24 Jun 2019 20:54:30 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] {linux,
  linux-headers}: bump 4.{4, 9, 14, 19}.x / 5.1.x series
-Message-ID: <20190624190229.E8A4B868B5@busybox.osuosl.org>
+Message-ID: <20190624190446.ADAA1868B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c254130b126157fe03f589e502bbe9d7519fc31
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=5de89341827a98cb3af3e18e46104a16b0d4f5ef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Includes fixes for the "TCP SACK PANIC" vulnerability:
 
@@ -20,31 +20,34 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 (cherry picked from commit 19f6b3281c03a1892900723c47cc766e6770e862)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 8 ++++----
- package/linux-headers/Config.in.host | 8 ++++----
- 3 files changed, 9 insertions(+), 9 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
 diff --git a/linux/Config.in b/linux/Config.in
-index f1695f8f94..9ff8069f6e 100644
+index 95ee1cf542..0bc9612551 100644
 --- a/linux/Config.in
 +++ b/linux/Config.in
-@@ -122,7 +122,7 @@ endif
+@@ -121,7 +121,7 @@ endif
  
  config BR2_LINUX_KERNEL_VERSION
  	string
--	default "4.19.51" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.19.52" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.176-cip31" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	default "5.1.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.1.11" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
  	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
  		if BR2_LINUX_KERNEL_CUSTOM_VERSION
 diff --git a/linux/linux.hash b/linux/linux.hash
-index 1b75082114..dc1a916d03 100644
+index 6477991daa..497e8e4d6f 100644
 --- a/linux/linux.hash
 +++ b/linux/linux.hash
-@@ -1,6 +1,6 @@
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256 39063041532579cb7e9fab5837313a8e6639c1c583cd39c72b313b3abfa9fbcf  linux-5.1.10.tar.xz
++sha256 11fd93207290272389ad284b8b042041d088fbee0ed5798e933bf8e91697d219  linux-5.1.11.tar.xz
+ sha256 98d307a546c95a215dee675ffa4b63c2a7a29e7af839f0d8dfb96dbb61aac2d7  linux-5.0.21.tar.xz
  # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
 -sha256 7afa920d776f8ca3fc3ced5026cc02c5ccc960c58314050982c307589b5a8d70  linux-4.19.51.tar.xz
 -sha256 6a2e89504d8560b132ab743a0206ffce026bff2697b705819421c5f125633970  linux-4.14.126.tar.xz
 -sha256 8fcd223e11cba322801bc38cdb8b581d64c0115f585dcb6604de8561b574fced  linux-4.9.181.tar.xz
@@ -54,10 +57,10 @@ index 1b75082114..dc1a916d03 100644
 +sha256 b16e12681a0638368479d73a9b1b8e9407c1ae4b7ae52fdf236d9e5657999695  linux-4.9.182.tar.xz
 +sha256 c409d88f61cd9a37cbba36d5d9c8162263eb1e5c9380efaf880a3ec10cd88527  linux-4.4.182.tar.xz
 diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index bc53613003..52f7d843fe 100644
+index 3ddf4a75f6..2bdce9b7f8 100644
 --- a/package/linux-headers/Config.in.host
 +++ b/package/linux-headers/Config.in.host
-@@ -287,10 +287,10 @@ endchoice
+@@ -297,12 +297,12 @@ endchoice
  
  config BR2_DEFAULT_KERNEL_HEADERS
  	string
@@ -69,6 +72,9 @@ index bc53613003..52f7d843fe 100644
 +	default "4.9.182"	if BR2_KERNEL_HEADERS_4_9
 +	default "4.14.127"	if BR2_KERNEL_HEADERS_4_14
 +	default "4.19.52"	if BR2_KERNEL_HEADERS_4_19
- 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
+ 	default "5.0.21"	if BR2_KERNEL_HEADERS_5_0
+-	default "5.1.10"	if BR2_KERNEL_HEADERS_5_1
++	default "5.1.11"	if BR2_KERNEL_HEADERS_5_1
  	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
  	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
