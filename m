@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 24 Jun 2019 23:36:47 +0200
-Subject: [Buildroot] [PATCH 05/19] autobuild-run: move http variables
+Date: Mon, 24 Jun 2019 23:37:38 +0200
+Subject: [Buildroot] [PATCH 08/19] autobuild-run: move toolchains_csv
  from kwargs to Builder class
-In-Reply-To: <20190621084730.16411-5-itsatharva@gmail.com>
+In-Reply-To: <20190621084730.16411-8-itsatharva@gmail.com>
 References: <20190621084730.16411-1-itsatharva@gmail.com>
- <20190621084730.16411-5-itsatharva@gmail.com>
-Message-ID: <0d7ca9dc-6f3e-35e5-017a-51f39eeea50e@mind.be>
+ <20190621084730.16411-8-itsatharva@gmail.com>
+Message-ID: <dc6b2bcd-5353-51d5-e027-d6c7ae76174b@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,62 +16,66 @@ To: buildroot@busybox.net
 
 On 21/06/2019 10:47, Atharva Lele wrote:
 > Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+> ---
+>  scripts/autobuild-run | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
+> index a435570..f737b27 100755
+> --- a/scripts/autobuild-run
+> +++ b/scripts/autobuild-run
+> @@ -273,7 +273,7 @@ class SystemInfo:
+>  class Builder:
+>      def __init__(self, instance, njobs, sysinfo,
+>                   http_url, http_login, http_password,
+> -                 submitter, make_opts, nice):
+> +                 submitter, make_opts, nice, toolchains_csv):
+>          self.instance = instance
+>          self.njobs = njobs
+>          self.sysinfo = sysinfo
+> @@ -283,6 +283,7 @@ class Builder:
+>          self.submitter = submitter
+>          self.make_opts = make_opts
+>          self.nice = nice
+> +        self.toolchains_csv = toolchains_csv
+>  
+>      def prepare_build(self, **kwargs):
+>          """Prepare for the next build of the specified instance
+> @@ -381,7 +382,7 @@ class Builder:
+>          args = [os.path.join(srcdir, "utils/genrandconfig"),
+>                  "-o", outputdir, "-b", srcdir]
+>  
+> -        toolchains_csv = kwargs['toolchains_csv']
+> +        toolchains_csv = self.toolchains_csv
+
+ Creating a local variable here is not very useful anymore. Better use
+self.toolchains_csv everywhere below.
+
+ That can be done in the same patch.
+
+ Either way:
 
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+
+In other words: you can respin with self.toolchains_csv everywhere, or Thomas
+can apply without it. Either way is fine.
 
  Regards,
  Arnout
 
-> ---
->  scripts/autobuild-run | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
-> 
-> diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index 22452cf..03c54a9 100755
-> --- a/scripts/autobuild-run
-> +++ b/scripts/autobuild-run
-> @@ -271,10 +271,14 @@ class SystemInfo:
->          return not missing_requirements
->  
->  class Builder:
-> -    def __init__(self, instance, njobs, sysinfo):
-> +    def __init__(self, instance, njobs, sysinfo,
-> +                 http_url, http_login, http_password):
->          self.instance = instance
->          self.njobs = njobs
->          self.sysinfo = sysinfo
-> +        self.http_url = http_url
-> +        self.http_login = http_login
-> +        self.http_password = http_password
->  
->      def prepare_build(self, **kwargs):
->          """Prepare for the next build of the specified instance
-> @@ -681,11 +685,11 @@ class Builder:
->              # none of the ones that are part of the standard library can
->              # upload a file without writing dozens of lines of code.
->              ret = subprocess.call(["curl", "-u",
-> -                                "%s:%s" % (kwargs['http_login'], kwargs['http_password']),
-> +                                "%s:%s" % (self.http_login, self.http_password),
->                                  "-H", "Expect:",
->                                  "-F", "uploadedfile=@%s" % os.path.join(outputdir, "results.tar.bz2"),
->                                  "-F", "uploadsubmit=1",
-> -                                kwargs['http_url']],
-> +                                self.http_url],
->                                  stdout=log, stderr=log)
->              if ret != 0:
->                  log_write(log, "INFO: results could not be submitted, %d" % ret)
-> @@ -845,11 +849,9 @@ def main():
->      buildpid = multiprocessing.Array('i', int(args['--ninstances']))
->      processes = []
->      for i in range(0, int(args['--ninstances'])):
-> -        builder = Builder(i, args['--njobs'], sysinfo)
-> +        builder = Builder(i, args['--njobs'], sysinfo, args['--http-url'],
-> +                          args['--http-login'], args['--http-password'])
+
+>          if toolchains_csv:
+>              if not os.path.isabs(toolchains_csv):
+>                  toolchains_csv = os.path.join(srcdir, toolchains_csv)
+> @@ -855,9 +856,8 @@ def main():
+>          builder = Builder(i, args['--njobs'], sysinfo, args['--http-url'],
+>                            args['--http-login'], args['--http-password'],
+>                            args['--submitter'], (args['--make-opts'] or ''),
+> -                          (args['--nice'] or 0))
+> +                          (args['--nice'] or 0), args['--toolchains-csv'])
 >          p = multiprocessing.Process(target=builder.run_instance, kwargs=dict(
-> -                http_url = args['--http-url'],
-> -                http_login = args['--http-login'],
-> -                http_password = args['--http-password'],
->                  submitter = args['--submitter'],
->                  make_opts = (args['--make-opts'] or ''),
->                  nice = (args['--nice'] or 0),
+> -                toolchains_csv = args['--toolchains-csv'],
+>                  repo = args['--repo'],
+>                  upload = upload,
+>                  buildpid = buildpid,
 > 
