@@ -1,203 +1,102 @@
 From: John Faith <jfaith@impinj.com>
-Date: Mon, 24 Jun 2019 15:45:45 +0000
-Subject: [Buildroot] [PATCH 2/2] sdbusplus: new package
-In-Reply-To: <20190624154451.22199-1-jfaith@impinj.com>
-References: <20190624154451.22199-1-jfaith@impinj.com>
-Message-ID: <20190624154451.22199-2-jfaith@impinj.com>
+Date: Mon, 24 Jun 2019 15:45:41 +0000
+Subject: [Buildroot] [PATCH 1/2] python-inflection: new package
+Message-ID: <20190624154451.22199-1-jfaith@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Trent Piepho <tpiepho@impinj.com>
+A string transformation library that singularizes and pluralizes English
+words, and transforms strings from CamelCase to underscored string.
+Inflection is a port of Ruby on Rails' inflector to Python.
 
-A C++ library for interacting with sd-bus and a C++ bindings generator.
-
-The host build produces a code generation tool, sdbus++ while the target
-build gives libsdbusplus.
-
-The target build of sdbusplus tries to use the code generator tool,
-which we do not build for the target, to build an example program.
-Disable the examples to fix this.
-
-The code generator requires host-python-pyyaml, since this isn't built
-on the target, the target build does not require python-pyyaml.
-
-The host package includes a code and documentation generation program,
-which is useful for including in a buildroot SDK, even if no target
-packages built need it.  So make it a selected host package.
+https://github.com/jpvanhal/inflection
 
 Signed-off-by: John Faith <jfaith@impinj.com>
-Signed-off-by: Trent Piepho <tpiepho@impinj.com>
 ---
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- package/Config.in.host                        |  1 +
- ...x-example-build-with-disable-sdbuspp.patch | 42 +++++++++++++++++++
- package/sdbusplus/Config.in                   | 12 ++++++
- package/sdbusplus/Config.in.host              | 10 +++++
- package/sdbusplus/sdbusplus.hash              |  2 +
- package/sdbusplus/sdbusplus.mk                | 21 ++++++++++
- 8 files changed, 90 insertions(+)
- create mode 100644 package/sdbusplus/0001-build-Fix-example-build-with-disable-sdbuspp.patch
- create mode 100644 package/sdbusplus/Config.in
- create mode 100644 package/sdbusplus/Config.in.host
- create mode 100644 package/sdbusplus/sdbusplus.hash
- create mode 100644 package/sdbusplus/sdbusplus.mk
+ DEVELOPERS                                       |  3 +++
+ package/Config.in                                |  1 +
+ package/python-inflection/Config.in              | 10 ++++++++++
+ package/python-inflection/python-inflection.hash |  3 +++
+ package/python-inflection/python-inflection.mk   | 15 +++++++++++++++
+ 5 files changed, 32 insertions(+)
+ create mode 100644 package/python-inflection/Config.in
+ create mode 100644 package/python-inflection/python-inflection.hash
+ create mode 100644 package/python-inflection/python-inflection.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index e9c521f400..08ef4f74eb 100644
+index ce3fcb2de8..e9c521f400 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1176,6 +1176,7 @@ F:	package/dhcpcd/
+@@ -1174,6 +1174,9 @@ F:	package/nginx-dav-ext/
+ N:	John Stile <johns@msli.com>
+ F:	package/dhcpcd/
  
- N:	John Faith <jfaith@impinj.com>
- F:	package/python-inflection/
-+F:	package/sdbusplus/
- 
++N:	John Faith <jfaith@impinj.com>
++F:	package/python-inflection/
++
  N:	Jonathan Ben Avraham <yba@tkos.co.il>
  F:	arch/Config.in.xtensa
+ F:	package/autofs/
 diff --git a/package/Config.in b/package/Config.in
-index d501b5a65b..73aeed26a1 100644
+index bc529e0b56..d501b5a65b 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -513,6 +513,7 @@ endmenu
- 	source "package/rtl8723bu/Config.in"
- 	source "package/rtl8821au/Config.in"
- 	source "package/sane-backends/Config.in"
-+	source "package/sdbusplus/Config.in"
- 	source "package/sdparm/Config.in"
- 	source "package/sedutil/Config.in"
- 	source "package/setserial/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 1501889b72..835dd04237 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -61,6 +61,7 @@ menu "Host utilities"
- 	source "package/rustc/Config.in.host"
- 	source "package/s6-rc/Config.in.host"
- 	source "package/sam-ba/Config.in.host"
-+	source "package/sdbusplus/Config.in.host"
- 	source "package/squashfs/Config.in.host"
- 	source "package/sunxi-tools/Config.in.host"
- 	source "package/swig/Config.in.host"
-diff --git a/package/sdbusplus/0001-build-Fix-example-build-with-disable-sdbuspp.patch b/package/sdbusplus/0001-build-Fix-example-build-with-disable-sdbuspp.patch
+@@ -909,6 +909,7 @@ menu "External python modules"
+ 	source "package/python-id3/Config.in"
+ 	source "package/python-idna/Config.in"
+ 	source "package/python-incremental/Config.in"
++	source "package/python-inflection/Config.in"
+ 	source "package/python-influxdb/Config.in"
+ 	source "package/python-iniparse/Config.in"
+ 	source "package/python-iowait/Config.in"
+diff --git a/package/python-inflection/Config.in b/package/python-inflection/Config.in
 new file mode 100644
-index 0000000000..1262ced0f2
+index 0000000000..354a2345f1
 --- /dev/null
-+++ b/package/sdbusplus/0001-build-Fix-example-build-with-disable-sdbuspp.patch
-@@ -0,0 +1,42 @@
-+From c5d5a94f8e554f160e3f120b826e97b2961e2706 Mon Sep 17 00:00:00 2001
-+From: Trent Piepho <tpiepho@impinj.com>
-+Date: Mon, 14 May 2018 16:17:38 -0700
-+Subject: [PATCH] build: Fix example build with --disable-sdbuspp
-+
-+The calculator server examples uses the sdbus++ python program to build.
-+If this has been disabled, then trying to use it to build the example
-+could fail.  For instance, if python and all necessary python packages
-+are not available.  This might be the case when cross building the only
-+the library component for a target system.
-+
-+Don't build the calculator example when sdbus++ has been disabled.
-+
-+Signed-off-by: Trent Piepho <tpiepho@impinj.com>
-+---
-+ example/Makefile.am | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/example/Makefile.am b/example/Makefile.am
-+index 2cf8941..b0c3a4f 100644
-+--- a/example/Makefile.am
-++++ b/example/Makefile.am
-+@@ -1,4 +1,7 @@
-+-noinst_PROGRAMS = calculator-server list-users
-++noinst_PROGRAMS = list-users
-++
-++if WANT_SDBUSPP
-++noinst_PROGRAMS += calculator-server
-+ 
-+ calculator_server_generated_files = \
-+ 	net/poettering/Calculator/server.hpp \
-+@@ -8,6 +11,7 @@ calculator_server_generated_files = \
-+ 
-+ calculator_markdown_generated_files = \
-+ 	calculator.md
-++endif
-+ 
-+ calculator_server_SOURCES = \
-+ 	calculator-server.cpp $(calculator_server_generated_files)
-+-- 
-+2.14.3
-+
-diff --git a/package/sdbusplus/Config.in b/package/sdbusplus/Config.in
-new file mode 100644
-index 0000000000..578d2d5bd7
---- /dev/null
-+++ b/package/sdbusplus/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_SDBUSPLUS
-+	bool "sdbusplus"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	select BR2_PACKAGE_SYSTEMD
-+	select BR2_PACKAGE_HOST_PKGCONF
-+	help
-+	  A C++ library for sd-bus with a bindings and doc generator.
-+
-+	  This will build the target library.  See the host package for
-+	  the bindings and documentation generation program.
-+
-+	  https://github.com/openbmc/sdbusplus
-diff --git a/package/sdbusplus/Config.in.host b/package/sdbusplus/Config.in.host
-new file mode 100644
-index 0000000000..03f55c4c4f
---- /dev/null
-+++ b/package/sdbusplus/Config.in.host
++++ b/package/python-inflection/Config.in
 @@ -0,0 +1,10 @@
-+config BR2_PACKAGE_HOST_SDBUSPLUS
-+	bool "host-sdbusplus"
-+	select BR2_PACKAGE_HOST_PKGCONF
++config BR2_PACKAGE_PYTHON_INFLECTION
++	bool "python-inflection"
 +	help
-+	  A C++ library for sd-bus with a bindings and doc generator.
++	  A string transformation library that singularizes and
++	  pluralizes English words, and transforms strings from
++	  CamelCase to underscored string.
 +
-+	  This will be the host side generation tool for bindings and
-+	  documentation.
++	  Inflection is a port of Ruby on Rails' inflector to Python
 +
-+	  https://github.com/openbmc/sdbusplus
-diff --git a/package/sdbusplus/sdbusplus.hash b/package/sdbusplus/sdbusplus.hash
++	  https://github.com/jpvanhal/inflection
+diff --git a/package/python-inflection/python-inflection.hash b/package/python-inflection/python-inflection.hash
 new file mode 100644
-index 0000000000..5b616970d5
+index 0000000000..4bccf81622
 --- /dev/null
-+++ b/package/sdbusplus/sdbusplus.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  9136215c5fc849c33555db4210f17d844864c1b0790fe35026d594af965aa09d  sdbusplus-28dc36d509ba8f77ffb5726cc7d5f0184f8054b1.tar.gz
-diff --git a/package/sdbusplus/sdbusplus.mk b/package/sdbusplus/sdbusplus.mk
++++ b/package/python-inflection/python-inflection.hash
+@@ -0,0 +1,3 @@
++# Hashes from https://pypi.python.org/pypi/inflection/json
++md5     7941165e9f148e0520023941c0886b40  inflection-0.3.1.tar.gz
++sha256  18ea7fb7a7d152853386523def08736aa8c32636b047ade55f7578c4edeb16ca  inflection-0.3.1.tar.gz
+diff --git a/package/python-inflection/python-inflection.mk b/package/python-inflection/python-inflection.mk
 new file mode 100644
-index 0000000000..b1b3d5c138
+index 0000000000..7309880c6a
 --- /dev/null
-+++ b/package/sdbusplus/sdbusplus.mk
-@@ -0,0 +1,21 @@
++++ b/package/python-inflection/python-inflection.mk
+@@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# sdbusplus
++# python-inflection
 +#
 +################################################################################
 +
-+SDBUSPLUS_VERSION = 28dc36d509ba8f77ffb5726cc7d5f0184f8054b1
-+SDBUSPLUS_SITE = $(call github,openbmc,sdbusplus,$(SDBUSPLUS_VERSION))
-+SDBUSPLUS_DEPENDENCIES = host-autoconf-archive host-pkgconf systemd
-+HOST_SDBUSPLUS_DEPENDENCIES = host-autoconf-archive host-pkgconf \
-+	$(PKG_PYTHON_HOST_PYTHON) host-python-inflection host-python-mako host-python-pyyaml
-+SDBUSPLUS_CONF_OPTS = --disable-sdbuspp
-+HOST_SDBUSPLUS_CONF_OPTS = --disable-libsdbusplus
-+SDBUSPLUS_AUTORECONF = YES
-+SDBUSPLUS_AUTORECONF_OPTS = --include=$(HOST_DIR)/usr/share/autoconf-archive
-+SDBUSPLUS_INSTALL_STAGING = YES
-+SDBUSPLUS_LICENSE = Apache-2.0
-+SDBUSPLUS_LICENSE_FILES = LICENSE
++PYTHON_INFLECTION_VERSION = 0.3.1
++PYTHON_INFLECTION_SOURCE = inflection-$(PYTHON_INFLECTION_VERSION).tar.gz
++PYTHON_INFLECTION_SITE = https://pypi.python.org/packages/d5/35/a6eb45b4e2356fe688b21570864d4aa0d0a880ce387defe9c589112077f8
++PYTHON_INFLECTION_SETUP_TYPE = setuptools
++PYTHON_INFLECTION_LICENSE = MIT
++PYTHON_INFLECTION_LICENSE_FILES = LICENSE
 +
-+$(eval $(autotools-package))
-+$(eval $(host-autotools-package))
++$(eval $(python-package))
++$(eval $(host-python-package))
 -- 
 2.19.1
