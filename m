@@ -1,43 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 21:08:24 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/psplash: add
- license file details
-Message-ID: <20190624190722.E80DD81E05@busybox.osuosl.org>
+Date: Mon, 24 Jun 2019 21:09:05 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/tvheadend: fix
+ PIE build failures
+Message-ID: <20190624190837.3B79B81F57@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2559d81af81bdb28f2922bc5a500a6bdd39e308
+commit: https://git.buildroot.net/buildroot/commit/?id=05626b340a43a0249f248bb048e5400830430033
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Package tvheadend builds using '-pie' linker flag in any case. This
+leads to linking failure if toolchain doesn't support 'pie'.
+
+Add patch to fix tvheadend's Makefile bug where '-pie' flag is hardcoded
+making it depend on '--disable-pie' as compiler's flags already are
+treated.
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 32a0d3a8e2cf78f0f36b948ba5ea5aa85c2ceeb1)
+(cherry picked from commit dd0907d465a0d82a4844e7aaf3eb3be69103642b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/psplash/psplash.hash | 1 +
- package/psplash/psplash.mk   | 1 +
- 2 files changed, 2 insertions(+)
+ ...-fix-pie-linking-according-to-disable-pie.patch | 34 ++++++++++++++++++++++
+ package/tvheadend/tvheadend.mk                     |  4 +++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/package/psplash/psplash.hash b/package/psplash/psplash.hash
-index 68c6ffa8a9..c8865697c4 100644
---- a/package/psplash/psplash.hash
-+++ b/package/psplash/psplash.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256 aaddb20ef892dfb03d4e046cc634159bbcdfe555f7291652dde2b7d4cf491289  psplash-5b3c1cc28f5abdc2c33830150b48b278cc4f7bca.tar.gz
-+sha256 f9c375a1be4a41f7b70301dd83c91cb89e41567478859b77eef375a52d782505  COPYING
-diff --git a/package/psplash/psplash.mk b/package/psplash/psplash.mk
-index fe009785b9..4a2e0de5ce 100644
---- a/package/psplash/psplash.mk
-+++ b/package/psplash/psplash.mk
-@@ -7,6 +7,7 @@
- PSPLASH_VERSION = 5b3c1cc28f5abdc2c33830150b48b278cc4f7bca
- PSPLASH_SITE = git://git.yoctoproject.org/psplash
- PSPLASH_LICENSE = GPL-2.0+
-+PSPLASH_LICENSE_FILES = COPYING
- PSPLASH_AUTORECONF = YES
+diff --git a/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch b/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
+new file mode 100644
+index 0000000000..385c94b36b
+--- /dev/null
++++ b/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
+@@ -0,0 +1,34 @@
++From 5cbf08213222cb507d365e6cbda87277f0b8f31e Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@micronovasrl.com>
++Date: Fri, 14 Jun 2019 14:25:08 +0200
++Subject: [PATCH] Makefile: fix -pie linking according to --disable-pie
++
++Only compilation follows './configure --disable-pie', linking instead
++doesn't, because '-pie' flag is passed to LDFLAGS uncoditionally.
++
++So add '-pie' flag only if CONFIG_PIE=yes.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++ Makefile | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile b/Makefile
++index 41783b546..4e5a947a3 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -62,7 +62,10 @@ LDFLAGS += -ldl -lm
++ else
++ LDFLAGS += -ldl -lpthread -lm
++ endif
++-LDFLAGS += -pie -Wl,-z,now
+++ifeq ($(CONFIG_PIE),yes)
+++LDFLAGS += -pie
+++endif
+++LDFLAGS += -Wl,-z,now
++ ifeq ($(CONFIG_LIBICONV),yes)
++ LDFLAGS += -liconv
++ endif
++-- 
++2.17.1
++
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index e92c111082..b192a33d4a 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -94,6 +94,10 @@ else
+ TVHEADEND_CONF_OPTS += --disable-pcre
+ endif
  
- define PSPLASH_INSTALL_INIT_SYSTEMD
++ifeq ($(BR2_TOOLCHAIN_SUPPORTS_PIE),)
++TVHEADEND_CONF_OPTS += --disable-pie
++endif
++
+ TVHEADEND_DEPENDENCIES += dtv-scan-tables
+ 
+ # The tvheadend build system expects the transponder data to be present inside
