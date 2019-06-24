@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 24 Jun 2019 23:39:31 +0200
-Subject: [Buildroot] [PATCH 09/19] autobuild-run: move repo from kwargs
- to Builder class
-In-Reply-To: <20190621084730.16411-9-itsatharva@gmail.com>
+Date: Mon, 24 Jun 2019 23:40:00 +0200
+Subject: [Buildroot] [PATCH 10/19] autobuild-run: move upload variable
+ from kwargs to Builder class
+In-Reply-To: <20190621084730.16411-10-itsatharva@gmail.com>
 References: <20190621084730.16411-1-itsatharva@gmail.com>
- <20190621084730.16411-9-itsatharva@gmail.com>
-Message-ID: <b5911059-1281-61ce-5459-e72eb56d9562@mind.be>
+ <20190621084730.16411-10-itsatharva@gmail.com>
+Message-ID: <b3ddf252-8260-b2e6-7757-587652b103fd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
