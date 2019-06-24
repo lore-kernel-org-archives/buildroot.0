@@ -1,40 +1,56 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 24 Jun 2019 22:00:32 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x264: bump version to 20190623-2245
-Message-ID: <20190624200032.11841-1-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Jun 2019 22:01:13 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/postgresql:
+ security bump version to 11.4
+Message-ID: <20190624200010.5777A83D71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/x264/x264.hash | 2 +-
- package/x264/x264.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=3cc5f4aa9543830dc99b885993fa39ee94739fb1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-diff --git a/package/x264/x264.hash b/package/x264/x264.hash
-index da4ff5945d..0cbdc03a9c 100644
---- a/package/x264/x264.hash
-+++ b/package/x264/x264.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 94a67986dcb2c659752df767e81fd59a494fb7fb5c9d4fc8aff4f004353a42df  x264-snapshot-20181002-2245.tar.bz2
-+sha256 88bbb8f7453497be4ee85cbc6f7d27c02822c4a3744b5ae6042c9c0159ad0747  x264-snapshot-20190623-2245.tar.bz2
- sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index d529871a8d..f3654d46b0 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
+Release notes: https://www.postgresql.org/docs/11/release-11-4.html
+
+Fixes CVE-2019-10164.
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b262c7d578e7b15b95d68bead7cb8f0a97755d20)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/postgresql/postgresql.hash | 8 ++++----
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index ba6e02d4d8..d70ed7428d 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,7 +1,7 @@
+-# From https://ftp.postgresql.org/pub/source/v11.3/postgresql-11.3.tar.bz2.md5
+-md5 c2a729b754b8de86a969c86ec25db076  postgresql-11.3.tar.bz2
+-# From https://ftp.postgresql.org/pub/source/v11.3/postgresql-11.3.tar.bz2.sha256
+-sha256 2a85e082fc225944821dfd23990e32dfcd2284c19060864b0ad4ca537d30522d  postgresql-11.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v11.4/postgresql-11.4.tar.bz2.md5
++md5 dab5eed8a5f9204bf2f03a209eead4c3  postgresql-11.4.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v11.4/postgresql-11.4.tar.bz2.sha256
++sha256 02802ddffd1590805beddd1e464dd28a46a41a5f1e1df04bab4f46663195cc8b  postgresql-11.4.tar.bz2
+ 
+ # License file, Locally calculated
+ sha256	c4c86d683970b22b9fab53320ee1b3a30ef4e8223122b4fb6be53ea62ecee8b3  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index e6e34f5c72..ae2fa9d999 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--X264_VERSION = 20181002-2245
-+X264_VERSION = 20190623-2245
- X264_SITE = http://download.videolan.org/x264/snapshots
- X264_SOURCE = x264-snapshot-$(X264_VERSION).tar.bz2
- X264_LICENSE = GPL-2.0+
--- 
-2.20.1
+-POSTGRESQL_VERSION = 11.3
++POSTGRESQL_VERSION = 11.4
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = http://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
