@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 22:13:09 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/qt5/qt5base:
+Date: Mon, 24 Jun 2019 22:13:28 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/qt5/qt5base:
  disable predefined -Og optimization
-Message-ID: <20190624201215.C65F4825FB@busybox.osuosl.org>
+Message-ID: <20190624201226.6811B825FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ddc479f3ba20c9bb4dee0ca2947da5efba7d935
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f5872268e94edd0acaf99ff23d17989e2e446952
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Starting from Qt5 5.9.0, -optimize-debug is enabled by default for
 debug builds causing -Og flag to be appended to CFLAGS and
@@ -26,7 +26,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 7 insertions(+)
 
 diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
-index e73b8931aa..f9c0a57b1c 100644
+index 1c20b67e4b..da1a11b266 100644
 --- a/package/qt5/qt5base/qt5base.mk
 +++ b/package/qt5/qt5base/qt5base.mk
 @@ -27,6 +27,13 @@ QT5BASE_CONFIGURE_OPTS += \
