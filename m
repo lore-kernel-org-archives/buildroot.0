@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 21:11:26 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] support/download/git: fix
+Date: Mon, 24 Jun 2019 21:11:39 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] support/download/git: fix
  formatting of error message
-Message-ID: <20190624191028.AA0A0821CB@busybox.osuosl.org>
+Message-ID: <20190624191036.05CAC82611@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ebf356935b37e8f6c7b9f08d5273571a2c2ab5f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=307e74985829e4dc4c0bc3abc13d24236d09d703
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 '.' should be at the end of the sentence, not the beginning of a new
 line.
