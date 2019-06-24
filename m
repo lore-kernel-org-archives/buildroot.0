@@ -1,48 +1,33 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 21:58:48 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x]
- support/testing/infra/emulator: increase memory size used by Qemu
-Message-ID: <20190624195745.53018818E9@busybox.osuosl.org>
+Date: Mon, 24 Jun 2019 21:59:05 +0200
+Subject: [Buildroot] [PATCH] support/testing/infra/emulator: increase
+ memory size used by Qemu
+In-Reply-To: <20190621202724.19242-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni's message of "Fri, 21 Jun 2019 22:27:24 +0200")
+References: <20190621202724.19242-1-thomas.petazzoni@bootlin.com>
+Message-ID: <878stqlppy.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=564ab80ac1380fbb4036947c8e7ff5bb66259e5c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-By default, Qemu emulates a system with 128 MB of RAM. This is not
-sufficient for some test cases we have, such as TestPerlDBDmysql,
-where the initramfs is quite large. Therefore, this commit extends the
-RAM size emulated by Qemu to 256 MB.
+ > By default, Qemu emulates a system with 128 MB of RAM. This is not
+ > sufficient for some test cases we have, such as TestPerlDBDmysql,
+ > where the initramfs is quite large. Therefore, this commit extends the
+ > RAM size emulated by Qemu to 256 MB.
 
-Fixes:
+ > Fixes:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/237108668
+ >   https://gitlab.com/buildroot.org/buildroot/-/jobs/237108668
 
-Thanks to Arnout for the analysis of the issue.
+ > Thanks to Arnout for the analysis of the issue.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Acked-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 345c29a4b7321952b916c1b4eb88a03e136919be)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/testing/infra/emulator.py | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 802e89d4b4..3d3e1750c6 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -38,7 +38,8 @@ class Emulator(object):
- 
-         qemu_cmd = ["qemu-system-{}".format(qemu_arch),
-                     "-serial", "stdio",
--                    "-display", "none"]
-+                    "-display", "none",
-+                    "-m", "256"]
- 
-         if options:
-             qemu_cmd += options
+Committed to 2019.02.x and 2019.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
