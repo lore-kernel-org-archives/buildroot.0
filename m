@@ -1,43 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 21:54:13 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/lmbench: use
- UPDATE_CONFIG_HOOK instead of CONFIG_UPDATE
-Message-ID: <20190624195325.EEB968130C@busybox.osuosl.org>
+Date: Mon, 24 Jun 2019 21:54:27 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/lmbench: install
+ the lmbench script on the target
+Message-ID: <20190624195326.4293B81FB5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d2891ca33a4e2c96d79ef19c9f5d7724d7e2a04f
+commit: https://git.buildroot.net/buildroot/commit/?id=9fec8498dc56729a806e29ffd07f5ff730db8aec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-jimtcl, perl, usb_modeswitch and x264 are registering
-UPDATE_CONFIG_HOOK as a post patch hook to get their gnuconfig files
-updated. lmbench is the only package calling CONFIG_UPDATE directly,
-so for consistency, let's make it use the same logic as jimtcl, perl,
-usb_modeswitch and x264.
+We want to install the lmbench script along with the other executables,
+so we add it to the appropriate list.
 
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 2b8b6767ab1cc803a888cca91730732945f95b85)
+(cherry picked from commit 1956fbe5a4735dfeb4f448f022f42e32c018dca8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/lmbench/lmbench.mk | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ ...kefile-add-lmbench-to-list-of-executables.patch | 29 ++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
-diff --git a/package/lmbench/lmbench.mk b/package/lmbench/lmbench.mk
-index c52d6a5a39..2f3b19b5f8 100644
---- a/package/lmbench/lmbench.mk
-+++ b/package/lmbench/lmbench.mk
-@@ -18,8 +18,9 @@ LMBENCH_CFLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags libtirpc`
- LMBENCH_LDLIBS = `$(PKG_CONFIG_HOST_BINARY) --libs libtirpc`
- endif
- 
-+LMBENCH_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
+diff --git a/package/lmbench/0002-src-Makefile-add-lmbench-to-list-of-executables.patch b/package/lmbench/0002-src-Makefile-add-lmbench-to-list-of-executables.patch
+new file mode 100644
+index 0000000000..f5067a6b08
+--- /dev/null
++++ b/package/lmbench/0002-src-Makefile-add-lmbench-to-list-of-executables.patch
+@@ -0,0 +1,29 @@
++From c158a02561c64d0cd236f86db24cc20d0378eb72 Mon Sep 17 00:00:00 2001
++From: Markus Mayer <mmayer@broadcom.com>
++Date: Thu, 13 Jun 2019 12:28:54 -0700
++Subject: [PATCH] src/Makefile: add lmbench to list of executables
 +
- define LMBENCH_CONFIGURE_CMDS
--	$(call CONFIG_UPDATE,$(@D))
- 	sed -i 's/CFLAGS=/CFLAGS+=/g' $(@D)/src/Makefile
- 	sed -i 's/LDLIBS=/LDLIBS+=/g' $(@D)/scripts/build
- 	sed -i '/cd .*doc/d' $(@D)/src/Makefile
++We want to install the lmbench script along with the other executables,
++so we add it to the appropriate list.
++
++Signed-off-by: Markus Mayer <mmayer@broadcom.com>
++---
++ src/Makefile | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/Makefile b/src/Makefile
++index 4962815b5fe7..70dbc6794898 100644
++--- a/src/Makefile
+++++ b/src/Makefile
++@@ -98,7 +98,7 @@ EXES =	$O/bw_file_rd $O/bw_mem $O/bw_mmap_rd $O/bw_pipe $O/bw_tcp 	\
++ 	$O/lat_select $O/lat_pipe $O/lat_rpc $O/lat_syscall $O/lat_tcp	\
++ 	$O/lat_udp $O/lat_mmap $O/mhz $O/lat_proc $O/lat_pagefault	\
++ 	$O/lat_connect $O/lat_fs $O/lat_sig $O/lat_mem_rd $O/lat_ctx	\
++-	$O/lat_sem 							\
+++	$O/lat_sem $O/lmbench						\
++ 	$O/memsize $O/lat_unix $O/lmdd $O/timing_o $O/enough		\
++ 	$O/msleep $O/loop_o $O/lat_fifo $O/lmhttp $O/lat_http		\
++ 	$O/lat_fcntl $O/disk $O/lat_unix_connect $O/flushdisk		\
++-- 
++2.17.1
++
