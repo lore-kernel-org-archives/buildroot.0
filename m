@@ -1,47 +1,38 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 20:39:50 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/mongoose: bump to
- version 6.15
-Message-ID: <20190624183908.5661C880E6@busybox.osuosl.org>
+Date: Mon, 24 Jun 2019 20:45:01 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/logrotate: fix
+ legal-info
+Message-ID: <20190624184404.AACB482283@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ea24ca83bc142ca19da4621c2ee23d2dd4038a0
+commit: https://git.buildroot.net/buildroot/commit/?id=cbbabb1cb3a84849d611493b461e68e388e7bde5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-See https://github.com/cesanta/mongoose/releases/tag/6.15
+Add hash for COPYING file
+
+Fixes:
+
+$: make logrotate-legal-info
+ >>> logrotate 3.15.0 Collecting legal info
+ ERROR: No hash found for COPYING
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit da7fdfe6a3f9f1ee9439654e5f4d003fa538f9b2)
+(cherry picked from commit 38626b4b63bf877c3cfeb356a4b0dc0e79bdbc75)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mongoose/mongoose.hash | 2 +-
- package/mongoose/mongoose.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/logrotate/logrotate.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
-index 86ebe8efbf..92f35a7113 100644
---- a/package/mongoose/mongoose.hash
-+++ b/package/mongoose/mongoose.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	ec7956b8f2845f6c22e19ab38a0c32c9b379087f0038c7db661b34812f225911  mongoose-6.13.tar.gz
-+sha256	ed9b44690f9660d25562e45472d486c086bcc916bf49f39f22e0a90444d44454  mongoose-6.15.tar.gz
- sha256	fdc34eeea97327d75c83492abd34f1a3200c53dec04422ecda8071dc60a36d10  LICENSE
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index 653c83c7d4..c4a703d3cf 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MONGOOSE_VERSION = 6.13
-+MONGOOSE_VERSION = 6.15
- MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPL-2.0
- MONGOOSE_LICENSE_FILES = LICENSE
+diff --git a/package/logrotate/logrotate.hash b/package/logrotate/logrotate.hash
+index 70b068c67f..bebbd74657 100644
+--- a/package/logrotate/logrotate.hash
++++ b/package/logrotate/logrotate.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256 fb1ff8502e7ae4aedaa3d0da8d3740a6a0f44b72e34666af724e9094b166c942  logrotate-3.13.0.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
