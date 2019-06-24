@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 24 Jun 2019 23:38:33 +0200
-Subject: [Buildroot] [PATCH 07/19] autobuild-run: move niceness from
- kwargs to Builder class
-In-Reply-To: <20190621084730.16411-7-itsatharva@gmail.com>
+Date: Mon, 24 Jun 2019 23:39:31 +0200
+Subject: [Buildroot] [PATCH 09/19] autobuild-run: move repo from kwargs
+ to Builder class
+In-Reply-To: <20190621084730.16411-9-itsatharva@gmail.com>
 References: <20190621084730.16411-1-itsatharva@gmail.com>
- <20190621084730.16411-7-itsatharva@gmail.com>
-Message-ID: <61158d38-b448-5dde-3463-f0a576ae964d@mind.be>
+ <20190621084730.16411-9-itsatharva@gmail.com>
+Message-ID: <b5911059-1281-61ce-5459-e72eb56d9562@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
