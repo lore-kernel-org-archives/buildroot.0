@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 21:25:09 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/davfs2: bump to
+Date: Mon, 24 Jun 2019 21:25:15 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/davfs2: bump to
  version 1.5.5
-Message-ID: <20190624192405.ED0CE8694A@busybox.osuosl.org>
+Message-ID: <20190624192412.371648142E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bd18c13d45b3c4d13ce08bbd569bb38b5f38626
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=d7d7025abfdf53dbebb651dd690858f8a41b4441
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
