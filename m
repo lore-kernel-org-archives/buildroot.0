@@ -1,15 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 24 Jun 2019 08:35:20 +0200
-Subject: [Buildroot] [PATCH v4 08/15] package/gcc: switch to gcc 8.x as
- the default
-In-Reply-To: <20190623182145.459e0154@windsurf> (Thomas Petazzoni's message of
- "Sun, 23 Jun 2019 18:21:45 +0200")
-References: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
- <20190620100725.105587-9-giulio.benetti@micronovasrl.com>
- <20190622214410.4bc6022e@windsurf>
- <29b577b0-8c65-7038-929b-ad2828ec7495@gmail.com>
- <20190623182145.459e0154@windsurf>
-Message-ID: <877e9ba3tj.fsf@dell.be.48ers.dk>
+Date: Mon, 24 Jun 2019 08:43:16 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/harfbuzz: fix build without
+ cairo-svg
+In-Reply-To: <20190624061305.62a4e523@windsurf> (Thomas Petazzoni's message of
+ "Mon, 24 Jun 2019 06:13:05 +0200")
+References: <20190623190309.61714-1-james.hilliard1@gmail.com>
+ <20190624061305.62a4e523@windsurf>
+Message-ID: <87zhm78ovv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -18,19 +15,27 @@ To: buildroot@busybox.net
 
 >>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-Hi,
+ > On Sun, 23 Jun 2019 13:03:09 -0600
+ > James Hilliard <james.hilliard1@gmail.com> wrote:
 
- >> Thomas, I have the same question about gdb 7.12.x.
+ >> Fixes:
+ >> http://autobuild.buildroot.org/results/f6c0b85fa476e0f52cc06f0133d2e4f9920f7556
+ >> test-ot-color.cc:40:10: fatal error: cairo-svg.h: No such file or directory
+ >> 40 | #include <cairo-svg.h>
+ >> |          ^~~~~~~~~~~~~
+ >> 
+ >> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ >> ---
+ >> ...airo-svg-dependency-to-test-ot-color.patch | 38 +++++++++++++++++++
+ >> package/harfbuzz/harfbuzz.mk                  |  2 +-
+ >> 2 files changed, 39 insertions(+), 1 deletion(-)
+ >> create mode 100644 package/harfbuzz/0001-Add-missing-cairo-svg-dependency-to-test-ot-color.patch
 
- > I think we should also drop it. I was keeping it because it was the
- > last gdb version that could be built with a toolchain that doesn't have
- > C++11 support. But well, C++11 is there since gcc 4.8, so let's assume
- > most sane people have moved their distribution to a version that has
- > gcc 4.8 at least.
+ > Applied to master, thanks.
 
- > So on my side, green light to drop gdb 7.12.
-
-Same from me!
+This confuses me. We recently changed harfbuzz to only enable cairo
+support if cairo-svg is enabled, and now this patch adds an
+unconditional include of <cairo.h>?
 
 -- 
 Bye, Peter Korsgaard
