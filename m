@@ -1,47 +1,46 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Mon, 24 Jun 2019 22:24:13 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-paramiko: bump to version
- 2.6.0
-Message-ID: <20190624192413.21277-1-asafka7@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 24 Jun 2019 21:23:17 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/libressl: bump to
+ version 2.9.2
+Message-ID: <20190624192315.AD1828694A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- package/python-paramiko/python-paramiko.hash | 4 ++--
- package/python-paramiko/python-paramiko.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+commit: https://git.buildroot.net/buildroot/commit/?id=c4a45097673f020c47c7a62b8c3a061edf0934e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-diff --git a/package/python-paramiko/python-paramiko.hash b/package/python-paramiko/python-paramiko.hash
-index c4589feb82..48cc79e7eb 100644
---- a/package/python-paramiko/python-paramiko.hash
-+++ b/package/python-paramiko/python-paramiko.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/paramiko/json
--md5	1ca8e7fe1745db0e130b2cb6d9c68a03  paramiko-2.5.0.tar.gz
--sha256	9f081281064b5180dc0ef60e256224a280ff16f603a99f3dd4ba6334ebb65f7e  paramiko-2.5.0.tar.gz
-+md5	f729a45c9122bf975b9177ec5aaa3791  paramiko-2.6.0.tar.gz
-+sha256	f4b2edfa0d226b70bd4ca31ea7e389325990283da23465d572ed1f70a7583041  paramiko-2.6.0.tar.gz
- # Locally computed sha256 checksums
- sha256	5fa25bf5f395fd26e701c2e1de4ca7d162816986dc791c22f8f4226857ad1bb2  LICENSE
-diff --git a/package/python-paramiko/python-paramiko.mk b/package/python-paramiko/python-paramiko.mk
-index ef03b3173a..381cd2df21 100644
---- a/package/python-paramiko/python-paramiko.mk
-+++ b/package/python-paramiko/python-paramiko.mk
-@@ -4,9 +4,9 @@
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b93c71c83dd4dd5422c8cb258e97b4f08fb1a42a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libressl/libressl.hash | 2 +-
+ package/libressl/libressl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 9e5cbf22e9..e3e5dbe00b 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256 39e4dd856694dc10d564201e4549c46d2431601a2b10f3422507e24ccc8f62f8  libressl-2.9.1.tar.gz
++sha256 c4c78167fae325b47aebd8beb54b6041d6f6a56b3743f4bd5d79b15642f9d5d4  libressl-2.9.2.tar.gz
+ # Locally computed
+ sha256 5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index 4e9796d3ab..2d0f6fc50f 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PARAMIKO_VERSION = 2.5.0
-+PYTHON_PARAMIKO_VERSION = 2.6.0
- PYTHON_PARAMIKO_SOURCE = paramiko-$(PYTHON_PARAMIKO_VERSION).tar.gz
--PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/0e/29/aa6647f283796ff1c46747ee8e69092390116cd86c7c660247ef0d56a146
-+PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/54/68/dde7919279d4ecdd1607a7eb425a2874ccd49a73a5a71f8aa4f0102d3eb8
- PYTHON_PARAMIKO_SETUP_TYPE = setuptools
- PYTHON_PARAMIKO_LICENSE = LGPL-2.1+
- PYTHON_PARAMIKO_LICENSE_FILES = LICENSE
--- 
-2.20.1
+-LIBRESSL_VERSION = 2.9.1
++LIBRESSL_VERSION = 2.9.2
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
