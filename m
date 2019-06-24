@@ -1,9 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 24 Jun 2019 05:48:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/rtmpdump: bump version
-In-Reply-To: <20190622183857.31568-1-bernd.kuhls@t-online.de>
-References: <20190622183857.31568-1-bernd.kuhls@t-online.de>
-Message-ID: <20190624054801.15b09cfb@windsurf>
+Date: Mon, 24 Jun 2019 05:52:07 +0200
+Subject: [Buildroot] [PATCH] configs/csky_gx6605s: bump kernel to 5.0
+ and use buildroot toolchain
+In-Reply-To: <1561347693-16089-1-git-send-email-guoren@kernel.org>
+References: <1561347693-16089-1-git-send-email-guoren@kernel.org>
+Message-ID: <20190624055207.59b0c7bf@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,21 +13,37 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Sat, 22 Jun 2019 20:38:57 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+On Mon, 24 Jun 2019 11:41:33 +0800
+guoren at kernel.org wrote:
 
-> Added tarball and license hashes.
+> From: Guo Ren <ren_guo@c-sky.com>
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/rtmpdump/rtmpdump.hash | 3 +++
->  package/rtmpdump/rtmpdump.mk   | 2 +-
->  2 files changed, 4 insertions(+), 1 deletion(-)
->  create mode 100644 package/rtmpdump/rtmpdump.hash
+> The most thing is to use the toolchain compiled by buildroot itself. And
+> we also bump kernel to 5.0 with kernel.org.
+> 
+> For all 610s including qemu we use 0x10000000 PHYS_OFFSET for unified
+> maintain.
 
-This bump is causing a number of build failures. Could you have a look ?
+I'm not sure what you mean by "unified maintain". How does it matter,
+considering that the Buildroot defconfig is anyway for one single
+platform ?
 
-  http://autobuild.buildroot.net/?reason=rtmpdump-c5f04a58fc2aeea6296ca7c44ee4734c18401aa3
+> There is no gx6605s.dts for the config, so we need wget it from
+> csky gitlab CI storage.
+
+Meh, this is not great. Is the Gitlab CI URL really permanent? Jobs
+artifacts are usually removed after a configurable time, isn't it the
+case as well for this artifact ?
+
+Also, why isn't this .dts not submitted to the upstream Linux kernel ?
+
+Overall, I think I would prefer to see a patch to the Linux kernel in
+board/csky/ rather than downloading a random .dtb. Or just have
+the .dts file directly in board/csky/.
+
+For the record, DT is not about "config", it's about describing the
+hardware. You might give the DT kernel maintainers a heart attack if
+you call the DT "configuration"! :-)
 
 Thanks,
 
