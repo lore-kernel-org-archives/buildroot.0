@@ -1,85 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jun 2019 22:51:15 +0200
-Subject: [Buildroot] [PATCH-2019.02.x] package/libglib2: backport upstream
- security fix for CVE-2019-12450
-Message-ID: <20190625205115.23985-1-peter@korsgaard.com>
+Date: Tue, 25 Jun 2019 22:51:39 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/ffmpeg: bump
+ version to 3.4.6
+Message-ID: <20190625205059.D5EA6884B7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2019-12450: file_copy_fallback in gio/gfile.c in GNOME GLib 2.15.0
-through 2.61.1 does not properly restrict file permissions while a copy
-operation is in progress.  Instead, default permissions are used.
+commit: https://git.buildroot.net/buildroot/commit/?id=04c951e21ef58361b65803a465f0df45ff5048fa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+
+Fixes a number of bugs discovered after the 3.4.5 release:
+https://git.ffmpeg.org/gitweb/ffmpeg.git/shortlog/n3.4.6
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-gfile-Limit-access-to-files-when-copying.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/libglib2/0005-gfile-Limit-access-to-files-when-copying.patch
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libglib2/0005-gfile-Limit-access-to-files-when-copying.patch b/package/libglib2/0005-gfile-Limit-access-to-files-when-copying.patch
-new file mode 100644
-index 0000000000..750767dfbb
---- /dev/null
-+++ b/package/libglib2/0005-gfile-Limit-access-to-files-when-copying.patch
-@@ -0,0 +1,56 @@
-+From cf09035d361287dfadc93f09272ce68b4a9457ad Mon Sep 17 00:00:00 2001
-+From: Ondrej Holy <oholy@redhat.com>
-+Date: Thu, 23 May 2019 10:41:53 +0200
-+Subject: [PATCH] gfile: Limit access to files when copying
-+
-+file_copy_fallback creates new files with default permissions and
-+set the correct permissions after the operation is finished. This
-+might cause that the files can be accessible by more users during
-+the operation than expected. Use G_FILE_CREATE_PRIVATE for the new
-+files to limit access to those files.
-+
-+(cherry picked from commit d8f8f4d637ce43f8699ba94c9b7648beda0ca174)
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ gio/gfile.c | 11 ++++++-----
-+ 1 file changed, 6 insertions(+), 5 deletions(-)
-+
-+diff --git a/gio/gfile.c b/gio/gfile.c
-+index a67aad383..ff313ebf8 100644
-+--- a/gio/gfile.c
-++++ b/gio/gfile.c
-+@@ -3279,12 +3279,12 @@ file_copy_fallback (GFile                  *source,
-+         out = (GOutputStream*)_g_local_file_output_stream_replace (_g_local_file_get_filename (G_LOCAL_FILE (destination)),
-+                                                                    FALSE, NULL,
-+                                                                    flags & G_FILE_COPY_BACKUP,
-+-                                                                   G_FILE_CREATE_REPLACE_DESTINATION,
-+-                                                                   info,
-++                                                                   G_FILE_CREATE_REPLACE_DESTINATION |
-++                                                                   G_FILE_CREATE_PRIVATE, info,
-+                                                                    cancellable, error);
-+       else
-+         out = (GOutputStream*)_g_local_file_output_stream_create (_g_local_file_get_filename (G_LOCAL_FILE (destination)),
-+-                                                                  FALSE, 0, info,
-++                                                                  FALSE, G_FILE_CREATE_PRIVATE, info,
-+                                                                   cancellable, error);
-+     }
-+   else if (flags & G_FILE_COPY_OVERWRITE)
-+@@ -3292,12 +3292,13 @@ file_copy_fallback (GFile                  *source,
-+       out = (GOutputStream *)g_file_replace (destination,
-+                                              NULL,
-+                                              flags & G_FILE_COPY_BACKUP,
-+-                                             G_FILE_CREATE_REPLACE_DESTINATION,
-++                                             G_FILE_CREATE_REPLACE_DESTINATION |
-++                                             G_FILE_CREATE_PRIVATE,
-+                                              cancellable, error);
-+     }
-+   else
-+     {
-+-      out = (GOutputStream *)g_file_create (destination, 0, cancellable, error);
-++      out = (GOutputStream *)g_file_create (destination, G_FILE_CREATE_PRIVATE, cancellable, error);
-+     }
-+ 
-+   if (!out)
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index e00c4ec56c..e945130d88 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256 741cbd6394eaed370774ca4cc089eaafbc54d0824b9aa360d4b3b0cbcbc4a92c  ffmpeg-3.4.5.tar.xz
++sha256 3572279cb139d9e39dcfbc23edf438ff5311ec3fc5d0dcb3558e49591e5cb83e  ffmpeg-3.4.6.tar.xz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
+ sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  LICENSE.md
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 1e1004c378..d26555a506 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 3.4.5
++FFMPEG_VERSION = 3.4.6
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
