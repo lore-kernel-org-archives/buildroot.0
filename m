@@ -1,83 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jun 2019 08:17:39 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] linux: disable Werror for
- powerpc kernels
-Message-ID: <20190625061700.B3F86821C1@busybox.osuosl.org>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Tue, 25 Jun 2019 08:44:36 +0200
+Subject: [Buildroot] [PATCH] package/proj: fix build failure due to gcc bug
+ 68485
+Message-ID: <20190625064436.23113-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bc087658efb224b52c381b7086211a923d682255
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+The proj package exhibits gcc bug 68485 when built for the Microblaze
+architecture with optimization enabled, which causes a build failure.
 
-From patch [1] included in kernel >= 5.0:
-"The upcoming GCC 9 release extends the -Wmissing-attributes warnings
-(enabled by -Wall) to C and aliases: it warns when particular function
-attributes are missing in the aliases but not in their target.
-
-In particular, it triggers for all the init/cleanup_module
-aliases in the kernel (defined by the module_init/exit macros),
-ending up being very noisy.
-
-These aliases point to the __init/__exit functions of a module,
-which are defined as __cold (among other attributes). However,
-the aliases themselves do not have the __cold attribute.
-
-Since the compiler behaves differently when compiling a __cold
-function as well as when compiling paths leading to calls
-to __cold functions, the warning is trying to point out
-the possibly-forgotten attribute in the alias."
-
-Werror is set by default while building ppc kernel [2], but
-some warning can be introduced while building current kernel with
-newer compiler (for example building kernel 4.19 with gcc 9.1).
-
-For the same reason why we remove Werror in packages's compiler
-flags. Building with Werror is not bulletproof when we start
-using a newer compiler that introduce new warnings.
-This is the case here.
-
-Also this option is a bit strange since it's specific to ppc kernels:
-"The intention is to make it harder for people to inadvertantly
-introduce warnings in the arch/powerpc code."
-Other kernel developers on other arch may be interested by a
-similar/more generic option.
-
-So, It's clearly intended for kernel developers.
-
-Instead of backporting this patch [1] to kernel 4.19, select
-unconditionally the Kconfig option CONFIG_PPC_DISABLE_WERROR
-that allow to disable Werror.
+As done for other packages in Buildroot work around this gcc bug by
+setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y.
 
 Fixes:
-https://gitlab.com/kubu93/toolchains-builder/-/jobs/205435741
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=a6e60d84989fa0e91db7f236eda40453b0e44afa
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=ba55bd74360ea4b8b95e73ed79474d37ff482b36
-[3] https://gitlab.com/bootlin/toolchains-builder
+http://autobuild.buildroot.net/results/e61/e61bd55067071415223e523a81de3c2e9cafea6f/
 
-Fix-suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1713c3c344be26ec3bcb02a0a0068f21907ab881)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/linux.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/proj/proj.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index dd182d06b2..a1378345c3 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -316,6 +316,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 	$(LINUX_FIXUP_CONFIG_ENDIANNESS)
- 	$(if $(BR2_arm)$(BR2_armeb),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AEABI,$(@D)/.config))
-+	$(if $(BR2_powerpc)$(BR2_powerpc64)$(BR2_powerpc64le),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_PPC_DISABLE_WERROR,$(@D)/.config))
- 	$(if $(BR2_TARGET_ROOTFS_CPIO),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_BLK_DEV_INITRD,$(@D)/.config))
- 	# As the kernel gets compiled before root filesystems are
+diff --git a/package/proj/proj.mk b/package/proj/proj.mk
+index 0b239b2bbe..2969eb57ac 100644
+--- a/package/proj/proj.mk
++++ b/package/proj/proj.mk
+@@ -10,4 +10,12 @@ PROJ_LICENSE = MIT
+ PROJ_LICENSE_FILES = COPYING
+ PROJ_INSTALL_STAGING = YES
+ 
++PROJ_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
++PROJ_CFLAGS += -O0
++endif
++
++PROJ_CONF_ENV = CFLAGS="$(PROJ_CFLAGS)"
++
+ $(eval $(autotools-package))
+-- 
+2.17.1
