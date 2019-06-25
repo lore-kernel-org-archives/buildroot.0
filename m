@@ -1,35 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jun 2019 23:04:48 +0200
-Subject: [Buildroot] [PATCH v2,1/1] gnuchess: needs -fPIC
-In-Reply-To: <20190623202308.536031c8@windsurf> (Thomas Petazzoni's message of
- "Sun, 23 Jun 2019 20:23:08 +0200")
-References: <20190112175505.14348-1-fontaine.fabrice@gmail.com>
- <20190113141329.4d526438@windsurf.home>
- <20190623202308.536031c8@windsurf>
-Message-ID: <87pnn1gyvj.fsf@dell.be.48ers.dk>
+From: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Date: Tue, 25 Jun 2019 22:56:17 +0100
+Subject: [Buildroot] [PATCH] package/libcamera: bump to version
+ caf25dc5cfd11b965316f02610d49ae3d886716b
+Message-ID: <20190625215617.10817-1-kieran.bingham@ideasonboard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Buildroots autobuild identified a failure on GCC v6.2 and GCC v6.3,
+producing the following warning (reported as error due to -Werror):
 
-Hi,
+  event_dispatcher_poll.cpp:231:13: error: types may not be defined
+      in a for-range-declaration [-Werror]
 
- > Therefore I guess the issue is in elf2flt, and I reported a bug at
- > https://github.com/uclinux-dev/elf2flt/issues/11.
+              for (const struct pollfd &pfd : pollfds) {
+                         ^~~~~~
+              cc1plus: all warnings being treated as errors
 
-Thanks.
+A fix has been integrated upstream, bump the package to incorporate it.
 
- > In the mean time, I'm not sure what to do. Indeed, we don't care about
- > gnuchess on Cortex-M, but the same issue affects building binutils,
- > which may be a bit more important (for libbfd).
+Fixes: http://autobuild.buildroot.net/results/f6dd4c60c04892c8b1669e6000fce7edb2b6349e/
 
- > Should we simply add a work-around in gnuchess, to build in -O0 for the
- > time being ?
+Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+---
+ package/libcamera/libcamera.hash | 2 +-
+ package/libcamera/libcamera.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-You mean for gnuchess AND for binutils? I guess so.
-
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index 0616bbdf816e..fc0a21670ef9 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,3 +1,3 @@
+-sha256 cc4630139575dc0ea47899b1ea368fdfc5faf150c20cab5bef150de9f84c558e  libcamera-ab0188fc8bbb6f397ac3aa11c9377662b7bd88b0.tar.gz
++sha256 4073ee3429a28b19f65f1df107b87df9ee01e58dc3372fcc0fcafd3350a31c23  libcamera-caf25dc5cfd11b965316f02610d49ae3d886716b.tar.gz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  licenses/gnu-gpl-2.0.txt
+ sha256 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  licenses/gnu-lgpl-2.1.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 5e17dd0b93c3..62c48607d4ff 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
+-LIBCAMERA_VERSION = ab0188fc8bbb6f397ac3aa11c9377662b7bd88b0
++LIBCAMERA_VERSION = caf25dc5cfd11b965316f02610d49ae3d886716b
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = udev
+ LIBCAMERA_CONF_OPTS = -Dtests=false -Ddocumentation=false
 -- 
-Bye, Peter Korsgaard
+2.20.1
