@@ -1,65 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jun 2019 20:56:55 +0200
-Subject: [Buildroot] [git commit] package/{mesa3d,
- mesa3d-headers}: bump version to 19.0.7
-Message-ID: <20190625195517.9788481D7C@busybox.osuosl.org>
+Date: Tue, 25 Jun 2019 20:56:41 +0200
+Subject: [Buildroot] [git commit] package/python-paramiko: bump to version
+ 2.6.0
+Message-ID: <20190625195517.8DD7481D7C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=30bc0a998f042449214ca1ba0050cac246feee17
+commit: https://git.buildroot.net/buildroot/commit/?id=79a6edef4de2baebe80c39bcab9ee1d2e523de60
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mesa3d-headers/mesa3d-headers.mk |  2 +-
- package/mesa3d/mesa3d.hash               | 10 +++++-----
- package/mesa3d/mesa3d.mk                 |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-paramiko/python-paramiko.hash | 4 ++--
+ package/python-paramiko/python-paramiko.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index 17b1dea428..d3cb6f4d09 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 19.0.6
-+MESA3D_HEADERS_VERSION = 19.0.7
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index 661e2670f3..27868623d4 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,7 +1,7 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2019-June/000519.html
--md5 b97159690eba564311d88a818bdbd64d  mesa-19.0.6.tar.xz
--sha1 d57360ade1b7a5406de2f560829d6ec7783217b1  mesa-19.0.6.tar.xz
--sha256 2db2f2fcaa4048b16e066fad76b8a93944f7d06d329972b0f5fd5ce692ce3d24  mesa-19.0.6.tar.xz
--sha512 320fd6b12ccd5e4a40dfc93546354848a38da09d90e4d5a1dae5d100b8106942acfc25ac3f705a2d3ab3b355162c74c7dfadbdb99a46cf2e5e0761f8542bfeb1  mesa-19.0.6.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2019-June/000523.html
-+md5 4834e7951ba57bb8a2a403d9d5d93f31  mesa-19.0.7.tar.xz
-+sha1 1c7cd71150082d52a5308aef17ad8b41a6d7f726  mesa-19.0.7.tar.xz
-+sha256 d7bf3db2e442fe5eeb96144f8508d94f04aededdf37af477e644638d366b2b28  mesa-19.0.7.tar.xz
-+sha512 eda02c426ad642c1f783aa376533c4f93354e819f99fd0187a88be2afd109effc9365e8d5ffd676202b006399674572d26b806da7f4c96adb8111243330cd121  mesa-19.0.7.tar.xz
- # License
- sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 23e7e9d5a5..9d6045f7fa 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/python-paramiko/python-paramiko.hash b/package/python-paramiko/python-paramiko.hash
+index c4589feb82..48cc79e7eb 100644
+--- a/package/python-paramiko/python-paramiko.hash
++++ b/package/python-paramiko/python-paramiko.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/paramiko/json
+-md5	1ca8e7fe1745db0e130b2cb6d9c68a03  paramiko-2.5.0.tar.gz
+-sha256	9f081281064b5180dc0ef60e256224a280ff16f603a99f3dd4ba6334ebb65f7e  paramiko-2.5.0.tar.gz
++md5	f729a45c9122bf975b9177ec5aaa3791  paramiko-2.6.0.tar.gz
++sha256	f4b2edfa0d226b70bd4ca31ea7e389325990283da23465d572ed1f70a7583041  paramiko-2.6.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	5fa25bf5f395fd26e701c2e1de4ca7d162816986dc791c22f8f4226857ad1bb2  LICENSE
+diff --git a/package/python-paramiko/python-paramiko.mk b/package/python-paramiko/python-paramiko.mk
+index ef03b3173a..381cd2df21 100644
+--- a/package/python-paramiko/python-paramiko.mk
++++ b/package/python-paramiko/python-paramiko.mk
+@@ -4,9 +4,9 @@
+ #
  ################################################################################
  
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 19.0.6
-+MESA3D_VERSION = 19.0.7
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://mesa.freedesktop.org/archive
- MESA3D_LICENSE = MIT, SGI, Khronos
+-PYTHON_PARAMIKO_VERSION = 2.5.0
++PYTHON_PARAMIKO_VERSION = 2.6.0
+ PYTHON_PARAMIKO_SOURCE = paramiko-$(PYTHON_PARAMIKO_VERSION).tar.gz
+-PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/0e/29/aa6647f283796ff1c46747ee8e69092390116cd86c7c660247ef0d56a146
++PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/54/68/dde7919279d4ecdd1607a7eb425a2874ccd49a73a5a71f8aa4f0102d3eb8
+ PYTHON_PARAMIKO_SETUP_TYPE = setuptools
+ PYTHON_PARAMIKO_LICENSE = LGPL-2.1+
+ PYTHON_PARAMIKO_LICENSE_FILES = LICENSE
