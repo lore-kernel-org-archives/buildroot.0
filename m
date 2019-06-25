@@ -1,49 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jun 2019 20:56:41 +0200
-Subject: [Buildroot] [git commit] package/python-paramiko: bump to version
- 2.6.0
-Message-ID: <20190625195517.8DD7481D7C@busybox.osuosl.org>
+Date: Tue, 25 Jun 2019 20:59:05 +0200
+Subject: [Buildroot] [git commit] package/icu: adjust version information
+Message-ID: <20190625195517.B495E88701@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=79a6edef4de2baebe80c39bcab9ee1d2e523de60
+commit: https://git.buildroot.net/buildroot/commit/?id=7372db0c0dd0f8a4a2dde77dc9da1974f97865d6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+The icu upstream developers have a strange way of labelling their versions:
+
+ - The Github tags are named release-XX-Y, and therefore the versions
+   referenced by by Release Monitoring look like 60-2 or 64-1.
+
+ - The tarballs contain the version with an underscore separator, i.e
+   60_2 or 64_1.
+
+ - The directories on http://download.icu-project.org/files/icu4c/
+   contain the version with a dot separator, i.e 60.2 or 64.1.
+
+In order to have our <pkg>_VERSION match the one on Release
+Monitoring, we adjust it to use the underscore separator, and then
+further tweak the ICU_SOURCE and ICU_SITE definitions to keep
+everything working.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-paramiko/python-paramiko.hash | 4 ++--
- package/python-paramiko/python-paramiko.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/icu/icu.mk | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-paramiko/python-paramiko.hash b/package/python-paramiko/python-paramiko.hash
-index c4589feb82..48cc79e7eb 100644
---- a/package/python-paramiko/python-paramiko.hash
-+++ b/package/python-paramiko/python-paramiko.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/paramiko/json
--md5	1ca8e7fe1745db0e130b2cb6d9c68a03  paramiko-2.5.0.tar.gz
--sha256	9f081281064b5180dc0ef60e256224a280ff16f603a99f3dd4ba6334ebb65f7e  paramiko-2.5.0.tar.gz
-+md5	f729a45c9122bf975b9177ec5aaa3791  paramiko-2.6.0.tar.gz
-+sha256	f4b2edfa0d226b70bd4ca31ea7e389325990283da23465d572ed1f70a7583041  paramiko-2.6.0.tar.gz
- # Locally computed sha256 checksums
- sha256	5fa25bf5f395fd26e701c2e1de4ca7d162816986dc791c22f8f4226857ad1bb2  LICENSE
-diff --git a/package/python-paramiko/python-paramiko.mk b/package/python-paramiko/python-paramiko.mk
-index ef03b3173a..381cd2df21 100644
---- a/package/python-paramiko/python-paramiko.mk
-+++ b/package/python-paramiko/python-paramiko.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index a9466c8322..7bc1b97624 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -4,9 +4,12 @@
  #
  ################################################################################
  
--PYTHON_PARAMIKO_VERSION = 2.5.0
-+PYTHON_PARAMIKO_VERSION = 2.6.0
- PYTHON_PARAMIKO_SOURCE = paramiko-$(PYTHON_PARAMIKO_VERSION).tar.gz
--PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/0e/29/aa6647f283796ff1c46747ee8e69092390116cd86c7c660247ef0d56a146
-+PYTHON_PARAMIKO_SITE = https://files.pythonhosted.org/packages/54/68/dde7919279d4ecdd1607a7eb425a2874ccd49a73a5a71f8aa4f0102d3eb8
- PYTHON_PARAMIKO_SETUP_TYPE = setuptools
- PYTHON_PARAMIKO_LICENSE = LGPL-2.1+
- PYTHON_PARAMIKO_LICENSE_FILES = LICENSE
+-ICU_VERSION = 60.2
+-ICU_SOURCE = icu4c-$(subst .,_,$(ICU_VERSION))-src.tgz
+-ICU_SITE = http://download.icu-project.org/files/icu4c/$(ICU_VERSION)
++# Git tags (and therefore versions on release-monitoring.org) use the
++# XX-Y format, but the tarballs are named XX_Y and the containing
++# directories XX.Y.
++ICU_VERSION = 60-2
++ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
++ICU_SITE = http://download.icu-project.org/files/icu4c/$(subst -,.,$(ICU_VERSION))
+ ICU_LICENSE = ICU License
+ ICU_LICENSE_FILES = LICENSE
+ 
