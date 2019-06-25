@@ -1,82 +1,81 @@
-From: Samuel Mendoza-Jonas <sam@mendozajonas.com>
-Date: Tue, 25 Jun 2019 10:38:38 +1000
-Subject: [Buildroot] [PATCH] host-localedef: Compile against glibc-2.29
-In-Reply-To: <87k1dan7cv.fsf@dell.be.48ers.dk>
-References: <20190619020707.3798-1-sam@mendozajonas.com>
- <20190619134812.4bd672e7@windsurf> <87k1dan7cv.fsf@dell.be.48ers.dk>
-Message-ID: <cab0e23381beef9e4f8d9e895e6025c110cd2abd.camel@mendozajonas.com>
+From: Joel Stanley <joel@jms.id.au>
+Date: Tue, 25 Jun 2019 10:56:52 +0930
+Subject: [Buildroot] [PATCH v3] board: Add PowerPC mac99
+Message-ID: <20190625012652.21853-1-joel@jms.id.au>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2019-06-24 at 20:52 +0200, Peter Korsgaard wrote:
-> > > > > > "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
-> 
->  > Hello,
->  > On Wed, 19 Jun 2019 12:07:07 +1000
->  > Samuel Mendoza-Jonas <sam@mendozajonas.com> wrote:
-> 
->  >> In glibc 2.27 the following change occurred:
->  >> "Statically compiled applications attempting to load locales compiled
->  >> for the GNU C Library version 2.27 will fail and fall back to the
->  >> builtin C/POSIX locale."
->  >> 
->  >> This impacts us since upstream buildroot uses a localdef built against
->  >> an older eglibc release [0].
->  >> 
->  >> This is a combination of my patch to move to glibc and Peter Seiderer's
->  >> patch to avoid building all of glibc just for localedef.
->  >> 
->  >> [0] https://bugs.busybox.net/show_bug.cgi?id=11096
->  >> 
->  >> Signed-off-by: Samuel Mendoza-Jonas <sam@mendozajonas.com>
->  >> [localedef build & fixups:]
->  >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->  >> ---
->  >> This is an update to a previous very similar patch, but updated for
->  >> glibc 2.29 now that Buildroot has moved to it.
-> 
->  > So, since it's been a problem pending for way too long, I applied your
->  > patch to master. I however did a change: make sure we re-use the glibc
->  > tarball if possible. To do this:
-> 
->  >  - I defined LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz and
->  >    HOST_LOCALEDEF_DL_SUBDIR = glibc
-> 
->  >  - I changed the hash file because the tarball is now named
->  >    glibc-<version>.tar.gz
-> 
->  > I also wondered about making localedef.hash a symlink to glibc.hash,
->  > but that would require updating the symlink everything the glibc
->  > version is updated, because glibc.hash is in a version-specific folder.
-> 
->  > Overall, I am wondering if we shouldn't give up on this host-localedef
->  > package and in fact move this to a host-glibc package. Indeed that's
->  > really what we're doing here: build a host-glibc package.
-> 
->  > The only issue with doing this is the "HACK" patch. Indeed, how to make
->  > sure this patch will apply to all glibc versions we support ?
-> 
->  > But since the locale problem has been around for a long time, I
->  > preferred to apply your approach now, we can always improve things
->  > later if we think it's useful.
-> 
-> Committed to 2019.05.x, thanks.
-> 
-> 2019.02.x is using glibc-2.28. Is using this 2.29-based localedef the
-> right solution for 2019.02.x, or should we be using something 2.28
-> based?
-> 
+PowerPC kernel developers were after a userspace for testing 32-bit
+powerpc kernels. This machine both suits that requirement and has
+support in qemu. It's also a fairly common piece of 32-bit ppc hardware.
 
-I've not tested with a localedef ahead of glibc, but if we want to fix up
-2019.02 as well then basically the same patch minus the 2.28->2.29
-updates should work fine, eg:
-https://github.com/sammj/buildroot/commit/7fedd772a6caac0cbc69a90a8c1da8c142eae9ac
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Tested-by: Daniel Axtens <dja@axtens.net>
+---
+v3: Add ROOTFS_CPIO output as well as ext
+v2: Use default output directory for qemu command line in readme
 
-(not directly tested, but that's the same as what we've been running in our
- 2019.02-based op-build tree)
+ DEVELOPERS                          |  2 ++
+ board/qemu/ppc-mac99/linux.fragment |  3 +++
+ board/qemu/ppc-mac99/readme.txt     |  5 +++++
+ configs/qemu_ppc_mac99_defconfig    | 11 +++++++++++
+ 4 files changed, 21 insertions(+)
+ create mode 100644 board/qemu/ppc-mac99/linux.fragment
+ create mode 100644 board/qemu/ppc-mac99/readme.txt
+ create mode 100644 configs/qemu_ppc_mac99_defconfig
 
-Cheers,
-Sam
+diff --git a/DEVELOPERS b/DEVELOPERS
+index ce3fcb2de8c1..29a560f4a398 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1147,6 +1147,8 @@ N:	Joel Stanley <joel@jms.id.au>
+ F:	package/pdbg/
+ F:	board/qemu/ppc64le-pseries/
+ F:	configs/qemu_ppc64le_pseries_defconfig
++F:	board/qemu/ppc-mac99/
++F:	configs/qemu_ppc_mac99_defconfig
+ 
+ N:	Johan Derycke <johanderycke@gmail.com>
+ F:	package/python-libconfig/
+diff --git a/board/qemu/ppc-mac99/linux.fragment b/board/qemu/ppc-mac99/linux.fragment
+new file mode 100644
+index 000000000000..b1975f8253f7
+--- /dev/null
++++ b/board/qemu/ppc-mac99/linux.fragment
+@@ -0,0 +1,3 @@
++CONFIG_SERIAL_PMACZILOG=y
++CONFIG_SERIAL_PMACZILOG_TTYS=y
++CONFIG_SERIAL_PMACZILOG_CONSOLE=y
+diff --git a/board/qemu/ppc-mac99/readme.txt b/board/qemu/ppc-mac99/readme.txt
+new file mode 100644
+index 000000000000..a8a18db5b9ab
+--- /dev/null
++++ b/board/qemu/ppc-mac99/readme.txt
+@@ -0,0 +1,5 @@
++Run the emulation with:
++
++  qemu-system-ppc -nographic -vga none -M mac99 -cpu g4 -m 1G -kernel output/images/vmlinux -drive file=output/images/rootfs.ext2,format=raw -net nic,model=sungem -net user -append "root=/dev/sda"
++
++Tested with QEMU 3.1.0
+diff --git a/configs/qemu_ppc_mac99_defconfig b/configs/qemu_ppc_mac99_defconfig
+new file mode 100644
+index 000000000000..7a6a279c5399
+--- /dev/null
++++ b/configs/qemu_ppc_mac99_defconfig
+@@ -0,0 +1,11 @@
++BR2_powerpc=y
++BR2_powerpc_7400=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_SYSTEM_DHCP="eth0"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_DEFCONFIG="pmac32"
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/ppc-mac99/linux.fragment"
++BR2_LINUX_KERNEL_VMLINUX=y
++BR2_TARGET_ROOTFS_CPIO=y
++BR2_TARGET_ROOTFS_EXT2=y
++# BR2_TARGET_ROOTFS_TAR is not set
+-- 
+2.20.1
