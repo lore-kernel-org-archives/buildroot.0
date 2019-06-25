@@ -1,19 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jun 2019 20:58:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dtv-scan-tables: bump version
-In-Reply-To: <20190624192245.30208-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Mon, 24 Jun 2019 21:22:45 +0200")
-References: <20190624192245.30208-1-bernd.kuhls@t-online.de>
-Message-ID: <87blylijan.fsf@dell.be.48ers.dk>
+Date: Tue, 25 Jun 2019 20:58:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/weston: bump to version 6.0.1
+In-Reply-To: <20190624184634.16590-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Mon, 24 Jun 2019 12:46:34 -0600")
+References: <20190624184634.16590-1-james.hilliard1@gmail.com>
+Message-ID: <877e99ijae.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Removed patch which has now been committed upstream.
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
 Committed, thanks.
 
