@@ -1,97 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jun 2019 11:04:31 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/libcdaudio: fix
- build with toolchains lacking C++ support
-Message-ID: <20190625090357.8CA648270F@busybox.osuosl.org>
+Date: Tue, 25 Jun 2019 11:05:24 +0200
+Subject: [Buildroot] [PATCH v1] libcdaudio: fix compile on host systems
+ without C++ support
+In-Reply-To: <20190623214605.14a93a24@windsurf> (Thomas Petazzoni's message of
+ "Sun, 23 Jun 2019 21:46:05 +0200")
+References: <20190113214722.15104-1-ps.report@gmx.net>
+ <20190623214605.14a93a24@windsurf>
+Message-ID: <87sgryhw6j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fb9dc56d77b8fff9cbfb9a159ec8fff9e848b2e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-When the target toolchain does not support C++, the provided
-libcdaudio configure script tries to run a check with the C++
-pre-processor provided by the host (/lib/cpp) which may not exist on
-some systems.
+ > On Sun, 13 Jan 2019 22:47:22 +0100
+ > Peter Seiderer <ps.report@gmx.net> wrote:
 
-This issue is fixed by autoreconfiguring the package, as newly
-generated configure scripts do not have this issue.
+ >> Delivered libcdaudio configure tries to run a C++ check with the
+ >> host C preprocessor. Fix it by enabling autoreconf  (needs
+ >> a patch for configure.ac/Makefile.am removing ancient lines).
+ >> 
+ >> Fixes [1]:
+ >> 
+ >> checking how to run the C++ preprocessor... /lib/cpp
+ >> configure: error: C++ preprocessor "/lib/cpp" fails sanity check
+ >> 
+ >> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 
-Fixes:
+ > Contrary to what your commit title says, the problem does not occur
+ > when the host system lacks C++ support, it's when the target toolchain
+ > doesn't have C++ support. I have an Arch Linux system here (which is
+ > where the failure happens), and the host system has C++ support, but
+ > doesn't provide /lib/cpp.
 
-  http://autobuild.buildroot.net/results/f725a41ef992c42ceef7514d1a8dcac99e6b9114/
+ > I fixed up the commit title, commit log, and comment in the .mk file
+ > and applied.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8307fd013292d6f02116b8f4054c70746dddc009)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .../0001-libcdaudio-enable-autoreconf.patch        | 43 ++++++++++++++++++++++
- package/libcdaudio/libcdaudio.mk                   |  3 ++
- 2 files changed, 46 insertions(+)
+Committed to 2019.02.x and 2019.05.x with the same fixes, thanks.
 
-diff --git a/package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch b/package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch
-new file mode 100644
-index 0000000000..ab2296c042
---- /dev/null
-+++ b/package/libcdaudio/0001-libcdaudio-enable-autoreconf.patch
-@@ -0,0 +1,43 @@
-+From 9c2873b1d9292bcf43c862b6777d41c40521424c Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Sun, 13 Jan 2019 22:27:42 +0100
-+Subject: [PATCH] libcdaudio: enable autoreconf
-+
-+Fixes the following two autoreconf errors (by simple removing of the
-+two offending lines):
-+
-+  configure.ac:20: error: automatic de-ANSI-fication support has been removed
-+
-+  Makefile.am:2: error: automatic de-ANSI-fication support has been removed
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ Makefile.am  | 1 -
-+ configure.ac | 1 -
-+ 2 files changed, 2 deletions(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index f639dd8..a32cfe6 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -1,5 +1,4 @@
-+ ## Process this file with automake to produce Makefile.in
-+-AUTOMAKE_OPTIONS = ansi2knr
-+ SUBDIRS = src
-+ 
-+ bin_SCRIPTS = libcdaudio-config
-+diff --git a/configure.ac b/configure.ac
-+index bbdd42d..6699ceb 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -17,7 +17,6 @@ AM_CONFIG_HEADER(config.h)
-+ AC_PROG_AWK
-+ AC_PROG_CC
-+ AC_PROG_CPP
-+-AM_C_PROTOTYPES
-+ AM_PROG_CC_STDC
-+ AC_PROG_INSTALL
-+ AC_PROG_LN_S
-+-- 
-+2.20.1
-+
-diff --git a/package/libcdaudio/libcdaudio.mk b/package/libcdaudio/libcdaudio.mk
-index 5d421eba7a..651289d7e4 100644
---- a/package/libcdaudio/libcdaudio.mk
-+++ b/package/libcdaudio/libcdaudio.mk
-@@ -11,4 +11,7 @@ LIBCDAUDIO_CONFIG_SCRIPTS = libcdaudio-config
- LIBCDAUDIO_LICENSE = GPL-2.0+
- LIBCDAUDIO_LICENSE_FILES = COPYING
- 
-+# fix configure failure when the toolchain doesn't have C++ support
-+LIBCDAUDIO_AUTORECONF = YES
-+
- $(eval $(autotools-package))
+-- 
+Bye, Peter Korsgaard
