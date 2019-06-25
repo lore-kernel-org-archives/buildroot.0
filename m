@@ -1,55 +1,57 @@
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-Date: Tue, 25 Jun 2019 22:56:17 +0100
-Subject: [Buildroot] [PATCH] package/libcamera: bump to version
- caf25dc5cfd11b965316f02610d49ae3d886716b
-Message-ID: <20190625215617.10817-1-kieran.bingham@ideasonboard.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 26 Jun 2019 00:25:59 +0200
+Subject: [Buildroot] [PATCH v4 08/15] package/gcc: switch to gcc 8.x as
+ the default
+In-Reply-To: <20190623182145.459e0154@windsurf>
+References: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
+ <20190620100725.105587-9-giulio.benetti@micronovasrl.com>
+ <20190622214410.4bc6022e@windsurf>
+ <29b577b0-8c65-7038-929b-ad2828ec7495@gmail.com>
+ <20190623182145.459e0154@windsurf>
+Message-ID: <1892475d-542b-7c52-26c7-193f9749d347@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Buildroots autobuild identified a failure on GCC v6.2 and GCC v6.3,
-producing the following warning (reported as error due to -Werror):
 
-  event_dispatcher_poll.cpp:231:13: error: types may not be defined
-      in a for-range-declaration [-Werror]
 
-              for (const struct pollfd &pfd : pollfds) {
-                         ^~~~~~
-              cc1plus: all warnings being treated as errors
+On 23/06/2019 18:21, Thomas Petazzoni wrote:
+> Hello,
+> 
+> On Sun, 23 Jun 2019 00:35:38 +0200
+> Romain Naour <romain.naour@gmail.com> wrote:
+> 
+>>> Arnout: do you still think gcc 4.9 is needed at this point ? If it is
+>>> the case, should we keep gcc 4.9, but drop gcc 5 and 6 ?  
+>>
+>> Currently glibc >= 2.29 needs gcc >= 5 on all architectures.
+>> So we can only build a toolchain with gcc 4.9 with uClibc and musl.
+>> The upcoming release of glibc will require at least gcc 6.2 on all architectures
+>> [1].
+>>
+>> If a toolchain with gcc 4.9 is really needed, it can be build with the 2019.02
+>> LTS version.
+> 
+> So, Peter said for the next LTS (2020.02), we probably want to have
+> removed the oldest gcc versions (4.9, 5 and 6, most likely).
 
-A fix has been integrated upstream, bump the package to incorporate it.
+ Yes indeed, we can't keep 4.9 around indefinitely, so let's drop it and 5 and 6
+as well, leaving just the three most recent ones: 7, 8, 9.
 
-Fixes: http://autobuild.buildroot.net/results/f6dd4c60c04892c8b1669e6000fce7edb2b6349e/
 
-Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
----
- package/libcamera/libcamera.hash | 2 +-
- package/libcamera/libcamera.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+>> Thomas, I have the same question about gdb 7.12.x.
+> 
+> I think we should also drop it. I was keeping it because it was the
+> last gdb version that could be built with a toolchain that doesn't have
+> C++11 support. But well, C++11 is there since gcc 4.8, so let's assume
+> most sane people have moved their distribution to a version that has
+> gcc 4.8 at least.
+> 
+> So on my side, green light to drop gdb 7.12.
 
-diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
-index 0616bbdf816e..fc0a21670ef9 100644
---- a/package/libcamera/libcamera.hash
-+++ b/package/libcamera/libcamera.hash
-@@ -1,3 +1,3 @@
--sha256 cc4630139575dc0ea47899b1ea368fdfc5faf150c20cab5bef150de9f84c558e  libcamera-ab0188fc8bbb6f397ac3aa11c9377662b7bd88b0.tar.gz
-+sha256 4073ee3429a28b19f65f1df107b87df9ee01e58dc3372fcc0fcafd3350a31c23  libcamera-caf25dc5cfd11b965316f02610d49ae3d886716b.tar.gz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  licenses/gnu-gpl-2.0.txt
- sha256 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  licenses/gnu-lgpl-2.1.txt
-diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-index 5e17dd0b93c3..62c48607d4ff 100644
---- a/package/libcamera/libcamera.mk
-+++ b/package/libcamera/libcamera.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
--LIBCAMERA_VERSION = ab0188fc8bbb6f397ac3aa11c9377662b7bd88b0
-+LIBCAMERA_VERSION = caf25dc5cfd11b965316f02610d49ae3d886716b
- LIBCAMERA_SITE_METHOD = git
- LIBCAMERA_DEPENDENCIES = udev
- LIBCAMERA_CONF_OPTS = -Dtests=false -Ddocumentation=false
--- 
-2.20.1
+ For gdb, does it actually make sense to keep multiple versions?
+
+ Regards,
+ Arnout
