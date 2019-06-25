@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jun 2019 11:04:56 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libcdaudio: fix
+Date: Tue, 25 Jun 2019 11:04:31 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/libcdaudio: fix
  build with toolchains lacking C++ support
-Message-ID: <20190625090353.2B5898270F@busybox.osuosl.org>
+Message-ID: <20190625090357.8CA648270F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4fe00cba0208a7af87af8dd9c55def7a034fcaa5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=fb9dc56d77b8fff9cbfb9a159ec8fff9e848b2e7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 When the target toolchain does not support C++, the provided
 libcdaudio configure script tries to run a check with the C++
