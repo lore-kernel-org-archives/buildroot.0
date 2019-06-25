@@ -1,38 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 25 Jun 2019 22:55:03 +0200
-Subject: [Buildroot] [Bug 11776] New: qt5webengine 5.12.2 build failed
- with arm toolchain and linaro toolchain
-In-Reply-To: <CAOgXH4cdtGJb494PE0aYKmuVyqBkztK920S3ks4y4L2T_2jShg@mail.gmail.com>
-References: <bug-11776-163@https.bugs.busybox.net/>
- <CAOgXH4fdUqmL=s1t1wu7eBxwP7mKEKWv5p2ez7uoD7oH7V=TmA@mail.gmail.com>
- <02804c6d-653e-15da-ecf7-2c770ecb8b1f@230ruedubac.fr>
- <CAOgXH4dUVJziNh756o-6VLkVVaQrDaLcw_tjWa5Pd9GNtO-Rug@mail.gmail.com>
- <03545c68-3409-aad6-15a3-0e7de8cbff78@230ruedubac.fr>
- <CAOgXH4fTF-m_KqGocZz7p_Mfv5Nq+wNnJv3n3WjSuaVALRZOAg@mail.gmail.com>
- <CAOgXH4cgXYXgRL3WVAQfmpLBTUKBhS7qm8JxyiOp+GdcEAHHnw@mail.gmail.com>
- <CAOgXH4csPRQ=a446bUhofT52y6MsGVhRDUu5T3mjttp9T_MMOw@mail.gmail.com>
- <CAOgXH4cdtGJb494PE0aYKmuVyqBkztK920S3ks4y4L2T_2jShg@mail.gmail.com>
-Message-ID: <f58bb25a-ca9c-96b8-bf22-874745e47eab@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 25 Jun 2019 22:56:19 +0200
+Subject: [Buildroot] [PATCH] board/qemu: ensure root is available before
+ mounting it
+In-Reply-To: <20190622165120.24021-1-yann.morin.1998@free.fr> (Yann E. MORIN's
+ message of "Sat, 22 Jun 2019 18:51:20 +0200")
+References: <20190622165120.24021-1-yann.morin.1998@free.fr>
+Message-ID: <87tvcdgz9o.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
+ > On my machine, it happens once in a while that the virtualised machine
+ > boots too fast for the rootfs to be available at the time the kernel
+ > tries to mount it.
 
-On 22/06/2019 20:48, Nathan Ford wrote:
-> It is very possible this has been fixed in qt 5.13.0.
-> 
-> Here is the chromium fix I believe:
-> https://chromium.googlesource.com/chromium/src/+/a8c8396fd20d98666d517c45b358c63736e345ef%5E%21/#F0
+ > For example, board/qemu/arm-vexpress/readme.txt suggested changing
+ > "-smp 1" up to "-smp 4". But doing so here causes a kernel panic:
 
- Could you test if that fixes it for you, and if yes, send it as a patch to the
-Buildroot mailing list?
+ >     VFS: Cannot open root device "mmcblk0" or unknown-block(0,0): error -6
+ >     Please append a correct "root=" boot option; here are the available partitions:
+ >     1f00          131072 mtdblock0
+ >      (driver?)
+ >     1f01           32768 mtdblock1
+ >      (driver?)
+ >     Kernel panic - not syncing: VFS: Unable to mount root fs on
+ >     unknown-block(0,0)
 
- Qt 5.13.0 indeed includes this change.
+ > So, add the oh-so-usefull 'rootwait' option to all kernel command lines
+ > for qemu defconfigs.
 
- Regards,
- Arnout
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Cc: Joel Stanley <joel@jms.id.au>
+ > Cc: Mark Corbin <mark.corbin@embecosm.com>
+ > Cc: Matt Weber <matthew.weber@rockwellcollins.com>
 
-[snip]
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
