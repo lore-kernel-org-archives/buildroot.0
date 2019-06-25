@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jun 2019 20:58:01 +0200
-Subject: [Buildroot] [PATCH 1/1] package/x264: bump version to
- 20190623-2245
-In-Reply-To: <20190624200032.11841-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Mon, 24 Jun 2019 22:00:32 +0200")
-References: <20190624200032.11841-1-bernd.kuhls@t-online.de>
-Message-ID: <87ftnxijba.fsf@dell.be.48ers.dk>
+Date: Tue, 25 Jun 2019 20:58:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dtv-scan-tables: bump version
+In-Reply-To: <20190624192245.30208-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Mon, 24 Jun 2019 21:22:45 +0200")
+References: <20190624192245.30208-1-bernd.kuhls@t-online.de>
+Message-ID: <87blylijan.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
