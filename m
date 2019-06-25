@@ -1,42 +1,99 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 25 Jun 2019 20:57:31 +0200
-Subject: [Buildroot] [git commit] package/x264: bump version to 20190623-2245
-Message-ID: <20190625195517.A2EE281D7C@busybox.osuosl.org>
+Date: Tue, 25 Jun 2019 20:55:21 +0200
+Subject: [Buildroot] [git commit] package/weston: bump to version 6.0.1
+Message-ID: <20190625195517.8042988701@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=042ca483d63911302980917971bd66fce1520c59
+commit: https://git.buildroot.net/buildroot/commit/?id=b39ab5c3859048bb01e72c0deee7331df5608dd3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Removed patch which has now been committed upstream.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x264/x264.hash | 2 +-
- package/x264/x264.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../weston/0001-Fix-build-with-kernel-4.4.patch    | 40 ----------------------
+ package/weston/weston.hash                         | 10 +++---
+ package/weston/weston.mk                           |  2 +-
+ 3 files changed, 6 insertions(+), 46 deletions(-)
 
-diff --git a/package/x264/x264.hash b/package/x264/x264.hash
-index da4ff5945d..0cbdc03a9c 100644
---- a/package/x264/x264.hash
-+++ b/package/x264/x264.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 94a67986dcb2c659752df767e81fd59a494fb7fb5c9d4fc8aff4f004353a42df  x264-snapshot-20181002-2245.tar.bz2
-+sha256 88bbb8f7453497be4ee85cbc6f7d27c02822c4a3744b5ae6042c9c0159ad0747  x264-snapshot-20190623-2245.tar.bz2
- sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/x264/x264.mk b/package/x264/x264.mk
-index d529871a8d..f3654d46b0 100644
---- a/package/x264/x264.mk
-+++ b/package/x264/x264.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--X264_VERSION = 20181002-2245
-+X264_VERSION = 20190623-2245
- X264_SITE = http://download.videolan.org/x264/snapshots
- X264_SOURCE = x264-snapshot-$(X264_VERSION).tar.bz2
- X264_LICENSE = GPL-2.0+
+diff --git a/package/weston/0001-Fix-build-with-kernel-4.4.patch b/package/weston/0001-Fix-build-with-kernel-4.4.patch
+deleted file mode 100644
+index 89390e0e28..0000000000
+--- a/package/weston/0001-Fix-build-with-kernel-4.4.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From 137b811ecd566086f7eb42c1e49e7c0cf27fb85e Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Mon, 10 Jun 2019 12:02:03 +0200
+-Subject: [PATCH] Fix build with kernel < 4.4
+-
+-weston includes input-event-codes.h since version 5.0.91 and
+-https://github.com/wayland-project/weston/commit/6e229ca26381bc8191fd9af1e439c311da709aff
+-
+-input-event-codes.h is available only since kernel 4.4 and
+-https://github.com/torvalds/linux/commit/f902dd893427eade90f7eaf858e5ff8b150a5a12
+-
+-To fix this build failure, replace include on linux/input-event-codes.h
+-by linux/input.h
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/210c2759900f15ea0030d088f6f45cd8bb199b29
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.freedesktop.org/wayland/weston/merge_requests/184]
+----
+- compositor/main.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/compositor/main.c b/compositor/main.c
+-index 945f99ae..bf4062af 100644
+---- a/compositor/main.c
+-+++ b/compositor/main.c
+-@@ -42,7 +42,7 @@
+- #include <sys/socket.h>
+- #include <libinput.h>
+- #include <libevdev/libevdev.h>
+--#include <linux/input-event-codes.h>
+-+#include <linux/input.h>
+- #include <sys/time.h>
+- #include <linux/limits.h>
+- 
+--- 
+-2.20.1
+-
+diff --git a/package/weston/weston.hash b/package/weston/weston.hash
+index d761600961..a2dddf7a5b 100644
+--- a/package/weston/weston.hash
++++ b/package/weston/weston.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2019-March/040356.html
+-md5 7c634e262f8a464a076c97fd50ad36b3  weston-6.0.0.tar.xz
+-sha1 feac9d9a77037580f39c0085a08a3c17a62dced0  weston-6.0.0.tar.xz
+-sha256 546323a90607b3bd7f48809ea9d76e64cd09718102f2deca6d95aa59a882e612  weston-6.0.0.tar.xz
+-sha512 127ab64b689f202acca4d9461e4decfd42357e4bbb63493af257b3b20b693a8ab4207b3c6b97663cefeed200505aad5f32b6a064db2e53fa1e201877613b394f  weston-6.0.0.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2019-June/040661.html
++md5 e7b10710ef1eac82258f97bfd41fe534  weston-6.0.1.tar.xz
++sha1 3b39e454b3dc8dc32598790cfcc65728b448378b  weston-6.0.1.tar.xz
++sha256 bf2f6d5aae2e11cabb6bd69a76bcf9edb084f8c3e14ca769bea7234a513155b4  weston-6.0.1.tar.xz
++sha512 3da04ff9b884480ce0824950347185e55584e3938021fe62014423d3d51577eafdda8de650a5de6eb37a842130c9cb14c7a952a560f6be93ff973164363af3d9  weston-6.0.1.tar.xz
+ # locally computed
+ sha256 0f0de7b7b1f65870139c95dde7abc19ed305631ae7c5d37c386db40cde108632  weston-rel_imx_4.9.51_8mq_ga.tar.gz
+diff --git a/package/weston/weston.mk b/package/weston/weston.mk
+index 152ffe1cf7..ee3d3be87e 100644
+--- a/package/weston/weston.mk
++++ b/package/weston/weston.mk
+@@ -10,7 +10,7 @@ WESTON_SITE = https://source.codeaurora.org/external/imx/weston-imx
+ WESTON_SITE_METHOD = git
+ WESTON_AUTORECONF = YES
+ else
+-WESTON_VERSION = 6.0.0
++WESTON_VERSION = 6.0.1
+ WESTON_SITE = http://wayland.freedesktop.org/releases
+ WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
+ endif
