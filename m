@@ -1,47 +1,69 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 26 Jun 2019 14:58:59 +0200
-Subject: [Buildroot] [PATCH v2 6/7] package/prboom: work around gcc bug 85180
+Date: Wed, 26 Jun 2019 14:58:58 +0200
+Subject: [Buildroot] [PATCH v2 5/7] package/prboom: avoid using hardcoded
+ optimization flags
 In-Reply-To: <20190626125900.48230-1-giulio.benetti@micronovasrl.com>
 References: <20190626125900.48230-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190626125900.48230-7-giulio.benetti@micronovasrl.com>
+Message-ID: <20190626125900.48230-6-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With Microblaze Gcc version < 8.x the build hangs due to gcc bug
-85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-shows up when building prboom with optimization but not when building
-with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
-force using -O0.
+Package prboom builds using -O2 flag ignoring Buildroot settings, this
+is due to the fact that -O2 is appended at the end of compiler flags.
 
-Fixes:
-http://autobuild.buildroot.net/results/e72/e72a2070ab7e9a093c3c70002ee94ee57a6154f6/
+Remove -O2 from 'configure.ac' file and set PRBOOM_AUTORECONF to YES,
+this way CFLAGS_OPTS will contain Buildroot TARGET_CFLAGS.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/prboom/prboom.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
+V1->V2:
+* patch configure.ac instead of configure and autoreconf
+ ...move-predefined-O2-optimization-flag.patch | 21 +++++++++++++++++++
+ package/prboom/prboom.mk                      |  1 +
+ 2 files changed, 22 insertions(+)
+ create mode 100644 package/prboom/0002-configure-remove-predefined-O2-optimization-flag.patch
 
+diff --git a/package/prboom/0002-configure-remove-predefined-O2-optimization-flag.patch b/package/prboom/0002-configure-remove-predefined-O2-optimization-flag.patch
+new file mode 100644
+index 0000000000..9260cb6314
+--- /dev/null
++++ b/package/prboom/0002-configure-remove-predefined-O2-optimization-flag.patch
+@@ -0,0 +1,21 @@
++configure: remove predefined -O2 optimization flag
++
++CFLAGS_OPT variable forces to use -O2 optimization flag denying the
++possibility to use different optimization flag values.
++
++Remove -O2 flag from CFLAGS_OPT.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
++---
++diff -urpN prboom-2.5.0.orig/configure.ac prboom-2.5.0/configure.ac
++--- prboom-2.5.0.orig/configure.ac	2019-06-20 14:07:45.058481879 +0200
+++++ prboom-2.5.0/configure.ac	2019-06-20 14:09:05.066238825 +0200
++@@ -48,7 +48,7 @@ else
++ fi
++ 
++ dnl --- cph: work out flags to pass to compiler
++-CFLAGS_OPT="-O2 -fomit-frame-pointer"
+++CFLAGS_OPT="-fomit-frame-pointer"
++ AC_C_COMPILE_FLAGS(-Wall)
++ dnl --- Option to enable debugging
++ AC_ARG_ENABLE(debug,AC_HELP_STRING([--enable-debug],[turns on various debugging features, like range checking and internal heap diagnostics]),,enable_debug="no")
 diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
-index 325bf3eb02..36692d29a3 100644
+index d370ae3fa5..325bf3eb02 100644
 --- a/package/prboom/prboom.mk
 +++ b/package/prboom/prboom.mk
-@@ -12,6 +12,14 @@ PRBOOM_LICENSE = GPL-2.0+
+@@ -10,6 +10,7 @@ PRBOOM_CONF_ENV = ac_cv_type_uid_t=yes
+ PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
+ PRBOOM_LICENSE = GPL-2.0+
  PRBOOM_LICENSE_FILES = COPYING
- PRBOOM_AUTORECONF = YES
++PRBOOM_AUTORECONF = YES
  
-+PRBOOM_CFLAGS = $(TARGET_CFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-+PRBOOM_CFLAGS += -O0
-+endif
-+
-+PRBOOM_CONF_ENV += CFLAGS="$(PRBOOM_CFLAGS)"
-+
  ifeq ($(BR2_PACKAGE_LIBPNG),y)
  PRBOOM_DEPENDENCIES += libpng
- endif
 -- 
 2.17.1
