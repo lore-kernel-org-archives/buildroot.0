@@ -1,45 +1,47 @@
 From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Wed, 26 Jun 2019 14:58:56 +0200
-Subject: [Buildroot] [PATCH v2 3/7] package/ecryptfs-utils: remove libnss
- gcc bug dependency
+Date: Wed, 26 Jun 2019 14:58:59 +0200
+Subject: [Buildroot] [PATCH v2 6/7] package/prboom: work around gcc bug 85180
 In-Reply-To: <20190626125900.48230-1-giulio.benetti@micronovasrl.com>
 References: <20190626125900.48230-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190626125900.48230-4-giulio.benetti@micronovasrl.com>
+Message-ID: <20190626125900.48230-7-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Package libnss has BR2_TOOLCHAIN_HAS_GCC_BUG_85862 dependency and since
-ecryptfs-utils depends on libnss it has to have this dependency too. But
-libnss has been worked around for Gcc Bug 85862 on previous patch, then
-we can remove 'depends on !BR_TOOLCHAIN_HAS_GCC_BUG_85862' and its
-comment from Config.in.
+With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+shows up when building prboom with optimization but not when building
+with -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we
+force using -O0.
+
+Fixes:
+http://autobuild.buildroot.net/results/e72/e72a2070ab7e9a093c3c70002ee94ee57a6154f6/
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- package/ecryptfs-utils/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ package/prboom/prboom.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-index b589368a6a..68a659d33d 100644
---- a/package/ecryptfs-utils/Config.in
-+++ b/package/ecryptfs-utils/Config.in
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
- 	depends on !BR2_MIPS_NABI32 # libnss
- 	depends on !BR2_STATIC_LIBS # libnss, keyutils
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 # microblaze specific & GCC < 7.x
- 	select BR2_PACKAGE_KEYUTILS
- 	select BR2_PACKAGE_LIBNSS
- 	# runtime dependency only, some scripts are using the
-@@ -34,6 +33,3 @@ comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynami library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
- 		BR2_STATIC_LIBS
--
--comment "ecryptfs needs a toolchain not affected by GCC bug 85862"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862 # libnss
+diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
+index 325bf3eb02..36692d29a3 100644
+--- a/package/prboom/prboom.mk
++++ b/package/prboom/prboom.mk
+@@ -12,6 +12,14 @@ PRBOOM_LICENSE = GPL-2.0+
+ PRBOOM_LICENSE_FILES = COPYING
+ PRBOOM_AUTORECONF = YES
+ 
++PRBOOM_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++PRBOOM_CFLAGS += -O0
++endif
++
++PRBOOM_CONF_ENV += CFLAGS="$(PRBOOM_CFLAGS)"
++
+ ifeq ($(BR2_PACKAGE_LIBPNG),y)
+ PRBOOM_DEPENDENCIES += libpng
+ endif
 -- 
 2.17.1
