@@ -1,17 +1,11 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Wed, 26 Jun 2019 09:34:14 +0200
-Subject: [Buildroot] [PATCH v4 08/15] package/gcc: switch to gcc 8.x as
- the default
-In-Reply-To: <20190626092335.4f81ec27@windsurf>
-References: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
- <20190620100725.105587-9-giulio.benetti@micronovasrl.com>
- <20190622214410.4bc6022e@windsurf>
- <29b577b0-8c65-7038-929b-ad2828ec7495@gmail.com>
- <20190623182145.459e0154@windsurf>
- <1892475d-542b-7c52-26c7-193f9749d347@mind.be>
- <e0eb8f67-30b1-66ae-90ae-d2439a3ec631@smile.fr>
- <20190626092335.4f81ec27@windsurf>
-Message-ID: <fd188700-e2d5-52d2-d58e-2c50c24a08e8@smile.fr>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Wed, 26 Jun 2019 09:24:29 +0000
+Subject: [Buildroot] [arc-buildroot] [PATCH] ARC: Add support for ARC
+ HS48 v3.1 processor
+In-Reply-To: <20190624064605.5958b976@windsurf>
+References: <20190604053927.29319-1-Evgeniy.Didin@synopsys.com>
+ <20190624064605.5958b976@windsurf>
+Message-ID: <CY4PR1201MB012038B2DDC6719DA9DE78A5A1E20@CY4PR1201MB0120.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,40 +14,110 @@ To: buildroot@busybox.net
 
 Hi Thomas,
 
-Hi Thomas,
+> -----Original Message-----
+> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Sent: Monday, June 24, 2019 7:46 AM
+> To: Evgeniy Didin <didin@synopsys.com>
+> Cc: buildroot at busybox.net; arc-buildroot at synopsys.com; Alexey Brodkin <abrodkin@synopsys.com>
+> Subject: Re: [arc-buildroot] [Buildroot] [PATCH] ARC: Add support for ARC HS48 v3.1 processor
+> 
+> Hello Evgeniy,
+> 
+> On Tue,  4 Jun 2019 08:39:27 +0300
+> Evgeniy Didin <Evgeniy.Didin@synopsys.com> wrote:
+> 
+> > This patch introduces recently released significant
+> > update to ARC HS family: ARC HS48.
+> >
+> > One of the major ARC HS48 features is dual-issue pipeline
+> > which requires a little bit modified instruction scheduling compared
+> > to single-issue cores (HS38), thus new "-mcpu/--with-cpu=hs4x".
+> >
+> > Also to address some peculiarities of early designs based on
+> > HS48 we introduced yet another "-mcpu/--with-cpu=hs4x_rel1" which
+> 
+> I guess you meant --with-cpu=hs4x_rel31 here, correct ?
 
-Le 26/06/2019 ? 09:23, Thomas Petazzoni a ?crit?:
-> On Wed, 26 Jun 2019 08:55:00 +0200
-> Romain Naour <romain.naour@smile.fr> wrote:
-> 
->> Note: gcc 5 is still used by beaglebone_qt5_defconfig in order to test the SGX
->> PowerVR GPU using TI's sgx demo package.
->> This defconfig doesn't seems maintained for a long time (compared to
->> beaglebone_defconfig). I'm adding Lothar Felten in Cc.
->>
->> Lothar: it would be great if you can have a look at this defconfig and try to
->> use gcc 8 (or at least gcc 7).
-> 
-> Lothar did quite a bit of work on this, but we had the issue of the GBM
-> API, where I tried to do a virtual package, but it didn't work well,
-> Lothar did further experiments with Qt with GBM, and it worked, but I
-> never had the chance to have a look.
+Right!
 
-I used git log for having the history on this defconfig, the drawback of this
-method is I'm missing all work that is not merged yet.
-I wasn't aware of Lothar's work, sorry.
+> Overall, I'm a bit confused by the naming and choice of options for the
+> ARC architecture.
 > 
-> So, I wouldn't blame Lothar for not updating the defconfig here :-)
+> The patch at https://patchwork.ozlabs.org/patch/995220/ adds a variant
+> for ARC HS38 with quad MAC and double precision FPU, and the gcc option
+> to enable it was named hs38_linux. It is really weird to use the name
+> of an operating system in a gcc architecture name option.
 
-I don't blame Lothar for not updating this defconfig, I understand working on
-TI's SGX packages is difficult :)
-My intention is to notify Lothar that we are going to remove gcc 5.x.
+Well actually it's even more complicated :)
 
-Best regards,
-Romain
+That name comes out of a "template" in our IP configuration tool which
+in its turn was chosen to highlight that template purpose - it suits the
+best systems developed for running Linux. And in fact it's not unusual name
+as you may see more of that for ARC EM family, check
+https://github.com/gcc-mirror/gcc/blob/master/gcc/config/arc/arc-cpus.def.
 
-> 
-> Best regards,
-> 
-> Thomas
-> 
+> ... but the logic used by RISC-V to name gcc options
+> looks a lot better: a number of letters than indicate with optional
+> features of the CPU core have been enabled in the design. This allows
+> gcc and therefore Buildroot to easily support possibly any combination
+> of CPU core design, rather than just a few selected combinations.
+
+That's indeed an interesting point regrading RISC-V which we will
+take into consideration as naming of mcpu's seems to be getting a bit
+out of control. I guess the main difference between RISC-V and ARC is
+RISC-V has more structured ABI versions while we on ARC have more flexibility.
+
+But still what we have is what we have now and we'll need to leave with
+it until we come up with something better.
+
+> Regarding HS48, is "rel31" really part of the name ?
+
+Correct, see https://github.com/foss-for-synopsys-dwc-arc-processors/gcc/blob/arc-2019.03/gcc/config/arc/arc-cpus.def#L67
+
+> Are you going to update this with rel32, rel33, rel41, etc. ?
+
+Well that's really hard to tell as even _rel31 was not planned but we
+had to add it to address some peculiarities of a particular core revision
+which is being implemented in real silicon.
+
+But given your very good point above we need to revisit our naming
+scheme to make it simpler and cleaner.
+
+> Or is this rel31 only because as explained in the commit log, it's for
+> early designs only ? And then you will add the real hs48 option that
+> will use --with-cpu=hs4x ?
+
+Right we were planning to add "hs4x" and "hs4xd" as well.
+Most probably I explained our rationale for using mcpu's/with-cpu's
+but will re-iterate on it once again so that maybe better solutions will be
+offered by a casual readers...
+
+We have a couple of families of ARC cores. Up-to-date ones are ARC EM (pretty simple
+but very efficient 32-bit microcontrollers) and ARC HS (much more sophisticated
+and powerful cores). EM family is of no interest here as it cannot have MMU so no
+Linux on it.
+
+ARC HS cores (as any other ARC cores) might be in its bare-minimal configuration
+w/o even external memory, caches, multiplier, FPU - something like on-chip SRAM and ALU.
+That's the basic template called HS34. Then we start adding other HW features and
+getting other templates like those mentioned "hs38_linux", "hs4xd" etc, see this
+nice article describing details of what is supported [1]
+
+So looking at the table for ARC HS I'd propose to use simple "hs" for both
+"--with-cpu" & "-mcpu" and then depending on which type of "template" (or whatever we
+will call ARC core flavors) is selected by user add required set of discrete options like
+"-mdiv-rem -mll64 -mmpy-option=plus_qmacw -mfpu=fpud_all" which in the end will be a
+full equivalent of discussed "hs38_linux".
+
+Before Yann's proposal [2] with ARCH_TOOLCHAIN_WRAPPER_OPTS it was not very
+convenient as some packages which don't use CFLAGS could have been compiled without
+all those handy HW features in mind. But if we configure GCC with "--with-cpu=hs38_linux"
+then whatever is compiled with just arc-linux-gcc all HW features bundled in
+"hs38_linux" will be used.
+
+[1] https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/wiki/Understanding-GCC-mcpu-option
+[2] http://lists.busybox.net/pipermail/buildroot/2019-June/251531.html
+
+As always any input is much appreciated!
+
+-Alexey
