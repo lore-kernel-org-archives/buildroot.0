@@ -1,68 +1,48 @@
-From: jared.bents at rockwellcollins.com <jared.bents@rockwellcollins.com>
-Date: Wed, 26 Jun 2019 09:20:42 -0500
-Subject: [Buildroot] [PATCH v1 1/1] package/bzip2: cve-2019-12900 fix for
- bzip2 1.0.6
-Message-ID: <20190626142042.15714-1-jared.bents@rockwellcollins.com>
+From: Nathan Ford <nford@westpond.com>
+Date: Wed, 26 Jun 2019 11:04:06 -0400
+Subject: [Buildroot] [PATCH] This upstream patch fixes chromium compile
+ issues where standard includes are added that break compilation.
+Message-ID: <1561561447-14333-1-git-send-email-nford@westpond.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jared Bents <jared.bents@rockwellcollins.com>
+See the upstream commit for more detail:
+  https://chromium.googlesource.com/chromium/src.git/+/a8c8396fd20d98666d517c45b358c63736e345ef
 
-Patch to resolve cve-2019-12900 which affects bzip2
-versions 1.0.6 and older
-
-More information can be found at
-https://nvd.nist.gov/vuln/detail/CVE-2019-12900
-
-This applies to both master and 2019.02
-
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
+Signed-off-by: Nathan Ford <nford@westpond.com>
 ---
- ...-sure-nSelectors-is-not-out-of-range.patch | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
- create mode 100644 package/bzip2/0003-Make-sure-nSelectors-is-not-out-of-range.patch
+ .../5.12.2/0001-fix_compile_regression.patch         | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+ create mode 100644 package/qt5/qt5webengine/5.12.2/0001-fix_compile_regression.patch
 
-diff --git a/package/bzip2/0003-Make-sure-nSelectors-is-not-out-of-range.patch b/package/bzip2/0003-Make-sure-nSelectors-is-not-out-of-range.patch
+diff --git a/package/qt5/qt5webengine/5.12.2/0001-fix_compile_regression.patch b/package/qt5/qt5webengine/5.12.2/0001-fix_compile_regression.patch
 new file mode 100644
-index 0000000000..77a500d46d
+index 0000000..974e8c0
 --- /dev/null
-+++ b/package/bzip2/0003-Make-sure-nSelectors-is-not-out-of-range.patch
-@@ -0,0 +1,33 @@
-+From 74de1e2e6ffc9d51ef9824db71a8ffee5962cdbc Mon Sep 17 00:00:00 2001
-+From: Albert Astals Cid <aacid@kde.org>
-+Date: Tue, 28 May 2019 19:35:18 +0200
-+Subject: [PATCH] Make sure nSelectors is not out of range
-+
-+nSelectors is used in a loop from 0 to nSelectors to access selectorMtf
-+which is
-+	UChar    selectorMtf[BZ_MAX_SELECTORS];
-+so if nSelectors is bigger than BZ_MAX_SELECTORS it'll do an invalid memory
-+access
-+
-+Fixes out of bounds access discovered while fuzzying karchive
-+
-+Signed-off-by: Albert Astals Cid <aacid@kde.org>
-+---
-+ decompress.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/decompress.c b/decompress.c
-+index ab6a624..f3db91d 100644
-+--- a/decompress.c
-++++ b/decompress.c
-+@@ -287,7 +287,7 @@ Int32 BZ2_decompress ( DState* s )
-+       GET_BITS(BZ_X_SELECTOR_1, nGroups, 3);
-+       if (nGroups < 2 || nGroups > 6) RETURN(BZ_DATA_ERROR);
-+       GET_BITS(BZ_X_SELECTOR_2, nSelectors, 15);
-+-      if (nSelectors < 1) RETURN(BZ_DATA_ERROR);
-++      if (nSelectors < 1 || nSelectors > BZ_MAX_SELECTORS) RETURN(BZ_DATA_ERROR);
-+       for (i = 0; i < nSelectors; i++) {
-+          j = 0;
-+          while (True) {
-+-- 
-+2.21.0
++++ b/package/qt5/qt5webengine/5.12.2/0001-fix_compile_regression.patch
+@@ -0,0 +1,20 @@
++--- a/src/3rdparty/chromium/build/config/linux/pkg_config.gni	2019-06-06 08:53:17.000000000 -0400
+++++ b/src/3rdparty/chromium/build/config/linux/pkg_config.gni	2019-05-23 08:39:34.000000000 -0400
++@@ -103,11 +103,15 @@
++     pkgresult = exec_script(pkg_config_script, args, "value")
++     cflags = pkgresult[1]
++ 
++-    # We want the system include paths to use -isystem instead of -I to suppress
++-    # warnings in those headers.
++     foreach(include, pkgresult[0]) {
+++      if (use_sysroot) {
+++        # We want the system include paths to use -isystem instead of -I to
+++        # suppress warnings in those headers.
++       include_relativized = rebase_path(include, root_build_dir)
++       cflags += [ "-isystem$include_relativized" ]
+++      } else {
+++        cflags += [ "-I$include" ]
+++      }
++     }
++ 
++     if (!defined(invoker.ignore_libs) || !invoker.ignore_libs) {
 -- 
-2.18.0
+2.7.4
