@@ -1,118 +1,71 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Jun 2019 06:01:08 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-06-26
-Message-ID: <20190627060116.4A5242041D@silver.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 27 Jun 2019 08:57:21 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.1.x series
+Message-ID: <20190627065722.21350-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 10 +++++-----
+ package/linux-headers/Config.in.host | 10 +++++-----
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-Build statistics for 2019-06-26
-===============================
-
-      branch |  OK | NOK | TIM | TOT |
-   2019.02.x |  16 |   0 |   0 |  16 |
-   2019.05.x |  13 |   1 |   0 |  14 |
-      master | 156 |  51 |   0 | 207 |
-
-Results for branch '2019.05.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                qt5base-5.12.2 | 1 
-
-
-Detail of failures
-------------------
-
-      x86_64 |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/dd2065525fab0bbd27a964463a48be08e480b6a4 |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-               libglib2-2.60.4 | 16
-                       unknown | 6 
-              iputils-20190515 | 4 
-                 python3-3.7.3 | 4 
-rtmpdump-c5f04a58fc2aeea629... | 3 
-               libcap-ng-0.7.9 | 2 
-              libsodium-1.0.17 | 2 
-                    proj-5.0.1 | 2 
-                qt5base-5.12.2 | 2 
-             xlib_libX11-1.6.8 | 2 
-                harfbuzz-2.5.2 | 1 
-                 hiawatha-10.9 | 1 
-               host-efl-1.22.2 | 1 
-           host-nodejs-10.15.3 | 1 
-       python-matplotlib-3.0.3 | 1 
-   vdr-plugin-vnsiserver-1.8.0 | 1 
-               wireshark-3.0.2 | 1 
-         xfont_encodings-1.0.5 | 1 
-
-
-Detail of failures
-------------------
-
-        m68k |                 harfbuzz-2.5.2 | NOK | http://autobuild.buildroot.net/results/8ebfe683c13bd6f7f5c23e3eeddc048191a4532b | ORPH
-microblazeel |                  hiawatha-10.9 | NOK | http://autobuild.buildroot.net/results/e033f131a773195c8df5bb4693a991dcd829e3cd |     
-      x86_64 |                host-efl-1.22.2 | NOK | http://autobuild.buildroot.net/results/8e9ed4ae90a48ef4150d872cd9648581b75895df |     
-      x86_64 |            host-nodejs-10.15.3 | NOK | http://autobuild.buildroot.net/results/633fde05eaf7d3dda2ee2a024b3e75d9a1f929d8 |     
-        or1k |               iputils-20190515 | NOK | http://autobuild.buildroot.net/results/027cc460b5297f32ea32aba44120e51281594e80 |     
-        mips |               iputils-20190515 | NOK | http://autobuild.buildroot.net/results/0f32d0b2da8284f7722f098d9354cb787a8bbf26 |     
-         sh4 |               iputils-20190515 | NOK | http://autobuild.buildroot.net/results/4acc514553e19bae0c89b6480202179b26fcab46 |     
-    mips64el |               iputils-20190515 | NOK | http://autobuild.buildroot.net/results/53ebbea791ecbaaacadc75385cad26e3d001a514 |     
-         arc |                libcap-ng-0.7.9 | NOK | http://autobuild.buildroot.net/results/8c9ba941b405a3d5bf6c64c1d9693f8ecc1826f6 |     
-         arc |                libcap-ng-0.7.9 | NOK | http://autobuild.buildroot.net/results/c6d11b28b4689bc84bcb8fb7bb881f4edb340a21 |     
-      xtensa |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/288b3b5cd2dea7bf5f044a42e851112dce5d32d7 |     
-         arm |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/b04e15a03bbe010a2c636e8c6866ac41c2659140 |     
-        i586 |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/4ffe03f7244bccad7553289c8e4bf35ff03953c3 |     
-      xtensa |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/77172b53951b1d44a3dd182b5acd0203f98068e6 |     
-         arm |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/180ef1324e1d62cd11c7c6b372854c2ab3d28ad1 |     
-      mipsel |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/f3d2cded2fe1132452887941f7ccc6e70650feb8 |     
-    mips64el |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/64d1c5a168c317fa032dfe7270b1155909607357 |     
-        m68k |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/87caeb993af3b876b94f6b566076368c59e10c20 |     
-      xtensa |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/2ee8bcd5fa90d4527738cc9b80d913ef4a1cf3af |     
-      xtensa |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/ee40b2236eae1407543d7bc015eb72daacfad17c |     
-    mips64el |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/316d5de53e4bdf7a4a2126b6a12e842a26232779 |     
-         arm |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/28c5473fe74e901826d63c6f6825ae9e89c27eb5 |     
-     powerpc |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/a302ed5003b8752777c71fe1a0add92a106e0c28 |     
-        i586 |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/0ad78edefc6592eb2b28a7c1209b70cb6a7408fe |     
-         sh4 |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/b44ad1c3b415f0b117d9c6a128fd06c5c131ed2f |     
-        m68k |                libglib2-2.60.4 | NOK | http://autobuild.buildroot.net/results/10ea24821dfdde0e2f2c15de0c13bdb7d7501f98 |     
-         arc |               libsodium-1.0.17 | NOK | http://autobuild.buildroot.net/results/d3f516c5880fb78abd7db50858a3b894bec14f13 |     
-         arc |               libsodium-1.0.17 | NOK | http://autobuild.buildroot.net/results/da721d4169fb82bdd767f9821dd04695f1e76b56 |     
-microblazeel |                     proj-5.0.1 | NOK | http://autobuild.buildroot.net/results/84990cae2852b6be01bdd0837207d0efbf7358a3 |     
-microblazeel |                     proj-5.0.1 | NOK | http://autobuild.buildroot.net/results/dfddff308edd79610f903bf8dbeaee0ad9a016fe |     
-         arm |        python-matplotlib-3.0.3 | NOK | http://autobuild.buildroot.net/results/a23978c240912e547816192418aad79360fc4aab |     
-     powerpc |                  python3-3.7.3 | NOK | http://autobuild.buildroot.net/results/ad69fb81694b1a1ec436074f07d908d8654a3e77 |     
-     powerpc |                  python3-3.7.3 | NOK | http://autobuild.buildroot.net/results/3411038bd509f2ddf1ea135a48a5af9838f165c8 |     
-     powerpc |                  python3-3.7.3 | NOK | http://autobuild.buildroot.net/results/7df7593e208d0c8a0531743f896099e0e01056fc |     
-      x86_64 |                  python3-3.7.3 | NOK | http://autobuild.buildroot.net/results/69b37d32b9521ba5b5a9d5bdf4ac2b5a5876a77c |     
-      x86_64 |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/b7314e6a0e18b213b453c11a71306f556be99201 |     
-  aarch64_be |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/1f10c478104fcf618b50871305e4d6ba4c90e3ff |     
-       nios2 | rtmpdump-c5f04a58fc2aeea629... | NOK | http://autobuild.buildroot.net/results/9be754f3a81e9cad00354b8b8a2e7097a153d38d |     
-         arm | rtmpdump-c5f04a58fc2aeea629... | NOK | http://autobuild.buildroot.net/results/5a17699533a2e9540f4db0b7e019391c38279443 |     
-      x86_64 | rtmpdump-c5f04a58fc2aeea629... | NOK | http://autobuild.buildroot.net/results/e74bac7004bdae6b23b7e6c313d61d5d3b8680fa |     
-     aarch64 |                        unknown | NOK | http://autobuild.buildroot.net/results/13b71b239fd55647d327e002e89a4d15b80d2051 |     
-         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/bc10b822dc6e830c38f93a25a50bde14625739af |     
-        i586 |                        unknown | NOK | http://autobuild.buildroot.net/results/27d42ee42cddd03cfd167459568951cb066b4606 |     
-      xtensa |                        unknown | NOK | http://autobuild.buildroot.net/results/0bdf82baf115f229867ea17ef6d0530d25ababe0 |     
-      xtensa |                        unknown | NOK | http://autobuild.buildroot.net/results/a5c3f6b41a06a53713d099672407ea3cfafac652 |     
-         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/95e9fcac8053067b3550c96ce80135ff2fd8541c |     
-       nios2 |    vdr-plugin-vnsiserver-1.8.0 | NOK | http://autobuild.buildroot.net/results/ed614c6f349a88a9d01596f8f2875e4c79dbfab2 |     
-    mips64el |                wireshark-3.0.2 | NOK | http://autobuild.buildroot.net/results/ba498e04d40f818b93c837c297211d8a04a53ebf | ORPH
- powerpc64le |          xfont_encodings-1.0.5 | NOK | http://autobuild.buildroot.net/results/87dbca1262a935e9344832722d75fd2fda6a4e5a |     
-         arm |              xlib_libX11-1.6.8 | NOK | http://autobuild.buildroot.net/results/1f5ab6713018a16f70b4e040c92374c15bd55c81 |     
-      x86_64 |              xlib_libX11-1.6.8 | NOK | http://autobuild.buildroot.net/results/404cc6106d4d053ce8757ac3adf8e72900112e02 |     
-
-
+diff --git a/linux/Config.in b/linux/Config.in
+index 9b8db5d4c0..b004d4ff5d 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -122,7 +122,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.1.11" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.1.15" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 205441dc25..24fe746da9 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,7 +1,7 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256 11fd93207290272389ad284b8b042041d088fbee0ed5798e933bf8e91697d219  linux-5.1.11.tar.xz
++sha256 e8a128702680cea9f37c44bbeb456ea1c2ef1ae1eba0e05dcfc11d7d6cdc1399  linux-5.1.15.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 266ee655620c3689ae94761970d6827fffc919760caf815427ad22730ba4381e  linux-4.19.52.tar.xz
+-sha256 d7464c2379cdee46548ae9f848671f4669d4003af4034f3f738f2f0511ec75b3  linux-4.14.127.tar.xz
+-sha256 b16e12681a0638368479d73a9b1b8e9407c1ae4b7ae52fdf236d9e5657999695  linux-4.9.182.tar.xz
+-sha256 c409d88f61cd9a37cbba36d5d9c8162263eb1e5c9380efaf880a3ec10cd88527  linux-4.4.182.tar.xz
++sha256 7326943215b9496f302e95892457a63d9a77e0446e99dd7bade6b425bc966bdf  linux-4.19.56.tar.xz
++sha256 19f6404c30f4a9a1fe3315b902676b6d63a470be5d55cf2a0e47983c643c8ff5  linux-4.14.131.tar.xz
++sha256 6543232fc082485c1088830b9456e1a6e511239e4bf98817b0166ee62cafc3ca  linux-4.4.184.tar.xz
++sha256 033114d5350525dede995d31b596c31b0e26db8d77a0a1c53d36cdc36ead9faf  linux-4.9.184.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index adf342fce0..71e09b1497 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -297,11 +297,11 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.182"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.182"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.127"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.52"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.1.11"	if BR2_KERNEL_HEADERS_5_1
++	default "4.4.184"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.184"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.131"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.56"	if BR2_KERNEL_HEADERS_4_19
++	default "5.1.15"	if BR2_KERNEL_HEADERS_5_1
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-http://autobuild.buildroot.net
+2.11.0
