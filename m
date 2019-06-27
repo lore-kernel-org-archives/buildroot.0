@@ -1,85 +1,40 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Jun 2019 18:02:02 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/libglib2:
- backport upstream security fix for CVE-2019-12450
-Message-ID: <20190627160338.9021181E89@busybox.osuosl.org>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Thu, 27 Jun 2019 21:58:19 +0300
+Subject: [Buildroot] [PATCH 1/1] package/libuv: bump to version 1.30.0
+Message-ID: <20190627185820.464-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2df937ecb7b644c40f93781098375be0b4bc76eb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
-
-Fixes CVE-2019-12450: file_copy_fallback in gio/gfile.c in GNOME GLib 2.15.0
-through 2.61.1 does not properly restrict file permissions while a copy
-operation is in progress.  Instead, default permissions are used.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- ...-gfile-Limit-access-to-files-when-copying.patch | 56 ++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libglib2/0005-gfile-Limit-access-to-files-when-copying.patch b/package/libglib2/0005-gfile-Limit-access-to-files-when-copying.patch
-new file mode 100644
-index 0000000000..750767dfbb
---- /dev/null
-+++ b/package/libglib2/0005-gfile-Limit-access-to-files-when-copying.patch
-@@ -0,0 +1,56 @@
-+From cf09035d361287dfadc93f09272ce68b4a9457ad Mon Sep 17 00:00:00 2001
-+From: Ondrej Holy <oholy@redhat.com>
-+Date: Thu, 23 May 2019 10:41:53 +0200
-+Subject: [PATCH] gfile: Limit access to files when copying
-+
-+file_copy_fallback creates new files with default permissions and
-+set the correct permissions after the operation is finished. This
-+might cause that the files can be accessible by more users during
-+the operation than expected. Use G_FILE_CREATE_PRIVATE for the new
-+files to limit access to those files.
-+
-+(cherry picked from commit d8f8f4d637ce43f8699ba94c9b7648beda0ca174)
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ gio/gfile.c | 11 ++++++-----
-+ 1 file changed, 6 insertions(+), 5 deletions(-)
-+
-+diff --git a/gio/gfile.c b/gio/gfile.c
-+index a67aad383..ff313ebf8 100644
-+--- a/gio/gfile.c
-++++ b/gio/gfile.c
-+@@ -3279,12 +3279,12 @@ file_copy_fallback (GFile                  *source,
-+         out = (GOutputStream*)_g_local_file_output_stream_replace (_g_local_file_get_filename (G_LOCAL_FILE (destination)),
-+                                                                    FALSE, NULL,
-+                                                                    flags & G_FILE_COPY_BACKUP,
-+-                                                                   G_FILE_CREATE_REPLACE_DESTINATION,
-+-                                                                   info,
-++                                                                   G_FILE_CREATE_REPLACE_DESTINATION |
-++                                                                   G_FILE_CREATE_PRIVATE, info,
-+                                                                    cancellable, error);
-+       else
-+         out = (GOutputStream*)_g_local_file_output_stream_create (_g_local_file_get_filename (G_LOCAL_FILE (destination)),
-+-                                                                  FALSE, 0, info,
-++                                                                  FALSE, G_FILE_CREATE_PRIVATE, info,
-+                                                                   cancellable, error);
-+     }
-+   else if (flags & G_FILE_COPY_OVERWRITE)
-+@@ -3292,12 +3292,13 @@ file_copy_fallback (GFile                  *source,
-+       out = (GOutputStream *)g_file_replace (destination,
-+                                              NULL,
-+                                              flags & G_FILE_COPY_BACKUP,
-+-                                             G_FILE_CREATE_REPLACE_DESTINATION,
-++                                             G_FILE_CREATE_REPLACE_DESTINATION |
-++                                             G_FILE_CREATE_PRIVATE,
-+                                              cancellable, error);
-+     }
-+   else
-+     {
-+-      out = (GOutputStream *)g_file_create (destination, 0, cancellable, error);
-++      out = (GOutputStream *)g_file_create (destination, G_FILE_CREATE_PRIVATE, cancellable, error);
-+     }
-+ 
-+   if (!out)
-+-- 
-+2.11.0
-+
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 373c156ca5..ff0b9998ec 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bdde1140087ce97080ea323c3598553ece00a24ae63ac568be78bef3e97f3e25  libuv-1.29.1.tar.gz
++sha256  44c8fdadf3b3f393006a4ac4ba144020673a3f9cd72bed1fbb2c366ebcf0d199  libuv-1.30.0.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 17db3480e8..f17b5a8bf2 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBUV_VERSION = 1.29.1
++LIBUV_VERSION = 1.30.0
+ LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
+-- 
+2.20.1
