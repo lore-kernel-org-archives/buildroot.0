@@ -1,56 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Jun 2019 22:28:46 +0200
-Subject: [Buildroot] [git commit] package/libevdev: bump version to 1.7.0
-Message-ID: <20190627203208.4289B8168C@busybox.osuosl.org>
+From: Joris Offouga <offougajoris@gmail.com>
+Date: Thu, 27 Jun 2019 23:28:34 +0200
+Subject: [Buildroot] [PATCH] packages/python-paho-mqtt: bump version to 1.4.0
+Message-ID: <20190627212835.6059-1-offougajoris@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=393672521370c5476144b0f842a1f74cdfc715f2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-For details see [1] and [2].
-
-[1] https://lists.freedesktop.org/archives/input-tools/2019-May/001511.html
-[2] https://lists.freedesktop.org/archives/input-tools/2019-June/001512.html
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
 ---
- package/libevdev/libevdev.hash | 10 +++++-----
- package/libevdev/libevdev.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-paho-mqtt/python-paho-mqtt.hash | 4 ++--
+ package/python-paho-mqtt/python-paho-mqtt.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libevdev/libevdev.hash b/package/libevdev/libevdev.hash
-index 4a750e0ac9..5d17fec11f 100644
---- a/package/libevdev/libevdev.hash
-+++ b/package/libevdev/libevdev.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/input-tools/2018-October/001488.html
--md5 154b24f01425c4c82fdc3e11f2c13af6 libevdev-1.6.0.tar.xz
--sha1 ef584a500833fe737bacb89350f93314b07f1c42 libevdev-1.6.0.tar.xz
--sha256 f5005c865987d980cc1279b9ec6131b06a89fd9892f649f2a68262b8786ef814 libevdev-1.6.0.tar.xz
--sha512 73046da447773716c9f0c9f511f3a0a6ababcf92a146eba363014afcbdb465f4c3cd8be0917f2f01561a72f24f20fe8ecd333467437d9d85c03afcb433d05060 libevdev-1.6.0.tar.xz
-+# From https://lists.freedesktop.org/archives/input-tools/2019-June/001512.html
-+md5 fabe87d8d7d7f7cdb4a26e5dc99fc517 libevdev-1.7.0.tar.xz
-+sha1 418a06290c7a2f2ecaefca8b4d15e30e80428f61 libevdev-1.7.0.tar.xz
-+sha256 11dbe1f2b1d03a51f3e9a196757a75c3a999042ce34cf1fdc00a2363e5a2e369 libevdev-1.7.0.tar.xz
-+sha512 bc43723fd1ca251a77ee549022609f73c15a33ae470fc843ac687542fb1938fba4d046d3ee1dc814bc38a4292a7f2ad9e71fcce45525b518a4f4a5bef099aa6f libevdev-1.7.0.tar.xz
- 
- # Hash for license files:
- sha256 f063d1279b31e73007e1c54493391818b4cb5f9162d590120397e0347b932137 COPYING
-diff --git a/package/libevdev/libevdev.mk b/package/libevdev/libevdev.mk
-index d8361028da..27b1615482 100644
---- a/package/libevdev/libevdev.mk
-+++ b/package/libevdev/libevdev.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
+index e791d367ea..35afcccedb 100644
+--- a/package/python-paho-mqtt/python-paho-mqtt.hash
++++ b/package/python-paho-mqtt/python-paho-mqtt.hash
+@@ -1,6 +1,6 @@
+ # md5 from https://pypi.python.org/pypi/paho-mqtt/json, sha256 locally computed
+-md5	2cc27d8b369700b1fc99325add0dadd2  paho-mqtt-1.3.1.tar.gz
+-sha256	31911f6031de306c27ed79dc77b690d7c55b0dcb0f0434ca34ec6361d0371122  paho-mqtt-1.3.1.tar.gz
++md5	e3ac29cd5dc247a01083a2a8f3fddd08  paho-mqtt-1.4.0.tar.gz
++sha256	e440a052b46d222e184be3be38676378722072fcd4dfd2c8f509fb861a7b0b79  paho-mqtt-1.4.0.tar.gz
+ sha256	76f13729e84e9222e543303df00f87d1b2c0995b6a505cd859a285667e44babb  LICENSE.txt
+ sha256	e8cf7d54ea46c19aba793983889b7f7425e1ebfcaaccec764a7db091646e203c  edl-v10
+ sha256	3b9be6b894d0769de796e653571ff6cef494913c0ce78c35a97db939e7d9087c  epl-v10
+diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
+index f335b35edb..d192749e1e 100644
+--- a/package/python-paho-mqtt/python-paho-mqtt.mk
++++ b/package/python-paho-mqtt/python-paho-mqtt.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBEVDEV_VERSION = 1.6.0
-+LIBEVDEV_VERSION = 1.7.0
- LIBEVDEV_SITE = http://www.freedesktop.org/software/libevdev
- LIBEVDEV_SOURCE = libevdev-$(LIBEVDEV_VERSION).tar.xz
- LIBEVDEV_LICENSE = X11
+-PYTHON_PAHO_MQTT_VERSION = 1.3.1
++PYTHON_PAHO_MQTT_VERSION = 1.4.0
+ PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
+-PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/2a/5f/cf14b8f9f8ed1891cda893a2a7d1d6fa23de2a9fb4832f05cef02b79d01f
++PYTHON_PAHO_MQTT_SITE = https://files.pythonhosted.org/packages/25/63/db25e62979c2a716a74950c9ed658dce431b5cb01fde29eb6cba9489a904
+ PYTHON_PAHO_MQTT_LICENSE = EPL-1.0 or EDLv1.0
+ PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
+ PYTHON_PAHO_MQTT_SETUP_TYPE = setuptools
+-- 
+2.17.1
