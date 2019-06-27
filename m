@@ -1,22 +1,34 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Jun 2019 22:29:22 +0200
-Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.13.3
-In-Reply-To: <20190625202027.25556-1-ps.report@gmx.net> (Peter Seiderer's
- message of "Tue, 25 Jun 2019 22:20:27 +0200")
-References: <20190625202027.25556-1-ps.report@gmx.net>
-Message-ID: <87zhm23h7h.fsf@dell.be.48ers.dk>
+Date: Thu, 27 Jun 2019 22:31:48 +0200
+Subject: [Buildroot] [PATCH] package/libcamera: bump to version
+ caf25dc5cfd11b965316f02610d49ae3d886716b
+In-Reply-To: <20190625215617.10817-1-kieran.bingham@ideasonboard.com> (Kieran
+ Bingham's message of "Tue, 25 Jun 2019 22:56:17 +0100")
+References: <20190625215617.10817-1-kieran.bingham@ideasonboard.com>
+Message-ID: <87sgru3h3f.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Seiderer <ps.report@gmx.net> writes:
+>>>>> "Kieran" == Kieran Bingham <kieran.bingham@ideasonboard.com> writes:
 
- > For details see [1].
- > [1] https://lists.freedesktop.org/archives/wayland-devel/2019-June/040650.html
+ > Buildroots autobuild identified a failure on GCC v6.2 and GCC v6.3,
+ > producing the following warning (reported as error due to -Werror):
 
- > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+ >   event_dispatcher_poll.cpp:231:13: error: types may not be defined
+ >       in a for-range-declaration [-Werror]
+
+ >               for (const struct pollfd &pfd : pollfds) {
+ >                          ^~~~~~
+ >               cc1plus: all warnings being treated as errors
+
+ > A fix has been integrated upstream, bump the package to incorporate it.
+
+ > Fixes: http://autobuild.buildroot.net/results/f6dd4c60c04892c8b1669e6000fce7edb2b6349e/
+
+ > Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
 
 Committed, thanks.
 
