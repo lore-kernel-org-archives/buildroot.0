@@ -1,8 +1,7 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 27 Jun 2019 10:16:53 +0200
-Subject: [Buildroot] Buildroot Developers Meeting: October 25-27 in Lyon,
- France
-Message-ID: <20190627101653.5ca1a4ef@windsurf>
+Date: Thu, 27 Jun 2019 10:50:56 +0200
+Subject: [Buildroot] Buildroot Hackathon on August 1-2-3-4
+Message-ID: <20190627105056.0484ceab@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,32 +10,19 @@ To: buildroot@busybox.net
 
 Hello,
 
-This is an announcement regarding the date and location of the next
-Buildroot Developers Meeting. It will take place from October 25 to
-October 27 in Lyon, France.
+Some of the core Buildroot developers will meet on August 1-2-3-4 in
+Toulouse (France) for a Buildroot hackathon. This event is reserved to
+a small core team of Buildroot developers, and therefore is not open to
+everybody like the Buildroot Developers Meeting I announced in a
+previous e-mail.
 
-As usual, the date and location have been chosen to match with the date
-and location of the Embedded Linux Conference Europe 2019, which will
-take place in Lyon from October 28 to October 30.
-
-The Buildroot meeting will therefore be on Friday, Saturday on Sunday.
-It is entirely possible for participants to only attend the meeting on
-some of the days (for example only on Saturday/Sunday, or only on
-Sunday).
-
-We have been doing this meeting for many years, and each time it's a
-really great moment to meet the other Buildroot developers, and make
-some good progress on many Buildroot topics. The meetings are typically
-a mix of discussion sessions and lots of time dedicated to hacking,
-reviewing and merging code.
-
-Attending the event is free, after registration, which takes place at:
-
-  https://elinux.org/Buildroot:DeveloperDaysELCE2019
-
-Also, if you are in a situation where you would like to attend but
-travel/accommodation costs are an issue, please contact me privately to
-see if we can help.
+However, we believe it is quite important to announce this hackathon
+publicly, so that the entire community knows that there will be a burst
+of activity on August 1-2-3-4. Some of you may be interested in
+resending some patch series for this date so that they can be
+considered for review/discussion during the hackathon. We will also be
+available on IRC during the hackathon, so you can also participate
+remotely to the patch review effort.
 
 Best regards,
 
