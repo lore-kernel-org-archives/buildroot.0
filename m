@@ -1,90 +1,54 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Thu, 27 Jun 2019 21:58:20 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-pyzmq: bump to version 18.0.2
-In-Reply-To: <20190627185820.464-1-asafka7@gmail.com>
-References: <20190627185820.464-1-asafka7@gmail.com>
-Message-ID: <20190627185820.464-2-asafka7@gmail.com>
+From: Benjamin Marty <benjamin.marty@gmail.com>
+Date: Thu, 27 Jun 2019 21:04:52 +0200
+Subject: [Buildroot] Build Orange Pi One doesn't boot
+Message-ID: <CABSdY3+3CUSJrFjpK9GcrLtN48Rn2QgJa1aYp99OUJT+U2CA1g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update the patch for the newer version.
+Hello,
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
----
- ...use-buildroot-zmq-version-instead-of-detect.patch | 12 ++++++------
- package/python-pyzmq/python-pyzmq.hash               |  4 ++--
- package/python-pyzmq/python-pyzmq.mk                 |  4 ++--
- 3 files changed, 10 insertions(+), 10 deletions(-)
+I tried to build with the Version 2019.05 from the Website and also with
+master from Github. It builds fine but doesn't boot on the target device.
+It looks like the kernel somehow crashes during booting. I'm not sure if I
+did something wrong.
 
-diff --git a/package/python-pyzmq/0001-use-buildroot-zmq-version-instead-of-detect.patch b/package/python-pyzmq/0001-use-buildroot-zmq-version-instead-of-detect.patch
-index 461ef4e5fe..315c8c8bb2 100644
---- a/package/python-pyzmq/0001-use-buildroot-zmq-version-instead-of-detect.patch
-+++ b/package/python-pyzmq/0001-use-buildroot-zmq-version-instead-of-detect.patch
-@@ -15,7 +15,7 @@ dynamically, return the version of the buildroot environment.
- Written by Michael Rommel, modified for version 16.0.2 by Lionel
- Flandrin.
- 
--Modified for version 17.1.2 by Asaf Kahlon.
-+Modified for version 18.0.2 by Asaf Kahlon
- 
- Signed-off-by: Lionel Flandrin <lionel@svkt.org>
- Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-@@ -24,16 +24,16 @@ Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
-  1 file changed, 8 insertions(+), 6 deletions(-)
- 
- diff --git a/buildutils/detect.py b/buildutils/detect.py
--index cb14a8d..b33a3b5 100644
-+index d1380fe..4a91351 100644
- --- a/buildutils/detect.py
- +++ b/buildutils/detect.py
--@@ -116,13 +116,15 @@ def detect_zmq(basedir, compiler=None, **compiler_attrs):
--     
-+@@ -120,13 +120,15 @@ def detect_zmq(basedir, compiler=None, **compiler_attrs):
-+ 
-      cc = get_compiler(compiler=compiler, **compiler_attrs)
-      efile = test_compilation(cfile, compiler=cc, **compiler_attrs)
- -    patch_lib_paths(efile, cc.library_dirs)
- +    #patch_lib_paths(efile, cc.library_dirs)
--     
-+ 
- -    rc, so, se = get_output_error([efile])
- -    if rc:
- -        msg = "Error running version detection script:\n%s\n%s" % (so,se)
-@@ -50,5 +50,5 @@ index cb14a8d..b33a3b5 100644
-      handlers = {'vers':  lambda val: tuple(int(v) for v in val.split('.'))}
-  
- -- 
--2.17.1
-+2.20.1
- 
-diff --git a/package/python-pyzmq/python-pyzmq.hash b/package/python-pyzmq/python-pyzmq.hash
-index 58d5fa1f56..330ca7b4cd 100644
---- a/package/python-pyzmq/python-pyzmq.hash
-+++ b/package/python-pyzmq/python-pyzmq.hash
-@@ -1,3 +1,3 @@
- # md5, sha256 from https://pypi.org/pypi/pyzmq/json
--md5    81d643d1e9eb9238960a18b6b0989db2  pyzmq-18.0.0.tar.gz
--sha256 b30c339eb58355f51f4f54dd61d785f1ff58c86bca1c3a5916977631d121867b  pyzmq-18.0.0.tar.gz
-+md5	1bcdc3a18c99875e01a24735dc168b8d  pyzmq-18.0.2.tar.gz
-+sha256	31a11d37ac73107363b47e14c94547dbfc6a550029c3fe0530be443199026fc2  pyzmq-18.0.2.tar.gz
-diff --git a/package/python-pyzmq/python-pyzmq.mk b/package/python-pyzmq/python-pyzmq.mk
-index 5d772b9fa3..bcc2604008 100644
---- a/package/python-pyzmq/python-pyzmq.mk
-+++ b/package/python-pyzmq/python-pyzmq.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYZMQ_VERSION = 18.0.0
-+PYTHON_PYZMQ_VERSION = 18.0.2
- PYTHON_PYZMQ_SOURCE = pyzmq-$(PYTHON_PYZMQ_VERSION).tar.gz
--PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/64/8d/78975da77627fd863c08e8ea3c7cebce7e51bed2936be5118de6b0050638
-+PYTHON_PYZMQ_SITE = https://files.pythonhosted.org/packages/a8/5e/7e4ed045fc1fb7667de4975fe8b6ab6b358b16bcc59e8349c9bd092931b6
- PYTHON_PYZMQ_LICENSE = LGPL-3.0+, BSD-3-Clause, Apache-2.0
- # Apache license only online: http://www.apache.org/licenses/LICENSE-2.0
- PYTHON_PYZMQ_LICENSE_FILES = COPYING.LESSER COPYING.BSD
--- 
-2.20.1
+Benjamin
+
+# make orangepi_one_defconfig
+# make -j9
+sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 bs=4M
+
+
+Hit any key to stop autoboot:  0
+switch to partitions #0, OK
+mmc0 is current device
+Scanning mmc 0:1...
+Found U-Boot script /boot.scr
+reading /boot.scr
+301 bytes read in 15 ms (19.5 KiB/s)
+## Executing script at 43100000
+reading zImage
+3803896 bytes read in 192 ms (18.9 MiB/s)
+reading sun8i-h3-orangepi-one.dtb
+15153 bytes read in 26 ms (568.4 KiB/s)
+## Flattened Device Tree blob at 43000000
+   Booting using the fdt blob at 0x43000000
+   Using Device Tree in place at 43000000, end 43006b30
+
+Starting kernel ...
+
+data abort
+pc : [<5dfacea8>]   lr : [<5df7eef3>]
+reloc pc : [<4a02eea8>]   lr : [<4a000ef3>]
+sp : 59f59020  ip : 59f5e8fa fp : 00000004
+r10: 59f93a1c  r9 : 59f5dee0 r8 : 00000400
+r7 : 00000000  r6 : 42000000 r5 : 43000000  r4 : 00000000
+r3 : 43000000  r2 : 43000000 r1 : 00000000  r0 : 00000000
+Flags: nZCv  IRQs off  FIQs off  Mode UK6_32
+Resetting CPU ...
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190627/386db50e/attachment.html>
