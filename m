@@ -1,27 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 27 Jun 2019 17:51:17 +0200
-Subject: [Buildroot] network-manager: Bump version 1.16.2
-In-Reply-To: <CACvFaDdZo3MZbz+MQ44schX8OF0NCDeisRqDsQCVbGRBEdg=AQ@mail.gmail.com>
- (Pascal Vizeli's message of "Thu, 27 Jun 2019 15:13:49 +0200")
-References: <CACvFaDdZo3MZbz+MQ44schX8OF0NCDeisRqDsQCVbGRBEdg=AQ@mail.gmail.com>
-Message-ID: <87lfxn3u2y.fsf@dell.be.48ers.dk>
+Date: Thu, 27 Jun 2019 17:55:47 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.1.x series
+In-Reply-To: <20190627065722.21350-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Thu, 27 Jun 2019 08:57:21 +0200")
+References: <20190627065722.21350-1-peter@korsgaard.com>
+Message-ID: <87h88b3tvg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pascal" == Pascal Vizeli <pvizeli@syshack.ch> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Good morning,
- > I've written a patch to update NetworkManager to 1.16.2 and fix wlan issue:
- > https://github.com/home-assistant/hassos/blob/dev/buildroot-patches/0005-network-manager-Bump-version-1.16.2.patch
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ > ---
+ >  linux/Config.in                      |  2 +-
+ >  linux/linux.hash                     | 10 +++++-----
+ >  package/linux-headers/Config.in.host | 10 +++++-----
+ >  3 files changed, 11 insertions(+), 11 deletions(-)
 
-Thanks, but please send patches inline. This sounds like two different
-things, so it should be two different patches.
-
-For details, please see the manual:
-https://buildroot.org/downloads/manual/manual.html#submitting-patches
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
