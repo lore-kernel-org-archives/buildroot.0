@@ -1,54 +1,63 @@
-From: Benjamin Marty <benjamin.marty@gmail.com>
-Date: Thu, 27 Jun 2019 21:04:52 +0200
-Subject: [Buildroot] Build Orange Pi One doesn't boot
-Message-ID: <CABSdY3+3CUSJrFjpK9GcrLtN48Rn2QgJa1aYp99OUJT+U2CA1g@mail.gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 27 Jun 2019 21:06:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 19.0.8
+Message-ID: <20190627190614.24035-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mesa3d-headers/mesa3d-headers.mk |  2 +-
+ package/mesa3d/mesa3d.hash               | 10 +++++-----
+ package/mesa3d/mesa3d.mk                 |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-I tried to build with the Version 2019.05 from the Website and also with
-master from Github. It builds fine but doesn't boot on the target device.
-It looks like the kernel somehow crashes during booting. I'm not sure if I
-did something wrong.
-
-Benjamin
-
-# make orangepi_one_defconfig
-# make -j9
-sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 bs=4M
-
-
-Hit any key to stop autoboot:  0
-switch to partitions #0, OK
-mmc0 is current device
-Scanning mmc 0:1...
-Found U-Boot script /boot.scr
-reading /boot.scr
-301 bytes read in 15 ms (19.5 KiB/s)
-## Executing script at 43100000
-reading zImage
-3803896 bytes read in 192 ms (18.9 MiB/s)
-reading sun8i-h3-orangepi-one.dtb
-15153 bytes read in 26 ms (568.4 KiB/s)
-## Flattened Device Tree blob at 43000000
-   Booting using the fdt blob at 0x43000000
-   Using Device Tree in place at 43000000, end 43006b30
-
-Starting kernel ...
-
-data abort
-pc : [<5dfacea8>]   lr : [<5df7eef3>]
-reloc pc : [<4a02eea8>]   lr : [<4a000ef3>]
-sp : 59f59020  ip : 59f5e8fa fp : 00000004
-r10: 59f93a1c  r9 : 59f5dee0 r8 : 00000400
-r7 : 00000000  r6 : 42000000 r5 : 43000000  r4 : 00000000
-r3 : 43000000  r2 : 43000000 r1 : 00000000  r0 : 00000000
-Flags: nZCv  IRQs off  FIQs off  Mode UK6_32
-Resetting CPU ...
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190627/386db50e/attachment.html>
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index d3cb6f4d09..9d6980c3d7 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 19.0.7
++MESA3D_HEADERS_VERSION = 19.0.8
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index 27868623d4..0b82342fc6 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2019-June/000523.html
+-md5 4834e7951ba57bb8a2a403d9d5d93f31  mesa-19.0.7.tar.xz
+-sha1 1c7cd71150082d52a5308aef17ad8b41a6d7f726  mesa-19.0.7.tar.xz
+-sha256 d7bf3db2e442fe5eeb96144f8508d94f04aededdf37af477e644638d366b2b28  mesa-19.0.7.tar.xz
+-sha512 eda02c426ad642c1f783aa376533c4f93354e819f99fd0187a88be2afd109effc9365e8d5ffd676202b006399674572d26b806da7f4c96adb8111243330cd121  mesa-19.0.7.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2019-June/000525.html
++md5 9634964d87f1ce8d0230493e43f34c50  mesa-19.0.8.tar.xz
++sha1 5fd340a6304f7501014e1bd7291e4cfa7a6efcdb  mesa-19.0.8.tar.xz
++sha256 d017eb53a810c32dabeedf6ca2238ae1e897ce9090e470e9ce1d6c9e3f1b0862  mesa-19.0.8.tar.xz
++sha512 fbddc3a74f223564343027380af776b3fa5d63fe1af4e34121273235d1c6eced96439f601eb19bf658eb927aff3965b520f0329fcbd4650f3112167303e1746d  mesa-19.0.8.tar.xz
+ # License
+ sha256 630e75b4fdeb75ee2bf9e55db54dd1e3ff7353d52d9314ca8512bfd460f8e24c  docs/license.html
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 2c1ae484a8..c8ec9bd879 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 19.0.7
++MESA3D_VERSION = 19.0.8
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://mesa.freedesktop.org/archive
+ MESA3D_LICENSE = MIT, SGI, Khronos
+-- 
+2.20.1
