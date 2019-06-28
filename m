@@ -1,70 +1,101 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Jun 2019 08:32:46 +0200
-Subject: [Buildroot] [PATCH 2/2] package/docker-cli: security bump to
- version 18.09.7
-In-Reply-To: <20190628063247.3588-1-peter@korsgaard.com>
-References: <20190628063247.3588-1-peter@korsgaard.com>
-Message-ID: <20190628063247.3588-2-peter@korsgaard.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 28 Jun 2019 09:45:07 +0200
+Subject: [Buildroot] Build Orange Pi One doesn't boot
+In-Reply-To: <CABSdY3LrbjBHyQHwK8bKBC5EOsMt6PwSD_BVUQ3oN35hsAtBkg@mail.gmail.com>
+References: <CABSdY3+3CUSJrFjpK9GcrLtN48Rn2QgJa1aYp99OUJT+U2CA1g@mail.gmail.com>
+ <861affdc-cb20-aa89-8260-b0e57467a816@mind.be>
+ <CABSdY3LrbjBHyQHwK8bKBC5EOsMt6PwSD_BVUQ3oN35hsAtBkg@mail.gmail.com>
+Message-ID: <c637ffe8-dc91-4905-606a-ef4253dc036a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2018-15664: API endpoints behind the 'docker cp' command are
-vulnerable to a symlink-exchange attack with Directory Traversal, giving
-attackers arbitrary read-write access to the host filesystem with root
-privileges, because daemon/archive.go does not do archive operations on a
-frozen filesystem (or from within a chroot).
+ Hi Benjamin,
 
-And includes additional post-18.09.6 fixes:
+ Please keep the list in Cc. Other people may benefit from your resolution as well.
 
-Builder
-- Fixed a panic error when building dockerfiles that contain only comments.
-  moby/moby#38487
-- Added a workaround for GCR authentication issue. moby/moby#38246
-- Builder-next: Fixed a bug in the GCR token cache implementation
-  workaround.  moby/moby#39183
+On 28/06/2019 01:18, Benjamin Marty wrote:
+> Hi Arnout
+> 
+> Yes, that was the issue. I have now changed it to external ARM toolchain
+> and it's booting perfectly. Thanks!
 
-Runtime
-- Added performance optimizations in aufs and layer store that helps in
-  massively parallel container creation and removal.  moby/moby#39107,
-  moby/moby#39135
-- daemon: fixed a mirrors validation issue. moby/moby#38991
-- Docker no longer supports sorting UID and GID ranges in ID maps.
-  moby/moby#39288
+ This is bad... Does anyone know if there is an upstream patch (either in GCC or
+in the kernel) to fix this issue?
 
-Logging
-- Added a fix that now allows large log lines for logger plugins.
-  moby/moby#39038
+ Regards,
+ Arnout
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index 4abc5cf91a..27bf3322c4 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	02bcb73dde1c9542fa65c8b87078aaa1b01b0dbdd62346637bcf0999a2a0909f  docker-cli-18.09.6.tar.gz
-+sha256  62e25a0935bee75f999fb95b224ad982054fc1adc4351ce98d704ec00114ce57  docker-cli-18.09.7.tar.gz
- sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index eef492d625..0cff46abbd 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOCKER_CLI_VERSION = 18.09.6
-+DOCKER_CLI_VERSION = 18.09.7
- DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
- DOCKER_CLI_WORKSPACE = gopath
- 
--- 
-2.11.0
+> 
+> Benjamin
+> 
+> Am Fr., 28. Juni 2019 um 00:29 Uhr schrieb Arnout Vandecappelle <
+> arnout at mind.be>:
+> 
+>>
+>>
+>> On 27/06/2019 21:04, Benjamin Marty wrote:
+>>> Hello,
+>>>
+>>> I tried to build with the Version 2019.05 from the Website and also with
+>>> master from Github. It builds fine but doesn't boot on the target device.
+>>> It looks like the kernel somehow crashes during booting. I'm not sure if
+>> I
+>>> did something wrong.
+>>>
+>>> Benjamin
+>>>
+>>> # make orangepi_one_defconfig
+>>> # make -j9
+>>> sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 bs=4M
+>>>
+>>>
+>>> Hit any key to stop autoboot:  0
+>>> switch to partitions #0, OK
+>>> mmc0 is current device
+>>> Scanning mmc 0:1...
+>>> Found U-Boot script /boot.scr
+>>> reading /boot.scr
+>>> 301 bytes read in 15 ms (19.5 KiB/s)
+>>> ## Executing script at 43100000
+>>> reading zImage
+>>> 3803896 bytes read in 192 ms (18.9 MiB/s)
+>>> reading sun8i-h3-orangepi-one.dtb
+>>> 15153 bytes read in 26 ms (568.4 KiB/s)
+>>> ## Flattened Device Tree blob at 43000000
+>>>    Booting using the fdt blob at 0x43000000
+>>>    Using Device Tree in place at 43000000, end 43006b30
+>>>
+>>> Starting kernel ...
+>>>
+>>> data abort
+>>
+>>  That might be a compiler issue... Could you try to change the toolchain
+>> to an
+>> external toolchain (ARM 2019.03), do 'make clean; make' and see if that
+>> improves
+>> things?
+>>
+>>  Regards,
+>>  Arnout
+>>
+>>> pc : [<5dfacea8>]   lr : [<5df7eef3>]
+>>> reloc pc : [<4a02eea8>]   lr : [<4a000ef3>]
+>>> sp : 59f59020  ip : 59f5e8fa fp : 00000004
+>>> r10: 59f93a1c  r9 : 59f5dee0 r8 : 00000400
+>>> r7 : 00000000  r6 : 42000000 r5 : 43000000  r4 : 00000000
+>>> r3 : 43000000  r2 : 43000000 r1 : 00000000  r0 : 00000000
+>>> Flags: nZCv  IRQs off  FIQs off  Mode UK6_32
+>>> Resetting CPU ...
+>>>
+>>>
+>>> _______________________________________________
+>>> buildroot mailing list
+>>> buildroot at busybox.net
+>>> http://lists.busybox.net/mailman/listinfo/buildroot
+>>>
+>>
+> 
