@@ -1,47 +1,54 @@
-From: =?utf-8?Q?Micha=C5=82_Kalbarczyk?= <michal@gamecodehq.com>
-Date: Fri, 28 Jun 2019 12:12:39 +0200
-Subject: [Buildroot] [Bug 11776] New: qt5webengine 5.12.2 build failed
- with arm toolchain and linaro toolchain
-In-Reply-To: <CAOgXH4dADDf_5miE6KZC816dxMa21bEgp6GD5E_W7nUc1WSwcg@mail.gmail.com>
-References: <bug-11776-163@https.bugs.busybox.net/>
- <CAOgXH4fdUqmL=s1t1wu7eBxwP7mKEKWv5p2ez7uoD7oH7V=TmA@mail.gmail.com>
- <02804c6d-653e-15da-ecf7-2c770ecb8b1f@230ruedubac.fr>
- <CAOgXH4dUVJziNh756o-6VLkVVaQrDaLcw_tjWa5Pd9GNtO-Rug@mail.gmail.com>
- <03545c68-3409-aad6-15a3-0e7de8cbff78@230ruedubac.fr>
- <CAOgXH4fTF-m_KqGocZz7p_Mfv5Nq+wNnJv3n3WjSuaVALRZOAg@mail.gmail.com>
- <CAOgXH4cgXYXgRL3WVAQfmpLBTUKBhS7qm8JxyiOp+GdcEAHHnw@mail.gmail.com>
- <2DC17E03-794C-4E07-B698-707CE728A10A@gamecodehq.com>
- <CAOgXH4dADDf_5miE6KZC816dxMa21bEgp6GD5E_W7nUc1WSwcg@mail.gmail.com>
-Message-ID: <E428B667-87F4-4BF3-8FDD-3E1B74C64554@gamecodehq.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 28 Jun 2019 15:26:13 +0200
+Subject: [Buildroot] [PATCH] package/expat: security bump to version 2.2.7
+Message-ID: <20190628132613.8819-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Tried gcc 8.3 with the same result. I'm using eglfs, maybe this matter.
+Fixes the following security vulnerabilites:
 
-BR2_PACKAGE_QT5=y
-BR2_PACKAGE_QT5BASE_SQLITE_SYSTEM=y
-BR2_PACKAGE_QT5BASE_LINUXFB=y
-BR2_PACKAGE_QT5BASE_DEFAULT_QPA="eglfs"
-BR2_PACKAGE_QT5BASE_GIF=y
-BR2_PACKAGE_QT5BASE_PNG=y
-BR2_PACKAGE_QT5MULTIMEDIA=y
-BR2_PACKAGE_QT5WEBENGINE=y
+CVE-2018-20843: In libexpat in Expat before 2.2.7, XML input including XML
+names that contain a large number of colons could make the XML parser
+consume a high amount of RAM and CPU resources while processing (enough to
+be usable for denial-of-service attacks).
 
-Best regards,
-Micha?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/expat/expat.hash | 8 ++++----
+ package/expat/expat.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-
-> On 27 Jun 2019, at 23:45, Nathan Ford <nford@westpond.com> wrote:
-> 
-> That looks like a new issue.
-> 
-> For reference I am successfully building Buildroot 2019.05 with gcc 8.3.0.
-> 
-> --Nate
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190628/3eb3dc71/attachment.html>
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 6c55972f69..91f70f36ed 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/expat/files/expat/2.2.6/
+-md5	ca047ae951b40020ac831c28859161b2		expat-2.2.6.tar.bz2
+-sha1	c8947fc3119a797b55485f2f7bdaaeb49cc9df01	expat-2.2.6.tar.bz2
++# From https://sourceforge.net/projects/expat/files/expat/2.2.7/
++md5	72f36b87cdb478aba1e78473393766aa		expat-2.2.7.tar.bz2
++sha1	9c8a268211e3f1ae31c4d550e5be7708973ec6a6	expat-2.2.7.tar.bz2
+ 
+ # Locally calculated
+-sha256	17b43c2716d521369f82fc2dc70f359860e90fa440bea65b3b85f0b246ea81f2	expat-2.2.6.tar.bz2
++sha256	cbc9102f4a31a8dafd42d642e9a3aa31e79a0aedaa1f6efd2795ebc83174ec18	expat-2.2.7.tar.bz2
+ sha256	46336ab2fec900803e2f1a4253e325ac01d998efb09bc6906651f7259e636f76	COPYING
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index 548ec826a0..1b49a12c49 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXPAT_VERSION = 2.2.6
++EXPAT_VERSION = 2.2.7
+ EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
+ EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
+ EXPAT_INSTALL_STAGING = YES
+-- 
+2.11.0
