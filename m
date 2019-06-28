@@ -1,54 +1,20 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Jun 2019 15:26:13 +0200
-Subject: [Buildroot] [PATCH] package/expat: security bump to version 2.2.7
-Message-ID: <20190628132613.8819-1-peter@korsgaard.com>
+From: Petr Cvek <petrcvekcz@gmail.com>
+Date: Fri, 28 Jun 2019 19:07:40 +0200
+Subject: [Buildroot] [BUG] host-python-2.7.16 fails to build on aarch64,
+ luajit fails for soft float
+Message-ID: <d596b57f-e046-ec2c-4413-e2a3f301412e@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security vulnerabilites:
+Hello,
 
-CVE-2018-20843: In libexpat in Expat before 2.2.7, XML input including XML
-names that contain a large number of colons could make the XML parser
-consume a high amount of RAM and CPU resources while processing (enough to
-be usable for denial-of-service attacks).
+Trying to build an MIPS system on debian/sid/aarch64 machine fails to build python2 for the host. It seems the current used python has a bundled version of libffi, which doesn't yet support aarch64.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/expat/expat.hash | 8 ++++----
- package/expat/expat.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+A temporary solution is to hardcopy libffi-3.3-rc0 into python source tree:
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 6c55972f69..91f70f36ed 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.2.6/
--md5	ca047ae951b40020ac831c28859161b2		expat-2.2.6.tar.bz2
--sha1	c8947fc3119a797b55485f2f7bdaaeb49cc9df01	expat-2.2.6.tar.bz2
-+# From https://sourceforge.net/projects/expat/files/expat/2.2.7/
-+md5	72f36b87cdb478aba1e78473393766aa		expat-2.2.7.tar.bz2
-+sha1	9c8a268211e3f1ae31c4d550e5be7708973ec6a6	expat-2.2.7.tar.bz2
- 
- # Locally calculated
--sha256	17b43c2716d521369f82fc2dc70f359860e90fa440bea65b3b85f0b246ea81f2	expat-2.2.6.tar.bz2
-+sha256	cbc9102f4a31a8dafd42d642e9a3aa31e79a0aedaa1f6efd2795ebc83174ec18	expat-2.2.7.tar.bz2
- sha256	46336ab2fec900803e2f1a4253e325ac01d998efb09bc6906651f7259e636f76	COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 548ec826a0..1b49a12c49 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.2.6
-+EXPAT_VERSION = 2.2.7
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
- EXPAT_INSTALL_STAGING = YES
--- 
-2.11.0
+output/build/host-python-2.7.16/Modules/_ctypes/libffi
+
+Alse luajit for the target fails to build for MIPS -msoft-float. This seems to be fixed in 2.1.0-beta3.
