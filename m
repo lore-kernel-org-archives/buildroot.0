@@ -1,20 +1,33 @@
-From: Petr Cvek <petrcvekcz@gmail.com>
-Date: Fri, 28 Jun 2019 19:07:40 +0200
-Subject: [Buildroot] [BUG] host-python-2.7.16 fails to build on aarch64,
- luajit fails for soft float
-Message-ID: <d596b57f-e046-ec2c-4413-e2a3f301412e@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 28 Jun 2019 22:32:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dialog: fix build with NLS
+Message-ID: <20190628203209.1563-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Fixes:
+ - http://autobuild.buildroot.org/results/9287ffbb86a7dc09cda5f99f87445fa884e77625
 
-Trying to build an MIPS system on debian/sid/aarch64 machine fails to build python2 for the host. It seems the current used python has a bundled version of libffi, which doesn't yet support aarch64.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/dialog/dialog.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-A temporary solution is to hardcopy libffi-3.3-rc0 into python source tree:
-
-output/build/host-python-2.7.16/Modules/_ctypes/libffi
-
-Alse luajit for the target fails to build for MIPS -msoft-float. This seems to be fixed in 2.1.0-beta3.
+diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
+index 73fabe07cf..b1933b8836 100644
+--- a/package/dialog/dialog.mk
++++ b/package/dialog/dialog.mk
+@@ -9,7 +9,7 @@ DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
+ DIALOG_SITE = ftp://ftp.invisible-island.net/dialog
+ DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
+ 	--disable-rpath-hack
+-DIALOG_DEPENDENCIES = host-pkgconf ncurses
++DIALOG_DEPENDENCIES = host-pkgconf ncurses $(TARGET_NLS_DEPENDENCIES)
+ DIALOG_LICENSE = LGPL-2.1
+ DIALOG_LICENSE_FILES = COPYING
+ 
+-- 
+2.14.1
