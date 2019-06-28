@@ -1,101 +1,60 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 28 Jun 2019 09:45:07 +0200
-Subject: [Buildroot] Build Orange Pi One doesn't boot
-In-Reply-To: <CABSdY3LrbjBHyQHwK8bKBC5EOsMt6PwSD_BVUQ3oN35hsAtBkg@mail.gmail.com>
-References: <CABSdY3+3CUSJrFjpK9GcrLtN48Rn2QgJa1aYp99OUJT+U2CA1g@mail.gmail.com>
- <861affdc-cb20-aa89-8260-b0e57467a816@mind.be>
- <CABSdY3LrbjBHyQHwK8bKBC5EOsMt6PwSD_BVUQ3oN35hsAtBkg@mail.gmail.com>
-Message-ID: <c637ffe8-dc91-4905-606a-ef4253dc036a@mind.be>
+From: Michael Cullen <michael@michaelcullen.name>
+Date: Fri, 28 Jun 2019 10:08:48 +0100
+Subject: [Buildroot] [PATCH 1/2] package/rpi-firmware: Bump version for pi4
+ support
+Message-ID: <20190628090850.18733-1-michael@michaelcullen.name>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Benjamin,
+This commit pulls in the latest version of rpi-firmware to enable
+support for the new Pi4
 
- Please keep the list in Cc. Other people may benefit from your resolution as well.
+Additionally, it copies the RPi4 start files.
 
-On 28/06/2019 01:18, Benjamin Marty wrote:
-> Hi Arnout
-> 
-> Yes, that was the issue. I have now changed it to external ARM toolchain
-> and it's booting perfectly. Thanks!
+Signed-off-by: Michael Cullen <michael@michaelcullen.name>
 
- This is bad... Does anyone know if there is an upstream patch (either in GCC or
-in the kernel) to fix this issue?
+---
+I plan to rework the file copying. What's here right now won't work with
+the db and cd images since the filename pattern for the pi4 isn't quite
+the same.
+---
+ package/rpi-firmware/rpi-firmware.hash | 2 +-
+ package/rpi-firmware/rpi-firmware.mk   | 4 +++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
- Regards,
- Arnout
-
-
-> 
-> Benjamin
-> 
-> Am Fr., 28. Juni 2019 um 00:29 Uhr schrieb Arnout Vandecappelle <
-> arnout at mind.be>:
-> 
->>
->>
->> On 27/06/2019 21:04, Benjamin Marty wrote:
->>> Hello,
->>>
->>> I tried to build with the Version 2019.05 from the Website and also with
->>> master from Github. It builds fine but doesn't boot on the target device.
->>> It looks like the kernel somehow crashes during booting. I'm not sure if
->> I
->>> did something wrong.
->>>
->>> Benjamin
->>>
->>> # make orangepi_one_defconfig
->>> # make -j9
->>> sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 bs=4M
->>>
->>>
->>> Hit any key to stop autoboot:  0
->>> switch to partitions #0, OK
->>> mmc0 is current device
->>> Scanning mmc 0:1...
->>> Found U-Boot script /boot.scr
->>> reading /boot.scr
->>> 301 bytes read in 15 ms (19.5 KiB/s)
->>> ## Executing script at 43100000
->>> reading zImage
->>> 3803896 bytes read in 192 ms (18.9 MiB/s)
->>> reading sun8i-h3-orangepi-one.dtb
->>> 15153 bytes read in 26 ms (568.4 KiB/s)
->>> ## Flattened Device Tree blob at 43000000
->>>    Booting using the fdt blob at 0x43000000
->>>    Using Device Tree in place at 43000000, end 43006b30
->>>
->>> Starting kernel ...
->>>
->>> data abort
->>
->>  That might be a compiler issue... Could you try to change the toolchain
->> to an
->> external toolchain (ARM 2019.03), do 'make clean; make' and see if that
->> improves
->> things?
->>
->>  Regards,
->>  Arnout
->>
->>> pc : [<5dfacea8>]   lr : [<5df7eef3>]
->>> reloc pc : [<4a02eea8>]   lr : [<4a000ef3>]
->>> sp : 59f59020  ip : 59f5e8fa fp : 00000004
->>> r10: 59f93a1c  r9 : 59f5dee0 r8 : 00000400
->>> r7 : 00000000  r6 : 42000000 r5 : 43000000  r4 : 00000000
->>> r3 : 43000000  r2 : 43000000 r1 : 00000000  r0 : 00000000
->>> Flags: nZCv  IRQs off  FIQs off  Mode UK6_32
->>> Resetting CPU ...
->>>
->>>
->>> _______________________________________________
->>> buildroot mailing list
->>> buildroot at busybox.net
->>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>
->>
-> 
+diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
+index d719fa6e08..0d7ce949a2 100644
+--- a/package/rpi-firmware/rpi-firmware.hash
++++ b/package/rpi-firmware/rpi-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 e911f6342ea8aa9380cae97c6f5ac4ddd370527265f23d5b5d4b2c6f679d4ba8 rpi-firmware-ebf7b40cdc6effe7ffa3fd5195e8be01b94f80da.tar.gz
++sha256 c82c40cf37fac36160a7f6b9c314506beb942bf113a55d30fa163c56a4f98946 rpi-firmware-bcf40b5c2b94178c7564fb451098d44968e44af5.tar.gz
+diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
+index 272db1c321..d99c7dd0f0 100644
+--- a/package/rpi-firmware/rpi-firmware.mk
++++ b/package/rpi-firmware/rpi-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_FIRMWARE_VERSION = ebf7b40cdc6effe7ffa3fd5195e8be01b94f80da
++RPI_FIRMWARE_VERSION = bcf40b5c2b94178c7564fb451098d44968e44af5
+ RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
+ RPI_FIRMWARE_LICENSE = BSD-3-Clause
+ RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
+@@ -44,7 +44,9 @@ endif # INSTALL_VCDBG
+ define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
++	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start4.elf
+ 	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
++	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup4.dat
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
+ 	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
+ 	$(RPI_FIRMWARE_INSTALL_DTB)
+-- 
+2.21.0
