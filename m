@@ -1,60 +1,158 @@
 From: Michael Cullen <michael@michaelcullen.name>
-Date: Fri, 28 Jun 2019 10:08:48 +0100
-Subject: [Buildroot] [PATCH 1/2] package/rpi-firmware: Bump version for pi4
- support
-Message-ID: <20190628090850.18733-1-michael@michaelcullen.name>
+Date: Fri, 28 Jun 2019 10:08:49 +0100
+Subject: [Buildroot] [PATCH 2/2] board/raspberrypi: add support for the new
+ pi4
+In-Reply-To: <20190628090850.18733-1-michael@michaelcullen.name>
+References: <20190628090850.18733-1-michael@michaelcullen.name>
+Message-ID: <20190628090850.18733-2-michael@michaelcullen.name>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit pulls in the latest version of rpi-firmware to enable
-support for the new Pi4
-
-Additionally, it copies the RPi4 start files.
+This is based on the pi3 defconfig. There is currently no 64-bit support
+since the upstream kernel does not build in this configuration.
 
 Signed-off-by: Michael Cullen <michael@michaelcullen.name>
-
 ---
-I plan to rework the file copying. What's here right now won't work with
-the db and cd images since the filename pattern for the pi4 isn't quite
-the same.
----
- package/rpi-firmware/rpi-firmware.hash | 2 +-
- package/rpi-firmware/rpi-firmware.mk   | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ board/raspberrypi/genimage-raspberrypi4.cfg | 32 ++++++++++++++++++
+ board/raspberrypi/readme.txt                |  8 ++++-
+ board/raspberrypi4                          |  1 +
+ configs/raspberrypi4_defconfig              | 37 +++++++++++++++++++++
+ 4 files changed, 77 insertions(+), 1 deletion(-)
+ create mode 100644 board/raspberrypi/genimage-raspberrypi4.cfg
+ create mode 120000 board/raspberrypi4
+ create mode 100644 configs/raspberrypi4_defconfig
 
-diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-index d719fa6e08..0d7ce949a2 100644
---- a/package/rpi-firmware/rpi-firmware.hash
-+++ b/package/rpi-firmware/rpi-firmware.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 e911f6342ea8aa9380cae97c6f5ac4ddd370527265f23d5b5d4b2c6f679d4ba8 rpi-firmware-ebf7b40cdc6effe7ffa3fd5195e8be01b94f80da.tar.gz
-+sha256 c82c40cf37fac36160a7f6b9c314506beb942bf113a55d30fa163c56a4f98946 rpi-firmware-bcf40b5c2b94178c7564fb451098d44968e44af5.tar.gz
-diff --git a/package/rpi-firmware/rpi-firmware.mk b/package/rpi-firmware/rpi-firmware.mk
-index 272db1c321..d99c7dd0f0 100644
---- a/package/rpi-firmware/rpi-firmware.mk
-+++ b/package/rpi-firmware/rpi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/board/raspberrypi/genimage-raspberrypi4.cfg b/board/raspberrypi/genimage-raspberrypi4.cfg
+new file mode 100644
+index 0000000000..be79a8e663
+--- /dev/null
++++ b/board/raspberrypi/genimage-raspberrypi4.cfg
+@@ -0,0 +1,32 @@
++image boot.vfat {
++  vfat {
++    files = {
++      "bcm2711-rpi-4-b.dtb",
++      "rpi-firmware/bootcode.bin",
++      "rpi-firmware/cmdline.txt",
++      "rpi-firmware/config.txt",
++      "rpi-firmware/fixup.dat",
++      "rpi-firmware/fixup4.dat",
++      "rpi-firmware/start4.elf",
++      "rpi-firmware/overlays",
++      "zImage"
++    }
++  }
++  size = 64M
++}
++
++image sdcard.img {
++  hdimage {
++  }
++
++  partition boot {
++    partition-type = 0xC
++    bootable = "true"
++    image = "boot.vfat"
++  }
++
++  partition rootfs {
++    partition-type = 0x83
++    image = "rootfs.ext4"
++  }
++}
+diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
+index 9f91581054..2f0f4a6950 100644
+--- a/board/raspberrypi/readme.txt
++++ b/board/raspberrypi/readme.txt
+@@ -8,6 +8,7 @@ These instructions apply to all models of the Raspberry Pi:
+   - the "enhanced" models A+ and B+,
+   - the model B2 (aka Raspberry Pi 2)
+   - the model B3 (aka Raspberry Pi 3).
++  - the model B3 (aka Raspberry Pi 4).
  
--RPI_FIRMWARE_VERSION = ebf7b40cdc6effe7ffa3fd5195e8be01b94f80da
-+RPI_FIRMWARE_VERSION = bcf40b5c2b94178c7564fb451098d44968e44af5
- RPI_FIRMWARE_SITE = $(call github,raspberrypi,firmware,$(RPI_FIRMWARE_VERSION))
- RPI_FIRMWARE_LICENSE = BSD-3-Clause
- RPI_FIRMWARE_LICENSE_FILES = boot/LICENCE.broadcom
-@@ -44,7 +44,9 @@ endif # INSTALL_VCDBG
- define RPI_FIRMWARE_INSTALL_IMAGES_CMDS
- 	$(INSTALL) -D -m 0644 $(@D)/boot/bootcode.bin $(BINARIES_DIR)/rpi-firmware/bootcode.bin
- 	$(INSTALL) -D -m 0644 $(@D)/boot/start$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start.elf
-+	$(INSTALL) -D -m 0644 $(@D)/boot/start4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).elf $(BINARIES_DIR)/rpi-firmware/start4.elf
- 	$(INSTALL) -D -m 0644 $(@D)/boot/fixup$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup.dat
-+	$(INSTALL) -D -m 0644 $(@D)/boot/fixup4$(BR2_PACKAGE_RPI_FIRMWARE_BOOT).dat $(BINARIES_DIR)/rpi-firmware/fixup4.dat
- 	$(INSTALL) -D -m 0644 package/rpi-firmware/config.txt $(BINARIES_DIR)/rpi-firmware/config.txt
- 	$(INSTALL) -D -m 0644 package/rpi-firmware/cmdline.txt $(BINARIES_DIR)/rpi-firmware/cmdline.txt
- 	$(RPI_FIRMWARE_INSTALL_DTB)
+ How to build it
+ ===============
+@@ -34,6 +35,10 @@ For model 3 B and B+:
+ 
+   $ make raspberrypi3_defconfig
+ 
++For model 4 B:
++
++  $ make raspberrypi3_defconfig
++
+ Build the rootfs
+ ----------------
+ 
+@@ -57,6 +62,7 @@ After building, you should obtain this tree:
+     +-- bcm2709-rpi-2-b.dtb         [1]
+     +-- bcm2710-rpi-3-b.dtb         [1]
+     +-- bcm2710-rpi-3-b-plus.dtb    [1]
++    +-- bcm2838-rpi-4-b.dtb         [1]
+     +-- boot.vfat
+     +-- rootfs.ext4
+     +-- rpi-firmware/
+@@ -72,7 +78,7 @@ After building, you should obtain this tree:
+ [1] Not all of them will be present, depending on the RaspberryPi
+     model you are using.
+ 
+-[2] Only for the Raspberry Pi 3 Model (overlay pi3-miniuart-bt is needed
++[2] Only for the Raspberry Pi 3/4 Models (overlay pi3-miniuart-bt is needed
+     to enable the RPi3 serial console otherwise occupied by the bluetooth
+     chip). Alternative would be to disable the serial console in cmdline.txt
+     and /etc/inittab.
+diff --git a/board/raspberrypi4 b/board/raspberrypi4
+new file mode 120000
+index 0000000000..fcdafc81ed
+--- /dev/null
++++ b/board/raspberrypi4
+@@ -0,0 +1 @@
++raspberrypi
+\ No newline at end of file
+diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
+new file mode 100644
+index 0000000000..6cad4403a6
+--- /dev/null
++++ b/configs/raspberrypi4_defconfig
+@@ -0,0 +1,37 @@
++BR2_arm=y
++BR2_cortex_a72=y
++BR2_ARM_FPU_NEON_VFPV4=y
++
++BR2_TOOLCHAIN_BUILDROOT_CXX=y
++
++BR2_SYSTEM_DHCP="eth0"
++
++# Linux headers same as kernel, a 4.19 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,eb0360356344d8ba633e61936c794aa46a02397f)/linux-eb0360356344d8ba633e61936c794aa46a02397f.tar.gz"
++BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
++
++# Build the DTB from the kernel sources
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2711-rpi-4-b"
++
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++
++BR2_PACKAGE_RPI_FIRMWARE=y
++
++# Required tools to create the SD image
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
++
++# Filesystem / image
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4/post-image.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
 -- 
 2.21.0
