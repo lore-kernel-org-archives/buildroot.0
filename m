@@ -1,8 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 28 Jun 2019 08:32:45 +0200
-Subject: [Buildroot] [PATCH 1/2] package/docker-engine: security bump to
+Date: Fri, 28 Jun 2019 08:32:46 +0200
+Subject: [Buildroot] [PATCH 2/2] package/docker-cli: security bump to
  version 18.09.7
-Message-ID: <20190628063247.3588-1-peter@korsgaard.com>
+In-Reply-To: <20190628063247.3588-1-peter@korsgaard.com>
+References: <20190628063247.3588-1-peter@korsgaard.com>
+Message-ID: <20190628063247.3588-2-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -38,31 +40,31 @@ Logging
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-engine/docker-engine.hash | 2 +-
- package/docker-engine/docker-engine.mk   | 2 +-
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
-index 5beceea04b..4ef6905b5d 100644
---- a/package/docker-engine/docker-engine.hash
-+++ b/package/docker-engine/docker-engine.hash
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index 4abc5cf91a..27bf3322c4 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256	7cb45266fff79245c81ec86c455d4b0513ca5d4ec1b9be8c8330df30a9467481  docker-engine-18.09.6.tar.gz
-+sha256	b4f55831f5e7c5a92cd91f77aad1541ccd572eb18df2f44a01c372bceb3f9b6b  docker-engine-18.09.7.tar.gz
+-sha256	02bcb73dde1c9542fa65c8b87078aaa1b01b0dbdd62346637bcf0999a2a0909f  docker-cli-18.09.6.tar.gz
++sha256  62e25a0935bee75f999fb95b224ad982054fc1adc4351ce98d704ec00114ce57  docker-cli-18.09.7.tar.gz
  sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index dd23c59d16..99e3088f65 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index eef492d625..0cff46abbd 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOCKER_ENGINE_VERSION = 18.09.6
-+DOCKER_ENGINE_VERSION = 18.09.7
- DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
+-DOCKER_CLI_VERSION = 18.09.6
++DOCKER_CLI_VERSION = 18.09.7
+ DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ DOCKER_CLI_WORKSPACE = gopath
  
- DOCKER_ENGINE_LICENSE = Apache-2.0
 -- 
 2.11.0
