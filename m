@@ -1,10 +1,10 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Sat, 29 Jun 2019 10:32:11 +0530
-Subject: [Buildroot] [PATCH 24/27] autobuild-run: account for
- reproducibility failures when creating the reason file
+Date: Sat, 29 Jun 2019 10:32:12 +0530
+Subject: [Buildroot] [PATCH 25/27] web/import.inc.php: support reading
+ failure reason from reason file
 In-Reply-To: <20190629050214.17852-1-itsatharva@gmail.com>
 References: <20190629050214.17852-1-itsatharva@gmail.com>
-Message-ID: <20190629050214.17852-24-itsatharva@gmail.com>
+Message-ID: <20190629050214.17852-25-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,63 +13,50 @@ To: buildroot@busybox.net
 
 Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 ---
+NOTE: This patch is untested.
+
 Changes from reason-file-v2 series:
   - Move to builder-class series
 ---
- scripts/autobuild-run | 33 +++++++++++++++++++++++----------
- 1 file changed, 23 insertions(+), 10 deletions(-)
+ web/import.inc.php | 26 +++++++++++++++-----------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index d26594a..9051297 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -581,16 +581,26 @@ class Builder:
-             return
+diff --git a/web/import.inc.php b/web/import.inc.php
+index a9b368f..6f878e0 100644
+--- a/web/import.inc.php
++++ b/web/import.inc.php
+@@ -230,17 +230,21 @@ function import_result($buildid, $filename)
+     if ($status == 0)
+       $reason = "none";
+     else {
+-	$tmp = Array();
+-	exec("tail -3 " . $thisbuildfinaldir . "build-end.log | grep -v '\[_all\]' | grep 'make.*: \*\*\*' | sed 's,.*\[\([^\]*\)\] Error.*,\\1,' | sed 's,.*/build/\([^/]*\)/.*,\\1,'", $tmp);
+-	if (trim($tmp[0]))
+-	  $reason = $tmp[0];
+-	else {
+-	  exec("tail -1 " . $thisbuildfinaldir . "build-time.log | grep :start: | cut -d':' -f4", $tmp);
+-	  if (trim($tmp[0]))
+-	    $reason = trim($tmp[0]);
+-	  else
+-	    $reason = "unknown";
+-	}
++      if (file_exists($thisbuildfinaldir . "reason"))
++        $reason = trim(file_get_contents($thisbuildfinaldir . "reason", "r"));
++      else {
++        $tmp = Array();
++        exec("tail -3 " . $thisbuildfinaldir . "build-end.log | grep -v '\[_all\]' | grep 'make.*: \*\*\*' | sed 's,.*\[\([^\]*\)\] Error.*,\\1,' | sed 's,.*/build/\([^/]*\)/.*,\\1,'", $tmp);
++        if (trim($tmp[0]))
++          $reason = $tmp[0];
++        else {
++          exec("tail -1 " . $thisbuildfinaldir . "build-time.log | grep :start: | cut -d':' -f4", $tmp);
++          if (trim($tmp[0]))
++            $reason = trim($tmp[0]);
++          else
++            $reason = "unknown";
++        }
++      }
+     }
  
-         def get_failure_reason():
--            # Output is a tuple (package, version), or None.
--            lastlines = decode_bytes(subprocess.Popen(
--                ["tail", "-n", "3", os.path.join(self.outputdir, "logfile")],
--                stdout=subprocess.PIPE).communicate()[0]).splitlines()
-+            # Output is a tuple (package, version), or None in case of package failure
-+            # Output is "reproducible" in case of reproducibility failure
-+
-+            reproducible_results = os.path.join(self.resultdir, "reproducible_results")
-+            if os.path.exists(reproducible_results):
-+                if os.stat(reproducible_results).st_size > 0:
-+                    reason = "reproducible"
-+                    return reason
-+                else:
-+                    return None
-+            else:
-+                lastlines = decode_bytes(subprocess.Popen(
-+                    ["tail", "-n", "3", os.path.join(self.outputdir, "logfile")],
-+                    stdout=subprocess.PIPE).communicate()[0]).splitlines()
- 
--            regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
--            for line in lastlines:
--                m = regexp.search(line)
--                if m:
--                    return m.group(1).rsplit('-', 1)
-+                regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
-+                for line in lastlines:
-+                    m = regexp.search(line)
-+                    if m:
-+                        return m.group(1).rsplit('-', 1)
- 
-             # not found
-             return None
-@@ -598,7 +608,10 @@ class Builder:
-         reason = get_failure_reason()
-         if reason:
-             with open(os.path.join(self.resultdir, "reason"), "w+") as reasonf:
--                reasonf.write("-".join(reason))
-+                if reason == "reproducible":
-+                    reasonf.write(reason)
-+                else:
-+                    reasonf.write("-".join(reason))
- 
-         def extract_end_log(resultfile):
-             """Save the last part of the build log, starting from the failed package"""
+     /* Compress files that are typically too large and infrequently
 -- 
 2.20.1
