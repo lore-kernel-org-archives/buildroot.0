@@ -1,44 +1,62 @@
 From: Michael Cullen <michael@michaelcullen.name>
-Date: Sat, 29 Jun 2019 19:32:40 +0100
-Subject: [Buildroot] [PATCH v2 4/4] package/rpi-wifi-firmware: bump to the
+Date: Sat, 29 Jun 2019 19:58:56 +0100
+Subject: [Buildroot] [PATCH v2 3/4] package/rpi-bt-firmware: bump to
  latest version
-In-Reply-To: <20190629183240.16035-1-michael@michaelcullen.name>
+In-Reply-To: <20190629183240.16035-3-michael@michaelcullen.name>
 References: <20190629183240.16035-1-michael@michaelcullen.name>
-Message-ID: <20190629183240.16035-4-michael@michaelcullen.name>
+ <20190629183240.16035-3-michael@michaelcullen.name>
+Message-ID: <067c2909-86c9-483b-9ed9-f3301cd38e6b@www.fastmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Includes the newest firmware as shipped by Raspbian Buster,
-the Raspbian release designed for the Pi4
----
- package/rpi-wifi-firmware/rpi-wifi-firmware.hash | 2 +-
- package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Oops - forgot the signoff on the last two
 
-diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-index c61a47ec73..5de9e0f13f 100644
---- a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-+++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 155ebd5f08b819e0ce4e1950fcc972b2086cee3c16d36aba348beba1910c1fd2  rpi-wifi-firmware-8c1e2bff1da9850f68efcfff3da5d939ec27a2ee.tar.gz
-+sha256 51a33d23127300dffd6ac088f372b83ab862053f5e4dc7130676ebaaa824e626  rpi-wifi-firmware-688531da4bcf802a814d9cb0c8b6d62e3b8a3327.tar.gz
- sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
-diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-index 2eb8ceec3c..9dd1854b9a 100644
---- a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-+++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_WIFI_FIRMWARE_VERSION = 8c1e2bff1da9850f68efcfff3da5d939ec27a2ee
-+RPI_WIFI_FIRMWARE_VERSION = 688531da4bcf802a814d9cb0c8b6d62e3b8a3327
- RPI_WIFI_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_WIFI_FIRMWARE_VERSION))
- RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
- RPI_WIFI_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
--- 
-2.21.0
+On Sat, 29 Jun 2019, at 7:33 PM, Michael Cullen wrote:
+> Includes the newest firmware as shipped by Raspbian Buster,
+> the Raspbian release designed for the Pi4
+>
+Signed-off-by: Michael Cullen <michael@michaelcullen.name>
+> ---
+>  package/rpi-bt-firmware/rpi-bt-firmware.hash | 2 +-
+>  package/rpi-bt-firmware/rpi-bt-firmware.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.hash 
+> b/package/rpi-bt-firmware/rpi-bt-firmware.hash
+> index eeb7b605fe..a3c7281d75 100644
+> --- a/package/rpi-bt-firmware/rpi-bt-firmware.hash
+> +++ b/package/rpi-bt-firmware/rpi-bt-firmware.hash
+> @@ -1,3 +1,3 @@
+>  # Locally computed
+> -sha256 
+> 155ebd5f08b819e0ce4e1950fcc972b2086cee3c16d36aba348beba1910c1fd2  
+> rpi-bt-firmware-8c1e2bff1da9850f68efcfff3da5d939ec27a2ee.tar.gz
+> +sha256 
+> 51a33d23127300dffd6ac088f372b83ab862053f5e4dc7130676ebaaa824e626  
+> rpi-bt-firmware-688531da4bcf802a814d9cb0c8b6d62e3b8a3327.tar.gz
+>  sha256 
+> b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  
+> LICENCE.broadcom_bcm43xx
+> diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk 
+> b/package/rpi-bt-firmware/rpi-bt-firmware.mk
+> index f9f300da41..23923453c4 100644
+> --- a/package/rpi-bt-firmware/rpi-bt-firmware.mk
+> +++ b/package/rpi-bt-firmware/rpi-bt-firmware.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  
+> ################################################################################
+>  
+> -RPI_BT_FIRMWARE_VERSION = 8c1e2bff1da9850f68efcfff3da5d939ec27a2ee
+> +RPI_BT_FIRMWARE_VERSION = 688531da4bcf802a814d9cb0c8b6d62e3b8a3327
+>  RPI_BT_FIRMWARE_SITE = $(call 
+> github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_BT_FIRMWARE_VERSION))
+>  RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
+>  RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
+> -- 
+> 2.21.0
+> 
+>
