@@ -1,128 +1,47 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Jun 2019 16:46:26 +0200
-Subject: [Buildroot] [PATCH 1/5] package/nettle: bump version to 3.5.1
-Message-ID: <20190629144630.8036-1-bernd.kuhls@t-online.de>
+Date: Sat, 29 Jun 2019 16:46:30 +0200
+Subject: [Buildroot] [PATCH 5/5] package/p11-kit: bump version to 0.23.16.1
+In-Reply-To: <20190629144630.8036-1-bernd.kuhls@t-online.de>
+References: <20190629144630.8036-1-bernd.kuhls@t-online.de>
+Message-ID: <20190629144630.8036-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-http://lists.lysator.liu.se/pipermail/nettle-bugs/2019/007593.html
-
-Removed patch which was applied upstream.
+Added license hash, switched _SITE to github, previous URL is broken.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...1-Fix-accidental-use-of-C99-for-loop.patch | 71 -------------------
- package/nettle/nettle.hash                    |  4 +-
- package/nettle/nettle.mk                      |  2 +-
- 3 files changed, 3 insertions(+), 74 deletions(-)
- delete mode 100644 package/nettle/0001-Fix-accidental-use-of-C99-for-loop.patch
+ package/p11-kit/p11-kit.hash | 4 +++-
+ package/p11-kit/p11-kit.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/nettle/0001-Fix-accidental-use-of-C99-for-loop.patch b/package/nettle/0001-Fix-accidental-use-of-C99-for-loop.patch
-deleted file mode 100644
-index e03af7a45a..0000000000
---- a/package/nettle/0001-Fix-accidental-use-of-C99-for-loop.patch
-+++ /dev/null
-@@ -1,71 +0,0 @@
--From f5a3a224bf00bef5669366d2ae23c2b2b13b8016 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Niels=20M=C3=B6ller?= <nisse@lysator.liu.se>
--Date: Wed, 26 Dec 2018 11:04:31 +0100
--Subject: [PATCH] Fix accidental use of C99 for loop.
--
--* rsa-sign-tr.c (sec_equal): Fix accidental use of C99 for loop.
--Reported by Andreas Gustafsson.
--* testsuite/rsa-sec-decrypt-test.c (test_main): Likewise.
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://git.lysator.liu.se/nettle/nettle/commit/f5a3a224bf00bef5669366d2ae23c2b2b13b8016]
-----
-- ChangeLog                        | 6 ++++++
-- rsa-sign-tr.c                    | 3 ++-
-- testsuite/rsa-sec-decrypt-test.c | 3 ++-
-- 3 files changed, 10 insertions(+), 2 deletions(-)
--
--diff --git a/ChangeLog b/ChangeLog
--index 4c7338a1..079d0153 100644
----- a/ChangeLog
--+++ b/ChangeLog
--@@ -1,3 +1,9 @@
--+2018-12-26  Niels M?ller  <nisse@lysator.liu.se>
--+
--+	* rsa-sign-tr.c (sec_equal): Fix accidental use of C99 for loop.
--+	Reported by Andreas Gustafsson.
--+	* testsuite/rsa-sec-decrypt-test.c (test_main): Likewise.
--+
-- 2018-12-04  Niels M?ller  <nisse@lysator.liu.se>
-- 
-- 	* Released nettle-3.4.1.
--diff --git a/rsa-sign-tr.c b/rsa-sign-tr.c
--index 59c9bd07..f824c4ca 100644
----- a/rsa-sign-tr.c
--+++ b/rsa-sign-tr.c
--@@ -239,8 +239,9 @@ static int
-- sec_equal(const mp_limb_t *a, const mp_limb_t *b, size_t limbs)
-- {
--   volatile mp_limb_t z = 0;
--+  size_t i;
-- 
---  for (size_t i = 0; i < limbs; i++)
--+  for (i = 0; i < limbs; i++)
--     {
--       z |= (a[i] ^ b[i]);
--     }
--diff --git a/testsuite/rsa-sec-decrypt-test.c b/testsuite/rsa-sec-decrypt-test.c
--index 64f0b13c..fb0ed3a1 100644
----- a/testsuite/rsa-sec-decrypt-test.c
--+++ b/testsuite/rsa-sec-decrypt-test.c
--@@ -68,6 +68,7 @@ test_main(void)
--   unsigned n_size = 1024;
--   mpz_t gibberish;
--   mpz_t garbage;
--+  size_t size;
-- 
--   rsa_private_key_init(&key);
--   rsa_public_key_init(&pub);
--@@ -78,7 +79,7 @@ test_main(void)
-- 
--   memset(verifybad, 'A', PAYLOAD_SIZE);
-- 
---  for (size_t size = 1; size < 51; size++)
--+  for (size = 1; size < 51; size++)
--     {
--       ASSERT (rsa_generate_keypair(&pub, &key, &random_ctx,
-- 			           (nettle_random_func *) knuth_lfib_random,
---- 
--2.18.1
--
-diff --git a/package/nettle/nettle.hash b/package/nettle/nettle.hash
-index 32ed22c6c7..1e13aab411 100644
---- a/package/nettle/nettle.hash
-+++ b/package/nettle/nettle.hash
-@@ -1,6 +1,6 @@
+diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
+index c0182eb4ce..45f0f1d64e 100644
+--- a/package/p11-kit/p11-kit.hash
++++ b/package/p11-kit/p11-kit.hash
+@@ -1,2 +1,4 @@
  # Locally calculated after checking pgp signature
--# https://ftp.gnu.org/gnu/nettle/nettle-3.4.1.tar.gz.sig
--sha256	f941cf1535cd5d1819be5ccae5babef01f6db611f9b5a777bae9c7604b8a92ad	nettle-3.4.1.tar.gz
-+# https://ftp.gnu.org/gnu/nettle/nettle-3.5.1.tar.gz.sig
-+sha256	75cca1998761b02e16f2db56da52992aef622bf55a3b45ec538bc2eedadc9419	nettle-3.5.1.tar.gz
- # Locally calculated
- sha256	a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c	COPYING.LESSERv3
- sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYINGv2
-diff --git a/package/nettle/nettle.mk b/package/nettle/nettle.mk
-index 6a1144ed39..380d167521 100644
---- a/package/nettle/nettle.mk
-+++ b/package/nettle/nettle.mk
-@@ -4,7 +4,7 @@
+-sha256	ba726ea8303c97467a33fca50ee79b7b35212964be808ecf9b145e9042fdfaf0	p11-kit-0.23.2.tar.gz
++sha256 4b34e92ae36fa493e0d94366c767f06d5f9951e3d8581d10fd935d738db1574d  p11-kit-0.23.16.1.tar.gz
++# Locally computed
++sha256 2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
+diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
+index 10b5cc0393..1f72e0515b 100644
+--- a/package/p11-kit/p11-kit.mk
++++ b/package/p11-kit/p11-kit.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--NETTLE_VERSION = 3.4.1
-+NETTLE_VERSION = 3.5.1
- NETTLE_SITE = http://www.lysator.liu.se/~nisse/archive
- NETTLE_DEPENDENCIES = gmp
- NETTLE_INSTALL_STAGING = YES
+-P11_KIT_VERSION = 0.23.2
+-P11_KIT_SITE = http://p11-glue.freedesktop.org/releases
++P11_KIT_VERSION = 0.23.16.1
++P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
+ P11_KIT_DEPENDENCIES = host-pkgconf libffi libtasn1
+ P11_KIT_INSTALL_STAGING = YES
+ P11_KIT_CONF_OPTS = --disable-static
 -- 
 2.20.1
