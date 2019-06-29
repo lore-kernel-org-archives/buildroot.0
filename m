@@ -1,28 +1,44 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Jun 2019 19:32:22 +0200
-Subject: [Buildroot] [PATCH v3 8/9] package/mesa3d: switch build system
- to meson
-References: <20190506095451.26522-1-romain.naour@smile.fr>
- <20190506095451.26522-8-romain.naour@smile.fr>
- <7c733dcb-2368-a98d-33c3-6e21ade70a6c@smile.fr>
- <dtbaufxfem.ln2@ID-313208.user.individual.net>
-Message-ID: <6ujkufx7dc.ln2@ID-313208.user.individual.net>
+From: Michael Cullen <michael@michaelcullen.name>
+Date: Sat, 29 Jun 2019 19:32:39 +0100
+Subject: [Buildroot] [PATCH v2 3/4] package/rpi-bt-firmware: bump to latest
+ version
+In-Reply-To: <20190629183240.16035-1-michael@michaelcullen.name>
+References: <20190629183240.16035-1-michael@michaelcullen.name>
+Message-ID: <20190629183240.16035-3-michael@michaelcullen.name>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 25 Jun 2019 22:14:05 +0200 schrieb Bernd Kuhls:
+Includes the newest firmware as shipped by Raspbian Buster,
+the Raspbian release designed for the Pi4
+---
+ package/rpi-bt-firmware/rpi-bt-firmware.hash | 2 +-
+ package/rpi-bt-firmware/rpi-bt-firmware.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Run-time dependency xcb found: NO (tried pkgconfig)
-> 
-> meson.build:1375:4: ERROR: Dependency "xcb" not found, tried pkgconfig
-> 
-> Regards, Bernd
-
-Hi,
-
-fixed by v4.
-
-Regards, Bernd
+diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.hash b/package/rpi-bt-firmware/rpi-bt-firmware.hash
+index eeb7b605fe..a3c7281d75 100644
+--- a/package/rpi-bt-firmware/rpi-bt-firmware.hash
++++ b/package/rpi-bt-firmware/rpi-bt-firmware.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 155ebd5f08b819e0ce4e1950fcc972b2086cee3c16d36aba348beba1910c1fd2  rpi-bt-firmware-8c1e2bff1da9850f68efcfff3da5d939ec27a2ee.tar.gz
++sha256 51a33d23127300dffd6ac088f372b83ab862053f5e4dc7130676ebaaa824e626  rpi-bt-firmware-688531da4bcf802a814d9cb0c8b6d62e3b8a3327.tar.gz
+ sha256 b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  LICENCE.broadcom_bcm43xx
+diff --git a/package/rpi-bt-firmware/rpi-bt-firmware.mk b/package/rpi-bt-firmware/rpi-bt-firmware.mk
+index f9f300da41..23923453c4 100644
+--- a/package/rpi-bt-firmware/rpi-bt-firmware.mk
++++ b/package/rpi-bt-firmware/rpi-bt-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-RPI_BT_FIRMWARE_VERSION = 8c1e2bff1da9850f68efcfff3da5d939ec27a2ee
++RPI_BT_FIRMWARE_VERSION = 688531da4bcf802a814d9cb0c8b6d62e3b8a3327
+ RPI_BT_FIRMWARE_SITE = $(call github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_BT_FIRMWARE_VERSION))
+ RPI_BT_FIRMWARE_LICENSE = PROPRIETARY
+ RPI_BT_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
+-- 
+2.21.0
