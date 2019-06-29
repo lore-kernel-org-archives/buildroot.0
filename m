@@ -1,47 +1,91 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Jun 2019 16:46:30 +0200
-Subject: [Buildroot] [PATCH 5/5] package/p11-kit: bump version to 0.23.16.1
-In-Reply-To: <20190629144630.8036-1-bernd.kuhls@t-online.de>
-References: <20190629144630.8036-1-bernd.kuhls@t-online.de>
-Message-ID: <20190629144630.8036-5-bernd.kuhls@t-online.de>
+Date: Sat, 29 Jun 2019 17:12:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/giflib: security bump version to
+ 5.2.1
+Message-ID: <20190629151237.13413-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added license hash, switched _SITE to github, previous URL is broken.
+Version 5.1.5 fixes CVE-2018-11490
+https://sourceforge.net/p/giflib/code/ci/900d783def011e8d9f261db6839113425bf3334f/
+
+Added license hash.
+
+Upstream only provides a .gz tarball, so remove the .bz2 option.
+
+Switched package to generic-package after autoconf removal:
+https://sourceforge.net/p/giflib/code/ci/5fdd280d0049b7ee70f2ef1a8100b1473086e3eb/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/p11-kit/p11-kit.hash | 4 +++-
- package/p11-kit/p11-kit.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 3 deletions(-)
+ package/giflib/giflib.hash |  8 +++++---
+ package/giflib/giflib.mk   | 27 ++++++++++++++++++++++-----
+ 2 files changed, 27 insertions(+), 8 deletions(-)
 
-diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
-index c0182eb4ce..45f0f1d64e 100644
---- a/package/p11-kit/p11-kit.hash
-+++ b/package/p11-kit/p11-kit.hash
-@@ -1,2 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	ba726ea8303c97467a33fca50ee79b7b35212964be808ecf9b145e9042fdfaf0	p11-kit-0.23.2.tar.gz
-+sha256 4b34e92ae36fa493e0d94366c767f06d5f9951e3d8581d10fd935d738db1574d  p11-kit-0.23.16.1.tar.gz
+diff --git a/package/giflib/giflib.hash b/package/giflib/giflib.hash
+index cdd7bbdecd..7d22e0294d 100644
+--- a/package/giflib/giflib.hash
++++ b/package/giflib/giflib.hash
+@@ -1,3 +1,5 @@
+-# From http://sourceforge.net/projects/giflib/files
+-md5	2c171ced93c0e83bb09e6ccad8e3ba2b	giflib-5.1.4.tar.bz2
+-sha1	5f1157cfc377916280849e247b8e34fa0446513f	giflib-5.1.4.tar.bz2
++# From https://sourceforge.net/projects/giflib/files/
++md5 6f03aee4ebe54ac2cc1ab3e4b0a049e5  giflib-5.2.1.tar.gz
++sha1 c3f774dcbdf26afded7788979c8081d33c6426dc  giflib-5.2.1.tar.gz
 +# Locally computed
-+sha256 2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 10b5cc0393..1f72e0515b 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
-@@ -4,8 +4,8 @@
++sha256 0c9b7990ecdca88b676db232c226548ac408b279f550d424d996f0d83591dd8e  COPYING
+diff --git a/package/giflib/giflib.mk b/package/giflib/giflib.mk
+index 29666eebea..5ced060043 100644
+--- a/package/giflib/giflib.mk
++++ b/package/giflib/giflib.mk
+@@ -4,8 +4,7 @@
  #
  ################################################################################
  
--P11_KIT_VERSION = 0.23.2
--P11_KIT_SITE = http://p11-glue.freedesktop.org/releases
-+P11_KIT_VERSION = 0.23.16.1
-+P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
- P11_KIT_DEPENDENCIES = host-pkgconf libffi libtasn1
- P11_KIT_INSTALL_STAGING = YES
- P11_KIT_CONF_OPTS = --disable-static
+-GIFLIB_VERSION = 5.1.4
+-GIFLIB_SOURCE = giflib-$(GIFLIB_VERSION).tar.bz2
++GIFLIB_VERSION = 5.2.1
+ GIFLIB_SITE = http://downloads.sourceforge.net/project/giflib
+ GIFLIB_INSTALL_STAGING = YES
+ GIFLIB_LICENSE = MIT
+@@ -18,7 +17,21 @@ GIFLIB_BINS = \
+ 	gifrsize gifspnge giftext giftool gifwedge icon2gif raw2gif rgb2gif \
+ 	text2gif
+ 
+-GIFLIB_CONF_ENV = ac_cv_prog_have_xmlto=no
++define GIFLIB_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define HOST_GIFLIB_BUILD_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define GIFLIB_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr install
++endef
++
++define GIFLIB_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
++endef
+ 
+ define GIFLIB_BINS_CLEANUP
+ 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(GIFLIB_BINS))
+@@ -26,5 +39,9 @@ endef
+ 
+ GIFLIB_POST_INSTALL_TARGET_HOOKS += GIFLIB_BINS_CLEANUP
+ 
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
++define HOST_GIFLIB_INSTALL_CMDS
++	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) PREFIX=/ install
++endef
++
++$(eval $(generic-package))
++$(eval $(host-generic-package))
 -- 
 2.20.1
