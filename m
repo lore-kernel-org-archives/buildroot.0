@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Jun 2019 16:46:27 +0200
-Subject: [Buildroot] [PATCH 2/5] package/gnutls: bump version to 3.6.8
+Date: Sat, 29 Jun 2019 16:46:29 +0200
+Subject: [Buildroot] [PATCH 4/5] package/pcre2: bump version to 10.33
 In-Reply-To: <20190629144630.8036-1-bernd.kuhls@t-online.de>
 References: <20190629144630.8036-1-bernd.kuhls@t-online.de>
-Message-ID: <20190629144630.8036-2-bernd.kuhls@t-online.de>
+Message-ID: <20190629144630.8036-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,39 +11,43 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Release notes:
-https://lists.gnupg.org/pipermail/gnutls-help/2019-May/004527.html
+https://lists.exim.org/lurker/message/20190304.181617.bc5235a2.en.html
+http://www.pcre.org/news.txt
+https://lists.exim.org/lurker/message/20190416.154043.a260ee6c.en.html
+
+Updated license hash after upstream commit
+https://vcs.pcre.org/pcre2/code/tags/pcre2-10.33/LICENCE?r1=1087&r2=1001
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/gnutls/gnutls.hash | 4 ++--
- package/gnutls/gnutls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/pcre2/pcre2.hash | 6 +++---
+ package/pcre2/pcre2.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
-index 8c0e0d69d5..5ab913ad6e 100644
---- a/package/gnutls/gnutls.hash
-+++ b/package/gnutls/gnutls.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking pgp signature
--# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.7.1.tar.xz.sig
--sha256	881b26409ecd8ea4c514fd3fbdb6fae5fab422ca7b71116260e263940a4bbbad	gnutls-3.6.7.1.tar.xz
-+# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.8.tar.xz.sig
-+sha256	aa81944e5635de981171772857e72be231a7e0f559ae0292d2737de475383e83	gnutls-3.6.8.tar.xz
- # Locally calculated
- sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	doc/COPYING
- sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index e7c5968204..0e5bccc891 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/pcre2/pcre2.hash b/package/pcre2/pcre2.hash
+index a3210b184a..03f7eb32db 100644
+--- a/package/pcre2/pcre2.hash
++++ b/package/pcre2/pcre2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.32.tar.bz2.sig
+-sha256 f29e89cc5de813f45786580101aaee3984a65818631d4ddbda7b32f699b87c2e  pcre2-10.32.tar.bz2
++# Locally calculated after checking pgp signature at https://ftp.pcre.org/pub/pcre/pcre2-10.33.tar.bz2.sig
++sha256 35514dff0ccdf02b55bd2e9fa586a1b9d01f62332c3356e379eabb75f789d8aa  pcre2-10.33.tar.bz2
+ # Locally computed
+-sha256 c4a8b89cd38d6a7501d5b11a472fa15e71a051b66d6331c6cda364101389d6ee  LICENCE
++sha256 982293becea3f18eb4e3ce2145f66638e46d105a27b88418766caf321a684d03  LICENCE
+diff --git a/package/pcre2/pcre2.mk b/package/pcre2/pcre2.mk
+index 6d103c2b9b..61f41e06ea 100644
+--- a/package/pcre2/pcre2.mk
++++ b/package/pcre2/pcre2.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- GNUTLS_VERSION_MAJOR = 3.6
--GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7.1
-+GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
- GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
- GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
- GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
+-PCRE2_VERSION = 10.32
++PCRE2_VERSION = 10.33
+ PCRE2_SITE = https://ftp.pcre.org/pub/pcre
+ PCRE2_SOURCE = pcre2-$(PCRE2_VERSION).tar.bz2
+ PCRE2_LICENSE = BSD-3-Clause
 -- 
 2.20.1
