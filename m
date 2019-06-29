@@ -1,10 +1,10 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Sat, 29 Jun 2019 10:32:05 +0530
-Subject: [Buildroot] [PATCH 18/27] autobuild-run: define download directory
+Date: Sat, 29 Jun 2019 10:32:07 +0530
+Subject: [Buildroot] [PATCH 20/27] autobuild-run: define results directory
  as part of Builder class
 In-Reply-To: <20190629050214.17852-1-itsatharva@gmail.com>
 References: <20190629050214.17852-1-itsatharva@gmail.com>
-Message-ID: <20190629050214.17852-18-itsatharva@gmail.com>
+Message-ID: <20190629050214.17852-20-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,72 +14,99 @@ To: buildroot@busybox.net
 Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- scripts/autobuild-run | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
+ scripts/autobuild-run | 24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index a755d1f..d0b31c2 100755
+index a4a4961..4460887 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -293,6 +293,7 @@ class Builder:
-         # frequently needed directories
-         self.idir = "instance-%d" % self.instance
-         self.srcdir = os.path.join(self.idir, "buildroot")
-+        self.dldir = os.path.join(self.idir, "dl")
+@@ -299,6 +299,7 @@ class Builder:
+         # Buildroot sources, but to the location of the autobuilder
+         # script.
+         self.outputdir = os.path.abspath(os.path.join(self.idir, "output"))
++        self.resultdir = os.path.join(self.outputdir, "results")
  
          if self.debug:
              self.log = sys.stdout
-@@ -310,9 +311,8 @@ class Builder:
-         log_write(self.log, "INFO: preparing a new build")
+@@ -540,19 +541,17 @@ class Builder:
+         are available) or stores them locally as tarballs.
+         """
  
-         # Create the download directory if it doesn't exist
--        dldir = os.path.join(self.idir, "dl")
--        if not os.path.exists(dldir):
--            os.mkdir(dldir)
-+        if not os.path.exists(self.dldir):
-+            os.mkdir(self.dldir)
+-        resultdir = os.path.join(self.outputdir, "results")
+-
+         shutil.copyfile(os.path.join(self.outputdir, ".config"),
+-                        os.path.join(resultdir, "config"))
++                        os.path.join(self.resultdir, "config"))
+         shutil.copyfile(os.path.join(self.outputdir, "defconfig"),
+-                        os.path.join(resultdir, "defconfig"))
++                        os.path.join(self.resultdir, "defconfig"))
+         shutil.copyfile(os.path.join(self.outputdir, "branch"),
+-                        os.path.join(resultdir, "branch"))
++                        os.path.join(self.resultdir, "branch"))
  
-         # recursively find files under root
-         def find_files(root):
-@@ -332,12 +332,12 @@ class Builder:
-         # regularly re-download files to check that their upstream
-         # location is still correct.
-         for i in range(0, 5):
--            flist = list(find_files(dldir))
-+            flist = list(find_files(self.dldir))
-             if not flist:
-                 break
-             f = flist[randint(0, len(flist) - 1)]
-             log_write(self.log, "INFO: removing %s from downloads" %
--                      os.path.relpath(f, dldir))
-+                      os.path.relpath(f, self.dldir))
-             os.remove(f)
+         def copy_if_exists(directory, src, dst=None):
+             if os.path.exists(os.path.join(self.outputdir, directory, src)):
+                 shutil.copyfile(os.path.join(self.outputdir, directory, src),
+-                                os.path.join(resultdir, src if dst is None else dst))
++                                os.path.join(self.resultdir, src if dst is None else dst))
  
-         branch = get_branch()
-@@ -457,14 +457,13 @@ class Builder:
-         # path to the output directory here is not relative to the
-         # Buildroot sources, but to the location of the autobuilder
-         # script.
--        dldir = os.path.abspath(os.path.join(self.idir, "dl"))
-         outputdir = os.path.abspath(os.path.join(self.idir, "output"))
-         f = open(os.path.join(outputdir, "logfile"), "w+")
-         log_write(self.log, "INFO: build started")
+         copy_if_exists("build", "build-time.log")
+         copy_if_exists("build", "packages-file-list.txt")
+@@ -561,7 +560,7 @@ class Builder:
+         copy_if_exists("legal-info", "manifest.csv", "licenses-manifest.csv")
  
-         cmd = ["nice", "-n", str(self.nice),
-                "make", "O=%s" % outputdir,
--               "-C", self.srcdir, "BR2_DL_DIR=%s" % dldir,
-+               "-C", self.srcdir, "BR2_DL_DIR=%s" % self.dldir,
-                "BR2_JLEVEL=%s" % self.njobs] \
-             + self.make_opts.split()
-         sub = subprocess.Popen(cmd, stdout=f, stderr=f)
-@@ -497,7 +496,7 @@ class Builder:
-             return -1
+         subprocess.call(["git log -n 1 --pretty=format:%%H > %s" % \
+-                        os.path.join(resultdir, "gitid")],
++                        os.path.join(self.resultdir, "gitid")],
+                         shell=True, cwd=self.srcdir)
  
-         cmd = ["make", "O=%s" % outputdir, "-C", self.srcdir,
--               "BR2_DL_DIR=%s" % dldir, "legal-info"] \
-+               "BR2_DL_DIR=%s" % self.dldir, "legal-info"] \
-             + self.make_opts.split()
-         ret = subprocess.call(cmd, stdout=f, stderr=f)
-         if ret != 0:
+         # Return True if the result should be rejected, False otherwise
+@@ -623,7 +622,7 @@ class Builder:
+                 mf.close()
+                 f.close()
+ 
+-        extract_end_log(os.path.join(resultdir, "build-end.log"))
++        extract_end_log(os.path.join(self.resultdir, "build-end.log"))
+ 
+         def copy_config_log_files():
+             """Recursively copy any config.log files from the failing package"""
+@@ -633,7 +632,7 @@ class Builder:
+                 return
+ 
+             srcroot = os.path.join(self.outputdir, "build", '-'.join(reason))
+-            destroot = os.path.join(resultdir, '-'.join(reason))
++            destroot = os.path.join(self.resultdir, '-'.join(reason))
+             config_files = ('config.log', 'CMakeCache.txt', 'CMakeError.log',
+                 'CMakeOutput.log')
+ 
+@@ -648,7 +647,7 @@ class Builder:
+ 
+         copy_config_log_files()
+ 
+-        resultf = open(os.path.join(resultdir, "status"), "w+")
++        resultf = open(os.path.join(self.resultdir, "status"), "w+")
+         if result == 0:
+             resultf.write("OK")
+         elif result == -1:
+@@ -657,7 +656,7 @@ class Builder:
+             resultf.write("TIMEOUT")
+         resultf.close()
+ 
+-        with open(os.path.join(resultdir, "submitter"), "w+") as submitterf:
++        with open(os.path.join(self.resultdir, "submitter"), "w+") as submitterf:
+             submitterf.write(self.submitter)
+ 
+         # Yes, shutil.make_archive() would be nice, but it doesn't exist
+@@ -711,8 +710,7 @@ class Builder:
+             if ret != 0:
+                 continue
+ 
+-            resultdir = os.path.join(self.idir, "output", "results")
+-            os.mkdir(resultdir)
++            os.mkdir(self.resultdir)
+ 
+             ret = self.gen_config()
+             if ret != 0:
 -- 
 2.20.1
