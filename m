@@ -1,63 +1,61 @@
-From: Michael Cullen <michael@michaelcullen.name>
-Date: Sat, 29 Jun 2019 19:59:31 +0100
-Subject: [Buildroot] 
- =?utf-8?q?=5BPATCH_v2_4/4=5D_package/rpi-wifi-firmwa?=
- =?utf-8?q?re=3A_bump_to_the_latest_version?=
-In-Reply-To: <20190629183240.16035-4-michael@michaelcullen.name>
-References: <20190629183240.16035-1-michael@michaelcullen.name>
- <20190629183240.16035-4-michael@michaelcullen.name>
-Message-ID: <26e6e226-04e7-4f2e-9691-d37405e89374@www.fastmail.com>
+From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Date: Sat, 29 Jun 2019 23:54:31 +0200
+Subject: [Buildroot] [PATCH] package/shapelib: upgrade to 1.5.0
+Message-ID: <20190629215431.26839-1-zgyarmati@zgyarmati.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Forgot the signoff
+Also remove PROJ.4 dependency, as upstream decided to
+drop it.
 
-On Sat, 29 Jun 2019, at 7:33 PM, Michael Cullen wrote:
-> Includes the newest firmware as shipped by Raspbian Buster,
-> the Raspbian release designed for the Pi4
->
-Signed-off-by: Michael Cullen <michael@michaelcullen.name>
-> ---
->  package/rpi-wifi-firmware/rpi-wifi-firmware.hash | 2 +-
->  package/rpi-wifi-firmware/rpi-wifi-firmware.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash 
-> b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-> index c61a47ec73..5de9e0f13f 100644
-> --- a/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-> +++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 
-> 155ebd5f08b819e0ce4e1950fcc972b2086cee3c16d36aba348beba1910c1fd2  
-> rpi-wifi-firmware-8c1e2bff1da9850f68efcfff3da5d939ec27a2ee.tar.gz
-> +sha256 
-> 51a33d23127300dffd6ac088f372b83ab862053f5e4dc7130676ebaaa824e626  
-> rpi-wifi-firmware-688531da4bcf802a814d9cb0c8b6d62e3b8a3327.tar.gz
->  sha256 
-> b16056fc91b82a0e3e8de8f86c2dac98201aa9dc3cbd33e8d38f1b087fcec30d  
-> LICENCE.broadcom_bcm43xx
-> diff --git a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk 
-> b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-> index 2eb8ceec3c..9dd1854b9a 100644
-> --- a/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-> +++ b/package/rpi-wifi-firmware/rpi-wifi-firmware.mk
-> @@ -4,7 +4,7 @@
->  #
->  
-> ################################################################################
->  
-> -RPI_WIFI_FIRMWARE_VERSION = 8c1e2bff1da9850f68efcfff3da5d939ec27a2ee
-> +RPI_WIFI_FIRMWARE_VERSION = 688531da4bcf802a814d9cb0c8b6d62e3b8a3327
->  RPI_WIFI_FIRMWARE_SITE = $(call 
-> github,LibreELEC,brcmfmac_sdio-firmware-rpi,$(RPI_WIFI_FIRMWARE_VERSION))
->  RPI_WIFI_FIRMWARE_LICENSE = PROPRIETARY
->  RPI_WIFI_FIRMWARE_LICENSE_FILES = LICENCE.broadcom_bcm43xx
-> -- 
-> 2.21.0
-> 
->
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+---
+ package/shapelib/Config.in     | 1 -
+ package/shapelib/shapelib.hash | 2 +-
+ package/shapelib/shapelib.mk   | 3 +--
+ 3 files changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/package/shapelib/Config.in b/package/shapelib/Config.in
+index 553d3483af..7c7b9c76c7 100644
+--- a/package/shapelib/Config.in
++++ b/package/shapelib/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_SHAPELIB
+ 	bool "shapelib"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_PROJ
+ 	help
+ 	  The Shapefile C Library provides the ability to write simple
+ 	  C programs for reading, writing and updating (to a limited
+diff --git a/package/shapelib/shapelib.hash b/package/shapelib/shapelib.hash
+index 6abddb2a7a..d1f6fa9777 100644
+--- a/package/shapelib/shapelib.hash
++++ b/package/shapelib/shapelib.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 a4c94817365761a3a4c21bb3ca1c680a6bdfd3edd61df9fdd291d3e7645923b3  shapelib-1.4.1.tar.gz
++sha256 1fc0a480982caef9e7b9423070b47750ba34cd0ba82668f2e638fab1d07adae1  shapelib-1.5.0.tar.gz
+ sha256 7eb803a70990017a1c4e38a8342d7413c5dfeec3ed1ac407e15ae2c274e560ff  COPYING
+ sha256 a638278f7f1cb7d0cdc73b47a6c87261b882e356a8e79922e90d44d7ef1dd2c7  web/license.html
+diff --git a/package/shapelib/shapelib.mk b/package/shapelib/shapelib.mk
+index b76c3bb2d2..bedd15dc35 100644
+--- a/package/shapelib/shapelib.mk
++++ b/package/shapelib/shapelib.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
+ 
+-SHAPELIB_VERSION = 1.4.1
++SHAPELIB_VERSION = 1.5.0
+ SHAPELIB_SITE = http://download.osgeo.org/shapelib
+ SHAPELIB_LICENSE = MIT or LGPL-2.0
+ SHAPELIB_LICENSE_FILES = web/license.html COPYING
+ SHAPELIB_INSTALL_STAGING = YES
+-SHAPELIB_DEPENDENCIES = proj
+ 
+ $(eval $(autotools-package))
+-- 
+2.17.1
