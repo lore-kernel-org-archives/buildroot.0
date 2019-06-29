@@ -1,10 +1,10 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Sat, 29 Jun 2019 10:31:51 +0530
-Subject: [Buildroot] [PATCH 04/27] autobuild-run: move sysinfo from kwargs
- to Builder class
+Date: Sat, 29 Jun 2019 10:31:52 +0530
+Subject: [Buildroot] [PATCH 05/27] autobuild-run: move http variables from
+ kwargs to Builder class
 In-Reply-To: <20190629050214.17852-1-itsatharva@gmail.com>
 References: <20190629050214.17852-1-itsatharva@gmail.com>
-Message-ID: <20190629050214.17852-4-itsatharva@gmail.com>
+Message-ID: <20190629050214.17852-5-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,47 +15,60 @@ Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
 Changes v1 -> v2:
-  - Explicitly state class constructor argument
+  - Explicitly state class constructor arguments
 ---
- scripts/autobuild-run | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ scripts/autobuild-run | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index b6da642..a52d0e6 100755
+index a52d0e6..2c3da00 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -271,9 +271,10 @@ class SystemInfo:
+@@ -271,10 +271,14 @@ class SystemInfo:
          return not missing_requirements
  
  class Builder:
--    def __init__(self, instance, njobs):
-+    def __init__(self, instance, njobs, sysinfo):
+-    def __init__(self, instance, njobs, sysinfo):
++    def __init__(self, instance, njobs, sysinfo,
++                 http_url, http_login, http_password):
          self.instance = instance
          self.njobs = njobs
-+        self.sysinfo = sysinfo
+         self.sysinfo = sysinfo
++        self.http_url = http_url
++        self.http_login = http_login
++        self.http_password = http_password
  
      def prepare_build(self, **kwargs):
          """Prepare for the next build of the specified instance
-@@ -416,7 +417,7 @@ class Builder:
-         build_2_image = os.path.join(outputdir, "images", "rootfs.tar")
- 
-         with open(reproducible_results, 'w') as diff:
--            if kwargs['sysinfo'].has("diffoscope"):
-+            if self.sysinfo.has("diffoscope"):
-                 # Prefix to point diffoscope towards cross-tools
-                 prefix = subprocess.check_output(["make", "O=%s" % outputdir, "-C", srcdir, "printvars", "VARS=TARGET_CROSS"])
-                 # Remove TARGET_CROSS= and \n from the string
-@@ -846,9 +847,9 @@ def main():
-     for i in range(0, int(args['--ninstances'])):
+@@ -681,11 +685,11 @@ class Builder:
+             # none of the ones that are part of the standard library can
+             # upload a file without writing dozens of lines of code.
+             ret = subprocess.call(["curl", "-u",
+-                                   "%s:%s" % (kwargs['http_login'], kwargs['http_password']),
++                                   "%s:%s" % (self.http_login, self.http_password),
+                                    "-H", "Expect:",
+                                    "-F", "uploadedfile=@%s" % os.path.join(outputdir, "results.tar.bz2"),
+                                    "-F", "uploadsubmit=1",
+-                                   kwargs['http_url']],
++                                   self.http_url],
+                                    stdout=log, stderr=log)
+             if ret != 0:
+                 log_write(log, "INFO: results could not be submitted, %d" % ret)
+@@ -848,11 +852,11 @@ def main():
          builder = Builder(
              instance = i,
--            njobs = args['--njobs'])
-+            njobs = args['--njobs'],
-+            sysinfo = sysinfo)
+             njobs = args['--njobs'],
+-            sysinfo = sysinfo)
++            sysinfo = sysinfo,
++            http_url = args['--http-url'],
++            http_login = args['--http-login'],
++            http_password = args['--http-password'])
          p = multiprocessing.Process(target=builder.run_instance, kwargs=dict(
--                sysinfo = sysinfo,
-                 http_url = args['--http-url'],
-                 http_login = args['--http-login'],
-                 http_password = args['--http-password'],
+-                http_url = args['--http-url'],
+-                http_login = args['--http-login'],
+-                http_password = args['--http-password'],
+                 submitter = args['--submitter'],
+                 make_opts = (args['--make-opts'] or ''),
+                 nice = (args['--nice'] or 0),
 -- 
 2.20.1
