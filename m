@@ -1,91 +1,90 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 29 Jun 2019 17:12:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/giflib: security bump version to
- 5.2.1
-Message-ID: <20190629151237.13413-1-bernd.kuhls@t-online.de>
+Date: Sat, 29 Jun 2019 17:19:46 +0200
+Subject: [Buildroot] [PATCH 1/1] package/nasm: bump version to 2.14.02
+Message-ID: <20190629151946.28648-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 5.1.5 fixes CVE-2018-11490
-https://sourceforge.net/p/giflib/code/ci/900d783def011e8d9f261db6839113425bf3334f/
+Release notes: https://nasm.us/doc/nasmdocc.html
 
-Added license hash.
+Removed patch applied upstream:
+https://repo.or.cz/nasm.git/commitdiff/5eb1838b4d3752fd863d19442943983a2a5ee87c
 
-Upstream only provides a .gz tarball, so remove the .bz2 option.
-
-Switched package to generic-package after autoconf removal:
-https://sourceforge.net/p/giflib/code/ci/5fdd280d0049b7ee70f2ef1a8100b1473086e3eb/
+Switched _SITE to https.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/giflib/giflib.hash |  8 +++++---
- package/giflib/giflib.mk   | 27 ++++++++++++++++++++++-----
- 2 files changed, 27 insertions(+), 8 deletions(-)
+ .../0001-nasmlib-Drop-unused-seg_init.patch   | 32 -------------------
+ package/nasm/nasm.hash                        |  2 +-
+ package/nasm/nasm.mk                          |  4 +--
+ 3 files changed, 3 insertions(+), 35 deletions(-)
+ delete mode 100644 package/nasm/0001-nasmlib-Drop-unused-seg_init.patch
 
-diff --git a/package/giflib/giflib.hash b/package/giflib/giflib.hash
-index cdd7bbdecd..7d22e0294d 100644
---- a/package/giflib/giflib.hash
-+++ b/package/giflib/giflib.hash
-@@ -1,3 +1,5 @@
--# From http://sourceforge.net/projects/giflib/files
--md5	2c171ced93c0e83bb09e6ccad8e3ba2b	giflib-5.1.4.tar.bz2
--sha1	5f1157cfc377916280849e247b8e34fa0446513f	giflib-5.1.4.tar.bz2
-+# From https://sourceforge.net/projects/giflib/files/
-+md5 6f03aee4ebe54ac2cc1ab3e4b0a049e5  giflib-5.2.1.tar.gz
-+sha1 c3f774dcbdf26afded7788979c8081d33c6426dc  giflib-5.2.1.tar.gz
-+# Locally computed
-+sha256 0c9b7990ecdca88b676db232c226548ac408b279f550d424d996f0d83591dd8e  COPYING
-diff --git a/package/giflib/giflib.mk b/package/giflib/giflib.mk
-index 29666eebea..5ced060043 100644
---- a/package/giflib/giflib.mk
-+++ b/package/giflib/giflib.mk
-@@ -4,8 +4,7 @@
+diff --git a/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch b/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch
+deleted file mode 100644
+index a18d121bfb..0000000000
+--- a/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 5eb1838b4d3752fd863d19442943983a2a5ee87c Mon Sep 17 00:00:00 2001
+-From: Cyrill Gorcunov <gorcunov@gmail.com>
+-Date: Sat, 10 Feb 2018 00:33:41 +0300
+-Subject: [PATCH] nasmlib: Drop unused seg_init
+-
+-The helper has been eliminated in 2c4a4d5810d0a59b033a07876a2648ef5d4c2859
+-
+-https://bugzilla.nasm.us/show_bug.cgi?id=3392461
+-
+-Signed-off-by: Cyrill Gorcunov <gorcunov@gmail.com>
+----
+- include/nasmlib.h | 2 --
+- 1 file changed, 2 deletions(-)
+-
+-diff --git a/include/nasmlib.h b/include/nasmlib.h
+-index 79e866b5..fee1b5ea 100644
+---- a/include/nasmlib.h
+-+++ b/include/nasmlib.h
+-@@ -188,10 +188,8 @@ int64_t readnum(char *str, bool *error);
+- int64_t readstrnum(char *str, int length, bool *warn);
+- 
+- /*
+-- * seg_init: Initialise the segment-number allocator.
+-  * seg_alloc: allocate a hitherto unused segment number.
+-  */
+--void pure_func seg_init(void);
+- int32_t pure_func seg_alloc(void);
+- 
+- /*
+--- 
+-2.17.0
+-
+diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
+index db5b857193..d824f22b86 100644
+--- a/package/nasm/nasm.hash
++++ b/package/nasm/nasm.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 812ecfb0dcbc5bd409aaa8f61c7de94c5b8752a7b00c632883d15b2ed6452573  nasm-2.13.03.tar.xz
++sha256 e24ade3e928f7253aa8c14aa44726d1edf3f98643f87c9d72ec1df44b26be8f5  nasm-2.14.02.tar.xz
+ sha256 1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0  LICENSE
+diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
+index 76bcca3bbf..5a46fd0a4b 100644
+--- a/package/nasm/nasm.mk
++++ b/package/nasm/nasm.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--GIFLIB_VERSION = 5.1.4
--GIFLIB_SOURCE = giflib-$(GIFLIB_VERSION).tar.bz2
-+GIFLIB_VERSION = 5.2.1
- GIFLIB_SITE = http://downloads.sourceforge.net/project/giflib
- GIFLIB_INSTALL_STAGING = YES
- GIFLIB_LICENSE = MIT
-@@ -18,7 +17,21 @@ GIFLIB_BINS = \
- 	gifrsize gifspnge giftext giftool gifwedge icon2gif raw2gif rgb2gif \
- 	text2gif
+-NASM_VERSION = 2.13.03
++NASM_VERSION = 2.14.02
+ NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
+-NASM_SITE = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
++NASM_SITE = https://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
+ NASM_LICENSE = BSD-2-Clause
+ NASM_LICENSE_FILES = LICENSE
  
--GIFLIB_CONF_ENV = ac_cv_prog_have_xmlto=no
-+define GIFLIB_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define HOST_GIFLIB_BUILD_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)
-+endef
-+
-+define GIFLIB_INSTALL_STAGING_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(STAGING_DIR) PREFIX=/usr install
-+endef
-+
-+define GIFLIB_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) PREFIX=/usr install
-+endef
- 
- define GIFLIB_BINS_CLEANUP
- 	rm -f $(addprefix $(TARGET_DIR)/usr/bin/,$(GIFLIB_BINS))
-@@ -26,5 +39,9 @@ endef
- 
- GIFLIB_POST_INSTALL_TARGET_HOOKS += GIFLIB_BINS_CLEANUP
- 
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
-+define HOST_GIFLIB_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) PREFIX=/ install
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
 -- 
 2.20.1
