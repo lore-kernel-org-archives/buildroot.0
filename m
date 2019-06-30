@@ -1,104 +1,47 @@
 From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Sun, 30 Jun 2019 19:56:31 +0200
-Subject: [Buildroot] [PATCH] package/python-can: bump to version 3.3.0
-Message-ID: <1561917391-2593-1-git-send-email-pjtexier@koncepto.io>
+Date: Sun, 30 Jun 2019 19:57:39 +0200
+Subject: [Buildroot] [PATCH] package/python-libusb1: bump to version 1.7.1
+Message-ID: <1561917459-3823-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://github.com/hardbyte/python-can/releases
-
-Also add a patch removing the pytest-runner dependency.
+See https://pypi.org/project/libusb1/#id40
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- ...require-pytest-runner-only-when-necessary.patch | 49 ++++++++++++++++++++++
- package/python-can/python-can.hash                 |  2 +-
- package/python-can/python-can.mk                   |  4 +-
- 3 files changed, 52 insertions(+), 3 deletions(-)
- create mode 100644 package/python-can/0001-setup.py-require-pytest-runner-only-when-necessary.patch
+ package/python-libusb1/python-libusb1.hash | 4 ++--
+ package/python-libusb1/python-libusb1.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-can/0001-setup.py-require-pytest-runner-only-when-necessary.patch b/package/python-can/0001-setup.py-require-pytest-runner-only-when-necessary.patch
-new file mode 100644
-index 0000000..7fda1e3
---- /dev/null
-+++ b/package/python-can/0001-setup.py-require-pytest-runner-only-when-necessary.patch
-@@ -0,0 +1,49 @@
-+From 3da4873bcdcb7d8bd47e275b97bbb6f1c134b3b9 Mon Sep 17 00:00:00 2001
-+From: Pierre-Jean Texier <pjtexier@koncepto.io>
-+Date: Sat, 29 Jun 2019 21:19:08 +0200
-+Subject: [PATCH] setup.py: require pytest-runner only when necessary
-+
-+This optimizes setup.py for cases when pytest-runner is not needed,
-+using the approach that is suggested upstream:
-+
-+https://pypi.python.org/pypi/pytest-runner#conditional-requirement
-+
-+[Upstream status: https://github.com/hardbyte/python-can/pull/633]
-+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-+---
-+ setup.py | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 221c030..6e1778a 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -11,6 +11,7 @@ from os import listdir
-+ from os.path import isfile, join
-+ import re
-+ import logging
-++import sys
-+ from setuptools import setup, find_packages
-+ 
-+ logging.basicConfig(level=logging.WARNING)
-+@@ -40,6 +41,8 @@ tests_require = [
-+ 
-+ extras_require["test"] = tests_require
-+ 
-++needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
-++pytest_runner = ['pytest-runner'] if needs_pytest else []
-+ 
-+ setup(
-+     # Description
-+@@ -96,7 +99,7 @@ setup(
-+         'windows-curses;platform_system=="Windows"',
-+         "filelock",
-+     ],
-+-    setup_requires=["pytest-runner"],
-++    setup_requires=pytest_runner,
-+     extras_require=extras_require,
-+     tests_require=tests_require,
-+ )
-+-- 
-+2.7.4
-+
-diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
-index 7e8a07f..813ecf4 100644
---- a/package/python-can/python-can.hash
-+++ b/package/python-can/python-can.hash
+diff --git a/package/python-libusb1/python-libusb1.hash b/package/python-libusb1/python-libusb1.hash
+index 3649872..21f4840 100644
+--- a/package/python-libusb1/python-libusb1.hash
++++ b/package/python-libusb1/python-libusb1.hash
 @@ -1,4 +1,4 @@
- # sha256 from https://pypi.org/pypi/python-can/json
--sha256	99c06d05f8aa6fa9a84f39a11987c303c030411c3280e39bef0b5cd2242ad09f  python-can-3.1.1.tar.gz
-+sha256	2a7e9f658b5db16319bbebb2cdd82b1fc0a390ca939b47829affd07c832357ec  python-can-3.3.0.tar.gz
- # Locally computed sha256 checksums
- sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-index 86ece99..33449aa 100644
---- a/package/python-can/python-can.mk
-+++ b/package/python-can/python-can.mk
-@@ -4,8 +4,8 @@
+ # md5 from https://pypi.python.org/pypi/libusb1/json, sha256 locally computed
+-md5	9c2eb6032deda59f287a443091d38cb4  libusb1-1.6.4.tar.gz
+-sha256	8c930d9c1d037d9c83924c82608aa6a1adcaa01ca0e4a23ee0e8e18d7eee670d  libusb1-1.6.4.tar.gz
++md5	cb4073182fef4cee6ab9c6666b48d1a1  libusb1-1.7.1.tar.gz
++sha256	adf64a4f3f5c94643a1286f8153bcf4bc787c348b38934aacd7fe17fbeebc571  libusb1-1.7.1.tar.gz
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+diff --git a/package/python-libusb1/python-libusb1.mk b/package/python-libusb1/python-libusb1.mk
+index 3329764..075f50f 100644
+--- a/package/python-libusb1/python-libusb1.mk
++++ b/package/python-libusb1/python-libusb1.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CAN_VERSION = 3.1.1
--PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/c1/b0/72d7ed7840692ace5b55dd1155409cd86fd83cee4ded75e3d1102c08750a
-+PYTHON_CAN_VERSION = 3.3.0
-+PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/9c/1e/a10b6f038a4a4bdd89d13ecc5fba36b71ab716fbd9eae9feda1d975d9504
- PYTHON_CAN_SETUP_TYPE = setuptools
- PYTHON_CAN_LICENSE = LGPL-3.0
- PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+-PYTHON_LIBUSB1_VERSION = 1.6.4
++PYTHON_LIBUSB1_VERSION = 1.7.1
+ PYTHON_LIBUSB1_SOURCE = libusb1-$(PYTHON_LIBUSB1_VERSION).tar.gz
+-PYTHON_LIBUSB1_SITE = https://pypi.python.org/packages/ec/5d/4fdac6c53525786fe35cff035c3345452e24e2bee5627893be65d12555cb
++PYTHON_LIBUSB1_SITE = https://files.pythonhosted.org/packages/80/bb/4ee9d760dd29499d877ee384f1d2bc6bb9923defd4c69843aef5e729972d
+ PYTHON_LIBUSB1_SETUP_TYPE = setuptools
+ PYTHON_LIBUSB1_LICENSE = LGPL-2.1+
+ PYTHON_LIBUSB1_LICENSE_FILES = COPYING.LESSER
 -- 
 2.7.4
