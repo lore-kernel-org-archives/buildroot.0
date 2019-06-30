@@ -1,89 +1,162 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Jun 2019 16:05:01 +0200
-Subject: [Buildroot] [PATCH 07/31] package/kodi-audiodecoder-opus: remove
- package
+Date: Sun, 30 Jun 2019 16:05:04 +0200
+Subject: [Buildroot] [PATCH 10/31] package/kodi: add Kconfig options to
+ remove default skins
 In-Reply-To: <20190630140525.6537-1-bernd.kuhls@t-online.de>
 References: <20190630140525.6537-1-bernd.kuhls@t-online.de>
-Message-ID: <20190630140525.6537-8-bernd.kuhls@t-online.de>
+Message-ID: <20190630140525.6537-11-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package is incompatible with Kodi 18.x, configure is broken:
+The skins estuary and estouchy are new in Kodi 17-Krypton and replace
+the skin confluence, used until Kodi 16-Jarvis.
 
-CMake Error at output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/share/kodi/cmake/AddonHelpers.cmake:197 (message):
-  "@ADDON_DEPENDS@" not found in addon.xml.in.
-
-This package is also not part of the upstream binary repo:
-https://github.com/xbmc/repo-binary-addons
+This patch allows to disable one or both of the new skins, it also takes
+care that at least one skin needs to be enabled. With this patch Kodi
+can be used only with skin confluence.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audiodecoder-opus/Config.in            | 10 ----------
- .../kodi-audiodecoder-opus.hash                     |  2 --
- .../kodi-audiodecoder-opus.mk                       | 13 -------------
- package/kodi/Config.in                              |  1 -
- 4 files changed, 26 deletions(-)
- delete mode 100644 package/kodi-audiodecoder-opus/Config.in
- delete mode 100644 package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash
- delete mode 100644 package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
+ package/kodi-skin-confluence/Config.in |  1 +
+ package/kodi/Config.in                 | 35 ++++++++++++++++
+ package/kodi/kodi.mk                   | 58 ++++++++++++++++++++++++++
+ 3 files changed, 94 insertions(+)
 
-diff --git a/package/kodi-audiodecoder-opus/Config.in b/package/kodi-audiodecoder-opus/Config.in
-deleted file mode 100644
-index 12d7247d58..0000000000
---- a/package/kodi-audiodecoder-opus/Config.in
-+++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_KODI_AUDIODECODER_OPUS
--	bool "kodi-audiodecoder-opus"
--	select BR2_PACKAGE_KODI_PLATFORM
--	select BR2_PACKAGE_LIBOGG
--	select BR2_PACKAGE_OPUS
--	select BR2_PACKAGE_OPUSFILE
--	help
--	  Opus audio decoder for Kodi
--
--	  https://github.com/notspiff/audiodecoder.opus
-diff --git a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash b/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash
-deleted file mode 100644
-index 117e9f8337..0000000000
---- a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally computed
--sha256 bb7037f903f0396da739005843264acd7227cf96eeeac78b0e36d82872c9acc4  kodi-audiodecoder-opus-d6eb25f0c08033f9a2b4d7402e8baf866ebc731c.tar.gz
-diff --git a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk b/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
-deleted file mode 100644
-index d93c33ac51..0000000000
---- a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# kodi-audiodecoder-opus
--#
--################################################################################
--
--KODI_AUDIODECODER_OPUS_VERSION = d6eb25f0c08033f9a2b4d7402e8baf866ebc731c
--KODI_AUDIODECODER_OPUS_SITE = $(call github,notspiff,audiodecoder.opus,$(KODI_AUDIODECODER_OPUS_VERSION))
--KODI_AUDIODECODER_OPUS_LICENSE = GPL-2.0+
--KODI_AUDIODECODER_OPUS_LICENSE_FILES = src/OpusCodec.cpp
--KODI_AUDIODECODER_OPUS_DEPENDENCIES = kodi-platform libogg opus opusfile
--
--$(eval $(cmake-package))
+diff --git a/package/kodi-skin-confluence/Config.in b/package/kodi-skin-confluence/Config.in
+index 08b6568083..a623b03dab 100644
+--- a/package/kodi-skin-confluence/Config.in
++++ b/package/kodi-skin-confluence/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_KODI_SKIN_CONFLUENCE
+ 	bool "kodi-skin-confluence"
++	select BR2_PACKAGE_KODI_SKIN_ENABLED
+ 	help
+ 	  Kodi confluence skin
+ 
 diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index a5de8dd115..c0727da7f8 100644
+index edda795dd8..4178f67596 100644
 --- a/package/kodi/Config.in
 +++ b/package/kodi/Config.in
-@@ -300,7 +300,6 @@ config BR2_PACKAGE_KODI_OPTICALDRIVE
- menu "Audio decoder addons"
- 	source "package/kodi-audiodecoder-modplug/Config.in"
- 	source "package/kodi-audiodecoder-nosefart/Config.in"
--	source "package/kodi-audiodecoder-opus/Config.in"
- 	source "package/kodi-audiodecoder-sidplay/Config.in"
- 	source "package/kodi-audiodecoder-snesapu/Config.in"
- 	source "package/kodi-audiodecoder-stsound/Config.in"
+@@ -64,6 +64,7 @@ menuconfig BR2_PACKAGE_KODI
+ 	select BR2_PACKAGE_FONTCONFIG
+ 	select BR2_PACKAGE_FREETYPE
+ 	select BR2_PACKAGE_GNUTLS
++	select BR2_PACKAGE_KODI_SKIN_ESTUARY if !BR2_PACKAGE_KODI_SKIN_ENABLED
+ 	select BR2_PACKAGE_LIBASS
+ 	select BR2_PACKAGE_LIBCDIO
+ 	select BR2_PACKAGE_LIBCROSSGUID
+@@ -360,6 +361,40 @@ menu "Screensavers"
+ endmenu
+ 
+ menu "Skins"
++
++config BR2_PACKAGE_KODI_SKIN_ENABLED
++	bool
++
++choice
++	prompt "Default skin"
++
++config BR2_PACKAGE_KODI_SKIN_DEFAULT_ESTUARY
++	bool "kodi-skin-estuary"
++	depends on BR2_PACKAGE_KODI_SKIN_ESTUARY
++
++config BR2_PACKAGE_KODI_SKIN_DEFAULT_ESTOUCHY
++	bool "kodi-skin-estouchy"
++	depends on BR2_PACKAGE_KODI_SKIN_ESTOUCHY
++
++config BR2_PACKAGE_KODI_SKIN_DEFAULT_CONFLUENCE
++	bool "kodi-skin-confluence"
++	depends on BR2_PACKAGE_KODI_SKIN_CONFLUENCE
++
++endchoice
++
++config BR2_PACKAGE_KODI_SKIN_ESTUARY
++	bool "kodi-skin-estuary"
++	default y
++	help
++	  Default skin Estuary
++
++config BR2_PACKAGE_KODI_SKIN_ESTOUCHY
++	bool "kodi-skin-estouchy"
++	default y
++	select BR2_PACKAGE_KODI_SKIN_ENABLED
++	help
++	  Default skin Estouchy
++
+ 	source "package/kodi-skin-confluence/Config.in"
+ endmenu
+ 
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 590af15b7c..a123671333 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -381,6 +381,64 @@ define KODI_CLEAN_UNUSED_ADDONS
+ endef
+ KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_UNUSED_ADDONS
+ 
++# Skins estuary and estouchy are installed by default and need to be
++# removed if they are disabled in buildroot
++ifeq ($(BR2_PACKAGE_KODI_SKIN_ESTUARY),y)
++define KODI_CLEAN_SKIN_ESTUARY
++	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estuary/media -name *.gif -delete
++	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estuary/media -name *.jpg -delete
++	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estuary/media -name *.png -delete
++endef
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_SKIN_ESTUARY
++else
++define KODI_REMOVE_SKIN_ESTUARY
++	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/skin.estuary
++	$(HOST_DIR)/usr/bin/xml ed -L \
++		-d "/addons/addon[text()='skin.estuary']" \
++		$(KODI_ADDON_MANIFEST)
++endef
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_REMOVE_SKIN_ESTUARY
++endif
++
++ifeq ($(BR2_PACKAGE_KODI_SKIN_ESTOUCHY),y)
++define KODI_CLEAN_SKIN_ESTOUCHY
++	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estouchy/media -name *.gif -delete
++	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estouchy/media -name *.jpg -delete
++	find $(TARGET_DIR)/usr/share/kodi/addons/skin.estouchy/media -name *.png -delete
++endef
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_CLEAN_SKIN_ESTOUCHY
++else
++define KODI_REMOVE_SKIN_ESTOUCHY
++	rm -Rf $(TARGET_DIR)/usr/share/kodi/addons/skin.estouchy
++	$(HOST_DIR)/usr/bin/xml ed -L \
++		-d "/addons/addon[text()='skin.estouchy']" \
++		$(KODI_ADDON_MANIFEST)
++endef
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_REMOVE_SKIN_ESTOUCHY
++endif
++
++# The default value 'skin.estuary' is stored in
++# xbmc/system/settings/settings.xml.
++# If skin estuary is disabled this value needs to be changed to avoid
++# https://github.com/xbmc/xbmc/blob/32a6916059a0b14ab5fc65cedb17b2615c039918/xbmc/Application.cpp#L1124
++
++define KODI_SET_DEFAULT_SKIN_ESTOUCHY
++	$(SED) 's/skin.estuary/skin.estouchy/#g' $(TARGET_DIR)/usr/share/kodi/system/settings/settings.xml
++endef
++
++define KODI_SET_DEFAULT_SKIN_CONFLUENCE
++	$(SED) 's/skin.estuary/skin.confluence/#g' $(TARGET_DIR)/usr/share/kodi/system/settings/settings.xml
++	$(HOST_DIR)/usr/bin/xml ed -L -O --subnode "/addons" \
++		-t elem -n "addon" -v "skin.confluence" \
++		$(KODI_ADDON_MANIFEST)
++endef
++
++ifeq ($(BR2_PACKAGE_KODI_SKIN_DEFAULT_ESTOUCHY),y)
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_SET_DEFAULT_SKIN_ESTOUCHY
++else ifeq ($(BR2_PACKAGE_KODI_SKIN_DEFAULT_CONFLUENCE),y)
++KODI_POST_INSTALL_TARGET_HOOKS += KODI_SET_DEFAULT_SKIN_CONFLUENCE
++endif
++
+ define KODI_INSTALL_BR_WRAPPER
+ 	$(INSTALL) -D -m 0755 package/kodi/br-kodi \
+ 		$(TARGET_DIR)/usr/bin/br-kodi
 -- 
 2.20.1
