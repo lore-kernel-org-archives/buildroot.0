@@ -1,29 +1,35 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 30 Jun 2019 14:59:12 +0200
-Subject: [Buildroot] [PATCH] package/expat: security bump to version
- 2.2.7
-In-Reply-To: <20190628132613.8819-1-peter@korsgaard.com>
-References: <20190628132613.8819-1-peter@korsgaard.com>
-Message-ID: <8c0423f8-886a-a4a1-8707-71eca4fc3d7c@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 30 Jun 2019 14:59:31 +0200
+Subject: [Buildroot] [git commit] package/dialog: fix build with NLS
+Message-ID: <20190630125901.6BA0D7FE21@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=0953377a9ea4ea518a87a0b48169626c762b5fea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes:
+ - http://autobuild.buildroot.org/results/9287ffbb86a7dc09cda5f99f87445fa884e77625
 
-On 28/06/2019 15:26, Peter Korsgaard wrote:
-> Fixes the following security vulnerabilites:
-> 
-> CVE-2018-20843: In libexpat in Expat before 2.2.7, XML input including XML
-> names that contain a large number of colons could make the XML parser
-> consume a high amount of RAM and CPU resources while processing (enough to
-> be usable for denial-of-service attacks).
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/dialog/dialog.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Applied to master, thanks.
-
- Regards,
- Arnout
+diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
+index 73fabe07cf..b1933b8836 100644
+--- a/package/dialog/dialog.mk
++++ b/package/dialog/dialog.mk
+@@ -9,7 +9,7 @@ DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
+ DIALOG_SITE = ftp://ftp.invisible-island.net/dialog
+ DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
+ 	--disable-rpath-hack
+-DIALOG_DEPENDENCIES = host-pkgconf ncurses
++DIALOG_DEPENDENCIES = host-pkgconf ncurses $(TARGET_NLS_DEPENDENCIES)
+ DIALOG_LICENSE = LGPL-2.1
+ DIALOG_LICENSE_FILES = COPYING
+ 
