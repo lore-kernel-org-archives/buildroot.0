@@ -1,48 +1,47 @@
 From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Sun, 30 Jun 2019 19:52:15 +0200
-Subject: [Buildroot] [PATCH] package/python-zeroconf: bump to version 0.23.0
-Message-ID: <1561917135-19132-1-git-send-email-pjtexier@koncepto.io>
+Date: Sun, 30 Jun 2019 19:54:04 +0200
+Subject: [Buildroot] [PATCH] package/python-django: bump to version 2.2.2
+Message-ID: <1561917244-1188-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://github.com/jstasiak/python-zeroconf#changelog
-
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/python-zeroconf/python-zeroconf.hash | 4 ++--
- package/python-zeroconf/python-zeroconf.mk   | 4 ++--
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-zeroconf/python-zeroconf.hash b/package/python-zeroconf/python-zeroconf.hash
-index 1677aff..a4239b6 100644
---- a/package/python-zeroconf/python-zeroconf.hash
-+++ b/package/python-zeroconf/python-zeroconf.hash
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index c325116..4172f25 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/zeroconf/json
--md5	23124285dbdfcf3cb9cca11b98216cf7  zeroconf-0.20.0.tar.gz
--sha256	6e3f1e7b5871e3d1410ac29b9fb85aafc1e2d661ed596b07a6f84559a475efcb  zeroconf-0.20.0.tar.gz
-+md5	1094639f8688f2c5b1938029877eb4f2  zeroconf-0.23.0.tar.gz
-+sha256	e0c333b967c48f8b2e5cc94a1d4d28893023fb06dfd797ee384a94cdd1d0eef5  zeroconf-0.23.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	909c2e7761893a922dcf721521d9239e  Django-2.1.9.tar.gz
+-sha256	5052def4ff0a84bdf669827fdbd7b7cc1ac058f10232be6b21f37c6824f578da  Django-2.1.9.tar.gz
++md5	c52b05c2bc4898bd68dc0359347fff69  Django-2.2.2.tar.gz
++sha256	753d30d3eb078064d2ddadfea65083c9848074a7f93d7b4dc7fa6b1380d278f5  Django-2.2.2.tar.gz
  # Locally computed sha256 checksums
- sha256	bb117c0fbd7f57f64170b690285d7df07c2371b578e3b3cd3aa2e1155ef461a0  COPYING
-diff --git a/package/python-zeroconf/python-zeroconf.mk b/package/python-zeroconf/python-zeroconf.mk
-index 7000a0d..55da292 100644
---- a/package/python-zeroconf/python-zeroconf.mk
-+++ b/package/python-zeroconf/python-zeroconf.mk
-@@ -4,9 +4,9 @@
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 041822e..e1daae3 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--PYTHON_ZEROCONF_VERSION = 0.20.0
-+PYTHON_ZEROCONF_VERSION = 0.23.0
- PYTHON_ZEROCONF_SOURCE = zeroconf-$(PYTHON_ZEROCONF_VERSION).tar.gz
--PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/20/d7/418ff6c684ace0f5855ec56c66cfa99ec50443c41693b91e9abcccfa096c
-+PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/d7/25/8bbdd4857820e0cdc380c7e0c3543dc01a55247a1d831c712571783e74ec
- PYTHON_ZEROCONF_SETUP_TYPE = setuptools
- PYTHON_ZEROCONF_LICENSE = LGPL-2.1+
- PYTHON_ZEROCONF_LICENSE_FILES = COPYING
+-PYTHON_DJANGO_VERSION = 2.1.9
++PYTHON_DJANGO_VERSION = 2.2.2
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c1/b3/3cdc60dc2e3c11236539f9470e42c5075a2e9c9f4885f5b4b912e9f19992
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/56/2e/c0495314c0bdcf19d9b888a98ff16a4c58a90dd77ed741f4dbab2cbf7efe
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
 -- 
 2.7.4
