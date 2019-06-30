@@ -1,65 +1,65 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Jun 2019 16:05:12 +0200
-Subject: [Buildroot] [PATCH 18/31] package/kodi-inputstream-adaptive: bump
- version
+Date: Sun, 30 Jun 2019 16:05:19 +0200
+Subject: [Buildroot] [PATCH 25/31] package/kodi-pvr-vuplus: bump version
 In-Reply-To: <20190630140525.6537-1-bernd.kuhls@t-online.de>
 References: <20190630140525.6537-1-bernd.kuhls@t-online.de>
-Message-ID: <20190630140525.6537-19-bernd.kuhls@t-online.de>
+Message-ID: <20190630140525.6537-26-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switched dependencies from libplatform & kodi-platform to kodi after
-upstream commit:
-https://github.com/peak3d/inputstream.adaptive/commit/0d1c5503ad809a23062aebd3c01837ca5d21ea3a
+Added dependency to json-for-modern-cpp after upstream commit:
+https://github.com/kodi-pvr/pvr.vuplus/commit/07480b96fc674317ccbb792b03b811edec143e0c
+
+Also added missing dependency to tinyxml.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-inputstream-adaptive/Config.in                 | 2 --
- .../kodi-inputstream-adaptive.hash                          | 2 +-
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 6 ++----
- 3 files changed, 3 insertions(+), 7 deletions(-)
+ package/kodi-pvr-vuplus/Config.in            | 2 ++
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 2 +-
+ package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 6 ++----
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
-index cb5127363a..f9ba20adcf 100644
---- a/package/kodi-inputstream-adaptive/Config.in
-+++ b/package/kodi-inputstream-adaptive/Config.in
-@@ -3,8 +3,6 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
- 	# wvdecrypter/cdm/build/build_config.h
- 	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
- 		|| BR2_mips64el || BR2_x86_64
--	select BR2_PACKAGE_LIBPLATFORM
--	select BR2_PACKAGE_KODI_PLATFORM
+diff --git a/package/kodi-pvr-vuplus/Config.in b/package/kodi-pvr-vuplus/Config.in
+index a56c4ede93..96320f6fcb 100644
+--- a/package/kodi-pvr-vuplus/Config.in
++++ b/package/kodi-pvr-vuplus/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_KODI_PVR_VUPLUS
+ 	bool "kodi-pvr-vuplus"
++	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
+ 	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_TINYXML
  	help
- 	  Kodi inputstream addon for several manifest types
+ 	  VuPlus PVR client addon for Kodi
  
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 15ecf494f1..42edb5ae1d 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+index f4f6756931..f8b5e3d51d 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 872a6ffefb90b6201a1e01fe5a52e05877e2040737e052b2f249725b9a8a44ff  kodi-inputstream-adaptive-c51b9a9b58a645f820883e6d99982277fc58aac5.tar.gz
-+sha256 c7558bc7dc1a4089208e923c23e94b8f68cf76224eeb5ab02783ff8b1635bdfa  kodi-inputstream-adaptive-6011f1e1674392665defa1be12a67a38f2d71bd9.tar.gz
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index ab810d3248..f3ab79ac24 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+-sha256 a8c7345e4e2e415e29c21f14460b257dfbe08ed5ecf1cc2dc6bc393a10f95cf3  kodi-pvr-vuplus-2.4.12-Krypton.tar.gz
++sha256 35e4deda6ea7df6f0d92118fc5c760f374f85ac571bf52aceb2cb8d1956466dd  kodi-pvr-vuplus-e9792573414a7fab414f97de98dc594b7aaa7c54.tar.gz
+diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
+index 581d884caa..0dcc05810b 100644
+--- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
++++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
 @@ -4,12 +4,10 @@
  #
  ################################################################################
  
 -# This cset is on the branch 'Krypton'
 -# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = c51b9a9b58a645f820883e6d99982277fc58aac5
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 6011f1e1674392665defa1be12a67a38f2d71bd9
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
--KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = libplatform kodi-platform
-+KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
+-KODI_PVR_VUPLUS_VERSION = 2.4.12-Krypton
++KODI_PVR_VUPLUS_VERSION = e9792573414a7fab414f97de98dc594b7aaa7c54
+ KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
+ KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
+ KODI_PVR_VUPLUS_LICENSE_FILES = src/client.h
+-KODI_PVR_VUPLUS_DEPENDENCIES = kodi-platform
++KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi-platform tinyxml
  
  $(eval $(cmake-package))
 -- 
