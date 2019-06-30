@@ -1,74 +1,26 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 30 Jun 2019 16:05:23 +0200
-Subject: [Buildroot] [git commit] package/openjdk and package/openjdk-bin:
- bump to version 12.0.1+12
-Message-ID: <20190630152730.3B318880D3@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 30 Jun 2019 17:32:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openjdk and
+ package/openjdk-bin: bump to version 12.0.1+12
+In-Reply-To: <20190426193254.22036-1-aduskett@gmail.com>
+References: <20190426193254.22036-1-aduskett@gmail.com>
+Message-ID: <32f8a8fc-5dc5-e206-b5da-c7dafe4a25d2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7e99d1de50a9b98fb976e8074dd25740cd6440cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-[Arnout: rebase after change of version formatting]
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/openjdk-bin/openjdk-bin.hash | 2 +-
- package/openjdk-bin/openjdk-bin.mk   | 4 ++--
- package/openjdk/openjdk.hash         | 2 +-
- package/openjdk/openjdk.mk           | 4 ++--
- 4 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-index 63ed5874c4..1fab6e07a8 100644
---- a/package/openjdk-bin/openjdk-bin.hash
-+++ b/package/openjdk-bin/openjdk-bin.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/AdoptOpenJDK/openjdk12-binaries/releases
--sha256	4739064dc439a05487744cce0ba951cb544ed5e796f6c699646e16c09da5dd6a	OpenJDK12U-jdk_x64_linux_hotspot_12_33.tar.gz
-+sha256	dd3fdf3771a05a010029c1cf1aef516928eab55d6f5eb019008875e9ccbc8337	OpenJDK12U-jdk_x64_linux_hotspot_12.0.1_12.tar.gz
- 
- # Locally calculated
- sha256	4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726	legal/java.prefs/LICENSE
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index d2e0c2fd3b..383842d280 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--HOST_OPENJDK_BIN_VERSION_MAJOR = 12
--HOST_OPENJDK_BIN_VERSION_MINOR = 33
-+HOST_OPENJDK_BIN_VERSION_MAJOR = 12.0.1
-+HOST_OPENJDK_BIN_VERSION_MINOR = 12
- HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
- HOST_OPENJDK_BIN_SOURCE = OpenJDK12U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
- HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk12-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index e94d4d6d44..f4eecf5dcd 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 de278328668bdaf35d50d0319d15d64d195ddd8a0de9c6fde3a6c9ca10135a92  openjdk-12+33.tar.gz
-+sha256 47cfd6d8430d862869c42c5841bbaaa303a811fea8229baa10ac03b58e259af2  openjdk-12.0.1+12.tar.gz
- sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index e6e834cde9..2f3292ef6d 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--OPENJDK_VERSION_MAJOR = 12
--OPENJDK_VERSION_MINOR = 33
-+OPENJDK_VERSION_MAJOR = 12.0.1
-+OPENJDK_VERSION_MINOR = 12
- OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
- OPENJDK_SITE = $(call github,AdoptOpenJDK,openjdk-jdk12u,jdk-$(OPENJDK_VERSION))
- OPENJDK_LICENSE = GPL-2.0+ with exception
+On 26/04/2019 21:32, aduskett at gmail.com wrote:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+
+
+ Applied to master, thanks. I had to rebase because of Victor's change of how
+_VERSION is specified, but all is well.
+
+ Regards,
+ Arnout
