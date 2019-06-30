@@ -1,49 +1,57 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 30 Jun 2019 14:39:59 +0200
-Subject: [Buildroot] [PATCH 1/2] package/docker-engine: security bump to
- version 18.09.7
-In-Reply-To: <20190628063247.3588-1-peter@korsgaard.com>
-References: <20190628063247.3588-1-peter@korsgaard.com>
-Message-ID: <b66de1ee-e3d5-4765-a220-561c529453ef@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 30 Jun 2019 14:40:18 +0200
+Subject: [Buildroot] [git commit] package/expat: security bump to version
+ 2.2.7
+Message-ID: <20190630125717.27293835D4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=84fd08cf4f860914b0d7b6e48dbe6819e96cc423
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Fixes the following security vulnerabilites:
 
-On 28/06/2019 08:32, Peter Korsgaard wrote:
-> Fixes CVE-2018-15664: API endpoints behind the 'docker cp' command are
-> vulnerable to a symlink-exchange attack with Directory Traversal, giving
-> attackers arbitrary read-write access to the host filesystem with root
-> privileges, because daemon/archive.go does not do archive operations on a
-> frozen filesystem (or from within a chroot).
-> 
-> And includes additional post-18.09.6 fixes:
-> 
-> Builder
-> - Fixed a panic error when building dockerfiles that contain only comments.
->   moby/moby#38487
-> - Added a workaround for GCR authentication issue. moby/moby#38246
-> - Builder-next: Fixed a bug in the GCR token cache implementation
->   workaround.  moby/moby#39183
-> 
-> Runtime
-> - Added performance optimizations in aufs and layer store that helps in
->   massively parallel container creation and removal.  moby/moby#39107,
->   moby/moby#39135
-> - daemon: fixed a mirrors validation issue. moby/moby#38991
-> - Docker no longer supports sorting UID and GID ranges in ID maps.
->   moby/moby#39288
-> 
-> Logging
-> - Added a fix that now allows large log lines for logger plugins.
->   moby/moby#39038
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+CVE-2018-20843: In libexpat in Expat before 2.2.7, XML input including XML
+names that contain a large number of colons could make the XML parser
+consume a high amount of RAM and CPU resources while processing (enough to
+be usable for denial-of-service attacks).
 
- Both applied to master, thanks.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/expat/expat.hash | 8 ++++----
+ package/expat/expat.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
- Regards,
- Arnout
+diff --git a/package/expat/expat.hash b/package/expat/expat.hash
+index 6c55972f69..91f70f36ed 100644
+--- a/package/expat/expat.hash
++++ b/package/expat/expat.hash
+@@ -1,7 +1,7 @@
+-# From https://sourceforge.net/projects/expat/files/expat/2.2.6/
+-md5	ca047ae951b40020ac831c28859161b2		expat-2.2.6.tar.bz2
+-sha1	c8947fc3119a797b55485f2f7bdaaeb49cc9df01	expat-2.2.6.tar.bz2
++# From https://sourceforge.net/projects/expat/files/expat/2.2.7/
++md5	72f36b87cdb478aba1e78473393766aa		expat-2.2.7.tar.bz2
++sha1	9c8a268211e3f1ae31c4d550e5be7708973ec6a6	expat-2.2.7.tar.bz2
+ 
+ # Locally calculated
+-sha256	17b43c2716d521369f82fc2dc70f359860e90fa440bea65b3b85f0b246ea81f2	expat-2.2.6.tar.bz2
++sha256	cbc9102f4a31a8dafd42d642e9a3aa31e79a0aedaa1f6efd2795ebc83174ec18	expat-2.2.7.tar.bz2
+ sha256	46336ab2fec900803e2f1a4253e325ac01d998efb09bc6906651f7259e636f76	COPYING
+diff --git a/package/expat/expat.mk b/package/expat/expat.mk
+index 548ec826a0..1b49a12c49 100644
+--- a/package/expat/expat.mk
++++ b/package/expat/expat.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EXPAT_VERSION = 2.2.6
++EXPAT_VERSION = 2.2.7
+ EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
+ EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
+ EXPAT_INSTALL_STAGING = YES
