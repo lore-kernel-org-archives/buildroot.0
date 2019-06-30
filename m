@@ -1,315 +1,364 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Jun 2019 16:05:10 +0200
-Subject: [Buildroot] [PATCH 16/31] package/kodi-audiodecoder-*: mass version
+Date: Sun, 30 Jun 2019 16:05:23 +0200
+Subject: [Buildroot] [PATCH 29/31] package/kodi-screensaver-*: mass version
  bump
 In-Reply-To: <20190630140525.6537-1-bernd.kuhls@t-online.de>
 References: <20190630140525.6537-1-bernd.kuhls@t-online.de>
-Message-ID: <20190630140525.6537-17-bernd.kuhls@t-online.de>
+Message-ID: <20190630140525.6537-30-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Changed _SITE after upstream relocated all audio decoders to xbmc repos
-https://github.com/xbmc/repo-binary-addons/commit/4c900f6835889ce45ba4daaf0387bb5eb13db065
-
-Changed dependency from kodi-platform to kodi itself, the dependency to
-kodi-platform was removed upstream.
+Most screensaver repos were moved to the xbmc project:
+https://github.com/xbmc/repo-binary-addons/commit/57b8ed5fb9b5f0368738260b762cc0bab1147172
+https://github.com/xbmc/repo-binary-addons/commit/29c23f8e0cbfab6c39eb910ebc4f23f7afdec87e
+https://github.com/xbmc/repo-binary-addons/commit/98e71315026fd163de7cc15dad8e2c0398851499
+https://github.com/xbmc/repo-binary-addons/commit/994b0d5b73118e6dc5cece534daffb6a176fa426
+https://github.com/xbmc/repo-binary-addons/commit/21b0c96d7fbff7853aadf63868b79384cdb40394
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-audiodecoder-modplug/Config.in                 | 3 +--
- .../kodi-audiodecoder-modplug.hash                          | 2 +-
- .../kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk  | 6 +++---
- package/kodi-audiodecoder-nosefart/Config.in                | 3 +--
- .../kodi-audiodecoder-nosefart.hash                         | 2 +-
- .../kodi-audiodecoder-nosefart.mk                           | 6 +++---
- package/kodi-audiodecoder-sidplay/Config.in                 | 3 +--
- .../kodi-audiodecoder-sidplay.hash                          | 2 +-
- .../kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk  | 6 +++---
- package/kodi-audiodecoder-snesapu/Config.in                 | 3 +--
- .../kodi-audiodecoder-snesapu.hash                          | 2 +-
- .../kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk  | 6 +++---
- package/kodi-audiodecoder-stsound/Config.in                 | 3 +--
- .../kodi-audiodecoder-stsound.hash                          | 2 +-
- .../kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk  | 6 +++---
- package/kodi-audiodecoder-timidity/Config.in                | 2 +-
- .../kodi-audiodecoder-timidity.hash                         | 2 +-
- .../kodi-audiodecoder-timidity.mk                           | 4 ++--
- package/kodi-audiodecoder-vgmstream/Config.in               | 3 +--
- .../kodi-audiodecoder-vgmstream.hash                        | 2 +-
- .../kodi-audiodecoder-vgmstream.mk                          | 6 +++---
- 21 files changed, 34 insertions(+), 40 deletions(-)
+ package/kodi-screensaver-asterwave/Config.in                 | 2 +-
+ .../kodi-screensaver-asterwave.hash                          | 2 +-
+ .../kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk | 4 ++--
+ package/kodi-screensaver-biogenesis/Config.in                | 2 +-
+ .../kodi-screensaver-biogenesis.hash                         | 2 +-
+ .../kodi-screensaver-biogenesis.mk                           | 4 ++--
+ package/kodi-screensaver-cpblobs/Config.in                   | 2 +-
+ .../kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash   | 2 +-
+ package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk | 4 ++--
+ .../kodi-screensaver-crystalmorph.hash                       | 2 +-
+ .../kodi-screensaver-crystalmorph.mk                         | 2 +-
+ package/kodi-screensaver-greynetic/Config.in                 | 2 +-
+ .../kodi-screensaver-greynetic.hash                          | 2 +-
+ .../kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk | 4 ++--
+ package/kodi-screensaver-matrixtrails/Config.in              | 2 +-
+ .../kodi-screensaver-matrixtrails.hash                       | 2 +-
+ .../kodi-screensaver-matrixtrails.mk                         | 5 ++---
+ package/kodi-screensaver-pingpong/Config.in                  | 2 +-
+ .../kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash | 2 +-
+ .../kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk   | 4 ++--
+ package/kodi-screensaver-pyro/Config.in                      | 2 +-
+ package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash     | 2 +-
+ package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk       | 4 ++--
+ package/kodi-screensaver-stars/Config.in                     | 2 +-
+ package/kodi-screensaver-stars/kodi-screensaver-stars.hash   | 2 +-
+ package/kodi-screensaver-stars/kodi-screensaver-stars.mk     | 4 ++--
+ 26 files changed, 34 insertions(+), 35 deletions(-)
 
-diff --git a/package/kodi-audiodecoder-modplug/Config.in b/package/kodi-audiodecoder-modplug/Config.in
-index 026997319e..856ca8beb1 100644
---- a/package/kodi-audiodecoder-modplug/Config.in
-+++ b/package/kodi-audiodecoder-modplug/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_KODI_AUDIODECODER_MODPLUG
- 	bool "kodi-audiodecoder-modplug"
--	select BR2_PACKAGE_KODI_PLATFORM
- 	select BR2_PACKAGE_LIBMODPLUG
+diff --git a/package/kodi-screensaver-asterwave/Config.in b/package/kodi-screensaver-asterwave/Config.in
+index bd5db738ca..b5e80cc535 100644
+--- a/package/kodi-screensaver-asterwave/Config.in
++++ b/package/kodi-screensaver-asterwave/Config.in
+@@ -6,7 +6,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_ASTERWAVE
  	help
- 	  Modplug decoder addon for Kodi
+ 	  AsterWave screensaver for Kodi
  
--	  https://github.com/notspiff/audiodecoder.modplug
-+	  https://github.com/xbmc/audiodecoder.modplug
-diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-index 6a0607e83d..280d238e43 100644
---- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
-+++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.hash
+-	  https://github.com/notspiff/screensaver.asterwave
++	  https://github.com/xbmc/screensaver.asterwave
+ 
+ comment "kodi-screensaver-asterwave needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
+index 40c8f9b28c..e84c5bb1b4 100644
+--- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
++++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 8be4f8c6324bf790069e42c963e14733c53fcdc27548f21f4822b178f47b8177  kodi-audiodecoder-modplug-1.1.0.tar.gz
-+sha256 8ff4eacab4baedeaafcd1ce755347de69e5ac309530843762e94e20489e9af2f  kodi-audiodecoder-modplug-97b53af55b46b320461855560cffbcce48c29db0.tar.gz
-diff --git a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-index fb7003f093..3ba9d22778 100644
---- a/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-+++ b/package/kodi-audiodecoder-modplug/kodi-audiodecoder-modplug.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_MODPLUG_VERSION = 1.1.0
--KODI_AUDIODECODER_MODPLUG_SITE = $(call github,notspiff,audiodecoder.modplug,v$(KODI_AUDIODECODER_MODPLUG_VERSION))
-+KODI_AUDIODECODER_MODPLUG_VERSION = 97b53af55b46b320461855560cffbcce48c29db0
-+KODI_AUDIODECODER_MODPLUG_SITE = $(call github,xbmc,audiodecoder.modplug,$(KODI_AUDIODECODER_MODPLUG_VERSION))
- KODI_AUDIODECODER_MODPLUG_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_MODPLUG_LICENSE_FILES = src/ModplugCodec.cpp
--KODI_AUDIODECODER_MODPLUG_DEPENDENCIES = kodi-platform libmodplug
-+KODI_AUDIODECODER_MODPLUG_DEPENDENCIES = kodi libmodplug
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-nosefart/Config.in b/package/kodi-audiodecoder-nosefart/Config.in
-index 96591aae5c..bb56a3d6d4 100644
---- a/package/kodi-audiodecoder-nosefart/Config.in
-+++ b/package/kodi-audiodecoder-nosefart/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_AUDIODECODER_NOSEFART
- 	bool "kodi-audiodecoder-nosefart"
--	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  Nosefart decoder addon for Kodi
- 
--	  https://github.com/notspiff/audiodecoder.nosefart
-+	  https://github.com/xbmc/audiodecoder.nosefart
-diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
-index 670e324ee4..a6d7229f30 100644
---- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
-+++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 444cc85f4618daa5147a63633db3f300123d5e33b1b5894e7036fa9243e8a535  kodi-audiodecoder-nosefart-1.1.0.tar.gz
-+sha256 5677b4ad542cee713a376f34d0401b37f78a2687746ccbac4222b9582a2d6a4f  kodi-audiodecoder-nosefart-86b73e130dc09e2cae500ce81504bef567bc6cee.tar.gz
-diff --git a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-index 5e008198ca..a5675292f7 100644
---- a/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-+++ b/package/kodi-audiodecoder-nosefart/kodi-audiodecoder-nosefart.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_NOSEFART_VERSION = 1.1.0
--KODI_AUDIODECODER_NOSEFART_SITE = $(call github,notspiff,audiodecoder.nosefart,v$(KODI_AUDIODECODER_NOSEFART_VERSION))
-+KODI_AUDIODECODER_NOSEFART_VERSION = 86b73e130dc09e2cae500ce81504bef567bc6cee
-+KODI_AUDIODECODER_NOSEFART_SITE = $(call github,xbmc,audiodecoder.nosefart,$(KODI_AUDIODECODER_NOSEFART_VERSION))
- KODI_AUDIODECODER_NOSEFART_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_NOSEFART_LICENSE_FILES = src/NSFCodec.cpp
--KODI_AUDIODECODER_NOSEFART_DEPENDENCIES = kodi-platform
-+KODI_AUDIODECODER_NOSEFART_DEPENDENCIES = kodi
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-sidplay/Config.in b/package/kodi-audiodecoder-sidplay/Config.in
-index ae99afa9e0..eca4160a90 100644
---- a/package/kodi-audiodecoder-sidplay/Config.in
-+++ b/package/kodi-audiodecoder-sidplay/Config.in
-@@ -1,8 +1,7 @@
- config BR2_PACKAGE_KODI_AUDIODECODER_SIDPLAY
- 	bool "kodi-audiodecoder-sidplay"
--	select BR2_PACKAGE_KODI_PLATFORM
- 	select BR2_PACKAGE_LIBSIDPLAY2
- 	help
- 	  Sidplay decoder addon for Kodi
- 
--	  https://github.com/notspiff/audiodecoder.sidplay
-+	  https://github.com/xbmc/audiodecoder.sidplay
-diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
-index 97c5f28fc7..d659fb7b0b 100644
---- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
-+++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 527b188679add8043e8cd691af9735b6fe8bd6935ad8ac8312b459d6f160cdac  kodi-audiodecoder-sidplay-1.1.0.tar.gz
-+sha256 70779ce519453a6976ec36972e08877a5658786e5bd39e62f6ff8b367b1cc899  kodi-audiodecoder-sidplay-64dca58eea2c44e8962f128bac3226da67b6f835.tar.gz
-diff --git a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-index 8dc827a666..ffe09ad26c 100644
---- a/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-+++ b/package/kodi-audiodecoder-sidplay/kodi-audiodecoder-sidplay.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_SIDPLAY_VERSION = 1.1.0
--KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,notspiff,audiodecoder.sidplay,v$(KODI_AUDIODECODER_SIDPLAY_VERSION))
-+KODI_AUDIODECODER_SIDPLAY_VERSION = 64dca58eea2c44e8962f128bac3226da67b6f835
-+KODI_AUDIODECODER_SIDPLAY_SITE = $(call github,xbmc,audiodecoder.sidplay,$(KODI_AUDIODECODER_SIDPLAY_VERSION))
- KODI_AUDIODECODER_SIDPLAY_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_SIDPLAY_LICENSE_FILES = src/SIDCodec.cpp
--KODI_AUDIODECODER_SIDPLAY_DEPENDENCIES = host-pkgconf kodi-platform libsidplay2
-+KODI_AUDIODECODER_SIDPLAY_DEPENDENCIES = host-pkgconf kodi libsidplay2
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-snesapu/Config.in b/package/kodi-audiodecoder-snesapu/Config.in
-index 0cb572fec3..2c3bb15d2f 100644
---- a/package/kodi-audiodecoder-snesapu/Config.in
-+++ b/package/kodi-audiodecoder-snesapu/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_AUDIODECODER_SNESAPU
- 	bool "kodi-audiodecoder-snesapu"
--	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  SPC decoder addon for Kodi
- 
--	  https://github.com/notspiff/audiodecoder.snesapu
-+	  https://github.com/xbmc/audiodecoder.snesapu
-diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
-index 877b7a7f9c..8599794c2d 100644
---- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
-+++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 20d85822d0c01223903b5e5472a1d029fa4931c2a9ac4d399345c4363fa8f905  kodi-audiodecoder-snesapu-1.1.0.tar.gz
-+sha256 9abcd4fc02a9a6d5d8976ff0c888668aa31161db48516fe6f9cfe709fc9b9d2d  kodi-audiodecoder-snesapu-5cb318335a3b93ea7cf6b6e94ef781839c9dd9e4.tar.gz
-diff --git a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-index df7a8f09b9..91a80a71ce 100644
---- a/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-+++ b/package/kodi-audiodecoder-snesapu/kodi-audiodecoder-snesapu.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_SNESAPU_VERSION = 1.1.0
--KODI_AUDIODECODER_SNESAPU_SITE = $(call github,notspiff,audiodecoder.snesapu,v$(KODI_AUDIODECODER_SNESAPU_VERSION))
-+KODI_AUDIODECODER_SNESAPU_VERSION = 5cb318335a3b93ea7cf6b6e94ef781839c9dd9e4
-+KODI_AUDIODECODER_SNESAPU_SITE = $(call github,xbmc,audiodecoder.snesapu,$(KODI_AUDIODECODER_SNESAPU_VERSION))
- KODI_AUDIODECODER_SNESAPU_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_SNESAPU_LICENSE_FILES = src/SPCCodec.cpp
--KODI_AUDIODECODER_SNESAPU_DEPENDENCIES = kodi-platform
-+KODI_AUDIODECODER_SNESAPU_DEPENDENCIES = kodi
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-stsound/Config.in b/package/kodi-audiodecoder-stsound/Config.in
-index 6be216a2c7..2001e481cd 100644
---- a/package/kodi-audiodecoder-stsound/Config.in
-+++ b/package/kodi-audiodecoder-stsound/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_AUDIODECODER_STSOUND
- 	bool "kodi-audiodecoder-stsound"
--	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  YM decoder addon for Kodi
- 
--	  https://github.com/notspiff/audiodecoder.stsound
-+	  https://github.com/xbmc/audiodecoder.stsound
-diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
-index 2d70e085d9..6e840a4950 100644
---- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
-+++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 c9b6e98d544712f7cec3cf18f866ccaed2fbcd20410179259ae0455ffa967ca4  kodi-audiodecoder-stsound-1.1.0.tar.gz
-+sha256 dd391f2fb569514730c2ccf6968abf4bb5e1a17068e50728dc431d9efe74e6f5  kodi-audiodecoder-stsound-00d94df7c4414cc90abd0d5114df95a1aa7d9191.tar.gz
-diff --git a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-index f49c614bb2..53155a9a72 100644
---- a/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-+++ b/package/kodi-audiodecoder-stsound/kodi-audiodecoder-stsound.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--KODI_AUDIODECODER_STSOUND_VERSION = 1.1.0
--KODI_AUDIODECODER_STSOUND_SITE = $(call github,notspiff,audiodecoder.stsound,v$(KODI_AUDIODECODER_STSOUND_VERSION))
-+KODI_AUDIODECODER_STSOUND_VERSION = 00d94df7c4414cc90abd0d5114df95a1aa7d9191
-+KODI_AUDIODECODER_STSOUND_SITE = $(call github,xbmc,audiodecoder.stsound,$(KODI_AUDIODECODER_STSOUND_VERSION))
- KODI_AUDIODECODER_STSOUND_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_STSOUND_LICENSE_FILES = src/YMCodec.cpp
--KODI_AUDIODECODER_STSOUND_DEPENDENCIES = kodi-platform
-+KODI_AUDIODECODER_STSOUND_DEPENDENCIES = kodi
- 
- $(eval $(cmake-package))
-diff --git a/package/kodi-audiodecoder-timidity/Config.in b/package/kodi-audiodecoder-timidity/Config.in
-index 3372dc5c05..ad3caf1e42 100644
---- a/package/kodi-audiodecoder-timidity/Config.in
-+++ b/package/kodi-audiodecoder-timidity/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_KODI_AUDIODECODER_TIMIDITY
- 	help
- 	  Timidity decoder addon for Kodi
- 
--	  https://github.com/notspiff/audiodecoder.timidity
-+	  https://github.com/xbmc/audiodecoder.timidity
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-index 34260e9449..e8d5500504 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 83a740010dc7fa01101da370c74e79287ebd67bd28d27125e4372abe2fb3bb47  kodi-audiodecoder-timidity-1.1.1.tar.gz
-+sha256 3d6ab2fdadb5540410e464462d72ef8ffff8c1cd381171a31245f2edebb84a68  kodi-audiodecoder-timidity-a430ed4ec93cf832e5874a9e08faf294332b6685.tar.gz
-diff --git a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-index a4847e0289..daca8e1656 100644
---- a/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
-+++ b/package/kodi-audiodecoder-timidity/kodi-audiodecoder-timidity.mk
+-sha256 48cd459b60b2407b8bae9107760a013d04ee29e00fddbce9550291896d42ef64  kodi-screensaver-asterwave-1.1.0.tar.gz
++sha256 a244856601328d677f956001396c680988ef603509afe191e91aed5154c51089  kodi-screensaver-asterwave-48018a3648e33fc503d58536bdafaa4991d38302.tar.gz
+diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
+index 8f6d583829..3e585e8e19 100644
+--- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
++++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--KODI_AUDIODECODER_TIMIDITY_VERSION = 1.1.1
--KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,notspiff,audiodecoder.timidity,v$(KODI_AUDIODECODER_TIMIDITY_VERSION))
-+KODI_AUDIODECODER_TIMIDITY_VERSION = a430ed4ec93cf832e5874a9e08faf294332b6685
-+KODI_AUDIODECODER_TIMIDITY_SITE = $(call github,xbmc,audiodecoder.timidity,$(KODI_AUDIODECODER_TIMIDITY_VERSION))
- KODI_AUDIODECODER_TIMIDITY_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_TIMIDITY_LICENSE_FILES = src/TimidityCodec.cpp
- KODI_AUDIODECODER_TIMIDITY_DEPENDENCIES = kodi
-diff --git a/package/kodi-audiodecoder-vgmstream/Config.in b/package/kodi-audiodecoder-vgmstream/Config.in
-index ebf83df23b..440edc7cf6 100644
---- a/package/kodi-audiodecoder-vgmstream/Config.in
-+++ b/package/kodi-audiodecoder-vgmstream/Config.in
-@@ -1,7 +1,6 @@
- config BR2_PACKAGE_KODI_AUDIODECODER_VGMSTREAM
- 	bool "kodi-audiodecoder-vgmstream"
--	select BR2_PACKAGE_KODI_PLATFORM
- 	help
- 	  VGM decoder addon for Kodi
+-KODI_SCREENSAVER_ASTERWAVE_VERSION = 1.1.0
+-KODI_SCREENSAVER_ASTERWAVE_SITE = $(call github,notspiff,screensaver.asterwave,v$(KODI_SCREENSAVER_ASTERWAVE_VERSION))
++KODI_SCREENSAVER_ASTERWAVE_VERSION = 48018a3648e33fc503d58536bdafaa4991d38302
++KODI_SCREENSAVER_ASTERWAVE_SITE = $(call github,xbmc,screensaver.asterwave,$(KODI_SCREENSAVER_ASTERWAVE_VERSION))
+ KODI_SCREENSAVER_ASTERWAVE_DEPENDENCIES = kodi libglu libsoil
  
--	  https://github.com/notspiff/audiodecoder.vgmstream
-+	  https://github.com/xbmc/audiodecoder.vgmstream
-diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
-index f4cf51aa21..eb6943dca4 100644
---- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
-+++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.hash
+ $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-biogenesis/Config.in b/package/kodi-screensaver-biogenesis/Config.in
+index cdc2d91951..9703e9091b 100644
+--- a/package/kodi-screensaver-biogenesis/Config.in
++++ b/package/kodi-screensaver-biogenesis/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_BIOGENESIS
+ 	help
+ 	  BioGenesis screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.biogenesis
++	  https://github.com/xbmc/screensaver.biogenesis
+ 
+ comment "kodi-screensaver-biogenesis needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
+index 81b57e4265..621cc53169 100644
+--- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
++++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 40cd4f7f143c9313a4437854e31c460046af47bd709364439f0e370ec464af0d  kodi-audiodecoder-vgmstream-1.1.0.tar.gz
-+sha256 51785e7ad70236c333cb8899b7c0904bd997b56e05b993f6d37ad508b7dcd58b  kodi-audiodecoder-vgmstream-954a097e03a474735d69a65d09f8ffc3b28fa2e9.tar.gz
-diff --git a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-index e89602117e..5efc25522d 100644
---- a/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-+++ b/package/kodi-audiodecoder-vgmstream/kodi-audiodecoder-vgmstream.mk
-@@ -4,10 +4,10 @@
+-sha256 b97dc804261b19df725e0a9f1af3be6903226ae616fcac170f7b9c1a67bf811a  kodi-screensaver-biogenesis-1.1.0.tar.gz
++sha256 d4d4906ed2ddf73c704ddf2239e467402841a02c6bcaf0ee9dfbb73339db1683  kodi-screensaver-biogenesis-acd5afcea3998cb186d79cc1c1883778cf44368b.tar.gz
+diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
+index fe0d284448..aa0779e2cb 100644
+--- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
++++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--KODI_AUDIODECODER_VGMSTREAM_VERSION = 1.1.0
--KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,notspiff,audiodecoder.vgmstream,v$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
-+KODI_AUDIODECODER_VGMSTREAM_VERSION = 954a097e03a474735d69a65d09f8ffc3b28fa2e9
-+KODI_AUDIODECODER_VGMSTREAM_SITE = $(call github,xbmc,audiodecoder.vgmstream,$(KODI_AUDIODECODER_VGMSTREAM_VERSION))
- KODI_AUDIODECODER_VGMSTREAM_LICENSE = GPL-2.0+
- KODI_AUDIODECODER_VGMSTREAM_LICENSE_FILES = src/VGMCodec.cpp
--KODI_AUDIODECODER_VGMSTREAM_DEPENDENCIES = kodi-platform
-+KODI_AUDIODECODER_VGMSTREAM_DEPENDENCIES = kodi
+-KODI_SCREENSAVER_BIOGENESIS_VERSION = 1.1.0
+-KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,notspiff,screensaver.biogenesis,v$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
++KODI_SCREENSAVER_BIOGENESIS_VERSION = acd5afcea3998cb186d79cc1c1883778cf44368b
++KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,xbmc,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
+ KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = src/Life.cpp
+ KODI_SCREENSAVER_BIOGENESIS_DEPENDENCIES = kodi
+diff --git a/package/kodi-screensaver-cpblobs/Config.in b/package/kodi-screensaver-cpblobs/Config.in
+index e80ea0ebb3..4e0003bddc 100644
+--- a/package/kodi-screensaver-cpblobs/Config.in
++++ b/package/kodi-screensaver-cpblobs/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_CPBLOBS
+ 	help
+ 	  CpBlobs screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.cpblobs
++	  https://github.com/xbmc/screensaver.cpblobs
+ 
+ comment "kodi-screensaver-cpblobs needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
+index bc1228c55f..88fdca45c8 100644
+--- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
++++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 1ca5e4de61251de7e420dc6ded3156960f9bb52ed7ff0243f305768147d470e3  kodi-screensaver-cpblobs-1.1.0.tar.gz
++sha256 6d7a0036a118778117d1d1ebeca96903e66f49a166848a1c884aaf3ed65fdd46  kodi-screensaver-cpblobs-e65b34fb75ac258a8563169b9c00ebf739dbc7ca.tar.gz
+diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
+index 09dc6c16fc..bb6811dab3 100644
+--- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
++++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_CPBLOBS_VERSION = 1.1.0
+-KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,notspiff,screensaver.cpblobs,v$(KODI_SCREENSAVER_CPBLOBS_VERSION))
++KODI_SCREENSAVER_CPBLOBS_VERSION = e65b34fb75ac258a8563169b9c00ebf739dbc7ca
++KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,xbmc,screensaver.cpblobs,$(KODI_SCREENSAVER_CPBLOBS_VERSION))
+ KODI_SCREENSAVER_CPBLOBS_LICENSE = GPL-2.0
+ KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE
+ KODI_SCREENSAVER_CPBLOBS_DEPENDENCIES = kodi libsoil
+diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
+index ff9d6d0244..6442b4d5bc 100644
+--- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
++++ b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 a8400c8d8be0fe0ba616ad1d0ef5fd798980a9dd4e38ef88bee9bf74a06975d5  kodi-screensaver-crystalmorph-1dc9bf3f57cc2c5345efec64d9499c3bf8f7bd6e.tar.gz
++sha256 d8ed548222f1118964104fefc8ac3056dfe6c9d2ee35cd7c8355c9ea9fcaffc5  kodi-screensaver-crystalmorph-4439c84c38abf889e19a1863e745942c0d7f8203.tar.gz
+diff --git a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
+index 83629e41ca..35642d5580 100644
+--- a/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
++++ b/package/kodi-screensaver-crystalmorph/kodi-screensaver-crystalmorph.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_CRYSTALMORPH_VERSION = 1dc9bf3f57cc2c5345efec64d9499c3bf8f7bd6e
++KODI_SCREENSAVER_CRYSTALMORPH_VERSION = 4439c84c38abf889e19a1863e745942c0d7f8203
+ KODI_SCREENSAVER_CRYSTALMORPH_SITE = $(call github,notspiff,screensaver.crystalmorph,$(KODI_SCREENSAVER_CRYSTALMORPH_VERSION))
+ KODI_SCREENSAVER_CRYSTALMORPH_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_CRYSTALMORPH_LICENSE_FILES = src/Fractal.cpp
+diff --git a/package/kodi-screensaver-greynetic/Config.in b/package/kodi-screensaver-greynetic/Config.in
+index ce636b8271..685feb8872 100644
+--- a/package/kodi-screensaver-greynetic/Config.in
++++ b/package/kodi-screensaver-greynetic/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_GREYNETIC
+ 	help
+ 	  Greynetic screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.greynetic
++	  https://github.com/xbmc/screensaver.greynetic
+ 
+ comment "kodi-screensaver-greynetic needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
+index 5ca0f66d58..893a464a03 100644
+--- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
++++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 55a77487f02d282e8431e64de3cb263489037c2374a4b9cdd7aa189093e7621f  kodi-screensaver-greynetic-1.1.0.tar.gz
++sha256 cc32ef43aea92795dfd06ddca1aceb820f4df7e5407e42f61945e17380a24a48  kodi-screensaver-greynetic-f5912e92eae977d903422f66d5a7aafc9c80592a.tar.gz
+diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
+index ef95dc7505..dfa801ba77 100644
+--- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
++++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_GREYNETIC_VERSION = 1.1.0
+-KODI_SCREENSAVER_GREYNETIC_SITE = $(call github,notspiff,screensaver.greynetic,v$(KODI_SCREENSAVER_GREYNETIC_VERSION))
++KODI_SCREENSAVER_GREYNETIC_VERSION = f5912e92eae977d903422f66d5a7aafc9c80592a
++KODI_SCREENSAVER_GREYNETIC_SITE = $(call github,xbmc,screensaver.greynetic,$(KODI_SCREENSAVER_GREYNETIC_VERSION))
+ KODI_SCREENSAVER_GREYNETIC_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_GREYNETIC_LICENSE_FILES = src/GreyNetic.cpp
+ KODI_SCREENSAVER_GREYNETIC_DEPENDENCIES = kodi
+diff --git a/package/kodi-screensaver-matrixtrails/Config.in b/package/kodi-screensaver-matrixtrails/Config.in
+index e2d3f71acf..270a51c9f4 100644
+--- a/package/kodi-screensaver-matrixtrails/Config.in
++++ b/package/kodi-screensaver-matrixtrails/Config.in
+@@ -5,7 +5,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_MATRIXTRAILS
+ 	help
+ 	  Matrix trails screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.matrixtrails
++	  https://github.com/xbmc/screensaver.matrixtrails
+ 
+ comment "kodi-screensaver-matrixtrails needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
+index 6ba6d542b0..2b5656f869 100644
+--- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
++++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 2b531f51b86536df2a5268547e3d1b7fabc8a1dc930808b46685afcc455bb8fa  kodi-screensaver-matrixtrails-1.1.0.tar.gz
++sha256 8ec43505fe1ae3981c1594bf75f0ac681c804fc0016a285b68a91204dc0d0ac2  kodi-screensaver-matrixtrails-309ccc21e8a441682736ac3486c26a14d11830b4.tar.gz
+diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+index ff64ccb17f..8591a4fdc2 100644
+--- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
++++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
+@@ -4,11 +4,10 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 1.1.0
+-KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,notspiff,screensaver.matrixtrails,v$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
++KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 309ccc21e8a441682736ac3486c26a14d11830b4
++KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
+ KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = src/matrixtrails.cpp
+-
+ KODI_SCREENSAVER_MATRIXTRAILS_DEPENDENCIES = kodi libsoil
  
  $(eval $(cmake-package))
+diff --git a/package/kodi-screensaver-pingpong/Config.in b/package/kodi-screensaver-pingpong/Config.in
+index 3971052b94..bc76fffd6e 100644
+--- a/package/kodi-screensaver-pingpong/Config.in
++++ b/package/kodi-screensaver-pingpong/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_PINGPONG
+ 	help
+ 	  Ping-pong screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.pingpong
++	  https://github.com/xbmc/screensaver.pingpong
+ 
+ comment "kodi-screensaver-pingpong needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
+index 12049cf989..1d81bca5ee 100644
+--- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
++++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 99e9cbc3815d4e3dad964b2d233dbf6acc4416121398f7fca75f3811cb04d88f  kodi-screensaver-pingpong-1.1.0.tar.gz
++sha256 20b0a1469efb6c5ddbecc51601505134f489c78abd010cc444a25c2fd3c99092  kodi-screensaver-pingpong-2390f97ce3af94f359f732acebbd45dcd4559c25.tar.gz
+diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
+index f8830f24fd..08ec0b1483 100644
+--- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
++++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_PINGPONG_VERSION = 1.1.0
+-KODI_SCREENSAVER_PINGPONG_SITE = $(call github,notspiff,screensaver.pingpong,v$(KODI_SCREENSAVER_PINGPONG_VERSION))
++KODI_SCREENSAVER_PINGPONG_VERSION = 2390f97ce3af94f359f732acebbd45dcd4559c25
++KODI_SCREENSAVER_PINGPONG_SITE = $(call github,xbmc,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
+ KODI_SCREENSAVER_PINGPONG_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = src/readme.txt
+ KODI_SCREENSAVER_PINGPONG_DEPENDENCIES = kodi
+diff --git a/package/kodi-screensaver-pyro/Config.in b/package/kodi-screensaver-pyro/Config.in
+index 982542d5a3..e2d1988ec5 100644
+--- a/package/kodi-screensaver-pyro/Config.in
++++ b/package/kodi-screensaver-pyro/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_PYRO
+ 	help
+ 	  Pyro screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.pyro
++	  https://github.com/xbmc/screensaver.pyro
+ 
+ comment "kodi-screensaver-pyro needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
+index be29ca3bef..a81691c95f 100644
+--- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
++++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 0dcaed581ffe5595878338a8c9c55bd7acc87e03d30a4d3ca4a03c3f8db66ddc  kodi-screensaver-pyro-1.1.0.tar.gz
++sha256 91d17589f5ec66e932b8a6136d12f568a31b0eea21ec6ddfdac71beeea11e78e  kodi-screensaver-pyro-e93fdf31eba91c1fff15ea8ff0f6ec4beea354be.tar.gz
+diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
+index 4d6b1f72d3..81e50c9c3b 100644
+--- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
++++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_PYRO_VERSION = 1.1.0
+-KODI_SCREENSAVER_PYRO_SITE = $(call github,notspiff,screensaver.pyro,v$(KODI_SCREENSAVER_PYRO_VERSION))
++KODI_SCREENSAVER_PYRO_VERSION = e93fdf31eba91c1fff15ea8ff0f6ec4beea354be
++KODI_SCREENSAVER_PYRO_SITE = $(call github,xbmc,screensaver.pyro,$(KODI_SCREENSAVER_PYRO_VERSION))
+ KODI_SCREENSAVER_PYRO_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_PYRO_LICENSE_FILES = src/Pyro.cpp
+ KODI_SCREENSAVER_PYRO_DEPENDENCIES = kodi
+diff --git a/package/kodi-screensaver-stars/Config.in b/package/kodi-screensaver-stars/Config.in
+index bcfb47b2cc..a2e435c0f6 100644
+--- a/package/kodi-screensaver-stars/Config.in
++++ b/package/kodi-screensaver-stars/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_KODI_SCREENSAVER_STARS
+ 	help
+ 	  Starfield screensaver for Kodi
+ 
+-	  https://github.com/notspiff/screensaver.stars
++	  https://github.com/xbmc/screensaver.stars
+ 
+ comment "kodi-screensaver-stars needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
+index 63335742b2..cb928ef8f5 100644
+--- a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
++++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 525caac94fd2bd858daf9fa7719eea4181c168e5c692bb896689625bf4437d32  kodi-screensaver-stars-1.1.0.tar.gz
++sha256 d3f6b9874a0c409c5350fbe183697ff4165d3ecb919bdaed46fe28f2325bef7b  kodi-screensaver-stars-94a04e298fa61852d5427a9199fba881ef5cd200.tar.gz
+diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
+index 19e9db7194..6d4aedd815 100644
+--- a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
++++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_STARS_VERSION = 1.1.0
+-KODI_SCREENSAVER_STARS_SITE = $(call github,notspiff,screensaver.stars,v$(KODI_SCREENSAVER_STARS_VERSION))
++KODI_SCREENSAVER_STARS_VERSION = 94a04e298fa61852d5427a9199fba881ef5cd200
++KODI_SCREENSAVER_STARS_SITE = $(call github,xbmc,screensaver.stars,$(KODI_SCREENSAVER_STARS_VERSION))
+ KODI_SCREENSAVER_STARS_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_STARS_LICENSE_FILES = src/StarField.cpp
+ KODI_SCREENSAVER_STARS_DEPENDENCIES = kodi
 -- 
 2.20.1
