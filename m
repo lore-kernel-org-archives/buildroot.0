@@ -1,77 +1,88 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Jun 2019 16:04:57 +0200
-Subject: [Buildroot] [PATCH 03/31] package/mesa3d: add optional support for
- libva
+Date: Sun, 30 Jun 2019 16:05:03 +0200
+Subject: [Buildroot] [PATCH 09/31] package/kodi-screensaver-planestate:
+ remove package
 In-Reply-To: <20190630140525.6537-1-bernd.kuhls@t-online.de>
 References: <20190630140525.6537-1-bernd.kuhls@t-online.de>
-Message-ID: <20190630140525.6537-4-bernd.kuhls@t-online.de>
+Message-ID: <20190630140525.6537-10-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Kodi 18.0-Leia will support vaapi on r600 and radeonsi.
-We need libva support in mesa3d for this. To avoid the circular
-dependency we switch from using mesa3d in libva to use libva in mesa3d.
+This package is incompatible with Kodi 18.x, configure is broken:
 
-This patch is the second step: enable libva support in mesa3d.
+CMake Error at output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/share/kodi/cmake/AddonHelpers.cmake:197 (message):
+  "@ADDON_DEPENDS@" not found in addon.xml.in.
 
-To fix a new configure error caused by this patch
-
-    configure: error: VA requires at least one of the x11 drm or wayland
-    platforms
-
-with this defconfig
-
-BR2_PACKAGE_MESA3D=y
-BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600=y
-BR2_PACKAGE_MESA3D_OPENGL_EGL=y
-BR2_PACKAGE_LIBVA=y
-
-we add drm to mesa platforms for r600.
+This package is also not part of the upstream binary repo:
+https://github.com/xbmc/repo-binary-addons
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/mesa3d/mesa3d.mk | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ package/kodi-screensaver-planestate/Config.in         | 11 -----------
+ .../kodi-screensaver-planestate.hash                  |  2 --
+ .../kodi-screensaver-planestate.mk                    | 11 -----------
+ package/kodi/Config.in                                |  1 -
+ 4 files changed, 25 deletions(-)
+ delete mode 100644 package/kodi-screensaver-planestate/Config.in
+ delete mode 100644 package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash
+ delete mode 100644 package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk
 
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 15dbc4fa3d..58f0351328 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -111,6 +111,12 @@ MESA3D_CONF_OPTS += \
- 	-Dshared-glapi=true \
- 	-Dgallium-drivers=$(subst $(space),$(comma),$(MESA3D_GALLIUM_DRIVERS-y)) \
- 	-Dgallium-extra-hud=true
-+ifeq ($(BR2_PACKAGE_LIBVA),y)
-+MESA3D_CONF_OPTS += -Dgallium-va=true
-+MESA3D_DEPENDENCIES += libva
-+else
-+MESA3D_CONF_OPTS += -Dgallium-va=false
-+endif
- endif
- 
- ifeq ($(BR2_PACKAGE_MESA3D_DRI_DRIVER),)
-@@ -151,10 +157,6 @@ endif
- #   - Building OpenGL ES without OpenGL is not supported, so always keep opengl enabled.
- MESA3D_CONF_OPTS += -Dopengl=true
- 
--# libva and mesa3d have a circular dependency
--# we do not need libva support in mesa3d, therefore disable this option
--MESA3D_CONF_OPTS += -Dgallium-va=false
+diff --git a/package/kodi-screensaver-planestate/Config.in b/package/kodi-screensaver-planestate/Config.in
+deleted file mode 100644
+index b63d70e641..0000000000
+--- a/package/kodi-screensaver-planestate/Config.in
++++ /dev/null
+@@ -1,11 +0,0 @@
+-config BR2_PACKAGE_KODI_SCREENSAVER_PLANESTATE
+-	bool "kodi-screensaver-planestate"
+-	depends on BR2_PACKAGE_HAS_LIBGL # libsoil
+-	select BR2_PACKAGE_LIBSOIL
+-	help
+-	  PlaneState screensaver for Kodi
 -
- # libGL is only provided for a full xorg stack
- ifeq ($(BR2_PACKAGE_XORG7),y)
- MESA3D_PROVIDES += libgl
-@@ -176,6 +178,8 @@ else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_VIRGL),y)
- MESA3D_PLATFORMS = drm
- else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI),y)
- MESA3D_PLATFORMS = drm
-+else ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600),y)
-+MESA3D_PLATFORMS = drm
- endif
- ifeq ($(BR2_PACKAGE_WAYLAND),y)
- MESA3D_DEPENDENCIES += wayland wayland-protocols
+-	  https://github.com/notspiff/screensaver.planestate
+-
+-comment "kodi-screensaver-planestate needs OpenGL"
+-	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash b/package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash
+deleted file mode 100644
+index de5f6cf5d3..0000000000
+--- a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed
+-sha256 6059630e56bd022a27f73fe7c94fcf6a66792e7bb10f54a7893f536c23b95b99  kodi-screensaver-planestate-5341406dd05439a1a0245ab3f6d1a8964461d0e5.tar.gz
+diff --git a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk b/package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk
+deleted file mode 100644
+index 0e90ffc5d1..0000000000
+--- a/package/kodi-screensaver-planestate/kodi-screensaver-planestate.mk
++++ /dev/null
+@@ -1,11 +0,0 @@
+-################################################################################
+-#
+-# kodi-screensaver-planestate
+-#
+-################################################################################
+-
+-KODI_SCREENSAVER_PLANESTATE_VERSION = 5341406dd05439a1a0245ab3f6d1a8964461d0e5
+-KODI_SCREENSAVER_PLANESTATE_SITE = $(call github,notspiff,screensaver.planestate,$(KODI_SCREENSAVER_PLANESTATE_VERSION))
+-KODI_SCREENSAVER_PLANESTATE_DEPENDENCIES = kodi libsoil
+-
+-$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 40c07d8d3f..edda795dd8 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -354,7 +354,6 @@ menu "Screensavers"
+ 	source "package/kodi-screensaver-greynetic/Config.in"
+ 	source "package/kodi-screensaver-matrixtrails/Config.in"
+ 	source "package/kodi-screensaver-pingpong/Config.in"
+-	source "package/kodi-screensaver-planestate/Config.in"
+ 	source "package/kodi-screensaver-pyro/Config.in"
+ 	source "package/kodi-screensaver-rsxs/Config.in"
+ 	source "package/kodi-screensaver-stars/Config.in"
 -- 
 2.20.1
