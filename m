@@ -1,58 +1,66 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Jun 2019 16:05:13 +0200
-Subject: [Buildroot] [PATCH 19/31] package/kodi-inputstream-rtmp: bump
+Date: Sun, 30 Jun 2019 16:05:12 +0200
+Subject: [Buildroot] [PATCH 18/31] package/kodi-inputstream-adaptive: bump
  version
 In-Reply-To: <20190630140525.6537-1-bernd.kuhls@t-online.de>
 References: <20190630140525.6537-1-bernd.kuhls@t-online.de>
-Message-ID: <20190630140525.6537-20-bernd.kuhls@t-online.de>
+Message-ID: <20190630140525.6537-19-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Addon repo was moved to xbmc project:
-https://github.com/xbmc/repo-binary-addons/commit/57b8ed5fb9b5f0368738260b762cc0bab1147172#diff-2ca1e23208f215d294c01b80edfff00a
+Switched dependencies from libplatform & kodi-platform to kodi after
+upstream commit:
+https://github.com/peak3d/inputstream.adaptive/commit/0d1c5503ad809a23062aebd3c01837ca5d21ea3a
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-inputstream-rtmp/Config.in                  | 2 +-
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash | 2 +-
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi-inputstream-adaptive/Config.in                 | 2 --
+ .../kodi-inputstream-adaptive.hash                          | 2 +-
+ .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 6 ++----
+ 3 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/kodi-inputstream-rtmp/Config.in b/package/kodi-inputstream-rtmp/Config.in
-index c40bff2d7e..fa83926301 100644
---- a/package/kodi-inputstream-rtmp/Config.in
-+++ b/package/kodi-inputstream-rtmp/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_RTMP
+diff --git a/package/kodi-inputstream-adaptive/Config.in b/package/kodi-inputstream-adaptive/Config.in
+index cb5127363a..f9ba20adcf 100644
+--- a/package/kodi-inputstream-adaptive/Config.in
++++ b/package/kodi-inputstream-adaptive/Config.in
+@@ -3,8 +3,6 @@ config BR2_PACKAGE_KODI_INPUTSTREAM_ADAPTIVE
+ 	# wvdecrypter/cdm/build/build_config.h
+ 	depends on BR2_aarch64 || BR2_arm || BR2_i386 || BR2_mipsel \
+ 		|| BR2_mips64el || BR2_x86_64
+-	select BR2_PACKAGE_LIBPLATFORM
+-	select BR2_PACKAGE_KODI_PLATFORM
  	help
- 	  RTMP input stream add-on for Kodi
+ 	  Kodi inputstream addon for several manifest types
  
--	  https://github.com/notspiff/inputstream.rtmp
-+	  https://github.com/xbmc/inputstream.rtmp
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-index 2d7a68ba3c..ad256ad12d 100644
---- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index 15ecf494f1..42edb5ae1d 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 75a3cc87243a7c92a0a2e3f16710a1e60d05cd8dbc8b7fd1852244fbc5da2ae8  kodi-inputstream-rtmp-1.0.4.tar.gz
-+sha256 ff332894fbaee3829ecaa2f227cb6a4f8f1229dde0d6f0ffbe3c341a1f7f24d2  kodi-inputstream-rtmp-c4080dcee94f92daa0932ac8ecf3de3412b7fbaa.tar.gz
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-index 061aedf1e7..8e819625d7 100644
---- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-@@ -4,8 +4,8 @@
+-sha256 872a6ffefb90b6201a1e01fe5a52e05877e2040737e052b2f249725b9a8a44ff  kodi-inputstream-adaptive-c51b9a9b58a645f820883e6d99982277fc58aac5.tar.gz
++sha256 c7558bc7dc1a4089208e923c23e94b8f68cf76224eeb5ab02783ff8b1635bdfa  kodi-inputstream-adaptive-6011f1e1674392665defa1be12a67a38f2d71bd9.tar.gz
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index ab810d3248..f3ab79ac24 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,12 +4,10 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_RTMP_VERSION = 1.0.4
--KODI_INPUTSTREAM_RTMP_SITE = $(call github,notspiff,inputstream.rtmp,v$(KODI_INPUTSTREAM_RTMP_VERSION))
-+KODI_INPUTSTREAM_RTMP_VERSION = c4080dcee94f92daa0932ac8ecf3de3412b7fbaa
-+KODI_INPUTSTREAM_RTMP_SITE = $(call github,xbmc,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
- KODI_INPUTSTREAM_RTMP_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_RTMP_LICENSE_FILES = src/RTMPStream.cpp
- KODI_INPUTSTREAM_RTMP_DEPENDENCIES = kodi rtmpdump
+-# This cset is on the branch 'Krypton'
+-# When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = c51b9a9b58a645f820883e6d99982277fc58aac5
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 6011f1e1674392665defa1be12a67a38f2d71bd9
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,peak3d,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE_FILES = src/main.cpp
+-KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = libplatform kodi-platform
++KODI_INPUTSTREAM_ADAPTIVE_DEPENDENCIES = kodi
+ 
+ $(eval $(cmake-package))
 -- 
 2.20.1
