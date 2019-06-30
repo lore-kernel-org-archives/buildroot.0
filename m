@@ -1,47 +1,48 @@
 From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Sun, 30 Jun 2019 19:57:39 +0200
-Subject: [Buildroot] [PATCH] package/python-libusb1: bump to version 1.7.1
-Message-ID: <1561917459-3823-1-git-send-email-pjtexier@koncepto.io>
+Date: Sun, 30 Jun 2019 19:58:45 +0200
+Subject: [Buildroot] [PATCH] package/python-scandir: bump to version 1.10.0
+Message-ID: <1561917525-7285-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-See https://pypi.org/project/libusb1/#id40
+See https://github.com/benhoyt/scandir/releases
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/python-libusb1/python-libusb1.hash | 4 ++--
- package/python-libusb1/python-libusb1.mk   | 4 ++--
+ package/python-scandir/python-scandir.hash | 4 ++--
+ package/python-scandir/python-scandir.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-libusb1/python-libusb1.hash b/package/python-libusb1/python-libusb1.hash
-index 3649872..21f4840 100644
---- a/package/python-libusb1/python-libusb1.hash
-+++ b/package/python-libusb1/python-libusb1.hash
-@@ -1,4 +1,4 @@
- # md5 from https://pypi.python.org/pypi/libusb1/json, sha256 locally computed
--md5	9c2eb6032deda59f287a443091d38cb4  libusb1-1.6.4.tar.gz
--sha256	8c930d9c1d037d9c83924c82608aa6a1adcaa01ca0e4a23ee0e8e18d7eee670d  libusb1-1.6.4.tar.gz
-+md5	cb4073182fef4cee6ab9c6666b48d1a1  libusb1-1.7.1.tar.gz
-+sha256	adf64a4f3f5c94643a1286f8153bcf4bc787c348b38934aacd7fe17fbeebc571  libusb1-1.7.1.tar.gz
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
-diff --git a/package/python-libusb1/python-libusb1.mk b/package/python-libusb1/python-libusb1.mk
-index 3329764..075f50f 100644
---- a/package/python-libusb1/python-libusb1.mk
-+++ b/package/python-libusb1/python-libusb1.mk
+diff --git a/package/python-scandir/python-scandir.hash b/package/python-scandir/python-scandir.hash
+index 5918291..5c01701 100644
+--- a/package/python-scandir/python-scandir.hash
++++ b/package/python-scandir/python-scandir.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/scandir/json
+-md5	506c4cc5f38c00b301642a9cb0433910  scandir-1.9.0.tar.gz
+-sha256	44975e209c4827fc18a3486f257154d34ec6eaec0f90fef0cca1caa482db7064  scandir-1.9.0.tar.gz
++md5	f8378f4d9f95a6a78e97ab01aa900c1d  scandir-1.10.0.tar.gz
++sha256	4d4631f6062e658e9007ab3149a9b914f3548cb38bfb021c64f39a025ce578ae  scandir-1.10.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	a5e2fbdc239744419d29407cdbc92793c4d9c1d956c174f7cb7f96fa6d058c86  LICENSE.txt
+diff --git a/package/python-scandir/python-scandir.mk b/package/python-scandir/python-scandir.mk
+index 1008fca..f205fe3 100644
+--- a/package/python-scandir/python-scandir.mk
++++ b/package/python-scandir/python-scandir.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_LIBUSB1_VERSION = 1.6.4
-+PYTHON_LIBUSB1_VERSION = 1.7.1
- PYTHON_LIBUSB1_SOURCE = libusb1-$(PYTHON_LIBUSB1_VERSION).tar.gz
--PYTHON_LIBUSB1_SITE = https://pypi.python.org/packages/ec/5d/4fdac6c53525786fe35cff035c3345452e24e2bee5627893be65d12555cb
-+PYTHON_LIBUSB1_SITE = https://files.pythonhosted.org/packages/80/bb/4ee9d760dd29499d877ee384f1d2bc6bb9923defd4c69843aef5e729972d
- PYTHON_LIBUSB1_SETUP_TYPE = setuptools
- PYTHON_LIBUSB1_LICENSE = LGPL-2.1+
- PYTHON_LIBUSB1_LICENSE_FILES = COPYING.LESSER
+-PYTHON_SCANDIR_VERSION = 1.9.0
++PYTHON_SCANDIR_VERSION = 1.10.0
+ PYTHON_SCANDIR_SOURCE = scandir-$(PYTHON_SCANDIR_VERSION).tar.gz
+-PYTHON_SCANDIR_SITE = https://files.pythonhosted.org/packages/16/2a/557af1181e6b4e30254d5a6163b18f5053791ca66e251e77ab08887e8fe3
++PYTHON_SCANDIR_SITE = https://files.pythonhosted.org/packages/df/f5/9c052db7bd54d0cbf1bc0bb6554362bba1012d03e5888950a4f5c5dadc4e
+ PYTHON_SCANDIR_LICENSE = BSD-3-Clause
+ PYTHON_SCANDIR_LICENSE_FILES = LICENSE.txt
+ PYTHON_SCANDIR_SETUP_TYPE = setuptools
 -- 
 2.7.4
