@@ -1,160 +1,191 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Jun 2019 10:09:02 +0200
-Subject: [Buildroot] [PATCH 1/3] package/bison: bump version to 3.4.1
-Message-ID: <20190630080904.4105-1-bernd.kuhls@t-online.de>
+Date: Sun, 30 Jun 2019 10:09:03 +0200
+Subject: [Buildroot] [PATCH 2/3] package/gettext-gnu: bump version to 0.20.1
+In-Reply-To: <20190630080904.4105-1-bernd.kuhls@t-online.de>
+References: <20190630080904.4105-1-bernd.kuhls@t-online.de>
+Message-ID: <20190630080904.4105-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://lists.gnu.org/archive/html/info-gnu/2019-05/msg00014.html
-
-Removed patches applied to upstream gnulib:
-http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=4af4a4a71827c0bc5e0ec67af23edef4f15cee8e
-http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=74d9d6a293d7462dea8f83e7fc5ac792e956a0ad
+- Removed patch applied upstream
+- Removed md5 hash which is not provided by upstream anymore
+- Added locally computed sha256 hash for the tarball
+- Updated license hash after upstream commit
+  http://git.savannah.gnu.org/cgit/gettext.git/commit/COPYING?id=a57ffdb2f17d040a737e84114544fcd748fa87fa
+- Added license hash for gettext-runtime/intl/COPYING.LIB
+- Added note about changing gettext-tiny as well
+- Ported changes from this version bump to gettext-tiny,
+  lock.m4 can now be found in gnulib-m4/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...adjust-to-glibc-2.28-libio.h-removal.patch | 50 -------------------
- ...e-more-paranoid-about-libio.h-change.patch | 46 -----------------
- package/bison/bison.hash                      |  2 +-
- package/bison/bison.mk                        |  2 +-
- 4 files changed, 2 insertions(+), 98 deletions(-)
- delete mode 100644 package/bison/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch
- delete mode 100644 package/bison/0002-fflush-be-more-paranoid-about-libio.h-change.patch
+ .../0002-Update-after-gnulib-changed.patch    | 86 -------------------
+ package/gettext-gnu/gettext-gnu.hash          | 11 +--
+ package/gettext-gnu/gettext-gnu.mk            |  4 +-
+ package/gettext-tiny/gettext-tiny.hash        |  7 +-
+ package/gettext-tiny/gettext-tiny.mk          |  4 +-
+ 5 files changed, 15 insertions(+), 97 deletions(-)
+ delete mode 100644 package/gettext-gnu/0002-Update-after-gnulib-changed.patch
 
-diff --git a/package/bison/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch b/package/bison/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch
+diff --git a/package/gettext-gnu/0002-Update-after-gnulib-changed.patch b/package/gettext-gnu/0002-Update-after-gnulib-changed.patch
 deleted file mode 100644
-index e9dee48af9..0000000000
---- a/package/bison/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch
+index 5f5e5f6c25..0000000000
+--- a/package/gettext-gnu/0002-Update-after-gnulib-changed.patch
 +++ /dev/null
-@@ -1,50 +0,0 @@
--From 4af4a4a71827c0bc5e0ec67af23edef4f15cee8e Mon Sep 17 00:00:00 2001
--From: Paul Eggert <eggert@cs.ucla.edu>
--Date: Mon, 5 Mar 2018 10:56:29 -0800
--Subject: [PATCH 1/1] fflush: adjust to glibc 2.28 libio.h removal
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
+@@ -1,86 +0,0 @@
+-From a6f9caf8cc7614665d1be694485dd7bc30399e0f Mon Sep 17 00:00:00 2001
+-From: Bruno Haible <bruno@clisp.org>
+-Date: Tue, 16 May 2017 00:27:57 +0200
+-Subject: [PATCH] Update after gnulib changed.
 -
--Problem reported by Daniel P. Berrang? in:
--https://lists.gnu.org/r/bug-gnulib/2018-03/msg00000.html
--* lib/fbufmode.c (fbufmode):
--* lib/fflush.c (clear_ungetc_buffer_preserving_position)
--(disable_seek_optimization, rpl_fflush):
--* lib/fpending.c (__fpending):
--* lib/fpurge.c (fpurge):
--* lib/freadable.c (freadable):
--* lib/freadahead.c (freadahead):
--* lib/freading.c (freading):
--* lib/freadptr.c (freadptr):
--* lib/freadseek.c (freadptrinc):
--* lib/fseeko.c (fseeko):
--* lib/fseterr.c (fseterr):
--* lib/fwritable.c (fwritable):
--* lib/fwriting.c (fwriting):
--Check _IO_EOF_SEEN instead of _IO_ftrylockfile.
--* lib/stdio-impl.h (_IO_IN_BACKUP) [_IO_EOF_SEEN]:
--Define if not already defined.
-----
-- lib/fseterr.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+-For buildroot we only need to update wint_t.m4 to fix autoreconf with
+-certain packages which already contain the updated version of this file.
+-Otherwise autoreconf will break:
 -
--[yann.morin.1998 at free.fr: partially backport from upstream gnulib]
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-http://git.net/ml/bug-gnulib-gnu/2017-01/msg00067.html
+-https://git.busybox.net/buildroot/commit/package/wget?id=c36f0d65ad63589f1b21833ef53d429c018b6f8a
 -
--diff --git a/lib/fseterr.c b/lib/fseterr.c
--index 82649c3ac..adb637256 100644
----- a/lib/fseterr.c
--+++ b/lib/fseterr.c
--@@ -29,7 +29,7 @@ fseterr (FILE *fp)
--   /* Most systems provide FILE as a struct and the necessary bitmask in
--      <stdio.h>, because they need it for implementing getc() and putc() as
--      fast macros.  */
---#if defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
--+#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
--   fp->_flags |= _IO_ERR_SEEN;
-- #elif defined __sferror || defined __DragonFly__ || defined __ANDROID__
--   /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin, Minix 3, Android */
---- 
--2.14.1
+-Patch backported from upstream commit:
+-http://git.savannah.gnu.org/cgit/gettext.git/commit/?id=a6f9caf8cc7614665d1be694485dd7bc30399e0f
 -
-diff --git a/package/bison/0002-fflush-be-more-paranoid-about-libio.h-change.patch b/package/bison/0002-fflush-be-more-paranoid-about-libio.h-change.patch
-deleted file mode 100644
-index 035f8282c1..0000000000
---- a/package/bison/0002-fflush-be-more-paranoid-about-libio.h-change.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 74d9d6a293d7462dea8f83e7fc5ac792e956a0ad Mon Sep 17 00:00:00 2001
--From: Paul Eggert <eggert@cs.ucla.edu>
--Date: Thu, 8 Mar 2018 16:42:45 -0800
--Subject: [PATCH 2/2] fflush: be more paranoid about libio.h change
+-Needed for coreutils bump to 8.27
 -
--Suggested by Eli Zaretskii in:
--https://lists.gnu.org/r/emacs-devel/2018-03/msg00270.html
--* lib/fbufmode.c (fbufmode):
--* lib/fflush.c (clear_ungetc_buffer_preserving_position)
--(disable_seek_optimization, rpl_fflush):
--* lib/fpending.c (__fpending):
--* lib/fpurge.c (fpurge):
--* lib/freadable.c (freadable):
--* lib/freadahead.c (freadahead):
--* lib/freading.c (freading):
--* lib/freadptr.c (freadptr):
--* lib/freadseek.c (freadptrinc):
--* lib/fseeko.c (fseeko):
--* lib/fseterr.c (fseterr):
--* lib/fwritable.c (fwritable):
--* lib/fwriting.c (fwriting):
--Look at _IO_ftrylockfile as well as at _IO_EOF_SEEN.
-----
-- lib/fseterr.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 -
--[yann.morin.1998 at free.fr: partially backport from upstream gnulib]
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
--
--diff --git a/lib/fseterr.c b/lib/fseterr.c
--index adb637256..fd9da6338 100644
----- a/lib/fseterr.c
--+++ b/lib/fseterr.c
--@@ -29,7 +29,8 @@ fseterr (FILE *fp)
--   /* Most systems provide FILE as a struct and the necessary bitmask in
--      <stdio.h>, because they need it for implementing getc() and putc() as
--      fast macros.  */
---#if defined _IO_EOF_SEEN || __GNU_LIBRARY__ == 1 /* GNU libc, BeOS, Haiku, Linux libc5 */
--+#if defined _IO_EOF_SEEN || defined _IO_ftrylockfile || __GNU_LIBRARY__ == 1
--+  /* GNU libc, BeOS, Haiku, Linux libc5 */
--   fp->_flags |= _IO_ERR_SEEN;
-- #elif defined __sferror || defined __DragonFly__ || defined __ANDROID__
--   /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin, Minix 3, Android */
---- 
--2.14.1
--
-diff --git a/package/bison/bison.hash b/package/bison/bison.hash
-index 2c3320852f..a98ed6c89a 100644
---- a/package/bison/bison.hash
-+++ b/package/bison/bison.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	a72428c7917bdf9fa93cb8181c971b6e22834125848cf1d03ce10b1bb0716fe1	bison-3.0.4.tar.xz
-+sha256	27159ac5ebf736dffd5636fd2cd625767c9e437de65baa63cb0de83570bd820d	bison-3.4.1.tar.xz
- # License files, locally calculated
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index e4fc50410b..e5d09a4514 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
-@@ -4,7 +4,7 @@
+-diff --git a/gettext-runtime/m4/wint_t.m4 b/gettext-runtime/m4/wint_t.m4
+-index 8ff2a5b5a..d30b8bcf8 100644
+---- a/gettext-runtime/m4/wint_t.m4
+-+++ b/gettext-runtime/m4/wint_t.m4
+-@@ -1,11 +1,12 @@
+--# wint_t.m4 serial 5 (gettext-0.18.2)
+--dnl Copyright (C) 2003, 2007-2016 Free Software Foundation, Inc.
+-+# wint_t.m4 serial 7
+-+dnl Copyright (C) 2003, 2007-2017 Free Software Foundation, Inc.
+- dnl This file is free software; the Free Software Foundation
+- dnl gives unlimited permission to copy and/or distribute it,
+- dnl with or without modifications, as long as this notice is preserved.
+- 
+- dnl From Bruno Haible.
+--dnl Test whether <wchar.h> has the 'wint_t' type.
+-+dnl Test whether <wchar.h> has the 'wint_t' type and whether gnulib's
+-+dnl <wchar.h> or <wctype.h> would, if present, override 'wint_t'.
+- dnl Prerequisite: AC_PROG_CC
+- 
+- AC_DEFUN([gt_TYPE_WINT_T],
+-@@ -28,5 +29,46 @@ AC_DEFUN([gt_TYPE_WINT_T],
+-        [gt_cv_c_wint_t=no])])
+-   if test $gt_cv_c_wint_t = yes; then
+-     AC_DEFINE([HAVE_WINT_T], [1], [Define if you have the 'wint_t' type.])
+-+
+-+    dnl Determine whether gnulib's <wchar.h> or <wctype.h> would, if present,
+-+    dnl override 'wint_t'.
+-+    AC_CACHE_CHECK([whether wint_t is too small],
+-+      [gl_cv_type_wint_t_too_small],
+-+      [AC_COMPILE_IFELSE(
+-+           [AC_LANG_PROGRAM([[
+-+/* Tru64 with Desktop Toolkit C has a bug: <stdio.h> must be included before
+-+   <wchar.h>.
+-+   BSD/OS 4.0.1 has a bug: <stddef.h>, <stdio.h> and <time.h> must be
+-+   included before <wchar.h>.  */
+-+#if !(defined __GLIBC__ && !defined __UCLIBC__)
+-+# include <stddef.h>
+-+# include <stdio.h>
+-+# include <time.h>
+-+#endif
+-+#include <wchar.h>
+-+              int verify[sizeof (wint_t) < sizeof (int) ? -1 : 1];
+-+              ]])],
+-+           [gl_cv_type_wint_t_too_small=no],
+-+           [gl_cv_type_wint_t_too_small=yes])])
+-+    if test $gl_cv_type_wint_t_too_small = yes; then
+-+      GNULIB_OVERRIDES_WINT_T=1
+-+    else
+-+      GNULIB_OVERRIDES_WINT_T=0
+-+    fi
+-+  else
+-+    GNULIB_OVERRIDES_WINT_T=0
+-+  fi
+-+  AC_SUBST([GNULIB_OVERRIDES_WINT_T])
+-+])
+-+
+-+dnl Prerequisites of the 'wint_t' override.
+-+AC_DEFUN([gl_TYPE_WINT_T_PREREQ],
+-+[
+-+  AC_CHECK_HEADERS_ONCE([crtdefs.h])
+-+  if test $ac_cv_header_crtdefs_h = yes; then
+-+    HAVE_CRTDEFS_H=1
+-+  else
+-+    HAVE_CRTDEFS_H=0
+-   fi
+-+  AC_SUBST([HAVE_CRTDEFS_H])
+- ])
+diff --git a/package/gettext-gnu/gettext-gnu.hash b/package/gettext-gnu/gettext-gnu.hash
+index a2ab298760..1427a7788d 100644
+--- a/package/gettext-gnu/gettext-gnu.hash
++++ b/package/gettext-gnu/gettext-gnu.hash
+@@ -1,5 +1,6 @@
+-# From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
+-md5	df3f5690eaa30fd228537b00cb7b7590	gettext-0.19.8.1.tar.xz
+-sha1	e0fe90ede22f7f16bbde7bdea791a835f2773fc9	gettext-0.19.8.1.tar.xz
+-# License files, locally calculated
+-sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	COPYING
++# From https://lists.gnu.org/archive/html/info-gnu/2019-05/msg00011.html
++sha1	62f4a6a2fd5f80bfd0e66c497a04094fa3e07b90	gettext-0.20.1.tar.xz
++# Locally computed
++sha256	53f02fbbec9e798b0faaf7c73272f83608e835c6288dd58be6c9bb54624a3800	gettext-0.20.1.tar.xz
++sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	COPYING
++sha256	3fe5361f24b7c49ba12911c08f5a33f9cb18871d95d9fb881f5b8a4793e04288	gettext-runtime/intl/COPYING.LIB
+diff --git a/package/gettext-gnu/gettext-gnu.mk b/package/gettext-gnu/gettext-gnu.mk
+index 28662e0dec..1d8266cf5f 100644
+--- a/package/gettext-gnu/gettext-gnu.mk
++++ b/package/gettext-gnu/gettext-gnu.mk
+@@ -4,7 +4,9 @@
  #
  ################################################################################
  
--BISON_VERSION = 3.0.4
-+BISON_VERSION = 3.4.1
- BISON_SOURCE = bison-$(BISON_VERSION).tar.xz
- BISON_SITE = $(BR2_GNU_MIRROR)/bison
- BISON_LICENSE = GPL-3.0+
+-GETTEXT_GNU_VERSION = 0.19.8.1
++# When updating the version, please also update gettext-tiny.hash and
++# GETTEXT_TINY_ARCHIVE_VERSION
++GETTEXT_GNU_VERSION = 0.20.1
+ GETTEXT_GNU_SITE = $(BR2_GNU_MIRROR)/gettext
+ GETTEXT_GNU_SOURCE = gettext-$(GETTEXT_GNU_VERSION).tar.xz
+ GETTEXT_GNU_INSTALL_STAGING = YES
+diff --git a/package/gettext-tiny/gettext-tiny.hash b/package/gettext-tiny/gettext-tiny.hash
+index 7d13054144..21ecfd5d8b 100644
+--- a/package/gettext-tiny/gettext-tiny.hash
++++ b/package/gettext-tiny/gettext-tiny.hash
+@@ -2,6 +2,7 @@
+ sha256 00b03b08d909021aa5580fb45b6cf0ec45e9084ef94c26f034f03a64a69942bc  gettext-tiny-c6dcdcdef801127549d3906d153c061880d25a73.tar.gz
+ sha256 b57aa4fdc1c614c28d41c1e2d5c4090935964c5f86291ba7d1c99ffd1d698b34  LICENSE
+ sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  extra/COPYING
+-# From http://lists.gnu.org/archive/html/bug-gettext/2016-06/msg00008.html
+-md5  df3f5690eaa30fd228537b00cb7b7590         gettext-0.19.8.1.tar.xz
+-sha1 e0fe90ede22f7f16bbde7bdea791a835f2773fc9 gettext-0.19.8.1.tar.xz
++# From https://lists.gnu.org/archive/html/info-gnu/2019-05/msg00011.html
++sha1 62f4a6a2fd5f80bfd0e66c497a04094fa3e07b90  gettext-0.20.1.tar.xz
++# Locally computed
++sha256 53f02fbbec9e798b0faaf7c73272f83608e835c6288dd58be6c9bb54624a3800  gettext-0.20.1.tar.xz
+diff --git a/package/gettext-tiny/gettext-tiny.mk b/package/gettext-tiny/gettext-tiny.mk
+index 7db478d845..f4a6cad016 100644
+--- a/package/gettext-tiny/gettext-tiny.mk
++++ b/package/gettext-tiny/gettext-tiny.mk
+@@ -14,12 +14,12 @@ HOST_GETTEXT_TINY_LICENSE_FILES = LICENSE extra/COPYING
+ GETTEXT_TINY_PROVIDES = gettext
+ 
+ # needed for gettextize
+-GETTEXT_TINY_ARCHIVE_VERSION = 0.19.8
++GETTEXT_TINY_ARCHIVE_VERSION = 0.20.1
+ 
+ GETTEXT_TINY_EXTRA_GETTEXT_FILES = \
+ 	gettext-tools/misc/gettextize.in \
+ 	gettext-tools/po/Makevars.template \
+-	gettext-runtime/m4/lock.m4 \
++	gettext-runtime/gnulib-m4/lock.m4 \
+ 	gettext-runtime/po/boldquot.sed \
+ 	gettext-runtime/po/en at boldquot.header \
+ 	gettext-runtime/po/en@quot.header \
 -- 
 2.20.1
