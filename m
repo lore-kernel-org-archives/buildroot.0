@@ -1,125 +1,71 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Jun 2019 16:05:09 +0200
-Subject: [Buildroot] [PATCH 15/31] package/kodi: add optional support for gbm
+Date: Sun, 30 Jun 2019 16:05:21 +0200
+Subject: [Buildroot] [PATCH 27/31] package/kodi-screensaver-asteroids: bump
+ version
 In-Reply-To: <20190630140525.6537-1-bernd.kuhls@t-online.de>
 References: <20190630140525.6537-1-bernd.kuhls@t-online.de>
-Message-ID: <20190630140525.6537-16-bernd.kuhls@t-online.de>
+Message-ID: <20190630140525.6537-28-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see upstream PR 11955.
+Package was moved to xbmc repo:
+https://github.com/xbmc/repo-binary-addons/commit/57b8ed5fb9b5f0368738260b762cc0bab1147172#diff-4fa94ef50ebd8df4af5fd4eed5e693b6
+
+Added dependency to glm:
+https://github.com/xbmc/screensaver.asteroids/commit/360a02fc20925fa17179f3298dd4515b4354e266
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in | 45 +++++++++++++++++++++++++++++++++++++++++-
- package/kodi/kodi.mk   | 14 +++++++++++++
- 2 files changed, 58 insertions(+), 1 deletion(-)
+ package/kodi-screensaver-asteroids/Config.in                | 3 ++-
+ .../kodi-screensaver-asteroids.hash                         | 2 +-
+ .../kodi-screensaver-asteroids.mk                           | 6 +++---
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 4ae91e0389..955b09f971 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -25,6 +25,25 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_AML
- 	depends on BR2_PACKAGE_ODROID_MALI
- 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
- 
-+config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GL
-+	bool
-+	default y
-+	depends on BR2_ENABLE_LOCALE # libinput
-+	depends on BR2_PACKAGE_HAS_LIBGL
-+	depends on BR2_PACKAGE_HAS_LIBEGL
-+	depends on BR2_PACKAGE_MESA3D_GBM
-+	depends on BR2_PACKAGE_HAS_UDEV # libinput
-+	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-+
-+config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GLES
-+	bool
-+	default y
-+	depends on BR2_ENABLE_LOCALE # libinput
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_PACKAGE_MESA3D_GBM
-+	depends on BR2_PACKAGE_HAS_UDEV # libinput
-+	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-+
- config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_RBPI
- 	bool
- 	default y
-@@ -224,6 +243,26 @@ config BR2_PACKAGE_KODI_PLATFORM_AML
- 	bool "AMLogic"
- 	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_AML
- 
-+config BR2_PACKAGE_KODI_PLATFORM_GBM_GL
-+	bool "gbm/OpenGL"
-+	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GL
-+	select BR2_PACKAGE_LIBGLU
-+	select BR2_PACKAGE_LIBINPUT
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+
-+config BR2_PACKAGE_KODI_PLATFORM_GBM_GLES
-+	bool "gbm/GLES"
-+	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GLES
-+	select BR2_PACKAGE_LIBGLU
-+	select BR2_PACKAGE_LIBINPUT
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+
-+comment "gbm support needs OpenGL or GLES support"
-+	depends on \
-+		BR2_PACKAGE_MESA3D_GBM && \
-+		!BR2_PACKAGE_HAS_LIBEGL && \
-+		!BR2_PACKAGE_HAS_LIBGLES
-+
- config BR2_PACKAGE_KODI_PLATFORM_RBPI
- 	bool "Raspberry Pi"
- 	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_RBPI
-@@ -293,6 +332,8 @@ config BR2_PACKAGE_KODI_LIBUSB
- config BR2_PACKAGE_KODI_LIBVA
- 	bool "va"
- 	depends on \
-+		BR2_PACKAGE_KODI_PLATFORM_GBM_GL || \
-+		BR2_PACKAGE_KODI_PLATFORM_GBM_GLES || \
- 		BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL || \
- 		BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES || \
- 		BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
-@@ -300,8 +341,10 @@ config BR2_PACKAGE_KODI_LIBVA
+diff --git a/package/kodi-screensaver-asteroids/Config.in b/package/kodi-screensaver-asteroids/Config.in
+index ccc2aba6aa..3d66c3dcc3 100644
+--- a/package/kodi-screensaver-asteroids/Config.in
++++ b/package/kodi-screensaver-asteroids/Config.in
+@@ -1,10 +1,11 @@
+ config BR2_PACKAGE_KODI_SCREENSAVER_ASTEROIDS
+ 	bool "kodi-screensaver-asteroids"
+ 	depends on BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_GLM
  	help
- 	  Enable libva support.
+ 	  Asteroids screensaver for Kodi
  
--comment "libva support needs platform 'Wayland' or 'X11/OpenGL'"
-+comment "libva support needs platform 'gbm', 'Wayland' or 'X11/OpenGL'"
- 	depends on \
-+		!BR2_PACKAGE_KODI_PLATFORM_GBM_GL && \
-+		!BR2_PACKAGE_KODI_PLATFORM_GBM_GLES && \
- 		!BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL && \
- 		!BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES && \
- 		!BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index 1a825b0029..db5618d519 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -180,6 +180,20 @@ else
- KODI_CONF_OPTS += -DENABLE_AML=OFF
- endif
+-	  https://github.com/notspiff/screensaver.asteroids
++	  https://github.com/xbmc/screensaver.asteroids
  
-+ifeq ($(BR2_PACKAGE_KODI_PLATFORM_GBM_GL),y)
-+KODI_CONF_OPTS += \
-+	-DCORE_PLATFORM_NAME=gbm \
-+	-DGBM_RENDER_SYSTEM=gl
-+KODI_DEPENDENCIES += libegl libglu libinput libxkbcommon mesa3d
-+endif
-+
-+ifeq ($(BR2_PACKAGE_KODI_PLATFORM_GBM_GLES),y)
-+KODI_CONF_OPTS += \
-+	-DCORE_PLATFORM_NAME=gbm \
-+	-DGBM_RENDER_SYSTEM=gles
-+KODI_DEPENDENCIES += libgles libinput libxkbcommon mesa3d
-+endif
-+
- ifeq ($(BR2_PACKAGE_KODI_PLATFORM_RBPI),y)
- KODI_CONF_OPTS += -DCORE_PLATFORM_NAME=rbpi
- KODI_DEPENDENCIES += rpi-userland
+ comment "kodi-screensaver-asteroids needs OpenGL"
+ 	depends on !BR2_PACKAGE_HAS_LIBGL
+diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+index d62032c076..f4324ab16d 100644
+--- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
++++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 2e072e6aad12f707dec1e70b7df26c590bb41fed8880dcfdbe6c99949b7e287a  kodi-screensaver-asteroids-1.1.2.tar.gz
++sha256 9a9dee123861c8a6cf3271106ca41fa77da0f7f1f72532809f655dd26eb58929  kodi-screensaver-asteroids-6679ecf21e9220cfa7688494ec31cd1b09405588.tar.gz
+diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+index 378da74be1..57e2443f6d 100644
+--- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
++++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-KODI_SCREENSAVER_ASTEROIDS_VERSION = 1.1.2
+-KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,notspiff,screensaver.asteroids,v$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
++KODI_SCREENSAVER_ASTEROIDS_VERSION = 6679ecf21e9220cfa7688494ec31cd1b09405588
++KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,xbmc,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
+ KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = src/main.cpp
+-KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = kodi
++KODI_SCREENSAVER_ASTEROIDS_DEPENDENCIES = glm kodi
+ 
+ $(eval $(cmake-package))
 -- 
 2.20.1
