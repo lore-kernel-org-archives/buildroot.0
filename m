@@ -1,66 +1,125 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Jun 2019 16:05:19 +0200
-Subject: [Buildroot] [PATCH 25/31] package/kodi-pvr-vuplus: bump version
+Date: Sun, 30 Jun 2019 16:05:09 +0200
+Subject: [Buildroot] [PATCH 15/31] package/kodi: add optional support for gbm
 In-Reply-To: <20190630140525.6537-1-bernd.kuhls@t-online.de>
 References: <20190630140525.6537-1-bernd.kuhls@t-online.de>
-Message-ID: <20190630140525.6537-26-bernd.kuhls@t-online.de>
+Message-ID: <20190630140525.6537-16-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added dependency to json-for-modern-cpp after upstream commit:
-https://github.com/kodi-pvr/pvr.vuplus/commit/07480b96fc674317ccbb792b03b811edec143e0c
-
-Also added missing dependency to tinyxml.
+For details see upstream PR 11955.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-vuplus/Config.in            | 2 ++
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 2 +-
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 6 ++----
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/kodi/Config.in | 45 +++++++++++++++++++++++++++++++++++++++++-
+ package/kodi/kodi.mk   | 14 +++++++++++++
+ 2 files changed, 58 insertions(+), 1 deletion(-)
 
-diff --git a/package/kodi-pvr-vuplus/Config.in b/package/kodi-pvr-vuplus/Config.in
-index a56c4ede93..96320f6fcb 100644
---- a/package/kodi-pvr-vuplus/Config.in
-+++ b/package/kodi-pvr-vuplus/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_KODI_PVR_VUPLUS
- 	bool "kodi-pvr-vuplus"
-+	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
- 	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_TINYXML
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index 4ae91e0389..955b09f971 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -25,6 +25,25 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_AML
+ 	depends on BR2_PACKAGE_ODROID_MALI
+ 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
+ 
++config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GL
++	bool
++	default y
++	depends on BR2_ENABLE_LOCALE # libinput
++	depends on BR2_PACKAGE_HAS_LIBGL
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	depends on BR2_PACKAGE_MESA3D_GBM
++	depends on BR2_PACKAGE_HAS_UDEV # libinput
++	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
++
++config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GLES
++	bool
++	default y
++	depends on BR2_ENABLE_LOCALE # libinput
++	depends on BR2_PACKAGE_HAS_LIBGLES
++	depends on BR2_PACKAGE_MESA3D_GBM
++	depends on BR2_PACKAGE_HAS_UDEV # libinput
++	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
++
+ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_RBPI
+ 	bool
+ 	default y
+@@ -224,6 +243,26 @@ config BR2_PACKAGE_KODI_PLATFORM_AML
+ 	bool "AMLogic"
+ 	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_AML
+ 
++config BR2_PACKAGE_KODI_PLATFORM_GBM_GL
++	bool "gbm/OpenGL"
++	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GL
++	select BR2_PACKAGE_LIBGLU
++	select BR2_PACKAGE_LIBINPUT
++	select BR2_PACKAGE_LIBXKBCOMMON
++
++config BR2_PACKAGE_KODI_PLATFORM_GBM_GLES
++	bool "gbm/GLES"
++	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_GBM_GLES
++	select BR2_PACKAGE_LIBGLU
++	select BR2_PACKAGE_LIBINPUT
++	select BR2_PACKAGE_LIBXKBCOMMON
++
++comment "gbm support needs OpenGL or GLES support"
++	depends on \
++		BR2_PACKAGE_MESA3D_GBM && \
++		!BR2_PACKAGE_HAS_LIBEGL && \
++		!BR2_PACKAGE_HAS_LIBGLES
++
+ config BR2_PACKAGE_KODI_PLATFORM_RBPI
+ 	bool "Raspberry Pi"
+ 	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_RBPI
+@@ -293,6 +332,8 @@ config BR2_PACKAGE_KODI_LIBUSB
+ config BR2_PACKAGE_KODI_LIBVA
+ 	bool "va"
+ 	depends on \
++		BR2_PACKAGE_KODI_PLATFORM_GBM_GL || \
++		BR2_PACKAGE_KODI_PLATFORM_GBM_GLES || \
+ 		BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL || \
+ 		BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES || \
+ 		BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
+@@ -300,8 +341,10 @@ config BR2_PACKAGE_KODI_LIBVA
  	help
- 	  VuPlus PVR client addon for Kodi
+ 	  Enable libva support.
  
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-index f4f6756931..f8b5e3d51d 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-@@ -1,2 +1,2 @@
- # Locally computed
--sha256 a8c7345e4e2e415e29c21f14460b257dfbe08ed5ecf1cc2dc6bc393a10f95cf3  kodi-pvr-vuplus-2.4.12-Krypton.tar.gz
-+sha256 35e4deda6ea7df6f0d92118fc5c760f374f85ac571bf52aceb2cb8d1956466dd  kodi-pvr-vuplus-e9792573414a7fab414f97de98dc594b7aaa7c54.tar.gz
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-index 581d884caa..0dcc05810b 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-@@ -4,12 +4,10 @@
- #
- ################################################################################
+-comment "libva support needs platform 'Wayland' or 'X11/OpenGL'"
++comment "libva support needs platform 'gbm', 'Wayland' or 'X11/OpenGL'"
+ 	depends on \
++		!BR2_PACKAGE_KODI_PLATFORM_GBM_GL && \
++		!BR2_PACKAGE_KODI_PLATFORM_GBM_GLES && \
+ 		!BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL && \
+ 		!BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES && \
+ 		!BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index 1a825b0029..db5618d519 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -180,6 +180,20 @@ else
+ KODI_CONF_OPTS += -DENABLE_AML=OFF
+ endif
  
--# This cset is on the branch 'Krypton'
--# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_VUPLUS_VERSION = 2.4.12-Krypton
-+KODI_PVR_VUPLUS_VERSION = e9792573414a7fab414f97de98dc594b7aaa7c54
- KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
- KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
- KODI_PVR_VUPLUS_LICENSE_FILES = src/client.h
--KODI_PVR_VUPLUS_DEPENDENCIES = kodi-platform
-+KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi-platform tinyxml
- 
- $(eval $(cmake-package))
++ifeq ($(BR2_PACKAGE_KODI_PLATFORM_GBM_GL),y)
++KODI_CONF_OPTS += \
++	-DCORE_PLATFORM_NAME=gbm \
++	-DGBM_RENDER_SYSTEM=gl
++KODI_DEPENDENCIES += libegl libglu libinput libxkbcommon mesa3d
++endif
++
++ifeq ($(BR2_PACKAGE_KODI_PLATFORM_GBM_GLES),y)
++KODI_CONF_OPTS += \
++	-DCORE_PLATFORM_NAME=gbm \
++	-DGBM_RENDER_SYSTEM=gles
++KODI_DEPENDENCIES += libgles libinput libxkbcommon mesa3d
++endif
++
+ ifeq ($(BR2_PACKAGE_KODI_PLATFORM_RBPI),y)
+ KODI_CONF_OPTS += -DCORE_PLATFORM_NAME=rbpi
+ KODI_DEPENDENCIES += rpi-userland
 -- 
 2.20.1
