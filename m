@@ -1,107 +1,68 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 30 Jun 2019 15:09:11 +0200
-Subject: [Buildroot] [git commit] package/eudev: remove patches
-Message-ID: <20190630130943.A8B4E88701@busybox.osuosl.org>
+Date: Sun, 30 Jun 2019 15:12:05 +0200
+Subject: [Buildroot] [git commit] package/rtmpdump: Add patch to include
+ limits.h
+Message-ID: <20190630131616.F040583D6E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5b338d39cd3a18c3f29a2a6a8e47aa752a2b3df
+commit: https://git.buildroot.net/buildroot/commit/?id=d68db2af5c2288d2900fcacf6d0f86c632d53a4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Both were committed upstream:
-https://github.com/gentoo/eudev/commit/2cb6b734de901dda6e631de5dffbd4cb8e165cbb
-https://github.com/gentoo/eudev/commit/906654a0ab73dd488b101a2047c3c6a1205f7548
-
-Reported-by: Peter Korsgaard <peter@korsgaard.com>
+Fixes:
+http://autobuild.buildroot.net/results/8fd/8fd65149bdbbaf5dcb8e6a9d543f4224875bb156/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../eudev/0002-missing.h-add-KEY_ALS_TOGGLE.patch  | 34 ---------------------
- package/eudev/0003-missing.h-add-BTN_DPAD_UP.patch | 35 ----------------------
- 2 files changed, 69 deletions(-)
+ package/rtmpdump/0001-include-limits.h.patch | 39 ++++++++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/package/eudev/0002-missing.h-add-KEY_ALS_TOGGLE.patch b/package/eudev/0002-missing.h-add-KEY_ALS_TOGGLE.patch
-deleted file mode 100644
-index 97dac3fe81..0000000000
---- a/package/eudev/0002-missing.h-add-KEY_ALS_TOGGLE.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From cad87bd3d8aa9046af0872e8c22f4a3c8fafdc78 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 4 Dec 2018 22:38:37 +0100
--Subject: [PATCH] missing.h: add KEY_ALS_TOGGLE
--
--KEY_ALS_TOGGLE has been added in kernel 4.8 with
--https://github.com/torvalds/linux/commit/9ee27487127461b5cf71670b708ed5b2b8da568c
--
--So add it to missing.h to fix build with kernel older than 4.8
--
--Fixes:
-- - http://autobuild.buildroot.org/results/0c0aff02df91cdb869efa01e397f7ccc0d9f69af
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream: https://github.com/gentoo/eudev/commit/2cb6b734de901dda6e631de5dffbd4cb8e165cbb]
-----
-- src/shared/missing.h | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/src/shared/missing.h b/src/shared/missing.h
--index bebbb42be..b5b2e1194 100644
----- a/src/shared/missing.h
--+++ b/src/shared/missing.h
--@@ -179,3 +179,7 @@ static inline int name_to_handle_at(int fd, const char *name, struct file_handle
-- #ifndef INPUT_PROP_MAX
-- #define INPUT_PROP_MAX 0x1f
-- #endif
--+
--+#ifndef KEY_ALS_TOGGLE
--+#define KEY_ALS_TOGGLE 0x7a
--+#endif
---- 
--2.14.1
--
-diff --git a/package/eudev/0003-missing.h-add-BTN_DPAD_UP.patch b/package/eudev/0003-missing.h-add-BTN_DPAD_UP.patch
-deleted file mode 100644
-index 08e5fd2b71..0000000000
---- a/package/eudev/0003-missing.h-add-BTN_DPAD_UP.patch
-+++ /dev/null
-@@ -1,35 +0,0 @@
--From 981b8b997e119a117fada2731eeeb0475c511c8a Mon Sep 17 00:00:00 2001
--From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
--Date: Tue, 11 Dec 2018 07:56:20 +0100
--Subject: [PATCH] missing.h: add BTN_DPAD_UP
--
--As explained in issue 6267 of systemd [1], Linux < 3.11 does not
--provide definitions for BTN_DPAD_{UP,RIGHT}, which were introduced in
--[2].
--
--This patch fixes this issue.
--
--[1] https://github.com/systemd/systemd/pull/6267
--[2] https://github.com/torvalds/linux/commit/9ee27487127461b5cf71670b708ed5b2b8da568c
--
--Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-----
-- src/shared/missing.h | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/src/shared/missing.h b/src/shared/missing.h
--index b5b2e1194..3a83c91a6 100644
----- a/src/shared/missing.h
--+++ b/src/shared/missing.h
--@@ -183,3 +183,8 @@ static inline int name_to_handle_at(int fd, const char *name, struct file_handle
-- #ifndef KEY_ALS_TOGGLE
-- #define KEY_ALS_TOGGLE 0x7a
-- #endif
--+
--+#ifndef BTN_DPAD_UP
--+#define BTN_DPAD_UP 0x220
--+#define BTN_DPAD_RIGHT 0x223
--+#endif
---- 
--2.17.2
--
+diff --git a/package/rtmpdump/0001-include-limits.h.patch b/package/rtmpdump/0001-include-limits.h.patch
+new file mode 100644
+index 0000000000..172a9630f7
+--- /dev/null
++++ b/package/rtmpdump/0001-include-limits.h.patch
+@@ -0,0 +1,39 @@
++From b9d010d2c07e07eeffa510f14ff833ecb10dc0c8 Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Mon, 24 Jun 2019 21:11:33 +0200
++Subject: [PATCH] include <limits.h>
++
++Needed after
++https://repo.or.cz/rtmpdump.git/commitdiff/c5f04a58fc2aeea6296ca7c44ee4734c18401aa3
++
++to fix
++
++rtmp.c: In function 'HTTP_read':
++rtmp.c:4459:26: error: 'INT_MAX' undeclared (first use in this function); did you mean 'INT8_MAX'?
++
++reported by buildroot autobuilders:
++http://autobuild.buildroot.net/?reason=rtmpdump-c5f04a58fc2aeea6296ca7c44ee4734c18401aa3
++
++Patch sent upstream by e-mail to author of
++https://repo.or.cz/rtmpdump.git/patch/c5f04a58fc2aeea6296ca7c44ee4734c18401aa3
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ librtmp/rtmp.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/librtmp/rtmp.h b/librtmp/rtmp.h
++index 6d7dd89..48d4fc3 100644
++--- a/librtmp/rtmp.h
+++++ b/librtmp/rtmp.h
++@@ -32,6 +32,7 @@
++ #include <errno.h>
++ #include <stdint.h>
++ #include <stddef.h>
+++#include <limits.h>
++ 
++ #include "amf.h"
++ 
++-- 
++2.20.1
++
