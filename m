@@ -1,68 +1,62 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Jun 2019 16:05:14 +0200
-Subject: [Buildroot] [PATCH 20/31] package/kodi-peripheral-joystick: bump
- version
+Date: Sun, 30 Jun 2019 16:05:16 +0200
+Subject: [Buildroot] [PATCH 22/31] package/kodi-pvr-iptvsimple: bump version
 In-Reply-To: <20190630140525.6537-1-bernd.kuhls@t-online.de>
 References: <20190630140525.6537-1-bernd.kuhls@t-online.de>
-Message-ID: <20190630140525.6537-21-bernd.kuhls@t-online.de>
+Message-ID: <20190630140525.6537-23-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed dependency to kodi-platform
-https://github.com/xbmc/peripheral.joystick/commit/a9489ea0f08bbf04affb798857439540478ff90d
-
-Added dependency to tinyxml
-https://github.com/xbmc/peripheral.joystick/commit/471aa27d6c8ff9c9d0ac50c1b32f1504840194b5
+Rapidxml was added as dependency:
+https://github.com/kodi-pvr/pvr.iptvsimple/commit/d27b3ed1d379d2f865e95f08bdf2dbf086f8c0ad
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-peripheral-joystick/Config.in                | 2 +-
- .../kodi-peripheral-joystick.hash                         | 2 +-
- .../kodi-peripheral-joystick/kodi-peripheral-joystick.mk  | 8 +++-----
- 3 files changed, 5 insertions(+), 7 deletions(-)
+ package/kodi-pvr-iptvsimple/Config.in                | 1 +
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 6 ++----
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/kodi-peripheral-joystick/Config.in b/package/kodi-peripheral-joystick/Config.in
-index f257710a88..d93e71b607 100644
---- a/package/kodi-peripheral-joystick/Config.in
-+++ b/package/kodi-peripheral-joystick/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_KODI_PERIPHERAL_JOYSTICK
- 	bool "kodi-peripheral-joystick"
- 	depends on BR2_PACKAGE_HAS_UDEV
--	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_TINYXML
+diff --git a/package/kodi-pvr-iptvsimple/Config.in b/package/kodi-pvr-iptvsimple/Config.in
+index b59674979f..94fc1f0602 100644
+--- a/package/kodi-pvr-iptvsimple/Config.in
++++ b/package/kodi-pvr-iptvsimple/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_KODI_PVR_IPTVSIMPLE
+ 	bool "kodi-pvr-iptvsimple"
+ 	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_RAPIDXML
  	help
- 	  Kodi joystick support (drivers and button maps)
+ 	  IPTV Live TV and Radio PVR client addon for Kodi
  
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-index 5a7348d414..fc3e19d21a 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 0b0406feb8..4cdc278526 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 9a183e1f92ff2c68816bfa0056c65585a3e1129d924326359d7a5dfbcba6c56a  kodi-peripheral-joystick-1.3.4.tar.gz
-+sha256 8034753ae766851d149143d1f583b724f9eece8cbc34d0c42e834548a59694be  kodi-peripheral-joystick-370e2acfedba31b3cab45f1e59ddbbb2979f4e82.tar.gz
-diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-index 13c33fc0af..09804f42e7 100644
---- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
-+++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+-sha256 329bd71e5c786d7b037bf5fd103ee4abff892afc6e5186a5d0a797194a8c4c7c  kodi-pvr-iptvsimple-2.4.14-Krypton.tar.gz
++sha256 5294ff0cf97cf140adc72aba0ea55446d1b59a373aa6f76f2c56b6db6785372d  kodi-pvr-iptvsimple-6c53796acdde3f91fefd7576a2d3da838769fbd0.tar.gz
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index 0df509ea6a..a9fbe07dde 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
 @@ -4,12 +4,10 @@
  #
  ################################################################################
  
 -# This cset is on the branch 'Krypton'
 -# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PERIPHERAL_JOYSTICK_VERSION = 1.3.4
--KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,v$(KODI_PERIPHERAL_JOYSTICK_VERSION))
-+KODI_PERIPHERAL_JOYSTICK_VERSION = 370e2acfedba31b3cab45f1e59ddbbb2979f4e82
-+KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
- KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
- KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = src/addon.cpp
--KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi-platform udev
-+KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi tinyxml udev
+-KODI_PVR_IPTVSIMPLE_VERSION = 2.4.14-Krypton
++KODI_PVR_IPTVSIMPLE_VERSION = 6c53796acdde3f91fefd7576a2d3da838769fbd0
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = src/client.h
+-KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi-platform
++KODI_PVR_IPTVSIMPLE_DEPENDENCIES = kodi-platform rapidxml
  
  $(eval $(cmake-package))
 -- 
