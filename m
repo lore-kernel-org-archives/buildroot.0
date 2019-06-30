@@ -1,123 +1,69 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 30 Jun 2019 16:05:07 +0200
-Subject: [Buildroot] [PATCH 13/31] package/kodi: add optional support for
- wayland
+Date: Sun, 30 Jun 2019 16:05:14 +0200
+Subject: [Buildroot] [PATCH 20/31] package/kodi-peripheral-joystick: bump
+ version
 In-Reply-To: <20190630140525.6537-1-bernd.kuhls@t-online.de>
 References: <20190630140525.6537-1-bernd.kuhls@t-online.de>
-Message-ID: <20190630140525.6537-14-bernd.kuhls@t-online.de>
+Message-ID: <20190630140525.6537-21-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see upstream PR 12664.
+Removed dependency to kodi-platform
+https://github.com/xbmc/peripheral.joystick/commit/a9489ea0f08bbf04affb798857439540478ff90d
+
+Added dependency to tinyxml
+https://github.com/xbmc/peripheral.joystick/commit/471aa27d6c8ff9c9d0ac50c1b32f1504840194b5
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi/Config.in | 44 +++++++++++++++++++++++++++++++++++++++---
- package/kodi/kodi.mk   | 16 +++++++++++++++
- 2 files changed, 57 insertions(+), 3 deletions(-)
+ package/kodi-peripheral-joystick/Config.in                | 2 +-
+ .../kodi-peripheral-joystick.hash                         | 2 +-
+ .../kodi-peripheral-joystick/kodi-peripheral-joystick.mk  | 8 +++-----
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 228d298e7d..4ae91e0389 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -34,6 +34,27 @@ config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_RBPI
- 	depends on BR2_PACKAGE_RPI_USERLAND
- 	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
- 
-+config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GL
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # waylandpp
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_PACKAGE_WAYLAND # waylandpp
-+	select BR2_PACKAGE_WAYLANDPP
-+	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-+
-+config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GLES
-+	bool
-+	default y
-+	depends on BR2_PACKAGE_HAS_LIBGLES
-+	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND # waylandpp
-+	depends on BR2_HOST_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # waylandpp
-+	depends on BR2_PACKAGE_WAYLAND # waylandpp
-+	select BR2_PACKAGE_WAYLANDPP
-+	select BR2_PACKAGE_KODI_PLATFORM_SUPPORTS
-+
- config BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11_OPENGL
- 	bool
- 	default y
-@@ -207,6 +228,17 @@ config BR2_PACKAGE_KODI_PLATFORM_RBPI
- 	bool "Raspberry Pi"
- 	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_RBPI
- 
-+config BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL
-+	bool "Wayland/OpenGL"
-+	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GL
-+	select BR2_PACKAGE_LIBGLU
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+
-+config BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES
-+	bool "Wayland/GLES"
-+	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_WAYLAND_GLES
-+	select BR2_PACKAGE_LIBXKBCOMMON
-+
- config BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 	bool "X11/OpenGL"
- 	depends on BR2_PACKAGE_KODI_PLATFORM_SUPPORTS_X11_OPENGL
-@@ -260,13 +292,19 @@ config BR2_PACKAGE_KODI_LIBUSB
- 
- config BR2_PACKAGE_KODI_LIBVA
- 	bool "va"
--	depends on BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
-+	depends on \
-+		BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL || \
-+		BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES || \
-+		BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
- 	select BR2_PACKAGE_LIBVA
+diff --git a/package/kodi-peripheral-joystick/Config.in b/package/kodi-peripheral-joystick/Config.in
+index f257710a88..d93e71b607 100644
+--- a/package/kodi-peripheral-joystick/Config.in
++++ b/package/kodi-peripheral-joystick/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_KODI_PERIPHERAL_JOYSTICK
+ 	bool "kodi-peripheral-joystick"
+ 	depends on BR2_PACKAGE_HAS_UDEV
+-	select BR2_PACKAGE_KODI_PLATFORM
++	select BR2_PACKAGE_TINYXML
  	help
- 	  Enable libva support.
+ 	  Kodi joystick support (drivers and button maps)
  
--comment "libva support needs platform 'X11/OpenGL'"
--	depends on !BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
-+comment "libva support needs platform 'Wayland' or 'X11/OpenGL'"
-+	depends on \
-+		!BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL && \
-+		!BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES && \
-+		!BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+index 5a7348d414..fc3e19d21a 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256 9a183e1f92ff2c68816bfa0056c65585a3e1129d924326359d7a5dfbcba6c56a  kodi-peripheral-joystick-1.3.4.tar.gz
++sha256 8034753ae766851d149143d1f583b724f9eece8cbc34d0c42e834548a59694be  kodi-peripheral-joystick-370e2acfedba31b3cab45f1e59ddbbb2979f4e82.tar.gz
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+index 13c33fc0af..09804f42e7 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+@@ -4,12 +4,10 @@
+ #
+ ################################################################################
  
- config BR2_PACKAGE_KODI_LIBVDPAU
- 	bool "vdpau"
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index b016190906..1a825b0029 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -185,6 +185,22 @@ KODI_CONF_OPTS += -DCORE_PLATFORM_NAME=rbpi
- KODI_DEPENDENCIES += rpi-userland
- endif
+-# This cset is on the branch 'Krypton'
+-# When Kodi is updated, then this should be updated to the corresponding branch
+-KODI_PERIPHERAL_JOYSTICK_VERSION = 1.3.4
+-KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,v$(KODI_PERIPHERAL_JOYSTICK_VERSION))
++KODI_PERIPHERAL_JOYSTICK_VERSION = 370e2acfedba31b3cab45f1e59ddbbb2979f4e82
++KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
+ KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = src/addon.cpp
+-KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi-platform udev
++KODI_PERIPHERAL_JOYSTICK_DEPENDENCIES = kodi tinyxml udev
  
-+ifeq ($(BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GL),y)
-+KODI_CONF_OPTS += \
-+	-DCORE_PLATFORM_NAME=wayland \
-+	-DWAYLAND_RENDER_SYSTEM=gl
-+KODI_DEPENDENCIES += libegl libgl libglu libxkbcommon waylandpp
-+endif
-+
-+ifeq ($(BR2_PACKAGE_KODI_PLATFORM_WAYLAND_GLES),y)
-+KODI_CONF_OPTS += \
-+	-DCORE_PLATFORM_NAME=wayland \
-+	-DWAYLAND_RENDER_SYSTEM=gles
-+KODI_C_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
-+KODI_CXX_FLAGS += `$(PKG_CONFIG_HOST_BINARY) --cflags egl`
-+KODI_DEPENDENCIES += libegl libgles libxkbcommon waylandpp
-+endif
-+
- ifeq ($(BR2_PACKAGE_KODI_PLATFORM_X11_OPENGL),y)
- KODI_CONF_OPTS += -DCORE_PLATFORM_NAME=x11
- KODI_DEPENDENCIES += libegl libglu libgl xlib_libX11 xlib_libXext \
+ $(eval $(cmake-package))
 -- 
 2.20.1
