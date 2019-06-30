@@ -1,55 +1,74 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 30 Jun 2019 17:16:02 +0200
-Subject: [Buildroot] [PATCH] package/quazip: upgrade to v0.8.1
-In-Reply-To: <20190630143352.25100-1-zgyarmati@zgyarmati.de>
-References: <20190630143352.25100-1-zgyarmati@zgyarmati.de>
-Message-ID: <80a737ac-4df5-3f98-b35b-b9d345e20e6b@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 30 Jun 2019 16:05:23 +0200
+Subject: [Buildroot] [git commit] package/openjdk and package/openjdk-bin:
+ bump to version 12.0.1+12
+Message-ID: <20190630152730.3B318880D3@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Zoltan,
+commit: https://git.buildroot.net/buildroot/commit/?id=7e99d1de50a9b98fb976e8074dd25740cd6440cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 30/06/2019 16:33, Zoltan Gyarmati wrote:
-> And also register the hash of the COPYING file
-> 
-> Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-> ---
->  package/quazip/quazip.hash | 6 ++++--
->  package/quazip/quazip.mk   | 2 +-
->  2 files changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/quazip/quazip.hash b/package/quazip/quazip.hash
-> index 9f43643d6b..dc19fe8ccd 100644
-> --- a/package/quazip/quazip.hash
-> +++ b/package/quazip/quazip.hash
-> @@ -1,2 +1,4 @@
-> -# From github release page
-> -sha256 4118a830a375a81211956611cc34b1b5b4ddc108c126287b91b40c2493046b70 quazip-0.7.6.tar.gz
-> +# Locally computed
-> +sha256 4fda4d4248e08015b5090d0369ef9e68bdc4475aa12494f7c0f6d79e43270d14 quazip-v0.8.1.tar.gz
-> +sha256 d2a653b46b87963f29a7f1523e7c39bafdbb3592dfa01725e61a523387148e72 COPYING
-> +
-> diff --git a/package/quazip/quazip.mk b/package/quazip/quazip.mk
-> index aba8274506..886e3b323d 100644
-> --- a/package/quazip/quazip.mk
-> +++ b/package/quazip/quazip.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -QUAZIP_VERSION = 0.7.6
-> +QUAZIP_VERSION = v0.8.1
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+[Arnout: rebase after change of version formatting]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/openjdk-bin/openjdk-bin.hash | 2 +-
+ package/openjdk-bin/openjdk-bin.mk   | 4 ++--
+ package/openjdk/openjdk.hash         | 2 +-
+ package/openjdk/openjdk.mk           | 4 ++--
+ 4 files changed, 6 insertions(+), 6 deletions(-)
 
- We just removed the 'v' from the version in all packages, to match the version
-tag on release-monitoring.org. So please add the v as part of the _SITE instead.
-
- Regards,
- Arnout
-
->  QUAZIP_SITE = $(call github,stachenov,quazip,$(QUAZIP_VERSION))
->  QUAZIP_INSTALL_STAGING = YES
->  QUAZIP_DEPENDENCIES = \
-> 
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index 63ed5874c4..1fab6e07a8 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/AdoptOpenJDK/openjdk12-binaries/releases
+-sha256	4739064dc439a05487744cce0ba951cb544ed5e796f6c699646e16c09da5dd6a	OpenJDK12U-jdk_x64_linux_hotspot_12_33.tar.gz
++sha256	dd3fdf3771a05a010029c1cf1aef516928eab55d6f5eb019008875e9ccbc8337	OpenJDK12U-jdk_x64_linux_hotspot_12.0.1_12.tar.gz
+ 
+ # Locally calculated
+ sha256	4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726	legal/java.prefs/LICENSE
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index d2e0c2fd3b..383842d280 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-HOST_OPENJDK_BIN_VERSION_MAJOR = 12
+-HOST_OPENJDK_BIN_VERSION_MINOR = 33
++HOST_OPENJDK_BIN_VERSION_MAJOR = 12.0.1
++HOST_OPENJDK_BIN_VERSION_MINOR = 12
+ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
+ HOST_OPENJDK_BIN_SOURCE = OpenJDK12U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+ HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk12-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index e94d4d6d44..f4eecf5dcd 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 de278328668bdaf35d50d0319d15d64d195ddd8a0de9c6fde3a6c9ca10135a92  openjdk-12+33.tar.gz
++sha256 47cfd6d8430d862869c42c5841bbaaa303a811fea8229baa10ac03b58e259af2  openjdk-12.0.1+12.tar.gz
+ sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index e6e834cde9..2f3292ef6d 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-OPENJDK_VERSION_MAJOR = 12
+-OPENJDK_VERSION_MINOR = 33
++OPENJDK_VERSION_MAJOR = 12.0.1
++OPENJDK_VERSION_MINOR = 12
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SITE = $(call github,AdoptOpenJDK,openjdk-jdk12u,jdk-$(OPENJDK_VERSION))
+ OPENJDK_LICENSE = GPL-2.0+ with exception
