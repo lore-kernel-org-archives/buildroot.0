@@ -1,46 +1,49 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 1 Jul 2019 12:01:13 +0200
-Subject: [Buildroot] [BUG] host-python-2.7.16 fails to build on aarch64,
- luajit fails for soft float
-In-Reply-To: <d596b57f-e046-ec2c-4413-e2a3f301412e@gmail.com>
-References: <d596b57f-e046-ec2c-4413-e2a3f301412e@gmail.com>
-Message-ID: <20190701120113.4da32768@windsurf.home>
+From: Carlo Caione <ccaione@baylibre.com>
+Date: Mon, 1 Jul 2019 11:39:08 +0100
+Subject: [Buildroot] [PATCH 2/3] package/python-jailhouse: new package
+In-Reply-To: <CAGm1_ksmPzx5er=tNPF2oXWJk0W_r2fPoiwZ2NypTj8B_==ajg@mail.gmail.com>
+References: <20190621102339.22286-1-ccaione@baylibre.com>
+ <20190621102339.22286-3-ccaione@baylibre.com>
+ <CAGm1_ksmPzx5er=tNPF2oXWJk0W_r2fPoiwZ2NypTj8B_==ajg@mail.gmail.com>
+Message-ID: <faf51720-610d-6ef7-bb46-370b66c44a09@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Petr,
+On 01/07/2019 08:04, Yegor Yefremov wrote:
+> Hi Carlo,
 
-Thanks for your bug report. See below for some comments. Adding
-Fran?ois Perrad in Cc about the LuaJIT bump.
+Hi Yegor,
 
-On Fri, 28 Jun 2019 19:07:40 +0200
-Petr Cvek <petrcvekcz@gmail.com> wrote:
-
-> Trying to build an MIPS system on debian/sid/aarch64 machine fails to build python2 for the host. It seems the current used python has a bundled version of libffi, which doesn't yet support aarch64.
+>> --- /dev/null
+>> +++ b/package/python-jailhouse/python-jailhouse.mk
+>> @@ -0,0 +1,14 @@
+>> +################################################################################
+>> +#
+>> +# python-jailhouse
+>> +#
+>> +################################################################################
+>> +
+>> +PYTHON_JAILHOUSE_VERSION = 0.10
+>> +PYTHON_JAILHOUSE_SITE = $(call github,siemens,jailhouse,v$(JAILHOUSE_VERSION))
+>> +PYTHON_JAILHOUSE_LICENSE = GPL-2.0
+>> +PYTHON_JAILHOUSE_LICENSE_FILES = COPYING
+>> +
+>> +PYTHON_JAILHOUSE_SETUP_TYPE = setuptools
+>> +
+>> +$(eval $(python-package))
 > 
-> A temporary solution is to hardcopy libffi-3.3-rc0 into python source tree:
-> 
-> output/build/host-python-2.7.16/Modules/_ctypes/libffi
+> Does python-jailhouse depend on jailhouse at run-time? I would just
+> make one package jailhouse and compile python-jailhouse if either
+> Python2 or Python3 is selected. So instead of 3 patches you can make
+> just one.
 
-For the target python, we're building libffi separately. I guess we
-should do the same for host-python, i.e use host-libffi instead of the
-bundled libffi.
+You mean having one single package for both jailhouse and 
+python-jailhouse in one single mk file? Can we practically achieve that 
+since jailhouse is a generic package while I'm using $(eval 
+$(python-package)) for python-jailhouse?
 
-Could you have a look at implementing this ?
-
-> Alse luajit for the target fails to build for MIPS -msoft-float. This seems to be fixed in 2.1.0-beta3.
-
-There is a patch at http://patchwork.ozlabs.org/patch/1095710/ that
-bumps to 2.1.0-beta3, but only for AArch64. I'm not sure what we should
-do about this.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--
+Carlo Caione
