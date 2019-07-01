@@ -1,109 +1,69 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 1 Jul 2019 10:12:01 +0200
-Subject: [Buildroot] [PATCH 2/4] infra/pkg-meson: allow packages to pass
- custom compiler/linker flags
-In-Reply-To: <20190630163251.GA3606@scaer>
+Date: Mon, 1 Jul 2019 10:13:25 +0200
+Subject: [Buildroot] [PATCH 3/4] package/libglib2: fix NLS build on musl
+ and uclibc
+In-Reply-To: <45dbff9960329788c21a9a6b02e93fda6a217adf.1561407936.git.yann.morin.1998@free.fr>
 References: <cover.1561407936.git.yann.morin.1998@free.fr>
- <48a9daf25e9ca7335b0a09b8cd7f67974ad7c572.1561407936.git.yann.morin.1998@free.fr>
- <09229b6e-31fd-bf51-bd5d-060c9b87c477@mind.be> <20190630163251.GA3606@scaer>
-Message-ID: <bc171842-77d6-5483-0be7-b064047710e2@mind.be>
+ <45dbff9960329788c21a9a6b02e93fda6a217adf.1561407936.git.yann.morin.1998@free.fr>
+Message-ID: <cce67eef-6524-7202-3687-bc7df5b167d0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Yann
-
-On 30/06/2019 18:32, Yann E. MORIN wrote:
-> On 2019-06-30 18:12 +0200, Arnout Vandecappelle spake thusly:
->>  Hi Yann,
->>
->> On 24/06/2019 22:25, Yann E. MORIN wrote:
->> [snip]
->>> +$(2)_MESON_SED_CFLAGS = $$(if $$(strip $$($(2)_CFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_CFLAGS)`)
->>> +$(2)_MESON_SED_LDFLAGS = $$(if $$(strip $$($(2)_LDFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_LDFLAGS)`)
->>> +$(2)_MESON_SED_CXXFLAGS = $$(if $$(strip $$($(2)_CXXFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_CXXFLAGS)`)
->>
->>  This is ridiculous - why not the much simpler make construct
-> 
-> Look, I know I do a lot of crap, granted, but your often calling things
-> "ridiculous" or "bullshit" or other nasty qualifiers is starting to be
-> a little bit unnerving...
-
- You're absolutely right. I'm really sorry. I'll try to be less aggressive in
-the future.
-
- Thanks for pointing this out to me.
 
 
+On 24/06/2019 22:25, Yann E. MORIN wrote:
+> libglib2 uses a very crude and error-prone way to detect the intl
+> functions, which basically fails when the C library is not glibc.
 
->> 	-e "s%@TARGET_CFLAGS@%$$(foreach flag,$$($(2)_CFLAGS),"$$(flag)"$(comma))%g" \
-> 
-> Because it does not work as you think it works?
-> 
-> Consider the following:
-> 
->     FOO_CFLAGS = -DMEH='foo bar' -DBLEH="buz baz"
-> 
-> I'll leave it up to you to think what it gives in either case...
-
- That could be handled by using $(space) in the definition of FOO_CFLAGS, but
-that would look very bad. Indeed, it should be the infra that takes care of
-complexities like that.
-
-
->>  Note that this would also fix the issue from patch 1. Obviously untested,
->> because that's just the kind of person I am :-). If it does need to be a little
->> bit complicated, then I'd still prefer it to be managed by a macro rather than
->> defining additional variables for each kind of flag. E.g. quoted-comma-list.
-
- I still stand by this statement: it could move to a macro.
-
-
->>  Then again, this is the way it's already done in meson.mk, so why not. Maybe
->> something to fix in a follow-up patch.
-> 
-> Nope, there is nothing to fix.
-> 
-> If there were anything to fix, that would have been the commit log of
-> 5cd8afbd, which failed to explain this pecularity.
-
- Good point. I've added a paragraph to this commit's log that summarizes the issue.
-
+ I've added a reference here to the upstream meson bug report [1], so we might
+remember to remove this workaround once meson is fixed.
 
  Regards,
  Arnout
 
+[1] https://github.com/mesonbuild/meson/issues/3740
+
 > 
->>  If you haven't sent a v2 that applies this technique by the next time I'm
->> applying stuff, I'll apply it as is.
+> Now that a meson package can specify its LDFLAGS, use that to pass the
+> infrastructure-provided TARGET_NLS_LIBS to link with.
 > 
-> I will definitely *not* send a v2.
+> Fixes:
+>     http://autobuild.buildroot.org/results/f0d/f0d85d76786343d767fba9c7c5c01f042ecfc018/
+>     [...]
 > 
-> Regards,
-> Yann E. MORIN.
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Adam Duskett <aduskett@gmail.com>
+> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > 
->>  Regards,
->>  Arnout
->>
->>
->>> +
->>>  # Configure package for target
->>>  #
->>>  #
->>> @@ -67,9 +75,9 @@ define $(2)_CONFIGURE_CMDS
->>>  	    -e "s%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
->>>  	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
->>>  	    -e "s%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g" \
->>> -	    -e "s%@TARGET_CFLAGS@%$$(HOST_MESON_SED_CFLAGS)%g" \
->>> -	    -e "s%@TARGET_LDFLAGS@%$$(HOST_MESON_SED_LDFLAGS)%g" \
->>> -	    -e "s%@TARGET_CXXFLAGS@%$$(HOST_MESON_SED_CXXFLAGS)%g" \
->>> +	    -e "s%@TARGET_CFLAGS@%$$($(2)_MESON_SED_CFLAGS)%g" \
->>> +	    -e "s%@TARGET_LDFLAGS@%$$($(2)_MESON_SED_LDFLAGS)%g" \
->>> +	    -e "s%@TARGET_CXXFLAGS@%$$($(2)_MESON_SED_CXXFLAGS)%g" \
->>>  	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
->>>  	    package/meson/cross-compilation.conf.in \
->>>  	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
->>>
+> ---
+> Note: a few lines above, we do export LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
+> but this does not work at all and was broken by the conversion over to
+> meson, and will need to be addressed by another patch.
+> 
+> ---
+> Changes v2 -> v3:
+>   - rebased on master, with libglib2 2.60.4
+> 
+> Changes v1 -> v2:
+>   - rebased on master
+> ---
+>  package/libglib2/libglib2.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+> index 28a50f96a4..28f404b74a 100644
+> --- a/package/libglib2/libglib2.mk
+> +++ b/package/libglib2/libglib2.mk
+> @@ -12,6 +12,8 @@ LIBGLIB2_LICENSE = LGPL-2.1+
+>  LIBGLIB2_LICENSE_FILES = COPYING
+>  LIBGLIB2_INSTALL_STAGING = YES
+>  
+> +LIBGLIB2_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+> +
+>  # glib/valgrind.h contains inline asm not compatible with thumb1
+>  ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+>  LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
 > 
