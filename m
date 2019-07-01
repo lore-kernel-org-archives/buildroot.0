@@ -1,80 +1,45 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 01 Jul 2019 17:17:56 +0000
-Subject: [Buildroot] [Bug 11996] New: opencv3 SIGILL on Cortex-A5 with
- VFPv4-D16
-Message-ID: <bug-11996-163@https.bugs.busybox.net/>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon,  1 Jul 2019 15:47:58 -0400
+Subject: [Buildroot] [PATCH 1/3] package/x11r7/xlib_libX11: drop post patch
+ hooks
+Message-ID: <20190701194800.67133-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11996
+From: Adam Duskett <Aduskett@gmail.com>
 
-            Bug ID: 11996
-           Summary: opencv3 SIGILL on Cortex-A5 with VFPv4-D16
-           Product: buildroot
-           Version: 2019.02.3
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: jcowgill+busybox at jcowgill.uk
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+X11_CFLAGS no longer exists in version 1.6.8 of libX11, making the
+XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS post patch hook useless.
 
-I recently upgraded from 2018.02 to 2019.02 and discovered that opencv3 has
-broken on my board (it worked with 2018.02). The board has a Cortex-A5 with
-VFPv4-D16 enabled but without NEON and VFPv4 (so it only has 16 double floating
-point registers).
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/x11r7/xlib_libX11/xlib_libX11.mk | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-These are the target options I have set:
-BR2_arm=y
-BR2_BINFMT_ELF=y
-BR2_cortex_a5=y
-BR2_ARM_ENABLE_NEON=n
-BR2_ARM_ENABLE_VFP=y
-BR2_ARM_EABIHF=y
-BR2_ARM_FPU_VFPV4D16=y
-BR2_ARM_INSTRUCTIONS_THUMB2=y
-
-I can see that my application gets a SIGILL because it tries to load a value
-into the d20 register which doesn't exist in VFPv4-D16.
-
-0xb661d3d2 in cv::interpolateLanczos4 (coeffs=0xbef4602c, x=0.03125)
-    at
-/home/jcowgill/workspace/bsp/buildroot/output/build/opencv3-3.4.3/modules/imgproc/src/imgwarp.cpp:176
-176    
-/home/jcowgill/workspace/bsp/buildroot/output/build/opencv3-3.4.3/modules/imgproc/src/imgwarp.cpp:
-No such file or directory.
-(gdb) disassemble
-...
-   0xb661d3cc <+796>:   ldr     r3, [pc, #240]  ; (0xb661d4c0
-<cv::initInterTab2D(int, bool)+1040>)
-   0xb661d3ce <+798>:   vmov    s14, r8
-=> 0xb661d3d2 <+802>:   vldr    d20, [r10]
-   0xb661d3d6 <+806>:   vldr    d19, [r9]
-   0xb661d3da <+810>:   add     r3, pc
-   0xb661d3dc <+812>:   mov     r2, r7
-
-========
-
-I think this code in opencv3.mk is wrong (or maybe the ARM fpu config options
-are wrong):
-
-ifeq ($(BR2_ARCH_IS_64):$(BR2_ARM_CPU_HAS_VFPV3),:y)
-OPENCV3_CONF_OPTS += -DENABLE_VFPV3=ON
-else
-OPENCV3_CONF_OPTS += -DENABLE_VFPV3=OFF
-endif
-
-Apparently I have BR2_ARM_CPU_HAS_VFPV3 set (even though I only have the -D16
-version), but when you pass -DENABLE_VFPV3=ON to OpenCV, it passes -mfpu=vfpv3
-to the compiler and this is what's causing the SIGILL.
-
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index f0e52e0877..352d07dfde 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -37,17 +37,5 @@ HOST_XLIB_LIBX11_CONF_OPTS = \
+ 	--disable-specs \
+ 	--without-perl
+ 
+-# src/util/makekeys is executed at build time to generate ks_tables.h, so
+-# it should get compiled for the host. The libX11 makefile unfortunately
+-# doesn't have X11_CFLAGS_FOR_BUILD so this doesn't work.  For buildroot,
+-# we know the X11 includes are in $(HOST_DIR)/include, which are already
+-# in the CFLAGS_FOR_BUILD, so we can just remove the X11_CFLAGS
+-define XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
+-	$(SED) '/X11_CFLAGS/d' $(@D)/src/util/Makefile*
+-endef
+-
+-XLIB_LIBX11_POST_PATCH_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
+-HOST_XLIB_LIBX11_POST_PATCH_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
+-
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.21.0
