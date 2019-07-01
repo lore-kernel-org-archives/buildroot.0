@@ -1,8 +1,10 @@
 From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon,  1 Jul 2019 15:47:58 -0400
-Subject: [Buildroot] [PATCH 1/3] package/x11r7/xlib_libX11: drop post patch
- hooks
-Message-ID: <20190701194800.67133-1-aduskett@gmail.com>
+Date: Mon,  1 Jul 2019 15:47:59 -0400
+Subject: [Buildroot] [PATCH 2/3] package/x11r7/xlib_libX11: backport patch
+ to detach makekeys from X headers.
+In-Reply-To: <20190701194800.67133-1-aduskett@gmail.com>
+References: <20190701194800.67133-1-aduskett@gmail.com>
+Message-ID: <20190701194800.67133-2-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,35 +13,62 @@ To: buildroot@busybox.net
 
 From: Adam Duskett <Aduskett@gmail.com>
 
-X11_CFLAGS no longer exists in version 1.6.8 of libX11, making the
-XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS post patch hook useless.
+From https://gitlab.freedesktop.org/xorg/lib/libx11/commit/0327c427d62f671eced067c6d9b69f4e216a8ca
+
+With 1.6.8, there's no real reason to demand the X
+headers be installed for both the build and target machines if cross-
+compiling.
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.mk | 12 ------------
- 1 file changed, 12 deletions(-)
+ ...ch-ourselves-from-X-headers-entirely.patch | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 package/x11r7/xlib_libX11/0001-makekeys-detach-ourselves-from-X-headers-entirely.patch
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index f0e52e0877..352d07dfde 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -37,17 +37,5 @@ HOST_XLIB_LIBX11_CONF_OPTS = \
- 	--disable-specs \
- 	--without-perl
- 
--# src/util/makekeys is executed at build time to generate ks_tables.h, so
--# it should get compiled for the host. The libX11 makefile unfortunately
--# doesn't have X11_CFLAGS_FOR_BUILD so this doesn't work.  For buildroot,
--# we know the X11 includes are in $(HOST_DIR)/include, which are already
--# in the CFLAGS_FOR_BUILD, so we can just remove the X11_CFLAGS
--define XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
--	$(SED) '/X11_CFLAGS/d' $(@D)/src/util/Makefile*
--endef
--
--XLIB_LIBX11_POST_PATCH_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
--HOST_XLIB_LIBX11_POST_PATCH_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+diff --git a/package/x11r7/xlib_libX11/0001-makekeys-detach-ourselves-from-X-headers-entirely.patch b/package/x11r7/xlib_libX11/0001-makekeys-detach-ourselves-from-X-headers-entirely.patch
+new file mode 100644
+index 0000000000..6a149aca03
+--- /dev/null
++++ b/package/x11r7/xlib_libX11/0001-makekeys-detach-ourselves-from-X-headers-entirely.patch
+@@ -0,0 +1,39 @@
++From 0327c427d62f671eced067c6d9b69f4e216a8cac Mon Sep 17 00:00:00 2001
++From: Adam Jackson <ajax@redhat.com>
++Date: Mon, 17 Jun 2019 13:36:08 -0400
++Subject: [PATCH] makekeys: Detach ourselves from X headers entirely
++
++Subsequent to a121b7b0c210efe10bf93453b29050282324c906 we are no longer
++building makekeys with enough -I/foo/bar to find the X11 headers, so if
++they're not in a system include path, things fail. Since this utility is
++only needed at build time, there's no real reason to demand the X
++headers be installed for both the build and target machines if cross-
++compiling, we can just assume a vaguely ANSI environment instead.
++
++Tested-by: Niclas Zeising <zeising@daemonic.se>
++Reviewed-by: Keith Packard <keithp@keithp.com>
++Reviewed-by: Matt Turner <mattst88@gmail.com>
++Signed-off-by: Adam Duskett <aduskett@gmail.com>
++---
++ src/util/makekeys.c | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/src/util/makekeys.c b/src/util/makekeys.c
++index bcb5b7d5..07563315 100644
++--- a/src/util/makekeys.c
+++++ b/src/util/makekeys.c
++@@ -35,8 +35,10 @@ from The Open Group.
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <string.h>
+++#include <stdint.h>
+++#include <inttypes.h>
++ 
++-#include "../Xresinternal.h"
+++typedef uint32_t Signature;
++ 
++ #define KTNUM 4000
++ 
++-- 
++2.21.0
++
 -- 
 2.21.0
