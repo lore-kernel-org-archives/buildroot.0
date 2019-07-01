@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 2 Jul 2019 00:40:50 +0200
-Subject: [Buildroot] [PATCH 27/27] scripts/autobuild-run: support
- changing repo
-In-Reply-To: <20190629050214.17852-27-itsatharva@gmail.com>
+Date: Tue, 2 Jul 2019 00:46:54 +0200
+Subject: [Buildroot] [PATCH 23/27] autobuild-run: create reason file on
+ build failures
+In-Reply-To: <20190629050214.17852-23-itsatharva@gmail.com>
 References: <20190629050214.17852-1-itsatharva@gmail.com>
- <20190629050214.17852-27-itsatharva@gmail.com>
-Message-ID: <e3ba3be4-54e8-9440-2d92-582965b52ffe@mind.be>
+ <20190629050214.17852-23-itsatharva@gmail.com>
+Message-ID: <95d25c99-961d-16d2-1324-ee0cd118532f@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,55 +15,55 @@ To: buildroot@busybox.net
 
 
 On 29/06/2019 07:02, Atharva Lele wrote:
-> From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> When a build fails, we calculate the reason of failure on
+> the server side as well as client side. To solve this redundancy
+> we only calculate on the client side and submit a file which
+> contains the reason of failure.
 > 
-> The current logic in prepare_build() assumes that the "origin" repo
-> never changes. However, if one regularly changes his autobuild-run
-> configuration, switching being repository, this is not
-> true. Currently, it requires manually wiping out the Buildroot clone
-> in every autobuild instance when changing the repository to pull from.
-> 
-> So instead, use:
-> 
->  git fetch <repo> <branch>
->  git checkout FETCH_HEAD
-> 
-> which will easily allow switching from one repo to the other.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> [Atharva: Adapted Thomas' patches to work with Builder class]
 > Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 
 Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
 
  Regards,
  Arnout
 
 > ---
-> Changes v1 -> v2:
->   - Incorporate Thomas' patch into Builder class series
+> Changes from reason-file-v2 series:
+>   - Move to builder-class series
 > ---
->  scripts/autobuild-run | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  scripts/autobuild-run | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 > 
 > diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-> index d92e977..2dbcadb 100755
+> index 3e29f1f..d26594a 100755
 > --- a/scripts/autobuild-run
 > +++ b/scripts/autobuild-run
-> @@ -361,12 +361,12 @@ class Builder:
+> @@ -595,6 +595,11 @@ class Builder:
+>              # not found
+>              return None
 >  
->          # Update the Buildroot sources.
->          abssrcdir = os.path.abspath(self.srcdir)
-> -        ret = subprocess.call(["git", "fetch", "origin"], cwd=abssrcdir, stdout=self.log, stderr=self.log)
-> +        ret = subprocess.call(["git", "fetch", self.repo, branch], cwd=abssrcdir, stdout=self.log, stderr=self.log)
->          if ret != 0:
->              log_write(self.log, "ERROR: could not fetch Buildroot sources")
->              return -1
+> +        reason = get_failure_reason()
+> +        if reason:
+> +            with open(os.path.join(self.resultdir, "reason"), "w+") as reasonf:
+> +                reasonf.write("-".join(reason))
+> +
+>          def extract_end_log(resultfile):
+>              """Save the last part of the build log, starting from the failed package"""
 >  
-> -        ret = subprocess.call(["git", "checkout", "--detach", "origin/%s" % branch], cwd=abssrcdir, stdout=self.log, stderr=self.log)
-> +        ret = subprocess.call(["git", "checkout", "FETCH_HEAD"], cwd=abssrcdir, stdout=self.log, stderr=self.log)
->          if ret != 0:
->              log_write(self.log, "ERROR: could not check out Buildroot sources")
->              return -1
+> @@ -603,7 +608,6 @@ class Builder:
+>                                  (os.path.join(self.outputdir, "logfile"), resultfile)],
+>                                  shell=True)
+>  
+> -            reason = get_failure_reason()
+>              if not reason:
+>                  extract_last_500_lines()
+>              else:
+> @@ -627,7 +631,6 @@ class Builder:
+>          def copy_config_log_files():
+>              """Recursively copy any config.log files from the failing package"""
+>  
+> -            reason = get_failure_reason()
+>              if not reason:
+>                  return
+>  
 > 
