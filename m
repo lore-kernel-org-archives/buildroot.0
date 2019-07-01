@@ -1,438 +1,394 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 1 Jun 2019 00:27:04 +0200
-Subject: [Buildroot] [git commit] package/wireshark: security bump to
- version 3.0.2
-Message-ID: <20190531222741.CFE4A8E9E0@busybox.osuosl.org>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Mon,  1 Jul 2019 08:52:55 +0300
+Subject: [Buildroot] [PATCH] package/libssh: bump to version 0.9.0
+Message-ID: <c1c627f931b2eaa5d3df081c89245b3b62eb5a46.1561960375.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21ca2f7243cc937e0642be93e7824872a7072b6a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Drop upstream patches.
 
-The following vulnerabilities have been fixed:
- - wnpa-sec-2019-19 Wireshark dissection engine crash. Bug 15778.
-
-Update patches to use the ones merged upstream
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Cc: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- .../0001-CMake-add-USE_STATIC-option.patch         | 70 ++++++++++++++++++++++
- .../0001-FindGLIB2.cmake-fix-static-build.patch    | 39 ------------
- ...keLists.txt-disable-rpath-in-static-build.patch | 42 -------------
- ...-use-pkg-config-to-find-pcap-dependencies.patch | 45 ++++++++++++++
- .../0003-FindPCAP.cmake-fix-static-build.patch     | 46 --------------
- ...e-pkg-config-to-find-libxml2-dependencies.patch | 48 +++++++++++++++
- ...e-pkg-config-to-find-libxml2-dependencies.patch | 33 ----------
- package/wireshark/wireshark.hash                   |  4 +-
- package/wireshark/wireshark.mk                     |  8 ++-
- 9 files changed, 170 insertions(+), 165 deletions(-)
+ ...uffer-Fix-size-comparison-with-count.patch |  48 ------
+ ...t-for-argc-argument-in-ssh_buffer_-u.patch | 152 ------------------
+ .../0003-more-strict-overflow-fixes.patch     | 122 --------------
+ package/libssh/libssh.hash                    |   4 +-
+ package/libssh/libssh.mk                      |   4 +-
+ 5 files changed, 4 insertions(+), 326 deletions(-)
+ delete mode 100644 package/libssh/0001-buffer-Fix-size-comparison-with-count.patch
+ delete mode 100644 package/libssh/0002-buffer-Use-size_t-for-argc-argument-in-ssh_buffer_-u.patch
+ delete mode 100644 package/libssh/0003-more-strict-overflow-fixes.patch
 
-diff --git a/package/wireshark/0001-CMake-add-USE_STATIC-option.patch b/package/wireshark/0001-CMake-add-USE_STATIC-option.patch
-new file mode 100644
-index 0000000000..ebfa723697
---- /dev/null
-+++ b/package/wireshark/0001-CMake-add-USE_STATIC-option.patch
-@@ -0,0 +1,70 @@
-+From 900b9f137910c0ad0fe95d7354af8315ffeb0b04 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 22 Apr 2019 18:39:52 +0200
-+Subject: [PATCH] CMake: add USE_STATIC option
-+
-+USE_STATIC will:
-+ - always link statically with external libraries (such as glib2)
-+ - will not set rpath to avoid the following error:
-+
-+CMake Error at cmake_install.cmake:50 (file):
-+  file RPATH_CHANGE could not write new RPATH:
-+
-+    /usr/lib
-+
-+  to the file:
-+
-+    /home/fabrice/br-test-pkg/br-arm-full-static/target/usr/bin/tshark
-+
-+  No valid ELF RPATH or RUNPATH entry exists in the file;
-+
-+Change-Id: I242dc1a091cc211ee891568a2dee5080c9974fba
-+Ping-Bug: 15713
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Reviewed-on: https://code.wireshark.org/review/32945
-+Petri-Dish: Peter Wu <peter@lekensteyn.nl>
-+Tested-by: Petri Dish Buildbot
-+Reviewed-by: Peter Wu <peter@lekensteyn.nl>
-+[Retrieved from:
-+https://github.com/wireshark/wireshark/commit/900b9f137910c0ad0fe95d7354af8315ffeb0b04]
-+---
-+ CMakeLists.txt   | 6 +++++-
-+ CMakeOptions.txt | 1 +
-+ 2 files changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index df62819651..e2fdafc227 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -185,7 +185,7 @@ set(PROJECT_INSTALL_INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")
-+ set(LIBRARY_INSTALL_RPATH "")
-+ set(EXECUTABLE_INSTALL_RPATH "")
-+ set(EXTCAP_INSTALL_RPATH "")
-+-if(NOT (WIN32 OR APPLE))
-++if(NOT (WIN32 OR APPLE OR USE_STATIC))
-+ 	# Try to set a RPATH for installed binaries if the library directory is
-+ 	# not already included in the default search list.
-+ 	list(FIND CMAKE_C_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_FULL_LIBDIR}" IS_SYSTEM_DIR)
-+@@ -325,6 +325,10 @@ if(OSS_FUZZ)
-+ 		message(FATAL_ERROR "Cannot force libFuzzer when using oss-fuzz")
-+ 	endif()
-+ 	# Must not depend on external dependencies so statically link all libs.
-++	set(USE_STATIC ON)
-++endif()
-++
-++if(USE_STATIC)
-+ 	set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
-+ endif()
-+ 
-+diff --git a/CMakeOptions.txt b/CMakeOptions.txt
-+index b99e949c44..a605f7b49c 100644
-+--- a/CMakeOptions.txt
-++++ b/CMakeOptions.txt
-+@@ -59,6 +59,7 @@ if(WIN32)
-+ 	option(ENABLE_AIRPCAP    "Enable AirPcap support" ON)
-+ endif()
-+ option(ENABLE_STATIC            "Build Wireshark libraries statically" OFF)
-++option(USE_STATIC               "Always link statically with external libraries" OFF)
-+ option(ENABLE_PLUGINS           "Build with plugins" ON)
-+ option(ENABLE_PLUGIN_IFDEMO     "Build with plugin interface demo" OFF)
-+ option(ENABLE_PCAP_NG_DEFAULT   "Enable pcapng as default file format" ON)
-diff --git a/package/wireshark/0001-FindGLIB2.cmake-fix-static-build.patch b/package/wireshark/0001-FindGLIB2.cmake-fix-static-build.patch
+diff --git a/package/libssh/0001-buffer-Fix-size-comparison-with-count.patch b/package/libssh/0001-buffer-Fix-size-comparison-with-count.patch
 deleted file mode 100644
-index 5335fbf901..0000000000
---- a/package/wireshark/0001-FindGLIB2.cmake-fix-static-build.patch
+index 88e1bc3b48c1..000000000000
+--- a/package/libssh/0001-buffer-Fix-size-comparison-with-count.patch
 +++ /dev/null
-@@ -1,39 +0,0 @@
--From 388cd212f3f055600a37f550dd79b156193f3ce5 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 16 Apr 2019 11:19:13 +0200
--Subject: [PATCH] FindGLIB2.cmake: fix static build
+@@ -1,48 +0,0 @@
+-From 2aa8c46a853acd4198af16e417ebffd5b0e2c9f4 Mon Sep 17 00:00:00 2001
+-From: Andreas Schneider <asn@cryptomilk.org>
+-Date: Mon, 1 Oct 2018 20:58:47 +0200
+-Subject: [PATCH] buffer: Fix size comparison with count
 -
--captype, editcap and capinfos needs glib2 and its depedencies such as
--pcre otherwise static build will fail on missing references
--
--Currenttly, FindGLIB2.cmake sets GLIB2_LIBRARIES to GLIB2_LIBRARY then
--it checks for pcre library only when CMAKE_FIND_LIBRARIES_SUFFIXES is
--equal to ".a". When it is equal to ".so;.a", pcre is not added even
--if pkg-config has only found a static library.
--
--To fix this error, update FindGLIB2.cmake to append GLIB_LIBRARY to the
--GLIB2_LIBRARIES. In the UNIX context, GLIB2_LIBRARIES will contain all
--the needed dependencies returned by pkg-config
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://code.wireshark.org/review/#/c/32869/]
+-Signed-off-by: Andreas Schneider <asn@cryptomilk.org>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ----
-- cmake/modules/FindGLIB2.cmake | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+-Upstream status: commit 9c3ba94960cd5
 -
--diff --git a/cmake/modules/FindGLIB2.cmake b/cmake/modules/FindGLIB2.cmake
--index 2b55b742fe..46ad3c41a6 100644
----- a/cmake/modules/FindGLIB2.cmake
--+++ b/cmake/modules/FindGLIB2.cmake
--@@ -92,7 +92,7 @@ find_package_handle_standard_args( GLIB2
-- )
+- src/buffer.c | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/src/buffer.c b/src/buffer.c
+-index da6e587fc9e4..b029f202660f 100644
+---- a/src/buffer.c
+-+++ b/src/buffer.c
+-@@ -816,8 +816,8 @@ static int ssh_buffer_pack_allocate_va(struct ssh_buffer_struct *buffer,
+-     ssh_string string = NULL;
+-     char *cstring = NULL;
+-     size_t needed_size = 0;
+--    size_t count;
+-     size_t len;
+-+    int count; /* int for size comparison with argc */
+-     int rc = SSH_OK;
 - 
-- if( GLIB2_FOUND )
---	set( GLIB2_LIBRARIES ${GLIB2_LIBRARY} )
--+	list( APPEND GLIB2_LIBRARIES ${GLIB2_LIBRARY} )
-- 	# Include transitive dependencies for static linking.
-- 	if(UNIX AND CMAKE_FIND_LIBRARY_SUFFIXES STREQUAL ".a")
-- 		find_library(PCRE_LIBRARY pcre)
+-     for (p = format, count = 0; *p != '\0'; p++, count++) {
+-@@ -934,7 +934,7 @@ int ssh_buffer_pack_va(struct ssh_buffer_struct *buffer,
+-     char *cstring;
+-     bignum b;
+-     size_t len;
+--    int count;
+-+    int count; /* int for size comparison with argc */
+- 
+-     for (p = format, count = 0; *p != '\0'; p++, count++) {
+-         /* Invalid number of arguments passed */
+-@@ -1098,7 +1098,7 @@ int ssh_buffer_unpack_va(struct ssh_buffer_struct *buffer,
+-     } o;
+-     size_t len, rlen, max_len;
+-     va_list ap_copy;
+--    int count;
+-+    int count; /* int for size comparison with argc */
+- 
+-     max_len = ssh_buffer_get_len(buffer);
+- 
 --- 
 -2.20.1
 -
-diff --git a/package/wireshark/0002-CMakeLists.txt-disable-rpath-in-static-build.patch b/package/wireshark/0002-CMakeLists.txt-disable-rpath-in-static-build.patch
+diff --git a/package/libssh/0002-buffer-Use-size_t-for-argc-argument-in-ssh_buffer_-u.patch b/package/libssh/0002-buffer-Use-size_t-for-argc-argument-in-ssh_buffer_-u.patch
 deleted file mode 100644
-index 5fe0e58bf9..0000000000
---- a/package/wireshark/0002-CMakeLists.txt-disable-rpath-in-static-build.patch
+index c86238a7a159..000000000000
+--- a/package/libssh/0002-buffer-Use-size_t-for-argc-argument-in-ssh_buffer_-u.patch
 +++ /dev/null
-@@ -1,42 +0,0 @@
--From e4cbd1964bcb7e989acd97c4c17508160ec31c5a Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 16 Apr 2019 10:54:01 +0200
--Subject: [PATCH] CMakeLists.txt: disable rpath in static build
+@@ -1,152 +0,0 @@
+-From 270d6aa2bb01f3430d07cce5f97b48b741e3df9c Mon Sep 17 00:00:00 2001
+-From: Andreas Schneider <asn@cryptomilk.org>
+-Date: Fri, 7 Dec 2018 12:06:03 +0100
+-Subject: [PATCH] buffer: Use size_t for argc argument in ssh_buffer_(un)pack()
 -
--Trying to set RPATH to a static binary results in a build failure:
--
--CMake Error at cmake_install.cmake:50 (file):
--  file RPATH_CHANGE could not write new RPATH:
--
--    /usr/lib
--
--  to the file:
--
--    /home/fabrice/br-test-pkg/br-arm-full-static/target/usr/bin/tshark
--
--  No valid ELF RPATH or RUNPATH entry exists in the file;
--
--To fix this error, do not set RPATH if ENABLE_STATIC is set by the user
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: will be sent after first patch is merged]
+-Signed-off-by: Andreas Schneider <asn@cryptomilk.org>
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ----
-- CMakeLists.txt | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+-Upstream status: commit c306a693f3fbe
 -
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 95822cd0a6..38ba2382bb 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -185,7 +185,7 @@ set(PROJECT_INSTALL_INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")
-- set(LIBRARY_INSTALL_RPATH "")
-- set(EXECUTABLE_INSTALL_RPATH "")
-- set(EXTCAP_INSTALL_RPATH "")
---if(NOT (WIN32 OR APPLE))
--+if(NOT (WIN32 OR APPLE OR ENABLE_STATIC))
-- 	# Try to set a RPATH for installed binaries if the library directory is
-- 	# not already included in the default search list.
-- 	list(FIND CMAKE_C_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_FULL_LIBDIR}" IS_SYSTEM_DIR)
---- 
--2.20.1
+- include/libssh/buffer.h |  4 ++--
+- src/buffer.c            | 38 +++++++++++++++++++-------------------
+- 2 files changed, 21 insertions(+), 21 deletions(-)
 -
-diff --git a/package/wireshark/0002-FindPCAP-use-pkg-config-to-find-pcap-dependencies.patch b/package/wireshark/0002-FindPCAP-use-pkg-config-to-find-pcap-dependencies.patch
-new file mode 100644
-index 0000000000..d9ac80e982
---- /dev/null
-+++ b/package/wireshark/0002-FindPCAP-use-pkg-config-to-find-pcap-dependencies.patch
-@@ -0,0 +1,45 @@
-+From 1799b24aa397e98f7c894d17b37c087f1ae29d95 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 22 Apr 2019 18:40:25 +0200
-+Subject: [PATCH] FindPCAP: use pkg-config to find pcap dependencies
-+
-+On UNIX, when statically built, pcap can depends on other libraries such
-+as -lnl-3. Add a call to pkg-config to find them and append them to
-+PCAP_LIBRARIES (and so to CMAKE_REQUIRED_LIBRARIES) otherwise all
-+check_function_exists calls will fail
-+
-+Change-Id: I98361c05553738d015310fae76c17dfc08e131ff
-+Ping-Bug: 15713
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Reviewed-on: https://code.wireshark.org/review/32946
-+Reviewed-by: Peter Wu <peter@lekensteyn.nl>
-+Petri-Dish: Peter Wu <peter@lekensteyn.nl>
-+Tested-by: Petri Dish Buildbot
-+Reviewed-by: Guy Harris <guy@alum.mit.edu>
-+[Retrieved from:
-+https://github.com/wireshark/wireshark/commit/1799b24aa397e98f7c894d17b37c087f1ae29d95]
-+---
-+ cmake/modules/FindPCAP.cmake | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/cmake/modules/FindPCAP.cmake b/cmake/modules/FindPCAP.cmake
-+index dfd80415f6..6fe2d0f4dc 100644
-+--- a/cmake/modules/FindPCAP.cmake
-++++ b/cmake/modules/FindPCAP.cmake
-+@@ -38,6 +38,16 @@ find_package_handle_standard_args( PCAP DEFAULT_MSG PCAP_LIBRARY PCAP_INCLUDE_DI
-+ if( PCAP_FOUND )
-+   set( PCAP_INCLUDE_DIRS ${PCAP_INCLUDE_DIR} )
-+   set( PCAP_LIBRARIES ${PCAP_LIBRARY} )
-++
-++  # Include transitive dependencies for static linking.
-++  # This requires:
-++  #??1) a system with pkg-config installed
-++  # 2) libpcap >= 1.9.0 with its .pc files installed
-++  if( UNIX AND CMAKE_FIND_LIBRARY_SUFFIXES STREQUAL ".a" )
-++    find_package( PkgConfig )
-++    pkg_search_module( PC_LIBPCAP libpcap )
-++    list( APPEND PCAP_LIBRARIES ${PC_LIBPCAP_LIBRARIES} )
-++  endif()
-+ else()
-+   set( PCAP_INCLUDE_DIRS )
-+   set( PCAP_LIBRARIES )
-diff --git a/package/wireshark/0003-FindPCAP.cmake-fix-static-build.patch b/package/wireshark/0003-FindPCAP.cmake-fix-static-build.patch
-deleted file mode 100644
-index 425fa35ffc..0000000000
---- a/package/wireshark/0003-FindPCAP.cmake-fix-static-build.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From 1ffe04d0f2ef3c7737f1f9667cfcdd6c4239bbbe Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 17 Apr 2019 23:58:55 +0200
--Subject: [PATCH] FindPCAP.cmake: fix static build
--
--When statically built, pcap can depends on other libraries such as
---lnl-3. Add a call to pkg-config to find them and don't overwrite
--PCAP_LIBRARIES with PCAP_LIBRARY (use APPEND instead)
--
--Fixes:
-- - http://autobuild.buildroot.org/results/277a24ad543a8f54cc8afde4f359f5d77b42eb7f
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: not sent yet (waiting feedback on first patch)]
-----
-- cmake/modules/FindPCAP.cmake | 7 ++++++-
-- 1 file changed, 6 insertions(+), 1 deletion(-)
--
--diff --git a/cmake/modules/FindPCAP.cmake b/cmake/modules/FindPCAP.cmake
--index dfd80415f6..826ccfbdcc 100644
----- a/cmake/modules/FindPCAP.cmake
--+++ b/cmake/modules/FindPCAP.cmake
--@@ -9,6 +9,11 @@
-- include( FindWSWinLibs )
-- FindWSWinLibs( "WpdPack" "PCAP_HINTS" )
+-diff --git a/include/libssh/buffer.h b/include/libssh/buffer.h
+-index 4721cbe06c20..1c375343ee14 100644
+---- a/include/libssh/buffer.h
+-+++ b/include/libssh/buffer.h
+-@@ -40,11 +40,11 @@ void *ssh_buffer_allocate(struct ssh_buffer_struct *buffer, uint32_t len);
+- int ssh_buffer_allocate_size(struct ssh_buffer_struct *buffer, uint32_t len);
+- int ssh_buffer_pack_va(struct ssh_buffer_struct *buffer,
+-                        const char *format,
+--                       int argc,
+-+                       size_t argc,
+-                        va_list ap);
+- int _ssh_buffer_pack(struct ssh_buffer_struct *buffer,
+-                      const char *format,
+--                     int argc,
+-+                     size_t argc,
+-                      ...);
+- #define ssh_buffer_pack(buffer, format, ...) \
+-     _ssh_buffer_pack((buffer), (format), __VA_NARG__(__VA_ARGS__), __VA_ARGS__, SSH_BUFFER_PACK_END)
+-diff --git a/src/buffer.c b/src/buffer.c
+-index b029f202660f..99863747fc3c 100644
+---- a/src/buffer.c
+-+++ b/src/buffer.c
+-@@ -809,7 +809,7 @@ ssh_buffer_get_ssh_string(struct ssh_buffer_struct *buffer)
+-  */
+- static int ssh_buffer_pack_allocate_va(struct ssh_buffer_struct *buffer,
+-                                        const char *format,
+--                                       int argc,
+-+                                       size_t argc,
+-                                        va_list ap)
+- {
+-     const char *p = NULL;
+-@@ -817,12 +817,12 @@ static int ssh_buffer_pack_allocate_va(struct ssh_buffer_struct *buffer,
+-     char *cstring = NULL;
+-     size_t needed_size = 0;
+-     size_t len;
+--    int count; /* int for size comparison with argc */
+-+    size_t count;
+-     int rc = SSH_OK;
 - 
--+if (NOT WIN32)
--+  find_package(PkgConfig)
--+  pkg_search_module( PCAP libpcap )
--+endif()
+-     for (p = format, count = 0; *p != '\0'; p++, count++) {
+-         /* Invalid number of arguments passed */
+--        if (argc != -1 && count > argc) {
+-+        if (count > argc) {
+-             return SSH_ERROR;
+-         }
+- 
+-@@ -881,7 +881,7 @@ static int ssh_buffer_pack_allocate_va(struct ssh_buffer_struct *buffer,
+-         }
+-     }
+- 
+--    if (argc != -1 && argc != count) {
+-+    if (argc != count) {
+-         return SSH_ERROR;
+-     }
+- 
+-@@ -891,11 +891,7 @@ static int ssh_buffer_pack_allocate_va(struct ssh_buffer_struct *buffer,
+-          */
+-         uint32_t canary = va_arg(ap, uint32_t);
+-         if (canary != SSH_BUFFER_PACK_END) {
+--            if (argc == -1){
+--                return SSH_ERROR;
+--            } else {
+--                abort();
+--            }
+-+            abort();
+-         }
+-     }
+- 
+-@@ -918,7 +914,7 @@ static int ssh_buffer_pack_allocate_va(struct ssh_buffer_struct *buffer,
+-  */
+- int ssh_buffer_pack_va(struct ssh_buffer_struct *buffer,
+-                        const char *format,
+--                       int argc,
+-+                       size_t argc,
+-                        va_list ap)
+- {
+-     int rc = SSH_ERROR;
+-@@ -934,11 +930,15 @@ int ssh_buffer_pack_va(struct ssh_buffer_struct *buffer,
+-     char *cstring;
+-     bignum b;
+-     size_t len;
+--    int count; /* int for size comparison with argc */
+-+    size_t count;
 -+
-- # The 64-bit wpcap.lib is under /x64
-- set ( _PLATFORM_SUBDIR "" )
-- if( WIN32 AND "${WIRESHARK_TARGET_PLATFORM}" STREQUAL "win64" )
--@@ -37,7 +42,7 @@ find_package_handle_standard_args( PCAP DEFAULT_MSG PCAP_LIBRARY PCAP_INCLUDE_DI
+-+    if (argc > 256) {
+-+        return SSH_ERROR;
+-+    }
 - 
-- if( PCAP_FOUND )
--   set( PCAP_INCLUDE_DIRS ${PCAP_INCLUDE_DIR} )
---  set( PCAP_LIBRARIES ${PCAP_LIBRARY} )
--+  list( APPEND PCAP_LIBRARIES ${PCAP_LIBRARY} )
-- else()
--   set( PCAP_INCLUDE_DIRS )
--   set( PCAP_LIBRARIES )
+-     for (p = format, count = 0; *p != '\0'; p++, count++) {
+-         /* Invalid number of arguments passed */
+--        if (argc != -1 && count > argc) {
+-+        if (count > argc) {
+-             return SSH_ERROR;
+-         }
+- 
+-@@ -1010,7 +1010,7 @@ int ssh_buffer_pack_va(struct ssh_buffer_struct *buffer,
+-         }
+-     }
+- 
+--    if (argc != -1 && argc != count) {
+-+    if (argc != count) {
+-         return SSH_ERROR;
+-     }
+- 
+-@@ -1018,11 +1018,7 @@ int ssh_buffer_pack_va(struct ssh_buffer_struct *buffer,
+-         /* Check if our canary is intact, if not somthing really bad happened */
+-         uint32_t canary = va_arg(ap, uint32_t);
+-         if (canary != SSH_BUFFER_PACK_END) {
+--            if (argc == -1){
+--                return SSH_ERROR;
+--            } else {
+--                abort();
+--            }
+-+            abort();
+-         }
+-     }
+-     return rc;
+-@@ -1050,12 +1046,16 @@ int ssh_buffer_pack_va(struct ssh_buffer_struct *buffer,
+-  */
+- int _ssh_buffer_pack(struct ssh_buffer_struct *buffer,
+-                      const char *format,
+--                     int argc,
+-+                     size_t argc,
+-                      ...)
+- {
+-     va_list ap;
+-     int rc;
+- 
+-+    if (argc > 256) {
+-+        return SSH_ERROR;
+-+    }
+-+
+-     va_start(ap, argc);
+-     rc = ssh_buffer_pack_allocate_va(buffer, format, argc, ap);
+-     va_end(ap);
 --- 
 -2.20.1
 -
-diff --git a/package/wireshark/0003-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch b/package/wireshark/0003-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
-new file mode 100644
-index 0000000000..fe2d15ff2b
---- /dev/null
-+++ b/package/wireshark/0003-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
-@@ -0,0 +1,48 @@
-+From 580098d875b497e5d5aa36dfad10291668e7d392 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Wed, 24 Apr 2019 22:22:29 +0200
-+Subject: [PATCH] FindXml2: use pkg-config to find libxml2 dependencies
-+
-+On UNIX, when statically built, libxml2 can depends on other libraries
-+such as lzma. These dependencies are already retrieved through
-+pkg-config so append them to LIBXML2_LIBRARIES otherwise static build
-+will fail
-+
-+Change-Id: I362064969488ec53042aa323eadb54fef026d8a5
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Reviewed-on: https://code.wireshark.org/review/32968
-+Petri-Dish: Guy Harris <guy@alum.mit.edu>
-+Tested-by: Petri Dish Buildbot
-+Reviewed-by: Peter Wu <peter@lekensteyn.nl>
-+[Retrieved from:
-+https://github.com/wireshark/wireshark/commit/580098d875b497e5d5aa36dfad10291668e7d392]
-+---
-+ cmake/modules/FindLibXml2.cmake | 15 +++++++++++----
-+ 1 file changed, 11 insertions(+), 4 deletions(-)
-+
-+diff --git a/cmake/modules/FindLibXml2.cmake b/cmake/modules/FindLibXml2.cmake
-+index 99d70af57d..34121ef01b 100644
-+--- a/cmake/modules/FindLibXml2.cmake
-++++ b/cmake/modules/FindLibXml2.cmake
-+@@ -106,10 +106,17 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(LibXml2
-+ 
-+ mark_as_advanced(LIBXML2_INCLUDE_DIR LIBXML2_LIBRARY LIBXML2_XMLLINT_EXECUTABLE)
-+ 
-+-if(LibXml2_FOUND AND NOT TARGET LibXml2::LibXml2)
-+-   add_library(LibXml2::LibXml2 UNKNOWN IMPORTED)
-+-   set_target_properties(LibXml2::LibXml2 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${LIBXML2_INCLUDE_DIRS}")
-+-   set_property(TARGET LibXml2::LibXml2 APPEND PROPERTY IMPORTED_LOCATION "${LIBXML2_LIBRARY}")
-++if(LibXml2_FOUND)
-++    # Include transitive dependencies for static linking.
-++    if(UNIX AND CMAKE_FIND_LIBRARY_SUFFIXES STREQUAL ".a")
-++        list(APPEND LIBXML2_LIBRARIES ${PC_LIBXML_LIBRARIES})
-++    endif()
-++
-++    if (NOT TARGET LibXml2::LibXml2)
-++        add_library(LibXml2::LibXml2 UNKNOWN IMPORTED)
-++        set_target_properties(LibXml2::LibXml2 PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${LIBXML2_INCLUDE_DIRS}")
-++        set_property(TARGET LibXml2::LibXml2 APPEND PROPERTY IMPORTED_LOCATION "${LIBXML2_LIBRARY}")
-++    endif()
-+ endif()
-+ 
-+ AddWSWinDLLS(LibXml2 LIBXML2_HINTS "libxml2*" "lzma*")
-diff --git a/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch b/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
+diff --git a/package/libssh/0003-more-strict-overflow-fixes.patch b/package/libssh/0003-more-strict-overflow-fixes.patch
 deleted file mode 100644
-index ab549021e4..0000000000
---- a/package/wireshark/0004-FindXml2-use-pkg-config-to-find-libxml2-dependencies.patch
+index 6232ee77eab7..000000000000
+--- a/package/libssh/0003-more-strict-overflow-fixes.patch
 +++ /dev/null
-@@ -1,33 +0,0 @@
--From e6a2e71831f0699e9759e0579a00eea5fcb93696 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 24 Apr 2019 20:23:00 +0200
--Subject: [PATCH] FindXml2: use pkg-config to find libxml2 dependencies
+@@ -1,122 +0,0 @@
+-From 7656b1be8dc5425d5af03ffa6af711599fc07e80 Mon Sep 17 00:00:00 2001
+-From: Baruch Siach <baruch@tkos.co.il>
+-Date: Tue, 22 Jan 2019 08:16:50 +0200
+-Subject: [PATCH] buffer: Convert argc to size_t in ssh_buffer_unpack() as well
 -
--On UNIX, when statically built, libxml2 can depends on other libraries such
--as lzma. These dependencies are already retrieved through pkg-config so
--append them to LIBXML2_LIBRARIES otherwise static build will fail
+-Commit c306a693f3fb ("buffer: Use size_t for argc argument in
+-ssh_buffer_(un)pack()") mentioned unpack in the commit log, but it only
+-touches the pack variants. Extend the conversion to unpack.
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: not sent yet]
+-Pre-initialize the p pointer to avoid possible use before
+-initialization in case of early argc check failure.
+-
+-This fixes build failure:
+-
+-.../libssh-0.8.6/src/buffer.c: In function 'ssh_buffer_unpack_va':
+-.../libssh-0.8.6/src/buffer.c:1229:16: error: assuming signed overflow does not occur when simplifying conditional to constant [-Werror=strict-overflow]
+-             if (argc == -1){
+-		^
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ----
-- cmake/modules/FindLibXml2.cmake | 4 ++++
-- 1 file changed, 4 insertions(+)
+-Upstream status: https://www.libssh.org/archive/libssh/2019-01/0000032.html
 -
--diff --git a/cmake/modules/FindLibXml2.cmake b/cmake/modules/FindLibXml2.cmake
--index 99d70af57d..2a4b1f470f 100644
----- a/cmake/modules/FindLibXml2.cmake
--+++ b/cmake/modules/FindLibXml2.cmake
--@@ -98,6 +98,10 @@ endif()
+- include/libssh/buffer.h |  4 ++--
+- src/buffer.c            | 25 +++++++++++++------------
+- 2 files changed, 15 insertions(+), 14 deletions(-)
+-
+-diff --git a/include/libssh/buffer.h b/include/libssh/buffer.h
+-index 1c375343ee14..cd2dea6a7ecc 100644
+---- a/include/libssh/buffer.h
+-+++ b/include/libssh/buffer.h
+-@@ -50,11 +50,11 @@ int _ssh_buffer_pack(struct ssh_buffer_struct *buffer,
+-     _ssh_buffer_pack((buffer), (format), __VA_NARG__(__VA_ARGS__), __VA_ARGS__, SSH_BUFFER_PACK_END)
 - 
-- set(LIBXML2_INCLUDE_DIRS ${LIBXML2_INCLUDE_DIR} ${PC_LIBXML_INCLUDE_DIRS})
-- set(LIBXML2_LIBRARIES ${LIBXML2_LIBRARY})
--+# Include transitive dependencies for static linking.
--+if(UNIX)
--+    list(APPEND LIBXML2_LIBRARIES ${PC_LIBXML_LIBRARIES})
--+endif()
+- int ssh_buffer_unpack_va(struct ssh_buffer_struct *buffer,
+--                         const char *format, int argc,
+-+                         const char *format, size_t argc,
+-                          va_list ap);
+- int _ssh_buffer_unpack(struct ssh_buffer_struct *buffer,
+-                        const char *format,
+--                       int argc,
+-+                       size_t argc,
+-                        ...);
+- #define ssh_buffer_unpack(buffer, format, ...) \
+-     _ssh_buffer_unpack((buffer), (format), __VA_NARG__(__VA_ARGS__), __VA_ARGS__, SSH_BUFFER_PACK_END)
+-diff --git a/src/buffer.c b/src/buffer.c
+-index 99863747fc3c..c8ad20f24e43 100644
+---- a/src/buffer.c
+-+++ b/src/buffer.c
+-@@ -1082,11 +1082,11 @@ int _ssh_buffer_pack(struct ssh_buffer_struct *buffer,
+-  */
+- int ssh_buffer_unpack_va(struct ssh_buffer_struct *buffer,
+-                          const char *format,
+--                         int argc,
+-+                         size_t argc,
+-                          va_list ap)
+- {
+-     int rc = SSH_ERROR;
+--    const char *p, *last;
+-+    const char *p = format, *last;
+-     union {
+-         uint8_t *byte;
+-         uint16_t *word;
+-@@ -1098,16 +1098,21 @@ int ssh_buffer_unpack_va(struct ssh_buffer_struct *buffer,
+-     } o;
+-     size_t len, rlen, max_len;
+-     va_list ap_copy;
+--    int count; /* int for size comparison with argc */
+-+    size_t count;
 - 
-- include(FindPackageHandleStandardArgs)
-- FIND_PACKAGE_HANDLE_STANDARD_ARGS(LibXml2
+-     max_len = ssh_buffer_get_len(buffer);
+- 
+-     /* copy the argument list in case a rollback is needed */
+-     va_copy(ap_copy, ap);
+- 
+--    for (p = format, count = 0; *p != '\0'; p++, count++) {
+-+    if (argc > 256) {
+-+        rc = SSH_ERROR;
+-+        goto cleanup;
+-+    }
+-+
+-+    for (count = 0; *p != '\0'; p++, count++) {
+-         /* Invalid number of arguments passed */
+--        if (argc != -1 && count > argc) {
+-+        if (count > argc) {
+-             rc = SSH_ERROR;
+-             goto cleanup;
+-         }
+-@@ -1217,7 +1222,7 @@ int ssh_buffer_unpack_va(struct ssh_buffer_struct *buffer,
+-         }
+-     }
+- 
+--    if (argc != -1 && argc != count) {
+-+    if (argc != count) {
+-         rc = SSH_ERROR;
+-     }
+- 
+-@@ -1226,11 +1231,7 @@ cleanup:
+-         /* Check if our canary is intact, if not something really bad happened */
+-         uint32_t canary = va_arg(ap, uint32_t);
+-         if (canary != SSH_BUFFER_PACK_END){
+--            if (argc == -1){
+--                rc = SSH_ERROR;
+--            } else {
+--                abort();
+--            }
+-+            abort();
+-         }
+-     }
+- 
+-@@ -1320,7 +1321,7 @@ cleanup:
+-  */
+- int _ssh_buffer_unpack(struct ssh_buffer_struct *buffer,
+-                        const char *format,
+--                       int argc,
+-+                       size_t argc,
+-                        ...)
+- {
+-     va_list ap;
 --- 
 -2.20.1
 -
-diff --git a/package/wireshark/wireshark.hash b/package/wireshark/wireshark.hash
-index 99aa433bb4..8498f59140 100644
---- a/package/wireshark/wireshark.hash
-+++ b/package/wireshark/wireshark.hash
-@@ -1,4 +1,4 @@
--# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.0.1.txt
--sha256 86864c3d0f6c2311992a98d8ea7dfd429097fe62dae2e5516e1a2f6bef2ac08c  wireshark-3.0.1.tar.xz
-+# From: https://www.wireshark.org/download/src/all-versions/SIGNATURES-3.0.2.txt
-+sha256 7e1ec5664a0dba4493d8729f9922378bdd05040fb159c2b03b42111efda2e53b  wireshark-3.0.2.tar.xz
- # Locally calculated
- sha256 7cdbed2b697efaa45576a033f1ac0e73cd045644a91c79bbf41d4a7d81dac7bf  COPYING
-diff --git a/package/wireshark/wireshark.mk b/package/wireshark/wireshark.mk
-index 60cde3f838..a7401aa6dc 100644
---- a/package/wireshark/wireshark.mk
-+++ b/package/wireshark/wireshark.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
+index 7164c91069e8..2f5708ddac92 100644
+--- a/package/libssh/libssh.hash
++++ b/package/libssh/libssh.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.libssh.org/files/0.8/libssh-0.8.7.tar.xz.asc
++# https://www.libssh.org/files/0.9/libssh-0.9.0.tar.xz.asc
+ # with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
+-sha256 43304ca22f0ba0b654e14b574a39816bc70212fdea5858a6637cc26cade3d592  libssh-0.8.7.tar.xz
++sha256 25303c2995e663cd169fdd902bae88106f48242d7e96311d74f812023482c7a5  libssh-0.9.0.tar.xz
+ sha256 1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
+diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
+index 332f2a57004b..d5f22c29a08e 100644
+--- a/package/libssh/libssh.mk
++++ b/package/libssh/libssh.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--WIRESHARK_VERSION = 3.0.1
-+WIRESHARK_VERSION = 3.0.2
- WIRESHARK_SOURCE = wireshark-$(WIRESHARK_VERSION).tar.xz
- WIRESHARK_SITE = https://www.wireshark.org/download/src/all-versions
- WIRESHARK_LICENSE = wireshark license
-@@ -154,11 +154,13 @@ endif
- ifeq ($(BR2_STATIC_LIBS),y)
- WIRESHARK_CONF_OPTS += \
- 	-DENABLE_PLUGINS=OFF \
--	-DENABLE_STATIC=ON
-+	-DENABLE_STATIC=ON \
-+	-DUSE_STATIC=ON
- else
- WIRESHARK_CONF_OPTS += \
- 	-DENABLE_PLUGINS=ON \
--	-DENABLE_STATIC=OFF
-+	-DENABLE_STATIC=OFF \
-+	-DUSE_STATIC=OFF
- endif
- 
- define WIRESHARK_REMOVE_DOCS
+-LIBSSH_VERSION_MAJOR = 0.8
+-LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).7
++LIBSSH_VERSION_MAJOR = 0.9
++LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).0
+ LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
+ LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
+ LIBSSH_LICENSE = LGPL-2.1
+-- 
+2.20.1
