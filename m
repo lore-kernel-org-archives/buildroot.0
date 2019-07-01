@@ -1,82 +1,51 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Mon, 1 Jul 2019 09:04:52 +0200
-Subject: [Buildroot] [PATCH 2/3] package/python-jailhouse: new package
-In-Reply-To: <20190621102339.22286-3-ccaione@baylibre.com>
-References: <20190621102339.22286-1-ccaione@baylibre.com>
- <20190621102339.22286-3-ccaione@baylibre.com>
-Message-ID: <CAGm1_ksmPzx5er=tNPF2oXWJk0W_r2fPoiwZ2NypTj8B_==ajg@mail.gmail.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Mon, 1 Jul 2019 10:00:27 +0200
+Subject: [Buildroot] [git commit] package/libglib2: fix NLS build on musl
+ and uclibc
+Message-ID: <20190701080441.54256812EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Carlo,
+commit: https://git.buildroot.net/buildroot/commit/?id=c2e24f106058e63d7cb4404da0e7a6f209c162dc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, Jun 21, 2019 at 12:25 PM Carlo Caione <ccaione@baylibre.com> wrote:
->
-> Add the Python interface for the Jailhouse Hypervisor.
->
-> https://github.com/siemens/jailhouse
->
-> Signed-off-by: Carlo Caione <ccaione@baylibre.com>
-> ---
->  package/Config.in                            |  1 +
->  package/python-jailhouse/Config.in           |  7 +++++++
->  package/python-jailhouse/python-jailhouse.mk | 14 ++++++++++++++
->  3 files changed, 22 insertions(+)
->  create mode 100644 package/python-jailhouse/Config.in
->  create mode 100644 package/python-jailhouse/python-jailhouse.mk
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 8b6a9322e4..6c6e35f919 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -917,6 +917,7 @@ menu "External python modules"
->         source "package/python-ipython-genutils/Config.in"
->         source "package/python-iso8601/Config.in"
->         source "package/python-itsdangerous/Config.in"
-> +       source "package/python-jailhouse/Config.in"
->         source "package/python-jaraco-classes/Config.in"
->         source "package/python-jedi/Config.in"
->         source "package/python-jinja2/Config.in"
-> diff --git a/package/python-jailhouse/Config.in b/package/python-jailhouse/Config.in
-> new file mode 100644
-> index 0000000000..744169dc33
-> --- /dev/null
-> +++ b/package/python-jailhouse/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_JAILHOUSE
-> +       bool "python-jailhouse"
-> +       depends on BR2_PACKAGE_PYTHON
-> +       help
-> +         A Python interface for the Jailhouse Hypervisor.
-> +
-> +         https://github.com/siemens/jailhouse
-> diff --git a/package/python-jailhouse/python-jailhouse.mk b/package/python-jailhouse/python-jailhouse.mk
-> new file mode 100644
-> index 0000000000..9a07531315
-> --- /dev/null
-> +++ b/package/python-jailhouse/python-jailhouse.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-jailhouse
-> +#
-> +################################################################################
-> +
-> +PYTHON_JAILHOUSE_VERSION = 0.10
-> +PYTHON_JAILHOUSE_SITE = $(call github,siemens,jailhouse,v$(JAILHOUSE_VERSION))
-> +PYTHON_JAILHOUSE_LICENSE = GPL-2.0
-> +PYTHON_JAILHOUSE_LICENSE_FILES = COPYING
-> +
-> +PYTHON_JAILHOUSE_SETUP_TYPE = setuptools
-> +
-> +$(eval $(python-package))
+libglib2 uses a very crude and error-prone way to detect the intl
+functions, which basically fails when the C library is not glibc.
 
-Does python-jailhouse depend on jailhouse at run-time? I would just
-make one package jailhouse and compile python-jailhouse if either
-Python2 or Python3 is selected. So instead of 3 patches you can make
-just one.
+There is a bug report about this in upstream meson [1], but it doesn't
+seem to get any progress. Fixing that properly in Buildroot looks
+complicated.
 
-Yegor
+Now that a meson package can specify its LDFLAGS, use that to pass the
+infrastructure-provided TARGET_NLS_LIBS to link with.
+
+Fixes:
+    http://autobuild.buildroot.org/results/f0d/f0d85d76786343d767fba9c7c5c01f042ecfc018/
+    [...]
+
+[1] https://github.com/mesonbuild/meson/issues/3740
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/libglib2/libglib2.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 28a50f96a4..28f404b74a 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -12,6 +12,8 @@ LIBGLIB2_LICENSE = LGPL-2.1+
+ LIBGLIB2_LICENSE_FILES = COPYING
+ LIBGLIB2_INSTALL_STAGING = YES
+ 
++LIBGLIB2_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
++
+ # glib/valgrind.h contains inline asm not compatible with thumb1
+ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
