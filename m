@@ -1,51 +1,81 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 1 Jul 2019 10:00:27 +0200
-Subject: [Buildroot] [git commit] package/libglib2: fix NLS build on musl
- and uclibc
-Message-ID: <20190701080441.54256812EF@busybox.osuosl.org>
+Date: Mon, 1 Jul 2019 09:49:42 +0200
+Subject: [Buildroot] [git commit] package/meson: fix empty arguments in
+ cross-compilation.conf
+Message-ID: <20190701080441.3B93882108@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c2e24f106058e63d7cb4404da0e7a6f209c162dc
+commit: https://git.buildroot.net/buildroot/commit/?id=e9de6d9e0ac66883b9c8b7b4c623b27dab8087ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libglib2 uses a very crude and error-prone way to detect the intl
-functions, which basically fails when the C library is not glibc.
+When TARGET_CFLAGS (or _LDFLAGS or _CXXFLAGS) are empty, but were
+constructed by appending other variables, like:
 
-There is a bug report about this in upstream meson [1], but it doesn't
-seem to get any progress. Fixing that properly in Buildroot looks
-complicated.
+    TARGET_CFLAGS = $(SOMETHING) $(SOMETHING_ELSE)
 
-Now that a meson package can specify its LDFLAGS, use that to pass the
-infrastructure-provided TARGET_NLS_LIBS to link with.
+and both variables are empty, then $(TARGET_CFLAGS) is _not_ the
+null-string; it's value is a string made of a single space.
 
-Fixes:
-    http://autobuild.buildroot.org/results/f0d/f0d85d76786343d767fba9c7c5c01f042ecfc018/
-    [...]
+This means that the construct:
 
-[1] https://github.com/mesonbuild/meson/issues/3740
+    $(if $(TARGET_CFLAGS),true,false)
+
+will in fact return 'true'.
+
+In our case, it means that we will call:
+
+    `printf '"%s", ' `
+
+which expands to just:
+
+    "",
+
+which we are then happy to insert as-is in the generated
+cross-compilation.conf.
+
+Then meson, will happily call the compiler with an empty argument.
+
+The compiler is less happy, though:
+
+    arm-none-linux-gnueabi-gcc: error: : No such file or directory
+
+And this is not even trivial to debug either... The only clue being that
+there seems to be something missing between ': :'
+
+We fix that testing the $(strip)ed value. We can still pass the
+non-$(strip) expansion, because the shell will just do it for us, and we
+are then sure there is at least one non-blank word in there.
+
+Thanks a lot to Adam for his invaluable help debugging this!
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libglib2/libglib2.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/meson/meson.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 28a50f96a4..28f404b74a 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -12,6 +12,8 @@ LIBGLIB2_LICENSE = LGPL-2.1+
- LIBGLIB2_LICENSE_FILES = COPYING
- LIBGLIB2_INSTALL_STAGING = YES
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index 5b5100cccc..511be05a46 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -45,9 +45,9 @@ else
+ HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
+ endif
  
-+LIBGLIB2_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
-+
- # glib/valgrind.h contains inline asm not compatible with thumb1
- ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
- LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
+-HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
+-HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
+-HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
++HOST_MESON_SED_CFLAGS = $(if $(strip $(TARGET_CFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
++HOST_MESON_SED_LDFLAGS = $(if $(strip $(TARGET_LDFLAGS)),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
++HOST_MESON_SED_CXXFLAGS = $(if $(strip $(TARGET_CXXFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
+ 
+ # Generate a Meson cross-compilation.conf suitable for use with the
+ # SDK
