@@ -1,65 +1,36 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Mon, 1 Jul 2019 22:57:12 +0200
-Subject: [Buildroot] [PATCH 2/3] package/python-jailhouse: new package
-In-Reply-To: <CAGm1_kupdK_cHcvUjLEp5iUPsxzOOm5hQRJeL0q2_bMEv=Q6kA@mail.gmail.com>
-References: <20190621102339.22286-1-ccaione@baylibre.com>
- <20190621102339.22286-3-ccaione@baylibre.com>
- <CAGm1_ksmPzx5er=tNPF2oXWJk0W_r2fPoiwZ2NypTj8B_==ajg@mail.gmail.com>
- <faf51720-610d-6ef7-bb46-370b66c44a09@baylibre.com>
- <CAGm1_kupdK_cHcvUjLEp5iUPsxzOOm5hQRJeL0q2_bMEv=Q6kA@mail.gmail.com>
-Message-ID: <792e4257-4229-9aa3-3582-6cb845c83dfa@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 01 Jul 2019 21:47:09 +0000
+Subject: [Buildroot] [Bug 11996] opencv3 SIGILL on Cortex-A5 with VFPv4-D16
+In-Reply-To: <bug-11996-163@https.bugs.busybox.net/>
+References: <bug-11996-163@https.bugs.busybox.net/>
+Message-ID: <bug-11996-163-b3eE6ncpmK@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+https://bugs.busybox.net/show_bug.cgi?id=11996
 
-
-On 01/07/2019 14:24, Yegor Yefremov wrote:
-> On Mon, Jul 1, 2019 at 12:39 PM Carlo Caione <ccaione@baylibre.com> wrote:
->>
->> On 01/07/2019 08:04, Yegor Yefremov wrote:
->>> Hi Carlo,
->>
->> Hi Yegor,
->>
->>>> --- /dev/null
->>>> +++ b/package/python-jailhouse/python-jailhouse.mk
->>>> @@ -0,0 +1,14 @@
->>>> +################################################################################
->>>> +#
->>>> +# python-jailhouse
->>>> +#
->>>> +################################################################################
->>>> +
->>>> +PYTHON_JAILHOUSE_VERSION = 0.10
->>>> +PYTHON_JAILHOUSE_SITE = $(call github,siemens,jailhouse,v$(JAILHOUSE_VERSION))
->>>> +PYTHON_JAILHOUSE_LICENSE = GPL-2.0
->>>> +PYTHON_JAILHOUSE_LICENSE_FILES = COPYING
->>>> +
->>>> +PYTHON_JAILHOUSE_SETUP_TYPE = setuptools
->>>> +
->>>> +$(eval $(python-package))
->>>
->>> Does python-jailhouse depend on jailhouse at run-time? I would just
->>> make one package jailhouse and compile python-jailhouse if either
->>> Python2 or Python3 is selected. So instead of 3 patches you can make
->>> just one.
->>
->> You mean having one single package for both jailhouse and
->> python-jailhouse in one single mk file? Can we practically achieve that
->> since jailhouse is a generic package while I'm using $(eval
->> $(python-package)) for python-jailhouse?
+--- Comment #1 from Arnout Vandecappelle <arnout@mind.be> ---
+> I think this code in opencv3.mk is wrong (or maybe the ARM fpu config options
+> are wrong):
+>
+> ifeq ($(BR2_ARCH_IS_64):$(BR2_ARM_CPU_HAS_VFPV3),:y)
+> OPENCV3_CONF_OPTS += -DENABLE_VFPV3=ON
+> else
+> OPENCV3_CONF_OPTS += -DENABLE_VFPV3=OFF
+> endif
 > 
-> You'll probably have to mimic package/pkg-python.mk and invoke python
-> setup.py manually if Python/Python3 is selected. See
-> package/lirc-tools/lirc-tools.mk, but there autotools take care of
-> Python compilation stuff.
+> Apparently I have BR2_ARM_CPU_HAS_VFPV3 set (even though I only have the 
+> -D16 version), but when you pass -DENABLE_VFPV3=ON to OpenCV, it passes 
+> -mfpu=vfpv3 to the compiler and this is what's causing the SIGILL.
 
- I expect that it can get a bit messy to do both in one package. So Carlo, you
-can have a go, but if it looks complicated, just tell us and we'll apply it as
-is instead.
+If the only thing that ENABLE_VFPV3 does is to set the -mfpu=... option, then
+we should just always set it to OFF, because we already pass that option.
 
- Regards,
- Arnout
+Same for NEON, by the way.
+
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
