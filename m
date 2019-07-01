@@ -1,146 +1,66 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 1 Jul 2019 09:51:16 +0200
-Subject: [Buildroot] [git commit] infra/pkg-meson: allow packages to pass
- custom compiler/linker flags
-Message-ID: <20190701080441.48EBA82125@busybox.osuosl.org>
+Date: Mon, 1 Jul 2019 10:02:15 +0200
+Subject: [Buildroot] [git commit] package/libglib2: fix build on ARM in
+ Thumb mode
+Message-ID: <20190701080441.625C0812EF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74e574c8a651b79948ba5093f9f0faae098282ab
+commit: https://git.buildroot.net/buildroot/commit/?id=ad125248030dcb7b3a8e13c96b727262799c48b9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Meson does not allow to pass CFLAGS/LDFLAGS/CXXFLAGS via the environment
-or via command-line arguments or options (instead, those flags from the
-environment are passed to the host compiler, which is seldom what we
-need). The only way to pas those flags is via the cross-compilation.conf
-file.
+Commit 4102db0f7 (package/libglib2: bump to version 2.60.3) did convert
+libglib2 over to meson. In doing so, it left a very corner-case along.
 
-Add LIBFOO_CFLAGS, LIBFOO_LDFLAGS and LIBFOO_CXXFLAGS variables to allow
-packages to provide their own flags, possibly overriding the generic
-ones entirely, as we allow for other infras. Those per-package flags will
-then be used to generate the per-package cross-compilation.conf.
+When the target is an ARM CPU and the build is in thumb mode, then we
+want to ensure that libglib2 is still built in arm mode (because of
+inline asm).
 
-This means that the meson infra is the first and only infra for which
-FOO_CFLAGS, FOO_LDFLAGS, and FOO_CXXFLAGS are meaningful, while for the
-other infras, they are just variables private to the package itself.
-Instead of naming those variables after the meson infra (e.g.
-FOO_MESON_CFLAGS), we name them with a generic name, as maybe, just
-maybe, we could also change the other infras to also recognise those
-variables.
+But with meson, CFLAGS from the environment are passed to the host
+compiler, so the build breaks, and the meson log contains:
 
-Just like for the HOST_MESON_SED_CFLAGS etc., we need to add auxiliary
-variables to do convert the shell-formatted argument list into the
-JSON-formatted list that meson expects. We can't use a pure-make
-construct because the CFLAGS can contain quoting that needs to be
-expanded by the shell. Similarly, we need a condition on the strip'ed
-variable to avoid passing empty arguments.
+    Appending CFLAGS from environment: '-D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os   -marm'
+    No LDFLAGS in the environment, not changing global flags.
+    No CPPFLAGS in the environment, not changing global flags.
+    Sanity testing C compiler: cc
+    Is cross compiler: False.
+    Sanity check compiler command line: cc -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -marm [...]/build/libglib2-2.60.4/build/meson-private/sanitycheckc.c -o [...]/build/libglib2-2.60.4/build/meson-private/sanitycheckc.exe
+    Sanity check compile stdout:
+    -----
+    Sanity check compile stderr:
+    cc: error: unrecognized command line option ???-marm???; did you mean ???-mabm????
+    -----
+    meson.build:1:0: ERROR: Compiler cc can not compile programs.
 
-To mimic this feature for packages that are built from the SDK, we also
-install a templatised version of cross-compilation.conf, with three new
-placeholders for custom flags. If a user wants to build a package that
-needs custom flags, they can use that template to generate a per-package
-cross-compilation.conf.
+Fix that by using the new per-package CFLAGS feature of the meson infra.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 Cc: Adam Duskett <aduskett@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- docs/manual/adding-packages-meson.txt | 12 ++++++++++++
- package/meson/meson.mk                | 14 ++++++++++----
- package/pkg-meson.mk                  | 14 +++++++++++---
- 3 files changed, 33 insertions(+), 7 deletions(-)
+ package/libglib2/libglib2.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/docs/manual/adding-packages-meson.txt b/docs/manual/adding-packages-meson.txt
-index 30c338f486..8e2d448788 100644
---- a/docs/manual/adding-packages-meson.txt
-+++ b/docs/manual/adding-packages-meson.txt
-@@ -97,6 +97,18 @@ will therefore only use a few of them.
- * +FOO_CONF_OPTS+, to specify additional options to pass to +meson+ for the
-   configuration step. By default, empty.
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 28f404b74a..38941ca79d 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -12,11 +12,12 @@ LIBGLIB2_LICENSE = LGPL-2.1+
+ LIBGLIB2_LICENSE_FILES = COPYING
+ LIBGLIB2_INSTALL_STAGING = YES
  
-+* +FOO_CFLAGS+, to specify compiler arguments added to the package specific
-+  +cross-compile.conf+ file +c_args+ property. By default, the value of
-+  +TARGET_CFLAGS+.
-+
-+* +FOO_CXXFLAGS+, to specify compiler arguments added to the package specific
-+  +cross-compile.conf+ file +cpp_args+ property. By default, the value of
-+  +TARGET_CXXFLAGS+.
-+
-+* +FOO_LDFLAGS+, to specify compiler arguments added to the package specific
-+  +cross-compile.conf+ file +c_link_args+ and +cpp_link_args+ properties. By
-+  default, the value of +TARGET_LDFLAGS+.
-+
- * +FOO_NINJA_ENV+, to specify additional environment variables to pass to
-   +ninja+, meson companion tool in charge of the build operations. By default,
-   empty.
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index 511be05a46..dffa301191 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -50,18 +50,24 @@ HOST_MESON_SED_LDFLAGS = $(if $(strip $(TARGET_LDFLAGS)),`printf '"%s"$(comma) '
- HOST_MESON_SED_CXXFLAGS = $(if $(strip $(TARGET_CXXFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
++LIBGLIB2_CFLAGS = $(TARGET_CFLAGS)
+ LIBGLIB2_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
  
- # Generate a Meson cross-compilation.conf suitable for use with the
--# SDK
-+# SDK; also install the file as a template for users to add their
-+# own flags if they need to.
- define HOST_MESON_INSTALL_CROSS_CONF
- 	mkdir -p $(HOST_DIR)/etc/meson
- 	sed -e "s%@TARGET_CROSS@%$(TARGET_CROSS)%g" \
- 	    -e "s%@TARGET_ARCH@%$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
- 	    -e "s%@TARGET_CPU@%$(HOST_MESON_TARGET_CPU)%g" \
- 	    -e "s%@TARGET_ENDIAN@%$(HOST_MESON_TARGET_ENDIAN)%g" \
--	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)%g" \
--	    -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)%g" \
--	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)%g" \
-+	    -e "s%@TARGET_CFLAGS@%$(HOST_MESON_SED_CFLAGS)@PKG_TARGET_CFLAGS@%g" \
-+	    -e "s%@TARGET_LDFLAGS@%$(HOST_MESON_SED_LDFLAGS)@PKG_TARGET_CFLAGS@%g" \
-+	    -e "s%@TARGET_CXXFLAGS@%$(HOST_MESON_SED_CXXFLAGS)@PKG_TARGET_CFLAGS@%g" \
- 	    -e "s%@HOST_DIR@%$(HOST_DIR)%g" \
- 	    $(HOST_MESON_PKGDIR)/cross-compilation.conf.in \
-+	    > $(HOST_DIR)/etc/meson/cross-compilation.conf.in
-+	sed -e "s%@PKG_TARGET_CFLAGS@%%g" \
-+	    -e "s%@PKG_TARGET_LDFLAGS@%%g" \
-+	    -e "s%@PKG_TARGET_CXXFLAGS@%%g" \
-+	    $(HOST_DIR)/etc/meson/cross-compilation.conf.in \
- 	    > $(HOST_DIR)/etc/meson/cross-compilation.conf
- endef
+ # glib/valgrind.h contains inline asm not compatible with thumb1
+ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+-LIBGLIB2_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
++LIBGLIB2_CFLAGS += -marm
+ endif
  
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index 886fcf7205..0b811d1cc0 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -57,6 +57,14 @@ $(2)_NINJA_ENV		?=
- ifndef $(2)_CONFIGURE_CMDS
- ifeq ($(4),target)
- 
-+$(2)_CFLAGS ?= $$(TARGET_CFLAGS)
-+$(2)_LDFLAGS ?= $$(TARGET_LDFLAGS)
-+$(2)_CXXFLAGS ?= $$(TARGET_CXXFLAGS)
-+
-+$(2)_MESON_SED_CFLAGS = $$(if $$(strip $$($(2)_CFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_CFLAGS)`)
-+$(2)_MESON_SED_LDFLAGS = $$(if $$(strip $$($(2)_LDFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_LDFLAGS)`)
-+$(2)_MESON_SED_CXXFLAGS = $$(if $$(strip $$($(2)_CXXFLAGS)),`printf '"%s"$$(comma) ' $$($(2)_CXXFLAGS)`)
-+
- # Configure package for target
- #
- #
-@@ -67,9 +75,9 @@ define $(2)_CONFIGURE_CMDS
- 	    -e "s%@TARGET_ARCH@%$$(HOST_MESON_TARGET_CPU_FAMILY)%g" \
- 	    -e "s%@TARGET_CPU@%$$(GCC_TARGET_CPU)%g" \
- 	    -e "s%@TARGET_ENDIAN@%$$(call LOWERCASE,$$(BR2_ENDIAN))%g" \
--	    -e "s%@TARGET_CFLAGS@%$$(HOST_MESON_SED_CFLAGS)%g" \
--	    -e "s%@TARGET_LDFLAGS@%$$(HOST_MESON_SED_LDFLAGS)%g" \
--	    -e "s%@TARGET_CXXFLAGS@%$$(HOST_MESON_SED_CXXFLAGS)%g" \
-+	    -e "s%@TARGET_CFLAGS@%$$($(2)_MESON_SED_CFLAGS)%g" \
-+	    -e "s%@TARGET_LDFLAGS@%$$($(2)_MESON_SED_LDFLAGS)%g" \
-+	    -e "s%@TARGET_CXXFLAGS@%$$($(2)_MESON_SED_CXXFLAGS)%g" \
- 	    -e "s%@HOST_DIR@%$$(HOST_DIR)%g" \
- 	    package/meson/cross-compilation.conf.in \
- 	    > $$($$(PKG)_SRCDIR)/build/cross-compilation.conf
+ HOST_LIBGLIB2_CONF_OPTS = \
