@@ -1,156 +1,149 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon,  1 Jul 2019 22:18:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
-Message-ID: <20190701201834.19994-1-bernd.kuhls@t-online.de>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Mon, 1 Jul 2019 22:30:43 +0200
+Subject: [Buildroot] [PATCH] package/luasyslog: bump to version 2.2.0
+ (fork)
+In-Reply-To: <20190630182440.2841-1-francois.perrad@gadz.org>
+References: <20190630182440.2841-1-francois.perrad@gadz.org>
+Message-ID: <0be65c26-a7c1-bc02-1d92-5d3e6970f6a1@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch which was applied upstream.
-Added patch to fix uClibc build error.
+ Hi Francois,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- ...ude-stdio.h-before-tvheadend-headers.patch | 63 +++++++++++++++++++
- ...pie-linking-according-to-disable-pie.patch | 34 ----------
- package/tvheadend/tvheadend.hash              |  2 +-
- package/tvheadend/tvheadend.mk                |  2 +-
- 4 files changed, 65 insertions(+), 36 deletions(-)
- create mode 100644 package/tvheadend/0002-Include-stdio.h-before-tvheadend-headers.patch
- delete mode 100644 package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
+On 30/06/2019 20:24, Francois Perrad wrote:
+> this fork has a good support for Lua 5.3
 
-diff --git a/package/tvheadend/0002-Include-stdio.h-before-tvheadend-headers.patch b/package/tvheadend/0002-Include-stdio.h-before-tvheadend-headers.patch
-new file mode 100644
-index 0000000000..5c111ad161
---- /dev/null
-+++ b/package/tvheadend/0002-Include-stdio.h-before-tvheadend-headers.patch
-@@ -0,0 +1,63 @@
-+From 5387b1b8decc1767a200c7fd860472225a10878d Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Mon, 1 Jul 2019 22:08:47 +0200
-+Subject: [PATCH] Include stdio.h before tvheadend headers
-+
-+Fixes build error with uClibc: https://www.tvheadend.org/issues/5667
-+
-+Patch sent upstream:
-+https://github.com/tvheadend/tvheadend/pull/1283
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/main.c       | 2 +-
-+ src/tvh_locale.c | 1 +
-+ src/tvhlog.c     | 2 +-
-+ 3 files changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/main.c b/src/main.c
-+index 0e3bb4ab0..feb8e3025 100644
-+--- a/src/main.c
-++++ b/src/main.c
-+@@ -16,10 +16,10 @@
-+  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+  */
-+ 
-++#include <stdio.h>
-+ #include <tvh_thread.h>
-+ #include <sys/stat.h>
-+ #include <fcntl.h>
-+-#include <stdio.h>
-+ #include <unistd.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+diff --git a/src/tvh_locale.c b/src/tvh_locale.c
-+index a7c5150f5..7d1420e99 100644
-+--- a/src/tvh_locale.c
-++++ b/src/tvh_locale.c
-+@@ -16,6 +16,7 @@
-+  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+  */
-+ 
-++#include <stdio.h>
-+ #include "tvh_thread.h"
-+ #include "tvh_locale.h"
-+ #include "tvh_string.h"
-+diff --git a/src/tvhlog.c b/src/tvhlog.c
-+index 156b2110b..5e025cec4 100644
-+--- a/src/tvhlog.c
-++++ b/src/tvhlog.c
-+@@ -16,9 +16,9 @@
-+  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+  */
-+ 
-++#include <stdio.h>
-+ #include "tvhlog.h"
-+ #include <string.h>
-+-#include <stdio.h>
-+ #include <stdlib.h>
-+ #include <sys/time.h>
-+ #include <sys/types.h>
-+-- 
-+2.20.1
-+
-diff --git a/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch b/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
-deleted file mode 100644
-index 385c94b36b..0000000000
---- a/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 5cbf08213222cb507d365e6cbda87277f0b8f31e Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@micronovasrl.com>
--Date: Fri, 14 Jun 2019 14:25:08 +0200
--Subject: [PATCH] Makefile: fix -pie linking according to --disable-pie
--
--Only compilation follows './configure --disable-pie', linking instead
--doesn't, because '-pie' flag is passed to LDFLAGS uncoditionally.
--
--So add '-pie' flag only if CONFIG_PIE=yes.
--
--Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-----
-- Makefile | 5 ++++-
-- 1 file changed, 4 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index 41783b546..4e5a947a3 100644
----- a/Makefile
--+++ b/Makefile
--@@ -62,7 +62,10 @@ LDFLAGS += -ldl -lm
-- else
-- LDFLAGS += -ldl -lpthread -lm
-- endif
---LDFLAGS += -pie -Wl,-z,now
--+ifeq ($(CONFIG_PIE),yes)
--+LDFLAGS += -pie
--+endif
--+LDFLAGS += -Wl,-z,now
-- ifeq ($(CONFIG_LIBICONV),yes)
-- LDFLAGS += -liconv
-- endif
---- 
--2.17.1
--
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index 43178b874a..243b6a1bdc 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 92c5f2cdda085b81fc50025afeb3ece74f60fae2b26f40a7dd07e227b0db2d9f  tvheadend-17dff3e5ffbd67174b6c0d7b49f5488e19ec1ead.tar.gz
-+sha256 6efa0b62f004829f91243939181ddb08d2f7da05105e2b2305a15ce512ba3de3  tvheadend-dcc50db45b322da22241c01807643160c16ccfc2.tar.gz
- sha256 54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index b192a33d4a..1f4de5082c 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--TVHEADEND_VERSION = 17dff3e5ffbd67174b6c0d7b49f5488e19ec1ead
-+TVHEADEND_VERSION = dcc50db45b322da22241c01807643160c16ccfc2
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPL-3.0+
- TVHEADEND_LICENSE_FILES = LICENSE.md
--- 
-2.20.1
+ If I understand correctly, this fork *could* still use the luarocks
+infrastructure, but then luarocks would just call autogen so you need all the
+autotools dependencies, so it's easier to use an autotools package directly.
+
+
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/luasyslog/0001-compat-Lua-5.3.patch   | 52 -------------------
+>  .../luasyslog/0001-remove-AX_LUA_LIBS.patch   | 27 ++++++++++
+>  package/luasyslog/Config.in                   |  4 +-
+>  package/luasyslog/luasyslog.hash              |  6 +--
+>  package/luasyslog/luasyslog.mk                |  9 ++--
+>  .../testing/tests/package/test_luasyslog.py   |  2 +
+>  6 files changed, 40 insertions(+), 60 deletions(-)
+>  delete mode 100644 package/luasyslog/0001-compat-Lua-5.3.patch
+>  create mode 100644 package/luasyslog/0001-remove-AX_LUA_LIBS.patch
+> 
+[snip]
+> diff --git a/package/luasyslog/0001-remove-AX_LUA_LIBS.patch b/package/luasyslog/0001-remove-AX_LUA_LIBS.patch
+> new file mode 100644
+> index 000000000..23569ff5b
+> --- /dev/null
+> +++ b/package/luasyslog/0001-remove-AX_LUA_LIBS.patch
+> @@ -0,0 +1,27 @@
+> +From 84296c5eae651b45ebfa233199b7ddc009a5dad3 Mon Sep 17 00:00:00 2001
+> +From: Francois Perrad <francois.perrad@gadz.org>
+> +Date: Fri, 21 Jun 2019 14:58:54 +0200
+> +Subject: [PATCH] remove AX_LUA_LIBS
+> +
+> +AX_LUA_LIBS fails with LuaJIT
+
+ Why does it fail? Because LuaJIT doesn't install that autoconf macro?
+
+ Why can we just remove it?
+
+> +
+> +Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> +---
+> + configure.ac | 1 -
+> + 1 file changed, 1 deletion(-)
+> +
+> +diff --git a/configure.ac b/configure.ac
+> +index 9ac6c95..d7fc518 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -32,7 +32,6 @@ AC_PATH_PROG([LUAROCKS], [luarocks], [:])
+> + AX_PROG_LUA([5.1],[6.0])
+> + 
+> + dnl Check for libraries
+> +-AX_LUA_LIBS
+> + 
+> + dnl Check for functions
+> + AC_HEADER_STDC
+> +-- 
+> +2.20.1
+> +
+> diff --git a/package/luasyslog/Config.in b/package/luasyslog/Config.in
+> index 814e7ad37..ca098cb4f 100644
+> --- a/package/luasyslog/Config.in
+> +++ b/package/luasyslog/Config.in
+> @@ -2,6 +2,6 @@ config BR2_PACKAGE_LUASYSLOG
+>  	bool "luasyslog"
+>  	select BR2_PACKAGE_LUALOGGING # runtime
+>  	help
+> -	  Syslog logging for Lua.
+> +	  syslog appender for LuaLogging.
+
+ Why does the description change?
+
+>  
+> -	  http://lua.net-core.org/sputnik.lua?p=Telesto:About
+> +	  https://github.com/ntd/luasyslog
+> diff --git a/package/luasyslog/luasyslog.hash b/package/luasyslog/luasyslog.hash
+> index 02a0d838a..bcb6a7e02 100644
+> --- a/package/luasyslog/luasyslog.hash
+> +++ b/package/luasyslog/luasyslog.hash
+> @@ -1,3 +1,3 @@
+> -# computed by luarocks/buildroot
+> -sha256 e807a614b77108ca25aeed061faf73b7ef00708f5bfebb9e4f03d27f3d453e7b  luasyslog-1.0.0-2.src.rock
+> -sha256 c1ed5cbf3fc02836d3fc5d2354818a5c151c1cd75fcc0bf240dbf8d2b36a3c1d  luasyslog-1.0.0/COPYING
+> +# Locally computed
+> +sha256 7f7dad64117407f2484ff5b53e90804f923a99fcbde5872e54f6aba53f482da0  luasyslog-2.2.0.tar.gz
+> +sha256 833457938f5155e65dabda12a5c9d4b6fd7fb92dd7ead584c1c30cfb0c84adf4  COPYING
+> diff --git a/package/luasyslog/luasyslog.mk b/package/luasyslog/luasyslog.mk
+> index 1d88b6056..aa57f9425 100644
+> --- a/package/luasyslog/luasyslog.mk
+> +++ b/package/luasyslog/luasyslog.mk
+> @@ -4,8 +4,11 @@
+>  #
+>  ################################################################################
+>  
+> -LUASYSLOG_VERSION = 1.0.0-2
+> +LUASYSLOG_VERSION = 2.2.0
+> +LUASYSLOG_SITE = $(call github,ntd,luasyslog,$(LUASYSLOG_VERSION))
+> +LUASUSLOG_DEPENDENCIES = luainterpreter
+>  LUASYSLOG_LICENSE = MIT
+> -LUASYSLOG_LICENSE_FILES = $(LUASYSLOG_SUBDIR)/COPYING
+> +LUASYSLOG_LICENSE_FILES = COPYING
+> +LUASYSLOG_AUTORECONF = YES
+
+ Please add a comment why we reconf: sources from git + patch 0001.
+
+>  
+> -$(eval $(luarocks-package))
+> +$(eval $(autotools-package))
+> diff --git a/support/testing/tests/package/test_luasyslog.py b/support/testing/tests/package/test_luasyslog.py
+> index 4eb5402d0..158b95cb0 100644
+> --- a/support/testing/tests/package/test_luasyslog.py
+> +++ b/support/testing/tests/package/test_luasyslog.py
+> @@ -10,6 +10,7 @@ class TestLuaLuasyslog(TestLuaBase):
+>  
+>      def test_run(self):
+>          self.login()
+> +        self.module_test("lsyslog")
+
+ Please explain why this is added.
+
+
+ Regards,
+ Arnout
+
+>          self.module_test("logging.syslog")
+>  
+>  
+> @@ -22,4 +23,5 @@ class TestLuajitLuasyslog(TestLuaBase):
+>  
+>      def test_run(self):
+>          self.login()
+> +        self.module_test("lsyslog")
+>          self.module_test("logging.syslog")
+> 
