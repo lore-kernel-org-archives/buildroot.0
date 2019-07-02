@@ -1,57 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue,  2 Jul 2019 22:12:50 +0200
-Subject: [Buildroot] [PATCH] core/pkg-infra: really build all dependencies
- of foo with foo-depends
-Message-ID: <20190702201250.31638-1-yann.morin.1998@free.fr>
+From: Marcin Niestroj <m.niestroj@grinn-global.com>
+Date: Tue,  2 Jul 2019 22:13:41 +0200
+Subject: [Buildroot] [PATCH] boot/barebox: needs host-{flex,bison}
+Message-ID: <20190702201341.8230-1-m.niestroj@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, foo-depends only builds build dependencies. This means that
-download and extract dependencies are not built.
+Barebox starting from 2019.02 no longer ships flex/bison generated
+parser. Add conditional kconfig dependencies, same as we did for kernel
+and uboot.
 
-First, but a minor point, this is inconsistent with foo-show-depends,
-which does display all dependencies:
-
-    $ make host-gzip-show-depends
-    host-skeleton host-tar
-    $ make host-gzip-depends
-        # Only host-skeleton is built and installed
-
-Second, and more important, it makes it more difficult to preapre a
-debug build, like so:
-
-    $ make foo-depends
-    $ tar cf output.tar output
-    $ make foo
-        # bummer, broken
-        # edit foo.mk to try and fix it
-    $ rm -rf output; tar xf output.tar
-        # rince and repeat
-
-Change foo-depends so that it really builds all the dependencies for
-foo, bringing it on-par with foo-show-depends.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 ---
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ boot/barebox/barebox.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index b00967c648..9620dec524 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -801,7 +801,7 @@ $(1)-extract:			$$($(2)_TARGET_EXTRACT)
- $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
- $$($(2)_TARGET_EXTRACT): | $$($(2)_FINAL_EXTRACT_DEPENDENCIES)
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 9e8a9f67b5..52178d89c8 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -76,6 +76,10 @@ $(1)_KCONFIG_FRAGMENT_FILES = $$(call qstrip,$$(BR2_TARGET_$(1)_CONFIG_FRAGMENT_
+ $(1)_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ $(1)_KCONFIG_OPTS = $$($(1)_MAKE_FLAGS)
  
--$(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
-+$(1)-depends:		$$($(2)_FINAL_ALL_DEPENDENCIES)
- 
- $(1)-source:		$$($(2)_TARGET_SOURCE)
- $$($(2)_TARGET_SOURCE): | $$($(2)_FINAL_DOWNLOAD_DEPENDENCIES)
++$(1)_KCONFIG_DEPENDENCIES = \
++	$(BR2_BISON_HOST_DEPENDENCY) \
++	$(BR2_FLEX_HOST_DEPENDENCY)
++
+ ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
+ define $(1)_BUILD_BAREBOXENV_CMDS
+ 	$$(TARGET_CC) $$(TARGET_CFLAGS) $$(TARGET_LDFLAGS) -o $$(@D)/bareboxenv \
 -- 
-2.20.1
+2.21.0
