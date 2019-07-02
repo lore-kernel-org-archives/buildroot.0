@@ -1,416 +1,145 @@
-From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Date: Tue,  2 Jul 2019 12:52:38 +0300
-Subject: [Buildroot] [PATCH v2] toolchain: fix ARC GCC internal compiller
- error
-Message-ID: <20190702095238.7079-1-Evgeniy.Didin@synopsys.com>
+From: Carlo Caione <ccaione@baylibre.com>
+Date: Tue,  2 Jul 2019 10:58:39 +0100
+Subject: [Buildroot] [PATCH v2] package/jailhouse: new package
+Message-ID: <20190702095839.26701-1-ccaione@baylibre.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-With recent arc-toolchain update some packages started to fail with
-internal compiler error. This error first was catched while building
-glibc-testsuite with upstream gcc-8 and ARC port of glibc. For
-more information see BUG 89838:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=89838
+Jailhouse is a partitioning Hypervisor based on Linux. It is able to run
+bare-metal applications or (adapted) operating systems besides Linux.
+For this purpose, it configures CPU and device virtualization features
+of the hardware platform in a way that none of these domains, called
+"cells" here, can interfere with each other in an unacceptable way.
 
-This commit temporarily adds patch for current version of arc-gcc and
-should be removed with update to next version of ARC tools.
+https://github.com/siemens/jailhouse
 
-Fix in upstream gcc:
-https://gcc.gnu.org/viewcvs/gcc?view=revision&sortby=date&revision=272645
-
-Fixes:
-http://autobuild.buildroot.net/results/66e/66e8f28ed171b5c8994e6ba8c4e6257d6bbe0191//
-http://autobuild.buildroot.net/results/789/789016ff66bb4bcd2667a8c5241a680b98db5b2f//
-http://autobuild.buildroot.net/results/dd9/dd9de722b886dee3e6373b026062e1aecc11efd3//
-
-Signed-off-by: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: arc-buildroot at synopsys.com
+Signed-off-by: Carlo Caione <ccaione@baylibre.com>
 ---
-Changes since v2:
--Modify commit message, add link to BUG 
--Add Sob in patch file
- .../gcc/arc-2019.03-release/0001-ARC-PR89838.patch | 369 +++++++++++++++++++++
- 1 file changed, 369 insertions(+)
- create mode 100644 package/gcc/arc-2019.03-release/0001-ARC-PR89838.patch
+Changelog:
+  v2:
+    - Embed the python-jailhouse package into one single jailhouse 
+      package.
+---
+ package/Config.in                |  1 +
+ package/jailhouse/Config.in      | 29 +++++++++++++++++++
+ package/jailhouse/jailhouse.hash |  2 ++
+ package/jailhouse/jailhouse.mk   | 48 ++++++++++++++++++++++++++++++++
+ 4 files changed, 80 insertions(+)
+ create mode 100644 package/jailhouse/Config.in
+ create mode 100644 package/jailhouse/jailhouse.hash
+ create mode 100644 package/jailhouse/jailhouse.mk
 
-diff --git a/package/gcc/arc-2019.03-release/0001-ARC-PR89838.patch b/package/gcc/arc-2019.03-release/0001-ARC-PR89838.patch
+diff --git a/package/Config.in b/package/Config.in
+index bc529e0b56..bd68944636 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2198,6 +2198,7 @@ menu "System tools"
+ 	source "package/iotop/Config.in"
+ 	source "package/iprutils/Config.in"
+ 	source "package/irqbalance/Config.in"
++	source "package/jailhouse/Config.in"
+ 	source "package/keyutils/Config.in"
+ 	source "package/kmod/Config.in"
+ 	source "package/kvmtool/Config.in"
+diff --git a/package/jailhouse/Config.in b/package/jailhouse/Config.in
 new file mode 100644
-index 0000000000..e95f7954f9
+index 0000000000..7029c93b68
 --- /dev/null
-+++ b/package/gcc/arc-2019.03-release/0001-ARC-PR89838.patch
-@@ -0,0 +1,369 @@
-+From 228efbbb2f1d59ca7fc0ec09d4be75ce58fa583b Mon Sep 17 00:00:00 2001
-+From: Claudiu Zissulescu <claziss@gmail.com>
-+Date: Mon, 1 Apr 2019 13:03:55 +0300
-+Subject: [PATCH] [ARC] PR89838
++++ b/package/jailhouse/Config.in
+@@ -0,0 +1,29 @@
++config BR2_PACKAGE_JAILHOUSE
++	bool "Jailhouse"
++	depends on BR2_ARM_CPU_ARMV7A || BR2_aarch64 || BR2_x86_64
++	depends on BR2_LINUX_KERNEL
++	help
++	  The Jailhouse partitioning Hypervisor based on Linux.
 +
-+gcc/
-+xxxx-xx-xx  Claudiu Zissulescu  <claziss@synopsys.com>
++	  https://github.com/siemens/jailhouse
 +
-+	* config/arc/arc.c (arc_symbol_binds_local_p): New function.
-+	(arc_legitimize_pic_address): Simplify and cleanup the function.
-+	(SYMBOLIC_CONST): Remove.
-+	(prepare_pic_move): Likewise.
-+	(prepare_move_operands): Handle complex mov cases here.
-+	(arc_legitimize_address_0): Remove call to
-+	arc_legitimize_pic_address.
-+	(arc_legitimize_address): Remove call to
-+	arc_legitimize_tls_address.
-+	* config/arc/arc.md (movqi_insn): Allow Cm3 match.
-+	(movhi_insn): Likewise.
++comment "Jailhouse needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
 +
-+/gcc/testsuite
-+xxxx-xx-xx  Claudiu Zissulescu  <claziss@synopsys.com>
++comment "Jailhouse only supports X86_64, ARMv8 or ARMv7 with virtualization extensions"
++	depends on !(BR2_ARM_CPU_ARMV7A || BR2_aarch64 || BR2_x86_64)
 +
-+	* gcc.target/arc/pr89838.c: New file.
++if BR2_PACKAGE_JAILHOUSE
 +
-+Fix in upstream:
-+   https://gcc.gnu.org/viewcvs/gcc?view=revision&sortby=date&revision=272645
++config BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS
++	bool "Jailhouse helper scripts"
++	depends on BR2_PACKAGE_PYTHON
++	help
++	  Python-based helpers for the Jailhouse Hypervison".
 +
-+Signed-off-by: Evgeniy Didin <didin@synopsys.com>
-+---
-+ gcc/config/arc/arc.c  | 246 ++++++++++--------------------------------
-+ gcc/config/arc/arc.md |   8 +-
-+ 2 files changed, 60 insertions(+), 194 deletions(-)
++	  https://github.com/siemens/jailhouse
 +
-+diff --git a/gcc/config/arc/arc.c b/gcc/config/arc/arc.c
-+index 78a37aa2a18..8b544efaa11 100644
-+--- a/gcc/config/arc/arc.c
-++++ b/gcc/config/arc/arc.c
-+@@ -5990,137 +5990,46 @@ arc_legitimize_tls_address (rtx addr, enum tls_model model)
-+     }
-+ }
-+ 
-+-/* Legitimize a pic address reference in ORIG.
-+-   The return value is the legitimated address.
-+-   If OLDX is non-zero, it is the target to assign the address to first.  */
-++/* Return true if SYMBOL_REF X binds locally.  */
-+ 
-+-static rtx
-+-arc_legitimize_pic_address (rtx orig, rtx oldx)
-++static bool
-++arc_symbol_binds_local_p (const_rtx x)
-+ {
-+-  rtx addr = orig;
-+-  rtx pat = orig;
-+-  rtx base;
-++  return (SYMBOL_REF_DECL (x)
-++	  ? targetm.binds_local_p (SYMBOL_REF_DECL (x))
-++	  : SYMBOL_REF_LOCAL_P (x));
-++}
-+ 
-+-  if (oldx == orig)
-+-    oldx = NULL;
-++/* Legitimize a pic address reference in ORIG.  The return value is
-++   the legitimated address.  */
-++
-++static rtx
-++arc_legitimize_pic_address (rtx addr)
-++{
-++  if (!flag_pic)
-++    return addr;
-+ 
-+-  if (GET_CODE (addr) == LABEL_REF)
-+-    ; /* Do nothing.  */
-+-  else if (GET_CODE (addr) == SYMBOL_REF)
-++  switch (GET_CODE (addr))
-+     {
-+-      enum tls_model model = SYMBOL_REF_TLS_MODEL (addr);
-+-      if (model != 0)
-+-	return arc_legitimize_tls_address (addr, model);
-+-      else if (!flag_pic)
-+-	return orig;
-+-      else if (CONSTANT_POOL_ADDRESS_P (addr) || SYMBOL_REF_LOCAL_P (addr))
-+-	return arc_unspec_offset (addr, ARC_UNSPEC_GOTOFFPC);
-++    case SYMBOL_REF:
-++      /* TLS symbols are handled in different place.  */
-++      if (SYMBOL_REF_TLS_MODEL (addr))
-++	return addr;
-+ 
-+       /* This symbol must be referenced via a load from the Global
-+ 	 Offset Table (@GOTPC).  */
-+-      pat = arc_unspec_offset (addr, ARC_UNSPEC_GOT);
-+-      pat = gen_const_mem (Pmode, pat);
-++      if (!arc_symbol_binds_local_p (addr))
-++	return gen_const_mem (Pmode, arc_unspec_offset (addr, ARC_UNSPEC_GOT));
-+ 
-+-      if (oldx == NULL)
-+-	oldx = gen_reg_rtx (Pmode);
-+-
-+-      emit_move_insn (oldx, pat);
-+-      pat = oldx;
-+-    }
-+-  else
-+-    {
-+-      if (GET_CODE (addr) == CONST)
-+-	{
-+-	  addr = XEXP (addr, 0);
-+-	  if (GET_CODE (addr) == UNSPEC)
-+-	    {
-+-	      /* Check that the unspec is one of the ones we generate?  */
-+-	      return orig;
-+-	    }
-+-	  /* fwprop is placing in the REG_EQUIV notes constant pic
-+-	     unspecs expressions.  Then, loop may use these notes for
-+-	     optimizations resulting in complex patterns that are not
-+-	     supported by the current implementation. The following
-+-	     two if-cases are simplifying the complex patters to
-+-	     simpler ones.  */
-+-	  else if (GET_CODE (addr) == MINUS)
-+-	    {
-+-	      rtx op0 = XEXP (addr, 0);
-+-	      rtx op1 = XEXP (addr, 1);
-+-	      gcc_assert (oldx);
-+-	      gcc_assert (GET_CODE (op1) == UNSPEC);
-+-
-+-	      emit_move_insn (oldx,
-+-			      gen_rtx_CONST (SImode,
-+-					     arc_legitimize_pic_address (op1,
-+-									 NULL_RTX)));
-+-	      emit_insn (gen_rtx_SET (oldx, gen_rtx_MINUS (SImode, op0, oldx)));
-+-	      return oldx;
-+-
-+-	    }
-+-	  else if (GET_CODE (addr) != PLUS)
-+-	    {
-+-	      rtx tmp = XEXP (addr, 0);
-+-	      enum rtx_code code = GET_CODE (addr);
-+-
-+-	      /* It only works for UNARY operations.  */
-+-	      gcc_assert (UNARY_P (addr));
-+-	      gcc_assert (GET_CODE (tmp) == UNSPEC);
-+-	      gcc_assert (oldx);
-+-
-+-	      emit_move_insn
-+-		(oldx,
-+-		 gen_rtx_CONST (SImode,
-+-				arc_legitimize_pic_address (tmp,
-+-							    NULL_RTX)));
-+-
-+-	      emit_insn (gen_rtx_SET (oldx,
-+-				      gen_rtx_fmt_ee (code, SImode,
-+-						      oldx, const0_rtx)));
-+-
-+-	      return oldx;
-+-	    }
-+-	  else
-+-	    {
-+-	      gcc_assert (GET_CODE (addr) == PLUS);
-+-	      if (GET_CODE (XEXP (addr, 0)) == UNSPEC)
-+-		return orig;
-+-	    }
-+-	}
-+-
-+-      if (GET_CODE (addr) == PLUS)
-+-	{
-+-	  rtx op0 = XEXP (addr, 0), op1 = XEXP (addr, 1);
-+-
-+-	  base = arc_legitimize_pic_address (op0, oldx);
-+-	  pat  = arc_legitimize_pic_address (op1,
-+-					     base == oldx ? NULL_RTX : oldx);
-+-
-+-	  if (base == op0 && pat == op1)
-+-	    return orig;
-+-
-+-	  if (GET_CODE (base) == PLUS)
-+-	    {
-+-	      gcc_assert (oldx != NULL_RTX);
-+-	      gcc_assert (REG_P (oldx));
-+-	      emit_insn (gen_rtx_SET (oldx, base));
-+-	      base = oldx;
-+-	    }
-+-	  if (GET_CODE (pat) == CONST_INT)
-+-	    pat = plus_constant (Pmode, base, INTVAL (pat));
-+-	  else
-+-	    {
-+-	      if (GET_CODE (pat) == PLUS && CONSTANT_P (XEXP (pat, 1)))
-+-		{
-+-		  base = gen_rtx_PLUS (Pmode, base, XEXP (pat, 0));
-+-		  pat = XEXP (pat, 1);
-+-		}
-+-	      pat = gen_rtx_PLUS (Pmode, base, pat);
-+-	    }
-+-	}
-++      /* Local symb: use @pcl to access it.  */
-++      /* Fall through.  */
-++    case LABEL_REF:
-++      return arc_unspec_offset (addr, ARC_UNSPEC_GOTOFFPC);
-++    default:
-++      break;
-+     }
-+ 
-+- return pat;
-++ return addr;
-+ }
-+ 
-+ /* Output address constant X to FILE, taking PIC into account.  */
-+@@ -6282,28 +6191,6 @@ arc_output_pic_addr_const (FILE * file, rtx x, int code)
-+     }
-+ }
-+ 
-+-#define SYMBOLIC_CONST(X)	\
-+-(GET_CODE (X) == SYMBOL_REF						\
-+- || GET_CODE (X) == LABEL_REF						\
-+- || (GET_CODE (X) == CONST && symbolic_reference_mentioned_p (X)))
-+-
-+-/* Emit insns to move operands[1] into operands[0].  */
-+-
-+-static void
-+-prepare_pic_move (rtx *operands, machine_mode)
-+-{
-+-  if (GET_CODE (operands[0]) == MEM && SYMBOLIC_CONST (operands[1])
-+-      && flag_pic)
-+-    operands[1] = force_reg (Pmode, operands[1]);
-+-  else
-+-    {
-+-      rtx temp = (reload_in_progress ? operands[0]
-+-		  : gen_reg_rtx (Pmode));
-+-      operands[1] = arc_legitimize_pic_address (operands[1], temp);
-+-    }
-+-}
-+-
-+-
-+ /* The function returning the number of words, at the beginning of an
-+    argument, must be put in registers.  The returned value must be
-+    zero for arguments that are passed entirely in registers or that
-+@@ -9178,54 +9065,37 @@ prepare_move_operands (rtx *operands, machine_mode mode)
-+ 	}
-+     }
-+ 
-+-  if (mode == SImode && SYMBOLIC_CONST (operands[1]))
-++  if (GET_CODE (operands[1]) == SYMBOL_REF)
-+     {
-+-      prepare_pic_move (operands, SImode);
-+-
-+-      /* Disable any REG_EQUALs associated with the symref
-+-	 otherwise the optimization pass undoes the work done
-+-	 here and references the variable directly.  */
-++      enum tls_model model = SYMBOL_REF_TLS_MODEL (operands[1]);
-++      if (MEM_P (operands[0]) && flag_pic)
-++	operands[1] = force_reg (mode, operands[1]);
-++      else if (model)
-++	operands[1] = arc_legitimize_tls_address (operands[1], model);
-+     }
-+ 
-++  operands[1] = arc_legitimize_pic_address (operands[1]);
-++
-++  /* Store instructions are limited, they only accept as address an
-++     immediate, a register or a register plus a small immediate.  */
-+   if (MEM_P (operands[0])
-+-      && !(reload_in_progress || reload_completed))
-++      && !move_dest_operand (operands[0], mode))
-+     {
-+-      operands[1] = force_reg (mode, operands[1]);
-+-      if (!move_dest_operand (operands[0], mode))
-+-	{
-+-	  rtx addr = copy_to_mode_reg (Pmode, XEXP (operands[0], 0));
-+-	  /* This is like change_address_1 (operands[0], mode, 0, 1) ,
-+-	     except that we can't use that function because it is static.  */
-+-	  rtx pat = change_address (operands[0], mode, addr);
-+-	  MEM_COPY_ATTRIBUTES (pat, operands[0]);
-+-	  operands[0] = pat;
-+-	}
-+-      if (!cse_not_expected)
-+-	{
-+-	  rtx pat = XEXP (operands[0], 0);
-+-
-+-	  pat = arc_legitimize_address_0 (pat, pat, mode);
-+-	  if (pat)
-+-	    {
-+-	      pat = change_address (operands[0], mode, pat);
-+-	      MEM_COPY_ATTRIBUTES (pat, operands[0]);
-+-	      operands[0] = pat;
-+-	    }
-+-	}
-++      rtx tmp0 = copy_to_mode_reg (Pmode, XEXP (operands[0], 0));
-++      rtx tmp1 = change_address (operands[0], mode, tmp0);
-++      MEM_COPY_ATTRIBUTES (tmp1, operands[0]);
-++      operands[0] = tmp1;
-+     }
-+ 
-+-  if (MEM_P (operands[1]) && !cse_not_expected)
-+-    {
-+-      rtx pat = XEXP (operands[1], 0);
-+-
-+-      pat = arc_legitimize_address_0 (pat, pat, mode);
-+-      if (pat)
-+-	{
-+-	  pat = change_address (operands[1], mode, pat);
-+-	  MEM_COPY_ATTRIBUTES (pat, operands[1]);
-+-	  operands[1] = pat;
-+-	}
-+-    }
-++  /* Check if it is constant but it is not legitimized.  */
-++  if (CONSTANT_P (operands[1])
-++      && !arc_legitimate_constant_p (mode, operands[1]))
-++    operands[1] = force_reg (mode, XEXP (operands[1], 0));
-++  else if (MEM_P (operands[0])
-++	   && ((CONSTANT_P (operands[1])
-++		&& !satisfies_constraint_Cm3 (operands[1]))
-++	       || MEM_P (operands[1])))
-++    operands[1] = force_reg (mode, operands[1]);
-+ 
-+   return false;
-+ }
-+@@ -9630,11 +9500,10 @@ arc_legitimize_address_0 (rtx x, rtx oldx ATTRIBUTE_UNUSED,
-+ {
-+   rtx addr, inner;
-+ 
-+-  if (flag_pic && SYMBOLIC_CONST (x))
-+-     (x) =  arc_legitimize_pic_address (x, 0);
-+   addr = x;
-+   if (GET_CODE (addr) == CONST)
-+     addr = XEXP (addr, 0);
-++
-+   if (GET_CODE (addr) == PLUS
-+       && CONST_INT_P (XEXP (addr, 1))
-+       && ((GET_CODE (XEXP (addr, 0)) == SYMBOL_REF
-+@@ -9665,13 +9534,6 @@ arc_legitimize_address_0 (rtx x, rtx oldx ATTRIBUTE_UNUSED,
-+ static rtx
-+ arc_legitimize_address (rtx orig_x, rtx oldx, machine_mode mode)
-+ {
-+-  if (GET_CODE (orig_x) == SYMBOL_REF)
-+-    {
-+-      enum tls_model model = SYMBOL_REF_TLS_MODEL (orig_x);
-+-      if (model != 0)
-+-	return arc_legitimize_tls_address (orig_x, model);
-+-    }
-+-
-+   rtx new_x = arc_legitimize_address_0 (orig_x, oldx, mode);
-+ 
-+   if (new_x)
-+diff --git a/gcc/config/arc/arc.md b/gcc/config/arc/arc.md
-+index a7c5c600a99..dc5bcc0bb14 100644
-+--- a/gcc/config/arc/arc.md
-++++ b/gcc/config/arc/arc.md
-+@@ -682,7 +682,9 @@ archs4x, archs4xd"
-+   [(set (match_operand:QI 0 "move_dest_operand" "=Rcq,Rcq#q,    w,Rcq#q,   h, w, w,???w,h, w,Rcq,  S,!*x,  r,r, Ucm,m,???m,  m,Usc")
-+ 	(match_operand:QI 1 "move_src_operand"  "  cL,   cP,Rcq#q,    P,hCm1,cL, I,?Rac,i,?i,  T,Rcq,Usd,Ucm,m,?Rac,c,?Rac,Cm3,i"))]
-+   "register_operand (operands[0], QImode)
-+-   || register_operand (operands[1], QImode)"
-++   || register_operand (operands[1], QImode)
-++   || (satisfies_constraint_Cm3 (operands[1])
-++       && memory_operand (operands[0], QImode))"
-+   "@
-+    mov%? %0,%1%&
-+    mov%? %0,%1%&
-+@@ -724,7 +726,9 @@ archs4x, archs4xd"
-+        /* Don't use a LIMM that we could load with a single insn - we loose
-+ 	  delay-slot filling opportunities.  */
-+        && !satisfies_constraint_I (operands[1])
-+-       && satisfies_constraint_Usc (operands[0]))"
-++       && satisfies_constraint_Usc (operands[0]))
-++   || (satisfies_constraint_Cm3 (operands[1])
-++       && memory_operand (operands[0], HImode))"
-+   "@
-+    mov%? %0,%1%&
-+    mov%? %0,%1%&
-+-- 
-+2.17.2
++comment "Jailhouse helper scripts require Python"
++	depends on !BR2_PACKAGE_PYTHON
 +
++endif
+diff --git a/package/jailhouse/jailhouse.hash b/package/jailhouse/jailhouse.hash
+new file mode 100644
+index 0000000000..6deb184d58
+--- /dev/null
++++ b/package/jailhouse/jailhouse.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256 27fb262a3b42ba263f2a5a815127d2a9275f2f81e00e782591babb69d4f0465a  jailhouse-0.10.tar.gz
+diff --git a/package/jailhouse/jailhouse.mk b/package/jailhouse/jailhouse.mk
+new file mode 100644
+index 0000000000..d08eedfc71
+--- /dev/null
++++ b/package/jailhouse/jailhouse.mk
+@@ -0,0 +1,48 @@
++################################################################################
++#
++# jailhouse
++#
++################################################################################
++
++JAILHOUSE_VERSION = 0.10
++JAILHOUSE_SITE = $(call github,siemens,jailhouse,v$(JAILHOUSE_VERSION))
++JAILHOUSE_LICENSE = GPL-2.0
++JAILHOUSE_LICENSE_FILES = COPYING
++JAILHOUSE_DEPENDENCIES = \
++	$(if $(BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS), host-python-setuptools) \
++	linux
++
++JAILHOUSE_MAKE_OPTS = \
++	CROSS_COMPILE="$(TARGET_CROSS)" \
++	ARCH="$(KERNEL_ARCH)" \
++	KDIR="$(LINUX_DIR)" \
++	DESTDIR="$(TARGET_DIR)"
++
++ifeq ($(BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS),y)
++JAILHOUSE_MAKE_OPTS += PYTHON_PIP_USABLE="yes"
++else
++JAILHOUSE_MAKE_OPTS += PYTHON_PIP_USABLE="no"
++endif
++
++define JAILHOUSE_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(JAILHOUSE_MAKE_OPTS) -C $(@D)
++
++	$(if $(BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS), \
++		cd $(@D) && $(PKG_PYTHON_SETUPTOOLS_ENV) $(HOST_DIR)/bin/python setup.py build)
++endef
++
++define JAILHOUSE_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) $(JAILHOUSE_MAKE_OPTS) -C $(@D) modules_install firmware_install tool_inmates_install
++	$(TARGET_MAKE_ENV) $(MAKE) $(JAILHOUSE_MAKE_OPTS) -C $(@D)/tools src=$(@D)/tools install
++
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/jailhouse
++	$(INSTALL) -D -m 0644 $(@D)/configs/*/*.cell $(TARGET_DIR)/etc/jailhouse
++
++	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/local/libexec/jailhouse/demos
++	$(INSTALL) -D -m 0755 $(@D)/inmates/demos/*/*.bin $(TARGET_DIR)/usr/local/libexec/jailhouse/demos
++
++	$(if $(BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS), \
++		cd $(@D) && $(PKG_PYTHON_SETUPTOOLS_ENV) $(HOST_DIR)/bin/python setup.py install --no-compile $(PKG_PYTHON_SETUPTOOLS_INSTALL_TARGET_OPTS))
++endef
++
++$(eval $(generic-package))
 -- 
-2.16.2
+2.20.1
