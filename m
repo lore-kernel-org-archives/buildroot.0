@@ -1,44 +1,86 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Jul 2019 20:57:51 +0200
-Subject: [Buildroot] [PATCH 1/1] package/samba4: bump version to 4.9.10
-Message-ID: <20190702185751.21296-1-bernd.kuhls@t-online.de>
+Date: Tue,  2 Jul 2019 20:58:05 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/tvheadend: bump version
+Message-ID: <20190702185805.21370-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes: https://www.samba.org/samba/history/samba-4.9.10.html
+Removed patch which was applied upstream.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+v2: bumped version after patch from v1 was committed upstream
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 60c724e4b8..075a1e6f2c 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.9.tar.asc
--sha256 af0bf46abc74c62c5a8fe7b567103684b7bf4ce086d32bcd2f6681f592bf63ca  samba-4.9.9.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.10.tar.asc
-+sha256 f81ab92924b2f3c368ab64a381c1bb2befc7ddc90043dbb10b02d85cca27df61  samba-4.9.10.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 6aaf81bf13..7fe6ec5a2d 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+ ...pie-linking-according-to-disable-pie.patch | 34 -------------------
+ package/tvheadend/tvheadend.hash              |  2 +-
+ package/tvheadend/tvheadend.mk                |  2 +-
+ 3 files changed, 2 insertions(+), 36 deletions(-)
+ delete mode 100644 package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
+
+diff --git a/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch b/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
+deleted file mode 100644
+index 385c94b36b..0000000000
+--- a/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 5cbf08213222cb507d365e6cbda87277f0b8f31e Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+-Date: Fri, 14 Jun 2019 14:25:08 +0200
+-Subject: [PATCH] Makefile: fix -pie linking according to --disable-pie
+-
+-Only compilation follows './configure --disable-pie', linking instead
+-doesn't, because '-pie' flag is passed to LDFLAGS uncoditionally.
+-
+-So add '-pie' flag only if CONFIG_PIE=yes.
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+----
+- Makefile | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 41783b546..4e5a947a3 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -62,7 +62,10 @@ LDFLAGS += -ldl -lm
+- else
+- LDFLAGS += -ldl -lpthread -lm
+- endif
+--LDFLAGS += -pie -Wl,-z,now
+-+ifeq ($(CONFIG_PIE),yes)
+-+LDFLAGS += -pie
+-+endif
+-+LDFLAGS += -Wl,-z,now
+- ifeq ($(CONFIG_LIBICONV),yes)
+- LDFLAGS += -liconv
+- endif
+--- 
+-2.17.1
+-
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 43178b874a..ea24aec1cb 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 92c5f2cdda085b81fc50025afeb3ece74f60fae2b26f40a7dd07e227b0db2d9f  tvheadend-17dff3e5ffbd67174b6c0d7b49f5488e19ec1ead.tar.gz
++sha256 6a7703fbbe553a2d9f87acafc01162d81f78c6e427b8ab9c83242e1677248582  tvheadend-8f1de1621d78c91431238176bf4f6290870a031a.tar.gz
+ sha256 54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index b192a33d4a..61732a203c 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.9.9
-+SAMBA4_VERSION = 4.9.10
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-TVHEADEND_VERSION = 17dff3e5ffbd67174b6c0d7b49f5488e19ec1ead
++TVHEADEND_VERSION = 8f1de1621d78c91431238176bf4f6290870a031a
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 -- 
 2.20.1
