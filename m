@@ -1,11 +1,11 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 2 Jul 2019 23:25:20 +0200
-Subject: [Buildroot] [PATCH 1/6] package/gstreamer1/gstreamer1: Convert
- package type to meson
-In-Reply-To: <20190701221004.99862-2-aduskett@gmail.com>
+Date: Tue, 2 Jul 2019 23:34:25 +0200
+Subject: [Buildroot] [PATCH 5/6] package/gstreamer1/gst1-plugins-ugly:
+ Convert package type to meson
+In-Reply-To: <20190701221004.99862-6-aduskett@gmail.com>
 References: <20190701221004.99862-1-aduskett@gmail.com>
- <20190701221004.99862-2-aduskett@gmail.com>
-Message-ID: <20190702232520.68072df8@gmx.net>
+ <20190701221004.99862-6-aduskett@gmail.com>
+Message-ID: <20190702233425.7b2ffef4@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,108 +14,143 @@ To: buildroot@busybox.net
 
 Hello Adam,
 
-On Mon,  1 Jul 2019 18:09:59 -0400, aduskett at gmail.com wrote:
+On Mon,  1 Jul 2019 18:10:03 -0400, aduskett at gmail.com wrote:
 
 > From: Adam Duskett <Aduskett@gmail.com>
 >
-> Gstreamer 1.16.0 is the last version to support autotools, and will be removed
+> GStreamer 1.16.0 is the last version to support autotools, and will be removed
 > in the next version.
-
-This text is more one for a cover-letter?
-
 >
 > Other changes:
->   - Valgrind is no longer an option, and is checked via headers. So this option
->     is removed and instead changed to a package check and a dependency.
-
-Or (better?):
-
-    The meson build provides no 'disable-valgrind' option but checks
-    for the availability of valgrind/valgrind.h, so add an optional
-    valgrind dependency instead.
-
->
->   - Add the following new meson-specific options:
->   - -DDgtk_doc=disabled
-
-s/DDgtk_doc/Dgtk_doc/
-
->   - -Dglib-asserts=disabled
->   - -Dglib-checks=disabled
-
-missing:
-
-    - -Dgobject-cast-checks=disabled
-
+>   - Valgrind is no longer an option and is checked via headers, so the option
+>     has been removed entirely, because the Valgrind package check is now in
+>     the base gstreamer1 package.
 >
 > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 > ---
->  package/gstreamer1/gstreamer1/gstreamer1.mk | 32 ++++++++++++---------
->  1 file changed, 19 insertions(+), 13 deletions(-)
+>  .../gst1-plugins-ugly/gst1-plugins-ugly.mk    | 54 ++++++++++---------
+>  1 file changed, 28 insertions(+), 26 deletions(-)
 >
-> diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-> index 3378232c10..ff4074861e 100644
-> --- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-> +++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-> @@ -12,18 +12,20 @@ GSTREAMER1_LICENSE_FILES = COPYING
->  GSTREAMER1_LICENSE = LGPL-2.0+, LGPL-2.1+
+> diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+> index f3ac2f79d3..8372f76804 100644
+> --- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+> +++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
+> @@ -11,79 +11,81 @@ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
+>  # GPL licensed plugins will append to GST1_PLUGINS_UGLY_LICENSE if enabled.
+>  GST1_PLUGINS_UGLY_LICENSE = LGPL-2.1+
 >
->  GSTREAMER1_CONF_OPTS = \
-> -	--disable-examples \
-> -	--disable-tests \
-> -	--disable-failing-tests \
-> -	--disable-valgrind \
-> -	--disable-benchmarks \
-> -	--disable-introspection \
-> -	$(if $(BR2_PACKAGE_GSTREAMER1_CHECK),,--disable-check) \
-> -	$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),,--disable-trace) \
-> -	$(if $(BR2_PACKAGE_GSTREAMER1_PARSE),,--disable-parse) \
-> -	$(if $(BR2_PACKAGE_GSTREAMER1_GST_DEBUG),,--disable-gst-debug) \
-> -	$(if $(BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY),,--disable-registry) \
-> -	$(if $(BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS),,--disable-tools)
-> +	-Dexamples=disabled \
-> +	-Dtests=disabled \
-> +	-Dbenchmarks=disabled \
-> +	-Dgtk_doc=disabled \
-> +	-Dintrospection=disabled \
+> -GST1_PLUGINS_UGLY_CONF_OPTS = --disable-examples --disable-valgrind
+> +GST1_PLUGINS_UGLY_CONF_OPTS += \
+> +	-Dtests=disabled
 
-> +	-Dgobject-cast-checks=disabled \
-> +	-Dglib-asserts=disabled \
-> +	-Dglib-checks=disabled \
-
-Not sure if it is the best to disable these three checks above
-as default...the meson_options.txt files states 'auto = enabled
-for development, disabled for stable releases'...so maybe you
-are right with this decision...
-
-> +	-Dcheck=$(if $(BR2_PACKAGE_GSTREAMER1_CHECK),enabled,disabled) \
-> +	-Dtracer_hooks=$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),true,false) \
-> +	-Doption-parsing=$(if $(BR2_PACKAGE_GSTREAMER1_PARSE),true,false) \
-> +	-Dgst_debug=$(if $(BR2_PACKAGE_GSTREAMER1_GST_DEBUG),true,false) \
-> +	-Dregistry=$(if $(BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY),true,false) \
-> +	-Dtools=$(if $(BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS),enabled,disabled)
->
->  GSTREAMER1_DEPENDENCIES = \
->  	host-bison \
-> @@ -32,4 +34,8 @@ GSTREAMER1_DEPENDENCIES = \
->  	libglib2 \
->  	$(if $(BR2_PACKAGE_LIBUNWIND),libunwind)
->
-> -$(eval $(autotools-package))
-> +ifeq ($(BR2_PACKAGE_VALGRIND),y)
-> +GSTREAMER1_DEPENDENCIES += valgrind
-> +endif
-
-Why not the short form as above for libunwind? e.g.
-        ... \
-        $(if $(BR2_PACKAGE_VALGRIND),valgrind)
-
-> +
-> +$(eval $(meson-package))
-
-Otherwise looks very similar to my draft from April, see [1]
+-Dexamples=disabled missing?
 
 Regards,
 Peter
 
-[1] http://lists.busybox.net/pipermail/buildroot/2019-April/249008.html
+>
+>  GST1_PLUGINS_UGLY_CONF_OPTS += \
+> -	--disable-a52dec \
+> -	--disable-amrnb \
+> -	--disable-amrwb \
+> -	--disable-cdio \
+> -	--disable-sidplay \
+> -	--disable-twolame
+> +	-Da52dec=disabled \
+> +	-Damrnb=disabled \
+> +	-Damrwbdec=disabled \
+> +	-Dcdio=disabled \
+> +	-Dsidplay=disabled
+>
+>  GST1_PLUGINS_UGLY_DEPENDENCIES = gstreamer1 gst1-plugins-base
+>
+>  ifeq ($(BR2_PACKAGE_ORC),y)
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-orc
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dorc=enabled
+>  GST1_PLUGINS_UGLY_DEPENDENCIES += orc
+> +else
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dorc=disabled
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_ASFDEMUX),y)
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-asfdemux
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dasfdemux=enabled
+>  else
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-asfdemux
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dasfdemux=disabled
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDLPCMDEC),y)
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-dvdlpcmdec
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdlpcmdec=enabled
+>  else
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-dvdlpcmdec
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdlpcmdec=disabled
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDSUB),y)
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-dvdsub
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdsub=enabled
+>  else
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-dvdsub
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdsub=disabled
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX),y)
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-xingmux
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dxingmux=enabled
+>  else
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-xingmux
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dxingmux=disabled
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_REALMEDIA),y)
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-realmedia
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Drealmedia=enabled
+>  else
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-realmedia
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Drealmedia=disabled
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD),y)
+>  # configure does not use pkg-config to detect libdvdread
+>  ifeq ($(BR2_PACKAGE_LIBDVDCSS)$(BR2_STATIC_LIBS),yy)
+> -GST1_PLUGINS_UGLY_CONF_ENV += LIBS="-ldvdcss"
+> +GST1_PLUGINS_UGLY_LDFLAGS +="-ldvdcss"
+>  endif
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-dvdread
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdread=enabled
+>  GST1_PLUGINS_UGLY_DEPENDENCIES += libdvdread
+>  GST1_PLUGINS_UGLY_HAS_GPL_LICENSE = y
+>  else
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-dvdread
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdread=disabled
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC),y)
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-mpeg2dec
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dmpeg2dec=enabled
+>  GST1_PLUGINS_UGLY_DEPENDENCIES += libmpeg2
+>  GST1_PLUGINS_UGLY_HAS_GPL_LICENSE = y
+>  else
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-mpeg2dec
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dmpeg2dec=disabled
+>  endif
+>
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_X264),y)
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-x264
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dx264=enabled
+>  GST1_PLUGINS_UGLY_DEPENDENCIES += x264
+>  GST1_PLUGINS_UGLY_HAS_GPL_LICENSE = y
+>  else
+> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-x264
+> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dx264=disabled
+>  endif
+>
+>  # Add GPL license if GPL plugins enabled.
+> @@ -94,4 +96,4 @@ endif
+>  # Use the following command to extract license info for plugins.
+>  # # find . -name 'plugin-*.xml' | xargs grep license
+>
+> -$(eval $(autotools-package))
+> +$(eval $(meson-package))
