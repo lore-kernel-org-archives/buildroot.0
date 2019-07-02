@@ -1,58 +1,34 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Jul 2019 20:59:48 +0200
-Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: bump version to 1.45.2
-Message-ID: <20190702185948.21717-1-bernd.kuhls@t-online.de>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  2 Jul 2019 21:59:13 +0200
+Subject: [Buildroot] [PATCH 1/2] package/atk: fix build with NLS
+Message-ID: <20190702195914.3682-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-http://e2fsprogs.sourceforge.net/e2fsprogs-release.html#1.45.2
+Fixes:
+ - http://autobuild.buildroot.org/results/67367706de3b38f31b9f59a7cb98cb2186e8ee6b
 
-Disabled crond support for host build.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/e2fsprogs/e2fsprogs.hash | 4 ++--
- package/e2fsprogs/e2fsprogs.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/atk/atk.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index 7619e26275..c7d57a5f82 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -1,5 +1,5 @@
--# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.44.5/sha256sums.asc
--sha256 ba5eb3069d69160d96818bb9700de9ab5a8458d9add1fd85d427c0000d34c5b9  e2fsprogs-1.44.5.tar.xz
-+# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.2/sha256sums.asc
-+sha256 4952c9ae91e36d762e13cc5b9e8f7eeb5453e4aee4cd9b7402e73f2d4e65e009  e2fsprogs-1.45.2.tar.xz
- # Locally calculated
- sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
- sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index f5785ab4f2..a78417e7e7 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+index 228b24a7da..6a0cb370db 100644
+--- a/package/atk/atk.mk
++++ b/package/atk/atk.mk
+@@ -11,6 +11,8 @@ ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
+ ATK_LICENSE = LGPL-2.0+
+ ATK_LICENSE_FILES = COPYING
+ ATK_INSTALL_STAGING = YES
+-ATK_DEPENDENCIES = libglib2
++ATK_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
++
++ATK_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
  
--E2FSPROGS_VERSION = 1.44.5
-+E2FSPROGS_VERSION = 1.45.2
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
-@@ -28,7 +28,8 @@ HOST_E2FSPROGS_CONF_OPTS = \
- 	--disable-libuuid \
- 	--disable-testio-debug \
- 	--enable-symlink-install \
--	--enable-elf-shlibs
-+	--enable-elf-shlibs \
-+	--with-crond-dir=no
- 
- # Set the binary directories to "/bin" and "/sbin", as busybox does,
- # so that we do not end up with two versions of e2fs tools.
+ $(eval $(meson-package))
 -- 
 2.20.1
