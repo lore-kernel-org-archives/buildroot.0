@@ -1,86 +1,58 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue,  2 Jul 2019 20:58:05 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/tvheadend: bump version
-Message-ID: <20190702185805.21370-1-bernd.kuhls@t-online.de>
+Date: Tue,  2 Jul 2019 20:59:48 +0200
+Subject: [Buildroot] [PATCH 1/1] package/e2fsprogs: bump version to 1.45.2
+Message-ID: <20190702185948.21717-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch which was applied upstream.
+Release notes:
+http://e2fsprogs.sourceforge.net/e2fsprogs-release.html#1.45.2
+
+Disabled crond support for host build.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v2: bumped version after patch from v1 was committed upstream
+ package/e2fsprogs/e2fsprogs.hash | 4 ++--
+ package/e2fsprogs/e2fsprogs.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
- ...pie-linking-according-to-disable-pie.patch | 34 -------------------
- package/tvheadend/tvheadend.hash              |  2 +-
- package/tvheadend/tvheadend.mk                |  2 +-
- 3 files changed, 2 insertions(+), 36 deletions(-)
- delete mode 100644 package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
-
-diff --git a/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch b/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
-deleted file mode 100644
-index 385c94b36b..0000000000
---- a/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 5cbf08213222cb507d365e6cbda87277f0b8f31e Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@micronovasrl.com>
--Date: Fri, 14 Jun 2019 14:25:08 +0200
--Subject: [PATCH] Makefile: fix -pie linking according to --disable-pie
--
--Only compilation follows './configure --disable-pie', linking instead
--doesn't, because '-pie' flag is passed to LDFLAGS uncoditionally.
--
--So add '-pie' flag only if CONFIG_PIE=yes.
--
--Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-----
-- Makefile | 5 ++++-
-- 1 file changed, 4 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index 41783b546..4e5a947a3 100644
----- a/Makefile
--+++ b/Makefile
--@@ -62,7 +62,10 @@ LDFLAGS += -ldl -lm
-- else
-- LDFLAGS += -ldl -lpthread -lm
-- endif
---LDFLAGS += -pie -Wl,-z,now
--+ifeq ($(CONFIG_PIE),yes)
--+LDFLAGS += -pie
--+endif
--+LDFLAGS += -Wl,-z,now
-- ifeq ($(CONFIG_LIBICONV),yes)
-- LDFLAGS += -liconv
-- endif
---- 
--2.17.1
--
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index 43178b874a..ea24aec1cb 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 92c5f2cdda085b81fc50025afeb3ece74f60fae2b26f40a7dd07e227b0db2d9f  tvheadend-17dff3e5ffbd67174b6c0d7b49f5488e19ec1ead.tar.gz
-+sha256 6a7703fbbe553a2d9f87acafc01162d81f78c6e427b8ab9c83242e1677248582  tvheadend-8f1de1621d78c91431238176bf4f6290870a031a.tar.gz
- sha256 54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index b192a33d4a..61732a203c 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index 7619e26275..c7d57a5f82 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
+@@ -1,5 +1,5 @@
+-# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.44.5/sha256sums.asc
+-sha256 ba5eb3069d69160d96818bb9700de9ab5a8458d9add1fd85d427c0000d34c5b9  e2fsprogs-1.44.5.tar.xz
++# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.2/sha256sums.asc
++sha256 4952c9ae91e36d762e13cc5b9e8f7eeb5453e4aee4cd9b7402e73f2d4e65e009  e2fsprogs-1.45.2.tar.xz
+ # Locally calculated
+ sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
+ sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index f5785ab4f2..a78417e7e7 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TVHEADEND_VERSION = 17dff3e5ffbd67174b6c0d7b49f5488e19ec1ead
-+TVHEADEND_VERSION = 8f1de1621d78c91431238176bf4f6290870a031a
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPL-3.0+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+-E2FSPROGS_VERSION = 1.44.5
++E2FSPROGS_VERSION = 1.45.2
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
+@@ -28,7 +28,8 @@ HOST_E2FSPROGS_CONF_OPTS = \
+ 	--disable-libuuid \
+ 	--disable-testio-debug \
+ 	--enable-symlink-install \
+-	--enable-elf-shlibs
++	--enable-elf-shlibs \
++	--with-crond-dir=no
+ 
+ # Set the binary directories to "/bin" and "/sbin", as busybox does,
+ # so that we do not end up with two versions of e2fs tools.
 -- 
 2.20.1
