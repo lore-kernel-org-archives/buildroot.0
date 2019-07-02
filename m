@@ -1,156 +1,38 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue, 2 Jul 2019 23:34:25 +0200
-Subject: [Buildroot] [PATCH 5/6] package/gstreamer1/gst1-plugins-ugly:
- Convert package type to meson
-In-Reply-To: <20190701221004.99862-6-aduskett@gmail.com>
-References: <20190701221004.99862-1-aduskett@gmail.com>
- <20190701221004.99862-6-aduskett@gmail.com>
-Message-ID: <20190702233425.7b2ffef4@gmx.net>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue,  2 Jul 2019 23:39:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libgtk3: fix build with NLS
+Message-ID: <20190702213925.27014-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+Fixes:
+ - No autobuilder failures yet
 
-On Mon,  1 Jul 2019 18:10:03 -0400, aduskett at gmail.com wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libgtk3/libgtk3.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-> From: Adam Duskett <Aduskett@gmail.com>
->
-> GStreamer 1.16.0 is the last version to support autotools, and will be removed
-> in the next version.
->
-> Other changes:
->   - Valgrind is no longer an option and is checked via headers, so the option
->     has been removed entirely, because the Valgrind package check is now in
->     the base gstreamer1 package.
->
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  .../gst1-plugins-ugly/gst1-plugins-ugly.mk    | 54 ++++++++++---------
->  1 file changed, 28 insertions(+), 26 deletions(-)
->
-> diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-> index f3ac2f79d3..8372f76804 100644
-> --- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-> +++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-> @@ -11,79 +11,81 @@ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
->  # GPL licensed plugins will append to GST1_PLUGINS_UGLY_LICENSE if enabled.
->  GST1_PLUGINS_UGLY_LICENSE = LGPL-2.1+
->
-> -GST1_PLUGINS_UGLY_CONF_OPTS = --disable-examples --disable-valgrind
-> +GST1_PLUGINS_UGLY_CONF_OPTS += \
-> +	-Dtests=disabled
-
--Dexamples=disabled missing?
-
-Regards,
-Peter
-
->
->  GST1_PLUGINS_UGLY_CONF_OPTS += \
-> -	--disable-a52dec \
-> -	--disable-amrnb \
-> -	--disable-amrwb \
-> -	--disable-cdio \
-> -	--disable-sidplay \
-> -	--disable-twolame
-> +	-Da52dec=disabled \
-> +	-Damrnb=disabled \
-> +	-Damrwbdec=disabled \
-> +	-Dcdio=disabled \
-> +	-Dsidplay=disabled
->
->  GST1_PLUGINS_UGLY_DEPENDENCIES = gstreamer1 gst1-plugins-base
->
->  ifeq ($(BR2_PACKAGE_ORC),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-orc
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dorc=enabled
->  GST1_PLUGINS_UGLY_DEPENDENCIES += orc
-> +else
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dorc=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_ASFDEMUX),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-asfdemux
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dasfdemux=enabled
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-asfdemux
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dasfdemux=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDLPCMDEC),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-dvdlpcmdec
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdlpcmdec=enabled
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-dvdlpcmdec
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdlpcmdec=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDSUB),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-dvdsub
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdsub=enabled
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-dvdsub
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdsub=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-xingmux
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dxingmux=enabled
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-xingmux
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dxingmux=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_REALMEDIA),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-realmedia
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Drealmedia=enabled
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-realmedia
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Drealmedia=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD),y)
->  # configure does not use pkg-config to detect libdvdread
->  ifeq ($(BR2_PACKAGE_LIBDVDCSS)$(BR2_STATIC_LIBS),yy)
-> -GST1_PLUGINS_UGLY_CONF_ENV += LIBS="-ldvdcss"
-> +GST1_PLUGINS_UGLY_LDFLAGS +="-ldvdcss"
->  endif
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-dvdread
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdread=enabled
->  GST1_PLUGINS_UGLY_DEPENDENCIES += libdvdread
->  GST1_PLUGINS_UGLY_HAS_GPL_LICENSE = y
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-dvdread
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdread=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-mpeg2dec
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dmpeg2dec=enabled
->  GST1_PLUGINS_UGLY_DEPENDENCIES += libmpeg2
->  GST1_PLUGINS_UGLY_HAS_GPL_LICENSE = y
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-mpeg2dec
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dmpeg2dec=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_X264),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-x264
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dx264=enabled
->  GST1_PLUGINS_UGLY_DEPENDENCIES += x264
->  GST1_PLUGINS_UGLY_HAS_GPL_LICENSE = y
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-x264
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dx264=disabled
->  endif
->
->  # Add GPL license if GPL plugins enabled.
-> @@ -94,4 +96,4 @@ endif
->  # Use the following command to extract license info for plugins.
->  # # find . -name 'plugin-*.xml' | xargs grep license
->
-> -$(eval $(autotools-package))
-> +$(eval $(meson-package))
+diff --git a/package/libgtk3/libgtk3.mk b/package/libgtk3/libgtk3.mk
+index bdf820de37..b9adc673f5 100644
+--- a/package/libgtk3/libgtk3.mk
++++ b/package/libgtk3/libgtk3.mk
+@@ -24,9 +24,11 @@ LIBGTK3_CONF_OPTS = \
+ 
+ # Override pkg-config pkgdatadir variable, it needs the prefix
+ LIBGTK3_MAKE_OPTS = \
+-	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols
++	WAYLAND_PROTOCOLS_DATADIR=$(STAGING_DIR)/usr/share/wayland-protocols \
++	LIBS=$(TARGET_NLS_LIBS)
+ 
+-LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango gdk-pixbuf libepoxy
++LIBGTK3_DEPENDENCIES = host-pkgconf host-libgtk3 atk libglib2 cairo pango \
++	gdk-pixbuf libepoxy $(TARGET_NLS_DEPENDENCIES)
+ 
+ ifeq ($(BR2_PACKAGE_LIBGTK3_X11),y)
+ LIBGTK3_DEPENDENCIES += fontconfig xlib_libX11 xlib_libXext xlib_libXrender xlib_libXi
+-- 
+2.20.1
