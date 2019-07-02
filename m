@@ -1,53 +1,48 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Tue,  2 Jul 2019 19:07:59 +0200
-Subject: [Buildroot] [PATCH v1] package/libinput: bump version to 1.13.4
-Message-ID: <20190702170759.11275-1-ps.report@gmx.net>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Tue,  2 Jul 2019 23:05:59 +0530
+Subject: [Buildroot] [PATCH v2] fs/tar: explicitly set extended header
+ values to ensure binary reproducibility
+Message-ID: <20190702173559.4423-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-For details see [1].
+Since we use --xattrs-include='*' to include all extended attributes,
+tar creates a PAX formatted archive. The archive metadata captures atime
+and ctime of files. To fix this, GNU recommends that we pass this added
+argument to tar to create binary reproducible packages. Setting of mtime
+is handled in fs/common.mk using touch on all files.
 
-[1] https://lists.freedesktop.org/archives/wayland-devel/2019-June/040675.html
+Diffoscope output pre-change: https://gitlab.com/snippets/1871111
+Diffoscope output after change is blank i.e. binary reproducibile rootfs
+is created.
 
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+GNU Recommendation: https://www.gnu.org/software/tar/manual/tar.html#SEC147
+
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 ---
- package/libinput/libinput.hash | 10 +++++-----
- package/libinput/libinput.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Changes v1 -> v2:
+  - Added comment about mtime handling
+---
+ fs/tar/tar.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
-index 71542fb347..ea9319d663 100644
---- a/package/libinput/libinput.hash
-+++ b/package/libinput/libinput.hash
-@@ -1,8 +1,8 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2019-June/040650.html
--md5 0205d720ae0b1caef1faeb4bba7f8c0f libinput-1.13.3.tar.xz
--sha1 ea80070c087363415a4259ddc4bf828e18205195 libinput-1.13.3.tar.xz
--sha256 f3ff113023a28631d83971c059c1f3057d51a90aa3746428776f3b3462131092 libinput-1.13.3.tar.xz
--sha512 427ec838975444571770e129ef78fd42e4438a11e89ed0b3fc98793184d00c0ca8ed282eab2045cc6cb345804ad6fce1061af563b4f41d75405cdf2f09cb01e1 libinput-1.13.3.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2019-June/040675.html
-+md5 9ef817774bb5b4006cba95e34103e82c libinput-1.13.4.tar.xz
-+sha1 14d7a14643d41c2e7512a7b3a6c0c9a3e7ba3242 libinput-1.13.4.tar.xz
-+sha256 d3eb57c714683b117aae29f6c0be76dd46de259f0a48f20cb43b9fa9f2e1401d libinput-1.13.4.tar.xz
-+sha512 ccfdfc704dab9ea19a503399ecd4ce3a95b8d9480b8dfddeb80be01236c34c6f2f472be0e12e04dddd68092611470d303351e092141bc7491729639bcf7e64d7 libinput-1.13.4.tar.xz
-
- # License files
- sha256 70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14 COPYING
-diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
-index 6761173a1c..4706e8ebfa 100644
---- a/package/libinput/libinput.mk
-+++ b/package/libinput/libinput.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
-
--LIBINPUT_VERSION = 1.13.3
-+LIBINPUT_VERSION = 1.13.4
- LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
- LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
- LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
---
-2.22.0
+diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
+index 4c6327ace8..f6d11baa84 100644
+--- a/fs/tar/tar.mk
++++ b/fs/tar/tar.mk
+@@ -8,6 +8,10 @@ TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
+ 
+ ROOTFS_TAR_DEPENDENCIES = $(BR2_TAR_HOST_DEPENDENCY)
+ 
++ifeq ($(BR2_REPRODUCIBLE),y)
++TAR_OPTS += --pax-option=exthdr.name=%d/PaxHeaders/%f,atime:=0,ctime:=0
++endif
++
+ define ROOTFS_TAR_CMD
+ 	(cd $(TARGET_DIR); find -print0 | LC_ALL=C sort -z | \
+ 		tar $(TAR_OPTS) -cf $@ --null --xattrs-include='*' --no-recursion -T - --numeric-owner)
+-- 
+2.20.1
