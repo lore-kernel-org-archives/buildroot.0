@@ -1,45 +1,28 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 04 Jul 2019 00:04:19 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
- 2019-07-01
-In-Reply-To: <20190702203614.GA4840@dell5510> (Petr Vorel's message of "Tue, 2
- Jul 2019 22:36:16 +0200")
-References: <5d1af309.1c69fb81.cf999.ba7eSMTPIN_ADDED_MISSING@mx.google.com>
- <20190702203614.GA4840@dell5510>
-Message-ID: <874l423hcs.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 4 Jul 2019 00:04:31 +0200
+Subject: [Buildroot] [PATCH] package/faad2: add upstream security fixes
+In-Reply-To: <202f3ce613cead8063357b6d9aae1da5f9bdcf09.1561985006.git.baruch@tkos.co.il>
+References: <202f3ce613cead8063357b6d9aae1da5f9bdcf09.1561985006.git.baruch@tkos.co.il>
+Message-ID: <79ad4303-e3cf-cc96-9a0e-a2ef2bb0892e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
- > Hi,
- >> Hello,
 
- >> This is the list of Buildroot build failures that occured on
- >> 2019-07-01, and for which you are a registered architecture developer
- >> or package developer. Please help us improving the quality of
- >> Buildroot by investigating those build failures and sending patches to
- >> fix them. Thanks!
+On 01/07/2019 14:43, Baruch Siach wrote:
+> CVE-2018-20194: Stack buffer overflow on invalid input
+> 
+> CVE-2018-20362: Null pointer dereference when processing crafted AAC
+> input
+> 
+> Add two more crash fixes from upstream.
+> 
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
- >> Results for the 'master' branch
- >> ===============================
+ Applied to master, thanks.
 
- >> Build failures related to your packages:
-
- >> sh4 |               iputils-20190515 | http://autobuild.buildroot.net/results/e2ad49ca3b59c5d4b0fb883fc3a79483ba023428
- >> microblazeel |               iputils-20190515 | http://autobuild.buildroot.net/results/53c8354aba24ac99a532d3fc50132e4d5eeb1ff6
- >> mips |               iputils-20190515 | http://autobuild.buildroot.net/results/cf3c2016be18882713a70baa367ef6836df207c1
- >> sh4 |               iputils-20190515 | http://autobuild.buildroot.net/results/c891df50b2ca01c969e5275ca92d74ce861af8ee
- >> arm |               iputils-20190515 | http://autobuild.buildroot.net/results/754179740a63d4c34480804f2b733f687a7128dd
-
- > At least some of these are fixed in next branch. What is the policy? Can be
- > individual commits cherrypicked? Or does it need to wait till next release?
-
-I take it you mean next branch / release of iputils? Sending cherry
-picks of specific fixes is fine.
-
--- 
-Bye, Peter Korsgaard
+ Regards,
+ Arnout
