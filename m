@@ -1,58 +1,44 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 4 Jul 2019 00:16:07 +0200
-Subject: [Buildroot] [PATCH 1/1] Standardize my email address.
-In-Reply-To: <20190701163029.5819-1-aduskett@gmail.com>
-References: <20190701163029.5819-1-aduskett@gmail.com>
-Message-ID: <46f31335-000d-40f2-f4ea-c0476557ddfe@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 04 Jul 2019 00:18:46 +0200
+Subject: [Buildroot] [git commit] utils/check-package: Add a quiet flag
+In-Reply-To: <20190703213520.D843B815A2@busybox.osuosl.org> (Arnout
+ Vandecappelle's message of "Wed, 3 Jul 2019 23:34:58 +0200")
+References: <20190703213520.D843B815A2@busybox.osuosl.org>
+Message-ID: <87wogy2249.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Adam,
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-On 01/07/2019 18:30, aduskett at gmail.com wrote:
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> This changes the email address I use to just my standard aduskett at gmail.com
-> email address.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=44af8386f83ed042591fa089dbf01e373c8424ad
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- Please avoid 1st person references in commit messages, because it is not always
-clear who is speaking.
+ > When running in a CI system, stat messages become white noise. Introduce
+ > an option to suppress non-error, non-warning, messages.
 
- Especially in the subject line, it's annoying when you do a oneline log and you
-don't see who 'my' refers to.
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/heirloom-mailx/0002-fix-libressl-support.patch        | 4 ++--
->  package/libglib2/0001-fix-compile-time-atomic-detection.patch | 2 +-
->  package/libsepol/0001-support-static-only.patch               | 4 ++--
->  package/libsepol/0002-revert-ln-relative.patch                | 2 +-
->  ...auto-type-sizeof-rework-autotest-to-be-cross-compila.patch | 2 +-
->  package/php/0003-configure-disable-the-phar-tool.patch        | 2 +-
->  ...1-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch | 4 ++--
->  package/policycoreutils/0002-Add-PREFIX-to-host-paths.patch   | 4 ++--
->  .../python3/0032-fix-building-on-older-distributions.patch    | 4 ++--
->  package/setools/0001-remove-werror-flag-from-setup.patch      | 4 ++--
->  ...Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch | 2 +-
->  package/systemd/0001-install-don-t-use-ln-relative.patch      | 4 ++--
+ > Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > ---
+ >  utils/check-package | 7 +++++--
+ >  1 file changed, 5 insertions(+), 2 deletions(-)
 
- Some of these may have found their way upstream with the wrong email address...
-But I figured that that's not so important, so I applied to master with the
-following commit message:
+ > diff --git a/utils/check-package b/utils/check-package
+ > index ce1fe98d67..f09aaeea03 100755
+ > --- a/utils/check-package
+ > +++ b/utils/check-package
+ > @@ -33,6 +33,7 @@ def parse_args():
+ >                          default="http://nightly.buildroot.org/",
+ >                          help="default: %(default)s")
+ >      parser.add_argument("--verbose", "-v", action="count", default=0)
+ > +    parser.add_argument("--quiet", "-q", action="count", default=0)
 
-    Standardize Adam Duskett's email address
+As we don't have multiple level of quietness, action="store_true" would
+probably have made mode sense:
 
-    Globally change Adam Duskett's email address to aduskett at gmail.com.
+https://docs.python.org/3/library/argparse.html#action
 
-    Note that one or two of the patches may have been applied upstream with
-    the old email address, but in that case those patches will anyway be
-    removed when bumping.
-
-    Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-    Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-
- Regards,
- Arnout
+-- 
+Bye, Peter Korsgaard
