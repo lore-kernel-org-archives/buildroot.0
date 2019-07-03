@@ -1,31 +1,29 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Thu, 4 Jul 2019 00:46:29 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xfont_font-util: add license
- hash
-Message-ID: <20190703224540.E14C087FEB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libXv: add license hash
+Message-ID: <20190703224541.1D44587FEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=be110da4a7dd72ff8e8d33925e6ab73fb56ed21f
+commit: https://git.buildroot.net/buildroot/commit/?id=ec83fe6b6edd564eac390c66b9381484072a9f0f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/x11r7/xfont_font-util/xfont_font-util.hash | 3 +++
+ package/x11r7/xlib_libXv/xlib_libXv.hash | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/x11r7/xfont_font-util/xfont_font-util.hash b/package/x11r7/xfont_font-util/xfont_font-util.hash
-index 04ada91da1..7616ca3030 100644
---- a/package/x11r7/xfont_font-util/xfont_font-util.hash
-+++ b/package/x11r7/xfont_font-util/xfont_font-util.hash
-@@ -1,3 +1,6 @@
- # From http://lists.x.org/archives/xorg-announce/2015-March/002546.html
- sha1	0b16add3637c64b0bbaf1dd223b71b0421100c20				font-util-1.3.1.tar.bz2
- sha256	aa7ebdb0715106dd255082f2310dbaa2cd7e225957c2a77d719720c7cc92b921	font-util-1.3.1.tar.bz2
+diff --git a/package/x11r7/xlib_libXv/xlib_libXv.hash b/package/x11r7/xlib_libXv/xlib_libXv.hash
+index 4cb26eac71..ccc6727017 100644
+--- a/package/x11r7/xlib_libXv/xlib_libXv.hash
++++ b/package/x11r7/xlib_libXv/xlib_libXv.hash
+@@ -1,2 +1,5 @@
+ # From https://lists.x.org/archives/xorg-announce/2016-October/002727.html
+ sha256 d26c13eac99ac4504c532e8e76a1c8e4bd526471eb8a0a4ff2a88db60cb0b088  libXv-1.0.11.tar.bz2
 +
 +# Locally calculated
-+sha256	ce16c3ee6f2a38db6870b66bdb54fce9dcf24acd1161840789e321f6faa1251c	COPYING
++sha256 4fac4d581d00f11c459d68b7cb970f3d4e5a5bbfb53784d85f59a90076280301  COPYING
