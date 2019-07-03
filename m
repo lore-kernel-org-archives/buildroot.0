@@ -1,10 +1,10 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Thu,  4 Jul 2019 00:01:36 +0530
-Subject: [Buildroot] [PATCH v2 04/27] autobuild-run: move sysinfo from
+Date: Thu,  4 Jul 2019 00:01:40 +0530
+Subject: [Buildroot] [PATCH v2 08/27] autobuild-run: move niceness from
  kwargs to Builder class
 In-Reply-To: <20190703183159.3415-1-itsatharva@gmail.com>
 References: <20190703183159.3415-1-itsatharva@gmail.com>
-Message-ID: <20190703183159.3415-4-itsatharva@gmail.com>
+Message-ID: <20190703183159.3415-8-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,46 +16,60 @@ Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
 Changes v1 -> v2:
   - Explicitly state class constructor argument
+  - Fix accidentally moving make_opts in the same patch
 ---
- scripts/autobuild-run | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ scripts/autobuild-run | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 4d730ce..ca2dd83 100755
+index c2d137c..87d0bd8 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -271,9 +271,10 @@ class SystemInfo:
-         return not missing_requirements
- 
+@@ -273,7 +273,7 @@ class SystemInfo:
  class Builder:
--    def __init__(self, instance, njobs):
-+    def __init__(self, instance, njobs, sysinfo):
+     def __init__(self, instance, njobs, sysinfo,
+                  http_url, http_login, http_password,
+-                 submitter, make_opts):
++                 submitter, make_opts, nice):
          self.instance = instance
          self.njobs = njobs
-+        self.sysinfo = sysinfo
+         self.sysinfo = sysinfo
+@@ -282,6 +282,7 @@ class Builder:
+         self.http_password = http_password
+         self.submitter = submitter
+         self.make_opts = make_opts
++        self.nice = nice
  
      def prepare_build(self, **kwargs):
          """Prepare for the next build of the specified instance
-@@ -416,7 +417,7 @@ class Builder:
-         build_2_image = os.path.join(outputdir, "images", "rootfs.tar")
+@@ -449,7 +450,6 @@ class Builder:
  
-         with open(reproducible_results, 'w') as diff:
--            if kwargs['sysinfo'].has("diffoscope"):
-+            if self.sysinfo.has("diffoscope"):
-                 # Prefix to point diffoscope towards cross-tools
-                 prefix = subprocess.check_output(["make", "O=%s" % outputdir, "-C", srcdir, "printvars", "VARS=TARGET_CROSS"])
-                 # Remove TARGET_CROSS= and \n from the string
-@@ -846,9 +847,9 @@ def main():
-     for i in range(0, int(args['--ninstances'])):
-         builder = Builder(
-             instance = i,
--            njobs = args['--njobs'])
-+            njobs = args['--njobs'],
-+            sysinfo = sysinfo)
+         idir = "instance-%d" % self.instance
+         log = kwargs['log']
+-        nice = kwargs['nice']
+ 
+         # We need the absolute path to use with O=, because the relative
+         # path to the output directory here is not relative to the
+@@ -461,7 +461,7 @@ class Builder:
+         f = open(os.path.join(outputdir, "logfile"), "w+")
+         log_write(log, "INFO: build started")
+ 
+-        cmd = ["nice", "-n", str(nice),
++        cmd = ["nice", "-n", str(self.nice),
+                "make", "O=%s" % outputdir,
+                "-C", srcdir, "BR2_DL_DIR=%s" % dldir,
+                "BR2_JLEVEL=%s" % self.njobs] \
+@@ -860,9 +860,9 @@ def main():
+             http_login = args['--http-login'],
+             http_password = args['--http-password'],
+             submitter = args['--submitter'],
+-            make_opts = (args['--make-opts'] or ''))
++            make_opts = (args['--make-opts'] or ''),
++            nice = (args['--nice'] or 0))
          p = multiprocessing.Process(target=builder.run_instance, kwargs=dict(
--                sysinfo = sysinfo,
-                 http_url = args['--http-url'],
-                 http_login = args['--http-login'],
-                 http_password = args['--http-password'],
+-                nice = (args['--nice'] or 0),
+                 toolchains_csv = args['--toolchains-csv'],
+                 repo = args['--repo'],
+                 upload = upload,
 -- 
 2.22.0
