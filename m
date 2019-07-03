@@ -1,82 +1,112 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Thu,  4 Jul 2019 00:01:53 +0530
-Subject: [Buildroot] [PATCH v2 21/27] autobuild-run: move check_version() to
- Builder class
+Date: Thu,  4 Jul 2019 00:01:52 +0530
+Subject: [Buildroot] [PATCH v2 20/27] autobuild-run: define results
+ directory as part of Builder class
 In-Reply-To: <20190703183159.3415-1-itsatharva@gmail.com>
 References: <20190703183159.3415-1-itsatharva@gmail.com>
-Message-ID: <20190703183159.3415-21-itsatharva@gmail.com>
+Message-ID: <20190703183159.3415-20-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Upcoming patch from Thomas needs check_version() to
-use http_url. As that is inside Builder class and check_version()
-is only used inside Builder class, move it inside the class.
-
-Also remove the redundant call to check_version() from main().
-We already call check_version() in run_instance(). Also the fact
-that we cannot call check_version() in main() since the builder
-class object is not defined at that point.
-
 Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes v1 -> v2:
-  - New patch
----
- scripts/autobuild-run | 17 ++++++++---------
- 1 file changed, 8 insertions(+), 9 deletions(-)
+ scripts/autobuild-run | 24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 8f3e602..00d5c8e 100755
+index f2a28d5..8f3e602 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -178,13 +178,6 @@ def log_write(logf, msg):
-     logf.write("[%s] %s\n" % (strftime("%a, %d %b %Y %H:%M:%S", localtime()), msg))
-     logf.flush()
+@@ -299,6 +299,7 @@ class Builder:
+         # Buildroot sources, but to the location of the autobuilder
+         # script.
+         self.outputdir = os.path.abspath(os.path.join(self.idir, "output"))
++        self.resultdir = os.path.join(self.outputdir, "results")
  
--def check_version():
--    with urlopen_closing('http://autobuild.buildroot.org/version') as r:
--        version = int(decode_bytes(r.readline()).strip())
--    if version > VERSION:
--        print("ERROR: script version too old, please upgrade.")
--        sys.exit(1)
+         if self.debug:
+             self.log = sys.stdout
+@@ -540,19 +541,17 @@ class Builder:
+         are available) or stores them locally as tarballs.
+         """
+ 
+-        resultdir = os.path.join(self.outputdir, "results")
 -
- def get_branch():
-     """Returns the branch that should be built. It fetches a CSV file from
-     autobuild.buildroot.org that provides the list of branches to test
-@@ -306,6 +299,13 @@ class Builder:
-         else:
-             self.log = open(os.path.join(self.idir, "instance.log"), "a+")
+         shutil.copyfile(os.path.join(self.outputdir, ".config"),
+-                        os.path.join(resultdir, "config"))
++                        os.path.join(self.resultdir, "config"))
+         shutil.copyfile(os.path.join(self.outputdir, "defconfig"),
+-                        os.path.join(resultdir, "defconfig"))
++                        os.path.join(self.resultdir, "defconfig"))
+         shutil.copyfile(os.path.join(self.outputdir, "branch"),
+-                        os.path.join(resultdir, "branch"))
++                        os.path.join(self.resultdir, "branch"))
  
-+    def check_version(self):
-+        with urlopen_closing('http://autobuild.buildroot.org/version') as r:
-+            version = int(decode_bytes(r.readline()).strip())
-+        if version > VERSION:
-+            print("ERROR: script version too old, please upgrade.")
-+            sys.exit(1)
-+
-     def prepare_build(self):
-         """Prepare for the next build of the specified instance
+         def copy_if_exists(directory, src, dst=None):
+             if os.path.exists(os.path.join(self.outputdir, directory, src)):
+                 shutil.copyfile(os.path.join(self.outputdir, directory, src),
+-                                os.path.join(resultdir, src if dst is None else dst))
++                                os.path.join(self.resultdir, src if dst is None else dst))
  
-@@ -704,7 +704,7 @@ class Builder:
-         log_write(self.log, "INFO: instance started")
+         copy_if_exists("build", "build-time.log")
+         copy_if_exists("build", "packages-file-list.txt")
+@@ -561,7 +560,7 @@ class Builder:
+         copy_if_exists("legal-info", "manifest.csv", "licenses-manifest.csv")
  
-         while True:
--            check_version()
-+            self.check_version()
+         subprocess.call(["git log -n 1 --pretty=format:%%H > %s" % \
+-                         os.path.join(resultdir, "gitid")],
++                         os.path.join(self.resultdir, "gitid")],
+                         shell=True, cwd=self.srcdir)
  
-             ret = self.prepare_build()
+         # Return True if the result should be rejected, False otherwise
+@@ -623,7 +622,7 @@ class Builder:
+                 mf.close()
+                 f.close()
+ 
+-        extract_end_log(os.path.join(resultdir, "build-end.log"))
++        extract_end_log(os.path.join(self.resultdir, "build-end.log"))
+ 
+         def copy_config_log_files():
+             """Recursively copy any config.log files from the failing package"""
+@@ -633,7 +632,7 @@ class Builder:
+                 return
+ 
+             srcroot = os.path.join(self.outputdir, "build", '-'.join(reason))
+-            destroot = os.path.join(resultdir, '-'.join(reason))
++            destroot = os.path.join(self.resultdir, '-'.join(reason))
+             config_files = ('config.log', 'CMakeCache.txt', 'CMakeError.log',
+                 'CMakeOutput.log')
+ 
+@@ -648,7 +647,7 @@ class Builder:
+ 
+         copy_config_log_files()
+ 
+-        resultf = open(os.path.join(resultdir, "status"), "w+")
++        resultf = open(os.path.join(self.resultdir, "status"), "w+")
+         if result == 0:
+             resultf.write("OK")
+         elif result == -1:
+@@ -657,7 +656,7 @@ class Builder:
+             resultf.write("TIMEOUT")
+         resultf.close()
+ 
+-        with open(os.path.join(resultdir, "submitter"), "w+") as submitterf:
++        with open(os.path.join(self.resultdir, "submitter"), "w+") as submitterf:
+             submitterf.write(self.submitter)
+ 
+         # Yes, shutil.make_archive() would be nice, but it doesn't exist
+@@ -711,8 +710,7 @@ class Builder:
              if ret != 0:
-@@ -763,7 +763,6 @@ def main():
-     # showing error messages in another language.
-     os.environ['LC_ALL'] = 'C'
+                 continue
  
--    check_version()
-     sysinfo = SystemInfo()
+-            resultdir = os.path.join(self.idir, "output", "results")
+-            os.mkdir(resultdir)
++            os.mkdir(self.resultdir)
  
-     args = docopt.docopt(doc, version=VERSION)
+             ret = self.gen_config()
+             if ret != 0:
 -- 
 2.22.0
