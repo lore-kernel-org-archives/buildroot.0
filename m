@@ -1,28 +1,31 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 4 Jul 2019 00:46:14 +0200
-Subject: [Buildroot] [git commit] package/rpi-firmware: add license hash
-Message-ID: <20190703224540.A945682677@busybox.osuosl.org>
+Date: Thu, 4 Jul 2019 00:46:29 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xfont_font-util: add license
+ hash
+Message-ID: <20190703224540.E14C087FEB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c25030c2ea942d9d183f34760c45378f7ffc0ce
+commit: https://git.buildroot.net/buildroot/commit/?id=be110da4a7dd72ff8e8d33925e6ab73fb56ed21f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-[Arnout: fix path to license file]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/rpi-firmware/rpi-firmware.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/x11r7/xfont_font-util/xfont_font-util.hash | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/rpi-firmware/rpi-firmware.hash b/package/rpi-firmware/rpi-firmware.hash
-index d719fa6e08..076ce5044c 100644
---- a/package/rpi-firmware/rpi-firmware.hash
-+++ b/package/rpi-firmware/rpi-firmware.hash
-@@ -1,2 +1,3 @@
- # Locally computed
- sha256 e911f6342ea8aa9380cae97c6f5ac4ddd370527265f23d5b5d4b2c6f679d4ba8 rpi-firmware-ebf7b40cdc6effe7ffa3fd5195e8be01b94f80da.tar.gz
-+sha256 ba76edfc10a248166d965b8eaf320771c44f4f432d4fce2fd31fd272e7038add boot/LICENCE.broadcom
+diff --git a/package/x11r7/xfont_font-util/xfont_font-util.hash b/package/x11r7/xfont_font-util/xfont_font-util.hash
+index 04ada91da1..7616ca3030 100644
+--- a/package/x11r7/xfont_font-util/xfont_font-util.hash
++++ b/package/x11r7/xfont_font-util/xfont_font-util.hash
+@@ -1,3 +1,6 @@
+ # From http://lists.x.org/archives/xorg-announce/2015-March/002546.html
+ sha1	0b16add3637c64b0bbaf1dd223b71b0421100c20				font-util-1.3.1.tar.bz2
+ sha256	aa7ebdb0715106dd255082f2310dbaa2cd7e225957c2a77d719720c7cc92b921	font-util-1.3.1.tar.bz2
++
++# Locally calculated
++sha256	ce16c3ee6f2a38db6870b66bdb54fce9dcf24acd1161840789e321f6faa1251c	COPYING
