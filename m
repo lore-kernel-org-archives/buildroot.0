@@ -1,10 +1,10 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Thu,  4 Jul 2019 00:01:39 +0530
-Subject: [Buildroot] [PATCH v2 07/27] autobuild-run: move make_opts from
- kwargs to Builder class
+Date: Thu,  4 Jul 2019 00:01:37 +0530
+Subject: [Buildroot] [PATCH v2 05/27] autobuild-run: move http variables
+ from kwargs to Builder class
 In-Reply-To: <20190703183159.3415-1-itsatharva@gmail.com>
 References: <20190703183159.3415-1-itsatharva@gmail.com>
-Message-ID: <20190703183159.3415-7-itsatharva@gmail.com>
+Message-ID: <20190703183159.3415-5-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,61 +15,61 @@ Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
 Changes v1 -> v2:
-  - New patch, split accidental squash of niceness move and make_opts move
+  - Explicitly state class constructor arguments
+  - Fix whitespace issues
 ---
- scripts/autobuild-run | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+ scripts/autobuild-run | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 426078c..c2d137c 100755
+index ca2dd83..9d16ce5 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -273,7 +273,7 @@ class SystemInfo:
+@@ -271,10 +271,14 @@ class SystemInfo:
+         return not missing_requirements
+ 
  class Builder:
-     def __init__(self, instance, njobs, sysinfo,
-                  http_url, http_login, http_password,
--                 submitter):
-+                 submitter, make_opts):
+-    def __init__(self, instance, njobs, sysinfo):
++    def __init__(self, instance, njobs, sysinfo,
++                 http_url, http_login, http_password):
          self.instance = instance
          self.njobs = njobs
          self.sysinfo = sysinfo
-@@ -281,6 +281,7 @@ class Builder:
-         self.http_login = http_login
-         self.http_password = http_password
-         self.submitter = submitter
-+        self.make_opts = make_opts
++        self.http_url = http_url
++        self.http_login = http_login
++        self.http_password = http_password
  
      def prepare_build(self, **kwargs):
          """Prepare for the next build of the specified instance
-@@ -464,7 +465,7 @@ class Builder:
-                "make", "O=%s" % outputdir,
-                "-C", srcdir, "BR2_DL_DIR=%s" % dldir,
-                "BR2_JLEVEL=%s" % self.njobs] \
--            + kwargs['make_opts'].split()
-+            + self.make_opts.split()
-         sub = subprocess.Popen(cmd, stdout=f, stderr=f)
- 
-         # Setup hung build monitoring thread
-@@ -496,7 +497,7 @@ class Builder:
- 
-         cmd = ["make", "O=%s" % outputdir, "-C", srcdir,
-                "BR2_DL_DIR=%s" % dldir, "legal-info"] \
--            + kwargs['make_opts'].split()
-+            + self.make_opts.split()
-         ret = subprocess.call(cmd, stdout=f, stderr=f)
-         if ret != 0:
-             log_write(log, "INFO: build failed during legal-info")
-@@ -858,9 +859,9 @@ def main():
-             http_url = args['--http-url'],
-             http_login = args['--http-login'],
-             http_password = args['--http-password'],
--            submitter = args['--submitter'])
-+            submitter = args['--submitter'],
-+            make_opts = (args['--make-opts'] or ''))
+@@ -681,11 +685,11 @@ class Builder:
+             # none of the ones that are part of the standard library can
+             # upload a file without writing dozens of lines of code.
+             ret = subprocess.call(["curl", "-u",
+-                                   "%s:%s" % (kwargs['http_login'], kwargs['http_password']),
++                                   "%s:%s" % (self.http_login, self.http_password),
+                                    "-H", "Expect:",
+                                    "-F", "uploadedfile=@%s" % os.path.join(outputdir, "results.tar.bz2"),
+                                    "-F", "uploadsubmit=1",
+-                                   kwargs['http_url']],
++                                   self.http_url],
+                                   stdout=log, stderr=log)
+             if ret != 0:
+                 log_write(log, "INFO: results could not be submitted, %d" % ret)
+@@ -848,11 +852,11 @@ def main():
+         builder = Builder(
+             instance = i,
+             njobs = args['--njobs'],
+-            sysinfo = sysinfo)
++            sysinfo = sysinfo,
++            http_url = args['--http-url'],
++            http_login = args['--http-login'],
++            http_password = args['--http-password'])
          p = multiprocessing.Process(target=builder.run_instance, kwargs=dict(
--                make_opts = (args['--make-opts'] or ''),
+-                http_url = args['--http-url'],
+-                http_login = args['--http-login'],
+-                http_password = args['--http-password'],
+                 submitter = args['--submitter'],
+                 make_opts = (args['--make-opts'] or ''),
                  nice = (args['--nice'] or 0),
-                 toolchains_csv = args['--toolchains-csv'],
-                 repo = args['--repo'],
 -- 
 2.22.0
