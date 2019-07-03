@@ -1,90 +1,49 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Wed, 3 Jul 2019 08:23:07 -0500
-Subject: [Buildroot] [PATCH v2] fs/tar: explicitly set extended header
- values to ensure binary reproducibility
-In-Reply-To: <20190702173559.4423-1-itsatharva@gmail.com>
-References: <20190702173559.4423-1-itsatharva@gmail.com>
-Message-ID: <CANQCQpYU16Lw36=Mov_A0bowwGq_G-3HY4EnC1hrdYG3HzA4NA@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed,  3 Jul 2019 17:52:13 +0200
+Subject: [Buildroot] [PATCH] package/irssi: security bump to version 1.0.8
+Message-ID: <20190703155213.15636-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Atharva,
+Fixes the following security vulnerability:
 
-On Tue, Jul 2, 2019 at 12:37 PM Atharva Lele <itsatharva@gmail.com> wrote:
->
-> Since we use --xattrs-include='*' to include all extended attributes,
-> tar creates a PAX formatted archive. The archive metadata captures atime
-> and ctime of files. To fix this, GNU recommends that we pass this added
-> argument to tar to create binary reproducible packages. Setting of mtime
-> is handled in fs/common.mk using touch on all files.
->
-> Diffoscope output pre-change: https://gitlab.com/snippets/1871111
-> Diffoscope output after change is blank i.e. binary reproducibile rootfs
-> is created.
->
-> GNU Recommendation: https://www.gnu.org/software/tar/manual/tar.html#SEC147
->
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+CVE-2019-13045: Use after free when sending SASL login to the server found
+by ilbelkyr
 
-Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
+For more details, see the advisory:
+https://irssi.org/security/html/irssi_sa_2019_06/
 
-> ---
-> Changes v1 -> v2:
->   - Added comment about mtime handling
-> ---
->  fs/tar/tar.mk | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
-> index 4c6327ace8..f6d11baa84 100644
-> --- a/fs/tar/tar.mk
-> +++ b/fs/tar/tar.mk
-> @@ -8,6 +8,10 @@ TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
->
->  ROOTFS_TAR_DEPENDENCIES = $(BR2_TAR_HOST_DEPENDENCY)
->
-> +ifeq ($(BR2_REPRODUCIBLE),y)
-> +TAR_OPTS += --pax-option=exthdr.name=%d/PaxHeaders/%f,atime:=0,ctime:=0
-> +endif
-> +
->  define ROOTFS_TAR_CMD
->         (cd $(TARGET_DIR); find -print0 | LC_ALL=C sort -z | \
->                 tar $(TAR_OPTS) -cf $@ --null --xattrs-include='*' --no-recursion -T - --numeric-owner)
-> --
-> 2.20.1
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/irssi/irssi.hash | 2 +-
+ package/irssi/irssi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-
-
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index 0f298137ba..6a91e16487 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	1b386ca026aa1875c380fd00ef1d24b71fb87cdae39ef5349ecca16c4567feac  irssi-1.0.7.tar.xz
++sha256	414fdee2ffaeb90a55f141b7fb3899608631dc891e2bc1f5e91ca31f1a621101  irssi-1.0.8.tar.xz
+ # Locally calculated
+ sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index 611365f88e..4d7268d291 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IRSSI_VERSION = 1.0.7
++IRSSI_VERSION = 1.0.8
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
 -- 
-
-Matthew Weber | Pr. Software Engineer | Commercial Avionics
-
-COLLINS AEROSPACE
-
-400 Collins Road NE, Cedar Rapids, Iowa 52498, USA
-
-Tel: +1 319 295 7349 | FAX: +1 319 263 6099
-
-matthew.weber at collins.com | collinsaerospace.com
-
-
-
-CONFIDENTIALITY WARNING: This message may contain proprietary and/or
-privileged information of Collins Aerospace and its affiliated
-companies. If you are not the intended recipient, please 1) Do not
-disclose, copy, distribute or use this message or its contents. 2)
-Advise the sender by return email. 3) Delete all copies (including all
-attachments) from your computer. Your cooperation is greatly
-appreciated.
-
-
-Any export restricted material should be shared using my
-matthew.weber at corp.rockwellcollins.com address.
+2.11.0
