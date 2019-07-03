@@ -1,61 +1,100 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 4 Jul 2019 00:53:14 +0200
-Subject: [Buildroot] [PATCH] package/python-django: bump to version 2.2.2
-In-Reply-To: <1561917244-1188-1-git-send-email-pjtexier@koncepto.io>
-References: <1561917244-1188-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <e00bb722-d8a4-b357-3783-ccb6ccc476f3@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 4 Jul 2019 00:57:50 +0200
+Subject: [Buildroot] [git commit] package/mbedtls: bump version to 2.16.2
+Message-ID: <20190703225739.0AB3283B6F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Pierre-Jean,
+commit: https://git.buildroot.net/buildroot/commit/?id=5358a5485216ab34daf667eff4f2a5a4da210742
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 30/06/2019 19:54, Pierre-Jean Texier wrote:
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+See changelog: https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.2-and-2.7.11-released
 
- Peter posted a security bump to 2.1.10 shortly afterwards. I applied that one
-instead, because I assume that that CVE-2019-12781 fix needs to be added on top
-of 2.2.2 as well. Therefore, I've marked this patch as Changes Requested in
-patchwork.
+Fixes:
+ - http://autobuild.buildroot.net/results/7c0/7c09c80a376cf0c4c23a3cf48314806de9251544/
 
- Regards,
- Arnout
+Also add a patch to fix the build issue by requiring at least
+ARMv6 in addition to the DSP feature.
 
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ ...quire-at-least-ARMv6-to-enable-the-ARM-DS.patch | 38 ++++++++++++++++++++++
+ package/mbedtls/mbedtls.hash                       |  6 ++--
+ package/mbedtls/mbedtls.mk                         |  2 +-
+ 3 files changed, 42 insertions(+), 4 deletions(-)
 
-> ---
->  package/python-django/python-django.hash | 4 ++--
->  package/python-django/python-django.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-> index c325116..4172f25 100644
-> --- a/package/python-django/python-django.hash
-> +++ b/package/python-django/python-django.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/django/json
-> -md5	909c2e7761893a922dcf721521d9239e  Django-2.1.9.tar.gz
-> -sha256	5052def4ff0a84bdf669827fdbd7b7cc1ac058f10232be6b21f37c6824f578da  Django-2.1.9.tar.gz
-> +md5	c52b05c2bc4898bd68dc0359347fff69  Django-2.2.2.tar.gz
-> +sha256	753d30d3eb078064d2ddadfea65083c9848074a7f93d7b4dc7fa6b1380d278f5  Django-2.2.2.tar.gz
->  # Locally computed sha256 checksums
->  sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-> diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-> index 041822e..e1daae3 100644
-> --- a/package/python-django/python-django.mk
-> +++ b/package/python-django/python-django.mk
-> @@ -4,10 +4,10 @@
->  #
->  ################################################################################
->  
-> -PYTHON_DJANGO_VERSION = 2.1.9
-> +PYTHON_DJANGO_VERSION = 2.2.2
->  PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
->  # The official Django site has an unpractical URL
-> -PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/c1/b3/3cdc60dc2e3c11236539f9470e42c5075a2e9c9f4885f5b4b912e9f19992
-> +PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/56/2e/c0495314c0bdcf19d9b888a98ff16a4c58a90dd77ed741f4dbab2cbf7efe
->  PYTHON_DJANGO_LICENSE = BSD-3-Clause
->  PYTHON_DJANGO_LICENSE_FILES = LICENSE
->  PYTHON_DJANGO_SETUP_TYPE = setuptools
-> 
+diff --git a/package/mbedtls/0002-bn_mul.h-require-at-least-ARMv6-to-enable-the-ARM-DS.patch b/package/mbedtls/0002-bn_mul.h-require-at-least-ARMv6-to-enable-the-ARM-DS.patch
+new file mode 100644
+index 0000000000..ee66be4b21
+--- /dev/null
++++ b/package/mbedtls/0002-bn_mul.h-require-at-least-ARMv6-to-enable-the-ARM-DS.patch
+@@ -0,0 +1,38 @@
++From 63f5b85e700677270197d176475be609187e9cdb Mon Sep 17 00:00:00 2001
++From: Aurelien Jarno <aurelien@aurel32.net>
++Date: Sat, 3 Nov 2018 00:46:06 +0100
++Subject: [PATCH] bn_mul.h: require at least ARMv6 to enable the ARM DSP code
++
++Commit 16b1bd89326e "bn_mul.h: add ARM DSP optimized MULADDC code"
++added some ARM DSP instructions that was assumed to always be available
++when __ARM_FEATURE_DSP is defined to 1. Unfortunately it appears that
++the ARMv5TE architecture (GCC flag -march=armv5te) supports the DSP
++instructions, but only in Thumb mode and not in ARM mode, despite
++defining __ARM_FEATURE_DSP in both cases.
++
++This patch fixes the build issue by requiring at least ARMv6 in addition
++to the DSP feature.
++
++[Upstream status: https://github.com/ARMmbed/mbedtls/pull/2169]
++Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
++---
++ include/mbedtls/bn_mul.h | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/include/mbedtls/bn_mul.h b/include/mbedtls/bn_mul.h
++index 0af694c..565615f 100644
++--- a/include/mbedtls/bn_mul.h
+++++ b/include/mbedtls/bn_mul.h
++@@ -636,7 +636,8 @@
++            "r6", "r7", "r8", "r9", "cc"         \
++          );
++ 
++-#elif defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1)
+++#elif (__ARM_ARCH >= 6) && \
+++    defined (__ARM_FEATURE_DSP) && (__ARM_FEATURE_DSP == 1)
++ 
++ #define MULADDC_INIT                            \
++     asm(
++-- 
++2.7.4
++
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index 57a5aeffcb..1e65f8224a 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,5 +1,5 @@
+-# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.0-2.7.9-and-2.1.18-released
+-sha1	70dc65f3f6f6b2392b821163be7f1f634f0012c8	mbedtls-2.7.9-apache.tgz
+-sha256	18e57260b46579245744adb79c2924194dad36aac38c2d0be9e749b9181c706f	mbedtls-2.7.9-apache.tgz
++# From https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.2-and-2.7.11-released
++sha1	ba809acfd4b41b86895b92e98d936695b5b62b73	mbedtls-2.16.2-apache.tgz
++sha256	a6834fcd7b7e64b83dfaaa6ee695198cb5019a929b2806cb0162e049f98206a4	mbedtls-2.16.2-apache.tgz
+ # Locally calculated
+ sha256	cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30	apache-2.0.txt
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 4a5a731d42..fdf1d33b2e 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ MBEDTLS_SITE = https://tls.mbed.org/code/releases
+-MBEDTLS_VERSION = 2.7.9
++MBEDTLS_VERSION = 2.16.2
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION)-apache.tgz
+ MBEDTLS_CONF_OPTS = \
+ 	-DENABLE_PROGRAMS=$(if $(BR2_PACKAGE_MBEDTLS_PROGRAMS),ON,OFF) \
