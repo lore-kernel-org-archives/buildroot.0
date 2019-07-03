@@ -1,33 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 4 Jul 2019 00:02:28 +0200
-Subject: [Buildroot] [PATCH 1/3] package/libnftnl: bump to version 1.1.3
-In-Reply-To: <838be080c94bce93e5da8a5a4266be7a2a92be20.1561983176.git.baruch@tkos.co.il>
-References: <838be080c94bce93e5da8a5a4266be7a2a92be20.1561983176.git.baruch@tkos.co.il>
-Message-ID: <bac5f180-a5b8-5af6-d512-25bee2fce460@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 04 Jul 2019 00:04:19 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Your build results for
+ 2019-07-01
+In-Reply-To: <20190702203614.GA4840@dell5510> (Petr Vorel's message of "Tue, 2
+ Jul 2019 22:36:16 +0200")
+References: <5d1af309.1c69fb81.cf999.ba7eSMTPIN_ADDED_MISSING@mx.google.com>
+ <20190702203614.GA4840@dell5510>
+Message-ID: <874l423hcs.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Petr" == Petr Vorel <petr.vorel@gmail.com> writes:
 
+ > Hi,
+ >> Hello,
 
-On 01/07/2019 14:12, Baruch Siach wrote:
-> Rebase patch #1.
-> 
-> Cc: Yegor Yefremov <yegorslists@googlemail.com>
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ >> This is the list of Buildroot build failures that occured on
+ >> 2019-07-01, and for which you are a registered architecture developer
+ >> or package developer. Please help us improving the quality of
+ >> Buildroot by investigating those build failures and sending patches to
+ >> fix them. Thanks!
 
- Series applied to master, thanks.
+ >> Results for the 'master' branch
+ >> ===============================
 
+ >> Build failures related to your packages:
 
->  ...libnftnl_xfree-to-avoid-symbol-namin.patch | 118 ++++++++++--------
+ >> sh4 |               iputils-20190515 | http://autobuild.buildroot.net/results/e2ad49ca3b59c5d4b0fb883fc3a79483ba023428
+ >> microblazeel |               iputils-20190515 | http://autobuild.buildroot.net/results/53c8354aba24ac99a532d3fc50132e4d5eeb1ff6
+ >> mips |               iputils-20190515 | http://autobuild.buildroot.net/results/cf3c2016be18882713a70baa367ef6836df207c1
+ >> sh4 |               iputils-20190515 | http://autobuild.buildroot.net/results/c891df50b2ca01c969e5275ca92d74ce861af8ee
+ >> arm |               iputils-20190515 | http://autobuild.buildroot.net/results/754179740a63d4c34480804f2b733f687a7128dd
 
- Could you check if this patch is still relevant? Originally, xfree was defined
-as a function so it made sense. However, in 1.0.3 it became a define so it
-shouldn't be needed anymore...
+ > At least some of these are fixed in next branch. What is the policy? Can be
+ > individual commits cherrypicked? Or does it need to wait till next release?
 
- Also, is path 2 upstreamable?
+I take it you mean next branch / release of iputils? Sending cherry
+picks of specific fixes is fine.
 
- Regards,
- Arnout
+-- 
+Bye, Peter Korsgaard
