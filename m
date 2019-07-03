@@ -1,63 +1,49 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 4 Jul 2019 01:04:41 +0200
-Subject: [Buildroot] [PATCH 3/5] package/pcre: bump version to 8.43
-In-Reply-To: <20190629144630.8036-3-bernd.kuhls@t-online.de>
-References: <20190629144630.8036-1-bernd.kuhls@t-online.de>
- <20190629144630.8036-3-bernd.kuhls@t-online.de>
-Message-ID: <f839d535-5788-4c68-52be-9d9d26fce600@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 4 Jul 2019 01:02:12 +0200
+Subject: [Buildroot] [git commit] package/gnutls: bump version to 3.6.8
+Message-ID: <20190703230713.C1B6487FED@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Bernd,
+commit: https://git.buildroot.net/buildroot/commit/?id=9e2fcb2e251e0763c00583cc21d3e8cff968976f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 29/06/2019 16:46, Bernd Kuhls wrote:
-> Release notes:
-> https://lists.exim.org/lurker/message/20190125.161413.ce45dfd2.en.html
-> https://lists.exim.org/lurker/message/20190223.165009.b0fb3c20.en.html
-> 
-> Updated license hash after upstream commit
-> https://vcs.pcre.org/pcre/code/tags/pcre-8.43/LICENCE?r1=1749&r2=1734
+Release notes:
+https://lists.gnupg.org/pipermail/gnutls-help/2019-May/004527.html
 
- You also have to say why the change is innocent:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/gnutls/gnutls.hash | 4 ++--
+ package/gnutls/gnutls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Updated license hash after update of copyright year in upstream commit
-
-
- Regards,
- Arnout
-
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/pcre/pcre.hash | 4 ++--
->  package/pcre/pcre.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
-> index ca72a78cd2..7513d5f198 100644
-> --- a/package/pcre/pcre.hash
-> +++ b/package/pcre/pcre.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated after checking pgp signature
-> -sha256 2cd04b7c887808be030254e8d77de11d3fe9d4505c39d4b15d2664ffe8bf9301  pcre-8.42.tar.bz2
-> +sha256 91e762520003013834ac1adb4a938d53b22a216341c061b0cf05603b290faf6b  pcre-8.43.tar.bz2
->  # License files, locally calculated
-> -sha256 f998c0f52eb704eff28f503580cfca3f2547280aa212994f6cf2d8e317587c1c  LICENCE
-> +sha256 a5fce68baf797e0918463a4437ef75984c41118f43850ddeabda1b5a90154309  LICENCE
-> diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-> index 163e535ec3..595cda8a53 100644
-> --- a/package/pcre/pcre.mk
-> +++ b/package/pcre/pcre.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -PCRE_VERSION = 8.42
-> +PCRE_VERSION = 8.43
->  PCRE_SITE = https://ftp.pcre.org/pub/pcre
->  PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
->  PCRE_LICENSE = BSD-3-Clause
-> 
+diff --git a/package/gnutls/gnutls.hash b/package/gnutls/gnutls.hash
+index 8c0e0d69d5..5ab913ad6e 100644
+--- a/package/gnutls/gnutls.hash
++++ b/package/gnutls/gnutls.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.7.1.tar.xz.sig
+-sha256	881b26409ecd8ea4c514fd3fbdb6fae5fab422ca7b71116260e263940a4bbbad	gnutls-3.6.7.1.tar.xz
++# https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.8.tar.xz.sig
++sha256	aa81944e5635de981171772857e72be231a7e0f559ae0292d2737de475383e83	gnutls-3.6.8.tar.xz
+ # Locally calculated
+ sha256	e79e9c8a0c85d735ff98185918ec94ed7d175efc377012787aebcf3b80f0d90b	doc/COPYING
+ sha256	6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3	doc/COPYING.LESSER
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index e7c5968204..0e5bccc891 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ GNUTLS_VERSION_MAJOR = 3.6
+-GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).7.1
++GNUTLS_VERSION = $(GNUTLS_VERSION_MAJOR).8
+ GNUTLS_SOURCE = gnutls-$(GNUTLS_VERSION).tar.xz
+ GNUTLS_SITE = https://www.gnupg.org/ftp/gcrypt/gnutls/v$(GNUTLS_VERSION_MAJOR)
+ GNUTLS_LICENSE = LGPL-2.1+ (core library), GPL-3.0+ (gnutls-openssl library)
