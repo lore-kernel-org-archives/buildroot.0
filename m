@@ -1,31 +1,28 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Thu, 4 Jul 2019 00:46:29 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xserver_xorg-server: add
+Subject: [Buildroot] [git commit] package/x11r7/xfont_font-alias: add
  license hash
-Message-ID: <20190703224541.3015287FEB@busybox.osuosl.org>
+Message-ID: <20190703224540.C878782677@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4801346196e6a4f92278968a58ec0d24b62655ce
+commit: https://git.buildroot.net/buildroot/commit/?id=1f89241717a7a1f94addfbfdb56a6832ddc89f6f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ package/x11r7/xfont_font-alias/xfont_font-alias.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index f79dc0c4eb..fe2a7ae55a 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -8,3 +8,6 @@ md5 c9fc7e21e11286dbedd22c00df652130  xorg-server-1.20.5.tar.bz2
- sha1 fea6fd34c7f48b3c69fbecd8fb294eaa1498e69c  xorg-server-1.20.5.tar.bz2
- sha256 a81d8243f37e75a03d4f8c55f96d0bc25802be6ec45c3bfa5cb614c6d01bac9d  xorg-server-1.20.5.tar.bz2
- sha512 625f0626b122cf95600abe382c3217348999357a0e2d2443092f1b67cff1c98d7ef09303884ceaeac181e0555dc56b0d4d44bda45cc464dac2d9a50c5b32d631  xorg-server-1.20.5.tar.bz2
-+
-+# Locally calculated
-+sha256 4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
+diff --git a/package/x11r7/xfont_font-alias/xfont_font-alias.hash b/package/x11r7/xfont_font-alias/xfont_font-alias.hash
+index 7f1efe8e0b..ae679a0ade 100644
+--- a/package/x11r7/xfont_font-alias/xfont_font-alias.hash
++++ b/package/x11r7/xfont_font-alias/xfont_font-alias.hash
+@@ -1,2 +1,3 @@
+ # locally computed
+ sha256  8b453b2aae1cfa8090009ca037037b8c5e333550651d5a158b7264ce1d472c9a  font-alias-1.0.3.tar.bz2
++sha256  bdba5452fc080c0f1a56d66978ac4150d1d1a00a9cc0248bba4f0b76c80ad47e  COPYING
