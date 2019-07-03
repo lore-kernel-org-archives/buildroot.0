@@ -1,36 +1,36 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Wed,  3 Jul 2019 22:09:59 +0530
-Subject: [Buildroot] [PATCH 2/2] fs/common.mk: do not store original names
- and timestamps when creating GZIP rootfs
-In-Reply-To: <20190703163959.23070-1-itsatharva@gmail.com>
-References: <20190703163959.23070-1-itsatharva@gmail.com>
-Message-ID: <20190703163959.23070-2-itsatharva@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed,  3 Jul 2019 20:11:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gupnp-tools: fix build with NLS
+Message-ID: <20190703181156.20472-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We don't use the GZIP environment variable to store GZIP options,
-so explicitly add -n argument here to increase reproducibility.
+Fixes:
+ - No autobuilder failures yet
 
-Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- fs/common.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/gupnp-tools/gupnp-tools.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/fs/common.mk b/fs/common.mk
-index fceb38c5b9..ca46a331d6 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -115,7 +115,7 @@ ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES = $$(sort \
+diff --git a/package/gupnp-tools/gupnp-tools.mk b/package/gupnp-tools/gupnp-tools.mk
+index 8f95e04f98..06c7b1fd3b 100644
+--- a/package/gupnp-tools/gupnp-tools.mk
++++ b/package/gupnp-tools/gupnp-tools.mk
+@@ -19,7 +19,10 @@ GUPNP_TOOLS_DEPENDENCIES = \
+ 	gssdp \
+ 	gupnp \
+ 	libsoup \
+-	libgtk3
++	libgtk3 \
++	$(TARGET_NLS_DEPENDENCIES)
++
++GUPNP_TOOLS_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
  
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
- ROOTFS_$(2)_COMPRESS_EXT = .gz
--ROOTFS_$(2)_COMPRESS_CMD = gzip -9 -c
-+ROOTFS_$(2)_COMPRESS_CMD = gzip -9 -c -n
- endif
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)_BZIP2),y)
- ROOTFS_$(2)_COMPRESS_EXT = .bz2
+ ifeq ($(BR2_PACKAGE_GUPNP_AV),y)
+ GUPNP_TOOLS_CONF_OPTS += --with-av
 -- 
-2.22.0
+2.20.1
