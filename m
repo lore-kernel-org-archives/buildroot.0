@@ -1,51 +1,47 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 4 Jul 2019 01:03:51 +0200
-Subject: [Buildroot] [git commit] package/pcre: bump version to 8.43
-Message-ID: <20190703230713.C994887FED@busybox.osuosl.org>
+Date: Thu, 4 Jul 2019 01:05:35 +0200
+Subject: [Buildroot] [git commit] package/p11-kit: bump version to 0.23.16.1
+Message-ID: <20190703230713.D97ED88452@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31c5daf40a31f0fbc0221b859faa2df5f04e5d90
+commit: https://git.buildroot.net/buildroot/commit/?id=5674c600795d5572110e59a34a7f4d79b6185ad8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://lists.exim.org/lurker/message/20190125.161413.ce45dfd2.en.html
-https://lists.exim.org/lurker/message/20190223.165009.b0fb3c20.en.html
-
-Updated license hash after update of copyright year in upstream commit
-https://vcs.pcre.org/pcre/code/tags/pcre-8.43/LICENCE?r1=1749&r2=1734
+Added license hash, switched _SITE to github, previous URL is broken.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/pcre/pcre.hash | 4 ++--
- package/pcre/pcre.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/p11-kit/p11-kit.hash | 4 +++-
+ package/p11-kit/p11-kit.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/package/pcre/pcre.hash b/package/pcre/pcre.hash
-index ca72a78cd2..7513d5f198 100644
---- a/package/pcre/pcre.hash
-+++ b/package/pcre/pcre.hash
-@@ -1,4 +1,4 @@
+diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
+index c0182eb4ce..45f0f1d64e 100644
+--- a/package/p11-kit/p11-kit.hash
++++ b/package/p11-kit/p11-kit.hash
+@@ -1,2 +1,4 @@
  # Locally calculated after checking pgp signature
--sha256 2cd04b7c887808be030254e8d77de11d3fe9d4505c39d4b15d2664ffe8bf9301  pcre-8.42.tar.bz2
-+sha256 91e762520003013834ac1adb4a938d53b22a216341c061b0cf05603b290faf6b  pcre-8.43.tar.bz2
- # License files, locally calculated
--sha256 f998c0f52eb704eff28f503580cfca3f2547280aa212994f6cf2d8e317587c1c  LICENCE
-+sha256 a5fce68baf797e0918463a4437ef75984c41118f43850ddeabda1b5a90154309  LICENCE
-diff --git a/package/pcre/pcre.mk b/package/pcre/pcre.mk
-index 163e535ec3..595cda8a53 100644
---- a/package/pcre/pcre.mk
-+++ b/package/pcre/pcre.mk
-@@ -4,7 +4,7 @@
+-sha256	ba726ea8303c97467a33fca50ee79b7b35212964be808ecf9b145e9042fdfaf0	p11-kit-0.23.2.tar.gz
++sha256 4b34e92ae36fa493e0d94366c767f06d5f9951e3d8581d10fd935d738db1574d  p11-kit-0.23.16.1.tar.gz
++# Locally computed
++sha256 2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
+diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
+index 10b5cc0393..1f72e0515b 100644
+--- a/package/p11-kit/p11-kit.mk
++++ b/package/p11-kit/p11-kit.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--PCRE_VERSION = 8.42
-+PCRE_VERSION = 8.43
- PCRE_SITE = https://ftp.pcre.org/pub/pcre
- PCRE_SOURCE = pcre-$(PCRE_VERSION).tar.bz2
- PCRE_LICENSE = BSD-3-Clause
+-P11_KIT_VERSION = 0.23.2
+-P11_KIT_SITE = http://p11-glue.freedesktop.org/releases
++P11_KIT_VERSION = 0.23.16.1
++P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
+ P11_KIT_DEPENDENCIES = host-pkgconf libffi libtasn1
+ P11_KIT_INSTALL_STAGING = YES
+ P11_KIT_CONF_OPTS = --disable-static
