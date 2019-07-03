@@ -1,334 +1,423 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 3 Jul 2019 23:55:27 +0200
-Subject: [Buildroot] [git commit] package/iptables: bump to version 1.8.3
-Message-ID: <20190703215603.AB1EE8270C@busybox.osuosl.org>
+Date: Wed, 3 Jul 2019 23:53:24 +0200
+Subject: [Buildroot] [git commit] package/libnftnl: bump to version 1.1.3
+Message-ID: <20190703215603.A375E8270C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=326a9ae2e5cd1e13abd1ea3de2a17909086e221c
+commit: https://git.buildroot.net/buildroot/commit/?id=1208e41561da7c8347d430c5af3efcd271ad5260
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop upstream patches.
+Rebase patch #1.
 
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...an-fix-userspace-kernel-headers-collision.patch | 45 -------------
- ...tables-monitor-fix-build-with-older-glibc.patch | 77 ----------------------
- ...-fix-build-with-kernel-headers-before-4.2.patch | 51 --------------
- ...-xtables-monitor-fix-build-with-musl-libc.patch | 44 -------------
- ...end-the-headers-conflict-workaround-to-in.patch | 37 -----------
- package/iptables/iptables.hash                     |  2 +-
- package/iptables/iptables.mk                       |  2 +-
- 7 files changed, 2 insertions(+), 256 deletions(-)
+ ...e-to-libnftnl_xfree-to-avoid-symbol-namin.patch | 118 ++++++++++++---------
+ package/libnftnl/libnftnl.hash                     |   2 +-
+ package/libnftnl/libnftnl.mk                       |   2 +-
+ 3 files changed, 70 insertions(+), 52 deletions(-)
 
-diff --git a/package/iptables/0001-ebtables-vlan-fix-userspace-kernel-headers-collision.patch b/package/iptables/0001-ebtables-vlan-fix-userspace-kernel-headers-collision.patch
-deleted file mode 100644
-index 37c6f96af4..0000000000
---- a/package/iptables/0001-ebtables-vlan-fix-userspace-kernel-headers-collision.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 51d374ba41ae4f1bb851228c06b030b83dd2092f Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Tue, 13 Nov 2018 19:22:08 +0200
--Subject: [PATCH] ebtables: vlan: fix userspace/kernel headers collision
--
--Build with musl libc fails because of conflicting struct ethhdr
--definitions:
--
--In file included from .../sysroot/usr/include/net/ethernet.h:10:0,
--                 from ../iptables/nft-bridge.h:8,
--                 from libebt_vlan.c:18:
--.../sysroot/usr/include/netinet/if_ether.h:107:8: error: redefinition of ???struct ethhdr???
-- struct ethhdr {
--        ^~~~~~
--In file included from libebt_vlan.c:16:0:
--.../sysroot/usr/include/linux/if_ether.h:160:8: note: originally defined here
-- struct ethhdr {
--        ^~~~~~
--
--Include the userspace header first for the definition suppression logic
--to do the right thing.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-----
--Upstream status: commit 51d374ba41ae
--
-- extensions/libebt_vlan.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/extensions/libebt_vlan.c b/extensions/libebt_vlan.c
--index 4a2eb7126895..be269c6cdb4c 100644
----- a/extensions/libebt_vlan.c
--+++ b/extensions/libebt_vlan.c
--@@ -12,6 +12,7 @@
-- #include <getopt.h>
-- #include <ctype.h>
-- #include <xtables.h>
--+#include <netinet/if_ether.h>
-- #include <linux/netfilter_bridge/ebt_vlan.h>
-- #include <linux/if_ether.h>
-- #include "iptables/nft.h"
---- 
--2.19.1
--
-diff --git a/package/iptables/0002-xtables-monitor-fix-build-with-older-glibc.patch b/package/iptables/0002-xtables-monitor-fix-build-with-older-glibc.patch
-deleted file mode 100644
-index 18dbc28f91..0000000000
---- a/package/iptables/0002-xtables-monitor-fix-build-with-older-glibc.patch
-+++ /dev/null
-@@ -1,77 +0,0 @@
--From 7c8791edac3e74f6ce0bf21f98bc820db8e55e62 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Fri, 16 Nov 2018 07:23:32 +0200
--Subject: [PATCH] xtables-monitor: fix build with older glibc
--
--glibc older than 2.19 only expose BSD style fields of struct tcphdr when
--_BSD_SOURCE is define. Current glibc however, warn that _BSD_SOURCE is
--deprecated. Migrate to the GNU style of tcphdr fields to make the code
--compatible with any glibc version.
--
--Fix the following build failure:
--
--xtables-monitor.c: In function 'trace_print_packet':
--xtables-monitor.c:406:43: error: 'const struct tcphdr' has no member named 'th_sport'
--    printf("SPORT=%d DPORT=%d ", ntohs(tcph->th_sport), ntohs(tcph->th_dport));
--                                           ^
--xtables-monitor.c:406:66: error: 'const struct tcphdr' has no member named 'th_dport'
--    printf("SPORT=%d DPORT=%d ", ntohs(tcph->th_sport), ntohs(tcph->th_dport));
--                                                                  ^
--...
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--Signed-off-by: Florian Westphal <fw@strlen.de>
-----
--Upstream status: commit 7c8791edac3e74
--
-- iptables/xtables-monitor.c | 30 ++++++++++++++----------------
-- 1 file changed, 14 insertions(+), 16 deletions(-)
--
--diff --git a/iptables/xtables-monitor.c b/iptables/xtables-monitor.c
--index 3b1ca777a28a..5d1611122df5 100644
----- a/iptables/xtables-monitor.c
--+++ b/iptables/xtables-monitor.c
--@@ -403,26 +403,24 @@ static void trace_print_packet(const struct nftnl_trace *nlt, struct cb_arg *arg
-- 		case IPPROTO_UDP:
-- 			if (len < 4)
-- 				break;
---			printf("SPORT=%d DPORT=%d ", ntohs(tcph->th_sport), ntohs(tcph->th_dport));
--+			printf("SPORT=%d DPORT=%d ", ntohs(tcph->source), ntohs(tcph->dest));
-- 			break;
-- 		case IPPROTO_TCP:
-- 			if (len < sizeof(*tcph))
-- 				break;
---			printf("SPORT=%d DPORT=%d ", ntohs(tcph->th_sport), ntohs(tcph->th_dport));
---			if (tcph->th_flags & (TH_FIN|TH_SYN|TH_RST|TH_PUSH|TH_ACK|TH_URG)) {
---				if (tcph->th_flags & TH_SYN)
---					printf("SYN ");
---				if (tcph->th_flags & TH_ACK)
---					printf("ACK ");
---				if (tcph->th_flags & TH_FIN)
---					printf("FIN ");
---				if (tcph->th_flags & TH_RST)
---					printf("RST ");
---				if (tcph->th_flags & TH_PUSH)
---					printf("PSH ");
---				if (tcph->th_flags & TH_URG)
---					printf("URG ");
---			}
--+			printf("SPORT=%d DPORT=%d ", ntohs(tcph->source), ntohs(tcph->dest));
--+			if (tcph->syn)
--+				printf("SYN ");
--+			if (tcph->ack)
--+				printf("ACK ");
--+			if (tcph->fin)
--+				printf("FIN ");
--+			if (tcph->rst)
--+				printf("RST ");
--+			if (tcph->psh)
--+				printf("PSH ");
--+			if (tcph->urg)
--+				printf("URG ");
-- 			break;
-- 		default:
-- 			break;
---- 
--2.19.1
--
-diff --git a/package/iptables/0003-include-fix-build-with-kernel-headers-before-4.2.patch b/package/iptables/0003-include-fix-build-with-kernel-headers-before-4.2.patch
-deleted file mode 100644
-index c5cd6437f0..0000000000
---- a/package/iptables/0003-include-fix-build-with-kernel-headers-before-4.2.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From 8d9d7e4b9ef4c6e6abab2cf35c747d7ca36824bd Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Fri, 16 Nov 2018 09:30:33 +0200
--Subject: [PATCH] include: fix build with kernel headers before 4.2
--
--Commit 672accf1530 (include: update kernel netfilter header files)
--updated linux/netfilter.h and brought with it the update from kernel
--commit a263653ed798 (netfilter: don't pull include/linux/netfilter.h
--from netns headers). This triggers conflict of headers that is fixed in
--kernel commit 279c6c7fa64f (api: fix compatibility of linux/in.h with
--netinet/in.h) included in kernel version 4.2. For earlier kernel headers
--we need a workaround that prevents the headers conflict.
--
--Fixes the following build failure:
--
--In file included from .../sysroot/usr/include/netinet/ip.h:25:0,
--                 from ../include/libiptc/ipt_kernel_headers.h:8,
--                 from ../include/libiptc/libiptc.h:6,
--                 from libip4tc.c:29:
--.../sysroot/usr/include/linux/in.h:26:3: error: redeclaration of enumerator ???IPPROTO_IP???
--   IPPROTO_IP = 0,  /* Dummy protocol for TCP  */
--   ^
--.../sysroot/usr/include/netinet/in.h:33:5: note: previous definition of ???IPPROTO_IP??? was here
--     IPPROTO_IP = 0,    /* Dummy protocol for TCP.  */
--     ^~~~~~~~~~
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--Signed-off-by: Florian Westphal <fw@strlen.de>
-----
--Upstream status: commit 8d9d7e4b9ef4c6
--
-- include/linux/netfilter.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/include/linux/netfilter.h b/include/linux/netfilter.h
--index c3f087ac680c..bacf8cd92116 100644
----- a/include/linux/netfilter.h
--+++ b/include/linux/netfilter.h
--@@ -3,7 +3,9 @@
-- 
-- #include <linux/types.h>
-- 
--+#ifndef _NETINET_IN_H
-- #include <linux/in.h>
--+#endif
-- #include <linux/in6.h>
-- #include <limits.h>
-- 
---- 
--2.19.1
--
-diff --git a/package/iptables/0004-xtables-monitor-fix-build-with-musl-libc.patch b/package/iptables/0004-xtables-monitor-fix-build-with-musl-libc.patch
-deleted file mode 100644
-index 0b6358b255..0000000000
---- a/package/iptables/0004-xtables-monitor-fix-build-with-musl-libc.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 90b0d3abfc0b4150b198eb17080d75acc5838a59 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Sat, 17 Nov 2018 22:20:08 +0200
--Subject: [PATCH] xtables-monitor: fix build with musl libc
--
--Commit 7c8791edac3 ("xtables-monitor: fix build with older glibc")
--changed the code to use GNU style tcphdr fields. Unfortunately, musl
--libc requires _GNU_SOURCE definition to expose these fields.
--
--Fix the following build failure:
--
--xtables-monitor.c: In function ???trace_print_packet???:
--xtables-monitor.c:406:43: error: ???const struct tcphdr??? has no member named ???source???
--    printf("SPORT=%d DPORT=%d ", ntohs(tcph->source), ntohs(tcph->dest));
--                                           ^~
--xtables-monitor.c:406:64: error: ???const struct tcphdr??? has no member named ???dest???
--    printf("SPORT=%d DPORT=%d ", ntohs(tcph->source), ntohs(tcph->dest));
--                                                                ^~
--...
--
--Cc: Florian Westphal <fw@strlen.de>
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--Signed-off-by: Florian Westphal <fw@strlen.de>
-----
--Upstream status: commit 90b0d3abfc0b
--
-- iptables/xtables-monitor.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/iptables/xtables-monitor.c b/iptables/xtables-monitor.c
--index 5d1611122df5..f835c5e503e0 100644
----- a/iptables/xtables-monitor.c
--+++ b/iptables/xtables-monitor.c
--@@ -9,6 +9,7 @@
--  * This software has been sponsored by Sophos Astaro <http://www.sophos.com>
--  */
-- 
--+#define _GNU_SOURCE
-- #include <stdlib.h>
-- #include <time.h>
-- #include <string.h>
---- 
--2.19.1
--
-diff --git a/package/iptables/0005-include-extend-the-headers-conflict-workaround-to-in.patch b/package/iptables/0005-include-extend-the-headers-conflict-workaround-to-in.patch
-deleted file mode 100644
-index 6b1ffbd639..0000000000
---- a/package/iptables/0005-include-extend-the-headers-conflict-workaround-to-in.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 23dee088cd54aae94f1b71046f2ab2b206eedd42 Mon Sep 17 00:00:00 2001
--Message-Id: <23dee088cd54aae94f1b71046f2ab2b206eedd42.1543092537.git.baruch@tkos.co.il>
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Sat, 24 Nov 2018 22:33:37 +0200
--Subject: [PATCH] include: extend the headers conflict workaround to in6.h
--
--Commit 8d9d7e4b9ef ("include: fix build with kernel headers before 4.2")
--introduced a kernel/user headers conflict workaround that allows build
--of iptables with kernel headers older than 4.2. This minor extension
--allows build with kernel headers older than 3.12, which is the version
--that introduced explicit IP headers synchronization.
--
--Cc: Florian Westphal <fw@strlen.de>
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: https://www.spinics.net/lists/netfilter-devel/msg57029.html
--
-- include/linux/netfilter.h | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/include/linux/netfilter.h b/include/linux/netfilter.h
--index bacf8cd92116..042d8b1478e0 100644
----- a/include/linux/netfilter.h
--+++ b/include/linux/netfilter.h
--@@ -5,8 +5,8 @@
-- 
-- #ifndef _NETINET_IN_H
-- #include <linux/in.h>
---#endif
-- #include <linux/in6.h>
--+#endif
-- #include <limits.h>
-- 
-- /* Responses from hook functions. */
---- 
--2.19.1
--
-diff --git a/package/iptables/iptables.hash b/package/iptables/iptables.hash
-index d84bd3af98..2e149aa11b 100644
---- a/package/iptables/iptables.hash
-+++ b/package/iptables/iptables.hash
-@@ -1,4 +1,4 @@
- # From https://netfilter.org/projects/iptables/downloads.html
--sha256 a3778b50ed1a3256f9ca975de82c2204e508001fc2471238c8c97f3d1c4c12af  iptables-1.8.2.tar.bz2
-+sha256 a23cac034181206b4545f4e7e730e76e08b5f3dd78771ba9645a6756de9cdd80  iptables-1.8.3.tar.bz2
- # Locally calculated
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index 54494937af..ae5cf4ddd3 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
+diff --git a/package/libnftnl/0001-Rename-xfree-to-libnftnl_xfree-to-avoid-symbol-namin.patch b/package/libnftnl/0001-Rename-xfree-to-libnftnl_xfree-to-avoid-symbol-namin.patch
+index 213aab79eb..e1ef576285 100644
+--- a/package/libnftnl/0001-Rename-xfree-to-libnftnl_xfree-to-avoid-symbol-namin.patch
++++ b/package/libnftnl/0001-Rename-xfree-to-libnftnl_xfree-to-avoid-symbol-namin.patch
+@@ -22,11 +22,11 @@ libnftnl_xfree().
+ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+ [Gustavo: update for version 1.0.7]
+ Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-[baruch: update for versions 1.0.9, 1.1.2]
++[baruch: update for versions 1.0.9, 1.1.2, 1.1.3]
+ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+ ---
+  include/utils.h         |  2 +-
+- src/chain.c             | 36 ++++++++++++++++++------------------
++ src/chain.c             | 38 +++++++++++++++++++-------------------
+  src/common.c            |  2 +-
+  src/expr.c              |  4 ++--
+  src/expr/data_reg.c     |  2 +-
+@@ -37,7 +37,7 @@ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+  src/expr/lookup.c       |  2 +-
+  src/expr/match.c        |  6 +++---
+  src/expr/target.c       |  6 +++---
+- src/flowtable.c         | 32 ++++++++++++++++----------------
++ src/flowtable.c         | 34 +++++++++++++++++-----------------
+  src/gen.c               |  2 +-
+  src/object.c            | 14 +++++++-------
+  src/rule.c              | 32 ++++++++++++++++----------------
+@@ -48,7 +48,7 @@ Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+  src/trace.c             | 14 +++++++-------
+  src/udata.c             |  2 +-
+  src/utils.c             |  2 +-
+- 23 files changed, 121 insertions(+), 121 deletions(-)
++ 23 files changed, 123 insertions(+), 123 deletions(-)
+ 
+ diff --git a/include/utils.h b/include/utils.h
+ index 3cc659652fe2..820556715013 100644
+@@ -64,12 +64,12 @@ index 3cc659652fe2..820556715013 100644
+  #define div_round_up(n, d)	(((n) + (d) - 1) / (d))
+  
+ diff --git a/src/chain.c b/src/chain.c
+-index 01d62c84f140..93e193955934 100644
++index 26f9b9d61053..06316a26b075 100644
+ --- a/src/chain.c
+ +++ b/src/chain.c
+-@@ -97,14 +97,14 @@ EXPORT_SYMBOL(nftnl_chain_free);
+- void nftnl_chain_free(const struct nftnl_chain *c)
+- {
++@@ -114,14 +114,14 @@ void nftnl_chain_free(const struct nftnl_chain *c)
++ 		nftnl_rule_free(r);
++ 
+  	if (c->flags & (1 << NFTNL_CHAIN_NAME))
+ -		xfree(c->name);
+ +		nftnl_xfree(c->name);
+@@ -87,7 +87,7 @@ index 01d62c84f140..93e193955934 100644
+  }
+  
+  EXPORT_SYMBOL(nftnl_chain_is_set);
+-@@ -121,15 +121,15 @@ void nftnl_chain_unset(struct nftnl_chain *c, uint16_t attr)
++@@ -138,15 +138,15 @@ void nftnl_chain_unset(struct nftnl_chain *c, uint16_t attr)
+  
+  	switch (attr) {
+  	case NFTNL_CHAIN_NAME:
+@@ -106,7 +106,7 @@ index 01d62c84f140..93e193955934 100644
+  		break;
+  	case NFTNL_CHAIN_HOOKNUM:
+  	case NFTNL_CHAIN_PRIO:
+-@@ -140,7 +140,7 @@ void nftnl_chain_unset(struct nftnl_chain *c, uint16_t attr)
++@@ -157,7 +157,7 @@ void nftnl_chain_unset(struct nftnl_chain *c, uint16_t attr)
+  	case NFTNL_CHAIN_FAMILY:
+  		break;
+  	case NFTNL_CHAIN_DEV:
+@@ -115,7 +115,7 @@ index 01d62c84f140..93e193955934 100644
+  		break;
+  	default:
+  		return;
+-@@ -169,7 +169,7 @@ int nftnl_chain_set_data(struct nftnl_chain *c, uint16_t attr,
++@@ -186,7 +186,7 @@ int nftnl_chain_set_data(struct nftnl_chain *c, uint16_t attr,
+  	switch(attr) {
+  	case NFTNL_CHAIN_NAME:
+  		if (c->flags & (1 << NFTNL_CHAIN_NAME))
+@@ -124,7 +124,7 @@ index 01d62c84f140..93e193955934 100644
+  
+  		c->name = strdup(data);
+  		if (!c->name)
+-@@ -177,7 +177,7 @@ int nftnl_chain_set_data(struct nftnl_chain *c, uint16_t attr,
++@@ -194,7 +194,7 @@ int nftnl_chain_set_data(struct nftnl_chain *c, uint16_t attr,
+  		break;
+  	case NFTNL_CHAIN_TABLE:
+  		if (c->flags & (1 << NFTNL_CHAIN_TABLE))
+@@ -133,7 +133,7 @@ index 01d62c84f140..93e193955934 100644
+  
+  		c->table = strdup(data);
+  		if (!c->table)
+-@@ -209,7 +209,7 @@ int nftnl_chain_set_data(struct nftnl_chain *c, uint16_t attr,
++@@ -226,7 +226,7 @@ int nftnl_chain_set_data(struct nftnl_chain *c, uint16_t attr,
+  		break;
+  	case NFTNL_CHAIN_TYPE:
+  		if (c->flags & (1 << NFTNL_CHAIN_TYPE))
+@@ -142,7 +142,7 @@ index 01d62c84f140..93e193955934 100644
+  
+  		c->type = strdup(data);
+  		if (!c->type)
+-@@ -217,7 +217,7 @@ int nftnl_chain_set_data(struct nftnl_chain *c, uint16_t attr,
++@@ -234,7 +234,7 @@ int nftnl_chain_set_data(struct nftnl_chain *c, uint16_t attr,
+  		break;
+  	case NFTNL_CHAIN_DEV:
+  		if (c->flags & (1 << NFTNL_CHAIN_DEV))
+@@ -151,7 +151,7 @@ index 01d62c84f140..93e193955934 100644
+  
+  		c->dev = strdup(data);
+  		if (!c->dev)
+-@@ -541,7 +541,7 @@ int nftnl_chain_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_chain *c)
++@@ -588,7 +588,7 @@ int nftnl_chain_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_chain *c)
+  
+  	if (tb[NFTA_CHAIN_NAME]) {
+  		if (c->flags & (1 << NFTNL_CHAIN_NAME))
+@@ -160,7 +160,7 @@ index 01d62c84f140..93e193955934 100644
+  		c->name = strdup(mnl_attr_get_str(tb[NFTA_CHAIN_NAME]));
+  		if (!c->name)
+  			return -1;
+-@@ -549,7 +549,7 @@ int nftnl_chain_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_chain *c)
++@@ -596,7 +596,7 @@ int nftnl_chain_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_chain *c)
+  	}
+  	if (tb[NFTA_CHAIN_TABLE]) {
+  		if (c->flags & (1 << NFTNL_CHAIN_TABLE))
+@@ -169,7 +169,7 @@ index 01d62c84f140..93e193955934 100644
+  		c->table = strdup(mnl_attr_get_str(tb[NFTA_CHAIN_TABLE]));
+  		if (!c->table)
+  			return -1;
+-@@ -579,7 +579,7 @@ int nftnl_chain_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_chain *c)
++@@ -626,7 +626,7 @@ int nftnl_chain_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_chain *c)
+  	}
+  	if (tb[NFTA_CHAIN_TYPE]) {
+  		if (c->flags & (1 << NFTNL_CHAIN_TYPE))
+@@ -178,8 +178,17 @@ index 01d62c84f140..93e193955934 100644
+  		c->type = strdup(mnl_attr_get_str(tb[NFTA_CHAIN_TYPE]));
+  		if (!c->type)
+  			return -1;
+-@@ -711,7 +711,7 @@ void nftnl_chain_list_free(struct nftnl_chain_list *list)
+- 		list_del(&r->head);
++@@ -810,7 +810,7 @@ struct nftnl_rule *nftnl_rule_iter_next(struct nftnl_rule_iter *iter)
++ EXPORT_SYMBOL(nftnl_rule_iter_destroy);
++ void nftnl_rule_iter_destroy(struct nftnl_rule_iter *iter)
++ {
++-	xfree(iter);
+++	nftnl_xfree(iter);
++ }
++ 
++ #define CHAIN_NAME_HSIZE	512
++@@ -848,7 +848,7 @@ void nftnl_chain_list_free(struct nftnl_chain_list *list)
++ 		hlist_del(&r->hnode);
+  		nftnl_chain_free(r);
+  	}
+ -	xfree(list);
+@@ -187,7 +196,7 @@ index 01d62c84f140..93e193955934 100644
+  }
+  
+  EXPORT_SYMBOL(nftnl_chain_list_is_empty);
+-@@ -797,5 +797,5 @@ struct nftnl_chain *nftnl_chain_list_iter_next(struct nftnl_chain_list_iter *ite
++@@ -967,5 +967,5 @@ struct nftnl_chain *nftnl_chain_list_iter_next(struct nftnl_chain_list_iter *ite
+  EXPORT_SYMBOL(nftnl_chain_list_iter_destroy);
+  void nftnl_chain_list_iter_destroy(struct nftnl_chain_list_iter *iter)
+  {
+@@ -388,7 +397,7 @@ index 91000386704a..5d0763edf63f 100644
+  
+  struct expr_ops expr_ops_target = {
+ diff --git a/src/flowtable.c b/src/flowtable.c
+-index c939306b56c4..f1b3eef48b73 100644
++index 1f7ba3052d4f..7f3f6bbcfd13 100644
+ --- a/src/flowtable.c
+ +++ b/src/flowtable.c
+ @@ -45,16 +45,16 @@ void nftnl_flowtable_free(const struct nftnl_flowtable *c)
+@@ -429,15 +438,15 @@ index c939306b56c4..f1b3eef48b73 100644
+ @@ -86,8 +86,8 @@ void nftnl_flowtable_unset(struct nftnl_flowtable *c, uint16_t attr)
+  		break;
+  	case NFTNL_FLOWTABLE_DEVICES:
+- 		for (i = 0; i < c->dev_array_len; i++) {
++ 		for (i = 0; i < c->dev_array_len; i++)
+ -			xfree(c->dev_array[i]);
+--			xfree(c->dev_array);
++-		xfree(c->dev_array);
+ +			nftnl_xfree(c->dev_array[i]);
+-+			nftnl_xfree(c->dev_array);
+- 		}
+++		nftnl_xfree(c->dev_array);
+  		break;
+  	default:
+-@@ -117,7 +117,7 @@ int nftnl_flowtable_set_data(struct nftnl_flowtable *c, uint16_t attr,
++ 		return;
++@@ -116,7 +116,7 @@ int nftnl_flowtable_set_data(struct nftnl_flowtable *c, uint16_t attr,
+  	switch(attr) {
+  	case NFTNL_FLOWTABLE_NAME:
+  		if (c->flags & (1 << NFTNL_FLOWTABLE_NAME))
+@@ -446,7 +455,7 @@ index c939306b56c4..f1b3eef48b73 100644
+  
+  		c->name = strdup(data);
+  		if (!c->name)
+-@@ -125,7 +125,7 @@ int nftnl_flowtable_set_data(struct nftnl_flowtable *c, uint16_t attr,
++@@ -124,7 +124,7 @@ int nftnl_flowtable_set_data(struct nftnl_flowtable *c, uint16_t attr,
+  		break;
+  	case NFTNL_FLOWTABLE_TABLE:
+  		if (c->flags & (1 << NFTNL_FLOWTABLE_TABLE))
+@@ -455,18 +464,27 @@ index c939306b56c4..f1b3eef48b73 100644
+  
+  		c->table = strdup(data);
+  		if (!c->table)
+-@@ -147,8 +147,8 @@ int nftnl_flowtable_set_data(struct nftnl_flowtable *c, uint16_t attr,
++@@ -146,8 +146,8 @@ int nftnl_flowtable_set_data(struct nftnl_flowtable *c, uint16_t attr,
+  
+  		if (c->flags & (1 << NFTNL_FLOWTABLE_DEVICES)) {
+- 			for (i = 0; i < c->dev_array_len; i++) {
++ 			for (i = 0; i < c->dev_array_len; i++)
+ -				xfree(c->dev_array[i]);
+--				xfree(c->dev_array);
++-			xfree(c->dev_array);
+ +				nftnl_xfree(c->dev_array[i]);
+-+				nftnl_xfree(c->dev_array);
+- 			}
+++			nftnl_xfree(c->dev_array);
+  		}
+  
+-@@ -423,7 +423,7 @@ int nftnl_flowtable_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_flowtab
++ 		c->dev_array = calloc(len + 1, sizeof(char *));
++@@ -385,7 +385,7 @@ static int nftnl_flowtable_parse_devs(struct nlattr *nest,
++ 	return 0;
++ err:
++ 	while (len--)
++-		xfree(dev_array[len]);
+++		nftnl_xfree(dev_array[len]);
++ 	return -1;
++ }
++ 
++@@ -426,7 +426,7 @@ int nftnl_flowtable_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_flowtab
+  
+  	if (tb[NFTA_FLOWTABLE_NAME]) {
+  		if (c->flags & (1 << NFTNL_FLOWTABLE_NAME))
+@@ -475,7 +493,7 @@ index c939306b56c4..f1b3eef48b73 100644
+  		c->name = strdup(mnl_attr_get_str(tb[NFTA_FLOWTABLE_NAME]));
+  		if (!c->name)
+  			return -1;
+-@@ -431,7 +431,7 @@ int nftnl_flowtable_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_flowtab
++@@ -434,7 +434,7 @@ int nftnl_flowtable_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_flowtab
+  	}
+  	if (tb[NFTA_FLOWTABLE_TABLE]) {
+  		if (c->flags & (1 << NFTNL_FLOWTABLE_TABLE))
+@@ -484,7 +502,7 @@ index c939306b56c4..f1b3eef48b73 100644
+  		c->table = strdup(mnl_attr_get_str(tb[NFTA_FLOWTABLE_TABLE]));
+  		if (!c->table)
+  			return -1;
+-@@ -635,7 +635,7 @@ void nftnl_flowtable_list_free(struct nftnl_flowtable_list *list)
++@@ -638,7 +638,7 @@ void nftnl_flowtable_list_free(struct nftnl_flowtable_list *list)
+  		list_del(&s->head);
+  		nftnl_flowtable_free(s);
+  	}
+@@ -507,7 +525,7 @@ index 1fc909930d86..c69f6f87deae 100644
+  
+  EXPORT_SYMBOL(nftnl_gen_is_set);
+ diff --git a/src/object.c b/src/object.c
+-index e88203a82441..28e04486c76c 100644
++index 5c8d1835ca97..1de1b35d2217 100644
+ --- a/src/object.c
+ +++ b/src/object.c
+ @@ -53,11 +53,11 @@ EXPORT_SYMBOL(nftnl_obj_free);
+@@ -556,10 +574,10 @@ index e88203a82441..28e04486c76c 100644
+ +	nftnl_xfree(iter);
+  }
+ diff --git a/src/rule.c b/src/rule.c
+-index 9af8fae2a803..0fce46e5c944 100644
++index 8173fcdd863d..36446de29dbe 100644
+ --- a/src/rule.c
+ +++ b/src/rule.c
+-@@ -75,13 +75,13 @@ void nftnl_rule_free(const struct nftnl_rule *r)
++@@ -53,13 +53,13 @@ void nftnl_rule_free(const struct nftnl_rule *r)
+  		nftnl_expr_free(e);
+  
+  	if (r->flags & (1 << (NFTNL_RULE_TABLE)))
+@@ -577,7 +595,7 @@ index 9af8fae2a803..0fce46e5c944 100644
+  }
+  
+  EXPORT_SYMBOL(nftnl_rule_is_set);
+-@@ -98,10 +98,10 @@ void nftnl_rule_unset(struct nftnl_rule *r, uint16_t attr)
++@@ -76,10 +76,10 @@ void nftnl_rule_unset(struct nftnl_rule *r, uint16_t attr)
+  
+  	switch (attr) {
+  	case NFTNL_RULE_TABLE:
+@@ -590,8 +608,8 @@ index 9af8fae2a803..0fce46e5c944 100644
+  		break;
+  	case NFTNL_RULE_HANDLE:
+  	case NFTNL_RULE_COMPAT_PROTO:
+-@@ -111,7 +111,7 @@ void nftnl_rule_unset(struct nftnl_rule *r, uint16_t attr)
+- 	case NFTNL_RULE_ID:
++@@ -90,7 +90,7 @@ void nftnl_rule_unset(struct nftnl_rule *r, uint16_t attr)
++ 	case NFTNL_RULE_POSITION_ID:
+  		break;
+  	case NFTNL_RULE_USERDATA:
+ -		xfree(r->user.data);
+@@ -599,7 +617,7 @@ index 9af8fae2a803..0fce46e5c944 100644
+  		break;
+  	}
+  
+-@@ -137,7 +137,7 @@ int nftnl_rule_set_data(struct nftnl_rule *r, uint16_t attr,
++@@ -117,7 +117,7 @@ int nftnl_rule_set_data(struct nftnl_rule *r, uint16_t attr,
+  	switch(attr) {
+  	case NFTNL_RULE_TABLE:
+  		if (r->flags & (1 << NFTNL_RULE_TABLE))
+@@ -608,7 +626,7 @@ index 9af8fae2a803..0fce46e5c944 100644
+  
+  		r->table = strdup(data);
+  		if (!r->table)
+-@@ -145,7 +145,7 @@ int nftnl_rule_set_data(struct nftnl_rule *r, uint16_t attr,
++@@ -125,7 +125,7 @@ int nftnl_rule_set_data(struct nftnl_rule *r, uint16_t attr,
+  		break;
+  	case NFTNL_RULE_CHAIN:
+  		if (r->flags & (1 << NFTNL_RULE_CHAIN))
+@@ -617,7 +635,7 @@ index 9af8fae2a803..0fce46e5c944 100644
+  
+  		r->chain = strdup(data);
+  		if (!r->chain)
+-@@ -168,7 +168,7 @@ int nftnl_rule_set_data(struct nftnl_rule *r, uint16_t attr,
++@@ -148,7 +148,7 @@ int nftnl_rule_set_data(struct nftnl_rule *r, uint16_t attr,
+  		break;
+  	case NFTNL_RULE_USERDATA:
+  		if (r->flags & (1 << NFTNL_RULE_USERDATA))
+@@ -626,7 +644,7 @@ index 9af8fae2a803..0fce46e5c944 100644
+  
+  		r->user.data = malloc(data_len);
+  		if (!r->user.data)
+-@@ -453,7 +453,7 @@ int nftnl_rule_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_rule *r)
++@@ -442,7 +442,7 @@ int nftnl_rule_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_rule *r)
+  
+  	if (tb[NFTA_RULE_TABLE]) {
+  		if (r->flags & (1 << NFTNL_RULE_TABLE))
+@@ -635,7 +653,7 @@ index 9af8fae2a803..0fce46e5c944 100644
+  		r->table = strdup(mnl_attr_get_str(tb[NFTA_RULE_TABLE]));
+  		if (!r->table)
+  			return -1;
+-@@ -461,7 +461,7 @@ int nftnl_rule_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_rule *r)
++@@ -450,7 +450,7 @@ int nftnl_rule_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_rule *r)
+  	}
+  	if (tb[NFTA_RULE_CHAIN]) {
+  		if (r->flags & (1 << NFTNL_RULE_CHAIN))
+@@ -644,7 +662,7 @@ index 9af8fae2a803..0fce46e5c944 100644
+  		r->chain = strdup(mnl_attr_get_str(tb[NFTA_RULE_CHAIN]));
+  		if (!r->chain)
+  			return -1;
+-@@ -490,7 +490,7 @@ int nftnl_rule_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_rule *r)
++@@ -479,7 +479,7 @@ int nftnl_rule_nlmsg_parse(const struct nlmsghdr *nlh, struct nftnl_rule *r)
+  			mnl_attr_get_payload(tb[NFTA_RULE_USERDATA]);
+  
+  		if (r->flags & (1 << NFTNL_RULE_USERDATA))
+@@ -653,7 +671,7 @@ index 9af8fae2a803..0fce46e5c944 100644
+  
+  		r->user.len = mnl_attr_get_payload_len(tb[NFTA_RULE_USERDATA]);
+  
+-@@ -737,7 +737,7 @@ struct nftnl_expr *nftnl_expr_iter_next(struct nftnl_expr_iter *iter)
++@@ -735,7 +735,7 @@ struct nftnl_expr *nftnl_expr_iter_next(struct nftnl_expr_iter *iter)
+  EXPORT_SYMBOL(nftnl_expr_iter_destroy);
+  void nftnl_expr_iter_destroy(struct nftnl_expr_iter *iter)
+  {
+@@ -662,7 +680,7 @@ index 9af8fae2a803..0fce46e5c944 100644
+  }
+  
+  struct nftnl_rule_list {
+-@@ -767,7 +767,7 @@ void nftnl_rule_list_free(struct nftnl_rule_list *list)
++@@ -765,7 +765,7 @@ void nftnl_rule_list_free(struct nftnl_rule_list *list)
+  		list_del(&r->head);
+  		nftnl_rule_free(r);
+  	}
+@@ -671,7 +689,7 @@ index 9af8fae2a803..0fce46e5c944 100644
+  }
+  
+  EXPORT_SYMBOL(nftnl_rule_list_is_empty);
+-@@ -865,5 +865,5 @@ struct nftnl_rule *nftnl_rule_list_iter_next(struct nftnl_rule_list_iter *iter)
++@@ -863,5 +863,5 @@ struct nftnl_rule *nftnl_rule_list_iter_next(struct nftnl_rule_list_iter *iter)
+  EXPORT_SYMBOL(nftnl_rule_list_iter_destroy);
+  void nftnl_rule_list_iter_destroy(const struct nftnl_rule_list_iter *iter)
+  {
+diff --git a/package/libnftnl/libnftnl.hash b/package/libnftnl/libnftnl.hash
+index 3ecaeb8a11..64bd07a235 100644
+--- a/package/libnftnl/libnftnl.hash
++++ b/package/libnftnl/libnftnl.hash
+@@ -1,3 +1,3 @@
+ # From http://www.netfilter.org/projects/libnftnl/downloads.html
+-sha256	a5c7b7a6c13c9c5898b13fcb1126fefce2015d5a96d7c354b19aaa40b6aece5d 	libnftnl-1.1.2.tar.bz2
++sha256	22dd97d3b06ae8c67499506e2bfd6803ce116479076ec3700e7a4c7cd9fcba0f  	libnftnl-1.1.3.tar.bz2
+ sha256	98193898c663001eff2fdcfb676e210c13042bc1a05e8d570c363efa396f8e24	COPYING
+diff --git a/package/libnftnl/libnftnl.mk b/package/libnftnl/libnftnl.mk
+index b8e015baf8..a3fba488c4 100644
+--- a/package/libnftnl/libnftnl.mk
++++ b/package/libnftnl/libnftnl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPTABLES_VERSION = 1.8.2
-+IPTABLES_VERSION = 1.8.3
- IPTABLES_SOURCE = iptables-$(IPTABLES_VERSION).tar.bz2
- IPTABLES_SITE = https://netfilter.org/projects/iptables/files
- IPTABLES_INSTALL_STAGING = YES
+-LIBNFTNL_VERSION = 1.1.2
++LIBNFTNL_VERSION = 1.1.3
+ LIBNFTNL_SITE = https://netfilter.org/projects/libnftnl/files
+ LIBNFTNL_SOURCE = libnftnl-$(LIBNFTNL_VERSION).tar.bz2
+ LIBNFTNL_LICENSE = GPL-2.0+
