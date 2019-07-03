@@ -1,10 +1,10 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Thu,  4 Jul 2019 00:01:35 +0530
-Subject: [Buildroot] [PATCH v2 03/27] autobuild-run: move njobs from kwargs
- to Builder class
+Date: Thu,  4 Jul 2019 00:01:39 +0530
+Subject: [Buildroot] [PATCH v2 07/27] autobuild-run: move make_opts from
+ kwargs to Builder class
 In-Reply-To: <20190703183159.3415-1-itsatharva@gmail.com>
 References: <20190703183159.3415-1-itsatharva@gmail.com>
-Message-ID: <20190703183159.3415-3-itsatharva@gmail.com>
+Message-ID: <20190703183159.3415-7-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,47 +15,61 @@ Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
 Changes v1 -> v2:
-  - Explicitly state class constructor argument
+  - New patch, split accidental squash of niceness move and make_opts move
 ---
- scripts/autobuild-run | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ scripts/autobuild-run | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 9946ddc..4d730ce 100755
+index 426078c..c2d137c 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -271,8 +271,9 @@ class SystemInfo:
-         return not missing_requirements
- 
+@@ -273,7 +273,7 @@ class SystemInfo:
  class Builder:
--    def __init__(self, instance):
-+    def __init__(self, instance, njobs):
+     def __init__(self, instance, njobs, sysinfo,
+                  http_url, http_login, http_password,
+-                 submitter):
++                 submitter, make_opts):
          self.instance = instance
-+        self.njobs = njobs
+         self.njobs = njobs
+         self.sysinfo = sysinfo
+@@ -281,6 +281,7 @@ class Builder:
+         self.http_login = http_login
+         self.http_password = http_password
+         self.submitter = submitter
++        self.make_opts = make_opts
  
      def prepare_build(self, **kwargs):
          """Prepare for the next build of the specified instance
-@@ -455,7 +456,7 @@ class Builder:
-         cmd = ["nice", "-n", str(nice),
+@@ -464,7 +465,7 @@ class Builder:
                 "make", "O=%s" % outputdir,
                 "-C", srcdir, "BR2_DL_DIR=%s" % dldir,
--               "BR2_JLEVEL=%s" % kwargs['njobs']] \
-+               "BR2_JLEVEL=%s" % self.njobs] \
-             + kwargs['make_opts'].split()
+                "BR2_JLEVEL=%s" % self.njobs] \
+-            + kwargs['make_opts'].split()
++            + self.make_opts.split()
          sub = subprocess.Popen(cmd, stdout=f, stderr=f)
  
-@@ -843,9 +844,10 @@ def main():
-     buildpid = multiprocessing.Array('i', int(args['--ninstances']))
-     processes = []
-     for i in range(0, int(args['--ninstances'])):
--        builder = Builder(instance = i)
-+        builder = Builder(
-+            instance = i,
-+            njobs = args['--njobs'])
+         # Setup hung build monitoring thread
+@@ -496,7 +497,7 @@ class Builder:
+ 
+         cmd = ["make", "O=%s" % outputdir, "-C", srcdir,
+                "BR2_DL_DIR=%s" % dldir, "legal-info"] \
+-            + kwargs['make_opts'].split()
++            + self.make_opts.split()
+         ret = subprocess.call(cmd, stdout=f, stderr=f)
+         if ret != 0:
+             log_write(log, "INFO: build failed during legal-info")
+@@ -858,9 +859,9 @@ def main():
+             http_url = args['--http-url'],
+             http_login = args['--http-login'],
+             http_password = args['--http-password'],
+-            submitter = args['--submitter'])
++            submitter = args['--submitter'],
++            make_opts = (args['--make-opts'] or ''))
          p = multiprocessing.Process(target=builder.run_instance, kwargs=dict(
--                njobs = args['--njobs'],
-                 sysinfo = sysinfo,
-                 http_url = args['--http-url'],
-                 http_login = args['--http-login'],
+-                make_opts = (args['--make-opts'] or ''),
+                 nice = (args['--nice'] or 0),
+                 toolchains_csv = args['--toolchains-csv'],
+                 repo = args['--repo'],
 -- 
 2.22.0
