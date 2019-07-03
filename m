@@ -1,71 +1,37 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 4 Jul 2019 00:17:31 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: backport patch
- to detach makekeys from X headers.
-Message-ID: <20190703222502.76B82890B2@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 4 Jul 2019 00:40:47 +0200
+Subject: [Buildroot] [PATCH 04/22] package/libsig: add license hash
+In-Reply-To: <20190701222634.104301-4-aduskett@gmail.com>
+References: <20190701222634.104301-1-aduskett@gmail.com>
+ <20190701222634.104301-4-aduskett@gmail.com>
+Message-ID: <f7088f45-b9ad-f7ff-af9b-e4d2e23587f9@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cac24b8bf66f43fb161426a3420d16ad58be8999
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ s/libsig/libsigc/
 
-From https://gitlab.freedesktop.org/xorg/lib/libx11/commit/0327c427d62f671eced067c6d9b69f4e216a8ca
+ Regards,
+ Arnout
 
-With 1.6.8, there's no real reason to demand the X
-headers be installed for both the build and target machines if cross-
-compiling.
-
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- ...-detach-ourselves-from-X-headers-entirely.patch | 39 ++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
-
-diff --git a/package/x11r7/xlib_libX11/0001-makekeys-detach-ourselves-from-X-headers-entirely.patch b/package/x11r7/xlib_libX11/0001-makekeys-detach-ourselves-from-X-headers-entirely.patch
-new file mode 100644
-index 0000000000..6a149aca03
---- /dev/null
-+++ b/package/x11r7/xlib_libX11/0001-makekeys-detach-ourselves-from-X-headers-entirely.patch
-@@ -0,0 +1,39 @@
-+From 0327c427d62f671eced067c6d9b69f4e216a8cac Mon Sep 17 00:00:00 2001
-+From: Adam Jackson <ajax@redhat.com>
-+Date: Mon, 17 Jun 2019 13:36:08 -0400
-+Subject: [PATCH] makekeys: Detach ourselves from X headers entirely
-+
-+Subsequent to a121b7b0c210efe10bf93453b29050282324c906 we are no longer
-+building makekeys with enough -I/foo/bar to find the X11 headers, so if
-+they're not in a system include path, things fail. Since this utility is
-+only needed at build time, there's no real reason to demand the X
-+headers be installed for both the build and target machines if cross-
-+compiling, we can just assume a vaguely ANSI environment instead.
-+
-+Tested-by: Niclas Zeising <zeising@daemonic.se>
-+Reviewed-by: Keith Packard <keithp@keithp.com>
-+Reviewed-by: Matt Turner <mattst88@gmail.com>
-+Signed-off-by: Adam Duskett <aduskett@gmail.com>
-+---
-+ src/util/makekeys.c | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/src/util/makekeys.c b/src/util/makekeys.c
-+index bcb5b7d5..07563315 100644
-+--- a/src/util/makekeys.c
-++++ b/src/util/makekeys.c
-+@@ -35,8 +35,10 @@ from The Open Group.
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-++#include <stdint.h>
-++#include <inttypes.h>
-+ 
-+-#include "../Xresinternal.h"
-++typedef uint32_t Signature;
-+ 
-+ #define KTNUM 4000
-+ 
-+-- 
-+2.21.0
-+
+On 02/07/2019 00:26, aduskett at gmail.com wrote:
+> From: Adam Duskett <Aduskett@gmail.com>
+> 
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+>  package/libsigc/libsigc.hash | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/libsigc/libsigc.hash b/package/libsigc/libsigc.hash
+> index a630534e84..4bdebc5ed8 100644
+> --- a/package/libsigc/libsigc.hash
+> +++ b/package/libsigc/libsigc.hash
+> @@ -1,2 +1,5 @@
+>  # From http://ftp.gnome.org/pub/gnome/sources/libsigc++/2.10/libsigc++-2.10.0.sha256sum
+>  sha256	f843d6346260bfcb4426259e314512b99e296e8ca241d771d21ac64f28298d81	libsigc++-2.10.0.tar.xz
+> +
+> +# Locally calculated
+> +sha256	5bbcbb737e60fe9deba08ecbd00920cfcc3403ba2e534c64fdeea49d6bb87509	COPYING
+> 
