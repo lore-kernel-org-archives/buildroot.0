@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 3 Jul 2019 23:28:59 +0200
-Subject: [Buildroot] [PATCH] core/pkg-infra: really build all
- dependencies of foo with foo-depends
-In-Reply-To: <20190702201250.31638-1-yann.morin.1998@free.fr>
-References: <20190702201250.31638-1-yann.morin.1998@free.fr>
-Message-ID: <4281e1c1-dda6-5af6-7f0c-4e29cd279922@mind.be>
+Date: Wed, 3 Jul 2019 23:30:39 +0200
+Subject: [Buildroot] [PATCH] package/irssi: security bump to version
+ 1.0.8
+In-Reply-To: <20190703155213.15636-1-peter@korsgaard.com>
+References: <20190703155213.15636-1-peter@korsgaard.com>
+Message-ID: <a238bece-e45f-e371-fb29-966cc774f31a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,91 +13,48 @@ To: buildroot@busybox.net
 
 
 
-On 02/07/2019 22:12, Yann E. MORIN wrote:
-> Currently, foo-depends only builds build dependencies. This means that
-> download and extract dependencies are not built.
+On 03/07/2019 17:52, Peter Korsgaard wrote:
+> Fixes the following security vulnerability:
+> 
+> CVE-2019-13045: Use after free when sending SASL login to the server found
+> by ilbelkyr
+> 
+> For more details, see the advisory:
+> https://irssi.org/security/html/irssi_sa_2019_06/
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
- But also patch dependencies.
-
- Patch dependencies are special, because when used normally, they cause the
-following chain (I'm simplifying, obviously):
-
-FOO_PATCH_DEPENDENCIES = bar
-foo-patch: bar-patch
-
-while for all other types of dependencies it would be:
-
-FOO_EXTRACT_DEPENDENCIES = bar
-foo-extract: bar
-
-
- So, this patch can lead to circular dependencies, because bar could in turn
-depend on foo (that's precisely why this construct was introduced).
-
- However, it turns out that we only use this _PATCH_DEPENDENCIES for Linux
-extensions. In addition, most of them don't even depend back on linux. The only
-one in that situation is RTAI. And even for that case, it's not really a
-circular dependency. Instead, you have:
-
-linux-depends: rtai <other linux deps>
-rtai: ... linux ...
-linux: linux-install
-linux-install: linux-build
-linux-build: linux-configure
-linux-configure: linux-patch <other linux deps>
-linux-patch: linux-extract rtai-patch
-linux-extract: linux-source
-
-So, not an actual circular dependency, because 'linux-depends' is not a target
-that is used internally.
-
- Therefore, I've applied to master, thanks.
-
- I probably should have added the above explanation to the commit message :-(
+ Applied to master, thanks.
 
  Regards,
  Arnout
 
-
-> First, but a minor point, this is inconsistent with foo-show-depends,
-> which does display all dependencies:
-> 
->     $ make host-gzip-show-depends
->     host-skeleton host-tar
->     $ make host-gzip-depends
->         # Only host-skeleton is built and installed
-> 
-> Second, and more important, it makes it more difficult to preapre a
-> debug build, like so:
-> 
->     $ make foo-depends
->     $ tar cf output.tar output
->     $ make foo
->         # bummer, broken
->         # edit foo.mk to try and fix it
->     $ rm -rf output; tar xf output.tar
->         # rince and repeat
-> 
-> Change foo-depends so that it really builds all the dependencies for
-> foo, bringing it on-par with foo-show-depends.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 > ---
->  package/pkg-generic.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/irssi/irssi.hash | 2 +-
+>  package/irssi/irssi.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index b00967c648..9620dec524 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -801,7 +801,7 @@ $(1)-extract:			$$($(2)_TARGET_EXTRACT)
->  $$($(2)_TARGET_EXTRACT):	$$($(2)_TARGET_SOURCE)
->  $$($(2)_TARGET_EXTRACT): | $$($(2)_FINAL_EXTRACT_DEPENDENCIES)
+> diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+> index 0f298137ba..6a91e16487 100644
+> --- a/package/irssi/irssi.hash
+> +++ b/package/irssi/irssi.hash
+> @@ -1,4 +1,4 @@
+>  # Locally calculated after checking pgp signature
+> -sha256	1b386ca026aa1875c380fd00ef1d24b71fb87cdae39ef5349ecca16c4567feac  irssi-1.0.7.tar.xz
+> +sha256	414fdee2ffaeb90a55f141b7fb3899608631dc891e2bc1f5e91ca31f1a621101  irssi-1.0.8.tar.xz
+>  # Locally calculated
+>  sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
+> diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+> index 611365f88e..4d7268d291 100644
+> --- a/package/irssi/irssi.mk
+> +++ b/package/irssi/irssi.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> -$(1)-depends:		$$($(2)_FINAL_DEPENDENCIES)
-> +$(1)-depends:		$$($(2)_FINAL_ALL_DEPENDENCIES)
->  
->  $(1)-source:		$$($(2)_TARGET_SOURCE)
->  $$($(2)_TARGET_SOURCE): | $$($(2)_FINAL_DOWNLOAD_DEPENDENCIES)
+> -IRSSI_VERSION = 1.0.7
+> +IRSSI_VERSION = 1.0.8
+>  IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+>  # Do not use the github helper here. The generated tarball is *NOT* the
+>  # same as the one uploaded by upstream for the release.
 > 
