@@ -1,45 +1,88 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 4 Jul 2019 00:16:26 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: drop post patch
- hooks
-Message-ID: <20190703222502.702238905B@busybox.osuosl.org>
+Date: Thu, 4 Jul 2019 00:20:47 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xlib_libX11: don't require
+ static libc on host
+Message-ID: <20190703222502.7F0798905B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=43e6f70f9cc570ca53a39048b66ed6fa31867b50
+commit: https://git.buildroot.net/buildroot/commit/?id=3716a2d418e25ad3a5d37d2a419b126fdb3d380d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-X11_CFLAGS no longer exists in version 1.6.8 of libX11, making the
-XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS post patch hook useless.
+As per: https://gitlab.freedesktop.org/xorg/lib/libx11/commit/4645e219133458781e3fb48eaea6a74cccb1b9aa
+
+"For Windows targets, libtool uses a wrapper executable, not a wrapper
+script (see [1]), which it compiles with the host compiler.  This
+doesn't work when cross-compiling."
+
+Because of this change, builds fail on Linux hosts without a static
+libc. This patch reverts this change as we are guaranteed to build in a
+Linux environment.
+
+Fixes:
+http://autobuild.buildroot.net/results/ac7c777e5fe31b6eda8b8b662881b07299e57ae9
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.mk | 12 ------------
- 1 file changed, 12 deletions(-)
+ .../0002-remove-reliance-on-static-libc.patch      | 36 ++++++++++++++++++++++
+ package/x11r7/xlib_libX11/xlib_libX11.mk           |  1 +
+ 2 files changed, 37 insertions(+)
 
+diff --git a/package/x11r7/xlib_libX11/0002-remove-reliance-on-static-libc.patch b/package/x11r7/xlib_libX11/0002-remove-reliance-on-static-libc.patch
+new file mode 100644
+index 0000000000..68fda2889e
+--- /dev/null
++++ b/package/x11r7/xlib_libX11/0002-remove-reliance-on-static-libc.patch
+@@ -0,0 +1,36 @@
++From fc3c35853429ac7b4b7a1d91f639b7c3b946e1b6 Mon Sep 17 00:00:00 2001
++From: Adam Duskett <Aduskett@gmail.com>
++Date: Mon, 1 Jul 2019 15:26:00 -0400
++Subject: [PATCH] remove reliance on static libc.
++
++As per commit: https://gitlab.freedesktop.org/xorg/lib/libx11/commit/4645e219133458781e3fb48eaea6a74cccb1b9aa
++
++"For Windows targets, libtool uses a wrapper executable, not a wrapper
++script (see [1]), which it compiles with the host compiler.  This
++doesn't work when cross-compiling."
++
++Because of this change, builds fail on Linux hosts without a static libc, this
++patch reverts this change.
++
++
++Signed-off-by: Adam Duskett <Aduskett@gmail.com>
++---
++ src/util/Makefile.am | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/util/Makefile.am b/src/util/Makefile.am
++index 3731437..a051567 100644
++--- a/src/util/Makefile.am
+++++ b/src/util/Makefile.am
++@@ -10,7 +10,7 @@ AM_CPPFLAGS = \
++ CC = @CC_FOR_BUILD@
++ CPPFLAGS = @CPPFLAGS_FOR_BUILD@
++ CFLAGS = @CFLAGS_FOR_BUILD@
++-LDFLAGS = @LDFLAGS_FOR_BUILD@ -all-static
+++LDFLAGS = @LDFLAGS_FOR_BUILD@
++ LIBS =
++ EXEEXT = @EXEEXT_FOR_BUILD@
++ 
++-- 
++2.21.0
++
 diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index f0e52e0877..352d07dfde 100644
+index 352d07dfde..c51bb53cdb 100644
 --- a/package/x11r7/xlib_libX11/xlib_libX11.mk
 +++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -37,17 +37,5 @@ HOST_XLIB_LIBX11_CONF_OPTS = \
- 	--disable-specs \
- 	--without-perl
- 
--# src/util/makekeys is executed at build time to generate ks_tables.h, so
--# it should get compiled for the host. The libX11 makefile unfortunately
--# doesn't have X11_CFLAGS_FOR_BUILD so this doesn't work.  For buildroot,
--# we know the X11 includes are in $(HOST_DIR)/include, which are already
--# in the CFLAGS_FOR_BUILD, so we can just remove the X11_CFLAGS
--define XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
--	$(SED) '/X11_CFLAGS/d' $(@D)/src/util/Makefile*
--endef
--
--XLIB_LIBX11_POST_PATCH_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
--HOST_XLIB_LIBX11_POST_PATCH_HOOKS += XLIB_LIBX11_DISABLE_MAKEKEYS_X11_CFLAGS
--
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+@@ -10,6 +10,7 @@ XLIB_LIBX11_SITE = https://xorg.freedesktop.org/archive/individual/lib
+ XLIB_LIBX11_LICENSE = MIT
+ XLIB_LIBX11_LICENSE_FILES = COPYING
+ XLIB_LIBX11_INSTALL_STAGING = YES
++XLIB_LIBX11_AUTORECONF = YES
+ XLIB_LIBX11_DEPENDENCIES = \
+ 	libxcb \
+ 	xutil_util-macros \
