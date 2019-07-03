@@ -1,52 +1,38 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 3 Jul 2019 23:29:19 +0200
-Subject: [Buildroot] [git commit] package/irssi: security bump to version
- 1.0.8
-Message-ID: <20190703213110.5031B8902A@busybox.osuosl.org>
+Date: Wed, 3 Jul 2019 23:32:50 +0200
+Subject: [Buildroot] [git commit] boot/barebox: needs host-{flex,bison}
+Message-ID: <20190703213259.54B7B8842C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a1b957d4ed3ec41c645fc81ba6029921116ab4f
+commit: https://git.buildroot.net/buildroot/commit/?id=e7d8d9a765b61f0c464abea37a9568c1ae7a25c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes the following security vulnerability:
+Barebox starting from 2019.02 no longer ships flex/bison generated
+parser. Add conditional kconfig dependencies, same as we did for kernel
+and uboot.
 
-CVE-2019-13045: Use after free when sending SASL login to the server found
-by ilbelkyr
-
-For more details, see the advisory:
-https://irssi.org/security/html/irssi_sa_2019_06/
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/irssi/irssi.hash | 2 +-
- package/irssi/irssi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ boot/barebox/barebox.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
-index 0f298137ba..6a91e16487 100644
---- a/package/irssi/irssi.hash
-+++ b/package/irssi/irssi.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256	1b386ca026aa1875c380fd00ef1d24b71fb87cdae39ef5349ecca16c4567feac  irssi-1.0.7.tar.xz
-+sha256	414fdee2ffaeb90a55f141b7fb3899608631dc891e2bc1f5e91ca31f1a621101  irssi-1.0.8.tar.xz
- # Locally calculated
- sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
-diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
-index 611365f88e..4d7268d291 100644
---- a/package/irssi/irssi.mk
-+++ b/package/irssi/irssi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index 9e8a9f67b5..52178d89c8 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -76,6 +76,10 @@ $(1)_KCONFIG_FRAGMENT_FILES = $$(call qstrip,$$(BR2_TARGET_$(1)_CONFIG_FRAGMENT_
+ $(1)_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ $(1)_KCONFIG_OPTS = $$($(1)_MAKE_FLAGS)
  
--IRSSI_VERSION = 1.0.7
-+IRSSI_VERSION = 1.0.8
- IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
- # Do not use the github helper here. The generated tarball is *NOT* the
- # same as the one uploaded by upstream for the release.
++$(1)_KCONFIG_DEPENDENCIES = \
++	$(BR2_BISON_HOST_DEPENDENCY) \
++	$(BR2_FLEX_HOST_DEPENDENCY)
++
+ ifeq ($$(BR2_TARGET_$(1)_BAREBOXENV),y)
+ define $(1)_BUILD_BAREBOXENV_CMDS
+ 	$$(TARGET_CC) $$(TARGET_CFLAGS) $$(TARGET_LDFLAGS) -o $$(@D)/bareboxenv \
