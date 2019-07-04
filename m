@@ -1,58 +1,139 @@
-From: Adrian Perez de Castro <aperez@igalia.com>
-Date: Thu,  4 Jul 2019 12:10:06 +0300
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version 2.24.3
-Message-ID: <20190704091006.4701-1-aperez@igalia.com>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Thu,  4 Jul 2019 12:43:19 +0200
+Subject: [Buildroot] [PATCH 1/3] package/libgcrypt: replace reconfigure
+ patch with upstream patch
+In-Reply-To: <20190704104321.2598-1-joerg.krause@embedded.rocks>
+References: <20190704104321.2598-1-joerg.krause@embedded.rocks>
+Message-ID: <20190704104321.2598-2-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 2.24.3 is a minor update which contains many bugfixes.
-From the announcement:
+The `ac_cv_sys_symbol_underscore` reconfigure patch was added to
+Buildroot back in 2007 [1], but was not reported to upstream back then.
 
-  - Fix previous/next gestures in RTL mode.
-  - Fix rendering artifacts in popular sites (YouTube, GitHub, etc.)
-  - Fix media playback annoyances (volume randomly changing, HLS streams
-    starting too slowly, some audio streams would not play, etc.)
-  - Fix build with audio and video disabled.
+Meanwhile, the issue has been fixed upstream [2] after the version bump to
+version 1.8.4.
 
-  https://webkitgtk.org/2019/07/02/webkitgtk2.24.3-released.html
+In order to add another upstream patch, which will add a pkg-config file
+for libgrypt and therefore requires autoreconfiguration as well, replace the
+current patch with the upstream patch.
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+[1] https://git.buildroot.net/buildroot/commit/package/libgcrypt?id=f1bcdf518fa7868b7819b0248f4b8da02a954dde
+[2] https://github.com/gpg/libgcrypt/commit/0f4545b441b6fbdd6e9c4e95f5f2a367483e78ad
+
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ ...ult-to-underscore-yes-for-cross-buil.patch | 48 +++++++++++++++++++
+ package/libgcrypt/0001-reconfigure.patch      | 27 -----------
+ package/libgcrypt/libgcrypt.mk                |  4 +-
+ 3 files changed, 50 insertions(+), 29 deletions(-)
+ create mode 100644 package/libgcrypt/0001-build-Don-t-default-to-underscore-yes-for-cross-buil.patch
+ delete mode 100644 package/libgcrypt/0001-reconfigure.patch
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 40bb6f7b63..f1784da2ad 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.24.2.tar.xz.sums
--md5 83012998e1b9f71abb37d8baf6f9c7e6 webkitgtk-2.24.2.tar.xz
--sha1 632a65d93beb996bebdf7592ef9591f3993dea91 webkitgtk-2.24.2.tar.xz
--sha256 019cb1f0d05bf6148b72c7a85734bcd006388a1c14132843ef9a1b2cb7b4321c webkitgtk-2.24.2.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.24.3.tar.xz.sums
-+md5 e2a5bbd09a217eba096a2d1562143e35 webkitgtk-2.24.3.tar.xz
-+sha1 26a33fd0af8223c130427cd59aaf5ccaba584114 webkitgtk-2.24.3.tar.xz
-+sha256 940d746d7e82c357222feb5b3f44c4b201e81df7d81ddca5ca2bf3ae0acf6c51 webkitgtk-2.24.3.tar.xz
+diff --git a/package/libgcrypt/0001-build-Don-t-default-to-underscore-yes-for-cross-buil.patch b/package/libgcrypt/0001-build-Don-t-default-to-underscore-yes-for-cross-buil.patch
+new file mode 100644
+index 0000000000..032cb7c84c
+--- /dev/null
++++ b/package/libgcrypt/0001-build-Don-t-default-to-underscore-yes-for-cross-buil.patch
+@@ -0,0 +1,48 @@
++From 7fec3ac22efb86fce90a9edc5696e16ee88a65c7 Mon Sep 17 00:00:00 2001
++From: NIIBE Yutaka <gniibe@fsij.org>
++Date: Wed, 24 Oct 2018 14:29:45 +0900
++Subject: [PATCH] build: Don't default to underscore=yes for cross-build.
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++* acinclude.m4: Don't set ac_cv_sys_symbol_underscore
++for cross build.
++
++--
++
++It made sense in the past when cross compile were basically for a.out
++system, but nowadays, it's better not to assume that.
++
++Fetched from: 0f4545b441b6fbdd6e9c4e95f5f2a367483e78ad
++
++Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
++Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
++---
++ acinclude.m4 | 8 ++------
++ 1 file changed, 2 insertions(+), 6 deletions(-)
++
++diff --git a/acinclude.m4 b/acinclude.m4
++index fc208c53..6f7789d0 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -111,14 +111,10 @@ case "${host}" in
++         ac_cv_sys_symbol_underscore=yes
++         ;;
++     *)
++-      if test "$cross_compiling" = yes; then
++-        if test "x$ac_cv_sys_symbol_underscore" = x ; then
++-           ac_cv_sys_symbol_underscore=yes
++-        fi
++-      else
+++      if test "$cross_compiling" != yes; then
++          tmp_do_check="yes"
++       fi
++-       ;;
+++      ;;
++ esac
++ if test "$tmp_do_check" = "yes"; then
++   AC_REQUIRE([AC_LIBTOOL_SYS_GLOBAL_SYMBOL_PIPE])
++-- 
++2.22.0
++
+diff --git a/package/libgcrypt/0001-reconfigure.patch b/package/libgcrypt/0001-reconfigure.patch
+deleted file mode 100644
+index 87d29a298b..0000000000
+--- a/package/libgcrypt/0001-reconfigure.patch
++++ /dev/null
+@@ -1,27 +0,0 @@
+-diff --git a/configure b/configure
+-index 70a6d50..8f55d95 100755
+---- a/configure
+-+++ b/configure
+-@@ -22306,14 +22306,15 @@ case "${host}" in
+-     i386-emx-os2 | i345686-pc-os2*emx | i386-pc-msdosdjgpp)
+-         ac_cv_sys_symbol_underscore=yes
+-         ;;
+--    *)
+--      if test "$cross_compiling" = yes; then
+--        if test "x$ac_cv_sys_symbol_underscore" = x ; then
+--           ac_cv_sys_symbol_underscore=yes
+-+    *)if test -z "$ac_cv_sys_symbol_underscore";then
+-+        if test "$cross_compiling" = yes; then
+-+            if test "x$ac_cv_sys_symbol_underscore" = x ; then
+-+                ac_cv_sys_symbol_underscore=yes
+-+            fi
+-+        else
+-+            tmp_do_check="yes"
+-+        fi
+-         fi
+--      else
+--         tmp_do_check="yes"
+--      fi
+-        ;;
+- esac
+- if test "$tmp_do_check" = "yes"; then
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 452cf17ce1..5aa44481ae 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -13,8 +13,8 @@ LIBGCRYPT_INSTALL_STAGING = YES
+ LIBGCRYPT_DEPENDENCIES = libgpg-error
+ LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
  
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index e81ba047e4..f8cd728351 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-LIBGCRYPT_CONF_ENV = \
+-	ac_cv_sys_symbol_underscore=no
++# Patching acinclude.m4 in 0001
++LIBGCRYPT_AUTORECONF = YES
+ LIBGCRYPT_CONF_OPTS = \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
  
--WEBKITGTK_VERSION = 2.24.2
-+WEBKITGTK_VERSION = 2.24.3
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
 -- 
 2.22.0
