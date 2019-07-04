@@ -1,105 +1,55 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Jul 2019 07:51:45 +0200
-Subject: [Buildroot] [git commit] package/python-can: bump to version 3.3.0
-Message-ID: <20190704060000.7349B7FC8F@busybox.osuosl.org>
+Date: Thu, 4 Jul 2019 08:01:03 +0200
+Subject: [Buildroot] [git commit] package/libinput: bump version to 1.13.4
+Message-ID: <20190704060000.AFD667FC8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1b489fe74f2e5bd7cecc886d6dfde131296578f
+commit: https://git.buildroot.net/buildroot/commit/?id=58434306804e9a7123a3c15e91f83b6fee407a07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See https://github.com/hardbyte/python-can/releases
+For details see [1].
 
-Also add a patch removing the pytest-runner dependency.
+[1] https://lists.freedesktop.org/archives/wayland-devel/2019-June/040675.html
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...require-pytest-runner-only-when-necessary.patch | 49 ++++++++++++++++++++++
- package/python-can/python-can.hash                 |  2 +-
- package/python-can/python-can.mk                   |  4 +-
- 3 files changed, 52 insertions(+), 3 deletions(-)
+ package/libinput/libinput.hash | 10 +++++-----
+ package/libinput/libinput.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-can/0001-setup.py-require-pytest-runner-only-when-necessary.patch b/package/python-can/0001-setup.py-require-pytest-runner-only-when-necessary.patch
-new file mode 100644
-index 0000000000..7fda1e3d57
---- /dev/null
-+++ b/package/python-can/0001-setup.py-require-pytest-runner-only-when-necessary.patch
-@@ -0,0 +1,49 @@
-+From 3da4873bcdcb7d8bd47e275b97bbb6f1c134b3b9 Mon Sep 17 00:00:00 2001
-+From: Pierre-Jean Texier <pjtexier@koncepto.io>
-+Date: Sat, 29 Jun 2019 21:19:08 +0200
-+Subject: [PATCH] setup.py: require pytest-runner only when necessary
-+
-+This optimizes setup.py for cases when pytest-runner is not needed,
-+using the approach that is suggested upstream:
-+
-+https://pypi.python.org/pypi/pytest-runner#conditional-requirement
-+
-+[Upstream status: https://github.com/hardbyte/python-can/pull/633]
-+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-+---
-+ setup.py | 5 ++++-
-+ 1 file changed, 4 insertions(+), 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 221c030..6e1778a 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -11,6 +11,7 @@ from os import listdir
-+ from os.path import isfile, join
-+ import re
-+ import logging
-++import sys
-+ from setuptools import setup, find_packages
-+ 
-+ logging.basicConfig(level=logging.WARNING)
-+@@ -40,6 +41,8 @@ tests_require = [
-+ 
-+ extras_require["test"] = tests_require
-+ 
-++needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
-++pytest_runner = ['pytest-runner'] if needs_pytest else []
-+ 
-+ setup(
-+     # Description
-+@@ -96,7 +99,7 @@ setup(
-+         'windows-curses;platform_system=="Windows"',
-+         "filelock",
-+     ],
-+-    setup_requires=["pytest-runner"],
-++    setup_requires=pytest_runner,
-+     extras_require=extras_require,
-+     tests_require=tests_require,
-+ )
-+-- 
-+2.7.4
-+
-diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
-index 7e8a07fb4e..813ecf4419 100644
---- a/package/python-can/python-can.hash
-+++ b/package/python-can/python-can.hash
-@@ -1,4 +1,4 @@
- # sha256 from https://pypi.org/pypi/python-can/json
--sha256	99c06d05f8aa6fa9a84f39a11987c303c030411c3280e39bef0b5cd2242ad09f  python-can-3.1.1.tar.gz
-+sha256	2a7e9f658b5db16319bbebb2cdd82b1fc0a390ca939b47829affd07c832357ec  python-can-3.3.0.tar.gz
- # Locally computed sha256 checksums
- sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-index 86ece99b08..33449aa451 100644
---- a/package/python-can/python-can.mk
-+++ b/package/python-can/python-can.mk
-@@ -4,8 +4,8 @@
+diff --git a/package/libinput/libinput.hash b/package/libinput/libinput.hash
+index 71542fb347..ea9319d663 100644
+--- a/package/libinput/libinput.hash
++++ b/package/libinput/libinput.hash
+@@ -1,8 +1,8 @@
+-# From https://lists.freedesktop.org/archives/wayland-devel/2019-June/040650.html
+-md5 0205d720ae0b1caef1faeb4bba7f8c0f libinput-1.13.3.tar.xz
+-sha1 ea80070c087363415a4259ddc4bf828e18205195 libinput-1.13.3.tar.xz
+-sha256 f3ff113023a28631d83971c059c1f3057d51a90aa3746428776f3b3462131092 libinput-1.13.3.tar.xz
+-sha512 427ec838975444571770e129ef78fd42e4438a11e89ed0b3fc98793184d00c0ca8ed282eab2045cc6cb345804ad6fce1061af563b4f41d75405cdf2f09cb01e1 libinput-1.13.3.tar.xz
++# From https://lists.freedesktop.org/archives/wayland-devel/2019-June/040675.html
++md5 9ef817774bb5b4006cba95e34103e82c libinput-1.13.4.tar.xz
++sha1 14d7a14643d41c2e7512a7b3a6c0c9a3e7ba3242 libinput-1.13.4.tar.xz
++sha256 d3eb57c714683b117aae29f6c0be76dd46de259f0a48f20cb43b9fa9f2e1401d libinput-1.13.4.tar.xz
++sha512 ccfdfc704dab9ea19a503399ecd4ce3a95b8d9480b8dfddeb80be01236c34c6f2f472be0e12e04dddd68092611470d303351e092141bc7491729639bcf7e64d7 libinput-1.13.4.tar.xz
+ 
+ # License files
+ sha256 70d5b1dfe5a9c50a1f2ea91b1c2b1c85d876c5c92339585edbb85cf69e945e14 COPYING
+diff --git a/package/libinput/libinput.mk b/package/libinput/libinput.mk
+index 6761173a1c..4706e8ebfa 100644
+--- a/package/libinput/libinput.mk
++++ b/package/libinput/libinput.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_CAN_VERSION = 3.1.1
--PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/c1/b0/72d7ed7840692ace5b55dd1155409cd86fd83cee4ded75e3d1102c08750a
-+PYTHON_CAN_VERSION = 3.3.0
-+PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/9c/1e/a10b6f038a4a4bdd89d13ecc5fba36b71ab716fbd9eae9feda1d975d9504
- PYTHON_CAN_SETUP_TYPE = setuptools
- PYTHON_CAN_LICENSE = LGPL-3.0
- PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+-LIBINPUT_VERSION = 1.13.3
++LIBINPUT_VERSION = 1.13.4
+ LIBINPUT_SOURCE = libinput-$(LIBINPUT_VERSION).tar.xz
+ LIBINPUT_SITE = http://www.freedesktop.org/software/libinput
+ LIBINPUT_DEPENDENCIES = host-pkgconf libevdev mtdev udev
