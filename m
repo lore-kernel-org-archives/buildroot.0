@@ -1,12 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 4 Jul 2019 19:34:52 +0200
-Subject: [Buildroot] [PATCH v3 3/3] package/mpd: bump to version 0.21.7
-In-Reply-To: <d5afdd42c243c540364a10373fd0944671130165.camel@embedded.rocks>
-References: <20190704104321.2598-1-joerg.krause@embedded.rocks>
- <20190704104321.2598-4-joerg.krause@embedded.rocks>
- <91452a65-49d5-a479-6cf8-eb9e0eef1897@mind.be>
- <d5afdd42c243c540364a10373fd0944671130165.camel@embedded.rocks>
-Message-ID: <4b5bb0a4-1019-c837-688f-42a3af3385a7@mind.be>
+Date: Thu, 4 Jul 2019 19:36:15 +0200
+Subject: [Buildroot] [PATCH v2 19/27] autobuild-run: define output
+ directory as part of Builder class
+In-Reply-To: <20190703183159.3415-19-itsatharva@gmail.com>
+References: <20190703183159.3415-1-itsatharva@gmail.com>
+ <20190703183159.3415-19-itsatharva@gmail.com>
+Message-ID: <6a17f564-a296-0494-5788-38345db4b230@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,46 +14,18 @@ To: buildroot@busybox.net
 
 
 
-On 04/07/2019 19:31, J?rg Krause wrote:
-> Hi Arnout,
+On 03/07/2019 20:31, Atharva Lele wrote:
+> Absolute path for output dir is required when using outputdir with
+> system commands like make or tail. It was necessary because the
+> relative path would be relative to the autobuilder script rather
+> than the buildroot source directory.
 > 
-> On Thu, 2019-07-04 at 19:21 +0200, Arnout Vandecappelle wrote:
->>
->> On 04/07/2019 12:43, J?rg Krause wrote:
->>> MPD changed from Autotools to the Meson build system.
->>>
->>> Add config options for the qobuz and tidal plugins and group them together
->>> with the soundcloud plugin under "Commercial services".
->>>
->>> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
->>
->> Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
->>
->>  Is there any reason why you didn't do the bump to 0.21.11 already?
+> It is OK to use an  absolute path everywhere because an absolute
+> path is always correct.
 > 
-> The only reason is that the patch was first proposed when version
-> 0.21.7 was the most recent version back then. Shall I bump to version
-> 0.21.11 instead (and change the commit message)?
+> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 
- I'd think that that is easier than making an additional patch for the
-additional bump.
-
-
->>>  ifeq ($(BR2_PACKAGE_MPD_TREMOR),y)
->>>  MPD_DEPENDENCIES += tremor
->>> -# Help mpd to find tremor in static linking scenarios
->>> -MPD_CONF_ENV += \
->>> -	TREMOR_LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs vorbisidec`"
->>> -MPD_CONF_OPTS += --with-tremor=$(STAGING_DIR)/usr
->>
->>  I guess this is no longer needed because meson properly uses pkg-config. Have
->> you tested that?
-> 
-> You're right, this is no longer needed and can safely be removed.
-
- If you're anyway respinning, please mention it in the commit message.
-
- Thanks!
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 
  Regards,
  Arnout
