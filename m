@@ -1,7 +1,8 @@
 From: Vered Kalef <vered.kalef@gmail.com>
-Date: Thu, 4 Jul 2019 15:36:35 +0300
-Subject: [Buildroot] (no subject)
-Message-ID: <CADNjvP9Ppo7p9FknyCZE4TeV1mOOh7xBY+VggZMNTC1dx-LJtA@mail.gmail.com>
+Date: Thu, 4 Jul 2019 15:38:59 +0300
+Subject: [Buildroot] How do I enable webrtc as part of external gstreamer,
+ in buildroot
+Message-ID: <CADNjvP-VYgO7ctGsOjZxudkA7k6PzT4FNt+JRACmUV6=bh_E=Q@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -31,4 +32,4 @@ Regards,
 Vered
 -------------- next part --------------
 An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190704/33afdc30/attachment.html>
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190704/a14f78a5/attachment.html>
