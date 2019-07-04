@@ -1,85 +1,105 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Jul 2019 07:56:53 +0200
-Subject: [Buildroot] [git commit] package/tvheadend: bump version
-Message-ID: <20190704060000.A7ED47FC8F@busybox.osuosl.org>
+Date: Thu, 4 Jul 2019 07:51:45 +0200
+Subject: [Buildroot] [git commit] package/python-can: bump to version 3.3.0
+Message-ID: <20190704060000.7349B7FC8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d5ca53da8685ede405dfa63f3f05212dd70300e1
+commit: https://git.buildroot.net/buildroot/commit/?id=b1b489fe74f2e5bd7cecc886d6dfde131296578f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch which was applied upstream.
+See https://github.com/hardbyte/python-can/releases
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Also add a patch removing the pytest-runner dependency.
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...-fix-pie-linking-according-to-disable-pie.patch | 34 ----------------------
- package/tvheadend/tvheadend.hash                   |  2 +-
- package/tvheadend/tvheadend.mk                     |  2 +-
- 3 files changed, 2 insertions(+), 36 deletions(-)
+ ...require-pytest-runner-only-when-necessary.patch | 49 ++++++++++++++++++++++
+ package/python-can/python-can.hash                 |  2 +-
+ package/python-can/python-can.mk                   |  4 +-
+ 3 files changed, 52 insertions(+), 3 deletions(-)
 
-diff --git a/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch b/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
-deleted file mode 100644
-index 385c94b36b..0000000000
---- a/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 5cbf08213222cb507d365e6cbda87277f0b8f31e Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@micronovasrl.com>
--Date: Fri, 14 Jun 2019 14:25:08 +0200
--Subject: [PATCH] Makefile: fix -pie linking according to --disable-pie
--
--Only compilation follows './configure --disable-pie', linking instead
--doesn't, because '-pie' flag is passed to LDFLAGS uncoditionally.
--
--So add '-pie' flag only if CONFIG_PIE=yes.
--
--Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-----
-- Makefile | 5 ++++-
-- 1 file changed, 4 insertions(+), 1 deletion(-)
--
--diff --git a/Makefile b/Makefile
--index 41783b546..4e5a947a3 100644
----- a/Makefile
--+++ b/Makefile
--@@ -62,7 +62,10 @@ LDFLAGS += -ldl -lm
-- else
-- LDFLAGS += -ldl -lpthread -lm
-- endif
---LDFLAGS += -pie -Wl,-z,now
--+ifeq ($(CONFIG_PIE),yes)
--+LDFLAGS += -pie
--+endif
--+LDFLAGS += -Wl,-z,now
-- ifeq ($(CONFIG_LIBICONV),yes)
-- LDFLAGS += -liconv
-- endif
---- 
--2.17.1
--
-diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
-index 43178b874a..ea24aec1cb 100644
---- a/package/tvheadend/tvheadend.hash
-+++ b/package/tvheadend/tvheadend.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 92c5f2cdda085b81fc50025afeb3ece74f60fae2b26f40a7dd07e227b0db2d9f  tvheadend-17dff3e5ffbd67174b6c0d7b49f5488e19ec1ead.tar.gz
-+sha256 6a7703fbbe553a2d9f87acafc01162d81f78c6e427b8ab9c83242e1677248582  tvheadend-8f1de1621d78c91431238176bf4f6290870a031a.tar.gz
- sha256 54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
-diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
-index b192a33d4a..61732a203c 100644
---- a/package/tvheadend/tvheadend.mk
-+++ b/package/tvheadend/tvheadend.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-can/0001-setup.py-require-pytest-runner-only-when-necessary.patch b/package/python-can/0001-setup.py-require-pytest-runner-only-when-necessary.patch
+new file mode 100644
+index 0000000000..7fda1e3d57
+--- /dev/null
++++ b/package/python-can/0001-setup.py-require-pytest-runner-only-when-necessary.patch
+@@ -0,0 +1,49 @@
++From 3da4873bcdcb7d8bd47e275b97bbb6f1c134b3b9 Mon Sep 17 00:00:00 2001
++From: Pierre-Jean Texier <pjtexier@koncepto.io>
++Date: Sat, 29 Jun 2019 21:19:08 +0200
++Subject: [PATCH] setup.py: require pytest-runner only when necessary
++
++This optimizes setup.py for cases when pytest-runner is not needed,
++using the approach that is suggested upstream:
++
++https://pypi.python.org/pypi/pytest-runner#conditional-requirement
++
++[Upstream status: https://github.com/hardbyte/python-can/pull/633]
++Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
++---
++ setup.py | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/setup.py b/setup.py
++index 221c030..6e1778a 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -11,6 +11,7 @@ from os import listdir
++ from os.path import isfile, join
++ import re
++ import logging
+++import sys
++ from setuptools import setup, find_packages
++ 
++ logging.basicConfig(level=logging.WARNING)
++@@ -40,6 +41,8 @@ tests_require = [
++ 
++ extras_require["test"] = tests_require
++ 
+++needs_pytest = {'pytest', 'test', 'ptr'}.intersection(sys.argv)
+++pytest_runner = ['pytest-runner'] if needs_pytest else []
++ 
++ setup(
++     # Description
++@@ -96,7 +99,7 @@ setup(
++         'windows-curses;platform_system=="Windows"',
++         "filelock",
++     ],
++-    setup_requires=["pytest-runner"],
+++    setup_requires=pytest_runner,
++     extras_require=extras_require,
++     tests_require=tests_require,
++ )
++-- 
++2.7.4
++
+diff --git a/package/python-can/python-can.hash b/package/python-can/python-can.hash
+index 7e8a07fb4e..813ecf4419 100644
+--- a/package/python-can/python-can.hash
++++ b/package/python-can/python-can.hash
+@@ -1,4 +1,4 @@
+ # sha256 from https://pypi.org/pypi/python-can/json
+-sha256	99c06d05f8aa6fa9a84f39a11987c303c030411c3280e39bef0b5cd2242ad09f  python-can-3.1.1.tar.gz
++sha256	2a7e9f658b5db16319bbebb2cdd82b1fc0a390ca939b47829affd07c832357ec  python-can-3.3.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256	da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSE.txt
+diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
+index 86ece99b08..33449aa451 100644
+--- a/package/python-can/python-can.mk
++++ b/package/python-can/python-can.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--TVHEADEND_VERSION = 17dff3e5ffbd67174b6c0d7b49f5488e19ec1ead
-+TVHEADEND_VERSION = 8f1de1621d78c91431238176bf4f6290870a031a
- TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
- TVHEADEND_LICENSE = GPL-3.0+
- TVHEADEND_LICENSE_FILES = LICENSE.md
+-PYTHON_CAN_VERSION = 3.1.1
+-PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/c1/b0/72d7ed7840692ace5b55dd1155409cd86fd83cee4ded75e3d1102c08750a
++PYTHON_CAN_VERSION = 3.3.0
++PYTHON_CAN_SITE = https://files.pythonhosted.org/packages/9c/1e/a10b6f038a4a4bdd89d13ecc5fba36b71ab716fbd9eae9feda1d975d9504
+ PYTHON_CAN_SETUP_TYPE = setuptools
+ PYTHON_CAN_LICENSE = LGPL-3.0
+ PYTHON_CAN_LICENSE_FILES = LICENSE.txt
