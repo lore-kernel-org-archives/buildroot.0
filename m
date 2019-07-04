@@ -1,60 +1,57 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Jul 2019 08:22:51 +0200
-Subject: [Buildroot] [git commit] package/e2fsprogs: bump version to 1.45.2
-Message-ID: <20190704062422.81EE08A359@busybox.osuosl.org>
+Date: Thu, 04 Jul 2019 08:28:21 +0200
+Subject: [Buildroot] [PATCH v2] fs/tar: explicitly set extended header
+ values to ensure binary reproducibility
+In-Reply-To: <20190702173559.4423-1-itsatharva@gmail.com> (Atharva Lele's
+ message of "Tue, 2 Jul 2019 23:05:59 +0530")
+References: <20190702173559.4423-1-itsatharva@gmail.com>
+Message-ID: <87a7duz52y.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=92ebd24be9708a28e7d15f27080f847f371d0558
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Atharva" == Atharva Lele <itsatharva@gmail.com> writes:
 
-Release notes:
-http://e2fsprogs.sourceforge.net/e2fsprogs-release.html#1.45.2
+ > Since we use --xattrs-include='*' to include all extended attributes,
+ > tar creates a PAX formatted archive. The archive metadata captures atime
+ > and ctime of files. To fix this, GNU recommends that we pass this added
+ > argument to tar to create binary reproducible packages. Setting of mtime
+ > is handled in fs/common.mk using touch on all files.
 
-Disabled crond support for host build.
+ > Diffoscope output pre-change: https://gitlab.com/snippets/1871111
+ > Diffoscope output after change is blank i.e. binary reproducibile rootfs
+ > is created.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/e2fsprogs/e2fsprogs.hash | 4 ++--
- package/e2fsprogs/e2fsprogs.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ > GNU Recommendation: https://www.gnu.org/software/tar/manual/tar.html#SEC147
 
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index 7619e26275..c7d57a5f82 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
-@@ -1,5 +1,5 @@
--# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.44.5/sha256sums.asc
--sha256 ba5eb3069d69160d96818bb9700de9ab5a8458d9add1fd85d427c0000d34c5b9  e2fsprogs-1.44.5.tar.xz
-+# From https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.45.2/sha256sums.asc
-+sha256 4952c9ae91e36d762e13cc5b9e8f7eeb5453e4aee4cd9b7402e73f2d4e65e009  e2fsprogs-1.45.2.tar.xz
- # Locally calculated
- sha256 5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
- sha256 032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index f5785ab4f2..a78417e7e7 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ > Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+ > ---
+ > Changes v1 -> v2:
+ >   - Added comment about mtime handling
+ > ---
+ >  fs/tar/tar.mk | 4 ++++
+ >  1 file changed, 4 insertions(+)
+
+ > diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
+ > index 4c6327ace8..f6d11baa84 100644
+ > --- a/fs/tar/tar.mk
+ > +++ b/fs/tar/tar.mk
+ > @@ -8,6 +8,10 @@ TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
  
--E2FSPROGS_VERSION = 1.44.5
-+E2FSPROGS_VERSION = 1.45.2
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
-@@ -28,7 +28,8 @@ HOST_E2FSPROGS_CONF_OPTS = \
- 	--disable-libuuid \
- 	--disable-testio-debug \
- 	--enable-symlink-install \
--	--enable-elf-shlibs
-+	--enable-elf-shlibs \
-+	--with-crond-dir=no
+ >  ROOTFS_TAR_DEPENDENCIES = $(BR2_TAR_HOST_DEPENDENCY)
  
- # Set the binary directories to "/bin" and "/sbin", as busybox does,
- # so that we do not end up with two versions of e2fs tools.
+ > +ifeq ($(BR2_REPRODUCIBLE),y)
+ > +TAR_OPTS += --pax-option=exthdr.name=%d/PaxHeaders/%f,atime:=0,ctime:=0
+ > +endif
+
+It would be good to add a short comment saying something like
+
+# don't store atime/ctime
+
+Is there any use case for ever storing these in the rootfs, or should we
+just do this fix unconditionally?
+
+-- 
+Bye, Peter Korsgaard
