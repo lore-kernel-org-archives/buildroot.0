@@ -1,51 +1,85 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Jul 2019 07:51:36 +0200
-Subject: [Buildroot] [git commit] package/python-zeroconf: bump to version
- 0.23.0
-Message-ID: <20190704060000.663E882165@busybox.osuosl.org>
+Date: Thu, 4 Jul 2019 07:56:53 +0200
+Subject: [Buildroot] [git commit] package/tvheadend: bump version
+Message-ID: <20190704060000.A7ED47FC8F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33ecad32ecd53393d845b2c519985baba8b36d89
+commit: https://git.buildroot.net/buildroot/commit/?id=d5ca53da8685ede405dfa63f3f05212dd70300e1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See https://github.com/jstasiak/python-zeroconf#changelog
+Removed patch which was applied upstream.
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-zeroconf/python-zeroconf.hash | 4 ++--
- package/python-zeroconf/python-zeroconf.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ ...-fix-pie-linking-according-to-disable-pie.patch | 34 ----------------------
+ package/tvheadend/tvheadend.hash                   |  2 +-
+ package/tvheadend/tvheadend.mk                     |  2 +-
+ 3 files changed, 2 insertions(+), 36 deletions(-)
 
-diff --git a/package/python-zeroconf/python-zeroconf.hash b/package/python-zeroconf/python-zeroconf.hash
-index 1677affa11..a4239b6780 100644
---- a/package/python-zeroconf/python-zeroconf.hash
-+++ b/package/python-zeroconf/python-zeroconf.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/zeroconf/json
--md5	23124285dbdfcf3cb9cca11b98216cf7  zeroconf-0.20.0.tar.gz
--sha256	6e3f1e7b5871e3d1410ac29b9fb85aafc1e2d661ed596b07a6f84559a475efcb  zeroconf-0.20.0.tar.gz
-+md5	1094639f8688f2c5b1938029877eb4f2  zeroconf-0.23.0.tar.gz
-+sha256	e0c333b967c48f8b2e5cc94a1d4d28893023fb06dfd797ee384a94cdd1d0eef5  zeroconf-0.23.0.tar.gz
- # Locally computed sha256 checksums
- sha256	bb117c0fbd7f57f64170b690285d7df07c2371b578e3b3cd3aa2e1155ef461a0  COPYING
-diff --git a/package/python-zeroconf/python-zeroconf.mk b/package/python-zeroconf/python-zeroconf.mk
-index 7000a0da7a..55da292b46 100644
---- a/package/python-zeroconf/python-zeroconf.mk
-+++ b/package/python-zeroconf/python-zeroconf.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch b/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
+deleted file mode 100644
+index 385c94b36b..0000000000
+--- a/package/tvheadend/0002-Makefile-fix-pie-linking-according-to-disable-pie.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 5cbf08213222cb507d365e6cbda87277f0b8f31e Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+-Date: Fri, 14 Jun 2019 14:25:08 +0200
+-Subject: [PATCH] Makefile: fix -pie linking according to --disable-pie
+-
+-Only compilation follows './configure --disable-pie', linking instead
+-doesn't, because '-pie' flag is passed to LDFLAGS uncoditionally.
+-
+-So add '-pie' flag only if CONFIG_PIE=yes.
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+----
+- Makefile | 5 ++++-
+- 1 file changed, 4 insertions(+), 1 deletion(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 41783b546..4e5a947a3 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -62,7 +62,10 @@ LDFLAGS += -ldl -lm
+- else
+- LDFLAGS += -ldl -lpthread -lm
+- endif
+--LDFLAGS += -pie -Wl,-z,now
+-+ifeq ($(CONFIG_PIE),yes)
+-+LDFLAGS += -pie
+-+endif
+-+LDFLAGS += -Wl,-z,now
+- ifeq ($(CONFIG_LIBICONV),yes)
+- LDFLAGS += -liconv
+- endif
+--- 
+-2.17.1
+-
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index 43178b874a..ea24aec1cb 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 92c5f2cdda085b81fc50025afeb3ece74f60fae2b26f40a7dd07e227b0db2d9f  tvheadend-17dff3e5ffbd67174b6c0d7b49f5488e19ec1ead.tar.gz
++sha256 6a7703fbbe553a2d9f87acafc01162d81f78c6e427b8ab9c83242e1677248582  tvheadend-8f1de1621d78c91431238176bf4f6290870a031a.tar.gz
+ sha256 54dc3cbc00bf126bcba43e2af7f3ad1dc00f335985da1409fa943c7b7256d942  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index b192a33d4a..61732a203c 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_ZEROCONF_VERSION = 0.20.0
-+PYTHON_ZEROCONF_VERSION = 0.23.0
- PYTHON_ZEROCONF_SOURCE = zeroconf-$(PYTHON_ZEROCONF_VERSION).tar.gz
--PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/20/d7/418ff6c684ace0f5855ec56c66cfa99ec50443c41693b91e9abcccfa096c
-+PYTHON_ZEROCONF_SITE = https://files.pythonhosted.org/packages/d7/25/8bbdd4857820e0cdc380c7e0c3543dc01a55247a1d831c712571783e74ec
- PYTHON_ZEROCONF_SETUP_TYPE = setuptools
- PYTHON_ZEROCONF_LICENSE = LGPL-2.1+
- PYTHON_ZEROCONF_LICENSE_FILES = COPYING
+-TVHEADEND_VERSION = 17dff3e5ffbd67174b6c0d7b49f5488e19ec1ead
++TVHEADEND_VERSION = 8f1de1621d78c91431238176bf4f6290870a031a
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
