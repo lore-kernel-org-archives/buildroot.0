@@ -1,46 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 4 Jul 2019 08:35:22 +0200
-Subject: [Buildroot] [git commit] package/samba4: bump version to 4.9.11
-Message-ID: <20190704063512.07166810AE@busybox.osuosl.org>
+Date: Thu, 4 Jul 2019 08:34:02 +0200
+Subject: [Buildroot] [git commit] package/libdrm: bump version to 2.4.99
+Message-ID: <20190704063511.F20EF8A2D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ded3f9954f158b5d9cd08ae76749eade72fcca3a
+commit: https://git.buildroot.net/buildroot/commit/?id=dec99b165861945e9893a2f8158ca5b35643749c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Release notes: https://www.samba.org/samba/history/samba-4.9.11.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libdrm/libdrm.hash | 10 +++++-----
+ package/libdrm/libdrm.mk   |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 075a1e6f2c..28cbe7d9b2 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.9.10.tar.asc
--sha256 f81ab92924b2f3c368ab64a381c1bb2befc7ddc90043dbb10b02d85cca27df61  samba-4.9.10.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.9.11.tar.asc
-+sha256 bb736624d16f7369e395de2f15fec153b554f76f95864015b4ce1f2ae53e817b  samba-4.9.11.tar.gz
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 7fe6ec5a2d..3690dbd7c5 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+diff --git a/package/libdrm/libdrm.hash b/package/libdrm/libdrm.hash
+index cd08a9505a..a2b68b50e1 100644
+--- a/package/libdrm/libdrm.hash
++++ b/package/libdrm/libdrm.hash
+@@ -1,5 +1,5 @@
+-# From https://lists.freedesktop.org/archives/dri-devel/2019-April/215254.html
+-md5 1320b43c4bdb8846c308ec2610b62b64 libdrm-2.4.98.tar.bz2
+-sha1 4c8a11870a89f59c294bef0109939a7ffaa1fb26 libdrm-2.4.98.tar.bz2
+-sha256 8be0edccaca3abde8b6bb1431b46354c7fab46e9b91cc6946ba65b51f56f1894 libdrm-2.4.98.tar.bz2
+-sha512 3d333d060ceb14fa8e204ef468ca2c95d6f07205185ca90a044b685832b9b2d7256faa5e81d5871ce8b70aa1fdf9fb1ade18b4e582ff0c7ef5551da8506eb27b libdrm-2.4.98.tar.bz2
++# From https://lists.freedesktop.org/archives/dri-devel/2019-July/225069.html
++md5 72539626815b35159a63d45bc4c14ee6  libdrm-2.4.99.tar.bz2
++sha1 e15a3fcc2d321b03d233a245a8593abde7feefd4  libdrm-2.4.99.tar.bz2
++sha256 4dbf539c7ed25dbb2055090b77ab87508fc46be39a9379d15fed4b5517e1da5e  libdrm-2.4.99.tar.bz2
++sha512 04702eebe8dca97fac61653623804fdcb0b8b3714bdc6f5e72f0dfdce9c9524cf16f69d37aa9feac79ddc1c11939be44a216484563a612414668ea5eaeadf191  libdrm-2.4.99.tar.bz2
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index 91d109c678..f6955826d3 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.9.10
-+SAMBA4_VERSION = 4.9.11
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-LIBDRM_VERSION = 2.4.98
++LIBDRM_VERSION = 2.4.99
+ LIBDRM_SOURCE = libdrm-$(LIBDRM_VERSION).tar.bz2
+ LIBDRM_SITE = https://dri.freedesktop.org/libdrm
+ LIBDRM_LICENSE = MIT
