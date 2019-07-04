@@ -1,64 +1,51 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Thu, 04 Jul 2019 23:52:41 +0530
-Subject: [Buildroot] [PATCH v2] fs/tar: explicitly set extended header
- values to ensure binary reproducibility
-In-Reply-To: <87a7duz52y.fsf@dell.be.48ers.dk>
-References: <20190702173559.4423-1-itsatharva@gmail.com>
- <87a7duz52y.fsf@dell.be.48ers.dk>
-Message-ID: <1831896.i2y51H8qiE@msi-manjaro>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu,  4 Jul 2019 18:23:24 +0200
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: bump to version
+ 1.10.2
+Message-ID: <20190704162324.26409-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thursday, July 4, 2019 11:58:21 AM IST Peter Korsgaard wrote:
-> >>>>> "Atharva" == Atharva Lele <itsatharva@gmail.com> writes:
->  > Since we use --xattrs-include='*' to include all extended attributes,
->  > tar creates a PAX formatted archive. The archive metadata captures atime
->  > and ctime of files. To fix this, GNU recommends that we pass this added
->  > argument to tar to create binary reproducible packages. Setting of mtime
->  > is handled in fs/common.mk using touch on all files.
->  > 
->  > Diffoscope output pre-change: https://gitlab.com/snippets/1871111
->  > Diffoscope output after change is blank i.e. binary reproducibile rootfs
->  > is created.
->  > 
->  > GNU Recommendation:
->  > https://www.gnu.org/software/tar/manual/tar.html#SEC147
->  > 
->  > Signed-off-by: Atharva Lele <itsatharva@gmail.com>
->  > 
->  >  fs/tar/tar.mk | 4 ++++
->  >  1 file changed, 4 insertions(+)
->  > 
->  > diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
->  > index 4c6327ace8..f6d11baa84 100644
->  > --- a/fs/tar/tar.mk
->  > +++ b/fs/tar/tar.mk
->  > @@ -8,6 +8,10 @@ TAR_OPTS := $(call
->  > qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS)) > 
->  >  ROOTFS_TAR_DEPENDENCIES = $(BR2_TAR_HOST_DEPENDENCY)
->  > 
->  > +ifeq ($(BR2_REPRODUCIBLE),y)
->  > +TAR_OPTS += --pax-option=exthdr.name=%d/PaxHeaders/%f,atime:=0,ctime:=0
->  > +endif
-> 
-> It would be good to add a short comment saying something like
-> 
-> # don't store atime/ctime
-> 
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+Tested:
+./utils/test-pkg -p modem-manager
+                             br-arm-full [1/6]: OK
+                  br-arm-cortex-a9-glibc [2/6]: OK
+                   br-arm-cortex-m4-full [3/6]: SKIPPED
+                          br-x86-64-musl [4/6]: OK
+                      br-arm-full-static [5/6]: OK
+                            sourcery-arm [6/6]: OK
 
-Definitely. Will do in a v3.
+ package/modem-manager/modem-manager.hash | 2 +-
+ package/modem-manager/modem-manager.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Is there any use case for ever storing these in the rootfs, or should we
-> just do this fix unconditionally?
-
-Personally, I can't think of a reason why we'd want to store atime/ctime in 
-the rootfs. I think they got included when we added --xattrs-include='*'
-
-Arnout, Matt and Yann: any thoughts on that?
-
+diff --git a/package/modem-manager/modem-manager.hash b/package/modem-manager/modem-manager.hash
+index 404ae7929f..4d88594e57 100644
+--- a/package/modem-manager/modem-manager.hash
++++ b/package/modem-manager/modem-manager.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  fd0f39996025dac96995daea8a58ec7dd571582f7563a8ae0d5f65b571b76ee2  ModemManager-1.10.0.tar.xz
++sha256  bbcf6da35da3d72f688675bde91dfed6485845c3fedd1805ae914b71d1b783f2  ModemManager-1.10.2.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index aa27dc9ce5..a2c38a68c9 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MODEM_MANAGER_VERSION = 1.10.0
++MODEM_MANAGER_VERSION = 1.10.2
+ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
 -- 
-Regards,
-Atharva Lele
+2.20.1
