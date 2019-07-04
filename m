@@ -1,49 +1,33 @@
-From: Joris OFFOUGA <offougajoris@gmail.com>
-Date: Thu, 4 Jul 2019 06:33:00 +0200
-Subject: [Buildroot] [PATCH] package/mbedtls: bump version to 2.16.2
-In-Reply-To: <209727dc-fe2e-5023-ac48-d31620651363@mind.be>
-References: <20190627215437.32571-1-offougajoris@gmail.com>
- <209727dc-fe2e-5023-ac48-d31620651363@mind.be>
-Message-ID: <CACr73kAKM7DArwioef8k3MN99GdAy1m4GYLg-ALWxTEN29pyDg@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 04 Jul 2019 07:38:48 +0200
+Subject: [Buildroot] [PATCH] package/python-django: bump to version 2.2.2
+In-Reply-To: <e00bb722-d8a4-b357-3783-ccb6ccc476f3@mind.be> (Arnout
+ Vandecappelle's message of "Thu, 4 Jul 2019 00:53:14 +0200")
+References: <1561917244-1188-1-git-send-email-pjtexier@koncepto.io>
+ <e00bb722-d8a4-b357-3783-ccb6ccc476f3@mind.be>
+Message-ID: <87sgrm1hqv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le jeu. 4 juil. 2019 ? 01:01, Arnout Vandecappelle <arnout@mind.be> a
-?crit :
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
->
->
-> On 27/06/2019 23:54, Joris Offouga wrote:
-> > See changelog:
-> https://tls.mbed.org/tech-updates/releases/mbedtls-2.16.2-and-2.7.11-released
-> >
-> > Fixes:
-> >  -
-> http://autobuild.buildroot.net/results/7c0/7c09c80a376cf0c4c23a3cf48314806de9251544/
-> >
-> > Also add a patch to fix the build issue by requiring at least
-> > ARMv6 in addition to the DSP feature.
-> >
-> > Signed-off-by: Joris Offouga <offougajoris@gmail.com>
-> > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
->
->  Just for my info, why is Pierre-Jean's Sob here as well?
->
-We worked on the commit together
+ >  Hi Pierre-Jean,
+ > On 30/06/2019 19:54, Pierre-Jean Texier wrote:
+ >> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 
-Best Regards,
-Joris Offouga
+ >  Peter posted a security bump to 2.1.10 shortly afterwards. I applied that one
+ > instead, because I assume that that CVE-2019-12781 fix needs to be added on top
+ > of 2.2.2 as well. Therefore, I've marked this patch as Changes Requested in
+ > patchwork.
 
->
->
->  Applied to master, thanks.
->
->  Regards,
->  Arnout
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190704/80f606ee/attachment.html>
+Yes, the same fix is available in 2.2.3. I submitted the 2.1.10 bump for
+easy backporting to 2019.02.x / 2019.05.x, but I'm fine with moving to
+the 2.2.x series for master as that is the new LTS series:
+
+https://www.djangoproject.com/download/
+
+-- 
+Bye, Peter Korsgaard
