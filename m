@@ -1,60 +1,279 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 4 Jul 2019 20:25:28 +0200
-Subject: [Buildroot] How do I enable webrtc as part of external
- gstreamer, in buildroot
-In-Reply-To: <CADNjvP-VYgO7ctGsOjZxudkA7k6PzT4FNt+JRACmUV6=bh_E=Q@mail.gmail.com>
-References: <CADNjvP-VYgO7ctGsOjZxudkA7k6PzT4FNt+JRACmUV6=bh_E=Q@mail.gmail.com>
-Message-ID: <20190704202528.63f7d667@gmx.net>
+From: Julien Olivain <juju@cotds.org>
+Date: Thu,  4 Jul 2019 23:25:23 +0200
+Subject: [Buildroot] [PATCH v2] package/glslsandbox-player: new package
+In-Reply-To: <20190423192917.4081-1-juju@cotds.org>
+References: <20190423192917.4081-1-juju@cotds.org>
+Message-ID: <20190704212523.11818-1-juju@cotds.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vered,
+GLSL Sandbox standalone player allow one to run and render
+(most of) nice shaders available online on the
+http://glslsandbox.com/ website, but without the need of an
+Internet connection, a web browser or any of its
+dependencies. Instead, the only requirement of
+glslsandbox-player is a working EGL and GLESv2 libraries.
 
-On Thu, 4 Jul 2019 15:38:59 +0300, Vered Kalef <vered.kalef@gmail.com> wrote:
+This package is useful for stressing and testing GLES shader
+compiler in GPU drivers.
 
-> Hi all,
-> I'm trying to install external gstreamer with webrtc enabled on buildroot.
+https://github.com/jolivain/glslsandbox-player
 
-What do your mean with 'external'? Why 'external'?
+Signed-off-by: Julien Olivain <juju@cotds.org>
 
-> It seems this option is missing within the buildroot.
+---
+Changes v1 -> v2:
+  - add missing VIVFB windowing system
+  - use a tag instead of commit id for version
 
-Which option? There is definitely an GStreamer webrtc option (since
-2019.05), see [1]...
+Signed-off-by: Julien Olivain <juju@cotds.org>
+---
+ DEVELOPERS                                    |   1 +
+ package/Config.in                             |   1 +
+ package/glslsandbox-player/Config.in          | 111 ++++++++++++++++++
+ .../glslsandbox-player/glslsandbox-player.mk  |  89 ++++++++++++++
+ 4 files changed, 202 insertions(+)
+ create mode 100644 package/glslsandbox-player/Config.in
+ create mode 100644 package/glslsandbox-player/glslsandbox-player.mk
 
-Which Buildroot version do you use?
-
-> I've configured the mk file and the Config.in file.
-> After installation when I check gst-inspect webrtcbin, I get -
-> 
-> No such element or plugin ?webrtcbin'
-> What am I missing?
-
-Take a look at the gst1-plugins-bad configure output (or
-build/gst1-plugins-bad-<version>/config.log for a hint
-what is missing (look for webrtc entries)....
-
-> gst1-plugins-bad/Config.in config
-> BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC bool "webrtc" depends on
-> !BR2_STATIC_LIBS # libnice -> gnutls select BR2_PACKAGE_GST1_PLUGINS_BASE #
-> libgstsdp select BR2_PACKAGE_LIBNICE help WebRTC plugins (webrtcbin - a bin
-> for webrtc connections comment "webrtc needs a toolchain w/ dynamic
-> library" depends on BR2_STATIC_LIBS gst1-plugins-bad/gst1-plugins-bad.mk
-> ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
-> GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc GST1_PLUGINS_BAD_DEPENDENCIES
-> += libnice GST1_PLUGINS_BAD_DEPENDENCIES += gst1-plugins-base libnice else
-> GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc endif
-> 
-
-Mind to share your config and/or defconfig file?
-
-Regards,
-Peter
-
-[1] https://git.buildroot.net/buildroot/tree/package/gstreamer1/gst1-plugins-bad/Config.in#n566
-
-> Regards,
-> Vered
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e9c521f400..8b23bfbe79 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1271,6 +1271,7 @@ F:	board/technexion/imx8mmpico/
+ F:	board/technexion/imx8mpico/
+ F:	configs/imx8mmpico_defconfig
+ F:	configs/imx8mpico_defconfig
++F:	package/glslsandbox-player/
+ 
+ N:	Julien Viard de Galbert <julien@vdg.name>
+ F:	package/dieharder/
+diff --git a/package/Config.in b/package/Config.in
+index d501b5a65b..9be9b3f172 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -272,6 +272,7 @@ comment "Graphic applications"
+ 	source "package/fswebcam/Config.in"
+ 	source "package/ghostscript/Config.in"
+ 	source "package/glmark2/Config.in"
++	source "package/glslsandbox-player/Config.in"
+ 	source "package/gnuplot/Config.in"
+ 	source "package/jhead/Config.in"
+ 	source "package/kmscube/Config.in"
+diff --git a/package/glslsandbox-player/Config.in b/package/glslsandbox-player/Config.in
+new file mode 100644
+index 0000000000..eacd060fc7
+--- /dev/null
++++ b/package/glslsandbox-player/Config.in
+@@ -0,0 +1,111 @@
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER
++	bool "glslsandbox-player"
++	depends on BR2_PACKAGE_HAS_LIBEGL
++	depends on BR2_PACKAGE_HAS_LIBGLES
++	help
++	  GLSL Sandbox standalone player allow one to run and render
++	  (most of) nice shaders available online on the
++	  http://glslsandbox.com/ website, but without the need of an
++	  Internet connection, a web browser or any of its
++	  dependencies. Instead, the only requirement of
++	  glslsandbox-player is a working EGL and GLESv2 libraries.
++
++	  This package is useful for stressing and testing GLES shader
++	  compiler in GPU drivers.
++
++	  https://github.com/jolivain/glslsandbox-player
++
++if BR2_PACKAGE_GLSLSANDBOX_PLAYER
++
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_DL_SHADERS
++	bool "Download shaders from http://glslsandbox.com/"
++	help
++	  Download some shaders from http://glslsandbox.com/ to be
++	  embedded in the binary
++
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_PNG
++	bool "Enable PNG support"
++	select BR2_PACKAGE_LIBPNG
++	help
++	  Enable PNG texture loading support
++
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_TESTING
++	bool "Enable testing"
++	help
++	  Generate and install test suite on target
++
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_SCRIPTS
++	bool "Install scripts"
++	depends on BR2_USE_MMU # bash, python
++	depends on BR2_USE_WCHAR # python
++	depends on BR2_TOOLCHAIN_HAS_THREADS # python
++	depends on !BR2_STATIC_LIBS # python
++	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
++	select BR2_PACKAGE_PYTHON
++	select BR2_PACKAGE_BASH
++	select BR2_PACKAGE_LIBCURL
++	select BR2_PACKAGE_CURL
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_BIN if BR2_PACKAGE_LIBOPENSSL
++	select BR2_PACKAGE_LIBRESSL_BIN if BR2_PACKAGE_LIBRESSL
++	select BR2_PACKAGE_MAKE
++	select BR2_PACKAGE_COREUTILS
++	select BR2_PACKAGE_JPEG
++	select BR2_PACKAGE_IMAGEMAGICK
++	help
++	  Install additional helper scripts
++
++choice
++	prompt "Native windowing system"
++	default BR2_PACKAGE_GLSLSANDBOX_PLAYER_RPI   if BR2_PACKAGE_RPI_USERLAND
++	default BR2_PACKAGE_GLSLSANDBOX_PLAYER_TISGX if BR2_PACKAGE_TI_SGX_UM
++	default BR2_PACKAGE_GLSLSANDBOX_PLAYER_MALI  if BR2_PACKAGE_SUNXI_MALI_MAINLINE
++	default BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL    if BR2_PACKAGE_WAYLAND
++	default BR2_PACKAGE_GLSLSANDBOX_PLAYER_X11   if BR2_PACKAGE_XORG7
++	default BR2_PACKAGE_GLSLSANDBOX_PLAYER_SDL2  if BR2_PACKAGE_SDL2_OPENGLES
++	help
++	  Select the native windowing system you wish to use.
++
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_KMS
++	bool "KMS/DRM/GBM"
++	select BR2_PACKAGE_LIBDRM
++
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_VIVFB
++	bool "Vivante Frame Buffer"
++	depends on BR2_PACKAGE_IMX_GPU_VIV
++
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_RPI
++	bool "RaspberryPI Frame Buffer"
++	depends on BR2_PACKAGE_RPI_USERLAND
++
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_TISGX
++	bool "TI/SGX Frame Buffer"
++	depends on BR2_PACKAGE_TI_SGX_UM
++
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_MALI
++	bool "Allwinner ARM/Mali Frame Buffer"
++	depends on BR2_PACKAGE_SUNXI_MALI_MAINLINE
++
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL
++	bool "Wayland"
++	depends on BR2_PACKAGE_WAYLAND
++
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_X11
++	bool "X11"
++	depends on BR2_PACKAGE_XORG7
++
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_SDL2
++	bool "SDL2"
++	depends on BR2_PACKAGE_SDL2_OPENGLES
++
++endchoice
++
++if BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL
++config BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_IVI
++	bool "Wayland IVI shell support"
++endif
++
++endif
++
++comment "glslsandbox-player needs an openGL ES and EGL driver"
++	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES
+diff --git a/package/glslsandbox-player/glslsandbox-player.mk b/package/glslsandbox-player/glslsandbox-player.mk
+new file mode 100644
+index 0000000000..b3048345ce
+--- /dev/null
++++ b/package/glslsandbox-player/glslsandbox-player.mk
+@@ -0,0 +1,89 @@
++################################################################################
++#
++# glslsandbox-player
++#
++################################################################################
++
++GLSLSANDBOX_PLAYER_VERSION = v2019.06.16
++GLSLSANDBOX_PLAYER_SITE = https://github.com/jolivain/glslsandbox-player
++GLSLSANDBOX_PLAYER_SITE_METHOD = git
++GLSLSANDBOX_PLAYER_AUTORECONF = YES
++GLSLSANDBOX_PLAYER_DEPENDENCIES = libegl libgles host-pkgconf
++
++GLSLSANDBOX_PLAYER_LICENSE = BSD-2-Clause
++GLSLSANDBOX_PLAYER_LICENSE_FILES = LICENSE
++
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_DL_SHADERS),y)
++GLSLSANDBOX_PLAYER_DEPENDENCIES += host-libcurl
++else
++GLSLSANDBOX_PLAYER_CONF_OPTS += --with-shader-list=shader-local.list
++endif
++
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_PNG),y)
++GLSLSANDBOX_PLAYER_DEPENDENCIES += libpng
++GLSLSANDBOX_PLAYER_CONF_OPTS += --with-libpng
++else
++GLSLSANDBOX_PLAYER_CONF_OPTS += --without-libpng
++endif
++
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_TESTING),y)
++GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-testing --enable-install-testsuite
++else
++GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-testing
++endif
++
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_SCRIPTS),y)
++GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-install-scripts
++else
++GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-install-scripts
++endif
++
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_KMS),y)
++# gbm dependency is not needed, as it is normally packaged with
++# libegl/libgles drivers.
++GLSLSANDBOX_PLAYER_DEPENDENCIES += libdrm
++GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=kms
++endif
++
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_VIVFB),y)
++GLSLSANDBOX_PLAYER_DEPENDENCIES += imx-gpu-viv
++GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=vivfb
++endif
++
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_RPI),y)
++GLSLSANDBOX_PLAYER_DEPENDENCIES += rpi-userland
++GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=rpi
++endif
++
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_TISGX),y)
++GLSLSANDBOX_PLAYER_DEPENDENCIES += ti-sgx-um
++GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=tisgx
++endif
++
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_MALI),y)
++GLSLSANDBOX_PLAYER_DEPENDENCIES += sunxi-mali-mainline
++GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=mali
++endif
++
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL),y)
++GLSLSANDBOX_PLAYER_DEPENDENCIES += wayland
++GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=wl
++
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_IVI),y)
++GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-ivi
++else
++GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-ivi
++endif
++endif
++
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_X11),y)
++GLSLSANDBOX_PLAYER_DEPENDENCIES += xlib_libX11
++GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=x11
++endif
++
++ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_SDL2),y)
++GLSLSANDBOX_PLAYER_DEPENDENCIES += sdl2
++GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=sdl2
++endif
++
++$(eval $(autotools-package))
+-- 
+2.21.0
