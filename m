@@ -1,158 +1,62 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Thu,  4 Jul 2019 12:43:20 +0200
-Subject: [Buildroot] [PATCH 2/3] package/libgcrypt: add upstream patch to
- add pkg-config file
-In-Reply-To: <20190704104321.2598-1-joerg.krause@embedded.rocks>
-References: <20190704104321.2598-1-joerg.krause@embedded.rocks>
-Message-ID: <20190704104321.2598-3-joerg.krause@embedded.rocks>
+Date: Thu,  4 Jul 2019 12:43:18 +0200
+Subject: [Buildroot] [PATCH v3 0/3] package/mpd: bump to version 0.21.7
+Message-ID: <20190704104321.2598-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libgrypt provides a config file `libgcrypt-config`. After the version
-bump to 1.8.4 upstream added a pkg-config file as well [1].
+MPD switched from Autotools to the Meson build system. This is not
+really a big deal except that the Qobuz plugin depends on libgcrypt.
 
-Using the pkg-config file is preferred over using the package provided
-config file. For example, the Meson build system requires that for every
-special config file an entry is added to the `[binary]` section in the
-cross-compilation.conf file, otherwise it will use the config file found
-in `PATH`. This is bad when cross-compiling as `PATH` will include
-pathes to the host and therefore Meson will wrongly use the host config
-file.
+The issue is, that libgcrypt version 1.8.4 only provides its own config
+file `libgcrypt-config` instead of a pkg-config file. Every custom config
+file needs to be added to the `[binary]` section in the cross-compilation.conf
+file, so that Meson correctly detects the path for the custom config file
+instead of using the one find in `PATH`, which directs to the host.
 
-To simplify using libgcrypt for packages using the meson infrastructure
-lets add the pkg-config file.
+v1 of bumping mpd to the 0.21 version added `libgcrypt-config` to the
+cross-compilation.conf.in file which has the drawback, that this
+variable is creeping into the global cross-compilation file.
 
-[1] https://github.com/gpg/libgcrypt/commit/97194b422bc89a6137f4e218d4cdee118c63e96e
+v2 added the staging path early to PATH, which is not a wise idea, because
+$(STAGING_DIR)/usr/bin contains binaries compiled for the target.
 
-Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
----
- ...-libgcrypt.pc-generated-by-configure.patch | 102 ++++++++++++++++++
- package/libgcrypt/libgcrypt.mk                |   1 +
- 2 files changed, 103 insertions(+)
+There was an ongoing discussion, how to add support to the meson
+infrastructure to allow adding entries to the `[binaries]` section on
+the per-package cross-compilation file. It turned out, that the current
+meson infrastructure needs some changes to support adding multi-line
+entries.
+
+v3 does not try to fix the meson build infrastructure, but adds an
+upstream patch to libgcrypt to provide a pkg-config file. pkg-config
+files are preferred over custom config files and meson will correctly
+detect libgcrypt without changing the meson infrastructure. This makes
+bumping mpd to the 0.21.x version branch much easier.
+
+Note, that meanwhile mpd released version 0.21.11. As soon as this series
+is applied, a follow up patch will bump mpd to the latest version.
+
+J?rg Krause (3):
+  package/libgcrypt: replace reconfigure patch with upstream patch
+  package/libgcrypt: add upstream patch to add pkg-config file
+  package/mpd: bump to version 0.21.7
+
+ ...ult-to-underscore-yes-for-cross-buil.patch |  48 +++++
+ package/libgcrypt/0001-reconfigure.patch      |  27 ---
+ ...-libgcrypt.pc-generated-by-configure.patch | 102 ++++++++++
+ package/libgcrypt/libgcrypt.mk                |   5 +-
+ ...gure.ac-check-if-libatomic-is-needed.patch |  40 ----
+ package/mpd/Config.in                         |  29 ++-
+ package/mpd/mpd.hash                          |   2 +-
+ package/mpd/mpd.mk                            | 176 +++++++++---------
+ 8 files changed, 270 insertions(+), 159 deletions(-)
+ create mode 100644 package/libgcrypt/0001-build-Don-t-default-to-underscore-yes-for-cross-buil.patch
+ delete mode 100644 package/libgcrypt/0001-reconfigure.patch
  create mode 100644 package/libgcrypt/0002-build-Provide-libgcrypt.pc-generated-by-configure.patch
+ delete mode 100644 package/mpd/0001-configure.ac-check-if-libatomic-is-needed.patch
 
-diff --git a/package/libgcrypt/0002-build-Provide-libgcrypt.pc-generated-by-configure.patch b/package/libgcrypt/0002-build-Provide-libgcrypt.pc-generated-by-configure.patch
-new file mode 100644
-index 0000000000..4f4d86c975
---- /dev/null
-+++ b/package/libgcrypt/0002-build-Provide-libgcrypt.pc-generated-by-configure.patch
-@@ -0,0 +1,102 @@
-+From ef6f53ae7f9938a672f96c0c43707bc808c78221 Mon Sep 17 00:00:00 2001
-+From: NIIBE Yutaka <gniibe@fsij.org>
-+Date: Wed, 24 Oct 2018 14:57:53 +0900
-+Subject: [PATCH] build: Provide libgcrypt.pc, generated by configure.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+* configure.ac: Generate src/libgcrypt.pc.
-+* src/Makefile.am (pkgconfigdir, pkgconfig_DATA): New.
-+(EXTRA_DIST): Add libgcrypt.pc.in.
-+* src/libgcrypt-config.in: Use @PACKAGE_VERSION at .
-+* src/libgcrypt.pc.in: New.
-+
-+Fetched from: 97194b422bc89a6137f4e218d4cdee118c63e96e
-+
-+Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
-+
-+build: Fix libgcrypt.pc.
-+
-+* src/libgcrypt.pc.in: Fix typo.
-+
-+Fetched from: 0e071372fc0e6fed4a449955ed0789803ba5e709
-+
-+Signed-off-by: NIIBE Yutaka <gniibe@fsij.org>
-+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-+---
-+ configure.ac            |  1 +
-+ src/Makefile.am         |  5 ++++-
-+ src/libgcrypt-config.in |  2 +-
-+ src/libgcrypt.pc.in     | 17 +++++++++++++++++
-+ 4 files changed, 23 insertions(+), 2 deletions(-)
-+ create mode 100644 src/libgcrypt.pc.in
-+
-+diff --git a/configure.ac b/configure.ac
-+index ce11162d..4e788714 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2613,6 +2613,7 @@ doc/Makefile
-+ src/Makefile
-+ src/gcrypt.h
-+ src/libgcrypt-config
-++src/libgcrypt.pc
-+ src/versioninfo.rc
-+ tests/Makefile
-+ ])
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 3cc4a552..82d6e8a0 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -20,8 +20,11 @@
-+ 
-+ ## Process this file with automake to produce Makefile.in
-+ 
-++pkgconfigdir = $(libdir)/pkgconfig
-++pkgconfig_DATA = libgcrypt.pc
-++
-+ EXTRA_DIST = libgcrypt-config.in libgcrypt.m4 libgcrypt.vers \
-+-             gcrypt.h.in libgcrypt.def
-++             gcrypt.h.in libgcrypt.def libgcrypt.pc.in
-+ 
-+ bin_SCRIPTS = libgcrypt-config
-+ m4datadir = $(datadir)/aclocal
-+diff --git a/src/libgcrypt-config.in b/src/libgcrypt-config.in
-+index c052638c..f7a13afe 100644
-+--- a/src/libgcrypt-config.in
-++++ b/src/libgcrypt-config.in
-+@@ -14,7 +14,7 @@
-+ # General.
-+ prefix="@prefix@"
-+ exec_prefix="@exec_prefix@"
-+-version="@VERSION@"
-++version="@PACKAGE_VERSION@"
-+ includedir="@includedir@"
-+ libdir="@libdir@"
-+ gpg_error_libs="@GPG_ERROR_LIBS@"
-+diff --git a/src/libgcrypt.pc.in b/src/libgcrypt.pc.in
-+new file mode 100644
-+index 00000000..ec68fa2d
-+--- /dev/null
-++++ b/src/libgcrypt.pc.in
-+@@ -0,0 +1,17 @@
-++prefix=@prefix@
-++exec_prefix=@exec_prefix@
-++includedir=@includedir@
-++libdir=@libdir@
-++host=@LIBGCRYPT_CONFIG_HOST@
-++api_version=@LIBGCRYPT_CONFIG_API_VERSION@
-++symmetric_ciphers="@LIBGCRYPT_CIPHERS@"
-++asymmetric_ciphers="@LIBGCRYPT_PUBKEY_CIPHERS@"
-++digests="@LIBGCRYPT_DIGESTS@"
-++
-++Name: libgcrypt
-++Description: General purpose cryptographic library
-++Requires: gpg-error
-++Version: @PACKAGE_VERSION@
-++Cflags: @LIBGCRYPT_CONFIG_CFLAGS@
-++Libs: @LIBGCRYPT_CONFIG_LIBS@
-++URL: https://www.gnupg.org/software/libgcrypt/index.html
-+-- 
-+2.22.0
-+
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 5aa44481ae..2799a6fba2 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -14,6 +14,7 @@ LIBGCRYPT_DEPENDENCIES = libgpg-error
- LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
- 
- # Patching acinclude.m4 in 0001
-+# Patching configure.ac and Makefile.am in 0002
- LIBGCRYPT_AUTORECONF = YES
- LIBGCRYPT_CONF_OPTS = \
- 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
 -- 
 2.22.0
