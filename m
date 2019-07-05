@@ -1,105 +1,48 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Fri, 5 Jul 2019 14:09:00 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-ifaddr: new package
-In-Reply-To: <20190705115712.18252-1-grzegorz@blach.pl>
-References: <20190705115712.18252-1-grzegorz@blach.pl>
-Message-ID: <CAGm1_kuehS1uO8KEG=WZUETt5eB2CFVzzeQi9NjiJPbZGsSepg@mail.gmail.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Fri,  5 Jul 2019 15:10:03 +0300
+Subject: [Buildroot] [PATCH 1/1] package/python-cython: bump to version
+ 0.29.11
+Message-ID: <20190705121003.5368-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Jul 5, 2019 at 1:57 PM Grzegorz Blach <grzegorz@blach.pl> wrote:
->
-> Enumerates all IP addresses on all network adapters of the system.
->
-> https://github.com/pydron/ifaddr
->
-> Signed-off-by: Grzegorz Blach <grzegorz@blach.pl>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/python-cython/python-cython.hash | 4 ++--
+ package/python-cython/python-cython.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-The package seems to be a little bit abandoned [1]. But nothign doing.
-
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-
-[1] https://github.com/pydron/ifaddr/pull/18
-
-> ---
->  DEVELOPERS                               |  1 +
->  package/Config.in                        |  1 +
->  package/python-ifaddr/Config.in          |  7 +++++++
->  package/python-ifaddr/python-ifaddr.hash |  3 +++
->  package/python-ifaddr/python-ifaddr.mk   | 13 +++++++++++++
->  5 files changed, 25 insertions(+)
->  create mode 100644 package/python-ifaddr/Config.in
->  create mode 100644 package/python-ifaddr/python-ifaddr.hash
->  create mode 100644 package/python-ifaddr/python-ifaddr.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index e9c521f400..b63799f16e 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -959,6 +959,7 @@ F:  package/f2fs-tools/
->  F:     package/pigpio/
->  F:     package/python-aioblescan/
->  F:     package/python-falcon/
-> +F:     package/python-ifaddr/
->  F:     package/python-mimeparse/
->  F:     package/python-pigpio/
->  F:     package/python-pyjwt/
-> diff --git a/package/Config.in b/package/Config.in
-> index d501b5a65b..94fce52bfc 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -908,6 +908,7 @@ menu "External python modules"
->         source "package/python-ibmiotf/Config.in"
->         source "package/python-id3/Config.in"
->         source "package/python-idna/Config.in"
-> +       source "package/python-ifaddr/Config.in"
->         source "package/python-incremental/Config.in"
->         source "package/python-inflection/Config.in"
->         source "package/python-influxdb/Config.in"
-> diff --git a/package/python-ifaddr/Config.in b/package/python-ifaddr/Config.in
-> new file mode 100644
-> index 0000000000..64e9a3aad5
-> --- /dev/null
-> +++ b/package/python-ifaddr/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_IFADDR
-> +       bool "python-ifaddr"
-> +       help
-> +         Enumerates all IP addresses on all network adapters of the
-> +         system.
-> +
-> +         https://github.com/pydron/ifaddr
-> diff --git a/package/python-ifaddr/python-ifaddr.hash b/package/python-ifaddr/python-ifaddr.hash
-> new file mode 100644
-> index 0000000000..ccb3682608
-> --- /dev/null
-> +++ b/package/python-ifaddr/python-ifaddr.hash
-> @@ -0,0 +1,3 @@
-> +# md5, sha256 from https://pypi.org/pypi/ifaddr/json
-> +md5    cc1b7f0a587ef38491f07e50bf91d82e  ifaddr-0.1.6.tar.gz
-> +sha256 c19c64882a7ad51a394451dabcbbed72e98b5625ec1e79789924d5ea3e3ecb93  ifaddr-0.1.6.tar.gz
-> diff --git a/package/python-ifaddr/python-ifaddr.mk b/package/python-ifaddr/python-ifaddr.mk
-> new file mode 100644
-> index 0000000000..419e3f1838
-> --- /dev/null
-> +++ b/package/python-ifaddr/python-ifaddr.mk
-> @@ -0,0 +1,13 @@
-> +################################################################################
-> +#
-> +# python-ifaddr
-> +#
-> +################################################################################
-> +
-> +PYTHON_IFADDR_VERSION = 0.1.6
-> +PYTHON_IFADDR_SOURCE = ifaddr-$(PYTHON_IFADDR_VERSION).tar.gz
-> +PYTHON_IFADDR_SITE = https://files.pythonhosted.org/packages/9f/54/d92bda685093ebc70e2057abfa83ef1b3fb0ae2b6357262a3e19dfe96bb8
-> +PYTHON_IFADDR_SETUP_TYPE = setuptools
-> +PYTHON_IFADDR_LICENSE = MIT
-> +
-> +$(eval $(python-package))
-> --
-> 2.22.0
->
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index 87aa565523..49f978bedf 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cython/json
+-md5	bc0cca4658947bf2fb3fc10e8d090182  Cython-0.29.9.tar.gz
+-sha256	b88e033c06d29f3f3c760a3fb9837dce6e124d627bd562d1cdf93e9da16df215  Cython-0.29.9.tar.gz
++md5	785fa46921b4cbb4028b27b825a268d4  Cython-0.29.11.tar.gz
++sha256	763a522cc5d1673ba7a4092c0914790f11704b1d4c41e2671e50d0f702a8c6a0  Cython-0.29.11.tar.gz
+ # Locally computed sha256 checksums
+ sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+ sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index bd9f322d53..47dedd40d6 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_CYTHON_VERSION = 0.29.9
++PYTHON_CYTHON_VERSION = 0.29.11
+ PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/69/ab/b18f7f2e61c12e5e859c86b6d37f73971679d5f5c5c97d6cc7ff8916468a
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/87/26/6f8a63fda4743d9e405c17c2872ac3242b63b5eba79c475ddf1777f17b9e
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+-- 
+2.20.1
