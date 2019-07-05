@@ -1,69 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Jul 2019 08:29:42 +0200
-Subject: [Buildroot] [git commit] package/opkg: bump to version 0.4.1
-Message-ID: <20190705062947.56F248A553@busybox.osuosl.org>
+Date: Fri, 5 Jul 2019 08:27:47 +0200
+Subject: [Buildroot] [git commit] package/libgpgme: bump to version 1.13.1
+Message-ID: <20190705062947.410618138B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bafffe136dd2c0d8f53c2bf1a389634067a69fad
+commit: https://git.buildroot.net/buildroot/commit/?id=205969777579cc763b645d735c2b7cf389abf0c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-tarball conf/ scripts no longer link to host files. Drop autoreconf.
-
-Add license hash.
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/opkg/opkg.hash |  4 +++-
- package/opkg/opkg.mk   | 12 +-----------
- 2 files changed, 4 insertions(+), 12 deletions(-)
+ package/libgpgme/libgpgme.hash | 6 ++----
+ package/libgpgme/libgpgme.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/package/opkg/opkg.hash b/package/opkg/opkg.hash
-index 321c41dbd0..69eebde2d3 100644
---- a/package/opkg/opkg.hash
-+++ b/package/opkg/opkg.hash
-@@ -1,2 +1,4 @@
- # From http://downloads.yoctoproject.org/releases/opkg/SHA256SUMS
--sha256 f607f0e61be8cf8a3bbd0d2dccd9ec9e9b6c21dd4307b671c600d6eeaf84d30b  opkg-0.3.6.tar.gz
-+sha256 45ac1e037d3877f635d883f8a555e172883a25d3eeb7986c75890fdd31250a43  opkg-0.4.1.tar.gz
-+# Locally calculated
-+sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
-index 4d34c6d4d3..8155ed381f 100644
---- a/package/opkg/opkg.mk
-+++ b/package/opkg/opkg.mk
-@@ -4,29 +4,19 @@
+diff --git a/package/libgpgme/libgpgme.hash b/package/libgpgme/libgpgme.hash
+index 1e61fbd833..6ed6a3625d 100644
+--- a/package/libgpgme/libgpgme.hash
++++ b/package/libgpgme/libgpgme.hash
+@@ -1,8 +1,6 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2018q4/000429.html
+-sha1 6f1828fcd7de4366ca063e57f35e4ab24bc91baf  gpgme-1.12.0.tar.bz2
+ # Locally calculated after checking pgp signature
+-# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.12.0.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/gpgme/gpgme-1.13.1.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256 b4dc951c3743a60e2e120a77892e9e864fb936b2e58e7c77e8581f4d050e8cd8  gpgme-1.12.0.tar.bz2
++sha256 c4e30b227682374c23cddc7fdb9324a99694d907e79242a25a4deeedb393be46  gpgme-1.13.1.tar.bz2
+ # Locally calculated
+ sha256 ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING.LESSER
+diff --git a/package/libgpgme/libgpgme.mk b/package/libgpgme/libgpgme.mk
+index 85450c83d2..f916ca180c 100644
+--- a/package/libgpgme/libgpgme.mk
++++ b/package/libgpgme/libgpgme.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--OPKG_VERSION = 0.3.6
-+OPKG_VERSION = 0.4.1
- OPKG_SITE = http://downloads.yoctoproject.org/releases/opkg
- OPKG_DEPENDENCIES = host-pkgconf libarchive
- OPKG_LICENSE = GPL-2.0+
- OPKG_LICENSE_FILES = COPYING
- OPKG_INSTALL_STAGING = YES
- OPKG_CONF_OPTS = --disable-curl
--# Populate the conf/ directory
--OPKG_AUTORECONF = YES
- 
- # Ensure directory for lockfile exists
- define OPKG_CREATE_LOCKDIR
- 	mkdir -p $(TARGET_DIR)/usr/lib/opkg
- endef
- 
--# The conf/ directory contains symlinks to host automake and libtool provided
--# scripts. Don't rely on them being present.
--define OPKG_REMOVE_AUTOTOOLS_SYMLINKS
--	rm $(@D)/conf/*
--endef
--
--OPKG_POST_EXTRACT_HOOKS += OPKG_REMOVE_AUTOTOOLS_SYMLINKS
--
- ifeq ($(BR2_PACKAGE_OPKG_GPG_SIGN),y)
- OPKG_CONF_OPTS += --enable-gpg
- OPKG_CONF_ENV += \
+-LIBGPGME_VERSION = 1.12.0
++LIBGPGME_VERSION = 1.13.1
+ LIBGPGME_SITE = https://gnupg.org/ftp/gcrypt/gpgme
+ LIBGPGME_SOURCE = gpgme-$(LIBGPGME_VERSION).tar.bz2
+ LIBGPGME_LICENSE = LGPL-2.1+
