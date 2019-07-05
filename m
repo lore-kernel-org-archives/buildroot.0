@@ -1,56 +1,44 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri,  5 Jul 2019 07:36:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/freeswitch: bump version to 1.8.7
-Message-ID: <20190705053608.7575-1-bernd.kuhls@t-online.de>
+Date: Fri,  5 Jul 2019 07:37:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/php: bump version to 7.3.7
+Message-ID: <20190705053726.7947-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switched _SITE to https.
+Changelog: https://www.php.net/ChangeLog-7.php#7.3.7
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/freeswitch/freeswitch.hash | 12 ++++++------
- package/freeswitch/freeswitch.mk   |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/freeswitch/freeswitch.hash b/package/freeswitch/freeswitch.hash
-index d80934d436..e8fb81dd47 100644
---- a/package/freeswitch/freeswitch.hash
-+++ b/package/freeswitch/freeswitch.hash
-@@ -1,9 +1,9 @@
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.6.tar.xz.md5
--md5 cadec07057786cfb0bb805edc279d752 freeswitch-1.8.6.tar.xz
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.6.tar.xz.sha1
--sha1 c6eb7de942a61604774ca08ac8070244b7c3167a freeswitch-1.8.6.tar.xz
--# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.6.tar.xz.sha256
--sha256 b87f47e57d13de2b901bd1e4eb85491178e59a159a2831d7430abe7947f0d3a4 freeswitch-1.8.6.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.7.tar.xz.md5
-+md5 40a065c9b597256b1636fa4b7470a73a freeswitch-1.8.7.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.7.tar.xz.sha1
-+sha1 5ada2dbc365f368639f22375b41afe6f06bc2ffb freeswitch-1.8.7.tar.xz
-+# From http://files.freeswitch.org/freeswitch-releases/freeswitch-1.8.7.tar.xz.sha256
-+sha256 7d3cee32713db5f65e3d4703c6420038872d8f6efab8be4d58fbf66ffa993008 freeswitch-1.8.7.tar.xz
- # Locally computed
- sha256 75c933202f40939cdc3827fce20a1efdaa38291e2b5a65d234eb16e2cffda66a  COPYING
- sha256 c3e3388768dae8bf4edcc4108f95be815b8a05c0b0aef6e4c3d8df81affdfa34  docs/OPENH264_BINARY_LICENSE.txt
-diff --git a/package/freeswitch/freeswitch.mk b/package/freeswitch/freeswitch.mk
-index 1c49b8d814..d266d11863 100644
---- a/package/freeswitch/freeswitch.mk
-+++ b/package/freeswitch/freeswitch.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/php/php.hash b/package/php/php.hash
+index d88433e8c0..30aa8bfcf6 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From http://php.net/downloads.php
+-sha256 fefc8967daa30ebc375b2ab2857f97da94ca81921b722ddac86b29e15c54a164  php-7.3.6.tar.xz
++sha256 ba067200ba649956b3a92ec8b71a6ed8ce8a099921212443c1bcf3260a29274c  php-7.3.7.tar.xz
+ 
+ # License file
+ sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index de7c0c0d5a..2da27a473d 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FREESWITCH_VERSION = 1.8.6
-+FREESWITCH_VERSION = 1.8.7
- FREESWITCH_SOURCE = freeswitch-$(FREESWITCH_VERSION).tar.xz
--FREESWITCH_SITE = http://files.freeswitch.org/freeswitch-releases
-+FREESWITCH_SITE = https://files.freeswitch.org/freeswitch-releases
- # External modules need headers/libs from staging
- FREESWITCH_INSTALL_STAGING = YES
- FREESWITCH_LICENSE = MPL-1.1, \
+-PHP_VERSION = 7.3.6
++PHP_VERSION = 7.3.7
+ PHP_SITE = http://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 -- 
 2.20.1
