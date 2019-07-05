@@ -1,53 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Jul 2019 08:22:33 +0200
-Subject: [Buildroot] [git commit] package/libsecret: bump to version 0.18.8
-Message-ID: <20190705062454.8A719813A4@busybox.osuosl.org>
+Date: Fri, 5 Jul 2019 08:20:48 +0200
+Subject: [Buildroot] [git commit] package/webkitgtk: bump to version 2.24.3
+Message-ID: <20190705062454.81423813A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f4e63afe2fccabc73ea72c564769cf1a8fd3217e
+commit: https://git.buildroot.net/buildroot/commit/?id=3ff05d9094be1329b5987589d6b6fefb152ff006
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-host-intltool is not needed since version 0.18.7 and
-https://github.com/GNOME/libsecret/commit/f25420d5aadc1449f78c9293d0b1ddf16f5d2eba
+Version 2.24.3 is a minor update which contains many bugfixes.
+From the announcement:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+  - Fix previous/next gestures in RTL mode.
+  - Fix rendering artifacts in popular sites (YouTube, GitHub, etc.)
+  - Fix media playback annoyances (volume randomly changing, HLS streams
+    starting too slowly, some audio streams would not play, etc.)
+  - Fix build with audio and video disabled.
+
+  https://webkitgtk.org/2019/07/02/webkitgtk2.24.3-released.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libsecret/libsecret.hash | 4 ++--
- package/libsecret/libsecret.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libsecret/libsecret.hash b/package/libsecret/libsecret.hash
-index 808b1741f3..00fdfd06f6 100644
---- a/package/libsecret/libsecret.hash
-+++ b/package/libsecret/libsecret.hash
-@@ -1,5 +1,5 @@
--# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.6.sha256sum
--sha256	5efbc890ba41a323ffe0599cd260fd12bd8eb62a04aa1bd1b2762575d253d66f	libsecret-0.18.6.tar.xz
-+# From http://ftp.gnome.org/pub/GNOME/sources/libsecret/0.18/libsecret-0.18.8.sha256sum
-+sha256	3bfa889d260e0dbabcf5b9967f2aae12edcd2ddc9adc365de7a5cc840c311d15	libsecret-0.18.8.tar.xz
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 40bb6f7b63..f1784da2ad 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.24.2.tar.xz.sums
+-md5 83012998e1b9f71abb37d8baf6f9c7e6 webkitgtk-2.24.2.tar.xz
+-sha1 632a65d93beb996bebdf7592ef9591f3993dea91 webkitgtk-2.24.2.tar.xz
+-sha256 019cb1f0d05bf6148b72c7a85734bcd006388a1c14132843ef9a1b2cb7b4321c webkitgtk-2.24.2.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.24.3.tar.xz.sums
++md5 e2a5bbd09a217eba096a2d1562143e35 webkitgtk-2.24.3.tar.xz
++sha1 26a33fd0af8223c130427cd59aaf5ccaba584114 webkitgtk-2.24.3.tar.xz
++sha256 940d746d7e82c357222feb5b3f44c4b201e81df7d81ddca5ca2bf3ae0acf6c51 webkitgtk-2.24.3.tar.xz
  
- # Hash for license file:
- sha256	a1a33180d02960ab1c5de36cf20b1a2f0fe9888d83826ad263da5db52f1b183b	COPYING
-diff --git a/package/libsecret/libsecret.mk b/package/libsecret/libsecret.mk
-index f5879fbf4e..c699e16d99 100644
---- a/package/libsecret/libsecret.mk
-+++ b/package/libsecret/libsecret.mk
-@@ -5,11 +5,11 @@
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index e81ba047e4..f8cd728351 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBSECRET_VERSION_MAJOR = 0.18
--LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).6
-+LIBSECRET_VERSION = $(LIBSECRET_VERSION_MAJOR).8
- LIBSECRET_SITE = http://ftp.gnome.org/pub/GNOME/sources/libsecret/$(LIBSECRET_VERSION_MAJOR)
- LIBSECRET_SOURCE = libsecret-$(LIBSECRET_VERSION).tar.xz
- LIBSECRET_INSTALL_STAGING = YES
--LIBSECRET_DEPENDENCIES = libglib2 host-intltool $(TARGET_NLS_DEPENDENCIES)
-+LIBSECRET_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
- LIBSECRET_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- LIBSECRET_CONF_OPTS = \
- 	--disable-manpages \
+-WEBKITGTK_VERSION = 2.24.2
++WEBKITGTK_VERSION = 2.24.3
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
