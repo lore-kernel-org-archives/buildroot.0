@@ -1,27 +1,35 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 05 Jul 2019 21:35:59 +0000
-Subject: [Buildroot] [Bug 11966] Valgrind segfaults on startup on armhf
-In-Reply-To: <bug-11966-163@https.bugs.busybox.net/>
-References: <bug-11966-163@https.bugs.busybox.net/>
-Message-ID: <bug-11966-163-z9aWhY4t3d@https.bugs.busybox.net/>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  5 Jul 2019 23:48:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/modem-manager: drop host-intltool
+Message-ID: <20190705214809.27903-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11966
+intltool is not needed since
+https://gitlab.freedesktop.org/mobile-broadband/ModemManager/commit/984625165e09f02b4d6b8389092d5055fdbb0f03
 
---- Comment #4 from Peter Seiderer <ps.report@gmx.net> ---
-Does an update to valgrind-3.15 (buildroot git) work?
+So drop it and add TARGET_NLS_DEPENDENCIES
 
-Does the same failure happen in case you use an buildroot generated toolchain?
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/modem-manager/modem-manager.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Does the failure happen when you use Nulgrind (BR2_PACKAGE_VALGRIND_NULGRIND,
-'--tool=none')?
-
-Any valgrind output before/while segfault?
-
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index a2c38a68c9..61658cf48a 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -9,7 +9,7 @@ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+ MODEM_MANAGER_LICENSE_FILES = COPYING COPYING.LIB
+-MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool libglib2
++MODEM_MANAGER_DEPENDENCIES = host-pkgconf libglib2 $(TARGET_NLS_DEPENDENCIES)
+ MODEM_MANAGER_INSTALL_STAGING = YES
+ MODEM_MANAGER_CONF_OPTS = --disable-more-warnings
+ 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.20.1
