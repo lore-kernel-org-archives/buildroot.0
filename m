@@ -1,67 +1,55 @@
-From: Arnold Bloemert <abloemert@gmail.com>
-Date: Fri,  5 Jul 2019 08:50:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-good: add
- option to enable/disable shout2 plugin
-Message-ID: <20190705065015.29773-1-abloemert@gmail.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+Date: Fri, 5 Jul 2019 11:02:04 +0300
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version
+ 2.24.3
+In-Reply-To: <8736jlxapy.fsf@dell.be.48ers.dk>
+References: <20190704091006.4701-1-aperez@igalia.com>
+ <8736jlxapy.fsf@dell.be.48ers.dk>
+Message-ID: <20190705110204.GB8135@momiji>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently there is no way to turn the shout2 plugin on.
-Create a menu entry allowing users to disable or enable the plugin,
-like we have for other features (for example the Pulseaudio plugin).
+Hello Peter,
 
-Signed-off-by: Arnold Bloemert <abloemert@gmail.com>
----
- package/gstreamer1/gst1-plugins-good/Config.in           | 6 ++++++
- .../gstreamer1/gst1-plugins-good/gst1-plugins-good.mk    | 9 +++++++--
- 2 files changed, 13 insertions(+), 2 deletions(-)
+On Fri, 05 Jul 2019 08:21:45 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+> >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+> 
+>  > Version 2.24.3 is a minor update which contains many bugfixes.
+>  > From the announcement:
+> 
+>  >   - Fix previous/next gestures in RTL mode.
+>  >   - Fix rendering artifacts in popular sites (YouTube, GitHub, etc.)
+>  >   - Fix media playback annoyances (volume randomly changing, HLS streams
+>  >     starting too slowly, some audio streams would not play, etc.)
+>  >   - Fix build with audio and video disabled.
+> 
+>  >   https://webkitgtk.org/2019/07/02/webkitgtk2.24.3-released.html
+> 
+>  > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+> 
+> Committed, thanks.
+> 
+> Given the above, should this be applied to 2019.02.x / 2019.05.x as
+> well?
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 433084fd6b..ce85388eb0 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -300,6 +300,12 @@ comment "qmlgl (qt5) plugin needs an OpenGL-capable Qt5 backend"
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
- 
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
-+        bool "shout2"
-+        select BR2_PACKAGE_LIBSHOUT
-+        help
-+          Elements to send data to an icecast server using libshout2
-+
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
- 	bool "v4l2"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index 829d27a2da..0a6cc77208 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -25,8 +25,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
- # Options which require currently unpackaged libraries
- GST1_PLUGINS_GOOD_CONF_OPTS += \
- 	--disable-libdv \
--	--disable-dv1394 \
--	--disable-shout2
-+	--disable-dv1394
- 
- GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
- 
-@@ -343,6 +342,12 @@ else
- GST1_PLUGINS_GOOD_CONF_OPTS += --disable-qt
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2),y)
-+GST1_PLUGINS_GOOD_CONF_OPTS += --enable-shout2
-+else
-+GST1_PLUGINS_GOOD_CONF_OPTS += --disable-shout2
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
- GST1_PLUGINS_GOOD_CONF_OPTS += --enable-gst_v4l2
- else
--- 
-2.22.0
+We do not have an accompanying security advisory for this release, but we
+expect to have one for an upcoming 2.24.4 release a few weeks down the road,
+so another option could be to wait until that release and skip this one point
+release.
+
+Nevertheless, if it is possible to have this patch applied to 2019.02.x and
+2019.05.x, that would be definitely very nice for people using WebKitGTK
+(in particular due to the media playback fixes :D).
+
+Cheers,
+?Adri?n
+-------------- next part --------------
+A non-text attachment was scrubbed...
+Name: not available
+Type: application/pgp-signature
+Size: 195 bytes
+Desc: not available
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190705/4f2e0cee/attachment.asc>
