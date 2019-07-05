@@ -1,69 +1,74 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Fri,  5 Jul 2019 07:32:14 +0300
-Subject: [Buildroot] [PATCH 3/3] package/opkg: bump to version 0.4.1
-In-Reply-To: <42ce7221ac70a831016205e8111c2cb313403054.1562301134.git.baruch@tkos.co.il>
-References: <42ce7221ac70a831016205e8111c2cb313403054.1562301134.git.baruch@tkos.co.il>
-Message-ID: <6458f3e13c11bb029fbc5c45e1b62b13958f304e.1562301134.git.baruch@tkos.co.il>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri,  5 Jul 2019 06:35:09 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: Fix build with libnettle
+ 3.5
+Message-ID: <20190705043509.19163-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-tarball conf/ scripts no longer link to host files. Drop autoreconf.
+Fixes
+http://autobuild.buildroot.net/results/1ee/1ee4c34087147ba06081a99ed6bb7524f48731e2/
 
-Add license hash.
-
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/opkg/opkg.hash |  4 +++-
- package/opkg/opkg.mk   | 12 +-----------
- 2 files changed, 4 insertions(+), 12 deletions(-)
+ .../0002-Fix-build-with-libnettle-3.5.patch   | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/dnsmasq/0002-Fix-build-with-libnettle-3.5.patch
 
-diff --git a/package/opkg/opkg.hash b/package/opkg/opkg.hash
-index 321c41dbd051..69eebde2d361 100644
---- a/package/opkg/opkg.hash
-+++ b/package/opkg/opkg.hash
-@@ -1,2 +1,4 @@
- # From http://downloads.yoctoproject.org/releases/opkg/SHA256SUMS
--sha256 f607f0e61be8cf8a3bbd0d2dccd9ec9e9b6c21dd4307b671c600d6eeaf84d30b  opkg-0.3.6.tar.gz
-+sha256 45ac1e037d3877f635d883f8a555e172883a25d3eeb7986c75890fdd31250a43  opkg-0.4.1.tar.gz
-+# Locally calculated
-+sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/opkg/opkg.mk b/package/opkg/opkg.mk
-index 4d34c6d4d3a2..8155ed381f35 100644
---- a/package/opkg/opkg.mk
-+++ b/package/opkg/opkg.mk
-@@ -4,29 +4,19 @@
- #
- ################################################################################
- 
--OPKG_VERSION = 0.3.6
-+OPKG_VERSION = 0.4.1
- OPKG_SITE = http://downloads.yoctoproject.org/releases/opkg
- OPKG_DEPENDENCIES = host-pkgconf libarchive
- OPKG_LICENSE = GPL-2.0+
- OPKG_LICENSE_FILES = COPYING
- OPKG_INSTALL_STAGING = YES
- OPKG_CONF_OPTS = --disable-curl
--# Populate the conf/ directory
--OPKG_AUTORECONF = YES
- 
- # Ensure directory for lockfile exists
- define OPKG_CREATE_LOCKDIR
- 	mkdir -p $(TARGET_DIR)/usr/lib/opkg
- endef
- 
--# The conf/ directory contains symlinks to host automake and libtool provided
--# scripts. Don't rely on them being present.
--define OPKG_REMOVE_AUTOTOOLS_SYMLINKS
--	rm $(@D)/conf/*
--endef
--
--OPKG_POST_EXTRACT_HOOKS += OPKG_REMOVE_AUTOTOOLS_SYMLINKS
--
- ifeq ($(BR2_PACKAGE_OPKG_GPG_SIGN),y)
- OPKG_CONF_OPTS += --enable-gpg
- OPKG_CONF_ENV += \
+diff --git a/package/dnsmasq/0002-Fix-build-with-libnettle-3.5.patch b/package/dnsmasq/0002-Fix-build-with-libnettle-3.5.patch
+new file mode 100644
+index 0000000000..a19a149458
+--- /dev/null
++++ b/package/dnsmasq/0002-Fix-build-with-libnettle-3.5.patch
+@@ -0,0 +1,46 @@
++From 6fd9aba7abe1e084123bc5002959350897774ace Mon Sep 17 00:00:00 2001
++From: Vladislav Grishenko <themiron@mail.ru>
++Date: Wed, 26 Jun 2019 20:27:11 +0500
++Subject: [PATCH] Fix build with libnettle 3.5
++
++Downloaded from
++https://github.com/themiron/dnsmasq/commit/6fd9aba7abe1e084123bc5002959350897774ace
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ src/crypto.c | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
++
++diff --git a/src/crypto.c b/src/crypto.c
++index 1f1c12b..9cfe371 100644
++--- a/src/crypto.c
+++++ b/src/crypto.c
++@@ -296,6 +296,10 @@ static int dnsmasq_ecdsa_verify(struct blockdata *key_data, unsigned int key_len
++   static struct ecc_point *key_256 = NULL, *key_384 = NULL;
++   static mpz_t x, y;
++   static struct dsa_signature *sig_struct;
+++#if NETTLE_VERSION_MAJOR == 3 && NETTLE_VERSION_MINOR < 4
+++#define nettle_get_secp_256r1() (&nettle_secp_256r1)
+++#define nettle_get_secp_384r1() (&nettle_secp_384r1)
+++#endif
++   
++   if (!sig_struct)
++     {
++@@ -315,7 +319,7 @@ static int dnsmasq_ecdsa_verify(struct blockdata *key_data, unsigned int key_len
++ 	  if (!(key_256 = whine_malloc(sizeof(struct ecc_point))))
++ 	    return 0;
++ 	  
++-	  nettle_ecc_point_init(key_256, &nettle_secp_256r1);
+++	  nettle_ecc_point_init(key_256, nettle_get_secp_256r1());
++ 	}
++       
++       key = key_256;
++@@ -328,7 +332,7 @@ static int dnsmasq_ecdsa_verify(struct blockdata *key_data, unsigned int key_len
++ 	  if (!(key_384 = whine_malloc(sizeof(struct ecc_point))))
++ 	    return 0;
++ 	  
++-	  nettle_ecc_point_init(key_384, &nettle_secp_384r1);
+++	  nettle_ecc_point_init(key_384, nettle_get_secp_384r1());
++ 	}
++       
++       key = key_384;
 -- 
 2.20.1
