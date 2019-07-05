@@ -1,36 +1,26 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 05 Jul 2019 21:11:43 +0000
-Subject: [Buildroot] [Bug 11991] [numpy] segfault when compiling for RPi3
- 64bits
-In-Reply-To: <bug-11991-163@https.bugs.busybox.net/>
-References: <bug-11991-163@https.bugs.busybox.net/>
-Message-ID: <bug-11991-163-p2QCcxwRVg@https.bugs.busybox.net/>
+Date: Fri, 05 Jul 2019 21:35:59 +0000
+Subject: [Buildroot] [Bug 11966] Valgrind segfaults on startup on armhf
+In-Reply-To: <bug-11966-163@https.bugs.busybox.net/>
+References: <bug-11966-163@https.bugs.busybox.net/>
+Message-ID: <bug-11966-163-z9aWhY4t3d@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11991
+https://bugs.busybox.net/show_bug.cgi?id=11966
 
---- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
-Which GCC version? Mind to share your config/defconfig?
+--- Comment #4 from Peter Seiderer <ps.report@gmx.net> ---
+Does an update to valgrind-3.15 (buildroot git) work?
 
-There is one more reference of the same compile failure on the web, see [1].
+Does the same failure happen in case you use an buildroot generated toolchain?
 
-numpy/core/src/npymath/npy_math_internal.h.src:482:12: internal compiler error:
-Segmentation fault
-     return @kind@@c@(x, y);
-            ^~~~~~~~~~~~~~~
+Does the failure happen when you use Nulgrind (BR2_PACKAGE_VALGRIND_NULGRIND,
+'--tool=none')?
 
-Stating 'Bug does not occur when using -O0 on GCC 8.2.0 and does not occur at
-all with GCC 9.1.0', mind to try a different compiler and/or optimization
-setting?
-
-Regards,
-Peter
-
-[1] https://github.com/numpy/numpy/issues/13622
+Any valgrind output before/while segfault?
 
 -- 
 You are receiving this mail because:
