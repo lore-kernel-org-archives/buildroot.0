@@ -1,23 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 05 Jul 2019 08:23:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libsecret: bump to version
- 0.18.8
-In-Reply-To: <20190704170650.19598-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 4 Jul 2019 19:06:50 +0200")
-References: <20190704170650.19598-1-fontaine.fabrice@gmail.com>
-Message-ID: <87y31dvw3c.fsf@dell.be.48ers.dk>
+Date: Fri, 05 Jul 2019 08:23:20 +0200
+Subject: [Buildroot] [PATCH] package/libnftnl: drop obsolete patch
+In-Reply-To: <8f9414398d3f524d9b44a196ca134638b3604e0f.1562296092.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Fri, 5 Jul 2019 06:08:12 +0300")
+References: <8f9414398d3f524d9b44a196ca134638b3604e0f.1562296092.git.baruch@tkos.co.il>
+Message-ID: <87tvc1vw2v.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > host-intltool is not needed since version 0.18.7 and
- > https://github.com/GNOME/libsecret/commit/f25420d5aadc1449f78c9293d0b1ddf16f5d2eba
+ > Patch #1 is obsolete since upstream commit 244d60de2f1 ("utils: define
+ > xfree() as macro") in version 1.0.3. xfree is no longer a symbol, so it
+ > can't conflict with symbols of the code libnftnl links with.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Cc: Yegor Yefremov <yegorslists@googlemail.com>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
