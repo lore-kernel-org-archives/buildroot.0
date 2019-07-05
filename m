@@ -1,46 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri,  5 Jul 2019 23:08:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libqmi: bump to version 1.22.4
-Message-ID: <20190705210800.20864-1-fontaine.fabrice@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 05 Jul 2019 21:11:43 +0000
+Subject: [Buildroot] [Bug 11991] [numpy] segfault when compiling for RPi3
+ 64bits
+In-Reply-To: <bug-11991-163@https.bugs.busybox.net/>
+References: <bug-11991-163@https.bugs.busybox.net/>
+Message-ID: <bug-11991-163-p2QCcxwRVg@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-libqmi >= 1.22.4 is needed by modem-manager 1.10.2
+https://bugs.busybox.net/show_bug.cgi?id=11991
 
-Fixes:
- - http://autobuild.buildroot.org/results/14e11c6136db09b36d84246a7472b77bb4bfdd19
+--- Comment #1 from Peter Seiderer <ps.report@gmx.net> ---
+Which GCC version? Mind to share your config/defconfig?
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libqmi/libqmi.hash | 2 +-
- package/libqmi/libqmi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+There is one more reference of the same compile failure on the web, see [1].
 
-diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-index 0c27451ec2..7d622cb702 100644
---- a/package/libqmi/libqmi.hash
-+++ b/package/libqmi/libqmi.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 21c198b481f1617bb7edb1960d823569de3e38b269dbf513af1b56048cafaa17  libqmi-1.22.0.tar.xz
-+sha256 4c5b8e7bde4144ad875e9efaccd05bcc9b830c9a114df63aa2be8eb5d3caf9f1  libqmi-1.22.4.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 319c2362bf..302e938c62 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBQMI_VERSION = 1.22.0
-+LIBQMI_VERSION = 1.22.4
- LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
+numpy/core/src/npymath/npy_math_internal.h.src:482:12: internal compiler error:
+Segmentation fault
+     return @kind@@c@(x, y);
+            ^~~~~~~~~~~~~~~
+
+Stating 'Bug does not occur when using -O0 on GCC 8.2.0 and does not occur at
+all with GCC 9.1.0', mind to try a different compiler and/or optimization
+setting?
+
+Regards,
+Peter
+
+[1] https://github.com/numpy/numpy/issues/13622
+
 -- 
-2.20.1
+You are receiving this mail because:
+You are on the CC list for the bug.
