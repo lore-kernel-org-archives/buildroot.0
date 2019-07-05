@@ -1,46 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 5 Jul 2019 08:24:11 +0200
-Subject: [Buildroot] [git commit] package/php: bump version to 7.3.7
-Message-ID: <20190705062454.A4659821BB@busybox.osuosl.org>
+Date: Fri, 5 Jul 2019 08:19:00 +0200
+Subject: [Buildroot] [git commit] package/cog: bump to version 0.3.1
+Message-ID: <20190705062454.79170813A4@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7accdcb3a943d420b13a73c497d29cb15db156e2
+commit: https://git.buildroot.net/buildroot/commit/?id=45ab7fa4e6d5dbdd2603f2a1971652fdbfc0a09e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://www.php.net/ChangeLog-7.php#7.3.7
+Update the package to version 0.3.1, which includes build improvements.
+In particular, it now uses wayland-scanner to generate Wayland protocol
+code instead of shipping pre-generated files.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/cog/cog.hash | 6 ++++--
+ package/cog/cog.mk   | 5 +++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index d88433e8c0..30aa8bfcf6 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From http://php.net/downloads.php
--sha256 fefc8967daa30ebc375b2ab2857f97da94ca81921b722ddac86b29e15c54a164  php-7.3.6.tar.xz
-+sha256 ba067200ba649956b3a92ec8b71a6ed8ce8a099921212443c1bcf3260a29274c  php-7.3.7.tar.xz
+diff --git a/package/cog/cog.hash b/package/cog/cog.hash
+index 3aec4ca378..18b53e4ee4 100644
+--- a/package/cog/cog.hash
++++ b/package/cog/cog.hash
+@@ -1,5 +1,7 @@
+-# Locally generated
+-sha256 755c68029bbd05a17784262e56021362740783d15868dab9402a125ef35eedaf  cog-0.3.0.tar.gz
++# From https://github.com/Igalia/cog/releases/tag/v0.3.1
++md5 65bb078aad576b8402f973234e86cc82 cog-0.3.1.tar.xz
++sha1 d73b060618f342accb12db71a7578940c2243d4c cog-0.3.1.tar.xz
++sha256 ca7eae333cc02b947ec3d657a2090f01a9b08f9fabb855a585472edafbd9e7eb cog-0.3.1.tar.xz
  
- # License file
- sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index de7c0c0d5a..2da27a473d 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
-@@ -4,7 +4,7 @@
+ # Hashes for license files:
+ sha256 e6c42d93c68b292bcccf6d2ec3e13da85df90b718ba27c2c2a01053a9d009252  COPYING
+diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+index 98b0aa6f7a..615d6664df 100644
+--- a/package/cog/cog.mk
++++ b/package/cog/cog.mk
+@@ -4,8 +4,9 @@
  #
  ################################################################################
  
--PHP_VERSION = 7.3.6
-+PHP_VERSION = 7.3.7
- PHP_SITE = http://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-COG_VERSION = 0.3.0
+-COG_SITE = $(call github,Igalia,cog,v$(COG_VERSION))
++COG_VERSION = 0.3.1
++COG_SITE = https://github.com/Igalia/cog/releases/download/v$(COG_VERSION)
++COG_SOURCE = cog-$(COG_VERSION).tar.xz
+ COG_INSTALL_STAGING = YES
+ COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo
+ COG_LICENSE = MIT
