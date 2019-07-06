@@ -1,164 +1,53 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sat, 6 Jul 2019 10:47:59 +0200
-Subject: [Buildroot] [PATCH 1/1] configs/imx6ullevk: add imx6ullevk
- support
-In-Reply-To: <20190521204534.27569-1-jeffrey.kinross@i3pd.com>
-References: <20190521204534.27569-1-jeffrey.kinross@i3pd.com>
-Message-ID: <CAKcgs2zcwV3Doj2c_wiUu9fcYVd-tuxe6NxP-jT20aeWTQinww@mail.gmail.com>
+From: Carlos Santos <unixmania@gmail.com>
+Date: Sat, 6 Jul 2019 07:43:23 -0300
+Subject: [Buildroot] [PATCH 1/1] package/libqmi: bump to version 1.22.4
+In-Reply-To: <20190705210800.20864-1-fontaine.fabrice@gmail.com>
+References: <20190705210800.20864-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAJ4jsafZ_vw4dcnBog_YvY=UDT7JorrpHDMg9uJ46nfHdx4Qzw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Jeffrey,
-
-Le mar. 21 mai 2019 ? 22:45, <jeffrey.kinross@i3pd.com> a ?crit :
+On Fri, Jul 5, 2019 at 6:08 PM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
 >
-> From: Jeffrey Kinross <jeffrey.kinross@i3pd.com>
+> libqmi >= 1.22.4 is needed by modem-manager 1.10.2
 >
-> Signed-off-by: Jeffrey Kinross <jeffrey.kinross@i3pd.com>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/14e11c6136db09b36d84246a7472b77bb4bfdd19
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  board/freescale/imx6ullevk/readme.txt | 64 +++++++++++++++++++++++++++
->  configs/imx6ullevk_defconfig          | 38 ++++++++++++++++
->  2 files changed, 102 insertions(+)
->  create mode 100644 board/freescale/imx6ullevk/readme.txt
->  create mode 100644 configs/imx6ullevk_defconfig
+>  package/libqmi/libqmi.hash | 2 +-
+>  package/libqmi/libqmi.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/board/freescale/imx6ullevk/readme.txt b/board/freescale/imx6ullevk/readme.txt
-> new file mode 100644
-> index 0000000000..1b10f90621
-> --- /dev/null
-> +++ b/board/freescale/imx6ullevk/readme.txt
-> @@ -0,0 +1,64 @@
-> +***************************
-> +Freescale i.MX6ULL EVK board
-> +***************************
-> +
-> +This file documents the Buildroot support for the Freescale i.MX6ULL EVK board.
-> +
-> +Please read the i.MX6ULL Evaluation Kit Quick Start Guide [1] for an
-> +introduction to the board.
-> +
-> +Build
-> +=====
-> +
-> +First, configure Buildroot for your i.MX6ULL EVK board:
-> +
-> +make imx6ullevk_defconfig
-> +
-> +Build all components:
-> +
-> +  make
-> +
-> +You will find in ./output/images/ the following files:
-> +  - imx6ull-14x14-evk.dtb
-> +  - rootfs.ext4
-> +  - rootfs.tar
-> +  - sdcard.img
-> +  - u-boot.imx
-> +  - zImage
-> +
-> +Create a bootable microSD card
-> +==============================
-> +
-> +To determine the device associated to the microSD card have a look in the
-> +/proc/partitions file:
-> +
-> +  cat /proc/partitions
-> +
-> +Buildroot prepares a bootable "sdcard.img" image in the output/images/
-> +directory, ready to be dumped on a microSD card. Launch the following
-> +command as root:
-> +
-> +  dd if=./output/images/sdcard.img of=/dev/<your-microsd-device>
-> +
-> +*** WARNING! This will destroy all the card content. Use with care! ***
-> +
-> +For details about the medium image layout, see the definition in
-> +board/freescale/common/imx/genimage.cfg.template.
-> +
-> +Boot the i.MX6ULL EVK board
-> +=========================
-> +
-> +To boot your newly created system (refer to the i.MX6ULL EVK Quick Start Guide
-> +[1] for guidance):
-> +- insert the microSD card in the microSD slot of the board;
-> +- verify that your i.MX6ULL EVK board jumpers and switches are set as mentioned
-> +  in the i.MX6ULL EVK Quick Start Guide [1];
-> +- put a micro USB cable into the Debug USB Port and connect using a terminal
-> +  emulator at 115200 bps, 8n1;
-> +- power on the board.
-> +
-> +Enjoy!
-> +
-> +References
-> +==========
-> +[1] https://www.nxp.com/files-static/32bit/doc/brochure/IMX6ULLQSG.pdf
-> diff --git a/configs/imx6ullevk_defconfig b/configs/imx6ullevk_defconfig
-> new file mode 100644
-> index 0000000000..85e0f4fe8b
-> --- /dev/null
-> +++ b/configs/imx6ullevk_defconfig
-> @@ -0,0 +1,38 @@
-> +# architecture
-> +BR2_arm=y
-> +BR2_cortex_a7=y
-> +BR2_ARM_FPU_NEON_VFPV4=y
-> +
-> +# Linux headers same as kernel, a 4.19 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
-> +
-> +# system
-> +BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-> +
-> +# kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.44"
-> +BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ull-14x14-evk"
-> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +
-> +# bootloader
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BOARDNAME="mx6ullevk"
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_USE_DEFCONFIG=y
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="mx6ull_14x14_evk"
-> +BR2_TARGET_UBOOT_FORMAT_IMX=y
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +
-> +# required tools to create the SD card image
-> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_MTOOLS=y
-> +
-> +# filesystem / image
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> --
-> 2.20.1
+> diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+> index 0c27451ec2..7d622cb702 100644
+> --- a/package/libqmi/libqmi.hash
+> +++ b/package/libqmi/libqmi.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed:
+> -sha256 21c198b481f1617bb7edb1960d823569de3e38b269dbf513af1b56048cafaa17  libqmi-1.22.0.tar.xz
+> +sha256 4c5b8e7bde4144ad875e9efaccd05bcc9b830c9a114df63aa2be8eb5d3caf9f1  libqmi-1.22.4.tar.xz
+>  sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+> diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+> index 319c2362bf..302e938c62 100644
+> --- a/package/libqmi/libqmi.mk
+> +++ b/package/libqmi/libqmi.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-Thanks for your contribution.
-I have tried and built this new defconfig and I do get the correct
-artifiacts mentioned in your description.
-I couldn't test it though as I don't have the board.
+> -LIBQMI_VERSION = 1.22.0
+> +LIBQMI_VERSION = 1.22.4
+>  LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+>  LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+>  LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
 
-Two comments:
-1)  the subject of your commit should say: configs/imx6ullevk: new defconfig
-Then you can add more information in your commit message
-
-2) You need to add an entry to the DEVELOPERS file with your name and
-contribution if you want to be the maintainer of this board.
-
-Can you please send a v2 version?
-
-Thanks
-Gilles.
+Tested-by: Carlos Santos <unixmania@gmail.com>
+---
+Verified that modem-manager builds correctly after this change.
