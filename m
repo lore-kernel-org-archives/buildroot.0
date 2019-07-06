@@ -1,67 +1,51 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  6 Jul 2019 08:42:36 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: fix build error
-Message-ID: <20190706064236.30663-1-bernd.kuhls@t-online.de>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Sat,  6 Jul 2019 12:25:01 +0530
+Subject: [Buildroot] [PATCH v3] fs/tar: explicitly set extended header
+ values to ensure binary reproducibility
+Message-ID: <20190706065501.3959-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes
-http://autobuild.buildroot.net/results/627/627e7080e655005d6724b9977670cc73059d6281/
+Since we use --xattrs-include='*' to include all extended attributes,
+tar creates a PAX formatted archive. The archive metadata captures atime
+and ctime of files. To fix this, GNU recommends that we pass this added
+argument to tar to create binary reproducible packages. Setting of mtime
+is handled in fs/common.mk using touch on all files.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Diffoscope output pre-change: https://gitlab.com/snippets/1871111
+Diffoscope output after change is blank i.e. binary reproducibile rootfs
+is created.
+
+GNU Recommendation: https://www.gnu.org/software/tar/manual/tar.html#SEC147
+
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ---
- .../0002-tvhcsa.c-include-stdio.h.patch       | 40 +++++++++++++++++++
- 1 file changed, 40 insertions(+)
- create mode 100644 package/tvheadend/0002-tvhcsa.c-include-stdio.h.patch
+Changes v2 -> v2:
+  - Add comment (suggested by Peter)
+  - Does not depend on BR2_REPRODUCIBLE since we don't need atime/ctime anyway
+Changes v1 -> v2:
+  - Added comment about mtime handling
+---
+ fs/tar/tar.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/tvheadend/0002-tvhcsa.c-include-stdio.h.patch b/package/tvheadend/0002-tvhcsa.c-include-stdio.h.patch
-new file mode 100644
-index 0000000000..a1e80568fb
---- /dev/null
-+++ b/package/tvheadend/0002-tvhcsa.c-include-stdio.h.patch
-@@ -0,0 +1,40 @@
-+From 693e3a3fe281dd618dd244b245c9bb0a00c7d893 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 6 Jul 2019 08:36:11 +0200
-+Subject: [PATCH] tvhcsa.c: include stdio.h
+diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
+index 4c6327ace8..393d01bfe8 100644
+--- a/fs/tar/tar.mk
++++ b/fs/tar/tar.mk
+@@ -8,6 +8,9 @@ TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
+ 
+ ROOTFS_TAR_DEPENDENCIES = $(BR2_TAR_HOST_DEPENDENCY)
+ 
++# do not store atime/ctime in PaxHeaders to ensure reproducbility
++TAR_OPTS += --pax-option=exthdr.name=%d/PaxHeaders/%f,atime:=0,ctime:=0
 +
-+Fixes uclibc build error:
-+
-+CC              src/descrambler/tvhcsa.o
-+In file included from /home/buildroot/autobuild/instance-0/output/build/tvheadend-8f1de1621d78c91431238176bf4f6290870a031a/src/tvhlog.h:30:0,
-+                 from src/descrambler/tvhcsa.h:30,
-+                 from src/descrambler/tvhcsa.c:19:
-+/home/buildroot/autobuild/instance-0/output/build/tvheadend-8f1de1621d78c91431238176bf4f6290870a031a/src/tvh_thread.h:163:25:
-+ error: unknown type name '__do_not_use_pthread_mutex_t'
-+ #define pthread_mutex_t __do_not_use_pthread_mutex_t
-+
-+detected by buildroot autobuilder:
-+http://autobuild.buildroot.net/results/627/627e7080e655005d6724b9977670cc73059d6281/
-+
-+Patch sent upstream: https://github.com/tvheadend/tvheadend/pull/1285
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/descrambler/tvhcsa.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/descrambler/tvhcsa.c b/src/descrambler/tvhcsa.c
-+index 1deefc50f..e97c14e99 100644
-+--- a/src/descrambler/tvhcsa.c
-++++ b/src/descrambler/tvhcsa.c
-+@@ -16,6 +16,7 @@
-+  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-+  */
-+ 
-++#include <stdio.h>
-+ #include "tvhcsa.h"
-+ #include "input.h"
-+ #include "input/mpegts/tsdemux.h"
-+-- 
-+2.20.1
-+
+ define ROOTFS_TAR_CMD
+ 	(cd $(TARGET_DIR); find -print0 | LC_ALL=C sort -z | \
+ 		tar $(TAR_OPTS) -cf $@ --null --xattrs-include='*' --no-recursion -T - --numeric-owner)
 -- 
-2.20.1
+2.22.0
