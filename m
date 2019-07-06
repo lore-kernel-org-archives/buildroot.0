@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 6 Jul 2019 22:22:53 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] board/qemu: ensure root
+Date: Sun, 7 Jul 2019 00:09:02 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] board/qemu: ensure root
  is available before mounting it
-Message-ID: <20190706221233.147E78840C@busybox.osuosl.org>
+Message-ID: <20190706221237.96DFD88431@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1d79dbc41c1488923caac4229d77c76d006ab1f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ef3b031a81aa8b4247d18af7018af5b0a0cf5a2a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 On my machine, it happens once in a while that the virtualised machine
 boots too fast for the rootfs to be available at the time the kernel
@@ -258,26 +258,26 @@ index c23da70df0..2728675df2 100644
  The login prompt will appear in the terminal window.
  
 diff --git a/board/qemu/riscv32-virt/readme.txt b/board/qemu/riscv32-virt/readme.txt
-index b984e47105..5d7c1988d2 100644
+index 2da99580e5..24d44f0a99 100644
 --- a/board/qemu/riscv32-virt/readme.txt
 +++ b/board/qemu/riscv32-virt/readme.txt
 @@ -1,6 +1,6 @@
- Run Linux in emulation with:
+ Run the emulation with:
  
--  qemu-system-riscv32 -M virt -kernel output/images/fw_jump.elf -device loader,file=output/images/Image,addr=0x80400000 -append "root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
-+  qemu-system-riscv32 -M virt -kernel output/images/fw_jump.elf -device loader,file=output/images/Image,addr=0x80400000 -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
+-  qemu-system-riscv32 -M virt -kernel output/images/bbl -append "root=/dev/vda ro console=ttyS0" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
++  qemu-system-riscv32 -M virt -kernel output/images/bbl -append "rootwait root=/dev/vda ro console=ttyS0" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
  
  The login prompt will appear in the terminal that started Qemu.
  
 diff --git a/board/qemu/riscv64-virt/readme.txt b/board/qemu/riscv64-virt/readme.txt
-index 84c7ab3221..c075cc464d 100644
+index 9f6e35c867..e878330dee 100644
 --- a/board/qemu/riscv64-virt/readme.txt
 +++ b/board/qemu/riscv64-virt/readme.txt
 @@ -1,6 +1,6 @@
- Run Linux in emulation with:
+ Run the emulation with:
  
--  qemu-system-riscv64 -M virt -kernel output/images/fw_jump.elf -device loader,file=output/images/Image,addr=0x80200000 -append "root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
-+  qemu-system-riscv64 -M virt -kernel output/images/fw_jump.elf -device loader,file=output/images/Image,addr=0x80200000 -append "rootwait root=/dev/vda ro" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
+-  qemu-system-riscv64 -M virt -kernel output/images/bbl -append "root=/dev/vda ro console=ttyS0" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
++  qemu-system-riscv64 -M virt -kernel output/images/bbl -append "rootwait root=/dev/vda ro console=ttyS0" -drive file=output/images/rootfs.ext2,format=raw,id=hd0 -device virtio-blk-device,drive=hd0 -netdev user,id=net0 -device virtio-net-device,netdev=net0 -nographic
  
  The login prompt will appear in the terminal that started Qemu.
  
