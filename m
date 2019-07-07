@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:41:15 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] boot/barebox: needs
+Date: Sun, 7 Jul 2019 08:41:24 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] boot/barebox: needs
  host-{flex, bison}
-Message-ID: <20190707063940.A27EA83ACC@busybox.osuosl.org>
+Message-ID: <20190707063948.A151388592@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=769ce63723a33c48ab4b5d22ad7a22abde699735
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=629d37ea4a62aa3ffd730a93b8822b49389b6c93
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Barebox starting from 2019.02 no longer ships flex/bison generated
 parser. Add conditional kconfig dependencies, same as we did for kernel
