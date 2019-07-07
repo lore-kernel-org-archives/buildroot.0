@@ -1,36 +1,66 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:19:40 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/bzip2: add hash
- for license file
-Message-ID: <20190707061811.B4A72826F6@busybox.osuosl.org>
+Date: Sun, 7 Jul 2019 08:19:47 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/bzip2: add
+ upstream security fix for CVE-2019-12900
+Message-ID: <20190707061811.BF10B813F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f663cf2d0050d13297d965a60304c75cc495107d
+commit: https://git.buildroot.net/buildroot/commit/?id=1ffac20f7fed58b5d8e124ac2a6adfd4aa25f8b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-Also add a standard sha256 hash for the package itself.
+Patch to resolve cve-2019-12900 which affects bzip2 versions 1.0.6 and older
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-Reviewed-by: Thomas Huth <huth@tuxfamily.org>
+More information can be found at
+https://nvd.nist.gov/vuln/detail/CVE-2019-12900
+
+Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit cc7581a850fcae8de601b9678f65a00d46db76af)
+(cherry picked from commit 6581c441dfc06c5e5e3666718e5c2e9801485ede)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bzip2/bzip2.hash | 4 ++++
- 1 file changed, 4 insertions(+)
+ ...-Make-sure-nSelectors-is-not-out-of-range.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/bzip2/bzip2.hash b/package/bzip2/bzip2.hash
-index 60b0a191ef..ffe94aa454 100644
---- a/package/bzip2/bzip2.hash
-+++ b/package/bzip2/bzip2.hash
-@@ -1,2 +1,6 @@
- # From http://www.bzip.org/downloads.html
- md5	00b516f4704d4a7cb50a1d97e6e8e15b	bzip2-1.0.6.tar.gz
+diff --git a/package/bzip2/0003-Make-sure-nSelectors-is-not-out-of-range.patch b/package/bzip2/0003-Make-sure-nSelectors-is-not-out-of-range.patch
+new file mode 100644
+index 0000000000..77a500d46d
+--- /dev/null
++++ b/package/bzip2/0003-Make-sure-nSelectors-is-not-out-of-range.patch
+@@ -0,0 +1,33 @@
++From 74de1e2e6ffc9d51ef9824db71a8ffee5962cdbc Mon Sep 17 00:00:00 2001
++From: Albert Astals Cid <aacid@kde.org>
++Date: Tue, 28 May 2019 19:35:18 +0200
++Subject: [PATCH] Make sure nSelectors is not out of range
 +
-+# Locally calculated
-+sha256	a2848f34fcd5d6cf47def00461fcb528a0484d8edef8208d6d2e2909dc61d9cd	bzip2-1.0.6.tar.gz
-+sha256	4919cfb14a73cd64fcef67b107613970cf1659a09aa675dba31314f373bc7204	LICENSE
++nSelectors is used in a loop from 0 to nSelectors to access selectorMtf
++which is
++	UChar    selectorMtf[BZ_MAX_SELECTORS];
++so if nSelectors is bigger than BZ_MAX_SELECTORS it'll do an invalid memory
++access
++
++Fixes out of bounds access discovered while fuzzying karchive
++
++Signed-off-by: Albert Astals Cid <aacid@kde.org>
++---
++ decompress.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/decompress.c b/decompress.c
++index ab6a624..f3db91d 100644
++--- a/decompress.c
+++++ b/decompress.c
++@@ -287,7 +287,7 @@ Int32 BZ2_decompress ( DState* s )
++       GET_BITS(BZ_X_SELECTOR_1, nGroups, 3);
++       if (nGroups < 2 || nGroups > 6) RETURN(BZ_DATA_ERROR);
++       GET_BITS(BZ_X_SELECTOR_2, nSelectors, 15);
++-      if (nSelectors < 1) RETURN(BZ_DATA_ERROR);
+++      if (nSelectors < 1 || nSelectors > BZ_MAX_SELECTORS) RETURN(BZ_DATA_ERROR);
++       for (i = 0; i < nSelectors; i++) {
++          j = 0;
++          while (True) {
++-- 
++2.21.0
