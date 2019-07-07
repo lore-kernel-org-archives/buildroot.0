@@ -1,89 +1,139 @@
-From: Paul Cercueil <paul@crapouillou.net>
-Date: Sun,  7 Jul 2019 12:52:24 -0400
-Subject: [Buildroot] [PATCH 1/1] package/libpng: allow selection of older
- libpng versions
-Message-ID: <20190707165224.31438-1-paul@crapouillou.net>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 7 Jul 2019 20:40:22 +0200
+Subject: [Buildroot] How do I enable webrtc as part of external
+ gstreamer, in buildroot
+In-Reply-To: <CADNjvP_HU1+D+LXwVtVosxpvDiUGZC=uEUCET10RpiG+oVn63Q@mail.gmail.com>
+References: <CADNjvP-VYgO7ctGsOjZxudkA7k6PzT4FNt+JRACmUV6=bh_E=Q@mail.gmail.com>
+ <20190704202528.63f7d667@gmx.net>
+ <CADNjvP_HU1+D+LXwVtVosxpvDiUGZC=uEUCET10RpiG+oVn63Q@mail.gmail.com>
+Message-ID: <20190707204022.65affaec@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-By allowing building an older version of libpng, we can create Buildroot
-systems that are still binary-compatible with applications compiled with
-older Buildroot toolchains.
+Hello Vered,
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- .../0001-Disable-pngfix-and-png-fix-itxt.patch    |  0
- package/libpng/Config.in                          | 15 +++++++++++++++
- package/libpng/libpng.hash                        |  2 ++
- package/libpng/libpng.mk                          | 11 +++++++++++
- 4 files changed, 28 insertions(+)
- rename package/libpng/{ => 1.6.37}/0001-Disable-pngfix-and-png-fix-itxt.patch (100%)
+please keep buildroot at busybox.net in CC
 
-diff --git a/package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch b/package/libpng/1.6.37/0001-Disable-pngfix-and-png-fix-itxt.patch
-similarity index 100%
-rename from package/libpng/0001-Disable-pngfix-and-png-fix-itxt.patch
-rename to package/libpng/1.6.37/0001-Disable-pngfix-and-png-fix-itxt.patch
-diff --git a/package/libpng/Config.in b/package/libpng/Config.in
-index b0a3646078..099492c07c 100644
---- a/package/libpng/Config.in
-+++ b/package/libpng/Config.in
-@@ -6,3 +6,18 @@ config BR2_PACKAGE_LIBPNG
- 	  images.
- 
- 	  http://www.libpng.org/
-+
-+choice
-+	prompt "libpng version series"
-+	default BR2_PACKAGE_LIBPNG_16
-+
-+config BR2_PACKAGE_LIBPNG_16
-+	bool "libpng 1.6"
-+
-+config BR2_PACKAGE_LIBPNG_14
-+	bool "libpng 1.4"
-+
-+config BR2_PACKAGE_LIBPNG_12
-+	bool "libpng 1.2"
-+
-+endchoice
-diff --git a/package/libpng/libpng.hash b/package/libpng/libpng.hash
-index e86b8c65ce..c4bfc812cb 100644
---- a/package/libpng/libpng.hash
-+++ b/package/libpng/libpng.hash
-@@ -2,5 +2,7 @@
- md5 015e8e15db1eecde5f2eb9eb5b6e59e9  libpng-1.6.37.tar.xz
- sha1 3ab93fabbf4c27e1c4724371df408d9a1bd3f656  libpng-1.6.37.tar.xz
- # Locally computed:
-+sha256 b4635f15b8adccc8ad0934eea485ef59cc4cae24d0f0300a9a941e51974ffcc7  libpng-1.2.59.tar.xz
-+sha256 8d419a8b2a5edddda5cbcb897ded92205344a3249fa7a00d6384ea23ac3ccbd8  libpng-1.4.22.tar.xz
- sha256 505e70834d35383537b6491e7ae8641f1a4bed1876dbfe361201fc80868d88ca  libpng-1.6.37.tar.xz
- sha256 bf5e22b9dce8464064ae17a48ea1133c3369ac9e1d80ef9e320e5219aa14ea9b  LICENSE
-diff --git a/package/libpng/libpng.mk b/package/libpng/libpng.mk
-index 5c30a4f9ad..2a89595006 100644
---- a/package/libpng/libpng.mk
-+++ b/package/libpng/libpng.mk
-@@ -4,8 +4,19 @@
- #
- ################################################################################
- 
-+ifeq ($(BR2_PACKAGE_LIBPNG_16),y)
- LIBPNG_VERSION = 1.6.37
- LIBPNG_SERIES = 16
-+else
-+ifeq ($(BR2_PACKAGE_LIBPNG_14),y)
-+LIBPNG_VERSION = 1.4.22
-+LIBPNG_SERIES = 14
-+else
-+LIBPNG_VERSION = 1.2.59
-+LIBPNG_SERIES = 12
-+endif
-+endif
-+
- LIBPNG_SOURCE = libpng-$(LIBPNG_VERSION).tar.xz
- LIBPNG_SITE = http://downloads.sourceforge.net/project/libpng/libpng$(LIBPNG_SERIES)/$(LIBPNG_VERSION)
- LIBPNG_LICENSE = Libpng-2.0
--- 
-2.21.0.593.g511ec345e18
+On Sun, 7 Jul 2019 11:05:34 +0300, Vered Kalef <vered.kalef@gmail.com> wrote:
+
+> On Thu, Jul 4, 2019 at 9:25 PM Peter Seiderer <ps.report@gmx.net> wrote:
+> 
+> > Hello Vered,
+> >
+> > On Thu, 4 Jul 2019 15:38:59 +0300, Vered Kalef <vered.kalef@gmail.com>
+> > wrote:
+> >  
+> > > Hi all,
+> > > I'm trying to install external gstreamer with webrtc enabled on  
+> > buildroot.
+> >
+> > What do your mean with 'external'? Why 'external'?
+> >  
+> 
+> I use buildroot 14.0. It doesn't contain webrtc build in and I can't update
+> to a later version so I added as an external the gstreamer with webrtc
+> enabled.
+
+14.0 does not make sense, the buildroot versions are <year>.<month>.<release>,
+did you mean 2014.02, 2014.05, 2014.8 or 2014.11?
+
+> I renamed the packaged so it won't conflict with the one built in within
+> buildroot.
+> 
+> >  
+> > > It seems this option is missing within the buildroot.  
+> >
+> > Which option? There is definitely an GStreamer webrtc option (since
+> > 2019.05), see [1]...
+> >  
+> I don't see the option webrtc enabled, only webrtc-audio-processing, which
+> is different altogether.
+> 
+> >
+> > Which Buildroot version do you use?
+> >  
+> 14.0
+
+??? (see above)
+
+> 
+> >  
+> > > I've configured the mk file and the Config.in file.
+> > > After installation when I check gst-inspect webrtcbin, I get -
+> > >
+> > > No such element or plugin ?webrtcbin'
+> > > What am I missing?  
+> >
+> > Take a look at the gst1-plugins-bad configure output (or
+> > build/gst1-plugins-bad-<version>/config.log for a hint
+> > what is missing (look for webrtc entries)....
+
+Please take a look at the build/gst1-plugins-bad-<version>/config.log, is webrtc enabled
+e.g.:
+
+configure:91279: *** checking feature: WebRTC ***
+configure:91283: *** for plug-ins: webrtc ***
+configure:91327: checking for NICE
+configure:91335: $PKG_CONFIG --exists --print-errors "nice >= 0.1.14"
+configure:91338: $? = 0
+configure:91353: $PKG_CONFIG --exists --print-errors "nice >= 0.1.14"
+configure:91356: $? = 0
+configure:91396: result: yes
+configure:91412: *** These plugins will be built: webrtc
+
+> >
+> > Do you open the dump and view the log file or is it additional log file?  
+> Within the dump I see  -
+> 0:00:51.704162800  1051 0x7fff64004400 LOG      GST_ELEMENT_FACTORY
+> gstelementfactory.c:438:gst_element_factory_make: gstelementfactory: make
+> "webrtcbin" "(NULL)"
+> 0:00:51.704206500  1051 0x7fff64004400 LOG      GST_ELEMENT_FACTORY
+> gstelementfactory.c:142:gst_element_factory_find: no such element factory
+> "webrtcbin"
+> 0:00:51.704213200  1051 0x7fff64004400 WARN     GST_ELEMENT_FACTORY
+> gstelementfactory.c:456:gst_element_factory_make: no such element factory
+> "webrtcbin"!
+
+Nothing new, gstreamer is unable to find an element named webrtcbin,
+make sure the plugin libgstwebrtc.so is build and installed (at the right
+location and with the right dependencies) at the target...
+
+Regards,
+Peter
+
+> 
+> > gst1-plugins-bad/Config.in config  
+> > > BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC bool "webrtc" depends on
+> > > !BR2_STATIC_LIBS # libnice -> gnutls select  
+> > BR2_PACKAGE_GST1_PLUGINS_BASE #  
+> > > libgstsdp select BR2_PACKAGE_LIBNICE help WebRTC plugins (webrtcbin - a  
+> > bin  
+> > > for webrtc connections comment "webrtc needs a toolchain w/ dynamic
+> > > library" depends on BR2_STATIC_LIBS gst1-plugins-bad/gst1-plugins-bad.mk
+> > > ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
+> > > GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc  
+> > GST1_PLUGINS_BAD_DEPENDENCIES  
+> > > += libnice GST1_PLUGINS_BAD_DEPENDENCIES += gst1-plugins-base libnice  
+> > else  
+> > > GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc endif
+> > >  
+> >
+> > Mind to share your config and/or defconfig file?
+> >  
+> Added.
+> 
+> >
+> > Regards,
+> > Peter
+> >
+> > [1]
+> > https://git.buildroot.net/buildroot/tree/package/gstreamer1/gst1-plugins-bad/Config.in#n566
+> >  
+> > > Regards,
+> > > Vered  
+> >
+> > Regards,  
+> Vered
