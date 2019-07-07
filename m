@@ -1,31 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Jul 2019 08:20:12 +0200
-Subject: [Buildroot] [PATCH v1 1/1] package/bzip2: cve-2019-12900 fix
- for bzip2 1.0.6
-In-Reply-To: <20190626142042.15714-1-jared.bents@rockwellcollins.com> (jared
- bents's message of "Wed, 26 Jun 2019 09:20:42 -0500")
-References: <20190626142042.15714-1-jared.bents@rockwellcollins.com>
-Message-ID: <87v9wecqn7.fsf@dell.be.48ers.dk>
+Date: Sun, 7 Jul 2019 08:19:04 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/bzip2: add hash
+ for license file
+Message-ID: <20190707061852.42DAA868B5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "jared" == jared bents <jared.bents@rockwellcollins.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ceafdfb7d4b8611e9b2f439dfec8058777e23dca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
- > From: Jared Bents <jared.bents@rockwellcollins.com>
- > Patch to resolve cve-2019-12900 which affects bzip2
- > versions 1.0.6 and older
+Also add a standard sha256 hash for the package itself.
 
- > More information can be found at
- > https://nvd.nist.gov/vuln/detail/CVE-2019-12900
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Reviewed-by: Thomas Huth <huth@tuxfamily.org>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit cc7581a850fcae8de601b9678f65a00d46db76af)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/bzip2/bzip2.hash | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > This applies to both master and 2019.02
-
- > Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-
-Committed to 2019.02.x and 2019.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/bzip2/bzip2.hash b/package/bzip2/bzip2.hash
+index 60b0a191ef..ffe94aa454 100644
+--- a/package/bzip2/bzip2.hash
++++ b/package/bzip2/bzip2.hash
+@@ -1,2 +1,6 @@
+ # From http://www.bzip.org/downloads.html
+ md5	00b516f4704d4a7cb50a1d97e6e8e15b	bzip2-1.0.6.tar.gz
++
++# Locally calculated
++sha256	a2848f34fcd5d6cf47def00461fcb528a0484d8edef8208d6d2e2909dc61d9cd	bzip2-1.0.6.tar.gz
++sha256	4919cfb14a73cd64fcef67b107613970cf1659a09aa675dba31314f373bc7204	LICENSE
