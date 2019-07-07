@@ -1,38 +1,24 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:32:05 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/dialog: fix build
- with NLS
-Message-ID: <20190707063028.BA3268B52D@busybox.osuosl.org>
+Date: Sun, 07 Jul 2019 08:32:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dialog: fix build with NLS
+In-Reply-To: <20190628203209.1563-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Fri, 28 Jun 2019 22:32:09 +0200")
+References: <20190628203209.1563-1-fontaine.fabrice@gmail.com>
+Message-ID: <87a7dqcq32.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e164494f3a4a204682b3d548d0d62e85fe8b669a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fixes:
- - http://autobuild.buildroot.org/results/9287ffbb86a7dc09cda5f99f87445fa884e77625
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/9287ffbb86a7dc09cda5f99f87445fa884e77625
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 0953377a9ea4ea518a87a0b48169626c762b5fea)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dialog/dialog.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/dialog/dialog.mk b/package/dialog/dialog.mk
-index 73fabe07cf..b1933b8836 100644
---- a/package/dialog/dialog.mk
-+++ b/package/dialog/dialog.mk
-@@ -9,7 +9,7 @@ DIALOG_SOURCE = dialog-$(DIALOG_VERSION).tgz
- DIALOG_SITE = ftp://ftp.invisible-island.net/dialog
- DIALOG_CONF_OPTS = --with-ncurses --with-curses-dir=$(STAGING_DIR)/usr \
- 	--disable-rpath-hack
--DIALOG_DEPENDENCIES = host-pkgconf ncurses
-+DIALOG_DEPENDENCIES = host-pkgconf ncurses $(TARGET_NLS_DEPENDENCIES)
- DIALOG_LICENSE = LGPL-2.1
- DIALOG_LICENSE_FILES = COPYING
- 
+Committed to 2019.02.x and 2019.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
