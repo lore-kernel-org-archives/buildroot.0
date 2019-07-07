@@ -1,88 +1,71 @@
-From: Brandon Maier <brandon.maier@rockwellcollins.com>
-Date: Sun, 7 Jul 2019 09:43:16 -0500
-Subject: [Buildroot] [PATCH 1/1] utils/check-package: Add a quiet flag
-In-Reply-To: <6749b240-6844-b50e-59dd-fc5d2485fa3a@mind.be>
-References: <20190702185227.14435-1-brandon.maier@rockwellcollins.com>
- <6749b240-6844-b50e-59dd-fc5d2485fa3a@mind.be>
-Message-ID: <CA+fik53QPbO5pG48C3nutnvOHhFZU_cCxDMmJfYwQoQJd7Ab3A@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun,  7 Jul 2019 17:01:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xscreensaver: bump to version 5.43
+Message-ID: <20190707150112.1856-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 3, 2019, 4:39 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+- Remove patch (not needed anymore)
+- Add hash for license files
 
->  Hi Brandon,
->
-> On 02/07/2019 20:52, Brandon Maier wrote:
-> > When running in a CI system, stat messages become white noise. Introduce
-> > an option to suppress non-error, non-warning, messages.
-> >
-> > Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
->
->  Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...001-fix-cross-compile-ansi-c-bailout.patch | 19 -------------------
+ package/xscreensaver/xscreensaver.hash        |  4 +++-
+ package/xscreensaver/xscreensaver.mk          |  2 +-
+ 3 files changed, 4 insertions(+), 21 deletions(-)
+ delete mode 100644 package/xscreensaver/0001-fix-cross-compile-ansi-c-bailout.patch
 
-Thanks
-
->
->  However, could you give an example of a case where this is annoying in CI
-> output? If I look at e.g. the output in gitlab-ci [1], the cruft that is
-> added
-> by gitlab-ci itself makes it pretty verbose already.
->
-
-We have a custom tool to run various checks on our team's pull requests and
-display findings. E.g. check-package, checkpatch, shellcheck, pylint, etc.
-
-It's a simple tool though, and dumps stdout/stderr into the report. So it
-assumes no output means everything is okay. All the other checkers have a
--q equivalent, so figured it'd be easiest to add it to check-package as
-well.
-
-
->  Regards,
->  Arnout
->
-> [1] https://gitlab.com/buildroot.org/buildroot/-/jobs/242921394
->
->
-> > ---
-> >  utils/check-package | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/utils/check-package b/utils/check-package
-> > index ce1fe98d67..f09aaeea03 100755
-> > --- a/utils/check-package
-> > +++ b/utils/check-package
-> > @@ -33,6 +33,7 @@ def parse_args():
-> >                          default="http://nightly.buildroot.org/",
-> >                          help="default: %(default)s")
-> >      parser.add_argument("--verbose", "-v", action="count", default=0)
-> > +    parser.add_argument("--quiet", "-q", action="count", default=0)
-> >
-> >      # Now the debug options in the order they are processed.
-> >      parser.add_argument("--include-only", dest="include_list",
-> action="append",
-> > @@ -177,8 +178,10 @@ def __main__():
-> >      # (e.g. counted by 'wc'), so for stats use stderr. Wait all
-> warnings are
-> >      # printed, for the case there are many of them, before printing
-> stats.
-> >      sys.stdout.flush()
-> > -    print("{} lines processed".format(total_lines), file=sys.stderr)
-> > -    print("{} warnings generated".format(total_warnings),
-> file=sys.stderr)
-> > +
-> > +    if not flags.quiet:
-> > +        print("{} lines processed".format(total_lines), file=sys.stderr)
-> > +        print("{} warnings generated".format(total_warnings),
-> file=sys.stderr)
-> >
-> >      if total_warnings > 0:
-> >          sys.exit(1)
-> >
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190707/0de8b419/attachment.html>
+diff --git a/package/xscreensaver/0001-fix-cross-compile-ansi-c-bailout.patch b/package/xscreensaver/0001-fix-cross-compile-ansi-c-bailout.patch
+deleted file mode 100644
+index 6da9419e08..0000000000
+--- a/package/xscreensaver/0001-fix-cross-compile-ansi-c-bailout.patch
++++ /dev/null
+@@ -1,19 +0,0 @@
+-The configure bails out when cross-compiling, because it is over-cautious
+-about ANSI support in the C compiler. Work around this by disabling the
+-bail-out code.
+-
+-[Peter: updated for 5.32]
+-Signed-off-by: Simon Dawson <spdawson@gmail.com>
+-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-
+-diff -Nurp a/configure b/configure
+---- a/configure	2013-07-16 10:23:32.000000000 +0100
+-+++ b/configure	2013-09-22 14:50:07.186953454 +0100
+-@@ -4374,7 +4374,6 @@ $as_echo "Solaris: adding -D__EXTENSIONS
+-   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the compiler works on ANSI C" >&5
+- $as_echo_n "checking whether the compiler works on ANSI C... " >&6; }
+-   if test "$cross_compiling" = yes; then :
+--  as_fn_error $? "Couldn't build even a trivial ANSI C program: check CC." "$LINENO" 5
+- else
+-   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+- /* end confdefs.h.  */
+diff --git a/package/xscreensaver/xscreensaver.hash b/package/xscreensaver/xscreensaver.hash
+index 48bc2b1eb2..c1198b7558 100644
+--- a/package/xscreensaver/xscreensaver.hash
++++ b/package/xscreensaver/xscreensaver.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+-sha256 6b8b5238047f1613d99149bb02d5ed3384675f3ce74a0a8ba25290bd61abc06c  xscreensaver-5.36.tar.gz
++sha256 17eab67f3554e21c23b1526ec48a06a9ec8605baffee48f91f603f7599b383d4  xscreensaver-5.43.tar.gz
++sha256 8a03451ba5c4c9af669b53e47e50c38c149b9e152d3d627809b962da7b760bbd  hacks/screenhack.h
++sha256 56db580415bb313a4a82c5e08f106304904d15d42faf8e6ab14b34e14e2087a5  hacks/glx/chessmodels.h
+diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
+index 34b116387b..642d65f0c6 100644
+--- a/package/xscreensaver/xscreensaver.mk
++++ b/package/xscreensaver/xscreensaver.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XSCREENSAVER_VERSION = 5.36
++XSCREENSAVER_VERSION = 5.43
+ XSCREENSAVER_SITE = https://www.jwz.org/xscreensaver
+ 
+ # N.B. GPL-2.0+ code (in the hacks/glx subdirectory) is not currently built.
+-- 
+2.20.1
