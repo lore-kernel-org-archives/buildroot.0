@@ -1,66 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:19:13 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/bzip2: add
- upstream security fix for CVE-2019-12900
-Message-ID: <20190707061852.4B26781767@busybox.osuosl.org>
+Date: Sun, 07 Jul 2019 08:21:24 +0200
+Subject: [Buildroot] [PATCH] package/libcamera: bump to version
+ caf25dc5cfd11b965316f02610d49ae3d886716b
+In-Reply-To: <20190625215617.10817-1-kieran.bingham@ideasonboard.com> (Kieran
+ Bingham's message of "Tue, 25 Jun 2019 22:56:17 +0100")
+References: <20190625215617.10817-1-kieran.bingham@ideasonboard.com>
+Message-ID: <87r272cql7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fdb256bf9721fc0be975e205af8e4198a70a169
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Kieran" == Kieran Bingham <kieran.bingham@ideasonboard.com> writes:
 
-Patch to resolve cve-2019-12900 which affects bzip2 versions 1.0.6 and older
+ > Buildroots autobuild identified a failure on GCC v6.2 and GCC v6.3,
+ > producing the following warning (reported as error due to -Werror):
 
-More information can be found at
-https://nvd.nist.gov/vuln/detail/CVE-2019-12900
+ >   event_dispatcher_poll.cpp:231:13: error: types may not be defined
+ >       in a for-range-declaration [-Werror]
 
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 6581c441dfc06c5e5e3666718e5c2e9801485ede)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-Make-sure-nSelectors-is-not-out-of-range.patch | 33 ++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ >               for (const struct pollfd &pfd : pollfds) {
+ >                          ^~~~~~
+ >               cc1plus: all warnings being treated as errors
 
-diff --git a/package/bzip2/0003-Make-sure-nSelectors-is-not-out-of-range.patch b/package/bzip2/0003-Make-sure-nSelectors-is-not-out-of-range.patch
-new file mode 100644
-index 0000000000..77a500d46d
---- /dev/null
-+++ b/package/bzip2/0003-Make-sure-nSelectors-is-not-out-of-range.patch
-@@ -0,0 +1,33 @@
-+From 74de1e2e6ffc9d51ef9824db71a8ffee5962cdbc Mon Sep 17 00:00:00 2001
-+From: Albert Astals Cid <aacid@kde.org>
-+Date: Tue, 28 May 2019 19:35:18 +0200
-+Subject: [PATCH] Make sure nSelectors is not out of range
-+
-+nSelectors is used in a loop from 0 to nSelectors to access selectorMtf
-+which is
-+	UChar    selectorMtf[BZ_MAX_SELECTORS];
-+so if nSelectors is bigger than BZ_MAX_SELECTORS it'll do an invalid memory
-+access
-+
-+Fixes out of bounds access discovered while fuzzying karchive
-+
-+Signed-off-by: Albert Astals Cid <aacid@kde.org>
-+---
-+ decompress.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/decompress.c b/decompress.c
-+index ab6a624..f3db91d 100644
-+--- a/decompress.c
-++++ b/decompress.c
-+@@ -287,7 +287,7 @@ Int32 BZ2_decompress ( DState* s )
-+       GET_BITS(BZ_X_SELECTOR_1, nGroups, 3);
-+       if (nGroups < 2 || nGroups > 6) RETURN(BZ_DATA_ERROR);
-+       GET_BITS(BZ_X_SELECTOR_2, nSelectors, 15);
-+-      if (nSelectors < 1) RETURN(BZ_DATA_ERROR);
-++      if (nSelectors < 1 || nSelectors > BZ_MAX_SELECTORS) RETURN(BZ_DATA_ERROR);
-+       for (i = 0; i < nSelectors; i++) {
-+          j = 0;
-+          while (True) {
-+-- 
-+2.21.0
+ > A fix has been integrated upstream, bump the package to incorporate it.
+
+ > Fixes: http://autobuild.buildroot.net/results/f6dd4c60c04892c8b1669e6000fce7edb2b6349e/
+
+ > Signed-off-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+
+Committed to 2019.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
