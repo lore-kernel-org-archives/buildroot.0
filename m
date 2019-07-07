@@ -1,54 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 22:33:03 +0200
-Subject: [Buildroot] [git commit] Update for 2019.05.1
-Message-ID: <20190707203746.C4DFA81513@busybox.osuosl.org>
+Date: Sun, 7 Jul 2019 22:39:14 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2019.05.1
+Message-ID: <20190707203746.D1DD781417@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0225c2776cb476e134bf1ffb6fd5ff511a62f6e
+commit: https://git.buildroot.net/buildroot/commit/?id=89d297a1ea5dc5c41b31f8b5b14c3e9fe5564bad
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Peter: drop Makefile changes]
-(cherry picked from commit 5b4e32cae812225fa909d755d7e09588ce0b92da)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 0ab5749aca..3854b7455e 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,28 @@
-+2019.05.1, Released July 7th, 2019
-+
-+	Important / security related fixes.
-+
-+	arch: x86: Fix typo breaking 'core-avx2' variant
-+
-+	linux: Workaround -Werror related build failure on powerpc,
-+	by forcing CONFIG_PPC_DISABLE_WERROR on.
-+
-+	support/testing: Emulate a machine with 256MB RAM to fix
-+	issues with certain tests running out of memory.
-+
-+	test-pkg: Correct long option handling and clean output dir
-+	after a successful build to save disk space.
-+
-+	Defconfigs: QEMU: use 'rootwait' kernel option to ensure root
-+	partition is available before mounting.
-+
-+	Updated/fixed packages: barebox, busybox, bzip2, davfs2,
-+	dialog, docker-cli, docker-engine, exim, expat, faad2,
-+	haveged, irssi, libcamera, libcdaudio, libcurl, libglib2,
-+	libressl, libsecret, lmbench, meson, monit, php, postgresql,
-+	psplash, python-django, qt5base, tvheadend, webkitgtk,
-+	xserver_xorg-server, znc
-+
- 2019.05, released June 2nd, 2019
+diff --git a/docs/website/download.html b/docs/website/download.html
+index ac25140e6a..329169317a 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -42,37 +42,37 @@
+ 	</div>
+       </div>
  
- 	Various fixes.
+-      <h3 style="text-align: center;">Latest stable release: <b>2019.05</b></h3>
++      <h3 style="text-align: center;">Latest stable release: <b>2019.05.1</b></h3>
+ 
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2019.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2019.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2019.05.tar.gz">buildroot-2019.05.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2019.05.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2019.05.1.tar.gz">buildroot-2019.05.1.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2019.05.1.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2019.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2019.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2019.05.tar.bz2">buildroot-2019.05.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2019.05.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2019.05.1.tar.bz2">buildroot-2019.05.1.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2019.05.1.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ <!--
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 8d38108eb7..0a889c497e 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li>
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2019.05.1 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>7 July 2019</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2019.05.1 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2019.05 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.05.1">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-July/254105.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2019.05.1.tar.bz2">2019.05.1 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li class="timeline-inverted">
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
