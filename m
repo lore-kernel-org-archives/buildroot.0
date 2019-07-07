@@ -1,139 +1,134 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 7 Jul 2019 20:40:22 +0200
-Subject: [Buildroot] How do I enable webrtc as part of external
- gstreamer, in buildroot
-In-Reply-To: <CADNjvP_HU1+D+LXwVtVosxpvDiUGZC=uEUCET10RpiG+oVn63Q@mail.gmail.com>
-References: <CADNjvP-VYgO7ctGsOjZxudkA7k6PzT4FNt+JRACmUV6=bh_E=Q@mail.gmail.com>
- <20190704202528.63f7d667@gmx.net>
- <CADNjvP_HU1+D+LXwVtVosxpvDiUGZC=uEUCET10RpiG+oVn63Q@mail.gmail.com>
-Message-ID: <20190707204022.65affaec@gmx.net>
+Date: Sun, 7 Jul 2019 20:47:53 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-good:
+ add option to enable/disable shout2 plugin
+In-Reply-To: <CAGh8qMq-mr-9vtC6XJc=u_CrUS9e1vj7=DfQAX=OtzEOrR-eiw@mail.gmail.com>
+References: <20190705065015.29773-1-abloemert@gmail.com>
+ <20190705171809.36c29b5c@gmx.net>
+ <CAGh8qMq-mr-9vtC6XJc=u_CrUS9e1vj7=DfQAX=OtzEOrR-eiw@mail.gmail.com>
+Message-ID: <20190707204753.77ce9110@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vered,
+Hello Arnold,
 
-please keep buildroot at busybox.net in CC
+On Fri, 5 Jul 2019 23:48:33 +0200, Arnold Bloemert <abloemert@gmail.com> wrote:
 
-On Sun, 7 Jul 2019 11:05:34 +0300, Vered Kalef <vered.kalef@gmail.com> wrote:
+> Hi Peter,
+>
+> I tried to create a patch in the same style as the patch for jack by Adam,
+> but I like your proposal to simplify.
 
-> On Thu, Jul 4, 2019 at 9:25 PM Peter Seiderer <ps.report@gmx.net> wrote:
-> 
-> > Hello Vered,
-> >
-> > On Thu, 4 Jul 2019 15:38:59 +0300, Vered Kalef <vered.kalef@gmail.com>
-> > wrote:
-> >  
-> > > Hi all,
-> > > I'm trying to install external gstreamer with webrtc enabled on  
-> > buildroot.
-> >
-> > What do your mean with 'external'? Why 'external'?
-> >  
-> 
-> I use buildroot 14.0. It doesn't contain webrtc build in and I can't update
-> to a later version so I added as an external the gstreamer with webrtc
-> enabled.
+Ohhh, I see (the comments are mainly a matter of taste)...
 
-14.0 does not make sense, the buildroot versions are <year>.<month>.<release>,
-did you mean 2014.02, 2014.05, 2014.8 or 2014.11?
+>
+> The missing dependency in the .mk file was a stupid mistake, thanks for
+> noticing it!
 
-> I renamed the packaged so it won't conflict with the one built in within
-> buildroot.
-> 
-> >  
-> > > It seems this option is missing within the buildroot.  
-> >
-> > Which option? There is definitely an GStreamer webrtc option (since
-> > 2019.05), see [1]...
-> >  
-> I don't see the option webrtc enabled, only webrtc-audio-processing, which
-> is different altogether.
-> 
-> >
-> > Which Buildroot version do you use?
-> >  
-> 14.0
+No problem (catching it is the main purpose of the review process ;-) )...
 
-??? (see above)
+>
+> I'll create a new revision of the patch, contributing to Buildroot is new
+> for me, so hopefully I'm doing it right.
 
-> 
-> >  
-> > > I've configured the mk file and the Config.in file.
-> > > After installation when I check gst-inspect webrtcbin, I get -
-> > >
-> > > No such element or plugin ?webrtcbin'
-> > > What am I missing?  
-> >
-> > Take a look at the gst1-plugins-bad configure output (or
-> > build/gst1-plugins-bad-<version>/config.log for a hint
-> > what is missing (look for webrtc entries)....
-
-Please take a look at the build/gst1-plugins-bad-<version>/config.log, is webrtc enabled
-e.g.:
-
-configure:91279: *** checking feature: WebRTC ***
-configure:91283: *** for plug-ins: webrtc ***
-configure:91327: checking for NICE
-configure:91335: $PKG_CONFIG --exists --print-errors "nice >= 0.1.14"
-configure:91338: $? = 0
-configure:91353: $PKG_CONFIG --exists --print-errors "nice >= 0.1.14"
-configure:91356: $? = 0
-configure:91396: result: yes
-configure:91412: *** These plugins will be built: webrtc
-
-> >
-> > Do you open the dump and view the log file or is it additional log file?  
-> Within the dump I see  -
-> 0:00:51.704162800  1051 0x7fff64004400 LOG      GST_ELEMENT_FACTORY
-> gstelementfactory.c:438:gst_element_factory_make: gstelementfactory: make
-> "webrtcbin" "(NULL)"
-> 0:00:51.704206500  1051 0x7fff64004400 LOG      GST_ELEMENT_FACTORY
-> gstelementfactory.c:142:gst_element_factory_find: no such element factory
-> "webrtcbin"
-> 0:00:51.704213200  1051 0x7fff64004400 WARN     GST_ELEMENT_FACTORY
-> gstelementfactory.c:456:gst_element_factory_make: no such element factory
-> "webrtcbin"!
-
-Nothing new, gstreamer is unable to find an element named webrtcbin,
-make sure the plugin libgstwebrtc.so is build and installed (at the right
-location and with the right dependencies) at the target...
+Many thanks for contributing, every patch is welcome! Yours is nearly perfect,
+only one nitpick (see comment on v2 of the patch)...
 
 Regards,
 Peter
 
-> 
-> > gst1-plugins-bad/Config.in config  
-> > > BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC bool "webrtc" depends on
-> > > !BR2_STATIC_LIBS # libnice -> gnutls select  
-> > BR2_PACKAGE_GST1_PLUGINS_BASE #  
-> > > libgstsdp select BR2_PACKAGE_LIBNICE help WebRTC plugins (webrtcbin - a  
-> > bin  
-> > > for webrtc connections comment "webrtc needs a toolchain w/ dynamic
-> > > library" depends on BR2_STATIC_LIBS gst1-plugins-bad/gst1-plugins-bad.mk
-> > > ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
-> > > GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc  
-> > GST1_PLUGINS_BAD_DEPENDENCIES  
-> > > += libnice GST1_PLUGINS_BAD_DEPENDENCIES += gst1-plugins-base libnice  
-> > else  
-> > > GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc endif
-> > >  
+>
+> Kind regards,
+>
+> Arnold
+>
+> Op vr 5 jul. 2019 om 17:18 schreef Peter Seiderer <ps.report@gmx.net>:
+>
+> > Hello Arnould,
 > >
-> > Mind to share your config and/or defconfig file?
-> >  
-> Added.
-> 
+> > a little shorter subject line as the following should be enough:
+> >
+> >    package/gst1-plugins-good: add shout2 plugin option
+> >
+> >
+> > On Fri,  5 Jul 2019 08:50:15 +0200, Arnold Bloemert <abloemert@gmail.com>
+> > wrote:
+> >
+> > > Currently there is no way to turn the shout2 plugin on.
+> > > Create a menu entry allowing users to disable or enable the plugin,
+> > > like we have for other features (for example the Pulseaudio plugin).
+> >
+> > Given text is more suitable for a cover letter ;-), no special
+> > justification
+> > for adding a missing option needed....
+> >
+> > >
+> > > Signed-off-by: Arnold Bloemert <abloemert@gmail.com>
+> > > ---
+> > >  package/gstreamer1/gst1-plugins-good/Config.in           | 6 ++++++
+> > >  .../gstreamer1/gst1-plugins-good/gst1-plugins-good.mk    | 9 +++++++--
+> > >  2 files changed, 13 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/package/gstreamer1/gst1-plugins-good/Config.in
+> > b/package/gstreamer1/gst1-plugins-good/Config.in
+> > > index 433084fd6b..ce85388eb0 100644
+> > > --- a/package/gstreamer1/gst1-plugins-good/Config.in
+> > > +++ b/package/gstreamer1/gst1-plugins-good/Config.in
+> > > @@ -300,6 +300,12 @@ comment "qmlgl (qt5) plugin needs an OpenGL-capable
+> > Qt5 backend"
+> > >       depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+> > >       depends on !BR2_PACKAGE_QT5_GL_AVAILABLE &&
+> > !BR2_PACKAGE_QT5_VERSION_LATEST
+> > >
+> > > +config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
+> > > +        bool "shout2"
+> > > +        select BR2_PACKAGE_LIBSHOUT
+> > > +        help
+> > > +          Elements to send data to an icecast server using libshout2
+> > > +
+> > >  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
+> > >       bool "v4l2"
+> > >       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
+> > > diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> > b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> > > index 829d27a2da..0a6cc77208 100644
+> > > --- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> > > +++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> > > @@ -25,8 +25,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
+> > >  # Options which require currently unpackaged libraries
+> > >  GST1_PLUGINS_GOOD_CONF_OPTS += \
+> > >       --disable-libdv \
+> > > -     --disable-dv1394 \
+> > > -     --disable-shout2
+> > > +     --disable-dv1394
+> > >
+> > >  GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
+> > >
+> > > @@ -343,6 +342,12 @@ else
+> > >  GST1_PLUGINS_GOOD_CONF_OPTS += --disable-qt
+> > >  endif
+> > >
+> > > +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2),y)
+> > > +GST1_PLUGINS_GOOD_CONF_OPTS += --enable-shout2
+> >
+> > ...missing:
+> >
+> >     GST1_PLUGINS_GOOD_DEPENDENCIES += libshout
+> >
+> > Otherwise looks good!
 > >
 > > Regards,
 > > Peter
 > >
-> > [1]
-> > https://git.buildroot.net/buildroot/tree/package/gstreamer1/gst1-plugins-bad/Config.in#n566
-> >  
-> > > Regards,
-> > > Vered  
+> > > +else
+> > > +GST1_PLUGINS_GOOD_CONF_OPTS += --disable-shout2
+> > > +endif
+> > > +
+> > >  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
+> > >  GST1_PLUGINS_GOOD_CONF_OPTS += --enable-gst_v4l2
+> > >  else
 > >
-> > Regards,  
-> Vered
+> >
