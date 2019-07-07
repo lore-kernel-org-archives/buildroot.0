@@ -1,12 +1,11 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 7 Jul 2019 20:47:53 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1/gst1-plugins-good:
- add option to enable/disable shout2 plugin
-In-Reply-To: <CAGh8qMq-mr-9vtC6XJc=u_CrUS9e1vj7=DfQAX=OtzEOrR-eiw@mail.gmail.com>
+Date: Sun, 7 Jul 2019 21:03:39 +0200
+Subject: [Buildroot] [PATCH v2] package/gst1-plugins-good: add shout2
+ plugin option
+In-Reply-To: <20190705215038.12927-1-abloemert@gmail.com>
 References: <20190705065015.29773-1-abloemert@gmail.com>
- <20190705171809.36c29b5c@gmx.net>
- <CAGh8qMq-mr-9vtC6XJc=u_CrUS9e1vj7=DfQAX=OtzEOrR-eiw@mail.gmail.com>
-Message-ID: <20190707204753.77ce9110@gmx.net>
+ <20190705215038.12927-1-abloemert@gmail.com>
+Message-ID: <20190707210339.3daa9093@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,120 +14,78 @@ To: buildroot@busybox.net
 
 Hello Arnold,
 
-On Fri, 5 Jul 2019 23:48:33 +0200, Arnold Bloemert <abloemert@gmail.com> wrote:
+On Fri,  5 Jul 2019 23:50:38 +0200, Arnold Bloemert <abloemert@gmail.com> wrote:
 
-> Hi Peter,
+> Signed-off-by: Arnold Bloemert <abloemert@gmail.com>
 >
-> I tried to create a patch in the same style as the patch for jack by Adam,
-> but I like your proposal to simplify.
-
-Ohhh, I see (the comments are mainly a matter of taste)...
-
+> ---
+> Changes v1 -> v2:
+>   - add dependency to .mk file and simplify commit message (suggested by Peter Seiderer)
 >
-> The missing dependency in the .mk file was a stupid mistake, thanks for
-> noticing it!
-
-No problem (catching it is the main purpose of the review process ;-) )...
-
+> Signed-off-by: Arnold Bloemert <abloemert@gmail.com>
+> ---
+>  package/gstreamer1/gst1-plugins-good/Config.in         |  6 ++++++
+>  .../gstreamer1/gst1-plugins-good/gst1-plugins-good.mk  | 10 ++++++++--
+>  2 files changed, 14 insertions(+), 2 deletions(-)
 >
-> I'll create a new revision of the patch, contributing to Buildroot is new
-> for me, so hopefully I'm doing it right.
+> diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+> index 433084fd6b..ce85388eb0 100644d3b0edbba14c343b299b96dfdeeebc465a71ba78
+> --- a/package/gstreamer1/gst1-plugins-good/Config.in
+> +++ b/package/gstreamer1/gst1-plugins-good/Config.in
+> @@ -300,6 +300,12 @@ comment "qmlgl (qt5) plugin needs an OpenGL-capable Qt5 backend"
+>  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+>  	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
+>
+> +config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
+> +        bool "shout2"
+> +        select BR2_PACKAGE_LIBSHOUT
+> +        help
+> +          Elements to send data to an icecast server using libshout2
+> +
+>  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
+>  	bool "v4l2"
+>  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
+> diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> index 829d27a2da..3c9f0d5605 100644
+> --- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> +++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+> @@ -25,8 +25,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
+>  # Options which require currently unpackaged libraries
+>  GST1_PLUGINS_GOOD_CONF_OPTS += \
+>  	--disable-libdv \
+> -	--disable-dv1394 \
+> -	--disable-shout2
+> +	--disable-dv1394
+>
+>  GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
+>
+> @@ -343,6 +342,13 @@ else
+>  GST1_PLUGINS_GOOD_CONF_OPTS += --disable-qt
+>  endif
+>
+> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2),y)
+> +GST1_PLUGINS_GOOD_CONF_OPTS += --enable-shout2
+> +GST1_PLUGINS_GOOD_DEPENDENCIES += libshout
+> +else
+> +GST1_PLUGINS_GOOD_CONF_OPTS += --disable-shout2
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
+>  GST1_PLUGINS_GOOD_CONF_OPTS += --enable-gst_v4l2
+>  else
 
-Many thanks for contributing, every patch is welcome! Yours is nearly perfect,
-only one nitpick (see comment on v2 of the patch)...
+
+The other gstreamer1 files state for the options (see e.g. [1]):
+
+   # These plugins are listed in the order from ./configure --help
+
+For shout2 this should be after qt (right) and before soup (false), but
+taking a look at Config.in/gst1-plugins-good.mk the option order is not
+very strict....so I am o.k. with your patch ;-), you can add my
+
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
 
 Regards,
 Peter
 
->
-> Kind regards,
->
-> Arnold
->
-> Op vr 5 jul. 2019 om 17:18 schreef Peter Seiderer <ps.report@gmx.net>:
->
-> > Hello Arnould,
-> >
-> > a little shorter subject line as the following should be enough:
-> >
-> >    package/gst1-plugins-good: add shout2 plugin option
-> >
-> >
-> > On Fri,  5 Jul 2019 08:50:15 +0200, Arnold Bloemert <abloemert@gmail.com>
-> > wrote:
-> >
-> > > Currently there is no way to turn the shout2 plugin on.
-> > > Create a menu entry allowing users to disable or enable the plugin,
-> > > like we have for other features (for example the Pulseaudio plugin).
-> >
-> > Given text is more suitable for a cover letter ;-), no special
-> > justification
-> > for adding a missing option needed....
-> >
-> > >
-> > > Signed-off-by: Arnold Bloemert <abloemert@gmail.com>
-> > > ---
-> > >  package/gstreamer1/gst1-plugins-good/Config.in           | 6 ++++++
-> > >  .../gstreamer1/gst1-plugins-good/gst1-plugins-good.mk    | 9 +++++++--
-> > >  2 files changed, 13 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/package/gstreamer1/gst1-plugins-good/Config.in
-> > b/package/gstreamer1/gst1-plugins-good/Config.in
-> > > index 433084fd6b..ce85388eb0 100644
-> > > --- a/package/gstreamer1/gst1-plugins-good/Config.in
-> > > +++ b/package/gstreamer1/gst1-plugins-good/Config.in
-> > > @@ -300,6 +300,12 @@ comment "qmlgl (qt5) plugin needs an OpenGL-capable
-> > Qt5 backend"
-> > >       depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
-> > >       depends on !BR2_PACKAGE_QT5_GL_AVAILABLE &&
-> > !BR2_PACKAGE_QT5_VERSION_LATEST
-> > >
-> > > +config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
-> > > +        bool "shout2"
-> > > +        select BR2_PACKAGE_LIBSHOUT
-> > > +        help
-> > > +          Elements to send data to an icecast server using libshout2
-> > > +
-> > >  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
-> > >       bool "v4l2"
-> > >       depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
-> > > diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> > b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> > > index 829d27a2da..0a6cc77208 100644
-> > > --- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> > > +++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> > > @@ -25,8 +25,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
-> > >  # Options which require currently unpackaged libraries
-> > >  GST1_PLUGINS_GOOD_CONF_OPTS += \
-> > >       --disable-libdv \
-> > > -     --disable-dv1394 \
-> > > -     --disable-shout2
-> > > +     --disable-dv1394
-> > >
-> > >  GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
-> > >
-> > > @@ -343,6 +342,12 @@ else
-> > >  GST1_PLUGINS_GOOD_CONF_OPTS += --disable-qt
-> > >  endif
-> > >
-> > > +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2),y)
-> > > +GST1_PLUGINS_GOOD_CONF_OPTS += --enable-shout2
-> >
-> > ...missing:
-> >
-> >     GST1_PLUGINS_GOOD_DEPENDENCIES += libshout
-> >
-> > Otherwise looks good!
-> >
-> > Regards,
-> > Peter
-> >
-> > > +else
-> > > +GST1_PLUGINS_GOOD_CONF_OPTS += --disable-shout2
-> > > +endif
-> > > +
-> > >  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
-> > >  GST1_PLUGINS_GOOD_CONF_OPTS += --enable-gst_v4l2
-> > >  else
-> >
-> >
+[1] https://git.buildroot.net/buildroot/tree/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk#n27
