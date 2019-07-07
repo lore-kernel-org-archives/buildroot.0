@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:42:01 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] utils/check-package: Add
+Date: Sun, 7 Jul 2019 08:42:09 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] utils/check-package: Add
  a quiet flag
-Message-ID: <20190707064025.A25FB83BF9@busybox.osuosl.org>
+Message-ID: <20190707064033.51A9683BF9@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=00eb1900bbb1c7290c257de32d85a92ff8333087
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=036a9add4b56c3025b2c4d91031b7b908efaa54b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 When running in a CI system, stat messages become white noise. Introduce
 an option to suppress non-error, non-warning, messages.
