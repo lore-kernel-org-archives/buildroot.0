@@ -1,61 +1,38 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Sun,  7 Jul 2019 10:58:24 +0530
-Subject: [Buildroot] [PATCH v3 24/31] autobuild-run: create reason file on
- build failures
+Date: Sun,  7 Jul 2019 10:58:29 +0530
+Subject: [Buildroot] [PATCH v3 29/31] autobuild-run: define different output
+ directory for reproducible builds
 In-Reply-To: <20190707052831.9469-1-itsatharva@gmail.com>
 References: <20190707052831.9469-1-itsatharva@gmail.com>
-Message-ID: <20190707052831.9469-24-itsatharva@gmail.com>
+Message-ID: <20190707052831.9469-29-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When a build fails, we calculate the reason of failure on
-the server side as well as client side. To solve this redundancy
-we only calculate on the client side and submit a file which
-contains the reason of failure.
+Having different output directories will increase variance. Subsequent
+patches will modify other parts of the scripts to use this directory.
 
 Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes from reason-file-v2 series:
-  - Move to builder-class series
----
- scripts/autobuild-run | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ scripts/autobuild-run | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 678bac5..8f60e89 100755
+index 522421e..84212c6 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -598,6 +598,11 @@ class Builder:
-             # not found
-             return None
+@@ -278,6 +278,10 @@ class Builder:
+         self.outputdir = os.path.abspath(os.path.join(self.idir, "output"))
+         self.resultdir = os.path.join(self.outputdir, "results")
  
-+        reason = get_failure_reason()
-+        if reason:
-+            with open(os.path.join(self.resultdir, "reason"), "w+") as reasonf:
-+                reasonf.write("-".join(reason))
++        # We use a different output directory for more variance in reproducibility
++        # testing.
++        self.outputdir_1 = os.path.abspath(os.path.join(self.idir, "output-1"))
 +
-         def extract_end_log(resultfile):
-             """Save the last part of the build log, starting from the failed package"""
- 
-@@ -606,7 +611,6 @@ class Builder:
-                                  (os.path.join(self.outputdir, "logfile"), resultfile)],
-                                 shell=True)
- 
--            reason = get_failure_reason()
-             if not reason:
-                 extract_last_500_lines()
-             else:
-@@ -630,7 +634,6 @@ class Builder:
-         def copy_config_log_files():
-             """Recursively copy any config.log files from the failing package"""
- 
--            reason = get_failure_reason()
-             if not reason:
-                 return
- 
+         if self.debug:
+             self.log = sys.stdout
+         else:
 -- 
 2.22.0
