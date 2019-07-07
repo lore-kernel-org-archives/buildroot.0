@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 07 Jul 2019 08:30:20 +0200
-Subject: [Buildroot] [PATCH 1/2] package/docker-engine: security bump to
+Date: Sun, 07 Jul 2019 08:30:30 +0200
+Subject: [Buildroot] [PATCH 2/2] package/docker-cli: security bump to
  version 18.09.7
-In-Reply-To: <20190628063247.3588-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 28 Jun 2019 08:32:45 +0200")
+In-Reply-To: <20190628063247.3588-2-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 28 Jun 2019 08:32:46 +0200")
 References: <20190628063247.3588-1-peter@korsgaard.com>
-Message-ID: <87muhqcq6b.fsf@dell.be.48ers.dk>
+ <20190628063247.3588-2-peter@korsgaard.com>
+Message-ID: <87imsecq61.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
