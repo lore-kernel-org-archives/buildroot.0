@@ -1,83 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:33:49 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/meson: fix empty
- arguments in cross-compilation.conf
-Message-ID: <20190707063326.BDEF5888A2@busybox.osuosl.org>
+Date: Sun, 7 Jul 2019 08:39:43 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/irssi: security
+ bump to version 1.0.8
+Message-ID: <20190707063812.A5FF98874D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cdee4f6c67cd3aa1aa3b77b500ff03c6e96cbaf7
+commit: https://git.buildroot.net/buildroot/commit/?id=4e0e4b56578549a4e6609c7a755af2a9398d7a29
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-When TARGET_CFLAGS (or _LDFLAGS or _CXXFLAGS) are empty, but were
-constructed by appending other variables, like:
+Fixes the following security vulnerability:
 
-    TARGET_CFLAGS = $(SOMETHING) $(SOMETHING_ELSE)
+CVE-2019-13045: Use after free when sending SASL login to the server found
+by ilbelkyr
 
-and both variables are empty, then $(TARGET_CFLAGS) is _not_ the
-null-string; it's value is a string made of a single space.
+For more details, see the advisory:
+https://irssi.org/security/html/irssi_sa_2019_06/
 
-This means that the construct:
-
-    $(if $(TARGET_CFLAGS),true,false)
-
-will in fact return 'true'.
-
-In our case, it means that we will call:
-
-    `printf '"%s", ' `
-
-which expands to just:
-
-    "",
-
-which we are then happy to insert as-is in the generated
-cross-compilation.conf.
-
-Then meson, will happily call the compiler with an empty argument.
-
-The compiler is less happy, though:
-
-    arm-none-linux-gnueabi-gcc: error: : No such file or directory
-
-And this is not even trivial to debug either... The only clue being that
-there seems to be something missing between ': :'
-
-We fix that testing the $(strip)ed value. We can still pass the
-non-$(strip) expansion, because the shell will just do it for us, and we
-are then sure there is at least one non-blank word in there.
-
-Thanks a lot to Adam for his invaluable help debugging this!
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit e9de6d9e0ac66883b9c8b7b4c623b27dab8087ab)
+(cherry picked from commit 0a1b957d4ed3ec41c645fc81ba6029921116ab4f)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/meson/meson.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/irssi/irssi.hash | 2 +-
+ package/irssi/irssi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index cf62b0ddde..099aaee5eb 100644
---- a/package/meson/meson.mk
-+++ b/package/meson/meson.mk
-@@ -45,9 +45,9 @@ else
- HOST_MESON_TARGET_CPU_FAMILY = $(ARCH)
- endif
+diff --git a/package/irssi/irssi.hash b/package/irssi/irssi.hash
+index 0f298137ba..6a91e16487 100644
+--- a/package/irssi/irssi.hash
++++ b/package/irssi/irssi.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256	1b386ca026aa1875c380fd00ef1d24b71fb87cdae39ef5349ecca16c4567feac  irssi-1.0.7.tar.xz
++sha256	414fdee2ffaeb90a55f141b7fb3899608631dc891e2bc1f5e91ca31f1a621101  irssi-1.0.8.tar.xz
+ # Locally calculated
+ sha256	a1a27cb2ecee8d5378fbb3562f577104a445d6d66fee89286e16758305e63e2b  COPYING
+diff --git a/package/irssi/irssi.mk b/package/irssi/irssi.mk
+index 611365f88e..4d7268d291 100644
+--- a/package/irssi/irssi.mk
++++ b/package/irssi/irssi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
--HOST_MESON_SED_CFLAGS = $(if $(TARGET_CFLAGS),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
--HOST_MESON_SED_LDFLAGS = $(if $(TARGET_LDFLAGS),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
--HOST_MESON_SED_CXXFLAGS = $(if $(TARGET_CXXFLAGS),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
-+HOST_MESON_SED_CFLAGS = $(if $(strip $(TARGET_CFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CFLAGS)`)
-+HOST_MESON_SED_LDFLAGS = $(if $(strip $(TARGET_LDFLAGS)),`printf '"%s"$(comma) ' $(TARGET_LDFLAGS)`)
-+HOST_MESON_SED_CXXFLAGS = $(if $(strip $(TARGET_CXXFLAGS)),`printf '"%s"$(comma) ' $(TARGET_CXXFLAGS)`)
- 
- # Generate a Meson cross-compilation.conf suitable for use with the
- # SDK
+-IRSSI_VERSION = 1.0.7
++IRSSI_VERSION = 1.0.8
+ IRSSI_SOURCE = irssi-$(IRSSI_VERSION).tar.xz
+ # Do not use the github helper here. The generated tarball is *NOT* the
+ # same as the one uploaded by upstream for the release.
