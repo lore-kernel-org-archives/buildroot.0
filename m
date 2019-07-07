@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:57:11 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/php: bump version
+Date: Sun, 7 Jul 2019 08:57:01 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/php: bump version
  to 7.3.7
-Message-ID: <20190707065558.1F83A88FE5@busybox.osuosl.org>
+Message-ID: <20190707065603.0433188FE5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a6165aa4ecadbcafca663eb042736193ac69af8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=1fa07c457748ef6ac46151d0ab9801fe109066b6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Changelog: https://www.php.net/ChangeLog-7.php#7.3.7
 
@@ -35,7 +35,7 @@ index d88433e8c0..30aa8bfcf6 100644
  # License file
  sha256 f689b8fa63bea7950ce6a21bf52ed88ea0d77673ee76e6de12f51191174d91b8  LICENSE
 diff --git a/package/php/php.mk b/package/php/php.mk
-index 7132f95917..e0c1c4445d 100644
+index de7c0c0d5a..2da27a473d 100644
 --- a/package/php/php.mk
 +++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
