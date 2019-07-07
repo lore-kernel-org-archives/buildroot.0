@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:47:00 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/libsecret: fix
+Date: Sun, 7 Jul 2019 08:47:14 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/libsecret: fix
  build with NLS
-Message-ID: <20190707064530.515D28B49C@busybox.osuosl.org>
+Message-ID: <20190707064537.9A7EB8B49C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=656bd2d824de5d8f66cce52e16d0e89582f36ea0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=bb7cf8a7e437b049206250f9a0c9dac373a1c185
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/1497d7c2485c4a107ab82c870d78744981efb6d3
