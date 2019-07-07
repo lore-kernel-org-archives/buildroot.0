@@ -1,277 +1,98 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Sun,  7 Jul 2019 10:58:19 +0530
-Subject: [Buildroot] [PATCH v3 19/31] autobuild-run: define output directory
- as part of Builder class
+Date: Sun,  7 Jul 2019 10:58:23 +0530
+Subject: [Buildroot] [PATCH v3 23/31] scripts/autobuild-run: make the HTTP
+ URL really configurable
 In-Reply-To: <20190707052831.9469-1-itsatharva@gmail.com>
 References: <20190707052831.9469-1-itsatharva@gmail.com>
-Message-ID: <20190707052831.9469-19-itsatharva@gmail.com>
+Message-ID: <20190707052831.9469-23-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Absolute path for output dir is required when using outputdir with
-system commands like make or tail. It was necessary because the
-relative path would be relative to the autobuilder script rather
-than the buildroot source directory.
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-It is OK to use an  absolute path everywhere because an absolute
-path is always correct.
+The --http-url option allowed to customize the URL at which build
+results are submitted. However, there were two other places in the
+script where autobuild.buildroot.org was hardcoded: when checking the
+script version, and when getting the list of branches to build.
 
+This commit changes the --http-url to be the base URL of the autobuild
+server, and it is used everywhere instead of hardcoding
+autobuild.buildroot.org.
+
+Note: users of autobuild-run that were passing a custom --http-url
+option such as http://foo.com/submit/ should change it to just
+http://foo.com/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[Atharva: Adapted Thomas' patches to work with Builder class]
 Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes v2 -> v3:
-  - Use outputdir as argument in stop_on_build_hang(), required for
-    later changes (different output dir for reproducibility testing)
 Changes v1 -> v2:
-  - Fixed inaccuracies in commit message
-  - Fixed whitespace issue
+  - Incorporate Thomas' patch into Builder class series
+  - Move patch for appropriate order of patches
 ---
- scripts/autobuild-run | 81 ++++++++++++++++++++-----------------------
- 1 file changed, 37 insertions(+), 44 deletions(-)
+ scripts/autobuild-run | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 84b4dee..e225211 100755
+index ccfa9c4..678bac5 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -294,6 +294,11 @@ class Builder:
-         self.idir = "instance-%d" % self.instance
-         self.srcdir = os.path.join(self.idir, "buildroot")
-         self.dldir = os.path.join(self.idir, "dl")
-+        # We need the absolute path to use with O=, because the relative
-+        # path to the output directory here is not relative to the
-+        # Buildroot sources, but to the location of the autobuilder
-+        # script.
-+        self.outputdir = os.path.abspath(os.path.join(self.idir, "output"))
+@@ -66,7 +66,7 @@ defaults = {
+     '--make-opts': '',
+     '--nice': 0,
+     '--pid-file': '/tmp/buildroot-autobuild.pid',
+-    '--http-url': 'http://autobuild.buildroot.org/submit/',
++    '--http-url': 'http://autobuild.buildroot.org/',
+     '--toolchains-csv': 'support/config-fragments/autobuild/toolchain-configs.csv',
+     '--repo': 'https://github.com/buildroot/buildroot.git',
+ }
+@@ -145,6 +145,7 @@ from distutils.version import StrictVersion
+ import platform
+ from threading import Thread, Event
+ import datetime
++import urlparse
  
-         if self.debug:
-             self.log = sys.stdout
-@@ -365,19 +370,17 @@ class Builder:
-             return -1
+ if sys.hexversion >= 0x3000000:
+     import configparser
+@@ -283,7 +284,7 @@ class Builder:
+             self.log = open(os.path.join(self.idir, "instance.log"), "a+")
  
-         # Create an empty output directory. We remove it first, in case a previous build was aborted.
--        outputdir = os.path.join(self.idir, "output")
--        if os.path.exists(outputdir):
-+        if os.path.exists(self.outputdir):
-             # shutil.rmtree doesn't remove write-protected files
--            subprocess.call(["rm", "-rf", outputdir])
--        os.mkdir(outputdir)
--        with open(os.path.join(outputdir, "branch"), "w") as branchf:
-+            subprocess.call(["rm", "-rf", self.outputdir])
-+        os.mkdir(self.outputdir)
-+        with open(os.path.join(self.outputdir, "branch"), "w") as branchf:
-             branchf.write(branch)
+     def check_version(self):
+-        with urlopen_closing('http://autobuild.buildroot.org/version') as r:
++        with urlopen_closing(urlparse.urljoin(self.http_url, 'version')) as r:
+             version = int(decode_bytes(r.readline()).strip())
+         if version > VERSION:
+             print("ERROR: script version too old, please upgrade.")
+@@ -291,14 +292,14 @@ class Builder:
  
-         return 0
- 
-     def gen_config(self):
-         """Generate a new random configuration."""
--        outputdir = os.path.abspath(os.path.join(self.idir, "output"))
- 
-         log_write(self.log, "INFO: generate the configuration")
- 
-@@ -387,7 +390,7 @@ class Builder:
-             devnull = open(os.devnull, "w")
- 
-         args = [os.path.join(self.srcdir, "utils/genrandconfig"),
--                "-o", outputdir, "-b", self.srcdir]
-+                "-o", self.outputdir, "-b", self.srcdir]
- 
-         toolchains_csv = self.toolchains_csv
-         if toolchains_csv:
-@@ -423,16 +426,15 @@ class Builder:
-         installed, fallback to cmp
+     def get_branch(self):
+         """Returns the branch that should be built. It fetches a CSV file from
+-        autobuild.buildroot.org that provides the list of branches to test
++        the autobuild server that provides the list of branches to test
+         (first field) and their weight (second field). We build a list of
+         branches, where the branch name is repeated N times, with N being
+         the weight of the branch. We then pick a random branch in this
+         list. This way, branches with a higher weight are more likely to
+         be selected.
          """
- 
--        outputdir = os.path.join(self.idir, "output")
--        reproducible_results = os.path.join(outputdir, "results", "reproducible_results")
-+        reproducible_results = os.path.join(self.outputdir, "results", "reproducible_results")
-         # Using only tar images for now
--        build_1_image = os.path.join(outputdir, "images-1", "rootfs.tar")
--        build_2_image = os.path.join(outputdir, "images", "rootfs.tar")
-+        build_1_image = os.path.join(self.outputdir, "images-1", "rootfs.tar")
-+        build_2_image = os.path.join(self.outputdir, "images", "rootfs.tar")
- 
-         with open(reproducible_results, 'w') as diff:
-             if self.sysinfo.has("diffoscope"):
-                 # Prefix to point diffoscope towards cross-tools
--                prefix = subprocess.check_output(["make", "O=%s" % outputdir, "-C", self.srcdir, "printvars", "VARS=TARGET_CROSS"])
-+                prefix = subprocess.check_output(["make", "O=%s" % self.outputdir, "-C", self.srcdir, "printvars", "VARS=TARGET_CROSS"])
-                 # Remove TARGET_CROSS= and \n from the string
-                 prefix = prefix[13:-1]
-                 log_write(self.log, "INFO: running diffoscope on images")
-@@ -453,16 +455,11 @@ class Builder:
-     def do_build(self):
-         """Run the build itself"""
- 
--        # We need the absolute path to use with O=, because the relative
--        # path to the output directory here is not relative to the
--        # Buildroot sources, but to the location of the autobuilder
--        # script.
--        outputdir = os.path.abspath(os.path.join(self.idir, "output"))
--        f = open(os.path.join(outputdir, "logfile"), "w+")
-+        f = open(os.path.join(self.outputdir, "logfile"), "w+")
-         log_write(self.log, "INFO: build started")
- 
-         cmd = ["nice", "-n", str(self.nice),
--               "make", "O=%s" % outputdir,
-+               "make", "O=%s" % self.outputdir,
-                "-C", self.srcdir, "BR2_DL_DIR=%s" % self.dldir,
-                "BR2_JLEVEL=%s" % self.njobs] \
-             + self.make_opts.split()
-@@ -474,7 +471,7 @@ class Builder:
-         build_monitor = Thread(target=self.stop_on_build_hang,
-                                args=(monitor_thread_hung_build_flag,
-                                      monitor_thread_stop_flag,
--                                     sub, outputdir))
-+                                     sub, self.outputdir))
-         build_monitor.daemon = True
-         build_monitor.start()
- 
-@@ -495,7 +492,7 @@ class Builder:
-             log_write(self.log, "INFO: build failed [%d]" % ret)
-             return -1
- 
--        cmd = ["make", "O=%s" % outputdir, "-C", self.srcdir,
-+        cmd = ["make", "O=%s" % self.outputdir, "-C", self.srcdir,
-                "BR2_DL_DIR=%s" % self.dldir, "legal-info"] \
-             + self.make_opts.split()
-         ret = subprocess.call(cmd, stdout=f, stderr=f)
-@@ -512,8 +509,6 @@ class Builder:
-         perform the actual build.
-         """
- 
--        outputdir = os.path.abspath(os.path.join(self.idir, "output"))
--
-         # Start the first build
-         log_write(self.log, "INFO: Reproducible Build Test, starting build 1")
-         ret = self.do_build()
-@@ -522,11 +517,11 @@ class Builder:
-             return ret
- 
-         # First build has been built, move files and start build 2
--        os.rename(os.path.join(outputdir, "images"), os.path.join(outputdir, "images-1"))
-+        os.rename(os.path.join(self.outputdir, "images"), os.path.join(self.outputdir, "images-1"))
- 
-         # Clean up build 1
--        f = open(os.path.join(outputdir, "logfile"), "w+")
--        subprocess.call(["make", "O=%s" % outputdir, "-C", self.srcdir, "clean"], stdout=f, stderr=f)
-+        f = open(os.path.join(self.outputdir, "logfile"), "w+")
-+        subprocess.call(["make", "O=%s" % self.outputdir, "-C", self.srcdir, "clean"], stdout=f, stderr=f)
- 
-         # Start the second build
-         log_write(self.log, "INFO: Reproducible Build Test, starting build 2")
-@@ -547,19 +542,18 @@ class Builder:
-         are available) or stores them locally as tarballs.
-         """
- 
--        outputdir = os.path.abspath(os.path.join(self.idir, "output"))
--        resultdir = os.path.join(outputdir, "results")
-+        resultdir = os.path.join(self.outputdir, "results")
- 
--        shutil.copyfile(os.path.join(outputdir, ".config"),
-+        shutil.copyfile(os.path.join(self.outputdir, ".config"),
-                         os.path.join(resultdir, "config"))
--        shutil.copyfile(os.path.join(outputdir, "defconfig"),
-+        shutil.copyfile(os.path.join(self.outputdir, "defconfig"),
-                         os.path.join(resultdir, "defconfig"))
--        shutil.copyfile(os.path.join(outputdir, "branch"),
-+        shutil.copyfile(os.path.join(self.outputdir, "branch"),
-                         os.path.join(resultdir, "branch"))
- 
-         def copy_if_exists(directory, src, dst=None):
--            if os.path.exists(os.path.join(outputdir, directory, src)):
--                shutil.copyfile(os.path.join(outputdir, directory, src),
-+            if os.path.exists(os.path.join(self.outputdir, directory, src)):
-+                shutil.copyfile(os.path.join(self.outputdir, directory, src),
-                                 os.path.join(resultdir, src if dst is None else dst))
- 
-         copy_if_exists("build", "build-time.log")
-@@ -575,7 +569,7 @@ class Builder:
-         # Return True if the result should be rejected, False otherwise
-         def reject_results():
-             lastlines = decode_bytes(subprocess.Popen(
--                ["tail", "-n", "3", os.path.join(outputdir, "logfile")],
-+                ["tail", "-n", "3", os.path.join(self.outputdir, "logfile")],
-                 stdout=subprocess.PIPE).communicate()[0]).splitlines()
- 
-             # Reject results where qemu-user refused to build
-@@ -592,7 +586,7 @@ class Builder:
-         def get_failure_reason():
-             # Output is a tuple (package, version), or None.
-             lastlines = decode_bytes(subprocess.Popen(
--                ["tail", "-n", "3", os.path.join(outputdir, "logfile")],
-+                ["tail", "-n", "3", os.path.join(self.outputdir, "logfile")],
-                 stdout=subprocess.PIPE).communicate()[0]).splitlines()
- 
-             regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
-@@ -609,14 +603,14 @@ class Builder:
- 
-             def extract_last_500_lines():
-                 subprocess.call(["tail -500 %s > %s" % \
--                                 (os.path.join(outputdir, "logfile"), resultfile)],
-+                                 (os.path.join(self.outputdir, "logfile"), resultfile)],
-                                 shell=True)
- 
-             reason = get_failure_reason()
-             if not reason:
-                 extract_last_500_lines()
-             else:
--                f = open(os.path.join(outputdir, "logfile"), 'r')
-+                f = open(os.path.join(self.outputdir, "logfile"), 'r')
-                 mf = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
-                 mf.seek(0)
-                 # Search for first action on the failed package
-@@ -640,7 +634,7 @@ class Builder:
-             if not reason:
-                 return
- 
--            srcroot = os.path.join(outputdir, "build", '-'.join(reason))
-+            srcroot = os.path.join(self.outputdir, "build", '-'.join(reason))
-             destroot = os.path.join(resultdir, '-'.join(reason))
-             config_files = ('config.log', 'CMakeCache.txt', 'CMakeError.log',
-                 'CMakeOutput.log')
-@@ -671,7 +665,7 @@ class Builder:
-         # Yes, shutil.make_archive() would be nice, but it doesn't exist
-         # in Python 2.6.
-         ret = subprocess.call(["tar", "cjf", "results.tar.bz2", "results"],
--                              cwd=outputdir, stdout=self.log, stderr=self.log)
-+                              cwd=self.outputdir, stdout=self.log, stderr=self.log)
-         if ret != 0:
-             log_write(self.log, "ERROR: could not make results tarball")
-             sys.exit(1)
-@@ -683,7 +677,7 @@ class Builder:
-             ret = subprocess.call(["curl", "-u",
-                                    "%s:%s" % (self.http_login, self.http_password),
+-        with urlopen_closing('http://autobuild.buildroot.org/branches') as r:
++        with urlopen_closing(urlparse.urljoin(self.http_url, 'branches')) as r:
+             csv_branches = r.readlines()
+         branches = []
+         for branch in csv.reader(csv_branches):
+@@ -678,7 +679,7 @@ class Builder:
                                     "-H", "Expect:",
--                                   "-F", "uploadedfile=@%s" % os.path.join(outputdir, "results.tar.bz2"),
-+                                   "-F", "uploadedfile=@%s" % os.path.join(self.outputdir, "results.tar.bz2"),
+                                    "-F", "uploadedfile=@%s" % os.path.join(self.outputdir, "results.tar.bz2"),
                                     "-F", "uploadsubmit=1",
-                                    self.http_url],
+-                                   self.http_url],
++                                   urlparse.urljoin(self.http_url, 'submit/')],
                                    stdout=self.log, stderr=self.log)
-@@ -693,10 +687,10 @@ class Builder:
-                 log_write(self.log, "INFO: results were submitted successfully")
-         else:
-             # No http login/password, keep tarballs locally
--            with open(os.path.join(outputdir, "results.tar.bz2"), 'rb') as f:
-+            with open(os.path.join(self.outputdir, "results.tar.bz2"), 'rb') as f:
-                 sha1 = hashlib.sha1(f.read()).hexdigest()
-             resultfilename = "instance-%d-%s.tar.bz2" % (self.instance, sha1)
--            os.rename(os.path.join(outputdir, "results.tar.bz2"), resultfilename)
-+            os.rename(os.path.join(self.outputdir, "results.tar.bz2"), resultfilename)
-             log_write(self.log, "INFO: results saved as %s" % resultfilename)
- 
-     def run_instance(self):
-@@ -728,8 +722,7 @@ class Builder:
-                 continue
- 
-             # Check if the build test is supposed to be a reproducible test
--            outputdir = os.path.abspath(os.path.join(self.idir, "output"))
--            with open(os.path.join(outputdir, ".config"), "r") as fconf:
-+            with open(os.path.join(self.outputdir, ".config"), "r") as fconf:
-                 reproducible = "BR2_REPRODUCIBLE=y\n" in fconf.read()
-             if reproducible:
-                 ret = self.do_reproducible_build()
+             if ret != 0:
+                 log_write(self.log, "INFO: results could not be submitted, %d" % ret)
 -- 
 2.22.0
