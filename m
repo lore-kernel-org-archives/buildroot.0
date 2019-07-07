@@ -1,75 +1,61 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Sun,  7 Jul 2019 10:58:25 +0530
-Subject: [Buildroot] [PATCH v3 25/31] autobuild-run: account for
- reproducibility failures when creating the reason file
+Date: Sun,  7 Jul 2019 10:58:24 +0530
+Subject: [Buildroot] [PATCH v3 24/31] autobuild-run: create reason file on
+ build failures
 In-Reply-To: <20190707052831.9469-1-itsatharva@gmail.com>
 References: <20190707052831.9469-1-itsatharva@gmail.com>
-Message-ID: <20190707052831.9469-25-itsatharva@gmail.com>
+Message-ID: <20190707052831.9469-24-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+When a build fails, we calculate the reason of failure on
+the server side as well as client side. To solve this redundancy
+we only calculate on the client side and submit a file which
+contains the reason of failure.
+
 Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
 Changes from reason-file-v2 series:
   - Move to builder-class series
 ---
- scripts/autobuild-run | 33 +++++++++++++++++++++++----------
- 1 file changed, 23 insertions(+), 10 deletions(-)
+ scripts/autobuild-run | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 8f60e89..8011ebb 100755
+index 678bac5..8f60e89 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -584,16 +584,26 @@ class Builder:
-             return
- 
-         def get_failure_reason():
--            # Output is a tuple (package, version), or None.
--            lastlines = decode_bytes(subprocess.Popen(
--                ["tail", "-n", "3", os.path.join(self.outputdir, "logfile")],
--                stdout=subprocess.PIPE).communicate()[0]).splitlines()
-+            # Output is a tuple (package, version), or None in case of package failure
-+            # Output is "reproducible" in case of reproducibility failure
-+
-+            reproducible_results = os.path.join(self.resultdir, "reproducible_results")
-+            if os.path.exists(reproducible_results):
-+                if os.stat(reproducible_results).st_size > 0:
-+                    reason = "reproducible"
-+                    return reason
-+                else:
-+                    return None
-+            else:
-+                lastlines = decode_bytes(subprocess.Popen(
-+                    ["tail", "-n", "3", os.path.join(self.outputdir, "logfile")],
-+                    stdout=subprocess.PIPE).communicate()[0]).splitlines()
- 
--            regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
--            for line in lastlines:
--                m = regexp.search(line)
--                if m:
--                    return m.group(1).rsplit('-', 1)
-+                regexp = re.compile(r'make: \*\*\* .*/(?:build|toolchain)/([^/]*)/')
-+                for line in lastlines:
-+                    m = regexp.search(line)
-+                    if m:
-+                        return m.group(1).rsplit('-', 1)
- 
+@@ -598,6 +598,11 @@ class Builder:
              # not found
              return None
-@@ -601,7 +611,10 @@ class Builder:
-         reason = get_failure_reason()
-         if reason:
-             with open(os.path.join(self.resultdir, "reason"), "w+") as reasonf:
--                reasonf.write("-".join(reason))
-+                if reason == "reproducible":
-+                    reasonf.write(reason)
-+                else:
-+                    reasonf.write("-".join(reason))
  
++        reason = get_failure_reason()
++        if reason:
++            with open(os.path.join(self.resultdir, "reason"), "w+") as reasonf:
++                reasonf.write("-".join(reason))
++
          def extract_end_log(resultfile):
              """Save the last part of the build log, starting from the failed package"""
+ 
+@@ -606,7 +611,6 @@ class Builder:
+                                  (os.path.join(self.outputdir, "logfile"), resultfile)],
+                                 shell=True)
+ 
+-            reason = get_failure_reason()
+             if not reason:
+                 extract_last_500_lines()
+             else:
+@@ -630,7 +634,6 @@ class Builder:
+         def copy_config_log_files():
+             """Recursively copy any config.log files from the failing package"""
+ 
+-            reason = get_failure_reason()
+             if not reason:
+                 return
+ 
 -- 
 2.22.0
