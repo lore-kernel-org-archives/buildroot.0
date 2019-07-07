@@ -1,90 +1,53 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  7 Jul 2019 10:29:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libplatform: bump to version
- 1eb12b1b1efa6747c1e190964854e9e267e3a1e2
-Message-ID: <20190707082914.18743-1-fontaine.fabrice@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun,  7 Jul 2019 13:44:14 +0200
+Subject: [Buildroot] [PATCH 1/2] package/freetype: bump version to 2.10.1
+Message-ID: <20190707114415.13195-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove patch (already in version)
-- Add hash for license file
+Upstream does not provide bz2 tarball anymore, switched to xz.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- ...-p8-platform-config-fix-lookup-paths.patch | 38 -------------------
- package/libplatform/libplatform.hash          |  3 +-
- package/libplatform/libplatform.mk            |  2 +-
- 3 files changed, 3 insertions(+), 40 deletions(-)
- delete mode 100644 package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
+ package/freetype/freetype.hash | 8 ++++----
+ package/freetype/freetype.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch b/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
-deleted file mode 100644
-index d487fd942e..0000000000
---- a/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 01b5478638c705af29f09ad4ed70289f70a21dcf Mon Sep 17 00:00:00 2001
--From: "Yann E. MORIN" <yann.morin.1998@free.fr>
--Date: Mon, 6 Feb 2017 14:04:47 +0100
--Subject: [PATCH] p8-platform-config: fix lookup paths
--
--Use the proper methods to find the headers and the library.
--
--Signed-off-by: Samuel Martin <s.martin49@gmail.com>
--Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-----
-- p8-platform-config.cmake.in | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/p8-platform-config.cmake.in b/p8-platform-config.cmake.in
--index 47f30f1..f59418d 100644
----- a/p8-platform-config.cmake.in
--+++ b/p8-platform-config.cmake.in
--@@ -10,7 +10,7 @@
-- #
-- # propagate these properties from one build system to the other
-- set (p8-platform_VERSION "@p8-platform_VERSION_MAJOR at .@p8-platform_VERSION_MINOR@")
---set (p8-platform_INCLUDE_DIRS @p8-platform_INCLUDE_DIRS@ @CMAKE_INSTALL_PREFIX@/include)
--+find_path (p8-platform_INCLUDE_DIRS p8-platform/os.h)
-- set (p8-platform_LIBRARY_DIRS "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@")
-- set (p8-platform_LINKER_FLAGS "@p8-platform_LINKER_FLAGS@")
-- set (p8-platform_CONFIG_VARS "@p8-platform_CONFIG_VARS@")
--@@ -19,7 +19,7 @@ set (p8-platform_CONFIG_VARS "@p8-platform_CONFIG_VARS@")
-- if(WIN32)
--   set (p8-platform_LIBRARY "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/p8-platform.lib")
-- else(WIN32)
---  set (p8-platform_LIBRARY "-L at CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lp8-platform")
--+  find_library (p8-platform_LIBRARY p8-platform)
-- endif(WIN32)
-- set (p8-platform_LIBRARIES ${p8-platform_LIBRARY} "@p8-platform_LIBRARIES@")
-- mark_as_advanced (p8-platform_LIBRARY)
---- 
--2.7.4
--
-diff --git a/package/libplatform/libplatform.hash b/package/libplatform/libplatform.hash
-index 5162b43fad..09f9dadb19 100644
---- a/package/libplatform/libplatform.hash
-+++ b/package/libplatform/libplatform.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 dd07bea9cb5676220586e772f09eab51f1093e5ef0faadee80f7c0e99f5f6c1c  libplatform-2d90f98620e25f47702c9e848380c0d93f29462b.tar.gz
-+sha256 94dba139066a332d048486f817736e4cf4962393c9f892d2c7dd40d9d69ca788  libplatform-1eb12b1b1efa6747c1e190964854e9e267e3a1e2.tar.gz
-+sha256 80fc66febbb2393c9d518e3eefa4ad9aae15a9b6a84174c0e443ea79eeea5131  src/os.h
-diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
-index c805af2e16..0a4c492969 100644
---- a/package/libplatform/libplatform.mk
-+++ b/package/libplatform/libplatform.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index 2095d6eaec..c4e75c327c 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,9 +1,9 @@
+-# From https://sourceforge.net/projects/freetype/files/freetype2/2.10.0/
+-md5 a717e6925b61b9dda946322ecd278a42 freetype-2.10.0.tar.bz2
+-sha1 f6abf03e0e3189a0de883981c57d3861b5d314f5 freetype-2.10.0.tar.bz2
++# From https://sourceforge.net/projects/freetype/files/freetype2/2.10.1/
++md5 bd42e75127f8431923679480efb5ba8f freetype-2.10.1.tar.xz
++sha1 79874ef4eaa52025126b71d836453b8279bdd331 freetype-2.10.1.tar.xz
+ 
+ # Locally calculated
+-sha256	fccc62928c65192fff6c98847233b28eb7ce05f12d2fea3f6cc90e8b4e5fbe06	freetype-2.10.0.tar.bz2
++sha256	16dbfa488a21fe827dc27eaf708f42f7aa3bb997d745d31a19781628c36ba26f	freetype-2.10.1.tar.xz
+ sha256	fd056de4196903a676208ef58cfddafc7d583d1f28fa2e44c309cf84a59e62fb	docs/LICENSE.TXT
+ sha256	08c135755dd589039470f1fdbb400daaabaaa50d0b366d19cebff4d22986baa1	docs/FTL.TXT
+ sha256	c4120c6752c910c299e3bd9cb3a46ff262c268303ca2069b61f92f10a5656c18	docs/GPLv2.TXT
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 44a9464d13..8b3a4ca09c 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBPLATFORM_VERSION = 2d90f98620e25f47702c9e848380c0d93f29462b
-+LIBPLATFORM_VERSION = 1eb12b1b1efa6747c1e190964854e9e267e3a1e2
- LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
- LIBPLATFORM_LICENSE = GPL-2.0+
- LIBPLATFORM_LICENSE_FILES = src/os.h
+-FREETYPE_VERSION = 2.10.0
+-FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.bz2
++FREETYPE_VERSION = 2.10.1
++FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
+ FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
+ FREETYPE_INSTALL_STAGING = YES
+ FREETYPE_MAKE_OPTS = CCexe="$(HOSTCC)"
 -- 
 2.20.1
