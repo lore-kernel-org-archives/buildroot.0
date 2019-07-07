@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:56:03 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/webkitgtk: bump
+Date: Sun, 7 Jul 2019 08:56:13 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/webkitgtk: bump
  to version 2.24.3
-Message-ID: <20190707065427.BFC2D8A5B1@busybox.osuosl.org>
+Message-ID: <20190707065437.661618A5B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6a34aa99d4c4d614d8c303550b07ac697eb162c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8749266fbd5cf3c79906a7073e03c7c7e60437e5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Version 2.24.3 is a minor update which contains many bugfixes.
 From the announcement:
