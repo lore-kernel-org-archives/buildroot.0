@@ -1,45 +1,88 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun,  7 Jul 2019 15:55:33 +0200
-Subject: [Buildroot] [PATCH 2/2] package/imx-uuc: bump to version
- fc48b497fe961d601b4bcced807f562090854ec9
-In-Reply-To: <20190707135533.15376-1-fontaine.fabrice@gmail.com>
-References: <20190707135533.15376-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190707135533.15376-2-fontaine.fabrice@gmail.com>
+From: Brandon Maier <brandon.maier@rockwellcollins.com>
+Date: Sun, 7 Jul 2019 09:43:16 -0500
+Subject: [Buildroot] [PATCH 1/1] utils/check-package: Add a quiet flag
+In-Reply-To: <6749b240-6844-b50e-59dd-fc5d2485fa3a@mind.be>
+References: <20190702185227.14435-1-brandon.maier@rockwellcollins.com>
+ <6749b240-6844-b50e-59dd-fc5d2485fa3a@mind.be>
+Message-ID: <CA+fik53QPbO5pG48C3nutnvOHhFZU_cCxDMmJfYwQoQJd7Ab3A@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add hash for license file
+On Wed, Jul 3, 2019, 4:39 PM Arnout Vandecappelle <arnout@mind.be> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/freescale-imx/imx-uuc/imx-uuc.hash | 3 ++-
- package/freescale-imx/imx-uuc/imx-uuc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+>  Hi Brandon,
+>
+> On 02/07/2019 20:52, Brandon Maier wrote:
+> > When running in a CI system, stat messages become white noise. Introduce
+> > an option to suppress non-error, non-warning, messages.
+> >
+> > Signed-off-by: Brandon Maier <brandon.maier@rockwellcollins.com>
+>
+>  Applied to master, thanks.
 
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.hash b/package/freescale-imx/imx-uuc/imx-uuc.hash
-index 623bd27644..57a5098597 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.hash
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.hash
-@@ -1,2 +1,3 @@
- # Locally computed
--sha256 ac4960b9dc53cfd09709951c4bf1f774567ff0918d0b216b480e1f7df8c6ee48  imx-uuc-79e9798eee9cd972d92ed2b18f170de856d153c9.tar.gz
-+sha256 2784e0826074335893fdad20e9a4faaedced2f206565c383043fbd169e9273a4  imx-uuc-fc48b497fe961d601b4bcced807f562090854ec9.tar.gz
-+sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.mk b/package/freescale-imx/imx-uuc/imx-uuc.mk
-index e94648b832..040d7bd874 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.mk
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMX_UUC_VERSION = 79e9798eee9cd972d92ed2b18f170de856d153c9
-+IMX_UUC_VERSION = fc48b497fe961d601b4bcced807f562090854ec9
- IMX_UUC_SITE = $(call github,NXPmicro,imx-uuc,$(IMX_UUC_VERSION))
- IMX_UUC_LICENSE = GPL-2.0+
- IMX_UUC_LICENSE_FILES = COPYING
--- 
-2.20.1
+Thanks
+
+>
+>  However, could you give an example of a case where this is annoying in CI
+> output? If I look at e.g. the output in gitlab-ci [1], the cruft that is
+> added
+> by gitlab-ci itself makes it pretty verbose already.
+>
+
+We have a custom tool to run various checks on our team's pull requests and
+display findings. E.g. check-package, checkpatch, shellcheck, pylint, etc.
+
+It's a simple tool though, and dumps stdout/stderr into the report. So it
+assumes no output means everything is okay. All the other checkers have a
+-q equivalent, so figured it'd be easiest to add it to check-package as
+well.
+
+
+>  Regards,
+>  Arnout
+>
+> [1] https://gitlab.com/buildroot.org/buildroot/-/jobs/242921394
+>
+>
+> > ---
+> >  utils/check-package | 7 +++++--
+> >  1 file changed, 5 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/utils/check-package b/utils/check-package
+> > index ce1fe98d67..f09aaeea03 100755
+> > --- a/utils/check-package
+> > +++ b/utils/check-package
+> > @@ -33,6 +33,7 @@ def parse_args():
+> >                          default="http://nightly.buildroot.org/",
+> >                          help="default: %(default)s")
+> >      parser.add_argument("--verbose", "-v", action="count", default=0)
+> > +    parser.add_argument("--quiet", "-q", action="count", default=0)
+> >
+> >      # Now the debug options in the order they are processed.
+> >      parser.add_argument("--include-only", dest="include_list",
+> action="append",
+> > @@ -177,8 +178,10 @@ def __main__():
+> >      # (e.g. counted by 'wc'), so for stats use stderr. Wait all
+> warnings are
+> >      # printed, for the case there are many of them, before printing
+> stats.
+> >      sys.stdout.flush()
+> > -    print("{} lines processed".format(total_lines), file=sys.stderr)
+> > -    print("{} warnings generated".format(total_warnings),
+> file=sys.stderr)
+> > +
+> > +    if not flags.quiet:
+> > +        print("{} lines processed".format(total_lines), file=sys.stderr)
+> > +        print("{} warnings generated".format(total_warnings),
+> file=sys.stderr)
+> >
+> >      if total_warnings > 0:
+> >          sys.exit(1)
+> >
+>
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190707/0de8b419/attachment.html>
