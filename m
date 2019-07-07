@@ -1,15 +1,15 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:29:53 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/docker-cli:
+Date: Sun, 7 Jul 2019 08:29:30 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/docker-engine:
  security bump to version 18.09.7
-Message-ID: <20190707062919.B044C8167F@busybox.osuosl.org>
+Message-ID: <20190707062919.A16B38167F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cac0c6fa2fca0b4fa3071fb5f17becbdd507ff96
+commit: https://git.buildroot.net/buildroot/commit/?id=3f1c6740eac91a18532406365e95525777f01b3c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes CVE-2018-15664: API endpoints behind the 'docker cp' command are
@@ -41,34 +41,34 @@ Logging
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit cdbb3ced003a3fbf141964d4acaabda969d742b0)
+(cherry picked from commit 13cf6f0c0bf0df313712aca8e4197ce96e29de89)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/docker-cli/docker-cli.hash | 2 +-
- package/docker-cli/docker-cli.mk   | 4 ++--
+ package/docker-engine/docker-engine.hash | 2 +-
+ package/docker-engine/docker-engine.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
-index e8af45ccea..27bf3322c4 100644
---- a/package/docker-cli/docker-cli.hash
-+++ b/package/docker-cli/docker-cli.hash
+diff --git a/package/docker-engine/docker-engine.hash b/package/docker-engine/docker-engine.hash
+index 4e673f2856..4ef6905b5d 100644
+--- a/package/docker-engine/docker-engine.hash
++++ b/package/docker-engine/docker-engine.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256	02bcb73dde1c9542fa65c8b87078aaa1b01b0dbdd62346637bcf0999a2a0909f  docker-cli-v18.09.6.tar.gz
-+sha256  62e25a0935bee75f999fb95b224ad982054fc1adc4351ce98d704ec00114ce57  docker-cli-18.09.7.tar.gz
+-sha256	7cb45266fff79245c81ec86c455d4b0513ca5d4ec1b9be8c8330df30a9467481  docker-engine-v18.09.6.tar.gz
++sha256	b4f55831f5e7c5a92cd91f77aad1541ccd572eb18df2f44a01c372bceb3f9b6b  docker-engine-18.09.7.tar.gz
  sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
-diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
-index b71bd7097d..0cff46abbd 100644
---- a/package/docker-cli/docker-cli.mk
-+++ b/package/docker-cli/docker-cli.mk
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index 50d4129256..99e3088f65 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
 @@ -4,8 +4,8 @@
  #
  ################################################################################
  
--DOCKER_CLI_VERSION = v18.09.6
--DOCKER_CLI_SITE = $(call github,docker,cli,$(DOCKER_CLI_VERSION))
-+DOCKER_CLI_VERSION = 18.09.7
-+DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
- DOCKER_CLI_WORKSPACE = gopath
+-DOCKER_ENGINE_VERSION = v18.09.6
+-DOCKER_ENGINE_SITE = $(call github,docker,engine,$(DOCKER_ENGINE_VERSION))
++DOCKER_ENGINE_VERSION = 18.09.7
++DOCKER_ENGINE_SITE = $(call github,docker,engine,v$(DOCKER_ENGINE_VERSION))
  
- DOCKER_CLI_LICENSE = Apache-2.0
+ DOCKER_ENGINE_LICENSE = Apache-2.0
+ DOCKER_ENGINE_LICENSE_FILES = LICENSE
