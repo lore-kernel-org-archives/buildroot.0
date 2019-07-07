@@ -1,60 +1,82 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Sun,  7 Jul 2019 10:58:27 +0530
-Subject: [Buildroot] [PATCH v3 27/31] scripts/autobuild-run: support
- changing repo
+Date: Sun,  7 Jul 2019 10:58:28 +0530
+Subject: [Buildroot] [PATCH v3 28/31] autobuild-run: modify do_build() to
+ accept outputdir as argument
 In-Reply-To: <20190707052831.9469-1-itsatharva@gmail.com>
 References: <20190707052831.9469-1-itsatharva@gmail.com>
-Message-ID: <20190707052831.9469-27-itsatharva@gmail.com>
+Message-ID: <20190707052831.9469-28-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Pass outputdir to do_build() so in future patches we can pass
+different output directories to increase variance in case of
+reproducibility testing.
 
-The current logic in prepare_build() assumes that the "origin" repo
-never changes. However, if one regularly changes his autobuild-run
-configuration, switching being repository, this is not
-true. Currently, it requires manually wiping out the Buildroot clone
-in every autobuild instance when changing the repository to pull from.
-
-So instead, use:
-
- git fetch <repo> <branch>
- git checkout FETCH_HEAD
-
-which will easily allow switching from one repo to the other.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[Atharva: Adapted Thomas' patches to work with Builder class]
 Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-Reviewed-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes v1 -> v2:
-  - Incorporate Thomas' patch into Builder class series
----
- scripts/autobuild-run | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ scripts/autobuild-run | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index 8011ebb..acd1547 100755
+index acd1547..522421e 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -361,12 +361,12 @@ class Builder:
+@@ -454,14 +454,14 @@ class Builder:
+         log_write(self.log, "INFO: Build is reproducible!")
+         return 0
  
-         # Update the Buildroot sources.
-         abssrcdir = os.path.abspath(self.srcdir)
--        ret = subprocess.call(["git", "fetch", "origin"], cwd=abssrcdir, stdout=self.log, stderr=self.log)
-+        ret = subprocess.call(["git", "fetch", self.repo, branch], cwd=abssrcdir, stdout=self.log, stderr=self.log)
-         if ret != 0:
-             log_write(self.log, "ERROR: could not fetch Buildroot sources")
+-    def do_build(self):
++    def do_build(self, outputdir):
+         """Run the build itself"""
+ 
+-        f = open(os.path.join(self.outputdir, "logfile"), "w+")
++        f = open(os.path.join(outputdir, "logfile"), "w+")
+         log_write(self.log, "INFO: build started")
+ 
+         cmd = ["nice", "-n", str(self.nice),
+-               "make", "O=%s" % self.outputdir,
++               "make", "O=%s" % outputdir,
+                "-C", self.srcdir, "BR2_DL_DIR=%s" % self.dldir,
+                "BR2_JLEVEL=%s" % self.njobs] \
+             + self.make_opts.split()
+@@ -473,7 +473,7 @@ class Builder:
+         build_monitor = Thread(target=self.stop_on_build_hang,
+                                args=(monitor_thread_hung_build_flag,
+                                      monitor_thread_stop_flag,
+-                                     sub, self.outputdir))
++                                     sub, outputdir))
+         build_monitor.daemon = True
+         build_monitor.start()
+ 
+@@ -494,7 +494,7 @@ class Builder:
+             log_write(self.log, "INFO: build failed [%d]" % ret)
              return -1
  
--        ret = subprocess.call(["git", "checkout", "--detach", "origin/%s" % branch], cwd=abssrcdir, stdout=self.log, stderr=self.log)
-+        ret = subprocess.call(["git", "checkout", "FETCH_HEAD"], cwd=abssrcdir, stdout=self.log, stderr=self.log)
+-        cmd = ["make", "O=%s" % self.outputdir, "-C", self.srcdir,
++        cmd = ["make", "O=%s" % outputdir, "-C", self.srcdir,
+                "BR2_DL_DIR=%s" % self.dldir, "legal-info"] \
+             + self.make_opts.split()
+         ret = subprocess.call(cmd, stdout=f, stderr=f)
+@@ -513,7 +513,7 @@ class Builder:
+ 
+         # Start the first build
+         log_write(self.log, "INFO: Reproducible Build Test, starting build 1")
+-        ret = self.do_build()
++        ret = self.do_build(self.outputdir)
          if ret != 0:
-             log_write(self.log, "ERROR: could not check out Buildroot sources")
-             return -1
+             log_write(self.log, "INFO: build 1 failed, skipping build 2")
+             return ret
+@@ -527,7 +527,7 @@ class Builder:
+ 
+         # Start the second build
+         log_write(self.log, "INFO: Reproducible Build Test, starting build 2")
+-        ret = self.do_build()
++        ret = self.do_build(self.outputdir)
+         if ret != 0:
+             log_write(self.log, "INFO: build 2 failed")
+             return ret
 -- 
 2.22.0
