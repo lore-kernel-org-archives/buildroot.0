@@ -1,65 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:54:55 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] {linux,
- linux-headers}: bump 4.{14, 19}.x / 5.1.x series
-Message-ID: <20190707065330.A98528894D@busybox.osuosl.org>
+Date: Sun, 7 Jul 2019 08:56:03 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/webkitgtk: bump
+ to version 2.24.3
+Message-ID: <20190707065427.BFC2D8A5B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cd8ff25d7f14245d7ee907d4aeebd0ef7e2926d8
+commit: https://git.buildroot.net/buildroot/commit/?id=b6a34aa99d4c4d614d8c303550b07ac697eb162c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
+Version 2.24.3 is a minor update which contains many bugfixes.
+From the announcement:
+
+  - Fix previous/next gestures in RTL mode.
+  - Fix rendering artifacts in popular sites (YouTube, GitHub, etc.)
+  - Fix media playback annoyances (volume randomly changing, HLS streams
+    starting too slowly, some audio streams would not play, etc.)
+  - Fix build with audio and video disabled.
+
+  https://webkitgtk.org/2019/07/02/webkitgtk2.24.3-released.html
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Peter: drop 5.1.x bump]
-(cherry picked from commit 173ed657f3ff322e523912f7cd3c651b758debe2)
+(cherry picked from commit 3ff05d9094be1329b5987589d6b6fefb152ff006)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ package/webkitgtk/webkitgtk.hash | 8 ++++----
+ package/webkitgtk/webkitgtk.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 0f04962ee5..e522921e2d 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -122,7 +122,7 @@ endif
+diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
+index 40bb6f7b63..f1784da2ad 100644
+--- a/package/webkitgtk/webkitgtk.hash
++++ b/package/webkitgtk/webkitgtk.hash
+@@ -1,7 +1,7 @@
+-# From https://webkitgtk.org/releases/webkitgtk-2.24.2.tar.xz.sums
+-md5 83012998e1b9f71abb37d8baf6f9c7e6 webkitgtk-2.24.2.tar.xz
+-sha1 632a65d93beb996bebdf7592ef9591f3993dea91 webkitgtk-2.24.2.tar.xz
+-sha256 019cb1f0d05bf6148b72c7a85734bcd006388a1c14132843ef9a1b2cb7b4321c webkitgtk-2.24.2.tar.xz
++# From https://webkitgtk.org/releases/webkitgtk-2.24.3.tar.xz.sums
++md5 e2a5bbd09a217eba096a2d1562143e35 webkitgtk-2.24.3.tar.xz
++sha1 26a33fd0af8223c130427cd59aaf5ccaba584114 webkitgtk-2.24.3.tar.xz
++sha256 940d746d7e82c357222feb5b3f44c4b201e81df7d81ddca5ca2bf3ae0acf6c51 webkitgtk-2.24.3.tar.xz
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "4.19.56" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "4.19.57" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.4.176-cip31" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 6d02218926..b61b736061 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
- sha256 d011245629b980d4c15febf080b54804aaf215167b514a3577feddb2495f8a3e  linux-4.20.17.tar.xz
--sha256 7326943215b9496f302e95892457a63d9a77e0446e99dd7bade6b425bc966bdf  linux-4.19.56.tar.xz
--sha256 19f6404c30f4a9a1fe3315b902676b6d63a470be5d55cf2a0e47983c643c8ff5  linux-4.14.131.tar.xz
-+sha256 327c5759d5888361d6c9d6adb0c8ad7e3c624eb05bb9e5869d9f3078dd0d3f87  linux-4.19.57.tar.xz
-+sha256 da86f39a722da656fce4e2685223093b5d5f4db94046fcd79e492428a82ff330  linux-4.14.132.tar.xz
- sha256 6543232fc082485c1088830b9456e1a6e511239e4bf98817b0166ee62cafc3ca  linux-4.4.184.tar.xz
- sha256 033114d5350525dede995d31b596c31b0e26db8d77a0a1c53d36cdc36ead9faf  linux-4.9.184.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 9b3111c519..ff5959ac47 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -289,8 +289,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.184"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.184"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.131"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.56"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.14.132"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.57"	if BR2_KERNEL_HEADERS_4_19
- 	default "4.20.17"	if BR2_KERNEL_HEADERS_4_20
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ # Hashes for license files:
+ sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index e81ba047e4..f8cd728351 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WEBKITGTK_VERSION = 2.24.2
++WEBKITGTK_VERSION = 2.24.3
+ WEBKITGTK_SITE = https://www.webkitgtk.org/releases
+ WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
+ WEBKITGTK_INSTALL_STAGING = YES
