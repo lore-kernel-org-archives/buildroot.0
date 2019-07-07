@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:33:55 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/meson: fix empty
+Date: Sun, 7 Jul 2019 08:33:49 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/meson: fix empty
  arguments in cross-compilation.conf
-Message-ID: <20190707063317.D76ED821BB@busybox.osuosl.org>
+Message-ID: <20190707063326.BDEF5888A2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=721208a87182dfa00b163c90af5ea7e13de764fc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=cdee4f6c67cd3aa1aa3b77b500ff03c6e96cbaf7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 When TARGET_CFLAGS (or _LDFLAGS or _CXXFLAGS) are empty, but were
 constructed by appending other variables, like:
@@ -65,7 +65,7 @@ Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/package/meson/meson.mk b/package/meson/meson.mk
-index d76541cc93..71bdadf825 100644
+index cf62b0ddde..099aaee5eb 100644
 --- a/package/meson/meson.mk
 +++ b/package/meson/meson.mk
 @@ -45,9 +45,9 @@ else
