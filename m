@@ -1,82 +1,62 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Sun,  7 Jul 2019 10:58:28 +0530
-Subject: [Buildroot] [PATCH v3 28/31] autobuild-run: modify do_build() to
- accept outputdir as argument
+Date: Sun,  7 Jul 2019 10:58:26 +0530
+Subject: [Buildroot] [PATCH v3 26/31] web/import.inc.php: support reading
+ failure reason from reason file
 In-Reply-To: <20190707052831.9469-1-itsatharva@gmail.com>
 References: <20190707052831.9469-1-itsatharva@gmail.com>
-Message-ID: <20190707052831.9469-28-itsatharva@gmail.com>
+Message-ID: <20190707052831.9469-26-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pass outputdir to do_build() so in future patches we can pass
-different output directories to increase variance in case of
-reproducibility testing.
-
 Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 ---
- scripts/autobuild-run | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+NOTE: This patch is untested.
 
-diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index acd1547..522421e 100755
---- a/scripts/autobuild-run
-+++ b/scripts/autobuild-run
-@@ -454,14 +454,14 @@ class Builder:
-         log_write(self.log, "INFO: Build is reproducible!")
-         return 0
+Changes from reason-file-v2 series:
+  - Move to builder-class series
+---
+ web/import.inc.php | 26 +++++++++++++++-----------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
+
+diff --git a/web/import.inc.php b/web/import.inc.php
+index a9b368f..6f878e0 100644
+--- a/web/import.inc.php
++++ b/web/import.inc.php
+@@ -230,17 +230,21 @@ function import_result($buildid, $filename)
+     if ($status == 0)
+       $reason = "none";
+     else {
+-	$tmp = Array();
+-	exec("tail -3 " . $thisbuildfinaldir . "build-end.log | grep -v '\[_all\]' | grep 'make.*: \*\*\*' | sed 's,.*\[\([^\]*\)\] Error.*,\\1,' | sed 's,.*/build/\([^/]*\)/.*,\\1,'", $tmp);
+-	if (trim($tmp[0]))
+-	  $reason = $tmp[0];
+-	else {
+-	  exec("tail -1 " . $thisbuildfinaldir . "build-time.log | grep :start: | cut -d':' -f4", $tmp);
+-	  if (trim($tmp[0]))
+-	    $reason = trim($tmp[0]);
+-	  else
+-	    $reason = "unknown";
+-	}
++      if (file_exists($thisbuildfinaldir . "reason"))
++        $reason = trim(file_get_contents($thisbuildfinaldir . "reason", "r"));
++      else {
++        $tmp = Array();
++        exec("tail -3 " . $thisbuildfinaldir . "build-end.log | grep -v '\[_all\]' | grep 'make.*: \*\*\*' | sed 's,.*\[\([^\]*\)\] Error.*,\\1,' | sed 's,.*/build/\([^/]*\)/.*,\\1,'", $tmp);
++        if (trim($tmp[0]))
++          $reason = $tmp[0];
++        else {
++          exec("tail -1 " . $thisbuildfinaldir . "build-time.log | grep :start: | cut -d':' -f4", $tmp);
++          if (trim($tmp[0]))
++            $reason = trim($tmp[0]);
++          else
++            $reason = "unknown";
++        }
++      }
+     }
  
--    def do_build(self):
-+    def do_build(self, outputdir):
-         """Run the build itself"""
- 
--        f = open(os.path.join(self.outputdir, "logfile"), "w+")
-+        f = open(os.path.join(outputdir, "logfile"), "w+")
-         log_write(self.log, "INFO: build started")
- 
-         cmd = ["nice", "-n", str(self.nice),
--               "make", "O=%s" % self.outputdir,
-+               "make", "O=%s" % outputdir,
-                "-C", self.srcdir, "BR2_DL_DIR=%s" % self.dldir,
-                "BR2_JLEVEL=%s" % self.njobs] \
-             + self.make_opts.split()
-@@ -473,7 +473,7 @@ class Builder:
-         build_monitor = Thread(target=self.stop_on_build_hang,
-                                args=(monitor_thread_hung_build_flag,
-                                      monitor_thread_stop_flag,
--                                     sub, self.outputdir))
-+                                     sub, outputdir))
-         build_monitor.daemon = True
-         build_monitor.start()
- 
-@@ -494,7 +494,7 @@ class Builder:
-             log_write(self.log, "INFO: build failed [%d]" % ret)
-             return -1
- 
--        cmd = ["make", "O=%s" % self.outputdir, "-C", self.srcdir,
-+        cmd = ["make", "O=%s" % outputdir, "-C", self.srcdir,
-                "BR2_DL_DIR=%s" % self.dldir, "legal-info"] \
-             + self.make_opts.split()
-         ret = subprocess.call(cmd, stdout=f, stderr=f)
-@@ -513,7 +513,7 @@ class Builder:
- 
-         # Start the first build
-         log_write(self.log, "INFO: Reproducible Build Test, starting build 1")
--        ret = self.do_build()
-+        ret = self.do_build(self.outputdir)
-         if ret != 0:
-             log_write(self.log, "INFO: build 1 failed, skipping build 2")
-             return ret
-@@ -527,7 +527,7 @@ class Builder:
- 
-         # Start the second build
-         log_write(self.log, "INFO: Reproducible Build Test, starting build 2")
--        ret = self.do_build()
-+        ret = self.do_build(self.outputdir)
-         if ret != 0:
-             log_write(self.log, "INFO: build 2 failed")
-             return ret
+     /* Compress files that are typically too large and infrequently
 -- 
 2.22.0
