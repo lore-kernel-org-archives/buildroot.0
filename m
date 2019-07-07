@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:39:43 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/irssi: security
+Date: Sun, 7 Jul 2019 08:39:56 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/irssi: security
  bump to version 1.0.8
-Message-ID: <20190707063812.A5FF98874D@busybox.osuosl.org>
+Message-ID: <20190707063821.3389488F36@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e0e4b56578549a4e6609c7a755af2a9398d7a29
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=259d203f5a2867c6a6f8b9888166ea2ff6c60d9b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes the following security vulnerability:
 
