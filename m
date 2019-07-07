@@ -1,10 +1,10 @@
 From: Atharva Lele <itsatharva@gmail.com>
-Date: Sun,  7 Jul 2019 10:58:17 +0530
-Subject: [Buildroot] [PATCH v3 17/31] autobuild-run: define source directory
- as part of Builder class
+Date: Sun,  7 Jul 2019 10:58:20 +0530
+Subject: [Buildroot] [PATCH v3 20/31] autobuild-run: define results
+ directory as part of Builder class
 In-Reply-To: <20190707052831.9469-1-itsatharva@gmail.com>
 References: <20190707052831.9469-1-itsatharva@gmail.com>
-Message-ID: <20190707052831.9469-17-itsatharva@gmail.com>
+Message-ID: <20190707052831.9469-20-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,143 +14,99 @@ To: buildroot@busybox.net
 Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 Acked-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes v1 -> v2:
-  - Fix whitespace issue
----
- scripts/autobuild-run | 29 ++++++++++++-----------------
- 1 file changed, 12 insertions(+), 17 deletions(-)
+ scripts/autobuild-run | 24 +++++++++++-------------
+ 1 file changed, 11 insertions(+), 13 deletions(-)
 
 diff --git a/scripts/autobuild-run b/scripts/autobuild-run
-index adc8795..741d316 100755
+index e225211..8a0bec7 100755
 --- a/scripts/autobuild-run
 +++ b/scripts/autobuild-run
-@@ -292,6 +292,7 @@ class Builder:
- 
-         # frequently needed directories
-         self.idir = "instance-%d" % self.instance
-+        self.srcdir = os.path.join(self.idir, "buildroot")
+@@ -299,6 +299,7 @@ class Builder:
+         # Buildroot sources, but to the location of the autobuilder
+         # script.
+         self.outputdir = os.path.abspath(os.path.join(self.idir, "output"))
++        self.resultdir = os.path.join(self.outputdir, "results")
  
          if self.debug:
              self.log = sys.stdout
-@@ -344,16 +345,15 @@ class Builder:
- 
-         # Clone Buildroot. This only happens if the source directory
-         # didn't exist already.
--        srcdir = os.path.join(self.idir, "buildroot")
--        if not os.path.exists(srcdir):
--            ret = subprocess.call(["git", "clone", self.repo, srcdir],
-+        if not os.path.exists(self.srcdir):
-+            ret = subprocess.call(["git", "clone", self.repo, self.srcdir],
-                                   stdout=self.log, stderr=self.log)
-             if ret != 0:
-                 log_write(self.log, "ERROR: could not clone Buildroot sources")
-                 return -1
- 
-         # Update the Buildroot sources.
--        abssrcdir = os.path.abspath(srcdir)
-+        abssrcdir = os.path.abspath(self.srcdir)
-         ret = subprocess.call(["git", "fetch", "origin"], cwd=abssrcdir, stdout=self.log, stderr=self.log)
-         if ret != 0:
-             log_write(self.log, "ERROR: could not fetch Buildroot sources")
-@@ -378,7 +378,6 @@ class Builder:
-     def gen_config(self):
-         """Generate a new random configuration."""
-         outputdir = os.path.abspath(os.path.join(self.idir, "output"))
--        srcdir = os.path.join(self.idir, "buildroot")
- 
-         log_write(self.log, "INFO: generate the configuration")
- 
-@@ -387,13 +386,13 @@ class Builder:
-         else:
-             devnull = open(os.devnull, "w")
- 
--        args = [os.path.join(srcdir, "utils/genrandconfig"),
--                "-o", outputdir, "-b", srcdir]
-+        args = [os.path.join(self.srcdir, "utils/genrandconfig"),
-+                "-o", outputdir, "-b", self.srcdir]
- 
-         toolchains_csv = self.toolchains_csv
-         if toolchains_csv:
-             if not os.path.isabs(toolchains_csv):
--                toolchains_csv = os.path.join(srcdir, toolchains_csv)
-+                toolchains_csv = os.path.join(self.srcdir, toolchains_csv)
-             args.extend(["--toolchains-csv", toolchains_csv])
- 
-         ret = subprocess.call(args, stdout=devnull, stderr=self.log)
-@@ -425,7 +424,6 @@ class Builder:
+@@ -542,19 +543,17 @@ class Builder:
+         are available) or stores them locally as tarballs.
          """
  
-         outputdir = os.path.join(self.idir, "output")
--        srcdir = os.path.join(self.idir, "buildroot")
-         reproducible_results = os.path.join(outputdir, "results", "reproducible_results")
-         # Using only tar images for now
-         build_1_image = os.path.join(outputdir, "images-1", "rootfs.tar")
-@@ -434,7 +432,7 @@ class Builder:
-         with open(reproducible_results, 'w') as diff:
-             if self.sysinfo.has("diffoscope"):
-                 # Prefix to point diffoscope towards cross-tools
--                prefix = subprocess.check_output(["make", "O=%s" % outputdir, "-C", srcdir, "printvars", "VARS=TARGET_CROSS"])
-+                prefix = subprocess.check_output(["make", "O=%s" % outputdir, "-C", self.srcdir, "printvars", "VARS=TARGET_CROSS"])
-                 # Remove TARGET_CROSS= and \n from the string
-                 prefix = prefix[13:-1]
-                 log_write(self.log, "INFO: running diffoscope on images")
-@@ -461,13 +459,12 @@ class Builder:
-         # script.
-         dldir = os.path.abspath(os.path.join(self.idir, "dl"))
-         outputdir = os.path.abspath(os.path.join(self.idir, "output"))
--        srcdir = os.path.join(self.idir, "buildroot")
-         f = open(os.path.join(outputdir, "logfile"), "w+")
-         log_write(self.log, "INFO: build started")
+-        resultdir = os.path.join(self.outputdir, "results")
+-
+         shutil.copyfile(os.path.join(self.outputdir, ".config"),
+-                        os.path.join(resultdir, "config"))
++                        os.path.join(self.resultdir, "config"))
+         shutil.copyfile(os.path.join(self.outputdir, "defconfig"),
+-                        os.path.join(resultdir, "defconfig"))
++                        os.path.join(self.resultdir, "defconfig"))
+         shutil.copyfile(os.path.join(self.outputdir, "branch"),
+-                        os.path.join(resultdir, "branch"))
++                        os.path.join(self.resultdir, "branch"))
  
-         cmd = ["nice", "-n", str(self.nice),
-                "make", "O=%s" % outputdir,
--               "-C", srcdir, "BR2_DL_DIR=%s" % dldir,
-+               "-C", self.srcdir, "BR2_DL_DIR=%s" % dldir,
-                "BR2_JLEVEL=%s" % self.njobs] \
-             + self.make_opts.split()
-         sub = subprocess.Popen(cmd, stdout=f, stderr=f)
-@@ -499,7 +496,7 @@ class Builder:
-             log_write(self.log, "INFO: build failed [%d]" % ret)
-             return -1
+         def copy_if_exists(directory, src, dst=None):
+             if os.path.exists(os.path.join(self.outputdir, directory, src)):
+                 shutil.copyfile(os.path.join(self.outputdir, directory, src),
+-                                os.path.join(resultdir, src if dst is None else dst))
++                                os.path.join(self.resultdir, src if dst is None else dst))
  
--        cmd = ["make", "O=%s" % outputdir, "-C", srcdir,
-+        cmd = ["make", "O=%s" % outputdir, "-C", self.srcdir,
-                "BR2_DL_DIR=%s" % dldir, "legal-info"] \
-             + self.make_opts.split()
-         ret = subprocess.call(cmd, stdout=f, stderr=f)
-@@ -517,7 +514,6 @@ class Builder:
-         """
- 
-         outputdir = os.path.abspath(os.path.join(self.idir, "output"))
--        srcdir = os.path.join(self.idir, "buildroot")
- 
-         # Start the first build
-         log_write(self.log, "INFO: Reproducible Build Test, starting build 1")
-@@ -531,7 +527,7 @@ class Builder:
- 
-         # Clean up build 1
-         f = open(os.path.join(outputdir, "logfile"), "w+")
--        subprocess.call(["make", "O=%s" % outputdir, "-C", srcdir, "clean"], stdout=f, stderr=f)
-+        subprocess.call(["make", "O=%s" % outputdir, "-C", self.srcdir, "clean"], stdout=f, stderr=f)
- 
-         # Start the second build
-         log_write(self.log, "INFO: Reproducible Build Test, starting build 2")
-@@ -553,7 +549,6 @@ class Builder:
-         """
- 
-         outputdir = os.path.abspath(os.path.join(self.idir, "output"))
--        srcdir = os.path.join(self.idir, "buildroot")
-         resultdir = os.path.join(outputdir, "results")
- 
-         shutil.copyfile(os.path.join(outputdir, ".config"),
-@@ -576,7 +571,7 @@ class Builder:
+         copy_if_exists("build", "build-time.log")
+         copy_if_exists("build", "packages-file-list.txt")
+@@ -563,7 +562,7 @@ class Builder:
+         copy_if_exists("legal-info", "manifest.csv", "licenses-manifest.csv")
  
          subprocess.call(["git log -n 1 --pretty=format:%%H > %s" % \
-                          os.path.join(resultdir, "gitid")],
--                        shell=True, cwd=srcdir)
-+                        shell=True, cwd=self.srcdir)
+-                         os.path.join(resultdir, "gitid")],
++                         os.path.join(self.resultdir, "gitid")],
+                         shell=True, cwd=self.srcdir)
  
          # Return True if the result should be rejected, False otherwise
-         def reject_results():
+@@ -625,7 +624,7 @@ class Builder:
+                 mf.close()
+                 f.close()
+ 
+-        extract_end_log(os.path.join(resultdir, "build-end.log"))
++        extract_end_log(os.path.join(self.resultdir, "build-end.log"))
+ 
+         def copy_config_log_files():
+             """Recursively copy any config.log files from the failing package"""
+@@ -635,7 +634,7 @@ class Builder:
+                 return
+ 
+             srcroot = os.path.join(self.outputdir, "build", '-'.join(reason))
+-            destroot = os.path.join(resultdir, '-'.join(reason))
++            destroot = os.path.join(self.resultdir, '-'.join(reason))
+             config_files = ('config.log', 'CMakeCache.txt', 'CMakeError.log',
+                 'CMakeOutput.log')
+ 
+@@ -650,7 +649,7 @@ class Builder:
+ 
+         copy_config_log_files()
+ 
+-        resultf = open(os.path.join(resultdir, "status"), "w+")
++        resultf = open(os.path.join(self.resultdir, "status"), "w+")
+         if result == 0:
+             resultf.write("OK")
+         elif result == -1:
+@@ -659,7 +658,7 @@ class Builder:
+             resultf.write("TIMEOUT")
+         resultf.close()
+ 
+-        with open(os.path.join(resultdir, "submitter"), "w+") as submitterf:
++        with open(os.path.join(self.resultdir, "submitter"), "w+") as submitterf:
+             submitterf.write(self.submitter)
+ 
+         # Yes, shutil.make_archive() would be nice, but it doesn't exist
+@@ -713,8 +712,7 @@ class Builder:
+             if ret != 0:
+                 continue
+ 
+-            resultdir = os.path.join(self.idir, "output", "results")
+-            os.mkdir(resultdir)
++            os.mkdir(self.resultdir)
+ 
+             ret = self.gen_config()
+             if ret != 0:
 -- 
 2.22.0
