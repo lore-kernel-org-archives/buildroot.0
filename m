@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:31:49 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/dialog: fix build
+Date: Sun, 7 Jul 2019 08:32:05 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/dialog: fix build
  with NLS
-Message-ID: <20190707063015.102338B52D@busybox.osuosl.org>
+Message-ID: <20190707063028.BA3268B52D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=17ebddd57192355a42d395f64a8f3f055e063281
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=e164494f3a4a204682b3d548d0d62e85fe8b669a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes:
  - http://autobuild.buildroot.org/results/9287ffbb86a7dc09cda5f99f87445fa884e77625
