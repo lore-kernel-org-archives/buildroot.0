@@ -1,91 +1,68 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 7 Jul 2019 21:03:39 +0200
-Subject: [Buildroot] [PATCH v2] package/gst1-plugins-good: add shout2
- plugin option
-In-Reply-To: <20190705215038.12927-1-abloemert@gmail.com>
-References: <20190705065015.29773-1-abloemert@gmail.com>
- <20190705215038.12927-1-abloemert@gmail.com>
-Message-ID: <20190707210339.3daa9093@gmx.net>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 7 Jul 2019 22:09:08 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] Update for 2019.05.1
+Message-ID: <20190707200809.59616814C8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnold,
+commit: https://git.buildroot.net/buildroot/commit/?id=5b4e32cae812225fa909d755d7e09588ce0b92da
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
-On Fri,  5 Jul 2019 23:50:38 +0200, Arnold Bloemert <abloemert@gmail.com> wrote:
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ CHANGES  | 25 +++++++++++++++++++++++++
+ Makefile |  4 ++--
+ 2 files changed, 27 insertions(+), 2 deletions(-)
 
-> Signed-off-by: Arnold Bloemert <abloemert@gmail.com>
->
-> ---
-> Changes v1 -> v2:
->   - add dependency to .mk file and simplify commit message (suggested by Peter Seiderer)
->
-> Signed-off-by: Arnold Bloemert <abloemert@gmail.com>
-> ---
->  package/gstreamer1/gst1-plugins-good/Config.in         |  6 ++++++
->  .../gstreamer1/gst1-plugins-good/gst1-plugins-good.mk  | 10 ++++++++--
->  2 files changed, 14 insertions(+), 2 deletions(-)
->
-> diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-> index 433084fd6b..ce85388eb0 100644d3b0edbba14c343b299b96dfdeeebc465a71ba78
-> --- a/package/gstreamer1/gst1-plugins-good/Config.in
-> +++ b/package/gstreamer1/gst1-plugins-good/Config.in
-> @@ -300,6 +300,12 @@ comment "qmlgl (qt5) plugin needs an OpenGL-capable Qt5 backend"
->  	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
->  	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
->
-> +config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
-> +        bool "shout2"
-> +        select BR2_PACKAGE_LIBSHOUT
-> +        help
-> +          Elements to send data to an icecast server using libshout2
-> +
->  config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
->  	bool "v4l2"
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
-> diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> index 829d27a2da..3c9f0d5605 100644
-> --- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> +++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-> @@ -25,8 +25,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
->  # Options which require currently unpackaged libraries
->  GST1_PLUGINS_GOOD_CONF_OPTS += \
->  	--disable-libdv \
-> -	--disable-dv1394 \
-> -	--disable-shout2
-> +	--disable-dv1394
->
->  GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
->
-> @@ -343,6 +342,13 @@ else
->  GST1_PLUGINS_GOOD_CONF_OPTS += --disable-qt
->  endif
->
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2),y)
-> +GST1_PLUGINS_GOOD_CONF_OPTS += --enable-shout2
-> +GST1_PLUGINS_GOOD_DEPENDENCIES += libshout
-> +else
-> +GST1_PLUGINS_GOOD_CONF_OPTS += --disable-shout2
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
->  GST1_PLUGINS_GOOD_CONF_OPTS += --enable-gst_v4l2
->  else
-
-
-The other gstreamer1 files state for the options (see e.g. [1]):
-
-   # These plugins are listed in the order from ./configure --help
-
-For shout2 this should be after qt (right) and before soup (false), but
-taking a look at Config.in/gst1-plugins-good.mk the option order is not
-very strict....so I am o.k. with your patch ;-), you can add my
-
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-
-Regards,
-Peter
-
-[1] https://git.buildroot.net/buildroot/tree/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk#n27
+diff --git a/CHANGES b/CHANGES
+index 35a094b70f..de59635227 100644
+--- a/CHANGES
++++ b/CHANGES
+@@ -1,3 +1,28 @@
++2019.05.1, Released July 7th, 2019
++
++	Important / security related fixes.
++
++	arch: x86: Fix typo breaking 'core-avx2' variant
++
++	linux: Workaround -Werror related build failure on powerpc,
++	by forcing CONFIG_PPC_DISABLE_WERROR on.
++
++	support/testing: Emulate a machine with 256MB RAM to fix
++	issues with certain tests running out of memory.
++
++	test-pkg: Correct long option handling and clean output dir
++	after a successful build to save disk space.
++
++	Defconfigs: QEMU: use 'rootwait' kernel option to ensure root
++	partition is available before mounting.
++
++	Updated/fixed packages: barebox, busybox, bzip2, davfs2,
++	dialog, docker-cli, docker-engine, exim, expat, faad2,
++	haveged, irssi, libcamera, libcdaudio, libcurl, libglib2,
++	libressl, libsecret, lmbench, meson, monit, php, postgresql,
++	psplash, python-django, qt5base, tvheadend, webkitgtk,
++	xserver_xorg-server, znc
++
+ 2019.05, released June 2nd, 2019
+ 
+ 	Various fixes.
+diff --git a/Makefile b/Makefile
+index 7ff40496d3..c5d398a5a9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -92,9 +92,9 @@ all:
+ .PHONY: all
+ 
+ # Set and export the version string
+-export BR2_VERSION := 2019.05
++export BR2_VERSION := 2019.05.1
+ # Actual time the release is cut (for reproducible builds)
+-BR2_VERSION_EPOCH = 1559462000
++BR2_VERSION_EPOCH = 1562530000
+ 
+ # Save running make version since it's clobbered by the make package
+ RUNNING_MAKE_VERSION := $(MAKE_VERSION)
