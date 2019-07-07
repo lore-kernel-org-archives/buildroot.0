@@ -1,59 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:30:55 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/expat: security
- bump to version 2.2.7
-Message-ID: <20190707062919.B8500814FC@busybox.osuosl.org>
+Date: Sun, 7 Jul 2019 08:29:53 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/docker-cli:
+ security bump to version 18.09.7
+Message-ID: <20190707062919.B044C8167F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=55fd596e7d8a8292713329432126a8fb92f197ee
+commit: https://git.buildroot.net/buildroot/commit/?id=cac0c6fa2fca0b4fa3071fb5f17becbdd507ff96
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-Fixes the following security vulnerabilites:
+Fixes CVE-2018-15664: API endpoints behind the 'docker cp' command are
+vulnerable to a symlink-exchange attack with Directory Traversal, giving
+attackers arbitrary read-write access to the host filesystem with root
+privileges, because daemon/archive.go does not do archive operations on a
+frozen filesystem (or from within a chroot).
 
-CVE-2018-20843: In libexpat in Expat before 2.2.7, XML input including XML
-names that contain a large number of colons could make the XML parser
-consume a high amount of RAM and CPU resources while processing (enough to
-be usable for denial-of-service attacks).
+And includes additional post-18.09.6 fixes:
+
+Builder
+- Fixed a panic error when building dockerfiles that contain only comments.
+  moby/moby#38487
+- Added a workaround for GCR authentication issue. moby/moby#38246
+- Builder-next: Fixed a bug in the GCR token cache implementation
+  workaround.  moby/moby#39183
+
+Runtime
+- Added performance optimizations in aufs and layer store that helps in
+  massively parallel container creation and removal.  moby/moby#39107,
+  moby/moby#39135
+- daemon: fixed a mirrors validation issue. moby/moby#38991
+- Docker no longer supports sorting UID and GID ranges in ID maps.
+  moby/moby#39288
+
+Logging
+- Added a fix that now allows large log lines for logger plugins.
+  moby/moby#39038
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 84fd08cf4f860914b0d7b6e48dbe6819e96cc423)
+(cherry picked from commit cdbb3ced003a3fbf141964d4acaabda969d742b0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/expat/expat.hash | 8 ++++----
- package/expat/expat.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/docker-cli/docker-cli.hash | 2 +-
+ package/docker-cli/docker-cli.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 6c55972f69..91f70f36ed 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,7 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.2.6/
--md5	ca047ae951b40020ac831c28859161b2		expat-2.2.6.tar.bz2
--sha1	c8947fc3119a797b55485f2f7bdaaeb49cc9df01	expat-2.2.6.tar.bz2
-+# From https://sourceforge.net/projects/expat/files/expat/2.2.7/
-+md5	72f36b87cdb478aba1e78473393766aa		expat-2.2.7.tar.bz2
-+sha1	9c8a268211e3f1ae31c4d550e5be7708973ec6a6	expat-2.2.7.tar.bz2
- 
+diff --git a/package/docker-cli/docker-cli.hash b/package/docker-cli/docker-cli.hash
+index e8af45ccea..27bf3322c4 100644
+--- a/package/docker-cli/docker-cli.hash
++++ b/package/docker-cli/docker-cli.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256	17b43c2716d521369f82fc2dc70f359860e90fa440bea65b3b85f0b246ea81f2	expat-2.2.6.tar.bz2
-+sha256	cbc9102f4a31a8dafd42d642e9a3aa31e79a0aedaa1f6efd2795ebc83174ec18	expat-2.2.7.tar.bz2
- sha256	46336ab2fec900803e2f1a4253e325ac01d998efb09bc6906651f7259e636f76	COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 548ec826a0..1b49a12c49 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
+-sha256	02bcb73dde1c9542fa65c8b87078aaa1b01b0dbdd62346637bcf0999a2a0909f  docker-cli-v18.09.6.tar.gz
++sha256  62e25a0935bee75f999fb95b224ad982054fc1adc4351ce98d704ec00114ce57  docker-cli-18.09.7.tar.gz
+ sha256	2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0  LICENSE
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index b71bd7097d..0cff46abbd 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--EXPAT_VERSION = 2.2.6
-+EXPAT_VERSION = 2.2.7
- EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.bz2
- EXPAT_INSTALL_STAGING = YES
+-DOCKER_CLI_VERSION = v18.09.6
+-DOCKER_CLI_SITE = $(call github,docker,cli,$(DOCKER_CLI_VERSION))
++DOCKER_CLI_VERSION = 18.09.7
++DOCKER_CLI_SITE = $(call github,docker,cli,v$(DOCKER_CLI_VERSION))
+ DOCKER_CLI_WORKSPACE = gopath
+ 
+ DOCKER_CLI_LICENSE = Apache-2.0
