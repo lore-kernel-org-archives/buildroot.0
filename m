@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:43:21 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/faad2: add
+Date: Sun, 7 Jul 2019 08:43:28 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/faad2: add
  upstream security fixes
-Message-ID: <20190707064145.C73A88A581@busybox.osuosl.org>
+Message-ID: <20190707064151.C6E448A581@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90c114911fcc359c347249434de6c98b443fe2d0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=9ffc00c6b89ffdf2f079e451165387b08ba7718c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 CVE-2018-20194: Stack buffer overflow on invalid input
 
