@@ -1,63 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:56:13 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/webkitgtk: bump
- to version 2.24.3
-Message-ID: <20190707065437.661618A5B1@busybox.osuosl.org>
+Date: Sun, 07 Jul 2019 08:56:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version
+ 2.24.3
+In-Reply-To: <20190705110204.GB8135@momiji> (Adrian Perez de Castro's message
+ of "Fri, 5 Jul 2019 11:02:04 +0300")
+References: <20190704091006.4701-1-aperez@igalia.com>
+ <8736jlxapy.fsf@dell.be.48ers.dk> <20190705110204.GB8135@momiji>
+Message-ID: <87bly6bae2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8749266fbd5cf3c79906a7073e03c7c7e60437e5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+>>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
 
-Version 2.24.3 is a minor update which contains many bugfixes.
-From the announcement:
+ > Hello Peter,
+ > On Fri, 05 Jul 2019 08:21:45 +0200, Peter Korsgaard <peter@korsgaard.com> wrote:
+ >> >>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+ >> 
+ >> > Version 2.24.3 is a minor update which contains many bugfixes.
+ >> > From the announcement:
+ >> 
+ >> >   - Fix previous/next gestures in RTL mode.
+ >> >   - Fix rendering artifacts in popular sites (YouTube, GitHub, etc.)
+ >> >   - Fix media playback annoyances (volume randomly changing, HLS streams
+ >> >     starting too slowly, some audio streams would not play, etc.)
+ >> >   - Fix build with audio and video disabled.
+ >> 
+ >> >   https://webkitgtk.org/2019/07/02/webkitgtk2.24.3-released.html
+ >> 
+ >> > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+ >> 
+ >> Committed, thanks.
+ >> 
+ >> Given the above, should this be applied to 2019.02.x / 2019.05.x as
+ >> well?
 
-  - Fix previous/next gestures in RTL mode.
-  - Fix rendering artifacts in popular sites (YouTube, GitHub, etc.)
-  - Fix media playback annoyances (volume randomly changing, HLS streams
-    starting too slowly, some audio streams would not play, etc.)
-  - Fix build with audio and video disabled.
+ > We do not have an accompanying security advisory for this release, but we
+ > expect to have one for an upcoming 2.24.4 release a few weeks down the road,
+ > so another option could be to wait until that release and skip this one point
+ > release.
 
-  https://webkitgtk.org/2019/07/02/webkitgtk2.24.3-released.html
+ > Nevertheless, if it is possible to have this patch applied to 2019.02.x and
+ > 2019.05.x, that would be definitely very nice for people using WebKitGTK
+ > (in particular due to the media playback fixes :D).
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3ff05d9094be1329b5987589d6b6fefb152ff006)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/webkitgtk/webkitgtk.hash | 8 ++++----
- package/webkitgtk/webkitgtk.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+OK - Committed to 2019.02.x and 2019.05, thanks.
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 40bb6f7b63..f1784da2ad 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,7 +1,7 @@
--# From https://webkitgtk.org/releases/webkitgtk-2.24.2.tar.xz.sums
--md5 83012998e1b9f71abb37d8baf6f9c7e6 webkitgtk-2.24.2.tar.xz
--sha1 632a65d93beb996bebdf7592ef9591f3993dea91 webkitgtk-2.24.2.tar.xz
--sha256 019cb1f0d05bf6148b72c7a85734bcd006388a1c14132843ef9a1b2cb7b4321c webkitgtk-2.24.2.tar.xz
-+# From https://webkitgtk.org/releases/webkitgtk-2.24.3.tar.xz.sums
-+md5 e2a5bbd09a217eba096a2d1562143e35 webkitgtk-2.24.3.tar.xz
-+sha1 26a33fd0af8223c130427cd59aaf5ccaba584114 webkitgtk-2.24.3.tar.xz
-+sha256 940d746d7e82c357222feb5b3f44c4b201e81df7d81ddca5ca2bf3ae0acf6c51 webkitgtk-2.24.3.tar.xz
- 
- # Hashes for license files:
- sha256 0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4 Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index e81ba047e4..f8cd728351 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WEBKITGTK_VERSION = 2.24.2
-+WEBKITGTK_VERSION = 2.24.3
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-- 
+Bye, Peter Korsgaard
