@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 08:44:58 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/python-django:
+Date: Sun, 7 Jul 2019 08:45:30 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/python-django:
  security bump to version 2.1.10
-Message-ID: <20190707064322.15AF58A5CC@busybox.osuosl.org>
+Message-ID: <20190707064354.4E1ED81684@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=01aea425d4f3bcec65f115e6a31e87b50abad468
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=920e467980e3d697fe98fdb2a8984706dbc75bc3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Fixes the following security vulnerabilities:
 
