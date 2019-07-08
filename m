@@ -1,35 +1,44 @@
-From: Ortmann, Michael <m.ortmann@lxinstruments.com>
-Date: Mon, 8 Jul 2019 14:54:13 +0000
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version
- 2.24.3
-Message-ID: <6d875efc4fc34633a85e52c770d3e803@lxinstruments.com>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Mon,  8 Jul 2019 20:18:49 +0300
+Subject: [Buildroot] [PATCH 1/1] package/zeromq: bump to version 4.3.2
+Message-ID: <20190708171849.17423-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-the new version of webkitgtk seems to be incompatible with the patch file "0001-Build-failure-after-r243644-in-GTK-Li.patch" that is located in "package/webkitgtk". Build fails after trying to apply the patch:
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/zeromq/zeromq.hash | 4 ++--
+ package/zeromq/zeromq.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-webkitgtk-2.24.3.tar.xz: OK (md5: e2a5bbd09a217eba096a2d1562143e35)
-webkitgtk-2.24.3.tar.xz: OK (sha1: 26a33fd0af8223c130427cd59aaf5ccaba584114)
-webkitgtk-2.24.3.tar.xz: OK (sha256: 940d746d7e82c357222feb5b3f44c4b201e81df7d81ddca5ca2bf3ae0acf6c51)
->>> webkitgtk 2.24.3 Extracting
-xzcat /buildroot/buildroot-2019.05/dl/webkitgtk/webkitgtk-2.24.3.tar.xz | tar --strip-components=1 -C /buildroot/buildroot-2019.05/output/build/webkitgtk-2.24.3   -xf -
->>> webkitgtk 2.24.3 Patching
-
-Applying 0001-Build-failure-after-r243644-in-GTK-Li.patch using patch:
-patching file Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp
-Reversed (or previously applied) patch detected!  Skipping patch.
-1 out of 1 hunk ignored -- saving rejects to file Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp.rej
-package/pkg-generic.mk:202: recipe for target '/buildroot/buildroot-2019.05/output/build/webkitgtk-2.24.3/.stamp_patched' failed
-make[1]: *** [/buildroot/buildroot-2019.05/output/build/webkitgtk-2.24.3/.stamp_patched] Error 1
-Makefile:84: recipe for target '_all' failed
-make: *** [_all] Error 2
-
-After deleting the patch file, building works for me.
-Regards, Michael
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190708/356cd615/attachment.html>
+diff --git a/package/zeromq/zeromq.hash b/package/zeromq/zeromq.hash
+index 5af6a3ff8d..5b87c3ca15 100644
+--- a/package/zeromq/zeromq.hash
++++ b/package/zeromq/zeromq.hash
+@@ -1,6 +1,6 @@
+ # From https://github.com/zeromq/libzmq/releases
+-md5  64cbf3577afdbfda30358bc757a6ac83  zeromq-4.3.1.tar.gz
+-sha1 6cce22d830eaf95feff7cab00744df13ad7ab7f3  zeromq-4.3.1.tar.gz
++md5  2047e917c2cc93505e2579bcba67a573 zeromq-4.3.2.tar.gz
++sha1 e5253bff214f77621b3d29443f1aa6e5a106ffe5  zeromq-4.3.2.tar.gz
+ # Locally computed
+ sha256 bcbabe1e2c7d0eec4ed612e10b94b112dd5f06fcefa994a0c79a45d835cd21eb  zeromq-4.3.1.tar.gz
+ sha256 4fd86507c9b486764343065a9e035222869a27b5789efeb4fd93edc85412d7a3  COPYING
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index d799f863c4..2c2e3e45b8 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZEROMQ_VERSION = 4.3.1
++ZEROMQ_VERSION = 4.3.2
+ ZEROMQ_SITE = https://github.com/zeromq/libzmq/releases/download/v$(ZEROMQ_VERSION)
+ ZEROMQ_INSTALL_STAGING = YES
+ ZEROMQ_DEPENDENCIES = util-linux
+-- 
+2.20.1
