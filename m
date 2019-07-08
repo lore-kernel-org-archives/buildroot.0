@@ -1,100 +1,106 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 7 Jul 2019 22:39:14 +0200
-Subject: [Buildroot] [git commit] docs/website: update for 2019.05.1
-Message-ID: <20190707203746.D1DD781417@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Mon, 08 Jul 2019 06:00:49 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-07-07
+Message-ID: <20190708060115.05D6E204EF@silver.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89d297a1ea5dc5c41b31f8b5b14c3e9fe5564bad
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/website/download.html | 18 +++++++++---------
- docs/website/news.html     | 19 +++++++++++++++++++
- 2 files changed, 28 insertions(+), 9 deletions(-)
+Build statistics for 2019-07-07
+===============================
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index ac25140e6a..329169317a 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -42,37 +42,37 @@
- 	</div>
-       </div>
- 
--      <h3 style="text-align: center;">Latest stable release: <b>2019.05</b></h3>
-+      <h3 style="text-align: center;">Latest stable release: <b>2019.05.1</b></h3>
- 
-       <div class="row mt centered">
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.05.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.05.1.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
--	  <h3><a href="/downloads/buildroot-2019.05.tar.gz">buildroot-2019.05.tar.gz</a></h3>
--	  <p><a href="/downloads/buildroot-2019.05.tar.gz.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.05.1.tar.gz">buildroot-2019.05.1.tar.gz</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.05.1.tar.gz.sign">PGP signature</a></p>
- 	</div>
- 	<div class="col-sm-6">
- 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
- 	    <div class="flipper">
- 	      <div class="front">
--		<a href="/downloads/buildroot-2019.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	      <div class="back">
--		<a href="/downloads/buildroot-2019.05.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
-+		<a href="/downloads/buildroot-2019.05.1.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
- 	      </div>
- 	    </div>
- 	  </div>
- 
--	  <h3><a href="/downloads/buildroot-2019.05.tar.bz2">buildroot-2019.05.tar.bz2</a></h3>
--	  <p><a href="/downloads/buildroot-2019.05.tar.bz2.sign">PGP signature</a></p>
-+	  <h3><a href="/downloads/buildroot-2019.05.1.tar.bz2">buildroot-2019.05.1.tar.bz2</a></h3>
-+	  <p><a href="/downloads/buildroot-2019.05.1.tar.bz2.sign">PGP signature</a></p>
- 	</div>
-       </div>
- <!--
-diff --git a/docs/website/news.html b/docs/website/news.html
-index 8d38108eb7..0a889c497e 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9,6 +9,25 @@
- <h2>News</h2>
- <ul class="timeline">
- 
-+  <li>
-+    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-+    <div class="timeline-panel">
-+      <div class="timeline-heading">
-+	<h4 class="timeline-title">2019.05.1 released</h4>
-+	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>7 July 2019</small></p>
-+      </div>
-+      <div class="timeline-body">
-+	<p>The 2019.05.1 bugfix release is out, fixing a number of important /
-+	  security related issues discovered since the 2019.05 release. See the
-+	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.05.1">CHANGES</a>
-+	  file for more details, read the
-+	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-July/254105.html">announcement</a>
-+	  and go to the <a href="/downloads/">downloads page</a> to pick up the
-+	  <a href="/downloads/buildroot-2019.05.1.tar.bz2">2019.05.1 release</a>.</p>
-+      </div>
-+    </div>
-+  </li>
-+
-   <li class="timeline-inverted">
-     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
-     <div class="timeline-panel">
+      branch |  OK | NOK | TIM | TOT |
+   2019.02.x |  22 |   1 |   0 |  23 |
+   2019.05.x |  15 |   1 |   0 |  16 |
+      master | 147 |  28 |   0 | 175 |
+
+Results for branch '2019.05.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                qt5base-5.12.2 | 1 
+
+
+Detail of failures
+------------------
+
+      x86_64 |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/0abcacb248ad2664e9418983278696056f61a339 |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+               libcap-ng-0.7.9 | 4 
+              libsodium-1.0.17 | 4 
+                       unknown | 3 
+                    atk-2.30.0 | 2 
+                  dnsmasq-2.80 | 2 
+                harfbuzz-2.5.2 | 2 
+              iputils-20190515 | 2 
+          modem-manager-1.10.2 | 2 
+      gst1-plugins-base-1.16.0 | 1 
+                   gvfs-1.31.4 | 1 
+imx-uuc-79e9798eee9cd972d92... | 1 
+               libgpgme-1.13.1 | 1 
+                    mpv-0.27.2 | 1 
+                 python3-3.7.3 | 1 
+   vdr-plugin-vnsiserver-1.8.0 | 1 
+
+
+Detail of failures
+------------------
+
+         arc |                     atk-2.30.0 | NOK | http://autobuild.buildroot.net/results/0f1a2dc0d8ccc32ca3b6778a335cadcc56306772 | ORPH
+      xtensa |                     atk-2.30.0 | NOK | http://autobuild.buildroot.net/results/436ac69e81df900ac70b1e5b1f7db19700159d35 | ORPH
+       nios2 |                   dnsmasq-2.80 | NOK | http://autobuild.buildroot.net/results/43335fe7356d11ddf05f754b5318d14526770fe5 |     
+         arm |                   dnsmasq-2.80 | NOK | http://autobuild.buildroot.net/results/17e4a6de68080e09cae1375cca1f00c551d47a74 |     
+         arm |       gst1-plugins-base-1.16.0 | NOK | http://autobuild.buildroot.net/results/0364b872a50a7824ad6389378974f78929b89861 |     
+    mips64el |                    gvfs-1.31.4 | NOK | http://autobuild.buildroot.net/results/e59ffd6751c26f680034d3488015f07b26123c54 | ORPH
+        m68k |                 harfbuzz-2.5.2 | NOK | http://autobuild.buildroot.net/results/fae63658a1fed3493638d916846f23ec98072a53 | ORPH
+        m68k |                 harfbuzz-2.5.2 | NOK | http://autobuild.buildroot.net/results/6ee2900df4fc7d4ae5aee34d7b92468b916bca6c | ORPH
+         arm | imx-uuc-79e9798eee9cd972d92... | NOK | http://autobuild.buildroot.net/results/12c08173f83315fb68fe3c3d34a78ed919ba5a79 |     
+microblazeel |               iputils-20190515 | NOK | http://autobuild.buildroot.net/results/e3d75a5a39f4419bee03afc5db09d73d141ac120 |     
+         arm |               iputils-20190515 | NOK | http://autobuild.buildroot.net/results/15989b9af8b1a469a44267ee828c8d825c4d9ebd |     
+         arc |                libcap-ng-0.7.9 | NOK | http://autobuild.buildroot.net/results/dcd7d04ca3d5001b5ed81fbc5cea0c63585fa74a |     
+         arc |                libcap-ng-0.7.9 | NOK | http://autobuild.buildroot.net/results/64f6cb72770a4df42faa1891cd08de864e828fbf |     
+         arc |                libcap-ng-0.7.9 | NOK | http://autobuild.buildroot.net/results/3165b2f423f70d428dcd1c31b8bdd8aa595e868d |     
+         arc |                libcap-ng-0.7.9 | NOK | http://autobuild.buildroot.net/results/cafb6bd6525a2352f71472bb399115d04e35a5c8 |     
+         arm |                libgpgme-1.13.1 | NOK | http://autobuild.buildroot.net/results/1807e49ee076bcb945627f42f98cc8565b50c309 | ORPH
+         arc |               libsodium-1.0.17 | NOK | http://autobuild.buildroot.net/results/92a6b2257df66673dc93cd8c6cf18381d471968f |     
+         arc |               libsodium-1.0.17 | NOK | http://autobuild.buildroot.net/results/f7681c5c706a1a7eaf9a11179674bdb1fc3ecad3 |     
+         arc |               libsodium-1.0.17 | NOK | http://autobuild.buildroot.net/results/18c17e68bf83c5d8aa2c202b8833f092a54a10f7 |     
+         arc |               libsodium-1.0.17 | NOK | http://autobuild.buildroot.net/results/812b25206476e6b549b8fee92dc2d5ffa57aa8e9 |     
+      x86_64 |           modem-manager-1.10.2 | NOK | http://autobuild.buildroot.net/results/dbe235284fd3b4a4a26b6c97d2a87c8799166b8d |     
+     aarch64 |           modem-manager-1.10.2 | NOK | http://autobuild.buildroot.net/results/32e1f8c0ce6184fab301dccb1c8923827970350b |     
+     nds32le |                     mpv-0.27.2 | NOK | http://autobuild.buildroot.net/results/d949c48245917b7ebcc1420da057d8dda11458c6 |     
+     powerpc |                  python3-3.7.3 | NOK | http://autobuild.buildroot.net/results/d1f4cf5168b3f776ce6139a35ac812d23ca043ae |     
+    mips64el |                        unknown | NOK | http://autobuild.buildroot.net/results/fe9989471ab51cdf33f51ca997d151039fef22f1 |     
+  aarch64_be |                        unknown | NOK | http://autobuild.buildroot.net/results/9fbe7cf46ab1daa508c31d9ecee87f8d46141b38 |     
+         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/5fb3862542b94c71644a7f8295d3aa20a0e48e22 |     
+       nios2 |    vdr-plugin-vnsiserver-1.8.0 | NOK | http://autobuild.buildroot.net/results/a44668af97fcbf5194d0d072a444678af69e3212 |     
+
+Results for branch '2019.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                    vte-0.48.3 | 1 
+
+
+Detail of failures
+------------------
+
+     sparc64 |                     vte-0.48.3 | NOK | http://autobuild.buildroot.net/results/30a8032ebba5a30bacd321c407a1d0734fadf757 | ORPH
+
+
+-- 
+http://autobuild.buildroot.net
