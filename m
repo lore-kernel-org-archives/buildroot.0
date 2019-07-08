@@ -1,188 +1,182 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon,  8 Jul 2019 23:08:29 +0200
-Subject: [Buildroot] [PATCH] package/uboot-tools: bump to version 2019.07
-Message-ID: <1562620109-22335-1-git-send-email-pjtexier@koncepto.io>
+From: Joris Offouga <offougajoris@gmail.com>
+Date: Mon, 8 Jul 2019 23:52:51 +0200
+Subject: [Buildroot] [PATCH] configs/warp7: Bump kernel and U-Boot
+ versions
+In-Reply-To: <1562616678-20056-1-git-send-email-pjtexier@koncepto.io>
+References: <1562616678-20056-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <c89ef2ad-8051-a726-e727-5cb6e97d993a@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Bump to version 2019.07.
-- remove the patches that have been upstreamed.
+Hi Pierre-Jean
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
----
- .../0003-Make-FIT-support-really-optional.patch    | 101 ---------------------
- ...ile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch |  28 ------
- package/uboot-tools/uboot-tools.hash               |   2 +-
- package/uboot-tools/uboot-tools.mk                 |   2 +-
- 4 files changed, 2 insertions(+), 131 deletions(-)
- delete mode 100644 package/uboot-tools/0003-Make-FIT-support-really-optional.patch
- delete mode 100644 package/uboot-tools/0004-tools-Makefile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch
+Le 08/07/2019 ? 22:11, Pierre-Jean Texier a ?crit?:
+> Bump U-Boot to 2019.07 and kernel to version 5.1.16.
+>
+> Also
+>   - adjust the U-Boot binary name after DM conversion.
+>   - add missing notes about DFU
+>
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> ---
+> Logs:
+> U-Boot 2019.07 (Jul 08 2019 - 21:48:39 +0200)
+>
+> CPU:   Freescale i.MX7S rev1.2 800 MHz (running at 792 MHz)
+> CPU:   Extended Commercial temperature grade (-20C to 105C) at 41C
+> Reset cause: POR
+> Model: Warp i.MX7 Board
+> Board: WARP7 in secure mode OPTEE DRAM 0x9d000000-0xa0000000
+> DRAM:  464 MiB
+> PMIC: PFUZE3000 DEV_ID=0x30 REV_ID=0x11
+> MMC:   FSL_SDHC: 1, FSL_SDHC: 0
+>
+> => run bootcmd
+> switch to partitions #0, OK
+> mmc0(part 0) is current device
+> switch to partitions #0, OK
+> mmc0(part 0) is current device
+> 8188560 bytes read in 118 ms (66.2 MiB/s)
+> Booting from mmc ...
+> ...
+> Starting kernel ...
+>
+> [    0.000000] Booting Linux on physical CPU 0x0
+> [    0.000000] Linux version 5.1.16 (pjtexier at menoah)
+>
+>   board/warp7/readme.txt  | 22 ++++++++++++++++++----
+>   configs/warp7_defconfig | 10 +++++-----
+>   2 files changed, 23 insertions(+), 9 deletions(-)
+>
+> diff --git a/board/warp7/readme.txt b/board/warp7/readme.txt
+> index 47458e9..aff7a60 100644
+> --- a/board/warp7/readme.txt
+> +++ b/board/warp7/readme.txt
+> @@ -20,7 +20,7 @@ You will find in output/images/ the following files:
+>     - rootfs.ext4
+>     - rootfs.tar
+>     - sdcard.img
+> -  - u-boot.imx
+> +  - u-boot-dtb.imx
+>     - zImage
+>   
+>   Flash the eMMC image
+> @@ -61,11 +61,11 @@ Connect a USB to serial adapter between the host PC and warp7 serial
+>   USB port, and also a USB cable between the OTG warp7 port and the host
+>   PC.
+>   
+> -Copy u-boot.imx to the imx_usb_loader folder.
+> +Copy u-boot-dtb.imx to the imx_usb_loader folder.
+>   
+> -Load u-boot.imx via USB:
+> +Load u-boot-dtb.imx via USB:
+>   
+> -$ sudo ./imx_usb u-boot.imx
+> +$ sudo ./imx_usb u-boot-dtb.imx
+>   
+>   Then U-Boot should start and its messages will appear in the console program.
+>   
+> @@ -75,6 +75,20 @@ Use the default environment variables:
+>   
+>   => env default -f -a
+>   => saveenv
+> +
+> +Run the DFU command:
+> +=> dfu 0 mmc 0
+> +
+> +Transfer u-boot-dtb.imx that will be flashed into the eMMC:
+> +
+> +$ sudo dfu-util -D u-boot-dtb.imx -a boot
+> +
+> +Then on the U-Boot prompt the following message should be seen after a
+> +successful upgrade:
+> +
+> +#DOWNLOAD ... OK
+> +Ctrl+C to exit ...
+> +
+>   => ums 0 mmc 0
+>   
+>   sudo dd if=output/images/sdcard.img of=/dev/<your-emmc-device>
+> diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+> index 8acd730..9b10085 100644
+> --- a/configs/warp7_defconfig
+> +++ b/configs/warp7_defconfig
+> @@ -3,8 +3,8 @@ BR2_arm=y
+>   BR2_cortex_a7=y
+>   BR2_ARM_FPU_NEON_VFPV4=y
+>   
+> -# Linux headers same as kernel, a 5.0 series
+> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+> +# Linux headers same as kernel, a 5.1 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
+>   
+>   # system
+>   BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+> @@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
+>   # Kernel
+>   BR2_LINUX_KERNEL=y
+>   BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.9"
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.16"
+>   BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+>   BR2_LINUX_KERNEL_DTS_SUPPORT=y
+>   BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+> @@ -25,8 +25,8 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+>   BR2_TARGET_UBOOT=y
+>   BR2_TARGET_UBOOT_BOARDNAME="warp7"
+>   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+> -BR2_TARGET_UBOOT_FORMAT_IMX=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
+> +BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+>   
+>   # wifi firmware for brcm43430
+>   BR2_PACKAGE_LINUX_FIRMWARE=y
 
-diff --git a/package/uboot-tools/0003-Make-FIT-support-really-optional.patch b/package/uboot-tools/0003-Make-FIT-support-really-optional.patch
-deleted file mode 100644
-index 329245f..0000000
---- a/package/uboot-tools/0003-Make-FIT-support-really-optional.patch
-+++ /dev/null
-@@ -1,101 +0,0 @@
--From 794aeeb82ab7c0304e343499ee5d82c1f1c5c39a Mon Sep 17 00:00:00 2001
--From: Carlos Santos <casantos@datacom.ind.br>
--Date: Sun, 8 May 2016 11:11:39 -0300
--Subject: [PATCH] Make FIT support really optional
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Due to some mistakes in the source code, it was not possible to really
--turn FIT support off. This commit fixes the problem by means of the
--following changes:
--
--- Enclose "bootm_host_load_image" and "bootm_host_load_images" between
--  checks for CONFIG_FIT_SIGNATURE, in common/bootm.c.
--
--- Enclose the declaration of "bootm_host_load_images" between checks for
--  CONFIG_FIT_SIGNATURE, in common/bootm.h.
--
--- Condition the compilation and linking of fit_common.o fit_image.o
--  image-host.o common/image-fit.o to CONFIG_FIT=y, in tools/Makefile.
--
--Signed-off-by: Carlos Santos <casantos@datacom.ind.br>
--[fabio: adapt for 2016.07]
--Signed-off-by: Fabio Estevam <festevam@gmail.com>
--[Ricardo: fix conditional compilation and linking of the files mentioned above
--for 2016.07]
--Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
--[J?rg: adapt for 2019.01]
--Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-----
-- common/bootm.c  | 2 ++
-- include/bootm.h | 2 ++
-- tools/Makefile  | 6 ++----
-- 3 files changed, 6 insertions(+), 4 deletions(-)
--
--diff --git a/common/bootm.c b/common/bootm.c
--index 8bf84ebcb7..ecc29fb7b4 100644
----- a/common/bootm.c
--+++ b/common/bootm.c
--@@ -922,6 +922,7 @@ void memmove_wd(void *to, void *from, size_t len, ulong chunksz)
-- 	memmove(to, from, len);
-- }
-- 
--+#if defined(CONFIG_FIT_SIGNATURE)
-- static int bootm_host_load_image(const void *fit, int req_image_type)
-- {
-- 	const char *fit_uname_config = NULL;
--@@ -986,5 +987,6 @@ int bootm_host_load_images(const void *fit, int cfg_noffset)
-- 	/* Return the first error we found */
-- 	return err;
-- }
--+#endif
-- 
-- #endif /* ndef USE_HOSTCC */
--diff --git a/include/bootm.h b/include/bootm.h
--index dbd6f49c2d..f5fe9cb2d3 100644
----- a/include/bootm.h
--+++ b/include/bootm.h
--@@ -42,7 +42,9 @@ void lynxkdi_boot(image_header_t *hdr);
-- 
-- boot_os_fn *bootm_os_get_boot_func(int os);
-- 
--+#if defined(CONFIG_FIT_SIGNATURE)
-- int bootm_host_load_images(const void *fit, int cfg_noffset);
--+#endif
-- 
-- int boot_selected_os(int argc, char * const argv[], int state,
-- 		     bootm_headers_t *images, boot_os_fn *boot_fn);
--diff --git a/tools/Makefile b/tools/Makefile
--index 081383d7a7..4d23c3941e 100644
----- a/tools/Makefile
--+++ b/tools/Makefile
--@@ -58,6 +58,7 @@ hostprogs-$(CONFIG_FIT_SIGNATURE) += fit_info fit_check_sign
-- 
-- hostprogs-$(CONFIG_CMD_BOOTEFI_SELFTEST) += file2include
-- 
--+FIT_OBJS-$(CONFIG_FIT) := fit_common.o fit_image.o image-host.o common/image-fit.o
-- FIT_SIG_OBJS-$(CONFIG_FIT_SIGNATURE) := common/image-sig.o
-- 
-- # The following files are synced with upstream DTC.
--@@ -80,16 +81,13 @@ ROCKCHIP_OBS = lib/rc4.o rkcommon.o rkimage.o rksd.o rkspi.o
-- # common objs for dumpimage and mkimage
-- dumpimage-mkimage-objs := aisimage.o \
-- 			atmelimage.o \
--+			$(FIT_OBJS-y) \
-- 			$(FIT_SIG_OBJS-y) \
-- 			common/bootm.o \
-- 			lib/crc32.o \
-- 			default_image.o \
-- 			lib/fdtdec_common.o \
-- 			lib/fdtdec.o \
---			fit_common.o \
---			fit_image.o \
---			common/image-fit.o \
---			image-host.o \
-- 			common/image.o \
-- 			imagetool.o \
-- 			imximage.o \
---- 
--2.20.1
--
-diff --git a/package/uboot-tools/0004-tools-Makefile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch b/package/uboot-tools/0004-tools-Makefile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch
-deleted file mode 100644
-index 5c54f4c..0000000
---- a/package/uboot-tools/0004-tools-Makefile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 9f2dce5887bb52e8c7f9ef40a6733d70af72ff1c Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 30 Apr 2019 18:45:17 +0200
--Subject: [PATCH] tools/Makefile: fix HOSTCFLAGS with CROSS_BUILD_TOOLS
--
--When CROSS_BUILD_TOOLS is set, set HOSTCFLAGS to CFLAGS otherwise CC
--will be used with HOSTCFLAGS which seems wrong
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- tools/Makefile | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/tools/Makefile b/tools/Makefile
--index 12a3027e23..eadeba417d 100644
----- a/tools/Makefile
--+++ b/tools/Makefile
--@@ -272,6 +272,7 @@ subdir- += env
-- 
-- ifneq ($(CROSS_BUILD_TOOLS),)
-- override HOSTCC = $(CC)
--+override HOSTCFLAGS = $(CFLAGS)
-- 
-- quiet_cmd_crosstools_strip = STRIP   $^
--       cmd_crosstools_strip = $(STRIP) $^; touch $@
---- 
--2.20.1
--
-diff --git a/package/uboot-tools/uboot-tools.hash b/package/uboot-tools/uboot-tools.hash
-index b8b06a2..d2830ee 100644
---- a/package/uboot-tools/uboot-tools.hash
-+++ b/package/uboot-tools/uboot-tools.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  76b7772d156b3ddd7644c8a1736081e55b78828537ff714065d21dbade229bef  u-boot-2019.04.tar.bz2
-+sha256  bff4fa77e8da17521c030ca4c5b947a056c1b1be4d3e6ee8637020b8d50251d0  u-boot-2019.07.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index ba6b6db..6bfc2ff 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UBOOT_TOOLS_VERSION = 2019.04
-+UBOOT_TOOLS_VERSION = 2019.07
- UBOOT_TOOLS_SOURCE = u-boot-$(UBOOT_TOOLS_VERSION).tar.bz2
- UBOOT_TOOLS_SITE = ftp://ftp.denx.de/pub/u-boot
- UBOOT_TOOLS_LICENSE = GPL-2.0+
--- 
-2.7.4
+it works for me
+
+U-Boot 2019.07 (Jul 08 2019 - 23:35:25 +0200)
+
+CPU:?? Freescale i.MX7S rev1.2 800 MHz (running at 792 MHz)
+CPU:?? Extended Commercial temperature grade (-20C to 105C) at 46C
+Reset cause: POR
+Model: Warp i.MX7 Board
+Board: WARP7 in secure mode OPTEE DRAM 0x9d000000-0xa0000000
+DRAM:? 464 MiB
+PMIC: PFUZE3000 DEV_ID=0x30 REV_ID=0x11
+MMC:?? FSL_SDHC: 1, FSL_SDHC: 0
+Loading Environment from MMC... OK
+In:??? serial at 30860000
+Out:?? serial at 30860000
+Err:?? serial at 30860000
+SEC0: RNG instantiated
+Net:?? usb_ether
+Warning: usb_ether (eth0) using random MAC address - 4a:ec:76:9f:4e:28
+
+Hit any key to stop autoboot:? 0
+switch to partitions #0, OK
+mmc0(part 0) is current device
+switch to partitions #0, OK
+mmc0(part 0) is current device
+8188688 bytes read in 119 ms (65.6 MiB/s)
+Booting from mmc ...
+26889 bytes read in 10 ms (2.6 MiB/s)
+Kernel image @ 0x80800000 [ 0x000000 - 0x7cf310 ]
+## Flattened Device Tree blob at 83000000
+ ?? Booting using the fdt blob at 0x83000000
+ ?? Using Device Tree in place at 83000000, end 83009908
+
+Starting kernel ...
+
+Tested-by: Joris Offouga <offougajoris@gmail.com>
+
+Best Regards,
+
+Joris Offouga
+
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190708/9be20de2/attachment.html>
