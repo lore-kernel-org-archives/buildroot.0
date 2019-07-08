@@ -1,43 +1,62 @@
-From: jared.bents at rockwellcollins.com <jared.bents@rockwellcollins.com>
-Date: Mon,  8 Jul 2019 15:07:54 -0500
-Subject: [Buildroot] [PATCH v3 1/1] package/hostapd: add debug information
- options
-Message-ID: <20190708200754.20272-1-jared.bents@rockwellcollins.com>
+From: Joseph Kogut <joseph.kogut@gmail.com>
+Date: Mon, 8 Jul 2019 13:11:17 -0700
+Subject: [Buildroot] [PATCH 1/1] package/at-spi2-core: fix build with NLS
+In-Reply-To: <20190704170538.19478-1-fontaine.fabrice@gmail.com>
+References: <20190704170538.19478-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAMWSM7gdtjvdp=py9+isYfKqf_Bd9OXS7jQB18ym_XX78sV7CQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jared Bents <jared.bents@rockwellcollins.com>
+Hi Fabrice,
 
-hostapd 2.7 added compile time options to include
-redirecting the output from stdout to a file or syslog
-like wpa_supplicant
+On Thu, Jul 4, 2019 at 10:05 AM Fabrice Fontaine
+<fontaine.fabrice@gmail.com> wrote:
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/0b0d3370d8d050f7a3ba5663833e5e06e7c0b7b1?
+>
 
-Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
---
-v1->v2: Updated to move reposition the debug syslog option
-v2->v3: Updated to turn both options on unconditionally
----
- package/hostapd/hostapd.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+It appears there's an extra character on the end of that buildbot URL.
 
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 550f887206..e6542c879c 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -31,7 +31,10 @@ HOSTAPD_LICENSE = BSD-3-Clause
- HOSTAPD_LICENSE_FILES = README
- HOSTAPD_CONFIG_SET =
- 
--HOSTAPD_CONFIG_ENABLE = CONFIG_INTERNAL_LIBTOMMATH
-+HOSTAPD_CONFIG_ENABLE = \
-+	CONFIG_INTERNAL_LIBTOMMATH \
-+	CONFIG_DEBUG_FILE \
-+	CONFIG_DEBUG_SYSLOG
- 
- HOSTAPD_CONFIG_DISABLE =
- 
--- 
-2.18.0
+It looks like the correct URL is:
+http://autobuild.buildroot.org/results/0b0d3370d8d050f7a3ba5663833e5e06e7c0b7b1
+
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/at-spi2-core/at-spi2-core.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
+> index 40b29bdb3f..3a5197eb03 100644
+> --- a/package/at-spi2-core/at-spi2-core.mk
+> +++ b/package/at-spi2-core/at-spi2-core.mk
+> @@ -11,7 +11,10 @@ AT_SPI2_CORE_SITE = http://ftp.gnome.org/pub/gnome/sources/at-spi2-core/$(AT_SPI
+>  AT_SPI2_CORE_LICENSE = LGPL-2.0+
+>  AT_SPI2_CORE_LICENSE_FILES = COPYING
+>  AT_SPI2_CORE_INSTALL_STAGING = YES
+> -AT_SPI2_CORE_DEPENDENCIES = host-pkgconf dbus libglib2 xlib_libXtst
+> +AT_SPI2_CORE_DEPENDENCIES = host-pkgconf dbus libglib2 xlib_libXtst \
+> +       $(TARGET_NLS_DEPENDENCIES)
+>  AT_SPI2_CORE_CONF_OPTS = -Ddbus_daemon=/usr/bin/dbus-daemon
+>
+> +AT_SPI2_CORE_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+> +
+>  $(eval $(meson-package))
+> --
+> 2.20.1
+>
+
+Also fixes:
+- http://autobuild.buildroot.net/results/b46f989e2c5d37e9c6535ce5630c80ca9d0a9009
+
+Tested-by: Joseph Kogut <joseph.kogut@gmail.com>
+
+Lastly, it appears there is a similar failure with atk. I assume the
+fix is also the same. Do you have time to make a patch for that as
+well? If not, I can submit one.
+
+Best,
+Joseph
