@@ -1,36 +1,45 @@
-From: Victor Huesca <victor.huesca@bootlin.com>
-Date: Mon,  8 Jul 2019 10:37:23 +0200
-Subject: [Buildroot] [PATCH] package/ding-libs: adjsut version variable
-Message-ID: <20190708083723.12154-1-victor.huesca@bootlin.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 08 Jul 2019 11:36:17 +0000
+Subject: [Buildroot] [Bug 11991] [numpy] segfault when compiling for RPi3
+ 64bits
+In-Reply-To: <bug-11991-163@https.bugs.busybox.net/>
+References: <bug-11991-163@https.bugs.busybox.net/>
+Message-ID: <bug-11991-163-9UoYMib0Rj@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This package use dashes as version separator while release-monitoring uses dots.
-As the <pkg>_VERSION is used to match against release-monitoring, this patch change
-the version variable to use dots instead.
+https://bugs.busybox.net/show_bug.cgi?id=11991
 
-Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
----
- package/ding-libs/ding-libs.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+--- Comment #2 from XonqNopp <xonqnoppp@gmail.com> ---
+Created attachment 8136
+  --> https://bugs.busybox.net/attachment.cgi?id=8136&action=edit
+Config used when encountering numpy segfault
 
-diff --git a/package/ding-libs/ding-libs.mk b/package/ding-libs/ding-libs.mk
-index e9508ccf9e..976f5728ea 100644
---- a/package/ding-libs/ding-libs.mk
-+++ b/package/ding-libs/ding-libs.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--DING_LIBS_VERSION = 0_4_0
--DING_LIBS_SOURCE = ding_libs-$(DING_LIBS_VERSION).tar.xz
-+DING_LIBS_VERSION = 0.4.0
-+DING_LIBS_SOURCE = ding_libs-$(subst .,_,$(DING_LIBS_VERSION)).tar.xz
- DING_LIBS_SITE = https://git.fedorahosted.org/cgit/ding-libs.git/snapshot
- DING_LIBS_DEPENDENCIES = host-pkgconf \
- 	$(TARGET_NLS_DEPENDENCIES) \
+Attached my .config (compressed because too large for bugzilla).
+
+I started from configs/raspberry3_64_defconfig and added the stuff I need.
+
+About GCC version I am not sure which one you want... So I have these:
+
+$
+/home/buildroot/buildroot201907numpySegFault/output/host/bin/aarch64-buildroot-linux-uclibc-gcc
+--version
+aarch64-buildroot-linux-uclibc-gcc.br_real (Buildroot 2019.05) 7.4.0
+Copyright (C) 2017 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+$ gcc --version
+gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516
+Copyright (C) 2016 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Let me know if you want to know about another one...
+
 -- 
-2.21.0
+You are receiving this mail because:
+You are on the CC list for the bug.
