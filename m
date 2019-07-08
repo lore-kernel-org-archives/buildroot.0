@@ -1,62 +1,133 @@
-From: Joseph Kogut <joseph.kogut@gmail.com>
-Date: Mon, 8 Jul 2019 13:11:17 -0700
-Subject: [Buildroot] [PATCH 1/1] package/at-spi2-core: fix build with NLS
-In-Reply-To: <20190704170538.19478-1-fontaine.fabrice@gmail.com>
-References: <20190704170538.19478-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAMWSM7gdtjvdp=py9+isYfKqf_Bd9OXS7jQB18ym_XX78sV7CQ@mail.gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon,  8 Jul 2019 22:11:18 +0200
+Subject: [Buildroot] [PATCH] configs/warp7: Bump kernel and U-Boot versions
+Message-ID: <1562616678-20056-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+Bump U-Boot to 2019.07 and kernel to version 5.1.16.
 
-On Thu, Jul 4, 2019 at 10:05 AM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/0b0d3370d8d050f7a3ba5663833e5e06e7c0b7b1?
->
+Also
+ - adjust the U-Boot binary name after DM conversion.
+ - add missing notes about DFU
 
-It appears there's an extra character on the end of that buildbot URL.
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+Logs:
+U-Boot 2019.07 (Jul 08 2019 - 21:48:39 +0200)
 
-It looks like the correct URL is:
-http://autobuild.buildroot.org/results/0b0d3370d8d050f7a3ba5663833e5e06e7c0b7b1
+CPU:   Freescale i.MX7S rev1.2 800 MHz (running at 792 MHz)
+CPU:   Extended Commercial temperature grade (-20C to 105C) at 41C
+Reset cause: POR
+Model: Warp i.MX7 Board
+Board: WARP7 in secure mode OPTEE DRAM 0x9d000000-0xa0000000
+DRAM:  464 MiB
+PMIC: PFUZE3000 DEV_ID=0x30 REV_ID=0x11
+MMC:   FSL_SDHC: 1, FSL_SDHC: 0
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/at-spi2-core/at-spi2-core.mk | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
-> index 40b29bdb3f..3a5197eb03 100644
-> --- a/package/at-spi2-core/at-spi2-core.mk
-> +++ b/package/at-spi2-core/at-spi2-core.mk
-> @@ -11,7 +11,10 @@ AT_SPI2_CORE_SITE = http://ftp.gnome.org/pub/gnome/sources/at-spi2-core/$(AT_SPI
->  AT_SPI2_CORE_LICENSE = LGPL-2.0+
->  AT_SPI2_CORE_LICENSE_FILES = COPYING
->  AT_SPI2_CORE_INSTALL_STAGING = YES
-> -AT_SPI2_CORE_DEPENDENCIES = host-pkgconf dbus libglib2 xlib_libXtst
-> +AT_SPI2_CORE_DEPENDENCIES = host-pkgconf dbus libglib2 xlib_libXtst \
-> +       $(TARGET_NLS_DEPENDENCIES)
->  AT_SPI2_CORE_CONF_OPTS = -Ddbus_daemon=/usr/bin/dbus-daemon
->
-> +AT_SPI2_CORE_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
-> +
->  $(eval $(meson-package))
-> --
-> 2.20.1
->
+=> run bootcmd 
+switch to partitions #0, OK
+mmc0(part 0) is current device
+switch to partitions #0, OK
+mmc0(part 0) is current device
+8188560 bytes read in 118 ms (66.2 MiB/s)
+Booting from mmc ...
+...
+Starting kernel ...
 
-Also fixes:
-- http://autobuild.buildroot.net/results/b46f989e2c5d37e9c6535ce5630c80ca9d0a9009
+[    0.000000] Booting Linux on physical CPU 0x0
+[    0.000000] Linux version 5.1.16 (pjtexier at menoah)
 
-Tested-by: Joseph Kogut <joseph.kogut@gmail.com>
+ board/warp7/readme.txt  | 22 ++++++++++++++++++----
+ configs/warp7_defconfig | 10 +++++-----
+ 2 files changed, 23 insertions(+), 9 deletions(-)
 
-Lastly, it appears there is a similar failure with atk. I assume the
-fix is also the same. Do you have time to make a patch for that as
-well? If not, I can submit one.
-
-Best,
-Joseph
+diff --git a/board/warp7/readme.txt b/board/warp7/readme.txt
+index 47458e9..aff7a60 100644
+--- a/board/warp7/readme.txt
++++ b/board/warp7/readme.txt
+@@ -20,7 +20,7 @@ You will find in output/images/ the following files:
+   - rootfs.ext4
+   - rootfs.tar
+   - sdcard.img
+-  - u-boot.imx
++  - u-boot-dtb.imx
+   - zImage
+ 
+ Flash the eMMC image
+@@ -61,11 +61,11 @@ Connect a USB to serial adapter between the host PC and warp7 serial
+ USB port, and also a USB cable between the OTG warp7 port and the host
+ PC.
+ 
+-Copy u-boot.imx to the imx_usb_loader folder.
++Copy u-boot-dtb.imx to the imx_usb_loader folder.
+ 
+-Load u-boot.imx via USB:
++Load u-boot-dtb.imx via USB:
+ 
+-$ sudo ./imx_usb u-boot.imx
++$ sudo ./imx_usb u-boot-dtb.imx
+ 
+ Then U-Boot should start and its messages will appear in the console program.
+ 
+@@ -75,6 +75,20 @@ Use the default environment variables:
+ 
+ => env default -f -a
+ => saveenv
++
++Run the DFU command:
++=> dfu 0 mmc 0
++
++Transfer u-boot-dtb.imx that will be flashed into the eMMC:
++
++$ sudo dfu-util -D u-boot-dtb.imx -a boot
++
++Then on the U-Boot prompt the following message should be seen after a
++successful upgrade:
++
++#DOWNLOAD ... OK
++Ctrl+C to exit ...
++
+ => ums 0 mmc 0
+ 
+ sudo dd if=output/images/sdcard.img of=/dev/<your-emmc-device>
+diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
+index 8acd730..9b10085 100644
+--- a/configs/warp7_defconfig
++++ b/configs/warp7_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 5.0 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
++# Linux headers same as kernel, a 5.1 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.9"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.16"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
+@@ -25,8 +25,8 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="warp7"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
+-BR2_TARGET_UBOOT_FORMAT_IMX=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
++BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+ 
+ # wifi firmware for brcm43430
+ BR2_PACKAGE_LINUX_FIRMWARE=y
+-- 
+2.7.4
