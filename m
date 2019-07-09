@@ -1,51 +1,38 @@
-From: robert.mccabe at rockwellcollins.com <robert.mccabe@rockwellcollins.com>
-Date: Tue,  9 Jul 2019 15:46:19 -0500
-Subject: [Buildroot] [PATCH v2 1/1] BR2_EXTERNAL linux-kernel-extensions
- support
-Message-ID: <20190709204619.425-1-robert.mccabe@rockwellcollins.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Tue,  9 Jul 2019 22:54:14 +0200
+Subject: [Buildroot] [PATCH] configs/beaglebone: increase rootfs image size
+Message-ID: <1562705654-1620-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "McCabe, Robert J" <robert.mccabe@rockwellcollins.com>
+The default rootfs image size is too small (60M).
+So, increase it to 120M.
 
-Allows external projects to inject custom code inside the Linux source
-tree.
+Fixes:
 
-Signed-off-by: McCabe, Robert J <robert.mccabe@rockwellcollins.com>
+ Copying files into the device: __populate_fs: Could not allocate block in ext2 filesystem while writing file "koi8_r.py"
+ mkfs.ext4: Could not allocate block in ext2 filesystem while populating file system
+ *** Maybe you need to increase the filesystem size (BR2_TARGET_ROOTFS_EXT2_SIZE)
+
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- linux/linux.mk | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ configs/beaglebone_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index a1378345c3..2128a36b5f 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -511,14 +511,19 @@ endef
- #
- # Note: our package infrastructure uses the full-path of the last-scanned
- # Makefile to determine what package we're currently defining, using the
--# last directory component in the path. As such, including other Makefile,
--# like below, before we call one of the *-package macro is usally not
--# working.
-+# last directory component in the path. As such, including other Makefiles,
-+# like below, before we call one of the *-package macros usually doesn't
-+# work.
- # However, since the files we include here are in the same directory as
- # the current Makefile, we are OK. But this is a hard requirement: files
--# included here *must* be in the same directory!
-+# included here *must* either by in this same directory OR within a
-+# another directory with the name "linux" (in the BR2_EXTERNAL case).
- include $(sort $(wildcard linux/linux-ext-*.mk))
-
-+#Import linux-kernel-extensions from externals
-+-include $(sort $(wildcard $(foreach ext,$(BR2_EXTERNAL_DIRS), \
-+       $(ext)/linux/linux-ext-*.mk)))
-+
- LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
-        $(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
-
---
-2.17.1
+diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
+index b4f152f..0ba3310 100644
+--- a/configs/beaglebone_defconfig
++++ b/configs/beaglebone_defconfig
+@@ -13,6 +13,7 @@ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-- 
+2.7.4
