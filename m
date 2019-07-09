@@ -1,165 +1,51 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Tue, 9 Jul 2019 13:05:39 -0700
-Subject: [Buildroot] [PATCH 1/2] boot/opensbi: Add support for including
- Linux payload
-In-Reply-To: <CAKmqyKOXbP8vjj+5OiFd2xbswpqwY08xXur6T2Vdfid6Zg23Nw@mail.gmail.com>
-References: <20190708215353.9107-1-alistair.francis@wdc.com>
- <adac2106-429b-218b-20c2-ffee4aa4c83d@embecosm.com>
- <93ce4fc2-709b-8739-b0d0-7f8dacb3f0d0@mind.be>
- <CAKmqyKOXbP8vjj+5OiFd2xbswpqwY08xXur6T2Vdfid6Zg23Nw@mail.gmail.com>
-Message-ID: <CAKmqyKMmjFTS_z+qOX9qy5d9LWENB+Y04O2=PS9E_+78RtqrRA@mail.gmail.com>
+From: robert.mccabe at rockwellcollins.com <robert.mccabe@rockwellcollins.com>
+Date: Tue,  9 Jul 2019 15:46:19 -0500
+Subject: [Buildroot] [PATCH v2 1/1] BR2_EXTERNAL linux-kernel-extensions
+ support
+Message-ID: <20190709204619.425-1-robert.mccabe@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 9, 2019 at 10:48 AM Alistair Francis <alistair23@gmail.com> wrote:
->
-> On Tue, Jul 9, 2019 at 10:33 AM Arnout Vandecappelle <arnout@mind.be> wrote:
-> >
-> >
-> >
-> > On 09/07/2019 17:27, Mark Corbin wrote:
-> > > Hello Alistair
-> > >
-> > > On 08/07/2019 22:53, Alistair Francis wrote:
-> > >> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-> > >> ---
-> > >>  boot/opensbi/Config.in  |  9 +++++++++
-> > >>  boot/opensbi/opensbi.mk | 22 +++++++++++++++++++---
-> > >>  2 files changed, 28 insertions(+), 3 deletions(-)
-> > >>
-> > >> diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
-> > >> index 5f3cc13312..5cb8aace3e 100644
-> > >> --- a/boot/opensbi/Config.in
-> > >> +++ b/boot/opensbi/Config.in
-> > >> @@ -22,4 +22,13 @@ config BR2_TARGET_OPENSBI_PLAT
-> > >>        library libsbi.a is built. If a platform is specified then
-> > >>        the platform specific static library libplatsbi.a and firmware
-> > >>        examples are built.
-> > >> +
-> > >> +if BR2_TARGET_OPENSBI_PLAT != ""
-> > >> +config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
-> > >> +    bool "Include Linux as OpenSBI Payload"
-> > >> +    depends on BR2_LINUX_KERNEL
-> > >> +    depends on BR2_LINUX_KERNEL_IMAGE
-> > >> +    help
-> > >> +      Build OpenSBI with the Linux kernel as a Payload.
-> > >> +endif
-> > >
-> > > I've tested this patch and it works okay with my HiFive Unleashed board,
-> > > but I'm still not a great fan of using a free-form string to specify the
-> > > OpenSBI platform (BR2_TARGET_OPENSBI_PLAT). I think that a) this always
-> > > increases the chance of errors due to typos and b) it doesn't let me see
-> > > what other options are available for my build without looking at the
-> > > OpenSBI source tree.
-> > >
-> > > Perhaps a list of options would be better (similar to the current grub2
-> > > implementation)? There are only 5 OpenSBI platforms at the moment and I
-> > > don't think that it would be a big deal to add others as they appear (We
-> >
-> >  Depends on how successful you expect RiscV to become, I guess...
->
-> That is why I went with strings in the first place as I worry platform
-> options limit us to only a handful of platforms and as OpenSBI
-> platforms are added we will required a buildroot patch.
->
-> >
-> >  Is there a vision in OpenSBI upstream how this will be handled going forward?
-> > More and more in-tree firmware binaries, or support for pulling in an external
-> > binary, or ...?
->
-> AFAIK the current vision is to have users specify the platform they
-> want to build.
->
-> >
-> >  Of course, for now we could turn it into a choice, and we can revisit later
-> > when things change upstream.
->
-> Yeah, I think that's the best option. I'll update this patch.
+From: "McCabe, Robert J" <robert.mccabe@rockwellcollins.com>
 
-I just sent a series to update OpenSBI and add the platform support.
-Once that is merged I'll update this series on top of it.
+Allows external projects to inject custom code inside the Linux source
+tree.
 
-Alistair
+Signed-off-by: McCabe, Robert J <robert.mccabe@rockwellcollins.com>
+---
+ linux/linux.mk | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
->
-> Alistair
->
-> >
-> >  Regards,
-> >  Arnout
-> >
-> >
-> > > only actually need to add 3 platforms to support QEMU and HiFive
-> > > Unleashed - plus a default library only mode).
-> > >
-> > > So with, for example, the following options:
-> > >     BR2_TARGET_OPENSBI_LIBRARY_ONLY
-> > >     BR2_TARGET_OPENSBI_QEMU_VIRT
-> > >     BR2_TARGET_OPENSBI_QEMU_SIFIVE_U
-> > >     BR2_TARGET_OPENSBI_HIFIVE_UNLEASHED
-> > >
-> > > The configuration snippet above for BR2_TARGET_OPENSBI_LINUX_PAYLOAD
-> > > would become:
-> > >
-> > > config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
-> > >     bool "Include Linux as OpenSBI Payload"
-> > >     depends on BR2_LINUX_KERNEL
-> > >     depends on BR2_LINUX_KERNEL_IMAGE
-> > >     depends on !BR2_TARGET_OPENSBI_LIBRARY_ONLY
-> > >
-> > > i.e. it loses the ' if BR2_TARGET_OPENSBI_PLAT != "" '
-> > >
-> > > Thoughts?
-> > >
-> > > Mark
-> > >>  endif
-> > >> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-> > >> index 45a3fc4859..2179d846e3 100644
-> > >> --- a/boot/opensbi/opensbi.mk
-> > >> +++ b/boot/opensbi/opensbi.mk
-> > >> @@ -19,18 +19,34 @@ ifneq ($(OPENSBI_PLAT),)
-> > >>  OPENSBI_MAKE_ENV += PLATFORM=$(OPENSBI_PLAT)
-> > >>  endif
-> > >>
-> > >> +OPENSBI_LINUX_PAYLOAD = $(call qstrip,$(BR2_TARGET_OPENSBI_LINUX_PAYLOAD))
-> > >> +ifeq ($(OPENSBI_LINUX_PAYLOAD), y)
-> > >> +OPENSBI_DEPENDENCIES = linux
-> > >> +OPENSBI_MAKE_ENV += FW_PAYLOAD_PATH="$(BINARIES_DIR)/Image"
-> > >> +endif
-> > >> +
-> > >>  define OPENSBI_BUILD_CMDS
-> > >>      $(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
-> > >>  endef
-> > >>
-> > >>  ifneq ($(OPENSBI_PLAT),)
-> > >>  OPENSBI_INSTALL_IMAGES = YES
-> > >> -define OPENSBI_INSTALL_IMAGES_CMDS
-> > >> -    $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin
-> > >> +OPENSBI_INSTALL_IMAGES_CMDS_PLAT = \
-> > >> +    $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin; \
-> > >>      $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
-> > >> -endef
-> > >>  endif
-> > >>
-> > >> +ifeq ($(OPENSBI_LINUX_PAYLOAD), y)
-> > >> +OPENSBI_INSTALL_IMAGES_CMDS_PAYLOAD = \
-> > >> +    $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_payload.bin $(BINARIES_DIR)/fw_payload.bin; \
-> > >> +    $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_payload.elf $(BINARIES_DIR)/fw_payload.elf
-> > >> +endif
-> > >> +
-> > >> +define OPENSBI_INSTALL_IMAGES_CMDS
-> > >> +    $(OPENSBI_INSTALL_IMAGES_CMDS_PLAT)
-> > >> +    $(OPENSBI_INSTALL_IMAGES_CMDS_PAYLOAD)
-> > >> +endef
-> > >> +
-> > >>  # libsbi.a is not a library meant to be linked in user-space code, but
-> > >>  # with bare metal code, which is why we don't install it in
-> > >>  # $(STAGING_DIR)/usr/lib
-> > >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/linux/linux.mk b/linux/linux.mk
+index a1378345c3..2128a36b5f 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -511,14 +511,19 @@ endef
+ #
+ # Note: our package infrastructure uses the full-path of the last-scanned
+ # Makefile to determine what package we're currently defining, using the
+-# last directory component in the path. As such, including other Makefile,
+-# like below, before we call one of the *-package macro is usally not
+-# working.
++# last directory component in the path. As such, including other Makefiles,
++# like below, before we call one of the *-package macros usually doesn't
++# work.
+ # However, since the files we include here are in the same directory as
+ # the current Makefile, we are OK. But this is a hard requirement: files
+-# included here *must* be in the same directory!
++# included here *must* either by in this same directory OR within a
++# another directory with the name "linux" (in the BR2_EXTERNAL case).
+ include $(sort $(wildcard linux/linux-ext-*.mk))
+
++#Import linux-kernel-extensions from externals
++-include $(sort $(wildcard $(foreach ext,$(BR2_EXTERNAL_DIRS), \
++       $(ext)/linux/linux-ext-*.mk)))
++
+ LINUX_PATCH_DEPENDENCIES += $(foreach ext,$(LINUX_EXTENSIONS),\
+        $(if $(BR2_LINUX_KERNEL_EXT_$(call UPPERCASE,$(ext))),$(ext)))
+
+--
+2.17.1
