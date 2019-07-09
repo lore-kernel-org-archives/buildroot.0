@@ -1,51 +1,110 @@
 From: Alistair Francis <alistair.francis@wdc.com>
-Date: Tue,  9 Jul 2019 15:36:48 -0700
-Subject: [Buildroot] [PATCH v2 1/2] boot/opensbi: Upgrade from v0.3 to v0.4
-Message-ID: <20190709223649.25630-1-alistair.francis@wdc.com>
+Date: Tue,  9 Jul 2019 15:36:49 -0700
+Subject: [Buildroot] [PATCH v2 2/2] boot/opensbi: Implement a choice for the
+ OpenSBI Platform
+In-Reply-To: <20190709223649.25630-1-alistair.francis@wdc.com>
+References: <20190709223649.25630-1-alistair.francis@wdc.com>
+Message-ID: <20190709223649.25630-2-alistair.francis@wdc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Instead of requiring users to look at the OpenSBI source code and
+determine the platform string let's use a choice option to allow them to
+specify the platform they would like to target. We still allow them to
+specify a custom string if they want to.
+
 Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
 ---
-v2:
- - Install both bin and elf for fw_dynamic.*
+ boot/opensbi/Config.in              | 25 ++++++++++++++++++++++---
+ boot/opensbi/opensbi.mk             | 11 ++++++++++-
+ configs/qemu_riscv32_virt_defconfig |  2 +-
+ configs/qemu_riscv64_virt_defconfig |  2 +-
+ 4 files changed, 34 insertions(+), 6 deletions(-)
 
- boot/opensbi/opensbi.hash | 2 +-
- boot/opensbi/opensbi.mk   | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
-index d8449f573a..21f802bcbc 100644
---- a/boot/opensbi/opensbi.hash
-+++ b/boot/opensbi/opensbi.hash
-@@ -1,2 +1,2 @@
- # locally computed
--sha256 07f18b73abf3b85aabe5bead19a923716c100d30eb58033459f39c3a224be300 opensbi-0.3.tar.gz
-+sha256 d3060bf51af00204ce90fc73106955c694463b59a5b81be64cf780cd32743abf opensbi-0.4.tar.gz
+diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+index 5f3cc13312..997c79f9b0 100644
+--- a/boot/opensbi/Config.in
++++ b/boot/opensbi/Config.in
+@@ -13,13 +13,32 @@ config BR2_TARGET_OPENSBI
+ 	  https://github.com/riscv/opensbi.git
+ 
+ if BR2_TARGET_OPENSBI
+-config BR2_TARGET_OPENSBI_PLAT
+-	string "OpenSBI Platform"
+-	default ""
++
++choice
++	prompt "OpenSBI Platform"
+ 	help
+ 	  Specifies the OpenSBI platform to build. If no platform is
+ 	  specified only the OpenSBI platform independent static
+ 	  library libsbi.a is built. If a platform is specified then
+ 	  the platform specific static library libplatsbi.a and firmware
+ 	  examples are built.
++
++config BR2_TARGET_OPENSBI_LIBRARY_ONLY
++	bool "Library Only"
++
++config BR2_TARGET_OPENSBI_QEMU_VIRT
++	bool "QEMU Virt"
++
++config BR2_TARGET_OPENSBI_QEMU_SIFIVE_U
++	bool "QEMU SiFive U"
++
++config BR2_TARGET_OPENSBI_CUSTOM_PLATFORM
++	bool "Custom Platform"
++
++endchoice
++
++config BR2_TARGET_OPENSBI_CUSTOM_PLATFORM_VALUE
++	string "OpenSBI Platform String"
++	depends on BR2_TARGET_OPENSBI_CUSTOM_PLATFORM
++
+ endif
 diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-index 45a3fc4859..83552a5442 100644
+index 83552a5442..78da22aa1f 100644
 --- a/boot/opensbi/opensbi.mk
 +++ b/boot/opensbi/opensbi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -14,7 +14,16 @@ OPENSBI_INSTALL_STAGING = YES
+ OPENSBI_MAKE_ENV = \
+ 	CROSS_COMPILE=$(TARGET_CROSS)
  
--OPENSBI_VERSION = 0.3
-+OPENSBI_VERSION = 0.4
- OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
- OPENSBI_LICENSE = BSD-2-Clause
- OPENSBI_LICENSE_FILES = COPYING.BSD
-@@ -28,6 +28,8 @@ OPENSBI_INSTALL_IMAGES = YES
- define OPENSBI_INSTALL_IMAGES_CMDS
- 	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin
- 	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
-+	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.bin $(BINARIES_DIR)/fw_dynamic.bin
-+	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.elf $(BINARIES_DIR)/fw_dynamic.elf
- endef
+-OPENSBI_PLAT = $(call qstrip,$(BR2_TARGET_OPENSBI_PLAT))
++ifeq ($(BR2_TARGET_OPENSBI_QEMU_VIRT),y)
++OPENSBI_PLAT = qemu/virt
++else ifeq ($(BR2_TARGET_OPENSBI_QEMU_SIFIVE_U),y)
++OPENSBI_PLAT = qemu/sifive_u
++else ifeq ($(BR2_TARGET_OPENSBI_SIFIVE_FU540),y)
++OPENSBI_PLAT = sifive/fu540
++else ifeq ($(BR2_TARGET_OPENSBI_CUSTOM_PLATFORM),y)
++OPENSBI_PLAT = $(call qstrip,$(BR2_TARGET_OPENSBI_CUSTOM_PLATFORM_VALUE))
++endif
++
+ ifneq ($(OPENSBI_PLAT),)
+ OPENSBI_MAKE_ENV += PLATFORM=$(OPENSBI_PLAT)
  endif
- 
+diff --git a/configs/qemu_riscv32_virt_defconfig b/configs/qemu_riscv32_virt_defconfig
+index a1a8c5fd20..ebe3e72135 100644
+--- a/configs/qemu_riscv32_virt_defconfig
++++ b/configs/qemu_riscv32_virt_defconfig
+@@ -24,4 +24,4 @@ BR2_LINUX_KERNEL_IMAGE=y
+ # Bootloader
+ BR2_TARGET_OPENSBI=y
+ BR2_TARGET_OPENSBI_USE_PLAT=y
+-BR2_TARGET_OPENSBI_PLAT="qemu/virt"
++BR2_TARGET_OPENSBI_QEMU_VIRT=y
+diff --git a/configs/qemu_riscv64_virt_defconfig b/configs/qemu_riscv64_virt_defconfig
+index c0b1a43925..16e0e332f7 100644
+--- a/configs/qemu_riscv64_virt_defconfig
++++ b/configs/qemu_riscv64_virt_defconfig
+@@ -23,4 +23,4 @@ BR2_LINUX_KERNEL_IMAGE=y
+ # Bootloader
+ BR2_TARGET_OPENSBI=y
+ BR2_TARGET_OPENSBI_USE_PLAT=y
+-BR2_TARGET_OPENSBI_PLAT="qemu/virt"
++BR2_TARGET_OPENSBI_QEMU_VIRT=y
 -- 
 2.22.0
