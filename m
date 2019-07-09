@@ -1,66 +1,34 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 9 Jul 2019 18:58:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version
- 2.24.3
-In-Reply-To: <6d875efc4fc34633a85e52c770d3e803@lxinstruments.com>
-References: <6d875efc4fc34633a85e52c770d3e803@lxinstruments.com>
-Message-ID: <3fef1583-e50b-067b-589f-904ec07f8aeb@mind.be>
+Date: Tue, 9 Jul 2019 19:01:43 +0200
+Subject: [Buildroot] How do I enable webrtc as part of external
+ gstreamer, in buildroot
+In-Reply-To: <CADNjvP8jLnPK7DvDtpacTCn2g=DowwPr-C+KX7649aenVutaDg@mail.gmail.com>
+References: <CADNjvP-VYgO7ctGsOjZxudkA7k6PzT4FNt+JRACmUV6=bh_E=Q@mail.gmail.com>
+ <20190704202528.63f7d667@gmx.net>
+ <CADNjvP_HU1+D+LXwVtVosxpvDiUGZC=uEUCET10RpiG+oVn63Q@mail.gmail.com>
+ <20190707204022.65affaec@gmx.net>
+ <CADNjvP8jLnPK7DvDtpacTCn2g=DowwPr-C+KX7649aenVutaDg@mail.gmail.com>
+Message-ID: <7bed35ef-501b-c318-ef26-02eeed8484ad@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Adrian,
 
-On 08/07/2019 16:54, Ortmann, Michael wrote:
-> Hi,
-> 
-> the new version of webkitgtk seems to be incompatible with the patch file
-> ?0001-Build-failure-after-r243644-in-GTK-Li.patch? that is located in
-> ?package/webkitgtk?. Build fails after trying to apply the patch:
-> 
-> ?
-> 
-> webkitgtk-2.24.3.tar.xz: OK (md5: e2a5bbd09a217eba096a2d1562143e35)
-> 
-> webkitgtk-2.24.3.tar.xz: OK (sha1: 26a33fd0af8223c130427cd59aaf5ccaba584114)
-> 
-> webkitgtk-2.24.3.tar.xz: OK (sha256:
-> 940d746d7e82c357222feb5b3f44c4b201e81df7d81ddca5ca2bf3ae0acf6c51)
-> 
->>>> webkitgtk 2.24.3 Extracting
-> 
-> xzcat /buildroot/buildroot-2019.05/dl/webkitgtk/webkitgtk-2.24.3.tar.xz | tar
-> --strip-components=1 -C
-> /buildroot/buildroot-2019.05/output/build/webkitgtk-2.24.3?? -xf -
-> 
->>>> webkitgtk 2.24.3 Patching
-> 
-> ?
-> 
-> Applying 0001-Build-failure-after-r243644-in-GTK-Li.patch using patch:
-> 
-> patching file
-> Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp
-> 
-> Reversed (or previously applied) patch detected!? Skipping patch.
-> 
-> 1 out of 1 hunk ignored -- saving rejects to file
-> Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp.rej
-> 
-> package/pkg-generic.mk:202: recipe for target
-> '/buildroot/buildroot-2019.05/output/build/webkitgtk-2.24.3/.stamp_patched' failed
-> 
-> make[1]: ***
-> [/buildroot/buildroot-2019.05/output/build/webkitgtk-2.24.3/.stamp_patched] Error 1
-> 
-> Makefile:84: recipe for target '_all' failed
-> 
-> make: *** [_all] Error 2
 
- I can confirm that on current master, `make webkitgtk-patch` results in the
-above. Adrian, could you have a look?
+On 08/07/2019 14:30, Vered Kalef wrote:
+> This file made the difference. It seems the problem is an old version of
+> libnice, it should be greater than 0.1.14, so, I think I'll upgrade to buildroot
+> 2018.11, which holds libnice 0.1.14
+> and create the external gstreamer with webrtc enabled as you've done in version
+> 2019.5.
+
+ If you can anyway upgrade buildroot as a whole (which is the safer option),
+then it's better to upgrade to either 2019.05 (which already contains gst-webrtc
+support) or to 2019.02 (because that's an LTS release).
 
  Regards,
  Arnout
+
+> In your opinion will it do the work?
