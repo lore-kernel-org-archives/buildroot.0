@@ -1,196 +1,121 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue,  9 Jul 2019 13:33:47 +0300
-Subject: [Buildroot] [PATCH] package/libarchive: fix build without zlib
-Message-ID: <40975b008a819eee0b75858fe9609ef9e58d80d7.1562668427.git.baruch@tkos.co.il>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Tue, 9 Jul 2019 16:27:50 +0100
+Subject: [Buildroot] [PATCH 1/2] boot/opensbi: Add support for including
+ Linux payload
+In-Reply-To: <20190708215353.9107-1-alistair.francis@wdc.com>
+References: <20190708215353.9107-1-alistair.francis@wdc.com>
+Message-ID: <adac2106-429b-218b-20c2-ffee4aa4c83d@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add upstream patch fixing build without zlib.
+Hello Alistair
 
-Fixes:
-http://autobuild.buildroot.net/results/d116d3ace93784722a0914f73dc402746d04b439/
+On 08/07/2019 22:53, Alistair Francis wrote:
+> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> ---
+>  boot/opensbi/Config.in  |  9 +++++++++
+>  boot/opensbi/opensbi.mk | 22 +++++++++++++++++++---
+>  2 files changed, 28 insertions(+), 3 deletions(-)
+>
+> diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+> index 5f3cc13312..5cb8aace3e 100644
+> --- a/boot/opensbi/Config.in
+> +++ b/boot/opensbi/Config.in
+> @@ -22,4 +22,13 @@ config BR2_TARGET_OPENSBI_PLAT
+>  	  library libsbi.a is built. If a platform is specified then
+>  	  the platform specific static library libplatsbi.a and firmware
+>  	  examples are built.
+> +
+> +if BR2_TARGET_OPENSBI_PLAT != ""
+> +config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
+> +	bool "Include Linux as OpenSBI Payload"
+> +	depends on BR2_LINUX_KERNEL
+> +	depends on BR2_LINUX_KERNEL_IMAGE
+> +	help
+> +	  Build OpenSBI with the Linux kernel as a Payload.
+> +endif
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- ...001-Unbreak-compilation-without-zlib.patch | 167 ++++++++++++++++++
- 1 file changed, 167 insertions(+)
- create mode 100644 package/libarchive/0001-Unbreak-compilation-without-zlib.patch
+I've tested this patch and it works okay with my HiFive Unleashed board,
+but I'm still not a great fan of using a free-form string to specify the
+OpenSBI platform (BR2_TARGET_OPENSBI_PLAT). I think that a) this always
+increases the chance of errors due to typos and b) it doesn't let me see
+what other options are available for my build without looking at the
+OpenSBI source tree.
 
-diff --git a/package/libarchive/0001-Unbreak-compilation-without-zlib.patch b/package/libarchive/0001-Unbreak-compilation-without-zlib.patch
-new file mode 100644
-index 000000000000..b4da5206d4ff
---- /dev/null
-+++ b/package/libarchive/0001-Unbreak-compilation-without-zlib.patch
-@@ -0,0 +1,167 @@
-+From 64333cef68d7bcc67bef6ecf177fbeaa549b9139 Mon Sep 17 00:00:00 2001
-+From: Martin Matuska <martin@matuska.org>
-+Date: Sat, 29 Jun 2019 00:20:58 +0200
-+Subject: [PATCH] Unbreak compilation without zlib
-+
-+Fixes #1214
-+
-+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-+---
-+Upstream status: commit 64333cef68d7
-+
-+ libarchive/archive_read_support_filter_gzip.c | 54 ++++++++++++-------
-+ libarchive/test/test_read_format_raw.c        |  4 ++
-+ 2 files changed, 39 insertions(+), 19 deletions(-)
-+
-+diff --git a/libarchive/archive_read_support_filter_gzip.c b/libarchive/archive_read_support_filter_gzip.c
-+index 458b6f729164..9fa9e2b0ddb8 100644
-+--- a/libarchive/archive_read_support_filter_gzip.c
-++++ b/libarchive/archive_read_support_filter_gzip.c
-+@@ -131,12 +131,20 @@ archive_read_support_filter_gzip(struct archive *_a)
-+  */
-+ static ssize_t
-+ peek_at_header(struct archive_read_filter *filter, int *pbits,
-+-	       struct private_data *state)
-++#ifdef HAVE_ZLIB_H
-++	       struct private_data *state
-++#else
-++	       void *state
-++#endif
-++	      )
-+ {
-+ 	const unsigned char *p;
-+ 	ssize_t avail, len;
-+ 	int bits = 0;
-+ 	int header_flags;
-++#ifndef HAVE_ZLIB_H
-++	(void)state; /* UNUSED */
-++#endif
-+ 
-+ 	/* Start by looking at the first ten bytes of the header, which
-+ 	 * is all fixed layout. */
-+@@ -153,8 +161,10 @@ peek_at_header(struct archive_read_filter *filter, int *pbits,
-+ 	bits += 3;
-+ 	header_flags = p[3];
-+ 	/* Bytes 4-7 are mod time in little endian. */
-++#ifdef HAVE_ZLIB_H
-+ 	if (state)
-+ 		state->mtime = archive_le32dec(p + 4);
-++#endif
-+ 	/* Byte 8 is deflate flags. */
-+ 	/* XXXX TODO: return deflate flags back to consume_header for use
-+ 	   in initializing the decompressor. */
-+@@ -171,7 +181,9 @@ peek_at_header(struct archive_read_filter *filter, int *pbits,
-+ 
-+ 	/* Null-terminated optional filename. */
-+ 	if (header_flags & 8) {
-++#ifdef HAVE_ZLIB_H
-+ 		ssize_t file_start = len;
-++#endif
-+ 		do {
-+ 			++len;
-+ 			if (avail < len)
-+@@ -181,11 +193,13 @@ peek_at_header(struct archive_read_filter *filter, int *pbits,
-+ 				return (0);
-+ 		} while (p[len - 1] != 0);
-+ 
-++#ifdef HAVE_ZLIB_H
-+ 		if (state) {
-+ 			/* Reset the name in case of repeat header reads. */
-+ 			free(state->name);
-+ 			state->name = strdup((const char *)&p[file_start]);
-+ 		}
-++#endif
-+ 	}
-+ 
-+ 	/* Null-terminated optional comment. */
-+@@ -236,24 +250,6 @@ gzip_bidder_bid(struct archive_read_filter_bidder *self,
-+ 	return (0);
-+ }
-+ 
-+-static int
-+-gzip_read_header(struct archive_read_filter *self, struct archive_entry *entry)
-+-{
-+-	struct private_data *state;
-+-
-+-	state = (struct private_data *)self->data;
-+-
-+-	/* A mtime of 0 is considered invalid/missing. */
-+-	if (state->mtime != 0)
-+-		archive_entry_set_mtime(entry, state->mtime, 0);
-+-
-+-	/* If the name is available, extract it. */
-+-	if (state->name)
-+-		archive_entry_set_pathname(entry, state->name);
-+-
-+-	return (ARCHIVE_OK);
-+-}
-+-
-+ #ifndef HAVE_ZLIB_H
-+ 
-+ /*
-+@@ -277,6 +273,24 @@ gzip_bidder_init(struct archive_read_filter *self)
-+ 
-+ #else
-+ 
-++static int
-++gzip_read_header(struct archive_read_filter *self, struct archive_entry *entry)
-++{
-++	struct private_data *state;
-++
-++	state = (struct private_data *)self->data;
-++
-++	/* A mtime of 0 is considered invalid/missing. */
-++	if (state->mtime != 0)
-++		archive_entry_set_mtime(entry, state->mtime, 0);
-++
-++	/* If the name is available, extract it. */
-++	if (state->name)
-++		archive_entry_set_pathname(entry, state->name);
-++
-++	return (ARCHIVE_OK);
-++}
-++
-+ /*
-+  * Initialize the filter object.
-+  */
-+@@ -306,7 +320,9 @@ gzip_bidder_init(struct archive_read_filter *self)
-+ 	self->read = gzip_filter_read;
-+ 	self->skip = NULL; /* not supported */
-+ 	self->close = gzip_filter_close;
-++#ifdef HAVE_ZLIB_H
-+ 	self->read_header = gzip_read_header;
-++#endif
-+ 
-+ 	state->in_stream = 0; /* We're not actually within a stream yet. */
-+ 
-+diff --git a/libarchive/test/test_read_format_raw.c b/libarchive/test/test_read_format_raw.c
-+index 0dac8bfbab4a..3961723b48a1 100644
-+--- a/libarchive/test/test_read_format_raw.c
-++++ b/libarchive/test/test_read_format_raw.c
-+@@ -36,7 +36,9 @@ DEFINE_TEST(test_read_format_raw)
-+ 	const char *reffile1 = "test_read_format_raw.data";
-+ 	const char *reffile2 = "test_read_format_raw.data.Z";
-+ 	const char *reffile3 = "test_read_format_raw.bufr";
-++#ifdef HAVE_ZLIB_H
-+ 	const char *reffile4 = "test_read_format_raw.data.gz";
-++#endif
-+ 
-+ 	/* First, try pulling data out of an uninterpretable file. */
-+ 	extract_reference_file(reffile1);
-+@@ -119,6 +121,7 @@ DEFINE_TEST(test_read_format_raw)
-+ 	assertEqualIntA(a, ARCHIVE_OK, archive_read_close(a));
-+ 	assertEqualInt(ARCHIVE_OK, archive_read_free(a));
-+ 
-++#ifdef HAVE_ZLIB_H
-+ 	/* Fourth, try with gzip which has metadata. */
-+ 	extract_reference_file(reffile4);
-+ 	assert((a = archive_read_new()) != NULL);
-+@@ -144,4 +147,5 @@ DEFINE_TEST(test_read_format_raw)
-+ 	assertEqualIntA(a, ARCHIVE_EOF, archive_read_next_header(a, &ae));
-+ 	assertEqualIntA(a, ARCHIVE_OK, archive_read_close(a));
-+ 	assertEqualInt(ARCHIVE_OK, archive_read_free(a));
-++#endif
-+ }
-+-- 
-+2.20.1
-+
+Perhaps a list of options would be better (similar to the current grub2
+implementation)? There are only 5 OpenSBI platforms at the moment and I
+don't think that it would be a big deal to add others as they appear (We
+only actually need to add 3 platforms to support QEMU and HiFive
+Unleashed - plus a default library only mode).
+
+So with, for example, the following options:
+??? BR2_TARGET_OPENSBI_LIBRARY_ONLY
+??? BR2_TARGET_OPENSBI_QEMU_VIRT
+??? BR2_TARGET_OPENSBI_QEMU_SIFIVE_U
+??? BR2_TARGET_OPENSBI_HIFIVE_UNLEASHED
+
+The configuration snippet above for BR2_TARGET_OPENSBI_LINUX_PAYLOAD
+would become:
+
+config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
+??? bool "Include Linux as OpenSBI Payload"
+??? depends on BR2_LINUX_KERNEL
+??? depends on BR2_LINUX_KERNEL_IMAGE
+??? depends on !BR2_TARGET_OPENSBI_LIBRARY_ONLY
+
+i.e. it loses the ' if BR2_TARGET_OPENSBI_PLAT != "" '
+
+Thoughts?
+
+Mark
+>  endif
+> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+> index 45a3fc4859..2179d846e3 100644
+> --- a/boot/opensbi/opensbi.mk
+> +++ b/boot/opensbi/opensbi.mk
+> @@ -19,18 +19,34 @@ ifneq ($(OPENSBI_PLAT),)
+>  OPENSBI_MAKE_ENV += PLATFORM=$(OPENSBI_PLAT)
+>  endif
+>  
+> +OPENSBI_LINUX_PAYLOAD = $(call qstrip,$(BR2_TARGET_OPENSBI_LINUX_PAYLOAD))
+> +ifeq ($(OPENSBI_LINUX_PAYLOAD), y)
+> +OPENSBI_DEPENDENCIES = linux
+> +OPENSBI_MAKE_ENV += FW_PAYLOAD_PATH="$(BINARIES_DIR)/Image"
+> +endif
+> +
+>  define OPENSBI_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
+>  endef
+>  
+>  ifneq ($(OPENSBI_PLAT),)
+>  OPENSBI_INSTALL_IMAGES = YES
+> -define OPENSBI_INSTALL_IMAGES_CMDS
+> -	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin
+> +OPENSBI_INSTALL_IMAGES_CMDS_PLAT = \
+> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin; \
+>  	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
+> -endef
+>  endif
+>  
+> +ifeq ($(OPENSBI_LINUX_PAYLOAD), y)
+> +OPENSBI_INSTALL_IMAGES_CMDS_PAYLOAD = \
+> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_payload.bin $(BINARIES_DIR)/fw_payload.bin; \
+> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_payload.elf $(BINARIES_DIR)/fw_payload.elf
+> +endif
+> +
+> +define OPENSBI_INSTALL_IMAGES_CMDS
+> +	$(OPENSBI_INSTALL_IMAGES_CMDS_PLAT)
+> +	$(OPENSBI_INSTALL_IMAGES_CMDS_PAYLOAD)
+> +endef
+> +
+>  # libsbi.a is not a library meant to be linked in user-space code, but
+>  # with bare metal code, which is why we don't install it in
+>  # $(STAGING_DIR)/usr/lib
+
 -- 
-2.20.1
+Mark Corbin
+Embecosm Ltd.
+https://www.embecosm.com
