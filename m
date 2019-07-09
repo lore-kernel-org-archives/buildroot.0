@@ -1,94 +1,47 @@
-From: Joris Offouga <offougajoris@gmail.com>
-Date: Tue, 9 Jul 2019 20:44:41 +0200
-Subject: [Buildroot] [PATCH 1/2] board/freescale: Introduce UBOOTBIN in
- spl template
-In-Reply-To: <9df66dc8-c322-5527-10bd-e93b351c0b53@mind.be>
-References: <20190709095703.24229-1-offougajoris@gmail.com>
- <9df66dc8-c322-5527-10bd-e93b351c0b53@mind.be>
-Message-ID: <e98b793e-7a94-c4cd-37ac-97b798d4b60b@gmail.com>
+From: Alistair Francis <alistair.francis@wdc.com>
+Date: Tue,  9 Jul 2019 13:04:16 -0700
+Subject: [Buildroot] [PATCH 1/2] boot/opensbi: Upgrade from v0.3 to v0.4
+Message-ID: <20190709200417.8120-1-alistair.francis@wdc.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+---
+ boot/opensbi/opensbi.hash | 2 +-
+ boot/opensbi/opensbi.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-Le 09/07/2019 ? 20:06, Arnout Vandecappelle a ?crit?:
->
-> On 09/07/2019 11:57, Joris Offouga wrote:
->> For board like imx7d-pico u-boot.img change to u-boot-dtb.img in U-Boot v2019.07
->> so replace hard code u-boot.img with variable
->>
->> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
->> ---
->>   .../common/imx/genimage.cfg.template_no_boot_part_spl         | 4 ++--
->>   board/freescale/common/imx/genimage.cfg.template_spl          | 4 ++--
->>   board/freescale/common/imx/post-image.sh                      | 4 ++++
->>   3 files changed, 8 insertions(+), 4 deletions(-)
->>
->> diff --git a/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl b/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
->> index 9cdecc6ce0..c29032572a 100644
->> --- a/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
->> +++ b/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
->> @@ -17,9 +17,9 @@ image sdcard.img {
->>       offset = 1024
->>     }
->>   
->> -  partition u-boot-img {
->> +  partition u-boot {
->>       in-partition-table = "no"
->> -    image = "u-boot.img"
->> +    image = "%UBOOTBIN%"
->>       offset = 69K
->>     }
->>   
->> diff --git a/board/freescale/common/imx/genimage.cfg.template_spl b/board/freescale/common/imx/genimage.cfg.template_spl
->> index 0b6e22864b..d2d810777b 100644
->> --- a/board/freescale/common/imx/genimage.cfg.template_spl
->> +++ b/board/freescale/common/imx/genimage.cfg.template_spl
->> @@ -26,9 +26,9 @@ image sdcard.img {
->>       offset = 1024
->>     }
->>   
->> -  partition u-boot-img {
->> +  partition u-boot {
->>       in-partition-table = "no"
->> -    image = "u-boot.img"
->> +    image = "%UBOOTBIN%"
->>       offset = 69K
->>     }
->>   
->> diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
->> index 12756c63d5..ab51dc2098 100755
->> --- a/board/freescale/common/imx/post-image.sh
->> +++ b/board/freescale/common/imx/post-image.sh
->> @@ -66,6 +66,10 @@ uboot_image()
->>   		echo "u-boot-dtb.imx"
->>   	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_IMX=y$" ${BR2_CONFIG}; then
->>   		echo "u-boot.imx"
->> +	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y$" ${BR2_CONFIG}; then
->> +	    echo "u-boot-dtb.img"
->> +	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y$" ${BR2_CONFIG}; then
->   This should have been BR2_TARGET_UBOOT_FORMAT_IMG.
-
-Indeed, i use wrong config, i send new patch for fix this:
-
-https://github.com/buildroot/buildroot/commit/4f9f3a0e9695e670c707d938096ec620c612b694#diff-704e3d7e4d3563826a5c0db0ca5b696eR71
-
-Also for U-Boot 2019.07, it is necessary to apply the series of Pierre-Jean
-
-Best Regards,
-
-Joris Offouga
-
->
->   Applied to master with that fixed, and with a heavily reworked commit log, thanks.
->
->   Regards,
->   Arnout
->
->> +	    echo "u-boot.img"
->>   	fi
->>   }
->>   
->>
+diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
+index d8449f573a..21f802bcbc 100644
+--- a/boot/opensbi/opensbi.hash
++++ b/boot/opensbi/opensbi.hash
+@@ -1,2 +1,2 @@
+ # locally computed
+-sha256 07f18b73abf3b85aabe5bead19a923716c100d30eb58033459f39c3a224be300 opensbi-0.3.tar.gz
++sha256 d3060bf51af00204ce90fc73106955c694463b59a5b81be64cf780cd32743abf opensbi-0.4.tar.gz
+diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+index 45a3fc4859..0008155dea 100644
+--- a/boot/opensbi/opensbi.mk
++++ b/boot/opensbi/opensbi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENSBI_VERSION = 0.3
++OPENSBI_VERSION = 0.4
+ OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
+ OPENSBI_LICENSE = BSD-2-Clause
+ OPENSBI_LICENSE_FILES = COPYING.BSD
+@@ -28,6 +28,7 @@ OPENSBI_INSTALL_IMAGES = YES
+ define OPENSBI_INSTALL_IMAGES_CMDS
+ 	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin
+ 	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
++	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.elf $(BINARIES_DIR)/fw_dynamic.elf
+ endef
+ endif
+ 
+-- 
+2.22.0
