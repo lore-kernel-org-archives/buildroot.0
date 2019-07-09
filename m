@@ -1,357 +1,350 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 10 Jul 2019 00:36:25 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iputils: Bump to version s20190709
-Message-ID: <20190709223625.4442-1-petr.vorel@gmail.com>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Tue, 9 Jul 2019 15:42:38 -0700
+Subject: [Buildroot] [PATCH 2/2] board/sifive: Add the HiFive Unleased
+In-Reply-To: <0c6c487b-0383-b25a-3aa1-3601c632185e@embecosm.com>
+References: <20190708215353.9107-1-alistair.francis@wdc.com>
+ <20190708215353.9107-3-alistair.francis@wdc.com>
+ <0c6c487b-0383-b25a-3aa1-3601c632185e@embecosm.com>
+Message-ID: <CAKmqyKO2GjJDR_AzMMAx=6ug3P_FN1KTD2MAr2aaK4fEpvf6Tg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add 's' before release as this is in upstream tags and in sha256sum.asc.
-This prevents error:
-ERROR: No hash found for iputils-20190709.tar.gz
+On Tue, Jul 9, 2019 at 8:54 AM Mark Corbin <mark.corbin@embecosm.com> wrote:
+>
+> Hello Alistair
+>
+> On 08/07/2019 22:53, Alistair Francis wrote:
+> > This patch adds support for the HiFive Unleashed board. This includes
+> > building the firmware, kernel and rootFS for the HiFive Unleased.
+> >
+> > This patch includes a post-image.sh script and genimage.cfg file
+> > used to generate a sdcard image that can be dd-ed to an SD card.
+> > Unfortunately this seems to create a corrupted GPT partition,
+>
+> See below...
+>
+> > so manual
+> > steps with sgdisk are also included which work.
+> >
+> > The manual steps are useful even when genimage works as
+> > users won't always need to flash the entire SD card. For example a
+> > kernel update will only require one partition being updated manually via
+> > dd instead of a full reflash.
+> >
+> > Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+> > ---
+> >  DEVELOPERS                                    |  2 +
+> >  board/sifive/hifive_unleased/genimage.cfg     | 17 ++++
+> >  .../hifive_unleased/linux.config.fragment     | 16 ++++
+> >  board/sifive/hifive_unleased/post-image.sh    |  9 ++
+> >  board/sifive/hifive_unleased/readme.txt       | 93 +++++++++++++++++++
+> >  configs/hifive_unleashed_defconfig            | 40 ++++++++
+> >  6 files changed, 177 insertions(+)
+> >  create mode 100644 board/sifive/hifive_unleased/genimage.cfg
+> >  create mode 100644 board/sifive/hifive_unleased/linux.config.fragment
+> >  create mode 100755 board/sifive/hifive_unleased/post-image.sh
+> >  create mode 100644 board/sifive/hifive_unleased/readme.txt
+> >  create mode 100644 configs/hifive_unleashed_defconfig
+> >
+> > diff --git a/DEVELOPERS b/DEVELOPERS
+> > index e9c521f400..33b5cfd875 100644
+> > --- a/DEVELOPERS
+> > +++ b/DEVELOPERS
+> > @@ -123,7 +123,9 @@ F:        package/kvazaar/
+> >  F:   package/v4l2loopback/
+> >
+> >  N:   Alistair Francis <alistair@alistair23.me>
+> > +F:   board/sifive/
+> >  F:   boot/opensbi/
+> > +F:   configs/hifive_unleashed_defconfig
+> >  F:   package/xen/
+> >
+> >  N:   Alvaro G. M <alvaro.gamez@hazent.com>
+> > diff --git a/board/sifive/hifive_unleased/genimage.cfg b/board/sifive/hifive_unleased/genimage.cfg
+> > new file mode 100644
+> > index 0000000000..ed5323927e
+> > --- /dev/null
+> > +++ b/board/sifive/hifive_unleased/genimage.cfg
+> > @@ -0,0 +1,17 @@
+> > +image sdcard.img {
+> > +     hdimage {
+> > +             gpt = true
+> > +     }
+> > +
+> > +     partition bootloader {
+> > +             image = "fw_payload.bin"
+> > +             offset = 2048
+> > +             size = 33554432 # 32MB
+> > +             partition-uuid = 2E54B353-1271-4842-806F-E436D6AF6985
+> > +     }
+> > +
+> > +     partition rootfs {
+> > +             image = "rootfs.ext4"
+> > +             partition-uuid = 0FC63DAF-8483-4772-8E79-3D69D8477DE4
+> > +     }
+> > +}
+>
+> The genimage offset appears to be in bytes rather than sectors - so it
+> needs to be 1M (2048 x 512 bytes). The 'partition-uuid' parameter needs
+> to be 'partition-type-uuid' instead. Try the following:
+>
+> image sdcard.img {
+>         hdimage {
+>                 gpt = true
+>         }
+>
+>         partition bootloader {
+>                 image = "fw_payload.bin"
+>                 offset = 1M
+>                 size = 32M
+>                 partition-type-uuid = 2E54B353-1271-4842-806F-E436D6AF6985
+>         }
+>
+>         partition rootfs {
+>                 image = "rootfs.ext4"
+>                 partition-type-uuid = 0FC63DAF-8483-4772-8E79-3D69D8477DE4
+>         }
+> }
+>
+> This produces a single bootable SD card image that works on my board.
 
-Remove all patches (accepted in this release).
+Ah great! This works for me as well. Thanks for this Mark
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- ...-ninfod_name.c-fix-build-with-nettle.patch | 38 ---------
- ...atic-build-gcrypt-dependency-gpg-err.patch | 51 ------------
- .../0003-meson.build-fix-build-with-NLS.patch | 77 -------------------
- ...uild-sys-Make-setcap-really-optional.patch | 70 -----------------
- .../0005-traceroute6-fix-build-with-NLS.patch | 30 --------
- package/iputils/iputils.hash                  |  3 +-
- package/iputils/iputils.mk                    |  4 +-
- 7 files changed, 4 insertions(+), 269 deletions(-)
- delete mode 100644 package/iputils/0001-ninfod-ninfod_name.c-fix-build-with-nettle.patch
- delete mode 100644 package/iputils/0002-build-sys-fix-static-build-gcrypt-dependency-gpg-err.patch
- delete mode 100644 package/iputils/0003-meson.build-fix-build-with-NLS.patch
- delete mode 100644 package/iputils/0004-build-sys-Make-setcap-really-optional.patch
- delete mode 100644 package/iputils/0005-traceroute6-fix-build-with-NLS.patch
+>
+> Note that you will still get a warning reported by fdisk when you
+> examine the SD card. This is because the genimage.cfg file doesn't
+> specify the SD card size (as people will naturally have different sized
+> cards), so the secondary GPT header is placed after the rootfs rather
+> than at the end of the disk where it is expected to be.
+>
+> You will also see the following at boot time:
+>
+> [    2.318722] GPT:Primary header thinks Alt. header is not at the end
+> of the disk.
+> [    2.325390] GPT:190496 != 122142719
+> [    2.328843] GPT:Alternate GPT header not at the end of the disk.
+> [    2.334824] GPT:190496 != 122142719
+> [    2.338302] GPT: Use GNU Parted to correct GPT errors.
+> [    2.343456]  mmcblk0: p1 p2
 
-diff --git a/package/iputils/0001-ninfod-ninfod_name.c-fix-build-with-nettle.patch b/package/iputils/0001-ninfod-ninfod_name.c-fix-build-with-nettle.patch
-deleted file mode 100644
-index 5d522f53ef..0000000000
---- a/package/iputils/0001-ninfod-ninfod_name.c-fix-build-with-nettle.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From f209ebb91e65980bcdddce8cc12b00ec11623f76 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 21 May 2019 19:14:18 +0200
--Subject: [PATCH] ninfod/ninfod_name.c: fix build with nettle
--
--Build of ninfod with nettle fails on:
--/home/test/autobuild/run/instance-1/output/host/bin/mips64el-linux-gcc  -o ninfod/ninfod 'ninfod/0cb6efe@@ninfod at exe/ni_ifaddrs.c.o' 'ninfod/0cb6efe@@ninfod at exe/ninfod.c.o' 'ninfod/0cb6efe@@ninfod at exe/ninfod_addrs.c.o' 'ninfod/0cb6efe@@ninfod at exe/ninfod_core.c.o' 'ninfod/0cb6efe@@ninfod at exe/ninfod_name.c.o' -Wl,--no-undefined -Wl,--as-needed -Wl,-O1 -Wl,--start-group libcommon.a -lcap /home/test/autobuild/run/instance-1/output/host/usr/bin/../mips64el-buildroot-linux-uclibc/sysroot/usr/lib/libnettle.so -Wl,--end-group -pthread '-Wl,-rpath,$ORIGIN/..:/home/test/autobuild/run/instance-1/output/host/usr/bin/../mips64el-buildroot-linux-uclibc/sysroot/usr/lib' -Wl,-rpath-link,/home/test/autobuild/run/instance-1/output/build/iputils-s20190515/build/:/home/test/autobuild/run/instance-1/output/host/usr/bin/../mips64el-buildroot-linux-uclibc/sysroot/usr/lib
--ninfod/0cb6efe@@ninfod at exe/ninfod_name.c.o: In function `init_nodeinfo_nodename':
--ninfod_name.c:(.text+0x378): undefined reference to `MD5_Init'
--
--This error is raised because MD5_Init is not defined by nettle.
--To fix this error, include iputils_md5dig.h if USE_NETTLE is defined.
--
--Fixes:
-- - http://autobuild.buildroot.org/results/e86555090e27b631ba35214ef100aa9331844684
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream status: commit f209ebb91e65980bcdddce8cc12b00ec11623f76
-----
-- ninfod/ninfod_name.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/ninfod/ninfod_name.c b/ninfod/ninfod_name.c
--index daf606d..525c93d 100644
----- a/ninfod/ninfod_name.c
--+++ b/ninfod/ninfod_name.c
--@@ -95,7 +95,7 @@
-- 
-- #include <arpa/inet.h>
-- 
---#if defined(HAVE_GCRYPT_H) || defined(USE_KERNEL_CRYPTO_API)
--+#if defined(HAVE_GCRYPT_H) || defined(USE_KERNEL_CRYPTO_API) || defined(USE_NETTLE)
-- # include "iputils_md5dig.h"
-- #elif defined(HAVE_GNUTLS_OPENSSL_H)
-- # include <gnutls/openssl.h>
---- 
--2.21.0
--
-diff --git a/package/iputils/0002-build-sys-fix-static-build-gcrypt-dependency-gpg-err.patch b/package/iputils/0002-build-sys-fix-static-build-gcrypt-dependency-gpg-err.patch
-deleted file mode 100644
-index aaf6a0d392..0000000000
---- a/package/iputils/0002-build-sys-fix-static-build-gcrypt-dependency-gpg-err.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From eabe21164bbb29dead1a902b6d6e910f6892e3a7 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 7 Jun 2019 23:17:13 +0200
--Subject: [PATCH] build-sys: fix static build gcrypt dependency gpg-error
--
--The gcrypt depends on gpg-error, so find it's availability and link with it
--when needed to fix static build.
--
--Fixes:
--- http://autobuild.buildroot.net/results/fb698e3e903869978bd5e69d791ec362317b7981
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream status: commit eabe21164bbb29dead1a902b6d6e910f6892e3a7
-----
-- meson.build | 12 +++++++-----
-- 1 file changed, 7 insertions(+), 5 deletions(-)
--
--diff --git a/meson.build b/meson.build
--index 84e4360..3766edc 100644
----- a/meson.build
--+++ b/meson.build
--@@ -101,20 +101,22 @@ else
-- endif
--
-- crypto = get_option('USE_CRYPTO')
--+crypto_dep = []
-- if crypto == 'nettle'
---	crypto_dep = dependency('nettle')
--+	crypto_dep += dependency('nettle')
--	conf.set('USE_NETTLE', 1, description : 'If set use nettle crypto library.')
-- elif crypto == 'gcrypt'
---	crypto_dep = cc.find_library('gcrypt')
--+	crypto_dep += cc.find_library('gcrypt')
--+	crypto_dep += dependency('gpg-error', required : true)
--	conf.set('USE_GCRYPT', 1, description : 'If set use gcrypt crypto library.')
-- elif crypto == 'openssl'
---	crypto_dep = dependency('openssl')
--+	crypto_dep += dependency('openssl')
--	conf.set('USE_OPENSSL', 1, description : 'if set use openssl crypto library.')
-- elif crypto == 'kernel'
---	crypto_dep = dependency('disabler-appears-to-disable-executable-build', required : false)
--+	crypto_dep += dependency('disabler-appears-to-disable-executable-build', required : false)
--	conf.set('USE_KERNEL_CRYPTO_API', 1, description : 'if set use Linux kernel Crypto API.')
-- elif crypto == 'none'
---	crypto_dep = dependency('disabler-appears-to-disable-executable-build', required : false)
--+	crypto_dep += dependency('disabler-appears-to-disable-executable-build', required : false)
--	conf.set('PING6_NONCE_MEMORY', 1,
--		description : 'If set RFC6744 random does not use any CRYPTO lib.')
-- endif
----
--2.21.0
-diff --git a/package/iputils/0003-meson.build-fix-build-with-NLS.patch b/package/iputils/0003-meson.build-fix-build-with-NLS.patch
-deleted file mode 100644
-index 1c999ba750..0000000000
---- a/package/iputils/0003-meson.build-fix-build-with-NLS.patch
-+++ /dev/null
-@@ -1,77 +0,0 @@
--From 418d8bea5424d8a14a21fd7928747a233557618c Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 9 Jun 2019 18:38:37 +0200
--Subject: [PATCH] build-sys: fix build with NLS
--
--With some toolchains, intl is needed for NLS support so search for this
--library and use if needed.
--
--Fixes:
-- - http://autobuild.buildroot.org/results/0a8a3efe734ac7fb3a68ba505277681857dc0a3d
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream status: commit 418d8bea5424d8a14a21fd7928747a233557618c
-----
-- meson.build | 11 +++++++----
-- 1 file changed, 7 insertions(+), 4 deletions(-)
--
--diff --git a/meson.build b/meson.build
--index 3766edc..2b545b6 100644
----- a/meson.build
--+++ b/meson.build
--@@ -77,6 +77,8 @@ if opt != ''
--	conf.set_quoted('DEFAULT_DEVICE', opt, description : 'arping default device.')
-- endif
-- 
--+# Some systems needs intl for gettext
--+intl_dep = []
-- opt = get_option('USE_GETTEXT')
-- if opt == true
--	prefix = get_option('prefix')
--@@ -86,6 +88,7 @@ if opt == true
--	conf.set('ENABLE_NLS', 1, description : 'If set enable I18N.')
--	conf.set_quoted('LOCALEDIR', join_paths(prefix, localedir))
--	subdir ('po')
--+	intl_dep += cc.find_library('intl', required : false)
-- endif
--
-- opt = get_option('USE_IDN')
--@@ -243,7 +246,7 @@ libcommon = static_library(
-- 
-- if build_ping == true
-- 	executable('ping', ['ping.c', 'ping_common.c', 'ping6_common.c', git_version_h],
---		dependencies : [m_dep, cap_dep, idn_dep, crypto_dep, resolv_dep],
--+		dependencies : [m_dep, cap_dep, idn_dep, intl_dep, crypto_dep, resolv_dep],
-- 		link_with : [libcommon],
-- 		install: true)
-- 	meson.add_install_script('build-aux/setcap-setuid.sh',
--@@ -256,7 +259,7 @@ endif
-- 
-- if build_tracepath == true
-- 	executable('tracepath', ['tracepath.c', git_version_h],
---		dependencies : idn_dep,
--+		dependencies : [idn_dep, intl_dep],
-- 		link_with : [libcommon],
-- 		install: true)
-- endif
--@@ -276,7 +279,7 @@ endif
-- 
-- if build_clockdiff == true
-- 	executable('clockdiff', ['clockdiff.c', git_version_h],
---		dependencies : [cap_dep],
--+		dependencies : [cap_dep, intl_dep],
-- 		link_with : [libcommon],
-- 		install: true)
-- 	meson.add_install_script('build-aux/setcap-setuid.sh',
--@@ -306,7 +309,7 @@ endif
-- 
-- if build_arping == true
-- 	executable('arping', ['arping.c', git_version_h],
---		dependencies : [rt_dep, cap_dep, idn_dep],
--+		dependencies : [rt_dep, cap_dep, idn_dep, intl_dep],
-- 		link_with : [libcommon],
-- 		install: true)
-- 	meson.add_install_script('build-aux/setcap-setuid.sh',
---- 
--2.21.0
--
-diff --git a/package/iputils/0004-build-sys-Make-setcap-really-optional.patch b/package/iputils/0004-build-sys-Make-setcap-really-optional.patch
-deleted file mode 100644
-index 5ebd1db026..0000000000
---- a/package/iputils/0004-build-sys-Make-setcap-really-optional.patch
-+++ /dev/null
-@@ -1,70 +0,0 @@
--From 473be6467f995865244e7e68b2fa587a4ee79551 Mon Sep 17 00:00:00 2001
--From: Michael Weiss <dev.primeos@gmail.com>
--Date: Thu, 16 May 2019 09:44:27 +0000
--Subject: [PATCH] build-sys: Make setcap really optional
--
--The setcap dependency is marked as optional but meson.build depends on
--setcap.path():
--
--meson.build:246:7: ERROR:  add_install_script args must be strings
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream status: commit 473be6467f995865244e7e68b2fa587a4ee79551
-----
-- meson.build | 11 +++++++----
-- 1 file changed, 7 insertions(+), 4 deletions(-)
--
--diff --git a/meson.build b/meson.build
--index 8af9e18..95c778a 100644
----- a/meson.build
--+++ b/meson.build
--@@ -221,10 +221,13 @@ config_h = configure_file(
-- setcap = find_program('setcap', '/usr/sbin/setcap', '/sbin/setcap', required : false)
-- if get_option('NO_SETCAP_OR_SUID')
-- 	perm_type = 'none'
--+	setcap_path = '/dev/null'
-- elif cap_dep.found() and setcap.found()
-- 	perm_type = 'caps'
--+	setcap_path = setcap.path()
-- else
-- 	perm_type = 'setuid'
--+	setcap_path = '/dev/null'
-- endif
-- 
-- ############################################################
--@@ -243,7 +246,7 @@ if build_ping == true
-- 		join_paths(get_option('prefix'), get_option('bindir')),
-- 		'ping',
-- 		perm_type,
---		setcap.path()
--+		setcap_path
-- 	)
-- endif
-- 
--@@ -263,7 +266,7 @@ if build_traceroute6 == true
-- 		join_paths(get_option('prefix'), get_option('bindir')),
-- 		'traceroute6',
-- 		perm_type,
---		setcap.path()
--+		setcap_path
-- 	)
-- endif
-- 
--@@ -276,7 +279,7 @@ if build_clockdiff == true
-- 		join_paths(get_option('prefix'), get_option('bindir')),
-- 		'clockdiff',
-- 		perm_type,
---		setcap.path()
--+		setcap_path
-- 	)
-- endif
-- 
--@@ -306,7 +309,7 @@ if build_arping == true
-- 		join_paths(get_option('prefix'), get_option('bindir')),
-- 		'arping',
-- 		perm_type,
---		setcap.path()
--+		setcap_path
-- 	)
-- endif
-- 
-diff --git a/package/iputils/0005-traceroute6-fix-build-with-NLS.patch b/package/iputils/0005-traceroute6-fix-build-with-NLS.patch
-deleted file mode 100644
-index 70315c551b..0000000000
---- a/package/iputils/0005-traceroute6-fix-build-with-NLS.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From b18c6c48e4dabaf8bf9b178b3deca631fc79c96e Mon Sep 17 00:00:00 2001
--From: Petr Vorel <pvorel@suse.cz>
--Date: Tue, 11 Jun 2019 21:51:58 +0200
--Subject: [PATCH] traceroute6: fix build with NLS
--
--commit 418d8be ("build-sys: fix build with NLS") fixed problems for
--default packages using libintl. Fix also traceroute6 (build it must be
--enabled with -DBUILD_TRACEROUTE6=true)
--
--Signed-off-by: Petr Vorel <pvorel@suse.cz>
--Upstream status: 81bfb31a714641b70c2a7c7d9ce12cf08f98a372
-----
-- meson.build | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index 2b545b6..85db8a6 100644
----- a/meson.build
--+++ b/meson.build
--@@ -266,7 +266,7 @@ endif
--
-- if build_traceroute6 == true
--	executable('traceroute6', ['traceroute6.c', git_version_h],
---		dependencies : [cap_dep, idn_dep],
--+		dependencies : [cap_dep, intl_dep, idn_dep],
--		link_with : [libcommon],
--		install: true)
--	meson.add_install_script('build-aux/setcap-setuid.sh',
----
--2.21.0
-diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-index 0e2963dda2..22c0f0f536 100644
---- a/package/iputils/iputils.hash
-+++ b/package/iputils/iputils.hash
-@@ -1,5 +1,6 @@
-+# https://github.com/iputils/iputils/releases/download/s20190709/sha256sum.asc
-+sha256 a15720dd741d7538dd2645f9f516d193636ae4300ff7dbc8bfca757bf166490a  iputils-s20190709.tar.gz
- # Locally computed
--sha256 9b5125eb5ef9f4e947ad8fdddcf77f538f53b8f47b53eb5bc5347cb16d01c8fd  iputils-20190515.tar.gz
- sha256 b8ea785d12fa6a44916601104dd746216957e93f13a26d3eb858b3b5a4ad66ab  LICENSE
- sha256 9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documentation/LICENSE.GPL2
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 15ee68be53..70f294e6c4 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -11,8 +11,8 @@
- # and IPv6 updates.
- # http://www.spinics.net/lists/netdev/msg279881.html
- 
--IPUTILS_VERSION = 20190515
--IPUTILS_SITE = $(call github,iputils,iputils,s$(IPUTILS_VERSION))
-+IPUTILS_VERSION = s20190709
-+IPUTILS_SITE = $(call github,iputils,iputils,$(IPUTILS_VERSION))
- IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
- IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
- IPUTILS_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
--- 
-2.22.0
+I have added this to the readme.
+
+>
+>
+> > diff --git a/board/sifive/hifive_unleased/linux.config.fragment b/board/sifive/hifive_unleased/linux.config.fragment
+> > new file mode 100644
+> > index 0000000000..f4f384088a
+> > --- /dev/null
+> > +++ b/board/sifive/hifive_unleased/linux.config.fragment
+> > @@ -0,0 +1,16 @@
+> > +CONFIG_HZ_100=y
+> > +CONFIG_CMDLINE="earlycon=sbi root=/dev/mmcblk0p2 rootwait"
+> > +CONFIG_DEVTMPFS_MOUNT=y
+> > +CONFIG_SERIAL_SIFIVE=y
+> > +CONFIG_SERIAL_SIFIVE_CONSOLE=y
+> > +CONFIG_SPI=y
+> > +CONFIG_SPI_SIFIVE=y
+> > +CONFIG_GPIOLIB=y
+> > +CONFIG_GPIO_SYSFS=y
+> > +CONFIG_GPIO_SIFIVE=y
+> > +CONFIG_MMC=y
+> > +CONFIG_MMC_SPI=y
+> > +CONFIG_CLK_U54_PRCI=y
+> > +CONFIG_CLK_GEMGXL_MGMT=y
+> > +CONFIG_PWM=y
+> > +CONFIG_PWM_SIFIVE=y
+> > diff --git a/board/sifive/hifive_unleased/post-image.sh b/board/sifive/hifive_unleased/post-image.sh
+> > new file mode 100755
+> > index 0000000000..2051ee49cb
+> > --- /dev/null
+> > +++ b/board/sifive/hifive_unleased/post-image.sh
+> > @@ -0,0 +1,9 @@
+> > +#!/bin/sh
+> > +
+> > +# Script to generate a SD card image for the HiFive Unleashed.
+> > +
+> > +# We need to make sure that this is updated
+> > +make opensbi-rebuild
+> > +
+> > +support/scripts/genimage.sh -c board/sifive/hifive_unleased/genimage.cfg
+> > +
+> > diff --git a/board/sifive/hifive_unleased/readme.txt b/board/sifive/hifive_unleased/readme.txt
+> > new file mode 100644
+> > index 0000000000..a126fa92c4
+> > --- /dev/null
+> > +++ b/board/sifive/hifive_unleased/readme.txt
+> > @@ -0,0 +1,93 @@
+> > +SiFive HiFive Unleashed
+> > +=======================
+> > +
+> > +This file describes how to use the pre-defined Buildroot
+> > +configuration for the SiFive HiFive Unleashed board.
+> > +
+> > +Further information about the HiFive Unleashed board can be found
+> > +at https://www.sifive.com/boards/hifive-unleashed
+> > +
+> > +Building
+> > +========
+> > +
+> > +Configure Buildroot using the default board configuration:
+> > +
+> > +  $ make hifive_unleashed_defconfig
+> > +
+> > +Customise the build as necessary:
+> > +
+> > +  $ make menuconfig
+> > +
+> > +Start the build:
+> > +
+> > +  $ make
+> > +
+> > +Result of the build
+> > +===================
+> > +
+> > +Once the build has finished you will have the following files:
+> > +
+> > +    output/images/
+> > +    +-- fw_jump.bin
+> > +    +-- fw_jump.elf
+> > +    +-- fw_payload.bin
+> > +    +-- fw_payload.elf
+> > +    +-- Image
+> > +    +-- rootfs.ext2
+> > +    +-- rootfs.ext4
+> > +    +-- rootfs.tar
+> > +    +-- sdcard.img
+> > +
+> > +
+> > +Creating a bootable SD card with genimage
+> > +=========================================
+> > +
+> > +At the current time the genimage utility used by Buildroot produces
+> > +corrupt GPT partition images. This is documented here for future use,
+> > +but at the time of writing does not work.
+>
+> This statement can be dropped. Might be worth adding a note about the
+> warning related to the location of the secondary header.
+
+Removed.
+
+>
+> > +
+> > +Buildroot builds a SD card image for you. All you need to do is dd the
+> > +image to your SD card, which can be done with the following command:
+> > +
+> > +  $ sudo dd if=output/images/sdcard.img of=/dev/mmcblk0 bs=4096
+> > +
+> > +Creating a bootable SD card with sgdisk
+> > +=======================================
+> > +
+> > +Below are manual instructions to setup the SD card. These should be
+> > +removed when genimage can be used instead.
+> > +
+> > +Create the partitions on the SD card:
+> > +
+> > +  $ sudo sgdisk -g --clear \
+> > +        --new=1:2048:67583  \
+> > +        --change-name=1:bootloader \
+> > +        --typecode=1:2E54B353-1271-4842-806F-E436D6AF6985 \
+> > +        --new=2:264192: \
+> > +        --change-name=2:root \
+> > +        --typecode=2:0FC63DAF-8483-4772-8E79-3D69D8477DE4 \
+> > +        /dev/mmcblk0
+> > +
+> > +The first partition will contain the bootloader and kernel
+> > +(fw_payload.bin). The second partition contains the Linux
+> > +filesystem.
+> > +
+> > +Copy the bootloader and kernel to the SD card:
+> > +
+> > +  $ sudo dd if=output/images/fw_payload.bin of=/dev/mmcblk0p1 bs=4096
+> > +
+> > +Copy the rootFS to the SD card:
+> > +
+> > +  $ sudo dd if=output/images/rootfs.ext4 of=/dev/mmcblk0p2 bs=4096
+> > +
+> > +Booting the SD card on the board
+> > +================================
+> > +
+> > +Make sure that the all DIP switches are set to the off position for
+> > +default boot mode (MSEL mode = 1111), insert the SD card and power
+> > +up the board.
+> > +
+> > +Connect the USB cable and open minicom (/dev/ttyUSB1, 115200, 8N1).
+> > +
+> > +See the 'SiFive HiFive Unleashed Getting Started Guide' for
+> > +more details (https://www.sifive.com/documentation).
+> > diff --git a/configs/hifive_unleashed_defconfig b/configs/hifive_unleashed_defconfig
+> > new file mode 100644
+> > index 0000000000..8a2a9303d9
+> > --- /dev/null
+> > +++ b/configs/hifive_unleashed_defconfig
+> > @@ -0,0 +1,40 @@
+> > +# Architecture
+> > +BR2_riscv=y
+> > +BR2_riscv_custom=y
+> > +BR2_RISCV_ISA_CUSTOM_RVM=y
+> > +BR2_RISCV_ISA_CUSTOM_RVF=y
+> > +BR2_RISCV_ISA_CUSTOM_RVD=y
+> > +BR2_RISCV_ISA_CUSTOM_RVC=y
+> > +BR2_RISCV_64=y
+> > +BR2_RISCV_ABI_LP64D=y
+> > +
+> > +# System
+> > +BR2_SYSTEM_DHCP="eth0"
+> > +BR2_TARGET_GENERIC_GETTY=y
+> > +BR2_TARGET_GENERIC_GETTY_PORT="ttySIF0"
+> > +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/sifive/hifive_unleased/post-image.sh"
+> > +
+> > +# Filesystem
+> > +BR2_TARGET_ROOTFS_EXT2=y
+> > +BR2_TARGET_ROOTFS_EXT2_4=y
+> > +
+> > +# Linux headers same as kernel, a 5.1 series
+> > +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
+> > +
+> > +# Kernel
+> > +BR2_LINUX_KERNEL=y
+> > +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> > +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/alistair23/linux.git"
+> > +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="hifive-unleashed-5.1"
+> > +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> > +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sifive/hifive_unleased/linux.config.fragment"
+> > +BR2_LINUX_KERNEL_IMAGE=y
+> > +
+> > +# Bootloader
+> > +BR2_TARGET_OPENSBI=y
+> > +BR2_TARGET_OPENSBI_USE_PLAT=y
+> > +BR2_TARGET_OPENSBI_PLAT="sifive/fu540"
+>
+> Personally I'd prefer this as an option rather than a free-form string,
+> e.g. BR2_TARGET_OPENSBI_PLAT_SIFIVE_FU540=y or
+> BR2_TARGET_OPENSBI_PLAT_HIFIVE_UNLEASHED=y
+>
+> See my earlier email for comments on this.
+
+I have updated this (see separate patch).
+
+Alistair
+
+>
+> Regards
+>
+> Mark
+> > +BR2_TARGET_OPENSBI_LINUX_PAYLOAD=y
+> > +
+> > +# Host tools
+> > +BR2_PACKAGE_HOST_GENIMAGE=y
+>
+> --
+> Mark Corbin
+> Embecosm Ltd.
+> https://www.embecosm.com
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
