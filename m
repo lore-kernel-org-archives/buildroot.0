@@ -1,103 +1,94 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 9 Jul 2019 20:30:03 +0200
-Subject: [Buildroot] [PATCH 1/3] package/pkg-generic: allow to use
- <pkg>_DL_VERSION in packages .mk files
-In-Reply-To: <20190709074551.22747-2-victor.huesca@bootlin.com>
-References: <20190709074551.22747-1-victor.huesca@bootlin.com>
- <20190709074551.22747-2-victor.huesca@bootlin.com>
-Message-ID: <6c1d55b1-df16-6452-7da5-78b4dd1160a6@mind.be>
+From: Joris Offouga <offougajoris@gmail.com>
+Date: Tue, 9 Jul 2019 20:44:41 +0200
+Subject: [Buildroot] [PATCH 1/2] board/freescale: Introduce UBOOTBIN in
+ spl template
+In-Reply-To: <9df66dc8-c322-5527-10bd-e93b351c0b53@mind.be>
+References: <20190709095703.24229-1-offougajoris@gmail.com>
+ <9df66dc8-c322-5527-10bd-e93b351c0b53@mind.be>
+Message-ID: <e98b793e-7a94-c4cd-37ac-97b798d4b60b@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Victor,
 
-On 09/07/2019 09:45, Victor Huesca wrote:
-> This patch continue the work done here http://buildroot-busybox.2317881.n4.nabble.com/PATCH-0-4-Sanetize-packages-version-tp225554.html
+Le 09/07/2019 ? 20:06, Arnout Vandecappelle a ?crit?:
+>
+> On 09/07/2019 11:57, Joris Offouga wrote:
+>> For board like imx7d-pico u-boot.img change to u-boot-dtb.img in U-Boot v2019.07
+>> so replace hard code u-boot.img with variable
+>>
+>> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+>> ---
+>>   .../common/imx/genimage.cfg.template_no_boot_part_spl         | 4 ++--
+>>   board/freescale/common/imx/genimage.cfg.template_spl          | 4 ++--
+>>   board/freescale/common/imx/post-image.sh                      | 4 ++++
+>>   3 files changed, 8 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl b/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
+>> index 9cdecc6ce0..c29032572a 100644
+>> --- a/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
+>> +++ b/board/freescale/common/imx/genimage.cfg.template_no_boot_part_spl
+>> @@ -17,9 +17,9 @@ image sdcard.img {
+>>       offset = 1024
+>>     }
+>>   
+>> -  partition u-boot-img {
+>> +  partition u-boot {
+>>       in-partition-table = "no"
+>> -    image = "u-boot.img"
+>> +    image = "%UBOOTBIN%"
+>>       offset = 69K
+>>     }
+>>   
+>> diff --git a/board/freescale/common/imx/genimage.cfg.template_spl b/board/freescale/common/imx/genimage.cfg.template_spl
+>> index 0b6e22864b..d2d810777b 100644
+>> --- a/board/freescale/common/imx/genimage.cfg.template_spl
+>> +++ b/board/freescale/common/imx/genimage.cfg.template_spl
+>> @@ -26,9 +26,9 @@ image sdcard.img {
+>>       offset = 1024
+>>     }
+>>   
+>> -  partition u-boot-img {
+>> +  partition u-boot {
+>>       in-partition-table = "no"
+>> -    image = "u-boot.img"
+>> +    image = "%UBOOTBIN%"
+>>       offset = 69K
+>>     }
+>>   
+>> diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
+>> index 12756c63d5..ab51dc2098 100755
+>> --- a/board/freescale/common/imx/post-image.sh
+>> +++ b/board/freescale/common/imx/post-image.sh
+>> @@ -66,6 +66,10 @@ uboot_image()
+>>   		echo "u-boot-dtb.imx"
+>>   	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_IMX=y$" ${BR2_CONFIG}; then
+>>   		echo "u-boot.imx"
+>> +	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y$" ${BR2_CONFIG}; then
+>> +	    echo "u-boot-dtb.img"
+>> +	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y$" ${BR2_CONFIG}; then
+>   This should have been BR2_TARGET_UBOOT_FORMAT_IMG.
 
- It's generally nices to summarize the discussion and put the reference as a
-footnote, e.g.:
+Indeed, i use wrong config, i send new patch for fix this:
 
-The _VERSION values should correspond to the ones on release-monitoring.org, so
-we can easily check if there is an update for a package. For downloaded
-packages, we can just add any prefix/suffix as part of the _SOURCE and/or _SITE
-variables. However, for VCS-downloaded packages, the _VERSION is used directly
-by the download infra.
+https://github.com/buildroot/buildroot/commit/4f9f3a0e9695e670c707d938096ec620c612b694#diff-704e3d7e4d3563826a5c0db0ca5b696eR71
 
-This patch makes the DL_VERSION public, i.e. packages can set it (to a different
-value than _VERSION). This way, we can handle the missing corner cases without
-changes all over the places. See [1] for the full discussion.
+Also for U-Boot 2019.07, it is necessary to apply the series of Pierre-Jean
 
-[1]
-http://buildroot-busybox.2317881.n4.nabble.com/PATCH-0-4-Sanetize-packages-version-tp225554.html
+Best Regards,
 
+Joris Offouga
 
-
- However, I don't think the discussion said anything more than what I wrote
-above, so I don't think adding the reference is very valuable. It's up to you.
-
-> By making this DL_VERSION public we should be able to handle the missing corner-cases
-> with package version sanitizeing.
-> 
-> Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
-> ---
->  package/pkg-generic.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-> index 9620dec524..c48f54a2b7 100644
-> --- a/package/pkg-generic.mk
-> +++ b/package/pkg-generic.mk
-> @@ -447,7 +447,9 @@ $(2)_PKGDIR			=  $(pkgdir)
->  # version control system branch or tag, for example remotes/origin/1_10_stable.
->  # Similar for spaces and colons (:) that may appear in date-based revisions for
->  # CVS.
-
- Maybe it would be good to add a comment like this:
-
-# Since _DL_VERSION and _VERSION are defined based on themselves, we need to use
-# := assignment. Also, since they may be calculated through functions, it's best
-# to strip them - this makes it easier for the packages themselves.
-
-
-> -ifndef $(2)_VERSION
-> +ifdef $(2)_DL_VERSION
-> + $(2)_DL_VERSION := $$(strip $$($(2)_DL_VERSION))
-
- This will not work as intended... A few lines below, we have:
-
-$(2)_VERSION := $$(call sanitize,$$($(2)_DL_VERSION))
-
-so the _VERSION defined by the package will not be used at all...
-
- I'm surprised that you didn't notice this. Maybe I'm mistaken? Or is there some
-situation where the correct _VERSION does end up getting used?
-
- I think the only solution is something like:
-
-ifdef $(2)_DL_VERSION
- $(2)_DL_VERSION := $$(strip $$($(2)_DL_VERSION))
- $(2)_VERSION := $$(call sanitize,$$($(2)_DL_VERSION))
-else
- ifndef $(2)_VERSION
-  ifdef $(3)_DL_VERSION
-   $(2)_DL_VERSION := $$($(3)_DL_VERSION)
-  else ifdef $(3)_VERSION
-   $(2)_DL_VERSION := $$($(3)_VERSION)
-  endif
- else
-  $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
- endif
-endif
-
-
- Regards,
- Arnout
-
-> +else ifndef $(2)_VERSION
->   ifdef $(3)_DL_VERSION
->    $(2)_DL_VERSION := $$($(3)_DL_VERSION)
->   else ifdef $(3)_VERSION
-> 
+>
+>   Applied to master with that fixed, and with a heavily reworked commit log, thanks.
+>
+>   Regards,
+>   Arnout
+>
+>> +	    echo "u-boot.img"
+>>   	fi
+>>   }
+>>   
+>>
