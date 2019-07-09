@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 9 Jul 2019 19:14:19 +0200
+Date: Tue, 9 Jul 2019 19:14:44 +0200
 Subject: [Buildroot] [RFC] BR2_EXTERNAL linux-kernel-extensions support
 In-Reply-To: <CANQCQpbobC6KV9fNwUw3gzUonzsW+W5E9EjYNnMmmoJ9bVRQHA@mail.gmail.com>
 References: <20190709005820.595-1-robert.mccabe@rockwellcollins.com>
  <CANQCQpbobC6KV9fNwUw3gzUonzsW+W5E9EjYNnMmmoJ9bVRQHA@mail.gmail.com>
-Message-ID: <54114ab5-43aa-a55c-6402-9f1a5d614400@mind.be>
+Message-ID: <7c959acd-0ab9-1ac0-315c-0502057fbc3d@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
