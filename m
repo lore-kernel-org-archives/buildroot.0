@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 9 Jul 2019 19:28:28 +0200
-Subject: [Buildroot] [PATCH 2/2] board/sifive: Add the HiFive Unleased
-In-Reply-To: <0c6c487b-0383-b25a-3aa1-3601c632185e@embecosm.com>
+Date: Tue, 9 Jul 2019 19:33:04 +0200
+Subject: [Buildroot] [PATCH 1/2] boot/opensbi: Add support for including
+ Linux payload
+In-Reply-To: <adac2106-429b-218b-20c2-ffee4aa4c83d@embecosm.com>
 References: <20190708215353.9107-1-alistair.francis@wdc.com>
- <20190708215353.9107-3-alistair.francis@wdc.com>
- <0c6c487b-0383-b25a-3aa1-3601c632185e@embecosm.com>
-Message-ID: <3697d868-e446-6cc8-2806-42b4a761c36b@mind.be>
+ <adac2106-429b-218b-20c2-ffee4aa4c83d@embecosm.com>
+Message-ID: <93ce4fc2-709b-8739-b0d0-7f8dacb3f0d0@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,24 +14,122 @@ To: buildroot@busybox.net
 
 
 
-On 09/07/2019 17:53, Mark Corbin wrote:
-> Note that you will still get a warning reported by fdisk when you
-> examine the SD card. This is because the genimage.cfg file doesn't
-> specify the SD card size (as people will naturally have different sized
-> cards), so the secondary GPT header is placed after the rootfs rather
-> than at the end of the disk where it is expected to be.
+On 09/07/2019 17:27, Mark Corbin wrote:
+> Hello Alistair
 > 
-> You will also see the following at boot time:
+> On 08/07/2019 22:53, Alistair Francis wrote:
+>> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+>> ---
+>>  boot/opensbi/Config.in  |  9 +++++++++
+>>  boot/opensbi/opensbi.mk | 22 +++++++++++++++++++---
+>>  2 files changed, 28 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/boot/opensbi/Config.in b/boot/opensbi/Config.in
+>> index 5f3cc13312..5cb8aace3e 100644
+>> --- a/boot/opensbi/Config.in
+>> +++ b/boot/opensbi/Config.in
+>> @@ -22,4 +22,13 @@ config BR2_TARGET_OPENSBI_PLAT
+>>  	  library libsbi.a is built. If a platform is specified then
+>>  	  the platform specific static library libplatsbi.a and firmware
+>>  	  examples are built.
+>> +
+>> +if BR2_TARGET_OPENSBI_PLAT != ""
+>> +config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
+>> +	bool "Include Linux as OpenSBI Payload"
+>> +	depends on BR2_LINUX_KERNEL
+>> +	depends on BR2_LINUX_KERNEL_IMAGE
+>> +	help
+>> +	  Build OpenSBI with the Linux kernel as a Payload.
+>> +endif
 > 
-> [??? 2.318722] GPT:Primary header thinks Alt. header is not at the end
-> of the disk.
-> [??? 2.325390] GPT:190496 != 122142719
-> [??? 2.328843] GPT:Alternate GPT header not at the end of the disk.
-> [??? 2.334824] GPT:190496 != 122142719
-> [??? 2.338302] GPT: Use GNU Parted to correct GPT errors.
-> [??? 2.343456]? mmcblk0: p1 p2
+> I've tested this patch and it works okay with my HiFive Unleashed board,
+> but I'm still not a great fan of using a free-form string to specify the
+> OpenSBI platform (BR2_TARGET_OPENSBI_PLAT). I think that a) this always
+> increases the chance of errors due to typos and b) it doesn't let me see
+> what other options are available for my build without looking at the
+> OpenSBI source tree.
+> 
+> Perhaps a list of options would be better (similar to the current grub2
+> implementation)? There are only 5 OpenSBI platforms at the moment and I
+> don't think that it would be a big deal to add others as they appear (We
 
- It would be good to have this information in the readme.
+ Depends on how successful you expect RiscV to become, I guess...
+
+ Is there a vision in OpenSBI upstream how this will be handled going forward?
+More and more in-tree firmware binaries, or support for pulling in an external
+binary, or ...?
+
+ Of course, for now we could turn it into a choice, and we can revisit later
+when things change upstream.
 
  Regards,
  Arnout
+
+
+> only actually need to add 3 platforms to support QEMU and HiFive
+> Unleashed - plus a default library only mode).
+> 
+> So with, for example, the following options:
+> ??? BR2_TARGET_OPENSBI_LIBRARY_ONLY
+> ??? BR2_TARGET_OPENSBI_QEMU_VIRT
+> ??? BR2_TARGET_OPENSBI_QEMU_SIFIVE_U
+> ??? BR2_TARGET_OPENSBI_HIFIVE_UNLEASHED
+> 
+> The configuration snippet above for BR2_TARGET_OPENSBI_LINUX_PAYLOAD
+> would become:
+> 
+> config BR2_TARGET_OPENSBI_LINUX_PAYLOAD
+> ??? bool "Include Linux as OpenSBI Payload"
+> ??? depends on BR2_LINUX_KERNEL
+> ??? depends on BR2_LINUX_KERNEL_IMAGE
+> ??? depends on !BR2_TARGET_OPENSBI_LIBRARY_ONLY
+> 
+> i.e. it loses the ' if BR2_TARGET_OPENSBI_PLAT != "" '
+> 
+> Thoughts?
+> 
+> Mark
+>>  endif
+>> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+>> index 45a3fc4859..2179d846e3 100644
+>> --- a/boot/opensbi/opensbi.mk
+>> +++ b/boot/opensbi/opensbi.mk
+>> @@ -19,18 +19,34 @@ ifneq ($(OPENSBI_PLAT),)
+>>  OPENSBI_MAKE_ENV += PLATFORM=$(OPENSBI_PLAT)
+>>  endif
+>>  
+>> +OPENSBI_LINUX_PAYLOAD = $(call qstrip,$(BR2_TARGET_OPENSBI_LINUX_PAYLOAD))
+>> +ifeq ($(OPENSBI_LINUX_PAYLOAD), y)
+>> +OPENSBI_DEPENDENCIES = linux
+>> +OPENSBI_MAKE_ENV += FW_PAYLOAD_PATH="$(BINARIES_DIR)/Image"
+>> +endif
+>> +
+>>  define OPENSBI_BUILD_CMDS
+>>  	$(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
+>>  endef
+>>  
+>>  ifneq ($(OPENSBI_PLAT),)
+>>  OPENSBI_INSTALL_IMAGES = YES
+>> -define OPENSBI_INSTALL_IMAGES_CMDS
+>> -	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin
+>> +OPENSBI_INSTALL_IMAGES_CMDS_PLAT = \
+>> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin; \
+>>  	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
+>> -endef
+>>  endif
+>>  
+>> +ifeq ($(OPENSBI_LINUX_PAYLOAD), y)
+>> +OPENSBI_INSTALL_IMAGES_CMDS_PAYLOAD = \
+>> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_payload.bin $(BINARIES_DIR)/fw_payload.bin; \
+>> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_payload.elf $(BINARIES_DIR)/fw_payload.elf
+>> +endif
+>> +
+>> +define OPENSBI_INSTALL_IMAGES_CMDS
+>> +	$(OPENSBI_INSTALL_IMAGES_CMDS_PLAT)
+>> +	$(OPENSBI_INSTALL_IMAGES_CMDS_PAYLOAD)
+>> +endef
+>> +
+>>  # libsbi.a is not a library meant to be linked in user-space code, but
+>>  # with bare metal code, which is why we don't install it in
+>>  # $(STAGING_DIR)/usr/lib
+> 
