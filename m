@@ -1,63 +1,66 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Tue,  9 Jul 2019 18:42:44 +0200
-Subject: [Buildroot] [PATCH] configs/olimex_a20_olinuxino_lime*: bump Linux
- and U-Boot versions
-Message-ID: <20190709164244.11820-1-francois.perrad@gadz.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Tue, 9 Jul 2019 18:58:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/webkitgtk: bump to version
+ 2.24.3
+In-Reply-To: <6d875efc4fc34633a85e52c770d3e803@lxinstruments.com>
+References: <6d875efc4fc34633a85e52c770d3e803@lxinstruments.com>
+Message-ID: <3fef1583-e50b-067b-589f-904ec07f8aeb@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- configs/olimex_a20_olinuxino_lime2_defconfig | 4 ++--
- configs/olimex_a20_olinuxino_lime_defconfig  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ Adrian,
 
-diff --git a/configs/olimex_a20_olinuxino_lime2_defconfig b/configs/olimex_a20_olinuxino_lime2_defconfig
-index 8ef745743..a36a73fe4 100644
---- a/configs/olimex_a20_olinuxino_lime2_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime2_defconfig
-@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.34"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.57"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-diff --git a/configs/olimex_a20_olinuxino_lime_defconfig b/configs/olimex_a20_olinuxino_lime_defconfig
-index 12ad8472c..709dc77a5 100644
---- a/configs/olimex_a20_olinuxino_lime_defconfig
-+++ b/configs/olimex_a20_olinuxino_lime_defconfig
-@@ -18,7 +18,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a20_olinuxino/genimage.cfg"
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.34"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.57"
- BR2_LINUX_KERNEL_USE_DEFCONFIG=y
- BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -39,7 +39,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A20-OLinuXino-Lime"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--- 
-2.17.1
+On 08/07/2019 16:54, Ortmann, Michael wrote:
+> Hi,
+> 
+> the new version of webkitgtk seems to be incompatible with the patch file
+> ?0001-Build-failure-after-r243644-in-GTK-Li.patch? that is located in
+> ?package/webkitgtk?. Build fails after trying to apply the patch:
+> 
+> ?
+> 
+> webkitgtk-2.24.3.tar.xz: OK (md5: e2a5bbd09a217eba096a2d1562143e35)
+> 
+> webkitgtk-2.24.3.tar.xz: OK (sha1: 26a33fd0af8223c130427cd59aaf5ccaba584114)
+> 
+> webkitgtk-2.24.3.tar.xz: OK (sha256:
+> 940d746d7e82c357222feb5b3f44c4b201e81df7d81ddca5ca2bf3ae0acf6c51)
+> 
+>>>> webkitgtk 2.24.3 Extracting
+> 
+> xzcat /buildroot/buildroot-2019.05/dl/webkitgtk/webkitgtk-2.24.3.tar.xz | tar
+> --strip-components=1 -C
+> /buildroot/buildroot-2019.05/output/build/webkitgtk-2.24.3?? -xf -
+> 
+>>>> webkitgtk 2.24.3 Patching
+> 
+> ?
+> 
+> Applying 0001-Build-failure-after-r243644-in-GTK-Li.patch using patch:
+> 
+> patching file
+> Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp
+> 
+> Reversed (or previously applied) patch detected!? Skipping patch.
+> 
+> 1 out of 1 hunk ignored -- saving rejects to file
+> Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp.rej
+> 
+> package/pkg-generic.mk:202: recipe for target
+> '/buildroot/buildroot-2019.05/output/build/webkitgtk-2.24.3/.stamp_patched' failed
+> 
+> make[1]: ***
+> [/buildroot/buildroot-2019.05/output/build/webkitgtk-2.24.3/.stamp_patched] Error 1
+> 
+> Makefile:84: recipe for target '_all' failed
+> 
+> make: *** [_all] Error 2
+
+ I can confirm that on current master, `make webkitgtk-patch` results in the
+above. Adrian, could you have a look?
+
+ Regards,
+ Arnout
