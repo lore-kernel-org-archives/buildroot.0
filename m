@@ -1,130 +1,103 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 9 Jul 2019 20:07:26 +0200
-Subject: [Buildroot] [PATCH 2/2] configs/imx7dpico: Bump U-Boot to
- 2019.07 and kernel to version 5.1.16.
-In-Reply-To: <20190709095703.24229-2-offougajoris@gmail.com>
-References: <20190709095703.24229-1-offougajoris@gmail.com>
- <20190709095703.24229-2-offougajoris@gmail.com>
-Message-ID: <b4dd7711-b9ef-f016-1c64-0e9b760caa19@mind.be>
+Date: Tue, 9 Jul 2019 20:30:03 +0200
+Subject: [Buildroot] [PATCH 1/3] package/pkg-generic: allow to use
+ <pkg>_DL_VERSION in packages .mk files
+In-Reply-To: <20190709074551.22747-2-victor.huesca@bootlin.com>
+References: <20190709074551.22747-1-victor.huesca@bootlin.com>
+ <20190709074551.22747-2-victor.huesca@bootlin.com>
+Message-ID: <6c1d55b1-df16-6452-7da5-78b4dd1160a6@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ Hi Victor,
+
+On 09/07/2019 09:45, Victor Huesca wrote:
+> This patch continue the work done here http://buildroot-busybox.2317881.n4.nabble.com/PATCH-0-4-Sanetize-packages-version-tp225554.html
+
+ It's generally nices to summarize the discussion and put the reference as a
+footnote, e.g.:
+
+The _VERSION values should correspond to the ones on release-monitoring.org, so
+we can easily check if there is an update for a package. For downloaded
+packages, we can just add any prefix/suffix as part of the _SOURCE and/or _SITE
+variables. However, for VCS-downloaded packages, the _VERSION is used directly
+by the download infra.
+
+This patch makes the DL_VERSION public, i.e. packages can set it (to a different
+value than _VERSION). This way, we can handle the missing corner cases without
+changes all over the places. See [1] for the full discussion.
+
+[1]
+http://buildroot-busybox.2317881.n4.nabble.com/PATCH-0-4-Sanetize-packages-version-tp225554.html
 
 
-On 09/07/2019 11:57, Joris Offouga wrote:
-> Also
->  - adjust the U-Boot binary name after DM conversion.
->  - add missing notes about flashing U-Boot and SPL
+
+ However, I don't think the discussion said anything more than what I wrote
+above, so I don't think adding the reference is very valuable. It's up to you.
+
+> By making this DL_VERSION public we should be able to handle the missing corner-cases
+> with package version sanitizeing.
 > 
-> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+> Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
 > ---
->  board/technexion/imx7dpico/readme.txt | 55 ++++++++++++++++++++++++++-
->  configs/imx7dpico_defconfig           |  6 +--
->  2 files changed, 57 insertions(+), 4 deletions(-)
+>  package/pkg-generic.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/board/technexion/imx7dpico/readme.txt b/board/technexion/imx7dpico/readme.txt
-> index 1b9e80a0fd..53197d458d 100644
-> --- a/board/technexion/imx7dpico/readme.txt
-> +++ b/board/technexion/imx7dpico/readme.txt
-> @@ -20,10 +20,63 @@ You will find in output/images/ the following files:
->    - rootfs.ext4
->    - rootfs.tar
->    - sdcard.img
-> -  - u-boot.img
-> +  - u-boot-dtb.img
->    - SPL
->    - zImage
->  
-> +Flash U-Boot and SPL
-> +=====
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 9620dec524..c48f54a2b7 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -447,7 +447,9 @@ $(2)_PKGDIR			=  $(pkgdir)
+>  # version control system branch or tag, for example remotes/origin/1_10_stable.
+>  # Similar for spaces and colons (:) that may appear in date-based revisions for
+>  # CVS.
 
- It would have been nice to add this as a separate patch, before the bump.
+ Maybe it would be good to add a comment like this:
 
- However, I guess it needs heavy modification in that case, so I applied to
-master as-is after all, thanks.
+# Since _DL_VERSION and _VERSION are defined based on themselves, we need to use
+# := assignment. Also, since they may be calculated through functions, it's best
+# to strip them - this makes it easier for the packages themselves.
+
+
+> -ifndef $(2)_VERSION
+> +ifdef $(2)_DL_VERSION
+> + $(2)_DL_VERSION := $$(strip $$($(2)_DL_VERSION))
+
+ This will not work as intended... A few lines below, we have:
+
+$(2)_VERSION := $$(call sanitize,$$($(2)_DL_VERSION))
+
+so the _VERSION defined by the package will not be used at all...
+
+ I'm surprised that you didn't notice this. Maybe I'm mistaken? Or is there some
+situation where the correct _VERSION does end up getting used?
+
+ I think the only solution is something like:
+
+ifdef $(2)_DL_VERSION
+ $(2)_DL_VERSION := $$(strip $$($(2)_DL_VERSION))
+ $(2)_VERSION := $$(call sanitize,$$($(2)_DL_VERSION))
+else
+ ifndef $(2)_VERSION
+  ifdef $(3)_DL_VERSION
+   $(2)_DL_VERSION := $$($(3)_DL_VERSION)
+  else ifdef $(3)_VERSION
+   $(2)_DL_VERSION := $$($(3)_VERSION)
+  endif
+ else
+  $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
+ endif
+endif
+
 
  Regards,
  Arnout
 
-> +
-> +Note: This method is convenient for development purposes.
-> +If the eMMC has already a U-Boot flashed with DFU support then
-> +the user can go to step 2 below in order to update U-Boot.
-> +
-> +Put pico board in USB download mode (refer to the PICO-iMX7D Quick Start Guide
-> +page 3)
-> +
-> +Connect a USB to serial adapter between the host PC and pico.
-> +
-> +Connect a USB cable between the OTG pico port and the host PC.
-> +
-> +Note: Some computers may be a bit strict with USB current draw and will
-> +shut down their ports if the draw is too high. The solution for that is
-> +to use an externally powered USB hub between the board and the host computer.
-> +
-> +Open a terminal program such as minicom.
-> +
-> +Copy SPL and u-boot-dtb.img to the imx_usb_loader folder.
-> +
-> +Load the SPL binary via USB:
-> +
-> +$ sudo ./imx_usb SPL
-> +
-> +Load the u-boot-dtb.img binary via USB:
-> +
-> +$ sudo ./imx_usb u-boot-dtb.img
-> +
-> +Then U-Boot starts and its messages appear in the console program.
-> +
-> +Use the default environment variables:
-> +
-> +=> env default -f -a
-> +=> saveenv
-> +
-> +Run the DFU agent so we can flash the new images using dfu-util tool:
-> +
-> +=> dfu 0 mmc 0
-> +
-> +Flash SPL and u-boot-dtb.img into the eMMC running the following commands on a PC:
-> +
-> +$ sudo dfu-util -D SPL -a spl
-> +
-> +$ sudo dfu-util -D u-boot-dtb.img -a u-boot
-> +
-> +Remove power from the pico board.
-> +
-> +Put pico board into normal boot mode.
-> +
-> +Power up the board and the new updated U-Boot should boot from eMMC.
-> +
->  Flash the eMMC
->  ==============
->  
-> diff --git a/configs/imx7dpico_defconfig b/configs/imx7dpico_defconfig
-> index a5d41657f1..151b7fd65a 100644
-> --- a/configs/imx7dpico_defconfig
-> +++ b/configs/imx7dpico_defconfig
-> @@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc4"
->  # kernel
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.6"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.16"
->  BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-pico-pi"
-> @@ -25,8 +25,8 @@ BR2_TARGET_UBOOT_SPL=y
->  BR2_TARGET_UBOOT_SPL_NAME="SPL"
->  BR2_TARGET_UBOOT_BOARDNAME="pico-pi-imx7d"
->  BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
-> -BR2_TARGET_UBOOT_FORMAT_IMG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
-> +BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
->  
->  # wifi firmware for brcm43439
->  BR2_PACKAGE_LINUX_FIRMWARE=y
+> +else ifndef $(2)_VERSION
+>   ifdef $(3)_DL_VERSION
+>    $(2)_DL_VERSION := $$($(3)_DL_VERSION)
+>   else ifdef $(3)_VERSION
 > 
