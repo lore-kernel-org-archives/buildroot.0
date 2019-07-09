@@ -1,14 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Tue, 9 Jul 2019 19:01:43 +0200
-Subject: [Buildroot] How do I enable webrtc as part of external
- gstreamer, in buildroot
-In-Reply-To: <CADNjvP8jLnPK7DvDtpacTCn2g=DowwPr-C+KX7649aenVutaDg@mail.gmail.com>
-References: <CADNjvP-VYgO7ctGsOjZxudkA7k6PzT4FNt+JRACmUV6=bh_E=Q@mail.gmail.com>
- <20190704202528.63f7d667@gmx.net>
- <CADNjvP_HU1+D+LXwVtVosxpvDiUGZC=uEUCET10RpiG+oVn63Q@mail.gmail.com>
- <20190707204022.65affaec@gmx.net>
- <CADNjvP8jLnPK7DvDtpacTCn2g=DowwPr-C+KX7649aenVutaDg@mail.gmail.com>
-Message-ID: <7bed35ef-501b-c318-ef26-02eeed8484ad@mind.be>
+Date: Tue, 9 Jul 2019 19:14:19 +0200
+Subject: [Buildroot] [RFC] BR2_EXTERNAL linux-kernel-extensions support
+In-Reply-To: <CANQCQpbobC6KV9fNwUw3gzUonzsW+W5E9EjYNnMmmoJ9bVRQHA@mail.gmail.com>
+References: <20190709005820.595-1-robert.mccabe@rockwellcollins.com>
+ <CANQCQpbobC6KV9fNwUw3gzUonzsW+W5E9EjYNnMmmoJ9bVRQHA@mail.gmail.com>
+Message-ID: <54114ab5-43aa-a55c-6402-9f1a5d614400@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -17,18 +13,35 @@ To: buildroot@busybox.net
 
 
 
-On 08/07/2019 14:30, Vered Kalef wrote:
-> This file made the difference. It seems the problem is an old version of
-> libnice, it should be greater than 0.1.14, so, I think I'll upgrade to buildroot
-> 2018.11, which holds libnice 0.1.14
-> and create the external gstreamer with webrtc enabled as you've done in version
-> 2019.5.
+On 09/07/2019 04:15, Matthew Weber wrote:
+> Hi Rob,
+> 
+> On Mon, Jul 8, 2019 at 7:58 PM <robert.mccabe@rockwellcollins.com> wrote:
+>>
+>> From: "McCabe, Robert J" <robert.mccabe@rockwellcollins.com>
+>>
+>> Allows external projects to inject custom code inside the Linux source
+>> tree.
+>>
+>> Although a simple change that *shouldn't* be controversial I'm troubled
+>> by the comment a few lines above:
+>>
+>>    #However, since the files we include here are in the same directory as
+>>    #the current Makefile, we are OK. But this is a hard requirement: files
+>>    #included here *must* be in the same directory!
+>>
+>> I'm not seeing why this is a "hard requirement" ...
+> 
+> There was some discussion on a similar thread earlier this year. (I
+> added Ryan Barnett as we had similar interest in converting our
+> internal linux extension over to the upstream approach.)
+> http://buildroot-busybox.2317881.n4.nabble.com/Linux-extension-from-a-BR2-EXTERNAL-tree-td214834.html#a214845
 
- If you can anyway upgrade buildroot as a whole (which is the safer option),
-then it's better to upgrade to either 2019.05 (which already contains gst-webrtc
-support) or to 2019.02 (because that's an LTS release).
+ Thomas's approach in that thread, however, was to include the extension *after*
+linux.mk expansion. This doesn't work, as explained in that thread.
+
 
  Regards,
  Arnout
 
-> In your opinion will it do the work?
+[snip]
