@@ -1,72 +1,39 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Tue, 9 Jul 2019 09:24:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/at-spi2-core: fix build with NLS
-In-Reply-To: <CAMWSM7gdtjvdp=py9+isYfKqf_Bd9OXS7jQB18ym_XX78sV7CQ@mail.gmail.com>
-References: <20190704170538.19478-1-fontaine.fabrice@gmail.com>
- <CAMWSM7gdtjvdp=py9+isYfKqf_Bd9OXS7jQB18ym_XX78sV7CQ@mail.gmail.com>
-Message-ID: <CAPi7W81_0L+BwFWadF+nv06attTFfnKuoiCshbuf3mGGiOX5Gw@mail.gmail.com>
+From: Victor Huesca <victor.huesca@bootlin.com>
+Date: Tue,  9 Jul 2019 09:45:49 +0200
+Subject: [Buildroot] [PATCH 1/3] package/pkg-generic: allow to use
+ <pkg>_DL_VERSION in packages .mk files
+In-Reply-To: <20190709074551.22747-1-victor.huesca@bootlin.com>
+References: <20190709074551.22747-1-victor.huesca@bootlin.com>
+Message-ID: <20190709074551.22747-2-victor.huesca@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Joseph,
+This patch continue the work done here http://buildroot-busybox.2317881.n4.nabble.com/PATCH-0-4-Sanetize-packages-version-tp225554.html
+By making this DL_VERSION public we should be able to handle the missing corner-cases
+with package version sanitizeing.
 
-Le lun. 8 juil. 2019 ? 22:11, Joseph Kogut <joseph.kogut@gmail.com> a ?crit :
->
-> Hi Fabrice,
->
-> On Thu, Jul 4, 2019 at 10:05 AM Fabrice Fontaine
-> <fontaine.fabrice@gmail.com> wrote:
-> >
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/0b0d3370d8d050f7a3ba5663833e5e06e7c0b7b1?
-> >
->
-> It appears there's an extra character on the end of that buildbot URL.
->
-> It looks like the correct URL is:
-> http://autobuild.buildroot.org/results/0b0d3370d8d050f7a3ba5663833e5e06e7c0b7b1
-I'll send a v2 with the correct URL.
->
-> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> > ---
-> >  package/at-spi2-core/at-spi2-core.mk | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/package/at-spi2-core/at-spi2-core.mk b/package/at-spi2-core/at-spi2-core.mk
-> > index 40b29bdb3f..3a5197eb03 100644
-> > --- a/package/at-spi2-core/at-spi2-core.mk
-> > +++ b/package/at-spi2-core/at-spi2-core.mk
-> > @@ -11,7 +11,10 @@ AT_SPI2_CORE_SITE = http://ftp.gnome.org/pub/gnome/sources/at-spi2-core/$(AT_SPI
-> >  AT_SPI2_CORE_LICENSE = LGPL-2.0+
-> >  AT_SPI2_CORE_LICENSE_FILES = COPYING
-> >  AT_SPI2_CORE_INSTALL_STAGING = YES
-> > -AT_SPI2_CORE_DEPENDENCIES = host-pkgconf dbus libglib2 xlib_libXtst
-> > +AT_SPI2_CORE_DEPENDENCIES = host-pkgconf dbus libglib2 xlib_libXtst \
-> > +       $(TARGET_NLS_DEPENDENCIES)
-> >  AT_SPI2_CORE_CONF_OPTS = -Ddbus_daemon=/usr/bin/dbus-daemon
-> >
-> > +AT_SPI2_CORE_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
-> > +
-> >  $(eval $(meson-package))
-> > --
-> > 2.20.1
-> >
->
-> Also fixes:
-> - http://autobuild.buildroot.net/results/b46f989e2c5d37e9c6535ce5630c80ca9d0a9009
->
-> Tested-by: Joseph Kogut <joseph.kogut@gmail.com>
->
-> Lastly, it appears there is a similar failure with atk. I assume the
-> fix is also the same. Do you have time to make a patch for that as
-> well? If not, I can submit one.
-Patch for atk is already available: http://patchwork.ozlabs.org/patch/1126485
->
-> Best,
-> Joseph
-Best Regards,
+Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+---
+ package/pkg-generic.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Fabrice
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 9620dec524..c48f54a2b7 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -447,7 +447,9 @@ $(2)_PKGDIR			=  $(pkgdir)
+ # version control system branch or tag, for example remotes/origin/1_10_stable.
+ # Similar for spaces and colons (:) that may appear in date-based revisions for
+ # CVS.
+-ifndef $(2)_VERSION
++ifdef $(2)_DL_VERSION
++ $(2)_DL_VERSION := $$(strip $$($(2)_DL_VERSION))
++else ifndef $(2)_VERSION
+  ifdef $(3)_DL_VERSION
+   $(2)_DL_VERSION := $$($(3)_DL_VERSION)
+  else ifdef $(3)_VERSION
+-- 
+2.21.0
