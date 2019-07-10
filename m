@@ -1,49 +1,38 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Wed, 10 Jul 2019 22:32:02 +0200
-Subject: [Buildroot] [git commit] package/libqmi: bump to version 1.22.4
-Message-ID: <20190710203726.ADC4581674@busybox.osuosl.org>
+Date: Wed, 10 Jul 2019 22:32:27 +0200
+Subject: [Buildroot] [git commit] package/modem-manager: drop host-intltool
+Message-ID: <20190710203726.B5B1E81674@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61db8b7a43978327222894fe2cb452c8dacbdc40
+commit: https://git.buildroot.net/buildroot/commit/?id=ff0f28add8e386bbb5321d5b4eb9f38886ac42d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-libqmi >= 1.22.4 is needed by modem-manager 1.10.2
+intltool is not needed since
+https://gitlab.freedesktop.org/mobile-broadband/ModemManager/commit/984625165e09f02b4d6b8389092d5055fdbb0f03
 
-Fixes:
- - http://autobuild.buildroot.org/results/14e11c6136db09b36d84246a7472b77bb4bfdd19
+So drop it and add TARGET_NLS_DEPENDENCIES
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Tested-by: Carlos Santos <unixmania@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- package/libqmi/libqmi.hash | 2 +-
- package/libqmi/libqmi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/modem-manager/modem-manager.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
-index 0c27451ec2..7d622cb702 100644
---- a/package/libqmi/libqmi.hash
-+++ b/package/libqmi/libqmi.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256 21c198b481f1617bb7edb1960d823569de3e38b269dbf513af1b56048cafaa17  libqmi-1.22.0.tar.xz
-+sha256 4c5b8e7bde4144ad875e9efaccd05bcc9b830c9a114df63aa2be8eb5d3caf9f1  libqmi-1.22.4.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
-index 319c2362bf..302e938c62 100644
---- a/package/libqmi/libqmi.mk
-+++ b/package/libqmi/libqmi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/modem-manager/modem-manager.mk b/package/modem-manager/modem-manager.mk
+index a2c38a68c9..61658cf48a 100644
+--- a/package/modem-manager/modem-manager.mk
++++ b/package/modem-manager/modem-manager.mk
+@@ -9,7 +9,7 @@ MODEM_MANAGER_SOURCE = ModemManager-$(MODEM_MANAGER_VERSION).tar.xz
+ MODEM_MANAGER_SITE = http://www.freedesktop.org/software/ModemManager
+ MODEM_MANAGER_LICENSE = GPL-2.0+ (programs, plugins), LGPL-2.0+ (libmm-glib)
+ MODEM_MANAGER_LICENSE_FILES = COPYING COPYING.LIB
+-MODEM_MANAGER_DEPENDENCIES = host-pkgconf host-intltool libglib2
++MODEM_MANAGER_DEPENDENCIES = host-pkgconf libglib2 $(TARGET_NLS_DEPENDENCIES)
+ MODEM_MANAGER_INSTALL_STAGING = YES
+ MODEM_MANAGER_CONF_OPTS = --disable-more-warnings
  
--LIBQMI_VERSION = 1.22.0
-+LIBQMI_VERSION = 1.22.4
- LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
- LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
- LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
