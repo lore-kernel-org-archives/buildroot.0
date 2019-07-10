@@ -1,10 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Wed, 10 Jul 2019 22:23:15 +0200
-Subject: [Buildroot] [PATCH] board/freescale: Fix wrong config for
- u-boot.img
-In-Reply-To: <20190710051702.9481-1-offougajoris@gmail.com>
-References: <20190710051702.9481-1-offougajoris@gmail.com>
-Message-ID: <f9d3f91e-6743-b24b-4778-f0c8a1ce64b9@mind.be>
+Date: Wed, 10 Jul 2019 22:34:05 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libqmi: bump to version 1.22.4
+In-Reply-To: <20190705210800.20864-1-fontaine.fabrice@gmail.com>
+References: <20190705210800.20864-1-fontaine.fabrice@gmail.com>
+Message-ID: <4d8e3a44-e439-c847-aa2d-f4959f64d0b2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,27 +12,13 @@ To: buildroot@busybox.net
 
 
 
-On 10/07/2019 07:17, Joris Offouga wrote:
-> Signed-off-by: Joris Offouga <offougajoris@gmail.com>
-> ---
->  board/freescale/common/imx/post-image.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On 05/07/2019 23:08, Fabrice Fontaine wrote:
+> libqmi >= 1.22.4 is needed by modem-manager 1.10.2
 > 
-> diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
-> index ab51dc2098..19d8fffb63 100755
-> --- a/board/freescale/common/imx/post-image.sh
-> +++ b/board/freescale/common/imx/post-image.sh
-> @@ -68,7 +68,7 @@ uboot_image()
->  		echo "u-boot.imx"
->  	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y$" ${BR2_CONFIG}; then
->  	    echo "u-boot-dtb.img"
-> -	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y$" ${BR2_CONFIG}; then
-> +	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_IMG=y$" ${BR2_CONFIG}; then
-
- Gah, I had made exactly this fix before applying to master, I had even updated
-the commit message, but somehow the fix got lost...
-
- Thanks for handling it!
+> Fixes:
+>  - http://autobuild.buildroot.org/results/14e11c6136db09b36d84246a7472b77bb4bfdd19
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
  Applied to master, thanks.
 
@@ -41,7 +26,32 @@ the commit message, but somehow the fix got lost...
  Arnout
 
 
->  	    echo "u-boot.img"
->  	fi
->  }
+> ---
+>  package/libqmi/libqmi.hash | 2 +-
+>  package/libqmi/libqmi.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/package/libqmi/libqmi.hash b/package/libqmi/libqmi.hash
+> index 0c27451ec2..7d622cb702 100644
+> --- a/package/libqmi/libqmi.hash
+> +++ b/package/libqmi/libqmi.hash
+> @@ -1,4 +1,4 @@
+>  # Locally computed:
+> -sha256 21c198b481f1617bb7edb1960d823569de3e38b269dbf513af1b56048cafaa17  libqmi-1.22.0.tar.xz
+> +sha256 4c5b8e7bde4144ad875e9efaccd05bcc9b830c9a114df63aa2be8eb5d3caf9f1  libqmi-1.22.4.tar.xz
+>  sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+>  sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+> diff --git a/package/libqmi/libqmi.mk b/package/libqmi/libqmi.mk
+> index 319c2362bf..302e938c62 100644
+> --- a/package/libqmi/libqmi.mk
+> +++ b/package/libqmi/libqmi.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBQMI_VERSION = 1.22.0
+> +LIBQMI_VERSION = 1.22.4
+>  LIBQMI_SITE = http://www.freedesktop.org/software/libqmi
+>  LIBQMI_SOURCE = libqmi-$(LIBQMI_VERSION).tar.xz
+>  LIBQMI_LICENSE = LGPL-2.0+ (library), GPL-2.0+ (programs)
 > 
