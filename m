@@ -1,181 +1,121 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 10 Jul 2019 23:13:18 +0200
-Subject: [Buildroot] [PATCH v2 5/6]
- package/gstreamer1/gst1-plugins-ugly: convert package type to meson
-In-Reply-To: <20190710153634.25235-6-aduskett@gmail.com>
-References: <20190710153634.25235-1-aduskett@gmail.com>
- <20190710153634.25235-6-aduskett@gmail.com>
-Message-ID: <20190710231318.7fea1fb6@gmx.net>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Wed, 10 Jul 2019 23:13:55 +0200
+Subject: [Buildroot] [PATCH] package/openpgm: remove 'release-' prefix
+ in order to sanitize version.
+In-Reply-To: <20190710160030.27668-1-victor.huesca@bootlin.com>
+References: <20190710160030.27668-1-victor.huesca@bootlin.com>
+Message-ID: <3ba20ce3-efab-e61c-4096-50521f4111bd@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Adam,
+ [Adding a few involved parties in Cc]
 
-On Wed, 10 Jul 2019 11:36:33 -0400, aduskett at gmail.com wrote:
+On 10/07/2019 18:00, Victor Huesca wrote:
+> While we would want to use the standard dot notation, his package is
+> already present on release-monitoring with dash separator so we have to
+> keep it with dashes in buildroot too -- at least until its release-
+> monitoring entry is updated (which we could do but it is used by other
+> distros and may break their compatibility).
+> 
+> Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
 
-> From: Adam Duskett <Aduskett@gmail.com>
->
-> GStreamer 1.16.0 is the last version to support autotools, and will be removed
-> in the next version.
+ Unfortunately, I can't apply this because the current hash is broken.
+Apparently, steve-o at some point regenerated the release tags under his own
+name instead of the original tagger, so it got a different commit hash, and the
+commit hash is stored as a comment in the tarball... Here is the diffoscope output:
 
-See previous patch...
+--- dl/openpgm/openpgm-release-5-2-122.orig.tar.gz
++++ dl/openpgm/openpgm-release-5-2-122.tar.gz
+?   --- openpgm-release-5-2-122.orig.tar
+??? +++ openpgm-release-5-2-122.tar
+?? Format-specific differences are supported for this file format but none were
+detected (POSIX tar archive)
+? @@ -26,18 +26,18 @@
+?  00000190: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+?  000001a0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+?  000001b0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+?  000001c0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+?  000001d0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+?  000001e0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+?  000001f0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+? -00000200: 3532 2063 6f6d 6d65 6e74 3d65 6662 3735  52 comment=efb75
+? -00000210: 6339 3665 6263 3035 3234 6137 6462 3663  c96ebc0524a7db6c
+? -00000220: 3133 3537 6631 3537 3035 6134 6334 6662  1357f15705a4c4fb
+? -00000230: 3930 620a 0000 0000 0000 0000 0000 0000  90b.............
+? +00000200: 3532 2063 6f6d 6d65 6e74 3d35 3836 6437  52 comment=586d7
+? +00000210: 3038 3966 6231 3764 6261 3033 6564 6135  089fb17dba03eda5
+? +00000220: 3532 6539 3430 3737 3731 3837 6661 3262  52e940777187fa2b
+? +00000230: 3465 310a 0000 0000 0000 0000 0000 0000  4e1.............
+?  00000240: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+?  00000250: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+?  00000260: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+?  00000270: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+?  00000280: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+?  00000290: 0000 0000 0000 0000 0000 0000 0000 0000  ................
+?  000002a0: 0000 0000 0000 0000 0000 0000 0000 0000  ................
 
->
-> Other changes:
->   - Valgrind is no longer an option and is checked via headers, so the option
->     has been removed entirely, because the Valgrind package check is now in
->     the base gstreamer1 package.
+ This is the new tag:
+https://github.com/steve-o/openpgm/commit/586d7089fb17dba03eda552e940777187fa2b4e1
 
-See previous patch...
+and this is the old one:
+https://github.com/steve-o/openpgm/commit/efb75c96ebc0524a7db6c1357f15705a4c4fb90b
 
->
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+
+
+ So, we have a few options now:
+
+- Bump to a more recent version. The current version is 6 years old. Upstream
+has been merging pull requests, but hasn't really maintained the code, and is no
+longer able to test it. So there is no more recent release, and Fabrice has sent
+a patch to bump to a random git commit. In parallel, he asked to make a
+release[1] - but this hasn't happened in the four months since.
+
+- Fix the hash as a preparatory commit. However, this breaks
+sources.buildroot.org for users of older Buildroot versions, or it breaks it for
+current master (depending on whether we update the tarball there or not).
+
+- Fix the hash as part of this commit. Since this commit changes the tarball
+name, changing the hash at the same time allows sources.buildroot.org to carry
+both the old and the new tarball.
+
+
+ I think the third option is the best. It requires a good explanation in the
+commit message though.
+
+ Regards,
+ Arnout
+
+[1] https://github.com/steve-o/openpgm/issues/62
+
 > ---
-> Changes v1 -> v2:
->   - Add -Dexamples=disabled as a default config value. (Peter)
->
->  .../gst1-plugins-ugly/gst1-plugins-ugly.mk    | 55 ++++++++++---------
->  1 file changed, 29 insertions(+), 26 deletions(-)
->
-> diff --git a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-> index f3ac2f79d3..588729b7d7 100644
-> --- a/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-> +++ b/package/gstreamer1/gst1-plugins-ugly/gst1-plugins-ugly.mk
-> @@ -11,79 +11,82 @@ GST1_PLUGINS_UGLY_LICENSE_FILES = COPYING
->  # GPL licensed plugins will append to GST1_PLUGINS_UGLY_LICENSE if enabled.
->  GST1_PLUGINS_UGLY_LICENSE = LGPL-2.1+
->
-> -GST1_PLUGINS_UGLY_CONF_OPTS = --disable-examples --disable-valgrind
-> +GST1_PLUGINS_UGLY_CONF_OPTS += \
-> +	-Dtests=disabled \
-> +	-Dexamples=disabled
-
-Keep the order:
-
-  -Dexamples=disabled \
-  -Dtests=disabled
-
-Missing:
-
-+	-Dgobject-cast-checks=disabled \
-+	-Dglib-asserts=disabled \
-+	-Dglib-checks=disabled \
-
->
->  GST1_PLUGINS_UGLY_CONF_OPTS += \
-> -	--disable-a52dec \
-> -	--disable-amrnb \
-> -	--disable-amrwb \
-> -	--disable-cdio \
-> -	--disable-sidplay \
-> -	--disable-twolame
-
-What happend to --disable-twolame?
-
-> +	-Da52dec=disabled \
-> +	-Damrnb=disabled \
-> +	-Damrwbdec=disabled \
-> +	-Dcdio=disabled \
-> +	-Dsidplay=disabled
->
->  GST1_PLUGINS_UGLY_DEPENDENCIES = gstreamer1 gst1-plugins-base
->
->  ifeq ($(BR2_PACKAGE_ORC),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-orc
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dorc=enabled
->  GST1_PLUGINS_UGLY_DEPENDENCIES += orc
-> +else
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dorc=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_ASFDEMUX),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-asfdemux
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dasfdemux=enabled
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-asfdemux
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dasfdemux=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDLPCMDEC),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-dvdlpcmdec
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdlpcmdec=enabled
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-dvdlpcmdec
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdlpcmdec=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDSUB),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-dvdsub
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdsub=enabled
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-dvdsub
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdsub=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_XINGMUX),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-xingmux
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dxingmux=enabled
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-xingmux
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dxingmux=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_REALMEDIA),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-realmedia
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Drealmedia=enabled
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-realmedia
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Drealmedia=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_DVDREAD),y)
->  # configure does not use pkg-config to detect libdvdread
->  ifeq ($(BR2_PACKAGE_LIBDVDCSS)$(BR2_STATIC_LIBS),yy)
-> -GST1_PLUGINS_UGLY_CONF_ENV += LIBS="-ldvdcss"
-> +GST1_PLUGINS_UGLY_LDFLAGS +="-ldvdcss"
-
-Missing space (GST1_PLUGINS_UGLY_LDFLAGS += "-ldvdcss")?
-
-Regards,
-Peter
-
->  endif
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-dvdread
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdread=enabled
->  GST1_PLUGINS_UGLY_DEPENDENCIES += libdvdread
->  GST1_PLUGINS_UGLY_HAS_GPL_LICENSE = y
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-dvdread
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Ddvdread=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_MPEG2DEC),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-mpeg2dec
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dmpeg2dec=enabled
->  GST1_PLUGINS_UGLY_DEPENDENCIES += libmpeg2
->  GST1_PLUGINS_UGLY_HAS_GPL_LICENSE = y
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-mpeg2dec
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dmpeg2dec=disabled
->  endif
->
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_UGLY_PLUGIN_X264),y)
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --enable-x264
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dx264=enabled
->  GST1_PLUGINS_UGLY_DEPENDENCIES += x264
->  GST1_PLUGINS_UGLY_HAS_GPL_LICENSE = y
->  else
-> -GST1_PLUGINS_UGLY_CONF_OPTS += --disable-x264
-> +GST1_PLUGINS_UGLY_CONF_OPTS += -Dx264=disabled
->  endif
->
->  # Add GPL license if GPL plugins enabled.
-> @@ -94,4 +97,4 @@ endif
->  # Use the following command to extract license info for plugins.
->  # # find . -name 'plugin-*.xml' | xargs grep license
->
-> -$(eval $(autotools-package))
-> +$(eval $(meson-package))
+>  package/openpgm/openpgm.hash | 2 +-
+>  package/openpgm/openpgm.mk   | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/openpgm/openpgm.hash b/package/openpgm/openpgm.hash
+> index f20e02a7fb..eee021a348 100644
+> --- a/package/openpgm/openpgm.hash
+> +++ b/package/openpgm/openpgm.hash
+> @@ -1,2 +1,2 @@
+>  # Locally calculated
+> -sha256 ecd48fd0bcfd8351ce6dcf31b063dd8fe83d3dab41bca62a6ebd6880a88c4a69  openpgm-release-5-2-122.tar.gz
+> +sha256 ecd48fd0bcfd8351ce6dcf31b063dd8fe83d3dab41bca62a6ebd6880a88c4a69  openpgm-5-2-122.tar.gz
+> diff --git a/package/openpgm/openpgm.mk b/package/openpgm/openpgm.mk
+> index 8c85344b68..8163982d37 100644
+> --- a/package/openpgm/openpgm.mk
+> +++ b/package/openpgm/openpgm.mk
+> @@ -4,8 +4,8 @@
+>  #
+>  ################################################################################
+>  
+> -OPENPGM_VERSION = release-5-2-122
+> -OPENPGM_SITE = $(call github,steve-o,openpgm,$(OPENPGM_VERSION))
+> +OPENPGM_VERSION = 5-2-122
+> +OPENPGM_SITE = $(call github,steve-o,openpgm,release-$(OPENPGM_VERSION))
+>  OPENPGM_LICENSE = LGPL-2.1+
+>  OPENPGM_LICENSE_FILES = openpgm/pgm/LICENSE
+>  OPENPGM_INSTALL_STAGING = YES
+> 
