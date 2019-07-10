@@ -1,11 +1,11 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 10 Jul 2019 22:52:03 +0200
+Date: Wed, 10 Jul 2019 22:57:03 +0200
 Subject: [Buildroot] [PATCH v2 3/6]
  package/gstreamer1/gst1-plugins-good: convert package type to meson
 In-Reply-To: <20190710153634.25235-4-aduskett@gmail.com>
 References: <20190710153634.25235-1-aduskett@gmail.com>
  <20190710153634.25235-4-aduskett@gmail.com>
-Message-ID: <20190710225203.0b81eec0@gmx.net>
+Message-ID: <20190710225703.0e73f13f@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -20,17 +20,11 @@ On Wed, 10 Jul 2019 11:36:31 -0400, aduskett at gmail.com wrote:
 >
 > GStreamer 1.16.0 is the last version to support autotools, and will be removed
 > in the next version.
-
-See previous patch...
-
 >
 > Other changes:
 >   - Valgrind is no longer an option and is checked via headers, so the option
 >     has been removed entirely, because the Valgrind package check is now in
 >     the base gstreamer1 package.
-
-See previous patch...
-
 >
 >   - zlib no longer has an option and is also checked via headers.
 >
@@ -52,10 +46,6 @@ See previous patch...
 > -	--disable-directsound \
 > -	--disable-waveform \
 > -	--disable-sunaudio \
-
-Add commit log entry for the lost sunaudio option (removed since 2017-06-23, did not
-determine the gstreamer version)....
-
 > -	--disable-osx_audio \
 > -	--disable-osx_video \
 > -	--disable-aalib \
@@ -63,17 +53,20 @@ determine the gstreamer version)....
 > -	--disable-libcaca
 > +	-Dexamples=disabled \
 > +	-Dtests=disabled \
-
-While your are at it , the following options should move to the
-'Options which require currently unpackaged libraries' section
-some lines below:
-
 > +	-Ddirectsound=disabled \
 > +	-Dwaveform=disabled \
 > +	-Dosxaudio=disabled \
 > +	-Dosxvideo=disabled \
 > +	-Daalib=disabled \
 > +	-Dlibcaca=disabled
+
+Missing:
+
++	-Dgobject-cast-checks=disabled \
++	-Dglib-asserts=disabled \
++	-Dglib-checks=disabled \
+
+
 >
 >  # Options which require currently unpackaged libraries
 >  GST1_PLUGINS_GOOD_CONF_OPTS += \
@@ -515,6 +508,24 @@ some lines below:
 > -GST1_PLUGINS_GOOD_CONF_OPTS += --disable-v4l2-probe
 > +GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-probe=false
 >  endif
+
+Missing entry for:
+
+  option('v4l2-libv4l2', type : 'feature', value : 'auto', description : 'Use libv4l2 for some obscure format conversions')
+
+ifeq ($(BR2_PACKAGE_LIBV4L),y)
+GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-libv4l2=enabled
+GST1_PLUGINS_GOOD_DEPENDENCIES += libv4l
+else
+GST1_PLUGINS_GOOD_CONF_OPTS += -Dv4l2-libv4l2=disabled
+endif
+
+Maybe missing entry for:
+  option('v4l2-gudev', type : 'feature', value : 'auto', description : 'Use libgudev for probing v4l2 devices')
+
+Regards,
+Peter
+
 >
 >  ifeq ($(BR2_PACKAGE_XORG7),y)
 >  GST1_PLUGINS_GOOD_DEPENDENCIES += xlib_libX11 xlib_libXext xlib_libXv
@@ -525,10 +536,6 @@ some lines below:
 > +	-Dximagesrc=enabled \
 > +	$(if $(BR2_PACKAGE_XLIB_LIBXFIXES),-Dximagesrc-xfixes=enabled) \
 > +	$(if $(BR2_PACKAGE_XLIB_LIBXDAMAGE),-Dximagesrc-xdamage=enabled)
-
-Maybe better with an Dximagesrc-xfixes=disabled, Dximagesrc-xdamage=disabled
-else path?
-
 >  else
 >  GST1_PLUGINS_GOOD_CONF_OPTS += \
 > -	--disable-x
@@ -651,21 +658,6 @@ else path?
 > -else
 > -GST1_PLUGINS_GOOD_CONF_OPTS += --disable-zlib
 >  endif
-
-Should be:
-
-  # checked for by meson.build, gst/isomp4/meson.build, gst/matroska/meson.build
-  # and gst/icydemux/meson.build
-  ifeq ($(BR2_PACKAGE_ZLIB),y)
-  GST1_PLUGINS_GOOD_DEPENDENCIES += zlib
-  endif
-
-And option BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB removed from Config.in (and moved
-to Config.in.legacy)...
-
-Regards,
-Peter
-
 >
 >  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_BZ2),y)
 > -GST1_PLUGINS_GOOD_CONF_OPTS += --enable-bz2
