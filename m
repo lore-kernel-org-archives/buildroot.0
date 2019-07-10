@@ -1,35 +1,30 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 10 Jul 2019 00:51:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iputils: Bump to version
- s20190709
-In-Reply-To: <20190709223625.4442-1-petr.vorel@gmail.com>
-References: <20190709223625.4442-1-petr.vorel@gmail.com>
-Message-ID: <20190709225157.GA20328@dell5510>
+From: Joris Offouga <offougajoris@gmail.com>
+Date: Wed, 10 Jul 2019 07:17:02 +0200
+Subject: [Buildroot] [PATCH] board/freescale: Fix wrong config for u-boot.img
+Message-ID: <20190710051702.9481-1-offougajoris@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
+---
+ board/freescale/common/imx/post-image.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Add 's' before release as this is in upstream tags and in sha256sum.asc.
-> This prevents error:
-> ERROR: No hash found for iputils-20190709.tar.gz
-
-> Remove all patches (accepted in this release).
-Sorry, commit message should have been with "bump" lowercase.
-
-+ checked:
-$ ./utils/test-pkg -p iputils
-                             br-arm-full [1/6]: OK
-                  br-arm-cortex-a9-glibc [2/6]: OK
-                   br-arm-cortex-m4-full [3/6]: SKIPPED
-                          br-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: OK
-                            sourcery-arm [6/6]: OK
-6 builds, 1 skipped, 0 build failed, 0 legal-info failed
-
-
-Kind regards,
-Petr
+diff --git a/board/freescale/common/imx/post-image.sh b/board/freescale/common/imx/post-image.sh
+index ab51dc2098..19d8fffb63 100755
+--- a/board/freescale/common/imx/post-image.sh
++++ b/board/freescale/common/imx/post-image.sh
+@@ -68,7 +68,7 @@ uboot_image()
+ 		echo "u-boot.imx"
+ 	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y$" ${BR2_CONFIG}; then
+ 	    echo "u-boot-dtb.img"
+-	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y$" ${BR2_CONFIG}; then
++	elif grep -Eq "^BR2_TARGET_UBOOT_FORMAT_IMG=y$" ${BR2_CONFIG}; then
+ 	    echo "u-boot.img"
+ 	fi
+ }
+-- 
+2.17.1
