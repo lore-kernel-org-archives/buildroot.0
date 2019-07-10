@@ -1,53 +1,99 @@
-From: Baruch Siach <baruch@tkos.co.il>
-Date: Wed, 10 Jul 2019 20:57:26 +0300
-Subject: [Buildroot] [PATCH] package/gnupg2: security bump to version 2.2.17
-Message-ID: <6c353a63bf5b445d4f4da96dd21e1b36fdfc3095.1562781446.git.baruch@tkos.co.il>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 10 Jul 2019 21:55:10 +0200
+Subject: [Buildroot] [PATCH v2 1/6] package/gstreamer1/gstreamer1:
+ convert package type to meson
+In-Reply-To: <20190710153634.25235-2-aduskett@gmail.com>
+References: <20190710153634.25235-1-aduskett@gmail.com>
+ <20190710153634.25235-2-aduskett@gmail.com>
+Message-ID: <20190710215510.7c7de09d@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This release mitigates the effects of the denial-of-service attacks on
-the keyserver network (CVE-2019-13050).
+Hello Adam,
 
-https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f
-https://access.redhat.com/articles/4264021
+On Wed, 10 Jul 2019 11:36:29 -0400, aduskett at gmail.com wrote:
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
----
- package/gnupg2/gnupg2.hash | 8 ++++----
- package/gnupg2/gnupg2.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+> From: Adam Duskett <Aduskett@gmail.com>
+>
+> Gstreamer 1.16.0 is the last version to support autotools, and will be removed
+> in the next version.
 
-diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
-index a9b7d10f6780..806a07b8409c 100644
---- a/package/gnupg2/gnupg2.hash
-+++ b/package/gnupg2/gnupg2.hash
-@@ -1,7 +1,7 @@
--# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q1/000434.html
--sha1 66ebc053e2d22f743673d3fbe54453774e4fac58  gnupg-2.2.13.tar.bz2
-+# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q3/000439.html
-+sha1 12c1cee8871c03f0315fc8f27876364b75c95b12  gnupg-2.2.17.tar.bz2
- # Calculated based on the hash above and signature
--# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.13.tar.bz2.sig
-+# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.17.tar.bz2.sig
- # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256 76c787a955f9e6e0ead47c9be700bfb9d454f955a7b7c7e697aa719bac7b11d8  gnupg-2.2.13.tar.bz2
-+sha256 afa262868e39b651a2db4c071fba90415154243e83a830ca00516f9a807fd514  gnupg-2.2.17.tar.bz2
- sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index ca6b6293e770..aa1f7b14d6cf 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GNUPG2_VERSION = 2.2.13
-+GNUPG2_VERSION = 2.2.17
- GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
- GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
- GNUPG2_LICENSE = GPL-3.0+
--- 
-2.20.1
+Still some text more for an cover-letter...
+
+Otherwise looks good...
+
+Regards,
+Peter
+
+>
+> Other changes:
+>   - The meson build provides no 'disable-valgrind' option but checks
+>     for the availability of valgrind/valgrind.h, so add an optional
+>     valgrind dependency instead.
+>
+>   - Add the following new meson-specific options:
+>   - -Dgtk_doc=disabled
+>   - -Dglib-asserts=disabled
+>   - -Dglib-checks=disabled
+>   - -Dgobject-cast-checks=disabled
+>
+> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+> ---
+> Changes v1 -> v2:
+>   - Change valgrind check from an ifeq to the short form like libunwind. (Peter)
+>   - Update commit message to be more clear about valgrind. (Peter)
+>   - Fix s/DDgtk_doc/Dgtk_doc/ in the commit message. (Peter)
+>   - Add -Dgobject-cast-checks=disabled to the commit message. (Peter)
+>
+>  package/gstreamer1/gstreamer1/gstreamer1.mk | 31 +++++++++++----------
+>  1 file changed, 17 insertions(+), 14 deletions(-)
+>
+> diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+> index 3378232c10..cea933be84 100644
+> --- a/package/gstreamer1/gstreamer1/gstreamer1.mk
+> +++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+> @@ -12,24 +12,27 @@ GSTREAMER1_LICENSE_FILES = COPYING
+>  GSTREAMER1_LICENSE = LGPL-2.0+, LGPL-2.1+
+>
+>  GSTREAMER1_CONF_OPTS = \
+> -	--disable-examples \
+> -	--disable-tests \
+> -	--disable-failing-tests \
+> -	--disable-valgrind \
+> -	--disable-benchmarks \
+> -	--disable-introspection \
+> -	$(if $(BR2_PACKAGE_GSTREAMER1_CHECK),,--disable-check) \
+> -	$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),,--disable-trace) \
+> -	$(if $(BR2_PACKAGE_GSTREAMER1_PARSE),,--disable-parse) \
+> -	$(if $(BR2_PACKAGE_GSTREAMER1_GST_DEBUG),,--disable-gst-debug) \
+> -	$(if $(BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY),,--disable-registry) \
+> -	$(if $(BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS),,--disable-tools)
+> +	-Dexamples=disabled \
+> +	-Dtests=disabled \
+> +	-Dbenchmarks=disabled \
+> +	-Dgtk_doc=disabled \
+> +	-Dintrospection=disabled \
+> +	-Dglib-asserts=disabled \
+> +	-Dglib-checks=disabled \
+> +	-Dgobject-cast-checks=disabled \
+> +	-Dcheck=$(if $(BR2_PACKAGE_GSTREAMER1_CHECK),enabled,disabled) \
+> +	-Dtracer_hooks=$(if $(BR2_PACKAGE_GSTREAMER1_TRACE),true,false) \
+> +	-Doption-parsing=$(if $(BR2_PACKAGE_GSTREAMER1_PARSE),true,false) \
+> +	-Dgst_debug=$(if $(BR2_PACKAGE_GSTREAMER1_GST_DEBUG),true,false) \
+> +	-Dregistry=$(if $(BR2_PACKAGE_GSTREAMER1_PLUGIN_REGISTRY),true,false) \
+> +	-Dtools=$(if $(BR2_PACKAGE_GSTREAMER1_INSTALL_TOOLS),enabled,disabled)
+>
+>  GSTREAMER1_DEPENDENCIES = \
+>  	host-bison \
+>  	host-flex \
+>  	host-pkgconf \
+>  	libglib2 \
+> -	$(if $(BR2_PACKAGE_LIBUNWIND),libunwind)
+> +	$(if $(BR2_PACKAGE_LIBUNWIND),libunwind) \
+> +	$(if $(BR2_PACKAGE_VALGRIND),valgrind)
+>
+> -$(eval $(autotools-package))
+> +$(eval $(meson-package))
