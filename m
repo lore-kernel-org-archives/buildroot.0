@@ -1,22 +1,114 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Wed, 10 Jul 2019 10:57:00 +0000
-Subject: [Buildroot] [Bug 12011] cronstamps directory is not created by
- dcron package
-In-Reply-To: <bug-12011-163@https.bugs.busybox.net/>
-References: <bug-12011-163@https.bugs.busybox.net/>
-Message-ID: <bug-12011-163-iYtYg7L8LF@https.bugs.busybox.net/>
+From: Victor Huesca <victor.huesca@bootlin.com>
+Date: Wed, 10 Jul 2019 13:15:15 +0200
+Subject: [Buildroot] [PATCH 1/3] package/pkg-generic: allow to use
+ <pkg>_DL_VERSION in packages .mk files
+In-Reply-To: <6c1d55b1-df16-6452-7da5-78b4dd1160a6@mind.be>
+References: <20190709074551.22747-1-victor.huesca@bootlin.com>
+ <20190709074551.22747-2-victor.huesca@bootlin.com>
+ <6c1d55b1-df16-6452-7da5-78b4dd1160a6@mind.be>
+Message-ID: <5eac1154-6130-2948-5a00-8449d85d3c24@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12011
+Hi Arnout,
 
---- Comment #2 from Zoltan Gyarmati <zgyarmati@zgyarmati.de> ---
-It's back online, see:
-https://github.com/dubiousjim/dcron/issues/21
+On 09/07/2019 20:30, Arnout Vandecappelle wrote:
+>  Hi Victor,
+> 
+> On 09/07/2019 09:45, Victor Huesca wrote:
+>> This patch continue the work done here http://buildroot-busybox.2317881.n4.nabble.com/PATCH-0-4-Sanetize-packages-version-tp225554.html
+> 
+>  It's generally nices to summarize the discussion and put the reference as a
+> footnote, e.g.:
+> 
+> The _VERSION values should correspond to the ones on release-monitoring.org, so
+> we can easily check if there is an update for a package. For downloaded
+> packages, we can just add any prefix/suffix as part of the _SOURCE and/or _SITE
+> variables. However, for VCS-downloaded packages, the _VERSION is used directly
+> by the download infra.
+> 
+> This patch makes the DL_VERSION public, i.e. packages can set it (to a different
+> value than _VERSION). This way, we can handle the missing corner cases without
+> changes all over the places. See [1] for the full discussion.
+> 
+> [1]
+> http://buildroot-busybox.2317881.n4.nabble.com/PATCH-0-4-Sanetize-packages-version-tp225554.html
+> 
+> 
+> 
+>  However, I don't think the discussion said anything more than what I wrote
+> above, so I don't think adding the reference is very valuable. It's up to you.
+I see, thank you, I'll use this for the v2.
+
+
+>> By making this DL_VERSION public we should be able to handle the missing corner-cases
+>> with package version sanitizeing.
+>>
+>> Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+>> ---
+>>  package/pkg-generic.mk | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+>> index 9620dec524..c48f54a2b7 100644
+>> --- a/package/pkg-generic.mk
+>> +++ b/package/pkg-generic.mk
+>> @@ -447,7 +447,9 @@ $(2)_PKGDIR			=  $(pkgdir)
+>>  # version control system branch or tag, for example remotes/origin/1_10_stable.
+>>  # Similar for spaces and colons (:) that may appear in date-based revisions for
+>>  # CVS.
+> 
+>  Maybe it would be good to add a comment like this:
+> 
+> # Since _DL_VERSION and _VERSION are defined based on themselves, we need to use
+> # := assignment. Also, since they may be calculated through functions, it's best
+> # to strip them - this makes it easier for the packages themselves.
+> 
+> 
+>> -ifndef $(2)_VERSION
+>> +ifdef $(2)_DL_VERSION
+>> + $(2)_DL_VERSION := $$(strip $$($(2)_DL_VERSION))
+> 
+>  This will not work as intended... A few lines below, we have:
+> 
+> $(2)_VERSION := $$(call sanitize,$$($(2)_DL_VERSION))
+> 
+> so the _VERSION defined by the package will not be used at all...
+> 
+>  I'm surprised that you didn't notice this. Maybe I'm mistaken? Or is there some
+> situation where the correct _VERSION does end up getting used?
+
+You're right, I was focused on making the download work and forgot that
+now that _DL_VERSION and _VERSION can differs we should keep _VERSION
+rather than _DL_VERSION.
+
+>  I think the only solution is something like:
+> 
+> ifdef $(2)_DL_VERSION
+>  $(2)_DL_VERSION := $$(strip $$($(2)_DL_VERSION))
+>  $(2)_VERSION := $$(call sanitize,$$($(2)_DL_VERSION))> else
+>  ifndef $(2)_VERSION
+>   ifdef $(3)_DL_VERSION
+>    $(2)_DL_VERSION := $$($(3)_DL_VERSION)
+>   else ifdef $(3)_VERSION
+>    $(2)_DL_VERSION := $$($(3)_VERSION)
+>   endif
+>  else
+>   $(2)_DL_VERSION := $$(strip $$($(2)_VERSION))
+>  endif
+> endif
+
+Maybe I am mistaken but to me this code produce exactly the same results
+as mine...
+
+Anyway, now that you pointed out to me that we should keep the original
+_VERSION I can make a v2 that take this in account.
+
 
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Victor Huesca, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
