@@ -1,11 +1,11 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 10 Jul 2019 21:55:10 +0200
+Date: Wed, 10 Jul 2019 22:01:15 +0200
 Subject: [Buildroot] [PATCH v2 1/6] package/gstreamer1/gstreamer1:
  convert package type to meson
 In-Reply-To: <20190710153634.25235-2-aduskett@gmail.com>
 References: <20190710153634.25235-1-aduskett@gmail.com>
  <20190710153634.25235-2-aduskett@gmail.com>
-Message-ID: <20190710215510.7c7de09d@gmx.net>
+Message-ID: <20190710220115.3da8bc34@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,20 +14,23 @@ To: buildroot@busybox.net
 
 Hello Adam,
 
+and one more nitpick (or something a matter of taste, others will differ), I would
+prefer a shorter subject line:
+
+    package/gstreamer1: convert package type to meson
+    package/gst1-plugins-base: convert package type to meson
+    ...
+
+Regards,
+Peter
+
+
 On Wed, 10 Jul 2019 11:36:29 -0400, aduskett at gmail.com wrote:
 
 > From: Adam Duskett <Aduskett@gmail.com>
 >
 > Gstreamer 1.16.0 is the last version to support autotools, and will be removed
 > in the next version.
-
-Still some text more for an cover-letter...
-
-Otherwise looks good...
-
-Regards,
-Peter
-
 >
 > Other changes:
 >   - The meson build provides no 'disable-valgrind' option but checks
@@ -53,7 +56,7 @@ Peter
 >
 > diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
 > index 3378232c10..cea933be84 100644
-> --- a/package/gstreamer1/gstreamer1/gstreamer1.mk
+> --- a/package/gstreamer1/gstreamer1/gstreamer1.mk8c0d910ae6441f611ade55494089230d00ae86ff
 > +++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
 > @@ -12,24 +12,27 @@ GSTREAMER1_LICENSE_FILES = COPYING
 >  GSTREAMER1_LICENSE = LGPL-2.0+, LGPL-2.1+
