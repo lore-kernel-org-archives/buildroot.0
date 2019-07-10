@@ -1,63 +1,100 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Jul 2019 11:29:30 +0200
-Subject: [Buildroot] [git commit] Update for 2019.02.4
-Message-ID: <20190710093059.3E8C2814C1@busybox.osuosl.org>
+Date: Wed, 10 Jul 2019 11:32:28 +0200
+Subject: [Buildroot] [git commit] docs/website: update for 2019.02.4
+Message-ID: <20190710093059.4EDC97FF6E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86c31e8b5a04c773cd49379fd674d20317400a04
+commit: https://git.buildroot.net/buildroot/commit/?id=21a44009875fc50bd6bdde65ec71930c657875fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[Peter: drop Makefile changes]
-(cherry picked from commit 26bae8483231b23159c6b6c39e204c0eca76f0d4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- CHANGES | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ docs/website/download.html | 18 +++++++++---------
+ docs/website/news.html     | 19 +++++++++++++++++++
+ 2 files changed, 28 insertions(+), 9 deletions(-)
 
-diff --git a/CHANGES b/CHANGES
-index 3854b7455e..586195cc20 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -139,6 +139,37 @@
- 	#11761: Building custom kernel 5.1-rc3 or later breaks on objtool
- 	#11816: Only selected coreutils binaries are installed
+diff --git a/docs/website/download.html b/docs/website/download.html
+index 329169317a..f88af00a0f 100644
+--- a/docs/website/download.html
++++ b/docs/website/download.html
+@@ -8,37 +8,37 @@
+     <div class="panel-heading">Download</div>
+     <div class="panel-body">
  
-+2019.02.4, Released July 10th, 2019
-+
-+	Important / security related fixes.
-+
-+	arch: x86: Fix typo breaking 'core-avx2' variant, add Westmere
-+	variant.
-+
-+	linux: Workaround -Werror related build failure on powerpc,
-+	by forcing CONFIG_PPC_DISABLE_WERROR on.
-+
-+	support/testing: Emulate a machine with 256MB RAM to fix
-+	issues with certain tests running out of memory.
-+
-+	test-pkg: Correct long option handling and clean output dir
-+	after a successful build to save disk space.
-+
-+	Ensure custom <pkg>_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS are
-+	passed before the standard exclusions so they are not ignored
-+	by rsync when using override-srcdir.
-+
-+	Defconfigs: QEMU: use 'rootwait' kernel option to ensure root
-+	partition is available before mounting.
-+
-+	Updated/fixed packages: barebox, bzip2, davfs2, dbus, dialog,
-+	docker-cli, docker-engine, expat, faad2, ffmpeg, freeswitch,
-+	gerbera, haveged, irssi, libcdadio, libgit2, libglib2,
-+	libsecret, libvncserver, lmbench, logrotate, mariadb, meson,
-+	mongoose, monit, mpd, openblas, php, postgresql, psplash,
-+	python, python-django, python3, qt5base, samba4, taglib,
-+	tvheadend, vlc, webkitgtk, xserver_xorg-server, znc
-+
- 2019.02.3, Released June 7th, 2019
+-      <h3 style="text-align: center;">Latest long term support release: <b>2019.02.3</b></h3>
++      <h3 style="text-align: center;">Latest long term support release: <b>2019.02.4</b></h3>
  
- 	Important / security related fixes.
+       <div class="row mt centered">
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2019.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2019.02.3.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.02.4.tar.gz"><img src="images/zip.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+-	  <h3><a href="/downloads/buildroot-2019.02.3.tar.gz">buildroot-2019.02.3.tar.gz</a></h3>
+-	  <p><a href="/downloads/buildroot-2019.02.3.tar.gz.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2019.02.4.tar.gz">buildroot-2019.02.4.tar.gz</a></h3>
++	  <p><a href="/downloads/buildroot-2019.02.4.tar.gz.sign">PGP signature</a></p>
+ 	</div>
+ 	<div class="col-sm-6">
+ 	  <div class="flip-container center-block" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<a href="/downloads/buildroot-2019.02.3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<a href="/downloads/buildroot-2019.02.3.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
++		<a href="/downloads/buildroot-2019.02.4.tar.bz2"><img src="images/package.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+ 
+-	  <h3><a href="/downloads/buildroot-2019.02.3.tar.bz2">buildroot-2019.02.3.tar.bz2</a></h3>
+-	  <p><a href="/downloads/buildroot-2019.02.3.tar.bz2.sign">PGP signature</a></p>
++	  <h3><a href="/downloads/buildroot-2019.02.4.tar.bz2">buildroot-2019.02.4.tar.bz2</a></h3>
++	  <p><a href="/downloads/buildroot-2019.02.4.tar.bz2.sign">PGP signature</a></p>
+ 	</div>
+       </div>
+ 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index 0a889c497e..ba7030048a 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -9,6 +9,25 @@
+ <h2>News</h2>
+ <ul class="timeline">
+ 
++  <li class="timeline-inverted">
++    <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
++    <div class="timeline-panel">
++      <div class="timeline-heading">
++	<h4 class="timeline-title">2019.02.4 released</h4>
++	<p><small class="text-muted"><i class="glyphicon glyphicon-time"></i>7 June 2019</small></p>
++      </div>
++      <div class="timeline-body">
++	<p>The 2019.02.4 bugfix release is out, fixing a number of important /
++	  security related issues discovered since the 2019.02.2 release. See the
++	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.4">CHANGES</a>
++	  file for more details, read the
++	  <a href="http://lists.busybox.net/pipermail/buildroot/2019-July/254194.html">announcement</a>
++	  and go to the <a href="/downloads/">downloads page</a> to pick up the
++	  <a href="/downloads/buildroot-2019.02.4.tar.bz2">2019.02.4 release</a>.</p>
++      </div>
++    </div>
++  </li>
++
+   <li>
+     <div class="timeline-badge"><i class="glyphicon glyphicon-thumbs-up"></i></div>
+     <div class="timeline-panel">
