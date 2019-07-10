@@ -1,74 +1,86 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 10 Jul 2019 10:02:18 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] Update for 2019.02.4
-Message-ID: <20190710080206.CEC7281684@busybox.osuosl.org>
+Date: Wed, 10 Jul 2019 11:26:48 +0200
+Subject: [Buildroot] Buildroot 2019.02.4 released
+Message-ID: <87y3169r53.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26bae8483231b23159c6b6c39e204c0eca76f0d4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+Hi,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- CHANGES  | 31 +++++++++++++++++++++++++++++++
- Makefile |  4 ++--
- 2 files changed, 33 insertions(+), 2 deletions(-)
+Buildroot is a simple tool for creating complete embedded Linux systems
+(http://buildroot.org).
 
-diff --git a/CHANGES b/CHANGES
-index e3d7ad3bf8..7c8cad7e57 100644
---- a/CHANGES
-+++ b/CHANGES
-@@ -1,3 +1,34 @@
-+2019.02.4, Released July 10th, 2019
-+
-+	Important / security related fixes.
-+
-+	arch: x86: Fix typo breaking 'core-avx2' variant, add Westmere
-+	variant.
-+
-+	linux: Workaround -Werror related build failure on powerpc,
-+	by forcing CONFIG_PPC_DISABLE_WERROR on.
-+
-+	support/testing: Emulate a machine with 256MB RAM to fix
-+	issues with certain tests running out of memory.
-+
-+	test-pkg: Correct long option handling and clean output dir
-+	after a successful build to save disk space.
-+
-+	Ensure custom <pkg>_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS are
-+	passed before the standard exclusions so they are not ignored
-+	by rsync when using override-srcdir.
-+
-+	Defconfigs: QEMU: use 'rootwait' kernel option to ensure root
-+	partition is available before mounting.
-+
-+	Updated/fixed packages: barebox, bzip2, davfs2, dbus, dialog,
-+	docker-cli, docker-engine, expat, faad2, ffmpeg, freeswitch,
-+	gerbera, haveged, irssi, libcdadio, libgit2, libglib2,
-+	libsecret, libvncserver, lmbench, logrotate, mariadb, meson,
-+	mongoose, monit, mpd, openblas, php, postgresql, psplash,
-+	python, python-django, python3, qt5base, samba4, taglib,
-+	tvheadend, vlc, webkitgtk, xserver_xorg-server, znc
-+
- 2019.02.3, Released June 7th, 2019
- 
- 	Important / security related fixes.
-diff --git a/Makefile b/Makefile
-index 2c8146e87a..e0cf1ecc65 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,9 +92,9 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2019.02.3
-+export BR2_VERSION := 2019.02.4
- # Actual time the release is cut (for reproducible builds)
--BR2_VERSION_EPOCH = 1559893000
-+BR2_VERSION_EPOCH = 1562745000
- 
- # Save running make version since it's clobbered by the make package
- RUNNING_MAKE_VERSION := $(MAKE_VERSION)
+Buildroot 2019.02.4 is released - Go download it at:
+
+http://buildroot.org/downloads/buildroot-2019.02.4.tar.gz
+
+or
+
+http://buildroot.org/downloads/buildroot-2019.02.4.tar.bz2
+
+Or get it from Git:
+
+git://git.buildroot.org/buildroot
+
+Buildroot 2019.02.4 is a bugfix release on the current long term
+release, fixing a number of important / security related issues
+discovered since the 2019.02.3 release.
+
+- arch: x86: Fix typo breaking 'core-avx2' variant, add Westmere
+  variant.
+
+- linux: Workaround -Werror related build failure on powerpc, by forcing
+  CONFIG_PPC_DISABLE_WERROR on.
+
+- Ensure custom <pkg>_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS are
+  passed before the standard exclusions so they are not ignored
+  by rsync when using override-srcdir.
+
+- Security fixes for bzip2, dbus, docker-cli, docker-engine, expat,
+  faad2, irssi, libgit2, libglib2, mariadb, postgresql, python,
+  python-django, python3, samba4, vlc, znc
+
+- Fixes for download/compilation/runtime issues in barebox, davfs2,
+  dialog, ffmpeg, freeswitch, gerbera, haveged, libcdaudio, libsecret,
+  lmbench, logrotate, meson, mongoose, monit, mpd, php, psplash,
+  qt5base, taglib, tvheadend, webkitgtk, xserver_xorg-server
+
+For more details, see the CHANGES file:
+
+https://git.buildroot.net/buildroot/plain/CHANGES?id=2019.02.4
+
+Users of the affected packages are strongly encouraged to upgrade.
+
+Many thanks to all the people contributing to this release:
+
+git shortlog -sn 2019.02.3..
+
+    16  Peter Korsgaard
+    10  Fabrice Fontaine
+     9  Bernd Kuhls
+     4  Pierre-Jean Texier
+     3  Esben Haabendal
+     2  Giulio Benetti
+     2  Jan Kundr?t
+     2  J?rg Krause
+     2  Markus Mayer
+     2  Thomas De Schampheleire
+     2  Thomas Petazzoni
+     2  Yann E. MORIN
+     1  Adam Duskett
+     1  Adrian Perez de Castro
+     1  Baruch Siach
+     1  Brandon Maier
+     1  Jared Bents
+     1  John Keeping
+     1  Julien Olivain
+     1  Marcin Niestroj
+     1  Peter Seiderer
+     1  Romain Naour
+     1  Ryan Coe
+
+-- 
+Bye, Peter Korsgaard
