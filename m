@@ -1,122 +1,91 @@
 From: Victor Huesca <victor.huesca@bootlin.com>
-Date: Thu, 11 Jul 2019 11:28:02 +0200
-Subject: [Buildroot] [PATCH v2] support/script/pkg-stats: add support for
- json output
-Message-ID: <20190711092801.6314-1-victor.huesca@bootlin.com>
+Date: Thu, 11 Jul 2019 11:54:47 +0200
+Subject: [Buildroot] [PATCH 1/2] support/script/pkg-stats: run the 3 `make`
+ calls in parallel
+Message-ID: <20190711095448.7417-1-victor.huesca@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Pkg-stats is a great script that get a lot of intersting infos from
-buildroot packages. Unfortunatly it is currently designed to output a
-static HTML page only. While html is great for human to read, it is a
-pain to parse for scripts.
+The pkg-stats calls 3 times `make` to get a bunch of variables. These
+calls all takes about the same time -- 95% of the time is spent parsing
+the makefile -- so running these subprocesses in parallel can save this
+shared time.
 
-This patch provide a new option to output a JSON file in addition to the
-HTML one. This allow other scripts to use all the usefull informations
-computed by pkg-stats.
-
-Please note that the old 'output' option has been renamed to 'html'
-to distinguish from the new 'json' option. Also the 'npackages' and
-'packages' now uses the argparse `mutualy_exclusive` group.
+The gain scale quite well since with only 3 subprocesses I achieve a
+x2.5 ~ x3 speedup.
 
 Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
 ---
-Changes v1 --> v2:
-- Make commit message more explicit
-- fix coding style using flake8
----
- support/scripts/pkg-stats | 53 +++++++++++++++++++++++++++++++--------
- 1 file changed, 43 insertions(+), 10 deletions(-)
+ support/scripts/pkg-stats | 33 ++++++++++++++++++++++++---------
+ 1 file changed, 24 insertions(+), 9 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index b0be7d919b..1ff3fb2bd1 100755
+index 1ff3fb2bd1..2ed41dffa9 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -23,7 +23,6 @@ import os
- from collections import defaultdict
- import re
- import subprocess
--import sys
- import requests  # URL checking
- import json
- import certifi
-@@ -696,22 +695,52 @@ def dump_html(packages, stats, output):
-         f.write(html_footer)
+@@ -220,11 +220,30 @@ def get_pkglist(npackages, package_list):
+     return packages
  
  
-+def dump_json(packages, stats, output):
-+    excluded_fields = ['url_worker', 'name']
-+    pkgs = {
-+        pkg.name: {
-+            k: v
-+            for k, v in pkg.__dict__.items()
-+            if k not in excluded_fields
-+        } for pkg in packages
-+    }
-+    statistics = {
-+        k: v
-+        for k, v in stats.items()
-+        if not k.startswith('infra-')
-+    }
-+    statistics['infra'] = {k[6:]: v for k, v in stats.items() if k.startswith('infra-')}
-+    o = subprocess.check_output(['git', 'log', 'master', '-n', '1', '--pretty=format:%H'])
-+    final = {'packages': pkgs,
-+             'stats': statistics,
-+             'commit': o.splitlines()[0],
-+             'date': str(datetime.datetime.utcnow())}
-+
-+    with open(output, 'w') as f:
-+        json.dump(final, f, indent=2, separators=(',', ': '))
-+        f.write('\n')
++def check_multiple_output(cmds, *popenargs, **kwargs):
++    '''
++    Run each `cmd` asynchronousely and return their respective output.
++    The execution time is the max of all subprocess execution time.
++    '''
++    processes = [subprocess.Popen(cmd, *popenargs,
++                                  stdout=subprocess.PIPE,
++                                  stderr=subprocess.PIPE,
++                                  **kwargs) for cmd in cmds]
++    for proc in processes:
++        out, err = proc.communicate()
++        yield out
 +
 +
- def parse_args():
-     parser = argparse.ArgumentParser()
--    parser.add_argument('-o', dest='output', action='store', required=True,
-+    group1 = parser.add_argument_group('output', 'Output file(s)')
-+    group1.add_argument('--html', dest='html', action='store',
-                         help='HTML output file')
--    parser.add_argument('-n', dest='npackages', type=int, action='store',
-+    group1.add_argument('--json', dest='json', action='store',
-+                        help='JSON output file')
-+    group2 = parser.add_mutually_exclusive_group()
-+    group2.add_argument('-n', dest='npackages', type=int, action='store',
-                         help='Number of packages')
--    parser.add_argument('-p', dest='packages', action='store',
-+    group2.add_argument('-p', dest='packages', action='store',
-                         help='List of packages (comma separated)')
--    return parser.parse_args()
-+    args = parser.parse_args()
-+    if not args.html and not args.json:
-+        parser.error('at least one of --html or --json (or both) is required')
-+    return args
+ def package_init_make_info():
++    # Fetch all variables at once
++    licenses, files, versions = check_multiple_output([
++        ["make", "BR2_HAVE_DOT_CONFIG=y", "-s", "printvars", "VARS=%_LICENSE"],
++        ["make", "BR2_HAVE_DOT_CONFIG=y", "-s", "printvars", "VARS=%_LICENSE_FILES"],
++        ["make", "BR2_HAVE_DOT_CONFIG=y", "-s", "printvars", "VARS=%_VERSION"],
++    ])
++
+     # Licenses
+-    o = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y",
+-                                 "-s", "printvars", "VARS=%_LICENSE"])
+-    for l in o.splitlines():
++    for l in licenses.splitlines():
+         # Get variable name and value
+         pkgvar, value = l.split("=")
  
+@@ -241,9 +260,7 @@ def package_init_make_info():
+         Package.all_licenses.append(pkgvar)
  
- def __main__():
-     args = parse_args()
--    if args.npackages and args.packages:
--        print("ERROR: -n and -p are mutually exclusive")
--        sys.exit(1)
-     if args.packages:
-         package_list = args.packages.split(",")
-     else:
-@@ -735,8 +764,12 @@ def __main__():
-     check_package_latest_version(packages)
-     print("Calculate stats")
-     stats = calculate_stats(packages)
--    print("Write HTML")
--    dump_html(packages, stats, args.output)
-+    if args.html:
-+        print("Write HTML")
-+        dump_html(packages, stats, args.html)
-+    if args.json:
-+        print("Write JSON")
-+        dump_json(packages, stats, args.json)
+     # License files
+-    o = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y",
+-                                 "-s", "printvars", "VARS=%_LICENSE_FILES"])
+-    for l in o.splitlines():
++    for l in files.splitlines():
+         # Get variable name and value
+         pkgvar, value = l.split("=")
  
+@@ -260,14 +277,12 @@ def package_init_make_info():
+         Package.all_license_files.append(pkgvar)
  
- __main__()
+     # Version
+-    o = subprocess.check_output(["make", "BR2_HAVE_DOT_CONFIG=y",
+-                                 "-s", "printvars", "VARS=%_VERSION"])
+ 
+     # We process first the host package VERSION, and then the target
+     # package VERSION. This means that if a package exists in both
+     # target and host variants, with different version numbers
+     # (unlikely), we'll report the target version number.
+-    version_list = o.splitlines()
++    version_list = versions.splitlines()
+     version_list = [x for x in version_list if x.startswith("HOST_")] + \
+                    [x for x in version_list if not x.startswith("HOST_")]
+     for l in version_list:
 -- 
 2.21.0
