@@ -1,58 +1,100 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Thu, 11 Jul 2019 11:10:19 -0400
-Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump to version 2.60.5
-Message-ID: <20190711151020.55218-1-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 11 Jul 2019 17:51:04 +0200
+Subject: [Buildroot] [PATCH v2] support/script/pkg-stats: add support
+ for json output
+In-Reply-To: <20190711092801.6314-1-victor.huesca@bootlin.com>
+References: <20190711092801.6314-1-victor.huesca@bootlin.com>
+Message-ID: <20190711175104.45c6f597@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Hello Victor,
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
- package/libglib2/libglib2.hash                     | 4 ++--
- package/libglib2/libglib2.mk                       | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Thanks for this work!
 
-diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
-index e7e48f1a8b..808e1b560a 100644
---- a/package/libglib2/0003-remove-cpp-requirement.patch
-+++ b/package/libglib2/0003-remove-cpp-requirement.patch
-@@ -35,7 +35,7 @@ index c96289a..b694bb7 100644
- @@ -1,4 +1,4 @@
- -project('glib', 'c', 'cpp',
- +project('glib', 'c',
--   version : '2.60.4',
-+   version : '2.60.5',
-    meson_version : '>= 0.48.0',
-    default_options : [
- @@ -9,7 +9,6 @@ project('glib', 'c', 'cpp',
-diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
-index 6cbcba702a..679a7715d7 100644
---- a/package/libglib2/libglib2.hash
-+++ b/package/libglib2/libglib2.hash
-@@ -1,4 +1,4 @@
--# https://download.gnome.org/sources/glib/2.60/glib-2.60.4.sha256sum
--sha256  2b941ec5dcb92e5ea83fe42f9eb55a827bc8a12c153ad2489d551c31d04733dd  glib-2.60.4.tar.xz
-+# https://download.gnome.org/sources/glib/2.60/glib-2.60.5.sha256sum
-+sha256  3edf1df576ee82b2ecb8ba85c343644e48ee62e68290e71e6084b00d6ba2622e  glib-2.60.5.tar.xz
- # License files, locally calculated
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
-index 38941ca79d..39021757b5 100644
---- a/package/libglib2/libglib2.mk
-+++ b/package/libglib2/libglib2.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- LIBGLIB2_VERSION_MAJOR = 2.60
--LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
-+LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).5
- LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
- LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
- LIBGLIB2_LICENSE = LGPL-2.1+
+On Thu, 11 Jul 2019 11:28:02 +0200
+Victor Huesca <victor.huesca@bootlin.com> wrote:
+
+> Pkg-stats is a great script that get a lot of intersting infos from
+
+Typo: interesting
+
+> buildroot packages. Unfortunatly it is currently designed to output a
+
+Typo: unfortunately
+
+> static HTML page only. While html is great for human to read, it is a
+> pain to parse for scripts.
+> 
+> This patch provide a new option to output a JSON file in addition to the
+
+provide -> provides
+
+> HTML one. This allow other scripts to use all the usefull informations
+
+allow -> allows
+
+informations -> information
+
+> computed by pkg-stats.
+> 
+> Please note that the old 'output' option has been renamed to 'html'
+> to distinguish from the new 'json' option. Also the 'npackages' and
+> 'packages' now uses the argparse `mutualy_exclusive` group.
+
+uses -> use
+
+mutually_exclusive
+
+> 
+> Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+
+I think ideally this patch should have been split into two:
+
+ - One migrating the options to a better argparse usage
+
+ - A second one adding the JSON output support itself.
+
+> +def dump_json(packages, stats, output):
+> +    excluded_fields = ['url_worker', 'name']
+> +    pkgs = {
+> +        pkg.name: {
+> +            k: v
+> +            for k, v in pkg.__dict__.items()
+> +            if k not in excluded_fields
+> +        } for pkg in packages
+> +    }
+> +    statistics = {
+> +        k: v
+> +        for k, v in stats.items()
+> +        if not k.startswith('infra-')
+> +    }
+> +    statistics['infra'] = {k[6:]: v for k, v in stats.items() if k.startswith('infra-')}
+
+Perhaps a short comment here would be useful to explain what's going on
+with the "infra" key in the statistics dict.
+
+> +    o = subprocess.check_output(['git', 'log', 'master', '-n', '1', '--pretty=format:%H'])
+> +    final = {'packages': pkgs,
+> +             'stats': statistics,
+> +             'commit': o.splitlines()[0],
+> +             'date': str(datetime.datetime.utcnow())}
+
+For both the git commit and date, I find it a bit odd that we need to
+retrieve it separately once for the HTML output and once for the JSON
+output. I think it would make more sense if the calling function of
+dump_html() and dump_json() was getting those two values (Git commit id
+and date), and pass them as argument to dump_html() and dump_json().
+
+Besides these comments, it looks good to me!
+
+Thanks again,
+
+Thomas
 -- 
-2.21.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
