@@ -1,27 +1,52 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 11 Jul 2019 18:41:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: Fix build with
- libnettle 3.5
-References: <20190705043509.19163-1-bernd.kuhls@t-online.de>
- <0b1ec3a5-d5d2-f759-4987-948640c3264b@mind.be>
-Message-ID: <5e5kvfxj4m.ln2@ID-313208.user.individual.net>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Thu, 11 Jul 2019 18:53:19 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/barebox: bump version to 2019.07.0
+Message-ID: <20190711165319.20152-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 11 Jul 2019 16:08:45 +0200 schrieb Arnout Vandecappelle:
+---
+ boot/barebox/Config.in    | 4 ++--
+ boot/barebox/barebox.hash | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-> On 05/07/2019 06:35, Bernd Kuhls wrote:
->> Fixes
-> 
->  Please put a colon behind Fixes, so patchworks picks it up.
-
-Hi Arnout,
-
-thanks for the hint, I did not know that.
-The docs also do not mention it: http://buildroot.uclibc.org/downloads/
-manual/manual.html#_analyzing_and_fixing_autobuild_failures
-
-Regards, Bernd
+diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
+index d919cacc57..f4c0c27df8 100644
+--- a/boot/barebox/Config.in
++++ b/boot/barebox/Config.in
+@@ -12,7 +12,7 @@ choice
+ 	  Select the specific Barebox version you want to use
+ 
+ config BR2_TARGET_BAREBOX_LATEST_VERSION
+-	bool "2019.05.0"
++	bool "2019.07.0"
+ 
+ config BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	bool "Custom version"
+@@ -40,7 +40,7 @@ endif
+ 
+ config BR2_TARGET_BAREBOX_VERSION
+ 	string
+-	default "2019.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
++	default "2019.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
+ 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
+ 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
+ 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
+diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
+index fb371ab671..70b500da77 100644
+--- a/boot/barebox/barebox.hash
++++ b/boot/barebox/barebox.hash
+@@ -1,5 +1,5 @@
+-# From https://www.barebox.org/download/barebox-2019.05.0.tar.bz2.md5
+-md5 2e721cce90f1ea1492710ca23680311f barebox-2019.05.0.tar.bz2
++# From https://www.barebox.org/download/barebox-2019.07.0.tar.bz2.md5
++md5 8fb8e8ec3775228c34f7de2096872f51 barebox-2019.07.0.tar.bz2
+ 
+ # Locally calculated
+-sha256 704bb09b2bf1347e43ebb9138da32a7e1b4d13892fd187be98f4f9dae000501d barebox-2019.05.0.tar.bz2
++sha256 8512ac1b91ef48f8b657fad446edc868eb7da30e93d6ff7854f0006854b6a3a6 barebox-2019.07.0.tar.bz2
+-- 
+2.22.0
