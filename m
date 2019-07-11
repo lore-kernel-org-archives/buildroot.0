@@ -1,38 +1,25 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 11 Jul 2019 16:05:48 +0200
-Subject: [Buildroot] [git commit] package/gupnp-tools: fix build with NLS
-Message-ID: <20190711140437.954378168A@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 11 Jul 2019 16:07:12 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gupnp-av: bump to version
+ 0.12.11
+In-Reply-To: <20190703201930.13931-1-fontaine.fabrice@gmail.com>
+References: <20190703201930.13931-1-fontaine.fabrice@gmail.com>
+Message-ID: <eb5b50f7-6dce-fd5a-5721-e5f8810a8b33@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f8e16b6d6481ae02c88d0fcaf6fe73efc21bc93a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
- - No autobuilder failures yet
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/gupnp-tools/gupnp-tools.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+On 03/07/2019 22:19, Fabrice Fontaine wrote:
+> Drop patch as it is not needed since
+> https://gitlab.gnome.org/GNOME/gupnp-av/commit/69117d1507da91a67b8b71f9b2f8242d7bec8e53
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/gupnp-tools/gupnp-tools.mk b/package/gupnp-tools/gupnp-tools.mk
-index 8f95e04f98..06c7b1fd3b 100644
---- a/package/gupnp-tools/gupnp-tools.mk
-+++ b/package/gupnp-tools/gupnp-tools.mk
-@@ -19,7 +19,10 @@ GUPNP_TOOLS_DEPENDENCIES = \
- 	gssdp \
- 	gupnp \
- 	libsoup \
--	libgtk3
-+	libgtk3 \
-+	$(TARGET_NLS_DEPENDENCIES)
-+
-+GUPNP_TOOLS_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
- 
- ifeq ($(BR2_PACKAGE_GUPNP_AV),y)
- GUPNP_TOOLS_CONF_OPTS += --with-av
+ Applied to master, thanks.
+
+ Regards,
+ Arnout
