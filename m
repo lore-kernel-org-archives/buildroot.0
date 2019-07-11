@@ -1,54 +1,44 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Thu, 11 Jul 2019 14:36:54 -0500
-Subject: [Buildroot] [PATCH] package/fakeroot: use TCP for msg passing
-Message-ID: <20190711193654.2039-1-matthew.weber@rockwellcollins.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 11 Jul 2019 21:58:54 +0200
+Subject: [Buildroot] [PATCH 1/2] package/json-glib: fix NLS build
+In-Reply-To: <20190702061113.24985-1-fontaine.fabrice@gmail.com>
+References: <20190702061113.24985-1-fontaine.fabrice@gmail.com>
+Message-ID: <b07aaa0d-d8bb-3a30-b929-38f1dde1d4c7@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-fakeroot can be built to either use SYSV IPC or TCP for message passing.
 
-Cases for which the SYSV IPC version fails or causes problems but for
-which fakeroot-tcp has been observed to work well include the items
-listed below.
 
-  * Multithreaded applications (using pthread)
-  * Running under realtime-preempt kernel
-  * Microsoft Windows 10 Services for Linux
+On 02/07/2019 08:11, Fabrice Fontaine wrote:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/a9515ce8acb2d13532d0d43f8f61fa890a4705b3
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/json-glib/json-glib.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
+> index 77c0c45323..2d4adb2adb 100644
+> --- a/package/json-glib/json-glib.mk
+> +++ b/package/json-glib/json-glib.mk
+> @@ -12,6 +12,8 @@ JSON_GLIB_LICENSE = LGPL-2.1+
+>  JSON_GLIB_LICENSE_FILES = COPYING
+>  JSON_GLIB_INSTALL_STAGING = YES
+>  
+> +JSON_GLIB_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
 
-Link to readme capturing original upstream bug report #
-https://salsa.debian.org/clint/fakeroot/commit/113c6320244c4261f7f7a9ce07cf7b5465573dfe
+ We typically put LDFLAGS etc. after DEPENDENCIES, so I changed that and applied
+both to master, thanks.
 
-Fixes
-https://bugs.busybox.net/show_bug.cgi?id=11366
+ Regards,
+ Arnout
 
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
----
-I can't find a good reason to not make this the new default in the
-Buildroot host build of fakeroot.  vs auto detecting which to build
-depending on what the host env can support.
-
-For good measure, in-addition to this change, I will submit an upstream
-patch for the suggested configure.as update (pending a little cleanup
-in that proposed patch). https://bugs.busybox.net/attachment.cgi?id=7791
----
- package/fakeroot/fakeroot.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
-index 4aa27a1b0c..d8effc955e 100644
---- a/package/fakeroot/fakeroot.mk
-+++ b/package/fakeroot/fakeroot.mk
-@@ -16,6 +16,8 @@ HOST_FAKEROOT_CONF_ENV = \
- 	ac_cv_header_sys_capability_h=no \
- 	ac_cv_func_capset=no
- 
-+HOST_FAKEROOT_CONF_OPTS = --with-ipc=tcp
-+
- FAKEROOT_LICENSE = GPL-3.0+
- FAKEROOT_LICENSE_FILES = COPYING
- 
--- 
-2.17.1
+> +
+>  JSON_GLIB_DEPENDENCIES = \
+>  	$(TARGET_NLS_DEPENDENCIES) \
+>  	host-pkgconf \
+> 
