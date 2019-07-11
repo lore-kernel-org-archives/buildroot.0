@@ -1,7 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 11 Jul 2019 18:56:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1: fix build with NLS
-Message-ID: <20190711165655.8850-1-fontaine.fabrice@gmail.com>
+Date: Thu, 11 Jul 2019 18:57:44 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gst1-plugins-base: fix build with
+ NLS
+Message-ID: <20190711165744.8939-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -9,27 +10,27 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/6d3be9feb301495b079eff6283f1cbed9603dc42
+ - http://autobuild.buildroot.org/results/93b58753071dac193881049c79288ef39fa9db16
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gstreamer1/gstreamer1/gstreamer1.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
-index cea933be84..023cf4e85e 100644
---- a/package/gstreamer1/gstreamer1/gstreamer1.mk
-+++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
-@@ -33,6 +33,9 @@ GSTREAMER1_DEPENDENCIES = \
- 	host-pkgconf \
- 	libglib2 \
- 	$(if $(BR2_PACKAGE_LIBUNWIND),libunwind) \
--	$(if $(BR2_PACKAGE_VALGRIND),valgrind)
-+	$(if $(BR2_PACKAGE_VALGRIND),valgrind) \
-+	$(TARGET_NLS_DEPENDENCIES)
-+
-+GSTREAMER1_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 34c6074b8f..66c136c36c 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -26,7 +26,9 @@ GST1_PLUGINS_BASE_CONF_OPTS += \
+ 	-Dlibvisual=disabled \
+ 	-Diso-codes=disabled
  
- $(eval $(meson-package))
+-GST1_PLUGINS_BASE_DEPENDENCIES = gstreamer1
++GST1_PLUGINS_BASE_DEPENDENCIES = gstreamer1 $(TARGET_NLS_DEPENDENCIES)
++
++GST1_PLUGINS_BASE_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ # These plugins are listed in the order from ./configure --help
+ ifeq ($(BR2_PACKAGE_ORC),y)
 -- 
 2.20.1
