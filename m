@@ -1,9 +1,9 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 11 Jul 2019 16:09:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gvfs: fix build with NLS
-In-Reply-To: <20190703203319.8882-1-fontaine.fabrice@gmail.com>
-References: <20190703203319.8882-1-fontaine.fabrice@gmail.com>
-Message-ID: <dd29faf1-4a4b-507e-e043-d360c25fefc7@mind.be>
+Date: Thu, 11 Jul 2019 16:10:45 +0200
+Subject: [Buildroot] [PATCH 1/2] package/atk: fix build with NLS
+In-Reply-To: <20190702195914.3682-1-fontaine.fabrice@gmail.com>
+References: <20190702195914.3682-1-fontaine.fabrice@gmail.com>
+Message-ID: <f85229b6-6ae6-8a2d-6458-5bfb9404b685@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,42 +12,33 @@ To: buildroot@busybox.net
 
 
 
-On 03/07/2019 22:33, Fabrice Fontaine wrote:
+On 02/07/2019 21:59, Fabrice Fontaine wrote:
 > Fixes:
->  - http://autobuild.buildroot.org/results/8b061756ae6081d21d6ede8b27844f8fc3131953
+>  - http://autobuild.buildroot.org/results/67367706de3b38f31b9f59a7cb98cb2186e8ee6b
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
- Applied to master, thanks.
+ Both applied to master, thanks.
 
  Regards,
  Arnout
 
 > ---
->  package/gvfs/gvfs.mk | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+>  package/atk/atk.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/gvfs/gvfs.mk b/package/gvfs/gvfs.mk
-> index 47fbe0e858..9bfe9e60fb 100644
-> --- a/package/gvfs/gvfs.mk
-> +++ b/package/gvfs/gvfs.mk
-> @@ -9,13 +9,16 @@ GVFS_VERSION = $(GVFS_VERSION_MAJOR).4
->  GVFS_SOURCE = gvfs-$(GVFS_VERSION).tar.xz
->  GVFS_SITE = http://ftp.gnome.org/pub/GNOME/sources/gvfs/$(GVFS_VERSION_MAJOR)
->  GVFS_INSTALL_STAGING = YES
-> -GVFS_DEPENDENCIES = host-pkgconf host-libglib2 libglib2 dbus shared-mime-info
-> +GVFS_DEPENDENCIES = host-pkgconf host-libglib2 libglib2 dbus shared-mime-info \
-> +	$(TARGET_NLS_DEPENDENCIES)
->  GVFS_LICENSE = LGPL-2.0+
->  GVFS_LICENSE_FILES = COPYING
+> diff --git a/package/atk/atk.mk b/package/atk/atk.mk
+> index 228b24a7da..6a0cb370db 100644
+> --- a/package/atk/atk.mk
+> +++ b/package/atk/atk.mk
+> @@ -11,6 +11,8 @@ ATK_SITE = http://ftp.gnome.org/pub/gnome/sources/atk/$(ATK_VERSION_MAJOR)
+>  ATK_LICENSE = LGPL-2.0+
+>  ATK_LICENSE_FILES = COPYING
+>  ATK_INSTALL_STAGING = YES
+> -ATK_DEPENDENCIES = libglib2
+> +ATK_DEPENDENCIES = libglib2 $(TARGET_NLS_DEPENDENCIES)
+> +
+> +ATK_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
 >  
->  # Export ac_cv_path_LIBGCRYPT_CONFIG unconditionally to prevent
->  # build system from searching the host paths.
-> -GVFS_CONF_ENV = ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
-> +GVFS_CONF_ENV = \
-> +	ac_cv_path_LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config \
-> +	LIBS=$(TARGET_NLS_LIBS)
->  
->  # Most of these are missing library support
->  GVFS_CONF_OPTS = \
+>  $(eval $(meson-package))
 > 
