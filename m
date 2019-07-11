@@ -1,214 +1,117 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 11 Jul 2019 00:34:41 +0200
-Subject: [Buildroot] [PATCH] [PATCHv3] package/python-numpy: fix
- occasional build failure with lapack
-In-Reply-To: <20190710141940.13504-1-alexandre.payen@smile.fr>
-References: <20190710141940.13504-1-alexandre.payen@smile.fr>
-Message-ID: <b1bf4a91-4612-e3a7-b033-c2ff549694ed@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 11 Jul 2019 06:00:57 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-07-10
+Message-ID: <20190711060103.81A4C20407@silver.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Alexandre,
+Hello,
 
- Please set your user.name and user.email git config options to match your
-Signed-off-by.
+Build statistics for 2019-07-10
+===============================
 
-On 10/07/2019 16:19, Aalx wrote:
-> python-numpy build fails if lapack or clapack are build before python-numpy
-> itself, and this boesn't always happen because lapack dependency is missing in
-> BR2_PYTHON_NUMPY_DEPENDENCIES.
+      branch |  OK | NOK | TIM | TOT |
+   2019.02.x |  16 |   2 |   0 |  18 |
+   2019.05.x |  17 |   0 |   0 |  17 |
+      master | 133 |  42 |   0 | 175 |
 
- Well, that's not true: for clapack, the dependency was already there. However,
-the SITE_CFG_LIBS and environment were referring to blas/lapack instead of
-cblas/clapack.
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                  dnsmasq-2.80 | 6 
+              libsodium-1.0.17 | 4 
+tvheadend-8f1de1621d78c9143... | 4 
+                       unknown | 3 
+           at-spi2-core-2.28.0 | 2 
+              domoticz-4.10717 | 2 
+                harfbuzz-2.5.2 | 2 
+               libcap-ng-0.7.9 | 2 
+                libvips-7.42.2 | 2 
+                    atk-2.30.0 | 1 
+                 dovecot-2.3.6 | 1 
+      gst1-plugins-base-1.16.0 | 1 
+                   gvfs-1.31.4 | 1 
+                     gzip-1.10 | 1 
+             host-cargo-0.26.0 | 1 
+               host-efl-1.22.2 | 1 
+           host-nodejs-10.15.3 | 1 
+      intel-mediadriver-18.4.0 | 1 
+              iputils-20190515 | 1 
+          modem-manager-1.10.2 | 1 
+       python-matplotlib-3.0.3 | 1 
+              syslog-ng-3.19.1 | 1 
+           udpxy-1.0.23-9-prod | 1 
+   vdr-plugin-vnsiserver-1.8.0 | 1 
 
 
-> Also, clapack is a C implementation of FORTRAN lapack. At build time, they both
-> generate the same liblapack.so file. But because lapack is written in FORTRAN
-> then, it can be difficult to build. Both package are kept behind a virtual
-> package named vlapack. They are mutually exclusive.
+Detail of failures
+------------------
 
- This is pretty much independent of the numpy fix, so should be a separate patch.
+      mipsel |            at-spi2-core-2.28.0 | NOK | http://autobuild.buildroot.net/results/9860616b235cc9a08940f691c62d467d6c276cbf |     
+         arm |            at-spi2-core-2.28.0 | NOK | http://autobuild.buildroot.net/results/d05956346414152efd407a9ae8974e2928a3b615 |     
+      xtensa |                     atk-2.30.0 | NOK | http://autobuild.buildroot.net/results/75d52bd813831058cc717e5cf7dac261e2aaff9a | ORPH
+         arm |                   dnsmasq-2.80 | NOK | http://autobuild.buildroot.net/results/6e803484c756e3138e0865559fca7d07c7ff1c30 |     
+ powerpc64le |                   dnsmasq-2.80 | NOK | http://autobuild.buildroot.net/results/9dfe2598a560d42c8dfa6e97e367ad816269c034 |     
+     powerpc |                   dnsmasq-2.80 | NOK | http://autobuild.buildroot.net/results/a584147d5ef2423d810dbd940fc436125e59789e |     
+     aarch64 |                   dnsmasq-2.80 | NOK | http://autobuild.buildroot.net/results/bc1e77f43fc1a224c6f2c758a071ea05dae90d52 |     
+         arm |                   dnsmasq-2.80 | NOK | http://autobuild.buildroot.net/results/5ebf8a7ca356eaaf2323c75e3896eef193df8037 |     
+         arm |                   dnsmasq-2.80 | NOK | http://autobuild.buildroot.net/results/2b7f2f13be13aeb54c62a2aedbd7b7447d98ccfc |     
+     riscv64 |               domoticz-4.10717 | NOK | http://autobuild.buildroot.net/results/91bdaaff2252310e32ddd6a8ddbf9d870e7de81e |     
+     aarch64 |               domoticz-4.10717 | NOK | http://autobuild.buildroot.net/results/20840b4300f77dac69e07f9ee4050ed7547696c1 |     
+   powerpc64 |                  dovecot-2.3.6 | NOK | http://autobuild.buildroot.net/results/bba0d54cab164d77caf7161596b22602875a7a85 |     
+       sparc |       gst1-plugins-base-1.16.0 | NOK | http://autobuild.buildroot.net/results/93b58753071dac193881049c79288ef39fa9db16 |     
+         arm |                    gvfs-1.31.4 | NOK | http://autobuild.buildroot.net/results/cebd107316981d736374310b11580093810a89c1 | ORPH
+         arm |                      gzip-1.10 | NOK | http://autobuild.buildroot.net/results/cd6fd646e7df7245e074c5194347e8891cfe26e8 | ORPH
+        m68k |                 harfbuzz-2.5.2 | NOK | http://autobuild.buildroot.net/results/09dc35b5a1f0b79c15d6a3e351d8d348ef7a142d | ORPH
+        m68k |                 harfbuzz-2.5.2 | NOK | http://autobuild.buildroot.net/results/a1ca826b72d99a3b53c32ec55366385cab1ca15c | ORPH
+     riscv64 |              host-cargo-0.26.0 | NOK | http://autobuild.buildroot.net/results/f59467a268db235ed623dd0720848478da9f2409 |     
+      x86_64 |                host-efl-1.22.2 | NOK | http://autobuild.buildroot.net/results/66ab77d194cc4640bdafb584fe78d82a74e46e9c |     
+        i686 |            host-nodejs-10.15.3 | NOK | http://autobuild.buildroot.net/results/40ccccfd027a0b384da0740aa0cd806d8c2c2552 |     
+      x86_64 |       intel-mediadriver-18.4.0 | NOK | http://autobuild.buildroot.net/results/dc5faa5d64824747fa32e6cc5f77d1ad6b396823 |     
+         arm |               iputils-20190515 | NOK | http://autobuild.buildroot.net/results/d46bf80eca495844046344629314c23684138835 |     
+         arc |                libcap-ng-0.7.9 | NOK | http://autobuild.buildroot.net/results/ae28dbea6780e65136d60c189cf845734e1a5cd3 |     
+         arc |                libcap-ng-0.7.9 | NOK | http://autobuild.buildroot.net/results/042bc235c64eb97a8673825c2b1aa256ac652330 |     
+         arc |               libsodium-1.0.17 | NOK | http://autobuild.buildroot.net/results/240db17740c53637bab9221d53111fc697576d45 |     
+         arc |               libsodium-1.0.17 | NOK | http://autobuild.buildroot.net/results/f42e46acedb22ed74f70779713beea1a1c995fc8 |     
+         arc |               libsodium-1.0.17 | NOK | http://autobuild.buildroot.net/results/a68d24c1290ca59f2028bd98f3391879cfea0269 |     
+         arc |               libsodium-1.0.17 | NOK | http://autobuild.buildroot.net/results/dc1255304cd418bc0509edcdbe1bc2552e27ef44 |     
+        i686 |                 libvips-7.42.2 | NOK | http://autobuild.buildroot.net/results/b4c2f4b4e3c09e54b4d97dabb43d2f1ee1b61f6b |     
+        m68k |                 libvips-7.42.2 | NOK | http://autobuild.buildroot.net/results/e5b7b89beecc4fefa170aa9c0e8139b20df896f8 |     
+     riscv64 |           modem-manager-1.10.2 | NOK | http://autobuild.buildroot.net/results/67d9bb135058bb4b80d558e35f47d5a5b0f79e4b |     
+   powerpc64 |        python-matplotlib-3.0.3 | NOK | http://autobuild.buildroot.net/results/ca751420670a16a433393c36934ad23273e34288 |     
+         arc |               syslog-ng-3.19.1 | NOK | http://autobuild.buildroot.net/results/590a2e1b31fa6a0787f5fd358aed20f85dbed167 |     
+      xtensa | tvheadend-8f1de1621d78c9143... | NOK | http://autobuild.buildroot.net/results/850329cd0b13b9c5cd887e0d02d37687aa433f9e |     
+microblazeel | tvheadend-8f1de1621d78c9143... | NOK | http://autobuild.buildroot.net/results/9c1da50276ca8e9b73e6a4083c8f37c7af5cd842 |     
+microblazeel | tvheadend-8f1de1621d78c9143... | NOK | http://autobuild.buildroot.net/results/a34c4ecfd25cfc92e6f2360dabc5b69ee586024d |     
+    mips64el | tvheadend-8f1de1621d78c9143... | NOK | http://autobuild.buildroot.net/results/cf4e47e3b18a9658d1d74e6bc46dc67551aa1121 |     
+microblazeel |            udpxy-1.0.23-9-prod | NOK | http://autobuild.buildroot.net/results/f592183efba60ab208af17fa805f1c2d39a93f66 |     
+      x86_64 |                        unknown | NOK | http://autobuild.buildroot.net/results/1d755cee8e7d318e49757ef0a8c83aa2c48ca9ff |     
+      mipsel |                        unknown | NOK | http://autobuild.buildroot.net/results/725283b33478bd6bed4d844931a72206fce96a2e |     
+        mips |                        unknown | NOK | http://autobuild.buildroot.net/results/e52a27c01e8f82c051bb2dcadd296cc38d3a11a6 |     
+         arc |    vdr-plugin-vnsiserver-1.8.0 | NOK | http://autobuild.buildroot.net/results/4fcd96a8a8226ed7b5ff130606616b654e21ae8d |     
 
- Note, however, there are three ways to make them mutually exclusive.
+Results for branch '2019.02.x'
+==============================
 
-1. Making it a virtual package - which is what you did. However, the main
-purpose of a virtual package is to make it possible to use it in select/depend
-without caring about which implementation is chosen. That might apply for
-lapack, I'm not sure.
+Classification of failures by reason
+------------------------------------
 
-2. Adding an explicit dependency from one on the other in Config.in. E.g.
-clapack could depend on !lapack.
-
-3. Adding a dependency on something else which is mutually exclusive. lapack
-depends on BR2_TOOLCHAIN_HAS_FORTRAN, so you could just add a dependency on
-!BR2_TOOLCHAIN_HAS_FORTRAN to clapack. This makes sense, since the Fortran
-implementation is supposed to be the real source, and clapack is more or less
-automatically generated from it. Supposedly, lapack should optimise better than
-clapack.
+           host-mfgtools-v0.02 | 1 
+              qt5enginio-1.6.3 | 1 
 
 
- The commit log should explain that these three options exist, and why you
-choose that particular one.
+Detail of failures
+------------------
 
-[snip]
-> diff --git a/package/liblapack/Config.in b/package/liblapack/Config.in
-> new file mode 100644
-> index 0000000000..fb155d7c02
-> --- /dev/null
-> +++ b/package/liblapack/Config.in
-> @@ -0,0 +1,86 @@
-> +config BR2_PACKAGE_VIRTUAL_LAPACK
+         arm |            host-mfgtools-v0.02 | NOK | http://autobuild.buildroot.net/results/53b4f7ca97f60cee3355557267c5a08cef1cc87f |     
+         arc |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/d969ff4eb8d6e9cfc9f6a2a60d82361617563e09 |     
 
- The package name and Config.in symbol must correspond with each other. So if
-the package is called VIRTUAL_LAPACK, the directory and .mk file should be
-called virtual-lapack, etc.
 
-> +	bool "lapack support"
-> +	select BR2_PACKAGE_HAS_LAPACK
-> +	help
-> +	  Select lapack library provider.
-> +
-> +if BR2_PACKAGE_VIRTUAL_LAPACK
-> +
-> +choice
-> +        prompt "lapack implementation"
-> +        default BR2_PACKAGE_LAPACK
-> +        help
-> +	  Select lapack or clapack implementation.
-
- This is not formatted properly. Please use check-package to verify formatting.
-
-> +
-> +
-> +comment "clapack needs a glibc toolchain"
-> +	depends on BR2_powerpc
-> +	depends on !BR2_TOOLCHAIN_USES_GLIBC
-> +
-> +config BR2_PACKAGE_CLAPACK
-
- Unfortunately, it is not possible to put clapack in a choice at the moment,
-since armadillo selects it. So you need to adapt armadillo as well to select
-BR2_PACKAGE_VIRTUAL_LAPACK instead of BR2_PACKAGE_CLAPACK (and test that it
-works with lapack).
-
- Also, it is not possible to convert existing Config.in symbols into choice
-options, because that breaks existing configurations.
-
- Anyway, there is no real need for a choice. The normal use of a virtual package
-is to select the virtual package from the providers. But then, typically, the
-user of the virtual package would depend on it, rather than select it.
-
-> +	bool "C implementation"
-> +	# _fpu_control is used on PowerPC, but not available with
-> +	# uClibc or musl
-> +	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC
-> +	# assembler: Error: value out of range
-> +	depends on !BR2_m68k_cf
-> +	help
-> +	  LAPACK and BLAS C implementation (f2c'ed version of).'
-> +
-> +	  http://www.netlib.org/clapack/
-> +
-> +if BR2_PACKAGE_CLAPACK
-> +
-> +config BR2_PACKAGE_CLAPACK_ARITH_H
-
- This has to go outside of the choice block.
-
-> +	string "Custom BLAS arith.h"
-> +	depends on BR2_PACKAGE_CLAPACK
-> +	help
-> +	  To optimize BLAS library for the hardware, an 'arith.h' header
-> +	  should be provided.
-> +
-> +	  If empty, the library will not be optimized by the compiler.
-> +
-> +	  In any case an 'arithchk' program is built
-> +	  (but not installed), to be run on the target to generate this
-> +	  arith.h header.
-> +
-> +endif
-> +
-> +comment "lapack/blas needs a toolchain w/ fortran"
-> +	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
-> +	depends on !BR2_TOOLCHAIN_HAS_FORTRAN
-> +
-> +config BR2_PACKAGE_LAPACK
-> +	bool "FORTRAN implementation"
-> +	depends on BR2_TOOLCHAIN_HAS_FORTRAN
-> +	# _fpu_control is used on PowerPC, but not available with uClibc
-> +	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
-> +	help
-> +	  LAPACK and BLAS FORTRAN implementation. This package
-> +	  installs two libraries: libblas and liblapack.
-> +
-> +	  http://www.netlib.org/lapack/
-> +
-> +if BR2_PACKAGE_LAPACK
-> +
-> +config BR2_PACKAGE_LAPACK_COMPLEX
-
- This as well.
-
-> +	bool "Complex/Complex16 support"
-> +	default y
-> +	depends on BR2_PACKAGE_LAPACK
-> +	help
-> +	  Builds support for COMPLEX and COMPLEX16 data types.
-> +
-> +endif
-> +
-> +endchoice
-> +
-> +config BR2_PACKAGE_HAS_VIRT_LAPACK
-
- Again, this name should be the same as the package name, so
-BR2_PACKAGE_HAS_VIRTUAL_LAPACK.
-
- Regards,
- Arnout
-
-> +	bool
-> +
-> +config BR2_PACKAGE_PROVIDES_VIRT_LAPACK
-> +        depends on BR2_PACKAGE_HAS_VIRT_LAPACK
-> +        string
-> +	default "lapack"  if BR2_PACKAGE_LAPACK
-> +	default "clapack"  if BR2_PACKAGE_CLAPACK
-> +
-> +endif
-> diff --git a/package/liblapack/liblapack.mk b/package/liblapack/liblapack.mk
-> new file mode 100644
-> index 0000000000..06cece60f9
-> --- /dev/null
-> +++ b/package/liblapack/liblapack.mk
-> @@ -0,0 +1,7 @@
-> +################################################################################
-> +#
-> +# liblapack
-> +#
-> +################################################################################
-> +
-> +$(eval $(virtual-package))
-> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-> index 5d2fbfc7ad..71de61f6e3 100644
-> --- a/package/python-numpy/python-numpy.mk
-> +++ b/package/python-numpy/python-numpy.mk
-> @@ -17,7 +17,12 @@ PYTHON_NUMPY_SETUP_TYPE = setuptools
->  
->  ifeq ($(BR2_PACKAGE_CLAPACK),y)
->  PYTHON_NUMPY_DEPENDENCIES += clapack
-> +PYTHON_NUMPY_SITE_CFG_LIBS += cblas clapack
-> +PYTHON_NUMPY_ENV += BLAS=clapack LAPACK=clapack
-> +else ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)
-> +PYTHON_NUMPY_DEPENDENCIES += lapack
->  PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
-> +PYTHON_NUMPY_ENV += BLAS=lapack LAPACK=lapack
->  else
->  PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
->  endif
-> 
+-- 
+http://autobuild.buildroot.net
