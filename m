@@ -1,7 +1,9 @@
 From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Thu, 11 Jul 2019 22:13:30 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/at91bootstrap3: bump to version 3.8.13
-Message-ID: <1562876010-29364-1-git-send-email-pjtexier@koncepto.io>
+Date: Thu, 11 Jul 2019 22:43:26 +0200
+Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add myself for stunnel
+In-Reply-To: <1562877806-10215-1-git-send-email-pjtexier@koncepto.io>
+References: <1562877806-10215-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <1562877806-10215-2-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,39 +12,20 @@ To: buildroot@busybox.net
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- boot/at91bootstrap3/Config.in           | 4 ++--
- boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index afdc7e7..89ef3fc 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -19,7 +19,7 @@ choice
- 	prompt "AT91 Bootstrap 3 version"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e9c521f..bac9a17 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1860,6 +1860,7 @@ F:	package/trace-cmd/
+ N:	Pierre-Jean Texier <pjtexier@koncepto.io>
+ F:	package/libubootenv/
+ F:	package/python-periphery/
++F:	package/stunnel/
  
- config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
--	bool "3.8.12"
-+	bool "3.8.13"
- 
- config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	bool "Custom Git repository"
-@@ -44,7 +44,7 @@ endif
- 
- config BR2_TARGET_AT91BOOTSTRAP3_VERSION
- 	string
--	default "v3.8.12" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+	default "v3.8.13" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
- 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
- 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 
-diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
-index cfeb9c8..ecfda3b 100644
---- a/boot/at91bootstrap3/at91bootstrap3.hash
-+++ b/boot/at91bootstrap3/at91bootstrap3.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	e25324b6f38725ad2ebfd946cb9e144f0d5889e2885992c7196a82b41fe45ee4  at91bootstrap3-v3.8.12.tar.gz
-+sha256	a5a10579598d47475696fab56c086225b0f4b710299e2dc9e0f9b6f72ed98be8  at91bootstrap3-v3.8.13.tar.gz
+ N:	Pieter De Gendt <pieter.degendt@gmail.com>
+ F:	package/libvips/
 -- 
 2.7.4
