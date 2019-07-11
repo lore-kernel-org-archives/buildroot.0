@@ -1,88 +1,54 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 11 Jul 2019 21:30:21 +0200
-Subject: [Buildroot] [PATCH v2 3/6]
- package/gstreamer1/gst1-plugins-good: convert package type to meson
-In-Reply-To: <ab41f678-9611-a6af-3314-ff2d643a7599@mind.be>
-References: <20190710153634.25235-1-aduskett@gmail.com>
- <20190710153634.25235-4-aduskett@gmail.com>
- <20190710225203.0b81eec0@gmx.net>
- <ab41f678-9611-a6af-3314-ff2d643a7599@mind.be>
-Message-ID: <20190711213021.2204224c@gmx.net>
+From: Matt Weber <matthew.weber@rockwellcollins.com>
+Date: Thu, 11 Jul 2019 14:36:54 -0500
+Subject: [Buildroot] [PATCH] package/fakeroot: use TCP for msg passing
+Message-ID: <20190711193654.2039-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+fakeroot can be built to either use SYSV IPC or TCP for message passing.
 
-On Wed, 10 Jul 2019 23:53:24 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+Cases for which the SYSV IPC version fails or causes problems but for
+which fakeroot-tcp has been observed to work well include the items
+listed below.
 
-> On 10/07/2019 22:52, Peter Seiderer wrote:
-> > Hello Adam,
-> >
-> > On Wed, 10 Jul 2019 11:36:31 -0400, aduskett at gmail.com wrote:
->
-> [snip]
-> >> -	--disable-osx_audio \
-> >> -	--disable-osx_video \
-> >> -	--disable-aalib \
-> >> -	--disable-aalibtest \
-> >> -	--disable-libcaca
-> >> +	-Dexamples=disabled \
-> >> +	-Dtests=disabled \
-> >
-> > While your are at it , the following options should move to the
-> > 'Options which require currently unpackaged libraries' section
-> > some lines below:
->
->  No, that should be done as a separate patch.
->
->  It would also be nice BTW if all the options would be ordered alphabetically.
-> Now they're a bit of a hodgepodge.
+  * Multithreaded applications (using pthread)
+  * Running under realtime-preempt kernel
+  * Microsoft Windows 10 Services for Linux
 
-O.k. stuff for an follow up patch, I would prefer option ordering according
-to meson_options.txt (to enable easy check for added/removed/changed options)...
+Link to readme capturing original upstream bug report #
+https://salsa.debian.org/clint/fakeroot/commit/113c6320244c4261f7f7a9ce07cf7b5465573dfe
 
->
-> [snip]
-> >>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB),y)
-> >> -GST1_PLUGINS_GOOD_CONF_OPTS += --enable-zlib
-> >>  GST1_PLUGINS_GOOD_DEPENDENCIES += zlib
-> >> -else
-> >> -GST1_PLUGINS_GOOD_CONF_OPTS += --disable-zlib
-> >>  endif
-> >
-> > Should be:
-> >
-> >   # checked for by meson.build, gst/isomp4/meson.build, gst/matroska/meson.build
-> >   # and gst/icydemux/meson.build
->
->  We don't add such a comment for any other package, so not needed.
+Fixes
+https://bugs.busybox.net/show_bug.cgi?id=11366
 
-Would like to keep it, because:
+Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+---
+I can't find a good reason to not make this the new default in the
+Buildroot host build of fakeroot.  vs auto detecting which to build
+depending on what the host env can support.
 
-- as prove of correctness of the removed BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB Config.in entry
-- as a reminder/blueprint for identifying zlib-like minor feature dependencies not expressed
-  in the root meson_options.txt file
+For good measure, in-addition to this change, I will submit an upstream
+patch for the suggested configure.as update (pending a little cleanup
+in that proposed patch). https://bugs.busybox.net/attachment.cgi?id=7791
+---
+ package/fakeroot/fakeroot.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Regards,
-Peter
-
->
-> >   ifeq ($(BR2_PACKAGE_ZLIB),y)
-> >   GST1_PLUGINS_GOOD_DEPENDENCIES += zlib
-> >   endif
-> >
-> > And option BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB removed from Config.in (and moved
-> > to Config.in.legacy)...
->
->  This, however, is true. Legacy handling is not needed though: existing .configs
-> will just work unmodified, the option will disappear automatically when you do
-> 'make olddefconfig' and zlib will still be selected.
->
->
->  Regards,
->  Arnout
->
-> [snip]
+diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+index 4aa27a1b0c..d8effc955e 100644
+--- a/package/fakeroot/fakeroot.mk
++++ b/package/fakeroot/fakeroot.mk
+@@ -16,6 +16,8 @@ HOST_FAKEROOT_CONF_ENV = \
+ 	ac_cv_header_sys_capability_h=no \
+ 	ac_cv_func_capset=no
+ 
++HOST_FAKEROOT_CONF_OPTS = --with-ipc=tcp
++
+ FAKEROOT_LICENSE = GPL-3.0+
+ FAKEROOT_LICENSE_FILES = COPYING
+ 
+-- 
+2.17.1
