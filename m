@@ -1,12 +1,13 @@
 From: Peter Seiderer <ps.report@gmx.net>
-Date: Thu, 11 Jul 2019 21:02:33 +0200
-Subject: [Buildroot] [PATCH v2 2/2] package/qt5: bump latest version to
- 5.12.4
-In-Reply-To: <891f19e9-a64b-c025-b5cd-f7a0517fbc35@mind.be>
-References: <20190710173645.15459-1-ps.report@gmx.net>
- <20190710173645.15459-2-ps.report@gmx.net>
- <891f19e9-a64b-c025-b5cd-f7a0517fbc35@mind.be>
-Message-ID: <20190711210233.0b7eb0aa@gmx.net>
+Date: Thu, 11 Jul 2019 21:30:21 +0200
+Subject: [Buildroot] [PATCH v2 3/6]
+ package/gstreamer1/gst1-plugins-good: convert package type to meson
+In-Reply-To: <ab41f678-9611-a6af-3314-ff2d643a7599@mind.be>
+References: <20190710153634.25235-1-aduskett@gmail.com>
+ <20190710153634.25235-4-aduskett@gmail.com>
+ <20190710225203.0b81eec0@gmx.net>
+ <ab41f678-9611-a6af-3314-ff2d643a7599@mind.be>
+Message-ID: <20190711213021.2204224c@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,55 +16,73 @@ To: buildroot@busybox.net
 
 Hello Arnout,
 
-On Thu, 11 Jul 2019 00:12:59 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+On Wed, 10 Jul 2019 23:53:24 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-> On 10/07/2019 19:36, Peter Seiderer wrote:
-> > qt5multimedia:
-> > - remove 0001-Fix-compile-failure-with-gstreamer-0-10.patch (taken from
-> >   upstream [1])
->
->  For some reason, this gave a conflict for me...
->
+> On 10/07/2019 22:52, Peter Seiderer wrote:
+> > Hello Adam,
 > >
-> > qt5webengine:
-> > - add one additional license hash
-> >   (src/3rdparty/chromium/third_party/blink/renderer/build/scripts/license.pyc)
+> > On Wed, 10 Jul 2019 11:36:31 -0400, aduskett at gmail.com wrote:
+>
+> [snip]
+> >> -	--disable-osx_audio \
+> >> -	--disable-osx_video \
+> >> -	--disable-aalib \
+> >> -	--disable-aalibtest \
+> >> -	--disable-libcaca
+> >> +	-Dexamples=disabled \
+> >> +	-Dtests=disabled \
 > >
-> > [1] https://code.qt.io/cgit/qt/qtmultimedia.git/commit/?id=935967a453b47ae7c8e9ad3d94eef3813eab58db
+> > While your are at it , the following options should move to the
+> > 'Options which require currently unpackaged libraries' section
+> > some lines below:
+>
+>  No, that should be done as a separate patch.
+>
+>  It would also be nice BTW if all the options would be ordered alphabetically.
+> Now they're a bit of a hodgepodge.
+
+O.k. stuff for an follow up patch, I would prefer option ordering according
+to meson_options.txt (to enable easy check for added/removed/changed options)...
+
+>
+> [snip]
+> >>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB),y)
+> >> -GST1_PLUGINS_GOOD_CONF_OPTS += --enable-zlib
+> >>  GST1_PLUGINS_GOOD_DEPENDENCIES += zlib
+> >> -else
+> >> -GST1_PLUGINS_GOOD_CONF_OPTS += --disable-zlib
+> >>  endif
 > >
-> > Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> > Should be:
+> >
+> >   # checked for by meson.build, gst/isomp4/meson.build, gst/matroska/meson.build
+> >   # and gst/icydemux/meson.build
 >
->  Applied to master, thanks.
->
->  Do you know if this also fixes Bug 11776 [1] for qt5webengine? Apparently the
-> bump to 5.13 should fix it, but I guess 5.12.4 probably fixes it too.
+>  We don't add such a comment for any other package, so not needed.
 
-No, the bug still exists with 5.12.4....
+Would like to keep it, because:
 
->
->  By the way, do we stick to 5.12.x or do we bump to 5.13 (for 2019.08)? If we
-> bump, it would be nice to have that bump soonish... Still, it's good to have
-> this 5.12.4 bump first because that can be backported to 2019.05.
-
-Will prepare the bump to 5.13.0 the next (few) weeks ;-), the question is how
-to proceed:
-
-- keep LTS 5.6 (Standard Support Until 16.03.2019, according to [2]), bump Latest to 5.13
-- bump LTS 5.6 to LTS 5.9 (Standard Support Until 31.05.2020), bump Latest to 5.13
-- bump LTS 5.6 to LTS 5.12 (Standard Support Until 2021), bump Latest to 5.13
-- drop LTS, only support Latest
+- as prove of correctness of the removed BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB Config.in entry
+- as a reminder/blueprint for identifying zlib-like minor feature dependencies not expressed
+  in the root meson_options.txt file
 
 Regards,
 Peter
 
-[2] https://en.wikipedia.org/wiki/Qt_version_history
-
+>
+> >   ifeq ($(BR2_PACKAGE_ZLIB),y)
+> >   GST1_PLUGINS_GOOD_DEPENDENCIES += zlib
+> >   endif
+> >
+> > And option BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB removed from Config.in (and moved
+> > to Config.in.legacy)...
+>
+>  This, however, is true. Legacy handling is not needed though: existing .configs
+> will just work unmodified, the option will disappear automatically when you do
+> 'make olddefconfig' and zlib will still be selected.
+>
 >
 >  Regards,
 >  Arnout
 >
-> [1] https://bugs.busybox.net/show_bug.cgi?id=11776
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> [snip]
