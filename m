@@ -1,52 +1,35 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Thu, 11 Jul 2019 18:53:19 +0200
-Subject: [Buildroot] [PATCH 1/1] boot/barebox: bump version to 2019.07.0
-Message-ID: <20190711165319.20152-1-b.bilas@grinn-global.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Thu, 11 Jul 2019 18:56:55 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1: fix build with NLS
+Message-ID: <20190711165655.8850-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/6d3be9feb301495b079eff6283f1cbed9603dc42
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index d919cacc57..f4c0c27df8 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gstreamer1/gstreamer1/gstreamer1.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index cea933be84..023cf4e85e 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -33,6 +33,9 @@ GSTREAMER1_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	libglib2 \
+ 	$(if $(BR2_PACKAGE_LIBUNWIND),libunwind) \
+-	$(if $(BR2_PACKAGE_VALGRIND),valgrind)
++	$(if $(BR2_PACKAGE_VALGRIND),valgrind) \
++	$(TARGET_NLS_DEPENDENCIES)
++
++GSTREAMER1_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
  
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2019.05.0"
-+	bool "2019.07.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2019.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2019.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index fb371ab671..70b500da77 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
-@@ -1,5 +1,5 @@
--# From https://www.barebox.org/download/barebox-2019.05.0.tar.bz2.md5
--md5 2e721cce90f1ea1492710ca23680311f barebox-2019.05.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2019.07.0.tar.bz2.md5
-+md5 8fb8e8ec3775228c34f7de2096872f51 barebox-2019.07.0.tar.bz2
- 
- # Locally calculated
--sha256 704bb09b2bf1347e43ebb9138da32a7e1b4d13892fd187be98f4f9dae000501d barebox-2019.05.0.tar.bz2
-+sha256 8512ac1b91ef48f8b657fad446edc868eb7da30e93d6ff7854f0006854b6a3a6 barebox-2019.07.0.tar.bz2
+ $(eval $(meson-package))
 -- 
-2.22.0
+2.20.1
