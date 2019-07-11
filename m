@@ -1,56 +1,42 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Thu, 11 Jul 2019 18:59:50 +0200
-Subject: [Buildroot] [PATCH v2 1/1] boot/barebox: bump version to 2019.07.0
-Message-ID: <20190711165950.21005-1-b.bilas@grinn-global.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Thu, 11 Jul 2019 20:44:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ffmpeg: bump version to 4.1.4
+Message-ID: <20190711184402.5820-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2:
-  - add missing signed off
----
- boot/barebox/Config.in    | 4 ++--
- boot/barebox/barebox.hash | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/ffmpeg/ffmpeg.hash | 2 +-
+ package/ffmpeg/ffmpeg.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/barebox/Config.in b/boot/barebox/Config.in
-index d919cacc57..f4c0c27df8 100644
---- a/boot/barebox/Config.in
-+++ b/boot/barebox/Config.in
-@@ -12,7 +12,7 @@ choice
- 	  Select the specific Barebox version you want to use
- 
- config BR2_TARGET_BAREBOX_LATEST_VERSION
--	bool "2019.05.0"
-+	bool "2019.07.0"
- 
- config BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -40,7 +40,7 @@ endif
- 
- config BR2_TARGET_BAREBOX_VERSION
- 	string
--	default "2019.05.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
-+	default "2019.07.0"	if BR2_TARGET_BAREBOX_LATEST_VERSION
- 	default BR2_TARGET_BAREBOX_CUSTOM_VERSION_VALUE if BR2_TARGET_BAREBOX_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_BAREBOX_CUSTOM_TARBALL
- 	default BR2_TARGET_BAREBOX_CUSTOM_GIT_VERSION if BR2_TARGET_BAREBOX_CUSTOM_GIT
-diff --git a/boot/barebox/barebox.hash b/boot/barebox/barebox.hash
-index fb371ab671..70b500da77 100644
---- a/boot/barebox/barebox.hash
-+++ b/boot/barebox/barebox.hash
+diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
+index ba51af9847..f27eaa5706 100644
+--- a/package/ffmpeg/ffmpeg.hash
++++ b/package/ffmpeg/ffmpeg.hash
 @@ -1,5 +1,5 @@
--# From https://www.barebox.org/download/barebox-2019.05.0.tar.bz2.md5
--md5 2e721cce90f1ea1492710ca23680311f barebox-2019.05.0.tar.bz2
-+# From https://www.barebox.org/download/barebox-2019.07.0.tar.bz2.md5
-+md5 8fb8e8ec3775228c34f7de2096872f51 barebox-2019.07.0.tar.bz2
- 
  # Locally calculated
--sha256 704bb09b2bf1347e43ebb9138da32a7e1b4d13892fd187be98f4f9dae000501d barebox-2019.05.0.tar.bz2
-+sha256 8512ac1b91ef48f8b657fad446edc868eb7da30e93d6ff7854f0006854b6a3a6 barebox-2019.07.0.tar.bz2
+-sha256 0c3020452880581a8face91595b239198078645e7d7184273b8bcc7758beb63d  ffmpeg-4.1.3.tar.xz
++sha256 f1f049a82fcfbf156564e73a3935d7e750891fab2abf302e735104fd4050a7e1  ffmpeg-4.1.4.tar.xz
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
+ sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
+ sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  LICENSE.md
+diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
+index 5c070b7ee4..21fb24e597 100644
+--- a/package/ffmpeg/ffmpeg.mk
++++ b/package/ffmpeg/ffmpeg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FFMPEG_VERSION = 4.1.3
++FFMPEG_VERSION = 4.1.4
+ FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
+ FFMPEG_SITE = http://ffmpeg.org/releases
+ FFMPEG_INSTALL_STAGING = YES
 -- 
-2.22.0
+2.20.1
