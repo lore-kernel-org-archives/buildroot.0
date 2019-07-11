@@ -1,93 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 11 Jul 2019 06:23:22 +0000
-Subject: [Buildroot] [Bug 12031] New: Build of cups-filters fails while
- linking, apparently due to missing libiconv
-Message-ID: <bug-12031-163@https.bugs.busybox.net/>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Thu, 11 Jul 2019 08:04:06 +0000
+Subject: [Buildroot] [arc-buildroot] [PATCH v2] toolchain: fix ARC GCC
+ internal compiller error
+In-Reply-To: <20190702095238.7079-1-Evgeniy.Didin@synopsys.com>
+References: <20190702095238.7079-1-Evgeniy.Didin@synopsys.com>
+Message-ID: <CY4PR1201MB0120A72B446B7F4EF349A8FBA1F30@CY4PR1201MB0120.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12031
+Hi Thomas, Arnout,
 
-            Bug ID: 12031
-              Host: i386
-             Build: amd64 Linux
-           Summary: Build of cups-filters fails while linking, apparently
-                    due to missing libiconv
-           Product: buildroot
-           Version: 2019.05.1
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Keywords: link-failure
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: jakobcornell at gmail.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+> -----Original Message-----
+> From: Evgeniy Didin <Evgeniy.Didin@synopsys.com>
+> Sent: Tuesday, July 2, 2019 10:53 AM
+> To: buildroot at busybox.net
+> Cc: Evgeniy Didin <didin@synopsys.com>; Thomas Petazzoni <thomas.petazzoni@bootlin.com>; arc-
+> buildroot at synopsys.com
+> Subject: [arc-buildroot] [PATCH v2] toolchain: fix ARC GCC internal compiller error
+> 
+> With recent arc-toolchain update some packages started to fail with
+> internal compiler error. This error first was catched while building
+> glibc-testsuite with upstream gcc-8 and ARC port of glibc. For
+> more information see BUG 89838:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=89838
+> 
+> This commit temporarily adds patch for current version of arc-gcc and
+> should be removed with update to next version of ARC tools.
+> 
+> Fix in upstream gcc:
+> https://gcc.gnu.org/viewcvs/gcc?view=revision&sortby=date&revision=272645
+> 
+> Fixes:
+> http://autobuild.buildroot.net/results/66e/66e8f28ed171b5c8994e6ba8c4e6257d6bbe0191//
+> http://autobuild.buildroot.net/results/789/789016ff66bb4bcd2667a8c5241a680b98db5b2f//
+> http://autobuild.buildroot.net/results/dd9/dd9de722b886dee3e6373b026062e1aecc11efd3//
 
-The command `make` fails with the following output:
+Does that respin looks good?
+Would be nice to apply the fix so quite some build breakages go away.
 
-[7m>>> cups-filters 1.21.3 Building[27m
-PATH="/home/jakob/buildroot-2019.05.1/output/host/bin:/home/jakob/buildroot-2019.05.1/output/host/sbin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games:/home/jakob/.cargo/bin"
- /usr/bin/make -j3  -C
-/home/jakob/buildroot-2019.05.1/output/build/cups-filters-1.21.3/
-make[1]: Entering directory
-'/home/jakob/buildroot-2019.05.1/output/build/cups-filters-1.21.3'
-/usr/bin/make  all-am
-make[2]: Entering directory
-'/home/jakob/buildroot-2019.05.1/output/build/cups-filters-1.21.3'
-sed -e "s/Braille transcription/Additional Braille transcription (2)/" \
-    -e "s/^  \\*Choice /  Choice /" \
-    -e "s/^  Choice \"HyphLocale\//  *Choice \"HyphLocale\//" \
-    -e s/LibLouis/LibLouis2/ \
-    < filter/braille/filters/liblouis1.defs >
-filter/braille/filters/liblouis2.defs
-sed -e "s/Braille transcription/Additional Braille transcription (3)/" \
-    -e "s/^  \\*Choice /  Choice /" \
-    -e "s/^  Choice \"None\//  *Choice \"None\//" \
-    -e s/LibLouis/LibLouis3/ \
-    < filter/braille/filters/liblouis1.defs >
-filter/braille/filters/liblouis3.defs
-  CCLD     texttotext
-sed -e "s/Braille transcription/Additional Braille transcription (4)/" \
-    -e "s/^  \\*Choice /  Choice /" \
-    -e "s/^  Choice \"None\//  *Choice \"None\//" \
-    -e s/LibLouis/LibLouis4/ \
-    < filter/braille/filters/liblouis1.defs >
-filter/braille/filters/liblouis4.defs
-/home/jakob/buildroot-2019.05.1/output/host/lib/gcc/i686-buildroot-linux-uclibc/7.4.0/../../../../i686-buildroot-linux-uclibc/bin/ld:
-texttotext-texttotext.o: in function `main':
-texttotext.c:(.text.startup+0xdf3): undefined reference to `libiconv_open'
-/home/jakob/buildroot-2019.05.1/output/host/lib/gcc/i686-buildroot-linux-uclibc/7.4.0/../../../../i686-buildroot-linux-uclibc/bin/ld:
-texttotext.c:(.text.startup+0xfb0): undefined reference to `libiconv'
-/home/jakob/buildroot-2019.05.1/output/host/lib/gcc/i686-buildroot-linux-uclibc/7.4.0/../../../../i686-buildroot-linux-uclibc/bin/ld:
-texttotext.c:(.text.startup+0xfe9): undefined reference to `libiconv'
-/home/jakob/buildroot-2019.05.1/output/host/lib/gcc/i686-buildroot-linux-uclibc/7.4.0/../../../../i686-buildroot-linux-uclibc/bin/ld:
-texttotext.c:(.text.startup+0x16eb): undefined reference to `libiconv_close'
-collect2: error: ld returned 1 exit status
-Makefile:2541: recipe for target 'texttotext' failed
-make[2]: *** [texttotext] Error 1
-make[2]: Leaving directory
-'/home/jakob/buildroot-2019.05.1/output/build/cups-filters-1.21.3'
-Makefile:1968: recipe for target 'all' failed
-make[1]: *** [all] Error 2
-make[1]: Leaving directory
-'/home/jakob/buildroot-2019.05.1/output/build/cups-filters-1.21.3'
-package/pkg-generic.mk:238: recipe for target
-'/home/jakob/buildroot-2019.05.1/output/build/cups-filters-1.21.3/.stamp_built'
-failed
-make: ***
-[/home/jakob/buildroot-2019.05.1/output/build/cups-filters-1.21.3/.stamp_built]
-Error 2
-
-My Buildroot config is attached. I'm using uClibc in the toolchain, and
-libiconv is selected as a dependency in the target package list.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+-Alexey
