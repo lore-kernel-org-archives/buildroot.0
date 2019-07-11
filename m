@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu, 11 Jul 2019 18:57:44 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gst1-plugins-base: fix build with
- NLS
-Message-ID: <20190711165744.8939-1-fontaine.fabrice@gmail.com>
+Date: Thu, 11 Jul 2019 18:58:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dovecot: add linux-pam optional
+ dependency
+Message-ID: <20190711165838.9033-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,27 +10,30 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/93b58753071dac193881049c79288ef39fa9db16
+ - http://autobuild.buildroot.org/results/bba0d54cab164d77caf7161596b22602875a7a85
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ package/dovecot/dovecot.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index 34c6074b8f..66c136c36c 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -26,7 +26,9 @@ GST1_PLUGINS_BASE_CONF_OPTS += \
- 	-Dlibvisual=disabled \
- 	-Diso-codes=disabled
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 78bc41bff2..b13bbc429d 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -64,6 +64,13 @@ else
+ DOVECOT_CONF_OPTS += --without-sodium
+ endif
  
--GST1_PLUGINS_BASE_DEPENDENCIES = gstreamer1
-+GST1_PLUGINS_BASE_DEPENDENCIES = gstreamer1 $(TARGET_NLS_DEPENDENCIES)
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++DOVECOT_CONF_OPTS += --with-pam
++DOVECOT_DEPENDENCIES += linux-pam
++else
++DOVECOT_CONF_OPTS += --without-pam
++endif
 +
-+GST1_PLUGINS_BASE_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- 
- # These plugins are listed in the order from ./configure --help
- ifeq ($(BR2_PACKAGE_ORC),y)
+ ifeq ($(BR2_PACKAGE_DOVECOT_MYSQL),y)
+ DOVECOT_CONF_ENV += MYSQL_CONFIG="$(STAGING_DIR)/usr/bin/mysql_config"
+ DOVECOT_CONF_OPTS += --with-mysql
 -- 
 2.20.1
