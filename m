@@ -1,18 +1,16 @@
-From: Victor Huesca <victor.huesca@bootlin.com>
-Date: Thu, 11 Jul 2019 15:17:39 +0200
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 11 Jul 2019 15:18:43 +0200
 Subject: [Buildroot] [PATCH 1/2] support/script/pkg-stats: run the 3
  `make` calls in parallel
 In-Reply-To: <20190711150832.136f7a4e@windsurf>
 References: <20190711095448.7417-1-victor.huesca@bootlin.com>
  <20190711150832.136f7a4e@windsurf>
-Message-ID: <dc8cdcca-d1bb-b5ff-eeca-5d1bad3306ef@bootlin.com>
+Message-ID: <f60d66bd-3a4f-e235-4712-f391f40685a4@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
-
-Hi Thomas,
 
 
 
@@ -50,22 +48,14 @@ On 11/07/2019 15:08, Thomas Petazzoni wrote:
 > and then parse out the result, which will contain all the _LICENSE,
 > _LICENSE_FILES and _VERSION variables ?
 
-Because I did not thought it was possible to do this >_<'
-I remember that I tried several syntaxes to retrieve all variables with
-a single `make` but did not find a working one and this solution was not
-hard to implement...
+ Or better yet, run `make show-info` and parse JSON.
 
-Thanks for the hint, I'll send a v2 with this -- way better -- approach.
+ I'll admit, that requires some changes to show-info:
 
-Thanks,
-Victor
+- include license_files;
+- have an option to run it on *all* packages, not just the selected ones.
 
-> Best regards,
-> 
-> Thomas
-> 
+ The second one might be tricky...
 
--- 
-Victor Huesca, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+ Regards,
+ Arnout
