@@ -1,92 +1,56 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Fri, 12 Jul 2019 23:29:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libvncserver: needs dynamic library
-Message-ID: <20190712212918.14055-1-fontaine.fabrice@gmail.com>
+Date: Fri, 12 Jul 2019 23:32:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xkeyboard-config: bump to version
+ 2.27
+Message-ID: <20190712213241.14216-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Disable libvncserver for static builds and drop second patch following
-upstream feedback on patch fixing openssl issue:
-https://github.com/LibVNC/libvncserver/pull/319
-
-This will also fix build failure when building statically with libgcrypt
-
-Don't update x11vnc, the reverse dependency of libvncserver, because
-BR2_PACKAGE_XORG7 already depends on !BR2_STATIC_LIBS
-
-Fixes:
- - http://autobuild.buildroot.org/results/8d7b109d085e3931a874c4fb99f465789485565a
+Drop host-intltool dependency, not needed since
+https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/commit/e8026f673ec49c109212acc4c35b492b3e30f48f
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...ts.txt-use-pkgconfig-to-find-openssl.patch | 34 -------------------
- package/libvncserver/Config.in                |  6 ++++
- 2 files changed, 6 insertions(+), 34 deletions(-)
- delete mode 100644 package/libvncserver/0002-CMakeLists.txt-use-pkgconfig-to-find-openssl.patch
+ package/x11r7/xkeyboard-config/xkeyboard-config.hash | 6 +-----
+ package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/package/libvncserver/0002-CMakeLists.txt-use-pkgconfig-to-find-openssl.patch b/package/libvncserver/0002-CMakeLists.txt-use-pkgconfig-to-find-openssl.patch
-deleted file mode 100644
-index c51b725469..0000000000
---- a/package/libvncserver/0002-CMakeLists.txt-use-pkgconfig-to-find-openssl.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From ab512233c88022fec67fabec1fb00a833c466c9e Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 23 Jun 2019 22:54:57 +0200
--Subject: [PATCH] CMakeLists.txt: use pkgconfig to find openssl
--
--find_package(openssl) fails to find openssl dependencies such as -lz so
--use pkgconfig to fix static build
--
--Fixes:
-- - http://autobuild.buildroot.org/results/c3f75480cb4b8b042cdf6a34cc5568ea13e51342
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/LibVNC/libvncserver/pull/318]
-----
-- CMakeLists.txt | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index ad609ae..11103d8 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -125,7 +125,8 @@ endif(WITH_GNUTLS)
-- 
-- 
-- if(WITH_OPENSSL)
---  find_package(OpenSSL)
--+  find_package(PkgConfig)
--+  pkg_check_modules(OPENSSL "openssl")
-- endif(WITH_OPENSSL)
-- 
-- 
---- 
--2.14.1
--
-diff --git a/package/libvncserver/Config.in b/package/libvncserver/Config.in
-index c8042905ce..2d5bf8a182 100644
---- a/package/libvncserver/Config.in
-+++ b/package/libvncserver/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBVNCSERVER
- 	depends on BR2_USE_MMU # VNCommand.c uses fork()
- 	# binutils issue (bad expression)
- 	depends on !BR2_nios2
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LZO
- 	help
- 	  libvncserver is a VNC server/client library.
-@@ -22,3 +23,8 @@ config BR2_PACKAGE_LIBVNCSERVER_TIGHTPNG
- 	  http://wiki.qemu.org/VNC_Tight_PNG
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index 56ea0e5251..dfe4405067 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+@@ -1,7 +1,3 @@
+-# From https://lists.x.org/archives/xorg-announce/2018-February/002833.html
+-md5 875cbd09ab8394277fd16070326abbae  xkeyboard-config-2.23.1.tar.bz2
+-sha1 184c9ce35f4fa44188acbf549f80d36407697ac3  xkeyboard-config-2.23.1.tar.bz2
+-sha256 2a4bbc05fea22151b7a7c8ac2655d549aa9b0486bedc7f5a68c72716343b02f3  xkeyboard-config-2.23.1.tar.bz2
+-sha512 d651bb89c265e58abe8bba4af6683364a8023cb73af7d00f401f33960e44fa94a7d8a8fdd2483d6703d1c261ca72ae5f2b53f543cfb70b2f571cfe9dcb80c3ba  xkeyboard-config-2.23.1.tar.bz2
+ # Locally computed
++sha256 2a4bbc05fea22151b7a7c8ac2655d549aa9b0486bedc7f5a68c72716343b02f3  xkeyboard-config-2.27.tar.bz2
+ sha256 6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+index 9a8838dde1..d1b9586588 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- endif
-+
-+comment "libvncserver needs a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_nios
-+	depends on BR2_STATIC_LIBS
+-XKEYBOARD_CONFIG_VERSION = 2.23.1
++XKEYBOARD_CONFIG_VERSION = 2.27
+ XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
+ XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
+ XKEYBOARD_CONFIG_LICENSE = MIT
+@@ -14,6 +14,6 @@ XKEYBOARD_CONFIG_LICENSE_FILES = COPYING
+ XKEYBOARD_CONFIG_INSTALL_STAGING = YES
+ 
+ XKEYBOARD_CONFIG_CONF_OPTS = --disable-runtime-deps
+-XKEYBOARD_CONFIG_DEPENDENCIES = host-gettext host-intltool host-xapp_xkbcomp
++XKEYBOARD_CONFIG_DEPENDENCIES = host-gettext host-xapp_xkbcomp
+ 
+ $(eval $(autotools-package))
 -- 
 2.20.1
