@@ -1,234 +1,89 @@
-From: Aalx <alexandre.payen@smile.fr>
-Date: Fri, 12 Jul 2019 17:11:28 +0200
-Subject: [Buildroot] [PATCH] [PATCH] add package/liblapack: add liblapack as
- a virtual package.
-Message-ID: <20190712151128.25378-1-alexandre.payen@smile.fr>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Fri, 12 Jul 2019 15:30:41 +0200
+Subject: [Buildroot] [PATCH 1/1] package/unzip: update security and bux fix
+ patches from Debian
+Message-ID: <20190712133041.3611-1-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Alexandre PAYEN <alexandre.payen@smile.fr>
+Fix the URL and add three new patches. Quoting changelog [1]:
 
-lapack and clapack are both generating the same liblapack.so but does not have
-the same symbols. So the run-time is broke. They have to exclude each other.
-The armadillo packet require clapack to build, but lapack with complex support
-works as well.
+unzip (6.0-24) unstable; urgency=medium
 
-So :
-- add package/liblapack directory and do the virtual configuration
-- add BR2_LAPACK_COMPLEX in armadillo configuration when
-BR2_LAPACK = y
+  * Apply two patches by Mark Adler:
+  - Fix bug in undefer_input() that misplaced the input state.
+  - Detect and reject a zip bomb using overlapped entries. Closes: #931433.
+    Bug discovered by David Fifield. For reference, this is CVE-2019-13232.
 
-Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
+ -- Santiago Vila <sanvila@debian.org>  Thu, 11 Jul 2019 18:03:34 +0200
+
+unzip (6.0-23) unstable; urgency=medium
+
+  * Fix lame code in fileio.c which parsed 64-bit values incorrectly.
+    Thanks to David Fifield for the report. Closes: #929502.
+
+ -- Santiago Vila <sanvila@debian.org>  Wed, 29 May 2019 00:24:08 +0200
+
+[1] https://sources.debian.org/data/main/u/unzip/6.0-24/debian/changelog
+
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 ---
- package/Config.in              |  3 +-
- package/armadillo/Config.in    |  3 +-
- package/armadillo/armadillo.mk |  4 ++
- package/clapack/clapack.mk     |  1 +
- package/lapack/lapack.mk       |  1 +
- package/liblapack/Config.in    | 95 ++++++++++++++++++++++++++++++++++
- package/liblapack/liblapack.mk |  7 +++
- 7 files changed, 111 insertions(+), 3 deletions(-)
- create mode 100644 package/liblapack/Config.in
- create mode 100644 package/liblapack/liblapack.mk
+ package/unzip/unzip.hash |  3 +++
+ package/unzip/unzip.mk   | 29 ++++++++++++++++-------------
+ 2 files changed, 19 insertions(+), 13 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 657f28d9d0..700d497724 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1663,7 +1663,6 @@ menu "Other"
- 	source "package/boost/Config.in"
- 	source "package/capnproto/Config.in"
- 	source "package/clang/Config.in"
--	source "package/clapack/Config.in"
- 	source "package/classpath/Config.in"
- 	source "package/cmocka/Config.in"
- 	source "package/cppcms/Config.in"
-@@ -1686,7 +1685,6 @@ menu "Other"
- 	source "package/gsl/Config.in"
- 	source "package/gtest/Config.in"
- 	source "package/jemalloc/Config.in"
--	source "package/lapack/Config.in"
- 	source "package/libargtable2/Config.in"
- 	source "package/libatomic_ops/Config.in"
- 	source "package/libb64/Config.in"
-@@ -1767,6 +1765,7 @@ endif
- 	source "package/tinycbor/Config.in"
- 	source "package/tz/Config.in"
- 	source "package/tzdata/Config.in"
-+	source "package/liblapack/Config.in"
- 	source "package/xapian/Config.in"
- endmenu
+diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
+index fbf2615ad6..0c384d006e 100644
+--- a/package/unzip/unzip.hash
++++ b/package/unzip/unzip.hash
+@@ -13,3 +13,6 @@ sha256 ea04cfc8b7ca3b3c03117da0d891870b8c542d26188ef5593fd7e479f4f29f4e 17-resto
+ sha256 1872ffdd4d82edd7b1e62c469642bf16a1ca12dd26d41bd3f0b44f0f7602eb63 18-cve-2014-9913-unzip-buffer-overflow.patch
+ sha256 60840ea8f5d11a276972fb5b43652cdd49a9ed93b2cc0586ad309bf52104b012 19-cve-2016-9844-zipinfo-buffer-overflow.patch
+ sha256 4eabc3faeddd56ebc3d5053486b61f8758d840902725fd555d3472cffb094437 20-cve-2018-1000035-unzip-buffer-overflow.patch
++sha256 df3b0eeea8dcc161a2565e306b5dda13d27de43145e198baaf0eab822321ee7e 21-fix-warning-messages-on-big-files.patch
++sha256 2cf5a89e921da99e883bcde0ea03e2c77ae9185f57efaf35e7d43bc24353cfdc 22-cve-2019-13232-fix-bug-in-undefer-input.patch
++sha256 c8e82c80fc7760f90567118a465e4cfa1b8e5d0a5723f9c70e3d21247e550615 23-cve-2019-13232-zip-bomb-with-overlapped-entries.patch
+diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
+index 43e90125e6..2887b7b288 100644
+--- a/package/unzip/unzip.mk
++++ b/package/unzip/unzip.mk
+@@ -11,18 +11,21 @@ UNZIP_LICENSE = Info-ZIP
+ UNZIP_LICENSE_FILES = LICENSE
  
-diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
-index b2b61a3233..62c15fbdbe 100644
---- a/package/armadillo/Config.in
-+++ b/package/armadillo/Config.in
-@@ -12,7 +12,8 @@ config BR2_PACKAGE_ARMADILLO
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC # clapack
- 	depends on !BR2_m68k_cf # clapack
--	select BR2_PACKAGE_CLAPACK
-+	select BR2_PACKAGE_LIBLAPACK
-+	select BR2_PACKAGE_LAPACK_COMPLEX if BR2_PACKAGE_LAPACK
- 	help
- 	  Armadillo: An Open Source C++ Linear Algebra Library for
- 	  Fast Prototyping and Computationally Intensive Experiments.
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index b5fe403a7a..484fa47443 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -7,7 +7,11 @@
- ARMADILLO_VERSION = 7.900.1
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
-+ifeq ($(BR2_PACKAGE_CLAPACK), y)
- ARMADILLO_DEPENDENCIES = clapack
-+else ifeq ($(BR2_PACKAGE_LAPACK), y)
-+ARMADILLO_DEPENDENCIES = lapack
-+endif
- ARMADILLO_INSTALL_STAGING = YES
- ARMADILLO_LICENSE = MPL-2.0
- ARMADILLO_LICENSE_FILES = LICENSE.txt
-diff --git a/package/clapack/clapack.mk b/package/clapack/clapack.mk
-index 9a083f3223..90b1e84aa4 100644
---- a/package/clapack/clapack.mk
-+++ b/package/clapack/clapack.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
+ UNZIP_PATCH = \
+-	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/07-increase-size-of-cfactorstr.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/08-allow-greater-hostver-values.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/09-cve-2014-8139-crc-overflow.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/10-cve-2014-8140-test-compr-eb.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/11-cve-2014-8141-getzip64data.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/12-cve-2014-9636-test-compr-eb.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/14-cve-2015-7696.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/15-cve-2015-7697.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/16-fix-integer-underflow-csiz-decrypted.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/17-restore-unix-timestamps-accurately.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/18-cve-2014-9913-unzip-buffer-overflow.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/19-cve-2016-9844-zipinfo-buffer-overflow.patch \
+-	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/20-cve-2018-1000035-unzip-buffer-overflow.patch
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/07-increase-size-of-cfactorstr.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/08-allow-greater-hostver-values.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/09-cve-2014-8139-crc-overflow.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/10-cve-2014-8140-test-compr-eb.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/11-cve-2014-8141-getzip64data.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/12-cve-2014-9636-test-compr-eb.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/14-cve-2015-7696.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/15-cve-2015-7697.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/16-fix-integer-underflow-csiz-decrypted.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/17-restore-unix-timestamps-accurately.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/18-cve-2014-9913-unzip-buffer-overflow.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/19-cve-2016-9844-zipinfo-buffer-overflow.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/20-cve-2018-1000035-unzip-buffer-overflow.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/21-fix-warning-messages-on-big-files.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/22-cve-2019-13232-fix-bug-in-undefer-input.patch \
++	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/23-cve-2019-13232-zip-bomb-with-overlapped-entries.patch
  
-+CLAPACK = clapack
- CLAPACK_VERSION = 3.2.1
- CLAPACK_SOURCE = clapack-$(CLAPACK_VERSION)-CMAKE.tgz
- # This package provides 3 libraries:
-diff --git a/package/lapack/lapack.mk b/package/lapack/lapack.mk
-index 3b59214e4b..c96c50d71a 100644
---- a/package/lapack/lapack.mk
-+++ b/package/lapack/lapack.mk
-@@ -4,6 +4,7 @@
- #
- ################################################################################
- 
-+LAPACK = lapack
- LAPACK_VERSION = 3.8.0
- LAPACK_LICENSE = BSD-3-Clause
- LAPACK_LICENSE_FILES = LICENSE
-diff --git a/package/liblapack/Config.in b/package/liblapack/Config.in
-new file mode 100644
-index 0000000000..bea3df75bf
---- /dev/null
-+++ b/package/liblapack/Config.in
-@@ -0,0 +1,95 @@
-+config BR2_PACKAGE_LIBLAPACK
-+	bool "lapack support"
-+	select BR2_PACKAGE_HAS_LIBLAPACK
-+	help
-+	  Select lapack library provider.
-+
-+if BR2_PACKAGE_LIBLAPACK
-+
-+choice
-+	prompt "lapack implementation"
-+	default BR2_PACKAGE_LAPACK
-+	help
-+	  Select lapack or clapack implementation.
-+
-+comment "clapack needs a glibc toolchain"
-+	depends on BR2_powerpc
-+	depends on !BR2_TOOLCHAIN_USES_GLIBC
-+
-+config BR2_PACKAGE_CLAPACK
-+	bool "C implementation"
-+	# _fpu_control is used on PowerPC, but not available with
-+	# uClibc or musl
-+	depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC
-+	# assembler: Error: value out of range
-+	depends on !BR2_m68k_cf
-+	select BR2_PACKAGE_HAS_LIBLAPACK
-+	help
-+	  LAPACK and BLAS C implementation (f2c'ed version of).'
-+
-+	  http://www.netlib.org/clapack/
-+
-+comment "lapack/blas needs a toolchain w/ fortran"
-+	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
-+	depends on !BR2_TOOLCHAIN_HAS_FORTRAN
-+
-+config BR2_PACKAGE_LAPACK
-+	bool "FORTRAN implementation"
-+	depends on BR2_TOOLCHAIN_HAS_FORTRAN
-+	# _fpu_control is used on PowerPC, but not available with uClibc
-+	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
-+	select BR2_PACKAGE_HAS_LIBLAPACK
-+	help
-+	  LAPACK and BLAS FORTRAN implementation. This package
-+	  installs two libraries: libblas and liblapack.
-+
-+	  http://www.netlib.org/lapack/
-+
-+endchoice
-+
-+if BR2_PACKAGE_CLAPACK
-+
-+config BR2_PACKAGE_CLAPACK_ARITH_H
-+	string "Custom BLAS arith.h"
-+	depends on BR2_PACKAGE_CLAPACK
-+	help
-+	  To optimize BLAS library for the hardware, an 'arith.h' header
-+	  should be provided.
-+
-+	  If empty, the library will not be optimized by the compiler.
-+
-+	  In any case an 'arithchk' program is built
-+	  (but not installed), to be run on the target to generate this
-+	  arith.h header.
-+
-+endif
-+
-+if BR2_PACKAGE_LAPACK
-+
-+config BR2_PACKAGE_LAPACK_COMPLEX
-+	bool "Complex/Complex16 support"
-+	default y
-+	depends on BR2_PACKAGE_LAPACK
-+	help
-+	  Builds support for COMPLEX and COMPLEX16 data types.
-+
-+endif
-+
-+config BR2_PACKAGE_HAS_LIBLAPACK
-+	bool
-+
-+config BR2_PACKAGE_PROVIDES_LIBLAPACK
-+	string
-+	depends on BR2_PACKAGE_HAS_LIBLAPACK
-+
-+if BR2_PACKAGE_LAPACK
-+config BR2_PACKAGE_PROVIDES_LIBLAPACK
-+	default "lapack"
-+endif
-+
-+if BR2_PACKAGE_CLAPACK
-+config BR2_PACKAGE_PROVIDES_LIBLAPACK
-+	default "clapack"
-+endif
-+
-+endif
-diff --git a/package/liblapack/liblapack.mk b/package/liblapack/liblapack.mk
-new file mode 100644
-index 0000000000..06cece60f9
---- /dev/null
-+++ b/package/liblapack/liblapack.mk
-@@ -0,0 +1,7 @@
-+################################################################################
-+#
-+# liblapack
-+#
-+################################################################################
-+
-+$(eval $(virtual-package))
+ $(eval $(cmake-package))
 -- 
 2.21.0
