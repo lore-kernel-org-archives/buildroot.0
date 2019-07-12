@@ -1,37 +1,45 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 12 Jul 2019 11:02:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dnsmasq: Fix build with
- libnettle 3.5
-In-Reply-To: <5e5kvfxj4m.ln2@ID-313208.user.individual.net>
-References: <20190705043509.19163-1-bernd.kuhls@t-online.de>
- <0b1ec3a5-d5d2-f759-4987-948640c3264b@mind.be>
- <5e5kvfxj4m.ln2@ID-313208.user.individual.net>
-Message-ID: <3baad348-d7df-1a43-c8e2-6f0d8656494e@mind.be>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Fri, 12 Jul 2019 11:04:07 +0200
+Subject: [Buildroot] [PATCH] package/x11r7/xlib_libXfont2: work around gcc
+ bug 85180
+Message-ID: <20190712090407.54154-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+shows up when building xlib_libXfont2 with optimization but not when
+building with -O0. To work around this, if
+BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
 
+Fixes:
+http://autobuild.buildroot.net/results/210/21099d27c03948daaca2d1c149eeba084427e3af/
 
-On 11/07/2019 18:41, Bernd Kuhls wrote:
-> Am Thu, 11 Jul 2019 16:08:45 +0200 schrieb Arnout Vandecappelle:
-> 
->> On 05/07/2019 06:35, Bernd Kuhls wrote:
->>> Fixes
->>
->>  Please put a colon behind Fixes, so patchworks picks it up.
-> 
-> Hi Arnout,
-> 
-> thanks for the hint, I did not know that.
-> The docs also do not mention it: http://buildroot.uclibc.org/downloads/
-> manual/manual.html#_analyzing_and_fixing_autobuild_failures
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/x11r7/xlib_libXfont2/xlib_libXfont2.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
- Well, I actually just discovered it now. I'm not even 100% sure that this is
-the issue, but I noticed patchwork didn't recognise this as a fix, and the only
-thing I can see is this colon missing.
-
- Regards,
- Arnout
+diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+index ba2c7540cb..37e20e5e11 100644
+--- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
++++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+@@ -27,5 +27,13 @@ HOST_XLIB_LIBXFONT2_DEPENDENCIES = \
+ XLIB_LIBXFONT2_CONF_OPTS = --disable-devel-docs
+ HOST_XLIB_LIBXFONT2_CONF_OPTS = --disable-devel-docs
+ 
++XLIB_LIBXFONT2_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++XLIB_LIBXFONT2_CFLAGS += -O0
++endif
++
++XLIB_LIBXFONT2_CONF_OPTS += CFLAGS="$(XLIB_LIBXFONT2_CFLAGS)"
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
+-- 
+2.17.1
