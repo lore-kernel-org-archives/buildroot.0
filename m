@@ -1,81 +1,287 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 12 Jul 2019 11:42:57 +0200
-Subject: [Buildroot] [PATCH v2 3/6]
- package/gstreamer1/gst1-plugins-good: convert package type to meson
-In-Reply-To: <20190711213021.2204224c@gmx.net>
-References: <20190710153634.25235-1-aduskett@gmail.com>
- <20190710153634.25235-4-aduskett@gmail.com> <20190710225203.0b81eec0@gmx.net>
- <ab41f678-9611-a6af-3314-ff2d643a7599@mind.be>
- <20190711213021.2204224c@gmx.net>
-Message-ID: <b096dec2-90a1-1566-4bc5-1006cf0c6c4f@mind.be>
+From: Alexandre PAYEN <alexandre.payen@smile.fr>
+Date: Fri, 12 Jul 2019 11:44:03 +0200
+Subject: [Buildroot] [PATCH] [PATCHv3] package/python-numpy: fix
+ occasional build failure with lapack
+In-Reply-To: <b1bf4a91-4612-e3a7-b033-c2ff549694ed@mind.be>
+References: <20190710141940.13504-1-alexandre.payen@smile.fr>
+ <b1bf4a91-4612-e3a7-b033-c2ff549694ed@mind.be>
+Message-ID: <CAC5PdM0+b2j0oarA0WEZuyp0DScco4pLN7nvJep5+g0qHFUYzw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout,
+Thanks for reviewing. It is my very first attempt.
 
+Following this mail, a new try.
 
-On 11/07/2019 21:30, Peter Seiderer wrote:
-> Hello Arnout,
-> 
-> On Wed, 10 Jul 2019 23:53:24 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
-> 
->> On 10/07/2019 22:52, Peter Seiderer wrote:
->>> Hello Adam,
->>>
->>> On Wed, 10 Jul 2019 11:36:31 -0400, aduskett at gmail.com wrote:
->>
->> [snip]
->>>> -	--disable-osx_audio \
->>>> -	--disable-osx_video \
->>>> -	--disable-aalib \
->>>> -	--disable-aalibtest \
->>>> -	--disable-libcaca
->>>> +	-Dexamples=disabled \
->>>> +	-Dtests=disabled \
->>>
->>> While your are at it , the following options should move to the
->>> 'Options which require currently unpackaged libraries' section
->>> some lines below:
->>
->>  No, that should be done as a separate patch.
->>
->>  It would also be nice BTW if all the options would be ordered alphabetically.
->> Now they're a bit of a hodgepodge.
-> 
-> O.k. stuff for an follow up patch, I would prefer option ordering according
-> to meson_options.txt (to enable easy check for added/removed/changed options)...
+Le jeu. 11 juil. 2019 ? 00:34, Arnout Vandecappelle <arnout@mind.be> a
+?crit :
 
- OK. then indeed it can be done at the same time as the conversion to meson.
+>  Hi Alexandre,
+>
+>  Please set your user.name and user.email git config options to match your
+> Signed-off-by.
+>
+> On 10/07/2019 16:19, Aalx wrote:
+> > python-numpy build fails if lapack or clapack are build before
+> python-numpy
+> > itself, and this boesn't always happen because lapack dependency is
+> missing in
+> > BR2_PYTHON_NUMPY_DEPENDENCIES.
+>
+>  Well, that's not true: for clapack, the dependency was already there.
+> However,
+> the SITE_CFG_LIBS and environment were referring to blas/lapack instead of
+> cblas/clapack.
 
- The ordering choice should be mentioned in the commit message then.
+Okay, I will fix this.
 
->> [snip]
->>>>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB),y)
->>>> -GST1_PLUGINS_GOOD_CONF_OPTS += --enable-zlib
->>>>  GST1_PLUGINS_GOOD_DEPENDENCIES += zlib
->>>> -else
->>>> -GST1_PLUGINS_GOOD_CONF_OPTS += --disable-zlib
->>>>  endif
->>>
->>> Should be:
->>>
->>>   # checked for by meson.build, gst/isomp4/meson.build, gst/matroska/meson.build
->>>   # and gst/icydemux/meson.build
->>
->>  We don't add such a comment for any other package, so not needed.
-> 
-> Would like to keep it, because:
-> 
-> - as prove of correctness of the removed BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB Config.in entry
-> - as a reminder/blueprint for identifying zlib-like minor feature dependencies not expressed
->   in the root meson_options.txt file
+>
+>
+> > Also, clapack is a C implementation of FORTRAN lapack. At build time,
+> they both
+> > generate the same liblapack.so file. But because lapack is written in
+> FORTRAN
+> > then, it can be difficult to build. Both package are kept behind a
+> virtual
+> > package named vlapack. They are mutually exclusive.
+>
+>  This is pretty much independent of the numpy fix, so should be a separate
+> patch.
+>
+>  Note, however, there are three ways to make them mutually exclusive.
+>
+> 1. Making it a virtual package - which is what you did. However, the main
+> purpose of a virtual package is to make it possible to use it in
+> select/depend
+> without caring about which implementation is chosen. That might apply for
+> lapack, I'm not sure.
+>
+> 2. Adding an explicit dependency from one on the other in Config.in. E.g.
+> clapack could depend on !lapack.
+>
+It has already been discussed. That is why I choose the virtual package
+solution.
 
- Good point, but IMHO it fits more as a commit message paragaph than as a
-comment in the source file.
+>
+> 3. Adding a dependency on something else which is mutually exclusive.
+> lapack
+> depends on BR2_TOOLCHAIN_HAS_FORTRAN, so you could just add a dependency on
+> !BR2_TOOLCHAIN_HAS_FORTRAN to clapack. This makes sense, since the Fortran
+> implementation is supposed to be the real source, and clapack is more or
+> less
+> automatically generated from it. Supposedly, lapack should optimise better
+> than
+> clapack.
+>
+>
+>  The commit log should explain that these three options exist, and why you
+> choose that particular one.
+>
+> [snip]
+> > diff --git a/package/liblapack/Config.in b/package/liblapack/Config.in
+> > new file mode 100644
+> > index 0000000000..fb155d7c02
+> > --- /dev/null
+> > +++ b/package/liblapack/Config.in
+> > @@ -0,0 +1,86 @@
+> > +config BR2_PACKAGE_VIRTUAL_LAPACK
+>
+>  The package name and Config.in symbol must correspond with each other. So
+> if
+> the package is called VIRTUAL_LAPACK, the directory and .mk file should be
+> called virtual-lapack, etc.
+>
+My bad, I renamed the virtual package as liblapack at the end and I forget
+to fix it here.
+You can see vlapack in the commit message too.
 
- Regards,
- Arnout
+>
+> > +     bool "lapack support"
+> > +     select BR2_PACKAGE_HAS_LAPACK
+> > +     help
+> > +       Select lapack library provider.
+> > +
+> > +if BR2_PACKAGE_VIRTUAL_LAPACK
+> > +
+> > +choice
+> > +        prompt "lapack implementation"
+> > +        default BR2_PACKAGE_LAPACK
+> > +        help
+> > +       Select lapack or clapack implementation.
+>
+>  This is not formatted properly. Please use check-package to verify
+> formatting.
+>
+I did not know about check-package, now my package is properly formatting.
+Thx.
 
-[snip]
+>
+> > +
+> > +
+> > +comment "clapack needs a glibc toolchain"
+> > +     depends on BR2_powerpc
+> > +     depends on !BR2_TOOLCHAIN_USES_GLIBC
+> > +
+> > +config BR2_PACKAGE_CLAPACK
+>
+>  Unfortunately, it is not possible to put clapack in a choice at the
+> moment,
+> since armadillo selects it. So you need to adapt armadillo as well to
+> select
+> BR2_PACKAGE_VIRTUAL_LAPACK instead of BR2_PACKAGE_CLAPACK (and test that it
+> works with lapack).
+>
+I'm currently testing.
+
+>
+>  Also, it is not possible to convert existing Config.in symbols into choice
+> options, because that breaks existing configurations.
+>
+Which configuration does it break except armadillo ?
+In `git grep LAPACK` only python-numpy and armadillo use lapack or clapack.
+
+>
+>  Anyway, there is no real need for a choice. The normal use of a virtual
+> package
+> is to select the virtual package from the providers. But then, typically,
+> the
+> user of the virtual package would depend on it, rather than select it.
+>
+lapack is selected by default if there is a FORTRAN compiler (as you said,
+I guess that
+lapack is more efficient than clapack).
+If there is no FORTRAN compiler, clapack is selected by default. The user
+should only select one
+if he need special option like the path of header file `arith.h`.
+
+>
+> > +     bool "C implementation"
+> > +     # _fpu_control is used on PowerPC, but not available with
+> > +     # uClibc or musl
+> > +     depends on !BR2_powerpc || BR2_TOOLCHAIN_USES_GLIBC
+> > +     # assembler: Error: value out of range
+> > +     depends on !BR2_m68k_cf
+> > +     help
+> > +       LAPACK and BLAS C implementation (f2c'ed version of).'
+> > +
+> > +       http://www.netlib.org/clapack/
+> > +
+> > +if BR2_PACKAGE_CLAPACK
+> > +
+> > +config BR2_PACKAGE_CLAPACK_ARITH_H
+>
+>  This has to go outside of the choice block.
+>
+Ok
+
+>
+> > +     string "Custom BLAS arith.h"
+> > +     depends on BR2_PACKAGE_CLAPACK
+> > +     help
+> > +       To optimize BLAS library for the hardware, an 'arith.h' header
+> > +       should be provided.
+> > +
+> > +       If empty, the library will not be optimized by the compiler.
+> > +
+> > +       In any case an 'arithchk' program is built
+> > +       (but not installed), to be run on the target to generate this
+> > +       arith.h header.
+> > +
+> > +endif
+> > +
+> > +comment "lapack/blas needs a toolchain w/ fortran"
+> > +     depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
+> > +     depends on !BR2_TOOLCHAIN_HAS_FORTRAN
+> > +
+> > +config BR2_PACKAGE_LAPACK
+> > +     bool "FORTRAN implementation"
+> > +     depends on BR2_TOOLCHAIN_HAS_FORTRAN
+> > +     # _fpu_control is used on PowerPC, but not available with uClibc
+> > +     depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_UCLIBC)
+> > +     help
+> > +       LAPACK and BLAS FORTRAN implementation. This package
+> > +       installs two libraries: libblas and liblapack.
+> > +
+> > +       http://www.netlib.org/lapack/
+> > +
+> > +if BR2_PACKAGE_LAPACK
+> > +
+> > +config BR2_PACKAGE_LAPACK_COMPLEX
+>
+>  This as well.
+>
+Ok as well.
+
+>
+> > +     bool "Complex/Complex16 support"
+> > +     default y
+> > +     depends on BR2_PACKAGE_LAPACK
+> > +     help
+> > +       Builds support for COMPLEX and COMPLEX16 data types.
+> > +
+> > +endif
+> > +
+> > +endchoice
+> > +
+> > +config BR2_PACKAGE_HAS_VIRT_LAPACK
+>
+>  Again, this name should be the same as the package name, so
+> BR2_PACKAGE_HAS_VIRTUAL_LAPACK.
+>
+>  Regards,
+>  Arnout
+>
+> > +     bool
+> > +
+> > +config BR2_PACKAGE_PROVIDES_VIRT_LAPACK
+> > +        depends on BR2_PACKAGE_HAS_VIRT_LAPACK
+> > +        string
+> > +     default "lapack"  if BR2_PACKAGE_LAPACK
+> > +     default "clapack"  if BR2_PACKAGE_CLAPACK
+> > +
+> > +endif
+> > diff --git a/package/liblapack/liblapack.mk b/package/liblapack/
+> liblapack.mk
+> > new file mode 100644
+> > index 0000000000..06cece60f9
+> > --- /dev/null
+> > +++ b/package/liblapack/liblapack.mk
+> > @@ -0,0 +1,7 @@
+> >
+> +################################################################################
+> > +#
+> > +# liblapack
+> > +#
+> >
+> +################################################################################
+> > +
+> > +$(eval $(virtual-package))
+> > diff --git a/package/python-numpy/python-numpy.mk
+> b/package/python-numpy/python-numpy.mk
+> > index 5d2fbfc7ad..71de61f6e3 100644
+> > --- a/package/python-numpy/python-numpy.mk
+> > +++ b/package/python-numpy/python-numpy.mk
+> > @@ -17,7 +17,12 @@ PYTHON_NUMPY_SETUP_TYPE = setuptools
+> >
+> >  ifeq ($(BR2_PACKAGE_CLAPACK),y)
+> >  PYTHON_NUMPY_DEPENDENCIES += clapack
+> > +PYTHON_NUMPY_SITE_CFG_LIBS += cblas clapack
+> > +PYTHON_NUMPY_ENV += BLAS=clapack LAPACK=clapack
+> > +else ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)
+> > +PYTHON_NUMPY_DEPENDENCIES += lapack
+> >  PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
+> > +PYTHON_NUMPY_ENV += BLAS=lapack LAPACK=lapack
+> >  else
+> >  PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
+> >  endif
+> >
+>
+Bye,
+Alexandre
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190712/3aae0e66/attachment.html>
