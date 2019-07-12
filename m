@@ -1,49 +1,47 @@
-From: Brent Generous <bgenerous@impinj.com>
-Date: Fri, 12 Jul 2019 16:10:02 +0000
-Subject: [Buildroot] [PATCH 1/1] Makefile: add $BINARIES_DIR dependency to
- target-post-image target
-Message-ID: <20190712160925.6027-1-bgenerous@impinj.com>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Fri, 12 Jul 2019 22:53:20 +0530
+Subject: [Buildroot] [PATCH] fs/cpio: make cpio rootfs reproducible
+Message-ID: <20190712172320.23108-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Without this dependency, there is no guarantee that the $BINARIES_DIR
-has been created before this point. This can cause commands that intend
-to copy a file into $BINARIES_DIR to instead copy to a file named
-$BINARIES_DIR, causing later commands to create this directory to fail.
+Pass the recommended argument in the CPIO manual to make cpio archives
+reproducible.
 
-A comment above the target for $BINARIES_DIR mentions "do NOT list these
-as dependencies anywhere else". It wasn't clear from the git history why
-that should be the case. This seems like the correct way to handle the
-dependency on this directory.
+Reference: https://www.gnu.org/software/cpio/manual/cpio.html#Copy_002dpass-mode
 
-Signed-off-by: Brent Generous <bgenerous@impinj.com>
+Pre-patch diffoscope output: https://gitlab.com/snippets/1874745
+Post-patch: https://gitlab.com/snippets/1874746
+
+We can see that post-patch, the archive related differences are removed.
+The differences are arising from utils/bin/getconf. This will have to
+be investigated further. However, that is unrelated to cpio.
+
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
 ---
- Makefile | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ fs/cpio/cpio.mk | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index c98a0ed87e..2ea7220484 100644
---- a/Makefile
-+++ b/Makefile
-@@ -606,7 +606,6 @@ BR2_SDK_PREFIX ?= $(GNU_TARGET_NAME)_sdk-buildroot
- sdk: prepare-sdk $(BR2_TAR_HOST_DEPENDENCY)
- 	@$(call MESSAGE,"Generating SDK tarball")
- 	$(if $(BR2_SDK_PREFIX),,$(error BR2_SDK_PREFIX can not be empty))
--	$(Q)mkdir -p $(BINARIES_DIR)
- 	$(TAR) czf "$(BINARIES_DIR)/$(BR2_SDK_PREFIX).tar.gz" \
- 		--owner=0 --group=0 --numeric-owner \
- 		--transform='s#^$(patsubst /%,%,$(HOST_DIR))#$(BR2_SDK_PREFIX)#' \
-@@ -810,7 +809,7 @@ endif # merged /usr
- 	touch $(TARGET_DIR)/usr
+diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+index 1f0cafe62f..4847f56d53 100644
+--- a/fs/cpio/cpio.mk
++++ b/fs/cpio/cpio.mk
+@@ -29,8 +29,12 @@ endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
  
- .PHONY: target-post-image
--target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
-+target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize | $(BINARIES_DIR)
- 	@rm -f $(ROOTFS_COMMON_TAR)
- 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
- 		$(call MESSAGE,"Executing post-image script $(s)"); \
+ ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
+ 
++ifeq ($(BR2_REPRODUCIBLE), y)
++CPIO_OPTS = --reproducible
++endif
++
+ define ROOTFS_CPIO_CMD
+-	cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $@
++	cd $(TARGET_DIR) && find . | cpio $(CPIO_OPTS) --quiet -o -H newc > $@
+ endef
+ 
+ ifeq ($(BR2_TARGET_ROOTFS_CPIO_UIMAGE),y)
 -- 
-2.17.2
+2.22.0
