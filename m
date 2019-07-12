@@ -1,46 +1,104 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 12 Jul 2019 21:13:34 +0200
-Subject: [Buildroot] [PATCH 2/2] package/dovecot-pigeonhole: bump version to
- 0.5.7
-In-Reply-To: <20190712191334.8198-1-bernd.kuhls@t-online.de>
-References: <20190712191334.8198-1-bernd.kuhls@t-online.de>
-Message-ID: <20190712191334.8198-2-bernd.kuhls@t-online.de>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Fri, 12 Jul 2019 21:15:29 +0200
+Subject: [Buildroot] Qt5 LTS handling [was: package/qt5: bump latest
+ version to 5.12.4]
+In-Reply-To: <93af8798-0395-2c9f-dd0f-aad677dc0909@mind.be>
+References: <20190710173645.15459-1-ps.report@gmx.net>
+ <20190710173645.15459-2-ps.report@gmx.net>
+ <891f19e9-a64b-c025-b5cd-f7a0517fbc35@mind.be>
+ <20190711210233.0b7eb0aa@gmx.net>
+ <93af8798-0395-2c9f-dd0f-aad677dc0909@mind.be>
+Message-ID: <20190712211529.00fbf6e0@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Release notes:
-https://dovecot.org/pipermail/dovecot-news/2019-July/000413.html
+Hello Arnout,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Fri, 12 Jul 2019 11:40:43 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-index f2b8720c63..7d215c88e7 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-@@ -1,3 +1,3 @@
- # Locally computed after checking signature
--sha256 7c2fe7e23e732a8451172c00da5f19532448c95e03e44d47c61b123e8210f5b8  dovecot-2.3-pigeonhole-0.5.6.tar.gz
-+sha256 783849542c272331f60e7c4d371b303f7f2b1d69828bced3094a898876ecdb63  dovecot-2.3-pigeonhole-0.5.7.tar.gz
- sha256 fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index 1568cbc14d..532d3e6e3b 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DOVECOT_PIGEONHOLE_VERSION = 0.5.6
-+DOVECOT_PIGEONHOLE_VERSION = 0.5.7
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
- DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
--- 
-2.20.1
+> On 11/07/2019 21:02, Peter Seiderer wrote:
+> > Hello Arnout,
+> >
+> > On Thu, 11 Jul 2019 00:12:59 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+> >
+> >> On 10/07/2019 19:36, Peter Seiderer wrote:
+> >>> qt5multimedia:
+> >>> - remove 0001-Fix-compile-failure-with-gstreamer-0-10.patch (taken from
+> >>>   upstream [1])
+> >>
+> >>  For some reason, this gave a conflict for me...
+> >>
+> >>>
+> >>> qt5webengine:
+> >>> - add one additional license hash
+> >>>   (src/3rdparty/chromium/third_party/blink/renderer/build/scripts/license.pyc)
+> >>>
+> >>> [1] https://code.qt.io/cgit/qt/qtmultimedia.git/commit/?id=935967a453b47ae7c8e9ad3d94eef3813eab58db
+> >>>
+> >>> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> >>
+> >>  Applied to master, thanks.
+> >>
+> >>  Do you know if this also fixes Bug 11776 [1] for qt5webengine? Apparently the
+> >> bump to 5.13 should fix it, but I guess 5.12.4 probably fixes it too.
+> >
+> > No, the bug still exists with 5.12.4....
+>
+>  Darn. We could try to backport the fix, but I think it's complicated...
+>
+>
+> >>  By the way, do we stick to 5.12.x or do we bump to 5.13 (for 2019.08)? If we
+> >> bump, it would be nice to have that bump soonish... Still, it's good to have
+> >> this 5.12.4 bump first because that can be backported to 2019.05.
+> >
+> > Will prepare the bump to 5.13.0 the next (few) weeks ;-), the question is how
+> > to proceed:
+> >
+> > - keep LTS 5.6 (Standard Support Until 16.03.2019, according to [2]), bump Latest to 5.13
+> > - bump LTS 5.6 to LTS 5.9 (Standard Support Until 31.05.2020), bump Latest to 5.13
+> > - bump LTS 5.6 to LTS 5.12 (Standard Support Until 2021), bump Latest to 5.13
+> > - drop LTS, only support Latest
+>
+>  At the last BR meeting it was decided to drop LTS entirely, because it is
+> causing too much pain. Instead, we'd aim for an LTS version to be included in
+> the 20xx.02 Buildroot release, and bump to a non-LTS release shortly after that.
+
+For the record the link to the meeting notes, see [1]...
+
+>
+>  I'm not sure, however, if this is possible. It would mean that we would delay
+> the bump to 5.13 until after 2020.02. So in practice, we'd skip 5.13 and jump to
+> 5.14. It works out now, but since Qt releases an LTS every year-and-a-half,
+> approximately, it will probably get us into trouble at some point...
+
+Delaying a possible bump to 5.13 would be a pity, trying to get qt for buildroot
+up-to-date for an customer (to keep up with the windows folks who are
+happily bumping versions ;-) )...
+
+Plus the option to maintain a back-portable Latest-LTS leeds to an
+LTS-5.12 and Latest 5.13/5.14/6.0... solution...
+
+>
+>  Anyway, there is talk of Qt6, which will change the landscape again...
+>
+>
+>  So actually, my proposal would be to forego the LTS entirely and just go for
+> latest. That does mean that we end up with an unmaintained qt5 in our own LTS
+> branch. For example, Qt 5.14 will probably get its last update around June 2020.
+> Note that the current situation (LTS vs. Latest choice) would not be a solution
+> for that - the Latest would still be in the unmaintained situation, so it would
+> in practice not be useable.
+
+Regards,
+Peter
+
+[1]  https://elinux.org/Buildroot:DeveloperDaysFOSDEM2019#Qt5_versions_to_support:_keep_5.6_or_a_newer_LTS.3F
+
+>
+>
+>  Regards,
+>  Arnout
+>
