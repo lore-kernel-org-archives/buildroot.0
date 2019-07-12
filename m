@@ -1,104 +1,47 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Fri, 12 Jul 2019 20:56:51 +0200
-Subject: [Buildroot] [PATCH v2 3/6]
- package/gstreamer1/gst1-plugins-good: convert package type to meson
-In-Reply-To: <b096dec2-90a1-1566-4bc5-1006cf0c6c4f@mind.be>
-References: <20190710153634.25235-1-aduskett@gmail.com>
- <20190710153634.25235-4-aduskett@gmail.com>
- <20190710225203.0b81eec0@gmx.net>
- <ab41f678-9611-a6af-3314-ff2d643a7599@mind.be>
- <20190711213021.2204224c@gmx.net>
- <b096dec2-90a1-1566-4bc5-1006cf0c6c4f@mind.be>
-Message-ID: <20190712205651.21503ada@gmx.net>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Fri, 12 Jul 2019 21:13:33 +0200
+Subject: [Buildroot] [PATCH 1/2] package/dovecot: bump version to 2.3.7
+Message-ID: <20190712191334.8198-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Arnout,
+Switched _SITE to dovecot.org according to release notes:
+https://dovecot.org/pipermail/dovecot-news/2019-July/000412.html
 
-On Fri, 12 Jul 2019 11:42:57 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> On 11/07/2019 21:30, Peter Seiderer wrote:
-> > Hello Arnout,
-> >
-> > On Wed, 10 Jul 2019 23:53:24 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
-> >
-> >> On 10/07/2019 22:52, Peter Seiderer wrote:
-> >>> Hello Adam,
-> >>>
-> >>> On Wed, 10 Jul 2019 11:36:31 -0400, aduskett at gmail.com wrote:
-> >>
-> >> [snip]
-> >>>> -	--disable-osx_audio \
-> >>>> -	--disable-osx_video \
-> >>>> -	--disable-aalib \
-> >>>> -	--disable-aalibtest \
-> >>>> -	--disable-libcaca
-> >>>> +	-Dexamples=disabled \
-> >>>> +	-Dtests=disabled \
-> >>>
-> >>> While your are at it , the following options should move to the
-> >>> 'Options which require currently unpackaged libraries' section
-> >>> some lines below:
-> >>
-> >>  No, that should be done as a separate patch.
-> >>
-> >>  It would also be nice BTW if all the options would be ordered alphabetically.
-> >> Now they're a bit of a hodgepodge.
-> >
-> > O.k. stuff for an follow up patch, I would prefer option ordering according
-> > to meson_options.txt (to enable easy check for added/removed/changed options)...
->
->  OK. then indeed it can be done at the same time as the conversion to meson.
-
-Tried it already, but doing the re-ordering in one patch with the conversion makes
-patch review very hard, therefore prefer the re-ordering via an extra patch...
-
->
->  The ordering choice should be mentioned in the commit message then.
-
-Or in the .mk Files, some plugin .mk files state now
-
-     # These plugins are listed in the order from ./configure --help
-
-should be change to
-
-     # These plugins are listed in the order from meson_options.txt
-
->
-> >> [snip]
-> >>>>  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB),y)
-> >>>> -GST1_PLUGINS_GOOD_CONF_OPTS += --enable-zlib
-> >>>>  GST1_PLUGINS_GOOD_DEPENDENCIES += zlib
-> >>>> -else
-> >>>> -GST1_PLUGINS_GOOD_CONF_OPTS += --disable-zlib
-> >>>>  endif
-> >>>
-> >>> Should be:
-> >>>
-> >>>   # checked for by meson.build, gst/isomp4/meson.build, gst/matroska/meson.build
-> >>>   # and gst/icydemux/meson.build
-> >>
-> >>  We don't add such a comment for any other package, so not needed.
-> >
-> > Would like to keep it, because:
-> >
-> > - as prove of correctness of the removed BR2_PACKAGE_GST1_PLUGINS_GOOD_ZLIB Config.in entry
-> > - as a reminder/blueprint for identifying zlib-like minor feature dependencies not expressed
-> >   in the root meson_options.txt file
->
->  Good point, but IMHO it fits more as a commit message paragaph than as a
-> comment in the source file.
-
-Thats fine with me...
-
-Regards,
-Peter
-
->
->  Regards,
->  Arnout
->
-> [snip]
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index a57e51405d..05862f0df2 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256 ed1d8dc1beeae9c6c73deac73a62ef19fe9262fbffd86604a3f690452f5536c7  dovecot-2.3.6.tar.gz
++sha256 11e156ae8539e42892809cc2412c3f1a294188806969f5547191a43abd4083aa  dovecot-2.3.7.tar.gz
+ sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 78bc41bff2..e4573e63f4 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,8 +5,8 @@
+ ################################################################################
+ 
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).6
+-DOVECOT_SITE = https://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).7
++DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+ DOVECOT_LICENSE_FILES = COPYING COPYING.LGPL COPYING.MIT
+-- 
+2.20.1
