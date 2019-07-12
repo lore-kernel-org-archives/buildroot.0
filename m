@@ -1,89 +1,49 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Fri, 12 Jul 2019 15:30:41 +0200
-Subject: [Buildroot] [PATCH 1/1] package/unzip: update security and bux fix
- patches from Debian
-Message-ID: <20190712133041.3611-1-sebastien.szymanski@armadeus.com>
+From: Brent Generous <bgenerous@impinj.com>
+Date: Fri, 12 Jul 2019 16:10:02 +0000
+Subject: [Buildroot] [PATCH 1/1] Makefile: add $BINARIES_DIR dependency to
+ target-post-image target
+Message-ID: <20190712160925.6027-1-bgenerous@impinj.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix the URL and add three new patches. Quoting changelog [1]:
+Without this dependency, there is no guarantee that the $BINARIES_DIR
+has been created before this point. This can cause commands that intend
+to copy a file into $BINARIES_DIR to instead copy to a file named
+$BINARIES_DIR, causing later commands to create this directory to fail.
 
-unzip (6.0-24) unstable; urgency=medium
+A comment above the target for $BINARIES_DIR mentions "do NOT list these
+as dependencies anywhere else". It wasn't clear from the git history why
+that should be the case. This seems like the correct way to handle the
+dependency on this directory.
 
-  * Apply two patches by Mark Adler:
-  - Fix bug in undefer_input() that misplaced the input state.
-  - Detect and reject a zip bomb using overlapped entries. Closes: #931433.
-    Bug discovered by David Fifield. For reference, this is CVE-2019-13232.
-
- -- Santiago Vila <sanvila@debian.org>  Thu, 11 Jul 2019 18:03:34 +0200
-
-unzip (6.0-23) unstable; urgency=medium
-
-  * Fix lame code in fileio.c which parsed 64-bit values incorrectly.
-    Thanks to David Fifield for the report. Closes: #929502.
-
- -- Santiago Vila <sanvila@debian.org>  Wed, 29 May 2019 00:24:08 +0200
-
-[1] https://sources.debian.org/data/main/u/unzip/6.0-24/debian/changelog
-
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Signed-off-by: Brent Generous <bgenerous@impinj.com>
 ---
- package/unzip/unzip.hash |  3 +++
- package/unzip/unzip.mk   | 29 ++++++++++++++++-------------
- 2 files changed, 19 insertions(+), 13 deletions(-)
+ Makefile | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/package/unzip/unzip.hash b/package/unzip/unzip.hash
-index fbf2615ad6..0c384d006e 100644
---- a/package/unzip/unzip.hash
-+++ b/package/unzip/unzip.hash
-@@ -13,3 +13,6 @@ sha256 ea04cfc8b7ca3b3c03117da0d891870b8c542d26188ef5593fd7e479f4f29f4e 17-resto
- sha256 1872ffdd4d82edd7b1e62c469642bf16a1ca12dd26d41bd3f0b44f0f7602eb63 18-cve-2014-9913-unzip-buffer-overflow.patch
- sha256 60840ea8f5d11a276972fb5b43652cdd49a9ed93b2cc0586ad309bf52104b012 19-cve-2016-9844-zipinfo-buffer-overflow.patch
- sha256 4eabc3faeddd56ebc3d5053486b61f8758d840902725fd555d3472cffb094437 20-cve-2018-1000035-unzip-buffer-overflow.patch
-+sha256 df3b0eeea8dcc161a2565e306b5dda13d27de43145e198baaf0eab822321ee7e 21-fix-warning-messages-on-big-files.patch
-+sha256 2cf5a89e921da99e883bcde0ea03e2c77ae9185f57efaf35e7d43bc24353cfdc 22-cve-2019-13232-fix-bug-in-undefer-input.patch
-+sha256 c8e82c80fc7760f90567118a465e4cfa1b8e5d0a5723f9c70e3d21247e550615 23-cve-2019-13232-zip-bomb-with-overlapped-entries.patch
-diff --git a/package/unzip/unzip.mk b/package/unzip/unzip.mk
-index 43e90125e6..2887b7b288 100644
---- a/package/unzip/unzip.mk
-+++ b/package/unzip/unzip.mk
-@@ -11,18 +11,21 @@ UNZIP_LICENSE = Info-ZIP
- UNZIP_LICENSE_FILES = LICENSE
+diff --git a/Makefile b/Makefile
+index c98a0ed87e..2ea7220484 100644
+--- a/Makefile
++++ b/Makefile
+@@ -606,7 +606,6 @@ BR2_SDK_PREFIX ?= $(GNU_TARGET_NAME)_sdk-buildroot
+ sdk: prepare-sdk $(BR2_TAR_HOST_DEPENDENCY)
+ 	@$(call MESSAGE,"Generating SDK tarball")
+ 	$(if $(BR2_SDK_PREFIX),,$(error BR2_SDK_PREFIX can not be empty))
+-	$(Q)mkdir -p $(BINARIES_DIR)
+ 	$(TAR) czf "$(BINARIES_DIR)/$(BR2_SDK_PREFIX).tar.gz" \
+ 		--owner=0 --group=0 --numeric-owner \
+ 		--transform='s#^$(patsubst /%,%,$(HOST_DIR))#$(BR2_SDK_PREFIX)#' \
+@@ -810,7 +809,7 @@ endif # merged /usr
+ 	touch $(TARGET_DIR)/usr
  
- UNZIP_PATCH = \
--	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/07-increase-size-of-cfactorstr.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/08-allow-greater-hostver-values.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/09-cve-2014-8139-crc-overflow.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/10-cve-2014-8140-test-compr-eb.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/11-cve-2014-8141-getzip64data.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/12-cve-2014-9636-test-compr-eb.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/14-cve-2015-7696.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/15-cve-2015-7697.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/16-fix-integer-underflow-csiz-decrypted.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/17-restore-unix-timestamps-accurately.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/18-cve-2014-9913-unzip-buffer-overflow.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/19-cve-2016-9844-zipinfo-buffer-overflow.patch \
--	https://sources.debian.org/data/main/u/unzip/6.0-22/debian/patches/20-cve-2018-1000035-unzip-buffer-overflow.patch
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/07-increase-size-of-cfactorstr.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/08-allow-greater-hostver-values.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/09-cve-2014-8139-crc-overflow.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/10-cve-2014-8140-test-compr-eb.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/11-cve-2014-8141-getzip64data.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/12-cve-2014-9636-test-compr-eb.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/14-cve-2015-7696.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/15-cve-2015-7697.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/16-fix-integer-underflow-csiz-decrypted.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/17-restore-unix-timestamps-accurately.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/18-cve-2014-9913-unzip-buffer-overflow.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/19-cve-2016-9844-zipinfo-buffer-overflow.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/20-cve-2018-1000035-unzip-buffer-overflow.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/21-fix-warning-messages-on-big-files.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/22-cve-2019-13232-fix-bug-in-undefer-input.patch \
-+	https://sources.debian.org/data/main/u/unzip/6.0-24/debian/patches/23-cve-2019-13232-zip-bomb-with-overlapped-entries.patch
- 
- $(eval $(cmake-package))
+ .PHONY: target-post-image
+-target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize
++target-post-image: $(TARGETS_ROOTFS) target-finalize staging-finalize | $(BINARIES_DIR)
+ 	@rm -f $(ROOTFS_COMMON_TAR)
+ 	@$(foreach s, $(call qstrip,$(BR2_ROOTFS_POST_IMAGE_SCRIPT)), \
+ 		$(call MESSAGE,"Executing post-image script $(s)"); \
 -- 
-2.21.0
+2.17.2
