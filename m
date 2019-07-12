@@ -1,80 +1,92 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 12 Jul 2019 23:18:35 +0200
-Subject: [Buildroot] Qt5 LTS handling [was: package/qt5: bump latest
- version to 5.12.4]
-In-Reply-To: <20190712211529.00fbf6e0@gmx.net>
-References: <20190710173645.15459-1-ps.report@gmx.net>
- <20190710173645.15459-2-ps.report@gmx.net>
- <891f19e9-a64b-c025-b5cd-f7a0517fbc35@mind.be>
- <20190711210233.0b7eb0aa@gmx.net>
- <93af8798-0395-2c9f-dd0f-aad677dc0909@mind.be>
- <20190712211529.00fbf6e0@gmx.net>
-Message-ID: <8f646260-7e2b-8d47-82c0-2624e86cfb56@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri, 12 Jul 2019 23:29:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libvncserver: needs dynamic library
+Message-ID: <20190712212918.14055-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Disable libvncserver for static builds and drop second patch following
+upstream feedback on patch fixing openssl issue:
+https://github.com/LibVNC/libvncserver/pull/319
 
+This will also fix build failure when building statically with libgcrypt
 
-On 12/07/2019 21:15, Peter Seiderer wrote:
-> Hello Arnout,
-> 
-> On Fri, 12 Jul 2019 11:40:43 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
-[snip]
->>  At the last BR meeting it was decided to drop LTS entirely, because it is
->> causing too much pain. Instead, we'd aim for an LTS version to be included in
->> the 20xx.02 Buildroot release, and bump to a non-LTS release shortly after that.
-> 
-> For the record the link to the meeting notes, see [1]...
+Don't update x11vnc, the reverse dependency of libvncserver, because
+BR2_PACKAGE_XORG7 already depends on !BR2_STATIC_LIBS
 
- Thanks, forgot to include that.
+Fixes:
+ - http://autobuild.buildroot.org/results/8d7b109d085e3931a874c4fb99f465789485565a
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...ts.txt-use-pkgconfig-to-find-openssl.patch | 34 -------------------
+ package/libvncserver/Config.in                |  6 ++++
+ 2 files changed, 6 insertions(+), 34 deletions(-)
+ delete mode 100644 package/libvncserver/0002-CMakeLists.txt-use-pkgconfig-to-find-openssl.patch
 
->>  I'm not sure, however, if this is possible. It would mean that we would delay
->> the bump to 5.13 until after 2020.02. So in practice, we'd skip 5.13 and jump to
->> 5.14. It works out now, but since Qt releases an LTS every year-and-a-half,
->> approximately, it will probably get us into trouble at some point...
-> 
-> Delaying a possible bump to 5.13 would be a pity, trying to get qt for buildroot
-> up-to-date for an customer (to keep up with the windows folks who are
-> happily bumping versions ;-) )...
-> 
-> Plus the option to maintain a back-portable Latest-LTS leeds to an
-> LTS-5.12 and Latest 5.13/5.14/6.0... solution...
-
- So, how do you feel about the maintenance overhead of having two parallel versions?
-
-
->>
->>  Anyway, there is talk of Qt6, which will change the landscape again...
->>
->>
->>  So actually, my proposal would be to forego the LTS entirely and just go for
->> latest. That does mean that we end up with an unmaintained qt5 in our own LTS
->> branch. For example, Qt 5.14 will probably get its last update around June 2020.
->> Note that the current situation (LTS vs. Latest choice) would not be a solution
->> for that - the Latest would still be in the unmaintained situation, so it would
->> in practice not be useable.
-
- Addendum to my earlier statement: in my (admittedly limited) experience, there
-isn't really much reason to stick to LTS releases. Backward compatibility is
-generally OK, and regressions can be fixed.
-
- Regards,
- Arnout
-
-
-> 
-> Regards,
-> Peter
-> 
-> [1]  https://elinux.org/Buildroot:DeveloperDaysFOSDEM2019#Qt5_versions_to_support:_keep_5.6_or_a_newer_LTS.3F
-> 
->>
->>
->>  Regards,
->>  Arnout
->>
-> 
+diff --git a/package/libvncserver/0002-CMakeLists.txt-use-pkgconfig-to-find-openssl.patch b/package/libvncserver/0002-CMakeLists.txt-use-pkgconfig-to-find-openssl.patch
+deleted file mode 100644
+index c51b725469..0000000000
+--- a/package/libvncserver/0002-CMakeLists.txt-use-pkgconfig-to-find-openssl.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From ab512233c88022fec67fabec1fb00a833c466c9e Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Sun, 23 Jun 2019 22:54:57 +0200
+-Subject: [PATCH] CMakeLists.txt: use pkgconfig to find openssl
+-
+-find_package(openssl) fails to find openssl dependencies such as -lz so
+-use pkgconfig to fix static build
+-
+-Fixes:
+- - http://autobuild.buildroot.org/results/c3f75480cb4b8b042cdf6a34cc5568ea13e51342
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/LibVNC/libvncserver/pull/318]
+----
+- CMakeLists.txt | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index ad609ae..11103d8 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -125,7 +125,8 @@ endif(WITH_GNUTLS)
+- 
+- 
+- if(WITH_OPENSSL)
+--  find_package(OpenSSL)
+-+  find_package(PkgConfig)
+-+  pkg_check_modules(OPENSSL "openssl")
+- endif(WITH_OPENSSL)
+- 
+- 
+--- 
+-2.14.1
+-
+diff --git a/package/libvncserver/Config.in b/package/libvncserver/Config.in
+index c8042905ce..2d5bf8a182 100644
+--- a/package/libvncserver/Config.in
++++ b/package/libvncserver/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBVNCSERVER
+ 	depends on BR2_USE_MMU # VNCommand.c uses fork()
+ 	# binutils issue (bad expression)
+ 	depends on !BR2_nios2
++	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_LZO
+ 	help
+ 	  libvncserver is a VNC server/client library.
+@@ -22,3 +23,8 @@ config BR2_PACKAGE_LIBVNCSERVER_TIGHTPNG
+ 	  http://wiki.qemu.org/VNC_Tight_PNG
+ 
+ endif
++
++comment "libvncserver needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_nios
++	depends on BR2_STATIC_LIBS
+-- 
+2.20.1
