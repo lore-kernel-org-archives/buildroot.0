@@ -1,92 +1,80 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 12 Jul 2019 22:46:06 +0200
-Subject: [Buildroot] [PATCH] [PATCHv3] package/python-numpy: fix
- occasional build failure with lapack
-In-Reply-To: <CAC5PdM0+b2j0oarA0WEZuyp0DScco4pLN7nvJep5+g0qHFUYzw@mail.gmail.com>
-References: <20190710141940.13504-1-alexandre.payen@smile.fr>
- <b1bf4a91-4612-e3a7-b033-c2ff549694ed@mind.be>
- <CAC5PdM0+b2j0oarA0WEZuyp0DScco4pLN7nvJep5+g0qHFUYzw@mail.gmail.com>
-Message-ID: <4ced309f-43bd-f04a-7bad-610dde3d9f12@mind.be>
+Date: Fri, 12 Jul 2019 23:18:35 +0200
+Subject: [Buildroot] Qt5 LTS handling [was: package/qt5: bump latest
+ version to 5.12.4]
+In-Reply-To: <20190712211529.00fbf6e0@gmx.net>
+References: <20190710173645.15459-1-ps.report@gmx.net>
+ <20190710173645.15459-2-ps.report@gmx.net>
+ <891f19e9-a64b-c025-b5cd-f7a0517fbc35@mind.be>
+ <20190711210233.0b7eb0aa@gmx.net>
+ <93af8798-0395-2c9f-dd0f-aad677dc0909@mind.be>
+ <20190712211529.00fbf6e0@gmx.net>
+Message-ID: <8f646260-7e2b-8d47-82c0-2624e86cfb56@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Alex,
 
-On 12/07/2019 11:44, Alexandre PAYEN wrote:
+
+On 12/07/2019 21:15, Peter Seiderer wrote:
+> Hello Arnout,
+> 
+> On Fri, 12 Jul 2019 11:40:43 +0200, Arnout Vandecappelle <arnout@mind.be> wrote:
 [snip]
->     > Also, clapack is a C implementation of FORTRAN lapack. At build time, they
->     both
->     > generate the same liblapack.so file. But because lapack is written in FORTRAN
->     > then, it can be difficult to build. Both package are kept behind a virtual
->     > package named vlapack. They are mutually exclusive.
+>>  At the last BR meeting it was decided to drop LTS entirely, because it is
+>> causing too much pain. Instead, we'd aim for an LTS version to be included in
+>> the 20xx.02 Buildroot release, and bump to a non-LTS release shortly after that.
 > 
->     ?This is pretty much independent of the numpy fix, so should be a separate
->     patch.
-> 
->     ?Note, however, there are three ways to make them mutually exclusive.
-> 
->     1. Making it a virtual package - which is what you did. However, the main
->     purpose of a virtual package is to make it possible to use it in select/depend
->     without caring about which implementation is chosen. That might apply for
->     lapack, I'm not sure.
-> 
->     2. Adding an explicit dependency from one on the other in Config.in. E.g.
->     clapack could depend on !lapack.
-> 
-> It has already been discussed. That is why I choose the virtual package solution.
+> For the record the link to the meeting notes, see [1]...
 
- I know My point was, however...
-
-> 
-> 
->     3. Adding a dependency on something else which is mutually exclusive. lapack
->     depends on BR2_TOOLCHAIN_HAS_FORTRAN, so you could just add a dependency on
->     !BR2_TOOLCHAIN_HAS_FORTRAN to clapack. This makes sense, since the Fortran
->     implementation is supposed to be the real source, and clapack is more or less
->     automatically generated from it. Supposedly, lapack should optimise better than
->     clapack.
-> 
-> 
->     ?The commit log should explain that these three options exist, and why you
->     choose that particular one.
-
- ... this ^^^^. The rest was a reminder that those are the options.
+ Thanks, forgot to include that.
 
 
-[snip]
->     ?Also, it is not possible to convert existing Config.in symbols into choice
->     options, because that breaks existing configurations.
+>>  I'm not sure, however, if this is possible. It would mean that we would delay
+>> the bump to 5.13 until after 2020.02. So in practice, we'd skip 5.13 and jump to
+>> 5.14. It works out now, but since Qt releases an LTS every year-and-a-half,
+>> approximately, it will probably get us into trouble at some point...
 > 
-> Which configuration does it break except armadillo ?
-> In `git grep LAPACK` only python-numpy and armadillo use lapack or clapack.
-
- I mean the following:
-
-*Before* your patch. select BR2_PACKAGE_LAPACK. Now, apply your patch. Do 'make
-menuconfig', and you'll see that BR2_PACKAGE_LAPACK is no longer selected.
-That's a problem.
-
-
->     Anyway, there is no real need for a choice. The normal use of a virtual package
->     is to select the virtual package from the providers. But then, typically, the
->     user of the virtual package would depend on it, rather than select it.
+> Delaying a possible bump to 5.13 would be a pity, trying to get qt for buildroot
+> up-to-date for an customer (to keep up with the windows folks who are
+> happily bumping versions ;-) )...
 > 
-> lapack is selected by default if there is a FORTRAN compiler (as you said, I
-> guess that
-> lapack is more efficient than clapack).
-> If there is no FORTRAN compiler, clapack is selected by default. The user should
-> only select one
-> if he need special option like the path of header file `arith.h`.
+> Plus the option to maintain a back-portable Latest-LTS leeds to an
+> LTS-5.12 and Latest 5.13/5.14/6.0... solution...
 
- If there would be a package that needs clapack specifically, it is not possible
-for that package to select clapack (because it's now part of a choice). That's a
-bit annoying. But since no such package exists, probably not important.
+ So, how do you feel about the maintenance overhead of having two parallel versions?
 
+
+>>
+>>  Anyway, there is talk of Qt6, which will change the landscape again...
+>>
+>>
+>>  So actually, my proposal would be to forego the LTS entirely and just go for
+>> latest. That does mean that we end up with an unmaintained qt5 in our own LTS
+>> branch. For example, Qt 5.14 will probably get its last update around June 2020.
+>> Note that the current situation (LTS vs. Latest choice) would not be a solution
+>> for that - the Latest would still be in the unmaintained situation, so it would
+>> in practice not be useable.
+
+ Addendum to my earlier statement: in my (admittedly limited) experience, there
+isn't really much reason to stick to LTS releases. Backward compatibility is
+generally OK, and regressions can be fixed.
 
  Regards,
  Arnout
 
-[snip]
+
+> 
+> Regards,
+> Peter
+> 
+> [1]  https://elinux.org/Buildroot:DeveloperDaysFOSDEM2019#Qt5_versions_to_support:_keep_5.6_or_a_newer_LTS.3F
+> 
+>>
+>>
+>>  Regards,
+>>  Arnout
+>>
+> 
