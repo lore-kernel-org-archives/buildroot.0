@@ -1,47 +1,46 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Fri, 12 Jul 2019 21:13:33 +0200
-Subject: [Buildroot] [PATCH 1/2] package/dovecot: bump version to 2.3.7
-Message-ID: <20190712191334.8198-1-bernd.kuhls@t-online.de>
+Date: Fri, 12 Jul 2019 21:13:34 +0200
+Subject: [Buildroot] [PATCH 2/2] package/dovecot-pigeonhole: bump version to
+ 0.5.7
+In-Reply-To: <20190712191334.8198-1-bernd.kuhls@t-online.de>
+References: <20190712191334.8198-1-bernd.kuhls@t-online.de>
+Message-ID: <20190712191334.8198-2-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switched _SITE to dovecot.org according to release notes:
-https://dovecot.org/pipermail/dovecot-news/2019-July/000412.html
+Release notes:
+https://dovecot.org/pipermail/dovecot-news/2019-July/000413.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index a57e51405d..05862f0df2 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index f2b8720c63..7d215c88e7 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,3 +1,3 @@
  # Locally computed after checking signature
--sha256 ed1d8dc1beeae9c6c73deac73a62ef19fe9262fbffd86604a3f690452f5536c7  dovecot-2.3.6.tar.gz
-+sha256 11e156ae8539e42892809cc2412c3f1a294188806969f5547191a43abd4083aa  dovecot-2.3.7.tar.gz
- sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 78bc41bff2..e4573e63f4 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,8 +5,8 @@
+-sha256 7c2fe7e23e732a8451172c00da5f19532448c95e03e44d47c61b123e8210f5b8  dovecot-2.3-pigeonhole-0.5.6.tar.gz
++sha256 783849542c272331f60e7c4d371b303f7f2b1d69828bced3094a898876ecdb63  dovecot-2.3-pigeonhole-0.5.7.tar.gz
+ sha256 fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 1568cbc14d..532d3e6e3b 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).6
--DOVECOT_SITE = https://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).7
-+DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
- DOVECOT_LICENSE_FILES = COPYING COPYING.LGPL COPYING.MIT
+-DOVECOT_PIGEONHOLE_VERSION = 0.5.6
++DOVECOT_PIGEONHOLE_VERSION = 0.5.7
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
+ DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
 -- 
 2.20.1
