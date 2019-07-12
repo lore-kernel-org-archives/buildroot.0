@@ -1,34 +1,44 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri, 12 Jul 2019 11:06:41 +0200
-Subject: [Buildroot] [PATCH] docs/manual: 'Fixes' tag needs a colon
-Message-ID: <20190712090641.2471-1-arnout@mind.be>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 12 Jul 2019 11:08:07 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1: fix build with NLS
+In-Reply-To: <20190711165655.8850-1-fontaine.fabrice@gmail.com>
+References: <20190711165655.8850-1-fontaine.fabrice@gmail.com>
+Message-ID: <fea8d27c-a463-3daf-b668-08885290493a@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Apparently, patchwork only recognizes the 'Fixes' tag if it is followed
-by a colon. So make sure the manual documents it as such.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- docs/manual/contribute.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 11/07/2019 18:56, Fabrice Fontaine wrote:
+> Fixes:
+>  - http://autobuild.buildroot.org/results/6d3be9feb301495b079eff6283f1cbed9603dc42
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/gstreamer1/gstreamer1/gstreamer1.mk | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+> index cea933be84..023cf4e85e 100644
+> --- a/package/gstreamer1/gstreamer1/gstreamer1.mk
+> +++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+> @@ -33,6 +33,9 @@ GSTREAMER1_DEPENDENCIES = \
+>  	host-pkgconf \
+>  	libglib2 \
+>  	$(if $(BR2_PACKAGE_LIBUNWIND),libunwind) \
+> -	$(if $(BR2_PACKAGE_VALGRIND),valgrind)
+> +	$(if $(BR2_PACKAGE_VALGRIND),valgrind) \
+> +	$(TARGET_NLS_DEPENDENCIES)
+> +
+> +GSTREAMER1_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 868600d5d0..f339ca50b8 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -73,7 +73,7 @@ basically two things that can be done:
-     In the commit message of a patch fixing an autobuild failure, add a
-     reference to the build result directory, as follows:
- ---------------------
--Fixes http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
-+Fixes: http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
- ---------------------
- 
- === Reviewing and testing patches
--- 
-2.21.0
+ Adam, can you respin the rest of the gst -> meson series taking this into account?
+
+ Regards,
+ Arnout
+
+>  
+>  $(eval $(meson-package))
+> 
