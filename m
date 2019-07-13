@@ -1,47 +1,68 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Jul 2019 00:27:25 +0200
-Subject: [Buildroot] [PATCH v2 2/2] checkpackagelib/lib_config.py: check
- packages alphabetical order in {Config.in, Config.in.host}
-In-Reply-To: <20190611204946.3848-2-jerzy.m.grzegorek@gmail.com>
-References: <20190611204946.3848-1-jerzy.m.grzegorek@gmail.com>
- <20190611204946.3848-2-jerzy.m.grzegorek@gmail.com>
-Message-ID: <52067533-c74f-348b-450a-0504b71b0184@mind.be>
+Date: Sun, 14 Jul 2019 00:34:41 +0200
+Subject: [Buildroot] [PATCH] fs/cpio: make cpio rootfs reproducible
+In-Reply-To: <20190712172320.23108-1-itsatharva@gmail.com>
+References: <20190712172320.23108-1-itsatharva@gmail.com>
+Message-ID: <e4d54ca8-8d14-a42f-cb71-a370575c0e11@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Jerzy,
+ Hi Atharva,
 
-On 11/06/2019 22:49, Jerzy Grzegorek wrote:
-> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+On 12/07/2019 19:23, Atharva Lele wrote:
+> Pass the recommended argument in the CPIO manual to make cpio archives
+> reproducible.
+> 
+> Reference: https://www.gnu.org/software/cpio/manual/cpio.html#Copy_002dpass-mode
+> 
+> Pre-patch diffoscope output: https://gitlab.com/snippets/1874745
+> Post-patch: https://gitlab.com/snippets/1874746
+> 
+> We can see that post-patch, the archive related differences are removed.
+> The differences are arising from utils/bin/getconf. This will have to
+> be investigated further. However, that is unrelated to cpio.
+> 
+> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+> ---
+>  fs/cpio/cpio.mk | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+> index 1f0cafe62f..4847f56d53 100644
+> --- a/fs/cpio/cpio.mk
+> +++ b/fs/cpio/cpio.mk
+> @@ -29,8 +29,12 @@ endif # BR2_ROOTFS_DEVICE_CREATION_STATIC
+>  
+>  ROOTFS_CPIO_PRE_GEN_HOOKS += ROOTFS_CPIO_ADD_INIT
+>  
+> +ifeq ($(BR2_REPRODUCIBLE), y)
+> +CPIO_OPTS = --reproducible
 
- Applied both to master, thanks.
+ Unfortunately, this option was only introduced in cpio 2.12 (2015). Older
+distros, including Debian oldstable and Ubuntu 2016.04, both of which are still
+being maintained, have an earlier cpio version (2.11) so don't have this option.
 
- I still made a lot of changes, though:
+ Therefore, I think we have to check for a suitable system cpio and build
+host-cpio if it is not suitable. Or maybe, for reproducible, always build
+host-cpio?
 
-     - calculate level by counting - instead of with a static array;
-     - new_package is only used locally, so don't make it a class member;
-     - do indentation according to length of prefix;
-     - don't split string in the middle of a line;
-     - report first wrong package per menu;
-     - do replace() only once;
-     - add comment why we do replace().
+ Yann, what do you think?
 
- Please take a look at the end result, and if there's something you don't like,
-send a follow-up patch.
+ Otherwise, the patch looks good. But I've marked it as Changes Requested in
+pathchwork.
 
  Regards,
  Arnout
 
-
-> ---
-> Changes v1 -> v2:
->  - swap patches 1 and 2 (Arnout)
->  - drop trailing lines (copy/paste side effect)
->  - rewrap lines to < 80 chars
->  - add variable to cut lines to < 80 chars
->  - change alphabetical order of '_" to go before digits (Arnout)
+> +endif
+> +
+>  define ROOTFS_CPIO_CMD
+> -	cd $(TARGET_DIR) && find . | cpio --quiet -o -H newc > $@
+> +	cd $(TARGET_DIR) && find . | cpio $(CPIO_OPTS) --quiet -o -H newc > $@
+>  endef
+>  
+>  ifeq ($(BR2_TARGET_ROOTFS_CPIO_UIMAGE),y)
 > 
-> TODO : checking of menu of comments and menu of menus
