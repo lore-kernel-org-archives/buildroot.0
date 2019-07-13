@@ -1,106 +1,181 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 14 Jul 2019 00:21:26 +0200
-Subject: [Buildroot] [git commit] checkpackagelib/lib_config.py: check
- packages alphabetical order in {Config.in, Config.in.host}
-Message-ID: <20190713222452.85742813D7@busybox.osuosl.org>
+Date: Sat, 13 Jul 2019 23:26:40 +0200
+Subject: [Buildroot] [git commit] package/Config.in: fix alphabetical order
+Message-ID: <20190713222452.7CDCA8161B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e36a63cf6b325f76ad62c1e06b8a6d4fb4c9f062
+commit: https://git.buildroot.net/buildroot/commit/?id=4e655134cd6043323d65118960c140f80480869d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-[Arnout:
- - calculate level by counting - instead of with a static array;
- - new_package is only used locally, so don't make it a class member;
- - do indentation according to length of prefix;
- - don't split string in the middle of a line;
- - report first wrong package per menu;
- - do replace() only once;
- - add comment why we do replace().
-]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- utils/checkpackagelib/lib_config.py | 66 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 66 insertions(+)
+ package/Config.in | 30 +++++++++++++++---------------
+ 1 file changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index 89d44da57e..f0edb9993d 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -60,6 +60,72 @@ class AttributesOrder(_CheckFunction):
-                     text]
+diff --git a/package/Config.in b/package/Config.in
+index 657f28d9d0..90dddfd346 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -288,10 +288,10 @@ comment "Graphic libraries"
+ 	source "package/directfb/Config.in"
+ 	source "package/directfb-examples/Config.in"
+ 	source "package/efl/Config.in"
++	source "package/fb-test-app/Config.in"
+ 	source "package/fbdump/Config.in"
+ 	source "package/fbgrab/Config.in"
+ 	source "package/fbset/Config.in"
+-	source "package/fb-test-app/Config.in"
+ 	source "package/fbterm/Config.in"
+ 	source "package/fbv/Config.in"
+ 	source "package/freerdp/Config.in"
+@@ -319,11 +319,11 @@ comment "Graphic libraries"
  
- 
-+class CommentsMenusPackagesOrder(_CheckFunction):
-+    print_package_warning = [True, True, True, True, True, True]
-+    menu_of_packages = ["", "", "", "", "", ""]
-+    package = ["", "", "", "", "", ""]
-+
-+    def before(self):
-+        self.state = ""
-+
-+    def get_level(self):
-+        return len(self.state.split('-')) - 1
-+
-+    def check_line(self, lineno, text):
-+        if text.startswith("comment") or text.startswith("if") or \
-+           text.startswith("menu"):
-+
-+            if text.startswith("comment"):
-+                if not self.state.endswith("-comment"):
-+                    self.state += "-comment"
-+
-+            elif text.startswith("if") or text.startswith("menu"):
-+                if text.startswith("if"):
-+                    self.state += "-if"
-+
-+                elif text.startswith("menu"):
-+                    self.state += "-menu"
-+
-+            level = self.get_level()
-+            self.package[level] = ""
-+            self.print_package_warning[level] = True
-+            self.menu_of_packages[level] = text[:-1]
-+
-+        elif text.startswith("endif") or text.startswith("endmenu"):
-+            if self.state.endswith("comment"):
-+                self.state = self.state[:-8]
-+
-+            if text.startswith("endif"):
-+                self.state = self.state[:-3]
-+
-+            elif text.startswith("endmenu"):
-+                self.state = self.state[:-5]
-+
-+        elif text.startswith('\tsource "package/'):
-+            level = self.get_level()
-+            new_package = text[17: -(len(self.filename)-5):]
-+
-+            # We order _ before A, so replace it with .
-+            new_package_ord = new_package.replace('_', '.')
-+
-+            if self.package[level] != "" and \
-+               self.print_package_warning[level] and \
-+               new_package_ord < self.package[level]:
-+                self.print_package_warning[level] = False
-+                prefix = "{}:{}: ".format(self.filename, lineno)
-+                spaces = " " * len(prefix)
-+                return ["{prefix}Packages in: {menu},\n"
-+                        "{spaces}are not alphabetically ordered;\n"
-+                        "{spaces}correct order: '-', '_', digits, capitals, lowercase;\n"
-+                        "{spaces}first incorrect package: {package}"
-+                        .format(prefix=prefix, spaces=spaces,
-+                                menu=self.menu_of_packages[level],
-+                                package=new_package),
-+                        text]
-+
-+            self.package[level] = new_package_ord
-+
-+
- class HelpText(_CheckFunction):
-     HELP_TEXT_FORMAT = re.compile("^\t  .{,62}$")
-     URL_ONLY = re.compile("^(http|https|git)://\S*$")
+ comment "Other GUIs"
+ 	source "package/qt5/Config.in"
+-	source "package/kf5/Config.in"
+ if BR2_PACKAGE_QT5
+ comment "QT libraries and helper libraries"
+ 	source "package/cutelyst/Config.in"
+ 	source "package/grantlee/Config.in"
++	source "package/kf5/Config.in"
+ 	source "package/qextserialport/Config.in"
+ 	source "package/qjson/Config.in"
+ 	source "package/quazip/Config.in"
+@@ -462,8 +462,8 @@ endmenu
+ 	source "package/lcdproc/Config.in"
+ 	source "package/libubootenv/Config.in"
+ 	source "package/libuio/Config.in"
+-	source "package/linuxconsoletools/Config.in"
+ 	source "package/linux-backports/Config.in"
++	source "package/linuxconsoletools/Config.in"
+ 	source "package/lirc-tools/Config.in"
+ 	source "package/lm-sensors/Config.in"
+ 	source "package/lshw/Config.in"
+@@ -632,12 +632,15 @@ menu "Lua libraries/modules"
+ 	source "package/lua-messagepack/Config.in"
+ 	source "package/lua-msgpack-native/Config.in"
+ 	source "package/lua-periphery/Config.in"
++	source "package/lua-resty-http/Config.in"
++	source "package/lua-sailor/Config.in"
+ 	source "package/lua-sdl2/Config.in"
+ 	source "package/lua-std-debug/Config.in"
+ 	source "package/lua-std-normalize/Config.in"
+ 	source "package/lua-stdlib/Config.in"
+ 	source "package/lua-testmore/Config.in"
+ 	source "package/lua-utf8/Config.in"
++	source "package/lua-valua/Config.in"
+ 	source "package/luabitop/Config.in"
+ 	source "package/luadbi/Config.in"
+ 	source "package/luadbi-sqlite3/Config.in"
+@@ -648,13 +651,10 @@ menu "Lua libraries/modules"
+ 	source "package/lualogging/Config.in"
+ 	source "package/luaossl/Config.in"
+ 	source "package/luaposix/Config.in"
+-	source "package/lua-resty-http/Config.in"
+-	source "package/lua-sailor/Config.in"
+ 	source "package/luasec/Config.in"
+ 	source "package/luasocket/Config.in"
+ 	source "package/luasql-sqlite3/Config.in"
+ 	source "package/luasyslog/Config.in"
+-	source "package/lua-valua/Config.in"
+ 	source "package/lutok/Config.in"
+ 	source "package/luv/Config.in"
+ 	source "package/luvi/Config.in"
+@@ -743,13 +743,13 @@ menu "Perl libraries/modules"
+ 	source "package/perl-lwp-mediatypes/Config.in"
+ 	source "package/perl-mail-dkim/Config.in"
+ 	source "package/perl-mailtools/Config.in"
+-	source "package/perl-mime-base64-urlsafe/Config.in"
+ 	source "package/perl-mime-base64/Config.in"
++	source "package/perl-mime-base64-urlsafe/Config.in"
+ 	source "package/perl-mime-tools/Config.in"
+ 	source "package/perl-module-implementation/Config.in"
+ 	source "package/perl-module-runtime/Config.in"
+-	source "package/perl-mojolicious-plugin-authentication/Config.in"
+ 	source "package/perl-mojolicious/Config.in"
++	source "package/perl-mojolicious-plugin-authentication/Config.in"
+ 	source "package/perl-moo/Config.in"
+ 	source "package/perl-net-dns/Config.in"
+ 	source "package/perl-net-http/Config.in"
+@@ -768,8 +768,8 @@ menu "Perl libraries/modules"
+ 	source "package/perl-role-tiny/Config.in"
+ 	source "package/perl-stream-buffered/Config.in"
+ 	source "package/perl-sub-exporter-progressive/Config.in"
+-	source "package/perl-sub-quote/Config.in"
+ 	source "package/perl-sub-install/Config.in"
++	source "package/perl-sub-quote/Config.in"
+ 	source "package/perl-sys-cpu/Config.in"
+ 	source "package/perl-sys-meminfo/Config.in"
+ 	source "package/perl-sys-mmap/Config.in"
+@@ -820,9 +820,9 @@ menu "External python modules"
+ 	source "package/python-aiohttp-security/Config.in"
+ 	source "package/python-aiohttp-session/Config.in"
+ 	source "package/python-aiohttp-sse/Config.in"
++	source "package/python-aiojobs/Config.in"
+ 	source "package/python-aiomonitor/Config.in"
+ 	source "package/python-aiorwlock/Config.in"
+-	source "package/python-aiojobs/Config.in"
+ 	source "package/python-alsaaudio/Config.in"
+ 	source "package/python-argh/Config.in"
+ 	source "package/python-arrow/Config.in"
+@@ -875,8 +875,8 @@ menu "External python modules"
+ 	source "package/python-dicttoxml/Config.in"
+ 	source "package/python-django/Config.in"
+ 	source "package/python-docker/Config.in"
+-	source "package/python-dockerpty/Config.in"
+ 	source "package/python-docker-pycreds/Config.in"
++	source "package/python-dockerpty/Config.in"
+ 	source "package/python-docopt/Config.in"
+ 	source "package/python-docutils/Config.in"
+ 	source "package/python-dominate/Config.in"
+@@ -888,8 +888,8 @@ menu "External python modules"
+ 	source "package/python-falcon/Config.in"
+ 	source "package/python-fire/Config.in"
+ 	source "package/python-flask/Config.in"
+-	source "package/python-flask-cors/Config.in"
+ 	source "package/python-flask-babel/Config.in"
++	source "package/python-flask-cors/Config.in"
+ 	source "package/python-flask-jsonrpc/Config.in"
+ 	source "package/python-flask-login/Config.in"
+ 	source "package/python-flask-sqlalchemy/Config.in"
+@@ -924,9 +924,9 @@ menu "External python modules"
+ 	source "package/python-jaraco-classes/Config.in"
+ 	source "package/python-jedi/Config.in"
+ 	source "package/python-jinja2/Config.in"
++	source "package/python-json-schema-validator/Config.in"
+ 	source "package/python-jsonmodels/Config.in"
+ 	source "package/python-jsonschema/Config.in"
+-	source "package/python-json-schema-validator/Config.in"
+ 	source "package/python-keyring/Config.in"
+ 	source "package/python-libconfig/Config.in"
+ 	source "package/python-libusb1/Config.in"
+@@ -1277,8 +1277,8 @@ menu "Graphics"
+ 	source "package/cairo/Config.in"
+ 	source "package/cairomm/Config.in"
+ 	source "package/chipmunk/Config.in"
+-	source "package/exiv2/Config.in"
+ 	source "package/exempi/Config.in"
++	source "package/exiv2/Config.in"
+ 	source "package/fltk/Config.in"
+ 	source "package/fontconfig/Config.in"
+ 	source "package/freetype/Config.in"
+@@ -1971,13 +1971,13 @@ menu "Networking applications"
+ 	source "package/nbd/Config.in"
+ 	source "package/ncftp/Config.in"
+ 	source "package/ndisc6/Config.in"
++	source "package/net-tools/Config.in"
+ 	source "package/netatalk/Config.in"
+ 	source "package/netcat/Config.in"
+ 	source "package/netcat-openbsd/Config.in"
+ 	source "package/netplug/Config.in"
+ 	source "package/netsnmp/Config.in"
+ 	source "package/netstat-nat/Config.in"
+-	source "package/net-tools/Config.in"
+ 	source "package/network-manager/Config.in"
+ 	source "package/nfacct/Config.in"
+ 	source "package/nftables/Config.in"
