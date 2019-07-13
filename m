@@ -1,82 +1,75 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 13 Jul 2019 22:57:42 +0200
-Subject: [Buildroot] [git commit] arch/arm: some cores have a different name
- with gcc-9
-Message-ID: <20190713210917.60298816B8@busybox.osuosl.org>
+Date: Sat, 13 Jul 2019 23:00:47 +0200
+Subject: [Buildroot] [git commit] arch/arm: add two new cortex-based
+ armv8.2a cores
+Message-ID: <20190713210917.757A68137C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0d17301531eaa1dfdf102d1ec5bfce839c55ce4
+commit: https://git.buildroot.net/buildroot/commit/?id=e65a173e5243bb9fdecc4e1792e473116d1de9ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In gcc-9, some cores from the ThunderX familly have been renamed to
-their marketting names, i.e. OcteonTX. Subsequently, new core names
-have been added to gcc, with the old names still being around.
+The cortex-a76 implements the full amrv8.2a extensions, and some
+optional extensions from the armv8.3a, armv8.4a, and armv8.5a sets,
+but none of their mandatory extensions, which means that it does not
+qualify for better than an armv8.2a:
+    https://developer.arm.com/products/processors/cortex-a/cortex-a76
+    http://infocenter.arm.com/help/topic/com.arm.doc.100798_0301_00_en/giq1479805174793.html
+    http://infocenter.arm.com/help/topic/com.arm.doc.100798_0301_00_en/fjv1477559794375.html
 
-Update the prompts with the new names as alternative to the existing
-names. We still keep the kconfig options as-is, so that we do not need
-to add legacy handling.
+Also, gcc fits it in the armv8.2a category, too:
+    https://gcc.gnu.org/git/?p=gcc.git;a=blob;f=gcc/config/aarch64/aarch64-cores.def;h=67ce42fb8aacd4c246295f32151a03b1f318ae44;hb=HEAD#l97
 
-However, since there is no guarantee for how long gcc will retain
-compatibility for the older names, we readily switch over to using the
-new names when using a gcc 9-or-later, but keep using the older names
-with gcc older than 9.
+Build tested:
+https://gitlab.com/kubu93/buildroot/pipelines/60318953
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-[Arnout: don't rely on ordering, but make condition explicit]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- arch/Config.in.arm | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ arch/Config.in.arm | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
 diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 5557261604..42f8b4d72f 100644
+index 0c4aeba34b..d0a2c3d7dd 100644
 --- a/arch/Config.in.arm
 +++ b/arch/Config.in.arm
-@@ -391,21 +391,21 @@ config BR2_qdf24xx
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- config BR2_thunderx
--	bool "thunderx"
-+	bool "thunderx (aka octeontx)"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
+@@ -494,6 +494,24 @@ config BR2_cortex_a75_a55
  	select BR2_ARM_CPU_ARMV8A
  	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- config BR2_thunderxt81
--	bool "thunderxt81"
-+	bool "thunderxt81 (aka octeontx81)"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
- 	select BR2_ARCH_HAS_MMU_OPTIONAL
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- config BR2_thunderxt83
--	bool "thunderxt83"
-+	bool "thunderxt83 (aka octeontx83)"
- 	depends on BR2_ARCH_IS_64
- 	select BR2_ARM_CPU_HAS_FP_ARMV8
- 	select BR2_ARM_CPU_ARMV8A
-@@ -824,9 +824,12 @@ config BR2_GCC_TARGET_CPU
- 	default "exynos-m1"	if BR2_exynos_m1
- 	default "falkor"	if BR2_falkor
- 	default "qdf24xx"	if BR2_qdf24xx
--	default "thunderx"	if BR2_thunderx
--	default "thunderxt81"	if BR2_thunderxt81
--	default "thunderxt83"	if BR2_thunderxt83
-+	default "thunderx"	if BR2_thunderx && !BR2_TOOLCHAIN_GCC_AT_LEAST_9
-+	default "octeontx"	if BR2_thunderx && BR2_TOOLCHAIN_GCC_AT_LEAST_9
-+	default "thunderxt81"	if BR2_thunderxt81 && !BR2_TOOLCHAIN_GCC_AT_LEAST_9
-+	default "octeontx81"	if BR2_thunderxt81 && BR2_TOOLCHAIN_GCC_AT_LEAST_9
-+	default "thunderxt83"	if BR2_thunderxt83 && !BR2_TOOLCHAIN_GCC_AT_LEAST_9
-+	default "octeontx83"	if BR2_thunderxt83 && BR2_TOOLCHAIN_GCC_AT_LEAST_9
- 	default "thunderxt88"	if BR2_thunderxt88
- 	default "thunderxt88p1"	if BR2_thunderxt88p1
- 	default "xgene1"	if BR2_xgene1
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_8
++config BR2_cortex_a76
++	bool "cortex-A76"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
++config BR2_cortex_a76_a55
++	bool "cortex-A76/A55 big.LITTLE"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+ 
+ comment "armv8.4a cores"
+ config BR2_saphira
+@@ -857,6 +875,8 @@ config BR2_GCC_TARGET_CPU
+ 	default "cortex-a55"	if BR2_cortex_a55
+ 	default "cortex-a75"	if BR2_cortex_a75
+ 	default "cortex-a75.cortex-a55"	if BR2_cortex_a75_a55
++	default "cortex-a76"	if BR2_cortex_a76
++	default "cortex-a76.cortex-a55"	if BR2_cortex_a76_a55
+ 	# armv8.4a
+ 	default "saphira"	if BR2_saphira
+ 
