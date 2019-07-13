@@ -1,67 +1,68 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Jul 2019 22:47:42 +0200
-Subject: [Buildroot] [PATCH 1/1] package/qt5wayland: examples needs
- opengl with qt latest
-In-Reply-To: <20190602200734.29324-1-fontaine.fabrice@gmail.com>
-References: <20190602200734.29324-1-fontaine.fabrice@gmail.com>
-Message-ID: <698c9bc8-b31d-98ba-5bef-6f2b8c12faf0@mind.be>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat, 13 Jul 2019 23:06:23 +0200
+Subject: [Buildroot] [git commit] arch/arm: add two new non-cortex-based
+ armv8.2a cores
+Message-ID: <20190713210917.7F4A2816B8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=0b630b5bf3023e97740a2eca92eaa34804bd8aee
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+The Neoverse N1 CPU was supported in GCC earlier through the codename Ares [1].
 
-On 02/06/2019 22:07, Fabrice Fontaine wrote:
-> WIth Qt latest, if opengl is not enabled, qt5wayland examples won't be
-> built:
-> make[3]: Entering directory `/home/dawncrow/buildroot-test/scripts/instance-0/output/build/qt5wayland-5.12.2/examples/wayland'
-> Some of the required modules (qtConfig(opengl)) are not available.
-> Skipped.
-> make[3]: Leaving directory `/home/dawncrow/buildroot-test/scripts/instance-0/output/build/qt5wayland-5.12.2/examples/wayland'
-> 
-> And build will fail on:
-> cp: cannot stat '/home/dawncrow/buildroot-test/scripts/instance-0/output/host/sparc64-buildroot-linux-gnu/sysroot/usr/lib/qt/examples/wayland': No such file or directory
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/902322ca156c14044d4ce53ab2c77f30dd854c98
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/qt5/qt5wayland/qt5wayland.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
-> index 449640c881..0bda596f3b 100644
-> --- a/package/qt5/qt5wayland/qt5wayland.mk
-> +++ b/package/qt5/qt5wayland/qt5wayland.mk
-> @@ -60,10 +60,18 @@ endif
->  endif
->  
->  ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
-> +ifeq ($(BR2_PACKAGE_QT5_VERSION_LATEST),y)
-> +ifeq ($(BR2_PACKAGE_QT5BASE_OPENGL),y)
+[1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=37cf0ddecfd1eb5c6852a44135af5a92e5103931
 
- There is a better way to write this condition so you don't need to repeat the
-command. However, I don't want to think about it now, and the qt5 versions
-distiction is going to go away soon. Therefore, I've applied to master as is,
-thanks.
+Build tested:
+https://gitlab.com/kubu93/buildroot/pipelines/60318953
 
- Regards,
- Arnout
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+[Romain: rename BR2_ares to BR2_neoverse_n1]
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+[Arnout: 'aka' instead of 'alias']
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ arch/Config.in.arm | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
->  define QT5WAYLAND_INSTALL_TARGET_EXAMPLES
->  	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/wayland $(TARGET_DIR)/usr/lib/qt/examples/
->  endef
->  endif
-> +else
-> +define QT5WAYLAND_INSTALL_TARGET_EXAMPLES
-> +	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/wayland $(TARGET_DIR)/usr/lib/qt/examples/
-> +endef
-> +endif
-> +endif
->  
->  define QT5WAYLAND_INSTALL_TARGET_CMDS
->  	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WaylandClient.so* $(TARGET_DIR)/usr/lib
-> 
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index d0a2c3d7dd..4c0910e4f8 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -512,6 +512,22 @@ config BR2_cortex_a76_a55
+ 	select BR2_ARM_CPU_ARMV8A
+ 	select BR2_ARCH_HAS_MMU_OPTIONAL
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
++config BR2_neoverse_n1
++	bool "neoverse-N1 (aka ares)"
++	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
++config BR2_tsv110
++	bool "tsv110"
++	depends on BR2_ARCH_IS_64
++	select BR2_ARM_CPU_HAS_FP_ARMV8
++	select BR2_ARM_CPU_ARMV8A
++	select BR2_ARCH_HAS_MMU_OPTIONAL
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+ 
+ comment "armv8.4a cores"
+ config BR2_saphira
+@@ -877,6 +893,8 @@ config BR2_GCC_TARGET_CPU
+ 	default "cortex-a75.cortex-a55"	if BR2_cortex_a75_a55
+ 	default "cortex-a76"	if BR2_cortex_a76
+ 	default "cortex-a76.cortex-a55"	if BR2_cortex_a76_a55
++	default "neoverse-n1"	if BR2_neoverse_n1
++	default "tsv110"	if BR2_tsv110
+ 	# armv8.4a
+ 	default "saphira"	if BR2_saphira
+ 
