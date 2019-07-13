@@ -1,38 +1,41 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat, 13 Jul 2019 10:32:56 +0200
-Subject: [Buildroot] [PATCH 2/2] package/vte: add gnutls optional dependency
-In-Reply-To: <20190713083256.28511-1-fontaine.fabrice@gmail.com>
-References: <20190713083256.28511-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190713083256.28511-2-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 13 Jul 2019 11:43:38 +0200
+Subject: [Buildroot] Qt5 LTS handling [was: package/qt5: bump latest
+ version to 5.12.4]
+In-Reply-To: <8f646260-7e2b-8d47-82c0-2624e86cfb56@mind.be> (Arnout
+ Vandecappelle's message of "Fri, 12 Jul 2019 23:18:35 +0200")
+References: <20190710173645.15459-1-ps.report@gmx.net>
+ <20190710173645.15459-2-ps.report@gmx.net>
+ <891f19e9-a64b-c025-b5cd-f7a0517fbc35@mind.be>
+ <20190711210233.0b7eb0aa@gmx.net>
+ <93af8798-0395-2c9f-dd0f-aad677dc0909@mind.be>
+ <20190712211529.00fbf6e0@gmx.net>
+ <8f646260-7e2b-8d47-82c0-2624e86cfb56@mind.be>
+Message-ID: <87k1cm9smt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/vte/vte.mk | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-diff --git a/package/vte/vte.mk b/package/vte/vte.mk
-index 7332a1ae04..0d5db34b62 100644
---- a/package/vte/vte.mk
-+++ b/package/vte/vte.mk
-@@ -10,6 +10,13 @@ VTE_SITE = http://ftp.gnome.org/pub/gnome/sources/vte/0.48
- VTE_DEPENDENCIES = host-intltool host-pkgconf libgtk3 libxml2 pcre2
- VTE_LICENSE = LGPL-2.1+
- VTE_LICENSE_FILES = COPYING
--VTE_CONF_OPTS += --disable-introspection --without-gnutls --disable-vala
-+VTE_CONF_OPTS += --disable-introspection --disable-vala
-+
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+VTE_CONF_OPTS += --with-gnutls
-+VTE_DEPENDENCIES += gnutls
-+else
-+VTE_CONF_OPTS += --without-gnutls
-+endif
- 
- $(eval $(autotools-package))
+Hi,
+
+ >>> So actually, my proposal would be to forego the LTS entirely and just go for
+ >>> latest. That does mean that we end up with an unmaintained qt5 in our own LTS
+ >>> branch. For example, Qt 5.14 will probably get its last update around June 2020.
+ >>> Note that the current situation (LTS vs. Latest choice) would not be a solution
+ >>> for that - the Latest would still be in the unmaintained situation, so it would
+ >>> in practice not be useable.
+
+ >  Addendum to my earlier statement: in my (admittedly limited) experience, there
+ > isn't really much reason to stick to LTS releases. Backward compatibility is
+ > generally OK, and regressions can be fixed.
+
+I also don't use Qt, so I know next to nothing about it. With Qt5.6 EOL
+(so the GPL2/3 issue no longer applicable) then I'm fine with a single
+Qt5 version if that is the general agreement among users.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
