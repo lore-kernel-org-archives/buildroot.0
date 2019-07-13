@@ -1,45 +1,106 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 13 Jul 2019 23:51:53 +0200
-Subject: [Buildroot] [PATCH v4 14/15] arch/arm: add two new
- non-cortex-based armv8.2a cores
-In-Reply-To: <2c02775a-4ccd-88f7-1306-71940e794e0b@mind.be>
-References: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
- <20190620100725.105587-15-giulio.benetti@micronovasrl.com>
- <2c02775a-4ccd-88f7-1306-71940e794e0b@mind.be>
-Message-ID: <20190713215153.GH2680@scaer>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sun, 14 Jul 2019 00:21:26 +0200
+Subject: [Buildroot] [git commit] checkpackagelib/lib_config.py: check
+ packages alphabetical order in {Config.in, Config.in.host}
+Message-ID: <20190713222452.85742813D7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=e36a63cf6b325f76ad62c1e06b8a6d4fb4c9f062
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-07-13 23:22 +0200, Arnout Vandecappelle spake thusly:
-> On 20/06/2019 12:07, Giulio Benetti wrote:
-> > From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-[--SNIP--]
-> > +config BR2_tsv110
-> > +	bool "tsv110"
-> > +	depends on BR2_ARCH_IS_64
-> > +	select BR2_ARM_CPU_HAS_FP_ARMV8
-> > +	select BR2_ARM_CPU_ARMV8A
-> > +	select BR2_ARCH_HAS_MMU_OPTIONAL
->  Somewhat unrelated to this patch, but: is this really correct? I thought the
-> MMU was mandatory on 64-bit ARM. At least, the kernel forces MMU on for arm64.
+Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+[Arnout:
+ - calculate level by counting - instead of with a static array;
+ - new_package is only used locally, so don't make it a class member;
+ - do indentation according to length of prefix;
+ - don't split string in the middle of a line;
+ - report first wrong package per menu;
+ - do replace() only once;
+ - add comment why we do replace().
+]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ utils/checkpackagelib/lib_config.py | 66 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
 
-TBH, I don't know. I stupidly replicated the settings from the other
-existing AArch64 cores we already had in the list.
-
-Thanks!
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+index 89d44da57e..f0edb9993d 100644
+--- a/utils/checkpackagelib/lib_config.py
++++ b/utils/checkpackagelib/lib_config.py
+@@ -60,6 +60,72 @@ class AttributesOrder(_CheckFunction):
+                     text]
+ 
+ 
++class CommentsMenusPackagesOrder(_CheckFunction):
++    print_package_warning = [True, True, True, True, True, True]
++    menu_of_packages = ["", "", "", "", "", ""]
++    package = ["", "", "", "", "", ""]
++
++    def before(self):
++        self.state = ""
++
++    def get_level(self):
++        return len(self.state.split('-')) - 1
++
++    def check_line(self, lineno, text):
++        if text.startswith("comment") or text.startswith("if") or \
++           text.startswith("menu"):
++
++            if text.startswith("comment"):
++                if not self.state.endswith("-comment"):
++                    self.state += "-comment"
++
++            elif text.startswith("if") or text.startswith("menu"):
++                if text.startswith("if"):
++                    self.state += "-if"
++
++                elif text.startswith("menu"):
++                    self.state += "-menu"
++
++            level = self.get_level()
++            self.package[level] = ""
++            self.print_package_warning[level] = True
++            self.menu_of_packages[level] = text[:-1]
++
++        elif text.startswith("endif") or text.startswith("endmenu"):
++            if self.state.endswith("comment"):
++                self.state = self.state[:-8]
++
++            if text.startswith("endif"):
++                self.state = self.state[:-3]
++
++            elif text.startswith("endmenu"):
++                self.state = self.state[:-5]
++
++        elif text.startswith('\tsource "package/'):
++            level = self.get_level()
++            new_package = text[17: -(len(self.filename)-5):]
++
++            # We order _ before A, so replace it with .
++            new_package_ord = new_package.replace('_', '.')
++
++            if self.package[level] != "" and \
++               self.print_package_warning[level] and \
++               new_package_ord < self.package[level]:
++                self.print_package_warning[level] = False
++                prefix = "{}:{}: ".format(self.filename, lineno)
++                spaces = " " * len(prefix)
++                return ["{prefix}Packages in: {menu},\n"
++                        "{spaces}are not alphabetically ordered;\n"
++                        "{spaces}correct order: '-', '_', digits, capitals, lowercase;\n"
++                        "{spaces}first incorrect package: {package}"
++                        .format(prefix=prefix, spaces=spaces,
++                                menu=self.menu_of_packages[level],
++                                package=new_package),
++                        text]
++
++            self.package[level] = new_package_ord
++
++
+ class HelpText(_CheckFunction):
+     HELP_TEXT_FORMAT = re.compile("^\t  .{,62}$")
+     URL_ONLY = re.compile("^(http|https|git)://\S*$")
