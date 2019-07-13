@@ -1,7 +1,9 @@
 From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sat, 13 Jul 2019 08:58:23 +0200
-Subject: [Buildroot] [PATCH] package/iozone: bump to version 3_487
-Message-ID: <1563001107-17687-1-git-send-email-gilles.talis@gmail.com>
+Date: Sat, 13 Jul 2019 08:58:24 +0200
+Subject: [Buildroot] [PATCH] package/leptonica: bump to version 1.78.0
+In-Reply-To: <1563001107-17687-1-git-send-email-gilles.talis@gmail.com>
+References: <1563001107-17687-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <1563001107-17687-2-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,30 +12,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- package/iozone/iozone.hash | 2 +-
- package/iozone/iozone.mk   | 2 +-
+ package/leptonica/leptonica.hash | 2 +-
+ package/leptonica/leptonica.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
-index 2a02731..29dba67 100644
---- a/package/iozone/iozone.hash
-+++ b/package/iozone/iozone.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	eeaf16cfbee095b16e4934180c6c7438539629489ce42ef4ace48feb23916b12	iozone3_483.tar
-+sha256	2c488a7ccddd624fd557af16e71442c367b131d6178e1b4023bbd532bacdda59	iozone3_487.tar
-diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
-index 903d2a1..00573d9 100644
---- a/package/iozone/iozone.mk
-+++ b/package/iozone/iozone.mk
+diff --git a/package/leptonica/leptonica.hash b/package/leptonica/leptonica.hash
+index 14c750c..56f8643 100644
+--- a/package/leptonica/leptonica.hash
++++ b/package/leptonica/leptonica.hash
+@@ -1,3 +1,3 @@
+ # locally computed hash
+-sha256 dd7990ab6b6824b0cfed70920824d37b47184240f98db4085f7dbf1250cd4899  leptonica-1.77.0.tar.gz
++sha256 e2ed2e81e7a22ddf45d2c05f0bc8b9ae7450545d995bfe28517ba408d14a5a88  leptonica-1.78.0.tar.gz
+ sha256 ca0ac11c7c0acad9599d54990942cc11c9f6d9b569f1a360d774a628819c3518  leptonica-license.txt
+diff --git a/package/leptonica/leptonica.mk b/package/leptonica/leptonica.mk
+index 7c6fa12..309c650 100644
+--- a/package/leptonica/leptonica.mk
++++ b/package/leptonica/leptonica.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IOZONE_VERSION = 3_483
-+IOZONE_VERSION = 3_487
- IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
- IOZONE_SITE = http://www.iozone.org/src/current
- IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
+-LEPTONICA_VERSION = 1.77.0
++LEPTONICA_VERSION = 1.78.0
+ LEPTONICA_SITE = http://www.leptonica.org/source
+ LEPTONICA_LICENSE = BSD-2-Clause
+ LEPTONICA_LICENSE_FILES = leptonica-license.txt
 -- 
 2.7.4
