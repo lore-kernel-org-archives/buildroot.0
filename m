@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 13 Jul 2019 23:22:09 +0200
-Subject: [Buildroot] [PATCH v4 14/15] arch/arm: add two new
- non-cortex-based armv8.2a cores
-In-Reply-To: <20190620100725.105587-15-giulio.benetti@micronovasrl.com>
+Date: Sat, 13 Jul 2019 23:24:13 +0200
+Subject: [Buildroot] [PATCH v4 15/15] package/gcc: enable gcc 9.1 for
+ ork1 (openrisc)
+In-Reply-To: <20190620100725.105587-16-giulio.benetti@micronovasrl.com>
 References: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
- <20190620100725.105587-15-giulio.benetti@micronovasrl.com>
-Message-ID: <2c02775a-4ccd-88f7-1306-71940e794e0b@mind.be>
+ <20190620100725.105587-16-giulio.benetti@micronovasrl.com>
+Message-ID: <54fe6b56-aa43-b657-0b8e-1c42e2471735@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,76 +15,13 @@ To: buildroot@busybox.net
 
 
 On 20/06/2019 12:07, Giulio Benetti wrote:
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> The Neoverse N1 CPU was supported in GCC earlier through the codename Ares [1].
-> 
-> [1] https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=37cf0ddecfd1eb5c6852a44135af5a92e5103931
-> 
-> Build tested:
-> https://gitlab.com/kubu93/buildroot/pipelines/60318953
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> [Romain: rename BR2_ares to BR2_neoverse_n1]
-> Signed-off-by: Romain Naour <romain.naour@gmail.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
-> v2: add neoverse-e1 (Yann)
->     reorder alphabetically after renaming ares to neoverse-n1.
-> 
-> Note: The Neoverse E1 CPU needs at least binutils 2.32 to support Speculative Store
-> Bypass Safe instruction (SSBS) which is part of ARMv8.5-A architecture extensions.
-> Postpone the support for this new ARM core.
-> See: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=104fefeebb544b7745bb353b63110afa46119647
-> ---
->  arch/Config.in.arm | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-> index a664cfe0e2..eea77cdabe 100644
-> --- a/arch/Config.in.arm
-> +++ b/arch/Config.in.arm
-> @@ -512,6 +512,22 @@ config BR2_cortex_a76_a55
->  	select BR2_ARM_CPU_ARMV8A
->  	select BR2_ARCH_HAS_MMU_OPTIONAL
->  	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
-> +config BR2_neoverse_n1
-> +	bool "neoverse-N1 (alias ares)"
+> openrisc support has been added with gcc 9.1.
+> Keep for now the old gcc 5 fork for ork1.
 
- In an earlier patch, you used 'aka', so I did the same here.
+ So, when will we remove this?
 
-> +	select BR2_ARM_CPU_HAS_ARM if !BR2_ARCH_IS_64
-> +	select BR2_ARM_CPU_HAS_NEON if !BR2_ARCH_IS_64
-> +	select BR2_ARM_CPU_HAS_THUMB2 if !BR2_ARCH_IS_64
-> +	select BR2_ARM_CPU_HAS_FP_ARMV8
-> +	select BR2_ARM_CPU_ARMV8A
-> +	select BR2_ARCH_HAS_MMU_OPTIONAL
-> +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
-> +config BR2_tsv110
-> +	bool "tsv110"
-> +	depends on BR2_ARCH_IS_64
-> +	select BR2_ARM_CPU_HAS_FP_ARMV8
-> +	select BR2_ARM_CPU_ARMV8A
-> +	select BR2_ARCH_HAS_MMU_OPTIONAL
-
- Somewhat unrelated to this patch, but: is this really correct? I thought the
-MMU was mandatory on 64-bit ARM. At least, the kernel forces MMU on for arm64.
+ Same for ARC (GCC 8.x fork) and C-SKY (GCC 6.x fork): they are available in
+GCC9, do we need to keep those old forks?
 
  Regards,
  Arnout
-
-> +	select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
->  
->  comment "armv8.4a cores"
->  config BR2_saphira
-> @@ -877,6 +893,8 @@ config BR2_GCC_TARGET_CPU
->  	default "cortex-a75.cortex-a55"	if BR2_cortex_a75_a55
->  	default "cortex-a76"	if BR2_cortex_a76
->  	default "cortex-a76.cortex-a55"	if BR2_cortex_a76_a55
-> +	default "neoverse-n1"	if BR2_neoverse_n1
-> +	default "tsv110"	if BR2_tsv110
->  	# armv8.4a
->  	default "saphira"	if BR2_saphira
->  
-> 
