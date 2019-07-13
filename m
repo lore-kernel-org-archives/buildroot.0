@@ -1,41 +1,45 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 13 Jul 2019 11:43:38 +0200
-Subject: [Buildroot] Qt5 LTS handling [was: package/qt5: bump latest
- version to 5.12.4]
-In-Reply-To: <8f646260-7e2b-8d47-82c0-2624e86cfb56@mind.be> (Arnout
- Vandecappelle's message of "Fri, 12 Jul 2019 23:18:35 +0200")
-References: <20190710173645.15459-1-ps.report@gmx.net>
- <20190710173645.15459-2-ps.report@gmx.net>
- <891f19e9-a64b-c025-b5cd-f7a0517fbc35@mind.be>
- <20190711210233.0b7eb0aa@gmx.net>
- <93af8798-0395-2c9f-dd0f-aad677dc0909@mind.be>
- <20190712211529.00fbf6e0@gmx.net>
- <8f646260-7e2b-8d47-82c0-2624e86cfb56@mind.be>
-Message-ID: <87k1cm9smt.fsf@dell.be.48ers.dk>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sat, 13 Jul 2019 13:53:09 +0200
+Subject: [Buildroot] [PATCH] package/x11r7/xlib_libXfont: work around gcc
+ bug 85180
+Message-ID: <20190713115309.88559-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+shows up when building xlib_libXfont with optimization but not when
+building with -O0. To work around this, if
+BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
 
-Hi,
+Fixes:
+http://autobuild.buildroot.net/results/7c6/7c64becbf06a1e00e41b7ddb95dd0c65bf364eb7/
 
- >>> So actually, my proposal would be to forego the LTS entirely and just go for
- >>> latest. That does mean that we end up with an unmaintained qt5 in our own LTS
- >>> branch. For example, Qt 5.14 will probably get its last update around June 2020.
- >>> Note that the current situation (LTS vs. Latest choice) would not be a solution
- >>> for that - the Latest would still be in the unmaintained situation, so it would
- >>> in practice not be useable.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+---
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
- >  Addendum to my earlier statement: in my (admittedly limited) experience, there
- > isn't really much reason to stick to LTS releases. Backward compatibility is
- > generally OK, and regressions can be fixed.
-
-I also don't use Qt, so I know next to nothing about it. With Qt5.6 EOL
-(so the GPL2/3 issue no longer applicable) then I'm fine with a single
-Qt5 version if that is the general agreement among users.
-
+diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+index a1acfba83b..ba41970289 100644
+--- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
++++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+@@ -30,5 +30,13 @@ ifeq ($(BR2_microblaze),y)
+ XLIB_LIBXFONT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D__ELF__"
+ endif
+ 
++XLIB_LIBXFONT_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++XLIB_LIBXFONT_CFLAGS += -O0
++endif
++
++XLIB_LIBXFONT_CONF_OPTS += CFLAGS="$(XLIB_LIBXFONT_CFLAGS)"
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-Bye, Peter Korsgaard
+2.17.1
