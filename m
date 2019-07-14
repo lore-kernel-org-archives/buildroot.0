@@ -1,72 +1,64 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Jul 2019 20:50:31 +0200
-Subject: [Buildroot] [PATCH] utils/checkpackagelib:
- CommentsMenusPackagesOrder: fix 'menuconfig' handling
-In-Reply-To: <20190714132329.GA25166@scaer>
-References: <20190714124400.29431-1-arnout@mind.be>
- <20190714131502.GC8912@scaer> <20190714132329.GA25166@scaer>
-Message-ID: <7841a190-820b-cd3c-4f71-2a5b0c5f6a0d@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Jul 2019 20:53:25 +0200
+Subject: [Buildroot] [PATCH 1/1] package/weston-imx: Split weston-imx
+ off from weston
+In-Reply-To: <CADvTj4r+GiLH=1oA7c8OsTRhLnA+TPYHpgRbQmttt5Es0QObdQ@mail.gmail.com>
+References: <20190625225008.58056-1-james.hilliard1@gmail.com>
+ <20190714183438.GG29941@scaer>
+ <CADvTj4r+GiLH=1oA7c8OsTRhLnA+TPYHpgRbQmttt5Es0QObdQ@mail.gmail.com>
+Message-ID: <20190714185325.GH29941@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+James, All,
 
+On 2019-07-14 12:37 -0600, James Hilliard spake thusly:
+> On Sun, Jul 14, 2019 at 12:34 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > On 2019-06-25 16:50 -0600, James Hilliard spake thusly:
+> > > This is in preparation for migration of weston to the meson build system.
+> > > Since weston-imx is based off of a much older version of weston it is
+> > > difficult to maintain as part of the weston package.
+[--SNIP--]
+> > Which implies that we should allow bioth westons to be installed side by
+> > side, and that the imx variant be installed as 'weston-imx', e.g. using
+> > the ./configure flag:
+> Is there a use case for having both westons side by side?
 
-On 14/07/2019 15:23, Yann E. MORIN wrote:
-> Arnout, Jerzy, All,
-> 
-> (sorry, I sent the previous one too quickly)
-> 
-> On 2019-07-14 15:15 +0200, Yann E. MORIN spake thusly:
->> On 2019-07-14 14:44 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> [--SNIP--]
->>> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/251214899
->> No, it does not fix it totally. It only fixes the python traceback.
->> The Kodi issues is till present.
->> Hint: the Kodi package is the only one that indents the "source" lines
->> with a TAB.
-> 
-> If one changes Kodi to not indent the source lines, then the issue
-> disappears. Of course, this is not the correct solution, but...
+Well, yes: the RDB stuff for example does not seem to depend on the
+hardware at all, in fact, so it would be better if it were provided by
+the real weston, which is more up-to-date with RDP than by the imx fork,
+which supports an older version of RDP. And it has caused grief in the
+past that when we update weston, it uses newer FreeRDP APIs, or the
+other way around, when we update FreeRDP, it no longer exports APIs
+needed by older weston.
 
- Yes, because the test only looks at source lines which are indented, which is
-wrong too. It should be a regex.
+So, I'd like we find a way for the imxc fork to be consrained to only
+the actual imx backend, and keep using the official weston for all the
+rest.
 
-> 
-> If one changes another package to also idnent the source lines with a
-> TAB, then the error happens there too (for example, fftw):
-> 
->     package/fftw/Config.in:18: Packages in: if BR2_PACKAGE_FFTW,
->                                are not alphabetically ordered;
->                                correct order: '-', '_', digits, capitals, lowercase;
->                                first incorrect package: ftw/fftw-d
-> 
-> OK, so, weird. The package included is in fact fftw/fftw-double and only
-> part of the bname is reported.
-> 
-> But if one also looks more closely at the Kodi issue, packages names are
-> also incorrectly reported:
-> 
->     package/kodi/Config.in:303: Packages in: menu "Audio decoder addons",
->     [--SNIP--]
->                                 first incorrect package: kodi-audiodecoder
-> 
-> And in fact, there is one thing I don;t understand in utils/checkpackagelib/lib_config.py,
-> line 106:
-> 
->     new_package = text[17: -(len(self.filename)-5):]
-> 
-> Why are we using the current filename to strip away parts of the new
-> package filename?
+Regards,
+Yann E. MORIN.
 
- That is indeed the problem. I didn't look too hard at that line (because I
-already looked to much at all the rest :-). The len(self.filename)-5 works for
-package/Config.in because that exactly strips off the /Config.in part of the
-line. But that's a horrible hack, of course...
+> >     --program-suffix=-imx
+> >
+> > Regards,
+> > Yann E. MORIN.
+> >
+> > --
+> > .-----------------.--------------------.------------------.--------------------.
+> > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > '------------------------------^-------^------------------^--------------------'
 
- I'll look at correcting it shortly.
-
- Regards,
- Arnout
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
