@@ -1,137 +1,140 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 14 Jul 2019 22:19:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/can-utils: fix build with kernel >=
- 5.2
-Message-ID: <20190714201920.15718-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 14 Jul 2019 22:24:06 +0200
+Subject: [Buildroot] [PATCH] utils/checkpackagelib:
+ CommentsMenusPackagesOrder: fix 'menuconfig' handling
+In-Reply-To: <7841a190-820b-cd3c-4f71-2a5b0c5f6a0d@mind.be>
+References: <20190714124400.29431-1-arnout@mind.be>
+ <20190714131502.GC8912@scaer> <20190714132329.GA25166@scaer>
+ <7841a190-820b-cd3c-4f71-2a5b0c5f6a0d@mind.be>
+Message-ID: <0a63745f-3e08-ffa7-6c8c-84ef9e419a78@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - http://autobuild.buildroot.org/results/363de7d9bf433be8bc47ba4ee52ae0bb80fa9021
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...o-find-SIOCGSTAMP-with-latest-kernel.patch | 109 ++++++++++++++++++
- 1 file changed, 109 insertions(+)
- create mode 100644 package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
 
-diff --git a/package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch b/package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
-new file mode 100644
-index 0000000000..3cde5b42af
---- /dev/null
-+++ b/package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
-@@ -0,0 +1,109 @@
-+From e9590b1ca75d360eaf3211bebd86058214d48064 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sun, 14 Jul 2019 21:50:43 +0200
-+Subject: [PATCH] fix include to find SIOCGSTAMP with latest kernel
-+
-+In linux kernel commit 0768e17073dc527ccd18ed5f96ce85f9985e9115
-+the asm-generic/sockios.h header no longer defines SIOCGSTAMP.
-+Instead it provides only SIOCGSTAMP_OLD.
-+
-+The linux/sockios.h header now defines SIOCGSTAMP using either
-+SIOCGSTAMP_OLD or SIOCGSTAMP_NEW as appropriate. This linux only
-+header file is not pulled so we get a build failure.
-+
-+canlogserver.c: In function 'main':
-+canlogserver.c:404:21: error: 'SIOCGSTAMP' undeclared (first use in this function); did you mean 'SIOCGRARP'?
-+     if (ioctl(s[i], SIOCGSTAMP, &tv) < 0)
-+                     ^~~~~~~~~~
-+                     SIOCGRARP
-+canlogserver.c:404:21: note: each undeclared identifier is reported only once for each function it appears in
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/363de7d9bf433be8bc47ba4ee52ae0bb80fa9021
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/linux-can/can-utils/pull/147]
-+---
-+ canlogserver.c | 1 +
-+ cansniffer.c   | 1 +
-+ isotpdump.c    | 1 +
-+ isotpperf.c    | 1 +
-+ isotpsniffer.c | 1 +
-+ slcanpty.c     | 1 +
-+ 6 files changed, 6 insertions(+)
-+
-+diff --git a/canlogserver.c b/canlogserver.c
-+index f9ae159..4429ccd 100644
-+--- a/canlogserver.c
-++++ b/canlogserver.c
-+@@ -62,6 +62,7 @@
-+ 
-+ #include <linux/can.h>
-+ #include <linux/can/raw.h>
-++#include <linux/sockios.h>
-+ #include <signal.h>
-+ #include <errno.h>
-+ 
-+diff --git a/cansniffer.c b/cansniffer.c
-+index b710058..0ff29b4 100644
-+--- a/cansniffer.c
-++++ b/cansniffer.c
-+@@ -62,6 +62,7 @@
-+ 
-+ #include <linux/can.h>
-+ #include <linux/can/bcm.h>
-++#include <linux/sockios.h>
-+ 
-+ #include "terminal.h"
-+ 
-+diff --git a/isotpdump.c b/isotpdump.c
-+index 1ab9416..97baeca 100644
-+--- a/isotpdump.c
-++++ b/isotpdump.c
-+@@ -57,6 +57,7 @@
-+ 
-+ #include <linux/can.h>
-+ #include <linux/can/raw.h>
-++#include <linux/sockios.h>
-+ #include "terminal.h"
-+ 
-+ #define NO_CAN_ID 0xFFFFFFFFU
-+diff --git a/isotpperf.c b/isotpperf.c
-+index 6ee6ede..5ad302a 100644
-+--- a/isotpperf.c
-++++ b/isotpperf.c
-+@@ -57,6 +57,7 @@
-+ 
-+ #include <linux/can.h>
-+ #include <linux/can/raw.h>
-++#include <linux/sockios.h>
-+ 
-+ #define NO_CAN_ID 0xFFFFFFFFU
-+ #define PERCENTRES 2 /* resolution in percent for bargraph */
-+diff --git a/isotpsniffer.c b/isotpsniffer.c
-+index 6c19c8b..5d61872 100644
-+--- a/isotpsniffer.c
-++++ b/isotpsniffer.c
-+@@ -56,6 +56,7 @@
-+ 
-+ #include <linux/can.h>
-+ #include <linux/can/isotp.h>
-++#include <linux/sockios.h>
-+ #include "terminal.h"
-+ 
-+ #define NO_CAN_ID 0xFFFFFFFFU
-+diff --git a/slcanpty.c b/slcanpty.c
-+index e90b32a..5fdfa55 100644
-+--- a/slcanpty.c
-++++ b/slcanpty.c
-+@@ -37,6 +37,7 @@
-+ 
-+ #include <linux/can.h>
-+ #include <linux/can/raw.h>
-++#include <linux/sockios.h>
-+ 
-+ /* maximum rx buffer len: extended CAN frame with timestamp */
-+ #define SLC_MTU (sizeof("T1111222281122334455667788EA5F\r")+1)
-+-- 
-+2.20.1
-+
--- 
-2.20.1
+On 14/07/2019 20:50, Arnout Vandecappelle wrote:
+> 
+> 
+> On 14/07/2019 15:23, Yann E. MORIN wrote:
+>> Arnout, Jerzy, All,
+>>
+>> (sorry, I sent the previous one too quickly)
+>>
+>> On 2019-07-14 15:15 +0200, Yann E. MORIN spake thusly:
+>>> On 2019-07-14 14:44 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+>> [--SNIP--]
+>>>> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/251214899
+>>> No, it does not fix it totally. It only fixes the python traceback.
+>>> The Kodi issues is till present.
+>>> Hint: the Kodi package is the only one that indents the "source" lines
+>>> with a TAB.
+>>
+>> If one changes Kodi to not indent the source lines, then the issue
+>> disappears. Of course, this is not the correct solution, but...
+> 
+>  Yes, because the test only looks at source lines which are indented, which is
+> wrong too. It should be a regex.
+
+ So, I changed this into a regex...
+
+> 
+>>
+>> If one changes another package to also idnent the source lines with a
+>> TAB, then the error happens there too (for example, fftw):
+>>
+>>     package/fftw/Config.in:18: Packages in: if BR2_PACKAGE_FFTW,
+>>                                are not alphabetically ordered;
+>>                                correct order: '-', '_', digits, capitals, lowercase;
+>>                                first incorrect package: ftw/fftw-d
+>>
+>> OK, so, weird. The package included is in fact fftw/fftw-double and only
+>> part of the bname is reported.
+>>
+>> But if one also looks more closely at the Kodi issue, packages names are
+>> also incorrectly reported:
+>>
+>>     package/kodi/Config.in:303: Packages in: menu "Audio decoder addons",
+>>     [--SNIP--]
+>>                                 first incorrect package: kodi-audiodecoder
+>>
+>> And in fact, there is one thing I don;t understand in utils/checkpackagelib/lib_config.py,
+>> line 106:
+>>
+>>     new_package = text[17: -(len(self.filename)-5):]
+>>
+>> Why are we using the current filename to strip away parts of the new
+>> package filename?
+> 
+>  That is indeed the problem. I didn't look too hard at that line (because I
+> already looked to much at all the rest :-). The len(self.filename)-5 works for
+> package/Config.in because that exactly strips off the /Config.in part of the
+> line. But that's a horrible hack, of course...
+
+ ... and used the same regex to get the package name.
+
+ It now seems to work correctly. However, it turns up 10 "errors":
+
+boot/Config.in:7: Packages in: menu "Bootloaders",
+                  are not alphabetically ordered;
+                  correct order: '-', '_', digits, capitals, lowercase;
+                  first incorrect package: arm-trusted-firmware
+package/fftw/Config.in:18: Packages in: if BR2_PACKAGE_FFTW,
+                           are not alphabetically ordered;
+                           correct order: '-', '_', digits, capitals, lowercase;
+                           first incorrect package: fftw-double
+package/gstreamer/Config.in:7: Packages in: if BR2_PACKAGE_GSTREAMER,
+                               are not alphabetically ordered;
+                               correct order: '-', '_', digits, capitals, lowercase;
+                               first incorrect package: gst-plugins-bad
+package/gstreamer1/Config.in:6: Packages in: if BR2_PACKAGE_GSTREAMER1,
+                                are not alphabetically ordered;
+                                correct order: '-', '_', digits, capitals,
+lowercase;
+                                first incorrect package: gst1-plugins-base
+package/opengl/Config.in:2: Packages in: ,
+                            are not alphabetically ordered;
+                            correct order: '-', '_', digits, capitals, lowercase;
+                            first incorrect package: libegl
+package/qt5/Config.in:84: Packages in: comment "Latest Qt version needs
+host/toolchain w/ gcc >= 4.8",
+                          are not alphabetically ordered;
+                          correct order: '-', '_', digits, capitals, lowercase;
+                          first incorrect package: qt5webengine
+package/freescale-imx/Config.in:96: Packages in: if BR2_PACKAGE_FREESCALE_IMX,
+                                    are not alphabetically ordered;
+                                    correct order: '-', '_', digits, capitals,
+lowercase;
+                                    first incorrect package: firmware-imx
+toolchain/toolchain-buildroot/Config.in:109: Packages in: comment "glibc on MIPS
+w/ NAN2008 needs a toolchain w/ headers >= 4.5",
+                                             are not alphabetically ordered;
+                                             correct order: '-', '_', digits,
+capitals, lowercase;
+                                             first incorrect package: glibc
+toolchain/toolchain-external/Config.in:17: Packages in: comment "glibc
+toolchains only available with shared lib support",
+                                           are not alphabetically ordered;
+                                           correct order: '-', '_', digits,
+capitals, lowercase;
+                                           first incorrect package:
+toolchain-external-codesourcery-aarch64
+toolchain/Config.in:70: Packages in: menu "Toolchain",
+                        are not alphabetically ordered;
+                        correct order: '-', '_', digits, capitals, lowercase;
+                        first incorrect package: gdb
+
+
+ I haven't looked at the details yet, but I think most of them are bogus. So,
+maybe we should just do it for package/Config.in and package/Config.in.host.
+However, some of them *are* relevant: external toolchains, bootloaders, maybe
+qt5... Note however that for those the "comment" handling is not correct (in
+package/Config.in, comments are generally used to indicate submenus, but in
+other Config.in files this is not the case).
+
+ Ideas?
+
+ Regards,
+ Arnout
