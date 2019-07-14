@@ -1,50 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:09:26 +0200
-Subject: [Buildroot] [git commit] boot/at91bootstrap3: bump to version 3.8.13
-Message-ID: <20190714102157.5745480163@busybox.osuosl.org>
+Date: Sun, 14 Jul 2019 11:57:22 +0200
+Subject: [Buildroot] [git commit] package/python-django: bump to version
+ 2.2.3
+Message-ID: <20190714102157.256B481421@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d00f9680efbff65bde95e688d13f7468a152d2e1
+commit: https://git.buildroot.net/buildroot/commit/?id=0ef236c72606d3dcdb0018740c365589e64461bc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+See https://docs.djangoproject.com/en/2.2/releases/2.2.3/
+
+Also, 2.2.x is the new LTS series.
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/at91bootstrap3/Config.in           | 4 ++--
- boot/at91bootstrap3/at91bootstrap3.hash | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/boot/at91bootstrap3/Config.in b/boot/at91bootstrap3/Config.in
-index afdc7e77ea..89ef3fc908 100644
---- a/boot/at91bootstrap3/Config.in
-+++ b/boot/at91bootstrap3/Config.in
-@@ -19,7 +19,7 @@ choice
- 	prompt "AT91 Bootstrap 3 version"
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 8cb60adf0c..0d63853aaa 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	2162aed4111da837433f41a9eed5c8bd  Django-2.1.10.tar.gz
+-sha256	65e2a548a52fca560cdd4e35f4fa1a79140f405af48950e59702a37e4227e958  Django-2.1.10.tar.gz
++md5	f152164e77d38460ee06c42c210d2f57  Django-2.2.3.tar.gz
++sha256	4d23f61b26892bac785f07401bc38cbf8fa4cec993f400e9cd9ddf28fd51c0ea  Django-2.2.3.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 09c178288c..2697f05466 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
  
- config BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
--	bool "3.8.12"
-+	bool "3.8.13"
- 
- config BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 	bool "Custom Git repository"
-@@ -44,7 +44,7 @@ endif
- 
- config BR2_TARGET_AT91BOOTSTRAP3_VERSION
- 	string
--	default "v3.8.12" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
-+	default "v3.8.13" if BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION
- 	default BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION \
- 		if BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT
- 
-diff --git a/boot/at91bootstrap3/at91bootstrap3.hash b/boot/at91bootstrap3/at91bootstrap3.hash
-index cfeb9c8dc0..ecfda3b2ff 100644
---- a/boot/at91bootstrap3/at91bootstrap3.hash
-+++ b/boot/at91bootstrap3/at91bootstrap3.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256	e25324b6f38725ad2ebfd946cb9e144f0d5889e2885992c7196a82b41fe45ee4  at91bootstrap3-v3.8.12.tar.gz
-+sha256	a5a10579598d47475696fab56c086225b0f4b710299e2dc9e0f9b6f72ed98be8  at91bootstrap3-v3.8.13.tar.gz
+-PYTHON_DJANGO_VERSION = 2.1.10
++PYTHON_DJANGO_VERSION = 2.2.3
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/be/1b/009ec818adf51c7641f3bd9dae778e8b28291b3ceedb352317b0eeafd7ff
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/d3/20/b447eb3d820e0d05fe83cbfb016842bd8da35f4b0f83498dca43d02aebc3
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
