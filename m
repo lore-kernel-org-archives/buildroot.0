@@ -1,32 +1,36 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:12:44 +0200
-Subject: [Buildroot] [git commit] DEVELOPERS: add Pierre-Jean Texier for
- stunnel
-Message-ID: <20190714102157.6CE1880163@busybox.osuosl.org>
+Date: Sun, 14 Jul 2019 12:13:56 +0200
+Subject: [Buildroot] [git commit] docs/manual: 'Fixes' tag needs a colon
+Message-ID: <20190714102157.75BF280163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=26053dfbee089b91149214f6f89a50c67847af63
+commit: https://git.buildroot.net/buildroot/commit/?id=e875c2ffd2f23413e2c924a450c745aa7c785677
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Apparently, patchwork only recognizes the 'Fixes' tag if it is followed
+by a colon. So make sure the manual documents it as such.
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ docs/manual/contribute.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e9c521f400..bac9a17164 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1860,6 +1860,7 @@ F:	package/trace-cmd/
- N:	Pierre-Jean Texier <pjtexier@koncepto.io>
- F:	package/libubootenv/
- F:	package/python-periphery/
-+F:	package/stunnel/
+diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
+index 868600d5d0..f339ca50b8 100644
+--- a/docs/manual/contribute.txt
++++ b/docs/manual/contribute.txt
+@@ -73,7 +73,7 @@ basically two things that can be done:
+     In the commit message of a patch fixing an autobuild failure, add a
+     reference to the build result directory, as follows:
+ ---------------------
+-Fixes http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
++Fixes: http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
+ ---------------------
  
- N:	Pieter De Gendt <pieter.degendt@gmail.com>
- F:	package/libvips/
+ === Reviewing and testing patches
