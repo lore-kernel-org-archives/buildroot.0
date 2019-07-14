@@ -1,35 +1,39 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Jul 2019 15:46:38 +0200
-Subject: [Buildroot] [PATCH] package/uboot-tools: bump to version 2019.07
-In-Reply-To: <1562620109-22335-1-git-send-email-pjtexier@koncepto.io>
-References: <1562620109-22335-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190714154638.03f5df2e@windsurf>
+Date: Sun, 14 Jul 2019 15:54:40 +0200
+Subject: [Buildroot] [git commit] package/ding-libs: adjust version variable
+Message-ID: <20190714135314.09B37828E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  8 Jul 2019 23:08:29 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ed917897116e9488a2598364b21a81d04fc99ca1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Bump to version 2019.07.
-> - remove the patches that have been upstreamed.
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
->  .../0003-Make-FIT-support-really-optional.patch    | 101 ---------------------
->  ...ile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch |  28 ------
->  package/uboot-tools/uboot-tools.hash               |   2 +-
->  package/uboot-tools/uboot-tools.mk                 |   2 +-
->  4 files changed, 2 insertions(+), 131 deletions(-)
->  delete mode 100644 package/uboot-tools/0003-Make-FIT-support-really-optional.patch
->  delete mode 100644 package/uboot-tools/0004-tools-Makefile-fix-HOSTCFLAGS-with-CROSS_BUILD_TOOLS.patch
+This package uses dashes as the version separator while
+release-monitoring uses dots. As the <pkg>_VERSION is used to match
+against release-monitoring, this patch changes the version variable to
+use dots instead.
 
-Applied to master, thanks.
+Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ding-libs/ding-libs.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/ding-libs/ding-libs.mk b/package/ding-libs/ding-libs.mk
+index e9508ccf9e..976f5728ea 100644
+--- a/package/ding-libs/ding-libs.mk
++++ b/package/ding-libs/ding-libs.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-DING_LIBS_VERSION = 0_4_0
+-DING_LIBS_SOURCE = ding_libs-$(DING_LIBS_VERSION).tar.xz
++DING_LIBS_VERSION = 0.4.0
++DING_LIBS_SOURCE = ding_libs-$(subst .,_,$(DING_LIBS_VERSION)).tar.xz
+ DING_LIBS_SITE = https://git.fedorahosted.org/cgit/ding-libs.git/snapshot
+ DING_LIBS_DEPENDENCIES = host-pkgconf \
+ 	$(TARGET_NLS_DEPENDENCIES) \
