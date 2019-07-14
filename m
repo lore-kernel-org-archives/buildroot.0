@@ -1,46 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:16:05 +0200
-Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: bump version
- to 0.5.7
-Message-ID: <20190714102157.900C380163@busybox.osuosl.org>
+Date: Sun, 14 Jul 2019 12:17:16 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xauth: bump version to
+ 1.1
+Message-ID: <20190714102157.A0D7280163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29367651e045766545a82f197a4a7199f5dd5518
+commit: https://git.buildroot.net/buildroot/commit/?id=af252509d35b02db06055f671d03a3dd89070de7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://dovecot.org/pipermail/dovecot-news/2019-July/000413.html
+Added all hashes provided by upstream, added license hash.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
- package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/x11r7/xapp_xauth/xapp_xauth.hash | 9 +++++++--
+ package/x11r7/xapp_xauth/xapp_xauth.mk   | 2 +-
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-index f2b8720c63..7d215c88e7 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
-@@ -1,3 +1,3 @@
- # Locally computed after checking signature
--sha256 7c2fe7e23e732a8451172c00da5f19532448c95e03e44d47c61b123e8210f5b8  dovecot-2.3-pigeonhole-0.5.6.tar.gz
-+sha256 783849542c272331f60e7c4d371b303f7f2b1d69828bced3094a898876ecdb63  dovecot-2.3-pigeonhole-0.5.7.tar.gz
- sha256 fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
-diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-index 1568cbc14d..532d3e6e3b 100644
---- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
-+++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+diff --git a/package/x11r7/xapp_xauth/xapp_xauth.hash b/package/x11r7/xapp_xauth/xapp_xauth.hash
+index f6987c1c0c..0251c083a7 100644
+--- a/package/x11r7/xapp_xauth/xapp_xauth.hash
++++ b/package/x11r7/xapp_xauth/xapp_xauth.hash
+@@ -1,2 +1,7 @@
+-# From https://lists.x.org/archives/xorg-announce/2017-January/002772.html
+-sha256 5afe42ce3cdf4f60520d1658d2b17face45c74050f39af45dccdc95e73fafc4d  xauth-1.0.10.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-July/003005.html
++md5 e50587c1bb832aafd1a19d91a0890a0b  xauth-1.1.tar.bz2
++sha1 16180e36d75a23cb182cb91e78f24273f1a63967  xauth-1.1.tar.bz2
++sha256 6d1dd1b79dd185107c5b0fdd22d1d791ad749ad6e288d0cdf80964c4ffa7530c  xauth-1.1.tar.bz2
++sha512 b6ecd59a853a491ef45bf8cfbff63bed36645f81cb79ae9d18458b57f7502bccf92f0d979d3337578518646f680ad379e67b1dac15a927cbb11372733e7a3a0c  xauth-1.1.tar.bz2
++# Locally computed
++sha256 dcdf5fa36a652efbe61a21def1301739b0010334ae3f049f1cff433221a8c7a5  COPYING
+diff --git a/package/x11r7/xapp_xauth/xapp_xauth.mk b/package/x11r7/xapp_xauth/xapp_xauth.mk
+index 80ac6a42d5..cd900f0055 100644
+--- a/package/x11r7/xapp_xauth/xapp_xauth.mk
++++ b/package/x11r7/xapp_xauth/xapp_xauth.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOVECOT_PIGEONHOLE_VERSION = 0.5.6
-+DOVECOT_PIGEONHOLE_VERSION = 0.5.7
- DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
- DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
- DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
+-XAPP_XAUTH_VERSION = 1.0.10
++XAPP_XAUTH_VERSION = 1.1
+ XAPP_XAUTH_SOURCE = xauth-$(XAPP_XAUTH_VERSION).tar.bz2
+ XAPP_XAUTH_SITE = http://xorg.freedesktop.org/releases/individual/app
+ XAPP_XAUTH_LICENSE = MIT
