@@ -1,23 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:13:31 +0200
-Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add myself for stunnel
-In-Reply-To: <1562877806-10215-2-git-send-email-pjtexier@koncepto.io>
- (Pierre-Jean Texier's message of "Thu, 11 Jul 2019 22:43:26 +0200")
-References: <1562877806-10215-1-git-send-email-pjtexier@koncepto.io>
- <1562877806-10215-2-git-send-email-pjtexier@koncepto.io>
-Message-ID: <87blxw9b5g.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Jul 2019 12:14:04 +0200
+Subject: [Buildroot] [PATCH] docs/manual: 'Fixes' tag needs a colon
+In-Reply-To: <20190712090641.2471-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Fri, 12 Jul 2019 11:06:41 +0200")
+References: <20190712090641.2471-1-arnout@mind.be>
+Message-ID: <877e8k9b4j.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
- > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+ > Apparently, patchwork only recognizes the 'Fixes' tag if it is followed
+ > by a colon. So make sure the manual documents it as such.
 
-"myself" is not really helpful in a commit message, so I've replaced
-with your name and committed, thanks.
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
