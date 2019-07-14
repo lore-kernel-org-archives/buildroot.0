@@ -1,22 +1,41 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:35:39 +0200
-Subject: [Buildroot] [PATCH] package/webp: bump to version 1.0.2
-In-Reply-To: <1563001107-17687-4-git-send-email-gilles.talis@gmail.com>
- (Gilles Talis's message of "Sat, 13 Jul 2019 08:58:26 +0200")
-References: <1563001107-17687-1-git-send-email-gilles.talis@gmail.com>
- <1563001107-17687-4-git-send-email-gilles.talis@gmail.com>
-Message-ID: <87pnmc52f8.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Jul 2019 12:35:10 +0200
+Subject: [Buildroot] [git commit] package/iozone: bump to version 3_487
+Message-ID: <20190714103359.54CDA814DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d766a61c788c42a37d64cef73103ac31ffc5cc90
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/iozone/iozone.hash | 2 +-
+ package/iozone/iozone.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/iozone/iozone.hash b/package/iozone/iozone.hash
+index 2a027317fc..29dba67b32 100644
+--- a/package/iozone/iozone.hash
++++ b/package/iozone/iozone.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256	eeaf16cfbee095b16e4934180c6c7438539629489ce42ef4ace48feb23916b12	iozone3_483.tar
++sha256	2c488a7ccddd624fd557af16e71442c367b131d6178e1b4023bbd532bacdda59	iozone3_487.tar
+diff --git a/package/iozone/iozone.mk b/package/iozone/iozone.mk
+index 903d2a1882..00573d933d 100644
+--- a/package/iozone/iozone.mk
++++ b/package/iozone/iozone.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IOZONE_VERSION = 3_483
++IOZONE_VERSION = 3_487
+ IOZONE_SOURCE = iozone$(IOZONE_VERSION).tar
+ IOZONE_SITE = http://www.iozone.org/src/current
+ IOZONE_LICENSE = IOzone license (NO DERIVED WORKS ALLOWED)
