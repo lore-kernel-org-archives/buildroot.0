@@ -1,90 +1,46 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sun, 14 Jul 2019 15:45:21 +0200
-Subject: [Buildroot] [PATCH] [PATCH] package/python-numpy: fix
- occasional build and run-time failure with lapack
-In-Reply-To: <20190712134227.22781-1-alexandre.payen@smile.fr>
-References: <20190712134227.22781-1-alexandre.payen@smile.fr>
-Message-ID: <a78695a7-0075-ca10-99fb-03222bb2eb23@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 14 Jul 2019 15:46:22 +0200
+Subject: [Buildroot] [git commit] package/zeromq: bump to version 4.3.2
+Message-ID: <20190714134431.0AF55817BC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Alexandre, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=45e5cd5a2bab8502f0752b565c2ae77fd154a40f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Le 12/07/2019 ? 15:42, Aalx a ?crit?:
-> From: Alexandre PAYEN <alexandre.payen@smile.fr>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/zeromq/zeromq.hash | 4 ++--
+ package/zeromq/zeromq.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-This is actually the v3 or v4 of this patch send initially by Giulio Benetti
-[1]. Can you add the revision changelog in the patch?
-
-see: http://nightly.buildroot.org/manual.html#_contributing_to_buildroot (Patch
-revision changelog)
-
-Also, you must keep the initial patch authorship when you rework a patch send by
-another contributor :). Giulio made the initial patch and investigations on this
-issue.
-
-see: http://nightly.buildroot.org/manual.html#_reviewing_and_testing_patches
-
-> 
-> python-numpy build fails if lapack is built before python-numpy itself, and
-> this does not always happen because lapack dependency is missing in
-> BR2_PYTHON_NUMPY_DEPENDENCIES.
-> Also python-numpy fail at run-time because `cblas` reference is missing in
-> BR2_PYTHON_NUMPY_SITE_CFG_LIBS however the choosen lapack implementation.
-> 
-> So :
-> - add lapack to BR2_PYTHON_NUMPY_DEPENDENCIES when
->   BR2_PACKAGE_LAPACK = y
-> - add cblas reference in BR2_PYTHON_NUMPY_SITE_CFG_LIBS when
->   BR2_PACKAGE_LAPACK = y
-> - add cblas and clapack reference in BR2_PYTHON_NUMPY_SITE_CFG_LIBS when
->   BR2_PACKAGE_CLAPACK = y
-
-I believe this should be split into two patches:
-
-1) add cblas in BR2_PYTHON_NUMPY_SITE_CFG_LIBS.
-It's not clear to me why you're removing blas and changing lapack to clapack.
-I tested only with this change and it fixes the 'cblas' reference issue.
-
-2) add lapack optional dependency, probably after adding liblapack virtual package.
-
-Doing so, the initial patch provided by Giulio is not applicable. At least you
-should add in the commit log a link to the patch.
-
-[1] http://patchwork.ozlabs.org/patch/1100208/
-
-Best regards,
-Romain
-
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/50f/50f7f09a9f830cd7b94f8fc83c09fc3d39297d3d/
-> http://lists.busybox.net/pipermail/buildroot/2019-June/252380.html
-> 
-> Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
-> ---
->  package/python-numpy/python-numpy.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-> index 5d2fbfc7ad..e539a649f7 100644
-> --- a/package/python-numpy/python-numpy.mk
-> +++ b/package/python-numpy/python-numpy.mk
-> @@ -17,7 +17,12 @@ PYTHON_NUMPY_SETUP_TYPE = setuptools
->  
->  ifeq ($(BR2_PACKAGE_CLAPACK),y)
->  PYTHON_NUMPY_DEPENDENCIES += clapack
-> -PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
-> +PYTHON_NUMPY_SITE_CFG_LIBS += cblas clapack
-> +PYTHON_NUMPY_ENV += BLAS=clapack LAPACK=clapack
-> +else ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)
-> +PYTHON_NUMPY_DEPENDENCIES += lapack
-> +PYTHON_NUMPY_SITE_CFG_LIBS += blas cblas lapack
-> +PYTHON_NUMPY_ENV += BLAS=lapack LAPACK=lapack
->  else
->  PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
->  endif
-> 
+diff --git a/package/zeromq/zeromq.hash b/package/zeromq/zeromq.hash
+index 5af6a3ff8d..5b87c3ca15 100644
+--- a/package/zeromq/zeromq.hash
++++ b/package/zeromq/zeromq.hash
+@@ -1,6 +1,6 @@
+ # From https://github.com/zeromq/libzmq/releases
+-md5  64cbf3577afdbfda30358bc757a6ac83  zeromq-4.3.1.tar.gz
+-sha1 6cce22d830eaf95feff7cab00744df13ad7ab7f3  zeromq-4.3.1.tar.gz
++md5  2047e917c2cc93505e2579bcba67a573 zeromq-4.3.2.tar.gz
++sha1 e5253bff214f77621b3d29443f1aa6e5a106ffe5  zeromq-4.3.2.tar.gz
+ # Locally computed
+ sha256 bcbabe1e2c7d0eec4ed612e10b94b112dd5f06fcefa994a0c79a45d835cd21eb  zeromq-4.3.1.tar.gz
+ sha256 4fd86507c9b486764343065a9e035222869a27b5789efeb4fd93edc85412d7a3  COPYING
+diff --git a/package/zeromq/zeromq.mk b/package/zeromq/zeromq.mk
+index d799f863c4..2c2e3e45b8 100644
+--- a/package/zeromq/zeromq.mk
++++ b/package/zeromq/zeromq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ZEROMQ_VERSION = 4.3.1
++ZEROMQ_VERSION = 4.3.2
+ ZEROMQ_SITE = https://github.com/zeromq/libzmq/releases/download/v$(ZEROMQ_VERSION)
+ ZEROMQ_INSTALL_STAGING = YES
+ ZEROMQ_DEPENDENCIES = util-linux
