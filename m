@@ -1,44 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:14:14 +0200
-Subject: [Buildroot] [git commit] package/acpica: bump to version 20190703
-Message-ID: <20190714102157.7DF2980163@busybox.osuosl.org>
+Date: Sun, 14 Jul 2019 12:12:09 +0200
+Subject: [Buildroot] [git commit] package/stunnel: bump version to 5.55
+Message-ID: <20190714102157.601ED80163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=645a4e962dc965faf0e674bda0ae59d5d36dfc1c
+commit: https://git.buildroot.net/buildroot/commit/?id=3b4f242e67c40c2b7b8ee62999c0d1a00abe451d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add hash for license file
+See https://www.stunnel.org/ChangeLog.md.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/acpica/acpica.hash | 3 ++-
- package/acpica/acpica.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/stunnel/stunnel.hash | 4 ++--
+ package/stunnel/stunnel.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/acpica/acpica.hash b/package/acpica/acpica.hash
-index 4942fe4548..20d7e0fdfa 100644
---- a/package/acpica/acpica.hash
-+++ b/package/acpica/acpica.hash
-@@ -1,2 +1,3 @@
- # locally computed hash
--sha256 0b979b778bcf711a2b8702b1831affd7dac4a776235d7877fd185651b6a390a3  acpica-unix2-20170531.tar.gz
-+sha256 9f539986b91749947dfc32b3b00d338ba565ee1a394b95c049dd393aac8ae34e  acpica-unix2-20190703.tar.gz
-+sha256 65464cea6ee2f7a5d38e2b5f1050a4b39a15358a09b8e36119416d4e2c5031b8  source/include/acpi.h
-diff --git a/package/acpica/acpica.mk b/package/acpica/acpica.mk
-index c540061928..03d1c45e06 100644
---- a/package/acpica/acpica.mk
-+++ b/package/acpica/acpica.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
+index 999a4500ed..7dde175563 100644
+--- a/package/stunnel/stunnel.hash
++++ b/package/stunnel/stunnel.hash
+@@ -1,5 +1,5 @@
+-# From https://www.stunnel.org/downloads/stunnel-5.53.tar.gz.sha256
+-sha256	80439896ee14269eb70bc8bc669433c7d619018a62c9f9c5c760a24515302585	stunnel-5.53.tar.gz
++# From https://www.stunnel.org/downloads/stunnel-5.55.tar.gz.sha256
++sha256	90de69f41c58342549e74c82503555a6426961b29af3ed92f878192727074c62	stunnel-5.55.tar.gz
+ # Locally calculated
+ sha256	81d0b7244f44ef81dd0b299cf681037c5a42d468b8533e53aff6d1ac84c97dc8	COPYING
+ sha256	1ee2b290e92c211b08df10e9fcaf32596cdb22b8eae731b18c2c074a4a83eebe	COPYRIGHT.GPL
+diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
+index adfa0748ae..261e331cfa 100644
+--- a/package/stunnel/stunnel.mk
++++ b/package/stunnel/stunnel.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--ACPICA_VERSION = 20170531
-+ACPICA_VERSION = 20190703
- ACPICA_SOURCE = acpica-unix2-$(ACPICA_VERSION).tar.gz
- ACPICA_SITE = https://acpica.org/sites/acpica/files
- ACPICA_LICENSE = BSD-3-Clause or GPL-2.0
+ STUNNEL_VERSION_MAJOR = 5
+-STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).53
++STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).55
+ STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
+ STUNNEL_DEPENDENCIES = host-pkgconf openssl
+ STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
