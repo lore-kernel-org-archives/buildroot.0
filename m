@@ -1,42 +1,75 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sun, 14 Jul 2019 14:44:00 +0200
-Subject: [Buildroot] [PATCH] utils/checkpackagelib:
- CommentsMenusPackagesOrder: fix 'menuconfig' handling
-Message-ID: <20190714124400.29431-1-arnout@mind.be>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Sun, 14 Jul 2019 18:16:33 +0530
+Subject: [Buildroot] [PATCH] package/cpio: add host version
+In-Reply-To: <20190714123859.GA8912@scaer>
+References: <20190714090301.26552-1-yann.morin.1998@free.fr>
+ <7761512e-bb70-ea06-14e8-a7f0df882964@mind.be> <20190714123859.GA8912@scaer>
+Message-ID: <2262480.0uGyQ1EtkW@msi-manjaro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The CommentsMenusPackagesOrder check builds the 'state' to track the
-depth of menus and conditions. However, a menuconfig doesn't create a
-menu by itself - it is always followed by a condition that implies the
-menu. As a result, when unwinding the 'state', the level will be wrong.
+On Sunday, July 14, 2019 6:08:59 PM IST Yann E. MORIN wrote:
+> Arnout, All,
+> 
+> On 2019-07-14 14:19 +0200, Arnout Vandecappelle spake thusly:
+> > On 14/07/2019 11:03, Yann E. MORIN wrote:
+> > > The latest cpio has a --reproducible option, which may come handy when
+> > > we try to, well, be reproducible...
+> > > 
+> > > Reported-by: Arnout Vandecappelle <arnout@mind.be>
+> > > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> > > Cc: Arnout Vandecappelle <arnout@mind.be>
+> > > Cc: Atharva Lele <itsatharva@gmail.com>
+> > > ---
+> > > 
+> > >  package/cpio/cpio.mk | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > > 
+> > > diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
+> > > index 9a09279572..d2814b87a5 100644
+> > > --- a/package/cpio/cpio.mk
+> > > +++ b/package/cpio/cpio.mk
+> > > @@ -16,4 +16,7 @@ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+> > > 
+> > >  CPIO_DEPENDENCIES += argp-standalone
+> > >  endif
+> > > 
+> > > +HOST_CPIO_CONF_OPTS = --bindir=$(HOST_DIR)/bin
+> >  
+> >  Why is this needed? For target it is needed because --prefix is set to
+> >  /usr so> 
+> > it would end up in /usr/bin and we want it in /bin. But for hsot, --prefix
+> > is $(HOST_DIR).
+> 
+> You know what? That is exactly what I think, too. ;-)
+> 
+> I just did a quick hack locally to test the build time of cpio, and did
+> not try to think further, so I stupidly copied the target variant as-is
+> without thinking too much.
+> 
+> Then I saw it worked, got the required timings from a batch of 5 runs,
+> finished my reply to Atharva's fs/cpio patch, and decided to send this
+> patch too, without realising that it needed a bit more love.
+> 
+> Atharva, when you respin your fs/cpio patch, can you grab this one in
+> your tree and fix it as Arnout pointed out?
 
-Fix this by checking for menu followed by a space, so it no longer
-matches menuconfig.
+I will :)
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/251214899
+> Regards,
+> Yann E. MORIN.
+> 
+> >  Regards,
+> >  Arnout
+> >  
+> > > +
+> > > 
+> > >  $(eval $(autotools-package))
+> > > 
+> > > +$(eval $(host-autotools-package))
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
----
- utils/checkpackagelib/lib_config.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index f0edb9993d..94faf1b0fc 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -73,7 +73,7 @@ class CommentsMenusPackagesOrder(_CheckFunction):
- 
-     def check_line(self, lineno, text):
-         if text.startswith("comment") or text.startswith("if") or \
--           text.startswith("menu"):
-+           text.startswith("menu "):
- 
-             if text.startswith("comment"):
-                 if not self.state.endswith("-comment"):
--- 
-2.21.0
+Regards,
+Atharva Lele
