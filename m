@@ -1,23 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:14:04 +0200
-Subject: [Buildroot] [PATCH] docs/manual: 'Fixes' tag needs a colon
-In-Reply-To: <20190712090641.2471-1-arnout@mind.be> (Arnout Vandecappelle's
- message of "Fri, 12 Jul 2019 11:06:41 +0200")
-References: <20190712090641.2471-1-arnout@mind.be>
-Message-ID: <877e8k9b4j.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Jul 2019 12:14:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/acpica: bump to version 20190703
+In-Reply-To: <20190711213943.7688-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 11 Jul 2019 23:39:43 +0200")
+References: <20190711213943.7688-1-fontaine.fabrice@gmail.com>
+Message-ID: <8736j89b45.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Apparently, patchwork only recognizes the 'Fixes' tag if it is followed
- > by a colon. So make sure the manual documents it as such.
-
- > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
- > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > Add hash for license file
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed, thanks.
 
