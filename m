@@ -1,8 +1,8 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 15 Jul 2019 01:06:02 +0200
-Subject: [Buildroot] [PATCH 1/1] package/socketcand: fix build with kernel
+Date: Mon, 15 Jul 2019 01:25:45 +0200
+Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: fix build with kernel
  >= 5.2
-Message-ID: <20190714230602.8861-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190714232545.28892-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,73 +10,87 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
 Fixes:
- - http://autobuild.buildroot.org/results/3112b1ad77e805cd3ca61bb79560e8e13a466589
+ - http://autobuild.buildroot.org/results/1b965c5d9c782d6689041eeeb7be3be4a4854346
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...o-find-SIOCGSTAMP-with-latest-kernel.patch | 54 +++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 package/socketcand/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
+ ...x-build-after-y2038-changes-in-glibc.patch | 68 +++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+ create mode 100644 package/bluez5_utils/0001-tools-Fix-build-after-y2038-changes-in-glibc.patch
 
-diff --git a/package/socketcand/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch b/package/socketcand/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
+diff --git a/package/bluez5_utils/0001-tools-Fix-build-after-y2038-changes-in-glibc.patch b/package/bluez5_utils/0001-tools-Fix-build-after-y2038-changes-in-glibc.patch
 new file mode 100644
-index 0000000000..5e7554733e
+index 0000000000..7d08c6aa40
 --- /dev/null
-+++ b/package/socketcand/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
-@@ -0,0 +1,54 @@
-+From e6f21b0cd5a449c1bf7a4d2c6bc5ad278a2d4e8e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 15 Jul 2019 01:01:34 +0200
-+Subject: [PATCH] fix include to find SIOCGSTAMP with latest kernel
++++ b/package/bluez5_utils/0001-tools-Fix-build-after-y2038-changes-in-glibc.patch
+@@ -0,0 +1,68 @@
++From f36f71f60b1e68c0f12e615b9b128d089ec3dd19 Mon Sep 17 00:00:00 2001
++From: Bastien Nocera <hadess@hadess.net>
++Date: Fri, 7 Jun 2019 09:51:33 +0200
++Subject: tools: Fix build after y2038 changes in glibc
 +
-+In linux kernel commit 0768e17073dc527ccd18ed5f96ce85f9985e9115
-+the asm-generic/sockios.h header no longer defines SIOCGSTAMP.
-+Instead it provides only SIOCGSTAMP_OLD.
-+
-+The linux/sockios.h header now defines SIOCGSTAMP using either
-+SIOCGSTAMP_OLD or SIOCGSTAMP_NEW as appropriate. This linux only
-+header file is not pulled so we get a build failure.
-+
-+./state_bcm.c: In function 'state_bcm':
-+./state_bcm.c:91:16: error: 'SIOCGSTAMP' undeclared (first use in this function); did you mean 'SIOCGARP'?
-+   if(ioctl(sc, SIOCGSTAMP, &tv) < 0) {
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/3112b1ad77e805cd3ca61bb79560e8e13a466589
-+
++The 32-bit SIOCGSTAMP has been deprecated. Use the deprecated name
++to fix the build.
++[Retrieved from:
++https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/tools/?id=f36f71f60b1e68c0f12e615b9b128d089ec3dd19]
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/dschanoeh/socketcand/pull/26]
 +---
-+ state_bcm.c   | 1 +
-+ state_isotp.c | 1 +
-+ 2 files changed, 2 insertions(+)
++ tools/l2test.c | 6 +++++-
++ tools/rctest.c | 6 +++++-
++ 2 files changed, 10 insertions(+), 2 deletions(-)
 +
-+diff --git a/state_bcm.c b/state_bcm.c
-+index 0c980fa..d6bdd7e 100644
-+--- a/state_bcm.c
-++++ b/state_bcm.c
-+@@ -21,6 +21,7 @@
-+ #include <linux/can.h>
-+ #include <linux/can/bcm.h>
-+ #include <linux/can/error.h>
-++#include <linux/sockios.h>
++(limited to 'tools')
++
++diff --git a/tools/l2test.c b/tools/l2test.c
++index e755ac881..e787c2ce2 100644
++--- a/tools/l2test.c
+++++ b/tools/l2test.c
++@@ -55,6 +55,10 @@
++ #define BREDR_DEFAULT_PSM	0x1011
++ #define LE_DEFAULT_PSM		0x0080
 + 
-+ #define RXLEN 128
+++#ifndef SIOCGSTAMP_OLD
+++#define SIOCGSTAMP_OLD SIOCGSTAMP
+++#endif
+++
++ /* Test modes */
++ enum {
++ 	SEND,
++@@ -907,7 +911,7 @@ static void recv_mode(int sk)
++ 			if (timestamp) {
++ 				struct timeval tv;
 + 
-+diff --git a/state_isotp.c b/state_isotp.c
-+index 4005f94..7b515e7 100644
-+--- a/state_isotp.c
-++++ b/state_isotp.c
-+@@ -20,6 +20,7 @@
-+ #include <linux/can.h>
-+ #include <linux/can/isotp.h>
-+ #include <linux/can/error.h>
-++#include <linux/sockios.h>
++-				if (ioctl(sk, SIOCGSTAMP, &tv) < 0) {
+++				if (ioctl(sk, SIOCGSTAMP_OLD, &tv) < 0) {
++ 					timestamp = 0;
++ 					memset(ts, 0, sizeof(ts));
++ 				} else {
++diff --git a/tools/rctest.c b/tools/rctest.c
++index 94490f462..bc8ed875d 100644
++--- a/tools/rctest.c
+++++ b/tools/rctest.c
++@@ -50,6 +50,10 @@
 + 
-+ int si = -1;
-+ fd_set readfds;
++ #include "src/shared/util.h"
++ 
+++#ifndef SIOCGSTAMP_OLD
+++#define SIOCGSTAMP_OLD SIOCGSTAMP
+++#endif
+++
++ /* Test modes */
++ enum {
++ 	SEND,
++@@ -505,7 +509,7 @@ static void recv_mode(int sk)
++ 			if (timestamp) {
++ 				struct timeval tv;
++ 
++-				if (ioctl(sk, SIOCGSTAMP, &tv) < 0) {
+++				if (ioctl(sk, SIOCGSTAMP_OLD, &tv) < 0) {
++ 					timestamp = 0;
++ 					memset(ts, 0, sizeof(ts));
++ 				} else {
 +-- 
-+2.20.1
++cgit 1.2-0.3.lf.el7
 +
 -- 
 2.20.1
