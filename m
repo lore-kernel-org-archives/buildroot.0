@@ -1,57 +1,62 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jul 2019 19:32:18 +0200
-Subject: [Buildroot] [PATCHv2] boot/atf: licensing info is only valid for
- v1.4
-Message-ID: <20190714173218.22671-1-yann.morin.1998@free.fr>
+Date: Sun, 14 Jul 2019 20:06:04 +0200
+Subject: [Buildroot] [PATCH 2/2] fs/common.mk: do not store original
+ names and timestamps when creating GZIP rootfs
+In-Reply-To: <20190703163959.23070-2-itsatharva@gmail.com>
+References: <20190703163959.23070-1-itsatharva@gmail.com>
+ <20190703163959.23070-2-itsatharva@gmail.com>
+Message-ID: <20190714180604.GD29941@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The licensing information, and expecially the name of the license file,
-is known only for the official v1.4 version. For example, in later
-versions, the license file has been renamed.
+Atharva, All,
 
-Since we can't be sure of the licensing information for custom versions,
-or for versions from git, define that only for the known v1.4 version.
+On 2019-07-03 22:09 +0530, Atharva Lele spake thusly:
+> We don't use the GZIP environment variable to store GZIP options,
+> so explicitly add -n argument here to increase reproducibility.
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Adam Duskett <aduskett@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+This patch should come before the previous patch removing 'export GZIP'.
 
----
-Changes v1 -> v2:
-  - adopted by Yann from Adam
-  - don't change the filename, but move the licensing info
----
- boot/arm-trusted-firmware/arm-trusted-firmware.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Otherwise:
 
-diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-index 9a23e3d336..a7814e534a 100644
---- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-+++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
-@@ -5,8 +5,6 @@
- ################################################################################
- 
- ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
--ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
--ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
- 
- ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
- # Handle custom ATF tarballs as specified by the configuration
-@@ -19,6 +17,10 @@ ARM_TRUSTED_FIRMWARE_SITE_METHOD = git
- else
- # Handle stable official ATF versions
- ARM_TRUSTED_FIRMWARE_SITE = $(call github,ARM-software,arm-trusted-firmware,$(ARM_TRUSTED_FIRMWARE_VERSION))
-+# The licensing of custom or from-git versions is unknown.
-+# This is valid only for the official v1.4.
-+ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
-+ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
- endif
- 
- ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE)$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION),y)
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+> ---
+>  fs/common.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/common.mk b/fs/common.mk
+> index fceb38c5b9..ca46a331d6 100644
+> --- a/fs/common.mk
+> +++ b/fs/common.mk
+> @@ -115,7 +115,7 @@ ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES = $$(sort \
+>  
+>  ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
+>  ROOTFS_$(2)_COMPRESS_EXT = .gz
+> -ROOTFS_$(2)_COMPRESS_CMD = gzip -9 -c
+> +ROOTFS_$(2)_COMPRESS_CMD = gzip -9 -c -n
+>  endif
+>  ifeq ($$(BR2_TARGET_ROOTFS_$(2)_BZIP2),y)
+>  ROOTFS_$(2)_COMPRESS_EXT = .bz2
+> -- 
+> 2.22.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
