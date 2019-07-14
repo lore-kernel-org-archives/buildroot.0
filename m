@@ -1,49 +1,47 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:15:03 +0200
-Subject: [Buildroot] [git commit] package/dovecot: bump version to 2.3.7
-Message-ID: <20190714102157.86DEA80163@busybox.osuosl.org>
+Date: Sun, 14 Jul 2019 12:21:11 +0200
+Subject: [Buildroot] [git commit] fs/tar: explicitly set extended header
+ values to ensure binary reproducibility
+Message-ID: <20190714102157.D47F780163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f24cb3414f7f84eaf565244aa889437df28eedba
+commit: https://git.buildroot.net/buildroot/commit/?id=9c449f9dd8d6a5f3545a7c191b64cd7cd886ce58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Switched _SITE to dovecot.org according to release notes:
-https://dovecot.org/pipermail/dovecot-news/2019-July/000412.html
+Since we use --xattrs-include='*' to include all extended attributes,
+tar creates a PAX formatted archive. The archive metadata captures atime
+and ctime of files. To fix this, GNU recommends that we pass this added
+argument to tar to create binary reproducible packages. Setting of mtime
+is handled in fs/common.mk using touch on all files.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Diffoscope output pre-change: https://gitlab.com/snippets/1871111
+Diffoscope output after change is blank i.e. binary reproducibile rootfs
+is created.
+
+GNU Recommendation: https://www.gnu.org/software/tar/manual/tar.html#SEC147
+
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+Reviewed-by: Matt Weber <matthew.weber@rockwellcollins.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dovecot/dovecot.hash | 2 +-
- package/dovecot/dovecot.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ fs/tar/tar.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
-index a57e51405d..05862f0df2 100644
---- a/package/dovecot/dovecot.hash
-+++ b/package/dovecot/dovecot.hash
-@@ -1,5 +1,5 @@
- # Locally computed after checking signature
--sha256 ed1d8dc1beeae9c6c73deac73a62ef19fe9262fbffd86604a3f690452f5536c7  dovecot-2.3.6.tar.gz
-+sha256 11e156ae8539e42892809cc2412c3f1a294188806969f5547191a43abd4083aa  dovecot-2.3.7.tar.gz
- sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
- sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
- sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
-diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
-index 78bc41bff2..e4573e63f4 100644
---- a/package/dovecot/dovecot.mk
-+++ b/package/dovecot/dovecot.mk
-@@ -5,8 +5,8 @@
- ################################################################################
+diff --git a/fs/tar/tar.mk b/fs/tar/tar.mk
+index 4c6327ace8..393d01bfe8 100644
+--- a/fs/tar/tar.mk
++++ b/fs/tar/tar.mk
+@@ -8,6 +8,9 @@ TAR_OPTS := $(call qstrip,$(BR2_TARGET_ROOTFS_TAR_OPTIONS))
  
- DOVECOT_VERSION_MAJOR = 2.3
--DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).6
--DOVECOT_SITE = https://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
-+DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).7
-+DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
- DOVECOT_INSTALL_STAGING = YES
- DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
- DOVECOT_LICENSE_FILES = COPYING COPYING.LGPL COPYING.MIT
+ ROOTFS_TAR_DEPENDENCIES = $(BR2_TAR_HOST_DEPENDENCY)
+ 
++# do not store atime/ctime in PaxHeaders to ensure reproducbility
++TAR_OPTS += --pax-option=exthdr.name=%d/PaxHeaders/%f,atime:=0,ctime:=0
++
+ define ROOTFS_TAR_CMD
+ 	(cd $(TARGET_DIR); find -print0 | LC_ALL=C sort -z | \
+ 		tar $(TAR_OPTS) -cf $@ --null --xattrs-include='*' --no-recursion -T - --numeric-owner)
