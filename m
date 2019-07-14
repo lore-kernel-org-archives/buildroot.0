@@ -1,68 +1,92 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jul 2019 15:23:29 +0200
-Subject: [Buildroot] [PATCH] utils/checkpackagelib:
- CommentsMenusPackagesOrder: fix 'menuconfig' handling
-In-Reply-To: <20190714131502.GC8912@scaer>
-References: <20190714124400.29431-1-arnout@mind.be>
- <20190714131502.GC8912@scaer>
-Message-ID: <20190714132329.GA25166@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 14 Jul 2019 15:23:04 +0200
+Subject: [Buildroot] [PATCH] package/sshguard: new package
+In-Reply-To: <1562793228-5530-1-git-send-email-angelo@amarulasolutions.com>
+References: <1562793228-5530-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <20190714152304.37a32f23@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, Jerzy, All,
+Hello Angelo,
 
-(sorry, I sent the previous one too quickly)
+On Wed, 10 Jul 2019 23:13:48 +0200
+Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
 
-On 2019-07-14 15:15 +0200, Yann E. MORIN spake thusly:
-> On 2019-07-14 14:44 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-[--SNIP--]
-> > Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/251214899
-> No, it does not fix it totally. It only fixes the python traceback.
-> The Kodi issues is till present.
-> Hint: the Kodi package is the only one that indents the "source" lines
-> with a TAB.
+> sshguard protects hosts from brute-force attacks against SSH and other
+> services.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
-If one changes Kodi to not indent the source lines, then the issue
-disappears. Of course, this is not the correct solution, but...
+Thanks for this contribution!
 
-If one changes another package to also idnent the source lines with a
-TAB, then the error happens there too (for example, fftw):
+> diff --git a/package/sshguard/S39sshguard b/package/sshguard/S39sshguard
+> new file mode 100644
+> index 0000000..8b46bc5
+> --- /dev/null
+> +++ b/package/sshguard/S39sshguard
+> @@ -0,0 +1,27 @@
+> +#!/bin/sh
+> +
+> +case "$1" in
+> +	start)
+> +		printf "Starting sshguard: "
+> +		iptables -N sshguard
+> +		iptables -A INPUT -j sshguard
+> +		start-stop-daemon -S -q -b -p /run/sshguard.pid \
+> +			-x /usr/sbin/sshguard -- -i /run/sshguard.pid
+> +		[ $? = 0 ] && echo "OK" || echo "FAIL"
+> +		;;
+> +	stop)
+> +		printf "Stopping sshguard: "
+> +		start-stop-daemon -K -q -p /run/sshguard.pid
+> +		[ $? = 0 ] && echo "OK" || echo "FAIL"
+> +		iptables -D INPUT -j sshguard
+> +		iptables -F sshguard
+> +		iptables -X sshguard
+> +		;;
+> +	restart)
+> +		"$0" stop
+> +		"$0" start
+> +		;;
+> +	*)
+> +		echo "Usage: $0 {start|stop|restart}"
+> +		;;
+> +esac
 
-    package/fftw/Config.in:18: Packages in: if BR2_PACKAGE_FFTW,
-                               are not alphabetically ordered;
-                               correct order: '-', '_', digits, capitals, lowercase;
-                               first incorrect package: ftw/fftw-d
+For the init script, could you use package/busybox/S01syslogd as a
+template ? It is now our "canonical" init script format, so we would
+like to follow it for new packages.
 
-OK, so, weird. The package included is in fact fftw/fftw-double and only
-part of the bname is reported.
+> diff --git a/package/sshguard/sshguard.mk b/package/sshguard/sshguard.mk
+> new file mode 100644
+> index 0000000..634bc17
+> --- /dev/null
+> +++ b/package/sshguard/sshguard.mk
+> @@ -0,0 +1,35 @@
+> +################################################################################
+> +#
+> +# sshguard
+> +#
+> +################################################################################
+> +
+> +SSHGUARD_VERSION = v2.4.0
+> +SSHGUARD_SITE = https://bitbucket.org/sshguard/sshguard
+> +SSHGUARD_SITE_METHOD = git
+> +SSHGUARD_LICENSE = GPL-2.0+
 
-But if one also looks more closely at the Kodi issue, packages names are
-also incorrectly reported:
+The COPYING file at
+https://bitbucket.org/sshguard/sshguard/src/v2.4.0/COPYING doesn't look
+like GPLv2 at all. Are you sure about this ?
 
-    package/kodi/Config.in:303: Packages in: menu "Audio decoder addons",
-    [--SNIP--]
-                                first incorrect package: kodi-audiodecoder
+Could you fix those two issues and send an updated version ?
 
-And in fact, there is one thing I don;t understand in utils/checkpackagelib/lib_config.py,
-line 106:
+Thanks!
 
-    new_package = text[17: -(len(self.filename)-5):]
-
-Why are we using the current filename to strip away parts of the new
-package filename?
-
-Hope that helps.
-
-Regards,
-Yann E. MORIN.
-
+Thomas
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
