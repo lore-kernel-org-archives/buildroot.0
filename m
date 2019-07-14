@@ -1,47 +1,32 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:12:09 +0200
-Subject: [Buildroot] [git commit] package/stunnel: bump version to 5.55
-Message-ID: <20190714102157.601ED80163@busybox.osuosl.org>
+Date: Sun, 14 Jul 2019 12:12:44 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Pierre-Jean Texier for
+ stunnel
+Message-ID: <20190714102157.6CE1880163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3b4f242e67c40c2b7b8ee62999c0d1a00abe451d
+commit: https://git.buildroot.net/buildroot/commit/?id=26053dfbee089b91149214f6f89a50c67847af63
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-See https://www.stunnel.org/ChangeLog.md.html
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/stunnel/stunnel.hash | 4 ++--
- package/stunnel/stunnel.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/stunnel/stunnel.hash b/package/stunnel/stunnel.hash
-index 999a4500ed..7dde175563 100644
---- a/package/stunnel/stunnel.hash
-+++ b/package/stunnel/stunnel.hash
-@@ -1,5 +1,5 @@
--# From https://www.stunnel.org/downloads/stunnel-5.53.tar.gz.sha256
--sha256	80439896ee14269eb70bc8bc669433c7d619018a62c9f9c5c760a24515302585	stunnel-5.53.tar.gz
-+# From https://www.stunnel.org/downloads/stunnel-5.55.tar.gz.sha256
-+sha256	90de69f41c58342549e74c82503555a6426961b29af3ed92f878192727074c62	stunnel-5.55.tar.gz
- # Locally calculated
- sha256	81d0b7244f44ef81dd0b299cf681037c5a42d468b8533e53aff6d1ac84c97dc8	COPYING
- sha256	1ee2b290e92c211b08df10e9fcaf32596cdb22b8eae731b18c2c074a4a83eebe	COPYRIGHT.GPL
-diff --git a/package/stunnel/stunnel.mk b/package/stunnel/stunnel.mk
-index adfa0748ae..261e331cfa 100644
---- a/package/stunnel/stunnel.mk
-+++ b/package/stunnel/stunnel.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e9c521f400..bac9a17164 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1860,6 +1860,7 @@ F:	package/trace-cmd/
+ N:	Pierre-Jean Texier <pjtexier@koncepto.io>
+ F:	package/libubootenv/
+ F:	package/python-periphery/
++F:	package/stunnel/
  
- STUNNEL_VERSION_MAJOR = 5
--STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).53
-+STUNNEL_VERSION = $(STUNNEL_VERSION_MAJOR).55
- STUNNEL_SITE = http://www.usenix.org.uk/mirrors/stunnel/archive/$(STUNNEL_VERSION_MAJOR).x
- STUNNEL_DEPENDENCIES = host-pkgconf openssl
- STUNNEL_CONF_OPTS = --with-ssl=$(STAGING_DIR)/usr --with-threads=fork \
+ N:	Pieter De Gendt <pieter.degendt@gmail.com>
+ F:	package/libvips/
