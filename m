@@ -1,42 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jul 2019 19:21:33 +0200
-Subject: [Buildroot] [PATCH 2/2] fs/cpio: make cpio rootfs reproducible
-In-Reply-To: <20190714164725.GB29941@scaer>
-References: <20190714162335.12684-1-itsatharva@gmail.com>
- <20190714162335.12684-2-itsatharva@gmail.com>
- <20190714164725.GB29941@scaer>
-Message-ID: <20190714172133.GC29941@scaer>
+Date: Sun, 14 Jul 2019 19:32:18 +0200
+Subject: [Buildroot] [PATCHv2] boot/atf: licensing info is only valid for
+ v1.4
+Message-ID: <20190714173218.22671-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Atharva, All,
+The licensing information, and expecially the name of the license file,
+is known only for the official v1.4 version. For example, in later
+versions, the license file has been renamed.
 
-On 2019-07-14 18:47 +0200, Yann E. MORIN spake thusly:
-> On 2019-07-14 21:53 +0530, Atharva Lele spake thusly:
-> > Pass the recommended argument in the CPIO manual to make cpio archives
-> > reproducible.
-[--SNIP--]
-> > +# --repoducible option was not introduced until cpio v2.12. Some distros
-> > +# like Ubuntu 16.04 or Debian oldstable which package v2.11. Hence build
-> > +# host-cpio.
-> > +ifeq ($(BR2_REPRODUCIBLE), y)
-> > +ROOTFS_CPIO_DEPENDENCIES += host-cpio
-> > +CPIO_OPTS = --reproducible
+Since we can't be sure of the licensing information for custom versions,
+or for versions from git, define that only for the known v1.4 version.
 
-In addition to my previous comments: the variable shall be prefixed with
-ROOTFS_CPIO_, not just with CPIO_, otherwise it could clash with variables
-from the cpio package itself.
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Adam Duskett <aduskett@gmail.com>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-Regards,
-Yann E. MORIN.
+---
+Changes v1 -> v2:
+  - adopted by Yann from Adam
+  - don't change the filename, but move the licensing info
+---
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index 9a23e3d336..a7814e534a 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -5,8 +5,6 @@
+ ################################################################################
+ 
+ ARM_TRUSTED_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_VERSION))
+-ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
+-ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
+ 
+ ifeq ($(ARM_TRUSTED_FIRMWARE_VERSION),custom)
+ # Handle custom ATF tarballs as specified by the configuration
+@@ -19,6 +17,10 @@ ARM_TRUSTED_FIRMWARE_SITE_METHOD = git
+ else
+ # Handle stable official ATF versions
+ ARM_TRUSTED_FIRMWARE_SITE = $(call github,ARM-software,arm-trusted-firmware,$(ARM_TRUSTED_FIRMWARE_VERSION))
++# The licensing of custom or from-git versions is unknown.
++# This is valid only for the official v1.4.
++ARM_TRUSTED_FIRMWARE_LICENSE = BSD-3-Clause
++ARM_TRUSTED_FIRMWARE_LICENSE_FILES = license.rst
+ endif
+ 
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE)$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION),y)
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
