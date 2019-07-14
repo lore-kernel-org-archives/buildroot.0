@@ -1,22 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:27:14 +0200
-Subject: [Buildroot] [PATCH 2/2] DEVELOPERS: add myself for freetype
-In-Reply-To: <20190707114415.13195-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 7 Jul 2019 13:44:15 +0200")
-References: <20190707114415.13195-1-bernd.kuhls@t-online.de>
- <20190707114415.13195-2-bernd.kuhls@t-online.de>
-Message-ID: <87muhg6hdp.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Jul 2019 12:26:52 +0200
+Subject: [Buildroot] [git commit] DEVELOPERS: add Bernd Kuhls for freetype
+Message-ID: <20190714102543.4D0DC7FE2C@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c4fa336c69dd72e39f7c31f9987a7f29b842daea
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index bac9a17164..4ab4e36593 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -296,6 +296,7 @@ F:	package/fetchmail/
+ F:	package/ffmpeg/
+ F:	package/freeswitch/
+ F:	package/freeswitch-mod-bcg729/
++F:	package/freetype/
+ F:	package/ghostscript/
+ F:	package/giflib/
+ F:	package/gli/
