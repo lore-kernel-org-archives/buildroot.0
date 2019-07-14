@@ -1,22 +1,33 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 15 Jul 2019 00:03:09 +0200
-Subject: [Buildroot] [PATCH 1/1] package/zeromq: bump to version 4.3.2
-In-Reply-To: <20190708171849.17423-1-asafka7@gmail.com> (Asaf Kahlon's message
- of "Mon, 8 Jul 2019 20:18:49 +0300")
-References: <20190708171849.17423-1-asafka7@gmail.com>
-Message-ID: <87zhlgz336.fsf@dell.be.48ers.dk>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 15 Jul 2019 00:51:00 +0200
+Subject: [Buildroot] [PATCH 1/1] package/glib-networking: select openssl if
+ gnutls is not enabled
+Message-ID: <20190714225100.2957-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
+Fixes:
+ - http://autobuild.buildroot.org/results/385ab1e09f821facc3d97b7dda6bd8d4a2c98eb5
 
- > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/glib-networking/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-It would have been good to mention that this also contains a fix for a
-pretty serious security issue.
-
+diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
+index ec2962392c..004f82222c 100644
+--- a/package/glib-networking/Config.in
++++ b/package/glib-networking/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_GLIB_NETWORKING
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
+ 	help
+ 	  Network-related GIO modules for glib.
+ 
 -- 
-Bye, Peter Korsgaard
+2.20.1
