@@ -1,42 +1,45 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:35:28 +0200
-Subject: [Buildroot] [git commit] package/webp: bump to version 1.0.2
-Message-ID: <20190714103359.6001C802B7@busybox.osuosl.org>
+Date: Sun, 14 Jul 2019 12:34:06 +0200
+Subject: [Buildroot] [git commit] package/tesseract-ocr: bump to version
+ 4.1.0
+Message-ID: <20190714103359.45B00814DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28122f7867166fbb7cd9ad94be93aefce81b990d
+commit: https://git.buildroot.net/buildroot/commit/?id=a2be01d786236ad53742e1bf67c0b75da977fc4e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/webp/webp.hash | 2 +-
- package/webp/webp.mk   | 2 +-
+ package/tesseract-ocr/tesseract-ocr.hash | 2 +-
+ package/tesseract-ocr/tesseract-ocr.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/webp/webp.hash b/package/webp/webp.hash
-index ed4b127e53..e84dd8c034 100644
---- a/package/webp/webp.hash
-+++ b/package/webp/webp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	8c744a5422dbffa0d1f92e90b34186fb8ed44db93fbacb55abd751ac8808d922	libwebp-1.0.1.tar.gz
-+sha256	3d47b48c40ed6476e8047b2ddb81d93835e0ca1b8d3e8c679afbb3004dd564b1	libwebp-1.0.2.tar.gz
- sha256	5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf	COPYING
-diff --git a/package/webp/webp.mk b/package/webp/webp.mk
-index 1aa81a0717..e7235f48f4 100644
---- a/package/webp/webp.mk
-+++ b/package/webp/webp.mk
+diff --git a/package/tesseract-ocr/tesseract-ocr.hash b/package/tesseract-ocr/tesseract-ocr.hash
+index d953758841..8de25e2941 100644
+--- a/package/tesseract-ocr/tesseract-ocr.hash
++++ b/package/tesseract-ocr/tesseract-ocr.hash
+@@ -1,5 +1,5 @@
+ # locally computed
+-sha256  a1f5422ca49a32e5f35c54dee5112b11b99928fc9f4ee6695cdc6768d69f61dd  tesseract-ocr-4.0.0.tar.gz
++sha256  5c5ed5f1a76888dc57a83704f24ae02f8319849f5c4cf19d254296978a1a1961  tesseract-ocr-4.1.0.tar.gz
+ sha256  d770c1ac1235bc018530701da1ce453367f7952a3075d12b9029f81a26c05f13  COPYING
+ sha256  daa0c97d651c19fba3b25e81317cd697e9908c8208090c94c3905381c23fc047  eng.traineddata
+ sha256  eac01c1d72540d6090facb7b2f42dd0a2ee8fc57c5be1b20548ae668e2761913  fra.traineddata
+diff --git a/package/tesseract-ocr/tesseract-ocr.mk b/package/tesseract-ocr/tesseract-ocr.mk
+index 74b344961f..2cc04596aa 100644
+--- a/package/tesseract-ocr/tesseract-ocr.mk
++++ b/package/tesseract-ocr/tesseract-ocr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WEBP_VERSION = 1.0.1
-+WEBP_VERSION = 1.0.2
- WEBP_SOURCE = libwebp-$(WEBP_VERSION).tar.gz
- WEBP_SITE = http://downloads.webmproject.org/releases/webp
- WEBP_LICENSE = BSD-3-Clause
+-TESSERACT_OCR_VERSION = 4.0.0
++TESSERACT_OCR_VERSION = 4.1.0
+ TESSERACT_OCR_DATA_VERSION = 4.0.0
+ TESSERACT_OCR_SITE = $(call github,tesseract-ocr,tesseract,$(TESSERACT_OCR_VERSION))
+ TESSERACT_OCR_LICENSE = Apache-2.0
