@@ -1,98 +1,70 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Jul 2019 20:55:48 +0200
-Subject: [Buildroot] Installed external gstreamer,
- enabled WebRTC and installed external libnice plugins to buildroot, however,
- libnice is missing
-In-Reply-To: <CADNjvP9-5R2z+aUN7xKARboNkiReWVpZ7tNFg+xj81DObTE6fQ@mail.gmail.com>
-References: <CADNjvP9-5R2z+aUN7xKARboNkiReWVpZ7tNFg+xj81DObTE6fQ@mail.gmail.com>
-Message-ID: <76760dd0-ddab-6599-f60d-2f564b74e6ad@mind.be>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Sun, 14 Jul 2019 13:04:39 -0600
+Subject: [Buildroot] [PATCH 1/1] package/weston-imx: Split weston-imx
+ off from weston
+In-Reply-To: <20190714185325.GH29941@scaer>
+References: <20190625225008.58056-1-james.hilliard1@gmail.com>
+ <20190714183438.GG29941@scaer>
+ <CADvTj4r+GiLH=1oA7c8OsTRhLnA+TPYHpgRbQmttt5Es0QObdQ@mail.gmail.com>
+ <20190714185325.GH29941@scaer>
+Message-ID: <CADvTj4rCiNjgCPvwnNJu25jHXZYQp2JGmx_G+ttHTh7PtK6uFQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-
-
-On 14/07/2019 12:10, Vered Kalef wrote:
-> Hi all,
-> I'm working with buildroot 18.02.
-> I've installed External gstreamer version 14.0.
-> I've managed to update the plugins-bad, to hold webrtc option.
-> For the webrtc I had to update libnice version, so I've installed it as external
-> libnice 0.1.14.
-> Now -?
-> gst-inspect-1.0 webrtc
-> shows that webrtc exists!?
-> 
-> Should it work as well:
-> gst-inspect-1.0 libnice
-
- I don't think libnice itself is a gstreamer plugin, so this wouldn't work. I
-might be wrong though.
-
-
-> Is the installation of libnice as external is problematic?
-> I've called the external plugin CUSTOM_LIBNICE and referred to it from
-> custom-gst1-plugins-bad.mk <http://custom-gst1-plugins-bad.mk> -
-> 
-> ifeq ($(BR2_PACKAGE_CUSTOM_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
-> CUSTOM_GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc
-> CUSTOM_GST1_PLUGINS_BAD_DEPENDENCIES += custom-gst1-plugins-base? CUSTOM_LIBNICE
-
- I guess it is custom-libnice here, not CUSTOM_LIBNICE?
-
- Can you check what the build log says about libnice?
-
- Can you check if libnice is installed on your target?
-
- Regards,
- Arnout
-
-> else
-> CUSTOM_GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc
-> endif
-> 
-> *The errors I got -?*
-> 0:00:05.765174600 17318 0x7fff64004400 WARN ? ? ? ? ? ? ? webrtcbin
-> gstwebrtcbin.c:2991:gst_webrtc_bin_request_new_pad:<webrtcbin0> error: libnice
-> elements are not available
-> 0:00:05.765219000 17318 0x7fff64004400 LOG ? ? ? ? ? ? ?GST_MESSAGE
-> gstmessage.c:301:gst_message_new_custom: source webrtcbin0: creating new message
-> 0x7fff640bf2c0 error
-> 0:00:05.765249100 17318 0x7fff64004400 WARN ? ? ? ? ? ? ? structure
-> gststructure.c:1832:priv_gst_structure_append_to_gstring: No value transform to
-> serialize field 'gerror' of type 'GError'
-> 0:00:05.765239500 17318 0x7fff64004400 DEBUG ? ? ? ? ? ? ? ?GST_BUS
-> gstbus.c:318:gst_bus_post:<bus0> [msg 0x7fff640bf2c0] posting on bus error
-> message: 0x7fff640bf2c0, time 99:99:99.999999999, seq-num 65, element
-> 'webrtcbin0', GstMessageError, gerror=(GError)NULL,
-> debug=(string)"gstwebrtcbin.c\(2991\):\ gst_webrtc_bin_request_new_pad\ \(\):\
-> /GstPipeline:pipeline0/GstWebRTCBin:webrtcbin0:\012libnice\ elements\ are\ not\
-> available";
-> 0:00:05.765261300 17318 0x7fff64004400 DEBUG ? ? ? ? ? ? ? ? ? ?bin
-> gstbin.c:3715:gst_bin_handle_message_func:<pipeline0> [msg 0x7fff640bf2c0]
-> handling child webrtcbin0 message of type error
-> 0:00:05.765283100 17318 0x7fff64004400 WARN ? ? ? ? ? ? ? structure
-> gststructure.c:1832:priv_gst_structure_append_to_gstring: No value transform to
-> serialize field 'gerror' of type 'GError'
-> 0:00:05.765281100 17318 0x7fff64004400 DEBUG ? ? ? ? ? ? ? ?GST_BUS
-> gstbus.c:318:gst_bus_post:<bus1> [msg 0x7fff640bf2c0] posting on bus error
-> message: 0x7fff640bf2c0, time 99:99:99.999999999, seq-num 65, element
-> 'webrtcbin0', GstMessageError, gerror=(GError)NULL,
-> debug=(string)"gstwebrtcbin.c\(2991\):\ gst_webrtc_bin_request_new_pad\ \(\):\
-> /GstPipeline:pipeline0/GstWebRTCBin:webrtcbin0:\012libnice\ elements\ are\ not\
-> available";
-> 0:00:05.765327400 17318 0x7fff64004400 INFO ? ? ? ?GST_ERROR_SYSTEM
-> gstelement.c:2172:gst_element_message_full_with_details:<webrtcbin0> posted
-> error message: Your GStreamer installation is missing a plug-in.
-> 
-> Thanks in advance,
-> Vered
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-> 
+On Sun, Jul 14, 2019 at 12:53 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+>
+> James, All,
+>
+> On 2019-07-14 12:37 -0600, James Hilliard spake thusly:
+> > On Sun, Jul 14, 2019 at 12:34 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
+> > > On 2019-06-25 16:50 -0600, James Hilliard spake thusly:
+> > > > This is in preparation for migration of weston to the meson build system.
+> > > > Since weston-imx is based off of a much older version of weston it is
+> > > > difficult to maintain as part of the weston package.
+> [--SNIP--]
+> > > Which implies that we should allow bioth westons to be installed side by
+> > > side, and that the imx variant be installed as 'weston-imx', e.g. using
+> > > the ./configure flag:
+> > Is there a use case for having both westons side by side?
+>
+> Well, yes: the RDB stuff for example does not seem to depend on the
+> hardware at all, in fact, so it would be better if it were provided by
+> the real weston, which is more up-to-date with RDP than by the imx fork,
+> which supports an older version of RDP. And it has caused grief in the
+> past that when we update weston, it uses newer FreeRDP APIs, or the
+> other way around, when we update FreeRDP, it no longer exports APIs
+> needed by older weston.
+Ah, I don't have any imx hardware so someone else would probably need
+to do that.
+>
+> So, I'd like we find a way for the imxc fork to be consrained to only
+> the actual imx backend, and keep using the official weston for all the
+> rest.
+I'm not sure how one would best go about that.
+>
+> Regards,
+> Yann E. MORIN.
+>
+> > >     --program-suffix=-imx
+> > >
+> > > Regards,
+> > > Yann E. MORIN.
+> > >
+> > > --
+> > > .-----------------.--------------------.------------------.--------------------.
+> > > |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> > > | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> > > | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> > > | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> > > '------------------------------^-------^------------------^--------------------'
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
