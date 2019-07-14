@@ -1,51 +1,56 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:16:47 +0200
-Subject: [Buildroot] [git commit] package/libpciaccess: bummp version to 0.15
-Message-ID: <20190714102157.980FF80163@busybox.osuosl.org>
+Date: Sun, 14 Jul 2019 11:56:58 +0200
+Subject: [Buildroot] [git commit] package/gnupg2: security bump to version
+ 2.2.17
+Message-ID: <20190714102157.1C5CB8135B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=815edff5d60a947fe21d11e78829e1e73716c6f9
+commit: https://git.buildroot.net/buildroot/commit/?id=410e8a5977130b40cc93bf30aea8329859d60cef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+This release mitigates the effects of the denial-of-service attacks on
+the keyserver network (CVE-2019-13050).
+
+https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f
+https://access.redhat.com/articles/4264021
+
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpciaccess/libpciaccess.hash | 10 +++++-----
- package/libpciaccess/libpciaccess.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/gnupg2/gnupg2.hash | 8 ++++----
+ package/gnupg2/gnupg2.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/libpciaccess/libpciaccess.hash b/package/libpciaccess/libpciaccess.hash
-index 651f0462b7..36ca2d7e47 100644
---- a/package/libpciaccess/libpciaccess.hash
-+++ b/package/libpciaccess/libpciaccess.hash
-@@ -1,8 +1,8 @@
--# From https://lists.x.org/archives/xorg-announce/2017-October/002817.html
--md5 8f436e151d5106a9cfaa71857a066d33  libpciaccess-0.14.tar.bz2
--sha1 f70a958bf4e744cb4ee93be64e9bc52ac05cdaeb  libpciaccess-0.14.tar.bz2
--sha256 3df543e12afd41fea8eac817e48cbfde5aed8817b81670a4e9e493bb2f5bf2a4  libpciaccess-0.14.tar.bz2
--sha512 bf40214dfd22f2a223f7c948566e6eaa4bfed60116e71b3eb19f6fe7ab2c4546649eb0416c06d5983e476ea5e27de036936646eb5f800ea97763b6d1f1976f4b  libpciaccess-0.14.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-July/003004.html
-+md5 843e92d0eef94684a4eb9a2d311bfb12  libpciaccess-0.15.tar.bz2
-+sha1 e89fe53622533650203271945759e5e397cdbe10  libpciaccess-0.15.tar.bz2
-+sha256 a75643bb5cd02f6da8667d437b76492842dd56bc88e3dfb8410f5d535b99f5dc  libpciaccess-0.15.tar.bz2
-+sha512 c34abc438c549db22d27d71d63e13f93cb547eaea238ff2d193627b83a5877e2b34f6fcf4cdaf9b4f0c6b78206447fd9a578454783cfb4e9010e8de20de1364e  libpciaccess-0.15.tar.bz2
- 
- # Hash for license file:
- sha256 47012fd746980d1712ac4f3841ab6164bda1d2b84880760e45dbe1e1dc07f608  COPYING
-diff --git a/package/libpciaccess/libpciaccess.mk b/package/libpciaccess/libpciaccess.mk
-index 93b5fc7ac2..5a95ae1338 100644
---- a/package/libpciaccess/libpciaccess.mk
-+++ b/package/libpciaccess/libpciaccess.mk
+diff --git a/package/gnupg2/gnupg2.hash b/package/gnupg2/gnupg2.hash
+index a9b7d10f67..806a07b840 100644
+--- a/package/gnupg2/gnupg2.hash
++++ b/package/gnupg2/gnupg2.hash
+@@ -1,7 +1,7 @@
+-# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q1/000434.html
+-sha1 66ebc053e2d22f743673d3fbe54453774e4fac58  gnupg-2.2.13.tar.bz2
++# From https://lists.gnupg.org/pipermail/gnupg-announce/2019q3/000439.html
++sha1 12c1cee8871c03f0315fc8f27876364b75c95b12  gnupg-2.2.17.tar.bz2
+ # Calculated based on the hash above and signature
+-# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.13.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/gnupg/gnupg-2.2.17.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256 76c787a955f9e6e0ead47c9be700bfb9d454f955a7b7c7e697aa719bac7b11d8  gnupg-2.2.13.tar.bz2
++sha256 afa262868e39b651a2db4c071fba90415154243e83a830ca00516f9a807fd514  gnupg-2.2.17.tar.bz2
+ sha256 bc2d6664f6276fa0a72d57633b3ae68dc7dcb677b71018bf08c8e93e509f1357  COPYING
+diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
+index ca6b6293e7..aa1f7b14d6 100644
+--- a/package/gnupg2/gnupg2.mk
++++ b/package/gnupg2/gnupg2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBPCIACCESS_VERSION = 0.14
-+LIBPCIACCESS_VERSION = 0.15
- LIBPCIACCESS_SOURCE = libpciaccess-$(LIBPCIACCESS_VERSION).tar.bz2
- LIBPCIACCESS_SITE = http://xorg.freedesktop.org/releases/individual/lib
- LIBPCIACCESS_LICENSE = MIT
+-GNUPG2_VERSION = 2.2.13
++GNUPG2_VERSION = 2.2.17
+ GNUPG2_SOURCE = gnupg-$(GNUPG2_VERSION).tar.bz2
+ GNUPG2_SITE = https://gnupg.org/ftp/gcrypt/gnupg
+ GNUPG2_LICENSE = GPL-3.0+
