@@ -1,58 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:18:12 +0200
-Subject: [Buildroot] [git commit] package/xkeyboard-config: bump to version
- 2.27
-Message-ID: <20190714102157.AE38A80163@busybox.osuosl.org>
+Date: Sun, 14 Jul 2019 12:15:03 +0200
+Subject: [Buildroot] [git commit] package/dovecot: bump version to 2.3.7
+Message-ID: <20190714102157.86DEA80163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1052b1afb66cf74ee0f76470d440616da0895f4a
+commit: https://git.buildroot.net/buildroot/commit/?id=f24cb3414f7f84eaf565244aa889437df28eedba
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop host-intltool dependency, not needed since
-https://gitlab.freedesktop.org/xkeyboard-config/xkeyboard-config/commit/e8026f673ec49c109212acc4c35b492b3e30f48f
+Switched _SITE to dovecot.org according to release notes:
+https://dovecot.org/pipermail/dovecot-news/2019-July/000412.html
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xkeyboard-config/xkeyboard-config.hash | 6 +-----
- package/x11r7/xkeyboard-config/xkeyboard-config.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 7 deletions(-)
+ package/dovecot/dovecot.hash | 2 +-
+ package/dovecot/dovecot.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-index 56ea0e5251..dfe4405067 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
-@@ -1,7 +1,3 @@
--# From https://lists.x.org/archives/xorg-announce/2018-February/002833.html
--md5 875cbd09ab8394277fd16070326abbae  xkeyboard-config-2.23.1.tar.bz2
--sha1 184c9ce35f4fa44188acbf549f80d36407697ac3  xkeyboard-config-2.23.1.tar.bz2
--sha256 2a4bbc05fea22151b7a7c8ac2655d549aa9b0486bedc7f5a68c72716343b02f3  xkeyboard-config-2.23.1.tar.bz2
--sha512 d651bb89c265e58abe8bba4af6683364a8023cb73af7d00f401f33960e44fa94a7d8a8fdd2483d6703d1c261ca72ae5f2b53f543cfb70b2f571cfe9dcb80c3ba  xkeyboard-config-2.23.1.tar.bz2
- # Locally computed
-+sha256 2a4bbc05fea22151b7a7c8ac2655d549aa9b0486bedc7f5a68c72716343b02f3  xkeyboard-config-2.27.tar.bz2
- sha256 6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
-diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.mk b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-index 9a8838dde1..d1b9586588 100644
---- a/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-+++ b/package/x11r7/xkeyboard-config/xkeyboard-config.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/dovecot/dovecot.hash b/package/dovecot/dovecot.hash
+index a57e51405d..05862f0df2 100644
+--- a/package/dovecot/dovecot.hash
++++ b/package/dovecot/dovecot.hash
+@@ -1,5 +1,5 @@
+ # Locally computed after checking signature
+-sha256 ed1d8dc1beeae9c6c73deac73a62ef19fe9262fbffd86604a3f690452f5536c7  dovecot-2.3.6.tar.gz
++sha256 11e156ae8539e42892809cc2412c3f1a294188806969f5547191a43abd4083aa  dovecot-2.3.7.tar.gz
+ sha256 a363b132e494f662d98c820d1481297e6ae72f194c2c91b6c39e1518b86240a8  COPYING
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+ sha256 52b8c95fabb19575281874b661ef7968ea47e8f5d74ba0dd40ce512e52b3fc97  COPYING.MIT
+diff --git a/package/dovecot/dovecot.mk b/package/dovecot/dovecot.mk
+index 78bc41bff2..e4573e63f4 100644
+--- a/package/dovecot/dovecot.mk
++++ b/package/dovecot/dovecot.mk
+@@ -5,8 +5,8 @@
  ################################################################################
  
--XKEYBOARD_CONFIG_VERSION = 2.23.1
-+XKEYBOARD_CONFIG_VERSION = 2.27
- XKEYBOARD_CONFIG_SOURCE = xkeyboard-config-$(XKEYBOARD_CONFIG_VERSION).tar.bz2
- XKEYBOARD_CONFIG_SITE = http://www.x.org/releases/individual/data/xkeyboard-config
- XKEYBOARD_CONFIG_LICENSE = MIT
-@@ -14,6 +14,6 @@ XKEYBOARD_CONFIG_LICENSE_FILES = COPYING
- XKEYBOARD_CONFIG_INSTALL_STAGING = YES
- 
- XKEYBOARD_CONFIG_CONF_OPTS = --disable-runtime-deps
--XKEYBOARD_CONFIG_DEPENDENCIES = host-gettext host-intltool host-xapp_xkbcomp
-+XKEYBOARD_CONFIG_DEPENDENCIES = host-gettext host-xapp_xkbcomp
- 
- $(eval $(autotools-package))
+ DOVECOT_VERSION_MAJOR = 2.3
+-DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).6
+-DOVECOT_SITE = https://www.dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
++DOVECOT_VERSION = $(DOVECOT_VERSION_MAJOR).7
++DOVECOT_SITE = https://dovecot.org/releases/$(DOVECOT_VERSION_MAJOR)
+ DOVECOT_INSTALL_STAGING = YES
+ DOVECOT_LICENSE = LGPL-2.1, MIT, Public Domain, BSD-3-Clause, Unicode-DFS-2015
+ DOVECOT_LICENSE_FILES = COPYING COPYING.LGPL COPYING.MIT
