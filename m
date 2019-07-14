@@ -1,58 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Jul 2019 15:07:10 +0200
-Subject: [Buildroot] [PATCH] package/x11r7/xlib_libXfont: work around
- gcc bug 85180
-In-Reply-To: <20190713115309.88559-1-giulio.benetti@micronovasrl.com>
-References: <20190713115309.88559-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190714150710.3f4f42fc@windsurf>
+Date: Sun, 14 Jul 2019 15:07:32 +0200
+Subject: [Buildroot] [git commit] package/meson: bump version to 0.51.1
+Message-ID: <20190714130539.14E32816C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=4d87f5a74ca8266289a452565a1595c58be57571
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat, 13 Jul 2019 13:53:09 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/meson/meson.hash | 4 ++--
+ package/meson/meson.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> With Microblaze Gcc version < 8.x the build hangs due to gcc bug
-> 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
-> shows up when building xlib_libXfont with optimization but not when
-> building with -O0. To work around this, if
-> BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/7c6/7c64becbf06a1e00e41b7ddb95dd0c65bf364eb7/
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  package/x11r7/xlib_libXfont/xlib_libXfont.mk | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-> index a1acfba83b..ba41970289 100644
-> --- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-> +++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
-> @@ -30,5 +30,13 @@ ifeq ($(BR2_microblaze),y)
->  XLIB_LIBXFONT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D__ELF__"
->  endif
->  
-> +XLIB_LIBXFONT_CFLAGS = $(TARGET_CFLAGS)
-> +
-> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
-> +XLIB_LIBXFONT_CFLAGS += -O0
-> +endif
-> +
-> +XLIB_LIBXFONT_CONF_OPTS += CFLAGS="$(XLIB_LIBXFONT_CFLAGS)"
-
-We normally use the <pkg>_CONF_ENV variable to override CFLAGS, so I
-fixed that up and applied. Thanks!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/meson/meson.hash b/package/meson/meson.hash
+index da031e8cd7..80828b2a17 100644
+--- a/package/meson/meson.hash
++++ b/package/meson/meson.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://github.com/mesonbuild/meson/releases/download/0.51.0/meson-0.51.0.tar.gz.asc
+-sha256 2f75fdf6d586d3595c03a07afcd0eaae11f68dd33fea5906a434d22a409ed63f meson-0.51.0.tar.gz
++# https://github.com/mesonbuild/meson/releases/download/0.51.1/meson-0.51.1.tar.gz.asc
++sha256 f27b7a60f339ba66fe4b8f81f0d1072e090a08eabbd6aa287683b2c2b9dd2d82 meson-0.51.1.tar.gz
+ sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
+diff --git a/package/meson/meson.mk b/package/meson/meson.mk
+index dffa301191..3267581fc6 100644
+--- a/package/meson/meson.mk
++++ b/package/meson/meson.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MESON_VERSION = 0.51.0
++MESON_VERSION = 0.51.1
+ MESON_SITE = https://github.com/mesonbuild/meson/releases/download/$(MESON_VERSION)
+ MESON_LICENSE = Apache-2.0
+ MESON_LICENSE_FILES = COPYING
