@@ -1,72 +1,92 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Jul 2019 16:07:36 +0200
-Subject: [Buildroot] [git commit] package/xscreensaver: bump to version 5.43
-Message-ID: <20190714140544.DB91F813B1@busybox.osuosl.org>
+Date: Sun, 14 Jul 2019 16:00:48 +0200
+Subject: [Buildroot] [git commit] package/libplatform: bump to version
+ 1eb12b1b1efa6747c1e190964854e9e267e3a1e2
+Message-ID: <20190714140544.D36B3813B1@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=86ade1a56c64a7b6bc570e3b3846437373df779a
+commit: https://git.buildroot.net/buildroot/commit/?id=d1a62b24c6a54ea618e23cea7bcce4276c614fa8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-- Remove patch (not needed anymore)
-- Add hash for license files
+- Remove patch (already in version)
+- Add hash for license file
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0001-fix-cross-compile-ansi-c-bailout.patch       | 19 -------------------
- package/xscreensaver/xscreensaver.hash                |  4 +++-
- package/xscreensaver/xscreensaver.mk                  |  2 +-
- 3 files changed, 4 insertions(+), 21 deletions(-)
+ .../0001-p8-platform-config-fix-lookup-paths.patch | 38 ----------------------
+ package/libplatform/libplatform.hash               |  3 +-
+ package/libplatform/libplatform.mk                 |  2 +-
+ 3 files changed, 3 insertions(+), 40 deletions(-)
 
-diff --git a/package/xscreensaver/0001-fix-cross-compile-ansi-c-bailout.patch b/package/xscreensaver/0001-fix-cross-compile-ansi-c-bailout.patch
+diff --git a/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch b/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
 deleted file mode 100644
-index 6da9419e08..0000000000
---- a/package/xscreensaver/0001-fix-cross-compile-ansi-c-bailout.patch
+index d487fd942e..0000000000
+--- a/package/libplatform/0001-p8-platform-config-fix-lookup-paths.patch
 +++ /dev/null
-@@ -1,19 +0,0 @@
--The configure bails out when cross-compiling, because it is over-cautious
--about ANSI support in the C compiler. Work around this by disabling the
--bail-out code.
+@@ -1,38 +0,0 @@
+-From 01b5478638c705af29f09ad4ed70289f70a21dcf Mon Sep 17 00:00:00 2001
+-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+-Date: Mon, 6 Feb 2017 14:04:47 +0100
+-Subject: [PATCH] p8-platform-config: fix lookup paths
 -
--[Peter: updated for 5.32]
--Signed-off-by: Simon Dawson <spdawson@gmail.com>
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+-Use the proper methods to find the headers and the library.
 -
--diff -Nurp a/configure b/configure
----- a/configure	2013-07-16 10:23:32.000000000 +0100
--+++ b/configure	2013-09-22 14:50:07.186953454 +0100
--@@ -4374,7 +4374,6 @@ $as_echo "Solaris: adding -D__EXTENSIONS
--   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether the compiler works on ANSI C" >&5
-- $as_echo_n "checking whether the compiler works on ANSI C... " >&6; }
--   if test "$cross_compiling" = yes; then :
---  as_fn_error $? "Couldn't build even a trivial ANSI C program: check CC." "$LINENO" 5
-- else
--   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-- /* end confdefs.h.  */
-diff --git a/package/xscreensaver/xscreensaver.hash b/package/xscreensaver/xscreensaver.hash
-index 48bc2b1eb2..c1198b7558 100644
---- a/package/xscreensaver/xscreensaver.hash
-+++ b/package/xscreensaver/xscreensaver.hash
-@@ -1,2 +1,4 @@
- # Locally calculated
--sha256 6b8b5238047f1613d99149bb02d5ed3384675f3ce74a0a8ba25290bd61abc06c  xscreensaver-5.36.tar.gz
-+sha256 17eab67f3554e21c23b1526ec48a06a9ec8605baffee48f91f603f7599b383d4  xscreensaver-5.43.tar.gz
-+sha256 8a03451ba5c4c9af669b53e47e50c38c149b9e152d3d627809b962da7b760bbd  hacks/screenhack.h
-+sha256 56db580415bb313a4a82c5e08f106304904d15d42faf8e6ab14b34e14e2087a5  hacks/glx/chessmodels.h
-diff --git a/package/xscreensaver/xscreensaver.mk b/package/xscreensaver/xscreensaver.mk
-index 34b116387b..642d65f0c6 100644
---- a/package/xscreensaver/xscreensaver.mk
-+++ b/package/xscreensaver/xscreensaver.mk
+-Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+----
+- p8-platform-config.cmake.in | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/p8-platform-config.cmake.in b/p8-platform-config.cmake.in
+-index 47f30f1..f59418d 100644
+---- a/p8-platform-config.cmake.in
+-+++ b/p8-platform-config.cmake.in
+-@@ -10,7 +10,7 @@
+- #
+- # propagate these properties from one build system to the other
+- set (p8-platform_VERSION "@p8-platform_VERSION_MAJOR at .@p8-platform_VERSION_MINOR@")
+--set (p8-platform_INCLUDE_DIRS @p8-platform_INCLUDE_DIRS@ @CMAKE_INSTALL_PREFIX@/include)
+-+find_path (p8-platform_INCLUDE_DIRS p8-platform/os.h)
+- set (p8-platform_LIBRARY_DIRS "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@")
+- set (p8-platform_LINKER_FLAGS "@p8-platform_LINKER_FLAGS@")
+- set (p8-platform_CONFIG_VARS "@p8-platform_CONFIG_VARS@")
+-@@ -19,7 +19,7 @@ set (p8-platform_CONFIG_VARS "@p8-platform_CONFIG_VARS@")
+- if(WIN32)
+-   set (p8-platform_LIBRARY "@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@/p8-platform.lib")
+- else(WIN32)
+--  set (p8-platform_LIBRARY "-L at CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@ -lp8-platform")
+-+  find_library (p8-platform_LIBRARY p8-platform)
+- endif(WIN32)
+- set (p8-platform_LIBRARIES ${p8-platform_LIBRARY} "@p8-platform_LIBRARIES@")
+- mark_as_advanced (p8-platform_LIBRARY)
+--- 
+-2.7.4
+-
+diff --git a/package/libplatform/libplatform.hash b/package/libplatform/libplatform.hash
+index 5162b43fad..09f9dadb19 100644
+--- a/package/libplatform/libplatform.hash
++++ b/package/libplatform/libplatform.hash
+@@ -1,2 +1,3 @@
+ # Locally computed
+-sha256 dd07bea9cb5676220586e772f09eab51f1093e5ef0faadee80f7c0e99f5f6c1c  libplatform-2d90f98620e25f47702c9e848380c0d93f29462b.tar.gz
++sha256 94dba139066a332d048486f817736e4cf4962393c9f892d2c7dd40d9d69ca788  libplatform-1eb12b1b1efa6747c1e190964854e9e267e3a1e2.tar.gz
++sha256 80fc66febbb2393c9d518e3eefa4ad9aae15a9b6a84174c0e443ea79eeea5131  src/os.h
+diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
+index c805af2e16..0a4c492969 100644
+--- a/package/libplatform/libplatform.mk
++++ b/package/libplatform/libplatform.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XSCREENSAVER_VERSION = 5.36
-+XSCREENSAVER_VERSION = 5.43
- XSCREENSAVER_SITE = https://www.jwz.org/xscreensaver
- 
- # N.B. GPL-2.0+ code (in the hacks/glx subdirectory) is not currently built.
+-LIBPLATFORM_VERSION = 2d90f98620e25f47702c9e848380c0d93f29462b
++LIBPLATFORM_VERSION = 1eb12b1b1efa6747c1e190964854e9e267e3a1e2
+ LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
+ LIBPLATFORM_LICENSE = GPL-2.0+
+ LIBPLATFORM_LICENSE_FILES = src/os.h
