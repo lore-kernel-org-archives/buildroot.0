@@ -1,22 +1,26 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:14:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/acpica: bump to version 20190703
-In-Reply-To: <20190711213943.7688-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 11 Jul 2019 23:39:43 +0200")
-References: <20190711213943.7688-1-fontaine.fabrice@gmail.com>
-Message-ID: <8736j89b45.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Jul 2019 12:16:30 +0200
+Subject: [Buildroot] [PATCH 1/2] package/dovecot: bump version to 2.3.7
+In-Reply-To: <20190712191334.8198-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Fri, 12 Jul 2019 21:13:33 +0200")
+References: <20190712191334.8198-1-bernd.kuhls@t-online.de>
+Message-ID: <87y3107wg1.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Add hash for license file
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Switched _SITE to dovecot.org according to release notes:
+ > https://dovecot.org/pipermail/dovecot-news/2019-July/000412.html
+
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
 Committed, thanks.
+
+Should this also be applied to 2019.02.x / 2019.05.x?
 
 -- 
 Bye, Peter Korsgaard
