@@ -1,24 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Jul 2019 15:46:34 +0200
-Subject: [Buildroot] [PATCH] boot/uboot: bump to version 2019.07
-In-Reply-To: <1562619136-21804-1-git-send-email-pjtexier@koncepto.io>
-References: <1562619136-21804-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190714154634.26358268@windsurf>
+Date: Sun, 14 Jul 2019 15:46:52 +0200
+Subject: [Buildroot] [PATCH 1/1] package/zeromq: bump to version 4.3.2
+In-Reply-To: <20190708171849.17423-1-asafka7@gmail.com>
+References: <20190708171849.17423-1-asafka7@gmail.com>
+Message-ID: <20190714154652.01d6e241@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon,  8 Jul 2019 22:52:16 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+On Mon,  8 Jul 2019 20:18:49 +0300
+Asaf Kahlon <asafka7@gmail.com> wrote:
 
-> See https://lists.denx.de/pipermail/u-boot/2019-July/375451.html
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 > ---
->  boot/uboot/Config.in  | 4 ++--
->  boot/uboot/uboot.hash | 2 +-
+>  package/zeromq/zeromq.hash | 4 ++--
+>  package/zeromq/zeromq.mk   | 2 +-
 >  2 files changed, 3 insertions(+), 3 deletions(-)
 
 Applied to master, thanks.
