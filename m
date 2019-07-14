@@ -1,67 +1,47 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jul 2019 11:39:16 +0200
-Subject: [Buildroot] [PATCH v4 15/15] package/gcc: enable gcc 9.1 for
- ork1 (openrisc)
-In-Reply-To: <CAJF2gTSD9ANSQs7S3nSnboZm7P012mzO1EfuE-P4Z5xFusvSYw@mail.gmail.com>
-References: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
- <20190620100725.105587-16-giulio.benetti@micronovasrl.com>
- <54fe6b56-aa43-b657-0b8e-1c42e2471735@mind.be>
- <CAJF2gTQ85czGP5BAMgn5kwbJKGTmxwAakkZGmUomquTugSwMcg@mail.gmail.com>
- <20190714084056.GI2680@scaer>
- <CAJF2gTSD9ANSQs7S3nSnboZm7P012mzO1EfuE-P4Z5xFusvSYw@mail.gmail.com>
-Message-ID: <20190714093916.GK2680@scaer>
+Date: Sun, 14 Jul 2019 11:54:47 +0200
+Subject: [Buildroot] [PATCH 0/2] arch/csky: clean up conditions on gcc
+ verssion (branch yem/arch-csky)
+Message-ID: <cover.1563098054.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Guo, All,
+Hello All!
 
-Peter, Thomas, Arnout, question below...
+This little series makes use of the GCC_AT_LEAST_X symbols to restrict
+the gcc versions usable for each C-SKY variants.
 
-On 2019-07-14 17:18 +0800, Guo Ren spake thusly:
-> On Sun, Jul 14, 2019 at 4:41 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> > On 2019-07-14 07:57 +0800, Guo Ren spake thusly:
-> > > On Sun, Jul 14, 2019 at 5:24 AM Arnout Vandecappelle <arnout@mind.be> wrote:
-> > > > On 20/06/2019 12:07, Giulio Benetti wrote:
-> > > > > openrisc support has been added with gcc 9.1.
-> > > > > Keep for now the old gcc 5 fork for ork1.
-> > > >  So, when will we remove this?
-> > > >  Same for ARC (GCC 8.x fork) and C-SKY (GCC 6.x fork): they are available in
-> > > > GCC9, do we need to keep those old forks?
-> > > Keep the fork for C-SKY, the upstream of csky backend in gcc9 only
-> > > support abiv2.
-> > As far as I can see, we have no way to choose the ABI in Buildroot.
-> > So, what would we loose by keeping only gcc-9?
-> See package/Makefile.in
-> 
-> # For C-SKY abiv1 & abiv2
-> ifeq ($(BR2_csky),y)
-> ifeq ($(BR2_ck610),y)
-> ABI = abiv1
-> else
-> ABI = abiv2
-> endif
-> endif
 
-Ah, thanks for pointing this out. I only had a look at arch/arch.mk.csky
-and arch/Config.in.csky.
+Regards,
+Yann E. MORIN.
 
-This makes me wonder: should we move all this out of package/Makefile.in
-and into the per-arch .mk files instead?
 
-> gcc-9 don't support 610.
+The following changes since commit d5225c5f6d1345bd08d968bf704e01c272537c48
 
-There is currently nothign in Buildroot that prevents selecting gcc9 for
-the ck610...
+  package/{mesa3d, mesa3d-headers}: bump version to 19.0.8 (2019-07-14 00:36:51 +0200)
 
-> 
-> -- 
-> Best Regards
->  Guo Ren
-> 
-> ML: https://lore.kernel.org/linux-csky/
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 52aa7c5a90e87a0e8a0e794487b61d3d4759d301
+
+  package/gcc: drop negative conditions on C-SKY for older versions (2019-07-14 11:50:43 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      arch/csky: restrict ck610 to the C-SKY gcc port
+      package/gcc: drop negative conditions on C-SKY for older versions
+
+ arch/Config.in             | 3 +++
+ arch/Config.in.csky        | 2 ++
+ package/gcc/Config.in.host | 8 +++-----
+ 3 files changed, 8 insertions(+), 5 deletions(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
