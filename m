@@ -1,70 +1,28 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 14 Jul 2019 11:54:50 +0200
-Subject: [Buildroot] [PATCH 2/2] package/gcc: drop negative conditions on
- C-SKY for older versions
-In-Reply-To: <cover.1563098054.git.yann.morin.1998@free.fr>
-References: <cover.1563098054.git.yann.morin.1998@free.fr>
-Message-ID: <52aa7c5a90e87a0e8a0e794487b61d3d4759d301.1563098054.git.yann.morin.1998@free.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 14 Jul 2019 11:58:16 +0200
+Subject: [Buildroot] [PATCH] package/gnupg2: security bump to version
+ 2.2.17
+In-Reply-To: <6c353a63bf5b445d4f4da96dd21e1b36fdfc3095.1562781446.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Wed, 10 Jul 2019 20:57:26 +0300")
+References: <6c353a63bf5b445d4f4da96dd21e1b36fdfc3095.1562781446.git.baruch@tkos.co.il>
+Message-ID: <87a7dh9buv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Now that the C-SKY architecture requires gcc-9, we can drop the special
-conditions on the individual older versions.
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Guo Ren <guoren@kernel.org>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Romain Naour <romain.naour@gmail.com>
----
- package/gcc/Config.in.host | 5 -----
- 1 file changed, 5 deletions(-)
+ > This release mitigates the effects of the denial-of-service attacks on
+ > the keyserver network (CVE-2019-13050).
 
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index adc12e95ea..a3ba7cf90d 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -32,7 +32,6 @@ config BR2_GCC_VERSION_4_9_X
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- 	# Broken or unsupported architectures
- 	depends on !BR2_arc
--	depends on !BR2_csky
- 	depends on !BR2_or1k
- 	# musl on microblaze, ppc64 and mips64 unsupported
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_microblazeel || BR2_microblazebe))
-@@ -47,7 +46,6 @@ config BR2_GCC_VERSION_5_X
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- 	# Broken or unsupported architectures
- 	depends on !BR2_arc
--	depends on !BR2_csky
- 	depends on !BR2_or1k
- 	# musl on ppc64 and mips64 unsupported
- 	depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
-@@ -61,7 +59,6 @@ config BR2_GCC_VERSION_6_X
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- 	# Broken or unsupported architectures
- 	depends on !BR2_arc
--	depends on !BR2_csky
- 	depends on !BR2_or1k
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 
-@@ -69,7 +66,6 @@ config BR2_GCC_VERSION_7_X
- 	bool "gcc 7.x"
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- 	# Broken or unsupported architectures
--	depends on !BR2_csky
- 	depends on !BR2_or1k
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 
-@@ -77,7 +73,6 @@ config BR2_GCC_VERSION_8_X
- 	bool "gcc 8.x"
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- 	# Broken or unsupported architectures
--	depends on !BR2_csky
- 	depends on !BR2_or1k
- 	# powerpc spe support has been deprecated since gcc 8.x.
- 	# https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
+ > https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f
+ > https://access.redhat.com/articles/4264021
+
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+
+Committed, thanks.
+
 -- 
-2.20.1
+Bye, Peter Korsgaard
