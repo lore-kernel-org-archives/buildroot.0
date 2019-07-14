@@ -1,75 +1,46 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Sun, 14 Jul 2019 18:16:33 +0530
-Subject: [Buildroot] [PATCH] package/cpio: add host version
-In-Reply-To: <20190714123859.GA8912@scaer>
-References: <20190714090301.26552-1-yann.morin.1998@free.fr>
- <7761512e-bb70-ea06-14e8-a7f0df882964@mind.be> <20190714123859.GA8912@scaer>
-Message-ID: <2262480.0uGyQ1EtkW@msi-manjaro>
+From: Romain Naour <romain.naour@gmail.com>
+Date: Sun, 14 Jul 2019 14:48:33 +0200
+Subject: [Buildroot] [PATCH v4 15/15] package/gcc: enable gcc 9.1 for
+ ork1 (openrisc)
+In-Reply-To: <54fe6b56-aa43-b657-0b8e-1c42e2471735@mind.be>
+References: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
+ <20190620100725.105587-16-giulio.benetti@micronovasrl.com>
+ <54fe6b56-aa43-b657-0b8e-1c42e2471735@mind.be>
+Message-ID: <d23234b7-5159-aa15-b2e3-91c6552d810f@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sunday, July 14, 2019 6:08:59 PM IST Yann E. MORIN wrote:
-> Arnout, All,
-> 
-> On 2019-07-14 14:19 +0200, Arnout Vandecappelle spake thusly:
-> > On 14/07/2019 11:03, Yann E. MORIN wrote:
-> > > The latest cpio has a --reproducible option, which may come handy when
-> > > we try to, well, be reproducible...
-> > > 
-> > > Reported-by: Arnout Vandecappelle <arnout@mind.be>
-> > > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > > Cc: Atharva Lele <itsatharva@gmail.com>
-> > > ---
-> > > 
-> > >  package/cpio/cpio.mk | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > > 
-> > > diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
-> > > index 9a09279572..d2814b87a5 100644
-> > > --- a/package/cpio/cpio.mk
-> > > +++ b/package/cpio/cpio.mk
-> > > @@ -16,4 +16,7 @@ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
-> > > 
-> > >  CPIO_DEPENDENCIES += argp-standalone
-> > >  endif
-> > > 
-> > > +HOST_CPIO_CONF_OPTS = --bindir=$(HOST_DIR)/bin
-> >  
-> >  Why is this needed? For target it is needed because --prefix is set to
-> >  /usr so> 
-> > it would end up in /usr/bin and we want it in /bin. But for hsot, --prefix
-> > is $(HOST_DIR).
-> 
-> You know what? That is exactly what I think, too. ;-)
-> 
-> I just did a quick hack locally to test the build time of cpio, and did
-> not try to think further, so I stupidly copied the target variant as-is
-> without thinking too much.
-> 
-> Then I saw it worked, got the required timings from a batch of 5 runs,
-> finished my reply to Atharva's fs/cpio patch, and decided to send this
-> patch too, without realising that it needed a bit more love.
-> 
-> Atharva, when you respin your fs/cpio patch, can you grab this one in
-> your tree and fix it as Arnout pointed out?
+Hi Arnout, All,
 
-I will :)
-
-> Regards,
-> Yann E. MORIN.
+Le 13/07/2019 ? 23:24, Arnout Vandecappelle a ?crit?:
 > 
-> >  Regards,
-> >  Arnout
-> >  
-> > > +
-> > > 
-> > >  $(eval $(autotools-package))
-> > > 
-> > > +$(eval $(host-autotools-package))
+> 
+> On 20/06/2019 12:07, Giulio Benetti wrote:
+>> openrisc support has been added with gcc 9.1.
+>> Keep for now the old gcc 5 fork for ork1.
+> 
+>  So, when will we remove this?
 
-Regards,
-Atharva Lele
+Adding Waldemar in Cc.
+
+Waldemar, I tested gcc 9.1 ork1 backend using qemu_or1k_defconfig, it's ok to
+remove the old gcc 5 fork ?
+At least, we can remove this fork while removing gcc 5 for the internal toolchain.
+
+> 
+>  Same for ARC (GCC 8.x fork) and C-SKY (GCC 6.x fork): they are available in
+> GCC9, do we need to keep those old forks?
+
+For ARC and C-SKY we have architectures maintainer, I'll let them remove these
+gcc fork.
+
+Best regards,
+Romain
+
+> 
+>  Regards,
+>  Arnout
+> 
