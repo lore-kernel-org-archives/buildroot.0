@@ -1,43 +1,68 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Jul 2019 15:16:58 +0200
-Subject: [Buildroot] [PATCH] configs/atmel: bump to linux4sam_6.1
-In-Reply-To: <20190711091951.21129-1-ludovic.desroches@microchip.com>
-References: <20190711091951.21129-1-ludovic.desroches@microchip.com>
-Message-ID: <20190714151658.2d18f9a5@windsurf>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Jul 2019 15:23:29 +0200
+Subject: [Buildroot] [PATCH] utils/checkpackagelib:
+ CommentsMenusPackagesOrder: fix 'menuconfig' handling
+In-Reply-To: <20190714131502.GC8912@scaer>
+References: <20190714124400.29431-1-arnout@mind.be>
+ <20190714131502.GC8912@scaer>
+Message-ID: <20190714132329.GA25166@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Ludovic,
+Arnout, Jerzy, All,
 
-On Thu, 11 Jul 2019 11:19:51 +0200
-Ludovic Desroches <ludovic.desroches@microchip.com> wrote:
+(sorry, I sent the previous one too quickly)
 
-> Only the atmel_sama5d27_som1 board uses the linux4sam_6.1 release. Bump
-> other boards to this new version.
-> 
-> Signed-off-by: Ludovic Desroches <ludovic.desroches@microchip.com>
+On 2019-07-14 15:15 +0200, Yann E. MORIN spake thusly:
+> On 2019-07-14 14:44 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+[--SNIP--]
+> > Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/251214899
+> No, it does not fix it totally. It only fixes the python traceback.
+> The Kodi issues is till present.
+> Hint: the Kodi package is the only one that indents the "source" lines
+> with a TAB.
 
-I am a bit perplex, because this patch doesn't update the kernel
-version anywhere. It updates the U-Boot version, the AT91Bootstrap
-version, the version of the kernel headers, but not the kernel itself.
-I don't really see how this can work, as the kernel headers version
-will no longer match the kernel version, and also the commit title that
-says we're bumping to linux4sam_6.1 is incorrect in that regard.
+If one changes Kodi to not indent the source lines, then the issue
+disappears. Of course, this is not the correct solution, but...
 
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_5.8)/linux-linux4sam_5.8.tar.gz"
+If one changes another package to also idnent the source lines with a
+TAB, then the error happens there too (for example, fftw):
 
-See here, we're still using Linux tagged in version linux4sam_5.8, and
-not linux4sam_6.1.
+    package/fftw/Config.in:18: Packages in: if BR2_PACKAGE_FFTW,
+                               are not alphabetically ordered;
+                               correct order: '-', '_', digits, capitals, lowercase;
+                               first incorrect package: ftw/fftw-d
 
-Could you fix this and send an updated version ?
+OK, so, weird. The package included is in fact fftw/fftw-double and only
+part of the bname is reported.
 
-Thanks!
+But if one also looks more closely at the Kodi issue, packages names are
+also incorrectly reported:
 
-Thomas
+    package/kodi/Config.in:303: Packages in: menu "Audio decoder addons",
+    [--SNIP--]
+                                first incorrect package: kodi-audiodecoder
+
+And in fact, there is one thing I don;t understand in utils/checkpackagelib/lib_config.py,
+line 106:
+
+    new_package = text[17: -(len(self.filename)-5):]
+
+Why are we using the current filename to strip away parts of the new
+package filename?
+
+Hope that helps.
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
