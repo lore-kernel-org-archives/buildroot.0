@@ -1,44 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:08:55 +0200
-Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 4.1.4
-Message-ID: <20190714102157.4D04780163@busybox.osuosl.org>
+Date: Sun, 14 Jul 2019 12:18:44 +0200
+Subject: [Buildroot] [git commit] package/imagemagick: security bump to
+ version 7.0.8-53
+Message-ID: <20190714102157.B773E80163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=856dd2f87490ed97eb9924c6dc2deb736e9d2394
+commit: https://git.buildroot.net/buildroot/commit/?id=7f7820c5359e86ad16be1e781f3b45ccc2961018
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Fixes various CVE IDs:
+
+CVE-2019-13133, CVE-2019-13134, CVE-2019-13135, CVE-2019-13136,
+CVE-2019-13137, CVE-2019-13295, CVE-2019-13296, CVE-2019-13297,
+CVE-2019-13298, CVE-2019-13299, CVE-2019-13300, CVE-2019-13301,
+CVE-2019-13302, CVE-2019-13303, CVE-2019-13304, CVE-2019-13305,
+CVE-2019-13306, CVE-2019-13307, CVE-2019-13308, CVE-2019-13309,
+CVE-2019-13310, CVE-2019-13311, CVE-2019-13391
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ffmpeg/ffmpeg.hash | 2 +-
- package/ffmpeg/ffmpeg.mk   | 2 +-
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index ba51af9847..f27eaa5706 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256 0c3020452880581a8face91595b239198078645e7d7184273b8bcc7758beb63d  ffmpeg-4.1.3.tar.xz
-+sha256 f1f049a82fcfbf156564e73a3935d7e750891fab2abf302e735104fd4050a7e1  ffmpeg-4.1.4.tar.xz
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256 b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256 73d99bc83313fff665b426d6672b4e0479102bc402fe22314ac9ce94a38aa5ff  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 5c070b7ee4..21fb24e597 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index e89aa557c1..e5f8733d7a 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 2a1ca5f9c38e6596a5ee9fdbbaebba1d21b57618e892c72c8e4e63ced571af40  7.0.8-42.tar.gz
++sha256 b8c35e03fc4bd2bf66bddfe232a34473e7df68c3716c831ba76dc30520e7b490  7.0.8-53.tar.gz
+ sha256 5b47db932754743460eba7a226aea85b63e3408d3c7affb4d0117f70c9594ded  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index be350e88ed..fff00fcfb1 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 4.1.3
-+FFMPEG_VERSION = 4.1.4
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = http://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+-IMAGEMAGICK_VERSION = 7.0.8-42
++IMAGEMAGICK_VERSION = 7.0.8-53
+ IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
+ IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
+ IMAGEMAGICK_LICENSE = Apache-2.0
