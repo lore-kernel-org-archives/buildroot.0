@@ -1,31 +1,62 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 14 Jul 2019 16:25:04 +0200
-Subject: [Buildroot] [PATCH 1/1] package/zeromq: fix sha256 hash
-Message-ID: <20190714142504.30546-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Jul 2019 16:29:40 +0200
+Subject: [Buildroot] [PATCH 0/2 v2] arch: allow passing compile flags
+ (branch yem/arc-atomic)
+Message-ID: <cover.1563114574.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Bump to version 4.3.2 did not update sha256 hash
+Hello All!
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/zeromq/zeromq.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This series makes it so that architectures can set compilation flags,
+passed down via the wrapper.
 
-diff --git a/package/zeromq/zeromq.hash b/package/zeromq/zeromq.hash
-index 5b87c3ca15..689d960b28 100644
---- a/package/zeromq/zeromq.hash
-+++ b/package/zeromq/zeromq.hash
-@@ -2,6 +2,6 @@
- md5  2047e917c2cc93505e2579bcba67a573 zeromq-4.3.2.tar.gz
- sha1 e5253bff214f77621b3d29443f1aa6e5a106ffe5  zeromq-4.3.2.tar.gz
- # Locally computed
--sha256 bcbabe1e2c7d0eec4ed612e10b94b112dd5f06fcefa994a0c79a45d835cd21eb  zeromq-4.3.1.tar.gz
-+sha256 ebd7b5c830d6428956b67a0454a7f8cbed1de74b3b01e5c33c5378e22740f763  zeromq-4.3.2.tar.gz
- sha256 4fd86507c9b486764343065a9e035222869a27b5789efeb4fd93edc85412d7a3  COPYING
- sha256 83f32abe61ee58ffb1b007412c08415168c052501dbf56d7a47aaaac52b03ef6  COPYING.LESSER
+This is then used by arc to enforce -matomic for those cores that need
+it, namely arc7x0, as reported by Alexey:
+
+    https://patchwork.ozlabs.org/patch/1087480/
+    https://patchwork.ozlabs.org/patch/1087471/
+
+Changes v1 -> v2;
+  - move condition that was previously in package/Makefile.in  (Alexey)
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit fb9c86a31c7933d2a320644be9cfff4be71a3206
+
+  package/imx-uuc: bump to version fc48b497fe961d601b4bcced807f562090854ec9 (2019-07-14 15:59:56 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 8d0887d8b7c56dd2b92314886f35bdaa7d57894d
+
+  arch/arc: always needs -matomic with atomix extensions (2019-07-14 16:28:43 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      toolchain: allow architectures to enforce compilation flags
+      arch/arc: always needs -matomic with atomix extensions
+
+ arch/arch.mk.arc               | 4 ++++
+ package/Makefile.in            | 4 ----
+ toolchain/toolchain-wrapper.mk | 1 +
+ 3 files changed, 5 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arch.mk.arc
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
