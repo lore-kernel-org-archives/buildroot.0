@@ -1,38 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Jul 2019 13:38:34 +0200
-Subject: [Buildroot] [PATCH] package/redis: bump version to 5.0.5
-In-Reply-To: <20190714110431.27244-1-peter@korsgaard.com>
-References: <20190714110431.27244-1-peter@korsgaard.com>
-Message-ID: <20190714133834.30619d14@windsurf>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sun, 14 Jul 2019 14:19:24 +0200
+Subject: [Buildroot] [PATCH] package/cpio: add host version
+In-Reply-To: <20190714090301.26552-1-yann.morin.1998@free.fr>
+References: <20190714090301.26552-1-yann.morin.1998@free.fr>
+Message-ID: <7761512e-bb70-ea06-14e8-a7f0df882964@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 14 Jul 2019 13:04:30 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
 
-> From the release notes:
-> https://raw.githubusercontent.com/antirez/redis/5.0/00-RELEASENOTES
+
+On 14/07/2019 11:03, Yann E. MORIN wrote:
+> The latest cpio has a --reproducible option, which may come handy when
+> we try to, well, be reproducible...
 > 
-> ================================================================================
-> Redis 5.0.5     Released Wed May 15 17:57:41 CEST 2019
-> ================================================================================
-> 
-> Upgrade urgency CRITICAL: This release fixes an important AOF fysnc bug
->                           and other less critical issues.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Reported-by: Arnout Vandecappelle <arnout@mind.be>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Atharva Lele <itsatharva@gmail.com>
 > ---
->  package/redis/redis.hash | 2 +-
->  package/redis/redis.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  package/cpio/cpio.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
+> index 9a09279572..d2814b87a5 100644
+> --- a/package/cpio/cpio.mk
+> +++ b/package/cpio/cpio.mk
+> @@ -16,4 +16,7 @@ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+>  CPIO_DEPENDENCIES += argp-standalone
+>  endif
+>  
+> +HOST_CPIO_CONF_OPTS = --bindir=$(HOST_DIR)/bin
 
-Applied to master, thanks.
+ Why is this needed? For target it is needed because --prefix is set to /usr so
+it would end up in /usr/bin and we want it in /bin. But for hsot, --prefix is
+$(HOST_DIR).
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ Regards,
+ Arnout
+
+> +
+>  $(eval $(autotools-package))
+> +$(eval $(host-autotools-package))
+> 
