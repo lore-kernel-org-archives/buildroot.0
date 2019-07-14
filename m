@@ -1,44 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:27:51 +0200
-Subject: [Buildroot] [git commit] package/libxslt: bump version to 1.1.33
-Message-ID: <20190714102956.2507F828E8@busybox.osuosl.org>
+Date: Sun, 14 Jul 2019 12:34:57 +0200
+Subject: [Buildroot] [PATCH] package/iozone: bump to version 3_487
+In-Reply-To: <1563001107-17687-1-git-send-email-gilles.talis@gmail.com>
+ (Gilles Talis's message of "Sat, 13 Jul 2019 08:58:23 +0200")
+References: <1563001107-17687-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <877e8k6h0u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=655e9f0699e1a3dd04746704cf5e0a32a18b150b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Gilles" == Gilles Talis <gilles.talis@gmail.com> writes:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libxslt/libxslt.hash | 2 +-
- package/libxslt/libxslt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 
-diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
-index f28150b71e..0326585959 100644
---- a/package/libxslt/libxslt.hash
-+++ b/package/libxslt/libxslt.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	526ecd0abaf4a7789041622c3950c0e7f2c4c8835471515fd77eec684a355460	libxslt-1.1.32.tar.gz
-+sha256	8e36605144409df979cab43d835002f63988f3dc94d5d3537c12796db90e38c8	libxslt-1.1.33.tar.gz
- 
- # Hash for license file:
- sha256	7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819	COPYING
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 4632301b16..d2cef1cb04 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXSLT_VERSION = 1.1.32
-+LIBXSLT_VERSION = 1.1.33
- LIBXSLT_SITE = http://xmlsoft.org/sources
- LIBXSLT_INSTALL_STAGING = YES
- LIBXSLT_LICENSE = MIT
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
