@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 11:59:23 +0200
-Subject: [Buildroot] [PATCH] configs/warp7: Bump kernel and U-Boot
- versions
-In-Reply-To: <1562616678-20056-1-git-send-email-pjtexier@koncepto.io>
- (Pierre-Jean Texier's message of "Mon, 8 Jul 2019 22:11:18 +0200")
-References: <1562616678-20056-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <875zo59bt0.fsf@dell.be.48ers.dk>
+Date: Sun, 14 Jul 2019 11:59:44 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/python-django: bump to
+ version 2.2.3
+In-Reply-To: <1562618541-11390-1-git-send-email-pjtexier@koncepto.io>
+ (Pierre-Jean Texier's message of "Mon, 8 Jul 2019 22:42:21 +0200")
+References: <1562618541-11390-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <871ryt9bsf.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,12 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
 
- > Bump U-Boot to 2019.07 and kernel to version 5.1.16.
- > Also
- >  - adjust the U-Boot binary name after DM conversion.
- >  - add missing notes about DFU
+ > See https://docs.djangoproject.com/en/2.2/releases/2.2.3/
+ > Also, 2.2.x is the new LTS series.
 
  > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+ > ---
+ > Changes v1 -> v2
+ >  - bump to 2.2.3 instead of 2.2.2 (suggested by Peter Korsgaard after review of Arnout Vandecappelle) 
+ >  - The 2.2.3 includes the same fix (CVE-2019-12781) as version 2.1.10.
 
 Committed, thanks.
 
