@@ -1,80 +1,61 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Jul 2019 21:05:01 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/Config.in: fix alphabetical
- order
-In-Reply-To: <20190714123415.GB18236@scaer>
+From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Date: Sun, 14 Jul 2019 22:12:47 +0200
+Subject: [Buildroot] [PATCH v2 2/2] checkpackagelib/lib_config.py: check
+ packages alphabetical order in {Config.in, Config.in.host}
+In-Reply-To: <52067533-c74f-348b-450a-0504b71b0184@mind.be>
 References: <20190611204946.3848-1-jerzy.m.grzegorek@gmail.com>
- <20190714123415.GB18236@scaer>
-Message-ID: <64500993-4908-3f86-8b73-2355ac75edab@mind.be>
+ <20190611204946.3848-2-jerzy.m.grzegorek@gmail.com>
+ <52067533-c74f-348b-450a-0504b71b0184@mind.be>
+Message-ID: <8ac92bf3-55a0-7580-5dfe-4beba20d80a1@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Hi Arnout,
 
-
-On 14/07/2019 14:34, Yann E. MORIN wrote:
-> On 2019-06-11 22:49 +0200, Jerzy Grzegorek spake thusly:
+>   Hi Jerzy,
+>
+> On 11/06/2019 22:49, Jerzy Grzegorek wrote:
 >> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+>   Applied both to master, thanks.
+>
+>   I still made a lot of changes, though:
+>
+>       - calculate level by counting - instead of with a static array;
+>       - new_package is only used locally, so don't make it a class member;
+>       - do indentation according to length of prefix;
+>       - don't split string in the middle of a line;
+>       - report first wrong package per menu;
+>       - do replace() only once;
+>       - add comment why we do replace().
+>
+>   Please take a look at the end result, and if there's something you don't like,
+> send a follow-up patch.
+>
+>   Regards,
+>   Arnout
+
+
+I'm fine with all the changes you did.
+Thanks.
+However, I'll send a follow-up patch.
+
+
+Regards,
+
+Jerzy
+
+
+>
+>
 >> ---
 >> Changes v1 -> v2:
->>  - swap patches 1 and 2 (Arnout)
->>  - change alphabetical order (Arnout)
->>    real alphabetical order: '-', digits, capitals, '_', lowercase
->>    order after change: '-', '_', digits, capitals, lowercase
->> ---
+>>   - swap patches 1 and 2 (Arnout)
+>>   - drop trailing lines (copy/paste side effect)
+>>   - rewrap lines to < 80 chars
+>>   - add variable to cut lines to < 80 chars
+>>   - change alphabetical order of '_" to go before digits (Arnout)
 >>
->>  package/Config.in | 30 +++++++++++++++---------------
->>  1 file changed, 15 insertions(+), 15 deletions(-)
->>
->> diff --git a/package/Config.in b/package/Config.in
->> index f61009410d..fcb61c61e0 100644
->> --- a/package/Config.in
->> +++ b/package/Config.in
->> @@ -288,10 +288,10 @@ comment "Graphic libraries"
->>  	source "package/directfb/Config.in"
->>  	source "package/directfb-examples/Config.in"
->>  	source "package/efl/Config.in"
->> +	source "package/fb-test-app/Config.in"
->>  	source "package/fbdump/Config.in"
->>  	source "package/fbgrab/Config.in"
->>  	source "package/fbset/Config.in"
->> -	source "package/fb-test-app/Config.in"
-> Actually, I am not a fan of this ordering.
-> 
-> I am a human, not a machine, so when I try to find something in an
-> ordered list in my head, I definitely do not run qsort() using the
-> C locale. Instead, I just ignore '-' or '_' when sorting; I just
-> sort on the letters and numbers, and anything else is silently
-> ignored.
-> 
-> So, again, this is a mechanical sort suited for machines, not humans.
-> This is sad... :-(
-
- The intention was to go to a consistent ordering, not necessarily 'suited for
-machines' (i.e. ascii ordering). See Jerzy's comment in the patch changelog
-about ordering: _ is ordered before digits and letters instead of between
-capital and lowercase.
-
- We could indeed do something similar for -, or replace - by nothing. However,
-it's not as if things were ordered like that everywhere before this patch.
-
- So feel free to suggest an alternative ordering, and of course contribute a
-patch to change it :-)
-
- BTW, I don't really agree that - or _ should be ignored while sorting. For me,
-the following order looks wrong:
-
-aaa
-a-ba
-abr
-
-"a-ba" to me sounds like two words, and for me it feels more natural to order
-"a ba" before "aaa".
-
- But this, obviously, is bikeshedding :-)
-
-
- Regards,
- Arnout
+>> TODO : checking of menu of comments and menu of menus
