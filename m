@@ -1,92 +1,47 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 14 Jul 2019 15:23:04 +0200
-Subject: [Buildroot] [PATCH] package/sshguard: new package
-In-Reply-To: <1562793228-5530-1-git-send-email-angelo@amarulasolutions.com>
-References: <1562793228-5530-1-git-send-email-angelo@amarulasolutions.com>
-Message-ID: <20190714152304.37a32f23@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 14 Jul 2019 15:28:07 +0200
+Subject: [Buildroot] [PATCH 1/2] package/vte: needs host-intltool
+In-Reply-To: <20190714145107.7aa5ebb1@windsurf>
+References: <20190713083256.28511-1-fontaine.fabrice@gmail.com>
+ <20190714145107.7aa5ebb1@windsurf>
+Message-ID: <CAPi7W81NkNY=3CZ_WD2fvrbRrgSSkdd=cKvtEW5CBzS2WLLx1g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Angelo,
+Dear Thomas,
 
-On Wed, 10 Jul 2019 23:13:48 +0200
-Angelo Compagnucci <angelo@amarulasolutions.com> wrote:
+Le dim. 14 juil. 2019 ? 14:51, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> a ?crit :
+>
+> On Sat, 13 Jul 2019 10:32:55 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+>
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/30a8032ebba5a30bacd321c407a1d0734fadf757
+> >
+> > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> This vte package has not changed since it was introduced in January
+> 2018. Why suddenly we have this error caused by the missing intltool ?
+This version of vte currently depends on intltool through
+IT_PROG_INTLTOOL([0.35]) and it uses intltool-update to retrieve the
+version.
+However, on my build system and the one from the Xogium autobuilder,
+intltool-update is not available which raise this build failure.
+I don't know why we didn't get this error sooner, perhaps because
+intltool was more widely installed on the different distributions or
+because host-intltool was built due to another package?
+>
+> Thanks,
+>
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+Best Regards,
 
-> sshguard protects hosts from brute-force attacks against SSH and other
-> services.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-
-Thanks for this contribution!
-
-> diff --git a/package/sshguard/S39sshguard b/package/sshguard/S39sshguard
-> new file mode 100644
-> index 0000000..8b46bc5
-> --- /dev/null
-> +++ b/package/sshguard/S39sshguard
-> @@ -0,0 +1,27 @@
-> +#!/bin/sh
-> +
-> +case "$1" in
-> +	start)
-> +		printf "Starting sshguard: "
-> +		iptables -N sshguard
-> +		iptables -A INPUT -j sshguard
-> +		start-stop-daemon -S -q -b -p /run/sshguard.pid \
-> +			-x /usr/sbin/sshguard -- -i /run/sshguard.pid
-> +		[ $? = 0 ] && echo "OK" || echo "FAIL"
-> +		;;
-> +	stop)
-> +		printf "Stopping sshguard: "
-> +		start-stop-daemon -K -q -p /run/sshguard.pid
-> +		[ $? = 0 ] && echo "OK" || echo "FAIL"
-> +		iptables -D INPUT -j sshguard
-> +		iptables -F sshguard
-> +		iptables -X sshguard
-> +		;;
-> +	restart)
-> +		"$0" stop
-> +		"$0" start
-> +		;;
-> +	*)
-> +		echo "Usage: $0 {start|stop|restart}"
-> +		;;
-> +esac
-
-For the init script, could you use package/busybox/S01syslogd as a
-template ? It is now our "canonical" init script format, so we would
-like to follow it for new packages.
-
-> diff --git a/package/sshguard/sshguard.mk b/package/sshguard/sshguard.mk
-> new file mode 100644
-> index 0000000..634bc17
-> --- /dev/null
-> +++ b/package/sshguard/sshguard.mk
-> @@ -0,0 +1,35 @@
-> +################################################################################
-> +#
-> +# sshguard
-> +#
-> +################################################################################
-> +
-> +SSHGUARD_VERSION = v2.4.0
-> +SSHGUARD_SITE = https://bitbucket.org/sshguard/sshguard
-> +SSHGUARD_SITE_METHOD = git
-> +SSHGUARD_LICENSE = GPL-2.0+
-
-The COPYING file at
-https://bitbucket.org/sshguard/sshguard/src/v2.4.0/COPYING doesn't look
-like GPLv2 at all. Are you sure about this ?
-
-Could you fix those two issues and send an updated version ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fabrice
