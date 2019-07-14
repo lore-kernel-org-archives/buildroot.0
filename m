@@ -1,91 +1,202 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 14 Jul 2019 12:22:24 +0200
-Subject: [Buildroot] [git commit] package/libva: bump version to 2.5.0
-Message-ID: <20190714102157.E3D337FB36@busybox.osuosl.org>
+Date: Sun, 14 Jul 2019 12:20:25 +0200
+Subject: [Buildroot] [git commit] package/libiscsi: bump to version 1.19.0
+Message-ID: <20190714102157.CB64B80163@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f2f52044d577b2e66e23193e6eb95191aaca88cd
+commit: https://git.buildroot.net/buildroot/commit/?id=3a8b7f75acdda9e7155da80e7cf63970a06f34b0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Removed patch which was applied upstream:
-https://github.com/intel/libva/commit/6724011e8b52901f13dded130f0b47e8bdbd4dda
+- Remove patches (already in version)
+- Use new configure options to disable examples, test-tool and tests
+- Drop cunit optional dependency now that test-tool is always disabled
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...a-va_trace-unbreak-with-C89-after-b369467.patch | 35 ----------------------
- package/libva/libva.hash                           |  6 ++--
- package/libva/libva.mk                             |  2 +-
- 3 files changed, 4 insertions(+), 39 deletions(-)
+ ...lude.-This-is-unsafe-when-cross-compiling.patch | 67 ----------------------
+ ...logging-message-that-includes-target-name.patch | 29 ----------
+ package/libiscsi/0003-avoid-fallthrough.patch      | 24 --------
+ package/libiscsi/libiscsi.hash                     |  2 +-
+ package/libiscsi/libiscsi.mk                       |  9 +--
+ 5 files changed, 4 insertions(+), 127 deletions(-)
 
-diff --git a/package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch b/package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch
+diff --git a/package/libiscsi/0001-Do-not-use-I-usr-include.-This-is-unsafe-when-cross-compiling.patch b/package/libiscsi/0001-Do-not-use-I-usr-include.-This-is-unsafe-when-cross-compiling.patch
 deleted file mode 100644
-index 19192742c8..0000000000
---- a/package/libva/0001-va-va_trace-unbreak-with-C89-after-b369467.patch
+index dc047ef49c..0000000000
+--- a/package/libiscsi/0001-Do-not-use-I-usr-include.-This-is-unsafe-when-cross-compiling.patch
 +++ /dev/null
-@@ -1,35 +0,0 @@
--From 6724011e8b52901f13dded130f0b47e8bdbd4dda Mon Sep 17 00:00:00 2001
--From: Jan Beich <jbeich@FreeBSD.org>
--Date: Wed, 10 Apr 2019 11:37:28 +0000
--Subject: [PATCH] va/va_trace: unbreak with C89 after b3694671c784
+@@ -1,67 +0,0 @@
+-From f27bdf64f0c375352ca42928071a9178a5a04c46 Mon Sep 17 00:00:00 2001
+-From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+-Date: Sun, 16 Oct 2016 10:53:13 +0100
+-Subject: [PATCH] Do not use -I/usr/include. This is unsafe when cross-compiling.
 -
--va/va_trace.c: In function 'va_TraceVAEncMiscParameterBuffer':
--va/va_trace.c:3281: error: 'for' loop initial declaration used outside C99 mode
+-Upstream status: PR sent (https://github.com/sahlberg/libiscsi/pull/219)
+-
+-Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
+----
+- examples/Makefile.am | 2 +-
+- lib/Makefile.am      | 2 +-
+- tests/Makefile.am    | 2 +-
+- utils/Makefile.am    | 2 +-
+- 4 files changed, 4 insertions(+), 4 deletions(-)
+-
+-diff --git a/examples/Makefile.am b/examples/Makefile.am
+-index 0de0b1f..42ad818 100644
+---- a/examples/Makefile.am
+-+++ b/examples/Makefile.am
+-@@ -1,6 +1,6 @@
+- AM_CPPFLAGS=-I. -I${srcdir}/../include "-D_U_=__attribute__((unused))" \
+- 	"-D_R_(A,B)=__attribute__((format(printf,A,B)))"
+--AM_CFLAGS=$(WARN_CFLAGS) -I/usr/include
+-+AM_CFLAGS=$(WARN_CFLAGS)
+- LDADD = ../lib/libiscsi.la
+- 
+- noinst_PROGRAMS = iscsiclient iscsi-dd
+-diff --git a/lib/Makefile.am b/lib/Makefile.am
+-index d612fb7..47ffc33 100644
+---- a/lib/Makefile.am
+-+++ b/lib/Makefile.am
+-@@ -29,7 +29,7 @@ libiscsi_la_CPPFLAGS = -I${srcdir}/../include -I$(srcdir)/include \
+- 	"-D_U_=__attribute__((unused))" \
+- 	"-D_R_(A,B)=__attribute__((format(printf,A,B)))"
+- 
+--AM_CFLAGS=$(WARN_CFLAGS) -I/usr/include
+-+AM_CFLAGS=$(WARN_CFLAGS)
+- 
+- dist_noinst_DATA = libiscsi.syms libiscsi.def
+- 
+-diff --git a/tests/Makefile.am b/tests/Makefile.am
+-index 9d699fc..b4cbf21 100644
+---- a/tests/Makefile.am
+-+++ b/tests/Makefile.am
+-@@ -1,6 +1,6 @@
+- AM_CPPFLAGS = -I../include "-D_U_=__attribute__((unused))" \
+- 	"-D_R_(A,B)=__attribute__((format(printf,A,B)))"
+--AM_CFLAGS = $(WARN_CFLAGS) -I/usr/include
+-+AM_CFLAGS = $(WARN_CFLAGS)
+- LDADD = ../lib/libiscsi.la
+- 
+- noinst_PROGRAMS = prog_reconnect prog_reconnect_timeout prog_noop_reply \
+-diff --git a/utils/Makefile.am b/utils/Makefile.am
+-index 657ca9d..bde1c81 100644
+---- a/utils/Makefile.am
+-+++ b/utils/Makefile.am
+-@@ -1,6 +1,6 @@
+- AM_CPPFLAGS = -I${srcdir}/../include "-D_U_=__attribute__((unused))" \
+- 	"-D_R_(A,B)=__attribute__((format(printf,A,B)))"
+--AM_CFLAGS = $(WARN_CFLAGS) -I/usr/include
+-+AM_CFLAGS = $(WARN_CFLAGS)
+- LDADD = ../lib/libiscsi.la
+- 
+- bin_PROGRAMS = iscsi-inq iscsi-ls iscsi-perf iscsi-readcapacity16 \
+--- 
+-2.10.0
+-
+diff --git a/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch b/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch
+deleted file mode 100644
+index 1334a8352c..0000000000
+--- a/package/libiscsi/0002-avoid-truncation-when-logging-message-that-includes-target-name.patch
++++ /dev/null
+@@ -1,29 +0,0 @@
+-From bffafc1c3003c2ee05d28eaa345e5854bc36014d Mon Sep 17 00:00:00 2001
+-From: Paolo Bonzini <pbonzini@redhat.com>
+-Date: Mon, 1 Oct 2018 14:16:14 +0200
+-Subject: [PATCH] avoid truncation when logging message that includes target
+- name
+-
 -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 -[Retrieved from:
--https://github.com/intel/libva/commit/6724011e8b52901f13dded130f0b47e8bdbd4dda]
+-https://github.com/sahlberg/libiscsi/commit/bffafc1c3003c2ee05d28eaa345e5854bc36014d]
 ----
-- va/va_trace.c | 3 ++-
-- 1 file changed, 2 insertions(+), 1 deletion(-)
+- lib/logging.c | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
 -
--diff --git a/va/va_trace.c b/va/va_trace.c
--index 0a17e5cd..d41f62c1 100755
----- a/va/va_trace.c
--+++ b/va/va_trace.c
--@@ -3271,6 +3271,7 @@ static void va_TraceVAEncMiscParameterBuffer(
--     }
--     case VAEncMiscParameterTypeROI:
--     {
--+        int i;
--         VAEncMiscParameterBufferROI *p = (VAEncMiscParameterBufferROI *)tmp->data;
+-diff --git a/lib/logging.c b/lib/logging.c
+-index be518fc5..61c74407 100644
+---- a/lib/logging.c
+-+++ b/lib/logging.c
+-@@ -73,9 +73,9 @@ iscsi_log_message(struct iscsi_context *iscsi, int level, const char *format, ..
+- 	}
 - 
--         va_TraceMsg(trace_ctx, "\t--VAEncMiscParameterBufferROI\n");
--@@ -3278,7 +3279,7 @@ static void va_TraceVAEncMiscParameterBuffer(
--         va_TraceMsg(trace_ctx, "\tmax_delta_qp = %d\n", p->max_delta_qp);
--         va_TraceMsg(trace_ctx, "\tmin_delta_qp = %d\n", p->min_delta_qp);
--         va_TraceMsg(trace_ctx, "\troi_flags.bits.roi_value_is_qp_delta = %d\n", p->roi_flags.bits.roi_value_is_qp_delta);
---        for (int i = 0; i < p->num_roi; i++) {
--+        for (i = 0; i < p->num_roi; i++) {
--             va_TraceMsg(trace_ctx, "\troi[%d].roi_rectangle.x      = %d\n", i, p->roi[i].roi_rectangle.x);
--             va_TraceMsg(trace_ctx, "\troi[%d].roi_rectangle.y      = %d\n", i, p->roi[i].roi_rectangle.y);
--             va_TraceMsg(trace_ctx, "\troi[%d].roi_rectangle.width  = %d\n", i, p->roi[i].roi_rectangle.width);
-diff --git a/package/libva/libva.hash b/package/libva/libva.hash
-index 661eedf16a..4a62a9450a 100644
---- a/package/libva/libva.hash
-+++ b/package/libva/libva.hash
+- 	if (iscsi->target_name[0]) {
+--		static char message2[1024];
+-+		static char message2[1282];
+- 
+--		snprintf(message2, 1024, "%s [%s]", message, iscsi->target_name);
+-+		snprintf(message2, 1282, "%s [%s]", message, iscsi->target_name);
+- 		iscsi->log_fn(level, message2);
+- 	}
+- 	else
+diff --git a/package/libiscsi/0003-avoid-fallthrough.patch b/package/libiscsi/0003-avoid-fallthrough.patch
+deleted file mode 100644
+index 94f653a99c..0000000000
+--- a/package/libiscsi/0003-avoid-fallthrough.patch
++++ /dev/null
+@@ -1,24 +0,0 @@
+-From 679d0abe7c142df178a907397551c4d9695cc667 Mon Sep 17 00:00:00 2001
+-From: Paolo Bonzini <pbonzini@redhat.com>
+-Date: Mon, 1 Oct 2018 14:14:24 +0200
+-Subject: [PATCH] avoid fallthrough
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://github.com/sahlberg/libiscsi/commit/679d0abe7c142df178a907397551c4d9695cc667]
+----
+- lib/scsi-lowlevel.c | 1 +
+- 1 file changed, 1 insertion(+)
+-
+-diff --git a/lib/scsi-lowlevel.c b/lib/scsi-lowlevel.c
+-index 5ddd709c..747ce0c4 100644
+---- a/lib/scsi-lowlevel.c
+-+++ b/lib/scsi-lowlevel.c
+-@@ -1086,6 +1086,7 @@ scsi_maintenancein_datain_getfullsize(struct scsi_task *task)
+- 				(task_get_uint8(task, 1) & 0x80) ? 12 : 0 +
+- 				task_get_uint16(task, 2);
+- 		}
+-+		return -1;
+- 	default:
+- 		return -1;
+- 	}
+diff --git a/package/libiscsi/libiscsi.hash b/package/libiscsi/libiscsi.hash
+index 0688f2dd2f..b70bb423dc 100644
+--- a/package/libiscsi/libiscsi.hash
++++ b/package/libiscsi/libiscsi.hash
 @@ -1,5 +1,5 @@
--# From https://github.com/intel/libva/releases/download/2.4.1/libva-2.4.1.tar.bz2.sha1sum
--sha1 5aeffc9929b4a9a5ebbed94adf065d08fc50bcf9  libva-2.4.1.tar.bz2
-+# From https://github.com/intel/libva/releases/download/2.5.0/libva-2.5.0.tar.bz2.sha1sum
-+sha1 5bd2b0bc9d1e49cf1e21d9a63696f13a1483bd86  libva-2.5.0.tar.bz2
- # Locally computed
--sha256 e9e053908591b121793eaa5d8aa37675b4cd3af4b12f1f377dff4767f39cee70  libva-2.4.1.tar.bz2
-+sha256 3aa89cd369a506ac4dbe5de7c0ef5da4f3d220bf986403f02fa1f6f702af6878  libva-2.5.0.tar.bz2
- sha256 c86a782ee845b52472dae9b9d79fb915d333628ac0efe49cdce63644814931de  COPYING
-diff --git a/package/libva/libva.mk b/package/libva/libva.mk
-index e876a1a3d0..7bf1839f4c 100644
---- a/package/libva/libva.mk
-+++ b/package/libva/libva.mk
-@@ -4,7 +4,7 @@
+ # Locally computed:
+-sha256 464d104e12533dc11f0dd7662cbc2f01c132f94aa4f5bd519e3413ef485830e8  libiscsi-1.18.0.tar.gz
++sha256 c7848ac722c8361d5064654bc6e926c2be61ef11dd3875020a63931836d806df  libiscsi-1.19.0.tar.gz
+ sha256 88e3eccc48722b2a0eaff456dda94b8e8e123848d01f631969bec8e3c6c6eb85  COPYING
+ sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENCE-GPL-2.txt
+ sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  LICENCE-LGPL-2.1.txt
+diff --git a/package/libiscsi/libiscsi.mk b/package/libiscsi/libiscsi.mk
+index 2b26a1427c..f0b003b347 100644
+--- a/package/libiscsi/libiscsi.mk
++++ b/package/libiscsi/libiscsi.mk
+@@ -4,18 +4,15 @@
  #
  ################################################################################
  
--LIBVA_VERSION = 2.4.1
-+LIBVA_VERSION = 2.5.0
- LIBVA_SOURCE = libva-$(LIBVA_VERSION).tar.bz2
- LIBVA_SITE = https://github.com/intel/libva/releases/download/$(LIBVA_VERSION)
- LIBVA_LICENSE = MIT
+-LIBISCSI_VERSION = 1.18.0
++LIBISCSI_VERSION = 1.19.0
+ LIBISCSI_SITE = $(call github,sahlberg,libiscsi,$(LIBISCSI_VERSION))
+ LIBISCSI_LICENSE = GPL-2.0+, LGPL-2.1+
+ LIBISCSI_LICENSE_FILES = COPYING LICENCE-GPL-2.txt LICENCE-LGPL-2.1.txt
+ LIBISCSI_INSTALL_STAGING = YES
+ LIBISCSI_AUTORECONF = YES
+ 
+-ifeq ($(BR2_PACKAGE_CUNIT),y)
+-LIBISCSI_DEPENDENCIES += cunit
+-endif
+-
+-LIBISCSI_CONF_OPTS = --disable-werror --disable-manpages
++LIBISCSI_CONF_OPTS = --disable-examples --disable-werror --disable-manpages \
++	--disable-test-tool --disable-tests
+ 
+ # We need to create the m4 directory to make autoreconf work properly.
+ define LIBISCSI_CREATE_M4_DIR
