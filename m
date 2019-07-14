@@ -1,140 +1,92 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sun, 14 Jul 2019 22:24:06 +0200
-Subject: [Buildroot] [PATCH] utils/checkpackagelib:
- CommentsMenusPackagesOrder: fix 'menuconfig' handling
-In-Reply-To: <7841a190-820b-cd3c-4f71-2a5b0c5f6a0d@mind.be>
-References: <20190714124400.29431-1-arnout@mind.be>
- <20190714131502.GC8912@scaer> <20190714132329.GA25166@scaer>
- <7841a190-820b-cd3c-4f71-2a5b0c5f6a0d@mind.be>
-Message-ID: <0a63745f-3e08-ffa7-6c8c-84ef9e419a78@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 14 Jul 2019 22:33:29 +0200
+Subject: [Buildroot] [PATCH] package/fakeroot: use TCP for msg passing
+In-Reply-To: <20190711193654.2039-1-matthew.weber@rockwellcollins.com>
+References: <20190711193654.2039-1-matthew.weber@rockwellcollins.com>
+Message-ID: <20190714203329.GJ29941@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Matt, All,
 
-
-On 14/07/2019 20:50, Arnout Vandecappelle wrote:
+On 2019-07-11 14:36 -0500, Matt Weber spake thusly:
+> fakeroot can be built to either use SYSV IPC or TCP for message passing.
 > 
+> Cases for which the SYSV IPC version fails or causes problems but for
+> which fakeroot-tcp has been observed to work well include the items
+> listed below.
 > 
-> On 14/07/2019 15:23, Yann E. MORIN wrote:
->> Arnout, Jerzy, All,
->>
->> (sorry, I sent the previous one too quickly)
->>
->> On 2019-07-14 15:15 +0200, Yann E. MORIN spake thusly:
->>> On 2019-07-14 14:44 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
->> [--SNIP--]
->>>> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/251214899
->>> No, it does not fix it totally. It only fixes the python traceback.
->>> The Kodi issues is till present.
->>> Hint: the Kodi package is the only one that indents the "source" lines
->>> with a TAB.
->>
->> If one changes Kodi to not indent the source lines, then the issue
->> disappears. Of course, this is not the correct solution, but...
+>   * Multithreaded applications (using pthread)
+
+I know you used the commit log from upstream, but that was written 12
+year ago now. 12 years ago NPTL was still new-ish, and LinuxThreads were
+still alive. Is it still true that fakeroot misbehaves when using
+pthreads at all nowadays?
+
+>   * Running under realtime-preempt kernel
+>   * Microsoft Windows 10 Services for Linux
 > 
->  Yes, because the test only looks at source lines which are indented, which is
-> wrong too. It should be a regex.
-
- So, I changed this into a regex...
-
+> Link to readme capturing original upstream bug report #
+> https://salsa.debian.org/clint/fakeroot/commit/113c6320244c4261f7f7a9ce07cf7b5465573dfe
 > 
->>
->> If one changes another package to also idnent the source lines with a
->> TAB, then the error happens there too (for example, fftw):
->>
->>     package/fftw/Config.in:18: Packages in: if BR2_PACKAGE_FFTW,
->>                                are not alphabetically ordered;
->>                                correct order: '-', '_', digits, capitals, lowercase;
->>                                first incorrect package: ftw/fftw-d
->>
->> OK, so, weird. The package included is in fact fftw/fftw-double and only
->> part of the bname is reported.
->>
->> But if one also looks more closely at the Kodi issue, packages names are
->> also incorrectly reported:
->>
->>     package/kodi/Config.in:303: Packages in: menu "Audio decoder addons",
->>     [--SNIP--]
->>                                 first incorrect package: kodi-audiodecoder
->>
->> And in fact, there is one thing I don;t understand in utils/checkpackagelib/lib_config.py,
->> line 106:
->>
->>     new_package = text[17: -(len(self.filename)-5):]
->>
->> Why are we using the current filename to strip away parts of the new
->> package filename?
+> Fixes
+> https://bugs.busybox.net/show_bug.cgi?id=11366
 > 
->  That is indeed the problem. I didn't look too hard at that line (because I
-> already looked to much at all the rest :-). The len(self.filename)-5 works for
-> package/Config.in because that exactly strips off the /Config.in part of the
-> line. But that's a horrible hack, of course...
+> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> ---
+> I can't find a good reason to not make this the new default in the
+> Buildroot host build of fakeroot.  vs auto detecting which to build
+> depending on what the host env can support.
 
- ... and used the same regex to get the package name.
+I have two questions:
 
- It now seems to work correctly. However, it turns up 10 "errors":
+  - can we run two unrelated fakeroot concurrently? E.g. if we have two
+    buildsin parallel, which happen to each call their fakeroot at about
+    the same time that the two fakeroot will run in parallel, won;t that
+    clash? I think it boils down to how fakeroot chooses the port to
+    listen on;
 
-boot/Config.in:7: Packages in: menu "Bootloaders",
-                  are not alphabetically ordered;
-                  correct order: '-', '_', digits, capitals, lowercase;
-                  first incorrect package: arm-trusted-firmware
-package/fftw/Config.in:18: Packages in: if BR2_PACKAGE_FFTW,
-                           are not alphabetically ordered;
-                           correct order: '-', '_', digits, capitals, lowercase;
-                           first incorrect package: fftw-double
-package/gstreamer/Config.in:7: Packages in: if BR2_PACKAGE_GSTREAMER,
-                               are not alphabetically ordered;
-                               correct order: '-', '_', digits, capitals, lowercase;
-                               first incorrect package: gst-plugins-bad
-package/gstreamer1/Config.in:6: Packages in: if BR2_PACKAGE_GSTREAMER1,
-                                are not alphabetically ordered;
-                                correct order: '-', '_', digits, capitals,
-lowercase;
-                                first incorrect package: gst1-plugins-base
-package/opengl/Config.in:2: Packages in: ,
-                            are not alphabetically ordered;
-                            correct order: '-', '_', digits, capitals, lowercase;
-                            first incorrect package: libegl
-package/qt5/Config.in:84: Packages in: comment "Latest Qt version needs
-host/toolchain w/ gcc >= 4.8",
-                          are not alphabetically ordered;
-                          correct order: '-', '_', digits, capitals, lowercase;
-                          first incorrect package: qt5webengine
-package/freescale-imx/Config.in:96: Packages in: if BR2_PACKAGE_FREESCALE_IMX,
-                                    are not alphabetically ordered;
-                                    correct order: '-', '_', digits, capitals,
-lowercase;
-                                    first incorrect package: firmware-imx
-toolchain/toolchain-buildroot/Config.in:109: Packages in: comment "glibc on MIPS
-w/ NAN2008 needs a toolchain w/ headers >= 4.5",
-                                             are not alphabetically ordered;
-                                             correct order: '-', '_', digits,
-capitals, lowercase;
-                                             first incorrect package: glibc
-toolchain/toolchain-external/Config.in:17: Packages in: comment "glibc
-toolchains only available with shared lib support",
-                                           are not alphabetically ordered;
-                                           correct order: '-', '_', digits,
-capitals, lowercase;
-                                           first incorrect package:
-toolchain-external-codesourcery-aarch64
-toolchain/Config.in:70: Packages in: menu "Toolchain",
-                        are not alphabetically ordered;
-                        correct order: '-', '_', digits, capitals, lowercase;
-                        first incorrect package: gdb
+  - is there a performance issue? I wonder how it behaves for very big
+    rootfs content, when compared to the sysv ipc.
 
+Regards,
+Yann E. MORIN.
 
- I haven't looked at the details yet, but I think most of them are bogus. So,
-maybe we should just do it for package/Config.in and package/Config.in.host.
-However, some of them *are* relevant: external toolchains, bootloaders, maybe
-qt5... Note however that for those the "comment" handling is not correct (in
-package/Config.in, comments are generally used to indicate submenus, but in
-other Config.in files this is not the case).
+> For good measure, in-addition to this change, I will submit an upstream
+> patch for the suggested configure.as update (pending a little cleanup
+> in that proposed patch). https://bugs.busybox.net/attachment.cgi?id=7791
+> ---
+>  package/fakeroot/fakeroot.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/package/fakeroot/fakeroot.mk b/package/fakeroot/fakeroot.mk
+> index 4aa27a1b0c..d8effc955e 100644
+> --- a/package/fakeroot/fakeroot.mk
+> +++ b/package/fakeroot/fakeroot.mk
+> @@ -16,6 +16,8 @@ HOST_FAKEROOT_CONF_ENV = \
+>  	ac_cv_header_sys_capability_h=no \
+>  	ac_cv_func_capset=no
+>  
+> +HOST_FAKEROOT_CONF_OPTS = --with-ipc=tcp
+> +
+>  FAKEROOT_LICENSE = GPL-3.0+
+>  FAKEROOT_LICENSE_FILES = COPYING
+>  
+> -- 
+> 2.17.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
- Ideas?
-
- Regards,
- Arnout
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
