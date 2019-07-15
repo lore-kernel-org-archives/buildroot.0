@@ -1,67 +1,73 @@
-From: Alistair Francis <alistair23@gmail.com>
-Date: Mon, 15 Jul 2019 13:21:00 -0700
-Subject: [Buildroot] [PATCH v2 1/2] boot/opensbi: Upgrade from v0.3 to
- v0.4
-In-Reply-To: <20190709223649.25630-1-alistair.francis@wdc.com>
-References: <20190709223649.25630-1-alistair.francis@wdc.com>
-Message-ID: <CAKmqyKPD3=QG2kiSJH-hNAZ=abhtcCX7EhcA1tn3ChSAyqD-1w@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 15 Jul 2019 22:34:01 +0200
+Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib:
+ CommentsMenusPackagesOrder: fix order of packages checking
+In-Reply-To: <20190715065253.6072-1-jerzy.m.grzegorek@gmail.com>
+References: <20190715065253.6072-1-jerzy.m.grzegorek@gmail.com>
+Message-ID: <20190715203401.GO29941@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, Jul 9, 2019 at 3:49 PM Alistair Francis
-<alistair.francis@wdc.com> wrote:
->
-> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+Jerzy, All,
 
-Ping?
+On 2019-07-15 08:52 +0200, Jerzy Grzegorek spake thusly:
+> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
 
-Alistair
+Please provide more information in the commit log. See below...
 
 > ---
-> v2:
->  - Install both bin and elf for fw_dynamic.*
->
->  boot/opensbi/opensbi.hash | 2 +-
->  boot/opensbi/opensbi.mk   | 4 +++-
->  2 files changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
-> index d8449f573a..21f802bcbc 100644
-> --- a/boot/opensbi/opensbi.hash
-> +++ b/boot/opensbi/opensbi.hash
-> @@ -1,2 +1,2 @@
->  # locally computed
-> -sha256 07f18b73abf3b85aabe5bead19a923716c100d30eb58033459f39c3a224be300 opensbi-0.3.tar.gz
-> +sha256 d3060bf51af00204ce90fc73106955c694463b59a5b81be64cf780cd32743abf opensbi-0.4.tar.gz
-> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-> index 45a3fc4859..83552a5442 100644
-> --- a/boot/opensbi/opensbi.mk
-> +++ b/boot/opensbi/opensbi.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->
-> -OPENSBI_VERSION = 0.3
-> +OPENSBI_VERSION = 0.4
->  OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
->  OPENSBI_LICENSE = BSD-2-Clause
->  OPENSBI_LICENSE_FILES = COPYING.BSD
-> @@ -28,6 +28,8 @@ OPENSBI_INSTALL_IMAGES = YES
->  define OPENSBI_INSTALL_IMAGES_CMDS
->         $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin
->         $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
-> +       $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.bin $(BINARIES_DIR)/fw_dynamic.bin
-> +       $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.elf $(BINARIES_DIR)/fw_dynamic.elf
->  endef
->  endif
->
-> --
-> 2.22.0
->
+>  utils/checkpackagelib/lib_config.py | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+> index f0edb9993d..a135355f9a 100644
+> --- a/utils/checkpackagelib/lib_config.py
+> +++ b/utils/checkpackagelib/lib_config.py
+> @@ -72,8 +72,8 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+>          return len(self.state.split('-')) - 1
+>  
+>      def check_line(self, lineno, text):
+> -        if text.startswith("comment") or text.startswith("if") or \
+> -           text.startswith("menu"):
+> +        if text.startswith("comment ") or text.startswith("if ") or \
+> +           text.startswith("menu "):
+
+I guess this superseds Arnout's own patch?
+    http://lists.busybox.net/pipermail/buildroot/2019-July/254466.html
+
+>              if text.startswith("comment"):
+>                  if not self.state.endswith("-comment"):
+> @@ -103,7 +103,7 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+>  
+>          elif text.startswith('\tsource "package/'):
+>              level = self.get_level()
+> -            new_package = text[17: -(len(self.filename)-5):]
+> +            new_package = text[17: -(len(self.filename)-self.filename.index("Config")+3):]
+
+I fail to see how the two changes are related. This should be explained
+in the commit log. If they are not fixing the same thing, it should be
+two commits.
+
+Regards,
+Yann E. MORIN.
+
+>              # We order _ before A, so replace it with .
+>              new_package_ord = new_package.replace('_', '.')
+> -- 
+> 2.17.1
+> 
 > _______________________________________________
 > buildroot mailing list
 > buildroot at busybox.net
 > http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
