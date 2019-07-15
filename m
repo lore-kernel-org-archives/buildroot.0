@@ -1,96 +1,32 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 15 Jul 2019 18:37:55 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bluez_utils: fix build with kernel
- >= 5.2
-Message-ID: <20190715163755.2052-1-fontaine.fabrice@gmail.com>
+Date: Mon, 15 Jul 2019 18:38:33 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xscreensaver: fix hash
+Message-ID: <20190715163833.2128-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+When bumping to version 5.43, an incorrect hash was set
+
 Fixes:
- - http://autobuild.buildroot.org/results/72b6039ee4ba28e67d5ffcb5073e669e8d740e14
+ - http://autobuild.buildroot.org/results/029ab289021edaf9820b47846e5d107cab6f3e28
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...x-build-after-y2038-changes-in-glibc.patch | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
- create mode 100644 package/bluez_utils/0006-tools-Fix-build-after-y2038-changes-in-glibc.patch
+ package/xscreensaver/xscreensaver.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bluez_utils/0006-tools-Fix-build-after-y2038-changes-in-glibc.patch b/package/bluez_utils/0006-tools-Fix-build-after-y2038-changes-in-glibc.patch
-new file mode 100644
-index 0000000000..fd81a93ba2
---- /dev/null
-+++ b/package/bluez_utils/0006-tools-Fix-build-after-y2038-changes-in-glibc.patch
-@@ -0,0 +1,68 @@
-+From f36f71f60b1e68c0f12e615b9b128d089ec3dd19 Mon Sep 17 00:00:00 2001
-+From: Bastien Nocera <hadess@hadess.net>
-+Date: Fri, 7 Jun 2019 09:51:33 +0200
-+Subject: tools: Fix build after y2038 changes in glibc
-+
-+The 32-bit SIOCGSTAMP has been deprecated. Use the deprecated name
-+to fix the build.
-+[Retrieved (and backported) from:
-+https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/tools/?id=f36f71f60b1e68c0f12e615b9b128d089ec3dd19]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ test/l2test.c | 6 +++++-
-+ test/rctest.c | 6 +++++-
-+ 2 files changed, 10 insertions(+), 2 deletions(-)
-+
-+(limited to 'tools')
-+
-+diff --git a/test/l2test.c b/test/l2test.c
-+index e755ac881..e787c2ce2 100644
-+--- a/test/l2test.c
-++++ b/test/l2test.c
-+@@ -55,6 +55,10 @@
-+ #define BREDR_DEFAULT_PSM	0x1011
-+ #define LE_DEFAULT_PSM		0x0080
-+ 
-++#ifndef SIOCGSTAMP_OLD
-++#define SIOCGSTAMP_OLD SIOCGSTAMP
-++#endif
-++
-+ /* Test modes */
-+ enum {
-+ 	SEND,
-+@@ -907,7 +911,7 @@ static void recv_mode(int sk)
-+ 			if (timestamp) {
-+ 				struct timeval tv;
-+ 
-+-				if (ioctl(sk, SIOCGSTAMP, &tv) < 0) {
-++				if (ioctl(sk, SIOCGSTAMP_OLD, &tv) < 0) {
-+ 					timestamp = 0;
-+ 					memset(ts, 0, sizeof(ts));
-+ 				} else {
-+diff --git a/test/rctest.c b/test/rctest.c
-+index 94490f462..bc8ed875d 100644
-+--- a/test/rctest.c
-++++ b/test/rctest.c
-+@@ -50,6 +50,10 @@
-+ 
-+ #include "src/shared/util.h"
-+ 
-++#ifndef SIOCGSTAMP_OLD
-++#define SIOCGSTAMP_OLD SIOCGSTAMP
-++#endif
-++
-+ /* Test modes */
-+ enum {
-+ 	SEND,
-+@@ -505,7 +509,7 @@ static void recv_mode(int sk)
-+ 			if (timestamp) {
-+ 				struct timeval tv;
-+ 
-+-				if (ioctl(sk, SIOCGSTAMP, &tv) < 0) {
-++				if (ioctl(sk, SIOCGSTAMP_OLD, &tv) < 0) {
-+ 					timestamp = 0;
-+ 					memset(ts, 0, sizeof(ts));
-+ 				} else {
-+-- 
-+cgit 1.2-0.3.lf.el7
-+
+diff --git a/package/xscreensaver/xscreensaver.hash b/package/xscreensaver/xscreensaver.hash
+index c1198b7558..e33413c76a 100644
+--- a/package/xscreensaver/xscreensaver.hash
++++ b/package/xscreensaver/xscreensaver.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256 17eab67f3554e21c23b1526ec48a06a9ec8605baffee48f91f603f7599b383d4  xscreensaver-5.43.tar.gz
++sha256 158f381d687e8360a6debb0d3af0148d279e853666244f02d628a5a482bce194  xscreensaver-5.43.tar.gz
+ sha256 8a03451ba5c4c9af669b53e47e50c38c149b9e152d3d627809b962da7b760bbd  hacks/screenhack.h
+ sha256 56db580415bb313a4a82c5e08f106304904d15d42faf8e6ab14b34e14e2087a5  hacks/glx/chessmodels.h
 -- 
 2.20.1
