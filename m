@@ -1,55 +1,45 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Mon, 15 Jul 2019 10:32:09 +0200
-Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib:
- CommentsMenusPackagesOrder: append elements to arrays if needed
-Message-ID: <20190715083209.7319-1-jerzy.m.grzegorek@gmail.com>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Mon, 15 Jul 2019 10:46:05 +0200
+Subject: [Buildroot] [PATCH] package/x11r7/xlib_libXfont: work around gcc
+ bug 85180
+Message-ID: <20190715084605.5236-1-giulio.benetti@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-To be "future-proof" append elements to arrays if needed.
-Also change order of variables.
+With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+shows up when building xlib_libXfont with optimization but not when
+building with -O0. To work around this, if
+BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Fixes:
+http://autobuild.buildroot.net/results/7c6/7c64becbf06a1e00e41b7ddb95dd0c65bf364eb7/
+
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 ---
- utils/checkpackagelib/lib_config.py | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ package/x11r7/xlib_libXfont/xlib_libXfont.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index f0edb9993d..f55bb33d69 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -61,9 +61,9 @@ class AttributesOrder(_CheckFunction):
+diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+index a1acfba83b..eeddfeebc9 100644
+--- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
++++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
+@@ -30,5 +30,13 @@ ifeq ($(BR2_microblaze),y)
+ XLIB_LIBXFONT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D__ELF__"
+ endif
  
- 
- class CommentsMenusPackagesOrder(_CheckFunction):
--    print_package_warning = [True, True, True, True, True, True]
--    menu_of_packages = ["", "", "", "", "", ""]
--    package = ["", "", "", "", "", ""]
-+    menu_of_packages = [""]
-+    package = [""]
-+    print_package_warning = [True]
- 
-     def before(self):
-         self.state = ""
-@@ -87,9 +87,15 @@ class CommentsMenusPackagesOrder(_CheckFunction):
-                     self.state += "-menu"
- 
-             level = self.get_level()
++XLIB_LIBXFONT_CFLAGS = $(TARGET_CFLAGS)
 +
-+            if level > len(self.package) - 1:
-+                self.menu_of_packages.append("")
-+                self.package.append("")
-+                self.print_package_warning.append(True)
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++XLIB_LIBXFONT_CFLAGS += -O0
++endif
 +
-+            self.menu_of_packages[level] = text[:-1]
-             self.package[level] = ""
-             self.print_package_warning[level] = True
--            self.menu_of_packages[level] = text[:-1]
- 
-         elif text.startswith("endif") or text.startswith("endmenu"):
-             if self.state.endswith("comment"):
++XLIB_LIBXFONT_CONF_ENV += CFLAGS="$(XLIB_LIBXFONT_CFLAGS)"
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.17.1
