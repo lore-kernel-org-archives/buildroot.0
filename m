@@ -1,53 +1,58 @@
-From: Alexandre PAYEN <alexandre.payen@smile.fr>
-Date: Mon, 15 Jul 2019 14:27:02 +0200
-Subject: [Buildroot] [PATCHv5 3/3] package/python-numpy: fix occasional
- build and run-time failure with lapack
-In-Reply-To: <20190715122239.17147-1-alexandre.payen@smile.fr>
-References: <20190715122239.17147-1-alexandre.payen@smile.fr>
-Message-ID: <CAC5PdM1v4TdAs02X0FYZH49Y80J9tKQg+i-r1riMdUP6FatR-w@mail.gmail.com>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Mon, 15 Jul 2019 17:27:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tesseract-ocr: fix license
+In-Reply-To: <20190714225819.4551-1-fontaine.fabrice@gmail.com>
+References: <20190714225819.4551-1-fontaine.fabrice@gmail.com>
+Message-ID: <CAKcgs2yUr6X0rvEcxVXQ42WruJ-RWE0asF9sc-h=+YT27CcJOg@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Please, ignore this mail, it's a mistake.
-
-
-Le lun. 15 juil. 2019 ? 14:22, Aalx <alexandre.payen@smile.fr> a ?crit :
-
-> From: Alexandre PAYEN <alexandre.payen@smile.fr>
+Le lun. 15 juil. 2019 ? 00:58, Fabrice Fontaine
+<fontaine.fabrice@gmail.com> a ?crit :
 >
-> With the virtual packet liblapack, numpy can be build using both providers.
-> Due to run-time failure when complex option is enable,
-> the cblas reference must be add when :
-> BR2_PACKAGE_LAPACK_COMPLEX = y
+> COPYING has been removed since version 4.1.0 and
+> https://github.com/tesseract-ocr/tesseract/commit/618489290536282a59ed7a71381ca083d9a7586a
 >
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
+> So replace COPYING by LICENSE
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/a3cff9747be539bdaffde3926f995467f33428c0
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/python-numpy/python-numpy.mk | 3 +++
->  1 file changed, 3 insertions(+)
+>  package/tesseract-ocr/tesseract-ocr.hash | 2 +-
+>  package/tesseract-ocr/tesseract-ocr.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/
-> python-numpy.mk
-> index b90ff7d70f..30db0b3797 100644
-> --- a/package/python-numpy/python-numpy.mk
-> +++ b/package/python-numpy/python-numpy.mk
-> @@ -18,6 +18,9 @@ PYTHON_NUMPY_SETUP_TYPE = setuptools
->  ifeq ($(BR2_PACKAGE_CLAPACK),y)
->  PYTHON_NUMPY_DEPENDENCIES += clapack
->  PYTHON_NUMPY_SITE_CFG_LIBS += cblas clapack
-> +else ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)
-> +PYTHON_NUMPY_DEPENDENCIES += lapack
-> +PYTHON_NUMPY_SITE_CFG_LIBS += blas cblas lapack
->  else
->  PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
->  endif
+> diff --git a/package/tesseract-ocr/tesseract-ocr.hash b/package/tesseract-ocr/tesseract-ocr.hash
+> index 8de25e2941..a5601adfc7 100644
+> --- a/package/tesseract-ocr/tesseract-ocr.hash
+> +++ b/package/tesseract-ocr/tesseract-ocr.hash
+> @@ -1,6 +1,6 @@
+>  # locally computed
+>  sha256  5c5ed5f1a76888dc57a83704f24ae02f8319849f5c4cf19d254296978a1a1961  tesseract-ocr-4.1.0.tar.gz
+> -sha256  d770c1ac1235bc018530701da1ce453367f7952a3075d12b9029f81a26c05f13  COPYING
+> +sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+>  sha256  daa0c97d651c19fba3b25e81317cd697e9908c8208090c94c3905381c23fc047  eng.traineddata
+>  sha256  eac01c1d72540d6090facb7b2f42dd0a2ee8fc57c5be1b20548ae668e2761913  fra.traineddata
+>  sha256  896b3b4956503ab9daa10285db330881b2d74b70d889b79262cc534b9ec699a4  deu.traineddata
+> diff --git a/package/tesseract-ocr/tesseract-ocr.mk b/package/tesseract-ocr/tesseract-ocr.mk
+> index 2cc04596aa..0fbbb93422 100644
+> --- a/package/tesseract-ocr/tesseract-ocr.mk
+> +++ b/package/tesseract-ocr/tesseract-ocr.mk
+> @@ -8,7 +8,7 @@ TESSERACT_OCR_VERSION = 4.1.0
+>  TESSERACT_OCR_DATA_VERSION = 4.0.0
+>  TESSERACT_OCR_SITE = $(call github,tesseract-ocr,tesseract,$(TESSERACT_OCR_VERSION))
+>  TESSERACT_OCR_LICENSE = Apache-2.0
+> -TESSERACT_OCR_LICENSE_FILES = COPYING
+> +TESSERACT_OCR_LICENSE_FILES = LICENSE
+>
+>  # Source from github, no configure script provided
+>  TESSERACT_OCR_AUTORECONF = YES
 > --
-> 2.21.0
+> 2.20.1
 >
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190715/55a12599/attachment.html>
+Acked-by: Gilles Talis <gilles.talis@gmail.com>
