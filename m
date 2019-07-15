@@ -1,104 +1,67 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Jul 2019 21:57:31 +0200
-Subject: [Buildroot] [PATCH 2/2] package/gcc: drop negative conditions
- on C-SKY for older versions
-In-Reply-To: <CAJF2gTR7EBMiTsBVbkt1ZC86MXKs_40zZF2wbFUq80fhYHJkdQ@mail.gmail.com>
-References: <cover.1563098054.git.yann.morin.1998@free.fr>
- <52aa7c5a90e87a0e8a0e794487b61d3d4759d301.1563098054.git.yann.morin.1998@free.fr>
- <CAJF2gTR7EBMiTsBVbkt1ZC86MXKs_40zZF2wbFUq80fhYHJkdQ@mail.gmail.com>
-Message-ID: <20190715195731.GN29941@scaer>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Mon, 15 Jul 2019 13:21:00 -0700
+Subject: [Buildroot] [PATCH v2 1/2] boot/opensbi: Upgrade from v0.3 to
+ v0.4
+In-Reply-To: <20190709223649.25630-1-alistair.francis@wdc.com>
+References: <20190709223649.25630-1-alistair.francis@wdc.com>
+Message-ID: <CAKmqyKPD3=QG2kiSJH-hNAZ=abhtcCX7EhcA1tn3ChSAyqD-1w@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Guo, All,
+On Tue, Jul 9, 2019 at 3:49 PM Alistair Francis
+<alistair.francis@wdc.com> wrote:
+>
+> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
 
-On 2019-07-15 23:52 +0800, Guo Ren spake thusly:
-> Acked, Thx.
+Ping?
 
-Thanks for the review. :-)
+Alistair
 
-Next time, can you please send a proper "Acked-by:" tag, so that
-patchwwork can pick it up, and thus it ends up in the commit when
-the patch is eventually applied? Thanks!
-
-Regards,
-Yann E. MORIN.
-
-> On Sun, Jul 14, 2019 at 5:54 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >
-> > Now that the C-SKY architecture requires gcc-9, we can drop the special
-> > conditions on the individual older versions.
-> >
-> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > Cc: Guo Ren <guoren@kernel.org>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > Cc: Romain Naour <romain.naour@gmail.com>
-> > ---
-> >  package/gcc/Config.in.host | 5 -----
-> >  1 file changed, 5 deletions(-)
-> >
-> > diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> > index adc12e95ea..a3ba7cf90d 100644
-> > --- a/package/gcc/Config.in.host
-> > +++ b/package/gcc/Config.in.host
-> > @@ -32,7 +32,6 @@ config BR2_GCC_VERSION_4_9_X
-> >         depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
-> >         # Broken or unsupported architectures
-> >         depends on !BR2_arc
-> > -       depends on !BR2_csky
-> >         depends on !BR2_or1k
-> >         # musl on microblaze, ppc64 and mips64 unsupported
-> >         depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_microblazeel || BR2_microblazebe))
-> > @@ -47,7 +46,6 @@ config BR2_GCC_VERSION_5_X
-> >         depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
-> >         # Broken or unsupported architectures
-> >         depends on !BR2_arc
-> > -       depends on !BR2_csky
-> >         depends on !BR2_or1k
-> >         # musl on ppc64 and mips64 unsupported
-> >         depends on !(BR2_TOOLCHAIN_USES_MUSL && (BR2_powerpc64 || BR2_powerpc64le))
-> > @@ -61,7 +59,6 @@ config BR2_GCC_VERSION_6_X
-> >         depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
-> >         # Broken or unsupported architectures
-> >         depends on !BR2_arc
-> > -       depends on !BR2_csky
-> >         depends on !BR2_or1k
-> >         select BR2_TOOLCHAIN_GCC_AT_LEAST_6
-> >
-> > @@ -69,7 +66,6 @@ config BR2_GCC_VERSION_7_X
-> >         bool "gcc 7.x"
-> >         depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
-> >         # Broken or unsupported architectures
-> > -       depends on !BR2_csky
-> >         depends on !BR2_or1k
-> >         select BR2_TOOLCHAIN_GCC_AT_LEAST_7
-> >
-> > @@ -77,7 +73,6 @@ config BR2_GCC_VERSION_8_X
-> >         bool "gcc 8.x"
-> >         depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_9
-> >         # Broken or unsupported architectures
-> > -       depends on !BR2_csky
-> >         depends on !BR2_or1k
-> >         # powerpc spe support has been deprecated since gcc 8.x.
-> >         # https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
-> > --
-> > 2.20.1
-> >
-> 
-> 
-> -- 
-> Best Regards
->  Guo Ren
-> 
-> ML: https://lore.kernel.org/linux-csky/
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> ---
+> v2:
+>  - Install both bin and elf for fw_dynamic.*
+>
+>  boot/opensbi/opensbi.hash | 2 +-
+>  boot/opensbi/opensbi.mk   | 4 +++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/boot/opensbi/opensbi.hash b/boot/opensbi/opensbi.hash
+> index d8449f573a..21f802bcbc 100644
+> --- a/boot/opensbi/opensbi.hash
+> +++ b/boot/opensbi/opensbi.hash
+> @@ -1,2 +1,2 @@
+>  # locally computed
+> -sha256 07f18b73abf3b85aabe5bead19a923716c100d30eb58033459f39c3a224be300 opensbi-0.3.tar.gz
+> +sha256 d3060bf51af00204ce90fc73106955c694463b59a5b81be64cf780cd32743abf opensbi-0.4.tar.gz
+> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+> index 45a3fc4859..83552a5442 100644
+> --- a/boot/opensbi/opensbi.mk
+> +++ b/boot/opensbi/opensbi.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>
+> -OPENSBI_VERSION = 0.3
+> +OPENSBI_VERSION = 0.4
+>  OPENSBI_SITE = $(call github,riscv,opensbi,v$(OPENSBI_VERSION))
+>  OPENSBI_LICENSE = BSD-2-Clause
+>  OPENSBI_LICENSE_FILES = COPYING.BSD
+> @@ -28,6 +28,8 @@ OPENSBI_INSTALL_IMAGES = YES
+>  define OPENSBI_INSTALL_IMAGES_CMDS
+>         $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin
+>         $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
+> +       $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.bin $(BINARIES_DIR)/fw_dynamic.bin
+> +       $(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.elf $(BINARIES_DIR)/fw_dynamic.elf
+>  endef
+>  endif
+>
+> --
+> 2.22.0
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
