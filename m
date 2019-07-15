@@ -1,127 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Jul 2019 18:53:28 +0200
-Subject: [Buildroot] [PATCH 1/2] arch/csky: restrict ck610 to the C-SKY
- gcc port
-In-Reply-To: <CAJF2gTQJV0rDrN4GU6pza7J-Rp0JnXZ6XeTh23qbn_x_Z+RZUA@mail.gmail.com>
-References: <cover.1563098054.git.yann.morin.1998@free.fr>
- <c19ea092f48534429b8d71fe1ae13cb8856008b1.1563098054.git.yann.morin.1998@free.fr>
- <CAJF2gTQJV0rDrN4GU6pza7J-Rp0JnXZ6XeTh23qbn_x_Z+RZUA@mail.gmail.com>
-Message-ID: <20190715165328.GL29941@scaer>
+Date: Mon, 15 Jul 2019 19:05:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libiscsi: needs threads
+In-Reply-To: <20190715163702.1978-1-fontaine.fabrice@gmail.com>
+References: <20190715163702.1978-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190715170556.GM29941@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Guo, All,
+Fabrice, All,
 
-On 2019-07-16 00:02 +0800, Guo Ren spake thusly:
-> On Sun, Jul 14, 2019 at 5:54 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
-> >
-> > As Guo explained, upstream gcc does not support abi-v1 (only abi-v2), but
-> > ck610 needs abi-v1 [0] [1]
-> >
-> > To simplify things, we make the whole C-SKY architecture require gcc-9
-> > or later, and add a single exception in gcc to force the ck610 to use
-> > the C-SKY port.
-> >
-> > [0] http://lists.busybox.net/pipermail/buildroot/2019-July/254386.html
-> > [1] package/Makefile.in#73
-> >
-> > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> > Cc: Guo Ren <guoren@kernel.org>
-> > Cc: Arnout Vandecappelle <arnout@mind.be>
-> > Cc: Romain Naour <romain.naour@gmail.com>
-> > ---
-> >  arch/Config.in             | 3 +++
-> >  arch/Config.in.csky        | 2 ++
-> >  package/gcc/Config.in.host | 3 +++
-> >  3 files changed, 8 insertions(+)
-> >
-> > diff --git a/arch/Config.in b/arch/Config.in
-> > index d8d841b1a2..9d1a06872d 100644
-> > --- a/arch/Config.in
-> > +++ b/arch/Config.in
-> > @@ -78,6 +78,9 @@ config BR2_aarch64_be
-> >  config BR2_csky
-> >         bool "csky"
-> >         select BR2_ARCH_HAS_MMU_MANDATORY
-> > +       # Most variants are support by gcc-9+, except one that is handled as a
-> > +       # special exception in package/gcc/Config.in.host
-> > +       select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
-> We recommand using  BR2_GCC_VERSION_CSKY not BR2_GCC_VERSION_9_X. I
-> don't want GCC_9 as default for buildroot user and they could select
-> it by themself.
+On 2019-07-15 18:37 +0200, Fabrice Fontaine spake thusly:
+> threads are needed since bump to version 1.19.0 and
+> https://github.com/sahlberg/libiscsi/commit/41af44eba113c59dc43764d1d240397616e85b82
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/1d71c95378a6ef9774926bf7431c1a315e4a1b3e
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-This new 'select' does not change the pereferred gcc version. It just
-limits which ones are available.
-
-By selecting BR2_ARCH_NEEDS_GCC_AT_LEAST_9, we ensure that any version
-of gcc below 9.x are not visible.
-
-But the C-SKY specific gcc version, BR2_GCC_VERSION_CSKY, is not
-impacted by this restriction.
-
-So, with this patch, when BR2_csky=y:
-
-  - with ck610, only BR2_GCC_VERSION_CSKY is available, labelled "gcc
-    csky" in the gcc version selection, in menuconfig;
-
-  - with any other variant, BR2_GCC_VERSION_CSKY and BR2_GCC_VERSION_9_X
-    are both available, and BR2_GCC_VERSION_CSKY is the dfault.
-
-Does that explanations address your concerns? If so, I can respin the
-series with an expanded commit log.
-
-Thanks for the review! :-)
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
 
-> >         help
-> >           csky is processor IP from china.
-> >           http://www.c-sky.com/
-> > diff --git a/arch/Config.in.csky b/arch/Config.in.csky
-> > index 4bdfbfae4b..2cf31c88c6 100644
-> > --- a/arch/Config.in.csky
-> > +++ b/arch/Config.in.csky
-> > @@ -5,6 +5,8 @@ choice
-> >           Specific CPU variant to use
-> >
-> >  config BR2_ck610
-> > +       # Not supported by upstream gc <= 9, and handled as a special
-> > +       # exception in package/gcc/Config.in.host
-> Acked.
+> ---
+>  package/libiscsi/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> >         bool "ck610"
-> >
-> >  config BR2_ck807
-> > diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> > index 8b563c8f27..adc12e95ea 100644
-> > --- a/package/gcc/Config.in.host
-> > +++ b/package/gcc/Config.in.host
-> > @@ -89,6 +89,9 @@ config BR2_GCC_VERSION_9_X
-> >         # powerpc spe support has been deprecated since gcc 8.x.
-> >         # https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
-> >         depends on !BR2_powerpc_SPE
-> > +       # C-SKY sk610 needs abiv1, which is not supported in
-> > +       # upstream gcc
-> > +       depends on !BR2_ck610
-> Acked.
-> 
-> >         select BR2_TOOLCHAIN_GCC_AT_LEAST_9
-> >
-> >  endchoice
-> > --
-> > 2.20.1
-> >
-> 
-> 
+> diff --git a/package/libiscsi/Config.in b/package/libiscsi/Config.in
+> index 760fecea66..1e75071476 100644
+> --- a/package/libiscsi/Config.in
+> +++ b/package/libiscsi/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_LIBISCSI
+>  	bool "libiscsi"
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	help
+>  	  Libiscsi is a client-side library to implement the iSCSI
+>  	  protocol that can be used to access resource of an iSCSI
+> @@ -10,3 +11,6 @@ config BR2_PACKAGE_LIBISCSI
+>  	  for simpler applications.
+>  
+>  	  https://github.com/sahlberg/libiscsi  (no proper homepage)
+> +
+> +comment "libiscsi needs a toolchain w/ threads"
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
 > -- 
-> Best Regards
->  Guo Ren
+> 2.20.1
 > 
-> ML: https://lore.kernel.org/linux-csky/
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
