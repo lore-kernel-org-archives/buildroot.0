@@ -1,95 +1,64 @@
-From: Guo Ren <guoren@kernel.org>
-Date: Tue, 16 Jul 2019 00:02:50 +0800
-Subject: [Buildroot] [PATCH 1/2] arch/csky: restrict ck610 to the C-SKY
- gcc port
-In-Reply-To: <c19ea092f48534429b8d71fe1ae13cb8856008b1.1563098054.git.yann.morin.1998@free.fr>
-References: <cover.1563098054.git.yann.morin.1998@free.fr>
- <c19ea092f48534429b8d71fe1ae13cb8856008b1.1563098054.git.yann.morin.1998@free.fr>
-Message-ID: <CAJF2gTQJV0rDrN4GU6pza7J-Rp0JnXZ6XeTh23qbn_x_Z+RZUA@mail.gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 15 Jul 2019 18:36:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/gnutls: fix build on sparc
+Message-ID: <20190715163608.1903-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, Jul 14, 2019 at 5:54 PM Yann E. MORIN <yann.morin.1998@free.fr> wrote:
->
-> As Guo explained, upstream gcc does not support abi-v1 (only abi-v2), but
-> ck610 needs abi-v1 [0] [1]
->
-> To simplify things, we make the whole C-SKY architecture require gcc-9
-> or later, and add a single exception in gcc to force the ck610 to use
-> the C-SKY port.
->
-> [0] http://lists.busybox.net/pipermail/buildroot/2019-July/254386.html
-> [1] package/Makefile.in#73
->
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Guo Ren <guoren@kernel.org>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Romain Naour <romain.naour@gmail.com>
-> ---
->  arch/Config.in             | 3 +++
->  arch/Config.in.csky        | 2 ++
->  package/gcc/Config.in.host | 3 +++
->  3 files changed, 8 insertions(+)
->
-> diff --git a/arch/Config.in b/arch/Config.in
-> index d8d841b1a2..9d1a06872d 100644
-> --- a/arch/Config.in
-> +++ b/arch/Config.in
-> @@ -78,6 +78,9 @@ config BR2_aarch64_be
->  config BR2_csky
->         bool "csky"
->         select BR2_ARCH_HAS_MMU_MANDATORY
-> +       # Most variants are support by gcc-9+, except one that is handled as a
-> +       # special exception in package/gcc/Config.in.host
-> +       select BR2_ARCH_NEEDS_GCC_AT_LEAST_9
-We recommand using  BR2_GCC_VERSION_CSKY not BR2_GCC_VERSION_9_X. I
-don't want GCC_9 as default for buildroot user and they could select
-it by themself.
+gnutls source code uses the C++11 <atomic> functionality since
+https://github.com/gnutls/gnutls/commit/7978a733460f92b31033affd0e487c86d66c643d,
+which internally is implemented using the __atomic_*() gcc built-ins
 
->         help
->           csky is processor IP from china.
->           http://www.c-sky.com/
-> diff --git a/arch/Config.in.csky b/arch/Config.in.csky
-> index 4bdfbfae4b..2cf31c88c6 100644
-> --- a/arch/Config.in.csky
-> +++ b/arch/Config.in.csky
-> @@ -5,6 +5,8 @@ choice
->           Specific CPU variant to use
->
->  config BR2_ck610
-> +       # Not supported by upstream gc <= 9, and handled as a special
-> +       # exception in package/gcc/Config.in.host
-Acked.
+On certain architectures, the __atomic_*() built-ins are implemented in
+the libatomic library that comes with the rest of the gcc runtime. Due
+to this, code using <atomic> might need to link against libatomic,
+otherwise one hits build issues such as:
 
->         bool "ck610"
->
->  config BR2_ck807
-> diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-> index 8b563c8f27..adc12e95ea 100644
-> --- a/package/gcc/Config.in.host
-> +++ b/package/gcc/Config.in.host
-> @@ -89,6 +89,9 @@ config BR2_GCC_VERSION_9_X
->         # powerpc spe support has been deprecated since gcc 8.x.
->         # https://gcc.gnu.org/ml/gcc/2018-04/msg00102.html
->         depends on !BR2_powerpc_SPE
-> +       # C-SKY sk610 needs abiv1, which is not supported in
-> +       # upstream gcc
-> +       depends on !BR2_ck610
-Acked.
+../lib/.libs/libgnutls.so: undefined reference to `__atomic_fetch_sub_4'
 
->         select BR2_TOOLCHAIN_GCC_AT_LEAST_9
->
->  endchoice
-> --
-> 2.20.1
->
+on an architecture like SPARC.
 
+To solve this, link against libatomic if BR2_PACKAGE_HAS_LIBATOMIC is set.
 
+This fix gnutls build failures as well as cups, gnupg and libmicrohttpd
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1c7541fc6ac4b52d1dfe02a9a7d61db90f4521eb
+ - http://autobuild.buildroot.org/results/42c8803b98e38ebd48870fe6b1a20a1d6c351e5f
+ - http://autobuild.buildroot.org/results/a1e96d02d41f7fec0f5327f65fb34405f963a1e9
+ - http://autobuild.buildroot.org/results/59c92706457a9da29dd44425e546a7c80c18b454
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/gnutls/gnutls.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 0e5bccc891..4f40b896ff 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -46,7 +46,7 @@ endif
+ 
+ # Prerequisite for crywrap
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+-GNUTLS_CONF_ENV += LIBS="-largp"
++GNUTLS_LIBS += -largp
+ GNUTLS_DEPENDENCIES += argp-standalone
+ endif
+ 
+@@ -86,4 +86,10 @@ else ifeq ($(BR2_PACKAGE_CA_CERTIFICATES),y)
+ GNUTLS_CONF_OPTS += --with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt
+ endif
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++GNUTLS_LIBS += -latomic
++endif
++
++GNUTLS_CONF_ENV += LIBS="$(GNUTLS_LIBS)"
++
+ $(eval $(autotools-package))
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+2.20.1
