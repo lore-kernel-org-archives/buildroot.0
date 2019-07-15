@@ -1,61 +1,33 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Jul 2019 19:05:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libiscsi: needs threads
-In-Reply-To: <20190715163702.1978-1-fontaine.fabrice@gmail.com>
-References: <20190715163702.1978-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190715170556.GM29941@scaer>
+From: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
+Date: Mon, 15 Jul 2019 13:18:01 -0400
+Subject: [Buildroot] [PATCH] package/json-glib: set -Dintrospection=false
+Message-ID: <20190715171801.409911-1-alex_y_xu@yahoo.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fabrice, All,
+when it is true, the meson script auto-detects the host g-ir-scanner,
+which is not usable in a cross-compile environment.
 
-On 2019-07-15 18:37 +0200, Fabrice Fontaine spake thusly:
-> threads are needed since bump to version 1.19.0 and
-> https://github.com/sahlberg/libiscsi/commit/41af44eba113c59dc43764d1d240397616e85b82
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1d71c95378a6ef9774926bf7431c1a315e4a1b3e
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
+---
+ package/json-glib/json-glib.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libiscsi/Config.in | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/libiscsi/Config.in b/package/libiscsi/Config.in
-> index 760fecea66..1e75071476 100644
-> --- a/package/libiscsi/Config.in
-> +++ b/package/libiscsi/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_LIBISCSI
->  	bool "libiscsi"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	help
->  	  Libiscsi is a client-side library to implement the iSCSI
->  	  protocol that can be used to access resource of an iSCSI
-> @@ -10,3 +11,6 @@ config BR2_PACKAGE_LIBISCSI
->  	  for simpler applications.
->  
->  	  https://github.com/sahlberg/libiscsi  (no proper homepage)
-> +
-> +comment "libiscsi needs a toolchain w/ threads"
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS
-> -- 
-> 2.20.1
-> 
-
+diff --git a/package/json-glib/json-glib.mk b/package/json-glib/json-glib.mk
+index 0879c772b5..7405b28b2e 100644
+--- a/package/json-glib/json-glib.mk
++++ b/package/json-glib/json-glib.mk
+@@ -17,6 +17,8 @@ JSON_GLIB_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	libglib2
+ 
++JSON_GLIB_CONF_OPTS = -Dintrospection=false
++
+ JSON_GLIB_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ $(eval $(meson-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.22.0
