@@ -1,64 +1,41 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 15 Jul 2019 18:36:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gnutls: fix build on sparc
-Message-ID: <20190715163608.1903-1-fontaine.fabrice@gmail.com>
+Date: Mon, 15 Jul 2019 18:37:02 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libiscsi: needs threads
+Message-ID: <20190715163702.1978-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-gnutls source code uses the C++11 <atomic> functionality since
-https://github.com/gnutls/gnutls/commit/7978a733460f92b31033affd0e487c86d66c643d,
-which internally is implemented using the __atomic_*() gcc built-ins
-
-On certain architectures, the __atomic_*() built-ins are implemented in
-the libatomic library that comes with the rest of the gcc runtime. Due
-to this, code using <atomic> might need to link against libatomic,
-otherwise one hits build issues such as:
-
-../lib/.libs/libgnutls.so: undefined reference to `__atomic_fetch_sub_4'
-
-on an architecture like SPARC.
-
-To solve this, link against libatomic if BR2_PACKAGE_HAS_LIBATOMIC is set.
-
-This fix gnutls build failures as well as cups, gnupg and libmicrohttpd
+threads are needed since bump to version 1.19.0 and
+https://github.com/sahlberg/libiscsi/commit/41af44eba113c59dc43764d1d240397616e85b82
 
 Fixes:
- - http://autobuild.buildroot.org/results/1c7541fc6ac4b52d1dfe02a9a7d61db90f4521eb
- - http://autobuild.buildroot.org/results/42c8803b98e38ebd48870fe6b1a20a1d6c351e5f
- - http://autobuild.buildroot.org/results/a1e96d02d41f7fec0f5327f65fb34405f963a1e9
- - http://autobuild.buildroot.org/results/59c92706457a9da29dd44425e546a7c80c18b454
+ - http://autobuild.buildroot.org/results/1d71c95378a6ef9774926bf7431c1a315e4a1b3e
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/gnutls/gnutls.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/libiscsi/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 0e5bccc891..4f40b896ff 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -46,7 +46,7 @@ endif
+diff --git a/package/libiscsi/Config.in b/package/libiscsi/Config.in
+index 760fecea66..1e75071476 100644
+--- a/package/libiscsi/Config.in
++++ b/package/libiscsi/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBISCSI
+ 	bool "libiscsi"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Libiscsi is a client-side library to implement the iSCSI
+ 	  protocol that can be used to access resource of an iSCSI
+@@ -10,3 +11,6 @@ config BR2_PACKAGE_LIBISCSI
+ 	  for simpler applications.
  
- # Prerequisite for crywrap
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
--GNUTLS_CONF_ENV += LIBS="-largp"
-+GNUTLS_LIBS += -largp
- GNUTLS_DEPENDENCIES += argp-standalone
- endif
- 
-@@ -86,4 +86,10 @@ else ifeq ($(BR2_PACKAGE_CA_CERTIFICATES),y)
- GNUTLS_CONF_OPTS += --with-default-trust-store-file=/etc/ssl/certs/ca-certificates.crt
- endif
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+GNUTLS_LIBS += -latomic
-+endif
+ 	  https://github.com/sahlberg/libiscsi  (no proper homepage)
 +
-+GNUTLS_CONF_ENV += LIBS="$(GNUTLS_LIBS)"
-+
- $(eval $(autotools-package))
++comment "libiscsi needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
 -- 
 2.20.1
