@@ -1,69 +1,61 @@
-From: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Date: Mon, 15 Jul 2019 10:49:59 +0200
-Subject: [Buildroot] [PATCH] package/x11r7/xlib_libXfont: work around
- gcc bug 85180
-In-Reply-To: <20190714150710.3f4f42fc@windsurf>
-References: <20190713115309.88559-1-giulio.benetti@micronovasrl.com>
- <20190714150710.3f4f42fc@windsurf>
-Message-ID: <ac3f7b4a-4642-fb6f-7407-d5356e395591@micronovasrl.com>
+From: Ludovic Desroches <ludovic.desroches@microchip.com>
+Date: Mon, 15 Jul 2019 11:07:35 +0200
+Subject: [Buildroot] [PATCH] configs/atmel: bump to linux4sam_6.1
+In-Reply-To: <20190714151658.2d18f9a5@windsurf>
+References: <20190711091951.21129-1-ludovic.desroches@microchip.com>
+ <20190714151658.2d18f9a5@windsurf>
+Message-ID: <20190715090734.rei3fhzcfagaklmj@M43218.corp.atmel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
-
-Il 14/07/2019 15:07, Thomas Petazzoni ha scritto:
-> Hello,
+On Sun, Jul 14, 2019 at 03:16:58PM +0200, Thomas Petazzoni wrote:
+> External E-Mail
 > 
-> On Sat, 13 Jul 2019 13:53:09 +0200
-> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 > 
->> With Microblaze Gcc version < 8.x the build hangs due to gcc bug
->> 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
->> shows up when building xlib_libXfont with optimization but not when
->> building with -O0. To work around this, if
->> BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
->>
->> Fixes:
->> http://autobuild.buildroot.net/results/7c6/7c64becbf06a1e00e41b7ddb95dd0c65bf364eb7/
->>
->> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
->> ---
->>   package/x11r7/xlib_libXfont/xlib_libXfont.mk | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/package/x11r7/xlib_libXfont/xlib_libXfont.mk b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
->> index a1acfba83b..ba41970289 100644
->> --- a/package/x11r7/xlib_libXfont/xlib_libXfont.mk
->> +++ b/package/x11r7/xlib_libXfont/xlib_libXfont.mk
->> @@ -30,5 +30,13 @@ ifeq ($(BR2_microblaze),y)
->>   XLIB_LIBXFONT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D__ELF__"
->>   endif
->>   
->> +XLIB_LIBXFONT_CFLAGS = $(TARGET_CFLAGS)
->> +
->> +ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
->> +XLIB_LIBXFONT_CFLAGS += -O0
->> +endif
->> +
->> +XLIB_LIBXFONT_CONF_OPTS += CFLAGS="$(XLIB_LIBXFONT_CFLAGS)"
+> Hello Ludovic,
 > 
-> We normally use the <pkg>_CONF_ENV variable to override CFLAGS, so I
-> fixed that up and applied. Thanks!
+> On Thu, 11 Jul 2019 11:19:51 +0200
+> Ludovic Desroches <ludovic.desroches@microchip.com> wrote:
+> 
+> > Only the atmel_sama5d27_som1 board uses the linux4sam_6.1 release. Bump
+> > other boards to this new version.
+> > 
+> > Signed-off-by: Ludovic Desroches <ludovic.desroches@microchip.com>
+> 
+> I am a bit perplex, because this patch doesn't update the kernel
+> version anywhere. It updates the U-Boot version, the AT91Bootstrap
+> version, the version of the kernel headers, but not the kernel itself.
+> I don't really see how this can work, as the kernel headers version
+> will no longer match the kernel version, and also the commit title that
+> says we're bumping to linux4sam_6.1 is incorrect in that regard.
+> 
+> >  BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4sam,linux-at91,linux4sam_5.8)/linux-linux4sam_5.8.tar.gz"
+> 
+> See here, we're still using Linux tagged in version linux4sam_5.8, and
+> not linux4sam_6.1.
 
-You've changed and applied xlib_libXfont2, so I've sent a v2 patch for 
-xlib_libXfont using <pkg>_CONF_ENV.
+Sorry my bad, a typo in my script that prevents the kernel update.
 
--- 
-Giulio Benetti
-CTO
+> 
+> Could you fix this and send an updated version ?
+> 
 
-MICRONOVA SRL
-Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
-Tel. 049/8931563 - Fax 049/8931346
-Cod.Fiscale - P.IVA 02663420285
-Capitale Sociale ? 26.000 i.v.
-Iscritta al Reg. Imprese di Padova N. 02663420285
-Numero R.E.A. 258642
+Sure, I'll do a new version.
+
+Ludovic
+
+> Thanks!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
