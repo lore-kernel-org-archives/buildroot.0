@@ -1,99 +1,46 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 15 Jul 2019 22:46:32 +0200
-Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib:
- CommentsMenusPackagesOrder: append elements to arrays if needed
-In-Reply-To: <20190715083209.7319-1-jerzy.m.grzegorek@gmail.com>
-References: <20190715083209.7319-1-jerzy.m.grzegorek@gmail.com>
-Message-ID: <20190715204632.GP29941@scaer>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Mon, 15 Jul 2019 21:55:22 +0000
+Subject: [Buildroot] [arc-buildroot] [PATCH v4 15/15] package/gcc:
+ enable gcc 9.1 for ork1 (openrisc)
+In-Reply-To: <54fe6b56-aa43-b657-0b8e-1c42e2471735@mind.be>
+References: <20190620100725.105587-1-giulio.benetti@micronovasrl.com>
+ <20190620100725.105587-16-giulio.benetti@micronovasrl.com>
+ <54fe6b56-aa43-b657-0b8e-1c42e2471735@mind.be>
+Message-ID: <CY4PR1201MB0120060693F61271D06946F0A1CF0@CY4PR1201MB0120.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Jerzy, All,
+Hi Arnout, all,
 
-On 2019-07-15 10:32 +0200, Jerzy Grzegorek spake thusly:
-> To be "future-proof" append elements to arrays if needed.
-> Also change order of variables.
-
-Is that a fix for the existing issues, or just an improvement/cleanup?
-
-> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-> ---
->  utils/checkpackagelib/lib_config.py | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
+> -----Original Message-----
+> From: Arnout Vandecappelle <arnout@mind.be>
+> Sent: Sunday, July 14, 2019 12:24 AM
+> To: Giulio Benetti <giulio.benetti@micronovasrl.com>; buildroot at buildroot.org; arc-
+> buildroot at synopsys.com; Guo Ren <ren_guo@c-sky.com>
+> Cc: Yann E . MORIN <yann.morin.1998@free.fr>; Thomas Petazzoni <thomas.petazzoni@bootlin.com>; Romain
+> Naour <romain.naour@gmail.com>; Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
+> Subject: Re: [arc-buildroot] [Buildroot] [PATCH v4 15/15] package/gcc: enable gcc 9.1 for ork1
+> (openrisc)
 > 
-> diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-> index f0edb9993d..f55bb33d69 100644
-> --- a/utils/checkpackagelib/lib_config.py
-> +++ b/utils/checkpackagelib/lib_config.py
-> @@ -61,9 +61,9 @@ class AttributesOrder(_CheckFunction):
->  
->  
->  class CommentsMenusPackagesOrder(_CheckFunction):
-> -    print_package_warning = [True, True, True, True, True, True]
-> -    menu_of_packages = ["", "", "", "", "", ""]
-> -    package = ["", "", "", "", "", ""]
-> +    menu_of_packages = [""]
-> +    package = [""]
-> +    print_package_warning = [True]
-
-Why do we need an initial value in the arrays? Can't we do something
-like:
-
-    package = []
-    ...
-    if level > len(self.package):
-        append the stuff here.
-
-Of course, that is not very nice either... All of that because we can't
-assigne to an index that does not already exists. In python, the moto is
-"easier to ask for forgiveness than permission". So:
-
-    try:
-        self.menu_of_packages[level] = text[:-1]
-        self.package[level] = ""
-        self.print_package_warning[level] = True
-    except IndexError:
-        self.menu_of_packages.append(text[:-1])
-        self.package.append("")
-        self.print_package_warning.append(True)
-
-Regards,
-Yann E. MORIN.
-
->      def before(self):
->          self.state = ""
-> @@ -87,9 +87,15 @@ class CommentsMenusPackagesOrder(_CheckFunction):
->                      self.state += "-menu"
->  
->              level = self.get_level()
-> +
-> +            if level > len(self.package) - 1:
-> +                self.menu_of_packages.append("")
-> +                self.package.append("")
-> +                self.print_package_warning.append(True)
-> +
-> +            self.menu_of_packages[level] = text[:-1]
->              self.package[level] = ""
->              self.print_package_warning[level] = True
-> -            self.menu_of_packages[level] = text[:-1]
->  
->          elif text.startswith("endif") or text.startswith("endmenu"):
->              if self.state.endswith("comment"):
-> -- 
-> 2.17.1
 > 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
+> On 20/06/2019 12:07, Giulio Benetti wrote:
+> > openrisc support has been added with gcc 9.1.
+> > Keep for now the old gcc 5 fork for ork1.
+> 
+>  So, when will we remove this?
+> 
+>  Same for ARC (GCC 8.x fork) and C-SKY (GCC 6.x fork): they are available in
+> GCC9, do we need to keep those old forks?
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+ARC support in GCC 9.x & Binutils 2.32 is very solid so we may even try to use it by default for ARC.
+
+As for arc-xxxx.yy forks I'd like to keep them for a couple of future BR releases
+and if we see that vanilla GCC/Binutils work really good then forks may go avay.
+
+Make sense?
+
+-Alexey
