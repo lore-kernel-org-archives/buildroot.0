@@ -1,8 +1,8 @@
 From: Aalx <alexandre.payen@smile.fr>
-Date: Mon, 15 Jul 2019 14:22:39 +0200
+Date: Mon, 15 Jul 2019 14:25:12 +0200
 Subject: [Buildroot] [PATCHv5 3/3] package/python-numpy: fix occasional
- build and run-time failure with lapack
-Message-ID: <20190715122239.17147-1-alexandre.payen@smile.fr>
+ run-time failure with lapack
+Message-ID: <20190715122512.17290-1-alexandre.payen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
