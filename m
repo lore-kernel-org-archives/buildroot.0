@@ -1,35 +1,28 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Tue, 16 Jul 2019 17:52:51 +0000
-Subject: [Buildroot] [PATCH 0/2 v2] arch: allow passing compile flags
- (branch yem/arc-atomic)
-In-Reply-To: <cover.1563114574.git.yann.morin.1998@free.fr>
-References: <cover.1563114574.git.yann.morin.1998@free.fr>
-Message-ID: <CY4PR1201MB01203F114D92BD4E89EB806CA1CE0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+From: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
+Date: Tue, 16 Jul 2019 13:58:30 -0400
+Subject: [Buildroot] [PATCH] package/python-idna: select PYTHON3_UNICODEDATA
+Message-ID: <20190716175830.604552-1-alex_y_xu@yahoo.ca>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, all,
+Signed-off-by: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
+---
+ package/python-idna/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-> -----Original Message-----
-> From: Yann E. MORIN <yann.morin.1998@gmail.com> On Behalf Of Yann E. MORIN
-> Sent: Sunday, July 14, 2019 5:30 PM
-> To: buildroot at buildroot.org
-> Cc: Alexey Brodkin <abrodkin@synopsys.com>; Alexey Brodkin <abrodkin@synopsys.com>; Arnout
-> Vandecappelle <arnout@mind.be>; Thomas Petazzoni <thomas.petazzoni@bootlin.com>; Yann E . MORIN
-> <yann.morin.1998@free.fr>
-> Subject: [PATCH 0/2 v2] arch: allow passing compile flags (branch yem/arc-atomic)
-> 
-> Hello All!
-> 
-> This series makes it so that architectures can set compilation flags,
-> passed down via the wrapper.
-
-Works like a charm now for building Linux perf for ARC770 (finally)!
-Thanks for doing that!
-
-That said for entire series...
-
-Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
+diff --git a/package/python-idna/Config.in b/package/python-idna/Config.in
+index 1fd56ceaf6..c247fa89d0 100644
+--- a/package/python-idna/Config.in
++++ b/package/python-idna/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_IDNA
+ 	bool "python-idna"
++        select BR2_PACKAGE_PYTHON3_UNICODEDATA
+ 	help
+ 	  A library to support the Internationalised Domain Names in
+ 	  Applications (IDNA) protocol as specified in RFC 5891. This
+-- 
+2.22.0
