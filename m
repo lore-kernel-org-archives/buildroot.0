@@ -1,133 +1,44 @@
-From: Vered Kalef <vered.kalef@gmail.com>
-Date: Tue, 16 Jul 2019 16:30:02 +0300
-Subject: [Buildroot] Installed external gstreamer,
- enabled WebRTC and installed external libnice plugins to buildroot, however,
- libnice is missing
-In-Reply-To: <76760dd0-ddab-6599-f60d-2f564b74e6ad@mind.be>
-References: <CADNjvP9-5R2z+aUN7xKARboNkiReWVpZ7tNFg+xj81DObTE6fQ@mail.gmail.com>
- <76760dd0-ddab-6599-f60d-2f564b74e6ad@mind.be>
-Message-ID: <CADNjvP-y6qyxE5bLFer-n-cNVVCDEv+WnoPX0yH8Cbg_bVba=Q@mail.gmail.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Tue, 16 Jul 2019 11:12:56 -0400
+Subject: [Buildroot] [PATCH 1/2] package/mender: bump to version 2.0.1
+Message-ID: <20190716151257.78244-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi
-upgraded buildroot version to 2018.05.3, so, I'll have libnice 1.14 built
-in .
-I enabled it.
-Restored the connection between webrtc and original libnice.
-I saw that I should have the plugins nicesrc and nicesink (the plugins are
-part of libnice associated with gstreamer).
-Still I get that libnice is missing in the installation - libnice elements
-are not available
-I'm still missing an installation.
-Regards,
-Vered
+From: Adam Duskett <Aduskett@gmail.com>
 
-On Sun, Jul 14, 2019 at 9:55 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+---
+ package/mender/mender.hash | 2 +-
+ package/mender/mender.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->
->
-> On 14/07/2019 12:10, Vered Kalef wrote:
-> > Hi all,
-> > I'm working with buildroot 18.02.
-> > I've installed External gstreamer version 14.0.
-> > I've managed to update the plugins-bad, to hold webrtc option.
-> > For the webrtc I had to update libnice version, so I've installed it as
-> external
-> > libnice 0.1.14.
-> > Now -
-> > gst-inspect-1.0 webrtc
-> > shows that webrtc exists!
-> >
-> > Should it work as well:
-> > gst-inspect-1.0 libnice
->
->  I don't think libnice itself is a gstreamer plugin, so this wouldn't
-> work. I
-> might be wrong though.
->
->
-> > Is the installation of libnice as external is problematic?
-> > I've called the external plugin CUSTOM_LIBNICE and referred to it from
-> > custom-gst1-plugins-bad.mk <http://custom-gst1-plugins-bad.mk> -
-> >
-> > ifeq ($(BR2_PACKAGE_CUSTOM_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
-> > CUSTOM_GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc
-> > CUSTOM_GST1_PLUGINS_BAD_DEPENDENCIES += custom-gst1-plugins-base
-> CUSTOM_LIBNICE
->
->  I guess it is custom-libnice here, not CUSTOM_LIBNICE?
->
->  Can you check what the build log says about libnice?
->
->  Can you check if libnice is installed on your target?
->
->  Regards,
->  Arnout
->
-> > else
-> > CUSTOM_GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc
-> > endif
-> >
-> > *The errors I got - *
-> > 0:00:05.765174600 17318 0x7fff64004400 WARN               webrtcbin
-> > gstwebrtcbin.c:2991:gst_webrtc_bin_request_new_pad:<webrtcbin0> error:
-> libnice
-> > elements are not available
-> > 0:00:05.765219000 17318 0x7fff64004400 LOG              GST_MESSAGE
-> > gstmessage.c:301:gst_message_new_custom: source webrtcbin0: creating new
-> message
-> > 0x7fff640bf2c0 error
-> > 0:00:05.765249100 17318 0x7fff64004400 WARN               structure
-> > gststructure.c:1832:priv_gst_structure_append_to_gstring: No value
-> transform to
-> > serialize field 'gerror' of type 'GError'
-> > 0:00:05.765239500 17318 0x7fff64004400 DEBUG                GST_BUS
-> > gstbus.c:318:gst_bus_post:<bus0> [msg 0x7fff640bf2c0] posting on bus
-> error
-> > message: 0x7fff640bf2c0, time 99:99:99.999999999, seq-num 65, element
-> > 'webrtcbin0', GstMessageError, gerror=(GError)NULL,
-> > debug=(string)"gstwebrtcbin.c\(2991\):\ gst_webrtc_bin_request_new_pad\
-> \(\):\
-> > /GstPipeline:pipeline0/GstWebRTCBin:webrtcbin0:\012libnice\ elements\
-> are\ not\
-> > available";
-> > 0:00:05.765261300 17318 0x7fff64004400 DEBUG                    bin
-> > gstbin.c:3715:gst_bin_handle_message_func:<pipeline0> [msg
-> 0x7fff640bf2c0]
-> > handling child webrtcbin0 message of type error
-> > 0:00:05.765283100 17318 0x7fff64004400 WARN               structure
-> > gststructure.c:1832:priv_gst_structure_append_to_gstring: No value
-> transform to
-> > serialize field 'gerror' of type 'GError'
-> > 0:00:05.765281100 17318 0x7fff64004400 DEBUG                GST_BUS
-> > gstbus.c:318:gst_bus_post:<bus1> [msg 0x7fff640bf2c0] posting on bus
-> error
-> > message: 0x7fff640bf2c0, time 99:99:99.999999999, seq-num 65, element
-> > 'webrtcbin0', GstMessageError, gerror=(GError)NULL,
-> > debug=(string)"gstwebrtcbin.c\(2991\):\ gst_webrtc_bin_request_new_pad\
-> \(\):\
-> > /GstPipeline:pipeline0/GstWebRTCBin:webrtcbin0:\012libnice\ elements\
-> are\ not\
-> > available";
-> > 0:00:05.765327400 17318 0x7fff64004400 INFO        GST_ERROR_SYSTEM
-> > gstelement.c:2172:gst_element_message_full_with_details:<webrtcbin0>
-> posted
-> > error message: Your GStreamer installation is missing a plug-in.
-> >
-> > Thanks in advance,
-> > Vered
-> >
-> >
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190716/3036692e/attachment.html>
+diff --git a/package/mender/mender.hash b/package/mender/mender.hash
+index 5981252b4d..ba69229fcb 100644
+--- a/package/mender/mender.hash
++++ b/package/mender/mender.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256 af37a11c4189097b485254c35450f289b078bc61f6a230d6540743f202d81b98 2.0.0.tar.gz
++sha256 0ece9e7b23ab43691112aac90d3b757c37ebd1c7c2b3d9c0668243d1503d1e55 2.0.1.tar.gz
+ 
+ # Apache-2.0 license, locally computed
+ sha256 beb140be4cd64599bedc691a55b2729c9cc611a4b9d6ec44e01270105daf18a2 LICENSE
+diff --git a/package/mender/mender.mk b/package/mender/mender.mk
+index 12a25fbbf3..1179fdc688 100644
+--- a/package/mender/mender.mk
++++ b/package/mender/mender.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MENDER_VERSION = 2.0.0
++MENDER_VERSION = 2.0.1
+ MENDER_SITE = https://github.com/mendersoftware/mender/archive
+ MENDER_SOURCE = $(MENDER_VERSION).tar.gz
+ MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
+-- 
+2.21.0
