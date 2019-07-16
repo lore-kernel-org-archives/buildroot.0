@@ -1,51 +1,45 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Tue, 16 Jul 2019 11:37:09 -0400
-Subject: [Buildroot] [PATCH 1/1] package/python-psycopg2: bump to version
- 2.8.3
-In-Reply-To: <20190716153709.19420-1-aduskett@gmail.com>
-References: <20190716153709.19420-1-aduskett@gmail.com>
-Message-ID: <20190716153709.19420-2-aduskett@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 16 Jul 2019 19:00:19 +0200
+Subject: [Buildroot] [git commit] package/mender-artifact: bump to version
+ 3.0.1
+Message-ID: <20190716170134.B63A6812AF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=c16ba2822fba0c6e01839c9cc569d651d2964b5b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Adam Duskett <Aduskett@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-psycopg2/python-psycopg2.hash | 4 ++--
- package/python-psycopg2/python-psycopg2.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/mender-artifact/mender-artifact.hash | 2 +-
+ package/mender-artifact/mender-artifact.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-psycopg2/python-psycopg2.hash b/package/python-psycopg2/python-psycopg2.hash
-index 2711b10627..d53977d059 100644
---- a/package/python-psycopg2/python-psycopg2.hash
-+++ b/package/python-psycopg2/python-psycopg2.hash
+diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
+index 9f75b850f9..6a3cf78f3a 100644
+--- a/package/mender-artifact/mender-artifact.hash
++++ b/package/mender-artifact/mender-artifact.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/psycopg2/json
--md5	74cbe0f09a6ebafd107f89c858120bd5  psycopg2-2.8.2.tar.gz
--sha256	5cacf21b6f813c239f100ef78a4132056f93a5940219ec25d2ef833cbeb05588  psycopg2-2.8.2.tar.gz
-+md5	bc00aa77595c03af7d68876ceb74ef77  psycopg2-2.8.3.tar.gz
-+sha256	897a6e838319b4bf648a574afb6cabcb17d0488f8c7195100d48d872419f4457  psycopg2-2.8.3.tar.gz
- # Locally computed sha256 checksums
- sha256	9614b85dfc9a72c5b2ca33144c1d7e1ed3b1c297459d9fb28a6a5762c2e8d71b  LICENSE
-diff --git a/package/python-psycopg2/python-psycopg2.mk b/package/python-psycopg2/python-psycopg2.mk
-index a3548a27fa..b49fbd86fc 100644
---- a/package/python-psycopg2/python-psycopg2.mk
-+++ b/package/python-psycopg2/python-psycopg2.mk
-@@ -4,9 +4,9 @@
+ # Locally computed:
+-sha256 b1b80822282a750c3f94cf4954ac4b1de5a86a7a9c1c7f2541aaf21417a0ff5f 3.0.0.tar.gz
++sha256 5dc663251d23c066bf238756d188d639dbfda00e2941a2fc2c4dc29aab29bfe9 3.0.1.tar.gz
+ 
+ # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
+ # following command:
+diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
+index f8b364166f..0a663ba891 100644
+--- a/package/mender-artifact/mender-artifact.mk
++++ b/package/mender-artifact/mender-artifact.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PSYCOPG2_VERSION = 2.8.2
-+PYTHON_PSYCOPG2_VERSION = 2.8.3
- PYTHON_PSYCOPG2_SOURCE = psycopg2-$(PYTHON_PSYCOPG2_VERSION).tar.gz
--PYTHON_PSYCOPG2_SITE = https://files.pythonhosted.org/packages/23/7e/93c325482c328619870b6cd09370f6dbe1148283daca65115cd63642e60f
-+PYTHON_PSYCOPG2_SITE = https://files.pythonhosted.org/packages/5c/1c/6997288da181277a0c29bc39a5f9143ff20b8c99f2a7d059cfb55163e165
- PYTHON_PSYCOPG2_SETUP_TYPE = setuptools
- PYTHON_PSYCOPG2_LICENSE = LGPL-3.0+
- PYTHON_PSYCOPG2_LICENSE_FILES = LICENSE
--- 
-2.21.0
+-HOST_MENDER_ARTIFACT_VERSION = 3.0.0
++HOST_MENDER_ARTIFACT_VERSION = 3.0.1
+ HOST_MENDER_ARTIFACT_SITE = https://github.com/mendersoftware/mender-artifact/archive
+ HOST_MENDER_ARTIFACT_SOURCE = $(HOST_MENDER_ARTIFACT_VERSION).tar.gz
+ HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT
