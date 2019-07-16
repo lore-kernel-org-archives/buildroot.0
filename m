@@ -1,192 +1,152 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Wed, 17 Jul 2019 00:50:01 +0300
-Subject: [Buildroot] [PATCH] package/gcc: arc-2019.03/9.1.0: Fix compilation
- of glibc
-Message-ID: <20190716215001.9181-1-abrodkin@synopsys.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Wed, 17 Jul 2019 00:13:39 +0200
+Subject: [Buildroot] Installed external gstreamer,
+ enabled WebRTC and installed external libnice plugins to buildroot, however,
+ libnice is missing
+In-Reply-To: <CADNjvP-y6qyxE5bLFer-n-cNVVCDEv+WnoPX0yH8Cbg_bVba=Q@mail.gmail.com>
+References: <CADNjvP9-5R2z+aUN7xKARboNkiReWVpZ7tNFg+xj81DObTE6fQ@mail.gmail.com>
+ <76760dd0-ddab-6599-f60d-2f564b74e6ad@mind.be>
+ <CADNjvP-y6qyxE5bLFer-n-cNVVCDEv+WnoPX0yH8Cbg_bVba=Q@mail.gmail.com>
+Message-ID: <20190717001339.2ec38c30@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When storing a TLS symbol to memory, always use an intermediate register
-to load it. Otherwise compiler generates instruction which couldn't be
-encoded and we see:
------------------------------>8---------------------------
-In file included from gethstent_r.c:34:
-../nss/getXXent_r.c: In function '__gethostent_r':
-../nss/getXXent_r.c:168:1: error: unrecognizable insn:
- }
- ^
-(insn 25 24 26 5 (set (mem:SI (plus:SI (reg/f:SI 149 virtual-outgoing-args)
-                (const_int 16 [0x10])) [0  S4 A32])
-        (plus:SI (reg:SI 25 r25)
-            (reg:SI 174))) "../nss/getXXent_r.c":160 -1
-     (nil))
-during RTL pass: vregs
-../nss/getXXent_r.c:168:1: internal compiler error: in extract_insn, at recog.c:2304
-In file included from getnetent_r.c:34:
-../nss/getXXent_r.c: In function '__getnetent_r':
-../nss/getXXent_r.c:168:1: error: unrecognizable insn:
- }
- ^
-(insn 25 24 26 5 (set (mem:SI (plus:SI (reg/f:SI 149 virtual-outgoing-args)
-                (const_int 16 [0x10])) [0  S4 A32])
-        (plus:SI (reg:SI 25 r25)
-            (reg:SI 174))) "../nss/getXXent_r.c":160 -1
-     (nil))
-during RTL pass: vregs
-../nss/getXXent_r.c:168:1: internal compiler error: in extract_insn, at recog.c:2304
------------------------------>8---------------------------
+Hello Vered,
 
-Note this patch is not yet submitted to the GCC's master and gcc-9-branch but
-will be submitted soon. That said with bump of GCC for ARC this patch won't be
-needed any longer.
+On Tue, 16 Jul 2019 16:30:02 +0300, Vered Kalef <vered.kalef@gmail.com> wrote:
 
-Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Evgeniy Didin <didin@synopsys.com>
----
- .../9.1.0/0002-ARC-Fix-emitting-TLS-symbols.patch  | 61 ++++++++++++++++++++++
- .../0002-ARC-Fix-emitting-TLS-symbols.patch        | 61 ++++++++++++++++++++++
- 2 files changed, 122 insertions(+)
- create mode 100644 package/gcc/9.1.0/0002-ARC-Fix-emitting-TLS-symbols.patch
- create mode 100644 package/gcc/arc-2019.03-release/0002-ARC-Fix-emitting-TLS-symbols.patch
+> Hi
+> upgraded buildroot version to 2018.05.3, so, I'll have libnice 1.14 built
+> in .
+> I enabled it.
+> Restored the connection between webrtc and original libnice.
+> I saw that I should have the plugins nicesrc and nicesink (the plugins are
+> part of libnice associated with gstreamer).
+> Still I get that libnice is missing in the installation - libnice elements
+> are not available
+> I'm still missing an installation.
 
-diff --git a/package/gcc/9.1.0/0002-ARC-Fix-emitting-TLS-symbols.patch b/package/gcc/9.1.0/0002-ARC-Fix-emitting-TLS-symbols.patch
-new file mode 100644
-index 0000000000..15df921290
---- /dev/null
-+++ b/package/gcc/9.1.0/0002-ARC-Fix-emitting-TLS-symbols.patch
-@@ -0,0 +1,61 @@
-+From d17cd0f88ed986be4046b2eb70240dc95b2958cd Mon Sep 17 00:00:00 2001
-+From: Claudiu Zissulescu <claziss@synopsys.com>
-+Date: Wed, 26 Jun 2019 17:53:51 +0300
-+Subject: [PATCH 2/2] [ARC] Fix emitting TLS symbols.
-+
-+When storing a TLS symbol to memory, always use an intermediate register
-+to load it. Otherwise compiler generates instruction which couldn't be
-+encoded and we see:
-+----------------------------->8---------------------------
-+In file included from gethstent_r.c:34:
-+../nss/getXXent_r.c: In function '__gethostent_r':
-+../nss/getXXent_r.c:168:1: error: unrecognizable insn:
-+ }
-+ ^
-+(insn 25 24 26 5 (set (mem:SI (plus:SI (reg/f:SI 149 virtual-outgoing-args)
-+                (const_int 16 [0x10])) [0  S4 A32])
-+        (plus:SI (reg:SI 25 r25)
-+            (reg:SI 174))) "../nss/getXXent_r.c":160 -1
-+     (nil))
-+during RTL pass: vregs
-+../nss/getXXent_r.c:168:1: internal compiler error: in extract_insn, at recog.c:2304
-+In file included from getnetent_r.c:34:
-+../nss/getXXent_r.c: In function '__getnetent_r':
-+../nss/getXXent_r.c:168:1: error: unrecognizable insn:
-+ }
-+ ^
-+(insn 25 24 26 5 (set (mem:SI (plus:SI (reg/f:SI 149 virtual-outgoing-args)
-+                (const_int 16 [0x10])) [0  S4 A32])
-+        (plus:SI (reg:SI 25 r25)
-+            (reg:SI 174))) "../nss/getXXent_r.c":160 -1
-+     (nil))
-+during RTL pass: vregs
-+../nss/getXXent_r.c:168:1: internal compiler error: in extract_insn, at recog.c:2304
-+----------------------------->8---------------------------
-+
-+Note this patch is not yet submitted to the GCC's master and gcc-9-branch but
-+will be submitted soon. That said with bump of GCC this patch won't be
-+needed any longer.
-+
-+Signed-off-by: Claudiu Zissulescu  <claziss@synopsys.com>
-+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-+---
-+ gcc/config/arc/arc.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gcc/config/arc/arc.c b/gcc/config/arc/arc.c
-+index daacc79d0cb..ee1f70bbb51 100644
-+--- a/gcc/config/arc/arc.c
-++++ b/gcc/config/arc/arc.c
-+@@ -8951,7 +8951,7 @@ prepare_move_operands (rtx *operands, machine_mode mode)
-+   if (GET_CODE (operands[1]) == SYMBOL_REF)
-+     {
-+       enum tls_model model = SYMBOL_REF_TLS_MODEL (operands[1]);
-+-      if (MEM_P (operands[0]) && flag_pic)
-++      if (MEM_P (operands[0]))
-+ 	operands[1] = force_reg (mode, operands[1]);
-+       else if (model)
-+ 	operands[1] = arc_legitimize_tls_address (operands[1], model);
-+-- 
-+2.16.2
-+
-diff --git a/package/gcc/arc-2019.03-release/0002-ARC-Fix-emitting-TLS-symbols.patch b/package/gcc/arc-2019.03-release/0002-ARC-Fix-emitting-TLS-symbols.patch
-new file mode 100644
-index 0000000000..b6e5c0ee83
---- /dev/null
-+++ b/package/gcc/arc-2019.03-release/0002-ARC-Fix-emitting-TLS-symbols.patch
-@@ -0,0 +1,61 @@
-+From a971faaf8fb48acbf48ca800634fc78a27581517 Mon Sep 17 00:00:00 2001
-+From: Claudiu Zissulescu <claziss@synopsys.com>
-+Date: Wed, 26 Jun 2019 17:53:51 +0300
-+Subject: [PATCH] [ARC] Fix emitting TLS symbols.
-+
-+When storing a TLS symbol to memory, always use an intermediate register
-+to load it. Otherwise compiler generates instruction which couldn't be
-+encoded and we see:
-+----------------------------->8---------------------------
-+In file included from gethstent_r.c:34:
-+../nss/getXXent_r.c: In function '__gethostent_r':
-+../nss/getXXent_r.c:168:1: error: unrecognizable insn:
-+ }
-+ ^
-+(insn 25 24 26 5 (set (mem:SI (plus:SI (reg/f:SI 149 virtual-outgoing-args)
-+                (const_int 16 [0x10])) [0  S4 A32])
-+        (plus:SI (reg:SI 25 r25)
-+            (reg:SI 174))) "../nss/getXXent_r.c":160 -1
-+     (nil))
-+during RTL pass: vregs
-+../nss/getXXent_r.c:168:1: internal compiler error: in extract_insn, at recog.c:2304
-+In file included from getnetent_r.c:34:
-+../nss/getXXent_r.c: In function '__getnetent_r':
-+../nss/getXXent_r.c:168:1: error: unrecognizable insn:
-+ }
-+ ^
-+(insn 25 24 26 5 (set (mem:SI (plus:SI (reg/f:SI 149 virtual-outgoing-args)
-+                (const_int 16 [0x10])) [0  S4 A32])
-+        (plus:SI (reg:SI 25 r25)
-+            (reg:SI 174))) "../nss/getXXent_r.c":160 -1
-+     (nil))
-+during RTL pass: vregs
-+../nss/getXXent_r.c:168:1: internal compiler error: in extract_insn, at recog.c:2304
-+----------------------------->8---------------------------
-+
-+Note this patch is not yet submitted to the GCC's master and gcc-9-branch but
-+will be submitted soon. That said with bump of GCC for ARC this patch won't be
-+needed any longer.
-+
-+Signed-off-by: Claudiu Zissulescu  <claziss@synopsys.com>
-+Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-+---
-+ gcc/config/arc/arc.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/gcc/config/arc/arc.c b/gcc/config/arc/arc.c
-+index 8b544efaa11..989bec703df 100644
-+--- a/gcc/config/arc/arc.c
-++++ b/gcc/config/arc/arc.c
-+@@ -9068,7 +9068,7 @@ prepare_move_operands (rtx *operands, machine_mode mode)
-+   if (GET_CODE (operands[1]) == SYMBOL_REF)
-+     {
-+       enum tls_model model = SYMBOL_REF_TLS_MODEL (operands[1]);
-+-      if (MEM_P (operands[0]) && flag_pic)
-++      if (MEM_P (operands[0]))
-+ 	operands[1] = force_reg (mode, operands[1]);
-+       else if (model)
-+ 	operands[1] = arc_legitimize_tls_address (operands[1], model);
-+-- 
-+2.16.2
-+
--- 
-2.16.2
+As already said in [1] you need the following patches (not included in 2018.5,
+but on master or 2019.05):
+
+	# libnice: add gstreamer support [2]
+	$ git cherry-pick 689c083f571e0c88463a451cb4e64c1470b67afb
+
+	# package/gst1-plugins-bad: add webrtc option [3]
+	$ git cherry-pick baffecda1678d68ab6d16514ae1903d2d4dc1e5d
+
+Regards,
+Peter
+
+[1] http://lists.busybox.net/pipermail/buildroot/2019-July/254128.html
+[2] https://git.buildroot.net/buildroot/commit/?id=689c083f571e0c88463a451cb4e64c1470b67afb
+[3] https://git.buildroot.net/buildroot/commit/?id=baffecda1678d68ab6d16514ae1903d2d4dc1e5d
+
+> Regards,
+> Vered
+>
+> On Sun, Jul 14, 2019 at 9:55 PM Arnout Vandecappelle <arnout@mind.be> wrote:
+>
+> >
+> >
+> > On 14/07/2019 12:10, Vered Kalef wrote:
+> > > Hi all,
+> > > I'm working with buildroot 18.02.
+> > > I've installed External gstreamer version 14.0.
+> > > I've managed to update the plugins-bad, to hold webrtc option.
+> > > For the webrtc I had to update libnice version, so I've installed it as
+> > external
+> > > libnice 0.1.14.
+> > > Now -
+> > > gst-inspect-1.0 webrtc
+> > > shows that webrtc exists!
+> > >
+> > > Should it work as well:
+> > > gst-inspect-1.0 libnice
+> >
+> >  I don't think libnice itself is a gstreamer plugin, so this wouldn't
+> > work. I
+> > might be wrong though.
+> >
+> >
+> > > Is the installation of libnice as external is problematic?
+> > > I've called the external plugin CUSTOM_LIBNICE and referred to it from
+> > > custom-gst1-plugins-bad.mk <http://custom-gst1-plugins-bad.mk> -
+> > >
+> > > ifeq ($(BR2_PACKAGE_CUSTOM_GST1_PLUGINS_BAD_PLUGIN_WEBRTC),y)
+> > > CUSTOM_GST1_PLUGINS_BAD_CONF_OPTS += --enable-webrtc
+> > > CUSTOM_GST1_PLUGINS_BAD_DEPENDENCIES += custom-gst1-plugins-base
+> > CUSTOM_LIBNICE
+> >
+> >  I guess it is custom-libnice here, not CUSTOM_LIBNICE?
+> >
+> >  Can you check what the build log says about libnice?
+> >
+> >  Can you check if libnice is installed on your target?
+> >
+> >  Regards,
+> >  Arnout
+> >
+> > > else
+> > > CUSTOM_GST1_PLUGINS_BAD_CONF_OPTS += --disable-webrtc
+> > > endif
+> > >
+> > > *The errors I got - *
+> > > 0:00:05.765174600 17318 0x7fff64004400 WARN               webrtcbin
+> > > gstwebrtcbin.c:2991:gst_webrtc_bin_request_new_pad:<webrtcbin0> error:
+> > libnice
+> > > elements are not available
+> > > 0:00:05.765219000 17318 0x7fff64004400 LOG              GST_MESSAGE
+> > > gstmessage.c:301:gst_message_new_custom: source webrtcbin0: creating new
+> > message
+> > > 0x7fff640bf2c0 error
+> > > 0:00:05.765249100 17318 0x7fff64004400 WARN               structure
+> > > gststructure.c:1832:priv_gst_structure_append_to_gstring: No value
+> > transform to
+> > > serialize field 'gerror' of type 'GError'
+> > > 0:00:05.765239500 17318 0x7fff64004400 DEBUG                GST_BUS
+> > > gstbus.c:318:gst_bus_post:<bus0> [msg 0x7fff640bf2c0] posting on bus
+> > error
+> > > message: 0x7fff640bf2c0, time 99:99:99.999999999, seq-num 65, element
+> > > 'webrtcbin0', GstMessageError, gerror=(GError)NULL,
+> > > debug=(string)"gstwebrtcbin.c\(2991\):\ gst_webrtc_bin_request_new_pad\
+> > \(\):\
+> > > /GstPipeline:pipeline0/GstWebRTCBin:webrtcbin0:\012libnice\ elements\
+> > are\ not\
+> > > available";
+> > > 0:00:05.765261300 17318 0x7fff64004400 DEBUG                    bin
+> > > gstbin.c:3715:gst_bin_handle_message_func:<pipeline0> [msg
+> > 0x7fff640bf2c0]
+> > > handling child webrtcbin0 message of type error
+> > > 0:00:05.765283100 17318 0x7fff64004400 WARN               structure
+> > > gststructure.c:1832:priv_gst_structure_append_to_gstring: No value
+> > transform to
+> > > serialize field 'gerror' of type 'GError'
+> > > 0:00:05.765281100 17318 0x7fff64004400 DEBUG                GST_BUS
+> > > gstbus.c:318:gst_bus_post:<bus1> [msg 0x7fff640bf2c0] posting on bus
+> > error
+> > > message: 0x7fff640bf2c0, time 99:99:99.999999999, seq-num 65, element
+> > > 'webrtcbin0', GstMessageError, gerror=(GError)NULL,
+> > > debug=(string)"gstwebrtcbin.c\(2991\):\ gst_webrtc_bin_request_new_pad\
+> > \(\):\
+> > > /GstPipeline:pipeline0/GstWebRTCBin:webrtcbin0:\012libnice\ elements\
+> > are\ not\
+> > > available";
+> > > 0:00:05.765327400 17318 0x7fff64004400 INFO        GST_ERROR_SYSTEM
+> > > gstelement.c:2172:gst_element_message_full_with_details:<webrtcbin0>
+> > posted
+> > > error message: Your GStreamer installation is missing a plug-in.
+> > >
+> > > Thanks in advance,
+> > > Vered
+> > >
+> > >
+> > > _______________________________________________
+> > > buildroot mailing list
+> > > buildroot at busybox.net
+> > > http://lists.busybox.net/mailman/listinfo/buildroot
+> > >
+> >
