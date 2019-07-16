@@ -1,111 +1,62 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Tue, 16 Jul 2019 10:12:29 +0200
-Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib:
- CommentsMenusPackagesOrder: append elements to arrays if needed
-In-Reply-To: <20190715204632.GP29941@scaer>
-References: <20190715083209.7319-1-jerzy.m.grzegorek@gmail.com>
- <20190715204632.GP29941@scaer>
-Message-ID: <ad4f0e74-4828-2cf0-2e1c-5d74f69790f8@gmail.com>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Tue, 16 Jul 2019 17:45:49 +0530
+Subject: [Buildroot] [PATCH 2/2] fs/cpio: make cpio rootfs reproducible
+In-Reply-To: <20190714172133.GC29941@scaer>
+References: <20190714162335.12684-1-itsatharva@gmail.com>
+ <20190714164725.GB29941@scaer> <20190714172133.GC29941@scaer>
+Message-ID: <40090178.cAxkiHm8M1@msi-manjaro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+Yann, all:
 
-> Jerzy, All,
->
-> On 2019-07-15 10:32 +0200, Jerzy Grzegorek spake thusly:
->> To be "future-proof" append elements to arrays if needed.
->> Also change order of variables.
-> Is that a fix for the existing issues, or just an improvement/cleanup?
+Replying to both of Yann's emails in this one:
 
+On Sunday, July 14, 2019 10:17:25 PM IST Yann E. MORIN wrote:
+> Having a pure assignment in a condition is risky for the future. If we
+> were to later add new unconditional options, we would add them before
+> this part (as is customary to do: uncoditional stuff goes before
+> conditional stuff). In this case, the assignment here would override the
+> uncoditional options, which is not nice.
+> 
+> Instead, I think we prefer an append-assignment in conditional blocks,
+> even if the variable is not already defined.
 
-That is just improvement.
+Ah yes that makes sense. I'll change it to an append-assignment in v2.
+Thanks!
 
+On Sunday, July 14, 2019 10:51:33 PM IST Yann E. MORIN wrote:
+> Atharva, All,
+> 
+> On 2019-07-14 18:47 +0200, Yann E. MORIN spake thusly:
+> > On 2019-07-14 21:53 +0530, Atharva Lele spake thusly:
+> > > Pass the recommended argument in the CPIO manual to make cpio archives
+> > > reproducible.
+> 
+> [--SNIP--]
+> 
+> > > +# --repoducible option was not introduced until cpio v2.12. Some
+> > > distros
+> > > +# like Ubuntu 16.04 or Debian oldstable which package v2.11. Hence
+> > > build
+> > > +# host-cpio.
+> > > +ifeq ($(BR2_REPRODUCIBLE), y)
+> > > +ROOTFS_CPIO_DEPENDENCIES += host-cpio
+> > > +CPIO_OPTS = --reproducible
+> 
+> In addition to my previous comments: the variable shall be prefixed with
+> ROOTFS_CPIO_, not just with CPIO_, otherwise it could clash with variables
+> from the cpio package itself.
 
->
->> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
->> ---
->>   utils/checkpackagelib/lib_config.py | 14 ++++++++++----
->>   1 file changed, 10 insertions(+), 4 deletions(-)
->>
->> diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
->> index f0edb9993d..f55bb33d69 100644
->> --- a/utils/checkpackagelib/lib_config.py
->> +++ b/utils/checkpackagelib/lib_config.py
->> @@ -61,9 +61,9 @@ class AttributesOrder(_CheckFunction):
->>   
->>   
->>   class CommentsMenusPackagesOrder(_CheckFunction):
->> -    print_package_warning = [True, True, True, True, True, True]
->> -    menu_of_packages = ["", "", "", "", "", ""]
->> -    package = ["", "", "", "", "", ""]
->> +    menu_of_packages = [""]
->> +    package = [""]
->> +    print_package_warning = [True]
-> Why do we need an initial value in the arrays? Can't we do something
+Agreed, fixing it in v2.
 
-
-We don't need it.
-
-
-> like:
->
->      package = []
->      ...
->      if level > len(self.package):
->          append the stuff here.
->
-> Of course, that is not very nice either... All of that because we can't
-> assigne to an index that does not already exists. In python, the moto is
-> "easier to ask for forgiveness than permission". So:
->
->      try:
->          self.menu_of_packages[level] = text[:-1]
->          self.package[level] = ""
->          self.print_package_warning[level] = True
->      except IndexError:
->          self.menu_of_packages.append(text[:-1])
->          self.package.append("")
->          self.print_package_warning.append(True)
-
-I'm fine with your suggestion too.
-I'll send a new version in a couple of days.
-Thanks for the review.
-
-Regards,
-Jerzy
-
-
->
 > Regards,
 > Yann E. MORIN.
->
->>       def before(self):
->>           self.state = ""
->> @@ -87,9 +87,15 @@ class CommentsMenusPackagesOrder(_CheckFunction):
->>                       self.state += "-menu"
->>   
->>               level = self.get_level()
->> +
->> +            if level > len(self.package) - 1:
->> +                self.menu_of_packages.append("")
->> +                self.package.append("")
->> +                self.print_package_warning.append(True)
->> +
->> +            self.menu_of_packages[level] = text[:-1]
->>               self.package[level] = ""
->>               self.print_package_warning[level] = True
->> -            self.menu_of_packages[level] = text[:-1]
->>   
->>           elif text.startswith("endif") or text.startswith("endmenu"):
->>               if self.state.endswith("comment"):
->> -- 
->> 2.17.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+
+Thanks for the review!
+
+Regards,
+Atharva Lele
