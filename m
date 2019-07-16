@@ -1,30 +1,41 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 16 Jul 2019 19:04:22 +0200
-Subject: [Buildroot] [PATCH 1/2] package/mender: bump to version 2.0.1
-In-Reply-To: <20190716151257.78244-1-aduskett@gmail.com>
-References: <20190716151257.78244-1-aduskett@gmail.com>
-Message-ID: <20190716190422.3a4ba99e@windsurf>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Tue, 16 Jul 2019 23:05:17 +0530
+Subject: [Buildroot] [PATCH v2 1/2] package/cpio: add host version
+Message-ID: <20190716173518.11081-1-itsatharva@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 16 Jul 2019 11:12:56 -0400
-aduskett at gmail.com wrote:
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-> From: Adam Duskett <Aduskett@gmail.com>
-> 
-> Signed-off-by: Adam Duskett <Aduskett@gmail.com>
-> ---
->  package/mender/mender.hash | 2 +-
->  package/mender/mender.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+The latest cpio has a --reproducible option, which may come handy when
+we try to, well, be reproducible...
 
-Both applied to master. Thanks!
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+[Atharva: don't force --bindir, as noticed by Arnout]
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Atharva Lele <itsatharva@gmail.com>
+---
+Changes v1 -> v2:
+  - Add patch from Yann to my series
+  - Fix [Atharva: ] comment
+---
+ package/cpio/cpio.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
+diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
+index 9a09279572..cc40838840 100644
+--- a/package/cpio/cpio.mk
++++ b/package/cpio/cpio.mk
+@@ -17,3 +17,4 @@ CPIO_DEPENDENCIES += argp-standalone
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.22.0
