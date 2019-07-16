@@ -1,46 +1,35 @@
-From: Atharva Lele <itsatharva@gmail.com>
-Date: Tue, 16 Jul 2019 23:12:14 +0530
-Subject: [Buildroot] [PATCH v2 2/2] Makefile: don't export GZIP environment
- variable
-In-Reply-To: <20190716174214.11914-1-itsatharva@gmail.com>
-References: <20190716174214.11914-1-itsatharva@gmail.com>
-Message-ID: <20190716174214.11914-2-itsatharva@gmail.com>
+From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+Date: Tue, 16 Jul 2019 17:52:51 +0000
+Subject: [Buildroot] [PATCH 0/2 v2] arch: allow passing compile flags
+ (branch yem/arc-atomic)
+In-Reply-To: <cover.1563114574.git.yann.morin.1998@free.fr>
+References: <cover.1563114574.git.yann.morin.1998@free.fr>
+Message-ID: <CY4PR1201MB01203F114D92BD4E89EB806CA1CE0@CY4PR1201MB0120.namprd12.prod.outlook.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-We export GZIP = -n so that GZIP does not record original
-name and timestamps. However..
+Hi Yann, all,
 
-GZIP environment variable is deprecated and soon will not be
-supported in future GZIP versions. GZIP suggests the use of a
-wrapper to pass options globally but it might be difficult to
-implement in Buildroot. For now, we don't export the variable
-and fix reproducibility issues per package as they show up in
-Autobuilder.
+> -----Original Message-----
+> From: Yann E. MORIN <yann.morin.1998@gmail.com> On Behalf Of Yann E. MORIN
+> Sent: Sunday, July 14, 2019 5:30 PM
+> To: buildroot at buildroot.org
+> Cc: Alexey Brodkin <abrodkin@synopsys.com>; Alexey Brodkin <abrodkin@synopsys.com>; Arnout
+> Vandecappelle <arnout@mind.be>; Thomas Petazzoni <thomas.petazzoni@bootlin.com>; Yann E . MORIN
+> <yann.morin.1998@free.fr>
+> Subject: [PATCH 0/2 v2] arch: allow passing compile flags (branch yem/arc-atomic)
+> 
+> Hello All!
+> 
+> This series makes it so that architectures can set compilation flags,
+> passed down via the wrapper.
 
-Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
-Changes v1 -> v2:
-  - Reversed order of patches
----
- Makefile | 1 -
- 1 file changed, 1 deletion(-)
+Works like a charm now for building Linux perf for ARC770 (finally)!
+Thanks for doing that!
 
-diff --git a/Makefile b/Makefile
-index c98a0ed87e..9cce934990 100644
---- a/Makefile
-+++ b/Makefile
-@@ -248,7 +248,6 @@ ifeq ($(BR2_REPRODUCIBLE),y)
- export TZ = UTC
- export LANG = C
- export LC_ALL = C
--export GZIP = -n
- endif
- 
- # To put more focus on warnings, be less verbose as default
--- 
-2.22.0
+That said for entire series...
+
+Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
