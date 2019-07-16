@@ -1,92 +1,61 @@
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-Date: Tue, 16 Jul 2019 22:56:42 +0200
-Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib:
- CommentsMenusPackagesOrder: fix order of packages checking
-In-Reply-To: <20190715203401.GO29941@scaer>
-References: <20190715065253.6072-1-jerzy.m.grzegorek@gmail.com>
- <20190715203401.GO29941@scaer>
-Message-ID: <9986d013-13e7-83a8-5cfc-f98f36020a51@gmail.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 16 Jul 2019 23:21:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/ding-libs: bump to version 0.6.1
+Message-ID: <20190716212147.24187-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+- Switch site to pagure.io as fedorahosted.org is retired:
+  https://fedoraproject.org/wiki/Infrastructure/Fedorahosted-retirement
+- Add hash for license files
 
-> Jerzy, All,
->
-> On 2019-07-15 08:52 +0200, Jerzy Grzegorek spake thusly:
->> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-> Please provide more information in the commit log. See below...
->
->> ---
->>   utils/checkpackagelib/lib_config.py | 6 +++---
->>   1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
->> index f0edb9993d..a135355f9a 100644
->> --- a/utils/checkpackagelib/lib_config.py
->> +++ b/utils/checkpackagelib/lib_config.py
->> @@ -72,8 +72,8 @@ class CommentsMenusPackagesOrder(_CheckFunction):
->>           return len(self.state.split('-')) - 1
->>   
->>       def check_line(self, lineno, text):
->> -        if text.startswith("comment") or text.startswith("if") or \
->> -           text.startswith("menu"):
->> +        if text.startswith("comment ") or text.startswith("if ") or \
->> +           text.startswith("menu "):
-> I guess this superseds Arnout's own patch?
->      http://lists.busybox.net/pipermail/buildroot/2019-July/254466.html
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/ding-libs/Config.in      | 2 +-
+ package/ding-libs/ding-libs.hash | 4 +++-
+ package/ding-libs/ding-libs.mk   | 7 ++++---
+ 3 files changed, 8 insertions(+), 5 deletions(-)
 
-Ah yes, actually.
-This change filters out lines starting with e.g.
-menuconfig ...
-from those starting with
-menu "...
-Only lines starting with "comment ", "if " or "menu " build new state
-to track the depth of menus and conditions.
-
->
->>               if text.startswith("comment"):
->>                   if not self.state.endswith("-comment"):
->> @@ -103,7 +103,7 @@ class CommentsMenusPackagesOrder(_CheckFunction):
->>   
->>           elif text.startswith('\tsource "package/'):
->>               level = self.get_level()
->> -            new_package = text[17: -(len(self.filename)-5):]
->> +            new_package = text[17: -(len(self.filename)-self.filename.index("Config")+3):]
-> I fail to see how the two changes are related. This should be explained
-> in the commit log. If they are not fixing the same thing, it should be
-> two commits.
-
-This one only took into account files: package/Config.in and 
-package/Config.in.host .
-In case of file package/kodi/Config.in packages' names in lines have 
-been cut off to much:
-\tsource "package/kodi-audiodecoder-modplug/Config.in" -> 
-kodi-audiodecoder-mo
-\tsource "package/kodi-audiodecoder-nosefart/Config.in" -> 
-kodi-audiodecoder-nos
-\tsource "package/kodi-audiodecoder-opus/Config.in" -> kodi-audiodecoder
-...
-and after comparing it caused an issue.
-Thanks for the review.
-
-Regards,
-Jerzy
-
-
->
-> Regards,
-> Yann E. MORIN.
->
->>               # We order _ before A, so replace it with .
->>               new_package_ord = new_package.replace('_', '.')
->> -- 
->> 2.17.1
->>
->> _______________________________________________
->> buildroot mailing list
->> buildroot at busybox.net
->> http://lists.busybox.net/mailman/listinfo/buildroot
+diff --git a/package/ding-libs/Config.in b/package/ding-libs/Config.in
+index 6dc2a80f82..152dca0426 100644
+--- a/package/ding-libs/Config.in
++++ b/package/ding-libs/Config.in
+@@ -13,4 +13,4 @@ config BR2_PACKAGE_DING_LIBS
+ 	  initialization format (INI) into a library collection data
+ 	  structure (libini_config).
+ 
+-	  https://git.fedorahosted.org/git/ding-libs.git
++	  https://pagure.io/SSSD/ding-libs
+diff --git a/package/ding-libs/ding-libs.hash b/package/ding-libs/ding-libs.hash
+index 6e35697692..2ac5bd8eee 100644
+--- a/package/ding-libs/ding-libs.hash
++++ b/package/ding-libs/ding-libs.hash
+@@ -1,2 +1,4 @@
+ # Locally computed
+-sha256 639984a57d6f936a6551c842712619692febaebf4515033fc929620a241ffa6a ding_libs-0_4_0.tar.xz
++sha256 ad3c573641701f67d4b6bd8a5a71f0b65d45fd39fe961495ef5f5d3c57fc0963 ding-libs-ding_libs-0_6_1.tar.gz
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903 COPYING
++sha256 6c57f43c939054fd4b831f271a14c97a488c38f98cdda5e887c5d396e3b3bc58 COPYING.LESSER
+diff --git a/package/ding-libs/ding-libs.mk b/package/ding-libs/ding-libs.mk
+index 976f5728ea..1e8fa59d69 100644
+--- a/package/ding-libs/ding-libs.mk
++++ b/package/ding-libs/ding-libs.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-DING_LIBS_VERSION = 0.4.0
+-DING_LIBS_SOURCE = ding_libs-$(subst .,_,$(DING_LIBS_VERSION)).tar.xz
+-DING_LIBS_SITE = https://git.fedorahosted.org/cgit/ding-libs.git/snapshot
++DING_LIBS_VERSION = 0.6.1
++DING_LIBS_SOURCE = ding-libs-ding_libs-$(subst .,_,$(DING_LIBS_VERSION)).tar.gz
++DING_LIBS_SITE = \
++	https://pagure.io/SSSD/ding-libs/archive/ding_libs-$(subst .,_,$(DING_LIBS_VERSION))
+ DING_LIBS_DEPENDENCIES = host-pkgconf \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+-- 
+2.20.1
