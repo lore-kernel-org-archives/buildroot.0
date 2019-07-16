@@ -1,42 +1,92 @@
-From: bbacha <bbacha@accuratetechnologies.com>
-Date: Tue, 16 Jul 2019 15:38:59 -0500 (CDT)
-Subject: [Buildroot] Buildroot image failed with external toolchain from
- crosstool-ng
-Message-ID: <1563309539424-0.post@n4.nabble.com>
+From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Date: Tue, 16 Jul 2019 22:56:42 +0200
+Subject: [Buildroot] [PATCH 1/1] utils/checkpackagelib:
+ CommentsMenusPackagesOrder: fix order of packages checking
+In-Reply-To: <20190715203401.GO29941@scaer>
+References: <20190715065253.6072-1-jerzy.m.grzegorek@gmail.com>
+ <20190715203401.GO29941@scaer>
+Message-ID: <9986d013-13e7-83a8-5cfc-f98f36020a51@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
-I am using freescale_imx8mqevk_defconfig which selects
-rel_imx_4.14.78_1.0.0_ga kernel version from
-https://source.codeaurora.org/external/imx/linux-imx and external toolchain
-generated from crosstool-ng (Kernel: 4.14.x and Glibc 2.29)
+Hi Yann,
 
-Gives error
-FATAL: kernel too old
-[    4.072195] Kernel panic - not syncing: Attempted to kill init!
-exitcode=0x00007f00
-[    4.072195]
-[    4.081333] CPU: 1 PID: 1 Comm: init Not tainted 4.14.78 #1
-[    4.086905] Hardware name: Freescale i.MX8MQ EVK (DT)
-[    4.091956] Call trace:
-[    4.094411] [<ffff000008089b50>] dump_backtrace+0x0/0x3b0
-[    4.099814] [<ffff000008089f14>] show_stack+0x14/0x20
-[    4.104869] [<ffff000008d80b10>] dump_stack+0x9c/0xbc
-[    4.109923] [<ffff0000080ce588>] panic+0x11c/0x278
-[    4.114717] [<ffff0000080d2788>] do_exit+0x918/0x950
-[    4.119681] [<ffff0000080d2824>] do_group_exit+0x34/0xa0
-[    4.124992] [<ffff0000080d28a0>] __wake_up_parent+0x0/0x30
-[    4.130475] Exception stack(0xffff00000803bec0 to 0xffff00000803c000).
+> Jerzy, All,
+>
+> On 2019-07-15 08:52 +0200, Jerzy Grzegorek spake thusly:
+>> Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+> Please provide more information in the commit log. See below...
+>
+>> ---
+>>   utils/checkpackagelib/lib_config.py | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+>> index f0edb9993d..a135355f9a 100644
+>> --- a/utils/checkpackagelib/lib_config.py
+>> +++ b/utils/checkpackagelib/lib_config.py
+>> @@ -72,8 +72,8 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+>>           return len(self.state.split('-')) - 1
+>>   
+>>       def check_line(self, lineno, text):
+>> -        if text.startswith("comment") or text.startswith("if") or \
+>> -           text.startswith("menu"):
+>> +        if text.startswith("comment ") or text.startswith("if ") or \
+>> +           text.startswith("menu "):
+> I guess this superseds Arnout's own patch?
+>      http://lists.busybox.net/pipermail/buildroot/2019-July/254466.html
 
-Thanks,
-Bharat
+Ah yes, actually.
+This change filters out lines starting with e.g.
+menuconfig ...
+from those starting with
+menu "...
+Only lines starting with "comment ", "if " or "menu " build new state
+to track the depth of menus and conditions.
+
+>
+>>               if text.startswith("comment"):
+>>                   if not self.state.endswith("-comment"):
+>> @@ -103,7 +103,7 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+>>   
+>>           elif text.startswith('\tsource "package/'):
+>>               level = self.get_level()
+>> -            new_package = text[17: -(len(self.filename)-5):]
+>> +            new_package = text[17: -(len(self.filename)-self.filename.index("Config")+3):]
+> I fail to see how the two changes are related. This should be explained
+> in the commit log. If they are not fixing the same thing, it should be
+> two commits.
+
+This one only took into account files: package/Config.in and 
+package/Config.in.host .
+In case of file package/kodi/Config.in packages' names in lines have 
+been cut off to much:
+\tsource "package/kodi-audiodecoder-modplug/Config.in" -> 
+kodi-audiodecoder-mo
+\tsource "package/kodi-audiodecoder-nosefart/Config.in" -> 
+kodi-audiodecoder-nos
+\tsource "package/kodi-audiodecoder-opus/Config.in" -> kodi-audiodecoder
+...
+and after comparing it caused an issue.
+Thanks for the review.
+
+Regards,
+Jerzy
 
 
-
-
---
-Sent from: http://buildroot-busybox.2317881.n4.nabble.com/
+>
+> Regards,
+> Yann E. MORIN.
+>
+>>               # We order _ before A, so replace it with .
+>>               new_package_ord = new_package.replace('_', '.')
+>> -- 
+>> 2.17.1
+>>
+>> _______________________________________________
+>> buildroot mailing list
+>> buildroot at busybox.net
+>> http://lists.busybox.net/mailman/listinfo/buildroot
