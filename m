@@ -1,56 +1,54 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jul 2019 07:17:33 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xclock: bump version to
- 1.0.9
-Message-ID: <20190717051632.B4AE87FB47@busybox.osuosl.org>
+Date: Wed, 17 Jul 2019 07:16:43 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xapp_setxkbmap: bump version
+ to 1.3.2
+Message-ID: <20190717051632.938EC8379E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3cc4a4cd41b8efb71cbe171e2af6cef494292af
+commit: https://git.buildroot.net/buildroot/commit/?id=5966187a788aed418b427d91cca079939ba2078b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Added all hashes provided by upstream, added license hash.
 Updated _SITE according to release notes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xapp_xclock/xapp_xclock.hash | 10 +++++-----
- package/x11r7/xapp_xclock/xapp_xclock.mk   |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/x11r7/xapp_setxkbmap/xapp_setxkbmap.hash | 9 +++++++--
+ package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk   | 4 ++--
+ 2 files changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xapp_xclock/xapp_xclock.hash b/package/x11r7/xapp_xclock/xapp_xclock.hash
-index a0712e9a1a..881b40154d 100644
---- a/package/x11r7/xapp_xclock/xapp_xclock.hash
-+++ b/package/x11r7/xapp_xclock/xapp_xclock.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2019-February/002947.html
--md5 8bd39eb3678ed58a2350794fe13401cc  xclock-1.0.8.tar.bz2
--sha1 980df6958286450cfc1fe6daa7ff912885d728ba  xclock-1.0.8.tar.bz2
--sha256 930820483a36f1f1ce1bf52b648865629a16082641e12c5cf2b5045815fc2255  xclock-1.0.8.tar.bz2
--sha512 1272221ace3657505bae1b22f181e9ecbf1710900c89a860c8ceae47ae31ca5e75b6557c37dc0a881a0a24c9597b9a07f46200926feb1013f1e2e995111a7646  xclock-1.0.8.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-July/003010.html
-+md5 437522a96f424f68fc64ed34ece9b211  xclock-1.0.9.tar.bz2
-+sha1 774c711cf7ee3f601f7209bbb01ce3f0d5ddbde6  xclock-1.0.9.tar.bz2
-+sha256 cf461fb2c6f2ac42c54d8429ee2010fdb9a1442a370adfbfe8a7bfaf33c123bb  xclock-1.0.9.tar.bz2
-+sha512 fcbac0b4ab1cea4ae0751ce1c0c6302048e5d98d459873c7580e4ca786ec49fa27f73e5831bdfe135abb5cfeabe886456276e9d01351ea7905c606f40f84522d  xclock-1.0.9.tar.bz2
- # Locally computed
- sha256 ee1f19f46801ef00e70498603e74df644d0b93fc82f06b55ce64c3a2c9f16e71  COPYING
-diff --git a/package/x11r7/xapp_xclock/xapp_xclock.mk b/package/x11r7/xapp_xclock/xapp_xclock.mk
-index b0f74682e0..77cc7011d3 100644
---- a/package/x11r7/xapp_xclock/xapp_xclock.mk
-+++ b/package/x11r7/xapp_xclock/xapp_xclock.mk
+diff --git a/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.hash b/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.hash
+index bdc5f1cc78..4f963593cb 100644
+--- a/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.hash
++++ b/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.hash
+@@ -1,2 +1,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-April/002563.html
+-sha256	a9ddb3963f263ba13f0ea105d8c45a531832140530217cc559587bb94f02d3e1	setxkbmap-1.3.1.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-July/003007.html
++md5 93e736c98fb75856ee8227a0c49a128d  setxkbmap-1.3.2.tar.bz2
++sha1 44783734bc58fca93165a20da0bb3eca1ccb9ad9  setxkbmap-1.3.2.tar.bz2
++sha256 8ff27486442725e50b02d7049152f51d125ecad71b7ce503cfa09d5d8ceeb9f5  setxkbmap-1.3.2.tar.bz2
++sha512 bfa8015dee0d8d3fdbbd89afbd71c8606ce168d6edca8521d5ed05a00fecbea39bc4bfcce84b71458bdeb34c60bd80a5df27e0691ccee3966443ecdc937faf38  setxkbmap-1.3.2.tar.bz2
++# Locally computed
++sha256 afb8ce58340b6a6b85b73e256425263ce46f5a427279785e275991cb660cce82  COPYING
+diff --git a/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk b/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk
+index b923d60f53..8b69747593 100644
+--- a/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk
++++ b/package/x11r7/xapp_setxkbmap/xapp_setxkbmap.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XCLOCK_VERSION = 1.0.8
-+XAPP_XCLOCK_VERSION = 1.0.9
- XAPP_XCLOCK_SOURCE = xclock-$(XAPP_XCLOCK_VERSION).tar.bz2
--XAPP_XCLOCK_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XCLOCK_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XCLOCK_LICENSE = MIT
- XAPP_XCLOCK_LICENSE_FILES = COPYING
- XAPP_XCLOCK_DEPENDENCIES = xlib_libX11 xlib_libXaw xlib_libXft xlib_libXrender xlib_libxkbfile
+-XAPP_SETXKBMAP_VERSION = 1.3.1
++XAPP_SETXKBMAP_VERSION = 1.3.2
+ XAPP_SETXKBMAP_SOURCE = setxkbmap-$(XAPP_SETXKBMAP_VERSION).tar.bz2
+-XAPP_SETXKBMAP_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_SETXKBMAP_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_SETXKBMAP_LICENSE = MIT
+ XAPP_SETXKBMAP_LICENSE_FILES = COPYING
+ XAPP_SETXKBMAP_DEPENDENCIES = xlib_libX11 xlib_libxkbfile
