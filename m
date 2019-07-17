@@ -1,30 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jul 2019 07:30:49 +0200
-Subject: [Buildroot] [PATCH] package/json-glib: set -Dintrospection=false
-In-Reply-To: <20190715171801.409911-1-alex_y_xu@yahoo.ca>
-References: <20190715171801.409911-1-alex_y_xu@yahoo.ca>
-Message-ID: <20190717073049.42579415@windsurf>
+Date: Wed, 17 Jul 2019 07:31:08 +0200
+Subject: [Buildroot] [git commit] package/libiscsi: needs threads
+Message-ID: <20190717052935.A337681398@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 15 Jul 2019 13:18:01 -0400
-"Alex Xu (Hello71)" <alex_y_xu@yahoo.ca> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=43caf8e1f71506b664efe75795f6d9d25f493497
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> when it is true, the meson script auto-detects the host g-ir-scanner,
-> which is not usable in a cross-compile environment.
-> 
-> Signed-off-by: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
-> ---
->  package/json-glib/json-glib.mk | 2 ++
->  1 file changed, 2 insertions(+)
+threads are needed since bump to version 1.19.0 and
+https://github.com/sahlberg/libiscsi/commit/41af44eba113c59dc43764d1d240397616e85b82
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/1d71c95378a6ef9774926bf7431c1a315e4a1b3e
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libiscsi/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/libiscsi/Config.in b/package/libiscsi/Config.in
+index 760fecea66..1e75071476 100644
+--- a/package/libiscsi/Config.in
++++ b/package/libiscsi/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBISCSI
+ 	bool "libiscsi"
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	help
+ 	  Libiscsi is a client-side library to implement the iSCSI
+ 	  protocol that can be used to access resource of an iSCSI
+@@ -10,3 +11,6 @@ config BR2_PACKAGE_LIBISCSI
+ 	  for simpler applications.
+ 
+ 	  https://github.com/sahlberg/libiscsi  (no proper homepage)
++
++comment "libiscsi needs a toolchain w/ threads"
++	depends on !BR2_TOOLCHAIN_HAS_THREADS
