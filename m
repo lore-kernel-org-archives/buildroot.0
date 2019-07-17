@@ -1,39 +1,57 @@
-From: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
-Date: Wed, 17 Jul 2019 15:12:15 -0400
-Subject: [Buildroot] [PATCH v2] package/python-idna: select
- PYTHON3_UNICODEDATA
-In-Reply-To: <20190717084347.784866e3@windsurf>
-References: <20190717084347.784866e3@windsurf>
-Message-ID: <20190717191215.61153-1-alex_y_xu@yahoo.ca>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 17 Jul 2019 23:46:52 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/tesseract-ocr: fix build on uclibc
+Message-ID: <20190717214652.6493-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-idna requires unicodedata:
+Fixes:
+ - http://autobuild.buildroot.org/results/bdfbafa105ddf0b9b9399d94b557d318ad587d79
 
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "usr/lib/python3.7/site-packages/idna/__init__.py", line 2, in <module>
-  File "usr/lib/python3.7/site-packages/idna/core.py", line 3, in <module>
-ModuleNotFoundError: No module named 'unicodedata'
-
-Signed-off-by: Alex Xu (Hello71) <alex_y_xu@yahoo.ca>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-idna/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Changes v1 -> v2:
+ - Use upstream solution
 
-diff --git a/package/python-idna/Config.in b/package/python-idna/Config.in
-index 1fd56ceaf6..ddc2cd7d17 100644
---- a/package/python-idna/Config.in
-+++ b/package/python-idna/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_IDNA
- 	bool "python-idna"
-+	select BR2_PACKAGE_PYTHON3_UNICODEDATA
- 	help
- 	  A library to support the Internationalised Domain Names in
- 	  Applications (IDNA) protocol as specified in RFC 5891. This
+ ...stead-of-off_t-for-result-from-ftell.patch | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/tesseract-ocr/0001-Use-long-instead-of-off_t-for-result-from-ftell.patch
+
+diff --git a/package/tesseract-ocr/0001-Use-long-instead-of-off_t-for-result-from-ftell.patch b/package/tesseract-ocr/0001-Use-long-instead-of-off_t-for-result-from-ftell.patch
+new file mode 100644
+index 0000000000..7cb5d6877e
+--- /dev/null
++++ b/package/tesseract-ocr/0001-Use-long-instead-of-off_t-for-result-from-ftell.patch
+@@ -0,0 +1,26 @@
++From d4e0ab3014c57e519513c10b8e23d8bf66610bff Mon Sep 17 00:00:00 2001
++From: Stefan Weil <sw@weilnetz.de>
++Date: Wed, 17 Jul 2019 21:11:53 +0200
++Subject: [PATCH] Use long instead of off_t for result from ftell
++
++Signed-off-by: Stefan Weil <sw@weilnetz.de>
++[Retrieved from:
++https://github.com/tesseract-ocr/tesseract/commit/d4e0ab3014c57e519513c10b8e23d8bf66610bff]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ src/ccutil/scanutils.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/ccutil/scanutils.cpp b/src/ccutil/scanutils.cpp
++index da0c6918e..ea376a570 100644
++--- a/src/ccutil/scanutils.cpp
+++++ b/src/ccutil/scanutils.cpp
++@@ -214,7 +214,7 @@ static int tvfscanf(FILE* stream, const char *format, va_list ap) {
++       (CHAR_BIT * sizeof(long))];
++   int matchinv = 0;   // Is match map inverted?
++   unsigned char range_start = 0;
++-  off_t start_off = ftell(stream);
+++  long start_off = ftell(stream);
++ 
++   // Skip leading spaces
++   SkipSpace(stream);
 -- 
-2.22.0
+2.20.1
