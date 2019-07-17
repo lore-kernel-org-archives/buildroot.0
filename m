@@ -1,91 +1,37 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Wed, 17 Jul 2019 08:53:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/socketcand: fix build with
- kernel >= 5.2
-In-Reply-To: <20190714230602.8861-1-fontaine.fabrice@gmail.com>
-References: <20190714230602.8861-1-fontaine.fabrice@gmail.com>
-Message-ID: <CAGm1_ktUFnTxiC8QyjnMpRPidLBxM=8mcbgLt32FDh8muvQp1Q@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 17 Jul 2019 08:47:34 +0200
+Subject: [Buildroot] [git commit] package/cpio: add host version
+Message-ID: <20190717065217.DB01E83DFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, Jul 15, 2019 at 1:05 AM Fabrice Fontaine
-<fontaine.fabrice@gmail.com> wrote:
->
-> Fixes:
->  - http://autobuild.buildroot.org/results/3112b1ad77e805cd3ca61bb79560e8e13a466589
->
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=48f2f4dd8e4a54dcbfcda947c6ced724c77841c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+The latest cpio has a --reproducible option, which may come handy when
+we try to, well, be reproducible...
 
-> ---
->  ...o-find-SIOCGSTAMP-with-latest-kernel.patch | 54 +++++++++++++++++++
->  1 file changed, 54 insertions(+)
->  create mode 100644 package/socketcand/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
->
-> diff --git a/package/socketcand/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch b/package/socketcand/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
-> new file mode 100644
-> index 0000000000..5e7554733e
-> --- /dev/null
-> +++ b/package/socketcand/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
-> @@ -0,0 +1,54 @@
-> +From e6f21b0cd5a449c1bf7a4d2c6bc5ad278a2d4e8e Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Mon, 15 Jul 2019 01:01:34 +0200
-> +Subject: [PATCH] fix include to find SIOCGSTAMP with latest kernel
-> +
-> +In linux kernel commit 0768e17073dc527ccd18ed5f96ce85f9985e9115
-> +the asm-generic/sockios.h header no longer defines SIOCGSTAMP.
-> +Instead it provides only SIOCGSTAMP_OLD.
-> +
-> +The linux/sockios.h header now defines SIOCGSTAMP using either
-> +SIOCGSTAMP_OLD or SIOCGSTAMP_NEW as appropriate. This linux only
-> +header file is not pulled so we get a build failure.
-> +
-> +./state_bcm.c: In function 'state_bcm':
-> +./state_bcm.c:91:16: error: 'SIOCGSTAMP' undeclared (first use in this function); did you mean 'SIOCGARP'?
-> +   if(ioctl(sc, SIOCGSTAMP, &tv) < 0) {
-> +
-> +Fixes:
-> + - http://autobuild.buildroot.org/results/3112b1ad77e805cd3ca61bb79560e8e13a466589
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +[Upstream status: https://github.com/dschanoeh/socketcand/pull/26]
-> +---
-> + state_bcm.c   | 1 +
-> + state_isotp.c | 1 +
-> + 2 files changed, 2 insertions(+)
-> +
-> +diff --git a/state_bcm.c b/state_bcm.c
-> +index 0c980fa..d6bdd7e 100644
-> +--- a/state_bcm.c
-> ++++ b/state_bcm.c
-> +@@ -21,6 +21,7 @@
-> + #include <linux/can.h>
-> + #include <linux/can/bcm.h>
-> + #include <linux/can/error.h>
-> ++#include <linux/sockios.h>
-> +
-> + #define RXLEN 128
-> +
-> +diff --git a/state_isotp.c b/state_isotp.c
-> +index 4005f94..7b515e7 100644
-> +--- a/state_isotp.c
-> ++++ b/state_isotp.c
-> +@@ -20,6 +20,7 @@
-> + #include <linux/can.h>
-> + #include <linux/can/isotp.h>
-> + #include <linux/can/error.h>
-> ++#include <linux/sockios.h>
-> +
-> + int si = -1;
-> + fd_set readfds;
-> +--
-> +2.20.1
-> +
-> --
-> 2.20.1
->
+Reported-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+[Atharva: don't force --bindir, as noticed by Arnout]
+Signed-off-by: Atharva Lele <itsatharva@gmail.com>
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Atharva Lele <itsatharva@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/cpio/cpio.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/cpio/cpio.mk b/package/cpio/cpio.mk
+index 9a09279572..cc40838840 100644
+--- a/package/cpio/cpio.mk
++++ b/package/cpio/cpio.mk
+@@ -17,3 +17,4 @@ CPIO_DEPENDENCIES += argp-standalone
+ endif
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
