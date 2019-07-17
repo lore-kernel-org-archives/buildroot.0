@@ -1,50 +1,83 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jul 2019 08:39:15 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gnutls: fix build on sparc
-In-Reply-To: <20190715163608.1903-1-fontaine.fabrice@gmail.com>
-References: <20190715163608.1903-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190717083915.088b2898@windsurf>
+Date: Wed, 17 Jul 2019 08:40:44 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1: fix static build break
+ after change to meson build
+Message-ID: <20190717064009.02ECC811F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 15 Jul 2019 18:36:08 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8ffee67ab44865fa58e6c21175f62e2d3a1b37d4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> gnutls source code uses the C++11 <atomic> functionality since
-> https://github.com/gnutls/gnutls/commit/7978a733460f92b31033affd0e487c86d66c643d,
-> which internally is implemented using the __atomic_*() gcc built-ins
-> 
-> On certain architectures, the __atomic_*() built-ins are implemented in
-> the libatomic library that comes with the rest of the gcc runtime. Due
-> to this, code using <atomic> might need to link against libatomic,
-> otherwise one hits build issues such as:
-> 
-> ../lib/.libs/libgnutls.so: undefined reference to `__atomic_fetch_sub_4'
-> 
-> on an architecture like SPARC.
-> 
-> To solve this, link against libatomic if BR2_PACKAGE_HAS_LIBATOMIC is set.
-> 
-> This fix gnutls build failures as well as cups, gnupg and libmicrohttpd
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1c7541fc6ac4b52d1dfe02a9a7d61db90f4521eb
->  - http://autobuild.buildroot.org/results/42c8803b98e38ebd48870fe6b1a20a1d6c351e5f
->  - http://autobuild.buildroot.org/results/a1e96d02d41f7fec0f5327f65fb34405f963a1e9
->  - http://autobuild.buildroot.org/results/59c92706457a9da29dd44425e546a7c80c18b454
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/gnutls/gnutls.mk | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+Add upstream patch to work around meson bug with linking static
+libraries, fixes [1]:
 
-Applied to master, thanks.
+.../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgstreamer-1.0.a(gstelement.c.o): In function `_gst_element_error_printf':
+gstelement.c:(.text+0x3fe8): undefined reference to `__gst_vasprintf'
+.../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgstreamer-1.0.a(gstinfo.c.o): In function `gst_debug_message_get':
+gstinfo.c:(.text+0x1df0): undefined reference to `__gst_vasprintf'
+.../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgstreamer-1.0.a(gstinfo.c.o): In function `_priv_gst_debug_init':
+gstinfo.c:(.text+0x34a4): undefined reference to `__gst_printf_pointer_extension_set_func'
+.../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgstreamer-1.0.a(gstinfo.c.o): In function `gst_info_vasprintf':
+gstinfo.c:(.text+0x40b4): undefined reference to `__gst_vasprintf'
+collect2: error: ld returned 1 exit status
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+[1] http://autobuild.buildroot.net/results/9f92b180835df9ed580fe2420687a3632d08b3e4
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...to-objects-instea-of-static-helper-librar.patch | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
+
+diff --git a/package/gstreamer1/gstreamer1/0001-meson-Link-to-objects-instea-of-static-helper-librar.patch b/package/gstreamer1/gstreamer1/0001-meson-Link-to-objects-instea-of-static-helper-librar.patch
+new file mode 100644
+index 0000000000..2bbc069f2b
+--- /dev/null
++++ b/package/gstreamer1/gstreamer1/0001-meson-Link-to-objects-instea-of-static-helper-librar.patch
+@@ -0,0 +1,42 @@
++From 060fef075d6e614cc4dabb6d4fe62ce9b3e0f299 Mon Sep 17 00:00:00 2001
++From: Nirbheek Chauhan <nirbheek@centricular.com>
++Date: Mon, 13 May 2019 13:24:42 +0530
++Subject: [PATCH] meson: Link to objects instea of static helper library
++
++Otherwise the objects from that static helper library are not included
++in the gstreamer-1.0 static library. This was supposed to be fixed in
++Meson, but the pull request hasn't been merged yet:
++https://github.com/mesonbuild/meson/pull/3939
++
++Closes https://gitlab.freedesktop.org/gstreamer/gstreamer/issues/398
++
++Upstream: https://cgit.freedesktop.org/gstreamer/gstreamer/commit/?id=b19de413b94d228b1460b0899f9b41b2b5233943
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++---
++ gst/meson.build | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gst/meson.build b/gst/meson.build
++index 145e97a89..c753ff5e3 100644
++--- a/gst/meson.build
+++++ b/gst/meson.build
++@@ -237,6 +237,7 @@ gst_incdirs = [configinc]
++ gst_gen_sources = [gstenum_h]
++ libgst = library('gstreamer-1.0', gst_sources,
++   gstenum_h, gstenum_c, gst_parse_sources, gst_registry_sources,
+++  objects : printf_lib.extract_all_objects(),
++   version : libversion,
++   soversion : soversion,
++   darwin_versions : osxversion,
++@@ -244,7 +245,6 @@ libgst = library('gstreamer-1.0', gst_sources,
++   include_directories : [configinc,
++     # HACK, change include paths in .y and .l in final version.
++     include_directories('parse')],
++-  link_with : printf_lib,
++   install : true,
++   dependencies : [gobject_dep, gmodule_dep, glib_dep, mathlib, dl_dep] + backtrace_deps
++                    + platform_deps,
++--
++2.22.0
++
