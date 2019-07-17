@@ -1,40 +1,44 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jul 2019 08:45:11 +0200
-Subject: [Buildroot] [git commit] fs/common.mk: do not store original names
- and timestamps when creating gzipped rootfs
-Message-ID: <20190717064413.CD7C38155A@busybox.osuosl.org>
+Date: Wed, 17 Jul 2019 08:46:34 +0200
+Subject: [Buildroot] [PATCH v1] package/gstreamer1: fix static build
+ break after change to meson build
+In-Reply-To: <20190715175732.8096-1-ps.report@gmx.net>
+References: <20190715175732.8096-1-ps.report@gmx.net>
+Message-ID: <20190717084634.795e31e9@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=44d17dd128164cfe7870f5bef279e273ba59f83d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 15 Jul 2019 19:57:32 +0200
+Peter Seiderer <ps.report@gmx.net> wrote:
 
-Using the GZIP environment variable to pass gzip options is
-deprecated, and therefore we are going to remove the "GZIP = -n"
-definition from the main Buildroot Makefile. In preparation for this,
-we explicitly add the -n argument to the gzip call in fs/common.mk to
-ensure reproducibility.
+> Add upstream patch to work around meson bug with linking static
+> libraries, fixes [1]:
+> 
+> .../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgstreamer-1.0.a(gstelement.c.o): In function `_gst_element_error_printf':
+> gstelement.c:(.text+0x3fe8): undefined reference to `__gst_vasprintf'
+> .../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgstreamer-1.0.a(gstinfo.c.o): In function `gst_debug_message_get':
+> gstinfo.c:(.text+0x1df0): undefined reference to `__gst_vasprintf'
+> .../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgstreamer-1.0.a(gstinfo.c.o): In function `_priv_gst_debug_init':
+> gstinfo.c:(.text+0x34a4): undefined reference to `__gst_printf_pointer_extension_set_func'
+> .../arm-buildroot-linux-uclibcgnueabi/sysroot/usr/lib/libgstreamer-1.0.a(gstinfo.c.o): In function `gst_info_vasprintf':
+> gstinfo.c:(.text+0x40b4): undefined reference to `__gst_vasprintf'
+> collect2: error: ld returned 1 exit status
+> 
+> [1] http://autobuild.buildroot.net/results/9f92b180835df9ed580fe2420687a3632d08b3e4
+> 
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> ---
+>  ...jects-instea-of-static-helper-librar.patch | 42 +++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+>  create mode 100644 package/gstreamer1/gstreamer1/0001-meson-Link-to-objects-instea-of-static-helper-librar.patch
 
-Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- fs/common.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/fs/common.mk b/fs/common.mk
-index fceb38c5b9..ca46a331d6 100644
---- a/fs/common.mk
-+++ b/fs/common.mk
-@@ -115,7 +115,7 @@ ROOTFS_$(2)_FINAL_RECURSIVE_DEPENDENCIES = $$(sort \
- 
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)_GZIP),y)
- ROOTFS_$(2)_COMPRESS_EXT = .gz
--ROOTFS_$(2)_COMPRESS_CMD = gzip -9 -c
-+ROOTFS_$(2)_COMPRESS_CMD = gzip -9 -c -n
- endif
- ifeq ($$(BR2_TARGET_ROOTFS_$(2)_BZIP2),y)
- ROOTFS_$(2)_COMPRESS_EXT = .bz2
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
