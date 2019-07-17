@@ -1,15 +1,15 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jul 2019 07:17:49 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xwininfo: bump version
- to 1.1.5
-Message-ID: <20190717051632.C86117FB47@busybox.osuosl.org>
+Date: Wed, 17 Jul 2019 07:17:33 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xclock: bump version to
+ 1.0.9
+Message-ID: <20190717051632.B4AE87FB47@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c56a918a52158ca213d57a2e9d24513f48cabd0d
+commit: https://git.buildroot.net/buildroot/commit/?id=e3cc4a4cd41b8efb71cbe171e2af6cef494292af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Updated _SITE according to release notes.
@@ -17,40 +17,40 @@ Updated _SITE according to release notes.
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xapp_xwininfo/xapp_xwininfo.hash | 10 +++++-----
- package/x11r7/xapp_xwininfo/xapp_xwininfo.mk   |  4 ++--
+ package/x11r7/xapp_xclock/xapp_xclock.hash | 10 +++++-----
+ package/x11r7/xapp_xclock/xapp_xclock.mk   |  4 ++--
  2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash b/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
-index e3882584c3..163d5cc404 100644
---- a/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
-+++ b/package/x11r7/xapp_xwininfo/xapp_xwininfo.hash
+diff --git a/package/x11r7/xapp_xclock/xapp_xclock.hash b/package/x11r7/xapp_xclock/xapp_xclock.hash
+index a0712e9a1a..881b40154d 100644
+--- a/package/x11r7/xapp_xclock/xapp_xclock.hash
++++ b/package/x11r7/xapp_xclock/xapp_xclock.hash
 @@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002877.html
--md5 9a505b91ae7160bbdec360968d060c83  xwininfo-1.1.4.tar.bz2
--sha1 7364e79d1de7bb612dd98c336c649648c6c081ca  xwininfo-1.1.4.tar.bz2
--sha256 839498aa46b496492a5c65cd42cd2e86e0da88149b0672e90cb91648f8cd5b01  xwininfo-1.1.4.tar.bz2
--sha512 d3ab103a0a311e08d1eabc4346750c21eb7d2fbcdc27cab0989a2624b9cd488911614fcf9832603353450114b1231a8f8262cab16e090a0d458d83ec7b6b959b  xwininfo-1.1.4.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-July/003012.html
-+md5 26d46f7ef0588d3392da3ad5802be420  xwininfo-1.1.5.tar.bz2
-+sha1 9f67b1eb07c5824d437bf577cf6198962af1aeb7  xwininfo-1.1.5.tar.bz2
-+sha256 7a405441dfc476666c744f5fcd1bc8a75abf8b5b1d85db7b88b370982365080e  xwininfo-1.1.5.tar.bz2
-+sha512 a3268bbeeeeafac94e589fdd47554a965910d40df7cc3d9c36c7c24fa4f5dd49615484d5916ccb41efca9cd4cf9d8981a4c60953b921220b3f4f57f9cce0e1a6  xwininfo-1.1.5.tar.bz2
+-# From https://lists.x.org/archives/xorg-announce/2019-February/002947.html
+-md5 8bd39eb3678ed58a2350794fe13401cc  xclock-1.0.8.tar.bz2
+-sha1 980df6958286450cfc1fe6daa7ff912885d728ba  xclock-1.0.8.tar.bz2
+-sha256 930820483a36f1f1ce1bf52b648865629a16082641e12c5cf2b5045815fc2255  xclock-1.0.8.tar.bz2
+-sha512 1272221ace3657505bae1b22f181e9ecbf1710900c89a860c8ceae47ae31ca5e75b6557c37dc0a881a0a24c9597b9a07f46200926feb1013f1e2e995111a7646  xclock-1.0.8.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-July/003010.html
++md5 437522a96f424f68fc64ed34ece9b211  xclock-1.0.9.tar.bz2
++sha1 774c711cf7ee3f601f7209bbb01ce3f0d5ddbde6  xclock-1.0.9.tar.bz2
++sha256 cf461fb2c6f2ac42c54d8429ee2010fdb9a1442a370adfbfe8a7bfaf33c123bb  xclock-1.0.9.tar.bz2
++sha512 fcbac0b4ab1cea4ae0751ce1c0c6302048e5d98d459873c7580e4ca786ec49fa27f73e5831bdfe135abb5cfeabe886456276e9d01351ea7905c606f40f84522d  xclock-1.0.9.tar.bz2
  # Locally computed
- sha256 443d675237c023a47e4886506b72796afbb2633394812027f91d6e8fa433b2af COPYING
-diff --git a/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk b/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
-index 7da881a9fc..9652487aae 100644
---- a/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
-+++ b/package/x11r7/xapp_xwininfo/xapp_xwininfo.mk
+ sha256 ee1f19f46801ef00e70498603e74df644d0b93fc82f06b55ce64c3a2c9f16e71  COPYING
+diff --git a/package/x11r7/xapp_xclock/xapp_xclock.mk b/package/x11r7/xapp_xclock/xapp_xclock.mk
+index b0f74682e0..77cc7011d3 100644
+--- a/package/x11r7/xapp_xclock/xapp_xclock.mk
++++ b/package/x11r7/xapp_xclock/xapp_xclock.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XWININFO_VERSION = 1.1.4
-+XAPP_XWININFO_VERSION = 1.1.5
- XAPP_XWININFO_SOURCE = xwininfo-$(XAPP_XWININFO_VERSION).tar.bz2
--XAPP_XWININFO_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XWININFO_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XWININFO_LICENSE = MIT
- XAPP_XWININFO_LICENSE_FILES = COPYING
- XAPP_XWININFO_DEPENDENCIES = xlib_libX11 xlib_libXmu
+-XAPP_XCLOCK_VERSION = 1.0.8
++XAPP_XCLOCK_VERSION = 1.0.9
+ XAPP_XCLOCK_SOURCE = xclock-$(XAPP_XCLOCK_VERSION).tar.bz2
+-XAPP_XCLOCK_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XCLOCK_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XCLOCK_LICENSE = MIT
+ XAPP_XCLOCK_LICENSE_FILES = COPYING
+ XAPP_XCLOCK_DEPENDENCIES = xlib_libX11 xlib_libXaw xlib_libXft xlib_libXrender xlib_libxkbfile
