@@ -1,56 +1,55 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jul 2019 07:16:55 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xbacklight: bump
- version to 1.2.3
-Message-ID: <20190717051632.A07B67FB47@busybox.osuosl.org>
+Date: Wed, 17 Jul 2019 07:17:39 +0200
+Subject: [Buildroot] [git commit] package/x11r7/xapp_xman: bump version to
+ 1.1.5
+Message-ID: <20190717051632.BF12C83900@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef13210b11e7df3419cc35591f15de04bdfdf71d
+commit: https://git.buildroot.net/buildroot/commit/?id=c86d309a95fe89d0ef55dd3767dea9a07fabf7b1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+Added all hashes provided by upstream, added license hash.
 Updated _SITE according to release notes.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/x11r7/xapp_xbacklight/xapp_xbacklight.hash | 10 +++++-----
- package/x11r7/xapp_xbacklight/xapp_xbacklight.mk   |  4 ++--
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/x11r7/xapp_xman/xapp_xman.hash | 10 +++++++---
+ package/x11r7/xapp_xman/xapp_xman.mk   |  4 ++--
+ 2 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/package/x11r7/xapp_xbacklight/xapp_xbacklight.hash b/package/x11r7/xapp_xbacklight/xapp_xbacklight.hash
-index b2aa760600..12d20525c2 100644
---- a/package/x11r7/xapp_xbacklight/xapp_xbacklight.hash
-+++ b/package/x11r7/xapp_xbacklight/xapp_xbacklight.hash
-@@ -1,7 +1,7 @@
--# From https://lists.x.org/archives/xorg-announce/2018-March/002862.html
--md5 d50cf135af04436b9456a5ab7dcf7971  xbacklight-1.2.2.tar.bz2
--sha1 8cc84c4b2e23e99bfa72239847af4b42ae89669e  xbacklight-1.2.2.tar.bz2
--sha256 615a1d13e429ed5a0300b2f4508bc199d7cf21b6b9f088a9d8188d3bc957bf5e  xbacklight-1.2.2.tar.bz2
--sha512 4dca70ef8e3494b19ea126c46395807cddc007b2b09a133810daeb77ae27fa36ac4eec7813828248fc195abe27f59700cfa58ee65ef3a020a51f73e5107678ec  xbacklight-1.2.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-July/003008.html
-+md5 5b6405973db69c0443be2fba8e1a8ab7  xbacklight-1.2.3.tar.bz2
-+sha1 f0a6163738143ec23542b459aef567309a119e0c  xbacklight-1.2.3.tar.bz2
-+sha256 3a27f324777ae99fee476cfb2f064576fb8cba4eb77f97cda37adda1c1d39ade  xbacklight-1.2.3.tar.bz2
-+sha512 717c87ce24634892fc4ac54fc59dcc0a5bc8f206aaf1d13410f95f7e4fe6e3dbc7ff8d951bcd8ea8c5e955357a00fea6ceadd4559e60b1a632e40f71290e12c7  xbacklight-1.2.3.tar.bz2
- # Locally computed
- sha256 c9fbf1f272215babef31808c1235de8e4f7641ca5edfc4fc615b6556054b2b04 COPYING
-diff --git a/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk b/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
-index a2907bb288..d52d562ceb 100644
---- a/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
-+++ b/package/x11r7/xapp_xbacklight/xapp_xbacklight.mk
+diff --git a/package/x11r7/xapp_xman/xapp_xman.hash b/package/x11r7/xapp_xman/xapp_xman.hash
+index 00a4d85bba..e4a93d170c 100644
+--- a/package/x11r7/xapp_xman/xapp_xman.hash
++++ b/package/x11r7/xapp_xman/xapp_xman.hash
+@@ -1,3 +1,7 @@
+-# From http://lists.x.org/archives/xorg-announce/2015-March/002541.html
+-sha1	b64516dab2b1c407b28ce3822a98b93178e29f02				xman-1.1.4.tar.bz2
+-sha256	b3fa9d2e3f3745c529eb0b6ee4f0e00d936457d11e5221b2efad06ff7c84df29	xman-1.1.4.tar.bz2
++# From https://lists.x.org/archives/xorg-announce/2019-July/003011.html
++md5 629436867b202098967636b17c8d303c  xman-1.1.5.tar.bz2
++sha1 ec76dbd010f68974e05dfe8bc4b91731a3b7285b  xman-1.1.5.tar.bz2
++sha256 4e3c2c7497e9734a6d3c8e1b6a364612892bb31e9f33076c9fdae7177ab60978  xman-1.1.5.tar.bz2
++sha512 f6b2be424a79f298bf1a81edce4172572195c9efc9454e5b7b7046f344ed08154c77ccaa763ccdf3f1a30b64aa4802783bf813ee637437ccb1fba434fc5d4400  xman-1.1.5.tar.bz2
++# Locally computed
++sha256 4c3d6d6fc5661c64285931a0871728f3745d962d877477235dc66e4043db3d36  COPYING
+diff --git a/package/x11r7/xapp_xman/xapp_xman.mk b/package/x11r7/xapp_xman/xapp_xman.mk
+index 0d744cc390..f8abfe577d 100644
+--- a/package/x11r7/xapp_xman/xapp_xman.mk
++++ b/package/x11r7/xapp_xman/xapp_xman.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--XAPP_XBACKLIGHT_VERSION = 1.2.2
-+XAPP_XBACKLIGHT_VERSION = 1.2.3
- XAPP_XBACKLIGHT_SOURCE = xbacklight-$(XAPP_XBACKLIGHT_VERSION).tar.bz2
--XAPP_XBACKLIGHT_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XBACKLIGHT_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XBACKLIGHT_LICENSE = MIT
- XAPP_XBACKLIGHT_LICENSE_FILES = COPYING
- XAPP_XBACKLIGHT_DEPENDENCIES = xlib_libX11 xlib_libXrandr xlib_libXrender xcb-util
+-XAPP_XMAN_VERSION = 1.1.4
++XAPP_XMAN_VERSION = 1.1.5
+ XAPP_XMAN_SOURCE = xman-$(XAPP_XMAN_VERSION).tar.bz2
+-XAPP_XMAN_SITE = http://xorg.freedesktop.org/releases/individual/app
++XAPP_XMAN_SITE = https://xorg.freedesktop.org/archive/individual/app
+ XAPP_XMAN_LICENSE = MIT
+ XAPP_XMAN_LICENSE_FILES = COPYING
+ XAPP_XMAN_DEPENDENCIES = xlib_libXaw
