@@ -1,36 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jul 2019 09:16:33 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tesseract-ocr: fix license
-In-Reply-To: <20190714225819.4551-1-fontaine.fabrice@gmail.com>
-References: <20190714225819.4551-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190717091633.2323fe35@windsurf>
+Date: Wed, 17 Jul 2019 09:22:04 +0200
+Subject: [Buildroot] [git commit] package/xkeyboard-config: fix hash
+Message-ID: <20190717072034.B7DE481052@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 15 Jul 2019 00:58:19 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=816c10b8e8dad48597a84f6d8f8e0db7806eac24
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> COPYING has been removed since version 4.1.0 and
-> https://github.com/tesseract-ocr/tesseract/commit/618489290536282a59ed7a71381ca083d9a7586a
-> 
-> So replace COPYING by LICENSE
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/a3cff9747be539bdaffde3926f995467f33428c0
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/tesseract-ocr/tesseract-ocr.hash | 2 +-
->  package/tesseract-ocr/tesseract-ocr.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Bump to version 2.27 did not update the hash
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.org/results/6afcadda1008771fa32055de64285498815bc4c0
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/x11r7/xkeyboard-config/xkeyboard-config.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/x11r7/xkeyboard-config/xkeyboard-config.hash b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+index dfe4405067..55a9b28f16 100644
+--- a/package/x11r7/xkeyboard-config/xkeyboard-config.hash
++++ b/package/x11r7/xkeyboard-config/xkeyboard-config.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 2a4bbc05fea22151b7a7c8ac2655d549aa9b0486bedc7f5a68c72716343b02f3  xkeyboard-config-2.27.tar.bz2
++sha256 690daec8fea63526c07620c90e6f3f10aae34e94b6db6e30906173480721901f  xkeyboard-config-2.27.tar.bz2
+ sha256 6ca90f4b67dced4062894d6d77f4cc39343df9e359fc12f5e5d3c89ef2a3ef6d  COPYING
