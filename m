@@ -1,31 +1,31 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jul 2019 08:57:30 +0200
-Subject: [Buildroot] [git commit] boot/uboot: add hash for license file
-Message-ID: <20190717065536.9EF4281641@busybox.osuosl.org>
+Date: Wed, 17 Jul 2019 08:57:53 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/uboot: add hash for license file
+In-Reply-To: <1563219311-10528-1-git-send-email-pjtexier@koncepto.io>
+References: <1563219311-10528-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <20190717085753.64573e32@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6003bc37a0e07bf3b7990748719b0ae2ee0acea2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 15 Jul 2019 21:35:11 +0200
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-Fixes:
- >>> uboot 2019.07 Collecting legal info
- ERROR: No hash found for Licenses/gpl-2.0.txt
+> Fixes:
+>  >>> uboot 2019.07 Collecting legal info  
+>  ERROR: No hash found for Licenses/gpl-2.0.txt
+> 
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> ---
+>  boot/uboot/uboot.hash | 1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/uboot/uboot.hash | 1 +
- 1 file changed, 1 insertion(+)
+Applied to master, thanks.
 
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index d83dc062a2..d2830eeba5 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  bff4fa77e8da17521c030ca4c5b947a056c1b1be4d3e6ee8637020b8d50251d0  u-boot-2019.07.tar.bz2
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
