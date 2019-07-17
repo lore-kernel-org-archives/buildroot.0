@@ -1,39 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 17 Jul 2019 08:54:50 +0200
-Subject: [Buildroot] [PATCH v2 1/2] package/cpio: add host version
-In-Reply-To: <20190716173518.11081-1-itsatharva@gmail.com>
+Date: Wed, 17 Jul 2019 08:56:22 +0200
+Subject: [Buildroot] [PATCH v2 2/2] fs/cpio: make cpio rootfs
+ reproducible
+In-Reply-To: <20190716173518.11081-2-itsatharva@gmail.com>
 References: <20190716173518.11081-1-itsatharva@gmail.com>
-Message-ID: <20190717085450.2022478c@windsurf>
+ <20190716173518.11081-2-itsatharva@gmail.com>
+Message-ID: <20190717085622.6c1c6e58@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 16 Jul 2019 23:05:17 +0530
+Hello,
+
+On Tue, 16 Jul 2019 23:05:18 +0530
 Atharva Lele <itsatharva@gmail.com> wrote:
 
-> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-> 
-> The latest cpio has a --reproducible option, which may come handy when
-> we try to, well, be reproducible...
-> 
-> Reported-by: Arnout Vandecappelle <arnout@mind.be>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> [Atharva: don't force --bindir, as noticed by Arnout]
-> Signed-off-by: Atharva Lele <itsatharva@gmail.com>
-> Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Atharva Lele <itsatharva@gmail.com>
-> ---
-> Changes v1 -> v2:
->   - Add patch from Yann to my series
->   - Fix [Atharva: ] comment
-> ---
->  package/cpio/cpio.mk | 1 +
->  1 file changed, 1 insertion(+)
+> +# --repoducible option was not introduced until cpio v2.12. Some distros
 
-Applied to master, thanks.
+The kind of double negation here "was not introduced until" looked a
+bit complicated compared to just "--reproducible was introduced in cpio
+v2.12". I've simplified the paragraph to:
+
++# --repoducible option was introduced in cpio v2.12, which may not be
++# available in some old distributions, so we build host-cpio
+
+And of course now I notice that --repoducible has a typo, and should be
+--reproducible. Oh well.
+
+> +# like Ubuntu 16.04 or Debian oldstable which package v2.11. Hence build
+> +# host-cpio.
+> +ifeq ($(BR2_REPRODUCIBLE), y)
+
+No space after comma. I fixed that up.
+
+Applied with those changes. Thanks!
 
 Thomas
 -- 
