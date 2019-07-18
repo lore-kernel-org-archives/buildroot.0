@@ -1,10 +1,10 @@
 From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Thu, 18 Jul 2019 12:06:34 +0200
-Subject: [Buildroot] [PATCH 1/3] package/mosquitto: allow to build as static
- lib
+Date: Thu, 18 Jul 2019 12:06:35 +0200
+Subject: [Buildroot] [PATCH 2/3] package/mosquitto: Switch systemd unit to
+ Type=notify and depend on network
 In-Reply-To: <20190718100636.27290-1-titouan.christophe@railnova.eu>
 References: <20190718100636.27290-1-titouan.christophe@railnova.eu>
-Message-ID: <20190718100636.27290-2-titouan.christophe@railnova.eu>
+Message-ID: <20190718100636.27290-3-titouan.christophe@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,44 +13,42 @@ To: buildroot@busybox.net
 
 Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
 ---
- package/mosquitto/Config.in    | 4 ----
- package/mosquitto/mosquitto.mk | 6 ++++++
- 2 files changed, 6 insertions(+), 4 deletions(-)
+RFC: Would it be better to use the mosquitto.service file provided upstream ?
+https://github.com/eclipse/mosquitto/blob/master/service/systemd/mosquitto.service.notify
+---
+ package/mosquitto/mosquitto.mk      | 4 ++++
+ package/mosquitto/mosquitto.service | 3 +++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-index 11b6d7891b..7135e86e69 100644
---- a/package/mosquitto/Config.in
-+++ b/package/mosquitto/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_MOSQUITTO
- 	bool "mosquitto"
--	depends on !BR2_STATIC_LIBS # builds .so
- 	help
- 	  Mosquitto is an open source message broker that implements
- 	  the MQ Telemetry Transport protocol versions 3.1 and
-@@ -22,6 +21,3 @@ config BR2_PACKAGE_MOSQUITTO_BROKER
- 
- comment "mosquitto broker needs a system with MMU"
- 	depends on BR2_PACKAGE_MOSQUTTO && !BR2_USE_MMU
--
--comment "mosquitto needs a toolchain w/ dynamic library"
--	depends on BR2_STATIC_LIBS
 diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 51c0abd0ba..ed72af754a 100644
+index ed72af754a..333cce35c2 100644
 --- a/package/mosquitto/mosquitto.mk
 +++ b/package/mosquitto/mosquitto.mk
-@@ -17,6 +17,12 @@ MOSQUITTO_MAKE_OPTS = \
- 	WITH_WRAP=no \
- 	WITH_DOCS=no
+@@ -23,6 +23,10 @@ else
+ MOSQUITTO_MAKE_OPTS += WITH_STATIC_LIBRARIES=no WITH_SHARED_LIBRARIES=yes
+ endif
  
-+ifeq ($(BR2_STATIC_LIBS),y)
-+MOSQUITTO_MAKE_OPTS += WITH_STATIC_LIBRARIES=yes WITH_SHARED_LIBRARIES=no
-+else
-+MOSQUITTO_MAKE_OPTS += WITH_STATIC_LIBRARIES=no WITH_SHARED_LIBRARIES=yes
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++MOSQUITTO_MAKE_OPTS += WITH_SYSTEMD=yes
 +endif
 +
  # adns uses getaddrinfo_a
  ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
  MOSQUITTO_MAKE_OPTS += WITH_ADNS=yes
+diff --git a/package/mosquitto/mosquitto.service b/package/mosquitto/mosquitto.service
+index 2d1939d1c7..24c9d8e948 100644
+--- a/package/mosquitto/mosquitto.service
++++ b/package/mosquitto/mosquitto.service
+@@ -1,7 +1,10 @@
+ [Unit]
+ Description=Mosquitto MQTT broker
++After=network-online.target
++Wants=network-online.target
+ 
+ [Service]
++Type=notify
+ ExecStart=/usr/sbin/mosquitto -c /etc/mosquitto/mosquitto.conf
+ ExecReload=/bin/kill -HUP $MAINPID
+ Restart=always
 -- 
 2.21.0
