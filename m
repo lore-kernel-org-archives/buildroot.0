@@ -1,61 +1,53 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 18 Jul 2019 22:58:27 +0200
-Subject: [Buildroot] [PATCH] linux-tools/perf: Respect TARGET_CFLAGS
-In-Reply-To: <20190418093902.41835-1-abrodkin@synopsys.com>
-References: <20190418093902.41835-1-abrodkin@synopsys.com>
-Message-ID: <20190718205827.GA31829@scaer>
+Date: Thu, 18 Jul 2019 23:06:25 +0200
+Subject: [Buildroot] [PATCH 0/2 v2] arch/csky: clean up conditions on gcc
+ verssion (branch yem/arch-csky)
+Message-ID: <cover.1563483980.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Alexey, All,
+Hello All!
 
-On 2019-04-18 12:39 +0300, Alexey Brodkin spake thusly:
-> perf uses its own build-system and doesn't respect externally set flags.
-> Let's force it to use target flags as perf utility is nothing but
-> an ordinary user-space application.
-> 
-> This among other things is required to build perf for ARC700 for which
-> we pass "-matomic" via TARGET_ABI, see [1] for more details.
+This little series makes use of the GCC_AT_LEAST_X symbols to restrict
+the gcc versions usable for each C-SKY variants.
 
-As was discussed in the thread, the proper option is now passed in via
-the wrapper and arch-specific CFLAGS:
-    https://git.buildroot.org/buildroot/commit/?id=4281288d2d568d5ce748a0e66e0872f54fbe956c
-    https://git.buildroot.org/buildroot/commit/?id=c568b4f37fa6d7f51e6d14d33d7eb75dfe26d7bf
+---
+Changes v1 -> v2:
+  - expand first commit log  (Guo)
+  - add Guo's acked-by
+  - fix typoes
 
-Thanks!
 
 Regards,
 Yann E. MORIN.
 
-> [1] https://patchwork.ozlabs.org/patch/1087471/
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> ---
->  package/linux-tools/linux-tool-perf.mk.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
-> index 80e00c3c56..e7565773c4 100644
-> --- a/package/linux-tools/linux-tool-perf.mk.in
-> +++ b/package/linux-tools/linux-tool-perf.mk.in
-> @@ -19,6 +19,7 @@ PERF_MAKE_FLAGS = \
->  	JOBS=$(PARALLEL_JOBS) \
->  	ARCH=$(PERF_ARCH) \
->  	DESTDIR=$(TARGET_DIR) \
-> +	EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
->  	prefix=/usr \
->  	WERROR=0 \
->  	NO_LIBAUDIT=1 \
-> -- 
-> 2.16.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+
+The following changes since commit c568b4f37fa6d7f51e6d14d33d7eb75dfe26d7bf
+
+  arch/arc: always needs -matomic with atomic extensions (2019-07-18 22:54:36 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to f55f05c0066b6dabbcd21f68883319ff1050f478
+
+  package/gcc: drop negative conditions on C-SKY for older versions (2019-07-18 23:02:47 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (2):
+      arch/csky: restrict ck610 to the C-SKY gcc port
+      package/gcc: drop negative conditions on C-SKY for older versions
+
+ arch/Config.in             | 3 +++
+ arch/Config.in.csky        | 2 ++
+ package/gcc/Config.in.host | 8 +++-----
+ 3 files changed, 8 insertions(+), 5 deletions(-)
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
