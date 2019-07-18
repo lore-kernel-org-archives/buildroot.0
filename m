@@ -1,48 +1,48 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Thu, 18 Jul 2019 22:26:18 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcurl: bump to version 7.65.2
-Message-ID: <1563481578-14067-1-git-send-email-pjtexier@koncepto.io>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 18 Jul 2019 22:27:38 +0200
+Subject: [Buildroot] [PATCH v2] package/python-idna: select
+ PYTHON3_UNICODEDATA
+In-Reply-To: <20190717191215.61153-1-alex_y_xu@yahoo.ca>
+References: <20190717084347.784866e3@windsurf>
+ <20190717191215.61153-1-alex_y_xu@yahoo.ca>
+Message-ID: <20190718222738.6db4d00d@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Contains a number of fixes for issues discovered post-7.65.1.
-For details, see full changelog:
+Hello Alex,
 
-https://curl.haxx.se/changes.html#7_65_2
+Thanks for the new iteration of the patch. There was still an issue,
+but see below.
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
----
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+On Wed, 17 Jul 2019 15:12:15 -0400
+"Alex Xu (Hello71)" <alex_y_xu@yahoo.ca> wrote:
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index f5e90e0..0ee0b0f 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.65.1.tar.xz.asc
-+# https://curl.haxx.se/download/curl-7.65.2.tar.xz.asc
- # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256 f6c22074877f235aebc7c53057dbc7ee82358f8ae58bfb767e955c18c859a77a  curl-7.65.1.tar.xz
-+sha256 b6124b68ed56172012f767a9ea36d3b8ed45adafe7953bd11add66ae6f9d8a39  curl-7.65.2.tar.xz
- sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index abf7c0b..1819c02 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.65.1
-+LIBCURL_VERSION = 7.65.2
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+> diff --git a/package/python-idna/Config.in b/package/python-idna/Config.in
+> index 1fd56ceaf6..ddc2cd7d17 100644
+> --- a/package/python-idna/Config.in
+> +++ b/package/python-idna/Config.in
+> @@ -1,5 +1,6 @@
+>  config BR2_PACKAGE_PYTHON_IDNA
+>  	bool "python-idna"
+> +	select BR2_PACKAGE_PYTHON3_UNICODEDATA
+
+This only takes care of the case where python3 is used, by python-idna
+can also be used when python (2.x) is selected.
+
+So I changed this to:
+
++       select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
++       select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
+
+and applied.
+
+Thanks!
+
+Thomas
 -- 
-2.7.4
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
