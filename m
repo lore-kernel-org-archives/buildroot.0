@@ -1,50 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jul 2019 22:42:36 +0200
-Subject: [Buildroot] [git commit] package/libcurl: bump to version 7.65.2
-Message-ID: <20190718204109.551E2839C5@busybox.osuosl.org>
+Date: Thu, 18 Jul 2019 22:44:00 +0200
+Subject: [Buildroot] [git commit] package/bluez5_utils: fix build with
+ kernel >= 5.2
+Message-ID: <20190718204156.CCE1D839C5@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=28e91cf3a0ec448fddd3ae89afccb44b47966f15
+commit: https://git.buildroot.net/buildroot/commit/?id=4666e85cfbd482766d0f685869689749f44aea0c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Contains a number of fixes for issues discovered post-7.65.1.
-For details, see full changelog:
+Fixes:
+ - http://autobuild.buildroot.org/results/1b965c5d9c782d6689041eeeb7be3be4a4854346
 
-https://curl.haxx.se/changes.html#7_65_2
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...ls-Fix-build-after-y2038-changes-in-glibc.patch | 68 ++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index f5e90e0aa8..0ee0b0f088 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.65.1.tar.xz.asc
-+# https://curl.haxx.se/download/curl-7.65.2.tar.xz.asc
- # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256 f6c22074877f235aebc7c53057dbc7ee82358f8ae58bfb767e955c18c859a77a  curl-7.65.1.tar.xz
-+sha256 b6124b68ed56172012f767a9ea36d3b8ed45adafe7953bd11add66ae6f9d8a39  curl-7.65.2.tar.xz
- sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index abf7c0bf59..1819c022f0 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 7.65.1
-+LIBCURL_VERSION = 7.65.2
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+diff --git a/package/bluez5_utils/0001-tools-Fix-build-after-y2038-changes-in-glibc.patch b/package/bluez5_utils/0001-tools-Fix-build-after-y2038-changes-in-glibc.patch
+new file mode 100644
+index 0000000000..7d08c6aa40
+--- /dev/null
++++ b/package/bluez5_utils/0001-tools-Fix-build-after-y2038-changes-in-glibc.patch
+@@ -0,0 +1,68 @@
++From f36f71f60b1e68c0f12e615b9b128d089ec3dd19 Mon Sep 17 00:00:00 2001
++From: Bastien Nocera <hadess@hadess.net>
++Date: Fri, 7 Jun 2019 09:51:33 +0200
++Subject: tools: Fix build after y2038 changes in glibc
++
++The 32-bit SIOCGSTAMP has been deprecated. Use the deprecated name
++to fix the build.
++[Retrieved from:
++https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/tools/?id=f36f71f60b1e68c0f12e615b9b128d089ec3dd19]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ tools/l2test.c | 6 +++++-
++ tools/rctest.c | 6 +++++-
++ 2 files changed, 10 insertions(+), 2 deletions(-)
++
++(limited to 'tools')
++
++diff --git a/tools/l2test.c b/tools/l2test.c
++index e755ac881..e787c2ce2 100644
++--- a/tools/l2test.c
+++++ b/tools/l2test.c
++@@ -55,6 +55,10 @@
++ #define BREDR_DEFAULT_PSM	0x1011
++ #define LE_DEFAULT_PSM		0x0080
++ 
+++#ifndef SIOCGSTAMP_OLD
+++#define SIOCGSTAMP_OLD SIOCGSTAMP
+++#endif
+++
++ /* Test modes */
++ enum {
++ 	SEND,
++@@ -907,7 +911,7 @@ static void recv_mode(int sk)
++ 			if (timestamp) {
++ 				struct timeval tv;
++ 
++-				if (ioctl(sk, SIOCGSTAMP, &tv) < 0) {
+++				if (ioctl(sk, SIOCGSTAMP_OLD, &tv) < 0) {
++ 					timestamp = 0;
++ 					memset(ts, 0, sizeof(ts));
++ 				} else {
++diff --git a/tools/rctest.c b/tools/rctest.c
++index 94490f462..bc8ed875d 100644
++--- a/tools/rctest.c
+++++ b/tools/rctest.c
++@@ -50,6 +50,10 @@
++ 
++ #include "src/shared/util.h"
++ 
+++#ifndef SIOCGSTAMP_OLD
+++#define SIOCGSTAMP_OLD SIOCGSTAMP
+++#endif
+++
++ /* Test modes */
++ enum {
++ 	SEND,
++@@ -505,7 +509,7 @@ static void recv_mode(int sk)
++ 			if (timestamp) {
++ 				struct timeval tv;
++ 
++-				if (ioctl(sk, SIOCGSTAMP, &tv) < 0) {
+++				if (ioctl(sk, SIOCGSTAMP_OLD, &tv) < 0) {
++ 					timestamp = 0;
++ 					memset(ts, 0, sizeof(ts));
++ 				} else {
++-- 
++cgit 1.2-0.3.lf.el7
++
