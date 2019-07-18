@@ -1,34 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 18 Jul 2019 18:56:51 +0000
-Subject: [Buildroot] =?utf-8?q?=5BBug_12046=5D_Can=E2=80=99t_login_as_roo?=
- =?utf-8?q?t_user_after_upgrading_to_buildroot_2019=2E02?=
-In-Reply-To: <bug-12046-163@https.bugs.busybox.net/>
-References: <bug-12046-163@https.bugs.busybox.net/>
-Message-ID: <bug-12046-163-tm65tAWHT2@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 18 Jul 2019 20:39:36 +0200
+Subject: [Buildroot] [git commit] package/connman-gtk: add hash for license
+ file
+Message-ID: <20190718185711.BA00280841@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12046
+commit: https://git.buildroot.net/buildroot/commit/?id=49928a5ff870d6ed460913d167fa55adb348e609
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Carlos Santos <unixmania@gmail.com> changed:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/connman-gtk/connman-gtk.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |ASSIGNED
-           Assignee|unassigned at buildroot.uclibc |unixmania at gmail.com
-                   |.org                        |
-
---- Comment #1 from Carlos Santos <unixmania@gmail.com> ---
-Please run the following commands
-
-    $ make savedefconfig BR2_DEFCONFIG=/tmp/bz12046.defconfig
-    $ gzip /tmp/bz12046.defconfig
-
-Then attach the resulting /tmp/bz12046.defconfig.gz file to this bug.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+diff --git a/package/connman-gtk/connman-gtk.hash b/package/connman-gtk/connman-gtk.hash
+index d71e77d2c1..fbc4acb14c 100644
+--- a/package/connman-gtk/connman-gtk.hash
++++ b/package/connman-gtk/connman-gtk.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+ sha256	49bdc4769a7c508b0130e4705eef21aec9df1ea4f5c29fee48a0cae8db828fca	connman-gtk-1.1.1.tar.bz2
++sha256	8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643	COPYING
