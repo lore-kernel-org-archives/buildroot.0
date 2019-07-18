@@ -1,48 +1,97 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jul 2019 22:27:38 +0200
-Subject: [Buildroot] [PATCH v2] package/python-idna: select
- PYTHON3_UNICODEDATA
-In-Reply-To: <20190717191215.61153-1-alex_y_xu@yahoo.ca>
-References: <20190717084347.784866e3@windsurf>
- <20190717191215.61153-1-alex_y_xu@yahoo.ca>
-Message-ID: <20190718222738.6db4d00d@windsurf>
+Date: Thu, 18 Jul 2019 22:29:41 +0200
+Subject: [Buildroot] [git commit] package/bluez_utils: fix build with kernel
+ >= 5.2
+Message-ID: <20190718202739.6E1C0842DC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alex,
+commit: https://git.buildroot.net/buildroot/commit/?id=6b8da7573a4315edcd6ce274517009ed8568dc1f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for the new iteration of the patch. There was still an issue,
-but see below.
+Fixes:
+ - http://autobuild.buildroot.org/results/72b6039ee4ba28e67d5ffcb5073e669e8d740e14
 
-On Wed, 17 Jul 2019 15:12:15 -0400
-"Alex Xu (Hello71)" <alex_y_xu@yahoo.ca> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ls-Fix-build-after-y2038-changes-in-glibc.patch | 68 ++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
-> diff --git a/package/python-idna/Config.in b/package/python-idna/Config.in
-> index 1fd56ceaf6..ddc2cd7d17 100644
-> --- a/package/python-idna/Config.in
-> +++ b/package/python-idna/Config.in
-> @@ -1,5 +1,6 @@
->  config BR2_PACKAGE_PYTHON_IDNA
->  	bool "python-idna"
-> +	select BR2_PACKAGE_PYTHON3_UNICODEDATA
-
-This only takes care of the case where python3 is used, by python-idna
-can also be used when python (2.x) is selected.
-
-So I changed this to:
-
-+       select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
-+       select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
-
-and applied.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/bluez_utils/0006-tools-Fix-build-after-y2038-changes-in-glibc.patch b/package/bluez_utils/0006-tools-Fix-build-after-y2038-changes-in-glibc.patch
+new file mode 100644
+index 0000000000..fd81a93ba2
+--- /dev/null
++++ b/package/bluez_utils/0006-tools-Fix-build-after-y2038-changes-in-glibc.patch
+@@ -0,0 +1,68 @@
++From f36f71f60b1e68c0f12e615b9b128d089ec3dd19 Mon Sep 17 00:00:00 2001
++From: Bastien Nocera <hadess@hadess.net>
++Date: Fri, 7 Jun 2019 09:51:33 +0200
++Subject: tools: Fix build after y2038 changes in glibc
++
++The 32-bit SIOCGSTAMP has been deprecated. Use the deprecated name
++to fix the build.
++[Retrieved (and backported) from:
++https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/tools/?id=f36f71f60b1e68c0f12e615b9b128d089ec3dd19]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ test/l2test.c | 6 +++++-
++ test/rctest.c | 6 +++++-
++ 2 files changed, 10 insertions(+), 2 deletions(-)
++
++(limited to 'tools')
++
++diff --git a/test/l2test.c b/test/l2test.c
++index e755ac881..e787c2ce2 100644
++--- a/test/l2test.c
+++++ b/test/l2test.c
++@@ -55,6 +55,10 @@
++ #define BREDR_DEFAULT_PSM	0x1011
++ #define LE_DEFAULT_PSM		0x0080
++ 
+++#ifndef SIOCGSTAMP_OLD
+++#define SIOCGSTAMP_OLD SIOCGSTAMP
+++#endif
+++
++ /* Test modes */
++ enum {
++ 	SEND,
++@@ -907,7 +911,7 @@ static void recv_mode(int sk)
++ 			if (timestamp) {
++ 				struct timeval tv;
++ 
++-				if (ioctl(sk, SIOCGSTAMP, &tv) < 0) {
+++				if (ioctl(sk, SIOCGSTAMP_OLD, &tv) < 0) {
++ 					timestamp = 0;
++ 					memset(ts, 0, sizeof(ts));
++ 				} else {
++diff --git a/test/rctest.c b/test/rctest.c
++index 94490f462..bc8ed875d 100644
++--- a/test/rctest.c
+++++ b/test/rctest.c
++@@ -50,6 +50,10 @@
++ 
++ #include "src/shared/util.h"
++ 
+++#ifndef SIOCGSTAMP_OLD
+++#define SIOCGSTAMP_OLD SIOCGSTAMP
+++#endif
+++
++ /* Test modes */
++ enum {
++ 	SEND,
++@@ -505,7 +509,7 @@ static void recv_mode(int sk)
++ 			if (timestamp) {
++ 				struct timeval tv;
++ 
++-				if (ioctl(sk, SIOCGSTAMP, &tv) < 0) {
+++				if (ioctl(sk, SIOCGSTAMP_OLD, &tv) < 0) {
++ 					timestamp = 0;
++ 					memset(ts, 0, sizeof(ts));
++ 				} else {
++-- 
++cgit 1.2-0.3.lf.el7
++
