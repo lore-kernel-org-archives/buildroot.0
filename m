@@ -1,36 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jul 2019 22:54:28 +0200
-Subject: [Buildroot] [git commit] toolchain: allow architectures to enforce
- compilation flags
-Message-ID: <20190718205327.56F9C80DE3@busybox.osuosl.org>
+Date: Thu, 18 Jul 2019 22:57:40 +0200
+Subject: [Buildroot] [PATCH 0/2 v3] arch: allow passing compile flags
+ (branch yem/arc-atomic)
+In-Reply-To: <cover.1563483157.git.yann.morin.1998@free.fr>
+References: <cover.1563483157.git.yann.morin.1998@free.fr>
+Message-ID: <20190718225740.509c41f1@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4281288d2d568d5ce748a0e66e0872f54fbe956c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Alexey Brodkin <abrodkin@synopsys.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
-Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- toolchain/toolchain-wrapper.mk | 1 +
- 1 file changed, 1 insertion(+)
+On Thu, 18 Jul 2019 22:52:46 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-diff --git a/toolchain/toolchain-wrapper.mk b/toolchain/toolchain-wrapper.mk
-index ca66fa7ba4..8f872506ec 100644
---- a/toolchain/toolchain-wrapper.mk
-+++ b/toolchain/toolchain-wrapper.mk
-@@ -17,6 +17,7 @@ TOOLCHAIN_WRAPPER_ARGS = $($(PKG)_TOOLCHAIN_WRAPPER_ARGS)
- TOOLCHAIN_WRAPPER_ARGS += -DBR_SYSROOT='"$(STAGING_SUBDIR)"'
- 
- TOOLCHAIN_WRAPPER_OPTS = \
-+	$(ARCH_TOOLCHAIN_WRAPPER_OPTS) \
- 	$(call qstrip,$(BR2_SSP_OPTION)) \
- 	$(call qstrip,$(BR2_TARGET_OPTIMIZATION))
- 
+> Yann E. MORIN (2):
+>       toolchain: allow architectures to enforce compilation flags
+>       arch/arc: always needs -matomic with atomix extensions
+
+Thanks, I've applied the series. I extended the commit log of the
+second patch, because it was really terse.
+
+Following this, I believe it would make sense to move the two remaining
+uses of TARGET_ABI in package/Makefile.in to the appropriate arch/
+file, and drop TARGET_ABI entirely. Indeed, those ABI options are
+really mandatory, if they don't get passed to the cross-compiler,
+things are going to be clearly wrong.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
