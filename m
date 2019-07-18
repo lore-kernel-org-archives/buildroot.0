@@ -1,40 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jul 2019 22:25:27 +0200
-Subject: [Buildroot] [git commit] package/python-idna: select unicodedata
- support in python interpreter
-Message-ID: <20190718202333.868128134C@busybox.osuosl.org>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Thu, 18 Jul 2019 22:26:18 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libcurl: bump to version 7.65.2
+Message-ID: <1563481578-14067-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9177475111050728193159259c5853b4f5ae053f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Contains a number of fixes for issues discovered post-7.65.1.
+For details, see full changelog:
 
-idna requires unicodedata:
+https://curl.haxx.se/changes.html#7_65_2
 
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-  File "usr/lib/python3.7/site-packages/idna/__init__.py", line 2, in <module>
-  File "usr/lib/python3.7/site-packages/idna/core.py", line 3, in <module>
-ModuleNotFoundError: No module named 'unicodedata'
-
-Signed-off-by: Alex Xu <alex_y_xu@yahoo.ca>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/python-idna/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-idna/Config.in b/package/python-idna/Config.in
-index 1fd56ceaf6..e3e548d493 100644
---- a/package/python-idna/Config.in
-+++ b/package/python-idna/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_PYTHON_IDNA
- 	bool "python-idna"
-+	select BR2_PACKAGE_PYTHON_UNICODEDATA if BR2_PACKAGE_PYTHON
-+	select BR2_PACKAGE_PYTHON3_UNICODEDATA if BR2_PACKAGE_PYTHON3
- 	help
- 	  A library to support the Internationalised Domain Names in
- 	  Applications (IDNA) protocol as specified in RFC 5891. This
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index f5e90e0..0ee0b0f 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.haxx.se/download/curl-7.65.1.tar.xz.asc
++# https://curl.haxx.se/download/curl-7.65.2.tar.xz.asc
+ # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256 f6c22074877f235aebc7c53057dbc7ee82358f8ae58bfb767e955c18c859a77a  curl-7.65.1.tar.xz
++sha256 b6124b68ed56172012f767a9ea36d3b8ed45adafe7953bd11add66ae6f9d8a39  curl-7.65.2.tar.xz
+ sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index abf7c0b..1819c02 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 7.65.1
++LIBCURL_VERSION = 7.65.2
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.haxx.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
+-- 
+2.7.4
