@@ -1,32 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jul 2019 22:44:12 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: fix build with
- kernel >= 5.2
-In-Reply-To: <20190714232545.28892-1-fontaine.fabrice@gmail.com>
-References: <20190714232545.28892-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190718224412.5965d491@windsurf>
+Date: Thu, 18 Jul 2019 22:48:13 +0200
+Subject: [Buildroot] [git commit] package/glib-networking: select openssl if
+ gnutls is not enabled
+Message-ID: <20190718204623.21AD68146E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 15 Jul 2019 01:25:45 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=e7f418908c494e95bdafef773e62b868db741358
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/1b965c5d9c782d6689041eeeb7be3be4a4854346
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...x-build-after-y2038-changes-in-glibc.patch | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
->  create mode 100644 package/bluez5_utils/0001-tools-Fix-build-after-y2038-changes-in-glibc.patch
+Fixes:
+ - http://autobuild.buildroot.org/results/385ab1e09f821facc3d97b7dda6bd8d4a2c98eb5
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/glib-networking/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
+index ec2962392c..004f82222c 100644
+--- a/package/glib-networking/Config.in
++++ b/package/glib-networking/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_GLIB_NETWORKING
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_USE_MMU # glib2
+ 	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
+ 	help
+ 	  Network-related GIO modules for glib.
+ 
