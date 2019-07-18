@@ -1,39 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jul 2019 20:39:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/botan: bump to version 2.11.0
-In-Reply-To: <1563373480-22284-1-git-send-email-pjtexier@koncepto.io>
-References: <1563373480-22284-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190718203919.587ac217@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 18 Jul 2019 18:56:51 +0000
+Subject: [Buildroot] =?utf-8?q?=5BBug_12046=5D_Can=E2=80=99t_login_as_roo?=
+ =?utf-8?q?t_user_after_upgrading_to_buildroot_2019=2E02?=
+In-Reply-To: <bug-12046-163@https.bugs.busybox.net/>
+References: <bug-12046-163@https.bugs.busybox.net/>
+Message-ID: <bug-12046-163-tm65tAWHT2@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 17 Jul 2019 16:24:40 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=12046
 
->  - Remove patches (already in version)
->  - Upstream does not provide tgz tarball anymore, switch to xz.
->  - Update hash for license file due to copyright year change.
->  - See full changelog https://botan.randombit.net/news.html
-> 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
->  .../botan/0001-remove-mips64-explicit-mabi.patch   | 20 -------
->  ...Fix-compat-issue-with-upcoming-Boost-1-70.patch | 67 ----------------------
->  ...kefile.in-move-LDFLAGS-after-EXE_LINKS_TO.patch | 38 ------------
->  package/botan/botan.hash                           |  4 +-
->  package/botan/botan.mk                             |  4 +-
->  5 files changed, 4 insertions(+), 129 deletions(-)
->  delete mode 100644 package/botan/0001-remove-mips64-explicit-mabi.patch
->  delete mode 100644 package/botan/0002-Fix-compat-issue-with-upcoming-Boost-1-70.patch
->  delete mode 100644 package/botan/0003-makefile.in-move-LDFLAGS-after-EXE_LINKS_TO.patch
+Carlos Santos <unixmania@gmail.com> changed:
 
-Applied to master, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+           Assignee|unassigned at buildroot.uclibc |unixmania at gmail.com
+                   |.org                        |
 
-Thomas
+--- Comment #1 from Carlos Santos <unixmania@gmail.com> ---
+Please run the following commands
+
+    $ make savedefconfig BR2_DEFCONFIG=/tmp/bz12046.defconfig
+    $ gzip /tmp/bz12046.defconfig
+
+Then attach the resulting /tmp/bz12046.defconfig.gz file to this bug.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
