@@ -1,19 +1,25 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 18 Jul 2019 22:52:49 +0200
-Subject: [Buildroot] [PATCH 2/2 v3] arch/arc: always needs -matomic with
- atomix extensions
-In-Reply-To: <cover.1563483157.git.yann.morin.1998@free.fr>
-References: <cover.1563483157.git.yann.morin.1998@free.fr>
-Message-ID: <7fe54408b9c04d8d5799a167aded7c0b0157c572.1563483157.git.yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 18 Jul 2019 22:54:36 +0200
+Subject: [Buildroot] [git commit] arch/arc: always needs -matomic with
+ atomic extensions
+Message-ID: <20190718205327.5F1E084459@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-As reported by Alexey:
+commit: https://git.buildroot.net/buildroot/commit/?id=c568b4f37fa6d7f51e6d14d33d7eb75dfe26d7bf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+As reported by Alexey in:
     https://patchwork.ozlabs.org/patch/1087480/
     https://patchwork.ozlabs.org/patch/1087471/
+
+when BR2_ARC_ATOMIC_EXT is enabled, -matomic needs to always be passed
+to the compiler to allow atomic instructions to be used. So instead of
+passing them through the command-line CFLAGS, we enforce them in the
+toolchain wrapper directly.
 
 Reported-by: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
@@ -21,18 +27,11 @@ Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Acked-by: Alexey Brodkin <abrodkin@synopsys.com>
-
----
-Changes v2 -> v3:
-  - fix the condition test ('yy', not 'y')
-
-Changes v1 -> v2:
-  - move the condition out of package/Makefile.in  (Alexey)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  arch/arch.mk.arc    | 4 ++++
  package/Makefile.in | 4 ----
  2 files changed, 4 insertions(+), 4 deletions(-)
- create mode 100644 arch/arch.mk.arc
 
 diff --git a/arch/arch.mk.arc b/arch/arch.mk.arc
 new file mode 100644
@@ -59,5 +58,3 @@ index f05b9cc3aa..0a7899c852 100644
  STAGING_SUBDIR = $(GNU_TARGET_NAME)/sysroot
  STAGING_DIR    = $(HOST_DIR)/$(STAGING_SUBDIR)
  
--- 
-2.20.1
