@@ -1,38 +1,48 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 18 Jul 2019 22:34:15 +0200
-Subject: [Buildroot] [PATCH] package/gcc: 9.1.0: Fix ICE for ARC
-In-Reply-To: <20190716214725.6206-1-abrodkin@synopsys.com>
-References: <20190716214725.6206-1-abrodkin@synopsys.com>
-Message-ID: <20190718223415.4f279682@windsurf>
+Date: Thu, 18 Jul 2019 22:34:19 +0200
+Subject: [Buildroot] [PATCH] package/gcc: arc-2019.03/9.1.0: Fix
+ compilation of glibc
+In-Reply-To: <20190716215001.9181-1-abrodkin@synopsys.com>
+References: <20190716215001.9181-1-abrodkin@synopsys.com>
+Message-ID: <20190718223419.58050ad3@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 17 Jul 2019 00:47:25 +0300
+On Wed, 17 Jul 2019 00:50:01 +0300
 Alexey Brodkin <Alexey.Brodkin@synopsys.com> wrote:
 
-> In a nutshell while compiling Gibc GCC catches Internal Compiler Error (ICE).
-> 
-> This is a backport of upstream fix [1] for GCC's BUG #89838 [2].
-> Fix is the same as previously was done for arc-2019.03 [3].
-> 
-> With update of GCC to 9.2.0 and above this patch won't be needed
-> as it's already merged in both stable "gcc-9-branch" and "master".
-> 
-> [1] https://github.com/gcc-mirror/gcc/commit/472bac30e63ffacecfa5eda813054555f2cc7def
-> [2] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=89838
-> [3] https://git.buildroot.org/buildroot/commit/?h=dbf7fffb37e25c40fd5c03d0a64e50a1bba86424
-> 
-> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Evgeniy Didin <didin@synopsys.com>
-> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> ---
->  .../gcc/9.1.0/0001-ARC-Backport-fix-PR89838.patch  | 367 +++++++++++++++++++++
->  1 file changed, 367 insertions(+)
->  create mode 100644 package/gcc/9.1.0/0001-ARC-Backport-fix-PR89838.patch
+> When storing a TLS symbol to memory, always use an intermediate register
+> to load it. Otherwise compiler generates instruction which couldn't be
+> encoded and we see:
+> ----------------------------->8---------------------------  
+> In file included from gethstent_r.c:34:
+> ../nss/getXXent_r.c: In function '__gethostent_r':
+> ../nss/getXXent_r.c:168:1: error: unrecognizable insn:
+>  }
+>  ^
+> (insn 25 24 26 5 (set (mem:SI (plus:SI (reg/f:SI 149 virtual-outgoing-args)
+>                 (const_int 16 [0x10])) [0  S4 A32])
+>         (plus:SI (reg:SI 25 r25)
+>             (reg:SI 174))) "../nss/getXXent_r.c":160 -1
+>      (nil))
+> during RTL pass: vregs
+> ../nss/getXXent_r.c:168:1: internal compiler error: in extract_insn, at recog.c:2304
+> In file included from getnetent_r.c:34:
+> ../nss/getXXent_r.c: In function '__getnetent_r':
+> ../nss/getXXent_r.c:168:1: error: unrecognizable insn:
+>  }
+>  ^
+> (insn 25 24 26 5 (set (mem:SI (plus:SI (reg/f:SI 149 virtual-outgoing-args)
+>                 (const_int 16 [0x10])) [0  S4 A32])
+>         (plus:SI (reg:SI 25 r25)
+>             (reg:SI 174))) "../nss/getXXent_r.c":160 -1
+>      (nil))
+> during RTL pass: vregs
+> ../nss/getXXent_r.c:168:1: internal compiler error: in extract_insn, at recog.c:2304
+> ----------------------------->8---------------------------  
 
 Applied to master, thanks.
 
