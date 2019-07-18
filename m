@@ -1,67 +1,131 @@
-From: Joel Stanley <joel@jms.id.au>
-Date: Thu, 18 Jul 2019 06:41:58 +0000
-Subject: [Buildroot] [PATCH] pdbg: Bump version to v2.2
-In-Reply-To: <20190625015340.6531-1-joel@jms.id.au>
-References: <20190625015340.6531-1-joel@jms.id.au>
-Message-ID: <CACPK8XeBPhdtu_B6ubWtWihpxeUinOp-d304Hn1it1FTEApCVw@mail.gmail.com>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Thu, 18 Jul 2019 10:32:43 +0300
+Subject: [Buildroot] [RFC v2 1/1] utils/show-progress: add tool to show
+ build progress at runtime
+Message-ID: <20190718073243.10767-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 25 Jun 2019 at 01:53, Joel Stanley <joel@jms.id.au> wrote:
->
-> Upstream changes:
->
->  - libpdbg API clean-up
->  - Path based targetting
->  - POWER8 sreset fixes
->  - gdbserver
->
-> This also adds the v back to the version string that pdbg's build system
-> uses, following the recent buildroot changes to remove "v" from package
-> versions.
->
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
+This might be useful to watch the amount of built and selected
+packages and some progress about it. So added python script which
+prints progress and build stats. The sample of output is:
 
-Ping
+Press Ctrl-C to exit ...
 
-> ---
->  package/pdbg/pdbg.hash | 2 +-
->  package/pdbg/pdbg.mk   | 4 ++--
->  2 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
-> index 35a26eddddc6..b856e4ce8c0c 100644
-> --- a/package/pdbg/pdbg.hash
-> +++ b/package/pdbg/pdbg.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 da65ebbd9a710555e9684472ee36fff37e897111034fcc2c07172cc39016d169 pdbg-2.0.tar.gz
-> +sha256 b3bd93475da1e68502732309fa274514fb0a1193d574adfd68d5feeabeb30571  pdbg-2.2.tar.gz
->  sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-> diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
-> index c92920a6d619..97832f23d189 100644
-> --- a/package/pdbg/pdbg.mk
-> +++ b/package/pdbg/pdbg.mk
-> @@ -4,14 +4,14 @@
->  #
->  ################################################################################
->
-> -PDBG_VERSION = 2.0
-> +PDBG_VERSION = 2.2
->  PDBG_SITE = $(call github,open-power,pdbg,v$(PDBG_VERSION))
->  PDBG_LICENSE = Apache-2.0
->  PDBG_LICENSE_FILES = COPYING
->  PDBG_AUTORECONF = YES
->  PDBG_DEPENDENCIES = host-dtc
->
-> -PDBG_MAKE_OPTS = "GIT_SHA1=\"$(PDBG_VERSION)\""
-> +PDBG_MAKE_OPTS = "GIT_SHA1=\"v$(PDBG_VERSION)\""
->
->  define PDBG_PATCH_M4
->         mkdir -p $(@D)/m4
-> --
-> 2.20.1
->
+Building: output/qemu_x86_64
+ ##################################------------------------------ [ 42.42% 14/33]
+
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+---
+
+RFC v2:
+    1) filter rootfs package type
+    2) rename build-progress -> show-progress
+    3) check empty version
+
+ utils/show-progress | 91 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
+ create mode 100755 utils/show-progress
+
+diff --git a/utils/show-progress b/utils/show-progress
+new file mode 100755
+index 0000000000..ee1e1da289
+--- /dev/null
++++ b/utils/show-progress
+@@ -0,0 +1,91 @@
++#!/usr/bin/env python
++
++# Copyright (C) 2019 Vadim Kochan <vadim4j@gmail.com>
++
++import os
++import sys
++import json
++import time
++import logging
++import subprocess
++
++do_exit = False
++
++def usage():
++    print("""Usage: show-progress [-h] [PATH]
++show-progress shows progress about selected and built packages.
++If PATH is no specified then the current working one will be used as
++build output directory.
++
++Example usage:
++ $ show-progress output/qemu_x86_64
++
++""")
++    sys.exit(0)
++
++def get_pkgs_list(build_dir):
++    cmd = ["make", "-C", build_dir, "-s", "--no-print-directory", "show-info"]
++    results = []
++
++    with open(os.devnull, 'wb') as devnull:
++        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=devnull,
++                             universal_newlines=True)
++        pkg_list = json.loads(p.communicate()[0])
++
++        for p in pkg_list:
++            if pkg_list[p]["type"] == "rootfs":
++                continue
++
++            ver = "" if pkg_list[p]["virtual"] else pkg_list[p]["version"]
++            ver = "-" + ver if ver != "" else ver
++
++            results.append(p + ver)
++
++    return results
++
++def is_pkg_built(build_dir, p):
++    for s in ["host", "target"]:
++        if os.path.exists(build_dir + "/build/" + p + "/.stamp_" + s + "_installed"):
++            return True
++
++    return False
++
++def progress(ready, total):
++    perc = ready / total
++    fill = round(perc * 80)
++    print('\r', '#' * fill + '-' * (80 - fill), '[{:>7.2%} {}/{} ]'.format(perc, ready, total), end='')
++    sys.stdout.flush()
++
++def main():
++    build_dir = "."
++
++    if "-h" in sys.argv or "--help" in sys.argv:
++        usage()
++
++    if len(sys.argv) > 1:
++        build_dir = sys.argv[1]
++
++    pkgs = get_pkgs_list(build_dir)
++    total = len(pkgs)
++
++    print("Press Ctrl-C to exit ...\n")
++    print("Building: " + build_dir)
++
++    while not do_exit:
++        ready = 0
++
++        for p in pkgs:
++            if is_pkg_built(build_dir, p):
++                ready = ready + 1
++
++        progress(ready, total)
++        time.sleep(1)
++
++        if ready == total:
++            print("Done")
++            break
++
++try:
++    main()
++except KeyboardInterrupt:
++    do_exit = True
+-- 
+2.22.0
