@@ -1,60 +1,52 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Thu, 18 Jul 2019 12:06:36 +0200
-Subject: [Buildroot] [PATCH 3/3] package/mosquitto: bump to v1.6.3
-In-Reply-To: <20190718100636.27290-1-titouan.christophe@railnova.eu>
-References: <20190718100636.27290-1-titouan.christophe@railnova.eu>
-Message-ID: <20190718100636.27290-4-titouan.christophe@railnova.eu>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date: Thu, 18 Jul 2019 16:16:27 +0300
+Subject: [Buildroot] fb-test-app: Git repo with sources is gone
+In-Reply-To: <CY4PR1201MB01202AF6D2B078F3070C2690A1C80@CY4PR1201MB0120.namprd12.prod.outlook.com>
+References: <CY4PR1201MB01200469C475B81E48B0C364A1CE0@CY4PR1201MB0120.namprd12.prod.outlook.com>
+ <20190718081132.532nstxozjkj65ki@M43218.corp.atmel.com>
+ <CY4PR1201MB01202AF6D2B078F3070C2690A1C80@CY4PR1201MB0120.namprd12.prod.outlook.com>
+Message-ID: <20190718131627.GZ9224@smile.fi.intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* Drop dependency on libuuid
+On Thu, Jul 18, 2019 at 08:50:01AM +0000, Alexey Brodkin wrote:
+> > -----Original Message-----
+> > From: Ludovic Desroches <ludovic.desroches@microchip.com>
+> > Sent: Thursday, July 18, 2019 11:12 AM
+> > To: Alexey Brodkin <abrodkin@synopsys.com>
+> > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>; Arnout Vandecappelle <arnout@mind.be>;
+> > buildroot at buildroot.org
+> > Subject: Re: fb-test-app: Git repo with sources is gone
+> > On Tue, Jul 16, 2019 at 01:22:22PM +0000, Alexey Brodkin wrote:
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- package/mosquitto/mosquitto.hash | 2 +-
- package/mosquitto/mosquitto.mk   | 9 +--------
- 2 files changed, 2 insertions(+), 9 deletions(-)
+> > > Just noticed that the FBTest's git repo [1] is no longer available.
+> > > I was not able to find its owner's (David Anders AKA prpplague)
+> > > up-to-date email so not sure if there's a chance to get it recovered.
+> > >
+> > > Looks like Buildroot's autobuilder didn't highlight that problem due to the
+> > > "cached" version of the tarball [2].
+> > >
+> > > Unfortunately I don't have a local clone of this repo but maybe
+> > > someone else has it.
+> > 
+> > Thanks for the feedback. Let see if we can have a revival of this repo.
+> > Otherwise, it's not a big deal for me to remove it.
+> 
+> I was able to contact David and he's not interested in restoration
+> of his repo. But given there're quite some forks of it we may rely
+> either on once of them (for example Andy Shevchenko one [1]) or
+> just keep using "cached" tarball hosted at sources.buildroot.net
+> and change Buildroot's fb-test-app.mk [3] accordingly.
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 25b9910138..c6efdabd2a 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking gpg signature
--sha256 78d7e70c3794dc3a1d484b4f2f8d3addebe9c2da3f5a1cebe557f7d13beb0da4  mosquitto-1.5.8.tar.gz
-+sha256 9ef5cc75f4fe31d7bf50654ddf4728ad9e1ae2e5609a4b42ecbbcb4a209ed17e  mosquitto-1.6.3.tar.gz
- 
- # License files
- sha256 cc77e25bafd40637b7084f04086d606f0a200051b61806f97c93405926670bc1  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index 333cce35c2..c6c0c04f38 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MOSQUITTO_VERSION = 1.5.8
-+MOSQUITTO_VERSION = 1.6.3
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-1.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v10 edl-v10
-@@ -54,13 +54,6 @@ else
- MOSQUITTO_MAKE_OPTS += WITH_SRV=no
- endif
- 
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
--MOSQUITTO_DEPENDENCIES += util-linux
--MOSQUITTO_MAKE_OPTS += WITH_UUID=yes
--else
--MOSQUITTO_MAKE_OPTS += WITH_UUID=no
--endif
--
- ifeq ($(BR2_PACKAGE_LIBWEBSOCKETS),y)
- MOSQUITTO_DEPENDENCIES += libwebsockets
- MOSQUITTO_MAKE_OPTS += WITH_WEBSOCKETS=yes
+For the record, I had checked all twenty repositories on GitHub and they have
+almost nothing advanced in comparison to what I have now. Similar patch to
+revert the change had been done in one, and one non-significant change had been
+done in another, the rest just a fork without anything additional to the, used
+to be, original one.
+
 -- 
-2.21.0
+With Best Regards,
+Andy Shevchenko
