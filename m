@@ -1,35 +1,54 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 19 Jul 2019 17:11:40 +0000
-Subject: [Buildroot] [Bug 12031] Build of cups-filters fails while linking,
- apparently due to missing libiconv
-In-Reply-To: <bug-12031-163@https.bugs.busybox.net/>
-References: <bug-12031-163@https.bugs.busybox.net/>
-Message-ID: <bug-12031-163-2GL9iKvbtN@https.bugs.busybox.net/>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Fri, 19 Jul 2019 19:14:42 +0200
+Subject: [Buildroot] [PATCH] package/tesseract-ocr: fix build on musl
+Message-ID: <1563556482-2308-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12031
+Fixes autobuild failures like:
+- http://autobuild.buildroot.net/results/e47da689b4a2912b626f5d31086f6414e3e53774/
 
-jakobcornell at gmail.com changed:
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+---
+ .../0001-Fix-timeval-structure-build-failure.patch | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/tesseract-ocr/0001-Fix-timeval-structure-build-failure.patch
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-   Attachment #8161|requested config            |incorrect config - do not
-        description|                            |use
-   Attachment #8161|0                           |1
-        is obsolete|                            |
-
---- Comment #4 from jakobcornell at gmail.com ---
-Comment on attachment 8161
-  --> https://bugs.busybox.net/attachment.cgi?id=8161
-incorrect config - do not use
-
-I'd changed some config parameters since getting the issue, so this config
-doesn't cause the error. Stay tuned for the proper config.
-
+diff --git a/package/tesseract-ocr/0001-Fix-timeval-structure-build-failure.patch b/package/tesseract-ocr/0001-Fix-timeval-structure-build-failure.patch
+new file mode 100644
+index 0000000..0b0bb1a
+--- /dev/null
++++ b/package/tesseract-ocr/0001-Fix-timeval-structure-build-failure.patch
+@@ -0,0 +1,27 @@
++From ea1e1ddfc0af9966a0c613a93087bc3e0a5979a7 Mon Sep 17 00:00:00 2001
++From: Gilles Talis <gilles.talis@gmail.com>
++Date: Fri, 19 Jul 2019 18:52:03 +0200
++Subject: [PATCH] Fix timeval structure build failure
++
++timeval structure definition requires <sys/time.h> to be included
++
++Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
++---
++ src/ccutil/ocrclass.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/ccutil/ocrclass.h b/src/ccutil/ocrclass.h
++index d39a6dd..2a01118 100644
++--- a/src/ccutil/ocrclass.h
+++++ b/src/ccutil/ocrclass.h
++@@ -28,6 +28,7 @@
++ 
++ #include <chrono>
++ #include <ctime>
+++#include <sys/time.h>
++ #ifdef _WIN32
++ #include <winsock2.h> // for timeval
++ #endif
++-- 
++2.7.4
++
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.7.4
