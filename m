@@ -1,88 +1,36 @@
-From: Romain Naour <romain.naour@gmail.com>
-Date: Sat, 20 Jul 2019 13:08:10 +0200
-Subject: [Buildroot] [WIP: python3 bug] support/testing: add python3
- multiprocessing pool test
-Message-ID: <20190720110810.20085-1-romain.naour@gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 20 Jul 2019 15:24:47 +0200
+Subject: [Buildroot] [git commit] package/libvips: fix build with NLS
+Message-ID: <20190720132319.6D28D81342@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-While running some python script on aarch64 board, it get stuck while
-imporing multiprocessing Pool:
+commit: https://git.buildroot.net/buildroot/commit/?id=b96acd52aface4a7367ccdded65c4d933b6059eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-from multiprocessing import Pool
+Fixes:
+ - http://autobuild.buildroot.org/results/cd61be84dc9781ea645f7667c2bd29908484692f
 
-This issue seems specific to aarch64.
-
-Signed-off-by: Romain Naour <romain.naour@gmail.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../sample_python_multiprocessing_pool.py     |  3 ++
- .../test_python_multiprocessing_pool.py       | 45 +++++++++++++++++++
- 2 files changed, 48 insertions(+)
- create mode 100644 support/testing/tests/package/sample_python_multiprocessing_pool.py
- create mode 100644 support/testing/tests/package/test_python_multiprocessing_pool.py
+ package/libvips/libvips.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/sample_python_multiprocessing_pool.py b/support/testing/tests/package/sample_python_multiprocessing_pool.py
-new file mode 100644
-index 0000000000..df450e4b71
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_multiprocessing_pool.py
-@@ -0,0 +1,3 @@
-+# This import can be stuck on aarch64 with python3 (3.7.4)
-+# The test should fail when the timout occurred.
-+from multiprocessing import Pool
-diff --git a/support/testing/tests/package/test_python_multiprocessing_pool.py b/support/testing/tests/package/test_python_multiprocessing_pool.py
-new file mode 100644
-index 0000000000..349a91368c
---- /dev/null
-+++ b/support/testing/tests/package/test_python_multiprocessing_pool.py
-@@ -0,0 +1,45 @@
-+import os
-+
-+from tests.package.test_python import TestPythonPackageBase
-+
-+class TestPythonMultiprocessingPool(TestPythonPackageBase):
-+    sample_scripts = ["tests/package/sample_python_multiprocessing_pool.py"]
-+    timeout = 60
-+
-+    # Remove "-serial", "stdio", from testing/infra/emulator.py before running the test.
-+    # Otherwise you will get the following error:
-+    # qemu-system-aarch64: -serial stdio: cannot use stdio by multiple character devices
-+    # qemu-system-aarch64: -serial stdio: could not connect serial device to character backend 'stdio'
-+
-+    def login(self):
-+        kern = os.path.join(self.builddir, "images", "Image")
-+        ext4_file = os.path.join(self.builddir, "images", "rootfs.ext4")
-+
-+        self.emulator.boot(arch="aarch64",
-+                        kernel=kern,
-+                        options=["-append","root=/dev/vda console=ttyAMA0", "-M", "virt", "-cpu", "cortex-a53", "-nographic", "-smp", "1", "-netdev", "user,id=eth0", "-device", "virtio-net-device,netdev=eth0", "-drive", "file=" + ext4_file + ",if=none,format=raw,id=hd0", "-device", "virtio-blk-device,drive=hd0"])
-+        self.emulator.login()
-+
-+# Test with Glibc and MultiprocessingPool
-+class TestPythonPy3GlibcMultiprocessingPool(TestPythonMultiprocessingPool):
-+    __test__ = True
-+    config = \
-+        """
-+	BR2_aarch64=y
-+	BR2_cortex_a53=y
-+	BR2_TOOLCHAIN_EXTERNAL=y
-+	BR2_SYSTEM_DHCP="eth0"
-+	BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-+	BR2_TARGET_ROOTFS_EXT2=y
-+	BR2_TARGET_ROOTFS_EXT2_4=y
-+	# BR2_TARGET_ROOTFS_TAR is not set
-+	BR2_LINUX_KERNEL=y
-+	BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+	BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
-+	BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+	BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-+	BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
--- 
-2.21.0
+diff --git a/package/libvips/libvips.mk b/package/libvips/libvips.mk
+index 7622f32fbc..72fcf6003e 100644
+--- a/package/libvips/libvips.mk
++++ b/package/libvips/libvips.mk
+@@ -20,7 +20,8 @@ ifeq ($(BR2_sparc64),y)
+ LIBVIPS_CXXFLAGS += -O0
+ endif
+ 
+-LIBVIPS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) $(LIBVIPS_CXXFLAGS)"
++LIBVIPS_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) $(LIBVIPS_CXXFLAGS)" \
++	LIBS=$(TARGET_NLS_LIBS)
+ 
+ LIBVIPS_CONF_OPTS = \
+ 	--disable-introspection \
