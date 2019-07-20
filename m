@@ -1,31 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jul 2019 18:45:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gst1-plugins-base: fix build
- with NLS
-In-Reply-To: <20190711165744.8939-1-fontaine.fabrice@gmail.com>
-References: <20190711165744.8939-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190720184508.449de733@windsurf>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sat, 20 Jul 2019 18:05:58 +0000
+Subject: [Buildroot] [Bug 11766] Console (getty) issues with systemd
+In-Reply-To: <bug-11766-163@https.bugs.busybox.net/>
+References: <bug-11766-163@https.bugs.busybox.net/>
+Message-ID: <bug-11766-163-Py1QUjFtES@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 11 Jul 2019 18:57:44 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+https://bugs.busybox.net/show_bug.cgi?id=11766
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/93b58753071dac193881049c79288ef39fa9db16
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+Carlos Santos <unixmania@gmail.com> changed:
 
-Applied to master, thanks.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+           Assignee|unassigned at buildroot.uclibc |unixmania at gmail.com
+                   |.org                        |
+             Status|NEW                         |ASSIGNED
 
-Thomas
+--- Comment #2 from Carlos Santos <unixmania@gmail.com> ---
+Hello,
+
+The change you proposed does not seem to be required for other boards beyond
+Raspberry Pi 3. The best solution may be adding a post-buid script to patch
+serial-getty at .service. There is already a board/raspberrypi/post-build.sh.
+
+Would you mind submitting a patch?
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
