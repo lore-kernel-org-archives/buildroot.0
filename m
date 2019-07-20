@@ -1,80 +1,55 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sat, 20 Jul 2019 15:31:58 +0200
-Subject: [Buildroot] [PATCH] package/netsurf: bump to version 3.9
-Message-ID: <20190720133158.14707-1-francois.perrad@gadz.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 20 Jul 2019 15:36:27 +0200
+Subject: [Buildroot] [git commit] package/tesseract-ocr: fix build on musl
+Message-ID: <20190720133425.CCB02814E8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- .../netsurf/0002-fix-freetype-detection.patch | 32 -------------------
- package/netsurf/netsurf.hash                  |  2 +-
- package/netsurf/netsurf.mk                    |  2 +-
- 3 files changed, 2 insertions(+), 34 deletions(-)
- delete mode 100644 package/netsurf/0002-fix-freetype-detection.patch
+commit: https://git.buildroot.net/buildroot/commit/?id=4bc55061d9d52b290304a0a7f2b1ece8ac792784
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-diff --git a/package/netsurf/0002-fix-freetype-detection.patch b/package/netsurf/0002-fix-freetype-detection.patch
-deleted file mode 100644
-index 27e3a6a1d..000000000
---- a/package/netsurf/0002-fix-freetype-detection.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 85336f2404b9583267019650ea0112ebf1bb571a Mon Sep 17 00:00:00 2001
--From: Francois Perrad <francois.perrad@gadz.org>
--Date: Wed, 28 Nov 2018 17:59:44 +0100
--Subject: [PATCH] fix freetype detection
--
--Using freetype-config doesn't work well, because it's going to use the
--system freetype-config instead of the one installed in the
--cross-compilation sysroot. So, let's use pkg-config instead.
--
--Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-----
-- netsurf/frontends/framebuffer/Makefile | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/netsurf/frontends/framebuffer/Makefile b/netsurf/frontends/framebuffer/Makefile
--index bdedd90..249c7c4 100644
----- a/netsurf/frontends/framebuffer/Makefile
--+++ b/netsurf/frontends/framebuffer/Makefile
--@@ -35,8 +35,8 @@ LDFLAGS += -Wl,--no-whole-archive
-- 
-- # freetype is optional but does not use pkg-config
-- ifeq ($(NETSURF_FB_FONTLIB),freetype)
---  CFLAGS += -DFB_USE_FREETYPE $(shell freetype-config --cflags)
---  LDFLAGS += $(shell freetype-config --libs)
--+  CFLAGS += -DFB_USE_FREETYPE $(shell $(PKG_CONFIG) --cflags freetype2)
--+  LDFLAGS += $(shell $(PKG_CONFIG) --libs freetype2)
-- endif
-- 
-- 
---- 
--2.17.1
--
-diff --git a/package/netsurf/netsurf.hash b/package/netsurf/netsurf.hash
-index 26e8c76f3..0f38ea208 100644
---- a/package/netsurf/netsurf.hash
-+++ b/package/netsurf/netsurf.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 eb4864d4459d6f9958dd10a3301c272ea7f5df72667a7db0aad5bc5ae06c0e10  netsurf-all-3.8.tar.gz
-+sha256 11e384eaf47e65c186da5001f1055a02f2d72ff17b50f403b8392546a2cf65ff  netsurf-all-3.9.tar.gz
- sha256 55c4a7ae3953d720a462e69d1f128a20004933d12538be5314a33f8821675378  netsurf/COPYING
-diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
-index 31cf9e62b..30e8dc8b4 100644
---- a/package/netsurf/netsurf.mk
-+++ b/package/netsurf/netsurf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NETSURF_VERSION = 3.8
-+NETSURF_VERSION = 3.9
- NETSURF_SOURCE = netsurf-all-$(NETSURF_VERSION).tar.gz
- NETSURF_SITE = http://download.netsurf-browser.org/netsurf/releases/source-full
- NETSURF_LICENSE = GPL-2.0
--- 
-2.20.1
+Fixes autobuild failures like:
+- http://autobuild.buildroot.net/results/e47da689b4a2912b626f5d31086f6414e3e53774/
+
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-Fix-timeval-structure-build-failure.patch | 27 ++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/package/tesseract-ocr/0001-Fix-timeval-structure-build-failure.patch b/package/tesseract-ocr/0001-Fix-timeval-structure-build-failure.patch
+new file mode 100644
+index 0000000000..0b0bb1a899
+--- /dev/null
++++ b/package/tesseract-ocr/0001-Fix-timeval-structure-build-failure.patch
+@@ -0,0 +1,27 @@
++From ea1e1ddfc0af9966a0c613a93087bc3e0a5979a7 Mon Sep 17 00:00:00 2001
++From: Gilles Talis <gilles.talis@gmail.com>
++Date: Fri, 19 Jul 2019 18:52:03 +0200
++Subject: [PATCH] Fix timeval structure build failure
++
++timeval structure definition requires <sys/time.h> to be included
++
++Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
++---
++ src/ccutil/ocrclass.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/ccutil/ocrclass.h b/src/ccutil/ocrclass.h
++index d39a6dd..2a01118 100644
++--- a/src/ccutil/ocrclass.h
+++++ b/src/ccutil/ocrclass.h
++@@ -28,6 +28,7 @@
++ 
++ #include <chrono>
++ #include <ctime>
+++#include <sys/time.h>
++ #ifdef _WIN32
++ #include <winsock2.h> // for timeval
++ #endif
++-- 
++2.7.4
++
