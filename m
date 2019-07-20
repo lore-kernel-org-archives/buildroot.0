@@ -1,34 +1,42 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 20 Jul 2019 18:05:58 +0000
-Subject: [Buildroot] [Bug 11766] Console (getty) issues with systemd
-In-Reply-To: <bug-11766-163@https.bugs.busybox.net/>
-References: <bug-11766-163@https.bugs.busybox.net/>
-Message-ID: <bug-11766-163-Py1QUjFtES@https.bugs.busybox.net/>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Sat, 20 Jul 2019 15:39:36 -0300
+Subject: [Buildroot] [PATCH] package/dcron: create
+ /var/spool/cron/cronstamps in installation
+Message-ID: <20190720183936.20746-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=11766
+From: Carlos Santos <unixmania@gmail.com>
 
-Carlos Santos <unixmania@gmail.com> changed:
+The directory is required by dcron at run-time.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-           Assignee|unassigned at buildroot.uclibc |unixmania at gmail.com
-                   |.org                        |
-             Status|NEW                         |ASSIGNED
+On systems with busybox and sysvinit startup /var/spool is a symlink to
+/tmp (see package/skeleton-init-sysv/skeleton/) so the directories will
+vanish after mounting /tmp, which by default is a tmpfs. In order to
+really solve the problem we must also change skeleton-init-sysv to make
+/var/spool persistent across rebuilds.
 
---- Comment #2 from Carlos Santos <unixmania@gmail.com> ---
-Hello,
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=12011 (partially)
 
-The change you proposed does not seem to be required for other boards beyond
-Raspberry Pi 3. The best solution may be adding a post-buid script to patch
-serial-getty at .service. There is already a board/raspberrypi/post-build.sh.
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+ package/dcron/dcron.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Would you mind submitting a patch?
-
+diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
+index 2ee0709af5..4a3994cd1a 100644
+--- a/package/dcron/dcron.mk
++++ b/package/dcron/dcron.mk
+@@ -20,6 +20,7 @@ define DCRON_INSTALL_TARGET_CMDS
+ 	# Busybox provides run-parts, so there is no need to use nor install provided run-cron
+ 	$(SED) 's#/usr/sbin/run-cron#/bin/run-parts#g' $(TARGET_DIR)/etc/cron.d/system
+ 	$(INSTALL) -d -m0755 $(TARGET_DIR)/var/spool/cron/crontabs \
++		$(TARGET_DIR)/var/spool/cron/cronstamps \
+ 		$(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly \
+ 		$(TARGET_DIR)/etc/cron.monthly $(TARGET_DIR)/etc/cron.weekly
+ endef
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+2.18.1
