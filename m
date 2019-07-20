@@ -1,30 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jul 2019 15:45:45 +0200
-Subject: [Buildroot] [PATCH] package/netsurf: bump to version 3.9
-In-Reply-To: <20190720133158.14707-1-francois.perrad@gadz.org>
-References: <20190720133158.14707-1-francois.perrad@gadz.org>
-Message-ID: <20190720154545.3f15f6ba@windsurf>
+Date: Sat, 20 Jul 2019 18:44:17 +0200
+Subject: [Buildroot] [git commit] package/gstreamer1/gstreamer1: fix build
+ with NLS
+Message-ID: <20190720164234.AC437829FA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 20 Jul 2019 15:31:58 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=99f91d7020c5b6ee79c73a517c2c46e0c317103f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  .../netsurf/0002-fix-freetype-detection.patch | 32 -------------------
->  package/netsurf/netsurf.hash                  |  2 +-
->  package/netsurf/netsurf.mk                    |  2 +-
->  3 files changed, 2 insertions(+), 34 deletions(-)
->  delete mode 100644 package/netsurf/0002-fix-freetype-detection.patch
+Fixes:
+ - http://autobuild.buildroot.org/results/6d3be9feb301495b079eff6283f1cbed9603dc42
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gstreamer1/gstreamer1/gstreamer1.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/gstreamer1/gstreamer1/gstreamer1.mk b/package/gstreamer1/gstreamer1/gstreamer1.mk
+index cea933be84..023cf4e85e 100644
+--- a/package/gstreamer1/gstreamer1/gstreamer1.mk
++++ b/package/gstreamer1/gstreamer1/gstreamer1.mk
+@@ -33,6 +33,9 @@ GSTREAMER1_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	libglib2 \
+ 	$(if $(BR2_PACKAGE_LIBUNWIND),libunwind) \
+-	$(if $(BR2_PACKAGE_VALGRIND),valgrind)
++	$(if $(BR2_PACKAGE_VALGRIND),valgrind) \
++	$(TARGET_NLS_DEPENDENCIES)
++
++GSTREAMER1_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ $(eval $(meson-package))
