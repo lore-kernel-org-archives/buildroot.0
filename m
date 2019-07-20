@@ -1,47 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 20 Jul 2019 21:50:15 +0200
-Subject: [Buildroot] [PATCH v2 2/2] boot/opensbi: Implement a choice for
- the OpenSBI Platform
-In-Reply-To: <20190709223649.25630-2-alistair.francis@wdc.com>
-References: <20190709223649.25630-1-alistair.francis@wdc.com>
- <20190709223649.25630-2-alistair.francis@wdc.com>
-Message-ID: <20190720215015.6dbc6b97@windsurf>
+Date: Sat, 20 Jul 2019 21:51:49 +0200
+Subject: [Buildroot] [git commit] package/zeromq: fix sha256 hash
+Message-ID: <20190720195623.D68F783903@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Alistair,
+commit: https://git.buildroot.net/buildroot/commit/?id=2312a83288c5bf7b546d7e2100aaac425ec85845
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue,  9 Jul 2019 15:36:49 -0700
-Alistair Francis <alistair.francis@wdc.com> wrote:
+Bump to version 4.3.2 did not update sha256 hash
 
-> Instead of requiring users to look at the OpenSBI source code and
-> determine the platform string let's use a choice option to allow them to
-> specify the platform they would like to target. We still allow them to
-> specify a custom string if they want to.
-> 
-> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/zeromq/zeromq.hash | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I have not applied this patch, because we don't do this anywhere in
-Buildroot. For things like U-Boot, Linux or Barebox, the name of the
-platform/configuration is always a free-form string. Having an explicit
-list of platform is difficult to maintain as the list of platforms can
-be huge. Also the list of supported platforms can differ from one
-version to the other (in the case where the version itself is
-configurable). In addition, how do you draw the line between platforms
-that should be explicitly listed in the Config.in choice, and the ones
-for which users should use the free-form string option.
-
-But again, the main reason for rejecting is that in exactly this
-situation in other packages in Buildroot, we use a simple free-form
-string.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/zeromq/zeromq.hash b/package/zeromq/zeromq.hash
+index 5b87c3ca15..689d960b28 100644
+--- a/package/zeromq/zeromq.hash
++++ b/package/zeromq/zeromq.hash
+@@ -2,6 +2,6 @@
+ md5  2047e917c2cc93505e2579bcba67a573 zeromq-4.3.2.tar.gz
+ sha1 e5253bff214f77621b3d29443f1aa6e5a106ffe5  zeromq-4.3.2.tar.gz
+ # Locally computed
+-sha256 bcbabe1e2c7d0eec4ed612e10b94b112dd5f06fcefa994a0c79a45d835cd21eb  zeromq-4.3.1.tar.gz
++sha256 ebd7b5c830d6428956b67a0454a7f8cbed1de74b3b01e5c33c5378e22740f763  zeromq-4.3.2.tar.gz
+ sha256 4fd86507c9b486764343065a9e035222869a27b5789efeb4fd93edc85412d7a3  COPYING
+ sha256 83f32abe61ee58ffb1b007412c08415168c052501dbf56d7a47aaaac52b03ef6  COPYING.LESSER
