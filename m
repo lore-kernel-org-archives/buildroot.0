@@ -1,96 +1,50 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Tue, 23 Jul 2019 21:50:40 +0200
-Subject: [Buildroot] [PATCH] package/opencv3: allow to use pkg-config while
- cross-compiling
-Message-ID: <20190723195040.5698-1-romain.naour@smile.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 21 Jul 2019 15:52:43 +0200
+Subject: [Buildroot] [git commit] package/python-cython: bump to version
+ 0.29.11
+Message-ID: <20190723220529.6AD6E8706B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since version 3.4.1 [1], opencv disable pkg-config while cross-compiling to
-avoid host headers/libraries poisoning.
+commit: https://git.buildroot.net/buildroot/commit/?id=6054e096daefe698f460874baf0ec316363a7c0c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Due to this, opencv fail to detect ffmpeg, gstreamer and gtk dependencies
-even if	the corresponding support is requested by
-BR2_PACKAGE_OPENCV3_WITH_{FFMPEG,GSTREAMER,GTK2,GTK3}.
-
-Maybe other dependencies are affected by this issue...
-
-While configuring opencv we can notice the following messages:
-"-- OpenCV disables pkg-config to avoid using of host libraries. Consider using PKG_CONFIG_LIBDIR to specify target SYSROOT"
-"-- Can't find ffmpeg - 'pkg-config' utility is missing"
-
-As the result ffmpeg and gstreamer are not enabled:
---   Video I/O:
---     FFMPEG:                      NO
---       avcodec:                   NO
---       avformat:                  NO
---       avutil:                    NO
---       swscale:                   NO
---       avresample:                NO
---     GStreamer:                   NO
---     libv4l/libv4l2:              NO
---     v4l/v4l2:                    linux/videodev2.h
-
-We can fixes this by adding a new option OPENCV_ENABLE_PKG_CONFIG=ON
-
---   Video I/O:
---     FFMPEG:                      YES
---       avcodec:                   YES (ver 58.35.100)
---       avformat:                  YES (ver 58.20.100)
---       avutil:                    YES (ver 56.22.100)
---       swscale:                   YES (ver 5.3.100)
---       avresample:                YES (ver 4.0.0)
---     GStreamer:
---       base:                      YES (ver 1.16.0)
---       video:                     YES (ver 1.16.0)
---       app:                       YES (ver 1.16.0)
---       riff:                      YES (ver 1.16.0)
---       pbutils:                   YES (ver 1.16.0)
---     libv4l/libv4l2:              NO
---     v4l/v4l2:                    linux/videodev2.h
-
-Add host-pkgconf in the dependencies.
-
-If there is a path poisoning issue, it will be detected by the toolchain
-paranoid wrapper.
-
-[1] https://github.com/opencv/opencv/commit/c4f9ff0285130bd8bcf9d87a9ea6949bdd7e9e5d
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-This patch should be backported to Buildroot 2019.02 that use opencv 3.4.2.
----
- package/opencv3/opencv3.mk | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ package/python-cython/python-cython.hash | 4 ++--
+ package/python-cython/python-cython.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/opencv3/opencv3.mk b/package/opencv3/opencv3.mk
-index 7fa9a6e8a5..6046f159af 100644
---- a/package/opencv3/opencv3.mk
-+++ b/package/opencv3/opencv3.mk
-@@ -34,7 +34,8 @@ OPENCV3_CONF_OPTS += \
- 	-DBUILD_PERF_TESTS=$(if $(BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS),ON,OFF) \
- 	-DBUILD_TESTS=$(if $(BR2_PACKAGE_OPENCV3_BUILD_TESTS),ON,OFF) \
- 	-DBUILD_WITH_DEBUG_INFO=OFF \
--	-DDOWNLOAD_EXTERNAL_TEST_DATA=OFF
-+	-DDOWNLOAD_EXTERNAL_TEST_DATA=OFF \
-+	-DOPENCV_ENABLE_PKG_CONFIG=ON
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index 87aa565523..49f978bedf 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cython/json
+-md5	bc0cca4658947bf2fb3fc10e8d090182  Cython-0.29.9.tar.gz
+-sha256	b88e033c06d29f3f3c760a3fb9837dce6e124d627bd562d1cdf93e9da16df215  Cython-0.29.9.tar.gz
++md5	785fa46921b4cbb4028b27b825a268d4  Cython-0.29.11.tar.gz
++sha256	763a522cc5d1673ba7a4092c0914790f11704b1d4c41e2671e50d0f702a8c6a0  Cython-0.29.11.tar.gz
+ # Locally computed sha256 checksums
+ sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
+ sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index bd9f322d53..47dedd40d6 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_PACKAGE_OPENCV3_BUILD_TESTS)$(BR2_PACKAGE_OPENCV3_BUILD_PERF_TESTS),)
- OPENCV3_CONF_OPTS += -DINSTALL_TEST=OFF
-@@ -225,7 +226,7 @@ OPENCV3_CONF_OPTS += \
- 	-DWITH_WEBP=OFF \
- 	-DWITH_XINE=OFF
- 
--OPENCV3_DEPENDENCIES += zlib
-+OPENCV3_DEPENDENCIES += host-pkgconf zlib
- 
- ifeq ($(BR2_PACKAGE_OPENCV3_WITH_FFMPEG),y)
- OPENCV3_CONF_OPTS += -DWITH_FFMPEG=ON
--- 
-2.20.1
+-PYTHON_CYTHON_VERSION = 0.29.9
++PYTHON_CYTHON_VERSION = 0.29.11
+ PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/69/ab/b18f7f2e61c12e5e859c86b6d37f73971679d5f5c5c97d6cc7ff8916468a
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/87/26/6f8a63fda4743d9e405c17c2872ac3242b63b5eba79c475ddf1777f17b9e
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
