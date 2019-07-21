@@ -1,53 +1,52 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Sun, 21 Jul 2019 21:01:10 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-07-20
-In-Reply-To: <20190721060040.4E27586230@whitealder.osuosl.org>
-References: <20190721060040.4E27586230@whitealder.osuosl.org>
-Message-ID: <20190721210110.0b3620b0@gmx.net>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 21 Jul 2019 19:16:39 +0000
+Subject: [Buildroot] [Bug 11766] Console (getty) issues with systemd
+In-Reply-To: <bug-11766-163@https.bugs.busybox.net/>
+References: <bug-11766-163@https.bugs.busybox.net/>
+Message-ID: <bug-11766-163-dF0SzFUubn@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello *,
+https://bugs.busybox.net/show_bug.cgi?id=11766
 
-On Sun, 21 Jul 2019 06:00:34 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+--- Comment #3 from Peter Seiderer <ps.report@gmx.net> ---
+Enabling hardware flow control for a 3-wire serial line (without
+the extra wires for the hardware flow control) seems strange, and I believe is
+not the solution...
 
-> Hello,
-> 
-> Build statistics for 2019-07-20
+diff -u ~/Downloads/console-getty.service_comparison.txt
+~/Downloads/console-getty.fixed.txt 
+--- /home/seiderer/Downloads/console-getty.service_comparison.txt      
+2019-04-09 19:02:33.570689557 +0200
++++ /home/seiderer/Downloads/console-getty.fixed.txt    2019-07-21
+21:03:18.299974466 +0200
+@@ -32,7 +32,7 @@
+     # The '-o' option value tells agetty to replace 'login' arguments with an
+     # option to preserve environment (-p), followed by '--' for safety, and
+then
+     # the entered username.
+-    ExecStart=-/sbin/getty -L %I 115200 vt100
++    ExecStart=-/sbin/getty -h %I 115200 vt100
+     Type=idle
+     Restart=always
+     UtmpIdentifier=%I
 
-[...]
+You seem to have fixed the already working file (marked by you with
+'console-getty.service from Buildroot 2018.11 (Working):' and not the one
+marked by your with 'console-getty.service from Buildroot 2019.02.1 (Not
+working):'.
 
->      sparc64 |                  libv4l-1.16.5 | NOK | http://autobuild.buildroot.net/results/79c1e1b7a1bc53c1e9b2ae0c9acb443e6d2e2994 |     
+The real diff between the two versions is:
 
-make[4]: Entering directory '/home/buildroot/build/instance-1/output/build/libv4l-1.16.5/utils/qv4l2'
+-    ExecStart=-/sbin/getty -L %I 115200 vt100
++    ExecStart=-/sbin/getty -L console 115200 vt100
 
-[...]
+Can you check which console/%I the working version is using on a running
+system?
 
-  CXXLD    qv4l2
-libtool: warning: library '/home/buildroot/build/instance-1/output/host/bin/../sparc64-buildroot-linux-gnu/sysroot/usr/lib/libQt5Widgets.la' was moved.
-libtool:   error: cannot find the library '' or unhandled argument '/libQt5Gui.so'
-Makefile:571: recipe for target 'qv4l2' failed
-
-
-From host/sparc64-buildroot-linux-gnu/sysroot/usr/lib/libQt5Widgets.la:
-
-	# Libraries that this one depends upon.
-	dependency_libs='-latomic /libQt5Gui.so /libQt5Core.so -lpthread -lrt -lpthread -ldl '
-
-This can be fixed by reverting 'qt5: Remove *.la/*.prl fixup script' ([1]), and adding
-
-	-e "s:\/lib\([a-zA-Z0-9_-]*\)\.so:-l\1:g"
-
-to the sed statement, resulting in the following dependency_libs line:
-
-	# Libraries that this one depends upon.
-	dependency_libs='-latomic -lQt5Gui -lQt5Core -lpthread -lrt -lpthread -ldl '
-
-Regards,
-Peter
-
-[1] https://git.buildroot.net/buildroot/commit/?id=428e5276e4df0b4bbd75df38565298ad53ea4f8b
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
