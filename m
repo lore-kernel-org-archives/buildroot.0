@@ -1,43 +1,38 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 21 Jul 2019 15:44:31 +0200
-Subject: [Buildroot] [PATCHv2] boot/atf: licensing info is only valid
- for v1.4
-In-Reply-To: <20190714173218.22671-1-yann.morin.1998@free.fr>
-References: <20190714173218.22671-1-yann.morin.1998@free.fr>
-Message-ID: <20190721154431.7d8f1bfe@windsurf>
+Date: Sun, 21 Jul 2019 15:44:50 +0200
+Subject: [Buildroot] [git commit] package/libgtk2: fix build with NLS
+Message-ID: <20190721134507.0F6BB838FE@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun, 14 Jul 2019 19:32:18 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=81c126bc8ff15e0356510626169cc05482e5bd1e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The licensing information, and expecially the name of the license file,
-> is known only for the official v1.4 version. For example, in later
-> versions, the license file has been renamed.
-> 
-> Since we can't be sure of the licensing information for custom versions,
-> or for versions from git, define that only for the known v1.4 version.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Adam Duskett <aduskett@gmail.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> ---
-> Changes v1 -> v2:
->   - adopted by Yann from Adam
->   - don't change the filename, but move the licensing info
-> ---
->  boot/arm-trusted-firmware/arm-trusted-firmware.mk | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+Fixes:
+ - http://autobuild.buildroot.org/results/20644475a745c04fec4a87c639bd13e4f333805a
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libgtk2/libgtk2.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libgtk2/libgtk2.mk b/package/libgtk2/libgtk2.mk
+index 8f60573a5e..710e6e47db 100644
+--- a/package/libgtk2/libgtk2.mk
++++ b/package/libgtk2/libgtk2.mk
+@@ -21,7 +21,10 @@ LIBGTK2_CONF_ENV = \
+ 
+ LIBGTK2_CONF_OPTS = --disable-glibtest --enable-explicit-deps=no
+ 
+-LIBGTK2_DEPENDENCIES = host-pkgconf host-libgtk2 libglib2 cairo pango atk gdk-pixbuf
++LIBGTK2_DEPENDENCIES = host-pkgconf host-libgtk2 libglib2 cairo pango atk \
++	gdk-pixbuf $(TARGET_NLS_DEPENDENCIES)
++
++LIBGTK2_MAKE_OPTS = LIBS=$(TARGET_NLS_LIBS)
+ 
+ # Xorg dependencies
+ LIBGTK2_CONF_OPTS += \
