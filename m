@@ -1,107 +1,78 @@
-From: Francois Perrad <fperrad@gmail.com>
-Date: Sun, 21 Jul 2019 10:51:43 +0200
-Subject: [Buildroot] [PATCH 2/2] support/testing: add luaposix test
-In-Reply-To: <20190721085143.6857-1-francois.perrad@gadz.org>
-References: <20190721085143.6857-1-francois.perrad@gadz.org>
-Message-ID: <20190721085143.6857-2-francois.perrad@gadz.org>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Sun, 21 Jul 2019 11:34:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/glib-networking: needs dynamic
+ library
+In-Reply-To: <20190718214952.20763-1-fontaine.fabrice@gmail.com>
+References: <20190718214952.20763-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190721113414.0c604f82@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- .../testing/tests/package/test_luaposix.py    | 81 +++++++++++++++++++
- 1 file changed, 81 insertions(+)
- create mode 100644 support/testing/tests/package/test_luaposix.py
+Hello Fabrice,
 
-diff --git a/support/testing/tests/package/test_luaposix.py b/support/testing/tests/package/test_luaposix.py
-new file mode 100644
-index 000000000..0182faf2f
---- /dev/null
-+++ b/support/testing/tests/package/test_luaposix.py
-@@ -0,0 +1,81 @@
-+from tests.package.test_lua import TestLuaBase
-+
-+
-+class TestLuaLuaPosix(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUA=y
-+        BR2_PACKAGE_LUAPOSIX=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("posix.version", "print(require[[posix.version]])")
-+        self.module_test("posix.ctype")
-+        self.module_test("posix.dirent")
-+        self.module_test("posix.errno")
-+        self.module_test("posix.fcntl")
-+        self.module_test("posix.fnmatch")
-+        self.module_test("posix.glob")
-+        self.module_test("posix.grp")
-+        self.module_test("posix.libgen")
-+        self.module_test("posix.poll")
-+        self.module_test("posix.pwd")
-+        self.module_test("posix.sched")
-+        self.module_test("posix.signal")
-+        self.module_test("posix.stdio")
-+        self.module_test("posix.stdlib")
-+        self.module_test("posix.sys.msg")
-+        self.module_test("posix.sys.resource")
-+        self.module_test("posix.sys.socket")
-+        self.module_test("posix.sys.stat")
-+        self.module_test("posix.sys.statvfs")
-+        self.module_test("posix.sys.time")
-+        self.module_test("posix.sys.times")
-+        self.module_test("posix.sys.utsname")
-+        self.module_test("posix.sys.wait")
-+        self.module_test("posix.syslog")
-+        self.module_test("posix.termio")
-+        self.module_test("posix.time")
-+        self.module_test("posix.unistd")
-+        self.module_test("posix.utime")
-+
-+
-+class TestLuajitLuaPosix(TestLuaBase):
-+    config = TestLuaBase.config + \
-+        """
-+        BR2_PACKAGE_LUAJIT=y
-+        BR2_PACKAGE_LUAPOSIX=y
-+        """
-+
-+    def test_run(self):
-+        self.login()
-+        self.module_test("posix.version", "print(require[[posix.version]])")
-+        self.module_test("posix.ctype")
-+        self.module_test("posix.dirent")
-+        self.module_test("posix.errno")
-+        self.module_test("posix.fcntl")
-+        self.module_test("posix.fnmatch")
-+        self.module_test("posix.glob")
-+        self.module_test("posix.grp")
-+        self.module_test("posix.libgen")
-+        self.module_test("posix.poll")
-+        self.module_test("posix.pwd")
-+        self.module_test("posix.sched")
-+        self.module_test("posix.signal")
-+        self.module_test("posix.stdio")
-+        self.module_test("posix.stdlib")
-+        self.module_test("posix.sys.msg")
-+        self.module_test("posix.sys.resource")
-+        self.module_test("posix.sys.socket")
-+        self.module_test("posix.sys.stat")
-+        self.module_test("posix.sys.statvfs")
-+        self.module_test("posix.sys.time")
-+        self.module_test("posix.sys.times")
-+        self.module_test("posix.sys.utsname")
-+        self.module_test("posix.sys.wait")
-+        self.module_test("posix.syslog")
-+        self.module_test("posix.termio")
-+        self.module_test("posix.time")
-+        self.module_test("posix.unistd")
-+        self.module_test("posix.utime")
--- 
-2.20.1
+On Thu, 18 Jul 2019 23:49:52 +0200, Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> glib-networking uses the meson's shared_module function
+>
+> Fixes:
+>  - http://autobuild.buildroot.org/results/60037e37e020404485df9814f3f3ad4e3b2abdb3
+>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/glib-networking/Config.in | 6 ++++--
+>  package/libsoup/Config.in         | 2 +-
+>  2 files changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
+> index ec2962392c..339eee1139 100644
+> --- a/package/glib-networking/Config.in
+> +++ b/package/glib-networking/Config.in
+> @@ -3,10 +3,12 @@ config BR2_PACKAGE_GLIB_NETWORKING
+>  	depends on BR2_USE_WCHAR # glib2
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+>  	depends on BR2_USE_MMU # glib2
+> +	depends on !BR2_STATIC_LIBS
+>  	select BR2_PACKAGE_LIBGLIB2
+>  	help
+>  	  Network-related GIO modules for glib.
+>
+> -comment "glib-networking needs a toolchain w/ wchar, threads"
+> +comment "glib-networking needs a toolchain w/ wchar, threads, dynamic library"
+>  	depends on BR2_USE_MMU
+> -	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		BR2_STATIC_LIBS
+
+Please mention in the commit log that this is a partly revert of commit
+ed3eef6bb49270de619e5a86a249fdd8724c40cd 'package/glib-networking: bump
+to version 2.61.1' re-adding the dynamic library dependency but from
+a different demand...
+
+> diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
+> index 599f9594d9..f6f8fde968 100644
+> --- a/package/libsoup/Config.in
+> +++ b/package/libsoup/Config.in
+> @@ -22,7 +22,7 @@ config BR2_PACKAGE_LIBSOUP_GNOME
+>
+>  config BR2_PACKAGE_LIBSOUP_SSL
+>  	bool "https support"
+> -	depends on !BR2_STATIC_LIBS # gnutls
+> +	depends on !BR2_STATIC_LIBS # glib-networking, gnutls
+>  	select BR2_PACKAGE_GLIB_NETWORKING
+>  	select BR2_PACKAGE_GNUTLS
+>  	help
+
+And mention that the only direct user of BR2_PACKAGE_LIBSOUP_SSL is
+package/webkitgtk for the option BR2_PACKAGE_WEBKITGTK_HTTPS which
+already has (from lagacy) the dependency on !BR2_STATIC_LIBS and/or
+update the comment in package/webkitgtk/Config.in...
+
+With this changes you can add my
+
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+
+Regards,
+Peter
