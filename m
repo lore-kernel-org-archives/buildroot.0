@@ -1,43 +1,44 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 22 Jul 2019 07:16:27 +0200
-Subject: [Buildroot] [PATCH 2/2] system: Add XATTR abbreviation
-In-Reply-To: <20190722051627.12993-1-petr.vorel@gmail.com>
-References: <20190722051627.12993-1-petr.vorel@gmail.com>
-Message-ID: <20190722051627.12993-2-petr.vorel@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 22 Jul 2019 07:17:15 +0200
+Subject: [Buildroot] [PATCH 1/1] package/netsurf: fix build of host tool
+ convert_image
+Message-ID: <20190722051715.18053-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-to BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
+Upstream commit
+http://source.netsurf-browser.org/netsurf.git/commit/frontends/framebuffer/Makefile?id=40cdf498b9153685b4cefe576e59f6b41090912b
 
-+ capitalize
+renamed the variable HOST_*FLAGS to BUILD_*FLAGS.
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+This breaks the build of the host tool convert_image when png.h is not
+provided by the host system itself.
+
+Fixes:
+http://autobuild.buildroot.net/results/6ac/6ac71c7a41dd92a5fb924af9da7cedc40e745cfa/
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Hi,
+ package/netsurf/netsurf.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-you can squash this commit into previous one.
-
-Kind regards,
-Petr
-
- system/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/system/Config.in b/system/Config.in
-index 842e745cd3..39f8603639 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -195,7 +195,7 @@ config BR2_ROOTFS_STATIC_DEVICE_TABLE
- 	  syntax of these files.
- 
- config BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
--	bool "support extended attributes in device tables"
-+	bool "Support extended attributes (XATTR) in device tables"
- 	default y if !BR2_TARGET_ROOTFS_AXFS && !BR2_TARGET_ROOTFS_CRAMFS && !BR2_TARGET_ROOTFS_ISO9660 && !BR2_TARGET_ROOTFS_ROMFS && !BR2_TARGET_ROOTFS_YAFFS2
- 	help
- 	  Support extended attributes handling in device tables
+diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
+index 30e8dc8b4f..b510a69649 100644
+--- a/package/netsurf/netsurf.mk
++++ b/package/netsurf/netsurf.mk
+@@ -36,8 +36,8 @@ ifeq ($(BR2_PACKAGE_NETSURF_SDL),y)
+ NETSURF_DEPENDENCIES += sdl host-libpng
+ NETSURF_FRONTEND = framebuffer
+ NETSURF_CONFIG = \
+-	HOST_CFLAGS='$(HOST_CFLAGS)' \
+-	HOST_LDFLAGS='$(HOST_LDFLAGS) -lpng'
++	BUILD_CFLAGS='$(HOST_CFLAGS)' \
++	BUILD_LDFLAGS='$(HOST_LDFLAGS) -lpng'
+ ifeq ($(BR2_PACKAGE_FREETYPE),y)
+ NETSURF_DEPENDENCIES += freetype
+ define NETSURF_FONTLIB_CONFIGURE_CMDS
 -- 
 2.20.1
