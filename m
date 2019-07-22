@@ -1,106 +1,55 @@
-From: David Oberhollenzer <david.oberhollenzer@sigma-star.at>
-Date: Sun, 21 Jul 2019 23:32:58 +0200
-Subject: [Buildroot] [ANNOUNCE] mtd-utils-2.1.1 is released
-Message-ID: <805d5408-af93-43e4-6615-1ee0c7ca9dc3@sigma-star.at>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Sun, 21 Jul 2019 21:16:06 -0300
+Subject: [Buildroot] [PATCH] package/dcron: add patch to fix error message
+Message-ID: <20190722001606.5128-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+From: Carlos Santos <unixmania@gmail.com>
 
-mtd-utils-2.1.1 is released.
+The error message issued when the creation of the log file fails lacks
+an ending newline. Add a patch already submitted upstream[1] to fix it.
 
-Tarball:               ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.1.1.tar.bz2
-Tarball gpg signature: ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.1.1.tar.bz2.asc
-Signed git tag:        git://git.infradead.org/mtd-utils.git v2.1.1
+1. https://github.com/dubiousjim/dcron/pull/22
+---
+ ...ne-to-logfile-openning-error-message.patch | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 package/dcron/0001-main.c-add-newline-to-logfile-openning-error-message.patch
 
-
-This release contains primarily bug fixes following the 2.1.0 release that
-introduced a number of new features. Most importantly, one of the fixes
-contained address a problem building mkfs.ubifs with file encryption disabled,
-hence the push for an earlier release despite only a small number of commits
-since 2.1.0.
-
-On the side of features, optional support for zstd compression has been added
-to mkfs.ubifs now that it is supported in UBIFS on the kernel side.
-
-With a newer gcc version, the build is now spewing warnings again. So currently
-work is on the way to address this (and also issues reported by static
-analysis), so the next release will probably be another patch level increment
-again, most likely before the end of the year.
-
-
-Changes from 2.1.0 to 2.1.1:
-
-Features:
- - mkfs.ubifs: Add ZSTD compression
-
-Fixes:
- - ubiformat: Dont ignore sequence number CLI option
- - mkfs.ubifs: fix build without openssl
- - mkfs.ubifs: fix regression when trying to store device special files
- - mkfs.ubifs: fix description of favor_lzo
- - unittests/test_lib: Include proper header for _IOC_SIZE
- - unittests/libmtd_test: Include fcntl header
- - unittests: Define the use of _GNU_SOURCE
- - ubinize: Exit with non-zero exit code on error.
- - mtd-tests: nandbiterrs: Fix issue that just insert error at bit 7
- - ubi-tests: ubi_mkvol_request: Fully initialize 'struct ubi_mkvol_request req'
- - ubi-tests: io_read: Filter invalid offset value before 'lseek' in io_read test
- - ubi-tests: mkvol test: Checks return value 'ENOSPC' for 'ubi_mkvol'
- - ubi-tests: fm_param: Replace 'fm_auto' with 'fm_autoconvert'
-
-
-
-Raw short log since the 2.1.0 release:
-
-Amol Vengurlekar (1):
-      ubiformat: Dont ignore sequence number CLI option
-
-Baruch Siach (1):
-      mkfs.ubifs: fix build without openssl
-
-David Oberhollenzer (2):
-      mkfs.ubifs: fix regression when trying to store device special files
-      mkfs.ubifs: remove ZSTD_CLEVEL_DEFAULT for backwards compatibillity
-
-Martin Kaiser (1):
-      mkfs.ubifs: fix compilation without ZSTD
-
-Olliver Schinagl (3):
-      unittests/test_lib: Include proper header for _IOC_SIZE
-      unittests/libmtd_test: Include fcntl header
-      unittests: Define the use of _GNU_SOURCE
-
-Patrick Doyle (1):
-      ubinize: Exit with non-zero exit code on error.
-
-Sebastian Andrzej Siewior (1):
-      mkfs.ubifs: Add ZSTD compression
-
-Uwe Kleine-K?nig (1):
-      mkfs.ubifs: fix description of favor_lzo
-
-Xiaolei Li (1):
-      mtd-tests: nandbiterrs: Fix issue that just insert error at bit 7
-
-Zhihao Cheng (4):
-      ubi-tests: ubi_mkvol_request: Fully initialize 'struct ubi_mkvol_request req'
-      ubi-tests: io_read: Filter invalid offset value before 'lseek' in io_read test
-      ubi-tests: mkvol test: Checks return value 'ENOSPC' for 'ubi_mkvol'
-      ubi-tests: fm_param: Replace 'fm_auto' with 'fm_autoconvert'
-
-
-Regards,
-
-David
-
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: signature.asc
-Type: application/pgp-signature
-Size: 488 bytes
-Desc: OpenPGP digital signature
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190721/24b741f8/attachment.asc>
+diff --git a/package/dcron/0001-main.c-add-newline-to-logfile-openning-error-message.patch b/package/dcron/0001-main.c-add-newline-to-logfile-openning-error-message.patch
+new file mode 100644
+index 0000000000..c838063e03
+--- /dev/null
++++ b/package/dcron/0001-main.c-add-newline-to-logfile-openning-error-message.patch
+@@ -0,0 +1,26 @@
++From 2710bc67cd920323da9b23a3d60193577bd43d71 Mon Sep 17 00:00:00 2001
++From: Carlos Santos <unixmania@gmail.com>
++Date: Sat, 20 Jul 2019 00:27:31 -0300
++Subject: [PATCH] main.c: add newline to logfile openning error message
++
++Signed-off-by: Carlos Santos <unixmania@gmail.com>
++---
++ main.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/main.c b/main.c
++index 0eba280..2606db8 100644
++--- a/main.c
+++++ b/main.c
++@@ -261,7 +261,7 @@ main(int ac, char **av)
++ 				dup2(fd, 2);
++ 			} else {
++ 				int n = errno;
++-				fdprintf(2, "failed to open logfile '%s', reason: %s", LogFile, strerror(n));
+++				fdprintf(2, "failed to open logfile '%s', reason: %s\n", LogFile, strerror(n));
++ 				exit(n);
++ 			}
++ 		}
++-- 
++2.18.1
++
+-- 
+2.18.1
