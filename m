@@ -1,56 +1,46 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 22 Jul 2019 18:14:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/suricata: fix build with kernel >=
- 5.2
-Message-ID: <20190722161449.10624-1-bernd.kuhls@t-online.de>
+From: Gilles Talis <gilles.talis@gmail.com>
+Date: Mon, 22 Jul 2019 19:57:02 +0200
+Subject: [Buildroot] [PATCH] package/ncdu: bump to version 1.14
+Message-ID: <1563818223-23023-1-git-send-email-gilles.talis@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/422/422e1aa4e7d0bac31b55e7150a7ab031e23cef4a/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 ---
- ...et-fix-build-on-recent-Linux-kernels.patch | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch
+ package/ncdu/ncdu.hash | 8 ++++----
+ package/ncdu/ncdu.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch b/package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch
-new file mode 100644
-index 0000000000..6547fd57f5
---- /dev/null
-+++ b/package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch
-@@ -0,0 +1,28 @@
-+From b37554e0bc3cf383e6547c5c6a69c6f6849c09e3 Mon Sep 17 00:00:00 2001
-+From: Eric Leblond <eric@regit.org>
-+Date: Wed, 17 Jul 2019 12:35:12 +0200
-+Subject: [PATCH] af-packet: fix build on recent Linux kernels
-+
-+Downloaded from upstream commit
-+https://github.com/OISF/suricata/commit/b37554e0bc3cf383e6547c5c6a69c6f6849c09e3
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ src/source-af-packet.c | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/src/source-af-packet.c b/src/source-af-packet.c
-+index 2c65ccbcf5..e117d36e5c 100644
-+--- a/src/source-af-packet.c
-++++ b/src/source-af-packet.c
-+@@ -65,6 +65,10 @@
-+ #include <sys/ioctl.h>
-+ #endif
-+ 
-++#if HAVE_LINUX_SOCKIOS_H
-++#include <linux/sockios.h>
-++#endif
-++
-+ #ifdef HAVE_PACKET_EBPF
-+ #include "util-ebpf.h"
-+ #include <bpf/libbpf.h>
+diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
+index 7326a15..97ac287 100644
+--- a/package/ncdu/ncdu.hash
++++ b/package/ncdu/ncdu.hash
+@@ -1,6 +1,6 @@
+-# From http://dev.yorhel.nl/download/ncdu-1.13.tar.gz.{md5,sha1}
+-md5 67239592ac41f42290f52ab89ff198be  ncdu-1.13.tar.gz
+-sha1 3233c4185208d9989ac528a94817ed92dd59c773  ncdu-1.13.tar.gz
++# From http://dev.yorhel.nl/download/ncdu-1.14.tar.gz.{md5,sha1}
++md5 d26c0aa57728c19969c3c5036fa272a0  ncdu-1.14.tar.gz
++sha1 28c7003ad23d2e3a2d22d2c349bb0c7170752396  ncdu-1.14.tar.gz
+ 
+ # computed locally
+-sha256 0ee47c3742a867ace26eb429cce593b54ab4ccb4c4a97d62e41363cbf80c8a24 COPYING
++sha256 a05f1fd38432052dc8588da66b8bf3e9e103e29a82c0b5d72c65d4d9fc830f2e COPYING
+diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+index 9a7170d..87508f5 100644
+--- a/package/ncdu/ncdu.mk
++++ b/package/ncdu/ncdu.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NCDU_VERSION = 1.13
++NCDU_VERSION = 1.14
+ NCDU_SITE = http://dev.yorhel.nl/download
+ 
+ NCDU_DEPENDENCIES = ncurses
 -- 
-2.20.1
+2.7.4
