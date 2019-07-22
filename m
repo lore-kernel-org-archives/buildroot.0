@@ -1,110 +1,63 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Mon, 22 Jul 2019 20:21:40 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-07-20
-In-Reply-To: <9f2cfe09-b9af-285f-b192-f7b2bc975d68@andin.de>
-References: <20190721060040.4E27586230@whitealder.osuosl.org>
- <20190721210110.0b3620b0@gmx.net>
- <9f2cfe09-b9af-285f-b192-f7b2bc975d68@andin.de>
-Message-ID: <20190722202140.207e29c3@gmx.net>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Mon, 22 Jul 2019 13:45:54 -0700
+Subject: [Buildroot] [PATCH v2 2/2] boot/opensbi: Implement a choice for
+ the OpenSBI Platform
+In-Reply-To: <20190720215015.6dbc6b97@windsurf>
+References: <20190709223649.25630-1-alistair.francis@wdc.com>
+ <20190709223649.25630-2-alistair.francis@wdc.com>
+ <20190720215015.6dbc6b97@windsurf>
+Message-ID: <CAKmqyKM02t=60XZjGFtqUcLu_3McEXVnX6UoMavbxAWHgE_v4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Andreas,
+On Sat, Jul 20, 2019 at 12:50 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+>
+> Hello Alistair,
+>
+> On Tue,  9 Jul 2019 15:36:49 -0700
+> Alistair Francis <alistair.francis@wdc.com> wrote:
+>
+> > Instead of requiring users to look at the OpenSBI source code and
+> > determine the platform string let's use a choice option to allow them to
+> > specify the platform they would like to target. We still allow them to
+> > specify a custom string if they want to.
+> >
+> > Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+>
+> I have not applied this patch, because we don't do this anywhere in
+> Buildroot. For things like U-Boot, Linux or Barebox, the name of the
+> platform/configuration is always a free-form string. Having an explicit
+> list of platform is difficult to maintain as the list of platforms can
+> be huge. Also the list of supported platforms can differ from one
+> version to the other (in the case where the version itself is
+> configurable). In addition, how do you draw the line between platforms
+> that should be explicitly listed in the Config.in choice, and the ones
+> for which users should use the free-form string option.
+>
+> But again, the main reason for rejecting is that in exactly this
+> situation in other packages in Buildroot, we use a simple free-form
+> string.
 
-On Mon, 22 Jul 2019 16:09:59 +0200, Andreas Naumann <dev@andin.de> wrote:
+No worries. As that was the main problem Mark had with the HiFive
+Unleashed patches these should be good to merge.
 
-> Hello Peter, all,
->
->
-> Am 21.07.19 um 21:01 schrieb Peter Seiderer:
-> > Hello *,
-> >
-> > On Sun, 21 Jul 2019 06:00:34 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
-> >
-> >> Hello,
-> >>
-> >> Build statistics for 2019-07-20
-> >
-> > [...]
-> >
-> >>       sparc64 |                  libv4l-1.16.5 | NOK | http://autobuild.buildroot.net/results/79c1e1b7a1bc53c1e9b2ae0c9acb443e6d2e2994 |
-> >
-> > make[4]: Entering directory '/home/buildroot/build/instance-1/output/build/libv4l-1.16.5/utils/qv4l2'
-> >
-> > [...]
-> >
-> >    CXXLD    qv4l2
-> > libtool: warning: library '/home/buildroot/build/instance-1/output/host/bin/../sparc64-buildroot-linux-gnu/sysroot/usr/lib/libQt5Widgets.la' was moved.
-> > libtool:   error: cannot find the library '' or unhandled argument '/libQt5Gui.so'
-> > Makefile:571: recipe for target 'qv4l2' failed
-> >
-> >
-> >>From host/sparc64-buildroot-linux-gnu/sysroot/usr/lib/libQt5Widgets.la:
-> >
-> > 	# Libraries that this one depends upon.
-> > 	dependency_libs='-latomic /libQt5Gui.so /libQt5Core.so -lpthread -lrt -lpthread -ldl '
->
->
-> I have rebuilt the sparc config that led to this failure as well as an
-> arm config (imx6-sabresd_qt5) and can confirm that both now (Qt 5.12.4)
-> create lines like
->    dependency_libs='-latomic <pkg-build-dir>/lib/libQt5Core.so -lpthread
-> -lrt -lpthread -ldl '
->
-> instead of (Qt 5.11.3)
->    dependency_libs='-L<pkd-build-dir>/lib -lQt5Core -lrt -ldl -latomic
-> -lpthread '
->
-> Right now I dont have the time to find out why and what exactly has
-> changed in Qt (or elsewhere) to cause that.
->
-> >
-> > This can be fixed by reverting 'qt5: Remove *.la/*.prl fixup script' ([1]), and adding
-> >
-> > 	-e "s:\/lib\([a-zA-Z0-9_-]*\)\.so:-l\1:g"
-> >
-> > to the sed statement, resulting in the following dependency_libs line:
-> >
-> > 	# Libraries that this one depends upon.
-> > 	dependency_libs='-latomic -lQt5Gui -lQt5Core -lpthread -lrt -lpthread -ldl '
->
-> Obviously the la fixup code in pkg-generic.mk is no longer able to
-> handle the occurence of so-files with full path correctly. However, I
-> wonder if pkg-generic would be an acceptable place to fix the issue.?
+I just sent a v2 with an updated readme to the list.
 
-Can confirm that the following (quick hack) fixes the problem too:
-
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -305,6 +305,7 @@ $(BUILD_DIR)/%/.stamp_staging_installed:
-                                -e "s:@TOOLCHAIN_EXTERNAL_INSTALL_DIR@:$(TOOLCHAIN_EXTERNAL_INSTALL_DIR):g") \
-                        -e "s:@STAGING_DIR@:$(STAGING_DIR):g" \
-                        -e "s:@BASE_DIR@:$(BASE_DIR):g" \
-+                       -e "s:\/lib\([a-zA-Z0-9_-]*\)\.so:-l\1:g" \
-                        "$${la}.fixed" && \
-                if cmp -s "$${la}" "$${la}.fixed"; then \
-                        rm -f "$${la}.fixed"; \
-
-Regards,
-Peter
+Alistair
 
 >
+> Best regards,
 >
-> regards,
-> Andreas
->
->
-> >
-> > Regards,
-> > Peter
-> >
-> > [1] https://git.buildroot.net/buildroot/commit/?id=428e5276e4df0b4bbd75df38565298ad53ea4f8b
-> > _______________________________________________
-> > buildroot mailing list
-> > buildroot at busybox.net
-> > http://lists.busybox.net/mailman/listinfo/buildroot
-> >
+> Thomas
+> --
+> Thomas Petazzoni, CTO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
