@@ -1,7 +1,7 @@
 From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 22 Jul 2019 17:54:01 -0500
-Subject: [Buildroot] [PATCH] package/mtd: bump to 2.1.1
-Message-ID: <20190722225401.2625-1-matthew.weber@rockwellcollins.com>
+Date: Mon, 22 Jul 2019 17:57:45 -0500
+Subject: [Buildroot] [PATCH v2] package/mtd: bump to 2.1.1
+Message-ID: <20190722225745.2743-1-matthew.weber@rockwellcollins.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,10 +15,15 @@ Release Notes:
 https://www.spinics.net/lists/linux-mtd/msg08093.html
 
 Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+--
+Changes
+v1 -> v2
+ - Added hash file update missed in first patch
 ---
  ...mkfs.ubifs-fix-build-without-openssl.patch | 38 -------------------
+ package/mtd/mtd.hash                          |  4 +-
  package/mtd/mtd.mk                            |  2 +-
- 2 files changed, 1 insertion(+), 39 deletions(-)
+ 3 files changed, 3 insertions(+), 41 deletions(-)
  delete mode 100644 package/mtd/0001-mkfs.ubifs-fix-build-without-openssl.patch
 
 diff --git a/package/mtd/0001-mkfs.ubifs-fix-build-without-openssl.patch b/package/mtd/0001-mkfs.ubifs-fix-build-without-openssl.patch
@@ -65,6 +70,17 @@ index 8633830806..0000000000
 --- 
 -2.20.1
 -
+diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
+index e82b3522cb..2e23fbb819 100644
+--- a/package/mtd/mtd.hash
++++ b/package/mtd/mtd.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.2.tar.bz2.asc
+-sha256	b4b995b06d93aee4125e8e44c05a1cae6eea545ca5a6e8a377405ee8aa454bd2	mtd-utils-2.1.0.tar.bz2
++# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.1.1.tar.bz2.asc
++sha256	8d15e8b70f036d6af1a66011f8ca0e048e9675fa7983d33bea92c24313a232d2	mtd-utils-2.1.1.tar.bz2
+ sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
 diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
 index 94c8b8b1da..0de14dbcba 100644
 --- a/package/mtd/mtd.mk
