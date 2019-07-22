@@ -1,25 +1,74 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 22 Jul 2019 07:16:24 +0000
-Subject: [Buildroot] [Bug 12031] Build of cups-filters fails while linking,
- apparently due to missing libiconv
-In-Reply-To: <bug-12031-163@https.bugs.busybox.net/>
-References: <bug-12031-163@https.bugs.busybox.net/>
-Message-ID: <bug-12031-163-eTSj95Gbrx@https.bugs.busybox.net/>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Mon, 22 Jul 2019 10:22:32 +0300
+Subject: [Buildroot] [PATCH] package/cups-filters: fix build without NLS
+In-Reply-To: <20190722071146.30199-1-unixmania@gmail.com>
+References: <20190722071146.30199-1-unixmania@gmail.com>
+Message-ID: <CAMw6YJ+NkOZ-+ouPyknGq2BXP6kDNuLSxxau=EFkvtvfHFmpbw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12031
+Hi Carlos,
 
---- Comment #7 from Carlos Santos <unixmania@gmail.com> ---
-(In reply to jakobcornell from comment #6)
 
-A patch fixing the problem was submitted:
+On Mon, Jul 22, 2019 at 10:12 AM <unixmania@gmail.com> wrote:
+>
+> From: Carlos Santos <unixmania@gmail.com>
+>
+> texttotext must be linked to libiconv if !BR2_ENABLE_LOCALE so patch
+> Makefile.am to add the required -liconv argument.
+>
+> We could patch configure.ac to use AM_ICONV but it would require more
+> change adding AM_GNU_GETTEXT_VERSION([x.y.z]) to bring iconv.m4.
+>
+> Fixes: https://bugs.busybox.net/show_bug.cgi?id=12031
+>
+> Signed-off-by: Carlos Santos <unixmania@gmail.com>
+> ---
+>  package/cups-filters/cups-filters.mk | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/package/cups-filters/cups-filters.mk b/package/cups-filters/cups-filters.mk
+> index 214647a90e..8368be5e4b 100644
+> --- a/package/cups-filters/cups-filters.mk
+> +++ b/package/cups-filters/cups-filters.mk
+> @@ -13,6 +13,17 @@ CUPS_FILTERS_AUTORECONF = YES
+>
+>  CUPS_FILTERS_DEPENDENCIES = cups libglib2 lcms2 qpdf fontconfig freetype jpeg
+>
+> +# texttotext must be linked to libiconv if !BR2_ENABLE_LOCALE. We could patch
+> +# configure.ac to use AM_ICONV but it would require iconv.m4, increasing the
+> +# patch size by at least 130 lines. Let's keep it simple and just patch
+> +# Makefile.am to append -liconv to the link command line.
+> +ifeq ($(BR2_PACKAGE_LIBICONV),y)
+> +define CUPS_FILTERS_LINK_LIBICONV
+> +       $(SED) '/texttotext_LDADD =/s/(CUPS_LIBS)$$/(CUPS_LIBS) -liconv/' $(@D)/Makefile.am
+> +endef
+> +CUPS_FILTERS_PRE_CONFIGURE_HOOKS += CUPS_FILTERS_LINK_LIBICONV
+> +endif
+> +
+>  CUPS_FILTERS_CONF_OPTS = --disable-imagefilters \
+>         --disable-mutool \
+>         --disable-foomatic \
+> --
+> 2.18.1
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
-    https://patchwork.ozlabs.org/patch/1134738/
+I already sent patch to fix this problem (but I did not check the
+LOCALE config so looks like your version is better):
+    https://patchwork.ozlabs.org/patch/1134318
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+but in case of your version is it not enough to just add:
+
+    CUPS_FILTERS_CONF_ENV += LIBS=-liconv
+
+?
+
+Regards,
+Vadim Kochan
