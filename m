@@ -1,75 +1,88 @@
-From: Gamble, Bradley <bradley.gamble@ncipher.com>
-Date: Mon, 22 Jul 2019 13:10:59 +0000
-Subject: [Buildroot] Patchelf: Execution error against host libraries
-Message-ID: <1563801059238.32443@ncipher.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Mon, 22 Jul 2019 16:09:59 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-07-20
+In-Reply-To: <20190721210110.0b3620b0@gmx.net>
+References: <20190721060040.4E27586230@whitealder.osuosl.org>
+ <20190721210110.0b3620b0@gmx.net>
+Message-ID: <9f2cfe09-b9af-285f-b192-f7b2bc975d68@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Peter, all,
 
 
-I am currently attempting to perform a build using Buildroot 2019.05.1 targetting PowerPC. I am performing this build from within a Docker container based upon Debian.
-
-When attempting a build within this container most steps will complete successfully until near "Finalizing target directory", when the build will fail. The output is as follows:
-
-
-    >>>   Sanitizing RPATH in target tree
-    /home/bgamble/buildroot-2019.05.1/support/scripts/fix-rpath target
-    Error: can't execute patchelf utility '/home/bgamble/buildroot-2019.05.1/output/host/bin/patchelf'
-    make[1]: *** [target-finalize] Error 1
-    make: *** [_all] Error 2
-
-Attempting to execute this binary indicates that it is expecting a newer version of libstdc++:
-
-
-    $ ./output/host/bin/patchelf
-    ./output/host/bin/patchelf: /usr/lib/libstdc++.so.6: version `GLIBCXX_3.4.20' not found (required by ./output/host/bin/patchelf)
-
-
-The container I am using currently has version GLIBCXX_3.4.13, which we are required to use in order to maintain compatibility with additional software packages that we support.
-
-
-Is it expected behaviour that this application should depend on a newer version of libstdc++ than is available on the current system? If so, is there a workaround to force compatibility with older versions of the library?
-
-
-Regards,
-
-bdg
-
-________________________________
-
- [cid:image205928.PNG at e5d4a7c1.46a003c2] <http://www.ncipher.com>
-Bradley Gamble
-Software Engineer
-Tel: +44 1293 580000
+Am 21.07.19 um 21:01 schrieb Peter Seiderer:
+> Hello *,
+> 
+> On Sun, 21 Jul 2019 06:00:34 -0000, Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+> 
+>> Hello,
+>>
+>> Build statistics for 2019-07-20
+> 
+> [...]
+> 
+>>       sparc64 |                  libv4l-1.16.5 | NOK | http://autobuild.buildroot.net/results/79c1e1b7a1bc53c1e9b2ae0c9acb443e6d2e2994 |
+> 
+> make[4]: Entering directory '/home/buildroot/build/instance-1/output/build/libv4l-1.16.5/utils/qv4l2'
+> 
+> [...]
+> 
+>    CXXLD    qv4l2
+> libtool: warning: library '/home/buildroot/build/instance-1/output/host/bin/../sparc64-buildroot-linux-gnu/sysroot/usr/lib/libQt5Widgets.la' was moved.
+> libtool:   error: cannot find the library '' or unhandled argument '/libQt5Gui.so'
+> Makefile:571: recipe for target 'qv4l2' failed
+> 
+> 
+>>From host/sparc64-buildroot-linux-gnu/sysroot/usr/lib/libQt5Widgets.la:
+> 
+> 	# Libraries that this one depends upon.
+> 	dependency_libs='-latomic /libQt5Gui.so /libQt5Core.so -lpthread -lrt -lpthread -ldl '
 
 
-nCipher Security
-Manor Royal
-Crawley RH10 9HA
-United Kingdom
+I have rebuilt the sparc config that led to this failure as well as an 
+arm config (imx6-sabresd_qt5) and can confirm that both now (Qt 5.12.4) 
+create lines like
+   dependency_libs='-latomic <pkg-build-dir>/lib/libQt5Core.so -lpthread 
+-lrt -lpthread -ldl '
 
-www.ncipher.com<http://www.ncipher.com>
+instead of (Qt 5.11.3)
+   dependency_libs='-L<pkd-build-dir>/lib -lQt5Core -lrt -ldl -latomic 
+-lpthread '
 
-[cid:imagef00b1d.JPG at 915576c7.4a884da0]<https://www.ncipher.com/lp/2019/blackhat-usa>
+Right now I dont have the time to find out why and what exactly has 
+changed in Qt (or elsewhere) to cause that.
 
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190722/b4afac42/attachment.html>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: image205928.PNG
-Type: image/png
-Size: 3675 bytes
-Desc: image205928.PNG
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190722/b4afac42/attachment.png>
--------------- next part --------------
-A non-text attachment was scrubbed...
-Name: imagef00b1d.JPG
-Type: image/jpeg
-Size: 46854 bytes
-Desc: imagef00b1d.JPG
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190722/b4afac42/attachment.jpe>
+> 
+> This can be fixed by reverting 'qt5: Remove *.la/*.prl fixup script' ([1]), and adding
+> 
+> 	-e "s:\/lib\([a-zA-Z0-9_-]*\)\.so:-l\1:g"
+> 
+> to the sed statement, resulting in the following dependency_libs line:
+> 
+> 	# Libraries that this one depends upon.
+> 	dependency_libs='-latomic -lQt5Gui -lQt5Core -lpthread -lrt -lpthread -ldl '
+
+Obviously the la fixup code in pkg-generic.mk is no longer able to 
+handle the occurence of so-files with full path correctly. However, I 
+wonder if pkg-generic would be an acceptable place to fix the issue.?
+
+
+regards,
+Andreas
+
+
+> 
+> Regards,
+> Peter
+> 
+> [1] https://git.buildroot.net/buildroot/commit/?id=428e5276e4df0b4bbd75df38565298ad53ea4f8b
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
