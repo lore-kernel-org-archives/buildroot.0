@@ -1,27 +1,31 @@
 From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 22 Jul 2019 11:05:17 +0000
-Subject: [Buildroot] [Bug 12031] Build of cups-filters fails while linking,
- apparently due to missing libiconv
-In-Reply-To: <bug-12031-163@https.bugs.busybox.net/>
-References: <bug-12031-163@https.bugs.busybox.net/>
-Message-ID: <bug-12031-163-mjGUHiPKto@https.bugs.busybox.net/>
+Date: Mon, 22 Jul 2019 11:11:22 +0000
+Subject: [Buildroot] [Bug 12011] cronstamps directory is not created by
+ dcron package
+In-Reply-To: <bug-12011-163@https.bugs.busybox.net/>
+References: <bug-12011-163@https.bugs.busybox.net/>
+Message-ID: <bug-12011-163-NK0DntqNQm@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12031
+https://bugs.busybox.net/show_bug.cgi?id=12011
 
-Carlos Santos <unixmania@gmail.com> changed:
+--- Comment #7 from Carlos Santos <unixmania@gmail.com> ---
+(In reply to Dominique Tronche from comment #6)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|RESOLVED                    |REOPENED
-         Resolution|FIXED                       |---
+As Yann clarified in his review of my patch,
 
---- Comment #9 from Carlos Santos <unixmania@gmail.com> ---
-Reopening, since the patch was not committed yet, just submitted for review.
+"Getting a presistent storage, and customisations of the directory layout
+to use those persistent locations, can not be done in a generic way. It
+can only be handled locally, as each one will need to adapt to their own
+constraints."
+
+So I submitted a second patch with a better solution:
+
+    https://patchwork.ozlabs.org/patch/1134631/
 
 -- 
 You are receiving this mail because:
