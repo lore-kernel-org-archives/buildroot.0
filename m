@@ -1,30 +1,30 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Mon, 22 Jul 2019 08:29:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/iputils: fix build without NLS
-In-Reply-To: <20190719211152.3812-1-fontaine.fabrice@gmail.com>
-References: <20190719211152.3812-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190722062923.GA5516@dell5510>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 22 Jul 2019 06:52:44 +0000
+Subject: [Buildroot] [Bug 12031] Build of cups-filters fails while linking,
+ apparently due to missing libiconv
+In-Reply-To: <bug-12031-163@https.bugs.busybox.net/>
+References: <bug-12031-163@https.bugs.busybox.net/>
+Message-ID: <bug-12031-163-7QHQrLIt86@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Fabrice,
+https://bugs.busybox.net/show_bug.cgi?id=12031
 
-> Set USE_GETTEXT depending on BR2_SYSTEM_ENABLE_NLS as otherwise build
-> will fail if gettext is not installed on host because USE_GETTEXT is
-> enabled by default since version 20190324 and
-> https://github.com/iputils/iputils/commit/2615a527209bb408b54028ef6405075cadd4541b
+jakobcornell at gmail.com changed:
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/127823ddbd75336abc0fe0e9bd11e4f5249df87c
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+           Severity|normal                      |minor
 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
+--- Comment #6 from jakobcornell at gmail.com ---
+I've worked around the problem for now by adding `-liconv` to the `CUPS_LIBS`
+definition in `output/build/cups-filters-1.21.3/Makefile`. But I wonder how one
+would go about patching this so the dependency is used automatically under a
+uClibc toolchain.
 
-Thanks for fixing it!
-Hope that's the last one needed due changing build system to meson :).
-
-Kind regards,
-Petr
+-- 
+You are receiving this mail because:
+You are on the CC list for the bug.
