@@ -1,43 +1,40 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 22 Jul 2019 06:24:38 +0200
-Subject: [Buildroot] [PATCH 1/1] package/pngquant: bump version to 2.12.3
-Message-ID: <20190722042438.28114-1-bernd.kuhls@t-online.de>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Mon, 22 Jul 2019 07:16:26 +0200
+Subject: [Buildroot] [PATCH 1/2] system: add default to
+ BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
+Message-ID: <20190722051627.12993-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- package/pngquant/pngquant.hash | 4 ++--
- package/pngquant/pngquant.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Enable BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES if none
+of non-supported rootfs is selected.
 
-diff --git a/package/pngquant/pngquant.hash b/package/pngquant/pngquant.hash
-index f27eda60dd..00dd5cd93f 100644
---- a/package/pngquant/pngquant.hash
-+++ b/package/pngquant/pngquant.hash
-@@ -1,5 +1,5 @@
- # From https://pngquant.org/releases.html
--sha1 24efa42105bf3d8d0f4cf699053d2701ea787bd5  pngquant-2.12.2-src.tar.gz
-+sha1 e160eade5897b1c3d991e57b528b4f338674af88  pngquant-2.12.3-src.tar.gz
- # Locally computed
--sha256 bb031c48039ee73ea0e60709bb9ab80c55bfa3a5920b798ea37a03f2757b099c  pngquant-2.12.2-src.tar.gz
-+sha256 8bb076832a3f1c826393f4be62df8b637dfd6493b13d5839ad697a8a80ccf95b  pngquant-2.12.3-src.tar.gz
- sha256 e4f467f7abf860b4e620f5f60fdd88bc3a63a0fdb98a481fb002b5e511c9b826  COPYRIGHT
-diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
-index 0053b9a46e..801290807b 100644
---- a/package/pngquant/pngquant.mk
-+++ b/package/pngquant/pngquant.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+Hi,
+
+not sure about cloop, cpio, tar, ubi.
+
+Kind regards,
+Petr
+
+ system/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/system/Config.in b/system/Config.in
+index af7d8566d3..842e745cd3 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -196,6 +196,7 @@ config BR2_ROOTFS_STATIC_DEVICE_TABLE
  
--PNGQUANT_VERSION = 2.12.2
-+PNGQUANT_VERSION = 2.12.3
- PNGQUANT_SOURCE = pngquant-$(PNGQUANT_VERSION)-src.tar.gz
- PNGQUANT_SITE = https://pngquant.org
- PNGQUANT_LICENSE = GPL-3.0+
+ config BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
+ 	bool "support extended attributes in device tables"
++	default y if !BR2_TARGET_ROOTFS_AXFS && !BR2_TARGET_ROOTFS_CRAMFS && !BR2_TARGET_ROOTFS_ISO9660 && !BR2_TARGET_ROOTFS_ROMFS && !BR2_TARGET_ROOTFS_YAFFS2
+ 	help
+ 	  Support extended attributes handling in device tables
+ 
 -- 
 2.20.1
