@@ -1,7 +1,8 @@
 From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Sun, 21 Jul 2019 21:24:10 -0300
-Subject: [Buildroot] [PATCH v2] package/dcron: add patch to fix error message
-Message-ID: <20190722002410.6707-1-unixmania@gmail.com>
+Date: Sun, 21 Jul 2019 21:24:25 -0300
+Subject: [Buildroot] [PATCH v2] package/dcron: fix startup error due to
+ missing directories
+Message-ID: <20190722002425.6783-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,51 +11,136 @@ To: buildroot@busybox.net
 
 From: Carlos Santos <unixmania@gmail.com>
 
-The error message issued when the creation of the log file fails lacks
-an ending newline. Add a patch already submitted upstream[1] to fix it.
+crond uses the /var/spool/cron/{crontabs,cronstamps} directories to
+store the per-user crontabs and timestamps for jobs, respectively.
 
-1. https://github.com/dubiousjim/dcron/pull/22
+On systems with busybox or sysv init /var/spool is by default a link to
+/tmp (see package/skeleton-init-sysv/skeleton/). So if those directories
+are created at installation time they actually are under /tmp/spool and
+vanish at run time when a tmpfs is mounted at /tmp. In this case crond
+issues error messages that can't be seen.
+
+The error is hidden because we use start-stop-daemon to run crond in
+foreground mode to create a pid file and move crond to background. In
+this mode crond does not use syslog and all error messages are lost
+because start-stop-daemon redirects strderr to /dev/null.
+
+Getting a presistent storage for /var/spool would require customisations
+of the directory layout, which can not be done in a generic way, as each
+one will need to adapt to their own constraints.
+
+Fix these problem by means of the following changes:
+
+- Add configs for the crontabs and cronstamps paths. They can be used to
+  move the directories to persistent filesystems, if necessary.
+- Change the init script and systemd unit to ensure that the directories
+  are created before starting crond.
+- Start crond in daemon mode in the init script and use "pidof crond" to
+  create the required pid file.
+
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=12011
 
 Signed-off-by: Carlos Santos <unixmania@gmail.com>
 ---
 Changes v1->v2:
-  - Add SOB
+  - Remove (partially), since the fix is now complete
 ---
- ...ne-to-logfile-openning-error-message.patch | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/dcron/0001-main.c-add-newline-to-logfile-openning-error-message.patch
+ package/dcron/Config.in     | 16 ++++++++++++++++
+ package/dcron/S90dcron      |  8 +++++++-
+ package/dcron/dcron.mk      | 11 +++++++++--
+ package/dcron/dcron.service |  3 ++-
+ 4 files changed, 34 insertions(+), 4 deletions(-)
 
-diff --git a/package/dcron/0001-main.c-add-newline-to-logfile-openning-error-message.patch b/package/dcron/0001-main.c-add-newline-to-logfile-openning-error-message.patch
-new file mode 100644
-index 0000000000..c838063e03
---- /dev/null
-+++ b/package/dcron/0001-main.c-add-newline-to-logfile-openning-error-message.patch
-@@ -0,0 +1,26 @@
-+From 2710bc67cd920323da9b23a3d60193577bd43d71 Mon Sep 17 00:00:00 2001
-+From: Carlos Santos <unixmania@gmail.com>
-+Date: Sat, 20 Jul 2019 00:27:31 -0300
-+Subject: [PATCH] main.c: add newline to logfile openning error message
+diff --git a/package/dcron/Config.in b/package/dcron/Config.in
+index d7f66bdb7d..1203c42dec 100644
+--- a/package/dcron/Config.in
++++ b/package/dcron/Config.in
+@@ -21,3 +21,19 @@ config BR2_PACKAGE_DCRON
+ 	  with sgid bit enabled.
+ 
+ 	  http://www.jimpryor.net/linux/dcron.html
 +
-+Signed-off-by: Carlos Santos <unixmania@gmail.com>
-+---
-+ main.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++if BR2_PACKAGE_DCRON
 +
-+diff --git a/main.c b/main.c
-+index 0eba280..2606db8 100644
-+--- a/main.c
-++++ b/main.c
-+@@ -261,7 +261,7 @@ main(int ac, char **av)
-+ 				dup2(fd, 2);
-+ 			} else {
-+ 				int n = errno;
-+-				fdprintf(2, "failed to open logfile '%s', reason: %s", LogFile, strerror(n));
-++				fdprintf(2, "failed to open logfile '%s', reason: %s\n", LogFile, strerror(n));
-+ 				exit(n);
-+ 			}
-+ 		}
-+-- 
-+2.18.1
++config BR2_PACKAGE_DCRON_CRONTABS_DIR
++	string "crontabs directory"
++	default "/var/spool/cron/crontabs"
++	help
++	  Directory of per-user crontabs
 +
++config BR2_PACKAGE_DCRON_CRONSTAMPS_DIR
++	string "cronstamps directory"
++	default "/var/spool/cron/cronstamps"
++	help
++	  Directory of timestamps for @freq and FREQ=... jobs
++
++endif
+diff --git a/package/dcron/S90dcron b/package/dcron/S90dcron
+index de21d2ca13..4527277623 100644
+--- a/package/dcron/S90dcron
++++ b/package/dcron/S90dcron
+@@ -1,9 +1,15 @@
+ #!/bin/sh
+ 
++CRONTABS_DIR=%%CRONTABS_DIR%%
++CRONSTAMPS_DIR=%%CRONSTAMPS_DIR%%
++
+ case "$1" in
+ 	start)
+ 		printf "Starting cron ... "
+-		start-stop-daemon -S -q -m -b -p /var/run/dcron.pid --exec /usr/sbin/crond -- -f
++		mkdir -p "$CRONTABS_DIR" "$CRONSTAMPS_DIR"
++		start-stop-daemon -S -q -p /var/run/dcron.pid -x /usr/sbin/crond \
++			-- -c "$CRONTABS_DIR" -t "$CRONSTAMPS_DIR"
++		pidof crond > /var/run/dcron.pid || rm -f /var/run/dcron.pid
+ 		echo "done."
+ 		;;
+ 	stop)
+diff --git a/package/dcron/dcron.mk b/package/dcron/dcron.mk
+index 2ee0709af5..453e3acb54 100644
+--- a/package/dcron/dcron.mk
++++ b/package/dcron/dcron.mk
+@@ -19,18 +19,25 @@ define DCRON_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m0644 $(@D)/extra/root.crontab $(TARGET_DIR)/etc/cron.d/system
+ 	# Busybox provides run-parts, so there is no need to use nor install provided run-cron
+ 	$(SED) 's#/usr/sbin/run-cron#/bin/run-parts#g' $(TARGET_DIR)/etc/cron.d/system
+-	$(INSTALL) -d -m0755 $(TARGET_DIR)/var/spool/cron/crontabs \
+-		$(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly \
++	$(INSTALL) -d -m750 $(TARGET_DIR)/etc/cron.daily $(TARGET_DIR)/etc/cron.hourly \
+ 		$(TARGET_DIR)/etc/cron.monthly $(TARGET_DIR)/etc/cron.weekly
+ endef
+ 
+ define DCRON_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 0755 package/dcron/S90dcron $(TARGET_DIR)/etc/init.d/S90dcron
++	$(SED) 's#%%CRONTABS_DIR%%#$(BR2_PACKAGE_DCRON_CRONTABS_DIR)#' \
++		$(TARGET_DIR)/etc/init.d/S90dcron
++	$(SED) 's#%%CRONSTAMPS_DIR%%#$(BR2_PACKAGE_DCRON_CRONSTAMPS_DIR)#' \
++		$(TARGET_DIR)/etc/init.d/S90dcron
+ endef
+ 
+ define DCRON_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/dcron/dcron.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/dcron.service
++	$(SED) 's#%%CRONTABS_DIR%%#$(BR2_PACKAGE_DCRON_CRONTABS_DIR)#' \
++		$(TARGET_DIR)/usr/lib/systemd/system/dcron.service
++	$(SED) 's#%%CRONSTAMPS_DIR%%#$(BR2_PACKAGE_DCRON_CRONSTAMPS_DIR)#' \
++		$(TARGET_DIR)/usr/lib/systemd/system/dcron.service
+ 	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
+ 	ln -sf ../../../../usr/lib/systemd/system/dcron.service \
+ 		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/dcron.service
+diff --git a/package/dcron/dcron.service b/package/dcron/dcron.service
+index 924ed72205..abce25ba4f 100644
+--- a/package/dcron/dcron.service
++++ b/package/dcron/dcron.service
+@@ -3,7 +3,8 @@ Description=Task scheduler daemon
+ After=syslog.target
+ 
+ [Service]
+-ExecStart=/usr/sbin/crond -S
++ExecStartPre=mkdir -p %%CRONTABS_DIR%% %%CRONSTAMPS_DIR%%
++ExecStart=/usr/sbin/crond -c %%CRONTABS_DIR%% -t %%CRONSTAMPS_DIR%%
+ Type=forking
+ 
+ [Install]
 -- 
 2.18.1
