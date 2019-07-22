@@ -1,47 +1,25 @@
-From: =?UTF-8?Q?Micka=c3=abl_Tansorier?= <mickael.tansorier@smile.fr>
-Date: Mon, 22 Jul 2019 09:07:42 +0200
-Subject: [Buildroot] fitImage: proposal to sign images into fitImage
-Message-ID: <994ab8c3-bf81-2b91-946a-8281105bfc36@smile.fr>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 22 Jul 2019 07:16:24 +0000
+Subject: [Buildroot] [Bug 12031] Build of cups-filters fails while linking,
+ apparently due to missing libiconv
+In-Reply-To: <bug-12031-163@https.bugs.busybox.net/>
+References: <bug-12031-163@https.bugs.busybox.net/>
+Message-ID: <bug-12031-163-eTSj95Gbrx@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+https://bugs.busybox.net/show_bug.cgi?id=12031
 
-In project, I worked to add option in builroot to sign kernel and 
-devicetree image for fitImage.
+--- Comment #7 from Carlos Santos <unixmania@gmail.com> ---
+(In reply to jakobcornell from comment #6)
 
-Uboot support fitImage signature check, but buildroot have no option to 
-build fitImage with specific signature.
+A patch fixing the problem was submitted:
 
-I would like to propose patch, but I'm not sure about the best practice 
-to do that. Have you any suggestion ?
-I can send you my patch (draft) to improve it.
+    https://patchwork.ozlabs.org/patch/1134738/
 
-My idea is to add variables to get path of `its` file, `dts` to describe 
-public key for uboot, and server where to download keys to sign in 
-Config.in.
-Then in `uboot.mk`:
-  - I download keys
-  - I replace kernel name, dtb name, and keys name in `its` file. (To 
-get right path to its).
-  - I replace keys name in `dts` file
-  - I compile `dts` to `dtb` with space to add pubic key
-  - I compile fitImage with `mkimage`
-
-It could be find if this can be generic.
-
-I appreciate if any of you have idea or suggertion.
-
-Thank.
-
-Regards.
 -- 
-Tansorier Micka?l
-
-Smile ECS / OpenWide Ing?nierie
-D?l?gu? du Personnel pour l'agence de Nantes
-
-[Pr?serve ta libert?: https://gafam.laquadrature.net/]
+You are receiving this mail because:
+You are on the CC list for the bug.
