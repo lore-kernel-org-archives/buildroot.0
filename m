@@ -1,47 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Jul 2019 00:13:59 +0200
-Subject: [Buildroot] [PATCH 1/1] utils/test-pkg: add option to enable
- NLS support
-In-Reply-To: <20190723172336.24010-1-vadim4j@gmail.com>
-References: <20190723172336.24010-1-vadim4j@gmail.com>
-Message-ID: <20190724001359.0a290cf1@windsurf>
+Date: Wed, 24 Jul 2019 00:14:17 +0200
+Subject: [Buildroot] [git commit] package/dovecot-pigeonhole: bump version
+ to 0.5.7.1
+Message-ID: <20190723221242.7F31687774@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vadim,
+commit: https://git.buildroot.net/buildroot/commit/?id=267197f593cbe4627a1ab947832f4afabad10e46
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 23 Jul 2019 20:23:36 +0300
-Vadim Kochan <vadim4j@gmail.com> wrote:
+Release notes:
+https://dovecot.org/pipermail/dovecot/2019-July/116622.html
 
-> Sometimes the package or specific configuration should be build with and
-> without NLS support which requires additionally append NLS related
-> config options or to have separate config file or use additional shell
-> script.
-> 
-> So add helper command line option which appends config file with NLS
-> options to the final config file which is now always stored in temporary
-> file before merge it with the default configuration (even only -c was
-> specified).
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/dovecot-pigeonhole/dovecot-pigeonhole.hash | 2 +-
+ package/dovecot-pigeonhole/dovecot-pigeonhole.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for the patch. It seems like a good idea to test NLS-enabled
-configurations in test-pkg indeed. However, I'm not sure it's a good
-idea to make it conditional/optional. The idea of test-pkg is that
-people run test-pkg, and it tells them if their new package seems to be
-OK or not. Most people will not know which knobs/options to pass to
-test-pkg to test all possible situations.
-
-So I think we should instead ensure that test-pkg by default tests the
-different combinations that we think are useful to test.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+index 7d215c88e7..6435aa9ccf 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.hash
+@@ -1,3 +1,3 @@
+ # Locally computed after checking signature
+-sha256 783849542c272331f60e7c4d371b303f7f2b1d69828bced3094a898876ecdb63  dovecot-2.3-pigeonhole-0.5.7.tar.gz
++sha256 3270b24c1f75a7c144f54d6d08ce994176e39c2cdb3ac4dd80ad5e64aaaa2028  dovecot-2.3-pigeonhole-0.5.7.1.tar.gz
+ sha256 fc9e9522216f2a9a28b31300e3c73c1df56acc27dfae951bf516e7995366b51a  COPYING
+diff --git a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+index 532d3e6e3b..ecde286ffa 100644
+--- a/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
++++ b/package/dovecot-pigeonhole/dovecot-pigeonhole.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOVECOT_PIGEONHOLE_VERSION = 0.5.7
++DOVECOT_PIGEONHOLE_VERSION = 0.5.7.1
+ DOVECOT_PIGEONHOLE_SOURCE = dovecot-2.3-pigeonhole-$(DOVECOT_PIGEONHOLE_VERSION).tar.gz
+ DOVECOT_PIGEONHOLE_SITE = https://pigeonhole.dovecot.org/releases/2.3
+ DOVECOT_PIGEONHOLE_LICENSE = LGPL-2.1
