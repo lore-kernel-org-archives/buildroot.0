@@ -1,121 +1,75 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Tue, 23 Jul 2019 20:23:36 +0300
-Subject: [Buildroot] [PATCH 1/1] utils/test-pkg: add option to enable NLS
- support
-Message-ID: <20190723172336.24010-1-vadim4j@gmail.com>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Tue, 23 Jul 2019 19:26:11 +0200
+Subject: [Buildroot] [PATCH 2/2] package/exim: bump version to 4.90
+References: <20180127225123.28166-1-bernd.kuhls@t-online.de>
+ <20180127225123.28166-2-bernd.kuhls@t-online.de>
+ <20180129232524.5fadcbd8@windsurf.lan>
+Message-ID: <jisj0gxhh6.ln2@ID-313208.user.individual.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Sometimes the package or specific configuration should be build with and
-without NLS support which requires additionally append NLS related
-config options or to have separate config file or use additional shell
-script.
+Hi Thomas,
 
-So add helper command line option which appends config file with NLS
-options to the final config file which is now always stored in temporary
-file before merge it with the default configuration (even only -c was
-specified).
+Am Mon, 29 Jan 2018 23:25:24 +0100 schrieb Thomas Petazzoni:
 
-Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
----
- utils/test-pkg | 34 ++++++++++++++++++++++++++--------
- 1 file changed, 26 insertions(+), 8 deletions(-)
+> Hello,
+> 
+> On Sat, 27 Jan 2018 23:51:23 +0100, Bernd Kuhls wrote:
+> 
+>>  ifeq ($(BR2_PACKAGE_OPENSSL),y)
+>> -EXIM_DEPENDENCIES += openssl
+>> +EXIM_DEPENDENCIES += host-openssl openssl
+> 
+> This looks suspicious. Why are you bringing host-openssl when target
+> OpenSSL support is enabled ? Is the OpenSSL support in the macro_predef
+> program needed for target SSL support to work ? What does OpenSSL
+> support in macro_predef actually brings ?
 
-diff --git a/utils/test-pkg b/utils/test-pkg
-index f3b34d5d0d..6a48e039e0 100755
---- a/utils/test-pkg
-+++ b/utils/test-pkg
-@@ -16,9 +16,10 @@ main() {
-     local ret nb nb_skip nb_fail nb_legal nb_tc build_dir keep
-     local -a toolchains
-     local pkg_br_name
-+    local with_nls
- 
--    o='hakc:d:n:p:r:t:'
--    O='help,all,keep,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
-+    o='hakNc:d:n:p:r:t:'
-+    O='help,all,keep,with-nls,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
-     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
-     eval set -- "${opts}"
- 
-@@ -27,6 +28,7 @@ main() {
-     keep=0
-     number=0
-     mode=0
-+    with_nls=0
-     toolchains_csv="${TOOLCHAINS_CSV}"
-     while [ ${#} -gt 0 ]; do
-         case "${1}" in
-@@ -41,6 +43,10 @@ main() {
-             ;;
-         (-c|--config-snippet)
-             cfg="${2}"; shift 2
-+
-+            if [ ! -e "${cfg}" ]; then
-+                printf "error: %s: no such file\n" "${cfg}" >&2; exit 1
-+            fi
-             ;;
-         (-d|--build-dir)
-             dir="${2}"; shift 2
-@@ -57,6 +63,9 @@ main() {
-         (-t|--toolchains-csv)
-             toolchains_csv="${2}"; shift 2
-             ;;
-+        (-N|--with-nls)
-+            with_nls=1; shift 1
-+            ;;
-         (--)
-             shift; break
-             ;;
-@@ -65,16 +74,21 @@ main() {
- 
-     trap do_clean INT TERM HUP EXIT
- 
-+    TEMP_CONF=$(mktemp /tmp/test-${pkg}-config.XXXXXX)
-+
-     if [ -z "${cfg}" ]; then
-         pkg_br_name="${pkg//-/_}"
-         pkg_br_name="BR2_PACKAGE_${pkg_br_name^^}"
--        TEMP_CONF=$(mktemp /tmp/test-${pkg}-config.XXXXXX)
--        echo "${pkg_br_name}=y" > ${TEMP_CONF}
--        cfg="${TEMP_CONF}"
-+        echo "${pkg_br_name}=y" >> ${TEMP_CONF}
-+    else
-+        cat "${cfg}" >> ${TEMP_CONF}
-     fi
--    if [ ! -e "${cfg}" ]; then
--        printf "error: %s: no such file\n" "${cfg}" >&2; exit 1
-+
-+    if [ ${with_nls} -eq 1 ]; then
-+        echo "BR2_USE_WCHAR=y" >> ${TEMP_CONF}
-+        echo "BR2_SYSTEM_ENABLE_NLS=y" >> ${TEMP_CONF}
-     fi
-+
-     if [ -z "${dir}" ]; then
-         dir="${HOME}/br-test-pkg"
-     fi
-@@ -127,7 +141,7 @@ main() {
-         toolchain="$(basename "${toolchainconfig}" .config)"
-         build_dir="${dir}/${toolchain}"
-         printf "%40s [%*d/%d]: " "${toolchain}" ${#nb_tc} ${nb} ${nb_tc}
--        build_one "${build_dir}" "${toolchainconfig}" "${cfg}" "${pkg}" && ret=0 || ret=${?}
-+        build_one "${build_dir}" "${toolchainconfig}" "${TEMP_CONF}" "${pkg}" && ret=0 || ret=${?}
-         case ${ret} in
-         (0) printf "OK\n";;
-         (1) : $((nb_skip++)); printf "SKIPPED\n";;
-@@ -251,6 +265,10 @@ Options:
-         Note: the logfile and configuration is always retained, even without
-         this option.
- 
-+    -N, --with-nls
-+        Build with NLS support enabled. Required config options
-+        for NLS support will be automatically enabled.
-+
- Example:
- 
-     Testing libcec would require a config snippet that contains:
--- 
-2.17.1
+If you try to build exim with this defconfig
+
+BR2_PACKAGE_OPENSSL=y
+BR2_PACKAGE_EXIM=y
+
+without the buildroot package host-openssl and without a libssl-dev 
+package installed on your host machine the exim build will fail:
+
+/usr/bin/gcc -DMACRO_PREDEF macro_predef.c
+In file included from hash.h:14,
+                 from exim.h:485,
+                 from macro_predef.c:11:
+sha_ver.h:37:12: fatal error: openssl/ssl.h: No such file or directory
+
+because macro_predef also has the an optional dependency on openssl:
+https://github.com/Exim/exim/blob/exim-4.92%2Bfixes/src/src/
+macro_predef.c#L130
+
+>> +# We need the host version of macro_predef during the build, before
+>> +# building it we need to prepare the makefile.
+>>  # "The -j (parallel) flag must not be used with make"
+>>  # (http://www.exim.org/exim-html-current/doc/html/spec_html/ch04.html)
+>>  define EXIM_BUILD_CMDS
+>> +	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) makefile
+>> +	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)/build-br macro_predef \
+>> +		CC=$(HOSTCC) \
+>> +		LNCC=$(HOSTCC) \
+>> +		CFLAGS="$(HOST_CFLAGS)" \
+>> +		LFLAGS="-fPIC $(HOST_LDFLAGS)"
+> 
+> Meh, this is not nice. Perhaps we could submit a patch upstream that
+> adds support for CC_FOR_BUILD, CFLAGS_FOR_BUILD, LFLAGS_FOR_BUILD, so
+> that we don't need a separate build step. This could be useful for
+> other projects.
+
+Sorry, but this is beyond the scope of the time I am willing to invest in 
+buildroot.
+
+Sent new bump: http://patchwork.ozlabs.org/patch/1135814/
+
+Please note that on July, 25th new security-related patches will be 
+published as version bump to 4.92.1:
+https://lists.exim.org/lurker/message/20190722.100208.85ae994c.en.html
+
+Regards, Bernd
