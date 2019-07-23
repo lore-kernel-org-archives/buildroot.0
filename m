@@ -1,98 +1,35 @@
-From: Matt Weber <matthew.weber@rockwellcollins.com>
-Date: Mon, 22 Jul 2019 17:57:45 -0500
-Subject: [Buildroot] [PATCH v2] package/mtd: bump to 2.1.1
-Message-ID: <20190722225745.2743-1-matthew.weber@rockwellcollins.com>
+From: Danomi Manchego <danomimanchego123@gmail.com>
+Date: Mon, 22 Jul 2019 21:34:24 -0400
+Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: add missing
+ host-uboot-tools select
+Message-ID: <20190723013424.1827-1-danomimanchego123@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removes 0001-mkfs.ubifs-fix-build-without-openssl.patch which has been
-merged upsteam as b5027be5f470830ac9543db3c52e076b13abd313.
+The "Build BL31 U-Boot image" option uses mkimage to make atf-uboot.ub,
+and has a make dependency on host-uboot-tools.  Therefore, the Config.in
+option should select BR2_PACKAGE_HOST_UBOOT_TOOLS.  (Just like similar
+options in linux, package/xvisor, and fs/cpio.)
 
-Release Notes:
-https://www.spinics.net/lists/linux-mtd/msg08093.html
-
-Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
---
-Changes
-v1 -> v2
- - Added hash file update missed in first patch
+Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
 ---
- ...mkfs.ubifs-fix-build-without-openssl.patch | 38 -------------------
- package/mtd/mtd.hash                          |  4 +-
- package/mtd/mtd.mk                            |  2 +-
- 3 files changed, 3 insertions(+), 41 deletions(-)
- delete mode 100644 package/mtd/0001-mkfs.ubifs-fix-build-without-openssl.patch
+ boot/arm-trusted-firmware/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mtd/0001-mkfs.ubifs-fix-build-without-openssl.patch b/package/mtd/0001-mkfs.ubifs-fix-build-without-openssl.patch
-deleted file mode 100644
-index 8633830806..0000000000
---- a/package/mtd/0001-mkfs.ubifs-fix-build-without-openssl.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 451b6fd8f6b619ae75d283df02edd835c8e3c627 Mon Sep 17 00:00:00 2001
--From: Baruch Siach <baruch@tkos.co.il>
--Date: Fri, 29 Mar 2019 13:29:41 +0300
--Subject: [PATCH] mkfs.ubifs: fix build without openssl
--
--Exclude openssl headers when WITH_CRYPTO is not defined.
--
--Fixes this build failure:
--
--In file included from ubifs-utils/mkfs.ubifs/mkfs.ubifs.c:25:0:
--ubifs-utils/mkfs.ubifs/mkfs.ubifs.h:49:10: fatal error: openssl/rand.h: No such file or directory
-- #include <openssl/rand.h>
--          ^~~~~~~~~~~~~~~~
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-----
--Upstream status: http://lists.infradead.org/pipermail/linux-mtd/2019-March/088508.html
--
-- ubifs-utils/mkfs.ubifs/mkfs.ubifs.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/ubifs-utils/mkfs.ubifs/mkfs.ubifs.h b/ubifs-utils/mkfs.ubifs/mkfs.ubifs.h
--index aa032392155b..8f0186043079 100644
----- a/ubifs-utils/mkfs.ubifs/mkfs.ubifs.h
--+++ b/ubifs-utils/mkfs.ubifs/mkfs.ubifs.h
--@@ -46,7 +46,9 @@
-- #include <uuid.h>
-- #include <sys/file.h>
-- 
--+#ifdef WITH_CRYPTO
-- #include <openssl/rand.h>
--+#endif
-- 
-- #include <mtd/ubifs-media.h>
-- 
---- 
--2.20.1
--
-diff --git a/package/mtd/mtd.hash b/package/mtd/mtd.hash
-index e82b3522cb..2e23fbb819 100644
---- a/package/mtd/mtd.hash
-+++ b/package/mtd/mtd.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.0.2.tar.bz2.asc
--sha256	b4b995b06d93aee4125e8e44c05a1cae6eea545ca5a6e8a377405ee8aa454bd2	mtd-utils-2.1.0.tar.bz2
-+# ftp://ftp.infradead.org/pub/mtd-utils/mtd-utils-2.1.1.tar.bz2.asc
-+sha256	8d15e8b70f036d6af1a66011f8ca0e048e9675fa7983d33bea92c24313a232d2	mtd-utils-2.1.1.tar.bz2
- sha256	dcc100d4161cc0b7177545ab6e47216f84857cda3843847c792a25289852dcaa	COPYING
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 94c8b8b1da..0de14dbcba 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MTD_VERSION = 2.1.0
-+MTD_VERSION = 2.1.1
- MTD_SOURCE = mtd-utils-$(MTD_VERSION).tar.bz2
- MTD_SITE = ftp://ftp.infradead.org/pub/mtd-utils
- MTD_LICENSE = GPL-2.0
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index beb95fb..2e41bd0 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -86,6 +86,7 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT
+ 	bool "Build BL31 U-Boot image"
+ 	select BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
++	select BR2_PACKAGE_HOST_UBOOT_TOOLS
+ 	help
+ 	  Generates a U-Boot image named atf-uboot.ub containing
+ 	  bl31.bin.  This is used for example by the Xilinx version of
 -- 
-2.17.1
+2.7.4
