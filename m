@@ -1,29 +1,41 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 24 Jul 2019 00:17:37 +0200
-Subject: [Buildroot] [PATCH 1/1] package/proftpd: add upstream security
- fix for CVE-2019-12815
-In-Reply-To: <20190723174310.10779-1-bernd.kuhls@t-online.de>
-References: <20190723174310.10779-1-bernd.kuhls@t-online.de>
-Message-ID: <20190724001737.3d9568cf@windsurf>
+Date: Wed, 24 Jul 2019 00:25:14 +0200
+Subject: [Buildroot] [PATCH V2] dejavu: Add missing license name and
+ license hash
+In-Reply-To: <20190723152816.20465-1-mickael.tansorier@smile.fr>
+References: <20190723152816.20465-1-mickael.tansorier@smile.fr>
+Message-ID: <20190724002514.2e252e64@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 23 Jul 2019 19:43:10 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Hello,
 
-> Added license hash.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  package/proftpd/0002-fix-CVE-2019-12815.patch | 382 ++++++++++++++++++
->  package/proftpd/proftpd.hash                  |   1 +
->  2 files changed, 383 insertions(+)
->  create mode 100644 package/proftpd/0002-fix-CVE-2019-12815.patch
+Adding Yann and Arnout (licensing question below)
 
-Applied to master, thanks.
+On Tue, 23 Jul 2019 17:28:16 +0200
+Micka?l Tansorier <mickael.tansorier@smile.fr> wrote:
+
+> There is 3 licenses, not listed in SPDX license list:
+> - Bitstream Vera Fonts
+> - Arev Fonts
+> - Public Domain
+
+I'm not sure what you mean in this commit log. The actual code change
+is to add "Bitstream Vera" to the list of licenses, which is also not
+part of the SPDX license list.
+
+Regarding SPDX and "Public Domain", see
+https://wiki.spdx.org/view/Legal_Team/Decisions/Dealing_with_Public_Domain_within_SPDX_Files.
+
+Also, I think you are misreading the LICENSE file. What it says is
+"Bitstream Vera Fonts Copyright" and "Arev Fonts Copyright", which are
+not license texts. The license text is below each of those titles.
+
+Here is what Debian says about this font:
+https://metadata.ftp-master.debian.org/changelogs//main/f/fonts-dejavu/fonts-dejavu_2.37-1_copyright
 
 Thomas
 -- 
