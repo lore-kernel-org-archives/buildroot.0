@@ -1,47 +1,57 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 23 Jul 2019 07:02:20 +0300
-Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: add missing
- host-uboot-tools select
-In-Reply-To: <20190723013424.1827-1-danomimanchego123@gmail.com>
-References: <20190723013424.1827-1-danomimanchego123@gmail.com>
-Message-ID: <20190723040220.scotkwrqgsxjcsjl@sapphire.tkos.co.il>
+Date: Tue, 23 Jul 2019 07:17:35 +0300
+Subject: [Buildroot] [PATCH] package/ncdu: bump to version 1.14
+In-Reply-To: <1563818223-23023-1-git-send-email-gilles.talis@gmail.com>
+References: <1563818223-23023-1-git-send-email-gilles.talis@gmail.com>
+Message-ID: <20190723041735.dujdtjnuvytxi23r@sapphire.tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Danomi,
+Hi Gilles,
 
-On Mon, Jul 22, 2019 at 09:34:24PM -0400, Danomi Manchego wrote:
-> The "Build BL31 U-Boot image" option uses mkimage to make atf-uboot.ub,
-> and has a make dependency on host-uboot-tools.  Therefore, the Config.in
-> option should select BR2_PACKAGE_HOST_UBOOT_TOOLS.  (Just like similar
-> options in linux, package/xvisor, and fs/cpio.)
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
+On Mon, Jul 22, 2019 at 07:57:02PM +0200, Gilles Talis wrote:
+> Signed-off-by: Gilles Talis <gilles.talis@gmail.com>
 > ---
->  boot/arm-trusted-firmware/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  package/ncdu/ncdu.hash | 8 ++++----
+>  package/ncdu/ncdu.mk   | 2 +-
+>  2 files changed, 5 insertions(+), 5 deletions(-)
 > 
-> diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
-> index beb95fb..2e41bd0 100644
-> --- a/boot/arm-trusted-firmware/Config.in
-> +++ b/boot/arm-trusted-firmware/Config.in
-> @@ -86,6 +86,7 @@ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
->  config BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT
->  	bool "Build BL31 U-Boot image"
->  	select BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31
-> +	select BR2_PACKAGE_HOST_UBOOT_TOOLS
+> diff --git a/package/ncdu/ncdu.hash b/package/ncdu/ncdu.hash
+> index 7326a15..97ac287 100644
+> --- a/package/ncdu/ncdu.hash
+> +++ b/package/ncdu/ncdu.hash
+> @@ -1,6 +1,6 @@
+> -# From http://dev.yorhel.nl/download/ncdu-1.13.tar.gz.{md5,sha1}
+> -md5 67239592ac41f42290f52ab89ff198be  ncdu-1.13.tar.gz
+> -sha1 3233c4185208d9989ac528a94817ed92dd59c773  ncdu-1.13.tar.gz
+> +# From http://dev.yorhel.nl/download/ncdu-1.14.tar.gz.{md5,sha1}
+> +md5 d26c0aa57728c19969c3c5036fa272a0  ncdu-1.14.tar.gz
+> +sha1 28c7003ad23d2e3a2d22d2c349bb0c7170752396  ncdu-1.14.tar.gz
+>  
+>  # computed locally
+> -sha256 0ee47c3742a867ace26eb429cce593b54ab4ccb4c4a97d62e41363cbf80c8a24 COPYING
+> +sha256 a05f1fd38432052dc8588da66b8bf3e9e103e29a82c0b5d72c65d4d9fc830f2e COPYING
 
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT adds host-uboot-tools to 
-ARM_TRUSTED_FIRMWARE_DEPENDENCIES already. Why isn't that enough?
+What has changed in the license file? Please explain in the commit log.
 
 baruch
 
->  	help
->  	  Generates a U-Boot image named atf-uboot.ub containing
->  	  bl31.bin.  This is used for example by the Xilinx version of
+> diff --git a/package/ncdu/ncdu.mk b/package/ncdu/ncdu.mk
+> index 9a7170d..87508f5 100644
+> --- a/package/ncdu/ncdu.mk
+> +++ b/package/ncdu/ncdu.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -NCDU_VERSION = 1.13
+> +NCDU_VERSION = 1.14
+>  NCDU_SITE = http://dev.yorhel.nl/download
+>  
+>  NCDU_DEPENDENCIES = ncurses
 
 -- 
      http://baruch.siach.name/blog/                  ~. .~   Tk Open Systems
