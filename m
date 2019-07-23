@@ -1,30 +1,41 @@
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Tue, 23 Jul 2019 16:33:55 +0200
-Subject: [Buildroot] [PATCH] package/ncdu: bump to version 1.14
-In-Reply-To: <20190723054444.qyof24kzfgmmtseh@sapphire.tkos.co.il>
-References: <1563818223-23023-1-git-send-email-gilles.talis@gmail.com>
- <20190723041735.dujdtjnuvytxi23r@sapphire.tkos.co.il>
- <CAKcgs2y0yU4w-=sFW8f1L_F6By=XMWRO+rRyhLRLtbpnZatarA@mail.gmail.com>
- <20190723054444.qyof24kzfgmmtseh@sapphire.tkos.co.il>
-Message-ID: <CAKcgs2zXr9i9oB1=WzZ555uwScBxSV203ErQ1CQAe+xV5g9KqQ@mail.gmail.com>
+From: =?UTF-8?q?Micka=C3=ABl=20Tansorier?= <mickael.tansorier@smile.fr>
+Date: Tue, 23 Jul 2019 16:41:53 +0200
+Subject: [Buildroot] [PATCH] dejavu: Add missing license name and license
+ hash
+Message-ID: <20190723144153.12830-1-mickael.tansorier@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Baruch,
+Signed-off-by: Micka?l Tansorier <mickael.tansorier@smile.fr>
+---
+ package/dejavu/dejavu.hash | 3 +++
+ package/dejavu/dejavu.mk   | 1 +
+ 2 files changed, 4 insertions(+)
 
-Le mar. 23 juil. 2019 ? 07:44, Baruch Siach <baruch@tkos.co.il> a ?crit :
-
-> It is worth mentioning in the commit log. The whole point of license file
-> hashes is to detect license changes. Blind license hash updates defeat that
-> purpose.
-Understood. Thanks for the clarification.
-
->
-> Not sure it's worth v2 though. The maintainers can add the copyright year
-> update comment in the log when applying.
-OK. Let's see what maintainers do on this one. I'll send a v2 if necessary.
-
-Gilles.
+diff --git a/package/dejavu/dejavu.hash b/package/dejavu/dejavu.hash
+index db7365a1c3..57ae504fac 100644
+--- a/package/dejavu/dejavu.hash
++++ b/package/dejavu/dejavu.hash
+@@ -1,2 +1,5 @@
+ # From https://dejavu-fonts.github.io/Download.html
+ sha256 fa9ca4d13871dd122f61258a80d01751d603b4d3ee14095d65453b4e846e17d7  dejavu-fonts-ttf-2.37.tar.bz2
++
++# Hashes for license file:
++sha256 7a083b136e64d064794c3419751e5c7dd10d2f64c108fe5ba161eae5e5958a93 LICENSE
+diff --git a/package/dejavu/dejavu.mk b/package/dejavu/dejavu.mk
+index 9b57f0992e..5ce6fef5b3 100644
+--- a/package/dejavu/dejavu.mk
++++ b/package/dejavu/dejavu.mk
+@@ -7,6 +7,7 @@
+ DEJAVU_VERSION = 2.37
+ DEJAVU_SITE = https://sourceforge.net/projects/dejavu/files/dejavu/$(DEJAVU_VERSION)
+ DEJAVU_SOURCE = dejavu-fonts-ttf-$(DEJAVU_VERSION).tar.bz2
++DEJAVU_LICENSE = Bitstream Vera
+ DEJAVU_LICENSE_FILES = LICENSE
+ 
+ DEJAVU_FONTS_INSTALL =
+-- 
+2.22.0
