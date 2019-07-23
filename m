@@ -1,289 +1,121 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Tue, 23 Jul 2019 19:22:49 +0200
-Subject: [Buildroot] [PATCH 1/1] package/exim: bump version to 4.92
-Message-ID: <20190723172249.1919-1-bernd.kuhls@t-online.de>
+From: Vadim Kochan <vadim4j@gmail.com>
+Date: Tue, 23 Jul 2019 20:23:36 +0300
+Subject: [Buildroot] [PATCH 1/1] utils/test-pkg: add option to enable NLS
+ support
+Message-ID: <20190723172336.24010-1-vadim4j@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://github.com/Exim/exim/commit/d185889f47b9b27088e777f7d382295c51271586
-added new code to "Prebuild the data structure for builtin macros".
+Sometimes the package or specific configuration should be build with and
+without NLS support which requires additionally append NLS related
+config options or to have separate config file or use additional shell
+script.
 
-This function needs a host-built binary called macro_predef, it depends
-on host-berkeleydb, host-pcre and optionally on host-openssl.
+So add helper command line option which appends config file with NLS
+options to the final config file which is now always stored in temporary
+file before merge it with the default configuration (even only -c was
+specified).
 
-With an openssl-enabled exim the host build of macro_predef will fail
-if host-openssl is missing:
-
-/usr/bin/gcc -DMACRO_PREDEF macro_predef.c
-In file included from hash.h:14,
-                 from exim.h:485,
-                 from macro_predef.c:11:
-sha_ver.h:37:12: fatal error: openssl/ssl.h: No such file or directory
-
-because macro_predef also has the an optional dependency on openssl:
-https://github.com/Exim/exim/blob/exim-4.92%2Bfixes/src/src/macro_predef.c#L130
-
-Removed patches applied upstream:
-0004: https://github.com/Exim/exim/commit/98913c8ea2be5188dd22ec652da1182017e8edb7
-0005: https://github.com/Exim/exim/commit/cf3cd306062a08969c41a1cdd32c6855f1abecf1
-0007: https://github.com/Exim/exim/commit/7ea1237c783e380d7bdb86c90b13d8203c7ecf26#diff-58af16fe62ea674adf1730edc078d175R6243
-
-Added patch to fix uClibc build.
-
-Added license hash, switched _SITE to https.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 ---
- package/exim/0004-glibc.patch                 | 27 ----------
- ...-libnsl.patch => 0004-remove-libnsl.patch} |  0
- ...ix-base64d-buffer-size-CVE-2018-6789.patch | 37 --------------
- package/exim/0005-Fix-uClibc-build.patch      | 35 +++++++++++++
- package/exim/0007-Fix-CVE-2019-10149.patch    | 51 -------------------
- package/exim/exim.hash                        |  3 +-
- package/exim/exim.mk                          | 16 ++++--
- 7 files changed, 49 insertions(+), 120 deletions(-)
- delete mode 100644 package/exim/0004-glibc.patch
- rename package/exim/{0006-remove-libnsl.patch => 0004-remove-libnsl.patch} (100%)
- delete mode 100644 package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch
- create mode 100644 package/exim/0005-Fix-uClibc-build.patch
- delete mode 100644 package/exim/0007-Fix-CVE-2019-10149.patch
+ utils/test-pkg | 34 ++++++++++++++++++++++++++--------
+ 1 file changed, 26 insertions(+), 8 deletions(-)
 
-diff --git a/package/exim/0004-glibc.patch b/package/exim/0004-glibc.patch
-deleted file mode 100644
-index 7ae2ef8c70..0000000000
---- a/package/exim/0004-glibc.patch
-+++ /dev/null
-@@ -1,27 +0,0 @@
--uClibc does not contain gnu/libc-version.h
--
--Patch sent upstream: https://bugs.exim.org/show_bug.cgi?id=2070
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -uNr exim-4.88.org/src/exim.c exim-4.88/src/exim.c
----- exim-4.88.org/src/exim.c	2016-12-18 15:02:28.000000000 +0100
--+++ exim-4.88/src/exim.c	2016-12-26 12:12:57.000000000 +0100
--@@ -12,7 +12,7 @@
-- 
-- #include "exim.h"
-- 
---#ifdef __GLIBC__
--+#if defined(__GLIBC__) && !defined(__UCLIBC__)
-- # include <gnu/libc-version.h>
-- #endif
-- 
--@@ -1044,7 +1044,7 @@
--   fprintf(f, "Compiler: <unknown>\n");
-- #endif
-- 
---#ifdef __GLIBC__
--+#if defined(__GLIBC__) && !defined(__UCLIBC__)
--   fprintf(f, "Library version: Glibc: Compile: %d.%d\n",
-- 	       	__GLIBC__, __GLIBC_MINOR__);
--   if (__GLIBC_PREREQ(2, 1))
-diff --git a/package/exim/0006-remove-libnsl.patch b/package/exim/0004-remove-libnsl.patch
-similarity index 100%
-rename from package/exim/0006-remove-libnsl.patch
-rename to package/exim/0004-remove-libnsl.patch
-diff --git a/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch b/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch
-deleted file mode 100644
-index 1811a7ff98..0000000000
---- a/package/exim/0005-Fix-base64d-buffer-size-CVE-2018-6789.patch
-+++ /dev/null
-@@ -1,37 +0,0 @@
--From 062990cc1b2f9e5d82a413b53c8f0569075de700 Mon Sep 17 00:00:00 2001
--From: "Heiko Schlittermann (HS12-RIPE)" <hs@schlittermann.de>
--Date: Mon, 5 Feb 2018 22:23:32 +0100
--Subject: [PATCH] Fix base64d() buffer size (CVE-2018-6789)
--
--Credits for discovering this bug: Meh Chang <meh@devco.re>
--
--[Peter: Drop ChangeLog change, fix path]
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/base64.c      | 8 ++++++--
-- 1 file changed, 6 insertions(+), 2 deletions(-)
--
--diff --git a/src/base64.c b/src/base64.c
--index f6f187f0..e58ca6c7 100644
----- a/src/base64.c
--+++ b/src/base64.c
--@@ -152,10 +152,14 @@ static uschar dec64table[] = {
-- int
-- b64decode(const uschar *code, uschar **ptr)
-- {
--+
-- int x, y;
---uschar *result = store_get(3*(Ustrlen(code)/4) + 1);
--+uschar *result;
-- 
---*ptr = result;
--+{
--+  int l = Ustrlen(code);
--+  *ptr = result = store_get(1 + l/4 * 3 + l%4);
--+}
-- 
-- /* Each cycle of the loop handles a quantum of 4 input bytes. For the last
-- quantum this may decode to 1, 2, or 3 output bytes. */
---- 
--2.11.0
--
-diff --git a/package/exim/0005-Fix-uClibc-build.patch b/package/exim/0005-Fix-uClibc-build.patch
-new file mode 100644
-index 0000000000..9d5452bb56
---- /dev/null
-+++ b/package/exim/0005-Fix-uClibc-build.patch
-@@ -0,0 +1,35 @@
-+From 68ea4fc7ca53bf010e5ec738ad078452f0eaa639 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Tue, 23 Jul 2019 18:48:06 +0200
-+Subject: [PATCH] Fix uClibc build
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+structs.h:757:18: error: ?NS_MAXMSG? undeclared here (not in a function); did you mean ?N_MASC??
-+   uschar  answer[NS_MAXMSG];      /* the answer itself */
-+
-+Patch sent upstream: https://github.com/Exim/exim/pull/70
-+
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ OS/os.h-Linux | 4 ++++
-+ 1 file changed, 4 insertions(+)
-+
-+diff --git a/OS/os.h-Linux b/OS/os.h-Linux
-+index 63cf9babd..1d82e9bad 100644
-+--- a/OS/os.h-Linux
-++++ b/OS/os.h-Linux
-+@@ -87,5 +87,9 @@ then change the 0 to 1 in the next block. */
-+ # define TCPI_OPT_SYN_DATA 32
-+ #endif
-+ 
-++/* Needed for uClibc */
-++#ifndef NS_MAXMSG
-++# define NS_MAXMSG 65535
-++#endif
-+ 
-+ /* End */
-+-- 
-+2.20.1
-+
-diff --git a/package/exim/0007-Fix-CVE-2019-10149.patch b/package/exim/0007-Fix-CVE-2019-10149.patch
-deleted file mode 100644
-index f8b5338b57..0000000000
---- a/package/exim/0007-Fix-CVE-2019-10149.patch
-+++ /dev/null
-@@ -1,51 +0,0 @@
--From d740d2111f189760593a303124ff6b9b1f83453d Mon Sep 17 00:00:00 2001
--From: Jeremy Harris <jgh146exb@wizmail.org>
--Date: Mon, 27 May 2019 21:57:31 +0100
--Subject: [PATCH] Fix CVE-2019-10149
--
--[Peter: drop documentation update, fix path]
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- src/deliver.c          | 22 ++++++++++++++--------
-- 1 files changed, 52 insertions(+), 8 deletions(-)
-- create mode 100644 doc/doc-txt/cve-2019-10149
--
--diff --git a/src/deliver.c b/src/deliver.c
--index 59256ac2..45cc0723 100644
----- a/src/deliver.c
--+++ b/src/deliver.c
--@@ -6227,17 +6227,23 @@ if (process_recipients != RECIP_IGNORE)
-- 	{
-- 	uschar * save_local =  deliver_localpart;
-- 	const uschar * save_domain = deliver_domain;
--+	uschar * addr = new->address, * errmsg = NULL;
--+	int start, end, dom;
-- 
---	deliver_localpart = expand_string(
---		      string_sprintf("${local_part:%s}", new->address));
---	deliver_domain =    expand_string(
---		      string_sprintf("${domain:%s}", new->address));
--+	if (!parse_extract_address(addr, &errmsg, &start, &end, &dom, TRUE))
--+	  log_write(0, LOG_MAIN|LOG_PANIC,
--+                "failed to parse address '%.100s': %s\n", addr, errmsg);
--+	else
--+	  {
--+	  deliver_localpart =
--+	    string_copyn(addr+start, dom ? (dom-1) - start : end - start);
--+	  deliver_domain = dom ? CUS string_copyn(addr+dom, end - dom) : CUS"";
-- 
---	(void) event_raise(event_action,
---		      US"msg:fail:internal", new->message);
--+	  event_raise(event_action, US"msg:fail:internal", new->message);
-- 
---	deliver_localpart = save_local;
---	deliver_domain =    save_domain;
--+	  deliver_localpart = save_local;
--+	  deliver_domain = save_domain;
--+	  }
-- 	}
-- #endif
--       }
---- 
--2.11.0
--
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index 41f51b15eb..d4bd288ac2 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,2 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256 1a21322a10e2da9c0bd6a2a483b6e7ef8fa7f16efcab4c450fd73e7188f5fa94  exim-4.89.1.tar.xz
-+sha256 6ac9e62b484e78951c7c0517d1229ad7619a7eea70ca3b38b8ef430b28ef1d62  exim-4.92.tar.xz
-+sha256 49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index bde2df1153..c64d243e8a 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
+diff --git a/utils/test-pkg b/utils/test-pkg
+index f3b34d5d0d..6a48e039e0 100755
+--- a/utils/test-pkg
++++ b/utils/test-pkg
+@@ -16,9 +16,10 @@ main() {
+     local ret nb nb_skip nb_fail nb_legal nb_tc build_dir keep
+     local -a toolchains
+     local pkg_br_name
++    local with_nls
  
--EXIM_VERSION = 4.89.1
-+EXIM_VERSION = 4.92
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
--EXIM_SITE = ftp://ftp.exim.org/pub/exim/exim4
-+EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
- EXIM_LICENSE_FILES = LICENCE
--EXIM_DEPENDENCIES = pcre berkeleydb host-pkgconf
-+EXIM_DEPENDENCIES = host-berkeleydb host-pcre pcre berkeleydb host-pkgconf
+-    o='hakc:d:n:p:r:t:'
+-    O='help,all,keep,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
++    o='hakNc:d:n:p:r:t:'
++    O='help,all,keep,with-nls,config-snippet:,build-dir:,number:,package:,random:,toolchains-csv:'
+     opts="$(getopt -n "${my_name}" -o "${o}" -l "${O}" -- "${@}")"
+     eval set -- "${opts}"
  
- # Modify a variable value. It must already exist in the file, either
- # commented or not.
-@@ -65,7 +65,7 @@ endef
- endif
+@@ -27,6 +28,7 @@ main() {
+     keep=0
+     number=0
+     mode=0
++    with_nls=0
+     toolchains_csv="${TOOLCHAINS_CSV}"
+     while [ ${#} -gt 0 ]; do
+         case "${1}" in
+@@ -41,6 +43,10 @@ main() {
+             ;;
+         (-c|--config-snippet)
+             cfg="${2}"; shift 2
++
++            if [ ! -e "${cfg}" ]; then
++                printf "error: %s: no such file\n" "${cfg}" >&2; exit 1
++            fi
+             ;;
+         (-d|--build-dir)
+             dir="${2}"; shift 2
+@@ -57,6 +63,9 @@ main() {
+         (-t|--toolchains-csv)
+             toolchains_csv="${2}"; shift 2
+             ;;
++        (-N|--with-nls)
++            with_nls=1; shift 1
++            ;;
+         (--)
+             shift; break
+             ;;
+@@ -65,16 +74,21 @@ main() {
  
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
--EXIM_DEPENDENCIES += openssl
-+EXIM_DEPENDENCIES += host-openssl openssl
- define EXIM_USE_DEFAULT_CONFIG_FILE_OPENSSL
- 	$(call exim-config-change,SUPPORT_TLS,yes)
- 	$(call exim-config-change,USE_OPENSSL_PC,openssl)
-@@ -111,9 +111,17 @@ ifeq ($(BR2_STATIC_LIBS),y)
- EXIM_STATIC_FLAGS = LFLAGS="-pthread --static"
- endif
+     trap do_clean INT TERM HUP EXIT
  
-+# We need the host version of macro_predef during the build, before
-+# building it we need to prepare the makefile.
- # "The -j (parallel) flag must not be used with make"
- # (http://www.exim.org/exim-html-current/doc/html/spec_html/ch04.html)
- define EXIM_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) makefile
-+	$(HOST_MAKE_ENV) $(MAKE1) -C $(@D)/build-br macro_predef \
-+		CC=$(HOSTCC) \
-+		LNCC=$(HOSTCC) \
-+		CFLAGS="$(HOST_CFLAGS)" \
-+		LFLAGS="-fPIC $(HOST_LDFLAGS)"
- 	$(TARGET_MAKE_ENV) build=br $(MAKE1) -C $(@D) $(EXIM_STATIC_FLAGS)
- endef
++    TEMP_CONF=$(mktemp /tmp/test-${pkg}-config.XXXXXX)
++
+     if [ -z "${cfg}" ]; then
+         pkg_br_name="${pkg//-/_}"
+         pkg_br_name="BR2_PACKAGE_${pkg_br_name^^}"
+-        TEMP_CONF=$(mktemp /tmp/test-${pkg}-config.XXXXXX)
+-        echo "${pkg_br_name}=y" > ${TEMP_CONF}
+-        cfg="${TEMP_CONF}"
++        echo "${pkg_br_name}=y" >> ${TEMP_CONF}
++    else
++        cat "${cfg}" >> ${TEMP_CONF}
+     fi
+-    if [ ! -e "${cfg}" ]; then
+-        printf "error: %s: no such file\n" "${cfg}" >&2; exit 1
++
++    if [ ${with_nls} -eq 1 ]; then
++        echo "BR2_USE_WCHAR=y" >> ${TEMP_CONF}
++        echo "BR2_SYSTEM_ENABLE_NLS=y" >> ${TEMP_CONF}
+     fi
++
+     if [ -z "${dir}" ]; then
+         dir="${HOME}/br-test-pkg"
+     fi
+@@ -127,7 +141,7 @@ main() {
+         toolchain="$(basename "${toolchainconfig}" .config)"
+         build_dir="${dir}/${toolchain}"
+         printf "%40s [%*d/%d]: " "${toolchain}" ${#nb_tc} ${nb} ${nb_tc}
+-        build_one "${build_dir}" "${toolchainconfig}" "${cfg}" "${pkg}" && ret=0 || ret=${?}
++        build_one "${build_dir}" "${toolchainconfig}" "${TEMP_CONF}" "${pkg}" && ret=0 || ret=${?}
+         case ${ret} in
+         (0) printf "OK\n";;
+         (1) : $((nb_skip++)); printf "SKIPPED\n";;
+@@ -251,6 +265,10 @@ Options:
+         Note: the logfile and configuration is always retained, even without
+         this option.
  
++    -N, --with-nls
++        Build with NLS support enabled. Required config options
++        for NLS support will be automatically enabled.
++
+ Example:
+ 
+     Testing libcec would require a config snippet that contains:
 -- 
-2.20.1
+2.17.1
