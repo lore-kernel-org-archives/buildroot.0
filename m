@@ -1,7 +1,7 @@
 From: Ismael Luceno <ismael@iodev.co.uk>
-Date: Tue, 23 Jul 2019 21:32:57 +0200
-Subject: [Buildroot] [PATCH] axel: bump to version 2.17.5
-Message-ID: <20190723193257.26699-1-ismael@iodev.co.uk>
+Date: Tue, 23 Jul 2019 21:34:52 +0200
+Subject: [Buildroot] [PATCH v2] axel: bump to version 2.17.5
+Message-ID: <20190723193452.26899-1-ismael@iodev.co.uk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,12 +15,12 @@ Signed-off-by: Ismael Luceno <ismael@iodev.co.uk>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/package/axel/axel.hash b/package/axel/axel.hash
-index c317fb886f64..8d354b22eb0a 100644
+index c317fb886f64..2de602ae479a 100644
 --- a/package/axel/axel.hash
 +++ b/package/axel/axel.hash
 @@ -1 +1 @@
 -sha256 d34094eb63eaebc989f96eabdda091dcfb28e840bb8d274a5f216775941f59e4  axel-2.16.1.tar.xz
-+sha256 5c5c682617d498071ff9083029fcecc2c2fdeeedc366c35d2bdf8663355616cc  axel-2.17.3.tar.xz
++sha256 5c5c682617d498071ff9083029fcecc2c2fdeeedc366c35d2bdf8663355616cc  axel-2.17.5.tar.xz
 diff --git a/package/axel/axel.mk b/package/axel/axel.mk
 index 129ea2952f94..2ad8ff088101 100644
 --- a/package/axel/axel.mk
