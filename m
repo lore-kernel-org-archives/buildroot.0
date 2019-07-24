@@ -1,100 +1,59 @@
 From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 25 Jul 2019 00:12:04 +0200
-Subject: [Buildroot] [PATCH 3/6] package/rust: declare as cargo provider
+Date: Thu, 25 Jul 2019 00:12:05 +0200
+Subject: [Buildroot] [PATCH 4/6] package/cargo-bin: bump version to 0.37.0
 In-Reply-To: <20190724221207.9686-1-eric.le.bihan.dev@free.fr>
 References: <20190724221207.9686-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20190724221207.9686-4-eric.le.bihan.dev@free.fr>
+Message-ID: <20190724221207.9686-5-eric.le.bihan.dev@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Enable build of cargo along with Rust compiler and declare this package
-as a cargo provider.
-
 Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
 ---
- package/cargo/Config.in.host |  8 ++++++++
- package/rust/rust.mk         | 23 ++++++++++++++++++++++-
- 2 files changed, 30 insertions(+), 1 deletion(-)
+ package/cargo-bin/cargo-bin.hash | 18 +++++++++---------
+ package/cargo-bin/cargo-bin.mk   |  2 +-
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/package/cargo/Config.in.host b/package/cargo/Config.in.host
-index bae30d2f57..d1bb913573 100644
---- a/package/cargo/Config.in.host
-+++ b/package/cargo/Config.in.host
-@@ -14,6 +14,13 @@ choice
- 	help
- 	  Select a Cargo package manager provider
+diff --git a/package/cargo-bin/cargo-bin.hash b/package/cargo-bin/cargo-bin.hash
+index 0e9e9c5c61..c6df194b2f 100644
+--- a/package/cargo-bin/cargo-bin.hash
++++ b/package/cargo-bin/cargo-bin.hash
+@@ -1,12 +1,12 @@
+-# From https://static.rust-lang.org/dist/cargo-0.33.0-i686-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/cargo-0.33.0-i686-unknown-linux-gnu.tar.xz.asc
+-sha256 13acdb3c9f2505805ceed8a696f5f62ab8cd73e443cd43d6edd588aad88e1c32  cargo-0.33.0-i686-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/cargo-0.33.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/cargo-0.33.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
+-sha256 6628db22370f397676195555d768f0449a60f0a694bcac24611f4cd1cfc97cdc  cargo-0.33.0-powerpc64le-unknown-linux-gnu.tar.xz
+-# From https://static.rust-lang.org/dist/cargo-0.33.0-x86_64-unknown-linux-gnu.tar.xz.sha256
+-# Verified using https://static.rust-lang.org/dist/cargo-0.33.0-x86_64-unknown-linux-gnu.tar.xz.asc
+-sha256 c2c31db68c4dcb50ad856a19e6f11489a0d4df1212f31bd068dfbb73c5425761  cargo-0.33.0-x86_64-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/cargo-0.37.0-i686-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/cargo-0.37.0-i686-unknown-linux-gnu.tar.xz.asc
++sha256 6835a73e2ce17e11eda5393133dd7c78bc41bae5a09784e5327648f14340fd48  cargo-0.37.0-i686-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/cargo-0.37.0-powerpc64le-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/cargo-0.37.0-powerpc64le-unknown-linux-gnu.tar.xz.asc
++sha256 4cda7686160f6981e936229703e8e2e756c74f390245f2ad9e356bbbed28a2c9  cargo-0.37.0-powerpc64le-unknown-linux-gnu.tar.xz
++# From https://static.rust-lang.org/dist/cargo-0.37.0-x86_64-unknown-linux-gnu.tar.xz.sha256
++# Verified using https://static.rust-lang.org/dist/cargo-0.37.0-x86_64-unknown-linux-gnu.tar.xz.asc
++sha256 d20fa121951339d5492cf8862f8a7af59efc99d18f3c27b95ab6d4658b6a7d67  cargo-0.37.0-x86_64-unknown-linux-gnu.tar.xz
+ # Locally generated
+ sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
+ sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
+diff --git a/package/cargo-bin/cargo-bin.mk b/package/cargo-bin/cargo-bin.mk
+index 809bb64cae..534c023ffe 100644
+--- a/package/cargo-bin/cargo-bin.mk
++++ b/package/cargo-bin/cargo-bin.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+config BR2_PACKAGE_HOST_RUST_CARGO
-+	bool "host rust"
-+	depends on BR2_PACKAGE_HOST_RUST
-+	select BR2_PACKAGE_HAS_HOST_CARGO
-+	help
-+	  Install Cargo built at the same time as the Rust compiler.
-+
- config BR2_PACKAGE_HOST_CARGO_BIN
- 	bool "host cargo (pre-built)"
- 	depends on BR2_PACKAGE_HOST_RUST_BIN
-@@ -32,4 +39,5 @@ config BR2_PACKAGE_PROVIDES_HOST_CARGO
- 	string
- 	depends on BR2_PACKAGE_HAS_HOST_CARGO
- 	default "host-cargo-bin" if !BR2_PACKAGE_HOST_RUST
-+	default "host-rust" if BR2_PACKAGE_HOST_RUST
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index 5d14fc6682..ff23cd8930 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -10,7 +10,7 @@ RUST_SITE = https://static.rust-lang.org/dist
- RUST_LICENSE = Apache-2.0 or MIT
- RUST_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
- 
--HOST_RUST_PROVIDES = host-rustc
-+HOST_RUST_PROVIDES = host-rustc host-cargo
- 
- HOST_RUST_DEPENDENCIES = \
- 	toolchain \
-@@ -38,6 +38,25 @@ endef
- 
- HOST_RUST_POST_EXTRACT_HOOKS += HOST_RUST_EXCLUDE_ORIG_FILES
- 
-+ifeq ($(BR2_PACKAGE_HOST_RUST_CARGO),y)
-+
-+define HOST_RUST_ENABLE_CARGO
-+	echo 'extended = true'; \
-+	echo 'tools = ["cargo"]';
-+endef
-+
-+define HOST_RUST_INSTALL_CARGO
-+	find $(@D)/build/tmp/dist -maxdepth 2 -wholename '*cargo*/install.sh' \
-+		-exec {} --prefix=$(HOST_DIR) --disable-ldconfig \;
-+
-+endef
-+
-+HOST_RUST_POST_INSTALL_HOOKS += \
-+	HOST_RUST_INSTALL_CARGO \
-+	HOST_CARGO_INSTALL_CONFIG
-+
-+endif
-+
- define HOST_RUST_CONFIGURE_CMDS
- 	( \
- 		echo '[build]'; \
-@@ -47,11 +66,13 @@ define HOST_RUST_CONFIGURE_CMDS
- 		echo 'python = "$(HOST_DIR)/bin/python2"'; \
- 		echo 'submodules = false'; \
- 		echo 'vendor = true'; \
-+		$(HOST_RUST_ENABLE_CARGO) \
- 		echo 'compiler-docs = false'; \
- 		echo 'docs = false'; \
- 		echo 'verbose = $(HOST_RUST_VERBOSITY)'; \
- 		echo '[install]'; \
- 		echo 'prefix = "$(HOST_DIR)"'; \
-+		echo 'sysconfdir = "$(HOST_DIR)/etc"'; \
- 		echo '[rust]'; \
- 		echo 'channel = "stable"'; \
- 		echo '[target.$(RUSTC_TARGET_NAME)]'; \
+-CARGO_BIN_VERSION = 0.33.0
++CARGO_BIN_VERSION = 0.37.0
+ CARGO_BIN_SITE = https://static.rust-lang.org/dist
+ CARGO_BIN_SOURCE = cargo-$(CARGO_BIN_VERSION)-$(RUSTC_HOST_NAME).tar.xz
+ CARGO_BIN_LICENSE = Apache-2.0 or MIT
 -- 
 2.20.1
