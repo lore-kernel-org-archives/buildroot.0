@@ -1,56 +1,27 @@
-From: unixmania at gmail.com <unixmania@gmail.com>
-Date: Tue, 23 Jul 2019 22:21:12 -0300
-Subject: [Buildroot] [PATCH] package/dhcp: fix target installation
-Message-ID: <20190724012112.15414-1-unixmania@gmail.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Wed, 24 Jul 2019 01:23:30 +0000
+Subject: [Buildroot] [Bug 12051] package/dhcp installs libtool wrapper
+ scripts on target instead of real binaries
+In-Reply-To: <bug-12051-163@https.bugs.busybox.net/>
+References: <bug-12051-163@https.bugs.busybox.net/>
+Message-ID: <bug-12051-163-lu6ujEYJCv@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Carlos Santos <unixmania@gmail.com>
+https://bugs.busybox.net/show_bug.cgi?id=12051
 
-We don't use "make install" for the target installation so we must pick
-the executables from the ".libs" directories on which libtool generates
-them otherwise we install the automatically generated wrapper scripts.
+Carlos Santos <unixmania@gmail.com> changed:
 
-This was not necessary before the upgrade to version 4.4.1.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+            Summary|Build succeeds but leaves a |package/dhcp installs
+                   |temporary libtool wrapper   |libtool wrapper scripts on
+                   |script for dhcp in the      |target instead of real
+                   |rootfs                      |binaries
 
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
----
- package/dhcp/dhcp.mk | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
-index 1cef9724bd..86f5c69a77 100644
---- a/package/dhcp/dhcp.mk
-+++ b/package/dhcp/dhcp.mk
-@@ -44,7 +44,7 @@ ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
- define DHCP_INSTALL_SERVER
- 	mkdir -p $(TARGET_DIR)/var/lib
- 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
--	$(INSTALL) -m 0755 -D $(@D)/server/dhcpd $(TARGET_DIR)/usr/sbin/dhcpd
-+	$(INSTALL) -m 0755 -D $(@D)/server/.libs/dhcpd $(TARGET_DIR)/usr/sbin/dhcpd
- 	$(INSTALL) -m 0644 -D package/dhcp/dhcpd.conf \
- 		$(TARGET_DIR)/etc/dhcp/dhcpd.conf
- endef
-@@ -54,7 +54,7 @@ ifeq ($(BR2_PACKAGE_DHCP_RELAY),y)
- define DHCP_INSTALL_RELAY
- 	mkdir -p $(TARGET_DIR)/var/lib
- 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
--	$(INSTALL) -m 0755 -D $(DHCP_DIR)/relay/dhcrelay \
-+	$(INSTALL) -m 0755 -D $(DHCP_DIR)/relay/.libs/dhcrelay \
- 		$(TARGET_DIR)/usr/sbin/dhcrelay
- endef
- endif
-@@ -63,7 +63,7 @@ ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
- define DHCP_INSTALL_CLIENT
- 	mkdir -p $(TARGET_DIR)/var/lib
- 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
--	$(INSTALL) -m 0755 -D $(DHCP_DIR)/client/dhclient \
-+	$(INSTALL) -m 0755 -D $(DHCP_DIR)/client/.libs/dhclient \
- 		$(TARGET_DIR)/sbin/dhclient
- 	$(INSTALL) -m 0644 -D package/dhcp/dhclient.conf \
- 		$(TARGET_DIR)/etc/dhcp/dhclient.conf
 -- 
-2.18.1
+You are receiving this mail because:
+You are on the CC list for the bug.
