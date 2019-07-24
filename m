@@ -1,118 +1,61 @@
-From: Andreas Naumann <dev@andin.de>
-Date: Wed, 24 Jul 2019 10:09:11 +0200
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for
- 2019-07-20
-In-Reply-To: <20190723213646.326c6fd9@gmx.net>
-References: <20190721060040.4E27586230@whitealder.osuosl.org>
- <20190721210110.0b3620b0@gmx.net>
- <9f2cfe09-b9af-285f-b192-f7b2bc975d68@andin.de>
- <20190722202140.207e29c3@gmx.net>
- <9d0c9348-7ca4-bca5-3c89-17c1b1358069@andin.de>
- <20190723213646.326c6fd9@gmx.net>
-Message-ID: <ab6a2c32-38bb-6773-fea8-36e5931dcdc9@andin.de>
+From: unixmania at gmail.com <unixmania@gmail.com>
+Date: Wed, 24 Jul 2019 07:54:53 -0300
+Subject: [Buildroot] [PATCH v2] package/dhcp: fix target installation
+Message-ID: <20190724105453.4233-1-unixmania@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Peter,
+From: Carlos Santos <unixmania@gmail.com>
 
-Am 23.07.19 um 21:36 schrieb Peter Seiderer:
-> Hello Andreas,
-> 
+We don't use "make install" for the target installation so we must pick
+the executables from the ".libs" directories on which libtool generates
+them otherwise we install the automatically generated wrapper scripts.
 
-snip
+This was not necessary before the upgrade to version 4.4.1.
 
->>
->> Somebody reported a similar issue (and workaround) in the QT bugracker:
->> https://bugreports.qt.io/browse/QTBUG-76625
->> Theres also a fix for it, however it has no effect on the appearance of
->> so-file. As I understand it they rather fix the path to it.
->>
->> The real reason behind our problem seems to be:
->>
->> commit 5b3dfa470ed7ea40103daa785286ab71fb7aa230
->> Author: Oswald Buddenhagen <oswald.buddenhagen@qt.io>
->> Date:   Wed Dec 19 12:46:52 2018 +0100
->>
->>       qmake: link qt libraries by full path
->>
->>       this avoids the scenario where the linker would pick up the wrong qt
->>       libraries for LIBS_PRIVATE because LIBS added the "wrong" path first.
->>       this is also consistent with configure-supplied dependencies as of
->>       recently.
->>
->>       as a side effect, this also removes pretenses of lsb linker
->> handling, as
->>       it makes no sense after the change and is certainly obsolete anyway.
->>
->>       Fixes: QTBUG-50921
->>
->> I made a comment in 76625. If I understand the issue correctly, then
->> qmake needs to add '-l' in front of the absolute so-files. We in turn
->> would need to not remove the build-dir when occuring in an so-file, but
->> replace it with the staging dir. Otherwise we might hit the same issue
->> that 5b3dfa4 was trying to fix, right?
-> 
-> Thanks for investigation and the hints...., with the following patch
-> 
-> --- qt5base-5.12.4/mkspecs/features/qt.prf-001	2019-07-23 20:57:39.668312458 +0200
-> +++ qt5base-5.12.4/mkspecs/features/qt.prf	2019-07-23 20:58:44.289581880 +0200
-> @@ -217,7 +217,7 @@
->                       lib = $$MODULE_LIBS/$$QMAKE_PREFIX_STATICLIB$${lib}.$$QMAKE_EXTENSION_STATICLIB
->                       PRE_TARGETDEPS += $$lib
->                   } else {
-> -                    lib = $$MODULE_LIBS/$$QMAKE_PREFIX_SHLIB$${lib}.$$QMAKE_EXTENSION_SHLIB
-> +                    lib = -L$$MODULE_LIBS -l$${lib}
->                   }
->                   LIBS$$var_sfx += $$lib
->               }
-> 
-> 
-> I get the following entry in build/qt5base-5.12.4/lib/libQt5Widgets.la:
-> 
-> 	dependency_libs='-L/home/seiderer/Work/Buildroot/build_sparc_qt_libv4l_001/build/qt5base-5.12.4/lib -lQt5Gui -lQt5Core -latomic -lrt -ldl -lpthread -lrt -lpthread -ldl '
-> 
-> And in host/sparc64-buildroot-linux-gnu/sysroot/usr/lib/libQt5Widgets.la:
-> 
-> 	dependency_libs=' -lQt5Gui -lQt5Core -latomic -lrt -ldl -lpthread -lrt -lpthread -ldl '
-> 
-> And the build of libv4l/utils/qv4l2 succeeds...
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=12051
 
-I think this is a good solution for now. However, I'll watch the Qt-Bug 
-for news on this.
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+---
+Chancgs v1->v2
+  Add link to gug report
+---
+ package/dhcp/dhcp.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-regards,
-Andreas
-
-> 
-> Regards,
-> Peter
-> 
->>
->> regards,
->> Andreas
->>
->>>
->>> Regards,
->>> Peter
->>>
->>>>
->>>>
->>>> regards,
->>>> Andreas
->>>>
->>>>
->>>>>
->>>>> Regards,
->>>>> Peter
->>>>>
->>>>> [1] https://git.buildroot.net/buildroot/commit/?id=428e5276e4df0b4bbd75df38565298ad53ea4f8b
->>>>> _______________________________________________
->>>>> buildroot mailing list
->>>>> buildroot at busybox.net
->>>>> http://lists.busybox.net/mailman/listinfo/buildroot
->>>>>
->>>
-> 
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 1cef9724bd..86f5c69a77 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -44,7 +44,7 @@ ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
+ define DHCP_INSTALL_SERVER
+ 	mkdir -p $(TARGET_DIR)/var/lib
+ 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+-	$(INSTALL) -m 0755 -D $(@D)/server/dhcpd $(TARGET_DIR)/usr/sbin/dhcpd
++	$(INSTALL) -m 0755 -D $(@D)/server/.libs/dhcpd $(TARGET_DIR)/usr/sbin/dhcpd
+ 	$(INSTALL) -m 0644 -D package/dhcp/dhcpd.conf \
+ 		$(TARGET_DIR)/etc/dhcp/dhcpd.conf
+ endef
+@@ -54,7 +54,7 @@ ifeq ($(BR2_PACKAGE_DHCP_RELAY),y)
+ define DHCP_INSTALL_RELAY
+ 	mkdir -p $(TARGET_DIR)/var/lib
+ 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+-	$(INSTALL) -m 0755 -D $(DHCP_DIR)/relay/dhcrelay \
++	$(INSTALL) -m 0755 -D $(DHCP_DIR)/relay/.libs/dhcrelay \
+ 		$(TARGET_DIR)/usr/sbin/dhcrelay
+ endef
+ endif
+@@ -63,7 +63,7 @@ ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+ define DHCP_INSTALL_CLIENT
+ 	mkdir -p $(TARGET_DIR)/var/lib
+ 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+-	$(INSTALL) -m 0755 -D $(DHCP_DIR)/client/dhclient \
++	$(INSTALL) -m 0755 -D $(DHCP_DIR)/client/.libs/dhclient \
+ 		$(TARGET_DIR)/sbin/dhclient
+ 	$(INSTALL) -m 0644 -D package/dhcp/dhclient.conf \
+ 		$(TARGET_DIR)/etc/dhcp/dhclient.conf
+-- 
+2.18.1
