@@ -1,50 +1,48 @@
-From: Simon Rowe <simon.rowe@citrix.com>
-Date: Thu, 25 Jul 2019 09:30:21 +0100
-Subject: [Buildroot] [PATCH 1/1] package/openvmtools: use tirpc when no
- toolchain RPC
-Message-ID: <1564043421-126710-1-git-send-email-simon.rowe@citrix.com>
+From: Charlie Turner <cturner@igalia.com>
+Date: Thu, 25 Jul 2019 12:42:25 +0100
+Subject: [Buildroot] [PATCH 1/1] package/gstreamer1: gl enabled when either
+ GL or GLES2 is present
+Message-ID: <20190725114225.4893-1-cturner@igalia.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-openvmtools detects an external RPC library, select package/libtirpc
-when necessary.
+When building gst1-plugins-base with GL support on the rpi3 (which
+supports only GLES2, not full desktop GL), GStreamer was being asked to
+disable its GL support completely. This isn't correct since it can be
+used with either GL or GLES2.
 
-Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
+Signed-off-by: Charlie Turner <cturner@igalia.com>
 ---
- package/openvmtools/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../gstreamer1/gst1-plugins-base/gst1-plugins-base.mk    | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
-index 97860f8..2bd5c27 100644
---- a/package/openvmtools/Config.in
-+++ b/package/openvmtools/Config.in
-@@ -4,11 +4,11 @@ config BR2_PACKAGE_OPENVMTOOLS
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
--	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	depends on BR2_ENABLE_LOCALE
- 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBDNET
-+	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
- 	help
- 	  Open Virtual Machine Tools for VMware guest OS
- 
-@@ -61,9 +61,9 @@ comment "resolutionkms needs udev, a toolchain w/ threads"
- 
+diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+index 66c136c36c..b572c0e992 100644
+--- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
++++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
+@@ -39,13 +39,18 @@ GST1_PLUGINS_BASE_CONF_OPTS += -Dorc=disabled
  endif
  
--comment "openvmtools needs a glibc or musl toolchain w/ wchar, threads, RPC, locale"
-+comment "openvmtools needs a glibc or musl toolchain w/ wchar, threads, locale"
- 	depends on BR2_i386 || BR2_x86_64
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_ENABLE_LOCALE || \
-+		!BR2_ENABLE_LOCALE || \
- 		BR2_TOOLCHAIN_USES_UCLIBC
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL),y)
+-GST1_PLUGINS_BASE_GL_API_LIST = opengl
+ GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=enabled
+-GST1_PLUGINS_BASE_DEPENDENCIES += libgl libglu
++else ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2),y)
++GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=enabled
+ else
+ GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL),y)
++GST1_PLUGINS_BASE_GL_API_LIST = opengl
++GST1_PLUGINS_BASE_DEPENDENCIES += libgl libglu
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2),y)
+ GST1_PLUGINS_BASE_GL_API_LIST += gles2
+ GST1_PLUGINS_BASE_DEPENDENCIES += libgles
 -- 
-1.8.3.1
+2.17.1
