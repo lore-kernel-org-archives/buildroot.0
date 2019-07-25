@@ -1,57 +1,48 @@
 From: Lubomir Rintel <lkundrak@v3.sk>
-Date: Thu, 25 Jul 2019 10:05:50 +0200
-Subject: [Buildroot] [PATCH 1/3] package/linux-firmware: add option to
- install Libertas 8388 firmware
-In-Reply-To: <20190725080552.3135051-1-lkundrak@v3.sk>
-References: <20190725080552.3135051-1-lkundrak@v3.sk>
-Message-ID: <20190725080552.3135051-2-lkundrak@v3.sk>
+Date: Thu, 25 Jul 2019 10:21:34 +0200
+Subject: [Buildroot] [PATCH] package/network-manager: update to 1.18.2
+Message-ID: <20190725082134.3232067-1-lkundrak@v3.sk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Version 9 only. There's also version 5, but that probably is only for
-very very old kernels.
+A straightforward package update. Tested.
 
 Signed-off-by: Lubomir Rintel <lkundrak@v3.sk>
 ---
- package/linux-firmware/Config.in         | 5 +++++
- package/linux-firmware/linux-firmware.mk | 6 ++++++
- 2 files changed, 11 insertions(+)
+ package/network-manager/network-manager.hash | 4 ++--
+ package/network-manager/network-manager.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 2feec503f4..9370e30d08 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -207,6 +207,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_SD8688
- 	help
- 	  Firmware files for the Marvell SD8688 module
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 05ca63b041..c4baf071ab 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,5 +1,5 @@
+-# From http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/1.18/NetworkManager-1.18.0.sha256sum
+-sha256 c6e8df25e5a3c7309bc17664be8971689314884cdd08afdd6b0847d29d2a8ba6  NetworkManager-1.18.0.tar.xz
++# From https://download.gnome.org/sources/NetworkManager/1.18/NetworkManager-1.18.2.sha256sum
++sha256 4dd97ca974cd1f97990746527258f551f4257cbf011fecd01d10b7d74a6fa5c3  NetworkManager-1.18.2.tar.xz
+ # Locally computed
+ sha256 49d9659a4f9a09747c320d51d3cf9dfde210de67b70862acf849890f6477b00d  COPYING
+ sha256 3a2968e3abb4fea464cd8dc1146d71996f9544af91a5f687bc4f3a2932df49b4  libnm-util/COPYING
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index f9893680fa..2d35c84f39 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -5,9 +5,9 @@
+ ################################################################################
  
-+config BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_USB8388_V9
-+	bool "Libertas USB 8388 v9"
-+	help
-+	  Firmware files (version 9) for the Marvell USB8388 module
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787
- 	bool "Marvell Wifi-Ex 8787 SDIO"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index 500050f284..1828887fc6 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -189,6 +189,12 @@ LINUX_FIRMWARE_FILES += mrvl/sd8688.bin mrvl/sd8688_helper.bin
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
- endif
- 
-+# usb8388 v9
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_LIBERTAS_USB8388_V9),y)
-+LINUX_FIRMWARE_FILES += libertas/usb8388_v9.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.Marvell
-+endif
-+
- # sd8787
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_MWIFIEX_SD8787),y)
- LINUX_FIRMWARE_FILES += mrvl/sd8787_uapsta.bin
+ NETWORK_MANAGER_VERSION_MAJOR = 1.18
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).2
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+-NETWORK_MANAGER_SITE = http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
++NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+ NETWORK_MANAGER_DEPENDENCIES = host-pkgconf udev dbus-glib libnl gnutls \
+ 	libgcrypt wireless_tools util-linux host-intltool readline libndp libgudev
 -- 
 2.21.0
