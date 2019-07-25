@@ -1,319 +1,92 @@
-From: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-Date: Thu, 25 Jul 2019 00:12:07 +0200
-Subject: [Buildroot] [PATCH 6/6] package/rust: bump version to 1.36.0
-In-Reply-To: <20190724221207.9686-1-eric.le.bihan.dev@free.fr>
-References: <20190724221207.9686-1-eric.le.bihan.dev@free.fr>
-Message-ID: <20190724221207.9686-7-eric.le.bihan.dev@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 25 Jul 2019 06:00:40 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-07-24
+Message-ID: <20190725060050.D2DA72037D@silver.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
----
- ...esence-of-LLVM-library-in-stage0-lib.patch | 264 ------------------
- package/rust/rust.hash                        |   6 +-
- package/rust/rust.mk                          |   2 +-
- 3 files changed, 4 insertions(+), 268 deletions(-)
- delete mode 100644 package/rust/0001-Workaround-presence-of-LLVM-library-in-stage0-lib.patch
+Hello,
 
-diff --git a/package/rust/0001-Workaround-presence-of-LLVM-library-in-stage0-lib.patch b/package/rust/0001-Workaround-presence-of-LLVM-library-in-stage0-lib.patch
-deleted file mode 100644
-index 0c756e3028..0000000000
---- a/package/rust/0001-Workaround-presence-of-LLVM-library-in-stage0-lib.patch
-+++ /dev/null
-@@ -1,264 +0,0 @@
--From 2d21df8a3fd7a68ba9f52389ead7f06f13190c12 Mon Sep 17 00:00:00 2001
--From: Mark Rousskov <mark.simulacrum@gmail.com>
--Date: Mon, 21 Jan 2019 17:47:57 -0700
--Subject: [PATCH] Workaround presence of LLVM library in stage0/lib
--
--This commit works around the newly-introduced LLVM shared library.
--
--This is needed such that llvm-config run from
--librustc_llvm's build script can correctly locate it's own LLVM, not the
--one in stage0/lib. The LLVM build system uses the DT_RUNPATH/RUNPATH
--header within the llvm-config binary, which we want to use, but because
--Cargo always adds the host compiler's "libdir" (stage0/lib in our
--case) to the dynamic linker's search path, we weren't properly finding
--the freshly-built LLVM in llvm/lib. By restoring the environment
--variable setting the search path to what bootstrap sees, the problem is
--resolved and librustc_llvm correctly links and finds the appropriate
--LLVM.
--
--Several run-make-fulldeps tests are also updated with similar handling.
--
--Signed-off-by: Eric Le Bihan <eric.le.bihan.dev@free.fr>
-----
-- src/bootstrap/builder.rs                      |  9 ++++++++-
-- src/bootstrap/compile.rs                      |  1 +
-- src/bootstrap/util.rs                         |  6 +++++-
-- src/build_helper/lib.rs                       | 19 +++++++++++++++++++
-- src/librustc_asan/build.rs                    |  2 ++
-- src/librustc_llvm/build.rs                    |  2 ++
-- src/librustc_lsan/build.rs                    |  2 ++
-- src/librustc_msan/build.rs                    |  2 ++
-- src/librustc_tsan/build.rs                    |  2 ++
-- .../cross-lang-lto-upstream-rlibs/Makefile    |  4 ++--
-- .../run-make-fulldeps/cross-lang-lto/Makefile | 19 ++++++++++---------
-- 11 files changed, 55 insertions(+), 13 deletions(-)
--
--diff --git a/src/bootstrap/builder.rs b/src/bootstrap/builder.rs
--index a69ba20749..f742bce180 100644
----- a/src/bootstrap/builder.rs
--+++ b/src/bootstrap/builder.rs
--@@ -21,7 +21,7 @@ use crate::install;
-- use crate::native;
-- use crate::test;
-- use crate::tool;
---use crate::util::{add_lib_path, exe, libdir};
--+use crate::util::{self, add_lib_path, exe, libdir};
-- use crate::{Build, DocTests, Mode, GitRepo};
-- 
-- pub use crate::Compiler;
--@@ -791,6 +791,13 @@ impl<'a> Builder<'a> {
--             .env("CARGO_TARGET_DIR", out_dir)
--             .arg(cmd);
-- 
--+        // See comment in librustc_llvm/build.rs for why this is necessary, largely llvm-config
--+        // needs to not accidentally link to libLLVM in stage0/lib.
--+        cargo.env("REAL_LIBRARY_PATH_VAR", &util::dylib_path_var());
--+        if let Some(e) = env::var_os(util::dylib_path_var()) {
--+            cargo.env("REAL_LIBRARY_PATH", e);
--+        }
--+
--         if cmd != "install" {
--             cargo.arg("--target")
--                  .arg(target);
--diff --git a/src/bootstrap/compile.rs b/src/bootstrap/compile.rs
--index b581271663..ec04dee6c3 100644
----- a/src/bootstrap/compile.rs
--+++ b/src/bootstrap/compile.rs
--@@ -712,6 +712,7 @@ pub fn build_codegen_backend(builder: &Builder,
--             if builder.is_rust_llvm(target) && backend != "emscripten" {
--                 cargo.env("LLVM_RUSTLLVM", "1");
--             }
--+
--             cargo.env("LLVM_CONFIG", &llvm_config);
--             if backend != "emscripten" {
--                 let target_config = builder.config.target_config.get(&target);
--diff --git a/src/bootstrap/util.rs b/src/bootstrap/util.rs
--index 2880f1a084..37c6c040da 100644
----- a/src/bootstrap/util.rs
--+++ b/src/bootstrap/util.rs
--@@ -70,7 +70,11 @@ pub fn dylib_path_var() -> &'static str {
-- /// Parses the `dylib_path_var()` environment variable, returning a list of
-- /// paths that are members of this lookup path.
-- pub fn dylib_path() -> Vec<PathBuf> {
---    env::split_paths(&env::var_os(dylib_path_var()).unwrap_or_default()).collect()
--+    let var = match env::var_os(dylib_path_var()) {
--+        Some(v) => v,
--+        None => return vec![],
--+    };
--+    env::split_paths(&var).collect()
-- }
-- 
-- /// `push` all components to `buf`. On windows, append `.exe` to the last component.
--diff --git a/src/build_helper/lib.rs b/src/build_helper/lib.rs
--index 5a704e5577..c66c5c9249 100644
----- a/src/build_helper/lib.rs
--+++ b/src/build_helper/lib.rs
--@@ -23,6 +23,25 @@ macro_rules! t {
--     };
-- }
-- 
--+// Because Cargo adds the compiler's dylib path to our library search path, llvm-config may
--+// break: the dylib path for the compiler, as of this writing, contains a copy of the LLVM
--+// shared library, which means that when our freshly built llvm-config goes to load it's
--+// associated LLVM, it actually loads the compiler's LLVM. In particular when building the first
--+// compiler (i.e., in stage 0) that's a problem, as the compiler's LLVM is likely different from
--+// the one we want to use. As such, we restore the environment to what bootstrap saw. This isn't
--+// perfect -- we might actually want to see something from Cargo's added library paths -- but
--+// for now it works.
--+pub fn restore_library_path() {
--+    println!("cargo:rerun-if-env-changed=REAL_LIBRARY_PATH_VAR");
--+    println!("cargo:rerun-if-env-changed=REAL_LIBRARY_PATH");
--+    let key = env::var_os("REAL_LIBRARY_PATH_VAR").expect("REAL_LIBRARY_PATH_VAR");
--+    if let Some(env) = env::var_os("REAL_LIBRARY_PATH") {
--+        env::set_var(&key, &env);
--+    } else {
--+        env::remove_var(&key);
--+    }
--+}
--+
-- pub fn run(cmd: &mut Command) {
--     println!("running: {:?}", cmd);
--     run_silent(cmd);
--diff --git a/src/librustc_asan/build.rs b/src/librustc_asan/build.rs
--index 2d921b6669..b42d775deb 100644
----- a/src/librustc_asan/build.rs
--+++ b/src/librustc_asan/build.rs
--@@ -8,6 +8,8 @@ use cmake::Config;
-- 
-- fn main() {
--     if let Some(llvm_config) = env::var_os("LLVM_CONFIG") {
--+        build_helper::restore_library_path();
--+
--         let (native, target) = match sanitizer_lib_boilerplate("asan") {
--             Ok(native) => native,
--             _ => return,
--diff --git a/src/librustc_llvm/build.rs b/src/librustc_llvm/build.rs
--index ec3dff783c..cd91fcb299 100644
----- a/src/librustc_llvm/build.rs
--+++ b/src/librustc_llvm/build.rs
--@@ -24,6 +24,8 @@ fn main() {
--         return;
--     }
-- 
--+    build_helper::restore_library_path();
--+
--     let target = env::var("TARGET").expect("TARGET was not set");
--     let llvm_config = env::var_os("LLVM_CONFIG")
--         .map(PathBuf::from)
--diff --git a/src/librustc_lsan/build.rs b/src/librustc_lsan/build.rs
--index 470f2bb3e5..ad528bb039 100644
----- a/src/librustc_lsan/build.rs
--+++ b/src/librustc_lsan/build.rs
--@@ -8,6 +8,8 @@ use cmake::Config;
-- 
-- fn main() {
--     if let Some(llvm_config) = env::var_os("LLVM_CONFIG") {
--+        build_helper::restore_library_path();
--+
--         let (native, target) = match sanitizer_lib_boilerplate("lsan") {
--             Ok(native) => native,
--             _ => return,
--diff --git a/src/librustc_msan/build.rs b/src/librustc_msan/build.rs
--index e1140278f2..085514b5a0 100644
----- a/src/librustc_msan/build.rs
--+++ b/src/librustc_msan/build.rs
--@@ -8,6 +8,8 @@ use cmake::Config;
-- 
-- fn main() {
--     if let Some(llvm_config) = env::var_os("LLVM_CONFIG") {
--+        build_helper::restore_library_path();
--+
--         let (native, target) = match sanitizer_lib_boilerplate("msan") {
--             Ok(native) => native,
--             _ => return,
--diff --git a/src/librustc_tsan/build.rs b/src/librustc_tsan/build.rs
--index f63bb46b87..0db3db392d 100644
----- a/src/librustc_tsan/build.rs
--+++ b/src/librustc_tsan/build.rs
--@@ -8,6 +8,8 @@ use cmake::Config;
-- 
-- fn main() {
--     if let Some(llvm_config) = env::var_os("LLVM_CONFIG") {
--+        build_helper::restore_library_path();
--+
--         let (native, target) = match sanitizer_lib_boilerplate("tsan") {
--             Ok(native) => native,
--             _ => return,
--diff --git a/src/test/run-make-fulldeps/cross-lang-lto-upstream-rlibs/Makefile b/src/test/run-make-fulldeps/cross-lang-lto-upstream-rlibs/Makefile
--index 0a6f226a02..6992dab1a1 100644
----- a/src/test/run-make-fulldeps/cross-lang-lto-upstream-rlibs/Makefile
--+++ b/src/test/run-make-fulldeps/cross-lang-lto-upstream-rlibs/Makefile
--@@ -9,7 +9,7 @@ all: staticlib.rs upstream.rs
-- 
-- 	# Check No LTO
-- 	$(RUSTC) staticlib.rs -Z cross-lang-lto -Ccodegen-units=1 -L. -o $(TMPDIR)/staticlib.a
---	(cd $(TMPDIR); llvm-ar x ./staticlib.a)
--+	(cd $(TMPDIR); $(LD_LIB_PATH_ENVVAR)=$(REAL_LD_LIBRARY_PATH) llvm-ar x ./staticlib.a)
-- 	# Make sure the upstream object file was included
-- 	ls $(TMPDIR)/upstream.*.rcgu.o
-- 
--@@ -19,5 +19,5 @@ all: staticlib.rs upstream.rs
-- 	# Check ThinLTO
-- 	$(RUSTC) upstream.rs -Z cross-lang-lto -Ccodegen-units=1 -Clto=thin
-- 	$(RUSTC) staticlib.rs -Z cross-lang-lto -Ccodegen-units=1 -Clto=thin -L. -o $(TMPDIR)/staticlib.a
---	(cd $(TMPDIR); llvm-ar x ./staticlib.a)
--+	(cd $(TMPDIR); $(LD_LIB_PATH_ENVVAR)=$(REAL_LD_LIBRARY_PATH) llvm-ar x ./staticlib.a)
-- 	ls $(TMPDIR)/upstream.*.rcgu.o
--diff --git a/src/test/run-make-fulldeps/cross-lang-lto/Makefile b/src/test/run-make-fulldeps/cross-lang-lto/Makefile
--index 1d072e03de..4d1fb7b953 100644
----- a/src/test/run-make-fulldeps/cross-lang-lto/Makefile
--+++ b/src/test/run-make-fulldeps/cross-lang-lto/Makefile
--@@ -5,8 +5,9 @@
-- # LLVM bitcode files (as used by linker LTO plugins) when compiling with
-- # -Z cross-lang-lto.
-- 
---ASSERT_IS_BITCODE_OBJ=llvm-bcanalyzer # this only succeeds for bitcode files
---EXTRACT_OBJS=(cd $(TMPDIR); rm -f ./*.o; llvm-ar x $(1))
--+# this only succeeds for bitcode files
--+ASSERT_IS_BITCODE_OBJ=($(LD_LIB_PATH_ENVVAR)=$(REAL_LD_LIBRARY_PATH) llvm-bcanalyzer $(1))
--+EXTRACT_OBJS=(cd $(TMPDIR); rm -f ./*.o; $(LD_LIB_PATH_ENVVAR)=$(REAL_LD_LIBRARY_PATH) llvm-ar x $(1))
-- 
-- BUILD_LIB=$(RUSTC) lib.rs -Copt-level=2 -Z cross-lang-lto=on -Ccodegen-units=1
-- BUILD_EXE=$(RUSTC) main.rs -Copt-level=2 -Z cross-lang-lto=on -Ccodegen-units=1 --emit=obj
--@@ -16,31 +17,31 @@ all: staticlib staticlib-fat-lto staticlib-thin-lto rlib exe cdylib rdylib
-- staticlib: lib.rs
-- 	$(BUILD_LIB) --crate-type=staticlib -o $(TMPDIR)/liblib.a
-- 	$(call EXTRACT_OBJS, liblib.a)
---	for file in $(TMPDIR)/liblib.*.rcgu.o; do $(ASSERT_IS_BITCODE_OBJ) $$file; done
--+	for file in $(TMPDIR)/liblib.*.rcgu.o; do $(call ASSERT_IS_BITCODE_OBJ, $$file); done
-- 
-- staticlib-fat-lto: lib.rs
-- 	$(BUILD_LIB) --crate-type=staticlib -o $(TMPDIR)/liblib-fat-lto.a -Clto=fat
-- 	$(call EXTRACT_OBJS, liblib-fat-lto.a)
---	for file in $(TMPDIR)/liblib-fat-lto.*.rcgu.o; do $(ASSERT_IS_BITCODE_OBJ) $$file; done
--+	for file in $(TMPDIR)/liblib-fat-lto.*.rcgu.o; do $(call ASSERT_IS_BITCODE_OBJ, $$file); done
-- 
-- staticlib-thin-lto: lib.rs
-- 	$(BUILD_LIB) --crate-type=staticlib -o $(TMPDIR)/liblib-thin-lto.a -Clto=thin
-- 	$(call EXTRACT_OBJS, liblib-thin-lto.a)
---	for file in $(TMPDIR)/liblib-thin-lto.*.rcgu.o; do $(ASSERT_IS_BITCODE_OBJ) $$file; done
--+	for file in $(TMPDIR)/liblib-thin-lto.*.rcgu.o; do $(call ASSERT_IS_BITCODE_OBJ, $$file); done
-- 
-- rlib: lib.rs
-- 	$(BUILD_LIB) --crate-type=rlib -o $(TMPDIR)/liblib.rlib
-- 	$(call EXTRACT_OBJS, liblib.rlib)
---	for file in $(TMPDIR)/liblib.*.rcgu.o; do $(ASSERT_IS_BITCODE_OBJ) $$file; done
--+	for file in $(TMPDIR)/liblib.*.rcgu.o; do $(call ASSERT_IS_BITCODE_OBJ, $$file); done
-- 
-- cdylib: lib.rs
-- 	$(BUILD_LIB) --crate-type=cdylib --emit=obj -o $(TMPDIR)/cdylib.o
---	$(ASSERT_IS_BITCODE_OBJ) $(TMPDIR)/cdylib.o
--+	$(call ASSERT_IS_BITCODE_OBJ, $(TMPDIR)/cdylib.o)
-- 
-- rdylib: lib.rs
-- 	$(BUILD_LIB) --crate-type=dylib --emit=obj -o $(TMPDIR)/rdylib.o
---	$(ASSERT_IS_BITCODE_OBJ) $(TMPDIR)/rdylib.o
--+	$(call ASSERT_IS_BITCODE_OBJ, $(TMPDIR)/rdylib.o)
-- 
-- exe: lib.rs
-- 	$(BUILD_EXE) -o $(TMPDIR)/exe.o
---	$(ASSERT_IS_BITCODE_OBJ) $(TMPDIR)/exe.o
--+	$(call ASSERT_IS_BITCODE_OBJ, $(TMPDIR)/exe.o)
---- 
--2.17.2
--
-diff --git a/package/rust/rust.hash b/package/rust/rust.hash
-index 62e2e1855c..16962c6723 100644
---- a/package/rust/rust.hash
-+++ b/package/rust/rust.hash
-@@ -1,6 +1,6 @@
--# From https://static.rust-lang.org/dist/rustc-1.33.0-src.tar.xz.sha256
--# Verified using https://static.rust-lang.org/dist/rustc-1.33.0-src.tar.xz.asc
--sha256 f4b1a72f1a29b23dcc9d7be5f60878f0434560513273906aa93dcd5c0de39b71  rustc-1.33.0-src.tar.xz
-+# From https://static.rust-lang.org/dist/rustc-1.36.0-src.tar.xz.sha256
-+# Verified using https://static.rust-lang.org/dist/rustc-1.36.0-src.tar.xz.asc
-+sha256 f51645b9f787af4a5d94db17f6af39db0c55980ed24fe366cad55b57900f8f2d  rustc-1.36.0-src.tar.xz
- # Locally generated
- sha256 a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  LICENSE-APACHE
- sha256 23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3  LICENSE-MIT
-diff --git a/package/rust/rust.mk b/package/rust/rust.mk
-index ff23cd8930..8aa7fe723b 100644
---- a/package/rust/rust.mk
-+++ b/package/rust/rust.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RUST_VERSION = 1.33.0
-+RUST_VERSION = 1.36.0
- RUST_SOURCE = rustc-$(RUST_VERSION)-src.tar.xz
- RUST_SITE = https://static.rust-lang.org/dist
- RUST_LICENSE = Apache-2.0 or MIT
+Build statistics for 2019-07-24
+===============================
+
+      branch |  OK | NOK | TIM | TOT |
+   2019.02.x |  13 |   1 |   0 |  14 |
+   2019.05.x |  14 |   0 |   0 |  14 |
+      master |  92 |  29 |   0 | 121 |
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                   netsurf-3.9 | 9 
+                       unknown | 5 
+              iputils-20190709 | 2 
+          qt5multimedia-5.12.4 | 2 
+tvheadend-8f1de1621d78c9143... | 2 
+           can-utils-2018.02.0 | 1 
+                  dnsmasq-2.80 | 1 
+                  flashrom-1.1 | 1 
+               host-efl-1.22.2 | 1 
+               libupnpp-0.17.1 | 1 
+               log4cplus-2.0.4 | 1 
+                 python3-3.7.4 | 1 
+                qt5base-5.12.4 | 1 
+                suricata-4.1.3 | 1 
+
+
+Detail of failures
+------------------
+
+         arc |            can-utils-2018.02.0 | NOK | http://autobuild.buildroot.net/results/e02ba4e360e616e7f983ebaf52b8b3815cda5daf |     
+         arc |                   dnsmasq-2.80 | NOK | http://autobuild.buildroot.net/results/b725b8ff1a5783f8b5ad302c001a27c2310d6574 |     
+     powerpc |                   flashrom-1.1 | NOK | http://autobuild.buildroot.net/results/6085756fcde7d0ebd8846b7b28e8c14ea154fcae |     
+      x86_64 |                host-efl-1.22.2 | NOK | http://autobuild.buildroot.net/results/6f2b2a4ed56f19e1828d753c46f4aada8b213b0d |     
+         arm |               iputils-20190709 | NOK | http://autobuild.buildroot.net/results/a2a447752412a14ca4a0ea018ff4b52bc861c7c5 |     
+      x86_64 |               iputils-20190709 | NOK | http://autobuild.buildroot.net/results/7c762df7b666108b710d8f49c803329f41fd444f |     
+         arc |                libupnpp-0.17.1 | NOK | http://autobuild.buildroot.net/results/1124a06982d9b1dc3b3f90a886e5f3824c37d662 |     
+         arc |                log4cplus-2.0.4 | NOK | http://autobuild.buildroot.net/results/de0fab7adc8bf2d17f9a5cd5fa08d61299f82481 |     
+microblazeel |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/400541b08ec4a8595da9c1c569dd240a82df6037 |     
+         arm |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/c083f219296cd0dde9645273d374cb3ecd06bde1 |     
+ powerpc64le |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/2ea76be2a508787920fa4abdd0d6b8277a026a74 |     
+         arm |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/741597864b0b6104c9fd561facdf5e4727117eec |     
+       sparc |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/1db01ecae66ab819b666706579ede61ecdfd4488 |     
+        m68k |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/a074fb0f7c5dba9ec5124df1e3be07dcea9f1690 |     
+ powerpc64le |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/665409955a3b63bbd5251f09052caa4b2e8e667b |     
+         arm |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/23b817d841f2d1726586a7ae7b7f8fc5b7d16588 |     
+     nds32le |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/94f31f880569c6221b02c2ccf82d05f65e885676 |     
+     powerpc |                  python3-3.7.4 | NOK | http://autobuild.buildroot.net/results/f474c695398f3a9539913cdf368731c271b0c8ad |     
+  aarch64_be |                 qt5base-5.12.4 | NOK | http://autobuild.buildroot.net/results/f53a8ab5a39a52ff5c7a80c7925a732ebf69ff63 |     
+    mips64el |           qt5multimedia-5.12.4 | NOK | http://autobuild.buildroot.net/results/0250000c9b6cf469f25deeec9a9523998851c3be |     
+        mips |           qt5multimedia-5.12.4 | NOK | http://autobuild.buildroot.net/results/f5138fa7621651c5a65c106f2a51fac32b600cc7 |     
+      xtensa |                 suricata-4.1.3 | NOK | http://autobuild.buildroot.net/results/b170d3d714f4813adf6065a500cb765dda3ebffe |     
+         sh4 | tvheadend-8f1de1621d78c9143... | NOK | http://autobuild.buildroot.net/results/06e54be74e91ff3c06f6ee5c9288bc1de4bd4533 |     
+microblazeel | tvheadend-8f1de1621d78c9143... | NOK | http://autobuild.buildroot.net/results/106b715a2cde264a8ba2c6f9cb04cf15e68dba37 |     
+  aarch64_be |                        unknown | NOK | http://autobuild.buildroot.net/results/85196afc944ab9697c49d880f543c3fc02009c30 |     
+     powerpc |                        unknown | NOK | http://autobuild.buildroot.net/results/8ca07b96292b4518d2bfbfaaeb57a2375005b879 |     
+microblazeel |                        unknown | NOK | http://autobuild.buildroot.net/results/1adc89487aef30734fba9ee7a2f77c03f0d6a152 |     
+      xtensa |                        unknown | NOK | http://autobuild.buildroot.net/results/bb5f5835146a24aa3f619f6a29e97a4943b75560 |     
+       sparc |                        unknown | NOK | http://autobuild.buildroot.net/results/af7713b7412d4b008a91dd0b0bf718337647a0f9 |     
+
+Results for branch '2019.02.x'
+==============================
+
+Classification of failures by reason
+------------------------------------
+
+                qt5base-5.11.3 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                 qt5base-5.11.3 | NOK | http://autobuild.buildroot.net/results/85eda72caeab1d9fe019a25f17653fc0cb01c750 |     
+
+
 -- 
-2.20.1
+http://autobuild.buildroot.net
