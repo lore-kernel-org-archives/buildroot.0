@@ -1,43 +1,70 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 26 Jul 2019 23:04:25 +0200
-Subject: [Buildroot] [PATCH] package/sunxi-mali-mainline-driver: bump
- version
-In-Reply-To: <20190723081141.35064-1-giulio.benetti@micronovasrl.com>
-References: <20190723081141.35064-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190726230425.61d537f2@windsurf>
+Date: Fri, 26 Jul 2019 23:11:22 +0200
+Subject: [Buildroot] [git commit] package/openvmtools: use libtirpc when
+ toolchain has no native RPC
+Message-ID: <20190726210912.5142C81592@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Tue, 23 Jul 2019 10:11:41 +0200
-Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d006737faa8b0eb31db1ac216eaa872704a9f1a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> For 5.1 support.
-> 
-> git shortlog --invert-grep --grep=travis --no-merges
-> c12e16553576b050e74a8ed404cb555ce4b8e573..
-> Giulio Benetti (1):
->       README: update mali-blobs URL
-> 
-> Maxime Ripard (1):
->       Fix build with 5.1
-> 
-> Roman Stratiienko (2):
->       Add r9p0 version
->       Enable r9p0 build
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.hash  | 2 +-
->  .../sunxi-mali-mainline-driver/sunxi-mali-mainline-driver.mk    | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+openvmtools detects and uses an external RPC library if RPC is not
+supported by the toolchain C library, so let's select package/libtirpc
+when necessary.
 
-Applied to master, thanks.
+Signed-off-by: Simon Rowe <simon.rowe@citrix.com>
+[Thomas: add missing dependency on libtirpc]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/openvmtools/Config.in      | 6 +++---
+ package/openvmtools/openvmtools.mk | 4 ++++
+ 2 files changed, 7 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/openvmtools/Config.in b/package/openvmtools/Config.in
+index 97860f8c6f..2bd5c272a9 100644
+--- a/package/openvmtools/Config.in
++++ b/package/openvmtools/Config.in
+@@ -4,11 +4,11 @@ config BR2_PACKAGE_OPENVMTOOLS
+ 	depends on BR2_USE_MMU # libglib2
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+-	depends on BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	depends on BR2_ENABLE_LOCALE
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBDNET
++	select BR2_PACKAGE_LIBTIRPC if !BR2_TOOLCHAIN_HAS_NATIVE_RPC
+ 	help
+ 	  Open Virtual Machine Tools for VMware guest OS
+ 
+@@ -61,9 +61,9 @@ comment "resolutionkms needs udev, a toolchain w/ threads"
+ 
+ endif
+ 
+-comment "openvmtools needs a glibc or musl toolchain w/ wchar, threads, RPC, locale"
++comment "openvmtools needs a glibc or musl toolchain w/ wchar, threads, locale"
+ 	depends on BR2_i386 || BR2_x86_64
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_HAS_NATIVE_RPC || !BR2_ENABLE_LOCALE || \
++		!BR2_ENABLE_LOCALE || \
+ 		BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/package/openvmtools/openvmtools.mk b/package/openvmtools/openvmtools.mk
+index 145ee61895..e97eaf224e 100644
+--- a/package/openvmtools/openvmtools.mk
++++ b/package/openvmtools/openvmtools.mk
+@@ -20,6 +20,10 @@ OPENVMTOOLS_CONF_OPTS = --with-dnet \
+ OPENVMTOOLS_CONF_ENV += CUSTOM_DNET_CPPFLAGS=" "
+ OPENVMTOOLS_DEPENDENCIES = host-nfs-utils libglib2 libdnet
+ 
++ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
++OPENVMTOOLS_DEPENDENCIES += libtirpc
++endif
++
+ # When libfuse is available, openvmtools can build vmblock-fuse, so
+ # make sure that libfuse gets built first
+ ifeq ($(BR2_PACKAGE_LIBFUSE),y)
