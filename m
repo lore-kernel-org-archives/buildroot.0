@@ -1,43 +1,23 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 26 Jul 2019 16:33:25 +0200
-Subject: [Buildroot] [PATCH 4/4] configs/bananapi_m64: Bump to the linux
- kernel 5.0 and u-boot 2019.01
-In-Reply-To: <20190419095718.8444-4-shyam.saini@amarulasolutions.com>
-References: <20190419095718.8444-1-shyam.saini@amarulasolutions.com>
- <20190419095718.8444-4-shyam.saini@amarulasolutions.com>
-Message-ID: <20190726163325.0ae32e0e@windsurf>
+Date: Fri, 26 Jul 2019 16:34:45 +0200
+Subject: [Buildroot] c-sky defconfig build broken
+Message-ID: <20190726163445.2093571b@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Guo,
 
-On Fri, 19 Apr 2019 15:27:18 +0530
-Shyam Saini <shyam.saini@amarulasolutions.com> wrote:
+Following the addition of internal toolchain support for C-SKY, the
+existing csky_gx6605s_defconfig no longer builds:
 
-> This bumps to linux/linux-headers 5.0 and u-boot version 2019.01
-> 
-> Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
+Incorrect selection of kernel headers: expected 5.2.x, got 4.9.x
 
-Following this bump, this defconfig no longer builds:
+See https://gitlab.com/buildroot.org/buildroot/-/jobs/259847794
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/259847578
-
-The problem is:
-
-scripts/extract-cert.c:21:25: fatal error: openssl/bio.h: No such file or directory
- #include <openssl/bio.h>
-
-Which is fixed by adding BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y to the
-defconfig. Could you send a patch doing this ?
-
-Note that bananapro_defconfig seems to also be affected by the same issue:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/259847598
-
-Thanks,
+Could you send a patch to fix this ? Thanks!
 
 Thomas
 -- 
