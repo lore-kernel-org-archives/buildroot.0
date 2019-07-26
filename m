@@ -1,61 +1,45 @@
-From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 26 Jul 2019 22:10:41 +0300
-Subject: [Buildroot] [PATCH 2/2] package/python-fire: bump to version 0.2.0
-In-Reply-To: <20190726191041.1184-1-asafka7@gmail.com>
-References: <20190726191041.1184-1-asafka7@gmail.com>
-Message-ID: <20190726191041.1184-2-asafka7@gmail.com>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Fri, 26 Jul 2019 21:12:13 +0200
+Subject: [Buildroot] [PATCH 1/2] package/perl-class-instpector: bump to
+ version 1.36
+Message-ID: <20190726191214.12883-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/python-fire/Config.in        | 1 +
- package/python-fire/python-fire.hash | 4 ++--
- package/python-fire/python-fire.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/perl-class-inspector/perl-class-inspector.hash | 4 ++--
+ package/perl-class-inspector/perl-class-inspector.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-fire/Config.in b/package/python-fire/Config.in
-index 2c6e55ab6b..9c816b0fd0 100644
---- a/package/python-fire/Config.in
-+++ b/package/python-fire/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_FIRE
- 	bool "python-fire"
- 	select BR2_PACKAGE_PYTHON_SIX # runtime
-+	select BR2_PACKAGE_PYTHON_TERMCOLOR # runtime
- 	help
- 	  A library for automatically generating command line
- 	  interfaces.
-diff --git a/package/python-fire/python-fire.hash b/package/python-fire/python-fire.hash
-index d6304369d5..6c48950b7a 100644
---- a/package/python-fire/python-fire.hash
-+++ b/package/python-fire/python-fire.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fire/json
--md5	44c51c634b61acc7ed42a413a64de38a  fire-0.1.3.tar.gz
--sha256	c299d16064ff81cbb649b65988300d4a28b71ecfb789d1fb74d99ea98ae4d2eb  fire-0.1.3.tar.gz
-+md5	dccf1cbd740146d52d9896e4a5ba673e  fire-0.2.0.tar.gz
-+sha256	cdae28ea728d6cad487c900d534426d2cd09ddd2993287a885ff7c8accb097c8  fire-0.2.0.tar.gz
- # Locally computed sha256 checksums
- sha256	a5de77b62266bca0bb97bf058992f0b0f308a83a8ca55ee10fbf6bd8ed8f7ed0  LICENSE
-diff --git a/package/python-fire/python-fire.mk b/package/python-fire/python-fire.mk
-index bdb5ee191c..2573a577db 100644
---- a/package/python-fire/python-fire.mk
-+++ b/package/python-fire/python-fire.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/perl-class-inspector/perl-class-inspector.hash b/package/perl-class-inspector/perl-class-inspector.hash
+index fcbefdcbf..ee7a95bfa 100644
+--- a/package/perl-class-inspector/perl-class-inspector.hash
++++ b/package/perl-class-inspector/perl-class-inspector.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    657ec026aae1b28ee9368849fea8be75 Class-Inspector-1.34.tar.gz
+-sha256 fe9a86dcb3ccc7a99d6865e6b674a14d20164f76bd84f2eb43aafcc6bf1cf0d8 Class-Inspector-1.34.tar.gz
++md5    084c3aeec023639d21ecbaf7d4460b21 Class-Inspector-1.36.tar.gz
++sha256 cc295d23a472687c24489d58226ead23b9fdc2588e522f0b5f0747741700694e Class-Inspector-1.36.tar.gz
+ 
+ # computed by scancpan
+ sha256 401fe9c98bdb5707df71447fb93141f8cb2d85337d45505f5ae50a776a3f6666 LICENSE
+diff --git a/package/perl-class-inspector/perl-class-inspector.mk b/package/perl-class-inspector/perl-class-inspector.mk
+index 52e2032b5..fdb332366 100644
+--- a/package/perl-class-inspector/perl-class-inspector.mk
++++ b/package/perl-class-inspector/perl-class-inspector.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_FIRE_VERSION = 0.1.3
-+PYTHON_FIRE_VERSION = 0.2.0
- PYTHON_FIRE_SOURCE = fire-$(PYTHON_FIRE_VERSION).tar.gz
--PYTHON_FIRE_SITE = https://files.pythonhosted.org/packages/5a/b7/205702f348aab198baecd1d8344a90748cb68f53bdcd1cc30cbc08e47d3e
-+PYTHON_FIRE_SITE = https://files.pythonhosted.org/packages/40/6e/48cf0cffb7bf0bb58746bff99ed2d1a2769a32c4d74c06f988eb3e554f86
- PYTHON_FIRE_SETUP_TYPE = setuptools
- PYTHON_FIRE_LICENSE = Apache-2.0
- PYTHON_FIRE_LICENSE_FILES = LICENSE
+-PERL_CLASS_INSPECTOR_VERSION = 1.34
++PERL_CLASS_INSPECTOR_VERSION = 1.36
+ PERL_CLASS_INSPECTOR_SOURCE = Class-Inspector-$(PERL_CLASS_INSPECTOR_VERSION).tar.gz
+ PERL_CLASS_INSPECTOR_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PL/PLICEASE
+ PERL_CLASS_INSPECTOR_LICENSE = Artistic or GPL-1.0+
 -- 
 2.20.1
