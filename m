@@ -1,48 +1,80 @@
 From: Asaf Kahlon <asafka7@gmail.com>
-Date: Fri, 26 Jul 2019 22:10:14 +0300
-Subject: [Buildroot] [PATCH 1/1] package/python-cython: bump to version
- 0.29.13
-Message-ID: <20190726191014.1076-1-asafka7@gmail.com>
+Date: Fri, 26 Jul 2019 22:10:40 +0300
+Subject: [Buildroot] [PATCH 1/2] python-termcolor: new package
+Message-ID: <20190726191041.1184-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+ANSII Color formatting for output in terminal.
+
 Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 ---
- package/python-cython/python-cython.hash | 4 ++--
- package/python-cython/python-cython.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                              |  1 +
+ package/python-termcolor/Config.in             |  6 ++++++
+ package/python-termcolor/python-termcolor.hash |  5 +++++
+ package/python-termcolor/python-termcolor.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-termcolor/Config.in
+ create mode 100644 package/python-termcolor/python-termcolor.hash
+ create mode 100644 package/python-termcolor/python-termcolor.mk
 
-diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
-index 49f978bedf..1c9d140693 100644
---- a/package/python-cython/python-cython.hash
-+++ b/package/python-cython/python-cython.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/cython/json
--md5	785fa46921b4cbb4028b27b825a268d4  Cython-0.29.11.tar.gz
--sha256	763a522cc5d1673ba7a4092c0914790f11704b1d4c41e2671e50d0f702a8c6a0  Cython-0.29.11.tar.gz
-+md5	f8109a2a86cded40b3896ee7a63bc5a5  Cython-0.29.13.tar.gz
-+sha256	c29d069a4a30f472482343c866f7486731ad638ef9af92bfe5fca9c7323d638e  Cython-0.29.13.tar.gz
- # Locally computed sha256 checksums
- sha256 a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
- sha256 e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
-diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
-index 47dedd40d6..c7f777c7d8 100644
---- a/package/python-cython/python-cython.mk
-+++ b/package/python-cython/python-cython.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_CYTHON_VERSION = 0.29.11
-+PYTHON_CYTHON_VERSION = 0.29.13
- PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
--PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/87/26/6f8a63fda4743d9e405c17c2872ac3242b63b5eba79c475ddf1777f17b9e
-+PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/a5/1f/c7c5450c60a90ce058b47ecf60bb5be2bfe46f952ed1d3b95d1d677588be
- PYTHON_CYTHON_SETUP_TYPE = setuptools
- PYTHON_CYTHON_LICENSE = Apache-2.0
- PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
+diff --git a/package/Config.in b/package/Config.in
+index 90dddfd346..9b2cc7522d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1075,6 +1075,7 @@ menu "External python modules"
+ 	source "package/python-systemd/Config.in"
+ 	source "package/python-tabledata/Config.in"
+ 	source "package/python-tempora/Config.in"
++	source "package/python-termcolor/Config.in"
+ 	source "package/python-terminaltables/Config.in"
+ 	source "package/python-texttable/Config.in"
+ 	source "package/python-thrift/Config.in"
+diff --git a/package/python-termcolor/Config.in b/package/python-termcolor/Config.in
+new file mode 100644
+index 0000000000..e89da9b965
+--- /dev/null
++++ b/package/python-termcolor/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_TERMCOLOR
++	bool "python-termcolor"
++	help
++	  ANSII Color formatting for output in terminal.
++
++	  http://pypi.python.org/pypi/termcolor
+diff --git a/package/python-termcolor/python-termcolor.hash b/package/python-termcolor/python-termcolor.hash
+new file mode 100644
+index 0000000000..7cccc3ec97
+--- /dev/null
++++ b/package/python-termcolor/python-termcolor.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/termcolor/json
++md5	043e89644f8909d462fbbfa511c768df  termcolor-1.1.0.tar.gz
++sha256	1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b  termcolor-1.1.0.tar.gz
++# Locally computed sha256 checksums
++sha256	497b3272b67b94a7aa58fa3748d21b62b29ccb783b1cda816f594e3932590bbf  COPYING.txt
+diff --git a/package/python-termcolor/python-termcolor.mk b/package/python-termcolor/python-termcolor.mk
+new file mode 100644
+index 0000000000..ccdff4c0d7
+--- /dev/null
++++ b/package/python-termcolor/python-termcolor.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-termcolor
++#
++################################################################################
++
++PYTHON_TERMCOLOR_VERSION = 1.1.0
++PYTHON_TERMCOLOR_SOURCE = termcolor-$(PYTHON_TERMCOLOR_VERSION).tar.gz
++PYTHON_TERMCOLOR_SITE = https://files.pythonhosted.org/packages/8a/48/a76be51647d0eb9f10e2a4511bf3ffb8cc1e6b14e9e4fab46173aa79f981
++PYTHON_TERMCOLOR_SETUP_TYPE = distutils
++PYTHON_TERMCOLOR_LICENSE = MIT
++PYTHON_TERMCOLOR_LICENSE_FILES = COPYING.txt
++
++$(eval $(python-package))
 -- 
 2.20.1
