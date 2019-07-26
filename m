@@ -1,34 +1,47 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 26 Jul 2019 23:15:30 +0200
-Subject: [Buildroot] [PATCH 1/2] package/lua-curl: bump to version 0.3.10
-In-Reply-To: <20190726170101.21463-1-francois.perrad@gadz.org>
-References: <20190726170101.21463-1-francois.perrad@gadz.org>
-Message-ID: <20190726231530.01b1738f@windsurf>
+Date: Fri, 26 Jul 2019 23:15:59 +0200
+Subject: [Buildroot] [git commit] package/perl-class-instpector: bump to
+ version 1.36
+Message-ID: <20190726211404.3CCA287776@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, 26 Jul 2019 19:01:00 +0200
-Francois Perrad <fperrad@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a0181a7bf51250d3256dd05d881c2339c751af46
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> diff LICENSE:
-> -Copyright (c) 2014-2018 Alexey Melnichuk
-> +Copyright (c) 2014-2019 Alexey Melnichuk
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  ...dd-variant-definition-of-lcurl_url_t.patch | 40 -------------------
->  package/lua-curl/lua-curl.hash                |  4 +-
->  package/lua-curl/lua-curl.mk                  |  2 +-
->  3 files changed, 3 insertions(+), 43 deletions(-)
->  delete mode 100644 package/lua-curl/0001-add-variant-definition-of-lcurl_url_t.patch
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl-class-inspector/perl-class-inspector.hash | 4 ++--
+ package/perl-class-inspector/perl-class-inspector.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Both applied. Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/perl-class-inspector/perl-class-inspector.hash b/package/perl-class-inspector/perl-class-inspector.hash
+index fcbefdcbf3..ee7a95bfad 100644
+--- a/package/perl-class-inspector/perl-class-inspector.hash
++++ b/package/perl-class-inspector/perl-class-inspector.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from http://cpan.metacpan.org/
+-md5    657ec026aae1b28ee9368849fea8be75 Class-Inspector-1.34.tar.gz
+-sha256 fe9a86dcb3ccc7a99d6865e6b674a14d20164f76bd84f2eb43aafcc6bf1cf0d8 Class-Inspector-1.34.tar.gz
++md5    084c3aeec023639d21ecbaf7d4460b21 Class-Inspector-1.36.tar.gz
++sha256 cc295d23a472687c24489d58226ead23b9fdc2588e522f0b5f0747741700694e Class-Inspector-1.36.tar.gz
+ 
+ # computed by scancpan
+ sha256 401fe9c98bdb5707df71447fb93141f8cb2d85337d45505f5ae50a776a3f6666 LICENSE
+diff --git a/package/perl-class-inspector/perl-class-inspector.mk b/package/perl-class-inspector/perl-class-inspector.mk
+index 52e2032b5b..fdb332366c 100644
+--- a/package/perl-class-inspector/perl-class-inspector.mk
++++ b/package/perl-class-inspector/perl-class-inspector.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_CLASS_INSPECTOR_VERSION = 1.34
++PERL_CLASS_INSPECTOR_VERSION = 1.36
+ PERL_CLASS_INSPECTOR_SOURCE = Class-Inspector-$(PERL_CLASS_INSPECTOR_VERSION).tar.gz
+ PERL_CLASS_INSPECTOR_SITE = $(BR2_CPAN_MIRROR)/authors/id/P/PL/PLICEASE
+ PERL_CLASS_INSPECTOR_LICENSE = Artistic or GPL-1.0+
