@@ -1,10 +1,10 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 26 Jul 2019 16:27:11 +0200
-Subject: [Buildroot] [PATCH] configs/atmel_sama5d27_som1: bump to
- linux4sam_6.1
-In-Reply-To: <1562775673-22148-1-git-send-email-pjtexier@koncepto.io>
-References: <1562775673-22148-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <20190726162711.2c4ede9a@windsurf>
+Date: Fri, 26 Jul 2019 16:28:24 +0200
+Subject: [Buildroot] [PATCH] Defconfig arcturus_ucls1012a_defconfig:
+ bump UBOOT_CUSTOM_REPO_VERSION
+In-Reply-To: <20180605140250.5943-1-oleks@arcturusnetworks.com>
+References: <20180605140250.5943-1-oleks@arcturusnetworks.com>
+Message-ID: <20190726162824.6906545f@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,25 +13,22 @@ To: buildroot@busybox.net
 
 Hello,
 
-On Wed, 10 Jul 2019 18:21:12 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+On Tue,  5 Jun 2018 10:02:50 -0400
+Oleksandr Zhadan <oleks@arcturusnetworks.com> wrote:
 
-> This commit :
-> 	- bumps Linux & U-Boot to linux4sam_6.1.
-> 	- bumps at91bootstrap to v3.8.13
+> This new u-boot custom repo version should fix the arcturus_ucls1012a_defconfig
+> fails to build on master. See the build log at:
 > 
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/71726827
+> 
+> Signed-off-by: Oleksandr Zhadan <oleks@arcturusnetworks.com>
+> Signed-off-by: Michael Durrant <mdurrant@arcturusnetworks.com>
 
-Following this bump, the atmel_sama5d27_som1_ek_mmc_dev_defconfig no
-longer builds:
+This defconfig no longer builds with gcc 8.x, due to U-Boot:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/259847527
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/259846781
 
-You need to add:
- 
-  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-
-Could you test this and send a patch ?
+Could you have a look and send a patch to fix this ?
 
 Thanks!
 
