@@ -1,99 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 27 Jul 2019 06:00:34 -0000
-Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-07-26
-Message-ID: <20190727060039.05F118797C@fraxinus.osuosl.org>
+From: Asaf Kahlon <asafka7@gmail.com>
+Date: Sat, 27 Jul 2019 09:33:04 +0300
+Subject: [Buildroot] [PATCH v2 1/2] python-termcolor: new package
+Message-ID: <20190727063305.26512-1-asafka7@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+ANSII Color formatting for output in terminal.
 
-Build statistics for 2019-07-26
-===============================
+Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
+---
+ package/Config.in                              |  1 +
+ package/python-termcolor/Config.in             |  6 ++++++
+ package/python-termcolor/python-termcolor.hash |  5 +++++
+ package/python-termcolor/python-termcolor.mk   | 14 ++++++++++++++
+ 4 files changed, 26 insertions(+)
+ create mode 100644 package/python-termcolor/Config.in
+ create mode 100644 package/python-termcolor/python-termcolor.hash
+ create mode 100644 package/python-termcolor/python-termcolor.mk
 
-      branch |  OK | NOK | TIM | TOT |
-   2019.02.x |  14 |   1 |   0 |  15 |
-   2019.05.x |  16 |   1 |   0 |  17 |
-      master |  80 |  24 |   0 | 104 |
-
-Results for branch '2019.05.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-           qt5serialbus-5.12.2 | 1 
-
-
-Detail of failures
-------------------
-
-microblazeel |            qt5serialbus-5.12.2 | NOK | http://autobuild.buildroot.net/results/45431ac0184ca3733c50613435fb2efd6d50a133 |     
-
-Results for branch 'master'
-===========================
-
-Classification of failures by reason
-------------------------------------
-
-                   netsurf-3.9 | 7 
-           can-utils-2018.02.0 | 3 
-                  flashrom-1.1 | 2 
-               host-efl-1.22.2 | 2 
-               log4cplus-2.0.4 | 2 
-                       unknown | 2 
-/home/buildroot/autobuild/i... | 1 
-                harfbuzz-2.5.2 | 1 
-                  monkey-1.6.9 | 1 
-                qt5base-5.12.4 | 1 
-tvheadend-8f1de1621d78c9143... | 1 
-   vdr-plugin-vnsiserver-1.8.0 | 1 
-
-
-Detail of failures
-------------------
-
-      xtensa | /home/buildroot/autobuild/i... | NOK | http://autobuild.buildroot.net/results/d72eb18007f79276eca7f8f65aaf29ea64af4060 |     
-         arc |            can-utils-2018.02.0 | NOK | http://autobuild.buildroot.net/results/e3d82fd75c4a1b6dfaca8eb7a857e2ade3b1d719 |     
-     powerpc |            can-utils-2018.02.0 | NOK | http://autobuild.buildroot.net/results/9d4e49e00b9f119286e168c3fb33dc64d187a9b8 |     
-         arc |            can-utils-2018.02.0 | NOK | http://autobuild.buildroot.net/results/6a77cbafda19cc12669dc06fd864d119ee035e1d |     
-     powerpc |                   flashrom-1.1 | NOK | http://autobuild.buildroot.net/results/feb13762a80689519c31f674cbb7f777c951c2f1 |     
-     powerpc |                   flashrom-1.1 | NOK | http://autobuild.buildroot.net/results/7d8ff74927de0865b24d38d60d119d9619a743af |     
-        m68k |                 harfbuzz-2.5.2 | NOK | http://autobuild.buildroot.net/results/0058c288273a69cecd4b3696cebdf03da673cc3d | ORPH
-      x86_64 |                host-efl-1.22.2 | NOK | http://autobuild.buildroot.net/results/13c178cf791c9fba69e2c39223b527c740d32af8 |     
-         arm |                host-efl-1.22.2 | NOK | http://autobuild.buildroot.net/results/9f26ad5d86846353edb6883f7cbe44369d61cbc7 |     
-         arc |                log4cplus-2.0.4 | NOK | http://autobuild.buildroot.net/results/7d78217c873051f6067617fd0575bae53653b29e |     
-         arc |                log4cplus-2.0.4 | NOK | http://autobuild.buildroot.net/results/705d9a6e05a89c906b891093c603eac51a0ddf74 |     
-        m68k |                   monkey-1.6.9 | NOK | http://autobuild.buildroot.net/results/94eddbafdea765a4f534f62ef99082ca3f18e269 |     
-    mips64el |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/a7bc7cbede4cd6c0c29ff344fe59e80be2b5a5d9 |     
-     aarch64 |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/a84a40fac01cd9a52ea36c532e7b30e498dc9143 |     
-     riscv64 |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/436d733f89f5be06785dd4f099d1d5f53c52f922 |     
-     riscv64 |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/4f77960e855cbb7c6704139587a639837ee385c2 |     
-        mips |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/6f09416fe052784bca65c5f8d0ffd09a1b4d7244 |     
-    mips64el |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/9b94b4c15311d76e0c4f69547e46760abf3d34d9 |     
- powerpc64le |                    netsurf-3.9 | NOK | http://autobuild.buildroot.net/results/cb378a6e1b2448e103a8166e0a14b08265b845ea |     
-      x86_64 |                 qt5base-5.12.4 | NOK | http://autobuild.buildroot.net/results/15b1cb5e77e3153b9d4696870916c05c1cf56cf8 |     
-      mipsel | tvheadend-8f1de1621d78c9143... | NOK | http://autobuild.buildroot.net/results/883c1b60a62c1ea798a58877a4477a8c110ff23d |     
-      x86_64 |                        unknown | NOK | http://autobuild.buildroot.net/results/cb2b1a9980de3cdfcb4c2b866c6014fd779e4e45 |     
-        m68k |                        unknown | NOK | http://autobuild.buildroot.net/results/f2c8191c9f5b884a2601a0c92db267dd7f687a90 |     
-        mips |    vdr-plugin-vnsiserver-1.8.0 | NOK | http://autobuild.buildroot.net/results/471e86a99c56124e1cb9a19c1ced4700d5f70546 |     
-
-Results for branch '2019.02.x'
-==============================
-
-Classification of failures by reason
-------------------------------------
-
-                qt5base-5.11.3 | 1 
-
-
-Detail of failures
-------------------
-
-         arm |                 qt5base-5.11.3 | NOK | http://autobuild.buildroot.net/results/30a864f095c7ff6482804e49f94c9f91f7a83cb2 |     
-
-
+diff --git a/package/Config.in b/package/Config.in
+index 90dddfd346..9b2cc7522d 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1075,6 +1075,7 @@ menu "External python modules"
+ 	source "package/python-systemd/Config.in"
+ 	source "package/python-tabledata/Config.in"
+ 	source "package/python-tempora/Config.in"
++	source "package/python-termcolor/Config.in"
+ 	source "package/python-terminaltables/Config.in"
+ 	source "package/python-texttable/Config.in"
+ 	source "package/python-thrift/Config.in"
+diff --git a/package/python-termcolor/Config.in b/package/python-termcolor/Config.in
+new file mode 100644
+index 0000000000..e89da9b965
+--- /dev/null
++++ b/package/python-termcolor/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_TERMCOLOR
++	bool "python-termcolor"
++	help
++	  ANSII Color formatting for output in terminal.
++
++	  http://pypi.python.org/pypi/termcolor
+diff --git a/package/python-termcolor/python-termcolor.hash b/package/python-termcolor/python-termcolor.hash
+new file mode 100644
+index 0000000000..7cccc3ec97
+--- /dev/null
++++ b/package/python-termcolor/python-termcolor.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/termcolor/json
++md5	043e89644f8909d462fbbfa511c768df  termcolor-1.1.0.tar.gz
++sha256	1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b  termcolor-1.1.0.tar.gz
++# Locally computed sha256 checksums
++sha256	497b3272b67b94a7aa58fa3748d21b62b29ccb783b1cda816f594e3932590bbf  COPYING.txt
+diff --git a/package/python-termcolor/python-termcolor.mk b/package/python-termcolor/python-termcolor.mk
+new file mode 100644
+index 0000000000..ccdff4c0d7
+--- /dev/null
++++ b/package/python-termcolor/python-termcolor.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-termcolor
++#
++################################################################################
++
++PYTHON_TERMCOLOR_VERSION = 1.1.0
++PYTHON_TERMCOLOR_SOURCE = termcolor-$(PYTHON_TERMCOLOR_VERSION).tar.gz
++PYTHON_TERMCOLOR_SITE = https://files.pythonhosted.org/packages/8a/48/a76be51647d0eb9f10e2a4511bf3ffb8cc1e6b14e9e4fab46173aa79f981
++PYTHON_TERMCOLOR_SETUP_TYPE = distutils
++PYTHON_TERMCOLOR_LICENSE = MIT
++PYTHON_TERMCOLOR_LICENSE_FILES = COPYING.txt
++
++$(eval $(python-package))
 -- 
-http://autobuild.buildroot.net
+2.20.1
