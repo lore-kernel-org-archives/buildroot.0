@@ -1,27 +1,28 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 27 Jul 2019 06:38:24 +0000
-Subject: [Buildroot] =?utf-8?q?=5BBug_12046=5D_Can=E2=80=99t_login_as_roo?=
- =?utf-8?q?t_user_after_upgrading_to_buildroot_2019=2E02?=
-In-Reply-To: <bug-12046-163@https.bugs.busybox.net/>
-References: <bug-12046-163@https.bugs.busybox.net/>
-Message-ID: <bug-12046-163-Y4fNBXhQVp@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 27 Jul 2019 09:26:21 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-07-26
+References: <20190727060039.05F118797C@fraxinus.osuosl.org>
+Message-ID: <XnsAA996009D6FD6berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12046
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> 
+wrote in news:20190727060039.05F118797C at fraxinus.osuosl.org:
 
---- Comment #3 from liadekel123 at gmail.com ---
-Hey Carlos,
-Sorry about the delay. We solved the problem...
-Apparently the version of login in buildroot 2019.02 use securetty file which
-lists all the devices root user is allowed to login from :|
+>      aarch64 |                    netsurf-3.9 | NOK | 
+http://autobuild.buildroot.net/results/a84a40fac01cd9a52ea36c532e7b30e498dc91
+43 |     
 
-Many Thanks,
-Liad
+Fixed by http://patchwork.ozlabs.org/patch/1134698/
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+>       mipsel | tvheadend-8f1de1621d78c9143... | NOK | 
+http://autobuild.buildroot.net/results/883c1b60a62c1ea798a58877a4477a8c110ff2
+3d |     
+
+Fixed by http://patchwork.ozlabs.org/patch/1128403/
+
+Regards, Bernd
