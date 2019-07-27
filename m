@@ -1,26 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Sat, 27 Jul 2019 20:45:01 +0000
-Subject: [Buildroot] =?utf-8?q?=5BBug_12046=5D_Can=E2=80=99t_login_as_roo?=
- =?utf-8?q?t_user_after_upgrading_to_buildroot_2019=2E02?=
-In-Reply-To: <bug-12046-163@https.bugs.busybox.net/>
-References: <bug-12046-163@https.bugs.busybox.net/>
-Message-ID: <bug-12046-163-eEQ121lVF2@https.bugs.busybox.net/>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat, 27 Jul 2019 22:44:29 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: fix build error
+References: <20190706064236.30663-1-bernd.kuhls@t-online.de>
+ <20190727223753.2211ac3f@windsurf>
+Message-ID: <XnsAA99E75BA4FE2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12046
+[posted and mailed]
 
---- Comment #4 from Carlos Santos <unixmania@gmail.com> ---
-(In reply to liadekel123 from comment #3)
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> 
+wrote in news:20190727223753.2211ac3f at windsurf:
 
-/etc/securetty is required by pam_securetty, which is part of pam-linux. It is
-not used by default neither by the busybox login nor by the util-linux one.
-What
-is the contents of your /etc/pam.d/login file?
+> Could you give a bit more details about how including <stdio.h> can
+> solve this build issue ? All this thread stuff in tvheadend isn't that
+> clear, and the fact that including <stdio.h> solves the build issue
+> makes it even less clear.
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Hi Thomas,
+
+the fix was proposed by the author of tvheadend:
+https://tvheadend.org/issues/5667#note-7
+
+My knowledge about the code is not sufficient enough to answer your question, 
+sorry. I was glad that the fix was as easy as adding a header include.
+
+Regards, Bernd
