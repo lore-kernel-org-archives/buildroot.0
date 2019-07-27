@@ -1,27 +1,60 @@
 From: Carlos Santos <unixmania@gmail.com>
-Date: Fri, 26 Jul 2019 23:25:22 -0300
-Subject: [Buildroot] [RFC PATCH 4/4] Add linker override to config
- options
-In-Reply-To: <20190724173538.22913-5-joseph.kogut@gmail.com>
-References: <20190724173538.22913-1-joseph.kogut@gmail.com>
- <20190724173538.22913-5-joseph.kogut@gmail.com>
-Message-ID: <CAJ4jsad2fnpgqUq0bqtXz9f2ZQ9CJhEo2KcTi49NKqO5-a4PpQ@mail.gmail.com>
+Date: Fri, 26 Jul 2019 23:40:39 -0300
+Subject: [Buildroot] [PATCH v2 1/1] pkg-infra/show-info: dump
+ install_{staging, target} info
+In-Reply-To: <20190723125657.27702-1-vadim4j@gmail.com>
+References: <20190723125657.27702-1-vadim4j@gmail.com>
+Message-ID: <CAJ4jsaefr8e3ufjV_ZdnvaZZ4mkaiTvxwtYyOGTQD49UHYFSwA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, Jul 24, 2019 at 2:35 PM Joseph Kogut <joseph.kogut@gmail.com> wrote:
+On Tue, Jul 23, 2019 at 9:57 AM Vadim Kochan <vadim4j@gmail.com> wrote:
 >
-> Signed-off-by: Joseph Kogut <joseph.kogut@gmail.com>
-[...]
+> provide info if the package will be installed to staging/target
+> destinations. Might be useful for analyzing the packages which
+> installed only for target/staging.
 >
-> +ifeq ($(BR2_LINKER_LLD),y)
-> +TOOLCHAIN_WRAPPER_ARGS += -DBR_LINKER='"lld"'
+> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> ---
+>
+> v2:
+>     1) use oneliner 'if' to dump install_{staging,target} properties
+>
+>  package/pkg-utils.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index b7280e930f..1dcf2805cb 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -94,6 +94,8 @@ endef
+>  define _json-info-pkg-details
+>         "version": "$($(1)_DL_VERSION)",
+>         "licenses": "$($(1)_LICENSE)",
+> +       "install-target": $(if $($(1)_INSTALL_TARGET),true,false),
 
-Sorry for the nitpicking but Buildroot normally uses the "BR2_" prefix
-fo perhaps this should be "BR2_LINKER"
+This tests if if $($(1)_INSTALL_TARGET is not empty, e.g.
+
+$ fgrep '_INSTALL_TARGET =' package/*/*.mk
+package/azmq/azmq.mk:AZMQ_INSTALL_TARGET = NO
+[...]
+
+$ make azmq-show-info
+{ "azmq": { "type": "target", "virtual": false, "version": "1.0.2",
+"licenses": "BSL-1.0", "install-target": true, "install-staging":
+true, "downloads": [ { "source": "azmq-1.0.2.tar.gz", "uris": [
+"https+https}
+
+> +       "install-staging": $(if $($(1)_INSTALL_STAGING),true,false),
+
+$ make bash-show-info
+{ "bash": { "type": "target", "virtual": false, "version": "4.4.18",
+"licenses": "GPL-3.0+", "install-target": true, "install-staging":
+true, "downloads": [ { "source": "bash-4.4.18.tar.gz", "uris": [
+"http+htt}
 
 -- 
 Carlos Santos <unixmania@gmail.com>
