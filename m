@@ -1,31 +1,75 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 Jul 2019 22:44:34 +0200
-Subject: [Buildroot] [PATCH 7/7] package/iprutils: add license hash
-In-Reply-To: <20190728204434.12356-1-bernd.kuhls@t-online.de>
-References: <20190728204434.12356-1-bernd.kuhls@t-online.de>
-Message-ID: <20190728204434.12356-7-bernd.kuhls@t-online.de>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sun, 28 Jul 2019 22:55:21 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.{1, 2}.x series
+Message-ID: <20190728205521.24703-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Partly fixes:
-http://autobuild.buildroot.net/results/f0f/f0fd05ce8a8b595015baf625481b58967df53458/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iprutils/iprutils.hash | 1 +
- 1 file changed, 1 insertion(+)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 12 ++++++------
+ package/linux-headers/Config.in.host | 12 ++++++------
+ 3 files changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/package/iprutils/iprutils.hash b/package/iprutils/iprutils.hash
-index e5c1754696..423943b22d 100644
---- a/package/iprutils/iprutils.hash
-+++ b/package/iprutils/iprutils.hash
-@@ -3,3 +3,4 @@ md5 e4011051bba7470df3936cbba7dced98  iprutils-2.4.15.1.tar.gz
- sha1 ed6c362ee3c6bd9023ee60d0d1a1ce5543c27c41  iprutils-2.4.15.1.tar.gz
- # Locally computed:
- sha256 a733e65f8fb19565f2ef5191eaa2a14d816fabed0fc254ab4bbf1a4c7800ebe5  iprutils-2.4.15.1.tar.gz
-+sha256 59b4179e61248aff9cd2d6ee4cd1dbbd0ef48836fe2eeee19f4b16459785104a  LICENSE
+diff --git a/linux/Config.in b/linux/Config.in
+index 7ed61d1923..871141fdcd 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -122,7 +122,7 @@ endif
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "5.2" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "5.2.4" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "v4.19.60-cip7" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+ 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 009e9bd7c5..1bb374629e 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256 54ad66f672e1a831b574f5e704e8a05f1e6180a8245d4bdd811208a6cb0ac1e7  linux-5.2.tar.xz
+-sha256 8a3e55be3e788700836db6f75875b4d3b824a581d1eacfc2fcd29ed4e727ba3e  linux-5.1.16.tar.xz
++sha256 b1cd8b9e0bfe7afb2fdf3915605db3a6cd3fe098833f9bc0b37aae74b057ee43  linux-5.2.4.tar.xz
++sha256 56495f82314f0dfb84a3fe7fad78e17be69c4fd36ef46f2452458b2fa1e341f6  linux-5.1.21.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256 327c5759d5888361d6c9d6adb0c8ad7e3c624eb05bb9e5869d9f3078dd0d3f87  linux-4.19.57.tar.xz
+-sha256 da86f39a722da656fce4e2685223093b5d5f4db94046fcd79e492428a82ff330  linux-4.14.132.tar.xz
+-sha256 6543232fc082485c1088830b9456e1a6e511239e4bf98817b0166ee62cafc3ca  linux-4.4.184.tar.xz
+-sha256 033114d5350525dede995d31b596c31b0e26db8d77a0a1c53d36cdc36ead9faf  linux-4.9.184.tar.xz
++sha256 07be647189ced7eb8ba5ee769906e67919975772184842cc517f609df50cdadc  linux-4.19.62.tar.xz
++sha256 0b21e7b5effd92303a551b5be2380c9703d6fb87cfe5189fe0d795cc73903d2d  linux-4.14.134.tar.xz
++sha256 242484430d0729791d8efd92181b7d34b4021050646c6e00cf459866eab94b6a  linux-4.9.186.tar.xz
++sha256 0b1273d35c0664234e069f1ba894161b466679f6e1053f44fcf4098290937984  linux-4.4.186.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index e003de090e..cabdb7f209 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -305,12 +305,12 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.4.184"	if BR2_KERNEL_HEADERS_4_4
+-	default "4.9.184"	if BR2_KERNEL_HEADERS_4_9
+-	default "4.14.132"	if BR2_KERNEL_HEADERS_4_14
+-	default "4.19.57"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.1.16"	if BR2_KERNEL_HEADERS_5_1
+-	default "5.2"		if BR2_KERNEL_HEADERS_5_2
++	default "4.4.186"	if BR2_KERNEL_HEADERS_4_4
++	default "4.9.186"	if BR2_KERNEL_HEADERS_4_9
++	default "4.14.134"	if BR2_KERNEL_HEADERS_4_14
++	default "4.19.62"	if BR2_KERNEL_HEADERS_4_19
++	default "5.1.21"	if BR2_KERNEL_HEADERS_5_1
++	default "5.2.4"		if BR2_KERNEL_HEADERS_5_2
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
-2.20.1
+2.11.0
