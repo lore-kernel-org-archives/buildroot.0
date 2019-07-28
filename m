@@ -1,49 +1,49 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Jul 2019 22:40:02 +0200
-Subject: [Buildroot] [git commit] package/libcurl: bump to version 7.65.3
-Message-ID: <20190728203958.4BBDD83921@busybox.osuosl.org>
+Date: Sun, 28 Jul 2019 22:41:02 +0200
+Subject: [Buildroot] [git commit] package/python-pillow: bump to version
+ 6.1.0
+Message-ID: <20190728203958.718D280282@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3fac250944563491b327990eb909617c4f02bd81
+commit: https://git.buildroot.net/buildroot/commit/?id=8acdc0e2dca0682871a26ec67cb8ffab13fc0e8b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-A very small fix for the progress meter regression in 7.65.2.
+This patch bump python-pillow to version 6.1.0
 
-See https://curl.haxx.se/mail/lib-2019-07/0052.html
-
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
+ package/python-pillow/python-pillow.hash | 2 +-
+ package/python-pillow/python-pillow.mk   | 4 ++--
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 0ee0b0f088..580a2e640a 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.haxx.se/download/curl-7.65.2.tar.xz.asc
-+# https://curl.haxx.se/download/curl-7.65.3.tar.xz.asc
- # with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256 b6124b68ed56172012f767a9ea36d3b8ed45adafe7953bd11add66ae6f9d8a39  curl-7.65.2.tar.xz
-+sha256 f2d98854813948d157f6a91236ae34ca4a1b4cb302617cebad263d79b0235fea  curl-7.65.3.tar.xz
- sha256 8c8824f50e73a021f5dde1fccbf69685939247399a33a32abab1fa448c9ddabb  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 1819c022f0..8bb215381c 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
+index fa9caae679..fe72d01d38 100644
+--- a/package/python-pillow/python-pillow.hash
++++ b/package/python-pillow/python-pillow.hash
+@@ -1,4 +1,4 @@
+ # sha256 for python-pillow from https://pypi.org/project/Pillow/
+ # sha256 for LICENSE locally computed
+-sha256 809c0a2ce9032cbcd7b5313f71af4bdc5c8c771cb86eb7559afd954cab82ebb5  Pillow-6.0.0.tar.gz
++sha256 0804f77cb1e9b6dbd37601cee11283bba39a8d44b9ddb053400c58e0c0d7d9de  Pillow-6.1.0.tar.gz
+ sha256 64ea4328ed56392b423ef968519a9ad427e3de9b985862c95ed2ed4d793d22ee  LICENSE
+diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
+index 6efa9f3923..a4121da2b4 100644
+--- a/package/python-pillow/python-pillow.mk
++++ b/package/python-pillow/python-pillow.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBCURL_VERSION = 7.65.2
-+LIBCURL_VERSION = 7.65.3
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.haxx.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+-PYTHON_PILLOW_VERSION = 6.0.0
++PYTHON_PILLOW_VERSION = 6.1.0
+ PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
+-PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/81/1a/6b2971adc1bca55b9a53ed1efa372acff7e8b9913982a396f3fa046efaf8
++PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/51/fe/18125dc680720e4c3086dd3f5f95d80057c41ab98326877fc7d3ff6d0ee5
+ PYTHON_PILLOW_LICENSE = PIL Software License
+ PYTHON_PILLOW_LICENSE_FILES = LICENSE
+ PYTHON_PILLOW_SETUP_TYPE = setuptools
