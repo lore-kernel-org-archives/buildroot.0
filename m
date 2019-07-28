@@ -1,22 +1,27 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Jul 2019 22:41:33 +0200
-Subject: [Buildroot] [PATCH] package/python-can: bump to version 3.3.1
-In-Reply-To: <20190728151915.19914-1-angelo@amarulasolutions.com> (Angelo
- Compagnucci's message of "Sun, 28 Jul 2019 17:19:15 +0200")
-References: <20190728151915.19914-1-angelo@amarulasolutions.com>
-Message-ID: <87blxdki2q.fsf@dell.be.48ers.dk>
+Date: Sun, 28 Jul 2019 22:42:08 +0200
+Subject: [Buildroot] [PATCH 1/1] configs/atmel_sama5d27_som1: kernel
+ needs host-openssl to build
+In-Reply-To: <1564321818-4135-1-git-send-email-pjtexier@koncepto.io>
+ (Pierre-Jean Texier's message of "Sun, 28 Jul 2019 15:50:18 +0200")
+References: <1564321818-4135-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <877e81ki1r.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
+>>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
 
- > This patch bumps the package version to 3.3.1 and drops
- > an upstreamed patch.
+ > Since commit df7005975e5a8419918600b1fcac57799a0ff5da, the linux
+ > configuration requires host-openssl to be built.
 
- > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > Fixes:
+
+ >  https://gitlab.com/buildroot.org/buildroot/-/jobs/259847527
+
+ > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 
 Committed, thanks.
 
