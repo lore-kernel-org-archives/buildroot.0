@@ -1,31 +1,53 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 28 Jul 2019 10:06:06 +0200
-Subject: [Buildroot] [PATCH 1/1] package/exim: security bump to version
- 4.92.1
-In-Reply-To: <20190725171816.31519-1-bernd.kuhls@t-online.de>
-References: <20190725171816.31519-1-bernd.kuhls@t-online.de>
-Message-ID: <20190728100606.57b68a2b@windsurf>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 28 Jul 2019 10:50:46 +0200
+Subject: [Buildroot] [PATCH v2 1/2] package/berkeleydb: add host variant
+Message-ID: <20190728085047.18591-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 25 Jul 2019 19:18:16 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Needed for the upcoming Exim security version bump.
 
-> +EXIM_DEPENDENCIES = host-berkeleydb host-pcre pcre berkeleydb host-pkgconf
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: no changes, re-sent http://patchwork.ozlabs.org/patch/866788/
 
-Didn't you forget to send the patch adding a host variant for berkeleydb ?
+ package/berkeleydb/berkeleydb.mk | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-I get this when building:
-
-make[1]: *** No rule to make target 'host-berkeleydb', needed by '/home/thomas/projets/buildroot/output/build/exim-4.92.1/.stamp_configured'.  Stop.
-
-Best regards,
-
-Thomas
+diff --git a/package/berkeleydb/berkeleydb.mk b/package/berkeleydb/berkeleydb.mk
+index e5c11bddcf..e077eb4640 100644
+--- a/package/berkeleydb/berkeleydb.mk
++++ b/package/berkeleydb/berkeleydb.mk
+@@ -44,6 +44,22 @@ define BERKELEYDB_CONFIGURE_CMDS
+ 	)
+ endef
+ 
++define HOST_BERKELEYDB_CONFIGURE_CMDS
++	(cd $(@D)/build_unix; rm -rf config.cache; \
++		$(HOST_CONFIGURE_OPTS) \
++		../dist/configure $(QUIET) \
++		--prefix=$(HOST_DIR) \
++		--with-gnu-ld \
++		--disable-cxx \
++		--disable-java \
++		--disable-tcl \
++		--disable-compat185 \
++		--with-pic \
++		--enable-o_direct \
++		--disable-mutexsupport \
++	)
++endef
++
+ ifneq ($(BR2_PACKAGE_BERKELEYDB_TOOLS),y)
+ 
+ define BERKELEYDB_REMOVE_TOOLS
+@@ -61,3 +77,4 @@ endef
+ BERKELEYDB_POST_INSTALL_TARGET_HOOKS += BERKELEYDB_REMOVE_DOCS
+ 
+ $(eval $(autotools-package))
++$(eval $(host-autotools-package))
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
