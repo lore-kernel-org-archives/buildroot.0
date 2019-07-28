@@ -1,22 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Jul 2019 22:40:35 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libcurl: bump to version 7.65.3
-In-Reply-To: <1564321984-5286-1-git-send-email-pjtexier@koncepto.io>
- (Pierre-Jean Texier's message of "Sun, 28 Jul 2019 15:53:04 +0200")
-References: <1564321984-5286-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <87o91dki4c.fsf@dell.be.48ers.dk>
+Date: Sun, 28 Jul 2019 22:40:47 +0200
+Subject: [Buildroot] [PATCH] linux: bump CIP to version v4.19.60-cip7
+In-Reply-To: <20190728153318.5992-1-angelo@amarulasolutions.com> (Angelo
+ Compagnucci's message of "Sun, 28 Jul 2019 17:33:18 +0200")
+References: <20190728153318.5992-1-angelo@amarulasolutions.com>
+Message-ID: <87k1c1ki40.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Pierre-Jean" == Pierre-Jean Texier <pjtexier@koncepto.io> writes:
+>>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
- > A very small fix for the progress meter regression in 7.65.2.
- > See https://curl.haxx.se/mail/lib-2019-07/0052.html
-
- > Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+ > This patch bumps Linux CIP to version v4.19.60-cip7.
+ > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
 Committed, thanks.
 
