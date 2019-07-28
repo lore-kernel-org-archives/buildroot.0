@@ -1,44 +1,22 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Sun, 28 Jul 2019 14:33:27 +0200
-Subject: [Buildroot] [PATCH] configs/atmel_sama5d27_som1: bump to
- linux4sam_6.1
-In-Reply-To: <20190726162711.2c4ede9a@windsurf>
-References: <1562775673-22148-1-git-send-email-pjtexier@koncepto.io>
- <20190726162711.2c4ede9a@windsurf>
-Message-ID: <2915f499-4364-e4c7-9c19-b45892568565@koncepto.io>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Sun, 28 Jul 2019 13:50:39 +0000
+Subject: [Buildroot] =?utf-8?q?=5BBug_12046=5D_Can=E2=80=99t_login_as_roo?=
+ =?utf-8?q?t_user_after_upgrading_to_buildroot_2019=2E02?=
+In-Reply-To: <bug-12046-163@https.bugs.busybox.net/>
+References: <bug-12046-163@https.bugs.busybox.net/>
+Message-ID: <bug-12046-163-JGsByqa281@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+https://bugs.busybox.net/show_bug.cgi?id=12046
 
-Le 26/07/2019 ? 16:27, Thomas Petazzoni a ?crit?:
-> Following this bump, the atmel_sama5d27_som1_ek_mmc_dev_defconfig no
-> longer builds:
-> 
->    https://gitlab.com/buildroot.org/buildroot/-/jobs/259847527
-> 
-> You need to add:
->   
->    BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> 
-> Could you test this and send a patch ?
-
-Interesting, I hadn't encountered this problem.
-I'll send a patch to fix this issue.
-
-Thanks !
-
-Pierre-Jean
-
-> 
-> Thanks!
-> 
-> Thomas
+--- Comment #5 from liadekel123 at gmail.com ---
+(In reply to Carlos Santos from comment #4)
+There is no pam.d in my rootfs...
 
 -- 
-Pierre-Jean Texier
-Embedded Linux Engineer
-https://koncepto.io
+You are receiving this mail because:
+You are on the CC list for the bug.
