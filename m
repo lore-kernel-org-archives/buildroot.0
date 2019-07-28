@@ -1,10 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Jul 2019 22:41:08 +0200
-Subject: [Buildroot] [PATCH] package/python-pillow: bump to version 6.1.0
-In-Reply-To: <20190728151847.19494-1-angelo@amarulasolutions.com> (Angelo
- Compagnucci's message of "Sun, 28 Jul 2019 17:18:47 +0200")
-References: <20190728151847.19494-1-angelo@amarulasolutions.com>
-Message-ID: <87ftmpki3f.fsf@dell.be.48ers.dk>
+Date: Sun, 28 Jul 2019 22:41:33 +0200
+Subject: [Buildroot] [PATCH] package/python-can: bump to version 3.3.1
+In-Reply-To: <20190728151915.19914-1-angelo@amarulasolutions.com> (Angelo
+ Compagnucci's message of "Sun, 28 Jul 2019 17:19:15 +0200")
+References: <20190728151915.19914-1-angelo@amarulasolutions.com>
+Message-ID: <87blxdki2q.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,7 +13,9 @@ To: buildroot@busybox.net
 
 >>>>> "Angelo" == Angelo Compagnucci <angelo.compagnucci@gmail.com> writes:
 
- > This patch bump python-pillow to version 6.1.0
+ > This patch bumps the package version to 3.3.1 and drops
+ > an upstreamed patch.
+
  > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
 
 Committed, thanks.
