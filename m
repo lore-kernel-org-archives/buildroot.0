@@ -1,49 +1,29 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Jul 2019 22:41:02 +0200
-Subject: [Buildroot] [git commit] package/python-pillow: bump to version
- 6.1.0
-Message-ID: <20190728203958.718D280282@busybox.osuosl.org>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sun, 28 Jul 2019 22:44:28 +0200
+Subject: [Buildroot] [PATCH 1/7] package/ghostscript-fonts: add license hash
+Message-ID: <20190728204434.12356-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8acdc0e2dca0682871a26ec67cb8ffab13fc0e8b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Partly fixes:
+http://autobuild.buildroot.net/results/f0f/f0fd05ce8a8b595015baf625481b58967df53458/
 
-This patch bump python-pillow to version 6.1.0
-
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-pillow/python-pillow.hash | 2 +-
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ghostscript-fonts/ghostscript-fonts.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index fa9caae679..fe72d01d38 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,4 +1,4 @@
- # sha256 for python-pillow from https://pypi.org/project/Pillow/
- # sha256 for LICENSE locally computed
--sha256 809c0a2ce9032cbcd7b5313f71af4bdc5c8c771cb86eb7559afd954cab82ebb5  Pillow-6.0.0.tar.gz
-+sha256 0804f77cb1e9b6dbd37601cee11283bba39a8d44b9ddb053400c58e0c0d7d9de  Pillow-6.1.0.tar.gz
- sha256 64ea4328ed56392b423ef968519a9ad427e3de9b985862c95ed2ed4d793d22ee  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 6efa9f3923..a4121da2b4 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PILLOW_VERSION = 6.0.0
-+PYTHON_PILLOW_VERSION = 6.1.0
- PYTHON_PILLOW_SOURCE = Pillow-$(PYTHON_PILLOW_VERSION).tar.gz
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/81/1a/6b2971adc1bca55b9a53ed1efa372acff7e8b9913982a396f3fa046efaf8
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/51/fe/18125dc680720e4c3086dd3f5f95d80057c41ab98326877fc7d3ff6d0ee5
- PYTHON_PILLOW_LICENSE = PIL Software License
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
- PYTHON_PILLOW_SETUP_TYPE = setuptools
+diff --git a/package/ghostscript-fonts/ghostscript-fonts.hash b/package/ghostscript-fonts/ghostscript-fonts.hash
+index e9c7fdf999..e126f0e108 100644
+--- a/package/ghostscript-fonts/ghostscript-fonts.hash
++++ b/package/ghostscript-fonts/ghostscript-fonts.hash
+@@ -1,2 +1,4 @@
+ # From http://sourceforge.net/projects/gs-fonts/files/gs-fonts/8.11%20%28base%2035%2C%20GPL%29/
+ sha1	2a7198e8178b2e7dba87cb5794da515200b568f5	ghostscript-fonts-std-8.11.tar.gz
++# Locally computed
++sha256	0eb6f356119f2e49b2563210852e17f57f9dcc5755f350a69a46a0d641a0c401	ghostscript-fonts-std-8.11.tar.gz
+-- 
+2.20.1
