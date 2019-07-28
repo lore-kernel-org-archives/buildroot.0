@@ -1,7 +1,7 @@
 From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
-Date: Sun, 28 Jul 2019 08:22:21 +0200
-Subject: [Buildroot] [PATCH] package/mpd-mpc: bump to version 0.32
-Message-ID: <20190728062221.1033-1-joerg.krause@embedded.rocks>
+Date: Sun, 28 Jul 2019 08:26:21 +0200
+Subject: [Buildroot] [PATCH] package/libuv: bump to version 1.30.1
+Message-ID: <20190728062621.19831-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -10,31 +10,31 @@ To: buildroot@busybox.net
 
 Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
 ---
- package/mpd-mpc/mpd-mpc.hash | 2 +-
- package/mpd-mpc/mpd-mpc.mk   | 2 +-
+ package/libuv/libuv.hash | 2 +-
+ package/libuv/libuv.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mpd-mpc/mpd-mpc.hash b/package/mpd-mpc/mpd-mpc.hash
-index b1f262fc08..f577802c34 100644
---- a/package/mpd-mpc/mpd-mpc.hash
-+++ b/package/mpd-mpc/mpd-mpc.hash
+diff --git a/package/libuv/libuv.hash b/package/libuv/libuv.hash
+index 373c156ca5..d7f4437293 100644
+--- a/package/libuv/libuv.hash
++++ b/package/libuv/libuv.hash
 @@ -1,3 +1,3 @@
- # Locally calculated after checking pgp signature
--sha256  62373e83a8a165b2ed43967975efecd3feee530f4557d6b861dd08aa89d52b2d  mpc-0.31.tar.xz
-+sha256  7961d95b7ce019996beab281cf957e905667c989c53fffd13ade5e62fea331c7  mpc-0.32.tar.xz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-diff --git a/package/mpd-mpc/mpd-mpc.mk b/package/mpd-mpc/mpd-mpc.mk
-index 05c70ba04d..d781b9a75e 100644
---- a/package/mpd-mpc/mpd-mpc.mk
-+++ b/package/mpd-mpc/mpd-mpc.mk
-@@ -5,7 +5,7 @@
+ # Locally calculated
+-sha256  bdde1140087ce97080ea323c3598553ece00a24ae63ac568be78bef3e97f3e25  libuv-1.29.1.tar.gz
++sha256  d85566c2c4eae7d8e2c2d27d40e728fea29f9086e98e795c5cdce1a790f43de5  libuv-1.30.1.tar.gz
+ sha256  6d20216ae022fbeed23916f48508fd807ece3d8464992330643b0e64e5c0c24b  LICENSE
+diff --git a/package/libuv/libuv.mk b/package/libuv/libuv.mk
+index 17db3480e8..0825d7e390 100644
+--- a/package/libuv/libuv.mk
++++ b/package/libuv/libuv.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- MPD_MPC_VERSION_MAJOR = 0
--MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).31
-+MPD_MPC_VERSION = $(MPD_MPC_VERSION_MAJOR).32
- MPD_MPC_SITE = http://www.musicpd.org/download/mpc/$(MPD_MPC_VERSION_MAJOR)
- MPD_MPC_SOURCE = mpc-$(MPD_MPC_VERSION).tar.xz
- MPD_MPC_LICENSE = GPL-2.0+
+-LIBUV_VERSION = 1.29.1
++LIBUV_VERSION = 1.30.1
+ LIBUV_SITE = $(call github,libuv,libuv,v$(LIBUV_VERSION))
+ LIBUV_DEPENDENCIES = host-pkgconf
+ LIBUV_INSTALL_STAGING = YES
 -- 
 2.22.0
