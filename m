@@ -1,10 +1,10 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 Jul 2019 11:32:35 +0200
-Subject: [Buildroot] [PATCH v5 03/10] package/mesa3d: add OSMesa classic
- needs dri swrast
+Date: Sun, 28 Jul 2019 11:32:41 +0200
+Subject: [Buildroot] [PATCH v5 09/10] package/mesa3d: select kmsro for
+ etnaviv
 In-Reply-To: <20190728093242.4481-1-bernd.kuhls@t-online.de>
 References: <20190728093242.4481-1-bernd.kuhls@t-online.de>
-Message-ID: <20190728093242.4481-3-bernd.kuhls@t-online.de>
+Message-ID: <20190728093242.4481-9-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,52 +13,30 @@ To: buildroot@busybox.net
 
 From: Romain Naour <romain.naour@smile.fr>
 
-The meson build system now check if dri swrast is enabled
-when OSMesa classic is enabled.
-
-See:
-https://cgit.freedesktop.org/mesa/mesa/commit/?id=cbbd5bb889a2c271a504c379f36a7cb717a85af4
+Quote from mesa3d meson.build:
+"kmsro driver requires one or more renderonly drivers
+(vc4, etnaviv, freedreno)".
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
 v5: no changes
-v4: rebased (Bernd)
+v4: no changes
 
- Config.in.legacy         | 1 +
- package/mesa3d/Config.in | 4 ++++
- 2 files changed, 5 insertions(+)
+ package/mesa3d/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index cca4ac212d..94335591fe 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -148,6 +148,7 @@ comment "Legacy options removed in 2019.08"
- 
- config BR2_PACKAGE_MESA3D_OSMESA
- 	bool "mesa OSMesa option renamed"
-+	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
- 	select BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
- 	help
- 	  The option was renamed in order to match the naming used
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index bd05116aca..9bb95c3fd6 100644
+index e82bdc5e0d..afbf4a8cf5 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -267,10 +267,14 @@ comment "Off-screen Rendering"
- 
- config BR2_PACKAGE_MESA3D_OSMESA_CLASSIC
- 	bool "OSMesa (classic) library"
-+	depends on BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
+@@ -97,6 +97,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+ 	bool "Gallium Etnaviv driver"
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_ETNAVIV
++	select BR2_PACKAGE_MESA3D_GALLIUM_KMSRO
+ 	select BR2_PACKAGE_MESA3D_OPENGL_EGL
  	help
- 	  The OSMesa classic API provides functions for
- 	  making off-screen renderings.
- 
-+comment "OSMesa classic requires dri (classic) swrast"
-+	depends on !BR2_PACKAGE_MESA3D_DRI_DRIVER_SWRAST
-+
- if BR2_PACKAGE_MESA3D_DRIVER
- 
- comment "Additional API Support"
+ 	  Mesa driver for Vivante GPUs.
 -- 
 2.20.1
