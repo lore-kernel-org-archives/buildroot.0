@@ -1,100 +1,68 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sun, 28 Jul 2019 11:50:49 +0200
-Subject: [Buildroot] [PATCH v2 1/2] boot/opensbi: Add support for
- including Linux payload
-In-Reply-To: <20190722204447.7935-1-alistair.francis@wdc.com>
-References: <20190722204447.7935-1-alistair.francis@wdc.com>
-Message-ID: <20190728095049.GB21875@scaer>
+Date: Sun, 28 Jul 2019 11:56:40 +0200
+Subject: [Buildroot] [PATCH 1/1] pkg-infra/show-info: dump
+ install_{staging, target} info
+In-Reply-To: <20190723144459.5bfcc0fd@windsurf>
+References: <20190723123355.22313-1-vadim4j@gmail.com>
+ <20190723144459.5bfcc0fd@windsurf>
+Message-ID: <20190728095640.GC21875@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Allistair, All,
+On 2019-07-23 14:44 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 23 Jul 2019 15:33:55 +0300
+> Vadim Kochan <vadim4j@gmail.com> wrote:
+> 
+> > provide info if the package will be installed to staging/target
+> > destinations. Might be useful for analyzing the packages which
+> > installed only for target/staging.
+> > 
+> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> > ---
+> >  package/pkg-utils.mk | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> > 
+> > diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> > index b7280e930f..81222565bf 100644
+> > --- a/package/pkg-utils.mk
+> > +++ b/package/pkg-utils.mk
+> > @@ -94,6 +94,14 @@ endef
+> >  define _json-info-pkg-details
+> >  	"version": "$($(1)_DL_VERSION)",
+> >  	"licenses": "$($(1)_LICENSE)",
+> > +	$(if $($(1)_INSTALL_TARGET), \
+> > +		"install_target": true$(comma),
+> > +		"install_target": false$(comma)
+> > +	)
+> > +	$(if $($(1)_INSTALL_STAGING), \
+> > +		"install_staging": true$(comma),
+> > +		"install_staging": false$(comma)
+> > +	)
+> 
+> I would prefer install-target and install-staging for the JSON property
+> names, I prefer - over _.
 
-On 2019-07-22 13:44 -0700, Alistair Francis spake thusly:
-> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-[--SNIP--]
-> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
-> index 83552a5442..14657cac06 100644
-> --- a/boot/opensbi/opensbi.mk
-> +++ b/boot/opensbi/opensbi.mk
-> @@ -19,19 +19,35 @@ ifneq ($(OPENSBI_PLAT),)
->  OPENSBI_MAKE_ENV += PLATFORM=$(OPENSBI_PLAT)
->  endif
->  
-> +OPENSBI_LINUX_PAYLOAD = $(call qstrip,$(BR2_TARGET_OPENSBI_LINUX_PAYLOAD))
-> +ifeq ($(OPENSBI_LINUX_PAYLOAD), y)
-> +OPENSBI_DEPENDENCIES = linux
-> +OPENSBI_MAKE_ENV += FW_PAYLOAD_PATH="$(BINARIES_DIR)/Image"
-> +endif
+I do too, but Thomas DS. suggested we use _ and that's what we have in
+"reverse_depenencies".
 
-In Kconfig, OPENSBI_LINUX_PAYLOAD is conditional to OPENSBI_PLAT != ""
-so I would expect to see the same layout in the .mk (see below for what
-I mean).
+> Also, maybe you can write it like this:
+> 
+> 	"install-target": $(if $($(1)_INSTALL_TARGET),true,false),
+> 	"install-staging": $(if $($(1)_INSTALL_STAGING),true,false),
 
->  define OPENSBI_BUILD_CMDS
->  	$(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
->  endef
->  
->  ifneq ($(OPENSBI_PLAT),)
->  OPENSBI_INSTALL_IMAGES = YES
-> +OPENSBI_INSTALL_IMAGES_CMDS_PLAT = \
-> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin; \
-> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf; \
-> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.bin $(BINARIES_DIR)/fw_dynamic.bin; \
-> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.elf $(BINARIES_DIR)/fw_dynamic.elf;
-> +endif
-> +
-> +ifeq ($(OPENSBI_LINUX_PAYLOAD), y)
-> +OPENSBI_INSTALL_IMAGES_CMDS_PAYLOAD = \
-> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_payload.bin $(BINARIES_DIR)/fw_payload.bin; \
-> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_payload.elf $(BINARIES_DIR)/fw_payload.elf;
-> +endif
++1
 
-Why can't we have something like (untested):
+> Note: I haven't thought about whether those properties are actually
+> useful or not to have in the JSON output. I mainly react to the
+> implementation details.
 
-    OPENSBI_FW_DIR = $(@D)/build/platform/$(OPENSBI_PLAT)/firmware
-
-    ifneq ($(OPENSBI_PLAT),)
-    OPENSBI_FW_FILES = fw_jump.bin fw_jump.elf fw_dynamic.bin fw_dynamic.elf
-    ifeq ($(OPENSBI_LINUX_PAYLOAD),y)
-    OPENSBI_FW_FILES += fw_jump.bin fw_jump.elf fw_dynamic.bin fw_dynamic.elf
-    endif
-    endif
-
-    define OPENSBI_INSTALL_IMAGES_CMDS
-        $(foreach fw,$(OPENSBI_FW_FILES), \
-            $(INSTALL) -m 0644 -D $(OPENSBI_FW_DIR)/$(fw) $(BINARIES_DIR)/$(fw)
-        )
-    endef
-
-(notice also how OPENSBI_LINUX_PAYLOAD is inside the OPENSBI_PLAT != ""
-block, like it is in Config.in.)
+I think it is interesting to have.
 
 Regards,
 Yann E. MORIN.
-
->  define OPENSBI_INSTALL_IMAGES_CMDS
-> -	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin
-> -	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
-> -	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.bin $(BINARIES_DIR)/fw_dynamic.bin
-> -	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.elf $(BINARIES_DIR)/fw_dynamic.elf
-> +	$(OPENSBI_INSTALL_IMAGES_CMDS_PLAT)
-> +	$(OPENSBI_INSTALL_IMAGES_CMDS_PAYLOAD)
->  endef
-> -endif
->  
->  # libsbi.a is not a library meant to be linked in user-space code, but
->  # with bare metal code, which is why we don't install it in
-> -- 
-> 2.22.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
