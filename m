@@ -1,71 +1,105 @@
-From: Vadim Kochan <vadim4j@gmail.com>
-Date: Sun, 28 Jul 2019 12:48:50 +0300
-Subject: [Buildroot] [PATCH v2 1/1] pkg-infra/show-info: dump
- install_{staging, target} info
-In-Reply-To: <CAJ4jsaefr8e3ufjV_ZdnvaZZ4mkaiTvxwtYyOGTQD49UHYFSwA@mail.gmail.com>
-References: <20190723125657.27702-1-vadim4j@gmail.com>
- <CAJ4jsaefr8e3ufjV_ZdnvaZZ4mkaiTvxwtYyOGTQD49UHYFSwA@mail.gmail.com>
-Message-ID: <CAMw6YJJZjAtCiL7brZGy0Rd2mq9xxhHTJY9TAvnd=Guk83MXzA@mail.gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sun, 28 Jul 2019 11:50:49 +0200
+Subject: [Buildroot] [PATCH v2 1/2] boot/opensbi: Add support for
+ including Linux payload
+In-Reply-To: <20190722204447.7935-1-alistair.francis@wdc.com>
+References: <20190722204447.7935-1-alistair.francis@wdc.com>
+Message-ID: <20190728095049.GB21875@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Carlos,
+Allistair, All,
 
-On Sat, Jul 27, 2019 at 5:40 AM Carlos Santos <unixmania@gmail.com> wrote:
->
-> On Tue, Jul 23, 2019 at 9:57 AM Vadim Kochan <vadim4j@gmail.com> wrote:
-> >
-> > provide info if the package will be installed to staging/target
-> > destinations. Might be useful for analyzing the packages which
-> > installed only for target/staging.
-> >
-> > Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-> > ---
-> >
-> > v2:
-> >     1) use oneliner 'if' to dump install_{staging,target} properties
-> >
-> >  package/pkg-utils.mk | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-> > index b7280e930f..1dcf2805cb 100644
-> > --- a/package/pkg-utils.mk
-> > +++ b/package/pkg-utils.mk
-> > @@ -94,6 +94,8 @@ endef
-> >  define _json-info-pkg-details
-> >         "version": "$($(1)_DL_VERSION)",
-> >         "licenses": "$($(1)_LICENSE)",
-> > +       "install-target": $(if $($(1)_INSTALL_TARGET),true,false),
->
-> This tests if if $($(1)_INSTALL_TARGET is not empty, e.g.
->
-> $ fgrep '_INSTALL_TARGET =' package/*/*.mk
-> package/azmq/azmq.mk:AZMQ_INSTALL_TARGET = NO
-> [...]
->
-> $ make azmq-show-info
-> { "azmq": { "type": "target", "virtual": false, "version": "1.0.2",
-> "licenses": "BSL-1.0", "install-target": true, "install-staging":
-> true, "downloads": [ { "source": "azmq-1.0.2.tar.gz", "uris": [
-> "https+https}
->
-> > +       "install-staging": $(if $($(1)_INSTALL_STAGING),true,false),
->
-> $ make bash-show-info
-> { "bash": { "type": "target", "virtual": false, "version": "4.4.18",
-> "licenses": "GPL-3.0+", "install-target": true, "install-staging":
-> true, "downloads": [ { "source": "bash-4.4.18.tar.gz", "uris": [
-> "http+htt}
->
-> --
-> Carlos Santos <unixmania@gmail.com>
+On 2019-07-22 13:44 -0700, Alistair Francis spake thusly:
+> Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
+[--SNIP--]
+> diff --git a/boot/opensbi/opensbi.mk b/boot/opensbi/opensbi.mk
+> index 83552a5442..14657cac06 100644
+> --- a/boot/opensbi/opensbi.mk
+> +++ b/boot/opensbi/opensbi.mk
+> @@ -19,19 +19,35 @@ ifneq ($(OPENSBI_PLAT),)
+>  OPENSBI_MAKE_ENV += PLATFORM=$(OPENSBI_PLAT)
+>  endif
+>  
+> +OPENSBI_LINUX_PAYLOAD = $(call qstrip,$(BR2_TARGET_OPENSBI_LINUX_PAYLOAD))
+> +ifeq ($(OPENSBI_LINUX_PAYLOAD), y)
+> +OPENSBI_DEPENDENCIES = linux
+> +OPENSBI_MAKE_ENV += FW_PAYLOAD_PATH="$(BINARIES_DIR)/Image"
+> +endif
 
-Thanks a lot for this, and sorry for waste your time :(
-Somehow I messed YES with true :(
+In Kconfig, OPENSBI_LINUX_PAYLOAD is conditional to OPENSBI_PLAT != ""
+so I would expect to see the same layout in the .mk (see below for what
+I mean).
+
+>  define OPENSBI_BUILD_CMDS
+>  	$(TARGET_MAKE_ENV) $(OPENSBI_MAKE_ENV) $(MAKE) -C $(@D)
+>  endef
+>  
+>  ifneq ($(OPENSBI_PLAT),)
+>  OPENSBI_INSTALL_IMAGES = YES
+> +OPENSBI_INSTALL_IMAGES_CMDS_PLAT = \
+> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin; \
+> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf; \
+> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.bin $(BINARIES_DIR)/fw_dynamic.bin; \
+> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.elf $(BINARIES_DIR)/fw_dynamic.elf;
+> +endif
+> +
+> +ifeq ($(OPENSBI_LINUX_PAYLOAD), y)
+> +OPENSBI_INSTALL_IMAGES_CMDS_PAYLOAD = \
+> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_payload.bin $(BINARIES_DIR)/fw_payload.bin; \
+> +	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_payload.elf $(BINARIES_DIR)/fw_payload.elf;
+> +endif
+
+Why can't we have something like (untested):
+
+    OPENSBI_FW_DIR = $(@D)/build/platform/$(OPENSBI_PLAT)/firmware
+
+    ifneq ($(OPENSBI_PLAT),)
+    OPENSBI_FW_FILES = fw_jump.bin fw_jump.elf fw_dynamic.bin fw_dynamic.elf
+    ifeq ($(OPENSBI_LINUX_PAYLOAD),y)
+    OPENSBI_FW_FILES += fw_jump.bin fw_jump.elf fw_dynamic.bin fw_dynamic.elf
+    endif
+    endif
+
+    define OPENSBI_INSTALL_IMAGES_CMDS
+        $(foreach fw,$(OPENSBI_FW_FILES), \
+            $(INSTALL) -m 0644 -D $(OPENSBI_FW_DIR)/$(fw) $(BINARIES_DIR)/$(fw)
+        )
+    endef
+
+(notice also how OPENSBI_LINUX_PAYLOAD is inside the OPENSBI_PLAT != ""
+block, like it is in Config.in.)
 
 Regards,
-Vadim Kochan
+Yann E. MORIN.
+
+>  define OPENSBI_INSTALL_IMAGES_CMDS
+> -	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.bin $(BINARIES_DIR)/fw_jump.bin
+> -	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_jump.elf $(BINARIES_DIR)/fw_jump.elf
+> -	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.bin $(BINARIES_DIR)/fw_dynamic.bin
+> -	$(INSTALL) -m 0644 -D $(@D)/build/platform/$(OPENSBI_PLAT)/firmware/fw_dynamic.elf $(BINARIES_DIR)/fw_dynamic.elf
+> +	$(OPENSBI_INSTALL_IMAGES_CMDS_PLAT)
+> +	$(OPENSBI_INSTALL_IMAGES_CMDS_PAYLOAD)
+>  endef
+> -endif
+>  
+>  # libsbi.a is not a library meant to be linked in user-space code, but
+>  # with bare metal code, which is why we don't install it in
+> -- 
+> 2.22.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
