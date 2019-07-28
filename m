@@ -1,75 +1,75 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Jul 2019 22:55:21 +0200
-Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
- 19}.x / 5.{1, 2}.x series
-Message-ID: <20190728205521.24703-1-peter@korsgaard.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sun, 28 Jul 2019 23:20:08 +0200
+Subject: [Buildroot] [PATCH 1/1] package/lxc: switch from gnutls to
+ openssl
+In-Reply-To: <20190728093235.GA21875@scaer>
+References: <20190705165040.26254-1-fontaine.fabrice@gmail.com>
+ <20190727224246.75bd967e@windsurf> <20190728093235.GA21875@scaer>
+Message-ID: <CAPi7W81ak-Tm4d2rz2wJo=YKGEk3HZ-timyOLd2=nRRXG+xj-g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 12 ++++++------
- package/linux-headers/Config.in.host | 12 ++++++------
- 3 files changed, 13 insertions(+), 13 deletions(-)
+Dear all,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 7ed61d1923..871141fdcd 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -122,7 +122,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.2" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.2.4" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.19.60-cip7" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 009e9bd7c5..1bb374629e 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 54ad66f672e1a831b574f5e704e8a05f1e6180a8245d4bdd811208a6cb0ac1e7  linux-5.2.tar.xz
--sha256 8a3e55be3e788700836db6f75875b4d3b824a581d1eacfc2fcd29ed4e727ba3e  linux-5.1.16.tar.xz
-+sha256 b1cd8b9e0bfe7afb2fdf3915605db3a6cd3fe098833f9bc0b37aae74b057ee43  linux-5.2.4.tar.xz
-+sha256 56495f82314f0dfb84a3fe7fad78e17be69c4fd36ef46f2452458b2fa1e341f6  linux-5.1.21.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 327c5759d5888361d6c9d6adb0c8ad7e3c624eb05bb9e5869d9f3078dd0d3f87  linux-4.19.57.tar.xz
--sha256 da86f39a722da656fce4e2685223093b5d5f4db94046fcd79e492428a82ff330  linux-4.14.132.tar.xz
--sha256 6543232fc082485c1088830b9456e1a6e511239e4bf98817b0166ee62cafc3ca  linux-4.4.184.tar.xz
--sha256 033114d5350525dede995d31b596c31b0e26db8d77a0a1c53d36cdc36ead9faf  linux-4.9.184.tar.xz
-+sha256 07be647189ced7eb8ba5ee769906e67919975772184842cc517f609df50cdadc  linux-4.19.62.tar.xz
-+sha256 0b21e7b5effd92303a551b5be2380c9703d6fb87cfe5189fe0d795cc73903d2d  linux-4.14.134.tar.xz
-+sha256 242484430d0729791d8efd92181b7d34b4021050646c6e00cf459866eab94b6a  linux-4.9.186.tar.xz
-+sha256 0b1273d35c0664234e069f1ba894161b466679f6e1053f44fcf4098290937984  linux-4.4.186.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index e003de090e..cabdb7f209 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -305,12 +305,12 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.4.184"	if BR2_KERNEL_HEADERS_4_4
--	default "4.9.184"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.132"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.57"	if BR2_KERNEL_HEADERS_4_19
--	default "5.1.16"	if BR2_KERNEL_HEADERS_5_1
--	default "5.2"		if BR2_KERNEL_HEADERS_5_2
-+	default "4.4.186"	if BR2_KERNEL_HEADERS_4_4
-+	default "4.9.186"	if BR2_KERNEL_HEADERS_4_9
-+	default "4.14.134"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.62"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.1.21"	if BR2_KERNEL_HEADERS_5_1
-+	default "5.2.4"		if BR2_KERNEL_HEADERS_5_2
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
--- 
-2.11.0
+Le dim. 28 juil. 2019 ? 11:32, Yann E. MORIN <yann.morin.1998@free.fr> a ?crit :
+>
+> Thomas, Fabrice, J?r?me, All,
+>
+> On 2019-07-27 22:42 +0200, Thomas Petazzoni spake thusly:
+> > On Fri,  5 Jul 2019 18:50:40 +0200
+> > Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> >
+> > > Fixes:
+> > >  - http://autobuild.buildroot.org/results/c0a9565ae65336d55cdedc67adff221a7fa1a2c8
+> > >
+> > > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> >
+> > Thanks, but this is not entirely convincing, for two reasons:
+> >
+> >  - The actual build failure is due to libgnutls.so using __atomic
+> >    built-ins, without being linked to libatomic.so. This is a problem
+> >    that can affect any other package that uses libgnutls.so (and a
+> >    question is why we're not seeing more failures like this, from other
+> >    packages that use libgnutls).
+> >
+> >  - Switching to openssl is certainly OK, but the lxc configure.ac logic
+> >    does just OPENSSL_LIBS='-lssl -lcrypto', which is pretty much
+> >    guaranteed to fail in static linking scenarios, as it doesn't
+> >    account for second-order dependencies of openssl (the classic -lz
+> >    missing).
+> >
+> > Could you have a look at the libgnutls.so/libatomic.so issue, and
+gnutls issue was fixed by https://patchwork.ozlabs.org/patch/1132098
+which was sent a few days after the lxc's patch so this patch is not
+really needed anymore. I'll set it as non applicable.
+> > double check if lxc/openssl builds fine in a static linking
+> > configuration ? For the latter, it is possible that lxc already depends
+> > on libz for another reason, in which case the problem will not be
+> > visible.
+For the record, lxc already depends on dynamic library since 2015 and
+https://git.buildroot.net/buildroot/commit/package/lxc?id=29a6df448dd6b4e70594254803412350111be091
+>
+> Although I agree with Thomas' review, we'll nonetheless have to
+> understand and/or fix the -lz issue when we next bump lxz, as that new
+> version *will* have switched to using openssl instead of gnutls anyway.
+lxc released 3.2.1, I'll send a new patch for this bump.
+>
+> So I would say that, barring a good explanations about the atomic issue,
+> this backport from upstream is good-enough (with -lz fixed/explained).
+>
+> Regards,
+> Yann E. MORIN.
+>
+> --
+> .-----------------.--------------------.------------------.--------------------.
+> |  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+> | +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+> | +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+> | http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+> '------------------------------^-------^------------------^--------------------'
+Best Regards,
+
+Fabrice
