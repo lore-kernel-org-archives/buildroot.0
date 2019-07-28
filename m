@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 Jul 2019 22:44:30 +0200
-Subject: [Buildroot] [PATCH 3/7] package/taglib: add license hash
+Date: Sun, 28 Jul 2019 22:44:32 +0200
+Subject: [Buildroot] [PATCH 5/7] package/libsndfile: add license hash
 In-Reply-To: <20190728204434.12356-1-bernd.kuhls@t-online.de>
 References: <20190728204434.12356-1-bernd.kuhls@t-online.de>
-Message-ID: <20190728204434.12356-3-bernd.kuhls@t-online.de>
+Message-ID: <20190728204434.12356-5-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,17 +15,17 @@ http://autobuild.buildroot.net/results/f0f/f0fd05ce8a8b595015baf625481b58967df53
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/taglib/taglib.hash | 2 ++
+ package/libsndfile/libsndfile.hash | 2 ++
  1 file changed, 2 insertions(+)
 
-diff --git a/package/taglib/taglib.hash b/package/taglib/taglib.hash
-index 7a5c5cf98c..4b99e86d68 100644
---- a/package/taglib/taglib.hash
-+++ b/package/taglib/taglib.hash
+diff --git a/package/libsndfile/libsndfile.hash b/package/libsndfile/libsndfile.hash
+index 31500cd970..c744a7675a 100644
+--- a/package/libsndfile/libsndfile.hash
++++ b/package/libsndfile/libsndfile.hash
 @@ -1,2 +1,4 @@
- # Locally calculated
- sha256 b6d1a5a610aae6ff39d93de5efd0fdc787aa9e9dc1e7026fa4c961b26563526b  taglib-1.11.1.tar.gz
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-+sha256 53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING.MPL
+ # Locally calculated after checking pgp signature
+ sha256	1ff33929f042fa333aed1e8923aa628c3ee9e1eb85512686c55092d1e5a9dfa9	libsndfile-1.0.28.tar.gz
++# Locally calculated
++sha256	ad01ea5cd2755f6048383c8d54c88459cd6fcb17757c5c8892f8c5ea060f6140	COPYING
 -- 
 2.20.1
