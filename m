@@ -1,9 +1,9 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sun, 28 Jul 2019 22:44:31 +0200
-Subject: [Buildroot] [PATCH 4/7] package/twolame: add license hash
+Date: Sun, 28 Jul 2019 22:44:30 +0200
+Subject: [Buildroot] [PATCH 3/7] package/taglib: add license hash
 In-Reply-To: <20190728204434.12356-1-bernd.kuhls@t-online.de>
 References: <20190728204434.12356-1-bernd.kuhls@t-online.de>
-Message-ID: <20190728204434.12356-4-bernd.kuhls@t-online.de>
+Message-ID: <20190728204434.12356-3-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,16 +15,17 @@ http://autobuild.buildroot.net/results/f0f/f0fd05ce8a8b595015baf625481b58967df53
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/twolame/twolame.hash | 1 +
- 1 file changed, 1 insertion(+)
+ package/taglib/taglib.hash | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/twolame/twolame.hash b/package/twolame/twolame.hash
-index 647655bd15..eab52876af 100644
---- a/package/twolame/twolame.hash
-+++ b/package/twolame/twolame.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  98f332f48951f47f23f70fd0379463aff7d7fb26f07e1e24e42ddef22cc6112a  twolame-0.3.13.tar.gz
-+sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
+diff --git a/package/taglib/taglib.hash b/package/taglib/taglib.hash
+index 7a5c5cf98c..4b99e86d68 100644
+--- a/package/taglib/taglib.hash
++++ b/package/taglib/taglib.hash
+@@ -1,2 +1,4 @@
+ # Locally calculated
+ sha256 b6d1a5a610aae6ff39d93de5efd0fdc787aa9e9dc1e7026fa4c961b26563526b  taglib-1.11.1.tar.gz
++sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
++sha256 53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING.MPL
 -- 
 2.20.1
