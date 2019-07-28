@@ -1,41 +1,45 @@
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sun, 28 Jul 2019 17:33:18 +0200
-Subject: [Buildroot] [PATCH] linux: bump CIP to version v4.19.60-cip7
-Message-ID: <20190728153318.5992-1-angelo@amarulasolutions.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Sun, 28 Jul 2019 21:53:46 +0200
+Subject: [Buildroot] [PATCH 1/1] iputils: Add capability for clockdiff, ping,
+ traceroute6
+Message-ID: <20190728195346.31201-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This patch bumps Linux CIP to version v4.19.60-cip7.
+NOTE: not setting for arping as it can be used for ARP Poisoning
 
-Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+NOTE: use cap_net_raw+p (drop +e) as upstream sets that via
+cap_set_flag(), see https://github.com/iputils/iputils/issues/194
+
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- linux/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/iputils/iputils.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 9076f40ce6..7ed61d1923 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -35,7 +35,7 @@ config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (5.2)"
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 8e6a3e2fc5..2ffa8da554 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -73,11 +73,17 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
  
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	bool "Latest CIP SLTS version (v4.19.13-cip1)"
-+	bool "Latest CIP SLTS version (v4.19.60-cip7)"
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -123,7 +123,7 @@ endif
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "5.2" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "v4.19.13-cip1" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	default "v4.19.60-cip7" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
- 	default "custom" if BR2_LINUX_KERNEL_CUSTOM_TARBALL
+ # handle permissions ourselves
+ IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
++ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
++IPUTILS_CAPABILITY = |xattr cap_net_raw+p
++endif
+ define IPUTILS_PERMISSIONS
+ 	/usr/sbin/arping      f 4755 0 0 - - - - -
+ 	/usr/bin/clockdiff    f 4755 0 0 - - - - -
++	$(IPUTILS_CAPABILITY)
+ 	/bin/ping             f 4755 0 0 - - - - -
++	$(IPUTILS_CAPABILITY)
+ 	/usr/bin/traceroute6  f 4755 0 0 - - - - -
++	$(IPUTILS_CAPABILITY)
+ endef
+ 
+ $(eval $(meson-package))
 -- 
-2.17.1
+2.22.0
