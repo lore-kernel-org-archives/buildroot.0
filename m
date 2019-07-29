@@ -1,108 +1,149 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 29 Jul 2019 12:30:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libgcrypt: disable tests
-Message-ID: <20190729103014.20038-1-fontaine.fabrice@gmail.com>
+From: Bartosz Bilas <b.bilas@grinn-global.com>
+Date: Mon, 29 Jul 2019 12:33:39 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5webview: new package
+Message-ID: <20190729103339.5383-1-b.bilas@grinn-global.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add a patch to disable tests as t-lock needs threads
-
-Fixes:
- - http://autobuild.buildroot.org/results/50a8ba572e3fafd3c6a39bd54bcfcaf78b5ad325
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 ---
- ...re.ac-add-an-option-to-disable-tests.patch | 66 +++++++++++++++++++
- package/libgcrypt/libgcrypt.mk                |  1 +
- 2 files changed, 67 insertions(+)
- create mode 100644 package/libgcrypt/0004-configure.ac-add-an-option-to-disable-tests.patch
+ DEVELOPERS                             |  1 +
+ package/qt5/Config.in                  |  1 +
+ package/qt5/qt5webview/Config.in       | 17 +++++++++++
+ package/qt5/qt5webview/qt5webview.hash | 11 +++++++
+ package/qt5/qt5webview/qt5webview.mk   | 55 ++++++++++++++++++++++++++++++++++
+ 5 files changed, 85 insertions(+)
+ create mode 100644 package/qt5/qt5webview/Config.in
+ create mode 100644 package/qt5/qt5webview/qt5webview.hash
+ create mode 100644 package/qt5/qt5webview/qt5webview.mk
 
-diff --git a/package/libgcrypt/0004-configure.ac-add-an-option-to-disable-tests.patch b/package/libgcrypt/0004-configure.ac-add-an-option-to-disable-tests.patch
-new file mode 100644
-index 0000000000..21ff20a473
---- /dev/null
-+++ b/package/libgcrypt/0004-configure.ac-add-an-option-to-disable-tests.patch
-@@ -0,0 +1,66 @@
-+From 7fe1b8a53cc8c865c2a10dcd8f6cb4e51ccc6300 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 29 Jul 2019 12:19:10 +0200
-+Subject: [PATCH] configure.ac: add an option to disable tests
-+
-+Add an option to allow the user to disable tests, this can be useful for
-+example when the toolchain does not provide thread. Indeed, in this
-+case, libgcrypt fails to build t-lock:
-+
-+t-lock.c: In function 'run_test':
-+t-lock.c:359:3: error: unknown type name 'pthread_t'
-+   pthread_t rthread;
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/50a8ba572e3fafd3c6a39bd54bcfcaf78b5ad325
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ Makefile.am  |  7 ++++++-
-+ configure.ac | 10 ++++++++++
-+ 2 files changed, 16 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 7fa4fa4d..f0bd90e4 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -39,9 +39,14 @@ else
-+ doc =
-+ endif
-+ 
-++if BUILD_TESTS
-++tests = tests
-++else
-++tests =
-++endif
-+ 
-+ DIST_SUBDIRS = m4 compat mpi cipher random src doc tests
-+-SUBDIRS =         compat mpi cipher random src $(doc) tests
-++SUBDIRS =         compat mpi cipher random src $(doc) $(tests)
-+ 
-+ EXTRA_DIST = autogen.sh autogen.rc README.GIT LICENSES      	           \
-+              ChangeLog-2011 build-aux/ChangeLog-2011 doc/ChangeLog-2011    \
-+diff --git a/configure.ac b/configure.ac
-+index e8c8cd39..1a6b61e5 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2710,6 +2710,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
-+ AM_CONDITIONAL([BUILD_DOC], [test "x$build_doc" != xno])
-+ 
-+ 
-++#
-++# Option to disable building of tests
-++#
-++build_tests=yes
-++AC_ARG_ENABLE([tests], AC_HELP_STRING([--disable-tests],
-++                                      [do not build tests]),
-++                       build_tests=$enableval, build_tests=yes)
-++AM_CONDITIONAL([BUILD_TESTS], [test "x$build_tests" != xno])
-++
-++
-+ #
-+ # Provide information about the build.
-+ #
-+-- 
-+2.20.1
-+
-diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-index 2799a6fba2..e9039e50fc 100644
---- a/package/libgcrypt/libgcrypt.mk
-+++ b/package/libgcrypt/libgcrypt.mk
-@@ -17,6 +17,7 @@ LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
- # Patching configure.ac and Makefile.am in 0002
- LIBGCRYPT_AUTORECONF = YES
- LIBGCRYPT_CONF_OPTS = \
-+	--disable-tests \
- 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4ab4e36593..78d5b67d10 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -241,6 +241,7 @@ F:	package/orbit/
  
- # Libgcrypt doesn't support assembly for coldfire
+ N:	Bartosz Bilas <b.bilas@grinn-global.com>
+ F:	package/qt5/qt5scxml/
++F:	package/qt5/qt5webview/
+ 
+ N:	Bartosz Golaszewski <brgl@bgdev.pl>
+ F:	package/autoconf-archive/
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index b9598b2be7..6476745a8d 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -83,6 +83,7 @@ source "package/qt5/qt5webkit/Config.in"
+ source "package/qt5/qt5webkit-examples/Config.in"
+ source "package/qt5/qt5webengine/Config.in"
+ source "package/qt5/qt5websockets/Config.in"
++source "package/qt5/qt5webview/Config.in"
+ source "package/qt5/qt5x11extras/Config.in"
+ source "package/qt5/qt5xmlpatterns/Config.in"
+ endif
+diff --git a/package/qt5/qt5webview/Config.in b/package/qt5/qt5webview/Config.in
+new file mode 100644
+index 0000000000..d76061ceba
+--- /dev/null
++++ b/package/qt5/qt5webview/Config.in
+@@ -0,0 +1,17 @@
++config BR2_PACKAGE_QT5WEBVIEW
++	bool "qt5webview"
++	depends on BR2_PACKAGE_QT5WEBENGINE
++	select BR2_PACKAGE_QT5BASE
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
++
++	  Qt WebView provides a way to display web content in
++	  a QML application without necessarily including
++	  a full web browser stack by using native APIs where
++	  it makes sense.
++
++	  https://doc.qt.io/qt-5/qtwebview-index.html
++
++comment "qt5webview needs qt5webengine module"
++	depends on !BR2_PACKAGE_QT5WEBENGINE
+diff --git a/package/qt5/qt5webview/qt5webview.hash b/package/qt5/qt5webview/qt5webview.hash
+new file mode 100644
+index 0000000000..c5b1e25fb4
+--- /dev/null
++++ b/package/qt5/qt5webview/qt5webview.hash
+@@ -0,0 +1,11 @@
++# Hash from: https://download.qt.io/archive/qt/5.6/5.6.3/submodules/qtwebview-opensource-src-5.6.3.tar.xz.sha256
++sha256 768a456e89f0fd7cbf39ac6b282e078a098e7426651c0b3d453b10c5c44bd81c qtwebview-opensource-src-5.6.3.tar.xz
++
++# Hash from: https://download.qt.io/official_releases/qt/5.12/5.12.4/submodules/qtwebview-everywhere-src-5.12.4.tar.xz.sha256
++sha256 1f244c6b774dd9d03d3c5cafe877381900b50a2775cef6487c8bb66e32ab5a5d qtwebview-everywhere-src-5.12.4.tar.xz
++
++# Hashes for license files:
++sha256 ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d LICENSE.FDL
++sha256 edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253 LICENSE.GPLv2
++sha256 245248009fd0af1725d183248380e476c1283383909358a13686606352bf2a17 LICENSE.GPLv3
++sha256 5ceb37d1c7c1d92878b82af3c0fd5558087f3d5a08a3a4d43850bad4ad265a52 LICENSE.LGPLv3
+diff --git a/package/qt5/qt5webview/qt5webview.mk b/package/qt5/qt5webview/qt5webview.mk
+new file mode 100644
+index 0000000000..4e0103de8c
+--- /dev/null
++++ b/package/qt5/qt5webview/qt5webview.mk
+@@ -0,0 +1,55 @@
++################################################################################
++#
++# qt5webwiev
++#
++################################################################################
++
++QT5WEBVIEW_VERSION = $(QT5_VERSION)
++QT5WEBVIEW_SITE = $(QT5_SITE)
++QT5WEBVIEW_SOURCE = qtwebview-$(QT5_SOURCE_TARBALL_PREFIX)-$(QT5WEBVIEW_VERSION).tar.xz
++QT5WEBVIEW_DEPENDENCIES = qt5base qt5webengine
++QT5WEBVIEW_INSTALL_STAGING = YES
++QT5WEBVIEW_LICENSE = GPL-2.0+ or LGPL-3.0, GPL-3.0, GFDL-1.3 (docs)
++QT5WEBVIEW_LICENSE_FILES = LICENSE.GPLv2 LICENSE.GPLv3 LICENSE.LGPLv3 LICENSE.FDL
++
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++QT5WEBVIEW_LICENSE := $(QT5WEBVIEW_LICENSE), BSD-3-Clause (examples)
++endif
++
++define QT5WEBVIEW_CONFIGURE_CMDS
++	(cd $(@D); $(TARGET_MAKE_ENV) $(HOST_DIR)/bin/qmake)
++endef
++
++define QT5WEBVIEW_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)
++endef
++
++define QT5WEBVIEW_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) install
++endef
++
++ifeq ($(BR2_PACKAGE_QT5DECLARATIVE_QUICK),y)
++define QT5WEBVIEW_INSTALL_TARGET_QMLS
++	cp -dpfr $(STAGING_DIR)/usr/qml/QtWebView $(TARGET_DIR)/usr/qml/
++endef
++endif
++
++ifeq ($(BR2_PACKAGE_QT5BASE_EXAMPLES),y)
++define QT5WEBVIEW_INSTALL_TARGET_EXAMPLES
++	cp -dpfr $(STAGING_DIR)/usr/lib/qt/examples/webview $(TARGET_DIR)/usr/lib/qt/examples/
++endef
++endif
++
++ifneq ($(BR2_STATIC_LIBS),y)
++define QT5WEBVIEW_INSTALL_TARGET_LIBS
++	cp -dpf $(STAGING_DIR)/usr/lib/libQt5WebView.so.* $(TARGET_DIR)/usr/lib
++endef
++endif
++
++define QT5WEBVIEW_INSTALL_TARGET_CMDS
++	$(QT5WEBVIEW_INSTALL_TARGET_LIBS)
++	$(QT5WEBVIEW_INSTALL_TARGET_QMLS)
++	$(QT5WEBVIEW_INSTALL_TARGET_EXAMPLES)
++endef
++
++$(eval $(generic-package))
 -- 
-2.20.1
+2.11.0
