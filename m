@@ -1,94 +1,67 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Jul 2019 22:20:00 +0200
-Subject: [Buildroot] [PATCH 10/13 v2] core: allow br2-external trees to
- provide pre-configured toolchains
+Date: Mon, 29 Jul 2019 22:20:01 +0200
+Subject: [Buildroot] [PATCH 11/13 v2] core: allow br2-external trees to
+ provide libjpeg
 In-Reply-To: <cover.1564431589.git.yann.morin.1998@free.fr>
 References: <cover.1564431589.git.yann.morin.1998@free.fr>
-Message-ID: <48603fc1a6fab9f9e4c635fc76cf04c859a608f5.1564431589.git.yann.morin.1998@free.fr>
+Message-ID: <aaf91818a2ee035e4881a2a3f04a542fbde3d425.1564431589.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Since we have a choice for the pre-configured pre-built toolchains,
-there is no p[ossbility for a br2-external to provide its own. The
-only solution so far for defconfigs in br2-external trees is to use
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM and define all the bits by itself...
-
-This is not so convemient, so offer a way for br2-external trees to
-provide such pre-configured toolchains.
-
-To allow for this, we now scan each br2-external tree and look for a
-specific file, provides.toolchains.in. We generate a kconfig file that
-sources each such file, and that generated file is sourced from within
-the toolchain choice, thus making the toolchains from a br2-external
-tree possible and available in the same location as the ones known to
-Buildroot:
-
-    Toolchain  --->
-        Toolchain type (External toolchain)  --->
-        Toolchain  --->
-            (X) Arm ARM 2019.03
-            ( ) Linaro ARM 2018.05
-            ( ) Custom toolchain
-                *** Toolchains from my-br2-ext-tree: ***
-            ( ) My custom ARM toolchain
-                *** Toolchains from another-br2-ext-tree: ***
-            ( ) Another custom ARM toolchain
-            ( ) A third custom ARM toolchain
+Similar to toolchains, we now offer a way for br2-external trees to
+provide their libjpeg implementation, which gets included in the jpeg
+choice.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Vadim Kochan <vadim4j@gmail.com>
 ---
- support/scripts/br2-external           | 9 +++++++++
- toolchain/toolchain-external/Config.in | 5 ++++-
- 2 files changed, 13 insertions(+), 1 deletion(-)
+ package/jpeg/Config.in       | 3 +++
+ support/scripts/br2-external | 9 +++++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/support/scripts/br2-external b/support/scripts/br2-external
-index da315d5c1d..b08b77bd33 100755
---- a/support/scripts/br2-external
-+++ b/support/scripts/br2-external
-@@ -157,6 +157,7 @@ do_kconfig() {
-     items=(
-         paths
-         menus
-+        toolchains
-     )
+diff --git a/package/jpeg/Config.in b/package/jpeg/Config.in
+index a4a63cc7dc..3d0fea83b1 100644
+--- a/package/jpeg/Config.in
++++ b/package/jpeg/Config.in
+@@ -38,6 +38,9 @@ config BR2_PACKAGE_JPEG_TURBO
  
-     for br2 in "${items[@]}"; do
-@@ -196,6 +197,14 @@ do_kconfig() {
-             fi
-             printf '\n'
-         } >>"${outputdir}/.br2-external.in.menus"
-+
-+        if [ -f "${br2_ext}/provides/toolchains.in" ]; then
-+            printf 'comment "Toolchains from: %s"\n' "${br2_desc}"
-+            printf 'source "%s/provides/toolchains.in"\n' "${br2_ext}"
-+            printf '\n'
-+        else
-+            printf '# No toolchain from: %s\n\n' "${br2_desc}"
-+        fi >>"${outputdir}/.br2-external.in.toolchains"
-     done
+ 	  http://www.libjpeg-turbo.org
  
-     printf 'endmenu\n' >>"${outputdir}/.br2-external.in.menus"
-diff --git a/toolchain/toolchain-external/Config.in b/toolchain/toolchain-external/Config.in
-index d234c1c552..128bea257e 100644
---- a/toolchain/toolchain-external/Config.in
-+++ b/toolchain/toolchain-external/Config.in
-@@ -47,9 +47,12 @@ source "toolchain/toolchain-external/toolchain-external-codesourcery-amd64/Confi
- 
- # Kept last, so it remains the non-default choice, unless there isn't
- # any available toolchain profile for the currently selected
--# architecture.
-+# architecture, but before toolchains from br2-external trees.
- source "toolchain/toolchain-external/toolchain-external-custom/Config.in"
- 
-+# Toolchains from br2-external trees, if any
-+source "$BR2_BASE_DIR/.br2-external.in.toolchains"
++# libjpeg from br2-external trees, if any
++source "$BR2_BASE_DIR/.br2-external.in.jpeg"
 +
  endchoice
  
- choice
+ config BR2_PACKAGE_HAS_JPEG
+diff --git a/support/scripts/br2-external b/support/scripts/br2-external
+index b08b77bd33..82c8afd64c 100755
+--- a/support/scripts/br2-external
++++ b/support/scripts/br2-external
+@@ -158,6 +158,7 @@ do_kconfig() {
+         paths
+         menus
+         toolchains
++        jpeg
+     )
+ 
+     for br2 in "${items[@]}"; do
+@@ -205,6 +206,14 @@ do_kconfig() {
+         else
+             printf '# No toolchain from: %s\n\n' "${br2_desc}"
+         fi >>"${outputdir}/.br2-external.in.toolchains"
++
++        if [ -f "${br2_ext}/provides/jpeg.in" ]; then
++            printf 'comment "jpeg from: %s"\n' "${br2_desc}"
++            printf 'source "%s/provides/jpeg.in"\n' "${br2_ext}"
++            printf '\n'
++        else
++            printf '# No jpeg from: %s\n\n' "${br2_desc}"
++        fi >>"${outputdir}/.br2-external.in.jpeg"
+     done
+ 
+     printf 'endmenu\n' >>"${outputdir}/.br2-external.in.menus"
 -- 
 2.20.1
