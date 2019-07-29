@@ -1,51 +1,41 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 30 Jul 2019 01:06:43 +0200
-Subject: [Buildroot] [RFC PATCH v2 1/2] makedevs: only warn on xattr when
- not enabled
-Message-ID: <20190729230644.2423-1-petr.vorel@gmail.com>
+Date: Tue, 30 Jul 2019 01:06:44 +0200
+Subject: [Buildroot] [RFC PATCH v2 2/2] iputils: add capability for
+ clockdiff, ping, traceroute6
+In-Reply-To: <20190729230644.2423-1-petr.vorel@gmail.com>
+References: <20190729230644.2423-1-petr.vorel@gmail.com>
+Message-ID: <20190729230644.2423-2-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Previously makedevs failed on adding xattr when
-BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES was not enabled.
-Now only warn. Therefore check for this configuration would be required
-in each use. But no package is using it so far (it's used only in tests).
+Not setting for arping as it can be used for ARP Poisoning.
+
+Use cap_net_raw+p (drop +e) as upstream sets that via
+cap_set_flag(), see https://github.com/iputils/iputils/issues/194
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
-Hi,
+ package/iputils/iputils.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-this supersede this patch:
-https://patchwork.ozlabs.org/patch/1138055/
-
-Unfortunately I wasn't able to test it as
-buildroot/output/build/buildroot-fs/tar/fakeroot is not working for me.
-Can anyone test it?
-
-Kind regards,
-Petr
-
- package/makedevs/makedevs.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
-index c57b964f5c..ab35b8e70d 100644
---- a/package/makedevs/makedevs.c
-+++ b/package/makedevs/makedevs.c
-@@ -518,8 +518,9 @@ int main(int argc, char **argv)
- 			if (bb_set_xattr(full_name, xattr) < 0)
- 				bb_error_msg_and_die("can't set cap %s on file %s\n", xattr, full_name);
- #else
--			bb_error_msg_and_die("line %d not supported: '%s'\nDid you forget to enable "
--					     "BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES?\n",
-+			bb_error_msg("line %d not supported: '%s'\nEnable "
-+					     "BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES"
-+						 "to get xattr support\n",
- 					     linenum, line);
- #endif /* EXTENDED_ATTRIBUTES */
- 			continue;
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 8e6a3e2fc5..f1d3e1fc6a 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -76,8 +76,11 @@ IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
+ define IPUTILS_PERMISSIONS
+ 	/usr/sbin/arping      f 4755 0 0 - - - - -
+ 	/usr/bin/clockdiff    f 4755 0 0 - - - - -
++	|xattr cap_net_raw+p
+ 	/bin/ping             f 4755 0 0 - - - - -
++	|xattr cap_net_raw+p
+ 	/usr/bin/traceroute6  f 4755 0 0 - - - - -
++	|xattr cap_net_raw+p
+ endef
+ 
+ $(eval $(meson-package))
 -- 
 2.22.0
