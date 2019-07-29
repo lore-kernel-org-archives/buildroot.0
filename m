@@ -1,98 +1,109 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Jul 2019 22:19:53 +0200
-Subject: [Buildroot] [PATCH 03/13 v2] core: move generated .br2-external
- kconfig file to $(BASE_DIR)
+Date: Mon, 29 Jul 2019 22:19:57 +0200
+Subject: [Buildroot] [PATCH 07/13 v2] core: drop now-useless prepare-kconfig
+ rule
 In-Reply-To: <cover.1564431589.git.yann.morin.1998@free.fr>
 References: <cover.1564431589.git.yann.morin.1998@free.fr>
-Message-ID: <ac00c031db44bda7c8e5d7124cb91b8232b09a2a.1564431589.git.yann.morin.1998@free.fr>
+Message-ID: <0890af03dbffa2d14498dcb5b819a390a7c195a6.1564431589.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Currently, that file is generated rather late in the configuration
-process, so BUILD_DIR is known (and exists) by then.
+This rule was added back in 9429e7b698 (core: introduce an intermediate
+rule before the configurators) when the kconfig-side br2-external file
+was generated separately from the Makefile-side one.
 
-We're soon to generate that file much earlier, at a point where
-BUILD_DIR is not yet known, so we have two options:
- 1- declare BUILD_DIR earlier;
- 2- generate the file in an already-known location.
-
-We go with the second solution, as we're already generating a
-br2-external related file in BASE_DIR, so we can as well generate all
-br2-external files in the same place.
+Now that they are generated together very early in the Makefile, we no
+longer need this intermediate rule. Drop it.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Cc: Vadim Kochan <vadim4j@gmail.com>
 ---
- Config.in |  6 +++---
- Makefile  | 10 +++++-----
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ Makefile | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 757ad1ca40..c611bb7dec 100644
---- a/Config.in
-+++ b/Config.in
-@@ -14,9 +14,9 @@ config BR2_HOSTARCH
- 	string
- 	option env="HOSTARCH"
- 
--config BR2_BUILD_DIR
-+config BR2_BASE_DIR
- 	string
--	option env="BUILD_DIR"
-+	option env="BASE_DIR"
- 
- # Hidden config symbols for packages to check system gcc version
- config BR2_HOST_GCC_VERSION
-@@ -865,4 +865,4 @@ source "package/Config.in.host"
- 
- source "Config.in.legacy"
- 
--source "$BR2_BUILD_DIR/.br2-external.in"
-+source "$BR2_BASE_DIR/.br2-external.in"
 diff --git a/Makefile b/Makefile
-index 9cce934990..a7af04fb4b 100644
+index 78a89f6830..bc5329bde3 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -934,7 +934,7 @@ HOSTCFLAGS = $(CFLAGS_FOR_BUILD)
+@@ -932,9 +932,6 @@ endif # ifeq ($(BR2_HAVE_DOT_CONFIG),y)
+ HOSTCFLAGS = $(CFLAGS_FOR_BUILD)
  export HOSTCFLAGS
  
- .PHONY: prepare-kconfig
--prepare-kconfig: outputmakefile $(BUILD_DIR)/.br2-external.in
-+prepare-kconfig: outputmakefile $(BASE_DIR)/.br2-external.in
- 
+-.PHONY: prepare-kconfig
+-prepare-kconfig: outputmakefile
+-
  $(BUILD_DIR)/buildroot-config/%onf:
  	mkdir -p $(@D)/lxdialog
-@@ -952,7 +952,7 @@ COMMON_CONFIG_ENV = \
- 	KCONFIG_TRISTATE=$(BUILD_DIR)/buildroot-config/tristate.config \
- 	BR2_CONFIG=$(BR2_CONFIG) \
- 	HOST_GCC_VERSION="$(HOSTCC_VERSION)" \
--	BUILD_DIR=$(BUILD_DIR) \
-+	BASE_DIR=$(BASE_DIR) \
+ 	PKG_CONFIG_PATH="$(HOST_PKG_CONFIG_PATH)" $(MAKE) CC="$(HOSTCC_NOCCACHE)" HOSTCC="$(HOSTCC_NOCCACHE)" \
+@@ -954,19 +951,19 @@ COMMON_CONFIG_ENV = \
+ 	BASE_DIR=$(BASE_DIR) \
  	SKIP_LEGACY=
  
- xconfig: $(BUILD_DIR)/buildroot-config/qconf prepare-kconfig
-@@ -1034,8 +1034,8 @@ endif
- # Even though the target is a real file, we mark it as PHONY as we
- # want it to be re-generated each time make is invoked, in case the
- # value of BR2_EXTERNAL is changed.
--.PHONY: $(BUILD_DIR)/.br2-external.in
--$(BUILD_DIR)/.br2-external.in: $(BUILD_DIR)
-+.PHONY: $(BASE_DIR)/.br2-external.in
-+$(BASE_DIR)/.br2-external.in: $(BUILD_DIR)
- 	$(Q)support/scripts/br2-external -k -o "$(@)" $(BR2_EXTERNAL)
+-xconfig: $(BUILD_DIR)/buildroot-config/qconf prepare-kconfig
++xconfig: $(BUILD_DIR)/buildroot-config/qconf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
  
- # printvars prints all the variables currently defined in our
-@@ -1066,7 +1066,7 @@ ifeq ($(O),$(CURDIR)/output)
- 	rm -rf $(O)
- endif
- 	rm -rf $(TOPDIR)/dl $(BR2_CONFIG) $(CONFIG_DIR)/.config.old $(CONFIG_DIR)/..config.tmp \
--		$(CONFIG_DIR)/.auto.deps $(BR2_EXTERNAL_FILE)
-+		$(CONFIG_DIR)/.auto.deps $(BR2_EXTERNAL_FILE) $(BASE_DIR)/.br2-external.in
+-gconfig: $(BUILD_DIR)/buildroot-config/gconf prepare-kconfig
++gconfig: $(BUILD_DIR)/buildroot-config/gconf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) srctree=$(TOPDIR) $< $(CONFIG_CONFIG_IN)
  
- .PHONY: help
- help:
+-menuconfig: $(BUILD_DIR)/buildroot-config/mconf prepare-kconfig
++menuconfig: $(BUILD_DIR)/buildroot-config/mconf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+ 
+-nconfig: $(BUILD_DIR)/buildroot-config/nconf prepare-kconfig
++nconfig: $(BUILD_DIR)/buildroot-config/nconf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+ 
+-config: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
++config: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< $(CONFIG_CONFIG_IN)
+ 
+ # For the config targets that automatically select options, we pass
+@@ -974,11 +971,11 @@ config: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
+ # no values are set for the legacy options so a subsequent oldconfig
+ # will query them. Therefore, run an additional olddefconfig.
+ 
+-randconfig allyesconfig alldefconfig allnoconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
++randconfig allyesconfig alldefconfig allnoconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y $< --$@ $(CONFIG_CONFIG_IN)
+ 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
+ 
+-randpackageconfig allyespackageconfig allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
++randpackageconfig allyespackageconfig allnopackageconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@grep -v BR2_PACKAGE_ $(BR2_CONFIG) > $(CONFIG_DIR)/.config.nopkg
+ 	@$(COMMON_CONFIG_ENV) SKIP_LEGACY=y \
+ 		KCONFIG_ALLCONFIG=$(CONFIG_DIR)/.config.nopkg \
+@@ -986,15 +983,15 @@ randpackageconfig allyespackageconfig allnopackageconfig: $(BUILD_DIR)/buildroot
+ 	@rm -f $(CONFIG_DIR)/.config.nopkg
+ 	@$(COMMON_CONFIG_ENV) $< --olddefconfig $(CONFIG_CONFIG_IN) >/dev/null
+ 
+-oldconfig syncconfig olddefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
++oldconfig syncconfig olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< --$@ $(CONFIG_CONFIG_IN)
+ 
+-defconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
++defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
+ 
+ define percent_defconfig
+ # Override the BR2_DEFCONFIG from COMMON_CONFIG_ENV with the new defconfig
+-%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig prepare-kconfig
++%_defconfig: $(BUILD_DIR)/buildroot-config/conf $(1)/configs/%_defconfig outputmakefile
+ 	@$$(COMMON_CONFIG_ENV) BR2_DEFCONFIG=$(1)/configs/$$@ \
+ 		$$< --defconfig=$(1)/configs/$$@ $$(CONFIG_CONFIG_IN)
+ endef
+@@ -1002,7 +999,7 @@ $(eval $(foreach d,$(call reverse,$(TOPDIR) $(BR2_EXTERNAL_DIRS)),$(call percent
+ 
+ update-defconfig: savedefconfig
+ 
+-savedefconfig: $(BUILD_DIR)/buildroot-config/conf prepare-kconfig
++savedefconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
+ 	@$(COMMON_CONFIG_ENV) $< \
+ 		--savedefconfig=$(if $(DEFCONFIG),$(DEFCONFIG),$(CONFIG_DIR)/defconfig) \
+ 		$(CONFIG_CONFIG_IN)
 -- 
 2.20.1
