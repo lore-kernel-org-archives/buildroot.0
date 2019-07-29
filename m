@@ -1,51 +1,104 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 29 Jul 2019 23:15:56 +0200
-Subject: [Buildroot] [PATCH 1/1] package/expect: bump to version 5.45.4
-Message-ID: <20190729211556.21522-1-fontaine.fabrice@gmail.com>
+From: Peter Seiderer <ps.report@gmx.net>
+Date: Mon, 29 Jul 2019 23:18:42 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-07-27
+In-Reply-To: <23f21gxfdm.ln2@ID-313208.user.individual.net>
+References: <20190728060040.E179C88937@hemlock.osuosl.org>
+ <23f21gxfdm.ln2@ID-313208.user.individual.net>
+Message-ID: <20190729231842.3f39d3c0@gmx.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-* exp_inter.c: [https://sourceforge.net/p/expect/patches/22/]
-Fix interact bug - handle reads of 0 length on
-non-blocking channels by explicitly checking if the channel
-is non-blocking. Fix by Jack Bates.
+Hello Bernd,
 
-* expect.c: [https://sourceforge.net/p/expect/patches/21/]
-Fix eof bug introduced with previous bug fix - ensure that data
-received just before an eof is processed. Fix by Sergei Golovan.
+On Mon, 29 Jul 2019 08:08:02 +0200, Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/expect/expect.hash | 4 ++--
- package/expect/expect.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+> Am Sun, 28 Jul 2019 06:00:35 +0000 schrieb Thomas Petazzoni:
+>
+> >        sparc |                    vlc-3.0.7.1 | NOK |
+> >        http://autobuild.buildroot.net/results/
+> c9be4ef68c9c5d018e4084c52215ce69f0c72538
+>
+> Hi,
+>
+> having no idea what the root cause of the qt5-related build error is I
+> would just like to post the manual changes needed to fix the build error:
+>
+> Only vlc version 3.0.7.1 is affected
+> http://autobuild.buildroot.net/?reason=vlc-3.0.7.1
+> although I fail to see any changes upstream which could cause them:
+>
+> http://git.videolan.org/?p=vlc/vlc-3.0.git;a=shortlog;h=refs/tags/
+> 3.0.7.1-1
+>
+> Instead it seems some libQt*.la files are seriously broken causing the
+> build error, analyzed http://autobuild.buildroot.net/results/f19/
+> f19d509167ea5d38cba54ae53016caaeb0a076d5/:
+>
+> libtool:   error: cannot find the library '' or unhandled argument '/data/
+> buildroot/buildroot-test/instance-0/output/host/riscv64-buildroot-linux-
+> gnu/sysroot/usr/lib/libQt5Widgets.so'
+>
+> In the following lines I will show the .la content after the qt5 packages
+> were built and the manual changes needed to fix the vlc build error:
+>
+> libQt5Svg.la
+> old:
+> dependency_libs='-latomic /home/bernd/buildroot/br6/output/host/riscv64-
+> buildroot-linux-gnu/sysroot/usr/lib/libQt5Widgets.so /home/bernd/
+> buildroot/br6/output/host/riscv64-buildroot-linux-gnu/sysroot/usr/lib/l
+> ibQt5Gui.so /home/bernd/buildroot/br6/output/host/riscv64-buildroot-linux-
+> gnu/sysroot/usr/lib/libQt5Core.so -lpthread -lrt -lpthread -ldl '
+>
+> new:
+> dependency_libs='-latomic -lQt5Widgets -lQt5Gui -lQt5Core -lpthread -lrt -
+> lpthread -ldl '
+>
+> Build error changes to
+>
+> libtool:   error: cannot find the library '' or unhandled argument '/
+> libQt5Gui.so'
+>
+> libQt5Widgets.la
+> old:
+> dependency_libs='-latomic /libQt5Gui.so /libQt5Core.so -lpthread -lrt -
+> lpthread -ldl '
+>
+> new:
+> dependency_libs='-latomic -lQt5Gui -lQt5Core -lpthread -lrt -lpthread -
+> ldl '
+>
+> Build error changes to
+> libtool:   error: cannot find the library '' or unhandled argument '/
+> libQt5Core.so'
+>
+> libQt5Gui.la
+> old:
+> dependency_libs='-latomic /libQt5Core.so -lpthread -lrt -lpthread -ldl '
+>
+> new:
+> dependency_libs='-latomic -lQt5Core -lpthread -lrt -lpthread -ldl '
 
-diff --git a/package/expect/expect.hash b/package/expect/expect.hash
-index c89f323906..c4815abb07 100644
---- a/package/expect/expect.hash
-+++ b/package/expect/expect.hash
-@@ -1,4 +1,4 @@
--# From https://sourceforge.net/projects/expect/files/Expect/5.45.3/expect5.45.3.tar.gz.SHA256
--sha256  c520717b7195944a69ce1492ec82ca0ac3f3baf060804e6c5ee6d505ea512be9  expect5.45.3.tar.gz
-+# From https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz.SHA256
-+sha256  49a7da83b0bdd9f46d04a04deec19c7767bb9a323e40c4781f89caf760b92c34  expect5.45.4.tar.gz
- # Locally calculated
- sha256  b2415b17dc8d9a287f4509047ef5ac3436baef7ba7c50faef5222dcdf61a2bab  README
-diff --git a/package/expect/expect.mk b/package/expect/expect.mk
-index ccde33a71b..37b4ce7065 100644
---- a/package/expect/expect.mk
-+++ b/package/expect/expect.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPECT_VERSION = 5.45.3
-+EXPECT_VERSION = 5.45.4
- EXPECT_SITE = https://sourceforge.net/projects/expect/files/Expect/$(EXPECT_VERSION)
- EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
- EXPECT_LICENSE = Public domain
--- 
-2.20.1
+See mail thread [1] (and special [2]) for analysis and possible solutions....
+
+Regards,
+Peter
+
+Note: The libv4l/qv4l2 build succeeds without AUTORECONF, fails with AUTORECONF
+for the same la files...
+
+[1] http://lists.busybox.net/pipermail/buildroot/2019-July/254797.html
+[2] http://lists.busybox.net/pipermail/buildroot/2019-July/254869.html
+
+>
+> Now the vlc builds succeeds.
+>
+> Regards, Bernd
+>
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
