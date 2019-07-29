@@ -1,58 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Mon, 29 Jul 2019 18:17:03 +0200
-Subject: [Buildroot] [PATCH] package/xen: security bump to version 4.11.2
-Message-ID: <20190729161703.29544-1-peter@korsgaard.com>
+From: aduskett at gmail.com <aduskett@gmail.com>
+Date: Mon, 29 Jul 2019 12:20:04 -0400
+Subject: [Buildroot] [PATCH 1/1] package/libglib2: bump to version 2.60.6
+Message-ID: <20190729162004.80214-1-aduskett@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The 4.11.2 release brings a large number of fixes:
+From: Adam Duskett <Aduskett@gmail.com>
 
-https://xenproject.org/downloads/xen-project-archives/xen-project-4-11-series/xen-project-4-11-2/
-
-Including a number of security fixes:
-
-XSA-284: grant table transfer issues on large hosts
-XSA-285: race with pass-through device hotplug
-XSA-287: x86: steal_page violates page_struct access discipline
-XSA-288: x86: Inconsistent PV IOMMU discipline
-XSA-290: missing preemption in x86 PV page table unvalidation
-XSA-291: x86/PV: page type reference counting issue with failed IOMMU update
-XSA-292: x86: insufficient TLB flushing when using PCID
-XSA-293: x86: PV kernel context switch corruption
-XSA-294: x86 shadow: Insufficient TLB flushing when using PCID
-XSA-295: Unlimited Arm Atomics Operations
-XSA-297: Microarchitectural Data Sampling speculative side channel
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 ---
- package/xen/xen.hash | 2 +-
- package/xen/xen.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libglib2/0003-remove-cpp-requirement.patch | 2 +-
+ package/libglib2/libglib2.hash                     | 4 ++--
+ package/libglib2/libglib2.mk                       | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/xen/xen.hash b/package/xen/xen.hash
-index 7a52410954..d4232f592e 100644
---- a/package/xen/xen.hash
-+++ b/package/xen/xen.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 be88cb2443761990efc1070d9718016561fe19066af232f9bfae572922897e59 xen-4.11.1.tar.gz
-+sha256 3f9217f5a7cc240a06f3a03db8c29605d69a64d98330c426611ba5c2ee08b5d8 xen-4.11.2.tar.gz
- sha256 dba0d79260259c013c52e5d4daeaea564a2fbb9ff7fc6778c377a401ec3898de COPYING
-diff --git a/package/xen/xen.mk b/package/xen/xen.mk
-index d6e6c91cfb..bd8a39f639 100644
---- a/package/xen/xen.mk
-+++ b/package/xen/xen.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libglib2/0003-remove-cpp-requirement.patch b/package/libglib2/0003-remove-cpp-requirement.patch
+index 808e1b560a..f418369476 100644
+--- a/package/libglib2/0003-remove-cpp-requirement.patch
++++ b/package/libglib2/0003-remove-cpp-requirement.patch
+@@ -35,7 +35,7 @@ index c96289a..b694bb7 100644
+ @@ -1,4 +1,4 @@
+ -project('glib', 'c', 'cpp',
+ +project('glib', 'c',
+-   version : '2.60.5',
++   version : '2.60.6',
+    meson_version : '>= 0.48.0',
+    default_options : [
+ @@ -9,7 +9,6 @@ project('glib', 'c', 'cpp',
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 679a7715d7..ee8bd5bd6d 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.60/glib-2.60.5.sha256sum
+-sha256  3edf1df576ee82b2ecb8ba85c343644e48ee62e68290e71e6084b00d6ba2622e  glib-2.60.5.tar.xz
++# https://download.gnome.org/sources/glib/2.60/glib-2.60.6.sha256sum
++sha256  ff8fab8d8deaa4fd0536c90f90d9769a09071779c7e6183907f6855645bffb6c  glib-2.60.6.tar.xz
+ # License files, locally calculated
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 39021757b5..4f8de31e99 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--XEN_VERSION = 4.11.1
-+XEN_VERSION = 4.11.2
- XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
- XEN_LICENSE = GPL-2.0
- XEN_LICENSE_FILES = COPYING
+ LIBGLIB2_VERSION_MAJOR = 2.60
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).5
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).6
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = http://ftp.gnome.org/pub/gnome/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
 -- 
-2.11.0
+2.21.0
