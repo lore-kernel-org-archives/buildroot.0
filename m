@@ -1,50 +1,42 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 29 Jul 2019 09:25:00 +0200
-Subject: [Buildroot] [PATCH] dtc: Bump to version v1.5.0
-In-Reply-To: <20190722042113.10140-1-joel@jms.id.au>
-References: <20190722042113.10140-1-joel@jms.id.au>
-Message-ID: <20190729092500.530bbcb8@windsurf>
+Date: Mon, 29 Jul 2019 09:26:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/dtc: bump to version 1.5.0
+In-Reply-To: <20190620182036.28407-1-fontaine.fabrice@gmail.com>
+References: <20190620182036.28407-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190729092610.1d3a2e65@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Jul 2019 13:51:12 +0930
-Joel Stanley <joel@jms.id.au> wrote:
+Hello Fabrice,
 
-> Upstream now optionally supports a yaml output format, and support is
-> detected through pkg-config. It has not been added as a dependency but
-> could in the future if someone asks for it.
+On Thu, 20 Jun 2019 20:20:36 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+
+> - Remove first and third patches (already in version)
+> - Disable yaml which is enabled by default and has been added with
+>   https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=c86da84d30e4b72cfb4fee22b62bea4257bc14bf
+> - Move CFLAGS in {DTC,HOST_DTC}_MAKE_OPTS for readability
+> - Add hash for license files
 > 
-> Patches applied upstream:
-> 
->   - Kill bogus TYPE_BLOB marker type
->   - checks: fix simple-bus compatible matching
-> 
-> New patch:
-> 
->  - Makefile: Add EXTRA_CFLAGS variable
-> 
-> The new patch is required to correctly add buildroot's cflags. The
-> existing packaging was overwriting those set by the package's makefile,
-> which was breaking the yaml detection.
-> 
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
 >  ...rds-for-older-kernel-u-boot-sources.patch} |   0
 >  ...001-Kill-bogus-TYPE_BLOB-marker-type.patch | 138 ------------------
->  ...2-Makefile-Add-EXTRA_CFLAGS-variable.patch |  37 +++++
 >  ...s-fix-simple-bus-compatible-matching.patch | 120 ---------------
->  package/dtc/dtc.hash                          |   2 +-
->  package/dtc/dtc.mk                            |  10 +-
->  6 files changed, 43 insertions(+), 264 deletions(-)
+>  package/dtc/dtc.hash                          |   6 +-
+>  package/dtc/dtc.mk                            |   8 +-
+>  5 files changed, 10 insertions(+), 262 deletions(-)
 >  rename package/dtc/{0002-Fix-include-guards-for-older-kernel-u-boot-sources.patch => 0001-Fix-include-guards-for-older-kernel-u-boot-sources.patch} (100%)
 >  delete mode 100644 package/dtc/0001-Kill-bogus-TYPE_BLOB-marker-type.patch
->  create mode 100644 package/dtc/0002-Makefile-Add-EXTRA_CFLAGS-variable.patch
 >  delete mode 100644 package/dtc/0003-checks-fix-simple-bus-compatible-matching.patch
 
-Applied to master, thanks.
+Sorry, I am seeing this patch now, after applying a few minutes ago
+another patch bumping dtc, from Joel Stanley. Sorry about that.
+
+Best regards,
 
 Thomas
 -- 
