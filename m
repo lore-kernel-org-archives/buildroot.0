@@ -1,78 +1,96 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Mon, 29 Jul 2019 22:30:47 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libebml: bump version to 1.3.9
-Message-ID: <20190729203047.19560-1-bernd.kuhls@t-online.de>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Mon, 29 Jul 2019 23:02:52 +0200
+Subject: [Buildroot] [PATCH v2] package/python-modbus-tk: new package
+Message-ID: <1564434172-31697-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Removed patch applied upstream.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- ...nteger-Use-limits-instead-of-climits.patch | 28 -------------------
- package/libebml/libebml.hash                  |  2 +-
- package/libebml/libebml.mk                    |  2 +-
- 3 files changed, 2 insertions(+), 30 deletions(-)
- delete mode 100644 package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch
+Changes v1 -> v2:
+	- add missing entry in Config.in
 
-diff --git a/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch b/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch
-deleted file mode 100644
-index d6e906fe7b..0000000000
---- a/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From e46906b80e7662fb78d305f576412f9fa4a22218 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Hugo=20Beauz=C3=A9e-Luyssen?= <hugo@beauzee.fr>
--Date: Mon, 23 Apr 2018 12:05:42 +0200
--Subject: [PATCH] EbmlSInteger: Use <limits> instead of <climits>
--
--The former is the proper header to use for std::numerical_limits
--
--Retrieved from:
--https://github.com/Matroska-Org/libebml/commit/e46906b80e7662fb78d305f576412f9fa4a22218
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/EbmlSInteger.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/EbmlSInteger.cpp b/src/EbmlSInteger.cpp
--index 33f3637..b930f7d 100644
----- a/src/EbmlSInteger.cpp
--+++ b/src/EbmlSInteger.cpp
--@@ -33,7 +33,7 @@
--   \author Moritz Bunkus <moritz @ bunkus.org>
-- */
-- #include <cassert>
---#include <climits>
--+#include <limits>
-- 
-- #include "ebml/EbmlSInteger.h"
-- 
-diff --git a/package/libebml/libebml.hash b/package/libebml/libebml.hash
-index 6daa4746c2..30945548c5 100644
---- a/package/libebml/libebml.hash
-+++ b/package/libebml/libebml.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	1e5a7a7820c493aa62b0f35e15b4233c792cc03458c55ebdfa7a6521e4b43e9e	libebml-1.3.6.tar.xz
-+sha256	c6b6c6cd8b20a46203cb5dce636883aef68beb2846f1e4103b660a7da2c9c548	libebml-1.3.9.tar.xz
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL
-diff --git a/package/libebml/libebml.mk b/package/libebml/libebml.mk
-index 3c34462738..770fda5dae 100644
---- a/package/libebml/libebml.mk
-+++ b/package/libebml/libebml.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ DEVELOPERS                                     |  1 +
+ package/Config.in                              |  1 +
+ package/python-modbus-tk/Config.in             |  7 +++++++
+ package/python-modbus-tk/python-modbus-tk.hash |  6 ++++++
+ package/python-modbus-tk/python-modbus-tk.mk   | 14 ++++++++++++++
+ 5 files changed, 29 insertions(+)
+ create mode 100644 package/python-modbus-tk/Config.in
+ create mode 100644 package/python-modbus-tk/python-modbus-tk.hash
+ create mode 100644 package/python-modbus-tk/python-modbus-tk.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4ab4e36..9c5a9bb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1860,6 +1860,7 @@ F:	package/trace-cmd/
  
--LIBEBML_VERSION = 1.3.6
-+LIBEBML_VERSION = 1.3.9
- LIBEBML_SOURCE = libebml-$(LIBEBML_VERSION).tar.xz
- LIBEBML_SITE = http://dl.matroska.org/downloads/libebml
- LIBEBML_INSTALL_STAGING = YES
+ N:	Pierre-Jean Texier <pjtexier@koncepto.io>
+ F:	package/libubootenv/
++F:	package/python-modbus-tk/
+ F:	package/python-periphery/
+ F:	package/stunnel/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index 9b2cc75..b792a04 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -944,6 +944,7 @@ menu "External python modules"
+ 	source "package/python-meld3/Config.in"
+ 	source "package/python-mimeparse/Config.in"
+ 	source "package/python-mistune/Config.in"
++	source "package/python-modbus-tk/Config.in"
+ 	source "package/python-more-itertools/Config.in"
+ 	source "package/python-msgpack/Config.in"
+ 	source "package/python-multidict/Config.in"
+diff --git a/package/python-modbus-tk/Config.in b/package/python-modbus-tk/Config.in
+new file mode 100644
+index 0000000..16d87ff
+--- /dev/null
++++ b/package/python-modbus-tk/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_MODBUS_TK
++	bool "python-modbus-tk"
++	select BR2_PACKAGE_PYTHON_SERIAL # runtime
++	help
++	  Implementation of modbus protocol in python.
++
++	  https://github.com/ljean/modbus-tk/
+diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
+new file mode 100644
+index 0000000..f4da4e5
+--- /dev/null
++++ b/package/python-modbus-tk/python-modbus-tk.hash
+@@ -0,0 +1,6 @@
++# md5, sha256 from https://pypi.org/pypi/modbus-tk/json
++md5	e268242483b719030656ab6047cebff3  modbus_tk-1.0.0.tar.gz
++sha256	041a34afec8ef487d9e8c0c20834909c2f43a3ae9a0d007b978686d580e9b873  modbus_tk-1.0.0.tar.gz
++# Locally computed sha256 checksums
++sha256	3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
++sha256	aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
+diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
+new file mode 100644
+index 0000000..7de9005
+--- /dev/null
++++ b/package/python-modbus-tk/python-modbus-tk.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-modbus-tk
++#
++################################################################################
++
++PYTHON_MODBUS_TK_VERSION = 1.0.0
++PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
++PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/8b/03/50193a66aac4eeccbaecea22044de6f07f4e8bfcb6ec37d724a0bba50f46
++PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
++PYTHON_MODBUS_TK_LICENSE = GNU Library or Lesser General Public License (LGPL)
++PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
++
++$(eval $(python-package))
 -- 
-2.20.1
+2.7.4
