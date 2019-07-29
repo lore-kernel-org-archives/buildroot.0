@@ -1,96 +1,51 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Mon, 29 Jul 2019 23:02:52 +0200
-Subject: [Buildroot] [PATCH v2] package/python-modbus-tk: new package
-Message-ID: <1564434172-31697-1-git-send-email-pjtexier@koncepto.io>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 29 Jul 2019 23:15:56 +0200
+Subject: [Buildroot] [PATCH 1/1] package/expect: bump to version 5.45.4
+Message-ID: <20190729211556.21522-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+* exp_inter.c: [https://sourceforge.net/p/expect/patches/22/]
+Fix interact bug - handle reads of 0 length on
+non-blocking channels by explicitly checking if the channel
+is non-blocking. Fix by Jack Bates.
+
+* expect.c: [https://sourceforge.net/p/expect/patches/21/]
+Fix eof bug introduced with previous bug fix - ensure that data
+received just before an eof is processed. Fix by Sergei Golovan.
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2:
-	- add missing entry in Config.in
+ package/expect/expect.hash | 4 ++--
+ package/expect/expect.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/python-modbus-tk/Config.in             |  7 +++++++
- package/python-modbus-tk/python-modbus-tk.hash |  6 ++++++
- package/python-modbus-tk/python-modbus-tk.mk   | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
- create mode 100644 package/python-modbus-tk/Config.in
- create mode 100644 package/python-modbus-tk/python-modbus-tk.hash
- create mode 100644 package/python-modbus-tk/python-modbus-tk.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4ab4e36..9c5a9bb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1860,6 +1860,7 @@ F:	package/trace-cmd/
+diff --git a/package/expect/expect.hash b/package/expect/expect.hash
+index c89f323906..c4815abb07 100644
+--- a/package/expect/expect.hash
++++ b/package/expect/expect.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/projects/expect/files/Expect/5.45.3/expect5.45.3.tar.gz.SHA256
+-sha256  c520717b7195944a69ce1492ec82ca0ac3f3baf060804e6c5ee6d505ea512be9  expect5.45.3.tar.gz
++# From https://sourceforge.net/projects/expect/files/Expect/5.45.4/expect5.45.4.tar.gz.SHA256
++sha256  49a7da83b0bdd9f46d04a04deec19c7767bb9a323e40c4781f89caf760b92c34  expect5.45.4.tar.gz
+ # Locally calculated
+ sha256  b2415b17dc8d9a287f4509047ef5ac3436baef7ba7c50faef5222dcdf61a2bab  README
+diff --git a/package/expect/expect.mk b/package/expect/expect.mk
+index ccde33a71b..37b4ce7065 100644
+--- a/package/expect/expect.mk
++++ b/package/expect/expect.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- N:	Pierre-Jean Texier <pjtexier@koncepto.io>
- F:	package/libubootenv/
-+F:	package/python-modbus-tk/
- F:	package/python-periphery/
- F:	package/stunnel/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 9b2cc75..b792a04 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -944,6 +944,7 @@ menu "External python modules"
- 	source "package/python-meld3/Config.in"
- 	source "package/python-mimeparse/Config.in"
- 	source "package/python-mistune/Config.in"
-+	source "package/python-modbus-tk/Config.in"
- 	source "package/python-more-itertools/Config.in"
- 	source "package/python-msgpack/Config.in"
- 	source "package/python-multidict/Config.in"
-diff --git a/package/python-modbus-tk/Config.in b/package/python-modbus-tk/Config.in
-new file mode 100644
-index 0000000..16d87ff
---- /dev/null
-+++ b/package/python-modbus-tk/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_MODBUS_TK
-+	bool "python-modbus-tk"
-+	select BR2_PACKAGE_PYTHON_SERIAL # runtime
-+	help
-+	  Implementation of modbus protocol in python.
-+
-+	  https://github.com/ljean/modbus-tk/
-diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
-new file mode 100644
-index 0000000..f4da4e5
---- /dev/null
-+++ b/package/python-modbus-tk/python-modbus-tk.hash
-@@ -0,0 +1,6 @@
-+# md5, sha256 from https://pypi.org/pypi/modbus-tk/json
-+md5	e268242483b719030656ab6047cebff3  modbus_tk-1.0.0.tar.gz
-+sha256	041a34afec8ef487d9e8c0c20834909c2f43a3ae9a0d007b978686d580e9b873  modbus_tk-1.0.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
-+sha256	aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
-diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
-new file mode 100644
-index 0000000..7de9005
---- /dev/null
-+++ b/package/python-modbus-tk/python-modbus-tk.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-modbus-tk
-+#
-+################################################################################
-+
-+PYTHON_MODBUS_TK_VERSION = 1.0.0
-+PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
-+PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/8b/03/50193a66aac4eeccbaecea22044de6f07f4e8bfcb6ec37d724a0bba50f46
-+PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
-+PYTHON_MODBUS_TK_LICENSE = GNU Library or Lesser General Public License (LGPL)
-+PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
-+
-+$(eval $(python-package))
+-EXPECT_VERSION = 5.45.3
++EXPECT_VERSION = 5.45.4
+ EXPECT_SITE = https://sourceforge.net/projects/expect/files/Expect/$(EXPECT_VERSION)
+ EXPECT_SOURCE = expect$(EXPECT_VERSION).tar.gz
+ EXPECT_LICENSE = Public domain
 -- 
-2.7.4
+2.20.1
