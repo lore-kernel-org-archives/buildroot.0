@@ -1,69 +1,44 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Mon, 29 Jul 2019 01:35:54 +0000
-Subject: [Buildroot] =?utf-8?q?=5BBug_12046=5D_Can=E2=80=99t_login_as_roo?=
- =?utf-8?q?t_user_after_upgrading_to_buildroot_2019=2E02?=
-In-Reply-To: <bug-12046-163@https.bugs.busybox.net/>
-References: <bug-12046-163@https.bugs.busybox.net/>
-Message-ID: <bug-12046-163-sKBKL8TOaR@https.bugs.busybox.net/>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sun, 28 Jul 2019 23:21:21 -0300
+Subject: [Buildroot] syslog-ng test does not work due to lack of random
+ numbers
+References: <20190621214130.1074b702@windsurf>
+Message-ID: <5d3e5821b78b7_6df63fe81e0ca148393a4@ultri5.mail>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12046
+Hello,
 
-Carlos Santos <unixmania@gmail.com> changed:
+On Fri, Jun 21, 2019 at 04:41 PM, Thomas Petazzoni wrote:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|NEEDINFO                    |INVALID
+> The syslog-ng runtime test is no longer working:
+> 
+>   https://gitlab.com/buildroot.org/buildroot/-/jobs/237108732
+> 
+> I had a look, and the problem is that syslog-ng is stuck when starting,
+> waiting for random numbers. strace shows:
+> 
+> [pid    65] open("/dev/random", O_RDONLY|O_LARGEFILE) = 6
+> [pid    65] _newselect(7, [6], NULL, NULL, NULL
+> 
+> And then nothing.
+> 
+> Adding haveged to the configuration would have been an option, but
+> haveged is started as S21haveged, while syslog-ng is started as
+> S01syslog-ng, so obviously, this won't help.
+> 
+> What should we do ?
 
---- Comment #6 from Carlos Santos <unixmania@gmail.com> ---
-(In reply to liadekel123 from comment #5)
+We can use VirtIORNG like Peter did for the docker compose test.
 
-OK, I was able to reproduce the problem with the following defconfig:
+We need kernel config CONFIG_HW_RANDOM_VIRTIO=y.
+It is not enabled in the 2 binary kernel images we have for test infra.
+We also need qemu argument -device virtio-rng-pci.
 
-BR2_x86_64=y
-BR2_DL_DIR="$(HOME)/src"
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--bleeding-edge-2018.11-1.tar.bz2"
-BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y
-BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-BR2_SYSTEM_DHCP="eth0"
-BR2_SYSTEM_ENABLE_NLS=y
-BR2_LINUX_KERNEL=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
-BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
-BR2_TARGET_ROOTFS_EXT2=y
-# BR2_TARGET_ROOTFS_TAR is not set
+I will cook a patch.
 
-123456789012345678901234567890123456789012345678901234567890123456789012
-
-The problem happens with Busybox login:
-
-- If linux-pam is NOT selected
-  - If /etc/securetty does not exist root can log in without restrictions
-  - If /etc/securetty exists then root can log in only on terminals listed
-there
-- If linux-pam is selected
-  - If pam_securetty is NOT enabled in /etc/pam.d/login then /etc/securetty is
-ignored
-  - If pam_securetty is enabled with "auth required pam_securetty.so"
-    - If /etc/securetty does not exist root can log in without restrictions
-    - If /etc/securetty exists then can log in only on terminals listed there
-
-Considering that by default Buildroot does NOT install a /etc/securetty file
-I'm keeping this bug as RESOLVED but changing the resolution reason from
-NEEDINFO to INVALID.
-
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Regards,
+Ricardo
