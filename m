@@ -1,47 +1,80 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 29 Jul 2019 09:27:09 +0200
-Subject: [Buildroot] [PATCH] package/zip: adjust the version to 3.0
-In-Reply-To: <20190620134809.10007-1-thomas.petazzoni@bootlin.com>
-References: <20190620134809.10007-1-thomas.petazzoni@bootlin.com>
-Message-ID: <20190729092709.3661757d@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Mon, 29 Jul 2019 09:37:20 +0200
+Subject: [Buildroot] [PATCH] package/openjdk{,
+ -bin}: security bump to version 12.0.2_10
+Message-ID: <20190729073720.19116-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 20 Jun 2019 15:48:09 +0200
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
+Fixes the following security issues:
 
-> According to the project homepage at
-> http://infozip.sourceforge.net/Zip.html, the version is really named
-> 3.0. This is also how it's called inside the zip30.ann file in the
-> source code, which says "We have posted Zip 3.0, July 5th 2008".
-> 
-> So the fact that the tarball is named zip30.tgz is just because
-> upstream wanted to avoid having two dots (perhaps by habit of the old
-> DOS 8.3 file name limitation ?).
-> 
-> The version is also named "3.0" in the SourceForge RSS at [0] that
-> release-monitoring.org is using for this package [1]. Therefore, by
-> using "3.0" as the version, we will match the version known by
-> release-monitoring.org.
-> 
-> Of course the tarball name is still zip30.tgz so we tweak the
-> ZIP_VERSION value appropriately.
-> 
-> [0] https://sourceforge.net/projects/infozip/rss?path=/
-> [1] https://release-monitoring.org/project/10080/
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  package/zip/zip.mk | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+CVE-2019-7317 CVE-2019-2821 CVE-2019-2769 CVE-2019-2762 CVE-2019-2745
+CVE-2019-2816 CVE-2019-2842 CVE-2019-2786 CVE-2019-2818 CVE-2019-2766
+CVE-2019-6129
 
-Applied to master, thanks.
+For details. see the advisory:
+https://openjdk.java.net/groups/vulnerability/advisories/2019-07-16
 
-Thomas
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/openjdk-bin/openjdk-bin.hash | 2 +-
+ package/openjdk-bin/openjdk-bin.mk   | 4 ++--
+ package/openjdk/openjdk.hash         | 2 +-
+ package/openjdk/openjdk.mk           | 4 ++--
+ 4 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
+index 1fab6e07a8..dc0476ca2d 100644
+--- a/package/openjdk-bin/openjdk-bin.hash
++++ b/package/openjdk-bin/openjdk-bin.hash
+@@ -1,5 +1,5 @@
+ # From https://github.com/AdoptOpenJDK/openjdk12-binaries/releases
+-sha256	dd3fdf3771a05a010029c1cf1aef516928eab55d6f5eb019008875e9ccbc8337	OpenJDK12U-jdk_x64_linux_hotspot_12.0.1_12.tar.gz
++sha256  1202f536984c28d68681d51207a84b6c76e5998579132d3fe1b8085aa6a5f21e	OpenJDK12U-jdk_x64_linux_hotspot_12.0.2_10.tar.gz
+ 
+ # Locally calculated
+ sha256	4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726	legal/java.prefs/LICENSE
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index 383842d280..80b69b7a0e 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-HOST_OPENJDK_BIN_VERSION_MAJOR = 12.0.1
+-HOST_OPENJDK_BIN_VERSION_MINOR = 12
++HOST_OPENJDK_BIN_VERSION_MAJOR = 12.0.2
++HOST_OPENJDK_BIN_VERSION_MINOR = 10
+ HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
+ HOST_OPENJDK_BIN_SOURCE = OpenJDK12U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
+ HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk12-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index f4eecf5dcd..00d080aa3f 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 47cfd6d8430d862869c42c5841bbaaa303a811fea8229baa10ac03b58e259af2  openjdk-12.0.1+12.tar.gz
++sha256 5f73d86ed516173965b27754f1bb21374ccb1194a17c2d89d8018280ce5ffa78  openjdk-12.0.2+10.tar.gz
+ sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index 2f3292ef6d..ea2555edcc 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-OPENJDK_VERSION_MAJOR = 12.0.1
+-OPENJDK_VERSION_MINOR = 12
++OPENJDK_VERSION_MAJOR = 12.0.2
++OPENJDK_VERSION_MINOR = 10
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
+ OPENJDK_SITE = $(call github,AdoptOpenJDK,openjdk-jdk12u,jdk-$(OPENJDK_VERSION))
+ OPENJDK_LICENSE = GPL-2.0+ with exception
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
