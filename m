@@ -1,59 +1,69 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 28 Jul 2019 23:28:31 +0200
-Subject: [Buildroot] [PATCH] package/asterisk: security bump to version
- 16.4.1
-Message-ID: <20190728212832.2472-1-peter@korsgaard.com>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Mon, 29 Jul 2019 01:35:54 +0000
+Subject: [Buildroot] =?utf-8?q?=5BBug_12046=5D_Can=E2=80=99t_login_as_roo?=
+ =?utf-8?q?t_user_after_upgrading_to_buildroot_2019=2E02?=
+In-Reply-To: <bug-12046-163@https.bugs.busybox.net/>
+References: <bug-12046-163@https.bugs.busybox.net/>
+Message-ID: <bug-12046-163-sKBKL8TOaR@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes the following security issues:
+https://bugs.busybox.net/show_bug.cgi?id=12046
 
-CVE-2019-12827: A specially crafted SIP in-dialog MESSAGE message can cause
-Asterisk to crash:
+Carlos Santos <unixmania@gmail.com> changed:
 
-https://downloads.asterisk.org/pub/security/AST-2019-002.html
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+         Resolution|NEEDINFO                    |INVALID
 
-CVE-2019-13161: When T.38 faxing is done in Asterisk a T.38 reinvite may be
-sent to an endpoint to switch it to T.38.  If the endpoint responds with an
-improperly formatted SDP answer including both a T.38 UDPTL stream and an
-audio or video stream containing only codecs not allowed on the SIP peer or
-user a crash will occur.  The code incorrectly assumes that there will be at
-least one common codec when T.38 is also in the SDP answer:
+--- Comment #6 from Carlos Santos <unixmania@gmail.com> ---
+(In reply to liadekel123 from comment #5)
 
-https://downloads.asterisk.org/pub/security/AST-2019-003.html
+OK, I was able to reproduce the problem with the following defconfig:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+BR2_x86_64=y
+BR2_DL_DIR="$(HOME)/src"
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="https://toolchains.bootlin.com/downloads/releases/toolchains/x86-64-core-i7/tarballs/x86-64-core-i7--glibc--bleeding-edge-2018.11-1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
+BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY=y
+BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+BR2_SYSTEM_DHCP="eth0"
+BR2_SYSTEM_ENABLE_NLS=y
+BR2_LINUX_KERNEL=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
+BR2_TARGET_ROOTFS_EXT2=y
+# BR2_TARGET_ROOTFS_TAR is not set
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index d8cc56695c..dd1e1db327 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  c022e9d5410ed94ab1aa51ba1e2a8b196f0dfa15bcd0bd545d06efee4c786578  asterisk-16.2.1.tar.gz
-+sha256  8cabb7a6ad2c35b7fb5c520977f2b2c18b471e5b825b65dc411744c6bed2b9f8  asterisk-16.4.1.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 65f8d3fdf9..53dd593678 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 16.2.1
-+ASTERISK_VERSION = 16.4.1
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+123456789012345678901234567890123456789012345678901234567890123456789012
+
+The problem happens with Busybox login:
+
+- If linux-pam is NOT selected
+  - If /etc/securetty does not exist root can log in without restrictions
+  - If /etc/securetty exists then root can log in only on terminals listed
+there
+- If linux-pam is selected
+  - If pam_securetty is NOT enabled in /etc/pam.d/login then /etc/securetty is
+ignored
+  - If pam_securetty is enabled with "auth required pam_securetty.so"
+    - If /etc/securetty does not exist root can log in without restrictions
+    - If /etc/securetty exists then can log in only on terminals listed there
+
+Considering that by default Buildroot does NOT install a /etc/securetty file
+I'm keeping this bug as RESOLVED but changing the resolution reason from
+NEEDINFO to INVALID.
+
 -- 
-2.11.0
+You are receiving this mail because:
+You are on the CC list for the bug.
