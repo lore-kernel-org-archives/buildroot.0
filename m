@@ -1,73 +1,131 @@
-From: aduskett at gmail.com <aduskett@gmail.com>
-Date: Mon, 29 Jul 2019 15:25:32 -0400
-Subject: [Buildroot] [PATCH 1/1] package/openjdk,
- package/openjdk-bin: bump to version 12.0.2+10
-Message-ID: <20190729192532.43343-1-aduskett@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Mon, 29 Jul 2019 22:20:00 +0200
+Subject: [Buildroot] [PATCH 00/13 v2] core: allow br2-external trees to
+ provide resources usually in choices (branch yem/br2-ext-providers)
+Message-ID: <cover.1564431589.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Adam Duskett <Aduskett@gmail.com>
+Hello All!
 
-Signed-off-by: Adam Duskett <Aduskett@gmail.com>
----
- package/openjdk-bin/openjdk-bin.hash | 2 +-
- package/openjdk-bin/openjdk-bin.mk   | 4 ++--
- package/openjdk/openjdk.hash         | 2 +-
- package/openjdk/openjdk.mk           | 4 ++--
- 4 files changed, 6 insertions(+), 6 deletions(-)
+Some packages, like jpeg, openssl or the external toolchains, are
+presented to the user in a kconfig choice, which precludes br2-external
+trees to easily provide alternatives to those.
 
-diff --git a/package/openjdk-bin/openjdk-bin.hash b/package/openjdk-bin/openjdk-bin.hash
-index 1fab6e07a8..d2a152acca 100644
---- a/package/openjdk-bin/openjdk-bin.hash
-+++ b/package/openjdk-bin/openjdk-bin.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/AdoptOpenJDK/openjdk12-binaries/releases
--sha256	dd3fdf3771a05a010029c1cf1aef516928eab55d6f5eb019008875e9ccbc8337	OpenJDK12U-jdk_x64_linux_hotspot_12.0.1_12.tar.gz
-+sha256	1202f536984c28d68681d51207a84b6c76e5998579132d3fe1b8085aa6a5f21e	OpenJDK12U-jdk_x64_linux_hotspot_12.0.2_10.tar.gz
- 
- # Locally calculated
- sha256	4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726	legal/java.prefs/LICENSE
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index 383842d280..80b69b7a0e 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--HOST_OPENJDK_BIN_VERSION_MAJOR = 12.0.1
--HOST_OPENJDK_BIN_VERSION_MINOR = 12
-+HOST_OPENJDK_BIN_VERSION_MAJOR = 12.0.2
-+HOST_OPENJDK_BIN_VERSION_MINOR = 10
- HOST_OPENJDK_BIN_VERSION = $(HOST_OPENJDK_BIN_VERSION_MAJOR)_$(HOST_OPENJDK_BIN_VERSION_MINOR)
- HOST_OPENJDK_BIN_SOURCE = OpenJDK12U-jdk_x64_linux_hotspot_$(HOST_OPENJDK_BIN_VERSION).tar.gz
- HOST_OPENJDK_BIN_SITE = https://github.com/AdoptOpenJDK/openjdk12-binaries/releases/download/jdk-$(HOST_OPENJDK_BIN_VERSION_MAJOR)%2B$(HOST_OPENJDK_BIN_VERSION_MINOR)
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index f4eecf5dcd..00d080aa3f 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 47cfd6d8430d862869c42c5841bbaaa303a811fea8229baa10ac03b58e259af2  openjdk-12.0.1+12.tar.gz
-+sha256 5f73d86ed516173965b27754f1bb21374ccb1194a17c2d89d8018280ce5ffa78  openjdk-12.0.2+10.tar.gz
- sha256 4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index 2f3292ef6d..ea2555edcc 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--OPENJDK_VERSION_MAJOR = 12.0.1
--OPENJDK_VERSION_MINOR = 12
-+OPENJDK_VERSION_MAJOR = 12.0.2
-+OPENJDK_VERSION_MINOR = 10
- OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR)+$(OPENJDK_VERSION_MINOR)
- OPENJDK_SITE = $(call github,AdoptOpenJDK,openjdk-jdk12u,jdk-$(OPENJDK_VERSION))
- OPENJDK_LICENSE = GPL-2.0+ with exception
+This series prepares Buildroot to accept br2-external trees to provide
+such alternatives, that are seamlessly integrated into the existing
+choices.
+
+The naive solution would be to simply add a new entry in every such
+coices, like "from a br2-external tree", and let the br2-external tree
+provide standard packages. However, this solution suffers frm two flaws:
+  - it is not very user-friendly,
+  - it still allows to select two or more providers for such packages,
+    a situation which the choice otherwise avoids.
+
+We could have lived with that, like we do for providers of other virtual
+packages that are not in a choice, but this is not so nice. And in the
+end, the alternative solution, implemented in this series, see below,
+will even allow us to move all virtual packages into a set of choices
+(when that makes sense).
+
+Before we can allow br2-external trees to provide them we must allow for
+the kconfig variables that hold the paths to br2-external trees, to be
+available through-out kconfig, not only at the end. It usually does not
+matter in kconfig when a variable gets assigned a value, except when the
+variable is used to source a file, at which point its value must be
+known.
+
+So, the few preparatory patches make it so that the paths are defined
+early, so they are available everywhere, and makes the handling of the
+internal .br-exterrnal.mk more logical and consistent.
+
+Finally, the series introduces the possibility for br2-external trees to
+provide alternatives to the three meaningful packages: external
+toolchains, jpeg and openssl.
+
+Eventually, this is documented in the manual.
+
+In the future, we will be able to turn the GL providers into a choice.
+With this new mechanism, br2-external tree will be able to expose their
+GL providers, and they will appear in that choice.
+
+Notes: we decided to go with a single do_kconfig() function in the
+helper script, so the redirection is a bit disconcerting at first,
+especially in the do_mk() function. The alternative would have been to
+provide one funciton for each feature, and redirect the output of each
+functions, like so:
+    do_mk >$output_mk
+    do_kconfig_paths >$output_paths_in
+    do_kconfig_menus >$output_menus_in
+    do_kconfig_jpeg >$output_jpeg_in
+
+but that would have meant that each of those functions would have had to
+repeat all the boilerplate:
+    - the comment "this is a generated file; don't edit"
+    - testing if there was no br2-external tree and returning if so
+    - the loop over all the br2_names
+    - the evaluation of br2_desc and br2_ext (the path)
+
+In the end, at the expense of a bit more complexity in the redirections,
+a single function was deemed nicer overall.
+
+Changes v1 -> v2:
+  - push back redirection of helpers to its own patch
+  - expand manual changes
+  - reorder patches to have fixes first
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit b254cb25b2ab89ac482abd4da91d827abfe2344e
+
+  package/zip: adjust the version to 3.0 (2019-07-29 09:26:26 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 7f27bb724debc80a274d44a169f1680e88509189
+
+  docs/manual: document providers from br2-external (2019-07-29 22:19:03 +0200)
+
+
+----------------------------------------------------------------
+Yann E. MORIN (13):
+      supports/scripts: declare missing local variables
+      support/scripts: drop help for internal helper script
+      core: move generated .br2-external kconfig file to $(BASE_DIR)
+      core: rename generated .br-external.mk file
+      core: simplify removal of generated br2-external files
+      core: generate all br2-external files in one go
+      core: drop now-useless prepare-kconfig rule
+      core: prepare for generating multiple kconfig fragments
+      core: split generated kconfig file
+      core: allow br2-external trees to provide pre-configured toolchains
+      core: allow br2-external trees to provide libjpeg
+      core: allow br2-external trees to provide opensl
+      docs/manual: document providers from br2-external
+
+ Config.in                              |  10 +-
+ Makefile                               |  41 +++----
+ docs/manual/customize-outside-br.txt   |  91 ++++++++++++++-
+ package/jpeg/Config.in                 |   3 +
+ package/openssl/Config.in              |   3 +
+ support/scripts/br2-external           | 196 +++++++++++++++++----------------
+ toolchain/toolchain-external/Config.in |   5 +-
+ 7 files changed, 224 insertions(+), 125 deletions(-)
+
 -- 
-2.21.0
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
