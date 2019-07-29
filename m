@@ -1,63 +1,45 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 29 Jul 2019 08:54:49 +0200
-Subject: [Buildroot] [PATCH 1/1] iputils: Add capability for clockdiff,
- ping, traceroute6
-In-Reply-To: <20190728195346.31201-1-petr.vorel@gmail.com>
-References: <20190728195346.31201-1-petr.vorel@gmail.com>
-Message-ID: <20190729085449.771df94a@windsurf>
+Date: Mon, 29 Jul 2019 09:06:17 +0200
+Subject: [Buildroot] [git commit] package/pngquant: bump version to 2.12.3
+Message-ID: <20190729070358.4248E812E6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Petr,
+commit: https://git.buildroot.net/buildroot/commit/?id=b954cc0380fb1080d1e2dec8768f8c4b7a9b57eb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-+Yann in Cc.
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pngquant/pngquant.hash | 4 ++--
+ package/pngquant/pngquant.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Sun, 28 Jul 2019 21:53:46 +0200
-Petr Vorel <petr.vorel@gmail.com> wrote:
-
-> NOTE: not setting for arping as it can be used for ARP Poisoning
-> 
-> NOTE: use cap_net_raw+p (drop +e) as upstream sets that via
-> cap_set_flag(), see https://github.com/iputils/iputils/issues/194
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  package/iputils/iputils.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> index 8e6a3e2fc5..2ffa8da554 100644
-> --- a/package/iputils/iputils.mk
-> +++ b/package/iputils/iputils.mk
-> @@ -73,11 +73,17 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
->  
->  # handle permissions ourselves
->  IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
-> +ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
-> +IPUTILS_CAPABILITY = |xattr cap_net_raw+p
-> +endif
->  define IPUTILS_PERMISSIONS
->  	/usr/sbin/arping      f 4755 0 0 - - - - -
->  	/usr/bin/clockdiff    f 4755 0 0 - - - - -
-> +	$(IPUTILS_CAPABILITY)
-
-It looks a bit annoying to me that we have to add this
-BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES conditional.
-Indeed, every single place where a permission/device table will want to
-use extended attributes, we will have to add such a conditional.
-
-Shouldn't this logic be moved into the code that parses the
-permission/device table, and simply discard the extended attributes if
-BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES is disabled ?
-(Possibly with a warning)
-
-Thanks,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/pngquant/pngquant.hash b/package/pngquant/pngquant.hash
+index f27eda60dd..00dd5cd93f 100644
+--- a/package/pngquant/pngquant.hash
++++ b/package/pngquant/pngquant.hash
+@@ -1,5 +1,5 @@
+ # From https://pngquant.org/releases.html
+-sha1 24efa42105bf3d8d0f4cf699053d2701ea787bd5  pngquant-2.12.2-src.tar.gz
++sha1 e160eade5897b1c3d991e57b528b4f338674af88  pngquant-2.12.3-src.tar.gz
+ # Locally computed
+-sha256 bb031c48039ee73ea0e60709bb9ab80c55bfa3a5920b798ea37a03f2757b099c  pngquant-2.12.2-src.tar.gz
++sha256 8bb076832a3f1c826393f4be62df8b637dfd6493b13d5839ad697a8a80ccf95b  pngquant-2.12.3-src.tar.gz
+ sha256 e4f467f7abf860b4e620f5f60fdd88bc3a63a0fdb98a481fb002b5e511c9b826  COPYRIGHT
+diff --git a/package/pngquant/pngquant.mk b/package/pngquant/pngquant.mk
+index 0053b9a46e..801290807b 100644
+--- a/package/pngquant/pngquant.mk
++++ b/package/pngquant/pngquant.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PNGQUANT_VERSION = 2.12.2
++PNGQUANT_VERSION = 2.12.3
+ PNGQUANT_SOURCE = pngquant-$(PNGQUANT_VERSION)-src.tar.gz
+ PNGQUANT_SITE = https://pngquant.org
+ PNGQUANT_LICENSE = GPL-3.0+
