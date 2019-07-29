@@ -1,160 +1,78 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Mon, 29 Jul 2019 22:20:03 +0200
-Subject: [Buildroot] [PATCH 13/13 v2] docs/manual: document providers from
- br2-external
-In-Reply-To: <cover.1564431589.git.yann.morin.1998@free.fr>
-References: <cover.1564431589.git.yann.morin.1998@free.fr>
-Message-ID: <7f27bb724debc80a274d44a169f1680e88509189.1564431589.git.yann.morin.1998@free.fr>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Mon, 29 Jul 2019 22:30:47 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libebml: bump version to 1.3.9
+Message-ID: <20190729203047.19560-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Add documentation about how a br2-external tree can provide an external
-toolchain or a libjpeg alternative implementation.
+Removed patch applied upstream.
 
-Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Vadim Kochan <vadim4j@gmail.com>
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-Changes v1 -> v2:
-  - expand manual even more
+ ...nteger-Use-limits-instead-of-climits.patch | 28 -------------------
+ package/libebml/libebml.hash                  |  2 +-
+ package/libebml/libebml.mk                    |  2 +-
+ 3 files changed, 2 insertions(+), 30 deletions(-)
+ delete mode 100644 package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch
 
----
-Note: the documentation about external toolchains is inexistent so far,
-but this is unrelated to this change, which is only about documenting
-how to provide one from a br2-external.
----
- docs/manual/customize-outside-br.txt | 89 +++++++++++++++++++++++++++-
- 1 file changed, 88 insertions(+), 1 deletion(-)
-
-diff --git a/docs/manual/customize-outside-br.txt b/docs/manual/customize-outside-br.txt
-index 353b2ed75f..6ab01bcb1f 100644
---- a/docs/manual/customize-outside-br.txt
-+++ b/docs/manual/customize-outside-br.txt
-@@ -81,7 +81,8 @@ in the following chapters:
+diff --git a/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch b/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch
+deleted file mode 100644
+index d6e906fe7b..0000000000
+--- a/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From e46906b80e7662fb78d305f576412f9fa4a22218 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Hugo=20Beauz=C3=A9e-Luyssen?= <hugo@beauzee.fr>
+-Date: Mon, 23 Apr 2018 12:05:42 +0200
+-Subject: [PATCH] EbmlSInteger: Use <limits> instead of <climits>
+-
+-The former is the proper header to use for std::numerical_limits
+-
+-Retrieved from:
+-https://github.com/Matroska-Org/libebml/commit/e46906b80e7662fb78d305f576412f9fa4a22218
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/EbmlSInteger.cpp | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/EbmlSInteger.cpp b/src/EbmlSInteger.cpp
+-index 33f3637..b930f7d 100644
+---- a/src/EbmlSInteger.cpp
+-+++ b/src/EbmlSInteger.cpp
+-@@ -33,7 +33,7 @@
+-   \author Moritz Bunkus <moritz @ bunkus.org>
+- */
+- #include <cassert>
+--#include <climits>
+-+#include <limits>
+- 
+- #include "ebml/EbmlSInteger.h"
+- 
+diff --git a/package/libebml/libebml.hash b/package/libebml/libebml.hash
+index 6daa4746c2..30945548c5 100644
+--- a/package/libebml/libebml.hash
++++ b/package/libebml/libebml.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	1e5a7a7820c493aa62b0f35e15b4233c792cc03458c55ebdfa7a6521e4b43e9e	libebml-1.3.6.tar.xz
++sha256	c6b6c6cd8b20a46203cb5dce636883aef68beb2846f1e4103b660a7da2c9c548	libebml-1.3.9.tar.xz
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL
+diff --git a/package/libebml/libebml.mk b/package/libebml/libebml.mk
+index 3c34462738..770fda5dae 100644
+--- a/package/libebml/libebml.mk
++++ b/package/libebml/libebml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- Apart from those mandatory files, there may be additional and optional
- content that may be present in a br2-external tree, like the +configs/+
--directory. They are described in the following chapters as well.
-+or +provides/+ directories. They are described in the following chapters
-+as well.
- 
- A complete example br2-external tree layout is also described later.
- 
-@@ -186,6 +187,22 @@ the one from the last br2-external tree is used. It is thus possible
- to override a defconfig bundled in Buildroot or another br2-external
- tree.
- 
-+===== The +provides/+ directory
-+
-+For some packages, Buildroot provides a choice between two (or more)
-+implementations of API-compatible such packages. For example, there is
-+a choice to choose either libjpeg ot jpeg-turbo, and another choice
-+between openssl or libressl. Finally, there is a choice to select one
-+of the known, pre-configured toolchains.
-+
-+It is possible for a br2-external to extend those choices, by providing
-+a set of files that define those alternatives:
-+
-+* +provides/toolchains.in+ defines the pre-configured toolchains, which
-+  will then be listed in the toolchain selection;
-+* +provides/jpeg.in+ defines the alternative libjpeg implementations;
-+* +provides/openssl.in+ defines the alternative openssl implementations.
-+
- ===== Free-form content
- 
- One can store all the board-specific configuration files there, such
-@@ -217,8 +234,10 @@ illustration, of course):
-   |     `----
-   |
-   |- Config.in
-+  |     |source "$BR2_EXTERNAL_BAR_42_PATH/toolchain/toolchain-external-mine/Config.in.options"
-   |     |source "$BR2_EXTERNAL_BAR_42_PATH/package/pkg-1/Config.in"
-   |     |source "$BR2_EXTERNAL_BAR_42_PATH/package/pkg-2/Config.in"
-+  |     |source "$BR2_EXTERNAL_BAR_42_PATH/package/my-jpeg/Config.in"
-   |     |
-   |     |config BAR_42_FLASH_ADDR
-   |     |    hex "my-board flash address"
-@@ -259,6 +278,42 @@ illustration, of course):
-   |- package/pkg-2/pkg-2.hash
-   |- package/pkg-2/pkg-2.mk
-   |
-+  |- provides/jpeg.in
-+  |     |config BR2_PACKAGE_MY_JPEG
-+  |     |    bool "my-jpeg"
-+  |     `----
-+  |- package/my-jpeg/Config.in
-+  |     |config BR2_PACKAGE_PROVIDES_JPEG
-+  |     |    default "my-jpeg" if BR2_PACKAGE_MY_JPEG
-+  |     `----
-+  |- package/my-jpeg/my-jpeg.mk
-+  |     |# This is a normal package .mk file
-+  |     |MY_JPEG_VERSION = 1.2.3
-+  |     |MY_JPEG_SITE = https://example.net/some/place
-+  |     |MY_JPEG_PROVIDES = jpeg
-+  |     |$(eval $(autotools-package))
-+  |     `----
-+  |
-+  |- provides/toolchains.in
-+  |     |config BR2_TOOLCHAIN_EXTERNAL_MINE
-+  |     |    bool "my custom toolchain"
-+  |     |    depends on BR2_some_arch
-+  |     |    select BR2_INSTALL_LIBSTDCPP
-+  |     `----
-+  |- toolchain/toolchain-external-mine/Config.in.options
-+  |     |if BR2_TOOLCHAIN_EXTERNAL_MINE
-+  |     |config BR2_TOOLCHAIN_EXTERNAL_PREFIX
-+  |     |    default "arch-mine-linux-gnu"
-+  |     |config BR2_PACKAGE_PROVIDES_TOOLCHAIN_EXTERNAL
-+  |     |    default "toolchain-external-mine"
-+  |     |endif
-+  |     `----
-+  |- toolchain/toolchain-external-mine/toolchain-external-mine.mk
-+  |     |TOOLCHAIN_EXTERNAL_MINE_SITE = https://example.net/some/place
-+  |     |TOOLCHAIN_EXTERNAL_MINE_SOURCE = my-toolchain.tar.gz
-+  |     |$(eval $(toolchain-external-package))
-+  |     `----
-+  |
-   |- configs/my-board_defconfig
-   |     |BR2_GLOBAL_PATCH_DIR="$(BR2_EXTERNAL_BAR_42_PATH)/patches/"
-   |     |BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_BAR_42_PATH)/board/my-board/overlay/"
-@@ -311,3 +366,35 @@ External options  --->
-         [ ] foo
-         [ ] bar
- ----
-+
-+Additionally, the jpeg provider will be visible in the jpeg choice:
-+
-+----
-+Target packages  --->
-+    Libraries  --->
-+        Graphics  --->
-+            [*] jpeg support
-+                jpeg variant ()  --->
-+                    ( ) jpeg
-+                    ( ) jpeg-turbo
-+                        *** jpeg from: Example br2-external tree ***
-+                    (X) my-jpeg
-+                        *** jpeg from: FOO_27 ***
-+                    ( ) another-jpeg
-+----
-+
-+And similarly for the toolchains:
-+
-+----
-+Toolchain  --->
-+    Toolchain ()  --->
-+        ( ) Custom toolchain
-+            *** Toolchains from: Example br2-external tree ***
-+        (X) my custom toolchain
-+----
-+
-+.Note
-+The toolchain options in +toolchain/toolchain-external-mine/Config.in.options+
-+will not appear in the `Toolchain` menu. They must be explicitly included
-+from within the br2-external's top-level +Config.in+ and will thus appear
-+in the `External options` menu.
+-LIBEBML_VERSION = 1.3.6
++LIBEBML_VERSION = 1.3.9
+ LIBEBML_SOURCE = libebml-$(LIBEBML_VERSION).tar.xz
+ LIBEBML_SITE = http://dl.matroska.org/downloads/libebml
+ LIBEBML_INSTALL_STAGING = YES
 -- 
 2.20.1
