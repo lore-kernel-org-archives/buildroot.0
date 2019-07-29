@@ -1,53 +1,108 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Mon, 29 Jul 2019 12:00:14 +0200
-Subject: [Buildroot] [PATCH] linux: enable UEVENT_HELPER when mdev is
- used
-In-Reply-To: <87sgs6heq7.fsf@dell.be.48ers.dk>
-References: <20190525130755.25678-1-peter@korsgaard.com>
- <54a85c9f-1e14-de0d-c6cf-8201dea50e1d@mind.be>
- <87mujanw9q.fsf@dell.be.48ers.dk>
- <d3a724b9-b9c9-b399-0f32-b3f93d3511a3@mind.be>
- <87muiyu380.fsf@dell.be.48ers.dk>
- <9f9e57ff-ba24-a4c0-7be8-48e048e4138f@railnova.eu>
- <87sgs6heq7.fsf@dell.be.48ers.dk>
-Message-ID: <bdf4076f-6306-6f04-4693-250c4646425e@railnova.eu>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Mon, 29 Jul 2019 12:30:14 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libgcrypt: disable tests
+Message-ID: <20190729103014.20038-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Add a patch to disable tests as t-lock needs threads
 
-On 6/18/19 9:32 PM, Peter Korsgaard wrote:
->>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
-> 
-> Hi,
-> 
->   >> Indeed. Notice that Denys has just merged the daemon mode (-d) support
->   >> for mdev, so from a performance PoV, that is probably what we should
->   >> support rather than uevent + mdev:
->   >>
->   >> http://lists.busybox.net/pipermail/busybox/2019-June/087305.html
-> 
->   > This is great news !
-> 
->   > Even then, the S10mdev init script has to be modified to start mdev in
->   > daemon mode. I could add this to
->   > http://patchwork.ozlabs.org/patch/1107175/. However, I don't see a
->   > good way to check if FEATURE_MDEV_DAEMON=y.
-> 
-> We would just forcibly enable that option when building busybox when
-> BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV is enabled, similar to the other
-> mdev options.
-> 
+Fixes:
+ - http://autobuild.buildroot.org/results/50a8ba572e3fafd3c6a39bd54bcfcaf78b5ad325
 
-IMHO this patch can now be archived, since this series has been applied: 
-http://patchwork.ozlabs.org/project/buildroot/list/?series=114874 .
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ ...re.ac-add-an-option-to-disable-tests.patch | 66 +++++++++++++++++++
+ package/libgcrypt/libgcrypt.mk                |  1 +
+ 2 files changed, 67 insertions(+)
+ create mode 100644 package/libgcrypt/0004-configure.ac-add-an-option-to-disable-tests.patch
 
-Also, this last patch http://patchwork.ozlabs.org/patch/1119590/ would 
-be needed to make sure mdev daemon mode can always be used.
-
-Regards,
-
-Titouan
+diff --git a/package/libgcrypt/0004-configure.ac-add-an-option-to-disable-tests.patch b/package/libgcrypt/0004-configure.ac-add-an-option-to-disable-tests.patch
+new file mode 100644
+index 0000000000..21ff20a473
+--- /dev/null
++++ b/package/libgcrypt/0004-configure.ac-add-an-option-to-disable-tests.patch
+@@ -0,0 +1,66 @@
++From 7fe1b8a53cc8c865c2a10dcd8f6cb4e51ccc6300 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Mon, 29 Jul 2019 12:19:10 +0200
++Subject: [PATCH] configure.ac: add an option to disable tests
++
++Add an option to allow the user to disable tests, this can be useful for
++example when the toolchain does not provide thread. Indeed, in this
++case, libgcrypt fails to build t-lock:
++
++t-lock.c: In function 'run_test':
++t-lock.c:359:3: error: unknown type name 'pthread_t'
++   pthread_t rthread;
++
++Fixes:
++ - http://autobuild.buildroot.org/results/50a8ba572e3fafd3c6a39bd54bcfcaf78b5ad325
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ Makefile.am  |  7 ++++++-
++ configure.ac | 10 ++++++++++
++ 2 files changed, 16 insertions(+), 1 deletion(-)
++
++diff --git a/Makefile.am b/Makefile.am
++index 7fa4fa4d..f0bd90e4 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -39,9 +39,14 @@ else
++ doc =
++ endif
++ 
+++if BUILD_TESTS
+++tests = tests
+++else
+++tests =
+++endif
++ 
++ DIST_SUBDIRS = m4 compat mpi cipher random src doc tests
++-SUBDIRS =         compat mpi cipher random src $(doc) tests
+++SUBDIRS =         compat mpi cipher random src $(doc) $(tests)
++ 
++ EXTRA_DIST = autogen.sh autogen.rc README.GIT LICENSES      	           \
++              ChangeLog-2011 build-aux/ChangeLog-2011 doc/ChangeLog-2011    \
++diff --git a/configure.ac b/configure.ac
++index e8c8cd39..1a6b61e5 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -2710,6 +2710,16 @@ AC_ARG_ENABLE([doc], AC_HELP_STRING([--disable-doc],
++ AM_CONDITIONAL([BUILD_DOC], [test "x$build_doc" != xno])
++ 
++ 
+++#
+++# Option to disable building of tests
+++#
+++build_tests=yes
+++AC_ARG_ENABLE([tests], AC_HELP_STRING([--disable-tests],
+++                                      [do not build tests]),
+++                       build_tests=$enableval, build_tests=yes)
+++AM_CONDITIONAL([BUILD_TESTS], [test "x$build_tests" != xno])
+++
+++
++ #
++ # Provide information about the build.
++ #
++-- 
++2.20.1
++
+diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
+index 2799a6fba2..e9039e50fc 100644
+--- a/package/libgcrypt/libgcrypt.mk
++++ b/package/libgcrypt/libgcrypt.mk
+@@ -17,6 +17,7 @@ LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
+ # Patching configure.ac and Makefile.am in 0002
+ LIBGCRYPT_AUTORECONF = YES
+ LIBGCRYPT_CONF_OPTS = \
++	--disable-tests \
+ 	--with-gpg-error-prefix=$(STAGING_DIR)/usr
+ 
+ # Libgcrypt doesn't support assembly for coldfire
+-- 
+2.20.1
