@@ -1,29 +1,52 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 29 Jul 2019 09:11:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/suricata: fix build with kernel
- >= 5.2
-In-Reply-To: <20190722161449.10624-1-bernd.kuhls@t-online.de>
-References: <20190722161449.10624-1-bernd.kuhls@t-online.de>
-Message-ID: <20190729091134.6d0f6474@windsurf>
+Date: Mon, 29 Jul 2019 09:13:39 +0200
+Subject: [Buildroot] [PATCH 1/1] package/flashrom: fix redefinition of
+ 'struct termios'
+In-Reply-To: <20190723085516.17377-1-vadim4j@gmail.com>
+References: <20190723085516.17377-1-vadim4j@gmail.com>
+Message-ID: <20190729091339.4aa71512@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 22 Jul 2019 18:14:49 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Hello,
 
-> Fixes:
-> http://autobuild.buildroot.net/results/422/422e1aa4e7d0bac31b55e7150a7ab031e23cef4a/
++Waldemar in Cc.
+
+On Tue, 23 Jul 2019 11:55:16 +0300
+Vadim Kochan <vadim4j@gmail.com> wrote:
+
+> Both libc and linux defines 'struct termios', in termbits.h and
+> termios.h which leads to the compilation error:
 > 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
->  ...et-fix-build-on-recent-Linux-kernels.patch | 28 +++++++++++++++++++
->  1 file changed, 28 insertions(+)
->  create mode 100644 package/suricata/0002-af-packet-fix-build-on-recent-Linux-kernels.patch
+> In file included from custom_baud.c:23:0:
+> 
+> 	    /home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/asm-generic/termbits.h:12:8:
+> 	error: redefinition of 'struct termios'
+> 	 struct termios {
+> 		^~~~~~~
+> 	In file included from
+> 	/home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/termios.h:39:0,
+> 			 from
+> 	/home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/bits/ioctl-types.h:5,
+> 			 from
+> 	/home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/sys/ioctl.h:29,
+> 			 from custom_baud.c:21:
+> 	/home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/bits/termios.h:33:8:
+> 	note: originally defined here
+> 	 struct termios {
+> 		^~~~~~~
+> 
+> So fix it by renaming 'termios' to 'asmtermios' before termbits.h only,
+> because 'struct termios2' is used only.
 
-Applied to master, thanks.
+This issue only happens on PowerPC/uClibc, and on no other
+architecture. Do we have any idea why ? Couldn't this issue instead be
+a problem in uClibc headers ?
+
+Thanks,
 
 Thomas
 -- 
