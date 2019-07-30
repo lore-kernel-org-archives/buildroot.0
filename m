@@ -1,100 +1,54 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Tue, 30 Jul 2019 11:42:14 +0200
-Subject: [Buildroot] [PATCH v3] package/python-modbus-tk: new package
-Message-ID: <1564479734-10240-1-git-send-email-pjtexier@koncepto.io>
+From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
+Date: Tue, 30 Jul 2019 12:06:28 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mpd: needs gcc >= 6
+In-Reply-To: <20190729123315.6910-1-fontaine.fabrice@gmail.com>
+References: <20190729123315.6910-1-fontaine.fabrice@gmail.com>
+Message-ID: <c04d431cbc2c6a975ce9cce02a0bbeaf0684cc02.camel@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
----
-Changes v2 -> v3:
-	- Rework _LICENSE (after review of Yegor Yefremov)
+On Mon, 2019-07-29 at 14:33 +0200, Fabrice Fontaine wrote:
+> mpd needs gcc >= 6 since version 0.21 and
+> https://github.com/MusicPlayerDaemon/MPD/commit/a72d1200fba613d542aa806cbd6c536c0e5061db
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/dc4/dc49aaae29c61a8edd82e5fbd93db962e1126465
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Changes v1 -> v2:
-	- add missing entry in Config.in
+Acked-by: J?rg Krause <joerg.krause@embedded.rocks>
 
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/python-modbus-tk/Config.in             |  7 +++++++
- package/python-modbus-tk/python-modbus-tk.hash |  6 ++++++
- package/python-modbus-tk/python-modbus-tk.mk   | 14 ++++++++++++++
- 5 files changed, 29 insertions(+)
- create mode 100644 package/python-modbus-tk/Config.in
- create mode 100644 package/python-modbus-tk/python-modbus-tk.hash
- create mode 100644 package/python-modbus-tk/python-modbus-tk.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 4ab4e36..9c5a9bb 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1860,6 +1860,7 @@ F:	package/trace-cmd/
- 
- N:	Pierre-Jean Texier <pjtexier@koncepto.io>
- F:	package/libubootenv/
-+F:	package/python-modbus-tk/
- F:	package/python-periphery/
- F:	package/stunnel/
- 
-diff --git a/package/Config.in b/package/Config.in
-index 9b2cc75..b792a04 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -944,6 +944,7 @@ menu "External python modules"
- 	source "package/python-meld3/Config.in"
- 	source "package/python-mimeparse/Config.in"
- 	source "package/python-mistune/Config.in"
-+	source "package/python-modbus-tk/Config.in"
- 	source "package/python-more-itertools/Config.in"
- 	source "package/python-msgpack/Config.in"
- 	source "package/python-multidict/Config.in"
-diff --git a/package/python-modbus-tk/Config.in b/package/python-modbus-tk/Config.in
-new file mode 100644
-index 0000000..16d87ff
---- /dev/null
-+++ b/package/python-modbus-tk/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_MODBUS_TK
-+	bool "python-modbus-tk"
-+	select BR2_PACKAGE_PYTHON_SERIAL # runtime
-+	help
-+	  Implementation of modbus protocol in python.
-+
-+	  https://github.com/ljean/modbus-tk/
-diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
-new file mode 100644
-index 0000000..f4da4e5
---- /dev/null
-+++ b/package/python-modbus-tk/python-modbus-tk.hash
-@@ -0,0 +1,6 @@
-+# md5, sha256 from https://pypi.org/pypi/modbus-tk/json
-+md5	e268242483b719030656ab6047cebff3  modbus_tk-1.0.0.tar.gz
-+sha256	041a34afec8ef487d9e8c0c20834909c2f43a3ae9a0d007b978686d580e9b873  modbus_tk-1.0.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256	3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
-+sha256	aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
-diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
-new file mode 100644
-index 0000000..3d790e1
---- /dev/null
-+++ b/package/python-modbus-tk/python-modbus-tk.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-modbus-tk
-+#
-+################################################################################
-+
-+PYTHON_MODBUS_TK_VERSION = 1.0.0
-+PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
-+PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/8b/03/50193a66aac4eeccbaecea22044de6f07f4e8bfcb6ec37d724a0bba50f46
-+PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
-+PYTHON_MODBUS_TK_LICENSE = LGPL-2.1-or-later
-+PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
-+
-+$(eval $(python-package))
--- 
-2.7.4
+> ---
+>  package/mpd/Config.in | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
+> index 9d19248c82..84698b1702 100644
+> --- a/package/mpd/Config.in
+> +++ b/package/mpd/Config.in
+> @@ -5,7 +5,7 @@ menuconfig BR2_PACKAGE_MPD
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_USE_MMU # fork
+>  	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
+>  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
+>  	select BR2_PACKAGE_BOOST
+>  	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+> @@ -355,11 +355,11 @@ config BR2_PACKAGE_MPD_UPNP
+>  
+>  endif
+>  
+> -comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
+> +comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 6"
+>  	depends on BR2_USE_MMU
+>  	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+> -		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+> +		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_6
+>  
+>  comment "mpd needs a toolchain not affected by GCC bug 64735"
+>  	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
