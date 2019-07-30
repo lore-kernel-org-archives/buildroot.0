@@ -1,59 +1,114 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Mon, 29 Jul 2019 16:46:12 -0700
-Subject: [Buildroot] [PATCH 1/1] package/mariadb: bump to version 10.3.16
-Message-ID: <20190729234612.12481-1-bluemrp9@gmail.com>
+From: Yegor Yefremov <yegorslists@googlemail.com>
+Date: Tue, 30 Jul 2019 07:06:39 +0200
+Subject: [Buildroot] [PATCH v2] package/python-modbus-tk: new package
+In-Reply-To: <1564434172-31697-1-git-send-email-pjtexier@koncepto.io>
+References: <1564434172-31697-1-git-send-email-pjtexier@koncepto.io>
+Message-ID: <CAGm1_ks9d=8i7=+-Kw7tmjNT15hYx4f7+gDz=Z+_jf90mbNxiQ@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The license file COPYING has been updated with a new address.
+Hello Pierre-Jean,
 
-Release notes:
-https://mariadb.com/kb/en/library/mariadb-10316-release-notes/
+On Mon, Jul 29, 2019 at 11:02 PM Pierre-Jean Texier
+<pjtexier@koncepto.io> wrote:
+>
+> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+> ---
+> Changes v1 -> v2:
+>         - add missing entry in Config.in
+>
+>  DEVELOPERS                                     |  1 +
+>  package/Config.in                              |  1 +
+>  package/python-modbus-tk/Config.in             |  7 +++++++
+>  package/python-modbus-tk/python-modbus-tk.hash |  6 ++++++
+>  package/python-modbus-tk/python-modbus-tk.mk   | 14 ++++++++++++++
+>  5 files changed, 29 insertions(+)
+>  create mode 100644 package/python-modbus-tk/Config.in
+>  create mode 100644 package/python-modbus-tk/python-modbus-tk.hash
+>  create mode 100644 package/python-modbus-tk/python-modbus-tk.mk
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 4ab4e36..9c5a9bb 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1860,6 +1860,7 @@ F:        package/trace-cmd/
+>
+>  N:     Pierre-Jean Texier <pjtexier@koncepto.io>
+>  F:     package/libubootenv/
+> +F:     package/python-modbus-tk/
+>  F:     package/python-periphery/
+>  F:     package/stunnel/
+>
+> diff --git a/package/Config.in b/package/Config.in
+> index 9b2cc75..b792a04 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -944,6 +944,7 @@ menu "External python modules"
+>         source "package/python-meld3/Config.in"
+>         source "package/python-mimeparse/Config.in"
+>         source "package/python-mistune/Config.in"
+> +       source "package/python-modbus-tk/Config.in"
+>         source "package/python-more-itertools/Config.in"
+>         source "package/python-msgpack/Config.in"
+>         source "package/python-multidict/Config.in"
+> diff --git a/package/python-modbus-tk/Config.in b/package/python-modbus-tk/Config.in
+> new file mode 100644
+> index 0000000..16d87ff
+> --- /dev/null
+> +++ b/package/python-modbus-tk/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_MODBUS_TK
+> +       bool "python-modbus-tk"
+> +       select BR2_PACKAGE_PYTHON_SERIAL # runtime
+> +       help
+> +         Implementation of modbus protocol in python.
+> +
+> +         https://github.com/ljean/modbus-tk/
+> diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
+> new file mode 100644
+> index 0000000..f4da4e5
+> --- /dev/null
+> +++ b/package/python-modbus-tk/python-modbus-tk.hash
+> @@ -0,0 +1,6 @@
+> +# md5, sha256 from https://pypi.org/pypi/modbus-tk/json
+> +md5    e268242483b719030656ab6047cebff3  modbus_tk-1.0.0.tar.gz
+> +sha256 041a34afec8ef487d9e8c0c20834909c2f43a3ae9a0d007b978686d580e9b873  modbus_tk-1.0.0.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256 3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
+> +sha256 aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
+> diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
+> new file mode 100644
+> index 0000000..7de9005
+> --- /dev/null
+> +++ b/package/python-modbus-tk/python-modbus-tk.mk
+> @@ -0,0 +1,14 @@
+> +################################################################################
+> +#
+> +# python-modbus-tk
+> +#
+> +################################################################################
+> +
+> +PYTHON_MODBUS_TK_VERSION = 1.0.0
+> +PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
+> +PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/8b/03/50193a66aac4eeccbaecea22044de6f07f4e8bfcb6ec37d724a0bba50f46
+> +PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
+> +PYTHON_MODBUS_TK_LICENSE = GNU Library or Lesser General Public License (LGPL)
 
-Changelog:
-https://mariadb.com/kb/en/mariadb-10316-changelog/
+License should be LGPL-2.1-or-later
 
-Signed-off-by: Ryan Coe <bluemrp9@gmail.com>
----
- package/mariadb/mariadb.hash | 12 ++++++------
- package/mariadb/mariadb.mk   |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
+With this change applied you can add my
 
-diff --git a/package/mariadb/mariadb.hash b/package/mariadb/mariadb.hash
-index 1f478013c8..839407463a 100644
---- a/package/mariadb/mariadb.hash
-+++ b/package/mariadb/mariadb.hash
-@@ -1,9 +1,9 @@
--# From https://downloads.mariadb.org/mariadb/10.3.15
--md5 08edd8b5060a181e6dd3c6aac23218cd  mariadb-10.3.15.tar.gz
--sha1 134f6a1ee6bf3048580eca945a51cb3c9bda7cbe  mariadb-10.3.15.tar.gz
--sha256 27f391a54d544f93850d4edfb3ef1b4cf24f8e27e61e51727b0e7d31bb4d6968  mariadb-10.3.15.tar.gz
--sha512 35332ac32cba27fef1b4ddd2209236853f4309756fd121fbdbd2b6be0651e817cedc80e276b89ccfa4bc76760811434fab45a4d380d0ebd500c7d9bd7377fe93  mariadb-10.3.15.tar.gz
-+# From https://downloads.mariadb.org/mariadb/10.3.16
-+md5 11220d0b94c5c24caa2e1e9eaba38e31  mariadb-10.3.16.tar.gz
-+sha1 6a4ee3be06f38b9aef1cd4f99099abea6a17de69  mariadb-10.3.16.tar.gz
-+sha256 39e9723eaf620afd99b0925b2c2a5a50a89110ba50040adf14cce7cf89e5e21b  mariadb-10.3.16.tar.gz
-+sha512 b22a8c8fa0265f88962432ade71c3f0ec554f7d38042def832cfcb50f3aa1dd77a715c76706ffeae679b95438529b06e98b73b7e219f9c645980802027ec022f  mariadb-10.3.16.tar.gz
- 
- # Hash for license files
- sha256 a4665c1189fe31e0bbc27e9b55439df7dad6e99805407fe58d78da7aabe678f8  README.md
--sha256 ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
-+sha256 240a15a1d0f34d3abca462cdb7e5fb89470967563f16b0e71169e51c1e74cf2b  COPYING
-diff --git a/package/mariadb/mariadb.mk b/package/mariadb/mariadb.mk
-index cfb08eb664..bc22642beb 100644
---- a/package/mariadb/mariadb.mk
-+++ b/package/mariadb/mariadb.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MARIADB_VERSION = 10.3.15
-+MARIADB_VERSION = 10.3.16
- MARIADB_SITE = https://downloads.mariadb.org/interstitial/mariadb-$(MARIADB_VERSION)/source
- MARIADB_LICENSE = GPL-2.0 (server), GPL-2.0 with FLOSS exception (GPL client library), LGPL-2.0 (LGPL client library)
- # Tarball no longer contains LGPL license text
--- 
-2.17.1
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+Reagrds,
+Yegor
+
+> +PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
+> +
+> +$(eval $(python-package))
+> --
+> 2.7.4
+>
