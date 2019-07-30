@@ -1,9 +1,7 @@
 From: Baruch Siach <baruch@tkos.co.il>
-Date: Tue, 30 Jul 2019 14:00:59 +0300
-Subject: [Buildroot] [PATCH 2/2] package/libassuan: bump to version 2.5.3
-In-Reply-To: <4cb93f2380a041102fa48a2f9b899c281a2f95c3.1564484459.git.baruch@tkos.co.il>
-References: <4cb93f2380a041102fa48a2f9b899c281a2f95c3.1564484459.git.baruch@tkos.co.il>
-Message-ID: <282d713c5a06832c1bce2d6a374f86ffc209f298.1564484459.git.baruch@tkos.co.il>
+Date: Tue, 30 Jul 2019 14:53:39 +0300
+Subject: [Buildroot] [PATCH] package/btrfs-progs: bump to version 5.2.1
+Message-ID: <b9aaae5e3c6b4454cb4fa22ccf6089791f0ecf5f.1564487619.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -12,38 +10,33 @@ To: buildroot@busybox.net
 
 Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/libassuan/libassuan.hash | 6 +++---
- package/libassuan/libassuan.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/btrfs-progs/btrfs-progs.hash | 2 +-
+ package/btrfs-progs/btrfs-progs.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libassuan/libassuan.hash b/package/libassuan/libassuan.hash
-index 4878a692cf64..bb008d6ed4ea 100644
---- a/package/libassuan/libassuan.hash
-+++ b/package/libassuan/libassuan.hash
-@@ -1,8 +1,8 @@
- # From https://www.gnupg.org/download/integrity_check.html
--sha1 fb66bc1e8971d48ac9dbacd1cdaf6487a3e77375  libassuan-2.5.2.tar.bz2
-+sha1 6d81bf42fa91ed2894df8b65764ce899e39776f8  libassuan-2.5.3.tar.bz2
- # Locally calculated after checking signature
--# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.2.tar.bz2.sig
-+# https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.3.tar.bz2.sig
- # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
--sha256 986b1bf277e375f7a960450fbb8ffbd45294d06598916ad4ebf79aee0cb788e7  libassuan-2.5.2.tar.bz2
-+sha256 91bcb0403866b4e7c4bc1cc52ed4c364a9b5414b3994f718c70303f7f765e702  libassuan-2.5.3.tar.bz2
- sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
- sha256 fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
-diff --git a/package/libassuan/libassuan.mk b/package/libassuan/libassuan.mk
-index 1e4467b36dbd..034a9bfdfe57 100644
---- a/package/libassuan/libassuan.mk
-+++ b/package/libassuan/libassuan.mk
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index e7277ddea156..b8e6a07fd454 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256 890f8b7e162f2bbfaa5c7b23e8b6f791fd3f325239a0510871fa4b45e4a80e7c  btrfs-progs-v4.20.2.tar.xz
++sha256 36ac4a0198ffff79d5800c537ea4b19769a8fd3ad870f75413d25b20e2d83233  btrfs-progs-v5.2.1.tar.xz
+ # Locally computed
+ sha256 0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
+ sha256 3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  libbtrfsutil/COPYING
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index f3b671914bca..11a284499db7 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBASSUAN_VERSION = 2.5.2
-+LIBASSUAN_VERSION = 2.5.3
- LIBASSUAN_SITE = ftp://ftp.gnupg.org/gcrypt/libassuan
- LIBASSUAN_SOURCE = libassuan-$(LIBASSUAN_VERSION).tar.bz2
- LIBASSUAN_LICENSE = LGPL-2.1+ (library), GPL-3.0 (tests, doc)
+-BTRFS_PROGS_VERSION = 4.20.2
++BTRFS_PROGS_VERSION = 5.2.1
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
 -- 
 2.20.1
