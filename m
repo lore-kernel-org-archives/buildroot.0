@@ -1,49 +1,79 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jul 2019 23:33:30 +0200
-Subject: [Buildroot] [git commit] pandaboard_defconfig: bump linux to
- 4.19.62 to fix build with gcc 8
-Message-ID: <20190730213404.DD3938868B@busybox.osuosl.org>
+Date: Tue, 30 Jul 2019 23:35:00 +0200
+Subject: [Buildroot] [git commit] package/libebml: bump version to 1.3.9
+Message-ID: <20190730213404.EFDB18868B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8340793158c10bf396135052079d805c6208bddc
+commit: https://git.buildroot.net/buildroot/commit/?id=b927970a605e697a0b2a6ca7477de4573bdc8790
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The recent change to default to gcc 8 for the internal toolchain broke this
-defconfig.  Fix it by bumping to the latest 4.19 kernel.
+Removed patch applied upstream.
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/259853955
-
-The kernel now uses ttySx for the omap serial ports, so adjust the getty
-port to match.
-
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/pandaboard_defconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ ...bmlSInteger-Use-limits-instead-of-climits.patch | 28 ----------------------
+ package/libebml/libebml.hash                       |  2 +-
+ package/libebml/libebml.mk                         |  2 +-
+ 3 files changed, 2 insertions(+), 30 deletions(-)
 
-diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
-index 9b7c962de2..188eb1bc4f 100644
---- a/configs/pandaboard_defconfig
-+++ b/configs/pandaboard_defconfig
-@@ -2,14 +2,14 @@ BR2_arm=y
- BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
--BR2_TARGET_GENERIC_GETTY_PORT="ttyO2"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS2"
- BR2_SYSTEM_DHCP="eth0"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pandaboard/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.62"
- BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es omap4-panda omap4-panda-a4"
+diff --git a/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch b/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch
+deleted file mode 100644
+index d6e906fe7b..0000000000
+--- a/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch
++++ /dev/null
+@@ -1,28 +0,0 @@
+-From e46906b80e7662fb78d305f576412f9fa4a22218 Mon Sep 17 00:00:00 2001
+-From: =?UTF-8?q?Hugo=20Beauz=C3=A9e-Luyssen?= <hugo@beauzee.fr>
+-Date: Mon, 23 Apr 2018 12:05:42 +0200
+-Subject: [PATCH] EbmlSInteger: Use <limits> instead of <climits>
+-
+-The former is the proper header to use for std::numerical_limits
+-
+-Retrieved from:
+-https://github.com/Matroska-Org/libebml/commit/e46906b80e7662fb78d305f576412f9fa4a22218
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- src/EbmlSInteger.cpp | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/EbmlSInteger.cpp b/src/EbmlSInteger.cpp
+-index 33f3637..b930f7d 100644
+---- a/src/EbmlSInteger.cpp
+-+++ b/src/EbmlSInteger.cpp
+-@@ -33,7 +33,7 @@
+-   \author Moritz Bunkus <moritz @ bunkus.org>
+- */
+- #include <cassert>
+--#include <climits>
+-+#include <limits>
+- 
+- #include "ebml/EbmlSInteger.h"
+- 
+diff --git a/package/libebml/libebml.hash b/package/libebml/libebml.hash
+index 6daa4746c2..30945548c5 100644
+--- a/package/libebml/libebml.hash
++++ b/package/libebml/libebml.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256	1e5a7a7820c493aa62b0f35e15b4233c792cc03458c55ebdfa7a6521e4b43e9e	libebml-1.3.6.tar.xz
++sha256	c6b6c6cd8b20a46203cb5dce636883aef68beb2846f1e4103b660a7da2c9c548	libebml-1.3.9.tar.xz
+ sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL
+diff --git a/package/libebml/libebml.mk b/package/libebml/libebml.mk
+index 3c34462738..770fda5dae 100644
+--- a/package/libebml/libebml.mk
++++ b/package/libebml/libebml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBEBML_VERSION = 1.3.6
++LIBEBML_VERSION = 1.3.9
+ LIBEBML_SOURCE = libebml-$(LIBEBML_VERSION).tar.xz
+ LIBEBML_SITE = http://dl.matroska.org/downloads/libebml
+ LIBEBML_INSTALL_STAGING = YES
