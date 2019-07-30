@@ -1,54 +1,54 @@
-From: =?ISO-8859-1?Q?J=F6rg?= Krause <joerg.krause@embedded.rocks>
-Date: Tue, 30 Jul 2019 12:06:28 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mpd: needs gcc >= 6
-In-Reply-To: <20190729123315.6910-1-fontaine.fabrice@gmail.com>
-References: <20190729123315.6910-1-fontaine.fabrice@gmail.com>
-Message-ID: <c04d431cbc2c6a975ce9cce02a0bbeaf0684cc02.camel@embedded.rocks>
+From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
+Date: Tue, 30 Jul 2019 12:23:30 +0200
+Subject: [Buildroot] [PATCH 1/2] package/musl: bump to version 1.1.23
+Message-ID: <20190730102331.25609-1-joerg.krause@embedded.rocks>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 2019-07-29 at 14:33 +0200, Fabrice Fontaine wrote:
-> mpd needs gcc >= 6 since version 0.21 and
-> https://github.com/MusicPlayerDaemon/MPD/commit/a72d1200fba613d542aa806cbd6c536c0e5061db
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/dc4/dc49aaae29c61a8edd82e5fbd93db962e1126465
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This version merges the RISC-V (64-bit) port and new math library
+implementations of log, exp, and pow. Internals of how (non-cancellable)
+syscalls are performed have been overhauled so that all code necessary to make
+the syscall resides in the arch-provided header and is inlinable. In the
+process, bugs in the implementation of mips and microblaze syscall mechanisms
+were found and fixed. Several other bugs were fixed as well, including a
+potentially serious one in the layout of static TLS for shared libraries on
+archs that use "TLS variant I" layout.
 
-Acked-by: J?rg Krause <joerg.krause@embedded.rocks>
+A couple behaviors that were clearly undesirable but arguably mandated by POSIX
+have been fixed as a result of POSIX intepretations rendering them unnecessary.
 
-> ---
->  package/mpd/Config.in | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/mpd/Config.in b/package/mpd/Config.in
-> index 9d19248c82..84698b1702 100644
-> --- a/package/mpd/Config.in
-> +++ b/package/mpd/Config.in
-> @@ -5,7 +5,7 @@ menuconfig BR2_PACKAGE_MPD
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_USE_MMU # fork
->  	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-> -	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
->  	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # exception_ptr
->  	select BR2_PACKAGE_BOOST
->  	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
-> @@ -355,11 +355,11 @@ config BR2_PACKAGE_MPD_UPNP
->  
->  endif
->  
-> -comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
-> +comment "mpd needs a toolchain w/ C++, threads, wchar, gcc >= 6"
->  	depends on BR2_USE_MMU
->  	depends on BR2_TOOLCHAIN_HAS_ATOMIC
->  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-> -		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-> +		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_TOOLCHAIN_GCC_AT_LEAST_6
->  
->  comment "mpd needs a toolchain not affected by GCC bug 64735"
->  	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+---
+ package/musl/musl.hash | 4 ++--
+ package/musl/musl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/musl/musl.hash b/package/musl/musl.hash
+index 5644401770..034393edd9 100644
+--- a/package/musl/musl.hash
++++ b/package/musl/musl.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature from
+-# http://www.musl-libc.org/releases/musl-1.1.22.tar.gz.asc
+-sha256  8b0941a48d2f980fd7036cfbd24aa1d414f03d9a0652ecbd5ec5c7ff1bee29e3  musl-1.1.22.tar.gz
++# http://www.musl-libc.org/releases/musl-1.1.23.tar.gz.asc
++sha256  8a0feb41cef26c97dde382c014e68b9bb335c094bbc1356f6edaaf6b79bd14aa  musl-1.1.23.tar.gz
+ sha256  a3ae1b9fc5d4938f5734734383b9813d27a5652df23010c6f9d4c5419b239a41  COPYRIGHT
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 5db5bbd265..b401fb3d11 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MUSL_VERSION = 1.1.22
++MUSL_VERSION = 1.1.23
+ MUSL_SITE = http://www.musl-libc.org/releases
+ MUSL_LICENSE = MIT
+ MUSL_LICENSE_FILES = COPYRIGHT
+-- 
+2.22.0
