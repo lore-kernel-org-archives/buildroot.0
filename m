@@ -1,42 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jul 2019 14:37:34 +0200
-Subject: [Buildroot] [PATCH 3/3] configs: pandaboard: bump kernel to 4.5
-In-Reply-To: <20190726163809.3301a3ee@windsurf> (Thomas Petazzoni's message of
- "Fri, 26 Jul 2019 16:38:09 +0200")
-References: <1458077996-15549-1-git-send-email-peter@korsgaard.com>
- <1458077996-15549-3-git-send-email-peter@korsgaard.com>
- <20190726163809.3301a3ee@windsurf>
-Message-ID: <87a7cv8zqp.fsf@dell.be.48ers.dk>
+From: chalil jitesh <chaliljitesh@gmail.com>
+Date: Tue, 30 Jul 2019 18:33:52 +0530
+Subject: [Buildroot] btrfs filesystem image creation using TARGET_DIR path
+Message-ID: <CAP8JTaaqcBbCdoJHm5=zi0dc4NtNaq2Y=krx0UbCVz4PdB2sJw@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+ Hi,
 
- > Hello Peter,
- > On Tue, 15 Mar 2016 22:39:56 +0100
- > Peter Korsgaard <peter@korsgaard.com> wrote:
+I am trying to create a btrfs filesystem image from buildroot (buildroot
+2019.02 version). During the btrfs image creation step in the file
+buildroot/fs/btrfs/btrfs.mk the target root file system directory path
+passed to -r option seems to be given as $(TARGET_DIR) which is pointing to
+build/buildroot-fs/btrfs/target instead of actual root file system
+directory $(BASE_TARGET_DIR) (as followed for other file system image
+creation like buildroot/fs/squashfs/squashfs.mk).
+Kindly please review if my understanding is correct or if i am mising any
+steps and if the -r option should point to $(BASE_TARGET_DIR).
+Attaching the changes done for review.
 
- >> Notice: We cannot move to u-boot 2016.03 without changing the boot setup as
- >> 2016.03 broke legacy boot on omap4.
- >> 
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+diff -Naur btrfs/btrfs.mk btrfs_new/btrfs.mk
+--- btrfs/btrfs.mk    2019-07-30 13:05:57.105137900 +0530
++++ btrfs_new/btrfs.mk        2019-07-30 13:05:52.583135800 +0530
+@@ -19,7 +19,7 @@
 
- > You are the last one who bumped this defconfig, and now it fails to
- > build with gcc 8.x:
+ BTRFS_OPTS = \
+        -f \
+-       -r '$(TARGET_DIR)' \
++       -r '$(BASE_TARGET_DIR)' \
+        -L '$(BTRFS_LABEL)' \
+        --byte-count '$(BTRFS_SIZE)' \
+        $(if $(BTRFS_SIZE_NODE),--nodesize '$(BTRFS_SIZE_NODE)') \
 
- > https://gitlab.com/buildroot.org/buildroot/-/jobs/259853955
 
- > Probably needs another update of the kernel :-)
-
-Indeed. I've dug out my pandaboard from under the dust and send a patch
-bumping the kernel to 4.19:
-
-https://patchwork.ozlabs.org/patch/1138954/
-
-Thanks!
-
--- 
-Bye, Peter Korsgaard
+With Thanks and Regards
+Jitesh
+-------------- next part --------------
+An HTML attachment was scrubbed...
+URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190730/487b9a4b/attachment.html>
