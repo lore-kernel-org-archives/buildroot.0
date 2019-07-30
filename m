@@ -1,116 +1,48 @@
-From: Bartosz Bilas <b.bilas@grinn-global.com>
-Date: Tue, 30 Jul 2019 13:58:32 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: fix build error
-Message-ID: <20190730115832.21008-1-b.bilas@grinn-global.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 30 Jul 2019 14:21:42 +0200
+Subject: [Buildroot] [PATCH] configs/atmel_sama5d27_som1: bump to
+ linux4sam_6.1
+In-Reply-To: <2915f499-4364-e4c7-9c19-b45892568565@koncepto.io>
+References: <1562775673-22148-1-git-send-email-pjtexier@koncepto.io>
+ <20190726162711.2c4ede9a@windsurf>
+ <2915f499-4364-e4c7-9c19-b45892568565@koncepto.io>
+Message-ID: <20190730142142.7ed8ec91@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-This commit adds a patch from upstream chromium
-and bumps required minimal gcc version to 8.
+Hello Pierre-Jean,
 
-Fixes:
-  ../../3rdparty/chromium/third_party/skia/third_party/skcms/skcms.cc:1909:16:
-  note: in definition of macro 'NS'
-  #define NS(id) id
-                ^~
+On Sun, 28 Jul 2019 14:33:27 +0200
+Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
 
-Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
----
- ...1-pkg_config-Fixes-when-use_sysroot-false.patch | 56 ++++++++++++++++++++++
- package/qt5/qt5webengine/Config.in                 |  6 +--
- 2 files changed, 59 insertions(+), 3 deletions(-)
- create mode 100644 package/qt5/qt5webengine/5.12.4/0001-pkg_config-Fixes-when-use_sysroot-false.patch
+> Le 26/07/2019 ? 16:27, Thomas Petazzoni a ?crit?:
+> > Following this bump, the atmel_sama5d27_som1_ek_mmc_dev_defconfig no
+> > longer builds:
+> > 
+> >    https://gitlab.com/buildroot.org/buildroot/-/jobs/259847527
+> > 
+> > You need to add:
+> >   
+> >    BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> > 
+> > Could you test this and send a patch ?  
+> 
+> Interesting, I hadn't encountered this problem.
+> I'll send a patch to fix this issue.
 
-diff --git a/package/qt5/qt5webengine/5.12.4/0001-pkg_config-Fixes-when-use_sysroot-false.patch b/package/qt5/qt5webengine/5.12.4/0001-pkg_config-Fixes-when-use_sysroot-false.patch
-new file mode 100644
-index 0000000000..e5ffd19dd0
---- /dev/null
-+++ b/package/qt5/qt5webengine/5.12.4/0001-pkg_config-Fixes-when-use_sysroot-false.patch
-@@ -0,0 +1,56 @@
-+From cc35cac78c053c14da01d6b1e5b05b0615360148 Mon Sep 17 00:00:00 2001
-+From: Tom Anderson <thomasanderson@chromium.org>
-+Date: Thu, 2 Aug 2018 01:59:28 +0000
-+Subject: [PATCH] pkg_config: Fixes when use_sysroot=false
-+
-+This CL introduces 2 changes to the behavior of pkg_config when
-+use_sysroot=false:
-+
-+1. The path is not made relative to the build directory.  This fixes the case
-+where your src directory may be mounted at different locations.
-+
-+2. -I is used instead of -isystem.  When -isystem is used, dep files do not
-+reference the system header files.  This is OK when using the sysroot because
-+the CR_SYSROOT_HASH macro contains the sysroot revision so any source files will
-+be rebuilt when the sysroot updates.
-+
-+R=dpranke
-+
-+Change-Id: Ia3d7df51880205fee888923283b76078ccb3112f
-+Reviewed-on: https://chromium-review.googlesource.com/1159689
-+Reviewed-by: Dirk Pranke <dpranke@chromium.org>
-+Commit-Queue: Thomas Anderson <thomasanderson@chromium.org>
-+Cr-Original-Commit-Position: refs/heads/master@{#580030}
-+Cr-Mirrored-From: https://chromium.googlesource.com/chromium/src
-+Cr-Mirrored-Commit: a8c8396fd20d98666d517c45b358c63736e345ef
-+---
-+ src/3rdparty/chromium/build/config/linux/pkg_config.gni | 12 ++++++++----
-+ 1 file changed, 8 insertions(+), 4 deletions(-)
-+
-+diff --git a/src/3rdparty/chromium/build/config/linux/pkg_config.gni b/src/3rdparty/chromium/build/config/linux/pkg_config.gni
-+index 53ee353af..428e44ac0 100644
-+--- a/src/3rdparty/chromium/build/config/linux/pkg_config.gni
-++++ b/src/3rdparty/chromium/build/config/linux/pkg_config.gni
-+@@ -103,11 +103,15 @@ template("pkg_config") {
-+     pkgresult = exec_script(pkg_config_script, args, "value")
-+     cflags = pkgresult[1]
-+ 
-+-    # We want the system include paths to use -isystem instead of -I to suppress
-+-    # warnings in those headers.
-+     foreach(include, pkgresult[0]) {
-+-      include_relativized = rebase_path(include, root_build_dir)
-+-      cflags += [ "-isystem$include_relativized" ]
-++      if (use_sysroot) {
-++        # We want the system include paths to use -isystem instead of -I to
-++        # suppress warnings in those headers.
-++        include_relativized = rebase_path(include, root_build_dir)
-++        cflags += [ "-isystem$include_relativized" ]
-++      } else {
-++        cflags += [ "-I$include" ]
-++      }
-+     }
-+ 
-+     if (!defined(invoker.ignore_libs) || !invoker.ignore_libs) {
-+-- 
-+2.21.0
-+
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index 744d659567..8102e39b0b 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -10,10 +10,10 @@ config BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT # qt5base-icu
- 	depends on BR2_USE_MMU # libglib2, qt5base-dbus
- 
--comment "qt5webengine needs udev /dev management and a glibc toolchain w/ gcc >= 4.8, host gcc >= 4.8, threads, wchar"
-+comment "qt5webengine needs udev /dev management and a glibc toolchain w/ gcc >= 8, host gcc >= 4.8, threads, wchar"
- 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
- 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_USES_GLIBC || \
--		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 || \
-+		!BR2_HOST_GCC_AT_LEAST_4_8 || !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 
- comment "qt5webengine needs an OpenGL and EGL-capable backend"
-@@ -30,7 +30,7 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
- 	depends on BR2_HOST_GCC_AT_LEAST_4_8 # qt5base-icu
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # qt5base-icu
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # qt5base-icu
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 || BR2_PACKAGE_QT5_VERSION_5_6 # libnss
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
- 	depends on BR2_USE_WCHAR # libglib2
+If you have the OpenSSL development package installed on your system,
+then indeed you don't see the problem. However, the defconfigs are
+tested in a Docker container, with just the minimal dependencies needed
+by Buildroot to run, and these dependencies do not include OpenSSL
+development files. This explains why you have not seen the issue.
+
+Best regards,
+
+Thomas
 -- 
-2.11.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
