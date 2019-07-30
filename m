@@ -1,43 +1,54 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 30 Jul 2019 22:31:47 +0200
-Subject: [Buildroot] [RFC PATCH v3 2/2] iputils: add capability for
- clockdiff, ping, traceroute6
-In-Reply-To: <20190730203147.21113-1-petr.vorel@gmail.com>
-References: <20190730203147.21113-1-petr.vorel@gmail.com>
-Message-ID: <20190730203147.21113-2-petr.vorel@gmail.com>
+From: Markus Mayer <mmayer@broadcom.com>
+Date: Tue, 30 Jul 2019 13:44:15 -0700
+Subject: [Buildroot] [PATCH 1/1] package/host-mtd: fixes build
+In-Reply-To: <1564402300-3993-1-git-send-email-julien.boibessot@free.fr>
+References: <1564402300-3993-1-git-send-email-julien.boibessot@free.fr>
+Message-ID: <CAGt4E5u-0-EbOgdgQ6gQAEuQ2v1w22e_D0-NFODt65sia_-7cA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Not setting for arping as it can be used for ARP Poisoning.
+On Mon, 29 Jul 2019 at 05:11, <julien.boibessot@free.fr> wrote:
+>
+> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+>
+> Fixes following build error when Host doesn't have zstd devt files:
+>   configure: WARNING: cannot find ZSTD library required for mkfs program
+>   configure: mtd-utils can optionally be built without mkfs.ubifs
+>   configure: mtd-utils can optionally be built without ZSTD support
+>   configure: WARNING: cannot find headers for OpenSSL library
+>   configure: WARNING: disabling OpenSSL support
+>   configure: error: missing one or more dependencies
+>   package/pkg-generic.mk:228: recipe for target '/workspace/buildroot_git_devt/output/build/host-mtd-2.1.1/.stamp_configured' failed
+>   make: *** [/workspace/buildroot_git_devt/output/build/host-mtd-2.1.1/.stamp_configured] Error 1
 
-Use cap_net_raw+p (drop +e) as upstream sets that via
-cap_set_flag(), see https://github.com/iputils/iputils/issues/194
+I ran into the same issue following the bump of mtd-utils to 2.1.1,
+and this patch took care of it for me. Therefore
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
-Same as v2.
+Tested-by: Markus Mayer <mmayer@broadcom.com>
 
- package/iputils/iputils.mk | 3 +++
- 1 file changed, 3 insertions(+)
+Regards,
+-Markus
 
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 8e6a3e2fc5..f1d3e1fc6a 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -76,8 +76,11 @@ IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
- define IPUTILS_PERMISSIONS
- 	/usr/sbin/arping      f 4755 0 0 - - - - -
- 	/usr/bin/clockdiff    f 4755 0 0 - - - - -
-+	|xattr cap_net_raw+p
- 	/bin/ping             f 4755 0 0 - - - - -
-+	|xattr cap_net_raw+p
- 	/usr/bin/traceroute6  f 4755 0 0 - - - - -
-+	|xattr cap_net_raw+p
- endef
- 
- $(eval $(meson-package))
--- 
-2.22.0
+> Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+> ---
+>  package/mtd/mtd.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+> index 0de14db..65e7622 100644
+> --- a/package/mtd/mtd.mk
+> +++ b/package/mtd/mtd.mk
+> @@ -46,7 +46,7 @@ else
+>  MTD_CONF_OPTS += --without-xattr
+>  endif
+>
+> -HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux
+> +HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux host-zstd
+>  HOST_MTD_CONF_OPTS = \
+>         --with-jffs \
+>         --with-ubifs \
+> --
+> 2.1.4
