@@ -1,49 +1,47 @@
-From: =?UTF-8?Q?Bartosz_Bi=c5=82as?= <b.bilas@grinn-global.com>
-Date: Tue, 30 Jul 2019 18:06:18 +0200
-Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: fix build error
-In-Reply-To: <20190730160359.3f298606@windsurf>
-References: <20190730115832.21008-1-b.bilas@grinn-global.com>
- <20190730160359.3f298606@windsurf>
-Message-ID: <2ca6ec7e-ff3c-8ca6-53b3-d1cb5318ac15@grinn-global.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 30 Jul 2019 18:25:07 +0200
+Subject: [Buildroot] [PATCH 2/2] toolchain: enable musl for riscv
+In-Reply-To: <20190730174605.4481ad0d@windsurf> (Thomas Petazzoni's message of
+ "Tue, 30 Jul 2019 17:46:05 +0200")
+References: <20190730102331.25609-1-joerg.krause@embedded.rocks>
+ <20190730102331.25609-2-joerg.krause@embedded.rocks>
+ <20190730174605.4481ad0d@windsurf>
+Message-ID: <87ftmn5w2k.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-I haven't found anything except this one: 
-https://patchwork.ozlabs.org/comment/2079425/ . I've been struggling 
-with it during developing one of my projects. According to the GCC 
-version, I've encountered another error while I was building this 
-package when gcc version was lower than 8. I'll do a clean build one 
-more time with gcc 4.8 to show exactly what the problem is.
+ > Hello,
+ > On Tue, 30 Jul 2019 12:23:31 +0200
+ > J?rg Krause <joerg.krause@embedded.rocks> wrote:
 
-Best
-Bartek
-On 30.07.2019 16:03, Thomas Petazzoni wrote:
-> Hello Bartosz,
->
-> Thanks for your patch, see below for some questions.
->
-> On Tue, 30 Jul 2019 13:58:32 +0200
-> Bartosz Bilas <b.bilas@grinn-global.com> wrote:
->
->> This commit adds a patch from upstream chromium
->> and bumps required minimal gcc version to 8.
->>
->> Fixes:
->>    ../../3rdparty/chromium/third_party/skia/third_party/skcms/skcms.cc:1909:16:
->>    note: in definition of macro 'NS'
->>    #define NS(id) id
->>                  ^~
->>
->> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
-> Do we have any corresponding build failure in the autobuilders ? If so,
-> we like to have a reference to such build failures.
->
-> Also, why is the required gcc version now >= 8.x ? This is not really
-> explained in your commit log.
->
-> Thomas
+ >> Since version 1.1.23 musl supports the RISC-V architecture.
+ >> 
+ >> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ >> ---
+ >> toolchain/toolchain-buildroot/Config.in | 2 +-
+ >> 1 file changed, 1 insertion(+), 1 deletion(-)
+ >> 
+ >> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+ >> index d9f16e2a3a..b4168bd40c 100644
+ >> --- a/toolchain/toolchain-buildroot/Config.in
+ >> +++ b/toolchain/toolchain-buildroot/Config.in
+ >> @@ -84,7 +84,7 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ >> depends on BR2_aarch64	   || BR2_arm   || BR2_armeb   || BR2_i386 || \
+ >> BR2_microblaze  || BR2_mips  || BR2_mipsel  || BR2_mips64 || \
+ >> BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
+ >> -		   BR2_powerpc64le || BR2_sh    || BR2_x86_64
+ >> +		   BR2_powerpc64le || BR2_riscv || BR2_sh      || BR2_x86_64
+
+ > My understanding is that musl 1.1.23 only supports RISC-V 64 bits, not
+ > RISC-V 32 bits, so that should probably be "BR2_RISCV_64" instead of
+ > just "BR2_riscv".
+
+Ups, indeed - I'll fix that up.
+
+-- 
+Bye, Peter Korsgaard
