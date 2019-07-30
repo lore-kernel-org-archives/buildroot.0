@@ -1,114 +1,78 @@
-From: Yegor Yefremov <yegorslists@googlemail.com>
-Date: Tue, 30 Jul 2019 07:06:39 +0200
-Subject: [Buildroot] [PATCH v2] package/python-modbus-tk: new package
-In-Reply-To: <1564434172-31697-1-git-send-email-pjtexier@koncepto.io>
-References: <1564434172-31697-1-git-send-email-pjtexier@koncepto.io>
-Message-ID: <CAGm1_ks9d=8i7=+-Kw7tmjNT15hYx4f7+gDz=Z+_jf90mbNxiQ@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 30 Jul 2019 06:00:33 -0000
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for 2019-07-29
+Message-ID: <20190730060040.A274A2052B@silver.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Pierre-Jean,
+Hello,
 
-On Mon, Jul 29, 2019 at 11:02 PM Pierre-Jean Texier
-<pjtexier@koncepto.io> wrote:
->
-> Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-> ---
-> Changes v1 -> v2:
->         - add missing entry in Config.in
->
->  DEVELOPERS                                     |  1 +
->  package/Config.in                              |  1 +
->  package/python-modbus-tk/Config.in             |  7 +++++++
->  package/python-modbus-tk/python-modbus-tk.hash |  6 ++++++
->  package/python-modbus-tk/python-modbus-tk.mk   | 14 ++++++++++++++
->  5 files changed, 29 insertions(+)
->  create mode 100644 package/python-modbus-tk/Config.in
->  create mode 100644 package/python-modbus-tk/python-modbus-tk.hash
->  create mode 100644 package/python-modbus-tk/python-modbus-tk.mk
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 4ab4e36..9c5a9bb 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1860,6 +1860,7 @@ F:        package/trace-cmd/
->
->  N:     Pierre-Jean Texier <pjtexier@koncepto.io>
->  F:     package/libubootenv/
-> +F:     package/python-modbus-tk/
->  F:     package/python-periphery/
->  F:     package/stunnel/
->
-> diff --git a/package/Config.in b/package/Config.in
-> index 9b2cc75..b792a04 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -944,6 +944,7 @@ menu "External python modules"
->         source "package/python-meld3/Config.in"
->         source "package/python-mimeparse/Config.in"
->         source "package/python-mistune/Config.in"
-> +       source "package/python-modbus-tk/Config.in"
->         source "package/python-more-itertools/Config.in"
->         source "package/python-msgpack/Config.in"
->         source "package/python-multidict/Config.in"
-> diff --git a/package/python-modbus-tk/Config.in b/package/python-modbus-tk/Config.in
-> new file mode 100644
-> index 0000000..16d87ff
-> --- /dev/null
-> +++ b/package/python-modbus-tk/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_MODBUS_TK
-> +       bool "python-modbus-tk"
-> +       select BR2_PACKAGE_PYTHON_SERIAL # runtime
-> +       help
-> +         Implementation of modbus protocol in python.
-> +
-> +         https://github.com/ljean/modbus-tk/
-> diff --git a/package/python-modbus-tk/python-modbus-tk.hash b/package/python-modbus-tk/python-modbus-tk.hash
-> new file mode 100644
-> index 0000000..f4da4e5
-> --- /dev/null
-> +++ b/package/python-modbus-tk/python-modbus-tk.hash
-> @@ -0,0 +1,6 @@
-> +# md5, sha256 from https://pypi.org/pypi/modbus-tk/json
-> +md5    e268242483b719030656ab6047cebff3  modbus_tk-1.0.0.tar.gz
-> +sha256 041a34afec8ef487d9e8c0c20834909c2f43a3ae9a0d007b978686d580e9b873  modbus_tk-1.0.0.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256 3b6a7f9c478ac1982e86cdadb45eb4788241b95839500eb26839d5053b74a24a  license.txt
-> +sha256 aa7ca42152a13db6a27b31944f99851efc3b9ee813912ff21d7d6ceadca62e6f  copying.txt
-> diff --git a/package/python-modbus-tk/python-modbus-tk.mk b/package/python-modbus-tk/python-modbus-tk.mk
-> new file mode 100644
-> index 0000000..7de9005
-> --- /dev/null
-> +++ b/package/python-modbus-tk/python-modbus-tk.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-modbus-tk
-> +#
-> +################################################################################
-> +
-> +PYTHON_MODBUS_TK_VERSION = 1.0.0
-> +PYTHON_MODBUS_TK_SOURCE = modbus_tk-$(PYTHON_MODBUS_TK_VERSION).tar.gz
-> +PYTHON_MODBUS_TK_SITE = https://files.pythonhosted.org/packages/8b/03/50193a66aac4eeccbaecea22044de6f07f4e8bfcb6ec37d724a0bba50f46
-> +PYTHON_MODBUS_TK_SETUP_TYPE = setuptools
-> +PYTHON_MODBUS_TK_LICENSE = GNU Library or Lesser General Public License (LGPL)
+Build statistics for 2019-07-29
+===============================
 
-License should be LGPL-2.1-or-later
+      branch |  OK | NOK | TIM | TOT |
+   2019.02.x |   8 |   0 |   0 |   8 |
+   2019.05.x |  12 |   1 |   0 |  13 |
+      master |  63 |  19 |   0 |  82 |
 
-With this change applied you can add my
+Results for branch '2019.05.x'
+==============================
 
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Classification of failures by reason
+------------------------------------
 
-Reagrds,
-Yegor
+                qt5base-5.12.2 | 1 
 
-> +PYTHON_MODBUS_TK_LICENSE_FILES = license.txt copying.txt
-> +
-> +$(eval $(python-package))
-> --
-> 2.7.4
->
+
+Detail of failures
+------------------
+
+  aarch64_be |                 qt5base-5.12.2 | NOK | http://autobuild.buildroot.net/results/b9370bd34dbcf665bc3ba57e95b6eff52e7e3f2d |     
+
+Results for branch 'master'
+===========================
+
+Classification of failures by reason
+------------------------------------
+
+                   mpd-0.21.11 | 4 
+               libgcrypt-1.8.4 | 3 
+               libupnpp-0.17.1 | 2 
+                    proj-5.0.1 | 2 
+socketcand-df7fb4ff8a4439d7... | 2 
+                       unknown | 2 
+                    mpv-0.27.2 | 1 
+                 python3-3.7.4 | 1 
+              qt5enginio-1.6.3 | 1 
+                suricata-4.1.3 | 1 
+
+
+Detail of failures
+------------------
+
+         arm |                libgcrypt-1.8.4 | NOK | http://autobuild.buildroot.net/results/dafb2202e918c17cd2a6fb8ea7b8bb8f5d16f73c | ORPH
+         arm |                libgcrypt-1.8.4 | NOK | http://autobuild.buildroot.net/results/50a8ba572e3fafd3c6a39bd54bcfcaf78b5ad325 | ORPH
+         arm |                libgcrypt-1.8.4 | NOK | http://autobuild.buildroot.net/results/ceb92eaa91777ac5341f0ae2f68d3d12c777d1e1 | ORPH
+         arc |                libupnpp-0.17.1 | NOK | http://autobuild.buildroot.net/results/57bcfd33e76c5ea2900744d6dbef71749308822a |     
+         arc |                libupnpp-0.17.1 | NOK | http://autobuild.buildroot.net/results/4afce04817f9eab15387cf1f9d157b3dae79f11b |     
+    mips64el |                    mpd-0.21.11 | NOK | http://autobuild.buildroot.net/results/3d7cda2a2184ff3683418671b3ad0e8b01fb19f1 |     
+    mips64el |                    mpd-0.21.11 | NOK | http://autobuild.buildroot.net/results/663c137eb8ee12672b373ca955cbbb5c9fbfac88 |     
+    mips64el |                    mpd-0.21.11 | NOK | http://autobuild.buildroot.net/results/dc49aaae29c61a8edd82e5fbd93db962e1126465 |     
+ powerpc64le |                    mpd-0.21.11 | NOK | http://autobuild.buildroot.net/results/d32e2c1e67b3d83905280b4bc3462a538d73a1e0 |     
+         arm |                     mpv-0.27.2 | NOK | http://autobuild.buildroot.net/results/37c2424bd01a695c1ca442c46097efc115c719cc |     
+microblazeel |                     proj-5.0.1 | NOK | http://autobuild.buildroot.net/results/5013172fb113ec38f966ec569cd748267c4154d6 |     
+microblazeel |                     proj-5.0.1 | NOK | http://autobuild.buildroot.net/results/63530d3749668ad92d16d72181054d8ce0c10ba6 |     
+     powerpc |                  python3-3.7.4 | NOK | http://autobuild.buildroot.net/results/9a231bf16585a0156020e6246dcb98e2160088fc |     
+         arc |               qt5enginio-1.6.3 | NOK | http://autobuild.buildroot.net/results/c5340f7aeb49219f991af93d8ef6f70212a90cfa |     
+         arm | socketcand-df7fb4ff8a4439d7... | NOK | http://autobuild.buildroot.net/results/a50f1bea4f4d2d25c6d1c3144ea7f7382617b078 |     
+microblazeel | socketcand-df7fb4ff8a4439d7... | NOK | http://autobuild.buildroot.net/results/785e457ea44bc30dcad2ea6ada61983b0025b7b4 |     
+      xtensa |                 suricata-4.1.3 | NOK | http://autobuild.buildroot.net/results/f566983e80af02dae6eb0e725b87c25b45b87bca |     
+     aarch64 |                        unknown | NOK | http://autobuild.buildroot.net/results/0385cfc4783de4f630031ef1d689c94da7d0c876 |     
+         arm |                        unknown | NOK | http://autobuild.buildroot.net/results/467834e78f58ac57e8ad4205591b474273b596cb |     
+
+
+-- 
+http://autobuild.buildroot.net
