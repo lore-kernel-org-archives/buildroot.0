@@ -1,46 +1,37 @@
-From: Guo Ren <guoren@kernel.org>
-Date: Tue, 30 Jul 2019 17:36:14 +0800
-Subject: [Buildroot] c-sky defconfig build broken
-In-Reply-To: <20190726163445.2093571b@windsurf>
-References: <20190726163445.2093571b@windsurf>
-Message-ID: <CAJF2gTRCO1gBbJqu7wxgqhWAkf_6R8gRURTzGT0yyudwFdXq1g@mail.gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Tue, 30 Jul 2019 11:39:28 +0200
+Subject: [Buildroot] [PATCH v2] package/python-modbus-tk: new package
+In-Reply-To: <CAGm1_ks9d=8i7=+-Kw7tmjNT15hYx4f7+gDz=Z+_jf90mbNxiQ@mail.gmail.com>
+References: <1564434172-31697-1-git-send-email-pjtexier@koncepto.io>
+ <CAGm1_ks9d=8i7=+-Kw7tmjNT15hYx4f7+gDz=Z+_jf90mbNxiQ@mail.gmail.com>
+Message-ID: <7e013d7b-0e66-8c6a-e6d7-37145239bb66@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-I want to bumb it to linux-5.0 and deprecate external-toolchain, See
-my prior patch I've sent to you.
+Hello Yegor,
 
-https://lore.kernel.org/linux-csky/1561376581-19568-1-git-send-email-guoren at kernel.org/T/#u
+Le 30/07/2019 ? 07:06, Yegor Yefremov a ?crit?:
+> License should be LGPL-2.1-or-later
+> 
+> With this change applied you can add my
+> 
+> Reviewed-by: Yegor Yefremov<yegorslists@googlemail.com>
+> 
 
-Is that OK?
+Thanks for the review.
+I will update the _LICENSE.
 
-On Fri, Jul 26, 2019 at 10:34 PM Thomas Petazzoni
-<thomas.petazzoni@bootlin.com> wrote:
->
-> Hello Guo,
->
-> Following the addition of internal toolchain support for C-SKY, the
-> existing csky_gx6605s_defconfig no longer builds:
->
-> Incorrect selection of kernel headers: expected 5.2.x, got 4.9.x
->
-> See https://gitlab.com/buildroot.org/buildroot/-/jobs/259847794
->
-> Could you send a patch to fix this ? Thanks!
->
-> Thomas
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+Thanks !
 
+Pierre-Jean
 
+> Reagrds,
+> Yegor
 
 -- 
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+Pierre-Jean Texier
+Embedded Linux Engineer
+https://koncepto.io
