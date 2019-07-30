@@ -1,43 +1,41 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 30 Jul 2019 23:42:58 +0200
-Subject: [Buildroot] [RFC PATCH v3 1/2] makedevs: only warn when xattr
- support disabled
-In-Reply-To: <20190730205754.GH3194@scaer>
-References: <20190730203147.21113-1-petr.vorel@gmail.com>
- <20190730205754.GH3194@scaer>
-Message-ID: <20190730214257.GC8530@dell5510>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Tue, 30 Jul 2019 23:58:10 +0200
+Subject: [Buildroot] [PATCH 1/1] package/expect: bump to version 5.45.4
+In-Reply-To: <8736in5hog.fsf@dell.be.48ers.dk>
+References: <20190729211556.21522-1-fontaine.fabrice@gmail.com>
+ <8736in5hog.fsf@dell.be.48ers.dk>
+Message-ID: <CAPi7W82UXKDeC9Tcy=m+ArjuwFG8x8HP=Re8ph6+XDmE33QPtA@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, others,
+Dear Peter,
 
-> Why do you want to exit in failure?
+Le mar. 30 juil. 2019 ? 23:36, Peter Korsgaard <peter@korsgaard.com> a ?crit :
+>
+> >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>
+>  > * exp_inter.c: [https://sourceforge.net/p/expect/patches/22/]
+>  > Fix interact bug - handle reads of 0 length on
+>  > non-blocking channels by explicitly checking if the channel
+>  > is non-blocking. Fix by Jack Bates.
+>
+>  > * expect.c: [https://sourceforge.net/p/expect/patches/21/]
+>  > Fix eof bug introduced with previous bug fix - ensure that data
+>  > received just before an eof is processed. Fix by Sergei Golovan.
+>
+> So does this mean that it should be applied to 2019.02.x and 2019.05.x
+> as well?
+Yes, it should.
+>
+>  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+>
+> Committed, thanks.
+>
+> --
+> Bye, Peter Korsgaard
+Best Regards,
 
-> When makedevs exits in error, then whole fakeroot script aborts even
-> before attempting to generate the image.
-
-> I can see two problems with that:
-
->   - first, when iputils is enabled, then the build will by default fail,
->     as xattr support is by default disabled,
-
->   - I can very well see a scenario where xattr, and thus capabilities,
->     are not desired. For example, if I need iputils, but will only ever
->     call clockdiff as root, then I don't care about its capabilities.
-
-> So, I think it is nice that we warn that xattrs are dropped, but we
-> should not fail the build.
-Good point, I've sent v4 with this change.
-Thanks for your review!
-
-Regards to xattr support by default disabled, could you please have a look at
-other my patch, which set default according to xattr support of used rootfs?
-https://patchwork.ozlabs.org/project/buildroot/list/?series=120582
-
-NOTE to reviewers: I've cleaned up previous versions in patchwork (set superseded)
-
-Kind regards,
-Petr
+Fabrice
