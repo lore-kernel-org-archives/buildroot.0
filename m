@@ -1,30 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jul 2019 17:27:22 +0200
-Subject: [Buildroot] [git commit] package/dtc: add hash for license files
-Message-ID: <20190730155429.6D1CC82818@busybox.osuosl.org>
+Date: Tue, 30 Jul 2019 17:53:45 +0200
+Subject: [Buildroot] [git commit] toolchain: enable musl for riscv
+Message-ID: <20190730155429.A3D15810CC@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8f5f431463e844bcecf5e74fab366f5da29beec7
+commit: https://git.buildroot.net/buildroot/commit/?id=6105fb4e41a90728ff20f33ebc04ff6df02bd65d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Since version 1.1.23 musl supports the RISC-V architecture.
+
+Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
+Tested-by: Mark Corbin <mark.corbin@embecosm.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/dtc/dtc.hash | 4 ++++
- 1 file changed, 4 insertions(+)
+ toolchain/toolchain-buildroot/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/dtc/dtc.hash b/package/dtc/dtc.hash
-index e197d88967..4d0aaea601 100644
---- a/package/dtc/dtc.hash
-+++ b/package/dtc/dtc.hash
-@@ -1,2 +1,6 @@
- # from https://www.kernel.org/pub/software/utils/dtc/sha256sums.asc
- sha256 c672e443c9f7e39f5a7c8e602da6777f9ad55ad70de87de300a43828c8050172  dtc-1.5.0.tar.xz
-+
-+# Hash for license files
-+sha256 171ce1c292cf148a5be9ff95ce7e5c3d79a002721ab8e119eae3c0f5336d2b3d  README.license
-+sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  GPL
+diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
+index d9f16e2a3a..b4168bd40c 100644
+--- a/toolchain/toolchain-buildroot/Config.in
++++ b/toolchain/toolchain-buildroot/Config.in
+@@ -84,7 +84,7 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
+ 	depends on BR2_aarch64	   || BR2_arm   || BR2_armeb   || BR2_i386 || \
+ 		   BR2_microblaze  || BR2_mips  || BR2_mipsel  || BR2_mips64 || \
+ 		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
+-		   BR2_powerpc64le || BR2_sh    || BR2_x86_64
++		   BR2_powerpc64le || BR2_riscv || BR2_sh      || BR2_x86_64
+ 	depends on !BR2_powerpc_SPE # not supported, build breaks
+ 	# sh2 nommu is supported by musl, but we don't have support
+ 	# for it in Buildroot.
