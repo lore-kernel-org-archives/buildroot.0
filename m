@@ -1,81 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Tue, 30 Jul 2019 22:57:54 +0200
-Subject: [Buildroot] [RFC PATCH v3 1/2] makedevs: only warn when xattr
- support disabled
-In-Reply-To: <20190730203147.21113-1-petr.vorel@gmail.com>
-References: <20190730203147.21113-1-petr.vorel@gmail.com>
-Message-ID: <20190730205754.GH3194@scaer>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Tue, 30 Jul 2019 23:02:38 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tinyxml2: bump to version 7.0.1
+Message-ID: <1564520558-11051-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Petr, All,
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ package/tinyxml2/tinyxml2.hash | 4 ++--
+ package/tinyxml2/tinyxml2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On 2019-07-30 22:31 +0200, Petr Vorel spake thusly:
-> Previously makedevs failed when xattr configuration defined while
-> disabled BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES.
-> Therefore check for this configuration would be required
-> in each use. Therefore only print warning with number of discharged lines.
-> 
-> No package is using this feature so far (it's used only in tests),
-> thus no need to change any package config.
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-[--SNIP--]
-> @@ -641,6 +640,15 @@ int main(int argc, char **argv)
->  loop:
->  		free(line);
->  	}
-> +
-> +	if (xattr_warned) {
-> +			bb_error_msg("%u lines with xattr configuration discharged, enable "
-
-"discharged" is not the most appropriate term. I'd have just said
-"ignored".
-
-> +					     "BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES "
-> +						 "to get xattr support\n",
-> +					     xattr_warned);
-
-Yes, that's nice! :-)
-
-> +			ret = EXIT_FAILURE;
-
-Why do you want to exit in failure?
-
-When makedevs exits in error, then whole fakeroot script aborts even
-before attempting to generate the image.
-
-I can see two problems with that:
-
-  - first, when iputils is enabled, then the build will by default fail,
-    as xattr support is by default disabled,
-
-  - I can very well see a scenario where xattr, and thus capabilities,
-    are not desired. For example, if I need iputils, but will only ever
-    call clockdiff as root, then I don't care about its capabilities.
-
-So, I think it is nice that we warn that xattrs are dropped, but we
-should not fail the build.
-
-Regards,
-Yann E. MORIN.
-
-> +	}
-> +
->  	fclose(table);
->  
->  	return ret;
-> -- 
-> 2.22.0
-> 
-
+diff --git a/package/tinyxml2/tinyxml2.hash b/package/tinyxml2/tinyxml2.hash
+index 5f38546..88291e4 100644
+--- a/package/tinyxml2/tinyxml2.hash
++++ b/package/tinyxml2/tinyxml2.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 cdf0c2179ae7a7931dba52463741cf59024198bbf9673bf08415bcb46344110f  tinyxml2-6.2.0.tar.gz
+-sha256 8b2ab0b6ffb86798a2512f45fcf50a3b04b3516782d2e3fb30ebf55dc18c7cce  readme.md
++sha256 a381729e32b6c2916a23544c04f342682d38b3f6e6c0cad3c25e900c3a7ef1a6  tinyxml2-7.0.1.tar.gz
++sha256 35e49ea659da39b72b0e2f38214f9799b548225b0950c8dbb6d183b4c1455263  readme.md
+diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
+index 9439c5c..7f362f3 100644
+--- a/package/tinyxml2/tinyxml2.mk
++++ b/package/tinyxml2/tinyxml2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TINYXML2_VERSION = 6.2.0
++TINYXML2_VERSION = 7.0.1
+ TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
+ TINYXML2_LICENSE = Zlib
+ TINYXML2_LICENSE_FILES = readme.md
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.7.4
