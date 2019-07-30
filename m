@@ -1,47 +1,52 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jul 2019 18:25:07 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain: enable musl for riscv
-In-Reply-To: <20190730174605.4481ad0d@windsurf> (Thomas Petazzoni's message of
- "Tue, 30 Jul 2019 17:46:05 +0200")
-References: <20190730102331.25609-1-joerg.krause@embedded.rocks>
- <20190730102331.25609-2-joerg.krause@embedded.rocks>
- <20190730174605.4481ad0d@windsurf>
-Message-ID: <87ftmn5w2k.fsf@dell.be.48ers.dk>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Tue, 30 Jul 2019 13:36:48 -0300
+Subject: [Buildroot] [PATCH] configs/imx7d-sdb: Bump U-Boot and kernel
+Message-ID: <20190730163648.7236-1-festevam@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Bump U-Boot to version 2019.07 and kernel to version 5.2.4.
 
- > Hello,
- > On Tue, 30 Jul 2019 12:23:31 +0200
- > J?rg Krause <joerg.krause@embedded.rocks> wrote:
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+---
+ configs/imx7d-sdb_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- >> Since version 1.1.23 musl supports the RISC-V architecture.
- >> 
- >> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
- >> ---
- >> toolchain/toolchain-buildroot/Config.in | 2 +-
- >> 1 file changed, 1 insertion(+), 1 deletion(-)
- >> 
- >> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
- >> index d9f16e2a3a..b4168bd40c 100644
- >> --- a/toolchain/toolchain-buildroot/Config.in
- >> +++ b/toolchain/toolchain-buildroot/Config.in
- >> @@ -84,7 +84,7 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
- >> depends on BR2_aarch64	   || BR2_arm   || BR2_armeb   || BR2_i386 || \
- >> BR2_microblaze  || BR2_mips  || BR2_mipsel  || BR2_mips64 || \
- >> BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
- >> -		   BR2_powerpc64le || BR2_sh    || BR2_x86_64
- >> +		   BR2_powerpc64le || BR2_riscv || BR2_sh      || BR2_x86_64
-
- > My understanding is that musl 1.1.23 only supports RISC-V 64 bits, not
- > RISC-V 32 bits, so that should probably be "BR2_RISCV_64" instead of
- > just "BR2_riscv".
-
-Ups, indeed - I'll fix that up.
-
+diff --git a/configs/imx7d-sdb_defconfig b/configs/imx7d-sdb_defconfig
+index b1cc5f8523..b9983e34a4 100644
+--- a/configs/imx7d-sdb_defconfig
++++ b/configs/imx7d-sdb_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 4.17 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_17=y
++# Linux headers same as kernel, a 5.2 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+@@ -12,7 +12,7 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.17.4"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.4"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-sdb"
+@@ -22,7 +22,7 @@ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx7dsabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMX=y
+ 
+ # Filesystem
 -- 
-Bye, Peter Korsgaard
+2.17.1
