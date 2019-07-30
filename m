@@ -1,79 +1,70 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jul 2019 23:35:00 +0200
-Subject: [Buildroot] [git commit] package/libebml: bump version to 1.3.9
-Message-ID: <20190730213404.EFDB18868B@busybox.osuosl.org>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Tue, 30 Jul 2019 23:38:45 +0200
+Subject: [Buildroot] [RFC PATCH v4 1/2] makedevs: only warn when xattr
+ support disabled
+Message-ID: <20190730213846.7488-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b927970a605e697a0b2a6ca7477de4573bdc8790
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Previously makedevs failed when xattr configuration defined while
+disabled BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES.  Thus
+check for this configuration would be required in each use in packages.
+Changing makedevs to only print warning with number of ignored lines, so
+package configuration don't have to deal with
+BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES.
 
-Removed patch applied upstream.
+No package is using this feature so far (it's used only in tests),
+thus no need to change any package config.
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- ...bmlSInteger-Use-limits-instead-of-climits.patch | 28 ----------------------
- package/libebml/libebml.hash                       |  2 +-
- package/libebml/libebml.mk                         |  2 +-
- 3 files changed, 2 insertions(+), 30 deletions(-)
+Changes v3->v4 (Addressed Yann's issues):
+* s/discharged/ignored/
+* exit with EXIT_SUCCESS (no need to abort fakeroot script just due
+ignored xattr lines)
 
-diff --git a/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch b/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch
-deleted file mode 100644
-index d6e906fe7b..0000000000
---- a/package/libebml/0001-EbmlSInteger-Use-limits-instead-of-climits.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From e46906b80e7662fb78d305f576412f9fa4a22218 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Hugo=20Beauz=C3=A9e-Luyssen?= <hugo@beauzee.fr>
--Date: Mon, 23 Apr 2018 12:05:42 +0200
--Subject: [PATCH] EbmlSInteger: Use <limits> instead of <climits>
--
--The former is the proper header to use for std::numerical_limits
--
--Retrieved from:
--https://github.com/Matroska-Org/libebml/commit/e46906b80e7662fb78d305f576412f9fa4a22218
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/EbmlSInteger.cpp | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/EbmlSInteger.cpp b/src/EbmlSInteger.cpp
--index 33f3637..b930f7d 100644
----- a/src/EbmlSInteger.cpp
--+++ b/src/EbmlSInteger.cpp
--@@ -33,7 +33,7 @@
--   \author Moritz Bunkus <moritz @ bunkus.org>
-- */
-- #include <cassert>
---#include <climits>
--+#include <limits>
-- 
-- #include "ebml/EbmlSInteger.h"
-- 
-diff --git a/package/libebml/libebml.hash b/package/libebml/libebml.hash
-index 6daa4746c2..30945548c5 100644
---- a/package/libebml/libebml.hash
-+++ b/package/libebml/libebml.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	1e5a7a7820c493aa62b0f35e15b4233c792cc03458c55ebdfa7a6521e4b43e9e	libebml-1.3.6.tar.xz
-+sha256	c6b6c6cd8b20a46203cb5dce636883aef68beb2846f1e4103b660a7da2c9c548	libebml-1.3.9.tar.xz
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL
-diff --git a/package/libebml/libebml.mk b/package/libebml/libebml.mk
-index 3c34462738..770fda5dae 100644
---- a/package/libebml/libebml.mk
-+++ b/package/libebml/libebml.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ package/makedevs/makedevs.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
+index c57b964f5c..dbe5b13714 100644
+--- a/package/makedevs/makedevs.c
++++ b/package/makedevs/makedevs.c
+@@ -493,6 +493,7 @@ int main(int argc, char **argv)
+ 		printf("table=<stdin>\n");
+ 	}
  
--LIBEBML_VERSION = 1.3.6
-+LIBEBML_VERSION = 1.3.9
- LIBEBML_SOURCE = libebml-$(LIBEBML_VERSION).tar.xz
- LIBEBML_SITE = http://dl.matroska.org/downloads/libebml
- LIBEBML_INSTALL_STAGING = YES
++	unsigned int xattr_warned = 0;
+ 	while ((line = bb_get_chomped_line_from_file(table))) {
+ 		char type;
+ 		unsigned int mode = 0755;
+@@ -518,9 +519,7 @@ int main(int argc, char **argv)
+ 			if (bb_set_xattr(full_name, xattr) < 0)
+ 				bb_error_msg_and_die("can't set cap %s on file %s\n", xattr, full_name);
+ #else
+-			bb_error_msg_and_die("line %d not supported: '%s'\nDid you forget to enable "
+-					     "BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES?\n",
+-					     linenum, line);
++			xattr_warned++;
+ #endif /* EXTENDED_ATTRIBUTES */
+ 			continue;
+ 		}
+@@ -641,6 +640,13 @@ int main(int argc, char **argv)
+ loop:
+ 		free(line);
+ 	}
++
++	if (xattr_warned)
++			bb_error_msg("%u lines with xattr configuration ignored, enable "
++					     "BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES "
++						 "to get xattr support\n",
++					     xattr_warned);
++
+ 	fclose(table);
+ 
+ 	return ret;
+-- 
+2.22.0
