@@ -1,42 +1,41 @@
-From: chalil jitesh <chaliljitesh@gmail.com>
-Date: Tue, 30 Jul 2019 18:33:52 +0530
-Subject: [Buildroot] btrfs filesystem image creation using TARGET_DIR path
-Message-ID: <CAP8JTaaqcBbCdoJHm5=zi0dc4NtNaq2Y=krx0UbCVz4PdB2sJw@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 30 Jul 2019 16:03:59 +0200
+Subject: [Buildroot] [PATCH] package/qt5/qt5webengine: fix build error
+In-Reply-To: <20190730115832.21008-1-b.bilas@grinn-global.com>
+References: <20190730115832.21008-1-b.bilas@grinn-global.com>
+Message-ID: <20190730160359.3f298606@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi,
+Hello Bartosz,
 
-I am trying to create a btrfs filesystem image from buildroot (buildroot
-2019.02 version). During the btrfs image creation step in the file
-buildroot/fs/btrfs/btrfs.mk the target root file system directory path
-passed to -r option seems to be given as $(TARGET_DIR) which is pointing to
-build/buildroot-fs/btrfs/target instead of actual root file system
-directory $(BASE_TARGET_DIR) (as followed for other file system image
-creation like buildroot/fs/squashfs/squashfs.mk).
-Kindly please review if my understanding is correct or if i am mising any
-steps and if the -r option should point to $(BASE_TARGET_DIR).
-Attaching the changes done for review.
+Thanks for your patch, see below for some questions.
 
-diff -Naur btrfs/btrfs.mk btrfs_new/btrfs.mk
---- btrfs/btrfs.mk    2019-07-30 13:05:57.105137900 +0530
-+++ btrfs_new/btrfs.mk        2019-07-30 13:05:52.583135800 +0530
-@@ -19,7 +19,7 @@
+On Tue, 30 Jul 2019 13:58:32 +0200
+Bartosz Bilas <b.bilas@grinn-global.com> wrote:
 
- BTRFS_OPTS = \
-        -f \
--       -r '$(TARGET_DIR)' \
-+       -r '$(BASE_TARGET_DIR)' \
-        -L '$(BTRFS_LABEL)' \
-        --byte-count '$(BTRFS_SIZE)' \
-        $(if $(BTRFS_SIZE_NODE),--nodesize '$(BTRFS_SIZE_NODE)') \
+> This commit adds a patch from upstream chromium
+> and bumps required minimal gcc version to 8.
+> 
+> Fixes:
+>   ../../3rdparty/chromium/third_party/skia/third_party/skcms/skcms.cc:1909:16:
+>   note: in definition of macro 'NS'
+>   #define NS(id) id
+>                 ^~
+> 
+> Signed-off-by: Bartosz Bilas <b.bilas@grinn-global.com>
 
+Do we have any corresponding build failure in the autobuilders ? If so,
+we like to have a reference to such build failures.
 
-With Thanks and Regards
-Jitesh
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190730/487b9a4b/attachment.html>
+Also, why is the required gcc version now >= 8.x ? This is not really
+explained in your commit log.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
