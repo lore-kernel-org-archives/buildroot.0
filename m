@@ -1,57 +1,60 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jul 2019 17:53:07 +0200
-Subject: [Buildroot] [git commit] package/musl: bump to version 1.1.23
-Message-ID: <20190730155429.9C9A7810CC@busybox.osuosl.org>
+Date: Tue, 30 Jul 2019 17:27:44 +0200
+Subject: [Buildroot] [git commit] package/xen: security bump to version
+ 4.11.2
+Message-ID: <20190730155429.7522A82818@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c044cb2101c0c5cf5d55c423d71989e3ee9fded2
+commit: https://git.buildroot.net/buildroot/commit/?id=29055692842b65f88d636e27cb9fa248ad9161c7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This version merges the RISC-V (64-bit) port and new math library
-implementations of log, exp, and pow. Internals of how (non-cancellable)
-syscalls are performed have been overhauled so that all code necessary to make
-the syscall resides in the arch-provided header and is inlinable. In the
-process, bugs in the implementation of mips and microblaze syscall mechanisms
-were found and fixed. Several other bugs were fixed as well, including a
-potentially serious one in the layout of static TLS for shared libraries on
-archs that use "TLS variant I" layout.
+The 4.11.2 release brings a large number of fixes:
 
-A couple behaviors that were clearly undesirable but arguably mandated by POSIX
-have been fixed as a result of POSIX intepretations rendering them unnecessary.
+https://xenproject.org/downloads/xen-project-archives/xen-project-4-11-series/xen-project-4-11-2/
 
-Signed-off-by: J??rg Krause <joerg.krause@embedded.rocks>
-Tested-by: Mark Corbin <mark.corbin@embecosm.com>
+Including a number of security fixes:
+
+XSA-284: grant table transfer issues on large hosts
+XSA-285: race with pass-through device hotplug
+XSA-287: x86: steal_page violates page_struct access discipline
+XSA-288: x86: Inconsistent PV IOMMU discipline
+XSA-290: missing preemption in x86 PV page table unvalidation
+XSA-291: x86/PV: page type reference counting issue with failed IOMMU update
+XSA-292: x86: insufficient TLB flushing when using PCID
+XSA-293: x86: PV kernel context switch corruption
+XSA-294: x86 shadow: Insufficient TLB flushing when using PCID
+XSA-295: Unlimited Arm Atomics Operations
+XSA-297: Microarchitectural Data Sampling speculative side channel
+
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/musl/musl.hash | 4 ++--
- package/musl/musl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/xen/xen.hash | 2 +-
+ package/xen/xen.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/musl/musl.hash b/package/musl/musl.hash
-index 5644401770..034393edd9 100644
---- a/package/musl/musl.hash
-+++ b/package/musl/musl.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature from
--# http://www.musl-libc.org/releases/musl-1.1.22.tar.gz.asc
--sha256  8b0941a48d2f980fd7036cfbd24aa1d414f03d9a0652ecbd5ec5c7ff1bee29e3  musl-1.1.22.tar.gz
-+# http://www.musl-libc.org/releases/musl-1.1.23.tar.gz.asc
-+sha256  8a0feb41cef26c97dde382c014e68b9bb335c094bbc1356f6edaaf6b79bd14aa  musl-1.1.23.tar.gz
- sha256  a3ae1b9fc5d4938f5734734383b9813d27a5652df23010c6f9d4c5419b239a41  COPYRIGHT
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 5db5bbd265..b401fb3d11 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
+diff --git a/package/xen/xen.hash b/package/xen/xen.hash
+index 7a52410954..d4232f592e 100644
+--- a/package/xen/xen.hash
++++ b/package/xen/xen.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256 be88cb2443761990efc1070d9718016561fe19066af232f9bfae572922897e59 xen-4.11.1.tar.gz
++sha256 3f9217f5a7cc240a06f3a03db8c29605d69a64d98330c426611ba5c2ee08b5d8 xen-4.11.2.tar.gz
+ sha256 dba0d79260259c013c52e5d4daeaea564a2fbb9ff7fc6778c377a401ec3898de COPYING
+diff --git a/package/xen/xen.mk b/package/xen/xen.mk
+index d6e6c91cfb..bd8a39f639 100644
+--- a/package/xen/xen.mk
++++ b/package/xen/xen.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MUSL_VERSION = 1.1.22
-+MUSL_VERSION = 1.1.23
- MUSL_SITE = http://www.musl-libc.org/releases
- MUSL_LICENSE = MIT
- MUSL_LICENSE_FILES = COPYRIGHT
+-XEN_VERSION = 4.11.1
++XEN_VERSION = 4.11.2
+ XEN_SITE = https://downloads.xenproject.org/release/xen/$(XEN_VERSION)
+ XEN_LICENSE = GPL-2.0
+ XEN_LICENSE_FILES = COPYING
