@@ -1,47 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 30 Jul 2019 17:46:05 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain: enable musl for riscv
-In-Reply-To: <20190730102331.25609-2-joerg.krause@embedded.rocks>
-References: <20190730102331.25609-1-joerg.krause@embedded.rocks>
- <20190730102331.25609-2-joerg.krause@embedded.rocks>
-Message-ID: <20190730174605.4481ad0d@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 30 Jul 2019 17:49:55 +0200
+Subject: [Buildroot] [PATCH] package/xen: security bump to version 4.11.2
+In-Reply-To: <20190729161703.29544-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Mon, 29 Jul 2019 18:17:03 +0200")
+References: <20190729161703.29544-1-peter@korsgaard.com>
+Message-ID: <874l338qu4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-On Tue, 30 Jul 2019 12:23:31 +0200
-J?rg Krause <joerg.krause@embedded.rocks> wrote:
+ > The 4.11.2 release brings a large number of fixes:
+ > https://xenproject.org/downloads/xen-project-archives/xen-project-4-11-series/xen-project-4-11-2/
 
-> Since version 1.1.23 musl supports the RISC-V architecture.
-> 
-> Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
-> ---
->  toolchain/toolchain-buildroot/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/toolchain/toolchain-buildroot/Config.in b/toolchain/toolchain-buildroot/Config.in
-> index d9f16e2a3a..b4168bd40c 100644
-> --- a/toolchain/toolchain-buildroot/Config.in
-> +++ b/toolchain/toolchain-buildroot/Config.in
-> @@ -84,7 +84,7 @@ config BR2_TOOLCHAIN_BUILDROOT_MUSL
->  	depends on BR2_aarch64	   || BR2_arm   || BR2_armeb   || BR2_i386 || \
->  		   BR2_microblaze  || BR2_mips  || BR2_mipsel  || BR2_mips64 || \
->  		   BR2_mips64el    || BR2_or1k  || BR2_powerpc || BR2_powerpc64 || \
-> -		   BR2_powerpc64le || BR2_sh    || BR2_x86_64
-> +		   BR2_powerpc64le || BR2_riscv || BR2_sh      || BR2_x86_64
+ > Including a number of security fixes:
 
-My understanding is that musl 1.1.23 only supports RISC-V 64 bits, not
-RISC-V 32 bits, so that should probably be "BR2_RISCV_64" instead of
-just "BR2_riscv".
+ > XSA-284: grant table transfer issues on large hosts
+ > XSA-285: race with pass-through device hotplug
+ > XSA-287: x86: steal_page violates page_struct access discipline
+ > XSA-288: x86: Inconsistent PV IOMMU discipline
+ > XSA-290: missing preemption in x86 PV page table unvalidation
+ > XSA-291: x86/PV: page type reference counting issue with failed IOMMU update
+ > XSA-292: x86: insufficient TLB flushing when using PCID
+ > XSA-293: x86: PV kernel context switch corruption
+ > XSA-294: x86 shadow: Insufficient TLB flushing when using PCID
+ > XSA-295: Unlimited Arm Atomics Operations
+ > XSA-297: Microarchitectural Data Sampling speculative side channel
 
-Best regards,
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Thomas
+Committed, thanks.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
