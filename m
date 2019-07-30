@@ -1,19 +1,20 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jul 2019 17:50:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/dtc: add hash for license files
-In-Reply-To: <20190729105509.29288-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 29 Jul 2019 12:55:09 +0200")
-References: <20190729105509.29288-1-fontaine.fabrice@gmail.com>
-Message-ID: <87r2677c8t.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Jul 2019 17:50:33 +0200
+Subject: [Buildroot] [PATCH] {linux, linux-headers}: bump 4.{4, 9, 14,
+ 19}.x / 5.{1, 2}.x series
+In-Reply-To: <20190728205521.24703-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Sun, 28 Jul 2019 22:55:21 +0200")
+References: <20190728205521.24703-1-peter@korsgaard.com>
+Message-ID: <87mugv7c8m.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
 Committed, thanks.
 
