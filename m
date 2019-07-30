@@ -1,56 +1,45 @@
-From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Tue, 30 Jul 2019 12:36:00 +0200
-Subject: [Buildroot] [PATCH] package/qt5: change upstream location
-Message-ID: <22558_1564482970_5D401D9A_22558_273_1_a7cd5c93-0be9-438c-b5b5-7c5a2dc7a274@OPEXCNORM3C.corporate.adroot.infra.ftgroup>
+From: Baruch Siach <baruch@tkos.co.il>
+Date: Tue, 30 Jul 2019 14:00:58 +0300
+Subject: [Buildroot] [PATCH 1/2] package/libgpg-error: bump to version 1.36
+Message-ID: <4cb93f2380a041102fa48a2f9b899c281a2f95c3.1564484459.git.baruch@tkos.co.il>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: "Yann E. MORIN" <yann.morin@orange.com>
-
-Upstream pushes their delivery archives in to places:
-    https://download.qt.io/official_releases/
-    https://download.qt.io/archive/
-
-After a while, only the latter remains, whith the former being pruned
-actively to contain only officially supported versions.
-
-Switch to using the archive location, as it has everything, even the
-latest versions.
-
-Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/qt5/qt5.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libgpg-error/libgpg-error.hash | 4 ++--
+ package/libgpg-error/libgpg-error.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
-index 88ba1958dd..c8c07a9881 100644
---- a/package/qt5/qt5.mk
-+++ b/package/qt5/qt5.mk
-@@ -13,7 +13,7 @@ QT5_VERSION_MAJOR = 5.6
- QT5_VERSION = $(QT5_VERSION_MAJOR).3
- QT5_SOURCE_TARBALL_PREFIX = opensource-src
- endif
--QT5_SITE = https://download.qt.io/official_releases/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
-+QT5_SITE = https://download.qt.io/archive/qt/$(QT5_VERSION_MAJOR)/$(QT5_VERSION)/submodules
+diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+index 1b1ea4e7ef8f..2169182f60d9 100644
+--- a/package/libgpg-error/libgpg-error.hash
++++ b/package/libgpg-error/libgpg-error.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking pgp signature
+-# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.35.tar.bz2.sig
++# https://gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.36.tar.bz2.sig
+ # using key D8692123C4065DEA5E0F3AB5249B39D24F25E3B6
+-sha256 cbd5ee62a8a8c88d48c158fff4fc9ead4132aacd1b4a56eb791f9f997d07e067  libgpg-error-1.35.tar.bz2
++sha256 babd98437208c163175c29453f8681094bcaf92968a15cafb1a276076b33c97c  libgpg-error-1.36.tar.bz2
+ # Locally calculated
+ sha256 231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+ sha256 a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index f081ee48131b..95f5988770ef 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- include $(sort $(wildcard package/qt5/*/*.mk))
- 
+-LIBGPG_ERROR_VERSION = 1.35
++LIBGPG_ERROR_VERSION = 1.36
+ LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
+ LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+ LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
 -- 
-2.17.1
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.20.1
