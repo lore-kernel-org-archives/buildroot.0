@@ -1,26 +1,26 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Tue, 30 Jul 2019 23:11:49 +0200
-Subject: [Buildroot] [PATCH] ima-evm-utils: Add as new package
-In-Reply-To: <20190729223810.24617-1-petr.vorel@gmail.com>
-References: <20190729223810.24617-1-petr.vorel@gmail.com>
-Message-ID: <20190730211147.GA8530@dell5510>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 30 Jul 2019 23:23:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/openjdk,
+ package/openjdk-bin: bump to version 12.0.2+10
+In-Reply-To: <20190729192532.43343-1-aduskett@gmail.com> (aduskett@gmail.com's
+ message of "Mon, 29 Jul 2019 15:25:32 -0400")
+References: <20190729192532.43343-1-aduskett@gmail.com>
+Message-ID: <87blxb5i99.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi,
+>>>>> "aduskett" == aduskett  <aduskett@gmail.com> writes:
 
-> Upstream patch from upcoming release is needed to fix build.
-> Adding build and install hooks to run make in src subdirectory
-> (root directory asciidoc and xsltproc for manpage).
+ > From: Adam Duskett <Aduskett@gmail.com>
+ > Signed-off-by: Adam Duskett <Aduskett@gmail.com>
 
-v2 will be needed. All tests fails when tested with ./utils/test-pkg:
-Makefile:579: *** keyutils is in the dependency chain of ima-evm-utils that has added it to its _DEPENDENCIES variable without selecting it or depending on it from Config.in.  Stop.
-Sorry for not catching it before.
+I sent a similar patch just a bit earlier, with the information added
+that this is a security bump, fixing a number of security issues.
 
-And 1.2.1 has been released and uploaded to sourceforge.
+So I've applied that patch and marked this as superseeded.
 
-Kind regards,
-Petr
+-- 
+Bye, Peter Korsgaard
