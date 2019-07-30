@@ -1,22 +1,23 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Tue, 30 Jul 2019 17:54:04 +0200
-Subject: [Buildroot] [PATCH 2/2] toolchain: enable musl for riscv
-In-Reply-To: <20190730102331.25609-2-joerg.krause@embedded.rocks>
- (=?utf-8?Q?=22J=C3=B6rg?=
- Krause"'s message of "Tue, 30 Jul 2019 12:23:31 +0200")
-References: <20190730102331.25609-1-joerg.krause@embedded.rocks>
- <20190730102331.25609-2-joerg.krause@embedded.rocks>
-Message-ID: <87wofz5xib.fsf@dell.be.48ers.dk>
+Date: Tue, 30 Jul 2019 17:54:30 +0200
+Subject: [Buildroot] [PATCH] package/putty: bump to version 0.72
+In-Reply-To: <1904834f2b17d74ce7619f265a3e66ad7db14340.1564482633.git.baruch@tkos.co.il>
+ (Baruch Siach's message of "Tue, 30 Jul 2019 13:30:33 +0300")
+References: <1904834f2b17d74ce7619f265a3e66ad7db14340.1564482633.git.baruch@tkos.co.il>
+Message-ID: <87sgqn5xhl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "J?rg" == J?rg Krause <joerg.krause@embedded.rocks> writes:
+>>>>> "Baruch" == Baruch Siach <baruch@tkos.co.il> writes:
 
- > Since version 1.1.23 musl supports the RISC-V architecture.
- > Signed-off-by: J?rg Krause <joerg.krause@embedded.rocks>
+ > Drop upstream patches.
+ > Remove autoreconf; we no longer patch configure.ac.
+
+ > Cc: Alexander Dahl <post@lespocky.de>
+ > Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 
 Committed, thanks.
 
