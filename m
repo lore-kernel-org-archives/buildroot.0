@@ -1,48 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 30 Jul 2019 14:21:42 +0200
-Subject: [Buildroot] [PATCH] configs/atmel_sama5d27_som1: bump to
- linux4sam_6.1
-In-Reply-To: <2915f499-4364-e4c7-9c19-b45892568565@koncepto.io>
-References: <1562775673-22148-1-git-send-email-pjtexier@koncepto.io>
- <20190726162711.2c4ede9a@windsurf>
- <2915f499-4364-e4c7-9c19-b45892568565@koncepto.io>
-Message-ID: <20190730142142.7ed8ec91@windsurf>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Tue, 30 Jul 2019 14:33:15 +0200
+Subject: [Buildroot] [PATCH] pandaboard_defconfig: bump linux to 4.19.62 to
+ fix build with gcc 8
+Message-ID: <20190730123315.24775-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Pierre-Jean,
+The recent change to default to gcc 8 for the internal toolchain broke this
+defconfig.  Fix it by bumping to the latest 4.19 kernel.
 
-On Sun, 28 Jul 2019 14:33:27 +0200
-Pierre-Jean Texier <pjtexier@koncepto.io> wrote:
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/259853955
 
-> Le 26/07/2019 ? 16:27, Thomas Petazzoni a ?crit?:
-> > Following this bump, the atmel_sama5d27_som1_ek_mmc_dev_defconfig no
-> > longer builds:
-> > 
-> >    https://gitlab.com/buildroot.org/buildroot/-/jobs/259847527
-> > 
-> > You need to add:
-> >   
-> >    BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> > 
-> > Could you test this and send a patch ?  
-> 
-> Interesting, I hadn't encountered this problem.
-> I'll send a patch to fix this issue.
+The kernel now uses ttySx for the omap serial ports, so adjust the getty
+port to match.
 
-If you have the OpenSSL development package installed on your system,
-then indeed you don't see the problem. However, the defconfigs are
-tested in a Docker container, with just the minimal dependencies needed
-by Buildroot to run, and these dependencies do not include OpenSSL
-development files. This explains why you have not seen the issue.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ configs/pandaboard_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Best regards,
-
-Thomas
+diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
+index 9b7c962de2..188eb1bc4f 100644
+--- a/configs/pandaboard_defconfig
++++ b/configs/pandaboard_defconfig
+@@ -2,14 +2,14 @@ BR2_arm=y
+ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_5=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+-BR2_TARGET_GENERIC_GETTY_PORT="ttyO2"
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS2"
+ BR2_SYSTEM_DHCP="eth0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/pandaboard/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.5"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.62"
+ BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es omap4-panda omap4-panda-a4"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.11.0
