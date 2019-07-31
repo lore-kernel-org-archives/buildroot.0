@@ -1,87 +1,59 @@
 From: Petr Vorel <petr.vorel@gmail.com>
-Date: Wed, 31 Jul 2019 21:43:07 +0200
-Subject: [Buildroot] [PATCH 1/2] system: add default to
- BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
-In-Reply-To: <20190731160809.GK3194@scaer>
-References: <20190722051627.12993-1-petr.vorel@gmail.com>
- <20190731160809.GK3194@scaer>
-Message-ID: <20190731194306.GB10819@dell5510>
+Date: Wed, 31 Jul 2019 22:09:33 +0200
+Subject: [Buildroot] [RFC PATCH v5 2/2] iputils: add capability for
+ clockdiff, ping, traceroute6
+In-Reply-To: <20190731200933.3487-1-petr.vorel@gmail.com>
+References: <20190731200933.3487-1-petr.vorel@gmail.com>
+Message-ID: <20190731200933.3487-2-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+and fallback to setuid if xattr not enabled.
 
-> Petr, All,
+Not setting xattr on arping as it can be used for ARP Poisoning.
 
-> On 2019-07-22 07:16 +0200, Petr Vorel spake thusly:
-> > Enable BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES if none
-> > of non-supported rootfs is selected.
+Use cap_net_raw+p (drop +e) as upstream sets that via
+cap_set_flag(), see https://github.com/iputils/iputils/issues/194
 
-> No, sorry.
-
-> As I explained in another thread, there are valid cases where one does
-> not need capabilities (and thus xattrs) on their systems.
-
-> In that case, your change would mean that the defconfig files of those
-> people now default to using xattrs, when they previously would not.
-
-OK, agree, thanks for an explanation.
-I've set it in patchwork as rejected (+ delegate to you).
-I'd still add the second patch (adding "(XATTR)" I find it just by chance, as I
-didn't search for "extended attributes", but for XATTR.
-
-> > Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> > ---
-> > Hi,
-
-> > not sure about cloop, cpio, tar, ubi.
-
-> > Kind regards,
-> > Petr
-
-> >  system/Config.in | 1 +
-> >  1 file changed, 1 insertion(+)
-
-> > diff --git a/system/Config.in b/system/Config.in
-> > index af7d8566d3..842e745cd3 100644
-> > --- a/system/Config.in
-> > +++ b/system/Config.in
-> > @@ -196,6 +196,7 @@ config BR2_ROOTFS_STATIC_DEVICE_TABLE
-
-> >  config BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
-> >  	bool "support extended attributes in device tables"
-> > +	default y if !BR2_TARGET_ROOTFS_AXFS && !BR2_TARGET_ROOTFS_CRAMFS && !BR2_TARGET_ROOTFS_ISO9660 && !BR2_TARGET_ROOTFS_ROMFS && !BR2_TARGET_ROOTFS_YAFFS2
-
-> In any case, iff we were to add this, this should be done differently,
-> because we do not want to hard-code the list of filesystems here. For
-> one, becaise the list is long; and for two, because of filesystems from
-> the br2-external trees.
-
-> Instead, we would have to do:
-
->     config BR2_ROOTFS_SUPPORTS_XATTRS
->         bool
-
->     config BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
->         bool "support extended attributes in device tables"
->         default y if BR2_ROOTFS_SUPPORTS_XATTRS
-
-> and then filesystems would be responsible for setting:
-
->     config BR2_TARGET_ROOTFS_EXT2
->         bool "ext2/3/4 root filesystem"
->         select BR2_ROOTFS_SUPPORTS_XATTRS
-
-On first (unposted) version I implemented it this way :).
-
-> But again, I think it does not gain much. People who want xattrs will
-> know enough to enable it.
-
-> Regards,
-> Yann E. MORIN.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+---
+Changes v4->v5:
+* fallback to setuid if xattr (suggested by Yann by Yann)
+BTW I wasn't able to use ifeq.. ,y.
 
 Kind regards,
 Petr
+
+ package/iputils/iputils.mk | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
+
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 8e6a3e2fc5..e5a2690aac 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -73,11 +73,16 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
+ 
+ # handle permissions ourselves
+ IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
++MAYBE_SUID = $(if $(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),0,4)
++
+ define IPUTILS_PERMISSIONS
+-	/usr/sbin/arping      f 4755 0 0 - - - - -
+-	/usr/bin/clockdiff    f 4755 0 0 - - - - -
+-	/bin/ping             f 4755 0 0 - - - - -
+-	/usr/bin/traceroute6  f 4755 0 0 - - - - -
++	/usr/sbin/arping      f $(MAYBE_SUID)755 0 0 - - - - -
++	/usr/bin/clockdiff    f $(MAYBE_SUID)755 0 0 - - - - -
++	|xattr cap_net_raw+p
++	/bin/ping             f $(MAYBE_SUID)755 0 0 - - - - -
++	|xattr cap_net_raw+p
++	/usr/bin/traceroute6  f $(MAYBE_SUID)755 0 0 - - - - -
++	|xattr cap_net_raw+p
+ endef
+ 
+ $(eval $(meson-package))
+-- 
+2.22.0
