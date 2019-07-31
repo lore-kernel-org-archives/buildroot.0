@@ -1,23 +1,65 @@
-From: Ryan Coe <bluemrp9@gmail.com>
-Date: Wed, 31 Jul 2019 06:33:31 -0700
-Subject: [Buildroot] [PATCH 1/1] package/mariadb: bump to version 10.3.16
-In-Reply-To: <875znj7c50.fsf@dell.be.48ers.dk>
-References: <20190729234612.12481-1-bluemrp9@gmail.com>
- <875znj7c50.fsf@dell.be.48ers.dk>
-Message-ID: <ba903cd3-96ca-937a-1f55-4e22c15c0c91@gmail.com>
+From: Ludovic Desroches <ludovic.desroches@microchip.com>
+Date: Wed, 31 Jul 2019 15:46:47 +0200
+Subject: [Buildroot] [PATCH v3 1/3] board/atmel: genimage: remove display
+ variant dtbs
+Message-ID: <20190731134649.20701-1-ludovic.desroches@microchip.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter,
+Display variant dtbs are no longer part of the linux-at91 tree.
 
-On 7/30/2019 8:52 AM, Peter Korsgaard wrote:
->
-> Committed, thanks.
->
-> Given that this looks like purely fixes, should it also be applied to
-> 2019.02.x and 2019.05.x?
+Signed-off-by: Ludovic Desroches <ludovic.desroches@microchip.com>
+---
+ board/atmel/sama5d2_xplained_mmc/genimage.cfg | 3 ---
+ board/atmel/sama5d3_xplained_mmc/genimage.cfg | 3 ---
+ board/atmel/sama5d4_xplained_mmc/genimage.cfg | 4 ----
+ 3 files changed, 10 deletions(-)
 
-It is probably fine to skip this on the older branches.
+diff --git a/board/atmel/sama5d2_xplained_mmc/genimage.cfg b/board/atmel/sama5d2_xplained_mmc/genimage.cfg
+index d3b7af5b5c..3cc8ae2f8c 100644
+--- a/board/atmel/sama5d2_xplained_mmc/genimage.cfg
++++ b/board/atmel/sama5d2_xplained_mmc/genimage.cfg
+@@ -5,9 +5,6 @@ image boot.vfat {
+ 		files = {
+ 			"zImage",
+ 			"at91-sama5d2_xplained.dtb",
+-			"at91-sama5d2_xplained_pda4.dtb",
+-			"at91-sama5d2_xplained_pda7.dtb",
+-			"at91-sama5d2_xplained_pda7b.dtb",
+ 			"boot.bin",
+ 			"u-boot.bin"
+ 		}
+diff --git a/board/atmel/sama5d3_xplained_mmc/genimage.cfg b/board/atmel/sama5d3_xplained_mmc/genimage.cfg
+index 277ce5f9c9..1b46495128 100644
+--- a/board/atmel/sama5d3_xplained_mmc/genimage.cfg
++++ b/board/atmel/sama5d3_xplained_mmc/genimage.cfg
+@@ -5,9 +5,6 @@ image boot.vfat {
+ 		files = {
+ 			"zImage",
+ 			"at91-sama5d3_xplained.dtb",
+-			"at91-sama5d3_xplained_pda4.dtb",
+-			"at91-sama5d3_xplained_pda7.dtb",
+-			"at91-sama5d3_xplained_pda7b.dtb",
+ 			"boot.bin",
+ 			"u-boot.bin"
+ 		}
+diff --git a/board/atmel/sama5d4_xplained_mmc/genimage.cfg b/board/atmel/sama5d4_xplained_mmc/genimage.cfg
+index 70bb3e4ff0..004f2fddb3 100644
+--- a/board/atmel/sama5d4_xplained_mmc/genimage.cfg
++++ b/board/atmel/sama5d4_xplained_mmc/genimage.cfg
+@@ -5,10 +5,6 @@ image boot.vfat {
+ 		files = {
+ 			"zImage",
+ 			"at91-sama5d4_xplained.dtb",
+-			"at91-sama5d4_xplained_hdmi.dtb",
+-			"at91-sama5d4_xplained_pda4.dtb",
+-			"at91-sama5d4_xplained_pda7.dtb",
+-			"at91-sama5d4_xplained_pda7b.dtb",
+ 			"boot.bin",
+ 			"u-boot.bin"
+ 		}
+-- 
+2.23.0.rc0
