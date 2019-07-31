@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 00:21:34 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/imx-uuc: fix
+Date: Thu, 1 Aug 2019 00:21:53 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/imx-uuc: fix
  static build with musl
-Message-ID: <20190731221858.34A318172C@busybox.osuosl.org>
+Message-ID: <20190731221911.DA95B8894D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1852fb195e4f8949a5254c7e0f95d42f17bfd25
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=186172bd0cac7338f8749672c1266fb0972b1cca
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Use TARGET_CONFIGURE_OPTS to pass -static in LDFLAGS when building
 statically
