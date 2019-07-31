@@ -1,42 +1,52 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Aug 2019 00:02:58 +0200
-Subject: [Buildroot] [PATCH 1/1] package/unzip: update security and bux
- fix patches from Debian
-In-Reply-To: <20190712133041.3611-1-sebastien.szymanski@armadeus.com>
- (=?utf-8?Q?=22S=C3=A9bastien?= Szymanski"'s message of "Fri, 12 Jul 2019
- 15:30:41 +0200")
-References: <20190712133041.3611-1-sebastien.szymanski@armadeus.com>
-Message-ID: <87ef259819.fsf@dell.be.48ers.dk>
+Date: Thu, 1 Aug 2019 00:10:11 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x]
+ package/x11r7/xlib_libXfont2: work around gcc bug 85180
+Message-ID: <20190731220736.3DB998869E@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "S?bastien" == S?bastien Szymanski <sebastien.szymanski@armadeus.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=05993a62c059b0354dc46d326841117ec5554352
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
- > Fix the URL and add three new patches. Quoting changelog [1]:
- > unzip (6.0-24) unstable; urgency=medium
+On Microblaze, with gcc versions < 8.x the build of xlib_libXfont2
+hangs due to gcc bug 85180:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180.
 
- >   * Apply two patches by Mark Adler:
- >   - Fix bug in undefer_input() that misplaced the input state.
- >   - Detect and reject a zip bomb using overlapped entries. Closes: #931433.
- >     Bug discovered by David Fifield. For reference, this is CVE-2019-13232.
+The bug shows up when building xlib_libXfont2 with optimization but
+not when building with -O0. To work around this, if
+BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
 
- >  -- Santiago Vila <sanvila@debian.org>  Thu, 11 Jul 2019 18:03:34 +0200
+Fixes:
 
- > unzip (6.0-23) unstable; urgency=medium
+  http://autobuild.buildroot.net/results/21099d27c03948daaca2d1c149eeba084427e3af/
 
- >   * Fix lame code in fileio.c which parsed 64-bit values incorrectly.
- >     Thanks to David Fifield for the report. Closes: #929502.
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b5942dcdc5928e11c364e64cfe9666517f9db271)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x11r7/xlib_libXfont2/xlib_libXfont2.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
- >  -- Santiago Vila <sanvila@debian.org>  Wed, 29 May 2019 00:24:08 +0200
-
- > [1] https://sources.debian.org/data/main/u/unzip/6.0-24/debian/changelog
-
- > Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
-
-Committed to 2019.02.x and 2019.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+index ba2c7540cb..65adf665bd 100644
+--- a/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
++++ b/package/x11r7/xlib_libXfont2/xlib_libXfont2.mk
+@@ -27,5 +27,13 @@ HOST_XLIB_LIBXFONT2_DEPENDENCIES = \
+ XLIB_LIBXFONT2_CONF_OPTS = --disable-devel-docs
+ HOST_XLIB_LIBXFONT2_CONF_OPTS = --disable-devel-docs
+ 
++XLIB_LIBXFONT2_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++XLIB_LIBXFONT2_CFLAGS += -O0
++endif
++
++XLIB_LIBXFONT2_CONF_ENV = CFLAGS="$(XLIB_LIBXFONT2_CFLAGS)"
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
