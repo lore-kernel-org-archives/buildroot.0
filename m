@@ -1,54 +1,38 @@
-From: Charles Turner <cturner@igalia.com>
-Date: Wed, 31 Jul 2019 07:18:19 +0100
-Subject: [Buildroot] [PATCH 1/1] package/gstreamer1: gl enabled when
- either GL or GLES2 is present
-In-Reply-To: <20190725114225.4893-1-cturner@igalia.com>
-References: <20190725114225.4893-1-cturner@igalia.com>
-Message-ID: <813e2163aadb967498f3f9296517b3db6d7ba38a.camel@igalia.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Wed, 31 Jul 2019 08:20:46 +0200
+Subject: [Buildroot] [PATCH] linux: enable UEVENT_HELPER when mdev is
+ used
+In-Reply-To: <bdf4076f-6306-6f04-4693-250c4646425e@railnova.eu> (Titouan
+ Christophe's message of "Mon, 29 Jul 2019 12:00:14 +0200")
+References: <20190525130755.25678-1-peter@korsgaard.com>
+ <54a85c9f-1e14-de0d-c6cf-8201dea50e1d@mind.be>
+ <87mujanw9q.fsf@dell.be.48ers.dk>
+ <d3a724b9-b9c9-b399-0f32-b3f93d3511a3@mind.be>
+ <87muiyu380.fsf@dell.be.48ers.dk>
+ <9f9e57ff-ba24-a4c0-7be8-48e048e4138f@railnova.eu>
+ <87sgs6heq7.fsf@dell.be.48ers.dk>
+ <bdf4076f-6306-6f04-4693-250c4646425e@railnova.eu>
+Message-ID: <87pnlq4tdt.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Ping
+>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
 
-On Thu, 2019-07-25 at 12:42 +0100, Charlie Turner wrote:
-> When building gst1-plugins-base with GL support on the rpi3 (which
-> supports only GLES2, not full desktop GL), GStreamer was being asked
-> to
-> disable its GL support completely. This isn't correct since it can be
-> used with either GL or GLES2.
-> 
-> Signed-off-by: Charlie Turner <cturner@igalia.com>
-> ---
->  .../gstreamer1/gst1-plugins-base/gst1-plugins-base.mk    | 9
-> +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-
-> base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> index 66c136c36c..b572c0e992 100644
-> --- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> +++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-> @@ -39,13 +39,18 @@ GST1_PLUGINS_BASE_CONF_OPTS += -Dorc=disabled
->  endif
->  
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL),y)
-> -GST1_PLUGINS_BASE_GL_API_LIST = opengl
->  GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=enabled
-> -GST1_PLUGINS_BASE_DEPENDENCIES += libgl libglu
-> +else ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2),y)
-> +GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=enabled
->  else
->  GST1_PLUGINS_BASE_CONF_OPTS += -Dgl=disabled
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_OPENGL),y)
-> +GST1_PLUGINS_BASE_GL_API_LIST = opengl
-> +GST1_PLUGINS_BASE_DEPENDENCIES += libgl libglu
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_GLES2),y)
->  GST1_PLUGINS_BASE_GL_API_LIST += gles2
->  GST1_PLUGINS_BASE_DEPENDENCIES += libgles
+Hi,
+
+ > IMHO this patch can now be archived, since this series has been
+ > applied:
+ > http://patchwork.ozlabs.org/project/buildroot/list/?series=114874 .
+
+Agreed, marked as rejected.
+
+ > Also, this last patch http://patchwork.ozlabs.org/patch/1119590/ would
+ > be needed to make sure mdev daemon mode can always be used.
+
+And I have applied this, thanks!
+
+-- 
+Bye, Peter Korsgaard
