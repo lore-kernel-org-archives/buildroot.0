@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jul 2019 23:32:34 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/gnupg2: security
+Date: Wed, 31 Jul 2019 23:37:24 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/gnupg2: security
  bump to version 2.2.17
-Message-ID: <20190731213428.12FEB81099@busybox.osuosl.org>
+Message-ID: <20190731213444.E23C1883A8@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e6f996d64ee16fb59d33b4cbb23fc8ce22b1e104
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=3950c81da0a25e84a3dfb896e9a6ddf020776155
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 This release mitigates the effects of the denial-of-service attacks on
 the keyserver network (CVE-2019-13050).
