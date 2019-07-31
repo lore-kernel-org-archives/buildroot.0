@@ -1,37 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jul 2019 08:20:11 +0200
-Subject: [Buildroot] [git commit] linux: Force CONFIG_NET=y when using
- mdev+devtempfs for /dev management
-Message-ID: <20190731062114.86BE588589@busybox.osuosl.org>
+From: Julien Boibessot <julien.boibessot@free.fr>
+Date: Wed, 31 Jul 2019 09:09:55 +0200
+Subject: [Buildroot] [autobuild.buildroot.net] Build results for
+ 2019-07-30
+In-Reply-To: <20190731060047.74A0986802@whitealder.osuosl.org>
+References: <20190731060047.74A0986802@whitealder.osuosl.org>
+Message-ID: <fafde29b-0f43-e53e-d0df-37f10302ab95@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78e596719f43df6ffcb2a84f5160589c2a8d59a6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Since mdev was switched to the daemon mode introduced in Busybox 1.31.0,
-it requires CONFIG_NET to be enabled in the kernel such that the mdev
-daemon can listen to netlink events.
+On 31/07/2019 08:00, Thomas Petazzoni wrote:
+> Hello,
+>
+> Build statistics for 2019-07-30
+> ===============================
+>
+>       branch |  OK | NOK | TIM | TOT |
+>    2019.02.x |  11 |   0 |   0 |  11 |
+>    2019.05.x |  10 |   0 |   0 |  10 |
+>       master |  65 |  33 |   0 |  98 |
+>
+> Results for branch 'master'
+> ===========================
+>
+> Classification of failures by reason
+> ------------------------------------
+>
+>                 host-mtd-2.1.1 | 6 
+>
+>          arm |                 host-mtd-2.1.1 | NOK | http://autobuild.buildroot.net/results/727e2b6bd4c5bf4dcb886c9ae63b293251a1d3be |     
+>         m68k |                 host-mtd-2.1.1 | NOK | http://autobuild.buildroot.net/results/8b507d6deafe69c59597a99863df46c8c6888288 |     
+>         i586 |                 host-mtd-2.1.1 | NOK | http://autobuild.buildroot.net/results/e459400a3f50fd5c24165802fe1effe4de6c2932 |     
+>      nds32le |                 host-mtd-2.1.1 | NOK | http://autobuild.buildroot.net/results/85b64c71f20eb11fa3e215c6d4b9eee07ecc6a25 |     
+>          arc |                 host-mtd-2.1.1 | NOK | http://autobuild.buildroot.net/results/480fcb2ad263aabc08c463eaebaf9e33934c3b72 |     
+>   aarch64_be |                 host-mtd-2.1.1 | NOK | http://autobuild.buildroot.net/results/cb7ba2e5ee1ba33ff613bfc73612af6d29fe8066 |     
+>    
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/linux.mk | 2 ++
- 1 file changed, 2 insertions(+)
+will be fixed with my recent patch:
+    https://patchwork.ozlabs.org/patch/1138333/
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index a1378345c3..29d2f0ee69 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -335,6 +335,8 @@ define LINUX_KCONFIG_FIXUP_CMDS
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_DEVTMPFS_MOUNT,$(@D)/.config))
- 	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_INOTIFY_USER,$(@D)/.config))
-+	$(if $(BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV),
-+		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config))
- 	$(if $(BR2_PACKAGE_AUDIT),
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_NET,$(@D)/.config)
- 		$(call KCONFIG_ENABLE_OPT,CONFIG_AUDIT,$(@D)/.config))
+Regards,
+Julien
