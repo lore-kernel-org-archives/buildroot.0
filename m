@@ -1,67 +1,92 @@
-From: yann.morin at orange.com <yann.morin@orange.com>
-Date: Wed, 31 Jul 2019 07:16:18 +0200
-Subject: [Buildroot] [PATCH] package/qt5: change upstream location
-In-Reply-To: <87o91b5xes.fsf@dell.be.48ers.dk>
-References: <22558_1564482970_5D401D9A_22558_273_1_a7cd5c93-0be9-438c-b5b5-7c5a2dc7a274@OPEXCNORM3C.corporate.adroot.infra.ftgroup>
- <87o91b5xes.fsf@dell.be.48ers.dk>
-Message-ID: <28252_1564550180_5D412424_28252_18_1_20190731051618.GA2498@r-lnx-nyma7486-2>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Wed, 31 Jul 2019 07:53:26 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/icu: bump version to 64.2
+Message-ID: <20190731055326.21813-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+Updated license hash after upstream commit:
+https://github.com/unicode-org/icu/commit/fc255de3f050271198074c7e8865a805d33c20c4
 
-On 2019-07-30 17:56 +0200, Peter Korsgaard spake thusly:
-> >>>>>   <yann.morin@orange.com> writes:
-> 
->  > From: "Yann E. MORIN" <yann.morin@orange.com>
->  > Upstream pushes their delivery archives in to places:
->  >     https://download.qt.io/official_releases/
->  >     https://download.qt.io/archive/
-> 
->  > After a while, only the latter remains, whith the former being pruned
->  > actively to contain only officially supported versions.
-> 
->  > Switch to using the archive location, as it has everything, even the
->  > latest versions.
-> 
->  > Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
-> 
-> Committed, thanks.
+Added patch to fix big endian build.
 
-Thanks. :-)
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+v2: Added patch to fix big endian build.
 
-> I take it this is also for 2019.02.x?
+ package/icu/0005-Fix-big-endian-build.patch | 34 +++++++++++++++++++++
+ package/icu/icu.hash                        |  7 +++--
+ package/icu/icu.mk                          |  2 +-
+ 3 files changed, 39 insertions(+), 4 deletions(-)
+ create mode 100644 package/icu/0005-Fix-big-endian-build.patch
 
-Yes, this is valid for 2019.02.x amd 2019.05.x.
-
-Regards,
-Yann E. MORIN.
-
-> -- 
-> Bye, Peter Korsgaard
-
+diff --git a/package/icu/0005-Fix-big-endian-build.patch b/package/icu/0005-Fix-big-endian-build.patch
+new file mode 100644
+index 0000000000..2cb2129010
+--- /dev/null
++++ b/package/icu/0005-Fix-big-endian-build.patch
+@@ -0,0 +1,34 @@
++From 9be0b489a94b57419202c552022f25cb95bfac51 Mon Sep 17 00:00:00 2001
++From: Alexander Kanavin <alex.kanavin@gmail.com>
++Date: Wed, 17 Apr 2019 16:41:58 +0200
++Subject: [PATCH] Fix big-endian build
++
++Bug-report: https://unicode-org.atlassian.net/browse/ICU-20533
++Patch taken from: https://bugs.gentoo.org/682170
++
++Upstream-Status: Pending
++Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
++
++Downloaded from
++http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-support/icu/icu/0001-Fix-big-endian-build.patch?h=master
++
++[Bernd: Fixed path]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ data/Makefile.in | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
++
++diff --git a/source/data/Makefile.in b/source/data/Makefile.in
++index 778b6c7..67203e7 100644
++--- a/source/data/Makefile.in
+++++ b/source/data/Makefile.in
++@@ -148,7 +148,8 @@ ICUDATA_ARCHIVE = $(firstword $(wildcard $(srcdir)/in/$(ICUDATA_BASENAME_VERSION
++ # and convert it to the current type.
++ ifneq ($(ICUDATA_ARCHIVE),)
++ ICUDATA_SOURCE_ARCHIVE = $(OUTDIR)/$(ICUDATA_PLATFORM_NAME).dat
++-$(ICUDATA_SOURCE_ARCHIVE): $(ICUDATA_ARCHIVE) $(OUTDIR)
+++$(ICUDATA_SOURCE_ARCHIVE): $(ICUDATA_ARCHIVE)
+++	$(MKINSTALLDIRS) $(OUTDIR)
++ 	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $(ICUDATA_ARCHIVE) $(ICUDATA_SOURCE_ARCHIVE)
++ endif
++ else
+diff --git a/package/icu/icu.hash b/package/icu/icu.hash
+index 66a0a8dc80..86de0e14ea 100644
+--- a/package/icu/icu.hash
++++ b/package/icu/icu.hash
+@@ -1,3 +1,4 @@
+-# From http://download.icu-project.org/files/icu4c/60.2/SHASUM512.txt
+-sha512 8e718e66c13e7f25714404c46b91ed6305efff1df70c328be2ec743023a7719016dae72a5fa0a05d6f5599983590a2044ff72d3453a048d987ab546d0416d694  icu4c-60_2-src.tgz
+-sha256 24c771ce37201a3ab604852e47d10d21595d0493269dd6c8a5e567e998e18c00  LICENSE
++# From http://download.icu-project.org/files/icu4c/64.2/SHASUM512.txt
++sha512 5ecb4c230ba45918747a1cf9aef86f555aa07d5b29b1d07ab674e8013f46dfb907a0e9d6945db41155f9dc3012fd94e1152ffc19f61a68b6dfcbabdcb8ae9d78  icu4c-64_2-src.tgz
++# Locally computed
++sha256 6a18c5fac70d7860b57f5b72b4e2c9a1ba6b3d2741eef7ff9767c5379364f10d  LICENSE
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 7bc1b97624..81d1dbc179 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -7,7 +7,7 @@
+ # Git tags (and therefore versions on release-monitoring.org) use the
+ # XX-Y format, but the tarballs are named XX_Y and the containing
+ # directories XX.Y.
+-ICU_VERSION = 60-2
++ICU_VERSION = 64-2
+ ICU_SOURCE = icu4c-$(subst -,_,$(ICU_VERSION))-src.tgz
+ ICU_SITE = http://download.icu-project.org/files/icu4c/$(subst -,.,$(ICU_VERSION))
+ ICU_LICENSE = ICU License
 -- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-
-_________________________________________________________________________________________________________________________
-
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
+2.20.1
