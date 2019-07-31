@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jul 2019 23:47:37 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] fs/tar: explicitly set
+Date: Wed, 31 Jul 2019 23:47:28 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] fs/tar: explicitly set
  extended header values to ensure binary reproducibility
-Message-ID: <20190731215053.44806812F2@busybox.osuosl.org>
+Message-ID: <20190731215059.D184581541@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5014abb34af2934283d139cbd601dc4d4d560aa3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=dc1431ec65910cc76d4bcebdc26d496f71bcf975
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Since we use --xattrs-include='*' to include all extended attributes,
 tar creates a PAX formatted archive. The archive metadata captures atime
