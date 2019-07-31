@@ -1,54 +1,120 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jul 2019 23:44:58 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/imagemagick:
- security bump to version 7.0.8-53
-Message-ID: <20190731214410.800FE81E48@busybox.osuosl.org>
+Date: Wed, 31 Jul 2019 23:45:09 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/imagemagick: add
+ upstream security fix for CVE-2019-13454
+Message-ID: <20190731214410.87F247FCB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc13a9360516771fe7637a6f63fef96b0860c313
+commit: https://git.buildroot.net/buildroot/commit/?id=fbc5ff9e859cb1463753b06f52d3d95ea1dd97dd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
-
-Fixes various CVE IDs:
-
-CVE-2019-13133, CVE-2019-13134, CVE-2019-13135, CVE-2019-13136,
-CVE-2019-13137, CVE-2019-13295, CVE-2019-13296, CVE-2019-13297,
-CVE-2019-13298, CVE-2019-13299, CVE-2019-13300, CVE-2019-13301,
-CVE-2019-13302, CVE-2019-13303, CVE-2019-13304, CVE-2019-13305,
-CVE-2019-13306, CVE-2019-13307, CVE-2019-13308, CVE-2019-13309,
-CVE-2019-13310, CVE-2019-13311, CVE-2019-13391
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 7f7820c5359e86ad16be1e781f3b45ccc2961018)
+(cherry picked from commit 0287136ff7380ad90f190f32f10334fc53315246)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/imagemagick/imagemagick.hash | 2 +-
- package/imagemagick/imagemagick.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/imagemagick/0001-CVE-2019-13454.patch | 92 +++++++++++++++++++++++++++
+ 1 file changed, 92 insertions(+)
 
-diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
-index e89aa557c1..e5f8733d7a 100644
---- a/package/imagemagick/imagemagick.hash
-+++ b/package/imagemagick/imagemagick.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 2a1ca5f9c38e6596a5ee9fdbbaebba1d21b57618e892c72c8e4e63ced571af40  7.0.8-42.tar.gz
-+sha256 b8c35e03fc4bd2bf66bddfe232a34473e7df68c3716c831ba76dc30520e7b490  7.0.8-53.tar.gz
- sha256 5b47db932754743460eba7a226aea85b63e3408d3c7affb4d0117f70c9594ded  LICENSE
-diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-index 5ea79bed49..624ff168ff 100644
---- a/package/imagemagick/imagemagick.mk
-+++ b/package/imagemagick/imagemagick.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMAGEMAGICK_VERSION = 7.0.8-42
-+IMAGEMAGICK_VERSION = 7.0.8-53
- IMAGEMAGICK_SOURCE = $(IMAGEMAGICK_VERSION).tar.gz
- IMAGEMAGICK_SITE = https://github.com/ImageMagick/ImageMagick/archive
- IMAGEMAGICK_LICENSE = Apache-2.0
+diff --git a/package/imagemagick/0001-CVE-2019-13454.patch b/package/imagemagick/0001-CVE-2019-13454.patch
+new file mode 100644
+index 0000000000..dce28cc3d1
+--- /dev/null
++++ b/package/imagemagick/0001-CVE-2019-13454.patch
+@@ -0,0 +1,92 @@
++From 1ddcf2e4f28029a888cadef2e757509ef5047ad8 Mon Sep 17 00:00:00 2001
++From: Cristy <urban-warrior@imagemagick.org>
++Date: Mon, 8 Jul 2019 06:14:34 -0400
++Subject: [PATCH] https://github.com/ImageMagick/ImageMagick/issues/1629
++
++Downloaded from upstream commit
++https://github.com/ImageMagick/ImageMagick/commit/1ddcf2e4f28029a888cadef2e757509ef5047ad8
++
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ MagickCore/layer.c | 56 ++++++++++++++++++++++++----------------------
++ 1 file changed, 29 insertions(+), 27 deletions(-)
++
++diff --git a/MagickCore/layer.c b/MagickCore/layer.c
++index b520e9247d..48632885ae 100644
++--- a/MagickCore/layer.c
+++++ b/MagickCore/layer.c
++@@ -1584,45 +1584,47 @@ MagickExport void OptimizeImageTransparency(const Image *image,
++ %    o exception: return any errors or warnings in this structure.
++ %
++ */
++-MagickExport void RemoveDuplicateLayers(Image **images,
++-     ExceptionInfo *exception)
+++MagickExport void RemoveDuplicateLayers(Image **images,ExceptionInfo *exception)
++ {
++-  register Image
++-    *curr,
++-    *next;
++-
++   RectangleInfo
++     bounds;
++ 
+++  register Image
+++    *image,
+++    *next;
+++
++   assert((*images) != (const Image *) NULL);
++   assert((*images)->signature == MagickCoreSignature);
++   if ((*images)->debug != MagickFalse)
++-    (void) LogMagickEvent(TraceEvent,GetMagickModule(),"%s",(*images)->filename);
+++    (void) LogMagickEvent(TraceEvent,GetMagickModule(),"%s",
+++      (*images)->filename);
++   assert(exception != (ExceptionInfo *) NULL);
++   assert(exception->signature == MagickCoreSignature);
++-
++-  curr=GetFirstImageInList(*images);
++-  for (; (next=GetNextImageInList(curr)) != (Image *) NULL; curr=next)
+++  image=GetFirstImageInList(*images);
+++  for ( ; (next=GetNextImageInList(image)) != (Image *) NULL; image=next)
++   {
++-    if ( curr->columns != next->columns || curr->rows != next->rows
++-         || curr->page.x != next->page.x || curr->page.y != next->page.y )
+++    if ((image->columns != next->columns) || (image->rows != next->rows) ||
+++        (image->page.x != next->page.x) || (image->page.y != next->page.y))
++       continue;
++-    bounds=CompareImagesBounds(curr,next,CompareAnyLayer,exception);
++-    if ( bounds.x < 0 ) {
++-      /*
++-        the two images are the same, merge time delays and delete one.
++-      */
++-      size_t time;
++-      time = curr->delay*1000/curr->ticks_per_second;
++-      time += next->delay*1000/next->ticks_per_second;
++-      next->ticks_per_second = 100L;
++-      next->delay = time*curr->ticks_per_second/1000;
++-      next->iterations = curr->iterations;
++-      *images = curr;
++-      (void) DeleteImageFromList(images);
++-    }
+++    bounds=CompareImagesBounds(image,next,CompareAnyLayer,exception);
+++    if (bounds.x < 0)
+++      {
+++        /*
+++          Two images are the same, merge time delays and delete one.
+++        */
+++        size_t
+++          time;
+++
+++        time=1000*image->delay*PerceptibleReciprocal(image->ticks_per_second);
+++        time+=1000*next->delay*PerceptibleReciprocal(next->ticks_per_second);
+++        next->ticks_per_second=100L;
+++        next->delay=time*image->ticks_per_second/1000;
+++        next->iterations=image->iterations;
+++        *images=image;
+++        (void) DeleteImageFromList(images);
+++      }
++   }
++-  *images = GetFirstImageInList(*images);
+++  *images=GetFirstImageInList(*images);
++ }
++ 
++ /*
