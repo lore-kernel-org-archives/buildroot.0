@@ -1,39 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jul 2019 23:42:48 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] docs/manual: 'Fixes' tag
- needs a colon
-Message-ID: <20190731214006.2CC1783A2A@busybox.osuosl.org>
+Date: Wed, 31 Jul 2019 23:43:08 +0200
+Subject: [Buildroot] [PATCH] docs/manual: 'Fixes' tag needs a colon
+In-Reply-To: <20190712090641.2471-1-arnout@mind.be> (Arnout Vandecappelle's
+ message of "Fri, 12 Jul 2019 11:06:41 +0200")
+References: <20190712090641.2471-1-arnout@mind.be>
+Message-ID: <87v9vh98yb.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=42fa5b31227c946622334a446fb5cdc1c0e23cfa
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+>>>>> "Arnout" == Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be> writes:
 
-Apparently, patchwork only recognizes the 'Fixes' tag if it is followed
-by a colon. So make sure the manual documents it as such.
+ > Apparently, patchwork only recognizes the 'Fixes' tag if it is followed
+ > by a colon. So make sure the manual documents it as such.
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e875c2ffd2f23413e2c924a450c745aa7c785677)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- docs/manual/contribute.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ > Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+ > Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-diff --git a/docs/manual/contribute.txt b/docs/manual/contribute.txt
-index 868600d5d0..f339ca50b8 100644
---- a/docs/manual/contribute.txt
-+++ b/docs/manual/contribute.txt
-@@ -73,7 +73,7 @@ basically two things that can be done:
-     In the commit message of a patch fixing an autobuild failure, add a
-     reference to the build result directory, as follows:
- ---------------------
--Fixes http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
-+Fixes: http://autobuild.buildroot.org/results/51000a9d4656afe9e0ea6f07b9f8ed374c2e4069
- ---------------------
- 
- === Reviewing and testing patches
+Committed to 2019.02.x and 2019.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
