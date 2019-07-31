@@ -1,88 +1,45 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Mon, 26 Aug 2019 22:50:05 +0200
-Subject: [Buildroot] [git commit] support/graph-size: add option to sort
- packages in reverse size order
-Message-ID: <20190903133622.460A881413@busybox.osuosl.org>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Thu,  1 Aug 2019 00:00:59 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libmodbus: bump to version 3.1.6
+Message-ID: <1564610459-10876-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33c1ef88f8f851da0e2b68363adde6673cfb3d96
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Contains a fix for issue discovered post-3.1.5.
+See changelog:
 
-Currently, the packages are sorted smallest first, and biggest last
-(with unknown and others second-to-last and last, resp.).
+https://libmodbus.org/2019/urgent-fix-for-last-releases/
 
-Add an option to invert the ordering (but keeping unknown and others at
-their current positions).
-
-This has the nice side effect that we can now control the colours
-assigned to the biggest package(s), as the colours are cycled from the
-first to the last. Currently, the biggest packages gets a redish colour,
-which is appropriate, but the second gets a greenish one, which is not
-as appropriate (but changing that can come later).
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- docs/manual/common-usage.txt | 3 +++
- support/scripts/size-stats   | 8 +++++++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ package/libmodbus/libmodbus.hash | 2 +-
+ package/libmodbus/libmodbus.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/docs/manual/common-usage.txt b/docs/manual/common-usage.txt
-index 7af8d54a64..d9f086234c 100644
---- a/docs/manual/common-usage.txt
-+++ b/docs/manual/common-usage.txt
-@@ -329,6 +329,9 @@ to further control the generated graph. Accepted options are:
- * `--iec`, `--binary`, `--si`, `--decimal`, to use IEC (binary, powers
-   of 1024) or SI (decimal, powers of 1000; the default) prefixes.
+diff --git a/package/libmodbus/libmodbus.hash b/package/libmodbus/libmodbus.hash
+index 7f9a6e2..2931f3f 100644
+--- a/package/libmodbus/libmodbus.hash
++++ b/package/libmodbus/libmodbus.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f7a9538f23a8786b1ee62a4b75879b5c0e194e728350de1b741ce7d595970f06  libmodbus-3.1.5.tar.gz
++sha256  d7d9fa94a16edb094e5fdf5d87ae17a0dc3f3e3d687fead81835d9572cf87c16  libmodbus-3.1.6.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LESSER
+diff --git a/package/libmodbus/libmodbus.mk b/package/libmodbus/libmodbus.mk
+index 8df3ca2..584ac75 100644
+--- a/package/libmodbus/libmodbus.mk
++++ b/package/libmodbus/libmodbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+* `--biggest-first`, to sort packages in decreasing size order, rather
-+  than in increasing size order.
-+
- .Note
- The collected filesystem size data is only meaningful after a complete
- clean rebuild. Be sure to run +make clean all+ before using +make
-diff --git a/support/scripts/size-stats b/support/scripts/size-stats
-index 040f4017f8..996c0d660e 100755
---- a/support/scripts/size-stats
-+++ b/support/scripts/size-stats
-@@ -35,6 +35,7 @@ except ImportError:
- 
- 
- class Config:
-+    biggest_first = False
-     iec = False
-     size_limit = 0.01
-     colors = ['#e60004', '#009836', '#2e1d86', '#ffed00',
-@@ -152,7 +153,8 @@ def draw_graph(pkgsize, outputf):
-     values = []
-     other_value = 0
-     unknown_value = 0
--    for (p, sz) in sorted(pkgsize.items(), key=lambda x: x[1]):
-+    for (p, sz) in sorted(pkgsize.items(), key=lambda x: x[1],
-+                          reverse=Config.biggest_first):
-         if sz < (total * Config.size_limit):
-             other_value += sz
-         elif p == "unknown":
-@@ -269,6 +271,9 @@ def main():
-                         help="CSV output file with file size statistics")
-     parser.add_argument("--package-size-csv", '-p', metavar="PKG_SIZE_CSV",
-                         help="CSV output file with package size statistics")
-+    parser.add_argument("--biggest-first", action='store_true',
-+                        help="Sort packages in decreasing size order, " +
-+                             "rather than in increasing size order")
-     parser.add_argument("--iec", "--binary", "--si", "--decimal",
-                         action=PrefixAction,
-                         help="Use IEC (binary, powers of 1024) or SI (decimal, "
-@@ -278,6 +283,7 @@ def main():
-                              'the generic "Other" package. Default: 0.01 (1%%)')
-     args = parser.parse_args()
- 
-+    Config.biggest_first = args.biggest_first
-     Config.iec = args.iec
-     if args.size_limit is not None:
-         if args.size_limit < 0.0 or args.size_limit > 1.0:
+-LIBMODBUS_VERSION = 3.1.5
++LIBMODBUS_VERSION = 3.1.6
+ LIBMODBUS_SITE = http://libmodbus.org/releases
+ LIBMODBUS_LICENSE = LGPL-2.1+
+ LIBMODBUS_LICENSE_FILES = COPYING.LESSER
+-- 
+2.7.4
