@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Wed, 31 Jul 2019 23:42:38 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] docs/manual: 'Fixes' tag
+Date: Wed, 31 Jul 2019 23:42:48 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] docs/manual: 'Fixes' tag
  needs a colon
-Message-ID: <20190731213958.192E183A2A@busybox.osuosl.org>
+Message-ID: <20190731214006.2CC1783A2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3055cb553f840e80bbe206c17b9aa7d9cb1ecd4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=42fa5b31227c946622334a446fb5cdc1c0e23cfa
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Apparently, patchwork only recognizes the 'Fixes' tag if it is followed
 by a colon. So make sure the manual documents it as such.
