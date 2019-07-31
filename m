@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 00:13:42 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/zeromq: security
+Date: Thu, 1 Aug 2019 00:15:50 +0200
+Subject: [Buildroot] [git commit branch/2019.05.x] package/zeromq: security
  bump to version 4.3.2
-Message-ID: <20190731221254.7E5DF885C5@busybox.osuosl.org>
+Message-ID: <20190731221329.8C6B48894D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f466c88ec2230f84715006ac8c41ff5e0ca0e5de
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=8e01d65f617556670e2c8a3c7722a0782191b740
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
 
 Fixes the following security issue:
 
