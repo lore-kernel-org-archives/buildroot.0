@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 00:10:11 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x]
+Date: Thu, 1 Aug 2019 00:09:44 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x]
  package/x11r7/xlib_libXfont2: work around gcc bug 85180
-Message-ID: <20190731220736.3DB998869E@busybox.osuosl.org>
+Message-ID: <20190731220742.6677481359@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=05993a62c059b0354dc46d326841117ec5554352
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6495a148c28ec5a4bda660b49a9ed216e4a06ea2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 On Microblaze, with gcc versions < 8.x the build of xlib_libXfont2
 hangs due to gcc bug 85180:
