@@ -1,68 +1,55 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Wed, 31 Jul 2019 12:48:57 +0200
-Subject: [Buildroot] [PATCH 1/1] package/host-mtd: fixes build
-In-Reply-To: <20190731092534.31da3132@windsurf>
-References: <1564402300-3993-1-git-send-email-julien.boibessot@free.fr>
- <20190731092534.31da3132@windsurf>
-Message-ID: <f9baa408-a6b9-2078-9bc4-96d36830ec87@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Wed, 31 Jul 2019 14:45:16 +0200
+Subject: [Buildroot] btrfs filesystem image creation using TARGET_DIR
+ path
+In-Reply-To: <CAP8JTaaqcBbCdoJHm5=zi0dc4NtNaq2Y=krx0UbCVz4PdB2sJw@mail.gmail.com>
+References: <CAP8JTaaqcBbCdoJHm5=zi0dc4NtNaq2Y=krx0UbCVz4PdB2sJw@mail.gmail.com>
+Message-ID: <20190731144516.06e94517@windsurf>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas,
+Hello,
 
-On 31/07/2019 09:25, Thomas Petazzoni wrote:
-> Hello Julien,
->
-> The commit title should rather be:
->
-> 	package/mtd: add host-zstd dependency to host variant to fix build
+On Tue, 30 Jul 2019 18:33:52 +0530
+chalil jitesh <chaliljitesh@gmail.com> wrote:
 
-OK
+>  Hi,
+> 
+> I am trying to create a btrfs filesystem image from buildroot (buildroot
+> 2019.02 version). During the btrfs image creation step in the file
+> buildroot/fs/btrfs/btrfs.mk the target root file system directory path
+> passed to -r option seems to be given as $(TARGET_DIR) which is pointing to
+> build/buildroot-fs/btrfs/target instead of actual root file system
+> directory $(BASE_TARGET_DIR) (as followed for other file system image
+> creation like buildroot/fs/squashfs/squashfs.mk).
+> Kindly please review if my understanding is correct or if i am mising any
+> steps and if the -r option should point to $(BASE_TARGET_DIR).
+> Attaching the changes done for review.
 
->
-> On Mon, 29 Jul 2019 14:11:40 +0200
-> julien.boibessot at free.fr wrote:
->
->> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
->>
->> Fixes following build error when Host doesn't have zstd devt files:
-> This should also mention that the issue was introduced in the commit
-> bumping to 2.1.1, and add references to the autobuilder failures.
+Using $(TARGET_DIR) is correct. What is the problem you are seeing ?
 
-OK. autobuilder failures came *after* my patch ;-)
+The way it works is the following:
 
->
-> However, why does this problem only occurs for the host variant, and
-> not the target variant.
->
-> Why is this warning causing a build failure ? Normally warnings are
-> just warnings, not errors.
->
-> Is this zstd dependency optional somehow ?
+ - BASE_TARGET_DIR is output/target. This is where all packages install
+   their files that should be present on the target. During the package
+   build/installation, TARGET_DIR points to BASE_TARGET_DIR.
 
-It seems like zstd is now needed if ubifs is selected, like stated in
-mtd configure.ac:
+ - For each filesystem image format that is enabled, a copy of the
+   contents of BASE_TARGET_DIR is made, in a per-filesystem directory,
+   output/build/buildroot-fs/<filesystem>/target
 
-    AM_COND_IF([BUILD_UBIFS], [
-            need_uuid="yes"
-            need_xattr="yes"
-            need_zlib="yes"
-            need_lzo="yes"
-            need_zstd="yes"                   <<<<<<<<
-            need_openssl="yes"
-    ])
+ - In the code creating each filesystem image, TARGET_DIR points to
+   output/build/buildroot-fs/<filesystem>/target.
 
+So, using $(TARGET_DIR) in btrfs.mk is correct.
 
-So you were right, target mtd build is also impacted....
+Best regards,
 
-I will resend a patch to correct both target and host build.
-
-Regards,
-Julien
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190731/584bf9f9/attachment.html>
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
