@@ -1,16 +1,16 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 00:16:39 +0200
-Subject: [Buildroot] [git commit branch/2019.05.x] package/zeromq: fix
+Date: Thu, 1 Aug 2019 00:16:47 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/zeromq: fix
  sha256 hash
-Message-ID: <20190731221358.DE86D82C8B@busybox.osuosl.org>
+Message-ID: <20190731221407.975B588497@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=585e0a0ace926b7016948a17f004668262cf3213
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=bf73e317d7fe101d58c695f956a487509c97b23c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
 Bump to version 4.3.2 did not update sha256 hash
 
