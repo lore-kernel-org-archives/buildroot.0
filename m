@@ -1,30 +1,48 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Aug 2019 00:54:29 +0200
-Subject: [Buildroot] [PATCH 1/2] package/gtkperf: fix build with NLS
-In-Reply-To: <20190729132036.18721-1-fontaine.fabrice@gmail.com>
-References: <20190729132036.18721-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190801005429.54b42b23@windsurf.home>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu,  1 Aug 2019 01:02:20 +0200
+Subject: [Buildroot] [PATCH] utils/checkpackagelib:
+ CommentsMenusPackagesOrder: only apply to top-level
+Message-ID: <20190731230220.32266-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Mon, 29 Jul 2019 15:20:35 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+The CommentsMenusPackagesOrder test is broken in various ways for files
+other than package/Config.in and package/Config.in.host. Therefore, the
+script gives bogus errors for various other Config.in files.
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/747469b359dd05cfa05b4295958f8a8175166cfe
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/gtkperf/gtkperf.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+However, we don't really want to check those other files. Indeed, many
+of them have a non-alphabetical ordering for good reasons.
 
-Both applied. Thanks!
+Therefore, skip the check for files other than package/Config.in and
+package/Config.in.host.
 
-Thomas
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/251214899
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ utils/checkpackagelib/lib_config.py | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
+index f0edb9993d..7d7567ac67 100644
+--- a/utils/checkpackagelib/lib_config.py
++++ b/utils/checkpackagelib/lib_config.py
+@@ -72,6 +72,11 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+         return len(self.state.split('-')) - 1
+ 
+     def check_line(self, lineno, text):
++        # We only want to force sorting for the top-level menus
++        if self.filename not in ["package/Config.in",
++                                 "package/Config.in.host"]:
++            return
++
+         if text.startswith("comment") or text.startswith("if") or \
+            text.startswith("menu"):
+ 
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
