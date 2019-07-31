@@ -1,141 +1,128 @@
-From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
-Date: Wed, 31 Jul 2019 19:32:30 +0200
-Subject: [Buildroot] [PATCH 1/1] package/xenomai: bump to version 3.0.9
-Message-ID: <20190731173230.10065-1-sebastien.szymanski@armadeus.com>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Wed, 31 Jul 2019 21:31:19 +0200
+Subject: [Buildroot] [PATCH v2] ima-evm-utils: Add as new package,
+ version 1.2.1
+Message-ID: <20190731193119.10522-1-petr.vorel@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-remove upstream patch:
-https://gitlab.denx.de/Xenomai/xenomai/commit/c5e9c0817839536562a2ae90921f4799f4a9ad46
++ add myself as a maintainer.
 
-Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
+Adding build and install hooks to run make in src subdirectory
+(root directory asciidoc and xsltproc for manpage).
+
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 ---
- ...ated-destination-buffer-with-strncpy.patch | 91 -------------------
- package/xenomai/xenomai.hash                  |  2 +-
- package/xenomai/xenomai.mk                    |  2 +-
- 3 files changed, 2 insertions(+), 93 deletions(-)
- delete mode 100644 package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+Changes v1->v2:
+* Update to 1.2.1 (thus drop patch
+0001-evmctl-use-correct-include-for-xattr.h.patch)
+* Fix build by adding required selects (BR2_PACKAGE_OPENSSL and BR2_PACKAGE_KEYUTILS)
+* Add depends on BR2_USE_MMU and !BR2_STATIC_LIBS (based on keyutils dependency)
+* cleanup comments
 
-diff --git a/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch b/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
-deleted file mode 100644
-index cb2b1fee48..0000000000
---- a/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
-+++ /dev/null
-@@ -1,91 +0,0 @@
--From cdc63fe259c70a8a5304aa07087650ebf4ee6b5d Mon Sep 17 00:00:00 2001
--From: Philippe Gerum <rpm@xenomai.org>
--Date: Wed, 24 Oct 2018 11:28:49 +0200
--Subject: [PATCH] demos/posix: prevent unterminated destination buffer with
-- strncpy()
--
--GCC 8.x introduced -Wstringop-truncation to help detecting likely
--unwanted outcomes of strncpy(dst, src, n), such as omitting the NUL
--character into the destination buffer whenever n < sizeof(src).
--
--Fix unsafe strncpy() calls when we do expect a null-terminated
--destination buffer.
--
--Signed-off-by: Philippe Gerum <rpm@xenomai.org>
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Retrieved from:
--https://gitlab.denx.de/Xenomai/xenomai/commit/cdc63fe259c70a8a5304aa07087650ebf4ee6b5d]
-----
-- demo/posix/cobalt/can-rtt.c        | 4 ++--
-- demo/posix/cobalt/eth_p_all.c      | 3 ++-
-- demo/posix/cyclictest/cyclictest.c | 4 ++--
-- 3 files changed, 6 insertions(+), 5 deletions(-)
--
--diff --git a/demo/posix/cobalt/can-rtt.c b/demo/posix/cobalt/can-rtt.c
--index 61cad05e5..dd212d804 100644
----- a/demo/posix/cobalt/can-rtt.c
--+++ b/demo/posix/cobalt/can-rtt.c
--@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
-- 	return -1;
--     }
-- 
---    strncpy(ifr.ifr_name, rxdev, IFNAMSIZ);
--+    namecpy(ifr.ifr_name, rxdev);
--     printf("RX rxsock=%d, ifr_name=%s\n", rxsock, ifr.ifr_name);
-- 
--     if (ioctl(rxsock, SIOCGIFINDEX, &ifr) < 0) {
--@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
-- 	    goto failure1;
-- 	}
-- 
---	strncpy(ifr.ifr_name, txdev, IFNAMSIZ);
--+	namecpy(ifr.ifr_name, txdev);
-- 	printf("TX txsock=%d, ifr_name=%s\n", txsock, ifr.ifr_name);
-- 
-- 	if (ioctl(txsock, SIOCGIFINDEX, &ifr) < 0) {
--diff --git a/demo/posix/cobalt/eth_p_all.c b/demo/posix/cobalt/eth_p_all.c
--index 6ac12ab3e..91aef9fbd 100644
----- a/demo/posix/cobalt/eth_p_all.c
--+++ b/demo/posix/cobalt/eth_p_all.c
--@@ -40,6 +40,7 @@
-- #include <net/if.h>
-- #include <arpa/inet.h>
-- #include <netinet/ether.h>
--+#include <boilerplate/ancillaries.h>
-- 
-- char buffer[10*1024];
-- int sock;
--@@ -72,7 +73,7 @@ int main(int argc, char *argv[])
-- 	if (argc > 1) {
-- 		struct ifreq ifr;
-- 
---		strncpy(ifr.ifr_name, argv[1], IFNAMSIZ);
--+		namecpy(ifr.ifr_name, argv[1]);
-- 		if (ioctl(sock, SIOCGIFINDEX, &ifr) < 0) {
-- 			perror("cannot get interface index");
-- 			close(sock);
--diff --git a/demo/posix/cyclictest/cyclictest.c b/demo/posix/cyclictest/cyclictest.c
--index ebe5461db..76983bd02 100644
----- a/demo/posix/cyclictest/cyclictest.c
--+++ b/demo/posix/cyclictest/cyclictest.c
--@@ -1353,7 +1353,7 @@ static void process_options (int argc, char *argv[], int max_cpus)
-- 		case 'F':
-- 		case OPT_FIFO:
-- 			use_fifo = 1;
---			strncpy(fifopath, optarg, strlen(optarg));
--+			strncpy(fifopath, optarg, sizeof(fifopath) - 1);
-- 			break;
-- 
-- 		case 'H':
--@@ -1458,7 +1458,7 @@ static void process_options (int argc, char *argv[], int max_cpus)
-- 		case 'T':
-- 		case OPT_TRACER:
-- 			tracetype = CUSTOM;
---			strncpy(tracer, optarg, sizeof(tracer));
--+			strncpy(tracer, optarg, sizeof(tracer) - 1);
-- 			break;
-- 		case 'u':
-- 		case OPT_UNBUFFERED:
---- 
--2.18.1
--
-diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
-index cd518e20e9..0fc560f978 100644
---- a/package/xenomai/xenomai.hash
-+++ b/package/xenomai/xenomai.hash
-@@ -1,2 +1,2 @@
- # Locally computed;
--sha256 c373261ddb8280d9d7078cdd9cd9646dfb7d70d8cd3aa9693d9148f03990d711  xenomai-3.0.8.tar.bz2
-+sha256 9e4b879ee48e6423f76cba5882f41d129164fe977119080ff41ef531ee50dc4e  xenomai-3.0.9.tar.bz2
-diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
-index 3cb7dada4b..16c486eb34 100644
---- a/package/xenomai/xenomai.mk
-+++ b/package/xenomai/xenomai.mk
-@@ -6,7 +6,7 @@
+
+Petr
+
+ DEVELOPERS                               |  1 +
+ package/Config.in                        |  1 +
+ package/ima-evm-utils/Config.in          | 11 ++++++++
+ package/ima-evm-utils/ima-evm-utils.hash |  3 +++
+ package/ima-evm-utils/ima-evm-utils.mk   | 32 ++++++++++++++++++++++++
+ 5 files changed, 48 insertions(+)
+ create mode 100644 package/ima-evm-utils/Config.in
+ create mode 100644 package/ima-evm-utils/ima-evm-utils.hash
+ create mode 100644 package/ima-evm-utils/ima-evm-utils.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 05711ba678..5435a892c7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1825,6 +1825,7 @@ N:	Petr Kulhavy <brain@jikos.cz>
+ F:	package/linuxptp/
  
- XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
- ifeq ($(XENOMAI_VERSION),)
--XENOMAI_VERSION = 3.0.8
-+XENOMAI_VERSION = 3.0.9
- else
- BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
- endif
+ N:	Petr Vorel <petr.vorel@gmail.com>
++F:	package/ima-evm-utils/
+ F:	package/iproute2/
+ F:	package/iputils/
+ F:	package/linux-backports/
+diff --git a/package/Config.in b/package/Config.in
+index 9b2cc7522d..76f1ee1798 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2122,6 +2122,7 @@ endmenu
+ 
+ menu "Security"
+ 	source "package/checkpolicy/Config.in"
++	source "package/ima-evm-utils/Config.in"
+ 	source "package/optee-benchmark/Config.in"
+ 	source "package/optee-client/Config.in"
+ 	source "package/optee-examples/Config.in"
+diff --git a/package/ima-evm-utils/Config.in b/package/ima-evm-utils/Config.in
+new file mode 100644
+index 0000000000..7e3dcc4002
+--- /dev/null
++++ b/package/ima-evm-utils/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_IMA_EVM_UTILS
++	bool "ima-evm-utils"
++	depends on BR2_USE_MMU # keyutils dependency: fork()
++	depends on !BR2_STATIC_LIBS # keyutils dependency: dlopen
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_KEYUTILS
++	help
++	  Linux Integrity Measurement Architecture (IMA)
++	  Extended Verification Module (EVM) tools.
++
++	  https://sourceforge.net/p/linux-ima/wiki/Home/
+diff --git a/package/ima-evm-utils/ima-evm-utils.hash b/package/ima-evm-utils/ima-evm-utils.hash
+new file mode 100644
+index 0000000000..24be627d20
+--- /dev/null
++++ b/package/ima-evm-utils/ima-evm-utils.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256 ad8471b58c4df29abd51c80d74b1501cfe3289b60d32d1b318618a8fd26c0c0a  ima-evm-utils-1.2.1.tar.gz
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
+new file mode 100644
+index 0000000000..cd15f526f6
+--- /dev/null
++++ b/package/ima-evm-utils/ima-evm-utils.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# ima-evm-utils
++#
++################################################################################
++
++IMA_EVM_UTILS_VERSION = 1.2.1
++IMA_EVM_UTILS_SITE = http://downloads.sourceforge.net/project/linux-ima/ima-evm-utils
++IMA_EVM_UTILS_LICENSE = GPL-2.0
++IMA_EVM_UTILS_LICENSE_FILES = COPYING
++IMA_EVM_UTILS_DEPENDENCIES = host-pkgconf keyutils openssl
++
++# configure is missing but gpm seems not compatible with our autoreconf
++# mechanism so we have to do it manually instead of using IMA_EVM_UTILS_AUTORECONF = YES
++define IMA_EVM_UTILS_RUN_AUTOGEN
++	cd $(@D) && PATH=$(BR_PATH) ./autogen.sh
++endef
++IMA_EVM_UTILS_PRE_CONFIGURE_HOOKS += IMA_EVM_UTILS_RUN_AUTOGEN
++
++# build just sources in src subdirectory as root directory requires asciidoc
++# and xsltproc for manpage
++define IMA_EVM_UTILS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(IMA_EVM_UTILS_MAKE_ENV) $(MAKE) -C $(@D)/src all
++endef
++define IMA_EVM_UTILS_INSTALL_STAGING_CMDS
++	$(TARGET_MAKE_ENV) $(IMA_EVM_UTILS_MAKE_ENV) $(MAKE) DESTDIR="$(STAGING_DIR)" -C $(@D)/src install
++endef
++define IMA_EVM_UTILS_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(IMA_EVM_UTILS_MAKE_ENV) $(MAKE) DESTDIR="$(TARGET_DIR)" -C $(@D)/src install
++endef
++
++$(eval $(autotools-package))
 -- 
-2.21.0
+2.22.0
