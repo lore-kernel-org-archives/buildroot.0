@@ -1,84 +1,67 @@
-From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Tue, 30 Jul 2019 20:13:21 -0300
-Subject: [Buildroot] [PATCH] support/testing: use virtio-rng-pci to test
- syslog-ng
-Message-ID: <20190730231321.10673-1-ricardo.martincoski@gmail.com>
+From: yann.morin at orange.com <yann.morin@orange.com>
+Date: Wed, 31 Jul 2019 07:16:18 +0200
+Subject: [Buildroot] [PATCH] package/qt5: change upstream location
+In-Reply-To: <87o91b5xes.fsf@dell.be.48ers.dk>
+References: <22558_1564482970_5D401D9A_22558_273_1_a7cd5c93-0be9-438c-b5b5-7c5a2dc7a274@OPEXCNORM3C.corporate.adroot.infra.ftgroup>
+ <87o91b5xes.fsf@dell.be.48ers.dk>
+Message-ID: <28252_1564550180_5D412424_28252_18_1_20190731051618.GA2498@r-lnx-nyma7486-2>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Recent versions of syslog-ng need some entropy on startup.
-So use VirtIORNG to provide it. In order to accomplish this:
- - build the kernel containing the driver;
- - pass '-device virtio-rng-pci' to qemu.
+Peter, All,
 
-Use the same kernel version and kernel config as qemu_arm_versatile.
-It already has PCI enabled but it does not have HW_RANDOM_VIRTIO, so add
-a defconfig fragment to enable the drivers.
+On 2019-07-30 17:56 +0200, Peter Korsgaard spake thusly:
+> >>>>>   <yann.morin@orange.com> writes:
+> 
+>  > From: "Yann E. MORIN" <yann.morin@orange.com>
+>  > Upstream pushes their delivery archives in to places:
+>  >     https://download.qt.io/official_releases/
+>  >     https://download.qt.io/archive/
+> 
+>  > After a while, only the latter remains, whith the former being pruned
+>  > actively to contain only officially supported versions.
+> 
+>  > Switch to using the archive location, as it has everything, even the
+>  > latest versions.
+> 
+>  > Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
+> 
+> Committed, thanks.
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/259856394
+Thanks. :-)
 
-At the same time, fix a typo (missing '#') that resulted in the
-generation of root.tar. This file is not used in the test.
+> I take it this is also for 2019.02.x?
 
-Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
-https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/262628554
----
- .../conf/syslog-ng-kernel-fragment.config     |  3 +++
- .../testing/tests/package/test_syslog_ng.py   | 20 ++++++++++++++++---
- 2 files changed, 20 insertions(+), 3 deletions(-)
- create mode 100644 support/testing/conf/syslog-ng-kernel-fragment.config
+Yes, this is valid for 2019.02.x amd 2019.05.x.
 
-diff --git a/support/testing/conf/syslog-ng-kernel-fragment.config b/support/testing/conf/syslog-ng-kernel-fragment.config
-new file mode 100644
-index 0000000000..5b96e418be
---- /dev/null
-+++ b/support/testing/conf/syslog-ng-kernel-fragment.config
-@@ -0,0 +1,3 @@
-+CONFIG_HW_RANDOM=y
-+CONFIG_HW_RANDOM_VIRTIO=y
-+CONFIG_VIRTIO_PCI=y
-diff --git a/support/testing/tests/package/test_syslog_ng.py b/support/testing/tests/package/test_syslog_ng.py
-index 0155ef14e4..d1444d3d0d 100644
---- a/support/testing/tests/package/test_syslog_ng.py
-+++ b/support/testing/tests/package/test_syslog_ng.py
-@@ -6,15 +6,29 @@ import infra.basetest
- class TestSyslogNg(infra.basetest.BRTest):
-     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-         """
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/arm-versatile/linux.config"
-+        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{}"
-+        BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+        BR2_LINUX_KERNEL_INTREE_DTS_NAME="versatile-pb"
-         BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
-         BR2_PACKAGE_SYSLOG_NG=y
-         BR2_TARGET_ROOTFS_CPIO=y
--        BR2_TARGET_ROOTFS_TAR is not set
--        """
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """.format(infra.filepath("conf/syslog-ng-kernel-fragment.config"))
- 
-     def test_run(self):
-+        kernel = os.path.join(self.builddir, "images", "zImage")
-         cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
--        self.emulator.boot(arch="armv5", kernel="builtin", options=["-initrd", cpio_file])
-+        dtb = os.path.join(self.builddir, "images", "versatile-pb.dtb")
-+        options = ["-M", "versatilepb",
-+                   "-dtb", dtb,
-+                   "-initrd", cpio_file,
-+                   "-device", "virtio-rng-pci"]
-+        self.emulator.boot(arch="armv5", kernel=kernel, options=options)
-         self.emulator.login()
- 
-         cmd = "grep syslog-ng /var/log/messages | grep starting"
+Regards,
+Yann E. MORIN.
+
+> -- 
+> Bye, Peter Korsgaard
+
 -- 
-2.17.1
+                                        ____________
+.-----------------.--------------------:       _    :------------------.
+|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
+| +33 534.541.179 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
+| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
+|      yann.morin (at) orange.com      |_="    ,--' | / \ HTML MAIL    |
+'--------------------------------------:______/_____:------------------'
+
+
+_________________________________________________________________________________________________________________________
+
+Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
+pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
+a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
+Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+
+This message and its attachments may contain confidential or privileged information that may be protected by law;
+they should not be distributed, used or copied without authorisation.
+If you have received this email in error, please notify the sender and delete this message and its attachments.
+As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
+Thank you.
