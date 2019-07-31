@@ -1,34 +1,277 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Wed, 31 Jul 2019 08:06:19 +0200
-Subject: [Buildroot] [PATCH v1] package/qt5base: fix libtool la file
- dependency_libs entries
-References: <20190730212522.29386-1-ps.report@gmx.net>
-Message-ID: <rnn71gx36n.ln2@ID-313208.user.individual.net>
+Date: Wed, 31 Jul 2019 08:11:03 +0200
+Subject: [Buildroot] [PATCH 1/1] package/mpv: bump version to 0.29.1
+Message-ID: <20190731061103.28534-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Tue, 30 Jul 2019 23:25:22 +0200 schrieb Peter Seiderer:
+Added license hash, removed patches:
 
-> Fixes [1]:
-> 
->   libtool:   error: cannot find the library '' or unhandled argument
->   '/.../host/riscv64-buildroot-linux-gnu/sysroot/usr/lib/
-libQt5Widgets.so'
-> 
-> Add upstream suggested patch ([2]) to  change la file dependency_libs
-> entries to -L<path> -l<library> version.
-> 
-> [1]
-> http://autobuild.buildroot.net/results/
-79c1e1b7a1bc53c1e9b2ae0c9acb443e6d2e2994
-> [2] https://codereview.qt-project.org/c/qt/qtbase/+/269110
-> 
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+0001: upstream PR was closed as 'merged'
+0002: patch was backported and is now included
 
-Tested-by: Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Renamed license file according to upstream change.
 
-Fixes: http://autobuild.buildroot.net/results/c9b/
-c9be4ef68c9c5d018e4084c52215ce69f0c72538/
+Support for sdl1 was removed upstream:
+https://github.com/mpv-player/mpv/commit/1dcf511376545de7624863b76d7f30dc3bb44ac9
+
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ package/mpv/0003-rpi-fix-linking-errors.patch | 90 ------------------
+ package/mpv/0004-libva20.patch                | 93 -------------------
+ package/mpv/mpv.hash                          |  3 +-
+ package/mpv/mpv.mk                            | 14 +--
+ 4 files changed, 7 insertions(+), 193 deletions(-)
+ delete mode 100644 package/mpv/0003-rpi-fix-linking-errors.patch
+ delete mode 100644 package/mpv/0004-libva20.patch
+
+diff --git a/package/mpv/0003-rpi-fix-linking-errors.patch b/package/mpv/0003-rpi-fix-linking-errors.patch
+deleted file mode 100644
+index 0e65a5a3eb..0000000000
+--- a/package/mpv/0003-rpi-fix-linking-errors.patch
++++ /dev/null
+@@ -1,90 +0,0 @@
+-From fe482a600d507dc7ce77f6d154a9e8b395f74fdd Mon Sep 17 00:00:00 2001
+-From: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+-Date: Tue, 24 Oct 2017 09:47:38 +0100
+-Subject: [PATCH] rpi: fix linking errors
+-
+-Fixes linking issues when compiling with Raspberry Pi support.
+-
+-Signed-off-by: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+----
+-Status: pull request https://github.com/mpv-player/mpv/pull/4883
+----
+- waftools/checks/custom.py | 26 +++++++++++++++++++++++++-
+- wscript                   | 18 +-----------------
+- 2 files changed, 26 insertions(+), 18 deletions(-)
+-
+-diff --git a/waftools/checks/custom.py b/waftools/checks/custom.py
+-index d8065a3..9086795 100644
+---- a/waftools/checks/custom.py
+-+++ b/waftools/checks/custom.py
+-@@ -4,7 +4,7 @@ from waflib import Utils
+- import os
+- 
+- __all__ = ["check_pthreads", "check_iconv", "check_lua",
+--           "check_cocoa", "check_openal"]
+-+           "check_cocoa", "check_openal", "check_rpi"]
+- 
+- pthreads_program = load_fragment('pthreads.c')
+- 
+-@@ -103,3 +103,27 @@ def check_openal(ctx, dependency_identifier):
+-         if fn(ctx, dependency_identifier):
+-             return True
+-     return False
+-+
+-+def check_rpi(ctx, dependency_identifier):
+-+    # We need MMAL/bcm_host/dispmanx APIs.
+-+    # Upstream keeps pkgconfig files in '/opt/vc/lib/pkgconfig'.
+-+    # See https://github.com/raspberrypi/userland/issues/245
+-+    # PKG_CONFIG_SYSROOT_DIR helps with cross compilation.
+-+    prev_pkg_path = os.getenv('PKG_CONFIG_PATH', '')
+-+    os.environ['PKG_CONFIG_PATH'] = os.pathsep.join(
+-+        filter(None, [os.path.join(os.getenv('PKG_CONFIG_SYSROOT_DIR', '/'),
+-+                                   'opt/vc/lib/pkgconfig'),
+-+                      prev_pkg_path]))
+-+
+-+    checks = [
+-+        # We still need all OpenGL symbols, because the vo_opengl code is
+-+        # generic and supports anything from GLES2/OpenGL 2.1 to OpenGL 4 core.
+-+        check_pkg_config('bcm_host', uselib_store='bcm_host'),
+-+        check_pkg_config('egl'),
+-+        check_pkg_config('glesv2'),
+-+        check_cc(lib=['mmal_core', 'mmal_util', 'mmal_vc_client'], use=['bcm_host']),
+-+    ]
+-+
+-+    ret = all((fn(ctx, dependency_identifier) for fn in checks))
+-+    os.environ['PKG_CONFIG_PATH'] = prev_pkg_path
+-+    return ret
+-diff --git a/wscript b/wscript
+-index 9d88588..84e5f2e 100644
+---- a/wscript
+-+++ b/wscript
+-@@ -732,25 +732,9 @@ video_output_features = [
+-         'desc': 'Android support',
+-         'func': check_statement('android/api-level.h', '(void)__ANDROID__'),  # arbitrary android-specific header
+-     }, {
+--        # We need MMAL/bcm_host/dispmanx APIs. Also, most RPI distros require
+--        # every project to hardcode the paths to the include directories. Also,
+--        # these headers are so broken that they spam tons of warnings by merely
+--        # including them (compensate with -isystem and -fgnu89-inline).
+-         'name': '--rpi',
+-         'desc': 'Raspberry Pi support',
+--        'func': compose_checks(
+--            check_cc(cflags="-isystem/opt/vc/include/ "+
+--                            "-isystem/opt/vc/include/interface/vcos/pthreads " +
+--                            "-isystem/opt/vc/include/interface/vmcs_host/linux " +
+--                            "-fgnu89-inline",
+--                     linkflags="-L/opt/vc/lib",
+--                     header_name="bcm_host.h",
+--                     lib=['mmal_core', 'mmal_util', 'mmal_vc_client', 'bcm_host']),
+--            # We still need all OpenGL symbols, because the vo_opengl code is
+--            # generic and supports anything from GLES2/OpenGL 2.1 to OpenGL 4 core.
+--            check_cc(lib="EGL"),
+--            check_cc(lib="GLESv2"),
+--        ),
+-+        'func': check_rpi,
+-     } , {
+-         'name': '--ios-gl',
+-         'desc': 'iOS OpenGL ES hardware decoding interop support',
+--- 
+-2.14.2
+-
+diff --git a/package/mpv/0004-libva20.patch b/package/mpv/0004-libva20.patch
+deleted file mode 100644
+index 349dd3cb14..0000000000
+--- a/package/mpv/0004-libva20.patch
++++ /dev/null
+@@ -1,93 +0,0 @@
+-From 2ecf240b1cd20875991a5b18efafbe799864ff7f Mon Sep 17 00:00:00 2001
+-From: Mark Thompson <sw@jkqxz.net>
+-Date: Mon, 9 Oct 2017 20:10:26 +0100
+-Subject: [PATCH] vaapi: Use libva2 message callbacks
+-
+-They are no longer global, so they work vaguely sensibly.
+-
+-Downloaded from upstream commit:
+-https://github.com/mpv-player/mpv/commit/2ecf240b1cd20875991a5b18efafbe799864ff7f
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- video/vaapi.c | 32 +++++++++++++++++++++++++++++---
+- 1 file changed, 29 insertions(+), 3 deletions(-)
+-
+-diff --git a/video/vaapi.c b/video/vaapi.c
+-index 6bedbbaa18..3b1cb9cc41 100644
+---- a/video/vaapi.c
+-+++ b/video/vaapi.c
+-@@ -40,9 +40,27 @@ int va_get_colorspace_flag(enum mp_csp csp)
+-     return 0;
+- }
+- 
+--// VA message callbacks are global and do not have a context parameter, so it's
+--// impossible to know from which VADisplay they originate. Try to route them
+--// to existing mpv/libmpv instances within this process.
+-+#if VA_CHECK_VERSION(1, 0, 0)
+-+static void va_message_callback(void *context, const char *msg, int mp_level)
+-+{
+-+    struct mp_vaapi_ctx *res = context;
+-+    mp_msg(res->log, mp_level, "libva: %s", msg);
+-+}
+-+
+-+static void va_error_callback(void *context, const char *msg)
+-+{
+-+    va_message_callback(context, msg, MSGL_ERR);
+-+}
+-+
+-+static void va_info_callback(void *context, const char *msg)
+-+{
+-+    va_message_callback(context, msg, MSGL_V);
+-+}
+-+#else
+-+// Pre-libva2 VA message callbacks are global and do not have a context
+-+// parameter, so it's impossible to know from which VADisplay they
+-+// originate.  Try to route them to existing mpv/libmpv instances within
+-+// this process.
+- static pthread_mutex_t va_log_mutex = PTHREAD_MUTEX_INITIALIZER;
+- static struct mp_vaapi_ctx **va_mpv_clients;
+- static int num_va_mpv_clients;
+-@@ -77,6 +95,7 @@ static void va_info_callback(const char *msg)
+- {
+-     va_message_callback(msg, MSGL_V);
+- }
+-+#endif
+- 
+- static void open_lavu_vaapi_device(struct mp_vaapi_ctx *ctx)
+- {
+-@@ -108,6 +127,10 @@ struct mp_vaapi_ctx *va_initialize(VADisplay *display, struct mp_log *plog,
+-         },
+-     };
+- 
+-+#if VA_CHECK_VERSION(1, 0, 0)
+-+    vaSetErrorCallback(display, va_error_callback, res);
+-+    vaSetInfoCallback(display,  va_info_callback,  res);
+-+#else
+-     pthread_mutex_lock(&va_log_mutex);
+-     MP_TARRAY_APPEND(NULL, va_mpv_clients, num_va_mpv_clients, res);
+-     pthread_mutex_unlock(&va_log_mutex);
+-@@ -118,6 +141,7 @@ struct mp_vaapi_ctx *va_initialize(VADisplay *display, struct mp_log *plog,
+-     vaSetErrorCallback(va_error_callback);
+-     vaSetInfoCallback(va_info_callback);
+- #endif
+-+#endif
+- 
+-     int major, minor;
+-     int status = vaInitialize(display, &major, &minor);
+-@@ -154,6 +178,7 @@ void va_destroy(struct mp_vaapi_ctx *ctx)
+-         if (ctx->destroy_native_ctx)
+-             ctx->destroy_native_ctx(ctx->native_ctx);
+- 
+-+#if !VA_CHECK_VERSION(1, 0, 0)
+-         pthread_mutex_lock(&va_log_mutex);
+-         for (int n = 0; n < num_va_mpv_clients; n++) {
+-             if (va_mpv_clients[n] == ctx) {
+-@@ -164,6 +189,7 @@ void va_destroy(struct mp_vaapi_ctx *ctx)
+-         if (num_va_mpv_clients == 0)
+-             TA_FREEP(&va_mpv_clients); // avoid triggering leak detectors
+-         pthread_mutex_unlock(&va_log_mutex);
+-+#endif
+- 
+-         talloc_free(ctx);
+-     }
+diff --git a/package/mpv/mpv.hash b/package/mpv/mpv.hash
+index 1dac3a4940..734b6a3663 100644
+--- a/package/mpv/mpv.hash
++++ b/package/mpv/mpv.hash
+@@ -1,2 +1,3 @@
+ # Locally calculated
+-sha256 2ad104d83fd3b2b9457716615acad57e479fd1537b8fc5e37bfe9065359b50be v0.27.2.tar.gz
++sha256 f9f9d461d1990f9728660b4ccb0e8cb5dce29ccaa6af567bec481b79291ca623 v0.29.1.tar.gz
++sha256 a99d7b0625a0566271aad6de694e52eafd566db024f9516720d526c680d3ee30 LICENSE.GPL
+diff --git a/package/mpv/mpv.mk b/package/mpv/mpv.mk
+index 3ab2673774..dfc33ea986 100644
+--- a/package/mpv/mpv.mk
++++ b/package/mpv/mpv.mk
+@@ -4,14 +4,14 @@
+ #
+ ################################################################################
+ 
+-MPV_VERSION = 0.27.2
++MPV_VERSION = 0.29.1
+ MPV_SITE = https://github.com/mpv-player/mpv/archive
+ MPV_SOURCE = v$(MPV_VERSION).tar.gz
+ MPV_DEPENDENCIES = \
+ 	host-pkgconf ffmpeg zlib \
+ 	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+ MPV_LICENSE = GPL-2.0+
+-MPV_LICENSE_FILES = LICENSE
++MPV_LICENSE_FILES = LICENSE.GPL
+ 
+ MPV_NEEDS_EXTERNAL_WAF = YES
+ 
+@@ -164,16 +164,12 @@ MPV_CONF_OPTS += --disable-libsmbclient
+ endif
+ 
+ # SDL support
+-# Both can't be used@the same time, prefer newer API
+-# It also requires 64-bit sync intrinsics
++# Sdl2 requires 64-bit sync intrinsics
+ ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_8)$(BR2_PACKAGE_SDL2),yy)
+-MPV_CONF_OPTS += --enable-sdl2 --disable-sdl1
++MPV_CONF_OPTS += --enable-sdl2
+ MPV_DEPENDENCIES += sdl2
+-else ifeq ($(BR2_TOOLCHAIN_HAS_SYNC_8)$(BR2_PACKAGE_SDL),yy)
+-MPV_CONF_OPTS += --enable-sdl1 --disable-sdl2
+-MPV_DEPENDENCIES += sdl
+ else
+-MPV_CONF_OPTS += --disable-sdl1 --disable-sdl2
++MPV_CONF_OPTS += --disable-sdl2
+ endif
+ 
+ # Raspberry Pi support
+-- 
+2.20.1
