@@ -1,11 +1,10 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Wed, 31 Jul 2019 18:00:59 +0200
-Subject: [Buildroot] [RFC PATCH v4 2/2] iputils: add capability for
- clockdiff, ping, traceroute6
-In-Reply-To: <20190730213846.7488-2-petr.vorel@gmail.com>
-References: <20190730213846.7488-1-petr.vorel@gmail.com>
- <20190730213846.7488-2-petr.vorel@gmail.com>
-Message-ID: <20190731160059.GJ3194@scaer>
+Date: Wed, 31 Jul 2019 18:08:09 +0200
+Subject: [Buildroot] [PATCH 1/2] system: add default to
+ BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
+In-Reply-To: <20190722051627.12993-1-petr.vorel@gmail.com>
+References: <20190722051627.12993-1-petr.vorel@gmail.com>
+Message-ID: <20190731160809.GK3194@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,72 +13,76 @@ To: buildroot@busybox.net
 
 Petr, All,
 
-On 2019-07-30 23:38 +0200, Petr Vorel spake thusly:
-> Not setting for arping as it can be used for ARP Poisoning.
+On 2019-07-22 07:16 +0200, Petr Vorel spake thusly:
+> Enable BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES if none
+> of non-supported rootfs is selected.
+
+No, sorry.
+
+As I explained in another thread, there are valid cases where one does
+not need capabilities (and thus xattrs) on their systems.
+
+In that case, your change would mean that the defconfig files of those
+people now default to using xattrs, when they previously would not.
+
+> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+> ---
+> Hi,
 > 
-> Use cap_net_raw+p (drop +e) as upstream sets that via
-> cap_set_flag(), see https://github.com/iputils/iputils/issues/194
+> not sure about cloop, cpio, tar, ubi.
+> 
+> Kind regards,
+> Petr
+> 
+>  system/Config.in | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/system/Config.in b/system/Config.in
+> index af7d8566d3..842e745cd3 100644
+> --- a/system/Config.in
+> +++ b/system/Config.in
+> @@ -196,6 +196,7 @@ config BR2_ROOTFS_STATIC_DEVICE_TABLE
+>  
+>  config BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
+>  	bool "support extended attributes in device tables"
+> +	default y if !BR2_TARGET_ROOTFS_AXFS && !BR2_TARGET_ROOTFS_CRAMFS && !BR2_TARGET_ROOTFS_ISO9660 && !BR2_TARGET_ROOTFS_ROMFS && !BR2_TARGET_ROOTFS_YAFFS2
 
-So, now we set the capabilities to those exectuables, do they still need
-to be setuid?
+In any case, iff we were to add this, this should be done differently,
+because we do not want to hard-code the list of filesystems here. For
+one, becaise the list is long; and for two, because of filesystems from
+the br2-external trees.
 
-But then, if one really does not want xattr, setuid is still required.
+Instead, we would have to do:
 
-So, we have no way to express that a file should have either setuid or
-xattrs, except as a big if-block like:
+    config BR2_ROOTFS_SUPPORTS_XATTRS
+        bool
 
-    ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
-    define IPUTILS_PERMISSIONS
-        /usr/bin/clockdiff    f 0755 0 0 - - - - -
-        |xattr cap_net_raw+p
-    endef
-    else
-    define IPUTILS_PERMISSIONS
-        /usr/bin/clockdiff    f 4755 0 0 - - - - -
-    endef
-    endif
+    config BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES
+        bool "support extended attributes in device tables"
+        default y if BR2_ROOTFS_SUPPORTS_XATTRS
 
-... which is what we were trying to avoid in the firstplace...
+and then filesystems would be responsible for setting:
 
-We could write something like:
+    config BR2_TARGET_ROOTFS_EXT2
+        bool "ext2/3/4 root filesystem"
+        select BR2_ROOTFS_SUPPORTS_XATTRS
 
-    /usr/bin/clockdiff    f $(MAYBE_SUID)755 0 0 - - - - -
-    |xattr cap_net_raw+p
-
-Where MAYBE_SUID would be set as:
-
-    MAYBE_SUID = $(if $(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),0,4)
-
-But it is starting to be a bit more complex than what you initially
-envisionned, I guess.
+But again, I think it does not gain much. People who want xattrs will
+know enough to enable it.
 
 Regards,
 Yann E. MORIN.
 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  package/iputils/iputils.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> index 8e6a3e2fc5..f1d3e1fc6a 100644
-> --- a/package/iputils/iputils.mk
-> +++ b/package/iputils/iputils.mk
-> @@ -76,8 +76,11 @@ IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
->  define IPUTILS_PERMISSIONS
->  	/usr/sbin/arping      f 4755 0 0 - - - - -
->  	/usr/bin/clockdiff    f 4755 0 0 - - - - -
-> +	|xattr cap_net_raw+p
->  	/bin/ping             f 4755 0 0 - - - - -
-> +	|xattr cap_net_raw+p
->  	/usr/bin/traceroute6  f 4755 0 0 - - - - -
-> +	|xattr cap_net_raw+p
->  endef
+>  	help
+>  	  Support extended attributes handling in device tables
 >  
->  $(eval $(meson-package))
 > -- 
-> 2.22.0
+> 2.20.1
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
