@@ -1,45 +1,37 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Wed, 31 Jul 2019 09:10:00 +0200
-Subject: [Buildroot] [PATCH 1/1] package/libmatroska: bump to version 1.5.2
-Message-ID: <20190731071000.13586-1-fontaine.fabrice@gmail.com>
+From: Andreas Naumann <dev@andin.de>
+Date: Wed, 31 Jul 2019 09:14:43 +0200
+Subject: [Buildroot] [PATCH v1] package/qt5base: fix libtool la file
+ dependency_libs entries
+In-Reply-To: <20190730212522.29386-1-ps.report@gmx.net>
+References: <20190730212522.29386-1-ps.report@gmx.net>
+Message-ID: <736e2e98-63b1-15e1-6189-d04a64c627e6@andin.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix build with libebml 1.3.9
+Hi Peter,
 
-Fixes:
- - http://autobuild.buildroot.org/results/148ba335dbf51cdba19185fc23f0d13b707b54f9
+Am 30.07.19 um 23:25 schrieb Peter Seiderer:
+> Fixes [1]:
+> 
+>    libtool:   error: cannot find the library '' or unhandled argument '/.../host/riscv64-buildroot-linux-gnu/sysroot/usr/lib/libQt5Widgets.so'
+> 
+> Add upstream suggested patch ([2]) to  change la file dependency_libs entries
+> to -L<path> -l<library> version.
+> 
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libmatroska/libmatroska.hash | 2 +-
- package/libmatroska/libmatroska.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Upstream has also reacted on my comment in 76625, which lead me to do 
+some more fiddling, whose result I posted there:
+https://bugreports.qt.io/browse/QTBUG-76625
 
-diff --git a/package/libmatroska/libmatroska.hash b/package/libmatroska/libmatroska.hash
-index e42a9b2824..827f08921c 100644
---- a/package/libmatroska/libmatroska.hash
-+++ b/package/libmatroska/libmatroska.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256	38a61dd5d87c070928b5deb3922b63b2b83c09e2e4a10f9393eecb6afa9795c8	libmatroska-1.4.9.tar.xz
-+sha256	0ac6debfbf781d47f001b830aaf9be9dfbcefd13bcfb80ca5efc1c04b4a3c962	libmatroska-1.5.2.tar.xz
- sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	LICENSE.LGPL
-diff --git a/package/libmatroska/libmatroska.mk b/package/libmatroska/libmatroska.mk
-index b8d0d84d35..7b7c5f03ef 100644
---- a/package/libmatroska/libmatroska.mk
-+++ b/package/libmatroska/libmatroska.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBMATROSKA_VERSION = 1.4.9
-+LIBMATROSKA_VERSION = 1.5.2
- LIBMATROSKA_SOURCE = libmatroska-$(LIBMATROSKA_VERSION).tar.xz
- LIBMATROSKA_SITE = http://dl.matroska.org/downloads/libmatroska
- LIBMATROSKA_INSTALL_STAGING = YES
--- 
-2.20.1
+To sum it up, in my case it was enough to change the absolute so-file 
+into the absolute la-file inside dependency_libs.
+
+
+regards, Andreas
+
+
+BTW: Since the libdir has an extra = inside the value, e.g. 
+libdir='=/...', I get an ugly warning that the library was moved.
