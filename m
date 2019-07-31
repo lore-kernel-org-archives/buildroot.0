@@ -1,43 +1,33 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Wed, 31 Jul 2019 09:25:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/host-mtd: fixes build
-In-Reply-To: <1564402300-3993-1-git-send-email-julien.boibessot@free.fr>
-References: <1564402300-3993-1-git-send-email-julien.boibessot@free.fr>
-Message-ID: <20190731092534.31da3132@windsurf>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Wed, 31 Jul 2019 10:24:46 +0200
+Subject: [Buildroot] [PATCH 1/2] package/libshout: move site to https
+Message-ID: <20190731082447.3441-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Julien,
+Move site from http to https as HTTP URL now returns
+"301 Moved Permanently"
 
-The commit title should rather be:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libshout/libshout.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	package/mtd: add host-zstd dependency to host variant to fix build
-
-On Mon, 29 Jul 2019 14:11:40 +0200
-julien.boibessot at free.fr wrote:
-
-> From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-> 
-> Fixes following build error when Host doesn't have zstd devt files:
-
-This should also mention that the issue was introduced in the commit
-bumping to 2.1.1, and add references to the autobuilder failures.
-
-However, why does this problem only occurs for the host variant, and
-not the target variant.
-
-Why is this warning causing a build failure ? Normally warnings are
-just warnings, not errors.
-
-Is this zstd dependency optional somehow ?
-
-Thanks,
-
-Thomas
+diff --git a/package/libshout/libshout.mk b/package/libshout/libshout.mk
+index 4f209081a4..375ce05b4b 100644
+--- a/package/libshout/libshout.mk
++++ b/package/libshout/libshout.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBSHOUT_VERSION = 2.4.1
+-LIBSHOUT_SITE = http://downloads.xiph.org/releases/libshout
++LIBSHOUT_SITE = https://downloads.xiph.org/releases/libshout
+ LIBSHOUT_LICENSE = LGPL-2.0+
+ LIBSHOUT_LICENSE_FILES = COPYING
+ LIBSHOUT_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
