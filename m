@@ -1,31 +1,74 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Aug 2019 00:12:09 +0200
-Subject: [Buildroot] [PATCH] package/x11r7/xlib_libXfont2: work around
- gcc bug 85180
-In-Reply-To: <20190712090407.54154-1-giulio.benetti@micronovasrl.com> (Giulio
- Benetti's message of "Fri, 12 Jul 2019 11:04:07 +0200")
-References: <20190712090407.54154-1-giulio.benetti@micronovasrl.com>
-Message-ID: <87a7ct97ly.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Aug 2019 00:13:10 +0200
+Subject: [Buildroot] [RFC PATCH v4 2/2] iputils: add capability for
+ clockdiff, ping, traceroute6
+In-Reply-To: <20190731160059.GJ3194@scaer>
+References: <20190730213846.7488-1-petr.vorel@gmail.com>
+ <20190730213846.7488-2-petr.vorel@gmail.com>
+ <20190731160059.GJ3194@scaer>
+Message-ID: <20190801001310.644e3dc0@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
+Hello,
 
- > With Microblaze Gcc version < 8.x the build hangs due to gcc bug
- > 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
- > shows up when building xlib_libXfont2 with optimization but not when
- > building with -O0. To work around this, if
- > BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force using -O0.
+On Wed, 31 Jul 2019 18:00:59 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/210/21099d27c03948daaca2d1c149eeba084427e3af/
+> > Use cap_net_raw+p (drop +e) as upstream sets that via
+> > cap_set_flag(), see https://github.com/iputils/iputils/issues/194  
+> 
+> So, now we set the capabilities to those exectuables, do they still need
+> to be setuid?
+> 
+> But then, if one really does not want xattr, setuid is still required.
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Ah, yes, indeed.
 
-Committed to 2019.02.x and 2019.05.x, thanks.
+> So, we have no way to express that a file should have either setuid or
+> xattrs, except as a big if-block like:
+> 
+>     ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
+>     define IPUTILS_PERMISSIONS
+>         /usr/bin/clockdiff    f 0755 0 0 - - - - -
+>         |xattr cap_net_raw+p
+>     endef
+>     else
+>     define IPUTILS_PERMISSIONS
+>         /usr/bin/clockdiff    f 4755 0 0 - - - - -
+>     endef
+>     endif
+> 
+> ... which is what we were trying to avoid in the firstplace...
 
+Yes, but I believe it's the best solution for now, let's keep a
+conditional like you're showing here. Which of course makes the change
+to makedevs no longer relevant.
+
+I really hope Petr is not going to hate us for all the discussion, back
+and forth and change of mind/opinion about this topic :-/
+
+> We could write something like:
+> 
+>     /usr/bin/clockdiff    f $(MAYBE_SUID)755 0 0 - - - - -
+>     |xattr cap_net_raw+p
+> 
+> Where MAYBE_SUID would be set as:
+> 
+>     MAYBE_SUID = $(if $(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),0,4)
+> 
+> But it is starting to be a bit more complex than what you initially
+> envisionned, I guess.
+
+Meh, no, please not like this.
+
+Best regards,
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
