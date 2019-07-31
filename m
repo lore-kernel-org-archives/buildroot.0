@@ -1,36 +1,21 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 00:16:47 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/zeromq: fix
- sha256 hash
-Message-ID: <20190731221407.975B588497@busybox.osuosl.org>
+Date: Thu, 01 Aug 2019 00:17:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/zeromq: bump to version 4.3.2
+In-Reply-To: <20190708171849.17423-1-asafka7@gmail.com> (Asaf Kahlon's message
+ of "Mon, 8 Jul 2019 20:18:49 +0300")
+References: <20190708171849.17423-1-asafka7@gmail.com>
+Message-ID: <875znh97dk.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bf73e317d7fe101d58c695f956a487509c97b23c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Asaf" == Asaf Kahlon <asafka7@gmail.com> writes:
 
-Bump to version 4.3.2 did not update sha256 hash
+ > Signed-off-by: Asaf Kahlon <asafka7@gmail.com>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2312a83288c5bf7b546d7e2100aaac425ec85845)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/zeromq/zeromq.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Committed to 2019.02.x and 2019.05.x, thanks.
 
-diff --git a/package/zeromq/zeromq.hash b/package/zeromq/zeromq.hash
-index 5b87c3ca15..689d960b28 100644
---- a/package/zeromq/zeromq.hash
-+++ b/package/zeromq/zeromq.hash
-@@ -2,6 +2,6 @@
- md5  2047e917c2cc93505e2579bcba67a573 zeromq-4.3.2.tar.gz
- sha1 e5253bff214f77621b3d29443f1aa6e5a106ffe5  zeromq-4.3.2.tar.gz
- # Locally computed
--sha256 bcbabe1e2c7d0eec4ed612e10b94b112dd5f06fcefa994a0c79a45d835cd21eb  zeromq-4.3.1.tar.gz
-+sha256 ebd7b5c830d6428956b67a0454a7f8cbed1de74b3b01e5c33c5378e22740f763  zeromq-4.3.2.tar.gz
- sha256 4fd86507c9b486764343065a9e035222869a27b5789efeb4fd93edc85412d7a3  COPYING
- sha256 83f32abe61ee58ffb1b007412c08415168c052501dbf56d7a47aaaac52b03ef6  COPYING.LESSER
+-- 
+Bye, Peter Korsgaard
