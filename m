@@ -1,114 +1,141 @@
-From: Peter Seiderer <ps.report@gmx.net>
-Date: Wed, 31 Jul 2019 19:07:11 +0200
-Subject: [Buildroot] [PATCH v2] package/qt5base: fix libtool la file
- dependency_libs entries
-Message-ID: <20190731170711.27591-1-ps.report@gmx.net>
+From: =?UTF-8?q?S=C3=A9bastien=20Szymanski?= <sebastien.szymanski@armadeus.com>
+Date: Wed, 31 Jul 2019 19:32:30 +0200
+Subject: [Buildroot] [PATCH 1/1] package/xenomai: bump to version 3.0.9
+Message-ID: <20190731173230.10065-1-sebastien.szymanski@armadeus.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes [1]:
+remove upstream patch:
+https://gitlab.denx.de/Xenomai/xenomai/commit/c5e9c0817839536562a2ae90921f4799f4a9ad46
 
-  libtool:   error: cannot find the library '' or unhandled argument '/.../host/riscv64-buildroot-linux-gnu/sysroot/usr/lib/libQt5Widgets.so'
-
-Add upstream suggested patch ([2]) to  change la file dependency_libs entries
-to -L<path> -l<library> version.
-
-[1] http://autobuild.buildroot.net/results/79c1e1b7a1bc53c1e9b2ae0c9acb443e6d2e2994
-[2] https://codereview.qt-project.org/c/qt/qtbase/+/269110
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: S?bastien Szymanski <sebastien.szymanski@armadeus.com>
 ---
-Changes v1 -> v2:
-  - exchange own patch by new suggested upstream patch (with added
-    upsteam url and signed of by)
----
- ...x-dependency_libs-entry-of-.la-files.patch | 75 +++++++++++++++++++
- 1 file changed, 75 insertions(+)
- create mode 100644 package/qt5/qt5base/5.12.4/0005-Fix-dependency_libs-entry-of-.la-files.patch
+ ...ated-destination-buffer-with-strncpy.patch | 91 -------------------
+ package/xenomai/xenomai.hash                  |  2 +-
+ package/xenomai/xenomai.mk                    |  2 +-
+ 3 files changed, 2 insertions(+), 93 deletions(-)
+ delete mode 100644 package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
 
-diff --git a/package/qt5/qt5base/5.12.4/0005-Fix-dependency_libs-entry-of-.la-files.patch b/package/qt5/qt5base/5.12.4/0005-Fix-dependency_libs-entry-of-.la-files.patch
-new file mode 100644
-index 0000000000..91313bd5c5
---- /dev/null
-+++ b/package/qt5/qt5base/5.12.4/0005-Fix-dependency_libs-entry-of-.la-files.patch
-@@ -0,0 +1,75 @@
-+From 23e437bb5cba5b13ee327c36d8199a49aad9a8da Mon Sep 17 00:00:00 2001
-+From: Joerg Bornemann <joerg.bornemann@qt.io>
-+Date: Wed, 31 Jul 2019 10:55:14 +0200
-+Subject: [PATCH] Fix dependency_libs entry of .la files
-+
-+Libtool cannot cope with absolute paths in the dependency_libs entry.
-+We split absolute paths into -L and -l here.
-+
-+Change-Id: I30bf11e490d1993d2a4d88c114e07bbae12def6d
-+Fixes: QTBUG-76625
-+
-+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/269146
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+---
-+ qmake/generators/unix/unixmake2.cpp | 36 +++++++++++++++++++++++++----
-+ 1 file changed, 31 insertions(+), 5 deletions(-)
-+
-+diff --git a/qmake/generators/unix/unixmake2.cpp b/qmake/generators/unix/unixmake2.cpp
-+index d9bcccf2e2..ddc3b063d4 100644
-+--- a/qmake/generators/unix/unixmake2.cpp
-++++ b/qmake/generators/unix/unixmake2.cpp
-+@@ -1450,6 +1450,33 @@ UnixMakefileGenerator::libtoolFileName(bool fixify)
-+ void
-+ UnixMakefileGenerator::writeLibtoolFile()
-+ {
-++    auto fixAbsolutePaths
-++            = [this](const ProStringList &libs)
-++              {
-++                  ProStringList result;
-++                  for (auto lib : libs) {
-++                      auto fi = fileInfo(lib.toQString());
-++                      if (fi.isAbsolute()) {
-++                          const QString libDirArg = "-L" + fi.path();
-++                          if (!result.contains(libDirArg))
-++                              result += libDirArg;
-++                          QString namespec = fi.fileName();
-++                          int dotPos = namespec.lastIndexOf('.');
-++                          if (dotPos != -1 && namespec.startsWith("lib")) {
-++                              namespec.truncate(dotPos);
-++                              namespec.remove(0, 3);
-++                          } else {
-++                              namespec.prepend(':');
-++                          }
-++                          result += "-l" + namespec;
-++                      } else {
-++
-++                          result += lib;
-++                      }
-++                  }
-++                  return result;
-++              };
-++
-+     QString fname = libtoolFileName(), lname = fname;
-+     mkdir(fileInfo(fname).path());
-+     int slsh = lname.lastIndexOf(Option::dir_sep);
-+@@ -1488,12 +1515,11 @@ UnixMakefileGenerator::writeLibtoolFile()
-+                          << ".a'\n\n";
-+
-+     t << "# Libraries that this one depends upon.\n";
-++    static const ProKey libVars[] = { "LIBS", "QMAKE_LIBS" };
-+     ProStringList libs;
-+-    libs << "LIBS" << "QMAKE_LIBS";
-+-    t << "dependency_libs='";
-+-    for (ProStringList::ConstIterator it = libs.begin(); it != libs.end(); ++it)
-+-        t << fixLibFlags((*it).toKey()).join(' ') << ' ';
-+-    t << "'\n\n";
-++    for (auto var : libVars)
-++        libs += fixLibFlags(var);
-++    t << "dependency_libs='" << fixAbsolutePaths(libs).join(' ') << "'\n\n";
-+
-+     t << "# Version information for " << lname << "\n";
-+     int maj = project->first("VER_MAJ").toInt();
-+--
-+2.22.0
-+
---
-2.22.0
+diff --git a/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch b/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
+deleted file mode 100644
+index cb2b1fee48..0000000000
+--- a/package/xenomai/0001-demos-posix-prevent-unterminated-destination-buffer-with-strncpy.patch
++++ /dev/null
+@@ -1,91 +0,0 @@
+-From cdc63fe259c70a8a5304aa07087650ebf4ee6b5d Mon Sep 17 00:00:00 2001
+-From: Philippe Gerum <rpm@xenomai.org>
+-Date: Wed, 24 Oct 2018 11:28:49 +0200
+-Subject: [PATCH] demos/posix: prevent unterminated destination buffer with
+- strncpy()
+-
+-GCC 8.x introduced -Wstringop-truncation to help detecting likely
+-unwanted outcomes of strncpy(dst, src, n), such as omitting the NUL
+-character into the destination buffer whenever n < sizeof(src).
+-
+-Fix unsafe strncpy() calls when we do expect a null-terminated
+-destination buffer.
+-
+-Signed-off-by: Philippe Gerum <rpm@xenomai.org>
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Retrieved from:
+-https://gitlab.denx.de/Xenomai/xenomai/commit/cdc63fe259c70a8a5304aa07087650ebf4ee6b5d]
+----
+- demo/posix/cobalt/can-rtt.c        | 4 ++--
+- demo/posix/cobalt/eth_p_all.c      | 3 ++-
+- demo/posix/cyclictest/cyclictest.c | 4 ++--
+- 3 files changed, 6 insertions(+), 5 deletions(-)
+-
+-diff --git a/demo/posix/cobalt/can-rtt.c b/demo/posix/cobalt/can-rtt.c
+-index 61cad05e5..dd212d804 100644
+---- a/demo/posix/cobalt/can-rtt.c
+-+++ b/demo/posix/cobalt/can-rtt.c
+-@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
+- 	return -1;
+-     }
+- 
+--    strncpy(ifr.ifr_name, rxdev, IFNAMSIZ);
+-+    namecpy(ifr.ifr_name, rxdev);
+-     printf("RX rxsock=%d, ifr_name=%s\n", rxsock, ifr.ifr_name);
+- 
+-     if (ioctl(rxsock, SIOCGIFINDEX, &ifr) < 0) {
+-@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
+- 	    goto failure1;
+- 	}
+- 
+--	strncpy(ifr.ifr_name, txdev, IFNAMSIZ);
+-+	namecpy(ifr.ifr_name, txdev);
+- 	printf("TX txsock=%d, ifr_name=%s\n", txsock, ifr.ifr_name);
+- 
+- 	if (ioctl(txsock, SIOCGIFINDEX, &ifr) < 0) {
+-diff --git a/demo/posix/cobalt/eth_p_all.c b/demo/posix/cobalt/eth_p_all.c
+-index 6ac12ab3e..91aef9fbd 100644
+---- a/demo/posix/cobalt/eth_p_all.c
+-+++ b/demo/posix/cobalt/eth_p_all.c
+-@@ -40,6 +40,7 @@
+- #include <net/if.h>
+- #include <arpa/inet.h>
+- #include <netinet/ether.h>
+-+#include <boilerplate/ancillaries.h>
+- 
+- char buffer[10*1024];
+- int sock;
+-@@ -72,7 +73,7 @@ int main(int argc, char *argv[])
+- 	if (argc > 1) {
+- 		struct ifreq ifr;
+- 
+--		strncpy(ifr.ifr_name, argv[1], IFNAMSIZ);
+-+		namecpy(ifr.ifr_name, argv[1]);
+- 		if (ioctl(sock, SIOCGIFINDEX, &ifr) < 0) {
+- 			perror("cannot get interface index");
+- 			close(sock);
+-diff --git a/demo/posix/cyclictest/cyclictest.c b/demo/posix/cyclictest/cyclictest.c
+-index ebe5461db..76983bd02 100644
+---- a/demo/posix/cyclictest/cyclictest.c
+-+++ b/demo/posix/cyclictest/cyclictest.c
+-@@ -1353,7 +1353,7 @@ static void process_options (int argc, char *argv[], int max_cpus)
+- 		case 'F':
+- 		case OPT_FIFO:
+- 			use_fifo = 1;
+--			strncpy(fifopath, optarg, strlen(optarg));
+-+			strncpy(fifopath, optarg, sizeof(fifopath) - 1);
+- 			break;
+- 
+- 		case 'H':
+-@@ -1458,7 +1458,7 @@ static void process_options (int argc, char *argv[], int max_cpus)
+- 		case 'T':
+- 		case OPT_TRACER:
+- 			tracetype = CUSTOM;
+--			strncpy(tracer, optarg, sizeof(tracer));
+-+			strncpy(tracer, optarg, sizeof(tracer) - 1);
+- 			break;
+- 		case 'u':
+- 		case OPT_UNBUFFERED:
+--- 
+-2.18.1
+-
+diff --git a/package/xenomai/xenomai.hash b/package/xenomai/xenomai.hash
+index cd518e20e9..0fc560f978 100644
+--- a/package/xenomai/xenomai.hash
++++ b/package/xenomai/xenomai.hash
+@@ -1,2 +1,2 @@
+ # Locally computed;
+-sha256 c373261ddb8280d9d7078cdd9cd9646dfb7d70d8cd3aa9693d9148f03990d711  xenomai-3.0.8.tar.bz2
++sha256 9e4b879ee48e6423f76cba5882f41d129164fe977119080ff41ef531ee50dc4e  xenomai-3.0.9.tar.bz2
+diff --git a/package/xenomai/xenomai.mk b/package/xenomai/xenomai.mk
+index 3cb7dada4b..16c486eb34 100644
+--- a/package/xenomai/xenomai.mk
++++ b/package/xenomai/xenomai.mk
+@@ -6,7 +6,7 @@
+ 
+ XENOMAI_VERSION = $(call qstrip,$(BR2_PACKAGE_XENOMAI_VERSION))
+ ifeq ($(XENOMAI_VERSION),)
+-XENOMAI_VERSION = 3.0.8
++XENOMAI_VERSION = 3.0.9
+ else
+ BR_NO_CHECK_HASH_FOR += $(XENOMAI_SOURCE)
+ endif
+-- 
+2.21.0
