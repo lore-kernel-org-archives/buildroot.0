@@ -1,41 +1,63 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 00:21:53 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/imx-uuc: fix
- static build with musl
-Message-ID: <20190731221911.DA95B8894D@busybox.osuosl.org>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 1 Aug 2019 00:24:01 +0200
+Subject: [Buildroot] [RFC PATCH v4 2/2] iputils: add capability for
+ clockdiff, ping, traceroute6
+In-Reply-To: <20190801001310.644e3dc0@windsurf.home>
+References: <20190730213846.7488-1-petr.vorel@gmail.com>
+ <20190730213846.7488-2-petr.vorel@gmail.com>
+ <20190731160059.GJ3194@scaer>
+ <20190801001310.644e3dc0@windsurf.home>
+Message-ID: <20190731222400.GB5083@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=186172bd0cac7338f8749672c1266fb0972b1cca
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+Hi Thomas, Yann,
 
-Use TARGET_CONFIGURE_OPTS to pass -static in LDFLAGS when building
-statically
+I've sent v5 before your mail, sorry for forgetting to Cc you.
+> Hello,
 
-Fixes:
- - http://autobuild.buildroot.org/results/12c08173f83315fb68fe3c3d34a78ed919ba5a79
+> On Wed, 31 Jul 2019 18:00:59 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit df781e31ca9d695fd6cdf95b2078f608e8fd70d8)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/freescale-imx/imx-uuc/imx-uuc.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > > Use cap_net_raw+p (drop +e) as upstream sets that via
+> > > cap_set_flag(), see https://github.com/iputils/iputils/issues/194  
 
-diff --git a/package/freescale-imx/imx-uuc/imx-uuc.mk b/package/freescale-imx/imx-uuc/imx-uuc.mk
-index 52d2b7c7a3..e94648b832 100644
---- a/package/freescale-imx/imx-uuc/imx-uuc.mk
-+++ b/package/freescale-imx/imx-uuc/imx-uuc.mk
-@@ -14,7 +14,7 @@ IMX_UUC_LICENSE_FILES = COPYING
- IMX_UUC_DEPENDENCIES = host-dosfstools
- 
- define IMX_UUC_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CC=$(TARGET_CC)
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS)
- endef
- 
- define IMX_UUC_INSTALL_TARGET_CMDS
+> > So, now we set the capabilities to those exectuables, do they still need
+> > to be setuid?
+
+> > But then, if one really does not want xattr, setuid is still required.
+
+> Ah, yes, indeed.
+
+> > So, we have no way to express that a file should have either setuid or
+> > xattrs, except as a big if-block like:
+
+> >     ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
+> >     define IPUTILS_PERMISSIONS
+> >         /usr/bin/clockdiff    f 0755 0 0 - - - - -
+> >         |xattr cap_net_raw+p
+> >     endef
+> >     else
+> >     define IPUTILS_PERMISSIONS
+> >         /usr/bin/clockdiff    f 4755 0 0 - - - - -
+> >     endef
+> >     endif
+
+> > ... which is what we were trying to avoid in the firstplace...
+
+> Yes, but I believe it's the best solution for now, let's keep a
+> conditional like you're showing here. Which of course makes the change
+> to makedevs no longer relevant.
+Sure :). So merge the original version [1], related only to iputils?
+
+> I really hope Petr is not going to hate us for all the discussion, back
+> and forth and change of mind/opinion about this topic :-/
+No, not at all :).
+
+Kind regards,
+Petr
+
+[1] https://patchwork.ozlabs.org/patch/1138055/
