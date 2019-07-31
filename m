@@ -1,59 +1,51 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Wed, 31 Jul 2019 16:35:04 +0200
-Subject: [Buildroot] [PATCH] configs/warp7: Bump the kernel version
-In-Reply-To: <20190731135435.9484-1-festevam@gmail.com>
-References: <20190731135435.9484-1-festevam@gmail.com>
-Message-ID: <14238612-5830-e971-32c3-71bfd97edc3d@koncepto.io>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Wed, 31 Jul 2019 15:42:52 +0100
+Subject: [Buildroot] [PATCH 1/1] configs/freescale_imx8mmevk_defconfig: bump
+ to 4.14.98_2.0.0
+Message-ID: <20190731144252.22395-1-mark.corbin@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabio,
+Update the i.MX8MM-EVK BSP to match the latest version
+referenced on the NXP website.
 
-Le 31/07/2019 ? 15:54, Fabio Estevam a ?crit?:
-> Bump the kernel to version 5.2.4.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+---
+ configs/freescale_imx8mmevk_defconfig | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Reviewed-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-
-Thanks !
-
-Pierre-Jean
-
-> ---
->   configs/warp7_defconfig | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/configs/warp7_defconfig b/configs/warp7_defconfig
-> index 9b10085b65..1910478b35 100644
-> --- a/configs/warp7_defconfig
-> +++ b/configs/warp7_defconfig
-> @@ -3,8 +3,8 @@ BR2_arm=y
->   BR2_cortex_a7=y
->   BR2_ARM_FPU_NEON_VFPV4=y
->   
-> -# Linux headers same as kernel, a 5.1 series
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_1=y
-> +# Linux headers same as kernel, a 5.2 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_2=y
->   
->   # system
->   BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-> @@ -15,7 +15,7 @@ BR2_ROOTFS_OVERLAY="board/warp7/rootfs_overlay"
->   # Kernel
->   BR2_LINUX_KERNEL=y
->   BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1.16"
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.2.4"
->   BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
->   BR2_LINUX_KERNEL_DTS_SUPPORT=y
->   BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7s-warp"
-> 
-
+diff --git a/configs/freescale_imx8mmevk_defconfig b/configs/freescale_imx8mmevk_defconfig
+index 1acb3a694b..5472ed36bd 100644
+--- a/configs/freescale_imx8mmevk_defconfig
++++ b/configs/freescale_imx8mmevk_defconfig
+@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/fsl-imx8mm-evk.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_GIT=y
+ BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/linux-imx"
+-BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
++BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/fsl-imx8mm-evk"
+@@ -20,14 +20,14 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/imx-atf"
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_GIT=y
+ BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://source.codeaurora.org/external/imx/uboot-imx"
+-BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.14.78_1.0.0_ga"
++BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="rel_imx_4.14.98_2.0.0_ga"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
 -- 
-Pierre-Jean Texier
-Embedded Linux Engineer
-https://koncepto.io
+2.19.1
