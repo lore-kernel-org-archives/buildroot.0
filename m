@@ -1,84 +1,32 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Aug 2019 08:28:57 +0200
-Subject: [Buildroot] [git commit] package/socketcand: fix build with kernel
- >= 5.2
-Message-ID: <20190801070639.812CA7FFD8@busybox.osuosl.org>
+Date: Thu, 1 Aug 2019 09:22:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/can-utils: fix build with
+ kernel >= 5.2
+In-Reply-To: <20190714201920.15718-1-fontaine.fabrice@gmail.com>
+References: <20190714201920.15718-1-fontaine.fabrice@gmail.com>
+Message-ID: <20190801092222.5041abd5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a40ac385b0ae65e6291413d4489ae2e72341c81b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 14 Jul 2019 22:19:20 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Fixes:
- - http://autobuild.buildroot.org/results/3112b1ad77e805cd3ca61bb79560e8e13a466589
+> Fixes:
+>  - http://autobuild.buildroot.org/results/363de7d9bf433be8bc47ba4ee52ae0bb80fa9021
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...o-find-SIOCGSTAMP-with-latest-kernel.patch | 109 ++++++++++++++++++
+>  1 file changed, 109 insertions(+)
+>  create mode 100644 package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...ude-to-find-SIOCGSTAMP-with-latest-kernel.patch | 54 ++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/socketcand/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch b/package/socketcand/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
-new file mode 100644
-index 0000000000..5e7554733e
---- /dev/null
-+++ b/package/socketcand/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
-@@ -0,0 +1,54 @@
-+From e6f21b0cd5a449c1bf7a4d2c6bc5ad278a2d4e8e Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 15 Jul 2019 01:01:34 +0200
-+Subject: [PATCH] fix include to find SIOCGSTAMP with latest kernel
-+
-+In linux kernel commit 0768e17073dc527ccd18ed5f96ce85f9985e9115
-+the asm-generic/sockios.h header no longer defines SIOCGSTAMP.
-+Instead it provides only SIOCGSTAMP_OLD.
-+
-+The linux/sockios.h header now defines SIOCGSTAMP using either
-+SIOCGSTAMP_OLD or SIOCGSTAMP_NEW as appropriate. This linux only
-+header file is not pulled so we get a build failure.
-+
-+./state_bcm.c: In function 'state_bcm':
-+./state_bcm.c:91:16: error: 'SIOCGSTAMP' undeclared (first use in this function); did you mean 'SIOCGARP'?
-+   if(ioctl(sc, SIOCGSTAMP, &tv) < 0) {
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/3112b1ad77e805cd3ca61bb79560e8e13a466589
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+[Upstream status: https://github.com/dschanoeh/socketcand/pull/26]
-+---
-+ state_bcm.c   | 1 +
-+ state_isotp.c | 1 +
-+ 2 files changed, 2 insertions(+)
-+
-+diff --git a/state_bcm.c b/state_bcm.c
-+index 0c980fa..d6bdd7e 100644
-+--- a/state_bcm.c
-++++ b/state_bcm.c
-+@@ -21,6 +21,7 @@
-+ #include <linux/can.h>
-+ #include <linux/can/bcm.h>
-+ #include <linux/can/error.h>
-++#include <linux/sockios.h>
-+ 
-+ #define RXLEN 128
-+ 
-+diff --git a/state_isotp.c b/state_isotp.c
-+index 4005f94..7b515e7 100644
-+--- a/state_isotp.c
-++++ b/state_isotp.c
-+@@ -20,6 +20,7 @@
-+ #include <linux/can.h>
-+ #include <linux/can/isotp.h>
-+ #include <linux/can/error.h>
-++#include <linux/sockios.h>
-+ 
-+ int si = -1;
-+ fd_set readfds;
-+-- 
-+2.20.1
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
