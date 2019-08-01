@@ -1,35 +1,56 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  1 Aug 2019 18:22:32 +0200
-Subject: [Buildroot] [PATCH 1/2 v7] package/iputils: drop setuid on arping
-In-Reply-To: <cover.1564676540.git.yann.morin.1998@free.fr>
-References: <cover.1564676540.git.yann.morin.1998@free.fr>
-Message-ID: <f9b8b678e88316d6b572dc87e5080896cd8a84c7.1564676540.git.yann.morin.1998@free.fr>
+Date: Thu,  1 Aug 2019 18:22:30 +0200
+Subject: [Buildroot] [PATCH 0/2 v7] package/iputils: use capabilties (branch
+ yem/iputils-caps)
+Message-ID: <cover.1564676540.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-arping can be used for arp poisoning, so it should really not be setuid.
+Hello All!
 
-Reported-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/iputils/iputils.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This small series changes iputils to use capabilities if support for
+extended attributes is enabled.
 
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index b28222138f..7482bbdca1 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -80,7 +80,7 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
- # handle permissions ourselves
- IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
- define IPUTILS_PERMISSIONS
--	/usr/sbin/arping      f 4755 0 0 - - - - -
-+	/usr/sbin/arping      f  755 0 0 - - - - -
- 	/usr/bin/clockdiff    f 4755 0 0 - - - - -
- 	/bin/ping             f 4755 0 0 - - - - -
- 	/usr/bin/traceroute6  f 4755 0 0 - - - - -
+Additionally, arping can be used for arp poisoning, so it should not be
+usable by a non-root user. As such, we remove the setuid bit, and do not
+assign it a capability either.
+
+
+Regards,
+Yann E. MORIN.
+
+
+The following changes since commit 152e160bf6fcbb8f73c60944107e3a82f91edf50
+
+  package/netsurf: add optional dependency on webp (2019-08-01 16:54:04 +0200)
+
+
+are available in the git repository at:
+
+  git://git.buildroot.org/~ymorin/git/buildroot.git
+
+for you to fetch changes up to 7357ef816dae35990f461175f35135fb4996eb54
+
+  package/iputils: use capabilities if possible (2019-08-01 18:18:07 +0200)
+
+
+----------------------------------------------------------------
+Petr Vorel (1):
+      package/iputils: use capabilities if possible
+
+Yann E. MORIN (1):
+      package/iputils: drop setuid on arping
+
+ package/iputils/iputils.mk | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
