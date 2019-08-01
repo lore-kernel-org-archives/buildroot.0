@@ -1,110 +1,62 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  1 Aug 2019 13:16:54 +0200
-Subject: [Buildroot] [PATCH 2/2] package/rtorrent: bump to version 0.9.8
-In-Reply-To: <20190801111654.31714-1-fontaine.fabrice@gmail.com>
-References: <20190801111654.31714-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190801111654.31714-2-fontaine.fabrice@gmail.com>
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
+Date: Thu,  1 Aug 2019 13:57:20 +0200
+Subject: [Buildroot] [PATCH 1/1] qemu: fix host virtfs option
+Message-ID: <20190801115720.11307-1-vincent.stehle@arm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Remove patch (already in version) and drop AUTORECONF as it is not
-needed anymore
+Fix the build of host-qemu with virtfs enabled: fix a typo in makefile
+conditional and add a dependency on host-libcap.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+The virtfs configuration option was added by commit e0f49e648401
+("package/qemu: add option to enable virtual filesystem in host qemu").
+
+Signed-off-by: Vincent Stehle <vincent.stehle@arm.com>
+Cc: Etienne Carriere <etienne.carriere@linaro.org>
 ---
- package/rtorrent/0001-cross_compile.patch | 54 -----------------------
- package/rtorrent/rtorrent.hash            |  2 +-
- package/rtorrent/rtorrent.mk              |  3 +-
- 3 files changed, 2 insertions(+), 57 deletions(-)
- delete mode 100644 package/rtorrent/0001-cross_compile.patch
 
-diff --git a/package/rtorrent/0001-cross_compile.patch b/package/rtorrent/0001-cross_compile.patch
-deleted file mode 100644
-index 1c40eaebb3..0000000000
---- a/package/rtorrent/0001-cross_compile.patch
-+++ /dev/null
-@@ -1,54 +0,0 @@
--From d62f7474289970d5be3fd658dd6ace4489408bdf Mon Sep 17 00:00:00 2001
--From: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--Date: Mon, 5 Oct 2015 00:52:26 +0100
--Subject: [PATCH] Fix cross compilation, based on OpenWRT patch.
--
--[Vincent: tweak the patch for version 0.9.6]
--[Bernd: tweak the patch for version 0.9.7]
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Signed-off-by: Vicente Olivert Riera <Vincent.Riera@imgtec.com>
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- scripts/checks.m4 | 2 +-
-- scripts/common.m4 | 4 ++--
-- 2 files changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/scripts/checks.m4 b/scripts/checks.m4
--index 8d77fc5..c446995 100644
----- a/scripts/checks.m4
--+++ b/scripts/checks.m4
--@@ -96,7 +96,7 @@ AC_DEFUN([TORRENT_CHECK_KQUEUE], [
-- AC_DEFUN([TORRENT_CHECK_KQUEUE_SOCKET_ONLY], [
--   AC_MSG_CHECKING(whether kqueue supports pipes and ptys)
-- 
---  AC_RUN_IFELSE([AC_LANG_SOURCE([
--+  AC_LINK_IFELSE([AC_LANG_SOURCE([
--       #include <fcntl.h>
--       #include <stdlib.h>
--       #include <unistd.h>
--diff --git a/scripts/common.m4 b/scripts/common.m4
--index 9885b03..a0af7e7 100644
----- a/scripts/common.m4
--+++ b/scripts/common.m4
--@@ -153,7 +153,7 @@ dnl   Need to fix this so that it uses the stuff defined by the system.
-- AC_DEFUN([TORRENT_CHECK_EXECINFO], [
--   AC_MSG_CHECKING(for execinfo.h)
-- 
---  AC_RUN_IFELSE([AC_LANG_SOURCE([
--+  AC_LINK_IFELSE([AC_LANG_SOURCE([
--       #include <execinfo.h>
--       int main() { backtrace((void**)0, 0); backtrace_symbols((char**)0, 0); return 0;}
--       ])],
--@@ -168,7 +168,7 @@ AC_DEFUN([TORRENT_CHECK_EXECINFO], [
-- AC_DEFUN([TORRENT_CHECK_ALIGNED], [
--   AC_MSG_CHECKING(the byte alignment)
-- 
---  AC_RUN_IFELSE([AC_LANG_SOURCE([
--+  AC_LINK_IFELSE([AC_LANG_SOURCE([
--       #include <inttypes.h>
--       int main() {
--         char buf@<:@8@:>@ = { 0, 0, 0, 0, 1, 0, 0, 0 };
---- 
--2.18.0
--
-diff --git a/package/rtorrent/rtorrent.hash b/package/rtorrent/rtorrent.hash
-index 9f5ef2b4fc..a20e63782b 100644
---- a/package/rtorrent/rtorrent.hash
-+++ b/package/rtorrent/rtorrent.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 5d9842fe48c9582fbea2c7bf9f51412c1ccbba07d059b257039ad53b863fe8bb  rtorrent-0.9.7.tar.gz
-+sha256 9edf0304bf142215d3bc85a0771446b6a72d0ad8218efbe184b41e4c9c7542af  rtorrent-0.9.8.tar.gz
- sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-diff --git a/package/rtorrent/rtorrent.mk b/package/rtorrent/rtorrent.mk
-index aaf86be647..bc3afe8064 100644
---- a/package/rtorrent/rtorrent.mk
-+++ b/package/rtorrent/rtorrent.mk
-@@ -4,10 +4,9 @@
- #
- ################################################################################
+
+(Re-sending in ascii)
+
+Hi,
+
+I build-tested this with a number of architectures[1], with VIRTFS=y/n and
+this looks fine.
+  During testing I remarked that VIRTFS=n is somewhat "weak", as it does
+not forcibly disable virtfs. This means qemu can still auto-detect libcap
+and libattr, and decide to auto-enable virtfs. I think this does not harm,
+but we could also add an explicit --disable-virtfs if preferred. Do not
+hesitate to let me know if I should respin with this change.
+
+...et au passage un petit coucou a Etienne :)
+
+Vincent.
+
+[1]: aarch64, arm, i386, m68k, microblaze, microblazeel, mips, mips64,
+mips64el, mipsel, ppc, ppc64, riscv32, riscv64, sh4, sh4eb, sparc and
+x86_64.
+
+
+ package/qemu/qemu.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 73e0778d73..eff4bb6213 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -271,8 +271,9 @@ HOST_QEMU_OPTS += --enable-vde
+ HOST_QEMU_DEPENDENCIES += host-vde2
+ endif
  
--RTORRENT_VERSION = 0.9.7
-+RTORRENT_VERSION = 0.9.8
- RTORRENT_SITE = http://rtorrent.net/downloads
- RTORRENT_DEPENDENCIES = host-pkgconf libcurl libtorrent ncurses
--RTORRENT_AUTORECONF = YES
- RTORRENT_LICENSE = GPL-2.0
- RTORRENT_LICENSE_FILES = COPYING
+-ifdef ($(BR2_PACKAGE_HOST_QEMU_VIRTFS),y)
++ifeq ($(BR2_PACKAGE_HOST_QEMU_VIRTFS),y)
+ HOST_QEMU_OPTS += --enable-virtfs
++HOST_QEMU_DEPENDENCIES += host-libcap
+ endif
  
+ # Override CPP, as it expects to be able to call it like it'd
 -- 
 2.20.1
