@@ -1,36 +1,71 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 1 Aug 2019 12:43:12 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] libv4l: add an option for IR BPF based decoders
-In-Reply-To: <20181109172648.10289-1-fontaine.fabrice@gmail.com>
-References: <20181109172648.10289-1-fontaine.fabrice@gmail.com>
-Message-ID: <0d7c03c9-feee-0f45-2fd2-355e15d0e606@mind.be>
+From: Atharva Lele <itsatharva@gmail.com>
+Date: Thu, 01 Aug 2019 16:16:55 +0530
+Subject: [Buildroot] [PATCH v4 00/30] builder-class series cover letter
+In-Reply-To: <20190801103951.05be1116@windsurf.home>
+References: <20190801024643.11024-1-itsatharva@gmail.com>
+ <20190801103951.05be1116@windsurf.home>
+Message-ID: <1899192.UD1Ciha8BC@msi-manjaro>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Fabrice,
-
-On 09/11/2018 18:26, Fabrice Fontaine wrote:
-> Bump to version 1.61.1 added BPF based protocols support:
-> https://git.linuxtv.org/v4l-utils.git/commit/?id=d6025b0e8c7f57b0f9390f987acc5eed57360d80
+On Thursday, August 1, 2019 2:09:51 PM IST Thomas Petazzoni wrote:
+> Hello Atharva,
 > 
-> However, this dependency needs BPF support in kernel. On old kernels
-> (before 3.18), __NR_BPF is not defined for all architectures.
-> So retrieve upstream patch and add an option to enable BPF only if
-> headers are above 3.18.
+> On Thu,  1 Aug 2019 08:16:13 +0530
 > 
-> Also drop patch to add bpf_common.h on old kernels (not needed anymore)
+> Atharva Lele <itsatharva@gmail.com> wrote:
+> > Since various functions in the autobuilder script use a lot of common
+> > data, we introduce a Builder class to house these variables.
+> > 
+> > I have also included modified versions of Thomas's commits after adapting
+> > them to work with Builder class.
+> > 
+> > I created a v4 to change the order of one patch, and to delete another
+> > patch. No other changes have been made.
+> > 
+> > RFC: Few patches, namely patches 25, 27-30 have not been reviewed yet. I'd
+> > like some feedback on them, if any, so that necessary modifications can
+> > be done and it can be merged as soon as possible.
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/442de57cb76a7b38d71d690490faadc641036374
+> First of all, thanks a lot for all this work! Nice refactoring of the
+> autobuild-run script.
 
- This problem apparently went away with the bump to 1.16.2 (without needing to
-give the --disable-bpf config argument) so I've marked this patch as Superseded.
+Thank you!
 
- Please respin if you think it is still needed.
+> I merged all patches up to patch 27, included. According to Arnout,
+> applying patches 28/29/30 is problematic, because builds done in
+> different output directories are currently not reproducible at all, so
+> we would simply fail *all* reproducible builds if we apply those
+> patches. So I believe we need to fix this before we can apply such
+> patches.
 
- Regards,
- Arnout
+Yes, correct.
+
+> A small detail is that patches 28 and 29 should be squashed together:
+> patch 28 is only introducing a new variable pointing to the secondary
+> output directory, but it's not used anywhere.
+
+OK, so once I'm done with the reproducibility fixes for different output 
+directories, I'll send the revised version.
+
+> Also, long term, I'd like the send_results() method to be split into
+> several methods. One calculating the failure reason, one deciding if
+> the build result should be rejected, one preparing the build results
+> for upload, one doing the actual upload. But please don't work on this
+> additional refactoring, I think it's much more important that you focus
+> on the reproducible build topic.
+
+Of course! I'd love to work on it once majority of work on reproducible builds 
+is done.
+
+> Thanks!
+> 
+> Thomas
+
+Thanks for merging!
+
+Regards,
+Atharva Lele
