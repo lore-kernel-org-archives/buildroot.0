@@ -1,55 +1,105 @@
 From: Victor Huesca <victor.huesca@bootlin.com>
-Date: Thu,  1 Aug 2019 17:12:43 +0200
-Subject: [Buildroot] [PATCH v3] support/scripts/pkg-stats: fix flake8 issues
-Message-ID: <20190801151244.32281-1-victor.huesca@bootlin.com>
+Date: Thu,  1 Aug 2019 17:12:44 +0200
+Subject: [Buildroot] [PATCH v3] support/scripts/pkg-stats: retrieve packages
+ latest version using processes
+In-Reply-To: <20190801151244.32281-1-victor.huesca@bootlin.com>
+References: <20190801151244.32281-1-victor.huesca@bootlin.com>
+Message-ID: <20190801151244.32281-2-victor.huesca@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - blank space before ':'
- - unused 'o' variable left from a previous patch
- - bad continuous alignment
+The major bottleneck in pkg-stats is the time spent waiting for answer
+from distant servers. Two functions involve such communications with
+remote servers are:
+- 'check_package_urls' which check that package website are up, it
+  is efficient do to the use of process-pools thanks to Matt Weber.
+- 'check_package_latest_version' which fetch the latest package version
+  from release-monitoring, it uses a http-pool but run sequentially.
+
+This patch extends the use of process-pools to 'check_latest_version'.
+Due to some limitations of multiprocess callbacks, this patch lose the
+overall progress of packages in favour of just the current package name.
+
+Runtimes for this function are ~3m vs ~25m for the linear version.
+Tested on an i7 7500U (2/4 cores/threads @3.5GHz) with 15ms ping.
+
+Note: There have already been work trying to parallelize this function
+using threads but there were a failure on some configurations [1].
+This implementation rely on a dedicated module already in use on this
+script, so it's unlikely to see failure with this version.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2018-March/215368.html
 
 Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
 ---
- support/scripts/pkg-stats | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+Canges v2 --> v3:
+  - remove the feedback since it require the non-standard 
+    and non packaged 'multiprocess' module instead of the standard 
+    multiprocessing.
+---
+ support/scripts/pkg-stats | 33 +++++++++++++++++++++------------
+ 1 file changed, 21 insertions(+), 12 deletions(-)
 
 diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
-index f759d2de7b..225c19e1ab 100755
+index 4409d22986..f759d2de7b 100755
 --- a/support/scripts/pkg-stats
 +++ b/support/scripts/pkg-stats
-@@ -248,7 +248,7 @@ def package_init_make_info():
-             pkgvar = pkgvar[:-8]
-             Package.all_licenses.append(pkgvar)
+@@ -38,6 +38,9 @@ RM_API_STATUS_FOUND_BY_DISTRO = 2
+ RM_API_STATUS_FOUND_BY_PATTERN = 3
+ RM_API_STATUS_NOT_FOUND = 4
  
--        elif pkgvar.endswith("_LICENSE_FILES") :
-+        elif pkgvar.endswith("_LICENSE_FILES"):
-             if pkgvar.endswith("_MANIFEST_LICENSE_FILES"):
-                 continue
-             pkgvar = pkgvar[:-14]
-@@ -691,7 +691,6 @@ def dump_json(packages, stats, date, commit, output):
-     }
-     statistics['infra'] = {k[6:]: v for k, v in stats.items() if k.startswith('infra-')}
-     # The actual structure to dump, add commit and date to it
--    o = subprocess.check_output(["git", "log", "master", "-n", "1", "--pretty=format:%H"])
-     final = {'packages': pkgs,
-              'stats': statistics,
-              'commit': commit,
-@@ -711,9 +710,9 @@ def parse_args():
-                         help='JSON output file')
-     packages = parser.add_mutually_exclusive_group()
-     packages.add_argument('-n', dest='npackages', type=int, action='store',
--                        help='Number of packages')
-+                          help='Number of packages')
-     packages.add_argument('-p', dest='packages', action='store',
--                        help='List of packages (comma separated)')
-+                          help='List of packages (comma separated)')
-     args = parser.parse_args()
-     if not args.html and not args.json:
-         parser.error('at least one of --html or --json (or both) is required')
++# This one is used by to make multiple requests to the same host
++http_pool = None
++
+ 
+ class Package:
+     all_licenses = list()
+@@ -316,6 +319,15 @@ def release_monitoring_get_latest_version_by_guess(pool, name):
+     return (RM_API_STATUS_NOT_FOUND, None, None)
+ 
+ 
++def check_package_latest_version_worker(name):
++    """Wrapper to try both by name then by guess"""
++    print(name)
++    res = release_monitoring_get_latest_version_by_distro(http_pool, name)
++    if res[0] == RM_API_STATUS_NOT_FOUND:
++        res = release_monitoring_get_latest_version_by_guess(http_pool, name)
++    return res
++
++
+ def check_package_latest_version(packages):
+     """
+     Fills in the .latest_version field of all Package objects
+@@ -331,18 +343,15 @@ def check_package_latest_version(packages):
+     - id: string containing the id of the project corresponding to this
+       package, as known by release-monitoring.org
+     """
+-    pool = HTTPSConnectionPool('release-monitoring.org', port=443,
+-                               cert_reqs='CERT_REQUIRED', ca_certs=certifi.where(),
+-                               timeout=30)
+-    count = 0
+-    for pkg in packages:
+-        v = release_monitoring_get_latest_version_by_distro(pool, pkg.name)
+-        if v[0] == RM_API_STATUS_NOT_FOUND:
+-            v = release_monitoring_get_latest_version_by_guess(pool, pkg.name)
+-
+-        pkg.latest_version = v
+-        print("[%d/%d] Package %s" % (count, len(packages), pkg.name))
+-        count += 1
++    global http_pool
++    http_pool = HTTPSConnectionPool('release-monitoring.org', port=443,
++                                    cert_reqs='CERT_REQUIRED', ca_certs=certifi.where(),
++                                    timeout=30)
++    worker_pool = Pool(processes=64)
++    results = worker_pool.map(check_package_latest_version_worker, (pkg.name for pkg in packages))
++    for pkg, r in zip(packages, results):
++        pkg.latest_version = r
++    del http_pool
+ 
+ 
+ def calculate_stats(packages):
 -- 
 2.21.0
