@@ -1,47 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 19:56:03 +0200
-Subject: [Buildroot] [git commit] qemu: fix host virtfs option
-Message-ID: <20190801175534.68DB5889A3@busybox.osuosl.org>
+Date: Thu, 01 Aug 2019 20:13:12 +0200
+Subject: [Buildroot] [PATCH 1/2] package/cloop: needs _GNU_SOURCE
+In-Reply-To: <20190801122109.25535-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 1 Aug 2019 14:21:08 +0200")
+References: <20190801122109.25535-1-fontaine.fabrice@gmail.com>
+Message-ID: <87mugsvjnr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=499dfc941036b16a7bf615112b0a24e0daac9c41
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Fix the build of host-qemu with virtfs enabled: fix a typo in makefile
-conditional and add a dependency on host-libcap as that is a dependency of
-virtfs support:
+ > host-cloop needs _GNU_SOURCE for loff_t otherwise build fails with gcc
+ > 8.3.0 on:
+ > extract_compressed_fs.c: In function 'main':
+ > extract_compressed_fs.c:55:2: error: unknown type name 'loff_t'; did you mean 'off_t'?
+ >   loff_t *offsets;
 
-    if test "$virtfs" != no && test "$cap" = yes && test "$attr" = yes ; then
-      virtfs=yes
+ > Fixes:
+ >  - No autobuilder failures
 
-The virtfs configuration option was added by commit e0f49e648401
-("package/qemu: add option to enable virtual filesystem in host qemu").
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Signed-off-by: Vincent Stehl?? <vincent.stehle@arm.com>
-Cc: Etienne Carriere <etienne.carriere@linaro.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/qemu/qemu.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Committed, thanks.
 
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 73e0778d73..2c11f64ad0 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -271,8 +271,11 @@ HOST_QEMU_OPTS += --enable-vde
- HOST_QEMU_DEPENDENCIES += host-vde2
- endif
- 
--ifdef ($(BR2_PACKAGE_HOST_QEMU_VIRTFS),y)
-+ifeq ($(BR2_PACKAGE_HOST_QEMU_VIRTFS),y)
- HOST_QEMU_OPTS += --enable-virtfs
-+HOST_QEMU_DEPENDENCIES += host-libcap
-+else
-+HOST_QEMU_OPTS += --disable-virtfs
- endif
- 
- # Override CPP, as it expects to be able to call it like it'd
+-- 
+Bye, Peter Korsgaard
