@@ -1,52 +1,67 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Aug 2019 21:13:37 +0200
-Subject: [Buildroot] [PATCHv2] system: use system shell as root shell
-In-Reply-To: <20190801104851.32619-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Thu, 1 Aug 2019 12:48:51 +0200")
-References: <20190801104851.32619-1-yann.morin.1998@free.fr>
-Message-ID: <87d0hou2am.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 1 Aug 2019 21:10:52 +0200
+Subject: [Buildroot] [git commit] package/gst1-plugins-good: add shout2
+ plugin option
+Message-ID: <20190801191826.4485F8B904@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f0453de25d9ad458d5ef4da90f78124da1306424
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > From: Philip Molloy <philip.a.molloy@gmail.com>
- > Signed-off-by: Philip Molloy <philip.a.molloy@gmail.com>
- > [yann.morin.1998 at free.fr: use the sytem shell, not a new option,
- >  as suggested by Arnout]
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Arnold Bloemert <abloemert@gmail.com>
+Reviewed-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/gstreamer1/gst1-plugins-good/Config.in            |  6 ++++++
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 10 ++++++++--
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
- > ---
- > Changes v1 -> v2:
- >   - drop the new option, use the system shell
- > ---
- >  package/skeleton-init-common/skeleton-init-common.mk | 2 ++
- >  1 file changed, 2 insertions(+)
-
- > diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
- > index e429b13d78..b4fb11b369 100644
- > --- a/package/skeleton-init-common/skeleton-init-common.mk
- > +++ b/package/skeleton-init-common/skeleton-init-common.mk
- > @@ -95,6 +95,8 @@ SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_ADD_SH_TO_SHE
- >  ifneq ($(SKELETON_INIT_COMMON_BIN_SH),)
- >  define SKELETON_INIT_COMMON_SET_BIN_SH
- >  	ln -sf $(SKELETON_INIT_COMMON_BIN_SH) $(TARGET_DIR)/bin/sh
- > +	$(SED) '/^\root/s,:[^:]*$$,$(SKELETON_INIT_COMMON_BIN_SH),' \
- > +		$(TARGET_DIR)/etc/passwd
-
-Hmm, wait a second - This sed invocation doesn't make any sense to me.
-
-You search for ^\root, what is the backslash for? The search should also
-include the : separator to ensure it doesn't match 'rootfoo' or similar.
-
-You replace the last : and everything after it (E.G. /bin/sh) with
-$(SKELETON_INIT_COMMON_BIN_SH), so you drop the last :.
-
-I've fixed that up while committing, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index 433084fd6b..40e21985d9 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -300,6 +300,12 @@ comment "qmlgl (qt5) plugin needs an OpenGL-capable Qt5 backend"
+ 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
+ 	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
+ 
++config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
++	bool "shout2"
++	select BR2_PACKAGE_LIBSHOUT
++	help
++	  Elements to send data to an icecast server using libshout2
++
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
+ 	bool "v4l2"
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 829d27a2da..3c9f0d5605 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -25,8 +25,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
+ # Options which require currently unpackaged libraries
+ GST1_PLUGINS_GOOD_CONF_OPTS += \
+ 	--disable-libdv \
+-	--disable-dv1394 \
+-	--disable-shout2
++	--disable-dv1394
+ 
+ GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
+ 
+@@ -343,6 +342,13 @@ else
+ GST1_PLUGINS_GOOD_CONF_OPTS += --disable-qt
+ endif
+ 
++ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2),y)
++GST1_PLUGINS_GOOD_CONF_OPTS += --enable-shout2
++GST1_PLUGINS_GOOD_DEPENDENCIES += libshout
++else
++GST1_PLUGINS_GOOD_CONF_OPTS += --disable-shout2
++endif
++
+ ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
+ GST1_PLUGINS_GOOD_CONF_OPTS += --enable-gst_v4l2
+ else
