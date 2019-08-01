@@ -1,67 +1,41 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu, 1 Aug 2019 09:30:40 +0200
-Subject: [Buildroot] [PATCH] utils/checkpackagelib:
- CommentsMenusPackagesOrder: only apply to top-level
-In-Reply-To: <20190731230220.32266-1-arnout@mind.be>
-References: <20190731230220.32266-1-arnout@mind.be>
-Message-ID: <20190801073040.GB3548@scaer>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 1 Aug 2019 09:33:17 +0200
+Subject: [Buildroot] [RFC PATCH v4 2/2] iputils: add capability for
+ clockdiff, ping, traceroute6
+In-Reply-To: <20190801072910.GA3548@scaer>
+References: <20190730213846.7488-1-petr.vorel@gmail.com>
+ <20190730213846.7488-2-petr.vorel@gmail.com>
+ <20190731160059.GJ3194@scaer>
+ <20190801001310.644e3dc0@windsurf.home>
+ <20190731222400.GB5083@x230> <20190801072910.GA3548@scaer>
+Message-ID: <20190801073316.GA6438@dell5510>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Arnout, All,
+Hi Yann, Thomas,
 
-On 2019-08-01 01:02 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
-> The CommentsMenusPackagesOrder test is broken in various ways for files
-> other than package/Config.in and package/Config.in.host. Therefore, the
-> script gives bogus errors for various other Config.in files.
-> 
-> However, we don't really want to check those other files. Indeed, many
-> of them have a non-alphabetical ordering for good reasons.
-> 
-> Therefore, skip the check for files other than package/Config.in and
-> package/Config.in.host.
-> 
-> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/251214899
+> Petr, All,
 
-Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> On 2019-08-01 00:24 +0200, Petr Vorel spake thusly:
+> > > On Wed, 31 Jul 2019 18:00:59 +0200
+> > > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> [--SNIP--]
+> > > Yes, but I believe it's the best solution for now, let's keep a
+> > > conditional like you're showing here. Which of course makes the change
+> > > to makedevs no longer relevant.
+> > Sure :). So merge the original version [1], related only to iputils?
 
-Regards,
-Yann E. MORIN.
+> Not really, because your first iteration still kept the suid bit on the
+> orograms.
 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> ---
->  utils/checkpackagelib/lib_config.py | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-> index f0edb9993d..7d7567ac67 100644
-> --- a/utils/checkpackagelib/lib_config.py
-> +++ b/utils/checkpackagelib/lib_config.py
-> @@ -72,6 +72,11 @@ class CommentsMenusPackagesOrder(_CheckFunction):
->          return len(self.state.split('-')) - 1
->  
->      def check_line(self, lineno, text):
-> +        # We only want to force sorting for the top-level menus
-> +        if self.filename not in ["package/Config.in",
-> +                                 "package/Config.in.host"]:
-> +            return
-> +
->          if text.startswith("comment") or text.startswith("if") or \
->             text.startswith("menu"):
->  
-> -- 
-> 2.21.0
-> 
+> I'm intrigued why you could not use the ifeq(...) construct, though...
+Oh, sorry. I'll post v6.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+> Regards,
+> Yann E. MORIN.
+
+Kind regards,
+Petr
