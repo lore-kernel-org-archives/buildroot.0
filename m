@@ -1,39 +1,54 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Aug 2019 23:07:37 +0200
-Subject: [Buildroot] [PATCH] package/mono: bump to version 6.0.0.313
-In-Reply-To: <20190728151829.18851-1-angelo@amarulasolutions.com>
-References: <20190728151829.18851-1-angelo@amarulasolutions.com>
-Message-ID: <20190801230737.6e6a8de1@windsurf.home>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu,  1 Aug 2019 23:09:16 +0200
+Subject: [Buildroot] [PATCH 1/5] package/python-numpy: fix occasional build
+ and run-time failure with lapack
+Message-ID: <20190801210920.31338-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Angelo,
+From: Alexandre PAYEN <alexandre.payen@smile.fr>
 
-On Sun, 28 Jul 2019 17:18:29 +0200
-Angelo Compagnucci <angelo.compagnucci@gmail.com> wrote:
+python-numpy fail at run-time because `cblas` reference is missing in
+BR2_PYTHON_NUMPY_SITE_CFG_LIBS.
+clapack is the C implementation of lapack so when using clapack python numpy
+depends on clapack.
+cblas is a blas layer which allow to call blas routine from C code. So python
+numpy need cblas instead of blas to work correclty
 
-> This patch bumps mono to version 6.0.0.313 and it's related
-> dependency monolite to version d0aa6798-834d-11e9-b38a-3b0d70487d01.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+So :
+- add cblas reference in BR2_PYTHON_NUMPY_SITE_CFG_LIBS when
+  BR2_PACKAGE_CLAPACK = y
 
-You forgot to update the hash of mono's LICENSE file, whose content
-changed. So I've updated the hash, and extended the commit log with
-some explanations about why the license file hash change is not
-relevant for the <pkg>_LICENSE variable. See:
+Fixes:
+http://autobuild.buildroot.net/results/50f/50f7f09a9f830cd7b94f8fc83c09fc3d39297d3d/
+http://lists.busybox.net/pipermail/buildroot/2019-June/252380.html
 
-  https://git.buildroot.org/buildroot/commit/?id=74d9e5d9b8d0fff633463aaf9a41533469822ed0
+Initial patch from Giulio Benetti :
+[v1] http://patchwork.ozlabs.org/patch/1100100/
+[v2] http://patchwork.ozlabs.org/patch/1100208/
 
-Please remember to run make <pkg>-legal-info after bumping a package,
-or use test-pkg, which runs legal-info as part of its tests.
+Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
+Cc: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+---
+ package/python-numpy/python-numpy.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks!
-
-Thomas
+diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
+index 5d2fbfc7ad..aa8052dca4 100644
+--- a/package/python-numpy/python-numpy.mk
++++ b/package/python-numpy/python-numpy.mk
+@@ -17,7 +17,7 @@ PYTHON_NUMPY_SETUP_TYPE = setuptools
+ 
+ ifeq ($(BR2_PACKAGE_CLAPACK),y)
+ PYTHON_NUMPY_DEPENDENCIES += clapack
+-PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
++PYTHON_NUMPY_SITE_CFG_LIBS += cblas lapack
+ else
+ PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
+ endif
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
