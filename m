@@ -1,50 +1,31 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 16:54:04 +0200
-Subject: [Buildroot] [git commit] package/netsurf: add optional dependency
- on webp
-Message-ID: <20190801145202.5A6998A4C5@busybox.osuosl.org>
+Date: Thu, 01 Aug 2019 17:08:04 +0200
+Subject: [Buildroot] [PATCH] pdbg: Bump version to v2.2
+In-Reply-To: <20190625015340.6531-1-joel@jms.id.au> (Joel Stanley's message of
+ "Tue, 25 Jun 2019 11:23:40 +0930")
+References: <20190625015340.6531-1-joel@jms.id.au>
+Message-ID: <871ry4yld7.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=152e160bf6fcbb8f73c60944107e3a82f91edf50
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
 
-new feature of version 3.9
+ > Upstream changes:
+ >  - libpdbg API clean-up
+ >  - Path based targetting
+ >  - POWER8 sreset fixes
+ >  - gdbserver
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/netsurf/netsurf.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ > This also adds the v back to the version string that pdbg's build system
+ > uses, following the recent buildroot changes to remove "v" from package
+ > versions.
 
-diff --git a/package/netsurf/netsurf.mk b/package/netsurf/netsurf.mk
-index f82f3b5da8..0077adde28 100644
---- a/package/netsurf/netsurf.mk
-+++ b/package/netsurf/netsurf.mk
-@@ -64,11 +64,23 @@ define NETSURF_CURL_CONFIGURE_CMDS
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_WEBP),y)
-+NETSURF_DEPENDENCIES += webp
-+define NETSURF_WEBP_CONFIGURE_CMDS
-+	echo "override NETSURF_USE_WEBP := YES"         >> $(@D)/netsurf/Makefile.config
-+endef
-+else
-+define NETSURF_WEBP_CONFIGURE_CMDS
-+	echo "override NETSURF_USE_WEBP := NO"          >> $(@D)/netsurf/Makefile.config
-+endef
-+endif
-+
- define NETSURF_CONFIGURE_CMDS
- 	$(NETSURF_ICONV_CONFIGURE_CMDS)
- 	$(NETSURF_SVG_CONFIGURE_CMDS)
- 	$(NETSURF_FONTLIB_CONFIGURE_CMDS)
- 	$(NETSURF_CURL_CONFIGURE_CMDS)
-+	$(NETSURF_WEBP_CONFIGURE_CMDS)
- endef
- 
- NETSURF_MAKE_ENV = \
+ > Signed-off-by: Joel Stanley <joel@jms.id.au>
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
