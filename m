@@ -1,111 +1,139 @@
-From: chalil jitesh <chaliljitesh@gmail.com>
-Date: Thu, 1 Aug 2019 12:19:49 +0530
-Subject: [Buildroot] btrfs filesystem image creation using TARGET_DIR
- path
-In-Reply-To: <20190731144516.06e94517@windsurf>
-References: <CAP8JTaaqcBbCdoJHm5=zi0dc4NtNaq2Y=krx0UbCVz4PdB2sJw@mail.gmail.com>
- <20190731144516.06e94517@windsurf>
-Message-ID: <CAP8JTaY_9cS7vTMK_hxJsn2USEuKVZnNjj-s1bXP8fkXbipLMA@mail.gmail.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Aug 2019 08:28:51 +0200
+Subject: [Buildroot] [git commit] package/can-utils: fix build with kernel
+ >= 5.2
+Message-ID: <20190801070639.76D5283906@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Thomas,
+commit: https://git.buildroot.net/buildroot/commit/?id=a480f893efa624ebdadb808c0e41e693a3d1681c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Thanks for reviewing and providing the information.
+Fixes:
+ - http://autobuild.buildroot.org/results/363de7d9bf433be8bc47ba4ee52ae0bb80fa9021
 
-The following is the issue i am facing when using the TARGET_DIR.
-Suppose we set any capabilities to the files in the BASE_TARGET_DIR
-(./target in the below example) during the buildroot compilation. Example
-if we set some capabilities to the tool ping in BASE_TARGET_DIR as in
-example below.
-example : setcap cap_net_raw=ei ./target/bin/ping
-If we use BASE_TARGET_DIR with the -r option in buildroot/fs/btrfs/btrfs.mk
-(buildroot/fs/btrfs/btrfs.mk : -r '$(BASE_TARGET_DIR)')
-After the rootfs.btrfs image is generated from buildroot, if we mount the
-btrfs file sytem and check the capability of the file ping, the capability
-is getting retained in the btrfs file system generated as in example below
-(if BASE_TARGET_DIR  is used btrfs.mk).
-[root at localhost images]# mkdir test
-[root at localhost images]# mount -t btrfs ./rootfs.btrfs test
-[root at localhost images]# getcap ./test/bin/ping
-./test/bin/ping = cap_net_raw+ei
-[root at localhost images]#
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Reviewed-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ude-to-find-SIOCGSTAMP-with-latest-kernel.patch | 109 +++++++++++++++++++++
+ 1 file changed, 109 insertions(+)
 
-Instead of BASE_TARGET_DIR If we use TARGET_DIR with the -r option in
-buildroot/fs/btrfs/btrfs.mk (buildroot/fs/btrfs/btrfs.mk : -r
-'$(TARGET_DIR)')
-After the rootfs.btrfs image is generated from buildroot, if we mount the
-btrfs file sytem and check the capability of the file ping, the capability
-is not getting retained and is lost in the btrfs file system generated as
-in example below (if TARGET_DIR  is used btrfs.mk)..
-[root at localhost images]# mount -t btrfs ./rootfs.btrfs test
-[root at localhost images]# getcap ./test/bin/ping
-[root at localhost images]#
-
-During image creation process if we check the capability of the file
-ping in TARGET_DIR (example build/buildroot-fs/btrfs/target/bin/ping) , in
-this path also the capability is not retained and is missed as in example
-below.
-[root at localhost ~]# getcap ./build/buildroot-fs/btrfs/target/bin/ping
-[root at localhost ~]#
-
-Kindly please suggest why the capabilities are not getting retained and
-getting lost in TARGET_DIR.
-
-With Thanks and Regards
-Jitesh
-
-
-On Wed, Jul 31, 2019 at 6:15 PM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
-
-> Hello,
->
-> On Tue, 30 Jul 2019 18:33:52 +0530
-> chalil jitesh <chaliljitesh@gmail.com> wrote:
->
-> >  Hi,
-> >
-> > I am trying to create a btrfs filesystem image from buildroot (buildroot
-> > 2019.02 version). During the btrfs image creation step in the file
-> > buildroot/fs/btrfs/btrfs.mk the target root file system directory path
-> > passed to -r option seems to be given as $(TARGET_DIR) which is pointing
-> to
-> > build/buildroot-fs/btrfs/target instead of actual root file system
-> > directory $(BASE_TARGET_DIR) (as followed for other file system image
-> > creation like buildroot/fs/squashfs/squashfs.mk).
-> > Kindly please review if my understanding is correct or if i am mising any
-> > steps and if the -r option should point to $(BASE_TARGET_DIR).
-> > Attaching the changes done for review.
->
-> Using $(TARGET_DIR) is correct. What is the problem you are seeing ?
->
-> The way it works is the following:
->
->  - BASE_TARGET_DIR is output/target. This is where all packages install
->    their files that should be present on the target. During the package
->    build/installation, TARGET_DIR points to BASE_TARGET_DIR.
->
->  - For each filesystem image format that is enabled, a copy of the
->    contents of BASE_TARGET_DIR is made, in a per-filesystem directory,
->    output/build/buildroot-fs/<filesystem>/target
->
->  - In the code creating each filesystem image, TARGET_DIR points to
->    output/build/buildroot-fs/<filesystem>/target.
->
-> So, using $(TARGET_DIR) in btrfs.mk is correct.
->
-> Best regards,
->
-> Thomas Petazzoni
-> --
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
->
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190801/89986097/attachment.html>
+diff --git a/package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch b/package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
+new file mode 100644
+index 0000000000..3cde5b42af
+--- /dev/null
++++ b/package/can-utils/0001-fix-include-to-find-SIOCGSTAMP-with-latest-kernel.patch
+@@ -0,0 +1,109 @@
++From e9590b1ca75d360eaf3211bebd86058214d48064 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sun, 14 Jul 2019 21:50:43 +0200
++Subject: [PATCH] fix include to find SIOCGSTAMP with latest kernel
++
++In linux kernel commit 0768e17073dc527ccd18ed5f96ce85f9985e9115
++the asm-generic/sockios.h header no longer defines SIOCGSTAMP.
++Instead it provides only SIOCGSTAMP_OLD.
++
++The linux/sockios.h header now defines SIOCGSTAMP using either
++SIOCGSTAMP_OLD or SIOCGSTAMP_NEW as appropriate. This linux only
++header file is not pulled so we get a build failure.
++
++canlogserver.c: In function 'main':
++canlogserver.c:404:21: error: 'SIOCGSTAMP' undeclared (first use in this function); did you mean 'SIOCGRARP'?
++     if (ioctl(s[i], SIOCGSTAMP, &tv) < 0)
++                     ^~~~~~~~~~
++                     SIOCGRARP
++canlogserver.c:404:21: note: each undeclared identifier is reported only once for each function it appears in
++
++Fixes:
++ - http://autobuild.buildroot.org/results/363de7d9bf433be8bc47ba4ee52ae0bb80fa9021
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/linux-can/can-utils/pull/147]
++---
++ canlogserver.c | 1 +
++ cansniffer.c   | 1 +
++ isotpdump.c    | 1 +
++ isotpperf.c    | 1 +
++ isotpsniffer.c | 1 +
++ slcanpty.c     | 1 +
++ 6 files changed, 6 insertions(+)
++
++diff --git a/canlogserver.c b/canlogserver.c
++index f9ae159..4429ccd 100644
++--- a/canlogserver.c
+++++ b/canlogserver.c
++@@ -62,6 +62,7 @@
++ 
++ #include <linux/can.h>
++ #include <linux/can/raw.h>
+++#include <linux/sockios.h>
++ #include <signal.h>
++ #include <errno.h>
++ 
++diff --git a/cansniffer.c b/cansniffer.c
++index b710058..0ff29b4 100644
++--- a/cansniffer.c
+++++ b/cansniffer.c
++@@ -62,6 +62,7 @@
++ 
++ #include <linux/can.h>
++ #include <linux/can/bcm.h>
+++#include <linux/sockios.h>
++ 
++ #include "terminal.h"
++ 
++diff --git a/isotpdump.c b/isotpdump.c
++index 1ab9416..97baeca 100644
++--- a/isotpdump.c
+++++ b/isotpdump.c
++@@ -57,6 +57,7 @@
++ 
++ #include <linux/can.h>
++ #include <linux/can/raw.h>
+++#include <linux/sockios.h>
++ #include "terminal.h"
++ 
++ #define NO_CAN_ID 0xFFFFFFFFU
++diff --git a/isotpperf.c b/isotpperf.c
++index 6ee6ede..5ad302a 100644
++--- a/isotpperf.c
+++++ b/isotpperf.c
++@@ -57,6 +57,7 @@
++ 
++ #include <linux/can.h>
++ #include <linux/can/raw.h>
+++#include <linux/sockios.h>
++ 
++ #define NO_CAN_ID 0xFFFFFFFFU
++ #define PERCENTRES 2 /* resolution in percent for bargraph */
++diff --git a/isotpsniffer.c b/isotpsniffer.c
++index 6c19c8b..5d61872 100644
++--- a/isotpsniffer.c
+++++ b/isotpsniffer.c
++@@ -56,6 +56,7 @@
++ 
++ #include <linux/can.h>
++ #include <linux/can/isotp.h>
+++#include <linux/sockios.h>
++ #include "terminal.h"
++ 
++ #define NO_CAN_ID 0xFFFFFFFFU
++diff --git a/slcanpty.c b/slcanpty.c
++index e90b32a..5fdfa55 100644
++--- a/slcanpty.c
+++++ b/slcanpty.c
++@@ -37,6 +37,7 @@
++ 
++ #include <linux/can.h>
++ #include <linux/can/raw.h>
+++#include <linux/sockios.h>
++ 
++ /* maximum rx buffer len: extended CAN frame with timestamp */
++ #define SLC_MTU (sizeof("T1111222281122334455667788EA5F\r")+1)
++-- 
++2.20.1
++
