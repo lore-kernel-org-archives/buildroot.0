@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 10:40:26 +0200
-Subject: [Buildroot] [git commit] package/taglib: add license hash
-Message-ID: <20190801084417.491838A296@busybox.osuosl.org>
+Date: Thu, 1 Aug 2019 10:40:45 +0200
+Subject: [Buildroot] [git commit] package/twolame: add license hash
+Message-ID: <20190801084417.548A680F7A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=feb9b4f2e45948afe10edba6a947c14709f7d597
+commit: https://git.buildroot.net/buildroot/commit/?id=e0d238c968fdd02620f3ba4c4a5f30998cf0676a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Partly fixes:
@@ -17,15 +17,14 @@ http://autobuild.buildroot.net/results/f0f/f0fd05ce8a8b595015baf625481b58967df53
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/taglib/taglib.hash | 2 ++
- 1 file changed, 2 insertions(+)
+ package/twolame/twolame.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/taglib/taglib.hash b/package/taglib/taglib.hash
-index 7a5c5cf98c..4b99e86d68 100644
---- a/package/taglib/taglib.hash
-+++ b/package/taglib/taglib.hash
-@@ -1,2 +1,4 @@
- # Locally calculated
- sha256 b6d1a5a610aae6ff39d93de5efd0fdc787aa9e9dc1e7026fa4c961b26563526b  taglib-1.11.1.tar.gz
-+sha256 dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
-+sha256 53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  COPYING.MPL
+diff --git a/package/twolame/twolame.hash b/package/twolame/twolame.hash
+index 647655bd15..eab52876af 100644
+--- a/package/twolame/twolame.hash
++++ b/package/twolame/twolame.hash
+@@ -1,2 +1,3 @@
+ # Locally computed:
+ sha256  98f332f48951f47f23f70fd0379463aff7d7fb26f07e1e24e42ddef22cc6112a  twolame-0.3.13.tar.gz
++sha256  a190dc9c8043755d90f8b0a75fa66b9e42d4af4c980bf5ddc633f0124db3cee7  COPYING
