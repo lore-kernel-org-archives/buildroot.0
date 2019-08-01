@@ -1,52 +1,58 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu,  1 Aug 2019 18:24:08 +0200
-Subject: [Buildroot] [PATCH] package/quagga: fix static linking with getopt
-Message-ID: <20190801162408.16588-1-arnout@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Aug 2019 18:26:09 +0200
+Subject: [Buildroot] [git commit] package/dhcp: fix target installation
+Message-ID: <20190801162327.A587081F58@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-quagga has its own copy of getopt_long() instead of using the system's,
-and this copy also defines the opterr and optind variables. Obviously,
-this is only apparent when linking statically.
+commit: https://git.buildroot.net/buildroot/commit/?id=ffe5fcadfcd42af8a582b8f5fe49b56900b43a51
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This problem can easily be avoided by making sure that getopt() itself
-is defined too. This way, there is no reason any more to pull in libc's
-getopt() and the corresponding definitions of opterr and optind. Note
-that getopt() itself is pulled in by netsnmp, not by quagga itself.
+We don't use "make install" for the target installation so we must pick
+the executables from the ".libs" directories on which libtool generates
+them otherwise we install the automatically generated wrapper scripts.
 
-Fortunately, there's a REALLY_NEED_PLAIN_GETOPT flag that we can define
-to make sure getopt() does get built by quagga. We can safely do this
-unconditionally (instead of only when BR2_PACKAGE_QUAGGA_SNMP and
-BR2_STATIC_LIBS are enabled): without netsnmp, getopt() will simply not
-be used, and with dynamic libs there's no risk of conflicts anyway.
+This was not necessary before the upgrade to version 4.4.1.
 
-Fixes:
-http://autobuild.buildroot.net/results/0ac598c2259a8d7e8b72d4e8ed95079675b31b84
+Fixes: https://bugs.busybox.net/show_bug.cgi?id=12051
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Carlos Santos <unixmania@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/quagga/quagga.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ package/dhcp/dhcp.mk | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 420d72c79d..8aa58aceef 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -18,6 +18,11 @@ QUAGGA_CONF_OPTS = \
- 	--sysconfdir=/etc/quagga \
- 	--localstatedir=/var/run/quagga
- 
-+# quagga has its own internal copy of getopt_long. To avoid conflicts with libc's
-+# getopt, we need to make sure that the getopt function itself is also built.
-+QUAGGA_CONF_ENV = \
-+	CFLAGS="$(TARGET_CFLAGS) -DREALLY_NEED_PLAIN_GETOPT"
-+
- ifeq ($(BR2_PACKAGE_LIBCAP),y)
- QUAGGA_CONF_OPTS += --enable-capabilities
- QUAGGA_DEPENDENCIES += libcap
--- 
-2.21.0
+diff --git a/package/dhcp/dhcp.mk b/package/dhcp/dhcp.mk
+index 1cef9724bd..86f5c69a77 100644
+--- a/package/dhcp/dhcp.mk
++++ b/package/dhcp/dhcp.mk
+@@ -44,7 +44,7 @@ ifeq ($(BR2_PACKAGE_DHCP_SERVER),y)
+ define DHCP_INSTALL_SERVER
+ 	mkdir -p $(TARGET_DIR)/var/lib
+ 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+-	$(INSTALL) -m 0755 -D $(@D)/server/dhcpd $(TARGET_DIR)/usr/sbin/dhcpd
++	$(INSTALL) -m 0755 -D $(@D)/server/.libs/dhcpd $(TARGET_DIR)/usr/sbin/dhcpd
+ 	$(INSTALL) -m 0644 -D package/dhcp/dhcpd.conf \
+ 		$(TARGET_DIR)/etc/dhcp/dhcpd.conf
+ endef
+@@ -54,7 +54,7 @@ ifeq ($(BR2_PACKAGE_DHCP_RELAY),y)
+ define DHCP_INSTALL_RELAY
+ 	mkdir -p $(TARGET_DIR)/var/lib
+ 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+-	$(INSTALL) -m 0755 -D $(DHCP_DIR)/relay/dhcrelay \
++	$(INSTALL) -m 0755 -D $(DHCP_DIR)/relay/.libs/dhcrelay \
+ 		$(TARGET_DIR)/usr/sbin/dhcrelay
+ endef
+ endif
+@@ -63,7 +63,7 @@ ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+ define DHCP_INSTALL_CLIENT
+ 	mkdir -p $(TARGET_DIR)/var/lib
+ 	(cd $(TARGET_DIR)/var/lib; ln -snf /tmp dhcp)
+-	$(INSTALL) -m 0755 -D $(DHCP_DIR)/client/dhclient \
++	$(INSTALL) -m 0755 -D $(DHCP_DIR)/client/.libs/dhclient \
+ 		$(TARGET_DIR)/sbin/dhclient
+ 	$(INSTALL) -m 0644 -D package/dhcp/dhclient.conf \
+ 		$(TARGET_DIR)/etc/dhcp/dhclient.conf
