@@ -1,58 +1,25 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Aug 2019 10:39:51 +0200
-Subject: [Buildroot] [PATCH v4 00/30] builder-class series cover letter
-In-Reply-To: <20190801024643.11024-1-itsatharva@gmail.com>
-References: <20190801024643.11024-1-itsatharva@gmail.com>
-Message-ID: <20190801103951.05be1116@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 01 Aug 2019 10:41:59 +0200
+Subject: [Buildroot] [PATCH 4/7] package/twolame: add license hash
+In-Reply-To: <20190728204434.12356-4-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 28 Jul 2019 22:44:31 +0200")
+References: <20190728204434.12356-1-bernd.kuhls@t-online.de>
+ <20190728204434.12356-4-bernd.kuhls@t-online.de>
+Message-ID: <87sgql2s6g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Atharva,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-On Thu,  1 Aug 2019 08:16:13 +0530
-Atharva Lele <itsatharva@gmail.com> wrote:
+ > Partly fixes:
+ > http://autobuild.buildroot.net/results/f0f/f0fd05ce8a8b595015baf625481b58967df53458/
 
-> Since various functions in the autobuilder script use a lot of common data, we
-> introduce a Builder class to house these variables.
-> 
-> I have also included modified versions of Thomas's commits after adapting them
-> to work with Builder class.
-> 
-> I created a v4 to change the order of one patch, and to delete another patch. No
-> other changes have been made.
-> 
-> RFC: Few patches, namely patches 25, 27-30 have not been reviewed yet. I'd like
-> some feedback on them, if any, so that necessary modifications can be done and
-> it can be merged as soon as possible.
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-First of all, thanks a lot for all this work! Nice refactoring of the
-autobuild-run script.
+Committed, thanks.
 
-I merged all patches up to patch 27, included. According to Arnout,
-applying patches 28/29/30 is problematic, because builds done in
-different output directories are currently not reproducible at all, so
-we would simply fail *all* reproducible builds if we apply those
-patches. So I believe we need to fix this before we can apply such
-patches.
-
-A small detail is that patches 28 and 29 should be squashed together:
-patch 28 is only introducing a new variable pointing to the secondary
-output directory, but it's not used anywhere.
-
-Also, long term, I'd like the send_results() method to be split into
-several methods. One calculating the failure reason, one deciding if
-the build result should be rejected, one preparing the build results
-for upload, one doing the actual upload. But please don't work on this
-additional refactoring, I think it's much more important that you focus
-on the reproducible build topic.
-
-Thanks!
-
-Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Bye, Peter Korsgaard
