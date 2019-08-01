@@ -1,30 +1,64 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 09:39:50 +0200
-Subject: [Buildroot] [git commit] package/ltris: add license hash
-Message-ID: <20190801073838.480B3813D2@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Aug 2019 09:43:45 +0200
+Subject: [Buildroot] btrfs filesystem image creation using TARGET_DIR
+ path
+In-Reply-To: <CAP8JTaY_9cS7vTMK_hxJsn2USEuKVZnNjj-s1bXP8fkXbipLMA@mail.gmail.com>
+References: <CAP8JTaaqcBbCdoJHm5=zi0dc4NtNaq2Y=krx0UbCVz4PdB2sJw@mail.gmail.com>
+ <20190731144516.06e94517@windsurf>
+ <CAP8JTaY_9cS7vTMK_hxJsn2USEuKVZnNjj-s1bXP8fkXbipLMA@mail.gmail.com>
+Message-ID: <20190801094345.11611680@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=803b638eacb3149e3c3c29478deddee7b4d06c01
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Partly fixes:
-http://autobuild.buildroot.net/results/f0f/f0fd05ce8a8b595015baf625481b58967df53458/
+On Thu, 1 Aug 2019 12:19:49 +0530
+chalil jitesh <chaliljitesh@gmail.com> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/ltris/ltris.hash | 1 +
- 1 file changed, 1 insertion(+)
+> Thanks for reviewing and providing the information.
+> 
+> The following is the issue i am facing when using the TARGET_DIR.
+> Suppose we set any capabilities to the files in the BASE_TARGET_DIR
+> (./target in the below example) during the buildroot compilation. Example
+> if we set some capabilities to the tool ping in BASE_TARGET_DIR as in
+> example below.
+> example : setcap cap_net_raw=ei ./target/bin/ping
+> If we use BASE_TARGET_DIR with the -r option in buildroot/fs/btrfs/btrfs.mk
+> (buildroot/fs/btrfs/btrfs.mk : -r '$(BASE_TARGET_DIR)')
+> After the rootfs.btrfs image is generated from buildroot, if we mount the
+> btrfs file sytem and check the capability of the file ping, the capability
+> is getting retained in the btrfs file system generated as in example below
+> (if BASE_TARGET_DIR  is used btrfs.mk).
+> [root at localhost images]# mkdir test
+> [root at localhost images]# mount -t btrfs ./rootfs.btrfs test
+> [root at localhost images]# getcap ./test/bin/ping
+> ./test/bin/ping = cap_net_raw+ei
+> [root at localhost images]#
 
-diff --git a/package/ltris/ltris.hash b/package/ltris/ltris.hash
-index 5c0fcde7a0..25fc04c6cb 100644
---- a/package/ltris/ltris.hash
-+++ b/package/ltris/ltris.hash
-@@ -1,2 +1,3 @@
- # Locally computed:
- sha256  8f6a9e7719d22004aee153db29ffd9ca41c7a6cd87fc791591994eecc2e625a1  ltris-1.0.19.tar.gz
-+sha256  67f82e045cf7acfef853ea0f426575a8359161a0a325e19f02b529a87c4b6c34  COPYING
+The correct way to assign capabilities is to use the <pkg>_PERMISSIONS
+variable, which allows to define extended attributes for any file
+installed by a package.
+
+You might want to have a look at the current discussion in the
+following patches:
+
+  http://patchwork.ozlabs.org/patch/1140027/
+  http://patchwork.ozlabs.org/patch/1140026/
+
+Especially the second patch is very relevant, because it's precisely
+taking care of setting the right capabilities for ping.
+
+Also, from the above, it seems like you are doing your Buildroot build
+as root, which is really not recommended. We strongly recommend to do
+Buildroot builds as a normal user.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
