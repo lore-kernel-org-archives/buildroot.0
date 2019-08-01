@@ -1,30 +1,31 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 01 Aug 2019 16:27:05 +0000
-Subject: [Buildroot] [Bug 12051] package/dhcp installs libtool wrapper
- scripts on target instead of real binaries
-In-Reply-To: <bug-12051-163@https.bugs.busybox.net/>
-References: <bug-12051-163@https.bugs.busybox.net/>
-Message-ID: <bug-12051-163-dU6YhdUKU9@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Aug 2019 18:29:01 +0200
+Subject: [Buildroot] [PATCH] package/cups-filters: fix build without NLS
+In-Reply-To: <20190722071146.30199-1-unixmania@gmail.com>
+References: <20190722071146.30199-1-unixmania@gmail.com>
+Message-ID: <20190801182901.47e8377f@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12051
+On Mon, 22 Jul 2019 04:11:46 -0300
+unixmania at gmail.com wrote:
 
-Thomas Petazzoni <thomas.petazzoni@free-electrons.com> changed:
+> +# texttotext must be linked to libiconv if !BR2_ENABLE_LOCALE. We could patch
+> +# configure.ac to use AM_ICONV but it would require iconv.m4, increasing the
+> +# patch size by at least 130 lines. Let's keep it simple and just patch
+> +# Makefile.am to append -liconv to the link command line.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-         Resolution|---                         |FIXED
-             Status|ASSIGNED                    |RESOLVED
+Why is this AM_ICONV solution taking at least 130 lines ? This would be
+upstreamable, and looks a lot nicer. Could you propose a patch with an
+AM_ICONV base solution instead ?
 
---- Comment #6 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
-Fixed by
-https://git.buildroot.org/buildroot/commit/?id=ffe5fcadfcd42af8a582b8f5fe49b56900b43a51.
 Thanks!
 
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
