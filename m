@@ -1,65 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Aug 2019 12:41:52 +0200
-Subject: [Buildroot] [PATCH 1/3] package/mosquitto: allow to build as
- static lib
-In-Reply-To: <871ry518wo.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Thu, 01 Aug 2019 12:23:35 +0200")
-References: <20190718100636.27290-1-titouan.christophe@railnova.eu>
- <20190718100636.27290-2-titouan.christophe@railnova.eu>
- <871ry518wo.fsf@dell.be.48ers.dk>
-Message-ID: <87sgqlyxov.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 1 Aug 2019 12:43:12 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] libv4l: add an option for IR BPF based decoders
+In-Reply-To: <20181109172648.10289-1-fontaine.fabrice@gmail.com>
+References: <20181109172648.10289-1-fontaine.fabrice@gmail.com>
+Message-ID: <0d7c03c9-feee-0f45-2fd2-355e15d0e606@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+ Hi Fabrice,
 
-Hi,
+On 09/11/2018 18:26, Fabrice Fontaine wrote:
+> Bump to version 1.61.1 added BPF based protocols support:
+> https://git.linuxtv.org/v4l-utils.git/commit/?id=d6025b0e8c7f57b0f9390f987acc5eed57360d80
+> 
+> However, this dependency needs BPF support in kernel. On old kernels
+> (before 3.18), __NR_BPF is not defined for all architectures.
+> So retrieve upstream patch and add an option to enable BPF only if
+> headers are above 3.18.
+> 
+> Also drop patch to add bpf_common.h on old kernels (not needed anymore)
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/442de57cb76a7b38d71d690490faadc641036374
 
- >> +ifeq ($(BR2_STATIC_LIBS),y)
- >> +MOSQUITTO_MAKE_OPTS += WITH_STATIC_LIBRARIES=yes WITH_SHARED_LIBRARIES=no
- >> +else
- >> +MOSQUITTO_MAKE_OPTS += WITH_STATIC_LIBRARIES=no WITH_SHARED_LIBRARIES=yes
- >> +endif
+ This problem apparently went away with the bump to 1.16.2 (without needing to
+give the --disable-bpf config argument) so I've marked this patch as Superseded.
 
- > We actually have 3 variants:
+ Please respin if you think it is still needed.
 
- > - static only (BR2_STATIC_LIBS)
- > - shared only (BR2_SHARED_LIBS)
- > - shared and static (BR2_SHARED_STATIC_LIBS)
-
- > So I reworked it to take that into consideration and committed, thanks.
-
-Sorry, I will have to take that back. I did a test compilation with a
-completely static (BR2_STATIC_LIBS) setup, which failed:
-
-In file included from security.c:25:
-lib_load.h:23:11: fatal error: dlfcn.h: No such file or directory
- # include <dlfcn.h>
-           ^~~~~~~~~
-compilation terminated.
-
-The loadable plugin logic in security.c seems to be built
-unconditionally, so that cannot work in a completely static setup.
-
-Care to bring up this issue upstream?
-
-In the mean time I have marked your patch as changes requested. For
-reference, the changes I did in mosquitto.mk look like this:
-
-feq ($(BR2_SHARED_LIBS),y)
-MOSQUITTO_MAKE_OPTS += WITH_STATIC_LIBRARIES=no
-else
-MOSQUITTO_MAKE_OPTS += WITH_STATIC_LIBRARIES=yes
-endif
-
-ifeq ($(BR2_STATIC_LIBS),y)
-MOSQUITTO_MAKE_OPTS += WITH_SHARED_LIBRARIES=no
-else
-MOSQUITTO_MAKE_OPTS += WITH_SHARED_LIBRARIES=yes
-endif
-
--- 
-Bye, Peter Korsgaard
+ Regards,
+ Arnout
