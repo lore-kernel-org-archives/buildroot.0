@@ -1,43 +1,69 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 1 Aug 2019 16:24:20 +0200
-Subject: [Buildroot] [PATCH v2] ima-evm-utils: Add as new package,
- version 1.2.1
-In-Reply-To: <CANQCQpbTPuhm_a-SFei+RNdkRvPjXP5LZddPYqvAjoXTgTqD7g@mail.gmail.com>
-References: <20190731193119.10522-1-petr.vorel@gmail.com>
- <CANQCQpbTPuhm_a-SFei+RNdkRvPjXP5LZddPYqvAjoXTgTqD7g@mail.gmail.com>
-Message-ID: <20190801142419.GA30389@dell5510>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Aug 2019 16:46:17 +0200
+Subject: [Buildroot] [git commit] package/webkitgtk: remove upstreamed patch
+Message-ID: <20190801144334.24F73813FB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Matthew,
+commit: https://git.buildroot.net/buildroot/commit/?id=d069301d6325075395a99bf041d7ea2a1410080c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> > +++ b/package/ima-evm-utils/Config.in
-> > @@ -0,0 +1,11 @@
-> > +config BR2_PACKAGE_IMA_EVM_UTILS
-> > +       bool "ima-evm-utils"
-> > +       depends on BR2_USE_MMU # keyutils dependency: fork()
-> > +       depends on !BR2_STATIC_LIBS # keyutils dependency: dlopen
-> > +       select BR2_PACKAGE_OPENSSL
-> > +       select BR2_PACKAGE_KEYUTILS
-> > +       help
-> > +         Linux Integrity Measurement Architecture (IMA)
-> > +         Extended Verification Module (EVM) tools.
+The bump of webkitgtk to 2.24.3 in commit
+3ff05d9094be1329b5987589d6b6fefb152ff006 forgot to drop a patch that
+was upstreamed, and is now part of 2.24.3, causing a build failure, so
+let's drop this patch.
 
-> Do you have a proposal for how to use these tools in an embedded
-> environment where a filesystem needs to be "labeled/staged" offline
-> with the signatures/hashes?
+Fixes:
 
-> The filesystem staging might be a good run time test case as well to
-> show the end to end use where you execute a qemu which uses the IMA
-> tools to authenticate apps executing from a filesystem you just built.
+  http://autobuild.buildroot.net/results/4d7bffd20344f06ca719b7c8083b81053b255aa5/
 
-Yes I was thinking about it as well. While for some usage it's handy to have it
-on the target, it'd be certainly helpful to offer functionality to do do
-labelling filesystem with security.{ima,evm} extended attributes or with digital
-signatures during stagging.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...001-Build-failure-after-r243644-in-GTK-Li.patch | 36 ----------------------
+ 1 file changed, 36 deletions(-)
 
-Kind regards,
-Petr
+diff --git a/package/webkitgtk/0001-Build-failure-after-r243644-in-GTK-Li.patch b/package/webkitgtk/0001-Build-failure-after-r243644-in-GTK-Li.patch
+deleted file mode 100644
+index 748fc8e46e..0000000000
+--- a/package/webkitgtk/0001-Build-failure-after-r243644-in-GTK-Li.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From a672bbd75f257dd65844ad53dd21fb37345999b5 Mon Sep 17 00:00:00 2001
+-From: "aperez at igalia.com"
+- <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
+-Date: Mon, 20 May 2019 21:20:02 +0000
+-Subject: [PATCH] Build failure after r243644 in GTK
+- Linux 64-bit stable builds https://bugs.webkit.org/show_bug.cgi?id=196440
+-
+-Patch by Pablo Saavedra <psaavedra@igalia.com> on 2019-04-01
+-Reviewed by Philippe Normand.
+-
+-* platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp:
+-(WebCore::MediaPlayerPrivateGStreamerBase::updateTextureMapperFlags):
+-
+-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+-
+-diff --git a/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp b/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp
+-index 608aee2e1b3..c614050972a 100644
+---- a/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp
+-+++ b/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp
+-@@ -1000,11 +1000,13 @@ void MediaPlayerPrivateGStreamerBase::updateTextureMapperFlags()
+-         break;
+-     }
+- 
+-+#if USE(GSTREAMER_GL)
+-     // When the imxvpudecoder is used, the texture sampling of the
+-     // directviv-uploaded texture returns an RGB value, so there's no need to
+-     // convert it.
+-     if (m_videoDecoderPlatform != WebKitGstVideoDecoderPlatform::ImxVPU)
+-         m_textureMapperFlags |= TEXTURE_MAPPER_COLOR_CONVERT_FLAG;
+-+#endif
+- }
+- #endif
+- 
+--- 
+-2.21.0
+-
