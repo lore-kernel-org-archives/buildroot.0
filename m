@@ -1,49 +1,39 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 15:36:00 +0200
-Subject: [Buildroot] [git commit] package/proj: fix build failure due to gcc
- bug 68485
-Message-ID: <20190801133438.7BDD581518@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Aug 2019 15:44:55 +0200
+Subject: [Buildroot] [PATCH 1/3] package/bison: bump version to 3.4.1
+In-Reply-To: <20190630080904.4105-1-bernd.kuhls@t-online.de>
+References: <20190630080904.4105-1-bernd.kuhls@t-online.de>
+Message-ID: <20190801154455.48a520bd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c99665cde7e47e6eee0aa6ced2d5fed92f716a51
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 30 Jun 2019 10:09:02 +0200
+Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
 
-The proj package exhibits gcc bug 68485 when built for the Microblaze
-architecture with optimization enabled, which causes a build failure.
+> Release notes:
+> https://lists.gnu.org/archive/html/info-gnu/2019-05/msg00014.html
+> 
+> Removed patches applied to upstream gnulib:
+> http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=4af4a4a71827c0bc5e0ec67af23edef4f15cee8e
+> http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=74d9d6a293d7462dea8f83e7fc5ac792e956a0ad
+> 
+> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+> ---
+>  ...adjust-to-glibc-2.28-libio.h-removal.patch | 50 -------------------
+>  ...e-more-paranoid-about-libio.h-change.patch | 46 -----------------
+>  package/bison/bison.hash                      |  2 +-
+>  package/bison/bison.mk                        |  2 +-
+>  4 files changed, 2 insertions(+), 98 deletions(-)
+>  delete mode 100644 package/bison/0001-fflush-adjust-to-glibc-2.28-libio.h-removal.patch
+>  delete mode 100644 package/bison/0002-fflush-be-more-paranoid-about-libio.h-change.patch
 
-As done for other packages in Buildroot work around this gcc bug by
-setting optimization to -O0 if BR2_TOOLCHAIN_HAS_GCC_BUG_68485=y.
+Applied to master, thanks.
 
-Fixes:
-
-http://autobuild.buildroot.net/results/e61/e61bd55067071415223e523a81de3c2e9cafea6f/
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Tested-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Acked-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/proj/proj.mk | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/package/proj/proj.mk b/package/proj/proj.mk
-index 0b239b2bbe..2969eb57ac 100644
---- a/package/proj/proj.mk
-+++ b/package/proj/proj.mk
-@@ -10,4 +10,12 @@ PROJ_LICENSE = MIT
- PROJ_LICENSE_FILES = COPYING
- PROJ_INSTALL_STAGING = YES
- 
-+PROJ_CFLAGS = $(TARGET_CFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
-+PROJ_CFLAGS += -O0
-+endif
-+
-+PROJ_CONF_ENV = CFLAGS="$(PROJ_CFLAGS)"
-+
- $(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
