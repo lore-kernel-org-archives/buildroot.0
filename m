@@ -1,41 +1,24 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 1 Aug 2019 09:33:17 +0200
-Subject: [Buildroot] [RFC PATCH v4 2/2] iputils: add capability for
- clockdiff, ping, traceroute6
-In-Reply-To: <20190801072910.GA3548@scaer>
-References: <20190730213846.7488-1-petr.vorel@gmail.com>
- <20190730213846.7488-2-petr.vorel@gmail.com>
- <20190731160059.GJ3194@scaer>
- <20190801001310.644e3dc0@windsurf.home>
- <20190731222400.GB5083@x230> <20190801072910.GA3548@scaer>
-Message-ID: <20190801073316.GA6438@dell5510>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 01 Aug 2019 09:40:49 +0200
+Subject: [Buildroot] [PATCH 01/11] package/libsysfs: add license hashes
+In-Reply-To: <20190729181212.10341-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Mon, 29 Jul 2019 20:12:02 +0200")
+References: <20190729181212.10341-1-bernd.kuhls@t-online.de>
+Message-ID: <877e7x5o5a.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann, Thomas,
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-> Petr, All,
+ > Partly fixes:
+ > http://autobuild.buildroot.net/results/f0f/f0fd05ce8a8b595015baf625481b58967df53458/
 
-> On 2019-08-01 00:24 +0200, Petr Vorel spake thusly:
-> > > On Wed, 31 Jul 2019 18:00:59 +0200
-> > > "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
-> [--SNIP--]
-> > > Yes, but I believe it's the best solution for now, let's keep a
-> > > conditional like you're showing here. Which of course makes the change
-> > > to makedevs no longer relevant.
-> > Sure :). So merge the original version [1], related only to iputils?
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
-> Not really, because your first iteration still kept the suid bit on the
-> orograms.
+Committed series, thanks.
 
-> I'm intrigued why you could not use the ifeq(...) construct, though...
-Oh, sorry. I'll post v6.
-
-> Regards,
-> Yann E. MORIN.
-
-Kind regards,
-Petr
+-- 
+Bye, Peter Korsgaard
