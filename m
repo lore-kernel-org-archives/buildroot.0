@@ -1,45 +1,44 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 11:10:32 +0200
-Subject: [Buildroot] [git commit branch/2019.02.x] package/brotli: work
- around gcc bug 68485
-Message-ID: <20190801091107.6C55E80F9B@busybox.osuosl.org>
+Date: Thu, 01 Aug 2019 11:19:37 +0200
+Subject: [Buildroot] [PATCH 1/1] package/tvheadend: fix build error
+In-Reply-To: <vi401gxk1k.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
+ message of "Sun, 28 Jul 2019 10:56:31 +0200")
+References: <20190706064236.30663-1-bernd.kuhls@t-online.de>
+ <20190727223753.2211ac3f@windsurf>
+ <XnsAA99E75BA4FE2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
+ <vi401gxk1k.ln2@ID-313208.user.individual.net>
+Message-ID: <878ssd1bva.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=61557494367128bac69f42d80c20e107f6c107cf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
+>>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
-With Microblaze Gcc version <= 9.x the build fails due to gcc bug 68485:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68485. The bug show up when
-building brotli with optimization but not when building with -O0. To
-work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_68458=y, we force using
--O0.
+ > Am Sat, 27 Jul 2019 22:44:29 +0200 schrieb Bernd Kuhls:
+ >> Thomas Petazzoni
+ >> <thomas.petazzoni@bootlin.com> wrote in
+ >> news:20190727223753.2211ac3f at windsurf:
+ >> 
+ >>> Could you give a bit more details about how including <stdio.h> can
+ >>> solve this build issue ?
+ >> 
+ >> Hi Thomas,
+ >> 
+ >> the fix was proposed by the author of tvheadend:
+ >> https://tvheadend.org/issues/5667#note-7
 
-Fixes:
+ > Hi Thomas,
 
-  http://autobuild.buildroot.net/results/d86/d86251974a0a348a64d9a1d1fd7d02dd4aff0792/
+ > one additional note: A similar patch was already accepted upstream: 
+ > https://github.com/tvheadend/tvheadend/commit/
+ > 8f1de1621d78c91431238176bf4f6290870a031a
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-(cherry picked from commit 39dde1ffb6a7111c2fa2b340c940e4d3e685aa29)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/brotli/brotli.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ > When sending this patch I forgot the optional dependency of libdvbcsa 
+ > which causes the current build error and needs the same fix.
 
-diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
-index 2c1ad48753..248bfb9daf 100644
---- a/package/brotli/brotli.mk
-+++ b/package/brotli/brotli.mk
-@@ -14,4 +14,8 @@ BROTLI_CONF_OPTS = \
- 	-DBROTLI_DISABLE_TESTS=ON \
- 	-DBROTLI_BUNDLED_MODE=OFF
- 
-+ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
-+BROTLI_CONF_OPTS += -DCMAKE_C_FLAGS="-O0"
-+endif
-+
- $(eval $(cmake-package))
+Will you send a patch for that?
+
+-- 
+Bye, Peter Korsgaard
