@@ -1,27 +1,30 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 09:32:44 +0200
-Subject: [Buildroot] [git commit] package/bellagio: add license hash
-Message-ID: <20190801073838.08B45813D2@busybox.osuosl.org>
+Date: Thu, 1 Aug 2019 09:33:40 +0200
+Subject: [Buildroot] [git commit] package/jsmin: add license hash
+Message-ID: <20190801073838.10A11813D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8b539ccbcb33714b276f574357af90bd28e5ca50
+commit: https://git.buildroot.net/buildroot/commit/?id=0a080a301b0fe63b62032ab750de31e62cb223be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Partly fixes:
+http://autobuild.buildroot.net/results/f0f/f0fd05ce8a8b595015baf625481b58967df53458/
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bellagio/bellagio.hash | 1 +
+ package/jsmin/jsmin.hash | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/bellagio/bellagio.hash b/package/bellagio/bellagio.hash
-index 914dd7c369..bd95df0f19 100644
---- a/package/bellagio/bellagio.hash
-+++ b/package/bellagio/bellagio.hash
+diff --git a/package/jsmin/jsmin.hash b/package/jsmin/jsmin.hash
+index 6080f109dc..c160978519 100644
+--- a/package/jsmin/jsmin.hash
++++ b/package/jsmin/jsmin.hash
 @@ -1,2 +1,3 @@
- # Locally computed:
- sha256  593c0729c8ef8c1467b3bfefcf355ec19a46dd92e31bfc280e17d96b0934d74c  libomxil-bellagio-0.9.3.tar.gz
-+sha256  a3d4e451d72288a4f8819b734ef610926213c2ba97e512add8de2f30843505a6  COPYING
+ # Locally calculated
+ sha256 aae127bf7291a7b2592f36599e5ed6c6423eac7abe0cd5992f82d6d46fe9ed2d  jsmin-1bf6ce5f74a9f8752ac7f5d115b8d7ccb31cfe1b.tar.gz
++sha256 b420f61778af09534adc836a5086f5625b8499124051c50baefa218e7c03a58c  jsmin.c
