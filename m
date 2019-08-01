@@ -1,40 +1,64 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  1 Aug 2019 12:48:51 +0200
-Subject: [Buildroot] [PATCHv2] system: use system shell as root shell
-Message-ID: <20190801104851.32619-1-yann.morin.1998@free.fr>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 1 Aug 2019 12:52:29 +0200
+Subject: [Buildroot] [git commit] boot/uboot: add option to generate env
+ image from default env
+Message-ID: <20190801104954.84EEC8A50B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Philip Molloy <philip.a.molloy@gmail.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=2c8ff251cb16d38fb417a488ee0367cd03eebda2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Philip Molloy <philip.a.molloy@gmail.com>
-[yann.morin.1998 at free.fr: use the sytem shell, not a new option,
- as suggested by Arnout]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+This patch adds support to extract compiled in default env
+via u-boot's get_default_envs script and generate env image from it.
 
+Signed-off-by: Denis Osterland <Denis.Osterland@diehl.com>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes v1 -> v2:
-  - drop the new option, use the system shell
----
- package/skeleton-init-common/skeleton-init-common.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ boot/uboot/Config.in | 2 ++
+ boot/uboot/uboot.mk  | 8 ++++----
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/skeleton-init-common/skeleton-init-common.mk b/package/skeleton-init-common/skeleton-init-common.mk
-index e429b13d78..b4fb11b369 100644
---- a/package/skeleton-init-common/skeleton-init-common.mk
-+++ b/package/skeleton-init-common/skeleton-init-common.mk
-@@ -95,6 +95,8 @@ SKELETON_INIT_COMMON_TARGET_FINALIZE_HOOKS += SKELETON_INIT_COMMON_ADD_SH_TO_SHE
- ifneq ($(SKELETON_INIT_COMMON_BIN_SH),)
- define SKELETON_INIT_COMMON_SET_BIN_SH
- 	ln -sf $(SKELETON_INIT_COMMON_BIN_SH) $(TARGET_DIR)/bin/sh
-+	$(SED) '/^\root/s,:[^:]*$$,$(SKELETON_INIT_COMMON_BIN_SH),' \
-+		$(TARGET_DIR)/etc/passwd
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 1aa29a7d92..993979f273 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -487,6 +487,8 @@ menuconfig BR2_TARGET_UBOOT_ENVIMAGE
+ 
+ 	  The environment image will be called uboot-env.bin.
+ 
++	  Leave empty to generate image from compiled-in env.
++
+ if BR2_TARGET_UBOOT_ENVIMAGE
+ 
+ config BR2_TARGET_UBOOT_ENVIMAGE_SOURCE
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index ae09c37d84..0a8856d7db 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -271,8 +271,11 @@ define UBOOT_BUILD_OMAP_IFT
  endef
+ 
+ ifneq ($(BR2_TARGET_UBOOT_ENVIMAGE),)
++UBOOT_GENERATE_ENV_FILE=$(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE))
+ define UBOOT_GENERATE_ENV_IMAGE
+-	cat $(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)) \
++	$(if $(UBOOT_GENERATE_ENV_FILE), \
++		cat $(UBOOT_GENERATE_ENV_FILE), \
++		CROSS_COMPILE="$(TARGET_CROSS)" $(@D)/scripts/get_default_envs.sh $(@D)) \
+ 		>$(@D)/buildroot-env.txt
+ 	$(HOST_DIR)/bin/mkenvimage -s $(BR2_TARGET_UBOOT_ENVIMAGE_SIZE) \
+ 		$(if $(BR2_TARGET_UBOOT_ENVIMAGE_REDUNDANT),-r) \
+@@ -385,9 +388,6 @@ endef
+ 
+ ifeq ($(BR2_TARGET_UBOOT_ENVIMAGE),y)
+ ifeq ($(BR_BUILDING),y)
+-ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SOURCE)),)
+-$(error Please define a source file for Uboot environment (BR2_TARGET_UBOOT_ENVIMAGE_SOURCE setting))
+-endif
+ ifeq ($(call qstrip,$(BR2_TARGET_UBOOT_ENVIMAGE_SIZE)),)
+ $(error Please provide Uboot environment size (BR2_TARGET_UBOOT_ENVIMAGE_SIZE setting))
  endif
- endif
--- 
-2.20.1
