@@ -1,54 +1,58 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 10:36:08 +0200
-Subject: [Buildroot] [git commit] package/subversion: security bump to
- version 1.9.12
-Message-ID: <20190801083445.1ACA08122C@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Aug 2019 10:39:51 +0200
+Subject: [Buildroot] [PATCH v4 00/30] builder-class series cover letter
+In-Reply-To: <20190801024643.11024-1-itsatharva@gmail.com>
+References: <20190801024643.11024-1-itsatharva@gmail.com>
+Message-ID: <20190801103951.05be1116@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7695a02244abff439d3a3a9605e8b7ca3d72e61e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Atharva,
 
-Fixes the following security issues:
+On Thu,  1 Aug 2019 08:16:13 +0530
+Atharva Lele <itsatharva@gmail.com> wrote:
 
-CVE-2018-11782: Remotely triggerable DoS vulnerability in svnserve
-'get-deleted-rev'
-https://subversion.apache.org/security/CVE-2018-11782-advisory.txt
+> Since various functions in the autobuilder script use a lot of common data, we
+> introduce a Builder class to house these variables.
+> 
+> I have also included modified versions of Thomas's commits after adapting them
+> to work with Builder class.
+> 
+> I created a v4 to change the order of one patch, and to delete another patch. No
+> other changes have been made.
+> 
+> RFC: Few patches, namely patches 25, 27-30 have not been reviewed yet. I'd like
+> some feedback on them, if any, so that necessary modifications can be done and
+> it can be merged as soon as possible.
 
-CVE-2019-0203: Remote unauthenticated denial-of-service in Subversion
-svnserve
-https://subversion.apache.org/security/CVE-2019-0203-advisory.txt
+First of all, thanks a lot for all this work! Nice refactoring of the
+autobuild-run script.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/subversion/subversion.hash | 2 +-
- package/subversion/subversion.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I merged all patches up to patch 27, included. According to Arnout,
+applying patches 28/29/30 is problematic, because builds done in
+different output directories are currently not reproducible at all, so
+we would simply fail *all* reproducible builds if we apply those
+patches. So I believe we need to fix this before we can apply such
+patches.
 
-diff --git a/package/subversion/subversion.hash b/package/subversion/subversion.hash
-index be0c8ec931..7f94631f89 100644
---- a/package/subversion/subversion.hash
-+++ b/package/subversion/subversion.hash
-@@ -1,5 +1,5 @@
- # From https://www.apache.org/dist/subversion/subversion-1.9.10.tar.bz2.sha512
--sha512 58ac11078e0e5a1720199e5c66da76e7a20b86d02edcb8d313f98e2ddc74ae70aa3e0763a7d8a8fcb5a1fd7d65186829625ff110d78028b1c447e91f420d6f48 subversion-1.9.10.tar.bz2
-+sha512 08a5c6c0233cc1dbd992180d2077eb1c67725682c457d3f67ebb6d22db0f6b64002a699ab828d435b708340ce6fb07bb1f03d11daefb887053c427ed75ad2de7 subversion-1.9.12.tar.bz2
- 
- # Locally calculated
- sha256 3202942c1aba495fd17390618dedc1d3542815c5bc11958da7fd98c985abc11a LICENSE
-diff --git a/package/subversion/subversion.mk b/package/subversion/subversion.mk
-index 0e26cfd4be..1013f1fc55 100644
---- a/package/subversion/subversion.mk
-+++ b/package/subversion/subversion.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SUBVERSION_VERSION = 1.9.10
-+SUBVERSION_VERSION = 1.9.12
- SUBVERSION_SOURCE = subversion-$(SUBVERSION_VERSION).tar.bz2
- SUBVERSION_SITE = http://mirror.catn.com/pub/apache/subversion
- SUBVERSION_LICENSE = Apache-2.0
+A small detail is that patches 28 and 29 should be squashed together:
+patch 28 is only introducing a new variable pointing to the secondary
+output directory, but it's not used anywhere.
+
+Also, long term, I'd like the send_results() method to be split into
+several methods. One calculating the failure reason, one deciding if
+the build result should be rejected, one preparing the build results
+for upload, one doing the actual upload. But please don't work on this
+additional refactoring, I think it's much more important that you focus
+on the reproducible build topic.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
