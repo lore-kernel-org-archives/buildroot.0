@@ -1,61 +1,55 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 17:02:44 +0200
-Subject: [Buildroot] [git commit] pdbg: Bump version to v2.2
-Message-ID: <20190801150534.62F9182CA2@busybox.osuosl.org>
+From: Victor Huesca <victor.huesca@bootlin.com>
+Date: Thu,  1 Aug 2019 17:12:43 +0200
+Subject: [Buildroot] [PATCH v3] support/scripts/pkg-stats: fix flake8 issues
+Message-ID: <20190801151244.32281-1-victor.huesca@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa4474e999295c55744243379009621fcb06ae75
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fixes:
+ - blank space before ':'
+ - unused 'o' variable left from a previous patch
+ - bad continuous alignment
 
-Upstream changes:
-
- - libpdbg API clean-up
- - Path based targetting
- - POWER8 sreset fixes
- - gdbserver
-
-This also adds the v back to the version string that pdbg's build system
-uses, following the recent buildroot changes to remove "v" from package
-versions.
-
-Signed-off-by: Joel Stanley <joel@jms.id.au>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
 ---
- package/pdbg/pdbg.hash | 2 +-
- package/pdbg/pdbg.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/scripts/pkg-stats | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/pdbg/pdbg.hash b/package/pdbg/pdbg.hash
-index 35a26edddd..b856e4ce8c 100644
---- a/package/pdbg/pdbg.hash
-+++ b/package/pdbg/pdbg.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 da65ebbd9a710555e9684472ee36fff37e897111034fcc2c07172cc39016d169 pdbg-2.0.tar.gz
-+sha256 b3bd93475da1e68502732309fa274514fb0a1193d574adfd68d5feeabeb30571  pdbg-2.2.tar.gz
- sha256 cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30 COPYING
-diff --git a/package/pdbg/pdbg.mk b/package/pdbg/pdbg.mk
-index c92920a6d6..97832f23d1 100644
---- a/package/pdbg/pdbg.mk
-+++ b/package/pdbg/pdbg.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index f759d2de7b..225c19e1ab 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -248,7 +248,7 @@ def package_init_make_info():
+             pkgvar = pkgvar[:-8]
+             Package.all_licenses.append(pkgvar)
  
--PDBG_VERSION = 2.0
-+PDBG_VERSION = 2.2
- PDBG_SITE = $(call github,open-power,pdbg,v$(PDBG_VERSION))
- PDBG_LICENSE = Apache-2.0
- PDBG_LICENSE_FILES = COPYING
- PDBG_AUTORECONF = YES
- PDBG_DEPENDENCIES = host-dtc
- 
--PDBG_MAKE_OPTS = "GIT_SHA1=\"$(PDBG_VERSION)\""
-+PDBG_MAKE_OPTS = "GIT_SHA1=\"v$(PDBG_VERSION)\""
- 
- define PDBG_PATCH_M4
- 	mkdir -p $(@D)/m4
+-        elif pkgvar.endswith("_LICENSE_FILES") :
++        elif pkgvar.endswith("_LICENSE_FILES"):
+             if pkgvar.endswith("_MANIFEST_LICENSE_FILES"):
+                 continue
+             pkgvar = pkgvar[:-14]
+@@ -691,7 +691,6 @@ def dump_json(packages, stats, date, commit, output):
+     }
+     statistics['infra'] = {k[6:]: v for k, v in stats.items() if k.startswith('infra-')}
+     # The actual structure to dump, add commit and date to it
+-    o = subprocess.check_output(["git", "log", "master", "-n", "1", "--pretty=format:%H"])
+     final = {'packages': pkgs,
+              'stats': statistics,
+              'commit': commit,
+@@ -711,9 +710,9 @@ def parse_args():
+                         help='JSON output file')
+     packages = parser.add_mutually_exclusive_group()
+     packages.add_argument('-n', dest='npackages', type=int, action='store',
+-                        help='Number of packages')
++                          help='Number of packages')
+     packages.add_argument('-p', dest='packages', action='store',
+-                        help='List of packages (comma separated)')
++                          help='List of packages (comma separated)')
+     args = parser.parse_args()
+     if not args.html and not args.json:
+         parser.error('at least one of --html or --json (or both) is required')
+-- 
+2.21.0
