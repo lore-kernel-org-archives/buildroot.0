@@ -1,80 +1,60 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu,  1 Aug 2019 17:15:58 +0200
-Subject: [Buildroot] [RFC PATCH v6 1/1] iputils: Add capability for
- clockdiff, ping, traceroute6
-Message-ID: <20190801151558.12221-1-petr.vorel@gmail.com>
+From: Mark Corbin <mark.corbin@embecosm.com>
+Date: Thu,  1 Aug 2019 16:20:05 +0100
+Subject: [Buildroot] [PATCH 1/1] support/kconfig: fix compiler warnings by
+ increasing buffer sizes
+Message-ID: <20190801152005.12285-1-mark.corbin@embecosm.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-and fallback to setuid if xattr not enabled.
+When compiling kconfig with host gcc 8.3.0 several compiler
+'-Wformat-overflow=' warnings are generated. This is due to a
+number of temporary buffers used by sprintf being too small.
+The sizes of these buffers have been increased to remove the
+warnings.
 
-Not setting xattr on arping as it can be used for ARP Poisoning.
-
-Use cap_net_raw+p (drop +e) as upstream sets that via
-cap_set_flag(), see https://github.com/iputils/iputils/issues/194
-
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
 ---
-Hi,
+ support/kconfig/confdata.c | 4 ++--
+ support/kconfig/util.c     | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-hope this is the final version :).
-
-Kind regards,
-Petr
-
-* devices_table.txt for xattrs enabled:
- 	/usr/sbin/arping      f 4755 0 0 - - - - -
-	/usr/bin/clockdiff    f 0755 0 0 - - - - -
-	|xattr cap_net_raw+p
-	/bin/ping             f 0755 0 0 - - - - -
-	|xattr cap_net_raw+p
-	/usr/bin/traceroute6  f 0755 0 0 - - - - -
-	|xattr cap_net_raw+p
-
-* devices_table.txt for setuid:
-...
- 	/usr/sbin/arping      f 4755 0 0 - - - - -
-	/usr/bin/clockdiff    f 4755 0 0 - - - - -
-	
-	/bin/ping             f 4755 0 0 - - - - -
-	
-	/usr/bin/traceroute6  f 4755 0 0 - - - - -
-	
-...
-
- package/iputils/iputils.mk | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
-
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 8e6a3e2fc5..e353e821f9 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -73,11 +73,20 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
+diff --git a/support/kconfig/confdata.c b/support/kconfig/confdata.c
+index 892da74fdc..6f40588a89 100644
+--- a/support/kconfig/confdata.c
++++ b/support/kconfig/confdata.c
+@@ -744,7 +744,7 @@ int conf_write(const char *name)
+ 	struct menu *menu;
+ 	const char *basename;
+ 	const char *str;
+-	char dirname[PATH_MAX+1], tmpname[PATH_MAX+1], newname[PATH_MAX+1];
++	char dirname[PATH_MAX+1], tmpname[PATH_MAX+23], newname[PATH_MAX+1];
+ 	char *env;
  
- # handle permissions ourselves
- IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
-+ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
-+IPUTILS_CAPABILITY = |xattr cap_net_raw+p
-+MAYBE_SUID = 0
-+else
-+MAYBE_SUID = 4
-+endif
- define IPUTILS_PERMISSIONS
- 	/usr/sbin/arping      f 4755 0 0 - - - - -
--	/usr/bin/clockdiff    f 4755 0 0 - - - - -
--	/bin/ping             f 4755 0 0 - - - - -
--	/usr/bin/traceroute6  f 4755 0 0 - - - - -
-+	/usr/bin/clockdiff    f $(MAYBE_SUID)755 0 0 - - - - -
-+	$(IPUTILS_CAPABILITY)
-+	/bin/ping             f $(MAYBE_SUID)755 0 0 - - - - -
-+	$(IPUTILS_CAPABILITY)
-+	/usr/bin/traceroute6  f $(MAYBE_SUID)755 0 0 - - - - -
-+	$(IPUTILS_CAPABILITY)
- endef
+ 	if (!name)
+@@ -974,7 +974,7 @@ int conf_write_autoconf(void)
+ 	const char *name;
+ 	FILE *out, *tristate, *out_h;
+ 	int i;
+-	char dir[PATH_MAX+1], buf[PATH_MAX+1];
++	char dir[PATH_MAX+1], buf[PATH_MAX+20];
+ 	char *s;
  
- $(eval $(meson-package))
+ 	strcpy(dir, conf_get_configname());
+diff --git a/support/kconfig/util.c b/support/kconfig/util.c
+index 18a8e52391..d051fbea13 100644
+--- a/support/kconfig/util.c
++++ b/support/kconfig/util.c
+@@ -35,7 +35,7 @@ struct file *file_lookup(const char *name)
+ int file_write_dep(const char *name)
+ {
+ 	char *str;
+-	char buf[PATH_MAX+1], buf2[PATH_MAX+1], dir[PATH_MAX+1];
++	char buf[PATH_MAX+13], buf2[PATH_MAX+1], dir[PATH_MAX+1];
+ 	struct symbol *sym, *env_sym;
+ 	struct expr *e;
+ 	struct file *file;
 -- 
-2.22.0
+2.19.1
