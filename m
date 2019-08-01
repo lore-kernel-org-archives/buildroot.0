@@ -1,45 +1,25 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 20:14:48 +0200
-Subject: [Buildroot] [git commit] package/gmrender-resurrect: bump to
- version a7b0b1b9ca482d2d34ac62c2f2dc0cf0dfbb702b
-Message-ID: <20190801181411.B25D8885C5@busybox.osuosl.org>
+Date: Thu, 01 Aug 2019 20:21:46 +0200
+Subject: [Buildroot] [PATCH 1/2 v7] package/iputils: drop setuid on
+ arping
+In-Reply-To: <f9b8b678e88316d6b572dc87e5080896cd8a84c7.1564676540.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Thu, 1 Aug 2019 18:22:32 +0200")
+References: <cover.1564676540.git.yann.morin.1998@free.fr>
+ <f9b8b678e88316d6b572dc87e5080896cd8a84c7.1564676540.git.yann.morin.1998@free.fr>
+Message-ID: <87a7csvj9h.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f05569211a6d7eeae0a5f07bf72e18bf6261581
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Add hash for license file
+ > arping can be used for arp poisoning, so it should really not be setuid.
+ > Reported-by: Petr Vorel <petr.vorel@gmail.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gmrender-resurrect/gmrender-resurrect.hash | 3 ++-
- package/gmrender-resurrect/gmrender-resurrect.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Committed, thanks.
 
-diff --git a/package/gmrender-resurrect/gmrender-resurrect.hash b/package/gmrender-resurrect/gmrender-resurrect.hash
-index 522bd2ae87..85d6ad4629 100644
---- a/package/gmrender-resurrect/gmrender-resurrect.hash
-+++ b/package/gmrender-resurrect/gmrender-resurrect.hash
-@@ -1,2 +1,3 @@
- # Locally calculated
--sha256 dcbde3601c3389e8dd21fe1842a92abf4cc06f6e3a375f1df63fdbf784a6650b  gmrender-resurrect-33600ab663f181c4f4f5c48aba25bf961760a300.tar.gz
-+sha256 79dba7cbd275098026a16829597b7013ab71a9cca4c9762af6f210637099c39a  gmrender-resurrect-a7b0b1b9ca482d2d34ac62c2f2dc0cf0dfbb702b.tar.gz
-+sha256 c38aee9e3c8c4d5d594ff548a1be05453023016d6286931f6512db215ec1fd42  COPYING
-diff --git a/package/gmrender-resurrect/gmrender-resurrect.mk b/package/gmrender-resurrect/gmrender-resurrect.mk
-index 2b6a56f0e5..432ed8424e 100644
---- a/package/gmrender-resurrect/gmrender-resurrect.mk
-+++ b/package/gmrender-resurrect/gmrender-resurrect.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GMRENDER_RESURRECT_VERSION = 33600ab663f181c4f4f5c48aba25bf961760a300
-+GMRENDER_RESURRECT_VERSION = a7b0b1b9ca482d2d34ac62c2f2dc0cf0dfbb702b
- GMRENDER_RESURRECT_SITE = $(call github,hzeller,gmrender-resurrect,$(GMRENDER_RESURRECT_VERSION))
- # Original distribution does not have default configure,
- # so we need to autoreconf:
+-- 
+Bye, Peter Korsgaard
