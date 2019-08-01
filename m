@@ -1,25 +1,36 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Aug 2019 18:22:57 +0200
-Subject: [Buildroot] [PATCH 1/2] package/libtorrent: bump to version
- 0.13.8
-In-Reply-To: <20190801111654.31714-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 1 Aug 2019 13:16:53 +0200")
-References: <20190801111654.31714-1-fontaine.fabrice@gmail.com>
-Message-ID: <87pnlox3by.fsf@dell.be.48ers.dk>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 01 Aug 2019 16:22:58 +0000
+Subject: [Buildroot] [Bug 12076] Patchelf can link against an incompatible
+ libc++ version
+In-Reply-To: <bug-12076-163@https.bugs.busybox.net/>
+References: <bug-12076-163@https.bugs.busybox.net/>
+Message-ID: <bug-12076-163-2zFGa0OI3U@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+https://bugs.busybox.net/show_bug.cgi?id=12076
 
- > Remove both patches (already in version) and drop AUTORECONF as it is
- > not needed anymore
+--- Comment #1 from Thomas Petazzoni <thomas.petazzoni@free-electrons.com> ---
+I don't really see how this can happen, since Buildroot is building patchelf
+for the host before running it. The only reasons why it could fail like this is
+if:
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ - The patchelf binary is built on one system, and move to another, which has
+an older libstdc++ library
 
-Committed, thanks.
+ - The system on which you're doing the build has some kind of
+configuration/installation issue, and the C++ programs being built cannot be
+executed.
+
+All what Buildroot is doing is to build host-patchelf, which basically uses
+your system g++ compiler.
+
+Could you attach the broken patchelf binary ? Could you also attach the build
+log of the host-patchelf package ?
 
 -- 
-Bye, Peter Korsgaard
+You are receiving this mail because:
+You are on the CC list for the bug.
