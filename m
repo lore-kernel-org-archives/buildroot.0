@@ -1,60 +1,47 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Thu,  1 Aug 2019 16:20:05 +0100
-Subject: [Buildroot] [PATCH 1/1] support/kconfig: fix compiler warnings by
- increasing buffer sizes
-Message-ID: <20190801152005.12285-1-mark.corbin@embecosm.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 1 Aug 2019 17:35:22 +0200
+Subject: [Buildroot] [git commit] toolchain-external: fix find_sysroot
+Message-ID: <20190801153317.5D9117FE20@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-When compiling kconfig with host gcc 8.3.0 several compiler
-'-Wformat-overflow=' warnings are generated. This is due to a
-number of temporary buffers used by sprintf being too small.
-The sizes of these buffers have been increased to remove the
-warnings.
+commit: https://git.buildroot.net/buildroot/commit/?id=0de9a53a340321de5d51b4092181d157c3b539ef
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+Commit 23c0e97b29a (toolchain-external: anchor sysroot regex with /)
+tried to make the find-sysroot work more consistently, especially for
+toolchains where the C library is located in a sub-directory, like the
+"Realtek mips toolchain".
+
+After that patch, the '/' that was trailing in the returned path got
+removed now. This in turn breaks the Codesourcery toolchain.
+
+We fix that by appending the now-missing trailing '/'.
+
+Fixes:
+http://autobuild.buildroot.net/results/9284d571668148febce23d96a9c0a97a6b2b43dc
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: ?????? ??? <shawn_chen@realsil.com.cn>
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- support/kconfig/confdata.c | 4 ++--
- support/kconfig/util.c     | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/kconfig/confdata.c b/support/kconfig/confdata.c
-index 892da74fdc..6f40588a89 100644
---- a/support/kconfig/confdata.c
-+++ b/support/kconfig/confdata.c
-@@ -744,7 +744,7 @@ int conf_write(const char *name)
- 	struct menu *menu;
- 	const char *basename;
- 	const char *str;
--	char dirname[PATH_MAX+1], tmpname[PATH_MAX+1], newname[PATH_MAX+1];
-+	char dirname[PATH_MAX+1], tmpname[PATH_MAX+23], newname[PATH_MAX+1];
- 	char *env;
+diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
+index e618aa7a09..894e76ee32 100644
+--- a/toolchain/toolchain-external/pkg-toolchain-external.mk
++++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
+@@ -331,7 +331,7 @@ endef
+ #
+ # And variations on these.
+ define toolchain_find_sysroot
+-$$(printf $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:/(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::')
++$$(printf $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:/(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a:/:')
+ endef
  
- 	if (!name)
-@@ -974,7 +974,7 @@ int conf_write_autoconf(void)
- 	const char *name;
- 	FILE *out, *tristate, *out_h;
- 	int i;
--	char dir[PATH_MAX+1], buf[PATH_MAX+1];
-+	char dir[PATH_MAX+1], buf[PATH_MAX+20];
- 	char *s;
- 
- 	strcpy(dir, conf_get_configname());
-diff --git a/support/kconfig/util.c b/support/kconfig/util.c
-index 18a8e52391..d051fbea13 100644
---- a/support/kconfig/util.c
-+++ b/support/kconfig/util.c
-@@ -35,7 +35,7 @@ struct file *file_lookup(const char *name)
- int file_write_dep(const char *name)
- {
- 	char *str;
--	char buf[PATH_MAX+1], buf2[PATH_MAX+1], dir[PATH_MAX+1];
-+	char buf[PATH_MAX+13], buf2[PATH_MAX+1], dir[PATH_MAX+1];
- 	struct symbol *sym, *env_sym;
- 	struct expr *e;
- 	struct file *file;
--- 
-2.19.1
+ # Returns the lib subdirectory for the given compiler + flags (i.e
