@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Aug 2019 10:46:27 +0200
-Subject: [Buildroot] [PATCH 6/7] package/ijs: add license hash
-In-Reply-To: <20190728204434.12356-6-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 28 Jul 2019 22:44:33 +0200")
+Date: Thu, 01 Aug 2019 10:46:57 +0200
+Subject: [Buildroot] [PATCH 7/7] package/iprutils: add license hash
+In-Reply-To: <20190728204434.12356-7-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 28 Jul 2019 22:44:34 +0200")
 References: <20190728204434.12356-1-bernd.kuhls@t-online.de>
- <20190728204434.12356-6-bernd.kuhls@t-online.de>
-Message-ID: <87blx92rz0.fsf@dell.be.48ers.dk>
+ <20190728204434.12356-7-bernd.kuhls@t-online.de>
+Message-ID: <877e7x2ry6.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
