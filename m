@@ -1,47 +1,58 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Aug 2019 18:02:39 +0200
-Subject: [Buildroot] [PATCH 1/1] qemu: fix host virtfs option
-In-Reply-To: <20190801092701.8766-1-vincent.stehle@arm.com>
-References: <20190801092701.8766-1-vincent.stehle@arm.com>
-Message-ID: <20190801180239.262e5f6e@windsurf.home>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Thu, 01 Aug 2019 16:06:27 +0000
+Subject: [Buildroot] [Bug 12076] New: Patchelf can link against an
+ incompatible libc++ version
+Message-ID: <bug-12076-163@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vincent,
+https://bugs.busybox.net/show_bug.cgi?id=12076
 
-On Thu,  1 Aug 2019 11:27:01 +0200
-Vincent Stehl? <vincent.stehle@arm.com> wrote:
+            Bug ID: 12076
+           Summary: Patchelf can link against an incompatible libc++
+                    version
+           Product: buildroot
+           Version: 2019.05.1
+          Hardware: PC
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P5
+         Component: Other
+          Assignee: unassigned at buildroot.uclibc.org
+          Reporter: bradley.gamble at ncipher.com
+                CC: buildroot at uclibc.org
+  Target Milestone: ---
 
-> Fix the build of host-qemu with virtfs enabled: fix a typo in makefile
-> conditional and add a dependency on host-libcap.
-> 
-> The virtfs configuration option was added by commit e0f49e648401
-> ("package/qemu: add option to enable virtual filesystem in host qemu").
-> 
-> Signed-off-by: Vincent Stehl? <vincent.stehle@arm.com>
-> Cc: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
-> 
-> 
-> Hi,
-> 
-> I build-tested this with a number of architectures[1], with VIRTFS=y/n and
-> this looks fine.
->   During testing I remarked that VIRTFS=n is somewhat "weak", as it does
-> not forcibly disable virtfs. This means qemu can still auto-detect libcap
-> and libattr, and decide to auto-enable virtfs. I think this does not harm,
-> but we could also add an explicit --disable-virtfs if preferred. Do not
-> hesitate to let me know if I should respin with this change.
+Attempting a build of buildroot can fail if the host machine is using an older
+version of libstdc++. In this instance I was using a Docker container with
+libstdc++ 3.4.13 (GLIBCXX_3.4.13).
 
-Yes, we like to explicitly disable features, when possible.
+The truncated output from the build is as follows:
 
-Thanks!
+    >>>   Sanitizing RPATH in target tree
+    /home/bgamble/buildroot-2019.05.1/support/scripts/fix-rpath target
+    Error: can't execute patchelf utility
+'/home/bgamble/buildroot-2019.05.1/output/host/bin/patchelf'
+    make[1]: *** [target-finalize] Error 1
+    make: *** [_all] Error 2
 
-Thomas
+Attempting to manually execute the patchelf binary will give the following
+error message:
+
+    $ ./output/host/bin/patchelf
+    ./output/host/bin/patchelf: /usr/lib/libstdc++.so.6: version
+`GLIBCXX_3.4.20' not found (required by ./output/host/bin/patchelf)
+
+This means that it is not possible to perform a build with an older version of
+the libstdc++ library.
+It is possible to build and execute patchelf manually using the host compiler
+so I believe this is a Buildroot-specific issue and not caused by the upstream
+Patchelf source.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+You are receiving this mail because:
+You are on the CC list for the bug.
