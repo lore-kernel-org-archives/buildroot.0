@@ -1,63 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 15:28:18 +0200
-Subject: [Buildroot] [git commit] package/shapelib: upgrade to 1.5.0
-Message-ID: <20190801132735.EDD177FE71@busybox.osuosl.org>
+Date: Thu, 1 Aug 2019 15:29:20 +0200
+Subject: [Buildroot] [git commit] package/xlib_libX11: remove unrecognized
+ option
+Message-ID: <20190801132736.051FA7FA24@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c0773590e49ba95d6b9db596cef5e186177c6cdc
+commit: https://git.buildroot.net/buildroot/commit/?id=5cb2812fdba93ae72201c41a7ea076cd1f1a7bed
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also remove PROJ.4 dependency, as upstream decided to
-drop it.
+Remove --with-xcb as this option has been removed since version 1.3.99:
+https://cgit.freedesktop.org/xorg/lib/libX11/commit/?id=15e5eaf62897b3179d1fbe457cb19f886f0449f8
 
-Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/shapelib/Config.in     | 1 -
- package/shapelib/shapelib.hash | 2 +-
- package/shapelib/shapelib.mk   | 3 +--
- 3 files changed, 2 insertions(+), 4 deletions(-)
+ package/x11r7/xlib_libX11/xlib_libX11.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/shapelib/Config.in b/package/shapelib/Config.in
-index 553d3483af..7c7b9c76c7 100644
---- a/package/shapelib/Config.in
-+++ b/package/shapelib/Config.in
-@@ -2,7 +2,6 @@ config BR2_PACKAGE_SHAPELIB
- 	bool "shapelib"
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_PROJ
- 	help
- 	  The Shapefile C Library provides the ability to write simple
- 	  C programs for reading, writing and updating (to a limited
-diff --git a/package/shapelib/shapelib.hash b/package/shapelib/shapelib.hash
-index 6abddb2a7a..d1f6fa9777 100644
---- a/package/shapelib/shapelib.hash
-+++ b/package/shapelib/shapelib.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256 a4c94817365761a3a4c21bb3ca1c680a6bdfd3edd61df9fdd291d3e7645923b3  shapelib-1.4.1.tar.gz
-+sha256 1fc0a480982caef9e7b9423070b47750ba34cd0ba82668f2e638fab1d07adae1  shapelib-1.5.0.tar.gz
- sha256 7eb803a70990017a1c4e38a8342d7413c5dfeec3ed1ac407e15ae2c274e560ff  COPYING
- sha256 a638278f7f1cb7d0cdc73b47a6c87261b882e356a8e79922e90d44d7ef1dd2c7  web/license.html
-diff --git a/package/shapelib/shapelib.mk b/package/shapelib/shapelib.mk
-index b76c3bb2d2..bedd15dc35 100644
---- a/package/shapelib/shapelib.mk
-+++ b/package/shapelib/shapelib.mk
-@@ -4,11 +4,10 @@
- #
- ################################################################################
+diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
+index c51bb53cdb..7c34b97c8d 100644
+--- a/package/x11r7/xlib_libX11/xlib_libX11.mk
++++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
+@@ -30,7 +30,6 @@ HOST_XLIB_LIBX11_DEPENDENCIES = \
  
--SHAPELIB_VERSION = 1.4.1
-+SHAPELIB_VERSION = 1.5.0
- SHAPELIB_SITE = http://download.osgeo.org/shapelib
- SHAPELIB_LICENSE = MIT or LGPL-2.0
- SHAPELIB_LICENSE_FILES = web/license.html COPYING
- SHAPELIB_INSTALL_STAGING = YES
--SHAPELIB_DEPENDENCIES = proj
+ XLIB_LIBX11_CONF_OPTS = \
+ 	--disable-malloc0returnsnull \
+-	--with-xcb \
+ 	--disable-specs \
+ 	--without-perl
  
- $(eval $(autotools-package))
