@@ -1,43 +1,83 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 1 Aug 2019 19:25:28 +0200
-Subject: [Buildroot] [PATCH 1/2 v7] package/iputils: drop setuid on
- arping
-In-Reply-To: <f9b8b678e88316d6b572dc87e5080896cd8a84c7.1564676540.git.yann.morin.1998@free.fr>
-References: <cover.1564676540.git.yann.morin.1998@free.fr>
- <f9b8b678e88316d6b572dc87e5080896cd8a84c7.1564676540.git.yann.morin.1998@free.fr>
-Message-ID: <20190801172527.GA27877@x230>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 01 Aug 2019 19:25:42 +0200
+Subject: [Buildroot] [PATCH 1/3] package/mosquitto: allow to build as
+ static lib
+In-Reply-To: <b1957631-ca8b-38ab-9b24-5549e8e13e23@railnova.eu> (Titouan
+ Christophe's message of "Thu, 1 Aug 2019 19:09:50 +0200")
+References: <20190718100636.27290-1-titouan.christophe@railnova.eu>
+ <20190718100636.27290-2-titouan.christophe@railnova.eu>
+ <871ry518wo.fsf@dell.be.48ers.dk> <87sgqlyxov.fsf@dell.be.48ers.dk>
+ <b1957631-ca8b-38ab-9b24-5549e8e13e23@railnova.eu>
+Message-ID: <874l30x0fd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
 
-> arping can be used for arp poisoning, so it should really not be setuid.
+ > Hello Peter,
+ > Thank you for reviewing this series !
 
-> Reported-by: Petr Vorel <petr.vorel@gmail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Acked-by: Petr Vorel <petr.vorel@gmail.com>
-+1
-> ---
->  package/iputils/iputils.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+ > On 8/1/19 12:41 PM, Peter Korsgaard wrote:
+ >>>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+ >> 
+ >> Hi,
+ >> 
+ >> >> +ifeq ($(BR2_STATIC_LIBS),y)
+ >> >> +MOSQUITTO_MAKE_OPTS += WITH_STATIC_LIBRARIES=yes WITH_SHARED_LIBRARIES=no
+ >> >> +else
+ >> >> +MOSQUITTO_MAKE_OPTS += WITH_STATIC_LIBRARIES=no WITH_SHARED_LIBRARIES=yes
+ >> >> +endif
+ >> 
+ >> > We actually have 3 variants:
+ >> 
+ >> > - static only (BR2_STATIC_LIBS)
+ >> > - shared only (BR2_SHARED_LIBS)
+ >> > - shared and static (BR2_SHARED_STATIC_LIBS)
+ >> 
+ >> > So I reworked it to take that into consideration and committed, thanks.
+ >> 
+ >> Sorry, I will have to take that back. I did a test compilation with a
+ >> completely static (BR2_STATIC_LIBS) setup, which failed:
 
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> index b28222138f..7482bbdca1 100644
-> --- a/package/iputils/iputils.mk
-> +++ b/package/iputils/iputils.mk
-> @@ -80,7 +80,7 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
->  # handle permissions ourselves
->  IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
->  define IPUTILS_PERMISSIONS
-> -	/usr/sbin/arping      f 4755 0 0 - - - - -
-> +	/usr/sbin/arping      f  755 0 0 - - - - -
->  	/usr/bin/clockdiff    f 4755 0 0 - - - - -
->  	/bin/ping             f 4755 0 0 - - - - -
->  	/usr/bin/traceroute6  f 4755 0 0 - - - - -
+ > Could you share the defconfig you have used to obtain that result ?
 
+It was afaik just the default arm variant with BR2_STATIC_LIBS enabled.
 
-Kind regards,
-Petr
+ > When I run test-pkg with BR2_PACKAGE_MOSQUITTO=y (and
+ > BR2_PACKAGE_MOSQUITTO_BROKER defaults to y), I see:
+ > """br-arm-full-static [5/6]: OK""".
+
+Hmm, very odd. With current git HEAD and this patch 1/3 applied and the
+following config:
+
+BR2_arm=y
+BR2_STATIC_LIBS=y
+BR2_TOOLCHAIN_EXTERNAL=y
+BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2019.02-rc1.tar.bz2"
+BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
+BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
+BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
+# BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
+BR2_TOOLCHAIN_EXTERNAL_CXX=y
+BR2_PACKAGE_MOSQUITTO=y
+
+(E.G. support/config-fragments/autobuild/br-arm-full-static.config + mosquitto)
+
+I get the expected failure:
+
+In file included from security.c:25:0:
+lib_load.h:23:11: fatal error: dlfcn.h: No such file or directory
+ # include <dlfcn.h>
+           ^~~~~~~~~
+compilation terminated.
+Makefile:189: recipe for target 'security.o' failed
+
+br-arm-full-static-2019.02-rc1.tar.bz2 does not contain a dlfcn.h file,
+so that makes sense.
+
+-- 
+Bye, Peter Korsgaard
