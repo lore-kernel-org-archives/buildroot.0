@@ -1,46 +1,46 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Aug 2019 18:09:19 +0200
-Subject: [Buildroot] [PATCH 1/1] support/kconfig: fix compiler warnings
- by increasing buffer sizes
-In-Reply-To: <20190801152005.12285-1-mark.corbin@embecosm.com>
-References: <20190801152005.12285-1-mark.corbin@embecosm.com>
-Message-ID: <20190801180919.744284f3@windsurf.home>
+Date: Thu, 1 Aug 2019 18:11:07 +0200
+Subject: [Buildroot] [git commit] package/duktape: bump to version 2.4.0
+Message-ID: <20190801160829.B974D8139B@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=2174355059adb451fc55cc0cece68c0fda92c2e0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Thu,  1 Aug 2019 16:20:05 +0100
-Mark Corbin <mark.corbin@embecosm.com> wrote:
+Update hash for license file (update in year:
+https://github.com/svaarala/duktape/commit/bcb37439d6b0a589707f4d611962d7381868dce4)
 
-> When compiling kconfig with host gcc 8.3.0 several compiler
-> '-Wformat-overflow=' warnings are generated. This is due to a
-> number of temporary buffers used by sprintf being too small.
-> The sizes of these buffers have been increased to remove the
-> warnings.
-> 
-> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
-> ---
->  support/kconfig/confdata.c | 4 ++--
->  support/kconfig/util.c     | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/duktape/duktape.hash | 4 ++--
+ package/duktape/duktape.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-This was fixed in upstream Linux by commit
-2ae89c7a82ea9d81a19b4fc2df23bef4b112f24e, which is part of Linux since
-4.18. Our kconfig code base is based on 4.17-rc2, so the best thing is
-to update our kconfig code base, to re-use the fixes from the kernel.
-
-Could you do this ? Be careful that patches in support/kconfig/patches/
-need to be refreshed and re-applied on top of the kernel kconfig code
-base.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/duktape/duktape.hash b/package/duktape/duktape.hash
+index f0e2a71d4d..c5c4682696 100644
+--- a/package/duktape/duktape.hash
++++ b/package/duktape/duktape.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	0df1c0a9d40bfae31733e5c44f0eabaeae59e0a2ebf7693ff68bbabd49aae331	duktape-2.3.0.tar.gz
+-sha256	9aabee442709a6e7652348b9617ae26d26da6b270c1f4b6fce4a1e746acb3df0	LICENSE.txt
++sha256	4b022e040f10d6ead4fd3d0c865ca97d1679fc39307d4d3fa4a7f463ee4b9658	duktape-2.4.0.tar.gz
++sha256	5b42d02dbd084fd6d7e61d93f52e02b596f25400e54e0f86d5780045e5b754c8	LICENSE.txt
+diff --git a/package/duktape/duktape.mk b/package/duktape/duktape.mk
+index 7d7eb15f8f..30efaf5fa1 100644
+--- a/package/duktape/duktape.mk
++++ b/package/duktape/duktape.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DUKTAPE_VERSION = 2.3.0
++DUKTAPE_VERSION = 2.4.0
+ DUKTAPE_SITE = $(call github,svaarala,duktape-releases,v$(DUKTAPE_VERSION))
+ DUKTAPE_LICENSE = MIT
+ DUKTAPE_LICENSE_FILES = LICENSE.txt
