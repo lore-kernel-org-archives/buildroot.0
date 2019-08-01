@@ -1,91 +1,63 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 15:25:57 +0200
-Subject: [Buildroot] [git commit] package/nasm: bump version to 2.14.02
-Message-ID: <20190801132735.D713F7FE71@busybox.osuosl.org>
+Date: Thu, 1 Aug 2019 15:28:18 +0200
+Subject: [Buildroot] [git commit] package/shapelib: upgrade to 1.5.0
+Message-ID: <20190801132735.EDD177FE71@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0972dfb9d0f5d20c589ce95ce5ea640505f41c7c
+commit: https://git.buildroot.net/buildroot/commit/?id=c0773590e49ba95d6b9db596cef5e186177c6cdc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes: https://nasm.us/doc/nasmdocc.html
+Also remove PROJ.4 dependency, as upstream decided to
+drop it.
 
-Removed patch applied upstream:
-https://repo.or.cz/nasm.git/commitdiff/5eb1838b4d3752fd863d19442943983a2a5ee87c
-
-Switched _SITE to https.
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../nasm/0001-nasmlib-Drop-unused-seg_init.patch   | 32 ----------------------
- package/nasm/nasm.hash                             |  2 +-
- package/nasm/nasm.mk                               |  4 +--
- 3 files changed, 3 insertions(+), 35 deletions(-)
+ package/shapelib/Config.in     | 1 -
+ package/shapelib/shapelib.hash | 2 +-
+ package/shapelib/shapelib.mk   | 3 +--
+ 3 files changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch b/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch
-deleted file mode 100644
-index a18d121bfb..0000000000
---- a/package/nasm/0001-nasmlib-Drop-unused-seg_init.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 5eb1838b4d3752fd863d19442943983a2a5ee87c Mon Sep 17 00:00:00 2001
--From: Cyrill Gorcunov <gorcunov@gmail.com>
--Date: Sat, 10 Feb 2018 00:33:41 +0300
--Subject: [PATCH] nasmlib: Drop unused seg_init
--
--The helper has been eliminated in 2c4a4d5810d0a59b033a07876a2648ef5d4c2859
--
--https://bugzilla.nasm.us/show_bug.cgi?id=3392461
--
--Signed-off-by: Cyrill Gorcunov <gorcunov@gmail.com>
-----
-- include/nasmlib.h | 2 --
-- 1 file changed, 2 deletions(-)
--
--diff --git a/include/nasmlib.h b/include/nasmlib.h
--index 79e866b5..fee1b5ea 100644
----- a/include/nasmlib.h
--+++ b/include/nasmlib.h
--@@ -188,10 +188,8 @@ int64_t readnum(char *str, bool *error);
-- int64_t readstrnum(char *str, int length, bool *warn);
-- 
-- /*
--- * seg_init: Initialise the segment-number allocator.
--  * seg_alloc: allocate a hitherto unused segment number.
--  */
---void pure_func seg_init(void);
-- int32_t pure_func seg_alloc(void);
-- 
-- /*
---- 
--2.17.0
--
-diff --git a/package/nasm/nasm.hash b/package/nasm/nasm.hash
-index db5b857193..d824f22b86 100644
---- a/package/nasm/nasm.hash
-+++ b/package/nasm/nasm.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256 812ecfb0dcbc5bd409aaa8f61c7de94c5b8752a7b00c632883d15b2ed6452573  nasm-2.13.03.tar.xz
-+sha256 e24ade3e928f7253aa8c14aa44726d1edf3f98643f87c9d72ec1df44b26be8f5  nasm-2.14.02.tar.xz
- sha256 1563996c52e220e15ef2418e67d39488255aa8c28c89e617074d3afe3ee329e0  LICENSE
-diff --git a/package/nasm/nasm.mk b/package/nasm/nasm.mk
-index 76bcca3bbf..5a46fd0a4b 100644
---- a/package/nasm/nasm.mk
-+++ b/package/nasm/nasm.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/shapelib/Config.in b/package/shapelib/Config.in
+index 553d3483af..7c7b9c76c7 100644
+--- a/package/shapelib/Config.in
++++ b/package/shapelib/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_SHAPELIB
+ 	bool "shapelib"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_PROJ
+ 	help
+ 	  The Shapefile C Library provides the ability to write simple
+ 	  C programs for reading, writing and updating (to a limited
+diff --git a/package/shapelib/shapelib.hash b/package/shapelib/shapelib.hash
+index 6abddb2a7a..d1f6fa9777 100644
+--- a/package/shapelib/shapelib.hash
++++ b/package/shapelib/shapelib.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256 a4c94817365761a3a4c21bb3ca1c680a6bdfd3edd61df9fdd291d3e7645923b3  shapelib-1.4.1.tar.gz
++sha256 1fc0a480982caef9e7b9423070b47750ba34cd0ba82668f2e638fab1d07adae1  shapelib-1.5.0.tar.gz
+ sha256 7eb803a70990017a1c4e38a8342d7413c5dfeec3ed1ac407e15ae2c274e560ff  COPYING
+ sha256 a638278f7f1cb7d0cdc73b47a6c87261b882e356a8e79922e90d44d7ef1dd2c7  web/license.html
+diff --git a/package/shapelib/shapelib.mk b/package/shapelib/shapelib.mk
+index b76c3bb2d2..bedd15dc35 100644
+--- a/package/shapelib/shapelib.mk
++++ b/package/shapelib/shapelib.mk
+@@ -4,11 +4,10 @@
  #
  ################################################################################
  
--NASM_VERSION = 2.13.03
-+NASM_VERSION = 2.14.02
- NASM_SOURCE = nasm-$(NASM_VERSION).tar.xz
--NASM_SITE = http://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
-+NASM_SITE = https://www.nasm.us/pub/nasm/releasebuilds/$(NASM_VERSION)
- NASM_LICENSE = BSD-2-Clause
- NASM_LICENSE_FILES = LICENSE
+-SHAPELIB_VERSION = 1.4.1
++SHAPELIB_VERSION = 1.5.0
+ SHAPELIB_SITE = http://download.osgeo.org/shapelib
+ SHAPELIB_LICENSE = MIT or LGPL-2.0
+ SHAPELIB_LICENSE_FILES = web/license.html COPYING
+ SHAPELIB_INSTALL_STAGING = YES
+-SHAPELIB_DEPENDENCIES = proj
  
+ $(eval $(autotools-package))
