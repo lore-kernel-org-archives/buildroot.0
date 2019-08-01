@@ -1,11 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Aug 2019 10:42:21 +0200
-Subject: [Buildroot] [PATCH 3/7] package/taglib: add license hash
-In-Reply-To: <20190728204434.12356-3-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 28 Jul 2019 22:44:30 +0200")
+Date: Thu, 01 Aug 2019 10:43:47 +0200
+Subject: [Buildroot] [PATCH 2/7] package/google-material-design-icons:
+ add license hash
+In-Reply-To: <20190728204434.12356-2-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 28 Jul 2019 22:44:29 +0200")
 References: <20190728204434.12356-1-bernd.kuhls@t-online.de>
- <20190728204434.12356-3-bernd.kuhls@t-online.de>
-Message-ID: <87o9192s5u.fsf@dell.be.48ers.dk>
+ <20190728204434.12356-2-bernd.kuhls@t-online.de>
+Message-ID: <87k1bx2s3g.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
