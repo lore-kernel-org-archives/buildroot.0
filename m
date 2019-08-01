@@ -1,54 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 09:52:07 +0200
-Subject: [Buildroot] [git commit] package/x11r7/xapp_xinput: bump version to
- 1.6.3
-Message-ID: <20190801075017.ABE928894D@busybox.osuosl.org>
+Date: Thu, 1 Aug 2019 09:52:53 +0200
+Subject: [Buildroot] [git commit] package/sqlite: bump version to 3.29.0
+Message-ID: <20190801075017.B3ED58894D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2f2d3bf3da69d0745ef904b2abcb4b63bc875193
+commit: https://git.buildroot.net/buildroot/commit/?id=34e98c379f9e7e07492a26f522ae175d103e5133
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added all hashes provided by upstream, added license hash.
-Updated _SITE according to release notes.
+Release notes: https://www.sqlite.org/releaselog/3_29_0.html
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xapp_xinput/xapp_xinput.hash | 9 +++++++--
- package/x11r7/xapp_xinput/xapp_xinput.mk   | 4 ++--
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ package/sqlite/sqlite.hash | 4 ++--
+ package/sqlite/sqlite.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/x11r7/xapp_xinput/xapp_xinput.hash b/package/x11r7/xapp_xinput/xapp_xinput.hash
-index 724b2e2637..456a58c702 100644
---- a/package/x11r7/xapp_xinput/xapp_xinput.hash
-+++ b/package/x11r7/xapp_xinput/xapp_xinput.hash
-@@ -1,2 +1,7 @@
--# From http://lists.x.org/archives/xorg-announce/2015-October/002643.html
--sha256	3694d29b4180952fbf13c6d4e59541310cbb11eef5bf888ff3d8b7f4e3aee5c4		xinput-1.6.2.tar.bz2
-+# From https://lists.x.org/archives/xorg-announce/2019-July/003013.html
-+md5 ac6b7432726008b2f50eba82b0e2dbe4  xinput-1.6.3.tar.bz2
-+sha1 92ea7dfb3d8465921b0dca85da7d5b01cedae6c8  xinput-1.6.3.tar.bz2
-+sha256 35a281dd3b9b22ea85e39869bb7670ba78955d5fec17c6ef7165d61e5aeb66ed  xinput-1.6.3.tar.bz2
-+sha512 cb2fef866ac5a71dbca3e23b4ecadaca38e65dc1b30f8bb024bad92486554fafc472706619a1af04c746a4f53ce6aea827d694b9f4f0c7d0d46bb1da81984076  xinput-1.6.3.tar.bz2
-+# Locally computed
-+sha256 bbd35c7a8e8c5cb073935e84b29b0c53f7131a4ef1ce737dc2be5616941e07e1  COPYING
-diff --git a/package/x11r7/xapp_xinput/xapp_xinput.mk b/package/x11r7/xapp_xinput/xapp_xinput.mk
-index aaa7a80818..0d6c0deffe 100644
---- a/package/x11r7/xapp_xinput/xapp_xinput.mk
-+++ b/package/x11r7/xapp_xinput/xapp_xinput.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/sqlite/sqlite.hash b/package/sqlite/sqlite.hash
+index 9b7efe71d6..649bfba58e 100644
+--- a/package/sqlite/sqlite.hash
++++ b/package/sqlite/sqlite.hash
+@@ -1,6 +1,6 @@
+ # From https://www.sqlite.org/download.html
+-sha1 01b9d8fc77085e144dddc87456c9783e53d09a53  sqlite-autoconf-3280000.tar.gz
++sha1 053d8237eb9741b0e297073810668c2611a8e38e  sqlite-autoconf-3290000.tar.gz
+ # Calculated based on the hash above
+-sha256 d61b5286f062adfce5125eaf544d495300656908e61fca143517afcc0a89b7c3  sqlite-autoconf-3280000.tar.gz
++sha256 8e7c1e2950b5b04c5944a981cb31fffbf9d2ddda939d536838ebc854481afd5b  sqlite-autoconf-3290000.tar.gz
+ # Locally calculated
+ sha256 66e056b6e8687f32af30d5187611b98b12a8f46f07aaf62f43585f276e8f0ac9  tea/license.terms
+diff --git a/package/sqlite/sqlite.mk b/package/sqlite/sqlite.mk
+index d4cdefe34d..9bd196aaef 100644
+--- a/package/sqlite/sqlite.mk
++++ b/package/sqlite/sqlite.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--XAPP_XINPUT_VERSION = 1.6.2
-+XAPP_XINPUT_VERSION = 1.6.3
- XAPP_XINPUT_SOURCE = xinput-$(XAPP_XINPUT_VERSION).tar.bz2
--XAPP_XINPUT_SITE = http://xorg.freedesktop.org/releases/individual/app
-+XAPP_XINPUT_SITE = https://xorg.freedesktop.org/archive/individual/app
- XAPP_XINPUT_LICENSE = MIT
- XAPP_XINPUT_LICENSE_FILES = COPYING
- XAPP_XINPUT_DEPENDENCIES = xlib_libX11 xlib_libXi xlib_libXrandr xlib_libXinerama
+-SQLITE_VERSION = 3280000
++SQLITE_VERSION = 3290000
+ SQLITE_SOURCE = sqlite-autoconf-$(SQLITE_VERSION).tar.gz
+ SQLITE_SITE = https://www.sqlite.org/2019
+ SQLITE_LICENSE = Public domain
