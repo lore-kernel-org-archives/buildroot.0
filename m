@@ -1,56 +1,63 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Thu,  1 Aug 2019 18:22:30 +0200
-Subject: [Buildroot] [PATCH 0/2 v7] package/iputils: use capabilties (branch
- yem/iputils-caps)
-Message-ID: <cover.1564676540.git.yann.morin.1998@free.fr>
+Date: Thu,  1 Aug 2019 18:22:33 +0200
+Subject: [Buildroot] [PATCH 2/2 v7] package/iputils: use capabilities if
+ possible
+In-Reply-To: <cover.1564676540.git.yann.morin.1998@free.fr>
+References: <cover.1564676540.git.yann.morin.1998@free.fr>
+Message-ID: <7357ef816dae35990f461175f35135fb4996eb54.1564676540.git.yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello All!
+From: Petr Vorel <petr.vorel@gmail.com>
 
-This small series changes iputils to use capabilities if support for
-extended attributes is enabled.
+If support for extended attributes is enabled, then we can use them to
+store capabilities. If not, we keep using the setuid bit.
 
-Additionally, arping can be used for arp poisoning, so it should not be
-usable by a non-root user. As such, we remove the setuid bit, and do not
-assign it a capability either.
+arping does not get a capability, as it can be used for arp poisoning.
 
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+[yann.morin.1998 at free.fr:
+  - resort to using q full-fledged conditional block
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Regards,
-Yann E. MORIN.
+---
+Changes v6 -> v7:
+  - use a full if-block
+---
+ package/iputils/iputils.mk | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-
-The following changes since commit 152e160bf6fcbb8f73c60944107e3a82f91edf50
-
-  package/netsurf: add optional dependency on webp (2019-08-01 16:54:04 +0200)
-
-
-are available in the git repository at:
-
-  git://git.buildroot.org/~ymorin/git/buildroot.git
-
-for you to fetch changes up to 7357ef816dae35990f461175f35135fb4996eb54
-
-  package/iputils: use capabilities if possible (2019-08-01 18:18:07 +0200)
-
-
-----------------------------------------------------------------
-Petr Vorel (1):
-      package/iputils: use capabilities if possible
-
-Yann E. MORIN (1):
-      package/iputils: drop setuid on arping
-
- package/iputils/iputils.mk | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
-
+diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+index 7482bbdca1..cbcce89684 100644
+--- a/package/iputils/iputils.mk
++++ b/package/iputils/iputils.mk
+@@ -79,11 +79,23 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
+ 
+ # handle permissions ourselves
+ IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
++ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
++define IPUTILS_PERMISSIONS
++	/usr/sbin/arping      f 755 0 0 - - - - -
++	/usr/bin/clockdiff    f 755 0 0 - - - - -
++	|xattr cap_net_raw+p
++	/bin/ping             f 755 0 0 - - - - -
++	|xattr cap_net_raw+p
++	/usr/bin/traceroute6  f 755 0 0 - - - - -
++	|xattr cap_net_raw+p
++endef
++else
+ define IPUTILS_PERMISSIONS
+ 	/usr/sbin/arping      f  755 0 0 - - - - -
+ 	/usr/bin/clockdiff    f 4755 0 0 - - - - -
+ 	/bin/ping             f 4755 0 0 - - - - -
+ 	/usr/bin/traceroute6  f 4755 0 0 - - - - -
+ endef
++endif
+ 
+ $(eval $(meson-package))
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.20.1
