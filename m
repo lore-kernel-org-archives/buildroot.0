@@ -1,52 +1,66 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Thu, 1 Aug 2019 17:36:35 +0200
-Subject: [Buildroot] [PATCH] toolchain-external: fix find_sysroot
-In-Reply-To: <20190801145336.15199-1-yann.morin.1998@free.fr>
-References: <20190801145336.15199-1-yann.morin.1998@free.fr>
-Message-ID: <6818d38e-a2fb-1293-7c65-9528eead536d@mind.be>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Aug 2019 17:52:30 +0200
+Subject: [Buildroot] Harfbuzz issues
+Message-ID: <20190801175230.35ea7b31@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Bernd, James,
 
+Since Harfbuzz was bumped to 2.5.2 in commit
+c04e5cb16e3de688dfee585f47f22db4232acb3e, we have a problem: harfbuzz
+now requires gcc 4.8, so we need to add this dependency, for both the
+target variant and the host variant of harfbuzz.
 
-On 01/08/2019 16:53, Yann E. MORIN wrote:
-> Commit 23c0e97b29a (toolchain-external: anchor sysroot regex with /)
-> tried to make the find-sysroot work more consistently, especially for
-> toolchains where the C library is located in a sub-directory, like the
-> "Realtek mips toolchain".
-> 
-> After that patch, the '/' that was trailing in the returned path got
-> removed now. This in turn breaks the Codesourcery toolchain.
-> 
-> We fix that by appending the now-missing trailing '/'.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: ?? ? <shawn_chen@realsil.com.cn>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+I had a look at the reverse dependency trees. First for the target
+variant, it looks like this:
 
- Applied to master, thanks.
+ - harfbuzz
+   - pango
+     - gst-plugins-base
+     - gst1-plugins-base
+     - pangomm
+       - gtkmm3
+     - libgtk2
+       - about 6-7 packages
+     - libgtk3
+       - about 2-3 packages
+     - openbox
+     - rrdtool
+   - qt5base
+   - webkitgtk
+     - midori
+   - wpebkit
 
- Regards,
- Arnout
+So all those packages need to gain BR2_TOOLCHAIN_HAS_GCC_AT_LEAST_4_8
+dependency.
 
-> ---
->  toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> index e618aa7a09..894e76ee32 100644
-> --- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-> +++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-> @@ -331,7 +331,7 @@ endef
->  #
->  # And variations on these.
->  define toolchain_find_sysroot
-> -$$(printf $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:/(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a::')
-> +$$(printf $(call toolchain_find_libc_a,$(1)) | sed -r -e 's:/(usr/)?lib(32|64)?([^/]*)?/([^/]*/)?libc\.a:/:')
->  endef
->  
->  # Returns the lib subdirectory for the given compiler + flags (i.e
-> 
+Then, the host variant of harfbuzz also needs gcc 4.8, the reverse
+dependency tree looks like this:
+
+ - host-harfbuzz
+   - host-pango
+     - host-librsvg
+       - host-libgtk3
+         - libgtk3
+           - 2-3 packages
+     - host-imagemagick, and its SVG sub-options
+
+So libgtk3, the 2-3 packages that select libgtk3, and the host
+imagemagick svg option need to gain a BR2_HOST_GCC_AT_LEAST_4_8
+dependency.
+
+Could you send a patch that implements this, with the appropriate
+Config.in comment for target packages, and double checking that all
+reverse dependencies have been taken care of ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
