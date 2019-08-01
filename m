@@ -1,67 +1,32 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu, 1 Aug 2019 21:10:52 +0200
-Subject: [Buildroot] [git commit] package/gst1-plugins-good: add shout2
- plugin option
-Message-ID: <20190801191826.4485F8B904@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 01 Aug 2019 21:25:02 +0200
+Subject: [Buildroot] [PATCHv2] system: use system shell as root shell
+In-Reply-To: <87d0hou2am.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Thu, 01 Aug 2019 21:13:37 +0200")
+References: <20190801104851.32619-1-yann.morin.1998@free.fr>
+ <87d0hou2am.fsf@dell.be.48ers.dk>
+Message-ID: <878sscu1rl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f0453de25d9ad458d5ef4da90f78124da1306424
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Signed-off-by: Arnold Bloemert <abloemert@gmail.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/gstreamer1/gst1-plugins-good/Config.in            |  6 ++++++
- package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk | 10 ++++++++--
- 2 files changed, 14 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index 433084fd6b..40e21985d9 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -300,6 +300,12 @@ comment "qmlgl (qt5) plugin needs an OpenGL-capable Qt5 backend"
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE
- 	depends on !BR2_PACKAGE_QT5_GL_AVAILABLE && !BR2_PACKAGE_QT5_VERSION_LATEST
- 
-+config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2
-+	bool "shout2"
-+	select BR2_PACKAGE_LIBSHOUT
-+	help
-+	  Elements to send data to an icecast server using libshout2
-+
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2
- 	bool "v4l2"
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 # multi planar api
-diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-index 829d27a2da..3c9f0d5605 100644
---- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-+++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
-@@ -25,8 +25,7 @@ GST1_PLUGINS_GOOD_CONF_OPTS = \
- # Options which require currently unpackaged libraries
- GST1_PLUGINS_GOOD_CONF_OPTS += \
- 	--disable-libdv \
--	--disable-dv1394 \
--	--disable-shout2
-+	--disable-dv1394
- 
- GST1_PLUGINS_GOOD_DEPENDENCIES = gstreamer1 gst1-plugins-base
- 
-@@ -343,6 +342,13 @@ else
- GST1_PLUGINS_GOOD_CONF_OPTS += --disable-qt
- endif
- 
-+ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_SHOUT2),y)
-+GST1_PLUGINS_GOOD_CONF_OPTS += --enable-shout2
-+GST1_PLUGINS_GOOD_DEPENDENCIES += libshout
-+else
-+GST1_PLUGINS_GOOD_CONF_OPTS += --disable-shout2
-+endif
-+
- ifeq ($(BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2),y)
- GST1_PLUGINS_GOOD_CONF_OPTS += --enable-gst_v4l2
- else
+ > Hmm, wait a second - This sed invocation doesn't make any sense to me.
+
+ > You search for ^\root, what is the backslash for? The search should also
+ > include the : separator to ensure it doesn't match 'rootfoo' or similar.
+
+ > You replace the last : and everything after it (E.G. /bin/sh) with
+ > $(SKELETON_INIT_COMMON_BIN_SH), so you drop the last :.
+
+Sorry, sent too fast - Last issue: SKELETON_INIT_COMMON_BIN_SH is the
+name of the shell without path info, so we need to ensure it is prefixed
+with /bin/
+
+-- 
+Bye, Peter Korsgaard
