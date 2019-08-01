@@ -1,32 +1,37 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 01 Aug 2019 22:37:39 +0200
-Subject: [Buildroot] [PATCH 1/3] package/bison: bump version to 3.4.1
-References: <20190630080904.4105-1-bernd.kuhls@t-online.de>
- <20190801154455.48a520bd@windsurf.home>
-Message-ID: <j5vb1gx10k.ln2@ID-313208.user.individual.net>
+From: Francois Perrad <fperrad@gmail.com>
+Date: Thu,  1 Aug 2019 22:44:51 +0200
+Subject: [Buildroot] [PATCH] support/testing: improve test_luasyslog
+Message-ID: <20190801204451.15116-1-francois.perrad@gadz.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 01 Aug 2019 15:44:55 +0200 schrieb Thomas Petazzoni:
+first, check the native part
 
-> Applied to master, thanks.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ support/testing/tests/package/test_luasyslog.py | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Hi Thomas,
-
-since I cannot reproduce the build error with host-bison
-http://autobuild.buildroot.net/?reason=host-bison-3.4.1
-
-mv: cannot stat `examples/c/reccalc/scan.stamp.tmp': No such file or 
-directory
-
-I would like to ask if the command
-
-sed -i '6855 s/mv/cp/' Makefile.in
-
-mentioned by http://www.linuxfromscratch.org/lfs/view/development/
-chapter06/bison.html fixes the problem on your autobuilder.
-
-Regards, Bernd
+diff --git a/support/testing/tests/package/test_luasyslog.py b/support/testing/tests/package/test_luasyslog.py
+index 4eb5402d0..158b95cb0 100644
+--- a/support/testing/tests/package/test_luasyslog.py
++++ b/support/testing/tests/package/test_luasyslog.py
+@@ -10,6 +10,7 @@ class TestLuaLuasyslog(TestLuaBase):
+ 
+     def test_run(self):
+         self.login()
++        self.module_test("lsyslog")
+         self.module_test("logging.syslog")
+ 
+ 
+@@ -22,4 +23,5 @@ class TestLuajitLuasyslog(TestLuaBase):
+ 
+     def test_run(self):
+         self.login()
++        self.module_test("lsyslog")
+         self.module_test("logging.syslog")
+-- 
+2.20.1
