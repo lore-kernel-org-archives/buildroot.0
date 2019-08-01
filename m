@@ -1,46 +1,43 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Thu, 01 Aug 2019 19:15:34 +0200
-Subject: [Buildroot] [PATCH 1/1] package/tvheadend: fix build error
-References: <20190706064236.30663-1-bernd.kuhls@t-online.de>
- <20190727223753.2211ac3f@windsurf>
- <XnsAA99E75BA4FE2berndkuhlsPkbjNfxxIA@bernd-kuhls.de>
- <vi401gxk1k.ln2@ID-313208.user.individual.net>
- <878ssd1bva.fsf@dell.be.48ers.dk>
-Message-ID: <majb1gxf0g.ln2@ID-313208.user.individual.net>
+From: Petr Vorel <petr.vorel@gmail.com>
+Date: Thu, 1 Aug 2019 19:25:28 +0200
+Subject: [Buildroot] [PATCH 1/2 v7] package/iputils: drop setuid on
+ arping
+In-Reply-To: <f9b8b678e88316d6b572dc87e5080896cd8a84c7.1564676540.git.yann.morin.1998@free.fr>
+References: <cover.1564676540.git.yann.morin.1998@free.fr>
+ <f9b8b678e88316d6b572dc87e5080896cd8a84c7.1564676540.git.yann.morin.1998@free.fr>
+Message-ID: <20190801172527.GA27877@x230>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Thu, 01 Aug 2019 11:19:37 +0200 schrieb Peter Korsgaard:
+Hi Yann,
 
->>>>>> "Bernd" == Bernd Kuhls
->>>>>> <bernd.kuhls@t-online.de> writes:
-> 
->  > When sending this patch I forgot the optional dependency of libdvbcsa
->  > which causes the current build error and needs the same fix.
-> 
-> Will you send a patch for that?
+> arping can be used for arp poisoning, so it should really not be setuid.
 
-Hi Peter,
+> Reported-by: Petr Vorel <petr.vorel@gmail.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Acked-by: Petr Vorel <petr.vorel@gmail.com>
++1
+> ---
+>  package/iputils/iputils.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-let me rephrase my sentence:
+> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
+> index b28222138f..7482bbdca1 100644
+> --- a/package/iputils/iputils.mk
+> +++ b/package/iputils/iputils.mk
+> @@ -80,7 +80,7 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
+>  # handle permissions ourselves
+>  IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
+>  define IPUTILS_PERMISSIONS
+> -	/usr/sbin/arping      f 4755 0 0 - - - - -
+> +	/usr/sbin/arping      f  755 0 0 - - - - -
+>  	/usr/bin/clockdiff    f 4755 0 0 - - - - -
+>  	/bin/ping             f 4755 0 0 - - - - -
+>  	/usr/bin/traceroute6  f 4755 0 0 - - - - -
 
-When sending the first patch[1] fixing tvheadend build errors I forgot 
-the fact, that when the buildroot-supported optional dependency of 
-libdvbcsa[2] is activated, additional files are compiled in tvheadend, 
-one of them needed the patch I sent here.
 
-If we are talking about the same topic I think no further patches should 
-be needed atm ;)
-
-Regards, Bernd
-
-[1] http://patchwork.ozlabs.org/patch/1125591/
-    This patch was superseded by the bump in
-    http://patchwork.ozlabs.org/patch/1126475/
-    which included my initial patch after it was committed upstream.
-
-[2] https://git.buildroot.net/buildroot/tree/package/tvheadend/
-tvheadend.mk#n66
+Kind regards,
+Petr
