@@ -1,48 +1,70 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Aug 2019 16:08:26 +0200
-Subject: [Buildroot] [PATCH v2,
- 1/1] package/dropwatch: bump to version 1.5.1
-In-Reply-To: <20190719211003.3678-1-fontaine.fabrice@gmail.com>
-References: <20190719211003.3678-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190801160826.315f973a@windsurf.home>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 1 Aug 2019 16:08:01 +0200
+Subject: [Buildroot] [git commit] linux: make
+ BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT public
+Message-ID: <20190801140813.98C5E8164F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=869773d6683fc5bc0d8b3a7240a3dd95e17e659d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Fri, 19 Jul 2019 23:10:03 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Currently the BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT option is only
+available to be selected by another config option. This option controls
+if the Linux build system should build the DTB itself, or if buildroot
+explicitly calls the Linux Makefile like "make something.dtb".
 
-> - Switch site, see
->   http://git.infradead.org/users/nhorman/dropwatch.git/blob/975fd7331d19a32f6d0f20781dfb19f2d14c3c31:/README
-> - Switch to autotools (and so drop second patch on Makefile: if there is
->   some errors raised by -Werror, we'll fix them)
-> - Update first patch by upstream commit
-> - Add hash for license file
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v1 -> v2:
->  - Replace first patch with upstream commit
+My use case: I want to build an OpenRISC image with a custom device tree
+file. OpenRISC does not support appended DTBs, and I'm not using a
+bootloader, but link everything into a single kernel (vmlinux) image.
 
-Applied to master, thanks. Peter and I took the chance of this patch to
-have a look at why dropwatch depends on binutils. It's quite crazy, and
-totally useless in the context of Buildroot. dropwatch listens for
-netlink messages from the kernel about dropped packages. Such messages
-include the program counter of where the packet was dropped in the
-kernel. It then uses either kallsyms, or libbfd on the kernel modules
-in /usr/lib/debug to figure out the kernel function where the packet
-drop occurred. Since we don't install kernel modules in /usr/lib/debug,
-this is totally useless, and it should be possible to make binutils
-an optional dependency of dropwatch.
+The kernel option CONFIG_OPENRISC_BUILTIN_DTB allows me to specify a dtb
+file, which is typically located in the kernel source tree in
+arch/openrisc/boot/dts/NAME.dts.
 
-Best regards,
+Since my dts file is not part of the upstream kernel, I have two
+options: either patch the kernel to include the DTS file, and then
+specify it using the CONFIG_OPENRISC_BUILTIN_DTB option.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Or use buildroot's BR2_LINUX_KERNEL_CUSTOM_DTS_PATH config option to
+copy any DTS file to the kernel source tree, and then specify this file
+with CONFIG_OPENRISC_BUILTIN_DTB as before.
+
+However, the second option also requries the buildroot option
+BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT to be set, otherwise I end up with a
+"make -C kerneldir NAME.dts" call, which doesn't work (no such target
+exists).
+
+Currently the BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT option exists, but it's
+not visible/available. Simply making it available solves the problem for
+me nicely.
+
+Signed-off-by: Philipp Wagner <mail@philipp-wagner.com>
+[Arnout: add help text]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ linux/Config.in | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/linux/Config.in b/linux/Config.in
+index 871141fdcd..e275b8ad4f 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -375,7 +375,13 @@ if BR2_LINUX_KERNEL_DTS_SUPPORT
+ # The variable below address the second case, were you only want
+ # limited actions from buildroot.
+ config BR2_LINUX_KERNEL_DTB_IS_SELF_BUILT
+-	bool
++	bool "DTB is built by kernel itself"
++	help
++	  Normally, the device tree(s) to be built have to be passed
++	  explicitly to the kernel build system. For some binary
++	  formats, however, the kernel build system links in the
++	  device tree directly in the kernel binary. Select this option
++	  if you have such a kernel binary format.
+ 
+ config BR2_LINUX_KERNEL_APPENDED_DTB
+ 	bool
