@@ -1,44 +1,50 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  1 Aug 2019 11:51:22 +0200
-Subject: [Buildroot] [PATCH 1/1] package/duktape: bump to version 2.4.0
-Message-ID: <20190801095122.1652-1-fontaine.fabrice@gmail.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Thu, 1 Aug 2019 11:59:14 +0200
+Subject: [Buildroot] [PATCH v3] ARC: Add support for ARC HS38 with Quad
+ MAC & FPU
+In-Reply-To: <20181108215940.18298-1-abrodkin@synopsys.com>
+References: <20181108215940.18298-1-abrodkin@synopsys.com>
+Message-ID: <a3c1dd2c-4f37-f805-7a97-5b789c566991@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Update hash for license file (update in year:
-https://github.com/svaarala/duktape/commit/bcb37439d6b0a589707f4d611962d7381868dce4)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/duktape/duktape.hash | 4 ++--
- package/duktape/duktape.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/duktape/duktape.hash b/package/duktape/duktape.hash
-index f0e2a71d4d..c5c4682696 100644
---- a/package/duktape/duktape.hash
-+++ b/package/duktape/duktape.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	0df1c0a9d40bfae31733e5c44f0eabaeae59e0a2ebf7693ff68bbabd49aae331	duktape-2.3.0.tar.gz
--sha256	9aabee442709a6e7652348b9617ae26d26da6b270c1f4b6fce4a1e746acb3df0	LICENSE.txt
-+sha256	4b022e040f10d6ead4fd3d0c865ca97d1679fc39307d4d3fa4a7f463ee4b9658	duktape-2.4.0.tar.gz
-+sha256	5b42d02dbd084fd6d7e61d93f52e02b596f25400e54e0f86d5780045e5b754c8	LICENSE.txt
-diff --git a/package/duktape/duktape.mk b/package/duktape/duktape.mk
-index 7d7eb15f8f..30efaf5fa1 100644
---- a/package/duktape/duktape.mk
-+++ b/package/duktape/duktape.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DUKTAPE_VERSION = 2.3.0
-+DUKTAPE_VERSION = 2.4.0
- DUKTAPE_SITE = $(call github,svaarala,duktape-releases,v$(DUKTAPE_VERSION))
- DUKTAPE_LICENSE = MIT
- DUKTAPE_LICENSE_FILES = LICENSE.txt
--- 
-2.20.1
+On 08/11/2018 22:59, Alexey Brodkin wrote:
+> From: Alexey Brodkin <alexey.brodkin@synopsys.com>
+> 
+> We used to build everything for pretty much baseline ARC HS capable
+> of runnig Linux kernel, which was ARC HS38/48 with MMU and caches.
+> 
+> But there's a fully featured ARC HS with additional support for
+>  - Dual & quad integer multiply and MAC operations
+>  - Double-precision floating-point unit
+> 
+> It corresponds to the following ARC HS templates in ARChitect: hs38_slc_full.
+> 
+> In fact existing HSDK board uses exactly this configuration in its SoC
+> and this is recommended configuration for Linux use-cases.
+> 
+> To make life simpler we have corresponding "-mcpu" and "--with-cpu"
+> options in ARC GCC port so we're going to use it and get binaries
+> built accordingly optimized.
+> 
+> And while at it added help message so users may better understand
+> what they are dealing with.
+> 
+> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+[snip]
+> +	  It corresponds to "hs38_slc_full" ARC HS template in ARChitect.
+
+ This line was too long, as reported by check-package.
+
+ Committed with that fixed, thanks.
+
+ Regards,
+ Arnout
