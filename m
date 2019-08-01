@@ -1,73 +1,49 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Aug 2019 18:11:33 +0200
-Subject: [Buildroot] [git commit] package/luaposix: bump to version 34.1.1
-Message-ID: <20190801160851.16DE98A529@busybox.osuosl.org>
+Date: Thu, 1 Aug 2019 18:18:11 +0200
+Subject: [Buildroot] [git commit] package/tinyxml2: bump to version 7.0.1
+Message-ID: <20190801161619.4233981377@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b32cd888e1bf151ea4e68ea69d44d7a910988e9
+commit: https://git.buildroot.net/buildroot/commit/?id=070bebfa0b05ce85d7b0dc468772461d058b5219
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-the module std.normalize is no longer a dependency
+Even though the hash of the license file changes, there are no changes
+in the licensing terms themselves. There are changes in other parts of
+readme.md, and whitespace changes in the licensing terms, but no
+licensing term changes per-se.
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+[Thomas: add explanation about the license file hash change]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/luaposix/Config.in                     | 1 -
- package/luaposix/luaposix.hash                 | 2 +-
- package/luaposix/luaposix.mk                   | 2 +-
- support/testing/tests/package/test_luaposix.py | 2 ++
- 4 files changed, 4 insertions(+), 3 deletions(-)
+ package/tinyxml2/tinyxml2.hash | 4 ++--
+ package/tinyxml2/tinyxml2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/luaposix/Config.in b/package/luaposix/Config.in
-index bdc9926b1e..1e2291b3f5 100644
---- a/package/luaposix/Config.in
-+++ b/package/luaposix/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_LUAPOSIX
- 	bool "luaposix"
--	select BR2_PACKAGE_LUA_STD_NORMALIZE # runtime
- 	# "bit32" is included in Lua 5.2+. luajit has an equivalent
- 	# "bit" module, but since it has a different name, luaposix
- 	# doesn't find it.
-diff --git a/package/luaposix/luaposix.hash b/package/luaposix/luaposix.hash
-index a6b5cd42d4..fb06bc40a1 100644
---- a/package/luaposix/luaposix.hash
-+++ b/package/luaposix/luaposix.hash
-@@ -1,2 +1,2 @@
+diff --git a/package/tinyxml2/tinyxml2.hash b/package/tinyxml2/tinyxml2.hash
+index 5f38546466..88291e4f39 100644
+--- a/package/tinyxml2/tinyxml2.hash
++++ b/package/tinyxml2/tinyxml2.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256 b0f8bdfe4b43b6d79b8f3e8ef5b158de889e5dde046618a33335a38d2b5b90f9  luaposix-34.1.tar.gz
-+sha256 7948f4ac8b953172e928753632e37ad97cc3014df74b524fe7839f71216a7e90  luaposix-34.1.1.tar.gz
-diff --git a/package/luaposix/luaposix.mk b/package/luaposix/luaposix.mk
-index c7a9542969..ab6b030fca 100644
---- a/package/luaposix/luaposix.mk
-+++ b/package/luaposix/luaposix.mk
+-sha256 cdf0c2179ae7a7931dba52463741cf59024198bbf9673bf08415bcb46344110f  tinyxml2-6.2.0.tar.gz
+-sha256 8b2ab0b6ffb86798a2512f45fcf50a3b04b3516782d2e3fb30ebf55dc18c7cce  readme.md
++sha256 a381729e32b6c2916a23544c04f342682d38b3f6e6c0cad3c25e900c3a7ef1a6  tinyxml2-7.0.1.tar.gz
++sha256 35e49ea659da39b72b0e2f38214f9799b548225b0950c8dbb6d183b4c1455263  readme.md
+diff --git a/package/tinyxml2/tinyxml2.mk b/package/tinyxml2/tinyxml2.mk
+index 9439c5cb80..7f362f3d33 100644
+--- a/package/tinyxml2/tinyxml2.mk
++++ b/package/tinyxml2/tinyxml2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LUAPOSIX_VERSION = 34.1
-+LUAPOSIX_VERSION = 34.1.1
- LUAPOSIX_SITE = $(call github,luaposix,luaposix,v$(LUAPOSIX_VERSION))
- LUAPOSIX_LICENSE = MIT
- LUAPOSIX_LICENSE_FILES = LICENSE
-diff --git a/support/testing/tests/package/test_luaposix.py b/support/testing/tests/package/test_luaposix.py
-index 0182faf2f8..2918ee61b5 100644
---- a/support/testing/tests/package/test_luaposix.py
-+++ b/support/testing/tests/package/test_luaposix.py
-@@ -39,6 +39,7 @@ class TestLuaLuaPosix(TestLuaBase):
-         self.module_test("posix.time")
-         self.module_test("posix.unistd")
-         self.module_test("posix.utime")
-+        self.module_test("posix")
- 
- 
- class TestLuajitLuaPosix(TestLuaBase):
-@@ -79,3 +80,4 @@ class TestLuajitLuaPosix(TestLuaBase):
-         self.module_test("posix.time")
-         self.module_test("posix.unistd")
-         self.module_test("posix.utime")
-+        self.module_test("posix")
+-TINYXML2_VERSION = 6.2.0
++TINYXML2_VERSION = 7.0.1
+ TINYXML2_SITE = $(call github,leethomason,tinyxml2,$(TINYXML2_VERSION))
+ TINYXML2_LICENSE = Zlib
+ TINYXML2_LICENSE_FILES = readme.md
