@@ -1,70 +1,118 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Aug 2019 15:01:25 +0200
-Subject: [Buildroot] [PATCH buildroot-test 4/4] utils/daily-mail: add
- multiple argument to ease modularity of the script
-In-Reply-To: <20190708081406.28215-5-victor.huesca@bootlin.com>
-References: <20190708081406.28215-1-victor.huesca@bootlin.com>
- <20190708081406.28215-5-victor.huesca@bootlin.com>
-Message-ID: <20190801150125.7f1568a6@windsurf.home>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu, 1 Aug 2019 15:13:49 +0200
+Subject: [Buildroot] [RFC PATCH 0/4] Add Buildroot toolchain support for
+ LLD
+In-Reply-To: <20190724173538.22913-1-joseph.kogut@gmail.com>
+References: <20190724173538.22913-1-joseph.kogut@gmail.com>
+Message-ID: <89c3e74e-17e3-0d9e-7b64-6614d82e0348@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Joseph,
 
-On Mon,  8 Jul 2019 10:14:06 +0200
-Victor Huesca <victor.huesca@bootlin.com> wrote:
-
-> Options added:
-> - Include out-to-date packages
-> - Specify a custom date instead of today
-> - Enable/disable a header for tables displayed
-> - Specify branches to include instead of reading the 'branches' file
-> - Allow to send emails to developers only / to the maillist only
+Le 24/07/2019 ? 19:35, Joseph Kogut a ?crit?:
+> Hello,
 > 
-> Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+> This series adds support for changing the default linker Buildroot uses, and
+> adds the LLVM project's LLD linker as an alternative to ld.bfd.
+> 
+> LLD offers significantly faster linking compared to GNU Gold and ld.bfd, as well
+> as features like identical code folding (ICF) for generating smaller binaries.
+> 
+> This patchset does not aim to support the more advanced linking features of LLD,
+> but rather allows LLD to be used as a drop-in replacement for the standard GNU
+> linker.
 
-As I replied to the cover letter, this is doing too many things at
-once. Please do this argument parsing addition at the beginning of the
-series, one argument at a time.
+Do you think the test result could be improved by using the more advanced
+linking features ?
 
+> 
+> Below are some comparisons with individual package build times with and without
+> LLD. Tests of individual packages are conducted by building a complete image
+> without ccache, then doing:
+> 
+> make [package]-dirclean && time make [package]
+> 
+>         BFD:                    LLD:
+> FFmpeg:
+>         real    0m49.493s       real    0m48.912s
+>         user    10m55.617s      user    10m47.596s
+>         sys     0m40.307s       sys     0m42.746s
+> 
+> Python3:
+>         real    0m31.480s       real    0m31.273s
+>         user    1m35.363s       user    1m34.245s
+>         sys     0m9.554s        sys     0m10.448s
+> 
+> PostgreSQL:
+>         real    0m40.440s       real    0m40.015s
+>         user    3m20.186s       user    3m17.695s
+>         sys     0m22.199s       sys     0m22.656s
+> 
+> Node.js:
+>         real    1m47.497s       real    1m45.562s
+>         user    33m57.731s      user    33m55.133s
+>         sys     2m2.629s        sys     2m3.313s
+> 
+> As you can see, build times are slightly lower with LLD, but are mostly a wash.
+> Overall build times are not significantly different between the two, however,
+> debug builds may see a greater difference in link times. Performance may vary
+> on other systems.
+> 
+> Some packages such as glibc depend on ld.bfd, and a new environment variable
+> (BR2_NO_LINKER_OVERRIDE) allows disabling the linker override for specific
+> packages when necessary.
+> 
+> Support is currently only provided for Buildroot's toolchain, and only with
+> GCC 9.x, which supports the ld.lld linker driver upstream. Support for older
+> versions of GCC is possible, but it would need to be backported with a trivial
+> patch [1]. I'm open to discussion about if and how linker override support
+> should be handled with external toolchains.
 
->  # Send the global e-mail to the mailing list
-> -def global_email(smtp, results, results_by_reason, datestr, overall, dry_run, outdated=None):
-> +def global_email(smtp, results, results_by_reason, datestr, overall, outdated, dry_run, show_header=False):
->      to = "buildroot at buildroot.org"
->      email_from = localconfig.fromaddr
->      subject = "[%s] Build results for %s" % (baseurl, datestr)
->      contents = "Hello,\n\n"
->      contents += "Build statistics for %s\n" % datestr
->      contents += "===============================\n\n"
-> -    contents += "      branch |  OK | NOK | TIM | TOT |\n"
-> +    contents += "      branch |  OK | NOK | TIM | TOT\n"
+What was the architecture you used for this test ?
 
-This change is not really related.
+Since llvm/clang/lld take a lot of time to build, do you think it could be
+useful to be able to import a clang toolchain as an external toolchain ?
 
-> +    if show_header:
-> +        contents += "-------------+-----+-----+-----+-----\n"
+That was the question during the Buildroot FOSDEM meeting 2018:
+https://www.elinux.org/Buildroot:DeveloperDaysFOSDEM2018#LLVM.2FClang
 
-This is also not related to adding argument parsing, but related to
-adding headers to existing tables. Should be a separate commit.
+Best regards,
+Romain
 
->      for branch in sorted(overall.iterkeys()):
->          stats = overall[branch]
->          if stats[3] == 0:
->              continue
-> -        contents += "  %10s | %3d | %3d | %3d | %3d |\n" % \
-> +        contents += "  %10s | %3d | %3d | %3d | %3d\n" % \
->                      (branch, stats[0], stats[1], stats[2], stats[3])
-
-Ditto, unrelated to argument parsing.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> 
+> [1] https://patchwork.ozlabs.org/patch/987183/
+> 
+> Joseph Kogut (4):
+>   llvm: disable bindings on host
+>   package/lld: new package
+>   toolchain-wrapper: add linker override option
+>   Add linker override to config options
+> 
+>  Config.in                      | 27 +++++++++++++++++++++++++++
+>  DEVELOPERS                     |  1 +
+>  package/Config.in.host         |  1 +
+>  package/gcc/gcc.mk             |  3 ++-
+>  package/glibc/glibc.mk         |  3 +++
+>  package/lld/Config.in.host     | 16 ++++++++++++++++
+>  package/lld/lld.hash           |  3 +++
+>  package/lld/lld.mk             | 23 +++++++++++++++++++++++
+>  package/llvm/llvm.mk           |  3 ++-
+>  toolchain/toolchain-wrapper.c  | 11 +++++++++++
+>  toolchain/toolchain-wrapper.mk |  4 ++++
+>  11 files changed, 93 insertions(+), 2 deletions(-)
+>  create mode 100644 package/lld/Config.in.host
+>  create mode 100644 package/lld/lld.hash
+>  create mode 100644 package/lld/lld.mk
+> 
+> --
+> 2.22.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+> 
