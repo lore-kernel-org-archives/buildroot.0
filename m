@@ -1,69 +1,35 @@
-From: Petr Vorel <petr.vorel@gmail.com>
-Date: Thu, 1 Aug 2019 19:26:55 +0200
-Subject: [Buildroot] [PATCH 2/2 v7] package/iputils: use capabilities if
- possible
-In-Reply-To: <7357ef816dae35990f461175f35135fb4996eb54.1564676540.git.yann.morin.1998@free.fr>
-References: <cover.1564676540.git.yann.morin.1998@free.fr>
- <7357ef816dae35990f461175f35135fb4996eb54.1564676540.git.yann.morin.1998@free.fr>
-Message-ID: <20190801172654.GB27877@x230>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu, 01 Aug 2019 19:34:06 +0200
+Subject: [Buildroot] [PATCH v2,
+ 1/1] package/glib-networking: needs dynamic library
+In-Reply-To: <20190801104918.3731-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 1 Aug 2019 12:49:18 +0200")
+References: <20190801104918.3731-1-fontaine.fabrice@gmail.com>
+Message-ID: <87v9vgvlgx.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Yann,
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-> From: Petr Vorel <petr.vorel@gmail.com>
+ > glib-networking uses the meson's shared_module function
+ > This is a partly revert of commit
+ > ed3eef6bb49270de619e5a86a249fdd8724c40cd 'package/glib-networking: bump
+ > to version 2.61.1' re-adding the dynamic library dependency due to the
+ > meson's build system and not from gnutls
 
-> If support for extended attributes is enabled, then we can use them to
-> store capabilities. If not, we keep using the setuid bit.
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/60037e37e020404485df9814f3f3ad4e3b2abdb3
 
-> arping does not get a capability, as it can be used for arp poisoning.
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > ---
+ > Changes v1 -> v2 (after review of Peter Seiderer):
+ >  - Update commit message
+ >  - Update webkitgtk/Config.in
 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> [yann.morin.1998 at free.fr:
->   - resort to using q full-fledged conditional block
-> ]
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Committed, thanks.
 
-> ---
-> Changes v6 -> v7:
->   - use a full if-block
-> ---
->  package/iputils/iputils.mk | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-
-> diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-> index 7482bbdca1..cbcce89684 100644
-> --- a/package/iputils/iputils.mk
-> +++ b/package/iputils/iputils.mk
-> @@ -79,11 +79,23 @@ IPUTILS_POST_INSTALL_TARGET_HOOKS += IPUTILS_CREATE_PING6_SYMLINK
-
->  # handle permissions ourselves
->  IPUTILS_CONF_OPTS += -DNO_SETCAP_OR_SUID=true
-> +ifeq ($(BR2_ROOTFS_DEVICE_TABLE_SUPPORTS_EXTENDED_ATTRIBUTES),y)
-> +define IPUTILS_PERMISSIONS
-> +	/usr/sbin/arping      f 755 0 0 - - - - -
-> +	/usr/bin/clockdiff    f 755 0 0 - - - - -
-> +	|xattr cap_net_raw+p
-> +	/bin/ping             f 755 0 0 - - - - -
-> +	|xattr cap_net_raw+p
-> +	/usr/bin/traceroute6  f 755 0 0 - - - - -
-> +	|xattr cap_net_raw+p
-> +endef
-> +else
->  define IPUTILS_PERMISSIONS
->  	/usr/sbin/arping      f  755 0 0 - - - - -
->  	/usr/bin/clockdiff    f 4755 0 0 - - - - -
->  	/bin/ping             f 4755 0 0 - - - - -
->  	/usr/bin/traceroute6  f 4755 0 0 - - - - -
->  endef
-> +endif
-I wanted to avoid duplicity, but this is really clearer to read!
-Thanks for fixing arping setuid.
-
-Kind regards,
-Petr
-
->  $(eval $(meson-package))
+-- 
+Bye, Peter Korsgaard
