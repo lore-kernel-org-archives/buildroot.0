@@ -1,42 +1,52 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Aug 2019 18:25:57 +0200
-Subject: [Buildroot] [PATCH v2] package/dhcp: fix target installation
-In-Reply-To: <20190724105453.4233-1-unixmania@gmail.com>
-References: <20190724105453.4233-1-unixmania@gmail.com>
-Message-ID: <20190801182557.53903f52@windsurf.home>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu,  1 Aug 2019 18:24:08 +0200
+Subject: [Buildroot] [PATCH] package/quagga: fix static linking with getopt
+Message-ID: <20190801162408.16588-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 24 Jul 2019 07:54:53 -0300
-unixmania at gmail.com wrote:
+quagga has its own copy of getopt_long() instead of using the system's,
+and this copy also defines the opterr and optind variables. Obviously,
+this is only apparent when linking statically.
 
-> From: Carlos Santos <unixmania@gmail.com>
-> 
-> We don't use "make install" for the target installation so we must pick
-> the executables from the ".libs" directories on which libtool generates
-> them otherwise we install the automatically generated wrapper scripts.
-> 
-> This was not necessary before the upgrade to version 4.4.1.
-> 
-> Fixes: https://bugs.busybox.net/show_bug.cgi?id=12051
-> 
-> Signed-off-by: Carlos Santos <unixmania@gmail.com>
-> ---
-> Chancgs v1->v2
->   Add link to gug report
-> ---
->  package/dhcp/dhcp.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+This problem can easily be avoided by making sure that getopt() itself
+is defined too. This way, there is no reason any more to pull in libc's
+getopt() and the corresponding definitions of opterr and optind. Note
+that getopt() itself is pulled in by netsnmp, not by quagga itself.
 
-Applied to master, thanks. I am not thrilled by the solution though,
-and I'm wondering if using make install + removing what we don't want
-wouldn't be a nicer solution, but I'm not sure.
+Fortunately, there's a REALLY_NEED_PLAIN_GETOPT flag that we can define
+to make sure getopt() does get built by quagga. We can safely do this
+unconditionally (instead of only when BR2_PACKAGE_QUAGGA_SNMP and
+BR2_STATIC_LIBS are enabled): without netsnmp, getopt() will simply not
+be used, and with dynamic libs there's no risk of conflicts anyway.
 
-Thomas
+Fixes:
+http://autobuild.buildroot.net/results/0ac598c2259a8d7e8b72d4e8ed95079675b31b84
+
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/quagga/quagga.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 420d72c79d..8aa58aceef 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -18,6 +18,11 @@ QUAGGA_CONF_OPTS = \
+ 	--sysconfdir=/etc/quagga \
+ 	--localstatedir=/var/run/quagga
+ 
++# quagga has its own internal copy of getopt_long. To avoid conflicts with libc's
++# getopt, we need to make sure that the getopt function itself is also built.
++QUAGGA_CONF_ENV = \
++	CFLAGS="$(TARGET_CFLAGS) -DREALLY_NEED_PLAIN_GETOPT"
++
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ QUAGGA_CONF_OPTS += --enable-capabilities
+ QUAGGA_DEPENDENCIES += libcap
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
