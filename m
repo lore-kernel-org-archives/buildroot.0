@@ -1,50 +1,189 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Aug 2019 20:54:35 +0200
-Subject: [Buildroot] [PATCH] support/testing: use virtio-rng-pci to test
- syslog-ng
-In-Reply-To: <87o918u47q.fsf@dell.be.48ers.dk>
-References: <20190730231321.10673-1-ricardo.martincoski@gmail.com>
- <87o918u47q.fsf@dell.be.48ers.dk>
-Message-ID: <20190801205435.226c1187@windsurf.home>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Thu, 1 Aug 2019 21:01:17 +0200
+Subject: [Buildroot] [git commit] package/piglit: new package
+Message-ID: <20190801185841.BF006813DB@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 01 Aug 2019 20:32:09 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a2e71ff5815b3567fbb629278deb70300ca0af3a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> >>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:  
-> 
->  > Recent versions of syslog-ng need some entropy on startup.
->  > So use VirtIORNG to provide it. In order to accomplish this:
->  >  - build the kernel containing the driver;
->  >  - pass '-device virtio-rng-pci' to qemu.  
-> 
->  > Use the same kernel version and kernel config as qemu_arm_versatile.
->  > It already has PCI enabled but it does not have HW_RANDOM_VIRTIO, so add
->  > a defconfig fragment to enable the drivers.  
-> 
->  > Fixes:
->  > https://gitlab.com/buildroot.org/buildroot/-/jobs/259856394  
-> 
->  > At the same time, fix a typo (missing '#') that resulted in the
->  > generation of root.tar. This file is not used in the test.  
-> 
->  > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
->  > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->  > ---
->  > https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/262628554  
-> 
-> Committed, thanks.
+Piglit is an open-source test suite for OpenGL implementations.
+It's an python3 script based around several tools like glxinfo,
+wflinfo, dmesg.
 
-Longer term, probably we should rebuild newer versions of the pre-built
-kernels, with the appropriate config options enabled. I guess other
-use-cases will also need some entropy at boot time.
+Even though waffle support can be replaced by freeglut,
+using pliglit with waffle is recommended since freeglut
+will be replaced by waffle.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Add host-python-{mako,numpy,six} dependency since the build system
+is checking with the host-python interpreter.
+
+There is no comment about waffle dependency due to too complex
+dependencies of waffle.
+
+Signed-off-by: Romain Naour <romain.naour@gmail.com>
+[Reworked during the Buildroot summer camp 2019]
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+[Arnout: small corrections to license info. It's messy.]
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/piglit/Config.in   | 31 ++++++++++++++++++++
+ package/piglit/piglit.hash |  6 ++++
+ package/piglit/piglit.mk   | 70 ++++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 109 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 877bb36a66..74f52d26fd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1951,6 +1951,7 @@ F:	package/minetest/
+ F:	package/minetest-game/
+ F:	package/openpowerlink/
+ F:	package/physfs/
++F:	package/piglit/
+ F:	package/solarus/
+ F:	package/stress-ng/
+ F:	package/supertux/
+diff --git a/package/Config.in b/package/Config.in
+index 6e0ddfd8d9..b7472b9bea 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -118,6 +118,7 @@ menu "Debugging, profiling and benchmark"
+ 	source "package/oprofile/Config.in"
+ 	source "package/pax-utils/Config.in"
+ 	source "package/pcm-tools/Config.in"
++	source "package/piglit/Config.in"
+ 	source "package/pv/Config.in"
+ 	source "package/racehound/Config.in"
+ 	source "package/ramsmp/Config.in"
+diff --git a/package/piglit/Config.in b/package/piglit/Config.in
+new file mode 100644
+index 0000000000..7a16c94284
+--- /dev/null
++++ b/package/piglit/Config.in
+@@ -0,0 +1,31 @@
++config BR2_PACKAGE_PIGLIT
++	bool "piglit"
++	depends on BR2_PACKAGE_PYTHON3 # python3 only script
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_WAFFLE_SUPPORTS_GLX || \
++		BR2_PACKAGE_WAFFLE_SUPPORTS_WAYLAND || \
++		BR2_PACKAGE_WAFFLE_SUPPORTS_X11_EGL || \
++		BR2_PACKAGE_WAFFLE_SUPPORTS_GBM
++	select BR2_PACKAGE_LIBDRM if BR2_PACKAGE_HAS_LIBGL
++	select BR2_PACKAGE_LIBPNG
++	select BR2_PACKAGE_LIBXKBCOMMON if BR2_PACKAGE_WAYLAND
++	select BR2_PACKAGE_MESA3D_DEMOS # glxinfo
++	select BR2_PACKAGE_PYTHON_MAKO
++	select BR2_PACKAGE_PYTHON_NUMPY
++	select BR2_PACKAGE_PYTHON_SIX
++	select BR2_PACKAGE_PYTHON3_BZIP2
++	select BR2_PACKAGE_PYTHON3_PYEXPAT
++	select BR2_PACKAGE_PYTHON3_XZ
++	select BR2_PACKAGE_PYTHON3_ZLIB
++	select BR2_PACKAGE_UTIL_LINUX # runtime
++	select BR2_PACKAGE_UTIL_LINUX_BINARIES # requires real dmesg tool
++	select BR2_PACKAGE_WAFFLE # wflinfo, libwaffle-1
++	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XLIB_LIBXEXT if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_XORGPROTO if BR2_PACKAGE_XORG7
++	select BR2_PACKAGE_ZLIB
++	help
++	  Piglit is an open-source test suite for OpenGL
++	  implementations.
++
++	  https://piglit.freedesktop.org
+diff --git a/package/piglit/piglit.hash b/package/piglit/piglit.hash
+new file mode 100644
+index 0000000000..8cfd04f7e0
+--- /dev/null
++++ b/package/piglit/piglit.hash
+@@ -0,0 +1,6 @@
++# Locally calculated
++sha256 4eba46520df1c47b0aea5446c302ff51d52f905a63d1ba29230866fc6c952a2e  piglit-ef761094be04d14e258ad7706e7295f80d4411f2.tar.gz
++sha256 dcc398730859aee7cc1d6aa57f526f8d181b47bb3a49830e85b5723d5bc2c3bc  COPYING
++sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  licences/GPL-2
++sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  licences/GPL-3
++sha256 b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  licences/LGPL-2
+diff --git a/package/piglit/piglit.mk b/package/piglit/piglit.mk
+new file mode 100644
+index 0000000000..5ab81aba41
+--- /dev/null
++++ b/package/piglit/piglit.mk
+@@ -0,0 +1,70 @@
++################################################################################
++#
++# piglit
++#
++################################################################################
++
++PIGLIT_VERSION = ef761094be04d14e258ad7706e7295f80d4411f2
++PIGLIT_SITE = https://gitlab.freedesktop.org/mesa/piglit.git
++PIGLIT_SITE_METHOD = git
++PIGLIT_LICENSE = MIT (code), \
++	LGPL-2.0+ (tests/glslparsertest/glsl2/gst-gl-*), \
++	LGPL-2.1+ (some tests), \
++	GPL-3.0 (tests/glslparsertest/glsl2/norsetto-*), \
++	GPL-2.0+ (tests/glslparsertest/glsl2/xreal-*, some other shaders), \
++	BSD-3-Clause (tests/glslparsertest/shaders/*)
++PIGLIT_LICENSE_FILES = COPYING licences/GPL-2 licences/GPL-3 licences/LGPL-2
++
++PIGLIT_DEPENDENCIES = host-pkgconf \
++	host-python-mako \
++	host-python-numpy \
++	host-python-six \
++	libpng \
++	python-mako \
++	python-numpy \
++	python-six \
++	waffle \
++	zlib
++
++PIGLIT_CONF_OPTS += \
++	-DPIGLIT_USE_WAFFLE=ON \
++	-DPIGLIT_BUILD_CL_TESTS=OFF \
++	-DPIGLIT_BUILD_WGL_TESTS=OFF
++
++ifeq ($(BR2_PACKAGE_XORG7),y)
++# libxcb for xcb-dri2
++PIGLIT_DEPENDENCIES += \
++	xlib_libX11 \
++	xlib_libXext \
++	xorgproto \
++	$(if $(BR2_PACKAGE_LIBXCB),libxcb)
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
++PIGLIT_DEPENDENCIES += libgl libdrm
++PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GL_TESTS=ON
++else
++PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GL_TESTS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_XORG7)$(BR2_PACKAGE_HAS_LIBGL),yy)
++PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GLX_TESTS=ON
++else
++PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GLX_TESTS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
++PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GLES1_TESTS=ON \
++	-DPIGLIT_BUILD_GLES2_TESTS=ON \
++	-DPIGLIT_BUILD_GLES3_TESTS=ON
++else
++PIGLIT_CONF_OPTS += -DPIGLIT_BUILD_GLES1_TESTS=OFF \
++	-DPIGLIT_BUILD_GLES2_TESTS=OFF \
++	-DPIGLIT_BUILD_GLES3_TESTS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_WAYLAND),y)
++PIGLIT_DEPENDENCIES += wayland libxkbcommon
++endif
++
++$(eval $(cmake-package))
