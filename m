@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Aug 2019 20:13:12 +0200
-Subject: [Buildroot] [PATCH 1/2] package/cloop: needs _GNU_SOURCE
-In-Reply-To: <20190801122109.25535-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 1 Aug 2019 14:21:08 +0200")
+Date: Thu, 01 Aug 2019 20:13:21 +0200
+Subject: [Buildroot] [PATCH 2/2] package/cloop: bump to version 3.14.1.2
+In-Reply-To: <20190801122109.25535-2-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 1 Aug 2019 14:21:09 +0200")
 References: <20190801122109.25535-1-fontaine.fabrice@gmail.com>
-Message-ID: <87mugsvjnr.fsf@dell.be.48ers.dk>
+ <20190801122109.25535-2-fontaine.fabrice@gmail.com>
+Message-ID: <87imrgvjni.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,14 +14,14 @@ To: buildroot@busybox.net
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > host-cloop needs _GNU_SOURCE for loff_t otherwise build fails with gcc
- > 8.3.0 on:
- > extract_compressed_fs.c: In function 'main':
- > extract_compressed_fs.c:55:2: error: unknown type name 'loff_t'; did you mean 'off_t'?
- >   loff_t *offsets;
-
- > Fixes:
- >  - No autobuilder failures
+ > - Remove patch, it is not needed anymore as CFLAGS/LDFLAGS are now
+ >   correctly passed to extract_compressed_fs. CFLAGS/LDFLAGS are not
+ >   passed to cloop_suspend but it isn't built. Moreover original CFLAGS
+ >   are lost but this is acceptable)
+ > - Switch site to http://snapshot.debian.org/archive/debian as
+ >   http://debian-knoppix.alioth.debian.org/packages/sources/cloop is not
+ >   available anymore
+ > - Add hash for license files
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
