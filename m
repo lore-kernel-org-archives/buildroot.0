@@ -1,98 +1,57 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Thu,  1 Aug 2019 10:02:36 +0200
-Subject: [Buildroot] [PATCH v3 2/3] utils/checkpackagelib:
- CommentsMenusPackagesOrder: append elements to arrays if needed
+Date: Thu,  1 Aug 2019 10:02:37 +0200
+Subject: [Buildroot] [PATCH v3 3/3] utils/checkpackagelib:
+ CommentsMenusPackagesOrder: use regex for source
 In-Reply-To: <20190801080237.5462-1-arnout@mind.be>
 References: <20190801080237.5462-1-arnout@mind.be>
-Message-ID: <20190801080237.5462-3-arnout@mind.be>
+Message-ID: <20190801080237.5462-4-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
+The 'source' strings identify which package is incorrectly ordered. We
+need to extract the actual package name from that string, which is
+currently done with constants that assume the file is package/Config.in.
 
-In the future, the nesting level of menus, comments and conditions may
-increase. The fixed array length used now is not appropriate. Therefore,
-append elements to the arrays if needed.
+In addition, only 'source' lines that are indented with a tab are
+checked. This kind of indentation is done in package/Config.in, but not
+e.g. boot/Config.in.
 
-Also change order of variables.
+Therefore, use a regular expression to match the 'source' lines, and to
+extract the directory part from it.
 
-Signed-off-by: Jerzy Grzegorek <jerzy.m.grzegorek@gmail.com>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
-Changes v2 -> v3:
-  - Initialize arrays to empty
-  - Rewrite commit log
-
-Changes v1 -> v2:
-  - use try/except statement instead of if one (Yann)
-
-    At the beginning self.state is empty and variable level (index of arrays)
-    is equal 0. We append elements to arrays for the first time when a line
-    begining with "comment ", "if " or "menu ". At that moment level is equal 1
-    and each array should have two elements (index 0 and 1). To achieve this
-    we can use empty arrays or arrays with an initial value (index 0).
-
-    1. Arrays with an initial value and if statement (previous version)
-       ...
-       if level > len(array) - 1
-           append elements
-       ...
-
-    2. Empty arrays and while statement
-       ...
-       while level > len(array) - 1
-           append elements
-       ...
-
-    3. Arrays with an initial value and try/except statement (this version)
-       ...
-       try:
-           assigment staff
-       except IndexError:
-           append elements
-       ...
+v3: new patch
 ---
- utils/checkpackagelib/lib_config.py | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ utils/checkpackagelib/lib_config.py | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index b42760396e..6cbdc209c8 100644
+index 6cbdc209c8..26349fb681 100644
 --- a/utils/checkpackagelib/lib_config.py
 +++ b/utils/checkpackagelib/lib_config.py
-@@ -61,9 +61,9 @@ class AttributesOrder(_CheckFunction):
+@@ -77,6 +77,7 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+                                  "package/Config.in.host"]:
+             return
  
++        m = re.match(r'^\s*source ".*/([^/]*)/Config.in(.host)?"', text)
+         if text.startswith("comment ") or text.startswith("if ") or \
+            text.startswith("menu "):
  
- class CommentsMenusPackagesOrder(_CheckFunction):
--    print_package_warning = [True, True, True, True, True, True]
--    menu_of_packages = ["", "", "", "", "", ""]
--    package = ["", "", "", "", "", ""]
-+    menu_of_packages = []
-+    package = []
-+    print_package_warning = []
+@@ -112,9 +113,9 @@ class CommentsMenusPackagesOrder(_CheckFunction):
+             elif text.startswith("endmenu"):
+                 self.state = self.state[:-5]
  
-     def before(self):
-         self.state = ""
-@@ -92,9 +92,15 @@ class CommentsMenusPackagesOrder(_CheckFunction):
-                     self.state += "-menu"
- 
+-        elif text.startswith('\tsource "package/'):
++        elif m:
              level = self.get_level()
--            self.package[level] = ""
--            self.print_package_warning[level] = True
--            self.menu_of_packages[level] = text[:-1]
-+
-+            try:
-+                self.menu_of_packages[level] = text[:-1]
-+                self.package[level] = ""
-+                self.print_package_warning[level] = True
-+            except IndexError:
-+                self.menu_of_packages.append(text[:-1])
-+                self.package.append("")
-+                self.print_package_warning.append(True)
+-            new_package = text[17: -(len(self.filename)-5):]
++            new_package = m.group(1)
  
-         elif text.startswith("endif") or text.startswith("endmenu"):
-             if self.state.endswith("comment"):
+             # We order _ before A, so replace it with .
+             new_package_ord = new_package.replace('_', '.')
 -- 
 2.21.0
