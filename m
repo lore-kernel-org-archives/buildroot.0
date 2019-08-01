@@ -1,11 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Aug 2019 10:41:59 +0200
-Subject: [Buildroot] [PATCH 4/7] package/twolame: add license hash
-In-Reply-To: <20190728204434.12356-4-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sun, 28 Jul 2019 22:44:31 +0200")
+Date: Thu, 01 Aug 2019 10:42:21 +0200
+Subject: [Buildroot] [PATCH 3/7] package/taglib: add license hash
+In-Reply-To: <20190728204434.12356-3-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sun, 28 Jul 2019 22:44:30 +0200")
 References: <20190728204434.12356-1-bernd.kuhls@t-online.de>
- <20190728204434.12356-4-bernd.kuhls@t-online.de>
-Message-ID: <87sgql2s6g.fsf@dell.be.48ers.dk>
+ <20190728204434.12356-3-bernd.kuhls@t-online.de>
+Message-ID: <87o9192s5u.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
