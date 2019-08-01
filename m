@@ -1,10 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Aug 2019 15:26:19 +0200
-Subject: [Buildroot] [PATCH 1/1] package/nasm: bump version to 2.14.02
-In-Reply-To: <20190629151946.28648-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
- message of "Sat, 29 Jun 2019 17:19:46 +0200")
-References: <20190629151946.28648-1-bernd.kuhls@t-online.de>
-Message-ID: <87zhktxbic.fsf@dell.be.48ers.dk>
+Date: Thu, 01 Aug 2019 15:27:17 +0200
+Subject: [Buildroot] [PATCH 1/1] package/libmicrohttpd: bump version to
+ 0.9.64
+In-Reply-To: <20190629152736.14833-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 29 Jun 2019 17:27:36 +0200")
+References: <20190629152736.14833-1-bernd.kuhls@t-online.de>
+Message-ID: <87v9vhxbgq.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,11 +14,11 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Release notes: https://nasm.us/doc/nasmdocc.html
- > Removed patch applied upstream:
- > https://repo.or.cz/nasm.git/commitdiff/5eb1838b4d3752fd863d19442943983a2a5ee87c
+ > Release notes:
+ > https://lists.gnu.org/archive/html/libmicrohttpd/2019-06/msg00004.html
 
- > Switched _SITE to https.
+ > Updated license hash after upstream commit
+ > https://git.gnunet.org/libmicrohttpd.git/commit/?id=d0e81c8e0fb9676602db14a4120235f1524b1306
 
  > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
