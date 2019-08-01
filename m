@@ -1,97 +1,96 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  1 Aug 2019 14:21:09 +0200
-Subject: [Buildroot] [PATCH 2/2] package/cloop: bump to version 3.14.1.2
-In-Reply-To: <20190801122109.25535-1-fontaine.fabrice@gmail.com>
-References: <20190801122109.25535-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190801122109.25535-2-fontaine.fabrice@gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Thu,  1 Aug 2019 14:22:41 +0200
+Subject: [Buildroot] [PATCH] package/python-django: security bump to version
+ 2.2.4
+Message-ID: <20190801122241.31463-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Remove patch, it is not needed anymore as CFLAGS/LDFLAGS are now
-  correctly passed to extract_compressed_fs. CFLAGS/LDFLAGS are not
-  passed to cloop_suspend but it isn't built. Moreover original CFLAGS
-  are lost but this is acceptable)
-- Switch site to http://snapshot.debian.org/archive/debian as
-  http://debian-knoppix.alioth.debian.org/packages/sources/cloop is not
-  available anymore
-- Add hash for license files
+Fixes the following security issues:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+CVE-2019-14232: Denial-of-service possibility in django.utils.text.Truncator
+
+If django.utils.text.Truncator's chars() and words() methods were passed the
+html=True argument, they were extremely slow to evaluate certain inputs due
+to a catastrophic backtracking vulnerability in a regular expression.  The
+chars() and words() methods are used to implement the truncatechars_html and
+truncatewords_html template filters, which were thus vulnerable.
+
+The regular expressions used by Truncator have been simplified in order to
+avoid potential backtracking issues.  As a consequence, trailing punctuation
+may now at times be included in the truncated output.
+
+CVE-2019-14233: Denial-of-service possibility in strip_tags()
+
+Due to the behavior of the underlying HTMLParser,
+django.utils.html.strip_tags() would be extremely slow to evaluate certain
+inputs containing large sequences of nested incomplete HTML entities.  The
+strip_tags() method is used to implement the corresponding striptags
+template filter, which was thus also vulnerable.
+
+strip_tags() now avoids recursive calls to HTMLParser when progress removing
+tags, but necessarily incomplete HTML entities, stops being made.
+
+Remember that absolutely NO guarantee is provided about the results of
+strip_tags() being HTML safe.  So NEVER mark safe the result of a
+strip_tags() call without escaping it first, for example with
+django.utils.html.escape().
+
+CVE-2019-14234: SQL injection possibility in key and index lookups for
+JSONField/HStoreField
+
+Key and index lookups for django.contrib.postgres.fields.JSONField and key
+lookups for django.contrib.postgres.fields.HStoreField were subject to SQL
+injection, using a suitably crafted dictionary, with dictionary expansion,
+as the **kwargs passed to QuerySet.filter().
+
+CVE-2019-14235: Potential memory exhaustion in
+django.utils.encoding.uri_to_iri()
+
+If passed certain inputs, django.utils.encoding.uri_to_iri could lead to
+significant memory usage due to excessive recursion when re-percent-encoding
+invalid UTF-8 octet sequences.
+
+uri_to_iri() now avoids recursion when re-percent-encoding invalid UTF-8
+octet sequences.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cloop/0001-cflags.patch | 30 ------------------------------
- package/cloop/cloop.hash        |  8 ++++++--
- package/cloop/cloop.mk          |  6 +++---
- 3 files changed, 9 insertions(+), 35 deletions(-)
- delete mode 100644 package/cloop/0001-cflags.patch
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/cloop/0001-cflags.patch b/package/cloop/0001-cflags.patch
-deleted file mode 100644
-index c421dd7f8b..0000000000
---- a/package/cloop/0001-cflags.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--Take into account the CFLAGS/LDFLAGS passed in the environment.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: host-cloop-2.634-1/Makefile
--===================================================================
----- host-cloop-2.634-1.orig/Makefile	2010-12-16 09:17:52.826555645 +0100
--+++ host-cloop-2.634-1/Makefile	2010-12-16 09:18:57.208713338 +0100
--@@ -15,7 +15,7 @@
-- endif
-- 
-- ifdef APPSONLY
---CFLAGS:=-Wall -Wstrict-prototypes -Wno-trigraphs -O2 -s -I. -fno-strict-aliasing -fno-common -fomit-frame-pointer 
--+CLOOP_CFLAGS:=-Wall -Wstrict-prototypes -Wno-trigraphs -O2 -s -I. -fno-strict-aliasing -fno-common -fomit-frame-pointer 
-- endif
-- 
-- KERNOBJ:=compressed_loop.o
--@@ -53,10 +53,10 @@
-- 	( cd advancecomp-1.15 ; ./configure && $(MAKE) advfs )
-- 
-- extract_compressed_fs: extract_compressed_fs.c
---	$(CC) -Wall -O2 -s -o $@ $< -lz
--+	$(CC) $(CFLAGS) $(CLOOP_CFLAGS) $(LDFLAGS) -Wall -O2 -s -o $@ $< -lz
-- 
-- cloop_suspend: cloop_suspend.o
---	$(CC) -o $@ $<
--+	$(CC) $(CFLAGS) $(CLOOP_CFLAGS) $(LDFLAGS) -o $@ $<
-- 
-- clean:
-- 	rm -rf create_compressed_fs extract_compressed_fs zoom *.o *.ko Module.symvers .cloop* .compressed_loop.* .tmp*
-diff --git a/package/cloop/cloop.hash b/package/cloop/cloop.hash
-index 9acbceb05d..7af1a9594d 100644
---- a/package/cloop/cloop.hash
-+++ b/package/cloop/cloop.hash
-@@ -1,2 +1,6 @@
--# From http://debian-knoppix.alioth.debian.org/packages/sources/cloop/cloop_2.634-1.dsc
--sha256	d6d03e2368e19f9c6c3a313e9c34cf0620d129ce26132a8805580d953769dbbd	cloop_2.634-1.tar.gz
-+# From http://snapshot.debian.org/archive/debian/20150503T155713Z/pool/main/c/cloop/cloop_3.14.1.2.dsc
-+sha256	ac344225b3a5c4ddbb0d4b20cd4874798b51427b707b53e2ee9fbdada7497c95	cloop_3.14.1.2.tar.xz
-+
-+# Hash for license files
-+sha256	91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad	advancecomp-1.15/COPYING
-+sha256	1b1f89e94e131e259b9e334565c5c3500d4b8aa755b75c3f145ddcdff3b89124	README
-diff --git a/package/cloop/cloop.mk b/package/cloop/cloop.mk
-index 585f422ce3..046d98c862 100644
---- a/package/cloop/cloop.mk
-+++ b/package/cloop/cloop.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 0d63853aaa..b89ee907d3 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5	f152164e77d38460ee06c42c210d2f57  Django-2.2.3.tar.gz
+-sha256	4d23f61b26892bac785f07401bc38cbf8fa4cec993f400e9cd9ddf28fd51c0ea  Django-2.2.3.tar.gz
++md5	b32e396c354880742d85a7628a0bdd5a  Django-2.2.4.tar.gz
++sha256	16a5d54411599780ac9dfe3b9b38f90f785c51259a584e0b24b6f14a7f69aae8  Django-2.2.4.tar.gz
+ # Locally computed sha256 checksums
+ sha256	b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index 2697f05466..7dbf7a38fd 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--CLOOP_VERSION = 2.634-1
--CLOOP_SOURCE = cloop_$(CLOOP_VERSION).tar.gz
--CLOOP_SITE = http://debian-knoppix.alioth.debian.org/packages/sources/cloop
-+CLOOP_VERSION = 3.14.1.2
-+CLOOP_SOURCE = cloop_$(CLOOP_VERSION).tar.xz
-+CLOOP_SITE = http://snapshot.debian.org/archive/debian/20150503T155713Z/pool/main/c/cloop
- CLOOP_LICENSE = GPL-2.0 (module), GPL-2.0+ (advancecomp)
- CLOOP_LICENSE_FILES = README advancecomp-1.15/COPYING
- 
+-PYTHON_DJANGO_VERSION = 2.2.3
++PYTHON_DJANGO_VERSION = 2.2.4
+ PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+-PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/d3/20/b447eb3d820e0d05fe83cbfb016842bd8da35f4b0f83498dca43d02aebc3
++PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/19/11/3449a2071df9427e7a5c4dddee2462e88840dd968a9b0c161097154fcb0c
+ PYTHON_DJANGO_LICENSE = BSD-3-Clause
+ PYTHON_DJANGO_LICENSE_FILES = LICENSE
+ PYTHON_DJANGO_SETUP_TYPE = setuptools
 -- 
-2.20.1
+2.11.0
