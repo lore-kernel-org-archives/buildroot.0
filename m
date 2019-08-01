@@ -1,31 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 01 Aug 2019 15:37:00 +0200
-Subject: [Buildroot] [PATCH] package/git: work around gcc bug 85180
-In-Reply-To: <20190625070254.31868-1-giulio.benetti@micronovasrl.com> (Giulio
- Benetti's message of "Tue, 25 Jun 2019 09:02:54 +0200")
-References: <20190625070254.31868-1-giulio.benetti@micronovasrl.com>
-Message-ID: <87a7ctxb0j.fsf@dell.be.48ers.dk>
+Date: Thu, 1 Aug 2019 15:36:48 +0200
+Subject: [Buildroot] [git commit] package/git: work around gcc bug 85180
+Message-ID: <20190801133438.83BE481518@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Giulio" == Giulio Benetti <giulio.benetti@micronovasrl.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=7c7c0e4406aea45b2db0a932b128960b4ef4b474
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > With Microblaze Gcc version < 8.x the build hangs due to gcc bug
- > 85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
- > shows up when building git with optimization but not when building with
- > -O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force
- > using -O0.
+With Microblaze Gcc version < 8.x the build hangs due to gcc bug
+85180: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=85180. The bug
+shows up when building git with optimization but not when building with
+-O0. To work around this, if BR2_TOOLCHAIN_HAS_GCC_BUG_85180=y we force
+using -O0.
 
- > Fixes:
+Fixes:
 
- >   http://autobuild.buildroot.net/results/7ad/7adff001631053ae5a3cb3e176d321f6a2d3cceb/
+  http://autobuild.buildroot.net/results/7ad/7adff001631053ae5a3cb3e176d321f6a2d3cceb/
 
- > Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/git/git.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/git/git.mk b/package/git/git.mk
+index c91cd5210b..fdcb9aa54d 100644
+--- a/package/git/git.mk
++++ b/package/git/git.mk
+@@ -65,6 +65,14 @@ ifeq ($(BR2_SYSTEM_ENABLE_NLS),)
+ GIT_MAKE_OPTS += NO_GETTEXT=1
+ endif
+ 
++GIT_CFLAGS = $(TARGET_CFLAGS)
++
++ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
++GIT_CFLAGS += -O0
++endif
++
++GIT_CONF_OPTS += CFLAGS="$(GIT_CFLAGS)"
++
+ GIT_INSTALL_TARGET_OPTS = $(GIT_MAKE_OPTS) DESTDIR=$(TARGET_DIR) install
+ 
+ # assume yes for these tests, configure will bail out otherwise
