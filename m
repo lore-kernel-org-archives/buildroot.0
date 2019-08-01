@@ -1,35 +1,50 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 15:29:20 +0200
-Subject: [Buildroot] [git commit] package/xlib_libX11: remove unrecognized
- option
-Message-ID: <20190801132736.051FA7FA24@busybox.osuosl.org>
+Date: Thu, 1 Aug 2019 14:35:49 +0200
+Subject: [Buildroot] [git commit] packages/python-paho-mqtt: bump version to
+ 1.4.0
+Message-ID: <20190801132735.CBFBE81352@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5cb2812fdba93ae72201c41a7ea076cd1f1a7bed
+commit: https://git.buildroot.net/buildroot/commit/?id=95cc2a480e7edc943653e39b3b7c087c5ce0b3b3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Remove --with-xcb as this option has been removed since version 1.3.99:
-https://cgit.freedesktop.org/xorg/lib/libX11/commit/?id=15e5eaf62897b3179d1fbe457cb19f886f0449f8
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Joris Offouga <offougajoris@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/x11r7/xlib_libX11/xlib_libX11.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/python-paho-mqtt/python-paho-mqtt.hash | 4 ++--
+ package/python-paho-mqtt/python-paho-mqtt.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/x11r7/xlib_libX11/xlib_libX11.mk b/package/x11r7/xlib_libX11/xlib_libX11.mk
-index c51bb53cdb..7c34b97c8d 100644
---- a/package/x11r7/xlib_libX11/xlib_libX11.mk
-+++ b/package/x11r7/xlib_libX11/xlib_libX11.mk
-@@ -30,7 +30,6 @@ HOST_XLIB_LIBX11_DEPENDENCIES = \
+diff --git a/package/python-paho-mqtt/python-paho-mqtt.hash b/package/python-paho-mqtt/python-paho-mqtt.hash
+index e791d367ea..35afcccedb 100644
+--- a/package/python-paho-mqtt/python-paho-mqtt.hash
++++ b/package/python-paho-mqtt/python-paho-mqtt.hash
+@@ -1,6 +1,6 @@
+ # md5 from https://pypi.python.org/pypi/paho-mqtt/json, sha256 locally computed
+-md5	2cc27d8b369700b1fc99325add0dadd2  paho-mqtt-1.3.1.tar.gz
+-sha256	31911f6031de306c27ed79dc77b690d7c55b0dcb0f0434ca34ec6361d0371122  paho-mqtt-1.3.1.tar.gz
++md5	e3ac29cd5dc247a01083a2a8f3fddd08  paho-mqtt-1.4.0.tar.gz
++sha256	e440a052b46d222e184be3be38676378722072fcd4dfd2c8f509fb861a7b0b79  paho-mqtt-1.4.0.tar.gz
+ sha256	76f13729e84e9222e543303df00f87d1b2c0995b6a505cd859a285667e44babb  LICENSE.txt
+ sha256	e8cf7d54ea46c19aba793983889b7f7425e1ebfcaaccec764a7db091646e203c  edl-v10
+ sha256	3b9be6b894d0769de796e653571ff6cef494913c0ce78c35a97db939e7d9087c  epl-v10
+diff --git a/package/python-paho-mqtt/python-paho-mqtt.mk b/package/python-paho-mqtt/python-paho-mqtt.mk
+index f335b35edb..d192749e1e 100644
+--- a/package/python-paho-mqtt/python-paho-mqtt.mk
++++ b/package/python-paho-mqtt/python-paho-mqtt.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- XLIB_LIBX11_CONF_OPTS = \
- 	--disable-malloc0returnsnull \
--	--with-xcb \
- 	--disable-specs \
- 	--without-perl
- 
+-PYTHON_PAHO_MQTT_VERSION = 1.3.1
++PYTHON_PAHO_MQTT_VERSION = 1.4.0
+ PYTHON_PAHO_MQTT_SOURCE = paho-mqtt-$(PYTHON_PAHO_MQTT_VERSION).tar.gz
+-PYTHON_PAHO_MQTT_SITE = https://pypi.python.org/packages/2a/5f/cf14b8f9f8ed1891cda893a2a7d1d6fa23de2a9fb4832f05cef02b79d01f
++PYTHON_PAHO_MQTT_SITE = https://files.pythonhosted.org/packages/25/63/db25e62979c2a716a74950c9ed658dce431b5cb01fde29eb6cba9489a904
+ PYTHON_PAHO_MQTT_LICENSE = EPL-1.0 or EDLv1.0
+ PYTHON_PAHO_MQTT_LICENSE_FILES = LICENSE.txt edl-v10 epl-v10
+ PYTHON_PAHO_MQTT_SETUP_TYPE = setuptools
