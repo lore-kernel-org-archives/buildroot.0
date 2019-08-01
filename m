@@ -1,8 +1,8 @@
 From: Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
-Date: Thu,  1 Aug 2019 14:02:41 -0700
+Date: Thu,  1 Aug 2019 14:05:42 -0700
 Subject: [Buildroot] Makefile: follow symlinks when excluding files from
  being stripped.
-Message-ID: <20190801210241.40325-1-umesh.nerlige.ramappa@intel.com>
+Message-ID: <20190801210542.40390-1-umesh.nerlige.ramappa@intel.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
