@@ -1,78 +1,54 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 19:38:46 +0200
-Subject: [Buildroot] [git commit] package/glib-networking: needs dynamic
- library
-Message-ID: <20190801173605.3D64782CE5@busybox.osuosl.org>
+Date: Thu, 01 Aug 2019 19:55:57 +0200
+Subject: [Buildroot] [PATCH v2] qemu: fix host virtfs option
+In-Reply-To: <20190801170924.22435-1-vincent.stehle@arm.com> ("Vincent
+ =?utf-8?Q?Stehl=C3=A9=22's?= message of "Thu, 1 Aug 2019 19:09:24 +0200")
+References: <20190801180239.262e5f6e@windsurf.home>
+ <20190801170924.22435-1-vincent.stehle@arm.com>
+Message-ID: <87r264vkgi.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=02137d6397f8311e2e3204c81a0330f6eedfddda
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Vincent" == Vincent Stehl? <vincent.stehle@arm.com> writes:
 
-glib-networking uses the meson's shared_module function
+ > Fix the build of host-qemu with virtfs enabled: fix a typo in makefile
+ > conditional and add a dependency on host-libcap.
 
-This is a partly revert of commit
-ed3eef6bb49270de619e5a86a249fdd8724c40cd 'package/glib-networking: bump
-to version 2.61.1' re-adding the dynamic library dependency due to the
-meson's build system and not from gnutls
+ > The virtfs configuration option was added by commit e0f49e648401
+ > ("package/qemu: add option to enable virtual filesystem in host qemu").
 
-Fixes:
- - http://autobuild.buildroot.org/results/60037e37e020404485df9814f3f3ad4e3b2abdb3
+ > Signed-off-by: Vincent Stehl? <vincent.stehle@arm.com>
+ > Cc: Etienne Carriere <etienne.carriere@linaro.org>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/glib-networking/Config.in | 6 ++++--
- package/libsoup/Config.in         | 2 +-
- package/webkitgtk/Config.in       | 2 +-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ > ---
+ > Changes v1 -> v2:
+ >   - Forcibly disable virtfs when config option is =n rather than letting
+ >     qemu auto-detect (as per Thomas' feedback)
 
-diff --git a/package/glib-networking/Config.in b/package/glib-networking/Config.in
-index 004f82222c..e9557309ee 100644
---- a/package/glib-networking/Config.in
-+++ b/package/glib-networking/Config.in
-@@ -3,11 +3,13 @@ config BR2_PACKAGE_GLIB_NETWORKING
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
-+	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_OPENSSL if !BR2_PACKAGE_GNUTLS
- 	help
- 	  Network-related GIO modules for glib.
+ >  package/qemu/qemu.mk | 5 ++++-
+ >  1 file changed, 4 insertions(+), 1 deletion(-)
+
+ > diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+ > index 73e0778d73..2c11f64ad0 100644
+ > --- a/package/qemu/qemu.mk
+ > +++ b/package/qemu/qemu.mk
+ > @@ -271,8 +271,11 @@ HOST_QEMU_OPTS += --enable-vde
+ >  HOST_QEMU_DEPENDENCIES += host-vde2
+ >  endif
  
--comment "glib-networking needs a toolchain w/ wchar, threads"
-+comment "glib-networking needs a toolchain w/ wchar, threads, dynamic library"
- 	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		BR2_STATIC_LIBS
-diff --git a/package/libsoup/Config.in b/package/libsoup/Config.in
-index 599f9594d9..f6f8fde968 100644
---- a/package/libsoup/Config.in
-+++ b/package/libsoup/Config.in
-@@ -22,7 +22,7 @@ config BR2_PACKAGE_LIBSOUP_GNOME
- 
- config BR2_PACKAGE_LIBSOUP_SSL
- 	bool "https support"
--	depends on !BR2_STATIC_LIBS # gnutls
-+	depends on !BR2_STATIC_LIBS # glib-networking, gnutls
- 	select BR2_PACKAGE_GLIB_NETWORKING
- 	select BR2_PACKAGE_GNUTLS
- 	help
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 9f0d4a776c..db67c89042 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -59,7 +59,7 @@ if BR2_PACKAGE_WEBKITGTK
- 
- config BR2_PACKAGE_WEBKITGTK_HTTPS
- 	bool "HTTPS support"
--	depends on !BR2_STATIC_LIBS # gnutls -> libsoup
-+	depends on !BR2_STATIC_LIBS # libsoup -> glib-networking, gnutls
- 	select BR2_PACKAGE_CA_CERTIFICATES # runtime
- 	select BR2_PACKAGE_LIBSOUP_SSL
- 	help
+ > -ifdef ($(BR2_PACKAGE_HOST_QEMU_VIRTFS),y)
+ > +ifeq ($(BR2_PACKAGE_HOST_QEMU_VIRTFS),y)
+ >  HOST_QEMU_OPTS += --enable-virtfs
+ > +HOST_QEMU_DEPENDENCIES += host-libcap
+
+I was going to say that we also need host-attr, but looking closer at
+the configure step I see that the xattr support in glibc is also
+accepted.
+
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
