@@ -1,14 +1,14 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 09:33:40 +0200
-Subject: [Buildroot] [git commit] package/jsmin: add license hash
-Message-ID: <20190801073838.10A11813D2@busybox.osuosl.org>
+Date: Thu, 1 Aug 2019 09:34:34 +0200
+Subject: [Buildroot] [git commit] package/libusb-compat: add license hash
+Message-ID: <20190801073838.1A5A3813D2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a080a301b0fe63b62032ab750de31e62cb223be
+commit: https://git.buildroot.net/buildroot/commit/?id=84c9c3654c1cc5d979cf63d9526a986757c9177e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Partly fixes:
@@ -17,14 +17,14 @@ http://autobuild.buildroot.net/results/f0f/f0fd05ce8a8b595015baf625481b58967df53
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/jsmin/jsmin.hash | 1 +
+ package/libusb-compat/libusb-compat.hash | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/jsmin/jsmin.hash b/package/jsmin/jsmin.hash
-index 6080f109dc..c160978519 100644
---- a/package/jsmin/jsmin.hash
-+++ b/package/jsmin/jsmin.hash
+diff --git a/package/libusb-compat/libusb-compat.hash b/package/libusb-compat/libusb-compat.hash
+index c01eee532b..26c3a80ebc 100644
+--- a/package/libusb-compat/libusb-compat.hash
++++ b/package/libusb-compat/libusb-compat.hash
 @@ -1,2 +1,3 @@
- # Locally calculated
- sha256 aae127bf7291a7b2592f36599e5ed6c6423eac7abe0cd5992f82d6d46fe9ed2d  jsmin-1bf6ce5f74a9f8752ac7f5d115b8d7ccb31cfe1b.tar.gz
-+sha256 b420f61778af09534adc836a5086f5625b8499124051c50baefa218e7c03a58c  jsmin.c
+ # Locally computed:
+ sha256  404ef4b6b324be79ac1bfb3d839eac860fbc929e6acb1ef88793a6ea328bc55a  libusb-compat-0.1.5.tar.bz2
++sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
