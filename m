@@ -1,58 +1,46 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Thu, 01 Aug 2019 16:06:27 +0000
-Subject: [Buildroot] [Bug 12076] New: Patchelf can link against an
- incompatible libc++ version
-Message-ID: <bug-12076-163@https.bugs.busybox.net/>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Aug 2019 18:09:19 +0200
+Subject: [Buildroot] [PATCH 1/1] support/kconfig: fix compiler warnings
+ by increasing buffer sizes
+In-Reply-To: <20190801152005.12285-1-mark.corbin@embecosm.com>
+References: <20190801152005.12285-1-mark.corbin@embecosm.com>
+Message-ID: <20190801180919.744284f3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12076
+Hello,
 
-            Bug ID: 12076
-           Summary: Patchelf can link against an incompatible libc++
-                    version
-           Product: buildroot
-           Version: 2019.05.1
-          Hardware: PC
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P5
-         Component: Other
-          Assignee: unassigned at buildroot.uclibc.org
-          Reporter: bradley.gamble at ncipher.com
-                CC: buildroot at uclibc.org
-  Target Milestone: ---
+On Thu,  1 Aug 2019 16:20:05 +0100
+Mark Corbin <mark.corbin@embecosm.com> wrote:
 
-Attempting a build of buildroot can fail if the host machine is using an older
-version of libstdc++. In this instance I was using a Docker container with
-libstdc++ 3.4.13 (GLIBCXX_3.4.13).
+> When compiling kconfig with host gcc 8.3.0 several compiler
+> '-Wformat-overflow=' warnings are generated. This is due to a
+> number of temporary buffers used by sprintf being too small.
+> The sizes of these buffers have been increased to remove the
+> warnings.
+> 
+> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
+> ---
+>  support/kconfig/confdata.c | 4 ++--
+>  support/kconfig/util.c     | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-The truncated output from the build is as follows:
+This was fixed in upstream Linux by commit
+2ae89c7a82ea9d81a19b4fc2df23bef4b112f24e, which is part of Linux since
+4.18. Our kconfig code base is based on 4.17-rc2, so the best thing is
+to update our kconfig code base, to re-use the fixes from the kernel.
 
-    >>>   Sanitizing RPATH in target tree
-    /home/bgamble/buildroot-2019.05.1/support/scripts/fix-rpath target
-    Error: can't execute patchelf utility
-'/home/bgamble/buildroot-2019.05.1/output/host/bin/patchelf'
-    make[1]: *** [target-finalize] Error 1
-    make: *** [_all] Error 2
+Could you do this ? Be careful that patches in support/kconfig/patches/
+need to be refreshed and re-applied on top of the kernel kconfig code
+base.
 
-Attempting to manually execute the patchelf binary will give the following
-error message:
+Thanks!
 
-    $ ./output/host/bin/patchelf
-    ./output/host/bin/patchelf: /usr/lib/libstdc++.so.6: version
-`GLIBCXX_3.4.20' not found (required by ./output/host/bin/patchelf)
-
-This means that it is not possible to perform a build with an older version of
-the libstdc++ library.
-It is possible to build and execute patchelf manually using the host compiler
-so I believe this is a Buildroot-specific issue and not caused by the upstream
-Patchelf source.
-
+Thomas
 -- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
