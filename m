@@ -1,34 +1,57 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 1 Aug 2019 11:04:26 +0200
-Subject: [Buildroot] [git commit] package/ghostscript-fonts: add hashes
-Message-ID: <20190801090429.4369C88EE6@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Thu, 1 Aug 2019 11:10:41 +0200
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: improve
+ argparse usage
+Message-ID: <20190801090801.BBDB283A2A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=03ef9da6414ab4189723779a553c3c76dce26cb9
+commit: https://git.buildroot.net/buildroot/commit/?id=365aee0f386c4eba78d93c9bcb9e6f737ae5e3cc
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Added sha256 tarball hash.
+Move the mutual exculsion of the '-n' and '-p' options to be part of the
+parser instead of being checked in main.
 
-Added license hash partly fixes:
-http://autobuild.buildroot.net/results/f0f/f0fd05ce8a8b595015baf625481b58967df53458/
-
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ghostscript-fonts/ghostscript-fonts.hash | 3 +++
- 1 file changed, 3 insertions(+)
+ support/scripts/pkg-stats | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
 
-diff --git a/package/ghostscript-fonts/ghostscript-fonts.hash b/package/ghostscript-fonts/ghostscript-fonts.hash
-index e9c7fdf999..d6df0e745a 100644
---- a/package/ghostscript-fonts/ghostscript-fonts.hash
-+++ b/package/ghostscript-fonts/ghostscript-fonts.hash
-@@ -1,2 +1,5 @@
- # From http://sourceforge.net/projects/gs-fonts/files/gs-fonts/8.11%20%28base%2035%2C%20GPL%29/
- sha1	2a7198e8178b2e7dba87cb5794da515200b568f5	ghostscript-fonts-std-8.11.tar.gz
-+# Locally computed
-+sha256 0eb6f356119f2e49b2563210852e17f57f9dcc5755f350a69a46a0d641a0c401  ghostscript-fonts-std-8.11.tar.gz
-+sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index b0be7d919b..d65f609d57 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -23,7 +23,6 @@ import os
+ from collections import defaultdict
+ import re
+ import subprocess
+-import sys
+ import requests  # URL checking
+ import json
+ import certifi
+@@ -700,18 +699,16 @@ def parse_args():
+     parser = argparse.ArgumentParser()
+     parser.add_argument('-o', dest='output', action='store', required=True,
+                         help='HTML output file')
+-    parser.add_argument('-n', dest='npackages', type=int, action='store',
++    packages = parser.add_mutually_exclusive_group()
++    packages.add_argument('-n', dest='npackages', type=int, action='store',
+                         help='Number of packages')
+-    parser.add_argument('-p', dest='packages', action='store',
++    packages.add_argument('-p', dest='packages', action='store',
+                         help='List of packages (comma separated)')
+     return parser.parse_args()
+ 
+ 
+ def __main__():
+     args = parse_args()
+-    if args.npackages and args.packages:
+-        print("ERROR: -n and -p are mutually exclusive")
+-        sys.exit(1)
+     if args.packages:
+         package_list = args.packages.split(",")
+     else:
