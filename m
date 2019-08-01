@@ -1,69 +1,113 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Aug 2019 16:46:17 +0200
-Subject: [Buildroot] [git commit] package/webkitgtk: remove upstreamed patch
-Message-ID: <20190801144334.24F73813FB@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Thu, 1 Aug 2019 16:53:05 +0200
+Subject: [Buildroot] [WIP: python3 bug] support/testing: add python3
+ multiprocessing pool test
+In-Reply-To: <20190720110810.20085-1-romain.naour@gmail.com>
+References: <20190720110810.20085-1-romain.naour@gmail.com>
+Message-ID: <dce15126-3ec0-62ed-6c7a-598aa9a8474f@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d069301d6325075395a99bf041d7ea2a1410080c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hi,
 
-The bump of webkitgtk to 2.24.3 in commit
-3ff05d9094be1329b5987589d6b6fefb152ff006 forgot to drop a patch that
-was upstreamed, and is now part of 2.24.3, causing a build failure, so
-let's drop this patch.
+Le 20/07/2019 ? 13:08, Romain Naour a ?crit?:
+> While running some python script on aarch64 board, it get stuck while
+> imporing multiprocessing Pool:
+> 
+> from multiprocessing import Pool
+> 
+> This issue seems specific to aarch64.
 
-Fixes:
+So it seems the python multiprocessing import is stuck on os.urandom(32):
+https://github.com/python/cpython/blob/3.7/Lib/multiprocessing/process.py#L347
 
-  http://autobuild.buildroot.net/results/4d7bffd20344f06ca719b7c8083b81053b255aa5/
+See: https://bugs.python.org/issue29877
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...001-Build-failure-after-r243644-in-GTK-Li.patch | 36 ----------------------
- 1 file changed, 36 deletions(-)
+Indeed, there is no entropy
+# cat /proc/sys/kernel/random/entropy_avail
+0
 
-diff --git a/package/webkitgtk/0001-Build-failure-after-r243644-in-GTK-Li.patch b/package/webkitgtk/0001-Build-failure-after-r243644-in-GTK-Li.patch
-deleted file mode 100644
-index 748fc8e46e..0000000000
---- a/package/webkitgtk/0001-Build-failure-after-r243644-in-GTK-Li.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From a672bbd75f257dd65844ad53dd21fb37345999b5 Mon Sep 17 00:00:00 2001
--From: "aperez at igalia.com"
-- <aperez@igalia.com@268f45cc-cd09-0410-ab3c-d52691b4dbfc>
--Date: Mon, 20 May 2019 21:20:02 +0000
--Subject: [PATCH] Build failure after r243644 in GTK
-- Linux 64-bit stable builds https://bugs.webkit.org/show_bug.cgi?id=196440
--
--Patch by Pablo Saavedra <psaavedra@igalia.com> on 2019-04-01
--Reviewed by Philippe Normand.
--
--* platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp:
--(WebCore::MediaPlayerPrivateGStreamerBase::updateTextureMapperFlags):
--
--Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
--
--diff --git a/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp b/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp
--index 608aee2e1b3..c614050972a 100644
----- a/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp
--+++ b/Source/WebCore/platform/graphics/gstreamer/MediaPlayerPrivateGStreamerBase.cpp
--@@ -1000,11 +1000,13 @@ void MediaPlayerPrivateGStreamerBase::updateTextureMapperFlags()
--         break;
--     }
-- 
--+#if USE(GSTREAMER_GL)
--     // When the imxvpudecoder is used, the texture sampling of the
--     // directviv-uploaded texture returns an RGB value, so there's no need to
--     // convert it.
--     if (m_videoDecoderPlatform != WebKitGstVideoDecoderPlatform::ImxVPU)
--         m_textureMapperFlags |= TEXTURE_MAPPER_COLOR_CONVERT_FLAG;
--+#endif
-- }
-- #endif
-- 
---- 
--2.21.0
--
+This problem would be fixed by enabling the VirtIORNG to generate entropy on the
+target system. See: http://patchwork.ozlabs.org/patch/1139408/
+
+I tested on aarch64 with Qemu and the entropy is generated:
+
+# cat /proc/sys/kernel/random/entropy_avail
+1013
+
+Best regards,
+Romain
+
+> 
+> Signed-off-by: Romain Naour <romain.naour@gmail.com>
+> ---
+>  .../sample_python_multiprocessing_pool.py     |  3 ++
+>  .../test_python_multiprocessing_pool.py       | 45 +++++++++++++++++++
+>  2 files changed, 48 insertions(+)
+>  create mode 100644 support/testing/tests/package/sample_python_multiprocessing_pool.py
+>  create mode 100644 support/testing/tests/package/test_python_multiprocessing_pool.py
+> 
+> diff --git a/support/testing/tests/package/sample_python_multiprocessing_pool.py b/support/testing/tests/package/sample_python_multiprocessing_pool.py
+> new file mode 100644
+> index 0000000000..df450e4b71
+> --- /dev/null
+> +++ b/support/testing/tests/package/sample_python_multiprocessing_pool.py
+> @@ -0,0 +1,3 @@
+> +# This import can be stuck on aarch64 with python3 (3.7.4)
+> +# The test should fail when the timout occurred.
+> +from multiprocessing import Pool
+> diff --git a/support/testing/tests/package/test_python_multiprocessing_pool.py b/support/testing/tests/package/test_python_multiprocessing_pool.py
+> new file mode 100644
+> index 0000000000..349a91368c
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_python_multiprocessing_pool.py
+> @@ -0,0 +1,45 @@
+> +import os
+> +
+> +from tests.package.test_python import TestPythonPackageBase
+> +
+> +class TestPythonMultiprocessingPool(TestPythonPackageBase):
+> +    sample_scripts = ["tests/package/sample_python_multiprocessing_pool.py"]
+> +    timeout = 60
+> +
+> +    # Remove "-serial", "stdio", from testing/infra/emulator.py before running the test.
+> +    # Otherwise you will get the following error:
+> +    # qemu-system-aarch64: -serial stdio: cannot use stdio by multiple character devices
+> +    # qemu-system-aarch64: -serial stdio: could not connect serial device to character backend 'stdio'
+> +
+> +    def login(self):
+> +        kern = os.path.join(self.builddir, "images", "Image")
+> +        ext4_file = os.path.join(self.builddir, "images", "rootfs.ext4")
+> +
+> +        self.emulator.boot(arch="aarch64",
+> +                        kernel=kern,
+> +                        options=["-append","root=/dev/vda console=ttyAMA0", "-M", "virt", "-cpu", "cortex-a53", "-nographic", "-smp", "1", "-netdev", "user,id=eth0", "-device", "virtio-net-device,netdev=eth0", "-drive", "file=" + ext4_file + ",if=none,format=raw,id=hd0", "-device", "virtio-blk-device,drive=hd0"])
+> +        self.emulator.login()
+> +
+> +# Test with Glibc and MultiprocessingPool
+> +class TestPythonPy3GlibcMultiprocessingPool(TestPythonMultiprocessingPool):
+> +    __test__ = True
+> +    config = \
+> +        """
+> +	BR2_aarch64=y
+> +	BR2_cortex_a53=y
+> +	BR2_TOOLCHAIN_EXTERNAL=y
+> +	BR2_SYSTEM_DHCP="eth0"
+> +	BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+> +	BR2_TARGET_ROOTFS_EXT2=y
+> +	BR2_TARGET_ROOTFS_EXT2_4=y
+> +	# BR2_TARGET_ROOTFS_TAR is not set
+> +	BR2_LINUX_KERNEL=y
+> +	BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +	BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.19.16"
+> +	BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +	BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+> +	BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +        BR2_PACKAGE_PYTHON3=y
+> +        BR2_TARGET_ROOTFS_CPIO=y
+> +        # BR2_TARGET_ROOTFS_TAR is not set
+> +        """
+> 
