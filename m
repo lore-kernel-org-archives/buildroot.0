@@ -1,46 +1,106 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Thu, 1 Aug 2019 18:11:07 +0200
-Subject: [Buildroot] [git commit] package/duktape: bump to version 2.4.0
-Message-ID: <20190801160829.B974D8139B@busybox.osuosl.org>
+Date: Thu, 1 Aug 2019 18:04:09 +0200
+Subject: [Buildroot] [git commit] support/scripts/pkg-stats: retrieve
+ packages latest version using processes
+Message-ID: <20190801160204.F106B8A591@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2174355059adb451fc55cc0cece68c0fda92c2e0
+commit: https://git.buildroot.net/buildroot/commit/?id=294fc3218c2e296ddfe905d795e3b99e4c0cc8f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update hash for license file (update in year:
-https://github.com/svaarala/duktape/commit/bcb37439d6b0a589707f4d611962d7381868dce4)
+The major bottleneck in pkg-stats is the time spent waiting for
+answers from remote servers. Two functions involve such communication
+with remote servers:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+- 'check_package_urls' which checks that each package upstream website
+  is up, it is efficient due to the use of process-pools thanks to
+  Matt Weber.
+
+- 'check_package_latest_version' which fetches the latest package
+  version from release-monitoring, it uses a http-pool but runs
+  sequentially.
+
+This patch extends the use of process-pools to 'check_latest_version'.
+Due to some limitations of multiprocess callbacks, this patch loses
+the overall progress of packages in favour of just the current package
+name.
+
+Runtimes for this function are ~3m vs ~25m for the linear version.
+Tested on an i7 7500U (2/4 cores/threads @3.5GHz) with 15ms ping.
+
+Note: There have already been work trying to parallelize this function
+using threads but there were a failure on some configurations [1].
+This implementation rely on a dedicated module already in use on this
+script, so it's unlikely to see failure with this version.
+
+[1] http://lists.busybox.net/pipermail/buildroot/2018-March/215368.html
+
+Signed-off-by: Victor Huesca <victor.huesca@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/duktape/duktape.hash | 4 ++--
- package/duktape/duktape.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ support/scripts/pkg-stats | 34 ++++++++++++++++++++++------------
+ 1 file changed, 22 insertions(+), 12 deletions(-)
 
-diff --git a/package/duktape/duktape.hash b/package/duktape/duktape.hash
-index f0e2a71d4d..c5c4682696 100644
---- a/package/duktape/duktape.hash
-+++ b/package/duktape/duktape.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256	0df1c0a9d40bfae31733e5c44f0eabaeae59e0a2ebf7693ff68bbabd49aae331	duktape-2.3.0.tar.gz
--sha256	9aabee442709a6e7652348b9617ae26d26da6b270c1f4b6fce4a1e746acb3df0	LICENSE.txt
-+sha256	4b022e040f10d6ead4fd3d0c865ca97d1679fc39307d4d3fa4a7f463ee4b9658	duktape-2.4.0.tar.gz
-+sha256	5b42d02dbd084fd6d7e61d93f52e02b596f25400e54e0f86d5780045e5b754c8	LICENSE.txt
-diff --git a/package/duktape/duktape.mk b/package/duktape/duktape.mk
-index 7d7eb15f8f..30efaf5fa1 100644
---- a/package/duktape/duktape.mk
-+++ b/package/duktape/duktape.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index 45a7103099..992c2dd7c5 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -38,6 +38,10 @@ RM_API_STATUS_FOUND_BY_DISTRO = 2
+ RM_API_STATUS_FOUND_BY_PATTERN = 3
+ RM_API_STATUS_NOT_FOUND = 4
  
--DUKTAPE_VERSION = 2.3.0
-+DUKTAPE_VERSION = 2.4.0
- DUKTAPE_SITE = $(call github,svaarala,duktape-releases,v$(DUKTAPE_VERSION))
- DUKTAPE_LICENSE = MIT
- DUKTAPE_LICENSE_FILES = LICENSE.txt
++# Used to make multiple requests to the same host. It is global
++# because it's used by sub-processes.
++http_pool = None
++
+ 
+ class Package:
+     all_licenses = list()
+@@ -316,6 +320,15 @@ def release_monitoring_get_latest_version_by_guess(pool, name):
+     return (RM_API_STATUS_NOT_FOUND, None, None)
+ 
+ 
++def check_package_latest_version_worker(name):
++    """Wrapper to try both by name then by guess"""
++    print(name)
++    res = release_monitoring_get_latest_version_by_distro(http_pool, name)
++    if res[0] == RM_API_STATUS_NOT_FOUND:
++        res = release_monitoring_get_latest_version_by_guess(http_pool, name)
++    return res
++
++
+ def check_package_latest_version(packages):
+     """
+     Fills in the .latest_version field of all Package objects
+@@ -331,18 +344,15 @@ def check_package_latest_version(packages):
+     - id: string containing the id of the project corresponding to this
+       package, as known by release-monitoring.org
+     """
+-    pool = HTTPSConnectionPool('release-monitoring.org', port=443,
+-                               cert_reqs='CERT_REQUIRED', ca_certs=certifi.where(),
+-                               timeout=30)
+-    count = 0
+-    for pkg in packages:
+-        v = release_monitoring_get_latest_version_by_distro(pool, pkg.name)
+-        if v[0] == RM_API_STATUS_NOT_FOUND:
+-            v = release_monitoring_get_latest_version_by_guess(pool, pkg.name)
+-
+-        pkg.latest_version = v
+-        print("[%d/%d] Package %s" % (count, len(packages), pkg.name))
+-        count += 1
++    global http_pool
++    http_pool = HTTPSConnectionPool('release-monitoring.org', port=443,
++                                    cert_reqs='CERT_REQUIRED', ca_certs=certifi.where(),
++                                    timeout=30)
++    worker_pool = Pool(processes=64)
++    results = worker_pool.map(check_package_latest_version_worker, (pkg.name for pkg in packages))
++    for pkg, r in zip(packages, results):
++        pkg.latest_version = r
++    del http_pool
+ 
+ 
+ def calculate_stats(packages):
