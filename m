@@ -1,21 +1,27 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Aug 2019 22:48:24 +0200
-Subject: [Buildroot] [PATCH 1/1] package/quagga: bump to version 1.2.4
-In-Reply-To: <20190802112441.15755-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Fri, 2 Aug 2019 13:24:41 +0200")
-References: <20190802112441.15755-1-fontaine.fabrice@gmail.com>
-Message-ID: <87o917qoo7.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri,  2 Aug 2019 22:51:46 +0200
+Subject: [Buildroot] [PATCH 1/3] support/config-fragments/autobuild: rename
+ br-riscv64-musl config
+Message-ID: <20190802205149.28342-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+For internal toolchains, we have a policy of naming the files with
+"internal", to clearly distinguish them from external toolchain
+configurations.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../{br-riscv64-musl.config => br-riscv64-internal-musl.config}   | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename support/config-fragments/autobuild/{br-riscv64-musl.config => br-riscv64-internal-musl.config} (100%)
 
-Committed, thanks.
-
+diff --git a/support/config-fragments/autobuild/br-riscv64-musl.config b/support/config-fragments/autobuild/br-riscv64-internal-musl.config
+similarity index 100%
+rename from support/config-fragments/autobuild/br-riscv64-musl.config
+rename to support/config-fragments/autobuild/br-riscv64-internal-musl.config
 -- 
-Bye, Peter Korsgaard
+2.21.0
