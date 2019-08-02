@@ -1,27 +1,37 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Aug 2019 23:33:57 +0200
-Subject: [Buildroot] [PATCH 2/3] support/config-fragments/autobuild:
- update toolchains to 2019.05.1
-In-Reply-To: <20190802205149.28342-2-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Fri, 2 Aug 2019 22:51:47 +0200")
-References: <20190802205149.28342-1-thomas.petazzoni@bootlin.com>
- <20190802205149.28342-2-thomas.petazzoni@bootlin.com>
-Message-ID: <878ssbp7zu.fsf@dell.be.48ers.dk>
+Date: Fri, 2 Aug 2019 23:33:00 +0200
+Subject: [Buildroot] [git commit] support/config-fragments/autobuild: make
+ br-arm-internal-glibc bleeding edge
+Message-ID: <20190802213127.9275B89007@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=b96c343b2d58005a17903fc94fd51e112b7dc662
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > All toolchains have been rebuilt with Buildroot 2019.05.1. A number of
- > toolchains are now using Linux headers 5.1 instead of 4.19, because
- > 5.1 is now the default version.
+We do not have any configuration that tests the very bleeding edge gcc
+and binutils versions, so let's change br-arm-internal-glibc to use
+the latest version of gcc (9.x right now) and binutils (2.32 right
+now). The idea is that this defconfig should be updated to the latest
+version of gcc and binutils when their version is bumped.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ support/config-fragments/autobuild/br-arm-internal-glibc.config | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/support/config-fragments/autobuild/br-arm-internal-glibc.config b/support/config-fragments/autobuild/br-arm-internal-glibc.config
+index 6b2566eedc..7c9b465a88 100644
+--- a/support/config-fragments/autobuild/br-arm-internal-glibc.config
++++ b/support/config-fragments/autobuild/br-arm-internal-glibc.config
+@@ -1,4 +1,6 @@
+ BR2_arm=y
+ BR2_cortex_a8=y
+ BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
++BR2_BINUTILS_VERSION_2_32_X=y
++BR2_GCC_VERSION_9_X=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
