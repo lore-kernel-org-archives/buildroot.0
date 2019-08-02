@@ -1,52 +1,120 @@
-From: Mark Corbin <mark.corbin@embecosm.com>
-Date: Fri, 2 Aug 2019 12:25:57 +0100
-Subject: [Buildroot] [PATCH 1/1] support/kconfig: fix compiler warnings
- by increasing buffer sizes
-In-Reply-To: <20190801180919.744284f3@windsurf.home>
-References: <20190801152005.12285-1-mark.corbin@embecosm.com>
- <20190801180919.744284f3@windsurf.home>
-Message-ID: <55ee313b-4e36-5fbf-56a5-e16ed2373a5b@embecosm.com>
+From: Aalx <alexandre.payen@smile.fr>
+Date: Fri,  2 Aug 2019 14:14:49 +0200
+Subject: [Buildroot] [PATCH 1/2] package/python-numpy: remove unsafe path
+ possibly contamine target package with host libraries
+Message-ID: <20190802121449.17254-1-alexandre.payen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Thomas
+From: Romain Naour <romain.naour@smile.fr>
 
-On 01/08/2019 17:09, Thomas Petazzoni wrote:
-> Hello,
->
-> On Thu,  1 Aug 2019 16:20:05 +0100
-> Mark Corbin <mark.corbin@embecosm.com> wrote:
->
->> When compiling kconfig with host gcc 8.3.0 several compiler
->> '-Wformat-overflow=' warnings are generated. This is due to a
->> number of temporary buffers used by sprintf being too small.
->> The sizes of these buffers have been increased to remove the
->> warnings.
->>
->> Signed-off-by: Mark Corbin <mark.corbin@embecosm.com>
->> ---
->>  support/kconfig/confdata.c | 4 ++--
->>  support/kconfig/util.c     | 2 +-
->>  2 files changed, 3 insertions(+), 3 deletions(-)
-> This was fixed in upstream Linux by commit
-> 2ae89c7a82ea9d81a19b4fc2df23bef4b112f24e, which is part of Linux since
-> 4.18. Our kconfig code base is based on 4.17-rc2, so the best thing is
-> to update our kconfig code base, to re-use the fixes from the kernel.
->
-> Could you do this ? Be careful that patches in support/kconfig/patches/
-> need to be refreshed and re-applied on top of the kernel kconfig code
-> base.
+When python-numpy is cross-compiled, the path provided by the build process are
+hard-coded. Those paths are unsafe because they could poison the target package
+with host libraries.
 
-I can take a look at this if I get some time.
+Doing so, we can cross-compile python-scipy added in a following patch.
 
-Regards
+So :
+- Remove every unsafe path for cross-compiling in python-numpy.
+- Let the buildroot infrastructure provide the correct path through sysroot.
 
-Mark
+A similar fix have been done in Yocto Project.
+http://git.yoctoproject.org/cgit/cgit.cgi/poky/commit/?id=ced097eb4e30133acc6c3e9ed841b3463844cd39
 
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
+---
+ .../0001-distutils-remove-poisoned-path.patch | 79 +++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+ create mode 100644 package/python-numpy/0001-distutils-remove-poisoned-path.patch
+
+diff --git a/package/python-numpy/0001-distutils-remove-poisoned-path.patch b/package/python-numpy/0001-distutils-remove-poisoned-path.patch
+new file mode 100644
+index 0000000000..8bd19db8e8
+--- /dev/null
++++ b/package/python-numpy/0001-distutils-remove-poisoned-path.patch
+@@ -0,0 +1,79 @@
++From 89e5645bd80b57252a3babdbd68277490dc187e5 Mon Sep 17 00:00:00 2001
++From: Romain Naour <romain.naour@smile.fr>
++Date: Fri, 7 Jun 2019 18:02:53 +0200
++Subject: [PATCH] distutils: remove poisoned path
++
++When python-numpy is cross-compiled, the path provided by the build process are
++hard-coded. Those paths are unsafe because they could poison the target package
++with host libraries.
++
++Doing so, we can cross-compile python-scipy added in a following patch.
++
++So :
++- Remove every unsafe path for cross-compiling in python-numpy.
++- Let the buildroot infrastructure provide the correct path through sysroot.
++
++A similar fix have been done in Yocto Project.
++http://git.yoctoproject.org/cgit/cgit.cgi/poky/commit/?id=ced097eb4e30133acc6c3e9ed841b3463844cd39
++
++Signed-off-by: Romain Naour <romain.naour@smile.fr>
++Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
++---
++ numpy/distutils/system_info.py | 33 ++++++---------------------------
++ 1 file changed, 6 insertions(+), 27 deletions(-)
++
++diff --git a/numpy/distutils/system_info.py b/numpy/distutils/system_info.py
++index 806f4f7d3..7cadd325d 100644
++--- a/numpy/distutils/system_info.py
+++++ b/numpy/distutils/system_info.py
++@@ -276,29 +276,13 @@ if sys.platform == 'win32':
++             add_system_root(os.path.join(conda_dir, 'Library'))
++ 
++ else:
++-    default_lib_dirs = libpaths(['/usr/local/lib', '/opt/lib', '/usr/lib',
++-                                 '/opt/local/lib', '/sw/lib'], platform_bits)
+++    default_lib_dirs = []
++     default_runtime_dirs = []
++-    default_include_dirs = ['/usr/local/include',
++-                            '/opt/include', '/usr/include',
++-                            # path of umfpack under macports
++-                            '/opt/local/include/ufsparse',
++-                            '/opt/local/include', '/sw/include',
++-                            '/usr/include/suitesparse']
++-    default_src_dirs = ['.', '/usr/local/src', '/opt/src', '/sw/src']
++-
++-    default_x11_lib_dirs = libpaths(['/usr/X11R6/lib', '/usr/X11/lib',
++-                                     '/usr/lib'], platform_bits)
++-    default_x11_include_dirs = ['/usr/X11R6/include', '/usr/X11/include',
++-                                '/usr/include']
++-
++-    if os.path.exists('/usr/lib/X11'):
++-        globbed_x11_dir = glob('/usr/lib/*/libX11.so')
++-        if globbed_x11_dir:
++-            x11_so_dir = os.path.split(globbed_x11_dir[0])[0]
++-            default_x11_lib_dirs.extend([x11_so_dir, '/usr/lib/X11'])
++-            default_x11_include_dirs.extend(['/usr/lib/X11/include',
++-                                             '/usr/include/X11'])
+++    default_include_dirs = []
+++    default_src_dirs = ['.']
+++
+++    default_x11_lib_dirs = []
+++    default_x11_include_dirs = []
++ 
++     tmp = None
++     try:
++@@ -321,11 +305,6 @@ else:
++         if tmp is not None:
++             tmp.close()
++ 
++-if os.path.join(sys.prefix, 'lib') not in default_lib_dirs:
++-    default_lib_dirs.insert(0, os.path.join(sys.prefix, 'lib'))
++-    default_include_dirs.append(os.path.join(sys.prefix, 'include'))
++-    default_src_dirs.append(os.path.join(sys.prefix, 'src'))
++-
++ default_lib_dirs = [_m for _m in default_lib_dirs if os.path.isdir(_m)]
++ default_runtime_dirs = [_m for _m in default_runtime_dirs if os.path.isdir(_m)]
++ default_include_dirs = [_m for _m in default_include_dirs if os.path.isdir(_m)]
++-- 
++2.20.1
++
 -- 
-Mark Corbin
-Embecosm Ltd.
-https://www.embecosm.com
+2.21.0
