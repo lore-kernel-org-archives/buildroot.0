@@ -1,47 +1,74 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Aug 2019 17:58:56 +0200
-Subject: [Buildroot] [PATCH 1/3] package/mosquitto: allow to build as
- static lib
-In-Reply-To: <1471a17e-814d-eba7-5756-fe5dd592b5db@railnova.eu> (Titouan
- Christophe's message of "Fri, 2 Aug 2019 15:18:57 +0200")
-References: <20190718100636.27290-1-titouan.christophe@railnova.eu>
- <20190718100636.27290-2-titouan.christophe@railnova.eu>
- <871ry518wo.fsf@dell.be.48ers.dk> <87sgqlyxov.fsf@dell.be.48ers.dk>
- <b1957631-ca8b-38ab-9b24-5549e8e13e23@railnova.eu>
- <874l30x0fd.fsf@dell.be.48ers.dk>
- <1471a17e-814d-eba7-5756-fe5dd592b5db@railnova.eu>
-Message-ID: <87imrfsgn3.fsf@dell.be.48ers.dk>
+Date: Fri,  2 Aug 2019 18:22:26 +0200
+Subject: [Buildroot] [PATCH] python-matplotlib: needs a toolchain with C++
+ support
+Message-ID: <20190802162226.15556-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+Matplotlib contains .cpp source code:
 
-Hi,
+ls src/*.cpp
+src/_backend_agg.cpp
+src/_backend_agg_wrapper.cpp
+src/_contour.cpp
+src/_contour_wrapper.cpp
+src/ft2font.cpp
+src/ft2font_wrapper.cpp
+src/_image.cpp
+src/_image_wrapper.cpp
+src/mplutils.cpp
+src/_path_wrapper.cpp
+src/_png.cpp
+src/py_converters.cpp
+src/_tkagg.cpp
+src/_ttconv.cpp
+src/_windowing.cpp
 
- > Indeed, when doing a regular make (and not test-pkg) with this
- > defconfig I can reproduce the aforementioned failure.
+So add a dependency on C++ support in the toolchain to fix build errors like
+(no autobuilder reference yet):
 
-Funky, but OK.
+../output/host/bin/powerpc-buildroot-linux-uclibc-gcc -Wno-unused-result \
+  -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -D_LARGEFILE_SOURCE \
+  -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC \
+  -DFREETYPE_BUILD_TYPE=system \
+  -DPY_ARRAY_UNIQUE_SYMBOL=MPL_matplotlib_ft2font_ARRAY_API \
+  -DNPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION -D__STDC_FORMAT_MACROS=1 \
+  -I../output/host/lib/python3.7/site-packages/numpy/core/include \
+  -Iextern/agg24-svn/include \
+  -I../output/host/bin/../powerpc-buildroot-linux-uclibc/sysroot/usr/include \
+  -I../output/host/bin/../powerpc-buildroot-linux-uclibc/sysroot/usr/include/freetype2 \
+  -I. \
+  -I../output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/python3.7m \
+  -c src/ft2font.cpp -o build/temp.linux-x86_64-3.7/src/ft2font.o
+powerpc-buildroot-linux-uclibc-gcc.br_real: error: src/ft2font.cpp: C++
+  compiler not installed on this system
 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python-matplotlib/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- > Now, when looking at mosquitto, I understand that
- > WITH_SHARED_LIBRARY=no implies that libmosquitto.so won't be created
- > (and linked against).
-
- > However, the failure over here is due to some code in the broker which
- > is intended to dynamically load modules at runtime, no matter if
- > mosquitto is running inside a statically linked executable or from a
- > dylib.
-
- > As such, I suggest then to only make the broker depend on
- > BR2_SHARED_LIBS, while still allowing the client lib to be built
- > statically, which in my opinion makes sense for embedded targets.
- > What do you think ?
-
-Yes, that could work. Will you send a patch for that?
-
+diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
+index c5cb94dac7..14f43568f3 100644
+--- a/package/python-matplotlib/Config.in
++++ b/package/python-matplotlib/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PYTHON_MATPLOTLIB
+ 	bool "python-matplotlib"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 	select BR2_PACKAGE_FREETYPE # runtime
+@@ -19,3 +20,6 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB
+ 	  formats.
+ 
+ 	  https://matplotlib.org/
++
++comment "python-matplotlib needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
 -- 
-Bye, Peter Korsgaard
+2.11.0
