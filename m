@@ -1,72 +1,207 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Aug 2019 23:58:29 +0200
-Subject: [Buildroot] [PATCH v2 5/7] board/qemu/*/launch.sh: add qemu
- launch script
-In-Reply-To: <1557075239-30667-6-git-send-email-jugurtha.belkalem@smile.fr>
+Date: Sat, 3 Aug 2019 00:24:37 +0200
+Subject: [Buildroot] [PATCH v2 6/7] support/scripts/qemu-boot-*: gitlab
+ tests for Qemu
+In-Reply-To: <1557075239-30667-7-git-send-email-jugurtha.belkalem@smile.fr>
 References: <1557075239-30667-1-git-send-email-jugurtha.belkalem@smile.fr>
- <1557075239-30667-6-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <20190802235829.17b89102@windsurf.home>
+ <1557075239-30667-7-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <20190803002437.768b3fab@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+Hello Jugurtha,
 
-On Sun,  5 May 2019 18:53:57 +0200
+Didn't say it in my review of the previous patch, but I find this
+contribution very nice and useful. It will be good to have this to
+improve the testing of our Qemu defconfigs, for sure.
+
+On Sun,  5 May 2019 18:53:58 +0200
 Jugurtha BELKALEM <jugurtha.belkalem@smile.fr> wrote:
 
-> diff --git a/board/qemu/aarch64-virt/launch.sh b/board/qemu/aarch64-virt/launch.sh
+> diff --git a/support/scripts/qemu-boot-checker.sh b/support/scripts/qemu-boot-checker.sh
 > new file mode 100755
-> index 0000000..c6af589
+> index 0000000..dc79dad
 > --- /dev/null
-> +++ b/board/qemu/aarch64-virt/launch.sh
-> @@ -0,0 +1,21 @@
-> +#!/bin/bash
+> +++ b/support/scripts/qemu-boot-checker.sh
+> @@ -0,0 +1,25 @@
+> +#!/usr/bin/env bash
 > +
-> +qemu_command='qemu-system-aarch64 -M virt -cpu cortex-a53 -nographic -smp 1 -kernel output/images/Image -append "root=/dev/vda console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=output/images/rootfs.ext4,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0'
-> +
-> +function DisplayReadme {
-> +	echo "Run the emulation with:
-> +
-> +${qemu_command}
-> +
-> +The login prompt will appear in the terminal that started Qemu.
-> +
-> +Tested with QEMU 2.12.0"
+> +function archQemuNoSupport {
+
+Camel-case really hurt my eyes. Also, this function is only used once,
+so it's not really useful to have a function.
+
+> +	echo "cannot boot under qemu, support out of tree!"
+> +	exit 0
 > +}
 > +
-> +if [ ! -z $1 ] && [ $1 = "-h" ]
-> +then
-> +	DisplayReadme
-> +else
-> +	
-> +	echo "${qemu_command}"
-> +fi
+> +if [[ $1 = qemu* ]]; then
 
-I am not thrilled by the complexity of those scripts. Why isn't the
-script just a single line that runs Qemu ? Perhaps the only argument
-that would be sensible to have is an optional argument to pass the
-output directory.
+You should decide between [[ and [ for tests. And also, simply bail out
+when != qemu, so that you have one less indentation level.
 
-So just:
+So:
 
-#!/bin/bash
-qemu-system-aarch64 -M virt -cpu cortex-a53 -nographic -smp 1 -kernel ${0:-output}/images/Image -append "root=/dev/vda console=ttyAMA0" -netdev user,id=eth0 -device virtio-net-device,netdev=eth0 -drive file=${0:-output}/images/rootfs.ext4,if=none,format=raw,id=hd0 -device virtio-blk-device,drive=hd0
+if [[ $1 != qemu* ]]; then
+	exit 0
+fi
 
-Would be enough. But on the other hand, in the toolchain-builders
-stuff, we simply use the existing readme.txt contents. We do this:
+> +	device_name=$(echo $1  | sed -e 's#^qemu_##; s#_defconfig$##;' | sed -r 's/[_]/-/g')
 
-  test_qemu_cmd=$(grep qemu-system ${buildroot_dir}/board/qemu/${test_board_dir}/readme.txt)
+Perhaps just:
 
-And this gives us the Qemu command to run the qemu emulation. Perhaps
-we should do this as well here, and avoid the launch.sh scripts
-altogether ? In any case, we shouldn't duplicate this information
-between the launch.sh script and the readme.txt file. So if you go the
-launch.sh way, we need to adjust the readme.txt files accordingly.
+	device_name=$(echo $1 | sed -e 's,^qemu_\(.*\)_defconfig$,\1,; s/_/-/g')
 
-Best regards,
+> +	if [ "$device_name" = "x86-64" ]; then
+> +		device_name="x86_64"
+> +	elif [ "$device_name" = "m68k-q800" ] || [ "$device_name" = "ork1k" ]; then
+> +		archQemuNoSupport
+> +	fi
+
+Here you can do:
+
+	case ${device_name} in
+	x86-64)
+		device_name="x86_64"
+		;;
+	m68k-q800)
+	ork1k)
+		echo "No Qemu support for ${device_name}"
+		exit 0
+	esac
+
+But instead of encoding in this script which architectures can be
+tested with Qemu and which cannot, why not simply grep the defconfig
+for BR2_PACKAGE_HOST_QEMU=y ? If it has this config option, then the
+Qemu boot test can be done.
+
+For the x86_64 case, maybe we should simply rename board/qemu/x86_64 to
+board/qemu/x86-64, so that it matches the other directories, where we
+have the same name as the defconfig, with just the _ replaced by -.
+This would entirely remove those special conditions.
+
+> +
+> +	export PATH="$2/output/host/bin:$PATH"
+> +	qemu_command_launcher=$($2/board/qemu/${device_name}/launch.sh)
+
+Now I understand why "launch.sh" is not launching, but just echoing the
+command. Still, this isn't really nice, as a script called launch.sh
+should really launch. Another reason perhaps to simply keep the qemu
+command example in readme.txt, and extract it from there.
+
+> +	$2/support/scripts/qemu-boot-expect.py "${qemu_command_launcher}"
+> +
+> +	if [ $? -ne 0 ]; then
+> +		echo "  booting test system ... FAILED"
+> +		exit 1
+> +	fi
+> +	echo "  booting test system ... SUCCESS"
+
+Maybe show the "booting test system" message before the test, and the
+FAILED or SUCCESS after ? Something like this:
+
+	printf "  booting test system ..."
+	$2/support/scripts/qemu-boot-expect.py "${qemu_command_launcher}"
+	if [ $? -ne 0 ]; then
+		printf "FAILED\n"
+		exit 1
+	fi
+	printf "SUCCESS\n"	
+
+> diff --git a/support/scripts/qemu-boot-chg-defconfig.sh b/support/scripts/qemu-boot-chg-defconfig.sh
+> new file mode 100755
+> index 0000000..868bc4e
+> --- /dev/null
+> +++ b/support/scripts/qemu-boot-chg-defconfig.sh
+> @@ -0,0 +1,11 @@
+> +#!/usr/bin/env bash
+> +
+> +if [[ $1 = qemu* ]]; then
+> +	device_name=$(echo $1  | sed -e 's#^qemu_##; s#_defconfig$##;' | sed -r 's/[_]/-/g') 
+> +	if [ "$device_name" = "x86-64" ]; then
+> +		device_name="x86_64"
+
+The device_name is not used anywhere else in the script, so why are you
+changing it ?
+
+> +		sed -i "s/tty1/ttyS0/" $2/configs/$1
+> +	elif [ "$device_name" = "x86" ]; then
+> +		sed -i "s/tty1/ttyS0/" $2/configs/$1
+> +	fi
+
+Same comments as above. Also, I think this script should be run after
+the "make ${DEFCONFIG_NAME}" step in .gitlab-ci.yml, and operate on
+the .config file, not the defconfig file.
+
+Also, a more specific sed expression would be nice. Perhaps:
+
+	sed -i '/^BR2_TARGET_GENERIC_GETTY_PORT/ s/tty1/ttyS0/'
+
+> diff --git a/support/scripts/qemu-boot-expect.py b/support/scripts/qemu-boot-expect.py
+> new file mode 100755
+> index 0000000..7cd92c1
+> --- /dev/null
+> +++ b/support/scripts/qemu-boot-expect.py
+> @@ -0,0 +1,55 @@
+> +#!/usr/bin/env python
+> +#
+> +
+> +import pexpect
+> +import sys
+> +import os
+> +
+> +def checkQemuExec():
+
+Please don't use CamelCase for function names.
+
+> +    qemu_exec_exists = False
+> +    for dir in os.getenv("PATH").split(':'):
+> +        if (os.path.exists(os.path.join(dir, sys.argv[1].split(" ")[0]))):
+> +            qemu_exec_exists = True
+> +            break
+> +    return qemu_exec_exists
+
+This is more complicated than it need to be:
+
+    for dir in os.getenv("PATH").split(':'):
+        if (os.path.exists(os.path.join(dir, sys.argv[1].split(" ")[0]))):
+            return True
+    return False
+
+will do the same.
+
+But do we really need to check if Qemu exists ? If it doesn't the
+pexpect.spawn() will fail anyway.
+
+In addition, you are doing the pexpect.spawn() *before* you check if
+Qemu exists, which is not very useful.
+
+
+> +
+> +def main():
+> +    global child
+
+Pass child as argument to main().
+
+> +    if(checkQemuExec()):
+
+If you keep this function for some reason, then work the other way
+around:
+
+	if not checkQemuExec():	
+		print("Cannot find Qemu executable")
+		sys.exit(1)
+
+so that the remainder of the function does not need to be entirely
+indented.
+
+Could you rework this patch and the previous one to take into account
+my comments, and send a new iteration ?
+
+Thanks a lot!
 
 Thomas
 -- 
