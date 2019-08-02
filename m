@@ -1,73 +1,47 @@
-From: Etienne Carriere <etienne.carriere@linaro.org>
-Date: Fri, 2 Aug 2019 11:18:13 +0200
-Subject: [Buildroot] [PATCH 1/1] qemu: fix host virtfs option
-In-Reply-To: <20190801115720.11307-1-vincent.stehle@arm.com>
-References: <20190801115720.11307-1-vincent.stehle@arm.com>
-Message-ID: <CAN5uoS8o=fZECh1vRs1GqDfmp0ShRR-fd6Tu_MrcOe=9nszEow@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 02 Aug 2019 11:30:07 +0200
+Subject: [Buildroot] [PATCH v3] board: Add PowerPC mac99
+In-Reply-To: <CACPK8XfC=f5t+=KwmzTHDR-KedP0nLkgf8YHcRv+NpVVZ5ikDw@mail.gmail.com>
+ (Joel Stanley's message of "Fri, 2 Aug 2019 06:42:52 +0000")
+References: <20190625012652.21853-1-joel@jms.id.au>
+ <87wofwx4ni.fsf@dell.be.48ers.dk>
+ <CACPK8XfC=f5t+=KwmzTHDR-KedP0nLkgf8YHcRv+NpVVZ5ikDw@mail.gmail.com>
+Message-ID: <87r263syn4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu, 1 Aug 2019 at 13:57, Vincent Stehl? <vincent.stehle@arm.com> wrote:
->
-> Fix the build of host-qemu with virtfs enabled: fix a typo in makefile
-> conditional and add a dependency on host-libcap.
->
-> The virtfs configuration option was added by commit e0f49e648401
-> ("package/qemu: add option to enable virtual filesystem in host qemu").
->
-> Signed-off-by: Vincent Stehle <vincent.stehle@arm.com>
-> Cc: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
->
->
-> (Re-sending in ascii)
->
-> Hi,
->
-> I build-tested this with a number of architectures[1], with VIRTFS=y/n and
-> this looks fine.
->   During testing I remarked that VIRTFS=n is somewhat "weak", as it does
-> not forcibly disable virtfs. This means qemu can still auto-detect libcap
-> and libattr, and decide to auto-enable virtfs. I think this does not harm,
-> but we could also add an explicit --disable-virtfs if preferred. Do not
-> hesitate to let me know if I should respin with this change.
->
-> ...et au passage un petit coucou a Etienne :)
->
-> Vincent.
->
-> [1]: aarch64, arm, i386, m68k, microblaze, microblazeel, mips, mips64,
-> mips64el, mipsel, ppc, ppc64, riscv32, riscv64, sh4, sh4eb, sparc and
-> x86_64.
->
->
->  package/qemu/qemu.mk | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-> index 73e0778d73..eff4bb6213 100644
-> --- a/package/qemu/qemu.mk
-> +++ b/package/qemu/qemu.mk
-> @@ -271,8 +271,9 @@ HOST_QEMU_OPTS += --enable-vde
->  HOST_QEMU_DEPENDENCIES += host-vde2
->  endif
->
-> -ifdef ($(BR2_PACKAGE_HOST_QEMU_VIRTFS),y)
-> +ifeq ($(BR2_PACKAGE_HOST_QEMU_VIRTFS),y)
+>>>>> "Joel" == Joel Stanley <joel@jms.id.au> writes:
 
-Hi Vince!
-Apologies for the typo and thanks for the fixes.
-etienne
+Hi,
+
+ >> You forgot to specify the version of the Linux kernel /
+ >> kernel-headers. Committed with those set to 5.2.4, thanks.
+
+ > I didn't forget, I omitted them so the config would use the latest default.
+
+ > Is there a reason we specify a fixed version?
+
+Yes, reproducibility. If the defconfig is tested and working today, then
+it should preferably still work in (say) 6 months from now.
 
 
->  HOST_QEMU_OPTS += --enable-virtfs
-> +HOST_QEMU_DEPENDENCIES += host-libcap
->  endif
->
->  # Override CPP, as it expects to be able to call it like it'd
-> --
-> 2.20.1
->
+ >> With that said, we now have 4 32bit ppc qemu defconfigs which sounds
+ >> like a lot to me. Are they all still interesting / useful?
+
+ > I am not familiar with them. Michael?
+
+ > They all target different CPUs which means there is no overlap at least:
+
+ > $ grep -r BR2_powerpc_ configs/qemu_ppc_*
+ > configs/qemu_ppc_g3beige_defconfig:BR2_powerpc_750=y
+ > configs/qemu_ppc_mac99_defconfig:BR2_powerpc_7400=y
+ > configs/qemu_ppc_mpc8544ds_defconfig:BR2_powerpc_8548=y
+ > configs/qemu_ppc_virtex_ml507_defconfig:BR2_powerpc_440=y
+
+Correct. Ok, lets leave them for now then.
+
+-- 
+Bye, Peter Korsgaard
