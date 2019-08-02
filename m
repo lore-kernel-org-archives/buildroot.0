@@ -1,70 +1,81 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Fri, 2 Aug 2019 10:51:28 +0200
-Subject: [Buildroot] [PATCH 2/3] package/mosquitto: Switch systemd unit
- to Type=notify and depend on network
-In-Reply-To: <87wofxyyd1.fsf@dell.be.48ers.dk>
-References: <20190718100636.27290-1-titouan.christophe@railnova.eu>
- <20190718100636.27290-3-titouan.christophe@railnova.eu>
- <87wofxyyd1.fsf@dell.be.48ers.dk>
-Message-ID: <9c172f2a-3aa4-0641-5ae9-a14b406211e5@railnova.eu>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 2 Aug 2019 10:57:43 +0200
+Subject: [Buildroot] [PATCH 1/1] package/flashrom: fix redefinition of
+ 'struct termios'
+In-Reply-To: <20190723085516.17377-1-vadim4j@gmail.com>
+References: <20190723085516.17377-1-vadim4j@gmail.com>
+Message-ID: <20190802105743.5dc24f0e@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Peter,
+Hello Vadim,
 
-On 8/1/19 12:27 PM, Peter Korsgaard wrote:
->>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
-> 
->   > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
-> 
-> It would be great if your commit message would explain _WHY_ this is
-> done, not just _WHAT_ the change is - E.G. what is the advantage of type=notify?
+On Tue, 23 Jul 2019 11:55:16 +0300
+Vadim Kochan <vadim4j@gmail.com> wrote:
 
-Sure !
+> Both libc and linux defines 'struct termios', in termbits.h and
+> termios.h which leads to the compilation error:
+> 
+> In file included from custom_baud.c:23:0:
+> 
+> 	    /home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/asm-generic/termbits.h:12:8:
+> 	error: redefinition of 'struct termios'
+> 	 struct termios {
+> 		^~~~~~~
+> 	In file included from
+> 	/home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/termios.h:39:0,
+> 			 from
+> 	/home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/bits/ioctl-types.h:5,
+> 			 from
+> 	/home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/sys/ioctl.h:29,
+> 			 from custom_baud.c:21:
+> 	/home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/bits/termios.h:33:8:
+> 	note: originally defined here
+> 	 struct termios {
+> 		^~~~~~~
+> 
+> So fix it by renaming 'termios' to 'asmtermios' before termbits.h only,
+> because 'struct termios2' is used only.
+> 
+> Fixes:
+>     http://autobuild.buildroot.net/results/797dde5cbf0e94162c7cc7b557841605c78ac2f3/
+> 
+> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
 
-> 
->   > ---
->   > RFC: Would it be better to use the mosquitto.service file provided upstream ?
->   > https://github.com/eclipse/mosquitto/blob/master/service/systemd/mosquitto.service.notify
-> 
-> Not knowing much about systemd, but I think so. The differences look
-> quite small.
-Yes, that's why I think it would be better to use the upstreamed one for 
-that. I'm not sure of Buildroot's policy regarding config files provided 
-by the packages themselves, hence the question.
+Peter and I had a look at the issue, and our conclusion is that the
+actual problem is in uClibc-ng, and should be fixed here.
 
-> 
->> ---
->   >  package/mosquitto/mosquitto.mk      | 4 ++++
->   >  package/mosquitto/mosquitto.service | 3 +++
->   >  2 files changed, 7 insertions(+)
-> 
->   > diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
->   > index ed72af754a..333cce35c2 100644
->   > --- a/package/mosquitto/mosquitto.mk
->   > +++ b/package/mosquitto/mosquitto.mk
->   > @@ -23,6 +23,10 @@ else
->   >  MOSQUITTO_MAKE_OPTS += WITH_STATIC_LIBRARIES=no WITH_SHARED_LIBRARIES=yes
->   >  endif
->   
->   > +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
->   > +MOSQUITTO_MAKE_OPTS += WITH_SYSTEMD=yes
-> 
-> This is not mentioned in the commit message. I see this causes mosquitto
-> to link with -lsystemd, so you need to add systemd to
-> MOSQUITTO_DEPENDENCIES.
+The problem is that the powerpc-specific ioctl-types.h in uClibc-ng
+includes <termios.h>,
+see ./libc/sysdeps/linux/powerpc/bits/ioctl-types.h. But neither the
+MIPS-specific or the generic ioctl-types.h in uClibc-ng do that.
 
-Ok
+If you look at the history of
+libc/sysdeps/linux/powerpc/bits/ioctl-types.h, before commit
+e66d628551d918d4ee89d67fe62b627cae27d210, it was like the generic and
+MIPS ioctl-types.h, i.e defining a number of macros and structures, but
+certainly not including <termios.h>.
 
-> 
-> Care to send an updated patch with a more descriptive commit message,
-> reusing the upstream service file and adding systemd to _DEPENDENCIES?
-> 
+Then, if you look at glibc, indeed until commit
+d4795e4a43e6f0c221bc5dc64c612206a21a177b, the powerpc-specific
+ioctl-types.h was just including <termios.h>, but in this commit, they
+changed it back to define the different macros and structures.
 
-Sure, I'll respin that one
+So basically, the powerpc-specific ioctl-types.h in uClibc-ng needs to
+be resync'ed with the one from glibc, and it should fix the issue, in a
+proper way.
 
-Regards,
-Titouan
+Could you test this, and if it works, send the patch to upstream
+uClibc-ng, and add it in package/uclibc/ in Buildroot, until uClibc-ng
+integrates it in a release ?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
