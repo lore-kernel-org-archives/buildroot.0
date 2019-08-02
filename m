@@ -1,68 +1,95 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Fri, 2 Aug 2019 16:49:26 +0200
-Subject: [Buildroot] [PATCH 1/1] package/waffle: bump version to 1.6.0
-In-Reply-To: <20190704060635.11984-1-bernd.kuhls@t-online.de>
-References: <20190704060635.11984-1-bernd.kuhls@t-online.de>
-Message-ID: <20cae2c7-1d62-dea1-3bb5-93a0c7692a1a@smile.fr>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri,  2 Aug 2019 16:49:44 +0200
+Subject: [Buildroot] [PATCH] package/python3: fix configure issue for
+ musl/uclibc GCC 8+ toolchains on powerpc
+Message-ID: <20190802144945.22971-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Bernd,
+Fixes:
+http://autobuild.buildroot.net/results/cb4/cb49c539501342e45cbe5ade82e588fcdf51f05b
 
-Le 04/07/2019 ? 08:06, Bernd Kuhls a ?crit?:
-> Removed patch 0001 which was applied upstream.
-> 
-> Switched _SITE to gitlab according to release notes:
-> https://lists.freedesktop.org/archives/mesa-announce/2019-June/000520.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-> ---
+GCC commit 6834b83784dcf0364eb820e8 (multiarch support for non-glibc linux
+systems), which is part of GCC 8+, changed the multiarch logic to use
+$arch-linux-musl / $arch-linux-uclibc rather than $arch-linux-gnu.
 
-[...]
+This then causes the python3 configure script to error out:
 
-> index f496927e32..5bb65c9d93 100644
-> --- a/package/waffle/waffle.hash
-> +++ b/package/waffle/waffle.hash
-> @@ -1,3 +1,3 @@
->  # Locally calculated
-> -sha256 d662f6743f688dc5ea4b7d29f558eb54bd8f57350080f04a006693d22e5d1d5b  waffle-1.5.2.tar.gz
-> +sha256 b62bdc1c5ddea2f87c10a6d21d3812061e4c588a8a3bb45d9fd3ea3c9bd4fb30  waffle-1.6.0.tar.gz
->  sha256 630844d1911c8a1b7b888a1de9097c4860b7e381362fd5aa64141d58ab7ecc9b  LICENSE.txt
-> diff --git a/package/waffle/waffle.mk b/package/waffle/waffle.mk
-> index 280e295cb3..02a17f848b 100644
-> --- a/package/waffle/waffle.mk
-> +++ b/package/waffle/waffle.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -WAFFLE_VERSION = 1.5.2
-> -WAFFLE_SITE = $(call github,waffle-gl,waffle,v$(WAFFLE_VERSION))
-> +WAFFLE_VERSION = 1.6.0
-> +WAFFLE_SITE = https://gitlab.freedesktop.org/mesa/waffle/-/archive/v$(WAFFLE_VERSION)/waffle-v$(WAFFLE_VERSION).tar.bz2
->  WAFFLE_INSTALL_STAGING = YES
->  WAFFLE_LICENSE = BSD-2-Clause
->  WAFFLE_LICENSE_FILES = LICENSE.txt
-> 
+checking for the platform triplet based on compiler characteristics... powerpc-linux-gnu
+configure: error: internal configure error for the platform triplet, please file a bug report
 
-Waffle 1.6.0 has a new option waffle_has_surfaceless_egl [1]
+http://autobuild.buildroot.net/results/cb4/cb49c539501342e45cbe5ade82e588fcdf51f05b
 
-Since we don't provide platforms=surfaceless in mesa3d, I'm not sure waffle is
-going to build if egl is enabled.
+As it requires that the --print-multiarch output (if not empty) matches the
+deduced triplet (which always uses -linux-gnu).
 
-CXX is now listed in the project CMakeList.txt [1], we must add "depends on
-BR2_INSTALL_LIBSTDCPP".
+It isn't quite clear why --print-multiarch returns something for a
+non-multiarch toolchain on some architectures (E.G.  PowerPC), but as a
+workaround, add a patch to rewrite the --print-multiarch output to match
+older GCC versions to keep the configure script happy.
 
-[1]
-https://gitlab.freedesktop.org/mesa/waffle/commit/7318f22c4761035c03e99420edf3e92f07e06c9c
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...c-fixup-CC-print-multiarch-output-for-mus.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
 
-[2]
-https://gitlab.freedesktop.org/mesa/waffle/commit/6ca943584e593aec2bd4f9c66d91859e63e02d61
-
-Can you have a look?
-
-Best regards,
-Romain
+diff --git a/package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch b/package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
+new file mode 100644
+index 0000000000..19a0f23e7b
+--- /dev/null
++++ b/package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
+@@ -0,0 +1,48 @@
++From e1a2c27bcb9091f851ef7a9c7d59822a125a0b8e Mon Sep 17 00:00:00 2001
++From: Peter Korsgaard <peter@korsgaard.com>
++Date: Fri, 2 Aug 2019 15:53:16 +0200
++Subject: [PATCH] configure.ac: fixup $CC --print-multiarch output for
++ musl/uclibc GCC 8+ toolchains
++
++GCC commit 6834b83784dcf0364eb820e8 (multiarch support for non-glibc linux
++systems), which is part of GCC 8+, changed the multiarch logic to use
++$arch-linux-musl / $arch-linux-uclibc rather than $arch-linux-gnu.
++
++This then causes the python3 configure script to error out:
++
++checking for the platform triplet based on compiler characteristics... powerpc-linux-gnu
++configure: error: internal configure error for the platform triplet, please file a bug report
++
++http://autobuild.buildroot.net/results/cb4/cb49c539501342e45cbe5ade82e588fcdf51f05b
++
++As it requires that the --print-multiarch output (if not empty) matches the
++deduced triplet (which always uses -linux-gnu).
++
++It isn't quite clear why --print-multiarch returns something for a
++non-multiarch toolchain on some architectures (E.G.  PowerPC), but as a
++workaround, rewrite the --print-multiarch output to match older GCC versions
++to keep the configure script happy.
++
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++---
++ configure.ac | 4 +++-
++ 1 file changed, 3 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index e5fb7e7b0b..9c64f960d6 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -724,7 +724,9 @@ then
++ fi
++ 
++ 
++-MULTIARCH=$($CC --print-multiarch 2>/dev/null)
+++# GCC 8+ returns $arch-linux-{musl,uclibc} for musl/uClibc based
+++# toolchains confusing python. Fix that up
+++MULTIARCH=$($CC --print-multiarch 2>/dev/null | sed -E 's/-linux-(musl|uclibc)*$/-linux-gnu/')
++ AC_SUBST(MULTIARCH)
++ 
++ AC_MSG_CHECKING([for the platform triplet based on compiler characteristics])
++-- 
++2.11.0
++
+-- 
+2.11.0
