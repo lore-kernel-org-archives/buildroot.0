@@ -1,67 +1,47 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Aug 2019 23:00:42 +0200
-Subject: [Buildroot] [git commit] package/gssdp: bump to version 1.0.3
-Message-ID: <20190802205946.67E3E8D1F3@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri, 2 Aug 2019 14:24:42 +0200
+Subject: [Buildroot] [PATCHv2] package/mtd: needs zstd
+In-Reply-To: <6a36d470-0597-0166-d0e0-0aea26783a45@free.fr>
+References: <20190802081401.2545-1-yann.morin.1998@free.fr>
+ <983ab9a0-941e-0ea5-cf64-4217eda63220@armadeus.com>
+ <20190802083112.GA3083@scaer>
+ <6a36d470-0597-0166-d0e0-0aea26783a45@free.fr>
+Message-ID: <20190802122442.GA20164@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f923cccb64291cb17bffaa639edcc5b8d0321094
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Julien, All,
 
-- Switch to meson-package
-- Disable examples (enabled by default)
-- Disable introspection (enabled by default)
+On 2019-08-02 13:34 +0200, Julien Boibessot spake thusly:
+> On 02/08/2019 10:31, Yann E. MORIN wrote:
+>  On 2019-08-02 10:23 +0200, Julien Boibessot spake thusly:
+>  But in configure, as yhou already quoted, we can see that zstd is
+>  mandatory for ubifs:    AM_COND_IF([BUILD_UBIFS], [
+>                  need_uuid="yes"                need_xattr="yes"
+>                  need_zlib="yes"                need_lzo="yes"
+>                  need_zstd="yes"                   <<<<<<<<
+>                  need_openssl="yes"        ])
+>  So, zstd is not a conditional dependency when ubifs is enabled. Or do I
+>  still need to get more cofee? ;-)
+> 
+> well in configure it can also be disabled (like openssl):
+> 
+>   Optional Packages:
+>   ? ...
+>   ? --without-zstd????????? Disable support for ZSTD compression
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/gssdp/gssdp.hash |  4 ++--
- package/gssdp/gssdp.mk   | 11 +++++++----
- 2 files changed, 9 insertions(+), 6 deletions(-)
+Indeed, I've just tested, and it is really optiona. I've sent a v3.
 
-diff --git a/package/gssdp/gssdp.hash b/package/gssdp/gssdp.hash
-index acf6b3ab20..b389d0205c 100644
---- a/package/gssdp/gssdp.hash
-+++ b/package/gssdp/gssdp.hash
-@@ -1,5 +1,5 @@
--# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.0/gssdp-1.0.2.sha256sum:
--sha256 a1e17c09c7e1a185b0bd84fd6ff3794045a3cd729b707c23e422ff66471535dc  gssdp-1.0.2.tar.xz
-+# Hash from: http://ftp.gnome.org/pub/gnome/sources/gssdp/1.0/gssdp-1.0.3.sha256sum:
-+sha256 211387a62bc1d99821dd0333d873a781320287f5436f91e58b2ca145b378be41  gssdp-1.0.3.tar.xz
- 
- # Hash for license file:
- sha256 d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
-diff --git a/package/gssdp/gssdp.mk b/package/gssdp/gssdp.mk
-index e7f3ad9330..4589517691 100644
---- a/package/gssdp/gssdp.mk
-+++ b/package/gssdp/gssdp.mk
-@@ -5,19 +5,22 @@
- ################################################################################
- 
- GSSDP_VERSION_MAJOR = 1.0
--GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).2
-+GSSDP_VERSION = $(GSSDP_VERSION_MAJOR).3
- GSSDP_SOURCE = gssdp-$(GSSDP_VERSION).tar.xz
- GSSDP_SITE = http://ftp.gnome.org/pub/gnome/sources/gssdp/$(GSSDP_VERSION_MAJOR)
- GSSDP_LICENSE = LGPL-2.0+
- GSSDP_LICENSE_FILES = COPYING
- GSSDP_INSTALL_STAGING = YES
- GSSDP_DEPENDENCIES = host-pkgconf libglib2 libsoup
-+GSSDP_CONF_OPTS = \
-+	-Dexamples=false \
-+	-Dintrospection=false
- 
- ifeq ($(BR2_PACKAGE_LIBGTK3),y)
- GSSDP_DEPENDENCIES += libgtk3
--GSSDP_CONF_OPTS += --with-gtk
-+GSSDP_CONF_OPTS += -Dsniffer=true
- else
--GSSDP_CONF_OPTS += --without-gtk
-+GSSDP_CONF_OPTS += -Dsniffer=false
- endif
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
