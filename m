@@ -1,42 +1,57 @@
 From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 Aug 2019 14:24:42 +0200
-Subject: [Buildroot] [PATCHv2] package/mtd: needs zstd
-In-Reply-To: <6a36d470-0597-0166-d0e0-0aea26783a45@free.fr>
-References: <20190802081401.2545-1-yann.morin.1998@free.fr>
- <983ab9a0-941e-0ea5-cf64-4217eda63220@armadeus.com>
- <20190802083112.GA3083@scaer>
- <6a36d470-0597-0166-d0e0-0aea26783a45@free.fr>
-Message-ID: <20190802122442.GA20164@scaer>
+Date: Fri, 2 Aug 2019 16:48:18 +0200
+Subject: [Buildroot] [PATCH] package/imagemagick: fix host build for old
+ distributions
+In-Reply-To: <20190802134044.22094-1-peter@korsgaard.com>
+References: <20190802134044.22094-1-peter@korsgaard.com>
+Message-ID: <20190802144818.GB18760@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Julien, All,
+Peter, All,
 
-On 2019-08-02 13:34 +0200, Julien Boibessot spake thusly:
-> On 02/08/2019 10:31, Yann E. MORIN wrote:
->  On 2019-08-02 10:23 +0200, Julien Boibessot spake thusly:
->  But in configure, as yhou already quoted, we can see that zstd is
->  mandatory for ubifs:    AM_COND_IF([BUILD_UBIFS], [
->                  need_uuid="yes"                need_xattr="yes"
->                  need_zlib="yes"                need_lzo="yes"
->                  need_zstd="yes"                   <<<<<<<<
->                  need_openssl="yes"        ])
->  So, zstd is not a conditional dependency when ubifs is enabled. Or do I
->  still need to get more cofee? ;-)
+On 2019-08-02 15:40 +0200, Peter Korsgaard spake thusly:
+> Fixes:
+> http://autobuild.buildroot.net/results/5f0/5f0b85033e800c9eebc46812592966ec6826bb5d/
 > 
-> well in configure it can also be disabled (like openssl):
+> imagemagick uses clock_gettime, which was provided by librt rather than libc
+> in glibc < 2.17 - Causing link errors.
 > 
->   Optional Packages:
->   ? ...
->   ? --without-zstd????????? Disable support for ZSTD compression
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-Indeed, I've just tested, and it is really optiona. I've sent a v3.
+Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
 Regards,
 Yann E. MORIN.
+
+> ---
+>  package/imagemagick/imagemagick.mk | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+> index fff00fcfb1..3a37371e7b 100644
+> --- a/package/imagemagick/imagemagick.mk
+> +++ b/package/imagemagick/imagemagick.mk
+> @@ -176,6 +176,9 @@ HOST_IMAGEMAGICK_CONF_OPTS = \
+>  	--with-png \
+>  	--with-zlib
+>  
+> +# uses clock_gettime, which was provided by librt in glibc < 2.17
+> +HOST_IMAGEMAGICK_CONF_ENV = LIBS="-lrt"
+> +
+>  HOST_IMAGEMAGICK_DEPENDENCIES = \
+>  	host-libjpeg \
+>  	host-libpng \
+> -- 
+> 2.11.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
