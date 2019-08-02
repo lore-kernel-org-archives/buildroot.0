@@ -1,86 +1,73 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 2 Aug 2019 10:59:45 +0200
-Subject: [Buildroot] [PATCH 1/1] font-awesome compatible with fontconfig
- [FIXED]
-In-Reply-To: <20180921151515.5128-1-benj.calderon@gmail.com>
-References: <20180921151515.5128-1-benj.calderon@gmail.com>
-Message-ID: <9a58bc3e-ec6a-ab99-ddcc-71caa25cb691@mind.be>
+From: Etienne Carriere <etienne.carriere@linaro.org>
+Date: Fri, 2 Aug 2019 11:18:13 +0200
+Subject: [Buildroot] [PATCH 1/1] qemu: fix host virtfs option
+In-Reply-To: <20190801115720.11307-1-vincent.stehle@arm.com>
+References: <20190801115720.11307-1-vincent.stehle@arm.com>
+Message-ID: <CAN5uoS8o=fZECh1vRs1GqDfmp0ShRR-fd6Tu_MrcOe=9nszEow@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Benjamin,
-
- Sorry that we didn't come back earlier to this patch. It just got dropped from
-our radar...
-
-On 21/09/2018 17:15, Benjamin Calderon wrote:
-> This commit installs font-awesome in the standard fonts directory
-> making it available systemwide.
-
- This part of the commit is great.
-
-> The extra folders (css, less, scss) together with the webfonts (*.eot,
-> *.woff*, etc) are also left out since they are useless in this context.
-
- ... but this is not entirely true.
-
-> CSS and webfonts files are usually delivered via CDN or need to be in
-> the webroot of an http server in order to serve any purpose thus having those
-> files installed with this package is pointless.
-
- Indeed, the webserver has to be configured to export that particular directory
-- which I assume is exactly what the original contributor of this package did.
-
- It is true that the location is less than ideal - but we unfortunately don't
-have a standard location for the webroot, and definitely no standard
-subdirectories for CSS etc. We probably should have that. but we currently
-don't. We *mostly* use /var/www, but I believe that there are some web-related
-packages that install stuff in other locations.
-
- So, for sure, removing the woff*, eot and css is not good. The less and sccs
-I'm not so sure of, but I think even those may be used by a web service because
-they can be converted to css by Javascript on the browser.
-
- So I think this patch should *only* move the "classical" fonts to the fonts
-directory. Perhaps you could add a separate patch that moves all the rest to
-/var/www. And finally, if there is a good reason for it, you could have a third
-patch that removes less and sccs.
-
- For now, I've marked this patch as Changes Requested in patchwork.
-
- Regards,
- Arnout
-
-> 
-> Thanks to baruch for his technical critique.
-> 
-> Signed-off-by: Benjamin Calderon <benj.calderon@gmail.com>
+On Thu, 1 Aug 2019 at 13:57, Vincent Stehl? <vincent.stehle@arm.com> wrote:
+>
+> Fix the build of host-qemu with virtfs enabled: fix a typo in makefile
+> conditional and add a dependency on host-libcap.
+>
+> The virtfs configuration option was added by commit e0f49e648401
+> ("package/qemu: add option to enable virtual filesystem in host qemu").
+>
+> Signed-off-by: Vincent Stehle <vincent.stehle@arm.com>
+> Cc: Etienne Carriere <etienne.carriere@linaro.org>
 > ---
->  package/font-awesome/font-awesome.mk | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/package/font-awesome/font-awesome.mk b/package/font-awesome/font-awesome.mk
-> index f39401041a..1bf41c6020 100644
-> --- a/package/font-awesome/font-awesome.mk
-> +++ b/package/font-awesome/font-awesome.mk
-> @@ -6,13 +6,11 @@
->  
->  FONT_AWESOME_VERSION = v4.7.0
->  FONT_AWESOME_SITE = $(call github,FortAwesome,Font-Awesome,$(FONT_AWESOME_VERSION))
-> -FONT_AWESOME_LICENSE = OFL-1.1 (font), MIT (CSS, LESS and Sass files)
-> -FONT_AWESOME_DIRECTORIES_LIST = css fonts less scss
-> +FONT_AWESOME_LICENSE = OFL-1.1
->  
->  define FONT_AWESOME_INSTALL_TARGET_CMDS
-> -	mkdir -p $(TARGET_DIR)/usr/share/font-awesome/
-> -	$(foreach d,$(FONT_AWESOME_DIRECTORIES_LIST),\
-> -		cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/font-awesome$(sep))
-> +	mkdir -p $(TARGET_DIR)/usr/share/fonts/font-awesome/
-> +	cp $(@D)/fonts/FontAwesome.otf $(TARGET_DIR)/usr/share/fonts/font-awesome/FontAwesome.otf
->  endef
->  
->  $(eval $(generic-package))
-> 
+>
+>
+> (Re-sending in ascii)
+>
+> Hi,
+>
+> I build-tested this with a number of architectures[1], with VIRTFS=y/n and
+> this looks fine.
+>   During testing I remarked that VIRTFS=n is somewhat "weak", as it does
+> not forcibly disable virtfs. This means qemu can still auto-detect libcap
+> and libattr, and decide to auto-enable virtfs. I think this does not harm,
+> but we could also add an explicit --disable-virtfs if preferred. Do not
+> hesitate to let me know if I should respin with this change.
+>
+> ...et au passage un petit coucou a Etienne :)
+>
+> Vincent.
+>
+> [1]: aarch64, arm, i386, m68k, microblaze, microblazeel, mips, mips64,
+> mips64el, mipsel, ppc, ppc64, riscv32, riscv64, sh4, sh4eb, sparc and
+> x86_64.
+>
+>
+>  package/qemu/qemu.mk | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+> index 73e0778d73..eff4bb6213 100644
+> --- a/package/qemu/qemu.mk
+> +++ b/package/qemu/qemu.mk
+> @@ -271,8 +271,9 @@ HOST_QEMU_OPTS += --enable-vde
+>  HOST_QEMU_DEPENDENCIES += host-vde2
+>  endif
+>
+> -ifdef ($(BR2_PACKAGE_HOST_QEMU_VIRTFS),y)
+> +ifeq ($(BR2_PACKAGE_HOST_QEMU_VIRTFS),y)
+
+Hi Vince!
+Apologies for the typo and thanks for the fixes.
+etienne
+
+
+>  HOST_QEMU_OPTS += --enable-virtfs
+> +HOST_QEMU_DEPENDENCIES += host-libcap
+>  endif
+>
+>  # Override CPP, as it expects to be able to call it like it'd
+> --
+> 2.20.1
+>
