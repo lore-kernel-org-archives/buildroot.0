@@ -1,62 +1,36 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri, 2 Aug 2019 16:41:12 +0200
-Subject: [Buildroot] [PATCH] package/imagemagick: fix host build for old
- distributions
-In-Reply-To: <20190802134044.22094-1-peter@korsgaard.com>
-References: <20190802134044.22094-1-peter@korsgaard.com>
-Message-ID: <20190802144112.GA18760@scaer>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 2 Aug 2019 23:49:11 +0200
+Subject: [Buildroot] [git commit] package/qemu: remove comment about sh64
+Message-ID: <20190802214910.44A058142D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Peter, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=f4dae144f7813071d4e7d5881992470100fbe8e2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2019-08-02 15:40 +0200, Peter Korsgaard spake thusly:
-> Fixes:
-> http://autobuild.buildroot.net/results/5f0/5f0b85033e800c9eebc46812592966ec6826bb5d/
-> 
-> imagemagick uses clock_gettime, which was provided by librt rather than libc
-> in glibc < 2.17 - Causing link errors.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+sh64 has been removed since commit [1]:
 
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+[1] 4338a319b72570e433fd7484f8a95e1e0e978941
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+Reviewed-by: Thomas Huth <huth@tuxfamily.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/qemu/qemu.mk | 1 -
+ 1 file changed, 1 deletion(-)
 
-> ---
->  package/imagemagick/imagemagick.mk | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
-> index fff00fcfb1..3a37371e7b 100644
-> --- a/package/imagemagick/imagemagick.mk
-> +++ b/package/imagemagick/imagemagick.mk
-> @@ -176,6 +176,9 @@ HOST_IMAGEMAGICK_CONF_OPTS = \
->  	--with-png \
->  	--with-zlib
->  
-> +# uses clock_gettime, which was provided by librt in glibc < 2.17
-> +HOST_IMAGEMAGICK_CONF_ENV = LIBS="-lrt"
-> +
->  HOST_IMAGEMAGICK_DEPENDENCIES = \
->  	host-libjpeg \
->  	host-libpng \
-> -- 
-> 2.11.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index f4fa20abab..2a148c8b6e 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -186,7 +186,6 @@ HOST_QEMU_DEPENDENCIES = host-pkgconf host-zlib host-libglib2 host-pixman
+ #       sh4eb           sh4eb
+ #       sh4a            sh4
+ #       sh4aeb          sh4eb
+-#       sh64            not supported
+ #       sparc           sparc
+ #       sparc64         sparc64
+ 
