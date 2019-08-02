@@ -1,11 +1,10 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Aug 2019 19:47:11 +0200
-Subject: [Buildroot] [PATCH] package/imagemagick: fix host build for old
- distributions
-In-Reply-To: <20190802134044.22094-1-peter@korsgaard.com> (Peter Korsgaard's
- message of "Fri, 2 Aug 2019 15:40:44 +0200")
-References: <20190802134044.22094-1-peter@korsgaard.com>
-Message-ID: <87a7crsbmo.fsf@dell.be.48ers.dk>
+Date: Fri, 02 Aug 2019 19:47:19 +0200
+Subject: [Buildroot] [PATCH] package/mosquitto: bump to version 1.6.4
+In-Reply-To: <20190802070834.14143-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 2 Aug 2019 09:08:34 +0200")
+References: <20190802070834.14143-1-peter@korsgaard.com>
+Message-ID: <875znfsbmg.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,11 +13,10 @@ To: buildroot@busybox.net
 
 >>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
- > Fixes:
- > http://autobuild.buildroot.net/results/5f0/5f0b85033e800c9eebc46812592966ec6826bb5d/
+ > Bugfix release, fixing a number of issues.  For details, see the
+ > announcement:
 
- > imagemagick uses clock_gettime, which was provided by librt rather than libc
- > in glibc < 2.17 - Causing link errors.
+ > https://mosquitto.org/blog/2019/08/version-1-6-4-released/
 
  > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
