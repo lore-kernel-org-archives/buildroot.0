@@ -1,64 +1,55 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Fri,  2 Aug 2019 10:14:01 +0200
-Subject: [Buildroot] [PATCHv2] package/mtd: needs zstd
-Message-ID: <20190802081401.2545-1-yann.morin.1998@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 2 Aug 2019 10:29:07 +0200
+Subject: [Buildroot] [git commit] package/quagga: fix static linking with
+ getopt
+Message-ID: <20190802082634.0319D81585@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=d7215f2bbbe087ed026a43aa0884607084026b0e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For the target variant, zstd is a mandatory dependency when ubifs-tools
-are enabled. For the host variant, it is an unconditional dependency.
+quagga has its own copy of getopt_long() instead of using the system's,
+and this copy also defines the opterr and optind variables. Obviously,
+this is only apparent when linking statically.
+
+This problem can easily be avoided by making sure that getopt() itself
+is defined too. This way, there is no reason any more to pull in libc's
+getopt() and the corresponding definitions of opterr and optind. Note
+that getopt() itself is pulled in by netsnmp, not by quagga itself.
+
+Fortunately, there's a REALLY_NEED_PLAIN_GETOPT flag that we can define
+to make sure getopt() does get built by quagga. We can safely do this
+unconditionally (instead of only when BR2_PACKAGE_QUAGGA_SNMP and
+BR2_STATIC_LIBS are enabled): without netsnmp, getopt() will simply not
+be used, and with dynamic libs there's no risk of conflicts anyway.
 
 Fixes:
-    http://autobuild.buildroot.org/results/99b/99baf1de106f9c80a32e665263c1e4278097643d/ (target)
-    http://autobuild.buildroot.org/results/e3b/e3b96704f0b23e82999aa3d6e93233edecbecfe7/ (host)
+http://autobuild.buildroot.net/results/0ac598c2259a8d7e8b72d4e8ed95079675b31b84
 
-Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
-Tested-by: Markus Mayer <mmayer@broadcom.com>
-[yann.morin.1998 at free.fr: fix the target variant too]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mtd/Config.in | 1 +
- package/mtd/mtd.mk    | 4 ++--
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ package/quagga/quagga.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-index 590ca7f5ef..1dd7dad1b3 100644
---- a/package/mtd/Config.in
-+++ b/package/mtd/Config.in
-@@ -21,6 +21,7 @@ config BR2_PACKAGE_MTD_UBIFS_UTILS
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 	select BR2_PACKAGE_ZLIB
-+	select BR2_PACKAGE_ZSTD
+diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
+index 420d72c79d..8aa58aceef 100644
+--- a/package/quagga/quagga.mk
++++ b/package/quagga/quagga.mk
+@@ -18,6 +18,11 @@ QUAGGA_CONF_OPTS = \
+ 	--sysconfdir=/etc/quagga \
+ 	--localstatedir=/var/run/quagga
  
- comment "MTD tools selection"
- 
-diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
-index 0de14dbcba..04b8ccb73f 100644
---- a/package/mtd/mtd.mk
-+++ b/package/mtd/mtd.mk
-@@ -19,7 +19,7 @@ MTD_CONF_OPTS += --without-jffs
- endif
- 
- ifeq ($(BR2_PACKAGE_MTD_UBIFS_UTILS),y)
--MTD_DEPENDENCIES += util-linux zlib lzo host-pkgconf
-+MTD_DEPENDENCIES += util-linux zlib lzo host-pkgconf zstd
- MTD_CONF_OPTS += --with-ubifs
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- MTD_DEPENDENCIES += openssl
-@@ -46,7 +46,7 @@ else
- MTD_CONF_OPTS += --without-xattr
- endif
- 
--HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux
-+HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux host-zstd
- HOST_MTD_CONF_OPTS = \
- 	--with-jffs \
- 	--with-ubifs \
--- 
-2.20.1
++# quagga has its own internal copy of getopt_long. To avoid conflicts with libc's
++# getopt, we need to make sure that the getopt function itself is also built.
++QUAGGA_CONF_ENV = \
++	CFLAGS="$(TARGET_CFLAGS) -DREALLY_NEED_PLAIN_GETOPT"
++
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ QUAGGA_CONF_OPTS += --enable-capabilities
+ QUAGGA_DEPENDENCIES += libcap
