@@ -1,47 +1,34 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Aug 2019 10:29:31 +0200
-Subject: [Buildroot] [PATCH] package/quagga: fix static linking with
- getopt
-In-Reply-To: <20190801162408.16588-1-arnout@mind.be>
-References: <20190801162408.16588-1-arnout@mind.be>
-Message-ID: <20190802102931.0662c247@windsurf.home>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri,  2 Aug 2019 10:29:35 +0200
+Subject: [Buildroot] [PATCH 2/2] package/Config.in: remove double /
+In-Reply-To: <20190802082935.26747-1-arnout@mind.be>
+References: <20190802082935.26747-1-arnout@mind.be>
+Message-ID: <20190802082935.26747-2-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Thu,  1 Aug 2019 18:24:08 +0200
-"Arnout Vandecappelle (Essensium/Mind)" <arnout@mind.be> wrote:
+Detected by check-package, which gets confused by it.
 
-> quagga has its own copy of getopt_long() instead of using the system's,
-> and this copy also defines the opterr and optind variables. Obviously,
-> this is only apparent when linking statically.
-> 
-> This problem can easily be avoided by making sure that getopt() itself
-> is defined too. This way, there is no reason any more to pull in libc's
-> getopt() and the corresponding definitions of opterr and optind. Note
-> that getopt() itself is pulled in by netsnmp, not by quagga itself.
-> 
-> Fortunately, there's a REALLY_NEED_PLAIN_GETOPT flag that we can define
-> to make sure getopt() does get built by quagga. We can safely do this
-> unconditionally (instead of only when BR2_PACKAGE_QUAGGA_SNMP and
-> BR2_STATIC_LIBS are enabled): without netsnmp, getopt() will simply not
-> be used, and with dynamic libs there's no risk of conflicts anyway.
-> 
-> Fixes:
-> http://autobuild.buildroot.net/results/0ac598c2259a8d7e8b72d4e8ed95079675b31b84
-> 
-> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/quagga/quagga.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+---
+ package/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index b7472b9bea..35e71e3185 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1069,7 +1069,7 @@ menu "External python modules"
+ 	source "package/python-slob/Config.in"
+ 	source "package/python-smbus-cffi/Config.in"
+ 	source "package/python-socketio/Config.in"
+-	source "package/python-sortedcontainers//Config.in"
++	source "package/python-sortedcontainers/Config.in"
+ 	source "package/python-spidev/Config.in"
+ 	source "package/python-sqlalchemy/Config.in"
+ 	source "package/python-subprocess32/Config.in"
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.21.0
