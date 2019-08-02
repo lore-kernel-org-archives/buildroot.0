@@ -1,33 +1,34 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Aug 2019 17:28:06 +0200
-Subject: [Buildroot] [PATCH 1/1] iputils: fix build with disabled thread
- support
-In-Reply-To: <20190802151529.29589-1-petr.vorel@gmail.com>
-References: <20190802151529.29589-1-petr.vorel@gmail.com>
-Message-ID: <20190802172806.1370ec68@windsurf.home>
+Date: Fri, 2 Aug 2019 17:28:19 +0200
+Subject: [Buildroot] [git commit] package/mosquitto: fix typo in Config.in
+Message-ID: <20190802152603.89BBA8168A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri,  2 Aug 2019 17:15:29 +0200
-Petr Vorel <petr.vorel@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=22f3c69149f98e18f390fe8f40bd1c9c1b5a24cd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes:
-> http://autobuild.buildroot.net/results/10652b7bf6a606f0dd802916006c44abf3e5e059
-> http://autobuild.buildroot.net/results/9656af1aafbd2624fb75bf5fc1dfa13b6175c10b
-> http://autobuild.buildroot.net/results/2e170e149b293d40978e158d55dc0102315b9d86
-> 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  package/iputils/iputils.mk | 5 +++++
->  1 file changed, 5 insertions(+)
+Introduced in ea989ad2b2c2361c47e269dd89cb559edf561db4
 
-Applied to master, thanks.
+Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/mosquitto/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
+index 11b6d7891b..c7373d9a84 100644
+--- a/package/mosquitto/Config.in
++++ b/package/mosquitto/Config.in
+@@ -21,7 +21,7 @@ config BR2_PACKAGE_MOSQUITTO_BROKER
+ 	  Build and install the mosquitto broker onto target.
+ 
+ comment "mosquitto broker needs a system with MMU"
+-	depends on BR2_PACKAGE_MOSQUTTO && !BR2_USE_MMU
++	depends on BR2_PACKAGE_MOSQUITTO && !BR2_USE_MMU
+ 
+ comment "mosquitto needs a toolchain w/ dynamic library"
+ 	depends on BR2_STATIC_LIBS
