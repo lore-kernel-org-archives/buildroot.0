@@ -1,175 +1,97 @@
-From: Matthew Weber <matthew.weber@rockwellcollins.com>
-Date: Fri, 2 Aug 2019 13:13:18 -0500
-Subject: [Buildroot] [PATCH v7 5/5] testing/tests: CLANG compiler-rt
- runtime test
-In-Reply-To: <71ae5092-e883-2f64-1689-725e46190cf6@smile.fr>
-References: <20190501194032.765-1-matthew.weber@rockwellcollins.com>
- <20190501194032.765-6-matthew.weber@rockwellcollins.com>
- <3f14fe0c-d2a1-4502-b94d-0045e4c06e5b@smile.fr>
- <71ae5092-e883-2f64-1689-725e46190cf6@smile.fr>
-Message-ID: <CANQCQpbhZZW2K6nD7HvwHaC1Vs9KkmTv8SvkEGoSuuNYixxa4g@mail.gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Fri,  2 Aug 2019 21:27:22 +0200
+Subject: [Buildroot] [PATCH 1/1] package/cppzmq: bump to version 4.4.1
+Message-ID: <1564774042-9857-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Romain,
+Remove patch (already in version)
 
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
+---
+ .../0001-fix-install-without-static-libzmq.patch   | 47 ----------------------
+ package/cppzmq/cppzmq.hash                         |  2 +-
+ package/cppzmq/cppzmq.mk                           |  2 +-
+ 3 files changed, 2 insertions(+), 49 deletions(-)
+ delete mode 100644 package/cppzmq/0001-fix-install-without-static-libzmq.patch
 
-On Thu, Aug 1, 2019 at 3:32 AM Romain Naour <romain.naour@smile.fr> wrote:
->
-> Hi Matt,
->
-> Le 07/05/2019 ? 23:12, Romain Naour a ?crit :
-> > Hi Matt,
-> >
-> > Le 01/05/2019 ? 21:40, Matt Weber a ?crit :
-> >> This patch adds a test case that
-> >>  1) Builds the complete LLVM and CLANG set of host tools
-> >>  2) Cross-compiles the compiler-rt runtime using CLANG
-> >>  3) Builds a cross-compiled application using CLANG and the libfuzzer
-> >>     compiler-rt library.
-> >>  4) Executes the fuzz application (part of the libfuzzer package) on
-> >>     target and checks expected output
-> >
-> > Can you provide an example of expected output of fuzz_me ?
-> > I tried on x86_64 bit but I get an error: AddressSanitizer: heap-buffer-overflow
->
-> Ok, getting a heap-buffer-overflow is the purpose of this example :p
-
-I'll update my comment for 4)
-"Executes the fuzz application (part of the libfuzzer package) on
-target and checks expected output for a heap-buffer-overflow."
-
-> >
-> > I'm testing with aarch64 at the moment.
-> >
-> >>
-> >> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
-> >> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> >>
-> >> Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> >> [with the entire series applied on next branch:
-> >>  https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/121908178
-> >>  NOTE: this test case takes longer than test_rust, ~2 hours in my host
-> >>  machine with all tarballs previously downloaded]
-> >> Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-> >> ---
-> >
-> > [snip]
-> >
-> > 6814053e847c10f3eb003417bc523d30  LICENSE
-> >> diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
-> >> new file mode 100644
-> >> index 0000000000..7d6f83b4d3
-> >> --- /dev/null
-> >> +++ b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
-> >> @@ -0,0 +1,24 @@
-> >> +################################################################################
-> >> +#
-> >> +# libfuzzer
-> >> +#
-> >> +################################################################################
-> >> +
-> >> +LIBFUZZER_VERSION = 64e4d9aa19a8d33b61882154addbf8419d7416e1
-> >> +LIBFUZZER_SITE = $(call github,google,fuzzer-test-suite,$(LIBFUZZER_VERSION))
-> >> +LIBFUZZER_LICENSE = Apache-2.0
-> >> +LIBFUZZER_LICENSE_FILES = LICENSE
-> >> +LIBFUZZER_DEPENDENCIES = compiler-rt
-> >> +
-> >> +define LIBFUZZER_BUILD_CMDS
-> >> +    $(HOST_DIR)/bin/clang++ -mcpu=cortex-a53 --sysroot=$(STAGING_DIR) \
-> >
-> > There is no -mcpu option with clang++, I had to use -march=x86-64 instead.
-> >
-> >> +            -B $(HOST_DIR)/opt/ext-toolchain -fsanitize=address,fuzzer \
-> >
-> > Using $(HOST_DIR)/opt/ext-toolchain expect an external toolchain (this is the
-> > case during the test), but it doesn't work for internal toolchain or external
-> > pre-installed toolchain.
-> >
-> > Clang++ is using the path provided by -B to find crtbegin.o. This object file is
-> > not copied when using a pre-installed toolchain.
-> >
-> > https://pastebin.com/Wm59Z9nz
-
-I assume I make have to do this conditionally based on the toolchain
-type? I don't believe our host dir setup is consistent between the
-toolchain type.
-
-> >
-> > Best regards,
-> > Romain
-> >
-> >> +            $(@D)/tutorial/fuzz_me.cc \
-> >> +            -o $(@D)/fuzz_me
-> >> +endef
-> >> +
-> >> +define LIBFUZZER_INSTALL_TARGET_CMDS
-> >> +    $(INSTALL) -D -m 755 $(@D)/fuzz_me $(TARGET_DIR)/usr/bin/fuzz_me
-> >> +endef
-> >> +
-> >> +$(eval $(generic-package))
-> >> diff --git a/support/testing/tests/package/test_clang.py b/support/testing/tests/package/test_clang.py
-> >> new file mode 100644
-> >> index 0000000000..84a2528b00
-> >> --- /dev/null
-> >> +++ b/support/testing/tests/package/test_clang.py
-> >> @@ -0,0 +1,46 @@
-> >> +import os
-> >> +
-> >> +import infra.basetest
-> >> +
-> >> +FUZZ_TIMEOUT = 120
-> >> +
-> >> +
-> >> +class TestClangCompilerRT(infra.basetest.BRTest):
-> >> +    br2_external = [infra.filepath("tests/package/br2-external/clang-compiler-rt")]
-> >> +    config = \
-> >> +        """
-> >> +        BR2_aarch64=y
-> >> +        BR2_TOOLCHAIN_EXTERNAL=y
-> >> +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-> >> +        BR2_LINUX_KERNEL=y
-> >> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> >> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
-> >> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> >> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-> >> +        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> >> +        BR2_PACKAGE_COMPILER_RT=y
-> >> +        BR2_PACKAGE_LLVM=y
-> >> +        BR2_TARGET_ROOTFS_CPIO=y
-> >> +        BR2_TARGET_ROOTFS_CPIO_GZIP=y
-> >> +        # BR2_TARGET_ROOTFS_TAR is not set
-> >> +        BR2_PACKAGE_LIBFUZZER=y
-> >> +        """
-> >> +
-> >> +    def login(self):
-> >> +        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
-> >> +        kern = os.path.join(self.builddir, "images", "Image")
-> >> +        # Sanitizers overallocate memory and the minimum that seemed to work was 512MB
-> >> +        self.emulator.boot(arch="aarch64",
-> >> +                           kernel=kern,
-> >> +                           kernel_cmdline=["console=ttyAMA0"],
-> >> +                           options=["-M", "virt", "-cpu", "cortex-a53", "-m", "512", "-initrd", img])
-> >> +        self.emulator.login()
-> >> +
-> >> +    def test_run(self):
-> >> +        self.login()
-> >> +
-> >> +        # The test case verifies both that the application executes and that
-> >> +        # the symbolizer is working to decode the stack trace
-> >> +        cmd = "fuzz_me 2>&1 | grep _M_replace"
->
-> Can you explain why the test is looking at _M_replace in the log of fuzz_me ?
-> It seems specific to aarch64 backtrace.
-
-Correct, I just verify the application executes with an expected
-symbolizer string being displayed.  It may not be arch independent as
-you pointed out.
-
-Thanks for the review, I'll do some investigation further on the
-toolchain link path stuff above between the toolchain types.
-
-Matt
+diff --git a/package/cppzmq/0001-fix-install-without-static-libzmq.patch b/package/cppzmq/0001-fix-install-without-static-libzmq.patch
+deleted file mode 100644
+index 15936f3..0000000
+--- a/package/cppzmq/0001-fix-install-without-static-libzmq.patch
++++ /dev/null
+@@ -1,47 +0,0 @@
+-From bffb0eda34195339f2af49f2879d9d0b9dee5c28 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 20 Sep 2018 19:37:26 +0200
+-Subject: [PATCH] fix install without static libzmq
+-
+-If libzmq is only available as a shared library and not a static one
+-then cmake fails with:
+-
+--- CMake libzmq package not found, trying again with pkg-config (normal install of zeromq)
+--- Found PkgConfig: /home/fabrice/buildroot/output/host/bin/pkg-config (found version "0.28")
+-CMake Error at CMakeLists.txt:20 (message):
+-  ZeroMQ was not found, neither as a CMake package nor via pkg-config
+-
+-This is due to the fact that ZeroMQ_FOUND is not set to ON even if
+-ZEROMQ_LIBRARY is TRUE:
+-
+-if(ZeroMQ_LIBRARY AND ZeroMQ_STATIC_LIBRARY)
+-    set(ZeroMQ_FOUND ON)
+-endif()
+-
+-So change AND by OR as suggested in
+-https://github.com/zeromq/cppzmq/issues/266
+-
+-Fix #266
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/zeromq/cppzmq/pull/267]
+----
+- libzmq-pkg-config/FindZeroMQ.cmake | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/libzmq-pkg-config/FindZeroMQ.cmake b/libzmq-pkg-config/FindZeroMQ.cmake
+-index 89d8236..1b84c95 100644
+---- a/libzmq-pkg-config/FindZeroMQ.cmake
+-+++ b/libzmq-pkg-config/FindZeroMQ.cmake
+-@@ -8,7 +8,7 @@ find_library(ZeroMQ_LIBRARY NAMES libzmq.so libzmq.dylib libzmq.dll
+- find_library(ZeroMQ_STATIC_LIBRARY NAMES libzmq-static.a libzmq.a libzmq.dll.a
+-              PATHS ${PC_LIBZMQ_LIBDIR} ${PC_LIBZMQ_LIBRARY_DIRS})
+- 
+--if(ZeroMQ_LIBRARY AND ZeroMQ_STATIC_LIBRARY)
+-+if(ZeroMQ_LIBRARY OR ZeroMQ_STATIC_LIBRARY)
+-     set(ZeroMQ_FOUND ON)
+- endif()
+- 
+--- 
+-2.17.1
+-
+diff --git a/package/cppzmq/cppzmq.hash b/package/cppzmq/cppzmq.hash
+index 54406ad..58b91b5 100644
+--- a/package/cppzmq/cppzmq.hash
++++ b/package/cppzmq/cppzmq.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256 27d1f56406ba94ee779e639203218820975cf68174f92fbeae0f645df0fcada4  cppzmq-4.3.0.tar.gz
++sha256 117fc1ca24d98dbe1a60c072cde13be863d429134907797f8e03f654ce679385  cppzmq-4.4.1.tar.gz
+ sha256 7e6db90e2e805c72b3daa77849d1cb5f1f92da0e69750c8a4aa1d86d70704748  LICENSE
+diff --git a/package/cppzmq/cppzmq.mk b/package/cppzmq/cppzmq.mk
+index aab6e71..95c0880 100644
+--- a/package/cppzmq/cppzmq.mk
++++ b/package/cppzmq/cppzmq.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-CPPZMQ_VERSION = 4.3.0
++CPPZMQ_VERSION = 4.4.1
+ CPPZMQ_SITE = $(call github,zeromq,cppzmq,v$(CPPZMQ_VERSION))
+ CPPZMQ_INSTALL_STAGING = YES
+ CPPZMQ_DEPENDENCIES = host-pkgconf zeromq
+-- 
+2.7.4
