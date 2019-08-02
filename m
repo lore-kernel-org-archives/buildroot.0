@@ -1,75 +1,131 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Aug 2019 23:34:26 +0200
-Subject: [Buildroot] [git commit] package/python-matplotlib: needs a
- toolchain with C++ support
-Message-ID: <20190802213248.BF3DA8377F@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri,  2 Aug 2019 23:36:46 +0200
+Subject: [Buildroot] [PATCH]
+ toolchain/toolchain-external/toolchain-external-custom: be more flexible on
+ gcc version
+Message-ID: <20190802213646.29444-1-thomas.petazzoni@bootlin.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5c6f9f4973e67cd7ed1ad50286572447951b3d0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The custom external toolchain logic asks the user to specify which gcc
+version is provided by the toolchain. The list of gcc versions given
+by Buildroot is restricted depending on the selected CPU architecture
+using the BR2_ARCH_NEEDS_GCC_AT_LEAST_xyz config options.
 
-Matplotlib contains .cpp source code:
+However, these config options generally indicate in which upstream gcc
+version the support for the selected architecture was introduced. But
+in practice, it is possible that an external toolchain uses some
+non-upstream gcc code, providing support for a CPU architecture before
+it was merged in upstream gcc.
 
-ls src/*.cpp
-src/_backend_agg.cpp
-src/_backend_agg_wrapper.cpp
-src/_contour.cpp
-src/_contour_wrapper.cpp
-src/ft2font.cpp
-src/ft2font_wrapper.cpp
-src/_image.cpp
-src/_image_wrapper.cpp
-src/mplutils.cpp
-src/_path_wrapper.cpp
-src/_png.cpp
-src/py_converters.cpp
-src/_tkagg.cpp
-src/_ttconv.cpp
-src/_windowing.cpp
+A specific example is that there are pre-built external toolchains for
+the C-SKY CPU architecture that are based on gcc 6.x, even if the
+support for it was only added in upstream gcc 9.x.
 
-So add a dependency on C++ support in the toolchain to fix build errors like
-(no autobuilder reference yet):
+Due to the BR2_ARCH_NEEDS_GCC_AT_LEAST_xyz options, only gcc >= 9.x
+can be selected for C-SKY, preventing the use of such a custom
+toolchain.
 
-../output/host/bin/powerpc-buildroot-linux-uclibc-gcc -Wno-unused-result \
-  -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -D_LARGEFILE_SOURCE \
-  -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC \
-  -DFREETYPE_BUILD_TYPE=system \
-  -DPY_ARRAY_UNIQUE_SYMBOL=MPL_matplotlib_ft2font_ARRAY_API \
-  -DNPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION -D__STDC_FORMAT_MACROS=1 \
-  -I../output/host/lib/python3.7/site-packages/numpy/core/include \
-  -Iextern/agg24-svn/include \
-  -I../output/host/bin/../powerpc-buildroot-linux-uclibc/sysroot/usr/include \
-  -I../output/host/bin/../powerpc-buildroot-linux-uclibc/sysroot/usr/include/freetype2 \
-  -I. \
-  -I../output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/python3.7m \
-  -c src/ft2font.cpp -o build/temp.linux-x86_64-3.7/src/ft2font.o
-powerpc-buildroot-linux-uclibc-gcc.br_real: error: src/ft2font.cpp: C++
-  compiler not installed on this system
+In addition, those dependencies are in fact not really needed:
+Buildroot will check that the gcc version provided matches what the
+user declared in the configuration. And if the gcc provided by the
+toolchain does support that CPU architecture, then well, so be it,
+there's no need to restrict the gcc version selected.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+So we simply get rid of these dependencies on
+BR2_ARCH_NEEDS_GCC_AT_LEAST_xyz, and also don't use them anymore to
+chose a default value for the gcc version.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-matplotlib/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../Config.in.options                         | 20 -------------------
+ 1 file changed, 20 deletions(-)
 
-diff --git a/package/python-matplotlib/Config.in b/package/python-matplotlib/Config.in
-index c5cb94dac7..14f43568f3 100644
---- a/package/python-matplotlib/Config.in
-+++ b/package/python-matplotlib/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_MATPLOTLIB
- 	bool "python-matplotlib"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_PYTHON3
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	select BR2_PACKAGE_FREETYPE # runtime
-@@ -19,3 +20,6 @@ config BR2_PACKAGE_PYTHON_MATPLOTLIB
- 	  formats.
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index c5e2ce221b..679e727509 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -27,14 +27,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
  
- 	  https://matplotlib.org/
-+
-+comment "python-matplotlib needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
+ choice
+ 	bool "External toolchain gcc version"
+-	default BR2_TOOLCHAIN_EXTERNAL_GCC_9   if BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+-	default BR2_TOOLCHAIN_EXTERNAL_GCC_8   if BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+-	default BR2_TOOLCHAIN_EXTERNAL_GCC_7   if BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+-	default BR2_TOOLCHAIN_EXTERNAL_GCC_6   if BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+-	default BR2_TOOLCHAIN_EXTERNAL_GCC_5   if BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+-	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_9 if BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+-	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_8 if BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+-	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+ 	help
+ 	  Set to the gcc version that is used by your external
+ 	  toolchain.
+@@ -45,62 +37,50 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_9
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_8
+ 	bool "8.x"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_9
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_7
+ 	bool "7.x"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_6
+ 	bool "6.x"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_5
+ 	bool "5.x"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
+ 	bool "4.9.x"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
+ 	bool "4.8.x"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
+ 	bool "4.7.x"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
+ 	bool "4.6.x"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
+ 	bool "4.5.x"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
+ 	bool "4.4.x"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
+ 	bool "4.3.x"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
+ 
+ config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
+ 	bool "older"
+-	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
+ 	help
+ 	  Use this option if your GCC version is older than any of the
+ 	  above.
+-- 
+2.21.0
