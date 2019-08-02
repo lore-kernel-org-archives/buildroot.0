@@ -1,75 +1,38 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Fri, 2 Aug 2019 15:18:57 +0200
-Subject: [Buildroot] [PATCH 1/3] package/mosquitto: allow to build as
- static lib
-In-Reply-To: <874l30x0fd.fsf@dell.be.48ers.dk>
-References: <20190718100636.27290-1-titouan.christophe@railnova.eu>
- <20190718100636.27290-2-titouan.christophe@railnova.eu>
- <871ry518wo.fsf@dell.be.48ers.dk> <87sgqlyxov.fsf@dell.be.48ers.dk>
- <b1957631-ca8b-38ab-9b24-5549e8e13e23@railnova.eu>
- <874l30x0fd.fsf@dell.be.48ers.dk>
-Message-ID: <1471a17e-814d-eba7-5756-fe5dd592b5db@railnova.eu>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri,  2 Aug 2019 15:40:44 +0200
+Subject: [Buildroot] [PATCH] package/imagemagick: fix host build for old
+ distributions
+Message-ID: <20190802134044.22094-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
-On 8/1/19 7:25 PM, Peter Korsgaard wrote:
-> 
-> It was afaik just the default arm variant with BR2_STATIC_LIBS enabled.
-> 
->   > When I run test-pkg with BR2_PACKAGE_MOSQUITTO=y (and
->   > BR2_PACKAGE_MOSQUITTO_BROKER defaults to y), I see:
->   > """br-arm-full-static [5/6]: OK""".
-> 
-> Hmm, very odd. With current git HEAD and this patch 1/3 applied and the
-> following config:
-> 
-> BR2_arm=y
-> BR2_STATIC_LIBS=y
-> BR2_TOOLCHAIN_EXTERNAL=y
-> BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-> BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2019.02-rc1.tar.bz2"
-> BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
-> BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
-> BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-> # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-> BR2_TOOLCHAIN_EXTERNAL_CXX=y
-> BR2_PACKAGE_MOSQUITTO=y
-> 
+Fixes:
+http://autobuild.buildroot.net/results/5f0/5f0b85033e800c9eebc46812592966ec6826bb5d/
 
-Indeed, when doing a regular make (and not test-pkg) with this defconfig 
-I can reproduce the aforementioned failure.
+imagemagick uses clock_gettime, which was provided by librt rather than libc
+in glibc < 2.17 - Causing link errors.
 
-> (E.G. support/config-fragments/autobuild/br-arm-full-static.config + mosquitto)
-> 
-> I get the expected failure:
-> 
-> In file included from security.c:25:0:
-> lib_load.h:23:11: fatal error: dlfcn.h: No such file or directory
->   # include <dlfcn.h>
->             ^~~~~~~~~
-> compilation terminated.
-> Makefile:189: recipe for target 'security.o' failed
-> 
-> br-arm-full-static-2019.02-rc1.tar.bz2 does not contain a dlfcn.h file,
-> so that makes sense.
-> 
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/imagemagick/imagemagick.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Now, when looking at mosquitto, I understand that WITH_SHARED_LIBRARY=no 
-implies that libmosquitto.so won't be created (and linked against).
-
-However, the failure over here is due to some code in the broker which 
-is intended to dynamically load modules at runtime, no matter if 
-mosquitto is running inside a statically linked executable or from a dylib.
-
-As such, I suggest then to only make the broker depend on 
-BR2_SHARED_LIBS, while still allowing the client lib to be built 
-statically, which in my opinion makes sense for embedded targets.
-What do you think ?
-
-Kind regards,
-
-Titouan
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index fff00fcfb1..3a37371e7b 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -176,6 +176,9 @@ HOST_IMAGEMAGICK_CONF_OPTS = \
+ 	--with-png \
+ 	--with-zlib
+ 
++# uses clock_gettime, which was provided by librt in glibc < 2.17
++HOST_IMAGEMAGICK_CONF_ENV = LIBS="-lrt"
++
+ HOST_IMAGEMAGICK_DEPENDENCIES = \
+ 	host-libjpeg \
+ 	host-libpng \
+-- 
+2.11.0
