@@ -1,8 +1,7 @@
 From: Aalx <alexandre.payen@smile.fr>
-Date: Fri,  2 Aug 2019 14:14:49 +0200
-Subject: [Buildroot] [PATCH 1/2] package/python-numpy: remove unsafe path
- possibly contamine target package with host libraries
-Message-ID: <20190802121449.17254-1-alexandre.payen@smile.fr>
+Date: Fri,  2 Aug 2019 14:14:58 +0200
+Subject: [Buildroot] [PATCH 2/2] package/python-scipy: new package
+Message-ID: <20190802121458.17305-1-alexandre.payen@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -11,110 +10,124 @@ To: buildroot@busybox.net
 
 From: Romain Naour <romain.naour@smile.fr>
 
-When python-numpy is cross-compiled, the path provided by the build process are
-hard-coded. Those paths are unsafe because they could poison the target package
-with host libraries.
+Python building set -shared in LDSHARED option but python-numpy distutils
+use this as a file and then generate an error (file not found).
+The path is not exact too. It should link to target site-packages and not host.
+An other error occur when building, the build mechanism will search for a binary
+named gfortran, it is badly prefixed so the build configuration need to be
+modify in order to get the proper binary name.
+Since Version 1.3.0 python-numpy does not support python2 anymore
+Source : https://github.com/scipy/scipy/releases/tag/v1.3.0
 
-Doing so, we can cross-compile python-scipy added in a following patch.
+python-scipy doesn't build when using clapack as lapack provider.
+In the configure step python-scipy is looking for cblas.h which is
+not provided by clapack.
 
 So :
-- Remove every unsafe path for cross-compiling in python-numpy.
-- Let the buildroot infrastructure provide the correct path through sysroot.
-
-A similar fix have been done in Yocto Project.
-http://git.yoctoproject.org/cgit/cgit.cgi/poky/commit/?id=ced097eb4e30133acc6c3e9ed841b3463844cd39
+- Moving -shared in LDFLAG option to avoid `file not found`
+- Editing the path to get the target site-packages
+- Editing python-scipy.mk to add the correct binary name.
+- Allow only lapack as liblapack provider.
 
 Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
 ---
- .../0001-distutils-remove-poisoned-path.patch | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 package/python-numpy/0001-distutils-remove-poisoned-path.patch
+ package/Config.in                      |  1 +
+ package/python-scipy/Config.in         | 22 ++++++++++++++++++
+ package/python-scipy/python-scipy.hash |  4 ++++
+ package/python-scipy/python-scipy.mk   | 32 ++++++++++++++++++++++++++
+ 4 files changed, 59 insertions(+)
+ create mode 100644 package/python-scipy/Config.in
+ create mode 100644 package/python-scipy/python-scipy.hash
+ create mode 100644 package/python-scipy/python-scipy.mk
 
-diff --git a/package/python-numpy/0001-distutils-remove-poisoned-path.patch b/package/python-numpy/0001-distutils-remove-poisoned-path.patch
+diff --git a/package/Config.in b/package/Config.in
+index 5f408f4de9..68905849dc 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1047,6 +1047,7 @@ menu "External python modules"
+ 	source "package/python-scapy/Config.in"
+ 	source "package/python-scapy3k/Config.in"
+ 	source "package/python-schedule/Config.in"
++	source "package/python-scipy/Config.in"
+ 	source "package/python-sdnotify/Config.in"
+ 	source "package/python-secretstorage/Config.in"
+ 	source "package/python-see/Config.in"
+diff --git a/package/python-scipy/Config.in b/package/python-scipy/Config.in
 new file mode 100644
-index 0000000000..8bd19db8e8
+index 0000000000..ef35cd138d
 --- /dev/null
-+++ b/package/python-numpy/0001-distutils-remove-poisoned-path.patch
-@@ -0,0 +1,79 @@
-+From 89e5645bd80b57252a3babdbd68277490dc187e5 Mon Sep 17 00:00:00 2001
-+From: Romain Naour <romain.naour@smile.fr>
-+Date: Fri, 7 Jun 2019 18:02:53 +0200
-+Subject: [PATCH] distutils: remove poisoned path
++++ b/package/python-scipy/Config.in
+@@ -0,0 +1,22 @@
++config BR2_PACKAGE_PYTHON_SCIPY
++	bool "python-scipy"
++	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_PYTHON3
++	depends on BR2_TOOLCHAIN_HAS_FORTRAN # lapack
++	select BR2_PACKAGE_LIBLAPACK
++	select BR2_PACKAGE_LIBLAPACK_FORCE_LAPACK
++	select BR2_PACKAGE_LAPACK_COMPLEX
++	select BR2_PACKAGE_PYTHON_NUMPY
++	help
++	  SciPy (pronounced "Sigh Pie") is open-source software for
++	  mathematics, science, and engineering. It includes modules
++	  for statistics, optimization, integration, linear algebra,
++	  Fourier transforms, signal and image processing, ODE solvers,
++	  and more.
 +
-+When python-numpy is cross-compiled, the path provided by the build process are
-+hard-coded. Those paths are unsafe because they could poison the target package
-+with host libraries.
++	  http://www.scipy.org/
 +
-+Doing so, we can cross-compile python-scipy added in a following patch.
++comment "python-scipy needs lapack, gfortran"
++	depends on !BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
++	depends on !BR2_PACKAGE_PYTHON3
++	depends on !BR2_TOOLCHAIN_HAS_FORTRAN || !BR2_PACKAGE_LAPACK_COMPLEX
+diff --git a/package/python-scipy/python-scipy.hash b/package/python-scipy/python-scipy.hash
+new file mode 100644
+index 0000000000..3db1ac2346
+--- /dev/null
++++ b/package/python-scipy/python-scipy.hash
+@@ -0,0 +1,4 @@
++# sha256 locally calculated
++sha256  c3bb4bd2aca82fb498247deeac12265921fe231502a6bc6edea3ee7fe6c40a7a  scipy-1.3.0.tar.gz
++# License files, locally calculated
++sha256  904942f7df1dc0f4a48af8d72405854fd96497bd1fe9ddb2c69d1797c22dfcd7  LICENSE.txt
+diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
+new file mode 100644
+index 0000000000..793545ded0
+--- /dev/null
++++ b/package/python-scipy/python-scipy.mk
+@@ -0,0 +1,32 @@
++################################################################################
++#
++# python-scipy
++#
++################################################################################
 +
-+So :
-+- Remove every unsafe path for cross-compiling in python-numpy.
-+- Let the buildroot infrastructure provide the correct path through sysroot.
++PYTHON_SCIPY_VERSION = 1.3.0
++PYTHON_SCIPY_SOURCE = scipy-$(PYTHON_SCIPY_VERSION).tar.gz
++PYTHON_SCIPY_SITE = https://files.pythonhosted.org/packages/cb/97/361c8c6ceb3eb765371a702ea873ff2fe112fa40073e7d2b8199db8eb56e
++PYTHON_SCIPY_SETUP_TYPE = setuptools
++PYTHON_SCIPY_LICENSE = BSD-3c
++PYTHON_SCIPY_LICENSE_FILES = LICENSE.txt
++PYTHON_SCIPY_INSTALL_STAGING = YES
 +
-+A similar fix have been done in Yocto Project.
-+http://git.yoctoproject.org/cgit/cgit.cgi/poky/commit/?id=ced097eb4e30133acc6c3e9ed841b3463844cd39
++PYTHON_SCIPY_DEPENDENCIES = host-python-numpy python-numpy liblapack
 +
-+Signed-off-by: Romain Naour <romain.naour@smile.fr>
-+Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
-+---
-+ numpy/distutils/system_info.py | 33 ++++++---------------------------
-+ 1 file changed, 6 insertions(+), 27 deletions(-)
++# python-scipy needs lapack sources to build.
++PYTHON_SCIPY_ENV = \
++	LDSHARED="$(TARGET_CROSS)gcc" \
++	F70="$(TARGET_FC)" \
++	F90="$(TARGET_FC)" \
++	FC="$(TARGET_FC)" \
++	LAPACK_SRC=$(LAPACK_DIR) \
++	BLAS_SRC=$(LAPACK_DIR) \
++	LAPACK=$(STAGING_DIR)/usr/lib \
++	BLAS=$(STAGING_DIR)/usr/lib \
++	ATLAS=none \
++	LDFLAGS="$(TARGET_LDFLAGS) -shared -L$(STAGING_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/numpy/core/lib"
 +
-+diff --git a/numpy/distutils/system_info.py b/numpy/distutils/system_info.py
-+index 806f4f7d3..7cadd325d 100644
-+--- a/numpy/distutils/system_info.py
-++++ b/numpy/distutils/system_info.py
-+@@ -276,29 +276,13 @@ if sys.platform == 'win32':
-+             add_system_root(os.path.join(conda_dir, 'Library'))
-+ 
-+ else:
-+-    default_lib_dirs = libpaths(['/usr/local/lib', '/opt/lib', '/usr/lib',
-+-                                 '/opt/local/lib', '/sw/lib'], platform_bits)
-++    default_lib_dirs = []
-+     default_runtime_dirs = []
-+-    default_include_dirs = ['/usr/local/include',
-+-                            '/opt/include', '/usr/include',
-+-                            # path of umfpack under macports
-+-                            '/opt/local/include/ufsparse',
-+-                            '/opt/local/include', '/sw/include',
-+-                            '/usr/include/suitesparse']
-+-    default_src_dirs = ['.', '/usr/local/src', '/opt/src', '/sw/src']
-+-
-+-    default_x11_lib_dirs = libpaths(['/usr/X11R6/lib', '/usr/X11/lib',
-+-                                     '/usr/lib'], platform_bits)
-+-    default_x11_include_dirs = ['/usr/X11R6/include', '/usr/X11/include',
-+-                                '/usr/include']
-+-
-+-    if os.path.exists('/usr/lib/X11'):
-+-        globbed_x11_dir = glob('/usr/lib/*/libX11.so')
-+-        if globbed_x11_dir:
-+-            x11_so_dir = os.path.split(globbed_x11_dir[0])[0]
-+-            default_x11_lib_dirs.extend([x11_so_dir, '/usr/lib/X11'])
-+-            default_x11_include_dirs.extend(['/usr/lib/X11/include',
-+-                                             '/usr/include/X11'])
-++    default_include_dirs = []
-++    default_src_dirs = ['.']
-++
-++    default_x11_lib_dirs = []
-++    default_x11_include_dirs = []
-+ 
-+     tmp = None
-+     try:
-+@@ -321,11 +305,6 @@ else:
-+         if tmp is not None:
-+             tmp.close()
-+ 
-+-if os.path.join(sys.prefix, 'lib') not in default_lib_dirs:
-+-    default_lib_dirs.insert(0, os.path.join(sys.prefix, 'lib'))
-+-    default_include_dirs.append(os.path.join(sys.prefix, 'include'))
-+-    default_src_dirs.append(os.path.join(sys.prefix, 'src'))
-+-
-+ default_lib_dirs = [_m for _m in default_lib_dirs if os.path.isdir(_m)]
-+ default_runtime_dirs = [_m for _m in default_runtime_dirs if os.path.isdir(_m)]
-+ default_include_dirs = [_m for _m in default_include_dirs if os.path.isdir(_m)]
-+-- 
-+2.20.1
++PYTHON_SCIPY_BUILD_OPTS = config_fc --fcompiler=gnu95
 +
++$(eval $(python-package))
 -- 
 2.21.0
