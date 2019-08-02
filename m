@@ -1,68 +1,175 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Aug 2019 19:46:55 +0200
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.{14,
- 19}.x / 5.2.x series
-Message-ID: <20190802174515.832F98CA22@busybox.osuosl.org>
+From: Matthew Weber <matthew.weber@rockwellcollins.com>
+Date: Fri, 2 Aug 2019 13:13:18 -0500
+Subject: [Buildroot] [PATCH v7 5/5] testing/tests: CLANG compiler-rt
+ runtime test
+In-Reply-To: <71ae5092-e883-2f64-1689-725e46190cf6@smile.fr>
+References: <20190501194032.765-1-matthew.weber@rockwellcollins.com>
+ <20190501194032.765-6-matthew.weber@rockwellcollins.com>
+ <3f14fe0c-d2a1-4502-b94d-0045e4c06e5b@smile.fr>
+ <71ae5092-e883-2f64-1689-725e46190cf6@smile.fr>
+Message-ID: <CANQCQpbhZZW2K6nD7HvwHaC1Vs9KkmTv8SvkEGoSuuNYixxa4g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60d516989e86391fc3f637b44bb8f11621eef6b8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Romain,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 6 +++---
- package/linux-headers/Config.in.host | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index e275b8ad4f..544f6bff3d 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -122,7 +122,7 @@ endif
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "5.2.4" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "5.2.5" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "v4.19.60-cip7" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
- 		if BR2_LINUX_KERNEL_CUSTOM_VERSION
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 1bb374629e..33e708fb57 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256 b1cd8b9e0bfe7afb2fdf3915605db3a6cd3fe098833f9bc0b37aae74b057ee43  linux-5.2.4.tar.xz
-+sha256 c645402843f90a69426975f8923923dfc6edebb5d1bc0092560ffb7135d3cd96  linux-5.2.5.tar.xz
- sha256 56495f82314f0dfb84a3fe7fad78e17be69c4fd36ef46f2452458b2fa1e341f6  linux-5.1.21.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256 07be647189ced7eb8ba5ee769906e67919975772184842cc517f609df50cdadc  linux-4.19.62.tar.xz
--sha256 0b21e7b5effd92303a551b5be2380c9703d6fb87cfe5189fe0d795cc73903d2d  linux-4.14.134.tar.xz
-+sha256 75988760b931864b46292dcfad1dd54b3f4da10168041f48ca6d7f6dd4e5d25d  linux-4.19.63.tar.xz
-+sha256 429121e27971597044fb9efa19d25dcad76f5ef5c4e2d5270e674948e4055b74  linux-4.14.135.tar.xz
- sha256 242484430d0729791d8efd92181b7d34b4021050646c6e00cf459866eab94b6a  linux-4.9.186.tar.xz
- sha256 0b1273d35c0664234e069f1ba894161b466679f6e1053f44fcf4098290937984  linux-4.4.186.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index cabdb7f209..d677468a3d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -307,10 +307,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	string
- 	default "4.4.186"	if BR2_KERNEL_HEADERS_4_4
- 	default "4.9.186"	if BR2_KERNEL_HEADERS_4_9
--	default "4.14.134"	if BR2_KERNEL_HEADERS_4_14
--	default "4.19.62"	if BR2_KERNEL_HEADERS_4_19
-+	default "4.14.135"	if BR2_KERNEL_HEADERS_4_14
-+	default "4.19.63"	if BR2_KERNEL_HEADERS_4_19
- 	default "5.1.21"	if BR2_KERNEL_HEADERS_5_1
--	default "5.2.4"		if BR2_KERNEL_HEADERS_5_2
-+	default "5.2.5"		if BR2_KERNEL_HEADERS_5_2
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+On Thu, Aug 1, 2019 at 3:32 AM Romain Naour <romain.naour@smile.fr> wrote:
+>
+> Hi Matt,
+>
+> Le 07/05/2019 ? 23:12, Romain Naour a ?crit :
+> > Hi Matt,
+> >
+> > Le 01/05/2019 ? 21:40, Matt Weber a ?crit :
+> >> This patch adds a test case that
+> >>  1) Builds the complete LLVM and CLANG set of host tools
+> >>  2) Cross-compiles the compiler-rt runtime using CLANG
+> >>  3) Builds a cross-compiled application using CLANG and the libfuzzer
+> >>     compiler-rt library.
+> >>  4) Executes the fuzz application (part of the libfuzzer package) on
+> >>     target and checks expected output
+> >
+> > Can you provide an example of expected output of fuzz_me ?
+> > I tried on x86_64 bit but I get an error: AddressSanitizer: heap-buffer-overflow
+>
+> Ok, getting a heap-buffer-overflow is the purpose of this example :p
+
+I'll update my comment for 4)
+"Executes the fuzz application (part of the libfuzzer package) on
+target and checks expected output for a heap-buffer-overflow."
+
+> >
+> > I'm testing with aarch64 at the moment.
+> >
+> >>
+> >> Signed-off-by: Matthew Weber <matthew.weber@rockwellcollins.com>
+> >> Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> >>
+> >> Reviewed-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> >> [with the entire series applied on next branch:
+> >>  https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/121908178
+> >>  NOTE: this test case takes longer than test_rust, ~2 hours in my host
+> >>  machine with all tarballs previously downloaded]
+> >> Tested-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+> >> ---
+> >
+> > [snip]
+> >
+> > 6814053e847c10f3eb003417bc523d30  LICENSE
+> >> diff --git a/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
+> >> new file mode 100644
+> >> index 0000000000..7d6f83b4d3
+> >> --- /dev/null
+> >> +++ b/support/testing/tests/package/br2-external/clang-compiler-rt/package/libfuzzer/libfuzzer.mk
+> >> @@ -0,0 +1,24 @@
+> >> +################################################################################
+> >> +#
+> >> +# libfuzzer
+> >> +#
+> >> +################################################################################
+> >> +
+> >> +LIBFUZZER_VERSION = 64e4d9aa19a8d33b61882154addbf8419d7416e1
+> >> +LIBFUZZER_SITE = $(call github,google,fuzzer-test-suite,$(LIBFUZZER_VERSION))
+> >> +LIBFUZZER_LICENSE = Apache-2.0
+> >> +LIBFUZZER_LICENSE_FILES = LICENSE
+> >> +LIBFUZZER_DEPENDENCIES = compiler-rt
+> >> +
+> >> +define LIBFUZZER_BUILD_CMDS
+> >> +    $(HOST_DIR)/bin/clang++ -mcpu=cortex-a53 --sysroot=$(STAGING_DIR) \
+> >
+> > There is no -mcpu option with clang++, I had to use -march=x86-64 instead.
+> >
+> >> +            -B $(HOST_DIR)/opt/ext-toolchain -fsanitize=address,fuzzer \
+> >
+> > Using $(HOST_DIR)/opt/ext-toolchain expect an external toolchain (this is the
+> > case during the test), but it doesn't work for internal toolchain or external
+> > pre-installed toolchain.
+> >
+> > Clang++ is using the path provided by -B to find crtbegin.o. This object file is
+> > not copied when using a pre-installed toolchain.
+> >
+> > https://pastebin.com/Wm59Z9nz
+
+I assume I make have to do this conditionally based on the toolchain
+type? I don't believe our host dir setup is consistent between the
+toolchain type.
+
+> >
+> > Best regards,
+> > Romain
+> >
+> >> +            $(@D)/tutorial/fuzz_me.cc \
+> >> +            -o $(@D)/fuzz_me
+> >> +endef
+> >> +
+> >> +define LIBFUZZER_INSTALL_TARGET_CMDS
+> >> +    $(INSTALL) -D -m 755 $(@D)/fuzz_me $(TARGET_DIR)/usr/bin/fuzz_me
+> >> +endef
+> >> +
+> >> +$(eval $(generic-package))
+> >> diff --git a/support/testing/tests/package/test_clang.py b/support/testing/tests/package/test_clang.py
+> >> new file mode 100644
+> >> index 0000000000..84a2528b00
+> >> --- /dev/null
+> >> +++ b/support/testing/tests/package/test_clang.py
+> >> @@ -0,0 +1,46 @@
+> >> +import os
+> >> +
+> >> +import infra.basetest
+> >> +
+> >> +FUZZ_TIMEOUT = 120
+> >> +
+> >> +
+> >> +class TestClangCompilerRT(infra.basetest.BRTest):
+> >> +    br2_external = [infra.filepath("tests/package/br2-external/clang-compiler-rt")]
+> >> +    config = \
+> >> +        """
+> >> +        BR2_aarch64=y
+> >> +        BR2_TOOLCHAIN_EXTERNAL=y
+> >> +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+> >> +        BR2_LINUX_KERNEL=y
+> >> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> >> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.16.7"
+> >> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> >> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+> >> +        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> >> +        BR2_PACKAGE_COMPILER_RT=y
+> >> +        BR2_PACKAGE_LLVM=y
+> >> +        BR2_TARGET_ROOTFS_CPIO=y
+> >> +        BR2_TARGET_ROOTFS_CPIO_GZIP=y
+> >> +        # BR2_TARGET_ROOTFS_TAR is not set
+> >> +        BR2_PACKAGE_LIBFUZZER=y
+> >> +        """
+> >> +
+> >> +    def login(self):
+> >> +        img = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
+> >> +        kern = os.path.join(self.builddir, "images", "Image")
+> >> +        # Sanitizers overallocate memory and the minimum that seemed to work was 512MB
+> >> +        self.emulator.boot(arch="aarch64",
+> >> +                           kernel=kern,
+> >> +                           kernel_cmdline=["console=ttyAMA0"],
+> >> +                           options=["-M", "virt", "-cpu", "cortex-a53", "-m", "512", "-initrd", img])
+> >> +        self.emulator.login()
+> >> +
+> >> +    def test_run(self):
+> >> +        self.login()
+> >> +
+> >> +        # The test case verifies both that the application executes and that
+> >> +        # the symbolizer is working to decode the stack trace
+> >> +        cmd = "fuzz_me 2>&1 | grep _M_replace"
+>
+> Can you explain why the test is looking at _M_replace in the log of fuzz_me ?
+> It seems specific to aarch64 backtrace.
+
+Correct, I just verify the application executes with an expected
+symbolizer string being displayed.  It may not be arch independent as
+you pointed out.
+
+Thanks for the review, I'll do some investigation further on the
+toolchain link path stuff above between the toolchain types.
+
+Matt
