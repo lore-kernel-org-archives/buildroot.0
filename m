@@ -1,44 +1,91 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Aug 2019 22:48:00 +0200
-Subject: [Buildroot] [git commit] package/quagga: bump to version 1.2.4
-Message-ID: <20190802205213.9A7ED8D1E5@busybox.osuosl.org>
+Date: Fri, 2 Aug 2019 22:51:54 +0200
+Subject: [Buildroot] [git commit] package/gcc: remove libmudflap option
+Message-ID: <20190802205213.B2F4E8CA63@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5b169afaa4fdf06041e1ac896f618363e92ad4fe
+commit: https://git.buildroot.net/buildroot/commit/?id=77b3c089e9385ae43daa359d476a7339cc2905bb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+libmudflap was removed from gcc 4.9 [1] so it depends on gcc <= 4.9.
+This option can't be selected since we removed gcc 4.8 from Buildroot
+[2].
+
+[1] 4a692aefee10088c385d30e829abf80af1616d1b
+[2] f66952197b41452b77dfa065adc7172137e4c243
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/quagga/quagga.hash | 2 +-
- package/quagga/quagga.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/gcc/Config.in.host         | 16 ----------------
+ package/gcc/gcc-final/gcc-final.mk |  8 --------
+ package/gcc/gcc.mk                 |  6 ------
+ 3 files changed, 30 deletions(-)
 
-diff --git a/package/quagga/quagga.hash b/package/quagga/quagga.hash
-index 93fc42c8fc..293cee4d59 100644
---- a/package/quagga/quagga.hash
-+++ b/package/quagga/quagga.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256	ee2c0907a106902abbdcaf63b4f28c67241c4f3396989ed54da7b4976eecad31	quagga-1.2.3.tar.gz
-+sha256	e364c082c3309910e1eb7b068bf39ee298e2f2f3f31a6431a5c115193bd653d3	quagga-1.2.4.tar.gz
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index a3ba7cf90d..15ce7b81b5 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -154,22 +154,6 @@ config BR2_GCC_ENABLE_OPENMP
+ 	help
+ 	  Enable OpenMP support for the compiler
  
- # Hash for license file
- sha256	b39c1bad4e51e2a3389cd25fc4addebe41a3ae7c11100795683f9330de1536e5	COPYING
-diff --git a/package/quagga/quagga.mk b/package/quagga/quagga.mk
-index 8aa58aceef..9092e7cbdc 100644
---- a/package/quagga/quagga.mk
-+++ b/package/quagga/quagga.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-config BR2_GCC_ENABLE_LIBMUDFLAP
+-	bool "Enable libmudflap support"
+-	# There are architectures, or specific configurations for
+-	# which mudflap is not supported.
+-	depends on !BR2_ARM_INSTRUCTIONS_THUMB && !BR2_powerpc_SPE
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-	help
+-	  libmudflap is a gcc library used for the mudflap pointer
+-	  debugging functionality. It is only needed if you intend to
+-	  use the -fmudflap gcc flag.
+-
+-	  See http://gcc.gnu.org/wiki/Mudflap_Pointer_Debugging and
+-	  the help of the gcc -fmudflap option for more details.
+-
+-	  If you're unsure, leave this option disabled.
+-
+ config BR2_GCC_ENABLE_GRAPHITE
+ 	bool "Enable graphite support"
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5
+diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
+index 49f16f699e..f478fde0d7 100644
+--- a/package/gcc/gcc-final/gcc-final.mk
++++ b/package/gcc/gcc-final/gcc-final.mk
+@@ -184,14 +184,6 @@ ifeq ($(BR2_GCC_ENABLE_OPENMP),y)
+ HOST_GCC_FINAL_USR_LIBS += libgomp
+ endif
  
--QUAGGA_VERSION = 1.2.3
-+QUAGGA_VERSION = 1.2.4
- QUAGGA_SITE = http://download.savannah.gnu.org/releases/quagga
- QUAGGA_DEPENDENCIES = host-gawk host-pkgconf
- QUAGGA_LICENSE = GPL-2.0+
+-ifeq ($(BR2_GCC_ENABLE_LIBMUDFLAP),y)
+-ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
+-HOST_GCC_FINAL_USR_LIBS += libmudflapth
+-else
+-HOST_GCC_FINAL_USR_LIBS += libmudflap
+-endif
+-endif
+-
+ ifneq ($(HOST_GCC_FINAL_USR_LIBS),)
+ define HOST_GCC_FINAL_INSTALL_STATIC_LIBS
+ 	for i in $(HOST_GCC_FINAL_USR_LIBS) ; do \
+diff --git a/package/gcc/gcc.mk b/package/gcc/gcc.mk
+index 46ad16df13..20ef544ef5 100644
+--- a/package/gcc/gcc.mk
++++ b/package/gcc/gcc.mk
+@@ -155,12 +155,6 @@ ifeq ($(BR2_GCC_ENABLE_LTO),y)
+ HOST_GCC_COMMON_CONF_OPTS += --enable-plugins --enable-lto
+ endif
+ 
+-ifeq ($(BR2_GCC_ENABLE_LIBMUDFLAP),y)
+-HOST_GCC_COMMON_CONF_OPTS += --enable-libmudflap
+-else
+-HOST_GCC_COMMON_CONF_OPTS += --disable-libmudflap
+-endif
+-
+ ifeq ($(BR2_PTHREADS_NONE),y)
+ HOST_GCC_COMMON_CONF_OPTS += \
+ 	--disable-threads \
