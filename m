@@ -1,30 +1,30 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Aug 2019 23:53:01 +0200
-Subject: [Buildroot] [PATCH v2 2/7] package/qemu: enable sparc64 support
- for host-qemu
-In-Reply-To: <1557075239-30667-3-git-send-email-jugurtha.belkalem@smile.fr>
+Date: Fri, 2 Aug 2019 23:53:05 +0200
+Subject: [Buildroot] [PATCH v2 3/7] package/qemu: remove comment about
+ sh64
+In-Reply-To: <1557075239-30667-4-git-send-email-jugurtha.belkalem@smile.fr>
 References: <1557075239-30667-1-git-send-email-jugurtha.belkalem@smile.fr>
- <1557075239-30667-3-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <20190802235301.6a272a2d@windsurf.home>
+ <1557075239-30667-4-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <20190802235305.54c7ee67@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sun,  5 May 2019 18:53:54 +0200
+On Sun,  5 May 2019 18:53:55 +0200
 Jugurtha BELKALEM <jugurtha.belkalem@smile.fr> wrote:
 
-> This config enable host eqmu support for sparc64 which
-> allows to test this architecture in gitlab.
+> sh64 has been removed since commit [1]:
+> 
+> [1] 4338a319b72570e433fd7484f8a95e1e0e978941
 > 
 > Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
 > ---
->  package/qemu/Config.in.host | 1 +
->  package/qemu/qemu.mk        | 1 +
->  2 files changed, 2 insertions(+)
+>  package/qemu/qemu.mk | 1 -
+>  1 file changed, 1 deletion(-)
 
-Applied to master after tweaking a bit the commit log. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
