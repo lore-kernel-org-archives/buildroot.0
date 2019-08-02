@@ -1,508 +1,59 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 2 Aug 2019 23:32:40 +0200
-Subject: [Buildroot] [git commit] support/config-fragments/autobuild: update
- toolchains to 2019.05.1
-Message-ID: <20190802213127.8980A89007@busybox.osuosl.org>
+Date: Fri, 02 Aug 2019 23:35:18 +0200
+Subject: [Buildroot] [PATCH] python-matplotlib: needs a toolchain with
+ C++ support
+In-Reply-To: <20190802162226.15556-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 2 Aug 2019 18:22:26 +0200")
+References: <20190802162226.15556-1-peter@korsgaard.com>
+Message-ID: <874l2zp7xl.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=84f356e37530717f1e3924edaa836faac3eb9b0e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-All toolchains have been rebuilt with Buildroot 2019.05.1. A number of
-toolchains are now using Linux headers 5.1 instead of 4.19, because
-5.1 is now the default version.
+ > Matplotlib contains .cpp source code:
+ > ls src/*.cpp
+ > src/_backend_agg.cpp
+ > src/_backend_agg_wrapper.cpp
+ > src/_contour.cpp
+ > src/_contour_wrapper.cpp
+ > src/ft2font.cpp
+ > src/ft2font_wrapper.cpp
+ > src/_image.cpp
+ > src/_image_wrapper.cpp
+ > src/mplutils.cpp
+ > src/_path_wrapper.cpp
+ > src/_png.cpp
+ > src/py_converters.cpp
+ > src/_tkagg.cpp
+ > src/_ttconv.cpp
+ > src/_windowing.cpp
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- support/config-fragments/autobuild/br-aarch64-glibc.config            | 2 +-
- support/config-fragments/autobuild/br-arcle-hs38.config               | 2 +-
- support/config-fragments/autobuild/br-arm-basic.config                | 4 ++--
- support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config      | 4 ++--
- support/config-fragments/autobuild/br-arm-cortex-a9-musl.config       | 4 ++--
- support/config-fragments/autobuild/br-arm-cortex-m4-full.config       | 4 ++--
- support/config-fragments/autobuild/br-arm-full-nothread.config        | 4 ++--
- support/config-fragments/autobuild/br-arm-full-static.config          | 2 +-
- support/config-fragments/autobuild/br-arm-full.config                 | 2 +-
- support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config    | 2 +-
- support/config-fragments/autobuild/br-i386-pentium4-full.config       | 2 +-
- support/config-fragments/autobuild/br-m68k-5208-full.config           | 4 ++--
- support/config-fragments/autobuild/br-m68k-68040-full.config          | 4 ++--
- support/config-fragments/autobuild/br-microblazeel-full.config        | 2 +-
- support/config-fragments/autobuild/br-mips32r6-el-hf-glibc.config     | 4 ++--
- support/config-fragments/autobuild/br-mips64-n64-full.config          | 4 ++--
- support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config     | 4 ++--
- support/config-fragments/autobuild/br-mipsel-o32-full.config          | 4 ++--
- support/config-fragments/autobuild/br-nios2-glibc.config              | 4 ++--
- support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config   | 4 ++--
- support/config-fragments/autobuild/br-powerpc-e500mc-full.config      | 4 ++--
- support/config-fragments/autobuild/br-powerpc64-power7-glibc.config   | 4 ++--
- support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config | 4 ++--
- support/config-fragments/autobuild/br-riscv32.config                  | 4 ++--
- support/config-fragments/autobuild/br-riscv64.config                  | 4 ++--
- support/config-fragments/autobuild/br-sh4-full.config                 | 4 ++--
- support/config-fragments/autobuild/br-sparc-uclibc.config             | 2 +-
- support/config-fragments/autobuild/br-sparc64-glibc.config            | 2 +-
- support/config-fragments/autobuild/br-x86-64-core2-full.config        | 4 ++--
- support/config-fragments/autobuild/br-x86-64-musl.config              | 4 ++--
- support/config-fragments/autobuild/br-xtensa-full.config              | 4 ++--
- 31 files changed, 53 insertions(+), 53 deletions(-)
+ > So add a dependency on C++ support in the toolchain to fix build errors like
+ > (no autobuilder reference yet):
 
-diff --git a/support/config-fragments/autobuild/br-aarch64-glibc.config b/support/config-fragments/autobuild/br-aarch64-glibc.config
-index 048c27d6cd..42b1c3316c 100644
---- a/support/config-fragments/autobuild/br-aarch64-glibc.config
-+++ b/support/config-fragments/autobuild/br-aarch64-glibc.config
-@@ -2,7 +2,7 @@ BR2_aarch64=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-aarch64-glibc-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-aarch64-glibc-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
- BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-diff --git a/support/config-fragments/autobuild/br-arcle-hs38.config b/support/config-fragments/autobuild/br-arcle-hs38.config
-index 0832ddd305..eeec8f38e6 100644
---- a/support/config-fragments/autobuild/br-arcle-hs38.config
-+++ b/support/config-fragments/autobuild/br-arcle-hs38.config
-@@ -3,7 +3,7 @@ BR2_archs38=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arcle-hs38-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arcle-hs38-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
- BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-diff --git a/support/config-fragments/autobuild/br-arm-basic.config b/support/config-fragments/autobuild/br-arm-basic.config
-index c576b248b8..6f7c0ce138 100644
---- a/support/config-fragments/autobuild/br-arm-basic.config
-+++ b/support/config-fragments/autobuild/br-arm-basic.config
-@@ -2,7 +2,7 @@ BR2_arm=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-basic-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-basic-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
-diff --git a/support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config b/support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config
-index 63fb66983e..ab1c904bfd 100644
---- a/support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config
-+++ b/support/config-fragments/autobuild/br-arm-cortex-a9-glibc.config
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_VFP=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-glibc-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-glibc-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_8=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_20=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-arm-cortex-a9-musl.config b/support/config-fragments/autobuild/br-arm-cortex-a9-musl.config
-index 3a1499e32f..8f96b3c10f 100644
---- a/support/config-fragments/autobuild/br-arm-cortex-a9-musl.config
-+++ b/support/config-fragments/autobuild/br-arm-cortex-a9-musl.config
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_VFP=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-a9-musl-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-arm-cortex-m4-full.config b/support/config-fragments/autobuild/br-arm-cortex-m4-full.config
-index 36f1647730..327b490f7d 100644
---- a/support/config-fragments/autobuild/br-arm-cortex-m4-full.config
-+++ b/support/config-fragments/autobuild/br-arm-cortex-m4-full.config
-@@ -3,9 +3,9 @@ BR2_cortex_m4=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-m4-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-cortex-m4-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
- # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
- # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL is not set
-diff --git a/support/config-fragments/autobuild/br-arm-full-nothread.config b/support/config-fragments/autobuild/br-arm-full-nothread.config
-index a777d24e66..8215d0a6f9 100644
---- a/support/config-fragments/autobuild/br-arm-full-nothread.config
-+++ b/support/config-fragments/autobuild/br-arm-full-nothread.config
-@@ -3,9 +3,9 @@ BR2_arm1176jzf_s=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm11-full-nothread-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm11-full-nothread-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
- # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS is not set
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-arm-full-static.config b/support/config-fragments/autobuild/br-arm-full-static.config
-index 2e41e0b340..f1ec1cb1a0 100644
---- a/support/config-fragments/autobuild/br-arm-full-static.config
-+++ b/support/config-fragments/autobuild/br-arm-full-static.config
-@@ -3,7 +3,7 @@ BR2_STATIC_LIBS=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-static-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
- BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-diff --git a/support/config-fragments/autobuild/br-arm-full.config b/support/config-fragments/autobuild/br-arm-full.config
-index 7462706a0a..f27cc65619 100644
---- a/support/config-fragments/autobuild/br-arm-full.config
-+++ b/support/config-fragments/autobuild/br-arm-full.config
-@@ -2,7 +2,7 @@ BR2_arm=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-arm-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_4_9=y
- BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-diff --git a/support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config b/support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config
-index fa91cfefed..d177f5aed6 100644
---- a/support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config
-+++ b/support/config-fragments/autobuild/br-i386-pentium-mmx-musl.config
-@@ -2,7 +2,7 @@ BR2_x86_pentium_mmx=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-i386-pentium-mmx-musl-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-i386-pentium-mmx-musl-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
- BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
-diff --git a/support/config-fragments/autobuild/br-i386-pentium4-full.config b/support/config-fragments/autobuild/br-i386-pentium4-full.config
-index bf0d4165c8..cd359d7910 100644
---- a/support/config-fragments/autobuild/br-i386-pentium4-full.config
-+++ b/support/config-fragments/autobuild/br-i386-pentium4-full.config
-@@ -2,7 +2,7 @@ BR2_x86_pentium4=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-i386-pentium4-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
- BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_4=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-diff --git a/support/config-fragments/autobuild/br-m68k-5208-full.config b/support/config-fragments/autobuild/br-m68k-5208-full.config
-index f75cf3ac5f..25c7f10de5 100644
---- a/support/config-fragments/autobuild/br-m68k-5208-full.config
-+++ b/support/config-fragments/autobuild/br-m68k-5208-full.config
-@@ -2,9 +2,9 @@ BR2_m68k=y
- BR2_m68k_cf5208=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-m68k-5208-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-m68k-5208-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
- # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
- # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL is not set
-diff --git a/support/config-fragments/autobuild/br-m68k-68040-full.config b/support/config-fragments/autobuild/br-m68k-68040-full.config
-index 1bb6aeb8b6..089b8f14fb 100644
---- a/support/config-fragments/autobuild/br-m68k-68040-full.config
-+++ b/support/config-fragments/autobuild/br-m68k-68040-full.config
-@@ -1,9 +1,9 @@
- BR2_m68k=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-m68k-68040-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-m68k-68040-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
- # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
- # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_NPTL is not set
-diff --git a/support/config-fragments/autobuild/br-microblazeel-full.config b/support/config-fragments/autobuild/br-microblazeel-full.config
-index 035cb72e8e..2ddfb69762 100644
---- a/support/config-fragments/autobuild/br-microblazeel-full.config
-+++ b/support/config-fragments/autobuild/br-microblazeel-full.config
-@@ -1,7 +1,7 @@
- BR2_microblazeel=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-microblaze-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-microblaze-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
- BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-diff --git a/support/config-fragments/autobuild/br-mips32r6-el-hf-glibc.config b/support/config-fragments/autobuild/br-mips32r6-el-hf-glibc.config
-index 7454a4da23..d5f60b6f28 100644
---- a/support/config-fragments/autobuild/br-mips32r6-el-hf-glibc.config
-+++ b/support/config-fragments/autobuild/br-mips32r6-el-hf-glibc.config
-@@ -4,8 +4,8 @@ BR2_mips_32r6=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips32r6-el-hf-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips32r6-el-hf-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-mips64-n64-full.config b/support/config-fragments/autobuild/br-mips64-n64-full.config
-index 3f2e5d9ba2..3b95c2a9d7 100644
---- a/support/config-fragments/autobuild/br-mips64-n64-full.config
-+++ b/support/config-fragments/autobuild/br-mips64-n64-full.config
-@@ -3,8 +3,8 @@ BR2_MIPS_NABI64=y
- # BR2_MIPS_SOFT_FLOAT is not set
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips64-n64-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips64-n64-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_5=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config b/support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config
-index b47b434168..d9c544c62b 100644
---- a/support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config
-+++ b/support/config-fragments/autobuild/br-mips64r6-el-hf-glibc.config
-@@ -5,8 +5,8 @@ BR2_MIPS_NABI64=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips64r6-n64-el-hf-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mips64r6-n64-el-hf-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-mipsel-o32-full.config b/support/config-fragments/autobuild/br-mipsel-o32-full.config
-index 6cf919b1e1..87884e0076 100644
---- a/support/config-fragments/autobuild/br-mipsel-o32-full.config
-+++ b/support/config-fragments/autobuild/br-mipsel-o32-full.config
-@@ -2,9 +2,9 @@ BR2_mipsel=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-mipsel-o32-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
- # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-nios2-glibc.config b/support/config-fragments/autobuild/br-nios2-glibc.config
-index e25ea65a35..cbef0bd74d 100644
---- a/support/config-fragments/autobuild/br-nios2-glibc.config
-+++ b/support/config-fragments/autobuild/br-nios2-glibc.config
-@@ -2,9 +2,9 @@ BR2_nios2=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-nios2-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-nios2-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
- # BR2_TOOLCHAIN_EXTERNAL_HAS_SSP is not set
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config b/support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config
-index 0f19616ab2..dec7b7f681 100644
---- a/support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config
-+++ b/support/config-fragments/autobuild/br-powerpc-603e-basic-cpp.config
-@@ -3,8 +3,8 @@ BR2_powerpc_603e=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-powerpc-603e-basic-cpp-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-powerpc-603e-basic-cpp-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-powerpc-e500mc-full.config b/support/config-fragments/autobuild/br-powerpc-e500mc-full.config
-index 1673adbc00..e116daadee 100644
---- a/support/config-fragments/autobuild/br-powerpc-e500mc-full.config
-+++ b/support/config-fragments/autobuild/br-powerpc-e500mc-full.config
-@@ -3,9 +3,9 @@ BR2_powerpc_e500mc=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-powerpc-e500mc-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-powerpc-e500mc-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
- # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-powerpc64-power7-glibc.config b/support/config-fragments/autobuild/br-powerpc64-power7-glibc.config
-index fb51593412..48686bbcf8 100644
---- a/support/config-fragments/autobuild/br-powerpc64-power7-glibc.config
-+++ b/support/config-fragments/autobuild/br-powerpc64-power7-glibc.config
-@@ -2,8 +2,8 @@ BR2_powerpc64=y
- BR2_powerpc_power7=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-powerpc64-power7-glibc-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-powerpc64-power7-glibc-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config b/support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config
-index 964a13e2b3..c12e06e195 100644
---- a/support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config
-+++ b/support/config-fragments/autobuild/br-powerpc64le-power8-glibc.config
-@@ -2,8 +2,8 @@ BR2_powerpc64le=y
- BR2_powerpc_power8=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-powerpc64le-power8-glibc-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-powerpc64le-power8-glibc-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-riscv32.config b/support/config-fragments/autobuild/br-riscv32.config
-index 9565a0b70b..c64dd79b4d 100644
---- a/support/config-fragments/autobuild/br-riscv32.config
-+++ b/support/config-fragments/autobuild/br-riscv32.config
-@@ -2,7 +2,7 @@ BR2_riscv=y
- BR2_RISCV_32=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv32-2019.02-rc1.tar.bz2"
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv32-glibc-2019.05.1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_0=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-riscv64.config b/support/config-fragments/autobuild/br-riscv64.config
-index 61912cfd7b..4c156e9e34 100644
---- a/support/config-fragments/autobuild/br-riscv64.config
-+++ b/support/config-fragments/autobuild/br-riscv64.config
-@@ -1,7 +1,7 @@
- BR2_riscv=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv64-2019.02-rc1.tar.bz2"
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.net/toolchains/tarballs/br-riscv64-glibc-2019.05.1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-sh4-full.config b/support/config-fragments/autobuild/br-sh4-full.config
-index 3651fb6ee7..a2c7d0fed7 100644
---- a/support/config-fragments/autobuild/br-sh4-full.config
-+++ b/support/config-fragments/autobuild/br-sh4-full.config
-@@ -2,9 +2,9 @@ BR2_sh=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sh4-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sh4-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
- # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-sparc-uclibc.config b/support/config-fragments/autobuild/br-sparc-uclibc.config
-index d6b8d69e60..13e81804a2 100644
---- a/support/config-fragments/autobuild/br-sparc-uclibc.config
-+++ b/support/config-fragments/autobuild/br-sparc-uclibc.config
-@@ -1,7 +1,7 @@
- BR2_sparc=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sparc-uclibc-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sparc-uclibc-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
- BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_9=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
-diff --git a/support/config-fragments/autobuild/br-sparc64-glibc.config b/support/config-fragments/autobuild/br-sparc64-glibc.config
-index a4d1cc6688..293d477c95 100644
---- a/support/config-fragments/autobuild/br-sparc64-glibc.config
-+++ b/support/config-fragments/autobuild/br-sparc64-glibc.config
-@@ -1,7 +1,7 @@
- BR2_sparc64=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sparc64-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-sparc64-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
- BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_14=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-diff --git a/support/config-fragments/autobuild/br-x86-64-core2-full.config b/support/config-fragments/autobuild/br-x86-64-core2-full.config
-index 29ac6891f6..7220244442 100644
---- a/support/config-fragments/autobuild/br-x86-64-core2-full.config
-+++ b/support/config-fragments/autobuild/br-x86-64-core2-full.config
-@@ -3,9 +3,9 @@ BR2_x86_core2=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-core2-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
- # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-x86-64-musl.config b/support/config-fragments/autobuild/br-x86-64-musl.config
-index 595d968f3c..7d673f42ec 100644
---- a/support/config-fragments/autobuild/br-x86-64-musl.config
-+++ b/support/config-fragments/autobuild/br-x86-64-musl.config
-@@ -3,8 +3,8 @@ BR2_x86_atom=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-musl-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-x86-64-musl-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_CUSTOM_MUSL=y
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
-diff --git a/support/config-fragments/autobuild/br-xtensa-full.config b/support/config-fragments/autobuild/br-xtensa-full.config
-index bd531abbf1..4057e624db 100644
---- a/support/config-fragments/autobuild/br-xtensa-full.config
-+++ b/support/config-fragments/autobuild/br-xtensa-full.config
-@@ -1,9 +1,9 @@
- BR2_xtensa=y
- BR2_TOOLCHAIN_EXTERNAL=y
- BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
--BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-xtensa-full-2019.02-rc1.tar.bz2"
-+BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/br-xtensa-full-2019.05.1.tar.bz2"
- BR2_TOOLCHAIN_EXTERNAL_GCC_7=y
--BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_19=y
-+BR2_TOOLCHAIN_EXTERNAL_HEADERS_5_1=y
- BR2_TOOLCHAIN_EXTERNAL_LOCALE=y
- # BR2_TOOLCHAIN_EXTERNAL_HAS_THREADS_DEBUG is not set
- BR2_TOOLCHAIN_EXTERNAL_CXX=y
+ > ../output/host/bin/powerpc-buildroot-linux-uclibc-gcc -Wno-unused-result \
+ >   -Wsign-compare -DNDEBUG -g -fwrapv -O3 -Wall -D_LARGEFILE_SOURCE \
+ >   -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Os -fPIC \
+ >   -DFREETYPE_BUILD_TYPE=system \
+ >   -DPY_ARRAY_UNIQUE_SYMBOL=MPL_matplotlib_ft2font_ARRAY_API \
+ >   -DNPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION -D__STDC_FORMAT_MACROS=1 \
+ >   -I../output/host/lib/python3.7/site-packages/numpy/core/include \
+ >   -Iextern/agg24-svn/include \
+ >   -I../output/host/bin/../powerpc-buildroot-linux-uclibc/sysroot/usr/include \
+ >   -I../output/host/bin/../powerpc-buildroot-linux-uclibc/sysroot/usr/include/freetype2 \
+ >   -I. \
+ >   -I../output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/python3.7m \
+ >   -c src/ft2font.cpp -o build/temp.linux-x86_64-3.7/src/ft2font.o
+ > powerpc-buildroot-linux-uclibc-gcc.br_real: error: src/ft2font.cpp: C++
+ >   compiler not installed on this system
+
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+
+Committed after fixing the subject, thanks.
+
+-- 
+Bye, Peter Korsgaard
