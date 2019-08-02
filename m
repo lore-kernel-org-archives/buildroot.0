@@ -1,95 +1,56 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  2 Aug 2019 16:49:44 +0200
-Subject: [Buildroot] [PATCH] package/python3: fix configure issue for
- musl/uclibc GCC 8+ toolchains on powerpc
-Message-ID: <20190802144945.22971-1-peter@korsgaard.com>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Fri, 2 Aug 2019 17:10:50 +0200
+Subject: [Buildroot] [git commit] package/mtd: needs zstd
+Message-ID: <20190802151212.B54CE8C700@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+commit: https://git.buildroot.net/buildroot/commit/?id=9ace1cff3314e30d6ccf20005d6f72e1e144153d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+For the target variant, zstd is an optional dependency when ubifs-tools
+are enabled. For the host variant, we make it an unconditional
+dependency.
+
 Fixes:
-http://autobuild.buildroot.net/results/cb4/cb49c539501342e45cbe5ade82e588fcdf51f05b
+http://autobuild.buildroot.org/results/99baf1de106f9c80a32e665263c1e4278097643d (target)
+http://autobuild.buildroot.org/results/e3b96704f0b23e82999aa3d6e93233edecbecfe7 (host)
 
-GCC commit 6834b83784dcf0364eb820e8 (multiarch support for non-glibc linux
-systems), which is part of GCC 8+, changed the multiarch logic to use
-$arch-linux-musl / $arch-linux-uclibc rather than $arch-linux-gnu.
-
-This then causes the python3 configure script to error out:
-
-checking for the platform triplet based on compiler characteristics... powerpc-linux-gnu
-configure: error: internal configure error for the platform triplet, please file a bug report
-
-http://autobuild.buildroot.net/results/cb4/cb49c539501342e45cbe5ade82e588fcdf51f05b
-
-As it requires that the --print-multiarch output (if not empty) matches the
-deduced triplet (which always uses -linux-gnu).
-
-It isn't quite clear why --print-multiarch returns something for a
-non-multiarch toolchain on some architectures (E.G.  PowerPC), but as a
-workaround, add a patch to rewrite the --print-multiarch output to match
-older GCC versions to keep the configure script happy.
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Tested-by: Markus Mayer <mmayer@broadcom.com>
+[yann.morin.1998 at free.fr: fix the target variant too]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- ...c-fixup-CC-print-multiarch-output-for-mus.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
+ package/mtd/mtd.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch b/package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
-new file mode 100644
-index 0000000000..19a0f23e7b
---- /dev/null
-+++ b/package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
-@@ -0,0 +1,48 @@
-+From e1a2c27bcb9091f851ef7a9c7d59822a125a0b8e Mon Sep 17 00:00:00 2001
-+From: Peter Korsgaard <peter@korsgaard.com>
-+Date: Fri, 2 Aug 2019 15:53:16 +0200
-+Subject: [PATCH] configure.ac: fixup $CC --print-multiarch output for
-+ musl/uclibc GCC 8+ toolchains
-+
-+GCC commit 6834b83784dcf0364eb820e8 (multiarch support for non-glibc linux
-+systems), which is part of GCC 8+, changed the multiarch logic to use
-+$arch-linux-musl / $arch-linux-uclibc rather than $arch-linux-gnu.
-+
-+This then causes the python3 configure script to error out:
-+
-+checking for the platform triplet based on compiler characteristics... powerpc-linux-gnu
-+configure: error: internal configure error for the platform triplet, please file a bug report
-+
-+http://autobuild.buildroot.net/results/cb4/cb49c539501342e45cbe5ade82e588fcdf51f05b
-+
-+As it requires that the --print-multiarch output (if not empty) matches the
-+deduced triplet (which always uses -linux-gnu).
-+
-+It isn't quite clear why --print-multiarch returns something for a
-+non-multiarch toolchain on some architectures (E.G.  PowerPC), but as a
-+workaround, rewrite the --print-multiarch output to match older GCC versions
-+to keep the configure script happy.
-+
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+---
-+ configure.ac | 4 +++-
-+ 1 file changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index e5fb7e7b0b..9c64f960d6 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -724,7 +724,9 @@ then
-+ fi
-+ 
-+ 
-+-MULTIARCH=$($CC --print-multiarch 2>/dev/null)
-++# GCC 8+ returns $arch-linux-{musl,uclibc} for musl/uClibc based
-++# toolchains confusing python. Fix that up
-++MULTIARCH=$($CC --print-multiarch 2>/dev/null | sed -E 's/-linux-(musl|uclibc)*$/-linux-gnu/')
-+ AC_SUBST(MULTIARCH)
-+ 
-+ AC_MSG_CHECKING([for the platform triplet based on compiler characteristics])
-+-- 
-+2.11.0
-+
--- 
-2.11.0
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 0de14dbcba..3477460200 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -27,6 +27,12 @@ MTD_CONF_OPTS += --with-crypto
+ else
+ MTD_CONF_OPTS += --without-crypto
+ endif
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++MTD_DEPENDENCIES += zstd
++MTD_CONF_OPTS += --with-zstd
++else
++MTD_CONF_OPTS += --without-zstd
++endif
+ else
+ MTD_CONF_OPTS += --without-ubifs
+ endif
+@@ -46,7 +52,7 @@ else
+ MTD_CONF_OPTS += --without-xattr
+ endif
+ 
+-HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux
++HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux host-zstd
+ HOST_MTD_CONF_OPTS = \
+ 	--with-jffs \
+ 	--with-ubifs \
