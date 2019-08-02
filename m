@@ -1,131 +1,57 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri,  2 Aug 2019 23:36:46 +0200
-Subject: [Buildroot] [PATCH]
- toolchain/toolchain-external/toolchain-external-custom: be more flexible on
- gcc version
-Message-ID: <20190802213646.29444-1-thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 2 Aug 2019 23:37:34 +0200
+Subject: [Buildroot] csky_gx6605s_defconfig add
+ "BR2_TOOLCHAIN_EXTERNAL=y"
+In-Reply-To: <8130d244-31a8-a5df-9bc9-ecb2d53280c9@mind.be>
+References: <tencent_2664A2093675DB6268415CDB@qq.com>
+ <8130d244-31a8-a5df-9bc9-ecb2d53280c9@mind.be>
+Message-ID: <d9edd887-f1bc-0b0b-9d1a-a84b6d372706@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-The custom external toolchain logic asks the user to specify which gcc
-version is provided by the toolchain. The list of gcc versions given
-by Buildroot is restricted depending on the selected CPU architecture
-using the BR2_ARCH_NEEDS_GCC_AT_LEAST_xyz config options.
+ Sorry, I accidentally pressed send.
 
-However, these config options generally indicate in which upstream gcc
-version the support for the selected architecture was introduced. But
-in practice, it is possible that an external toolchain uses some
-non-upstream gcc code, providing support for a CPU architecture before
-it was merged in upstream gcc.
+On 02/08/2019 23:26, Arnout Vandecappelle wrote:
+>  Hi Liu,
+> 
+>  Thank you for this patch.
+> 
+> On 20/06/2019 11:56, ??? wrote:
+>> hi?
+>> ???????? ? buildroot source: git clone git://git.buildroot.net/buildroot
+>> ?????????
+>> all BR2_TOOLCHAIN_EXTERNAL_* items depend on BR2_TOOLCHAIN_EXTERNAL=y
 
-A specific example is that there are pre-built external toolchains for
-the C-SKY CPU architecture that are based on gcc 6.x, even if the
-support for it was only added in upstream gcc 9.x.
+ You need to add a Signed-off-by line for yourself.  This is a short way for you
+to assert that you are entitled to contribute the patch under buildroot's
+GPL license.  See  http://elinux.org/Developer_Certificate_Of_Origin
+for more details.
 
-Due to the BR2_ARCH_NEEDS_GCC_AT_LEAST_xyz options, only gcc >= 9.x
-can be selected for C-SKY, preventing the use of such a custom
-toolchain.
+>> diff --git a/configs/csky_gx6605s_defconfig b/configs/csky_gx6605s_defconfig
+>> index d0a2aad..22e9e0c 100644
+>> --- a/configs/csky_gx6605s_defconfig
+>> +++ b/configs/csky_gx6605s_defconfig
+>> @@ -1,5 +1,6 @@
+>> ?BR2_csky=y
+>> ?BR2_GLOBAL_PATCH_DIR="board/csky/gx6605s/patches"
+>> +BR2_TOOLCHAIN_EXTERNAL=y
 
-In addition, those dependencies are in fact not really needed:
-Buildroot will check that the gcc version provided matches what the
-user declared in the configuration. And if the gcc provided by the
-toolchain does support that CPU architecture, then well, so be it,
-there's no need to restrict the gcc version selected.
+ This is unfortunately not enough to fix the issue, since the external toolchain
+can no longer be selected due to the conditions. Thomas is sending a patch to
+fix that.
 
-So we simply get rid of these dependencies on
-BR2_ARCH_NEEDS_GCC_AT_LEAST_xyz, and also don't use them anymore to
-chose a default value for the gcc version.
+ In addition, Guo has sent a patch that moves this defconfig to an internal
+defconfig (like we do for all our other defconfigs) instead of an external one.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
----
- .../Config.in.options                         | 20 -------------------
- 1 file changed, 20 deletions(-)
+ Therefore, I've marked this patch as Superseded in patchwork.
 
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index c5e2ce221b..679e727509 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -27,14 +27,6 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
- 
- choice
- 	bool "External toolchain gcc version"
--	default BR2_TOOLCHAIN_EXTERNAL_GCC_9   if BR2_ARCH_NEEDS_GCC_AT_LEAST_9
--	default BR2_TOOLCHAIN_EXTERNAL_GCC_8   if BR2_ARCH_NEEDS_GCC_AT_LEAST_8
--	default BR2_TOOLCHAIN_EXTERNAL_GCC_7   if BR2_ARCH_NEEDS_GCC_AT_LEAST_7
--	default BR2_TOOLCHAIN_EXTERNAL_GCC_6   if BR2_ARCH_NEEDS_GCC_AT_LEAST_6
--	default BR2_TOOLCHAIN_EXTERNAL_GCC_5   if BR2_ARCH_NEEDS_GCC_AT_LEAST_5
--	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_9 if BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
--	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_8 if BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
--	default BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
- 	help
- 	  Set to the gcc version that is used by your external
- 	  toolchain.
-@@ -45,62 +37,50 @@ config BR2_TOOLCHAIN_EXTERNAL_GCC_9
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_8
- 	bool "8.x"
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_9
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_7
- 	bool "7.x"
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_7
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_6
- 	bool "6.x"
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_7
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_5
- 	bool "5.x"
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_6
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_5
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_9
- 	bool "4.9.x"
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_5
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_8
- 	bool "4.8.x"
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_9
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_7
- 	bool "4.7.x"
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_7
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_6
- 	bool "4.6.x"
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_6
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_5
- 	bool "4.5.x"
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_5
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_4
- 	bool "4.4.x"
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_4
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_4_3
- 	bool "4.3.x"
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_4_3
- 
- config BR2_TOOLCHAIN_EXTERNAL_GCC_OLD
- 	bool "older"
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_4_8
- 	help
- 	  Use this option if your GCC version is older than any of the
- 	  above.
--- 
-2.21.0
+
+ Regards,
+ Arnout
+
+>> ?BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
+>> ?BR2_TOOLCHAIN_EXTERNAL_URL="https://github.com/c-sky/tools/raw/master/csky-linux-tools-x86_64-glibc-linux-4.9.56-20180128.tar.gz"
+>> ?BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="csky-linux"
