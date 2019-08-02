@@ -1,44 +1,54 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Fri,  2 Aug 2019 10:29:34 +0200
-Subject: [Buildroot] [PATCH 1/2] utils/checkpackagelib:
- CommentsMenusPackagesOrder: properly initialize levels
-Message-ID: <20190802082935.26747-1-arnout@mind.be>
+From: bugzilla at busybox.net <bugzilla@busybox.net>
+Date: Fri, 02 Aug 2019 08:44:35 +0000
+Subject: [Buildroot] [Bug 12076] Patchelf can link against an incompatible
+ libc++ version
+In-Reply-To: <bug-12076-163@https.bugs.busybox.net/>
+References: <bug-12076-163@https.bugs.busybox.net/>
+Message-ID: <bug-12076-163-XDuJ7U9mnU@https.bugs.busybox.net/>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fix an issue introduced by Arnout while committing. Jerzy originally
-initialized the menu_of_packages, package and print_package_warning
-members like they should be, but Arnout thought it wasn't needed and
-removed that.
+https://bugs.busybox.net/show_bug.cgi?id=12076
 
-It is actually needed, to make sure the top level (level 0) works.
+--- Comment #2 from Bradley Gamble <bradley.gamble@ncipher.com> ---
+The build is completed in a single container without any sort of file
+migration. My build commands are:
 
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/264383157
+    wget https://buildroot.org/downloads/buildroot-2019.05.1.tar.gz
+    tar -xvf ./buildroot-2019.05.1.tar.gz
+    cp ./baseimage/defconfig ./buildroot-2019.05.1/configs/custom_defconfig
+    make -C buildroot-2019.05.1 custom_defconfig
+    make -C buildroot-2019.05.1
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- utils/checkpackagelib/lib_config.py | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This completes successfully, for example, on my host machine with newer
+libraries.
+In the container I am able to build and C++ applications without issue - We
+compile many C++ binaries from source and this example of Patchelf is the only
+failure we've encountered. I have demonstrated this by building a hello world
+example:
 
-diff --git a/utils/checkpackagelib/lib_config.py b/utils/checkpackagelib/lib_config.py
-index 26349fb681..225f92af13 100644
---- a/utils/checkpackagelib/lib_config.py
-+++ b/utils/checkpackagelib/lib_config.py
-@@ -61,9 +61,9 @@ class AttributesOrder(_CheckFunction):
- 
- 
- class CommentsMenusPackagesOrder(_CheckFunction):
--    menu_of_packages = []
--    package = []
--    print_package_warning = []
-+    menu_of_packages = [""]
-+    package = [""]
-+    print_package_warning = [True]
- 
-     def before(self):
-         self.state = ""
+$ cat helloworld.cpp 
+    #include <iostream>
+    using namespace std;
+    int main() 
+    {
+        cout << "Hello, World!";
+        return 0;
+    }
+$ g++ helloworld.cpp -ohelloworld
+$ ./helloworld 
+Hello, World!
+
+I have uploaded the files here: https://gofile.io/?c=INwQ9u (Apologies for the
+third-party host, the binaries are too big to upload even when compressed.)
+This tarball contains the Patchelf binary and log from Buildroot, as well as
+one I have manually compiled in the container. The Buildroot binary fails to
+execute from within the container, whereas the manually built one executes
+without issue.
+
 -- 
-2.21.0
+You are receiving this mail because:
+You are on the CC list for the bug.
