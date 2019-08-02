@@ -1,56 +1,48 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri, 02 Aug 2019 19:41:29 +0200
-Subject: [Buildroot] [PATCH] python-matplotlib: needs a toolchain with
- C++ support
-In-Reply-To: <20190802184610.3e9657aa@windsurf.home> (Thomas Petazzoni's
- message of "Fri, 2 Aug 2019 18:46:10 +0200")
-References: <20190802162226.15556-1-peter@korsgaard.com>
- <20190802184610.3e9657aa@windsurf.home>
-Message-ID: <87ef23sbw6.fsf@dell.be.48ers.dk>
+Date: Fri,  2 Aug 2019 19:43:59 +0200
+Subject: [Buildroot] [PATCH] package/python3: adjust _REMOVE_USELESS_FILES
+ fix for new layout
+Message-ID: <20190802174359.10033-1-peter@korsgaard.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+python3 nowadays appends the triplet to the config-<version>m directory:
 
- > Hello,
- > The commit title should start with package/python-matplotlib :-)
+echo target/usr/lib/python3.7/config-*
+target/usr/lib/python3.7/config-3.7m-powerpc-linux-gnu
 
-Ahh, indeed - Will fix.
+Likewise, there is no longer a pyconfig.h:
 
- > On Fri,  2 Aug 2019 18:22:26 +0200
- > Peter Korsgaard <peter@korsgaard.com> wrote:
+ls target/usr/lib/python3.7/config-3.7m-powerpc-linux-gnu
+config.c  config.c.in  install-sh  libpython3.7m.a  Makefile
+makesetup  python-config.py  python.o  Setup  Setup.local
 
- >> Matplotlib contains .cpp source code:
- >> 
- >> ls src/*.cpp
- >> src/_backend_agg.cpp
- >> src/_backend_agg_wrapper.cpp
- >> src/_contour.cpp
- >> src/_contour_wrapper.cpp
- >> src/ft2font.cpp
- >> src/ft2font_wrapper.cpp
- >> src/_image.cpp
- >> src/_image_wrapper.cpp
- >> src/mplutils.cpp
- >> src/_path_wrapper.cpp
- >> src/_png.cpp
- >> src/py_converters.cpp
- >> src/_tkagg.cpp
- >> src/_ttconv.cpp
- >> src/_windowing.cpp
- >> 
- >> So add a dependency on C++ support in the toolchain to fix build errors like
- >> (no autobuilder reference yet):
+So adjust the removal logic to match.  Use a wildcard rather than
+$GNU_TARGET_NAME as buildroot and python3's idea of the triplet doesn't
+always match (E.G.  for musl/uclibc).
 
- > Since when does it need C++ ? Was this package bumped recently ? If
- > not, why don't we have autobuilder failures for this ?
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/python3/python3.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Since always (the package only got added to next end of May). I'm not
-sure why there isn't any autobuilder failures, possibly because we don't
-test such combination of toolchain options? (wchar, threads, !static !c++)
-
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index decae1b721..8e6a0296ed 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -203,8 +203,8 @@ define PYTHON3_REMOVE_USELESS_FILES
+ 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
+ 	rm -f $(TARGET_DIR)/usr/bin/python3-config
+ 	rm -f $(TARGET_DIR)/usr/bin/smtpd.py.3
+-	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m/ \
+-		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
++	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m-*/ \
++		-type f -not -name Makefile` ; do \
+ 		rm -f $$i ; \
+ 	done
+ 	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/__pycache__/
 -- 
-Bye, Peter Korsgaard
+2.11.0
