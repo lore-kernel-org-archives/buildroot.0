@@ -1,100 +1,215 @@
-From: Julien Boibessot <julien.boibessot@free.fr>
-Date: Fri, 2 Aug 2019 13:34:04 +0200
-Subject: [Buildroot] [PATCHv2] package/mtd: needs zstd
-In-Reply-To: <20190802083112.GA3083@scaer>
-References: <20190802081401.2545-1-yann.morin.1998@free.fr>
- <983ab9a0-941e-0ea5-cf64-4217eda63220@armadeus.com>
- <20190802083112.GA3083@scaer>
-Message-ID: <6a36d470-0597-0166-d0e0-0aea26783a45@free.fr>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 2 Aug 2019 23:42:51 +0200
+Subject: [Buildroot] [git commit] configs/qemu_cskyXXX_virt: new defconfig
+Message-ID: <20190802214229.DE98E81589@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Yann,
+commit: https://git.buildroot.net/buildroot/commit/?id=2834df2b4be44b320215aae0d5310e2f06da5dd8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 02/08/2019 10:31, Yann E. MORIN wrote:
-> Julien, All,
->
-> On 2019-08-02 10:23 +0200, Julien Boibessot spake thusly:
->> On 02/08/2019 10:14, Yann E. MORIN wrote:
->>  From: Julien BOIBESSOT
->>  [1]<julien.boibessot@armadeus.com>
->>  For the target variant, zstd is a mandatory dependency when ubifs-tools
->>  are enabled. For the host variant, it is an unconditional dependency.
->>  Fixes:   
->>  [2]http://autobuild.buildroot.org/results/99b/99baf1de106f9c80a32e665263c1e4278097643d/
->>   (target)   
->>  [3]http://autobuild.buildroot.org/results/e3b/e3b96704f0b23e82999aa3d6e93233edecbecfe7/
->>   (host)Signed-off-by: Julien BOIBESSOT
->>  [4]<julien.boibessot@armadeus.com>
->>  Tested-by: Markus Mayer
->>  [5]<mmayer@broadcom.com>[
->>  [6]yann.morin.1998 at free.fr: fix the target variant too]
->>  Signed-off-by: Yann E. MORIN
->>  [7]<yann.morin.1998@free.fr>--- package/mtd/Config.in | 1 +
->>   package/mtd/mtd.mk    | 4 ++-- 2 files changed, 3 insertions(+), 2 deletions(-)
->>  diff --git a/package/mtd/Config.in b/package/mtd/Config.in
->>  index 590ca7f5ef..1dd7dad1b3 100644--- a/package/mtd/Config.in
->>  +++ b/package/mtd/Config.in@@ -21,6 +21,7 @@ config BR2_PACKAGE_MTD_UBIFS_UTILS
->>          select BR2_PACKAGE_UTIL_LINUX   select BR2_PACKAGE_UTIL_LINUX_LIBUUID
->>          select BR2_PACKAGE_ZLIB+        select BR2_PACKAGE_ZSTD
->>    comment "MTD tools selection" diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
->>  index 0de14dbcba..04b8ccb73f 100644--- a/package/mtd/mtd.mk
->>  +++ b/package/mtd/mtd.mk@@ -19,7 +19,7 @@ MTD_CONF_OPTS += --without-jffs
->>   endif  ifeq ($(BR2_PACKAGE_MTD_UBIFS_UTILS),y)
->>  -MTD_DEPENDENCIES += util-linux zlib lzo host-pkgconf
->>  +MTD_DEPENDENCIES += util-linux zlib lzo host-pkgconf zstd
->>   MTD_CONF_OPTS += --with-ubifs ifeq ($(BR2_PACKAGE_OPENSSL),y)
->>   MTD_DEPENDENCIES += openssl@@ -46,7 +46,7 @@ else
->>   MTD_CONF_OPTS += --without-xattr endif -HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux
->>  +HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux host-zstd
->>   HOST_MTD_CONF_OPTS = \         --with-jffs \   --with-ubifs \
->>
->> I like your version but, as ZSTD seems optional for MTD UBIFS, I had something slightly different in progress:
->>
->> diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
->> index 0de14db..3477460 100644
->> --- a/package/mtd/mtd.mk
->> +++ b/package/mtd/mtd.mk
->> @@ -27,6 +27,12 @@ MTD_CONF_OPTS += --with-crypto
->> ? else
->> ? MTD_CONF_OPTS += --without-crypto
->> ? endif
->> +ifeq ($(BR2_PACKAGE_ZSTD),y)
->> +MTD_DEPENDENCIES += zstd
->> +MTD_CONF_OPTS += --with-zstd
->> +else
->> +MTD_CONF_OPTS += --without-zstd
->> +endif
-> But in configure, as yhou already quoted, we can see that zstd is
-> mandatory for ubifs:
->
->     AM_COND_IF([BUILD_UBIFS], [
->                 need_uuid="yes"
->                 need_xattr="yes"
->                 need_zlib="yes"
->                 need_lzo="yes"
->                 need_zstd="yes"                   <<<<<<<<
->                 need_openssl="yes"
->         ])
->
-> So, zstd is not a conditional dependency when ubifs is enabled. Or do I
-> still need to get more cofee? ;-)
+Add C-SKY defconfig for QEMU virt machine.
 
-well in configure it can also be disabled (like openssl):
+Signed-off-by: Guo Ren <ren_guo@c-sky.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .gitlab-ci.yml                              |  4 ++++
+ DEVELOPERS                                  |  2 ++
+ board/qemu/csky/linux-ck610.config.fragment |  5 +++++
+ board/qemu/csky/linux-ck807.config.fragment |  5 +++++
+ board/qemu/csky/linux-ck810.config.fragment |  5 +++++
+ board/qemu/csky/linux-ck860.config.fragment |  9 +++++++++
+ board/qemu/csky/readme.txt                  | 12 ++++++++++++
+ configs/qemu_csky610_virt_defconfig         | 16 ++++++++++++++++
+ configs/qemu_csky807_virt_defconfig         | 16 ++++++++++++++++
+ configs/qemu_csky810_virt_defconfig         | 16 ++++++++++++++++
+ configs/qemu_csky860_virt_defconfig         | 16 ++++++++++++++++
+ 11 files changed, 106 insertions(+)
 
-    Optional Packages:
-      ...
-      --without-zstd          Disable support for ZSTD compression
-
-If your patch is OK for Thomas, it is OK for me (to select zstd by
-default when ubifs is choosen in mtd) ;-)
-
-Regards,
-Julien
-
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190802/246dcde0/attachment.html>
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index dd351fc545..09c979fe7f 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -250,6 +250,10 @@ qemu_aarch64_virt_defconfig: { extends: .defconfig }
+ qemu_arm_versatile_defconfig: { extends: .defconfig }
+ qemu_arm_versatile_nommu_defconfig: { extends: .defconfig }
+ qemu_arm_vexpress_defconfig: { extends: .defconfig }
++qemu_csky610_virt_defconfig: { extends: .defconfig }
++qemu_csky807_virt_defconfig: { extends: .defconfig }
++qemu_csky810_virt_defconfig: { extends: .defconfig }
++qemu_csky860_virt_defconfig: { extends: .defconfig }
+ qemu_m68k_mcf5208_defconfig: { extends: .defconfig }
+ qemu_m68k_q800_defconfig: { extends: .defconfig }
+ qemu_microblazebe_mmu_defconfig: { extends: .defconfig }
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 5b8d962ac8..b50b2ad30f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -978,7 +978,9 @@ F:	package/reaver/
+ N:	Guo Ren <ren_guo@c-sky.com>
+ F:	arch/Config.in.csky
+ F:	board/csky/
++F:	board/qemu/csky
+ F:	configs/csky_*
++F:	configs/qemu_csky*
+ 
+ N:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+ F:	configs/arm_juno_defconfig
+diff --git a/board/qemu/csky/linux-ck610.config.fragment b/board/qemu/csky/linux-ck610.config.fragment
+new file mode 100644
+index 0000000000..d80d0ee882
+--- /dev/null
++++ b/board/qemu/csky/linux-ck610.config.fragment
+@@ -0,0 +1,5 @@
++CONFIG_COMPILE_TEST=y
++CONFIG_CPU_CK610=y
++CONFIG_CPU_PM_WAIT=y
++CONFIG_CSKY_APB_INTC=y
++CONFIG_GX6605S_TIMER=y
+diff --git a/board/qemu/csky/linux-ck807.config.fragment b/board/qemu/csky/linux-ck807.config.fragment
+new file mode 100644
+index 0000000000..b6974f0157
+--- /dev/null
++++ b/board/qemu/csky/linux-ck807.config.fragment
+@@ -0,0 +1,5 @@
++CONFIG_COMPILE_TEST=y
++CONFIG_CPU_CK807=y
++# CONFIG_CPU_HAS_FPU is not set
++CONFIG_CPU_PM_WAIT=y
++CONFIG_CSKY_APB_INTC=y
+diff --git a/board/qemu/csky/linux-ck810.config.fragment b/board/qemu/csky/linux-ck810.config.fragment
+new file mode 100644
+index 0000000000..50fa1f4f79
+--- /dev/null
++++ b/board/qemu/csky/linux-ck810.config.fragment
+@@ -0,0 +1,5 @@
++CONFIG_COMPILE_TEST=y
++CONFIG_CPU_CK810=y
++# CONFIG_CPU_HAS_FPU is not set
++CONFIG_CPU_PM_WAIT=y
++CONFIG_CSKY_APB_INTC=y
+diff --git a/board/qemu/csky/linux-ck860.config.fragment b/board/qemu/csky/linux-ck860.config.fragment
+new file mode 100644
+index 0000000000..e8f6af10ba
+--- /dev/null
++++ b/board/qemu/csky/linux-ck860.config.fragment
+@@ -0,0 +1,9 @@
++CONFIG_COMPILE_TEST=y
++CONFIG_CPU_CK860=y
++# CONFIG_CPU_HAS_FPU is not set
++CONFIG_CPU_PM_WAIT=y
++CONFIG_SMP=y
++CONFIG_HOTPLUG_CPU=y
++CONFIG_CSKY_APB_INTC=y
++CONFIG_CSKY_MPINTC=y
++CONFIG_CSKY_MP_TIMER=y
+diff --git a/board/qemu/csky/readme.txt b/board/qemu/csky/readme.txt
+new file mode 100644
+index 0000000000..89d68aafb8
+--- /dev/null
++++ b/board/qemu/csky/readme.txt
+@@ -0,0 +1,12 @@
++Run with qemu:
++
++For ck860 smp:
++ qemu-system-cskyv2 -M virt -cpu ck860 -smp 2 -nographic -kernel vmlinux
++
++For ck810/ck807:
++ qemu-system-cskyv2 -M virt -nographic -kernel vmlinux
++
++For ck610:
++ qemu-system-cskyv1 -M virt -nographic -kernel vmlinux
++
++The login prompt will appear in the terminal that started Qemu. Username is root and no password.
+diff --git a/configs/qemu_csky610_virt_defconfig b/configs/qemu_csky610_virt_defconfig
+new file mode 100644
+index 0000000000..f337bd7eb4
+--- /dev/null
++++ b/configs/qemu_csky610_virt_defconfig
+@@ -0,0 +1,16 @@
++# Architecture
++BR2_csky=y
++BR2_ck610=y
++
++# System
++BR2_TARGET_ROOTFS_INITRAMFS=y
++
++# linux kernel header, the same version with linux kernel
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck610.config.fragment"
+diff --git a/configs/qemu_csky807_virt_defconfig b/configs/qemu_csky807_virt_defconfig
+new file mode 100644
+index 0000000000..c4a10b8ade
+--- /dev/null
++++ b/configs/qemu_csky807_virt_defconfig
+@@ -0,0 +1,16 @@
++# Architecture
++BR2_csky=y
++BR2_ck807=y
++
++# System
++BR2_TARGET_ROOTFS_INITRAMFS=y
++
++# linux kernel header, the same version with linux kernel
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck807.config.fragment"
+diff --git a/configs/qemu_csky810_virt_defconfig b/configs/qemu_csky810_virt_defconfig
+new file mode 100644
+index 0000000000..56efe8a6ae
+--- /dev/null
++++ b/configs/qemu_csky810_virt_defconfig
+@@ -0,0 +1,16 @@
++# Architecture
++BR2_csky=y
++BR2_ck810=y
++
++# System
++BR2_TARGET_ROOTFS_INITRAMFS=y
++
++# linux kernel header, the same version with linux kernel
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck810.config.fragment"
+diff --git a/configs/qemu_csky860_virt_defconfig b/configs/qemu_csky860_virt_defconfig
+new file mode 100644
+index 0000000000..9ec8f633af
+--- /dev/null
++++ b/configs/qemu_csky860_virt_defconfig
+@@ -0,0 +1,16 @@
++# Architecture
++BR2_csky=y
++BR2_ck860=y
++
++# System
++BR2_TARGET_ROOTFS_INITRAMFS=y
++
++# linux kernel header, the same version with linux kernel
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0.12"
++BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
++BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/csky/linux-ck860.config.fragment"
