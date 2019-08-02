@@ -1,46 +1,47 @@
-From: Haithem Ben Abdelaziz <haithem.ben.abdelaziz@gmail.com>
-Date: Fri, 2 Aug 2019 16:54:55 +0100
-Subject: [Buildroot] pb host-pkg-config 0.25
-Message-ID: <CAMucF0SAs=GpM1iSdhwxDqi6rjQri2ynPye_hW7SiyrGgnvOYw@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 02 Aug 2019 17:58:56 +0200
+Subject: [Buildroot] [PATCH 1/3] package/mosquitto: allow to build as
+ static lib
+In-Reply-To: <1471a17e-814d-eba7-5756-fe5dd592b5db@railnova.eu> (Titouan
+ Christophe's message of "Fri, 2 Aug 2019 15:18:57 +0200")
+References: <20190718100636.27290-1-titouan.christophe@railnova.eu>
+ <20190718100636.27290-2-titouan.christophe@railnova.eu>
+ <871ry518wo.fsf@dell.be.48ers.dk> <87sgqlyxov.fsf@dell.be.48ers.dk>
+ <b1957631-ca8b-38ab-9b24-5549e8e13e23@railnova.eu>
+ <874l30x0fd.fsf@dell.be.48ers.dk>
+ <1471a17e-814d-eba7-5756-fe5dd592b5db@railnova.eu>
+Message-ID: <87imrfsgn3.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Le dpkg de host-pkg-config 0.25 g?n?re ces errors: (suite au changement de
-versions os linux):
+>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+
+Hi,
+
+ > Indeed, when doing a regular make (and not test-pkg) with this
+ > defconfig I can reproduce the aforementioned failure.
+
+Funky, but OK.
 
 
-collect2: error: ld returned 1 exit status
-Makefile:479: recipe for target 'testglib' failed
-make[6]: *** [testglib] Error 1
-make[6]: *** Waiting for unfinished jobs....
-Makefile:476: recipe for target 'testgdateparser' failed
-make[6]: *** [testgdateparser] Error 1
+ > Now, when looking at mosquitto, I understand that
+ > WITH_SHARED_LIBRARY=no implies that libmosquitto.so won't be created
+ > (and linked against).
 
-collect2: error: ld returned 1 exit status
-Makefile:473: recipe for target 'testgdate' failed
-make[6]: *** [testgdate] Error 1
-Makefile:554: recipe for target 'all-recursive' failed
-make[5]: *** [all-recursive] Error 1
-Makefile:389: recipe for target 'all' failed
-make[4]: *** [all] Error 2
-Makefile:577: recipe for target 'all-recursive' failed
-make[3]: *** [all-recursive] Error 1
-Makefile:342: recipe for target 'all' failed
-make[2]: *** [all] Error 2
-package/pkg-generic.mk:158: recipe for target
-'/home/g361240/SSD/hd_debug/build/hot/build/host-pkg-config-0.25/.stamp_built'
-failed
-make[1]: ***
-[/home/g361240/SSD/hd_debug/build/hot/build/host-pkg-config-0.25/.stamp_built]
-Error 2
+ > However, the failure over here is due to some code in the broker which
+ > is intended to dynamically load modules at runtime, no matter if
+ > mosquitto is running inside a statically linked executable or from a
+ > dylib.
 
-How can we resolve that, configuration options .. ?
-thank you in advance
+ > As such, I suggest then to only make the broker depend on
+ > BR2_SHARED_LIBS, while still allowing the client lib to be built
+ > statically, which in my opinion makes sense for embedded targets.
+ > What do you think ?
 
-ha?them
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190802/3ef3bf8b/attachment.html>
+Yes, that could work. Will you send a patch for that?
+
+-- 
+Bye, Peter Korsgaard
