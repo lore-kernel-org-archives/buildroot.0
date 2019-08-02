@@ -1,54 +1,62 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Fri, 2 Aug 2019 12:17:20 +0200
-Subject: [Buildroot] [PATCH] support/testing: use virtio-rng-pci to test
- syslog-ng
-In-Reply-To: <20190801205435.226c1187@windsurf.home>
-References: <20190730231321.10673-1-ricardo.martincoski@gmail.com>
- <87o918u47q.fsf@dell.be.48ers.dk> <20190801205435.226c1187@windsurf.home>
-Message-ID: <01df19c6-e217-c0cc-f95a-17052a5986f7@mind.be>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Fri,  2 Aug 2019 13:05:26 +0200
+Subject: [Buildroot] [PATCH 1/1] package/pdbg: fix musl build
+Message-ID: <20190802110526.18613-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Fixes:
+ - http://autobuild.buildroot.org/results/81b1107bdb06250e1a7837506aec0c9762e771c5
 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .../0001-src-thread.c-include-endian.h.patch  | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/pdbg/0001-src-thread.c-include-endian.h.patch
 
-On 01/08/2019 20:54, Thomas Petazzoni wrote:
-> On Thu, 01 Aug 2019 20:32:09 +0200
-> Peter Korsgaard <peter@korsgaard.com> wrote:
-> 
->>>>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:  
->>
->>  > Recent versions of syslog-ng need some entropy on startup.
->>  > So use VirtIORNG to provide it. In order to accomplish this:
->>  >  - build the kernel containing the driver;
->>  >  - pass '-device virtio-rng-pci' to qemu.  
->>
->>  > Use the same kernel version and kernel config as qemu_arm_versatile.
->>  > It already has PCI enabled but it does not have HW_RANDOM_VIRTIO, so add
->>  > a defconfig fragment to enable the drivers.  
->>
->>  > Fixes:
->>  > https://gitlab.com/buildroot.org/buildroot/-/jobs/259856394  
->>
->>  > At the same time, fix a typo (missing '#') that resulted in the
->>  > generation of root.tar. This file is not used in the test.  
->>
->>  > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
->>  > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->>  > ---
->>  > https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/262628554  
->>
->> Committed, thanks.
-> 
-> Longer term, probably we should rebuild newer versions of the pre-built
-> kernels, with the appropriate config options enabled. I guess other
-> use-cases will also need some entropy at boot time.
-
- Make that short-term, because Romain just reported such an issue [1].
-
- Regards,
- Arnout
-
-[1] http://lists.busybox.net/pipermail/buildroot/2019-August/255550.html
+diff --git a/package/pdbg/0001-src-thread.c-include-endian.h.patch b/package/pdbg/0001-src-thread.c-include-endian.h.patch
+new file mode 100644
+index 0000000000..b7ee09a27a
+--- /dev/null
++++ b/package/pdbg/0001-src-thread.c-include-endian.h.patch
+@@ -0,0 +1,35 @@
++From e6a903ce82392c59d653f870a8af57d263c83a4f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 2 Aug 2019 12:28:42 +0200
++Subject: [PATCH] src/thread.c: include endian.h
++
++endian.h is needed for be64oh otherwise build with musl fails on:
++
++src/thread.c: In function 'flip_endian':
++src/thread.c:49:9: error: implicit declaration of function 'be64toh' [-Werror=implicit-function-declaration]
++  return be64toh(v);
++
++Fixes:
++ - http://autobuild.buildroot.org/results/81b1107bdb06250e1a7837506aec0c9762e771c5
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++[Upstream status: https://github.com/open-power/pdbg/pull/43]
++---
++ src/thread.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/src/thread.c b/src/thread.c
++index 7fd53a8..7ead430 100644
++--- a/src/thread.c
+++++ b/src/thread.c
++@@ -18,6 +18,7 @@
++ #include <stdio.h>
++ #include <stdlib.h>
++ #include <assert.h>
+++#include <endian.h>
++ 
++ #include <libpdbg.h>
++ 
++-- 
++2.20.1
++
+-- 
+2.20.1
