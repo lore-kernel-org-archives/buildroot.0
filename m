@@ -1,48 +1,28 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Fri,  2 Aug 2019 19:43:59 +0200
-Subject: [Buildroot] [PATCH] package/python3: adjust _REMOVE_USELESS_FILES
- fix for new layout
-Message-ID: <20190802174359.10033-1-peter@korsgaard.com>
+Date: Fri, 02 Aug 2019 19:47:11 +0200
+Subject: [Buildroot] [PATCH] package/imagemagick: fix host build for old
+ distributions
+In-Reply-To: <20190802134044.22094-1-peter@korsgaard.com> (Peter Korsgaard's
+ message of "Fri, 2 Aug 2019 15:40:44 +0200")
+References: <20190802134044.22094-1-peter@korsgaard.com>
+Message-ID: <87a7crsbmo.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-python3 nowadays appends the triplet to the config-<version>m directory:
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-echo target/usr/lib/python3.7/config-*
-target/usr/lib/python3.7/config-3.7m-powerpc-linux-gnu
+ > Fixes:
+ > http://autobuild.buildroot.net/results/5f0/5f0b85033e800c9eebc46812592966ec6826bb5d/
 
-Likewise, there is no longer a pyconfig.h:
+ > imagemagick uses clock_gettime, which was provided by librt rather than libc
+ > in glibc < 2.17 - Causing link errors.
 
-ls target/usr/lib/python3.7/config-3.7m-powerpc-linux-gnu
-config.c  config.c.in  install-sh  libpython3.7m.a  Makefile
-makesetup  python-config.py  python.o  Setup  Setup.local
+ > Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 
-So adjust the removal logic to match.  Use a wildcard rather than
-$GNU_TARGET_NAME as buildroot and python3's idea of the triplet doesn't
-always match (E.G.  for musl/uclibc).
+Committed, thanks.
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python3/python3.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index decae1b721..8e6a0296ed 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -203,8 +203,8 @@ define PYTHON3_REMOVE_USELESS_FILES
- 	rm -f $(TARGET_DIR)/usr/bin/python$(PYTHON3_VERSION_MAJOR)m-config
- 	rm -f $(TARGET_DIR)/usr/bin/python3-config
- 	rm -f $(TARGET_DIR)/usr/bin/smtpd.py.3
--	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m/ \
--		-type f -not -name pyconfig.h -a -not -name Makefile` ; do \
-+	for i in `find $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/config-$(PYTHON3_VERSION_MAJOR)m-*/ \
-+		-type f -not -name Makefile` ; do \
- 		rm -f $$i ; \
- 	done
- 	rm -rf $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/__pycache__/
 -- 
-2.11.0
+Bye, Peter Korsgaard
