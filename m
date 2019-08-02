@@ -1,54 +1,70 @@
-From: bugzilla at busybox.net <bugzilla@busybox.net>
-Date: Fri, 02 Aug 2019 08:44:35 +0000
-Subject: [Buildroot] [Bug 12076] Patchelf can link against an incompatible
- libc++ version
-In-Reply-To: <bug-12076-163@https.bugs.busybox.net/>
-References: <bug-12076-163@https.bugs.busybox.net/>
-Message-ID: <bug-12076-163-XDuJ7U9mnU@https.bugs.busybox.net/>
+From: Titouan Christophe <titouan.christophe@railnova.eu>
+Date: Fri, 2 Aug 2019 10:51:28 +0200
+Subject: [Buildroot] [PATCH 2/3] package/mosquitto: Switch systemd unit
+ to Type=notify and depend on network
+In-Reply-To: <87wofxyyd1.fsf@dell.be.48ers.dk>
+References: <20190718100636.27290-1-titouan.christophe@railnova.eu>
+ <20190718100636.27290-3-titouan.christophe@railnova.eu>
+ <87wofxyyd1.fsf@dell.be.48ers.dk>
+Message-ID: <9c172f2a-3aa4-0641-5ae9-a14b406211e5@railnova.eu>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-https://bugs.busybox.net/show_bug.cgi?id=12076
+Hello Peter,
 
---- Comment #2 from Bradley Gamble <bradley.gamble@ncipher.com> ---
-The build is completed in a single container without any sort of file
-migration. My build commands are:
+On 8/1/19 12:27 PM, Peter Korsgaard wrote:
+>>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
+> 
+>   > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+> 
+> It would be great if your commit message would explain _WHY_ this is
+> done, not just _WHAT_ the change is - E.G. what is the advantage of type=notify?
 
-    wget https://buildroot.org/downloads/buildroot-2019.05.1.tar.gz
-    tar -xvf ./buildroot-2019.05.1.tar.gz
-    cp ./baseimage/defconfig ./buildroot-2019.05.1/configs/custom_defconfig
-    make -C buildroot-2019.05.1 custom_defconfig
-    make -C buildroot-2019.05.1
+Sure !
 
-This completes successfully, for example, on my host machine with newer
-libraries.
-In the container I am able to build and C++ applications without issue - We
-compile many C++ binaries from source and this example of Patchelf is the only
-failure we've encountered. I have demonstrated this by building a hello world
-example:
+> 
+>   > ---
+>   > RFC: Would it be better to use the mosquitto.service file provided upstream ?
+>   > https://github.com/eclipse/mosquitto/blob/master/service/systemd/mosquitto.service.notify
+> 
+> Not knowing much about systemd, but I think so. The differences look
+> quite small.
+Yes, that's why I think it would be better to use the upstreamed one for 
+that. I'm not sure of Buildroot's policy regarding config files provided 
+by the packages themselves, hence the question.
 
-$ cat helloworld.cpp 
-    #include <iostream>
-    using namespace std;
-    int main() 
-    {
-        cout << "Hello, World!";
-        return 0;
-    }
-$ g++ helloworld.cpp -ohelloworld
-$ ./helloworld 
-Hello, World!
+> 
+>> ---
+>   >  package/mosquitto/mosquitto.mk      | 4 ++++
+>   >  package/mosquitto/mosquitto.service | 3 +++
+>   >  2 files changed, 7 insertions(+)
+> 
+>   > diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
+>   > index ed72af754a..333cce35c2 100644
+>   > --- a/package/mosquitto/mosquitto.mk
+>   > +++ b/package/mosquitto/mosquitto.mk
+>   > @@ -23,6 +23,10 @@ else
+>   >  MOSQUITTO_MAKE_OPTS += WITH_STATIC_LIBRARIES=no WITH_SHARED_LIBRARIES=yes
+>   >  endif
+>   
+>   > +ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+>   > +MOSQUITTO_MAKE_OPTS += WITH_SYSTEMD=yes
+> 
+> This is not mentioned in the commit message. I see this causes mosquitto
+> to link with -lsystemd, so you need to add systemd to
+> MOSQUITTO_DEPENDENCIES.
 
-I have uploaded the files here: https://gofile.io/?c=INwQ9u (Apologies for the
-third-party host, the binaries are too big to upload even when compressed.)
-This tarball contains the Patchelf binary and log from Buildroot, as well as
-one I have manually compiled in the container. The Buildroot binary fails to
-execute from within the container, whereas the manually built one executes
-without issue.
+Ok
 
--- 
-You are receiving this mail because:
-You are on the CC list for the bug.
+> 
+> Care to send an updated patch with a more descriptive commit message,
+> reusing the upstream service file and adding systemd to _DEPENDENCIES?
+> 
+
+Sure, I'll respin that one
+
+Regards,
+Titouan
