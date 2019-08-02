@@ -1,210 +1,35 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Aug 2019 00:24:37 +0200
-Subject: [Buildroot] [PATCH v2 6/7] support/scripts/qemu-boot-*: gitlab
- tests for Qemu
-In-Reply-To: <1557075239-30667-7-git-send-email-jugurtha.belkalem@smile.fr>
-References: <1557075239-30667-1-git-send-email-jugurtha.belkalem@smile.fr>
- <1557075239-30667-7-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <20190803002437.768b3fab@windsurf.home>
+Date: Sat, 3 Aug 2019 00:26:48 +0200
+Subject: [Buildroot] [git commit] package/vte: needs host-intltool
+Message-ID: <20190802222411.3B7CF8D3F6@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Jugurtha,
+commit: https://git.buildroot.net/buildroot/commit/?id=82fc6379f05668394cc8f9b573ed176ab762aa2e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Didn't say it in my review of the previous patch, but I find this
-contribution very nice and useful. It will be good to have this to
-improve the testing of our Qemu defconfigs, for sure.
+Fixes:
+ - http://autobuild.buildroot.org/results/30a8032ebba5a30bacd321c407a1d0734fadf757
 
-On Sun,  5 May 2019 18:53:58 +0200
-Jugurtha BELKALEM <jugurtha.belkalem@smile.fr> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/vte/vte.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> diff --git a/support/scripts/qemu-boot-checker.sh b/support/scripts/qemu-boot-checker.sh
-> new file mode 100755
-> index 0000000..dc79dad
-> --- /dev/null
-> +++ b/support/scripts/qemu-boot-checker.sh
-> @@ -0,0 +1,25 @@
-> +#!/usr/bin/env bash
-> +
-> +function archQemuNoSupport {
-
-Camel-case really hurt my eyes. Also, this function is only used once,
-so it's not really useful to have a function.
-
-> +	echo "cannot boot under qemu, support out of tree!"
-> +	exit 0
-> +}
-> +
-> +if [[ $1 = qemu* ]]; then
-
-You should decide between [[ and [ for tests. And also, simply bail out
-when != qemu, so that you have one less indentation level.
-
-So:
-
-if [[ $1 != qemu* ]]; then
-	exit 0
-fi
-
-> +	device_name=$(echo $1  | sed -e 's#^qemu_##; s#_defconfig$##;' | sed -r 's/[_]/-/g')
-
-Perhaps just:
-
-	device_name=$(echo $1 | sed -e 's,^qemu_\(.*\)_defconfig$,\1,; s/_/-/g')
-
-> +	if [ "$device_name" = "x86-64" ]; then
-> +		device_name="x86_64"
-> +	elif [ "$device_name" = "m68k-q800" ] || [ "$device_name" = "ork1k" ]; then
-> +		archQemuNoSupport
-> +	fi
-
-Here you can do:
-
-	case ${device_name} in
-	x86-64)
-		device_name="x86_64"
-		;;
-	m68k-q800)
-	ork1k)
-		echo "No Qemu support for ${device_name}"
-		exit 0
-	esac
-
-But instead of encoding in this script which architectures can be
-tested with Qemu and which cannot, why not simply grep the defconfig
-for BR2_PACKAGE_HOST_QEMU=y ? If it has this config option, then the
-Qemu boot test can be done.
-
-For the x86_64 case, maybe we should simply rename board/qemu/x86_64 to
-board/qemu/x86-64, so that it matches the other directories, where we
-have the same name as the defconfig, with just the _ replaced by -.
-This would entirely remove those special conditions.
-
-> +
-> +	export PATH="$2/output/host/bin:$PATH"
-> +	qemu_command_launcher=$($2/board/qemu/${device_name}/launch.sh)
-
-Now I understand why "launch.sh" is not launching, but just echoing the
-command. Still, this isn't really nice, as a script called launch.sh
-should really launch. Another reason perhaps to simply keep the qemu
-command example in readme.txt, and extract it from there.
-
-> +	$2/support/scripts/qemu-boot-expect.py "${qemu_command_launcher}"
-> +
-> +	if [ $? -ne 0 ]; then
-> +		echo "  booting test system ... FAILED"
-> +		exit 1
-> +	fi
-> +	echo "  booting test system ... SUCCESS"
-
-Maybe show the "booting test system" message before the test, and the
-FAILED or SUCCESS after ? Something like this:
-
-	printf "  booting test system ..."
-	$2/support/scripts/qemu-boot-expect.py "${qemu_command_launcher}"
-	if [ $? -ne 0 ]; then
-		printf "FAILED\n"
-		exit 1
-	fi
-	printf "SUCCESS\n"	
-
-> diff --git a/support/scripts/qemu-boot-chg-defconfig.sh b/support/scripts/qemu-boot-chg-defconfig.sh
-> new file mode 100755
-> index 0000000..868bc4e
-> --- /dev/null
-> +++ b/support/scripts/qemu-boot-chg-defconfig.sh
-> @@ -0,0 +1,11 @@
-> +#!/usr/bin/env bash
-> +
-> +if [[ $1 = qemu* ]]; then
-> +	device_name=$(echo $1  | sed -e 's#^qemu_##; s#_defconfig$##;' | sed -r 's/[_]/-/g') 
-> +	if [ "$device_name" = "x86-64" ]; then
-> +		device_name="x86_64"
-
-The device_name is not used anywhere else in the script, so why are you
-changing it ?
-
-> +		sed -i "s/tty1/ttyS0/" $2/configs/$1
-> +	elif [ "$device_name" = "x86" ]; then
-> +		sed -i "s/tty1/ttyS0/" $2/configs/$1
-> +	fi
-
-Same comments as above. Also, I think this script should be run after
-the "make ${DEFCONFIG_NAME}" step in .gitlab-ci.yml, and operate on
-the .config file, not the defconfig file.
-
-Also, a more specific sed expression would be nice. Perhaps:
-
-	sed -i '/^BR2_TARGET_GENERIC_GETTY_PORT/ s/tty1/ttyS0/'
-
-> diff --git a/support/scripts/qemu-boot-expect.py b/support/scripts/qemu-boot-expect.py
-> new file mode 100755
-> index 0000000..7cd92c1
-> --- /dev/null
-> +++ b/support/scripts/qemu-boot-expect.py
-> @@ -0,0 +1,55 @@
-> +#!/usr/bin/env python
-> +#
-> +
-> +import pexpect
-> +import sys
-> +import os
-> +
-> +def checkQemuExec():
-
-Please don't use CamelCase for function names.
-
-> +    qemu_exec_exists = False
-> +    for dir in os.getenv("PATH").split(':'):
-> +        if (os.path.exists(os.path.join(dir, sys.argv[1].split(" ")[0]))):
-> +            qemu_exec_exists = True
-> +            break
-> +    return qemu_exec_exists
-
-This is more complicated than it need to be:
-
-    for dir in os.getenv("PATH").split(':'):
-        if (os.path.exists(os.path.join(dir, sys.argv[1].split(" ")[0]))):
-            return True
-    return False
-
-will do the same.
-
-But do we really need to check if Qemu exists ? If it doesn't the
-pexpect.spawn() will fail anyway.
-
-In addition, you are doing the pexpect.spawn() *before* you check if
-Qemu exists, which is not very useful.
-
-
-> +
-> +def main():
-> +    global child
-
-Pass child as argument to main().
-
-> +    if(checkQemuExec()):
-
-If you keep this function for some reason, then work the other way
-around:
-
-	if not checkQemuExec():	
-		print("Cannot find Qemu executable")
-		sys.exit(1)
-
-so that the remainder of the function does not need to be entirely
-indented.
-
-Could you rework this patch and the previous one to take into account
-my comments, and send a new iteration ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/vte/vte.mk b/package/vte/vte.mk
+index 031022fb51..0d5db34b62 100644
+--- a/package/vte/vte.mk
++++ b/package/vte/vte.mk
+@@ -7,7 +7,7 @@
+ VTE_VERSION = 0.48.3
+ VTE_SOURCE = vte-$(VTE_VERSION).tar.xz
+ VTE_SITE = http://ftp.gnome.org/pub/gnome/sources/vte/0.48
+-VTE_DEPENDENCIES = host-pkgconf libgtk3 libxml2 pcre2
++VTE_DEPENDENCIES = host-intltool host-pkgconf libgtk3 libxml2 pcre2
+ VTE_LICENSE = LGPL-2.1+
+ VTE_LICENSE_FILES = COPYING
+ VTE_CONF_OPTS += --disable-introspection --disable-vala
