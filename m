@@ -1,27 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Aug 2019 00:27:09 +0200
-Subject: [Buildroot] [PATCH 1/2] package/vte: needs host-intltool
-In-Reply-To: <20190713083256.28511-1-fontaine.fabrice@gmail.com>
-References: <20190713083256.28511-1-fontaine.fabrice@gmail.com>
-Message-ID: <20190803002709.4feb38da@windsurf.home>
+Date: Fri, 2 Aug 2019 23:44:45 +0200
+Subject: [Buildroot] [PATCH/next 2/2] package/domoticz: bump to version
+ 4.10717
+In-Reply-To: <20190521192516.452-2-fontaine.fabrice@gmail.com>
+References: <20190521192516.452-1-fontaine.fabrice@gmail.com>
+ <20190521192516.452-2-fontaine.fabrice@gmail.com>
+Message-ID: <20190802234445.3142b8b5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, 13 Jul 2019 10:32:55 +0200
+Hello Fabrice,
+
+On Tue, 21 May 2019 21:25:16 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fixes:
->  - http://autobuild.buildroot.org/results/30a8032ebba5a30bacd321c407a1d0734fadf757
+> - Remove all patches (already in version)
+> - Add patch to fix version
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/vte/vte.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied to master, thanks.
+It turns out we have a fairly significant number of build failures of
+domoticz in the version you bumped to. See:
+
+  http://autobuild.buildroot.net/?reason=domoticz-4.10717
+
+Could you perhaps have a look ?
 
 Thomas
 -- 
