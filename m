@@ -1,44 +1,38 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Aug 2019 22:38:07 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/icu: bump version to 64.2
-In-Reply-To: <20190731055326.21813-1-bernd.kuhls@t-online.de>
-References: <20190731055326.21813-1-bernd.kuhls@t-online.de>
-Message-ID: <20190802223807.26340669@windsurf.home>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Fri, 2 Aug 2019 22:41:20 +0200
+Subject: [Buildroot] [git commit branch/2019.02.x] package/cryptopp: replace
+ utf-8 space by ascii character
+Message-ID: <20190802203843.5FE058CA75@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=62f9e4dd025deddb18f6c5320694178d40e99c60
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2019.02.x
 
-On Wed, 31 Jul 2019 07:53:26 +0200
-Bernd Kuhls <bernd.kuhls@t-online.de> wrote:
+Replace utf-8 NO-BREAK-SPACE (c2 a0) in comment line by simple
+ascii space character.
 
-> Updated license hash after upstream commit:
-> https://github.com/unicode-org/icu/commit/fc255de3f050271198074c7e8865a805d33c20c4
-> 
-> Added patch to fix big endian build.
-> 
-> Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 695f20cd0c92bd68bf771dc07751335519b40875)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cryptopp/cryptopp.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This bump is breaking the build of icu on at least nios2 and xtensa:
-
-  http://autobuild.buildroot.net/?reason=icu-64-2
-
-It's due to the double conversion code that uses some architecture
-specific definitions. However, the upstream double conversion code at
-https://github.com/google/double-conversion/blob/master/double-conversion/utils.h
-may have support for more architectures, and it's generally as easy as
-adding an ifdef. We also have patches for a few packages in Buildroot
-that also bundle double-conversion.
-
-Could you have a look into this ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/cryptopp/cryptopp.mk b/package/cryptopp/cryptopp.mk
+index 5bd7d5d92c..4565785cfb 100644
+--- a/package/cryptopp/cryptopp.mk
++++ b/package/cryptopp/cryptopp.mk
+@@ -17,7 +17,7 @@ endef
+ 
+ HOST_CRYPTOPP_CXXFLAGS = $(HOST_CFLAGS) -fPIC
+ 
+-#??_mm256_broadcastsi128_si256 has been added only in gcc 4.9
++# _mm256_broadcastsi128_si256 has been added only in gcc 4.9
+ ifneq ($(BR2_HOST_GCC_AT_LEAST_4_9),y)
+ HOST_CRYPTOPP_CXXFLAGS += -DCRYPTOPP_DISABLE_AVX2
+ endif
