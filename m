@@ -1,81 +1,86 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Aug 2019 10:57:43 +0200
-Subject: [Buildroot] [PATCH 1/1] package/flashrom: fix redefinition of
- 'struct termios'
-In-Reply-To: <20190723085516.17377-1-vadim4j@gmail.com>
-References: <20190723085516.17377-1-vadim4j@gmail.com>
-Message-ID: <20190802105743.5dc24f0e@windsurf.home>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Fri, 2 Aug 2019 10:59:45 +0200
+Subject: [Buildroot] [PATCH 1/1] font-awesome compatible with fontconfig
+ [FIXED]
+In-Reply-To: <20180921151515.5128-1-benj.calderon@gmail.com>
+References: <20180921151515.5128-1-benj.calderon@gmail.com>
+Message-ID: <9a58bc3e-ec6a-ab99-ddcc-71caa25cb691@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Vadim,
+ Hi Benjamin,
 
-On Tue, 23 Jul 2019 11:55:16 +0300
-Vadim Kochan <vadim4j@gmail.com> wrote:
+ Sorry that we didn't come back earlier to this patch. It just got dropped from
+our radar...
 
-> Both libc and linux defines 'struct termios', in termbits.h and
-> termios.h which leads to the compilation error:
+On 21/09/2018 17:15, Benjamin Calderon wrote:
+> This commit installs font-awesome in the standard fonts directory
+> making it available systemwide.
+
+ This part of the commit is great.
+
+> The extra folders (css, less, scss) together with the webfonts (*.eot,
+> *.woff*, etc) are also left out since they are useless in this context.
+
+ ... but this is not entirely true.
+
+> CSS and webfonts files are usually delivered via CDN or need to be in
+> the webroot of an http server in order to serve any purpose thus having those
+> files installed with this package is pointless.
+
+ Indeed, the webserver has to be configured to export that particular directory
+- which I assume is exactly what the original contributor of this package did.
+
+ It is true that the location is less than ideal - but we unfortunately don't
+have a standard location for the webroot, and definitely no standard
+subdirectories for CSS etc. We probably should have that. but we currently
+don't. We *mostly* use /var/www, but I believe that there are some web-related
+packages that install stuff in other locations.
+
+ So, for sure, removing the woff*, eot and css is not good. The less and sccs
+I'm not so sure of, but I think even those may be used by a web service because
+they can be converted to css by Javascript on the browser.
+
+ So I think this patch should *only* move the "classical" fonts to the fonts
+directory. Perhaps you could add a separate patch that moves all the rest to
+/var/www. And finally, if there is a good reason for it, you could have a third
+patch that removes less and sccs.
+
+ For now, I've marked this patch as Changes Requested in patchwork.
+
+ Regards,
+ Arnout
+
 > 
-> In file included from custom_baud.c:23:0:
+> Thanks to baruch for his technical critique.
 > 
-> 	    /home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/asm-generic/termbits.h:12:8:
-> 	error: redefinition of 'struct termios'
-> 	 struct termios {
-> 		^~~~~~~
-> 	In file included from
-> 	/home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/termios.h:39:0,
-> 			 from
-> 	/home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/bits/ioctl-types.h:5,
-> 			 from
-> 	/home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/sys/ioctl.h:29,
-> 			 from custom_baud.c:21:
-> 	/home/buildroot/autobuild/instance-3/output/host/powerpc-buildroot-linux-uclibc/sysroot/usr/include/bits/termios.h:33:8:
-> 	note: originally defined here
-> 	 struct termios {
-> 		^~~~~~~
+> Signed-off-by: Benjamin Calderon <benj.calderon@gmail.com>
+> ---
+>  package/font-awesome/font-awesome.mk | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
 > 
-> So fix it by renaming 'termios' to 'asmtermios' before termbits.h only,
-> because 'struct termios2' is used only.
+> diff --git a/package/font-awesome/font-awesome.mk b/package/font-awesome/font-awesome.mk
+> index f39401041a..1bf41c6020 100644
+> --- a/package/font-awesome/font-awesome.mk
+> +++ b/package/font-awesome/font-awesome.mk
+> @@ -6,13 +6,11 @@
+>  
+>  FONT_AWESOME_VERSION = v4.7.0
+>  FONT_AWESOME_SITE = $(call github,FortAwesome,Font-Awesome,$(FONT_AWESOME_VERSION))
+> -FONT_AWESOME_LICENSE = OFL-1.1 (font), MIT (CSS, LESS and Sass files)
+> -FONT_AWESOME_DIRECTORIES_LIST = css fonts less scss
+> +FONT_AWESOME_LICENSE = OFL-1.1
+>  
+>  define FONT_AWESOME_INSTALL_TARGET_CMDS
+> -	mkdir -p $(TARGET_DIR)/usr/share/font-awesome/
+> -	$(foreach d,$(FONT_AWESOME_DIRECTORIES_LIST),\
+> -		cp -dpfr $(@D)/$(d) $(TARGET_DIR)/usr/share/font-awesome$(sep))
+> +	mkdir -p $(TARGET_DIR)/usr/share/fonts/font-awesome/
+> +	cp $(@D)/fonts/FontAwesome.otf $(TARGET_DIR)/usr/share/fonts/font-awesome/FontAwesome.otf
+>  endef
+>  
+>  $(eval $(generic-package))
 > 
-> Fixes:
->     http://autobuild.buildroot.net/results/797dde5cbf0e94162c7cc7b557841605c78ac2f3/
-> 
-> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
-
-Peter and I had a look at the issue, and our conclusion is that the
-actual problem is in uClibc-ng, and should be fixed here.
-
-The problem is that the powerpc-specific ioctl-types.h in uClibc-ng
-includes <termios.h>,
-see ./libc/sysdeps/linux/powerpc/bits/ioctl-types.h. But neither the
-MIPS-specific or the generic ioctl-types.h in uClibc-ng do that.
-
-If you look at the history of
-libc/sysdeps/linux/powerpc/bits/ioctl-types.h, before commit
-e66d628551d918d4ee89d67fe62b627cae27d210, it was like the generic and
-MIPS ioctl-types.h, i.e defining a number of macros and structures, but
-certainly not including <termios.h>.
-
-Then, if you look at glibc, indeed until commit
-d4795e4a43e6f0c221bc5dc64c612206a21a177b, the powerpc-specific
-ioctl-types.h was just including <termios.h>, but in this commit, they
-changed it back to define the different macros and structures.
-
-So basically, the powerpc-specific ioctl-types.h in uClibc-ng needs to
-be resync'ed with the one from glibc, and it should fix the issue, in a
-proper way.
-
-Could you test this, and if it works, send the patch to upstream
-uClibc-ng, and add it in package/uclibc/ in Buildroot, until uClibc-ng
-integrates it in a release ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
