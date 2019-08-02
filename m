@@ -1,64 +1,32 @@
-From: Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
-Date: Thu, 1 Aug 2019 17:19:36 -0700
-Subject: [Buildroot] Makefile: follow symlinks when excluding files from
- being stripped.
-In-Reply-To: <831b364c-6a4a-e606-4868-165d997c4d60@mind.be>
-References: <20190801210542.40390-1-umesh.nerlige.ramappa@intel.com>
- <831b364c-6a4a-e606-4868-165d997c4d60@mind.be>
-Message-ID: <20190802001936.GA66339@orsosgc001.amr.corp.intel.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Fri, 2 Aug 2019 11:38:44 +0800
+Subject: [Buildroot] [git commit] package/gcc: drop negative conditions
+ on C-SKY for older versions
+In-Reply-To: <20190801081630.42287811EE@busybox.osuosl.org>
+References: <20190801081630.42287811EE@busybox.osuosl.org>
+Message-ID: <CAJF2gTQrzxpWDx+=-rRe+=Jiz_J5u+-FvQMQLGMX7dYA5Q=70g@mail.gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Fri, Aug 02, 2019 at 12:22:46AM +0200, Arnout Vandecappelle wrote:
-> Hi Umesh,
->
->On 01/08/2019 23:05, Umesh Nerlige Ramappa wrote:
->> In BR2_STRIP_EXCLUDE_FILES="libfoo.so" libfoo.so is mostly a symlink
->> pointing to the actual library file. The actual library file is still
->> stripped. While specifying the actual library file as libfoo.so.x.x
->> will work just fine, a user of buildroot need not know what version
->> of the library is being picked.
->>
->> Signed-off-by: Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
->> ---
->>  Makefile | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/Makefile b/Makefile
->> index 9cce934990..8f689401ba 100644
->> --- a/Makefile
->> +++ b/Makefile
->> @@ -624,7 +624,7 @@ STRIP_FIND_COMMON_CMD = \
->>  		-prune -o \
->>  	) \
->>  	$(if $(call qstrip,$(BR2_STRIP_EXCLUDE_FILES)), \
->> -		-not \( $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) )
->> +		-not -follow \( $(call findfileclauses,$(call qstrip,$(BR2_STRIP_EXCLUDE_FILES))) \) )
->
-> This will not do what you want. I don't fully understand how find parses it,
->but it has the effect of removing everything. Putting the -follow earlier also
->doesn't have the desired effect, because it jsut prints the dereferenced symlink
->instead of the symlink itself, and it will be printed twice because of that.
+Hello Peter,
 
-My bad. I just checked if the relevant files were not stripped, but 
-looks like it did remove everything like you said. I guess I will need 
-to specify the files explicitly for now.
+On Fri, Aug 2, 2019 at 12:00 AM Peter Korsgaard <peter@korsgaard.com> wrote:
+>
+> commit: https://git.buildroot.net/buildroot/commit/?id=f9d70202c1e09a7a02645638762f60434fd73051
+> branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>
+> Now that the C-SKY architecture requires gcc-9, we can drop the special
+> conditions on the individual older versions.
+In fact, we still use gcc-6.3 on github/c-sky/gcc. GCC-9 is not
+recommended for using.
 
-Regards,
-Umesh
+All I test is based on gcc-6.3
 
->
-> The problem is: if you have a symlink foo.so -> foo.so.1, when 'find'
->encounters foo.so.1, there is no way to detect that there also exists a symlink
->foo.so to it. So any kind of exclude of foo.so is not going to work.
->
-> Regards,
-> Arnout
->
->>
->>  # Regular stripping for everything, except libpthread, ld-*.so and
->>  # kernel modules:
->>
+-- 
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/
