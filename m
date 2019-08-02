@@ -1,32 +1,39 @@
-From: Titouan Christophe <titouan.christophe@railnova.eu>
-Date: Fri,  2 Aug 2019 17:18:03 +0200
-Subject: [Buildroot] [PATCH 1/1] package/mosquitto: fix typo in Config.in
-Message-ID: <20190802151803.72721-1-titouan.christophe@railnova.eu>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 2 Aug 2019 17:22:48 +0200
+Subject: [Buildroot] [PATCH 1/2] package/pkg-kconfig.mk: Reusability
+ improvements
+In-Reply-To: <20180921135521.32435-2-m.patzlaff@pilz.de>
+References: <20180921135521.32435-1-m.patzlaff@pilz.de>
+ <20180921135521.32435-2-m.patzlaff@pilz.de>
+Message-ID: <20190802172248.61b5038d@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Introduced in ea989ad2b2c2361c47e269dd89cb559edf561db4
+Hello,
 
-Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
----
- package/mosquitto/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, 21 Sep 2018 15:55:20 +0200
+Marcel Patzlaff <m.patzlaff@pilz.de> wrote:
 
-diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
-index 11b6d7891b..c7373d9a84 100644
---- a/package/mosquitto/Config.in
-+++ b/package/mosquitto/Config.in
-@@ -21,7 +21,7 @@ config BR2_PACKAGE_MOSQUITTO_BROKER
- 	  Build and install the mosquitto broker onto target.
- 
- comment "mosquitto broker needs a system with MMU"
--	depends on BR2_PACKAGE_MOSQUTTO && !BR2_USE_MMU
-+	depends on BR2_PACKAGE_MOSQUITTO && !BR2_USE_MMU
- 
- comment "mosquitto needs a toolchain w/ dynamic library"
- 	depends on BR2_STATIC_LIBS
+> This patch refactors savedefconfig and the configuration re-generation
+> to separate macros so that the functionality can be re-used in further
+> rules.
+> 
+> Signed-off-by: Marcel Patzlaff <m.patzlaff@pilz.de>
+> ---
+>  package/pkg-kconfig.mk | 43 ++++++++++++++++++++++++------------------
+>  1 file changed, 25 insertions(+), 18 deletions(-)
+
+I've applied to master, which required fixing a few conflicts due to
+other changes that occurred in the mean time. Sorry for the time it
+took :-/
+
+Best regards,
+
+Thomas
 -- 
-2.21.0
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
