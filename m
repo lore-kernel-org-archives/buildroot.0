@@ -1,47 +1,64 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 2 Aug 2019 09:46:23 +0200
-Subject: [Buildroot] [git commit] package/bison: fix parallel build issue
-Message-ID: <20190802074340.91C2B8C6B3@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Fri,  2 Aug 2019 10:14:01 +0200
+Subject: [Buildroot] [PATCHv2] package/mtd: needs zstd
+Message-ID: <20190802081401.2545-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9c2894298a11e414c1fa276ad28de8d4960a1f9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+From: Julien BOIBESSOT <julien.boibessot@armadeus.com>
 
-Following the bump of Bison to 3.4.1 in commit
-d3c2f33543b91670f8ead627ec7975142b9e6b5a, the build started failing on
-autobuilders using a fairly old version of make (3.81). The failure is
-caused by a parallel build problem in examples/c/reccalc/.
-
-Fixing it is not trivial, and would require autoreconf, which then
-fails due to help2man being missing. So for the time being, simply
-disable parallel build on bison.
-
-The issue has been reported to the bug-bison@ mailing list, but the
-e-mail doesn't appear yet in the mailing list archives.
+For the target variant, zstd is a mandatory dependency when ubifs-tools
+are enabled. For the host variant, it is an unconditional dependency.
 
 Fixes:
+    http://autobuild.buildroot.org/results/99b/99baf1de106f9c80a32e665263c1e4278097643d/ (target)
+    http://autobuild.buildroot.org/results/e3b/e3b96704f0b23e82999aa3d6e93233edecbecfe7/ (host)
 
-  http://autobuild.buildroot.net/results/856/8568bcef944096f2c21470d36f02b520989af5eb/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien BOIBESSOT <julien.boibessot@armadeus.com>
+Tested-by: Markus Mayer <mmayer@broadcom.com>
+[yann.morin.1998 at free.fr: fix the target variant too]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/bison/bison.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ package/mtd/Config.in | 1 +
+ package/mtd/mtd.mk    | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/bison/bison.mk b/package/bison/bison.mk
-index e5d09a4514..32ffa3aec9 100644
---- a/package/bison/bison.mk
-+++ b/package/bison/bison.mk
-@@ -9,6 +9,8 @@ BISON_SOURCE = bison-$(BISON_VERSION).tar.xz
- BISON_SITE = $(BR2_GNU_MIRROR)/bison
- BISON_LICENSE = GPL-3.0+
- BISON_LICENSE_FILES = COPYING
-+# parallel build issue in examples/c/reccalc/
-+BISON_MAKE = $(MAKE1)
- HOST_BISON_DEPENDENCIES = host-m4
+diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+index 590ca7f5ef..1dd7dad1b3 100644
+--- a/package/mtd/Config.in
++++ b/package/mtd/Config.in
+@@ -21,6 +21,7 @@ config BR2_PACKAGE_MTD_UBIFS_UTILS
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	select BR2_PACKAGE_ZLIB
++	select BR2_PACKAGE_ZSTD
  
- $(eval $(host-autotools-package))
+ comment "MTD tools selection"
+ 
+diff --git a/package/mtd/mtd.mk b/package/mtd/mtd.mk
+index 0de14dbcba..04b8ccb73f 100644
+--- a/package/mtd/mtd.mk
++++ b/package/mtd/mtd.mk
+@@ -19,7 +19,7 @@ MTD_CONF_OPTS += --without-jffs
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MTD_UBIFS_UTILS),y)
+-MTD_DEPENDENCIES += util-linux zlib lzo host-pkgconf
++MTD_DEPENDENCIES += util-linux zlib lzo host-pkgconf zstd
+ MTD_CONF_OPTS += --with-ubifs
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ MTD_DEPENDENCIES += openssl
+@@ -46,7 +46,7 @@ else
+ MTD_CONF_OPTS += --without-xattr
+ endif
+ 
+-HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux
++HOST_MTD_DEPENDENCIES = host-zlib host-lzo host-util-linux host-zstd
+ HOST_MTD_CONF_OPTS = \
+ 	--with-jffs \
+ 	--with-ubifs \
+-- 
+2.20.1
