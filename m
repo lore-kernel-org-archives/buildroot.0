@@ -1,72 +1,79 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sun, 4 Aug 2019 00:36:05 +0200
-Subject: [Buildroot] [PATCH v2 1/1] package/weston: replace autotools
- with meson
-In-Reply-To: <20190624181145.107293-1-james.hilliard1@gmail.com>
-References: <20190624181145.107293-1-james.hilliard1@gmail.com>
-Message-ID: <20190804003605.2bafd9f5@windsurf.home>
+From: David <david@ledav.net>
+Date: Sun, 04 Aug 2019 00:21:40 +0200
+Subject: [Buildroot] [PATCHv2] sgp30: New kernel module package
+In-Reply-To: <87tvayb9o6.fsf@dell.be.48ers.dk>
+References: <20190803080911.26062-1-yann.morin.1998@free.fr>
+ <87tvayb9o6.fsf@dell.be.48ers.dk>
+Message-ID: <67e06be7e926dfe5717b627dcffd7ad1@ledav.net>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello James,
+Hi Peter,
 
-On Mon, 24 Jun 2019 12:11:45 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Not anymore. I sent that patch 8 months ago... In the meantime, it was 
+indeed added so.
+Just forget about this patch and keep using the mainline.
 
->  config BR2_PACKAGE_WESTON_DEMO_CLIENTS
->  	bool "demo clients"
-> +	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
+Thanks.
 
-Why is this option added as a dependency. I understand about the other
-depends on and the select on pango, but I don't understand this
-BR2_PACKAGE_MESA3D_OPENGL_EGL dependency.
+Regards,
+David.
 
-> +	depends on BR2_USE_WCHAR # pango
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # pango
-> +	depends on BR2_USE_MMU # pango
-> +	depends on BR2_INSTALL_LIBSTDCPP # pango
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
-> +	select BR2_PACKAGE_PANGO
->  	help
->  	  This enables the installation of Weston's demo clients.
-> +# Uses VIDIOC_EXPBUF, only available from 3.8+
-> +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),)
-
-If you want to say "build this when headers >= 3.8", then it should be:
-
-ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),y)
-
-> +WESTON_CONF_OPTS +=	-Dsimple-clients=dmabuf-v4l
-> +else
-> +WESTON_CONF_OPTS +=	-Dsimple-clients=
->  endif
->  
->  ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
->  WESTON_CONF_OPTS += \
-> -	--enable-fbdev-compositor \
-> -	WESTON_NATIVE_BACKEND=fbdev-backend.so
-> +	-Dbackend-fbdev=true \
-> +	-Dbackend-default=fbdev
-
-I'm still not happy with the -Dbackend-default handling. Indeed, if you
-enable fbdev, and drm and x11, and xwayland, you are going to pass 4
--Dbackend-default options.
-
-Is this backend-default option mandatory ? Perhaps we can leave it
-undefined, and simply have the user select the backend at runtime ? I
-suppose if there is only backend, weston is smart enough at runtime to
-use that one ?
-
-Could you test with this -Dbackend-default option, making a runtime
-test ?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+On 03/08/2019 16:33, Peter Korsgaard wrote:
+>>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+> 
+>  > From: David De Grave <david@ledav.net>
+>  > Kernel module for the Sensirion sgp30 / sgpc2 chemical sensors.
+> 
+>  > Signed-off-by: David De Grave <david@ledav.net>
+>  > [yann.morin.1998 at free.fr:
+>  >   - fix coding style after check-package
+>  >   - enable required linux options
+>  > ]
+>  > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> 
+>  > ---
+>  > Changes v1 -> v2 (Yann):
+>  >   - fix coding style with check-package
+>  >   - enable the required linux options
+>  > ---
+>  >  linux/linux.mk           |  3 +++
+>  >  package/Config.in        |  1 +
+>  >  package/sgp30/Config.in  | 13 +++++++++++++
+>  >  package/sgp30/sgp30.hash |  1 +
+>  >  package/sgp30/sgp30.mk   | 18 ++++++++++++++++++
+> 
+> A DEVELOPERS entry is missing.
+> 
+> I see the kernel now has a sgp30 driver since 5.1, is there any reason
+> to use this over the mainline driver?
+> 
+> Author: Andreas Brauchli <a.brauchli@elementarea.net>
+> Date:   Thu Dec 13 15:43:23 2018 +0100
+> 
+>     iio: chemical: sgp30: Support Sensirion SGP30/SGPC3 sensors
+> 
+>     Support Sensirion SGP30 and SGPC3 multi-pixel I2C gas sensors
+> 
+>     Supported Features:
+> 
+>     * Indoor Air Quality (IAQ) concentrations for
+>       - tVOC (in_concentration_voc_input)
+>       - CO2eq (in_concentration_co2_input) - SGP30 only
+> 
+>       IAQ concentrations are periodically read out by a background 
+> thread
+>       to allow the sensor to maintain its internal baseline.
+> 
+>     * Gas concentration signals
+>       - Ethanol (in_concentration_ethanol_raw)
+>       - H2 (in_concentration_h2_raw) - SGP30 only
+> 
+>     https://www.sensirion.com/file/datasheet_sgp30
+>     https://www.sensirion.com/file/datasheet_sgpc3
+> 
+>     Signed-off-by: Andreas Brauchli <andreas.brauchli@sensirion.com>
+>     Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
