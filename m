@@ -1,43 +1,96 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Aug 2019 22:00:36 +0200
-Subject: [Buildroot] [git commit] package/libhdhomerun: bump version to
- 20190621
-Message-ID: <20190803200438.32B648DF20@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 3 Aug 2019 22:08:51 +0200
+Subject: [Buildroot] [PATCH 1/1] boot/arm-trusted-firmware: use prebuilt
+ BL33 images
+In-Reply-To: <CAN5uoS-q5p6eLgO5GrgR6LWb2oxy6Crb7w_7RAPrG=FA9QEbwA@mail.gmail.com>
+References: <1542900148-17204-1-git-send-email-etienne.carriere@linaro.org>
+ <20181201201834.GA7451@speedy.hunter>
+ <CAN5uoS-q5p6eLgO5GrgR6LWb2oxy6Crb7w_7RAPrG=FA9QEbwA@mail.gmail.com>
+Message-ID: <20190803220851.01cef626@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6daa90db412bc0b6548fc6fb83ca1a24ba30e9d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Etienne,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/libhdhomerun/libhdhomerun.hash | 2 +-
- package/libhdhomerun/libhdhomerun.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Thanks for the very long time it took to get back to you.
 
-diff --git a/package/libhdhomerun/libhdhomerun.hash b/package/libhdhomerun/libhdhomerun.hash
-index b7ad5b52e3..8b45486a12 100644
---- a/package/libhdhomerun/libhdhomerun.hash
-+++ b/package/libhdhomerun/libhdhomerun.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 437888b27206f526827ee7a4c57c1c167a36483b0445232e07fb7bb7ee854b42  libhdhomerun_20180817.tgz
-+sha256 9a60f663b00de5f820bdb85806662e25f22da248b14942e33a8b43a0331f855a  libhdhomerun_20190621.tgz
- sha256 9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/libhdhomerun/libhdhomerun.mk b/package/libhdhomerun/libhdhomerun.mk
-index 96be54a782..8281b2462b 100644
---- a/package/libhdhomerun/libhdhomerun.mk
-+++ b/package/libhdhomerun/libhdhomerun.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBHDHOMERUN_VERSION = 20180817
-+LIBHDHOMERUN_VERSION = 20190621
- LIBHDHOMERUN_SOURCE = libhdhomerun_$(LIBHDHOMERUN_VERSION).tgz
- LIBHDHOMERUN_SITE = http://download.silicondust.com/hdhomerun
- LIBHDHOMERUN_LICENSE = LGPL-2.1+
+On Mon, 3 Dec 2018 11:36:40 +0100
+Etienne Carriere <etienne.carriere@linaro.org> wrote:
+
+> Maybe I should start from the whole picture of my intentions (I tried
+> to be short).
+> 
+> I would like to bring (at least ease) support for OP-TEE on ATF aware
+> platforms in BR
+> OP-TEE is a compliant BL32 image (secure OS) ATF is able to boot.
+> This scheme covers arm64 platforms but also some 32bit arm platforms
+> (since ATF v1.5), assuming OP-TEE support this platfrom.
+> I have submitted patches to integrate OP-TEE components as BR packages
+> [1], before I submit the changes in boot/arm-trusted_firmware to
+> support this package.
+> (in the end, I plan to submit a new Qemu/arm board that boots OP-TEE
+> and a Linux OS through ATF + U-boot).
+> 
+> Assuming OP-TEE package ([1]) is merged in BR, I saw 2 options for BR
+> to build ATF with OP-TEE support:
+> 
+> 1/ Hard code OP-TEE support in BR package ATF on the same model as
+> U-Boot as BL33 support in ATF.
+> => Config.mk defines a specific xxxx_OPTEE_AS_BL32.
+> => arm-trusted-firmware.mk defines the expected binary image filename(s).  
+> 
+> 2/ Allow  ATF Config.mk & arm-trusted-firmware.mk to be more flexible
+> for supporting alternate BL32 images, being OP-TEE or something else.
+> One would set the build deps and BL32 image filename(s) from its board
+> config, not from the BR ATF package.
+> 
+> The patch reviewed in this thread proposes scheme 2/ above applied to
+> BL33 stage.
+> It is true that all boards currently supported in BR that uses ATF
+> with a BL33 stage do use U-Boot as BL33. There is currently not
+> specific need for alternate BL33 packages.
+> From the same perspective, when i will submit OP-TEE support, there
+> will be no specific need for alternate BL32 outside OPTEE.
+> 
+> SO the question is: it interesting to allow a BR board config to
+> define its BL32/BL33 stages or should these be tied to ATF config/make
+> script in BR?
+> 
+> To be clear on my expectations: I do not formerly need such a flexible
+> support. I currently only use U-boot as BL33 and OP-TEE as BL32 in my
+> BR setup. I would understand that the scheme proposed here is
+> rejected.
+
+Thanks for the clearer explanation. It would have been great to have
+exactly this explanation in the commit log in the first place!
+
+The proposed scheme is not ideal because for example the custom
+pre-built BL33 cannot be provided by another Buildroot package, as you
+cannot express the dependency.
+
+If all you're interested in is supporting OPTEE-OS, then I would
+recommend just add explicit support for it as an optional BL32 in ATF,
+without trying to be too flexible.
+
+If however you really want something that is very flexible, to allow
+both custom BL32 and BL33, then a possible solution is to create
+virtual packages: atf-bl32 and atf-bl33. optee_os would be a provider
+of atf-bl32, and U-Boot/Barebox could be providers of atf-bl33. This
+also allows custom packages in BR2_EXTERNAL, that package some custom
+BL32/BL33 to be providers of atf-bl32 or atf-bl33. This is of course
+more complicated to implement. Perhaps it is wise to wait and see if
+there really is a need for something like this.
+
+In the mean time, if what you want is just OPTEE-OS as BL32, keep it
+simple and add explicit handling for it in ATF.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
