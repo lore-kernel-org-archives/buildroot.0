@@ -1,64 +1,85 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  3 Aug 2019 08:31:35 +0200
-Subject: [Buildroot] [PATCH 2/2] package/icu: Fix xtensa build
-In-Reply-To: <20190803063135.24777-1-bernd.kuhls@t-online.de>
-References: <20190803063135.24777-1-bernd.kuhls@t-online.de>
-Message-ID: <20190803063135.24777-2-bernd.kuhls@t-online.de>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 3 Aug 2019 08:32:36 +0200
+Subject: [Buildroot] [PATCH v3 1/1] pkg-infra/show-info: dump
+ install_{staging, target} info
+In-Reply-To: <41428ed5-ed81-067a-829c-00b3e2bdc3ab@mind.be>
+References: <20190731153237.13607-1-vadim4j@gmail.com>
+ <93f8a09e-3dac-4a1c-aa2c-64f3ae51aeea@mind.be>
+ <41428ed5-ed81-067a-829c-00b3e2bdc3ab@mind.be>
+Message-ID: <20190803063236.GA28984@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
-http://autobuild.buildroot.net/results/e6c/e6c6f826d8280f2bef923b3327d2a9a13ce2f7e1/
+Arnout, Vadim, All,
 
-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
----
- .../icu/0007-ICU-20751-Fix-xtensa-build.patch | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 package/icu/0007-ICU-20751-Fix-xtensa-build.patch
+On 2019-08-02 22:43 +0200, Arnout Vandecappelle spake thusly:
+> On 02/08/2019 22:42, Arnout Vandecappelle wrote:
+> > On 31/07/2019 17:32, Vadim Kochan wrote:
+> >> provide info if the package will be installed to staging/target
+> >> destinations. Might be useful for analyzing the packages which
+> >> installed only for target/staging.
+> >>
+> >> Signed-off-by: Vadim Kochan <vadim4j@gmail.com>
+> >> ---
+> >> v2:
+> >>     1) use oneliner 'if' to dump install_{staging,target} properties
+> >>
+> >> v3:
+> >>     1) fix evaluation of true/false value via 'subst' (suggested by Yann E. Morin)
+> >>
+> >>  package/pkg-utils.mk | 2 ++
+> >>  1 file changed, 2 insertions(+)
+> >>
+> >> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> >> index b7280e930f..ffe198e242 100644
+> >> --- a/package/pkg-utils.mk
+> >> +++ b/package/pkg-utils.mk
+> >> @@ -94,6 +94,8 @@ endef
+> >>  define _json-info-pkg-details
+> >>  	"version": "$($(1)_DL_VERSION)",
+> >>  	"licenses": "$($(1)_LICENSE)",
+> >> +	"install-target": $(if $(subst NO,,$($(1)_INSTALL_TARGET)),true,false),
+> >> +	"install-staging": $(if $(subst NO,,$($(1)_INSTALL_STAGING)),true,false),
+> 
+>  Oh, also, someone commented that you should keep install_staging with
+> underscore because we already have reverse_dependencies.
 
-diff --git a/package/icu/0007-ICU-20751-Fix-xtensa-build.patch b/package/icu/0007-ICU-20751-Fix-xtensa-build.patch
-new file mode 100644
-index 0000000000..494eeb1dc5
---- /dev/null
-+++ b/package/icu/0007-ICU-20751-Fix-xtensa-build.patch
-@@ -0,0 +1,35 @@
-+From 8bb098a8d887939bf8eb41998c6ddfa847c12665 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd.kuhls@t-online.de>
-+Date: Sat, 3 Aug 2019 08:25:02 +0200
-+Subject: [PATCH] ICU-20751 Fix xtensa build
-+
-+Solves build error
-+In file included from double-conversion.h:42:0,
-+                 from number_decimalquantity.cpp:19:
-+double-conversion-utils.h:119:2: error: #error Target architecture was not detected as supported by Double-Conversion.
-+ #error Target architecture was not detected as supported by Double-Conversion.
-+
-+detected by buildroot autobuilders:
-+http://autobuild.buildroot.net/results/e6c/e6c6f826d8280f2bef923b3327d2a9a13ce2f7e1/
-+
-+[Bernd: Fixed path]
-+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+---
-+ source/i18n/double-conversion-utils.h | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/source/i18n/double-conversion-utils.h b/source/i18n/double-conversion-utils.h
-+index 1e44fcaa0e..79816c7e05 100644
-+--- a/source/i18n/double-conversion-utils.h
-++++ b/source/i18n/double-conversion-utils.h
-+@@ -103,6 +103,7 @@ int main(int argc, char** argv) {
-+     defined(__AARCH64EL__) || defined(__aarch64__) || defined(__AARCH64EB__) || \
-+     defined(__riscv) || \
-+     defined(__or1k__) || defined(__arc__) || \
-++    defined(__XTENSA__) || \
-+     defined(__EMSCRIPTEN__)
-+ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
-+ #elif defined(__mc68000__) || \
-+-- 
-+2.20.1
-+
+And install_target too, of course.
+
+And please also introduce install_images.
+
+Regards,
+Yann E. MORIN.
+
+>  Regards,
+>  Arnout
+> 
+> > 
+> >  I still find this ugly.
+> > 
+> >  Could you instead add a macro that does something like
+> > $(subst NO,false,$(subst YES,true,$(1)))
+> > and use that?
+> > 
+> >  It may also be handy in other situations.
+> > 
+> >  I'm not sure what to call it, maybe bool-to-json or yesno-to-bool
+> > 
+> >  Regards,
+> >  Arnout
+> > 
+> >>  	"downloads": [
+> >>  	$(foreach dl,$(sort $($(1)_ALL_DOWNLOADS)),
+> >>  		{
+> >>
+
 -- 
-2.20.1
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
