@@ -1,53 +1,174 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Aug 2019 22:49:23 +0200
-Subject: [Buildroot] [PATCH 1/1] package/elfutils: security bump to
- version 0.176
-In-Reply-To: <20190803093408.31776-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 3 Aug 2019 11:34:08 +0200")
-References: <20190803093408.31776-1-fontaine.fabrice@gmail.com>
-Message-ID: <874l2y7z58.fsf@dell.be.48ers.dk>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 3 Aug 2019 22:52:53 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/rcw: Optional RCW Generation
+In-Reply-To: <20190225161046.2345-1-jared.bents@rockwellcollins.com>
+References: <20190225161046.2345-1-jared.bents@rockwellcollins.com>
+Message-ID: <12c64738-e4b7-bc77-4940-6dffbff3a4b2@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+ Hi Jared,
 
- > Fixes CVE-2018-18310: An invalid memory address dereference was
- > discovered in dwfl_segment_report_module.c in libdwfl in elfutils
- > through v0.174. The vulnerability allows attackers to cause a denial of
- > service (application crash) with a crafted ELF file, as demonstrated by
- > consider_notes.
+ I have quite a few proposed changes to this. A bit too much to apply right
+away, so I'll resend it first. Please review and give your OK on it.
 
- > Fixes CVE-2018-18520: An Invalid Memory Address Dereference exists in
- > the function elf_end in libelf in elfutils through v0.174. Although
- > eu-size is intended to support ar files inside ar files,
- > handle_ar in size.c closes the outer ar file before handling all inner
- > entries. The vulnerability allows attackers to cause a denial of service
- > (application crash) with a crafted ELF file.
+On 25/02/2019 17:10, jared.bents at rockwellcollins.com wrote:
+> From: Jared Bents <jared.bents@rockwellcollins.com>
+> 
+> Update to add an optional RCW generation using
+> BR2_PACKAGE_HOST_RCW_CUSTOM_PATH with no modification
+> to the RCW package source.
+> 
+> --
+> [v1 -> v2]: * Removed host-python dependency
+>             * Updated help for BR2_PACKAGE_HOST_RCW_CUSTOM_PATH
+>             * Added error for number of .rcw not equal to 1
+>             * Removed symlinks
+>             * Split large install command into different commands
+>             * Resolved utils/check-package warnings
+> 
+> Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
 
- > Fixes CVE-2018-18521: Divide-by-zero vulnerabilities in the function
- > arlib_add_symbols() in arlib.c in elfutils 0.174 allow remote attackers
- > to cause a denial of service (application crash) with a crafted ELF
- > file, as demonstrated by eu-ranlib, because a zero sh_entsize is
- > mishandled.
+ Your Sob should be above the --- line, otherwise it gets stripped off.
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/rcw/Config.in.host | 16 ++++++++++++++++
+>  package/rcw/rcw.mk         | 32 ++++++++++++++++++++++++++++++++
+>  2 files changed, 48 insertions(+)
+> 
+> diff --git a/package/rcw/Config.in.host b/package/rcw/Config.in.host
+> index ba40f76de9..34f211a8ff 100644
+> --- a/package/rcw/Config.in.host
+> +++ b/package/rcw/Config.in.host
+> @@ -10,3 +10,19 @@ config BR2_PACKAGE_HOST_RCW
+>  	  then use this toolset and examples.
+>  
+>  	  https://source.codeaurora.org/external/qoriq/qoriq-components/rcw/
+> +
+> +if BR2_PACKAGE_HOST_RCW
+> +
+> +config BR2_PACKAGE_HOST_RCW_CUSTOM_PATH
+> +	string "RCW Source file paths"
+> +	help
+> +	  Space-separated list of .rcw and .rcwi files, that will be
+> +	  used to generate a RCW binary. The entire list of .rcwi files
+> +	  used by the .rcw file must be specified. There must be a
+> +	  single .rcw file in the list.
+> +
+> +	  This is optional. If left empty, the RCW package will be
+> +	  included for use in the SDK or with post scripts but the
+> +	  binary will not be generated.
 
-This unfortunately fails to build on older machines:
+ I slightly rephrased this.
 
-http://autobuild.buildroot.net/results/105/1053e2b4b51bc225c4a1a29c93946101a7a53be9/
+> +
+> +endif
+> diff --git a/package/rcw/rcw.mk b/package/rcw/rcw.mk
+> index f4570b9bde..1b7a73f6e5 100644
+> --- a/package/rcw/rcw.mk
+> +++ b/package/rcw/rcw.mk
+> @@ -10,11 +10,43 @@ RCW_SITE_METHOD = git
+>  RCW_LICENSE = BSD-3-Clause
+>  RCW_LICENSE_FILES = LICENSE
+>  
+> +# The name of the file to be deliveried in the BINARIES_DIR
+> +RCW_DELIVERY_FILE = PBL.bin
 
-libelf_pic.a(elf32_updatefile.os): In function `__elf32_updatemmap':
-elf32_updatefile.c:(.text+0xb16): undefined reference to `aligned_alloc'
-libelf_pic.a(elf64_updatefile.os): In function `__elf64_updatemmap':
-elf64_updatefile.c:(.text+0xb67): undefined reference to `aligned_alloc'
-collect2: error: ld returned 1 exit status
+ I removed this definition - IMO it serves no purpose.
 
-Which was added in glibc 2.16 (this specific autobuilder uses
-2.13). Could you take a look at changing it to use posix_memalign()
-instead? Thanks!
+> +
+> +# Get the name of the custom rcw file from the custom list
+> +RCW_PROJECT = $(filter %.rcw,$(notdir $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))))
 
--- 
-Bye, Peter Korsgaard
+ On the other hand, $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH)) is quite
+long, and used in several places. So I've added a variable for that.
+
+ Also, I've enclosed this entire block in a
+
+ifneq ($(RCW_FILES),)
+...
+endif
+
+> +
+> +# Error if there is more than one .rcw file
+> +ifneq ($(RCW_PROJECT),)
+> +ifneq ($(words $(RCW_PROJECT)),1)
+
+ I've added an
+
+ifeq ($(BR_BUILDING),y)
+
+here. I don't remember why this is needed, but basically it avoids showing the
+error in situations where it's not relevant.
+
+> +$(error BR2_PACKAGE_HOST_RCW_CUSTOM_PATH)
+
+ I've added an actual error message here.
+
+> +endif
+> +endif
+> +
+> +ifneq ($(RCW_PROJECT),)
+> +define HOST_RCW_ADD_CUSTOM_RCW_FILES
+> +	mkdir -p $(@D)/custom_board/rcw
+
+ I don't see why you should create the rcw subdirectory... I didn't change that
+though.
+
+> +	cp -f $(filter %.rcwi,$(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))) $(@D)/custom_board
+
+ I've changed this into $(filter-out %.rcw ...) - there is really no reason to
+constrain the files to be called *.rcwi.
+
+> +	cp -f $(filter %.rcw,$(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH))) $(@D)/custom_board/rcw
+> +endef
+> +HOST_RCW_POST_PATCH_HOOKS += HOST_RCW_ADD_CUSTOM_RCW_FILES
+> +
+> +define HOST_RCW_BUILD_CMDS
+> +	python $(@D)/rcw.py -i $(@D)/custom_board/rcw/$(RCW_PROJECT) -I $(@D)/custom_board -o $(@D)/$(RCW_DELIVERY_FILE)
+
+ This one got me thinking (and is another reason why I haven't applied yet):
+unlike similar options in Linux, U-Boot, ..., there really is no need to copy
+the source files at all. So, I would change the entire concept into expecting
+just a single filename. In other words, just call
+
+ 	python $(@D)/rcw.py -i $(call qstrip,$(BR2_PACKAGE_HOST_RCW_CUSTOM_PATH)) -o
+$(@D)PBL.bin
+
+ This has the advantage that you can spread the rcwi files over directories. For
+example, with the directory structure like the one inside the rcw package
+itself, it wouldn't work because you have things like
+
+#include "../../a004580.rcw"
+
+which won't be correct any more after the copying.
+
+> +endef
+> +
+> +define HOST_RCW_INSTALL_DELIVERY_FILE
+> +	$(INSTALL) -D -m 0644 $(@D)/$(RCW_DELIVERY_FILE) $(BINARIES_DIR)/$(RCW_DELIVERY_FILE)
+> +endef
+> +endif
+> +
+>  # Copy source files and script into $(HOST_DIR)/share/rcw/ so a developer
+>  # could use a post image or SDK to build/install PBL files.
+>  define HOST_RCW_INSTALL_CMDS
+>  	mkdir -p  $(HOST_DIR)/share/rcw
+>  	cp -a $(@D)/* $(HOST_DIR)/share/rcw
+> +	$(HOST_RCW_INSTALL_DELIVERY_FILE)
+> +	find $(HOST_DIR)/share/rcw -name "*.bin" -delete
+
+ Why do you do this? The only bin file would be the just-generated PBL.bin. If
+you don't want it, remove it in HOST_RCW_INSTALL_DELIVERY_FILE. So I've just
+removed this line.
+
+ Regards,
+ Arnout
+
+>  endef
+>  
+>  $(eval $(host-generic-package))
+> 
