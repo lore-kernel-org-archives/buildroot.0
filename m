@@ -1,66 +1,40 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 3 Aug 2019 12:57:46 +0200
-Subject: [Buildroot] [git commit] package/prboom: avoid using hardcoded
- optimization flags
-Message-ID: <20190803105500.913988898A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/config-fragments/autobuild: update
+ CSV after musl toolchain rename
+Message-ID: <20190803105501.DC1238377F@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34bcc4c6b003087673cf5faf3a896154b9425f75
+commit: https://git.buildroot.net/buildroot/commit/?id=228b0b1f0088ee8f8d1775b618a8725b8a4e0534
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Package prboom builds using -O2 flag ignoring Buildroot settings, this
-is due to the fact that -O2 is appended at the end of compiler flags.
+In commit a5893254055610e416316803de0095b0ce6f03f6
+("support/config-fragments/autobuild: rename br-riscv64-musl config"),
+the RISC-V 64-bit musl toolchain config snippet was renamed, but the
+toolchain.csv file was not updated accordingly.
 
-Remove -O2 from 'configure.ac' file and set PRBOOM_AUTORECONF to YES,
-this way CFLAGS_OPTS will contain Buildroot TARGET_CFLAGS.
+Due to this, utils/genrandconfig was no longer able to generate any
+configuration.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...ure-remove-predefined-O2-optimization-flag.patch | 21 +++++++++++++++++++++
- package/prboom/prboom.mk                            |  1 +
- 2 files changed, 22 insertions(+)
+ support/config-fragments/autobuild/toolchain-configs.csv | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/prboom/0002-configure-remove-predefined-O2-optimization-flag.patch b/package/prboom/0002-configure-remove-predefined-O2-optimization-flag.patch
-new file mode 100644
-index 0000000000..9260cb6314
---- /dev/null
-+++ b/package/prboom/0002-configure-remove-predefined-O2-optimization-flag.patch
-@@ -0,0 +1,21 @@
-+configure: remove predefined -O2 optimization flag
-+
-+CFLAGS_OPT variable forces to use -O2 optimization flag denying the
-+possibility to use different optimization flag values.
-+
-+Remove -O2 flag from CFLAGS_OPT.
-+
-+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-+---
-+diff -urpN prboom-2.5.0.orig/configure.ac prboom-2.5.0/configure.ac
-+--- prboom-2.5.0.orig/configure.ac	2019-06-20 14:07:45.058481879 +0200
-++++ prboom-2.5.0/configure.ac	2019-06-20 14:09:05.066238825 +0200
-+@@ -48,7 +48,7 @@ else
-+ fi
-+ 
-+ dnl --- cph: work out flags to pass to compiler
-+-CFLAGS_OPT="-O2 -fomit-frame-pointer"
-++CFLAGS_OPT="-fomit-frame-pointer"
-+ AC_C_COMPILE_FLAGS(-Wall)
-+ dnl --- Option to enable debugging
-+ AC_ARG_ENABLE(debug,AC_HELP_STRING([--enable-debug],[turns on various debugging features, like range checking and internal heap diagnostics]),,enable_debug="no")
-diff --git a/package/prboom/prboom.mk b/package/prboom/prboom.mk
-index d370ae3fa5..325bf3eb02 100644
---- a/package/prboom/prboom.mk
-+++ b/package/prboom/prboom.mk
-@@ -10,6 +10,7 @@ PRBOOM_CONF_ENV = ac_cv_type_uid_t=yes
- PRBOOM_DEPENDENCIES = sdl sdl_net sdl_mixer
- PRBOOM_LICENSE = GPL-2.0+
- PRBOOM_LICENSE_FILES = COPYING
-+PRBOOM_AUTORECONF = YES
- 
- ifeq ($(BR2_PACKAGE_LIBPNG),y)
- PRBOOM_DEPENDENCIES += libpng
+diff --git a/support/config-fragments/autobuild/toolchain-configs.csv b/support/config-fragments/autobuild/toolchain-configs.csv
+index da689c5fe7..9b41e2173b 100644
+--- a/support/config-fragments/autobuild/toolchain-configs.csv
++++ b/support/config-fragments/autobuild/toolchain-configs.csv
+@@ -53,7 +53,7 @@ support/config-fragments/autobuild/br-powerpc-e500mc-full.config,x86_64
+ support/config-fragments/autobuild/br-powerpc-internal-full.config,any
+ support/config-fragments/autobuild/br-riscv32.config,x86_64
+ support/config-fragments/autobuild/br-riscv64.config,x86_64
+-support/config-fragments/autobuild/br-riscv64-musl.config,any
++support/config-fragments/autobuild/br-riscv64-internal-musl.config,any
+ support/config-fragments/autobuild/br-sh4-full.config,x86_64
+ support/config-fragments/autobuild/br-sparc-uclibc.config,x86_64
+ support/config-fragments/autobuild/br-sparc64-glibc.config,x86_64
