@@ -1,105 +1,67 @@
-From: Romain Naour <romain.naour@smile.fr>
-Date: Sat,  3 Aug 2019 18:52:40 +0200
-Subject: [Buildroot] [PATCH] package/lapack: enable unconditionally complex
- matrices support
-Message-ID: <20190803165240.4674-1-romain.naour@smile.fr>
+From: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Date: Sat, 3 Aug 2019 19:08:13 +0200
+Subject: [Buildroot] [PATCH 2/2] package/qt5/qt5base: build with correct
+ optimization
+In-Reply-To: <20190803122141.67580d55@windsurf.home>
+References: <20190626140412.101607-1-giulio.benetti@micronovasrl.com>
+ <20190626140412.101607-2-giulio.benetti@micronovasrl.com>
+ <20190803122141.67580d55@windsurf.home>
+Message-ID: <3450849a-4a86-3829-0297-45316e6cf76d@micronovasrl.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-In order to avoid build issues when complex matrices support is
-disabled, we enable it unconditionally.
+Hello Thomas,
 
-While working on new runtime tests for python-numpy package, we
-noticed a build issue whith python-numpy package when
-BR2_PACKAGE_LAPACK_COMPLEX is not set. The python-numpy package
-was patched to add the dependency on lapack package instead of
-clapack.
+Il 03/08/2019 12:21, Thomas Petazzoni ha scritto:
+> Hello,
+> 
+> On Wed, 26 Jun 2019 16:04:12 +0200
+> Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
+> 
+>> diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
+>> index 26bee2cb39..4de880d2a2 100644
+>> --- a/package/qt5/qt5base/qmake.conf.in
+>> +++ b/package/qt5/qt5base/qmake.conf.in
+>> @@ -15,6 +15,7 @@ QMAKE_CXX               = $${CROSS_COMPILE}g++
+>>   # modifications to gcc-base.conf
+>>   QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
+>>   QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
+>> +QMAKE_CFLAGS_OPTIMIZE_FULL  = $${BR_OPTIMIZATION}
+>>   CONFIG                 += nostrip
+>>   
+>>   QMAKE_LIBS             += -lrt -lpthread -ldl
+>> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+>> index e4aa76908a..69e90a37b3 100644
+>> --- a/package/qt5/qt5base/qt5base.mk
+>> +++ b/package/qt5/qt5base/qt5base.mk
+>> @@ -361,6 +361,7 @@ define QT5BASE_CONFIGURE_CMDS
+>>   		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
+>>   		-device-option BR_COMPILER_CFLAGS="$(QT5BASE_CFLAGS)" \
+>>   		-device-option BR_COMPILER_CXXFLAGS="$(QT5BASE_CXXFLAGS)" \
+>> +		-device-option BR_OPTIMIZATION="$(TARGET_OPTIMIZATION)" \
+> 
+> TARGET_OPTIMIZATION is already inside TARGET_CFLAGS, so it doesn't make
+> a lot of sense to pass them again. Basically, it's just easier to set
+> QMAKE_CFLAGS_OPTIMIZE, QMAKE_CFLAGS_OPTIMIZE_FULL,
+> QMAKE_CFLAGS_OPTIMIZE_SIZE, QMAKE_CFLAGS_OPTIMIZE_DEBUG to the empty
+> value. See the final commit at:
+> 
+>    https://git.buildroot.org/buildroot/commit/?id=7c0aa83527e0b0179f9e3f73a3e63df1fdc5a6e6
 
-It failed with the following error:
+Good idea to override them in qmake.conf.in, I didn't think about it.
 
-libcblas.so: undefined reference to `scnrm2_'
-libcblas.so: undefined reference to `scasum_'
-
-Indeed, scnrm2 and scasum are added to libblas.so only when
-BUILD_COMPLEX is enabled.
-
-Also, there is no really important space saving on the target:
-
-| Library name  | Without lapack complex | With lapack complex |
-| liblapack.so  | 2,4M                   | 4,6M                |
-| liblapacke.so | 1,8M                   | 1,5M                |
-| libcblas.so   | 48K                    | 76K                 |
-| libblas.so    | 96K                    | 232K                |
-
-(Tested with the ARM external toolchain 2019.03)
-
-Complex matrices support are likeley expected when lapack package
-is selected.
-
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Samuel Martin <s.martin49@gmail.com>
-Cc: Benjamin Kamath <bkamath@spaceflight.com>
----
- Config.in.legacy         | 7 +++++++
- package/lapack/Config.in | 7 -------
- package/lapack/lapack.mk | 9 ++-------
- 3 files changed, 9 insertions(+), 14 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 6a241b1ec8..bab89bd219 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2019.08"
- 
-+config BR2_PACKAGE_LAPACK_COMPLEX
-+	bool "Complex/Complex16 option was removed"
-+	select BR2_LEGACY
-+	help
-+	  Complex/Complex16 support is now unconditionally enabled in
-+	  lapack package.
-+
- config BR2_GDB_VERSION_7_12
- 	bool "gdb 7.12.x has been removed"
- 	select BR2_LEGACY
-diff --git a/package/lapack/Config.in b/package/lapack/Config.in
-index 9687ace82d..f7844e29c2 100644
---- a/package/lapack/Config.in
-+++ b/package/lapack/Config.in
-@@ -12,10 +12,3 @@ config BR2_PACKAGE_LAPACK
- 	  installs two libraries: libblas and liblapack.
- 
- 	  http://www.netlib.org/lapack/
--
--config BR2_PACKAGE_LAPACK_COMPLEX
--	bool "Complex/Complex16 support"
--	default y
--	depends on BR2_PACKAGE_LAPACK
--	help
--	  Builds support for COMPLEX and COMPLEX16 data types.
-diff --git a/package/lapack/lapack.mk b/package/lapack/lapack.mk
-index 3b59214e4b..fcf4da3235 100644
---- a/package/lapack/lapack.mk
-+++ b/package/lapack/lapack.mk
-@@ -10,12 +10,7 @@ LAPACK_LICENSE_FILES = LICENSE
- LAPACK_SITE = http://www.netlib.org/lapack
- LAPACK_INSTALL_STAGING = YES
- LAPACK_SUPPORTS_IN_SOURCE_BUILD = NO
--LAPACK_CONF_OPTS = -DLAPACKE=ON -DCBLAS=ON
--
--ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)
--LAPACK_CONF_OPTS += -DBUILD_COMPLEX=ON -DBUILD_COMPLEX16=ON
--else
--LAPACK_CONF_OPTS += -DBUILD_COMPLEX=OFF -DBUILD_COMPLEX16=OFF
--endif
-+LAPACK_CONF_OPTS = -DLAPACKE=ON -DCBLAS=ON -DBUILD_COMPLEX=ON \
-+	-DBUILD_COMPLEX16=ON
- 
- $(eval $(cmake-package))
+Thank you
 -- 
-2.20.1
+Giulio Benetti
+CTO
+
+MICRONOVA SRL
+Sede: Via A. Niedda 3 - 35010 Vigonza (PD)
+Tel. 049/8931563 - Fax 049/8931346
+Cod.Fiscale - P.IVA 02663420285
+Capitale Sociale ? 26.000 i.v.
+Iscritta al Reg. Imprese di Padova N. 02663420285
+Numero R.E.A. 258642
