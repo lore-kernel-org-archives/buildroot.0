@@ -1,49 +1,51 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Aug 2019 16:21:57 +0200
-Subject: [Buildroot] [git commit] package/python-pytz: bump to version
- 2019.02
-Message-ID: <20190803142045.7F347813F7@busybox.osuosl.org>
+Date: Sat, 3 Aug 2019 16:22:07 +0200
+Subject: [Buildroot] [git commit] package/python-pyparsing: bump to version
+ 2.4.2
+Message-ID: <20190803142045.93873813F7@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b1b6906654fccd5e2d2172f43d29cb9d4f55c6b4
+commit: https://git.buildroot.net/buildroot/commit/?id=f1d51632cf1db5dd29c3d479d79c799b25e37163
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Also add a hash for LICENSE file
 
 Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-pytz/python-pytz.hash | 4 ++--
- package/python-pytz/python-pytz.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pyparsing/python-pyparsing.hash | 6 ++++--
+ package/python-pyparsing/python-pyparsing.mk   | 4 ++--
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
-index 525d452584..9e0dfe0289 100644
---- a/package/python-pytz/python-pytz.hash
-+++ b/package/python-pytz/python-pytz.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytz/json
--md5	0f57d76c64d0965e7429c9b871f6b711  pytz-2018.9.tar.gz
--sha256	d5f05e487007e29e03409f9398d074e158d920d36eb82eaf66fb1136b0c5374c  pytz-2018.9.tar.gz
-+md5	8c21963449c3a793aa61ef122e171516  pytz-2019.2.tar.gz
-+sha256	26c0b32e437e54a18161324a2fca3c4b9846b74a8dccddd843113109e1116b32  pytz-2019.2.tar.gz
- # Locally computed sha256 checksums
- sha256	39f07c72a1bfda349cbd27bac9bcb1e6f8c5b4e5cc3fadf56900406e8cc0b792  LICENSE.txt
-diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
-index a93a12c084..217d4850f2 100644
---- a/package/python-pytz/python-pytz.mk
-+++ b/package/python-pytz/python-pytz.mk
+diff --git a/package/python-pyparsing/python-pyparsing.hash b/package/python-pyparsing/python-pyparsing.hash
+index 61385804b6..d1161e4f8f 100644
+--- a/package/python-pyparsing/python-pyparsing.hash
++++ b/package/python-pyparsing/python-pyparsing.hash
+@@ -1,3 +1,5 @@
+ # md5 from https://pypi.python.org/pypi/pyparsing/json, sha256 locally computed
+-md5 065908b92904e0d3634eb156f44cc80e pyparsing-2.1.10.tar.gz
+-sha256 811c3e7b0031021137fc83e051795025fcb98674d07eb8fe922ba4de53d39188 pyparsing-2.1.10.tar.gz
++md5 46d02cbe0461fe0571d51649e6006ef5 pyparsing-2.4.2.tar.gz
++sha256 6f98a7b9397e206d78cc01df10131398f1c8b8510a2f4d97d9abd82e1aacdd80 pyparsing-2.4.2.tar.gz
++# Locally computed sha256 checksums
++sha256	10d5120a16805804ffda8b688c220bfb4e8f39741b57320604d455a309e01972  LICENSE
+diff --git a/package/python-pyparsing/python-pyparsing.mk b/package/python-pyparsing/python-pyparsing.mk
+index 4a4b1bb8e3..f419e00d40 100644
+--- a/package/python-pyparsing/python-pyparsing.mk
++++ b/package/python-pyparsing/python-pyparsing.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYTZ_VERSION = 2018.9
-+PYTHON_PYTZ_VERSION = 2019.2
- PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
--PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/af/be/6c59e30e208a5f28da85751b93ec7b97e4612268bb054d0dff396e758a90
-+PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/27/c0/fbd352ca76050952a03db776d241959d5a2ee1abddfeb9e2a53fdb489be4
- PYTHON_PYTZ_SETUP_TYPE = setuptools
- PYTHON_PYTZ_LICENSE = MIT
- PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
+-PYTHON_PYPARSING_VERSION = 2.1.10
++PYTHON_PYPARSING_VERSION = 2.4.2
+ PYTHON_PYPARSING_SOURCE = pyparsing-$(PYTHON_PYPARSING_VERSION).tar.gz
+-PYTHON_PYPARSING_SITE = https://pypi.python.org/packages/38/bb/bf325351dd8ab6eb3c3b7c07c3978f38b2103e2ab48d59726916907cd6fb
++PYTHON_PYPARSING_SITE = https://files.pythonhosted.org/packages/7e/24/eaa8d7003aee23eda270099eeec754d7bf4399f75c6a011ef948304f66a2
+ PYTHON_PYPARSING_LICENSE = MIT
+ PYTHON_PYPARSING_LICENSE_FILES = LICENSE
+ PYTHON_PYPARSING_SETUP_TYPE = setuptools
