@@ -1,11 +1,11 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Aug 2019 17:19:15 +0200
-Subject: [Buildroot] [PATCH v2 0/5] Fix bug 11271 and add test for
+Date: Sat, 3 Aug 2019 17:19:19 +0200
+Subject: [Buildroot] [PATCH 3/5] support/testing: add test for
  check-package
-In-Reply-To: <20181104041209.23028-1-ricardo.martincoski@gmail.com>
+In-Reply-To: <20181103045624.31059-4-ricardo.martincoski@gmail.com>
 References: <20181103045624.31059-1-ricardo.martincoski@gmail.com>
- <20181104041209.23028-1-ricardo.martincoski@gmail.com>
-Message-ID: <abae0445-caf8-13b1-544c-7ba85d9cfeb3@mind.be>
+ <20181103045624.31059-4-ricardo.martincoski@gmail.com>
+Message-ID: <5738014d-311c-dca1-8c59-be672965bba8@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,115 +13,202 @@ Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
  Hi Ricardo,
-On 04/11/2018 05:12, Ricardo Martincoski wrote:
-> Hello,
+
+On 03/11/2018 05:56, Ricardo Martincoski wrote:
+> Check the basic usage for check-package.
 > 
-> This series fixes bug 11271 and adds a test case that catches the bug.
-
- Sorry it took so long to apply this series...
-
-
-> Patch 1 fixes the usage of check-package when called from the same directory
-> than the files to be tested in a br2-external tree.
+> It can be called using either absolute path, relative path or from PATH.
+> Files to be checked can be passed with either absolute path or relative
+> path (also including files in the current directory).
 > 
-> Patch 2 improves the testing infra by ensuring it can be started from any path,
-> not only the Buildroot top directory.
-> As a consequence the test infra will always test the repo it belongs to.
+> Also check it ignores some special files when checking intree files,
+> i.e. package/pkg-generic.mk, while still generating warnings for out-of-tree
+> files when called with -b.
+> In order to allow the later, add an empty line to the Config.in in the
+> br2-external being tested so the script does generate a warning.
 > 
-> Patch 3 creates a test case for check-package, calling the script in the same
-> repo against in-tree files and against files in a br2-external.
-
- I had a few concerns about this one, but I just fixed it up and applied.
-
+> Catches bug #11271.
 > 
-> Patch 4 improves usability of check-package in a br2-external tree by ignoring
-> external.mk since it is special: it usually contains raw makefile targets and
-> therefore cannot be tested by the script, but it is part of the br2-external
-> structure, so it is likely someone expects it to be checkable by an in-tree
-> script.
-> 
-> Patch 5 improves the test case created by patch 3 to test the scenario covered
-> by patch 4.
+> More tests can be added later, for example compatibility to Python 3.
+[snip]
+> diff --git a/support/testing/tests/utils/test_check_package.py b/support/testing/tests/utils/test_check_package.py
+> new file mode 100644
+> index 0000000000..85f2e280a8
+> --- /dev/null
+> +++ b/support/testing/tests/utils/test_check_package.py
+> @@ -0,0 +1,148 @@
+> +"""Test cases for utils/check-package.
+> +
+> +It does not inherit from infra.basetest.BRTest and therefore does not generate a logfile.
 
- Series applies to master, thanks!
+ Lines should be wrapped at 80 columns. We override that limit in the gitlab-CI
+test because sometimes the code is uglier by wrapping exactly at 80, but the
+.flake8 file does set the limit at 80.
+
+ So I've rewrapped the entire file where appropriate. I've done the same with
+the following two commits.
+
+> +Only when the tests fail there will be output to the console.
+> +The make target ('make check-package') is already used by the job 'check-package' and won't be tested here.
+> +"""
+> +import os
+> +import subprocess
+> +import unittest
+> +
+> +import infra
+> +
+> +
+> +def call_script(args, env, cwd):
+> +    """Call a script and return stdout and stderr as lists."""
+> +    out, err = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env, cwd=cwd).communicate()
+> +    return out.splitlines(), err.splitlines()
+> +
+> +
+> +class TestCheckPackage(unittest.TestCase):
+> +    """Base class for all test cases for check-package.
+
+ Since there is only one derived class, and it doesn't seem worth to make
+additional classes even if more tests are added, I've merged this with
+TestCheckPackageBasicUsage.
+
+> +
+> +    It inherits from TestCase so its methods can use unittest assertions but it does not declare a test_run method in order to be
+> +    ignored by nose2 when the test cases are discovered.
+> +    """
+> +
+> +    WITH_EMPTY_PATH = {}
+> +    WITH_UTILS_IN_PATH = {"PATH": infra.basepath("utils") + ":" + os.environ["PATH"]}
+> +    relative = [
+> +        # base_script           base_file               rel_script               rel_file                rel_cwd
+> +        ["utils/check-package", "package/atop/atop.mk", "./utils/check-package", "package/atop/atop.mk", ""],
+> +        ["utils/check-package", "package/atop/atop.mk", "./utils/check-package", "./package/atop/atop.mk", ""],
+> +        ["utils/check-package", "package/atop/atop.mk", "../../utils/check-package", "atop.mk", "package/atop"],
+> +        ["utils/check-package", "package/atop/atop.mk", "../../utils/check-package", "./atop.mk", "package/atop"],
+> +        ["utils/check-package", "package/atop/atop.mk", "../utils/check-package", "atop/atop.mk", "package"],
+> +        ["utils/check-package", "package/atop/atop.mk", "../utils/check-package", "./atop/atop.mk", "package"],
+> +        ["utils/check-package", "package/atop/Config.in", "./utils/check-package", "package/atop/Config.in", ""],
+> +        ["utils/check-package", "package/atop/Config.in", "./utils/check-package", "./package/atop/Config.in", ""],
+> +        ["utils/check-package", "package/atop/Config.in", "../../utils/check-package", "Config.in", "package/atop"],
+> +        ["utils/check-package", "package/atop/Config.in", "../../utils/check-package", "./Config.in", "package/atop"],
+> +        ["utils/check-package", "package/atop/Config.in", "../utils/check-package", "atop/Config.in", "package"],
+> +        ["utils/check-package", "package/atop/Config.in", "../utils/check-package", "./atop/Config.in", "package"]]
+
+ I have the feeling that it would be sufficient to just have rel_cwd in this
+table and derive the rest from that (and using a loop for the .mk and
+Config.in). But it's not worth spending time on that, so I've kept it as is.
+
+
+> +
+> +    def assert_file_was_processed(self, stderr):
+> +        """Infer from check-package stderr if at least one file was processed and fail otherwise."""
+> +        self.assertIn("lines processed", stderr[0], stderr)
+> +        processed = int(stderr[0].split()[0])
+> +        self.assertGreater(processed, 0)
+> +
+> +    def assert_file_was_ignored(self, stderr):
+> +        """Infer from check-package stderr if no file was processed and fail otherwise."""
+> +        self.assertIn("lines processed", stderr[0], stderr)
+> +        processed = int(stderr[0].split()[0])
+> +        self.assertEqual(processed, 0)
+> +
+> +    def assert_warnings_generated_for_file(self, stderr):
+> +        """Infer from check-package stderr if at least one warning was generatd and fail otherwise."""
+> +        self.assertIn("warnings generated", stderr[1], stderr)
+> +        generated = int(stderr[1].split()[0])
+> +        self.assertGreater(generated, 0)
+> +
+> +
+> +class TestCheckPackageBasicUsage(TestCheckPackage):
+> +    """Test the various ways the script can be called.
+> +
+> +    The script can be called either using relative path, absolute path or from PATH.
+> +    The files to be checked can be passed as arguments using either relative path or absolute path.
+> +    When in in-tree mode (without -b) some in-tree files and also all out-of-tree files are ignored.
+> +    When in out-tree mode (with -b) the script does generate warnings.
+> +    """
+> +
+> +    def test_run(self):
+> +        """Test the various ways the script can be called in a simple top to bottom sequence."""
+> +        # an intree file can be checked by the script called from relative path, absolute path and from PATH
+> +        for base_script, base_file, rel_script, rel_file, rel_cwd in self.relative:
+> +            abs_script = infra.basepath(base_script)
+> +            abs_file = infra.basepath(base_file)
+> +            cwd = infra.basepath(rel_cwd)
+> +
+> +            _, m = call_script([rel_script, rel_file], self.WITH_EMPTY_PATH, cwd)
+> +            self.assert_file_was_processed(m)
+> +
+> +            _, m = call_script([abs_script, rel_file], self.WITH_EMPTY_PATH, cwd)
+> +            self.assert_file_was_processed(m)
+> +
+> +            _, m = call_script(["check-package", rel_file], self.WITH_UTILS_IN_PATH, cwd)
+> +            self.assert_file_was_processed(m)
+> +
+> +            _, m = call_script([rel_script, abs_file], self.WITH_EMPTY_PATH, cwd)
+> +            self.assert_file_was_processed(m)
+> +
+> +            _, m = call_script([abs_script, abs_file], self.WITH_EMPTY_PATH, cwd)
+> +            self.assert_file_was_processed(m)
+> +
+> +            _, m = call_script(["check-package", abs_file], self.WITH_UTILS_IN_PATH, cwd)
+> +            self.assert_file_was_processed(m)
+> +
+> +        # some intree files are ignored
+> +        _, m = call_script(["./utils/check-package", "package/pkg-generic.mk"], self.WITH_EMPTY_PATH, infra.basepath())
+> +        self.assert_file_was_ignored(m)
+> +
+> +        _, m = call_script(["./utils/check-package", "-b", "package/pkg-generic.mk"], self.WITH_EMPTY_PATH, infra.basepath())
+> +        self.assert_file_was_processed(m)
+> +
+> +        # an out-of-tree file can be checked by the script called from relative path, absolute path and from PATH
+> +        for base_script, base_file, rel_script, rel_file, rel_cwd in self.relative:
+> +            abs_script = infra.basepath(base_script)
+> +            abs_file = infra.basepath(base_file)
+> +            cwd = infra.basepath(rel_cwd)
+> +
+> +            _, m = call_script([rel_script, "-b", rel_file], self.WITH_EMPTY_PATH, cwd)
+> +            self.assert_file_was_processed(m)
+> +
+> +            _, m = call_script([abs_script, "-b", rel_file], self.WITH_EMPTY_PATH, cwd)
+> +            self.assert_file_was_processed(m)
+> +
+> +            _, m = call_script(["check-package", "-b", rel_file], self.WITH_UTILS_IN_PATH, cwd)
+> +            self.assert_file_was_processed(m)
+> +
+> +            _, m = call_script([rel_script, "-b", abs_file], self.WITH_EMPTY_PATH, cwd)
+> +            self.assert_file_was_processed(m)
+> +
+> +            _, m = call_script([abs_script, "-b", abs_file], self.WITH_EMPTY_PATH, cwd)
+> +            self.assert_file_was_processed(m)
+> +
+> +            _, m = call_script(["check-package", "-b", abs_file], self.WITH_UTILS_IN_PATH, cwd)
+> +            self.assert_file_was_processed(m)
+> +
+> +        # out-of-tree files are are ignored without -b but can generate warnings with -b
+> +        abs_path = infra.filepath("tests/utils/br2-external")
+
+ It might be nice to also test out-of-tree files that are *really* out of tree,
+but that's a bit more work...
 
  Regards,
  Arnout
 
-> 
-> On below tests I used another series just to make my life easier:
-> http://patchwork.ozlabs.org/project/buildroot/list/?series=72927
-> 
-> 1) to check patch 2 works and don't bring regressions: (I reused the urls for v1
->    because patch 2 did not change since v1 and also the master branch had no
->    change on support/testing since I sent v1)
-> 
-> A full run with only patch 2 applied:
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/35290055
-> 
-> Another full run with only patch 2 applied, this time cd'ing to /tmp and
-> starting the tests from there:
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/35290166
-> 
-> Without any patches of this series, cd'ing to /tmp and starting the tests from
-> there:
-> https://gitlab.com/RicardoMartincoski/buildroot/pipelines/35290220
-> 
-> 2) to check patch 3 tests what patch 1 fixes:
-> 
-> With only patches 2 and 3 applied: failed
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/116174566
-> 
-> With patches 1, 2 and 3 applied: passed
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/116174639
-> 
-> 3) to check patch 5 tests what patch 4 fixes:
-> 
-> With only patches 1, 2, 3 and 5 applied: failed
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/116174711
-> 
-> With all patches applied: passed
-> https://gitlab.com/RicardoMartincoski/buildroot/-/jobs/116174756
-> 
-> Changes v1 -> v2:
->   - do not absolutize paths on output (Vitaliy Lotorev)
->   - update expectation on the test case after changing patch 1: when a warning
->     is generated for a file from a br2-external and the file was specified in
->     the arguments as a relative path, the relative path is used in the warning
->     message
-> 
-> Regards,
-> Ricardo
-> 
-> Cc: Arnout Vandecappelle <arnout@mind.be>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Vitaliy Lotorev <lotorev@gmail.com>
-> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
-> 
-> Ricardo Martincoski (5):
->   check-package: fix check of file in current dir with -b
->   support/testing: allow run-tests to be called from anywhere
->   support/testing: add test for check-package
->   check-package: ignore external.mk
->   support/testing: test check-package ignores external.mk
-> 
->  .gitlab-ci.yml                                |   1 +
->  support/testing/infra/__init__.py             |   8 +-
->  support/testing/infra/builder.py              |   2 +-
->  support/testing/tests/utils/__init__.py       |   0
->  .../tests/utils/br2-external/Config.in        |   1 +
->  .../tests/utils/br2-external/external.desc    |   1 +
->  .../tests/utils/br2-external/external.mk      |   2 +
->  .../br2-external/package/external/external.mk |   1 +
->  .../testing/tests/utils/test_check_package.py | 171 ++++++++++++++++++
->  utils/check-package                           |   3 +
->  utils/checkpackagelib/lib_mk.py               |   7 +-
->  utils/checkpackagelib/lib_patch.py            |   5 +-
->  12 files changed, 194 insertions(+), 8 deletions(-)
->  create mode 100644 support/testing/tests/utils/__init__.py
->  create mode 100644 support/testing/tests/utils/br2-external/Config.in
->  create mode 100644 support/testing/tests/utils/br2-external/external.desc
->  create mode 100644 support/testing/tests/utils/br2-external/external.mk
->  create mode 100644 support/testing/tests/utils/br2-external/package/external/external.mk
->  create mode 100644 support/testing/tests/utils/test_check_package.py
+> +        rel_file = "Config.in"
+> +        abs_file = os.path.join(abs_path, rel_file)
+> +
+> +        _, m = call_script(["check-package", rel_file], self.WITH_UTILS_IN_PATH, abs_path)
+> +        self.assert_file_was_ignored(m)
+> +
+> +        _, m = call_script(["check-package", abs_file], self.WITH_UTILS_IN_PATH, infra.basepath())
+> +        self.assert_file_was_ignored(m)
+> +
+> +        w, m = call_script(["check-package", "-b", rel_file], self.WITH_UTILS_IN_PATH, abs_path)
+> +        self.assert_file_was_processed(m)
+> +        self.assert_warnings_generated_for_file(m)
+> +        self.assertIn("{}:1: empty line at end of file".format(abs_file), w)
+> +
+> +        w, m = call_script(["check-package", "-b", abs_file], self.WITH_UTILS_IN_PATH, infra.basepath())
+> +        self.assert_file_was_processed(m)
+> +        self.assert_warnings_generated_for_file(m)
+> +        self.assertIn("{}:1: empty line at end of file".format(abs_file), w)
 > 
