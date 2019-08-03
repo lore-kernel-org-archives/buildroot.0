@@ -1,50 +1,64 @@
-From: Thomas De Schampheleire <patrickdepinguin@gmail.com>
-Date: Sat, 3 Aug 2019 13:09:21 +0200
-Subject: [Buildroot] [PATCH 2/5] package/liblapack: add liblapack as
- virtual package with lapack and clapack as providers.
-In-Reply-To: <90898cde-8ddf-8b6a-196e-5e42f7f9fa55@mind.be>
-References: <20190801210920.31338-1-romain.naour@smile.fr>
- <20190801210920.31338-2-romain.naour@smile.fr>
- <90898cde-8ddf-8b6a-196e-5e42f7f9fa55@mind.be>
-Message-ID: <CAAXf6LVOq9X_YNG4xR+DeGeB66nr3iawzL-uPpzn_=MUJLCCzQ@mail.gmail.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 03 Aug 2019 13:13:45 +0200
+Subject: [Buildroot] [PATCH 1/3] package/mosquitto: allow to build as
+ static lib
+In-Reply-To: <20190803093858.144555-2-titouan.christophe@railnova.eu> (Titouan
+ Christophe's message of "Sat, 3 Aug 2019 11:38:56 +0200")
+References: <20190803093858.144555-1-titouan.christophe@railnova.eu>
+ <20190803093858.144555-2-titouan.christophe@railnova.eu>
+Message-ID: <87lfwaec2e.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Sat, Aug 3, 2019, 12:23 Arnout Vandecappelle <arnout@mind.be> wrote:
+>>>>> "Titouan" == Titouan Christophe <titouan.christophe@railnova.eu> writes:
 
->  Hi Alex, Romain,
->
-> On 01/08/2019 23:09, Romain Naour wrote:
-> > lapack and clapack are both generating the same liblapack.so but does
-> not have
-> > the same symbols. So the run-time is broke. They have to exclude each
-> other.
->
->  We discussed this at the hackaton and reviewed all the options that were
-> discussed before on the mailing list, and we concluded that the simplest
-> solution is to remove clapack entirely. Everything that uses clapack (i.e.,
-> armadillo and numpy) can use lapack as well, as you mention, so the only
-> reason
-> to keep clapack would be to support toolchains without Fortran compiler.
-> Most of
-> our external toolchains do have Fortran support, and I expect that anybody
-> who
-> cares about maths wouldn't mind enabling Fortran in their toolchains.
->
->  If anybody disagrees with that, now is the time to speak up :-)
->
+ > Since version 1.5, it is possible to build mosquitto as a static lib.
+ > However, the broker still needs a toolchain with support for shared libraries,
+ > because it contains code to dynamically load modules at runtime. This
+ > code makes use of dlfcn.h, which is only available for dylib enabled
+ > systems.
 
+ > Signed-off-by: Titouan Christophe <titouan.christophe@railnova.eu>
+ > ---
+ >  package/mosquitto/Config.in    |  9 +++------
+ >  package/mosquitto/mosquitto.mk | 12 ++++++++++++
+ >  2 files changed, 15 insertions(+), 6 deletions(-)
 
-I'm going to analyze this change in detail next week, as we've been in this
-situation and just now were working to switch from clapack to openblas as
-backend to armadillo.
+ > diff --git a/package/mosquitto/Config.in b/package/mosquitto/Config.in
+ > index c7373d9a84..8f2561c2d8 100644
+ > --- a/package/mosquitto/Config.in
+ > +++ b/package/mosquitto/Config.in
+ > @@ -1,6 +1,5 @@
+ >  config BR2_PACKAGE_MOSQUITTO
+ >  	bool "mosquitto"
+ > -	depends on !BR2_STATIC_LIBS # builds .so
+ >  	help
+ >  	  Mosquitto is an open source message broker that implements
+ >  	  the MQ Telemetry Transport protocol versions 3.1 and
+ > @@ -16,12 +15,10 @@ config BR2_PACKAGE_MOSQUITTO_BROKER
+ >  	bool "install the mosquitto broker"
+ >  	default y
+ >  	depends on BR2_USE_MMU # fork()
+ > +	depends on !BR2_STATIC_LIBS # include <dlfcn.h>
+ >  	depends on BR2_PACKAGE_MOSQUITTO
+ >  	help
+ >  	  Build and install the mosquitto broker onto target.
+ 
+ > -comment "mosquitto broker needs a system with MMU"
+ > -	depends on BR2_PACKAGE_MOSQUITTO && !BR2_USE_MMU
+ > -
+ > -comment "mosquitto needs a toolchain w/ dynamic library"
+ > -	depends on BR2_STATIC_LIBS
+ > +comment "mosquitto broker needs a system with MMU; toolchain w/ dynamic library"
+ > +	depends on BR2_PACKAGE_MOSQUITTO && (!BR2_USE_MMU || BR2_STATIC_LIBS)
 
-I'll report back...
+Not your fault, but this message should not mention MMU (as the user
+cannot change it) and only be displayed if mosquitto && mmu && static.
 
-Thomas
--------------- next part --------------
-An HTML attachment was scrubbed...
-URL: <http://lists.busybox.net/pipermail/buildroot/attachments/20190803/a5ed1da9/attachment.html>
+Committed with that fixed, thanks.
+
+-- 
+Bye, Peter Korsgaard
