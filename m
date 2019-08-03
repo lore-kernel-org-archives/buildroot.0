@@ -1,71 +1,88 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 3 Aug 2019 17:17:29 +0200
-Subject: [Buildroot] [git commit] support/testing: allow run-tests to be
- called from anywhere
-Message-ID: <20190803152016.A55AA8D4FD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: test check-package
+ ignores external.mk
+Message-ID: <20190803152016.C089A83902@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8669243da3c4d6f86a912b5dfda9006e87789eec
+commit: https://git.buildroot.net/buildroot/commit/?id=1ad5e0a6a6c8c82c116352abf420ea14074177e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently run-tests must be called from the Buildroot top directory.
+Check external.mk is ignored only when in the root path of a
+br2-external.
 
-Derive the top directory from the script path, so run-tests can be called from
-any path.
-As a consequence the test infra will always test the repo it belongs to.
+Add a file called external.mk as a fixture to be used by the test case.
 
-Suggested-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+[Arnout: wrap at 80 columns]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- support/testing/infra/__init__.py | 8 +++++++-
- support/testing/infra/builder.py  | 2 +-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ .../testing/tests/utils/br2-external/external.mk   |  2 ++
+ .../br2-external/package/external/external.mk      |  1 +
+ support/testing/tests/utils/test_check_package.py  | 30 +++++++++++++++++++++-
+ 3 files changed, 32 insertions(+), 1 deletion(-)
 
-diff --git a/support/testing/infra/__init__.py b/support/testing/infra/__init__.py
-index e229e90852..1d4d18bbe9 100644
---- a/support/testing/infra/__init__.py
-+++ b/support/testing/infra/__init__.py
-@@ -6,6 +6,7 @@ import subprocess
- from urllib2 import urlopen, HTTPError, URLError
+diff --git a/support/testing/tests/utils/br2-external/external.mk b/support/testing/tests/utils/br2-external/external.mk
+index e69de29bb2..470c01a382 100644
+--- a/support/testing/tests/utils/br2-external/external.mk
++++ b/support/testing/tests/utils/br2-external/external.mk
+@@ -0,0 +1,2 @@
++custom-target:
++	@echo "do nothing"
+diff --git a/support/testing/tests/utils/br2-external/package/external/external.mk b/support/testing/tests/utils/br2-external/package/external/external.mk
+new file mode 100644
+index 0000000000..74fb6540ab
+--- /dev/null
++++ b/support/testing/tests/utils/br2-external/package/external/external.mk
+@@ -0,0 +1 @@
++# wrong
+diff --git a/support/testing/tests/utils/test_check_package.py b/support/testing/tests/utils/test_check_package.py
+index 009d9f3f38..17c2fcf3bc 100644
+--- a/support/testing/tests/utils/test_check_package.py
++++ b/support/testing/tests/utils/test_check_package.py
+@@ -32,7 +32,8 @@ class TestCheckPackage(unittest.TestCase):
+     When in in-tree mode (without -b) some in-tree files and also all
+     out-of-tree files are ignored.
  
- ARTIFACTS_URL = "http://autobuild.buildroot.net/artefacts/"
-+BASE_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), "../../.."))
+-    When in out-tree mode (with -b) the script does generate warnings for these.
++    When in out-tree mode (with -b) the script does generate warnings for these
++    but ignores external.mk.
+     """
  
- 
- def open_log_file(builddir, stage, logtofile=True):
-@@ -21,8 +22,13 @@ def open_log_file(builddir, stage, logtofile=True):
-     return fhandle
- 
- 
-+def basepath(relpath=""):
-+    """Return the absolute path for a file or directory relative to the Buildroot top directory."""
-+    return os.path.join(BASE_DIR, relpath)
+     WITH_EMPTY_PATH = {}
+@@ -172,3 +173,30 @@ class TestCheckPackage(unittest.TestCase):
+         self.assert_file_was_processed(m)
+         self.assert_warnings_generated_for_file(m)
+         self.assertIn("{}:1: empty line at end of file".format(abs_file), w)
 +
++        # external.mk is ignored only when in the root path of a br2-external
++        rel_file = "external.mk"
++        abs_file = os.path.join(abs_path, rel_file)
 +
- def filepath(relpath):
--    return os.path.join(os.getcwd(), "support/testing", relpath)
-+    return os.path.join(BASE_DIR, "support/testing", relpath)
- 
- 
- def download(dldir, filename):
-diff --git a/support/testing/infra/builder.py b/support/testing/infra/builder.py
-index 018747555d..88f01d15c0 100644
---- a/support/testing/infra/builder.py
-+++ b/support/testing/infra/builder.py
-@@ -43,7 +43,7 @@ class Builder(object):
-         cmd += ["olddefconfig"]
- 
-         ret = subprocess.call(cmd, stdout=self.logfile, stderr=self.logfile,
--                              env=env)
-+                              cwd=infra.basepath(), env=env)
-         if ret != 0:
-             raise SystemError("Cannot olddefconfig")
- 
++        _, m = call_script(["check-package", "-b", rel_file],
++                           self.WITH_UTILS_IN_PATH, abs_path)
++        self.assert_file_was_ignored(m)
++
++        _, m = call_script(["check-package", "-b", abs_file],
++                           self.WITH_UTILS_IN_PATH, infra.basepath())
++        self.assert_file_was_ignored(m)
++
++        abs_path = infra.filepath("tests/utils/br2-external/package/external")
++        abs_file = os.path.join(abs_path, rel_file)
++
++        w, m = call_script(["check-package", "-b", rel_file],
++                           self.WITH_UTILS_IN_PATH, abs_path)
++        self.assert_file_was_processed(m)
++        self.assert_warnings_generated_for_file(m)
++        self.assertIn("{}:1: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)".format(rel_file), w)
++
++        w, m = call_script(["check-package", "-b", abs_file],
++                           self.WITH_UTILS_IN_PATH, infra.basepath())
++        self.assert_file_was_processed(m)
++        self.assert_warnings_generated_for_file(m)
++        self.assertIn("{}:1: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)".format(abs_file), w)
