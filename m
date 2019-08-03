@@ -1,119 +1,91 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Aug 2019 18:16:44 +0200
-Subject: [Buildroot] [PATCH v2] boot/syslinux: Add host installer
-In-Reply-To: <20181114222431.10194-1-alexander.sverdlin@gmail.com>
-References: <20181114222431.10194-1-alexander.sverdlin@gmail.com>
-Message-ID: <1eab0c4e-aaaa-6455-4ea8-100ae8595fb3@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 3 Aug 2019 18:24:32 +0200
+Subject: [Buildroot] [PATCH 1/1] support/cmake: Explicitly set
+ CMAKE_SYSTEM
+In-Reply-To: <20190317164817.13998-1-frank.vanbever@mind.be>
+References: <20190317164817.13998-1-frank.vanbever@mind.be>
+Message-ID: <20190803162432.GB26072@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
- Hi Alexander,
+Franck, All,
 
- Sorry that we haven't reacted on this patch any earlier. We have a long patch
-backlog, and somewhat more difficult patches like this one tend to get left
-behind...
+Thanks for your contribution. I was finally able to wrap my head around
+this cmake stuff... ;-)
 
-On 14/11/2018 23:24, Alexander Sverdlin wrote:
-> Add host installer for syslinux bootloader which allows to pre-install
-> syslinux in the generated firmware images. BR2_ROOTFS_POST_IMAGE_SCRIPT
-> can do something like this:
+On 2019-03-17 17:48 +0100, Frank Vanbever spake thusly:
+> Some packages test for CMAKE_SYSTEM explicitly.[1]
 > 
-> 	${HOST_DIR}/usr/bin/syslinux -d /syslinux/ -i ${IMGFILE}
+> CMAKE_SYSTEM is comprised of CMAKE_SYSTEM_NAME and CMAKE_SYSTEM_VERSION.
+> It defaults to CMAKE_SYSTEM_NAME if CMAKE_SYSTEM_VERSION is not set.[2]
 > 
-> if the rest of syslinux is installed under /syslinux inside the firmware
-> image.
+> At the point CMAKE_SYSTEM_NAME is set to "Linux" CMAKE_SYSTEM is already
+> constructed. Setting it explicitly ensures that it is the correct value.
+
+This is because we do set CMAKE_SYSTEM_NAME twice, in fact:
+
+  - first in toolchainfile.cmake, so that we tell cmake to use the
+    "Buildroot" platform,
+
+  - second, in the Buildroot.cmake platform definition itself, so that
+    we eventually behave like the Linux platform.
+
+I haven't been able to really track down exacty _when_ CMAKE_SYSTEM is
+indeed set, but I believe it is done after the toolchainfile.cmake file
+is parsed, but before the Buildroot.cmake platofrm one is. And indeed,
+that becomes too late.
+
+So, I believe this change is correct, but...
+
+We also set CMAKE_SYSTEM_VERSION to 1, and so the real CMAKE_SYSTEM
+value should be set to Linux-1 if we were to follow the documentation to
+the letter.
+
+However, for Linux, the version does not matter, and in some situations
+may even be harmful (that was reported in one of the commits that
+introduce Buildroot.cmake andtoolchanfile.cmake).
+
+So:
+
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Regards,
+Yann E. MORIN.
+
+> [1] Fluidsynth https://github.com/FluidSynth/fluidsynth/blob/0cd44d00e1ec9a905d51163efde7b70ff8ae0ba3/CMakeLists.txt#L80
+> [2] https://cmake.org/cmake/help/git-master/variable/CMAKE_SYSTEM.html#variable:CMAKE_SYSTEM
 > 
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> Signed-off-by: Frank Vanbever <frank.vanbever@mind.be>
 > ---
+>  support/misc/Buildroot.cmake | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Changelog:
-> v2:
-> - host package variant inside boot/syslinux instead of separate
->   package/syslinux-installer
-> - reworked commit title
-> 
->  boot/syslinux/Config.in   |  5 +++++
->  boot/syslinux/syslinux.mk | 13 +++++++++++++
->  2 files changed, 18 insertions(+)
-> 
-> diff --git a/boot/syslinux/Config.in b/boot/syslinux/Config.in
-> index e969d53fd0..caec66d767 100644
-> --- a/boot/syslinux/Config.in
-> +++ b/boot/syslinux/Config.in
-> @@ -56,6 +56,11 @@ config BR2_TARGET_SYSLINUX_C32
->  	  Enter a space-separated list of .c32 modules to install.
->  	  Leave empty to install no module.
+> diff --git a/support/misc/Buildroot.cmake b/support/misc/Buildroot.cmake
+> index 9f5f565255..761b6d7ae2 100644
+> --- a/support/misc/Buildroot.cmake
+> +++ b/support/misc/Buildroot.cmake
+> @@ -1,5 +1,6 @@
+>  # Impersonate a Linux system. Afterall, that's what we are...
+>  set(CMAKE_SYSTEM_NAME Linux)
+> +set(CMAKE_SYSTEM ${CMAKE_SYSTEM_NAME})
+>  include(Platform/Linux)
 >  
-> +config BR2_TARGET_HOST_SYSLINUX
-> +	bool "host syslinux installer"
-> +	help
-> +	  Host installer for syslinux bootloader
-
- We normally put host configuration options in Config.in.host. However, for
-this, I think it's better to always build it when syslinux is built. See below
-however.
-
-> +
->  endif # BR2_TARGET_SYSLINUX_LEGACY_BIOS
->  
->  endif # BR2_TARGET_SYSLINUX
-> diff --git a/boot/syslinux/syslinux.mk b/boot/syslinux/syslinux.mk
-> index 67bc69254e..72d7f62672 100644
-> --- a/boot/syslinux/syslinux.mk
-> +++ b/boot/syslinux/syslinux.mk
-> @@ -102,4 +102,17 @@ define SYSLINUX_INSTALL_IMAGES_CMDS
->  	done
->  endef
->  
-> +# See SYSLINUX_POST_INSTALL_CLEANUP
-> +HOST_SYSLINUX_DEPENDENCIES = syslinux
-> +
-> +define HOST_SYSLINUX_BUILD_CMDS
-> +	$(HOST_MAKE_ENV) $(MAKE) \
-> +		-C $(@D) installer
-> +endef
-> +
-> +define HOST_SYSLINUX_INSTALL_CMDS
-> +	$(INSTALL) -D -m 0755 $(@D)/bios/mtools/syslinux $(HOST_DIR)/usr/bin/syslinux
-> +endef
-
- The logic here is difficult to understand and not logical: during the target
-build, we build and install most of the host tools, except for syslinux itself,
-which is built and installed during the host build. But syslinux is *also* built
-and installed during the target build (and then removed again because it is
-built for the target), so we need that additional dependency.
-
- It would be much more appropriate to do the right thing, and build *only*
-target things during the target build, and *only* host things during the host
-build. In fact, this mixing of host and target build is only possible because
-we're adding patches to support it:
-0004-utils-Use-the-host-toolchain-to-build.patch
-0011-extlinux-Use-the-host-toolchain-to-build.patch
-
-Note that we still need some of those patches because there are tools that are
-used to generate code during the build.
-
- Then, the syslinux package can install just to STAGING_DIR (because it now
-contains only executables for the target), and we can have a completely separate
-host-syslinux. And then the dependency can be turned around, i.e.
-SYSLINUX_DEPENDENCIES += host-syslinux.
-
- This has the additional advantage that it is possible to install the installers
-(syslinux, extlinux, ...) in TARGET_DIR (by copying from STAGING_DIR). Not
-something to be done right away, but an interesting option.
-
- Therefore, I've marked your patch as Changes Requested in patchwork.
-
- Sorry it took so long!
-
- Regards,
- Arnout
-
-
-> +
->  $(eval $(generic-package))
-> +$(eval $(host-generic-package))
+>  # Override problematic settings, to avoid RPATH against host lib directories.
+> -- 
+> 2.19.1
 > 
+> _______________________________________________
+> buildroot mailing list
+> buildroot at busybox.net
+> http://lists.busybox.net/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
