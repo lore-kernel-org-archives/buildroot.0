@@ -1,42 +1,89 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  3 Aug 2019 21:36:19 +0200
-Subject: [Buildroot] [PATCH v5 02/25] package/libcec: bump version to 4.0.4
+Date: Sat,  3 Aug 2019 21:36:22 +0200
+Subject: [Buildroot] [PATCH v5 05/25] package/kodi-audiodecoder-opus: remove
+ package
 In-Reply-To: <20190803193642.17892-1-bernd.kuhls@t-online.de>
 References: <20190803193642.17892-1-bernd.kuhls@t-online.de>
-Message-ID: <20190803193642.17892-3-bernd.kuhls@t-online.de>
+Message-ID: <20190803193642.17892-6-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+This package is incompatible with Kodi 18.x, configure is broken:
+
+CMake Error at output/host/x86_64-buildroot-linux-uclibc/sysroot/usr/share/kodi/cmake/AddonHelpers.cmake:197 (message):
+  "@ADDON_DEPENDS@" not found in addon.xml.in.
+
+This package is also not part of the upstream binary repo:
+https://github.com/xbmc/repo-binary-addons
+
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/libcec/libcec.hash | 2 +-
- package/libcec/libcec.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-audiodecoder-opus/Config.in            | 10 ----------
+ .../kodi-audiodecoder-opus.hash                     |  2 --
+ .../kodi-audiodecoder-opus.mk                       | 13 -------------
+ package/kodi/Config.in                              |  1 -
+ 4 files changed, 26 deletions(-)
+ delete mode 100644 package/kodi-audiodecoder-opus/Config.in
+ delete mode 100644 package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash
+ delete mode 100644 package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
 
-diff --git a/package/libcec/libcec.hash b/package/libcec/libcec.hash
-index e7264b40ca..6790b417f1 100644
---- a/package/libcec/libcec.hash
-+++ b/package/libcec/libcec.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256 b8b8dd31f3ebdd5472f03ab7d401600ea0d959b1288b9ca24bf457ef60e2ba27  libcec-4.0.2.tar.gz
-+sha256 4382a964bf8c511c22c03cdab5ba2d81c241536e6479072a61516966804f400a  libcec-4.0.4.tar.gz
- sha256 3618005b3db4eb8ede7292d233e6c41605cb8dcbd33e8790eff6e29c1e4f3789  COPYING
-diff --git a/package/libcec/libcec.mk b/package/libcec/libcec.mk
-index 99d1c8b2ba..fe519d47ba 100644
---- a/package/libcec/libcec.mk
-+++ b/package/libcec/libcec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCEC_VERSION = 4.0.2
-+LIBCEC_VERSION = 4.0.4
- LIBCEC_SITE = $(call github,Pulse-Eight,libcec,libcec-$(LIBCEC_VERSION))
- LIBCEC_LICENSE = GPL-2.0+
- LIBCEC_LICENSE_FILES = COPYING
+diff --git a/package/kodi-audiodecoder-opus/Config.in b/package/kodi-audiodecoder-opus/Config.in
+deleted file mode 100644
+index 12d7247d58..0000000000
+--- a/package/kodi-audiodecoder-opus/Config.in
++++ /dev/null
+@@ -1,10 +0,0 @@
+-config BR2_PACKAGE_KODI_AUDIODECODER_OPUS
+-	bool "kodi-audiodecoder-opus"
+-	select BR2_PACKAGE_KODI_PLATFORM
+-	select BR2_PACKAGE_LIBOGG
+-	select BR2_PACKAGE_OPUS
+-	select BR2_PACKAGE_OPUSFILE
+-	help
+-	  Opus audio decoder for Kodi
+-
+-	  https://github.com/notspiff/audiodecoder.opus
+diff --git a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash b/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash
+deleted file mode 100644
+index 117e9f8337..0000000000
+--- a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.hash
++++ /dev/null
+@@ -1,2 +0,0 @@
+-# Locally computed
+-sha256 bb7037f903f0396da739005843264acd7227cf96eeeac78b0e36d82872c9acc4  kodi-audiodecoder-opus-d6eb25f0c08033f9a2b4d7402e8baf866ebc731c.tar.gz
+diff --git a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk b/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
+deleted file mode 100644
+index d93c33ac51..0000000000
+--- a/package/kodi-audiodecoder-opus/kodi-audiodecoder-opus.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# kodi-audiodecoder-opus
+-#
+-################################################################################
+-
+-KODI_AUDIODECODER_OPUS_VERSION = d6eb25f0c08033f9a2b4d7402e8baf866ebc731c
+-KODI_AUDIODECODER_OPUS_SITE = $(call github,notspiff,audiodecoder.opus,$(KODI_AUDIODECODER_OPUS_VERSION))
+-KODI_AUDIODECODER_OPUS_LICENSE = GPL-2.0+
+-KODI_AUDIODECODER_OPUS_LICENSE_FILES = src/OpusCodec.cpp
+-KODI_AUDIODECODER_OPUS_DEPENDENCIES = kodi-platform libogg opus opusfile
+-
+-$(eval $(cmake-package))
+diff --git a/package/kodi/Config.in b/package/kodi/Config.in
+index a5de8dd115..c0727da7f8 100644
+--- a/package/kodi/Config.in
++++ b/package/kodi/Config.in
+@@ -300,7 +300,6 @@ config BR2_PACKAGE_KODI_OPTICALDRIVE
+ menu "Audio decoder addons"
+ 	source "package/kodi-audiodecoder-modplug/Config.in"
+ 	source "package/kodi-audiodecoder-nosefart/Config.in"
+-	source "package/kodi-audiodecoder-opus/Config.in"
+ 	source "package/kodi-audiodecoder-sidplay/Config.in"
+ 	source "package/kodi-audiodecoder-snesapu/Config.in"
+ 	source "package/kodi-audiodecoder-stsound/Config.in"
 -- 
 2.20.1
