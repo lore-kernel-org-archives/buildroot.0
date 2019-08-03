@@ -1,125 +1,62 @@
-From: Marcin Niestroj <m.niestroj@grinn-global.com>
-Date: Sat,  3 Aug 2019 02:46:04 +0200
-Subject: [Buildroot] [RFC PATCH] package/meson: support cmake exported
- packages
-Message-ID: <20190803004604.2939-1-m.niestroj@grinn-global.com>
+From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+Date: Sat,  3 Aug 2019 02:22:12 -0300
+Subject: [Buildroot] [PATCH 0/4] new builtin kernel with entropy for the
+ test infra
+Message-ID: <20190803052216.22292-1-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-So far meson was not able to find CMake modules in cross compiled
-environments such as Buildroot. Added patch allows to do that
-now. Additionally meson needs to know path to cmake binary in order to
-finalize CMake module import.
+Hello,
 
-For now cmake is forced to be built as a host tool in Buildroot. The
-question is how to stop doing that and export BR2_CMAKE variable, so it
-can be referenced from package/meson/cross-compilation.conf.in.
+This small series adds a new builtin kernel image to the test infra.
+It contains the VirtIORNG driver so the target will have enough entropy at
+startup, a requirement for more and more packages being tested.
 
-Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
+It also uses this new builtin kernel to speed-up some test cases (atop,
+syslog-ng, python-crossbar, python-nacl) and fix others (python-txtorcon,
+python-treq).
+
+The binaries I used can be found here [1] and have this version string:
+>Linux version 4.19.16 (br-user at runner-ed2dce3a-project-3755559-concurrent-0) (gcc version 4.9.4 (Buildroot 2017.08-git-01078-g95b1dae)) #1 Fri Aug 2 23:05:09 UTC 2019
+
+One can see a complete run of "-runtime-tests" before [2] and after [3] this
+series in the URLs below.
+
+In order to provide a v1 of this series, I created a naming convention for the
+artifacts and also for the string passed to emulator.py in parameter "kernel".
+It was the first naming that came to mind, so of course it is open to
+suggestions/improvements.
+
+[1] https://gitlab.com/RicardoMartincoski/buildroot/commit/2ed44c7471cf5db246b592e24e9b2cfd69702f0f
+[2] https://gitlab.com/RicardoMartincoski/buildroot/pipelines/74501223
+[3] https://gitlab.com/RicardoMartincoski/buildroot/pipelines/74516103
+
+Regards,
+Ricardo
 ---
- ...port-for-crosscompiled-CMake-modules.patch | 60 +++++++++++++++++++
- package/meson/cross-compilation.conf.in       |  1 +
- support/dependencies/check-host-cmake.mk      |  7 ---
- 3 files changed, 61 insertions(+), 7 deletions(-)
- create mode 100644 package/meson/0002-Improve-support-for-crosscompiled-CMake-modules.patch
+Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Peter Korsgaard <peter@korsgaard.com>
+Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
-diff --git a/package/meson/0002-Improve-support-for-crosscompiled-CMake-modules.patch b/package/meson/0002-Improve-support-for-crosscompiled-CMake-modules.patch
-new file mode 100644
-index 0000000000..eeeab4962b
---- /dev/null
-+++ b/package/meson/0002-Improve-support-for-crosscompiled-CMake-modules.patch
-@@ -0,0 +1,60 @@
-+From 61edbcf60e20dbf730e6074f055f78e0e217f4ed Mon Sep 17 00:00:00 2001
-+From: Marcin Niestroj <m.niestroj@grinn-global.com>
-+Date: Thu, 1 Aug 2019 11:01:49 +0200
-+Subject: [PATCH] Improve support for crosscompiled CMake modules
-+
-+commit 987539e2331f2c78e94cbcf3623a82a66dd52267 upstream.
-+
-+There are two variables that CMake takes into account during
-+find_package() in cross-compiled environments, which are: CMAKE_SYSROOT
-+and CMAKE_FIND_ROOT_PATH. Those are used in cmFindCommon::RerootPaths()
-+function, which blindly prepends all search paths with those specified
-+via CMAKE_SYSROOT and CMAKE_FIND_ROOT_PATH.
-+
-+Extend search paths by using CMAKE_SYSROOT and CMAKE_FIND_ROOT_PATH in a
-+similar way as CMake does, so we successfully find CMake packages
-+information in cross-compiled environments.
-+
-+Signed-off-by: Marcin Niestroj <m.niestroj@grinn-global.com>
-+---
-+ mesonbuild/dependencies/base.py                | 11 ++++++++++-
-+ mesonbuild/dependencies/data/CMakePathInfo.txt |  2 ++
-+ 2 files changed, 12 insertions(+), 1 deletion(-)
-+
-+diff --git a/mesonbuild/dependencies/base.py b/mesonbuild/dependencies/base.py
-+index 21da8e24..98b02ff7 100644
-+--- a/mesonbuild/dependencies/base.py
-++++ b/mesonbuild/dependencies/base.py
-+@@ -1178,7 +1178,16 @@ class CMakeDependency(ExternalDependency):
-+             return None
-+ 
-+         # Extract the variables and sanity check them
-+-        module_paths = sorted(set(self.get_cmake_var('MESON_PATHS_LIST')))
-++        root_paths = set(self.get_cmake_var('MESON_FIND_ROOT_PATH'))
-++        root_paths.update(set(self.get_cmake_var('MESON_CMAKE_SYSROOT')))
-++        root_paths = sorted(root_paths)
-++        root_paths = list(filter(lambda x: os.path.isdir(x), root_paths))
-++        module_paths = set(self.get_cmake_var('MESON_PATHS_LIST'))
-++        rooted_paths = []
-++        for j in [Path(x) for x in root_paths]:
-++            for i in [Path(x) for x in module_paths]:
-++                rooted_paths.append(str(j / i.relative_to(i.anchor)))
-++        module_paths = sorted(module_paths.union(rooted_paths))
-+         module_paths = list(filter(lambda x: os.path.isdir(x), module_paths))
-+         archs = self.get_cmake_var('MESON_ARCH_LIST')
-+ 
-+diff --git a/mesonbuild/dependencies/data/CMakePathInfo.txt b/mesonbuild/dependencies/data/CMakePathInfo.txt
-+index 713c2da3..662ec583 100644
-+--- a/mesonbuild/dependencies/data/CMakePathInfo.txt
-++++ b/mesonbuild/dependencies/data/CMakePathInfo.txt
-+@@ -25,5 +25,7 @@ endif()
-+ set(MESON_ARCH_LIST ${LIB_ARCH_LIST})
-+ set(MESON_PATHS_LIST ${TMP_PATHS_LIST})
-+ set(MESON_CMAKE_ROOT ${CMAKE_ROOT})
-++set(MESON_CMAKE_SYSROOT ${CMAKE_SYSROOT})
-++set(MESON_FIND_ROOT_PATH ${CMAKE_FIND_ROOT_PATH})
-+ 
-+ message(STATUS ${TMP_PATHS_LIST})
-+-- 
-+2.22.0
-+
-diff --git a/package/meson/cross-compilation.conf.in b/package/meson/cross-compilation.conf.in
-index fc8e27f7eb..eb120bc5e9 100644
---- a/package/meson/cross-compilation.conf.in
-+++ b/package/meson/cross-compilation.conf.in
-@@ -9,6 +9,7 @@ cpp = '@TARGET_CROSS at g++'
- ar = '@TARGET_CROSS at ar'
- strip = '@TARGET_CROSS at strip'
- pkgconfig = '@HOST_DIR@/usr/bin/pkg-config'
-+cmake = ['@HOST_DIR@/bin/cmake', '-DCMAKE_TOOLCHAIN_FILE=@HOST_DIR@/share/buildroot/toolchainfile.cmake']
- 
- [properties]
- needs_exe_wrapper = true
-diff --git a/support/dependencies/check-host-cmake.mk b/support/dependencies/check-host-cmake.mk
-index 5604713de6..b20f34078d 100644
---- a/support/dependencies/check-host-cmake.mk
-+++ b/support/dependencies/check-host-cmake.mk
-@@ -3,12 +3,5 @@
- # package is bumped or a new one added, and it requires a higher
- # version, our cmake infra will catch it and build its own.
- #
--BR2_CMAKE_VERSION_MIN = 3.8
--
--BR2_CMAKE_CANDIDATES ?= cmake cmake3
--BR2_CMAKE ?= $(call suitable-host-package,cmake,\
--	$(BR2_CMAKE_VERSION_MIN) $(BR2_CMAKE_CANDIDATES))
--ifeq ($(BR2_CMAKE),)
- BR2_CMAKE = $(HOST_DIR)/bin/cmake
- BR2_CMAKE_HOST_DEPENDENCY = host-cmake
--endif
+Ricardo Martincoski (4):
+  support/testing: add builtin armv5 kernel 4.19 with entropy
+  support/testing: test syslog-ng with builtin kernel
+  support/testing: test python-* with builtin kernel
+  support/testing: test atop with builtin kernel
+
+ .../conf/syslog-ng-kernel-fragment.config     |  3 --
+ support/testing/infra/emulator.py             | 10 ++++++
+ support/testing/tests/package/test_atop.py    | 35 ++++++++++---------
+ support/testing/tests/package/test_python.py  |  2 +-
+ .../tests/package/test_python_crossbar.py     |  2 --
+ .../tests/package/test_python_pynacl.py       |  4 ---
+ .../testing/tests/package/test_syslog_ng.py   | 20 +++--------
+ 7 files changed, 33 insertions(+), 43 deletions(-)
+ delete mode 100644 support/testing/conf/syslog-ng-kernel-fragment.config
+
 -- 
-2.22.0
+2.17.1
