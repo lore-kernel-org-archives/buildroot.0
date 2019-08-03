@@ -1,49 +1,42 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Aug 2019 16:22:19 +0200
-Subject: [Buildroot] [git commit] package/python-pyasn1: bump to version
- 0.4.6
-Message-ID: <20190803142045.9BCA9813F7@busybox.osuosl.org>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 3 Aug 2019 16:33:39 +0200
+Subject: [Buildroot] [PATCH 1/4] host-go-glide: new package
+In-Reply-To: <1538143163-20596-2-git-send-email-fabiorush@gmail.com>
+References: <1538143163-20596-1-git-send-email-fabiorush@gmail.com>
+ <1538143163-20596-2-git-send-email-fabiorush@gmail.com>
+Message-ID: <20190803143218.GA23791@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9afddc97a780c8afe2e9b786d45fe4a5aaf26f59
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fabio, All,
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/python-pyasn1/python-pyasn1.hash | 4 ++--
- package/python-pyasn1/python-pyasn1.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Sorry for the long delay before replying to your patch...
 
-diff --git a/package/python-pyasn1/python-pyasn1.hash b/package/python-pyasn1/python-pyasn1.hash
-index bd21cebd74..3470de5a9f 100644
---- a/package/python-pyasn1/python-pyasn1.hash
-+++ b/package/python-pyasn1/python-pyasn1.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyasn1/json
--md5	f3c0cfbf882a20811be5ad5a41f74b82  pyasn1-0.4.5.tar.gz
--sha256	da2420fe13a9452d8ae97a0e478adde1dee153b11ba832a95b223a2ba01c10f7  pyasn1-0.4.5.tar.gz
-+md5	67f1da0cf680761d29169e54e7d53159  pyasn1-0.4.6.tar.gz
-+sha256	b773d5c9196ffbc3a1e13bdf909d446cad80a039aa3340bcad72f395b76ebc86  pyasn1-0.4.6.tar.gz
- # Locally computed sha256 checksums
- sha256	22c5cc6922ab5d69fba32d8c5ee4cdd14981508cb53afc0ebd85593847fd95a5  LICENSE.rst
-diff --git a/package/python-pyasn1/python-pyasn1.mk b/package/python-pyasn1/python-pyasn1.mk
-index 3f79cc2e7e..6ab5a3a1dd 100644
---- a/package/python-pyasn1/python-pyasn1.mk
-+++ b/package/python-pyasn1/python-pyasn1.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYASN1_VERSION = 0.4.5
-+PYTHON_PYASN1_VERSION = 0.4.6
- PYTHON_PYASN1_SOURCE = pyasn1-$(PYTHON_PYASN1_VERSION).tar.gz
--PYTHON_PYASN1_SITE = https://files.pythonhosted.org/packages/46/60/b7e32f6ff481b8a1f6c8f02b0fd9b693d1c92ddd2efb038ec050d99a7245
-+PYTHON_PYASN1_SITE = https://files.pythonhosted.org/packages/e3/12/dfffc84b783e280e942409d6b651fe4a5a746433c34589da7362db2c99c6
- PYTHON_PYASN1_SETUP_TYPE = setuptools
- PYTHON_PYASN1_LICENSE = BSD-2-Clause
- PYTHON_PYASN1_LICENSE_FILES = LICENSE.rst
+On 2018-09-28 10:59 -0300, Fabio Urquiza spake thusly:
+> From: Fabio Urquiza <flus@dmz.org.br>
+> A package management for Golang.
+
+We've discussed this patch during the developpers meeting today, and
+we've decided to not apply this patch, because go-glide is now
+deprecated, and replaced by "go modules", as discussed in that thread
+from last April:
+
+    http://lists.busybox.net/pipermail/buildroot/2019-April/247191.html
+
+And since the two go-based packages in your series (btcd and neutrino)
+already appear to support go modules, we don't see the point in having
+go-glide.
+
+Regards,
+Yann E. MORIN.
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
