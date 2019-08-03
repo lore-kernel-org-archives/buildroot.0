@@ -1,57 +1,35 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Aug 2019 18:03:32 +0200
-Subject: [Buildroot] [PATCH] busybox: Enable domain search list support
- in udhcpc
-In-Reply-To: <20190803154900.GA26072@scaer> (Yann E. MORIN's message of "Sat, 
- 3 Aug 2019 17:49:00 +0200")
-References: <20190408110010.2596-1-abrodkin@synopsys.com>
- <20190803154900.GA26072@scaer>
-Message-ID: <87h86yb5ij.fsf@dell.be.48ers.dk>
+Date: Sat, 3 Aug 2019 17:54:30 +0200
+Subject: [Buildroot] [git commit] package/busybox/udhcpc.script: fix domain
+ search comment
+Message-ID: <20190803160115.D40AA80E27@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=67a52f6fc9fe9fbe3b6ab3399ff1b55c2b4ed47c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Alexey, All,
- > On 2019-04-08 14:00 +0300, Alexey Brodkin spake thusly:
- >> This is useful in networks with internal resources as it allows
- >> to use much shorter names.
- >> 
- >> E.g. instead of "server.internal.company.com" it's possible
- >> to use just "server" if DHCP server is configured with:
- ----------------------------> 8-----------------------
- >> option domain-search "internal.company.com";
- ----------------------------> 8-----------------------
- >> 
- >> This improvement consists of 2 parts:
- >> 
- >> 1. Enable handling of RFC3397 so DHCP client is ready for processing
- >> corresponding data from DHCP server.
- >> 
- >> 2. Some DHCP servers always send out search list if it is set in server's
- >> configuration and some servers only provide search list if client
- >> asks for that (sending list of options it expectes to get).
- >> 
- >> And exactly for those stubborn DHCP servers we need to add "-O search"
- >> to udhcp's command line via CONFIG_IFUPDOWN_UDHCPC_CMD_OPTIONS.
- >> 
- >> Signed-off-by: Alexey Brodkin <abrodkin@synopsys.com>
- >> Cc: Ignacy Gawedzki <ignacy.gawedzki@green-communications.fr>
- >> Cc: Peter Korsgaard <peter@korsgaard.com>
+The domain search option is from RFC3397, not RFC3359 (which is about TLV
+codepoints), so fix that.
 
- > Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/busybox/udhcpc.script | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Committed, thanks.
-
-Notice: For a single domain, I believe you can just set
-
-option domain-name "internal.company.com"
-
-In the DHCP server config, which will work out of the box using the
-classic (option 15) domain name option.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/busybox/udhcpc.script b/package/busybox/udhcpc.script
+index ad110d3a7f..131c138b1a 100755
+--- a/package/busybox/udhcpc.script
++++ b/package/busybox/udhcpc.script
+@@ -56,7 +56,7 @@ case "$1" in
+ 		cat $TMPFILE > $RESOLV_CONF
+ 		rm -f $TMPFILE
+ 
+-		# prefer rfc3359 domain search list (option 119) if available
++		# prefer rfc3397 domain search list (option 119) if available
+ 		if [ -n "$search" ]; then
+ 			search_list=$search
+ 		elif [ -n "$domain" ]; then
