@@ -1,126 +1,72 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sun, 4 Aug 2019 00:32:24 +0200
-Subject: [Buildroot] [git commit] package/elfutils: fix build with glibc <
- 2.16
-Message-ID: <20190803222948.8D057825E9@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sun, 4 Aug 2019 00:36:05 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/weston: replace autotools
+ with meson
+In-Reply-To: <20190624181145.107293-1-james.hilliard1@gmail.com>
+References: <20190624181145.107293-1-james.hilliard1@gmail.com>
+Message-ID: <20190804003605.2bafd9f5@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dde53fd59e80298e749151d386d6b91a6d512782
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello James,
 
-Fixes:
- - autobuild.buildroot.net/results/1053e2b4b51bc225c4a1a29c93946101a7a53be9
+On Mon, 24 Jun 2019 12:11:45 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...le-resource-leak-in-elf-32-64-_updatefile.patch | 32 ++++++++++++
- ...e-posix_memalign-instead-of-aligned_alloc.patch | 58 ++++++++++++++++++++++
- 2 files changed, 90 insertions(+)
+>  config BR2_PACKAGE_WESTON_DEMO_CLIENTS
+>  	bool "demo clients"
+> +	depends on BR2_PACKAGE_MESA3D_OPENGL_EGL
 
-diff --git a/package/elfutils/0004-libelf-Fix-possible-resource-leak-in-elf-32-64-_updatefile.patch b/package/elfutils/0004-libelf-Fix-possible-resource-leak-in-elf-32-64-_updatefile.patch
-new file mode 100644
-index 0000000000..ab76bd7a4f
---- /dev/null
-+++ b/package/elfutils/0004-libelf-Fix-possible-resource-leak-in-elf-32-64-_updatefile.patch
-@@ -0,0 +1,32 @@
-+From 75e147d0ab85262d9bb2fff093db7ce67dbd4b62 Mon Sep 17 00:00:00 2001
-+From: Mark Wielaard <mark@klomp.org>
-+Date: Wed, 6 Mar 2019 19:56:54 +0100
-+Subject: [PATCH] libelf: Fix possible resource leak in elf[32|64]_updatefile.
-+
-+When we cannot allocate enough memory to convert the data in
-+updatemmap we should free the scns before returning an error.
-+
-+Signed-off-by: Mark Wielaard <mark@klomp.org>
-+[Retrieved (and slightly updated to remove ChangeLog update) from:
-+https://sourceware.org/git/?p=elfutils.git;a=patch;h=75e147d0ab85262d9bb2fff093db7ce67dbd4b62]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ libelf/elf32_updatefile.c | 1 +
-+ 2 files changed, 6 insertions(+)
-+
-+ 	* gelf_xlate.c (__elf_xfctstof): Remove alias.
-+diff --git a/libelf/elf32_updatefile.c b/libelf/elf32_updatefile.c
-+index 2899c6f..457d18e 100644
-+--- a/libelf/elf32_updatefile.c
-++++ b/libelf/elf32_updatefile.c
-+@@ -365,6 +365,7 @@ __elfw2(LIBELFBITS,updatemmap) (Elf *elf, int change_bo, size_t shnum)
-+ 			    char *converted = aligned_alloc (align, size);
-+ 			    if (converted == NULL)
-+ 			      {
-++				free (scns);
-+ 				__libelf_seterrno (ELF_E_NOMEM);
-+ 				return 1;
-+ 			      }
-+-- 
-+2.9.3
-+
-diff --git a/package/elfutils/0005-libelf-Use-posix_memalign-instead-of-aligned_alloc.patch b/package/elfutils/0005-libelf-Use-posix_memalign-instead-of-aligned_alloc.patch
-new file mode 100644
-index 0000000000..70f1f9af21
---- /dev/null
-+++ b/package/elfutils/0005-libelf-Use-posix_memalign-instead-of-aligned_alloc.patch
-@@ -0,0 +1,58 @@
-+From 6bd060a23f43a842fbc37dd1bb8d6d7964eda36e Mon Sep 17 00:00:00 2001
-+From: Mark Wielaard <mark@klomp.org>
-+Date: Thu, 7 Mar 2019 17:31:53 +0100
-+Subject: [PATCH] libelf: Use posix_memalign instead of aligned_alloc.
-+
-+Older glibc might not have aligned_alloc (it is C11).
-+Use posix_memalign instead. posix_memalign requires the alignment to
-+be a multiple of sizeof (void *). So use malloc for smaller alignments.
-+
-+Signed-off-by: Mark Wielaard <mark@klomp.org>
-+[Retrieved (and slighlty updated to remove ChangeLog update) from:
-+https://sourceware.org/git/?p=elfutils.git;a=patch;h=6bd060a23f43a842fbc37dd1bb8d6d7964eda36e]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ libelf/elf32_updatefile.c | 20 +++++++++++++++++---
-+ 2 files changed, 22 insertions(+), 3 deletions(-)
-+
-+diff --git a/libelf/elf32_updatefile.c b/libelf/elf32_updatefile.c
-+index 457d18e..eea51a7 100644
-+--- a/libelf/elf32_updatefile.c
-++++ b/libelf/elf32_updatefile.c
-+@@ -360,16 +360,30 @@ __elfw2(LIBELFBITS,updatemmap) (Elf *elf, int change_bo, size_t shnum)
-+ 			else
-+ 			  {
-+ 			    /* We have to do the conversion on properly
-+-			       aligned memory first.  */
-++			       aligned memory first.  align is a power of 2,
-++			       but posix_memalign only works for alignments
-++			       which are a multiple of sizeof (void *).
-++			       So use normal malloc for smaller alignments.  */
-+ 			    size_t size = dl->data.d.d_size;
-+-			    char *converted = aligned_alloc (align, size);
-++			    void *converted;
-++			    if (align < sizeof (void *))
-++			      converted = malloc (size);
-++			    else
-++			      {
-++				int res;
-++				res = posix_memalign (&converted, align, size);
-++				if (res != 0)
-++				  converted = NULL;
-++			      }
-++
-+ 			    if (converted == NULL)
-+ 			      {
-+ 				free (scns);
-+ 				__libelf_seterrno (ELF_E_NOMEM);
-+ 				return 1;
-+ 			      }
-+-                            (*fctp) (converted, dl->data.d.d_buf, size, 1);
-++
-++			    (*fctp) (converted, dl->data.d.d_buf, size, 1);
-+ 
-+ 			    /* And then write it to the mmapped file.  */
-+ 			    memcpy (last_position, converted, size);
-+-- 
-+2.9.3
-+
+Why is this option added as a dependency. I understand about the other
+depends on and the select on pango, but I don't understand this
+BR2_PACKAGE_MESA3D_OPENGL_EGL dependency.
+
+> +	depends on BR2_USE_WCHAR # pango
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # pango
+> +	depends on BR2_USE_MMU # pango
+> +	depends on BR2_INSTALL_LIBSTDCPP # pango
+> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
+> +	select BR2_PACKAGE_PANGO
+>  	help
+>  	  This enables the installation of Weston's demo clients.
+> +# Uses VIDIOC_EXPBUF, only available from 3.8+
+> +ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),)
+
+If you want to say "build this when headers >= 3.8", then it should be:
+
+ifeq ($(BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_8),y)
+
+> +WESTON_CONF_OPTS +=	-Dsimple-clients=dmabuf-v4l
+> +else
+> +WESTON_CONF_OPTS +=	-Dsimple-clients=
+>  endif
+>  
+>  ifeq ($(BR2_PACKAGE_WESTON_FBDEV),y)
+>  WESTON_CONF_OPTS += \
+> -	--enable-fbdev-compositor \
+> -	WESTON_NATIVE_BACKEND=fbdev-backend.so
+> +	-Dbackend-fbdev=true \
+> +	-Dbackend-default=fbdev
+
+I'm still not happy with the -Dbackend-default handling. Indeed, if you
+enable fbdev, and drm and x11, and xwayland, you are going to pass 4
+-Dbackend-default options.
+
+Is this backend-default option mandatory ? Perhaps we can leave it
+undefined, and simply have the user select the backend at runtime ? I
+suppose if there is only backend, weston is smart enough at runtime to
+use that one ?
+
+Could you test with this -Dbackend-default option, making a runtime
+test ?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
