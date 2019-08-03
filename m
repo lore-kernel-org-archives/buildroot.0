@@ -1,62 +1,67 @@
 From: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Date: Sat,  3 Aug 2019 02:22:12 -0300
-Subject: [Buildroot] [PATCH 0/4] new builtin kernel with entropy for the
- test infra
-Message-ID: <20190803052216.22292-1-ricardo.martincoski@gmail.com>
+Date: Sat,  3 Aug 2019 02:22:13 -0300
+Subject: [Buildroot] [PATCH 1/4] support/testing: add builtin armv5 kernel
+ 4.19 with entropy
+In-Reply-To: <20190803052216.22292-1-ricardo.martincoski@gmail.com>
+References: <20190803052216.22292-1-ricardo.martincoski@gmail.com>
+Message-ID: <20190803052216.22292-2-ricardo.martincoski@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+More and more packages being tested by the test infra, e.g. syslog-ng,
+need entropy at startup, usually reading from /dev/random.
 
-This small series adds a new builtin kernel image to the test infra.
-It contains the VirtIORNG driver so the target will have enough entropy at
-startup, a requirement for more and more packages being tested.
+Some test cases can also depend on a kernel version newer than the
+builtin ones already provided by the test infra:
+ - 3.11.0 for armv5;
+ - 4.0.0 for armv7.
 
-It also uses this new builtin kernel to speed-up some test cases (atop,
-syslog-ng, python-crossbar, python-nacl) and fix others (python-txtorcon,
-python-treq).
+Add a new builtin kernel to be used by such test cases.
+Add it for armv5 so most test cases that switch to use this kernel can
+keep using BASIC_TOOLCHAIN_CONFIG.
+Use the same kernel version and kernel config as qemu_arm_versatile plus
+HW_RANDOM_VIRTIO for VirtIORNG to be usable.
+Copy the actual binary file from the syslog-ng runtime test at current
+master @ 29e1cb8884.
+Since there is already a 'kernel-versatile' file and we must keep it
+with this name for reproducibility purposes, create a simple naming
+convention for newer builtin kernel images and dtb files:
+kernel-<defconfig>-<kernel_series_version>
+<dtb_name>-<kernel_series_version>.dtb
+Pass '-device virtio-rng-pci' to qemu when this kernel is used.
 
-The binaries I used can be found here [1] and have this version string:
->Linux version 4.19.16 (br-user at runner-ed2dce3a-project-3755559-concurrent-0) (gcc version 4.9.4 (Buildroot 2017.08-git-01078-g95b1dae)) #1 Fri Aug 2 23:05:09 UTC 2019
-
-One can see a complete run of "-runtime-tests" before [2] and after [3] this
-series in the URLs below.
-
-In order to provide a v1 of this series, I created a naming convention for the
-artifacts and also for the string passed to emulator.py in parameter "kernel".
-It was the first naming that came to mind, so of course it is open to
-suggestions/improvements.
-
-[1] https://gitlab.com/RicardoMartincoski/buildroot/commit/2ed44c7471cf5db246b592e24e9b2cfd69702f0f
-[2] https://gitlab.com/RicardoMartincoski/buildroot/pipelines/74501223
-[3] https://gitlab.com/RicardoMartincoski/buildroot/pipelines/74516103
-
-Regards,
-Ricardo
----
+Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
 Cc: Arnout Vandecappelle <arnout@mind.be>
 Cc: Peter Korsgaard <peter@korsgaard.com>
 Cc: Romain Naour <romain.naour@gmail.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ support/testing/infra/emulator.py | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Ricardo Martincoski (4):
-  support/testing: add builtin armv5 kernel 4.19 with entropy
-  support/testing: test syslog-ng with builtin kernel
-  support/testing: test python-* with builtin kernel
-  support/testing: test atop with builtin kernel
-
- .../conf/syslog-ng-kernel-fragment.config     |  3 --
- support/testing/infra/emulator.py             | 10 ++++++
- support/testing/tests/package/test_atop.py    | 35 ++++++++++---------
- support/testing/tests/package/test_python.py  |  2 +-
- .../tests/package/test_python_crossbar.py     |  2 --
- .../tests/package/test_python_pynacl.py       |  4 ---
- .../testing/tests/package/test_syslog_ng.py   | 20 +++--------
- 7 files changed, 33 insertions(+), 43 deletions(-)
- delete mode 100644 support/testing/conf/syslog-ng-kernel-fragment.config
-
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index 3d3e1750c6..29008cb940 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -63,6 +63,16 @@ class Emulator(object):
+                     kernel = infra.download(self.downloaddir,
+                                             "kernel-versatile")
+                     qemu_cmd += ["-M", "versatilepb"]
++            elif kernel == "builtin-4.19":
++                if arch == "armv5":
++                    kernel_cmdline.append("console=ttyAMA0")
++                    kernel = infra.download(self.downloaddir,
++                                            "kernel-versatile-4.19")
++                    dtb = infra.download(self.downloaddir,
++                                         "versatile-pb-4.19.dtb")
++                    qemu_cmd += ["-dtb", dtb]
++                    qemu_cmd += ["-M", "versatilepb"]
++                    qemu_cmd += ["-device", "virtio-rng-pci"]
+ 
+             qemu_cmd += ["-kernel", kernel]
+ 
 -- 
 2.17.1
