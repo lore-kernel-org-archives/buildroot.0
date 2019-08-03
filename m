@@ -1,152 +1,105 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Aug 2019 18:51:37 +0200
-Subject: [Buildroot] [git commit] package/bitcoin: new package
-Message-ID: <20190803164850.3FD4281838@busybox.osuosl.org>
+From: Romain Naour <romain.naour@smile.fr>
+Date: Sat,  3 Aug 2019 18:52:40 +0200
+Subject: [Buildroot] [PATCH] package/lapack: enable unconditionally complex
+ matrices support
+Message-ID: <20190803165240.4674-1-romain.naour@smile.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=656fc50b51c03891d34471fd39003355678f7fde
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+In order to avoid build issues when complex matrices support is
+disabled, we enable it unconditionally.
 
-Bitcoin Core is an open source project which maintains and releases
-Bitcoin client software called ???Bitcoin Core???.
+While working on new runtime tests for python-numpy package, we
+noticed a build issue whith python-numpy package when
+BR2_PACKAGE_LAPACK_COMPLEX is not set. The python-numpy package
+was patched to add the dependency on lapack package instead of
+clapack.
 
-Signed-off-by: Fabio Urquiza <fabiorush@gmail.com>
-[Thomas:
- - Don't create a new blockchain applications sub-menu for now, put
-   this package in "Miscellaneous applications"
- - Do not select BR2_INSTALL_LIBSTDCPP, use depends on instead, and
-   add the corresponding comment.
- - Do not select BR2_TOOLCHAIN_BUILDROOT_USE_SSP. Instead pass
-   --disable-hardening, and let Buildroot pass the appropriate CFLAGS
-   when hardening features are enabled system-wide.
- - Add missing BR2_TOOLCHAIN_HAS_ATOMIC dependency
- - Add quirky !(BR2_arm || BR2_armeb) || BR2_USE_MMU because the
-   Cortex-M toolchains don't provide 8-byte __atomic intrinsics, but
-   we don't have a good way to express that today
- - Add missing BR2_TOOLCHAIN_HAS_GCC_BUG_64735 due to the use of
-   std::future
- - Use only one BITCOIN_CONF_OPTS assignment to pass all options]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+It failed with the following error:
+
+libcblas.so: undefined reference to `scnrm2_'
+libcblas.so: undefined reference to `scasum_'
+
+Indeed, scnrm2 and scasum are added to libblas.so only when
+BUILD_COMPLEX is enabled.
+
+Also, there is no really important space saving on the target:
+
+| Library name  | Without lapack complex | With lapack complex |
+| liblapack.so  | 2,4M                   | 4,6M                |
+| liblapacke.so | 1,8M                   | 1,5M                |
+| libcblas.so   | 48K                    | 76K                 |
+| libblas.so    | 96K                    | 232K                |
+
+(Tested with the ARM external toolchain 2019.03)
+
+Complex matrices support are likeley expected when lapack package
+is selected.
+
+Signed-off-by: Romain Naour <romain.naour@smile.fr>
+Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Samuel Martin <s.martin49@gmail.com>
+Cc: Benjamin Kamath <bkamath@spaceflight.com>
 ---
- DEVELOPERS                   |  3 +++
- package/Config.in            |  1 +
- package/bitcoin/Config.in    | 45 ++++++++++++++++++++++++++++++++++++++++++++
- package/bitcoin/bitcoin.hash |  3 +++
- package/bitcoin/bitcoin.mk   | 19 +++++++++++++++++++
- 5 files changed, 71 insertions(+)
+ Config.in.legacy         | 7 +++++++
+ package/lapack/Config.in | 7 -------
+ package/lapack/lapack.mk | 9 ++-------
+ 3 files changed, 9 insertions(+), 14 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c5175155be..5073541a97 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -774,6 +774,9 @@ F:	package/kmscube/
- N:	Fabio Porcedda <fabio.porcedda@gmail.com>
- F:	package/netsurf-buildsystem/
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 6a241b1ec8..bab89bd219 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
-+N:	Fabio Urquiza <fabiorush@gmail.com>
-+F:	package/bitcoin/
-+
- N:	Fabrice Fontaine <fabrice.fontaine@orange.com>
- F:	package/domoticz/
- F:	package/libmediaart/
-diff --git a/package/Config.in b/package/Config.in
-index 9c07ae5874..763616e70c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1823,6 +1823,7 @@ endmenu
- menu "Miscellaneous"
- 	source "package/aespipe/Config.in"
- 	source "package/bc/Config.in"
-+	source "package/bitcoin/Config.in"
- 	source "package/clamav/Config.in"
- 	source "package/collectd/Config.in"
- 	source "package/domoticz/Config.in"
-diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
-new file mode 100644
-index 0000000000..03e040d8f5
---- /dev/null
-+++ b/package/bitcoin/Config.in
-@@ -0,0 +1,45 @@
-+config BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
-+	bool
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
-+	# bitcoin uses 8-byte __atomic intrinsics, which are not
-+	# available on ARM noMMU platforms that we
-+	# support. BR2_TOOLCHAIN_HAS_ATOMIC does not provide a
-+	# size-level granularity to express this dependency.
-+	depends on !(BR2_arm || BR2_armeb) || BR2_USE_MMU
-+
-+config BR2_PACKAGE_BITCOIN
-+	bool "bitcoin"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
-+	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_SYSTEM
-+	select BR2_PACKAGE_BOOST_FILESYSTEM
-+	select BR2_PACKAGE_BOOST_THREAD
-+	select BR2_PACKAGE_BOOST_CHRONO
-+	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBEVENT
+ comment "Legacy options removed in 2019.08"
+ 
++config BR2_PACKAGE_LAPACK_COMPLEX
++	bool "Complex/Complex16 option was removed"
++	select BR2_LEGACY
 +	help
-+	  Bitcoin Core is an open source project which maintains and
-+	  releases Bitcoin client software called ???Bitcoin Core???.
++	  Complex/Complex16 support is now unconditionally enabled in
++	  lapack package.
 +
-+	  It is a direct descendant of the original Bitcoin software
-+	  client released by Satoshi Nakamoto after he published the
-+	  famous Bitcoin whitepaper.
-+
-+	  Bitcoin Core consists of both "full-node" software for fully
-+	  validating the blockchain as well as a bitcoin wallet. The
-+	  project also currently maintains related software such as
-+	  the cryptography library libsecp256k1 and others located at
-+	  GitHub.
-+
-+	  https://bitcoincore.org
-+
-+comment "bitcoin needs a toolchain w/ C++"
-+	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
-+	depends on !BR2_INSTALL_LIBSTDCPP
-+
-+comment "bitcoin needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
-new file mode 100644
-index 0000000000..96edd22959
---- /dev/null
-+++ b/package/bitcoin/bitcoin.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256 c8557b6df5f5cdf67b3ddf6fe501cfc6e0be698f175f16927dd08d6040df7d9f  bitcoin-v0.16.3.tar.gz
-+sha256 70223369f70e8cb550e75aa74eb86bfa5220fb09c0ba0549d91c36587d15d1a0  COPYING
-diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
-new file mode 100644
-index 0000000000..78170abcc7
---- /dev/null
-+++ b/package/bitcoin/bitcoin.mk
-@@ -0,0 +1,19 @@
-+################################################################################
-+#
-+# bitcoin
-+#
-+################################################################################
-+
-+BITCOIN_VERSION = v0.16.3
-+BITCOIN_SITE = $(call github,bitcoin,bitcoin,$(BITCOIN_VERSION))
-+BITCOIN_AUTORECONF = YES
-+BITCOIN_LICENSE = MIT
-+BITCOIN_LICENSE_FILES = COPYING
-+BITCOIN_DEPENDENCIES = boost openssl libevent
-+BITCOIN_CONF_OPTS = \
-+	--disable-wallet \
-+	--disable-tests \
-+	--with-boost-libdir=$(STAGING_DIR)/usr/lib/ \
-+	--disable-hardening
-+
-+$(eval $(autotools-package))
+ config BR2_GDB_VERSION_7_12
+ 	bool "gdb 7.12.x has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/lapack/Config.in b/package/lapack/Config.in
+index 9687ace82d..f7844e29c2 100644
+--- a/package/lapack/Config.in
++++ b/package/lapack/Config.in
+@@ -12,10 +12,3 @@ config BR2_PACKAGE_LAPACK
+ 	  installs two libraries: libblas and liblapack.
+ 
+ 	  http://www.netlib.org/lapack/
+-
+-config BR2_PACKAGE_LAPACK_COMPLEX
+-	bool "Complex/Complex16 support"
+-	default y
+-	depends on BR2_PACKAGE_LAPACK
+-	help
+-	  Builds support for COMPLEX and COMPLEX16 data types.
+diff --git a/package/lapack/lapack.mk b/package/lapack/lapack.mk
+index 3b59214e4b..fcf4da3235 100644
+--- a/package/lapack/lapack.mk
++++ b/package/lapack/lapack.mk
+@@ -10,12 +10,7 @@ LAPACK_LICENSE_FILES = LICENSE
+ LAPACK_SITE = http://www.netlib.org/lapack
+ LAPACK_INSTALL_STAGING = YES
+ LAPACK_SUPPORTS_IN_SOURCE_BUILD = NO
+-LAPACK_CONF_OPTS = -DLAPACKE=ON -DCBLAS=ON
+-
+-ifeq ($(BR2_PACKAGE_LAPACK_COMPLEX),y)
+-LAPACK_CONF_OPTS += -DBUILD_COMPLEX=ON -DBUILD_COMPLEX16=ON
+-else
+-LAPACK_CONF_OPTS += -DBUILD_COMPLEX=OFF -DBUILD_COMPLEX16=OFF
+-endif
++LAPACK_CONF_OPTS = -DLAPACKE=ON -DCBLAS=ON -DBUILD_COMPLEX=ON \
++	-DBUILD_COMPLEX16=ON
+ 
+ $(eval $(cmake-package))
+-- 
+2.20.1
