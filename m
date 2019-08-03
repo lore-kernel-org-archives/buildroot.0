@@ -1,57 +1,213 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Aug 2019 08:24:34 +0200
-Subject: [Buildroot] [PATCH 0/4] new builtin kernel with entropy for the
- test infra
-In-Reply-To: <20190803052216.22292-1-ricardo.martincoski@gmail.com>
-References: <20190803052216.22292-1-ricardo.martincoski@gmail.com>
-Message-ID: <20190803082434.0080779f@windsurf.home>
+Date: Sat, 3 Aug 2019 08:28:35 +0200
+Subject: [Buildroot] [git commit] configs/olimex_a33_olinuxino: new defconfig
+Message-ID: <20190803062812.31E1883ACF@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=fb61cf213cca7e650df0601e15582fc28b4058bd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  3 Aug 2019 02:22:12 -0300
-Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
+This initial support includes:
+	u-boot v2019.04
+	Linux v5.0
+	Buildroot default packages
 
-> This small series adds a new builtin kernel image to the test infra.
-> It contains the VirtIORNG driver so the target will have enough entropy at
-> startup, a requirement for more and more packages being tested.
-> 
-> It also uses this new builtin kernel to speed-up some test cases (atop,
-> syslog-ng, python-crossbar, python-nacl) and fix others (python-txtorcon,
-> python-treq).
-> 
-> The binaries I used can be found here [1] and have this version string:
-> >Linux version 4.19.16 (br-user at runner-ed2dce3a-project-3755559-concurrent-0) (gcc version 4.9.4 (Buildroot 2017.08-git-01078-g95b1dae)) #1 Fri Aug 2 23:05:09 UTC 2019  
-> 
-> One can see a complete run of "-runtime-tests" before [2] and after [3] this
-> series in the URLs below.
-> 
-> In order to provide a v1 of this series, I created a naming convention for the
-> artifacts and also for the string passed to emulator.py in parameter "kernel".
-> It was the first naming that came to mind, so of course it is open to
-> suggestions/improvements.
-> 
-> [1] https://gitlab.com/RicardoMartincoski/buildroot/commit/2ed44c7471cf5db246b592e24e9b2cfd69702f0f
-> [2] https://gitlab.com/RicardoMartincoski/buildroot/pipelines/74501223
-> [3] https://gitlab.com/RicardoMartincoski/buildroot/pipelines/74516103
+Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
+[Thomas: use BR2_TARGET_UBOOT_BOOT_SCRIPT to generate the U-Boot
+script, instead of doing it in the post-build]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .gitlab-ci.yml                           |  1 +
+ DEVELOPERS                               |  2 ++
+ board/olimex/a33_olinuxino/boot.cmd      |  5 ++++
+ board/olimex/a33_olinuxino/genimage.cfg  | 17 +++++++++++
+ board/olimex/a33_olinuxino/post-build.sh |  2 ++
+ board/olimex/a33_olinuxino/readme.txt    | 50 ++++++++++++++++++++++++++++++++
+ configs/olimex_a33_olinuxino_defconfig   | 48 ++++++++++++++++++++++++++++++
+ 7 files changed, 125 insertions(+)
 
-Thanks a lot for working on this. However, instead of having this new
-kernel as a separate "version" from the current ARMv5 pre-built kernel,
-why don't we simply update the existing one ?
-
-One issue is that downloads get cached, so if the filename is the same,
-it won't be redownloaded. Perhaps we need to store hashes of the
-download artifacts, so that we can detect if they need to be
-re-downloaded ?
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
+index 3e37580e63..311ddb7780 100644
+--- a/.gitlab-ci.yml
++++ b/.gitlab-ci.yml
+@@ -227,6 +227,7 @@ olimex_a13_olinuxino_defconfig: { extends: .defconfig }
+ olimex_a20_olinuxino_lime2_defconfig: { extends: .defconfig }
+ olimex_a20_olinuxino_lime_defconfig: { extends: .defconfig }
+ olimex_a20_olinuxino_micro_defconfig: { extends: .defconfig }
++olimex_a33_olinuxino_defconfig: { extends: .defconfig }
+ olimex_a64_olinuxino_defconfig: { extends: .defconfig }
+ olimex_imx233_olinuxino_defconfig: { extends: .defconfig }
+ openblocks_a6_defconfig: { extends: .defconfig }
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c6b21559e5..2956528a8e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2066,10 +2066,12 @@ F:	package/wolfssl/
+ N:	Shyam Saini <shyam.saini@amarulasolutions.com>
+ F:	board/friendlyarm/nanopi-neo4/
+ F:	board/friendlyarm/nanopc-t4/
++F:	board/olimex/a33_olinuxino/
+ F:	board/radxa/rock-pi4/
+ F:	board/pine64/rockpro64/
+ F:	configs/nanopi_neo4_defconfig
+ F:	configs/nanopc_t4_defconfig
++F:	configs/olimex_a33_olinuxino_defconfig
+ F:	configs/pine64_rockpro64_defconfig
+ F:	configs/radxa_rock_pi4_defconfig
+ 
+diff --git a/board/olimex/a33_olinuxino/boot.cmd b/board/olimex/a33_olinuxino/boot.cmd
+new file mode 100644
+index 0000000000..44d9239a94
+--- /dev/null
++++ b/board/olimex/a33_olinuxino/boot.cmd
+@@ -0,0 +1,5 @@
++setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p1 rootwait panic=10 ${extra}
++ext4load mmc 0 0x49000000 /boot/${fdtfile}
++ext4load mmc 0 0x46000000 /boot/zImage
++env set fdt_high ffffffff
++bootz 0x46000000 - 0x49000000
+diff --git a/board/olimex/a33_olinuxino/genimage.cfg b/board/olimex/a33_olinuxino/genimage.cfg
+new file mode 100644
+index 0000000000..fc2f7f8d76
+--- /dev/null
++++ b/board/olimex/a33_olinuxino/genimage.cfg
+@@ -0,0 +1,17 @@
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = "no"
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8192
++		size = 1040384 # 1MB - 8192
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/olimex/a33_olinuxino/post-build.sh b/board/olimex/a33_olinuxino/post-build.sh
+new file mode 100755
+index 0000000000..b418120652
+--- /dev/null
++++ b/board/olimex/a33_olinuxino/post-build.sh
+@@ -0,0 +1,2 @@
++#!/bin/sh
++cp $BINARIES_DIR/boot.scr $TARGET_DIR/boot/boot.scr
+diff --git a/board/olimex/a33_olinuxino/readme.txt b/board/olimex/a33_olinuxino/readme.txt
+new file mode 100644
+index 0000000000..b19060200c
+--- /dev/null
++++ b/board/olimex/a33_olinuxino/readme.txt
+@@ -0,0 +1,50 @@
++A33-OLinuXino
++
++Intro
++=====
++
++This board is based on Allwinner A33 SoC.
++
++Home Page: https://www.olimex.com/Products/OLinuXino/A33/A33-OLinuXino/open-source-hardware
++Wiki: 	   https://wiki.amarulasolutions.com/bsp/sunxi/a33/Olimex-A33-Olinuxino.html
++
++How to build it
++===============
++
++Configure Buildroot:
++
++    $ make olimex_a33_olinuxino_defconfig
++
++Build everything by running:
++
++    $ make
++
++Result of the build
++-------------------
++
++After building, you should get a tree like this:
++
++output/images/
++????????? boot.scr
++????????? rootfs.ext2
++????????? rootfs.ext4 -> rootfs.ext2
++????????? rootfs.tar
++????????? sdcard.img
++????????? sun8i-a33-olinuxino.dtb
++????????? u-boot.bin
++????????? u-boot-sunxi-with-spl.bin
++????????? zImage
++
++
++How to write the SD card
++========================
++
++The sdcard.img file is a complete bootable image ready to be written
++on the boot medium. To install it, simply copy the image to a uSD
++card:
++
++    # dd if=output/images/sdcard.img of=/dev/sdX
++
++Where 'sdX' is the device node of the uSD.
++
++Eject the SD card, insert it in the A33-OLinuXino board, and power it up.
+diff --git a/configs/olimex_a33_olinuxino_defconfig b/configs/olimex_a33_olinuxino_defconfig
+new file mode 100644
+index 0000000000..c71bdb1fb4
+--- /dev/null
++++ b/configs/olimex_a33_olinuxino_defconfig
+@@ -0,0 +1,48 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a7=y
++
++# Linux headers same as kernel, a 5.0 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
++
++# System configuration
++BR2_TARGET_GENERIC_HOSTNAME="A33-olinuxino"
++BR2_TARGET_GENERIC_ISSUE="Welcome to A33 OLinuXino!"
++BR2_TARGET_GENERIC_GETTY=y
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++
++# Bootloaders
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.04"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="A33-OLinuXino"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_FORMAT_BIN=y
++BR2_TARGET_UBOOT_SPL=y
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_BOOT_SCRIPT=y
++BR2_TARGET_UBOOT_BOOT_SCRIPT_SOURCE="board/olimex/a33_olinuxino/boot.cmd"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.0"
++BR2_LINUX_KERNEL_USE_DEFCONFIG=y
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="sun8i-a33-olinuxino"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/olimex/a33_olinuxino/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/olimex/a33_olinuxino/genimage.cfg"
++
++# Additional tools
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_UBOOT_TOOLS=y
++BR2_PACKAGE_HOST_MTOOLS=y
