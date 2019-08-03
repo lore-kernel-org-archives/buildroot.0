@@ -1,86 +1,77 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Aug 2019 16:12:29 +0200
-Subject: [Buildroot] [PATCH 4/5] package/python-numpy: disable numpy if
- fenv.h is not provided by libc
-In-Reply-To: <CY4PR1201MB0120523CE90081F3CCB3B66DA1D80@CY4PR1201MB0120.namprd12.prod.outlook.com>
-References: <20190801210920.31338-1-romain.naour@smile.fr>
- <20190801210920.31338-4-romain.naour@smile.fr>
- <46a14660-516e-46e4-3ecf-5f43b422a5d8@mind.be>
- <CY4PR1201MB01208D2F8FAD71EE9FDA8754A1D80@CY4PR1201MB0120.namprd12.prod.outlook.com>
- <799fbe91-2db8-b771-3de8-4e777a62965e@mind.be>
- <CY4PR1201MB0120523CE90081F3CCB3B66DA1D80@CY4PR1201MB0120.namprd12.prod.outlook.com>
-Message-ID: <42e755da-8fcc-2a34-d304-ea7489261203@mind.be>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat, 3 Aug 2019 16:14:06 +0200
+Subject: [Buildroot] [PATCH v3] package/pkg-utils.mk: add dl_dir to
+ show-info output
+In-Reply-To: <20190803140433.27967-1-arnout@mind.be>
+References: <20190803140433.27967-1-arnout@mind.be>
+Message-ID: <20190803141406.GF28984@scaer>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+Arnout, All,
 
-
-On 03/08/2019 14:49, Alexey Brodkin wrote:
-> Hi Arnout,
+On 2019-08-03 16:04 +0200, Arnout Vandecappelle (Essensium/Mind) spake thusly:
+> It can be useful for scripts to be able to access a package's source
+> file after download. That used to be easy, just DL_DIR/PKG_SOURCE.
+> However, with the subdirectories in DL_DIR which can be overridden with
+> PKG_DL_SUBDIR, that is no longer easy.
 > 
->> -----Original Message-----
->> From: Arnout Vandecappelle <arnout@mind.be>
->> Sent: Saturday, August 3, 2019 3:25 PM
->> To: Alexey Brodkin <abrodkin@synopsys.com>
->> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>; Alexandre PAYEN
->> <alexandre.payen@smile.fr>; Damien DUVAL <damien.duval@smile.fr>; Evgeniy Didin <didin@synopsys.com>;
->> Fabrice Fontaine <fontaine.fabrice@gmail.com>; Romain Naour <romain.naour@smile.fr>;
->> buildroot at buildroot.org
->> Subject: Re: [Buildroot] [PATCH 4/5] package/python-numpy: disable numpy if fenv.h is not provided by
->> libc
->>
->>
->>
->> On 03/08/2019 12:48, Alexey Brodkin wrote:
->>> Hi Arnout,
->>>
->>>>  Since Alexey indicated that this is not needed any longer, I removed that part
->>>> and applied to master, thanks.
->>>>
->>>>  Alexey, could you do a runtime test (based on the one submitted by Romain) for
->>>> ARC to be sure? You'll need a qemu for ARC for that, obviously, which is why I'm
->>>> asking you instead of doing it myself :-)
->>>
->>> Any hint on why QEMU is in the question?
->>> I.e. is there any framework or test-suite that require QEMU?
->>
->>  Yes, the Buildroot runtime tests in support/testing use qemu.
+> Therefore, this patch adds dl_dir to the package information. It prints
+> just PKG_DL_SUBDIR, to avoid dumping absolute paths to the buildroot
+> directory in the show-info output.
 > 
-> That's cool, though I haven't tried that yet so may I ask what do I
-> need to run for testing numpy in particular?
-
- Specifically for numpy, there is no runtime test yet - Romain submitted a patch
-[1] but it needs a new iteration.
-
- But I realise now that in your case the runtime testing infra isn't that useful
-since you anyway need to change the test completely to get the right arch and
-kernel. So yes, by all means, test it on the board :-)
-
- You just need to add this to the config:
-
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON_NUMPY=y
-
- And run this in Python:
-
-import numpy as np
-list = [1,2,3,4]
-arr = np.array(list)
-print (arr)
-
-
-
- Regards,
- Arnout
-
-[1] http://patchwork.ozlabs.org/patch/1140773/
-
+> It can be used with the following jq script to get a newline-separated
+> list of all downloaded files:
 > 
-> -Alexey
+> make show-info | jq -r '.[] | ("dl/" + .dl_dir + "/" + .downloads[]?.source)'
 > 
-> P.S. Pls pardon my noob's questions - if there's an answer in
-> form of one-liner that would be super cool, otherwise docs will work.
+> Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Acked-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
+Thanks for the jq script! :-)
+
+Regards,
+Yann E. MORIN.
+
+> ---
+> v2 -> v3:
+>  - Remove accidental change
 > 
+> v1 -> v2:
+>  - Use DL_SUBDIR (i.e. relative path) instead of DL_DIR (i.e. absolute
+>    path). (Yann)
+>  - Move the definition one level higher, because it is anyway the same
+>    for all sources. (Yann)
+>  - Update jq script in commit message to handle the above.
+> ---
+>  package/pkg-utils.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+> index b7280e930f..ef93345595 100644
+> --- a/package/pkg-utils.mk
+> +++ b/package/pkg-utils.mk
+> @@ -94,6 +94,7 @@ endef
+>  define _json-info-pkg-details
+>  	"version": "$($(1)_DL_VERSION)",
+>  	"licenses": "$($(1)_LICENSE)",
+> +	"dl_dir": "$($(1)_DL_SUBDIR)",
+>  	"downloads": [
+>  	$(foreach dl,$(sort $($(1)_ALL_DOWNLOADS)),
+>  		{
+> -- 
+> 2.21.0
+> 
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
