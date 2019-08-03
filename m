@@ -1,63 +1,46 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  3 Aug 2019 11:34:08 +0200
-Subject: [Buildroot] [PATCH 1/1] package/elfutils: security bump to version
- 0.176
-Message-ID: <20190803093408.31776-1-fontaine.fabrice@gmail.com>
+From: Pierre-Jean Texier <pjtexier@koncepto.io>
+Date: Sat,  3 Aug 2019 11:34:18 +0200
+Subject: [Buildroot] [PATCH] package/python-pytz: bump to version 2019.02
+Message-ID: <1564824858-8159-1-git-send-email-pjtexier@koncepto.io>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes CVE-2018-18310: An invalid memory address dereference was
-discovered in dwfl_segment_report_module.c in libdwfl in elfutils
-through v0.174. The vulnerability allows attackers to cause a denial of
-service (application crash) with a crafted ELF file, as demonstrated by
-consider_notes.
-
-Fixes CVE-2018-18520: An Invalid Memory Address Dereference exists in
-the function elf_end in libelf in elfutils through v0.174. Although
-eu-size is intended to support ar files inside ar files,
-handle_ar in size.c closes the outer ar file before handling all inner
-entries. The vulnerability allows attackers to cause a denial of service
-(application crash) with a crafted ELF file.
-
-Fixes CVE-2018-18521: Divide-by-zero vulnerabilities in the function
-arlib_add_symbols() in arlib.c in elfutils 0.174 allow remote attackers
-to cause a denial of service (application crash) with a crafted ELF
-file, as demonstrated by eu-ranlib, because a zero sh_entsize is
-mishandled.
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
 ---
- package/elfutils/elfutils.hash | 4 ++--
- package/elfutils/elfutils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-pytz/python-pytz.hash | 4 ++--
+ package/python-pytz/python-pytz.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/elfutils/elfutils.hash b/package/elfutils/elfutils.hash
-index 5a76cd5868..15dddc2fdf 100644
---- a/package/elfutils/elfutils.hash
-+++ b/package/elfutils/elfutils.hash
+diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
+index 525d452..9e0dfe0 100644
+--- a/package/python-pytz/python-pytz.hash
++++ b/package/python-pytz/python-pytz.hash
 @@ -1,5 +1,5 @@
--# From https://sourceware.org/elfutils/ftp/0.174/sha512.sum
--sha512 696708309c2a9a076099748809ecdc0490f4a8a842b2efc1aae0d746e7c5a8b203743f5626739eff837216b0c052696516b2821f5d3cc3f2eef86597c96d42df  elfutils-0.174.tar.bz2
-+# From https://sourceware.org/elfutils/ftp/0.176/sha512.sum
-+sha512 7f032913be363a43229ded85d495dcf7542b3c85974aaaba0d984228dc9ac1721da3dc388d3fa02325a80940161db7e9ad2c9e4521a424ad8a7d050c0902915b  elfutils-0.176.tar.bz2
- # Locally calculated
- sha256 8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
- sha256 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING-GPLV2
-diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
-index 2d62017bba..ea54862870 100644
---- a/package/elfutils/elfutils.mk
-+++ b/package/elfutils/elfutils.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/pytz/json
+-md5	0f57d76c64d0965e7429c9b871f6b711  pytz-2018.9.tar.gz
+-sha256	d5f05e487007e29e03409f9398d074e158d920d36eb82eaf66fb1136b0c5374c  pytz-2018.9.tar.gz
++md5	8c21963449c3a793aa61ef122e171516  pytz-2019.2.tar.gz
++sha256	26c0b32e437e54a18161324a2fca3c4b9846b74a8dccddd843113109e1116b32  pytz-2019.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256	39f07c72a1bfda349cbd27bac9bcb1e6f8c5b4e5cc3fadf56900406e8cc0b792  LICENSE.txt
+diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
+index a93a12c..217d485 100644
+--- a/package/python-pytz/python-pytz.mk
++++ b/package/python-pytz/python-pytz.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--ELFUTILS_VERSION = 0.174
-+ELFUTILS_VERSION = 0.176
- ELFUTILS_SOURCE = elfutils-$(ELFUTILS_VERSION).tar.bz2
- ELFUTILS_SITE = https://sourceware.org/elfutils/ftp/$(ELFUTILS_VERSION)
- ELFUTILS_INSTALL_STAGING = YES
+-PYTHON_PYTZ_VERSION = 2018.9
++PYTHON_PYTZ_VERSION = 2019.2
+ PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
+-PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/af/be/6c59e30e208a5f28da85751b93ec7b97e4612268bb054d0dff396e758a90
++PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/27/c0/fbd352ca76050952a03db776d241959d5a2ee1abddfeb9e2a53fdb489be4
+ PYTHON_PYTZ_SETUP_TYPE = setuptools
+ PYTHON_PYTZ_LICENSE = MIT
+ PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
 -- 
-2.20.1
+2.7.4
