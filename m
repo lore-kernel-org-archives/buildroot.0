@@ -1,54 +1,72 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Sat, 3 Aug 2019 12:49:21 +0000
-Subject: [Buildroot] [PATCH 4/5] package/python-numpy: disable numpy if
- fenv.h is not provided by libc
-In-Reply-To: <799fbe91-2db8-b771-3de8-4e777a62965e@mind.be>
-References: <20190801210920.31338-1-romain.naour@smile.fr>
- <20190801210920.31338-4-romain.naour@smile.fr>
- <46a14660-516e-46e4-3ecf-5f43b422a5d8@mind.be>
- <CY4PR1201MB01208D2F8FAD71EE9FDA8754A1D80@CY4PR1201MB0120.namprd12.prod.outlook.com>
- <799fbe91-2db8-b771-3de8-4e777a62965e@mind.be>
-Message-ID: <CY4PR1201MB0120523CE90081F3CCB3B66DA1D80@CY4PR1201MB0120.namprd12.prod.outlook.com>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 03 Aug 2019 14:51:31 +0200
+Subject: [Buildroot] [PATCH 1/4] support/testing: add builtin armv5
+ kernel 4.19 with entropy
+In-Reply-To: <20190803052216.22292-2-ricardo.martincoski@gmail.com> (Ricardo
+ Martincoski's message of "Sat, 3 Aug 2019 02:22:13 -0300")
+References: <20190803052216.22292-1-ricardo.martincoski@gmail.com>
+ <20190803052216.22292-2-ricardo.martincoski@gmail.com>
+Message-ID: <87zhkqcsz0.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+>>>>> "Ricardo" == Ricardo Martincoski <ricardo.martincoski@gmail.com> writes:
 
-> -----Original Message-----
-> From: Arnout Vandecappelle <arnout@mind.be>
-> Sent: Saturday, August 3, 2019 3:25 PM
-> To: Alexey Brodkin <abrodkin@synopsys.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>; Alexandre PAYEN
-> <alexandre.payen@smile.fr>; Damien DUVAL <damien.duval@smile.fr>; Evgeniy Didin <didin@synopsys.com>;
-> Fabrice Fontaine <fontaine.fabrice@gmail.com>; Romain Naour <romain.naour@smile.fr>;
-> buildroot at buildroot.org
-> Subject: Re: [Buildroot] [PATCH 4/5] package/python-numpy: disable numpy if fenv.h is not provided by
-> libc
-> 
-> 
-> 
-> On 03/08/2019 12:48, Alexey Brodkin wrote:
-> > Hi Arnout,
-> >
-> >>  Since Alexey indicated that this is not needed any longer, I removed that part
-> >> and applied to master, thanks.
-> >>
-> >>  Alexey, could you do a runtime test (based on the one submitted by Romain) for
-> >> ARC to be sure? You'll need a qemu for ARC for that, obviously, which is why I'm
-> >> asking you instead of doing it myself :-)
-> >
-> > Any hint on why QEMU is in the question?
-> > I.e. is there any framework or test-suite that require QEMU?
-> 
->  Yes, the Buildroot runtime tests in support/testing use qemu.
+ > More and more packages being tested by the test infra, e.g. syslog-ng,
+ > need entropy at startup, usually reading from /dev/random.
 
-That's cool, though I haven't tried that yet so may I ask what do I
-need to run for testing numpy in particular?
+ > Some test cases can also depend on a kernel version newer than the
+ > builtin ones already provided by the test infra:
+ >  - 3.11.0 for armv5;
+ >  - 4.0.0 for armv7.
 
--Alexey
+ > Add a new builtin kernel to be used by such test cases.
+ > Add it for armv5 so most test cases that switch to use this kernel can
+ > keep using BASIC_TOOLCHAIN_CONFIG.
+ > Use the same kernel version and kernel config as qemu_arm_versatile plus
+ > HW_RANDOM_VIRTIO for VirtIORNG to be usable.
+ > Copy the actual binary file from the syslog-ng runtime test at current
+ > master @ 29e1cb8884.
+ > Since there is already a 'kernel-versatile' file and we must keep it
+ > with this name for reproducibility purposes, create a simple naming
+ > convention for newer builtin kernel images and dtb files:
+ > kernel-<defconfig>-<kernel_series_version>
+ > <dtb_name>-<kernel_series_version>.dtb
+ > Pass '-device virtio-rng-pci' to qemu when this kernel is used.
 
-P.S. Pls pardon my noob's questions - if there's an answer in
-form of one-liner that would be super cool, otherwise docs will work.
+ > Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
+ > Cc: Romain Naour <romain.naour@gmail.com>
+ > Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > ---
+ >  support/testing/infra/emulator.py | 10 ++++++++++
+ >  1 file changed, 10 insertions(+)
+
+ > diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+ > index 3d3e1750c6..29008cb940 100644
+ > --- a/support/testing/infra/emulator.py
+ > +++ b/support/testing/infra/emulator.py
+ > @@ -63,6 +63,16 @@ class Emulator(object):
+ >                      kernel = infra.download(self.downloaddir,
+ >                                              "kernel-versatile")
+ >                      qemu_cmd += ["-M", "versatilepb"]
+ > +            elif kernel == "builtin-4.19":
+ > +                if arch == "armv5":
+ > +                    kernel_cmdline.append("console=ttyAMA0")
+ > +                    kernel = infra.download(self.downloaddir,
+ > +                                            "kernel-versatile-4.19")
+ > +                    dtb = infra.download(self.downloaddir,
+ > +                                         "versatile-pb-4.19.dtb")
+ > +                    qemu_cmd += ["-dtb", dtb]
+ > +                    qemu_cmd += ["-M", "versatilepb"]
+ > +                    qemu_cmd += ["-device", "virtio-rng-pci"]
+
+Committed after changing the logic to use this for builtin/armv5
+instead, thanks.
+
+-- 
+Bye, Peter Korsgaard
