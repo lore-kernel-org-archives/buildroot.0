@@ -1,11 +1,13 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Aug 2019 13:24:10 +0200
-Subject: [Buildroot] [PATCH 0/4] new builtin kernel with entropy for the
- test infra
-In-Reply-To: <20190803082434.0080779f@windsurf.home>
-References: <20190803052216.22292-1-ricardo.martincoski@gmail.com>
- <20190803082434.0080779f@windsurf.home>
-Message-ID: <8b2b02d6-354c-bc13-05c9-6c0f27447eba@mind.be>
+Date: Sat, 3 Aug 2019 14:25:06 +0200
+Subject: [Buildroot] [PATCH 4/5] package/python-numpy: disable numpy if
+ fenv.h is not provided by libc
+In-Reply-To: <CY4PR1201MB01208D2F8FAD71EE9FDA8754A1D80@CY4PR1201MB0120.namprd12.prod.outlook.com>
+References: <20190801210920.31338-1-romain.naour@smile.fr>
+ <20190801210920.31338-4-romain.naour@smile.fr>
+ <46a14660-516e-46e4-3ecf-5f43b422a5d8@mind.be>
+ <CY4PR1201MB01208D2F8FAD71EE9FDA8754A1D80@CY4PR1201MB0120.namprd12.prod.outlook.com>
+Message-ID: <799fbe91-2db8-b771-3de8-4e777a62965e@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -14,52 +16,25 @@ To: buildroot@busybox.net
 
 
 
-On 03/08/2019 08:24, Thomas Petazzoni wrote:
-> Hello,
+On 03/08/2019 12:48, Alexey Brodkin wrote:
+> Hi Arnout,
 > 
-> On Sat,  3 Aug 2019 02:22:12 -0300
-> Ricardo Martincoski <ricardo.martincoski@gmail.com> wrote:
+>>  Since Alexey indicated that this is not needed any longer, I removed that part
+>> and applied to master, thanks.
+>>
+>>  Alexey, could you do a runtime test (based on the one submitted by Romain) for
+>> ARC to be sure? You'll need a qemu for ARC for that, obviously, which is why I'm
+>> asking you instead of doing it myself :-)
 > 
->> This small series adds a new builtin kernel image to the test infra.
->> It contains the VirtIORNG driver so the target will have enough entropy at
->> startup, a requirement for more and more packages being tested.
->>
->> It also uses this new builtin kernel to speed-up some test cases (atop,
->> syslog-ng, python-crossbar, python-nacl) and fix others (python-txtorcon,
->> python-treq).
->>
->> The binaries I used can be found here [1] and have this version string:
->>> Linux version 4.19.16 (br-user at runner-ed2dce3a-project-3755559-concurrent-0) (gcc version 4.9.4 (Buildroot 2017.08-git-01078-g95b1dae)) #1 Fri Aug 2 23:05:09 UTC 2019  
->>
->> One can see a complete run of "-runtime-tests" before [2] and after [3] this
->> series in the URLs below.
->>
->> In order to provide a v1 of this series, I created a naming convention for the
->> artifacts and also for the string passed to emulator.py in parameter "kernel".
->> It was the first naming that came to mind, so of course it is open to
->> suggestions/improvements.
->>
->> [1] https://gitlab.com/RicardoMartincoski/buildroot/commit/2ed44c7471cf5db246b592e24e9b2cfd69702f0f
->> [2] https://gitlab.com/RicardoMartincoski/buildroot/pipelines/74501223
->> [3] https://gitlab.com/RicardoMartincoski/buildroot/pipelines/74516103
-> 
-> Thanks a lot for working on this. However, instead of having this new
-> kernel as a separate "version" from the current ARMv5 pre-built kernel,
-> why don't we simply update the existing one ?
+> Any hint on why QEMU is in the question?
+> I.e. is there any framework or test-suite that require QEMU?
 
- IMO it's rarely a good idea to overwrite an existing file that can be
-downloaded. So I'd apply Ricardo's patches as is.
+ Yes, the Buildroot runtime tests in support/testing use qemu.
 
  Regards,
  Arnout
 
+> What about real boards, proprietary simulators?
 > 
-> One issue is that downloads get cached, so if the filename is the same,
-> it won't be redownloaded. Perhaps we need to store hashes of the
-> download artifacts, so that we can detect if they need to be
-> re-downloaded ?
-> 
-> Best regards,
-> 
-> Thomas
+> -Alexey
 > 
