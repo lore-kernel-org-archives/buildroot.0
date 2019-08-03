@@ -1,89 +1,63 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 3 Aug 2019 23:19:36 +0200
-Subject: [Buildroot] [git commit] toolchain: check the SSP option is known
-Message-ID: <20190803211932.1F40583EB2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] toolchain: -fstack-protector-strong can be
+ back-ported
+Message-ID: <20190803211932.2B68E83EB2@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ebc391a718617ac20b16d8aef4b2915b04e46f5b
+commit: https://git.buildroot.net/buildroot/commit/?id=51db8974f72bcefa912a5fea547311df1c1657ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Some toolchain vendors may have backported those options to older gcc
-versions, and we have no way to know, so we have to check that the
-user's selection is acceptable.
+Currently, use of -fstack-protector-strong is only available for gcc
+starting with 4.9, on the assumption that it appeared with that version.
 
-Extend the macro that currently checks for SSP in the toolchain, with
-a new test that the actual SSP option is recognised and accepted.
+Although this is true, it happens that quite a few vendors will have
+back-ported -fstack-protector-strong to older gcc versions (at least 4.8
+seen in the wild).
 
-Note that the SSP option is either totaly empty, or an already-quoted
-string, so we can safely and easily assign it to a shell variable to
-test and use it.
+Remove the guard against gcc>=4.9, and expand the help text.
 
-Note that we do not introduce BR2_TOOLCHAIN_HAS_SSP_STRONG, because:
+Note: we could have changed the guard to something like:
+    depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || BR2_TOOLCHAIN_EXTERNAL_CUSTOM
 
-  - our internal toolchain infra only supports gcc >= 4.9, so it has
-    SSP strong;
-
-  - of the external pre-built toolchains, only the codesourcery-arm
-    one has a gcc-4.8 which lacks SSP strong, all the others have a
-    gcc >= 4.9;
-
-  - we'd still have to do the actual check for custom external
-    toolchains anyway.
-
-So, we're not adding BR2_TOOLCHAIN_HAS_SSP_STRONG just for a single
-case.
+However, the latest gcc we support in the internal toolchain now *is*
+gcc-4.9, and similarly all external toolchains except Sourcery ARM are
+4.9 or higher. So except for the Sourcery toolchain, the condition would
+have always been true. For that one toolchain, we can allow it to hit
+the SSP check, and just drop the condition entirely.
 
 Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
 Cc: Matt Weber <matthew.weber@rockwellcollins.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- toolchain/helpers.mk                                   | 8 ++++++++
- toolchain/toolchain-external/pkg-toolchain-external.mk | 2 +-
- 2 files changed, 9 insertions(+), 1 deletion(-)
+ Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 03355f56dd..86d945a5b1 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -433,6 +433,7 @@ check_unusable_toolchain = \
- # Check if the toolchain has SSP (stack smashing protector) support
- #
- # $1: cross-gcc path
-+# $2: gcc ssp option
- #
- check_toolchain_ssp = \
- 	__CROSS_CC=$(strip $1) ; \
-@@ -445,6 +446,13 @@ check_toolchain_ssp = \
- 		echo "SSP support not available in this toolchain, please disable BR2_TOOLCHAIN_EXTERNAL_HAS_SSP" ; \
- 		exit 1 ; \
- 	fi ; \
-+	__SSP_OPTION=$(2); \
-+	if [ -n "$${__SSP_OPTION}" ] ; then \
-+		if ! echo 'void main(){}' | $${__CROSS_CC} -Werror $${__SSP_OPTION} -x c - -o $(BUILD_DIR)/.br-toolchain-test.tmp >/dev/null 2>&1 ; then \
-+			echo "SSP option $${__SSP_OPTION} not available in this toolchain, please select another SSP level" ; \
-+			exit 1 ; \
-+		fi; \
-+	fi; \
- 	rm -f $(BUILD_DIR)/.br-toolchain-test.tmp*
+diff --git a/Config.in b/Config.in
+index c611bb7dec..80f4eda705 100644
+--- a/Config.in
++++ b/Config.in
+@@ -746,14 +746,14 @@ config BR2_SSP_REGULAR
  
- #
-diff --git a/toolchain/toolchain-external/pkg-toolchain-external.mk b/toolchain/toolchain-external/pkg-toolchain-external.mk
-index 894e76ee32..c3ddff263f 100644
---- a/toolchain/toolchain-external/pkg-toolchain-external.mk
-+++ b/toolchain/toolchain-external/pkg-toolchain-external.mk
-@@ -556,7 +556,7 @@ define $(2)_CONFIGURE_CMDS
- 	else \
- 		$$(call check_glibc,$$$${SYSROOT_DIR}) ; \
- 	fi
--	$$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC))
-+	$$(Q)$$(call check_toolchain_ssp,$$(TOOLCHAIN_EXTERNAL_CC),$(BR2_SSP_OPTION))
- endef
+ config BR2_SSP_STRONG
+ 	bool "-fstack-protector-strong"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 	help
+ 	  Like -fstack-protector but includes additional functions to be
+ 	  protected - those that have local array definitions, or have
+ 	  references to local frame addresses.
  
- $(2)_TOOLCHAIN_WRAPPER_ARGS += $$(TOOLCHAIN_EXTERNAL_TOOLCHAIN_WRAPPER_ARGS)
+-comment "Stack Smashing Protection strong needs a toolchain w/ gcc >= 4.9"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++	  -fstack-protector-strong officially appeared in gcc 4.9, but
++	  some vendors have backported -fstack-protector-strong to older
++	  versions of gcc.
+ 
+ config BR2_SSP_ALL
+ 	bool "-fstack-protector-all"
