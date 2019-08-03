@@ -1,48 +1,51 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Date: Sat, 3 Aug 2019 12:57:45 +0200
-Subject: [Buildroot] [git commit] package/ecryptfs-utils: remove libnss gcc
- bug dependency
-Message-ID: <20190803105500.299D18122D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/boost: remove gcc bug 85180
+ dependency for boost-fiber option
+Message-ID: <20190803105500.4E23D8898A@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=862e47aec2ff8165c83d99f49639a1006be78ef2
+commit: https://git.buildroot.net/buildroot/commit/?id=eb8a7baa5090a6a0dff96d9bb2210c4760223877
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Package libnss had a BR2_TOOLCHAIN_HAS_GCC_BUG_85862 dependency and
-since ecryptfs-utils depends on libnss it does have this dependnecy as
-well.
-
-However, gcc bug 85862 has been worked around now in libnss by
-disabling optimization, so libnss no longer has this
-BR2_TOOLCHAIN_HAS_GCC_BUG_85862 dependency. We can therefore drop it
-from ecryptfs-utils as well.
+BR2_TOOLCHAIN_HAS_GCC_BUG_85180 dependency is already satisfied because
+BR2_PACKAGE_BOOST_FIBER depends on
+BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS that doesn't contain
+BR2_microblaze and BR2_TOOLCHAIN_HAS_GCC_BUG_85180 depends right on
+BR2_microblaze. So let's remove 'depends on
+BR2_TOOLCHAIN_HAS_GCC_BUG_85180'.
 
 Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ecryptfs-utils/Config.in | 4 ----
- 1 file changed, 4 deletions(-)
+ package/boost/Config.in | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
-index b589368a6a..68a659d33d 100644
---- a/package/ecryptfs-utils/Config.in
-+++ b/package/ecryptfs-utils/Config.in
-@@ -6,7 +6,6 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
- 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
- 	depends on !BR2_MIPS_NABI32 # libnss
- 	depends on !BR2_STATIC_LIBS # libnss, keyutils
--	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 # microblaze specific & GCC < 7.x
- 	select BR2_PACKAGE_KEYUTILS
- 	select BR2_PACKAGE_LIBNSS
- 	# runtime dependency only, some scripts are using the
-@@ -34,6 +33,3 @@ comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynami library"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
- 		BR2_STATIC_LIBS
--
--comment "ecryptfs needs a toolchain not affected by GCC bug 85862"
--	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862 # libnss
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 4e6bbff6df..392d7424fb 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -136,7 +136,6 @@ config BR2_PACKAGE_BOOST_FIBER
+ 	# since mips32r2/mips64r2.
+ 	depends on !BR2_MIPS_CPU_MIPS32 && !BR2_MIPS_CPU_MIPS64
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85180
+ 	select BR2_PACKAGE_BOOST_CONTEXT
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+@@ -147,9 +146,9 @@ comment "boost-fiber needs a toolchain w/ NPTL"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 
+-comment "boost-fiber needs a toolchain not affected by GCC bug 64735, 85180"
++comment "boost-fiber needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || BR2_TOOLCHAIN_HAS_GCC_BUG_85180
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 
+ config BR2_PACKAGE_BOOST_FILESYSTEM
+ 	bool "boost-filesystem"
