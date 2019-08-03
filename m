@@ -1,55 +1,53 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  3 Aug 2019 22:40:40 +0200
-Subject: [Buildroot] [PATCH 5/5] package/python-mwclient: bump version to
- 0.10.0
+Date: Sat,  3 Aug 2019 22:40:39 +0200
+Subject: [Buildroot] [PATCH 4/5] package/python-urllib3: bump version to
+ 1.25.3
 In-Reply-To: <20190803204040.341-1-bernd.kuhls@t-online.de>
 References: <20190803204040.341-1-bernd.kuhls@t-online.de>
-Message-ID: <20190803204040.341-5-bernd.kuhls@t-online.de>
+Message-ID: <20190803204040.341-4-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Switched license file to LICENSE.md.
+Updated license hash after upstream commit:
+https://github.com/urllib3/urllib3/commit/2a0957ea27e966166f81f88693af8e2f87d19fb6
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/python-mwclient/python-mwclient.hash | 6 +++---
- package/python-mwclient/python-mwclient.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-urllib3/python-urllib3.hash | 6 +++---
+ package/python-urllib3/python-urllib3.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-mwclient/python-mwclient.hash b/package/python-mwclient/python-mwclient.hash
-index fccfbcdcb6..a61dfd6963 100644
---- a/package/python-mwclient/python-mwclient.hash
-+++ b/package/python-mwclient/python-mwclient.hash
+diff --git a/package/python-urllib3/python-urllib3.hash b/package/python-urllib3/python-urllib3.hash
+index ec075cb4f6..e61f754aa3 100644
+--- a/package/python-urllib3/python-urllib3.hash
++++ b/package/python-urllib3/python-urllib3.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mwclient/json
--md5	994337c4153d86345f2dfdf74e53b546  mwclient-0.9.2.tar.gz
--sha256	60ed0b13fdef8cb2ce4dde79bc92dd729de093e86f188225b4bcd73e32d75282  mwclient-0.9.2.tar.gz
-+md5	c1b9f69d0eb71a031c1254b1ed16f678  mwclient-0.10.0.tar.gz
-+sha256	c3f1598a5f75fb80e9b8373f6574042208358aed81470fc2178a8ae7474069af  mwclient-0.10.0.tar.gz
- # Locally computed
--sha256	d29eaa80939b6d8fc3ab458bab90f4af879fa9e0430ed7e0fb2b94752e7eb33f  mwclient/__init__.py
-+sha256 0e713ce8e3e490bdc15ac1e59feba3009daef3fff10dd80d8baa6e5f9a294f32  LICENSE.md
-diff --git a/package/python-mwclient/python-mwclient.mk b/package/python-mwclient/python-mwclient.mk
-index 0e20dd6261..de66a42740 100644
---- a/package/python-mwclient/python-mwclient.mk
-+++ b/package/python-mwclient/python-mwclient.mk
-@@ -4,11 +4,11 @@
+ # md5, sha256 from https://pypi.org/pypi/urllib3/json
+-md5	20bb5a170a534bd0acd98bfc007fcc22  urllib3-1.24.2.tar.gz
+-sha256	9a247273df709c4fedb38c711e44292304f73f39ab01beda9f6b9fc375669ac3  urllib3-1.24.2.tar.gz
++md5	f09e95a5c42a7cc7ff7cb6a14c55fb69  urllib3-1.25.3.tar.gz
++sha256	dbe59173209418ae49d485b87d1681aefa36252ee85884c31346debd19463232  urllib3-1.25.3.tar.gz
+ # Locally computed sha256 checksums
+-sha256	11db569430ca5ad793f1399297b8df5041a22137abaf90642ea71da21d59121c  LICENSE.txt
++sha256	7c0d136ee0585389adf2d25671bb99687a1f75929f465b7f16ee3f01da37255e  LICENSE.txt
+diff --git a/package/python-urllib3/python-urllib3.mk b/package/python-urllib3/python-urllib3.mk
+index 893d32d976..5d8ec34f39 100644
+--- a/package/python-urllib3/python-urllib3.mk
++++ b/package/python-urllib3/python-urllib3.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MWCLIENT_VERSION = 0.9.2
-+PYTHON_MWCLIENT_VERSION = 0.10.0
- PYTHON_MWCLIENT_SOURCE = mwclient-$(PYTHON_MWCLIENT_VERSION).tar.gz
--PYTHON_MWCLIENT_SITE = https://files.pythonhosted.org/packages/f8/5a/9a5cf29e256c5720b9dc3b60586be6557e5f8bbf313d90bf75b0d967f0af
-+PYTHON_MWCLIENT_SITE = https://files.pythonhosted.org/packages/c1/ec/6206a7b3834572b3c1082f58dc960f4e49543395aa55955b598c29c9f8ad
- PYTHON_MWCLIENT_LICENSE = MIT
--PYTHON_MWCLIENT_LICENSE_FILES = mwclient/__init__.py
-+PYTHON_MWCLIENT_LICENSE_FILES = LICENSE.md
- PYTHON_MWCLIENT_SETUP_TYPE = setuptools
- 
- $(eval $(python-package))
+-PYTHON_URLLIB3_VERSION = 1.24.2
++PYTHON_URLLIB3_VERSION = 1.25.3
+ PYTHON_URLLIB3_SOURCE = urllib3-$(PYTHON_URLLIB3_VERSION).tar.gz
+-PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/fd/fa/b21f4f03176463a6cccdb612a5ff71b927e5224e83483012747c12fc5d62
++PYTHON_URLLIB3_SITE = https://files.pythonhosted.org/packages/4c/13/2386233f7ee40aa8444b47f7463338f3cbdf00c316627558784e3f542f07
+ PYTHON_URLLIB3_LICENSE = MIT
+ PYTHON_URLLIB3_LICENSE_FILES = LICENSE.txt
+ PYTHON_URLLIB3_SETUP_TYPE = setuptools
 -- 
 2.20.1
