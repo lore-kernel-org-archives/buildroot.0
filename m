@@ -1,119 +1,152 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 3 Aug 2019 18:48:09 +0200
-Subject: [Buildroot] [git commit] package/procps-ng: add init script for
- sysctl
-Message-ID: <20190803164527.892CD825E9@busybox.osuosl.org>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 3 Aug 2019 18:51:37 +0200
+Subject: [Buildroot] [git commit] package/bitcoin: new package
+Message-ID: <20190803164850.3FD4281838@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7ab7c6c6b2fe134d879335c99375e447e2d68b4b
+commit: https://git.buildroot.net/buildroot/commit/?id=656fc50b51c03891d34471fd39003355678f7fde
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add a simple init script that invokes sysctl early in the initialization
-process to configure kernel parameters. This is already performed by
-systemd (systemd-sysctl) but there is no sysvinit/busybox counterpart.
+Bitcoin Core is an open source project which maintains and releases
+Bitcoin client software called ???Bitcoin Core???.
 
-Files are read from directories in the following list in the given order
-from top to bottom:
-
-    /run/sysctl.d/*.conf
-    /etc/sysctl.d/*.conf
-    /usr/local/lib/sysctl.d/*.conf
-    /usr/lib/sysctl.d/*.conf
-    /lib/sysctl.d/*.conf
-    /etc/sysctl.conf
-
-Signed-off-by: Carlos Santos <unixmania@gmail.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Fabio Urquiza <fabiorush@gmail.com>
+[Thomas:
+ - Don't create a new blockchain applications sub-menu for now, put
+   this package in "Miscellaneous applications"
+ - Do not select BR2_INSTALL_LIBSTDCPP, use depends on instead, and
+   add the corresponding comment.
+ - Do not select BR2_TOOLCHAIN_BUILDROOT_USE_SSP. Instead pass
+   --disable-hardening, and let Buildroot pass the appropriate CFLAGS
+   when hardening features are enabled system-wide.
+ - Add missing BR2_TOOLCHAIN_HAS_ATOMIC dependency
+ - Add quirky !(BR2_arm || BR2_armeb) || BR2_USE_MMU because the
+   Cortex-M toolchains don't provide 8-byte __atomic intrinsics, but
+   we don't have a good way to express that today
+ - Add missing BR2_TOOLCHAIN_HAS_GCC_BUG_64735 due to the use of
+   std::future
+ - Use only one BITCOIN_CONF_OPTS assignment to pass all options]
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/procps-ng/S02sysctl    | 64 ++++++++++++++++++++++++++++++++++++++++++
- package/procps-ng/procps-ng.mk |  5 ++++
- 2 files changed, 69 insertions(+)
+ DEVELOPERS                   |  3 +++
+ package/Config.in            |  1 +
+ package/bitcoin/Config.in    | 45 ++++++++++++++++++++++++++++++++++++++++++++
+ package/bitcoin/bitcoin.hash |  3 +++
+ package/bitcoin/bitcoin.mk   | 19 +++++++++++++++++++
+ 5 files changed, 71 insertions(+)
 
-diff --git a/package/procps-ng/S02sysctl b/package/procps-ng/S02sysctl
-new file mode 100644
-index 0000000000..3a58578de4
---- /dev/null
-+++ b/package/procps-ng/S02sysctl
-@@ -0,0 +1,64 @@
-+#!/bin/sh
-+
-+PROGRAM="sysctl"
-+
-+SYSCTL_ARGS=""
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$PROGRAM" ] && . "/etc/default/$PROGRAM"
-+
-+# Files are read from directories in the SYSCTL_SOURCES list, in the given
-+# order. A file may be used more than once, since there can be multiple
-+# symlinks to it. No attempt is made to prevent this.
-+SYSCTL_SOURCES="/etc/sysctl.d/ /usr/local/lib/sysctl.d/ /usr/lib/sysctl.d/ /lib/sysctl.d/ /etc/sysctl.conf"
-+
-+# The "--system" option activates "--ignore", which is bad because invalid
-+# variable settings in the configuration files will not be reported on the
-+# system log. Use some scripting to mimic the --system behavior but still
-+# reporting errors. Users not interested on error report can put "-e" in
-+# SYSCTL_ARGS.
-+#
-+# The file redirections do the following:
-+#
-+# - stdout is redirected to syslog with facility.level "kern.info"
-+# - stderr is redirected to syslog with facility.level "kern.err"
-+# - file dscriptor 4 is used to pass the result to the "start" function.
-+#
-+run_program() {
-+	# shellcheck disable=SC2086 # we need the word splitting
-+	find $SYSCTL_SOURCES -maxdepth 1 -name '*.conf' -print0 2> /dev/null | \
-+	xargs -0 -r -n 1 readlink -f | {
-+		prog_status="OK"
-+		while :; do
-+			read -r file
-+			if [ -z "$file" ]; then
-+				echo "$prog_status" >&4
-+				break
-+			fi
-+			echo "* Applying $file ..."
-+			/sbin/sysctl -p "$file" $SYSCTL_ARGS || prog_status="FAIL"
-+		done 2>&1 >&3 | /usr/bin/logger -t sysctl -p kern.err
-+	} 3>&1 | /usr/bin/logger -t sysctl -p kern.info
-+}
-+
-+start() {
-+	printf '%s %s: ' "$1" "$PROGRAM"
-+	status=$(run_program 4>&1)
-+	echo "$status"
-+	if [ "$status" = "OK" ]; then
-+		return 0
-+	fi
-+	return 1
-+}
-+
-+case "$1" in
-+	start)
-+		start "Running";;
-+	restart|reload)
-+		start "Rerunning";;
-+	stop)
-+		:;;
-+	*)
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
-+esac
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index 03b74784d2..6a41e9b322 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -44,4 +44,9 @@ ifeq ($(BR2_STATIC_LIBS),y)
- PROCPS_NG_CONF_OPTS += --disable-numa
- endif
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c5175155be..5073541a97 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -774,6 +774,9 @@ F:	package/kmscube/
+ N:	Fabio Porcedda <fabio.porcedda@gmail.com>
+ F:	package/netsurf-buildsystem/
  
-+define PROCPS_NG_INSTALL_INIT_SYSV
-+	$(INSTALL) -D -m 755 package/procps-ng/S02sysctl \
-+		$(TARGET_DIR)/etc/init.d/S02sysctl
-+endef
++N:	Fabio Urquiza <fabiorush@gmail.com>
++F:	package/bitcoin/
 +
- $(eval $(autotools-package))
+ N:	Fabrice Fontaine <fabrice.fontaine@orange.com>
+ F:	package/domoticz/
+ F:	package/libmediaart/
+diff --git a/package/Config.in b/package/Config.in
+index 9c07ae5874..763616e70c 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1823,6 +1823,7 @@ endmenu
+ menu "Miscellaneous"
+ 	source "package/aespipe/Config.in"
+ 	source "package/bc/Config.in"
++	source "package/bitcoin/Config.in"
+ 	source "package/clamav/Config.in"
+ 	source "package/collectd/Config.in"
+ 	source "package/domoticz/Config.in"
+diff --git a/package/bitcoin/Config.in b/package/bitcoin/Config.in
+new file mode 100644
+index 0000000000..03e040d8f5
+--- /dev/null
++++ b/package/bitcoin/Config.in
+@@ -0,0 +1,45 @@
++config BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
++	bool
++	depends on BR2_TOOLCHAIN_HAS_ATOMIC
++	# bitcoin uses 8-byte __atomic intrinsics, which are not
++	# available on ARM noMMU platforms that we
++	# support. BR2_TOOLCHAIN_HAS_ATOMIC does not provide a
++	# size-level granularity to express this dependency.
++	depends on !(BR2_arm || BR2_armeb) || BR2_USE_MMU
++
++config BR2_PACKAGE_BITCOIN
++	bool "bitcoin"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
++	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
++	select BR2_PACKAGE_BOOST
++	select BR2_PACKAGE_BOOST_SYSTEM
++	select BR2_PACKAGE_BOOST_FILESYSTEM
++	select BR2_PACKAGE_BOOST_THREAD
++	select BR2_PACKAGE_BOOST_CHRONO
++	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
++	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_LIBEVENT
++	help
++	  Bitcoin Core is an open source project which maintains and
++	  releases Bitcoin client software called ???Bitcoin Core???.
++
++	  It is a direct descendant of the original Bitcoin software
++	  client released by Satoshi Nakamoto after he published the
++	  famous Bitcoin whitepaper.
++
++	  Bitcoin Core consists of both "full-node" software for fully
++	  validating the blockchain as well as a bitcoin wallet. The
++	  project also currently maintains related software such as
++	  the cryptography library libsecp256k1 and others located at
++	  GitHub.
++
++	  https://bitcoincore.org
++
++comment "bitcoin needs a toolchain w/ C++"
++	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
++	depends on !BR2_INSTALL_LIBSTDCPP
++
++comment "bitcoin needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_PACKAGE_BITCOIN_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/bitcoin/bitcoin.hash b/package/bitcoin/bitcoin.hash
+new file mode 100644
+index 0000000000..96edd22959
+--- /dev/null
++++ b/package/bitcoin/bitcoin.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256 c8557b6df5f5cdf67b3ddf6fe501cfc6e0be698f175f16927dd08d6040df7d9f  bitcoin-v0.16.3.tar.gz
++sha256 70223369f70e8cb550e75aa74eb86bfa5220fb09c0ba0549d91c36587d15d1a0  COPYING
+diff --git a/package/bitcoin/bitcoin.mk b/package/bitcoin/bitcoin.mk
+new file mode 100644
+index 0000000000..78170abcc7
+--- /dev/null
++++ b/package/bitcoin/bitcoin.mk
+@@ -0,0 +1,19 @@
++################################################################################
++#
++# bitcoin
++#
++################################################################################
++
++BITCOIN_VERSION = v0.16.3
++BITCOIN_SITE = $(call github,bitcoin,bitcoin,$(BITCOIN_VERSION))
++BITCOIN_AUTORECONF = YES
++BITCOIN_LICENSE = MIT
++BITCOIN_LICENSE_FILES = COPYING
++BITCOIN_DEPENDENCIES = boost openssl libevent
++BITCOIN_CONF_OPTS = \
++	--disable-wallet \
++	--disable-tests \
++	--with-boost-libdir=$(STAGING_DIR)/usr/lib/ \
++	--disable-hardening
++
++$(eval $(autotools-package))
