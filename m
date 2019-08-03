@@ -1,59 +1,114 @@
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  3 Aug 2019 09:38:20 +0200
-Subject: [Buildroot] [PATCH 1/1] package/gsettings-desktop-schemas: bump to
- version 3.33.1
-Message-ID: <20190803073820.9600-1-fontaine.fabrice@gmail.com>
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+Date: Sat,  3 Aug 2019 10:09:11 +0200
+Subject: [Buildroot] [PATCHv2] sgp30: New kernel module package
+Message-ID: <20190803080911.26062-1-yann.morin.1998@free.fr>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Switch to meson-package
-- Disable introspection (enabled by default)
-- Drop host-intltool (not needed anymore with meson)
-- Add hash for license file
+From: David De Grave <david@ledav.net>
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Kernel module for the Sensirion sgp30 / sgpc2 chemical sensors.
+
+Signed-off-by: David De Grave <david@ledav.net>
+[yann.morin.1998 at free.fr:
+  - fix coding style after check-package
+  - enable required linux options
+]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+
 ---
- .../gsettings-desktop-schemas.hash                       | 7 +++++--
- .../gsettings-desktop-schemas.mk                         | 9 +++++----
- 2 files changed, 10 insertions(+), 6 deletions(-)
+Changes v1 -> v2 (Yann):
+  - fix coding style with check-package
+  - enable the required linux options
+---
+ linux/linux.mk           |  3 +++
+ package/Config.in        |  1 +
+ package/sgp30/Config.in  | 13 +++++++++++++
+ package/sgp30/sgp30.hash |  1 +
+ package/sgp30/sgp30.mk   | 18 ++++++++++++++++++
+ 5 files changed, 36 insertions(+)
+ create mode 100644 package/sgp30/Config.in
+ create mode 100644 package/sgp30/sgp30.hash
+ create mode 100644 package/sgp30/sgp30.mk
 
-diff --git a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
-index 05ec7a418f..c37b7377de 100644
---- a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
-+++ b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.hash
-@@ -1,2 +1,5 @@
--# From http://ftp.acc.umu.se/pub/gnome/sources/gsettings-desktop-schemas/3.22/gsettings-desktop-schemas-3.22.0.sha256sum
--sha256	0f06c7ba34c3a99e4d58b10889496133c9aaad6698ea2d8405d481c7f1a7eae1	gsettings-desktop-schemas-3.22.0.tar.xz
-+# From http://ftp.acc.umu.se/pub/gnome/sources/gsettings-desktop-schemas/3.33/gsettings-desktop-schemas-3.33.1.sha256sum
-+sha256	bd337f13955856140fdbd3073c56d4adca20333f8bdac41e429c3dca4730cdff	gsettings-desktop-schemas-3.33.1.tar.xz
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 29d2f0ee69..a5f2e3ff7b 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -385,6 +385,9 @@ define LINUX_KCONFIG_FIXUP_CMDS
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_ARM_APPENDED_DTB,$(@D)/.config))
+ 	$(if $(BR2_PACKAGE_KERNEL_MODULE_IMX_GPU_VIV),
+ 		$(call KCONFIG_DISABLE_OPT,CONFIG_MXC_GPU_VIV,$(@D)/.config))
++	$(if $(BR2_PACKAGE_SGP30),
++		$(call KCONFIG_ENABLE_OPT,CONFIG_CRC8,$(@D)/.config)
++		$(call KCONFIG_ENABLE_OPT,CONFIG_IIO,$(@D)/.config))
+ 	$(if $(LINUX_KERNEL_CUSTOM_LOGO_PATH),
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_FB,$(@D)/.config)
+ 		$(call KCONFIG_ENABLE_OPT,CONFIG_LOGO,$(@D)/.config)
+diff --git a/package/Config.in b/package/Config.in
+index b7472b9bea..dae713aa57 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -518,6 +518,7 @@ endmenu
+ 	source "package/sedutil/Config.in"
+ 	source "package/setserial/Config.in"
+ 	source "package/sg3_utils/Config.in"
++	source "package/sgp30/Config.in"
+ 	source "package/sigrok-cli/Config.in"
+ 	source "package/sispmctl/Config.in"
+ 	source "package/smartmontools/Config.in"
+diff --git a/package/sgp30/Config.in b/package/sgp30/Config.in
+new file mode 100644
+index 0000000000..8703e7d240
+--- /dev/null
++++ b/package/sgp30/Config.in
+@@ -0,0 +1,13 @@
++config BR2_PACKAGE_SGP30
++	bool "sgp30"
++	depends on BR2_LINUX_KERNEL
++	help
++	  I2C interface support for the following
++	  Sensirion SGP multi-pixel gas sensors:
++	    * SGP30 gas sensor
++	    * SGPC3 low power gas sensor
 +
-+# Hash for license file
-+sha256	dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551	COPYING
-diff --git a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
-index 420ceda819..98d16745b2 100644
---- a/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
-+++ b/package/gsettings-desktop-schemas/gsettings-desktop-schemas.mk
-@@ -4,13 +4,14 @@
- #
- ################################################################################
- 
--GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR = 3.22
--GSETTINGS_DESKTOP_SCHEMAS_VERSION = $(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR).0
-+GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR = 3.33
-+GSETTINGS_DESKTOP_SCHEMAS_VERSION = $(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR).1
- GSETTINGS_DESKTOP_SCHEMAS_SOURCE = gsettings-desktop-schemas-$(GSETTINGS_DESKTOP_SCHEMAS_VERSION).tar.xz
- GSETTINGS_DESKTOP_SCHEMAS_SITE = http://ftp.gnome.org/pub/gnome/sources/gsettings-desktop-schemas/$(GSETTINGS_DESKTOP_SCHEMAS_VERSION_MAJOR)
- GSETTINGS_DESKTOP_SCHEMAS_INSTALL_STAGING = YES
--GSETTINGS_DESKTOP_SCHEMAS_DEPENDENCIES = host-intltool host-pkgconf libglib2
-+GSETTINGS_DESKTOP_SCHEMAS_DEPENDENCIES = host-pkgconf libglib2
- GSETTINGS_DESKTOP_SCHEMAS_LICENSE = LGPL-2.1+
- GSETTINGS_DESKTOP_SCHEMAS_LICENSE_FILES = COPYING
-+GSETTINGS_DESKTOP_SCHEMAS_CONF_OPTS = -Dintrospection=false
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
++	  This module will be called sgp30.
++
++comment "sgp30/sgpc3 needs a Linux kernel to be built"
++	depends on !BR2_LINUX_KERNEL
+diff --git a/package/sgp30/sgp30.hash b/package/sgp30/sgp30.hash
+new file mode 100644
+index 0000000000..61fda409ed
+--- /dev/null
++++ b/package/sgp30/sgp30.hash
+@@ -0,0 +1 @@
++sha256 f8d619046589eee93dbce091be5dc3059a2e37513e50b3c61eada9c3b6fc7c0f  Sensirion_Gas_Sensors_SGP30_Linux_Driver.zip
+diff --git a/package/sgp30/sgp30.mk b/package/sgp30/sgp30.mk
+new file mode 100644
+index 0000000000..0d58ab6e01
+--- /dev/null
++++ b/package/sgp30/sgp30.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# sgp30
++#
++################################################################################
++
++SGP30_SOURCE = Sensirion_Gas_Sensors_SGP30_Linux_Driver.zip
++SGP30_SITE = https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/13_Sample_Codes_Software/Gas_Sensors
++SGP30_LICENSE = GPL-2.0+
++SGP30_LICENSE_FILE = LICENSE
++SGP30_MODULE_SUBDIRS = sgp30
++
++define SGP30_EXTRACT_CMDS
++	$(UNZIP) -d $(@D) $(SGP30_DL_DIR)/$(SGP30_SOURCE)
++endef
++
++$(eval $(kernel-module))
++$(eval $(generic-package))
 -- 
 2.20.1
