@@ -1,23 +1,22 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Aug 2019 07:48:37 +0200
-Subject: [Buildroot] [git commit] configs/radxa_rock_pi4: new defconfig
-Message-ID: <20190803054931.7936D8898A@busybox.osuosl.org>
+Date: Sat, 3 Aug 2019 07:51:30 +0200
+Subject: [Buildroot] [git commit] configs/pine64_rockpro64: new defconfig
+Message-ID: <20190803054931.8739E82AFA@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a480976d1634ebf4b94e3e455a78e6dc662306b9
+commit: https://git.buildroot.net/buildroot/commit/?id=59e1077b4ebe79622a454b0a8a840e4349a0440d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 This initial support includes:
-        Linux 5.1
-        Custom U-Boot
-        Arm Trusted Firmware v2.0
-        Buildroot default packages
+            Linux 5.1
+            Custom U-Boot
+            Arm Trusted Firmware v2.0
+            Buildroot default packages
 
-Tested-by: Akash Gajjar <akash@openedev.com>
 Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
 [Thomas:
  - Use the headers from the kernel, by using
@@ -25,56 +24,56 @@ Signed-off-by: Shyam Saini <shyam.saini@amarulasolutions.com>
  - Use the default ext2 rootfs size]
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .gitlab-ci.yml                     |  1 +
- DEVELOPERS                         |  2 ++
- board/radxa/rock-pi4/extlinux.conf |  4 +++
- board/radxa/rock-pi4/genimage.cfg  | 22 ++++++++++++++++
- board/radxa/rock-pi4/post-build.sh |  9 +++++++
- board/radxa/rock-pi4/readme.txt    | 51 +++++++++++++++++++++++++++++++++++
- configs/radxa_rock_pi4_defconfig   | 54 ++++++++++++++++++++++++++++++++++++++
+ .gitlab-ci.yml                       |  1 +
+ DEVELOPERS                           |  2 ++
+ board/pine64/rockpro64/extlinux.conf |  4 +++
+ board/pine64/rockpro64/genimage.cfg  | 22 +++++++++++++++
+ board/pine64/rockpro64/post-build.sh |  9 ++++++
+ board/pine64/rockpro64/readme.txt    | 51 ++++++++++++++++++++++++++++++++++
+ configs/pine64_rockpro64_defconfig   | 54 ++++++++++++++++++++++++++++++++++++
  7 files changed, 143 insertions(+)
 
 diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index 067a2ad73e..2fdb906ff6 100644
+index 2fdb906ff6..770c72a37d 100644
 --- a/.gitlab-ci.yml
 +++ b/.gitlab-ci.yml
-@@ -286,6 +286,7 @@ qemu_x86_64_defconfig: { extends: .defconfig }
- qemu_x86_defconfig: { extends: .defconfig }
- qemu_xtensa_lx60_defconfig: { extends: .defconfig }
- qemu_xtensa_lx60_nommu_defconfig: { extends: .defconfig }
-+radxa_rock_pi4_defconfig: { extends: .defconfig }
- raspberrypi0_defconfig: { extends: .defconfig }
- raspberrypi0w_defconfig: { extends: .defconfig }
- raspberrypi2_defconfig: { extends: .defconfig }
+@@ -246,6 +246,7 @@ pandaboard_defconfig: { extends: .defconfig }
+ pc_x86_64_bios_defconfig: { extends: .defconfig }
+ pc_x86_64_efi_defconfig: { extends: .defconfig }
+ pine64_defconfig: { extends: .defconfig }
++pine64_rockpro64_defconfig: { extends: .defconfig }
+ pine64_sopine_defconfig: { extends: .defconfig }
+ qemu_aarch64_virt_defconfig: { extends: .defconfig }
+ qemu_arm_versatile_defconfig: { extends: .defconfig }
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 8941882fc2..e5d27925f1 100644
+index e5d27925f1..593c47b498 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -2065,7 +2065,9 @@ F:	package/wolfssl/
- 
+@@ -2066,7 +2066,9 @@ F:	package/wolfssl/
  N:	Shyam Saini <shyam.saini@amarulasolutions.com>
  F:	board/friendlyarm/nanopi-neo4/
-+F:	board/radxa/rock-pi4/
+ F:	board/radxa/rock-pi4/
++F:	board/pine64/rockpro64/
  F:	configs/nanopi_neo4_defconfig
-+F:	configs/radxa_rock_pi4_defconfig
++F:	configs/pine64_rockpro64_defconfig
+ F:	configs/radxa_rock_pi4_defconfig
  
  N:	Simon Dawson <spdawson@gmail.com>
- F:	boot/at91bootstrap3/
-diff --git a/board/radxa/rock-pi4/extlinux.conf b/board/radxa/rock-pi4/extlinux.conf
+diff --git a/board/pine64/rockpro64/extlinux.conf b/board/pine64/rockpro64/extlinux.conf
 new file mode 100644
-index 0000000000..f939cf5c56
+index 0000000000..ff196499b0
 --- /dev/null
-+++ b/board/radxa/rock-pi4/extlinux.conf
++++ b/board/pine64/rockpro64/extlinux.conf
 @@ -0,0 +1,4 @@
-+label Radxa Rock pi4 linux
++label RockPro64 linux
 +  kernel /boot/Image
-+  devicetree /boot/rk3399-rock-pi-4.dtb
++  devicetree /boot/rk3399-rockpro64.dtb
 +  append earlycon=uart8250,mmio32,0xff1a0000 root=/dev/mmcblk0p1 rootwait
-diff --git a/board/radxa/rock-pi4/genimage.cfg b/board/radxa/rock-pi4/genimage.cfg
+diff --git a/board/pine64/rockpro64/genimage.cfg b/board/pine64/rockpro64/genimage.cfg
 new file mode 100644
 index 0000000000..b8c1cd5220
 --- /dev/null
-+++ b/board/radxa/rock-pi4/genimage.cfg
++++ b/board/pine64/rockpro64/genimage.cfg
 @@ -0,0 +1,22 @@
 +image sdcard.img {
 +	hdimage {
@@ -98,11 +97,11 @@ index 0000000000..b8c1cd5220
 +		image = "rootfs.ext4"
 +	}
 +}
-diff --git a/board/radxa/rock-pi4/post-build.sh b/board/radxa/rock-pi4/post-build.sh
+diff --git a/board/pine64/rockpro64/post-build.sh b/board/pine64/rockpro64/post-build.sh
 new file mode 100755
 index 0000000000..e852ba6adf
 --- /dev/null
-+++ b/board/radxa/rock-pi4/post-build.sh
++++ b/board/pine64/rockpro64/post-build.sh
 @@ -0,0 +1,9 @@
 +#!/bin/sh
 +
@@ -113,25 +112,25 @@ index 0000000000..e852ba6adf
 +cat $BINARIES_DIR/u-boot-tpl-dtb.img $BINARIES_DIR/u-boot-spl-dtb.bin > $BINARIES_DIR/u-boot-tpl-spl-dtb.img
 +
 +install -m 0644 -D $BOARD_DIR/extlinux.conf $TARGET_DIR/boot/extlinux/extlinux.conf
-diff --git a/board/radxa/rock-pi4/readme.txt b/board/radxa/rock-pi4/readme.txt
+diff --git a/board/pine64/rockpro64/readme.txt b/board/pine64/rockpro64/readme.txt
 new file mode 100644
-index 0000000000..a6c8f10e3c
+index 0000000000..2fa8be362f
 --- /dev/null
-+++ b/board/radxa/rock-pi4/readme.txt
++++ b/board/pine64/rockpro64/readme.txt
 @@ -0,0 +1,51 @@
 +Intro
 +=====
 +
-+Radxa Rock Pi4 is a RK3399 SoC based ARM64 board.
++Pine64 RockPro64 is a RK3399 SoC based ARM64 board.
 +
-+Wiki: https://wiki.radxa.com/Rockpi4
++Wiki: https://wiki.pine64.org/index.php/ROCKPro64_Main_Page
 +
 +Build
 +=====
 +
-+Run Rock Pi 4 configuration
++Run Pine64 RockPro64 configuration
 +
-+  $ make radxa_rock_pi4_defconfig
++  $ make pine64_rockpro64_defconfig
 +
 +To build, run make comamnd.
 +
@@ -145,7 +144,7 @@ index 0000000000..a6c8f10e3c
 +????????? bl31.bin
 +????????? bl31.elf
 +????????? Image
-+????????? rk3399-rock-pi-4.dtb
++????????? rk3399-rockpro64.dtb
 +????????? rootfs.ext2
 +????????? rootfs.ext4 -> rootfs.ext2
 +????????? rootfs.tar
@@ -170,11 +169,11 @@ index 0000000000..a6c8f10e3c
 +--------------
 +
 +Baudrate for this board is 1500000
-diff --git a/configs/radxa_rock_pi4_defconfig b/configs/radxa_rock_pi4_defconfig
+diff --git a/configs/pine64_rockpro64_defconfig b/configs/pine64_rockpro64_defconfig
 new file mode 100644
-index 0000000000..99841b5511
+index 0000000000..7b52712560
 --- /dev/null
-+++ b/configs/radxa_rock_pi4_defconfig
++++ b/configs/pine64_rockpro64_defconfig
 @@ -0,0 +1,54 @@
 +# Architecture
 +BR2_aarch64=y
@@ -197,7 +196,7 @@ index 0000000000..99841b5511
 +BR2_TARGET_UBOOT_CUSTOM_GIT=y
 +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/amarula/u-boot-amarula.git"
 +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="dd2b180c457d35de195707dfa0b57a83b97fb275"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock-pi-4-rk3399"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rockpro64-rk3399"
 +BR2_TARGET_UBOOT_NEEDS_DTC=y
 +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
 +BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
@@ -214,13 +213,13 @@ index 0000000000..99841b5511
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.1"
 +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
 +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-rock-pi-4"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="rockchip/rk3399-rockpro64"
 +BR2_LINUX_KERNEL_INSTALL_TARGET=y
 +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
 +
 +# Filesystem
-+BR2_TARGET_GENERIC_HOSTNAME="Rock Pi4"
-+BR2_TARGET_GENERIC_ISSUE="Welcome to Rock Pi4!"
++BR2_TARGET_GENERIC_HOSTNAME="RockPro 64"
++BR2_TARGET_GENERIC_ISSUE="Welcome to RockPro64!"
 +BR2_TARGET_ROOTFS_EXT2=y
 +BR2_TARGET_ROOTFS_EXT2_4=y
 +BR2_PACKAGE_HOST_DOSFSTOOLS=y
@@ -228,5 +227,5 @@ index 0000000000..99841b5511
 +BR2_PACKAGE_HOST_MTOOLS=y
 +BR2_PACKAGE_HOST_UBOOT_TOOLS=y
 +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rock-pi4/genimage.cfg"
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/radxa/rock-pi4/post-build.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pine64/rockpro64/genimage.cfg"
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/pine64/rockpro64/post-build.sh"
