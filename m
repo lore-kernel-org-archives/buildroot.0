@@ -1,29 +1,48 @@
-From: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
-Date: Sat, 3 Aug 2019 10:48:06 +0000
-Subject: [Buildroot] [PATCH 4/5] package/python-numpy: disable numpy if
- fenv.h is not provided by libc
-In-Reply-To: <46a14660-516e-46e4-3ecf-5f43b422a5d8@mind.be>
-References: <20190801210920.31338-1-romain.naour@smile.fr>
- <20190801210920.31338-4-romain.naour@smile.fr>
- <46a14660-516e-46e4-3ecf-5f43b422a5d8@mind.be>
-Message-ID: <CY4PR1201MB01208D2F8FAD71EE9FDA8754A1D80@CY4PR1201MB0120.namprd12.prod.outlook.com>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 3 Aug 2019 12:57:45 +0200
+Subject: [Buildroot] [git commit] package/ecryptfs-utils: remove libnss gcc
+ bug dependency
+Message-ID: <20190803105500.299D18122D@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hi Arnout,
+commit: https://git.buildroot.net/buildroot/commit/?id=862e47aec2ff8165c83d99f49639a1006be78ef2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->  Since Alexey indicated that this is not needed any longer, I removed that part
-> and applied to master, thanks.
-> 
->  Alexey, could you do a runtime test (based on the one submitted by Romain) for
-> ARC to be sure? You'll need a qemu for ARC for that, obviously, which is why I'm
-> asking you instead of doing it myself :-)
+Package libnss had a BR2_TOOLCHAIN_HAS_GCC_BUG_85862 dependency and
+since ecryptfs-utils depends on libnss it does have this dependnecy as
+well.
 
-Any hint on why QEMU is in the question?
-I.e. is there any framework or test-suite that require QEMU?
-What about real boards, proprietary simulators?
+However, gcc bug 85862 has been worked around now in libnss by
+disabling optimization, so libnss no longer has this
+BR2_TOOLCHAIN_HAS_GCC_BUG_85862 dependency. We can therefore drop it
+from ecryptfs-utils as well.
 
--Alexey
+Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ecryptfs-utils/Config.in | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/package/ecryptfs-utils/Config.in b/package/ecryptfs-utils/Config.in
+index b589368a6a..68a659d33d 100644
+--- a/package/ecryptfs-utils/Config.in
++++ b/package/ecryptfs-utils/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_ECRYPTFS_UTILS
+ 	depends on BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT # libnss -> libnspr
+ 	depends on !BR2_MIPS_NABI32 # libnss
+ 	depends on !BR2_STATIC_LIBS # libnss, keyutils
+-	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_85862 # microblaze specific & GCC < 7.x
+ 	select BR2_PACKAGE_KEYUTILS
+ 	select BR2_PACKAGE_LIBNSS
+ 	# runtime dependency only, some scripts are using the
+@@ -34,6 +33,3 @@ comment "ecryptfs-utils needs a toolchain w/ threads, wchar, dynami library"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
+ 		BR2_STATIC_LIBS
+-
+-comment "ecryptfs needs a toolchain not affected by GCC bug 85862"
+-	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_85862 # libnss
