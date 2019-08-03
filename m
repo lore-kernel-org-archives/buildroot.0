@@ -1,154 +1,172 @@
 From: Peter Korsgaard <peter@korsgaard.com>
 Date: Sat, 3 Aug 2019 11:06:44 +0200
-Subject: [Buildroot] [git commit] board/raspberrypi: add support for the new
- pi4
-Message-ID: <20190803090406.303BE81052@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sshguard: new package
+Message-ID: <20190803090406.53C4C83D20@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa1ce849f3061fab282aa78ebff3cc30abb08f4f
+commit: https://git.buildroot.net/buildroot/commit/?id=d335e44d91a18be877f1036802f1bb9bd5bb256d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This is based on the pi3 defconfig. There is currently no 64-bit support
-since the upstream kernel does not build in this configuration.
+sshguard protects hosts from brute-force attacks against SSH and other
+services.
 
-Signed-off-by: Michael Cullen <michael@michaelcullen.name>
+Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+[Peter: cleanup, start init script at S49, correct license, select iptables]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/raspberrypi/genimage-raspberrypi4.cfg | 30 +++++++++++++++++++++++
- board/raspberrypi/readme.txt                |  8 +++++-
- board/raspberrypi4                          |  1 +
- configs/raspberrypi4_defconfig              | 38 +++++++++++++++++++++++++++++
- 4 files changed, 76 insertions(+), 1 deletion(-)
+ DEVELOPERS                     |  1 +
+ package/Config.in              |  1 +
+ package/sshguard/Config.in     | 10 +++++++++
+ package/sshguard/S49sshguard   | 49 ++++++++++++++++++++++++++++++++++++++++++
+ package/sshguard/sshguard.hash |  4 ++++
+ package/sshguard/sshguard.mk   | 33 ++++++++++++++++++++++++++++
+ 6 files changed, 98 insertions(+)
 
-diff --git a/board/raspberrypi/genimage-raspberrypi4.cfg b/board/raspberrypi/genimage-raspberrypi4.cfg
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 02d0815ecf..4338d6ec84 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -177,6 +177,7 @@ F:	package/python-can/
+ F:	package/python-pillow/
+ F:	package/python-pydal/
+ F:	package/python-web2py/
++F:	package/sshguard/
+ F:	package/sysdig/
+ 
+ N:	Anisse Astier <anisse@astier.eu>
+diff --git a/package/Config.in b/package/Config.in
+index 35e71e3185..a7c4c53165 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2055,6 +2055,7 @@ endif
+ 	source "package/spice/Config.in"
+ 	source "package/spice-protocol/Config.in"
+ 	source "package/squid/Config.in"
++	source "package/sshguard/Config.in"
+ 	source "package/sshpass/Config.in"
+ 	source "package/sslh/Config.in"
+ 	source "package/strongswan/Config.in"
+diff --git a/package/sshguard/Config.in b/package/sshguard/Config.in
 new file mode 100644
-index 0000000000..4e4742f3ef
+index 0000000000..e834f17f41
 --- /dev/null
-+++ b/board/raspberrypi/genimage-raspberrypi4.cfg
-@@ -0,0 +1,30 @@
-+image boot.vfat {
-+  vfat {
-+    files = {
-+      "bcm2711-rpi-4-b.dtb",
-+      "rpi-firmware/cmdline.txt",
-+      "rpi-firmware/config.txt",
-+      "rpi-firmware/fixup4.dat",
-+      "rpi-firmware/start4.elf",
-+      "rpi-firmware/overlays",
-+      "zImage"
-+    }
-+  }
-+  size = 32M
++++ b/package/sshguard/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_SSHGUARD
++	bool "sshguard"
++	select BR2_PACKAGE_IPTABLES # runtime
++	help
++	  sshguard protects hosts from brute-force attacks against SSH
++	  and other services. It aggregates system logs and blocks
++	  repeat offenders using one of several firewall backends,
++	  including iptables, ipfw, and pf.
++
++	  https://www.sshguard.net
+diff --git a/package/sshguard/S49sshguard b/package/sshguard/S49sshguard
+new file mode 100644
+index 0000000000..94776415a5
+--- /dev/null
++++ b/package/sshguard/S49sshguard
+@@ -0,0 +1,49 @@
++#!/bin/sh
++
++DAEMON="sshguard"
++PIDFILE="/var/run/$DAEMON.pid"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	iptables -L sshguard > /dev/null 2>&1 || \
++	    (iptables -N sshguard && iptables -A INPUT -j sshguard)
++	start-stop-daemon -S -q -b -p /run/sshguard.pid \
++		-x /usr/sbin/sshguard -- -i /run/sshguard.pid
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
 +}
 +
-+image sdcard.img {
-+  hdimage {
-+  }
-+
-+  partition boot {
-+    partition-type = 0xC
-+    bootable = "true"
-+    image = "boot.vfat"
-+  }
-+
-+  partition rootfs {
-+    partition-type = 0x83
-+    image = "rootfs.ext4"
-+  }
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
 +}
-diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 9f91581054..69c9f9b20a 100644
---- a/board/raspberrypi/readme.txt
-+++ b/board/raspberrypi/readme.txt
-@@ -8,6 +8,7 @@ These instructions apply to all models of the Raspberry Pi:
-   - the "enhanced" models A+ and B+,
-   - the model B2 (aka Raspberry Pi 2)
-   - the model B3 (aka Raspberry Pi 3).
-+  - the model B4 (aka Raspberry Pi 4).
- 
- How to build it
- ===============
-@@ -34,6 +35,10 @@ For model 3 B and B+:
- 
-   $ make raspberrypi3_defconfig
- 
-+For model 4 B:
 +
-+  $ make raspberrypi4_defconfig
++restart() {
++	stop
++	sleep 1
++	start
++}
 +
- Build the rootfs
- ----------------
- 
-@@ -57,6 +62,7 @@ After building, you should obtain this tree:
-     +-- bcm2709-rpi-2-b.dtb         [1]
-     +-- bcm2710-rpi-3-b.dtb         [1]
-     +-- bcm2710-rpi-3-b-plus.dtb    [1]
-+    +-- bcm2711-rpi-4-b.dtb         [1]
-     +-- boot.vfat
-     +-- rootfs.ext4
-     +-- rpi-firmware/
-@@ -72,7 +78,7 @@ After building, you should obtain this tree:
- [1] Not all of them will be present, depending on the RaspberryPi
-     model you are using.
- 
--[2] Only for the Raspberry Pi 3 Model (overlay pi3-miniuart-bt is needed
-+[2] Only for the Raspberry Pi 3/4 Models (overlay pi3-miniuart-bt is needed
-     to enable the RPi3 serial console otherwise occupied by the bluetooth
-     chip). Alternative would be to disable the serial console in cmdline.txt
-     and /etc/inittab.
-diff --git a/board/raspberrypi4 b/board/raspberrypi4
-new file mode 120000
-index 0000000000..fcdafc81ed
---- /dev/null
-+++ b/board/raspberrypi4
-@@ -0,0 +1 @@
-+raspberrypi
-\ No newline at end of file
-diff --git a/configs/raspberrypi4_defconfig b/configs/raspberrypi4_defconfig
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/sshguard/sshguard.hash b/package/sshguard/sshguard.hash
 new file mode 100644
-index 0000000000..a15a729e73
+index 0000000000..beb77a4d62
 --- /dev/null
-+++ b/configs/raspberrypi4_defconfig
-@@ -0,0 +1,38 @@
-+BR2_arm=y
-+BR2_cortex_a72=y
-+BR2_ARM_FPU_NEON_VFPV4=y
++++ b/package/sshguard/sshguard.hash
+@@ -0,0 +1,4 @@
++# sha256 from https://sourceforge.net/projects/sshguard/files/sshguard/2.4.0/sshguard-2.4.0.sha256
++sha256  065ca4091b3a96802714b560dbbc3d9f0e67574e99e2b6e8857aa1027d17d6c0  sshguard-2.4.0.tar.gz
++# Locally calculated
++sha256  c3ae64f12153a1bc55bc234d09f40a08ab0e0149fffc972c0b7f02d5a12c1a5c  COPYING
+diff --git a/package/sshguard/sshguard.mk b/package/sshguard/sshguard.mk
+new file mode 100644
+index 0000000000..0f39974d46
+--- /dev/null
++++ b/package/sshguard/sshguard.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# sshguard
++#
++################################################################################
 +
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
++SSHGUARD_VERSION = 2.4.0
++SSHGUARD_SITE = https://sourceforge.net/projects/sshguard/files/sshguard/$(SSHGUARD_VERSION)
++SSHGUARD_LICENSE = ISC, Public Domain (fnv hash), BSD-3-Clause (SimCList)
++SSHGUARD_LICENSE_FILES = COPYING
 +
-+BR2_SYSTEM_DHCP="eth0"
++define SSHGUARD_INSTALL_CONFIG
++	$(INSTALL) -D -m 0644 $(@D)/examples/sshguard.conf.sample \
++		$(TARGET_DIR)/etc/sshguard.conf
++	$(SED) '/^#BACKEND/c\BACKEND="/usr/libexec/sshg-fw-iptables"' \
++		-e '/^#FILES/c\FILES="/var/log/messages"' $(TARGET_DIR)/etc/sshguard.conf
++endef
++SSHGUARD_POST_INSTALL_TARGET_HOOKS += SSHGUARD_INSTALL_CONFIG
 +
-+# Linux headers same as kernel, a 4.19 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_19=y
++define SSHGUARD_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 755 package/sshguard/S49sshguard \
++		$(TARGET_DIR)/etc/init.d/S49sshguard
++endef
 +
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,raspberrypi,linux,eb0360356344d8ba633e61936c794aa46a02397f)/linux-eb0360356344d8ba633e61936c794aa46a02397f.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="bcm2711"
++define SSHGUARD_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 $(@D)/examples/sshguard.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/sshguard.service
++	mkdir -p $(TARGET_DIR)/etc/systemd/system/multi-user.target.wants
++	ln -fs ../../../../usr/lib/systemd/system/sshguard.service \
++		$(TARGET_DIR)/etc/systemd/system/multi-user.target.wants/sshguard.service
++endef
 +
-+# Build the DTB from the kernel sources
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="bcm2711-rpi-4-b"
-+
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+
-+BR2_PACKAGE_RPI_FIRMWARE=y
-+BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4=y
-+
-+# Required tools to create the SD image
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+
-+# Filesystem / image
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/raspberrypi4/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/raspberrypi4/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="--add-pi3-miniuart-bt-overlay"
++$(eval $(autotools-package))
