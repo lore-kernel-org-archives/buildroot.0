@@ -1,13 +1,11 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Aug 2019 23:02:54 +0200
-Subject: [Buildroot] [PATCH 1/1] package/bzip2: security bump version to
- 1.0.8
-In-Reply-To: <dh8h1gxvf.ln2@ID-313208.user.individual.net> (Bernd Kuhls's
- message of "Sat, 03 Aug 2019 22:48:13 +0200")
-References: <20190803195526.24827-1-bernd.kuhls@t-online.de>
- <878ssa7zwj.fsf@dell.be.48ers.dk>
- <dh8h1gxvf.ln2@ID-313208.user.individual.net>
-Message-ID: <87zhkq6jy9.fsf@dell.be.48ers.dk>
+Date: Sat, 03 Aug 2019 23:03:35 +0200
+Subject: [Buildroot] [PATCH v2 1/1] package/bzip2: security bump version
+ to 1.0.8
+In-Reply-To: <20190803204550.656-1-bernd.kuhls@t-online.de> (Bernd Kuhls's
+ message of "Sat, 3 Aug 2019 22:45:50 +0200")
+References: <20190803204550.656-1-bernd.kuhls@t-online.de>
+Message-ID: <87v9ve6jx4.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -16,47 +14,31 @@ To: buildroot@busybox.net
 
 >>>>> "Bernd" == Bernd Kuhls <bernd.kuhls@t-online.de> writes:
 
- > Am Sat, 03 Aug 2019 22:33:00 +0200 schrieb Peter Korsgaard:
- >> But we already have a fix for CVE-2019-12900 in
- >> 0003-Make-sure-nSelectors-is-not-out-of-range.patch. How come you are
- >> not removing it?
+ > Switched to new maintainer source:
+ > https://sourceware.org/ml/bzip2-devel/2019-q2/msg00022.html
 
- > Hi Peter,
+ > Version 1.0.7 fixes CVE-2016-3189 & CVE-2019-12900
 
- > because the patch did not fail to apply to 1.0.8 and does not contain any 
- > mention about being a CVE fix.
+ > Version 1.0.8 fixes the fix for CVE-2019-12900 from 1.0.7:
+ > https://sourceware.org/ml/bzip2-devel/2019-q3/msg00031.html
 
-The git history does, and the upstream git history of decompress.c shows
-that it should be removed.
+ > Rebased 0002-improve-build-system.patch.
 
-git log package/bzip2/0003-Make-sure-nSelectors-is-not-out-of-range.patch
-commit 6581c441dfc06c5e5e3666718e5c2e9801485ede
-Author: Jared Bents <jared.bents@rockwellcollins.com>
-Date:   Wed Jun 26 09:20:42 2019 -0500
+ > Removed 0003-Make-sure-nSelectors-is-not-out-of-range.patch, applied
+ > upstream:
+ > https://sourceware.org/git/?p=bzip2.git;a=commitdiff;h=7ed62bfb46e87a9e878712603469440e6882b184
+ > and reverted later on
+ > https://sourceware.org/git/?p=bzip2.git;a=commitdiff;h=b07b105d1b66e32760095e3602261738443b9e13
 
-    package/bzip2: add upstream security fix for CVE-2019-12900
+ > Added upstream sha512 hash and updated license hash after upstream
+ > commits:
+ > https://sourceware.org/git/?p=bzip2.git;a=history;f=LICENSE;h=81a37eab7a5be1a34456f38adb74928cc9073e9b;hb=HEAD
 
-    Patch to resolve cve-2019-12900 which affects bzip2 versions 1.0.6 and older
+ > Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+ > ---
+ > v2: removed 0003-Make-sure-nSelectors-is-not-out-of-range.patch (Peter)
 
-    More information can be found at
-    https://nvd.nist.gov/vuln/detail/CVE-2019-12900
-
-    Signed-off-by: Jared Bents <jared.bents@rockwellcollins.com>
-    Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-
-
-And the patch _IS_ the upstream git commit, as specified in the file:
-
-
-https://sourceware.org/git/?p=bzip2.git;a=commit;h=7ed62bfb46e87a9e878712603469440e6882b184
-
- > In fact this patch was reverted upstream for the 1.0.8 release:
- > https://sourceware.org/git/?
- > p=bzip2.git;a=commitdiff;h=b07b105d1b66e32760095e3602261738443b9e13
-
- > Thanks for the hint, sent v2: http://patchwork.ozlabs.org/patch/1141605/
-
-Thanks.
+Committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
