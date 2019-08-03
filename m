@@ -1,12 +1,12 @@
 From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Aug 2019 21:48:40 +0200
-Subject: [Buildroot] [PATCH 06/13 v2] core: generate all br2-external
- files in one go
-In-Reply-To: <5578c81c1007dc2654d886c5de7c3c390845d905.1564431589.git.yann.morin.1998@free.fr>
- (Yann E. MORIN's message of "Mon, 29 Jul 2019 22:19:56 +0200")
+Date: Sat, 03 Aug 2019 21:49:18 +0200
+Subject: [Buildroot] [PATCH 07/13 v2] core: drop now-useless
+ prepare-kconfig rule
+In-Reply-To: <0890af03dbffa2d14498dcb5b819a390a7c195a6.1564431589.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 29 Jul 2019 22:19:57 +0200")
 References: <cover.1564431589.git.yann.morin.1998@free.fr>
- <5578c81c1007dc2654d886c5de7c3c390845d905.1564431589.git.yann.morin.1998@free.fr>
-Message-ID: <87pnlm81yf.fsf@dell.be.48ers.dk>
+ <0890af03dbffa2d14498dcb5b819a390a7c195a6.1564431589.git.yann.morin.1998@free.fr>
+Message-ID: <87lfwa81xd.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -15,25 +15,19 @@ To: buildroot@busybox.net
 
 >>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
- > When we introduced support for multiple br2-external trees, we
- > introduced two files, one on the Makefile side, needed very early,
- > and one on the kconfig side, needed later in the configuration
- > process. We naturally introduced a two-step generation, as it looked
- > like the simplest and most obvious way.
+ > This rule was added back in 9429e7b698 (core: introduce an intermediate
+ > rule before the configurators) when the kconfig-side br2-external file
+ > was generated separately from the Makefile-side one.
 
- > But now, we are on the verge of generating more files on the kconfig
- > side, and it does not make sense to add even more steps to generate
- > them.
-
- > And even better yet, we can generate both the Makefile-side and
- > kconfig-side files at the same time, in fact.
-
- > Make it so.
+ > Now that they are generated together very early in the Makefile, we no
+ > longer need this intermediate rule. Drop it.
 
  > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
  > Cc: Vadim Kochan <vadim4j@gmail.com>
 
-Committed, thanks.
+We still had a reference to this rule in
+docs/manual/adding-packages-asciidoc.txt, so I've dropped that as well
+and committed, thanks.
 
 -- 
 Bye, Peter Korsgaard
