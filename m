@@ -1,88 +1,54 @@
 From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 Date: Sat, 3 Aug 2019 17:17:29 +0200
-Subject: [Buildroot] [git commit] support/testing: test check-package
- ignores external.mk
-Message-ID: <20190803152016.C089A83902@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] check-package: ignore external.mk
+Message-ID: <20190803152016.B81E28D4FD@busybox.osuosl.org>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1ad5e0a6a6c8c82c116352abf420ea14074177e3
+commit: https://git.buildroot.net/buildroot/commit/?id=75d6c2ba96bcfd796210f7ad73f71543996c4a04
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Check external.mk is ignored only when in the root path of a
-br2-external.
+The external.mk file in a br2-external usually contains raw makefile
+targets. This file is common code and not a package recipe so it should
+not be tested against the code-style of a package .mk file.
 
-Add a file called external.mk as a fixture to be used by the test case.
+When using this script to check files in a br2-external tree, usually
+the user is responsible for not passing files that check-package do not
+understand. But external.mk is special because it is part of the
+br2-external structure, so it is likely someone expects it to be
+checkable by an in-tree script.
 
+Instead of adding another blob to the manual, just ignore this file.
+Only do that when a br2-external is being tested (so with option -b
+passed to the script) and also check that it is on the root path of the
+br2-external to allow someone to have a package called external.
+
+Reported on bug #11271.
+
+Reported-by: Vitaliy Lotorev <lotorev@gmail.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Cc: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 [Arnout: wrap at 80 columns]
 Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
 ---
- .../testing/tests/utils/br2-external/external.mk   |  2 ++
- .../br2-external/package/external/external.mk      |  1 +
- support/testing/tests/utils/test_check_package.py  | 30 +++++++++++++++++++++-
- 3 files changed, 32 insertions(+), 1 deletion(-)
+ utils/check-package | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/support/testing/tests/utils/br2-external/external.mk b/support/testing/tests/utils/br2-external/external.mk
-index e69de29bb2..470c01a382 100644
---- a/support/testing/tests/utils/br2-external/external.mk
-+++ b/support/testing/tests/utils/br2-external/external.mk
-@@ -0,0 +1,2 @@
-+custom-target:
-+	@echo "do nothing"
-diff --git a/support/testing/tests/utils/br2-external/package/external/external.mk b/support/testing/tests/utils/br2-external/package/external/external.mk
-new file mode 100644
-index 0000000000..74fb6540ab
---- /dev/null
-+++ b/support/testing/tests/utils/br2-external/package/external/external.mk
-@@ -0,0 +1 @@
-+# wrong
-diff --git a/support/testing/tests/utils/test_check_package.py b/support/testing/tests/utils/test_check_package.py
-index 009d9f3f38..17c2fcf3bc 100644
---- a/support/testing/tests/utils/test_check_package.py
-+++ b/support/testing/tests/utils/test_check_package.py
-@@ -32,7 +32,8 @@ class TestCheckPackage(unittest.TestCase):
-     When in in-tree mode (without -b) some in-tree files and also all
-     out-of-tree files are ignored.
- 
--    When in out-tree mode (with -b) the script does generate warnings for these.
-+    When in out-tree mode (with -b) the script does generate warnings for these
-+    but ignores external.mk.
-     """
- 
-     WITH_EMPTY_PATH = {}
-@@ -172,3 +173,30 @@ class TestCheckPackage(unittest.TestCase):
-         self.assert_file_was_processed(m)
-         self.assert_warnings_generated_for_file(m)
-         self.assertIn("{}:1: empty line at end of file".format(abs_file), w)
-+
-+        # external.mk is ignored only when in the root path of a br2-external
-+        rel_file = "external.mk"
-+        abs_file = os.path.join(abs_path, rel_file)
-+
-+        _, m = call_script(["check-package", "-b", rel_file],
-+                           self.WITH_UTILS_IN_PATH, abs_path)
-+        self.assert_file_was_ignored(m)
-+
-+        _, m = call_script(["check-package", "-b", abs_file],
-+                           self.WITH_UTILS_IN_PATH, infra.basepath())
-+        self.assert_file_was_ignored(m)
-+
-+        abs_path = infra.filepath("tests/utils/br2-external/package/external")
-+        abs_file = os.path.join(abs_path, rel_file)
-+
-+        w, m = call_script(["check-package", "-b", rel_file],
-+                           self.WITH_UTILS_IN_PATH, abs_path)
-+        self.assert_file_was_processed(m)
-+        self.assert_warnings_generated_for_file(m)
-+        self.assertIn("{}:1: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)".format(rel_file), w)
-+
-+        w, m = call_script(["check-package", "-b", abs_file],
-+                           self.WITH_UTILS_IN_PATH, infra.basepath())
-+        self.assert_file_was_processed(m)
-+        self.assert_warnings_generated_for_file(m)
-+        self.assertIn("{}:1: should be 80 hashes (http://nightly.buildroot.org/#writing-rules-mk)".format(abs_file), w)
+diff --git a/utils/check-package b/utils/check-package
+index f09aaeea03..52317e02f4 100755
+--- a/utils/check-package
++++ b/utils/check-package
+@@ -73,6 +73,10 @@ def get_lib_from_filename(fname):
+             return None
+         if DO_NOT_CHECK_INTREE.match(fname):
+             return None
++    else:
++        if os.path.basename(fname) == "external.mk" and \
++           os.path.exists(fname[:-2] + "desc"):
++            return None
+     if CONFIG_IN_FILENAME.search(fname):
+         return checkpackagelib.lib_config
+     if fname.endswith(".hash"):
