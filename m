@@ -1,217 +1,180 @@
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Aug 2019 11:08:37 +0200
-Subject: [Buildroot] [PATCH v2] package/glslsandbox-player: new package
-In-Reply-To: <20190704212523.11818-1-juju@cotds.org>
-References: <20190423192917.4081-1-juju@cotds.org>
- <20190704212523.11818-1-juju@cotds.org>
-Message-ID: <20190803110837.5867241c@windsurf.home>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Date: Sat,  3 Aug 2019 11:22:31 +0200
+Subject: [Buildroot] [PATCH v2, 1/1] package/domoticz: bump to version
+ 0f411f781ae4fb4a82f592d38a3f40578c149533
+Message-ID: <20190803092231.2308-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Hello Julien,
+- Replace first patch to fix build when using a development version
+- Fix build with openzwave 1.6 through:
+  https://github.com/domoticz/domoticz/commit/56d3fa099d9c98222d6cf5043891c6ba2f1df6bf
+- Add patch to revert cmake 3.14 dependency as buildroot currently
+  requires only 3.8
 
-Thanks for this contribution! It looks like a useful package for
-Buildroot, and pretty good overall, but there are a few issues to
-address, see below.
+Fixes:
+ - http://autobuild.buildroot.org/results/3dbb6612205020cc156d245a75c76a7886f7d529
 
-On Thu,  4 Jul 2019 23:25:23 +0200
-Julien Olivain <juju@cotds.org> wrote:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Add information about cmake's patch
 
+ ...story.txt-use-10717-instead-of-xxxxx.patch | 33 +++++++++++++
+ ...ersion.default-bump-version-to-10717.patch | 23 ---------
+ ...CMake-configuration-file-to-use-vers.patch | 47 +++++++++++++++++++
+ package/domoticz/domoticz.hash                |  2 +-
+ package/domoticz/domoticz.mk                  |  2 +-
+ 5 files changed, 82 insertions(+), 25 deletions(-)
+ create mode 100644 package/domoticz/0001-History.txt-use-10717-instead-of-xxxxx.patch
+ delete mode 100644 package/domoticz/0001-appversion.default-bump-version-to-10717.patch
+ create mode 100644 package/domoticz/0002-Revert-Updating-CMake-configuration-file-to-use-vers.patch
 
-> +if BR2_PACKAGE_GLSLSANDBOX_PLAYER
-> +
-> +config BR2_PACKAGE_GLSLSANDBOX_PLAYER_DL_SHADERS
-> +	bool "Download shaders from http://glslsandbox.com/"
-> +	help
-> +	  Download some shaders from http://glslsandbox.com/ to be
-> +	  embedded in the binary
-
-You can't let a package download stuff on its own, because it defeats
-the Buildroot download infrastructure: "make source" will not know that
-these additional files should be downloaded, those files will not be
-cached on our sources.buildroot.net mirror, etc.
-
-I'm not sure what gets downloaded exactly, but you can either get it
-downloaded by Buildroot using <pkg>_EXTRA_DOWNLOADS in this package, or
-create a separate package.
-
-> +config BR2_PACKAGE_GLSLSANDBOX_PLAYER_SCRIPTS
-> +	bool "Install scripts"
-> +	depends on BR2_USE_MMU # bash, python
-> +	depends on BR2_USE_WCHAR # python
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # python
-> +	depends on !BR2_STATIC_LIBS # python
-> +	select BR2_PACKAGE_BUSYBOX_SHOW_OTHERS # bash
-> +	select BR2_PACKAGE_PYTHON
-
-BR2_PACKAGE_PYTHON depends on !BR2_PACKAGE_PYTHON3, so you would have
-to propagate this dependency. But does it work only with Python 2? It
-does not support Python 3 ?
-
-> +	select BR2_PACKAGE_BASH
-> +	select BR2_PACKAGE_LIBCURL
-> +	select BR2_PACKAGE_CURL
-> +	select BR2_PACKAGE_OPENSSL
-> +	select BR2_PACKAGE_LIBOPENSSL_BIN if BR2_PACKAGE_LIBOPENSSL
-> +	select BR2_PACKAGE_LIBRESSL_BIN if BR2_PACKAGE_LIBRESSL
-> +	select BR2_PACKAGE_MAKE
-> +	select BR2_PACKAGE_COREUTILS
-> +	select BR2_PACKAGE_JPEG
-> +	select BR2_PACKAGE_IMAGEMAGICK
-
-So all these dependencies are needed for the helper scripts ?
-
-> +choice
-> +	prompt "Native windowing system"
-> +	default BR2_PACKAGE_GLSLSANDBOX_PLAYER_RPI   if BR2_PACKAGE_RPI_USERLAND
-> +	default BR2_PACKAGE_GLSLSANDBOX_PLAYER_TISGX if BR2_PACKAGE_TI_SGX_UM
-> +	default BR2_PACKAGE_GLSLSANDBOX_PLAYER_MALI  if BR2_PACKAGE_SUNXI_MALI_MAINLINE
-> +	default BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL    if BR2_PACKAGE_WAYLAND
-> +	default BR2_PACKAGE_GLSLSANDBOX_PLAYER_X11   if BR2_PACKAGE_XORG7
-> +	default BR2_PACKAGE_GLSLSANDBOX_PLAYER_SDL2  if BR2_PACKAGE_SDL2_OPENGLES
-
-Alphabetic ordering would be nice, and also for the below option
-definitions.
-
-> +	help
-> +	  Select the native windowing system you wish to use.
-> +
-> +config BR2_PACKAGE_GLSLSANDBOX_PLAYER_KMS
-> +	bool "KMS/DRM/GBM"
-> +	select BR2_PACKAGE_LIBDRM
-
-You forgot to replicate the libdrm dependencies here.
-
-> +
-> +config BR2_PACKAGE_GLSLSANDBOX_PLAYER_VIVFB
-> +	bool "Vivante Frame Buffer"
-> +	depends on BR2_PACKAGE_IMX_GPU_VIV
-> +
-> +config BR2_PACKAGE_GLSLSANDBOX_PLAYER_RPI
-> +	bool "RaspberryPI Frame Buffer"
-> +	depends on BR2_PACKAGE_RPI_USERLAND
-> +
-> +config BR2_PACKAGE_GLSLSANDBOX_PLAYER_TISGX
-> +	bool "TI/SGX Frame Buffer"
-> +	depends on BR2_PACKAGE_TI_SGX_UM
-> +
-> +config BR2_PACKAGE_GLSLSANDBOX_PLAYER_MALI
-> +	bool "Allwinner ARM/Mali Frame Buffer"
-> +	depends on BR2_PACKAGE_SUNXI_MALI_MAINLINE
-> +
-> +config BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL
-> +	bool "Wayland"
-> +	depends on BR2_PACKAGE_WAYLAND
-> +
-> +config BR2_PACKAGE_GLSLSANDBOX_PLAYER_X11
-> +	bool "X11"
-> +	depends on BR2_PACKAGE_XORG7
-
-This is probably not sufficient: just having BR2_PACKAGE_XORG7 does not
-mean any X11 package will be enabled. So you might need a few selects
-here. Build a minimal configuration with just XORG7=y, and you'll see.
-
-> diff --git a/package/glslsandbox-player/glslsandbox-player.mk b/package/glslsandbox-player/glslsandbox-player.mk
-> new file mode 100644
-> index 0000000000..b3048345ce
-> --- /dev/null
-> +++ b/package/glslsandbox-player/glslsandbox-player.mk
-> @@ -0,0 +1,89 @@
-> +################################################################################
-> +#
-> +# glslsandbox-player
-> +#
-> +################################################################################
-> +
-> +GLSLSANDBOX_PLAYER_VERSION = v2019.06.16
-> +GLSLSANDBOX_PLAYER_SITE = https://github.com/jolivain/glslsandbox-player
-> +GLSLSANDBOX_PLAYER_SITE_METHOD = git
-
-Use the $(call github, ...) macro, see other packages.
-
-
-> +ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_SCRIPTS),y)
-> +GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-install-scripts
-
-You have tons of dependencies in the Config.in for those scripts. They
-are only runtime dependencies ? If so, you should add a "# runtime"
-comment in Config.in.
-
-> +else
-> +GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-install-scripts
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_KMS),y)
-> +# gbm dependency is not needed, as it is normally packaged with
-> +# libegl/libgles drivers.
-> +GLSLSANDBOX_PLAYER_DEPENDENCIES += libdrm
-> +GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=kms
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_VIVFB),y)
-> +GLSLSANDBOX_PLAYER_DEPENDENCIES += imx-gpu-viv
-> +GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=vivfb
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_RPI),y)
-> +GLSLSANDBOX_PLAYER_DEPENDENCIES += rpi-userland
-> +GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=rpi
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_TISGX),y)
-> +GLSLSANDBOX_PLAYER_DEPENDENCIES += ti-sgx-um
-> +GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=tisgx
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_MALI),y)
-> +GLSLSANDBOX_PLAYER_DEPENDENCIES += sunxi-mali-mainline
-> +GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=mali
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL),y)
-> +GLSLSANDBOX_PLAYER_DEPENDENCIES += wayland
-> +GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=wl
-> +
-> +ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_WL_IVI),y)
-> +GLSLSANDBOX_PLAYER_CONF_OPTS += --enable-ivi
-> +else
-> +GLSLSANDBOX_PLAYER_CONF_OPTS += --disable-ivi
-> +endif
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_X11),y)
-> +GLSLSANDBOX_PLAYER_DEPENDENCIES += xlib_libX11
-
-Ah, so you need xlib_libX11, but it's not selected by the Config.in.
-
-> +GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=x11
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_SDL2),y)
-> +GLSLSANDBOX_PLAYER_DEPENDENCIES += sdl2
-> +GLSLSANDBOX_PLAYER_CONF_OPTS += --with-native-gfx=sdl2
-> +endif
-
-Since only one of these gfx backends can be selected at once, I'd
-prefer if the makefile looked like this:
-
-ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_foo),y)
-...
-else ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_bar),y)
-..
-else ifeq ($(BR2_PACKAGE_GLSLSANDBOX_PLAYER_baz),y)
-..
-endif
-
-Could you fix the above issues and send an updated version of the patch ?
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/domoticz/0001-History.txt-use-10717-instead-of-xxxxx.patch b/package/domoticz/0001-History.txt-use-10717-instead-of-xxxxx.patch
+new file mode 100644
+index 0000000000..c2b9cb0d25
+--- /dev/null
++++ b/package/domoticz/0001-History.txt-use-10717-instead-of-xxxxx.patch
+@@ -0,0 +1,33 @@
++From bc34ba549d4366092a39a4d7bc4414f8cbd8bc6c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 3 Aug 2019 09:13:54 +0200
++Subject: [PATCH] History.txt: use 10717 instead of xxxxx
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++Set current development version to 4.10717 instead of 4.xxxxx to avoid
++the following build failure when git is unavailable:
++
++/home/fabrice/buildroot/output/build/domoticz-0f411f781ae4fb4a82f592d38a3f40578c149533/main/domoticz.cpp: In function ?void GetAppVersion()?:
++/home/fabrice/buildroot/output/build/domoticz-0f411f781ae4fb4a82f592d38a3f40578c149533/main/../appversion.h:1:20: error: ?xxxxx? was not declared in this scope
++ #define APPVERSION xxxxx
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ History.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/History.txt b/History.txt
++index 4dc45e6b5..ad67976f3 100644
++--- a/History.txt
+++++ b/History.txt
++@@ -1,4 +1,4 @@
++-Version 4.xxxxx (xxx 2019)
+++Version 4.10717 (xxx 2019)
++ - Implemented: DarkSky CloudCover sensor
++ - Implemented: EventSystem, option in Settings to enable/disable URL call logging containing full URL path
++ - Implemented: GUI, OpenZWave added Refresh Node Information button, styling
++-- 
++2.20.1
++
+diff --git a/package/domoticz/0001-appversion.default-bump-version-to-10717.patch b/package/domoticz/0001-appversion.default-bump-version-to-10717.patch
+deleted file mode 100644
+index df0f1b339a..0000000000
+--- a/package/domoticz/0001-appversion.default-bump-version-to-10717.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-From 4d8bbaf4bdffe4fa77a060cd7fa848f3001d46a8 Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Tue, 21 May 2019 21:08:13 +0200
+-Subject: [PATCH] appversion.default: bump version to 10717
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status: https://github.com/domoticz/domoticz/pull/3251]
+----
+- appversion.default | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/appversion.default b/appversion.default
+-index 7d3530590..6fc5766c2 100644
+---- a/appversion.default
+-+++ b/appversion.default
+-@@ -1,3 +1,3 @@
+--#define APPVERSION 9700
+-+#define APPVERSION 10717
+- #define APPHASH "b97777b"
+- #define APPDATE 1478691222
+--- 
+-2.20.1
+-
+diff --git a/package/domoticz/0002-Revert-Updating-CMake-configuration-file-to-use-vers.patch b/package/domoticz/0002-Revert-Updating-CMake-configuration-file-to-use-vers.patch
+new file mode 100644
+index 0000000000..8640b83544
+--- /dev/null
++++ b/package/domoticz/0002-Revert-Updating-CMake-configuration-file-to-use-vers.patch
+@@ -0,0 +1,47 @@
++From 2cd95289939b4a7c2576176c7f6268028aa093b2 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Fri, 24 May 2019 21:50:16 +0200
++Subject: [PATCH] Revert "Updating CMake configuration file to use
++ version 3.14 as minimum and added boost dependency targets"
++
++This reverts commit 4e4ee999c4b323514c0ba81ab1ff3afb10d2f1cd to avoid
++bumping host-cmake requirement version from 3.8 to 3.14 in buildroot.
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ CMakeLists.txt | 8 +++-----
++ 1 file changed, 3 insertions(+), 5 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index c5b7832ff..a21f5b87b 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1,5 +1,5 @@
++-#set to minimum version that supports clean build
++-cmake_minimum_required(VERSION 3.14.0)
+++#set to minimum version that supports clean build on cygwin
+++cmake_minimum_required(VERSION 2.8.4)
++ 
++ project(domoticz)
++ 
++@@ -583,6 +583,7 @@ set(Boost_USE_STATIC_LIBS ${USE_STATIC_BOOST})
++ set(Boost_USE_MULTITHREADED ON)
++ unset(Boost_INCLUDE_DIR CACHE)
++ unset(Boost_LIBRARY_DIRS CACHE)
+++find_package(Boost REQUIRED COMPONENTS thread system)
++ 
++ if(USE_STATIC_BOOST)
++    message(STATUS "Linking against boost static libraries")
++@@ -590,9 +591,6 @@ else(USE_STATIC_BOOST)
++    message(STATUS "Linking against boost dynamic libraries")
++ endif(USE_STATIC_BOOST)
++ 
++-find_package(Boost REQUIRED COMPONENTS thread system)
++-target_link_libraries(domoticz Boost::thread Boost::system)
++-
++ # compare found vs required libBoost version
++ if(Boost_VERSION VERSION_LESS DOMO_MIN_LIBBOOST_VERSION)
++    message(FATAL_ERROR "Found libBoost version ${Boost_VERSION}, ${DOMO_MIN_LIBBOOST_VERSION} or newer required")
++-- 
++2.20.1
++
+diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
+index 3d974b3f8d..320028ac53 100644
+--- a/package/domoticz/domoticz.hash
++++ b/package/domoticz/domoticz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256	c053a2161942529f56b748945ec297dcd67f449e68029fc886893a528891ad86	domoticz-4.10717.tar.gz
++sha256	1903b830ed53aada66ae261d4f29a73d10c03cb5f117e4c6e7e1275620b11f4e	domoticz-0f411f781ae4fb4a82f592d38a3f40578c149533.tar.gz
+ sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	License.txt
+diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
+index 9636e208d0..c0568c61c6 100644
+--- a/package/domoticz/domoticz.mk
++++ b/package/domoticz/domoticz.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DOMOTICZ_VERSION = 4.10717
++DOMOTICZ_VERSION = 0f411f781ae4fb4a82f592d38a3f40578c149533
+ DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
+ DOMOTICZ_LICENSE = GPL-3.0
+ DOMOTICZ_LICENSE_FILES = License.txt
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.20.1
