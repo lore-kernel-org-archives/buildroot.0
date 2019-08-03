@@ -1,69 +1,80 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Aug 2019 16:33:45 +0200
-Subject: [Buildroot] [PATCHv2] sgp30: New kernel module package
-In-Reply-To: <20190803080911.26062-1-yann.morin.1998@free.fr> (Yann E. MORIN's
- message of "Sat, 3 Aug 2019 10:09:11 +0200")
-References: <20190803080911.26062-1-yann.morin.1998@free.fr>
-Message-ID: <87tvayb9o6.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 3 Aug 2019 16:41:02 +0200
+Subject: [Buildroot] [PATCH V2] board: Add Oceanic 5205 5inMFD board
+ support
+In-Reply-To: <20190419093448.30685-1-shyam.saini@amarulasolutions.com>
+References: <20190419093448.30685-1-shyam.saini@amarulasolutions.com>
+Message-ID: <20190803164102.5de262b3@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Hello,
 
- > From: David De Grave <david@ledav.net>
- > Kernel module for the Sensirion sgp30 / sgpc2 chemical sensors.
+Sorry for the very long delay in reviewing this patch.
 
- > Signed-off-by: David De Grave <david@ledav.net>
- > [yann.morin.1998 at free.fr:
- >   - fix coding style after check-package
- >   - enable required linux options
- > ]
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+First, the commit title should be:
 
- > ---
- > Changes v1 -> v2 (Yann):
- >   - fix coding style with check-package
- >   - enable the required linux options
- > ---
- >  linux/linux.mk           |  3 +++
- >  package/Config.in        |  1 +
- >  package/sgp30/Config.in  | 13 +++++++++++++
- >  package/sgp30/sgp30.hash |  1 +
- >  package/sgp30/sgp30.mk   | 18 ++++++++++++++++++
+	configs/oceanic_5205_5inmfd: new defconfig
 
-A DEVELOPERS entry is missing.
+On Fri, 19 Apr 2019 15:04:48 +0530
+Shyam Saini <shyam.saini@amarulasolutions.com> wrote:
 
-I see the kernel now has a sgp30 driver since 5.1, is there any reason
-to use this over the mainline driver?
 
-Author: Andreas Brauchli <a.brauchli@elementarea.net>
-Date:   Thu Dec 13 15:43:23 2018 +0100
+> diff --git a/configs/oceanic_5205_5inmfd_defconfig b/configs/oceanic_5205_5inmfd_defconfig
+> new file mode 100644
+> index 0000000000..cd43677862
+> --- /dev/null
+> +++ b/configs/oceanic_5205_5inmfd_defconfig
+> @@ -0,0 +1,50 @@
+> +BR2_aarch64=y
+> +BR2_cortex_a53=y
+> +BR2_ARM_FPU_VFPV4=y
+> +
+> +# Linux headers same as kernel, a 5.0 series
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
+> +
+> +# Firmware
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/apritzel/arm-trusted-firmware.git"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50iw1p1"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="aa75c8da415158a94b82a430b2b40000778e851f"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
 
-    iio: chemical: sgp30: Support Sensirion SGP30/SGPC3 sensors
+This ATF repo is marked as obsolete, and Andre recommends using
+mainline ATF. Could you use that instead ?
 
-    Support Sensirion SGP30 and SGPC3 multi-pixel I2C gas sensors
+> +# Bootloader
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_GIT=y
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_URL="git://git.denx.de/u-boot.git"
+> +BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="1692c73ccb39fb790d7ba1a43ca2f14a0f9f1f32"
 
-    Supported Features:
+I'm sure it's now in a U-Boot release. Could you use it ?
 
-    * Indoor Air Quality (IAQ) concentrations for
-      - tVOC (in_concentration_voc_input)
-      - CO2eq (in_concentration_co2_input) - SGP30 only
+> +# Kernel
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_GIT=y
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/amarula/linux-amarula"
+> +BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="504a49ae70efd2ef936f6850dcdd71a250c4cb54"
+> +BR2_LINUX_KERNEL_VERSION="504a49ae70efd2ef936f6850dcdd71a250c4cb54"
+> +BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun50i-a64-oceanic-5205-5inmfd"
 
-      IAQ concentrations are periodically read out by a background thread
-      to allow the sensor to maintain its internal baseline.
+The support for this board is now in upstream Linux, could you use the
+upstream Linux kernel instead ?
 
-    * Gas concentration signals
-      - Ethanol (in_concentration_ethanol_raw)
-      - H2 (in_concentration_h2_raw) - SGP30 only
+Could you repost after adjusting those various aspects ?
 
-    https://www.sensirion.com/file/datasheet_sgp30
-    https://www.sensirion.com/file/datasheet_sgpc3
+Thanks a lot!
 
-    Signed-off-by: Andreas Brauchli <andreas.brauchli@sensirion.com>
-    Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
