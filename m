@@ -1,62 +1,76 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat,  3 Aug 2019 15:49:33 +0200
-Subject: [Buildroot] [PATCH] package/pkg-utils.mk: add dl_dir to show-info
- output
-Message-ID: <20190803134933.27050-1-arnout@mind.be>
+From: Bernd Kuhls <bernd.kuhls@t-online.de>
+Date: Sat,  3 Aug 2019 15:51:01 +0200
+Subject: [Buildroot] [PATCH v3 1/1] package/icu: Fix nios2 build
+Message-ID: <20190803135101.30923-1-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-It can be useful for scripts to be able to access a package's source
-file after download. That used to be easy, just DL_DIR/PKG_SOURCE.
-However, with the subdirectories in DL_DIR which can be overridden with
-PKG_DL_SUBDIR, that is no longer easy.
+Fixes:
+http://autobuild.buildroot.net/results/91e/91eaec34708d91f8a05af189243be0b7cabce31b/
 
-Therefore, this patch adds dl_dir to the package information. It prints
-just PKG_DL_SUBDIR, to avoid dumping absolute paths to the buildroot
-directory in the show-info output.
-
-It can be used with the following jq script to get a newline-separated
-list of all downloaded files:
-
-make show-info | jq -r '.[] | ("dl/" + .dl_dir + "/" + .downloads[]?.source)'
-
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
-v1 -> v2:
- - Use DL_SUBDIR (i.e. relative path) instead of DL_DIR (i.e. absolute
-   path). (Yann)
- - Move the definition one level higher, because it is anyway the same
-   for all sources. (Yann)
- - Update jq script in commit message to handle the above.
----
- package/pkg-utils.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+v3: added note about double conversion test (Thomas)
+v2: added upstream bug report and pull request URLs (Thomas)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index b7280e930f..d3345f7c91 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -94,6 +94,7 @@ endef
- define _json-info-pkg-details
- 	"version": "$($(1)_DL_VERSION)",
- 	"licenses": "$($(1)_LICENSE)",
-+	"dl_dir": "$($(1)_DL_SUBDIR)",
- 	"downloads": [
- 	$(foreach dl,$(sort $($(1)_ALL_DOWNLOADS)),
- 		{
-@@ -104,8 +105,7 @@ define _json-info-pkg-details
- 						$(call DOWNLOAD_URIS,$(dl),$(1))
- 					)
- 				)
--			]
--		},
-+			]		},
- 	)
- 	],
- endef
+ .../icu/0006-ICU-20751-Fix-nios2-build.patch  | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/icu/0006-ICU-20751-Fix-nios2-build.patch
+
+diff --git a/package/icu/0006-ICU-20751-Fix-nios2-build.patch b/package/icu/0006-ICU-20751-Fix-nios2-build.patch
+new file mode 100644
+index 0000000000..6587de484d
+--- /dev/null
++++ b/package/icu/0006-ICU-20751-Fix-nios2-build.patch
+@@ -0,0 +1,46 @@
++From d9d99097a5b28f4204b3a15e82564e50f9e62f5a Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd.kuhls@t-online.de>
++Date: Sat, 3 Aug 2019 08:05:35 +0200
++Subject: [PATCH] ICU-20751 Fix nios2 build
++
++Nios2 supports double conversion, tested using qemu:
++
++./main || echo "correct"
++correct
++uname -a
++Linux buildroot 4.19.16 #4 Sat Aug 3 14:46:48 CEST 2019 nios2 GNU/Linux
++
++Solves build error
++
++In file included from double-conversion.h:42:0,
++                 from number_decimalquantity.cpp:19:
++double-conversion-utils.h:119:2: error: #error Target architecture was not detected as supported by Double-Conversion.
++ #error Target architecture was not detected as supported by Double-Conversion.
++
++detected by buildroot autobuilders:
++http://autobuild.buildroot.net/results/91e/91eaec34708d91f8a05af189243be0b7cabce31b/
++
++Patch sent upstream: https://github.com/unicode-org/icu/pull/725
++Bug report: https://unicode-org.atlassian.net/browse/ICU-20751
++
++[Bernd: Fixed path]
++Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++---
++ source/i18n/double-conversion-utils.h | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/source/i18n/double-conversion-utils.h b/source/i18n/double-conversion-utils.h
++index 1e44fcaa0e..0cf993929f 100644
++--- a/source/i18n/double-conversion-utils.h
+++++ b/source/i18n/double-conversion-utils.h
++@@ -95,6 +95,7 @@ int main(int argc, char** argv) {
++     defined(__ARMEL__) || defined(__avr32__) || defined(_M_ARM) || defined(_M_ARM64) || \
++     defined(__hppa__) || defined(__ia64__) || \
++     defined(__mips__) || \
+++    defined(__nios2__) || \
++     defined(__powerpc__) || defined(__ppc__) || defined(__ppc64__) || \
++     defined(_POWER) || defined(_ARCH_PPC) || defined(_ARCH_PPC64) || \
++     defined(__sparc__) || defined(__sparc) || defined(__s390__) || \
++-- 
++2.20.1
++
 -- 
-2.21.0
+2.20.1
