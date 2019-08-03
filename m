@@ -1,33 +1,51 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 3 Aug 2019 14:31:08 +0200
-Subject: [Buildroot] [git commit] .gitlab-ci.yml: add raspberrypi4_defconfig
-Message-ID: <20190803122825.A33FE814C3@busybox.osuosl.org>
+From: Arnout Vandecappelle <arnout@mind.be>
+Date: Sat, 3 Aug 2019 14:46:42 +0200
+Subject: [Buildroot] [PATCH buildroot-test] autobuild-run: add
+ --flush-downloads argument to prevent false NOK due to not enough space on
+ hard drive
+In-Reply-To: <20180919114541.17670-1-giulio.benetti@micronovasrl.com>
+References: <20180919114541.17670-1-giulio.benetti@micronovasrl.com>
+Message-ID: <1acee2c7-86f0-ff53-71ae-79b3809f7657@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33604017a61d3511b3fc77bb21aab79e5131d9f1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ Hi Giulio,
 
-fa1ce849f3061fab282aa78ebff3cc30abb08f4f added raspberrypi4_defconfig
-but forgot to update .gitlab-ci.yml.
+ Sorry to be so late in responding to this...
 
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- .gitlab-ci.yml | 1 +
- 1 file changed, 1 insertion(+)
+On 19/09/2018 13:45, Giulio Benetti wrote:
+> Some server/pc can have little hard drive, but high speed internet
+> connection. If disk is little, autobuild-run could generate some false
+> NOK reporting:
+> Fatal error: ...: No space left on device
+> 
+> Add --flush-downloads argument to autobuild-run to delete entire
+> instance-*/dl/ folder everytime it creates a new instance.
 
-diff --git a/.gitlab-ci.yml b/.gitlab-ci.yml
-index b7d1ab7f32..3f2284d15f 100644
---- a/.gitlab-ci.yml
-+++ b/.gitlab-ci.yml
-@@ -298,6 +298,7 @@ raspberrypi2_defconfig: { extends: .defconfig }
- raspberrypi3_64_defconfig: { extends: .defconfig }
- raspberrypi3_defconfig: { extends: .defconfig }
- raspberrypi3_qt5we_defconfig: { extends: .defconfig }
-+raspberrypi4_defconfig: { extends: .defconfig }
- raspberrypi_defconfig: { extends: .defconfig }
- riotboard_defconfig: { extends: .defconfig }
- rock64_defconfig: { extends: .defconfig }
+ This probably doesn't *completely* solve the issue, because a single download
+can be very large as well.
+
+ We discussed this at the hackaton and decided that it would be more appropriate
+to instead tweak the number of files to delete from the download directory. By
+setting that number very high, you can approximate the same result (except that
+the git repos will never be touched). The code changes for that would be a lot
+simpler we think, and we think it's more suitable as an option.
+
+ Therefore, we've marked the patch as rejected in patchwork. Feel free to
+implement the suggestion above instead (or, of course, keep this as an
+out-of-tree patch).
+
+ Regards,
+ Arnout
+
+> If active this will lead to re-download all files needed by an instance
+> in its dl/ folder when created.
+> As the other options, flush-downloads can be listed in .conf file like
+> this:
+> flush-downloads = yes
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+[snip]
