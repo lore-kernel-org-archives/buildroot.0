@@ -1,10 +1,10 @@
 From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Aug 2019 20:26:11 +0200
-Subject: [Buildroot] [PATCH] package/python3: fix configure issue for
- musl/uclibc GCC 8+ toolchains on powerpc
-In-Reply-To: <20190802144945.22971-1-peter@korsgaard.com>
-References: <20190802144945.22971-1-peter@korsgaard.com>
-Message-ID: <2f792621-ed23-6c89-8010-9ad9caf492c9@mind.be>
+Date: Sat, 3 Aug 2019 20:28:27 +0200
+Subject: [Buildroot] [PATCH v3] package/qt5base: fix libtool la file
+ dependency_libs entries
+In-Reply-To: <20190801214823.5502-1-ps.report@gmx.net>
+References: <20190801214823.5502-1-ps.report@gmx.net>
+Message-ID: <cddc101f-d6d7-62bc-a135-c6d09abe1078@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -13,30 +13,19 @@ To: buildroot@busybox.net
 
 
 
-On 02/08/2019 16:49, Peter Korsgaard wrote:
-> Fixes:
-> http://autobuild.buildroot.net/results/cb4/cb49c539501342e45cbe5ade82e588fcdf51f05b
+On 01/08/2019 23:48, Peter Seiderer wrote:
+> Fixes [1]:
 > 
-> GCC commit 6834b83784dcf0364eb820e8 (multiarch support for non-glibc linux
-> systems), which is part of GCC 8+, changed the multiarch logic to use
-> $arch-linux-musl / $arch-linux-uclibc rather than $arch-linux-gnu.
+>   libtool: error: cannot find the library '' or unhandled argument '/.../host/riscv64-buildroot-linux-gnu/sysroot/usr/lib/libQt5Widgets.so'
 > 
-> This then causes the python3 configure script to error out:
+> Add upstream suggested patch ([2]) to change la file dependency_libs entries
+> to -L<path> -l<library> version.
 > 
-> checking for the platform triplet based on compiler characteristics... powerpc-linux-gnu
-> configure: error: internal configure error for the platform triplet, please file a bug report
+> [1] http://autobuild.buildroot.net/results/79c1e1b7a1bc53c1e9b2ae0c9acb443e6d2e2994
+> [2] https://codereview.qt-project.org/c/qt/qtbase/+/269146
 > 
-> http://autobuild.buildroot.net/results/cb4/cb49c539501342e45cbe5ade82e588fcdf51f05b
-> 
-> As it requires that the --print-multiarch output (if not empty) matches the
-> deduced triplet (which always uses -linux-gnu).
-> 
-> It isn't quite clear why --print-multiarch returns something for a
-> non-multiarch toolchain on some architectures (E.G.  PowerPC), but as a
-> workaround, add a patch to rewrite the --print-multiarch output to match
-> older GCC versions to keep the configure script happy.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+> Tested-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 
  Applied to master, thanks.
 
@@ -44,62 +33,10 @@ On 02/08/2019 16:49, Peter Korsgaard wrote:
  Arnout
 
 > ---
->  ...c-fixup-CC-print-multiarch-output-for-mus.patch | 48 ++++++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
+> Changes v1 -> v2:
+>   - exchange own patch by new suggested upstream patch (with added
+>     upsteam url and signed of by)
 > 
-> diff --git a/package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch b/package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
-> new file mode 100644
-> index 0000000000..19a0f23e7b
-> --- /dev/null
-> +++ b/package/python3/0033-configure.ac-fixup-CC-print-multiarch-output-for-mus.patch
-> @@ -0,0 +1,48 @@
-> +From e1a2c27bcb9091f851ef7a9c7d59822a125a0b8e Mon Sep 17 00:00:00 2001
-> +From: Peter Korsgaard <peter@korsgaard.com>
-> +Date: Fri, 2 Aug 2019 15:53:16 +0200
-> +Subject: [PATCH] configure.ac: fixup $CC --print-multiarch output for
-> + musl/uclibc GCC 8+ toolchains
-> +
-> +GCC commit 6834b83784dcf0364eb820e8 (multiarch support for non-glibc linux
-> +systems), which is part of GCC 8+, changed the multiarch logic to use
-> +$arch-linux-musl / $arch-linux-uclibc rather than $arch-linux-gnu.
-> +
-> +This then causes the python3 configure script to error out:
-> +
-> +checking for the platform triplet based on compiler characteristics... powerpc-linux-gnu
-> +configure: error: internal configure error for the platform triplet, please file a bug report
-> +
-> +http://autobuild.buildroot.net/results/cb4/cb49c539501342e45cbe5ade82e588fcdf51f05b
-> +
-> +As it requires that the --print-multiarch output (if not empty) matches the
-> +deduced triplet (which always uses -linux-gnu).
-> +
-> +It isn't quite clear why --print-multiarch returns something for a
-> +non-multiarch toolchain on some architectures (E.G.  PowerPC), but as a
-> +workaround, rewrite the --print-multiarch output to match older GCC versions
-> +to keep the configure script happy.
-> +
-> +Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> +---
-> + configure.ac | 4 +++-
-> + 1 file changed, 3 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/configure.ac b/configure.ac
-> +index e5fb7e7b0b..9c64f960d6 100644
-> +--- a/configure.ac
-> ++++ b/configure.ac
-> +@@ -724,7 +724,9 @@ then
-> + fi
-> + 
-> + 
-> +-MULTIARCH=$($CC --print-multiarch 2>/dev/null)
-> ++# GCC 8+ returns $arch-linux-{musl,uclibc} for musl/uClibc based
-> ++# toolchains confusing python. Fix that up
-> ++MULTIARCH=$($CC --print-multiarch 2>/dev/null | sed -E 's/-linux-(musl|uclibc)*$/-linux-gnu/')
-> + AC_SUBST(MULTIARCH)
-> + 
-> + AC_MSG_CHECKING([for the platform triplet based on compiler characteristics])
-> +-- 
-> +2.11.0
-> +
-> 
+> Changes v2 -> v3:
+>   - fix commit comment upstream url
+>   - add tested by bernd kuhls
