@@ -1,73 +1,33 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Aug 2019 12:19:35 +0200
-Subject: [Buildroot] [git commit] package/qt5/qt5base: build with correct
- optimization
-Message-ID: <20190803101658.4213A822B4@busybox.osuosl.org>
+Date: Sat, 3 Aug 2019 12:20:22 +0200
+Subject: [Buildroot] [PATCH 1/2] package/qt5/qt5base: drop wrong
+ optimization flag
+In-Reply-To: <20190626140412.101607-1-giulio.benetti@micronovasrl.com>
+References: <20190626140412.101607-1-giulio.benetti@micronovasrl.com>
+Message-ID: <20190803122022.0a67e7dd@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7c0aa83527e0b0179f9e3f73a3e63df1fdc5a6e6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed, 26 Jun 2019 16:04:11 +0200
+Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-Qt5 has predefined optimization flags depending if you're building for
-size, for debug etc. These flags are defined in
-mkspecs/common/gcc-base.conf:
+> In qmake.conf.in has been left 'QMAKE_CXXFLAGS_RELEASE += -O3' but this
+> leads to not use Buildroot CXXFLAGS when building in release
+> mode(without debugging symbols). So let's remove it to let Qt5 to follow
+> Buildroot optimization flags like other packages do.
+> 
+> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+> ---
+>  package/qt5/qt5base/qmake.conf.in | 1 -
+>  1 file changed, 1 deletion(-)
 
-QMAKE_CFLAGS_OPTIMIZE      = -O2
-QMAKE_CFLAGS_OPTIMIZE_FULL = -O3
-QMAKE_CFLAGS_OPTIMIZE_DEBUG = -Og
-QMAKE_CFLAGS_OPTIMIZE_SIZE = -Os
+Applied to master, thanks.
 
-Then, in common/features/default_post.prf, they add those flags to
-QMAKE_CFLAGS_RELEASE/QMAKE_CXXFLAGS_RELEASE depending on various build
-options (optimize_size, optimize_full, optimize_debug):
-
-optimize_size {
-    !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_SIZE)  {
-        QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
-        QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
-        QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
-        QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_SIZE
-    }
-} else: optimize_full {
-    !isEmpty(QMAKE_CFLAGS_OPTIMIZE):!isEmpty(QMAKE_CFLAGS_OPTIMIZE_FULL)  {
-        QMAKE_CFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
-        QMAKE_CXXFLAGS_RELEASE -= $$QMAKE_CFLAGS_OPTIMIZE
-        QMAKE_CFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
-        QMAKE_CXXFLAGS_RELEASE += $$QMAKE_CFLAGS_OPTIMIZE_FULL
-    }
-}
-
-Since this default_post.prf is included *after* our qmake.conf file,
-these flags override our optimizations flags, which is not good.
-
-However, our qmake.conf file is included *after* gcc-base.conf, so we
-can simply reset those variables to have the empty value, and our
-optimization flags will be used.
-
-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-[Thomas: completely change the approach, by simply resetting the
-QMAKE_CFLAGS_OPTIMIZE_* variables in qmake.conf]
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/qt5/qt5base/qmake.conf.in | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
-index 26bee2cb39..2eb564e172 100644
---- a/package/qt5/qt5base/qmake.conf.in
-+++ b/package/qt5/qt5base/qmake.conf.in
-@@ -15,6 +15,10 @@ QMAKE_CXX               = $${CROSS_COMPILE}g++
- # modifications to gcc-base.conf
- QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
- QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
-+QMAKE_CFLAGS_OPTIMIZE       =
-+QMAKE_CFLAGS_OPTIMIZE_DEBUG =
-+QMAKE_CFLAGS_OPTIMIZE_FULL  =
-+QMAKE_CFLAGS_OPTIMIZE_SIZE  =
- CONFIG                 += nostrip
- 
- QMAKE_LIBS             += -lrt -lpthread -ldl
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
