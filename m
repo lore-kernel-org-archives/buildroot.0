@@ -1,105 +1,122 @@
-From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
-Date: Sat, 3 Aug 2019 11:03:23 +0200
-Subject: [Buildroot] [git commit] package/python-numpy: fix run-time failure
- with clapack
-Message-ID: <20190803090215.08E5D816B2@busybox.osuosl.org>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 03 Aug 2019 11:06:24 +0200
+Subject: [Buildroot] [PATCH v2] package/sshguard: new package
+In-Reply-To: <1563307012-3724-1-git-send-email-angelo@amarulasolutions.com>
+ (Angelo Compagnucci's message of "Tue, 16 Jul 2019 21:56:52 +0200")
+References: <1563307012-3724-1-git-send-email-angelo@amarulasolutions.com>
+Message-ID: <87imreobxr.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4c2b6978f6439138870720c85be99a4eb056fc3c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Angelo" == Angelo Compagnucci <angelo@amarulasolutions.com> writes:
 
-The numpy build system attempts to find lapack/blas at build time. It
-tries a lot of different implementations, e.g. lapack, openblas, atlas,
-... It is possible to help this automatic discovery by specifying
-libraries to load in site.cfg and/or by setting environment variables
-BLAS and LAPACK.
+ > sshguard protects hosts from brute-force attacks against SSH and other
+ > services.
 
-Unfortunately, the build system's logic is really hard to understand and
-it's fragile. For example, regardless of what is specified as libraries
-to load, it *will* try to find libblas.so and liblapack.so. However,
-when something is specified explicitly in site.cfg, it will use a
-different code path.
+ > Signed-off-by: Angelo Compagnucci <angelo@amarulasolutions.com>
+ > ---
+ > CHANGELOG:
+ > v1-> v2:
+ > * Fixed license (suggested by Thomas)
+ > * Fixed sysv script (suggested by Thomas)
+ > * Moved from using git to use tarball
 
-It turns out that when we specified the blas and lapack libraries
-explicitly, as is done now, the build system logic will assume (without
-checking) that cblas is used. This causes calls to cblas_* to be linked
-in - again without checking, because numpy contains a copy of the header
-and it uses dlopen to load it. clapack, however, does *not* provide
-cblas (although it does provide a library libblas.so, but no
-libcblas.so). Therefore, when importing numpy at runtime, we get an
-error like:
+ >  DEVELOPERS                     |  1 +
+ >  package/Config.in              |  1 +
+ >  package/sshguard/Config.in     | 10 +++++++++
+ >  package/sshguard/S39sshguard   | 50 ++++++++++++++++++++++++++++++++++++++++++
+ >  package/sshguard/sshguard.hash |  3 +++
+ >  package/sshguard/sshguard.mk   | 34 ++++++++++++++++++++++++++++
+ >  6 files changed, 99 insertions(+)
 
-ImportError: /usr/lib/python3.7/site-packages/numpy/core/_multiarray_umath.cpython-37m-arm-linux-gnueabihf.so: undefined symbol: cblas_sgemm
+This had a number of check-package warnings, please consider running
+check-package before submitting in the future, thanks.
 
-The initial attempt to fix this added cblas to the libraries. This
-happens to work because apparently the entire libraries line is ignored
-when a non-existing library is added to it (remember, clapack does not
-provide libcblas).
+> diff --git a/package/sshguard/Config.in b/package/sshguard/Config.in
+ > new file mode 100644
+ > index 0000000..6bf1800
+ > --- /dev/null
+ > +++ b/package/sshguard/Config.in
+ > @@ -0,0 +1,10 @@
+ > +config BR2_PACKAGE_SSHGUARD
+ > +	bool "sshguard"
+ > +	depends on BR2_PACKAGE_IPTABLES
 
-Another attempt was to set BLAS=None in the environment. This didn't
-have any effect. Setting both BLAS=None and LAPACK=None does disable
-lapack and blas, but then we don't use clapack at all.
+Iptables doesn't have a lot of strange dependencies, so I think it makes
+more sense to use a select here. We also normally add a # runtime
+comment to explain why we don't need to add it to _DEPENDENCIES.
 
-In fact, it is not necessary to provide a libraries line at all: the
-build system will attempt to find liblapack, libblas and libcblas
-without any help.
 
-Therefore, remove the libraries line from site.cfg and remove
-PYTHON_NUMPY_SITE_CFG_LIBS.
+ > +++ b/package/sshguard/S39sshguard
+ > @@ -0,0 +1,50 @@
+ > +#!/bin/sh
+ > +
+ > +DAEMON="sshguard"
+ > +PIDFILE="/var/run/$DAEMON.pid"
+ > +
+ > +start() {
+ > +	printf 'Starting %s: ' "$DAEMON"
+ > +	iptables -L sshguard > /dev/null 2>&1 || \
+ > +	(iptables -N sshguard && \
+> +	iptables -A INPUT -j sshguard)
 
-Note that the paths to staging's /usr/include and /usr/lib need to be
-specified explicitly. Indeed, the numpy build system doesn't use the
-compiler to check the presence/absence of includes and libraries; it
-searches the paths itself. It also hardcodes paths to /usr/lib etc, but
-this is something that will be tackled in a separate commit.
+Indentation / wrapping looks a bit odd here.
 
-Note that there is another problem: both lapack and clapack provide
-libblas.so and liblapack.so. This will be handled in a later commit.
+ > +++ b/package/sshguard/sshguard.mk
+ > @@ -0,0 +1,34 @@
+ > +################################################################################
+ > +#
+ > +# sshguard
+ > +#
+ > +################################################################################
+ > +
+ > +SSHGUARD_VERSION = 2.4.0
+ > +SSHGUARD_SOURCE = sshguard-$(SSHGUARD_VERSION).tar.gz
 
-Also, openblas provides a cblas implementation in libopenblas.so, so
-there should be a dependency on openblas to make sure numpy can find it.
-This part is not entirely clear yet, so it will also be handled in a
-separate commit.
+It is the default, so can be dropped.
 
-Runtime testing is essential to be able to track this kind of issue, so
-that is something that will be added in a separate commit as well.
+> +SSHGUARD_SITE = https://sourceforge.net/projects/sshguard/files/sshguard/$(SSHGUARD_VERSION)
+ > +SSHGUARD_LICENSE = MIT, X11, GPL-2.0+, Public Domain, ISC
 
-Fixes:
-http://lists.busybox.net/pipermail/buildroot/2019-June/252380.html
+That is quite creative ;) The main license seems to be ISC, with the
+hash functions public domain and the SimCList code BSD-3-Clause. I do
+not see MIT or X11 code anywhere (except for the oneliner reference in
+install-sh, but that isn't used on the target). The only GPL reference I
+see is in the parser generated by bison, but that has an exception
+saying:
 
-Initial patch from Giulio Benetti :
-[v1] http://patchwork.ozlabs.org/patch/1100100/
-[v2] http://patchwork.ozlabs.org/patch/1100208/
+As a special exception, you may create a larger work that contains
+part or all of the Bison parser skeleton and distribute that work
+under terms of your choice
 
-Signed-off-by: Alexandre PAYEN <alexandre.payen@smile.fr>
-Cc: Giulio Benetti <giulio.benetti@micronovasrl.com>
-Signed-off-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
----
- package/python-numpy/python-numpy.mk | 2 --
- 1 file changed, 2 deletions(-)
+So I simply made this:
 
-diff --git a/package/python-numpy/python-numpy.mk b/package/python-numpy/python-numpy.mk
-index 5d2fbfc7ad..3b474efa6e 100644
---- a/package/python-numpy/python-numpy.mk
-+++ b/package/python-numpy/python-numpy.mk
-@@ -17,7 +17,6 @@ PYTHON_NUMPY_SETUP_TYPE = setuptools
- 
- ifeq ($(BR2_PACKAGE_CLAPACK),y)
- PYTHON_NUMPY_DEPENDENCIES += clapack
--PYTHON_NUMPY_SITE_CFG_LIBS += blas lapack
- else
- PYTHON_NUMPY_ENV += BLAS=None LAPACK=None
- endif
-@@ -29,7 +28,6 @@ define PYTHON_NUMPY_CONFIGURE_CMDS
- 	echo "[DEFAULT]" >> $(@D)/site.cfg
- 	echo "library_dirs = $(STAGING_DIR)/usr/lib" >> $(@D)/site.cfg
- 	echo "include_dirs = $(STAGING_DIR)/usr/include" >> $(@D)/site.cfg
--	echo "libraries =" $(subst $(space),$(comma),$(PYTHON_NUMPY_SITE_CFG_LIBS)) >> $(@D)/site.cfg
- endef
- 
- # Some package may include few headers from NumPy, so let's install it
+SSHGUARD_LICENSE = ISC, Public Domain (fnv hash), BSD-3-Clause (SimCList)
+
+ > +define SSHGUARD_INSTALL_CONFIG
+ > +	$(INSTALL) -D -m 0644 $(@D)/examples/sshguard.conf.sample \
+ > +		$(TARGET_DIR)/etc/sshguard.conf
+ > +	$(SED) '/^#BACKEND/c\BACKEND="/usr/libexec/sshg-fw-iptables"' $(TARGET_DIR)/etc/sshguard.conf
+ > +	$(SED) '/^#FILES/c\FILES="/var/log/messages"' $(TARGET_DIR)/etc/sshguard.conf
+
+NIT: This could be done in a single sed invocationm which would also
+shorten the very long line.
+
+ > +endef
+ > +SSHGUARD_POST_INSTALL_TARGET_HOOKS += SSHGUARD_INSTALL_CONFIG
+ > +
+ > +define SSHGUARD_INSTALL_INIT_SYSV
+ > +	$(INSTALL) -D -m 755 package/sshguard/S39sshguard \
+ > +		$(TARGET_DIR)/etc/init.d/S39sshguard
+ > +endef
+
+I don't see why this should be S39 when we only bring up the network in
+S40 and start ssh servers at S50, so I've changed this to S49.
+
+Committed with these fixes, thanks.
+
+-- 
+Bye, Peter Korsgaard
