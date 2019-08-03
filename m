@@ -1,66 +1,87 @@
 From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat,  3 Aug 2019 21:36:36 +0200
-Subject: [Buildroot] [PATCH v5 19/25] package/kodi-pvr-vuplus: bump version
+Date: Sat,  3 Aug 2019 21:36:34 +0200
+Subject: [Buildroot] [PATCH v5 17/25] package/kodi-pvr-mediaportal-tvserver:
+ bump version
 In-Reply-To: <20190803193642.17892-1-bernd.kuhls@t-online.de>
 References: <20190803193642.17892-1-bernd.kuhls@t-online.de>
-Message-ID: <20190803193642.17892-20-bernd.kuhls@t-online.de>
+Message-ID: <20190803193642.17892-18-bernd.kuhls@t-online.de>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Added dependency to json-for-modern-cpp after upstream commit:
-https://github.com/kodi-pvr/pvr.vuplus/commit/07480b96fc674317ccbb792b03b811edec143e0c
-
-Also added missing dependency to tinyxml.
+Removed patch, not needed anymore after PR 81.
 
 Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
 ---
- package/kodi-pvr-vuplus/Config.in            | 2 ++
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash | 2 +-
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk   | 6 ++----
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ ...e555-remove-xlocale.h-from-Locale.hh.patch | 33 -------------------
+ .../kodi-pvr-mediaportal-tvserver.hash        |  2 +-
+ .../kodi-pvr-mediaportal-tvserver.mk          |  4 +--
+ 3 files changed, 2 insertions(+), 37 deletions(-)
+ delete mode 100644 package/kodi-pvr-mediaportal-tvserver/0001-live555-remove-xlocale.h-from-Locale.hh.patch
 
-diff --git a/package/kodi-pvr-vuplus/Config.in b/package/kodi-pvr-vuplus/Config.in
-index a56c4ede93..96320f6fcb 100644
---- a/package/kodi-pvr-vuplus/Config.in
-+++ b/package/kodi-pvr-vuplus/Config.in
-@@ -1,6 +1,8 @@
- config BR2_PACKAGE_KODI_PVR_VUPLUS
- 	bool "kodi-pvr-vuplus"
-+	select BR2_PACKAGE_JSON_FOR_MODERN_CPP
- 	select BR2_PACKAGE_KODI_PLATFORM
-+	select BR2_PACKAGE_TINYXML
- 	help
- 	  VuPlus PVR client addon for Kodi
- 
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-index f4f6756931..f38f028cb3 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
+diff --git a/package/kodi-pvr-mediaportal-tvserver/0001-live555-remove-xlocale.h-from-Locale.hh.patch b/package/kodi-pvr-mediaportal-tvserver/0001-live555-remove-xlocale.h-from-Locale.hh.patch
+deleted file mode 100644
+index 7abb153b0e..0000000000
+--- a/package/kodi-pvr-mediaportal-tvserver/0001-live555-remove-xlocale.h-from-Locale.hh.patch
++++ /dev/null
+@@ -1,33 +0,0 @@
+-From 64b264d141fd80991ac071c5370802e2d7394f6d Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd.kuhls@t-online.de>
+-Date: Sun, 3 Dec 2017 22:17:12 +0100
+-Subject: [PATCH] live555: remove xlocale.h from Locale.hh
+-
+-Fixes build error with glibc 2.26:
+-https://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27
+-
+-Patch sent upstream:
+-https://github.com/kodi-pvr/pvr.mediaportal.tvserver/pull/79
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+----
+- src/lib/live555/liveMedia/include/Locale.hh | 3 ---
+- 1 file changed, 3 deletions(-)
+-
+-diff --git a/src/lib/live555/liveMedia/include/Locale.hh b/src/lib/live555/liveMedia/include/Locale.hh
+-index b327948..c4b4f4a 100644
+---- a/src/lib/live555/liveMedia/include/Locale.hh
+-+++ b/src/lib/live555/liveMedia/include/Locale.hh
+-@@ -43,9 +43,6 @@ along with this library; if not, write to the Free Software Foundation, Inc.,
+- 
+- #ifndef LOCALE_NOT_USED
+- #include <locale.h>
+--#ifndef XLOCALE_NOT_USED
+--#include <xlocale.h> // because, on some systems, <locale.h> doesn't include <xlocale.h>; this makes sure that we get both
+--#endif
+- #endif
+- 
+- 
+--- 
+-2.11.0
+-
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
+index 6eb0abfbaf..dfd5032598 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
 @@ -1,2 +1,2 @@
  # Locally computed
--sha256 a8c7345e4e2e415e29c21f14460b257dfbe08ed5ecf1cc2dc6bc393a10f95cf3  kodi-pvr-vuplus-2.4.12-Krypton.tar.gz
-+sha256 3dd505c6f83b5b388b1fb75a6e808a4b515564c83d3691741dfe15a8329d1da4  kodi-pvr-vuplus-7d4de243730eab00caa535df73278cbd5fe65334.tar.gz
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-index 581d884caa..bef7155598 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-@@ -4,12 +4,10 @@
+-sha256 3f5c022f83636b3739f26c1a07166b498eac82e8081ed7551980f4bb27c6b56e  kodi-pvr-mediaportal-tvserver-2.4.19v2-Krypton.tar.gz
++sha256 5fb5c4753dcfe1664bea2bd0053928a18069aea3436526e5b15c74c61a2349bb  kodi-pvr-mediaportal-tvserver-903d69fe4490a800ab757bbb3e8a026fb6ea2b0b.tar.gz
+diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+index 99a318911e..131e44ebf6 100644
+--- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
++++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
+@@ -4,9 +4,7 @@
  #
  ################################################################################
  
 -# This cset is on the branch 'Krypton'
 -# When Kodi is updated, then this should be updated to the corresponding branch
--KODI_PVR_VUPLUS_VERSION = 2.4.12-Krypton
-+KODI_PVR_VUPLUS_VERSION = 7d4de243730eab00caa535df73278cbd5fe65334
- KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
- KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
- KODI_PVR_VUPLUS_LICENSE_FILES = src/client.h
--KODI_PVR_VUPLUS_DEPENDENCIES = kodi-platform
-+KODI_PVR_VUPLUS_DEPENDENCIES = json-for-modern-cpp kodi-platform tinyxml
- 
- $(eval $(cmake-package))
+-KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 2.4.19v2-Krypton
++KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 903d69fe4490a800ab757bbb3e8a026fb6ea2b0b
+ KODI_PVR_MEDIAPORTAL_TVSERVER_SITE = $(call github,kodi-pvr,pvr.mediaportal.tvserver,$(KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION))
+ KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE = GPL-2.0+
+ KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE_FILES = src/client.h
 -- 
 2.20.1
