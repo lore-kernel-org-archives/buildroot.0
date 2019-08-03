@@ -1,48 +1,62 @@
-From: Bernd Kuhls <bernd.kuhls@t-online.de>
-Date: Sat, 03 Aug 2019 15:38:45 +0200
-Subject: [Buildroot] [PATCH v2 4/7] configs/qemu-*: add host-qemu-system
-References: <1557075239-30667-1-git-send-email-jugurtha.belkalem@smile.fr>
- <1557075239-30667-5-git-send-email-jugurtha.belkalem@smile.fr>
-Message-ID: <5cfg1gxvf.ln2@ID-313208.user.individual.net>
+From: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Date: Sat,  3 Aug 2019 15:49:33 +0200
+Subject: [Buildroot] [PATCH] package/pkg-utils.mk: add dl_dir to show-info
+ output
+Message-ID: <20190803134933.27050-1-arnout@mind.be>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Am Sun, 05 May 2019 18:53:56 +0200 schrieb Jugurtha BELKALEM:
+It can be useful for scripts to be able to access a package's source
+file after download. That used to be easy, just DL_DIR/PKG_SOURCE.
+However, with the subdirectories in DL_DIR which can be overridden with
+PKG_DL_SUBDIR, that is no longer easy.
 
-> diff --git a/configs/qemu_xtensa_lx60_defconfig b/configs/
-qemu_xtensa_lx60_defconfig
-> index 4287e6a..a5fd14b 100644
-> --- a/configs/qemu_xtensa_lx60_defconfig
-> +++ b/configs/qemu_xtensa_lx60_defconfig
-> @@ -26,3 +26,7 @@ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
->  
->  # Kernel needs mkimage
->  BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> +
-> +# host-qemu for gitlab testing
-> +BR2_PACKAGE_HOST_QEMU=y
-> +BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
-> diff --git a/configs/qemu_xtensa_lx60_nommu_defconfig b/configs/
-qemu_xtensa_lx60_nommu_defconfig
-> index 37b6743..750e37d 100644
-> --- a/configs/qemu_xtensa_lx60_nommu_defconfig
-> +++ b/configs/qemu_xtensa_lx60_nommu_defconfig
-> @@ -30,3 +30,7 @@ BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="Image"
->  
->  # Kernel needs mkimage
->  BR2_PACKAGE_HOST_UBOOT_TOOLS=y
-> +
-> +# host-qemu for gitlab testing
-> +BR2_PACKAGE_HOST_QEMU=y
-> +BR2_PACKAGE_HOST_QEMU_SYSTEM_MODE=y
+Therefore, this patch adds dl_dir to the package information. It prints
+just PKG_DL_SUBDIR, to avoid dumping absolute paths to the buildroot
+directory in the show-info output.
 
-Hi Jugurtha,
+It can be used with the following jq script to get a newline-separated
+list of all downloaded files:
 
-this patch added qemu-host support for xtensa, but
-https://git.buildroot.net/buildroot/tree/package/qemu/Config.in.host
-has no support for xtensa.
+make show-info | jq -r '.[] | ("dl/" + .dl_dir + "/" + .downloads[]?.source)'
 
-Regards, Bernd
+Signed-off-by: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+Cc: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+v1 -> v2:
+ - Use DL_SUBDIR (i.e. relative path) instead of DL_DIR (i.e. absolute
+   path). (Yann)
+ - Move the definition one level higher, because it is anyway the same
+   for all sources. (Yann)
+ - Update jq script in commit message to handle the above.
+---
+ package/pkg-utils.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
+index b7280e930f..d3345f7c91 100644
+--- a/package/pkg-utils.mk
++++ b/package/pkg-utils.mk
+@@ -94,6 +94,7 @@ endef
+ define _json-info-pkg-details
+ 	"version": "$($(1)_DL_VERSION)",
+ 	"licenses": "$($(1)_LICENSE)",
++	"dl_dir": "$($(1)_DL_SUBDIR)",
+ 	"downloads": [
+ 	$(foreach dl,$(sort $($(1)_ALL_DOWNLOADS)),
+ 		{
+@@ -104,8 +105,7 @@ define _json-info-pkg-details
+ 						$(call DOWNLOAD_URIS,$(dl),$(1))
+ 					)
+ 				)
+-			]
+-		},
++			]		},
+ 	)
+ 	],
+ endef
+-- 
+2.21.0
