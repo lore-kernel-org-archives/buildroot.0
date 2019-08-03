@@ -1,55 +1,38 @@
-From: Arnout Vandecappelle <arnout@mind.be>
-Date: Sat, 3 Aug 2019 23:13:28 +0200
-Subject: [Buildroot] [PATCH 3/5 v2] toolchain: check the SSP option is
- known
-In-Reply-To: <6137_1552392583_5C87A187_6137_470_1_3090e77d-fd75-49ec-8643-3a89ee5ea133@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
-References: <cover.1552392456.git.yann.morin@orange.com>
- <6137_1552392583_5C87A187_6137_470_1_3090e77d-fd75-49ec-8643-3a89ee5ea133@OPEXCLILM6F.corporate.adroot.infra.ftgroup>
-Message-ID: <15f0cc73-a0e4-35fe-03bc-0e18b62decb3@mind.be>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 03 Aug 2019 23:15:44 +0200
+Subject: [Buildroot] [PATCH] package/gdb: update host gdb minimum host
+ gcc version
+In-Reply-To: <20190803205935.12331-1-romain.naour@smile.fr> (Romain Naour's
+ message of "Sat, 3 Aug 2019 22:59:35 +0200")
+References: <20190803205935.12331-1-romain.naour@smile.fr>
+Message-ID: <87mugq6jcv.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
+>>>>> "Romain" == Romain Naour <romain.naour@smile.fr> writes:
+
+ > Following gdb 7.12.1 removal [1] the host gcc version needs
+ > to be updated since gdb >= 8.x now requires C++11 compiler.
+
+ > While at it, move BR2_HOST_GCC_AT_LEAST_4_8 under
+ > BR2_PACKAGE_HOST_GDB since it's not an architecture
+ > dependency. Add a comment when the host gcc is too
+ > old to build host gdb.
+
+ > [1] d36f2c73331b3ab4e238eeb47d7d79d81a895a59
+
+ > Fixes:
+ > http://autobuild.buildroot.org/results/822/822a747a6717db57705d1ce198a61988aa1173b1
+
+ > Signed-off-by: Romain Naour <romain.naour@smile.fr>
+ > Cc: Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Peter Korsgaard <peter@korsgaard.com>
 
 
-On 12/03/2019 13:09, yann.morin at orange.com wrote:
-> From: "Yann E. MORIN" <yann.morin@orange.com>
-> 
-> Some toolchain vendors may have backported those options to older gcc
-> versions, and we have no way to know, so we have to check that the
-> user's selection is acceptable.
-> 
-> Extend the macro that currently checks for SSP in the toolchain, with
-> a new test that the actual SSP option is recognised and accepted.
-> 
-> Note that the SSP option is either totaly empty, or an already-quoted
-> string, so we can safely and easily assign it to a shell variable to
-> test and use it.
-> 
-> Note that we do not introduce BR2_TOOLCHAIN_HAS_SSP_STRONG, because:
-> 
->   - our internal toolchain infra only supports gcc >= 4.9, so it has
->     SSP strong;
-> 
->   - of the external pre-built toolchains, only the codesourcery-arm
->     one has a gcc-4.8 which lacks SSP strong, all the others have a
->     gcc >= 4.9;
-> 
->   - we'd still have to do the actual check for custom external
->     toolchains anyway.
-> 
-> So, we're not adding BR2_TOOLCHAIN_HAS_SSP_STRONG just for a single
-> case.
-> 
-> Signed-off-by: "Yann E. MORIN" <yann.morin@orange.com>
-> Cc: Matt Weber <matthew.weber@rockwellcollins.com>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
-> Cc: Arnout Vandecappelle <arnout@mind.be>
+Committed, thanks.
 
- You replied to all concerns, so I've applied as-is.
-
- Regards,
- Arnout
+-- 
+Bye, Peter Korsgaard
