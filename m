@@ -1,38 +1,37 @@
-From: Pierre-Jean Texier <pjtexier@koncepto.io>
-Date: Sat,  3 Aug 2019 19:57:43 +0200
-Subject: [Buildroot] [PATCH] package/sshguard: need threads
-Message-ID: <1564855063-1853-1-git-send-email-pjtexier@koncepto.io>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 03 Aug 2019 20:00:26 +0200
+Subject: [Buildroot] [PATCH 01/13 v2] supports/scripts: declare missing
+ local variables
+In-Reply-To: <13072f388441fc50176afb83d877b33fe5cad833.1564431589.git.yann.morin.1998@free.fr>
+ (Yann E. MORIN's message of "Mon, 29 Jul 2019 22:19:51 +0200")
+References: <cover.1564431589.git.yann.morin.1998@free.fr>
+ <13072f388441fc50176afb83d877b33fe5cad833.1564431589.git.yann.morin.1998@free.fr>
+Message-ID: <87imre9lj9.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Fixes:
- - autobuild.buildroot.net/results/01f/01fb32fdb21c60ffece09ea5e7ba7b58d989ed76/
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-Signed-off-by: Pierre-Jean Texier <pjtexier@koncepto.io>
----
- package/sshguard/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ > Commit b14b02698 (core/br2-external: restore compatibility with old
+ > distros) switched to using 'eval' to emulate assocviative arrays, for
+ > those distros too old to have bash-4+.
 
-diff --git a/package/sshguard/Config.in b/package/sshguard/Config.in
-index e834f17..7454c0a 100644
---- a/package/sshguard/Config.in
-+++ b/package/sshguard/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_SSHGUARD
- 	bool "sshguard"
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_IPTABLES # runtime
- 	help
- 	  sshguard protects hosts from brute-force attacks against SSH
-@@ -8,3 +9,6 @@ config BR2_PACKAGE_SSHGUARD
- 	  including iptables, ipfw, and pf.
- 
- 	  https://www.sshguard.net
-+
-+comment "sshguard needs a toolchain w/ threads"
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
+ > In so doing, it forgot to declare the new local variables in the
+ > respective helper functions.
+
+ > Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ > Cc: Vadim Kochan <vadim4j@gmail.com>
+ > Cc: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Ricardo Martincoski <ricardo.martincoski@gmail.com>
+
+ > ---
+ > Changes v1 -> v2;
+ >   - add another missing variable
+
+Committed, thanks.
+
 -- 
-2.7.4
+Bye, Peter Korsgaard
