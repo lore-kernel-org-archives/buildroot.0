@@ -1,186 +1,150 @@
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-Date: Sat, 3 Aug 2019 12:04:09 +0200
-Subject: [Buildroot] [PATCH 1/2] jack1: new package
-In-Reply-To: <20190101173342.3565-1-adam@adamh.cz>
-References: <20190101173342.3565-1-adam@adamh.cz>
-Message-ID: <20190803100409.GD28984@scaer>
+From: Peter Korsgaard <peter@korsgaard.com>
+Date: Sat, 03 Aug 2019 12:18:13 +0200
+Subject: [Buildroot] [PATCH] package/ettercap: new package
+In-Reply-To: <1557232415-11421-1-git-send-email-jugurtha.belkalem@smile.fr>
+ (Jugurtha BELKALEM's message of "Tue, 7 May 2019 14:33:35 +0200")
+References: <1557232415-11421-1-git-send-email-jugurtha.belkalem@smile.fr>
+Message-ID: <87ef22o8m2.fsf@dell.be.48ers.dk>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-Adam, All,
+>>>>> "Jugurtha" == Jugurtha BELKALEM <jugurtha.belkalem@smile.fr> writes:
 
-Thanks for your contribution, and sorry to come back so late...
+ > Ettercap is a comprehensive suite for man
+ > in the middle attacks.
+ > It features sniffing of live connections, content
+ > filtering on the fly and many other interesting
+ > tricks.
 
-On 2019-01-01 18:33 +0100, Adam Heinrich spake thusly:
-> This patch adds a new jack1 package alongside the existing jack2.
-> 
-> While jack1 and jack2 are two equivalent implementations of the same
-> protocol, they differ in a few details and both of them are being
-> actively used (jack2 is not considered to be a replacement of jack1).
+ > Ettercap can help identify misconfigured networks,
+ > testing intrusion detection and prevention
+ > applications and build robust embedded systems that
+ > are "security by design" compliant.
 
-I've respun the jack1 patch with some changes:
-    https://patchwork.ozlabs.org/patch/1141475/
+You word wrapping is kind of odd?
 
-Specifically, I've switched to using the released tarfball, because it
-does contain everything to build, tested with utils/test-package:
 
-                             br-arm-full [1/6]: OK
-                  br-arm-cortex-a9-glibc [2/6]: OK
-                   br-arm-cortex-m4-full [3/6]: SKIPPED
-                          br-x86-64-musl [4/6]: OK
-                      br-arm-full-static [5/6]: SKIPPED
-                            sourcery-arm [6/6]: OK
-6 builds, 2 skipped, 0 build failed, 0 legal-info failed
+ > This tool can be used for security testing or
+ > educational purposes.
 
-Consequently, it meansthere is not reason to run autoreconf anymore.
-Also, running autogen.sh was not needed; all that was needed for
-autoreconf to work was to create the m4 directory, but that's not needed
-for the release tarball.
+ > Master branch from :
+ > https://github.com/Ettercap/ettercap
+ > was used as the source for this packet as it
+ > remains in active development (unlike release
+ > version which dates back to 2015).
 
-Finally, I've changed the dependency so that jack1 can't be enabled when
-jack2 is (a bit like we disallow python3 when python2 is enabled), which
-means your second patch (expanding the comment in jack2) is no longer
-really needed.
+In the mean time 0.8.3 has been released.
 
-Regards,
-Yann E. MORIN.
 
-> For more information, see:
-> https://github.com/jackaudio/jackaudio.github.com/wiki/Q_difference_jack1_jack2
-> 
-> Signed-off-by: Adam Heinrich <adam@adamh.cz>
-> ---
->  package/Config.in        |  1 +
->  package/jack1/Config.in  | 36 ++++++++++++++++++++++++++++++++++++
->  package/jack1/jack1.hash |  5 +++++
->  package/jack1/jack1.mk   | 36 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 78 insertions(+)
->  create mode 100644 package/jack1/Config.in
->  create mode 100644 package/jack1/jack1.hash
->  create mode 100644 package/jack1/jack1.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index 0df9b73088..ad8070f54c 100644
-> --- a/package/Config.in
 > +++ b/package/Config.in
-> @@ -25,6 +25,7 @@ menu "Audio and video applications"
->  	source "package/gmrender-resurrect/Config.in"
->  	source "package/gstreamer/Config.in"
->  	source "package/gstreamer1/Config.in"
-> +	source "package/jack1/Config.in"
->  	source "package/jack2/Config.in"
->  	source "package/kodi/Config.in"
->  	source "package/lame/Config.in"
-> diff --git a/package/jack1/Config.in b/package/jack1/Config.in
-> new file mode 100644
-> index 0000000000..bedd3ec449
-> --- /dev/null
-> +++ b/package/jack1/Config.in
-> @@ -0,0 +1,36 @@
-> +config BR2_PACKAGE_JACK1
-> +	bool "jack1"
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # alsa-lib
-> +	depends on BR2_USE_MMU # fork()
-> +	depends on !BR2_STATIC_LIBS
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +	select BR2_PACKAGE_BERKELEYDB
-> +	select BR2_PACKAGE_LIBSAMPLERATE
-> +	select BR2_PACKAGE_LIBSNDFILE
-> +	select BR2_PACKAGE_ALSA_LIB
-> +	select BR2_PACKAGE_ALSA_LIB_HWDEP
-> +	select BR2_PACKAGE_ALSA_LIB_SEQ
-> +	select BR2_PACKAGE_ALSA_LIB_RAWMIDI
-> +	help
-> +	  JACK Audio Connection Kit (JACK 1 implementation).
-> +
-> +	  JACK is a low-latency sound server, allowing multiple
-> +	  applications to connect to one audio device, and to share
-> +	  audio between themselves. This package contains the daemon
-> +	  jackd as well as some example clients.
-> +
-> +	  http://jackaudio.org/
-> +
-> +	  Another implementation (BR2_PACKAGE_JACK2) is also available,
-> +	  please consult the documentation to choose the right one:
-> +
-> +	  https://github.com/jackaudio/jackaudio.github.com/wiki/Q_difference_jack1_jack2
-> +
-> +comment "jack1 needs a toolchain w/ threads, dynamic library"
-> +	depends on BR2_USE_MMU
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-> +
-> +comment "do not enable jack1 and jack2 together"
-> +	depends on BR2_PACKAGE_JACK1
-> +	depends on BR2_PACKAGE_JACK2
-> diff --git a/package/jack1/jack1.hash b/package/jack1/jack1.hash
-> new file mode 100644
-> index 0000000000..06458180f0
-> --- /dev/null
-> +++ b/package/jack1/jack1.hash
-> @@ -0,0 +1,5 @@
-> +# Locally computed
-> +sha256 c811826f2993d4f0245b0ee92e9d305d0b67990cea08a2c5f9b21a5d65939a82  jack1-0.125.0.tar.gz
-> +sha256 661fe53a7e3fce790b185e35c60b7ed80d7efdf25fd7df5af6814a9a215a538f  COPYING
-> +sha256 32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING.GPL
-> +sha256 ad01ea5cd2755f6048383c8d54c88459cd6fcb17757c5c8892f8c5ea060f6140  COPYING.LGPL
-> diff --git a/package/jack1/jack1.mk b/package/jack1/jack1.mk
-> new file mode 100644
-> index 0000000000..b346839393
-> --- /dev/null
-> +++ b/package/jack1/jack1.mk
-> @@ -0,0 +1,36 @@
-> +################################################################################
-> +#
-> +# jack1
-> +#
-> +################################################################################
-> +
-> +JACK1_VERSION = 0.125.0
-> +# Do not use the official release link nor the github helper because
-> +# the archive contains empty directories (uninitialized submodules):
-> +JACK1_SITE = https://github.com/jackaudio/jack1.git
-> +JACK1_SITE_METHOD = git
-> +JACK1_GIT_SUBMODULES = YES
-> +JACK1_LICENSE = GPL-2.0+ (jack server), LGPL-2.1+ (jack library)
-> +JACK1_LICENSE_FILES = COPYING COPYING.GPL COPYING.LGPL
-> +JACK1_INSTALL_STAGING = YES
-> +JACK1_AUTORECONF = YES
-> +JACK1_CONF_OPTS = --without-html-dir --disable-oss
-> +JACK1_DEPENDENCIES = berkeleydb libsamplerate libsndfile alsa-lib
-> +
-> +ifeq ($(BR2_PACKAGE_OPUS),y)
-> +JACK1_DEPENDENCIES += opus
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_READLINE),y)
-> +JACK1_DEPENDENCIES += readline
-> +endif
-> +
-> +# Dependency to celt can't be met: jack1 requires celt >= 0.8.0 but we
-> +# only have 0.5.1.3 and we cannot upgrade.
-> +
-> +define JACK1_RUN_AUTOGEN
-> +	(cd $(@D); $(TARGET_CONFIGURE_OPTS) ./autogen.sh)
-> +endef
-> +JACK1_PRE_CONFIGURE_HOOKS += JACK1_RUN_AUTOGEN
-> +
-> +$(eval $(autotools-package))
-> -- 
-> 2.17.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot at busybox.net
-> http://lists.busybox.net/mailman/listinfo/buildroot
+ > @@ -1757,6 +1757,7 @@ endif
+ >  endmenu
+ 
+ >  menu "Security"
+ > +	source "package/ettercap/Config.in"
+
+Sticking this under libraries -> security is a bit odd. Perhaps a better
+place would be Networking applications?
+
+
+ > +++ b/package/ettercap/0001-Fix-invalid-utf-8-is-not-supported.patch
+ > @@ -0,0 +1,33 @@
+ > +From b4f8a10100669806de6cb37b1c1f747539e93b31 Mon Sep 17 00:00:00 2001
+ > +From: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+ > +Date: Tue, 7 May 2019 13:25:44 +0200
+ > +Subject: [PATCH] Fix invalid utf-8 is not supported
+ > +
+ > +Fixes fatal error message generated even when
+ > +utf-8 is available.
+ > +Ettercap requires gettext package and works fine.
+ > + 
+ > +Signed-off-by: Jugurtha BELKALEM <jugurtha.belkalem@smile.fr>
+ > +---
+ > + ettercap-5fb604823c6063676ebdf7cac66b7807acb4f7ed/src/ec_format.c | 5 +----
+ > + 1 file changed, 1 insertion(+), 4 deletions(-)
+ > +
+ > +diff --git a/src/ec_format.c b/ettercap-5fb604823c6063676ebdf7cac66b7807acb4f7ed/src/ec_format.c
+ > +index 5c9b850..dd9d972 100644
+ > +--- a/src/ec_format.c
+ > ++++ b/src/ec_format.c
+ > +@@ -417,10 +417,7 @@ int set_utf8_encoding(u_char *fromcode)
+ > + 
+ > +    /* make sure encoding type is supported */
+ > +    cd = iconv_open("UTF-8", (const char*)fromcode);
+ > +-   
+ > +-   if (cd == (iconv_t)(-1))
+ > +-      SEMIFATAL_ERROR("The conversion from %s to UTF-8 is not supported.", fromcode);
+
+This looks very confusing to me - Can you provide more details? What is
+fromcode set to here when it fails? What toolchains do you see this
+error with? Can we instead turn off HAVE_UTF8 for those cases?
+
+
+ > diff --git a/package/ettercap/Config.in b/package/ettercap/Config.in
+ > new file mode 100644
+ > index 0000000..fbab876
+ > --- /dev/null
+ > +++ b/package/ettercap/Config.in
+ > @@ -0,0 +1,22 @@
+ > +config BR2_PACKAGE_ETTERCAP
+ > +	bool "ettercap"
+ > +	select BR2_PACKAGE_ETHTOOL # runtime
+ > +	select BR2_PACKAGE_GEOIP # runtime
+ > +	select BR2_PACKAGE_GETTEXT # runtime
+ > +	select BR2_PACKAGE_LIBCURL # runtime
+ > +	select BR2_PACKAGE_LIBNET # runtime
+ > +	select BR2_PACKAGE_LIBPCAP # runtime
+ > +	select BR2_PACKAGE_LIBPTHREAD_STUB # runtime
+ > +	select BR2_PACKAGE_NCURSES # runtime
+ > +	select BR2_PACKAGE_OPENSSL # runtime
+ > +	select BR2_PACKAGE_ZLIB # runtime
+
+You list all of these as runtime dependencies, but still add them to
+ETTERCAP_DEPENDENCIES? Doing a quick test, I see that atleast ncurses is
+a build dependency:
+
+  Could NOT find Curses (missing: CURSES_LIBRARY CURSES_INCLUDE_PATH)
+
+Looking a CMakeLists.txt I see that a number of these are optional:
+
+option(ENABLE_CURSES "Enable curses interface" ON)
+option(ENABLE_GTK "Enable GTK interface" ON)
+option(ENABLE_PLUGINS "Enable plugins support" ON)
+option(ENABLE_IPV6 "Enable IPv6 support" OFF)
+option(ENABLE_LUA "Enable LUA support (EXPERIMENTAL)" OFF)
+option(ENABLE_PDF_DOCS "Enable PDF document generation" OFF)
+option(ENABLE_TESTS "Enable Unit Tests" OFF)
+option(ENABLE_GEOIP "Build with GeoIP support" ON)
+option(LIBRARY_BUILD "Build for libettercap only" OFF)
+option(INSTALL_DESKTOP "Install ettercap desktop files" ON)
+
+So it would be nice to only enable these things if the affected packages
+are enabled.
+
+Are there really no toolchain dependencies? I see that plugins are
+enabled by default, so presumably this means that it uses dlopen() and
+hence will not work in a BR2_STATIC_LIBS setup?
+
+
+ > +ETTERCAP_VERSION = 5fb604823c6063676ebdf7cac66b7807acb4f7ed
+ > +ETTERCAP_SITE = $(call github,Ettercap,ettercap,$(ETTERCAP_VERSION))
+ > +ETTERCAP_LICENSE = GPL-2.0
+
+The source files contains the "any later version" text, so it should be
+GPL-2.0+
+
+
+> +ETTERCAP_LICENSE_FILES = LICENSE
+ > +ETTERCAP_SUPPORTS_IN_SOURCE_BUILD = NO
+ > +ETTERCAP_DEPENDENCIES = geoip host-ncurses libzlib \
+ > +	libcurl libnet libopenssl libpcap ncurses
+
+Why is host-ncurses needed?
+
+Care to fix these issues and send an updated patch?
 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Bye, Peter Korsgaard
