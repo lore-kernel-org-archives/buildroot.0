@@ -1,34 +1,79 @@
-From: Peter Korsgaard <peter@korsgaard.com>
-Date: Sat, 03 Aug 2019 10:42:24 +0200
-Subject: [Buildroot] [PATCH v2 2/4] board/raspberrypi: add support for
- the new pi4
-In-Reply-To: <20190629183240.16035-2-michael@michaelcullen.name> (Michael
- Cullen's message of "Sat, 29 Jun 2019 19:32:38 +0100")
-References: <20190629183240.16035-1-michael@michaelcullen.name>
- <20190629183240.16035-2-michael@michaelcullen.name>
-Message-ID: <87mugqod1r.fsf@dell.be.48ers.dk>
+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Sat, 3 Aug 2019 10:44:03 +0200
+Subject: [Buildroot] [PATCH v2 2/2] board/sifive: Add the HiFive Unleased
+In-Reply-To: <20190722204447.7935-2-alistair.francis@wdc.com>
+References: <20190722204447.7935-1-alistair.francis@wdc.com>
+ <20190722204447.7935-2-alistair.francis@wdc.com>
+Message-ID: <20190803104403.727906e6@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
->>>>> "Michael" == Michael Cullen <michael@michaelcullen.name> writes:
+Hello Alistair,
 
- > This is based on the pi3 defconfig. There is currently no 64-bit support
- > since the upstream kernel does not build in this configuration.
+The commit title should have been:
 
- > Signed-off-by: Michael Cullen <michael@michaelcullen.name>
+	configs/hifive_unleashed: new defconfig
 
- > ---
- > V1 -> V2 Diff:
- > * Fixed various mistakes in the readme file
- > * Reverted a change (WRT the pi3 config) of the boot filesystem size
- >   - this was changed while I was testing and I forgot to change it back
- > * Stripped down boot partition to necessary files
- >   - Specifically, removed the start.elf and fixup.dat files for other versions
+On Mon, 22 Jul 2019 13:44:47 -0700
+Alistair Francis <alistair.francis@wdc.com> wrote:
 
-Committed, thanks.
+> This patch adds support for the HiFive Unleashed board. This includes
+> building the firmware, kernel and rootFS for the HiFive Unleased.
+> 
+> This patch includes a post-image.sh script and genimage.cfg file
+> used to generate a sdcard image that can be dd-ed to an SD card.
+> 
+> The manual steps are useful even when genimage works as
+> users won't always need to flash the entire SD card. For example a
+> kernel update will only require one partition being updated manually via
+> dd instead of a full reflash.
 
+Documenting such manual steps is not very useful in readme.txt.
+readme.txt is only meant as a very introductory document on how to use
+the image produced by Buildroot. More advanced use-cases cannot all be
+documented in readme.txt files, so I dropped that part from readme.txt.
+
+
+>  N:	Alvaro G. M <alvaro.gamez@hazent.com>
+> diff --git a/board/sifive/hifive_unleased/genimage.cfg b/board/sifive/hifive_unleased/genimage.cfg
+
+The folder board/sifive/hifive_unleased/ had a typo: unleased ->
+unleashed. This typo was also in the title of your commit.
+
+
+> diff --git a/board/sifive/hifive_unleased/post-image.sh b/board/sifive/hifive_unleased/post-image.sh
+> new file mode 100755
+> index 0000000000..2051ee49cb
+> --- /dev/null
+> +++ b/board/sifive/hifive_unleased/post-image.sh
+> @@ -0,0 +1,9 @@
+> +#!/bin/sh
+> +
+> +# Script to generate a SD card image for the HiFive Unleashed.
+> +
+> +# We need to make sure that this is updated
+> +make opensbi-rebuild
+
+This is not necessary: at the end of a build, opensbi will have been
+built after linux, so it's updated. It's only if you later change the
+linux configuration again that you need to regenerate the opensbi
+package. Buildroot only guarantees that a build output is correct for
+completely clean builds, so I dropped this. This makes the
+post-image.sh script useless, because we can use
+support/scripts/genimage.sh.
+
+I fixed those different aspects, and merged the patch. See the final
+commit at:
+
+  https://git.buildroot.org/buildroot/commit/?id=86531fae3e3c7ea59430cd0f86260d20fafa9b16
+
+Thanks!
+
+Thomas
 -- 
-Bye, Peter Korsgaard
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
