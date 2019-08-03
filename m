@@ -1,175 +1,94 @@
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sat,  3 Aug 2019 09:32:14 +0200
-Subject: [Buildroot] [PATCH 1/1] package/domoticz: bump to version
- 0f411f781ae4fb4a82f592d38a3f40578c149533
-Message-ID: <20190803073214.9102-1-fontaine.fabrice@gmail.com>
+Date: Sat,  3 Aug 2019 09:36:11 +0200
+Subject: [Buildroot] [PATCH 1/1] package/checksec: bump to version 2.1.0
+Message-ID: <20190803073611.9465-1-fontaine.fabrice@gmail.com>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-- Replace first patch to fix build when using a development version
-- Fix build with openzwave 1.6 through:
-  https://github.com/domoticz/domoticz/commit/56d3fa099d9c98222d6cf5043891c6ba2f1df6bf
-- Add patch to revert cmake 3.14 dependency
-
-Fixes:
- - http://autobuild.buildroot.org/results/3dbb6612205020cc156d245a75c76a7886f7d529
+Remove patch, it does not seem to be needed anymore as issue was not
+reproduced (see https://github.com/slimm609/checksec.sh/issues/54)
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...story.txt-use-10717-instead-of-xxxxx.patch | 33 +++++++++++++
- ...ersion.default-bump-version-to-10717.patch | 23 ----------
- ...CMake-configuration-file-to-use-vers.patch | 46 +++++++++++++++++++
- package/domoticz/domoticz.hash                |  2 +-
- package/domoticz/domoticz.mk                  |  2 +-
- 5 files changed, 81 insertions(+), 25 deletions(-)
- create mode 100644 package/domoticz/0001-History.txt-use-10717-instead-of-xxxxx.patch
- delete mode 100644 package/domoticz/0001-appversion.default-bump-version-to-10717.patch
- create mode 100644 package/domoticz/0002-Revert-Updating-CMake-configuration-file-to-use-vers.patch
+ ...cksec-Fixed-issue-with-relative-path.patch | 43 -------------------
+ package/checksec/checksec.hash                |  2 +-
+ package/checksec/checksec.mk                  |  2 +-
+ 3 files changed, 2 insertions(+), 45 deletions(-)
+ delete mode 100644 package/checksec/0001-checksec-Fixed-issue-with-relative-path.patch
 
-diff --git a/package/domoticz/0001-History.txt-use-10717-instead-of-xxxxx.patch b/package/domoticz/0001-History.txt-use-10717-instead-of-xxxxx.patch
-new file mode 100644
-index 0000000000..c2b9cb0d25
---- /dev/null
-+++ b/package/domoticz/0001-History.txt-use-10717-instead-of-xxxxx.patch
-@@ -0,0 +1,33 @@
-+From bc34ba549d4366092a39a4d7bc4414f8cbd8bc6c Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Sat, 3 Aug 2019 09:13:54 +0200
-+Subject: [PATCH] History.txt: use 10717 instead of xxxxx
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Set current development version to 4.10717 instead of 4.xxxxx to avoid
-+the following build failure when git is unavailable:
-+
-+/home/fabrice/buildroot/output/build/domoticz-0f411f781ae4fb4a82f592d38a3f40578c149533/main/domoticz.cpp: In function ?void GetAppVersion()?:
-+/home/fabrice/buildroot/output/build/domoticz-0f411f781ae4fb4a82f592d38a3f40578c149533/main/../appversion.h:1:20: error: ?xxxxx? was not declared in this scope
-+ #define APPVERSION xxxxx
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ History.txt | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/History.txt b/History.txt
-+index 4dc45e6b5..ad67976f3 100644
-+--- a/History.txt
-++++ b/History.txt
-+@@ -1,4 +1,4 @@
-+-Version 4.xxxxx (xxx 2019)
-++Version 4.10717 (xxx 2019)
-+ - Implemented: DarkSky CloudCover sensor
-+ - Implemented: EventSystem, option in Settings to enable/disable URL call logging containing full URL path
-+ - Implemented: GUI, OpenZWave added Refresh Node Information button, styling
-+-- 
-+2.20.1
-+
-diff --git a/package/domoticz/0001-appversion.default-bump-version-to-10717.patch b/package/domoticz/0001-appversion.default-bump-version-to-10717.patch
+diff --git a/package/checksec/0001-checksec-Fixed-issue-with-relative-path.patch b/package/checksec/0001-checksec-Fixed-issue-with-relative-path.patch
 deleted file mode 100644
-index df0f1b339a..0000000000
---- a/package/domoticz/0001-appversion.default-bump-version-to-10717.patch
+index 3ed75a3c34..0000000000
+--- a/package/checksec/0001-checksec-Fixed-issue-with-relative-path.patch
 +++ /dev/null
-@@ -1,23 +0,0 @@
--From 4d8bbaf4bdffe4fa77a060cd7fa848f3001d46a8 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Tue, 21 May 2019 21:08:13 +0200
--Subject: [PATCH] appversion.default: bump version to 10717
+@@ -1,43 +0,0 @@
+-From b48a2dfae26fa3b4af8e65fb5953b3caf62c137b Mon Sep 17 00:00:00 2001
+-From: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+-Date: Mon, 21 May 2018 14:34:23 -0500
+-Subject: [PATCH] checksec: Fixed issue with relative path
 -
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/domoticz/domoticz/pull/3251]
+-Before this patch, the checksec script was not able to find existing
+-directories when the user passed a relative path with --dir/-d,
+-the script aborted with a "No such file or directory". The same error
+-was reported when the script was executed through a relative path.
+-
+-https://github.com/slimm609/checksec.sh/issues/54
+-
+-Signed-off-by: Paresh Chaudhary <paresh.chaudhary@rockwellcollins.com>
+-Signed-off-by: Matt Weber <matthew.weber@rockwellcollins.com>
 ----
-- appversion.default | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
+- checksec | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
 -
--diff --git a/appversion.default b/appversion.default
--index 7d3530590..6fc5766c2 100644
----- a/appversion.default
--+++ b/appversion.default
--@@ -1,3 +1,3 @@
---#define APPVERSION 9700
--+#define APPVERSION 10717
-- #define APPHASH "b97777b"
-- #define APPDATE 1478691222
+-diff --git a/checksec b/checksec
+-index 24b521f..baf8d63 100755
+---- a/checksec
+-+++ b/checksec
+-@@ -1193,7 +1193,7 @@ do
+-     echo_message "RELRO           STACK CANARY      NX            PIE             RPATH      RUNPATH      FORTIFY Checked         Total   Filename\n" '' "<dir name='$tempdir'>\n" "{ \"dir\": { \"name\":\"$tempdir\" },"
+-     fdircount=0
+-     fdirtotal=0
+--    for N in $(find $tempdir -type f); do
+-+    for N in $(find . -type f); do
+-       if [[ "$N" != "[A-Za-z1-0]*" ]]; then
+-         out=$(file "$N")
+-         if [[  $out =~ ELF ]] ; then
+-@@ -1201,7 +1201,7 @@ do
+-         fi
+-       fi
+-     done
+--    for N in $(find $tempdir -type f); do
+-+    for N in $(find . -type f); do
+-       if [[ "$N" != "[A-Za-z1-0]*" ]]; then
+-     # read permissions?
+-     if [[ ! -r "$N" ]]; then
 --- 
--2.20.1
+-1.9.1
 -
-diff --git a/package/domoticz/0002-Revert-Updating-CMake-configuration-file-to-use-vers.patch b/package/domoticz/0002-Revert-Updating-CMake-configuration-file-to-use-vers.patch
-new file mode 100644
-index 0000000000..2aa58288b4
---- /dev/null
-+++ b/package/domoticz/0002-Revert-Updating-CMake-configuration-file-to-use-vers.patch
-@@ -0,0 +1,46 @@
-+From 2cd95289939b4a7c2576176c7f6268028aa093b2 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Fri, 24 May 2019 21:50:16 +0200
-+Subject: [PATCH] Revert "Updating CMake configuration file to use
-+ version 3.14 as minimum and added boost dependency targets"
-+
-+This reverts commit 4e4ee999c4b323514c0ba81ab1ff3afb10d2f1cd.
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ CMakeLists.txt | 8 +++-----
-+ 1 file changed, 3 insertions(+), 5 deletions(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index c5b7832ff..a21f5b87b 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -1,5 +1,5 @@
-+-#set to minimum version that supports clean build
-+-cmake_minimum_required(VERSION 3.14.0)
-++#set to minimum version that supports clean build on cygwin
-++cmake_minimum_required(VERSION 2.8.4)
-+ 
-+ project(domoticz)
-+ 
-+@@ -583,6 +583,7 @@ set(Boost_USE_STATIC_LIBS ${USE_STATIC_BOOST})
-+ set(Boost_USE_MULTITHREADED ON)
-+ unset(Boost_INCLUDE_DIR CACHE)
-+ unset(Boost_LIBRARY_DIRS CACHE)
-++find_package(Boost REQUIRED COMPONENTS thread system)
-+ 
-+ if(USE_STATIC_BOOST)
-+    message(STATUS "Linking against boost static libraries")
-+@@ -590,9 +591,6 @@ else(USE_STATIC_BOOST)
-+    message(STATUS "Linking against boost dynamic libraries")
-+ endif(USE_STATIC_BOOST)
-+ 
-+-find_package(Boost REQUIRED COMPONENTS thread system)
-+-target_link_libraries(domoticz Boost::thread Boost::system)
-+-
-+ # compare found vs required libBoost version
-+ if(Boost_VERSION VERSION_LESS DOMO_MIN_LIBBOOST_VERSION)
-+    message(FATAL_ERROR "Found libBoost version ${Boost_VERSION}, ${DOMO_MIN_LIBBOOST_VERSION} or newer required")
-+-- 
-+2.20.1
-+
-diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
-index 3d974b3f8d..320028ac53 100644
---- a/package/domoticz/domoticz.hash
-+++ b/package/domoticz/domoticz.hash
+diff --git a/package/checksec/checksec.hash b/package/checksec/checksec.hash
+index e3d1ffd5d1..4543f62a36 100644
+--- a/package/checksec/checksec.hash
++++ b/package/checksec/checksec.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256	c053a2161942529f56b748945ec297dcd67f449e68029fc886893a528891ad86	domoticz-4.10717.tar.gz
-+sha256	1903b830ed53aada66ae261d4f29a73d10c03cb5f117e4c6e7e1275620b11f4e	domoticz-0f411f781ae4fb4a82f592d38a3f40578c149533.tar.gz
- sha256	8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903	License.txt
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index 9636e208d0..c0568c61c6 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
+ # Locally calculated
+-sha256 510b0b0528f15d0bf13fa1ae7140d2b9fc9261323c98ff76c011bef475a69c14 checksec-cdefe53eb72e6e8f23308417d2fc6b68cba9dbac.tar.gz
++sha256 e50a92a2bb22d40d1aa297cd011209ab5ad0b620236dfb9a7afe4c29744260a9 checksec-2.1.0.tar.gz
+ sha256 c5e2a8e188040fc34eb9362084778a2e25f8d1f888e47a2be09efa7cecd9c70d LICENSE.txt
+diff --git a/package/checksec/checksec.mk b/package/checksec/checksec.mk
+index bfe54c262e..ffa249663c 100644
+--- a/package/checksec/checksec.mk
++++ b/package/checksec/checksec.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DOMOTICZ_VERSION = 4.10717
-+DOMOTICZ_VERSION = 0f411f781ae4fb4a82f592d38a3f40578c149533
- DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
- DOMOTICZ_LICENSE = GPL-3.0
- DOMOTICZ_LICENSE_FILES = License.txt
+-CHECKSEC_VERSION = cdefe53eb72e6e8f23308417d2fc6b68cba9dbac
++CHECKSEC_VERSION = 2.1.0
+ CHECKSEC_SITE = $(call github,slimm609,checksec.sh,$(CHECKSEC_VERSION))
+ CHECKSEC_LICENSE = BSD-3-Clause
+ CHECKSEC_LICENSE_FILES = LICENSE.txt
 -- 
 2.20.1
