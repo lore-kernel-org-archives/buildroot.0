@@ -1,30 +1,53 @@
 From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Sat, 3 Aug 2019 12:20:22 +0200
-Subject: [Buildroot] [PATCH 1/2] package/qt5/qt5base: drop wrong
- optimization flag
-In-Reply-To: <20190626140412.101607-1-giulio.benetti@micronovasrl.com>
+Date: Sat, 3 Aug 2019 12:21:41 +0200
+Subject: [Buildroot] [PATCH 2/2] package/qt5/qt5base: build with correct
+ optimization
+In-Reply-To: <20190626140412.101607-2-giulio.benetti@micronovasrl.com>
 References: <20190626140412.101607-1-giulio.benetti@micronovasrl.com>
-Message-ID: <20190803122022.0a67e7dd@windsurf.home>
+ <20190626140412.101607-2-giulio.benetti@micronovasrl.com>
+Message-ID: <20190803122141.67580d55@windsurf.home>
 List-Id: <buildroot.busybox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 To: buildroot@busybox.net
 
-On Wed, 26 Jun 2019 16:04:11 +0200
+Hello,
+
+On Wed, 26 Jun 2019 16:04:12 +0200
 Giulio Benetti <giulio.benetti@micronovasrl.com> wrote:
 
-> In qmake.conf.in has been left 'QMAKE_CXXFLAGS_RELEASE += -O3' but this
-> leads to not use Buildroot CXXFLAGS when building in release
-> mode(without debugging symbols). So let's remove it to let Qt5 to follow
-> Buildroot optimization flags like other packages do.
-> 
-> Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
-> ---
->  package/qt5/qt5base/qmake.conf.in | 1 -
->  1 file changed, 1 deletion(-)
+> diff --git a/package/qt5/qt5base/qmake.conf.in b/package/qt5/qt5base/qmake.conf.in
+> index 26bee2cb39..4de880d2a2 100644
+> --- a/package/qt5/qt5base/qmake.conf.in
+> +++ b/package/qt5/qt5base/qmake.conf.in
+> @@ -15,6 +15,7 @@ QMAKE_CXX               = $${CROSS_COMPILE}g++
+>  # modifications to gcc-base.conf
+>  QMAKE_CFLAGS           += $${BR_COMPILER_CFLAGS}
+>  QMAKE_CXXFLAGS         += $${BR_COMPILER_CXXFLAGS}
+> +QMAKE_CFLAGS_OPTIMIZE_FULL  = $${BR_OPTIMIZATION}
+>  CONFIG                 += nostrip
+>  
+>  QMAKE_LIBS             += -lrt -lpthread -ldl
+> diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+> index e4aa76908a..69e90a37b3 100644
+> --- a/package/qt5/qt5base/qt5base.mk
+> +++ b/package/qt5/qt5base/qt5base.mk
+> @@ -361,6 +361,7 @@ define QT5BASE_CONFIGURE_CMDS
+>  		-device-option CROSS_COMPILE="$(TARGET_CROSS)" \
+>  		-device-option BR_COMPILER_CFLAGS="$(QT5BASE_CFLAGS)" \
+>  		-device-option BR_COMPILER_CXXFLAGS="$(QT5BASE_CXXFLAGS)" \
+> +		-device-option BR_OPTIMIZATION="$(TARGET_OPTIMIZATION)" \
 
-Applied to master, thanks.
+TARGET_OPTIMIZATION is already inside TARGET_CFLAGS, so it doesn't make
+a lot of sense to pass them again. Basically, it's just easier to set
+QMAKE_CFLAGS_OPTIMIZE, QMAKE_CFLAGS_OPTIMIZE_FULL,
+QMAKE_CFLAGS_OPTIMIZE_SIZE, QMAKE_CFLAGS_OPTIMIZE_DEBUG to the empty
+value. See the final commit at:
+
+  https://git.buildroot.org/buildroot/commit/?id=7c0aa83527e0b0179f9e3f73a3e63df1fdc5a6e6
+
+Thanks!
 
 Thomas
 -- 
